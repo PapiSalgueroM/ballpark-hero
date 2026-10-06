@@ -59,6 +59,17 @@ const CONTROLS = {
   words: { file: 'soccerCareerLeague.ts', from: ' && !nameWords(c.name).some(w => myWords.includes(w))', to: '' },
   ofsize: { file: 'soccerCareerEngine.ts', from: 'const ofSize = lf.sizeVerified ? ` of ${leagueSize}` : "";', to: 'const ofSize = ` of ${leagueSize}`;' },
   field10: { file: 'soccerCareerLeague.ts', from: 'export const MANAGER_FIELD = 20;', to: 'export const MANAGER_FIELD = 10;' },
+  /* the review fixes' controls (single line strings, so a CRLF checkout matches too) */
+  nomove: { file: 'soccerCareerLeague.ts', from: 'export function divisionMove(league: string | null, pos: number, size: number): { to: string; up: boolean } | null {',
+    to: 'export function divisionMove(league: string | null, pos: number, size: number): { to: string; up: boolean } | null { return null;' },
+  listfirst: { file: 'soccerCareerLeague.ts', from: '? listLeague(input.clubs, input.league) ?? input.league',
+    to: '? input.clubs.find(c => clubKey(c.name) === mine)?.league ?? listLeague(input.clubs, input.league) ?? input.league' },
+  zones: { file: 'soccerCareerEngine.ts', from: 'const sizeUnknown = lf.league !== null && !lf.sizeVerified;', to: 'const sizeUnknown = false;' },
+  size: { file: 'soccerCareerLeague.ts', from: 'Math.max(MANAGER_FIELD, names.length + 1)', to: 'Math.max(MANAGER_FIELD, names.length)' },
+  noaccept: { file: 'soccerCareerEngine.ts', from: '  ms.league = offer.league;', to: '' },
+  nofold: { file: 'soccerCareerLeague.ts', from: 'const f = foldName(label);', to: 'const f = label.toLowerCase().trim();' },
+  nomarket: { file: 'soccerCareerEngine.ts', from: 'if (marketJob && MARKET) {', to: 'if (false) {' },
+  wording: { file: 'soccerCareerEngine.ts', from: '` ${ms.club} move up to Tier ${ms.clubTier}.`', to: '` Promoted with ${ms.club} to Tier ${ms.clubTier}!`' },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
 let applied = false;
@@ -82,12 +93,14 @@ export const e = await import('${fwd}/src/lib/soccerCareerEngine.ts');
 export const cm = await import('${fwd}/src/lib/clubManager.ts');
 export const lg = await import('${fwd}/src/lib/soccerCareerLeague.ts');
 export const rv = await import('${fwd}/src/data/clubRivalries.ts');
+export const ce = await import('${fwd}/src/lib/careerEras.ts');
+export const jm = await import('${fwd}/src/lib/managerJobMarket.ts');
 `);
 await build({ entryPoints: [path.join(tmp, 'entry.mjs')], bundle: true, format: 'esm', platform: 'node',
   outfile: path.join(tmp, 'mc.mjs'), logLevel: 'error', alias: { '@': `${fwd}/src` }, plugins: [controlPlugin] });
 if (CONTROL && !applied) { console.error(`control ${CONTROL} never reached its file`); process.exit(2); }
 if (CONTROL) console.log(`CONTROL ${CONTROL} applied: this run is meant to go red`);
-const { e, cm, lg, rv } = await import(pathToFileURL(path.join(tmp, 'mc.mjs')).href);
+const { e, cm, lg, rv, ce, jm } = await import(pathToFileURL(path.join(tmp, 'mc.mjs')).href);
 let failures = 0; const fail = s => { failures += 1; console.error('  FAIL: ' + s); };
 /** mulberry32, the same stream the Round 1029 bands were measured on. */
 function seedRandom(seed) {
@@ -237,14 +250,29 @@ const FB = e.FALLBACK_CLUBS;
 const foldName = s => s.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase().trim();
 const keyOf = n => foldName(rv.SC_CLUB_CANON[n] ?? n);
 const byName = new Map(FB.map(c => [c.name, c]));
-/** The league his table must be, worked out here and not by the engine: his
- *  club found in the career's list by name or by the shared spelling, else
- *  the list's league whose name matches the one his job came with. */
+/* Market leagues the list spells its own way, written out here and not read
+   from the engine. */
+const ALIAS = { 'efl championship': 'Championship', 'brasileirao serie a': 'Brasileirao', 'supersport hnl': 'HNL',
+  'mls eastern conference': 'MLS', 'mls western conference': 'MLS' };
+const listLabel = lab => { const f = foldName(lab); const w = ALIAS[f]; return FB.find(c => (w ? c.league === w : foldName(c.league) === f))?.league ?? null; };
+/** The league a job's first table must be: the league the job came with, in
+ *  the list's spelling (the card showed it), else his club found in the
+ *  list by name or by the shared spelling. */
 function expectedLeague(club, jobLeague) {
-  const home = FB.find(c => keyOf(c.name) === keyOf(club));
-  if (home) return home.league;
-  if (!jobLeague) return null;
-  return FB.find(c => foldName(c.league) === foldName(jobLeague))?.league ?? null;
+  if (jobLeague) return listLabel(jobLeague) ?? jobLeague;
+  return FB.find(c => keyOf(c.name) === keyOf(club))?.league ?? null;
+}
+const PLAIN = new Set(['city', 'united', 'club', 'real', 'sporting', 'athletic', 'atletico', 'town', 'county', 'rovers', 'football']);
+const words = n => foldName(n).split(/[^a-z0-9]+/).filter(w => w.length >= 4 && !PLAIN.has(w));
+/** Distinct clubs of `league` the list knows in `year`, his own (and, when he
+ *  is not in that league, its look alikes) left out. */
+function knownIn(league, club, year) {
+  if (!league) return 0;
+  const world = ce.adjustClubsForYear([...FB], year);
+  const mine = keyOf(club), mw = words(club);
+  const inLeague = world.some(c => c.league === league && keyOf(c.name) === mine);
+  return new Set(world.filter(c => c.league === league && keyOf(c.name) !== mine
+    && (inLeague || !words(c.name).some(w => mw.includes(w)))).map(c => keyOf(c.name))).size;
 }
 function seasonRow(year, tier) {
   return { year, age: 28, club: 'Club', clubCountry: 'England', clubTier: tier, apps: 34, goals: 10,
@@ -259,15 +287,37 @@ function dugout(club, tier, lastYear, league) {
     managerState: { club, clubTier: tier, season: 0, trophies: 0, promotions: 0, seasonResults: [],
       nationalTeamOffer: false, managingNationalTeam: false, ...(league ? { league } : {}) } };
 }
-const cover = { seasons: 0, home: 0, market: 0, verified: 0, thin: 0, named: 0, unnamed: 0 };
-const bad = { league: 0, self: 0, ofN: 0, size: 0 };
+const cover = { seasons: 0, home: 0, market: 0, verified: 0, thin: 0, named: 0, unnamed: 0,
+  accepted: 0, relabelled: 0, up: 0, down: 0, zones: 0, bigUnverified: 0 };
+const bad = { league: 0, self: 0, ofN: 0, size: 0, table: 0, known: 0, zone: 0, words: 0 };
 const firstBad = [];
-/** Every check of a) and b) on one employed season. */
-function checkSeason(s, club0, league0, lastYear) {
+const note = s => { if (firstBad.length < 6) firstBad.push(s); };
+/** Every check of a), b) and e) on one employed season. `want` is the league
+ *  this harness tracked for him: his job's, moved by the table's own rule. */
+function checkSeason(s, club0, want, lastYear) {
   const ms = s.managerState;
   const row = ms.seasonResults[ms.seasonResults.length - 1];
-  const want = expectedLeague(club0, league0);
   const calYear = lastYear + ms.season;
+  /* the table is the league he is in, on every season, named or not */
+  if ((row.league ?? null) !== want) { bad.table += 1; note(`${club0} S${ms.season}: table ${row.league ?? 'none'}, his league ${want ?? 'none'}`); }
+  /* the field holds every club it knows of that league when they fit, and
+     a field of unknown size is 20 or one more than it knows */
+  const K = knownIn(want, club0, calYear);
+  if (row.knownRivals !== Math.min(K, row.leagueSize - 1)) { bad.known += 1; note(`${want} ${calYear}: ${row.knownRivals} known, the list has ${K}`); }
+  if (!row.sizeVerified && row.leagueSize !== Math.max(20, K + 1)) { bad.size += 1; note(`${want} ${calYear}: unverified size ${row.leagueSize} for ${K} known`); }
+  if (!row.sizeVerified && K >= 20) cover.bigUnverified += 1;
+  /* a named league of unknown size prints no position and no points */
+  if (row.league && !row.sizeVerified) {
+    cover.zones += 1;
+    if (/\d(st|nd|rd|th)\b| points/.test(row.result)) { bad.zone += 1; note(`[${row.league}] ${row.result.slice(0, 60)}`); }
+  }
+  /* promotion and relegation are said only where the club changes league,
+     and always said there */
+  const promo = /Promoted with/.test(row.result), rele = /Relegated/.test(row.result);
+  if (row.league && promo && !(row.league === 'Championship' && / to the Premier League!/.test(row.result))) { bad.words += 1; note(`[${row.league}] ${row.result.slice(0, 80)}`); }
+  if (row.league && rele && !(row.league === 'Premier League' && /Relegated to the Championship/.test(row.result))) { bad.words += 1; note(`[${row.league}] ${row.result.slice(0, 80)}`); }
+  if (row.league === 'Premier League' && row.playerPos >= row.leagueSize - 2 && !rele) { bad.words += 1; note(`PL ${row.playerPos}/${row.leagueSize} not relegated: ${row.result.slice(0, 60)}`); }
+  if (row.league === 'Championship' && row.playerPos <= 2 && !promo) { bad.words += 1; note(`Championship ${row.playerPos} not promoted: ${row.result.slice(0, 60)}`); }
   cover.seasons += 1;
   if (FB.some(c => keyOf(c.name) === keyOf(club0))) cover.home += 1; else cover.market += 1;
   if (row.sizeVerified) cover.verified += 1;
@@ -282,7 +332,7 @@ function checkSeason(s, club0, league0, lastYear) {
   }
   const printsOf = / of \d+/.test(row.result);
   if (printsOf !== !!row.sizeVerified) { bad.ofN += 1; if (firstBad.length < 6) firstBad.push(`${club0}: "${row.result.slice(0, 40)}" with sizeVerified ${row.sizeVerified}`); }
-  const real = row.league ? lg.leagueSizeFor(row.league, calYear) : null;
+  const real = row.league ? lg.leagueSizeFor(row.league, calYear, true) : null;
   if (row.sizeVerified ? row.leagueSize !== real : real !== null) { bad.size += 1; if (firstBad.length < 6) firstBad.push(`${row.league} ${calYear}: size ${row.leagueSize}, verified ${real}`); }
   return row;
 }
@@ -296,15 +346,28 @@ for (const seed of SEEDS) {
     for (let k = 0; k < CAREERS_PER_TIER; k++) {
       const lastYear = k % 4 === 0 ? 1996 : 2030;
       let s = dugout(pool[k % pool.length].name, tier, lastYear);
+      let want = expectedLeague(s.managerState.club);
       for (let y = 0; y < SEASONS; y++) {
         if (s.managerState.unemployed) {
-          if ((s.managerState.offers ?? []).length) s = e.acceptManagerOffer(s, 0);
-          else { s = e.advanceManagerSeason(s, FB); continue; }
+          const offer = (s.managerState.offers ?? [])[0];
+          if (offer) {
+            s = e.acceptManagerOffer(s, 0);
+            want = expectedLeague(offer.club, offer.league);
+            cover.accepted += 1;
+            if (want !== offer.league) cover.relabelled += 1;
+          } else { s = e.advanceManagerSeason(s, FB); continue; }
         }
-        const t0 = s.managerState.clubTier, c0 = s.managerState.club, l0 = s.managerState.league;
+        const t0 = s.managerState.clubTier, c0 = s.managerState.club;
         s = e.advanceManagerSeason(s, FB);
-        const row = checkSeason(s, c0, l0, lastYear);
+        const row = checkSeason(s, c0, want, lastYear);
         const ms = s.managerState;
+        /* where he plays next: a poaching club's own league, or the table's
+           move (Premier League bottom three down, Championship top two up) */
+        if (!ms.unemployed) {
+          if (ms.club !== c0) want = FB.find(c => c.name === ms.club)?.league ?? null;
+          else if (want === 'Premier League' && row.playerPos >= row.leagueSize - 2) { want = 'Championship'; cover.down += 1; }
+          else if (want === 'Championship' && row.playerPos <= 2) { want = 'Premier League'; cover.up += 1; }
+        }
         const tk = Math.max(1, Math.min(5, t0));
         bump(tk, 'seasons');
         if (row.playerPos === 1) bump(tk, 'title');
@@ -316,18 +379,31 @@ for (const seed of SEEDS) {
 }
 console.log(`   ${cover.seasons} seasons: ${cover.home} at a club of the list, ${cover.market} at a market club, ${cover.verified} with a verified size, ${cover.thin} with no rival to name`);
 console.log(`   ${cover.named} named rows checked, ${cover.unnamed} unnamed; wrong league ${bad.league}, himself twice ${bad.self}, "of N" wrong ${bad.ofN}, size wrong ${bad.size}`);
+console.log(`   ${cover.accepted} market jobs taken (${cover.relabelled} in a league the list spells another way), ${cover.up} promotions to the Premier League, ${cover.down} relegations to the Championship, ${cover.zones} seasons in a named league of unknown size (${cover.bigUnverified} knowing 20 or more clubs)`);
+console.log(`   table not his league ${bad.table}, known clubs wrong ${bad.known}, a position in a league of unknown size ${bad.zone}, promotion or relegation words wrong ${bad.words}`);
 for (const f of firstBad.slice(0, 6)) console.log(`     e.g. ${f}`);
 /* coverage floors, about half of what this branch measured (29311 seasons:
    28814 at a club of the list, 497 at a market club, 9471 with a verified
-   size, 8340 with no rival to name, 63756 named rows); a run that skips a
-   path proves nothing about it */
-if (cover.home < 14000 || cover.market < 250 || cover.verified < 4500 || cover.thin < 4000 || cover.named < 30000) {
+   size, 8340 with no rival to name, 63756 named rows; after the review
+   fixes 29518, 28951, 567, 14562 with the Championship verified, 8214 and
+   63145); a run that skips a path proves nothing about it */
+/* the review fixes' floors, about half of the fixed branch's 1478 market
+   jobs, 1195 relabelled, 635 promotions to the Premier League, 164
+   relegations to the Championship, 14956 seasons of unknown size and 1088
+   of them knowing 20 or more clubs (the only fields where an off by one in
+   the size can show) */
+if (cover.home < 14000 || cover.market < 250 || cover.verified < 4500 || cover.thin < 4000 || cover.named < 30000
+  || cover.accepted < 700 || cover.relabelled < 500 || cover.up < 300 || cover.down < 80 || cover.zones < 7000 || cover.bigUnverified < 500) {
   fail(`a path went unexercised: ${JSON.stringify(cover)}`);
 }
 if (bad.league) fail(`${bad.league} named rows are not clubs of the manager's league`);
 if (bad.self) fail(`${bad.self} tables name the manager's own club as a rival`);
 if (bad.ofN) fail(`${bad.ofN} result lines print "of N" when the size is not verified, or leave it out when it is`);
-if (bad.size) fail(`${bad.size} tables disagree with the verified league size`);
+if (bad.size) fail(`${bad.size} tables disagree with the verified league size, or with the field of unknown size`);
+if (bad.table) fail(`${bad.table} seasons played in a league other than his own`);
+if (bad.known) fail(`${bad.known} tables name fewer known clubs than fit`);
+if (bad.zone) fail(`${bad.zone} result lines print a position or points in a league of unknown size`);
+if (bad.words) fail(`${bad.words} result lines say promoted or relegated where the club does not change league, or stay quiet where it does`);
 /* c) the three cases the round was written for, each six seasons */
 const probe = (club, tier, league, check) => {
   seedRandom(0x1029);
@@ -369,6 +445,41 @@ const probe = (club, tier, league, check) => {
   const withCity = cityDraws.filter(f => f.named.includes('Man City')).length;
   if (fc.named.length !== 19 || withCity) fail(`the Manchester City field holds ${fc.named.length} clubs, and Man City in ${withCity} of 10 draws`);
   if (fs2.named.includes('Red Bull Salzburg')) fail('the RB Salzburg field names Red Bull Salzburg');
+}
+/* f) jobs taken through acceptManagerOffer itself, the way the page takes
+   them, each played one season: the league on the card is the table's */
+{
+  const SUPER = 'S' + String.fromCharCode(252) + 'per Lig';
+  const jobs = [
+    ['Nacional', 'Portugal', 'Primeira Liga', 'Primeira Liga'],
+    ['Kasimpasa', 'Turkey', SUPER, 'Super Lig'],
+    ['West Ham United', 'England', 'EFL Championship', 'Championship'],
+    ['Eintracht Braunschweig', 'Germany', '2. Bundesliga', '2. Bundesliga'],
+  ];
+  for (const [club, country, league, want] of jobs) {
+    seedRandom(0x1029f);
+    let s = dugout('Everton', 2, 2030);
+    s = { ...s, managerState: { ...s.managerState, unemployed: true,
+      offers: [{ club, country, tier: 4, league, brief: 'Keep them up.', reason: 'They called.', budget: 10 }] } };
+    s = e.acceptManagerOffer(s, 0);
+    s = e.advanceManagerSeason(s, FB);
+    const row = s.managerState.seasonResults[s.managerState.seasonResults.length - 1];
+    const stray = (row.table ?? []).filter(r => !r.you && !r.unnamed && byName.get(r.club)?.league !== want).map(r => r.club);
+    console.log(`   took ${club} (${league}): table ${row.league}, ${row.knownRivals} known rivals${stray.length ? ', strays ' + stray.join(', ') : ''}`);
+    if (row.league !== want || stray.length) fail(`a ${club} job from the market played ${row.league} (want ${want})`);
+  }
+  /* a save from before the round: a market job, no league saved. The
+     market (loaded in section 2) gives it back by the club's exact name. */
+  const lost = jm.allOfferClubs().find(o => !FB.some(c => keyOf(c.name) === keyOf(o.name))
+    && jm.allOfferClubs().filter(x => x.name === o.name).length === 1);
+  seedRandom(0x1029e);
+  let s = dugout(lost.name, 4, 2030);
+  s = { ...s, managerState: { ...s.managerState, seasonResults: [{ year: 0, club: lost.name, tier: 4, result: `Took the ${lost.name} job. Fine.`, trophy: false }] } };
+  s = e.advanceManagerSeason(s, FB);
+  const row = s.managerState.seasonResults[s.managerState.seasonResults.length - 1];
+  const want = expectedLeague(lost.name, lost.league);
+  console.log(`   an old save at ${lost.name} (${lost.league}) with no league saved plays ${row.league ?? 'nothing named'}`);
+  if (row.league !== want || s.managerState.league !== want) fail(`an old save at ${lost.name} lost its league (${row.league}, want ${want})`);
 }
 /* d) rates per tier against main's band (numbers in the header) */
 {
