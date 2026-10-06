@@ -4594,7 +4594,7 @@ export const LINEUPS: Lineup[] = [
       { name: 'Joshua Kimmich', slotIndex: 6, nationality: 'Germany', clubAtTime: 'Bayern Munich' },
       { name: 'Douglas Costa', slotIndex: 9, nationality: 'Brazil', clubAtTime: 'Bayern Munich' },
     ],
-    source: 'Wikipedia match report + fcbayern.com official archive + Bundesliga.com, unanimous on the title-clinching starting XI.',
+    source: 'Round 1026: HELD, never dealt (HELD_LINEUP_IDS). The match as written (Bayern 1-0 Gladbach, 16 April 2016) did not take place and the eleven matches no Bayern lineup of that run-in; the ledger (scripts/data/missingXiVerified2026-10 shard 4) proposes the rebuild.',
   },
 
   // 140. 2012-13 Premier League Title Decider - Manchester United clinch the title under Ferguson's final season
@@ -4658,7 +4658,7 @@ export const LINEUPS: Lineup[] = [
       { name: 'Thiago Motta', slotIndex: 6, nationality: 'Brazil', clubAtTime: 'Inter Milan' },
       { name: 'Goran Pandev', slotIndex: 10, nationality: 'North Macedonia', clubAtTime: 'Inter Milan' },
     ],
-    source: 'Wikipedia match report + Inter official retrospective + Football Italia archive, unanimous on the Scudetto-clinching XI en route to the 2010 treble.',
+    source: 'Round 1026: HELD, never dealt (HELD_LINEUP_IDS). Inter played no league match on 5 May 2010; the title was won 1-0 at Siena on 16 May, and three of these starters and two of the blanks did not start it (ESPN, weltfussball.de). The ledger (shard 4) proposes the rebuild.',
   },
 
   // 142. 2007-08 Champions League Semifinal 1st Leg - Barcelona 0-0 Manchester United
@@ -7135,6 +7135,19 @@ function seededRandom(seed: number): () => number {
 }
 
 /**
+ * Round 1026: lineups the two host ledger (scripts/data/missingXiVerified2026-10)
+ * holds under the lead's rule 6. Each describes a match two hosts contradict
+ * (wrong date, score or starters) and waits for a rebuild the ledger
+ * proposes. They stay in LINEUPS so the daily rotation does not shift, and
+ * no player is dealt one. simMissingXi section 7 keeps this list equal to
+ * the ledger's held rows.
+ */
+export const HELD_LINEUP_IDS: ReadonlySet<string> = new Set([
+  'bundesliga-2016-bayern-title',
+  'seriea-2010-inter-title',
+]);
+
+/**
  * Picks today's lineup and which of its blankCandidates is blanked,
  * date-seeded (America/New_York) so every player gets the same puzzle on the
  * same ET date, matching the sitewide daily-reset convention.
@@ -7145,7 +7158,13 @@ export function pickDailyPuzzle(lineups: Lineup[] = LINEUPS): ActivePuzzle {
      this puzzle for months at a time. See dailyPrngSeed in dateUtils. */
   const seed = dailyPrngSeed(getTodayET());
   const rand = seededRandom(seed);
-  const lineupIndex = Math.floor(rand() * lineups.length);
+  let lineupIndex = Math.floor(rand() * lineups.length);
+  /* Round 1026: a held lineup is never dealt. Stepping to the next one moves
+     only the days that landed on a held lineup; every other day keeps its
+     puzzle, which removing the entries from LINEUPS would not. */
+  for (let step = 0; step < lineups.length && HELD_LINEUP_IDS.has(lineups[lineupIndex].id); step += 1) {
+    lineupIndex = (lineupIndex + 1) % lineups.length;
+  }
   const lineup = lineups[lineupIndex];
   // Draw again so the candidate pick isn't perfectly correlated with the
   // lineup pick (two independent calls to the same seeded stream).
@@ -7153,9 +7172,10 @@ export function pickDailyPuzzle(lineups: Lineup[] = LINEUPS): ActivePuzzle {
   return { lineup, candidate: lineup.blankCandidates[candidateIndex] };
 }
 
-/** Picks a random lineup + blank for Unlimited free-play mode. */
+/** Picks a random lineup + blank for Unlimited free-play mode. Held lineups are never drawn. */
 export function pickUnlimitedPuzzle(lineups: Lineup[] = LINEUPS): ActivePuzzle {
-  const lineup = lineups[Math.floor(Math.random() * lineups.length)];
+  const pool = lineups.filter(l => !HELD_LINEUP_IDS.has(l.id));
+  const lineup = pool[Math.floor(Math.random() * pool.length)];
   const candidate = lineup.blankCandidates[Math.floor(Math.random() * lineup.blankCandidates.length)];
   return { lineup, candidate };
 }

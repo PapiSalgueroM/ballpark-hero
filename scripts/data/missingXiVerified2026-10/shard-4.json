@@ -50,6 +50,8 @@
     "José Emilio Amavisca 90' for Raúl"
    ],
    "fields": {
+    "dateLabel": "1998 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "1998-05-20",
     "team": "Real Madrid",
     "opponent": "Juventus",
@@ -159,6 +161,8 @@
     "Fernando Hierro 85' for Míchel Salgado"
    ],
    "fields": {
+    "dateLabel": "2000 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2000-05-24",
     "team": "Real Madrid",
     "opponent": "Valencia",
@@ -300,6 +304,8 @@
     "Carlos Tevez 111' for Buffarini"
    ],
    "fields": {
+    "dateLabel": "2018 Copa Libertadores Final",
+    "competition": "Copa Libertadores",
     "matchDate": "2018-12-09",
     "team": "Boca Juniors",
     "opponent": "River Plate",
@@ -491,6 +497,8 @@
     "Bruno Zuculini 111' for Ignacio Fernández"
    ],
    "fields": {
+    "dateLabel": "2018 Copa Libertadores Final",
+    "competition": "Copa Libertadores",
     "matchDate": "2018-12-09",
     "team": "River Plate",
     "opponent": "Boca Juniors",
@@ -631,6 +639,8 @@
     "Layvin Kurzawa 80' for Bernat"
    ],
    "fields": {
+    "dateLabel": "2020 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2020-08-23",
     "team": "Paris Saint-Germain",
     "opponent": "Bayern Munich",
@@ -849,6 +859,8 @@
     "Fernando Llorente 82' for Alli"
    ],
    "fields": {
+    "dateLabel": "2019 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2019-06-01",
     "team": "Tottenham Hotspur",
     "opponent": "Liverpool",
@@ -958,6 +970,8 @@
     "Paul Scholes 77' for Carrick"
    ],
    "fields": {
+    "dateLabel": "2011 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2011-05-28",
     "team": "Manchester United",
     "opponent": "Barcelona",
@@ -1035,6 +1049,8 @@
     "Paul Scholes 75' for Giggs"
    ],
    "fields": {
+    "dateLabel": "2009 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2009-05-27",
     "team": "Manchester United",
     "opponent": "Barcelona",
@@ -1156,6 +1172,8 @@
     "Sylvain Wiltord 107' for Henry"
    ],
    "fields": {
+    "dateLabel": "2006 World Cup Final",
+    "competition": "FIFA World Cup",
     "matchDate": "2006-07-09",
     "team": "France",
     "opponent": "Italy",
@@ -1233,6 +1251,8 @@
     "Fernando Gago for Enzo Pérez (85' per fifa.com, 86' per ESPN)"
    ],
    "fields": {
+    "dateLabel": "2014 World Cup Final",
+    "competition": "FIFA World Cup",
     "matchDate": "2014-07-13",
     "team": "Argentina",
     "opponent": "Germany",
@@ -1367,6 +1387,8 @@
     "Marko Pjaca 82' for Strinić (81' per ESPN)"
    ],
    "fields": {
+    "dateLabel": "2018 World Cup Final",
+    "competition": "FIFA World Cup",
     "matchDate": "2018-07-15",
     "team": "Croatia",
     "opponent": "France",
@@ -1476,6 +1498,8 @@
     "Axel Disasi 120+1' for Koundé"
    ],
    "fields": {
+    "dateLabel": "2022 World Cup Final",
+    "competition": "FIFA World Cup",
     "matchDate": "2022-12-18",
     "team": "France",
     "opponent": "Argentina",
@@ -1584,6 +1608,8 @@
     "Anthony Martial 110' for Sissoko"
    ],
    "fields": {
+    "dateLabel": "2016 Euros Final",
+    "competition": "UEFA European Championship",
     "matchDate": "2016-07-10",
     "team": "France",
     "opponent": "Portugal",
@@ -1752,6 +1778,8 @@
     "Thiago Motta 56' for Montolivo (UEFA prints 57')"
    ],
    "fields": {
+    "dateLabel": "2012 Euros Final",
+    "competition": "UEFA European Championship",
     "matchDate": "2012-07-01",
     "team": "Italy",
     "opponent": "Spain",
@@ -1969,6 +1997,8 @@
     "Jamie Vardy 112' for Walker"
    ],
    "fields": {
+    "dateLabel": "2018 World Cup Semifinal",
+    "competition": "FIFA World Cup",
     "matchDate": "2018-07-11",
     "team": "England",
     "opponent": "Croatia",
@@ -2046,6 +2076,8 @@
     "Lovro Majer 81' for Modrić"
    ],
    "fields": {
+    "dateLabel": "2022 World Cup Semifinal",
+    "competition": "FIFA World Cup",
     "matchDate": "2022-12-13",
     "team": "Croatia",
     "opponent": "Argentina",
@@ -2181,6 +2213,8 @@
     "Michy Batshuayi 90+1' for Chadli"
    ],
    "fields": {
+    "dateLabel": "2018 World Cup Semifinal",
+    "competition": "FIFA World Cup",
     "matchDate": "2018-07-10",
     "team": "Belgium",
     "opponent": "France",
@@ -2400,6 +2434,8 @@
     "Klaas-Jan Huntelaar 95' for Van Persie (fifa.com)"
    ],
    "fields": {
+    "dateLabel": "2014 World Cup Semifinal",
+    "competition": "FIFA World Cup",
     "matchDate": "2014-07-09",
     "team": "Netherlands",
     "opponent": "Argentina",
@@ -2545,6 +2581,8 @@
     "Jonny Williams 66' for Collins"
    ],
    "fields": {
+    "dateLabel": "2016 Euros Semifinal",
+    "competition": "UEFA European Championship",
     "matchDate": "2016-07-06",
     "team": "Wales",
     "opponent": "Portugal",
@@ -2719,6 +2757,8 @@
     "Emerson Royal 76' for Renan Lodi"
    ],
    "fields": {
+    "dateLabel": "2021 Copa America Final",
+    "competition": "Copa America",
     "matchDate": "2021-07-10",
     "team": "Brazil",
     "opponent": "Argentina",
@@ -2884,6 +2924,8 @@
     "Erik Lamela 110' for Banega (ESPN prints 111')"
    ],
    "fields": {
+    "dateLabel": "2016 Copa America Centenario Final",
+    "competition": "Copa America",
     "matchDate": "2016-06-26",
     "team": "Argentina",
     "opponent": "Chile",
@@ -3016,6 +3058,8 @@
     "Éver Banega 81' for Pastore"
    ],
    "fields": {
+    "dateLabel": "2015 Copa America Final",
+    "competition": "Copa America",
     "matchDate": "2015-07-04",
     "team": "Argentina",
     "opponent": "Chile",
@@ -3154,6 +3198,8 @@
     "Roberto Firmino 77' for Thiago"
    ],
    "fields": {
+    "dateLabel": "2022 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2022-05-28",
     "team": "Liverpool",
     "opponent": "Real Madrid",
@@ -3232,6 +3278,8 @@
     "Henrikh Mkhitaryan 84' for Çalhanoğlu"
    ],
    "fields": {
+    "dateLabel": "2023 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2023-06-10",
     "team": "Inter Milan",
     "opponent": "Manchester City",
@@ -3342,6 +3390,8 @@
     "Jamie Gittens 87' for Sancho"
    ],
    "fields": {
+    "dateLabel": "2024 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2024-06-01",
     "team": "Borussia Dortmund",
     "opponent": "Real Madrid",
@@ -3421,6 +3471,8 @@
     "James Milner 83' for Lovren"
    ],
    "fields": {
+    "dateLabel": "2018-19 Premier League Title Run",
+    "competition": "Premier League",
     "matchDate": "2019-05-04",
     "team": "Liverpool",
     "opponent": "Newcastle United",
@@ -3631,6 +3683,8 @@
     "Mario Lemina 89' for Pjanić"
    ],
    "fields": {
+    "dateLabel": "2016-17 Champions League Semifinal",
+    "competition": "UEFA Champions League",
     "matchDate": "2017-05-03",
     "team": "Juventus",
     "opponent": "Monaco",
@@ -3794,6 +3848,8 @@
     "Daniele Rugani 77'/78' for De Ligt"
    ],
    "fields": {
+    "dateLabel": "2019-20 Serie A Title Decider",
+    "competition": "Serie A",
     "matchDate": "2020-07-26",
     "team": "Juventus",
     "opponent": "Sampdoria",
@@ -4026,6 +4082,8 @@
     "Alessandro Florenzi 81' for Saelemaekers"
    ],
    "fields": {
+    "dateLabel": "2021-22 Serie A Title Decider",
+    "competition": "Serie A",
     "matchDate": "2022-05-22",
     "team": "AC Milan",
     "opponent": "Sassuolo",
@@ -4166,6 +4224,8 @@
     "Thomas Müller 83' for Robben"
    ],
    "fields": {
+    "dateLabel": "2017-18 Bundesliga Title Decider",
+    "competition": "Bundesliga",
     "matchDate": "2018-04-07",
     "team": "Bayern Munich",
     "opponent": "FC Augsburg",
@@ -4415,6 +4475,8 @@
     "Sebastian Rode 89' for Thiago (ESPN match page; the ESPN lineups page printed a garbled version)"
    ],
    "fields": {
+    "dateLabel": "2015-16 Bundesliga Title Decider",
+    "competition": "Bundesliga",
     "matchDate": "2016-04-16",
     "team": "Bayern Munich",
     "opponent": "Borussia Monchengladbach",
@@ -4514,11 +4576,32 @@
      "reason": "one host on the research read; the entry describes a match that did not take place. Marked, not changed (lead rule 6)."
     }
    ],
-   "applied": [],
+   "applied": [
+    {
+     "path": "source",
+     "from": "(the old source line)",
+     "to": "Round 1026: HELD, never dealt",
+     "why": "the internal source string still vouched for a match two hosts contradict"
+    }
+   ],
    "hold": {
     "rule": "lead rule 6",
     "why": "The entry's match (Bayern 1-0 Gladbach, 16 April 2016) did not take place; its eleven matches neither the 30 April Gladbach draw nor the 7 May clincher (Boateng and Robben were not in that squad). Marked, not removed: removing the two held lineups would change the daily puzzle on 202 of the next 365 days (measured 2026-10-06) while they are dealt on 2.",
-    "proposal": "With ESPN (re-read 2026-10-06) and weltfussball.de (skeptic) the entry can be re-pointed at FC Ingolstadt 1-2 Bayern Munich, 7 May 2016, Audi Sportpark, Ingolstadt: Thiago Alcantara for Boateng, Franck Ribery for Robben, Kimmich at centre-back; Javi Martinez, Kimmich and Douglas Costa all started."
+    "proposal": "With ESPN (re-read 2026-10-06) and weltfussball.de (skeptic) the entry can be re-pointed at FC Ingolstadt 1-2 Bayern Munich, 7 May 2016, Audi Sportpark, Ingolstadt: Thiago Alcantara for Boateng, Franck Ribery for Robben, Kimmich at centre-back; Javi Martinez, Kimmich and Douglas Costa all started.",
+    "entryEleven": [
+     "Manuel Neuer",
+     "Philipp Lahm",
+     "Jerome Boateng",
+     "Javi Martinez",
+     "David Alaba",
+     "Xabi Alonso",
+     "Joshua Kimmich",
+     "Arjen Robben",
+     "Thomas Muller",
+     "Douglas Costa",
+     "Robert Lewandowski"
+    ],
+    "dealt": "never: HELD_LINEUP_IDS in src/lib/missingXi.ts keeps it out of Unlimited, and the daily steps to the next lineup on a day that lands on it (review fix, 2026-10-06)"
    },
    "notes": [
     "Verdict 'unverified' because only one host (espn.com) could be read for this season. bundesliga.com match URLs for 2015-16 (matchday 30, 32, 33 slugs, with and without /lineup) all returned 404; kicker.de returned 403; Sky Sports' and BeSoccer's archive pages only render current seasons; the session's web-search budget was exhausted, so no further hosts could be located. ESPN alone shows the entry is wrong on date/opponent/score/venue; a second host is needed before rewriting it.",
@@ -4549,6 +4632,8 @@
     "Danny Welbeck 72' for Rooney"
    ],
    "fields": {
+    "dateLabel": "2012-13 Premier League Title Decider",
+    "competition": "Premier League",
     "matchDate": "2013-04-22",
     "team": "Manchester United",
     "opponent": "Aston Villa",
@@ -4760,6 +4845,8 @@
     "Cristian Chivu 73' for Sneijder"
    ],
    "fields": {
+    "dateLabel": "2009-10 Serie A Title Decider",
+    "competition": "Serie A",
     "matchDate": "2010-05-05",
     "team": "Inter Milan",
     "opponent": "Siena",
@@ -4868,11 +4955,32 @@
      "reason": "one host on the research read; the entry describes a match that did not take place. Marked, not changed (lead rule 6)."
     }
    ],
-   "applied": [],
+   "applied": [
+    {
+     "path": "source",
+     "from": "(the old source line)",
+     "to": "Round 1026: HELD, never dealt",
+     "why": "the internal source string still vouched for a match two hosts contradict"
+    }
+   ],
    "hold": {
     "rule": "lead rule 6",
     "why": "No Inter Serie A match on 5 May 2010 (ESPN); the title was won 1-0 at Siena on 16 May. Three of the entry's eleven and two of its three blanks did not start that match. Marked, not removed (see bundesliga-2016-bayern-title for the measured cost of removal).",
-    "proposal": "With ESPN (re-read 2026-10-06) and weltfussball.de (skeptic) the entry can be re-pointed at Siena 0-1 Inter Milan, 16 May 2010, Artemio Franchi, Siena: Materazzi for Lucio, Zanetti for Chivu, Balotelli for Pandev; the Chivu and Pandev blanks replaced (Thiago Motta started)."
+    "proposal": "With ESPN (re-read 2026-10-06) and weltfussball.de (skeptic) the entry can be re-pointed at Siena 0-1 Inter Milan, 16 May 2010, Artemio Franchi, Siena: Materazzi for Lucio, Zanetti for Chivu, Balotelli for Pandev; the Chivu and Pandev blanks replaced (Thiago Motta started).",
+    "entryEleven": [
+     "Julio Cesar",
+     "Maicon",
+     "Lucio",
+     "Walter Samuel",
+     "Cristian Chivu",
+     "Esteban Cambiasso",
+     "Thiago Motta",
+     "Wesley Sneijder",
+     "Diego Milito",
+     "Samuel Eto'o",
+     "Goran Pandev"
+    ],
+    "dealt": "never: HELD_LINEUP_IDS in src/lib/missingXi.ts keeps it out of Unlimited, and the daily steps to the next lineup on a day that lands on it (review fix, 2026-10-06)"
    },
    "notes": [
     "Verdict 'unverified' because only espn.com could be read. Attempts: legaseriea.it old match and fixture URLs 301-redirect to the home page; the new site is script-rendered and its data API (api-sdp.legaseriea.it) returned 404 on the guessed path; BeSoccer and Sky Sports match pages could not be located without search (the session's web-search budget was exhausted); kicker.de returned 403.",
@@ -4905,6 +5013,8 @@
     "Ryan Giggs 85' for Tévez"
    ],
    "fields": {
+    "dateLabel": "2007-08 Champions League Semifinal",
+    "competition": "UEFA Champions League",
     "matchDate": "2008-04-23",
     "team": "Manchester United",
     "opponent": "Barcelona",
@@ -5088,6 +5198,8 @@
     "David Villa 86' for Raúl García"
    ],
    "fields": {
+    "dateLabel": "2013-14 Champions League Semifinal",
+    "competition": "UEFA Champions League",
     "matchDate": "2014-04-22",
     "team": "Atletico Madrid",
     "opponent": "Chelsea",

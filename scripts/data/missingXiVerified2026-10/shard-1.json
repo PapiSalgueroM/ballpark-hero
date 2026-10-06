@@ -74,6 +74,8 @@
     "90+2' Ibrahim Afellay for Pedro Rodríguez"
    ],
    "fields": {
+    "dateLabel": "2011 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2011-05-28",
     "team": "Barcelona",
     "opponent": "Manchester United",
@@ -151,6 +153,8 @@
     "84' Fernando Torres for Salomon Kalou"
    ],
    "fields": {
+    "dateLabel": "2012 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2012-05-19",
     "team": "Chelsea",
     "opponent": "Bayern Munich",
@@ -231,6 +235,8 @@
     "79' Álvaro Morata for Karim Benzema"
    ],
    "fields": {
+    "dateLabel": "2014 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2014-05-24",
     "team": "Real Madrid",
     "opponent": "Atletico Madrid",
@@ -311,6 +317,8 @@
     "90' Joe Gomez for Sadio Mané"
    ],
    "fields": {
+    "dateLabel": "2019 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2019-06-01",
     "team": "Liverpool",
     "opponent": "Tottenham Hotspur",
@@ -389,6 +397,8 @@
     "90+3' Rodrygo for Vinícius Júnior"
    ],
    "fields": {
+    "dateLabel": "2022 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2022-05-28",
     "team": "Real Madrid",
     "opponent": "Liverpool",
@@ -464,6 +474,8 @@
     "82' Kyle Walker for John Stones"
    ],
    "fields": {
+    "dateLabel": "2023 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2023-06-10",
     "team": "Manchester City",
     "opponent": "Inter Milan",
@@ -612,6 +624,8 @@
     "90+2' Pedro Rodríguez for Andrés Iniesta"
    ],
    "fields": {
+    "dateLabel": "2009 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2009-05-27",
     "team": "Barcelona",
     "opponent": "Manchester United",
@@ -690,6 +704,8 @@
     "85' Djibril Cissé for Milan Baroš"
    ],
    "fields": {
+    "dateLabel": "2005 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2005-05-25",
     "team": "Liverpool",
     "opponent": "AC Milan",
@@ -776,6 +792,8 @@
     "90+6' Pedro Rodríguez for Luis Suárez"
    ],
    "fields": {
+    "dateLabel": "2015 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2015-06-06",
     "team": "Barcelona",
     "opponent": "Juventus",
@@ -854,6 +872,8 @@
     "Marco Asensio for Isco (ESPN; minute not read. UEFA's event feed lists only the two substitutions above but has Asensio scoring at 90')"
    ],
    "fields": {
+    "dateLabel": "2017 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2017-06-03",
     "team": "Real Madrid",
     "opponent": "Juventus",
@@ -939,6 +959,8 @@
     "86' Corentin Tolisso for Thiago Alcántara"
    ],
    "fields": {
+    "dateLabel": "2020 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2020-08-23",
     "team": "Bayern Munich",
     "opponent": "Paris Saint-Germain",
@@ -1015,6 +1037,8 @@
     "80' Mateo Kovačić for Mason Mount"
    ],
    "fields": {
+    "dateLabel": "2021 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2021-05-29",
     "team": "Chelsea",
     "opponent": "Manchester City",
@@ -1141,6 +1165,8 @@
     "90+4' Lucas Vázquez for Vinícius Júnior"
    ],
    "fields": {
+    "dateLabel": "2024 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2024-06-01",
     "team": "Real Madrid",
     "opponent": "Borussia Dortmund",
@@ -1250,6 +1276,8 @@
     "90+2' Marco Materazzi for Diego Milito"
    ],
    "fields": {
+    "dateLabel": "2010 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2010-05-22",
     "team": "Inter Milan",
     "opponent": "Bayern Munich",
@@ -1326,6 +1354,8 @@
     "86' Alessandro DEL PIERO for Mauro CAMORANESI"
    ],
    "fields": {
+    "dateLabel": "2006 World Cup Final",
+    "competition": "FIFA World Cup",
     "matchDate": "2006-07-09",
     "team": "Italy",
     "opponent": "France",
@@ -1401,6 +1431,8 @@
     "104' Alessandro DEL PIERO for Simone PERROTTA"
    ],
    "fields": {
+    "dateLabel": "2006 World Cup Semifinal",
+    "competition": "FIFA World Cup",
     "matchDate": "2006-07-04",
     "team": "Italy",
     "opponent": "Germany",
@@ -1480,6 +1512,8 @@
     "105' Fernando TORRES for David VILLA"
    ],
    "fields": {
+    "dateLabel": "2010 World Cup Final",
+    "competition": "FIFA World Cup",
     "matchDate": "2010-07-11",
     "team": "Spain",
     "opponent": "Netherlands",
@@ -1566,6 +1600,8 @@
     "119' Per MERTESACKER for Mesut OEZIL"
    ],
    "fields": {
+    "dateLabel": "2014 World Cup Final",
+    "competition": "FIFA World Cup",
     "matchDate": "2014-07-13",
     "team": "Germany",
     "opponent": "Argentina",
@@ -1651,6 +1687,8 @@
     "76' Julian Draxler for Sami KHEDIRA"
    ],
    "fields": {
+    "dateLabel": "2014 World Cup Semifinal",
+    "competition": "FIFA World Cup",
     "matchDate": "2014-07-08",
     "team": "Germany",
     "opponent": "Brazil",
@@ -1738,6 +1776,8 @@
     "81' Nabil Fekir for Olivier Giroud"
    ],
    "fields": {
+    "dateLabel": "2018 World Cup Final",
+    "competition": "FIFA World Cup",
     "matchDate": "2018-07-15",
     "team": "France",
     "opponent": "Croatia",
@@ -1868,6 +1908,8 @@
     "120'+1' Paulo DYBALA for Nicolas TAGLIAFICO"
    ],
    "fields": {
+    "dateLabel": "2022 World Cup Final",
+    "competition": "FIFA World Cup",
     "matchDate": "2022-12-18",
     "team": "Argentina",
     "opponent": "France",
@@ -1946,6 +1988,8 @@
     "86' Juan FOYTH for Nahuel MOLINA"
    ],
    "fields": {
+    "dateLabel": "2022 World Cup Semifinal",
+    "competition": "FIFA World Cup",
     "matchDate": "2022-12-13",
     "team": "Argentina",
     "opponent": "Croatia",
@@ -2020,6 +2064,8 @@
     "88' Eljero ELIA for Arjen ROBBEN"
    ],
    "fields": {
+    "dateLabel": "2010 World Cup Semifinal",
+    "competition": "FIFA World Cup",
     "matchDate": "2010-07-06",
     "team": "Netherlands",
     "opponent": "Uruguay",
@@ -2149,6 +2195,8 @@
     "118' Alessandro Florenzi for Emerson"
    ],
    "fields": {
+    "dateLabel": "2021 Euros Final",
+    "competition": "UEFA European Championship",
     "matchDate": "2021-07-11",
     "team": "Italy",
     "opponent": "England",
@@ -2228,6 +2276,8 @@
     "89' Mikel Merino for Lamine Yamal"
    ],
    "fields": {
+    "dateLabel": "2024 Euros Final",
+    "competition": "UEFA European Championship",
     "matchDate": "2024-07-14",
     "team": "Spain",
     "opponent": "England",
@@ -2311,6 +2361,8 @@
     "76' Mario Balotelli for Carlos Tevez"
    ],
    "fields": {
+    "dateLabel": "2011-12 Premier League Title Decider",
+    "competition": "Premier League",
     "matchDate": "2012-05-13",
     "team": "Manchester City",
     "opponent": "Queens Park Rangers",
@@ -2416,6 +2468,8 @@
     "86' Nathan Dyer for Marc Albrighton"
    ],
    "fields": {
+    "dateLabel": "2015-16 Premier League Title Run",
+    "competition": "Premier League",
     "matchDate": "2016-02-06",
     "team": "Leicester City",
     "opponent": "Manchester City",
@@ -2504,6 +2558,8 @@
     "Nélson Semedo for Rafinha (ESPN; LaLiga's lineup feed lists the bench without minutes)"
    ],
    "fields": {
+    "dateLabel": "2018 El Clasico",
+    "competition": "La Liga",
     "matchDate": "2018-10-28",
     "team": "Barcelona",
     "opponent": "Real Madrid",
@@ -2581,6 +2637,8 @@
     "89' Nathaniel Chalobah for Willian"
    ],
    "fields": {
+    "dateLabel": "2016-17 Premier League Title Run",
+    "competition": "Premier League",
     "matchDate": "2016-10-01",
     "team": "Chelsea",
     "opponent": "Hull City",
@@ -2656,6 +2714,8 @@
     "Edu and José Antonio Reyes came on. Premier League: 66' Edu for Bergkamp, 81' Reyes for Parlour. ESPN: Edu for Parlour, Reyes for Bergkamp. The two sources disagree on who each replaced; not an entry field."
    ],
    "fields": {
+    "dateLabel": "2003-04 Arsenal Invincibles",
+    "competition": "Premier League",
     "matchDate": "2004-04-25",
     "team": "Arsenal",
     "opponent": "Tottenham Hotspur",
@@ -2730,6 +2790,8 @@
     "81' Ole Gunnar Solskjær for Andy Cole"
    ],
    "fields": {
+    "dateLabel": "1999 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "1999-05-26",
     "team": "Manchester United",
     "opponent": "Bayern Munich",
@@ -2807,6 +2869,8 @@
     "83' Lucas Hernández for Alphonso Davies"
    ],
    "fields": {
+    "dateLabel": "2019-20 Champions League Quarterfinal",
+    "competition": "UEFA Champions League",
     "matchDate": "2020-08-14",
     "team": "Bayern Munich",
     "opponent": "Barcelona",
@@ -2882,6 +2946,8 @@
     "90+4' Mario Gomez for Mario Mandžukić"
    ],
    "fields": {
+    "dateLabel": "2013 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2013-05-25",
     "team": "Bayern Munich",
     "opponent": "Borussia Dortmund",
@@ -2958,6 +3024,8 @@
     "86' Iago Aspas for Luis Suárez"
    ],
    "fields": {
+    "dateLabel": "2013-14 Premier League",
+    "competition": "Premier League",
     "matchDate": "2014-02-08",
     "team": "Liverpool",
     "opponent": "Arsenal",
@@ -3081,6 +3149,8 @@
     "76' PEDRO for Andres INIESTA"
    ],
    "fields": {
+    "dateLabel": "2010 World Cup Group Stage",
+    "competition": "FIFA World Cup",
     "matchDate": "2010-06-16",
     "team": "Spain",
     "opponent": "Switzerland",

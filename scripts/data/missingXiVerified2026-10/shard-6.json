@@ -63,6 +63,8 @@
     "Kristjan Asllani 70' (for Calhanoglu)"
    ],
    "fields": {
+    "dateLabel": "2025 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2025-05-31",
     "team": "Inter Milan",
     "opponent": "Paris Saint-Germain",
@@ -138,6 +140,8 @@
     "Ivica Olić 96/97' (for Ribéry)"
    ],
    "fields": {
+    "dateLabel": "2012 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2012-05-19",
     "team": "Bayern Munich",
     "opponent": "Chelsea",
@@ -150,7 +154,8 @@
      "name": "Anatoliy Tymoshchuk",
      "position": "CB",
      "nationality": "Ukraine",
-     "clubAtTime": "Bayern Munich"
+     "clubAtTime": "Bayern Munich",
+     "fact": "A holding midfielder pressed into centre back with Badstuber suspended"
     },
     {
      "name": "Diego Contento",
@@ -217,6 +222,8 @@
     "Toby Alderweireld 83' (for Filipe Luís)"
    ],
    "fields": {
+    "dateLabel": "2014 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2014-05-24",
     "team": "Atletico Madrid",
     "opponent": "Real Madrid",
@@ -293,6 +300,8 @@
     "Mario Gomez 74' (for Olić)"
    ],
    "fields": {
+    "dateLabel": "2010 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2010-05-22",
     "team": "Bayern Munich",
     "opponent": "Inter Milan",
@@ -439,6 +448,8 @@
     "Álvaro Arbeloa 88' (for Finnan)"
    ],
    "fields": {
+    "dateLabel": "2007 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2007-05-23",
     "team": "Liverpool",
     "opponent": "AC Milan",
@@ -532,6 +543,8 @@
     "José Antonio Reyes 85' (for Hleb)"
    ],
    "fields": {
+    "dateLabel": "2006 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2006-05-17",
     "team": "Arsenal",
     "opponent": "Barcelona",
@@ -614,6 +627,8 @@
     "Juliano Belletti 120' (for Makelele, to take a penalty)"
    ],
    "fields": {
+    "dateLabel": "2008 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2008-05-21",
     "team": "Chelsea",
     "opponent": "Manchester United",
@@ -626,7 +641,8 @@
      "name": "Michael Essien",
      "position": "RB",
      "nationality": "Ghana",
-     "clubAtTime": "Chelsea"
+     "clubAtTime": "Chelsea",
+     "fact": "Played the final at right back"
     },
     {
      "name": "Joe Cole",
@@ -689,6 +705,8 @@
     "Sébastien Squillaci 72' (for Givet)"
    ],
    "fields": {
+    "dateLabel": "2004 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2004-05-26",
     "team": "Monaco",
     "opponent": "Porto",
@@ -763,6 +781,8 @@
     "Marcelo Zalayeta 65' (for Davids)"
    ],
    "fields": {
+    "dateLabel": "2003 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2003-05-28",
     "team": "Juventus",
     "opponent": "AC Milan",
@@ -837,6 +857,8 @@
     "Marko Babić 90/91' (for Lúcio)"
    ],
    "fields": {
+    "dateLabel": "2002 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2002-05-15",
     "team": "Bayer Leverkusen",
     "opponent": "Real Madrid",
@@ -855,7 +877,8 @@
      "name": "Bernd Schneider",
      "position": "RM",
      "nationality": "Germany",
-     "clubAtTime": "Bayer Leverkusen"
+     "clubAtTime": "Bayer Leverkusen",
+     "fact": "His free kick was headed in by Lucio for the equaliser"
     },
     {
      "name": "Oliver Neuville",
@@ -918,6 +941,8 @@
     "Miroslav Djukić 89/90' (for Ayala)"
    ],
    "fields": {
+    "dateLabel": "2001 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2001-05-23",
     "team": "Valencia",
     "opponent": "Bayern Munich",
@@ -930,7 +955,8 @@
      "name": "Mauricio Pellegrino",
      "position": "CB",
      "nationality": "Argentina",
-     "clubAtTime": "Valencia"
+     "clubAtTime": "Valencia",
+     "fact": "Missed the decisive kick in the shootout"
     },
     {
      "name": "Ruben Baraja",
@@ -1001,6 +1027,8 @@
     "Ivan Toney 89' (for Foden)"
    ],
    "fields": {
+    "dateLabel": "2024 Euros Final",
+    "competition": "UEFA European Championship",
     "matchDate": "2024-07-14",
     "team": "England",
     "opponent": "Spain",
@@ -1025,7 +1053,8 @@
      "name": "Luke Shaw",
      "position": "LWB",
      "nationality": "England",
-     "clubAtTime": "Manchester United"
+     "clubAtTime": "Manchester United",
+     "fact": "His first start of the whole tournament"
     }
    ],
    "sources": [
@@ -1097,6 +1126,8 @@
     "Mario Gomez 79' (for Klose)"
    ],
    "fields": {
+    "dateLabel": "2008 Euros Final",
+    "competition": "UEFA European Championship",
     "matchDate": "2008-06-29",
     "team": "Germany",
     "opponent": "Spain",
@@ -1173,6 +1204,8 @@
     "Sebastián Fernández 83/84' (for Forlán)"
    ],
    "fields": {
+    "dateLabel": "2010 World Cup Semi-final",
+    "competition": "FIFA World Cup",
     "matchDate": "2010-07-06",
     "team": "Uruguay",
     "opponent": "Netherlands",
@@ -1185,7 +1218,8 @@
      "name": "Maxi Pereira",
      "position": "RB",
      "nationality": "Uruguay",
-     "clubAtTime": "Benfica"
+     "clubAtTime": "Benfica",
+     "fact": "Scored in stoppage time to make it 3-2"
     },
     {
      "name": "Walter Gargano",
@@ -1251,6 +1285,8 @@
     "Carlos Marchena 90+2/90+3' (for Xabi Alonso)"
    ],
    "fields": {
+    "dateLabel": "2010 World Cup Semi-final",
+    "competition": "FIFA World Cup",
     "matchDate": "2010-07-07",
     "team": "Spain",
     "opponent": "Germany",
@@ -1269,7 +1305,8 @@
      "name": "Pedro",
      "position": "LW",
      "nationality": "Spain",
-     "clubAtTime": "Barcelona"
+     "clubAtTime": "Barcelona",
+     "fact": "Started ahead of Torres, and kept the place for the final"
     },
     {
      "name": "Xabi Alonso",
@@ -1332,6 +1369,8 @@
     "Corentin Tolisso 86' (for Matuidi)"
    ],
    "fields": {
+    "dateLabel": "2018 World Cup Semi-final",
+    "competition": "FIFA World Cup",
     "matchDate": "2018-07-10",
     "team": "France",
     "opponent": "Belgium",
@@ -1350,7 +1389,8 @@
      "name": "Samuel Umtiti",
      "position": "CB",
      "nationality": "France",
-     "clubAtTime": "Barcelona"
+     "clubAtTime": "Barcelona",
+     "fact": "Headed the only goal from a Griezmann corner six minutes into the second half"
     },
     {
      "name": "Blaise Matuidi",
@@ -1408,6 +1448,8 @@
     "Milan Badelj 119' (for Modrić)"
    ],
    "fields": {
+    "dateLabel": "2018 World Cup Semi-final",
+    "competition": "FIFA World Cup",
     "matchDate": "2018-07-11",
     "team": "Croatia",
     "opponent": "England",
@@ -1509,6 +1551,8 @@
     "Randal Kolo Muani 78/79' (for Dembélé)"
    ],
    "fields": {
+    "dateLabel": "2022 World Cup Semi-final",
+    "competition": "FIFA World Cup",
     "matchDate": "2022-12-14",
     "team": "France",
     "opponent": "Morocco",
@@ -1592,6 +1636,8 @@
     "Ricardo Horta 79' (for Dalot)"
    ],
    "fields": {
+    "dateLabel": "2022 World Cup Quarter-final",
+    "competition": "FIFA World Cup",
     "matchDate": "2022-12-10",
     "team": "Portugal",
     "opponent": "Morocco",
@@ -1616,7 +1662,8 @@
      "name": "Goncalo Ramos",
      "position": "ST",
      "nationality": "Portugal",
-     "clubAtTime": "Benfica"
+     "clubAtTime": "Benfica",
+     "fact": "Kept his place up front after the hat-trick against Switzerland, with Ronaldo on the bench"
     }
    ],
    "sources": [
@@ -1669,6 +1716,8 @@
     "Martín Zubimendi 90+4' (for Nico Williams)"
    ],
    "fields": {
+    "dateLabel": "2024 Euros Semi-final",
+    "competition": "UEFA European Championship",
     "matchDate": "2024-07-09",
     "team": "Spain",
     "opponent": "France",
@@ -1681,13 +1730,15 @@
      "name": "Jesus Navas",
      "position": "RB",
      "nationality": "Spain",
-     "clubAtTime": "Sevilla"
+     "clubAtTime": "Sevilla",
+     "fact": "Started at 38 with Carvajal suspended"
     },
     {
      "name": "Nacho",
      "position": "CB",
      "nationality": "Spain",
-     "clubAtTime": "Real Madrid"
+     "clubAtTime": "Real Madrid",
+     "fact": "Started with Le Normand suspended"
     },
     {
      "name": "Marc Cucurella",
@@ -1745,6 +1796,8 @@
     "Ezri Konsa 90+3' (for Saka)"
    ],
    "fields": {
+    "dateLabel": "2024 Euros Semi-final",
+    "competition": "UEFA European Championship",
     "matchDate": "2024-07-10",
     "team": "England",
     "opponent": "Netherlands",
@@ -1757,7 +1810,8 @@
      "name": "Kieran Trippier",
      "position": "LWB",
      "nationality": "England",
-     "clubAtTime": "Newcastle United"
+     "clubAtTime": "Newcastle United",
+     "fact": "Started at left wing back and made way for Shaw at half time"
     },
     {
      "name": "John Stones",
@@ -1823,6 +1877,8 @@
     "Federico Bernardeschi 107' (for Chiesa)"
    ],
    "fields": {
+    "dateLabel": "2021 Euros Semi-final",
+    "competition": "UEFA European Championship",
     "matchDate": "2021-07-06",
     "team": "Italy",
     "opponent": "Spain",
@@ -1900,6 +1956,8 @@
     "Jonas Wind 105' (for Vestergaard)"
    ],
    "fields": {
+    "dateLabel": "2021 Euros Semi-final",
+    "competition": "UEFA European Championship",
     "matchDate": "2021-07-07",
     "team": "Denmark",
     "opponent": "England",
@@ -1924,7 +1982,8 @@
      "name": "Mikkel Damsgaard",
      "position": "LW",
      "nationality": "Denmark",
-     "clubAtTime": "Sampdoria"
+     "clubAtTime": "Sampdoria",
+     "fact": "Scored the free kick that put Denmark ahead at Wembley"
     }
    ],
    "sources": [
@@ -1975,6 +2034,8 @@
     "Antonio Di Natale 70' (for Balotelli)"
    ],
    "fields": {
+    "dateLabel": "2012 Euros Semi-final",
+    "competition": "UEFA European Championship",
     "matchDate": "2012-06-28",
     "team": "Italy",
     "opponent": "Germany",
@@ -1993,7 +2054,8 @@
      "name": "Riccardo Montolivo",
      "position": "CAM",
      "nationality": "Italy",
-     "clubAtTime": "Fiorentina"
+     "clubAtTime": "Fiorentina",
+     "fact": "His long pass set up the second Balotelli goal"
     },
     {
      "name": "Antonio Cassano",
@@ -2066,6 +2128,8 @@
     "Jorge Carrascal, Miguel Borja, Mateus Uribe 105' (for Lerma, Jhon Arias, Luis Díaz)"
    ],
    "fields": {
+    "dateLabel": "2024 Copa America Final",
+    "competition": "Copa America",
     "matchDate": "2024-07-14",
     "team": "Colombia",
     "opponent": "Argentina",
@@ -2141,6 +2205,8 @@
     "Oliver Neuville 111' (for Klose)"
    ],
    "fields": {
+    "dateLabel": "2006 World Cup Semi-final",
+    "competition": "FIFA World Cup",
     "matchDate": "2006-07-04",
     "team": "Germany",
     "opponent": "Italy",
@@ -2153,7 +2219,8 @@
      "name": "Sebastian Kehl",
      "position": "CM",
      "nationality": "Germany",
-     "clubAtTime": "Borussia Dortmund"
+     "clubAtTime": "Borussia Dortmund",
+     "fact": "Started with Frings suspended"
     },
     {
      "name": "Tim Borowski",
@@ -2218,6 +2285,8 @@
     "Rafael Tolói 90/90+1' (for Ruggeri)"
    ],
    "fields": {
+    "dateLabel": "2024 Europa League Final",
+    "competition": "UEFA Europa League",
     "matchDate": "2024-05-22",
     "team": "Atalanta",
     "opponent": "Bayer Leverkusen",
@@ -2301,6 +2370,8 @@
     "Kiernan Dewsbury-Hall 77' (for Reece James)"
    ],
    "fields": {
+    "dateLabel": "2025 Club World Cup Final",
+    "competition": "FIFA Club World Cup",
     "matchDate": "2025-07-13",
     "team": "Chelsea",
     "opponent": "Paris Saint-Germain",
@@ -2313,7 +2384,8 @@
      "name": "Malo Gusto",
      "position": "RB",
      "nationality": "France",
-     "clubAtTime": "Chelsea"
+     "clubAtTime": "Chelsea",
+     "fact": "His cut-back made the first goal"
     },
     {
      "name": "Trevoh Chalobah",
@@ -2376,6 +2448,8 @@
     "Will Hughes 87' (for Wharton)"
    ],
    "fields": {
+    "dateLabel": "2025 FA Cup Final",
+    "competition": "FA Cup",
     "matchDate": "2025-05-17",
     "team": "Crystal Palace",
     "opponent": "Manchester City",
@@ -2493,6 +2567,8 @@
     "Archie Gray 90' (for Sarr)"
    ],
    "fields": {
+    "dateLabel": "2025 Europa League Final",
+    "competition": "UEFA Europa League",
     "matchDate": "2025-05-21",
     "team": "Tottenham Hotspur",
     "opponent": "Manchester United",
@@ -2511,7 +2587,8 @@
      "name": "Brennan Johnson",
      "position": "RW",
      "nationality": "Wales",
-     "clubAtTime": "Tottenham Hotspur"
+     "clubAtTime": "Tottenham Hotspur",
+     "fact": "Bundled in the only goal just before half time"
     },
     {
      "name": "Dominic Solanke",
@@ -2589,6 +2666,8 @@
     "Darwin Núñez 83' (for Mac Allister)"
    ],
    "fields": {
+    "dateLabel": "2024-25 Premier League Title Clincher",
+    "competition": "Premier League",
     "matchDate": "2025-04-27",
     "team": "Liverpool",
     "opponent": "Tottenham Hotspur",
@@ -2607,7 +2686,8 @@
      "name": "Cody Gakpo",
      "position": "LW",
      "nationality": "Netherlands",
-     "clubAtTime": "Liverpool"
+     "clubAtTime": "Liverpool",
+     "fact": "Scored the third"
     },
     {
      "name": "Ibrahima Konate",
@@ -2663,6 +2743,8 @@
     "Aleksandar Kolarov 89' (for Milner)"
    ],
    "fields": {
+    "dateLabel": "2011 Manchester Derby, the 6-1",
+    "competition": "Premier League",
     "matchDate": "2011-10-23",
     "team": "Manchester City",
     "opponent": "Manchester United",

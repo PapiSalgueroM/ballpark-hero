@@ -43,6 +43,8 @@
     "Jose Sosa 72' for Adrian Lopez"
    ],
    "fields": {
+    "dateLabel": "2013-14 La Liga Title Decider",
+    "competition": "La Liga",
     "matchDate": "2014-05-17",
     "team": "Atletico Madrid",
     "opponent": "Barcelona",
@@ -119,6 +121,8 @@
     "Oleksandr Zinchenko 80' for Benjamin Mendy"
    ],
    "fields": {
+    "dateLabel": "2020-21 Premier League",
+    "competition": "Premier League",
     "matchDate": "2021-05-08",
     "team": "Manchester City",
     "opponent": "Chelsea",
@@ -395,6 +399,8 @@
     "Mateo Kovacic 90+1' for Phil Foden"
    ],
    "fields": {
+    "dateLabel": "2023-24 Premier League Title Decider",
+    "competition": "Premier League",
     "matchDate": "2024-05-19",
     "team": "Manchester City",
     "opponent": "West Ham United",
@@ -549,6 +555,8 @@
     "Franck Kessie 89' for Pedri"
    ],
    "fields": {
+    "dateLabel": "2022-23 La Liga Title Decider",
+    "competition": "La Liga",
     "matchDate": "2023-05-14",
     "team": "Barcelona",
     "opponent": "Espanyol",
@@ -741,6 +749,8 @@
     "Andres Iniesta 87' for Ivan Rakitic"
    ],
    "fields": {
+    "dateLabel": "2017-18 La Liga Title Decider",
+    "competition": "La Liga",
     "matchDate": "2018-04-29",
     "team": "Barcelona",
     "opponent": "Deportivo La Coruna",
@@ -882,6 +892,8 @@
     "Mateo Kovacic for Luka Modric (ESPN's page lists 56', 67', 83'/88'; minutes not cross-checked)"
    ],
    "fields": {
+    "dateLabel": "2015-16 Champions League Semifinal",
+    "competition": "UEFA Champions League",
     "matchDate": "2016-05-04",
     "team": "Real Madrid",
     "opponent": "Manchester City",
@@ -1044,6 +1056,8 @@
     "Naby Keita 84' for Sadio Mane"
    ],
    "fields": {
+    "dateLabel": "2019-20 Premier League Title Decider",
+    "competition": "Premier League",
     "matchDate": "2020-06-24",
     "team": "Liverpool",
     "opponent": "Crystal Palace",
@@ -1162,6 +1176,8 @@
     "Mateo Kovacic 114' for Toni Kroos (Sky minutes: Asensio 64', Vazquez 71')"
    ],
    "fields": {
+    "dateLabel": "2016-17 Champions League Quarterfinal",
+    "competition": "UEFA Champions League",
     "matchDate": "2017-04-18",
     "team": "Real Madrid",
     "opponent": "Bayern Munich",
@@ -1393,6 +1409,8 @@
     "Maxwell 90+1' for Adriano"
    ],
    "fields": {
+    "dateLabel": "2010-11 Champions League Round of 16",
+    "competition": "UEFA Champions League",
     "matchDate": "2011-03-08",
     "team": "Barcelona",
     "opponent": "Arsenal",
@@ -1584,6 +1602,8 @@
     "Jurgen Ekkelenkamp (ESPN's page shows one late change between Ekkelenkamp and Schone, rendered ambiguously; not cross-checked)"
    ],
    "fields": {
+    "dateLabel": "2018-19 Champions League Quarterfinal",
+    "competition": "UEFA Champions League",
     "matchDate": "2019-04-10",
     "team": "Ajax",
     "opponent": "Juventus",
@@ -1761,6 +1781,8 @@
     "Badr Benoun 120' for Azzedine Ounahi"
    ],
    "fields": {
+    "dateLabel": "2022 World Cup Round of 16",
+    "competition": "FIFA World Cup",
     "matchDate": "2022-12-06",
     "team": "Morocco",
     "opponent": "Spain",
@@ -1839,6 +1861,8 @@
     "Yahya Jabrane 82' for Sofiane Boufal"
    ],
    "fields": {
+    "dateLabel": "2022 World Cup Quarterfinal",
+    "competition": "FIFA World Cup",
     "matchDate": "2022-12-10",
     "team": "Morocco",
     "opponent": "Portugal",
@@ -1949,6 +1973,8 @@
     "Thomas Muller 73' for Bastian Schweinsteiger"
    ],
    "fields": {
+    "dateLabel": "2013-14 Champions League Semifinal",
+    "competition": "UEFA Champions League",
     "matchDate": "2014-04-23",
     "team": "Bayern Munich",
     "opponent": "Real Madrid",
@@ -2090,6 +2116,8 @@
     "Gonzalo Higuain 90+3' for Karim Benzema"
    ],
    "fields": {
+    "dateLabel": "2012 El Clasico",
+    "competition": "La Liga",
     "matchDate": "2012-04-21",
     "team": "Real Madrid",
     "opponent": "Barcelona",
@@ -2266,6 +2294,8 @@
     "Andre Gomes 70' for Paco Alcacer"
    ],
    "fields": {
+    "dateLabel": "2017 El Clasico",
+    "competition": "La Liga",
     "matchDate": "2017-04-23",
     "team": "Barcelona",
     "opponent": "Real Madrid",
@@ -2396,6 +2426,8 @@
     "Javier Pastore 81' (Sky and ESPN swap which of Verratti and Matuidi each replaced)"
    ],
    "fields": {
+    "dateLabel": "2015-16 Champions League Round of 16",
+    "competition": "UEFA Champions League",
     "matchDate": "2016-02-16",
     "team": "Paris Saint-Germain",
     "opponent": "Chelsea",
@@ -2537,6 +2569,8 @@
     "Kurt Zouma 86' for Victor Moses"
    ],
    "fields": {
+    "dateLabel": "2016-17 Premier League Title Decider",
+    "competition": "Premier League",
     "matchDate": "2017-05-12",
     "team": "Chelsea",
     "opponent": "West Bromwich Albion",
@@ -2656,6 +2690,8 @@
     "Marco Asensio 89' for Karim Benzema"
    ],
    "fields": {
+    "dateLabel": "2018 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2018-05-26",
     "team": "Real Madrid",
     "opponent": "Liverpool",
@@ -2668,19 +2704,22 @@
      "name": "Isco",
      "position": "CAM",
      "nationality": "Spain",
-     "clubAtTime": "Real Madrid"
+     "clubAtTime": "Real Madrid",
+     "fact": "Started at No. 10; Gareth Bale replaced him on 61 minutes and scored the bicycle kick two minutes later"
     },
     {
      "name": "Daniel Carvajal",
      "position": "RB",
      "nationality": "Spain",
-     "clubAtTime": "Real Madrid"
+     "clubAtTime": "Real Madrid",
+     "fact": "Forced off with a hamstring injury after 37 minutes"
     },
     {
      "name": "Casemiro",
      "position": "CDM",
      "nationality": "Brazil",
-     "clubAtTime": "Real Madrid"
+     "clubAtTime": "Real Madrid",
+     "fact": "Started that night for Real Madrid."
     }
    ],
    "sources": [
@@ -2735,6 +2774,8 @@
     "ESPN also shows a change at 45+2' involving Basinas and one at 85' without names; not cross-checked"
    ],
    "fields": {
+    "dateLabel": "2004 Euros Final",
+    "competition": "UEFA European Championship",
     "matchDate": "2004-07-04",
     "team": "Greece",
     "opponent": "Portugal",
@@ -2747,13 +2788,15 @@
      "name": "Angelos Charisteas",
      "position": "RW",
      "nationality": "Greece",
-     "clubAtTime": "Werder Bremen"
+     "clubAtTime": "Werder Bremen",
+     "fact": "Headed the winning goal from a Basinas corner on 57 minutes"
     },
     {
      "name": "Traianos Dellas",
      "position": "CB",
      "nationality": "Greece",
-     "clubAtTime": "Roma"
+     "clubAtTime": "Roma",
+     "fact": "Scored the silver-goal winner in the semifinal against the Czech Republic"
     },
     {
      "name": "Konstantinos Katsouranis",
@@ -2861,6 +2904,8 @@
     "Willian 69' for Fred"
    ],
    "fields": {
+    "dateLabel": "2014 World Cup Semifinal",
+    "competition": "FIFA World Cup",
     "matchDate": "2014-07-08",
     "team": "Brazil",
     "opponent": "Germany",
@@ -2873,13 +2918,15 @@
      "name": "Dante",
      "position": "CB",
      "nationality": "Brazil",
-     "clubAtTime": "Bayern Munich"
+     "clubAtTime": "Bayern Munich",
+     "fact": "Came in for suspended captain Thiago Silva on the night of the Mineirazo"
     },
     {
      "name": "Bernard",
      "position": "LW",
      "nationality": "Brazil",
-     "clubAtTime": "Shakhtar Donetsk"
+     "clubAtTime": "Shakhtar Donetsk",
+     "fact": "Started in place of the injured Neymar"
     },
     {
      "name": "Maicon",
@@ -2961,6 +3008,8 @@
     "Rui Costa 112' for Gennaro Gattuso"
    ],
    "fields": {
+    "dateLabel": "2005 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2005-05-25",
     "team": "AC Milan",
     "opponent": "Liverpool",
@@ -2973,19 +3022,22 @@
      "name": "Hernán Crespo",
      "position": "ST",
      "nationality": "Argentina",
-     "clubAtTime": "AC Milan (on loan from Chelsea)"
+     "clubAtTime": "AC Milan (on loan from Chelsea)",
+     "fact": "Scored twice in the first half (39 and 44) of the final Milan lost from 3-0 up"
     },
     {
      "name": "Jaap Stam",
      "position": "CB",
      "nationality": "Netherlands",
-     "clubAtTime": "AC Milan"
+     "clubAtTime": "AC Milan",
+     "fact": "Started that night for AC Milan."
     },
     {
      "name": "Gennaro Gattuso",
      "position": "CM",
      "nationality": "Italy",
-     "clubAtTime": "AC Milan"
+     "clubAtTime": "AC Milan",
+     "fact": "Started that night for AC Milan."
     }
    ],
    "sources": [
@@ -3036,6 +3088,8 @@
     "Sylvain Wiltord, David Trezeguet and Robert Pires came on (all on UEFA's bench list); minutes and who they replaced not cross-checked"
    ],
    "fields": {
+    "dateLabel": "2000 Euros Final",
+    "competition": "UEFA European Championship",
     "matchDate": "2000-07-02",
     "team": "France",
     "opponent": "Italy",
@@ -3048,7 +3102,8 @@
      "name": "Christophe Dugarry",
      "position": "ST",
      "nationality": "France",
-     "clubAtTime": "Bordeaux"
+     "clubAtTime": "Bordeaux",
+     "fact": "Led the line while both match-winners - Wiltord (90+4) and golden-goal hero Trezeguet - began on the bench"
     },
     {
      "name": "Youri Djorkaeff",
@@ -3139,6 +3194,8 @@
     "Patrick Kluivert 70' (UEFA) / 69' (RSSSF) for Jari Litmanen, scored 85'"
    ],
    "fields": {
+    "dateLabel": "1995 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "1995-05-24",
     "team": "Ajax",
     "opponent": "AC Milan",
@@ -3151,19 +3208,22 @@
      "name": "Jari Litmanen",
      "position": "CAM",
      "nationality": "Finland",
-     "clubAtTime": "Ajax"
+     "clubAtTime": "Ajax",
+     "fact": "Made way on 70 minutes for 18-year-old Patrick Kluivert, who scored the winner in the 85th"
     },
     {
      "name": "Edgar Davids",
      "position": "CM",
      "nationality": "Netherlands",
-     "clubAtTime": "Ajax"
+     "clubAtTime": "Ajax",
+     "fact": "Started that night for Ajax."
     },
     {
      "name": "Michael Reiziger",
      "position": "CB",
      "nationality": "Netherlands",
-     "clubAtTime": "Ajax"
+     "clubAtTime": "Ajax",
+     "fact": "Started that night for Ajax."
     }
    ],
    "sources": [
@@ -3215,6 +3275,8 @@
     "Edmundo 73' for Cesar Sampaio"
    ],
    "fields": {
+    "dateLabel": "1998 World Cup Final",
+    "competition": "FIFA World Cup",
     "matchDate": "1998-07-12",
     "team": "Brazil",
     "opponent": "France",
@@ -3333,6 +3395,8 @@
     "Robert Huth 90+1' for Claude Makelele"
    ],
    "fields": {
+    "dateLabel": "2004-05 Premier League Title Decider",
+    "competition": "Premier League",
     "matchDate": "2005-04-30",
     "team": "Chelsea",
     "opponent": "Bolton Wanderers",
@@ -3345,19 +3409,22 @@
      "name": "Jiri Jarosik",
      "position": "CM",
      "nationality": "Czech Republic",
-     "clubAtTime": "Chelsea"
+     "clubAtTime": "Chelsea",
+     "fact": "A surprise starter in midfield on the day Chelsea sealed their first league title in 50 years"
     },
     {
      "name": "Eidur Gudjohnsen",
      "position": "ST",
      "nationality": "Iceland",
-     "clubAtTime": "Chelsea"
+     "clubAtTime": "Chelsea",
+     "fact": "Started that night for Chelsea."
     },
     {
      "name": "William Gallas",
      "position": "LB",
      "nationality": "France",
-     "clubAtTime": "Chelsea"
+     "clubAtTime": "Chelsea",
+     "fact": "Started that night for Chelsea."
     }
    ],
    "sources": [
@@ -3412,6 +3479,8 @@
     "Jadon Sancho 120' for Kyle Walker"
    ],
    "fields": {
+    "dateLabel": "2021 Euros Final",
+    "competition": "UEFA European Championship",
     "matchDate": "2021-07-11",
     "team": "England",
     "opponent": "Italy",
@@ -3424,7 +3493,8 @@
      "name": "Kieran Trippier",
      "position": "RWB",
      "nationality": "England",
-     "clubAtTime": "Atletico Madrid"
+     "clubAtTime": "Atletico Madrid",
+     "fact": "Recalled in place of Bukayo Saka in a switch to 3-4-3, and crossed for the second-minute opener"
     },
     {
      "name": "Kalvin Phillips",
@@ -3555,6 +3625,8 @@
     "Senny Mayulu 84' for Fabian Ruiz (scored 86')"
    ],
    "fields": {
+    "dateLabel": "2025 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2025-05-31",
     "team": "Paris Saint-Germain",
     "opponent": "Inter Milan",
@@ -3567,19 +3639,22 @@
      "name": "Willian Pacho",
      "position": "CB",
      "nationality": "Ecuador",
-     "clubAtTime": "Paris Saint-Germain"
+     "clubAtTime": "Paris Saint-Germain",
+     "fact": "Started that night for Paris Saint-Germain."
     },
     {
      "name": "Fabián Ruiz",
      "position": "CM",
      "nationality": "Spain",
-     "clubAtTime": "Paris Saint-Germain"
+     "clubAtTime": "Paris Saint-Germain",
+     "fact": "Started that night for Paris Saint-Germain."
     },
     {
      "name": "Désiré Doué",
      "position": "RW",
      "nationality": "France",
-     "clubAtTime": "Paris Saint-Germain"
+     "clubAtTime": "Paris Saint-Germain",
+     "fact": "Scored twice and was named man of the match in the biggest final win in European Cup history"
     }
    ],
    "sources": [
@@ -3641,6 +3716,8 @@
     "Eric Garcia 99' for Aymeric Laporte"
    ],
    "fields": {
+    "dateLabel": "2026 World Cup Final",
+    "competition": "FIFA World Cup",
     "matchDate": "2026-07-19",
     "team": "Spain",
     "opponent": "Argentina",
@@ -3734,6 +3811,8 @@
     "Marcos Senesi 102' for Julian Alvarez"
    ],
    "fields": {
+    "dateLabel": "2026 World Cup Final",
+    "competition": "FIFA World Cup",
     "matchDate": "2026-07-19",
     "team": "Argentina",
     "opponent": "Spain",
@@ -3815,6 +3894,8 @@
     "Julian Schieber 90+1' for Jakub Blaszczykowski"
    ],
    "fields": {
+    "dateLabel": "2013 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2013-05-25",
     "team": "Borussia Dortmund",
     "opponent": "Bayern Munich",
@@ -3897,6 +3978,8 @@
     "Kingsley Coman 89' for Patrice Evra"
    ],
    "fields": {
+    "dateLabel": "2015 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2015-06-06",
     "team": "Juventus",
     "opponent": "Barcelona",
@@ -3972,6 +4055,8 @@
     "Thomas Partey 116' for Koke"
    ],
    "fields": {
+    "dateLabel": "2016 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2016-05-28",
     "team": "Atletico Madrid",
     "opponent": "Real Madrid",
@@ -3990,7 +4075,8 @@
      "name": "Augusto Fernandez",
      "position": "CM",
      "nationality": "Argentina",
-     "clubAtTime": "Atletico Madrid"
+     "clubAtTime": "Atletico Madrid",
+     "fact": "Started in midfield and made way at half time for Carrasco, who scored the equaliser"
     },
     {
      "name": "Filipe Luis",
@@ -4048,6 +4134,8 @@
     "Mario Lemina 78' for Paulo Dybala"
    ],
    "fields": {
+    "dateLabel": "2017 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2017-06-03",
     "team": "Juventus",
     "opponent": "Real Madrid",
@@ -4125,6 +4213,8 @@
     "Emre Can 83' for James Milner"
    ],
    "fields": {
+    "dateLabel": "2018 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2018-05-26",
     "team": "Liverpool",
     "opponent": "Real Madrid",
@@ -4200,6 +4290,8 @@
     "Sergio Aguero 77' for Raheem Sterling"
    ],
    "fields": {
+    "dateLabel": "2021 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2021-05-29",
     "team": "Manchester City",
     "opponent": "Chelsea",

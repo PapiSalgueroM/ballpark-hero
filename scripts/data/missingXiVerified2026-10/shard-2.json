@@ -42,6 +42,8 @@
     "Lucas Vazquez 77' for Benzema"
    ],
    "fields": {
+    "dateLabel": "2016 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2016-05-28",
     "team": "Real Madrid",
     "opponent": "Atletico Madrid",
@@ -117,6 +119,8 @@
     "Marcus Rashford 113' for Walker"
    ],
    "fields": {
+    "dateLabel": "2018 World Cup Round of 16",
+    "competition": "FIFA World Cup",
     "matchDate": "2018-07-03",
     "team": "England",
     "opponent": "Colombia",
@@ -198,6 +202,8 @@
     "Jesus Vallejo 115' for Militao"
    ],
    "fields": {
+    "dateLabel": "2021-22 Champions League Semifinal",
+    "competition": "UEFA Champions League",
     "matchDate": "2022-05-04",
     "team": "Real Madrid",
     "opponent": "Manchester City",
@@ -272,6 +278,8 @@
     "Jeffren 87' for Pedro"
    ],
    "fields": {
+    "dateLabel": "2010 El Clasico (\"La Manita\")",
+    "competition": "La Liga",
     "matchDate": "2010-11-29",
     "team": "Barcelona",
     "opponent": "Real Madrid",
@@ -353,6 +361,8 @@
     "Ryan Giggs 68' for Park (scored 80')"
    ],
    "fields": {
+    "dateLabel": "2007-08 Premier League Title Decider",
+    "competition": "Premier League",
     "matchDate": "2008-05-11",
     "team": "Manchester United",
     "opponent": "Wigan Athletic",
@@ -429,6 +439,8 @@
     "Ilkay Gundogan 68' for Bernardo Silva (scored 76' and 81')"
    ],
    "fields": {
+    "dateLabel": "2021-22 Premier League Title Decider",
+    "competition": "Premier League",
     "matchDate": "2022-05-22",
     "team": "Manchester City",
     "opponent": "Aston Villa",
@@ -502,6 +514,8 @@
     "Denilson 90' for Ronaldo"
    ],
    "fields": {
+    "dateLabel": "2002 World Cup Final",
+    "competition": "FIFA World Cup",
     "matchDate": "2002-06-30",
     "team": "Brazil",
     "opponent": "Germany",
@@ -577,6 +591,8 @@
     "Patrick Vieira 74' for Djorkaeff"
    ],
    "fields": {
+    "dateLabel": "1998 World Cup Final",
+    "competition": "FIFA World Cup",
     "matchDate": "1998-07-12",
     "team": "France",
     "opponent": "Brazil",
@@ -688,6 +704,8 @@
     "Massimo Ambrosini 87' for Rui Costa"
    ],
    "fields": {
+    "dateLabel": "2003 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2003-05-28",
     "team": "AC Milan",
     "opponent": "Juventus",
@@ -868,6 +886,8 @@
     "Giuseppe Favalli 90' for Seedorf"
    ],
    "fields": {
+    "dateLabel": "2007 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2007-05-23",
     "team": "AC Milan",
     "opponent": "Liverpool",
@@ -1056,6 +1076,8 @@
     "Anderson 120' for Brown"
    ],
    "fields": {
+    "dateLabel": "2008 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2008-05-21",
     "team": "Manchester United",
     "opponent": "Chelsea",
@@ -1174,6 +1196,8 @@
     "John Obi Mikel 79' for Joe Cole"
    ],
    "fields": {
+    "dateLabel": "2007-08 Premier League Title Race",
+    "competition": "Premier League",
     "matchDate": "2008-05-11",
     "team": "Chelsea",
     "opponent": "Bolton Wanderers",
@@ -1350,6 +1374,8 @@
     "Daniel Guiza 78' for Torres"
    ],
    "fields": {
+    "dateLabel": "2008 Euros Final",
+    "competition": "UEFA European Championship",
     "matchDate": "2008-06-29",
     "team": "Spain",
     "opponent": "Germany",
@@ -1493,6 +1519,8 @@
     "Juan Mata 87' for Iniesta"
    ],
    "fields": {
+    "dateLabel": "2012 Euros Final",
+    "competition": "UEFA European Championship",
     "matchDate": "2012-07-01",
     "team": "Spain",
     "opponent": "Italy",
@@ -1622,6 +1650,8 @@
     "Eder 79' for Renato Sanches (scored 109')"
    ],
    "fields": {
+    "dateLabel": "2016 Euros Final",
+    "competition": "UEFA European Championship",
     "matchDate": "2016-07-10",
     "team": "Portugal",
     "opponent": "France",
@@ -1814,6 +1844,8 @@
     "Nico Gonzalez 79' for Lautaro Martinez"
    ],
    "fields": {
+    "dateLabel": "2021 Copa America Final",
+    "competition": "Copa America",
     "matchDate": "2021-07-10",
     "team": "Argentina",
     "opponent": "Brazil",
@@ -1971,6 +2003,8 @@
     "Angelo Henriquez 95' for Vargas"
    ],
    "fields": {
+    "dateLabel": "2015 Copa America Final",
+    "competition": "Copa America",
     "matchDate": "2015-07-04",
     "team": "Chile",
     "opponent": "Argentina",
@@ -2079,6 +2113,8 @@
     "Allan 93' for Coutinho"
    ],
    "fields": {
+    "dateLabel": "2019 Copa America Final",
+    "competition": "Copa America",
     "matchDate": "2019-07-07",
     "team": "Brazil",
     "opponent": "Peru",
@@ -2170,6 +2206,8 @@
     "Nicolas Castillo 109' for Vargas"
    ],
    "fields": {
+    "dateLabel": "2016 Copa America Centenario Final",
+    "competition": "Copa America",
     "matchDate": "2016-06-26",
     "team": "Chile",
     "opponent": "Argentina",
@@ -2338,6 +2376,8 @@
     "Nicolas Otamendi 117' for Di Maria"
    ],
    "fields": {
+    "dateLabel": "2024 Copa America Final",
+    "competition": "Copa America",
     "matchDate": "2024-07-14",
     "team": "Argentina",
     "opponent": "Colombia",
@@ -2494,6 +2534,8 @@
     "First leg (17 Apr): Thomas Mueller 61' for Schweinsteiger"
    ],
    "fields": {
+    "dateLabel": "2011-12 Champions League Semifinal",
+    "competition": "UEFA Champions League",
     "matchDate": "2012-04-25",
     "team": "Bayern Munich",
     "opponent": "Real Madrid",
@@ -2679,6 +2721,8 @@
     "Daniel Sturridge 90' for Shaqiri"
    ],
    "fields": {
+    "dateLabel": "2018-19 Champions League Semifinal",
+    "competition": "UEFA Champions League",
     "matchDate": "2019-05-07",
     "team": "Liverpool",
     "opponent": "Barcelona",
@@ -2792,6 +2836,8 @@
     "Antonio Nunez 84' for Luis Garcia"
    ],
    "fields": {
+    "dateLabel": "2004-05 Champions League Semifinal",
+    "competition": "UEFA Champions League",
     "matchDate": "2005-05-03",
     "team": "Liverpool",
     "opponent": "Chelsea",
@@ -2950,6 +2996,8 @@
     "Andy King 88' for Mahrez"
    ],
    "fields": {
+    "dateLabel": "2015-16 Premier League Title Decider",
+    "competition": "Premier League",
     "matchDate": "2016-05-01",
     "team": "Leicester City",
     "opponent": "Manchester United",
@@ -3059,6 +3107,8 @@
     "Alvaro Negredo 86' for Yaya Toure"
    ],
    "fields": {
+    "dateLabel": "2013-14 Premier League Title Decider",
+    "competition": "Premier League",
     "matchDate": "2014-05-11",
     "team": "Manchester City",
     "opponent": "West Ham United",
@@ -3216,6 +3266,8 @@
     "Danilo 88' for Walker"
    ],
    "fields": {
+    "dateLabel": "2018-19 Premier League Title Decider",
+    "competition": "Premier League",
     "matchDate": "2019-05-12",
     "team": "Manchester City",
     "opponent": "Brighton & Hove Albion",
@@ -3428,6 +3480,8 @@
     "Marcelo 87' for Callejon"
    ],
    "fields": {
+    "dateLabel": "2011-12 La Liga Title Decider",
+    "competition": "La Liga",
     "matchDate": "2012-05-02",
     "team": "Real Madrid",
     "opponent": "Athletic Bilbao",
@@ -3614,6 +3668,8 @@
     "Rafinha 87' for Rakitic"
    ],
    "fields": {
+    "dateLabel": "2014-15 La Liga Title Decider",
+    "competition": "La Liga",
     "matchDate": "2015-05-17",
     "team": "Barcelona",
     "opponent": "Atletico Madrid",
@@ -3749,6 +3805,8 @@
     "Alvaro Morata 73' for Benzema"
    ],
    "fields": {
+    "dateLabel": "2016-17 La Liga Title Decider",
+    "competition": "La Liga",
     "matchDate": "2017-05-21",
     "team": "Real Madrid",
     "opponent": "Malaga",
@@ -3861,6 +3919,8 @@
     "Martin Keown 87' for Ljungberg"
    ],
    "fields": {
+    "dateLabel": "2003-04 Arsenal Invincibles Finale",
+    "competition": "Premier League",
     "matchDate": "2004-05-15",
     "team": "Arsenal",
     "opponent": "Leicester City",
@@ -3938,6 +3998,8 @@
     "Stephan El Shaarawy 77' for Nainggolan"
    ],
    "fields": {
+    "dateLabel": "2017-18 Champions League Quarterfinal",
+    "competition": "UEFA Champions League",
     "matchDate": "2018-04-10",
     "team": "Roma",
     "opponent": "Barcelona",
@@ -4149,6 +4211,8 @@
     "Ben Davies 82' for Rose"
    ],
    "fields": {
+    "dateLabel": "2018-19 Champions League Semifinal",
+    "competition": "UEFA Champions League",
     "matchDate": "2019-05-08",
     "team": "Tottenham Hotspur",
     "opponent": "Ajax",
@@ -4336,6 +4400,8 @@
     "Pedro Emanuel 85' for Deco"
    ],
    "fields": {
+    "dateLabel": "2004 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2004-05-26",
     "team": "Porto",
     "opponent": "Monaco",
@@ -4498,6 +4564,8 @@
     "Juliano Belletti 71' for Oleguer (scored 81')"
    ],
    "fields": {
+    "dateLabel": "2006 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2006-05-17",
     "team": "Barcelona",
     "opponent": "Arsenal",
@@ -4644,6 +4712,8 @@
     "Andriy Shevchenko 119' for Lampard"
    ],
    "fields": {
+    "dateLabel": "2007-08 Champions League Semifinal",
+    "competition": "UEFA Champions League",
     "matchDate": "2008-04-30",
     "team": "Chelsea",
     "opponent": "Liverpool",

@@ -50,6 +50,8 @@
     "Mario Balotelli 75' for Diego Milito"
    ],
    "fields": {
+    "dateLabel": "2009-10 Champions League Semifinal",
+    "competition": "UEFA Champions League",
     "matchDate": "2010-04-20",
     "team": "Inter Milan",
     "opponent": "Barcelona",
@@ -206,6 +208,8 @@
     "Casemiro 84' for Ángel Di María"
    ],
    "fields": {
+    "dateLabel": "2013-14 Champions League Semifinal",
+    "competition": "UEFA Champions League",
     "matchDate": "2014-04-29",
     "team": "Real Madrid",
     "opponent": "Bayern Munich",
@@ -341,6 +345,8 @@
     "André Gomes 84' for Ivan Rakitić"
    ],
    "fields": {
+    "dateLabel": "2016-17 Champions League Round of 16",
+    "competition": "UEFA Champions League",
     "matchDate": "2017-03-08",
     "team": "Barcelona",
     "opponent": "Paris Saint-Germain",
@@ -567,6 +573,8 @@
     "Ousmane Dembélé 81' for Philippe Coutinho"
    ],
    "fields": {
+    "dateLabel": "2018-19 Champions League Quarterfinal",
+    "competition": "UEFA Champions League",
     "matchDate": "2019-04-16",
     "team": "Barcelona",
     "opponent": "Manchester United",
@@ -711,6 +719,8 @@
     "Lucas Vázquez 85' for Dani Carvajal"
    ],
    "fields": {
+    "dateLabel": "2019-20 La Liga Title Decider",
+    "competition": "La Liga",
     "matchDate": "2020-07-16",
     "team": "Real Madrid",
     "opponent": "Villarreal",
@@ -853,6 +863,8 @@
     "Ivan Perišić 66' for Matteo Darmian"
    ],
    "fields": {
+    "dateLabel": "2020-21 Serie A Title Decider",
+    "competition": "Serie A",
     "matchDate": "2021-05-01",
     "team": "Inter Milan",
     "opponent": "Crotone",
@@ -1076,6 +1088,8 @@
     "Jamal Musiala 85' for Noussair Mazraoui (scored the late winner)"
    ],
    "fields": {
+    "dateLabel": "2022-23 Bundesliga Title Decider",
+    "competition": "Bundesliga",
     "matchDate": "2023-05-27",
     "team": "Bayern Munich",
     "opponent": "FC Koln",
@@ -1271,6 +1285,8 @@
     "Xherdan Shaqiri 89' for Franck Ribéry"
    ],
    "fields": {
+    "dateLabel": "2012-13 Champions League Semifinal",
+    "competition": "UEFA Champions League",
     "matchDate": "2013-04-23",
     "team": "Bayern Munich",
     "opponent": "Barcelona",
@@ -1405,6 +1421,8 @@
     "Sergi Roberto 90+1' for David Villa"
    ],
    "fields": {
+    "dateLabel": "2010-11 Champions League Semifinal",
+    "competition": "UEFA Champions League",
     "matchDate": "2011-04-27",
     "team": "Barcelona",
     "opponent": "Real Madrid",
@@ -1552,6 +1570,8 @@
     "Nabil Dirar 90+1' for Valère Germain"
    ],
    "fields": {
+    "dateLabel": "2016-17 Champions League Round of 16",
+    "competition": "UEFA Champions League",
     "matchDate": "2017-03-15",
     "team": "Monaco",
     "opponent": "Manchester City",
@@ -1705,6 +1725,8 @@
     "Fernando Torres 80' for Didier Drogba (scored 90+2')"
    ],
    "fields": {
+    "dateLabel": "2011-12 Champions League Semifinal",
+    "competition": "UEFA Champions League",
     "matchDate": "2012-04-24",
     "team": "Chelsea",
     "opponent": "Barcelona",
@@ -1812,6 +1834,8 @@
     "Marc Bartra 89' for Javier Mascherano"
    ],
    "fields": {
+    "dateLabel": "2014-15 Champions League Semifinal",
+    "competition": "UEFA Champions League",
     "matchDate": "2015-05-06",
     "team": "Barcelona",
     "opponent": "Bayern Munich",
@@ -1887,6 +1911,8 @@
     "José María Giménez 106' (ESPN 105') for Ángel Correa"
    ],
    "fields": {
+    "dateLabel": "2019-20 Champions League Round of 16",
+    "competition": "UEFA Champions League",
     "matchDate": "2020-03-11",
     "team": "Atletico Madrid",
     "opponent": "Liverpool",
@@ -2067,6 +2093,8 @@
     "Reece James 66' for César Azpilicueta"
    ],
    "fields": {
+    "dateLabel": "2020-21 Champions League Semifinal",
+    "competition": "UEFA Champions League",
     "matchDate": "2021-04-27",
     "team": "Chelsea",
     "opponent": "Real Madrid",
@@ -2269,6 +2297,8 @@
     "Jeffrey Schlupp 90' for Riyad Mahrez"
    ],
    "fields": {
+    "dateLabel": "2015-16 Premier League Title Run",
+    "competition": "Premier League",
     "matchDate": "2015-12-05",
     "team": "Leicester City",
     "opponent": "Swansea City",
@@ -2435,6 +2465,8 @@
     "Phil Foden 82' for Ilkay Gündogan"
    ],
    "fields": {
+    "dateLabel": "2017-18 Premier League \"Centurions\" Season",
+    "competition": "Premier League",
     "matchDate": "2018-05-13",
     "team": "Manchester City",
     "opponent": "Southampton",
@@ -2509,6 +2541,8 @@
     "Kevin De Bruyne 78' for Sergio Gómez"
    ],
    "fields": {
+    "dateLabel": "2022-23 Premier League Trophy Day",
+    "competition": "Premier League",
     "matchDate": "2023-05-21",
     "team": "Manchester City",
     "opponent": "Chelsea",
@@ -2810,6 +2844,8 @@
     "Mattia De Sciglio 87' for Juan Cuadrado"
    ],
    "fields": {
+    "dateLabel": "2018-19 Serie A Title Decider",
+    "competition": "Serie A",
     "matchDate": "2019-04-20",
     "team": "Juventus",
     "opponent": "Fiorentina",
@@ -3016,6 +3052,8 @@
     "Lucas Hernández 82' for Serge Gnabry"
    ],
    "fields": {
+    "dateLabel": "2019-20 Bundesliga Title Decider",
+    "competition": "Bundesliga",
     "matchDate": "2020-06-16",
     "team": "Bayern Munich",
     "opponent": "Werder Bremen",
@@ -3187,6 +3225,8 @@
     "Vinícius Júnior 75' for Rodrygo"
    ],
    "fields": {
+    "dateLabel": "2021-22 La Liga Title Decider",
+    "competition": "La Liga",
     "matchDate": "2022-04-30",
     "team": "Real Madrid",
     "opponent": "Espanyol",
@@ -3476,6 +3516,8 @@
     "Lucas Vázquez 77' for Karim Benzema"
    ],
    "fields": {
+    "dateLabel": "2016-17 Champions League Semifinal",
+    "competition": "UEFA Champions League",
     "matchDate": "2017-05-02",
     "team": "Real Madrid",
     "opponent": "Atletico Madrid",
@@ -3571,6 +3613,8 @@
     "Mason Greenwood 87' for Ashley Young"
    ],
    "fields": {
+    "dateLabel": "2018-19 Champions League Round of 16",
+    "competition": "UEFA Champions League",
     "matchDate": "2019-03-06",
     "team": "Manchester United",
     "opponent": "Paris Saint-Germain",
@@ -3793,6 +3837,8 @@
     "Daniele Bonera 90' for Djamel Mesbah"
    ],
    "fields": {
+    "dateLabel": "2011-12 Champions League Round of 16",
+    "competition": "UEFA Champions League",
     "matchDate": "2012-03-06",
     "team": "AC Milan",
     "opponent": "Arsenal",
@@ -4064,6 +4110,8 @@
     "Marouane Fellaini 90+1' for Robin van Persie"
    ],
    "fields": {
+    "dateLabel": "2013-14 Champions League Round of 16",
+    "competition": "UEFA Champions League",
     "matchDate": "2014-03-19",
     "team": "Manchester United",
     "opponent": "Olympiacos",
@@ -4267,6 +4315,8 @@
     "Marco Asensio 82' for Federico Valverde (scored 85')"
    ],
    "fields": {
+    "dateLabel": "2020-21 Champions League Round of 16",
+    "competition": "UEFA Champions League",
     "matchDate": "2021-03-16",
     "team": "Real Madrid",
     "opponent": "Atalanta",
@@ -4341,6 +4391,8 @@
     "Julián Alvarez 89' for Erling Haaland (scored 90+1')"
    ],
    "fields": {
+    "dateLabel": "2022-23 Champions League Semifinal",
+    "competition": "UEFA Champions League",
     "matchDate": "2023-05-17",
     "team": "Manchester City",
     "opponent": "Real Madrid",
@@ -4574,6 +4626,8 @@
     "Raphaël Varane 90+2' for Luka Modrić"
    ],
    "fields": {
+    "dateLabel": "2015-16 Champions League Quarterfinal",
+    "competition": "UEFA Champions League",
     "matchDate": "2016-04-12",
     "team": "Real Madrid",
     "opponent": "VfL Wolfsburg",
@@ -4677,6 +4731,8 @@
     "Nacho 88' for Marco Asensio"
    ],
    "fields": {
+    "dateLabel": "2017-18 Champions League Semifinal",
+    "competition": "UEFA Champions League",
     "matchDate": "2018-05-01",
     "team": "Real Madrid",
     "opponent": "Bayern Munich",
@@ -4898,6 +4954,8 @@
     "Lucas Vázquez 66' for Dani Carvajal"
    ],
    "fields": {
+    "dateLabel": "2021-22 Champions League Round of 16",
+    "competition": "UEFA Champions League",
     "matchDate": "2022-03-09",
     "team": "Real Madrid",
     "opponent": "Paris Saint-Germain",
@@ -5074,6 +5132,8 @@
     "Flavio Conceição 73' for Claude Makelele"
    ],
    "fields": {
+    "dateLabel": "2002 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2002-05-15",
     "team": "Real Madrid",
     "opponent": "Bayer Leverkusen",
@@ -5222,6 +5282,8 @@
     "Paulo Sérgio 108' for Mehmet Scholl"
    ],
    "fields": {
+    "dateLabel": "2001 Champions League Final",
+    "competition": "UEFA Champions League",
     "matchDate": "2001-05-23",
     "team": "Bayern Munich",
     "opponent": "Valencia",
@@ -5364,6 +5426,8 @@
     "Christian Ziege 84' for Marco Bode"
    ],
    "fields": {
+    "dateLabel": "2002 World Cup Final",
+    "competition": "FIFA World Cup",
     "matchDate": "2002-06-30",
     "team": "Germany",
     "opponent": "Brazil",
@@ -5478,6 +5542,8 @@
     "Edson Braafheid 104' for Giovanni van Bronckhorst"
    ],
    "fields": {
+    "dateLabel": "2010 World Cup Final",
+    "competition": "FIFA World Cup",
     "matchDate": "2010-07-11",
     "team": "Netherlands",
     "opponent": "Spain",
@@ -5591,6 +5657,8 @@
     "Nuno Gomes 74' for Pauleta"
    ],
    "fields": {
+    "dateLabel": "2004 Euros Final",
+    "competition": "UEFA European Championship",
     "matchDate": "2004-07-04",
     "team": "Portugal",
     "opponent": "Greece",
@@ -5704,6 +5772,8 @@
     "Mario Gomez 80' for Sami Khedira"
    ],
    "fields": {
+    "dateLabel": "2010 World Cup Semifinal",
+    "competition": "FIFA World Cup",
     "matchDate": "2010-07-07",
     "team": "Germany",
     "opponent": "Spain",
