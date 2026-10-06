@@ -1,3 +1,24 @@
+## Codex1060: saved-season comparison in remote preparation, 2026-10-06
+
+Career Log now offers Compare seasons after two saved seasons in NFL, NBA,
+MLB and NHL. Pick distinct original save indices; Overview compares rating,
+games, age and pay, and Regular season compares the existing position stats.
+Differences use raw saved values before rounding to each stat's precision.
+Missing, zero and suspended values stay distinct. Back restores opener focus.
+No engine, Board, save schema or database changes.
+
+Product and tests are implemented; remote runtime acceptance is pending.
+The existing season-review workflow temporarily generates the What's New
+snapshot and sitemap on this branch, then runs mounted outcomes, effective
+controls, career regression, all built readers and16 native journeys.
+All six MLB batting rows are checked at320px. Copy only verified generated
+artifacts, remove temporary generation, then verify committed source.
+
+PR140 is merged at1869ffe85c70c33e6ef59addec5dc5f0563b34e3. All eight
+final workflows and119 steps passed atf263e453; the merge tree is identical.
+Claude has the exact publication request in shared root WORKBOARD because
+Codex's authenticated browser bridge is unavailable. No live claim yet.
+Root drafts and seven stashes remain held. Runtime remains remote.
 ## Codex combined release final checks, 2026-10-05 EDT
 
 Remote preparation37406951266 passed every step on8155f4da:11 mounted cases,
