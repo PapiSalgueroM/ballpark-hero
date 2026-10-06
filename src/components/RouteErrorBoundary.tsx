@@ -1,5 +1,7 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react';
 import { isStaleChunkError, reloadOnceForStaleChunk } from '@/lib/freshBuild';
+import { browserStorage, heldSaveHere, openGame, setAsideSave } from '@/lib/brokenSaveRecovery';
+import type { ContinueSave } from '@/data/continueSaves';
 
 /**
  * Round 544: one game falling over must not take the site with it.
@@ -44,6 +46,10 @@ interface Props {
 
 interface State {
   failed: boolean;
+  /** Round 958: the long game on this route, when this browser holds its save. */
+  recover?: ContinueSave | null;
+  /** Round 958: a fresh start was asked for and the save could not be copied aside. */
+  recoverFailed?: boolean;
 }
 
 export class RouteErrorBoundary extends Component<Props, State> {
@@ -52,6 +58,23 @@ export class RouteErrorBoundary extends Component<Props, State> {
   static getDerivedStateFromError(): State {
     return { failed: true };
   }
+
+  /* Round 958: before this, the only button here reloaded the page, which read
+     the same broken save and broke the same way, so a long game whose save
+     throws while drawing trapped the player. Starting fresh moves the save to a
+     dated backup key first (src/lib/brokenSaveRecovery.ts copies it, reads the
+     copy back, and only then removes the original), then opens the game's own
+     address, which with no save is its start screen. If the copy fails nothing
+     is removed and the screen says so. This screen cannot tell a broken save
+     from a code bug, so the move is reversible: on the game's page
+     src/components/BrokenSaveRestore.tsx offers the backup back. */
+  startFresh = () => {
+    const entry = this.state.recover;
+    if (!entry) return;
+    const moved = setAsideSave(entry, browserStorage());
+    if (!moved.ok) { this.setState({ recoverFailed: true }); return; }
+    openGame(entry.path);
+  };
 
   componentDidCatch(error: Error, info: ErrorInfo) {
     /* Round 667: a stale chunk after a deploy is not a broken page, it is a
@@ -62,11 +85,16 @@ export class RouteErrorBoundary extends Component<Props, State> {
        thing that can fail while something is already failing, and the report a
        bug button below gives the player a way to tell us in their own words. */
     console.error('A page failed to render:', error, info.componentStack);
+    /* Round 958: looked up here, once, and not in render, which stays free of
+       storage reads. Null on any route without a save in this browser, and
+       null for a chunk that failed to load: that is the network or a deploy,
+       never the save, so the reload is the only honest offer there. */
+    this.setState({ recover: isStaleChunkError(error) ? null : heldSaveHere(), recoverFailed: false });
   }
 
   componentDidUpdate(prev: Props) {
     if (this.state.failed && prev.resetKey !== this.props.resetKey) {
-      this.setState({ failed: false });
+      this.setState({ failed: false, recover: null, recoverFailed: false });
     }
   }
 
@@ -101,7 +129,30 @@ export class RouteErrorBoundary extends Component<Props, State> {
             >
               Try this page again
             </button>
+            {this.state.recover && (
+              <button
+                type="button"
+                data-dukb-fresh-start=""
+                onClick={this.startFresh}
+                className="px-5 py-2.5 bg-secondary text-foreground rounded-full font-bold text-sm hover:bg-secondary/70 transition-colors"
+              >
+                Start a fresh game
+              </button>
+            )}
           </div>
+          {this.state.recover && !this.state.recoverFailed && (
+            <p className="mt-4 text-xs text-muted-foreground">
+              If trying again keeps breaking, you can start a fresh game. Your old save gets moved
+              aside to a backup in this browser, not deleted, and the game offers to put it back
+              next time you open it. Each game keeps its three newest backups.
+            </p>
+          )}
+          {this.state.recoverFailed && (
+            <p role="alert" className="mt-4 text-xs text-muted-foreground">
+              Your browser would not let us move the old save aside, so we left it exactly where it
+              was and did not start over.
+            </p>
+          )}
           <p className="mt-5 text-xs text-muted-foreground">
             Telling us what you were doing helps a lot. The report a bug button is at the bottom
             of this page.

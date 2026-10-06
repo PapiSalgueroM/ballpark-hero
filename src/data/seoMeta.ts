@@ -442,8 +442,8 @@ export const SEO_META: Record<string, SeoMeta> = {
     description: 'Two VFL and AFL greats side by side: who kicked more career goals? Sixty retired legends, so no total ever moves. Free daily Aussie rules footy trivia.',
   },
   '/aussie-rules-manager': {
-    title: 'Aussie Rules Manager: Free Footy Management Game',
-    description: 'Run a fictional Aussie rules club through ten rounds. Pick your squad, train or rest and change tactics between quarters. Free footy management game.',
+    title: 'Aussie Rules Manager: Free Footy Season Game',
+    description: 'Run a fictional Aussie rules club through 23 rounds, the finals and the draft. Pick your 23, call the quarters, chase a flag. Free footy manager.',
   },
   '/guess-nascar-driver': {
     title: 'Guess The Driver: NASCAR Cup Series Quiz',

@@ -9,7 +9,7 @@ type Picker = { bench: boolean; index: number };
 const newSeed = () => Math.floor(Math.random() * 4294967295) + 1;
 const score = (value: Score) => `${value.goals}.${value.behinds} (${value.total})`;
 
-export default function AussieRulesManagerBoard() {
+export default function AussieRulesManagerBoard({ onReset }: { onReset?: () => void } = {}) {
   const game = useAussieRulesManager();
   const state = game.state;
   const [seed, setSeed] = useState(newSeed);
@@ -112,7 +112,7 @@ export default function AussieRulesManagerBoard() {
     {confirmReset ? <div className={styles.card}>
       <h3>Start fresh?</h3><p>Your current local season will be replaced.</p><div className={styles.actions}>
         <button className={styles.secondary} onClick={() => { setConfirmReset(false); resetOpener.current?.focus({ preventScroll: true }); }}>Keep this season</button>
-        <button className={styles.action} onClick={() => { flowFocus.current = true; game.reset(); setSeed(newSeed()); setConfirmReset(false); setPicker(null); setCue(null); }}>Start a new season</button>
+        <button className={styles.action} onClick={() => { flowFocus.current = true; game.reset(); setSeed(newSeed()); setConfirmReset(false); setPicker(null); setCue(null); onReset?.(); }}>Start a new season</button>
       </div></div> : <>
       <nav className={styles.tabs} aria-label="Season panels">{(['match', 'squad', 'ladder'] as const).map(value => <button key={value} aria-pressed={panel === value} className={panel === value ? styles.action : styles.secondary} onClick={() => { setPanel(value); setPicker(null); }}>{value === 'match' ? 'Match' : value === 'squad' ? 'Squad' : 'Ladder'}</button>)}</nav>
       <div className={styles.feedback} role="status" aria-live="polite">{cue && <span key={cue.id} className={styles.committed} data-arm-feedback>{cue.text}</span>}</div>

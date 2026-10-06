@@ -1,0 +1,1746 @@
+{
+ "recordedOn": "2026-10-05",
+ "recordedFrom": "cbc4e03a",
+ "note": "Recorded by replaying each action list through the untouched Round 792 engine (src/lib/aussieRulesManager.ts at origin/main) and hashing JSON.stringify(state) with sha256. simAussieRulesSeason section 1 replays them through the edited file.",
+ "saves": [
+  {
+   "name": "fresh",
+   "seed": 1234567,
+   "clubId": "club-0",
+   "actions": [],
+   "phase": "prepare",
+   "round": 0,
+   "hash": "e76e92c65066751f09c5e0b7063a11062777b67efaa9d8bd64bc8dddda63af77"
+  },
+  {
+   "name": "prepare with a custom lineup",
+   "seed": 99,
+   "clubId": "club-3",
+   "actions": [
+    {
+     "type": "lineup",
+     "starters": [
+      "club-3-p-10",
+      "club-3-p-4",
+      "club-3-p-6",
+      "club-3-p-1",
+      "club-3-p-11",
+      "club-3-p-2",
+      "club-3-p-16",
+      "club-3-p-21",
+      "club-3-p-14",
+      "club-3-p-15",
+      "club-3-p-17",
+      "club-3-p-25",
+      "club-3-p-28",
+      "club-3-p-32",
+      "club-3-p-29",
+      "club-3-p-33",
+      "club-3-p-34",
+      "club-3-p-26"
+     ],
+     "bench": [
+      "club-3-p-5",
+      "club-3-p-13",
+      "club-3-p-24",
+      "club-3-p-27",
+      "club-3-p-30"
+     ]
+    }
+   ],
+   "phase": "prepare",
+   "round": 0,
+   "hash": "a14145f46256602cb999edbaab67c4a3f18a8703b5d4a68f22c08f3935f947f2"
+  },
+  {
+   "name": "quarter phase",
+   "seed": 4242,
+   "clubId": "club-1",
+   "actions": [
+    {
+     "type": "prepare",
+     "choice": "train"
+    }
+   ],
+   "phase": "quarter",
+   "round": 0,
+   "hash": "8768dc894eb6e93c3d97717a889a294ed6dc61a1ed5f2380c10d0d2277172d51"
+  },
+  {
+   "name": "break phase",
+   "seed": 777,
+   "clubId": "club-2",
+   "actions": [
+    {
+     "type": "prepare",
+     "choice": "train"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    }
+   ],
+   "phase": "break",
+   "round": 0,
+   "hash": "099a90ecb4b76bb3797e57e73d3e4a5b1dedbeb60118b3f9249d6d5f99c33160"
+  },
+  {
+   "name": "break with five swaps",
+   "seed": 31337,
+   "clubId": "club-4",
+   "actions": [
+    {
+     "type": "prepare",
+     "choice": "train"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "swap",
+     "outId": "club-4-p-6",
+     "inId": "club-4-p-3"
+    },
+    {
+     "type": "swap",
+     "outId": "club-4-p-14",
+     "inId": "club-4-p-12"
+    },
+    {
+     "type": "swap",
+     "outId": "club-4-p-22",
+     "inId": "club-4-p-24"
+    },
+    {
+     "type": "swap",
+     "outId": "club-4-p-30",
+     "inId": "club-4-p-27"
+    },
+    {
+     "type": "swap",
+     "outId": "club-4-p-24",
+     "inId": "club-4-p-25"
+    }
+   ],
+   "phase": "break",
+   "round": 0,
+   "hash": "d14eeccd4de576bde0fe412f0ff51e840efcfe984a14b5d70554ac23698a3614"
+  },
+  {
+   "name": "report phase",
+   "seed": 2024,
+   "clubId": "club-5",
+   "actions": [
+    {
+     "type": "prepare",
+     "choice": "train"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    }
+   ],
+   "phase": "report",
+   "round": 0,
+   "hash": "bf0c097af24505c96b28c32b2078638a0a6dea37b4b1658ac1040d367bf864d0"
+  },
+  {
+   "name": "round three prepare",
+   "seed": 8080,
+   "clubId": "club-0",
+   "actions": [
+    {
+     "type": "prepare",
+     "choice": "train"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "rest"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    }
+   ],
+   "phase": "prepare",
+   "round": 2,
+   "hash": "c7c8ad1db095874f7fe2958c08822172d1b9aa3e21f4bd1bff176d3abc80f2de"
+  },
+  {
+   "name": "mid season break",
+   "seed": 5150,
+   "clubId": "club-1",
+   "actions": [
+    {
+     "type": "prepare",
+     "choice": "train"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "rest"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "train"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "train"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "rest"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "train"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    }
+   ],
+   "phase": "break",
+   "round": 5,
+   "hash": "5718cc69865f4097860d395ae044be3bce4ebf83ba4223ed9b50198cd158f9bf"
+  },
+  {
+   "name": "completed season containing a draw",
+   "seed": 4,
+   "clubId": "club-2",
+   "actions": [
+    {
+     "type": "prepare",
+     "choice": "train"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "rest"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "train"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "train"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "rest"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "train"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "train"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "rest"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "train"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "train"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    }
+   ],
+   "phase": "complete",
+   "round": 9,
+   "hash": "510d0357f02ecb91da300dd95b70e6d12b17fa765819a52d094317647493c8ec"
+  },
+  {
+   "name": "completed season",
+   "seed": 60606,
+   "clubId": "club-5",
+   "actions": [
+    {
+     "type": "prepare",
+     "choice": "train"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "rest"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "train"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "train"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "rest"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "train"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "train"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "rest"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "train"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "train"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    }
+   ],
+   "phase": "complete",
+   "round": 9,
+   "hash": "ce6ce13026a075c765972b088c90614ce77eb53c2df16f7483ee7e55161d7a29"
+  },
+  {
+   "name": "last round report",
+   "seed": 909,
+   "clubId": "club-3",
+   "actions": [
+    {
+     "type": "prepare",
+     "choice": "train"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "rest"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "train"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "train"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "rest"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "train"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "train"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "rest"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "train"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "train"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    }
+   ],
+   "phase": "report",
+   "round": 9,
+   "hash": "db787e31708ad779a9698465ae2c8ae3759462d1f53df3f9ad2ee0209e2c6b7a"
+  },
+  {
+   "name": "completed season, other club",
+   "seed": 123,
+   "clubId": "club-0",
+   "actions": [
+    {
+     "type": "prepare",
+     "choice": "train"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "rest"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "train"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "train"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "rest"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "train"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "train"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "rest"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "train"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "prepare",
+     "choice": "train"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "direct"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "pressure"
+    },
+    {
+     "type": "next"
+    },
+    {
+     "type": "play",
+     "tactic": "control"
+    },
+    {
+     "type": "next"
+    }
+   ],
+   "phase": "complete",
+   "round": 9,
+   "hash": "3c4c3342354a0358d3ac6d09b38c3c6313a6abf081e55cafb65237cffdacf838"
+  }
+ ]
+}

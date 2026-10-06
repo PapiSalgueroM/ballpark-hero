@@ -17,6 +17,20 @@
     },
     {
       "era": {
+        "id": "era2020",
+        "label": "2020-21",
+        "startYear": 2020,
+        "emoji": "🏟️"
+      },
+      "firstKo": "R16",
+      "legs": 2,
+      "awayGoals": true,
+      "realId": "eight-groups-r16",
+      "matchesReal": true,
+      "line": "Eight groups of four into the round of 16, two legged ties, away goals count double. That is the real 2020-21 format."
+    },
+    {
+      "era": {
         "id": "era2015",
         "label": "2015-16",
         "startYear": 2015,

@@ -60,8 +60,8 @@ describe('actual Aussie Rules Manager Board', () => {
     expect(within(rules).getByRole('link', { name: '2026 Laws' })).toHaveAttribute('href', expect.stringContaining('Laws-of-Australian-Football'));
     expect(localStorage.getItem(SAVE_KEY)).toBeNull(); expect(recordCompletion).not.toHaveBeenCalled();
     fireEvent.click(within(rules).getByRole('button', { name: "Let's Play!" }));
-    expect(view.container.querySelectorAll('[data-arm-club]')).toHaveLength(6);
-    expect(view.getByText(/Six fictional clubs and generated players/)).toBeVisible();
+    expect(view.container.querySelectorAll('[data-arl-club]')).toHaveLength(18);
+    expect(view.getByText(/Eighteen fictional clubs and generated players/)).toBeVisible();
     fireEvent.click(view.getByRole('button', { name: 'How to play' })); expect(view.getByRole('dialog')).toBeVisible();
   });
 

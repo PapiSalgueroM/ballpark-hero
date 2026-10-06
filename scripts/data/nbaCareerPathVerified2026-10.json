@@ -1,0 +1,7793 @@
+{
+ "round": 925,
+ "game": "/nba-career (NBA Career Path), src/data/nbaCareerPlayers.ts",
+ "read": "2026-10-03",
+ "about": "Every line the game shows, with its value on two hosts read on the date above. The old file said team order and awards were standard record-book facts; nothing had been sourced. Round 925 read all 20 old rows and 31 candidates, corrected or removed every line two hosts did not both support, held one candidate out and grew the pool to 50. scripts/simNbaCareerPathFacts.mjs pins the data file to this record word for word.",
+ "sources": {
+  "official": "nba.com/player/<id>: the page data (__NEXT_DATA__) gives POSITION, COUNTRY, DRAFT_YEAR, DRAFT_ROUND, DRAFT_NUMBER, ROSTERSTATUS, the current team, the award counts (name and count) and, for a retired player, career per game averages. It does not serve season by season teams or career totals (stats.nba.com refused every request), so those come from the next two.",
+  "second": "basketball-reference.com player page: Position, birthplace, Draft and Team lines, the Totals table (season, team code, league, career row), the per game career row and the award list at the top of the page.",
+  "third": "ESPN: the athlete stats feed behind espn.com/nba/player/stats/_/id/<id> (site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/<id>/stats, season rows with a team slug, career totals), and the ESPN awards feed (sports.core.api.espn.com/v2/sports/basketball/leagues/nba/athletes/<id>/awards) for the season of a single MVP, Finals MVP, Rookie of the Year or Defensive Player of the Year.",
+  "legends": "nba.com Legends profiles, for the two careers ESPN does not hold whole: Kareem Abdul-Jabbar (ESPN keeps no Milwaukee seasons and only offensive plus defensive rebounds, 12,369) and Larry Bird (ESPN keeps no seasons at all).",
+  "notUsed": "No wiki of any kind."
+ },
+ "rules": {
+  "position": "nba.com POSITION word for word when basketball-reference lists a position in every family it names (Guard, Forward, Center). When it does not, only the words both support are shown, in nba.com order: four rows, listed under disagreements.",
+  "country": "nba.com COUNTRY, which is the country of birth on every row here, matched against the country of the basketball-reference birthplace. The flag is built from the ISO code. One candidate (Dominique Wilkins: nba.com USA, born in Paris, France) failed this and is held out.",
+  "draftInfo": "'Nth Round, Nth Pick (YYYY)' with the overall pick, equal on nba.com (round, number, year) and on basketball-reference ('1st round (1st pick, 1st overall), 2003 NBA Draft'). The drafting team is not shown.",
+  "teams": "NBA regular season teams in order, a new entry each time the team or its name changes (Seattle SuperSonics then Oklahoma City Thunder for Durant; New Orleans Hornets then New Orleans Pelicans for Davis), consecutive seasons under one name collapsed. basketball-reference team codes and ESPN team slugs must give the same sequence; the 2005 to 2007 New Orleans/Oklahoma City Hornets seasons (NOK on basketball-reference, nooklahoma-city-hornets on ESPN) show as New Orleans Hornets, the franchise name. Where ESPN does not hold the career, the nba.com Legends profile is the second host. An active player whose current team on nba.com and on basketball-reference is not the last team he played for gets that team appended, so the row is right when the season starts. The current team is the 2026-27 roster team on both hosts; the regular season opens on 2026-10-20 (nba.com key dates). The result screen says how many franchises he played for (the basketball-reference codes, counted by the franchises block); a current team he has not played for yet is never counted, and when its franchise is new to him the line names it as the team he is joining (the shipped row carries lastTeamNotYetPlayed).",
+  "stats": "Career NBA regular season totals from basketball-reference and ESPN (or the Legends profile). Exact ('26,496 Pts') when the player's last season is before 2025-26 and both agree. A player who played in 2025-26 may still play, so his totals are a floor: the lower of the two values rounded down to a hundred with '+'. Larry Bird shows career per game averages, equal on nba.com and basketball-reference.",
+  "awards": "Up to four lines. An award line shows a count equal on nba.com and basketball-reference; a single MVP, Finals MVP, Rookie of the Year or Defensive Player of the Year also shows its year when the basketball-reference season and the ESPN awards season agree. The awards an old row named come first when both hosts hold them, then MVP, NBA Champion, Finals MVP, Defensive Player of the Year, All-Star, Rookie of the Year, All-NBA, All-Defensive, Hall of Famer. No scoring or assists titles, Olympic medals, nicknames or 'record' claims: nba.com's player page carries none of them. Counts on active players are as of the read date.",
+  "names": "The pool spells names without accents so a typed guess matches (Nikola Jokic, Luka Doncic); officialName keeps the nba.com spelling."
+ },
+ "teamCodes": {
+  "ATL": {
+   "name": "Atlanta Hawks",
+   "espn": [
+    "atlanta-hawks"
+   ],
+   "franchise": "ATL"
+  },
+  "BOS": {
+   "name": "Boston Celtics",
+   "espn": [
+    "boston-celtics"
+   ],
+   "franchise": "BOS"
+  },
+  "BRK": {
+   "name": "Brooklyn Nets",
+   "espn": [
+    "brooklyn-nets"
+   ],
+   "franchise": "BRK"
+  },
+  "CHI": {
+   "name": "Chicago Bulls",
+   "espn": [
+    "chicago-bulls"
+   ],
+   "franchise": "CHI"
+  },
+  "CHO": {
+   "name": "Charlotte Hornets",
+   "espn": [
+    "charlotte-hornets"
+   ],
+   "franchise": "CHO"
+  },
+  "CLE": {
+   "name": "Cleveland Cavaliers",
+   "espn": [
+    "cleveland-cavaliers"
+   ],
+   "franchise": "CLE"
+  },
+  "DAL": {
+   "name": "Dallas Mavericks",
+   "espn": [
+    "dallas-mavericks"
+   ],
+   "franchise": "DAL"
+  },
+  "DEN": {
+   "name": "Denver Nuggets",
+   "espn": [
+    "denver-nuggets"
+   ],
+   "franchise": "DEN"
+  },
+  "DET": {
+   "name": "Detroit Pistons",
+   "espn": [
+    "detroit-pistons"
+   ],
+   "franchise": "DET"
+  },
+  "GSW": {
+   "name": "Golden State Warriors",
+   "espn": [
+    "golden-state-warriors"
+   ],
+   "franchise": "GSW"
+  },
+  "HOU": {
+   "name": "Houston Rockets",
+   "espn": [
+    "houston-rockets"
+   ],
+   "franchise": "HOU"
+  },
+  "IND": {
+   "name": "Indiana Pacers",
+   "espn": [
+    "indiana-pacers"
+   ],
+   "franchise": "IND"
+  },
+  "LAC": {
+   "name": "Los Angeles Clippers",
+   "espn": [
+    "la-clippers",
+    "los-angeles-clippers"
+   ],
+   "franchise": "LAC"
+  },
+  "LAL": {
+   "name": "Los Angeles Lakers",
+   "espn": [
+    "los-angeles-lakers"
+   ],
+   "franchise": "LAL"
+  },
+  "MEM": {
+   "name": "Memphis Grizzlies",
+   "espn": [
+    "memphis-grizzlies"
+   ],
+   "franchise": "MEM"
+  },
+  "MIA": {
+   "name": "Miami Heat",
+   "espn": [
+    "miami-heat"
+   ],
+   "franchise": "MIA"
+  },
+  "MIL": {
+   "name": "Milwaukee Bucks",
+   "espn": [
+    "milwaukee-bucks"
+   ],
+   "franchise": "MIL"
+  },
+  "MIN": {
+   "name": "Minnesota Timberwolves",
+   "espn": [
+    "minnesota-timberwolves"
+   ],
+   "franchise": "MIN"
+  },
+  "NJN": {
+   "name": "New Jersey Nets",
+   "espn": [
+    "new-jersey-nets"
+   ],
+   "franchise": "BRK"
+  },
+  "NOH": {
+   "name": "New Orleans Hornets",
+   "espn": [
+    "new-orleans-hornets"
+   ],
+   "franchise": "NOP"
+  },
+  "NOK": {
+   "name": "New Orleans Hornets",
+   "espn": [
+    "nooklahoma-city-hornets"
+   ],
+   "franchise": "NOP"
+  },
+  "NOP": {
+   "name": "New Orleans Pelicans",
+   "espn": [
+    "new-orleans-pelicans"
+   ],
+   "franchise": "NOP"
+  },
+  "NYK": {
+   "name": "New York Knicks",
+   "espn": [
+    "new-york-knicks"
+   ],
+   "franchise": "NYK"
+  },
+  "OKC": {
+   "name": "Oklahoma City Thunder",
+   "espn": [
+    "oklahoma-city-thunder"
+   ],
+   "franchise": "OKC"
+  },
+  "ORL": {
+   "name": "Orlando Magic",
+   "espn": [
+    "orlando-magic"
+   ],
+   "franchise": "ORL"
+  },
+  "PHI": {
+   "name": "Philadelphia 76ers",
+   "espn": [
+    "philadelphia-76ers"
+   ],
+   "franchise": "PHI"
+  },
+  "PHO": {
+   "name": "Phoenix Suns",
+   "espn": [
+    "phoenix-suns"
+   ],
+   "franchise": "PHO"
+  },
+  "POR": {
+   "name": "Portland Trail Blazers",
+   "espn": [
+    "portland-trail-blazers"
+   ],
+   "franchise": "POR"
+  },
+  "SAC": {
+   "name": "Sacramento Kings",
+   "espn": [
+    "sacramento-kings"
+   ],
+   "franchise": "SAC"
+  },
+  "SAS": {
+   "name": "San Antonio Spurs",
+   "espn": [
+    "san-antonio-spurs"
+   ],
+   "franchise": "SAS"
+  },
+  "SEA": {
+   "name": "Seattle SuperSonics",
+   "espn": [
+    "seattle-supersonics"
+   ],
+   "franchise": "OKC"
+  },
+  "TOR": {
+   "name": "Toronto Raptors",
+   "espn": [
+    "toronto-raptors"
+   ],
+   "franchise": "TOR"
+  },
+  "UTA": {
+   "name": "Utah Jazz",
+   "espn": [
+    "utah-jazz"
+   ],
+   "franchise": "UTA"
+  },
+  "WAS": {
+   "name": "Washington Wizards",
+   "espn": [
+    "washington-wizards"
+   ],
+   "franchise": "WAS"
+  }
+ },
+ "franchises": {
+  "about": "A team that moved or changed its name is one franchise. The result screen counts the distinct franchises a player played for: a return stint counts once and a renamed or moved franchise counts once. teamCodes[code].franchise groups the basketball-reference codes the same way, and simNbaCareerPathFacts checks the two agree on every row.",
+  "read": "2026-10-05",
+  "same": {
+   "Seattle SuperSonics": "Oklahoma City Thunder",
+   "New Jersey Nets": "Brooklyn Nets",
+   "New Orleans Hornets": "New Orleans Pelicans"
+  },
+  "sources": [
+   {
+    "old": "Seattle SuperSonics",
+    "now": "Oklahoma City Thunder",
+    "official": {
+     "url": "https://www.nba.com/news/history-this-date-in-nba-july",
+     "says": "July 2, 2008: a settlement finalizing the move of the Seattle SuperSonics to the Oklahoma City Thunder"
+    },
+    "second": {
+     "url": "https://www.basketball-reference.com/teams/OKC/",
+     "says": "franchise index, Team Names: Oklahoma City Thunder, Seattle SuperSonics (Seattle seasons 1967-68 to 2007-08)"
+    }
+   },
+   {
+    "old": "New Jersey Nets",
+    "now": "Brooklyn Nets",
+    "official": {
+     "url": "https://www.nba.com/news/30-teams-in-30-days-brooklyn-nets",
+     "says": "the Nets preview describes the move from New Jersey to Brooklyn"
+    },
+    "second": {
+     "url": "https://www.basketball-reference.com/teams/NJN/",
+     "says": "franchise index, Team Names: Brooklyn Nets, New Jersey Nets, New York Nets, New Jersey Americans"
+    }
+   },
+   {
+    "old": "New Orleans Hornets",
+    "now": "New Orleans Pelicans",
+    "official": {
+     "url": "https://www.nba.com/news/all-time-nba-draft-lottery-picks-new-orleans-pelicans",
+     "says": "the New Orleans Pelicans, previously named the New Orleans Hornets"
+    },
+    "second": {
+     "url": "https://www.basketball-reference.com/teams/NOH/",
+     "says": "franchise index: New Orleans Hornets 2002-03 to 2012-13 (New Orleans/Oklahoma City Hornets 2005-06 and 2006-07), New Orleans Pelicans from 2013-14"
+    }
+   }
+  ]
+ },
+ "countries": {
+  "USA": {
+   "official": "USA",
+   "birthCountry": "United States"
+  },
+  "Germany": {
+   "official": "Germany",
+   "birthCountry": "Germany"
+  },
+  "Nigeria": {
+   "official": "Nigeria",
+   "birthCountry": "Nigeria"
+  },
+  "Jamaica": {
+   "official": "Jamaica",
+   "birthCountry": "Jamaica"
+  },
+  "US Virgin Islands": {
+   "official": "US Virgin Islands",
+   "birthCountry": "U.S. Virgin Islands"
+  },
+  "Greece": {
+   "official": "Greece",
+   "birthCountry": "Greece"
+  },
+  "Serbia": {
+   "official": "Serbia",
+   "birthCountry": "Serbia"
+  },
+  "Slovenia": {
+   "official": "Slovenia",
+   "birthCountry": "Slovenia"
+  },
+  "Argentina": {
+   "official": "Argentina",
+   "birthCountry": "Argentina"
+  },
+  "Spain": {
+   "official": "Spain",
+   "birthCountry": "Spain"
+  },
+  "China": {
+   "official": "China",
+   "birthCountry": "China"
+  },
+  "Cameroon": {
+   "official": "Cameroon",
+   "birthCountry": "Cameroon"
+  },
+  "DR Congo": {
+   "official": "Congo",
+   "birthCountry": "Democratic Republic of the Congo"
+  },
+  "Canada": {
+   "official": "Canada",
+   "birthCountry": "Canada"
+  }
+ },
+ "order": "The array order is deliberate. The daily pick is dailyIndex(dateET, 50) in src/lib/dateUtils.ts, a fresh shuffle of the pool every 50 days; cycle 414 runs 2026-09-04 to 2026-10-23 and cycle 415 runs 2026-10-24 to 2026-12-12. The 30 new players sit on the 20 indices dealt 2026-10-04 to 2026-10-23 and on the first ten other indices cycle 415 deals, so a release from 2026-10-04 to releaseBy deals only new players for at least its first ten days and leaves at least 14 days between an old player's last old deal and his first new one. The old 20 keep their ids. The day the pool changes, a daily save from that morning loads only if its saved index equals the new one (useDailyPuzzle matches on date and index; this hook passes no puzzle id, and saves written before the release carry none). On 2026-10-31, 2026-12-09 and 2026-12-11 the old and new index are equal while the player differs, so a morning save would load on another player: releaseBy is 2026-10-30 and the release must not land on any of those days.",
+ "releaseBy": "2026-10-30",
+ "disagreements": [
+  "Luka Doncic: position nba Forward-Guard vs bbref Point Guard and Shooting Guard -> Guard",
+  "Scottie Pippen: position nba Forward-Guard vs bbref Small Forward -> Forward",
+  "Joel Embiid: position nba Center-Forward vs bbref Center -> Center",
+  "Jayson Tatum: position nba Forward-Guard vs bbref Small Forward and Power Forward -> Forward",
+  "Kobe Bryant: award hof nba 0 vs bbref 1 (held)",
+  "Tim Duncan: award hof nba 0 vs bbref 1 (held)",
+  "Kevin Garnett: award hof nba 0 vs bbref 1 (held)",
+  "Dirk Nowitzki: award hof nba 0 vs bbref 1 (held)",
+  "Dwyane Wade: award hof nba 0 vs bbref 1 (held)",
+  "Vince Carter: award hof nba 0 vs bbref 1 (held)",
+  "Dwight Howard: award hof nba 0 vs bbref 1 (held)",
+  "Paul Pierce: award hof nba 0 vs bbref 1 (held)",
+  "Carmelo Anthony: award hof nba 0 vs bbref 1 (held)",
+  "Manu Ginobili: award hof nba 0 vs bbref 1 (held)",
+  "Pau Gasol: award hof nba 0 vs bbref 1 (held)",
+  "Chris Bosh: award hof nba 0 vs bbref 1 (held)"
+ ],
+ "heldOut": [
+  {
+   "name": "Dominique Wilkins",
+   "reason": "Country: nba.com COUNTRY is USA, basketball-reference gives his birthplace as Paris, France. Neither value is supported by both, so the row is held out rather than shown with one of them.",
+   "read": "2026-10-03"
+  }
+ ],
+ "removedLines": [
+  {
+   "id": "nbac-020",
+   "name": "Vince Carter",
+   "field": "stats",
+   "line": "Played a record 22 seasons",
+   "kind": "false",
+   "reason": "No longer a record: LeBron James played his 23rd season in 2025-26 (basketball-reference career row 23 Yrs, ESPN 23 season rows); Carter played 22 (basketball-reference 22 Yrs, ESPN 2019-20 last)."
+  },
+  {
+   "id": "nbac-015",
+   "name": "Chris Paul",
+   "field": "teams",
+   "line": "New Orleans Hornets > Los Angeles Clippers > Houston Rockets > Oklahoma City Thunder > Phoenix Suns > Golden State Warriors > San Antonio Spurs",
+   "kind": "stale",
+   "reason": "He played 2025-26 for the Clippers again (basketball-reference LAC 2025-26, ESPN la-clippers 2025-26)."
+  },
+  {
+   "id": "nbac-005",
+   "name": "Tim Duncan",
+   "field": "country",
+   "line": "USA",
+   "kind": "changed",
+   "reason": "Both hosts give his birthplace as the US Virgin Islands (nba.com COUNTRY 'US Virgin Islands', basketball-reference 'St. Croix, U.S. Virgin Islands'), and the Country clue is the country of birth on every other row."
+  },
+  {
+   "id": "nbac-004",
+   "name": "Kobe Bryant",
+   "field": "position",
+   "line": "Guard",
+   "kind": "changed",
+   "reason": "nba.com lists Forward-Guard; basketball-reference lists Shooting Guard and Small Forward."
+  },
+  {
+   "id": "nbac-005",
+   "name": "Tim Duncan",
+   "field": "position",
+   "line": "Forward-Center",
+   "kind": "changed",
+   "reason": "nba.com lists Center-Forward; basketball-reference lists Center and Power Forward."
+  },
+  {
+   "id": "nbac-008",
+   "name": "Kevin Garnett",
+   "field": "draftInfo",
+   "line": "1st Round, 5th Pick (1995, straight out of high school)",
+   "kind": "unsourced",
+   "reason": "The draft slot holds on both; the aside was not checked, and the draft line keeps one format on every row."
+  },
+  {
+   "id": "nbac-001",
+   "name": "LeBron James",
+   "field": "teams",
+   "line": "Cleveland Cavaliers > Miami Heat > Cleveland Cavaliers > Los Angeles Lakers",
+   "kind": "stale",
+   "reason": "nba.com and basketball-reference both list him with the Philadelphia 76ers now; appended so the row holds once the 2026-27 season starts."
+  },
+  {
+   "id": "nbac-001",
+   "name": "LeBron James",
+   "field": "stats",
+   "line": "43,000+ Pts",
+   "kind": "changed",
+   "reason": "True but loose; refloored from 43,440 on both hosts."
+  },
+  {
+   "id": "nbac-001",
+   "name": "LeBron James",
+   "field": "stats",
+   "line": "11,900+ Ast",
+   "kind": "changed",
+   "reason": "True but loose; refloored from 12,016 on both hosts."
+  },
+  {
+   "id": "nbac-001",
+   "name": "LeBron James",
+   "field": "awards",
+   "line": "All-time scoring leader",
+   "kind": "unsourced",
+   "reason": "Neither the nba.com player page nor the basketball-reference player page states it; replaced by a count both carry."
+  },
+  {
+   "id": "nbac-002",
+   "name": "Michael Jordan",
+   "field": "awards",
+   "line": "10× scoring champion",
+   "kind": "unsourced",
+   "reason": "basketball-reference only; nba.com's player page carries no scoring titles."
+  },
+  {
+   "id": "nbac-007",
+   "name": "Stephen Curry",
+   "field": "stats",
+   "line": "26,000+ Pts",
+   "kind": "changed",
+   "reason": "True but loose; refloored from 26,528 on both hosts."
+  },
+  {
+   "id": "nbac-007",
+   "name": "Stephen Curry",
+   "field": "stats",
+   "line": "4,200+ made threes (all-time record)",
+   "kind": "unsourced",
+   "reason": "The total holds (4,248 on both); the record claim is on neither player page, so the line keeps the number only."
+  },
+  {
+   "id": "nbac-007",
+   "name": "Stephen Curry",
+   "field": "awards",
+   "line": "First unanimous MVP (2016)",
+   "kind": "unsourced",
+   "reason": "On neither player page."
+  },
+  {
+   "id": "nbac-008",
+   "name": "Kevin Garnett",
+   "field": "awards",
+   "line": "NBA Champion (2008)",
+   "kind": "unsourced",
+   "reason": "The championship holds on both; only basketball-reference gives its year, so the line shows without one."
+  },
+  {
+   "id": "nbac-009",
+   "name": "Dirk Nowitzki",
+   "field": "stats",
+   "line": "11,489 Reb",
+   "kind": "unsourced",
+   "reason": "The hosts disagree by one (basketball-reference 11,489, ESPN 11,490); replaced by made threes, 1,982 on both."
+  },
+  {
+   "id": "nbac-009",
+   "name": "Dirk Nowitzki",
+   "field": "awards",
+   "line": "NBA Champion (2011)",
+   "kind": "unsourced",
+   "reason": "The championship holds on both; only basketball-reference gives its year."
+  },
+  {
+   "id": "nbac-010",
+   "name": "Hakeem Olajuwon",
+   "field": "stats",
+   "line": "3,800+ Blk (all-time record)",
+   "kind": "unsourced",
+   "reason": "The total is 3,830 on both and he is retired, so it shows exact; the record claim is on neither player page."
+  },
+  {
+   "id": "nbac-011",
+   "name": "Larry Bird",
+   "field": "stats",
+   "line": "21,791 Pts",
+   "kind": "unsourced",
+   "reason": "Only basketball-reference holds his totals (ESPN has no Bird seasons, the Legends profile gives no totals); the row shows career per game averages, equal on nba.com and basketball-reference."
+  },
+  {
+   "id": "nbac-011",
+   "name": "Larry Bird",
+   "field": "stats",
+   "line": "8,974 Reb",
+   "kind": "unsourced",
+   "reason": "As above."
+  },
+  {
+   "id": "nbac-011",
+   "name": "Larry Bird",
+   "field": "stats",
+   "line": "5,695 Ast",
+   "kind": "unsourced",
+   "reason": "As above."
+  },
+  {
+   "id": "nbac-012",
+   "name": "Allen Iverson",
+   "field": "awards",
+   "line": "4× scoring champion",
+   "kind": "unsourced",
+   "reason": "basketball-reference only."
+  },
+  {
+   "id": "nbac-013",
+   "name": "Dwyane Wade",
+   "field": "awards",
+   "line": "Scoring champion (2009)",
+   "kind": "unsourced",
+   "reason": "basketball-reference only."
+  },
+  {
+   "id": "nbac-014",
+   "name": "Charles Barkley",
+   "field": "awards",
+   "line": "2× Olympic gold (Dream Team)",
+   "kind": "unsourced",
+   "reason": "nba.com only; basketball-reference's player page carries no Olympic medals."
+  },
+  {
+   "id": "nbac-015",
+   "name": "Chris Paul",
+   "field": "awards",
+   "line": "5× assists champion",
+   "kind": "unsourced",
+   "reason": "basketball-reference only."
+  },
+  {
+   "id": "nbac-015",
+   "name": "Chris Paul",
+   "field": "awards",
+   "line": "6× steals champion",
+   "kind": "unsourced",
+   "reason": "basketball-reference only."
+  },
+  {
+   "id": "nbac-016",
+   "name": "Patrick Ewing",
+   "field": "awards",
+   "line": "Hall of Fame (2008)",
+   "kind": "unsourced",
+   "reason": "Both hosts say Hall of Famer; only basketball-reference gives the year, so the line shows without one."
+  },
+  {
+   "id": "nbac-017",
+   "name": "John Stockton",
+   "field": "stats",
+   "line": "15,806 Ast (all-time record)",
+   "kind": "unsourced",
+   "reason": "The total holds on both; the record claim is on neither player page."
+  },
+  {
+   "id": "nbac-017",
+   "name": "John Stockton",
+   "field": "stats",
+   "line": "3,265 Stl (all-time record)",
+   "kind": "unsourced",
+   "reason": "As above."
+  },
+  {
+   "id": "nbac-017",
+   "name": "John Stockton",
+   "field": "awards",
+   "line": "9× assists champion",
+   "kind": "unsourced",
+   "reason": "basketball-reference only."
+  },
+  {
+   "id": "nbac-017",
+   "name": "John Stockton",
+   "field": "awards",
+   "line": "Hall of Fame (2009)",
+   "kind": "unsourced",
+   "reason": "Both hosts say Hall of Famer; only basketball-reference gives the year."
+  },
+  {
+   "id": "nbac-018",
+   "name": "Clyde Drexler",
+   "field": "awards",
+   "line": "NBA Champion (1995)",
+   "kind": "unsourced",
+   "reason": "The championship holds on both; only basketball-reference gives its year."
+  },
+  {
+   "id": "nbac-018",
+   "name": "Clyde Drexler",
+   "field": "awards",
+   "line": "Dream Team gold (1992)",
+   "kind": "unsourced",
+   "reason": "nba.com only."
+  },
+  {
+   "id": "nbac-019",
+   "name": "Gary Payton",
+   "field": "awards",
+   "line": "NBA Champion (2006)",
+   "kind": "unsourced",
+   "reason": "The championship holds on both; only basketball-reference gives its year."
+  },
+  {
+   "id": "nbac-019",
+   "name": "Gary Payton",
+   "field": "awards",
+   "line": "Nicknamed \"The Glove\"",
+   "kind": "unsourced",
+   "reason": "A nickname, not an award, and on neither host's award list."
+  },
+  {
+   "id": "nbac-020",
+   "name": "Vince Carter",
+   "field": "awards",
+   "line": "Slam Dunk Contest champion (2000)",
+   "kind": "unsourced",
+   "reason": "On neither host's award list."
+  }
+ ],
+ "players": [
+  {
+   "id": "nbac-024",
+   "name": "Nikola Jokic",
+   "officialName": "Nikola Jokić",
+   "status": "active or unconfirmed",
+   "lastSeason": "2025-26",
+   "sources": {
+    "official": "https://www.nba.com/player/203999",
+    "second": "https://www.basketball-reference.com/players/j/jokicni01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/3112335"
+   },
+   "position": "Center",
+   "country": "Serbia",
+   "countryIso": "rs",
+   "draftInfo": "2nd Round, 41st Pick (2014)",
+   "teams": [
+    "Denver Nuggets"
+   ],
+   "stats": [
+    "18,000+ Pts",
+    "8,900+ Reb",
+    "6,000+ Ast"
+   ],
+   "awards": [
+    "3× MVP",
+    "NBA Champion",
+    "Finals MVP (2023)",
+    "8× All-Star"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 3,
+     "second": 3
+    },
+    "champ": {
+     "official": 1,
+     "second": 1
+    },
+    "fmvp": {
+     "official": 1,
+     "second": 1
+    },
+    "dpoy": {
+     "official": 0,
+     "second": 0
+    },
+    "allstar": {
+     "official": 8,
+     "second": 8
+    },
+    "roy": {
+     "official": 0,
+     "second": 0
+    },
+    "allnba": {
+     "official": 8,
+     "second": 8
+    },
+    "alldef": {
+     "official": 0,
+     "second": 0
+    },
+    "hof": {
+     "official": 0,
+     "second": 0
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Center",
+     "official": "Center",
+     "second": "Center"
+    },
+    {
+     "field": "country",
+     "line": "Serbia",
+     "official": "Serbia",
+     "second": "Sombor, Serbia"
+    },
+    {
+     "field": "draft",
+     "line": "2nd Round, 41st Pick (2014)",
+     "official": "DRAFT_YEAR 2014, DRAFT_ROUND 2, DRAFT_NUMBER 41",
+     "second": "Denver Nuggets, 2nd round (11th pick, 41st overall), 2014 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Denver Nuggets",
+     "second": "DEN",
+     "third": "denver-nuggets"
+    },
+    {
+     "field": "stat",
+     "line": "18,000+ Pts",
+     "stat": "pts",
+     "rule": "floor (may still play)",
+     "third": 18009,
+     "second": 18009
+    },
+    {
+     "field": "stat",
+     "line": "8,900+ Reb",
+     "stat": "reb",
+     "rule": "floor (may still play)",
+     "third": 8977,
+     "second": 8977
+    },
+    {
+     "field": "stat",
+     "line": "6,000+ Ast",
+     "stat": "ast",
+     "rule": "floor (may still play)",
+     "third": 6080,
+     "second": 6080
+    },
+    {
+     "field": "award",
+     "line": "3× MVP",
+     "award": "mvp",
+     "official": 3,
+     "second": 3
+    },
+    {
+     "field": "award",
+     "line": "NBA Champion",
+     "award": "champ",
+     "official": 1,
+     "second": 1
+    },
+    {
+     "field": "award",
+     "line": "Finals MVP (2023)",
+     "award": "fmvp",
+     "official": 1,
+     "second": 1,
+     "secondSeason": "2022-23 Finals MVP",
+     "third": [
+      2023
+     ]
+    },
+    {
+     "field": "award",
+     "line": "8× All-Star",
+     "award": "allstar",
+     "official": 8,
+     "second": 8
+    }
+   ]
+  },
+  {
+   "id": "nbac-026",
+   "name": "James Harden",
+   "status": "active or unconfirmed",
+   "lastSeason": "2025-26",
+   "sources": {
+    "official": "https://www.nba.com/player/201935",
+    "second": "https://www.basketball-reference.com/players/h/hardeja01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/3992"
+   },
+   "position": "Guard",
+   "country": "USA",
+   "countryIso": "us",
+   "draftInfo": "1st Round, 3rd Pick (2009)",
+   "teams": [
+    "Oklahoma City Thunder",
+    "Houston Rockets",
+    "Brooklyn Nets",
+    "Philadelphia 76ers",
+    "Los Angeles Clippers",
+    "Cleveland Cavaliers"
+   ],
+   "stats": [
+    "29,300+ Pts",
+    "8,800+ Ast"
+   ],
+   "awards": [
+    "MVP (2018)",
+    "11× All-Star",
+    "8× All-NBA"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 1,
+     "second": 1
+    },
+    "champ": {
+     "official": 0,
+     "second": 0
+    },
+    "fmvp": {
+     "official": 0,
+     "second": 0
+    },
+    "dpoy": {
+     "official": 0,
+     "second": 0
+    },
+    "allstar": {
+     "official": 11,
+     "second": 11
+    },
+    "roy": {
+     "official": 0,
+     "second": 0
+    },
+    "allnba": {
+     "official": 8,
+     "second": 8
+    },
+    "alldef": {
+     "official": 0,
+     "second": 0
+    },
+    "hof": {
+     "official": 0,
+     "second": 0
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Guard",
+     "official": "Guard",
+     "second": "Point Guard and Shooting Guard"
+    },
+    {
+     "field": "country",
+     "line": "USA",
+     "official": "USA",
+     "second": "Los Angeles, California, United States"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 3rd Pick (2009)",
+     "official": "DRAFT_YEAR 2009, DRAFT_ROUND 1, DRAFT_NUMBER 3",
+     "second": "Oklahoma City Thunder, 1st round (3rd pick, 3rd overall), 2009 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Oklahoma City Thunder > Houston Rockets > Brooklyn Nets > Philadelphia 76ers > Los Angeles Clippers > Cleveland Cavaliers",
+     "second": "OKC HOU BRK PHI LAC CLE",
+     "third": "oklahoma-city-thunder houston-rockets brooklyn-nets philadelphia-76ers la-clippers cleveland-cavaliers"
+    },
+    {
+     "field": "stat",
+     "line": "29,300+ Pts",
+     "stat": "pts",
+     "rule": "floor (may still play)",
+     "third": 29339,
+     "second": 29339
+    },
+    {
+     "field": "stat",
+     "line": "8,800+ Ast",
+     "stat": "ast",
+     "rule": "floor (may still play)",
+     "third": 8873,
+     "second": 8873
+    },
+    {
+     "field": "award",
+     "line": "MVP (2018)",
+     "award": "mvp",
+     "official": 1,
+     "second": 1,
+     "secondSeason": "2017-18 MVP",
+     "third": [
+      2018
+     ]
+    },
+    {
+     "field": "award",
+     "line": "11× All-Star",
+     "award": "allstar",
+     "official": 11,
+     "second": 11
+    },
+    {
+     "field": "award",
+     "line": "8× All-NBA",
+     "award": "allnba",
+     "official": 8,
+     "second": 8
+    }
+   ]
+  },
+  {
+   "id": "nbac-031",
+   "name": "Ray Allen",
+   "status": "retired",
+   "lastSeason": "2013-14",
+   "sources": {
+    "official": "https://www.nba.com/player/951",
+    "second": "https://www.basketball-reference.com/players/a/allenra02.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/9"
+   },
+   "position": "Guard",
+   "country": "USA",
+   "countryIso": "us",
+   "draftInfo": "1st Round, 5th Pick (1996)",
+   "teams": [
+    "Milwaukee Bucks",
+    "Seattle SuperSonics",
+    "Boston Celtics",
+    "Miami Heat"
+   ],
+   "stats": [
+    "24,505 Pts",
+    "2,973 made threes"
+   ],
+   "awards": [
+    "2× NBA Champion",
+    "10× All-Star",
+    "2× All-NBA",
+    "Hall of Famer"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 0,
+     "second": 0
+    },
+    "champ": {
+     "official": 2,
+     "second": 2
+    },
+    "fmvp": {
+     "official": 0,
+     "second": 0
+    },
+    "dpoy": {
+     "official": 0,
+     "second": 0
+    },
+    "allstar": {
+     "official": 10,
+     "second": 10
+    },
+    "roy": {
+     "official": 0,
+     "second": 0
+    },
+    "allnba": {
+     "official": 2,
+     "second": 2
+    },
+    "alldef": {
+     "official": 0,
+     "second": 0
+    },
+    "hof": {
+     "official": 1,
+     "second": 1
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Guard",
+     "official": "Guard",
+     "second": "Shooting Guard"
+    },
+    {
+     "field": "country",
+     "line": "USA",
+     "official": "USA",
+     "second": "Merced, California, United States"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 5th Pick (1996)",
+     "official": "DRAFT_YEAR 1996, DRAFT_ROUND 1, DRAFT_NUMBER 5",
+     "second": "Minnesota Timberwolves, 1st round (5th pick, 5th overall), 1996 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Milwaukee Bucks > Seattle SuperSonics > Boston Celtics > Miami Heat",
+     "second": "MIL SEA BOS MIA",
+     "third": "milwaukee-bucks seattle-supersonics boston-celtics miami-heat"
+    },
+    {
+     "field": "stat",
+     "line": "24,505 Pts",
+     "stat": "pts",
+     "rule": "exact",
+     "third": 24505,
+     "second": 24505
+    },
+    {
+     "field": "stat",
+     "line": "2,973 made threes",
+     "stat": "fg3",
+     "rule": "exact",
+     "third": 2973,
+     "second": 2973
+    },
+    {
+     "field": "award",
+     "line": "2× NBA Champion",
+     "award": "champ",
+     "official": 2,
+     "second": 2
+    },
+    {
+     "field": "award",
+     "line": "10× All-Star",
+     "award": "allstar",
+     "official": 10,
+     "second": 10
+    },
+    {
+     "field": "award",
+     "line": "2× All-NBA",
+     "award": "allnba",
+     "official": 2,
+     "second": 2
+    },
+    {
+     "field": "award",
+     "line": "Hall of Famer",
+     "award": "hof",
+     "official": 1,
+     "second": 1
+    }
+   ]
+  },
+  {
+   "id": "nbac-050",
+   "name": "Chris Bosh",
+   "status": "retired",
+   "lastSeason": "2015-16",
+   "sources": {
+    "official": "https://www.nba.com/player/2547",
+    "second": "https://www.basketball-reference.com/players/b/boshch01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/1977"
+   },
+   "position": "Forward",
+   "country": "USA",
+   "countryIso": "us",
+   "draftInfo": "1st Round, 4th Pick (2003)",
+   "teams": [
+    "Toronto Raptors",
+    "Miami Heat"
+   ],
+   "stats": [
+    "17,189 Pts",
+    "7,592 Reb"
+   ],
+   "awards": [
+    "2× NBA Champion",
+    "11× All-Star",
+    "All-NBA"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 0,
+     "second": 0
+    },
+    "champ": {
+     "official": 2,
+     "second": 2
+    },
+    "fmvp": {
+     "official": 0,
+     "second": 0
+    },
+    "dpoy": {
+     "official": 0,
+     "second": 0
+    },
+    "allstar": {
+     "official": 11,
+     "second": 11
+    },
+    "roy": {
+     "official": 0,
+     "second": 0
+    },
+    "allnba": {
+     "official": 1,
+     "second": 1
+    },
+    "alldef": {
+     "official": 0,
+     "second": 0
+    },
+    "hof": {
+     "official": 0,
+     "second": 1
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "Forward",
+     "second": "Center and Power Forward"
+    },
+    {
+     "field": "country",
+     "line": "USA",
+     "official": "USA",
+     "second": "Dallas, Texas, United States"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 4th Pick (2003)",
+     "official": "DRAFT_YEAR 2003, DRAFT_ROUND 1, DRAFT_NUMBER 4",
+     "second": "Toronto Raptors, 1st round (4th pick, 4th overall), 2003 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Toronto Raptors > Miami Heat",
+     "second": "TOR MIA",
+     "third": "toronto-raptors miami-heat"
+    },
+    {
+     "field": "stat",
+     "line": "17,189 Pts",
+     "stat": "pts",
+     "rule": "exact",
+     "third": 17189,
+     "second": 17189
+    },
+    {
+     "field": "stat",
+     "line": "7,592 Reb",
+     "stat": "reb",
+     "rule": "exact",
+     "third": 7592,
+     "second": 7592
+    },
+    {
+     "field": "award",
+     "line": "2× NBA Champion",
+     "award": "champ",
+     "official": 2,
+     "second": 2
+    },
+    {
+     "field": "award",
+     "line": "11× All-Star",
+     "award": "allstar",
+     "official": 11,
+     "second": 11
+    },
+    {
+     "field": "award",
+     "line": "All-NBA",
+     "award": "allnba",
+     "official": 1,
+     "second": 1
+    }
+   ]
+  },
+  {
+   "id": "nbac-001",
+   "name": "LeBron James",
+   "status": "active or unconfirmed",
+   "lastSeason": "2025-26",
+   "sources": {
+    "official": "https://www.nba.com/player/2544",
+    "second": "https://www.basketball-reference.com/players/j/jamesle01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/1966"
+   },
+   "position": "Forward",
+   "country": "USA",
+   "countryIso": "us",
+   "draftInfo": "1st Round, 1st Pick (2003)",
+   "teams": [
+    "Cleveland Cavaliers",
+    "Miami Heat",
+    "Cleveland Cavaliers",
+    "Los Angeles Lakers",
+    "Philadelphia 76ers"
+   ],
+   "stats": [
+    "43,400+ Pts",
+    "12,000+ Reb",
+    "12,000+ Ast"
+   ],
+   "awards": [
+    "4× MVP",
+    "4× NBA Champion",
+    "4× Finals MVP",
+    "22× All-Star"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 4,
+     "second": 4
+    },
+    "champ": {
+     "official": 4,
+     "second": 4
+    },
+    "fmvp": {
+     "official": 4,
+     "second": 4
+    },
+    "dpoy": {
+     "official": 0,
+     "second": 0
+    },
+    "allstar": {
+     "official": 22,
+     "second": 22
+    },
+    "roy": {
+     "official": 1,
+     "second": 1
+    },
+    "allnba": {
+     "official": 21,
+     "second": 21
+    },
+    "alldef": {
+     "official": 6,
+     "second": 6
+    },
+    "hof": {
+     "official": 0,
+     "second": 0
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "Forward",
+     "second": "Small Forward, Power Forward, Point Guard, Center, and Shooting Guard"
+    },
+    {
+     "field": "country",
+     "line": "USA",
+     "official": "USA",
+     "second": "Akron, Ohio, United States"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 1st Pick (2003)",
+     "official": "DRAFT_YEAR 2003, DRAFT_ROUND 1, DRAFT_NUMBER 1",
+     "second": "Cleveland Cavaliers, 1st round (1st pick, 1st overall), 2003 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Cleveland Cavaliers > Miami Heat > Cleveland Cavaliers > Los Angeles Lakers > Philadelphia 76ers",
+     "second": "CLE MIA CLE LAL",
+     "third": "cleveland-cavaliers miami-heat cleveland-cavaliers los-angeles-lakers",
+     "current": {
+      "official": "Philadelphia 76ers",
+      "second": "Philadelphia 76ers"
+     }
+    },
+    {
+     "field": "stat",
+     "line": "43,400+ Pts",
+     "stat": "pts",
+     "rule": "floor (may still play)",
+     "third": 43440,
+     "second": 43440
+    },
+    {
+     "field": "stat",
+     "line": "12,000+ Reb",
+     "stat": "reb",
+     "rule": "floor (may still play)",
+     "third": 12095,
+     "second": 12095
+    },
+    {
+     "field": "stat",
+     "line": "12,000+ Ast",
+     "stat": "ast",
+     "rule": "floor (may still play)",
+     "third": 12016,
+     "second": 12016
+    },
+    {
+     "field": "award",
+     "line": "4× MVP",
+     "award": "mvp",
+     "official": 4,
+     "second": 4
+    },
+    {
+     "field": "award",
+     "line": "4× NBA Champion",
+     "award": "champ",
+     "official": 4,
+     "second": 4
+    },
+    {
+     "field": "award",
+     "line": "4× Finals MVP",
+     "award": "fmvp",
+     "official": 4,
+     "second": 4
+    },
+    {
+     "field": "award",
+     "line": "22× All-Star",
+     "award": "allstar",
+     "official": 22,
+     "second": 22
+    }
+   ]
+  },
+  {
+   "id": "nbac-002",
+   "name": "Michael Jordan",
+   "status": "retired",
+   "lastSeason": "2002-03",
+   "sources": {
+    "official": "https://www.nba.com/player/893",
+    "second": "https://www.basketball-reference.com/players/j/jordami01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/1035"
+   },
+   "position": "Guard",
+   "country": "USA",
+   "countryIso": "us",
+   "draftInfo": "1st Round, 3rd Pick (1984)",
+   "teams": [
+    "Chicago Bulls",
+    "Washington Wizards"
+   ],
+   "stats": [
+    "32,292 Pts",
+    "6,672 Reb",
+    "5,633 Ast"
+   ],
+   "awards": [
+    "5× MVP",
+    "6× NBA Champion",
+    "6× Finals MVP",
+    "Defensive Player of the Year (1988)"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 5,
+     "second": 5
+    },
+    "champ": {
+     "official": 6,
+     "second": 6
+    },
+    "fmvp": {
+     "official": 6,
+     "second": 6
+    },
+    "dpoy": {
+     "official": 1,
+     "second": 1
+    },
+    "allstar": {
+     "official": 14,
+     "second": 14
+    },
+    "roy": {
+     "official": 1,
+     "second": 1
+    },
+    "allnba": {
+     "official": 11,
+     "second": 11
+    },
+    "alldef": {
+     "official": 9,
+     "second": 9
+    },
+    "hof": {
+     "official": 1,
+     "second": 1
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Guard",
+     "official": "Guard",
+     "second": "Shooting Guard and Small Forward"
+    },
+    {
+     "field": "country",
+     "line": "USA",
+     "official": "USA",
+     "second": "Brooklyn, New York, United States"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 3rd Pick (1984)",
+     "official": "DRAFT_YEAR 1984, DRAFT_ROUND 1, DRAFT_NUMBER 3",
+     "second": "Chicago Bulls, 1st round (3rd pick, 3rd overall), 1984 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Chicago Bulls > Washington Wizards",
+     "second": "CHI WAS",
+     "third": "chicago-bulls washington-wizards"
+    },
+    {
+     "field": "stat",
+     "line": "32,292 Pts",
+     "stat": "pts",
+     "rule": "exact",
+     "third": 32292,
+     "second": 32292
+    },
+    {
+     "field": "stat",
+     "line": "6,672 Reb",
+     "stat": "reb",
+     "rule": "exact",
+     "third": 6672,
+     "second": 6672
+    },
+    {
+     "field": "stat",
+     "line": "5,633 Ast",
+     "stat": "ast",
+     "rule": "exact",
+     "third": 5633,
+     "second": 5633
+    },
+    {
+     "field": "award",
+     "line": "5× MVP",
+     "award": "mvp",
+     "official": 5,
+     "second": 5
+    },
+    {
+     "field": "award",
+     "line": "6× NBA Champion",
+     "award": "champ",
+     "official": 6,
+     "second": 6
+    },
+    {
+     "field": "award",
+     "line": "6× Finals MVP",
+     "award": "fmvp",
+     "official": 6,
+     "second": 6
+    },
+    {
+     "field": "award",
+     "line": "Defensive Player of the Year (1988)",
+     "award": "dpoy",
+     "official": 1,
+     "second": 1,
+     "secondSeason": "1987-88 Def. POY",
+     "third": [
+      1988
+     ]
+    }
+   ]
+  },
+  {
+   "id": "nbac-035",
+   "name": "Anthony Davis",
+   "status": "active or unconfirmed",
+   "lastSeason": "2025-26",
+   "sources": {
+    "official": "https://www.nba.com/player/203076",
+    "second": "https://www.basketball-reference.com/players/d/davisan02.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/6583"
+   },
+   "position": "Forward-Center",
+   "country": "USA",
+   "countryIso": "us",
+   "draftInfo": "1st Round, 1st Pick (2012)",
+   "teams": [
+    "New Orleans Hornets",
+    "New Orleans Pelicans",
+    "Los Angeles Lakers",
+    "Dallas Mavericks",
+    "Washington Wizards"
+   ],
+   "stats": [
+    "19,300+ Pts",
+    "1,800+ Blk"
+   ],
+   "awards": [
+    "NBA Champion",
+    "10× All-Star",
+    "5× All-NBA",
+    "5× All-Defensive"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 0,
+     "second": 0
+    },
+    "champ": {
+     "official": 1,
+     "second": 1
+    },
+    "fmvp": {
+     "official": 0,
+     "second": 0
+    },
+    "dpoy": {
+     "official": 0,
+     "second": 0
+    },
+    "allstar": {
+     "official": 10,
+     "second": 10
+    },
+    "roy": {
+     "official": 0,
+     "second": 0
+    },
+    "allnba": {
+     "official": 5,
+     "second": 5
+    },
+    "alldef": {
+     "official": 5,
+     "second": 5
+    },
+    "hof": {
+     "official": 0,
+     "second": 0
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward-Center",
+     "official": "Forward-Center",
+     "second": "Power Forward and Center"
+    },
+    {
+     "field": "country",
+     "line": "USA",
+     "official": "USA",
+     "second": "Chicago, Illinois, United States"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 1st Pick (2012)",
+     "official": "DRAFT_YEAR 2012, DRAFT_ROUND 1, DRAFT_NUMBER 1",
+     "second": "New Orleans Hornets, 1st round (1st pick, 1st overall), 2012 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "New Orleans Hornets > New Orleans Pelicans > Los Angeles Lakers > Dallas Mavericks > Washington Wizards",
+     "second": "NOH NOP LAL DAL",
+     "third": "new-orleans-hornets new-orleans-pelicans los-angeles-lakers dallas-mavericks",
+     "current": {
+      "official": "Washington Wizards",
+      "second": "Washington Wizards"
+     }
+    },
+    {
+     "field": "stat",
+     "line": "19,300+ Pts",
+     "stat": "pts",
+     "rule": "floor (may still play)",
+     "third": 19385,
+     "second": 19385
+    },
+    {
+     "field": "stat",
+     "line": "1,800+ Blk",
+     "stat": "blk",
+     "rule": "floor (may still play)",
+     "third": 1848,
+     "second": 1848
+    },
+    {
+     "field": "award",
+     "line": "NBA Champion",
+     "award": "champ",
+     "official": 1,
+     "second": 1
+    },
+    {
+     "field": "award",
+     "line": "10× All-Star",
+     "award": "allstar",
+     "official": 10,
+     "second": 10
+    },
+    {
+     "field": "award",
+     "line": "5× All-NBA",
+     "award": "allnba",
+     "official": 5,
+     "second": 5
+    },
+    {
+     "field": "award",
+     "line": "5× All-Defensive",
+     "award": "alldef",
+     "official": 5,
+     "second": 5
+    }
+   ]
+  },
+  {
+   "id": "nbac-003",
+   "name": "Kareem Abdul-Jabbar",
+   "status": "retired",
+   "lastSeason": "1988-89",
+   "sources": {
+    "official": "https://www.nba.com/player/76003",
+    "second": "https://www.basketball-reference.com/players/a/abdulka01.html",
+    "third": "https://www.nba.com/news/history-nba-legend-kareem-abdul-jabbar"
+   },
+   "position": "Center",
+   "country": "USA",
+   "countryIso": "us",
+   "draftInfo": "1st Round, 1st Pick (1969)",
+   "teams": [
+    "Milwaukee Bucks",
+    "Los Angeles Lakers"
+   ],
+   "stats": [
+    "38,387 Pts",
+    "17,440 Reb"
+   ],
+   "awards": [
+    "6× MVP",
+    "6× NBA Champion",
+    "2× Finals MVP",
+    "19× All-Star"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 6,
+     "second": 6
+    },
+    "champ": {
+     "official": 6,
+     "second": 6
+    },
+    "fmvp": {
+     "official": 2,
+     "second": 2
+    },
+    "allstar": {
+     "official": 19,
+     "second": 19
+    },
+    "dpoy": {
+     "official": 0,
+     "second": 0
+    },
+    "roy": {
+     "official": 1,
+     "second": 1
+    },
+    "allnba": {
+     "official": 15,
+     "second": 15
+    },
+    "alldef": {
+     "official": 11,
+     "second": 11
+    },
+    "hof": {
+     "official": 1,
+     "second": 1
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Center",
+     "official": "Center",
+     "second": "Center"
+    },
+    {
+     "field": "country",
+     "line": "USA",
+     "official": "USA",
+     "second": "New York, New York, United States"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 1st Pick (1969)",
+     "official": "DRAFT_YEAR 1969, DRAFT_ROUND 1, DRAFT_NUMBER 1",
+     "second": "Milwaukee Bucks, 1st round (1st pick, 1st overall), 1969 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Milwaukee Bucks > Los Angeles Lakers",
+     "second": "MIL LAL",
+     "third": "Milwaukee Bucks > Los Angeles Lakers"
+    },
+    {
+     "field": "stat",
+     "line": "38,387 Pts",
+     "stat": "pts",
+     "rule": "exact",
+     "third": 38387,
+     "second": 38387
+    },
+    {
+     "field": "stat",
+     "line": "17,440 Reb",
+     "stat": "reb",
+     "rule": "exact",
+     "third": 17440,
+     "second": 17440
+    },
+    {
+     "field": "award",
+     "line": "6× MVP",
+     "award": "mvp",
+     "official": 6,
+     "second": 6
+    },
+    {
+     "field": "award",
+     "line": "6× NBA Champion",
+     "award": "champ",
+     "official": 6,
+     "second": 6
+    },
+    {
+     "field": "award",
+     "line": "2× Finals MVP",
+     "award": "fmvp",
+     "official": 2,
+     "second": 2
+    },
+    {
+     "field": "award",
+     "line": "19× All-Star",
+     "award": "allstar",
+     "official": 19,
+     "second": 19
+    }
+   ]
+  },
+  {
+   "id": "nbac-037",
+   "name": "Reggie Miller",
+   "status": "retired",
+   "lastSeason": "2004-05",
+   "sources": {
+    "official": "https://www.nba.com/player/397",
+    "second": "https://www.basketball-reference.com/players/m/millere01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/552"
+   },
+   "position": "Guard",
+   "country": "USA",
+   "countryIso": "us",
+   "draftInfo": "1st Round, 11th Pick (1987)",
+   "teams": [
+    "Indiana Pacers"
+   ],
+   "stats": [
+    "25,279 Pts",
+    "2,560 made threes"
+   ],
+   "awards": [
+    "5× All-Star",
+    "3× All-NBA",
+    "Hall of Famer"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 0,
+     "second": 0
+    },
+    "champ": {
+     "official": 0,
+     "second": 0
+    },
+    "fmvp": {
+     "official": 0,
+     "second": 0
+    },
+    "dpoy": {
+     "official": 0,
+     "second": 0
+    },
+    "allstar": {
+     "official": 5,
+     "second": 5
+    },
+    "roy": {
+     "official": 0,
+     "second": 0
+    },
+    "allnba": {
+     "official": 3,
+     "second": 3
+    },
+    "alldef": {
+     "official": 0,
+     "second": 0
+    },
+    "hof": {
+     "official": 1,
+     "second": 1
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Guard",
+     "official": "Guard",
+     "second": "Shooting Guard"
+    },
+    {
+     "field": "country",
+     "line": "USA",
+     "official": "USA",
+     "second": "Riverside, California, United States"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 11th Pick (1987)",
+     "official": "DRAFT_YEAR 1987, DRAFT_ROUND 1, DRAFT_NUMBER 11",
+     "second": "Indiana Pacers, 1st round (11th pick, 11th overall), 1987 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Indiana Pacers",
+     "second": "IND",
+     "third": "indiana-pacers"
+    },
+    {
+     "field": "stat",
+     "line": "25,279 Pts",
+     "stat": "pts",
+     "rule": "exact",
+     "third": 25279,
+     "second": 25279
+    },
+    {
+     "field": "stat",
+     "line": "2,560 made threes",
+     "stat": "fg3",
+     "rule": "exact",
+     "third": 2560,
+     "second": 2560
+    },
+    {
+     "field": "award",
+     "line": "5× All-Star",
+     "award": "allstar",
+     "official": 5,
+     "second": 5
+    },
+    {
+     "field": "award",
+     "line": "3× All-NBA",
+     "award": "allnba",
+     "official": 3,
+     "second": 3
+    },
+    {
+     "field": "award",
+     "line": "Hall of Famer",
+     "award": "hof",
+     "official": 1,
+     "second": 1
+    }
+   ]
+  },
+  {
+   "id": "nbac-043",
+   "name": "Yao Ming",
+   "status": "retired",
+   "lastSeason": "2010-11",
+   "sources": {
+    "official": "https://www.nba.com/player/2397",
+    "second": "https://www.basketball-reference.com/players/m/mingya01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/1722"
+   },
+   "position": "Center",
+   "country": "China",
+   "countryIso": "cn",
+   "draftInfo": "1st Round, 1st Pick (2002)",
+   "teams": [
+    "Houston Rockets"
+   ],
+   "stats": [
+    "9,247 Pts",
+    "4,494 Reb",
+    "920 Blk"
+   ],
+   "awards": [
+    "8× All-Star",
+    "5× All-NBA",
+    "Hall of Famer"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 0,
+     "second": 0
+    },
+    "champ": {
+     "official": 0,
+     "second": 0
+    },
+    "fmvp": {
+     "official": 0,
+     "second": 0
+    },
+    "dpoy": {
+     "official": 0,
+     "second": 0
+    },
+    "allstar": {
+     "official": 8,
+     "second": 8
+    },
+    "roy": {
+     "official": 0,
+     "second": 0
+    },
+    "allnba": {
+     "official": 5,
+     "second": 5
+    },
+    "alldef": {
+     "official": 0,
+     "second": 0
+    },
+    "hof": {
+     "official": 1,
+     "second": 1
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Center",
+     "official": "Center",
+     "second": "Center"
+    },
+    {
+     "field": "country",
+     "line": "China",
+     "official": "China",
+     "second": "Shanghai, China"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 1st Pick (2002)",
+     "official": "DRAFT_YEAR 2002, DRAFT_ROUND 1, DRAFT_NUMBER 1",
+     "second": "Houston Rockets, 1st round (1st pick, 1st overall), 2002 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Houston Rockets",
+     "second": "HOU",
+     "third": "houston-rockets"
+    },
+    {
+     "field": "stat",
+     "line": "9,247 Pts",
+     "stat": "pts",
+     "rule": "exact",
+     "third": 9247,
+     "second": 9247
+    },
+    {
+     "field": "stat",
+     "line": "4,494 Reb",
+     "stat": "reb",
+     "rule": "exact",
+     "third": 4494,
+     "second": 4494
+    },
+    {
+     "field": "stat",
+     "line": "920 Blk",
+     "stat": "blk",
+     "rule": "exact",
+     "third": 920,
+     "second": 920
+    },
+    {
+     "field": "award",
+     "line": "8× All-Star",
+     "award": "allstar",
+     "official": 8,
+     "second": 8
+    },
+    {
+     "field": "award",
+     "line": "5× All-NBA",
+     "award": "allnba",
+     "official": 5,
+     "second": 5
+    },
+    {
+     "field": "award",
+     "line": "Hall of Famer",
+     "award": "hof",
+     "official": 1,
+     "second": 1
+    }
+   ]
+  },
+  {
+   "id": "nbac-030",
+   "name": "Paul Pierce",
+   "status": "retired",
+   "lastSeason": "2016-17",
+   "sources": {
+    "official": "https://www.nba.com/player/1718",
+    "second": "https://www.basketball-reference.com/players/p/piercpa01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/662"
+   },
+   "position": "Forward",
+   "country": "USA",
+   "countryIso": "us",
+   "draftInfo": "1st Round, 10th Pick (1998)",
+   "teams": [
+    "Boston Celtics",
+    "Brooklyn Nets",
+    "Washington Wizards",
+    "Los Angeles Clippers"
+   ],
+   "stats": [
+    "26,397 Pts",
+    "2,143 made threes"
+   ],
+   "awards": [
+    "NBA Champion",
+    "Finals MVP (2008)",
+    "10× All-Star",
+    "4× All-NBA"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 0,
+     "second": 0
+    },
+    "champ": {
+     "official": 1,
+     "second": 1
+    },
+    "fmvp": {
+     "official": 1,
+     "second": 1
+    },
+    "dpoy": {
+     "official": 0,
+     "second": 0
+    },
+    "allstar": {
+     "official": 10,
+     "second": 10
+    },
+    "roy": {
+     "official": 0,
+     "second": 0
+    },
+    "allnba": {
+     "official": 4,
+     "second": 4
+    },
+    "alldef": {
+     "official": 0,
+     "second": 0
+    },
+    "hof": {
+     "official": 0,
+     "second": 1
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "Forward",
+     "second": "Small Forward and Shooting Guard"
+    },
+    {
+     "field": "country",
+     "line": "USA",
+     "official": "USA",
+     "second": "Oakland, California, United States"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 10th Pick (1998)",
+     "official": "DRAFT_YEAR 1998, DRAFT_ROUND 1, DRAFT_NUMBER 10",
+     "second": "Boston Celtics, 1st round (10th pick, 10th overall), 1998 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Boston Celtics > Brooklyn Nets > Washington Wizards > Los Angeles Clippers",
+     "second": "BOS BRK WAS LAC",
+     "third": "boston-celtics brooklyn-nets washington-wizards la-clippers"
+    },
+    {
+     "field": "stat",
+     "line": "26,397 Pts",
+     "stat": "pts",
+     "rule": "exact",
+     "third": 26397,
+     "second": 26397
+    },
+    {
+     "field": "stat",
+     "line": "2,143 made threes",
+     "stat": "fg3",
+     "rule": "exact",
+     "third": 2143,
+     "second": 2143
+    },
+    {
+     "field": "award",
+     "line": "NBA Champion",
+     "award": "champ",
+     "official": 1,
+     "second": 1
+    },
+    {
+     "field": "award",
+     "line": "Finals MVP (2008)",
+     "award": "fmvp",
+     "official": 1,
+     "second": 1,
+     "secondSeason": "2007-08 Finals MVP",
+     "third": [
+      2008
+     ]
+    },
+    {
+     "field": "award",
+     "line": "10× All-Star",
+     "award": "allstar",
+     "official": 10,
+     "second": 10
+    },
+    {
+     "field": "award",
+     "line": "4× All-NBA",
+     "award": "allnba",
+     "official": 4,
+     "second": 4
+    }
+   ]
+  },
+  {
+   "id": "nbac-021",
+   "name": "Magic Johnson",
+   "status": "retired",
+   "lastSeason": "1995-96",
+   "sources": {
+    "official": "https://www.nba.com/player/77142",
+    "second": "https://www.basketball-reference.com/players/j/johnsma02.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/2334"
+   },
+   "position": "Forward-Guard",
+   "country": "USA",
+   "countryIso": "us",
+   "draftInfo": "1st Round, 1st Pick (1979)",
+   "teams": [
+    "Los Angeles Lakers"
+   ],
+   "stats": [
+    "17,707 Pts",
+    "10,141 Ast"
+   ],
+   "awards": [
+    "3× MVP",
+    "5× NBA Champion",
+    "3× Finals MVP",
+    "12× All-Star"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 3,
+     "second": 3
+    },
+    "champ": {
+     "official": 5,
+     "second": 5
+    },
+    "fmvp": {
+     "official": 3,
+     "second": 3
+    },
+    "dpoy": {
+     "official": 0,
+     "second": 0
+    },
+    "allstar": {
+     "official": 12,
+     "second": 12
+    },
+    "roy": {
+     "official": 0,
+     "second": 0
+    },
+    "allnba": {
+     "official": 10,
+     "second": 10
+    },
+    "alldef": {
+     "official": 0,
+     "second": 0
+    },
+    "hof": {
+     "official": 1,
+     "second": 1
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward-Guard",
+     "official": "Forward-Guard",
+     "second": "Point Guard, Shooting Guard, and Power Forward"
+    },
+    {
+     "field": "country",
+     "line": "USA",
+     "official": "USA",
+     "second": "Lansing, Michigan, United States"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 1st Pick (1979)",
+     "official": "DRAFT_YEAR 1979, DRAFT_ROUND 1, DRAFT_NUMBER 1",
+     "second": "Los Angeles Lakers, 1st round (1st pick, 1st overall), 1979 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Los Angeles Lakers",
+     "second": "LAL",
+     "third": "los-angeles-lakers"
+    },
+    {
+     "field": "stat",
+     "line": "17,707 Pts",
+     "stat": "pts",
+     "rule": "exact",
+     "third": 17707,
+     "second": 17707
+    },
+    {
+     "field": "stat",
+     "line": "10,141 Ast",
+     "stat": "ast",
+     "rule": "exact",
+     "third": 10141,
+     "second": 10141
+    },
+    {
+     "field": "award",
+     "line": "3× MVP",
+     "award": "mvp",
+     "official": 3,
+     "second": 3
+    },
+    {
+     "field": "award",
+     "line": "5× NBA Champion",
+     "award": "champ",
+     "official": 5,
+     "second": 5
+    },
+    {
+     "field": "award",
+     "line": "3× Finals MVP",
+     "award": "fmvp",
+     "official": 3,
+     "second": 3
+    },
+    {
+     "field": "award",
+     "line": "12× All-Star",
+     "award": "allstar",
+     "official": 12,
+     "second": 12
+    }
+   ]
+  },
+  {
+   "id": "nbac-004",
+   "name": "Kobe Bryant",
+   "status": "retired",
+   "lastSeason": "2015-16",
+   "sources": {
+    "official": "https://www.nba.com/player/977",
+    "second": "https://www.basketball-reference.com/players/b/bryanko01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/110"
+   },
+   "position": "Forward-Guard",
+   "country": "USA",
+   "countryIso": "us",
+   "draftInfo": "1st Round, 13th Pick (1996)",
+   "teams": [
+    "Los Angeles Lakers"
+   ],
+   "stats": [
+    "33,643 Pts",
+    "7,047 Reb",
+    "6,306 Ast"
+   ],
+   "awards": [
+    "MVP (2008)",
+    "5× NBA Champion",
+    "2× Finals MVP",
+    "18× All-Star"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 1,
+     "second": 1
+    },
+    "champ": {
+     "official": 5,
+     "second": 5
+    },
+    "fmvp": {
+     "official": 2,
+     "second": 2
+    },
+    "allstar": {
+     "official": 18,
+     "second": 18
+    },
+    "dpoy": {
+     "official": 0,
+     "second": 0
+    },
+    "roy": {
+     "official": 0,
+     "second": 0
+    },
+    "allnba": {
+     "official": 15,
+     "second": 15
+    },
+    "alldef": {
+     "official": 12,
+     "second": 12
+    },
+    "hof": {
+     "official": 0,
+     "second": 1
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward-Guard",
+     "official": "Forward-Guard",
+     "second": "Shooting Guard and Small Forward"
+    },
+    {
+     "field": "country",
+     "line": "USA",
+     "official": "USA",
+     "second": "Philadelphia, Pennsylvania, United States"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 13th Pick (1996)",
+     "official": "DRAFT_YEAR 1996, DRAFT_ROUND 1, DRAFT_NUMBER 13",
+     "second": "Charlotte Hornets, 1st round (13th pick, 13th overall), 1996 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Los Angeles Lakers",
+     "second": "LAL",
+     "third": "los-angeles-lakers"
+    },
+    {
+     "field": "stat",
+     "line": "33,643 Pts",
+     "stat": "pts",
+     "rule": "exact",
+     "third": 33643,
+     "second": 33643
+    },
+    {
+     "field": "stat",
+     "line": "7,047 Reb",
+     "stat": "reb",
+     "rule": "exact",
+     "third": 7047,
+     "second": 7047
+    },
+    {
+     "field": "stat",
+     "line": "6,306 Ast",
+     "stat": "ast",
+     "rule": "exact",
+     "third": 6306,
+     "second": 6306
+    },
+    {
+     "field": "award",
+     "line": "MVP (2008)",
+     "award": "mvp",
+     "official": 1,
+     "second": 1,
+     "secondSeason": "2007-08 MVP",
+     "third": [
+      2008
+     ]
+    },
+    {
+     "field": "award",
+     "line": "5× NBA Champion",
+     "award": "champ",
+     "official": 5,
+     "second": 5
+    },
+    {
+     "field": "award",
+     "line": "2× Finals MVP",
+     "award": "fmvp",
+     "official": 2,
+     "second": 2
+    },
+    {
+     "field": "award",
+     "line": "18× All-Star",
+     "award": "allstar",
+     "official": 18,
+     "second": 18
+    }
+   ]
+  },
+  {
+   "id": "nbac-034",
+   "name": "Kawhi Leonard",
+   "status": "active or unconfirmed",
+   "lastSeason": "2025-26",
+   "sources": {
+    "official": "https://www.nba.com/player/202695",
+    "second": "https://www.basketball-reference.com/players/l/leonaka01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/6450"
+   },
+   "position": "Forward",
+   "country": "USA",
+   "countryIso": "us",
+   "draftInfo": "1st Round, 15th Pick (2011)",
+   "teams": [
+    "San Antonio Spurs",
+    "Toronto Raptors",
+    "Los Angeles Clippers",
+    "Toronto Raptors"
+   ],
+   "stats": [
+    "16,500+ Pts",
+    "1,300+ Stl"
+   ],
+   "awards": [
+    "2× NBA Champion",
+    "2× Finals MVP",
+    "2× Defensive Player of the Year",
+    "7× All-Star"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 0,
+     "second": 0
+    },
+    "champ": {
+     "official": 2,
+     "second": 2
+    },
+    "fmvp": {
+     "official": 2,
+     "second": 2
+    },
+    "dpoy": {
+     "official": 2,
+     "second": 2
+    },
+    "allstar": {
+     "official": 7,
+     "second": 7
+    },
+    "roy": {
+     "official": 0,
+     "second": 0
+    },
+    "allnba": {
+     "official": 7,
+     "second": 7
+    },
+    "alldef": {
+     "official": 7,
+     "second": 7
+    },
+    "hof": {
+     "official": 0,
+     "second": 0
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "Forward",
+     "second": "Small Forward"
+    },
+    {
+     "field": "country",
+     "line": "USA",
+     "official": "USA",
+     "second": "Los Angeles, California, United States"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 15th Pick (2011)",
+     "official": "DRAFT_YEAR 2011, DRAFT_ROUND 1, DRAFT_NUMBER 15",
+     "second": "Indiana Pacers, 1st round (15th pick, 15th overall), 2011 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "San Antonio Spurs > Toronto Raptors > Los Angeles Clippers > Toronto Raptors",
+     "second": "SAS TOR LAC",
+     "third": "san-antonio-spurs toronto-raptors la-clippers",
+     "current": {
+      "official": "Toronto Raptors",
+      "second": "Toronto Raptors"
+     }
+    },
+    {
+     "field": "stat",
+     "line": "16,500+ Pts",
+     "stat": "pts",
+     "rule": "floor (may still play)",
+     "third": 16546,
+     "second": 16546
+    },
+    {
+     "field": "stat",
+     "line": "1,300+ Stl",
+     "stat": "stl",
+     "rule": "floor (may still play)",
+     "third": 1377,
+     "second": 1377
+    },
+    {
+     "field": "award",
+     "line": "2× NBA Champion",
+     "award": "champ",
+     "official": 2,
+     "second": 2
+    },
+    {
+     "field": "award",
+     "line": "2× Finals MVP",
+     "award": "fmvp",
+     "official": 2,
+     "second": 2
+    },
+    {
+     "field": "award",
+     "line": "2× Defensive Player of the Year",
+     "award": "dpoy",
+     "official": 2,
+     "second": 2
+    },
+    {
+     "field": "award",
+     "line": "7× All-Star",
+     "award": "allstar",
+     "official": 7,
+     "second": 7
+    }
+   ]
+  },
+  {
+   "id": "nbac-005",
+   "name": "Tim Duncan",
+   "status": "retired",
+   "lastSeason": "2015-16",
+   "sources": {
+    "official": "https://www.nba.com/player/1495",
+    "second": "https://www.basketball-reference.com/players/d/duncati01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/215"
+   },
+   "position": "Center-Forward",
+   "country": "US Virgin Islands",
+   "countryIso": "vi",
+   "draftInfo": "1st Round, 1st Pick (1997)",
+   "teams": [
+    "San Antonio Spurs"
+   ],
+   "stats": [
+    "26,496 Pts",
+    "15,091 Reb",
+    "3,020 Blk"
+   ],
+   "awards": [
+    "2× MVP",
+    "5× NBA Champion",
+    "3× Finals MVP",
+    "15× All-Star"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 2,
+     "second": 2
+    },
+    "champ": {
+     "official": 5,
+     "second": 5
+    },
+    "fmvp": {
+     "official": 3,
+     "second": 3
+    },
+    "allstar": {
+     "official": 15,
+     "second": 15
+    },
+    "dpoy": {
+     "official": 0,
+     "second": 0
+    },
+    "roy": {
+     "official": 1,
+     "second": 1
+    },
+    "allnba": {
+     "official": 15,
+     "second": 15
+    },
+    "alldef": {
+     "official": 15,
+     "second": 15
+    },
+    "hof": {
+     "official": 0,
+     "second": 1
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Center-Forward",
+     "official": "Center-Forward",
+     "second": "Center and Power Forward"
+    },
+    {
+     "field": "country",
+     "line": "US Virgin Islands",
+     "official": "US Virgin Islands",
+     "second": "St. Croix, U.S. Virgin Islands"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 1st Pick (1997)",
+     "official": "DRAFT_YEAR 1997, DRAFT_ROUND 1, DRAFT_NUMBER 1",
+     "second": "San Antonio Spurs, 1st round (1st pick, 1st overall), 1997 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "San Antonio Spurs",
+     "second": "SAS",
+     "third": "san-antonio-spurs"
+    },
+    {
+     "field": "stat",
+     "line": "26,496 Pts",
+     "stat": "pts",
+     "rule": "exact",
+     "third": 26496,
+     "second": 26496
+    },
+    {
+     "field": "stat",
+     "line": "15,091 Reb",
+     "stat": "reb",
+     "rule": "exact",
+     "third": 15091,
+     "second": 15091
+    },
+    {
+     "field": "stat",
+     "line": "3,020 Blk",
+     "stat": "blk",
+     "rule": "exact",
+     "third": 3020,
+     "second": 3020
+    },
+    {
+     "field": "award",
+     "line": "2× MVP",
+     "award": "mvp",
+     "official": 2,
+     "second": 2
+    },
+    {
+     "field": "award",
+     "line": "5× NBA Champion",
+     "award": "champ",
+     "official": 5,
+     "second": 5
+    },
+    {
+     "field": "award",
+     "line": "3× Finals MVP",
+     "award": "fmvp",
+     "official": 3,
+     "second": 3
+    },
+    {
+     "field": "award",
+     "line": "15× All-Star",
+     "award": "allstar",
+     "official": 15,
+     "second": 15
+    }
+   ]
+  },
+  {
+   "id": "nbac-040",
+   "name": "Dennis Rodman",
+   "status": "retired",
+   "lastSeason": "1999-00",
+   "sources": {
+    "official": "https://www.nba.com/player/23",
+    "second": "https://www.basketball-reference.com/players/r/rodmade01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/726"
+   },
+   "position": "Forward",
+   "country": "USA",
+   "countryIso": "us",
+   "draftInfo": "2nd Round, 27th Pick (1986)",
+   "teams": [
+    "Detroit Pistons",
+    "San Antonio Spurs",
+    "Chicago Bulls",
+    "Los Angeles Lakers",
+    "Dallas Mavericks"
+   ],
+   "stats": [
+    "11,954 Reb",
+    "6,683 Pts"
+   ],
+   "awards": [
+    "5× NBA Champion",
+    "2× Defensive Player of the Year",
+    "2× All-Star",
+    "2× All-NBA"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 0,
+     "second": 0
+    },
+    "champ": {
+     "official": 5,
+     "second": 5
+    },
+    "fmvp": {
+     "official": 0,
+     "second": 0
+    },
+    "dpoy": {
+     "official": 2,
+     "second": 2
+    },
+    "allstar": {
+     "official": 2,
+     "second": 2
+    },
+    "roy": {
+     "official": 0,
+     "second": 0
+    },
+    "allnba": {
+     "official": 2,
+     "second": 2
+    },
+    "alldef": {
+     "official": 8,
+     "second": 8
+    },
+    "hof": {
+     "official": 1,
+     "second": 1
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "Forward",
+     "second": "Power Forward and Small Forward"
+    },
+    {
+     "field": "country",
+     "line": "USA",
+     "official": "USA",
+     "second": "Trenton, New Jersey, United States"
+    },
+    {
+     "field": "draft",
+     "line": "2nd Round, 27th Pick (1986)",
+     "official": "DRAFT_YEAR 1986, DRAFT_ROUND 2, DRAFT_NUMBER 27",
+     "second": "Detroit Pistons, 2nd round (3rd pick, 27th overall), 1986 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Detroit Pistons > San Antonio Spurs > Chicago Bulls > Los Angeles Lakers > Dallas Mavericks",
+     "second": "DET SAS CHI LAL DAL",
+     "third": "detroit-pistons san-antonio-spurs chicago-bulls los-angeles-lakers dallas-mavericks"
+    },
+    {
+     "field": "stat",
+     "line": "11,954 Reb",
+     "stat": "reb",
+     "rule": "exact",
+     "third": 11954,
+     "second": 11954
+    },
+    {
+     "field": "stat",
+     "line": "6,683 Pts",
+     "stat": "pts",
+     "rule": "exact",
+     "third": 6683,
+     "second": 6683
+    },
+    {
+     "field": "award",
+     "line": "5× NBA Champion",
+     "award": "champ",
+     "official": 5,
+     "second": 5
+    },
+    {
+     "field": "award",
+     "line": "2× Defensive Player of the Year",
+     "award": "dpoy",
+     "official": 2,
+     "second": 2
+    },
+    {
+     "field": "award",
+     "line": "2× All-Star",
+     "award": "allstar",
+     "official": 2,
+     "second": 2
+    },
+    {
+     "field": "award",
+     "line": "2× All-NBA",
+     "award": "allnba",
+     "official": 2,
+     "second": 2
+    }
+   ]
+  },
+  {
+   "id": "nbac-038",
+   "name": "David Robinson",
+   "status": "retired",
+   "lastSeason": "2002-03",
+   "sources": {
+    "official": "https://www.nba.com/player/764",
+    "second": "https://www.basketball-reference.com/players/r/robinda01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/715"
+   },
+   "position": "Center",
+   "country": "USA",
+   "countryIso": "us",
+   "draftInfo": "1st Round, 1st Pick (1987)",
+   "teams": [
+    "San Antonio Spurs"
+   ],
+   "stats": [
+    "20,790 Pts",
+    "10,497 Reb",
+    "2,954 Blk"
+   ],
+   "awards": [
+    "MVP (1995)",
+    "2× NBA Champion",
+    "Defensive Player of the Year (1992)",
+    "10× All-Star"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 1,
+     "second": 1
+    },
+    "champ": {
+     "official": 2,
+     "second": 2
+    },
+    "fmvp": {
+     "official": 0,
+     "second": 0
+    },
+    "dpoy": {
+     "official": 1,
+     "second": 1
+    },
+    "allstar": {
+     "official": 10,
+     "second": 10
+    },
+    "roy": {
+     "official": 1,
+     "second": 1
+    },
+    "allnba": {
+     "official": 10,
+     "second": 10
+    },
+    "alldef": {
+     "official": 8,
+     "second": 8
+    },
+    "hof": {
+     "official": 1,
+     "second": 1
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Center",
+     "official": "Center",
+     "second": "Center"
+    },
+    {
+     "field": "country",
+     "line": "USA",
+     "official": "USA",
+     "second": "Key West, Florida, United States"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 1st Pick (1987)",
+     "official": "DRAFT_YEAR 1987, DRAFT_ROUND 1, DRAFT_NUMBER 1",
+     "second": "San Antonio Spurs, 1st round (1st pick, 1st overall), 1987 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "San Antonio Spurs",
+     "second": "SAS",
+     "third": "san-antonio-spurs"
+    },
+    {
+     "field": "stat",
+     "line": "20,790 Pts",
+     "stat": "pts",
+     "rule": "exact",
+     "third": 20790,
+     "second": 20790
+    },
+    {
+     "field": "stat",
+     "line": "10,497 Reb",
+     "stat": "reb",
+     "rule": "exact",
+     "third": 10497,
+     "second": 10497
+    },
+    {
+     "field": "stat",
+     "line": "2,954 Blk",
+     "stat": "blk",
+     "rule": "exact",
+     "third": 2954,
+     "second": 2954
+    },
+    {
+     "field": "award",
+     "line": "MVP (1995)",
+     "award": "mvp",
+     "official": 1,
+     "second": 1,
+     "secondSeason": "1994-95 MVP",
+     "third": [
+      1995
+     ]
+    },
+    {
+     "field": "award",
+     "line": "2× NBA Champion",
+     "award": "champ",
+     "official": 2,
+     "second": 2
+    },
+    {
+     "field": "award",
+     "line": "Defensive Player of the Year (1992)",
+     "award": "dpoy",
+     "official": 1,
+     "second": 1,
+     "secondSeason": "1991-92 Def. POY",
+     "third": [
+      1992
+     ]
+    },
+    {
+     "field": "award",
+     "line": "10× All-Star",
+     "award": "allstar",
+     "official": 10,
+     "second": 10
+    }
+   ]
+  },
+  {
+   "id": "nbac-049",
+   "name": "Shai Gilgeous-Alexander",
+   "status": "active or unconfirmed",
+   "lastSeason": "2025-26",
+   "sources": {
+    "official": "https://www.nba.com/player/1628983",
+    "second": "https://www.basketball-reference.com/players/g/gilgesh01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/4278073"
+   },
+   "position": "Guard",
+   "country": "Canada",
+   "countryIso": "ca",
+   "draftInfo": "1st Round, 11th Pick (2018)",
+   "teams": [
+    "Los Angeles Clippers",
+    "Oklahoma City Thunder"
+   ],
+   "stats": [
+    "13,400+ Pts",
+    "2,800+ Ast"
+   ],
+   "awards": [
+    "2× MVP",
+    "NBA Champion",
+    "Finals MVP (2025)",
+    "4× All-Star"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 2,
+     "second": 2
+    },
+    "champ": {
+     "official": 1,
+     "second": 1
+    },
+    "fmvp": {
+     "official": 1,
+     "second": 1
+    },
+    "dpoy": {
+     "official": 0,
+     "second": 0
+    },
+    "allstar": {
+     "official": 4,
+     "second": 4
+    },
+    "roy": {
+     "official": 0,
+     "second": 0
+    },
+    "allnba": {
+     "official": 4,
+     "second": 4
+    },
+    "alldef": {
+     "official": 0,
+     "second": 0
+    },
+    "hof": {
+     "official": 0,
+     "second": 0
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Guard",
+     "official": "Guard",
+     "second": "Point Guard and Shooting Guard"
+    },
+    {
+     "field": "country",
+     "line": "Canada",
+     "official": "Canada",
+     "second": "Toronto, Ontario, Canada"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 11th Pick (2018)",
+     "official": "DRAFT_YEAR 2018, DRAFT_ROUND 1, DRAFT_NUMBER 11",
+     "second": "Charlotte Hornets, 1st round (11th pick, 11th overall), 2018 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Los Angeles Clippers > Oklahoma City Thunder",
+     "second": "LAC OKC",
+     "third": "la-clippers oklahoma-city-thunder"
+    },
+    {
+     "field": "stat",
+     "line": "13,400+ Pts",
+     "stat": "pts",
+     "rule": "floor (may still play)",
+     "third": 13411,
+     "second": 13411
+    },
+    {
+     "field": "stat",
+     "line": "2,800+ Ast",
+     "stat": "ast",
+     "rule": "floor (may still play)",
+     "third": 2810,
+     "second": 2810
+    },
+    {
+     "field": "award",
+     "line": "2× MVP",
+     "award": "mvp",
+     "official": 2,
+     "second": 2
+    },
+    {
+     "field": "award",
+     "line": "NBA Champion",
+     "award": "champ",
+     "official": 1,
+     "second": 1
+    },
+    {
+     "field": "award",
+     "line": "Finals MVP (2025)",
+     "award": "fmvp",
+     "official": 1,
+     "second": 1,
+     "secondSeason": "2024-25 Finals MVP",
+     "third": [
+      2025
+     ]
+    },
+    {
+     "field": "award",
+     "line": "4× All-Star",
+     "award": "allstar",
+     "official": 4,
+     "second": 4
+    }
+   ]
+  },
+  {
+   "id": "nbac-032",
+   "name": "Carmelo Anthony",
+   "status": "retired",
+   "lastSeason": "2021-22",
+   "sources": {
+    "official": "https://www.nba.com/player/2546",
+    "second": "https://www.basketball-reference.com/players/a/anthoca01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/1975"
+   },
+   "position": "Forward",
+   "country": "USA",
+   "countryIso": "us",
+   "draftInfo": "1st Round, 3rd Pick (2003)",
+   "teams": [
+    "Denver Nuggets",
+    "New York Knicks",
+    "Oklahoma City Thunder",
+    "Houston Rockets",
+    "Portland Trail Blazers",
+    "Los Angeles Lakers"
+   ],
+   "stats": [
+    "28,289 Pts",
+    "1,731 made threes"
+   ],
+   "awards": [
+    "10× All-Star",
+    "6× All-NBA"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 0,
+     "second": 0
+    },
+    "champ": {
+     "official": 0,
+     "second": 0
+    },
+    "fmvp": {
+     "official": 0,
+     "second": 0
+    },
+    "dpoy": {
+     "official": 0,
+     "second": 0
+    },
+    "allstar": {
+     "official": 10,
+     "second": 10
+    },
+    "roy": {
+     "official": 0,
+     "second": 0
+    },
+    "allnba": {
+     "official": 6,
+     "second": 6
+    },
+    "alldef": {
+     "official": 0,
+     "second": 0
+    },
+    "hof": {
+     "official": 0,
+     "second": 1
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "Forward",
+     "second": "Small Forward and Power Forward"
+    },
+    {
+     "field": "country",
+     "line": "USA",
+     "official": "USA",
+     "second": "Brooklyn, New York, United States"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 3rd Pick (2003)",
+     "official": "DRAFT_YEAR 2003, DRAFT_ROUND 1, DRAFT_NUMBER 3",
+     "second": "Denver Nuggets, 1st round (3rd pick, 3rd overall), 2003 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Denver Nuggets > New York Knicks > Oklahoma City Thunder > Houston Rockets > Portland Trail Blazers > Los Angeles Lakers",
+     "second": "DEN NYK OKC HOU POR LAL",
+     "third": "denver-nuggets new-york-knicks oklahoma-city-thunder houston-rockets portland-trail-blazers los-angeles-lakers"
+    },
+    {
+     "field": "stat",
+     "line": "28,289 Pts",
+     "stat": "pts",
+     "rule": "exact",
+     "third": 28289,
+     "second": 28289
+    },
+    {
+     "field": "stat",
+     "line": "1,731 made threes",
+     "stat": "fg3",
+     "rule": "exact",
+     "third": 1731,
+     "second": 1731
+    },
+    {
+     "field": "award",
+     "line": "10× All-Star",
+     "award": "allstar",
+     "official": 10,
+     "second": 10
+    },
+    {
+     "field": "award",
+     "line": "6× All-NBA",
+     "award": "allnba",
+     "official": 6,
+     "second": 6
+    }
+   ]
+  },
+  {
+   "id": "nbac-006",
+   "name": "Shaquille O'Neal",
+   "status": "retired",
+   "lastSeason": "2010-11",
+   "sources": {
+    "official": "https://www.nba.com/player/406",
+    "second": "https://www.basketball-reference.com/players/o/onealsh01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/614"
+   },
+   "position": "Center",
+   "country": "USA",
+   "countryIso": "us",
+   "draftInfo": "1st Round, 1st Pick (1992)",
+   "teams": [
+    "Orlando Magic",
+    "Los Angeles Lakers",
+    "Miami Heat",
+    "Phoenix Suns",
+    "Cleveland Cavaliers",
+    "Boston Celtics"
+   ],
+   "stats": [
+    "28,596 Pts",
+    "13,099 Reb"
+   ],
+   "awards": [
+    "MVP (2000)",
+    "4× NBA Champion",
+    "3× Finals MVP",
+    "Rookie of the Year (1993)"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 1,
+     "second": 1
+    },
+    "champ": {
+     "official": 4,
+     "second": 4
+    },
+    "fmvp": {
+     "official": 3,
+     "second": 3
+    },
+    "roy": {
+     "official": 1,
+     "second": 1
+    },
+    "dpoy": {
+     "official": 0,
+     "second": 0
+    },
+    "allstar": {
+     "official": 15,
+     "second": 15
+    },
+    "allnba": {
+     "official": 14,
+     "second": 14
+    },
+    "alldef": {
+     "official": 3,
+     "second": 3
+    },
+    "hof": {
+     "official": 1,
+     "second": 1
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Center",
+     "official": "Center",
+     "second": "Center"
+    },
+    {
+     "field": "country",
+     "line": "USA",
+     "official": "USA",
+     "second": "Newark, New Jersey, United States"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 1st Pick (1992)",
+     "official": "DRAFT_YEAR 1992, DRAFT_ROUND 1, DRAFT_NUMBER 1",
+     "second": "Orlando Magic, 1st round (1st pick, 1st overall), 1992 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Orlando Magic > Los Angeles Lakers > Miami Heat > Phoenix Suns > Cleveland Cavaliers > Boston Celtics",
+     "second": "ORL LAL MIA PHO CLE BOS",
+     "third": "orlando-magic los-angeles-lakers miami-heat phoenix-suns cleveland-cavaliers boston-celtics"
+    },
+    {
+     "field": "stat",
+     "line": "28,596 Pts",
+     "stat": "pts",
+     "rule": "exact",
+     "third": 28596,
+     "second": 28596
+    },
+    {
+     "field": "stat",
+     "line": "13,099 Reb",
+     "stat": "reb",
+     "rule": "exact",
+     "third": 13099,
+     "second": 13099
+    },
+    {
+     "field": "award",
+     "line": "MVP (2000)",
+     "award": "mvp",
+     "official": 1,
+     "second": 1,
+     "secondSeason": "1999-00 MVP",
+     "third": [
+      2000
+     ]
+    },
+    {
+     "field": "award",
+     "line": "4× NBA Champion",
+     "award": "champ",
+     "official": 4,
+     "second": 4
+    },
+    {
+     "field": "award",
+     "line": "3× Finals MVP",
+     "award": "fmvp",
+     "official": 3,
+     "second": 3
+    },
+    {
+     "field": "award",
+     "line": "Rookie of the Year (1993)",
+     "award": "roy",
+     "official": 1,
+     "second": 1,
+     "secondSeason": "1992-93 ROY",
+     "third": [
+      1993
+     ]
+    }
+   ]
+  },
+  {
+   "id": "nbac-007",
+   "name": "Stephen Curry",
+   "status": "active or unconfirmed",
+   "lastSeason": "2025-26",
+   "sources": {
+    "official": "https://www.nba.com/player/201939",
+    "second": "https://www.basketball-reference.com/players/c/curryst01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/3975"
+   },
+   "position": "Guard",
+   "country": "USA",
+   "countryIso": "us",
+   "draftInfo": "1st Round, 7th Pick (2009)",
+   "teams": [
+    "Golden State Warriors"
+   ],
+   "stats": [
+    "26,500+ Pts",
+    "4,200+ made threes"
+   ],
+   "awards": [
+    "2× MVP",
+    "4× NBA Champion",
+    "Finals MVP (2022)",
+    "12× All-Star"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 2,
+     "second": 2
+    },
+    "champ": {
+     "official": 4,
+     "second": 4
+    },
+    "fmvp": {
+     "official": 1,
+     "second": 1
+    },
+    "dpoy": {
+     "official": 0,
+     "second": 0
+    },
+    "allstar": {
+     "official": 12,
+     "second": 12
+    },
+    "roy": {
+     "official": 0,
+     "second": 0
+    },
+    "allnba": {
+     "official": 11,
+     "second": 11
+    },
+    "alldef": {
+     "official": 0,
+     "second": 0
+    },
+    "hof": {
+     "official": 0,
+     "second": 0
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Guard",
+     "official": "Guard",
+     "second": "Point Guard"
+    },
+    {
+     "field": "country",
+     "line": "USA",
+     "official": "USA",
+     "second": "Akron, Ohio, United States"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 7th Pick (2009)",
+     "official": "DRAFT_YEAR 2009, DRAFT_ROUND 1, DRAFT_NUMBER 7",
+     "second": "Golden State Warriors, 1st round (7th pick, 7th overall), 2009 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Golden State Warriors",
+     "second": "GSW",
+     "third": "golden-state-warriors"
+    },
+    {
+     "field": "stat",
+     "line": "26,500+ Pts",
+     "stat": "pts",
+     "rule": "floor (may still play)",
+     "third": 26528,
+     "second": 26528
+    },
+    {
+     "field": "stat",
+     "line": "4,200+ made threes",
+     "stat": "fg3",
+     "rule": "floor (may still play)",
+     "third": 4248,
+     "second": 4248
+    },
+    {
+     "field": "award",
+     "line": "2× MVP",
+     "award": "mvp",
+     "official": 2,
+     "second": 2
+    },
+    {
+     "field": "award",
+     "line": "4× NBA Champion",
+     "award": "champ",
+     "official": 4,
+     "second": 4
+    },
+    {
+     "field": "award",
+     "line": "Finals MVP (2022)",
+     "award": "fmvp",
+     "official": 1,
+     "second": 1,
+     "secondSeason": "2021-22 Finals MVP",
+     "third": [
+      2022
+     ]
+    },
+    {
+     "field": "award",
+     "line": "12× All-Star",
+     "award": "allstar",
+     "official": 12,
+     "second": 12
+    }
+   ]
+  },
+  {
+   "id": "nbac-008",
+   "name": "Kevin Garnett",
+   "status": "retired",
+   "lastSeason": "2015-16",
+   "sources": {
+    "official": "https://www.nba.com/player/708",
+    "second": "https://www.basketball-reference.com/players/g/garneke01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/261"
+   },
+   "position": "Forward",
+   "country": "USA",
+   "countryIso": "us",
+   "draftInfo": "1st Round, 5th Pick (1995)",
+   "teams": [
+    "Minnesota Timberwolves",
+    "Boston Celtics",
+    "Brooklyn Nets",
+    "Minnesota Timberwolves"
+   ],
+   "stats": [
+    "26,071 Pts",
+    "14,662 Reb"
+   ],
+   "awards": [
+    "MVP (2004)",
+    "NBA Champion",
+    "Defensive Player of the Year (2008)",
+    "15× All-Star"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 1,
+     "second": 1
+    },
+    "champ": {
+     "official": 1,
+     "second": 1
+    },
+    "dpoy": {
+     "official": 1,
+     "second": 1
+    },
+    "allstar": {
+     "official": 15,
+     "second": 15
+    },
+    "fmvp": {
+     "official": 0,
+     "second": 0
+    },
+    "roy": {
+     "official": 0,
+     "second": 0
+    },
+    "allnba": {
+     "official": 9,
+     "second": 9
+    },
+    "alldef": {
+     "official": 12,
+     "second": 12
+    },
+    "hof": {
+     "official": 0,
+     "second": 1
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "Forward",
+     "second": "Power Forward, Center, and Small Forward"
+    },
+    {
+     "field": "country",
+     "line": "USA",
+     "official": "USA",
+     "second": "Greenville, South Carolina, United States"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 5th Pick (1995)",
+     "official": "DRAFT_YEAR 1995, DRAFT_ROUND 1, DRAFT_NUMBER 5",
+     "second": "Minnesota Timberwolves, 1st round (5th pick, 5th overall), 1995 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Minnesota Timberwolves > Boston Celtics > Brooklyn Nets > Minnesota Timberwolves",
+     "second": "MIN BOS BRK MIN",
+     "third": "minnesota-timberwolves boston-celtics brooklyn-nets minnesota-timberwolves"
+    },
+    {
+     "field": "stat",
+     "line": "26,071 Pts",
+     "stat": "pts",
+     "rule": "exact",
+     "third": 26071,
+     "second": 26071
+    },
+    {
+     "field": "stat",
+     "line": "14,662 Reb",
+     "stat": "reb",
+     "rule": "exact",
+     "third": 14662,
+     "second": 14662
+    },
+    {
+     "field": "award",
+     "line": "MVP (2004)",
+     "award": "mvp",
+     "official": 1,
+     "second": 1,
+     "secondSeason": "2003-04 MVP",
+     "third": [
+      2004
+     ]
+    },
+    {
+     "field": "award",
+     "line": "NBA Champion",
+     "award": "champ",
+     "official": 1,
+     "second": 1
+    },
+    {
+     "field": "award",
+     "line": "Defensive Player of the Year (2008)",
+     "award": "dpoy",
+     "official": 1,
+     "second": 1,
+     "secondSeason": "2007-08 Def. POY",
+     "third": [
+      2008
+     ]
+    },
+    {
+     "field": "award",
+     "line": "15× All-Star",
+     "award": "allstar",
+     "official": 15,
+     "second": 15
+    }
+   ]
+  },
+  {
+   "id": "nbac-025",
+   "name": "Luka Doncic",
+   "officialName": "Luka Dončić",
+   "status": "active or unconfirmed",
+   "lastSeason": "2025-26",
+   "sources": {
+    "official": "https://www.nba.com/player/1629029",
+    "second": "https://www.basketball-reference.com/players/d/doncilu01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/3945274"
+   },
+   "position": "Guard",
+   "country": "Slovenia",
+   "countryIso": "si",
+   "draftInfo": "1st Round, 3rd Pick (2018)",
+   "teams": [
+    "Dallas Mavericks",
+    "Los Angeles Lakers"
+   ],
+   "stats": [
+    "15,000+ Pts",
+    "4,200+ Ast"
+   ],
+   "awards": [
+    "6× All-Star",
+    "Rookie of the Year (2019)",
+    "6× All-NBA"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 0,
+     "second": 0
+    },
+    "champ": {
+     "official": 0,
+     "second": 0
+    },
+    "fmvp": {
+     "official": 0,
+     "second": 0
+    },
+    "dpoy": {
+     "official": 0,
+     "second": 0
+    },
+    "allstar": {
+     "official": 6,
+     "second": 6
+    },
+    "roy": {
+     "official": 1,
+     "second": 1
+    },
+    "allnba": {
+     "official": 6,
+     "second": 6
+    },
+    "alldef": {
+     "official": 0,
+     "second": 0
+    },
+    "hof": {
+     "official": 0,
+     "second": 0
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Guard",
+     "official": "Forward-Guard",
+     "second": "Point Guard and Shooting Guard"
+    },
+    {
+     "field": "country",
+     "line": "Slovenia",
+     "official": "Slovenia",
+     "second": "Ljubljana, Slovenia"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 3rd Pick (2018)",
+     "official": "DRAFT_YEAR 2018, DRAFT_ROUND 1, DRAFT_NUMBER 3",
+     "second": "Atlanta Hawks, 1st round (3rd pick, 3rd overall), 2018 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Dallas Mavericks > Los Angeles Lakers",
+     "second": "DAL LAL",
+     "third": "dallas-mavericks los-angeles-lakers"
+    },
+    {
+     "field": "stat",
+     "line": "15,000+ Pts",
+     "stat": "pts",
+     "rule": "floor (may still play)",
+     "third": 15021,
+     "second": 15021
+    },
+    {
+     "field": "stat",
+     "line": "4,200+ Ast",
+     "stat": "ast",
+     "rule": "floor (may still play)",
+     "third": 4230,
+     "second": 4230
+    },
+    {
+     "field": "award",
+     "line": "6× All-Star",
+     "award": "allstar",
+     "official": 6,
+     "second": 6
+    },
+    {
+     "field": "award",
+     "line": "Rookie of the Year (2019)",
+     "award": "roy",
+     "official": 1,
+     "second": 1,
+     "secondSeason": "2018-19 ROY",
+     "third": [
+      2019
+     ]
+    },
+    {
+     "field": "award",
+     "line": "6× All-NBA",
+     "award": "allnba",
+     "official": 6,
+     "second": 6
+    }
+   ]
+  },
+  {
+   "id": "nbac-048",
+   "name": "Dikembe Mutombo",
+   "status": "retired",
+   "lastSeason": "2008-09",
+   "sources": {
+    "official": "https://www.nba.com/player/87",
+    "second": "https://www.basketball-reference.com/players/m/mutomdi01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/588"
+   },
+   "position": "Center",
+   "country": "DR Congo",
+   "countryIso": "cd",
+   "draftInfo": "1st Round, 4th Pick (1991)",
+   "teams": [
+    "Denver Nuggets",
+    "Atlanta Hawks",
+    "Philadelphia 76ers",
+    "New Jersey Nets",
+    "New York Knicks",
+    "Houston Rockets"
+   ],
+   "stats": [
+    "3,289 Blk",
+    "12,359 Reb"
+   ],
+   "awards": [
+    "4× Defensive Player of the Year",
+    "8× All-Star",
+    "3× All-NBA",
+    "6× All-Defensive"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 0,
+     "second": 0
+    },
+    "champ": {
+     "official": 0,
+     "second": 0
+    },
+    "fmvp": {
+     "official": 0,
+     "second": 0
+    },
+    "dpoy": {
+     "official": 4,
+     "second": 4
+    },
+    "allstar": {
+     "official": 8,
+     "second": 8
+    },
+    "roy": {
+     "official": 0,
+     "second": 0
+    },
+    "allnba": {
+     "official": 3,
+     "second": 3
+    },
+    "alldef": {
+     "official": 6,
+     "second": 6
+    },
+    "hof": {
+     "official": 1,
+     "second": 1
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Center",
+     "official": "Center",
+     "second": "Center"
+    },
+    {
+     "field": "country",
+     "line": "DR Congo",
+     "official": "Congo",
+     "second": "Kinshasa, Democratic Republic of the Congo"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 4th Pick (1991)",
+     "official": "DRAFT_YEAR 1991, DRAFT_ROUND 1, DRAFT_NUMBER 4",
+     "second": "Denver Nuggets, 1st round (4th pick, 4th overall), 1991 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Denver Nuggets > Atlanta Hawks > Philadelphia 76ers > New Jersey Nets > New York Knicks > Houston Rockets",
+     "second": "DEN ATL PHI NJN NYK HOU",
+     "third": "denver-nuggets atlanta-hawks philadelphia-76ers new-jersey-nets new-york-knicks houston-rockets"
+    },
+    {
+     "field": "stat",
+     "line": "3,289 Blk",
+     "stat": "blk",
+     "rule": "exact",
+     "third": 3289,
+     "second": 3289
+    },
+    {
+     "field": "stat",
+     "line": "12,359 Reb",
+     "stat": "reb",
+     "rule": "exact",
+     "third": 12359,
+     "second": 12359
+    },
+    {
+     "field": "award",
+     "line": "4× Defensive Player of the Year",
+     "award": "dpoy",
+     "official": 4,
+     "second": 4
+    },
+    {
+     "field": "award",
+     "line": "8× All-Star",
+     "award": "allstar",
+     "official": 8,
+     "second": 8
+    },
+    {
+     "field": "award",
+     "line": "3× All-NBA",
+     "award": "allnba",
+     "official": 3,
+     "second": 3
+    },
+    {
+     "field": "award",
+     "line": "6× All-Defensive",
+     "award": "alldef",
+     "official": 6,
+     "second": 6
+    }
+   ]
+  },
+  {
+   "id": "nbac-042",
+   "name": "Pau Gasol",
+   "status": "retired",
+   "lastSeason": "2018-19",
+   "sources": {
+    "official": "https://www.nba.com/player/2200",
+    "second": "https://www.basketball-reference.com/players/g/gasolpa01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/996"
+   },
+   "position": "Center-Forward",
+   "country": "Spain",
+   "countryIso": "es",
+   "draftInfo": "1st Round, 3rd Pick (2001)",
+   "teams": [
+    "Memphis Grizzlies",
+    "Los Angeles Lakers",
+    "Chicago Bulls",
+    "San Antonio Spurs",
+    "Milwaukee Bucks"
+   ],
+   "stats": [
+    "20,894 Pts",
+    "11,305 Reb"
+   ],
+   "awards": [
+    "2× NBA Champion",
+    "6× All-Star",
+    "Rookie of the Year (2002)",
+    "4× All-NBA"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 0,
+     "second": 0
+    },
+    "champ": {
+     "official": 2,
+     "second": 2
+    },
+    "fmvp": {
+     "official": 0,
+     "second": 0
+    },
+    "dpoy": {
+     "official": 0,
+     "second": 0
+    },
+    "allstar": {
+     "official": 6,
+     "second": 6
+    },
+    "roy": {
+     "official": 1,
+     "second": 1
+    },
+    "allnba": {
+     "official": 4,
+     "second": 4
+    },
+    "alldef": {
+     "official": 0,
+     "second": 0
+    },
+    "hof": {
+     "official": 0,
+     "second": 1
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Center-Forward",
+     "official": "Center-Forward",
+     "second": "Center and Power Forward"
+    },
+    {
+     "field": "country",
+     "line": "Spain",
+     "official": "Spain",
+     "second": "Barcelona, Spain"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 3rd Pick (2001)",
+     "official": "DRAFT_YEAR 2001, DRAFT_ROUND 1, DRAFT_NUMBER 3",
+     "second": "Atlanta Hawks, 1st round (3rd pick, 3rd overall), 2001 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Memphis Grizzlies > Los Angeles Lakers > Chicago Bulls > San Antonio Spurs > Milwaukee Bucks",
+     "second": "MEM LAL CHI SAS MIL",
+     "third": "memphis-grizzlies los-angeles-lakers chicago-bulls san-antonio-spurs milwaukee-bucks"
+    },
+    {
+     "field": "stat",
+     "line": "20,894 Pts",
+     "stat": "pts",
+     "rule": "exact",
+     "third": 20894,
+     "second": 20894
+    },
+    {
+     "field": "stat",
+     "line": "11,305 Reb",
+     "stat": "reb",
+     "rule": "exact",
+     "third": 11305,
+     "second": 11305
+    },
+    {
+     "field": "award",
+     "line": "2× NBA Champion",
+     "award": "champ",
+     "official": 2,
+     "second": 2
+    },
+    {
+     "field": "award",
+     "line": "6× All-Star",
+     "award": "allstar",
+     "official": 6,
+     "second": 6
+    },
+    {
+     "field": "award",
+     "line": "Rookie of the Year (2002)",
+     "award": "roy",
+     "official": 1,
+     "second": 1,
+     "secondSeason": "2001-02 ROY",
+     "third": [
+      2002
+     ]
+    },
+    {
+     "field": "award",
+     "line": "4× All-NBA",
+     "award": "allnba",
+     "official": 4,
+     "second": 4
+    }
+   ]
+  },
+  {
+   "id": "nbac-029",
+   "name": "Dwight Howard",
+   "status": "retired",
+   "lastSeason": "2021-22",
+   "sources": {
+    "official": "https://www.nba.com/player/2730",
+    "second": "https://www.basketball-reference.com/players/h/howardw01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/2384"
+   },
+   "position": "Center-Forward",
+   "country": "USA",
+   "countryIso": "us",
+   "draftInfo": "1st Round, 1st Pick (2004)",
+   "teams": [
+    "Orlando Magic",
+    "Los Angeles Lakers",
+    "Houston Rockets",
+    "Atlanta Hawks",
+    "Charlotte Hornets",
+    "Washington Wizards",
+    "Los Angeles Lakers",
+    "Philadelphia 76ers",
+    "Los Angeles Lakers"
+   ],
+   "stats": [
+    "19,485 Pts",
+    "14,627 Reb",
+    "2,228 Blk"
+   ],
+   "awards": [
+    "NBA Champion",
+    "3× Defensive Player of the Year",
+    "8× All-Star",
+    "8× All-NBA"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 0,
+     "second": 0
+    },
+    "champ": {
+     "official": 1,
+     "second": 1
+    },
+    "fmvp": {
+     "official": 0,
+     "second": 0
+    },
+    "dpoy": {
+     "official": 3,
+     "second": 3
+    },
+    "allstar": {
+     "official": 8,
+     "second": 8
+    },
+    "roy": {
+     "official": 0,
+     "second": 0
+    },
+    "allnba": {
+     "official": 8,
+     "second": 8
+    },
+    "alldef": {
+     "official": 5,
+     "second": 5
+    },
+    "hof": {
+     "official": 0,
+     "second": 1
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Center-Forward",
+     "official": "Center-Forward",
+     "second": "Center and Power Forward"
+    },
+    {
+     "field": "country",
+     "line": "USA",
+     "official": "USA",
+     "second": "Atlanta, Georgia, United States"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 1st Pick (2004)",
+     "official": "DRAFT_YEAR 2004, DRAFT_ROUND 1, DRAFT_NUMBER 1",
+     "second": "Orlando Magic, 1st round (1st pick, 1st overall), 2004 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Orlando Magic > Los Angeles Lakers > Houston Rockets > Atlanta Hawks > Charlotte Hornets > Washington Wizards > Los Angeles Lakers > Philadelphia 76ers > Los Angeles Lakers",
+     "second": "ORL LAL HOU ATL CHO WAS LAL PHI LAL",
+     "third": "orlando-magic los-angeles-lakers houston-rockets atlanta-hawks charlotte-hornets washington-wizards los-angeles-lakers philadelphia-76ers los-angeles-lakers"
+    },
+    {
+     "field": "stat",
+     "line": "19,485 Pts",
+     "stat": "pts",
+     "rule": "exact",
+     "third": 19485,
+     "second": 19485
+    },
+    {
+     "field": "stat",
+     "line": "14,627 Reb",
+     "stat": "reb",
+     "rule": "exact",
+     "third": 14627,
+     "second": 14627
+    },
+    {
+     "field": "stat",
+     "line": "2,228 Blk",
+     "stat": "blk",
+     "rule": "exact",
+     "third": 2228,
+     "second": 2228
+    },
+    {
+     "field": "award",
+     "line": "NBA Champion",
+     "award": "champ",
+     "official": 1,
+     "second": 1
+    },
+    {
+     "field": "award",
+     "line": "3× Defensive Player of the Year",
+     "award": "dpoy",
+     "official": 3,
+     "second": 3
+    },
+    {
+     "field": "award",
+     "line": "8× All-Star",
+     "award": "allstar",
+     "official": 8,
+     "second": 8
+    },
+    {
+     "field": "award",
+     "line": "8× All-NBA",
+     "award": "allnba",
+     "official": 8,
+     "second": 8
+    }
+   ]
+  },
+  {
+   "id": "nbac-033",
+   "name": "Jason Kidd",
+   "status": "retired",
+   "lastSeason": "2012-13",
+   "sources": {
+    "official": "https://www.nba.com/player/467",
+    "second": "https://www.basketball-reference.com/players/k/kiddja01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/429"
+   },
+   "position": "Guard",
+   "country": "USA",
+   "countryIso": "us",
+   "draftInfo": "1st Round, 2nd Pick (1994)",
+   "teams": [
+    "Dallas Mavericks",
+    "Phoenix Suns",
+    "New Jersey Nets",
+    "Dallas Mavericks",
+    "New York Knicks"
+   ],
+   "stats": [
+    "12,091 Ast",
+    "2,684 Stl"
+   ],
+   "awards": [
+    "NBA Champion",
+    "10× All-Star",
+    "Rookie of the Year (1995)",
+    "6× All-NBA"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 0,
+     "second": 0
+    },
+    "champ": {
+     "official": 1,
+     "second": 1
+    },
+    "fmvp": {
+     "official": 0,
+     "second": 0
+    },
+    "dpoy": {
+     "official": 0,
+     "second": 0
+    },
+    "allstar": {
+     "official": 10,
+     "second": 10
+    },
+    "roy": {
+     "official": 1,
+     "second": 1
+    },
+    "allnba": {
+     "official": 6,
+     "second": 6
+    },
+    "alldef": {
+     "official": 9,
+     "second": 9
+    },
+    "hof": {
+     "official": 1,
+     "second": 1
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Guard",
+     "official": "Guard",
+     "second": "Point Guard and Shooting Guard"
+    },
+    {
+     "field": "country",
+     "line": "USA",
+     "official": "USA",
+     "second": "San Francisco, California, United States"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 2nd Pick (1994)",
+     "official": "DRAFT_YEAR 1994, DRAFT_ROUND 1, DRAFT_NUMBER 2",
+     "second": "Dallas Mavericks, 1st round (2nd pick, 2nd overall), 1994 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Dallas Mavericks > Phoenix Suns > New Jersey Nets > Dallas Mavericks > New York Knicks",
+     "second": "DAL PHO NJN DAL NYK",
+     "third": "dallas-mavericks phoenix-suns new-jersey-nets dallas-mavericks new-york-knicks"
+    },
+    {
+     "field": "stat",
+     "line": "12,091 Ast",
+     "stat": "ast",
+     "rule": "exact",
+     "third": 12091,
+     "second": 12091
+    },
+    {
+     "field": "stat",
+     "line": "2,684 Stl",
+     "stat": "stl",
+     "rule": "exact",
+     "third": 2684,
+     "second": 2684
+    },
+    {
+     "field": "award",
+     "line": "NBA Champion",
+     "award": "champ",
+     "official": 1,
+     "second": 1
+    },
+    {
+     "field": "award",
+     "line": "10× All-Star",
+     "award": "allstar",
+     "official": 10,
+     "second": 10
+    },
+    {
+     "field": "award",
+     "line": "Rookie of the Year (1995)",
+     "award": "roy",
+     "official": 1,
+     "second": 1,
+     "secondSeason": "1994-95 ROY",
+     "third": [
+      1995
+     ]
+    },
+    {
+     "field": "award",
+     "line": "6× All-NBA",
+     "award": "allnba",
+     "official": 6,
+     "second": 6
+    }
+   ]
+  },
+  {
+   "id": "nbac-023",
+   "name": "Giannis Antetokounmpo",
+   "status": "active or unconfirmed",
+   "lastSeason": "2025-26",
+   "sources": {
+    "official": "https://www.nba.com/player/203507",
+    "second": "https://www.basketball-reference.com/players/a/antetgi01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/3032977"
+   },
+   "position": "Forward",
+   "country": "Greece",
+   "countryIso": "gr",
+   "draftInfo": "1st Round, 15th Pick (2013)",
+   "teams": [
+    "Milwaukee Bucks",
+    "Miami Heat"
+   ],
+   "stats": [
+    "21,500+ Pts",
+    "8,800+ Reb"
+   ],
+   "awards": [
+    "2× MVP",
+    "NBA Champion",
+    "Finals MVP (2021)",
+    "Defensive Player of the Year (2020)"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 2,
+     "second": 2
+    },
+    "champ": {
+     "official": 1,
+     "second": 1
+    },
+    "fmvp": {
+     "official": 1,
+     "second": 1
+    },
+    "dpoy": {
+     "official": 1,
+     "second": 1
+    },
+    "allstar": {
+     "official": 10,
+     "second": 10
+    },
+    "roy": {
+     "official": 0,
+     "second": 0
+    },
+    "allnba": {
+     "official": 9,
+     "second": 9
+    },
+    "alldef": {
+     "official": 5,
+     "second": 5
+    },
+    "hof": {
+     "official": 0,
+     "second": 0
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "Forward",
+     "second": "Power Forward, Small Forward, Point Guard, and Shooting Guard"
+    },
+    {
+     "field": "country",
+     "line": "Greece",
+     "official": "Greece",
+     "second": "Athens, Greece"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 15th Pick (2013)",
+     "official": "DRAFT_YEAR 2013, DRAFT_ROUND 1, DRAFT_NUMBER 15",
+     "second": "Milwaukee Bucks, 1st round (15th pick, 15th overall), 2013 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Milwaukee Bucks > Miami Heat",
+     "second": "MIL",
+     "third": "milwaukee-bucks",
+     "current": {
+      "official": "Miami Heat",
+      "second": "Miami Heat"
+     }
+    },
+    {
+     "field": "stat",
+     "line": "21,500+ Pts",
+     "stat": "pts",
+     "rule": "floor (may still play)",
+     "third": 21531,
+     "second": 21531
+    },
+    {
+     "field": "stat",
+     "line": "8,800+ Reb",
+     "stat": "reb",
+     "rule": "floor (may still play)",
+     "third": 8882,
+     "second": 8882
+    },
+    {
+     "field": "award",
+     "line": "2× MVP",
+     "award": "mvp",
+     "official": 2,
+     "second": 2
+    },
+    {
+     "field": "award",
+     "line": "NBA Champion",
+     "award": "champ",
+     "official": 1,
+     "second": 1
+    },
+    {
+     "field": "award",
+     "line": "Finals MVP (2021)",
+     "award": "fmvp",
+     "official": 1,
+     "second": 1,
+     "secondSeason": "2020-21 Finals MVP",
+     "third": [
+      2021
+     ]
+    },
+    {
+     "field": "award",
+     "line": "Defensive Player of the Year (2020)",
+     "award": "dpoy",
+     "official": 1,
+     "second": 1,
+     "secondSeason": "2019-20 Def. POY",
+     "third": [
+      2020
+     ]
+    }
+   ]
+  },
+  {
+   "id": "nbac-046",
+   "name": "Jayson Tatum",
+   "status": "active or unconfirmed",
+   "lastSeason": "2025-26",
+   "sources": {
+    "official": "https://www.nba.com/player/1628369",
+    "second": "https://www.basketball-reference.com/players/t/tatumja01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/4065648"
+   },
+   "position": "Forward",
+   "country": "USA",
+   "countryIso": "us",
+   "draftInfo": "1st Round, 3rd Pick (2017)",
+   "teams": [
+    "Boston Celtics"
+   ],
+   "stats": [
+    "14,100+ Pts",
+    "4,400+ Reb"
+   ],
+   "awards": [
+    "NBA Champion",
+    "6× All-Star",
+    "5× All-NBA"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 0,
+     "second": 0
+    },
+    "champ": {
+     "official": 1,
+     "second": 1
+    },
+    "fmvp": {
+     "official": 0,
+     "second": 0
+    },
+    "dpoy": {
+     "official": 0,
+     "second": 0
+    },
+    "allstar": {
+     "official": 6,
+     "second": 6
+    },
+    "roy": {
+     "official": 0,
+     "second": 0
+    },
+    "allnba": {
+     "official": 5,
+     "second": 5
+    },
+    "alldef": {
+     "official": 0,
+     "second": 0
+    },
+    "hof": {
+     "official": 0,
+     "second": 0
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "Forward-Guard",
+     "second": "Small Forward and Power Forward"
+    },
+    {
+     "field": "country",
+     "line": "USA",
+     "official": "USA",
+     "second": "St. Louis, Missouri, United States"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 3rd Pick (2017)",
+     "official": "DRAFT_YEAR 2017, DRAFT_ROUND 1, DRAFT_NUMBER 3",
+     "second": "Boston Celtics, 1st round (3rd pick, 3rd overall), 2017 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Boston Celtics",
+     "second": "BOS",
+     "third": "boston-celtics"
+    },
+    {
+     "field": "stat",
+     "line": "14,100+ Pts",
+     "stat": "pts",
+     "rule": "floor (may still play)",
+     "third": 14132,
+     "second": 14132
+    },
+    {
+     "field": "stat",
+     "line": "4,400+ Reb",
+     "stat": "reb",
+     "rule": "floor (may still play)",
+     "third": 4453,
+     "second": 4453
+    },
+    {
+     "field": "award",
+     "line": "NBA Champion",
+     "award": "champ",
+     "official": 1,
+     "second": 1
+    },
+    {
+     "field": "award",
+     "line": "6× All-Star",
+     "award": "allstar",
+     "official": 6,
+     "second": 6
+    },
+    {
+     "field": "award",
+     "line": "5× All-NBA",
+     "award": "allnba",
+     "official": 5,
+     "second": 5
+    }
+   ]
+  },
+  {
+   "id": "nbac-041",
+   "name": "Manu Ginobili",
+   "status": "retired",
+   "lastSeason": "2017-18",
+   "sources": {
+    "official": "https://www.nba.com/player/1938",
+    "second": "https://www.basketball-reference.com/players/g/ginobma01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/272"
+   },
+   "position": "Guard",
+   "country": "Argentina",
+   "countryIso": "ar",
+   "draftInfo": "2nd Round, 57th Pick (1999)",
+   "teams": [
+    "San Antonio Spurs"
+   ],
+   "stats": [
+    "14,043 Pts",
+    "4,001 Ast"
+   ],
+   "awards": [
+    "4× NBA Champion",
+    "2× All-Star",
+    "2× All-NBA"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 0,
+     "second": 0
+    },
+    "champ": {
+     "official": 4,
+     "second": 4
+    },
+    "fmvp": {
+     "official": 0,
+     "second": 0
+    },
+    "dpoy": {
+     "official": 0,
+     "second": 0
+    },
+    "allstar": {
+     "official": 2,
+     "second": 2
+    },
+    "roy": {
+     "official": 0,
+     "second": 0
+    },
+    "allnba": {
+     "official": 2,
+     "second": 2
+    },
+    "alldef": {
+     "official": 0,
+     "second": 0
+    },
+    "hof": {
+     "official": 0,
+     "second": 1
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Guard",
+     "official": "Guard",
+     "second": "Shooting Guard"
+    },
+    {
+     "field": "country",
+     "line": "Argentina",
+     "official": "Argentina",
+     "second": "Bahia Blanca, Argentina"
+    },
+    {
+     "field": "draft",
+     "line": "2nd Round, 57th Pick (1999)",
+     "official": "DRAFT_YEAR 1999, DRAFT_ROUND 2, DRAFT_NUMBER 57",
+     "second": "San Antonio Spurs, 2nd round (28th pick, 57th overall), 1999 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "San Antonio Spurs",
+     "second": "SAS",
+     "third": "san-antonio-spurs"
+    },
+    {
+     "field": "stat",
+     "line": "14,043 Pts",
+     "stat": "pts",
+     "rule": "exact",
+     "third": 14043,
+     "second": 14043
+    },
+    {
+     "field": "stat",
+     "line": "4,001 Ast",
+     "stat": "ast",
+     "rule": "exact",
+     "third": 4001,
+     "second": 4001
+    },
+    {
+     "field": "award",
+     "line": "4× NBA Champion",
+     "award": "champ",
+     "official": 4,
+     "second": 4
+    },
+    {
+     "field": "award",
+     "line": "2× All-Star",
+     "award": "allstar",
+     "official": 2,
+     "second": 2
+    },
+    {
+     "field": "award",
+     "line": "2× All-NBA",
+     "award": "allnba",
+     "official": 2,
+     "second": 2
+    }
+   ]
+  },
+  {
+   "id": "nbac-009",
+   "name": "Dirk Nowitzki",
+   "status": "retired",
+   "lastSeason": "2018-19",
+   "sources": {
+    "official": "https://www.nba.com/player/1717",
+    "second": "https://www.basketball-reference.com/players/n/nowitdi01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/609"
+   },
+   "position": "Forward",
+   "country": "Germany",
+   "countryIso": "de",
+   "draftInfo": "1st Round, 9th Pick (1998)",
+   "teams": [
+    "Dallas Mavericks"
+   ],
+   "stats": [
+    "31,560 Pts",
+    "1,982 made threes"
+   ],
+   "awards": [
+    "MVP (2007)",
+    "NBA Champion",
+    "Finals MVP (2011)",
+    "14× All-Star"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 1,
+     "second": 1
+    },
+    "champ": {
+     "official": 1,
+     "second": 1
+    },
+    "fmvp": {
+     "official": 1,
+     "second": 1
+    },
+    "allstar": {
+     "official": 14,
+     "second": 14
+    },
+    "dpoy": {
+     "official": 0,
+     "second": 0
+    },
+    "roy": {
+     "official": 0,
+     "second": 0
+    },
+    "allnba": {
+     "official": 12,
+     "second": 12
+    },
+    "alldef": {
+     "official": 0,
+     "second": 0
+    },
+    "hof": {
+     "official": 0,
+     "second": 1
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "Forward",
+     "second": "Power Forward and Center"
+    },
+    {
+     "field": "country",
+     "line": "Germany",
+     "official": "Germany",
+     "second": "Wurzburg, Germany"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 9th Pick (1998)",
+     "official": "DRAFT_YEAR 1998, DRAFT_ROUND 1, DRAFT_NUMBER 9",
+     "second": "Milwaukee Bucks, 1st round (9th pick, 9th overall), 1998 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Dallas Mavericks",
+     "second": "DAL",
+     "third": "dallas-mavericks"
+    },
+    {
+     "field": "stat",
+     "line": "31,560 Pts",
+     "stat": "pts",
+     "rule": "exact",
+     "third": 31560,
+     "second": 31560
+    },
+    {
+     "field": "stat",
+     "line": "1,982 made threes",
+     "stat": "fg3",
+     "rule": "exact",
+     "third": 1982,
+     "second": 1982
+    },
+    {
+     "field": "award",
+     "line": "MVP (2007)",
+     "award": "mvp",
+     "official": 1,
+     "second": 1,
+     "secondSeason": "2006-07 MVP",
+     "third": [
+      2007
+     ]
+    },
+    {
+     "field": "award",
+     "line": "NBA Champion",
+     "award": "champ",
+     "official": 1,
+     "second": 1
+    },
+    {
+     "field": "award",
+     "line": "Finals MVP (2011)",
+     "award": "fmvp",
+     "official": 1,
+     "second": 1,
+     "secondSeason": "2010-11 Finals MVP",
+     "third": [
+      2011
+     ]
+    },
+    {
+     "field": "award",
+     "line": "14× All-Star",
+     "award": "allstar",
+     "official": 14,
+     "second": 14
+    }
+   ]
+  },
+  {
+   "id": "nbac-010",
+   "name": "Hakeem Olajuwon",
+   "status": "retired",
+   "lastSeason": "2001-02",
+   "sources": {
+    "official": "https://www.nba.com/player/165",
+    "second": "https://www.basketball-reference.com/players/o/olajuha01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/619"
+   },
+   "position": "Center",
+   "country": "Nigeria",
+   "countryIso": "ng",
+   "draftInfo": "1st Round, 1st Pick (1984)",
+   "teams": [
+    "Houston Rockets",
+    "Toronto Raptors"
+   ],
+   "stats": [
+    "26,946 Pts",
+    "13,748 Reb",
+    "3,830 Blk"
+   ],
+   "awards": [
+    "MVP (1994)",
+    "2× NBA Champion",
+    "2× Finals MVP",
+    "2× Defensive Player of the Year"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 1,
+     "second": 1
+    },
+    "champ": {
+     "official": 2,
+     "second": 2
+    },
+    "fmvp": {
+     "official": 2,
+     "second": 2
+    },
+    "dpoy": {
+     "official": 2,
+     "second": 2
+    },
+    "allstar": {
+     "official": 12,
+     "second": 12
+    },
+    "roy": {
+     "official": 0,
+     "second": 0
+    },
+    "allnba": {
+     "official": 12,
+     "second": 12
+    },
+    "alldef": {
+     "official": 9,
+     "second": 9
+    },
+    "hof": {
+     "official": 1,
+     "second": 1
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Center",
+     "official": "Center",
+     "second": "Center"
+    },
+    {
+     "field": "country",
+     "line": "Nigeria",
+     "official": "Nigeria",
+     "second": "Lagos, Nigeria"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 1st Pick (1984)",
+     "official": "DRAFT_YEAR 1984, DRAFT_ROUND 1, DRAFT_NUMBER 1",
+     "second": "Houston Rockets, 1st round (1st pick, 1st overall), 1984 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Houston Rockets > Toronto Raptors",
+     "second": "HOU TOR",
+     "third": "houston-rockets toronto-raptors"
+    },
+    {
+     "field": "stat",
+     "line": "26,946 Pts",
+     "stat": "pts",
+     "rule": "exact",
+     "third": 26946,
+     "second": 26946
+    },
+    {
+     "field": "stat",
+     "line": "13,748 Reb",
+     "stat": "reb",
+     "rule": "exact",
+     "third": 13748,
+     "second": 13748
+    },
+    {
+     "field": "stat",
+     "line": "3,830 Blk",
+     "stat": "blk",
+     "rule": "exact",
+     "third": 3830,
+     "second": 3830
+    },
+    {
+     "field": "award",
+     "line": "MVP (1994)",
+     "award": "mvp",
+     "official": 1,
+     "second": 1,
+     "secondSeason": "1993-94 MVP",
+     "third": [
+      1994
+     ]
+    },
+    {
+     "field": "award",
+     "line": "2× NBA Champion",
+     "award": "champ",
+     "official": 2,
+     "second": 2
+    },
+    {
+     "field": "award",
+     "line": "2× Finals MVP",
+     "award": "fmvp",
+     "official": 2,
+     "second": 2
+    },
+    {
+     "field": "award",
+     "line": "2× Defensive Player of the Year",
+     "award": "dpoy",
+     "official": 2,
+     "second": 2
+    }
+   ]
+  },
+  {
+   "id": "nbac-028",
+   "name": "Karl Malone",
+   "status": "retired",
+   "lastSeason": "2003-04",
+   "sources": {
+    "official": "https://www.nba.com/player/252",
+    "second": "https://www.basketball-reference.com/players/m/malonka01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/501"
+   },
+   "position": "Forward",
+   "country": "USA",
+   "countryIso": "us",
+   "draftInfo": "1st Round, 13th Pick (1985)",
+   "teams": [
+    "Utah Jazz",
+    "Los Angeles Lakers"
+   ],
+   "stats": [
+    "36,928 Pts",
+    "14,968 Reb"
+   ],
+   "awards": [
+    "2× MVP",
+    "14× All-Star",
+    "14× All-NBA",
+    "4× All-Defensive"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 2,
+     "second": 2
+    },
+    "champ": {
+     "official": 0,
+     "second": 0
+    },
+    "fmvp": {
+     "official": 0,
+     "second": 0
+    },
+    "dpoy": {
+     "official": 0,
+     "second": 0
+    },
+    "allstar": {
+     "official": 14,
+     "second": 14
+    },
+    "roy": {
+     "official": 0,
+     "second": 0
+    },
+    "allnba": {
+     "official": 14,
+     "second": 14
+    },
+    "alldef": {
+     "official": 4,
+     "second": 4
+    },
+    "hof": {
+     "official": 1,
+     "second": 1
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "Forward",
+     "second": "Power Forward"
+    },
+    {
+     "field": "country",
+     "line": "USA",
+     "official": "USA",
+     "second": "Summerfield, Louisiana, United States"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 13th Pick (1985)",
+     "official": "DRAFT_YEAR 1985, DRAFT_ROUND 1, DRAFT_NUMBER 13",
+     "second": "Utah Jazz, 1st round (13th pick, 13th overall), 1985 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Utah Jazz > Los Angeles Lakers",
+     "second": "UTA LAL",
+     "third": "utah-jazz los-angeles-lakers"
+    },
+    {
+     "field": "stat",
+     "line": "36,928 Pts",
+     "stat": "pts",
+     "rule": "exact",
+     "third": 36928,
+     "second": 36928
+    },
+    {
+     "field": "stat",
+     "line": "14,968 Reb",
+     "stat": "reb",
+     "rule": "exact",
+     "third": 14968,
+     "second": 14968
+    },
+    {
+     "field": "award",
+     "line": "2× MVP",
+     "award": "mvp",
+     "official": 2,
+     "second": 2
+    },
+    {
+     "field": "award",
+     "line": "14× All-Star",
+     "award": "allstar",
+     "official": 14,
+     "second": 14
+    },
+    {
+     "field": "award",
+     "line": "14× All-NBA",
+     "award": "allnba",
+     "official": 14,
+     "second": 14
+    },
+    {
+     "field": "award",
+     "line": "4× All-Defensive",
+     "award": "alldef",
+     "official": 4,
+     "second": 4
+    }
+   ]
+  },
+  {
+   "id": "nbac-044",
+   "name": "Joel Embiid",
+   "status": "active or unconfirmed",
+   "lastSeason": "2025-26",
+   "sources": {
+    "official": "https://www.nba.com/player/203954",
+    "second": "https://www.basketball-reference.com/players/e/embiijo01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/3059318"
+   },
+   "position": "Center",
+   "country": "Cameroon",
+   "countryIso": "cm",
+   "draftInfo": "1st Round, 3rd Pick (2014)",
+   "teams": [
+    "Philadelphia 76ers"
+   ],
+   "stats": [
+    "13,500+ Pts",
+    "5,200+ Reb"
+   ],
+   "awards": [
+    "MVP (2023)",
+    "7× All-Star",
+    "5× All-NBA",
+    "3× All-Defensive"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 1,
+     "second": 1
+    },
+    "champ": {
+     "official": 0,
+     "second": 0
+    },
+    "fmvp": {
+     "official": 0,
+     "second": 0
+    },
+    "dpoy": {
+     "official": 0,
+     "second": 0
+    },
+    "allstar": {
+     "official": 7,
+     "second": 7
+    },
+    "roy": {
+     "official": 0,
+     "second": 0
+    },
+    "allnba": {
+     "official": 5,
+     "second": 5
+    },
+    "alldef": {
+     "official": 3,
+     "second": 3
+    },
+    "hof": {
+     "official": 0,
+     "second": 0
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Center",
+     "official": "Center-Forward",
+     "second": "Center"
+    },
+    {
+     "field": "country",
+     "line": "Cameroon",
+     "official": "Cameroon",
+     "second": "Yaounde, Cameroon"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 3rd Pick (2014)",
+     "official": "DRAFT_YEAR 2014, DRAFT_ROUND 1, DRAFT_NUMBER 3",
+     "second": "Philadelphia 76ers, 1st round (3rd pick, 3rd overall), 2014 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Philadelphia 76ers",
+     "second": "PHI",
+     "third": "philadelphia-76ers"
+    },
+    {
+     "field": "stat",
+     "line": "13,500+ Pts",
+     "stat": "pts",
+     "rule": "floor (may still play)",
+     "third": 13544,
+     "second": 13544
+    },
+    {
+     "field": "stat",
+     "line": "5,200+ Reb",
+     "stat": "reb",
+     "rule": "floor (may still play)",
+     "third": 5280,
+     "second": 5280
+    },
+    {
+     "field": "award",
+     "line": "MVP (2023)",
+     "award": "mvp",
+     "official": 1,
+     "second": 1,
+     "secondSeason": "2022-23 MVP",
+     "third": [
+      2023
+     ]
+    },
+    {
+     "field": "award",
+     "line": "7× All-Star",
+     "award": "allstar",
+     "official": 7,
+     "second": 7
+    },
+    {
+     "field": "award",
+     "line": "5× All-NBA",
+     "award": "allnba",
+     "official": 5,
+     "second": 5
+    },
+    {
+     "field": "award",
+     "line": "3× All-Defensive",
+     "award": "alldef",
+     "official": 3,
+     "second": 3
+    }
+   ]
+  },
+  {
+   "id": "nbac-011",
+   "name": "Larry Bird",
+   "status": "retired",
+   "lastSeason": "1991-92",
+   "sources": {
+    "official": "https://www.nba.com/player/1449",
+    "second": "https://www.basketball-reference.com/players/b/birdla01.html",
+    "third": "https://www.nba.com/news/history-nba-legend-larry-bird"
+   },
+   "position": "Forward",
+   "country": "USA",
+   "countryIso": "us",
+   "draftInfo": "1st Round, 6th Pick (1978)",
+   "teams": [
+    "Boston Celtics"
+   ],
+   "stats": [
+    "24.3 PPG",
+    "10.0 RPG",
+    "6.3 APG"
+   ],
+   "awards": [
+    "3× MVP",
+    "3× NBA Champion",
+    "2× Finals MVP",
+    "Rookie of the Year (1980)"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 3,
+     "second": 3
+    },
+    "champ": {
+     "official": 3,
+     "second": 3
+    },
+    "fmvp": {
+     "official": 2,
+     "second": 2
+    },
+    "roy": {
+     "official": 1,
+     "second": 1
+    },
+    "dpoy": {
+     "official": 0,
+     "second": 0
+    },
+    "allstar": {
+     "official": 12,
+     "second": 12
+    },
+    "allnba": {
+     "official": 10,
+     "second": 10
+    },
+    "alldef": {
+     "official": 3,
+     "second": 3
+    },
+    "hof": {
+     "official": 1,
+     "second": 1
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "Forward",
+     "second": "Small Forward and Power Forward"
+    },
+    {
+     "field": "country",
+     "line": "USA",
+     "official": "USA",
+     "second": "West Baden, Indiana, United States"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 6th Pick (1978)",
+     "official": "DRAFT_YEAR 1978, DRAFT_ROUND 1, DRAFT_NUMBER 6",
+     "second": "Boston Celtics, 1st round (6th pick, 6th overall), 1978 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Boston Celtics",
+     "second": "BOS",
+     "third": "Boston Celtics"
+    },
+    {
+     "field": "stat",
+     "line": "24.3 PPG",
+     "stat": "PPG",
+     "rule": "career per game",
+     "official": 24.3,
+     "second": 24.3
+    },
+    {
+     "field": "stat",
+     "line": "10.0 RPG",
+     "stat": "RPG",
+     "rule": "career per game",
+     "official": 10,
+     "second": 10
+    },
+    {
+     "field": "stat",
+     "line": "6.3 APG",
+     "stat": "APG",
+     "rule": "career per game",
+     "official": 6.3,
+     "second": 6.3
+    },
+    {
+     "field": "award",
+     "line": "3× MVP",
+     "award": "mvp",
+     "official": 3,
+     "second": 3
+    },
+    {
+     "field": "award",
+     "line": "3× NBA Champion",
+     "award": "champ",
+     "official": 3,
+     "second": 3
+    },
+    {
+     "field": "award",
+     "line": "2× Finals MVP",
+     "award": "fmvp",
+     "official": 2,
+     "second": 2
+    },
+    {
+     "field": "award",
+     "line": "Rookie of the Year (1980)",
+     "award": "roy",
+     "official": 1,
+     "second": 1,
+     "secondSeason": "1979-80 ROY",
+     "third": [
+      1980
+     ]
+    }
+   ]
+  },
+  {
+   "id": "nbac-012",
+   "name": "Allen Iverson",
+   "status": "retired",
+   "lastSeason": "2009-10",
+   "sources": {
+    "official": "https://www.nba.com/player/947",
+    "second": "https://www.basketball-reference.com/players/i/iversal01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/366"
+   },
+   "position": "Guard",
+   "country": "USA",
+   "countryIso": "us",
+   "draftInfo": "1st Round, 1st Pick (1996)",
+   "teams": [
+    "Philadelphia 76ers",
+    "Denver Nuggets",
+    "Detroit Pistons",
+    "Memphis Grizzlies",
+    "Philadelphia 76ers"
+   ],
+   "stats": [
+    "24,368 Pts",
+    "5,624 Ast"
+   ],
+   "awards": [
+    "MVP (2001)",
+    "11× All-Star",
+    "Rookie of the Year (1997)",
+    "7× All-NBA"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 1,
+     "second": 1
+    },
+    "allstar": {
+     "official": 11,
+     "second": 11
+    },
+    "roy": {
+     "official": 1,
+     "second": 1
+    },
+    "champ": {
+     "official": 0,
+     "second": 0
+    },
+    "fmvp": {
+     "official": 0,
+     "second": 0
+    },
+    "dpoy": {
+     "official": 0,
+     "second": 0
+    },
+    "allnba": {
+     "official": 7,
+     "second": 7
+    },
+    "alldef": {
+     "official": 0,
+     "second": 0
+    },
+    "hof": {
+     "official": 1,
+     "second": 1
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Guard",
+     "official": "Guard",
+     "second": "Shooting Guard and Point Guard"
+    },
+    {
+     "field": "country",
+     "line": "USA",
+     "official": "USA",
+     "second": "Hampton, Virginia, United States"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 1st Pick (1996)",
+     "official": "DRAFT_YEAR 1996, DRAFT_ROUND 1, DRAFT_NUMBER 1",
+     "second": "Philadelphia 76ers, 1st round (1st pick, 1st overall), 1996 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Philadelphia 76ers > Denver Nuggets > Detroit Pistons > Memphis Grizzlies > Philadelphia 76ers",
+     "second": "PHI DEN DET MEM PHI",
+     "third": "philadelphia-76ers denver-nuggets detroit-pistons memphis-grizzlies philadelphia-76ers"
+    },
+    {
+     "field": "stat",
+     "line": "24,368 Pts",
+     "stat": "pts",
+     "rule": "exact",
+     "third": 24368,
+     "second": 24368
+    },
+    {
+     "field": "stat",
+     "line": "5,624 Ast",
+     "stat": "ast",
+     "rule": "exact",
+     "third": 5624,
+     "second": 5624
+    },
+    {
+     "field": "award",
+     "line": "MVP (2001)",
+     "award": "mvp",
+     "official": 1,
+     "second": 1,
+     "secondSeason": "2000-01 MVP",
+     "third": [
+      2001
+     ]
+    },
+    {
+     "field": "award",
+     "line": "11× All-Star",
+     "award": "allstar",
+     "official": 11,
+     "second": 11
+    },
+    {
+     "field": "award",
+     "line": "Rookie of the Year (1997)",
+     "award": "roy",
+     "official": 1,
+     "second": 1,
+     "secondSeason": "1996-97 ROY",
+     "third": [
+      1997
+     ]
+    },
+    {
+     "field": "award",
+     "line": "7× All-NBA",
+     "award": "allnba",
+     "official": 7,
+     "second": 7
+    }
+   ]
+  },
+  {
+   "id": "nbac-022",
+   "name": "Kevin Durant",
+   "status": "active or unconfirmed",
+   "lastSeason": "2025-26",
+   "sources": {
+    "official": "https://www.nba.com/player/201142",
+    "second": "https://www.basketball-reference.com/players/d/duranke01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/3202"
+   },
+   "position": "Forward",
+   "country": "USA",
+   "countryIso": "us",
+   "draftInfo": "1st Round, 2nd Pick (2007)",
+   "teams": [
+    "Seattle SuperSonics",
+    "Oklahoma City Thunder",
+    "Golden State Warriors",
+    "Brooklyn Nets",
+    "Phoenix Suns",
+    "Houston Rockets"
+   ],
+   "stats": [
+    "32,500+ Pts",
+    "8,200+ Reb"
+   ],
+   "awards": [
+    "MVP (2014)",
+    "2× NBA Champion",
+    "2× Finals MVP",
+    "16× All-Star"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 1,
+     "second": 1
+    },
+    "champ": {
+     "official": 2,
+     "second": 2
+    },
+    "fmvp": {
+     "official": 2,
+     "second": 2
+    },
+    "dpoy": {
+     "official": 0,
+     "second": 0
+    },
+    "allstar": {
+     "official": 16,
+     "second": 16
+    },
+    "roy": {
+     "official": 1,
+     "second": 1
+    },
+    "allnba": {
+     "official": 12,
+     "second": 12
+    },
+    "alldef": {
+     "official": 0,
+     "second": 0
+    },
+    "hof": {
+     "official": 0,
+     "second": 0
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "Forward",
+     "second": "Small Forward, Power Forward, and Shooting Guard"
+    },
+    {
+     "field": "country",
+     "line": "USA",
+     "official": "USA",
+     "second": "Washington, District of Columbia, United States"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 2nd Pick (2007)",
+     "official": "DRAFT_YEAR 2007, DRAFT_ROUND 1, DRAFT_NUMBER 2",
+     "second": "Seattle SuperSonics, 1st round (2nd pick, 2nd overall), 2007 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Seattle SuperSonics > Oklahoma City Thunder > Golden State Warriors > Brooklyn Nets > Phoenix Suns > Houston Rockets",
+     "second": "SEA OKC GSW BRK PHO HOU",
+     "third": "seattle-supersonics oklahoma-city-thunder golden-state-warriors brooklyn-nets phoenix-suns houston-rockets"
+    },
+    {
+     "field": "stat",
+     "line": "32,500+ Pts",
+     "stat": "pts",
+     "rule": "floor (may still play)",
+     "third": 32597,
+     "second": 32597
+    },
+    {
+     "field": "stat",
+     "line": "8,200+ Reb",
+     "stat": "reb",
+     "rule": "floor (may still play)",
+     "third": 8254,
+     "second": 8254
+    },
+    {
+     "field": "award",
+     "line": "MVP (2014)",
+     "award": "mvp",
+     "official": 1,
+     "second": 1,
+     "secondSeason": "2013-14 MVP",
+     "third": [
+      2014
+     ]
+    },
+    {
+     "field": "award",
+     "line": "2× NBA Champion",
+     "award": "champ",
+     "official": 2,
+     "second": 2
+    },
+    {
+     "field": "award",
+     "line": "2× Finals MVP",
+     "award": "fmvp",
+     "official": 2,
+     "second": 2
+    },
+    {
+     "field": "award",
+     "line": "16× All-Star",
+     "award": "allstar",
+     "official": 16,
+     "second": 16
+    }
+   ]
+  },
+  {
+   "id": "nbac-039",
+   "name": "Isiah Thomas",
+   "status": "retired",
+   "lastSeason": "1993-94",
+   "sources": {
+    "official": "https://www.nba.com/player/78318",
+    "second": "https://www.basketball-reference.com/players/t/thomais01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/3507"
+   },
+   "position": "Guard",
+   "country": "USA",
+   "countryIso": "us",
+   "draftInfo": "1st Round, 2nd Pick (1981)",
+   "teams": [
+    "Detroit Pistons"
+   ],
+   "stats": [
+    "18,822 Pts",
+    "9,061 Ast"
+   ],
+   "awards": [
+    "2× NBA Champion",
+    "Finals MVP (1990)",
+    "12× All-Star",
+    "5× All-NBA"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 0,
+     "second": 0
+    },
+    "champ": {
+     "official": 2,
+     "second": 2
+    },
+    "fmvp": {
+     "official": 1,
+     "second": 1
+    },
+    "dpoy": {
+     "official": 0,
+     "second": 0
+    },
+    "allstar": {
+     "official": 12,
+     "second": 12
+    },
+    "roy": {
+     "official": 0,
+     "second": 0
+    },
+    "allnba": {
+     "official": 5,
+     "second": 5
+    },
+    "alldef": {
+     "official": 0,
+     "second": 0
+    },
+    "hof": {
+     "official": 1,
+     "second": 1
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Guard",
+     "official": "Guard",
+     "second": "Point Guard"
+    },
+    {
+     "field": "country",
+     "line": "USA",
+     "official": "USA",
+     "second": "Chicago, Illinois, United States"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 2nd Pick (1981)",
+     "official": "DRAFT_YEAR 1981, DRAFT_ROUND 1, DRAFT_NUMBER 2",
+     "second": "Detroit Pistons, 1st round (2nd pick, 2nd overall), 1981 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Detroit Pistons",
+     "second": "DET",
+     "third": "detroit-pistons"
+    },
+    {
+     "field": "stat",
+     "line": "18,822 Pts",
+     "stat": "pts",
+     "rule": "exact",
+     "third": 18822,
+     "second": 18822
+    },
+    {
+     "field": "stat",
+     "line": "9,061 Ast",
+     "stat": "ast",
+     "rule": "exact",
+     "third": 9061,
+     "second": 9061
+    },
+    {
+     "field": "award",
+     "line": "2× NBA Champion",
+     "award": "champ",
+     "official": 2,
+     "second": 2
+    },
+    {
+     "field": "award",
+     "line": "Finals MVP (1990)",
+     "award": "fmvp",
+     "official": 1,
+     "second": 1,
+     "secondSeason": "1989-90 Finals MVP",
+     "third": [
+      1990
+     ]
+    },
+    {
+     "field": "award",
+     "line": "12× All-Star",
+     "award": "allstar",
+     "official": 12,
+     "second": 12
+    },
+    {
+     "field": "award",
+     "line": "5× All-NBA",
+     "award": "allnba",
+     "official": 5,
+     "second": 5
+    }
+   ]
+  },
+  {
+   "id": "nbac-045",
+   "name": "Tracy McGrady",
+   "status": "retired",
+   "lastSeason": "2011-12",
+   "sources": {
+    "official": "https://www.nba.com/player/1503",
+    "second": "https://www.basketball-reference.com/players/m/mcgratr01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/532"
+   },
+   "position": "Guard-Forward",
+   "country": "USA",
+   "countryIso": "us",
+   "draftInfo": "1st Round, 9th Pick (1997)",
+   "teams": [
+    "Toronto Raptors",
+    "Orlando Magic",
+    "Houston Rockets",
+    "New York Knicks",
+    "Detroit Pistons",
+    "Atlanta Hawks"
+   ],
+   "stats": [
+    "18,381 Pts",
+    "4,161 Ast"
+   ],
+   "awards": [
+    "7× All-Star",
+    "7× All-NBA",
+    "Hall of Famer"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 0,
+     "second": 0
+    },
+    "champ": {
+     "official": 0,
+     "second": 0
+    },
+    "fmvp": {
+     "official": 0,
+     "second": 0
+    },
+    "dpoy": {
+     "official": 0,
+     "second": 0
+    },
+    "allstar": {
+     "official": 7,
+     "second": 7
+    },
+    "roy": {
+     "official": 0,
+     "second": 0
+    },
+    "allnba": {
+     "official": 7,
+     "second": 7
+    },
+    "alldef": {
+     "official": 0,
+     "second": 0
+    },
+    "hof": {
+     "official": 1,
+     "second": 1
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Guard-Forward",
+     "official": "Guard-Forward",
+     "second": "Shooting Guard and Small Forward"
+    },
+    {
+     "field": "country",
+     "line": "USA",
+     "official": "USA",
+     "second": "Bartow, Florida, United States"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 9th Pick (1997)",
+     "official": "DRAFT_YEAR 1997, DRAFT_ROUND 1, DRAFT_NUMBER 9",
+     "second": "Toronto Raptors, 1st round (9th pick, 9th overall), 1997 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Toronto Raptors > Orlando Magic > Houston Rockets > New York Knicks > Detroit Pistons > Atlanta Hawks",
+     "second": "TOR ORL HOU NYK DET ATL",
+     "third": "toronto-raptors orlando-magic houston-rockets new-york-knicks detroit-pistons atlanta-hawks"
+    },
+    {
+     "field": "stat",
+     "line": "18,381 Pts",
+     "stat": "pts",
+     "rule": "exact",
+     "third": 18381,
+     "second": 18381
+    },
+    {
+     "field": "stat",
+     "line": "4,161 Ast",
+     "stat": "ast",
+     "rule": "exact",
+     "third": 4161,
+     "second": 4161
+    },
+    {
+     "field": "award",
+     "line": "7× All-Star",
+     "award": "allstar",
+     "official": 7,
+     "second": 7
+    },
+    {
+     "field": "award",
+     "line": "7× All-NBA",
+     "award": "allnba",
+     "official": 7,
+     "second": 7
+    },
+    {
+     "field": "award",
+     "line": "Hall of Famer",
+     "award": "hof",
+     "official": 1,
+     "second": 1
+    }
+   ]
+  },
+  {
+   "id": "nbac-013",
+   "name": "Dwyane Wade",
+   "status": "retired",
+   "lastSeason": "2018-19",
+   "sources": {
+    "official": "https://www.nba.com/player/2548",
+    "second": "https://www.basketball-reference.com/players/w/wadedw01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/1987"
+   },
+   "position": "Guard",
+   "country": "USA",
+   "countryIso": "us",
+   "draftInfo": "1st Round, 5th Pick (2003)",
+   "teams": [
+    "Miami Heat",
+    "Chicago Bulls",
+    "Cleveland Cavaliers",
+    "Miami Heat"
+   ],
+   "stats": [
+    "23,165 Pts",
+    "5,701 Ast"
+   ],
+   "awards": [
+    "3× NBA Champion",
+    "Finals MVP (2006)",
+    "13× All-Star",
+    "8× All-NBA"
+   ],
+   "awardCounts": {
+    "champ": {
+     "official": 3,
+     "second": 3
+    },
+    "fmvp": {
+     "official": 1,
+     "second": 1
+    },
+    "allstar": {
+     "official": 13,
+     "second": 13
+    },
+    "mvp": {
+     "official": 0,
+     "second": 0
+    },
+    "dpoy": {
+     "official": 0,
+     "second": 0
+    },
+    "roy": {
+     "official": 0,
+     "second": 0
+    },
+    "allnba": {
+     "official": 8,
+     "second": 8
+    },
+    "alldef": {
+     "official": 3,
+     "second": 3
+    },
+    "hof": {
+     "official": 0,
+     "second": 1
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Guard",
+     "official": "Guard",
+     "second": "Shooting Guard and Point Guard"
+    },
+    {
+     "field": "country",
+     "line": "USA",
+     "official": "USA",
+     "second": "Chicago, Illinois, United States"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 5th Pick (2003)",
+     "official": "DRAFT_YEAR 2003, DRAFT_ROUND 1, DRAFT_NUMBER 5",
+     "second": "Miami Heat, 1st round (5th pick, 5th overall), 2003 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Miami Heat > Chicago Bulls > Cleveland Cavaliers > Miami Heat",
+     "second": "MIA CHI CLE MIA",
+     "third": "miami-heat chicago-bulls cleveland-cavaliers miami-heat"
+    },
+    {
+     "field": "stat",
+     "line": "23,165 Pts",
+     "stat": "pts",
+     "rule": "exact",
+     "third": 23165,
+     "second": 23165
+    },
+    {
+     "field": "stat",
+     "line": "5,701 Ast",
+     "stat": "ast",
+     "rule": "exact",
+     "third": 5701,
+     "second": 5701
+    },
+    {
+     "field": "award",
+     "line": "3× NBA Champion",
+     "award": "champ",
+     "official": 3,
+     "second": 3
+    },
+    {
+     "field": "award",
+     "line": "Finals MVP (2006)",
+     "award": "fmvp",
+     "official": 1,
+     "second": 1,
+     "secondSeason": "2005-06 Finals MVP",
+     "third": [
+      2006
+     ]
+    },
+    {
+     "field": "award",
+     "line": "13× All-Star",
+     "award": "allstar",
+     "official": 13,
+     "second": 13
+    },
+    {
+     "field": "award",
+     "line": "8× All-NBA",
+     "award": "allnba",
+     "official": 8,
+     "second": 8
+    }
+   ]
+  },
+  {
+   "id": "nbac-014",
+   "name": "Charles Barkley",
+   "status": "retired",
+   "lastSeason": "1999-00",
+   "sources": {
+    "official": "https://www.nba.com/player/787",
+    "second": "https://www.basketball-reference.com/players/b/barklch01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/37"
+   },
+   "position": "Forward",
+   "country": "USA",
+   "countryIso": "us",
+   "draftInfo": "1st Round, 5th Pick (1984)",
+   "teams": [
+    "Philadelphia 76ers",
+    "Phoenix Suns",
+    "Houston Rockets"
+   ],
+   "stats": [
+    "23,757 Pts",
+    "12,546 Reb"
+   ],
+   "awards": [
+    "MVP (1993)",
+    "11× All-Star",
+    "11× All-NBA",
+    "Hall of Famer"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 1,
+     "second": 1
+    },
+    "allstar": {
+     "official": 11,
+     "second": 11
+    },
+    "champ": {
+     "official": 0,
+     "second": 0
+    },
+    "fmvp": {
+     "official": 0,
+     "second": 0
+    },
+    "dpoy": {
+     "official": 0,
+     "second": 0
+    },
+    "roy": {
+     "official": 0,
+     "second": 0
+    },
+    "allnba": {
+     "official": 11,
+     "second": 11
+    },
+    "alldef": {
+     "official": 0,
+     "second": 0
+    },
+    "hof": {
+     "official": 1,
+     "second": 1
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "Forward",
+     "second": "Power Forward and Small Forward"
+    },
+    {
+     "field": "country",
+     "line": "USA",
+     "official": "USA",
+     "second": "Leeds, Alabama, United States"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 5th Pick (1984)",
+     "official": "DRAFT_YEAR 1984, DRAFT_ROUND 1, DRAFT_NUMBER 5",
+     "second": "Philadelphia 76ers, 1st round (5th pick, 5th overall), 1984 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Philadelphia 76ers > Phoenix Suns > Houston Rockets",
+     "second": "PHI PHO HOU",
+     "third": "philadelphia-76ers phoenix-suns houston-rockets"
+    },
+    {
+     "field": "stat",
+     "line": "23,757 Pts",
+     "stat": "pts",
+     "rule": "exact",
+     "third": 23757,
+     "second": 23757
+    },
+    {
+     "field": "stat",
+     "line": "12,546 Reb",
+     "stat": "reb",
+     "rule": "exact",
+     "third": 12546,
+     "second": 12546
+    },
+    {
+     "field": "award",
+     "line": "MVP (1993)",
+     "award": "mvp",
+     "official": 1,
+     "second": 1,
+     "secondSeason": "1992-93 MVP",
+     "third": [
+      1993
+     ]
+    },
+    {
+     "field": "award",
+     "line": "11× All-Star",
+     "award": "allstar",
+     "official": 11,
+     "second": 11
+    },
+    {
+     "field": "award",
+     "line": "11× All-NBA",
+     "award": "allnba",
+     "official": 11,
+     "second": 11
+    },
+    {
+     "field": "award",
+     "line": "Hall of Famer",
+     "award": "hof",
+     "official": 1,
+     "second": 1
+    }
+   ]
+  },
+  {
+   "id": "nbac-015",
+   "name": "Chris Paul",
+   "status": "retired 2026-02-13 (nba.com player page, read 2026-10-05; ROSTERSTATUS Inactive); his last season is 2025-26, so the floor rule still applies",
+   "lastSeason": "2025-26",
+   "sources": {
+    "official": "https://www.nba.com/player/101108",
+    "second": "https://www.basketball-reference.com/players/p/paulch01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/2779"
+   },
+   "position": "Guard",
+   "country": "USA",
+   "countryIso": "us",
+   "draftInfo": "1st Round, 4th Pick (2005)",
+   "teams": [
+    "New Orleans Hornets",
+    "Los Angeles Clippers",
+    "Houston Rockets",
+    "Oklahoma City Thunder",
+    "Phoenix Suns",
+    "Golden State Warriors",
+    "San Antonio Spurs",
+    "Los Angeles Clippers"
+   ],
+   "stats": [
+    "23,000+ Pts",
+    "12,500+ Ast"
+   ],
+   "awards": [
+    "Rookie of the Year (2006)",
+    "12× All-Star",
+    "11× All-NBA",
+    "9× All-Defensive"
+   ],
+   "awardCounts": {
+    "roy": {
+     "official": 1,
+     "second": 1
+    },
+    "allstar": {
+     "official": 12,
+     "second": 12
+    },
+    "mvp": {
+     "official": 0,
+     "second": 0
+    },
+    "champ": {
+     "official": 0,
+     "second": 0
+    },
+    "fmvp": {
+     "official": 0,
+     "second": 0
+    },
+    "dpoy": {
+     "official": 0,
+     "second": 0
+    },
+    "allnba": {
+     "official": 11,
+     "second": 11
+    },
+    "alldef": {
+     "official": 9,
+     "second": 9
+    },
+    "hof": {
+     "official": 0,
+     "second": 0
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Guard",
+     "official": "Guard",
+     "second": "Point Guard"
+    },
+    {
+     "field": "country",
+     "line": "USA",
+     "official": "USA",
+     "second": "Winston-Salem, North Carolina, United States"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 4th Pick (2005)",
+     "official": "DRAFT_YEAR 2005, DRAFT_ROUND 1, DRAFT_NUMBER 4",
+     "second": "New Orleans Hornets, 1st round (4th pick, 4th overall), 2005 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "New Orleans Hornets > Los Angeles Clippers > Houston Rockets > Oklahoma City Thunder > Phoenix Suns > Golden State Warriors > San Antonio Spurs > Los Angeles Clippers",
+     "second": "NOK NOH LAC HOU OKC PHO GSW SAS LAC",
+     "third": "nooklahoma-city-hornets new-orleans-hornets la-clippers houston-rockets oklahoma-city-thunder phoenix-suns golden-state-warriors san-antonio-spurs la-clippers"
+    },
+    {
+     "field": "stat",
+     "line": "23,000+ Pts",
+     "stat": "pts",
+     "rule": "floor (may still play)",
+     "third": 23058,
+     "second": 23058
+    },
+    {
+     "field": "stat",
+     "line": "12,500+ Ast",
+     "stat": "ast",
+     "rule": "floor (may still play)",
+     "third": 12552,
+     "second": 12552
+    },
+    {
+     "field": "award",
+     "line": "Rookie of the Year (2006)",
+     "award": "roy",
+     "official": 1,
+     "second": 1,
+     "secondSeason": "2005-06 ROY",
+     "third": [
+      2006
+     ]
+    },
+    {
+     "field": "award",
+     "line": "12× All-Star",
+     "award": "allstar",
+     "official": 12,
+     "second": 12
+    },
+    {
+     "field": "award",
+     "line": "11× All-NBA",
+     "award": "allnba",
+     "official": 11,
+     "second": 11
+    },
+    {
+     "field": "award",
+     "line": "9× All-Defensive",
+     "award": "alldef",
+     "official": 9,
+     "second": 9
+    }
+   ]
+  },
+  {
+   "id": "nbac-016",
+   "name": "Patrick Ewing",
+   "status": "retired",
+   "lastSeason": "2001-02",
+   "sources": {
+    "official": "https://www.nba.com/player/121",
+    "second": "https://www.basketball-reference.com/players/e/ewingpa01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/237"
+   },
+   "position": "Center",
+   "country": "Jamaica",
+   "countryIso": "jm",
+   "draftInfo": "1st Round, 1st Pick (1985)",
+   "teams": [
+    "New York Knicks",
+    "Seattle SuperSonics",
+    "Orlando Magic"
+   ],
+   "stats": [
+    "24,815 Pts",
+    "11,607 Reb"
+   ],
+   "awards": [
+    "Rookie of the Year (1986)",
+    "11× All-Star",
+    "Hall of Famer",
+    "7× All-NBA"
+   ],
+   "awardCounts": {
+    "roy": {
+     "official": 1,
+     "second": 1
+    },
+    "allstar": {
+     "official": 11,
+     "second": 11
+    },
+    "hof": {
+     "official": 1,
+     "second": 1
+    },
+    "mvp": {
+     "official": 0,
+     "second": 0
+    },
+    "champ": {
+     "official": 0,
+     "second": 0
+    },
+    "fmvp": {
+     "official": 0,
+     "second": 0
+    },
+    "dpoy": {
+     "official": 0,
+     "second": 0
+    },
+    "allnba": {
+     "official": 7,
+     "second": 7
+    },
+    "alldef": {
+     "official": 3,
+     "second": 3
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Center",
+     "official": "Center",
+     "second": "Center and Power Forward"
+    },
+    {
+     "field": "country",
+     "line": "Jamaica",
+     "official": "Jamaica",
+     "second": "Kingston, Jamaica"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 1st Pick (1985)",
+     "official": "DRAFT_YEAR 1985, DRAFT_ROUND 1, DRAFT_NUMBER 1",
+     "second": "New York Knicks, 1st round (1st pick, 1st overall), 1985 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "New York Knicks > Seattle SuperSonics > Orlando Magic",
+     "second": "NYK SEA ORL",
+     "third": "new-york-knicks seattle-supersonics orlando-magic"
+    },
+    {
+     "field": "stat",
+     "line": "24,815 Pts",
+     "stat": "pts",
+     "rule": "exact",
+     "third": 24815,
+     "second": 24815
+    },
+    {
+     "field": "stat",
+     "line": "11,607 Reb",
+     "stat": "reb",
+     "rule": "exact",
+     "third": 11607,
+     "second": 11607
+    },
+    {
+     "field": "award",
+     "line": "Rookie of the Year (1986)",
+     "award": "roy",
+     "official": 1,
+     "second": 1,
+     "secondSeason": "1985-86 ROY",
+     "third": [
+      1986
+     ]
+    },
+    {
+     "field": "award",
+     "line": "11× All-Star",
+     "award": "allstar",
+     "official": 11,
+     "second": 11
+    },
+    {
+     "field": "award",
+     "line": "Hall of Famer",
+     "award": "hof",
+     "official": 1,
+     "second": 1
+    },
+    {
+     "field": "award",
+     "line": "7× All-NBA",
+     "award": "allnba",
+     "official": 7,
+     "second": 7
+    }
+   ]
+  },
+  {
+   "id": "nbac-036",
+   "name": "Scottie Pippen",
+   "status": "retired",
+   "lastSeason": "2003-04",
+   "sources": {
+    "official": "https://www.nba.com/player/937",
+    "second": "https://www.basketball-reference.com/players/p/pippesc01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/663"
+   },
+   "position": "Forward",
+   "country": "USA",
+   "countryIso": "us",
+   "draftInfo": "1st Round, 5th Pick (1987)",
+   "teams": [
+    "Chicago Bulls",
+    "Houston Rockets",
+    "Portland Trail Blazers",
+    "Chicago Bulls"
+   ],
+   "stats": [
+    "18,940 Pts",
+    "2,307 Stl"
+   ],
+   "awards": [
+    "6× NBA Champion",
+    "7× All-Star",
+    "7× All-NBA",
+    "10× All-Defensive"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 0,
+     "second": 0
+    },
+    "champ": {
+     "official": 6,
+     "second": 6
+    },
+    "fmvp": {
+     "official": 0,
+     "second": 0
+    },
+    "dpoy": {
+     "official": 0,
+     "second": 0
+    },
+    "allstar": {
+     "official": 7,
+     "second": 7
+    },
+    "roy": {
+     "official": 0,
+     "second": 0
+    },
+    "allnba": {
+     "official": 7,
+     "second": 7
+    },
+    "alldef": {
+     "official": 10,
+     "second": 10
+    },
+    "hof": {
+     "official": 1,
+     "second": 1
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Forward",
+     "official": "Forward-Guard",
+     "second": "Small Forward"
+    },
+    {
+     "field": "country",
+     "line": "USA",
+     "official": "USA",
+     "second": "Hamburg, Arkansas, United States"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 5th Pick (1987)",
+     "official": "DRAFT_YEAR 1987, DRAFT_ROUND 1, DRAFT_NUMBER 5",
+     "second": "Seattle SuperSonics, 1st round (5th pick, 5th overall), 1987 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Chicago Bulls > Houston Rockets > Portland Trail Blazers > Chicago Bulls",
+     "second": "CHI HOU POR CHI",
+     "third": "chicago-bulls houston-rockets portland-trail-blazers chicago-bulls"
+    },
+    {
+     "field": "stat",
+     "line": "18,940 Pts",
+     "stat": "pts",
+     "rule": "exact",
+     "third": 18940,
+     "second": 18940
+    },
+    {
+     "field": "stat",
+     "line": "2,307 Stl",
+     "stat": "stl",
+     "rule": "exact",
+     "third": 2307,
+     "second": 2307
+    },
+    {
+     "field": "award",
+     "line": "6× NBA Champion",
+     "award": "champ",
+     "official": 6,
+     "second": 6
+    },
+    {
+     "field": "award",
+     "line": "7× All-Star",
+     "award": "allstar",
+     "official": 7,
+     "second": 7
+    },
+    {
+     "field": "award",
+     "line": "7× All-NBA",
+     "award": "allnba",
+     "official": 7,
+     "second": 7
+    },
+    {
+     "field": "award",
+     "line": "10× All-Defensive",
+     "award": "alldef",
+     "official": 10,
+     "second": 10
+    }
+   ]
+  },
+  {
+   "id": "nbac-017",
+   "name": "John Stockton",
+   "status": "retired",
+   "lastSeason": "2002-03",
+   "sources": {
+    "official": "https://www.nba.com/player/304",
+    "second": "https://www.basketball-reference.com/players/s/stockjo01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/812"
+   },
+   "position": "Guard",
+   "country": "USA",
+   "countryIso": "us",
+   "draftInfo": "1st Round, 16th Pick (1984)",
+   "teams": [
+    "Utah Jazz"
+   ],
+   "stats": [
+    "15,806 Ast",
+    "3,265 Stl"
+   ],
+   "awards": [
+    "10× All-Star",
+    "Hall of Famer",
+    "11× All-NBA",
+    "5× All-Defensive"
+   ],
+   "awardCounts": {
+    "allstar": {
+     "official": 10,
+     "second": 10
+    },
+    "hof": {
+     "official": 1,
+     "second": 1
+    },
+    "mvp": {
+     "official": 0,
+     "second": 0
+    },
+    "champ": {
+     "official": 0,
+     "second": 0
+    },
+    "fmvp": {
+     "official": 0,
+     "second": 0
+    },
+    "dpoy": {
+     "official": 0,
+     "second": 0
+    },
+    "roy": {
+     "official": 0,
+     "second": 0
+    },
+    "allnba": {
+     "official": 11,
+     "second": 11
+    },
+    "alldef": {
+     "official": 5,
+     "second": 5
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Guard",
+     "official": "Guard",
+     "second": "Point Guard"
+    },
+    {
+     "field": "country",
+     "line": "USA",
+     "official": "USA",
+     "second": "Spokane, Washington, United States"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 16th Pick (1984)",
+     "official": "DRAFT_YEAR 1984, DRAFT_ROUND 1, DRAFT_NUMBER 16",
+     "second": "Utah Jazz, 1st round (16th pick, 16th overall), 1984 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Utah Jazz",
+     "second": "UTA",
+     "third": "utah-jazz"
+    },
+    {
+     "field": "stat",
+     "line": "15,806 Ast",
+     "stat": "ast",
+     "rule": "exact",
+     "third": 15806,
+     "second": 15806
+    },
+    {
+     "field": "stat",
+     "line": "3,265 Stl",
+     "stat": "stl",
+     "rule": "exact",
+     "third": 3265,
+     "second": 3265
+    },
+    {
+     "field": "award",
+     "line": "10× All-Star",
+     "award": "allstar",
+     "official": 10,
+     "second": 10
+    },
+    {
+     "field": "award",
+     "line": "Hall of Famer",
+     "award": "hof",
+     "official": 1,
+     "second": 1
+    },
+    {
+     "field": "award",
+     "line": "11× All-NBA",
+     "award": "allnba",
+     "official": 11,
+     "second": 11
+    },
+    {
+     "field": "award",
+     "line": "5× All-Defensive",
+     "award": "alldef",
+     "official": 5,
+     "second": 5
+    }
+   ]
+  },
+  {
+   "id": "nbac-027",
+   "name": "Russell Westbrook",
+   "status": "active or unconfirmed",
+   "lastSeason": "2025-26",
+   "sources": {
+    "official": "https://www.nba.com/player/201566",
+    "second": "https://www.basketball-reference.com/players/w/westbru01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/3468"
+   },
+   "position": "Guard",
+   "country": "USA",
+   "countryIso": "us",
+   "draftInfo": "1st Round, 4th Pick (2008)",
+   "teams": [
+    "Oklahoma City Thunder",
+    "Houston Rockets",
+    "Washington Wizards",
+    "Los Angeles Lakers",
+    "Los Angeles Clippers",
+    "Denver Nuggets",
+    "Sacramento Kings"
+   ],
+   "stats": [
+    "27,100+ Pts",
+    "9,000+ Reb",
+    "10,300+ Ast"
+   ],
+   "awards": [
+    "MVP (2017)",
+    "9× All-Star",
+    "9× All-NBA"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 1,
+     "second": 1
+    },
+    "champ": {
+     "official": 0,
+     "second": 0
+    },
+    "fmvp": {
+     "official": 0,
+     "second": 0
+    },
+    "dpoy": {
+     "official": 0,
+     "second": 0
+    },
+    "allstar": {
+     "official": 9,
+     "second": 9
+    },
+    "roy": {
+     "official": 0,
+     "second": 0
+    },
+    "allnba": {
+     "official": 9,
+     "second": 9
+    },
+    "alldef": {
+     "official": 0,
+     "second": 0
+    },
+    "hof": {
+     "official": 0,
+     "second": 0
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Guard",
+     "official": "Guard",
+     "second": "Point Guard and Small Forward"
+    },
+    {
+     "field": "country",
+     "line": "USA",
+     "official": "USA",
+     "second": "Long Beach, California, United States"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 4th Pick (2008)",
+     "official": "DRAFT_YEAR 2008, DRAFT_ROUND 1, DRAFT_NUMBER 4",
+     "second": "Seattle SuperSonics, 1st round (4th pick, 4th overall), 2008 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Oklahoma City Thunder > Houston Rockets > Washington Wizards > Los Angeles Lakers > Los Angeles Clippers > Denver Nuggets > Sacramento Kings",
+     "second": "OKC HOU WAS LAL LAC DEN SAC",
+     "third": "oklahoma-city-thunder houston-rockets washington-wizards los-angeles-lakers la-clippers denver-nuggets sacramento-kings"
+    },
+    {
+     "field": "stat",
+     "line": "27,100+ Pts",
+     "stat": "pts",
+     "rule": "floor (may still play)",
+     "third": 27176,
+     "second": 27176
+    },
+    {
+     "field": "stat",
+     "line": "9,000+ Reb",
+     "stat": "reb",
+     "rule": "floor (may still play)",
+     "third": 9025,
+     "second": 9025
+    },
+    {
+     "field": "stat",
+     "line": "10,300+ Ast",
+     "stat": "ast",
+     "rule": "floor (may still play)",
+     "third": 10351,
+     "second": 10351
+    },
+    {
+     "field": "award",
+     "line": "MVP (2017)",
+     "award": "mvp",
+     "official": 1,
+     "second": 1,
+     "secondSeason": "2016-17 MVP",
+     "third": [
+      2017
+     ]
+    },
+    {
+     "field": "award",
+     "line": "9× All-Star",
+     "award": "allstar",
+     "official": 9,
+     "second": 9
+    },
+    {
+     "field": "award",
+     "line": "9× All-NBA",
+     "award": "allnba",
+     "official": 9,
+     "second": 9
+    }
+   ]
+  },
+  {
+   "id": "nbac-018",
+   "name": "Clyde Drexler",
+   "status": "retired",
+   "lastSeason": "1997-98",
+   "sources": {
+    "official": "https://www.nba.com/player/17",
+    "second": "https://www.basketball-reference.com/players/d/drexlcl01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/3686"
+   },
+   "position": "Guard",
+   "country": "USA",
+   "countryIso": "us",
+   "draftInfo": "1st Round, 14th Pick (1983)",
+   "teams": [
+    "Portland Trail Blazers",
+    "Houston Rockets"
+   ],
+   "stats": [
+    "22,195 Pts",
+    "6,677 Reb",
+    "2,207 Stl"
+   ],
+   "awards": [
+    "NBA Champion",
+    "10× All-Star",
+    "5× All-NBA",
+    "Hall of Famer"
+   ],
+   "awardCounts": {
+    "champ": {
+     "official": 1,
+     "second": 1
+    },
+    "allstar": {
+     "official": 10,
+     "second": 10
+    },
+    "mvp": {
+     "official": 0,
+     "second": 0
+    },
+    "fmvp": {
+     "official": 0,
+     "second": 0
+    },
+    "dpoy": {
+     "official": 0,
+     "second": 0
+    },
+    "roy": {
+     "official": 0,
+     "second": 0
+    },
+    "allnba": {
+     "official": 5,
+     "second": 5
+    },
+    "alldef": {
+     "official": 0,
+     "second": 0
+    },
+    "hof": {
+     "official": 1,
+     "second": 1
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Guard",
+     "official": "Guard",
+     "second": "Shooting Guard"
+    },
+    {
+     "field": "country",
+     "line": "USA",
+     "official": "USA",
+     "second": "New Orleans, Louisiana, United States"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 14th Pick (1983)",
+     "official": "DRAFT_YEAR 1983, DRAFT_ROUND 1, DRAFT_NUMBER 14",
+     "second": "Portland Trail Blazers, 1st round (14th pick, 14th overall), 1983 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Portland Trail Blazers > Houston Rockets",
+     "second": "POR HOU",
+     "third": "portland-trail-blazers houston-rockets"
+    },
+    {
+     "field": "stat",
+     "line": "22,195 Pts",
+     "stat": "pts",
+     "rule": "exact",
+     "third": 22195,
+     "second": 22195
+    },
+    {
+     "field": "stat",
+     "line": "6,677 Reb",
+     "stat": "reb",
+     "rule": "exact",
+     "third": 6677,
+     "second": 6677
+    },
+    {
+     "field": "stat",
+     "line": "2,207 Stl",
+     "stat": "stl",
+     "rule": "exact",
+     "third": 2207,
+     "second": 2207
+    },
+    {
+     "field": "award",
+     "line": "NBA Champion",
+     "award": "champ",
+     "official": 1,
+     "second": 1
+    },
+    {
+     "field": "award",
+     "line": "10× All-Star",
+     "award": "allstar",
+     "official": 10,
+     "second": 10
+    },
+    {
+     "field": "award",
+     "line": "5× All-NBA",
+     "award": "allnba",
+     "official": 5,
+     "second": 5
+    },
+    {
+     "field": "award",
+     "line": "Hall of Famer",
+     "award": "hof",
+     "official": 1,
+     "second": 1
+    }
+   ]
+  },
+  {
+   "id": "nbac-019",
+   "name": "Gary Payton",
+   "status": "retired",
+   "lastSeason": "2006-07",
+   "sources": {
+    "official": "https://www.nba.com/player/56",
+    "second": "https://www.basketball-reference.com/players/p/paytoga01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/640"
+   },
+   "position": "Guard",
+   "country": "USA",
+   "countryIso": "us",
+   "draftInfo": "1st Round, 2nd Pick (1990)",
+   "teams": [
+    "Seattle SuperSonics",
+    "Milwaukee Bucks",
+    "Los Angeles Lakers",
+    "Boston Celtics",
+    "Miami Heat"
+   ],
+   "stats": [
+    "21,813 Pts",
+    "8,966 Ast",
+    "2,445 Stl"
+   ],
+   "awards": [
+    "Defensive Player of the Year (1996)",
+    "NBA Champion",
+    "9× All-Star",
+    "9× All-NBA"
+   ],
+   "awardCounts": {
+    "dpoy": {
+     "official": 1,
+     "second": 1
+    },
+    "champ": {
+     "official": 1,
+     "second": 1
+    },
+    "allstar": {
+     "official": 9,
+     "second": 9
+    },
+    "mvp": {
+     "official": 0,
+     "second": 0
+    },
+    "fmvp": {
+     "official": 0,
+     "second": 0
+    },
+    "roy": {
+     "official": 0,
+     "second": 0
+    },
+    "allnba": {
+     "official": 9,
+     "second": 9
+    },
+    "alldef": {
+     "official": 9,
+     "second": 9
+    },
+    "hof": {
+     "official": 1,
+     "second": 1
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Guard",
+     "official": "Guard",
+     "second": "Point Guard"
+    },
+    {
+     "field": "country",
+     "line": "USA",
+     "official": "USA",
+     "second": "Oakland, California, United States"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 2nd Pick (1990)",
+     "official": "DRAFT_YEAR 1990, DRAFT_ROUND 1, DRAFT_NUMBER 2",
+     "second": "Seattle SuperSonics, 1st round (2nd pick, 2nd overall), 1990 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Seattle SuperSonics > Milwaukee Bucks > Los Angeles Lakers > Boston Celtics > Miami Heat",
+     "second": "SEA MIL LAL BOS MIA",
+     "third": "seattle-supersonics milwaukee-bucks los-angeles-lakers boston-celtics miami-heat"
+    },
+    {
+     "field": "stat",
+     "line": "21,813 Pts",
+     "stat": "pts",
+     "rule": "exact",
+     "third": 21813,
+     "second": 21813
+    },
+    {
+     "field": "stat",
+     "line": "8,966 Ast",
+     "stat": "ast",
+     "rule": "exact",
+     "third": 8966,
+     "second": 8966
+    },
+    {
+     "field": "stat",
+     "line": "2,445 Stl",
+     "stat": "stl",
+     "rule": "exact",
+     "third": 2445,
+     "second": 2445
+    },
+    {
+     "field": "award",
+     "line": "Defensive Player of the Year (1996)",
+     "award": "dpoy",
+     "official": 1,
+     "second": 1,
+     "secondSeason": "1995-96 Def. POY",
+     "third": [
+      1996
+     ]
+    },
+    {
+     "field": "award",
+     "line": "NBA Champion",
+     "award": "champ",
+     "official": 1,
+     "second": 1
+    },
+    {
+     "field": "award",
+     "line": "9× All-Star",
+     "award": "allstar",
+     "official": 9,
+     "second": 9
+    },
+    {
+     "field": "award",
+     "line": "9× All-NBA",
+     "award": "allnba",
+     "official": 9,
+     "second": 9
+    }
+   ]
+  },
+  {
+   "id": "nbac-020",
+   "name": "Vince Carter",
+   "status": "retired",
+   "lastSeason": "2019-20",
+   "sources": {
+    "official": "https://www.nba.com/player/1713",
+    "second": "https://www.basketball-reference.com/players/c/cartevi01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/136"
+   },
+   "position": "Guard-Forward",
+   "country": "USA",
+   "countryIso": "us",
+   "draftInfo": "1st Round, 5th Pick (1998)",
+   "teams": [
+    "Toronto Raptors",
+    "New Jersey Nets",
+    "Orlando Magic",
+    "Phoenix Suns",
+    "Dallas Mavericks",
+    "Memphis Grizzlies",
+    "Sacramento Kings",
+    "Atlanta Hawks"
+   ],
+   "stats": [
+    "25,728 Pts",
+    "2,290 made threes"
+   ],
+   "awards": [
+    "8× All-Star",
+    "Rookie of the Year (1999)",
+    "2× All-NBA"
+   ],
+   "awardCounts": {
+    "allstar": {
+     "official": 8,
+     "second": 8
+    },
+    "roy": {
+     "official": 1,
+     "second": 1
+    },
+    "mvp": {
+     "official": 0,
+     "second": 0
+    },
+    "champ": {
+     "official": 0,
+     "second": 0
+    },
+    "fmvp": {
+     "official": 0,
+     "second": 0
+    },
+    "dpoy": {
+     "official": 0,
+     "second": 0
+    },
+    "allnba": {
+     "official": 2,
+     "second": 2
+    },
+    "alldef": {
+     "official": 0,
+     "second": 0
+    },
+    "hof": {
+     "official": 0,
+     "second": 1
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Guard-Forward",
+     "official": "Guard-Forward",
+     "second": "Shooting Guard, Small Forward, and Power Forward"
+    },
+    {
+     "field": "country",
+     "line": "USA",
+     "official": "USA",
+     "second": "Daytona Beach, Florida, United States"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 5th Pick (1998)",
+     "official": "DRAFT_YEAR 1998, DRAFT_ROUND 1, DRAFT_NUMBER 5",
+     "second": "Golden State Warriors, 1st round (5th pick, 5th overall), 1998 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Toronto Raptors > New Jersey Nets > Orlando Magic > Phoenix Suns > Dallas Mavericks > Memphis Grizzlies > Sacramento Kings > Atlanta Hawks",
+     "second": "TOR NJN ORL PHO DAL MEM SAC ATL",
+     "third": "toronto-raptors new-jersey-nets orlando-magic phoenix-suns dallas-mavericks memphis-grizzlies sacramento-kings atlanta-hawks"
+    },
+    {
+     "field": "stat",
+     "line": "25,728 Pts",
+     "stat": "pts",
+     "rule": "exact",
+     "third": 25728,
+     "second": 25728
+    },
+    {
+     "field": "stat",
+     "line": "2,290 made threes",
+     "stat": "fg3",
+     "rule": "exact",
+     "third": 2290,
+     "second": 2290
+    },
+    {
+     "field": "award",
+     "line": "8× All-Star",
+     "award": "allstar",
+     "official": 8,
+     "second": 8
+    },
+    {
+     "field": "award",
+     "line": "Rookie of the Year (1999)",
+     "award": "roy",
+     "official": 1,
+     "second": 1,
+     "secondSeason": "1998-99 ROY",
+     "third": [
+      1999
+     ]
+    },
+    {
+     "field": "award",
+     "line": "2× All-NBA",
+     "award": "allnba",
+     "official": 2,
+     "second": 2
+    }
+   ]
+  },
+  {
+   "id": "nbac-047",
+   "name": "Derrick Rose",
+   "status": "retired",
+   "lastSeason": "2023-24",
+   "sources": {
+    "official": "https://www.nba.com/player/201565",
+    "second": "https://www.basketball-reference.com/players/r/rosede01.html",
+    "third": "https://www.espn.com/nba/player/stats/_/id/3456"
+   },
+   "position": "Guard",
+   "country": "USA",
+   "countryIso": "us",
+   "draftInfo": "1st Round, 1st Pick (2008)",
+   "teams": [
+    "Chicago Bulls",
+    "New York Knicks",
+    "Cleveland Cavaliers",
+    "Minnesota Timberwolves",
+    "Detroit Pistons",
+    "New York Knicks",
+    "Memphis Grizzlies"
+   ],
+   "stats": [
+    "12,573 Pts",
+    "3,770 Ast"
+   ],
+   "awards": [
+    "MVP (2011)",
+    "3× All-Star",
+    "Rookie of the Year (2009)",
+    "All-NBA"
+   ],
+   "awardCounts": {
+    "mvp": {
+     "official": 1,
+     "second": 1
+    },
+    "champ": {
+     "official": 0,
+     "second": 0
+    },
+    "fmvp": {
+     "official": 0,
+     "second": 0
+    },
+    "dpoy": {
+     "official": 0,
+     "second": 0
+    },
+    "allstar": {
+     "official": 3,
+     "second": 3
+    },
+    "roy": {
+     "official": 1,
+     "second": 1
+    },
+    "allnba": {
+     "official": 1,
+     "second": 1
+    },
+    "alldef": {
+     "official": 0,
+     "second": 0
+    },
+    "hof": {
+     "official": 0,
+     "second": 0
+    }
+   },
+   "facts": [
+    {
+     "field": "position",
+     "line": "Guard",
+     "official": "Guard",
+     "second": "Point Guard"
+    },
+    {
+     "field": "country",
+     "line": "USA",
+     "official": "USA",
+     "second": "Chicago, Illinois, United States"
+    },
+    {
+     "field": "draft",
+     "line": "1st Round, 1st Pick (2008)",
+     "official": "DRAFT_YEAR 2008, DRAFT_ROUND 1, DRAFT_NUMBER 1",
+     "second": "Chicago Bulls, 1st round (1st pick, 1st overall), 2008 NBA Draft"
+    },
+    {
+     "field": "teams",
+     "line": "Chicago Bulls > New York Knicks > Cleveland Cavaliers > Minnesota Timberwolves > Detroit Pistons > New York Knicks > Memphis Grizzlies",
+     "second": "CHI NYK CLE MIN DET NYK MEM",
+     "third": "chicago-bulls new-york-knicks cleveland-cavaliers minnesota-timberwolves detroit-pistons new-york-knicks memphis-grizzlies"
+    },
+    {
+     "field": "stat",
+     "line": "12,573 Pts",
+     "stat": "pts",
+     "rule": "exact",
+     "third": 12573,
+     "second": 12573
+    },
+    {
+     "field": "stat",
+     "line": "3,770 Ast",
+     "stat": "ast",
+     "rule": "exact",
+     "third": 3770,
+     "second": 3770
+    },
+    {
+     "field": "award",
+     "line": "MVP (2011)",
+     "award": "mvp",
+     "official": 1,
+     "second": 1,
+     "secondSeason": "2010-11 MVP",
+     "third": [
+      2011
+     ]
+    },
+    {
+     "field": "award",
+     "line": "3× All-Star",
+     "award": "allstar",
+     "official": 3,
+     "second": 3
+    },
+    {
+     "field": "award",
+     "line": "Rookie of the Year (2009)",
+     "award": "roy",
+     "official": 1,
+     "second": 1,
+     "secondSeason": "2008-09 ROY",
+     "third": [
+      2009
+     ]
+    },
+    {
+     "field": "award",
+     "line": "All-NBA",
+     "award": "allnba",
+     "official": 1,
+     "second": 1
+    }
+   ]
+  }
+ ]
+}
