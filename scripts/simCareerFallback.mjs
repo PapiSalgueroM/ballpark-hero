@@ -265,20 +265,23 @@ for (const { file, migration } of CORRECTION_LEDGERS) {
      changed row back at its old figure, every removed man back. The bake's
      guard must name them all, or a re-bake run before the migration would
      quietly undo the correction. */
-  const isAdded = (name, s) => ledger.added.some(r => r.player === name && r.season === s.season && r.club === s.club);
-  /* every field a ledger changes on the row, not just the first (Round 1010b changes up to three per row) */
-  const changedFor = (name, s) => (ledger.changed ?? []).filter(c => c.player === name && c.season === s.season && c.club === s.club);
+  /* Round 1017: an inserted row (a missed spell of an earlier season) is gone before the migration too */
+  const isAdded = (name, s) => [...ledger.added, ...(ledger.inserted ?? [])].some(r => r.player === name && r.season === s.season && r.club === s.club);
+  /* every field a ledger changes on the row, not just the first (Round 1010b changes up to three per row);
+     each change names the row by its club before the ledger, and a row moved to another club reads the new one (Round 1017) */
+  const movedTo = new Map((ledger.changed ?? []).filter(c => c.field === 'club').map(c => [`${c.player}|${c.season}|${c.club}`, c.to]));
+  const changedFor = (name, s) => (ledger.changed ?? []).filter(c => c.player === name && c.season === s.season && (movedTo.get(`${c.player}|${c.season}|${c.club}`) ?? c.club) === s.club);
   const before = players.map(p => ({
     ...p,
     career: p.career.filter(s => !isAdded(p.name, s)).map(s => changedFor(p.name, s).reduce((row, c) => ({ ...row, [c.field]: c.from }), s)),
   }));
   for (const r of ledger.removed ?? []) if (r.copy) before.push(JSON.parse(JSON.stringify(r.copy)));
   const kept = r => !removed.has(r.player);
-  const want = ledger.added.filter(kept).length + (ledger.changed ?? []).filter(kept).length + (ledger.removed ?? []).length;
+  const want = ledger.added.filter(kept).length + (ledger.inserted ?? []).filter(kept).length + (ledger.changed ?? []).filter(kept).length + (ledger.removed ?? []).length;
   const caught = correctionProblems(before, ledger, removed).length;
   if (want === 0) fail(`${file} records no corrections, so this section checks nothing`);
   if (caught !== want) fail(`${file}: a pool without its ${want} recorded corrections drew ${caught} complaints; a bake before ${migration} would get through`);
-  console.log(`   ${file}: ${ledger.added.length} added and ${ledger.changed.length} changed rows in the file; without them the bake's guard names ${caught} of ${want}`);
+  console.log(`   ${file}: ${ledger.added.length} added, ${(ledger.inserted ?? []).length} inserted and ${ledger.changed.length} changed rows in the file; without them the bake's guard names ${caught} of ${want}`);
 }
 
 console.log('');

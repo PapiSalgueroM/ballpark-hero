@@ -56,6 +56,9 @@
  *      search's on the bake and each old value the one live after Round 784
  *      and the Round 531 refresh. Measured 2026-10-05: 13 renames, 53
  *      rewrites (18 classic, 19 Europe, 16 active); tpa-762 goes from 3 to 2.
+ *      Round 1017 folded wave 2 into the same unapplied migration: 13
+ *      renames, 192 rewrites (73 classic, 79 Europe, 40 active, 22 of them
+ *      an active entry where there was none); tpa-762 still goes to 2.
  *      Section 3 accepts the live table before or after it, never between,
  *      and the reader it uses is proved here on both tables and a half one.
  *
