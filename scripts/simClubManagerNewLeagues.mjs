@@ -82,7 +82,13 @@
      CM_NEW_CONTROL=dropcount2 Liga MX's rules row drops 2, part A and the
                                drop talk checks go red.
 
-   Run: node scripts/simClubManagerNewLeagues.mjs   (SIM_SEEDS=n, default 6)
+   Round 1035 added the A-League Men, the first league with a cup that two
+   of its clubs do not enter; those two are played by
+   scripts/simClubManagerALeague.mjs. Its row plays twelve seasons, keeps one
+   pair and leaves the rank correlation unbanded (the reasons and the numbers
+   are beside its entry below).
+
+   Run: node scripts/simClubManagerNewLeagues.mjs   (SIM_SEEDS=n, default 6; a row may ask for more)
 */
 import { build } from 'esbuild';
 import fs from 'node:fs';
@@ -92,7 +98,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_FWD = ROOT.replaceAll('\\', '/');
-const SEEDS = Number(process.env.SIM_SEEDS || 6);
+const SEEDS_ALL = Number(process.env.SIM_SEEDS || 6);
 const SEED_SET = process.env.SIM_SEED || "";
 const CONTROL = process.env.CM_NEW_CONTROL || '';
 const CONTROLS = ['dropcount', 'nocup', 'swap', 'invented', 'cupon', 'dropcount2'];
@@ -116,9 +122,20 @@ const NEW_LEAGUES = [
   /* Round 1035: the A-League Men. Its managed clubs all enter the Australia
      Cup; the two that do not (Auckland FC, Wellington Phoenix) are played by
      scripts/simClubManagerALeague.mjs, which holds the cup exclusion. */
+  /* Its squads are rated close together (best XI 57.5 to 60.9, previews 58
+     to 61), so six seasons were too few: over six a run, the Melbourne City
+     over Brisbane Roar pair (61 against 59) measured 2.0 to 11.5 points and
+     the rank correlation over six unmanaged clubs 0.50 to 0.91, both inside
+     what noise does. So the row plays twelve seasons, keeps the one pair with
+     a real rating gap (Adelaide United 61 over Central Coast Mariners 58),
+     and does not band the rank correlation (rhoMin null): ten of its twelve
+     previews sit at 60 or 61, and a rank of ties is not evidence.
+     MEASURED 2026-10-06, twelve seasons a run, SIM_SEED unset and 1 to 4:
+     Adelaide over Central Coast 7.4, 6.0, 8.8, 2.4 and 8.7 points a season,
+     so the band is 1 (the swap control turns the gap negative). */
   {
-    id: 'aleague', size: 12, drop: 0, cup: 'Australia Cup', pairGap: 2,
-    pairs: [['Adelaide United', 'Central Coast Mariners'], ['Melbourne City', 'Brisbane Roar']],
+    id: 'aleague', size: 12, drop: 0, cup: 'Australia Cup', pairGap: 1, seeds: 12, rhoMin: null,
+    pairs: [['Adelaide United', 'Central Coast Mariners']],
     managed: ['Perth Glory', 'Newcastle Jets', 'Melbourne Victory', 'Western Sydney Wanderers', 'Sydney FC', 'Macarthur FC'],
   },
 ];
@@ -246,6 +263,8 @@ function partRows(cm, row) {
 
 /* B. Full seasons. Returns each club's points per seed for part C. */
 function partSeasons(cm, row, lg) {
+  /* Round 1035: a row may ask for more seasons (the A-League, see its entry). */
+  const SEEDS = process.env.SIM_SEEDS ? SEEDS_ALL : (row.seeds ?? SEEDS_ALL);
   console.log(`B) ${row.id}: ${SEEDS} seeded seasons`);
   const clubs = new Set(lg.clubs);
   const nationClubs = new Set(cm.REAL_LEAGUES.filter(l => cm.leagueRulesOf(l.id).nationId === cm.leagueRulesOf(row.id).nationId).flatMap(l => l.clubs));
@@ -359,7 +378,11 @@ function partStrength(cm, row, lg, perClub) {
   const field = lg.clubs.filter(c => !managed.has(c) && perClub[c].length);
   const rho = spearman(field.map(c => cm.clubPreviewRating(c)), field.map(c => mean(perClub[c])));
   console.log(`   rank correlation, preview rating against mean points, ${field.length} clubs: ${rho.toFixed(3)}`);
-  if (!(rho >= RHO_MIN)) fail(`the rank correlation is ${rho.toFixed(3)}, the band is ${RHO_MIN}`);
+  /* Round 1035: a row whose clubs are rated too close together for a rank
+     correlation to mean anything sets rhoMin null and leans on its pair. */
+  const rhoMin = process.env.CM_NEW_RHO_MIN ? RHO_MIN : (row.rhoMin === undefined ? RHO_MIN : row.rhoMin);
+  if (rhoMin === null) console.log(`   (not banded for ${row.id}: its clubs are rated too close together, the pair carries this part)`);
+  else if (!(rho >= rhoMin)) fail(`the rank correlation is ${rho.toFixed(3)}, the band is ${rhoMin}`);
 }
 
 /* D. Nobody in the league is invented beyond the flagged youth pads. */

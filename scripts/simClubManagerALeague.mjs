@@ -41,7 +41,22 @@
 
    MEASURED 2026-10-06 (Round 1035 tree), SIM_SEED unset and 1 to 4, ten
    seasons a run plus the two excluded clubs:
-     (filled in below the controls once measured)
+     A  310 grouped ledger rows, 310 shipped, 2 group-less rows held back
+     B  310 players on 12 club pages, 61 with no value at the floor (48)
+     C  299 nationalities on two hosts, 11 unknown, every age on two hosts
+     D  every run 10 seasons ended (0 to 3 sacked careers replaced by the
+        next seed), 10 Australia Cup finals with a winner, won by 5 to 9
+        different clubs a run and never by Auckland FC or Wellington
+        Phoenix; the field is the ten Australian clubs, 2 ties and 6 byes;
+        the boards split 2 title, 5 finals, 5 mid-table; the short cups
+        measured scottish 12, austria 12, greece 14, denmark 12,
+        switzerland 12, croatia 10, aleague 10, the other 15 cups full
+     E  23 leagues, 380 clubs, 20 countries, 4562 real players, 10 count
+        lines in 6 files
+   Every check is a hard invariant (no band to tune); the statistical side
+   of the league (strength ordering the table) is held by
+   scripts/simClubManagerNewLeagues.mjs. Controls measured: invented 3
+   failures, offcurve 1, onehost 2, excluded 22, nobyes 11, stalecount 1.
 
    NEGATIVE CONTROLS (each must turn the run red, and each refuses to run if
    the text it mutates is missing):
@@ -351,28 +366,34 @@ function partSeasons(cm) {
     Math.random = REAL_RANDOM;
   }
 
-  /* The byes are shared: every modern league with a cup still crowns one. */
+  /* The byes are shared: every modern league whose cup draws a short field
+     (fewer than sixteen) still crowns a winner. A full field never reaches
+     the byes and is played by the other harnesses. The career runs at the
+     league's median rated club, the least likely to be sacked before the
+     final, and a sacked season is replayed on the next seed. */
   const fields = [];
+  const full = [];
   for (const l of cm.REAL_LEAGUES) {
     if (cm.leagueRulesOf(l.id).cup === null) continue;
-    const club = l.clubs[Math.floor(l.clubs.length / 2)];
-    /* A sacking ends the season before the cup does: try the next seed. */
+    const club = [...l.clubs].sort((a, b) => cm.clubPreviewRating(a) - cm.clubPreviewRating(b) || a.localeCompare(b))[Math.floor(l.clubs.length / 2)];
     let start = null, played = null, size = 0;
-    for (let t = 0; t < 4; t++) {
+    for (let t = 0; t < 6; t++) {
       Math.random = seeded(hashKey(`aleague${SEED_SET}|cup|${l.id}|${t}`));
       start = cm.startCareer(club, 'now');
       size = (start.cupBracket ?? []).filter(x => x.round === 'R16').length * 2 + (start.cupByes ?? []).length;
+      if (size >= 16) break;
       played = playSeason(cm, start);
       if (!played.sacked && !played.stuck) break;
     }
-    if (played.sacked || played.stuck) { fail(`${l.id} (${club}): four seeds in a row never finished a season`); Math.random = REAL_RANDOM; continue; }
-    const s = played.state;
-    const fin = (s.cupBracket ?? []).find(t => t.round === 'F');
+    if (size >= 16) { full.push(l.id); Math.random = REAL_RANDOM; continue; }
+    if (played.sacked || played.stuck) { fail(`${l.id} (${club}): six seeds in a row never finished a season`); Math.random = REAL_RANDOM; continue; }
+    const fin = (played.state.cupBracket ?? []).find(x => x.round === 'F');
     if (!fin?.winner) fail(`${l.id} (${club}): the ${l.cupName} has no final winner (field ${size})`);
-    if (size < 16) fields.push(`${l.id} ${size}`);
+    fields.push(`${l.id} ${size}`);
     Math.random = REAL_RANDOM;
   }
-  console.log(`   every cup league crowned a winner; short fields: ${fields.join(', ') || 'none'}`);
+  if (!fields.some(x => x.startsWith('aleague '))) fail('the A-League cup was not among the short fields checked');
+  console.log(`   every short cup crowned a winner: ${fields.join(', ')}; full fields of sixteen: ${full.length}`);
 }
 
 /* E. The numbers written in the copy are the numbers the engine plays. */
