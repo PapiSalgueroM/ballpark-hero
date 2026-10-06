@@ -27,13 +27,20 @@
  *
  * SHAPES THE ENGINE CANNOT PLAY. The tournament engine plays groups of three
  * or four with the top two going through, plus best thirds. Some real
- * editions did something else: the 1991 Copa America ended in a final group
- * of four with no final, the 2021 Copa America sent four of each five team
- * group through, the 1996 Gold Cup took the best runner up from groups of
- * three, and three OFC editions were a knockout or a round robin. Those rows
- * are here with their real shape, marked playable: false, and point at the
- * nearest verified shape the game plays instead (playedAs). They are not
+ * editions did something else: the 1991 Copa America had two groups of five
+ * and a final stage after them, the 2021 Copa America sent four of each five
+ * team group through, the 1996 Gold Cup took the best runner up from groups
+ * of three, and three OFC editions were a knockout or a round robin. Those
+ * rows are here with their real shape, marked playable: false, and point at
+ * the nearest verified shape the game plays instead (playedAs). They are not
  * thin data, they are honest about a simplification.
+ *
+ * ONE ROW NO GAME YEAR REACHES. The game's continental summers are the years
+ * divisible by four, so its 2020 Copa America is the row in force in 2020,
+ * the 2019 shape with two AFC guests. The real edition of that cycle was
+ * played in 2021 with no guests (copa-2021). That row is kept as the record
+ * of what happened and so the walk in the harness can see it, but the game
+ * never plays it; the vitest pins both halves of that.
  *
  * THIN DATA. A row the sources could not confirm twice is listed in
  * INTL_FORMAT_PARTIAL, the same shape CM_PARTIAL uses in Club Manager, and
@@ -223,7 +230,11 @@ export const INTL_FORMAT_PERIODS: IntlFormatPeriod[] = [
     id: 'copa-1991', competition: 'CONMEBOL', from: 1991, to: 1991,
     teams: 10, groups: 2, groupSize: 5, thirdsThrough: 0, firstKnockout: null,
     playable: false, playedAs: 'copa-12',
-    note: 'All ten CONMEBOL sides in two groups of five, the top two of each into a final group of four with no final.',
+    /* Both sources give the ten teams in two groups. Only RSSSF details what
+       came after (the top two of each into a final group of four, with no
+       final), so the note does not lean on that; the row is unplayable
+       either way. */
+    note: 'All ten CONMEBOL sides in two groups of five, then a final stage the game cannot play.',
     sources: ['rs91sa', 'fhCopa'],
   },
   {
@@ -250,7 +261,7 @@ export const INTL_FORMAT_PERIODS: IntlFormatPeriod[] = [
     id: 'copa-2021', competition: 'CONMEBOL', from: 2021, to: 2021,
     teams: 10, groups: 2, groupSize: 5, thirdsThrough: 0, firstKnockout: 'QF',
     playable: false, playedAs: 'copa-2019',
-    note: 'No guests: two groups of five, and the top four of each went through to the quarter-finals.',
+    note: 'No guests: two groups of five, and the top four of each went through to the quarter-finals. No game year lands on 2021, so the game never reaches this row; its 2020 Copa is the 2019 shape.',
     sources: ['rs21sa', 'si2021'],
   },
   {
@@ -331,7 +342,11 @@ export const INTL_FORMAT_PERIODS: IntlFormatPeriod[] = [
     teams: 0, groups: 0, groupSize: 0, thirdsThrough: 0, firstKnockout: null,
     playable: false, playedAs: 'ofc-6',
     note: 'No Nations Cup was played between the 1980 and 1996 editions. The game still runs one on its own calendar, in the nearest verified shape.',
-    sources: ['rsOfc'],
+    /* RSSSF: "A second edition took place in 1980, then the tournament was
+       discontinued. In 1996 it reappeared"; the OFC's own 1996 page: "After
+       sixteen years in the wilderness ... returned for its third edition in
+       1996". Both read 2026-10-06. */
+    sources: ['rsOfc', 'ofc1996'],
   },
   {
     id: 'ofc-1996', competition: 'OFC', from: 1996, to: 1996,
@@ -372,8 +387,9 @@ export const INTL_FORMAT_PERIODS: IntlFormatPeriod[] = [
 ];
 
 /** Rows the sources could not confirm twice. Same shape as CM_PARTIAL: a
- *  list of ids, and a thin row always falls back to a verified one. */
-export const INTL_FORMAT_PARTIAL: string[] = ['ofc-gap'];
+ *  list of ids, and a thin row always falls back to a verified one. Empty
+ *  since the OFC gap row gained its second publisher. */
+export const INTL_FORMAT_PARTIAL: string[] = [];
 
 /* ── Who fills a World Cup ──────────────────────────────────────────────────
 
