@@ -281,6 +281,11 @@ for (let y = 1990; y <= 2040; y += 4) {
     `${y}: the format carries the mix in force`);
 }
 {
+  const srcById = new Map(hist.INTL_FORMAT_SOURCES.map(s => [s.id, s]));
+  for (const m of hist.WC_FIELD_MIXES) {
+    const pubs = new Set(m.sources.map(s => srcById.get(s)?.publisher).filter(Boolean));
+    check(m.sources.every(s => srcById.has(s)) && pubs.size >= 2, `mix from ${m.from}: ${pubs.size} publishers, every source id real`);
+  }
   const m26 = hist.wcFieldMixFor(2026);
   check(JSON.stringify(m26.places) === JSON.stringify(intl.WC_SLOTS) && m26.open === 2,
     '2026 mix is the engine\'s WC_SLOTS plus its two play off places');

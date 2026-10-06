@@ -86,7 +86,7 @@ export const INTL_FORMAT_SOURCES: IntlFormatSource[] = [
   { id: 'ofc2026', publisher: 'Oceania Football Confederation', title: 'FIFA Council approves international match calendars with a change in format for 2026 FIFA World Cup', url: 'https://www.oceaniafootball.com/fifa-council-approves-international-match-calendars-with-a-change-in-format-for-2026-fifa-world-cup/' },
   { id: 'arxivSlots', publisher: 'arXiv (Csato and others)', title: 'The allocation of FIFA World Cup slots based on the ranking of confederations, Table 2', url: 'https://arxiv.org/pdf/2310.19100' },
   { id: 'atrSlots', publisher: 'Around the Rings (Infobae)', title: 'Current allocation of FIFA World Cup confederation slots maintained', url: 'https://www.infobae.com/aroundtherings/federations/2021/07/12/current-allocation-of-fifa-world-cup-confederation-slots-maintained' },
-  { id: 'csm2017', publisher: 'The Christian Science Monitor', title: 'FIFA expands, giving more slots to Africa, Asia, and Americas', url: 'https://www.csmonitor.com/Business/2017/0331/FIFA-expands-giving-more-slots-to-Africa-Asia-and-Americas' },
+  { id: 'si2017', publisher: 'Sports Illustrated', title: 'Confederation allocation and final playoff proposed for the 48-team 2026 World Cup', url: 'https://www.si.com/soccer/2017/03/30/2026-world-cup-48-teams-allocation-confederation-playoff' },
   /* European Championship */
   { id: 'fhEuro', publisher: 'footballhistory.org', title: 'The history of UEFA European Championship', url: 'https://www.footballhistory.org/european-championship.html' },
   { id: 'rsEuro', publisher: 'RSSSF', title: 'European Championship', url: 'https://www.rsssf.org/tablese/eurochamp.html' },
@@ -386,13 +386,13 @@ export const INTL_FORMAT_PARTIAL: string[] = ['ofc-gap'];
    every nation). Used where the allocation itself could not be confirmed
    twice; it is the real field, so open is 0.
 
-   'allocation': FIFA's places. Whole places go to the confederation; the half
-   places of the intercontinental play-offs and the host's place are 'open',
-   and the engine hands them to the best of whoever is left, the same way it
-   has always handled the 2026 play-off places. 2006 to 2022 kept one
-   allocation (arXiv Table 2, Around the Rings on 2018 and 2022 keeping "the
-   current allocation", and the Christian Science Monitor giving the 2026
-   increases "up from" those same numbers). */
+   'allocation': the places the governing body handed out before qualifying.
+   Whole places go to the confederation; the half places of the
+   intercontinental play-offs and the host's place are 'open', and the engine
+   hands them to the best of whoever is left, the same way it has always
+   handled the 2026 play-off places. 2006 to 2022 kept one allocation (arXiv
+   Table 2, and Around the Rings on 2018 and 2022 keeping "the current
+   allocation"). */
 export interface WcFieldMix {
   from: number;
   kind: 'finalists' | 'allocation';
@@ -422,7 +422,7 @@ export const WC_FIELD_MIXES: WcFieldMix[] = [
   {
     from: 2006, kind: 'allocation', open: 3,
     places: { UEFA: 13, CAF: 5, AFC: 4, CONMEBOL: 4, CONCACAF: 3, OFC: 0 },
-    sources: ['arxivSlots', 'atrSlots', 'csm2017'],
+    sources: ['arxivSlots', 'atrSlots'],
   },
   {
     /* The 2026 allocation the engine already used (WC_SLOTS in
@@ -430,7 +430,7 @@ export const WC_FIELD_MIXES: WcFieldMix[] = [
        direct places make six, and two inter-confederation play-off places. */
     from: 2026, kind: 'allocation', open: 2,
     places: { UEFA: 16, CAF: 9, AFC: 8, CONMEBOL: 6, CONCACAF: 6, OFC: 1 },
-    sources: ['arxivSlots', 'csm2017'],
+    sources: ['arxivSlots', 'si2017'],
   },
 ];
 
