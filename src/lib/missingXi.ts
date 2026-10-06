@@ -3403,7 +3403,7 @@ export const LINEUPS: Lineup[] = [
     blankCandidates: [
       { name: 'Eder Militao', slotIndex: 2, nationality: 'Brazil', clubAtTime: 'Real Madrid' },
       { name: 'Federico Valverde', slotIndex: 6, nationality: 'Uruguay', clubAtTime: 'Real Madrid' },
-      { name: 'Nacho', slotIndex: 4, nationality: 'Spain', clubAtTime: 'Real Madrid' },
+      { name: 'Nacho', slotIndex: 4, nationality: 'Spain', clubAtTime: 'Real Madrid', aliases: ['Nacho Fernández'] },
     ],
     source: 'Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 3. Nacho and Asensio started, Kroos in the middle and Valverde in the three; Mendy and Casemiro did not play.',
   },
@@ -4979,7 +4979,7 @@ export const LINEUPS: Lineup[] = [
     blankCandidates: [
       { name: 'Isco', slotIndex: 8, nationality: 'Spain', clubAtTime: 'Real Madrid' },
       { name: 'Daniel Carvajal', slotIndex: 1, nationality: 'Spain', clubAtTime: 'Real Madrid' },
-      { name: 'Nacho', slotIndex: 3, nationality: 'Spain', clubAtTime: 'Real Madrid' },
+      { name: 'Nacho', slotIndex: 3, nationality: 'Spain', clubAtTime: 'Real Madrid', aliases: ['Nacho Fernández'] },
     ],
     source: 'Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 5. The second leg at the Bernabeu, 18 April 2017: Nacho, not Varane, started.',
   },
