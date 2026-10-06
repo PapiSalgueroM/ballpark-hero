@@ -191,7 +191,7 @@ export const CLUB_MANAGEMENT_CONTENT: GameContentMap = {
       },
       {
         q: "When do the transfer windows close?",
-        a: "The calendar marks both. The summer window is open from kickoff and shuts at the final whistle of your fourth match; the January window opens in January and shuts after your third match from there, on the first Saturday of the new year in most leagues and a little later in a long one like the 24 club Championship, whose fixture list reaches January on its own. Deadline day wears a padlock on the grid, and every fast forward is a tap on a day that goes through the same rule.",
+        a: "The calendar marks both. The summer window is open from kickoff and shuts at the final whistle of your fourth match (in 2020-21, which really kicked off late, it stays open until your last match before the real deadline of 5 October, a few matches longer); the January window opens in January and shuts after your third match from there, on the first Saturday of the new year in most leagues and a little later in a long one like the 24 club Championship, whose fixture list reaches January on its own. Deadline day wears a padlock on the grid, and every fast forward is a tap on a day that goes through the same rule.",
       },
       {
         q: "Do wages come out of my transfer budget?",

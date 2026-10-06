@@ -88,6 +88,22 @@
       (6443f857), so what moved them is the three extra 2005-06 saves that
       now run before them in the same process. The path is the one Round
       899 met and this harness does not isolate.
+      Round 1021 (2020-21 starts late) re-took the eras entries for the five
+      era2020 leagues only, on purpose: a 2020-21 save's summer window now
+      runs to the real 5 October deadline (five to nine of its matches, not
+      four), so every era2020 digest moves from "start" on. Compared first on
+      the round's tree: modern 22 of 22 and the other 15 era entries matched
+      untouched, pure 43 of 43 (the lateStart field on the five rules rows
+      is in no view), and only the five era2020 rows differed.
+      Round 1021 review re-took four of them: a late season whose first
+      international window starts before its opener now sends the
+      assistant's note with the save (startCareer), so it can be answered
+      before the first match. That is the Premier League, La Liga, Serie A
+      and the Bundesliga of 2020-21 (Ligue 1 opened in August, before any
+      window). Measured 2026-10-06: exactly those four rows moved, in
+      "start" and "whole" only; table, results, world, cup, europe,
+      trophies, objectives and every next season view held, so the games
+      played are the same and what moved is the inbox and its message ids.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,

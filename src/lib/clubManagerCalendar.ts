@@ -26,7 +26,7 @@
  * new one or a plain description.
  */
 import {
-  playNextEntry, fixtureFor, entryInvolvesMe, careerLeagueOf, CUP_LABELS, UCL_LABELS,
+  playNextEntry, fixtureFor, entryInvolvesMe, careerLeagueOf, leagueRulesOf, CUP_LABELS, UCL_LABELS,
   cupProgressRank, uclProgressRank, objectiveStatuses,
   /* Round 783: the mid season takeover an accepted application walks into. */
   startCareer, interimManagerName,
@@ -83,13 +83,26 @@ export function dateOfWeek(worldYear: number, weekIdx: number): CalDate {
  * Bundesliga and La Liga really pause), and a league long enough to reach
  * January on its own (the 24 club Championship) is left where it was. The
  * engine's week index is untouched: this is where the week is DRAWN.
+ *
+ * Round 1021: a season that really started late (see seasonPlanOf) passes
+ * its plan, and only then does anything below change; with no plan every
+ * date is the one this function always drew.
  */
-export function dateOfEntries(worldYear: number, calendar: { type: string }[]): CalDate[] {
+export function dateOfEntries(worldYear: number, calendar: { type: string }[], plan?: SeasonPlan | null): CalDate[] {
+  if (plan) return lateEntryDates(worldYear, calendar, plan);
+  return drawEntries(seasonKickoff(worldYear), worldYear, calendar, NO_MIDWEEK_ROUNDS);
+}
+
+const NO_MIDWEEK_ROUNDS: ReadonlySet<number> = new Set();
+
+/** The drawing rule above from a given opening Saturday, with the league
+ *  rounds named in `midweek` played on the Wednesday after a Saturday. */
+function drawEntries(kickoff: CalDate, worldYear: number, calendar: { type: string }[], midweek: ReadonlySet<number>): CalDate[] {
   const out: CalDate[] = [];
-  let last = addDays(seasonKickoff(worldYear), -7);
+  let last = addDays(kickoff, -7);
   const newYear: CalDate = { y: worldYear + 1, m: 1, d: 1 };
-  for (const entry of calendar) {
-    if (entry.type === 'league' || entry.type === 'window') {
+  for (const [i, entry] of calendar.entries()) {
+    if ((entry.type === 'league' && !midweek.has(i)) || entry.type === 'window') {
       let next = saturdayAfter(last);
       if (entry.type === 'window' && dateKey(next) < dateKey(newYear)) {
         // The first Saturday on or after 1 January.
@@ -113,6 +126,91 @@ export function worldYearOf(state: Pick<CareerState, 'startYear' | 'season'>): n
   return (state.startYear ?? CM_BASE_YEAR) + state.season - 1;
 }
 
+/* ---------- Round 1021: the season that started late ---------- */
+
+/**
+ * Every season here opens on the second Saturday of August (seasonKickoff).
+ * 2020-21 did not: the pandemic pushed the end of 2019-20 into August, so
+ * the big five opened between late August and mid September and the summer
+ * window stayed open to 5 October. Each of those leagues carries its real
+ * opening Saturday and deadline on its rules row (lateStart on the 2020 rows
+ * of LEAGUE_RULES in clubManager.ts, with the sources), and a season keeps
+ * those dates only in the world year they were played. So only an era2020
+ * save's first season moves: its second (2021-22) opened in August as usual,
+ * and no other era's league has the field.
+ */
+
+/** One save's late season: its league's opening Saturday and the real summer deadline. */
+export interface SeasonPlan { kickoff: CalDate; summerClose: CalDate; }
+
+/** The plan for the save's current season, or null for a season that opened on time. */
+export function seasonPlanOf(state: Pick<CareerState, 'startYear' | 'season' | 'eraId' | 'clubName' | 'customClub'>): SeasonPlan | null {
+  const late = leagueRulesOf(careerLeagueOf(state).id).lateStart;
+  return late && late.kickoff.y === worldYearOf(state) ? { kickoff: late.kickoff, summerClose: late.summerClose } : null;
+}
+
+/** Every entry's date for the save's current season, late start included. */
+export function entryDatesOf(state: Pick<CareerState, 'startYear' | 'season' | 'eraId' | 'clubName' | 'customClub' | 'calendar'>): CalDate[] {
+  return dateOfEntries(worldYearOf(state), state.calendar, seasonPlanOf(state));
+}
+
+/** The opening Saturday of the save's current season. */
+export function kickoffOf(state: Pick<CareerState, 'startYear' | 'season' | 'eraId' | 'clubName' | 'customClub'>): CalDate {
+  return seasonPlanOf(state)?.kickoff ?? seasonKickoff(worldYearOf(state));
+}
+
+/**
+ * A late season's dates. Drawn from the real opening Saturday, the January
+ * window entry, which the engine puts after nearly half the league rounds,
+ * would land weeks into January. The real leagues got through the autumn by
+ * playing league rounds in midweek (football-data.co.uk's files: the big five
+ * played 9 to 22 midweek league matches each in December 2020 alone), so the
+ * same happens here: as many rounds as the window is late, the last ones
+ * before it that qualify, move to the Wednesday between two Saturday rounds,
+ * which brings the window back to the first Saturday of January. Each of
+ * those rounds sits between two league rounds (or a league round and the
+ * window), so it gains exactly one week and never meets a cup or European
+ * night. The engine's mix of cup and European nights leaves few rounds that
+ * qualify, so the last one before the window lands at the new year (30
+ * December, or 6 January where the window is a week late) and the others
+ * fall early: rounds 2 and 5 on 16 and 30
+ * September for the Premier League and La Liga, 23 September and 7 October
+ * for Serie A. That is earlier than the real squeeze, which came mostly in
+ * December: in September 2020 football-data.co.uk has 6 such La Liga
+ * matches, 4 Ligue 1 and 3 Serie A, and none at all in England or Germany
+ * (Round 1021 review, recounted 2026-10-06), so the Premier League's two
+ * September Wednesdays here have no real twin. Moving them later would
+ * need a round that sits between two league rounds, and the engine's cup
+ * and European nights leave none closer to December.
+ * Where there are too few such rounds the window stays a week late:
+ * Serie A and the Bundesliga, opening on 19 September, have one too few and
+ * open January on the 9th (measured in scripts/simClubManagerCalendar.mjs).
+ * The number of rounds is untouched; only the day they are drawn on.
+ */
+function lateEntryDates(worldYear: number, calendar: { type: string }[], plan: SeasonPlan): CalDate[] {
+  const plain = drawEntries(plan.kickoff, worldYear, calendar, NO_MIDWEEK_ROUNDS);
+  const windowIdx = calendar.findIndex(e => e.type === 'window');
+  if (windowIdx < 0) return plain;
+  const firstSaturday = saturdayAfter({ y: worldYear, m: 12, d: 31 });
+  const late = Math.round(daysBetween(firstSaturday, plain[windowIdx]) / 7);
+  if (late <= 0) return plain;
+  const isLeague = (i: number) => calendar[i]?.type === 'league';
+  const midweek = new Set<number>();
+  for (let i = windowIdx - 1; i > 0 && midweek.size < late; i--) {
+    const between = isLeague(i - 1) && (isLeague(i + 1) || i + 1 === windowIdx);
+    if (isLeague(i) && between && !midweek.has(i + 1)) midweek.add(i);
+  }
+  return drawEntries(plan.kickoff, worldYear, calendar, midweek);
+}
+
+export const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+/** "Sat 8 Aug". */
+export function shortDate(date: CalDate): string {
+  return `${DAY_NAMES[dayOfWeek(date.y, date.m, date.d)]} ${date.d} ${MONTH_NAMES[date.m - 1].slice(0, 3)}`;
+}
+
 /* ================================================================== */
 /* Windows                                                            */
 /* ================================================================== */
@@ -128,6 +226,27 @@ export function worldYearOf(state: Pick<CareerState, 'startYear' | 'season'>): n
  * numbers to the engine's own.
  */
 export const WINDOW_MATCH_WEEKS = { summer: 4, january: 3 } as const;
+
+/**
+ * Round 1021: a late season's summer window (see seasonPlanOf) is not four
+ * matches long. It stays open to the real deadline, so on day one it spans
+ * every match of mine drawn on or before that day: five to seven on a
+ * September start, nine on Ligue 1's August one (Lille, measured). startCareer writes
+ * this into windowWeeksLeft and keeps it on the save for the grid; null for
+ * a season that opened on time, which keeps the engine's own four.
+ */
+export function lateSummerWindowWeeks(state: CareerState): number | null {
+  const plan = seasonPlanOf(state);
+  if (!plan) return null;
+  const dates = entryDatesOf(state);
+  const close = dateKey(plan.summerClose);
+  return Math.max(1, myMatchWeeks(state).filter(w => dateKey(dates[w]) <= close).length);
+}
+
+/** How many of my matches this season's summer window spans. */
+export function summerWindowWeeksOf(state: Pick<CareerState, 'season' | 'summerWindow'>): number {
+  return state.summerWindow?.season === state.season ? state.summerWindow.matchWeeks : WINDOW_MATCH_WEEKS.summer;
+}
 
 export type WindowKind = 'summer' | 'january';
 
@@ -180,7 +299,7 @@ export function windowSpans(state: CareerState): WindowSpan[] {
 
   const summerDeadline = liveKind === 'summer'
     ? nthMatchWeekFrom(matchWeeks, state.week, Math.max(1, liveLeft))
-    : nthMatchWeekFrom(matchWeeks, 0, WINDOW_MATCH_WEEKS.summer);
+    : nthMatchWeekFrom(matchWeeks, 0, summerWindowWeeksOf(state));
   spans.push({ kind: 'summer', openWeek: 0, deadlineWeek: summerDeadline, live: liveKind === 'summer' });
 
   if (windowEntry >= 0) {
@@ -190,6 +309,30 @@ export function windowSpans(state: CareerState): WindowSpan[] {
     spans.push({ kind: 'january', openWeek: windowEntry, deadlineWeek: januaryDeadline, live: liveKind === 'january' });
   }
   return spans;
+}
+
+/** 1st, 2nd, 3rd, 4th, 11th, 22nd. */
+function ordinal(n: number): string {
+  const teen = n % 100 >= 11 && n % 100 <= 13;
+  const suffix = teen ? 'th' : n % 10 === 1 ? 'st' : n % 10 === 2 ? 'nd' : n % 10 === 3 ? 'rd' : 'th';
+  return `${n}${suffix}`;
+}
+
+/**
+ * The calendar strip's line for a day inside an open window: deadline day,
+ * and which match of mine that is. Round 1021 review: the match is counted
+ * off the very match weeks the deadline day is placed on (from kickoff for
+ * the summer, from the window entry for January), so the number can never
+ * contradict the date beside it. A 2020-21 save's summer deadline is its 5th
+ * to 9th match, where every other season's is the 4th.
+ */
+export function windowOpenLine(state: CareerState, span: WindowSpan, entryDates: CalDate[]): string {
+  const name = span.kind === 'summer' ? 'summer' : 'January';
+  const deadline = span.deadlineWeek;
+  if (deadline === null) return `The ${name} window is open.`;
+  const from = span.kind === 'summer' ? 0 : span.openWeek + 1;
+  const n = myMatchWeeks(state).filter(w => w >= from && w <= deadline).length;
+  return `The ${name} window is open. Deadline day is ${shortDate(entryDates[deadline])}, your ${ordinal(n)} match ${span.kind === 'january' ? 'after it opens' : 'of the season'}.`;
 }
 
 /* ================================================================== */
@@ -316,8 +459,8 @@ function pendingLabel(state: CareerState, entry: CalendarEntry): string {
  */
 export function seasonDays(state: CareerState): SeasonDays {
   const worldYear = worldYearOf(state);
-  const entryDates = dateOfEntries(worldYear, state.calendar);
-  const seasonStart = seasonKickoff(worldYear);
+  const entryDates = entryDatesOf(state);
+  const seasonStart = kickoffOf(state);
   const seasonEnd = entryDates[entryDates.length - 1] ?? seasonStart;
   let todayIdx = Math.min(state.week, state.calendar.length - 1);
   for (let w = state.week; w < state.calendar.length; w++) {
@@ -494,7 +637,7 @@ export function simToWeek(career: CareerState, targetWeek: number): SimRun {
 
 /** A tap on a day: the date rule, then the loop. Null when the day has nothing to sim. */
 export function simToDate(career: CareerState, date: CalDate): SimRun | null {
-  const entryDates = dateOfEntries(worldYearOf(career), career.calendar);
+  const entryDates = entryDatesOf(career);
   const target = targetWeekForDate(entryDates, career.week, date);
   return target === null ? null : simToWeek(career, target);
 }
@@ -557,7 +700,7 @@ export function fastForwardTargets(state: CareerState, days: SeasonDays): FastFo
 }
 
 /**
- * Real Premier League window dates for the seasons the four eras start in,
+ * Real Premier League window dates for the seasons the five eras start in,
  * two sources each, checked 2026-09-05. The grid never shows these: it
  * shows the engine's own deadline days (WINDOW_MATCH_WEEKS above). They
  * exist so scripts/simClubManagerCalendar.mjs can measure how far the
@@ -588,12 +731,29 @@ export function fastForwardTargets(state: CareerState, days: SeasonDays): FastFo
  *           ran 1 January 2006 to 00:00 UTC on 1 February 2006 (Wikipedia,
  *           summer 2005 list's note on the re-opening; Bleacher Report, the
  *           January window's history, England's window 1 to 31 January).
+ *  2020-21 (Round 1021, read 2026-10-05): summer closed 23:00 BST Monday 5
+ *           October 2020 in England (premierleague.com news 1725887; BBC
+ *           Sport 53417773; Sky Sports 11927589, cited at the 2020 rules
+ *           rows; the other four leagues' same day is THIN, see there).
+ *           January closed 23:00 GMT Monday 1 February 2021: THIN, one
+ *           publisher, BBC Sport's deadline day reports 55897363 and
+ *           55894098, both published 1 February 2021. (Round 1021 review,
+ *           2026-10-06: Maxifoot's winter 2020-21 English table, first cited
+ *           here as a second source, dates its deadline deals, Minamino,
+ *           Willock and Maitland-Niles, 2 February, so it does not confirm
+ *           the day and is not counted.) The OPENING day of that January
+ *           window is not sourced at all: nothing read for this round dates
+ *           it, so the row uses 1 January, the day every other row opens on,
+ *           as a measuring point only. The fence it feeds is ten days wide,
+ *           so a day either way cannot change a verdict, and the January
+ *           window's own day is pinned by section 6 of the harness anyway.
  */
 export const REAL_WINDOWS: Record<string, { summerClose: CalDate; januaryOpen: CalDate; januaryClose: CalDate }> = {
   now: { summerClose: { y: 2026, m: 9, d: 1 }, januaryOpen: { y: 2027, m: 1, d: 1 }, januaryClose: { y: 2027, m: 2, d: 1 } },
   era2015: { summerClose: { y: 2015, m: 9, d: 1 }, januaryOpen: { y: 2016, m: 1, d: 1 }, januaryClose: { y: 2016, m: 2, d: 1 } },
   era2010: { summerClose: { y: 2010, m: 8, d: 31 }, januaryOpen: { y: 2011, m: 1, d: 1 }, januaryClose: { y: 2011, m: 1, d: 31 } },
   era2005: { summerClose: { y: 2005, m: 8, d: 31 }, januaryOpen: { y: 2006, m: 1, d: 1 }, januaryClose: { y: 2006, m: 1, d: 31 } },
+  era2020: { summerClose: { y: 2020, m: 10, d: 5 }, januaryOpen: { y: 2021, m: 1, d: 1 }, januaryClose: { y: 2021, m: 2, d: 1 } },
 };
 
 /* ---------- Round 549: taking a club over mid season ---------- */
@@ -746,6 +906,14 @@ export function joinClubNow(career: CareerState): CareerState | null {
     return null;
   }
   if (fresh.clubName !== club) return null;
+  /* Round 1021 review: fresh is a season one save, so in the 2020-21 era it
+     is dealt that season's late summer window whatever year the career is
+     in. Every later season opened in August with the usual four matches,
+     so a join in one of those gets four, the same as everywhere else. */
+  if (fresh.summerWindow && worldYearOf(fresh) !== worldYearOf(career)) {
+    fresh.windowWeeksLeft = WINDOW_MATCH_WEEKS.summer;
+    delete fresh.summerWindow;
+  }
   /* The same point of the season, by share of the calendar: the two leagues
      need not be the same length. Never the very end, the Round 549 rule. */
   const total = fresh.calendar.length;

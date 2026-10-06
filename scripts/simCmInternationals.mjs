@@ -14,7 +14,10 @@
  *     before its first day and the first one on or after it, with the
  *     assistant's note naming every man who went and waiting in the inbox
  *     before the match they come back for. Arsenal plus six MLS clubs,
- *     whose 15 club conferences give someone a bye every round.
+ *     whose 15 club conferences give someone a bye every round, plus three
+ *     2020-21 saves (Round 1021: that season opened late, so its breaks are
+ *     read off its own dates, and a window that starts before the opener
+ *     sends its men from preseason, which the note must say).
  *  2. HARDER. Over seeded seasons of six squads heavy in internationals, the
  *     match each break hands back is weaker than the SAME save with call ups
  *     switched off: the save forks at the break (the engine draws nothing for
@@ -74,6 +77,8 @@
  *   livehook resumeMatch loses its break hook               -> check 1
  *   nextentry a break fires off the next entry's date, not my next match's
  *            (a bye before a window then carries it into the match) -> check 1
+ *   plaindates a break fires off the plain August dates, not the season's
+ *            own (Round 1021: 2020-21 started late)          -> check 1
  *   nocost   a break takes no fitness                       -> check 2
  *   norest   the assistant never rests anybody              -> check 3
  *   anyone   a man with no known country is called as well   -> check 4
@@ -115,6 +120,12 @@ const CONTROLS = {
   nextentry: {
     fixed: 'const nextKey = dateKey(dates[backWeek]);',
     broken: 'const nextKey = dateKey(dates[state.week]);',
+  },
+  /* Round 1021 review: the save read as a modern one, so its league has no
+     late start and the breaks fire off the plain August dates. */
+  plaindates: {
+    fixed: '  const dates = entryDatesOf(state);\n  const nextKey',
+    broken: "  const dates = entryDatesOf({ ...state, eraId: 'now' });\n  const nextKey",
   },
   restfill: {
     file: 'engine',
@@ -263,22 +274,33 @@ console.log('1) The window rule against the verified dates, and a played season 
     const res = cm.playNextEntry(st);
     return res.kind === 'halftime' ? cm.resumeMatch(res.state) : res;
   };
-  let missed = 0, ordered = 0, notes = 0, seasons = 0;
-  for (const club of ['Arsenal', 'Inter Miami', 'LA Galaxy', 'Toronto FC', 'Seattle Sounders', 'Atlanta United', 'Columbus Crew']) {
+  /* Round 1021 review: three 2020-21 saves too. That season opened late
+     (12 and 19 September, 22 August in France), so its breaks must be read
+     off the season's own dates (entryDatesOf), never the plain August ones:
+     on those every break fired three or four weeks late, after matches
+     dated past its first day, and Liverpool's September window, which
+     starts five days before the opener, never sent its men from preseason.
+     Control plaindates puts the plain dates back and must go red here. */
+  let missed = 0, ordered = 0, notes = 0, seasons = 0, preseason = 0;
+  const LIVE = [['Arsenal'], ['Inter Miami'], ['LA Galaxy'], ['Toronto FC'], ['Seattle Sounders'], ['Atlanta United'], ['Columbus Crew'],
+    ['Liverpool', 'era2020'], ['Juventus', 'era2020'], ['Lille', 'era2020']];
+  for (const [club, era] of LIVE) {
     a = 4242;
-    let s = cm.startCareer(club);
+    let s = era ? cm.startCareer(club, era) : cm.startCareer(club);
     const year = cal.worldYearOf(s);
-    const dates = cal.dateOfEntries(year, s.calendar);
+    const dates = cal.entryDatesOf(s);
+    if (!era && JSON.stringify(dates) !== JSON.stringify(cal.dateOfEntries(year, s.calendar))) fail(`${club}: an on time season draws other dates than the plain rule`);
+    if (era === 'era2020' && !cal.seasonPlanOf(s)) fail(`${club} ${era}: the save has no late season plan, so this proves nothing about it`);
     const mine = w => { const e = s.calendar[w]; return e.type !== 'window' && cm.entryInvolvesMe(s, e) && !!cm.fixtureFor(s, e); };
-    let fired = [], lastMatch = 0, guard = 0;
-    while (s.week < s.calendar.length && guard++ < 200) {
-      const before = (s.intl?.fired ?? []).length;
-      const res = playLive(s);
-      s = res.state;
-      if (res.kind === 'match') lastMatch = key(dates[s.week - 1]);
-      if (res.kind === 'seasonOver') break;
+    let fired = [], lastMatch = 0, guard = 0, firedPre = false;
+    /* Every break the save has fired since `before` breaks: in order,
+       between the right two matches of mine, with its note in the inbox
+       before the match they come back for. A late season's preseason break
+       is sent with the save itself (startCareer), so a fresh save is read
+       here once before the first play. */
+    const seen = before => {
       const now = s.intl?.fired ?? [];
-      if (now.length === before) continue;
+      if (now.length === before) return;
       noteCalls(s);
       const last = s.intl.last;
       for (const id of now.slice(before)) {
@@ -299,6 +321,26 @@ console.log('1) The window rule against the verified dates, and a played season 
         else if (last.called.every(c => note.text.includes(c.name))) notes += 1;
         else fail(`${club} ${last.windowId}: the note leaves somebody out`);
       }
+      if (last.atWeek === 0) firedPre = true;
+      if (era && note) {
+        const beforeAny = (s.resultLog ?? []).every(r => r.week >= last.atWeek);
+        if (note.text.includes('from preseason') !== beforeAny) fail(`${club} ${era} ${last.windowId}: the note ${beforeAny ? 'does not say' : 'says'} the men went from preseason, and ${beforeAny ? 'no' : 'a'} match of mine came before it`);
+      }
+    };
+    seen(0);
+    while (s.week < s.calendar.length && guard++ < 200) {
+      const before = (s.intl?.fired ?? []).length;
+      const res = playLive(s);
+      s = res.state;
+      if (res.kind === 'match') lastMatch = key(dates[s.week - 1]);
+      if (res.kind === 'seasonOver') break;
+      seen(before);
+    }
+    /* A late season whose first window starts before its opener must send
+       those men from preseason, before a ball is kicked. */
+    if (era && intl.intlWindowsFor(year).some(w => key(w.start) < key(dates[0]))) {
+      preseason += 1;
+      if (!firedPre) fail(`${club} ${era}: a window starts before the opener on ${key(dates[0])}, yet no break fired before my first match`);
     }
     const want = intl.intlWindowsFor(year).filter(w => key(w.start) <= lastMatch).map(w => w.id);
     if (club === 'Arsenal' && want.length !== 3) fail(`Arsenal's season reached ${want.length} windows, the season holds 3`);
@@ -308,6 +350,8 @@ console.log('1) The window rule against the verified dates, and a played season 
   }
   console.log(`   ${seasons} seasons on the live path: ${ordered} breaks between the right two matches of mine, ${notes} notes naming everyone, ${missed} where the match they come back for kicked off in the same play as the note`);
   if (missed > 0) fail(`${missed} breaks reached the match they come back for in the same play, so the manager never got to answer`);
+  console.log(`   ${preseason} late 2020-21 season(s) whose first window starts before the opener`);
+  if (preseason === 0) fail('no 2020-21 save had a window before its opener, so the preseason check proved nothing');
 }
 
 /* ---------- 2 and 3. The forks ---------- */
