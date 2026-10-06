@@ -6,7 +6,7 @@ import { Confetti } from "@/components/soccer-career/CareerFx";
 import { beatStyle, tournamentMomentKey, useCareerMoment } from "@/components/soccer-career/careerMoments";
 import { revealDelay } from "@/components/club-manager/Celebration";
 import { SpeechChoices } from "@/components/career/AwardsNightCard";
-import { SOCCER_WORLD_CUP_SPEECHES } from "@/lib/soccerCareerEngine";
+import { SOCCER_WORLD_CUP_SPEECHES, stagedSpeechOf } from "@/lib/soccerCareerEngine";
 import type {
   IntlTournament, IntlTie, IntlRound, IntlTableRow, IntlHistoryEntry, StagedSpeech,
 } from "@/lib/soccerCareerEngine";
@@ -143,15 +143,12 @@ export function SpokenSpeech({ speech }: { speech: StagedSpeech }) {
  * The tournament screen. Headline, then tiles. Each tile is its own screen.
  */
 export function TournamentCard({
-  t, onDismiss, onSpeech, speech,
+  t, onDismiss, onSpeech,
 }: {
-  t: IntlTournament;
+  /** Round 1023: the tournament carries the winner's speech once given. */
+  t: IntlTournament & { speech?: StagedSpeech };
   onDismiss: () => void;
   onSpeech: (choice: "for_the_country" | "shirt_to_the_fans" | "call_out_doubters" | "quiet_lap") => void;
-  /** Round 1023: while `open` a title offers the speeches in place of
-   *  Continue; once `given`, the card shows what it did above Continue. Left
-   *  out, a title offers the speeches as it always did. */
-  speech?: { open: boolean; given: StagedSpeech | null };
 }) {
   const [screen, setScreen] = useState<Screen>("home");
   /* Round 257: which table the first tile is showing. Defaults to the one he
@@ -174,8 +171,11 @@ export function TournamentCard({
     watchRef(el);
   }, [revealRef, watchRef]);
   const isWinner = t.myResult === "Winner";
-  const given = speech?.given ?? null;
-  const speechOpen = speech?.open ?? true;
+  /* Round 1023: a title offers the speeches until one is given (the engine's
+     giveWorldCupSpeech gives it once), then shows what it did above Continue.
+     The page mounts this card only on the tournament screen. */
+  const given = stagedSpeechOf(t);
+  const speechOpen = !given;
   const missed = t.myResult === "Did Not Qualify" || t.myResult === "Not Selected";
   /* Saves written before Round 257 carry a tournament with no groupTable at
      all, and a nation that never qualified has an empty one, so the group

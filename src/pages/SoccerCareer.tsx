@@ -34,7 +34,7 @@ import {
   dismissSummary, stayAtClub, signExtension, requestTransfer, applyEventChoice,
   dismissDebut, dismissWorldCup, retireFromInternational, dismissRivalryEvent,
   dismissBallonDor, giveBdorSpeech, bdorSpeechOpen, type BdorSpeechChoice, SOCCER_BALLON_DOR, SOCCER_BDOR_SPEECHES, SOCCER_WORLD_CUP_SPEECHES,
-  giveWorldCupSpeech, worldCupSpeechOpen, stagedSpeechOf, type WorldCupSpeechChoice, manualRetire, choosePostRetirement, advanceManagerSeason, acceptManagerOffer, endManagerCareer, loadManagerMarket,
+  giveWorldCupSpeech, stagedSpeechOf, type WorldCupSpeechChoice, manualRetire, choosePostRetirement, advanceManagerSeason, acceptManagerOffer, endManagerCareer, loadManagerMarket,
   acceptRetirementSuggestion, declineRetirementSuggestion,
   advancePunditSeason, endPunditCareer, punditLegacyPaid, playedSeniorSeason, POST_RETIREMENT_BONUS_CAP,
   advanceOwnerSeason, endOwnerCareer,
@@ -2523,7 +2523,7 @@ function WorldCupResultCard({ wc, career, onDismiss, onSpeech }: { wc: WorldCupR
       {/* Round 1023: once given, the speech stays on the card with what it
           really moved, and Continue moves on. */}
       {isWinner && given && <SpokenSpeech speech={given} />}
-      {isWinner && worldCupSpeechOpen(career) ? (
+      {isWinner && !given ? (
         /* Round 834: the buttons come from the shared speech options, the
            same list the tournament card draws. */
         <SpeechChoices prompt="The microphone is yours. The speech:" fadeIn roomy options={SOCCER_WORLD_CUP_SPEECHES} onChoose={onSpeech} />
@@ -3907,8 +3907,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
               the pre Round 124 shape, still rendered so a save made mid World
               Cup before this round is not left with no way forward. */}
           {career.phase === "world_cup" && career.pendingTournament && (
-            <TournamentCard t={career.pendingTournament} onDismiss={onDismissWorldCup} onSpeech={onWorldCupSpeech}
-              speech={{ open: worldCupSpeechOpen(career), given: stagedSpeechOf(career.pendingTournament) }} />
+            <TournamentCard t={career.pendingTournament} onDismiss={onDismissWorldCup} onSpeech={onWorldCupSpeech} />
           )}
           {career.phase === "world_cup" && !career.pendingTournament && career.pendingWorldCup && (
             <WorldCupResultCard wc={career.pendingWorldCup} career={career} onDismiss={onDismissWorldCup} onSpeech={onWorldCupSpeech} />
