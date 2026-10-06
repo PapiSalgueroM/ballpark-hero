@@ -30,6 +30,9 @@
 
 import { intlName } from './intlNames';
 import { NATIONAL_POOLS, NATIONAL_POOL_YEARS } from '@/data/nationalPools';
+import {
+  periodInForce, playedPeriod, wcFieldMixFor, type IntlCompetition,
+} from './intlFormatHistory';
 
 /* ─── Confederations ─────────────────────────────────────────────────────── */
 
@@ -253,12 +256,20 @@ export interface TournamentFormat {
   confederation: Confederation | null;
   /** Nations in the finals. */
   teams: number;
-  /** Groups of four. */
+  /** Groups of four (of three in some older continental editions). */
   groups: number;
   /** Third placed sides that also go through. */
   thirdsThrough: number;
   /** How many of the confederation's members reach the finals, for qualifying. */
   finalists: number;
+  /** Round 1027: the row of src/lib/intlFormatHistory.ts this shape comes
+   *  from, the knockout round it opens with, and, for a World Cup, who fills
+   *  it. Absent on a format built before the history existed. */
+  periodId?: string;
+  firstRound?: IntlRound;
+  fieldMix?: { places: Record<Confederation, number>; open: number };
+  /** Copa America only: where the invited guests come from. */
+  guestsFrom?: Confederation;
 }
 
 /* WORLD CUP, 48 teams from 2026 on.
@@ -344,10 +355,45 @@ export function isContinentalYear(year: number): boolean {
   return year % 4 === 0;
 }
 
+/* Round 1027: the shape of each tournament now depends on the year. Before
+   this every summer used the constants above, so a 1994 World Cup had 48
+   teams and a round of 32. The constants keep the names; the numbers come
+   from the verified history in src/lib/intlFormatHistory.ts, row in force for
+   the year, or the verified row it plays as when the engine cannot play the
+   real shape (a final group, groups of five). From 2026 on every row is the
+   one the constants already described, so a modern career plays exactly what
+   it played before; simIntlFormatHistory holds both of those. */
+const FORMAT_CACHE = new Map<string, TournamentFormat>();
+
+function formatInForce(base: TournamentFormat, competition: IntlCompetition, year: number): TournamentFormat {
+  const row = playedPeriod(periodInForce(competition, year));
+  const mix = competition === 'WC' ? wcFieldMixFor(year) : null;
+  const key = `${row.id}|${mix ? mix.from : ''}`;
+  const cached = FORMAT_CACHE.get(key);
+  if (cached) return cached;
+  // CONMEBOL's ten members all play the Copa América; only the guests vary.
+  const finalists = competition === 'CONMEBOL'
+    ? Math.min(CONFED_MEMBERS.CONMEBOL, row.teams)
+    : row.teams;
+  const fmt: TournamentFormat = {
+    ...base,
+    teams: row.teams, groups: row.groups, thirdsThrough: row.thirdsThrough, finalists,
+    periodId: row.id,
+    firstRound: row.firstKnockout ?? undefined,
+    ...(mix ? { fieldMix: { places: { ...mix.places }, open: mix.open } } : {}),
+    ...(row.guestsFrom ? { guestsFrom: row.guestsFrom } : {}),
+  };
+  FORMAT_CACHE.set(key, fmt);
+  return fmt;
+}
+
 /** The tournament a given nation plays this year, or null for an off year. */
 export function tournamentForYear(nation: string, year: number): TournamentFormat | null {
-  if (isWorldCupYear(year)) return WORLD_CUP;
-  if (isContinentalYear(year)) return CONTINENTAL[confederationOf(nation)];
+  if (isWorldCupYear(year)) return formatInForce(WORLD_CUP, 'WC', year);
+  if (isContinentalYear(year)) {
+    const conf = confederationOf(nation);
+    return formatInForce(CONTINENTAL[conf], conf, year);
+  }
   return null;
 }
 
@@ -644,7 +690,11 @@ function throughPerGroup(conf: Confederation, finalists: number): number {
 
 /** How many of a confederation's members reach the finals of a tournament. */
 function finalistsFor(fmt: TournamentFormat, conf: Confederation): number {
-  if (fmt.kind === 'World Cup') return WC_SLOTS[conf] + WC_PLAYOFF_SLOTS / 6;
+  if (fmt.kind === 'World Cup') {
+    // Round 1027: the places of the World Cup's own era, not 2026's.
+    const mix = fmt.fieldMix ?? { places: WC_SLOTS, open: WC_PLAYOFF_SLOTS };
+    return mix.places[conf] + mix.open / 6;
+  }
   return fmt.finalists;
 }
 
@@ -1055,16 +1105,32 @@ function buildField(fmt: TournamentFormat, nation: string, qualified: boolean): 
   if (fmt.kind === 'World Cup') {
     const field: string[] = [];
     const myConf = confederationOf(nation);
+    // Round 1027: the places of this World Cup's era (1990 had 24 finalists
+    // and no OFC place at all). A format without a mix is the 2026 one.
+    const mix = fmt.fieldMix ?? { places: WC_SLOTS, open: WC_PLAYOFF_SLOTS };
     for (const conf of Object.keys(WC_SLOTS) as Confederation[]) {
-      const slots = WC_SLOTS[conf];
+      const slots = mix.places[conf];
       const picked = pickField(nationsIn(conf), slots, conf === myConf ? forced : null);
       field.push(...picked);
     }
-    // The two inter confederation play off places go to whoever is left.
+    // The inter confederation play off places (and an older era's host
+    // place) go to whoever is left. A qualified nation whose confederation
+    // had no direct place takes one of them: that was its play off.
     const leftovers = Object.keys(WC_SLOTS)
       .flatMap(c => nationsIn(c as Confederation))
       .filter(n => !field.includes(n));
-    field.push(...pickField(leftovers, WC_PLAYOFF_SLOTS, null));
+    const stillOut = forced && !field.includes(forced) ? forced : null;
+    field.push(...pickField(leftovers, mix.open, stillOut));
+    // With no open place left (the eras counted from the real finalists), a
+    // qualified nation still out won its play off against the weakest side
+    // in the field and takes its place.
+    if (forced && !field.includes(forced) && NATION_CONFED[forced]) {
+      let weakest = 0;
+      for (let i = 1; i < field.length; i++) {
+        if (fifaRankOf(field[i]) > fifaRankOf(field[weakest])) weakest = i;
+      }
+      field[weakest] = forced;
+    }
     // Our nation list is smaller than FIFA's 211, so top the field up rather
     // than run a short World Cup.
     let filler = 1;
@@ -1073,9 +1139,11 @@ function buildField(fmt: TournamentFormat, nation: string, qualified: boolean): 
   }
   const conf = fmt.confederation ?? confederationOf(nation);
   if (conf === 'CONMEBOL') {
-    // 2024 format: ten CONMEBOL sides plus six CONCACAF guests.
+    // The ten CONMEBOL sides plus that era's invited guests: six from
+    // Concacaf in 2016 and 2024, two in the twelve team editions (from the
+    // AFC in 2019). Round 1027 reads both off the format history.
     const home = pickField(nationsIn('CONMEBOL'), Math.min(10, fmt.teams), forced);
-    const guests = pickField(nationsIn('CONCACAF'), fmt.teams - home.length, null);
+    const guests = pickField(nationsIn(fmt.guestsFrom ?? 'CONCACAF'), fmt.teams - home.length, null);
     return [...home, ...guests];
   }
   const field = pickField(nationsIn(conf), fmt.teams, forced);
@@ -1174,7 +1242,10 @@ export function simulateTournament(
      round by round until one nation is left standing. */
   const koField = shuffle(through);
   const bracket: IntlTie[] = [];
-  const first = firstRoundFor(koField.length);
+  // Round 1027: the round the format history says this shape opened with.
+  // It always agrees with the size of koField (simIntlFormatHistory holds
+  // the table to that); the count is the fallback for a format without one.
+  const first = fmt.firstRound ?? firstRoundFor(koField.length);
   let roundIdx = KO_ORDER.indexOf(first);
   let current = koField.slice(0, 2 ** (KO_ORDER.length - roundIdx));
 
