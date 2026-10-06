@@ -307,6 +307,18 @@ console.log('2) Five worlds (2026, 2020, 2015, 2010, 2005), and none of them lea
       'Pedro Mendes': 'Montpellier\'s centre-back Pedro Filipe Teodósio Mendes (b. 1990-10-01: ESPN, Sports Mole) and Tottenham\'s 2005 midfielder Pedro Miguel da Silva Mendes (b. 1979-02-26: ESPN, tottenhamhotspur.com)',
       'David García': 'Osasuna\'s David García Zubiria (b. 1994) and Espanyol\'s 2005 defender, the 2010 man above (b. 1981, same sources)',
       'Fernando': 'Sevilla\'s Fernando Reges (b. 1987, sources above) and Betis\' 2005 Fernando Varela Ramos (b. 1979-09-01: bdfutbol, playmakerstats)',
+      /* Six more once Round 902 gave 2005-06 its Serie A, Bundesliga and
+         Ligue 1 (measured on the tree merged with Round 902, 2026-10-05;
+         Round 902's own simEra2005 names the same 2005 men by club). Three
+         of the 2005 men are the 2010 men above five years younger, at the
+         same position (Felipe 20 and 25, Ederson 18 and 23, Rafinha 19 and
+         24 in the tables); the other six men were read 2026-10-05. */
+      'Koke': 'Atletico\'s Jorge Resurrección Merodio (b. 1992-01-08: laliga.com, atleticodemadrid.com) and Marseille\'s 2005 striker Sergio Contreras Pardo (b. 1983-04-27: besoccer, bdfa.com.ar)',
+      'Felipe': 'Atletico\'s Felipe Augusto de Almeida Monteiro (b. 1989, sources above) and Udinese\'s 2005 Felipe Dal Belo, the 2010 Fiorentina man above (b. 1984, same sources)',
+      'Emerson': 'Chelsea\'s Emerson Palmieri dos Santos (b. 1994-08-03: national-football-teams.com, ESPN) and Juventus\' 2005 midfielder Emerson Ferreira da Rosa (b. 1976-04-04: ESPN, thesportsdb.com)',
+      'Ederson': 'Manchester City\'s keeper Ederson Moraes (b. 1993, sources above) and Nice\'s 2005 Ederson Honorato Campos, the 2010 Lyon man above (b. 1986, same sources)',
+      'Fred': 'Manchester United\'s Frederico Rodrigues de Paula Santos (b. 1993-03-05: mufcinfo.com, national-football-teams.com) and Lyon\'s 2005 striker Frederico Chaves Guedes (b. 1983-10-03: besoccer, topscorersfootball.com)',
+      'Rafinha': 'PSG\'s Rafael Alcântara (b. 1993, sources above) and Schalke\'s 2005 right-back Márcio Rafael Ferreira de Souza, the 2010 Genoa man above (b. 1985, same sources)',
     },
   };
   const byName = rosters => { const m = new Map(); for (const roster of Object.values(rosters)) for (const p of roster) m.set(p.n, p); return m; };

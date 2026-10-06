@@ -71,6 +71,23 @@
       three new 2005-06 leagues, and the views' leagueNations and euroSlots).
       The new pure entries for 2005-06 equal the ones the branch wrote before
       the merge, value for value.
+      Round 971 added the 2020-21 era's five leagues and wrote the eras and
+      pure entries for them only. Landing it on Round 902's branch and main
+      (8f27082f), the merge took Round 902's file and compared first: every
+      older entry matched it untouched (eras 15 of 20, pure 38 of 43, the
+      2005-06, 2010-11 and 2015-16 leagues included), and what differed is
+      exactly this round's footprint, the five era2020 leagues in eras and
+      in pure, and the four views keyed on the set of leagues or eras
+      (leagueNations, euroSlots, eraIds, historic), each of which the new
+      era extends. Only then were eras and pure re-taken. The re-taken
+      era2020 pure rows equal the branch's own, value for value; its eras
+      rows moved in "whole" and "wholeNext" (and "start" for seriea2020 and
+      ligue12020), and that is this harness's own carry over, not the game:
+      a copy that digests the five era2020 saves alone gives identical
+      hashes on the merged tree and on the branch before the merge
+      (6443f857), so what moved them is the three extra 2005-06 saves that
+      now run before them in the same process. The path is the one Round
+      899 met and this harness does not isolate.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,
