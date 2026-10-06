@@ -67,6 +67,9 @@ export interface GmRetentionRules {
   maxDealsPerClub: number;
   /** Times one contract can be retained on over its life. */
   maxTimesPerContract: number;
+  /** Round 1020: true when these limits are the game's own rather than the
+      league's, so a refusal never blames the league for them. */
+  gameOwn?: boolean;
 }
 
 export interface GmTradeRules {
@@ -122,6 +125,30 @@ export const NHL_TRADE_RULES: GmTradeRules = {
    prospects. retention null is the game's limit: MLB clubs do pay down a
    traded man's salary with cash, which this game does not model yet. */
 export const MLB_TRADE_RULES: GmTradeRules = { sport: 'mlb', maxAssetsPerSide: 5, prospects: true, retention: null };
+
+/* Round 1020: cash in an MLB trade, for the MLB GM desk (src/lib/mlbGmDesk.ts),
+   which trades under MLB_TRADE_RULES with this as its retention. Additive:
+   MLB_TRADE_RULES above is unchanged, so every other caller still refuses it.
+   The mechanism, read 2026-10-05 on two publishers: an MLB club may send cash
+   in a trade to pay part of a traded man's salary. Only the first page says
+   the league sets no share it may not go past (the second shows only that the
+   commissioner approved a large payment), so the copy never makes a claim
+   about the league's limits: it calls the limits below the game's own
+   (gameOwn), and so does the refusal.
+     https://sports.yahoo.com/articles/mlb-trade-deadline-cash-considerations-205340594.html
+       (30 July 2026: the league "could not prohibit" a club eating $2 million
+       or $20 million of a deal; Minnesota paid part of what was left on Carlos
+       Correa's deal when it traded him to Houston in July 2025)
+     https://africa.espn.com/mlb/news/story?id=1735937
+       (15 February 2004: Texas paid $67 million of the $179 million left on
+       Alex Rodriguez's deal in the trade to New York, approved by the commissioner)
+   THE NUMBERS ARE THE GAME'S OWN, not the league's: half a salary, three such
+   deals a club at a time, twice on one contract, the NHL desk's shape so the
+   two sports read alike. The money is the game's own figures too. A cap of
+   $100,000 on cash for a man designated for assignment (the first page) and a
+   commissioner's approval above a dollar figure (one source only) are NOT
+   modelled. */
+export const MLB_CASH_RETENTION: GmRetentionRules = { maxShare: 0.5, maxDealsPerClub: 3, maxTimesPerContract: 2, gameOwn: true };
 
 export const GM_TRADE_RULES: Record<GmSportId, GmTradeRules> = {
   nfl: NFL_TRADE_RULES, nba: NBA_TRADE_RULES, nhl: NHL_TRADE_RULES, mlb: MLB_TRADE_RULES,
@@ -227,7 +254,9 @@ function retentionRefusal(side: TradeAsset[], club: string, ctx: PackageContext)
       return `A club can keep paying at most ${Math.round(rule.maxShare * 100)} percent of a salary.`;
     }
     if ((ctx.timesRetained?.(a.id) ?? 0) >= rule.maxTimesPerContract) {
-      return 'That contract has been retained on as often as the league allows.';
+      return rule.gameOwn
+        ? 'That contract has carried cash in a trade as often as this game allows.'
+        : 'That contract has been retained on as often as the league allows.';
     }
     fresh++;
   }
