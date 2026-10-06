@@ -1,0 +1,4193 @@
+{
+ "game": "Missing XI",
+ "round": 1026,
+ "shard": 5,
+ "positions": "141 to 175",
+ "checkedOn": "2026-10-05",
+ "foldedOn": "2026-10-06",
+ "method": null,
+ "skeptic": {
+  "verdict": "good",
+  "wrong": [],
+  "missing": [],
+  "resolution": [
+   "The shard 5 skeptic found nothing wrong or missing."
+  ]
+ },
+ "lineups": [
+  {
+   "position": 141,
+   "id": "laliga-2014-atletico-title",
+   "research": "same",
+   "verdict": "verified",
+   "eleven": [
+    "T. Courtois",
+    "Juanfran",
+    "D. Godin",
+    "Miranda",
+    "Filipe Luis",
+    "Koke",
+    "Gabi",
+    "Tiago",
+    "Arda Turan",
+    "Diego Costa",
+    "David Villa"
+   ],
+   "aka": {
+    "Thibaut Courtois": "T. Courtois",
+    "Diego Godin": "D. Godin"
+   },
+   "substitutes": [
+    "Adrian Lopez 16' for Diego Costa",
+    "Raul Garcia 23' for Arda Turan",
+    "Jose Sosa 72' for Adrian Lopez"
+   ],
+   "fields": {
+    "matchDate": "2014-05-17",
+    "team": "Atletico Madrid",
+    "opponent": "Barcelona",
+    "scoreLine": "Barcelona 1-1 Atletico Madrid (title clinched)",
+    "venue": "Camp Nou, Barcelona",
+    "formationLabel": "4-4-2"
+   },
+   "hints": [
+    {
+     "name": "Miranda",
+     "position": "CB",
+     "nationality": "Brazil",
+     "clubAtTime": "Atletico Madrid"
+    },
+    {
+     "name": "Filipe Luis",
+     "position": "LB",
+     "nationality": "Brazil",
+     "clubAtTime": "Atletico Madrid"
+    },
+    {
+     "name": "Koke",
+     "position": "RM",
+     "nationality": "Spain",
+     "clubAtTime": "Atletico Madrid"
+    }
+   ],
+   "sources": [
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/lineups/_/gameId/372838",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "May 17, 2014, 1-1. Atletico XI: T. Courtois; D. Godin, Miranda, Filipe Luis, Juanfran; Tiago, Gabi, Koke, A. Turan; D. Costa, D. Villa. Subs: Adrian for Costa 16', R. Garcia for Turan 23', J. Sosa for Adrian 72'."
+    },
+    {
+     "host": "skysports.com",
+     "url": "https://www.skysports.com/football/barcelona-vs-atletico-madrid/teams/311654",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Saturday 17th May 2014, Camp Nou, Barcelona 1-1 Atletico Madrid. XI: T Courtois; Juanfran, Miranda, D Godin, Filipe Luis; A Turan, Gabi (c), Tiago Mendes, Koke; D Villa, D Costa. Same three subs."
+    }
+   ],
+   "diffs": [],
+   "applied": [],
+   "notes": [
+    "Date 2014-05-17, Camp Nou, Barcelona 1-1 Atletico Madrid all match both sources.",
+    "Formation not stated as a label by either source; Sky's layout is 4 defenders, 4 midfielders (Turan, Gabi, Tiago, Koke), 2 forwards, consistent with the entry's 4-4-2.",
+    "Entry comment says Costa went off injured early: correct (16'). Arda Turan also went off injured at 23'.",
+    "Organiser page: laliga.com match URLs for this season return 404 (tried en-GB/match/temporada-2013-2014-liga-bbva-... and -laliga-bbva-...); laliga.com news 'atletico-win-liga-bbva' carries no lineup. Two independent hosts used instead."
+   ]
+  },
+  {
+   "position": 142,
+   "id": "epl-2021-city-title",
+   "research": "differs",
+   "verdict": "corrected",
+   "eleven": [
+    "Ederson",
+    "Ruben Dias",
+    "Aymeric Laporte",
+    "Nathan Ake",
+    "Joao Cancelo",
+    "Benjamin Mendy",
+    "Rodri",
+    "Ferran Torres",
+    "Raheem Sterling",
+    "Gabriel Jesus",
+    "Sergio Aguero"
+   ],
+   "substitutes": [
+    "Phil Foden 70' for Sergio Aguero",
+    "Ilkay Gundogan 71' for Ferran Torres",
+    "Oleksandr Zinchenko 80' for Benjamin Mendy"
+   ],
+   "fields": {
+    "matchDate": "2021-05-08",
+    "team": "Manchester City",
+    "opponent": "Chelsea",
+    "scoreLine": "Manchester City 1-2 Chelsea",
+    "venue": "Etihad Stadium, Manchester",
+    "formationLabel": "3-1-4-2"
+   },
+   "hints": [
+    {
+     "name": "Ruben Dias",
+     "position": "CB",
+     "nationality": "Portugal",
+     "clubAtTime": "Manchester City"
+    },
+    {
+     "name": "Aymeric Laporte",
+     "position": "CB",
+     "nationality": "France",
+     "clubAtTime": "Manchester City"
+    },
+    {
+     "name": "Nathan Ake",
+     "position": "CB",
+     "nationality": "Netherlands",
+     "clubAtTime": "Manchester City"
+    }
+   ],
+   "sources": [
+    {
+     "host": "premierleague.com",
+     "url": "https://www.premierleague.com/match/59242 (data read from the Premier League's own fixture API footballapi.pulselive.com/football/fixtures/59242)",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Sat 8 May 2021, Etihad Stadium, Manchester City 1-2 Chelsea. City 3-1-4-2: Ederson; Nathan Ake, Aymeric Laporte, Ruben Dias; Rodri; Ferran Torres, Joao Cancelo, Raheem Sterling, Benjamin Mendy; Sergio Aguero, Gabriel Jesus. Subs on: Foden 70' (Aguero), Gundogan 71' (Torres), Zinchenko 80' (Mendy). Bench included Walker, Mahrez, Bernardo Silva. Also: 11 May 2021 fixtures were Manchester United 1-2 Leicester City and Southampton 3-1 Crystal Palace; City's May games were 1, 8, 14, 18, 23 May."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/lineups/_/gameId/578313",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "May 8, 2021, Manchester City 1-2 Chelsea, City 3-1-4-2: Ederson, Ake, Dias, Laporte, Cancelo, Rodri, Sterling, Torres, Jesus, Aguero (Mendy shown via the 80' sub). Same three subs."
+    },
+    {
+     "host": "skysports.com",
+     "url": "https://www.skysports.com/football/manchester-city-vs-chelsea/teams/429183",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Saturday 8th May 2021, Etihad Stadium, 1-2. XI: Ederson, R Alves Dias, A Laporte, N Ake, Rodri, J Cancelo, F Torres, R Sterling (c), B Mendy, G Jesus, S Aguero. Subs Gundogan 71', Zinchenko 80', Foden 70'."
+    }
+   ],
+   "diffs": [
+    {
+     "field": "matchDate",
+     "entry": "2021-05-11",
+     "evidence": "The only City v Chelsea at the Etihad in 2020-21 league play was Saturday 8 May 2021. On 11 May 2021 City did not play: Manchester United 1-2 Leicester City that evening is what confirmed City as champions.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "scoreLine",
+     "entry": "Manchester City 2-1 Chelsea (title clinched)",
+     "evidence": "Manchester City 1-2 Chelsea (Sterling 44'; Ziyech 63', Alonso 90+2'). City lost, so this match did not clinch the title; Aguero missed a Panenka penalty.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "formationLabel",
+     "entry": "4-3-3",
+     "evidence": "premierleague.com and ESPN: 3-1-4-2; Sky's graphic read by the fetch as 4-3-3. Not a clean 4-3-3 back four with Walker/Stones/Zinchenko in any source.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "slots (XI)",
+     "entry": "Ederson; Kyle Walker, Ruben Dias, John Stones, Oleksandr Zinchenko; Rodri, Ilkay Gundogan, Bernardo Silva; Riyad Mahrez, Gabriel Jesus, Raheem Sterling",
+     "evidence": "Ederson; Ruben Dias, Aymeric Laporte, Nathan Ake; Rodri; Joao Cancelo, Ferran Torres, Raheem Sterling, Benjamin Mendy; Gabriel Jesus, Sergio Aguero. Walker, Mahrez, Bernardo Silva, Gundogan and Zinchenko were on the bench (Gundogan and Zinchenko came on); Stones was not in the squad.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "blankCandidates",
+     "entry": "Oleksandr Zinchenko (slot 4), Ilkay Gundogan (slot 6) as starters",
+     "evidence": "Both were substitutes, not starters. Ruben Dias did start.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    }
+   ],
+   "applied": [
+    {
+     "path": "comment",
+     "from": "Manchester City clinch the title early",
+     "to": "Manchester City 1-2 Chelsea, three days before the title was confirmed",
+     "why": "premierleague.com and ESPN: City lost this match; the title was confirmed on 11 May when City did not play"
+    },
+    {
+     "path": "dateLabel",
+     "from": "2020-21 Premier League Title Decider",
+     "to": "2020-21 Premier League",
+     "why": "premierleague.com and ESPN: City lost, so this was not the decider"
+    },
+    {
+     "path": "matchDate",
+     "from": "2021-05-11",
+     "to": "2021-05-08",
+     "why": "premierleague.com, ESPN and Sky Sports: City v Chelsea at the Etihad was Saturday 8 May 2021"
+    },
+    {
+     "path": "scoreLine",
+     "from": "Manchester City 2-1 Chelsea (title clinched)",
+     "to": "Manchester City 1-2 Chelsea",
+     "why": "premierleague.com and ESPN: Sterling 44; Ziyech 63, Alonso 90+2"
+    },
+    {
+     "path": "formationLabel",
+     "from": "4-3-3",
+     "to": "3-1-4-2",
+     "why": "premierleague.com and ESPN both state 3-1-4-2"
+    },
+    {
+     "path": "slots[1].name",
+     "from": "Kyle Walker",
+     "to": "João Cancelo",
+     "why": "premierleague.com and ESPN (RM): Cancelo started on the right; Walker was on the bench"
+    },
+    {
+     "path": "slots[1].position",
+     "from": "RB",
+     "to": "RM",
+     "why": "premierleague.com and ESPN (RM): Cancelo started on the right; Walker was on the bench"
+    },
+    {
+     "path": "slots[3].name",
+     "from": "John Stones",
+     "to": "Aymeric Laporte",
+     "why": "premierleague.com and ESPN (CD): Laporte started in the middle of the three; Stones was not in the squad"
+    },
+    {
+     "path": "slots[4].name",
+     "from": "Oleksandr Zinchenko",
+     "to": "Nathan Ake",
+     "why": "premierleague.com and ESPN (CD-L): Ake started on the left of the three; Zinchenko came on 80'"
+    },
+    {
+     "path": "slots[4].position",
+     "from": "LB",
+     "to": "CB",
+     "why": "premierleague.com and ESPN (CD-L): Ake started on the left of the three; Zinchenko came on 80'"
+    },
+    {
+     "path": "slots[6].name",
+     "from": "Ilkay Gundogan",
+     "to": "Ferran Torres",
+     "why": "premierleague.com and ESPN (CM-R): Ferran Torres started; Gundogan came on 71'"
+    },
+    {
+     "path": "slots[7].name",
+     "from": "Bernardo Silva",
+     "to": "Benjamin Mendy",
+     "why": "premierleague.com and ESPN (LM): Mendy started on the left; Bernardo Silva was on the bench"
+    },
+    {
+     "path": "slots[7].position",
+     "from": "CM",
+     "to": "LM",
+     "why": "premierleague.com and ESPN (LM): Mendy started on the left; Bernardo Silva was on the bench"
+    },
+    {
+     "path": "slots[8].name",
+     "from": "Riyad Mahrez",
+     "to": "Sergio Aguero",
+     "why": "premierleague.com and ESPN (CF-L): Aguero started up front; Mahrez was on the bench"
+    },
+    {
+     "path": "slots[8].position",
+     "from": "RW",
+     "to": "ST",
+     "why": "premierleague.com and ESPN (CF-L): Aguero started up front; Mahrez was on the bench"
+    },
+    {
+     "path": "slots[9].position",
+     "from": "CF",
+     "to": "ST",
+     "why": "premierleague.com and ESPN (CF-R): one of two strikers"
+    },
+    {
+     "path": "slots[10].position",
+     "from": "LW",
+     "to": "CM",
+     "why": "premierleague.com and ESPN (CM-L): Sterling played in the line of four"
+    },
+    {
+     "path": "blankCandidates[Oleksandr Zinchenko]",
+     "from": "candidate",
+     "to": null,
+     "why": "an 80th minute substitute (premierleague.com, ESPN)"
+    },
+    {
+     "path": "blankCandidates[Ilkay Gundogan]",
+     "from": "candidate",
+     "to": null,
+     "why": "a 71st minute substitute (premierleague.com, ESPN)"
+    },
+    {
+     "path": "blankCandidates[Aymeric Laporte]",
+     "from": null,
+     "to": {
+      "slotIndex": 3,
+      "nationality": "France",
+      "clubAtTime": "Manchester City"
+     },
+     "why": "started on both hosts; spelling already a verified blank in epl-2018-city-southampton"
+    },
+    {
+     "path": "blankCandidates[Nathan Ake]",
+     "from": null,
+     "to": {
+      "slotIndex": 4,
+      "nationality": "Netherlands",
+      "clubAtTime": "Manchester City"
+     },
+     "why": "started on both hosts; spelling already a verified blank in cl-2023-final-city"
+    },
+    {
+     "path": "source",
+     "from": "Wikipedia match report + Manchester City official archive + Sky Sports lineup graphic, unanimous.",
+     "to": "Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 5. The real City v Chelsea of 8 May 2021, a 1-2 defeat in a 3-1-4-2; the old eleven matched no source.",
+     "why": "the internal note vouched for the wrong eleven and result"
+    },
+    {
+     "path": "slots[3].side",
+     "from": "left",
+     "to": "centre",
+     "why": "premierleague.com and ESPN (CD): Laporte started in the middle of the three; Stones was not in the squad"
+    },
+    {
+     "path": "slots[8].side",
+     "from": "right",
+     "to": "left",
+     "why": "premierleague.com and ESPN (CF-L): Aguero started up front; Mahrez was on the bench"
+    },
+    {
+     "path": "slots[9].side",
+     "from": "centre",
+     "to": "right",
+     "why": "premierleague.com and ESPN (CF-R): one of two strikers"
+    }
+   ],
+   "notes": [
+    "The entry's XI does not match any source for this fixture; it reads like a generic 2020-21 City side. The entry's title-clinch framing is wrong: City clinched on 11 May without playing.",
+    "Venue Etihad Stadium is correct for the 8 May match.",
+    "Round 1026: the old eleven matched no source (a generic 2020-21 City side); re-pointed at the real City v Chelsea of 8 May 2021, which City lost. The title was confirmed on 11 May without City playing, so the decider framing went."
+   ]
+  },
+  {
+   "position": 143,
+   "id": "epl-2024-city-title",
+   "research": "differs",
+   "verdict": "corrected",
+   "eleven": [
+    "Stefan Ortega",
+    "Kyle Walker",
+    "Ruben Dias",
+    "Manuel Akanji",
+    "Josko Gvardiol",
+    "Rodri",
+    "Kevin De Bruyne",
+    "Bernardo Silva",
+    "Phil Foden",
+    "Erling Haaland",
+    "Jeremy Doku"
+   ],
+   "substitutes": [
+    "Nathan Ake 71' for Manuel Akanji",
+    "Mateo Kovacic 90+1' for Phil Foden"
+   ],
+   "fields": {
+    "matchDate": "2024-05-19",
+    "team": "Manchester City",
+    "opponent": "West Ham United",
+    "scoreLine": "Manchester City 3-1 West Ham United (title clinched)",
+    "venue": "Etihad Stadium, Manchester",
+    "formationLabel": "4-1-4-1"
+   },
+   "hints": [
+    {
+     "name": "Josko Gvardiol",
+     "position": "LB",
+     "nationality": "Croatia",
+     "clubAtTime": "Manchester City"
+    },
+    {
+     "name": "Jeremy Doku",
+     "position": "LM",
+     "nationality": "Belgium",
+     "clubAtTime": "Manchester City"
+    },
+    {
+     "name": "Ruben Dias",
+     "position": "CB",
+     "nationality": "Portugal",
+     "clubAtTime": "Manchester City"
+    }
+   ],
+   "sources": [
+    {
+     "host": "premierleague.com",
+     "url": "https://www.premierleague.com/match/93699 (data read from footballapi.pulselive.com/football/fixtures/93699, the Premier League's own fixture API)",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Sun 19 May 2024, Etihad Stadium, Manchester City 3-1 West Ham United. City 4-1-4-1 XI: Stefan Ortega; Kyle Walker, Ruben Dias, Manuel Akanji, Josko Gvardiol; Rodri; Phil Foden, Kevin De Bruyne, Bernardo Silva, Jeremy Doku; Erling Haaland. Bench: Stones, Nunes, Lewis, Bobb, Ake, Kovacic, Grealish, Alvarez, Carson. Subs on: Ake 71' (Akanji), Kovacic 90+1' (Foden)."
+    },
+    {
+     "host": "skysports.com",
+     "url": "https://www.skysports.com/football/manchester-city-vs-west-ham-united/teams/482969",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Sunday 19th May 2024, Etihad Stadium, 3-1. XI: S Ortega Moreno; K Walker (c), R Alves Dias, M Akanji, J Gvardiol; Rodri, B Silva, K De Bruyne; P Foden, J Doku, E Haaland. Subs Ake 71' for Akanji, Kovacic 90+1' for Foden."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/match/_/gameId/671405/west-ham-united-manchester-city",
+     "readOn": "2026-10-05 (search summary of the page)",
+     "xi": true,
+     "says": "May 19, 2024, Man City 3-1 West Ham. City: Ortega (GK), Gvardiol, Akanji, Dias, Walker, Rodri, Doku, Foden, De Bruyne, Silva, Haaland."
+    }
+   ],
+   "diffs": [
+    {
+     "field": "slots[0] GK",
+     "entry": "Ederson",
+     "evidence": "Stefan Ortega (premierleague.com, ESPN, Sky Sports 'S Ortega Moreno'). Ederson was not in the matchday squad; the bench keeper was Scott Carson.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "slots[3] CB",
+     "entry": "John Stones",
+     "evidence": "Manuel Akanji started; Stones was on the bench and did not come on.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "formationLabel",
+     "entry": "4-3-3",
+     "evidence": "premierleague.com lists 4-1-4-1; Sky's graphic read as 4-3-3. Same back four shape either way; minor.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    }
+   ],
+   "applied": [
+    {
+     "path": "formationLabel",
+     "from": "4-3-3",
+     "to": "4-1-4-1",
+     "why": "premierleague.com and ESPN both state 4-1-4-1 (Sky Sports read as 4-3-3)"
+    },
+    {
+     "path": "slots[0].name",
+     "from": "Ederson",
+     "to": "Stefan Ortega",
+     "why": "premierleague.com, ESPN and Sky Sports: Ortega started; Ederson was not in the squad"
+    },
+    {
+     "path": "slots[3].name",
+     "from": "John Stones",
+     "to": "Manuel Akanji",
+     "why": "premierleague.com, ESPN (CD-L) and Sky Sports: Akanji started; Stones was an unused substitute"
+    },
+    {
+     "path": "slots[7].position",
+     "from": "CM",
+     "to": "RM",
+     "why": "in the 4-1-4-1 both hosts state, ESPN has Bernardo Silva RM"
+    },
+    {
+     "path": "slots[8].position",
+     "from": "RW",
+     "to": "CM",
+     "why": "in the 4-1-4-1 both hosts state, ESPN has Foden CM-L"
+    },
+    {
+     "path": "slots[10].position",
+     "from": "LW",
+     "to": "LM",
+     "why": "in the 4-1-4-1 both hosts state, ESPN has Doku LM"
+    },
+    {
+     "path": "slots[7].side",
+     "from": "left",
+     "to": "right",
+     "why": "in the 4-1-4-1 both hosts state, ESPN has Bernardo Silva RM"
+    },
+    {
+     "path": "slots[8].side",
+     "from": "right",
+     "to": "left",
+     "why": "in the 4-1-4-1 both hosts state, ESPN has Foden CM-L"
+    }
+   ],
+   "notes": [
+    "Date 2024-05-19, Etihad Stadium, Manchester City 3-1 West Ham United (Foden 2', 18', Rodri 59'; Kudus 42') confirmed; fourth straight title clinched on the day.",
+    "Blank candidates Gvardiol, Doku, Ruben Dias all started: fine. Only the GK slot and the Stones slot are wrong."
+   ]
+  },
+  {
+   "position": 144,
+   "id": "laliga-2023-barca-title",
+   "research": "differs",
+   "verdict": "corrected",
+   "eleven": [
+    "Marc-Andre ter Stegen",
+    "Jules Kounde",
+    "Ronald Araujo",
+    "Andreas Christensen",
+    "Alejandro Balde",
+    "Sergio Busquets",
+    "Pedri",
+    "Frenkie de Jong",
+    "Raphinha",
+    "Robert Lewandowski",
+    "Gavi"
+   ],
+   "substitutes": [
+    "Ousmane Dembele 62' for Raphinha",
+    "Jordi Alba 62'/63' for Ronald Araujo",
+    "Ansu Fati 74'",
+    "Marcos Alonso 74'",
+    "Franck Kessie 89' for Pedri"
+   ],
+   "fields": {
+    "matchDate": "2023-05-14",
+    "team": "Barcelona",
+    "opponent": "Espanyol",
+    "scoreLine": "Espanyol 2-4 Barcelona (title clinched)",
+    "venue": "RCDE Stadium, Cornella",
+    "formationLabel": "4-3-3"
+   },
+   "hints": [
+    {
+     "name": "Alejandro Balde",
+     "position": "LB",
+     "nationality": "Spain",
+     "clubAtTime": "Barcelona"
+    },
+    {
+     "name": "Andreas Christensen",
+     "position": "CB",
+     "nationality": "Denmark",
+     "clubAtTime": "Barcelona"
+    },
+    {
+     "name": "Raphinha",
+     "position": "LW",
+     "nationality": "Brazil",
+     "clubAtTime": "Barcelona"
+    }
+   ],
+   "sources": [
+    {
+     "host": "skysports.com",
+     "url": "https://www.skysports.com/football/espanyol-vs-barcelona/teams/469848",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Sunday 14th May 2023, Cornella - El Prat, Barcelona 4-2 Espanyol. Barcelona XI: M ter Stegen; J Kounde, R Araujo, A Christensen, A Balde; Pedri, S Busquets (c), F De Jong; Raphinha, R Lewandowski, P Paez Gaviria. Subs Dembele 62', Alba 63', Fati 74', Alonso 74', Kessie 89'."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/lineups/_/gameId/644108",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "May 14, 2023, Espanyol 2-4 Barcelona, Barcelona 4-3-3: ter Stegen; Araujo, Christensen, Kounde, Balde; Busquets, Pedri, De Jong; Lewandowski, Raphinha, Gavi. Subs Alba 62', Dembele 62', Alonso 74', Fati 74', Kessie 89'."
+    }
+   ],
+   "diffs": [
+    {
+     "field": "venue",
+     "entry": "Camp Nou, Barcelona",
+     "evidence": "Espanyol were at home: RCDE Stadium, Cornella-El Prat (Sky: 'Cornella - El Prat', attendance 27,360; ESPN lists Espanyol 2-4 Barcelona with Espanyol as home side).",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "slots[1] RB",
+     "entry": "Sergi Roberto",
+     "evidence": "Jules Kounde started at right back; Sergi Roberto was an unused substitute.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "slots[8] RW",
+     "entry": "Ousmane Dembele",
+     "evidence": "Gavi started (Sky 'P Paez Gaviria'); Dembele came on at 62' for Raphinha.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    }
+   ],
+   "applied": [
+    {
+     "path": "venue",
+     "from": "Camp Nou, Barcelona",
+     "to": "RCDE Stadium, Cornella",
+     "why": "Sky Sports (Cornella - El Prat) and ESPN (RCDE Stadium): Espanyol were at home"
+    },
+    {
+     "path": "scoreLine",
+     "from": "Barcelona 4-2 Espanyol (title clinched)",
+     "to": "Espanyol 2-4 Barcelona (title clinched)",
+     "why": "Sky Sports and ESPN: Espanyol were the home side"
+    },
+    {
+     "path": "slots[1].name",
+     "from": "Sergi Roberto",
+     "to": "Jules Kounde",
+     "why": "Sky Sports and ESPN (RB): Kounde started at right-back; Sergi Roberto was an unused substitute"
+    },
+    {
+     "path": "slots[8].name",
+     "from": "Ousmane Dembele",
+     "to": "Gavi",
+     "why": "Sky Sports (P Paez Gaviria) and ESPN: Gavi started; Dembele came on 62' for Raphinha. Only ESPN states sides (Gavi left, Raphinha right), so the tile keeps the slot label"
+    },
+    {
+     "path": "source",
+     "from": "Wikipedia match report + FC Barcelona official archive + Marca, unanimous on the title-clinching starting XI.",
+     "to": "Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 5. At Espanyol: Kounde and Gavi started; Sergi Roberto and Dembele did not.",
+     "why": "the internal note vouched for the wrong eleven and venue"
+    }
+   ],
+   "notes": [
+    "Date 2023-05-14 and the 4-2 Barcelona win correct; formation 4-3-3 per ESPN. Entry scoreLine 'Barcelona 4-2 Espanyol' has the right numbers (Sky writes it the same way) but Espanyol were the home side, so home-first would be 'Espanyol 2-4 Barcelona'.",
+    "Sources disagree on who Fati and Alonso replaced at 74' (Sky: Fati for Christensen, Alonso for Gavi; ESPN: Alonso for Christensen, Fati for Gavi). Not an entry field.",
+    "Blank candidates Balde, Christensen, Raphinha all started: fine.",
+    "Organiser page: laliga.com match URLs for this fixture redirect to a 404 (temporada-2022-2023-laliga-santander-rcd-espanyol-de-barcelona-fc-barcelona-34 -> laliga-easports slug, 404). Two independent hosts used.",
+    "Round 1026: no host states a role for Gavi; the tile keeps the label of the slot he took. Open for a role source. ESPN alone puts Gavi left and Raphinha right; ESPN alone has Christensen left and Araujo right."
+   ]
+  },
+  {
+   "position": 145,
+   "id": "laliga-2018-barca-invincibles",
+   "research": "differs",
+   "verdict": "corrected",
+   "eleven": [
+    "Marc-Andre ter Stegen",
+    "Nelson Semedo",
+    "Gerard Pique",
+    "Samuel Umtiti",
+    "Jordi Alba",
+    "Sergio Busquets",
+    "Ivan Rakitic",
+    "Philippe Coutinho",
+    "Lionel Messi",
+    "Luis Suarez",
+    "Ousmane Dembele"
+   ],
+   "substitutes": [
+    "Denis Suarez 68' for Ousmane Dembele",
+    "Paulinho 74' for Philippe Coutinho",
+    "Andres Iniesta 87' for Ivan Rakitic"
+   ],
+   "fields": {
+    "matchDate": "2018-04-29",
+    "team": "Barcelona",
+    "opponent": "Deportivo La Coruna",
+    "scoreLine": "Deportivo La Coruna 2-4 Barcelona (title clinched)",
+    "venue": "Riazor, A Coruna",
+    "formationLabel": "4-3-3"
+   },
+   "hints": [
+    {
+     "name": "Samuel Umtiti",
+     "position": "CB",
+     "nationality": "France",
+     "clubAtTime": "Barcelona"
+    },
+    {
+     "name": "Ousmane Dembele",
+     "position": "LW",
+     "nationality": "France",
+     "clubAtTime": "Barcelona"
+    },
+    {
+     "name": "Philippe Coutinho",
+     "position": "CM",
+     "nationality": "Brazil",
+     "clubAtTime": "Barcelona"
+    }
+   ],
+   "sources": [
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/lineups/_/gameId/490361",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "April 29, 2018, Deportivo 2-4 Barcelona. Barcelona XI: M. ter Stegen; N. Semedo, G. Pique, S. Umtiti, J. Alba; I. Rakitic, S. Busquets, P. Coutinho; L. Messi, L. Suarez, O. Dembele. Subs D. Suarez 68' (Dembele), Paulinho 74' (Coutinho), A. Iniesta 87' (Rakitic)."
+    },
+    {
+     "host": "skysports.com",
+     "url": "https://www.skysports.com/football/deportivo-vs-barcelona/teams/382893",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Sunday 29th April 2018, Riazor, attendance 25,799. XI: M ter Stegen; N Cabral Semedo, G Pique, S Umtiti, J Alba; I Rakitic, S Busquets, P Coutinho; O Dembele, L Messi (c), L Suarez. Same three subs."
+    }
+   ],
+   "diffs": [
+    {
+     "field": "slots[1] RB",
+     "entry": "Sergi Roberto",
+     "evidence": "Nelson Semedo started at right back (ESPN 'N. Semedo', Sky 'N Cabral Semedo'). Sergi Roberto did not start and did not come on.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "slots[7] CM",
+     "entry": "Andres Iniesta",
+     "evidence": "Philippe Coutinho started (and scored 7'); Iniesta came off the bench at 87' for Rakitic. Messi wore the armband.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "blankCandidates",
+     "entry": "Sergi Roberto (slot 1) as a starter",
+     "evidence": "Sergi Roberto was not in the XI. Umtiti and Dembele did start.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    }
+   ],
+   "applied": [
+    {
+     "path": "comment",
+     "from": "title-clinching draw at Deportivo",
+     "to": "title-clinching 4-2 win at Deportivo",
+     "why": "ESPN and Sky Sports: Barcelona won 4-2"
+    },
+    {
+     "path": "slots[1].name",
+     "from": "Sergi Roberto",
+     "to": "Nelson Semedo",
+     "why": "ESPN (RB) and Sky Sports: Semedo started at right-back; Sergi Roberto did not play"
+    },
+    {
+     "path": "slots[7].name",
+     "from": "Andres Iniesta",
+     "to": "Philippe Coutinho",
+     "why": "ESPN (LM) and Sky Sports: Coutinho started and scored; Iniesta came on 87' for Rakitic"
+    },
+    {
+     "path": "blankCandidates[Sergi Roberto]",
+     "from": "candidate",
+     "to": null,
+     "why": "did not play (ESPN, Sky Sports)"
+    },
+    {
+     "path": "blankCandidates[Philippe Coutinho]",
+     "from": null,
+     "to": {
+      "slotIndex": 7,
+      "nationality": "Brazil",
+      "clubAtTime": "Barcelona"
+     },
+     "why": "started on both hosts; spelling already a verified blank in cl-2019-qf-barca"
+    },
+    {
+     "path": "source",
+     "from": "Wikipedia match report + FC Barcelona official archive + Marca, agree on the title-clinching starting XI during the unbeaten league season.",
+     "to": "Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 5. Semedo and Coutinho started; Iniesta came on late.",
+     "why": "the internal note vouched for the wrong eleven"
+    }
+   ],
+   "notes": [
+    "Date 2018-04-29, Riazor, Deportivo La Coruna 2-4 Barcelona (Coutinho 7', Messi 38', 82', 85'; Lucas Perez 40', Colak 64') confirmed. Formation 4-3-3 per Sky's layout.",
+    "Organiser page: laliga.com match URLs for older seasons return 404 (see 141, 144). Two independent hosts used.",
+    "Round 1026: ESPN alone has Dembele right, Suarez left and Messi central; layout unchanged."
+   ]
+  },
+  {
+   "position": 146,
+   "id": "cl-2016-semi-real",
+   "research": "differs",
+   "verdict": "corrected",
+   "eleven": [
+    "Keylor Navas",
+    "Dani Carvajal",
+    "Pepe",
+    "Sergio Ramos",
+    "Marcelo",
+    "Toni Kroos",
+    "Luka Modric",
+    "Isco",
+    "Gareth Bale",
+    "Cristiano Ronaldo",
+    "Jese"
+   ],
+   "aka": {
+    "Daniel Carvajal": "Dani Carvajal"
+   },
+   "substitutes": [
+    "Lucas Vazquez for Jese",
+    "James Rodriguez for Isco",
+    "Mateo Kovacic for Luka Modric (ESPN's page lists 56', 67', 83'/88'; minutes not cross-checked)"
+   ],
+   "fields": {
+    "matchDate": "2016-05-04",
+    "team": "Real Madrid",
+    "opponent": "Manchester City",
+    "scoreLine": "Real Madrid 1-0 Manchester City (Real Madrid win 1-0 on aggregate)",
+    "venue": "Santiago Bernabeu, Madrid",
+    "formationLabel": "4-3-3"
+   },
+   "hints": [
+    {
+     "name": "Pepe",
+     "position": "CB",
+     "nationality": "Portugal",
+     "clubAtTime": "Real Madrid"
+    },
+    {
+     "name": "Gareth Bale",
+     "position": "RW",
+     "nationality": "Wales",
+     "clubAtTime": "Real Madrid"
+    },
+    {
+     "name": "Isco",
+     "position": "CM",
+     "nationality": "Spain",
+     "clubAtTime": "Real Madrid"
+    }
+   ],
+   "sources": [
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/uefachampionsleague/match/2015788--real-madrid-vs-man-city/ (read from match.uefa.com/v5/matches/2015788 and /lineups, the data behind the page)",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "2016-05-04, Semi-finals, Estadio Santiago Bernabeu, Real Madrid 1-0 Man City (aggregate 1-0). Real XI: Keylor Navas; Dani Carvajal, Pepe, Sergio Ramos, Marcelo; Toni Kroos, Luka Modric, Isco; Gareth Bale, Cristiano Ronaldo, Jese. Goal: Fernando own goal 20'."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/lineups/_/gameId/447230",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "May 4, 2016, Real Madrid 1-0 Manchester City. XI: K. Navas; D. Carvajal, Pepe, S. Ramos, Marcelo; T. Kroos, Isco, L. Modric; Jese, C. Ronaldo, G. Bale. Subs L. Vazquez for Jese, J. Rodriguez for Isco, M. Kovacic for Modric."
+    }
+   ],
+   "diffs": [
+    {
+     "field": "slots[5] CDM",
+     "entry": "Casemiro",
+     "evidence": "Casemiro was not in Real Madrid's XI or on the bench (UEFA lists bench Casilla, Varane, James, Kovacic, Lucas Vazquez, Danilo, Mayoral). The midfield three was Kroos, Modric, Isco.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "slots[9] CF",
+     "entry": "Karim Benzema",
+     "evidence": "Jese started up front with Ronaldo and Bale; Benzema was not in the squad.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "blankCandidates",
+     "entry": "Casemiro (slot 5) as a starter",
+     "evidence": "Casemiro did not play. Pepe and Bale did start.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    }
+   ],
+   "applied": [
+    {
+     "path": "slots[5].name",
+     "from": "Casemiro",
+     "to": "Isco",
+     "why": "UEFA (left of the three) and ESPN (LM): Isco started; Casemiro was not in the matchday squad"
+    },
+    {
+     "path": "slots[5].position",
+     "from": "CDM",
+     "to": "CM",
+     "why": "UEFA (left of the three) and ESPN (LM): Isco started; Casemiro was not in the matchday squad"
+    },
+    {
+     "path": "slots[9].name",
+     "from": "Karim Benzema",
+     "to": "Jese",
+     "why": "UEFA and ESPN (F): Jese started up front; Benzema was not in the squad. The hosts split on the front three sides"
+    },
+    {
+     "path": "blankCandidates[Casemiro]",
+     "from": "candidate",
+     "to": null,
+     "why": "not in the matchday squad (UEFA)"
+    },
+    {
+     "path": "blankCandidates[Isco]",
+     "from": null,
+     "to": {
+      "slotIndex": 5,
+      "nationality": "Spain",
+      "clubAtTime": "Real Madrid"
+     },
+     "why": "started on both hosts; spelling already a verified blank in cl-2017-final-real"
+    },
+    {
+     "path": "source",
+     "from": "Wikipedia dedicated match article + UEFA.com archive, agree on Real Madrid's starting XI for the semifinal-clinching win.",
+     "to": "Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 5. Isco and Jese started; Casemiro and Benzema were not in the squad.",
+     "why": "the internal note vouched for the wrong eleven"
+    },
+    {
+     "path": "slots[5].side",
+     "from": "centre",
+     "to": "left",
+     "why": "UEFA (left of the three) and ESPN (LM): Isco started; Casemiro was not in the matchday squad"
+    },
+    {
+     "path": "slots[6].side",
+     "from": "right",
+     "to": "centre",
+     "why": "layout: UEFA (centre) and ESPN (CM) put Kroos in the middle of the three"
+    },
+    {
+     "path": "slots[7].side",
+     "from": "left",
+     "to": "right",
+     "why": "layout: UEFA (right) and ESPN (RM)"
+    }
+   ],
+   "notes": [
+    "Date 2016-05-04, Santiago Bernabeu, Real Madrid 1-0 Manchester City, 1-0 on aggregate, all confirmed. The goal is credited by UEFA as a Fernando own goal (20', Bale's deflected cross-shot).",
+    "UEFA's pitch coordinates place Isco on the left and Modric on the right of a three behind Bale, Ronaldo and Jese, so 4-3-3 is fine.",
+    "Round 1026: UEFA and ESPN split on the front three; Jese takes the central slot ESPN gives him."
+   ]
+  },
+  {
+   "position": 147,
+   "id": "epl-2020-liverpool-title",
+   "research": "differs",
+   "verdict": "corrected",
+   "eleven": [
+    "Alisson Becker",
+    "Trent Alexander-Arnold",
+    "Joe Gomez",
+    "Virgil van Dijk",
+    "Andy Robertson",
+    "Fabinho",
+    "Jordan Henderson",
+    "Georginio Wijnaldum",
+    "Mohamed Salah",
+    "Roberto Firmino",
+    "Sadio Mane"
+   ],
+   "aka": {
+    "Alisson": "Alisson Becker",
+    "Andrew Robertson": "Andy Robertson"
+   },
+   "substitutes": [
+    "Alex Oxlade-Chamberlain 64' for Jordan Henderson",
+    "Neco Williams 74' for Trent Alexander-Arnold",
+    "Takumi Minamino 74' for Roberto Firmino",
+    "Harvey Elliott 84' for Andy Robertson",
+    "Naby Keita 84' for Sadio Mane"
+   ],
+   "fields": {
+    "matchDate": "2020-06-24",
+    "team": "Liverpool",
+    "opponent": "Crystal Palace",
+    "scoreLine": "Liverpool 4-0 Crystal Palace (the title was sealed the next night)",
+    "venue": "Anfield, Liverpool",
+    "formationLabel": "4-3-3"
+   },
+   "hints": [
+    {
+     "name": "Joe Gomez",
+     "position": "CB",
+     "nationality": "England",
+     "clubAtTime": "Liverpool"
+    },
+    {
+     "name": "Georginio Wijnaldum",
+     "position": "CM",
+     "nationality": "Netherlands",
+     "clubAtTime": "Liverpool"
+    },
+    {
+     "name": "Fabinho",
+     "position": "CDM",
+     "nationality": "Brazil",
+     "clubAtTime": "Liverpool"
+    }
+   ],
+   "sources": [
+    {
+     "host": "premierleague.com",
+     "url": "https://www.premierleague.com/match/46908 (read from footballapi.pulselive.com/football/fixtures/46908, the Premier League's own fixture API)",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Wed 24 Jun 2020, 20:15 BST, Anfield, Liverpool 4-0 Crystal Palace, Liverpool 4-3-3: Alisson Becker; Trent Alexander-Arnold, Joe Gomez, Virgil van Dijk, Andy Robertson; Fabinho, Jordan Henderson, Georginio Wijnaldum; Mohamed Salah, Roberto Firmino, Sadio Mane. Goals TAA 23', Salah 44', Fabinho 55', Mane 69'. Same API lists Thu 25 Jun 2020 20:15 Chelsea 2-1 Manchester City."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/lineups/_/gameId/541539",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "June 24, 2020, Liverpool 4-0 Crystal Palace, 4-3-3, same XI and the five subs listed."
+    }
+   ],
+   "diffs": [
+    {
+     "field": "matchDate",
+     "entry": "2020-06-25",
+     "evidence": "Wednesday 24 June 2020 (20:15 BST kick-off).",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "scoreLine",
+     "entry": "Liverpool 4-0 Crystal Palace (title clinched, Chelsea beat Man City the night before)",
+     "evidence": "Liverpool 4-0 Crystal Palace is right, but Chelsea 2-1 Manchester City was the NEXT night, Thursday 25 June 2020, and that result is what clinched the title. This match was the last before the title was won, not the first after it.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    }
+   ],
+   "applied": [
+    {
+     "path": "matchDate",
+     "from": "2020-06-25",
+     "to": "2020-06-24",
+     "why": "premierleague.com and ESPN: Wednesday 24 June 2020"
+    },
+    {
+     "path": "scoreLine",
+     "from": "Liverpool 4-0 Crystal Palace (title clinched, Chelsea beat Man City the night before)",
+     "to": "Liverpool 4-0 Crystal Palace (the title was sealed the next night)",
+     "why": "premierleague.com and ESPN: Chelsea 2-1 Manchester City came the NEXT night, 25 June 2020, and that result won Liverpool the title"
+    },
+    {
+     "path": "comment",
+     "from": "// Note: the title was actually confirmed the night before via Chelsea's win over Man City; this match came after the title was already mathematically won, so it is the first home match played as champions, not the exact clinching match. Kept for the \"Centurions\"-adjacent title-run vein given the 30-year narrative significance.",
+     "to": "// Round 1026: this was the last match BEFORE the title, not after it. Chelsea 2-1 Manchester City the next night (25 June 2020) won Liverpool the league (premierleague.com, ESPN).",
+     "why": "the comment had the order of the two matches reversed"
+    },
+    {
+     "path": "source",
+     "from": "Wikipedia match report + Liverpool FC official archive + Sky Sports lineup graphic, unanimous on the starting XI for Liverpool's first home game as champions.",
+     "to": "Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 5. Eleven confirmed; the match was on 24 June, the night before the title was sealed.",
+     "why": "the internal note had the date story wrong"
+    }
+   ],
+   "notes": [
+    "Starting XI matches both sources exactly; formation 4-3-3 matches both. Venue Anfield correct. Andrew Robertson is listed as 'Andy Robertson' by the sources (same man).",
+    "The in-file comment ('the title was actually confirmed the night before via Chelsea's win ... this match came after the title was already mathematically won ... first home match played as champions') is also wrong for the same reason, and so is the source string's 'first home game as champions'. The first Anfield game as champions was later (Liverpool 2-1 Aston Villa on 5 July 2020 per general knowledge; not checked here).",
+    "Blank candidates Gomez, Wijnaldum, Fabinho all started."
+   ]
+  },
+  {
+   "position": 148,
+   "id": "cl-2017-qf-real",
+   "research": "differs",
+   "verdict": "corrected",
+   "eleven": [
+    "Keylor Navas",
+    "Dani Carvajal",
+    "Nacho",
+    "Sergio Ramos",
+    "Marcelo",
+    "Casemiro",
+    "Toni Kroos",
+    "Luka Modric",
+    "Isco",
+    "Cristiano Ronaldo",
+    "Karim Benzema"
+   ],
+   "aka": {
+    "Daniel Carvajal": "Dani Carvajal"
+   },
+   "substitutes": [
+    "Marco Asensio for Karim Benzema",
+    "Lucas Vazquez for Isco",
+    "Mateo Kovacic 114' for Toni Kroos (Sky minutes: Asensio 64', Vazquez 71')"
+   ],
+   "fields": {
+    "matchDate": "2017-04-18",
+    "team": "Real Madrid",
+    "opponent": "Bayern Munich",
+    "scoreLine": "Real Madrid 4-2 Bayern Munich, AET (Real Madrid win 6-3 on aggregate)",
+    "venue": "Santiago Bernabeu, Madrid",
+    "formationLabel": "4-3-3"
+   },
+   "hints": [
+    {
+     "name": "Isco",
+     "position": "RW",
+     "nationality": "Spain",
+     "clubAtTime": "Real Madrid"
+    },
+    {
+     "name": "Daniel Carvajal",
+     "position": "RB",
+     "nationality": "Spain",
+     "clubAtTime": "Real Madrid"
+    },
+    {
+     "name": "Nacho",
+     "position": "CB",
+     "nationality": "Spain",
+     "clubAtTime": "Real Madrid"
+    }
+   ],
+   "sources": [
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/uefachampionsleague/match/2019633--real-madrid-vs-bayern/ (read from match.uefa.com/v5/matches/2019633 and /lineups); first leg match 2019631",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "2019633: 2017-04-18, Quarter-finals, Estadio Santiago Bernabeu, Real Madrid 4-2 Bayern Munchen (90 min 1-2), aggregate 6-3. Real XI: Keylor Navas; Dani Carvajal, Nacho, Sergio Ramos, Marcelo; Casemiro, Toni Kroos, Luka Modric; Isco, Karim Benzema, Cristiano Ronaldo. Goals Lewandowski pen 53', Ronaldo 76', Ramos og 78', Ronaldo 105', 110', Asensio 112'. 2019631: 2017-04-12, Fussball Arena Munchen, Bayern 1-2 Real Madrid; Real XI Navas; Carvajal, Nacho, Ramos, Marcelo; Casemiro, Kroos, Modric; Bale, Ronaldo, Benzema."
+    },
+    {
+     "host": "skysports.com",
+     "url": "https://www.skysports.com/football/real-madrid-vs-bayern-munich/teams/370349",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Tuesday 18th April 2017, Santiago Bernabeu, Real Madrid 4-2 Bayern Munich after extra time. XI: K Navas; D Carvajal, Nacho, S Ramos (c), Marcelo; L Modric, Casemiro, T Kroos; Isco, K Benzema, C Ronaldo. Subs L Vazquez, M Asensio, M Kovacic."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/lineups/_/gameId/476515",
+     "readOn": "2026-10-05 (search summary)",
+     "xi": true,
+     "says": "April 18, 2017, Estadio Bernabeu, Real Madrid 4-2 Bayern; Real XI Navas; Carvajal, Ramos, Nacho, Marcelo; Kroos, Casemiro, Modric; Isco, Benzema, Ronaldo."
+    }
+   ],
+   "diffs": [
+    {
+     "field": "matchDate",
+     "entry": "2017-04-12",
+     "evidence": "The extra-time game with Ronaldo's hat-trick (the game this XI and the comment describe) was the second leg, Tuesday 18 April 2017. 12 April 2017 was the first leg.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "venue",
+     "entry": "Allianz Arena, Munich",
+     "evidence": "Second leg was at the Santiago Bernabeu, Madrid. (The first leg on 12 April was in Munich, Bayern 1-2 Real Madrid, no extra time.)",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "scoreLine",
+     "entry": "Bayern Munich 2-4 Real Madrid, AET (Real Madrid win 6-3 on aggregate)",
+     "evidence": "Real Madrid 4-2 Bayern Munich, AET (1-2 at 90 minutes), Real Madrid win 6-3 on aggregate. Real were at home.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "slots[3] CB",
+     "entry": "Raphael Varane",
+     "evidence": "Nacho started alongside Sergio Ramos; Varane was not in the matchday squad (bench: Casilla, James, Kovacic, Lucas Vazquez, Asensio, Morata, Danilo). Varane did not start the first leg either (also Nacho).",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "blankCandidates",
+     "entry": "Raphael Varane (slot 3) as a starter",
+     "evidence": "Varane did not play. Isco and Carvajal did start.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    }
+   ],
+   "applied": [
+    {
+     "path": "comment",
+     "from": "Bayern Munich 1-1 Real Madrid, AET (Real Madrid win 6-3)",
+     "to": "Real Madrid 4-2 Bayern Munich, AET (Real Madrid win 6-3)",
+     "why": "UEFA, Sky Sports and ESPN: the extra-time second leg was 4-2 at the Bernabeu"
+    },
+    {
+     "path": "matchDate",
+     "from": "2017-04-12",
+     "to": "2017-04-18",
+     "why": "UEFA, Sky Sports and ESPN: the extra-time game with Ronaldo's hat-trick (this eleven and the entry's comment) was the second leg, 18 April 2017"
+    },
+    {
+     "path": "venue",
+     "from": "Allianz Arena, Munich",
+     "to": "Santiago Bernabeu, Madrid",
+     "why": "UEFA and ESPN: the second leg was in Madrid"
+    },
+    {
+     "path": "scoreLine",
+     "from": "Bayern Munich 2-4 Real Madrid, AET (Real Madrid win 6-3 on aggregate)",
+     "to": "Real Madrid 4-2 Bayern Munich, AET (Real Madrid win 6-3 on aggregate)",
+     "why": "UEFA and ESPN: Real Madrid were at home"
+    },
+    {
+     "path": "formationLabel",
+     "from": "4-3-1-2",
+     "to": "4-3-3",
+     "why": "ESPN states 4-3-3 and UEFA coordinates draw Benzema central with Isco and Ronaldo either side"
+    },
+    {
+     "path": "slots[3].name",
+     "from": "Raphael Varane",
+     "to": "Nacho",
+     "why": "UEFA and ESPN (CD-R): Nacho started beside Ramos; Varane was not in the matchday squad"
+    },
+    {
+     "path": "slots[8].position",
+     "from": "CAM",
+     "to": "RW",
+     "why": "UEFA (right of the front line) and ESPN (RF): Isco played on the right of the attack"
+    },
+    {
+     "path": "slots[9].position",
+     "from": "ST",
+     "to": "LW",
+     "why": "UEFA (left of the front line) and ESPN (LF)"
+    },
+    {
+     "path": "blankCandidates[Raphael Varane]",
+     "from": "candidate",
+     "to": null,
+     "why": "not in the matchday squad (UEFA)"
+    },
+    {
+     "path": "blankCandidates[Nacho]",
+     "from": null,
+     "to": {
+      "slotIndex": 3,
+      "nationality": "Spain",
+      "clubAtTime": "Real Madrid"
+     },
+     "why": "started on both hosts; spelling already a verified blank in cl-2024-final-real"
+    },
+    {
+     "path": "source",
+     "from": "Wikipedia dedicated match article + UEFA.com archive, agree on the starting XI for Ronaldo's extra-time hat-trick.",
+     "to": "Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 5. The second leg at the Bernabeu, 18 April 2017: Nacho, not Varane, started.",
+     "why": "the internal note and fields mixed the two legs"
+    },
+    {
+     "path": "slots[2].side",
+     "from": "right",
+     "to": "left",
+     "why": "layout: UEFA and ESPN (CD-L) put Ramos on the left"
+    },
+    {
+     "path": "slots[3].side",
+     "from": "left",
+     "to": "right",
+     "why": "UEFA and ESPN (CD-R): Nacho started beside Ramos; Varane was not in the matchday squad"
+    },
+    {
+     "path": "slots[6].side",
+     "from": "right",
+     "to": "left",
+     "why": "layout: UEFA (left) and ESPN (LM)"
+    },
+    {
+     "path": "slots[7].side",
+     "from": "left",
+     "to": "right",
+     "why": "layout: UEFA (right) and ESPN (RM)"
+    },
+    {
+     "path": "slots[8].side",
+     "from": "centre",
+     "to": "right",
+     "why": "UEFA (right of the front line) and ESPN (RF): Isco played on the right of the attack"
+    },
+    {
+     "path": "slots[9].side",
+     "from": "right",
+     "to": "left",
+     "why": "UEFA (left of the front line) and ESPN (LF)"
+    },
+    {
+     "path": "slots[10].side",
+     "from": "left",
+     "to": "centre",
+     "why": "layout: UEFA (central, highest) and ESPN (F)"
+    }
+   ],
+   "notes": [
+    "The entry's header comment says 'Bayern Munich 1-1 Real Madrid, AET (Real Madrid win 6-3)', which matches neither leg.",
+    "Formation: entry 4-3-1-2. Sky's layout lists Isco, Benzema, Ronaldo as forwards; UEFA's pitch coordinates put Benzema central and highest with Isco and Ronaldo either side slightly deeper. Not labelled by either source; not counted as a diff.",
+    "If the intent was instead the first leg (12 April, Munich), that XI had Gareth Bale instead of Isco and Nacho instead of Varane, and the score was Bayern 1-2 Real Madrid."
+   ]
+  },
+  {
+   "position": 149,
+   "id": "cl-2011-r16-barca",
+   "research": "differs",
+   "verdict": "corrected",
+   "eleven": [
+    "Victor Valdes",
+    "Dani Alves",
+    "Sergio Busquets",
+    "Eric Abidal",
+    "Adriano",
+    "Javier Mascherano",
+    "Xavi",
+    "Andres Iniesta",
+    "Pedro",
+    "Lionel Messi",
+    "David Villa"
+   ],
+   "substitutes": [
+    "Ibrahim Afellay 82' for David Villa",
+    "Seydou Keita 89' for Javier Mascherano",
+    "Maxwell 90+1' for Adriano"
+   ],
+   "fields": {
+    "matchDate": "2011-03-08",
+    "team": "Barcelona",
+    "opponent": "Arsenal",
+    "scoreLine": "Barcelona 3-1 Arsenal (Barcelona win 4-3 on aggregate)",
+    "venue": "Camp Nou, Barcelona",
+    "formationLabel": "4-3-3"
+   },
+   "hints": [
+    {
+     "name": "Eric Abidal",
+     "position": "CB",
+     "nationality": "France",
+     "clubAtTime": "Barcelona"
+    },
+    {
+     "name": "Pedro",
+     "position": "RW",
+     "nationality": "Spain",
+     "clubAtTime": "Barcelona"
+    },
+    {
+     "name": "Dani Alves",
+     "position": "RB",
+     "nationality": "Brazil",
+     "clubAtTime": "Barcelona"
+    }
+   ],
+   "sources": [
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/uefachampionsleague/match/2003764--barcelona-vs-arsenal/ (read from match.uefa.com/v5/matches/2003764 and /lineups)",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "2011-03-08, Round of 16, Camp Nou, Barcelona 3-1 Arsenal, aggregate 4-3. Barcelona XI: Victor Valdes; Dani Alves, Sergio Busquets, Eric Abidal, Adriano; Javier Mascherano; Xavi Hernandez, Andres Iniesta; Pedro Rodriguez, Lionel Messi, David Villa. Bench: Pinto, Bojan, Keita, Milito, Maxwell, Afellay, Thiago. Goals Messi 45', Busquets og 53', Xavi 69', Messi pen 71'."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/lineups/_/gameId/310993",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "March 8, 2011, Barcelona 3-1 Arsenal, Barcelona won 4-3 on aggregate. XI: V. Valdes, D. Alves, E. Abidal, S. Busquets, Adriano, J. Mascherano, Xavi, A. Iniesta, D. Villa, L. Messi, Pedro. Subs Afellay 82', Keita 89', Maxwell 90+1'."
+    },
+    {
+     "host": "skysports.com",
+     "url": "https://www.skysports.com/football/barcelona-vs-arsenal/teams/229997",
+     "readOn": "2026-10-05 (search summary of the page)",
+     "xi": true,
+     "says": "Barcelona: Valdes; Alves, Busquets, Abidal, Adriano; Mascherano, Xavi; Iniesta, Pedro, Villa (and Messi); played at Camp Nou."
+    }
+   ],
+   "diffs": [
+    {
+     "field": "venue",
+     "entry": "Emirates Stadium, London",
+     "evidence": "The 8 March 2011 second leg was at the Camp Nou, Barcelona. (The Emirates hosted the first leg on 16 February 2011, which Arsenal won 2-1.)",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "scoreLine",
+     "entry": "Arsenal 1-2 Barcelona (Barcelona win 4-3 on aggregate)",
+     "evidence": "Barcelona 3-1 Arsenal (Messi 45+3', Xavi 69', Messi pen 71'; Busquets og 53'), Barcelona win 4-3 on aggregate.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "slots[2] CB",
+     "entry": "Gerard Pique",
+     "evidence": "Pique did not play (not in XI or on the bench). Sergio Busquets played centre back beside Abidal.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "slots[3] CB",
+     "entry": "Carles Puyol",
+     "evidence": "Puyol did not play. Eric Abidal played centre back.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "slots[4] LB",
+     "entry": "Eric Abidal",
+     "evidence": "Adriano played left back; Abidal was a centre back.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "slots[5] CDM",
+     "entry": "Sergio Busquets",
+     "evidence": "Javier Mascherano played the holding role (UEFA pitch position central, in front of the back four); Busquets was at centre back.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "blankCandidates",
+     "entry": "Eric Abidal at LB (slot 4)",
+     "evidence": "Abidal started, but at centre back, not left back. Pedro and Dani Alves started in the positions given.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    }
+   ],
+   "applied": [
+    {
+     "path": "comment",
+     "from": "Arsenal 1-2 Barcelona (Van Persie sent off, Messi struck twice)",
+     "to": "Barcelona 3-1 Arsenal (Van Persie sent off, Messi struck twice)",
+     "why": "UEFA and ESPN: the red card and the Messi brace were in the 3-1 second leg at Camp Nou"
+    },
+    {
+     "path": "venue",
+     "from": "Emirates Stadium, London",
+     "to": "Camp Nou, Barcelona",
+     "why": "UEFA and ESPN: the 8 March 2011 second leg was at Camp Nou"
+    },
+    {
+     "path": "scoreLine",
+     "from": "Arsenal 1-2 Barcelona (Barcelona win 4-3 on aggregate)",
+     "to": "Barcelona 3-1 Arsenal (Barcelona win 4-3 on aggregate)",
+     "why": "UEFA and ESPN: Barcelona 3-1 Arsenal on 8 March 2011"
+    },
+    {
+     "path": "slots[2].name",
+     "from": "Gerard Pique",
+     "to": "Sergio Busquets",
+     "why": "UEFA (back line, right of centre) and ESPN (CD-R): Busquets played centre-back; Pique did not play"
+    },
+    {
+     "path": "slots[3].name",
+     "from": "Carles Puyol",
+     "to": "Eric Abidal",
+     "why": "UEFA (back line, left of centre) and ESPN (CD-L): Abidal played centre-back; Puyol did not play"
+    },
+    {
+     "path": "slots[4].name",
+     "from": "Eric Abidal",
+     "to": "Adriano",
+     "why": "UEFA (full-back, left) and ESPN (LB): Adriano played left-back"
+    },
+    {
+     "path": "slots[5].name",
+     "from": "Sergio Busquets",
+     "to": "Javier Mascherano",
+     "why": "UEFA (central, in front of the back four) and ESPN (CM): Mascherano held the midfield"
+    },
+    {
+     "path": "slots[5].position",
+     "from": "CDM",
+     "to": "CM",
+     "why": "UEFA (central, in front of the back four) and ESPN (CM): Mascherano held the midfield"
+    },
+    {
+     "path": "blankCandidates[Eric Abidal].slotIndex",
+     "from": 4,
+     "to": 3,
+     "why": "Abidal started at centre-back, not left-back (UEFA, ESPN)"
+    },
+    {
+     "path": "source",
+     "from": "Wikipedia dedicated match article + UEFA.com archive, agree on Barcelona's starting XI for Messi's decisive 2nd-leg brace.",
+     "to": "Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 5. Second leg at Camp Nou: Busquets and Abidal at centre-back, Adriano at left-back, Mascherano in midfield; Pique and Puyol did not play.",
+     "why": "the internal note vouched for the wrong eleven and leg"
+    }
+   ],
+   "notes": [
+    "Date 2011-03-08 correct. The entry header comment ('Arsenal 1-2 Barcelona (Van Persie sent off, Messi struck twice)') mixes the legs: Van Persie's red card and Messi's two goals were in the Camp Nou second leg, which Barcelona won 3-1.",
+    "Formation 4-3-3 is consistent with Sky's layout (Valdes; Alves, Busquets, Abidal, Adriano; Mascherano, Xavi, Iniesta; Pedro, Messi, Villa).",
+    "Pedro is 'Pedro Rodriguez' on UEFA, same man."
+   ]
+  },
+  {
+   "position": 150,
+   "id": "cl-2019-qf-ajax",
+   "research": "differs",
+   "verdict": "corrected",
+   "eleven": [
+    "Andre Onana",
+    "Joel Veltman",
+    "Matthijs de Ligt",
+    "Daley Blind",
+    "Nicolas Tagliafico",
+    "Lasse Schone",
+    "Frenkie de Jong",
+    "Hakim Ziyech",
+    "Donny van de Beek",
+    "David Neres",
+    "Dusan Tadic"
+   ],
+   "substitutes": [
+    "Jurgen Ekkelenkamp (ESPN's page shows one late change between Ekkelenkamp and Schone, rendered ambiguously; not cross-checked)"
+   ],
+   "fields": {
+    "matchDate": "2019-04-10",
+    "team": "Ajax",
+    "opponent": "Juventus",
+    "scoreLine": "Ajax 1-1 Juventus",
+    "venue": "Johan Cruyff Arena, Amsterdam",
+    "formationLabel": "4-2-3-1"
+   },
+   "hints": [
+    {
+     "name": "Nicolas Tagliafico",
+     "position": "LB",
+     "nationality": "Argentina",
+     "clubAtTime": "Ajax"
+    },
+    {
+     "name": "Donny van de Beek",
+     "position": "CAM",
+     "nationality": "Netherlands",
+     "clubAtTime": "Ajax"
+    },
+    {
+     "name": "Matthijs de Ligt",
+     "position": "CB",
+     "nationality": "Netherlands",
+     "clubAtTime": "Ajax"
+    }
+   ],
+   "sources": [
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/uefachampionsleague/match/2027149--ajax-vs-juventus/ (read from match.uefa.com/v5/matches/2027149 and /lineups)",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "2019-04-10, Quarter-finals, Johan Cruijff ArenA Amsterdam, Ajax 1-1 Juventus. Ajax XI: Andre Onana; Joel Veltman, Matthijs de Ligt, Daley Blind, Nicolas Tagliafico; Lasse Schone, Frenkie de Jong; Hakim Ziyech, Donny van de Beek, David Neres; Dusan Tadic. Goals Ronaldo 45', Neres 46'."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/lineups/_/gameId/538695",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "April 10, 2019, Ajax 1-1 Juventus, Ajax 4-2-3-1: Andre Onana; Matthijs de Ligt, Daley Blind, Joel Veltman, Nicolas Tagliafico; Lasse Schone, Frenkie de Jong; Hakim Ziyech, Donny van de Beek, David Neres; Dusan Tadic."
+    }
+   ],
+   "diffs": [
+    {
+     "field": "slots[1] RB",
+     "entry": "Noussair Mazraoui",
+     "evidence": "Joel Veltman started at right back. Mazraoui was not in the matchday squad (UEFA bench: Varela, Kristensen, Sinkgraven, Huntelaar, Magallan, Dolberg, Ekkelenkamp).",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "slots[9] CF",
+     "entry": "Kasper Dolberg",
+     "evidence": "Dolberg was an unused substitute. Dusan Tadic played as the striker.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "slots[8] RW",
+     "entry": "Dusan Tadic",
+     "evidence": "Hakim Ziyech started on the right of the attacking three (UEFA pitch position right, ESPN 'Hakim Ziyech (M)'); Tadic led the line.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "formationLabel",
+     "entry": "4-3-3",
+     "evidence": "ESPN: 4-2-3-1 (Schone and De Jong deeper, Ziyech, Van de Beek, Neres behind Tadic). UEFA's pitch coordinates show the same shape.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "blankCandidates",
+     "entry": "Noussair Mazraoui (slot 1) as a starter",
+     "evidence": "Mazraoui did not play. Tagliafico and Van de Beek did start.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    }
+   ],
+   "applied": [
+    {
+     "path": "formationLabel",
+     "from": "4-3-3",
+     "to": "4-2-3-1",
+     "why": "ESPN states 4-2-3-1 and UEFA coordinates draw it (Schone and De Jong deeper, Ziyech, Van de Beek, Neres behind Tadic)"
+    },
+    {
+     "path": "slots[1].name",
+     "from": "Noussair Mazraoui",
+     "to": "Joel Veltman",
+     "why": "UEFA and ESPN (RB): Veltman started at right-back; Mazraoui was not in the matchday squad"
+    },
+    {
+     "path": "slots[6].position",
+     "from": "CM",
+     "to": "CAM",
+     "why": "UEFA (central, the line of three) and ESPN (AM): Van de Beek was the No. 10"
+    },
+    {
+     "path": "slots[8].name",
+     "from": "Dusan Tadic",
+     "to": "Hakim Ziyech",
+     "why": "UEFA (right of the line of three) and ESPN (AM-R): Ziyech started on the right"
+    },
+    {
+     "path": "slots[9].name",
+     "from": "Kasper Dolberg",
+     "to": "Dusan Tadic",
+     "why": "UEFA (striker) and ESPN (F): Tadic led the line; Dolberg was an unused substitute"
+    },
+    {
+     "path": "blankCandidates[Noussair Mazraoui]",
+     "from": "candidate",
+     "to": null,
+     "why": "not in the matchday squad (UEFA)"
+    },
+    {
+     "path": "blankCandidates[Matthijs de Ligt]",
+     "from": null,
+     "to": {
+      "slotIndex": 2,
+      "nationality": "Netherlands",
+      "clubAtTime": "Ajax"
+     },
+     "why": "started on both hosts; spelling already a verified blank in bundesliga-2023-bayern-title"
+    },
+    {
+     "path": "source",
+     "from": "Wikipedia dedicated match article + UEFA.com archive, agree on Ajax's starting XI for their run to the semifinals.",
+     "to": "Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 5. Veltman and Ziyech started, Tadic up front in a 4-2-3-1; Mazraoui and Dolberg did not play.",
+     "why": "the internal note vouched for the wrong eleven"
+    },
+    {
+     "path": "slots[5].side",
+     "from": "centre",
+     "to": "right",
+     "why": "layout: UEFA (right of the pair) and ESPN (RM)"
+    },
+    {
+     "path": "slots[6].side",
+     "from": "right",
+     "to": "centre",
+     "why": "UEFA (central, the line of three) and ESPN (AM): Van de Beek was the No. 10"
+    }
+   ],
+   "notes": [
+    "Date 2019-04-10, Johan Cruijff ArenA Amsterdam, Ajax 1-1 Juventus (Ronaldo 45', Neres 46') all correct."
+   ]
+  },
+  {
+   "position": 151,
+   "id": "wc-2022-r16-morocco",
+   "research": "same",
+   "verdict": "verified",
+   "eleven": [
+    "Yassine Bounou",
+    "Achraf Hakimi",
+    "Nayef Aguerd",
+    "Romain Saiss",
+    "Noussair Mazraoui",
+    "Sofyan Amrabat",
+    "Azzedine Ounahi",
+    "Selim Amallah",
+    "Hakim Ziyech",
+    "Youssef En-Nesyri",
+    "Sofiane Boufal"
+   ],
+   "substitutes": [
+    "Abde Ezzalzouli 66' for Sofiane Boufal",
+    "Abdelhamid Sabiri 82' for Youssef En-Nesyri",
+    "Walid Cheddira 82' for Selim Amallah",
+    "Yahya Attiat-Allah 82' for Noussair Mazraoui",
+    "Jawad El Yamiq 84' for Nayef Aguerd",
+    "Badr Benoun 120' for Azzedine Ounahi"
+   ],
+   "fields": {
+    "matchDate": "2022-12-06",
+    "team": "Morocco",
+    "opponent": "Spain",
+    "scoreLine": "Morocco 0-0 Spain, AET (Morocco won 3-0 on penalties)",
+    "venue": "Education City Stadium, Al Rayyan",
+    "formationLabel": "4-3-3"
+   },
+   "hints": [
+    {
+     "name": "Nayef Aguerd",
+     "position": "CB",
+     "nationality": "Morocco",
+     "clubAtTime": "West Ham United"
+    },
+    {
+     "name": "Azzedine Ounahi",
+     "position": "CM",
+     "nationality": "Morocco",
+     "clubAtTime": "Angers"
+    },
+    {
+     "name": "Selim Amallah",
+     "position": "CM",
+     "nationality": "Morocco",
+     "clubAtTime": "Standard Liege"
+    }
+   ],
+   "sources": [
+    {
+     "host": "fifa.com",
+     "url": "https://www.fifa.com/en/match-centre/match/17/255711/275099/400128137 (read from api.fifa.com/api/v3/live/football/... for match 400128137, the data behind the FIFA match centre)",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "2022-12-06 15:00Z, Round of 16, Education City Stadium, Doha, Morocco 0-0 Spain, pens 3-0. Morocco tactics 4-3-3, XI: Bounou; Hakimi, Mazraoui, Aguerd, Saiss (C); Amrabat, Ounahi, Amallah; Ziyech, Boufal, En Nesyri. Subs as listed."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/lineups/_/gameId/633841",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "December 6, 2022, Doha, 0-0, Morocco won 3-0 on penalties. Morocco 4-3-3: Bounou; Hakimi, Saiss, Aguerd, Mazraoui; Ounahi, Amrabat, Amallah; Ziyech, Boufal, En-Nesyri."
+    }
+   ],
+   "diffs": [],
+   "applied": [],
+   "notes": [
+    "Date 2022-12-06, Round of 16, Morocco 0-0 Spain AET, Morocco won 3-0 on penalties (Sabiri, Ziyech, Hakimi scored) all match. Formation 4-3-3 matches both (FIFA 'tactics 4-3-3').",
+    "Venue: stadium name matches. The entry's city 'Al Rayyan' differs from the city label both sources print ('Doha' in FIFA's data, 'Doha, Qatar' on ESPN). Education City Stadium sits in Al Rayyan municipality, so this is a locator choice rather than an error; flagged for the reviewer, not counted as a diff.",
+    "ESPN's page lists Sabiri twice in the sub list (66' and 82'); FIFA's data has Ezzalzouli 66' for Boufal and Sabiri 82' for En-Nesyri. FIFA taken as authoritative for subs.",
+    "FIFA prints 'Youssef EN NESYRI'; same man as 'Youssef En-Nesyri'."
+   ]
+  },
+  {
+   "position": 152,
+   "id": "wc-2022-qf-morocco",
+   "research": "differs",
+   "verdict": "corrected",
+   "eleven": [
+    "Yassine Bounou",
+    "Achraf Hakimi",
+    "Romain Saiss",
+    "Jawad El Yamiq",
+    "Yahya Attiat-Allah",
+    "Sofyan Amrabat",
+    "Azzedine Ounahi",
+    "Selim Amallah",
+    "Hakim Ziyech",
+    "Youssef En-Nesyri",
+    "Sofiane Boufal"
+   ],
+   "substitutes": [
+    "Achraf Dari 57' for Romain Saiss",
+    "Walid Cheddira 65' for Selim Amallah",
+    "Badr Benoun 65' for Youssef En-Nesyri",
+    "Zakaria Aboukhlal 82' for Hakim Ziyech",
+    "Yahya Jabrane 82' for Sofiane Boufal"
+   ],
+   "fields": {
+    "matchDate": "2022-12-10",
+    "team": "Morocco",
+    "opponent": "Portugal",
+    "scoreLine": "Morocco 1-0 Portugal",
+    "venue": "Al Thumama Stadium, Doha",
+    "formationLabel": "4-3-3"
+   },
+   "hints": [
+    {
+     "name": "Romain Saiss",
+     "position": "CB",
+     "nationality": "Morocco",
+     "clubAtTime": "Besiktas"
+    },
+    {
+     "name": "Hakim Ziyech",
+     "position": "RW",
+     "nationality": "Morocco",
+     "clubAtTime": "Chelsea"
+    },
+    {
+     "name": "Achraf Hakimi",
+     "position": "RB",
+     "nationality": "Morocco",
+     "clubAtTime": "Paris Saint-Germain"
+    }
+   ],
+   "sources": [
+    {
+     "host": "fifa.com",
+     "url": "https://www.fifa.com/en/match-centre/match/17/255711/275093/400128140 (read from api.fifa.com/api/v3/live/football/... for match 400128140)",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "2022-12-10 15:00Z, Quarter-final, Al Thumama Stadium, Doha, Morocco 1-0 Portugal. Morocco tactics 4-3-3, XI: Bounou; Hakimi, Saiss (C), El Yamiq, Attiat-Allah; Amrabat, Ounahi, Amallah; Ziyech, Boufal, En Nesyri. Subs Dari 57', Cheddira 65', Benoun 65', Aboukhlal 82', Jabrane 82'. Goal En Nesyri 42'."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/lineups/_/gameId/633845",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "December 10, 2022, Morocco 1-0 Portugal, Morocco 4-3-3: Bounou; Hakimi, El Yamiq, Saiss, Attiyat Allah; Ounahi, Amallah, Amrabat; Ziyech, Boufal, En-Nesyri."
+    }
+   ],
+   "diffs": [
+    {
+     "field": "slots[2] CB",
+     "entry": "Nayef Aguerd",
+     "evidence": "Jawad El Yamiq started at centre back (FIFA and ESPN). Aguerd did not play.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "slots[4] LB",
+     "entry": "Noussair Mazraoui",
+     "evidence": "Yahya Attiat-Allah started at left back (ESPN 'Yahia Attiyat Allah'). Mazraoui did not play.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    }
+   ],
+   "applied": [
+    {
+     "path": "slots[2].name",
+     "from": "Nayef Aguerd",
+     "to": "Jawad El Yamiq",
+     "why": "FIFA and ESPN (CD-R): El Yamiq started at centre-back; Aguerd did not play"
+    },
+    {
+     "path": "slots[4].name",
+     "from": "Noussair Mazraoui",
+     "to": "Yahya Attiat-Allah",
+     "why": "FIFA and ESPN (LB): Attiat-Allah started at left-back; Mazraoui did not play"
+    },
+    {
+     "path": "source",
+     "from": "Wikipedia dedicated match article, agrees on the identical starting XI Morocco used across their historic knockout run.",
+     "to": "Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 5. El Yamiq and Attiat-Allah started; the back four was not the same as against Spain.",
+     "why": "the internal note claimed an unchanged eleven"
+    }
+   ],
+   "notes": [
+    "Date 2022-12-10, Quarter-final, Al Thumama Stadium Doha (FIFA), Morocco 1-0 Portugal (En-Nesyri 42') all correct. Formation 4-3-3 matches.",
+    "The entry's source string ('the identical starting XI Morocco used across their historic knockout run') is wrong: two of the back four changed from the Spain game.",
+    "ESPN prints the venue city as 'Ar-Rayyan, Qatar'; FIFA's data says Al Thumama Stadium, Doha. The organiser is taken for the venue; the entry matches the organiser.",
+    "Blank candidates Saiss, Ziyech, Hakimi all started (Saiss went off at 57')."
+   ]
+  },
+  {
+   "position": 153,
+   "id": "cl-2014-semi-real-1st",
+   "research": "differs",
+   "verdict": "corrected",
+   "eleven": [
+    "Manuel Neuer",
+    "Rafinha",
+    "Jerome Boateng",
+    "Dante",
+    "David Alaba",
+    "Philipp Lahm",
+    "Bastian Schweinsteiger",
+    "Arjen Robben",
+    "Toni Kroos",
+    "Franck Ribery",
+    "Mario Mandzukic"
+   ],
+   "substitutes": [
+    "Javi Martinez 66' for Rafinha",
+    "Mario Gotze 72' for Franck Ribery",
+    "Thomas Muller 73' for Bastian Schweinsteiger"
+   ],
+   "fields": {
+    "matchDate": "2014-04-23",
+    "team": "Bayern Munich",
+    "opponent": "Real Madrid",
+    "scoreLine": "Real Madrid 1-0 Bayern Munich",
+    "venue": "Santiago Bernabeu, Madrid",
+    "formationLabel": "4-2-3-1"
+   },
+   "hints": [
+    {
+     "name": "Dante",
+     "position": "CB",
+     "nationality": "Brazil",
+     "clubAtTime": "Bayern Munich"
+    },
+    {
+     "name": "Toni Kroos",
+     "position": "CAM",
+     "nationality": "Germany",
+     "clubAtTime": "Bayern Munich"
+    },
+    {
+     "name": "Mario Mandžukić",
+     "position": "ST",
+     "nationality": "Croatia",
+     "clubAtTime": "Bayern Munich"
+    }
+   ],
+   "sources": [
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/uefachampionsleague/match/2011880--real-madrid-vs-bayern/ (read from match.uefa.com/v5/matches/2011880 and /lineups)",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "2014-04-23, Semi-finals, Estadio Santiago Bernabeu, Real Madrid 1-0 Bayern Munchen. Bayern XI: Manuel Neuer; Rafinha, Jerome Boateng, Dante, David Alaba; Philipp Lahm, Bastian Schweinsteiger; Arjen Robben, Toni Kroos, Franck Ribery; Mario Mandzukic. Bench includes Javi Martinez, Pizarro, Gotze, Weiser, Thomas Muller. Goal Benzema 19'."
+    },
+    {
+     "host": "skysports.com",
+     "url": "https://www.skysports.com/football/real-madrid-vs-bayern-munich/teams/310941",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Wednesday 23rd April 2014, Santiago Bernabeu, 1-0. Bayern XI: M Neuer; Rafinha, J Boateng, Dante, D Alaba; P Lahm (c), B Schweinsteiger; A Robben, T Kroos, F Ribery; M Mandzukic. Subs Javi Martinez 66' (Rafinha), Gotze 72' (Ribery), Muller 73' (Schweinsteiger)."
+    }
+   ],
+   "diffs": [
+    {
+     "field": "slots[1] RB",
+     "entry": "Philipp Lahm",
+     "evidence": "Rafinha started at right back; Lahm (captain) played in central midfield beside Schweinsteiger (UEFA pitch position central, deeper midfield).",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "slots[6] CDM",
+     "entry": "Toni Kroos",
+     "evidence": "Kroos played as the central attacking midfielder behind Mandzukic (UEFA pitch position central, between Robben and Ribery). The two deeper midfielders were Lahm and Schweinsteiger.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "slots[8] CAM",
+     "entry": "Thomas Muller",
+     "evidence": "Muller started on the bench and came on at 73' for Schweinsteiger.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    }
+   ],
+   "applied": [
+    {
+     "path": "slots[1].name",
+     "from": "Philipp Lahm",
+     "to": "Rafinha",
+     "why": "UEFA (right-back) and Sky Sports: Rafinha started at right-back"
+    },
+    {
+     "path": "slots[6].name",
+     "from": "Toni Kroos",
+     "to": "Philipp Lahm",
+     "why": "UEFA (central midfield, right of Schweinsteiger) and Sky Sports: Lahm started in midfield, not at right-back"
+    },
+    {
+     "path": "slots[8].name",
+     "from": "Thomas Muller",
+     "to": "Toni Kroos",
+     "why": "UEFA (central, between Robben and Ribery) and Sky Sports: Kroos started as the No. 10; Muller came on 73'"
+    },
+    {
+     "path": "blankCandidates[Toni Kroos].slotIndex",
+     "from": 6,
+     "to": 8,
+     "why": "Kroos played behind Mandzukic (UEFA); with Muller on the bench and Lahm in midfield (two hosts on the eleven) he is the only man for the No. 10 slot"
+    },
+    {
+     "path": "source",
+     "from": "Wikipedia dedicated match article + UEFA.com archive, agree on Bayern's starting XI for the semifinal 1st leg loss.",
+     "to": "Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 5. Rafinha at right-back, Lahm in midfield, Kroos behind Mandzukic; Muller came on.",
+     "why": "the internal note vouched for the wrong eleven"
+    },
+    {
+     "path": "slots[5].side",
+     "from": "right",
+     "to": "left",
+     "why": "layout: UEFA puts Schweinsteiger left of Lahm"
+    },
+    {
+     "path": "slots[6].side",
+     "from": "left",
+     "to": "right",
+     "why": "UEFA (central midfield, right of Schweinsteiger) and Sky Sports: Lahm started in midfield, not at right-back"
+    }
+   ],
+   "notes": [
+    "Date 2014-04-23, Santiago Bernabeu, Real Madrid 1-0 Bayern Munich (Benzema 19') correct. Formation 4-2-3-1 still describes the shape (Lahm, Schweinsteiger; Robben, Kroos, Ribery; Mandzukic).",
+    "Blank candidates Dante, Toni Kroos, Mario Mandzukic all started (Kroos at CAM, not CDM: the blank slot's position label would be wrong if Kroos is the blank).",
+    "The XI as a set differs by one man (Rafinha in, Muller out); the other changes are positions.",
+    "Round 1026: the roles of Lahm (midfield) and Kroos (No. 10) come from UEFA coordinates; Sky Sports confirms the eleven. The Kroos blank now reads CAM."
+   ]
+  },
+  {
+   "position": 154,
+   "id": "laliga-2012-clasico-real",
+   "research": "differs",
+   "verdict": "corrected",
+   "eleven": [
+    "Iker Casillas",
+    "Alvaro Arbeloa",
+    "Pepe",
+    "Sergio Ramos",
+    "Fabio Coentrao",
+    "Sami Khedira",
+    "Xabi Alonso",
+    "Angel Di Maria",
+    "Mesut Ozil",
+    "Cristiano Ronaldo",
+    "Karim Benzema"
+   ],
+   "substitutes": [
+    "Esteban Granero 74'/78' for Angel Di Maria",
+    "Jose Callejon 89' for Mesut Ozil",
+    "Gonzalo Higuain 90+3' for Karim Benzema"
+   ],
+   "fields": {
+    "matchDate": "2012-04-21",
+    "team": "Real Madrid",
+    "opponent": "Barcelona",
+    "scoreLine": "Barcelona 1-2 Real Madrid (title race decider)",
+    "venue": "Camp Nou, Barcelona",
+    "formationLabel": "4-2-3-1"
+   },
+   "hints": [
+    {
+     "name": "Angel Di Maria",
+     "position": "RW",
+     "nationality": "Argentina",
+     "clubAtTime": "Real Madrid"
+    },
+    {
+     "name": "Sami Khedira",
+     "position": "CDM",
+     "nationality": "Germany",
+     "clubAtTime": "Real Madrid"
+    },
+    {
+     "name": "Alvaro Arbeloa",
+     "position": "RB",
+     "nationality": "Spain",
+     "clubAtTime": "Real Madrid"
+    }
+   ],
+   "sources": [
+    {
+     "host": "skysports.com",
+     "url": "https://www.skysports.com/football/barcelona-vs-real-madrid/teams/258758",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Saturday 21st April 2012, Camp Nou, Barcelona 1-2 Real Madrid. Real XI: Iker Casillas (c); Alvaro Arbeloa, Pepe, Sergio Ramos, Fabio Coentrao; Xabi Alonso, Sami Khedira; Angel di Maria, Mesut Ozil, Cristiano Ronaldo; Karim Benzema. Subs Granero 74' (Di Maria), Callejon 89' (Ozil), Higuain 90+3' (Benzema)."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/lineups/_/gameId/323721",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "April 21, 2012, Barcelona, Spain, Barcelona 1-2 Real Madrid. Real XI: I. Casillas; A. Arbeloa, Pepe, S. Ramos, F. Coentrao; S. Khedira, X. Alonso; C. Ronaldo, M. Ozil, A. Di Maria; K. Benzema."
+    }
+   ],
+   "diffs": [
+    {
+     "field": "venue",
+     "entry": "Santiago Bernabeu, Madrid",
+     "evidence": "Camp Nou, Barcelona (Sky: 'Camp Nou'; ESPN: Barcelona, Spain). Barcelona were the home side.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "scoreLine",
+     "entry": "Real Madrid 2-1 Barcelona (title race decider)",
+     "evidence": "Barcelona 1-2 Real Madrid (Khedira 17', Alexis 70', Ronaldo 73'). Same result, but Barcelona were at home.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "slots[1] RB",
+     "entry": "Sergio Ramos",
+     "evidence": "Alvaro Arbeloa started at right back; Ramos played centre back with Pepe.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "slots[3] CB",
+     "entry": "Raul Albiol",
+     "evidence": "Albiol did not start (not among the subs used either). The centre backs were Pepe and Sergio Ramos.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "slots[4] LB",
+     "entry": "Marcelo",
+     "evidence": "Fabio Coentrao started at left back; Marcelo did not start.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "blankCandidates",
+     "entry": "Raul Albiol (slot 3) as a starter",
+     "evidence": "Albiol did not start. Di Maria and Khedira did.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    }
+   ],
+   "applied": [
+    {
+     "path": "comment",
+     "from": "Barcelona's record 5-0 rout to open the \"La Manita\" narrative rivalry year (reverse fixture at Camp Nou)",
+     "to": "Barcelona 1-2 Real Madrid at Camp Nou, the title race Clasico",
+     "why": "Sky Sports and ESPN: the match was a 2-1 Real Madrid win at Camp Nou"
+    },
+    {
+     "path": "venue",
+     "from": "Santiago Bernabeu, Madrid",
+     "to": "Camp Nou, Barcelona",
+     "why": "Sky Sports (Camp Nou) and ESPN: Barcelona were at home"
+    },
+    {
+     "path": "scoreLine",
+     "from": "Real Madrid 2-1 Barcelona (title race decider)",
+     "to": "Barcelona 1-2 Real Madrid (title race decider)",
+     "why": "Sky Sports and ESPN: Barcelona were the home side"
+    },
+    {
+     "path": "slots[1].name",
+     "from": "Sergio Ramos",
+     "to": "Alvaro Arbeloa",
+     "why": "Sky Sports and ESPN (RB): Arbeloa started at right-back"
+    },
+    {
+     "path": "slots[3].name",
+     "from": "Raul Albiol",
+     "to": "Sergio Ramos",
+     "why": "Sky Sports and ESPN (CD-L): Ramos played centre-back with Pepe; Albiol did not start"
+    },
+    {
+     "path": "slots[4].name",
+     "from": "Marcelo",
+     "to": "Fabio Coentrao",
+     "why": "Sky Sports and ESPN (LB): Coentrao started at left-back; Marcelo did not start"
+    },
+    {
+     "path": "blankCandidates[Raul Albiol]",
+     "from": "candidate",
+     "to": null,
+     "why": "did not start (Sky Sports, ESPN)"
+    },
+    {
+     "path": "blankCandidates[Alvaro Arbeloa]",
+     "from": null,
+     "to": {
+      "slotIndex": 1,
+      "nationality": "Spain",
+      "clubAtTime": "Real Madrid"
+     },
+     "why": "started on both hosts; spelling already a verified blank in euro-2012-final-spain"
+    },
+    {
+     "path": "source",
+     "from": "Wikipedia match report + Managing Madrid retrospective + Marca archive, agree on the starting XI for this pivotal title-race Clasico win.",
+     "to": "Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 5. At Camp Nou: Arbeloa, Ramos at centre-back and Coentrao started; Albiol and Marcelo did not.",
+     "why": "the internal note vouched for the wrong eleven and venue"
+    }
+   ],
+   "notes": [
+    "Date 2012-04-21 correct. Formation 4-2-3-1 fits Sky's order (Alonso, Khedira; Di Maria, Ozil, Ronaldo; Benzema).",
+    "Sub minutes: Sky has Granero 74' for Di Maria; ESPN's page lists 78' for the same change. Not an entry field.",
+    "Organiser page: laliga.com match URLs for this season return 404 (see 141). Two independent hosts used.",
+    "Round 1026: ESPN alone has Khedira left and Alonso right; layout unchanged."
+   ]
+  },
+  {
+   "position": 155,
+   "id": "laliga-2017-clasico-barca",
+   "research": "differs",
+   "verdict": "corrected",
+   "eleven": [
+    "Marc-Andre ter Stegen",
+    "Sergi Roberto",
+    "Gerard Pique",
+    "Samuel Umtiti",
+    "Jordi Alba",
+    "Sergio Busquets",
+    "Ivan Rakitic",
+    "Andres Iniesta",
+    "Lionel Messi",
+    "Luis Suarez",
+    "Paco Alcacer"
+   ],
+   "substitutes": [
+    "Andre Gomes 70' for Paco Alcacer"
+   ],
+   "fields": {
+    "matchDate": "2017-04-23",
+    "team": "Barcelona",
+    "opponent": "Real Madrid",
+    "scoreLine": "Real Madrid 2-3 Barcelona",
+    "venue": "Santiago Bernabeu, Madrid",
+    "formationLabel": "4-3-3"
+   },
+   "hints": [
+    {
+     "name": "Samuel Umtiti",
+     "position": "CB",
+     "nationality": "France",
+     "clubAtTime": "Barcelona"
+    },
+    {
+     "name": "Ivan Rakitic",
+     "position": "CM",
+     "nationality": "Croatia",
+     "clubAtTime": "Barcelona"
+    },
+    {
+     "name": "Sergi Roberto",
+     "position": "RB",
+     "nationality": "Spain",
+     "clubAtTime": "Barcelona"
+    }
+   ],
+   "sources": [
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/lineups/_/gameId/458756",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "April 23, 2017, Santiago Bernabeu, Real Madrid 2-3 Barcelona. Barcelona XI: M. ter Stegen, S. Umtiti, G. Pique, J. Alba, S. Roberto, P. Alcacer, S. Busquets, L. Messi, A. Iniesta, I. Rakitic, L. Suarez. Sub A. Gomes for Alcacer 70'."
+    },
+    {
+     "host": "skysports.com",
+     "url": "https://www.skysports.com/football/real-madrid-vs-barcelona/teams/363017",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Sunday 23rd April 2017, Santiago Bernabeu, Real Madrid 2-3 Barcelona. Barcelona 4-3-3: M ter Stegen; S Roberto, G Pique, S Umtiti, J Alba; I Rakitic, S Busquets, A Iniesta; L Messi (RW), L Suarez (ST), P Alcacer (LW). Sub A Gomes 70' for Alcacer."
+    }
+   ],
+   "diffs": [
+    {
+     "field": "venue",
+     "entry": "Camp Nou, Barcelona",
+     "evidence": "Santiago Bernabeu, Madrid. Real Madrid were the home side.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "scoreLine",
+     "entry": "Barcelona 2-3 Real Madrid",
+     "evidence": "Real Madrid 2-3 Barcelona: Barcelona WON 3-2 away (Messi 33', 90+2'; Rakitic 73'; Casemiro and James for Real). The entry's line reads as a Barcelona home defeat, which is the opposite result for the entry's team.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "slots[10] LW",
+     "entry": "Neymar",
+     "evidence": "Paco Alcacer started on the left of the front three (Sky 'P Alcacer (LW)'); Neymar did not play.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    }
+   ],
+   "applied": [
+    {
+     "path": "comment",
+     "from": "\"La Remontada\" build-up rivalry match, Real Madrid vs Barcelona at Camp Nou",
+     "to": "Real Madrid 2-3 Barcelona at the Bernabeu, won by Messi in stoppage time",
+     "why": "ESPN and Sky Sports: Barcelona won 3-2 away"
+    },
+    {
+     "path": "venue",
+     "from": "Camp Nou, Barcelona",
+     "to": "Santiago Bernabeu, Madrid",
+     "why": "ESPN and Sky Sports: Real Madrid were at home"
+    },
+    {
+     "path": "scoreLine",
+     "from": "Barcelona 2-3 Real Madrid",
+     "to": "Real Madrid 2-3 Barcelona",
+     "why": "ESPN and Sky Sports: Barcelona won 3-2 at the Bernabeu (Messi 33, 90+2; Rakitic 73); the old line read as a Barcelona home defeat"
+    },
+    {
+     "path": "slots[10].name",
+     "from": "Neymar",
+     "to": "Paco Alcacer",
+     "why": "Sky Sports (LW) and ESPN: Paco Alcacer started on the left; Neymar did not play"
+    },
+    {
+     "path": "source",
+     "from": "Wikipedia dedicated match article + Marca + ESPN, agree on Barcelona's starting XI in this narrow title-race defeat.",
+     "to": "Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 5. A 3-2 Barcelona win at the Bernabeu; Paco Alcacer, not Neymar, started.",
+     "why": "the internal note had the result reversed"
+    }
+   ],
+   "notes": [
+    "Date 2017-04-23 correct. Formation 4-3-3 matches Sky.",
+    "The entry's source string calls this 'this narrow title-race defeat' for Barcelona; it was Messi's 90+2' winner, a Barcelona win. The header comment ('La Remontada build-up ... at Camp Nou') is also wrong on venue.",
+    "Blank candidates Umtiti, Rakitic, Sergi Roberto all started.",
+    "Organiser page: laliga.com older match URLs 404 (see 141). Two independent hosts used.",
+    "Round 1026: formation split (ESPN 4-3-1-2 with Messi behind, Sky 4-3-3); entry keeps 4-3-3."
+   ]
+  },
+  {
+   "position": 156,
+   "id": "cl-2016-r16-psg",
+   "research": "differs",
+   "verdict": "corrected",
+   "eleven": [
+    "Kevin Trapp",
+    "Marquinhos",
+    "Thiago Silva",
+    "David Luiz",
+    "Maxwell",
+    "Thiago Motta",
+    "Marco Verratti",
+    "Blaise Matuidi",
+    "Angel Di Maria",
+    "Zlatan Ibrahimovic",
+    "Lucas Moura"
+   ],
+   "substitutes": [
+    "Edinson Cavani 74' for Lucas Moura",
+    "Adrien Rabiot 81'",
+    "Javier Pastore 81' (Sky and ESPN swap which of Verratti and Matuidi each replaced)"
+   ],
+   "fields": {
+    "matchDate": "2016-02-16",
+    "team": "Paris Saint-Germain",
+    "opponent": "Chelsea",
+    "scoreLine": "Paris Saint-Germain 2-1 Chelsea (first leg; PSG won the tie 4-2)",
+    "venue": "Parc des Princes, Paris",
+    "formationLabel": "4-3-3"
+   },
+   "hints": [
+    {
+     "name": "David Luiz",
+     "position": "CB",
+     "nationality": "Brazil",
+     "clubAtTime": "Paris Saint-Germain"
+    },
+    {
+     "name": "Marco Verratti",
+     "position": "CM",
+     "nationality": "Italy",
+     "clubAtTime": "Paris Saint-Germain"
+    },
+    {
+     "name": "Lucas Moura",
+     "position": "LW",
+     "nationality": "Brazil",
+     "clubAtTime": "Paris Saint-Germain"
+    }
+   ],
+   "sources": [
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/uefachampionsleague/match/2015765--paris-vs-chelsea/ (read from match.uefa.com/v5/matches/2015765 and /lineups); second leg 2015775",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "2015765: 2016-02-16, Round of 16, Parc des Princes Paris, Paris 2-1 Chelsea. PSG XI: Kevin Trapp; Marquinhos, Thiago Silva, David Luiz, Maxwell; Thiago Motta; Marco Verratti, Blaise Matuidi; Angel Di Maria, Zlatan Ibrahimovic, Lucas Moura. Bench incl. Gregory van der Wiel, Cavani, Rabiot, Pastore. 2015775: 2016-03-09, Stamford Bridge, Chelsea 1-2 Paris, agg 2-4; PSG XI Trapp; Marquinhos, Thiago Silva, David Luiz, Maxwell; Thiago Motta; Rabiot, Matuidi; Di Maria, Ibrahimovic, Lucas Moura."
+    },
+    {
+     "host": "skysports.com",
+     "url": "https://www.skysports.com/football/psg-vs-chelsea/teams/352778",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Tuesday 16th February 2016, Parc des Princes, PSG 2-1 Chelsea. XI: K Trapp; D Luiz, Thiago Silva (c), Marquinhos, Maxwell; M Verratti, T Motta, B Matuidi; A di Maria, Z Ibrahimovic, Lucas Moura. Subs Cavani 74' (Lucas), Rabiot 81' (Matuidi), Pastore 81' (Verratti)."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/lineups/_/gameId/439174",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "February 16, 2016, Paris, PSG 2-1 Chelsea, Round of 16 1st leg. Same XI as Sky. Subs Cavani 74' (Moura), Pastore 81' (Matuidi), Rabiot 81' (Verratti)."
+    }
+   ],
+   "diffs": [
+    {
+     "field": "venue",
+     "entry": "Stamford Bridge, London",
+     "evidence": "The 16 February 2016 game (the entry's date) was the first leg at the Parc des Princes, Paris. Stamford Bridge hosted the second leg on 9 March 2016.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "scoreLine",
+     "entry": "Chelsea 1-1 Paris Saint-Germain (PSG win 4-2 on aggregate)",
+     "evidence": "16 Feb 2016: PSG 2-1 Chelsea (Ibrahimovic 39', Mikel 45+1', Cavani 78'). There was no 1-1 in the tie: the second leg on 9 March 2016 was Chelsea 1-2 PSG (Rabiot 16', Costa 27', Ibrahimovic 67'), PSG 4-2 on aggregate.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "slots[1] RB",
+     "entry": "Gregory van der Wiel",
+     "evidence": "Marquinhos started at right back; Van der Wiel was on the bench (UEFA) in both legs.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "dateLabel/competition stage",
+     "entry": "header comment 'Paris Saint-Germain 2-2 Chelsea'; source 'the 2nd-leg draw'",
+     "evidence": "Neither leg was a draw. Recorded for the reviewer; the dateLabel field itself ('2015-16 Champions League Round of 16') is correct.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    }
+   ],
+   "applied": [
+    {
+     "path": "comment",
+     "from": "Paris Saint-Germain 2-2 Chelsea (Ibrahimovic vs Mourinho's last stand at Chelsea)",
+     "to": "Paris Saint-Germain 2-1 Chelsea, first leg (PSG went through 4-2)",
+     "why": "UEFA and ESPN: neither leg was a draw; the entry date is the 2-1 first leg"
+    },
+    {
+     "path": "venue",
+     "from": "Stamford Bridge, London",
+     "to": "Parc des Princes, Paris",
+     "why": "UEFA and ESPN: the 16 February 2016 first leg was in Paris"
+    },
+    {
+     "path": "scoreLine",
+     "from": "Chelsea 1-1 Paris Saint-Germain (PSG win 4-2 on aggregate)",
+     "to": "Paris Saint-Germain 2-1 Chelsea (first leg; PSG won the tie 4-2)",
+     "why": "UEFA, Sky Sports and ESPN: PSG 2-1 Chelsea on 16 February; Chelsea 1-2 PSG in the second leg"
+    },
+    {
+     "path": "slots[1].name",
+     "from": "Gregory van der Wiel",
+     "to": "Marquinhos",
+     "why": "UEFA (right-back) and ESPN (RB): Marquinhos started at right-back; van der Wiel was on the bench"
+    },
+    {
+     "path": "source",
+     "from": "Wikipedia dedicated match article + UEFA.com archive, agree on PSG's starting XI for the 2nd-leg draw that eliminated a struggling Chelsea.",
+     "to": "Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 5. The 2-1 first leg in Paris; Marquinhos at right-back. Neither leg was a draw.",
+     "why": "the internal note described a match that did not happen"
+    }
+   ],
+   "notes": [
+    "Taking the entry's date (2016-02-16) as the anchor, the XI matches the first leg except the right back (Marquinhos for van der Wiel). If the entry had meant the second leg at Stamford Bridge (9 March 2016), the XI would differ further: Adrien Rabiot started instead of Marco Verratti, and Marquinhos again at right back.",
+    "Formation 4-3-3 matches Sky's layout. Blank candidates David Luiz, Verratti, Lucas Moura all started the first leg (Verratti did not start the second leg)."
+   ]
+  },
+  {
+   "position": 157,
+   "id": "epl-2017-chelsea-title",
+   "research": "differs",
+   "verdict": "corrected",
+   "eleven": [
+    "Thibaut Courtois",
+    "Cesar Azpilicueta",
+    "David Luiz",
+    "Gary Cahill",
+    "Victor Moses",
+    "Nemanja Matic",
+    "Cesc Fabregas",
+    "Marcos Alonso",
+    "Pedro",
+    "Eden Hazard",
+    "Diego Costa"
+   ],
+   "substitutes": [
+    "Willian 75' for Eden Hazard",
+    "Michy Batshuayi 76' for Pedro (scored 82')",
+    "Kurt Zouma 86' for Victor Moses"
+   ],
+   "fields": {
+    "matchDate": "2017-05-12",
+    "team": "Chelsea",
+    "opponent": "West Bromwich Albion",
+    "scoreLine": "West Bromwich Albion 0-1 Chelsea (title clinched)",
+    "venue": "The Hawthorns, West Bromwich",
+    "formationLabel": "3-4-3"
+   },
+   "hints": [
+    {
+     "name": "Victor Moses",
+     "position": "RWB",
+     "nationality": "Nigeria",
+     "clubAtTime": "Chelsea"
+    },
+    {
+     "name": "Marcos Alonso",
+     "position": "LWB",
+     "nationality": "Spain",
+     "clubAtTime": "Chelsea"
+    },
+    {
+     "name": "Pedro",
+     "position": "RW",
+     "nationality": "Spain",
+     "clubAtTime": "Chelsea"
+    }
+   ],
+   "sources": [
+    {
+     "host": "premierleague.com",
+     "url": "https://www.premierleague.com/match/14408 (read from footballapi.pulselive.com/football/fixtures/14408)",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Fri 12 May 2017, The Hawthorns, West Bromwich Albion 0-1 Chelsea. Chelsea 3-4-2-1 XI: Thibaut Courtois; Cesar Azpilicueta, David Luiz, Gary Cahill; Victor Moses, Nemanja Matic, Cesc Fabregas, Marcos Alonso; Pedro, Eden Hazard; Diego Costa. Bench: N'Golo Kante, Michy Batshuayi, John Terry, Begovic, Ake, Willian, Zouma. Subs Willian 75' (Hazard), Batshuayi 76' (Pedro), Zouma 86' (Moses). Goal Batshuayi 82'."
+    },
+    {
+     "host": "skysports.com",
+     "url": "https://www.skysports.com/football/west-bromwich-albion-vs-chelsea/teams/356703",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Friday 12th May 2017, The Hawthorns, 0-1. Chelsea XI: T Courtois; C Azpilicueta, M Alonso, D Luiz, G Cahill (c); C Fabregas, N Matic; Pedro, E Hazard; D Costa (plus V Moses, replaced 86'). Subs Willian 75', Batshuayi 76' (scored 82'), Zouma 86'."
+    }
+   ],
+   "diffs": [
+    {
+     "field": "slots[5] CM",
+     "entry": "N'Golo Kante",
+     "evidence": "Cesc Fabregas started beside Matic; Kante was an unused substitute (premierleague.com bench list).",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "slots[10] ST",
+     "entry": "Michy Batshuayi",
+     "evidence": "Diego Costa started up front. Batshuayi came off the bench at 76' for Pedro and scored the 82nd-minute winner. The entry's inline comment ('Diego Costa did not start ... Batshuayi ... confirmed starting XI') and its source string ('confirms Batshuayi started') are both the reverse of what the sources say.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    }
+   ],
+   "applied": [
+    {
+     "path": "slots[5].name",
+     "from": "N'Golo Kante",
+     "to": "Cesc Fabregas",
+     "why": "premierleague.com and Sky Sports: Fabregas started beside Matic; Kante was an unused substitute"
+    },
+    {
+     "path": "slots[10].name",
+     "from": "Michy Batshuayi",
+     "to": "Diego Costa",
+     "why": "premierleague.com and Sky Sports: Diego Costa started up front; Batshuayi came on 76' for Pedro and scored the winner"
+    },
+    {
+     "path": "comment",
+     "from": "// Diego Costa did not start (came on as a sub); Batshuayi came off the bench to score the title-winning goal, but this is the confirmed starting XI.",
+     "to": "// Diego Costa started; Batshuayi came off the bench (76') to score the title-winning goal. Round 1026: premierleague.com and Sky Sports.",
+     "why": "the comment had it the wrong way round"
+    },
+    {
+     "path": "source",
+     "from": "Wikipedia match report + Sky Sports lineup graphic + ESPN, confirms Batshuayi started (not merely subbed on) and scored the title-clinching goal.",
+     "to": "Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 5. Fabregas and Diego Costa started; Batshuayi scored off the bench.",
+     "why": "the internal note was the reverse of both hosts"
+    }
+   ],
+   "notes": [
+    "Date 2017-05-12, The Hawthorns, West Bromwich Albion 0-1 Chelsea, title clinched: all correct.",
+    "Formation: entry 3-4-3; premierleague.com 3-4-2-1 (same back three and wing backs). Sky's graphic was read by the fetch as 4-3-3 but lists Moses as a starter via his 86' substitution. Not counted as a diff.",
+    "Blank candidates Moses, Alonso, Pedro all started. Nemanja Matic is written 'Nemanja Matic' by the sources; the entry's 'Nemanja Matić' is the same man.",
+    "Round 1026: Fabregas takes the vacated CM slot; no host states sides for him and Matic."
+   ]
+  },
+  {
+   "position": 158,
+   "id": "cl-2018-final-real",
+   "research": "same",
+   "verdict": "verified",
+   "eleven": [
+    "Keylor Navas",
+    "Dani Carvajal",
+    "Raphael Varane",
+    "Sergio Ramos",
+    "Marcelo",
+    "Casemiro",
+    "Luka Modric",
+    "Toni Kroos",
+    "Isco",
+    "Karim Benzema",
+    "Cristiano Ronaldo"
+   ],
+   "aka": {
+    "Daniel Carvajal": "Dani Carvajal"
+   },
+   "substitutes": [
+    "Nacho 37' for Dani Carvajal",
+    "Gareth Bale 61' for Isco",
+    "Marco Asensio 89' for Karim Benzema"
+   ],
+   "fields": {
+    "matchDate": "2018-05-26",
+    "team": "Real Madrid",
+    "opponent": "Liverpool",
+    "scoreLine": "Real Madrid 3-1 Liverpool",
+    "venue": "NSC Olimpiyskiy Stadium, Kyiv",
+    "formationLabel": "4-3-1-2"
+   },
+   "hints": [
+    {
+     "name": "Isco",
+     "position": "CAM",
+     "nationality": "Spain",
+     "clubAtTime": "Real Madrid"
+    },
+    {
+     "name": "Daniel Carvajal",
+     "position": "RB",
+     "nationality": "Spain",
+     "clubAtTime": "Real Madrid"
+    },
+    {
+     "name": "Casemiro",
+     "position": "CDM",
+     "nationality": "Brazil",
+     "clubAtTime": "Real Madrid"
+    }
+   ],
+   "sources": [
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/uefachampionsleague/match/2021711--real-madrid-vs-liverpool/ (read from match.uefa.com/v5/matches/2021711 and /lineups)",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "2018-05-26, Final, NSC Olimpiyskiy, Kyiv, Real Madrid 3-1 Liverpool. Real XI: Keylor Navas; Dani Carvajal, Raphael Varane, Sergio Ramos, Marcelo; Luka Modric, Casemiro, Toni Kroos; Isco; Karim Benzema, Cristiano Ronaldo. Bench incl. Nacho, Gareth Bale, Asensio. Goals Benzema 51', Mane 55', Bale 64', 83'."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/lineups/_/gameId/510387",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "May 26, 2018, Kiev, Real Madrid 3-1 Liverpool, Real 4-3-1-2: Navas; Carvajal, Ramos, Varane, Marcelo; Casemiro, Kroos, Modric; Isco; Benzema, Ronaldo. Subs Nacho 37' (Carvajal), Bale 61' (Isco), Asensio 89' (Benzema)."
+    }
+   ],
+   "diffs": [],
+   "applied": [],
+   "notes": [
+    "Date 2018-05-26, Final, NSC Olimpiyskiy Kyiv, Real Madrid 3-1 Liverpool (Benzema 51', Mane 55', Bale 64', 83') all match. Formation 4-3-1-2 matches ESPN exactly. UEFA's pitch coordinates also put Modric right, Kroos left, Benzema right and Ronaldo left of the front two, matching the entry's x values.",
+    "Facts: Carvajal off at 37' (Nacho on) and Isco off at 61' for Bale both confirmed. The Isco fact says Bale scored 'two minutes later'; the sources stamp the sub 61' and the goal 64', which is two to three minutes depending on rounding. Not counted as a diff; the reviewer may prefer 'minutes later'.",
+    "'Daniel Carvajal' in the entry, 'Dani Carvajal' in the sources: same man."
+   ]
+  },
+  {
+   "position": 159,
+   "id": "euro-2004-final-greece",
+   "research": "differs",
+   "verdict": "corrected",
+   "eleven": [
+    "Antonis Nikopolidis",
+    "Giourkas Seitaridis",
+    "Michalis Kapsis",
+    "Traianos Dellas",
+    "Takis Fyssas",
+    "Kostas Katsouranis",
+    "Theodoros Zagorakis",
+    "Angelos Basinas",
+    "Angelos Charisteas",
+    "Zisis Vryzas",
+    "Stelios Giannakopoulos"
+   ],
+   "aka": {
+    "Antonios Nikopolidis": "Antonis Nikopolidis",
+    "Konstantinos Katsouranis": "Kostas Katsouranis"
+   },
+   "substitutes": [
+    "Stelios Venetidis 76' for Stelios Giannakopoulos",
+    "Dimitris Papadopoulos 81' for Zisis Vryzas",
+    "ESPN also shows a change at 45+2' involving Basinas and one at 85' without names; not cross-checked"
+   ],
+   "fields": {
+    "matchDate": "2004-07-04",
+    "team": "Greece",
+    "opponent": "Portugal",
+    "scoreLine": "Portugal 0-1 Greece",
+    "venue": "Estadio da Luz, Lisbon",
+    "formationLabel": "4-3-3"
+   },
+   "hints": [
+    {
+     "name": "Angelos Charisteas",
+     "position": "RW",
+     "nationality": "Greece",
+     "clubAtTime": "Werder Bremen"
+    },
+    {
+     "name": "Traianos Dellas",
+     "position": "CB",
+     "nationality": "Greece",
+     "clubAtTime": "Roma"
+    },
+    {
+     "name": "Konstantinos Katsouranis",
+     "position": "CDM",
+     "nationality": "Greece",
+     "clubAtTime": "AEK Athens"
+    }
+   ],
+   "sources": [
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/uefaeuro/match/79185--portugal-vs-greece/ (read from match.uefa.com/v5/matches/79185 and /lineups)",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "2004-07-04, Final, Estadio do SL Benfica, Lisbon, Portugal 0-1 Greece, goal Charisteas 57'. Greece XI: Antonis Nikopolidis; Giourkas Seitaridis, Traianos Dellas, Michalis Kapsis, Takis Fyssas; Angelos Basinas, Theodoros Zagorakis, Kostas Katsouranis; Stelios Giannakopoulos, Angelos Charisteas, Zisis Vryzas."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/lineups/_/gameId/151740",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "July 4, 2004, Lisbon, Portugal 0-1 Greece. Greece XI: A. Nikopolidis; M. Kapsis, T. Dellas, T. Fyssas, G. Seitaridis; T. Zagorakis, K. Katsouranis, A. Basinas; S. Giannakopoulos, Z. Vryzas, A. Charisteas. Subs Venetidis 76' (Giannakopoulos), Papadopoulos 81' (Vryzas)."
+    },
+    {
+     "host": "skysports.com",
+     "url": "https://www.skysports.com/football/portugal-vs-greece/teams/51375",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Sunday 4th July 2004, Portugal 0-1 Greece. Greece XI: same eleven names."
+    },
+    {
+     "host": "worldsoccer.com",
+     "url": "https://www.worldsoccer.com/world-soccer-latest/greece-name-euro-2004-squad-55605",
+     "readOn": "2026-10-05",
+     "xi": false,
+     "says": "Greece Euro 2004 squad with clubs: Katsouranis (AEK Athens), Dellas (AS Roma, Italy), Haristeas (Werder Bremen, Germany)."
+    },
+    {
+     "host": "national-football-teams.com",
+     "url": "https://www.national-football-teams.com/country/73/2004/Greece.html",
+     "readOn": "2026-10-05",
+     "xi": false,
+     "says": "2004: Katsouranis AEK Athinon, Dellas AS Roma, Charisteas Ajax Amsterdam (end-of-year club)."
+    }
+   ],
+   "diffs": [
+    {
+     "field": "blankCandidates[2].clubAtTime",
+     "entry": "Panathinaikos (Konstantinos Katsouranis)",
+     "evidence": "AEK Athens. World Soccer's contemporary squad list: '22-Costas Katsouranis (AEK Athens)'; national-football-teams.com 2004: 'AEK Athinon'. He joined Panathinaikos only in 2009.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "blankCandidates[2].fact",
+     "entry": "'Started that night for Panathinaikos.'",
+     "evidence": "He started for Greece (a national-team final); his club was AEK Athens. The fact is wrong on both counts.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    }
+   ],
+   "applied": [
+    {
+     "path": "blankCandidates[Konstantinos Katsouranis].clubAtTime",
+     "from": "Panathinaikos",
+     "to": "AEK Athens",
+     "why": "World Soccer's 2004 squad list (AEK Athens) and national-football-teams.com 2004 (AEK Athinon): he joined Panathinaikos only in 2009. The fact line said he started for his club in a national-team final, so it goes"
+    },
+    {
+     "path": "blankCandidates[Konstantinos Katsouranis].fact",
+     "from": "Started that night for Panathinaikos.",
+     "to": null,
+     "why": "World Soccer's 2004 squad list (AEK Athens) and national-football-teams.com 2004 (AEK Athinon): he joined Panathinaikos only in 2009. The fact line said he started for his club in a national-team final, so it goes"
+    }
+   ],
+   "notes": [
+    "All eleven names match UEFA, ESPN and Sky. 'Antonios' / 'Antonis' Nikopolidis and 'Konstantinos' / 'Kostas' Katsouranis are the same men.",
+    "Date 2004-07-04, Final, Portugal 0-1 Greece (Charisteas 57') correct. Venue: UEFA names it 'Estadio do SL Benfica', i.e. the Estadio da Luz, Lisbon: same stadium.",
+    "Formation 4-3-3: ESPN lists Giannakopoulos, Vryzas and Charisteas as forwards and Zagorakis, Katsouranis, Basinas as midfielders, consistent. Which wing Charisteas and Giannakopoulos occupied was not stated by any source; not counted.",
+    "Charisteas clubAtTime Werder Bremen confirmed by World Soccer's 2004 squad list ('Angelos Haristeas (Werder Bremen, Germany)'); national-football-teams.com shows Ajax for 2004 because he moved in the winter, after the tournament. Dellas clubAtTime Roma confirmed by both.",
+    "Facts about the Basinas corner and Dellas's semifinal silver goal were not checked against these sources."
+   ]
+  },
+  {
+   "position": 160,
+   "id": "wc-2014-semi-brazil",
+   "research": "differs",
+   "verdict": "corrected",
+   "eleven": [
+    "Julio Cesar",
+    "Maicon",
+    "David Luiz",
+    "Dante",
+    "Marcelo",
+    "Luiz Gustavo",
+    "Fernandinho",
+    "Hulk",
+    "Oscar",
+    "Bernard",
+    "Fred"
+   ],
+   "substitutes": [
+    "Paulinho 45'/46' for Fernandinho",
+    "Ramires 45'/46' for Hulk",
+    "Willian 69' for Fred"
+   ],
+   "fields": {
+    "matchDate": "2014-07-08",
+    "team": "Brazil",
+    "opponent": "Germany",
+    "scoreLine": "Brazil 1-7 Germany",
+    "venue": "Estadio Mineirao, Belo Horizonte",
+    "formationLabel": "4-2-3-1"
+   },
+   "hints": [
+    {
+     "name": "Dante",
+     "position": "CB",
+     "nationality": "Brazil",
+     "clubAtTime": "Bayern Munich"
+    },
+    {
+     "name": "Bernard",
+     "position": "LW",
+     "nationality": "Brazil",
+     "clubAtTime": "Shakhtar Donetsk"
+    },
+    {
+     "name": "Maicon",
+     "position": "RB",
+     "nationality": "Brazil",
+     "clubAtTime": "Roma"
+    }
+   ],
+   "sources": [
+    {
+     "host": "fifa.com",
+     "url": "https://www.fifa.com/en/match-centre/match/17/251164/255955/300186474 (read from api.fifa.com/api/v3/live/football/... for match 300186474)",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "2014-07-08 20:00Z, Semi-final, Estadio Mineirao, Belo Horizonte, Brazil 1-7 Germany. Brazil XI: Julio Cesar; Maicon, David Luiz (C), Dante, Marcelo; Fernandinho, Luiz Gustavo, Oscar; Hulk, Fred, Bernard. Subs Paulinho 45' (Fernandinho), Ramires 45' (Hulk), Willian 69' (Fred). Brazil goal Oscar 89'."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/lineups/_/gameId/383242",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "July 8, 2014, Belo Horizonte, Brazil 1-7 Germany. Brazil XI: J. De Leon (GK), Maicon, Marcelo, D. Luiz, Dante, Fernandinho, Luiz Gustavo, Fred, Oscar, Hulk, Bernard."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/story/_/id/37371200/brazil-appeal-thiago-silva-yellow-card-bid-overturn-suspension-world-cup-semifinal-germany",
+     "readOn": "2026-10-05 (search summary)",
+     "xi": false,
+     "says": "Thiago Silva automatically suspended for the semifinal after a second booking; Neymar broke a vertebra against Colombia."
+    }
+   ],
+   "diffs": [
+    {
+     "field": "blankCandidates[2].fact",
+     "entry": "Maicon: 'Started that night for Roma.'",
+     "evidence": "This was a Brazil national-team match; Maicon started for Brazil. Roma was his club at the time (clubAtTime 'Roma' itself is fine), but the fact as written is false.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    }
+   ],
+   "applied": [
+    {
+     "path": "blankCandidates[Maicon].fact",
+     "from": "Started that night for Roma.",
+     "to": null,
+     "why": "FIFA and ESPN: a Brazil match; he started for Brazil, not for Roma (his club, which the club hint already shows)"
+    }
+   ],
+   "notes": [
+    "XI matches FIFA and ESPN exactly. Date 2014-07-08, Semi-final, Estadio Mineirao Belo Horizonte, Brazil 1-7 Germany all match.",
+    "David Luiz wore the armband (FIFA data marks DAVID LUIZ as captain), matching the entry's source note.",
+    "Facts: ESPN reports Thiago Silva was suspended for a second yellow card of the tournament (booked v Colombia) and Neymar had a broken vertebra from the quarterfinal, consistent with the Dante and Bernard facts.",
+    "Formation 4-2-3-1: not labelled by either source (FIFA 'tactics' null); not counted.",
+    "ESPN's lineups page renders the goalkeeper as 'J. De Leon' (its data label for Julio Cesar, shirt 12 per FIFA) and garbles the substitution text; FIFA's data is used for subs.",
+    "Pattern flag for the reviewer: the generated filler fact 'Started that night for <club>.' is false on every national-team lineup, because the player started for his country."
+   ]
+  },
+  {
+   "position": 161,
+   "id": "cl-2005-final-milan",
+   "research": "same",
+   "verdict": "verified",
+   "eleven": [
+    "Dida",
+    "Cafu",
+    "Jaap Stam",
+    "Alessandro Nesta",
+    "Paolo Maldini",
+    "Andrea Pirlo",
+    "Gennaro Gattuso",
+    "Clarence Seedorf",
+    "Kaka",
+    "Andriy Shevchenko",
+    "Hernan Crespo"
+   ],
+   "substitutes": [
+    "Jon Dahl Tomasson 85' for Hernan Crespo",
+    "Serginho 86' for Clarence Seedorf",
+    "Rui Costa 112' for Gennaro Gattuso"
+   ],
+   "fields": {
+    "matchDate": "2005-05-25",
+    "team": "AC Milan",
+    "opponent": "Liverpool",
+    "scoreLine": "AC Milan 3-3 Liverpool (Liverpool won 3-2 on penalties)",
+    "venue": "Ataturk Olympic Stadium, Istanbul",
+    "formationLabel": "4-4-2 diamond"
+   },
+   "hints": [
+    {
+     "name": "Hernán Crespo",
+     "position": "ST",
+     "nationality": "Argentina",
+     "clubAtTime": "AC Milan (on loan from Chelsea)"
+    },
+    {
+     "name": "Jaap Stam",
+     "position": "CB",
+     "nationality": "Netherlands",
+     "clubAtTime": "AC Milan"
+    },
+    {
+     "name": "Gennaro Gattuso",
+     "position": "CM",
+     "nationality": "Italy",
+     "clubAtTime": "AC Milan"
+    }
+   ],
+   "sources": [
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/uefachampionsleague/match/80813--milan-vs-liverpool/ (read from match.uefa.com/v5/matches/80813 and /lineups)",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "2005-05-25, Final, Ataturk Olimpiyat Stadyumu, Istanbul, Milan 3-3 Liverpool, pens 2-3. Milan XI: Dida, Cafu, Paolo Maldini, Andriy Shevchenko, Gennaro Gattuso, Hernan Crespo, Alessandro Nesta, Clarence Seedorf, Andrea Pirlo, Kaka, Jaap Stam. Goals Maldini 1', Crespo 39', 44', Gerrard 54', Smicer 56', Alonso 60'."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/lineups/_/gameId/183634",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "May 25, 2005, Istanbul, 3-3, Liverpool won 3-2 on penalties. Milan XI: Dida, Cafu, P. Maldini, J. Stam, A. Nesta, Kaka, A. Pirlo, C. Seedorf, I. Gattuso, A. Shevchenko, H. Crespo. Subs Tomasson 85', Serginho 86', Rui Costa 112'."
+    }
+   ],
+   "diffs": [],
+   "applied": [],
+   "notes": [
+    "XI matches UEFA and ESPN exactly. Date 2005-05-25, Final, Ataturk Olimpiyat Stadyumu Istanbul, Milan 3-3 Liverpool, Liverpool 3-2 on penalties, all match.",
+    "Crespo fact 'Scored twice in the first half (39 and 44)' confirmed by both (Maldini 1', Crespo 39', 44').",
+    "Formation '4-4-2 diamond': not labelled by either source; the XI (Pirlo, Gattuso, Seedorf, Kaka behind Shevchenko and Crespo) is consistent. Not counted.",
+    "Facts 'Started that night for AC Milan.' on Stam and Gattuso are true here (club match).",
+    "ESPN writes 'I. Gattuso' (Ivan Gennaro Gattuso); same man."
+   ]
+  },
+  {
+   "position": 162,
+   "id": "euro-2000-final-france",
+   "research": "differs",
+   "verdict": "corrected",
+   "eleven": [
+    "Fabien Barthez",
+    "Lilian Thuram",
+    "Marcel Desailly",
+    "Laurent Blanc",
+    "Bixente Lizarazu",
+    "Patrick Vieira",
+    "Didier Deschamps",
+    "Youri Djorkaeff",
+    "Zinedine Zidane",
+    "Thierry Henry",
+    "Christophe Dugarry"
+   ],
+   "substitutes": [
+    "Sylvain Wiltord, David Trezeguet and Robert Pires came on (all on UEFA's bench list); minutes and who they replaced not cross-checked"
+   ],
+   "fields": {
+    "matchDate": "2000-07-02",
+    "team": "France",
+    "opponent": "Italy",
+    "scoreLine": "France 2-1 Italy (golden goal in extra time)",
+    "venue": "De Kuip, Rotterdam",
+    "formationLabel": "4-2-3-1"
+   },
+   "hints": [
+    {
+     "name": "Christophe Dugarry",
+     "position": "ST",
+     "nationality": "France",
+     "clubAtTime": "Bordeaux"
+    },
+    {
+     "name": "Youri Djorkaeff",
+     "position": "RW",
+     "nationality": "France",
+     "clubAtTime": "Kaiserslautern"
+    },
+    {
+     "name": "Bixente Lizarazu",
+     "position": "LB",
+     "nationality": "France",
+     "clubAtTime": "Bayern Munich"
+    }
+   ],
+   "sources": [
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/uefaeuro/match/65299--france-vs-italy/ (read from match.uefa.com/v5/matches/65299 and /lineups)",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "2000-07-02, Final, Stadion Feijenoord 'De Kuip', Rotterdam, France 2-1 Italy (1-1 after 90). France XI: Barthez, Lizarazu, Vieira, Blanc, Djorkaeff, Deschamps, Desailly, Zidane, Henry, Thuram, Dugarry. Bench incl. Pires, Wiltord, Trezeguet. Goals Delvecchio 55', Wiltord 90', Trezeguet 103'."
+    },
+    {
+     "host": "skysports.com",
+     "url": "https://www.skysports.com/football/news/3633089/frances-2-1-extra-time-success-over-italy-in-the-euro-2000-final",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "02-07-2000, Rotterdam, France 2-1 Italy after extra time. France 451: Barthez, Thuram, Blanc, Desailly, Lizarazu, Dugarry, Vieira, Deschamps, Zidane, Djorkaeff, Henry."
+    }
+   ],
+   "diffs": [
+    {
+     "field": "blankCandidates[1].fact",
+     "entry": "Djorkaeff: 'Started that night for Kaiserslautern.'",
+     "evidence": "This was France v Italy; he started for France. Kaiserslautern was his club (clubAtTime itself is fine).",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "blankCandidates[2].fact",
+     "entry": "Lizarazu: 'Started that night for Bayern Munich.'",
+     "evidence": "He started for France; Bayern Munich was his club.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    }
+   ],
+   "applied": [
+    {
+     "path": "blankCandidates[Youri Djorkaeff].fact",
+     "from": "Started that night for Kaiserslautern.",
+     "to": null,
+     "why": "UEFA and Sky Sports: a France match; he started for France, not for his club"
+    },
+    {
+     "path": "blankCandidates[Bixente Lizarazu].fact",
+     "from": "Started that night for Bayern Munich.",
+     "to": null,
+     "why": "UEFA and Sky Sports: a France match; he started for France, not for his club"
+    }
+   ],
+   "notes": [
+    "XI matches UEFA and Sky Sports exactly. Date 2000-07-02, Final, De Kuip Rotterdam, France 2-1 Italy with a golden goal in extra time (Delvecchio 55', Wiltord 90', Trezeguet 103' per UEFA) all match.",
+    "Dugarry fact (both match-winners Wiltord and Trezeguet began on the bench) confirmed: both are on UEFA's France bench list. UEFA stamps Wiltord's equaliser 90'; the fact's '90+4' is stoppage time not contradicted, just not itemised.",
+    "Formation: entry 4-2-3-1, Sky's team graphic code '451'. A 4-2-3-1 is a 4-5-1 variant; flagged, not counted.",
+    "Clubs at the time (Dugarry Bordeaux, Djorkaeff Kaiserslautern, Lizarazu Bayern Munich) not contradicted by these sources but not checked against a squad list either."
+   ]
+  },
+  {
+   "position": 163,
+   "id": "cl-1995-final-ajax",
+   "research": "same",
+   "verdict": "verified",
+   "eleven": [
+    "Edwin van der Sar",
+    "Michael Reiziger",
+    "Danny Blind",
+    "Frank Rijkaard",
+    "Frank de Boer",
+    "Clarence Seedorf",
+    "Jari Litmanen",
+    "Edgar Davids",
+    "Finidi George",
+    "Ronald de Boer",
+    "Marc Overmars"
+   ],
+   "substitutes": [
+    "Nwankwo Kanu 53'/54' for Clarence Seedorf",
+    "Patrick Kluivert 70' (UEFA) / 69' (RSSSF) for Jari Litmanen, scored 85'"
+   ],
+   "fields": {
+    "matchDate": "1995-05-24",
+    "team": "Ajax",
+    "opponent": "AC Milan",
+    "scoreLine": "Ajax 1-0 AC Milan",
+    "venue": "Ernst-Happel-Stadion, Vienna",
+    "formationLabel": "3-3-1-3"
+   },
+   "hints": [
+    {
+     "name": "Jari Litmanen",
+     "position": "CAM",
+     "nationality": "Finland",
+     "clubAtTime": "Ajax"
+    },
+    {
+     "name": "Edgar Davids",
+     "position": "CM",
+     "nationality": "Netherlands",
+     "clubAtTime": "Ajax"
+    },
+    {
+     "name": "Michael Reiziger",
+     "position": "CB",
+     "nationality": "Netherlands",
+     "clubAtTime": "Ajax"
+    }
+   ],
+   "sources": [
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/uefachampionsleague/match/51668--ajax-vs-milan/lineups/ (read from match.uefa.com/v5/matches/51668, /lineups and /events)",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "1995-05-24, Final, Ernst-Happel-Stadion, Vienna, Ajax 1-0 Milan. Ajax XI: Edwin van der Sar, Michael Reiziger, Danny Blind, Frank Rijkaard, Frank de Boer, Clarence Seedorf, Finidi George, Edgar Davids, Ronald de Boer, Jari Litmanen, Marc Overmars. Events: 53' Seedorf off, Kanu on; 70' Litmanen off, Kluivert on; 85' goal Kluivert."
+    },
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/ec/ec199495.html",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Ernst Happel Stadium, Vienna, 24 May 1995. Ajax (0) 1 AC Milan (0) 0, 85' Kluivert. Ajax: Van der Sar, Reiziger, Blind, Rijkaard, F.de Boer, Seedorf (Kanu 54), Litmanen (Kluivert 69), Davids, Finidi, R.de Boer, Overmars."
+    }
+   ],
+   "diffs": [],
+   "applied": [],
+   "notes": [
+    "XI matches UEFA and RSSSF exactly. Date 1995-05-24, Final, Ernst-Happel-Stadion Vienna, Ajax 1-0 Milan (Kluivert 85') all match.",
+    "Litmanen fact ('Made way on 70 minutes for 18-year-old Patrick Kluivert, who scored the winner in the 85th'): UEFA's event feed has the change at 70' and the goal at 85'; RSSSF has the change at 69'. Within a minute; not counted as a diff.",
+    "Formation '3-3-1-3' is not labelled by either source; not counted.",
+    "BeSoccer's page for this match was also read but is unreliable (shows a 2-1 score and reversed substitutions), so it is not used.",
+    "Organiser read from UEFA's own data feed; the second host is RSSSF (an independent statistics archive, not a wiki), because ESPN and Sky carry no team sheet for this match."
+   ]
+  },
+  {
+   "position": 164,
+   "id": "wc-1998-final-brazil",
+   "research": "differs",
+   "verdict": "corrected",
+   "eleven": [
+    "Claudio Taffarel",
+    "Cafu",
+    "Junior Baiano",
+    "Aldair",
+    "Roberto Carlos",
+    "Dunga",
+    "Cesar Sampaio",
+    "Leonardo",
+    "Rivaldo",
+    "Bebeto",
+    "Ronaldo"
+   ],
+   "substitutes": [
+    "Denilson 45+1'/46' for Leonardo",
+    "Edmundo 73' for Cesar Sampaio"
+   ],
+   "fields": {
+    "matchDate": "1998-07-12",
+    "team": "Brazil",
+    "opponent": "France",
+    "scoreLine": "France 3-0 Brazil",
+    "venue": "Stade de France, Saint-Denis",
+    "formationLabel": "4-2-2-2"
+   },
+   "hints": [
+    {
+     "name": "Cafu",
+     "position": "RB",
+     "nationality": "Brazil",
+     "clubAtTime": "Roma"
+    },
+    {
+     "name": "Roberto Carlos",
+     "position": "LB",
+     "nationality": "Brazil",
+     "clubAtTime": "Real Madrid"
+    },
+    {
+     "name": "Rivaldo",
+     "position": "CAM",
+     "nationality": "Brazil",
+     "clubAtTime": "Barcelona"
+    }
+   ],
+   "sources": [
+    {
+     "host": "fifa.com",
+     "url": "https://www.fifa.com/en/match-centre/match/17/1/3/8788 (read from api.fifa.com/api/v3/live/football/... for match 8788)",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "1998-07-12 19:00Z, Final, Stade de France, Saint-Denis, Brazil 0-3 France. Brazil XI: Taffarel; Cafu, Aldair, Junior Baiano, Roberto Carlos; Cesar Sampaio, Dunga (C), Leonardo, Rivaldo; Ronaldo, Bebeto. Subs Denilson 45+1' (Leonardo), Edmundo 73' (Cesar Sampaio). France goals Zidane 27', 45+1', Petit 90+3'."
+    },
+    {
+     "host": "besoccer.com",
+     "url": "https://www.besoccer.com/match/seleccion-brasil/seleccion-francia/199819022/lineups",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "12 JUL 1998, Brazil 0-3 France, Brazil 4-4-2: Claudio Taffarel; Cafu, Aldair, Junior Baiano, Cesar Sampaio, Roberto Carlos; Dunga, Leonardo, Rivaldo; Bebeto, Ronaldo. Subs Denilson 46' (Leonardo), Edmundo 73' (Cesar Sampaio)."
+    }
+   ],
+   "diffs": [
+    {
+     "field": "blankCandidates[0].fact",
+     "entry": "Cafu: 'Started that night for Roma.'",
+     "evidence": "A Brazil v France World Cup final; he started for Brazil. Roma was his club (clubAtTime itself fine).",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "blankCandidates[1].fact",
+     "entry": "Roberto Carlos: 'Started that night for Real Madrid.'",
+     "evidence": "He started for Brazil; Real Madrid was his club.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "blankCandidates[2].fact",
+     "entry": "Rivaldo: 'Started that night for Barcelona.'",
+     "evidence": "He started for Brazil; Barcelona was his club.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    }
+   ],
+   "applied": [
+    {
+     "path": "blankCandidates[Cafu].fact",
+     "from": "Started that night for Roma.",
+     "to": null,
+     "why": "FIFA and BeSoccer: a Brazil match; he started for Brazil, not for his club"
+    },
+    {
+     "path": "blankCandidates[Roberto Carlos].fact",
+     "from": "Started that night for Real Madrid.",
+     "to": null,
+     "why": "FIFA and BeSoccer: a Brazil match; he started for Brazil, not for his club"
+    },
+    {
+     "path": "blankCandidates[Rivaldo].fact",
+     "from": "Started that night for Barcelona.",
+     "to": null,
+     "why": "FIFA and BeSoccer: a Brazil match; he started for Brazil, not for his club"
+    }
+   ],
+   "notes": [
+    "XI matches FIFA and BeSoccer exactly. Date 1998-07-12, Final, Stade de France Saint-Denis, France 3-0 Brazil (Zidane 27', 45+1', Petit 90+3' per FIFA) all match. FIFA's data lists Brazil as the nominal home side ('Brazil 0-3 France'); same result.",
+    "Formation 4-2-2-2 not labelled by FIFA; BeSoccer says 4-4-2. Compatible; not counted.",
+    "Claudio Taffarel appears as 'TAFFAREL' (FIFA) and 'Claudio Taffarel' (BeSoccer); Junior Baiano as 'JUNIOR BAIANO'; same men.",
+    "ESPN's page for this match (gameId 198155) carries no team sheet and credits a goal to Desailly at 69', which is wrong (Desailly was sent off), so it is not used. BeSoccer is used as the independent second host for the XI only; its substitution text was consistent with FIFA's.",
+    "Round 1026: the filler fact \"Started that night for <club>\" is false on every national-team lineup and is removed there (nine blanks across five lineups). On club lineups it is true and stays."
+   ]
+  },
+  {
+   "position": 165,
+   "id": "epl-2005-chelsea-title",
+   "research": "same",
+   "verdict": "verified",
+   "eleven": [
+    "Petr Cech",
+    "Geremi",
+    "John Terry",
+    "Ricardo Carvalho",
+    "William Gallas",
+    "Claude Makelele",
+    "Tiago",
+    "Jiri Jarosik",
+    "Frank Lampard",
+    "Eidur Gudjohnsen",
+    "Didier Drogba"
+   ],
+   "substitutes": [
+    "Aleksey Smertin 65' for Didier Drogba",
+    "Joe Cole 85' for Eidur Gudjohnsen",
+    "Robert Huth 90+1' for Claude Makelele"
+   ],
+   "fields": {
+    "matchDate": "2005-04-30",
+    "team": "Chelsea",
+    "opponent": "Bolton Wanderers",
+    "scoreLine": "Bolton Wanderers 0-2 Chelsea",
+    "venue": "Reebok Stadium, Bolton",
+    "formationLabel": "4-4-2 diamond"
+   },
+   "hints": [
+    {
+     "name": "Jiri Jarosik",
+     "position": "CM",
+     "nationality": "Czech Republic",
+     "clubAtTime": "Chelsea"
+    },
+    {
+     "name": "Eidur Gudjohnsen",
+     "position": "ST",
+     "nationality": "Iceland",
+     "clubAtTime": "Chelsea"
+    },
+    {
+     "name": "William Gallas",
+     "position": "LB",
+     "nationality": "France",
+     "clubAtTime": "Chelsea"
+    }
+   ],
+   "sources": [
+    {
+     "host": "premierleague.com",
+     "url": "https://www.premierleague.com/match/5155 (read from footballapi.pulselive.com/football/fixtures/5155)",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Sat 30 Apr 2005 17:15, Bolton Wanderers 0-2 Chelsea. Chelsea XI: Petr Cech; Geremi, John Terry, Ricardo Carvalho, William Gallas; Claude Makelele, Tiago, Jiri Jarosik, Frank Lampard; Eidur Gudjohnsen, Didier Drogba. Subs Smertin 65' (Drogba), J. Cole 85' (Gudjohnsen), Huth 90+1' (Makelele). Goals Lampard 60', 75'."
+    },
+    {
+     "host": "skysports.com",
+     "url": "https://www.skysports.com/football/bolton-wanderers-vs-chelsea/teams/60245",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Saturday 30th April 2005, Bolton Wanderers 0-2 Chelsea. Chelsea XI: P Cech, W Gallas, R Carvalho, J Terry, Geremi, C Makelele, Tiago Mendes, F Lampard, J Jarosik, D Drogba, E Gudjohnsen."
+    }
+   ],
+   "diffs": [],
+   "applied": [],
+   "notes": [
+    "XI matches premierleague.com and Sky Sports exactly. Date 2005-04-30, Bolton Wanderers 0-2 Chelsea (Lampard 60', 75') all match.",
+    "Venue: the entry's 'Reebok Stadium, Bolton' is the name at the time. The sources print the ground's later names (premierleague.com 'Macron Stadium', Sky 'Toughsheet Community Stadium'): same ground, not a diff.",
+    "Formation '4-4-2 diamond' and the Geremi-at-right-back / Gallas-at-left-back placement are not stated by either source (premierleague.com lists Geremi as M, Gallas as D). Not counted.",
+    "The entry's source string says Lampard scored at 60 and 76; premierleague.com has 60' and 75'. Source string only, not a player-facing field.",
+    "'Geremi Sorele Nijtap Fotso' (premierleague.com) is Geremi; 'Tiago Mendes' (Sky) is Tiago; 'Jiri Jarosik' with diacritics on premierleague.com."
+   ]
+  },
+  {
+   "position": 166,
+   "id": "euro-2021-final-england",
+   "research": "differs",
+   "verdict": "corrected",
+   "eleven": [
+    "Jordan Pickford",
+    "Kyle Walker",
+    "John Stones",
+    "Harry Maguire",
+    "Kieran Trippier",
+    "Kalvin Phillips",
+    "Declan Rice",
+    "Luke Shaw",
+    "Mason Mount",
+    "Raheem Sterling",
+    "Harry Kane"
+   ],
+   "substitutes": [
+    "Bukayo Saka 71' for Kieran Trippier",
+    "Jordan Henderson 74' for Declan Rice",
+    "Jack Grealish 99' for Mason Mount",
+    "Marcus Rashford 120' for Jordan Henderson",
+    "Jadon Sancho 120' for Kyle Walker"
+   ],
+   "fields": {
+    "matchDate": "2021-07-11",
+    "team": "England",
+    "opponent": "Italy",
+    "scoreLine": "Italy 1-1 England (Italy won 3-2 on penalties)",
+    "venue": "Wembley Stadium, London",
+    "formationLabel": "3-4-3"
+   },
+   "hints": [
+    {
+     "name": "Kieran Trippier",
+     "position": "RWB",
+     "nationality": "England",
+     "clubAtTime": "Atletico Madrid"
+    },
+    {
+     "name": "Kalvin Phillips",
+     "position": "CM",
+     "nationality": "England",
+     "clubAtTime": "Leeds United"
+    },
+    {
+     "name": "Mason Mount",
+     "position": "RW",
+     "nationality": "England",
+     "clubAtTime": "Chelsea"
+    }
+   ],
+   "sources": [
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/uefaeuro/match/2024491--italy-vs-england/ (read from match.uefa.com/v5/matches/2024491 and /lineups)",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "2021-07-11, Final, Wembley Stadium, London, Italy 1-1 England, pens 3-2. England XI by pitch position: Pickford; Walker (right), Stones, Maguire (left); Trippier (right wing back), Phillips, Rice, Shaw (left wing back); Mount (right, x 202), Sterling (left, x 792); Kane. Bench incl. Saka, Grealish, Henderson, Rashford, Sancho. Goals Shaw 2', Bonucci 67'."
+    },
+    {
+     "host": "skysports.com",
+     "url": "https://www.skysports.com/football/italy-vs-england/teams/421532",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Sunday 11th July 2021, Wembley Stadium, 1-1 aet, Italy won 3-2 on penalties. England: J Pickford; K Walker, J Stones, H Maguire, L Shaw; K Phillips, D Rice; K Trippier (Right Wing), M Mount (Central), R Sterling (Left Wing); H Kane (c). Subs Saka 71' (Trippier), Henderson 74' (Rice), Grealish 99' (Mount), Rashford 120' (Henderson), Sancho 120' (Walker)."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/lineups/_/gameId/560294",
+     "readOn": "2026-10-05 (search summary)",
+     "xi": true,
+     "says": "July 11, 2021, Wembley, Italy 1-1 England, Italy 3-2 on penalties. England 3-4-2-1: Pickford; Maguire, Stones, Walker; Shaw, Rice, Phillips, Trippier; Mount, Sterling; Kane."
+    }
+   ],
+   "diffs": [
+    {
+     "field": "slots[8] RW / slots[9] LW (sides)",
+     "entry": "Raheem Sterling RW (x 68), Mason Mount LW (x 32)",
+     "evidence": "UEFA's pitch coordinates put Mount on the right (x 202, Trippier's side) and Sterling on the left (x 792, Shaw's side); Sky's team graphic lists 'R Sterling' as Left Wing and Mount central. The two are swapped in the entry. Same eleven players.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "blankCandidates[1].fact",
+     "entry": "Kalvin Phillips: 'Started that night for Leeds United.'",
+     "evidence": "An England v Italy final; he started for England. Leeds United was his club.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "blankCandidates[2].fact",
+     "entry": "Mason Mount: 'Started that night for Chelsea.'",
+     "evidence": "He started for England; Chelsea was his club.",
+     "decision": "applied",
+     "reason": "two hosts agree; see applied for each change and its sources"
+    }
+   ],
+   "applied": [
+    {
+     "path": "slots[8].position",
+     "from": "RW",
+     "to": "LW",
+     "why": "UEFA coordinates (Shaw's side) and Sky Sports (Left Wing): Sterling played on the left"
+    },
+    {
+     "path": "slots[9].position",
+     "from": "LW",
+     "to": "RW",
+     "why": "UEFA coordinates (Trippier's side): Mount played on the right; Sky has Sterling, not Mount, on the left"
+    },
+    {
+     "path": "blankCandidates[Kalvin Phillips].fact",
+     "from": "Started that night for Leeds United.",
+     "to": null,
+     "why": "UEFA, ESPN and Sky Sports: an England match; he started for England, not for his club"
+    },
+    {
+     "path": "blankCandidates[Mason Mount].fact",
+     "from": "Started that night for Chelsea.",
+     "to": null,
+     "why": "UEFA, ESPN and Sky Sports: an England match; he started for England, not for his club"
+    },
+    {
+     "path": "slots[8].side",
+     "from": "right",
+     "to": "left",
+     "why": "UEFA coordinates (Shaw's side) and Sky Sports (Left Wing): Sterling played on the left"
+    },
+    {
+     "path": "slots[9].side",
+     "from": "left",
+     "to": "right",
+     "why": "UEFA coordinates (Trippier's side): Mount played on the right; Sky has Sterling, not Mount, on the left"
+    }
+   ],
+   "notes": [
+    "All eleven names match UEFA, ESPN and Sky. Date 2021-07-11, Final, Wembley Stadium, Italy 1-1 England (Shaw 2', Bonucci 67'), Italy 3-2 on penalties all match.",
+    "Formation: entry 3-4-3; ESPN 3-4-2-1; UEFA's coordinates show a back three with Trippier and Shaw as wing backs, consistent. Sky's auto-label '4-2-3-1' ignores the back three; not counted.",
+    "Trippier fact (recalled in place of Saka in a switch to a back three, crossed for the second-minute opener): Saka on UEFA's bench and came on at 71' for Trippier, goal Shaw 2'. The assist itself was not itemised by these sources."
+   ]
+  },
+  {
+   "position": 167,
+   "id": "cl-2025-final-psg",
+   "research": "same",
+   "verdict": "verified",
+   "eleven": [
+    "Gianluigi Donnarumma",
+    "Achraf Hakimi",
+    "Marquinhos",
+    "Willian Pacho",
+    "Nuno Mendes",
+    "Vitinha",
+    "Joao Neves",
+    "Fabian Ruiz",
+    "Desire Doue",
+    "Ousmane Dembele",
+    "Khvicha Kvaratskhelia"
+   ],
+   "substitutes": [
+    "Bradley Barcola 66'/67' for Desire Doue",
+    "Lucas Hernandez 78' for Nuno Mendes",
+    "Goncalo Ramos 84' for Khvicha Kvaratskhelia",
+    "Warren Zaire-Emery 84' for Joao Neves",
+    "Senny Mayulu 84' for Fabian Ruiz (scored 86')"
+   ],
+   "fields": {
+    "matchDate": "2025-05-31",
+    "team": "Paris Saint-Germain",
+    "opponent": "Inter Milan",
+    "scoreLine": "Paris Saint-Germain 5-0 Inter Milan",
+    "venue": "Allianz Arena, Munich",
+    "formationLabel": "4-3-3"
+   },
+   "hints": [
+    {
+     "name": "Willian Pacho",
+     "position": "CB",
+     "nationality": "Ecuador",
+     "clubAtTime": "Paris Saint-Germain"
+    },
+    {
+     "name": "Fabián Ruiz",
+     "position": "CM",
+     "nationality": "Spain",
+     "clubAtTime": "Paris Saint-Germain"
+    },
+    {
+     "name": "Désiré Doué",
+     "position": "RW",
+     "nationality": "France",
+     "clubAtTime": "Paris Saint-Germain"
+    }
+   ],
+   "sources": [
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/uefachampionsleague/match/2044466--paris-vs-inter/ (read from match.uefa.com/v5/matches/2044466, /lineups and /events)",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "2025-05-31, Final, Fussball Arena Munchen, Munich, Paris 5-0 Inter. Paris XI: Donnarumma; Hakimi, Marquinhos, Pacho, Nuno Mendes; Joao Neves, Vitinha, Fabian Ruiz; Doue, Dembele, Kvaratskhelia. Events: Barcola 66' for Doue, L. Hernandez 78' for Nuno Mendes, G. Ramos, Mayulu, Zaire-Emery 84'."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/lineups/_/gameId/733620",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "May 31, 2025, Munchen, PSG 5-0 Inter Milan, PSG 4-3-3: Donnarumma; Hakimi, Marquinhos, Pacho, Nuno Mendes; Fabian Ruiz, Vitinha, Joao Neves; Kvaratskhelia (LW), Dembele (RW), Doue (ST). Subs Barcola 67', L. Hernandez 78', G. Ramos 84', Zaire-Emery 84', Mayulu 84'."
+    },
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/uefachampionsleague/news/0299-1de41a81a0d8-2cfefc69a802-1000--desire-doue-named-official-2025-uefa-champions-league-final/",
+     "readOn": "2026-10-05 (search summary)",
+     "xi": false,
+     "says": "Doue named official 2025 final Player of the Match; first teenager to score twice in a Champions League final."
+    }
+   ],
+   "diffs": [],
+   "applied": [],
+   "notes": [
+    "XI matches UEFA and ESPN exactly. Date 2025-05-31, Final, PSG 5-0 Inter (Hakimi 12', Doue 20', 63', Kvaratskhelia 73', Mayulu 86') all match. Venue: UEFA's neutral name 'Fussball Arena Munchen' is the Allianz Arena; same ground.",
+    "Positions: UEFA's pitch coordinates put Doue on the right, Dembele central and Kvaratskhelia on the left, Joao Neves right and Fabian Ruiz left of Vitinha, Marquinhos right and Pacho left: all as in the entry. ESPN's position labels swap Doue (ST) and Dembele (RW); the organiser is preferred.",
+    "Doue fact confirmed: two goals (20', 63'), uefa.com names him the official final Player of the Match, and ESPN's report calls 5-0 the biggest winning margin in a Champions League final.",
+    "Facts 'Started that night for Paris Saint-Germain.' on Pacho and Fabian Ruiz are true (club match)."
+   ]
+  },
+  {
+   "position": 168,
+   "id": "wc-2026-final-spain",
+   "research": "same",
+   "verdict": "verified",
+   "eleven": [
+    "Unai Simon",
+    "Pedro Porro",
+    "Pau Cubarsi",
+    "Aymeric Laporte",
+    "Marc Cucurella",
+    "Rodri",
+    "Fabian Ruiz",
+    "Dani Olmo",
+    "Lamine Yamal",
+    "Alex Baena",
+    "Mikel Oyarzabal"
+   ],
+   "substitutes": [
+    "Ferran Torres 62' for Mikel Oyarzabal (scored 106')",
+    "Pedri 62' for Fabian Ruiz",
+    "Nico Williams 75' for Alex Baena",
+    "Mikel Merino 75' for Dani Olmo",
+    "Martin Zubimendi 99' for Rodri",
+    "Eric Garcia 99' for Aymeric Laporte"
+   ],
+   "fields": {
+    "matchDate": "2026-07-19",
+    "team": "Spain",
+    "opponent": "Argentina",
+    "scoreLine": "Spain 1-0 Argentina, AET",
+    "venue": "MetLife Stadium, East Rutherford",
+    "formationLabel": "4-2-3-1"
+   },
+   "hints": [
+    {
+     "name": "Pedro Porro",
+     "position": "RB",
+     "nationality": "Spain",
+     "clubAtTime": "Tottenham Hotspur"
+    },
+    {
+     "name": "Mikel Oyarzabal",
+     "position": "ST",
+     "nationality": "Spain",
+     "clubAtTime": "Real Sociedad"
+    },
+    {
+     "name": "Álex Baena",
+     "position": "LW",
+     "nationality": "Spain",
+     "clubAtTime": "Atlético de Madrid"
+    }
+   ],
+   "sources": [
+    {
+     "host": "fifa.com",
+     "url": "https://www.fifa.com/en/match-centre/match/17/285023/289292/400021543 (read from api.fifa.com/api/v3/live/football/17/285023/289292/400021543)",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "2026-07-19 19:00Z, Final, New York/New Jersey Stadium, Spain 1-0 Argentina. Spain tactics 4-1-2-3, XI: Unai Simon; Pedro Porro, Aymeric Laporte, Pau Cubarsi, Marc Cucurella; Fabian Ruiz, Alex Baena, Rodri (C); Dani Olmo, Lamine Yamal, Mikel Oyarzabal. Subs as listed; goal Ferran Torres 106'."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/lineups/_/gameId/760517",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "July 19, 2026, East Rutherford, Spain 1-0 Argentina (AET). Spain 4-2-3-1: Unai Simon; Pedro Porro, Pau Cubarsi, Aymeric Laporte, Marc Cucurella; Rodri, Fabian Ruiz; Lamine Yamal, Dani Olmo, Alex Baena; Mikel Oyarzabal."
+    },
+    {
+     "host": "skysports.com",
+     "url": "https://www.skysports.com/football/spain-vs-argentina/teams/549869",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Sunday 19th July 2026, MetLife Stadium, attendance 80,663, Spain 1-0 Argentina (AET). Same eleven names; no formation shown."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/story/_/id/48870392/spain-world-cup-2026-squad-confirmed-lamine-yamal-stars-no-real-madrid-players",
+     "readOn": "2026-10-05",
+     "xi": false,
+     "says": "Squad clubs: Pedro Porro Tottenham Hotspur, Mikel Oyarzabal Real Sociedad, Alex Baena Atletico Madrid."
+    }
+   ],
+   "diffs": [],
+   "applied": [],
+   "notes": [
+    "XI matches FIFA, ESPN and Sky name for name. Date 2026-07-19, Final, Spain 1-0 Argentina after extra time (Ferran Torres 106', on as a 62nd-minute substitute) all match.",
+    "Venue: FIFA's tournament name 'New York/New Jersey Stadium' and Sky's 'MetLife Stadium' are the same ground as the entry's 'MetLife Stadium, East Rutherford' (ESPN: East Rutherford, New Jersey).",
+    "Blank candidate clubs confirmed against ESPN's squad announcement: Pedro Porro 'Tottenham Hotspur', Mikel Oyarzabal 'Real Sociedad', Alex Baena 'Atletico Madrid'.",
+    "Sky writes 'U Simon Mendibil' and 'F Ruiz Pena'; same men."
+   ]
+  },
+  {
+   "position": 169,
+   "id": "wc-2026-final-argentina",
+   "research": "same",
+   "verdict": "verified",
+   "eleven": [
+    "Emiliano Martinez",
+    "Gonzalo Montiel",
+    "Cristian Romero",
+    "Lisandro Martinez",
+    "Nicolas Tagliafico",
+    "Rodrigo De Paul",
+    "Enzo Fernandez",
+    "Alexis Mac Allister",
+    "Nico Gonzalez",
+    "Lionel Messi",
+    "Julian Alvarez"
+   ],
+   "substitutes": [
+    "Nicolas Otamendi 44' for Lisandro Martinez",
+    "Leandro Paredes 45' for Nico Gonzalez",
+    "Nahuel Molina for Gonzalo Montiel (ESPN 52', FIFA 58')",
+    "Facundo Medina for Cristian Romero (ESPN 58', FIFA 70')",
+    "Giuliano Simeone 70' for Rodrigo De Paul",
+    "Marcos Senesi 102' for Julian Alvarez"
+   ],
+   "fields": {
+    "matchDate": "2026-07-19",
+    "team": "Argentina",
+    "opponent": "Spain",
+    "scoreLine": "Spain 1-0 Argentina, AET",
+    "venue": "MetLife Stadium, East Rutherford",
+    "formationLabel": "4-4-2"
+   },
+   "hints": [
+    {
+     "name": "Nicolas Tagliafico",
+     "position": "LB",
+     "nationality": "Argentina",
+     "clubAtTime": "Olympique Lyon"
+    },
+    {
+     "name": "Gonzalo Montiel",
+     "position": "RB",
+     "nationality": "Argentina",
+     "clubAtTime": "CA River Plate"
+    },
+    {
+     "name": "Alexis Mac Allister",
+     "position": "CM",
+     "nationality": "Argentina",
+     "clubAtTime": "Liverpool FC"
+    }
+   ],
+   "sources": [
+    {
+     "host": "fifa.com",
+     "url": "https://www.fifa.com/en/match-centre/match/17/285023/289292/400021543 (read from api.fifa.com)",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Argentina tactics 4-4-2, XI: Emiliano Martinez; Nicolas Tagliafico, Gonzalo Montiel, Lisandro Martinez, Cristian Romero; Rodrigo De Paul, Nico Gonzalez, Alexis Mac Allister, Enzo Fernandez; Julian Alvarez, Lionel Messi (C)."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/lineups/_/gameId/760517",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Argentina 4-4-2: Emiliano Martinez; Gonzalo Montiel, Cristian Romero, Lisandro Martinez, Nicolas Tagliafico; Rodrigo De Paul, Enzo Fernandez, Alexis Mac Allister, Nico Gonzalez; Lionel Messi, Julian Alvarez."
+    },
+    {
+     "host": "si.com",
+     "url": "https://www.si.com/soccer/argentina-2026-world-cup-roster-confirmed-full-list-players-messi-makes-history",
+     "readOn": "2026-10-05",
+     "xi": false,
+     "says": "Roster clubs: Tagliafico Lyon, Montiel River Plate, Mac Allister Liverpool."
+    }
+   ],
+   "diffs": [],
+   "applied": [],
+   "notes": [
+    "XI matches FIFA, ESPN and Sky name for name. Formation 4-4-2 matches FIFA ('Tactics 4-4-2') and ESPN. Date, venue and 'Spain 1-0 Argentina, AET' match as for 168.",
+    "Blank candidate clubs confirmed against SI's roster article: Tagliafico 'Lyon', Montiel 'River Plate', Mac Allister 'Liverpool'.",
+    "Substitution minutes for Molina and Medina differ between FIFA and ESPN; not an entry field."
+   ]
+  },
+  {
+   "position": 170,
+   "id": "cl-2013-final-dortmund",
+   "research": "same",
+   "verdict": "verified",
+   "eleven": [
+    "Roman Weidenfeller",
+    "Lukasz Piszczek",
+    "Neven Subotic",
+    "Mats Hummels",
+    "Marcel Schmelzer",
+    "Sven Bender",
+    "Ilkay Gundogan",
+    "Jakub Blaszczykowski",
+    "Marco Reus",
+    "Kevin Grosskreutz",
+    "Robert Lewandowski"
+   ],
+   "substitutes": [
+    "Nuri Sahin 90+1' for Sven Bender",
+    "Julian Schieber 90+1' for Jakub Blaszczykowski"
+   ],
+   "fields": {
+    "matchDate": "2013-05-25",
+    "team": "Borussia Dortmund",
+    "opponent": "Bayern Munich",
+    "scoreLine": "Borussia Dortmund 1-2 Bayern Munich",
+    "venue": "Wembley Stadium, London",
+    "formationLabel": "4-2-3-1"
+   },
+   "hints": [
+    {
+     "name": "Neven Subotic",
+     "position": "CB",
+     "nationality": "Serbia",
+     "clubAtTime": "Borussia Dortmund"
+    },
+    {
+     "name": "Marcel Schmelzer",
+     "position": "LB",
+     "nationality": "Germany",
+     "clubAtTime": "Borussia Dortmund"
+    },
+    {
+     "name": "Kevin Grosskreutz",
+     "position": "LW",
+     "nationality": "Germany",
+     "clubAtTime": "Borussia Dortmund"
+    }
+   ],
+   "sources": [
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/uefachampionsleague/match/2009612--dortmund-vs-bayern/ (read from match.uefa.com/v5/matches/2009612 and /lineups)",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "2013-05-25, Final, Wembley Stadium, London, B. Dortmund 1-2 Bayern Munchen. Dortmund XI: Roman Weidenfeller; Lukasz Piszczek, Neven Subotic, Mats Hummels, Marcel Schmelzer; Sven Bender, Ilkay Gundogan; Jakub Blaszczykowski, Marco Reus, Kevin Grosskreutz; Robert Lewandowski. Bench incl. Felipe Santana, Sahin, Schieber."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/lineups/_/gameId/365094",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "May 25, 2013, London, Dortmund 1-2 Bayern, 4-2-3-1: Weidenfeller; Subotic, Hummels, Piszczek, Schmelzer; Bender, Gundogan; Blaszczykowski, Reus, Grosskreutz; Lewandowski. Subs Sahin and Schieber 90+1'."
+    },
+    {
+     "host": "skysports.com",
+     "url": "https://www.skysports.com/football/borussia-dortmund-vs-bayern-munich/teams/286308",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Saturday 25th May 2013, Wembley Stadium, 1-2, attendance 86,298. XI: R Weidenfeller (c), L Piszczek, N Subotic, R de Souza Teles, M Schmelzer, S Bender, I Gundogan, J Blaszczykowski, M Reus, K Grosskreutz, R Lewandowski. Subs Sahin and Schieber 90'."
+    }
+   ],
+   "diffs": [],
+   "applied": [],
+   "notes": [
+    "Date 2013-05-25, Final, Wembley Stadium, Borussia Dortmund 1-2 Bayern Munich (Mandzukic 60', Gundogan pen 68', Robben 89') all match. Formation 4-2-3-1 matches ESPN.",
+    "UEFA's pitch coordinates put Blaszczykowski right, Reus central, Grosskreutz left; Bender right and Gundogan left of the pivot; Subotic right and Hummels left centre back: all as in the entry.",
+    "Spellings: UEFA 'Ilkay Gundogan', 'Lukasz Piszczek', 'Neven Subotic' with diacritics; Sky 'K Grosskreutz' with the German sharp s. Same men."
+   ]
+  },
+  {
+   "position": 171,
+   "id": "cl-2015-final-juventus",
+   "research": "same",
+   "verdict": "verified",
+   "eleven": [
+    "Gianluigi Buffon",
+    "Stephan Lichtsteiner",
+    "Andrea Barzagli",
+    "Leonardo Bonucci",
+    "Patrice Evra",
+    "Andrea Pirlo",
+    "Claudio Marchisio",
+    "Paul Pogba",
+    "Arturo Vidal",
+    "Carlos Tevez",
+    "Alvaro Morata"
+   ],
+   "substitutes": [
+    "Roberto Pereyra 79' for Arturo Vidal",
+    "Fernando Llorente 85' for Alvaro Morata",
+    "Kingsley Coman 89' for Patrice Evra"
+   ],
+   "fields": {
+    "matchDate": "2015-06-06",
+    "team": "Juventus",
+    "opponent": "Barcelona",
+    "scoreLine": "Juventus 1-3 Barcelona",
+    "venue": "Olympiastadion, Berlin",
+    "formationLabel": "4-3-1-2"
+   },
+   "hints": [
+    {
+     "name": "Stephan Lichtsteiner",
+     "position": "RB",
+     "nationality": "Switzerland",
+     "clubAtTime": "Juventus"
+    },
+    {
+     "name": "Andrea Barzagli",
+     "position": "CB",
+     "nationality": "Italy",
+     "clubAtTime": "Juventus"
+    },
+    {
+     "name": "Claudio Marchisio",
+     "position": "CM",
+     "nationality": "Italy",
+     "clubAtTime": "Juventus"
+    }
+   ],
+   "sources": [
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/uefachampionsleague/match/2015227--juventus-vs-barcelona/ (read from match.uefa.com/v5/matches/2015227, /lineups and /events)",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "2015-06-06, Final, Olympiastadion, Berlin, Juventus 1-3 Barcelona. Juventus XI: Buffon; Lichtsteiner, Barzagli, Bonucci, Evra; Pirlo; Marchisio, Pogba; Vidal; Tevez, Morata. Subs Pereyra 79' (Vidal), Llorente 85' (Morata), Coman 89' (Evra)."
+    },
+    {
+     "host": "skysports.com",
+     "url": "https://www.skysports.com/football/juventus-vs-barcelona/teams/335339",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Saturday 6th June 2015, Olympiastadion, Juventus 1-3 Barcelona. Juventus XI: G Buffon (c); S Lichtsteiner, A Barzagli, L Bonucci, P Evra; A Vidal, A Pirlo, C Marchisio, P Pogba; C Tevez, A Morata. Same three subs."
+    }
+   ],
+   "diffs": [],
+   "applied": [],
+   "notes": [
+    "XI matches UEFA and Sky exactly. Date 2015-06-06, Final, Olympiastadion Berlin, Juventus 1-3 Barcelona (Rakitic 4', Morata 55', Suarez 68', Neymar 90+7') all match.",
+    "Formation: entry 4-3-1-2. UEFA's pitch coordinates show Pirlo deepest, Marchisio right and Pogba left, Vidal central and advanced behind Tevez (right) and Morata (left): a 4-3-1-2 exactly as the entry lays it out. Sky prints a nominal 4-3-3 with Vidal 'RM' and Pogba 'LM'. Not counted.",
+    "Blank candidates Lichtsteiner, Barzagli, Marchisio all started."
+   ]
+  },
+  {
+   "position": 172,
+   "id": "cl-2016-final-atletico",
+   "research": "same",
+   "verdict": "verified",
+   "eleven": [
+    "Jan Oblak",
+    "Juanfran",
+    "Stefan Savic",
+    "Diego Godin",
+    "Filipe Luis",
+    "Saul Niguez",
+    "Gabi",
+    "Augusto Fernandez",
+    "Koke",
+    "Antoine Griezmann",
+    "Fernando Torres"
+   ],
+   "substitutes": [
+    "Yannick Carrasco 46' (UEFA) / 45' (Sky) for Augusto Fernandez, scored 79'",
+    "Lucas Hernandez 109' for Filipe Luis",
+    "Thomas Partey 116' for Koke"
+   ],
+   "fields": {
+    "matchDate": "2016-05-28",
+    "team": "Atletico Madrid",
+    "opponent": "Real Madrid",
+    "scoreLine": "Real Madrid 1-1 Atletico Madrid (Real Madrid won 5-3 on penalties)",
+    "venue": "San Siro, Milan",
+    "formationLabel": "4-4-2"
+   },
+   "hints": [
+    {
+     "name": "Stefan Savic",
+     "position": "CB",
+     "nationality": "Montenegro",
+     "clubAtTime": "Atletico Madrid"
+    },
+    {
+     "name": "Augusto Fernandez",
+     "position": "CM",
+     "nationality": "Argentina",
+     "clubAtTime": "Atletico Madrid"
+    },
+    {
+     "name": "Filipe Luis",
+     "position": "LB",
+     "nationality": "Brazil",
+     "clubAtTime": "Atletico Madrid"
+    }
+   ],
+   "sources": [
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/uefachampionsleague/match/2015789--real-madrid-vs-atleti/ (read from match.uefa.com/v5/matches/2015789, /lineups and /events)",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "2016-05-28, Final, Stadio San Siro, Milan, Real Madrid 1-1 Atleti, pens 5-3. Atleti XI: Oblak; Juanfran, Savic, Godin, Filipe Luis; Saul Niguez, Gabi, Augusto Fernandez, Koke; Fernando Torres, Antoine Griezmann. Events: Carrasco 46' for Augusto Fernandez, L. Hernandez 109' for Filipe Luis, Partey 116' for Koke; goals Ramos 15', Carrasco 79'."
+    },
+    {
+     "host": "skysports.com",
+     "url": "https://www.skysports.com/football/real-madrid-vs-atletico-madrid/teams/355010",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Saturday 28th May 2016, Giuseppe Meazza, 1-1, Real Madrid won 5-3 on penalties. Atletico 4-4-2: J Oblak; Juanfran, S Savic, D Godin, Filipe Luis; S Niguez (RM), G Fernandez (c), A Fernandez, Koke (LM); F Torres, A Griezmann. Subs Carrasco 45' (A Fernandez, scored 79'), L Hernandez 109', T Partey 116'."
+    }
+   ],
+   "diffs": [],
+   "applied": [],
+   "notes": [
+    "XI matches UEFA and Sky exactly, and Sky's position table matches the entry slot for slot (RB Juanfran, CB Savic, CB Godin, LB Filipe Luis, RM Saul, CM Gabi, CM Augusto Fernandez, LM Koke, ST Torres, ST Griezmann; 4-4-2).",
+    "Date 2016-05-28, Final, San Siro Milan (UEFA 'Stadio San Siro', Sky 'Giuseppe Meazza'), Real Madrid 1-1 Atletico, Real Madrid 5-3 on penalties (Ramos 15', Carrasco 79') all match.",
+    "Augusto Fernandez fact (made way at half time for Carrasco, who scored the equaliser) confirmed by both.",
+    "Minor: UEFA's pitch coordinates put Torres on the right and Griezmann on the left (slightly deeper); the entry has Griezmann right (x 62) and Torres left (x 38). Sky gives no sides. Single-source observation, not counted."
+   ]
+  },
+  {
+   "position": 173,
+   "id": "cl-2017-final-juventus",
+   "research": "same",
+   "verdict": "verified",
+   "eleven": [
+    "Gianluigi Buffon",
+    "Andrea Barzagli",
+    "Leonardo Bonucci",
+    "Giorgio Chiellini",
+    "Dani Alves",
+    "Miralem Pjanic",
+    "Sami Khedira",
+    "Alex Sandro",
+    "Paulo Dybala",
+    "Gonzalo Higuain",
+    "Mario Mandzukic"
+   ],
+   "substitutes": [
+    "Juan Cuadrado 66' for Andrea Barzagli",
+    "Claudio Marchisio 70' for Miralem Pjanic",
+    "Mario Lemina 78' for Paulo Dybala"
+   ],
+   "fields": {
+    "matchDate": "2017-06-03",
+    "team": "Juventus",
+    "opponent": "Real Madrid",
+    "scoreLine": "Juventus 1-4 Real Madrid",
+    "venue": "Millennium Stadium, Cardiff",
+    "formationLabel": "3-4-1-2"
+   },
+   "hints": [
+    {
+     "name": "Alex Sandro",
+     "position": "LWB",
+     "nationality": "Brazil",
+     "clubAtTime": "Juventus"
+    },
+    {
+     "name": "Miralem Pjanic",
+     "position": "CM",
+     "nationality": "Bosnia and Herzegovina",
+     "clubAtTime": "Juventus"
+    },
+    {
+     "name": "Sami Khedira",
+     "position": "CM",
+     "nationality": "Germany",
+     "clubAtTime": "Juventus"
+    }
+   ],
+   "sources": [
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/uefachampionsleague/match/2019641--juventus-vs-real-madrid/ (read from match.uefa.com/v5/matches/2019641 and /lineups)",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "2017-06-03, Final, National Stadium of Wales, Cardiff, Juventus 1-4 Real Madrid. Juventus XI: Buffon; Barzagli, Bonucci, Chiellini; Dani Alves, Pjanic, Khedira, Alex Sandro; Dybala; Higuain, Mandzukic."
+    },
+    {
+     "host": "skysports.com",
+     "url": "https://www.skysports.com/football/juventus-vs-real-madrid/teams/371636",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Saturday 3rd June 2017, Principality Stadium, Juventus 1-4 Real Madrid. XI: G Buffon (c); A Barzagli, L Bonucci, G Chiellini, Alex Sandro; M Pjanic, S Khedira, D Alves, P Dybala; M Mandzukic, G Higuain. Subs Cuadrado 66' (Barzagli), Marchisio 70' (Pjanic), Lemina 78' (Dybala)."
+    }
+   ],
+   "diffs": [],
+   "applied": [],
+   "notes": [
+    "XI matches UEFA and Sky exactly. Date 2017-06-03, Final, Juventus 1-4 Real Madrid (Ronaldo 20', Mandzukic 27', Casemiro 61', Ronaldo 64', Asensio 90') all match.",
+    "Venue: entry 'Millennium Stadium, Cardiff'; UEFA 'National Stadium of Wales', Sky 'Principality Stadium'. Same ground under its neutral and sponsor names.",
+    "Formation: entry 3-4-1-2. UEFA's pitch coordinates show a back three (Barzagli right, Bonucci, Chiellini left), Alves and Alex Sandro as wing backs, Pjanic right and Khedira left in the pivot, Dybala behind Higuain (right) and Mandzukic (left): exactly the entry's layout. Sky prints a nominal 4-2-3-1. Not counted."
+   ]
+  },
+  {
+   "position": 174,
+   "id": "cl-2018-final-liverpool",
+   "research": "same",
+   "verdict": "verified",
+   "eleven": [
+    "Loris Karius",
+    "Trent Alexander-Arnold",
+    "Dejan Lovren",
+    "Virgil van Dijk",
+    "Andy Robertson",
+    "Jordan Henderson",
+    "James Milner",
+    "Georginio Wijnaldum",
+    "Mohamed Salah",
+    "Roberto Firmino",
+    "Sadio Mane"
+   ],
+   "aka": {
+    "Andrew Robertson": "Andy Robertson"
+   },
+   "substitutes": [
+    "Adam Lallana 31' (UEFA) / 30' (Sky) for Mohamed Salah",
+    "Emre Can 83' for James Milner"
+   ],
+   "fields": {
+    "matchDate": "2018-05-26",
+    "team": "Liverpool",
+    "opponent": "Real Madrid",
+    "scoreLine": "Real Madrid 3-1 Liverpool",
+    "venue": "NSC Olimpiyskiy, Kyiv",
+    "formationLabel": "4-3-3"
+   },
+   "hints": [
+    {
+     "name": "Loris Karius",
+     "position": "GK",
+     "nationality": "Germany",
+     "clubAtTime": "Liverpool"
+    },
+    {
+     "name": "Dejan Lovren",
+     "position": "CB",
+     "nationality": "Croatia",
+     "clubAtTime": "Liverpool"
+    },
+    {
+     "name": "James Milner",
+     "position": "CM",
+     "nationality": "England",
+     "clubAtTime": "Liverpool"
+    }
+   ],
+   "sources": [
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/uefachampionsleague/match/2021711--real-madrid-vs-liverpool/ (read from match.uefa.com/v5/matches/2021711, /lineups and /events)",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "2018-05-26, Final, NSC Olimpiyskiy, Kyiv, Real Madrid 3-1 Liverpool. Liverpool XI: Karius; Alexander-Arnold, Lovren, van Dijk, Robertson; Milner, Henderson, Wijnaldum; Salah, Firmino, Mane. Events: Lallana 31' for Salah, Emre Can 83' for Milner."
+    },
+    {
+     "host": "skysports.com",
+     "url": "https://www.skysports.com/football/real-madrid-vs-liverpool/teams/389182",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Saturday 26th May 2018, Kiev Olympic Stadium, Real Madrid 3-1 Liverpool. Liverpool 4-3-3: L Karius; T Alexander-Arnold, D Lovren, V van Dijk, A Robertson; G Wijnaldum, J Henderson (c), J Milner; M Salah, R Firmino, S Mane. Subs Lallana 30' (Salah), Can 83' (Milner)."
+    }
+   ],
+   "diffs": [],
+   "applied": [],
+   "notes": [
+    "XI matches UEFA and Sky exactly, and Sky's position table (4-3-3, RW Salah, ST Firmino, LW Mane) matches the entry. UEFA's coordinates also put Lovren right and Van Dijk left, Milner right and Wijnaldum left of Henderson, as in the entry.",
+    "Date 2018-05-26, Final, NSC Olimpiyskiy Kyiv, Real Madrid 3-1 Liverpool all match.",
+    "'Andrew Robertson' in the entry, 'Andy Robertson' / 'A Robertson' in the sources: same man."
+   ]
+  },
+  {
+   "position": 175,
+   "id": "cl-2021-final-city",
+   "research": "same",
+   "verdict": "verified",
+   "eleven": [
+    "Ederson",
+    "Kyle Walker",
+    "John Stones",
+    "Ruben Dias",
+    "Oleksandr Zinchenko",
+    "Ilkay Gundogan",
+    "Bernardo Silva",
+    "Phil Foden",
+    "Riyad Mahrez",
+    "Kevin De Bruyne",
+    "Raheem Sterling"
+   ],
+   "substitutes": [
+    "Gabriel Jesus 60' for Kevin De Bruyne",
+    "Fernandinho 64' for Bernardo Silva",
+    "Sergio Aguero 77' for Raheem Sterling"
+   ],
+   "fields": {
+    "matchDate": "2021-05-29",
+    "team": "Manchester City",
+    "opponent": "Chelsea",
+    "scoreLine": "Manchester City 0-1 Chelsea",
+    "venue": "Estadio do Dragao, Porto",
+    "formationLabel": "4-3-3"
+   },
+   "hints": [
+    {
+     "name": "Oleksandr Zinchenko",
+     "position": "LB",
+     "nationality": "Ukraine",
+     "clubAtTime": "Manchester City"
+    },
+    {
+     "name": "Ruben Dias",
+     "position": "CB",
+     "nationality": "Portugal",
+     "clubAtTime": "Manchester City"
+    },
+    {
+     "name": "Riyad Mahrez",
+     "position": "RW",
+     "nationality": "Algeria",
+     "clubAtTime": "Manchester City"
+    }
+   ],
+   "sources": [
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/uefachampionsleague/match/2029498--man-city-vs-chelsea/ (read from match.uefa.com/v5/matches/2029498 and /lineups)",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "2021-05-29, Final, Estadio do Dragao, Porto, Man City 0-1 Chelsea. City XI: Ederson; Walker, Stones, Ruben Dias, Zinchenko; Gundogan; Bernardo Silva, Foden; Mahrez, De Bruyne, Sterling. Bench incl. Rodri, Fernandinho, Jesus, Aguero. Goal Havertz 42'."
+    },
+    {
+     "host": "skysports.com",
+     "url": "https://www.skysports.com/football/manchester-city-vs-chelsea/teams/442566",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Saturday 29th May 2021, Estadio do Dragao, Manchester City 0-1 Chelsea (Havertz 42'). XI: Ederson; K Walker, J Stones, R Alves Dias, O Zinchenko; B Silva, I Gundogan, P Foden, R Mahrez, K De Bruyne (c), R Sterling. Subs G Jesus 60' (De Bruyne), Fernandinho 64' (B Silva), S Aguero 77' (Sterling)."
+    }
+   ],
+   "diffs": [],
+   "applied": [],
+   "notes": [
+    "XI matches UEFA and Sky exactly; Rodri and Fernandinho on UEFA's bench, as the entry's comment says. Date 2021-05-29, Final, Estadio do Dragao Porto, Manchester City 0-1 Chelsea (Havertz 42') all match.",
+    "Positions: UEFA's pitch coordinates put Gundogan deepest, Bernardo Silva right and Foden left, Mahrez right, Sterling left and De Bruyne central but deeper than the wide men (a false nine): exactly the entry's layout and comment. Sky's auto labels (Foden RM, Mahrez LM, Sterling ST, De Bruyne CAM) disagree on sides; the organiser is preferred and the entry matches it. Not counted.",
+    "Formation 4-3-3 is not labelled by either source; consistent with UEFA's coordinates."
+   ]
+  }
+ ]
+}
