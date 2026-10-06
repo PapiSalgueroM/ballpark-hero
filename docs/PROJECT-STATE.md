@@ -1,3 +1,21 @@
+## Codex1063 first remote findings and repairs, 2026-10-06
+
+Preparation37435349135 failed and is not acceptance. Type/build, generation,
+22 combat/controller outcomes and28 effective controls passed. Paired72-fight
+policies measured blank0wins/0damage/0score and active70wins, mean97.2567damage
+and86.9861score. Outcome margins now use that measured headroom. No general
+balance claim. Native had not reached gameplay because its extra loopback
+preload blocked actual fonts; it now uses the accepted isolated native routing,
+only template/declared fonts with redirects0, all DB/writes fulfilled locally,
+and all8 real font faces required. No production access.
+The full171-page metadata check passed assertions but blocked two fonts;
+font hosts now abort before its guard, preserving all head/chunk assertions.
+New game link graph is restored by regenerating Fight Gym's actual related
+links. Sitemap ratchet grows170to171. Generation fence now eight files.
+Artifact11399321725 ZIP hash verified45839d412af821d47d09f39ca2be72bbdee71e99dcef7c4087ed124ee13b4527;
+no failed generated outputs copied. No product PR or live claim. New remote
+preparation follows. Root drafts/seven stashes safe. Claude pub1062 unchanged.
+
 ## Codex1063 source preparation, 2026-10-06
 
 Cage Clash is implemented in its isolated branch, with original pixel art,

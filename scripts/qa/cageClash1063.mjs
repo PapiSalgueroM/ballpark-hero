@@ -1,5 +1,4 @@
 /* Real built-game input and clock. No injected fight state or application test API. */
-import '../lib/offlineTransport.cjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -95,6 +94,7 @@ try {
             return route.fulfill({ response, body }); } return route.fulfill({ response });
         } catch (error) { row.assetErrors.push(String(error)); return route.abort(); }
       }
+      if (request.resourceType() === 'font') { row.assetErrors.push(`Undeclared font ${url.href}`); return route.abort('blockedbyclient'); }
       return route.fulfill({ status: 200, contentType: request.resourceType() === 'stylesheet' ? 'text/css' : 'application/json', body: request.resourceType() === 'stylesheet' ? '' : '[]' });
     });
     await context.routeWebSocket('**/*', socket => socket.close());
@@ -126,8 +126,15 @@ try {
     try {
       await page.clock.install();
       await page.goto(`${BASE}/cage-clash`, { waitUntil: 'domcontentloaded' }); await root(page).waitFor();
-      row.fonts = await page.evaluate(async () => { await document.fonts.ready; const faces = [...document.fonts].map(f => ({ family: f.family, status: f.status })); return faces; });
-      assert(row.fonts.some(f => f.status === 'loaded'), 'Actual site fonts are loaded');
+      row.fonts = await page.evaluate(async () => {
+        await document.fonts.ready; const faces = [];
+        for (const family of ['Inter', 'Space Grotesk']) for (const weight of [400, 500, 600, 700]) {
+          const loaded = await document.fonts.load(`${weight} 16px "${family}"`, 'Cage Clash');
+          faces.push({ family, weight, count: loaded.length, loaded: loaded.length > 0 && loaded.every(face => face.status === 'loaded') });
+        }
+        return faces;
+      });
+      assert.equal(row.fonts.length, 8); assert(row.fonts.every(face => face.loaded), 'All eight actual site font faces load before native geometry');
       assert.equal(await page.locator('html').evaluate(el => el.classList.contains('light')), profile.theme === 'light');
       assert.equal(await page.evaluate(() => matchMedia('(prefers-reduced-motion: reduce)').matches), profile.reduced);
       await inspect('setup'); assert.match(await root(page).innerText(), /Try this|Example/);
@@ -221,7 +228,7 @@ try {
       assert.equal(await page.evaluate(() => localStorage.getItem('cage-unrelated')), 'untouched');
       assert.deepEqual(row.errors, []); assert.deepEqual(row.assetErrors, []); row.passed = true;
       console.log(`cageClash1063 ${id}: real controls, complete fight, release, help pause, pixels, geometry and isolated network passed.`);
-    } catch (error) { row.error = String(error?.stack || error); await page.screenshot({ path: path.join(OUT, `${id}-failure.png`) }).catch(() => {}); }
+    } catch (error) { row.error = String(error?.stack || error); console.error(`${id}: ${row.error}`); await page.screenshot({ path: path.join(OUT, `${id}-failure.png`) }).catch(() => {}); }
     finally { await context.close(); report.coverage = [...coverage]; save(); }
   }
   assert.equal(report.cases.length, 4); assert.equal(report.controls.length, 4); assert(report.cases.every(row => row.passed), 'All four native profiles pass');

@@ -379,6 +379,9 @@ async function newPage() {
   await page.route('**://*.supabase.co/**', () => { /* never settled on purpose, as the prerenderer leaves it */ });
   await page.route('**://*.googletagmanager.com/**', r => r.abort());
   await page.route('**://pagead2.googlesyndication.com/**', r => r.abort());
+  // Head and chunk equivalence does not need external font transport.
+  await page.route('https://fonts.googleapis.com/**', r => r.abort());
+  await page.route('https://fonts.gstatic.com/**', r => r.abort());
   return page;
 }
 

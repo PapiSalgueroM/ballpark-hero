@@ -70,10 +70,10 @@ jobs:
       - name: Prepare route snapshots and final ledger
         if: github.event_name == 'push' && steps.build.outcome == 'success'
         run: |
-          PRERENDER_ONLY=/cage-clash,/whats-new node scripts/prerender.mjs 2>&1 | tee cage-clash-artifacts/prerender.log
+          PRERENDER_ONLY=/cage-clash,/whats-new,/fight-gym node scripts/prerender.mjs 2>&1 | tee cage-clash-artifacts/prerender.log
           node scripts/genSitemap.mjs 2>&1 | tee cage-clash-artifacts/sitemap.log
           npm run build 2>&1 | tee cage-clash-artifacts/generated-build.log
-          files=(index.html public/cage-clash/index.html public/whats-new/index.html public/sitemap.xml scripts/data/lastmod.json src/data/searchKeywords.json src/data/seoMetaParts/seoMetaPart14.ts)
+          files=(index.html public/cage-clash/index.html public/whats-new/index.html public/fight-gym/index.html public/sitemap.xml scripts/data/lastmod.json src/data/searchKeywords.json src/data/seoMetaParts/seoMetaPart14.ts)
           printf '%s\n' "${files[@]}" | sort > cage-clash-artifacts/allowed-generation.txt
           { git diff --name-only; git ls-files --others --exclude-standard public/cage-clash; } | sort -u > cage-clash-artifacts/changed-generation.txt
           if comm -23 cage-clash-artifacts/changed-generation.txt cage-clash-artifacts/allowed-generation.txt | grep .; then exit 1; fi
@@ -88,7 +88,7 @@ jobs:
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
           failed=0
-          for harness in simMmaPromotion simFightPromoter simNoDoubleRecord simScoringCoverage simScoreShown simHarnessAnchors simGuideHeadings simSeoTitles simHomeCopy simSeoMetaSplit simInventedNames; do
+          for harness in simMmaPromotion simFightPromoter simNoDoubleRecord simScoringCoverage simScoreShown simHarnessAnchors simGuideHeadings simSeoTitles simHomeCopy simSeoMetaSplit simInventedNames simRelatedGames; do
             ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "cage-clash-artifacts/$harness.log" || failed=1
           done
           exit "$failed"

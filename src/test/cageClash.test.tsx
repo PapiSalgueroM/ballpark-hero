@@ -216,7 +216,9 @@ describe('Cage Clash actual combat', () => {
         damage: fights.reduce((n, s) => n + s.player.damageDealt, 0) / fights.length, score: fights.reduce((n, s) => n + cageClashScore(s), 0) / fights.length });
     }
     console.log(`Cage strategy ${JSON.stringify(rows)}`);
-    expect(rows[1].damage).toBeGreaterThan(rows[0].damage); expect(rows[1].score).toBeGreaterThan(rows[0].score);
+    expect(rows[1].damage - rows[0].damage).toBeGreaterThan(60);
+    expect(rows[1].score - rows[0].score).toBeGreaterThan(40);
+    expect(rows[1].wins - rows[0].wins).toBeGreaterThanOrEqual(36);
   });
 });
 
