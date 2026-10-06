@@ -50,8 +50,11 @@ const PAGE_SIZE = 1000;
    twin (13 rows) and adds 7 rows of 2025-2026, so the tables read 252 and
    3,634 after it. Until it is applied the table reads 253 and 3,640, and a
    bake fails closed on CORRECTION_LEDGERS below rather than undoing it. */
+/* Round 1017 folded wave 2 into the same unapplied migration: 86 more rows
+   of 2025-2026 and 7 missed spells of 2024-2025, so the tables read 252 and
+   3,727 once it is applied. */
 const PLAYER_FLOOR = 252;
-const SEASON_FLOOR = 3634;
+const SEASON_FLOOR = 3727;
 
 /* Corrections recorded in a ledger, each with a migration that writes it to
    the tables. The file is baked from the tables, so a correction lives in the
@@ -80,15 +83,19 @@ export function correctionProblems(players, ledger, removed = removedNames([ledg
   for (const r of ledger.removed ?? []) {
     if (byName.has(r.player)) problems.push(`${r.player} is recorded as removed (kept as ${r.keptAs}) and is still in the read`);
   }
-  for (const r of ledger.added ?? []) {
+  /* Round 1017: inserted rows (a missed spell of an earlier season) are checked like added ones */
+  for (const r of [...(ledger.added ?? []), ...(ledger.inserted ?? [])]) {
     if (removed.has(r.player)) continue;
     const p = byName.get(r.player);
     const has = p?.career.some(s => s.season === r.season && s.club === r.club && s.goals === r.goals && s.appearances === r.appearances);
-    if (!has) problems.push(`${r.player} ${r.season} ${r.club} (${r.appearances} apps, ${r.goals} goals) is recorded as added and is not in the read`);
+    if (!has) problems.push(`${r.player} ${r.season} ${r.club} (${r.appearances} apps, ${r.goals} goals) is recorded as ${ledger.added?.includes(r) ? 'added' : 'inserted'} and is not in the read`);
   }
+  /* a changed entry names its row by the club it read before; a row moved to another club reads the new one */
+  const clubAfter = new Map((ledger.changed ?? []).filter(c => c.field === 'club').map(c => [`${c.player}|${c.season}|${c.club}`, c.to]));
   for (const c of ledger.changed ?? []) {
     if (removed.has(c.player)) continue;
-    const row = byName.get(c.player)?.career.find(s => s.season === c.season && s.club === c.club);
+    const club = clubAfter.get(`${c.player}|${c.season}|${c.club}`) ?? c.club;
+    const row = byName.get(c.player)?.career.find(s => s.season === c.season && s.club === club);
     if (!row || row[c.field] !== c.to) problems.push(`${c.player} ${c.season} ${c.club}: ${c.field} reads ${row ? row[c.field] : '(no row)'}, recorded as corrected to ${c.to}`);
   }
   return problems;

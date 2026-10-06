@@ -70,9 +70,11 @@ if (CONTROL === 'stale' && LOCAL_ONLY) { console.error('the stale control is cau
    28 first club rows); a shrink is lost coverage, a short read, or a bake from
    a table that does not carry the 784 migration yet. Round 1010b moved them
    on purpose to 252 and 3,634: the Alisson Becker twin (13 rows) goes and
-   seven 2025-2026 rows arrive (scripts/data/careerSeason2025.json). */
+   seven 2025-2026 rows arrive (scripts/data/careerSeason2025.json). Round
+   1017 (wave 2 of that ledger, the same migration) moved seasons to 3,727:
+   86 more 2025-2026 rows and 7 missed 2024-2025 spells. */
 const PLAYER_FLOOR = 252;
-const SEASON_FLOOR = 3634;
+const SEASON_FLOOR = 3727;
 const SAMPLE = 30;
 
 let failures = 0;

@@ -64,8 +64,32 @@ export function hostsFor(sources, field) {
 }
 
 const NUMERIC_FIELDS = ['goals', 'appearances', 'assists'];
-const LABELLED = { goals: /(\d+) goals?\b/g, assists: /(\d+) assists?\b/g, appearances: /(\d+) (?:apps|games?|appearances)\b/g };
-const NONE = { goals: /\bno goals?\b/, assists: /\bno assists?\b/, appearances: /\bno (?:apps|games?|appearances)\b/ };
+/* Round 1017 (wave 2's readings): "matches", "match" and "MP" are appearances too, and "40 goals conceded" is a keeper's, never his goals */
+const LABEL = { goals: 'goals?\\b(?!\\s+conceded)', assists: 'assists?\\b', appearances: '(?:apps|games?|appearances|match(?:es)?|MP)\\b' };
+const NONE = { goals: /\bno goals?\b/, assists: /\bno assists?\b/, appearances: /\bno (?:apps|games?|appearances|match(?:es)?)\b/ };
+const MONTH = '(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*';
+/* the order a reading lists a combined total in: "39, 2, 11 together" is appearances, goals, assists */
+const TRIPLE_ORDER = ['appearances', 'goals', 'assists'];
+const escapeRe = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+/**
+ * Round 1017: the clauses (split on semicolons) of a reading that can state
+ * this row's total. Dates and seasons are taken out, since a year is never a
+ * count ("2024/25 Arsenal: 37 matches" read 2024 before). A clause that
+ * mentions "without" states the total of another convention (the 2025 Club
+ * World Cup left out), and one that gives a "career" number a career total:
+ * both are dropped. A reading whose totals need more than this (another
+ * club's spell in the same line, a Club World Cup listed apart with no sum)
+ * carries `states`, see readingOf.
+ */
+function clausesFor(reads) {
+  return String(reads)
+    .replace(/\b\d{4}-\d{2}-\d{2}\b/g, ' ')
+    .replace(new RegExp(`\\b\\d{1,2} ${MONTH}(?: (?:19|20)\\d{2})?\\b`, 'g'), ' ')
+    .replace(/\b(?:19|20)\d{2}(?:\s*[/-]\s*(?:19|20)?\d{2})?\b/g, ' ')
+    .split(';').filter(c => !/\bwithout\b/i.test(c) && !/\bcareer\s+\d/i.test(c))
+    .join(';').trim();
+}
 
 /**
  * The total a source's own recorded reading (`reads`) gives for a numeric
@@ -75,20 +99,40 @@ const NONE = { goals: /\bno goals?\b/, assists: /\bno assists?\b/, appearances: 
  * brackets); "no goal" reads 0; an appearances page reads "Name: 35 (...)";
  * a source carrying one numeric field may read as a bare leading number, or
  * "absent from the list" (0). Anything else is not a reading of that field.
+ *
+ * Round 1017 (wave 2's readings, see clausesFor): a source may state its
+ * total in `states` ({ appearances: 44 }) where its reading gives it only in
+ * words ("1 app (44 together)"), and that wins. A total the reading gives for
+ * the Club World Cup counted ("39, 2, 11 together", "44, 17, 5 with it"; for
+ * a one field source also "(49 together)", "13 with it", "with it 44") wins
+ * over the labelled ones; the row's club may sit between a number and its
+ * label ("49 Barcelona games", "59 club games"); a one field source may close
+ * a list with its total ("goals: Premier League 4, Champions League 4: 9").
  */
-export function readingOf(source, field) {
+export function readingOf(source, field, club = null) {
   if (!NUMERIC_FIELDS.includes(field)) return null;
-  const text = String(source?.reads ?? '').trim();
+  if (Number.isInteger(source?.states?.[field])) return source.states[field];
+  const text = clausesFor(source?.reads ?? "");
+  const numeric = (source?.fields ?? []).filter(f => NUMERIC_FIELDS.includes(f));
+  const single = numeric.length === 1 && numeric[0] === field;
+  const triple = /(\d+), (\d+), (\d+) (?:together|with it)\b/.exec(text);
+  if (triple) return Number(triple[1 + TRIPLE_ORDER.indexOf(field)]);
+  if (single) {
+    const w = /\((\d+) together\)|(\d+) with it\b|with it,? (\d+)\b/.exec(text);
+    if (w) return Number(w[1] ?? w[2] ?? w[3]);
+  }
   const flat = text.replace(/\([^()]*\)/g, ' ');
-  const labelled = [...flat.matchAll(LABELLED[field])];
+  const between = `(?:(?:club${club ? `|${escapeRe(club)}` : ''}) )?`;
+  const labelled = [...flat.matchAll(new RegExp(`(\\d+) ${between}${LABEL[field]}`, 'g'))];
   if (labelled.length) return Number(labelled[labelled.length - 1][1]);
   if (NONE[field].test(flat)) return 0;
   if (field === 'appearances') { const m = /^[^:\d]+:\s*(\d+)\b/.exec(text); if (m) return Number(m[1]); }
-  const numeric = (source?.fields ?? []).filter(f => NUMERIC_FIELDS.includes(f));
-  if (numeric.length === 1 && numeric[0] === field) {
+  if (single) {
     const m = /^(\d+)\b/.exec(text);
     if (m) return Number(m[1]);
     if (/^absent from\b/.test(text)) return 0;
+    const closed = /:\s*(\d+)\s*(?:$|[;.,])/.exec(flat.replace(/\s+$/, ''));
+    if (closed) return Number(closed[1]);
   }
   return null;
 }
@@ -97,10 +141,11 @@ export function readingOf(source, field) {
  * What the sources' own readings say about one value: every source that
  * carries the field and states a total must state this one, and at least one
  * must state it. Returns the problems, empty when the value is what was read.
+ * `club` is the row's club (after any club change), see clausesFor.
  */
-export function readingProblems(sources, field, value) {
+export function readingProblems(sources, field, value, club = null) {
   const read = (sources ?? []).filter(s => Array.isArray(s.fields) && s.fields.includes(field))
-    .map(s => ({ url: s.url, n: readingOf(s, field) })).filter(r => r.n !== null);
+    .map(s => ({ url: s.url, n: readingOf(s, field, club) })).filter(r => r.n !== null);
   if (!read.length) return [`no source's recorded reading states the ${field} total`];
   return read.filter(r => r.n !== value).map(r => `${field} ${value}, but ${r.url} reads ${r.n}`);
 }
@@ -251,9 +296,11 @@ export function coverage(after, ledger) {
   const unaccounted = stopAtPrevious.filter(p => !ended.has(p.name) && !held.has(p.name)).map(p => p.name);
   const notCovered = [];
   const names = new Set(after.map(p => p.name));
+  /* a calendar league spell of the season is its first calendar year (Round 1017: Di María 2025 Rosario Central) */
+  const calendarYear = String(ledger.season).slice(0, 4);
   for (const name of added) {
     const p = after.find(x => x.name === name);
-    if (!p || lastOf(p) !== ledger.season) notCovered.push(`${name}: added, but his last row is ${p ? lastOf(p) : '(not in the pool)'}`);
+    if (!p || (lastOf(p) !== ledger.season && lastOf(p) !== calendarYear)) notCovered.push(`${name}: added, but his last row is ${p ? lastOf(p) : '(not in the pool)'}`);
   }
   for (const name of [...ended, ...held]) if (!names.has(name)) notCovered.push(`${name}: listed as ended or held, not in the pool`);
   const olderStops = after.filter(p => {

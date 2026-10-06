@@ -980,7 +980,8 @@
       "sources": [
         { "url": "https://www.footballdatabase.eu/en/player/details/244843-andre-onana", "fields": [ "club", "appearances", "goals" ], "reads": "Trabzonspor 2025/2026: Süper Lig 29, TFF Süper Kupa 1, Türkiye Kupasi 3 (33 games, 2,916 minutes, 40 conceded)" },
         { "url": "https://www.besoccer.com/player/a-onana-194243", "fields": [ "club", "appearances", "goals" ], "reads": "2025/26 Trabzonspor: 33 matches, 40 goals conceded" },
-        { "url": "https://www.soccerbase.com/players/player.sd?player_id=81181&season_id=158", "fields": [ "club" ], "reads": "loaned to Trabzonspor 2025-09-11; 29 Super Lig games listed (cup games not listed), loan renewed 2026-07-01" }
+        { "url": "https://www.soccerbase.com/players/player.sd?player_id=81181&season_id=158", "fields": [ "club" ], "reads": "loaned to Trabzonspor 2025-09-11; 29 Super Lig games listed (cup games not listed), loan renewed 2026-07-01" },
+        { "url": "https://www.espn.com/soccer/player/stats/_/id/215340/andre-onana", "fields": [ "goals" ], "reads": "Trabzonspor 2025-26 Turkish Super Lig: 29 starts, 0 sub appearances, 0 goals, 1 assist", "note": "league games only; the two hosts above list his 4 cup games with the goals he conceded and credit him no goal (read in Round 1017)" }
       ]
     },
     {
@@ -1044,7 +1045,9 @@
       "marketValue": 0,
       "sources": [
         { "url": "https://www.soccerbase.com/players/player.sd?player_id=135166&season_id=158", "fields": [ "club", "appearances", "goals" ], "reads": "Loaned to Napoli 2025-09-01 (made permanent 2026-06-03); no Man Utd game this season. Napoli match log: Serie A 33 games 12 goals, Champions League 7 (3: Sporting 2, Chelsea 1), Coppa Italia 2 (0), Supercoppa 2 (1 v Milan): 44 games 16 goals (Denmark games excluded)" },
-        { "url": "https://www.besoccer.com/player/rasmus-hojlund-834769", "fields": [ "club", "appearances", "goals" ], "reads": "Napoli 2025/26: 44 matches 16 goals; Manchester United 2025/26: 0 matches" }
+        { "url": "https://www.besoccer.com/player/rasmus-hojlund-834769", "fields": [ "club", "appearances", "goals" ], "reads": "Napoli 2025/26: 44 matches 16 goals; Manchester United 2025/26: 0 matches", "states": { "appearances": 44 },
+          "note": "states: its Napoli line, the Manchester United line after it is another spell."
+        }
       ]
     },
     {
@@ -1062,7 +1065,7 @@
         { "url": "https://www.soccerbase.com/players/player.sd?player_id=134664&season_id=158", "fields": [ "club", "appearances", "goals" ], "reads": "Chelsea match log: Premier League 33 games 3 goals (West Ham, Brentford, Liverpool), Champions League 10 (2: Ajax, Pafos), League Cup 3, FA Cup 4: 50 games 5 goals (Ecuador games and friendlies excluded). A first read of this page dropped three April league rows; a second read listing the league rows one by one gave 33" },
         { "url": "https://www.besoccer.com/player/m-caicedo-867414", "fields": [ "club", "appearances", "goals" ], "reads": "Chelsea 2025/26: 50 matches 5 goals" },
         { "url": "https://us.soccerway.com/player/caicedo-moises/tIqaAkDs/", "fields": [ "club", "appearances", "goals" ], "reads": "2025/2026 Chelsea: Premier League 33 (3 goals), FA Cup 4, EFL Cup 3, Champions League 10 (2): 50 games 5 goals" },
-        { "url": "https://www.espn.com/soccer/player/stats/_/id/289877/moises-caicedo", "fields": [ "goals" ], "reads": "Premier League 2025-26: 32 starts, 3 goals, 1 red card" }
+        { "url": "https://www.espn.com/soccer/player/stats/_/id/289877/moises-caicedo", "fields": [], "reads": "Premier League 2025-26: 32 starts, 3 goals, 1 red card", "note": "Premier League only, not a season total, so it carries no field (Round 1017)." }
       ]
     },
     {
@@ -1486,7 +1489,9 @@
       "note": "44 includes one FIFA Intercontinental Cup game (December 2025, inside the season); 43 without it. footballdatabase (https://www.footballdatabase.eu/en/player/details/97374-riyad-mahrez) returned a truncated page twice and was not used.",
       "sources": [
         { "url": "https://us.soccerway.com/player/mahrez-riyad/AkzHA2kB/", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Al Ahli SC: Saudi Professional League 2025/2026 27 (4, 8), King Cup 2025/2026 3 (0, 1), Super Cup 2025/2026 2 (0, 3), AFC Champions League 2025/2026 11 (4, 2), FIFA Intercontinental Cup 2025 1 (0, 0): 44 apps 8 goals 14 assists" },
-        { "url": "https://www.fotmob.com/players/278343/riyad-mahrez", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Career history, Al Ahli 2025/2026: Saudi Pro League 27 (4, 8), King's Cup 3 (0, 1), Super Cup 2 (0, 3), AFC Champions League Elite 11 (4, 2): 43 apps 8 goals 14 assists; FIFA Intercontinental Cup 2025 listed as its own season: 1 app (44 together); Al Ahli 2023-07-28 to 2026-07-04" }
+        { "url": "https://www.fotmob.com/players/278343/riyad-mahrez", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Career history, Al Ahli 2025/2026: Saudi Pro League 27 (4, 8), King's Cup 3 (0, 1), Super Cup 2 (0, 3), AFC Champions League Elite 11 (4, 2): 43 apps 8 goals 14 assists; FIFA Intercontinental Cup 2025 listed as its own season: 1 app (44 together); Al Ahli 2023-07-28 to 2026-07-04", "states": { "appearances": 44 },
+          "note": "states: 43 and the Intercontinental Cup game it lists apart, 44 together as the reading says."
+        }
       ]
     },
     {
@@ -3620,7 +3625,9 @@
       "to": 41,
       "sources": [
         { "url": "https://www.soccerbase.com/players/player.sd?player_id=105272&season_id=157", "fields": [ "club", "appearances" ], "reads": "Chelsea (loan from 2024-08-30): Premier League 31 (3 goals: Southampton, Tottenham, Ipswich), Conference League 8 (2: Djurgarden, Real Betis), FA Cup 2: 41 games 5 goals; no Club World Cup game. Before the loan, one Man Utd game: Community Shield v Man City 2024-08-10" },
-        { "url": "https://www.besoccer.com/player/j-sancho-341319", "fields": [ "club", "appearances" ], "reads": "2024/25 Chelsea: 41 matches 5 goals; Manchester United: 1 match 0 goals" },
+        { "url": "https://www.besoccer.com/player/j-sancho-341319", "fields": [ "club", "appearances" ], "reads": "2024/25 Chelsea: 41 matches 5 goals; Manchester United: 1 match 0 goals", "states": { "appearances": 41 },
+          "note": "states: its Chelsea line, the Manchester United line after it is the inserted spell."
+        },
         { "url": "https://www.footballdatabase.eu/en/club/team/38-chelsea/2024-2025", "fields": [ "club", "appearances" ], "reads": "Chelsea 2024/2025 squad: Jadon Sancho 41 played matches, 5 goals" }
       ]
     },
@@ -3664,7 +3671,9 @@
       "note": "soccerbase season 157 lists 19 Chelsea games 7 goals (it shows 4 Conference League games where the other three hosts imply 5). Goals 7 stand unchanged (all four hosts read 7).",
       "sources": [
         { "url": "https://ng.soccerway.com/player/joao-felix/KI3YXMhi/", "fields": [ "club", "appearances" ], "reads": "2024/2025 Chelsea: Premier League 12 (1 goal), FA Cup 1 (2), EFL Cup 2 (0), Conference League 5 (4): 20 games 7 goals" },
-        { "url": "https://www.besoccer.com/player/f-sequeira-j-341347", "fields": [ "club", "appearances" ], "reads": "2024/25 Chelsea: 20 matches 7 goals; Milan: 21 matches 3 goals" },
+        { "url": "https://www.besoccer.com/player/f-sequeira-j-341347", "fields": [ "club", "appearances" ], "reads": "2024/25 Chelsea: 20 matches 7 goals; Milan: 21 matches 3 goals", "states": { "appearances": 20 },
+          "note": "states: its Chelsea line, the Milan line after it is the inserted spell."
+        },
         { "url": "https://www.footballdatabase.eu/en/club/team/38-chelsea/2024-2025", "fields": [ "club", "appearances" ], "reads": "Chelsea 2024/2025 squad: João Félix 20 played matches, 7 goals" }
       ]
     },
@@ -5294,8 +5303,8 @@
     }
   },
   "rehearsal": {
-    "migrationSha256": "11e13a4af8deb1dcd46ba985aee2a110ebf7f10a8ef7eb4237c0757ab013c4b2",
+    "migrationSha256": "0f04e316bb9ae8a2ed83e02df34625f8da4412324f2c305c3dce2482d8f4b5dc",
     "with": "@electric-sql/pglite, PostgreSQL 18.3 (PGlite 0.5.8)",
-    "on": "2026-10-05"
+    "on": "2026-10-06"
   }
 }

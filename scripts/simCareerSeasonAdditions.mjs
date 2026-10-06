@@ -14,7 +14,14 @@
  *      man gets a row; no long dash anywhere in the file; every goals,
  *      appearances and assists number (added or changed) is the total its
  *      sources' recorded readings state (readingOf), so a typo regenerated
- *      into the migration and the bake still goes red here.
+ *      into the migration and the bake still goes red here. Wave 2 (Round
+ *      1017): an inserted row is a spell of the previous season at a split
+ *      season club, placed beside exactly one row of that same season (its
+ *      anchor, as the row reads once the changed entries are applied), with
+ *      the added rows' source rules; a changed entry may move a row to another
+ *      club, named by its old club, the new club flagged and on two hosts;
+ *      only club, goals, appearances and assists may change (the migration
+ *      writes nothing else).
  *   2. COVERAGE, the outcome that would have caught the tpa-762 report: the
  *      men whose last row is still the season before, neither ended nor held,
  *      are exactly COVERAGE_BASELINE, a list frozen in this file by name (a
@@ -23,11 +30,14 @@
  *      the same commit. The generator refuses to write a count above the
  *      committed one. Every man the ledger adds must now end at its season.
  *      Measured 2026-10-05: 95 before wave 1 (94 men and the twin), 80 after
- *      it; 23 men stop a season earlier (printed, a later round's).
+ *      it, 0 after wave 2 (Round 1017); 23 men stop a season earlier
+ *      (printed, a later round's).
  *   3. THE MIGRATION AND THE BAKE ARE THE LEDGER: the committed migration,
  *      bake and ledger equal what scripts/genCareerSeasonAdditions.mjs
- *      generates from the ledger now, and the migration's inserts and updates,
- *      read back independently, are the ledger's rows and counts.
+ *      generates from the ledger now, and the migration's inserts (added and
+ *      inserted, each inserted row at its anchor's place) and updates (a club
+ *      move included), read back independently, are the ledger's rows and
+ *      counts.
  *   4. THE BAKE CARRIES THE LEDGER: correctionProblems (the bake's own guard)
  *      finds nothing, and the bake hashes to the ledger's postBake.
  *   5. IDENTITY: no two pool players carry the same club and season key set.
@@ -59,7 +69,13 @@
  *   twin       Alisson cloned as Alisson Becker               (section 5)
  *   rehearse      Salah's 2024-2025 update writes 33 goals    (section 7)
  *   rehearsehint  tpa-762's active entry written as 3 steps  (section 7)
- * The two rehearsal controls rewrite only the SQL handed to PGlite and refuse
+ *   anchor        Kvaratskhelia's Napoli spell placed before a
+ *                 2024-2025 Marseille row he never had        (section 1)
+ *   rehearseclub  Aubameyang's move to Al-Qadsiah guarded by
+ *                 7 old goals where the table holds 6         (section 7)
+ *   rehearseinsert  Kvaratskhelia's Napoli spell written one
+ *                 place too late, after the PSG row           (section 7)
+ * The rehearsal controls rewrite only the SQL handed to PGlite and refuse
  * to run where PGlite is not resolvable, since they would prove nothing there.
  *
  * Reads no network and no database. Run: node scripts/simCareerSeasonAdditions.mjs
@@ -74,11 +90,13 @@ import { CALENDAR_SEASON, LEDGER_FILE, SPLIT_SEASON, applyLedger, bakeHash, care
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_SEASON_ADD_CONTROL || '';
-const OWN = { onesource: 1, dash: 1, calendar: 1, unflagged: 1, reads: 1, uncovered: 2, twin: 5, rehearse: 7, rehearsehint: 7 };
-/* what the two rehearsal controls rewrite in the migration text, in memory only */
+const OWN = { onesource: 1, dash: 1, calendar: 1, unflagged: 1, reads: 1, anchor: 1, uncovered: 2, twin: 5, rehearse: 7, rehearsehint: 7, rehearseclub: 7, rehearseinsert: 7 };
+/* what the rehearsal controls rewrite in the migration text, in memory only */
 const REHEARSE_CONTROLS = {
   rehearse: ['update public.career_seasons set goals = 34, assists = 23, appearances = 52', 'update public.career_seasons set goals = 33, assists = 23, appearances = 52'],
   rehearsehint: ["('tpa-762', 'Alisson', 'Mikel Oyarzabal', 'active', null::smallint, null::text, 2, ", "('tpa-762', 'Alisson', 'Mikel Oyarzabal', 'active', null::smallint, null::text, 3, "],
+  rehearseclub: ["and season = '2024-2025' and club = 'Marseille' and goals = 6 and assists is not distinct from 2", "and season = '2024-2025' and club = 'Marseille' and goals = 7 and assists is not distinct from 2"],
+  rehearseinsert: ["('a0000001-0000-0000-0000-000000000087', '2024-2025', 'Napoli', 5, 3, 19, 0, anchor_order);", "('a0000001-0000-0000-0000-000000000087', '2024-2025', 'Napoli', 5, 3, 19, 0, anchor_order + 2);"],
 };
 if (CONTROL && !OWN[CONTROL]) { console.error(`SIM_SEASON_ADD_CONTROL=${CONTROL} is not a control this harness knows: ${Object.keys(OWN).join(', ')}`); process.exit(1); }
 /*
@@ -89,24 +107,11 @@ if (CONTROL && !OWN[CONTROL]) { console.error(`SIM_SEASON_ADD_CONTROL=${CONTROL}
  * guard). Like RAW_RANDOM_BASELINE in simPrerender section 16: nobody may join
  * the list, and a man a wave accounts for leaves it in the same commit.
  * Wave 1 (2026-10-05): 80 men, from 95 before the ledger (94 and the twin).
+ * Wave 2 (Round 1017, 2026-10-05): none. Of the 80, Mats Hummels ended and
+ * every other man is added, Estêvão at Chelsea by the lead's ruling on
+ * Endrick (the held rule covers only a new row at a calendar league club).
  */
-const COVERAGE_BASELINE = new Set([
-  "Achraf Hakimi", "Alejandro Garnacho", "Alphonso Davies", "André Onana", "Angel Di María",
-  "Antoine Griezmann", "Arda Güler", "Bernardo Silva", "Bradley Barcola", "Bruno Fernandes",
-  "Bukayo Saka", "Casemiro", "Ciro Immobile", "Cole Palmer", "Cristian Pulisic",
-  "Cristiano Ronaldo", "Darwin Núñez", "Declan Rice", "Dusan Vlahović", "Ederson", "Endrick",
-  "Enzo Fernández", "Erling Haaland", "Estêvão", "Federico Valverde", "Gavi",
-  "Gianluigi Donnarumma", "Hakim Ziyech", "Harry Kane", "Jadon Sancho", "Jamal Musiala",
-  "Jan Oblak", "João Cancelo", "João Félix", "Jonathan David", "Joshua Kimmich", "Jude Bellingham",
-  "Karim Benzema", "Kevin De Bruyne", "Khvicha Kvaratskhelia", "Kobbie Mainoo", "Kyle Walker",
-  "Kylian Mbappé", "Lamine Yamal", "Leroy Sané", "Luka Modrić", "Marcus Rashford", "Marquinhos",
-  "Martin Ødegaard", "Mats Hummels", "Mikel Oyarzabal", "Moisés Caicedo", "Moussa Diaby",
-  "N'Golo Kanté", "Nico Williams", "Ousmane Dembélé", "Pau Cubarsí", "Paulo Dybala", "Pedri",
-  "Phil Foden", "Pierre-Emerick Aubameyang", "Rafael Leão", "Raheem Sterling", "Rasmus Højlund",
-  "Riyad Mahrez", "Robert Lewandowski", "Rodri", "Rodrygo", "Romelu Lukaku", "Rúben Dias",
-  "Sandro Tonali", "Son Heung-min", "Thibaut Courtois", "Trent Alexander-Arnold", "Victor Osimhen",
-  "Viktor Gyökeres", "Vinícius Júnior", "Warren Zaïre-Emery", "Xavi Simons", "Yassine Bounou"
-]);
+const COVERAGE_BASELINE = new Set([]);
 /* the flags of the calendar year leagues the pool writes as one year */
 const CALENDAR_COUNTRIES = new Set(['us', 'ca', 'br', 'ar', 'jp']);
 const failures = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
@@ -116,6 +121,20 @@ const fail = m => { failures[section] += 1; if (failures[section] <= 20) console
 const abort = m => { console.error(m); process.exit(1); };
 const read = rel => fs.readFileSync(path.join(ROOT, rel), 'utf8');
 const norm = s => s.replaceAll('\r\n', '\n');
+
+/** The source rules every new row meets, added or inserted (section 1). */
+function rowSourceChecks(r, who, held) {
+  if (held.has(r.player)) fail(`${who}: ${r.player} is held and gets no row`);
+  for (const f of ['club', 'goals', 'appearances']) {
+    const hosts = hostsFor(r.sources, f);
+    if (hosts.size < 2) fail(`${who}: ${f} carried by ${hosts.size} non-wiki host(s)`);
+  }
+  if (r.assists !== null && hostsFor(r.sources, 'assists').size < 2) fail(`${who}: assists ${r.assists} without two hosts (write null)`);
+  if (r.marketValue !== 0 && hostsFor(r.sources, 'marketValue').size < 2) fail(`${who}: market value ${r.marketValue} without two hosts (write 0)`);
+  /* each number is the one its sources were read as, not only a sourced field */
+  for (const f of ['goals', 'appearances', ...(r.assists === null ? [] : ['assists'])]) for (const pr of readingProblems(r.sources, f, r[f], r.club)) fail(`${who}: ${pr}`);
+  if (!Number.isInteger(r.goals) || !Number.isInteger(r.appearances) || r.goals < 0 || r.appearances < 1) fail(`${who}: goals and appearances must be real counts`);
+}
 
 const ledger = JSON.parse(read(LEDGER_FILE));
 const site = await loadSiteModules(ROOT);
@@ -148,6 +167,12 @@ console.log('1) the ledger shape: seasons, clubs, sources');
     salah.goals = 21;
     console.log('   NEGATIVE CONTROL ON: Salah\'s 2025-2026 goals are typed 21 while his sources read 12');
   }
+  if (CONTROL === 'anchor') {
+    const kv = (L.inserted ?? []).find(r => r.player === 'Khvicha Kvaratskhelia' && r.club === 'Napoli');
+    if (!kv || kv.before?.club !== 'PSG') abort('anchor control cannot run: no Kvaratskhelia Napoli row inserted before PSG');
+    kv.before = { season: kv.before.season, club: 'Marseille' };
+    console.log('   NEGATIVE CONTROL ON: Kvaratskhelia\'s Napoli spell is placed before a 2024-2025 Marseille row he never had');
+  }
   if (CONTROL === 'calendar' || CONTROL === 'unflagged') {
     const before = L.added.length;
     L.added.push({ ...clone(first), club: CONTROL === 'calendar' ? 'LAFC' : 'Atlantis FC', season: ledger.season });
@@ -168,30 +193,47 @@ console.log('1) the ledger shape: seasons, clubs, sources');
     if (r.season !== want) fail(`${who}: written ${JSON.stringify(r.season)}, the convention for a ${iso || 'flagless'} club is ${want}`);
     if (!SPLIT_SEASON.test(r.season) && !CALENDAR_SEASON.test(r.season)) fail(`${who}: the season is not a plain hyphen season`);
     if (r.season === String(seasonStart + 1)) fail(`${who}: nothing is ever written ${seasonStart + 1}`);
-    if (held.has(r.player)) fail(`${who}: ${r.player} is held and gets no row`);
-    for (const f of ['club', 'goals', 'appearances']) {
-      const hosts = hostsFor(r.sources, f);
-      if (hosts.size < 2) fail(`${who}: ${f} carried by ${hosts.size} non-wiki host(s)`);
-    }
-    if (r.assists !== null && hostsFor(r.sources, 'assists').size < 2) fail(`${who}: assists ${r.assists} without two hosts (write null)`);
-    if (r.marketValue !== 0 && hostsFor(r.sources, 'marketValue').size < 2) fail(`${who}: market value ${r.marketValue} without two hosts (write 0)`);
-    /* each number is the one its sources were read as, not only a sourced field */
-    for (const f of ['goals', 'appearances', ...(r.assists === null ? [] : ['assists'])]) for (const pr of readingProblems(r.sources, f, r[f])) fail(`${who}: ${pr}`);
-    if (!Number.isInteger(r.goals) || !Number.isInteger(r.appearances) || r.goals < 0 || r.appearances < 1) fail(`${who}: goals and appearances must be real counts`);
+    rowSourceChecks(r, who, held);
   }
+  /* wave 2: the previous season's spells the pool never carried, each beside one row of that season */
+  const changedOnly = applyLedger(pre, { ...L, added: [], inserted: [], removed: [] });
+  for (const r of L.inserted ?? []) {
+    rows += 1;
+    const who = `${r.player} ${r.season} ${r.club} (inserted)`;
+    const iso = isoOf(r.club);
+    if (!iso) fail(`${who}: the club resolves to no flag, so the Europe rule cannot place it`);
+    else if (CALENDAR_COUNTRIES.has(iso)) fail(`${who}: a calendar league spell of an earlier season waits for the relabel round`);
+    if (r.season !== L.previousSeason) fail(`${who}: an inserted row is a spell of ${L.previousSeason}, not ${r.season}`);
+    const a = r.before ?? r.after;
+    if (!a || (r.before && r.after)) { fail(`${who}: name exactly one of before and after`); continue; }
+    if (a.season !== r.season) fail(`${who}: its anchor ${a.season} ${a.club} is another season`);
+    const career = changedOnly.find(p => p.name === r.player)?.career ?? [];
+    const hits = career.filter(s => s.season === a.season && s.club === a.club).length;
+    if (hits !== 1) fail(`${who}: ${hits} rows read ${a.season} ${a.club}, the anchor must be exactly one`);
+    if (career.some(s => s.season === r.season && s.club === r.club)) fail(`${who}: the pool already carries it`);
+    rowSourceChecks(r, who, held);
+  }
+  /* the migration writes club, goals, assists and appearances, nothing else */
+  const CHANGEABLE = new Set(['club', 'goals', 'appearances', 'assists']);
+  /* a reading names the club the row ends at, so a moved row is read under its new club */
+  const movedTo = new Map((L.changed ?? []).filter(c => c.field === 'club').map(c => [`${c.player}|${c.season}|${c.club}`, c.to]));
   for (const c of L.changed ?? []) {
     const who = `${c.player} ${c.season} ${c.club} ${c.field}`;
+    if (!CHANGEABLE.has(c.field)) fail(`${who}: the migration never writes ${c.field}`);
     if (c.to !== null && hostsFor(c.sources, c.field).size < 2) fail(`${who}: the new value ${c.to} is carried by fewer than two hosts`);
     if (c.to === null && c.field !== 'assists') fail(`${who}: only assists may be written n/a`);
     if (c.from === c.to) fail(`${who}: a change that changes nothing`);
-    if (c.to !== null) for (const pr of readingProblems(c.sources, c.field, c.to)) fail(`${who}: ${pr}`);
+    if (c.field === 'club') {
+      if (c.from !== c.club) fail(`${who}: a club change names its row by the old club, ${c.from}`);
+      if (typeof c.to !== 'string' || !isoOf(c.to)) fail(`${who}: the new club ${JSON.stringify(c.to)} resolves to no flag`);
+    } else if (c.to !== null) for (const pr of readingProblems(c.sources, c.field, c.to, movedTo.get(`${c.player}|${c.season}|${c.club}`) ?? c.club)) fail(`${who}: ${pr}`);
   }
   for (const e of L.ended ?? []) if (hostsFor(e.sources, 'ended').size < 2) fail(`${e.player}: ended on fewer than two hosts`);
   for (const h of L.held ?? []) if (!h.reason || !pre.some(p => p.name === h.player)) fail(`${h.player}: held without a reason or not in the pool`);
   for (const r of L.removed ?? []) if (!r.keptAs || !r.copy || r.copy.name !== r.player) fail(`${r.player}: removed without the man he is kept as or a copy of his entry`);
   const text = JSON.stringify(L);
   if (/[\u2013\u2014]/.test(text)) fail('the ledger carries a long dash');
-  console.log(`   ${rows} added rows, ${(L.changed ?? []).length} changed fields, ${(L.ended ?? []).length} ended, ${(L.held ?? []).length} held, ${(L.removed ?? []).length} removed; every season, club and source holds`);
+  console.log(`   ${rows} new rows (${L.added.length} added, ${(L.inserted ?? []).length} inserted), ${(L.changed ?? []).length} changed fields (${(L.changed ?? []).filter(c => c.field === 'club').length} club moves), ${(L.ended ?? []).length} ended, ${(L.held ?? []).length} held, ${(L.removed ?? []).length} removed; every season, club and source holds`);
 }
 
 /* the pool after the ledger is the committed bake when that bake is current;
@@ -251,6 +293,19 @@ console.log('3) the committed migration, bake and ledger are what the ledger gen
   const wantInserts = ledger.added.map(r => `${r.playerId}|${r.season}|${r.club}|${r.goals}|${r.assists}|${r.appearances}|${r.marketValue}`).sort();
   if (JSON.stringify(inserts) !== JSON.stringify(wantInserts)) fail(`the migration inserts ${inserts.length} rows that are not exactly the ledger's ${wantInserts.length}`);
   if ((code.match(/select max\(sort_order\) into next_order/g) ?? []).length !== ledger.added.length) fail('each insert must read its sort order as the max plus one');
+  /* wave 2: each inserted row at its anchor's place, the anchor read as exactly one row, the rows from there shifted */
+  const inserted = ledger.inserted ?? [];
+  const placed = [...code.matchAll(/^\s*\('([0-9a-f-]{36})', '((?:[^']|'')+)', '((?:[^']|'')+)', (\d+), (null::integer|\d+), (\d+), (\d+), anchor_order( \+ 1)?\);$/gm)]
+    .map(m => `${m[1]}|${un(m[2])}|${un(m[3])}|${m[4]}|${num(m[5])}|${m[6]}|${m[7]}|${m[8] ? 'after' : 'before'}`).sort();
+  const wantPlaced = inserted.map(r => `${r.playerId}|${r.season}|${r.club}|${r.goals}|${r.assists}|${r.appearances}|${r.marketValue}|${r.before ? 'before' : 'after'}`).sort();
+  if (JSON.stringify(placed) !== JSON.stringify(wantPlaced)) fail(`the migration places ${placed.length} rows beside an anchor that are not exactly the ledger's ${wantPlaced.length} inserted rows`);
+  const anchors = [...code.matchAll(/select count\(\*\), min\(sort_order\) into n, anchor_order from public\.career_seasons where player_id = '([0-9a-f-]{36})' and season = '((?:[^']|'')+)' and club = '((?:[^']|'')+)';\n\s*if n <> 1 then/g)]
+    .map(m => `${m[1]}|${un(m[2])}|${un(m[3])}`).sort();
+  const wantAnchors = inserted.map(r => { const a = r.before ?? r.after; return `${r.playerId}|${a.season}|${a.club}`; }).sort();
+  if (JSON.stringify(anchors) !== JSON.stringify(wantAnchors)) fail('each inserted row must read its anchor as exactly one row');
+  const shifts = [...code.matchAll(/update public\.career_seasons set sort_order = sort_order \+ 1 where player_id = '([0-9a-f-]{36})' and sort_order (>=|>) anchor_order;/g)]
+    .map(m => `${m[1]}|${m[2] === '>=' ? 'before' : 'after'}`).sort();
+  if (JSON.stringify(shifts) !== JSON.stringify(inserted.map(r => `${r.playerId}|${r.before ? 'before' : 'after'}`).sort())) fail('each inserted row must shift the rows from its place on, and only those');
   /* the changed rows: the old tuple from the pool before, the new one from the ledger's own fields */
   const rowsByKey = new Map();
   for (const c of ledger.changed) {
@@ -261,9 +316,10 @@ console.log('3) the committed migration, bake and ledger are what the ledger gen
     }
     rowsByKey.get(key).next[c.field] = c.to;
   }
-  const wantUpdates = [...rowsByKey].map(([key, { old, next }]) => `${key}|${old.goals}|${old.assists}|${old.appearances}|${old.marketValue}->${next.goals}|${next.assists}|${next.appearances}`).sort();
-  const updates = [...code.matchAll(/^\s*update public\.career_seasons set goals = (\d+), assists = (null::integer|\d+), appearances = (\d+)\n\s*where player_id = '([0-9a-f-]{36})' and season = '((?:[^']|'')+)' and club = '((?:[^']|'')+)' and goals = (\d+) and assists is not distinct from (null::integer|\d+) and appearances = (\d+) and market_value = (\d+);$/gm)]
-    .map(m => `${m[4]}|${un(m[5])}|${un(m[6])}|${m[7]}|${num(m[8])}|${m[9]}|${m[10]}->${m[1]}|${num(m[2])}|${m[3]}`).sort();
+  const wantUpdates = [...rowsByKey].map(([key, { old, next }]) => `${key}|${old.goals}|${old.assists}|${old.appearances}|${old.marketValue}->${next.club}|${next.goals}|${next.assists}|${next.appearances}`).sort();
+  /* a club move writes club first; a row that keeps its club writes none */
+  const updates = [...code.matchAll(/^\s*update public\.career_seasons set (?:club = '((?:[^']|'')+)', )?goals = (\d+), assists = (null::integer|\d+), appearances = (\d+)\n\s*where player_id = '([0-9a-f-]{36})' and season = '((?:[^']|'')+)' and club = '((?:[^']|'')+)' and goals = (\d+) and assists is not distinct from (null::integer|\d+) and appearances = (\d+) and market_value = (\d+);$/gm)]
+    .map(m => `${m[5]}|${un(m[6])}|${un(m[7])}|${m[8]}|${num(m[9])}|${m[10]}|${m[11]}->${un(m[1] ?? m[7])}|${m[2]}|${num(m[3])}|${m[4]}`).sort();
   if (JSON.stringify(updates) !== JSON.stringify(wantUpdates)) fail(`the migration updates ${updates.length} rows, the ledger changes ${wantUpdates.length}, or an old or new value differs`);
   const after = applyLedger(pre, ledger);
   const seasons = ps => ps.reduce((n, p) => n + p.career.length, 0);
@@ -280,7 +336,7 @@ console.log('3) the committed migration, bake and ledger are what the ledger gen
   /* statements only: the raise messages say "delete" too */
   if ((code.match(/\bdelete\s+from\b/gi) ?? []).length !== wantDeletes.length) fail('the migration carries a delete the ledger does not record');
   if (!/^do \$migration\$$/m.test(code) || !/^\$migration\$;$/m.test(code)) fail('the migration is not one do-block');
-  console.log(`   ${inserts.length} inserts, ${updates.length} guarded row updates, ${deletes.length} delete; ${pre.length} to ${after.length} players and ${seasons(pre)} to ${seasons(after)} seasons guarded; files equal the generator's`);
+  console.log(`   ${inserts.length} inserts at the end, ${placed.length} beside an anchor, ${updates.length} guarded row updates, ${deletes.length} delete; ${pre.length} to ${after.length} players and ${seasons(pre)} to ${seasons(after)} seasons guarded; files equal the generator's`);
 }
 
 section = 4;
@@ -384,7 +440,7 @@ async function rehearse(PGlite) {
     alter table public.career_seasons enable row level security;
     alter table public.transfer_path_puzzles enable row level security;`);
   const ids = new Map();
-  for (const l of [ledger.added, ledger.changed, ledger.ended, ledger.held, ledger.removed]) for (const r of l ?? []) if (r.playerId) ids.set(r.player, r.playerId);
+  for (const l of [ledger.added, ledger.inserted, ledger.changed, ledger.ended, ledger.held, ledger.removed]) for (const r of l ?? []) if (r.playerId) ids.set(r.player, r.playerId);
   for (const r of ledger.removed ?? []) ids.set(r.keptAs, r.keptId);
   let k = 0;
   const idOf = name => ids.get(name) ?? ids.set(name, `00000000-0000-4000-8000-${String(++k).padStart(12, '0')}`).get(name);

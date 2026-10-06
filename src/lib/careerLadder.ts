@@ -562,7 +562,7 @@ export const CLUB_COUNTRY: Array<[string, string]> = [
   ['nantes', '🇫🇷'], ['montpellier', '🇫🇷'], ['strasbourg', '🇫🇷'], ['bordeaux', '🇫🇷'], ['saint-etienne', '🇫🇷'],
   ['saint etienne', '🇫🇷'], ['reims', '🇫🇷'], ['toulouse', '🇫🇷'], ['brest', '🇫🇷'], ['lorient', '🇫🇷'],
   ['metz', '🇫🇷'], ['angers', '🇫🇷'], ['auxerre', '🇫🇷'], ['ajaccio', '🇫🇷'], ['le havre', '🇫🇷'],
-  ['troyes', '🇫🇷'], ['clermont', '🇫🇷'],
+  ['troyes', '🇫🇷'], ['clermont', '🇫🇷'], ['paris fc', '🇫🇷'],
   // Portugal / Netherlands / Scotland
   ['benfica', '🇵🇹'], ['porto', '🇵🇹'], ['sporting cp', '🇵🇹'], ['sporting lisbon', '🇵🇹'], ['sporting', '🇵🇹'],
   ['braga', '🇵🇹'], ['vitoria guimaraes', '🇵🇹'], ['boavista', '🇵🇹'],
@@ -585,6 +585,7 @@ export const CLUB_COUNTRY: Array<[string, string]> = [
   // vs Mahrez and Firmino's Saudi one, most specific first as everywhere.
   ['al ahli dubai', '🇦🇪'],
   ['al hilal', '🇸🇦'], ['al ittihad', '🇸🇦'], ['al ahli', '🇸🇦'], ['al shabab', '🇸🇦'], ['al ettifaq', '🇸🇦'],
+  ['al qadsiah', '🇸🇦'],
   ['al sadd', '🇶🇦'], ['al duhail', '🇶🇦'], ['al rayyan', '🇶🇦'], ['al gharafa', '🇶🇦'], ['al arabi', '🇶🇦'],
   ['al ain', '🇦🇪'], ['al wahda', '🇦🇪'], ['al jazira', '🇦🇪'], ['shabab al ahli', '🇦🇪'], ['al wasl', '🇦🇪'],
   ['shanghai', '🇨🇳'], ['guangzhou', '🇨🇳'], ['beijing guoan', '🇨🇳'], ['shandong', '🇨🇳'], ['jiangsu', '🇨🇳'],
