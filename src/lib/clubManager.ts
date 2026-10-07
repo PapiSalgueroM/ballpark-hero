@@ -32,9 +32,9 @@ import {
   type LegacyLogEntry, type SeasonHandover, type SeasonLedger, type SeasonLedgerInput,
 } from '@/lib/clubManagerScore';
 import type { Player, Position } from '@/types/game';
-import { FORMATIONS as SHARED_FORMATIONS, SLOT_ALLOWED, playerRating } from '@/lib/squadDeal';
+import { FORMATIONS as SHARED_FORMATIONS, SLOT_ALLOWED, playerRating } from '@/lib/squadShape';
 import { CAPTAIN_MIN_AGE, CAPTAIN_MIN_RATING } from '@/lib/captaincy';
-import type { Formation, FormationSlot } from '@/lib/squadDeal';
+import type { Formation, FormationSlot } from '@/lib/squadShape';
 /* Round 505: the one position rule the lineup games share, so an out of
    position man here is graded by the same family table World XI uses.
    positionFit imports nothing but types, so there is no cycle. */

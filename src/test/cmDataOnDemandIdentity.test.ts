@@ -221,7 +221,15 @@ describe('Round 1042 identity: the squad shape is the same shape', () => {
     };
     console.log(`  D: ${deal.FORMATIONS.length} formations, ladder ${ladder.slice(0, 8).join(' ')} ...`);
     check('squadShape');
-    /* Round 1042, step 4 adds here: the objects from squadDeal and from squadShape are the SAME
-       references (a re export, never a copy). */
+    /* Round 1042, step 4: the objects from squadDeal and from squadShape are the SAME references
+       (a re export, never a copy), so the game that imports one and the game that imports the
+       other can never drift apart. */
+    const shape = await import('@/lib/squadShape');
+    expect(deal.FORMATIONS).toBe(shape.FORMATIONS);
+    expect(deal.SLOT_ALLOWED).toBe(shape.SLOT_ALLOWED);
+    expect(deal.POSITION_NORMALIZE).toBe(shape.POSITION_NORMALIZE);
+    expect(deal.playerRating).toBe(shape.playerRating);
+    expect(deal.ratingFor).toBe(shape.ratingFor);
+    expect(deal.normalizePosition).toBe(shape.normalizePosition);
   }, 60000);
 });
