@@ -898,7 +898,102 @@ const MLB_LEGACY_V1: LegacyWeights = {
     '*': { terms: [{ stat: 'hr', per: 4 }, { stat: 'rbi', per: 60 }] },
   },
 };
-export const MLB_LEGACY_WEIGHTS: Record<HallCalibration, LegacyWeights> = { 1: MLB_LEGACY_V1, 2: MLB_LEGACY_V1 };
+/* Calibration 2 (Round 1051). It contains calibration 1 unchanged (the same
+   awards, the same season weight, each position's old terms first and in
+   order) and only adds, so no career scores lower on it. What it adds:
+   a base where calibration 1 read nothing, and the standout: a career total
+   near the top of this game's books for the position, in any family on the
+   list, earns credit of its own (legacyRead; only the best family counts).
+   Every from and to mark, the list itself (the half rule) and the measured
+   base terms come from scripts/data/careerHallMarks.json, which
+   scripts/genCareerHallMarks.mjs derives from measured careers; section 17 of
+   scripts/simCareerHall.mjs fails if this table and that ledger disagree. */
+const MLB_LEGACY_V2: LegacyWeights = {
+  awards: { rings: 85, mvpCys: 220, allStars: 70 },
+  season: 9,
+  positions: {
+    SP: {
+      terms: [{ stat: 'wins', per: 2 }, { stat: 'so', per: 70 }],
+      standout: [
+        { stat: 'wins', from: 294, to: 330, label: 'wins' },
+        { stat: 'so', from: 3700, to: 4120, label: 'strikeouts' },
+      ],
+    },
+    RP: {
+      terms: [{ stat: 'hr', per: 4 }, { stat: 'rbi', per: 60 }, { stat: 'saves', per: 8 }, { stat: 'holds', per: 12 }, { stat: 'so', per: 40 }],
+      standout: [
+        { stat: 'saves', from: 809, to: 966, label: 'saves' },
+      ],
+    },
+    C: {
+      terms: [{ stat: 'hr', per: 4 }, { stat: 'rbi', per: 60 }],
+      standout: [
+        { stat: 'hr', from: 361, to: 435, label: 'home runs' },
+        { stat: 'rbi', from: 1350, to: 1560, label: 'RBI' },
+      ],
+    },
+    '1B': {
+      terms: [{ stat: 'hr', per: 4 }, { stat: 'rbi', per: 60 }],
+      standout: [
+        { stat: 'hr', from: 602, to: 699, label: 'home runs' },
+        { stat: 'rbi', from: 1880, to: 2070, label: 'RBI' },
+      ],
+    },
+    '2B': {
+      terms: [{ stat: 'hr', per: 4 }, { stat: 'rbi', per: 60 }],
+      standout: [
+        { stat: 'rbi', from: 1380, to: 1560, label: 'RBI' },
+      ],
+    },
+    '3B': {
+      terms: [{ stat: 'hr', per: 4 }, { stat: 'rbi', per: 60 }],
+      standout: [
+        { stat: 'hr', from: 549, to: 619, label: 'home runs' },
+        { stat: 'rbi', from: 1760, to: 1950, label: 'RBI' },
+      ],
+    },
+    SS: {
+      terms: [{ stat: 'hr', per: 4 }, { stat: 'rbi', per: 60 }],
+      standout: [
+        { stat: 'hr', from: 440, to: 503, label: 'home runs' },
+        { stat: 'rbi', from: 1550, to: 1710, label: 'RBI' },
+        { stat: 'sb', from: 812, to: 932, label: 'steals' },
+      ],
+    },
+    LF: {
+      terms: [{ stat: 'hr', per: 4 }, { stat: 'rbi', per: 60 }],
+      standout: [
+        { stat: 'hr', from: 529, to: 607, label: 'home runs' },
+        { stat: 'rbi', from: 1740, to: 1910, label: 'RBI' },
+        { stat: 'sb', from: 654, to: 745, label: 'steals' },
+      ],
+    },
+    CF: {
+      terms: [{ stat: 'hr', per: 4 }, { stat: 'rbi', per: 60 }],
+      standout: [
+        { stat: 'hr', from: 434, to: 504, label: 'home runs' },
+        { stat: 'rbi', from: 1540, to: 1720, label: 'RBI' },
+        { stat: 'sb', from: 900, to: 1070, label: 'steals' },
+      ],
+    },
+    RF: {
+      terms: [{ stat: 'hr', per: 4 }, { stat: 'rbi', per: 60 }],
+      standout: [
+        { stat: 'hr', from: 553, to: 626, label: 'home runs' },
+        { stat: 'rbi', from: 1760, to: 1960, label: 'RBI' },
+      ],
+    },
+    DH: {
+      terms: [{ stat: 'hr', per: 4 }, { stat: 'rbi', per: 60 }],
+      standout: [
+        { stat: 'hr', from: 705, to: 786, label: 'home runs' },
+        { stat: 'rbi', from: 2080, to: 2290, label: 'RBI' },
+      ],
+    },
+    '*': { terms: [{ stat: 'hr', per: 4 }, { stat: 'rbi', per: 60 }] },
+  },
+};
+export const MLB_LEGACY_WEIGHTS: Record<HallCalibration, LegacyWeights> = { 1: MLB_LEGACY_V1, 2: MLB_LEGACY_V2 };
 
 export function mlbLegacyOf(c: MlbCareerState): MlbLegacy {
   const t = mlbCareerTotals(c);
