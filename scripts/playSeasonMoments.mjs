@@ -38,6 +38,16 @@
  *   used   the "used" entry is not written when the board opens  -> 3 red
  *   label  "Let it play" is served as "Next chance"              -> 9 red
  *
+ * Measured 2026-10-07 on the build of 7e573b8a: 69 checks, 0 failed. Walk A
+ * (desktop, wall shot) missed a YOUR CALL the record had as a goal and the
+ * match changed; walk B (desktop, reduced motion, tackle) left the board and
+ * came back to a miss; walk C (phone, through ball) made a YOUR CALL the
+ * record had as a miss, with a real pointer on the real clock; walk D (phone,
+ * reduced motion, glove save) made a RECREATE for two stars. Every banked
+ * save was byte for byte the pure functions' output. Controls, each exit 1:
+ * used fails 3 (the entry read [md, 0, -2]) and with it 7; label fails 9
+ * only ("Next chance").
+ *
  * Run: npm run build, then ENGINES=chromium node scripts/playSeasonMoments.mjs
  * (MSYS_NO_PATHCONV=1 under Git Bash). Green is the closing
  * "playSeasonMoments: N checks, 0 failed" line and exit 0.
@@ -76,7 +86,7 @@ console.log(`chunks: centre ${CENTRE_CHUNK}, drill board ${DRILL_CHUNK}, through
 let CHUNK_TEXT = centreText;
 const swapOnce = (from, to) => { const n = CHUNK_TEXT.split(from).length - 1; if (n !== 1) throw new Error(`control refused: ${JSON.stringify(from)} appears ${n} times in the chunk`); CHUNK_TEXT = CHUNK_TEXT.replace(from, to); };
 if (CONTROL === 'used') { swapOnce(',-1,[])', ',-2,[])'); console.log('CONTROL used: opening the board writes an entry no reader accepts, so the attempt is not used'); }
-if (CONTROL === 'label') { swapOnce('▶ Let it play', 'Next chance'); console.log('CONTROL label: "Let it play" is served as "Next chance"'); }
+if (CONTROL === 'label') { swapOnce('children:"▶ Let it play"', 'children:"Next chance"'); console.log('CONTROL label: "Let it play" is served as "Next chance"'); }
 
 /* the walker's ACTIONS, read from its file's text (it runs on import) */
 function walkerActions() {
