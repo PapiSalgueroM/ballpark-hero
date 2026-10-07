@@ -644,12 +644,38 @@ async function replay(T, seed) {
     }
   }
   Math.random = realRandom;
-  return JSON.stringify({ seasons, dug, retired: s.retired });
+  /* Round 1041: the season row's cupRun (drawn from its own keyed generator,
+     scripts/simCareerDomesticCup.mjs section 1) is not part of this compare */
+  return JSON.stringify({ seasons, dug, retired: s.retired }, (k, v) => (k === 'cupRun' ? undefined : v));
 }
+/* Round 1041's two truth fixes move a career on purpose: a season in which
+   the association played no cup is never won (Mexico has none from 2020-21),
+   and the phone's world crowns cup winners by association. A career that
+   differs from the base is checked once more on this tree with both rules
+   taken out (in memory): equal then, the move is that round's and is
+   printed; still different, it fails as before. When the base already holds
+   Round 1041 the anchors still match and the arm is simply not needed. */
+const R1041_OUT = [
+  ['soccerCareerEngine.ts', '\n    && cupFor(cupAssociation(state.currentClubCountry, state.currentLeague), seasonYear).kind !== "NONE";', ';'],
+  ['soccerPhone.ts', 'if (assoc === undefined || opts.playerCupAssociation === undefined) {', 'if (true) {'],
+];
+const r1041Out = { name: 'r1041out', setup(b) {
+  b.onLoad({ filter: /(soccerCareerEngine|soccerPhone)\.ts$/ }, args => {
+    if (!path.resolve(args.path).toLowerCase().startsWith(path.resolve(ROOT, 'src').toLowerCase())) return undefined;
+    let src = fs.readFileSync(args.path, 'utf8').replace(/\r\n/g, '\n');
+    for (const [file, from, to] of R1041_OUT) {
+      if (!args.path.endsWith(file)) continue;
+      if (src.split(from).length !== 2) { console.error(`Round 1041 arm: the anchor is not in ${file} exactly once`); process.exit(2); }
+      src = src.replace(from, to);
+    }
+    return { contents: src, loader: 'ts' };
+  });
+} };
 if (baseRoot) {
   const B = await bundle(baseRoot, 'base', [releasePins(true)], false);
   const Bkeep = await bundle(baseRoot, 'basekeep', [releasePins(false)], false);
-  let same = 0; let differ = 0; let pinsMove = 0; let rows = 0;
+  let same = 0; let differ = 0; let pinsMove = 0; let rows = 0; let by1041 = 0;
+  let Mout = null;
   for (let i = 0; i < BASELINE_CAREERS; i++) {
     const seed = SEED * 7777 + i * 104729;
     const mine = await replay(M, seed);
@@ -657,6 +683,7 @@ if (baseRoot) {
     const kept = await replay(Bkeep, seed);
     rows += JSON.parse(mine).seasons.length + JSON.parse(mine).dug.length;
     if (mine === base) same += 1;
+    else if (await replay(Mout ??= await bundle(ROOT, 'tree1041out', [r1041Out]), seed) === base) { same += 1; by1041 += 1; console.log(`  career ${seed}: moved by Round 1041's two truth fixes (equal to the base with them taken out)`); }
     else {
       differ += 1;
       const a = JSON.parse(mine); const b = JSON.parse(base);
@@ -665,7 +692,7 @@ if (baseRoot) {
     }
     if (base !== kept) pinsMove += 1;
   }
-  console.log(`  ${same} of ${BASELINE_CAREERS} careers from 2025 identical from 2026-27 on (${rows} seasons and dugout rows compared); releasing the seven pins alone moves ${pinsMove} of them (attributed to the release, not the binds)`);
+  console.log(`  ${same} of ${BASELINE_CAREERS} careers from 2025 identical from 2026-27 on (${rows} seasons and dugout rows compared); releasing the seven pins alone moves ${pinsMove} of them (attributed to the release, not the binds); ${by1041} of the identical ones only once Round 1041's two truth fixes are taken out`);
   /* 430, 428 and 431 rows over seeds 1 to 3 */
   ok(rows >= BASELINE_CAREERS * 25, `only ${rows} rows compared over ${BASELINE_CAREERS} careers (floor ${BASELINE_CAREERS * 25})`);
 }

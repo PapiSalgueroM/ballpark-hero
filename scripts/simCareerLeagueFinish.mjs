@@ -196,8 +196,13 @@ const LATER_FIELDS = ['story'];
    the season rows the two states are equal leaf for leaf. So it leaves the
    digest on season shaped objects only (they carry both rating and
    leagueTitle, which also covers pendingSummary); an ovr anywhere else stays
-   in the hash. The stream control below still turns section 4 red. */
-const SEASON_ROW_FIELDS = ['ovr'];
+   in the hash. The stream control below still turns section 4 red.
+   Round 1041 (the domestic cup run) adds one more season row key, cupRun,
+   drawn from its own keyed generator after the season: scripts/
+   simCareerDomesticCup.mjs section 1 measures the same Math.random calls in
+   every one of 2400 forced seasons with the run drawn and with no run, and
+   every row field but cupRun equal. It leaves the digest the same way. */
+const SEASON_ROW_FIELDS = ['ovr', 'cupRun'];
 const isSeasonRow = o => o && typeof o === 'object' && 'rating' in o && 'leagueTitle' in o;
 function digest(s) {
   const json = JSON.stringify(s, function (k, v) { return NEW_FIELDS.includes(k) || (this === s && LATER_FIELDS.includes(k)) || (SEASON_ROW_FIELDS.includes(k) && isSeasonRow(this)) ? undefined : v; });
@@ -282,8 +287,25 @@ const DIGEST_SEEDS = 16;
    'b829c5dd07cfb3af', 'f539f12f1794c921', 'a5de9a434ad21895',
    '52e3772cb77b5986', '120dd615a6cd5dc1', '5372f38d44597423',
    'f810d1daa7ffd030', 'f47e78ff107bf228', 'e3e83a57c9b96439',
-   '8ae2cceb487c0598', '55bf134cb33eacee']. */
-const BASELINE =['9376570a25d3a155', 'fcb98e5a6f7c482c', 'ee8e07e3bb4c47f8', '4bc40153f6613fc8', 'db3a34cd89e14e3d', 'b829c5dd07cfb3af', 'f539f12f1794c921', '29e192b38eae5882', 'd763d6e12bcf7689', '120dd615a6cd5dc1', '5372f38d44597423', '63a6b8575832dc54', 'f47e78ff107bf228', 'e3e83a57c9b96439', '8ae2cceb487c0598', '7498856a14c25cc2'];
+   '8ae2cceb487c0598', '55bf134cb33eacee'].
+   Re-recorded by Round 1041 (2026-10-07, twice, identical), on purpose:
+   careers 1, 8 and 11 win a cup the table names, and the season's log line
+   now says so ("Won the FA Cup with ..." where it said "the Domestic Cup"),
+   a line of state the digest hashes. Nothing else moved. Attribution, each
+   a throwaway copy of this harness with parts of the round taken back out
+   in memory: the cup's name, the coin kept in a season with no cup and the
+   world's old league keyed rule all out records the list it replaced 16 of
+   16; only the name in, careers 1, 8 and 11 move, the same three as the
+   whole round; only the coin fix in, or only the world rule in, 16 of 16
+   unchanged. The cupRun key leaves the digest as a season row field (see
+   SEASON_ROW_FIELDS). The list it replaced (release-ai-int 182d83ba):
+   ['9376570a25d3a155', 'fcb98e5a6f7c482c', 'ee8e07e3bb4c47f8',
+   '4bc40153f6613fc8', 'db3a34cd89e14e3d', 'b829c5dd07cfb3af',
+   'f539f12f1794c921', '29e192b38eae5882', 'd763d6e12bcf7689',
+   '120dd615a6cd5dc1', '5372f38d44597423', '63a6b8575832dc54',
+   'f47e78ff107bf228', 'e3e83a57c9b96439', '8ae2cceb487c0598',
+   '7498856a14c25cc2']. */
+const BASELINE =['c73abbaa2e800104', 'fcb98e5a6f7c482c', 'ee8e07e3bb4c47f8', '4bc40153f6613fc8', 'db3a34cd89e14e3d', 'b829c5dd07cfb3af', 'f539f12f1794c921', '26e4c881bf412db7', 'd763d6e12bcf7689', '120dd615a6cd5dc1', '01b2d4b82109c7c6', '63a6b8575832dc54', 'f47e78ff107bf228', 'e3e83a57c9b96439', '8ae2cceb487c0598', '7498856a14c25cc2'];
 if (RECORD) {
   const out = [];
   for (let i = 1; i <= DIGEST_SEEDS; i++) out.push(digest(runCareer(i)));
