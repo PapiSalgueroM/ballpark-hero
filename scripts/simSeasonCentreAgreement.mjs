@@ -36,6 +36,9 @@
  *   cleansheet  clean sheet marks skipped, self check off         -> item 6
  *   points      the format ledger opens tables from 1990          -> item 3 (gate)
  *   resultstitle a results only title ignores the champions' band, self check off -> item 4b
+ *   leagueapps  the league target is one game over critic C2's  -> item 1
+ *               (the review's M2: item 1 now restates the target itself;
+ *               2026-10-07, 1990 failures at item 1, exit 1)
  *   ladder      a results only finish band starts his club on the top rung
  *               (the first cut's bug)                              -> item 4c
  *
@@ -83,6 +86,7 @@ const CONTROLS = {
   derby: [{ file: 'src/lib/season/soccer.ts', from: 'const g: FixedGame = { key: d.rival, home: m.home,', to: 'const g: FixedGame = { key: d.rival, home: !m.home,' }],
   cleansheet: [{ file: 'src/lib/season/core.ts', from: "marks[i] = s ? 'shutout' : 'concede';", to: 'marks[i] = undefined;' }, SELF_OFF],
   points: [{ file: 'src/data/leagueFormat.ts', from: '"Serie A": [{ from: 1995 }],', to: '"Serie A": [{ from: 1990 }],' }],
+  leagueapps: [{ file: 'src/lib/season/soccer.ts', from: 'const want = Math.min(row.leagueApps ?? row.apps, room, row.apps);', to: 'const want = Math.min((row.leagueApps ?? row.apps) + 1, room, row.apps);' }],
   ladder: [{ file: 'src/lib/season/soccer.ts', from: "const tier = fromFinish ?? (target.kind === 'band' ? 1 : byTier);", to: "const tier = target.kind === 'band' ? 1 : fromFinish ?? byTier;" }],
   resultstitle: [{ file: 'src/lib/season/core.ts', from: "    return ppg < target.ppgMin ? { slot: 0, dir: 1 } : ppg > target.ppgMax ? { slot: 0, dir: -1 } : null;", to: '    return null;' }, SELF_OFF],
 };
@@ -197,6 +201,17 @@ function checkSeason(career, row, ctx, s, tag) {
   const M = s.games.length;
   /* 1 apps */
   if (on.length + bucket.apps !== row.apps) fail('1 apps', `${tag}: ${on.length}+${bucket.apps} != ${row.apps}`);
+  {
+    /* critic C2's league target, restated here (Round 1045 review): the
+       games shown are min(leagueApps or apps, the games the injury block
+       leaves, apps), never fewer than the derbies he played */
+    const wk = row.injuryWeeks ?? 0;
+    const blk = wk > 0 ? Math.min(M, Math.max(1, Math.round((wk * M) / 46))) : 0;
+    const room = row.injurySevere && blk > 0 ? M : M - blk;
+    const derbiesPlayed = DB.readSeasonDerbies(row).reduce((a, d) => a + d.meetings.filter(m => m.played).length, 0);
+    const want = Math.min(Math.max(Math.min(row.leagueApps ?? row.apps, room, row.apps), derbiesPlayed), room, row.apps);
+    if (on.length !== want) fail('1 apps', `${tag}: ${on.length} league games shown for a target of ${want} (leagueApps ${row.leagueApps}, ${M} games, block ${blk})`);
+  }
   const size = s.mode === 'table' ? row.leagueSize : null;
   if (s.mode === 'table' && M !== 2 * (size - 1)) fail('1 apps', `${tag}: ${M} games in a ${size} club league`);
   /* 2 position and champion, 3 points, 13 clinch */
