@@ -217,7 +217,7 @@ import './lib/seedRandom.mjs';
 import os from 'node:os';
 import path from 'node:path';
 import { build } from 'esbuild';
-import { readFileSync, unlinkSync } from 'node:fs';
+import { readFileSync, unlinkSync, writeFileSync } from 'node:fs';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 
@@ -226,6 +226,13 @@ const ROOT = path.resolve(path.dirname(SELF), '..');
 const SPORT = process.argv[2];
 const CAREERS = Number(process.argv[3] || 2000);
 const CONTROL = process.env.SIM_CONTROL || '';
+/* Round 1051. SIM_CAL=1: no loop stamps a career as it retires, so every
+   career is read on calibration 1, the attribution switch (every number of
+   the Round 1039 header must come back exactly). SIM_SKIP_BOARD=1: sections
+   9 to 14 and 20 play no board career; the run prints BOARD SECTIONS SKIPPED
+   and exits 3 whatever else happened, so it can never be read as green. */
+const CAL1 = process.env.SIM_CAL === '1';
+const SKIP_BOARD = process.env.SIM_SKIP_BOARD === '1';
 
 const ENGINES = {
   nfl: { file: 'nflMyCareer.ts', hall: 'NFL_CAREER_HALL', legacy: 'legacyOf', label: 'teamLabelOf', arch: 'ARCHETYPES', start: 'startCareer', season: 'simSeason', progress: 'progress', event: 'drawEvent', stop: 'shouldRetire', roll: 'rollTeamQuality', binding: 'NFL_CAREER_SPORT', eras: 'NFL_ERAS', positions: ['QB', 'RB', 'WR', 'TE', 'LB', 'CB', 'EDGE', 'K'] },
@@ -284,6 +291,7 @@ const CONTROLS = {
   jerseyignore: { file: 'careerHallOfFame.ts', from: 'sport.recordedJersey?.(c) ?? jerseyFor(', to: 'jerseyFor(' },
   eraunguarded: { file: 'HallOfFameCard.tsx', from: 'rec.firstClass >= rules.verifiedFromClass', to: 'true' },
   // Round 1051, sections 15 on. v1drift: the first award weight of the sport's calibration 1 table plus one.
+  calflip: { file: 'careerHallOfFame.ts', from: 'return c.retired ? 1 : HALL_CALIBRATION;', to: 'return HALL_CALIBRATION;' },
   v1drift: { file: `${SPORT}MyCareer.ts`, re: /(_LEGACY_V1: LegacyWeights = \{\s+awards: \{ \w+: )(\d+)/, to: (m, a, n) => `${a}${Number(n) + 1}` },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown SIM_CONTROL ${CONTROL}`); process.exit(2); }
@@ -392,6 +400,8 @@ for (let i = 0; i < CAREERS; i += 1) {
       }
       if (eng.careerEndsAfter(block, year)) c.retired = true;
     }
+    // Round 1051: the live game stamps a career as it retires (SIM_CAL=1 leaves it on calibration 1).
+    if (!CAL1) eng.stampHallCalibration(c);
     const legacy = eng.LEGACY(c);
     counting = true;
     const rec = eng.hallRecordFor(HALL, c);
@@ -592,7 +602,7 @@ console.log(`  talk timing: talks a career, median ${med(careers.map(c => c.talk
    until they really differ, and card answers come off a second stream. */
 // The board loop costs about ten engine careers a career (the summer probes every later card), so it runs
 // 400 careers a policy by default; SIM_BOARD_CAREERS=2000 is the long measuring run.
-const BOARD_N = Number(process.env.SIM_BOARD_CAREERS || Math.min(CAREERS, 400));
+const BOARD_N = SKIP_BOARD ? 0 : Number(process.env.SIM_BOARD_CAREERS || Math.min(CAREERS, 400));
 const FAREWELL_EFFECT = 'Next season is your last';
 const hashStr = s => { let h = 0x811c9dc5 >>> 0; for (let k = 0; k < s.length; k += 1) { h ^= s.charCodeAt(k); h = Math.imul(h, 0x01000193) >>> 0; } return h >>> 0; };
 const streamFor = key => {
@@ -723,6 +733,8 @@ function boardCareer(i, policyName, eraId, X = eng) {
       log.offseasons.push(o);
     }
     if (policyName === 'oneMore' && i < 150) probeCareers += 1;
+    // Round 1051: the board stamps the calibration on the save that retires a career.
+    if (!CAL1) X.stampHallCalibration(c);
     return { c, log };
   } finally {
     Math.random = keep;
@@ -868,7 +880,7 @@ for (const { c } of runs.noTalk.slice(0, 300)) {
 /* 13. era class: a class year (and the rule lines) only where the audit
    anchors the first class, read off the card the board renders. */
 const auditFrom = table.verifiedFromClass;
-const ERA_N = Number(process.env.SIM_ERA_CAREERS || 100);
+const ERA_N = SKIP_BOARD ? 0 : Number(process.env.SIM_ERA_CAREERS || 100);
 const YEAR_RE = /\b(19|20)\d\d\b/;
 let eraMiss = 0;
 const eraCounts = {};
@@ -910,7 +922,7 @@ for (const last of [auditFrom - table.firstClassOffset - 1, auditFrom - table.fi
    the old answer, measured against today's: the farewell season's own line
    and the legacy and Hall shift. Reported; the bands are from seeds. */
 let balance = null;
-if (SPORT === 'nhl') {
+if (SPORT === 'nhl' && !SKIP_BOARD) {
   const OLD_FROM = 'apply: (cc) => { announceFarewell(cc); cc.health = 100;';
   const OLD_TO = 'apply: (cc) => { cc.ovr = Math.min(cc.ovr, 63); cc.health = 100;';
   const oldPlugin = {
@@ -986,6 +998,21 @@ console.log(`  era: verified from the Class of ${auditFrom}; ${JSON.stringify(er
    calibration (a shallow copy with the stamp set), so both arms are the same
    careers. */
 const scoreOn = (c, cal) => eng.LEGACY({ ...c, retired: true, hallCal: cal });
+/* One row a career, both calibrations on the same career: the population every
+   mark, band and table of sections 16 to 19 is measured on (the answers loop
+   of sections 1 to 8, never a loop that plays every career to the hard stop).
+   SIM_DUMP_ROWS=<file> writes them out, which is how the marks were frozen. */
+const AWARD_KEYS = LEGACY_INPUT[SPORT].awards;
+const rows = careers.map(k => {
+  const one = scoreOn(k.c, 1), two = scoreOn(k.c, eng.HALL_CALIBRATION);
+  return {
+    pos: k.pos, seasons: k.c.seasons.length, policy: k.policy,
+    aw: Object.fromEntries(AWARD_KEYS.map(a => [a, k.c[a]])), t: eng.TOTALS(k.c),
+    s1: one.score, hof1: one.hof, v1: one.verdict, s2: two.score, hof2: two.hof, v2: two.verdict,
+    standout: two.standout ? { stat: two.standout.stat, credit: two.standout.credit } : null,
+  };
+});
+if (process.env.SIM_DUMP_ROWS) writeFileSync(process.env.SIM_DUMP_ROWS, JSON.stringify(rows));
 
 /* 15 (a). The version 1 recording: every save in the fixture, unstamped, reads
    today what the base's code told it, whole objects. */
@@ -1013,6 +1040,31 @@ for (const k of careers) {
   const got = scoreOn(k.c, 1);
   if (got.score !== want || got.hof !== (want >= lines.hofLine) || 'standout' in got) v1FormulaMiss += 1;
 }
+/* 15 (c). Who is read on which calibration, exact: a valid stamp wins; with
+   none a retired career is 1 and a live one is today's; a junk stamp is no
+   stamp. And on every engine career the legacy follows that rule. */
+const CAL_NOW = eng.HALL_CALIBRATION;
+const calCases = [
+  [{ retired: true }, 1], [{ retired: false }, CAL_NOW], [{}, CAL_NOW],
+  [{ retired: true, hallCal: CAL_NOW }, CAL_NOW], [{ retired: false, hallCal: 1 }, 1], [{ retired: true, hallCal: 1 }, 1],
+  [{ retired: true, hallCal: CAL_NOW + 1 }, 1], [{ retired: true, hallCal: '2' }, 1], [{ retired: true, hallCal: 1.5 }, 1], [{ retired: true, hallCal: null }, 1], [{ retired: true, hallCal: {} }, 1], [{ retired: true, hallCal: 0 }, 1],
+  [{ retired: false, hallCal: 'x' }, CAL_NOW],
+];
+let calRuleMiss = calCases.filter(([c, want]) => eng.hallCalibrationOf(c) !== want).length;
+for (const k of careers) {
+  const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+  if (!same(eng.LEGACY({ ...k.c, retired: true, hallCal: undefined }), scoreOn(k.c, 1))) calRuleMiss += 1;
+  if (!same(eng.LEGACY({ ...k.c, retired: false, hallCal: undefined }), scoreOn(k.c, CAL_NOW))) calRuleMiss += 1;
+}
+const stampedEngine = careers.filter(k => k.c.hallCal === CAL_NOW).length;
+
+/* 20. The board loop's stamp: every career the loop retired carries today's
+   calibration and is scored on it (none under SIM_CAL=1). */
+const boardRetired = Object.values(runs).flat().filter(r => r.c.retired);
+const boardStamped = boardRetired.filter(r => r.c.hallCal === CAL_NOW).length;
+const boardScoreMiss = boardRetired.filter(r => eng.LEGACY(r.c).score !== scoreOn(r.c, CAL1 ? 1 : CAL_NOW).score).length;
+console.log(`  15 (c) calibration rule: ${calRuleMiss} misses over ${calCases.length} cases and ${careers.length} careers; engine careers stamped ${stampedEngine}${CAL1 ? ' (SIM_CAL=1)' : ''}`);
+console.log(`  20 board stamp: ${boardRetired.length} board careers retired, ${boardStamped} stamped ${CAL_NOW}, ${boardScoreMiss} scored on another calibration`);
 console.log(`  15 v1: ${v1Saves.length} recorded saves (base ${String(V1_FIXTURE.baseCommit).slice(0, 8)}), ${v1ReplayMiss} read differently today; ${v1FormulaMiss} of ${careers.length} engine careers off the Round 123 formula on calibration 1`);
 
 /* ─── Check ───────────────────────────────────────────────────────────── */
@@ -1039,14 +1091,18 @@ const checks = [
   ['era', eraMiss === 0 && eraBoundary.below > 0 && eraBoundary.above > 0, `${eraMiss} cards printing a class year or rule off the audit's verified class (${auditFrom}); ${JSON.stringify(eraCounts)}`],
   ['v1replay', v1ReplayMiss === 0 && v1Saves.length >= 16, `${v1ReplayMiss} readings of ${v1Saves.length} recorded saves differ from the version 1 recording`],
   ['v1formula', v1FormulaMiss === 0 && careers.length > 0, `${v1FormulaMiss} of ${careers.length} engine careers score off the Round 123 formula on calibration 1`],
+  ['calrule', calRuleMiss === 0 && stampedEngine === (CAL1 ? 0 : careers.length), `${calRuleMiss} readings off the calibration rule; ${stampedEngine} of ${careers.length} engine careers stamped`],
+  ['boardstamp', boardScoreMiss === 0 && boardRetired.length > 0 && boardStamped === (CAL1 ? 0 : boardRetired.length), `${boardStamped} of ${boardRetired.length} retired board careers stamped ${CAL_NOW}, ${boardScoreMiss} scored on another calibration`],
   ...(balance ? [['balance', balance.cases >= BAND.balanceCases && balance.ovrNow - balance.ovrOld >= BAND.farewellOvrGain && Math.abs(balance.hallNow - balance.hallOld) <= BAND.hallShift && Math.abs(balance.legacyNow - balance.legacyOld) <= BAND.legacyShift, `${balance.cases} walk away farewells (needs ${BAND.balanceCases}); farewell OVR gain ${(balance.ovrNow - balance.ovrOld).toFixed(1)} (needs ${BAND.farewellOvrGain}); Hall share shift ${(100 * (balance.hallNow - balance.hallOld)).toFixed(2)} points (band ${100 * BAND.hallShift}); median legacy shift ${balance.legacyNow - balance.legacyOld} (band ${BAND.legacyShift})`]] : []),
 ];
-for (const [name, ok, detail] of checks) console.log(`  ${ok ? 'ok  ' : 'FAIL'} ${name}: ${detail}`);
-const red = checks.filter(c => !c[1]).map(c => c[0]);
+const BOARD_CHECKS = ['identity', 'ends', 'once', 'seek', 'deckJersey', 'era', 'balance', 'boardstamp'];
+const shown = SKIP_BOARD ? checks.filter(c => !BOARD_CHECKS.includes(c[0])) : checks;
+for (const [name, ok, detail] of shown) console.log(`  ${ok ? 'ok  ' : 'FAIL'} ${name}: ${detail}`);
+const red = shown.filter(c => !c[1]).map(c => c[0]);
 if (CONTROL) {
   const WANT = { everyonein: 'iff', bindhof: 'iff', outcomeswap: 'outcome', nominationgone: 'outcome', oldcurve: 'outcome', waitoff: 'table', shownraw: 'sides', flatfirst: 'rises', nopromise: 'promise', mathrandom: 'keyed', sharesides: 'sides', notalk: 'talk', farewelloff: 'answers', retireoff: 'answers', jerseyfirst: 'jersey', jerseyraw: 'jersey', talkdraws: 'identity', deckfarewelloff: 'ends', twice: 'once', seekexclude: 'seek', jerseyignore: 'deckJersey', eraunguarded: 'era',
     // Round 1051. An array wants every one of its checks red.
-    v1drift: ['v1replay', 'v1formula'] }[CONTROL];
+    v1drift: ['v1replay', 'v1formula'], calflip: ['calrule'] }[CONTROL];
   const wantRed = [].concat(WANT);
   const fired = wantRed.every(n => red.includes(n));
   console.log(`simCareerHall ${SPORT} CONTROL ${CONTROL}: wanted ${wantRed.join(' and ')} red, red [${red.join(',')}], ${fired ? 'FIRED' : 'DID NOT FIRE'}`);
@@ -1054,5 +1110,9 @@ if (CONTROL) {
   // code alone proves the control hit its own check. Any other red is printed.
   process.exit(fired ? 1 : 0);
 }
-console.log(`simCareerHall ${SPORT}: ${red.length ? `RED [${red.join(',')}]` : `all ${checks.length} checks green`}`);
+if (SKIP_BOARD) {
+  console.log(`simCareerHall ${SPORT}: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (${red.length ? `red [${red.join(',')}]` : `the ${shown.length} checks that ran are green`})`);
+  process.exit(3);
+}
+console.log(`simCareerHall ${SPORT}: ${red.length ? `RED [${red.join(',')}]` : `all ${checks.length} checks green`}${CAL1 ? ' (SIM_CAL=1, calibration 1 everywhere)' : ''}`);
 process.exit(red.length ? 1 : 0);

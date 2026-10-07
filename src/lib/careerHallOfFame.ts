@@ -398,6 +398,9 @@ export interface UsCareerShape {
   numberRetiredBy?: NumberRetiredBy;
   /** The life deck's flags, read only for the deck jersey card's own flag. */
   lifeFlags?: Record<string, number>;
+  /** Round 1051: read by hallCalibrationOf. */
+  retired?: boolean;
+  hallCal?: HallCalibration;
 }
 
 export interface UsHallSport<C extends UsCareerShape> extends HallSport<C> {
