@@ -70,7 +70,11 @@ const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const heldFiles = [board, scorecard, 'src/lib/buzzerBeater.ts', 'src/lib/threePointContest.ts', 'src/lib/arcade.ts',
   'src/hooks/useArcadeFlight.ts', 'src/lib/arcadeRecord.ts', 'src/hooks/useGameCompletion.ts',
   'src/components/game/HowToPlayPopover.tsx', testFile, 'scripts/simBuzzerContestRecap.mjs'];
-const before = Object.fromEntries(await Promise.all(heldFiles.map(async file => [file, hash(await readFile(path.join(root, file)))])));
+const before = {};
+for (const file of heldFiles) {
+  const bytes = await readFile(path.join(root, file));
+  before[file] = hash(bytes);
+}
 const env = { ...process.env, FORCE_COLOR: '0' }; delete env.NO_COLOR; delete env.NO_DOUBLE_SWAP;
 const reportFile = path.join(evidence, `${control || 'normal'}-report.json`);
 let folder;
@@ -117,7 +121,11 @@ try {
 } finally {
   if (copy) await rm(copy, { force: true });
   if (folder) await rmdir(folder);
-  const after = Object.fromEntries(await Promise.all(heldFiles.map(async file => [file, hash(await readFile(path.join(root, file)))])));
+  const after = {};
+  for (const file of heldFiles) {
+    const bytes = await readFile(path.join(root, file));
+    after[file] = hash(bytes);
+  }
   await writeFile(path.join(evidence, `${control || 'normal'}-integrity.json`), JSON.stringify({ before, after, held: JSON.stringify(before) === JSON.stringify(after) }, null, 2));
   assert.deepEqual(after, before, 'Every production and harness input stays byte-identical');
 }

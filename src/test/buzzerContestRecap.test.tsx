@@ -211,6 +211,8 @@ describe('Buzzer contest recap', () => {
     reducedMotion(); const saved = savedDaily(); localStorage.setItem(saved.key, saved.bytes);
     const writes = vi.spyOn(Storage.prototype, 'setItem');
     const view = startContest(); finishContest(view);
+    expect(localStorage.getItem(saved.key)).toBe(saved.bytes);
+    expect(writeArcadeRun).not.toHaveBeenCalled(); expect(writes).not.toHaveBeenCalled();
     expect(screen.queryByTestId('recorded-share')).toBeNull();
     fireEvent.click(button("Today's ten")); state(view, 'done');
     expect(board(view)).toHaveAttribute('data-arcade-mode', 'daily');

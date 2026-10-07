@@ -134,6 +134,7 @@ async function readBalls(page, kind = 'live') {
   }));
 }
 function assertBalls(value, rack, settled, flying = -1, current = settled) {
+  assert.equal(value.rack, rack + 1, 'Ball strip belongs to the selected rack');
   assert.equal(value.markers.length, 5, 'Exactly five actual balls are shown');
   for (const [offset, marker] of value.markers.entries()) {
     const index = rack * 5 + offset;
@@ -141,6 +142,10 @@ function assertBalls(value, rack, settled, flying = -1, current = settled) {
       : index === flying ? 'in-flight' : index === current ? 'current' : 'upcoming';
     assert.equal(marker.ball, offset + 1, 'Rack ball order is exact');
     assert.equal(marker.status, expected, 'Ball status matches the actual settled engine outcome');
+    const points = offset === 4 ? '2' : '1';
+    const glyph = expected === 'made' ? `✓${offset === 4 ? '2' : ''}`
+      : expected === 'missed' ? `×${offset === 4 ? '2' : ''}` : expected === 'in-flight' ? '⋯' : points;
+    assert.equal(marker.text, glyph, 'Visible ball mark matches the actual settled engine outcome');
     assert(marker.label?.includes(expected === 'in-flight' ? 'in flight' : expected), 'Accessible ball label agrees with outcome');
     if (offset === 4) assert(/money/i.test(marker.label), 'Money ball keeps its explicit accessible label');
   }
@@ -164,6 +169,7 @@ function checkGeometry(value) {
   assert(value.pageWidth <= value.viewport.width + 2, 'No horizontal page overflow');
   const pane = value.pane;
   assert(pane.width > 0 && pane.height > 0 && pane.x >= -1 && pane.right <= value.viewport.width + 1 && pane.scroll <= pane.client + 1, 'Contest pane is not clipped');
+  if (value.kind === 'recap') assert(pane.y >= -1 && pane.bottom <= value.viewport.height + 1, 'Complete contest recap is visible after product reveal');
   for (const node of value.text) {
     assert(node.size >= 12, 'Contest text is at least 12px');
     assert(node.width > 0 && node.height > 0 && node.x >= pane.x - 1 && node.right <= pane.right + 1 && node.y >= pane.y - 1 && node.bottom <= pane.bottom + 1 && node.scroll <= node.client + 1, 'Contest text is not clipped');
@@ -190,9 +196,11 @@ async function visibleUnaided(page, locator) {
   for (let attempt = 0; attempt < 20; attempt++) {
     await page.clock.runFor(50); await waitWall(25);
     const boxes = await locator.evaluateAll(nodes => nodes.map(node => { const b = node.getBoundingClientRect(); return { top: b.top, bottom: b.bottom, left: b.left, right: b.right, viewport: innerHeight, width: innerWidth }; }));
-    if (boxes.length === 5 && boxes.every(box => box.top >= 0 && box.bottom <= box.viewport && box.left >= 0 && box.right <= box.width)) return boxes;
+    const pane = await page.locator('[data-contest-scorecard]').evaluate(node => { const b = node.getBoundingClientRect(); return { top: b.top, bottom: b.bottom, left: b.left, right: b.right, viewport: innerHeight, width: innerWidth }; });
+    const visible = box => box.top >= 0 && box.bottom <= box.viewport && box.left >= 0 && box.right <= box.width;
+    if (boxes.length === 5 && boxes.every(visible) && visible(pane)) return { pane, buttons: boxes };
   }
-  assert.fail('All final rack selectors must appear without driver scrolling');
+  assert.fail('The complete final recap and all rack selectors must appear without driver scrolling');
 }
 
 try {
@@ -203,7 +211,7 @@ try {
     { width: 1280, height: 720, touch: false, reduced: false, theme: 'light' },
   ]) {
     const id = `${profile.width}-${profile.touch ? 'touch' : 'keyboard'}-${profile.theme}${profile.reduced ? '-reduced' : ''}`;
-    const row = { id, ...profile, shots: [], geometry: [], screenshots: [], driverNavigation: [], errors: [], assetErrors: [], externalRequests: [], blockedWrites: [], storageWrites: [] };
+    const row = { id, ...profile, shots: [], releases: [], geometry: [], screenshots: [], driverNavigation: [], errors: [], assetErrors: [], externalRequests: [], fontResponses: [], blockedWrites: [], storageWrites: [] };
     report.cases.push(row);
     const context = await browser.newContext({ viewport: { width: profile.width, height: profile.height }, isMobile: profile.touch, hasTouch: profile.touch, deviceScaleFactor: 1, colorScheme: profile.theme, reducedMotion: profile.reduced ? 'reduce' : 'no-preference', serviceWorkers: 'block',
       storageState: { cookies: [], origins: [{ origin: BASE, localStorage: [{ name: 'cookie-consent', value: 'essential' }, { name: DAILY, value: dailyBytes }, { name: 'dukb-theme', value: profile.theme }] }] } });
@@ -212,7 +220,11 @@ try {
       if (url.origin === BASE) { assert(['GET', 'HEAD'].includes(request.method()), 'No local write transport'); return route.continue(); }
       row.externalRequests.push({ method: request.method(), origin: url.origin, path: url.pathname });
       if (!['GET', 'HEAD', 'OPTIONS'].includes(request.method())) row.blockedWrites.push({ method: request.method(), path: url.pathname });
-      if (fonts.has(url.href)) return route.fulfill({ status: 200, ...fonts.get(url.href) });
+      if (fonts.has(url.href)) {
+        const cached = fonts.get(url.href);
+        row.fontResponses.push({ url: url.href, sha256: digest(cached.body), bytes: cached.body.length, contentType: cached.contentType });
+        return route.fulfill({ status: 200, ...cached });
+      }
       const resource = request.resourceType();
       return route.fulfill({ status: 200, contentType: resource === 'stylesheet' ? 'text/css' : resource === 'script' ? 'application/javascript' : 'application/json', body: ['stylesheet', 'script'].includes(resource) ? '' : '[]' });
     });
@@ -221,6 +233,18 @@ try {
     await page.addInitScript(keys => {
       Math.random = () => 0.25;
       window.__contestWrites = [];
+      window.__contestInputs = [];
+      for (const type of ['pointerdown', 'pointerup', 'pointercancel', 'gotpointercapture', 'lostpointercapture', 'touchstart', 'touchend', 'touchcancel', 'click']) {
+        document.addEventListener(type, event => {
+          const board = document.querySelector('[data-arcade-mode]');
+          if (!board) return;
+          const button = event.target instanceof Element ? event.target.closest('button') : null;
+          window.__contestInputs.push({ type, trusted: event.isTrusted, pointerType: event.pointerType, pointerId: event.pointerId, detail: event.detail, stamp: event.timeStamp,
+            target: button?.textContent ?? event.target?.nodeName, phase: board.getAttribute('data-arcade-phase'),
+            ball: board.querySelector('[data-contest-ball]')?.getAttribute('data-contest-ball'), rack: board.querySelector('[data-contest-rack]')?.getAttribute('data-contest-rack'),
+            score: board.querySelector('[data-contest-score]')?.textContent });
+        }, true);
+      }
       for (const method of ['setItem', 'removeItem']) {
         const original = Storage.prototype[method];
         Storage.prototype[method] = function(key, ...args) {
@@ -240,6 +264,18 @@ try {
       await page.goto(BASE + '/buzzer-beater', { waitUntil: 'domcontentloaded' });
       const entry = page.getByRole('button', { name: 'Three-point contest', exact: true }); await entry.waitFor();
       await page.evaluate(() => document.fonts.ready);
+      row.loadedFonts = await page.evaluate(async () => {
+        const faces = [];
+        for (const family of ['Inter', 'Space Grotesk']) {
+          for (const weight of [400, 500, 600, 700]) {
+            const loaded = await document.fonts.load(`${weight} 16px "${family}"`, 'Buzzer Beater');
+            faces.push({ family, weight, faces: loaded.map(face => ({ family: face.family, weight: face.weight, status: face.status })) });
+          }
+        }
+        return faces;
+      });
+      assert.equal(row.loadedFonts.length, 8, 'All eight requested font faces are inspected');
+      for (const requested of row.loadedFonts) assert(requested.faces.length > 0 && requested.faces.every(face => face.status === 'loaded' && face.family.replace(/['"]/g, '') === requested.family), 'Requested font family has actual nonempty loaded faces');
       await page.clock.pauseAt(await page.evaluate(() => Date.now() + 1000));
       const before = await protectedState(page);
       assert((await state(page).innerText()).includes('three regular makes and a made money ball'), 'Actual worked example appears before entering contest');
@@ -267,6 +303,8 @@ try {
         await range(state(page), 'How high to put the arc on the shot', shot.release.arc);
         await range(state(page), 'How far to fade off the closeout', shot.release.x);
         const shoot = button('Hold to shoot'); await navigate(shoot, `User reaches shot ${shot.index + 1} release control`);
+        const attempt = { index: shot.index, expected: shot.release, inputsBefore: await page.evaluate(() => window.__contestInputs.length) };
+        row.releases.push(attempt);
         if (profile.touch) {
           const box = await shoot.boundingBox(); assert(box && box.height >= 44 && box.width >= 44);
           await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: box.x + box.width / 2, y: box.y + box.height / 2, id: 7 }] });
@@ -279,8 +317,12 @@ try {
           return { x: Number(sliders[1].value), arc: Number(sliders[0].value), power: parseFloat(width) / 100 };
         });
         for (const key of ['x', 'arc', 'power']) assert(Math.abs(release[key] - shot.release[key]) < 1e-9, `Shot ${shot.index + 1} actual ${key} matches independent engine input`);
+        attempt.actual = release;
         if (profile.touch) await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
         else await page.keyboard.up('Space');
+        attempt.afterRelease = await state(page).evaluate(el => ({ phase: el.getAttribute('data-arcade-phase'), paused: el.getAttribute('data-arcade-paused'), rack: el.querySelector('[data-contest-rack]')?.getAttribute('data-contest-rack'), ball: el.querySelector('[data-contest-ball]')?.getAttribute('data-contest-ball'), score: el.querySelector('[data-contest-score]')?.textContent,
+          sliders: [...el.querySelectorAll('input[type="range"]')].map(input => ({ label: input.getAttribute('aria-label'), value: input.value })), buttons: [...el.querySelectorAll('button')].map(button => button.textContent) }));
+        attempt.inputs = await page.evaluate(start => window.__contestInputs.slice(start), attempt.inputsBefore);
         if (!profile.reduced) {
           assert.equal(await state(page).getAttribute('data-arcade-phase'), 'flying');
           assertBalls(await readBalls(page), rack, shot.index, shot.index);
@@ -353,6 +395,32 @@ try {
           const restored = await geometry(page, 'recap'); assert.deepEqual(restored, positive, 'Exact positive geometry restores');
           report.controls.push({ name, broken, rejection: failure, restored });
         }
+        const recap = page.locator('[data-contest-balls="recap"]');
+        const glyphTarget = recap.locator('[data-contest-ball-marker="1"]');
+        const ballsBefore = await readBalls(page, 'recap'), originalGlyph = await glyphTarget.textContent();
+        await glyphTarget.evaluate(el => { el.textContent = '?'; });
+        const wrongGlyph = await readBalls(page, 'recap');
+        assert.notEqual(wrongGlyph.markers[0].text, originalGlyph, 'Glyph fault changes the actual rendered outcome');
+        assert.throws(() => assertBalls(wrongGlyph, ballsBefore.rack - 1, 25), error => error instanceof assert.AssertionError && error.message.startsWith('Visible ball mark matches the actual settled engine outcome'));
+        await glyphTarget.evaluate((el, prior) => { el.textContent = prior; }, originalGlyph);
+        const restoredBalls = await readBalls(page, 'recap');
+        assert.deepEqual(restoredBalls, ballsBefore, 'Exact visible outcome restores after glyph fault');
+        assertBalls(restoredBalls, ballsBefore.rack - 1, 25);
+        report.controls.push({ name: 'glyph', broken: wrongGlyph, rejection: 'Visible ball mark matches the actual settled engine outcome', restored: restoredBalls });
+
+        const paneStyle = await scorecard.getAttribute('style'), paneBefore = await geometry(page, 'recap');
+        await scorecard.evaluate(el => { el.style.transform = `translateY(${innerHeight + 100}px)`; });
+        const offscreen = await scorecard.boundingBox();
+        assert.notEqual(await scorecard.getAttribute('style'), paneStyle, 'Vertical fault changes the actual recap position');
+        assert(offscreen && offscreen.y > profile.height, 'Vertical fault moves the whole recap below the viewport');
+        let verticalRejection;
+        try { await geometry(page, 'recap'); }
+        catch (error) { assert(error instanceof assert.AssertionError && error.message === 'Complete contest recap is visible after product reveal'); verticalRejection = error.message; }
+        assert(verticalRejection, 'Offscreen recap must be rejected');
+        await scorecard.evaluate((el, prior) => prior === null ? el.removeAttribute('style') : el.setAttribute('style', prior), paneStyle);
+        const paneRestored = await geometry(page, 'recap');
+        assert.deepEqual(paneRestored, paneBefore, 'Exact positive recap geometry restores after vertical fault');
+        report.controls.push({ name: 'vertical', broken: offscreen, rejection: verticalRejection, restored: paneRestored });
       }
       if (profile.width === 390) {
         await activate(button('Steady practice'), profile);
@@ -382,13 +450,16 @@ try {
       assert.deepEqual(row.errors, [], 'No runtime errors'); assert.deepEqual(row.assetErrors, [], 'No local asset failures');
       assert.equal(row.shots.length, 25); row.passed = true; save();
     } catch (error) {
-      row.failure = String(error.stack || error); await screenshot('failure').catch(() => {}); save(); throw error;
+      row.failure = String(error.stack || error);
+      row.inputTail = await page.evaluate(() => window.__contestInputs.slice(-100)).catch(() => []);
+      row.failureState = await state(page).evaluate(el => ({ phase: el.getAttribute('data-arcade-phase'), mode: el.getAttribute('data-arcade-mode'), paused: el.getAttribute('data-arcade-paused'), text: el.textContent })).catch(() => null);
+      await screenshot('failure').catch(() => {}); save(); throw error;
     } finally { await context.close(); }
   }
   assert.equal(report.cases.filter(row => row.passed).length, 3);
-  assert.deepEqual(report.controls.map(control => control.name), ['value', 'font', 'clipping']);
+  assert.deepEqual(report.controls.map(control => control.name), ['value', 'font', 'clipping', 'glyph', 'vertical']);
   report.sourceAfter = sourceHashes(); assert.deepEqual(report.sourceAfter, beforeSources, 'All seven relevant sources are held');
   report.passed = true;
-  console.log('buzzerContestRecap1074: three native profiles, 75 actual mixed shots, five earned rack recaps per profile, no premature flight reveal, Help/Pause/retry/mode exits, three effective restored DOM controls and seven held sources passed. Zero forwarded writes.');
+  console.log('buzzerContestRecap1074: three native profiles, 75 actual mixed shots, five earned rack recaps per profile, no premature flight reveal, Help/Pause/retry/mode exits, five effective restored DOM controls and seven held sources passed. Zero forwarded writes.');
 } catch (error) { report.failure = String(error.stack || error); throw error; }
 finally { report.sourceAfter = sourceHashes(); save(); await browser?.close(); server.kill(); }
