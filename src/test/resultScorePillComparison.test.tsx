@@ -335,7 +335,7 @@ describe("Rank 'Em reveals the points it hands the recorder", () => {
       expect(stateOf(container)).toBe(kind);
       /* Round 1085: the pill groups thousands, so a daily win's 1000 recorded
          points read 1,000. The recorded number itself is checked above. */
-      expect(pill(container)).toBe(formatNumber(rec!.score));
+      expect(pill(container)).toBe(formatNumber(rec!.score as number));
       expect(firstH2(container)).toBe(`${kind === 'win' ? 5 : 3} / 5 correct`);
     });
   }
