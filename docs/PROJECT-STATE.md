@@ -1,3 +1,14 @@
+Codex1084 AUTHORED, October7,12:07 EDT: shared career save recovery.
+Branch codex/us-career-save-recovery-1084, base acceptedAJbde6b1c3.
+Only persistence/status/reset hunks in sharedBoard plus smallnotice changed.
+Latest exact serialized write/deletion kept for Retry,13 phases show recovery,
+key guard, first-failure toast, new-player write replaces refused reset.
+Engines/schemas/keys/data/Hall/summer/training mechanics and old tests held.
+Four original executable anchors rebound without changingfaults/assertions.
+Remote mounted outcome/control and12-route/four-deletion/nine-fault native
+proof pending. No PR/READY/live claim. Claude owns main/release/data/calibration.
+Design: docs/plans/2026-10-07-us-career-save-recovery-1084.md.
+
 ## Release AJ LIVE, 2026-10-07 11:34 EDT
 
 Claude lane. main 3353111f, deployment 3dba165e-356d-4381-9d12-25f9f8018695, entry index-qeAzpi07.js (was
