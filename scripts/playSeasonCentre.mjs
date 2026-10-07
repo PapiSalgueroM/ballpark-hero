@@ -351,10 +351,14 @@ try {
       const box = await P.page.evaluate(() => { const r = document.querySelector('[data-season-centre] [role="dialog"]').getBoundingClientRect(); return { top: r.top, bottom: r.bottom, scroll: document.scrollingElement.scrollHeight - window.innerHeight, y: window.scrollY }; });
       check(box.top >= 0 && box.bottom <= 900 && box.y === 0, `6. desktop: the dialog sits inside the screen (${Math.round(box.top)} to ${Math.round(box.bottom)}) and the page has not moved`);
     } else {
-      const fit = await P.page.evaluate(() => ({ sw: document.documentElement.scrollWidth, dlg: (() => { const d = document.querySelector('[data-season-centre] [role="dialog"]'); return d.scrollWidth - d.clientWidth; })(), bar: document.querySelector('[data-centre-bar]').getBoundingClientRect().bottom }));
-      check(fit.sw <= 391 && fit.dlg <= 1 && fit.bar <= 844, `6. phone: no sideways scroll (${fit.sw}, ${fit.dlg}) and the bar inside the screen (${Math.round(fit.bar)})`);
+      const fit = await P.page.evaluate(() => ({ sw: document.documentElement.scrollWidth, dlg: (() => { const d = document.querySelector('[data-season-centre] [role="dialog"]'); return d.scrollWidth - d.clientWidth; })(), bar: 0 }));
+      check(fit.sw <= 391 && fit.dlg <= 1, `6. phone: no sideways scroll on the kick off card (${fit.sw}, ${fit.dlg})`);
     }
     await clickText(P.page, '▶ Kick off');
+    if (tag === 'phone') {
+      const bar = await P.page.evaluate(() => { const b = document.querySelector('[data-centre-bar]'); const r = b ? b.getBoundingClientRect() : null; return r ? { top: r.top, bottom: r.bottom, sw: document.documentElement.scrollWidth } : null; });
+      check(!!bar && bar.top >= 0 && bar.bottom <= 844 && bar.sw <= 391, `6. phone: the bar sits inside the screen once the season starts (${bar ? Math.round(bar.top) + ' to ' + Math.round(bar.bottom) : 'no bar'})`);
+    }
     if (await P.page.$('[data-poster]')) await clickText(P.page, '▶ Matchday 1');
     /* 4: the clock, sampled through the first match at 1x */
     const g1 = D.games[0];
