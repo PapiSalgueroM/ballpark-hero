@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import ShareButtons from '@/components/game/ShareButtons';
+import MmaBoutRecap from '@/components/fight-promoter/MmaBoutRecap';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { useMmaPromotion } from '@/hooks/useMmaPromotion';
@@ -19,6 +20,7 @@ function MmaRulesText() {
     <p>A title fight needs two of your division's top four. If there is a champion, they must defend. A champion without a contract leaves a vacant belt.</p>
     <p>A month off moves recovery forward and costs {dollars(MMA_REST_COST)}. The event estimate shows your expected gate and all costs before you commit.</p>
     <p>Your score out of 100 comes from reputation (50), profitable events (30) and held belts (20). Every fighter, record and result is fictional.</p>
+    <p>Open Bout recap from an event receipt or Event history to compare saved totals and played rounds. Each takedown records 20 ground control units. Round points decide bouts that reach the final bell; an early finish ends the bout.</p>
     <p className="rounded-lg border bg-muted/30 p-3"><strong className="text-foreground">Example:</strong> two healthy light division fighters with contracts can contest the vacant title. The winner gets the belt, both use one contract fight, and recovery may stop an immediate rematch. Sign another contender or rest before booking again.</p>
   </div>;
 }
@@ -42,14 +44,22 @@ export default function MmaPromotionBoard() {
   const [listPage, setListPage] = useState(0);
   const [confirmReset, setConfirmReset] = useState(false);
   const [confirmEnd, setConfirmEnd] = useState(false);
+  const [recapIndex, setRecapIndex] = useState<number | null>(null);
   const heading = useRef<HTMLHeadingElement>(null);
   const opener = useRef<Panel>('card');
   const tiles = useRef<Partial<Record<Panel, HTMLButtonElement | null>>>({});
-  const active = !state ? 'setup' : view === 'dashboard' ? panel : view;
+  const recapOpeners = useRef<Record<number, HTMLButtonElement | null>>({});
+  const returnToBout = useRef<number | null>(null);
+  const recap = view === 'result' && result && recapIndex !== null ? result.bouts[recapIndex] : null;
+  const active = !state ? 'setup' : recap ? 'recap' : view === 'dashboard' ? panel : view;
   const reveal = useRevealScroll<HTMLDivElement>(active);
   useGameCompletion('fight-promoter', !!state?.closed && state.history.length > 0, state ? mmaPromotionScore(state) : 0);
   useEffect(() => {
     if (active === 'dashboard') tiles.current[opener.current]?.focus({ preventScroll: true });
+    else if (active === 'result' && returnToBout.current !== null) {
+      recapOpeners.current[returnToBout.current]?.focus({ preventScroll: true });
+      returnToBout.current = null;
+    }
     else if (active !== 'setup') heading.current?.focus({ preventScroll: true });
   }, [active]);
 
@@ -60,12 +70,13 @@ export default function MmaPromotionBoard() {
     setListPage(0);
   };
   const back = () => { game.back(); setPanel('dashboard'); setFighterId(null); };
+  const backToEvent = () => { returnToBout.current = recapIndex; setRecapIndex(null); };
   const rules = <MmaRules />;
   const feedback = notice ? <p role="status" className="rounded-lg border px-3 py-2 text-sm">{notice}</p> : null;
 
   if (!state) return <div data-mma-screen="setup" className="space-y-3" ref={reveal}>
     <div className="flex items-center justify-between"><h2 className="text-lg font-display font-bold">Build your MMA organization</h2>{rules}</div>
-    <div className="space-y-2 text-sm text-muted-foreground"><p>Build a fictional MMA promotion across twelve events. Sign three fight contracts, book up to three bouts per card, then pick a venue and ticket price.</p><p>Match healthy fighters in the same division. Title bouts need two of your top four, including the champion if there is one. You pay the purses and venue; the gate comes back to your business.</p><p className="rounded-lg border bg-muted/30 p-2"><strong className="text-foreground">Example:</strong> book two healthy light division fighters for the vacant title. The winner takes the belt. Both use a contract fight and need recovery before their next booking.</p></div>
+    <div className="space-y-2 text-sm text-muted-foreground"><p>Build a fictional MMA promotion across twelve events. Sign three fight contracts, book up to three bouts per card, then pick a venue and ticket price.</p><p>Match healthy fighters in the same division. Title bouts need two of your top four, including the champion if there is one. You pay the purses and venue; the gate comes back to your business.</p><p className="rounded-lg border bg-muted/30 p-2"><strong className="text-foreground">Example:</strong> two healthy lightweights contest a vacant belt. Both use a contract fight and need recovery. Bout recap shows saved rounds; Event history keeps older cards. Each takedown records 20 control units.</p></div>
     <label className="block text-sm">Promotion name<input aria-label="Promotion name" className={`${field} mt-1`} maxLength={28} value={name} onChange={e => setName(e.target.value)} placeholder="Cagehouse Promotions" /></label>
     {feedback}
     <button className={`${primary} w-full`} onClick={() => game.start(name)}>Start promotion</button>
@@ -87,7 +98,7 @@ export default function MmaPromotionBoard() {
   const roster = state.fighters.filter(f => f.division === division && (market ? f.contract === 0 : f.contract > 0));
   const rankings = mmaRankings(state, division as MmaFighter['division']);
   const pages = (count: number) => count > 4 ? <div className="flex items-center justify-between gap-2"><button className={action} disabled={listPage === 0} onClick={() => setListPage(listPage - 1)}>Previous fighters</button><span className="text-xs">{listPage + 1}/{Math.ceil(count / 4)}</span><button className={action} disabled={(listPage + 1) * 4 >= count} onClick={() => setListPage(listPage + 1)}>Next fighters</button></div> : null;
-  const titleLabel = active === 'dashboard' ? 'Promotion desk' : active === 'card' ? 'Book card' : active === 'matchup' ? 'Choose your matchup' : active === 'fighters' ? 'Fighters' : active === 'rankings' ? 'Rankings and belts' : active === 'history' ? 'Event history' : active === 'closed' ? 'Your promotion legacy' : 'Event receipt';
+  const titleLabel = active === 'dashboard' ? 'Promotion desk' : active === 'card' ? 'Book card' : active === 'matchup' ? 'Choose your matchup' : active === 'fighters' ? 'Fighters' : active === 'rankings' ? 'Rankings and belts' : active === 'history' ? 'Event history' : active === 'closed' ? 'Your promotion legacy' : active === 'recap' ? 'Bout recap' : 'Event receipt';
 
   return <div data-mma-screen={active} className="space-y-3" ref={reveal}>
     <div className="rounded-xl border bg-card p-3">
@@ -97,7 +108,7 @@ export default function MmaPromotionBoard() {
       </div>
     </div>
     <div className="flex items-center justify-between gap-2">
-      {active !== 'dashboard' && active !== 'closed' && <button aria-label={active === 'matchup' ? 'Back to card' : 'Back to dashboard'} className={`${action} shrink-0`} onClick={active === 'matchup' ? () => setPanel('card') : back}>Back</button>}
+      {active !== 'dashboard' && active !== 'closed' && <button aria-label={active === 'recap' ? 'Back to event' : active === 'matchup' ? 'Back to card' : 'Back to dashboard'} className={`${action} shrink-0`} onClick={active === 'recap' ? backToEvent : active === 'matchup' ? () => setPanel('card') : back}>Back</button>}
       <h2 ref={heading} tabIndex={-1} className="text-lg font-display font-bold outline-none">{titleLabel}</h2>{rules}
     </div>
     {feedback}
@@ -173,9 +184,11 @@ export default function MmaPromotionBoard() {
 
     {active === 'result' && result && <div data-mma-receipt={result.event} className="space-y-2">
       <div className="rounded-xl border bg-card p-3 text-sm"><p className="font-semibold">Event {result.event}, {result.attendance} seats</p><p>Gate <span data-mma-receipt-value="gate" data-value={result.gate}>{dollars(result.gate)}</span>, purses <span data-mma-receipt-value="purses" data-value={result.purses}>{dollars(result.purses)}</span>, venue <span data-mma-receipt-value="rent" data-value={result.rent}>{dollars(result.rent)}</span></p><p className="mt-1 font-bold">{result.profit >= 0 ? 'Profit' : 'Loss'} <span data-mma-receipt-value="profit" data-value={result.profit}>{dollars(Math.abs(result.profit))}</span></p><p className="text-xs text-muted-foreground">Reputation {result.repDelta >= 0 ? '+' : ''}{result.repDelta}</p></div>
-      {result.bouts.map(b => <div key={`${b.aId}:${b.bId}`} data-mma-bout-winner={b.winnerId} className="rounded-lg border bg-card p-3 text-sm"><p className="font-semibold">{fighterName(b.winnerId)} wins</p><p className="text-xs text-muted-foreground">{fighterName(b.aId)} vs {fighterName(b.bId)}</p><p>{b.method}, round {b.round}/{b.scheduledRounds}{b.title ? ', title fight' : ''}</p></div>)}
+      {result.bouts.map((b, i) => <div key={`${b.aId}:${b.bId}`} data-mma-bout-winner={b.winnerId} className="flex items-center gap-2 rounded-lg border bg-card p-3 text-sm"><div className="min-w-0 flex-1"><p className="font-semibold">{fighterName(b.winnerId)} wins</p><p className="text-xs text-muted-foreground">{fighterName(b.aId)} vs {fighterName(b.bId)}</p><p>{b.method}, round {b.round}/{b.scheduledRounds}{b.title ? ', title fight' : ''}</p></div><button ref={node => { recapOpeners.current[i] = node; }} aria-label={`View bout ${i + 1} recap`} className={`${action} shrink-0 px-2 text-xs`} onClick={() => setRecapIndex(i)}>Bout recap</button></div>)}
       <button className={`${primary} w-full`} onClick={back}>{state.closed ? 'See legacy score' : 'Plan next event'}</button>
     </div>}
+
+    {active === 'recap' && recap && result && <MmaBoutRecap key={`${result.event}:${recap.aId}:${recap.bId}`} bout={recap} aName={fighterName(recap.aId)} bName={fighterName(recap.bId)} event={result.event} />}
 
     {active === 'closed' && <div className="space-y-3 rounded-xl border bg-card p-4 text-center">
       <p className="text-3xl font-display font-bold">{mmaPromotionScore(state)} / 100</p>
