@@ -14,4 +14,3 @@ Default harness execution characterizes and enforces actual parity. Explicit --c
 No app source, player IDs, old Slots assertions or fixtures change. No normalization hides the five previously observed expired-card differences. The storage budget excess remains separate. All runtime is remote GitHub Actions only. Cloud artifacts retain complete data, source copies and emitted bundles for independent static review.
 
 A product verdict fix requires actual remote evidence first and exact old-card compatibility. PR 168 and 169 are READY separately. No merge/publish/live claim. Root drafts/seven stashes and Claude release/data/cup/Season Centre/Front Office lanes remain held.
-
