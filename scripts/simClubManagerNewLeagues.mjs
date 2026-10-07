@@ -262,8 +262,8 @@ const NEW_LEAGUES = [
      club is mostly youth pads. 48 seasons a run; MEASURED in the Round 1040
      header section. */
   {
-    id: 'serieb', size: 20, drop: 3, topDrop: 3, cup: 'Coppa Italia', pairGap: 2, rhoMin: 0.4, realPairs: true, seeds: 48,
-    pairs: [['Pisa', 'Cremonese']],
+    id: 'serieb', size: 20, drop: 3, topDrop: 3, cup: 'Coppa Italia', pairGap: 2, rhoMin: 0.4, realPairs: true, seeds: 48, realMin: 60,
+    pairs: [],
     managed: ['Palermo', 'Sampdoria', 'Empoli', 'Modena', 'Cesena', 'Padova'],
   },
   /* Round 1040: Ligue 2, Ligue 1's second tier. Nantes (14 real men),
@@ -273,8 +273,8 @@ const NEW_LEAGUES = [
      points over 48 seasons). The row keeps no pair, and part C here is the
      rank correlation alone. MEASURED in the Round 1040 header section. */
   {
-    id: 'ligue2', size: 18, drop: 2, topDrop: 2, cup: 'Coupe de France', pairGap: 2, rhoMin: 0.4, realPairs: true, seeds: 48, realMin: 60,
-    pairs: [],
+    id: 'ligue2', size: 18, drop: 2, topDrop: 2, cup: 'Coupe de France', pairGap: 2, rhoMin: 0.4, realPairs: true, seeds: 48, realMin: 36,
+    pairs: [['Nantes', 'Reims']],
     managed: ['Montpellier', 'Metz', 'Guingamp', 'Dunkerque', 'Annecy', 'Laval'],
   },
   /* Round 1040: the Segunda División, La Liga's second tier: 20 of the real
@@ -282,8 +282,8 @@ const NEW_LEAGUES = [
      Mallorca (12), Real Oviedo (9) and Las Palmas (8) carry 8 or more.
      MEASURED in the Round 1040 header section. */
   {
-    id: 'segunda', size: 20, drop: 4, topDrop: 3, cup: 'Copa del Rey', pairGap: 4, rhoMin: 0.4, realPairs: true, seeds: 48, realMin: 60,
-    pairs: [['Girona', 'Real Oviedo'], ['Mallorca', 'Las Palmas']],
+    id: 'segunda', size: 20, drop: 4, topDrop: 3, cup: 'Copa del Rey', pairGap: 4, rhoMin: 0.4, realPairs: true, seeds: 48, realMin: 36,
+    pairs: [['Girona', 'Mallorca']],
     managed: ['Almería', 'Leganés', 'Sporting Gijón', 'Granada', 'Cádiz', 'Castellón'],
   },
 ];
@@ -874,10 +874,12 @@ if (CONTROL === 'swap') {
   }
 }
 if (CONTROL === 'emptypair') {
-  const row = NEW_LEAGUES.find(r => r.id === 'serieb');
-  if (!row || row.pairs[0][1] !== 'Cremonese' || (cm.CM_ROSTERS.Arezzo?.length ?? 0) !== 0) { console.error('control emptypair: the Serie B pair or the empty Arezzo is not there; refusing to run'); process.exit(1); }
-  row.pairs[0] = [row.pairs[0][0], 'Arezzo'];
-  console.log('NEGATIVE CONTROL ON: a Serie B pair sets Pisa against empty Arezzo; the real squad pair rule must go red');
+  /* Round 1040 review: Serie B keeps no pair after the review's withholds,
+     so the control swaps the Segunda's pair to empty Tenerife instead. */
+  const row = NEW_LEAGUES.find(r => r.id === 'segunda');
+  if (!row || row.pairs[0]?.[1] !== 'Mallorca' || (cm.CM_ROSTERS.Tenerife?.length ?? 0) !== 0) { console.error('control emptypair: the Segunda pair or the empty Tenerife is not there; refusing to run'); process.exit(1); }
+  row.pairs[0] = [row.pairs[0][0], 'Tenerife'];
+  console.log('NEGATIVE CONTROL ON: a Segunda pair sets Girona against empty Tenerife; the real squad pair rule must go red');
 }
 if (PARTS.includes('A') || PARTS.includes('D')) {
   for (const row of NEW_LEAGUES.filter(r => !ROWS || ROWS.includes(r.id))) {

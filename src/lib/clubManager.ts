@@ -3555,6 +3555,12 @@ const STRENGTH_PRIORS: Record<string, number> = {
   // Round 1040: the Segunda División. Tenerife, Córdoba and Eldense have no
   // row in the table under any spelling, so the same 61.
   'Tenerife': 61, 'Córdoba': 61, 'Eldense': 61,
+  // Round 1040's review withheld every baked man at the new clubs that his
+  // club's ESPN 2026-27 squad page leaves out (the roster ledger's
+  // round1040-review rows), which left these eight with no baked player at
+  // all, so they take the same 61 rather than the 65 an unknown club gets.
+  'Juve Stabia': 61, 'Pau': 61, 'Grenoble': 61, 'Laval': 61,
+  'Sabadell': 61, 'Granada': 61, 'FC Andorra': 61, 'Ceuta': 61,
 };
 
 /** The real league a club plays in. Every playable club is covered.

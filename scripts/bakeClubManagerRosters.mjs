@@ -380,17 +380,19 @@ if (!(xiAvg('Palmeiras') > xiAvg('Vitória'))) errors.push('SANITY: Palmeiras <=
 // the pads of an empty club.
 if (!(xiAvg('América') > xiAvg('Necaxa'))) errors.push('SANITY: América <= Necaxa');
 if (!(xiAvg('Guadalajara') > xiAvg('FC Juárez'))) errors.push('SANITY: Guadalajara <= FC Juárez');
-// Round 1040: Serie B. Only Pisa (18 real men), Verona (13) and Cremonese
-// (10) carry 8 or more in the 2026-10-02 bake; every other member is under
-// it and padded, so both pairs compare real squads against a real squad.
+// Round 1040: Serie B. After the round's review withheld every man ESPN's
+// 2026-27 squad pages leave out, only Pisa (12 real men) and Verona (11)
+// carry 8 or more in the 2026-10-02 bake; Cremonese (6) is padded, so these
+// pairs ask that a real squad clears a mostly padded one.
 if (!(xiAvg('Pisa') > xiAvg('Cremonese'))) errors.push('SANITY: Pisa <= Cremonese');
 if (!(xiAvg('Verona') > xiAvg('Cremonese'))) errors.push('SANITY: Verona <= Cremonese');
-// Round 1040: Ligue 2. Nantes (14), Saint-Étienne (13) and Reims (12) carry
-// 8 or more real men; Pau (3) is mostly pads, so this only asks that a real
-// squad clears a padded one.
+// Round 1040: Ligue 2. Nantes (13), Saint-Étienne (9) and Reims (8) carry
+// 8 or more real men; Pau (none after the review) is all pads, so this only
+// asks that a real squad clears a padded one.
 if (!(xiAvg('Saint-Étienne') > xiAvg('Pau'))) errors.push('SANITY: Saint-Étienne <= Pau');
-// Round 1040: the Segunda División. Girona (13), Mallorca (12), Real Oviedo (9)
-// and Las Palmas (8) carry 8 or more real men; Castellón (4) is mostly pads.
+// Round 1040: the Segunda División. Girona (10) and Mallorca (8) carry 8 or
+// more real men after the review; Real Oviedo (3) and Castellón (2) are
+// mostly pads.
 if (!(xiAvg('Girona') > xiAvg('Castellón'))) errors.push('SANITY: Girona <= Castellón');
 if (!(xiAvg('Girona') > xiAvg('Real Oviedo'))) errors.push('SANITY: Girona <= Real Oviedo');
 
@@ -419,6 +421,9 @@ let out = `// Rounds 70+72: real rosters for every Club Manager club, generated 
 // 2. Bundesliga, Belgian Pro League, Austrian Bundesliga, Super League
 // Greece, Danish Superliga, Swiss Super League, SuperSport HNL,
 // Brazil's Serie A, Liga MX, Serie B, Ligue 2 and the Segunda División.
+// The overlay does not cover Serie B, Ligue 2 or the Segunda División: their
+// squads are the table's men that each club's ESPN 2026-27 squad page still
+// lists (the roster ledger withholds the rest), with no summer arrivals added.
 // Values in £m, ratings 48-94 from the value curve.
 // Regenerate with: node scripts/bakeClubManagerRosters.mjs
 // DO NOT EDIT BY HAND.
