@@ -399,7 +399,12 @@ if (reached) {
 
   const twoLegged = cardReport.ties.filter(t => t.twoLegged);
   const missingAgg = twoLegged.filter(t => !cardReport.text.includes(`${t.agg} on aggregate`));
-  const missingLegs = twoLegged.filter(t => !cardReport.text.includes(`${t.round} L1`) || !cardReport.text.includes(`${t.round} L2`));
+  /* Round 972 (Release AD) prints the knockout play-off as "Play-off", not its
+     engine code "PO" (SoccerCareer.tsx: m.round === "PO" ? "Play-off" : m.round),
+     so the leg labels are looked for under the name the card shows. Red since
+     Release AD with every leg label present on screen. */
+  const shownRound = r => (r === 'PO' ? 'Play-off' : r);
+  const missingLegs = twoLegged.filter(t => !cardReport.text.includes(`${shownRound(t.round)} L1`) || !cardReport.text.includes(`${shownRound(t.round)} L2`));
   const firstLegBadged = cardReport.ties.filter(t => t.firstHasBadge);
 
   console.log('\nThe card a player actually saw');
