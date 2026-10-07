@@ -339,7 +339,15 @@ console.log('3) the stream did not move: the engine and a copy without the stamp
 /* ovr leaves season shaped objects only (they carry both rating and
    leagueTitle, which also covers pendingSummary); everywhere else it stays in. */
 const isSeasonRow = o => o && typeof o === 'object' && 'rating' in o && 'leagueTitle' in o;
-const digest = s => crypto.createHash('sha256').update(JSON.stringify(s, function (k, v) { return k === 'ovr' && isSeasonRow(this) ? undefined : v; })).digest('hex').slice(0, 16);
+/* Release AI note: Round 1041's cup run reads the stamp on purpose (each tie's
+   odds use the overall he had that season, season.ovr ?? s.overall), so the
+   copy without the stamp draws a different cupRun on rows where growth moved
+   s.overall. That run comes from its own keyed generator and never touches the
+   main stream (simCareerDomesticCup section 1 proves it: 0 Math.random count
+   differences over 2400 seasons), and this section's question is the stream,
+   so cupRun on a season row is left out of the digest beside ovr. The call
+   counts are still compared at every step. */
+const digest = s => crypto.createHash('sha256').update(JSON.stringify(s, function (k, v) { return (k === 'ovr' || k === 'cupRun') && isSeasonRow(this) ? undefined : v; })).digest('hex').slice(0, 16);
 function trace(E, seed, policy) {
   const out = [];
   runCareer(E, seed, { era: '2020-24', startYear: 2020, position: POSITIONS[seed % POSITIONS.length], ovr: 64, policy, onStep: (_p, next) => out.push(`${calls}:${digest(next)}`) });
