@@ -94,7 +94,9 @@
 */
 /* Round 299: seeded stream, see scripts/lib/seedRandom.mjs. First import on purpose. */
 import './lib/seedRandom.mjs';
-import { execSync } from 'node:child_process';
+import { execSync, spawnSync } from 'node:child_process';
+import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { createRequire } from 'node:module';
 import fs from 'node:fs';
 import os from 'node:os';
@@ -112,7 +114,13 @@ if (CONTROL && !CONTROLS.includes(CONTROL)) {
 }
 
 let failures = 0;
-const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
+let section = 0;
+const failedIn = new Set();
+const fail = m => { failures += 1; failedIn.add(section); console.error(`  FAIL [${section}]: ${m}`); };
+const runtimeErrors = [];
+const recordRuntimeError = error => runtimeErrors.push(String(error?.stack ?? error));
+process.on('unhandledRejection', recordRuntimeError);
+process.on('uncaughtExceptionMonitor', recordRuntimeError);
 const lf = s => s.replaceAll('\r\n', '\n');
 const isNum = v => typeof v === 'number' && Number.isFinite(v);
 const mean = a => (a.length ? a.reduce((x, y) => x + y, 0) / a.length : NaN);
@@ -122,20 +130,33 @@ const stripComments = t => t.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:'"`
 const ENGINE = path.join(ROOT, 'src', 'lib', 'clubManager.ts');
 const CARD = path.join(ROOT, 'src', 'components', 'club-manager', 'MatchReportCard.tsx');
 const PAGE = path.join(ROOT, 'src', 'pages', 'ClubManager.tsx');
+const sourceBefore = {}, verifySources = [];
+for (const file of [ENGINE, CARD, PAGE]) {
+  const bytes = fs.readFileSync(file);
+  sourceBefore[path.relative(ROOT, file).replaceAll('\\', '/')] = createHash('sha256').update(bytes).digest('hex');
+  verifySources.push(() => assert.deepEqual(fs.readFileSync(file), bytes, 'Original match sources remain unchanged'));
+}
+const mutations = [];
 let enginePath = `${ROOT_URL}/src/lib/clubManager.ts`;
 let cardPath = `${ROOT_URL}/src/components/club-manager/MatchReportCard.tsx`;
 
 function rewrite(file, edits, outName, what) {
   let src = lf(fs.readFileSync(file, 'utf8'));
   for (const [from, to] of edits) {
-    if (!src.includes(from)) {
+    if (src.split(from).length !== 2) {
       console.error(`control cannot run: ${what} is not in the shape MATCH_SCREEN_CONTROL=${CONTROL} rewrites (${from.slice(0, 70)}...)`);
       process.exit(1);
     }
-    src = src.replace(from, to);
+    const changed = src.replace(from, to);
+    assert.notEqual(changed, src, 'An executable match-screen control actually changes its copied source');
+    mutations.push({ file: path.relative(ROOT, file).replaceAll('\\', '/'), anchor: from, replacement: to });
+    src = changed;
   }
   const out = `${TMP}/${process.pid}.${outName}`;
   fs.writeFileSync(out, src);
+  const artifacts = path.resolve(process.env.MATCH_SCREEN_ARTIFACTS || path.join(ROOT, 'cm-quick-subs-artifacts/match-screen'));
+  fs.mkdirSync(artifacts, { recursive: true });
+  fs.writeFileSync(path.join(artifacts, `${CONTROL}-${path.basename(file)}.txt`), src);
   return out;
 }
 
@@ -287,6 +308,7 @@ const screens = played.map(p => ({
 }));
 
 /* ---------- 1. the clock ---------- */
+section = 1;
 console.log('1) The clock: stoppage time on the screen, for both halves, from the half it followed');
 let clocks = 0;
 for (const s of screens) {
@@ -321,6 +343,7 @@ console.log(`   ${clocks} reports rendered, every one showing 45+n' and 90+m' as
 }
 
 /* ---------- 2. possession ---------- */
+section = 2;
 console.log('2) Possession: two shares of one hundred, both wearing a percent sign');
 let possChecked = 0;
 for (const s of screens) {
@@ -349,6 +372,7 @@ if (possChecked < 60) fail(`only ${possChecked} possession pairs checked`);
 console.log(`   ${possChecked} pairs on screen, every one summing to 100 and every one the sim's own share`);
 
 /* ---------- 3. both clubs named ---------- */
+section = 3;
 console.log('3) Both clubs named, counted rather than string matched');
 let namings = [];
 let liveScreens = 0;
@@ -396,6 +420,7 @@ if (!(meanNaming >= 3.5)) fail(`the other club is named ${meanNaming.toFixed(2)}
 console.log(`   ${screens.length} reports name the other club ${Math.min(...namings)} to ${Math.max(...namings)} times (mean ${meanNaming.toFixed(1)}, floor 3.5), and ${liveScreens} live viewers name both clubs`);
 
 /* ---------- 4. every text block centred ---------- */
+section = 4;
 console.log('4) Every text block centred inside the card');
 let centred = 0;
 for (const s of screens) {
@@ -408,6 +433,7 @@ for (const s of screens) {
 console.log(`   ${centred} cards rendered, 0 left aligned blocks, every card centring its text`);
 
 /* ---------- 5. momentum swings ---------- */
+section = 5;
 console.log('5) Momentum reads as swings, not as one number');
 const signChanges = series => {
   let n = 0;
@@ -447,6 +473,7 @@ console.log(`   ${drawn} charts: ${meanSwings.toFixed(2)} sign changes a match (
 console.log(`   every chart drew the report's own nine buckets`);
 
 /* ---------- 6. one flow, two ways, one match ---------- */
+section = 6;
 console.log('6) Historical no-coach baseline: the same fixture and seed finish identically');
 const sameKeys = r => JSON.stringify({
   home: r.home, away: r.away, hg: r.homeGoals, ag: r.awayGoals,
@@ -538,7 +565,42 @@ console.log(`   ${pairs} fixtures replayed both ways, ${scorelines.size} distinc
   console.log(`   the engine plays a match in ${calls.length} places, both off one kick off, and each of the two screens offers exactly 2 ways in (${centreButtons} buttons on the Match Centre)`);
 }
 
-console.log(failures === 0
-  ? '\nsimMatchScreen: PASS. One match, two ways through it, and a report that names both clubs, shows the clock it ran to, splits the ball two ways and draws a graph that moves.'
-  : `\nsimMatchScreen: ${failures} FAILURES`);
-process.exit(failures === 0 ? 0 : 1);
+await new Promise(resolve => setImmediate(resolve));
+for (const verify of verifySources) verify();
+assert.deepEqual(runtimeErrors, [], 'Runtime errors never receive match-screen control credit');
+const artifacts = path.resolve(process.env.MATCH_SCREEN_ARTIFACTS || path.join(ROOT, 'cm-quick-subs-artifacts/match-screen'));
+fs.mkdirSync(artifacts, { recursive: true });
+const intended = { noclock: 1, bareposs: 2, them: 3, ragged: 4, flat: 5, twoengines: 6 };
+let independentBaseline = null;
+if (CONTROL) {
+  const baseline = spawnSync(process.execPath, [fileURLToPath(import.meta.url)], {
+    cwd: ROOT, env: { ...process.env, MATCH_SCREEN_CONTROL: '', MATCH_SCREEN_ARTIFACTS: artifacts },
+    encoding: 'utf8', timeout: 180000, maxBuffer: 16 * 1024 * 1024, windowsHide: true,
+  });
+  const output = `${baseline.stdout || ''}\n${baseline.stderr || ''}`;
+  fs.writeFileSync(path.join(artifacts, `${CONTROL}-independent-baseline.log`), output);
+  independentBaseline = baseline.status === 0 && !baseline.error && !baseline.signal
+    && output.includes('simMatchScreen: PASS.') && !/ReferenceError|TypeError|Unhandled (?:Error|Rejection)/.test(output);
+}
+await new Promise(resolve => setImmediate(resolve));
+assert.deepEqual(runtimeErrors, [], 'Neither the control nor its baseline produces a runtime error');
+for (const verify of verifySources) verify();
+const sourceAfter = Object.fromEntries([ENGINE, CARD, PAGE].map(file => [path.relative(ROOT, file).replaceAll('\\', '/'), createHash('sha256').update(fs.readFileSync(file)).digest('hex')]));
+assert.deepEqual(sourceAfter, sourceBefore, 'All original match-source hashes remain held through the baseline');
+fs.writeFileSync(path.join(artifacts, `${CONTROL || 'normal'}-report.json`), JSON.stringify({
+  control: CONTROL || 'normal', intendedSection: intended[CONTROL] ?? null,
+  failedSections: [...failedIn].sort(), failureCount: failures, independentBaseline,
+  runtimeErrors, sourceBefore, sourceAfter, mutations,
+}, null, 2));
+if (CONTROL) {
+  assert.deepEqual([...failedIn].sort(), [intended[CONTROL]], 'Only the intended match-screen section fails');
+  assert.ok(failures > 0, 'The copied fault fails an actual outcome');
+  assert.equal(independentBaseline, true, 'The untouched full match-screen baseline passes independently');
+  console.log(`\nsimMatchScreen: PASS. Effective ${CONTROL} fault failed only section ${intended[CONTROL]}; untouched baseline passed and source bytes held.`);
+} else {
+  console.log(failures === 0
+    ? '\nsimMatchScreen: PASS. One match, two ways through it, and a report that names both clubs, shows the clock it ran to, splits the ball two ways and draws a graph that moves.'
+    : `\nsimMatchScreen: ${failures} FAILURES`);
+}
+process.off('unhandledRejection', recordRuntimeError); process.off('uncaughtExceptionMonitor', recordRuntimeError);
+process.exit(CONTROL || failures === 0 ? 0 : 1);

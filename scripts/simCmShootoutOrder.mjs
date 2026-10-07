@@ -47,14 +47,15 @@
  *   3) The cap. Over every taker rating and keeper rating 40 to 99 the
  *      taker's edge and the keeper's edge each stay inside the cap and the
  *      kick's odds stay inside twice the cap of the base rate.
- *   4) Unset means unchanged. scripts/data/cmShootoutUnset782.json holds,
+ *   4) Historical unmanaged play. scripts/data/cmShootoutUnset782.json holds,
  *      for 150 seeds of that same cup match with no order set, the result
  *      (how it was decided, who won the shootout, the score), the next
  *      number off the stream after the match, and a hash of the whole
  *      report and the save after it, written by the engine as it stood
  *      BEFORE this round (src/lib/clubManager.ts at origin/main 84d81619,
  *      unchanged since the branch point 9136539b). The engine now must
- *      reproduce every row. The next number alone is a weak witness (the
+ *      reproduce every row with automatic coaching bypassed. Section 1
+ *      exercises current coached matches. The next number alone is a weak witness (the
  *      engine's later draws are conditional, so a stream shifted by one can
  *      fall back into step: under unsetpath it came out the same on 17 of
  *      the 28 shootout rows, and 8 of them matched on every other field);
@@ -68,7 +69,7 @@
  *      now, still over the floor of 12; unsetpath still breaks all 15 (135
  *      of 150 reproduced) and turns section 5 red with them.
  *   5) An old save loads. A career written without the field comes back
- *      with no order, plays the fixture's match the fixture's way, and an
+ *      with no order, replays the fixture on its historical unmanaged path, and an
  *      order set on it survives a save and a load; a bad id is refused, and
  *      a loan signing (onLoan, a man on loan TO the club, who can start) is
  *      listed like anyone else.
@@ -234,6 +235,18 @@ if (CONTROL) {
   enginePath = copy;
 }
 
+/* Keep the frozen pre-coaching fixture on its unmanaged path. Current
+   coached matches are checked separately against the men who finished. */
+const historicalPath = `${TMP}/${TAG}.historical.engine.ts`;
+let historicalEnginePath = enginePath;
+if (!WRITE_FIXTURE) {
+  const source = readLF(enginePath);
+  const header = 'export function coachQuickMatch(career: CareerState): CareerState {\n';
+  if (source.split(header).length - 1 !== 1) abort('Historical no-coach arm needs one executable coach header');
+  fs.writeFileSync(historicalPath, source.replace(header, header + '  return career;\n'));
+  historicalEnginePath = historicalPath;
+}
+
 fs.writeFileSync(ENTRY, `
 let slot = {};
 globalThis.localStorage = {
@@ -243,11 +256,12 @@ globalThis.localStorage = {
   clear: () => { slot = {}; },
 };
 export const cm = await import('${enginePath}');
+export const historical = await import('${historicalEnginePath}');
 `);
 /* esbuild through its own module rather than a path under ROOT, so a worktree
    that resolves node_modules by walking up (no junction, ever) bundles too. */
 buildSync({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: BUNDLE, logLevel: 'error', alias: { '@': `${ROOT_URL}/src` } });
-const { cm } = await import(pathToFileURL(BUNDLE).href);
+const { cm, historical } = await import(pathToFileURL(BUNDLE).href);
 const {
   startCareer, playNextEntry, saveCareer, loadCareer, resolveXI, effectiveXIWithSlots, oppRosterFor,
   setShootoutOrder, shootoutOrderOf, runShootout, shootoutTakerOrder, shootoutSides,
@@ -303,14 +317,14 @@ const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const pct = x => `${(x * 100).toFixed(1)}%`;
 
 /* ---------- the base career, simmed to its first cup week ---------- */
-const atCup = withSeed(BASE_SEED, () => {
-  const start = startCareer(CLUB);
+const reachCup = engine => withSeed(BASE_SEED, () => {
+  const start = engine.startCareer(CLUB);
   const cupIdx = start.calendar.findIndex(e => e.type === 'cup');
   if (cupIdx < 0) abort(`${CLUB} has no cup entry in its calendar`);
   /* playNextEntry hands back after every match, so the walk to the cup week is a loop. */
   let s = start;
   for (let guard = 0; s.week < cupIdx && guard < 60; guard++) {
-    const r = playNextEntry(s, { skipHalftime: true, untilWeek: cupIdx });
+    const r = engine.playNextEntry(s, { skipHalftime: true, untilWeek: cupIdx });
     s = r.state;
     if (r.kind === 'reached') break;
     if (r.kind !== 'match') abort(`could not sim to the cup week: got ${r.kind} at week ${s.week} (wanted ${cupIdx})`);
@@ -318,13 +332,15 @@ const atCup = withSeed(BASE_SEED, () => {
   if (s.week !== cupIdx) abort(`could not sim to the cup week: stopped at week ${s.week} (wanted ${cupIdx})`);
   return s;
 });
+const atCup = reachCup(cm);
+const historicalCup = WRITE_FIXTURE ? atCup : reachCup(historical);
 const cupEntry = atCup.calendar[atCup.week];
 console.log(`   base: ${CLUB}, cup ${cupEntry.cupRound} in week ${atCup.week}, squad ${atCup.squad.length}, no order set: ${!('shootoutOrder' in atCup)}`);
 
 /** One cup match from the base, on a seed, and the next number off the stream once it is over. */
-function playCup(state, seed) {
+function playCup(state, seed, engine = cm) {
   return withSeed(seed, () => {
-    const r = playNextEntry(state, { skipHalftime: true });
+    const r = engine.playNextEntry(state, { skipHalftime: true });
     if (r.kind !== 'match' || !r.report) abort(`seed ${seed}: the cup week did not play a match (${r.kind})`);
     if (r.report.competition !== 'cup') abort(`seed ${seed}: played a ${r.report.competition} match, not the cup`);
     const rep = r.report;
@@ -415,7 +431,11 @@ console.log('1) The walk, through the whole match: my first five kicks are the f
       played.add(ids[0]);
     }
     const off = new Set();
-    for (const s of det.subs) if (s.offId) off.add(s.offId);
+    for (const s of det.subs) {
+      const ids = idsOfName.get(s.off) ?? [];
+      if (ids.length !== 1) abort(`seed ${seed}: substituted ${s.off} maps to ${ids.length} ids in the squad`);
+      off.add(ids[0]);
+    }
     for (const c of det.cards) if (c.kind === 'red' && c.id) off.add(c.id);
     for (const inj of det.injuries) if (inj.id) off.add(inj.id);
     const finished = [...played].filter(id => !off.has(id));
@@ -545,14 +565,14 @@ console.log('3) The cap: no edge and no kick moves past it, either way');
 }
 
 /* ================================================================== */
-console.log('4) Unset means unchanged: the frozen fixture replays row for row');
+console.log('4) Historical unmanaged play: the frozen fixture replays row for row');
 /* ================================================================== */
 let fixture = null;
 {
   if (!fs.existsSync(FIXTURE)) abort(`the fixture ${path.relative(ROOT, FIXTURE)} is missing; see the header for how it is written`);
   fixture = JSON.parse(readLF(FIXTURE));
-  if (fixture.club !== CLUB || fixture.baseSeed !== BASE_SEED || fixture.cupWeek !== atCup.week) {
-    fail(`the fixture was written for ${fixture.club} seed ${fixture.baseSeed} week ${fixture.cupWeek}, this run is ${CLUB} ${BASE_SEED} ${atCup.week}`);
+  if (fixture.club !== CLUB || fixture.baseSeed !== BASE_SEED || fixture.cupWeek !== historicalCup.week) {
+    fail(`the fixture was written for ${fixture.club} seed ${fixture.baseSeed} week ${fixture.cupWeek}, this run is ${CLUB} ${BASE_SEED} ${historicalCup.week}`);
   }
   if (fixture.rows.length !== FIXTURE_SEEDS.length) fail(`the fixture holds ${fixture.rows.length} rows, the harness walks ${FIXTURE_SEEDS.length} seeds`);
   let same = 0;
@@ -560,7 +580,7 @@ let fixture = null;
   let withKicks = 0;
   let shown = 0;
   for (const want of fixture.rows) {
-    const out = playCup(atCup, want.seed);
+    const out = playCup(historicalCup, want.seed, historical);
     const got = row(out);
     if (out.report.shootout) withKicks += 1;
     if (want.decidedBy === 'pens') pens += 1;
@@ -574,11 +594,11 @@ let fixture = null;
 }
 
 /* ================================================================== */
-console.log('5) An old save loads with no order, plays the old way, and an order set on it is kept');
+console.log('5) An old save loads with no order, holds its historical unmanaged play, and keeps a chosen order');
 /* ================================================================== */
 {
   localStorage.clear();
-  const old = JSON.parse(JSON.stringify(atCup));
+  const old = JSON.parse(JSON.stringify(historicalCup));
   delete old.shootoutOrder;
   if (!saveCareer(old)) fail('saveCareer refused the old shape');
   const back = loadCareer();
@@ -587,7 +607,7 @@ console.log('5) An old save loads with no order, plays the old way, and an order
   if (shootoutOrderOf(back) !== null) fail('shootoutOrderOf reads an order off a save that has none');
   const probe = fixture?.rows?.find(r => r.decidedBy === 'pens') ?? fixture?.rows?.[0];
   if (probe) {
-    const got = row(playCup(back, probe.seed));
+    const got = row(playCup(back, probe.seed, historical));
     if (JSON.stringify(got) !== JSON.stringify(probe)) fail(`the loaded old save played seed ${probe.seed} as ${JSON.stringify(got)}, the fixture says ${JSON.stringify(probe)}`);
     else console.log(`   loaded old save, seed ${probe.seed}: ${probe.decidedBy}${probe.decidedBy === 'pens' ? `, shootout ${probe.shootoutWon ? 'won' : 'lost'}` : ''}, same as the fixture`);
   }
@@ -699,7 +719,7 @@ console.log('6) The keeper facing each kick, and the other side\'s order');
 }
 
 /* ================================================================== */
-for (const f of [ENTRY, BUNDLE, `${TMP}/${TAG}.control.engine.ts`]) { try { fs.unlinkSync(f); } catch { /* not there */ } }
+for (const f of [ENTRY, BUNDLE, `${TMP}/${TAG}.control.engine.ts`, historicalPath]) { try { fs.unlinkSync(f); } catch { /* not there */ } }
 if (failures) {
   console.error(`\nsimCmShootoutOrder: ${failures} FAILURE(S)`);
   process.exit(1);

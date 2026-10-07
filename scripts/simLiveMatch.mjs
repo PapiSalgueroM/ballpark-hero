@@ -273,7 +273,7 @@ fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {}, clear: () => {} };
 const mod = await import('${enginePath}');
 export const engine = mod;
-export * as noCoach from '${noCoachPath}';
+export const noCoach = await import('${noCoachPath}');
 `);
 execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --alias:@=${ROOT_URL}/src --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
 const { engine: cm, noCoach } = await import(pathToFileURL(BUNDLE).href);

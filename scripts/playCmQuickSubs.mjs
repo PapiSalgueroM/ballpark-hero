@@ -120,7 +120,9 @@ try {
         await page.evaluate(() => document.fonts.ready);
         const before = await saved();
         fs.writeFileSync(path.join(OUT, `${id}-before.json`), JSON.stringify(before, null, 2));
-        const expected = fixedDate(() => withQuickSubsSeed(FINISH_SEED, () => cm.playNextEntry(before, { skipHalftime: true })));
+        // Each browser context boots fresh module counters, so its oracle does too.
+        const caseCm = await import(`${pathToFileURL(bundle).href}?case=${id}`);
+        const expected = fixedDate(() => withQuickSubsSeed(FINISH_SEED, () => caseCm.playNextEntry(before, { skipHalftime: true })));
         assert.equal(expected.kind, 'match'); assert(expected.report.detail.subs.length > 0, 'Actual coaching makes own substitutions');
         const subs = expected.report.detail.subs;
         for (const sub of subs) for (const nameKey of ['off', 'on']) {
@@ -170,7 +172,7 @@ try {
         assert(row.layout.scrollWidth <= profile.width + 2 && row.layout.x >= 0 && row.layout.right <= profile.width + 1, 'Report fits the viewport horizontally');
         assert(row.layout.fonts.every(Boolean), 'Actual report fonts loaded');
         assert(row.layout.ownRows.every(box => box.font >= 10 && box.height >= 18 && box.x >= 0 && box.right <= profile.width + 1), 'Own substitution rows remain readable and contained');
-        if (fixture.kind === 'injury') { const image = `${id}-report.png`; await page.screenshot({ path: path.join(OUT, image), fullPage: true }); row.snapshots.push(image); }
+        if (fixture.kind === 'injury') { const image = `${id}-report.png`; await page.screenshot({ path: path.join(OUT, image) }); row.snapshots.push(image); }
         row.quickInputs = await page.evaluate(() => window.__quickInputs); assert.equal(row.quickInputs, 1, 'One actual Quick Sim activation');
         row.careerWriteWeeks = await page.evaluate(() => window.__careerWrites.map(career => career.week));
         assert(row.careerWriteWeeks.every(week => week === before.week || week === after.week), 'Persistence never advances a second fixture');

@@ -454,7 +454,7 @@ begin('3b', 'The timeline on the card is the report\'s own timeline, row for row
     const ht = shown.find(s => s.kind === 'halftime');
     const ft = shown.find(s => s.kind === 'fulltime');
     if (!ht || ht.clock !== `45+${d.added.h1}'`) fail(`${ctx}: the half time row reads ${ht?.clock}, the board says 45+${d.added.h1}'`);
-    const wantFt = d.et ? `${d.et.to}'` : `90+${d.added.h2}'`;
+    const wantFt = d.et ? (d.added.et ? `${d.et.to}+${d.added.et}'` : `${d.et.to}'`) : `90+${d.added.h2}'`;
     if (!ft || ft.clock !== wantFt) fail(`${ctx}: the full time row reads ${ft?.clock}, want ${wantFt}`);
   }
   console.log(`   ${rowsShown} rows on ${reports.length} cards, every one the report's own row, the clock rows off the report's own board`);

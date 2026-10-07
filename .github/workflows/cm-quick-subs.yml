@@ -67,10 +67,11 @@ jobs:
       - name: Generate the changed help and news snapshots
         if: ${{ github.event_name == 'push' }}
         run: |
+          node scripts/simGuideHeadings.mjs --refresh /club-manager 2>&1 | tee cm-quick-subs-artifacts/guide-refresh.log
           node scripts/genSearchKeywords.mjs 2>&1 | tee cm-quick-subs-artifacts/search-generation.log
           PRERENDER_ONLY=/club-manager,/whats-new npm run build:seo 2>&1 | tee cm-quick-subs-artifacts/seo-generation.log
           mkdir -p cm-quick-subs-artifacts/payload
-          for file in public/club-manager/index.html public/whats-new/index.html public/sitemap.xml scripts/data/lastmod.json src/data/searchKeywords.json; do
+          for file in public/club-manager/index.html public/whats-new/index.html public/sitemap.xml scripts/data/lastmod.json src/data/searchKeywords.json scripts/data/guideHeadingsFrozen.json; do
             mkdir -p "cm-quick-subs-artifacts/payload/$(dirname "$file")"
             cp "$file" "cm-quick-subs-artifacts/payload/$file"
             sha256sum "$file"
@@ -105,6 +106,18 @@ jobs:
             ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "cm-quick-subs-artifacts/$harness.log" || failed=1
           done
           exit "$failed"
+      - name: Guide faults detect the reviewed help changes
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for control in skiplevel nokeyword lostline careerline unconvert snapdrift; do
+            set +e
+            GUIDE_HEADINGS_CONTROL="$control" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simGuideHeadings.mjs 2>&1 | tee "cm-quick-subs-artifacts/guide-$control.log"
+            status=${PIPESTATUS[0]}
+            set -e
+            if [ "$status" -ne 1 ] || ! grep -q "simGuideHeadings control $control: section .* red and every other section green" "cm-quick-subs-artifacts/guide-$control.log"; then failed=1; fi
+          done
+          exit "$failed"
       - name: Actual quick sim and report on phones and desktop
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmQuickSubs.mjs 2>&1 | tee cm-quick-subs-artifacts/native.log
@@ -118,3 +131,44 @@ jobs:
           name: cm-quick-subs-${{ github.run_id }}-${{ github.run_attempt }}
           retention-days: 7
           path: cm-quick-subs-artifacts/
+
+  baseline:
+    if: ${{ github.event_name == 'push' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      VITEST_MAX_FORKS: 1
+      VITEST_MIN_FORKS: 1
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 428881617a04543606050395d05be1a9fa4d7b3e
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Install baseline dependencies
+        run: |
+          mkdir -p cm-quick-baseline-artifacts
+          git rev-parse HEAD > cm-quick-baseline-artifacts/source-head.txt
+          npm ci
+      - name: Measure the existing main behavior
+        run: |
+          failed=0
+          for harness in simClubManagerSlots simCmStoppageTime simCmMatchCentre simCmShootoutOrder; do
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node "scripts/$harness.mjs" 2>&1 | tee "cm-quick-baseline-artifacts/$harness.log" || failed=1
+          done
+          git diff --exit-code HEAD -- src scripts || failed=1
+          exit "$failed"
+      - name: Preserve measured baseline
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cm-quick-baseline-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          path: cm-quick-baseline-artifacts/

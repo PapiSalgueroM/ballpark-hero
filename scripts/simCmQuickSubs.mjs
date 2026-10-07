@@ -173,13 +173,21 @@ async function main() {
   const unhandled = [];
   const captureUnhandled = error => unhandled.push({ name: error?.name, message: String(error?.message ?? error) });
   process.on('unhandledRejection', captureUnhandled);
-  process.on('uncaughtException', captureUnhandled);
+  process.on('uncaughtExceptionMonitor', captureUnhandled);
   try {
+    const bundles = new Map();
+    const require = createRequire(import.meta.url);
+    const freshEngine = name => {
+      const output = bundles.get(name);
+      delete require.cache[require.resolve(output)];
+      return require(output);
+    };
     async function bundle(text, name) {
       const target = path.join(folder, `${name}.ts`), output = path.join(folder, `${name}.cjs`);
       await writeFile(target, text);
       await build({ entryPoints: [target], bundle: true, platform: 'node', format: 'cjs', outfile: output, logLevel: 'silent', alias: { '@/lib/clubManager': target, '@': path.join(root, 'src') } });
-      return createRequire(import.meta.url)(output);
+      bundles.set(name, output);
+      return freshEngine(name);
     }
     let changed = source;
     if (control) {
@@ -210,6 +218,13 @@ async function main() {
         const after = withQuickSubsSeed(3103, () => cm.coachQuickMatch(f.state));
         verifyReplacement(cm, f, after, 104); assert.deepEqual(prefix(after.live, 104), was);
         assert.equal(after.live.et.to, 120);
+        f.state.live.minute = 90; f.state.live.added.h2 = 4;
+        f.state.live.h2Injuries = [{ id: f.out.id, name: f.out.name, minute: 90, plus: 2, weeks: 2 }];
+        const board = prefix(f.state.live, 91);
+        const resumed = withQuickSubsSeed(3103, () => cm.coachQuickMatch(f.state));
+        verifyReplacement(cm, f, resumed, 91);
+        assert.deepEqual(prefix(resumed.live, 91), board, 'An already drawn extra-time save keeps its whole regulation board');
+        assert.deepEqual(resumed.live.et, f.state.live.et);
       },
       clock() {
         const f = forced(original, 'late', 90, 46);
@@ -239,12 +254,34 @@ async function main() {
         verifyReplacement(cm, f, after, 17);
         const capped = clone(f.state); capped.live.subsUsed = 3;
         assert.equal(cm.changeLive(capped, 18, { kind: 'sub', outId: f.out.id, inId: f.incoming.id }), null);
+        const cappedCoach = withQuickSubsSeed(3106, () => cm.coachQuickMatch(capped));
+        assert.equal(cappedCoach.live.subsUsed, 3); assert.deepEqual(cappedCoach.live.subs, capped.live.subs);
+        assert.deepEqual(cappedCoach.live.onPitch, capped.live.onPitch);
         const red = clone(f.state); red.live.h1Cards = [{ id: f.out.id, name: f.out.name, minute: 10, kind: 'red' }];
         assert.equal(cm.changeLive(red, 17, { kind: 'sub', outId: f.out.id, inId: f.incoming.id }), null);
         assert.ok(!withQuickSubsSeed(3107, () => cm.coachQuickMatch(red)).live.subs.some(s => s.offId === f.out.id));
         assert.equal(cm.changeLive(f.state, 17, { kind: 'sub', outId: f.out.id, inId: f.state.live.onPitch[2] }), null);
         const unavailable = clone(f.state); unavailable.squad.find(p => p.id === loan.id).injuryWeeks = 2;
         assert.equal(cm.changeLive(unavailable, 17, { kind: 'sub', outId: f.out.id, inId: loan.id }), null);
+        const noBench = clone(f.state), playing = new Set(noBench.live.onPitch);
+        for (const p of noBench.squad) if (!playing.has(p.id)) p.injuryWeeks = 2;
+        assert.equal(cm.benchFor(noBench, f.out.id).length, 0);
+        const untouched = withQuickSubsSeed(3107, () => cm.coachQuickMatch(noBench));
+        assert.deepEqual(untouched.live.subs, []); assert.equal(untouched.live.subsUsed, noBench.live.subsUsed);
+        assert.deepEqual(untouched.live.onPitch, noBench.live.onPitch);
+        const used = forced(original, 'late', 76), playingBefore = new Set(used.state.live.onPitch);
+        const reserves = used.state.squad.filter(p => !playingBefore.has(p.id) && p.id !== used.incoming.id).slice(0, 2);
+        assert.equal(reserves.length, 2); for (const p of reserves) p.injuryWeeks = 0;
+        let active = withQuickSubsSeed(3120, () => original.changeLive(used.state, 55, { kind: 'sub', outId: used.state.live.onPitch[2], inId: used.incoming.id }));
+        assert.ok(active); active.live.h2Cards = [];
+        active = withQuickSubsSeed(3121, () => original.changeLive(active, 60, { kind: 'sub', outId: active.live.onPitch[3], inId: reserves[0].id }));
+        assert.ok(active); assert.equal(active.live.subsUsed, 2);
+        active.live.h2Cards = []; active.live.h2Injuries = [{ id: used.incoming.id, name: used.incoming.name, minute: 76, weeks: 2 }];
+        active.live.h2Play.push({ side: 'me', kind: 'corner', minute: 84, who: used.incoming.name });
+        active.live.h2Play.sort((a, b) => a.minute - b.minute || (a.plus ?? 0) - (b.plus ?? 0));
+        const replacement = withQuickSubsSeed(3122, () => cm.coachQuickMatch(active));
+        verifyReplacement(cm, { out: used.incoming, incoming: reserves[1] }, replacement, 76);
+        assert.equal(replacement.live.subsUsed, 3, 'An injured substitute uses the one remaining legal change');
       },
       fatigue() {
         const f = forced(original, 'early', 45), on = new Set(f.state.live.onPitch);
@@ -260,8 +297,8 @@ async function main() {
       },
       paths() {
         const f = forced(original, 'early', 17), was = JSON.stringify(f.state);
-        const quick = withQuickSubsSeed(3109, () => cm.playNextEntry(f.state, { skipHalftime: true }));
-        const calendar = withQuickSubsSeed(3109, () => cm.playNextEntry(f.state, { skipHalftime: true, untilWeek: f.state.week + 1 }));
+        const quick = withQuickSubsSeed(3109, () => freshEngine(control ? 'candidate' : 'original').playNextEntry(f.state, { skipHalftime: true }));
+        const calendar = withQuickSubsSeed(3109, () => freshEngine(control ? 'candidate' : 'original').playNextEntry(f.state, { skipHalftime: true, untilWeek: f.state.week + 1 }));
         assert.equal(quick.kind, 'match'); assert.deepEqual(calendar, quick);
         assert.ok(quick.report.detail.subs.some(s => s.off === f.out.name && s.on === f.incoming.name && s.minute === 17));
         assert.equal(quick.state.week, f.state.week + 1); assert.equal(quick.state.live, null); assert.equal(JSON.stringify(f.state), was);
@@ -276,10 +313,11 @@ async function main() {
         });
         assert.ok(plan.length > 0, 'The actual engine supplied coaching to replay');
         const manual = withQuickSubsSeed(fixture.seed, () => {
-          const stop = original.playNextEntry(fixture.pre);
-          return manuallyReplay(original, stop.state, plan);
+          const manualEngine = freshEngine('original');
+          const stop = manualEngine.playNextEntry(fixture.pre);
+          return manuallyReplay(manualEngine, stop.state, plan);
         });
-        const quick = withQuickSubsSeed(fixture.seed, () => cm.playNextEntry(fixture.pre, { skipHalftime: true }));
+        const quick = withQuickSubsSeed(fixture.seed, () => freshEngine(control ? 'candidate' : 'original').playNextEntry(fixture.pre, { skipHalftime: true }));
         assert.deepEqual(quick, manual, 'All report fields, credits, finances, calendar and events match actual manual changes');
       },
       immutable() {
@@ -288,11 +326,21 @@ async function main() {
         assert.deepEqual(f.state, before); assert.equal(after.week, before.week); assert.ok(after.live);
         assert.equal(after.budget, before.budget); assert.deepEqual(after.resultLog, before.resultLog);
         assert.deepEqual(after.squad.map(p => [p.id, p.apps, p.goals, p.assists, p.ratingSum]), before.squad.map(p => [p.id, p.apps, p.goals, p.assists, p.ratingSum]));
+        const quiet = withQuickSubsSeed(3114, () => original.playNextEntry(freshCareer(original))).state;
+        quiet.live.h1Injuries = []; quiet.live.h1Cards = [];
+        assert.equal(quiet.live.h2Drawn, false); assert.equal(original.tiringAtHalftime(quiet).length, 0);
+        const quietBefore = clone(quiet);
+        const drawn = withQuickSubsSeed(3115, () => cm.coachQuickMatch(quiet));
+        assert.equal(drawn.live.h2Drawn, true, 'The no-change arm actually draws its second half');
+        assert.deepEqual(quiet, quietBefore, 'Drawing without an intervening cloning change leaves the input save untouched');
       },
       baseline() {
         const pre = freshCareer(original), stop = withQuickSubsSeed(3112, () => original.playNextEntry(pre));
-        const a = withQuickSubsSeed(3113, () => original.resumeMatch(stop.state));
-        const b = withQuickSubsSeed(3113, () => original.resumeMatch(original.startSecondHalf(stop.state)));
+        const a = withQuickSubsSeed(3113, () => freshEngine('original').resumeMatch(stop.state));
+        const b = withQuickSubsSeed(3113, () => {
+          const baselineEngine = freshEngine('original');
+          return baselineEngine.resumeMatch(baselineEngine.startSecondHalf(stop.state));
+        });
         assert.equal(a.kind, 'match'); assert.deepEqual(a, b); assert.equal(a.report.detail.subs.length, 0);
         assert.equal(a.state.week, stop.state.week + 1); assert.ok(a.report.detail.play.length > 0);
         for (const id of stop.state.live.startXi) assert.equal(a.state.squad.find(p => p.id === id).apps, (stop.state.squad.find(p => p.id === id).apps ?? 0) + 1);
@@ -318,7 +366,7 @@ async function main() {
     }
     console.log(`simCmQuickSubs ${control || 'normal'}: real coaching outcomes and independent unmanaged baseline passed.`);
   } finally {
-    process.off('unhandledRejection', captureUnhandled); process.off('uncaughtException', captureUnhandled);
+    process.off('unhandledRejection', captureUnhandled); process.off('uncaughtExceptionMonitor', captureUnhandled);
     assert.equal(path.dirname(folder), controlRoot); assert.ok(path.basename(folder).startsWith('cm-quick-subs-'));
     await rm(folder, { recursive: true, force: true }); for (const verify of verifyBytes) await verify();
   }

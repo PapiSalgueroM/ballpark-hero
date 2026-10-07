@@ -1036,8 +1036,8 @@ const ClubManager = () => {
                     Round 472: and the hub keeps the two ways through a match
                     rather than three. Play Match and Watch Live were the same
                     fixture with the pitch drawn or not drawn, so they are one
-                    button, and the engine plays the same match whichever of
-                    the two you take. */}
+                    button. Both start the same fixture; quick sim handles
+                    legal substitutions while live play leaves you in charge. */}
                 <div className="mt-3 grid grid-cols-2 gap-2 max-w-sm mx-auto">
                   <button
                     onClick={() => { setWatchMode(true); g.play(); }}
@@ -1057,7 +1057,7 @@ const ClubManager = () => {
                     ⚡ Quick Sim
                   </button>
                 </div>
-                <p className="mt-1.5 text-[9px] text-muted-foreground">On the pitch with the break in your hands, or straight to the report. Same match either way.</p>
+                <p className="mt-1.5 text-[9px] text-muted-foreground">Play live to make your calls. Quick Sim handles your subs.</p>
                 {/* Round 543: only offered when it can actually open. The facts
                     are built only for a match that has not kicked off (the panel
                     carries the pre-match team talk, which is not a thing you get
