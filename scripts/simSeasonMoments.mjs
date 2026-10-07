@@ -12,6 +12,8 @@
  *      rating to one place). The table is replayed from scratch here.
  *   2. Prefix stability: deciding the moment at matchday k changes game k and
  *      one later game and nothing else, so nothing already watched moves.
+ *      Inside game k the events that differ all sit AT the moment's minute
+ *      (a missed chance on 22 never takes away his goal on 41).
  *   3. Every YOUR CALL's other outcome is a legal mirror (same opponent, a
  *      later game, neither a derby, equal and opposite score and line moves,
  *      caps held, clean sheet marks true, events adding up, his events inside
@@ -26,8 +28,13 @@
  *      replays to the result the player saw.
  *   7. The ledger: the reader refuses every malformed shape, an attempt is
  *      used once, a new season folds the old count and starts clean.
- *   8. The bank at every step (0 to 3 made, every star count), never past the
- *      ceiling with a drill already banked, once a season, latest season only.
+ *   8. The bank at every step (0 to 3 made, every star count, and fewer
+ *      moments taken than offered), never past the ceiling with the daily
+ *      drill banked in the same season IN EITHER ORDER, once a season,
+ *      latest season only. Leaving a season with a moment still to play
+ *      (closeSeasonMoments, what the page runs when the summary is
+ *      dismissed) banks exactly what the bank pays against the moments ON
+ *      OFFER, on every real season, with Math.random trapped.
  *   9. The default path: a career that never takes a moment has no
  *      `seasonMoments` key at any step, and taking moments changes exactly
  *      seasonMoments, statBoostNextSeason, morale and events on the save.
@@ -43,8 +50,9 @@
  *   boards, of 120 keyed rounds a run: a careful input makes the wall shot
  *   120 119 120 120 120 and the tackle, the glove save and the through ball
  *   120 every run (floors 0.95 and 0.97); the textbook wall shot strike
- *   scores 120 119 120 120 120 (floor 0.95). Planning took 3.8 to 10.4 ms a
- *   season on a loaded machine (cap 60).
+ *   scores 120 119 120 120 120 (floor 0.95). Planning took 1.2 to 10.4 ms a
+ *   season on a loaded machine: it is printed and no longer asserted (a
+ *   wall clock on a machine running twenty other jobs is not a rule).
  *
  * Controls (MOMENTS_CONTROL=), each patches exact strings as the code is
  * bundled (the bundler refuses a missing or repeated string) and must turn
@@ -54,6 +62,12 @@
  *   nogate   a miss with no mirror is offered as a RECREATE             -> 3
  *   ceiling  the bank ignores the ceiling                               -> 8
  *   double   a settled attempt can be taken again, and the bank twice  -> 7, 8
+ *   minutegoal    taking his goal away picks any goal of his in the game -> 2
+ *   minuteassist  taking his assist away picks any assist in the game    -> 2
+ *   minutestop    taking a goal against away picks any of theirs         -> 2
+ *   order    the daily drill ignores what the moments banked            -> 8
+ *   share    the share is of the stars TAKEN, not the stars on offer    -> 8
+ *   closeshort  leaving a season early banks against the moments taken  -> 8
  *
  * Control evidence, 2026-10-07 (8 careers each, every one exit 1):
  *   mirror: "the final table moved" and "absorbed against another club";
@@ -61,6 +75,13 @@
  *   of a miss" (3 recreate); ceiling: 88 of 200 cases over the ceiling and
  *   16 paid at it (8); double: the settled entry was overwritten (7) and
  *   the second bank paid (8). Every other check stayed green in each run.
+ *   Added after the review of 2026-10-07 (8 careers each, every one exit 1
+ *   with exactly one check red): minutegoal "an event away from minute 22
+ *   changed on md 4" (his goal on 41 went instead); minuteassist the same
+ *   on md 10 (the goal on 42, minute 67 asked); minutestop a goal against
+ *   on 81 for minute 83; order "moments first: 52 over" of 200; share "10
+ *   wrong, one of three for 3 stars pays 2"; closeshort "leaving with 1 of
+ *   3 moments taken did not bank against 3" (8 bank).
  *
  * Runs about a minute at 40 careers: run it through detach.sh and
  * waitfor.sh. Green is the closing "simSeasonMoments: ... 0 failed" line
@@ -76,6 +97,7 @@ const SEEDSET = Number(process.env.SEEDSET ?? 0);
 const CONTROL = process.env.MOMENTS_CONTROL ?? '';
 
 const CORE = 'src/lib/season/core.ts';
+const EVENTS = 'src/lib/season/soccerEvents.ts';
 const CONTROLS = {
   mirror: [
     { file: CORE, from: 'const back = meetings.find(x => x.md !== g.md)!;', to: 'const back = s.games.find(x => x.opp !== g.opp && x.md > g.md && !x.fixed && x.played) ?? meetings.find(x => x.md !== g.md)!;' },
@@ -85,6 +107,12 @@ const CONTROLS = {
   reroll: [{ file: CORE, from: 'const key = momentKey(s, spot);', to: "const key = momentKey(s, spot) + '|' + (globalThis.__reroll = (globalThis.__reroll ?? 0) + 1);" }],
   nogate: [{ file: CORE, from: 'else if (spot.planSuccess && spot.onRecord) cands.push(', to: 'else cands.push(' }],
   ceiling: [{ file: 'src/lib/season/soccerMoments.ts', from: 'return Math.max(0, Math.min(raw, Math.floor(room)));', to: 'return raw;' }],
+  minutegoal: [{ file: EVENTS, from: "const e = pick(ev.filter(x => x.kind === 'goal' && x.mine && at(x)));", to: "const e = pick(ev.filter(x => x.kind === 'goal' && x.mine));" }],
+  minuteassist: [{ file: EVENTS, from: "const a = pick(ev.filter(x => x.kind === 'assist' && at(x)));", to: "const a = pick(ev.filter(x => x.kind === 'assist'));" }],
+  minutestop: [{ file: EVENTS, from: "x.side === 'them' && at(x) && (!win ||", to: "x.side === 'them' && (!win ||" }],
+  order: [{ file: 'src/lib/careerDrills.ts', from: 'const headroom = Math.max(0, drillHeadroom(s) - momentsPaid(s.seasonMoments, year));', to: 'const headroom = drillHeadroom(s);' }],
+  share: [{ file: 'src/lib/season/soccerMoments.ts', from: 'const n = Math.max(save.m.length, Math.min(12, Math.floor(offered) || 0));', to: 'const n = save.m.length;' }],
+  closeshort: [{ file: 'src/lib/season/soccerMoments.ts', from: 'if (plan) offered = planMoments(SOCCER, row, ctx, plan).length;', to: 'if (plan) offered = save.m.length;' }],
   double: [
     { file: 'src/lib/season/momentsSave.ts', from: 'if (prev.m[at][2] !== -1 || result < 0) return prev;', to: '' },
     { file: 'src/lib/season/soccerMoments.ts', from: 'if (!save || save.banked || save.m.length === 0) return prev;', to: 'if (!save || save.m.length === 0) return prev;' },
@@ -229,6 +257,9 @@ function gameIllegal(g, pos, keeps) {
   return '';
 }
 
+/** What is in the list `xs` and not in `ys`, counted (two equal events are two). */
+const bagMinus = (xs, ys) => { const left = ys.slice(); return xs.filter(x => { const i = left.indexOf(x); if (i < 0) return true; left.splice(i, 1); return false; }); };
+
 /** Why the season `alt` is not the plan with exactly these call moments mirrored ('' when it is). */
 function mirrorIllegal(plan, alt, flipped, pos, keeps) {
   const changed = plan.games.filter((g, i) => J(g) !== J(alt.games[i])).map(g => g.md);
@@ -248,6 +279,15 @@ function mirrorIllegal(plan, alt, flipped, pos, keeps) {
     if (a0.opp !== b0.opp) return 'absorbed against another club';
     if (a0.fixed || b0.fixed) return 'a derby was rewritten';
     if (!a0.played) return 'a moment in a game he missed';
+    /* inside the moment's own game the clock has already shown every minute
+       before the stop, so the only events that may differ are AT the moment's
+       minute: a missed chance on 22 never takes away his goal on 41 */
+    const was = a0.events.map(J), now = a1.events.map(J);
+    const moved = [...bagMinus(was, now), ...bagMinus(now, was)];
+    if (moved.length === 0) return 'inside the moment game: nothing changed at all';
+    const away = moved.filter(e => JSON.parse(e).min !== m.minute);
+    if (away.length) return `inside the moment game: an event away from minute ${m.minute} changed on md ${m.md} (${away[0]})`;
+    stat.minuteHeld += 1;
     const dUs = a1.us - a0.us, dThem = a1.them - a0.them;
     if (dUs !== m.delta.us || dThem !== m.delta.them) return 'the moment game did not take its delta';
     if (b1.us - b0.us !== -dUs || b1.them - b0.them !== -dThem) return 'the return game is not the mirror';
@@ -289,7 +329,7 @@ function offerDishonest(plan, m) {
 }
 
 /* ─── Sections 1 to 5 and 9: every season of every career ─── */
-const stat = { seasons: 0, derived: 0, withMoments: 0, moments: 0, call: 0, recreate: 0, withCall: 0, sequences: 0, flips: 0, planMs: 0, kinds: new Map(), perSeason: new Map(), modes: { table: 0, results: 0 } };
+const stat = { seasons: 0, derived: 0, withMoments: 0, moments: 0, call: 0, recreate: 0, withCall: 0, sequences: 0, flips: 0, minuteHeld: 0, closed: 0, closedShort: 0, planMs: 0, kinds: new Map(), perSeason: new Map(), modes: { table: 0, results: 0 } };
 const STRIP = ['seasonMoments', 'statBoostNextSeason', 'morale', 'events'];
 let sample = null;
 const stripped = s => { const c = { ...s }; for (const k of STRIP) delete c[k]; return hashOf(c); };
@@ -362,7 +402,7 @@ function onSeason(s, row, c) {
     if (tm) fail('1 totals', `${tag} mask ${mask}: ${tm}`);
     if (J(totalsOf(alt, keeps)) !== planTotals) fail('1 totals', `${tag} mask ${mask}: a total (or the rating sum) is not the plan's`);
     const why = mirrorIllegal(plan, alt, flipped, pos, keeps);
-    if (why) fail(why.startsWith('changed games') ? '2 prefix' : '3 call', `${tag} mask ${mask}: ${why}`);
+    if (why) fail(why.startsWith('changed games') ? '2 prefix' : why.startsWith('inside the moment game') ? '2 moment minute' : '3 call', `${tag} mask ${mask}: ${why}`);
   }
   /* 9: taking every moment and banking changes four keys of the save and nothing else */
   const key = S.soccerSeasonKey(s.playerName, row);
@@ -372,6 +412,18 @@ function onSeason(s, row, c) {
   if (stripped(took) !== stripped(s)) fail('9 default path', `${tag}: taking moments changed more than ${STRIP.join(', ')}`);
   if (!took.seasonMoments?.banked) fail('8 bank', `${tag}: a played season did not bank on its latest row`);
   if (M.applySeasonMomentsBank(s, moments.length) !== s) fail('9 default path', `${tag}: the bank touched a career with no ledger`);
+  /* 8: leaving the season with a moment still to play (the summary dismissed,
+     the next season started) banks what was earned against the stars ON
+     OFFER, which the page does not know: closeSeasonMoments plans the season
+     itself, with Math.random trapped */
+  if (M.closeSeasonMoments(s, CLUBS) !== s) fail('9 default path', `${tag}: leaving the season touched a career with no ledger`);
+  let part = L.ledgerPut(null, key, moments[0].md, moments[0].id, -1, []);
+  part = L.ledgerPut(part, key, moments[0].md, moments[0].id, 3, [0.5]);
+  const closed = M.closeSeasonMoments({ ...s, seasonMoments: part }, CLUBS);
+  if (J(closed) !== J(M.applySeasonMomentsBank({ ...s, seasonMoments: part }, moments.length))) fail('8 bank', `${tag}: leaving with 1 of ${moments.length} moments taken did not bank against ${moments.length}`);
+  if (!closed.seasonMoments?.banked || M.closeSeasonMoments(closed, CLUBS) !== closed) fail('8 bank', `${tag}: leaving the season did not bank once`);
+  stat.closed += 1;
+  if (moments.length > 1) stat.closedShort += 1;
 }
 
 for (let c = 0; c < CAREERS; c += 1) {
@@ -406,11 +458,13 @@ const callShare = share(stat.call, stat.moments), perSeason = share(stat.moments
 console.log(`seasons ${stat.seasons}, derived ${stat.derived} (table ${stat.modes.table}, results ${stat.modes.results}), with moments ${stat.withMoments}; ${stat.sequences} outcome mixes, ${stat.flips} mirrored calls; planning ${(stat.planMs / Math.max(1, stat.derived)).toFixed(1)} ms a season`);
 console.log(`MEASURED moments a season ${perSeason.toFixed(3)} (${[...stat.perSeason].sort((a, b) => a[0] - b[0]).map(([n, v]) => `${n}: ${v}`).join(', ')}); YOUR CALL share ${callShare.toFixed(3)}; seasons with a YOUR CALL ${seasonsWithCall.toFixed(3)}`);
 console.log(`kinds: ${[...stat.kinds].sort().map(([k, v]) => `${k} ${v}`).join('; ')}`);
-for (const item of ['1 final table', '1 totals', '2 prefix', '3 offer', '3 call', '3 recreate', '4 read only', '4 determinism', '8 bank', '9 default path']) {
+for (const item of ['1 final table', '1 totals', '2 prefix', '2 moment minute', '3 offer', '3 call', '3 recreate', '4 read only', '4 determinism', '8 bank', '9 default path']) {
   check(!fails.has(item), `${item}: ${fails.has(item) ? `${fails.get(item).length}+ seasons failed` : `held over ${stat.derived} seasons`}`);
 }
 check(stat.derived >= CAREERS * 8, `population: ${stat.derived} derived seasons from ${CAREERS} careers (at least ${CAREERS * 8})`);
 check(stat.flips >= stat.derived, `the mirror was exercised: ${stat.flips} mirrored calls over ${stat.derived} seasons`);
+check(stat.closedShort > stat.withMoments / 2, `8 leaving a season early was exercised: ${stat.closed} seasons closed with one moment taken, ${stat.closedShort} of them with more on offer (of ${stat.withMoments})`);
+check(fails.size > 0 || stat.minuteHeld === stat.flips, `2 every mirrored call was read event by event: ${stat.minuteHeld} of ${stat.flips} changed at the moment's minute and nowhere else in its game`);
 
 /* ─── Section 6: the boards (one round of the training ground's own engines) ─── */
 const BOARDS = ['wallshot', 'tackle', 'gloves', 'throughball'];
@@ -494,11 +548,16 @@ for (const board of BOARDS) {
     { v: 1, key: 'k', m: [[0, 0, 1]] }, { v: 1, key: 'k', m: [[401, 0, 1]] }, { v: 1, key: 'k', m: [[3, 12, 1]] }, { v: 1, key: 'k', m: [[3, -1, 1]] },
     { v: 1, key: 'k', m: [[3, 0, 4]] }, { v: 1, key: 'k', m: [[3, 0, -2]] }, { v: 1, key: 'k', m: [[3, 0, 1.5]] }, { v: 1, key: 'k', m: [[3.5, 0, 1]] },
     { v: 1, key: 'k', m: [], banked: 2 }, { v: 1, key: 'k', m: [], banked: true }, { v: 1, key: 'k', m: [], tally: null },
+    { v: 1, key: 'k', m: [], paid: [2020, 1] }, { v: 1, key: 'k', m: [], banked: 1, paid: [2020, 3] }, { v: 1, key: 'k', m: [], banked: 1, paid: [2020, 0] },
+    { v: 1, key: 'k', m: [], banked: 1, paid: [2020] }, { v: 1, key: 'k', m: [], banked: 1, paid: 2 }, { v: 1, key: 'k', m: [], banked: 1, paid: [2020.5, 1] }, { v: 1, key: 'k', m: [], banked: 1, paid: [-1, 1] },
     { v: 1, key: 'k', m: [], tally: { seasons: -1, moments: 0, stars: 0 } }, { v: 1, key: 'k', m: [], tally: { seasons: 1, moments: 1.5, stars: 0 } }, { v: 1, key: 'k', m: [], tally: { seasons: 1 } },
   ];
   const refused = bad.filter(x => L.readSeasonMoments(x) === null).length;
   check(refused === bad.length, `7 the reader refuses every malformed ledger (${refused} of ${bad.length})`);
   check(J(L.readSeasonMoments(good)) === J(good) && L.readSeasonMoments({ ...good, m: [...good.m, [3, 0, 3]] }).m.length === 2, '7 a good ledger reads back as written and a duplicate keeps the first');
+  const paidGood = { ...good, banked: 1, paid: [2031, 2] };
+  check(J(L.readSeasonMoments(paidGood)) === J(paidGood) && L.momentsPaid(paidGood, 2031) === 2 && L.momentsPaid(paidGood, 2032) === 0 && L.momentsPaid(good, 2031) === 0 && L.momentsPaid({ ...paidGood, paid: [2031, 9] }, 2031) === 0 && L.momentsPaid(null, 2031) === 0,
+    '7 what a bank paid reads back for its own season, and a refused or unbanked ledger paid nothing');
   let led = L.ledgerPut(null, 'A', 4, 0, -1, []);
   const used = J(led);
   led = L.ledgerPut(led, 'A', 4, 0, 2, [0.123456, 1]);
@@ -525,10 +584,10 @@ else {
   const pending = c => Object.values(c.statBoostNextSeason).reduce((x, v) => x + (v > 0 ? v : 0), 0);
   let combos = 0, wrong = 0, morale = 0, lines = 0;
   const seenBoost = new Set();
+  const each = [0, 1, 2, 3];
+  const listsOf = n => (n === 1 ? each.map(a => [a]) : n === 2 ? each.flatMap(a => each.map(b => [a, b])) : each.flatMap(a => each.flatMap(b => each.map(c => [a, b, c]))));
   for (let offered = 1; offered <= 3; offered += 1) {
-    const each = [0, 1, 2, 3];
-    const lists = offered === 1 ? each.map(a => [a]) : offered === 2 ? each.flatMap(a => each.map(b => [a, b])) : each.flatMap(a => each.flatMap(b => each.map(c => [a, b, c])));
-    for (const list of lists) {
+    for (const list of listsOf(offered)) {
       combos += 1;
       const stars = list.reduce((x, v) => x + v, 0);
       const before = career(60, 90, { seasonMoments: ledgerOfStars(list) });
@@ -542,20 +601,52 @@ else {
   }
   check(wrong === 0 && [0, 1, 2].every(b => seenBoost.has(b)), `8 every star count pays what its share earns: ${combos} mixes of 1 to 3 moments, ${wrong} wrong, boosts seen ${[...seenBoost].sort().join(' ')}`);
   check(morale === 0 && lines === 0, `8 morale moves only when a moment was made, one event line, banked once (${morale} morale, ${lines} line errors)`);
-  /* at the ceiling, and with a drill already banked, never past it */
-  let over = 0, paidAtCeiling = 0, cases = 0;
-  for (let headroom = 0; headroom <= 4; headroom += 1) for (const drill of [-1, 5, 8, 10]) for (let stars = 0; stars <= 9; stars += 1) {
-    cases += 1;
-    const list = [Math.min(3, stars), Math.min(3, Math.max(0, stars - 3)), Math.max(0, stars - 6)];
-    let c = career(70, 70 + headroom, { seasonMoments: ledgerOfStars(list) });
-    if (drill >= 0) c = D.applyDrillResult(c, D.drillForPosition(c.position), drill);
-    const drillPaid = pending(c);
-    const after = M.applySeasonMomentsBank(c, 3);
-    if (pending(after) > headroom) over += 1;
-    if (headroom === 0 && pending(after) !== 0) paidAtCeiling += 1;
-    if (pending(after) - drillPaid !== Math.min(want(stars, 3), Math.max(0, headroom - drillPaid))) over += 1;
+  /* the share is of the stars ON OFFER: a moment left to play still counts
+     below the line (take one of three for 3 stars and that is 3 of 9) */
+  let fewer = 0, fewerWrong = 0, fewerPaid = 0, fewerLine = 0;
+  for (let offered = 2; offered <= 3; offered += 1) for (let taken = 1; taken < offered; taken += 1) for (const list of listsOf(taken)) {
+    fewer += 1;
+    const stars = list.reduce((x, v) => x + v, 0);
+    const after = M.applySeasonMomentsBank(career(60, 90, { seasonMoments: ledgerOfStars(list) }), offered);
+    const got = after.statBoostNextSeason[statKey] ?? 0;
+    if (got !== want(stars, offered)) fewerWrong += 1;
+    if (got > 0) fewerPaid += 1;
+    if (!String(after.events[0]).includes(`${stars} of ${offered * 3} stars`)) fewerLine += 1;
   }
-  check(over === 0 && paidAtCeiling === 0, `8 a drill plus the moments never pass the ceiling: ${cases} cases over headroom 0 to 4, ${over} over, ${paidAtCeiling} paid at the ceiling`);
+  const oneOfThree = M.applySeasonMomentsBank(career(60, 90, { seasonMoments: ledgerOfStars([3]) }), 3);
+  check(fewerWrong === 0 && fewerLine === 0 && fewerPaid > 0 && pending(oneOfThree) === 0,
+    `8 a moment left to play still counts below the line: ${fewer} ledgers with fewer taken than offered, ${fewerWrong} wrong, ${fewerLine} wrong lines, ${fewerPaid} paid; one of three for 3 stars pays ${pending(oneOfThree)}`);
+  /* at the ceiling, and with a drill banked in the same season, never past
+     it, in BOTH orders: the drill first, and the moments first (the usual
+     way round: the season is watched at the summary, the drill comes after) */
+  const drillRaw = n => (n >= 8 ? 2 : n >= 5 ? 1 : 0);
+  for (const order of ['drill first', 'moments first']) {
+    let over = 0, paidAtCeiling = 0, cases = 0, second = 0;
+    for (let headroom = 0; headroom <= 4; headroom += 1) for (const drill of [-1, 5, 8, 10]) for (let stars = 0; stars <= 9; stars += 1) {
+      cases += 1;
+      const list = [Math.min(3, stars), Math.min(3, Math.max(0, stars - 3)), Math.max(0, stars - 6)];
+      let c = career(70, 70 + headroom, { seasonMoments: ledgerOfStars(list) });
+      const runDrill = x => (drill >= 0 ? D.applyDrillResult(x, D.drillForPosition(x.position), drill) : x);
+      const runBank = x => M.applySeasonMomentsBank(x, 3);
+      c = order === 'drill first' ? runDrill(c) : runBank(c);
+      const firstPaid = pending(c);
+      const after = order === 'drill first' ? runBank(c) : runDrill(c);
+      const wantSecond = order === 'drill first' ? want(stars, 3) : (drill >= 0 ? drillRaw(drill) : 0);
+      if (pending(after) > headroom) over += 1;
+      if (headroom === 0 && pending(after) !== 0) paidAtCeiling += 1;
+      if (pending(after) - firstPaid !== Math.min(wantSecond, Math.max(0, headroom - firstPaid))) over += 1;
+      if (pending(after) > firstPaid && firstPaid > 0) second += 1;
+    }
+    check(over === 0 && paidAtCeiling === 0 && second > 0, `8 a drill plus the moments never pass the ceiling, ${order}: ${cases} cases over headroom 0 to 4, ${over} over, ${paidAtCeiling} paid at the ceiling, ${second} where both paid`);
+  }
+  /* next season's drill owes last season's moments nothing: that growth has landed */
+  {
+    const banked = M.applySeasonMomentsBank(career(70, 72, { seasonMoments: ledgerOfStars([3, 3, 3]) }), 3);
+    const nextYear = { ...banked, statBoostNextSeason: {}, seasons: [...banked.seasons, { ...row, year: row.year + 1 }] };
+    const drilled = D.applyDrillResult(nextYear, D.drillForPosition(nextYear.position), 10);
+    check(J(banked.seasonMoments.paid) === J([row.year, 2]) && L.momentsPaid(banked.seasonMoments, row.year) === 2 && L.momentsPaid(banked.seasonMoments, row.year + 1) === 0 && pending(drilled) === 2,
+      `8 the ledger keeps what it paid for its own season only: paid ${J(banked.seasonMoments.paid)}, next season's drill pays ${pending(drilled)} of 2`);
+  }
   const once = M.applySeasonMomentsBank(career(60, 90, { seasonMoments: ledgerOfStars([3, 3, 3]) }), 3);
   check(M.applySeasonMomentsBank(once, 3) === once && once.statBoostNextSeason[statKey] === 2, '8 the bank pays once a season: a second call returns the same career');
   const stale = career(60, 90, { seasonMoments: L.ledgerPut(null, `${key}|older`, 3, 0, 3, []) });
@@ -573,7 +664,8 @@ else {
 check(perSeason >= FLOOR.perSeason, `5 moments a season ${perSeason.toFixed(3)} (floor ${FLOOR.perSeason})`);
 check(callShare >= FLOOR.callShare, `5 YOUR CALL share ${callShare.toFixed(3)} (floor ${FLOOR.callShare})`);
 check(seasonsWithCall >= FLOOR.seasonsWithCall, `5 seasons with a YOUR CALL ${seasonsWithCall.toFixed(3)} (floor ${FLOOR.seasonsWithCall})`);
-check(stat.planMs / Math.max(1, stat.derived) < 60, `planning stays cheap: ${(stat.planMs / Math.max(1, stat.derived)).toFixed(1)} ms a season (under 60)`);
+/* printed, never asserted: a wall clock on a machine running twenty other jobs is not a rule */
+console.log(`MEASURED planning ${(stat.planMs / Math.max(1, stat.derived)).toFixed(1)} ms a season (information only)`);
 
 console.log(`simSeasonMoments: ${checks} checks, ${failed} failed${CONTROL ? ` (control ${CONTROL})` : ''}`);
 process.exit(failed ? 1 : 0);

@@ -20,6 +20,10 @@ export interface SeasonMomentsSave {
   m: number[][];
   /** This season's stars are already in next season's growth. */
   banked?: 1;
+  /** What that bank put into next season's growth, with the year of the season
+   *  it was banked in: [year, points]. The daily drill of the same season reads
+   *  it, so the pair stops at his ceiling whichever of the two banks first. */
+  paid?: [number, number];
   /** The career's running count, from the seasons before this one. */
   tally?: { seasons: number; moments: number; stars: number };
 }
@@ -30,6 +34,8 @@ export const ENTRY_MIN = 3;
 export const ENTRY_MAX = 8;
 const KEY_MAX = 200;
 const MD_MAX = 400;
+const YEAR_MAX = 9999;
+const PAID_MAX = 2;
 const TALLY_MAX = { seasons: 200, moments: 2400, stars: 7200 };
 
 const isInt = (v: unknown, lo: number, hi: number): v is number => typeof v === 'number' && Number.isInteger(v) && v >= lo && v <= hi;
@@ -53,6 +59,11 @@ export function readSeasonMoments(raw: unknown): SeasonMomentsSave | null {
     }
     const out: SeasonMomentsSave = { v: 1, key: r.key, m };
     if (r.banked !== undefined) { if (r.banked !== 1) return null; out.banked = 1; }
+    if (r.paid !== undefined) {
+      const p = r.paid;
+      if (out.banked !== 1 || !Array.isArray(p) || p.length !== 2 || !isInt(p[0], 0, YEAR_MAX) || !isInt(p[1], 1, PAID_MAX)) return null;
+      out.paid = [p[0], p[1]];
+    }
     if (r.tally !== undefined) {
       const t = r.tally as Record<string, unknown> | null;
       if (!t || typeof t !== 'object' || Array.isArray(t)) return null;
@@ -112,7 +123,19 @@ export function ledgerPut(save: SeasonMomentsSave | null | undefined, key: strin
   return { ...prev, m: [...prev.m, entry] };
 }
 
-/** The same ledger marked as banked (once a season). */
-export function ledgerBanked(save: SeasonMomentsSave): SeasonMomentsSave {
-  return { ...save, banked: 1 };
+/** The same ledger marked as banked (once a season). `paid` is what the bank
+ *  added to next season's growth, in the season that started in `year`. */
+export function ledgerBanked(save: SeasonMomentsSave, year = 0, paid = 0): SeasonMomentsSave {
+  const out: SeasonMomentsSave = { ...save, banked: 1 };
+  if (isInt(year, 0, YEAR_MAX) && isInt(paid, 1, PAID_MAX)) out.paid = [year, paid];
+  else delete out.paid;
+  return out;
+}
+
+/** What this season's moments already put into next season's growth: the
+ *  points banked in the season that started in `year`, and nothing for any
+ *  other season (that growth has landed) or for a ledger the reader refuses. */
+export function momentsPaid(save: unknown, year: number): number {
+  const s = readSeasonMoments(save);
+  return s && s.banked === 1 && s.paid && s.paid[0] === year ? s.paid[1] : 0;
 }

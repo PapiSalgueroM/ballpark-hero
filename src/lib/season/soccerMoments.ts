@@ -25,7 +25,7 @@
    - The bank is the drills' rule (applyDrillResult): once a season, the
      stat his position trains, never past the ceiling, and it lands with
      next season's growth. No Math.random anywhere in this file. */
-import type { CareerState } from '../soccerCareerEngine';
+import type { CareerState, ClubData } from '../soccerCareerEngine';
 import { keyedRng } from '../keyedRng';
 import {
   ROUNDS_PER_RUN, drillForPosition, drillHeadroom, drillStatFor,
@@ -34,7 +34,8 @@ import {
 } from '../careerDrills';
 import { LEAD_IDEAL, buildThroughBallRun, collectWindow, takeThroughBall, type ThroughBallSetup } from '../throughBallDrill';
 import { ledgerBanked, readSeasonMoments } from './momentsSave';
-import { soccerSeasonKey } from './soccer';
+import { MOMENTS_PER_SEASON, SOCCER, buildSoccerSeasonCtx, soccerSeasonKey } from './soccer';
+import { deriveSeason, planMoments } from './core';
 import type { SoccerMomentKind } from './soccerEvents';
 
 /** Which board plays which moment. */
@@ -159,9 +160,11 @@ export function applySeasonMomentsBank(prev: CareerState, offered: number): Care
   const n = Math.max(save.m.length, Math.min(12, Math.floor(offered) || 0));
   const stars = save.m.reduce((x, e) => x + (e[2] > 0 ? e[2] : 0), 0);
   const made = save.m.some(e => e[2] >= 1);
-  const s: CareerState = { ...prev, seasonMoments: ledgerBanked(save) };
+  const s: CareerState = { ...prev };
   const { stat, label } = drillStatFor(drillForPosition(s.position), s.position);
   const boost = momentsBoost(stars, n, momentsRoom(s));
+  /* the ledger keeps what it paid, so this season's daily drill counts it too */
+  s.seasonMoments = ledgerBanked(save, row.year, boost);
   const head = `🎯 Season Centre moments: ${stars} of ${n * MOMENT_STARS_MAX} stars.`;
   if (boost > 0) {
     s.statBoostNextSeason = { ...s.statBoostNextSeason, [stat]: (s.statBoostNextSeason[stat] || 0) + boost };
@@ -173,6 +176,29 @@ export function applySeasonMomentsBank(prev: CareerState, offered: number): Care
   }
   if (made) s.morale = Math.min(100, Math.max(0, s.morale + 2));
   return s;
+}
+
+/** Bank the latest season's moments on the way out of it: the page calls this
+ *  when the season summary is dismissed and again before the next season is
+ *  played, the two points after which that season's Centre cannot be opened.
+ *  So stars a player earned are never dropped because he stepped out before
+ *  the review with a moment still to play. The moments left untaken count
+ *  below the line (the season is planned here to count them); a season that
+ *  cannot be planned is held to the most a season can offer, never to what
+ *  was taken. A career with nothing to bank comes back as the same object,
+ *  without planning anything. Pure, no draw. */
+export function closeSeasonMoments(prev: CareerState, clubs: ClubData[]): CareerState {
+  const save = readSeasonMoments(prev.seasonMoments);
+  if (!save || save.banked || save.m.length === 0) return prev;
+  const row = prev.seasons[prev.seasons.length - 1];
+  if (!row || save.key !== soccerSeasonKey(prev.playerName, row)) return prev;
+  let offered = MOMENTS_PER_SEASON;
+  try {
+    const ctx = buildSoccerSeasonCtx(prev, clubs, row);
+    const plan = deriveSeason(SOCCER, row, ctx);
+    if (plan) offered = planMoments(SOCCER, row, ctx, plan).length;
+  } catch { /* the Continue button must never fail on this: bank against the most a season offers */ }
+  return applySeasonMomentsBank(prev, offered);
 }
 
 /** The stat a season's moments train for this player, in the attribute screen's word. */
@@ -188,6 +214,15 @@ export const MOMENT_LINE: Record<SoccerMomentKind, string> = {
   pass: 'You have it in midfield and your striker is on the move',
   save: 'Their striker is through and it is you or the net',
   tackle: 'Their winger is running at your back line',
+};
+/** How each board is played, shown on the offer BEFORE the go is used (the
+ *  boards skip their own rules card inside a match). The training ground's
+ *  words, one go instead of ten. */
+export const MOMENT_HOW: Record<PositionDrillKind, string> = {
+  wallshot: 'Wall Shot, one shot. A wall with a gap that opens and closes: drag the goal to aim across and up, set your power, and let go as the gap opens. Pace gets there sooner and sprays wider. Keys: arrows aim, W and S set power, space shoots.',
+  tackle: 'Tackle, one run. He runs across you and every touch pushes the ball off his feet for a moment: tap the ball, not the man, while it is loose. Tap him, or go in while it sits at his feet, and it is a foul. Keys: arrows move the marker, space goes in.',
+  gloves: 'Glove Save, one shot. Hold and drag to set your dive (where you drag is the direction, how far is the reach), then let go to dive. A full stretch takes longer to get there, so go early for the corner. Keys: arrows set it, space dives.',
+  throughball: 'Through Ball, one ball. Your runner waits a moment, then cuts across the back line: drag on the pitch to where the ball should stop and let go to play it, through a gap and onto his run before he is offside. The ? on the board has the full rules.',
 };
 /** A RECREATE's objective: the record stands, he plays it again. */
 export const RECREATE_LINE: Record<SoccerMomentKind, string> = {
