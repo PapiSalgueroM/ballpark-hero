@@ -8,7 +8,7 @@ import {
 import type { useCourtLife } from '@/hooks/useCourtLife';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 
-export const courtButton = 'min-h-[44px] rounded-xl border border-border bg-card px-4 py-2 text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary disabled:opacity-50';
+export const courtButton = 'min-h-[44px] min-w-[44px] shrink-0 rounded-xl border border-border bg-card px-4 py-2 text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary disabled:opacity-50';
 export const courtPrimary = `${courtButton} border-teal-400 bg-teal-300 text-slate-950 hover:bg-teal-200`;
 type Game = ReturnType<typeof useCourtLife>;
 

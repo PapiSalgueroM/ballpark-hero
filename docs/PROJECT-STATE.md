@@ -1,3 +1,18 @@
+## Court Life checkpoint37583148522, October 7
+
+Remote source0c340970 passed app types;14 engine outcomes/14 effective faults,
+12 career outcomes/25 faults,11 control outcomes/15 faults and10 presentation
+outcomes/24 faults. Authored-name baseline and both name controls passed.
+Two192-game measurement batches and their release/steal probes are retained.
+Artifact11466196066 SHA256:
+0c5d3e7267d27925b086c19a2dab475355594e14d741460bd1c5d66e70e52633.
+The native run correctly rejected the narrow rules button on its first320px
+journey. The screenshot was reviewed; common buttons now have explicit44px
+minimum width and cannot flex-shrink. Native completion remains unverified.
+This is a bounded correction to the existing checkpoint, with no new features.
+Court Life remains unregistered and unpublished; migration remains unapplied.
+The active product priority is1076 practice integrity and the proven games.
+
 ## October 7 priority steering: perfect the games visitors already choose
 
 Anthony supplied last-week traffic and search screenshots, then explicitly

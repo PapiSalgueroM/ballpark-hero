@@ -154,7 +154,7 @@ try {
     const activate = async locator => {
       row.navigation.push({ text: await locator.innerText(), scrollBefore: await page.evaluate(() => scrollY) });
       await locator.scrollIntoViewIfNeeded();
-      const box = await locator.boundingBox(); assert(box && box.width >= 44 && box.height >= 44, 'Native action target is at least 44px');
+      const box = await locator.boundingBox(); assert(box && box.width >= 44 && box.height >= 44, `Native action target is at least 44px: ${JSON.stringify(box)} ${await locator.innerText()}`);
       if (profile.touch) await locator.tap(); else { await locator.focus(); await locator.press('Enter'); }
     };
     const closeDialog = async () => {
