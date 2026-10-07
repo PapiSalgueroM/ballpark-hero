@@ -26,7 +26,17 @@
  *      then again from origin/main 6d29f561 once Rounds 819, 834 and 850 had
  *      changed Soccer Career there, and again from origin/main e30e2735 at
  *      Release AH once Rounds 899 to 1024 had; the file's recordedFrom header carries
- *      the sha). Soccer calls Math.random
+ *      the sha). Then once from the Release AH merged tree fc30942e itself,
+ *      because the lift has long been on main and two AH rounds deliberately
+ *      moved Soccer Career; recorded only after each move was put down to a
+ *      round in throwaway copies (each round's merge reverted, recorded, and
+ *      compared with origin/main 1c10e7e5, which replays the e30e2735 file
+ *      whole): Round 1023's speech steps move careers 2, 4, 9, 10, 12, 16,
+ *      21, 37, 39, 40 and old saves 19, 20, 32; Round 1022's club labels move
+ *      careers 0, 9, 10, 12, 20, 22, 24, 30, 31, 32 and old saves 0, 12, 19,
+ *      22, 30, 32 (its own branch tip records the same list); Rounds 1029
+ *      and 1032 move nothing; the union is every career and old save that
+ *      moved. Soccer calls Math.random
  *      in a fixed order, so a lift that moves one draw shows up here. The
  *      section also requires the fixture to have exercised what it claims
  *      (every post, every personality, every agent, the cover offer both
