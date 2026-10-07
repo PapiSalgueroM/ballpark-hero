@@ -155,7 +155,30 @@ try {
       await activate(button('Back to card')); await page.locator('[role="dialog"]').waitFor({ state: 'detached' });
       await page.waitForFunction(() => document.activeElement?.getAttribute('aria-label') === 'Show cash rules');
       const closed = await snapshot(page); assert.deepEqual(closed, preview, 'Back preserves exact full save, storage, RNG, writes and scroll');
-      await activate(rules); await natural(page, '[role="dialog"]'); await page.keyboard.press('Escape'); await page.locator('[role="dialog"]').waitFor({ state: 'detached' });
+      await activate(rules); await natural(page, '[role="dialog"]');
+      await page.waitForFunction(() => {
+        const dialog = document.querySelector('[role="dialog"]'), heading = document.activeElement;
+        return dialog?.getAttribute('data-state') === 'open' && getComputedStyle(dialog).pointerEvents === 'auto' &&
+          heading?.textContent === 'How show cash works' && dialog.contains(heading);
+      });
+      const reopened = { stage: 'help-reopened', geometry: await geometry(page, '[role="dialog"]'), snapshot: await snapshot(page), focus: await page.evaluate(() => ({
+        active: document.activeElement?.outerHTML, state: document.querySelector('[role="dialog"]')?.getAttribute('data-state'),
+        pointerEvents: getComputedStyle(document.querySelector('[role="dialog"]')).pointerEvents,
+      })) };
+      visible(reopened.geometry); row.observations.push(reopened); save();
+      assert.equal(reopened.snapshot.raw, preview.raw); assert.deepEqual(reopened.snapshot.storage, preview.storage);
+      assert.deepEqual(reopened.snapshot.writes, preview.writes); assert.equal(reopened.snapshot.rng, preview.rng);
+      await page.evaluate(() => {
+        window.__boxingEscapeEvents = [];
+        document.addEventListener('keydown', event => {
+          if (event.key === 'Escape') window.__boxingEscapeEvents.push({ key: event.key, code: event.code, isTrusted: event.isTrusted,
+            target: event.target?.outerHTML, active: document.activeElement?.outerHTML, at: performance.now() });
+        }, { capture: true });
+      });
+      await page.keyboard.press('Escape'); reopened.escapeEvents = await page.evaluate(() => window.__boxingEscapeEvents); save();
+      assert.equal(reopened.escapeEvents.length, 1, 'One actual Escape input closes the ready help');
+      assert.equal(reopened.escapeEvents[0].isTrusted, true, 'Escape is a trusted browser key event');
+      await page.locator('[role="dialog"]').waitFor({ state: 'detached' });
       await page.waitForFunction(() => document.activeElement?.getAttribute('aria-label') === 'Show cash rules'); assert.deepEqual(await snapshot(page), preview, 'Escape preserves exact preview snapshot');
       if (!report.controls.length) {
         const cell = page.locator('[data-boxing-purses]'), old = await cell.evaluate(el => ({ value: el.getAttribute('data-value'), text: el.firstChild.nodeValue }));
