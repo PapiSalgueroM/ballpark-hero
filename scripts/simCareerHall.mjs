@@ -87,10 +87,10 @@
                    and the declined clause are held by the vitest file
                    src/test/usCareerHallBoard.test.tsx, whose controls do fire.
     11b. seek      (closing check fix, 2026-10-07) so the seek time hold-out
-                   is held here too: the first 300 careers the oneMore policy
-                   brings to the talk are caught there, before the answer,
-                   and a summer is forged to stand on each deck retirement
-                   card the deck really holds then, at card 1 (a save
+                   is held here too: the first 300 talks the oneMore policy's
+                   careers are asked in the board loop are caught, before
+                   the answer, and a summer is forged to stand on each deck
+                   retirement card the deck really holds then, at card 1 (a save
                    restored on a card dealt before the talk) and at card 2,
                    with the talk pending and again after 'One more year'.
                    The board's seek (seekSummerCard with talkDeckFilter) must
@@ -102,9 +102,10 @@
                    leave the rating alone and land at card 2 as well. Control
                    seekexclude (the review's mutation M2, the hold-out dropped
                    from the seek): FIRED in all four sports with only seek
-                   red (80 board careers, 300 snapshots: met nfl 614 of 1228,
-                   nba 762 of 1524, mlb 636 of 1272, all at card 1; nhl 1696
-                   of 1696, 848 at card 1 and 848 at card 2).
+                   red (80 board careers, so every talk is under the cap of
+                   300: met nfl 614 of 1228, nba 762 of 1524, mlb 636 of
+                   1272, all at card 1; nhl 1696 of 1696, 848 at card 1 and
+                   848 at card 2).
     12. deckJersey a club that retired the number on a deck card is the club
                    the card names (even where another club has more seasons),
                    on real careers and on synthetic ones with twelve seasons
@@ -150,6 +151,33 @@
        median legacy over every career moved 0 to -7. Band: 15.
        (Seeds 1 to 3 ran before the bands were set and were red only on the
        placeholder case floor of 30; every other check was green.)
+     AT THE BRIEF'S SIZE, measured 2026-10-07 by the closing check fix:
+     SIM_BOARD_CAREERS=2000 (2000 board careers a policy) and 2000 engine
+     careers, the default seed plus SIM_SEED 1 to 5, all four sports, 24
+     runs, every one green on its closing line with zero misses in sections
+     9 to 13 and 11b. Ranges over the six seeds:
+       talks answered one more year nfl 5677 to 5829, nba 6668 to 6758,
+         mlb 6500 to 6655, nhl 6147 to 6282.
+       retire now (and talk farewells, the same count) nfl 1699 to 1721,
+         nba 1972 to 1979, mlb 1961 to 1972, nhl 1822 to 1866; deck farewells
+         nfl 80 to 166, nba 84 to 112, mlb 100 to 140, nhl 520 to 696.
+       talk offseasons nfl 13075 to 13361 (26 to 55 asked mid-summer, 69 to
+         106 after a banned year), nba 15313 to 15491 (3 to 18, 95 to 170),
+         mlb 14965 to 15280 (39 to 63, 58 to 88), nhl 14137 to 14430 (51
+         to 62, 135 to 157).
+       11b, forged summers landed with no hold-out (300 talks caught):
+         nfl 780 to 808 of 1560 to 1616, nba 786 to 850 of 1572 to 1700,
+         mlb 714 to 812 of 1428 to 1624 (all at card 1), nhl 2000 to 2148
+         of as many (card 1 and card 2 alike). Band: at least 300, about
+         half the smallest measured anywhere (614, nfl at 80 careers).
+       deck retired numbers nfl 227 to 308 (13 to 29 at a club with fewer
+         seasons), nba 308 to 373 (56 to 106), mlb 282 to 315 (27 to 56).
+       section 13 (100 a league era, unchanged by SIM_BOARD_CAREERS):
+         throwback careers below the verified class nfl 27 to 35, nba 22
+         to 36, nhl 3 to 6, mlb 0. Section 14 as above.
+     One run took 36 to 72 minutes on the shared machine, so runAllSims
+     keeps 400 board careers on the default seed; rerun the long form above
+     after any change to the board, the summer, the talk or a life B deck.
 
    A control run exits 1 only when the check it targets is red (FIRED), and 0
    when it is not (DID NOT FIRE), whatever else went red.
@@ -584,6 +612,7 @@ let probeCareers = 0;
 const deckSeen = new Set(), farewellCards = new Set(), probedTimes = new Map();
 // Section 11b: careers caught the moment the board asks the talk, before the answer.
 const SEEK_N = 300, seekSnaps = [];
+let seekOpen = true; // closed once 11b has read them, so sections 13 and 14 add none
 function probeDeck(c, SB = eng.SPORTB) {
   // The deck as the engine builds it now, each answer tried on a copy, on throwaway streams.
   const keep = Math.random;
@@ -621,7 +650,7 @@ function boardCareer(i, policyName, eraId, X = eng) {
       if (o.talkAt !== null) return false;
       if (!policy.asks) { if (ruleHolds(c, X)) o.talkAt = at; return false; }
       if (!X.pendingTalk(c, SB.hall)) return false;
-      if (policyName === 'oneMore' && X === eng && seekSnaps.length < SEEK_N) seekSnaps.push(JSON.parse(JSON.stringify(c)));
+      if (seekOpen && policyName === 'oneMore' && X === eng && seekSnaps.length < SEEK_N) seekSnaps.push(JSON.parse(JSON.stringify(c)));
       o.talkAt = at;
       log.talks.push(year);
       if (at > 0) log.midTalks += 1;
@@ -762,6 +791,8 @@ const unlisted = [...farewellCards].filter(id => !eng.RETIREMENT_CARD_IDS.has(id
    pending and again after 'One more year'. The board's seek must never land
    on one. With no hold-out the same seek must land on it (met), so the check
    cannot pass on nothing. Control seekexclude. */
+seekOpen = false;
+const seekCaught = seekSnaps.length;
 let seekMiss = 0, seekMet = 0, seekTried = 0;
 const seekMetAt = [0, 0];
 {
@@ -932,12 +963,12 @@ const eraBoundary = eraCounts.boundary ?? { below: 0, above: 0 };
 console.log(`  board loop: ${BOARD_N} careers a policy, ${boardCrashes} crashed; talks answered one more year ${identityTalks}; identity misses ${identityMiss}`);
 console.log(`  ends: retire now ${endsRetire}, talk farewells ${endsFarewell}, deck farewells ${endsDeck}, misses ${endsMiss}`);
 console.log(`  once: ${talkOffseasons} offseasons with the talk (${midTalkOffseasons} asked mid-summer, ${bannedTalkOffseasons} after a banned year), ${onceMiss} offered a retirement card; listed ids seen ${listedHere.length}, unseen [${deadIds.join(',')}], farewell cards not listed [${unlisted.join(',')}] (decks probed on ${probeCareers} careers)`);
-console.log(`  seek: ${seekSnaps.length} careers caught at the talk, ${seekTried} forged summers on a deck retirement card, ${seekMet} landed on it with no hold-out (at card 1 ${seekMetAt[0]}, at a later card ${seekMetAt[1]}), ${seekMiss} with the board's`);
+console.log(`  seek: ${seekCaught} talks caught in the board loop, ${seekTried} forged summers on a deck retirement card, ${seekMet} landed on it with no hold-out (at card 1 ${seekMetAt[0]}, at a later card ${seekMetAt[1]}), ${seekMiss} with the board's`);
 console.log(`  jersey (deck): ${jerseyRecN} recorded, ${jerseyRecElsewhere} at a club other than the one with most seasons, ${jerseyRecMiss} misnamed; synthetic ${jerseySynN}, ${jerseySynMiss} missed; wait answers ${waitAnswers}, ${waitWrote} wrote a club`);
 console.log(`  era: verified from the Class of ${auditFrom}; ${JSON.stringify(eraCounts)}; misses ${eraMiss}`);
 
 /* ─── Check ───────────────────────────────────────────────────────────── */
-const BAND = { minInducted: 0.05, decileCut: 0.06, ladderStep: 0.015, talkReach: 0.70, earlyFall: 0.10, atFloor: 100, balanceCases: 5, farewellOvrGain: 10, seekMet: 1, hallShift: 0.025, legacyShift: 15 };
+const BAND = { minInducted: 0.05, decileCut: 0.06, ladderStep: 0.015, talkReach: 0.70, earlyFall: 0.10, atFloor: 100, balanceCases: 5, farewellOvrGain: 10, seekMet: 300, hallShift: 0.025, legacyShift: 15 };
 const smallestCut = Math.min(...decileCuts);
 const fellEarlyEnough = rules.stayFloor === null || earlyFalls >= BAND.earlyFall * onBallotOut;
 const checks = [
