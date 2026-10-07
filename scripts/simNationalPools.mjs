@@ -45,7 +45,11 @@ const ENTRY = path.join(os.tmpdir(), 'pools-entry.mjs');
 
 writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-export const intl = await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerInternational.ts');
+/* Round 1042: the squad picker (pickSquad, realPool) lives in soccerInternationalSquads.ts, the
+   only reader of the pools. Both modules spread into one object, so the names below stand. */
+const core = await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerInternational.ts');
+const squads = await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerInternationalSquads.ts');
+export const intl = { ...core, ...squads };
 export const pools = await import('${ROOT.replaceAll('\\', '/')}/src/data/nationalPools.ts');
 `);
 await build({

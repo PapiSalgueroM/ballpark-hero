@@ -39,7 +39,8 @@ const BUNDLE = path.join(os.tmpdir(), 'xi.bundle.mjs');
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-export { pickSquad, xiMen, NATION_CONFED } from '${ROOT.replaceAll('\\', '/')}/src/lib/soccerInternational.ts';
+export { xiMen, NATION_CONFED } from '${ROOT.replaceAll('\\', '/')}/src/lib/soccerInternational.ts';
+export { pickSquad } from '${ROOT.replaceAll('\\', '/')}/src/lib/soccerInternationalSquads.ts';
 export { allIntlNames, intlName, NATION_FAMILY, NAME_FAMILIES, familyFor } from '${ROOT.replaceAll('\\', '/')}/src/lib/intlNames.ts';
 export { NATIONALITY_BY_WORLD } from '${ROOT.replaceAll('\\', '/')}/src/data/playerNationalities.ts';
 `);
@@ -202,7 +203,9 @@ console.log('6) The banks that could mint a real name do not come back');
   }
   if (!engine.includes("from './intlNames'")) fail('the engine no longer imports the guarded pools');
   if (!engine.includes('intlName(nat')) fail('generateContender is not using the guarded pools');
-  const intl = fs.readFileSync(path.join(ROOT, 'src/lib/soccerInternational.ts'), 'utf-8');
+  /* Round 1042: the team sheet (buildStartingXi, the one place the engine names a man) moved to
+     soccerInternationalSquads.ts, so that is where the guarded pools are used now. */
+  const intl = fs.readFileSync(path.join(ROOT, 'src/lib/soccerInternationalSquads.ts'), 'utf-8');
   if (!intl.includes("from './intlNames'")) fail('the international engine does not use the guarded pools');
 }
 

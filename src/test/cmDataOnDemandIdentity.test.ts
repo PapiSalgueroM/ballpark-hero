@@ -135,8 +135,8 @@ describe('Round 1042 identity: the squad picker picks the same squads', () => {
     vi.resetModules();
     const hot = await import('@/lib/managerHotSeat');
     const core = await import('@/lib/soccerInternational');
-    /* Round 1042, step 3: this ONE import line moves to '@/lib/soccerInternationalSquads'. */
-    const { pickSquad, runInternationalSummer, realPool } = await import('@/lib/soccerInternational');
+    /* Round 1042, step 3: this ONE import line moved here from '@/lib/soccerInternational'. */
+    const { pickSquad, runInternationalSummer, realPool } = await import('@/lib/soccerInternationalSquads');
     const nations = [...Object.keys(core.NATION_CONFED).slice(0, 12), 'Wales', 'Nowhereland United'];
     const years = [2016, 2019, 2022, 2026, 2045];
     const forms = [

@@ -139,12 +139,15 @@ import { getBootEvents } from "./soccerCareerBoot";
    here, so this is a one way edge. */
 import { applyAcademyFocus } from "./soccerCareerAcademy";
 import {
-  runInternationalSummer, tournamentForYear, offYearCaps, toHistoryEntry,
-  nationStrength as intlNationStrength, confederationOf, pickSquad,
+  tournamentForYear, offYearCaps, toHistoryEntry,
+  nationStrength as intlNationStrength, confederationOf,
 } from "./soccerInternational";
 import type {
   IntlTournament, IntlHistoryEntry, PlayerForm,
 } from "./soccerInternational";
+/* Round 1042: the squad picker and the national team pools it reads live in their own file, so
+   only this game downloads them. */
+import { pickSquad, runInternationalSummer } from "./soccerInternationalSquads";
 
 export type {
   IntlTournament, IntlHistoryEntry, IntlTie, IntlTableRow, IntlMatch,
