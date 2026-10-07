@@ -177,8 +177,8 @@ if (CONTROL === 'flat') {
 }
 if (CONTROL === 'twoengines') {
   enginePath = rewrite(ENGINE, [[
-    '    const report = playMyMatch(state, entry, live);\n    state.week = live.week + 1;\n',
-    '    const report = playMyMatch(state, entry, kickOff(state, entry));\n    state.week = live.week + 1;\n',
+    '    state.live = live;\n    return resumeMatch(coachQuickMatch(state));\n',
+    '    state.live = kickOff(state, entry);\n    return resumeMatch(coachQuickMatch(state));\n',
   ]], 'clubManager.twoengines.ts', 'the quick path');
   console.log('NEGATIVE CONTROL ON: the quick path kicks off a second half of its own, so the two ways stop agreeing; section 6 must go red');
 }
@@ -190,8 +190,16 @@ if (CONTROL === 'twoengines') {
    so seeds and controls can run side by side. */
 const ENTRY = `${TMP}/matchScreen.${process.pid}.entry.mjs`;
 const BUNDLE = `${TMP}/matchScreen.${process.pid}.bundle.cjs`;
+// Preserve the historical unmanaged parity arm. Automatic coaching has its own outcomes.
+const noCoachPath = `${TMP}/clubManager.noCoach.${process.pid}.ts`;
+const coachHeader = 'export function coachQuickMatch(career: CareerState): CareerState {\n';
+const paritySource = lf(fs.readFileSync(enginePath, 'utf8'));
+if (paritySource.split(coachHeader).length !== 2) throw new Error('One current coach export is required for unmanaged parity');
+fs.writeFileSync(noCoachPath, paritySource.replace(coachHeader, coachHeader + '  return career;\n'));
+process.on('exit', () => fs.rmSync(noCoachPath, { force: true }));
 fs.writeFileSync(ENTRY, `
 export * as cm from '${enginePath}';
+export * as noCoach from '${noCoachPath}';
 export { MatchReportCard } from '${cardPath}';
 export { LiveSimScreen } from '${ROOT_URL}/src/components/club-manager/LiveSimScreen.tsx';
 export { MatchCentre } from '${ROOT_URL}/src/components/club-manager/MatchCentre.tsx';
@@ -205,7 +213,7 @@ execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=cjs -
 });
 const store = new Map();
 globalThis.localStorage = { getItem: k => store.get(k) ?? null, setItem: (k, v) => store.set(k, String(v)), removeItem: k => store.delete(k), clear: () => store.clear() };
-const { cm, MatchReportCard, LiveSimScreen, MatchCentre, render } = createRequire(import.meta.url)(BUNDLE);
+const { cm, noCoach, MatchReportCard, LiveSimScreen, MatchCentre, render } = createRequire(import.meta.url)(BUNDLE);
 const { startCareer, playNextEntry, resumeMatch } = cm;
 
 /* ---- reading a rendered screen ---- */
@@ -439,7 +447,7 @@ console.log(`   ${drawn} charts: ${meanSwings.toFixed(2)} sign changes a match (
 console.log(`   every chart drew the report's own nine buckets`);
 
 /* ---------- 6. one flow, two ways, one match ---------- */
-console.log('6) The same fixture on the same seed, played live and quick simmed, ends the same');
+console.log('6) Historical no-coach baseline: the same fixture and seed finish identically');
 const sameKeys = r => JSON.stringify({
   home: r.home, away: r.away, hg: r.homeGoals, ag: r.awayGoals,
   decidedBy: r.decidedBy,
@@ -461,12 +469,12 @@ for (const club of ['Everton', 'Real Madrid', 'Wolves', 'Ajax']) {
   for (let k = 0; k < 6; k++) {
     const seed = 90001 + pairs * 7919;
     const liveRun = withSeed(seed, () => {
-      const stop = playNextEntry(base);
+      const stop = noCoach.playNextEntry(base);
       if (stop.kind !== 'halftime') return stop;
       /* A manager who walks in, changes nothing and walks back out. */
-      return resumeMatch(stop.state);
+      return noCoach.resumeMatch(stop.state);
     });
-    const quickRun = withSeed(seed, () => playNextEntry(base, { skipHalftime: true }));
+    const quickRun = withSeed(seed, () => noCoach.playNextEntry(base, { skipHalftime: true }));
     if (liveRun.kind !== quickRun.kind) {
       fail(`${club}: live gave "${liveRun.kind}" and the quick sim gave "${quickRun.kind}" for the same entry`);
       base = quickRun.state;
@@ -499,9 +507,11 @@ console.log(`   ${pairs} fixtures replayed both ways, ${scorelines.size} distinc
 {
   const engineSrc = stripComments(lf(fs.readFileSync(ENGINE, 'utf8')));
   const calls = engineSrc.match(/(?<!function )playMyMatch\(/g) ?? [];
-  if (calls.length !== 2) fail(`the engine holds ${calls.length} calls to playMyMatch, and there are two ways to play a match`);
+  if (calls.length !== 1) fail(`the engine holds ${calls.length} calls to playMyMatch, and both paths share one settlement`);
   const withLive = engineSrc.match(/playMyMatch\(state, entry, [a-zA-Z]/g) ?? [];
-  if (withLive.length !== 2) fail(`${withLive.length} of the playMyMatch calls hand it a kicked off match; both of them must`);
+  if (withLive.length !== 1) fail(`${withLive.length} settlement calls hand over a kicked off match; the shared settlement must`);
+  const coached = engineSrc.match(/resumeMatch\(coachQuickMatch\(state\)\)/g) ?? [];
+  if (coached.length !== 2) fail(`${coached.length} Quick paths use the same coach and settlement; both must`);
   const kickOffs = engineSrc.match(/[^n] kickOff\(state, entry\)/g) ?? [];
   if (kickOffs.length !== 1) fail(`${kickOffs.length} places kick a match off, and there is one`);
   /* And the two screens that start a match. The hub is counted in the source

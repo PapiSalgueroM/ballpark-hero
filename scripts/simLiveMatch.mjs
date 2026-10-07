@@ -172,8 +172,8 @@ const CONTROLS = {
     must: [4, 5], also: [],
     what: 'the two recut calls at the end of changeLive',
     edits: [[
-      '  if (entry && m < 45) recutFirstHalf(state, entry, live, m);\n  else if (entry && m >= 46 && live.h2Drawn) recutSecondHalf(state, entry, live, m);\n',
-      '  if (entry && m < 45) void 0;\n  else if (entry && m >= 46 && live.h2Drawn) void 0;\n',
+      '  if (entry && m < 45) recutFirstHalf(state, entry, live, m);\n  /* Round 781: a change in a board redraws the rest of that board. */\n  else if (entry && period) recutBoard(state, entry, live, period, p);\n  else if (entry && m >= 46 && live.h2Drawn) recutSecondHalf(state, entry, live, m);\n',
+      '  if (entry && m < 45) void 0;\n  /* Round 781: a change in a board redraws the rest of that board. */\n  else if (entry && period) void 0;\n  else if (entry && m >= 46 && live.h2Drawn) void 0;\n',
     ]],
     note: 'changeLive records the change and never redraws; sections 4 and 5 must go red',
   },
@@ -262,13 +262,21 @@ if (CONTROL) {
 /* The simLiveSim bundle: the shim goes in before the engine is imported,
    because the engine may touch storage at module scope. The pid is in every
    temp name so seeds and controls can run side by side. */
+// Keep the old unmanaged arm and its faults separate from automatic Quick coaching.
+const noCoachPath = `${TMP}/clubManager.liveNoCoach.${process.pid}.ts`;
+const coachHeader = 'export function coachQuickMatch(career: CareerState): CareerState {\n';
+const paritySource = lf(fs.readFileSync(enginePath, 'utf8'));
+if (paritySource.split(coachHeader).length !== 2) throw new Error('One coach export is required for historical parity');
+fs.writeFileSync(noCoachPath, paritySource.replace(coachHeader, coachHeader + '  return career;\n'));
+process.on('exit', () => fs.rmSync(noCoachPath, { force: true }));
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {}, clear: () => {} };
 const mod = await import('${enginePath}');
 export const engine = mod;
+export * as noCoach from '${noCoachPath}';
 `);
 execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --alias:@=${ROOT_URL}/src --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
-const cm = (await import(pathToFileURL(BUNDLE).href)).engine;
+const { engine: cm, noCoach } = await import(pathToFileURL(BUNDLE).href);
 for (const name of ['startCareer', 'playNextEntry', 'resumeMatch', 'startSecondHalf', 'changeLive', 'makeHalftimeSub',
   'benchForHalftime', 'liveStatsAt', 'oppOnPitchAt', 'myOnPitchAt', 'projectedRoster', 'yearsOn', 'MAX_SUBS', 'squadNumbers', 'liveFeed',
   'matchFacts', 'initScorerRace', 'goldenBootTable']) {
@@ -774,7 +782,7 @@ begin(5, 'The change moves the football: attacking at 70 against balanced at 70 
 }
 
 /* ---------- 6. one match, two ways, with the second half drawn by the viewer path ---------- */
-begin(6, 'One match, two ways: kick off, startSecondHalf, resumeMatch against the quick sim');
+begin(6, 'Historical no-coach parity: viewer draws against unmanaged quick settlement');
 {
   const sameKeys = r => J({
     home: r.home, away: r.away, hg: r.homeGoals, ag: r.awayGoals, decidedBy: r.decidedBy,
@@ -793,13 +801,13 @@ begin(6, 'One match, two ways: kick off, startSecondHalf, resumeMatch against th
   for (const f of fixtures) {
     const seed = f.seed + 400;
     const liveRun = withSeed(seed, () => {
-      const stop = playNextEntry(f.pre);
+      const stop = noCoach.playNextEntry(f.pre);
       if (stop.kind !== 'halftime') return stop;
-      const s2 = startSecondHalf(stop.state);
+      const s2 = noCoach.startSecondHalf(stop.state);
       if (!s2) return { kind: 'null' };
-      return resumeMatch(s2);
+      return noCoach.resumeMatch(s2);
     });
-    const quickRun = withSeed(seed, () => playNextEntry(f.pre, { skipHalftime: true }));
+    const quickRun = withSeed(seed, () => noCoach.playNextEntry(f.pre, { skipHalftime: true }));
     if (liveRun.kind !== 'match' || quickRun.kind !== 'match') { fail(`${ctxOf(f)}: live gave "${liveRun.kind}", quick gave "${quickRun.kind}"`); continue; }
     const a = sameKeys(liveRun.report);
     const b = sameKeys(quickRun.report);
@@ -895,7 +903,7 @@ begin(8, 'A paused save is picked back up, never kicked off a second time');
     if (again.kind !== 'halftime') fail(`${ctx}: playNextEntry on a paused save came back "${again.kind}"`);
     else if (!again.state.live || pausedKeys(again.state.live) !== was) fail(`${ctx}: playNextEntry on a paused save kicked the match off again (the first half changed)`);
     else if (again.live !== again.state.live) fail(`${ctx}: the result's live is not the save's live`);
-    const fin = withSeed(f.seed + 601, () => playNextEntry(f.ht, { skipHalftime: true }));
+    const fin = withSeed(f.seed + 601, () => noCoach.playNextEntry(f.ht, { skipHalftime: true }));
     if (fin.kind !== 'match' || !fin.report?.detail) { fail(`${ctx}: the quick sim of a paused save came back "${fin.kind}"`); continue; }
     const lines = xs => xs.map(l => `${l.name}@${l.minute}`);
     const gotMy = lines(fin.report.myScorers.filter(s => s.minute <= 45));

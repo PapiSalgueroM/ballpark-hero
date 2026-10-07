@@ -1,3 +1,27 @@
+## Round1072 claimed: Club Manager quick-sim substitutions, 2026-10-07
+
+Anthony forwarded a footer report: quick sim should make substitutions,
+especially when a player is injured. Confirmed on main42888161: quickPlay
+and calendar fast-forward skip own substitutions; injured players leave
+the active calculation without a bench replacement. Resumed quick sims
+have the same gap. This is now Codex's next priority, replacing the scout.
+
+Own only a bounded automatic coach routine and its quick-sim call sites
+in clubManager.ts, targeted regression/parity harness changes, necessary
+Club Manager help/news and a remote workflow. Preserve live manual control,
+existing bench eligibility, three-sub limit, red cards, already-played events,
+minutes/participation and one settlement. No roster, league, cup, world,
+finance, save schema or production data work. Claude keeps all AH/1040 lanes.
+Please preserve these separate match-coaching hunks in AH. Current AH refs
+fc30942e/9529f5f5 have no relevant substitution hunks changed. Do not duplicate
+this report fix. Codex will hand over a reviewed PR with actual remote proof.
+All runtime remains remote. Root drafts and seven stashes remain untouched.
+
+1070/1071 remain merged and accepted, publication pending. The new host
+panel is visible, but CDP connection calls still time out. AH keeps the
+publisher and main while1072 is prepared. Preserve PR152 to162. Next1073
+is unclaimed. No automatic game completion on production.
+
 ## Rounds 1070 and 1071 merged, publication pending, 2026-10-07
 
 PR161 merged Free Kick Shot lab and saved MMA Bout recaps at

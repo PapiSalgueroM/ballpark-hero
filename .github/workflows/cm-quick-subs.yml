@@ -1,0 +1,120 @@
+name: Club Manager quick sim substitutions
+
+on:
+  push:
+    branches: [codex/cm-quick-sim-subs-1072]
+  pull_request:
+    paths:
+      - .github/workflows/cm-quick-subs.yml
+      - src/lib/clubManager.ts
+      - src/hooks/useClubManager.ts
+      - src/pages/ClubManager.tsx
+      - src/components/club-manager/**
+      - src/data/gameContent/clubManagement.ts
+      - src/test/clubManager*.test.tsx
+      - scripts/simCmQuickSubs.mjs
+      - scripts/playCmQuickSubs.mjs
+      - scripts/simLiveMatch.mjs
+      - scripts/simMatchScreen.mjs
+      - scripts/simHalftime.mjs
+      - public/club-manager/index.html
+  workflow_dispatch:
+
+permissions:
+  contents: read
+concurrency:
+  group: cm-quick-subs-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      VITEST_MAX_FORKS: 1
+      VITEST_MIN_FORKS: 1
+      SEO_SPLIT_BASE_REF: HEAD
+      CM_QUICK_SUBS_ARTIFACTS: cm-quick-subs-artifacts/outcomes
+      CM_QUICK_SUBS_NATIVE_ARTIFACTS: cm-quick-subs-artifacts/native
+      FREE_KICK_FONT_CACHE: cm-quick-subs-artifacts/font-cache
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install verification dependencies
+        run: |
+          mkdir -p cm-quick-subs-artifacts
+          git rev-parse HEAD > cm-quick-subs-artifacts/source-head.txt
+          git rev-parse HEAD^{tree} > cm-quick-subs-artifacts/source-tree.txt
+          npm ci
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee cm-quick-subs-artifacts/fonts.log
+      - name: Generate the changed help and news snapshots
+        if: ${{ github.event_name == 'push' }}
+        run: |
+          node scripts/genSearchKeywords.mjs 2>&1 | tee cm-quick-subs-artifacts/search-generation.log
+          PRERENDER_ONLY=/club-manager,/whats-new npm run build:seo 2>&1 | tee cm-quick-subs-artifacts/seo-generation.log
+          mkdir -p cm-quick-subs-artifacts/payload
+          for file in public/club-manager/index.html public/whats-new/index.html public/sitemap.xml scripts/data/lastmod.json src/data/searchKeywords.json; do
+            mkdir -p "cm-quick-subs-artifacts/payload/$(dirname "$file")"
+            cp "$file" "cm-quick-subs-artifacts/payload/$file"
+            sha256sum "$file"
+          done | tee cm-quick-subs-artifacts/payload-sha256.txt
+      - name: Type check and build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee cm-quick-subs-artifacts/types.log
+          npm run build 2>&1 | tee cm-quick-subs-artifacts/build.log
+      - name: Automatic coaching outcomes and effective copied faults
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: CM_QUICK_SUBS_CONTROL=all ONLY=simCmQuickSubs node scripts/runAllSims.mjs 2>&1 | tee cm-quick-subs-artifacts/outcomes.log
+      - name: Existing match and manager regression checks
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simClubManager simClubManagerCalendar simClubManagerScore simClubManagerSave simClubManagerSlots simClubManagerMeters simClubManagerFacilities simClubManagerStaff simClubManagerFinances simMatchDetail simMatchScreen simLiveMatch simHalftime simCmStoppageTime simCmMatchCentre simCmShootoutOrder simNoDoubleRecord simScoringCoverage simScoreShown simHarnessAnchors; do
+            ONLY="$harness" node scripts/runAllSims.mjs 2>&1 | tee "cm-quick-subs-artifacts/$harness.log" || failed=1
+          done
+          for control in noclock bareposs them ragged flat twoengines; do
+            MATCH_SCREEN_CONTROL="$control" ONLY=simMatchScreen node scripts/runAllSims.mjs 2>&1 | tee "cm-quick-subs-artifacts/match-screen-$control.log" || failed=1
+          done
+          for control in noplay nocut rekick nooppsubs statsroll doubleman; do
+            LIVE_MATCH_CONTROL="$control" ONLY=simLiveMatch node scripts/runAllSims.mjs 2>&1 | tee "cm-quick-subs-artifacts/live-match-$control.log" || failed=1
+          done
+          exit "$failed"
+      - name: Every built page and search reader
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings simSeoTitles simSeoMetaSplit; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "cm-quick-subs-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Actual quick sim and report on phones and desktop
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmQuickSubs.mjs 2>&1 | tee cm-quick-subs-artifacts/native.log
+      - name: Preserve reviewed source bytes
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: git diff --exit-code HEAD -- src/lib/clubManager.ts src/hooks/useClubManager.ts src/pages/ClubManager.tsx src/components/club-manager src/data/gameContent/clubManagement.ts src/pages/WhatsNew.tsx scripts/simCmQuickSubs.mjs scripts/playCmQuickSubs.mjs scripts/simMatchScreen.mjs scripts/simLiveMatch.mjs scripts/simHalftime.mjs
+      - name: Preserve verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cm-quick-subs-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          path: cm-quick-subs-artifacts/
