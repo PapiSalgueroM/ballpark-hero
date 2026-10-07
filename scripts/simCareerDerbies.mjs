@@ -406,9 +406,17 @@ console.log('2) Club Manager reads exactly what it read before the lift');
      only Round 1015's rosters, nationality map and era guard put back gives
      the old hash, 00922bf91f48, exactly; none of the 98 changed rivals, old
      or new, is a hand mapped one; and RIVALS_HASH, the lifted table itself,
-     did not move. */
+     did not move.
+     BOARD_HASH re-taken again at Release AH (2026-10-06), for Round 1035's
+     A-League Men: the board now covers 380 clubs, not 368. Attribution, the
+     full snapshot written by --record in throwaway copies: the merged tree
+     fc30942e with Round 1035's merge reverted gives the Release AF hash,
+     c9b27c674c4b, exactly; the merged tree adds the twelve A-League clubs
+     (each board naming its nearestRival pick, none hand mapped) and changes
+     none of the 368 others; the lead's F10 call (Central Coast Mariners
+     partial) moves nothing. RIVALS_HASH did not move. */
   const RIVALS_HASH = '565e14623c2fe3607eec8864303d001fce77c4308c1a408c6c49114ea9b679d6';
-  const BOARD_HASH = 'c9b27c674c4bdebeb2e35428e82275fa8f9d5c23d9a54fd68b2dd9acad7f9f28';
+  const BOARD_HASH = 'fcc9f161da14271127aa08be03723f69f004bd9b5f579659e35642cf84790096';
   const h = sha(sortedJson(data.PRIMARY_RIVAL));
   const snap = boardSnapshot();
   const b = sha(sortedJson(snap));
