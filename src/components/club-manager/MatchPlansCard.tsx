@@ -63,7 +63,7 @@ export function MatchPlansCard({ career, open, onToggle, onSave, onApply, onDele
           </button>;
         })}
       </div>
-      <div ref={!plan ? actionRef : undefined} className="flex gap-2">
+      <div ref={!plan ? actionRef : undefined} className="flex gap-2 scroll-mb-3">
         <label className="flex-1 min-w-0">Plan name
           <input aria-label="Plan name" data-cm-plan-name value={name} maxLength={MATCH_PLAN_NAME_LIMIT}
             onChange={event => setName(event.target.value)} placeholder={`Plan ${selected + 1}`} disabled={!editable}
@@ -81,7 +81,7 @@ export function MatchPlansCard({ career, open, onToggle, onSave, onApply, onDele
           <p>Kickoff XI fitness <strong className="block" data-cm-plan-fitness>{preview.fitness === null ? 'No available players' : `${Math.round(preview.fitness)}% average`}</strong></p>
         </div>
         <p data-cm-plan-replacements>{preview.replacements ? `${preview.replacements} saved spot${preview.replacements === 1 ? '' : 's'} need a replacement.` : 'All saved picks can start.'} Strength includes current fitness, morale, form and position fit. Mentality and duties affect the match separately.</p>
-        <div ref={actionRef} data-cm-plan-actions className="grid grid-cols-2 gap-2">
+        <div ref={actionRef} data-cm-plan-actions className="grid grid-cols-2 gap-2 scroll-mb-3">
           <button type="button" data-cm-plan-apply disabled={!editable} className={cn(button, 'bg-primary text-primary-foreground')}
             onClick={() => showResult(onApply(selected), `Applied ${plan!.name}.`)}>Apply plan</button>
           <button type="button" aria-expanded={details} data-cm-plan-details onClick={() => setDetails(!details)} className={button}>{details ? 'Hide kickoff XI' : 'View kickoff XI'}</button>

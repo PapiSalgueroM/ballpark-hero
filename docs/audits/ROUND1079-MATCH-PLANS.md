@@ -1,5 +1,17 @@
 # Round 1079: saved Club Manager match plans
 
+Second preparation run37606817122 at410f6d588e0d67e6546d5f18bc70dbc686427dce
+passed13 mounted outcomes/34 effective faults, all regressions and20readers.
+Complete legacy comparisons retained three identical old red outcomes and a
+changed executable control, without rewriting their original assertions.
+Artifact11475976070 ZIP SHA256
+9fb97bd65e931db4878a235f02cba925f4baa909c8b4e87ba81402e00d6e63e0.
+Native reached only320px, rejecting Apply/View at bottom780.15625 against780.
+Three DOM faults, actual fonts,14 source holds and storage isolation passed;
+later journeys and other profiles remain unverified. Action and empty-slot
+reveal rows now have12px bottom scroll margin. Native assertions are unchanged.
+No ready or live claim is made from this failed preparation.
+
 Preparation, October 7, 2026. Base main 2fff5e044160b70bd58b64d931793ee4e443cedd.
 Branch codex/manager-match-plans-1079. No live claim, merge or publish.
 
