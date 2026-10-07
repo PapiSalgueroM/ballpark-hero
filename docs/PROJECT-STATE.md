@@ -1,4 +1,4 @@
-## Round 1089, Soccer Career panel nesting, preparation pending (2026-10-07)
+## Round 1089, Soccer Career panel nesting, QA2 pending (2026-10-07)
 
 Codex owns this isolated page repair before the 1047 page work. Base is
 `6f57ce7818f152b4efdc75027d267c49927a2d8b`. One closing `div` moves from between
@@ -6,15 +6,16 @@ the Career Timeline heading and rows to the end of the main panels. The timeline
 card and main panel become the grid's two direct children; Latest Events and the
 action bar remain outside. No engine, save, data, callback or reveal-hook change.
 
-Remote verification is authored, not yet accepted: the actual built route at
-390 touch and 1280 keyboard, real engine-generated playing/newspaper states,
-trusted Continue into the actual season summary, complete save and RNG parity,
-responsive geometry, and a separately built copy restoring the exact old page.
-The copy must fail the panel checks while keeping the career baseline unchanged.
-The workflow retains early/full artifacts, actual dependency manifests, source
-and build hashes, original reveal/career gates and all twenty built readers.
-Reduced-motion layout coverage is not a full career or animation acceptance.
-No local runtime, production request, merge or publication is credited here.
+Prep1 `eea4aec3a472236c13a577b427d8203c4e1bf1c8`, run `37700915175`, is RED.
+Native scope passed at 390/1280: eight journeys, one old-page fault across four
+journeys, four real Continue transitions and complete save/RNG parity. The whole
+candidate is unaccepted: 54/56 old checks passed (35/36 career, 19/20 readers).
+Reveal rejected an unretained offline block; Anchors flagged the raw hash helper.
+Full artifact `11518001717` retains 1,415 files; source and 521 package holds passed.
+QA2 retains raw digest bytes in a lexical block and adds twelve viewport captures
+beside the full-page images. A direct guarded Reveal diagnostic retains actual
+requests and both output streams; blocks remain RED and original gates stay intact.
+QA2 is pending. No full-career, animation, local runtime, merge or publication claim.
 
 ## Release AK LIVE, 2026-10-07 15:12 EDT, and the split of work with Codex
 

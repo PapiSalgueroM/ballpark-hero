@@ -15,7 +15,7 @@ const BASE_REF = '6f57ce7818f152b4efdc75027d267c49927a2d8b';
 const PAGE = 'src/pages/SoccerCareer.tsx', SAVE = 'soccerCareerSave';
 const NOW = Date.parse('2026-10-07T12:00:00.000Z');
 const sha = value => createHash('sha256').update(value).digest('hex');
-function fileSha(file) { const bytes = fs.readFileSync(file); return sha(bytes); }
+function fileSha(file) { let digest; { const bytes = fs.readFileSync(file); digest = sha(bytes); } return digest; }
 const clone = value => JSON.parse(JSON.stringify(value));
 const json = (file, value) => fs.writeFileSync(path.join(OUT, file), JSON.stringify(value, null, 2));
 for (const dir of [OUT, NATIVE, CACHE]) fs.mkdirSync(dir, { recursive: true });
@@ -240,6 +240,7 @@ try {
         else check(`${label}: desktop 260px rail shares the top row`, Math.abs(data.card.width - 260) <= 1 && Math.abs(data.card.y - data.right.y) <= 1 && data.right.x >= data.card.right, data, true);
         check(`${label}: layout fits physical viewport`, data.scrollWidth <= profile.width + 1, data);
         await page.screenshot({ path: path.join(NATIVE, `${arm}-${profile.name}-${label}.png`), fullPage: true });
+        await page.screenshot({ path: path.join(NATIVE, `${arm}-${profile.name}-${label}-viewport.png`), fullPage: false });
         return state;
       }
       const loaded = await observe(scene);

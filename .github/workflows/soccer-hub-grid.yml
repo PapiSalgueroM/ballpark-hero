@@ -128,6 +128,103 @@ jobs:
           path: soccer-hub-grid-artifacts/
           retention-days: 5
           if-no-files-found: error
+      - name: Direct unchanged Reveal diagnostic with retained guarded requests
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        timeout-minutes: 10
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import { spawn, execFileSync } from 'node:child_process';
+          import { createHash } from 'node:crypto';
+          const out = path.resolve('soccer-hub-grid-artifacts/reveal-diagnostic');
+          fs.mkdirSync(out, { recursive: true });
+          const sha = value => createHash('sha256').update(value).digest('hex');
+          const report = { status: 'running', diagnosticOnly: true, originalRunnerUnchanged: true, command: ['node', 'scripts/simRevealScroll.mjs'], events: [] };
+          const save = () => fs.writeFileSync(path.join(out, 'report.json'), JSON.stringify(report, null, 2));
+          const held = execFileSync('git', ['ls-files', '-z', 'src', 'scripts', '.github/workflows/soccer-hub-grid.yml', 'index.html', 'package.json', 'package-lock.json', 'vite.config.ts']).toString().split('\0').filter(Boolean);
+          const visit = dir => fs.readdirSync(dir, { withFileTypes: true }).flatMap(row => row.isDirectory() ? visit(path.join(dir, row.name)) : [path.join(dir, row.name)]);
+          const corePackage = JSON.parse(fs.readFileSync('node_modules/playwright-core/package.json'));
+          assert.equal(typeof corePackage.exports['./lib/coreBundle'], 'string');
+          const runtime = ['node_modules/playwright/package.json', 'node_modules/playwright-core/package.json', path.join('node_modules/playwright-core', corePackage.exports['./lib/coreBundle'])];
+          const files = [...held, ...visit('dist'), ...runtime];
+          const hashes = () => Object.fromEntries(files.map(file => [file, sha(fs.readFileSync(file))]));
+          report.before = hashes();
+          for (const file of runtime) {
+            const dest = path.join(out, 'runtime', file); fs.mkdirSync(path.dirname(dest), { recursive: true }); fs.copyFileSync(file, dest);
+          }
+          report.runtime = { version: corePackage.version, files: Object.fromEntries(runtime.map(file => [file, report.before[file]])) };
+          const observer = path.join(out, 'observer.cjs');
+          fs.writeFileSync(observer, String.raw`
+          const fs = require('node:fs');
+          const path = require('node:path');
+          const pw = require('playwright-core');
+          const file = path.join(__dirname, 'requests.jsonl');
+          let sequence = 0, nextRequest = 0;
+          const ids = new WeakMap();
+          const record = value => fs.appendFileSync(file, JSON.stringify({ sequence: ++sequence, ...value }) + '\n');
+          const identity = request => {
+            if (!ids.has(request)) ids.set(request, ++nextRequest);
+            const u = new URL(request.url());
+            return { requestId: ids.get(request), method: request.method(), origin: u.origin, pathname: u.pathname, queryKeys: [...new Set(u.searchParams.keys())].sort() };
+          };
+          pw.chromium._playwright._instrumentation.addListener({ runAfterCreateBrowserContext(context) {
+            context.on('request', request => record({ event: 'request', ...identity(request) }));
+            context.on('response', response => record({ event: 'response', ...identity(response.request()), status: response.status() }));
+            context.on('requestfailed', request => {
+              const error = request.failure()?.errorText || '';
+              record({ event: 'requestfailed', ...identity(request), status: 'failed', errorCode: /^net::ERR_[A-Z0-9_]+$/.test(error) ? error : 'request failed' });
+            });
+            context.on('page', page => page.on('websocket', socket => record({ event: 'websocket', origin: new URL(socket.url()).origin })));
+          } });
+          record({ event: 'observer-installed', packageVersion: require('playwright-core/package.json').version });
+          `);
+          const receipt = path.join(out, 'offline-receipt.log');
+          for (const name of ['offline-receipt.log', 'requests.jsonl', 'stdout.log', 'stderr.log', 'server.log']) fs.writeFileSync(path.join(out, name), '');
+          report.observerSha256 = sha(fs.readFileSync(observer));
+          const childEnv = { ...process.env, BASE: 'http://127.0.0.1:4173', SWEEP_BASE: 'http://127.0.0.1:4173', PORT: '4173', SIM_OFFLINE_RECEIPT: receipt, NODE_OPTIONS: process.env.NODE_OPTIONS + ' --require=' + observer };
+          delete childEnv.ONLY; delete childEnv.BROWSER;
+          report.environment = { BASE: childEnv.BASE, SWEEP_BASE: childEnv.SWEEP_BASE, PORT: childEnv.PORT, SIM_NETWORK: childEnv.SIM_NETWORK, NODE_OPTIONS: childEnv.NODE_OPTIONS };
+          const serverFd = fs.openSync(path.join(out, 'server.log'), 'a');
+          const server = spawn(process.execPath, ['scripts/lib/hostLikeServer.mjs', 'dist', '4173'], { stdio: ['ignore', serverFd, serverFd] });
+          server.on('error', error => { report.events.push({ event: 'server-error', message: error.message }); save(); });
+          server.on('exit', (code, signal) => { report.events.push({ event: 'server-exit', code, signal }); save(); });
+          let stdoutFd, stderrFd;
+          try {
+            const deadline = Date.now() + 30000;
+            let up = false;
+            while (!up && Date.now() < deadline) {
+              try { up = (await fetch(childEnv.BASE + '/')).ok; } catch {}
+              if (!up) await new Promise(resolve => setTimeout(resolve, 400));
+            }
+            assert(up, 'The unchanged local server became ready');
+            assert(!report.events.some(event => event.event === 'server-error' || event.event === 'server-exit'), 'The diagnostic owns its live local server');
+            stdoutFd = fs.openSync(path.join(out, 'stdout.log'), 'a'); stderrFd = fs.openSync(path.join(out, 'stderr.log'), 'a');
+            const child = spawn('timeout', ['--signal=TERM', '--kill-after=15s', '8m', process.execPath, 'scripts/simRevealScroll.mjs'], { env: childEnv, stdio: ['ignore', stdoutFd, stderrFd] });
+            report.process = await new Promise(resolve => {
+              child.on('error', error => resolve({ code: null, signal: null, error: error.message }));
+              child.on('close', (code, signal) => resolve({ code, signal, error: null }));
+            });
+            report.blocks = fs.readFileSync(receipt, 'utf8').split('\n').filter(Boolean);
+            const requests = fs.readFileSync(path.join(out, 'requests.jsonl'), 'utf8').split('\n').filter(Boolean).map(line => JSON.parse(line));
+            report.observations = { installed: requests.filter(row => row.event === 'observer-installed'), requests: requests.filter(row => row.event === 'request').length, responses: requests.filter(row => row.event === 'response').length, failures: requests.filter(row => row.event === 'requestfailed').length, socketOrigins: requests.filter(row => row.event === 'websocket').map(row => row.origin) };
+            report.status = report.process.code === 0 && report.process.signal === null && !report.process.error && report.blocks.length === 0 ? 'passed' : 'failed';
+            save();
+            assert(report.observations.installed.length > 0 && report.observations.installed.every(row => row.packageVersion === corePackage.version) && report.observations.requests > 0, 'The passive observer recorded the actual installed browser runtime requests');
+            assert.equal(report.process.error, null, 'The original diagnostic harness started');
+            assert.equal(report.process.signal, null, 'The original diagnostic harness was not signaled');
+            assert.equal(report.process.code, 0, 'The original diagnostic harness exited successfully');
+            assert.equal(report.blocks.length, 0, 'Diagnostic remains red after any offline transport block');
+          } catch (error) { report.status = 'failed'; report.failure = { name: error.name, message: error.message, stack: error.stack }; throw error; }
+          finally {
+            if (stdoutFd !== undefined) fs.closeSync(stdoutFd); if (stderrFd !== undefined) fs.closeSync(stderrFd);
+            server.kill(); fs.closeSync(serverFd);
+            try { report.after = hashes(); assert.deepEqual(report.after, report.before, 'Diagnostic source, installed runtime and built payloads remain exact'); }
+            catch (error) { report.status = 'failed'; report.holdError = error.message; throw error; }
+            finally { save(); }
+          }
+          NODE
       - name: Original reveal scroll and Soccer Career regressions
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
