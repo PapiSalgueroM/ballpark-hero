@@ -1,3 +1,17 @@
+## AH refresh accepted, October 7, 2026
+
+The refreshed preparation passed at672cb7722527861f163699c832b948b69d99bdae,
+treed6e6811d0fbd70f902ae9b5a2225ff4071dab6ec, remote37583268778.
+Artifact11466336248 ZIP SHA256:
+5a165691f067c296a980bc9c22033f32de938ec1e9ce9dd6ef92e894f27df3ba.
+App types/build,9 actual recap outcomes/20 effective copied faults,21 input
+integrity reports,75 native shots/three profiles/five DOM controls, original
+regressions and all20 closing readers passed. The latest320px final scorecard
+was visually reviewed. All six generated payload hashes were independently
+checked before import. AH changes and its What's New lines remain intact.
+The temporary refresh workflow is removed. PR165 final checks remain pending;
+this is not a merge or publication receipt. Claude retains release ownership.
+
 # Round 1074: Buzzer Beater contest recap
 
 The live rack strip and final five-rack scorecard show actual settled makes,
