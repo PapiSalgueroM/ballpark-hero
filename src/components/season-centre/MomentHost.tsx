@@ -179,11 +179,12 @@ export function MomentHost({ moment, moments, scoreLine, reduced, onDone }: {
       <p className="text-xs text-muted-foreground" data-moment-objective>{moment.objective}</p>
       <p className="rounded-lg bg-muted/30 p-2 text-[11px] leading-snug text-muted-foreground" data-moment-how><span className="font-bold text-foreground">How it plays: </span>{moment.how}</p>
       {step === 'failed' && <p className="text-xs text-amber-400" role="alert">The pitch did not load, so nothing was used. Try again or let it play.</p>}
+      {/* stacked on a phone: flex-1 there would shrink each button to its text (a 20 pixel target), so it only applies side by side */}
       <div className="flex flex-col gap-2 sm:flex-row">
-        <button type="button" disabled={step === 'loading'} onClick={take} className="h-11 flex-1 rounded-lg bg-emerald-600 text-sm font-bold text-black hover:bg-emerald-500 disabled:opacity-60" data-moment-take>
+        <button type="button" disabled={step === 'loading'} onClick={take} className="h-11 shrink-0 sm:flex-1 rounded-lg bg-emerald-600 text-sm font-bold text-black hover:bg-emerald-500 disabled:opacity-60" data-moment-take>
           {step === 'loading' ? 'Getting the pitch ready...' : '🎯 Take it yourself'}
         </button>
-        <button type="button" disabled={step === 'loading'} onClick={() => onDone(false)} className="h-11 flex-1 rounded-lg border border-border text-sm font-semibold hover:bg-muted/40 disabled:opacity-60" data-moment-pass>▶ Let it play</button>
+        <button type="button" disabled={step === 'loading'} onClick={() => onDone(false)} className="h-11 shrink-0 sm:flex-1 rounded-lg border border-border text-sm font-semibold hover:bg-muted/40 disabled:opacity-60" data-moment-pass>▶ Let it play</button>
       </div>
     </div>
   );

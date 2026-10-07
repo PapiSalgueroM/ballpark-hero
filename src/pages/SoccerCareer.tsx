@@ -1011,8 +1011,10 @@ export default function SoccerCareer() {
      played), so stepping out of the Centre early never drops them. Only a
      career holding an unbanked ledger takes this path; every other press runs
      `step` at once, exactly as before. The bank lives with the Season Centre,
-     off the first download, so it comes through that same lazy entry (already
-     in memory when a moment was played this visit). If it cannot be fetched the career
+     off the first download, so it is fetched here (already in memory when a
+     moment was played this visit). It is fetched by its own name, never
+     through the Season Centre's lazy entry: simFlagshipWeight reads a
+     second dynamic import of that entry as leave to import it statically. If it cannot be fetched the career
      still moves on. The step is worked out once, outside the updater, and
      only lands on the career it was pressed on, so a second press in the
      gap cannot step twice. */
@@ -1020,7 +1022,7 @@ export default function SoccerCareer() {
     if (!career) return;
     const ledger = readSeasonMoments(career.seasonMoments);
     if (!ledger || ledger.banked || ledger.m.length === 0) { setCareer(step(career)); return; }
-    import("@/components/soccer-career/SoccerSeasonCentre")
+    import('@/lib/season/soccerMoments')
       .then(m => m.closeSeasonMoments, () => null)
       .then(close => {
         const next = step(close ? close(career, clubs) : career);

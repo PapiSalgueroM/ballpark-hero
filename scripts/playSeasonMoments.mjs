@@ -27,7 +27,8 @@
  *  7. Once: after a reload the moment is not offered again and the season
  *     shows the decided score; an attempt opened and left (walk B reloads on
  *     the board) is a miss.
- *  8. Fit and stillness: no sideways scroll with the board open, the board
+ *  8. Fit and stillness: both buttons on the offer are 44 pixels tall, no
+ *     sideways scroll with the board open, the board
  *     inside the screen's width, the page does not scroll.
  *  9. Walker safety: no label on the offer, the board or the verdict starts
  *     with an entry of playSoccerCareer's ACTIONS.
@@ -62,12 +63,14 @@
  * only ("Next chance").
  *
  * Measured again 2026-10-07 after the review, on the build of the branch
- * with origin/main and release-al-int merged (ca3da0b0): 112 checks, 0
+ * with origin/main and release-al-int merged: 117 checks, 0
  * failed, five walks (walk E leaves early on the phone and banks at
  * Continue: "2 of 9 stars. No gains this time", phase ballon_dor). The
  * first run after the checks of 10 were written failed 6 of them (the
  * focus fell to BODY with the board open, in every walk), which is how the
- * moment host's cards came to be keyed. Controls, each exit 1 with all five
+ * moment host's cards came to be keyed. The phone's first screenshots showed
+ * the offer's two buttons about 20 pixels tall (flex-1 in a column), now 44
+ * on every walk (check 8). Controls, each exit 1 with all five
  * walks run: used fails 3 in every walk and 7, 6 and 10 in walk B; fixtures
  * fails 10 on the three phone walks only; label fails 9 only.
  *
@@ -361,7 +364,10 @@ async function walk(tag, view, how, { leaveOnBoard = false, leaveEarly = false, 
     badge: document.querySelector('[data-moment-badge]')?.textContent ?? '', held: document.querySelector('[data-match-clock]')?.getAttribute('data-held') ?? '',
     minute: Number(document.querySelector('[data-match-clock]')?.getAttribute('data-minute') ?? -1), md: Number(document.querySelector('[data-matchday]')?.getAttribute('data-matchday') ?? 0),
     bar: !!document.querySelector('[data-centre-bar]'), how: document.querySelector('[data-moment-how]')?.textContent ?? '',
+    /* layout heights (a transform in flight does not move them) */
+    takeH: document.querySelector('[data-moment-take]')?.offsetHeight ?? 0, passH: document.querySelector('[data-moment-pass]')?.offsetHeight ?? 0,
   }));
+  check(offer.takeH >= 44 && offer.passH >= 44, `8. ${name}: both buttons on the offer are full touch targets (${offer.takeH} and ${offer.passH} pixels tall, 44 wanted)`);
   const offerState = await hostState(P.page);
   check(offer.how === `How it plays: ${M.MOMENT_HOW[board]}` && offerState.focusInside, `2. ${name}: the offer says how the board is played before the go is used, and holds the focus ("${offer.how.slice(0, 50)}", on ${offerState.focus})`);
   check(offered && offer.md === m.md && offer.badge === (m.mode === 'call' ? 'YOUR CALL' : 'RECREATE'), `2. ${name}: matchday ${m.md} stops for a ${m.mode} (${offer.badge} on matchday ${offer.md})`);
