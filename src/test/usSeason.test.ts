@@ -7,6 +7,8 @@ import {
   type UsLengthSport,
 } from '@/data/usSeasonLengths';
 import { NBA_SCORING, US_LEAGUE_SHAPES, nflHosts17, usLeagueShape } from '@/data/usLeagueShape';
+import { keyedRng } from '@/lib/keyedRng';
+import { dealUnnamed, splitTotal } from '@/lib/season/us';
 
 const SPORTS: UsLengthSport[] = ['nba', 'nfl'];
 
@@ -101,5 +103,67 @@ describe('the league shape ledger', () => {
     expect(NBA_SCORING.now).toBeGreaterThan(NBA_SCORING.y2004);
     expect(NBA_SCORING.y2004).toBeGreaterThan(80);
     expect(NBA_SCORING.now).toBeLessThan(130);
+  });
+});
+
+/* ───────────────────────── src/lib/season/us.ts ───────────────────────── */
+
+describe('splitTotal', () => {
+  const rng = keyedRng('split');
+  it('always sums to the total with every cap and minimum held', () => {
+    let done = 0;
+    for (let n = 1; n <= 17; n += 1) {
+      for (let trial = 0; trial < 40; trial += 1) {
+        const weights = Array.from({ length: n }, () => (rng() < 0.2 ? 0 : rng() * 3));
+        const caps = Array.from({ length: n }, () => Math.floor(rng() * 9));
+        const mins = caps.map(c => Math.floor(rng() * (c + 1) * 0.4));
+        const lo = mins.reduce((a, b) => a + b, 0);
+        const hi = caps.reduce((a, b) => a + b, 0);
+        for (const total of [lo, hi, lo + Math.floor((hi - lo) / 2), lo + Math.floor((hi - lo) * rng())]) {
+          const x = splitTotal(total, weights, caps, mins)!;
+          expect(x, `n ${n} total ${total}`).not.toBeNull();
+          expect(x.reduce((a, b) => a + b, 0)).toBe(total);
+          x.forEach((v, i) => { expect(Number.isInteger(v)).toBe(true); expect(v).toBeGreaterThanOrEqual(mins[i]); expect(v).toBeLessThanOrEqual(caps[i]); });
+          done += 1;
+        }
+      }
+    }
+    expect(done).toBeGreaterThan(2000);
+  });
+  it('gives null when the caps or the minimums cannot hold the total', () => {
+    expect(splitTotal(10, [1, 1], [4, 5])).toBeNull();
+    expect(splitTotal(3, [1, 1], [4, 5], [2, 2])).toBeNull();
+    expect(splitTotal(3, [1, 1], [1, 5], [2, 0])).toBeNull();
+    expect(splitTotal(-1, [1], [5])).toBeNull();
+    expect(splitTotal(2.5, [1], [5])).toBeNull();
+    expect(splitTotal(0, [], [])).toEqual([]);
+    expect(splitTotal(1, [], [])).toBeNull();
+  });
+  it('follows the weights, and a zero weight only gets what is forced', () => {
+    expect(splitTotal(10, [1, 1], [10, 10])).toEqual([5, 5]);
+    expect(splitTotal(9, [2, 1], [10, 10])).toEqual([6, 3]);
+    expect(splitTotal(6, [1, 0, 1], [3, 9, 3])).toEqual([3, 0, 3]);
+    expect(splitTotal(7, [1, 0, 1], [3, 9, 3])).toEqual([3, 1, 3]);
+  });
+});
+
+describe('dealUnnamed', () => {
+  it('meets every opponent once, one game a round, home and away split evenly', () => {
+    for (const games of [82, 17, 16, 1]) {
+      for (let seed = 0; seed < 30; seed += 1) {
+        const rounds = dealUnnamed(games, keyedRng(`un|${games}|${seed}`));
+        expect(rounds).toHaveLength(games);
+        expect(rounds.every(r => r.length === 1 && (r[0][0] === 0) !== (r[0][1] === 0))).toBe(true);
+        const opps = rounds.map(r => (r[0][0] === 0 ? r[0][1] : r[0][0]));
+        expect([...opps].sort((a, b) => a - b)).toEqual(Array.from({ length: games }, (_, i) => i + 1));
+        const home = rounds.filter(r => r[0][0] === 0).length;
+        expect(Math.abs(2 * home - games)).toBeLessThanOrEqual(1);
+      }
+    }
+  });
+  it('keys the side of the odd game, so both eight and nine home games happen', () => {
+    const homes = new Set<number>();
+    for (let seed = 0; seed < 40; seed += 1) homes.add(dealUnnamed(17, keyedRng(`odd|${seed}`)).filter(r => r[0][0] === 0).length);
+    expect([...homes].sort()).toEqual([8, 9]);
   });
 });
