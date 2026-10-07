@@ -41,6 +41,17 @@
    8. copy (exact): the three reworded texts no longer claim a derby; no dash
       in a derby log or fan line; fan lines pass simCareerParity's rule.
 
+   Round 1037 (who was in each league, season by season): before 2026-27 a
+   derby needs both clubs in the same league that season by the league
+   ledgers, so section 3 counts meetings and checks rivals by the season's
+   real league; the forced cases outside the six ledger leagues (Brasileirao,
+   Liga MX) read none before 2026-27 and are checked from 2026-27 on, where
+   nothing moved; Newcastle 2020, Celta Vigo 2020 and Brighton 1990 read none
+   because Sunderland, Deportivo and Brighton were a division down that
+   season; the drift fence reads 2026-27, the list's own season, and moved
+   from 51 to 48 pairs only through the three labels the round released
+   (proven with the labels put back: 51 and the old 13).
+
    BANDS: see the BANDS block below, measured over seed offsets 0 to 3.
 
    Negative controls (SIM_DERBY_CONTROL; each asserts its anchor appears exactly
@@ -53,8 +64,8 @@
    uncapped  the popularity clamp is gone and a win is worth 10. Section 6 red.
    Added after the review (each one a hole a mutation walked through green):
    homealt   both meetings at the same ground. Section 4 red.
-   cadhold   the Liga MX 2019/20 hold is dropped. Section 3 red (Club America
-             2019).
+   cadhold   the Ligue 1 2019/20 hold is dropped (Round 1037; it was Liga MX's,
+             which no past derby reaches now). Section 3 red (PSG 2019).
    aliasdrop one alias entry (Athletic Bilbao) is deleted. Sections 1 and 3
              red: the alias map no longer covers a respelled pair club, and
              the Basque derby goes dormant against the pinned 2020 status.
@@ -128,7 +139,9 @@ if (CONTROL === 'uncapped') {
   mainDerby = edit(mainDerby, 'export const DERBY_WIN_POP = 2;', 'export const DERBY_WIN_POP = 10;', CONTROL);
 }
 if (CONTROL === 'homealt') mainDerby = edit(mainDerby, 'const home = (i % 2 === 0) === homeFirst;', 'const home = homeFirst;', CONTROL);
-if (CONTROL === 'cadhold') mainDerby = edit(mainDerby, '"Liga MX": [{ from: 1996, to: 2018, meetings: 2 }, { from: 2020, meetings: 2 }],', '"Liga MX": [{ from: 1996, meetings: 2 }],', CONTROL);
+/* Round 1037: a past Liga MX season has no derby at all now (the league
+   ledgers do not hold it), so the hold this control drops is Ligue 1's 2019-20 */
+if (CONTROL === 'cadhold') mainDerby = edit(mainDerby, '"Ligue 1": [{ from: 1990, to: 2018, meetings: 2 }, { from: 2020, meetings: 2 }],', '"Ligue 1": [{ from: 1990, meetings: 2 }],', CONTROL);
 if (CONTROL === 'winner') mainDerby = edit(mainDerby, 'if (gf > ga && k === ga + 1) won = true;', 'if (gf > ga && k <= ga + 1) won = true;', CONTROL);
 if (CONTROL === 'aliasdrop') overrideFile(DATA_FILE, "  'Athletic Bilbao': 'Athletic Club',\n", '');
 if (CONTROL === 'eliteoff') overrideFile(ENGINE_FILE, 'elite: ELITE_CLUBS,', 'elite: [],');
@@ -261,6 +274,9 @@ function runCareer(e, seed, { era = '2020-24', startYear = 2020, proSeasons = 10
   }
 }
 const leagueOf = name => (clubs.find(c => c.name === name) || {}).league || '';
+/* Round 1037: before 2026-27 a derby is played in the league the club was
+   really in that season (the league ledgers), from then on in its label */
+const yearLeague = (name, year) => league.leagueKeyInYear({ name, league: leagueOf(name) }, year) ?? '';
 
 let failures = 0;
 const red = new Set();
@@ -461,23 +477,31 @@ const FORCED_CASES = [
   ['Arsenal', 2020, ['Tottenham', 'Chelsea'], 'the North London derby and a London derby'],
   ['Real Madrid', 2020, ['Barcelona', 'Atletico Madrid'], 'El Clasico and the Madrid derby'],
   ['Man City', 2020, ['Man United'], 'the alias map: Man City is Manchester City in the table'],
-  ['Sao Paulo', 2020, ['Corinthians', 'Palmeiras', 'Santos'], 'three Paulista rivals, through the alias map'],
+  /* Round 1037 moved the past cases outside the six ledger leagues to none
+     (a past derby needs both clubs in one ledger league that season), and
+     checks each of them from 2026-27 on instead, where nothing moved */
+  ['Sao Paulo', 2020, [], 'before 2026-27 the Brasileirao is not one of the six leagues the ledgers hold'],
+  ['Sao Paulo', 2026, ['Corinthians', 'Palmeiras', 'Santos'], 'three Paulista rivals, through the alias map'],
   ['Corinthians', 2002, [], 'the Brasileirao before 2003 claims nothing'],
-  ['Corinthians', 2003, ['Palmeiras', 'Sao Paulo', 'Santos'], 'the first double round robin Brasileirao'],
-  ['Newcastle', 2020, ['Sunderland'], 'the Tyne-Wear derby, woken by Round 1013 adding Sunderland'],
-  ['Celta Vigo', 2020, ['Deportivo'], 'the Galician derby, Round 1013 Deportivo through the alias map'],
+  ['Corinthians', 2003, [], 'before 2026-27 the Brasileirao is not one of the six leagues the ledgers hold'],
+  ['Corinthians', 2026, ['Palmeiras', 'Sao Paulo', 'Santos'], 'the double round robin Brasileirao'],
+  ['Newcastle', 2020, [], 'Sunderland were in League One in 2020-21 (the league ledgers)'],
+  ['Newcastle', 2026, ['Sunderland'], 'the Tyne-Wear derby, woken by Round 1013 adding Sunderland'],
+  ['Celta Vigo', 2020, [], 'Deportivo were in the third tier in 2020-21 (the league ledgers)'],
+  ['Celta Vigo', 2026, ['Deportivo'], 'the Galician derby, Round 1013 Deportivo through the alias map'],
   ['West Ham', 2020, ['Tottenham'], 'Millwall plays in another league in the game, so the Dockers derby is dormant'],
   ['Roma', 2020, ['Napoli'], 'Lazio is not a Soccer Career club, so the Derby della Capitale is dormant'],
   ['PSG', 2018, ['Marseille'], 'the last full Ligue 1 season before the held one'],
   ['PSG', 2019, [], 'Ligue 1 2019/20 was abandoned, held'],
   ['PSG', 2020, ['Marseille'], 'Ligue 1 after the held season'],
   ['Club America', 1995, [], 'Liga MX before the short tournaments claims nothing'],
-  ['Club America', 1996, ['Chivas', 'Cruz Azul', 'Pumas'], 'Invierno 1996, the first short tournament'],
-  ['Club America', 2018, ['Chivas', 'Cruz Azul', 'Pumas'], 'the last Liga MX season before the held one'],
+  ['Club America', 1996, [], 'before 2026-27 Liga MX is not one of the six leagues the ledgers hold'],
   ['Club America', 2019, [], 'the Clausura 2020 was cancelled, held'],
-  ['Club America', 2020, ['Chivas', 'Cruz Azul', 'Pumas'], 'the Liga MX clasicos, through the alias map'],
+  ['Club America', 2026, ['Chivas', 'Cruz Azul', 'Pumas'], 'the Liga MX clasicos, through the alias map'],
   ['Boca Juniors', 2020, [], 'Argentina has no verified cadence'],
-  ['Brighton', 1990, ['Crystal Palace'], 'a First Division season the game labels Premier League'],
+  ['Brighton', 1990, [], 'Brighton were in the Second Division in 1990-91 (the league ledgers)'],
+  ['Crystal Palace', 1991, [], 'a First Division season, Brighton a division below (the league ledgers)'],
+  ['Brighton', 2026, ['Crystal Palace'], 'the M23 derby from 2026-27'],
 ];
 const forcedRows = [];
 section = 3;
@@ -488,7 +512,7 @@ console.log('3) the right derbies, the verified number of meetings, and nothing 
   const check = ({ r }) => {
     const lg = leagueOf(r.club);
     const want = derby.seasonDerbies({ club: r.club, league: lg, year: r.year, clubs });
-    const n = derby.derbyMeetings(lg, r.year);
+    const n = derby.derbyMeetings(yearLeague(r.club, r.year), r.year);
     checked += 1;
     if (want.length === 0) { if ('derbies' in r) keyWithout += 1; return; }
     withDerbies += 1;
@@ -524,7 +548,7 @@ console.log('3) the right derbies, the verified number of meetings, and nothing 
     const world = eras.adjustClubsForYear(clubs, r.year);
     for (const d of derby.readSeasonDerbies(r)) {
       const c = world.find(x => x.name === d.rival);
-      if (!c || c.league !== leagueOf(r.club)) outside += 1;
+      if (!c || yearLeague(c.name, r.year) !== yearLeague(r.club, r.year)) outside += 1;
     }
   }
   if (outside) fail(`${outside} meetings name a club outside the league or not yet founded`);
@@ -534,8 +558,17 @@ console.log('3) the right derbies, the verified number of meetings, and nothing 
      check still green, so the dormant pairs are listed here by name and the
      active count is fixed. A pair that changes status fails until it is moved
      on purpose: Round 1013 adds clubs and must move the pairs it wakes. */
-  const REF_YEAR = 2020;
-  const ACTIVE_2020 = 51;
+  /* Round 1037: 2020 is a past season now, answered by the league ledgers,
+     so the drift fence reads the list's own season, 2026-27 (the labels a
+     drift would break) */
+  const REF_YEAR = 2026;
+  /* Round 1037 moved this from 51 to 48, on purpose: it released Round
+     1022's held labels, so Wolves, West Ham (both Championship) and Girona
+     (Segunda Division) play 2026-27 a division down, and Aston Villa and
+     Wolves, Barcelona and Girona, West Ham and Tottenham sleep from then on.
+     Attribution: the same tree with those three labels put back reads 51
+     and the old 13 at 2026, and nothing else moved. */
+  const ACTIVE_2020 = 48;
   /* Recorded 2026-10-05 from the round's tree: 40 active and 24 dormant
      before the merge, 51 and 13 after Round 1013 (merged from main) added
      Sunderland, Leeds, Espanyol, Deportivo, Levante, Fluminense, Vasco da
@@ -547,7 +580,7 @@ console.log('3) the right derbies, the verified number of meetings, and nothing 
     'Boca Juniors and River Plate', 'Borussia Dortmund and Schalke 04', 'Guadalajara and Atlas', 'Hertha BSC and Union Berlin',
     'Köln and Gladbach', 'Lille and Lens', 'Nantes and Rennes', 'Norwich City and Ipswich Town',
     'Roma and Lazio', 'Stuttgart and Karlsruhe', 'Werder Bremen and Hamburg', 'West Ham and Millwall',
-    'Wolves and West Brom',
+    'Wolves and West Brom', 'Aston Villa and Wolves', 'Barcelona and Girona', 'West Ham and Tottenham',
   ];
   const world2020 = eras.adjustClubsForYear(clubs, REF_YEAR);
   const status = { active: [], dormant: [] };

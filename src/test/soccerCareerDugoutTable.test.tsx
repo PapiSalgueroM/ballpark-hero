@@ -68,6 +68,7 @@ vi.mock('@/components/game/ShareButtons', () => ({ default: () => null }));
 import * as E from '@/lib/soccerCareerEngine';
 import type { CareerState } from '@/lib/soccerCareerEngine';
 import { finishZone } from '@/lib/soccerCareerLeague';
+import { CAREER_LEAGUE_SEASONS } from '@/data/careerLeagueSeasons';
 import SoccerCareer from '@/pages/SoccerCareer';
 
 const SAVE_KEY = 'soccerCareerSave';
@@ -185,20 +186,37 @@ describe('Soccer Career: the dugout table is his own league (Round 1029)', () =>
     expect(t.rows).toEqual(['Boca Juniors', 'Arsenal', 'Ajax', 'Flamengo', 'Bayern Munich']);
   });
 
-  it('a season before the list\'s own names nobody and no league, and says why', async () => {
+  /* Round 1037 moved this case: a past season of a league the league ledgers
+     hold is that season's real league, its real clubs and its real size */
+  it('a season before the list\'s own in a ledger league is that season\'s real table', async () => {
     const s = dugout('Arsenal', 1, undefined, 1990);
     const last = s.managerState!.seasonResults[s.managerState!.seasonResults.length - 1];
-    expect(s.seasons[s.seasons.length - 1].year).toBeLessThan(2025);
+    const year = s.seasons[s.seasons.length - 1].year + s.managerState!.season;
+    expect(year).toBeLessThan(2026);
+    const real = CAREER_LEAGUE_SEASONS['Premier League'][year];
     expect(last.league).toBe('Premier League');
+    expect(last.lineupUnknown).toBeUndefined();
+    expect([last.leagueSize, last.sizeVerified]).toEqual([real.size, true]);
+    for (const r of last.table!.filter(r => !r.you && !r.unnamed)) expect(real.clubs).toContain(r.club);
+    const t = await finalTable(s);
+    expect(t.label).toBe(`Final table · ${real.name}`);
+    for (const name of t.rows) if (name !== 'another club' && name !== 'Arsenal') expect(real.clubs, name).toContain(name);
+  });
+
+  it('a season before the list\'s own in a league the ledgers do not hold names nobody and no league, and says why', async () => {
+    const s = dugout('Ajax', 1, undefined, 1990);
+    const last = s.managerState!.seasonResults[s.managerState!.seasonResults.length - 1];
+    expect(s.seasons[s.seasons.length - 1].year).toBeLessThan(2025);
+    expect(last.league).toBe('Eredivisie');
     expect(last.lineupUnknown).toBe(true);
     expect(last.knownRivals).toBe(0);
     expect(last.table!.filter(r => !r.you).every(r => r.unnamed && !r.club)).toBe(true);
     const t = await finalTable(s);
-    /* the game holds today's label for Arsenal, not the league of that year */
+    /* the game holds today's label for Ajax, not the league of that year */
     expect(t.label).toBe('Final table');
     expect(t.rows).toEqual([]);
     expect(t.text).toContain("We don't know who was in the league that year, so the rest of the field is counted, not named.");
     expect(t.text).not.toContain("We don't know enough");
-    expect(`${t.text} ${last.result}`).not.toMatch(/Premier League|Championship/);
+    expect(`${t.text} ${last.result}`).not.toMatch(/Eredivisie/);
   });
 });
