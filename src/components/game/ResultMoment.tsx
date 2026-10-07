@@ -15,7 +15,9 @@ import { sportOf, SPORT_NAME } from '@/data/homeFront';
  * honest states.
  *
  * What it never does: compute, round, award or record anything. The score is
- * whatever the game passes, shown as given, and every points line, stat row
+ * whatever the game passes (since Round 1085 a bare number or an all digit
+ * string is written with grouped thousands, 1,000 for 1000, and anything
+ * else, 7/9 or $1.2M, is shown as given), and every points line, stat row
  * and share stays with the game that owns it.
  *
  * Motion is transforms and opacity only, on boxes whose size is fixed from
