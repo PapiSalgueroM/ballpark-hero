@@ -208,6 +208,35 @@ describe.each(SPORTS)('%s: the retirement talk on the board', (_slug, getSport) 
     expect(document.body.textContent).not.toContain('reach free agency');
   });
 
+  it('a farewell season with no deal left offers one year deals, and a push adds no year (closing check fix)', async () => {
+    const sport = getSport();
+    const { c, tq } = talkCareer(sport, 47);
+    c.contractYears = 0;
+    save(sport, c, tq, 'season');
+    mount(sport);
+    await waitFor(() => expect(button('Announce a farewell season')).toBeTruthy());
+    fireEvent.click(button('Announce a farewell season')!);
+    await waitFor(() => expect(document.body.textContent).toContain(`Farewell season, ${c.year}`));
+    fireEvent.click(button(`Play the ${c.year} season`)!);
+    await waitFor(() => expect(document.querySelector('[data-fa-window]')).toBeTruthy());
+    const terms = () => [...document.querySelectorAll('[data-fa-offer]')].map(o => o.textContent?.match(/x (\d+) yr/)?.[1]);
+    expect(terms().length).toBeGreaterThan(0);
+    expect(terms().every(y => y === '1'), `offer lengths ${terms().join(',')}`).toBe(true);
+    /* Every draw low: the push comes up and asks for length, which is the
+       branch that used to add a year. */
+    vi.spyOn(Math, 'random').mockReturnValue(0.01);
+    fireEvent.click(button('Push for more')!);
+    await waitFor(() => expect(document.body.textContent).toContain('came up'));
+    expect(terms().every(y => y === '1'), `offer lengths after a push ${terms().join(',')}`).toBe(true);
+    vi.spyOn(Math, 'random').mockImplementation(mulberry32(47));
+    fireEvent.click(button('Sign')!);
+    expect(read(sport).c.contractYears).toBe(1);
+    fireEvent.click(button(`Play the ${c.year} season`)!);
+    const after = read(sport);
+    expect(after.phase).toBe('retired');
+    expect(lastYear(after.c)).toBe(lastYear(c) + 1);
+  });
+
   it('Retire now in the middle of an offseason drops the dealt card unapplied', async () => {
     const sport = getSport();
     const { c, tq } = talkCareer(sport, 51);

@@ -12,7 +12,7 @@ import ShareButtons from '@/components/game/ShareButtons';
    Wire a new screen here, once. */
 import type { UsCareerCore, UsCareerEvent, UsCareerSeason, UsCareerSport, UsShopItem } from '@/lib/usCareerSport';
 // Round 179: real free agency, shared engine and shared screen.
-import { pushFaOffer, applyFaSigning } from '@/lib/usCareerFreeAgency';
+import { pushFaOffer, applyFaSigning, oneYearWindow } from '@/lib/usCareerFreeAgency';
 import type { FaWindow } from '@/lib/usCareerFreeAgency';
 import FreeAgencyPanel from '@/components/us-career/FreeAgencyPanel';
 /* Round 207: the extension talk, shared engine and shared card. */
@@ -471,7 +471,10 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     extDeclinedRef.current = false;
 
     if (c.contractYears <= 0) {
-      setFaWindow(sport.buildFaWindow(c, teamQuality, Math.random));
+      /* Round 1039: a farewell season's market offers one year. Cut after the
+         build, so the draws are the same ones. */
+      const fa = sport.buildFaWindow(c, teamQuality, Math.random);
+      setFaWindow(isFarewellSeason(c.retirement, c.year) ? oneYearWindow(fa) : fa);
       setTalkLine(null);
       setPhase('freeagency');
       persist(c, 'season', teamQuality);
@@ -643,7 +646,8 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   };
   const pushFa = (idx: number) => {
     if (!career || !faWindow) return;
-    const res = pushFaOffer(faWindow, idx, sport.faPushArgs(career, Math.random));
+    const args = sport.faPushArgs(career, Math.random);
+    const res = pushFaOffer(faWindow, idx, isFarewellSeason(career.retirement, career.year) ? { ...args, maxYears: 1 } : args);
     setFaWindow(res.window);
     setTalkLine(res.line);
   };
