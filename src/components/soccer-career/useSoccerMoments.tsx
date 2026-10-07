@@ -11,7 +11,7 @@ import { momentResult, otherOutcome, type DerivedSeason, type Moment } from '@/l
 import { SOCCER, type SoccerSeasonCtx } from '@/lib/season/soccer';
 import { ledgerPut } from '@/lib/season/momentsSave';
 import {
-  CALL_LINE, MOMENT_BOARD, MOMENT_LINE, MOMENT_STARS_MAX, RECREATE_LINE, applySeasonMomentsBank, momentAfter, momentRound, momentSeed,
+  CALL_LINE, MOMENT_BOARD, MOMENT_HOW, MOMENT_LINE, MOMENT_STARS_MAX, RECREATE_LINE, applySeasonMomentsBank, momentAfter, momentRound, momentSeed,
   momentSetup, momentShotRng, momentsKickoffLine, packMomentInput, settleMoment,
 } from '@/lib/season/soccerMoments';
 import type { SoccerMomentKind } from '@/lib/season/soccerEvents';
@@ -54,6 +54,7 @@ export function useSoccerMoments({ career, row, ctx, plan, key, offered, entries
       return {
         md: m.md, id: m.id, minute: m.minute, mode: m.mode, line: MOMENT_LINE[kind],
         objective: m.mode === 'recreate' ? RECREATE_LINE[kind] : CALL_LINE,
+        how: MOMENT_HOW[MOMENT_BOARD[kind]],
         taken: r.taken ? { stars: r.stars, made: r.stars >= 1 } : null,
       };
     });
@@ -69,6 +70,7 @@ export function useSoccerMoments({ career, row, ctx, plan, key, offered, entries
     }
     return {
       list,
+      feedback: 'goal',
       kickoff: momentsKickoffLine(list.filter(m => !m.taken).map(m => m.md), word),
       review,
       preload: m => { const mm = find(m); return mm ? preloadMomentBoard(MOMENT_BOARD[mm.kind as SoccerMomentKind]) : Promise.reject(new Error('no such moment')); },

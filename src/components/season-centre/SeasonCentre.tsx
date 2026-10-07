@@ -411,6 +411,12 @@ export function SeasonCentre({ model, exitLabel, onClose }: { model: CentreModel
   const soTiles = model.sport.soFar(so);
   const btn = 'h-10 shrink-0 whitespace-nowrap rounded-lg px-3 text-xs font-bold';
 
+  /* Round 1047: on a phone the fixtures take the stage's place, which unmounts
+     the match and whatever it is hosting. A moment is one go, so while one is
+     on the stage (offer, board or verdict) the fixtures stay shut and the
+     button is not drawn: there is no way to leave a board and meet its offer again. */
+  const fixturesShown = fixturesOpen && hosting === null;
+
   const stageBody = (() => {
     if (stage.kind === 'kickoff') return <KickOff model={model} onKick={() => go(1)} onStraight={toEnd} />;
     if (stage.kind === 'review') return <Review model={model} reduced={reduced} />;
@@ -461,15 +467,15 @@ export function SeasonCentre({ model, exitLabel, onClose }: { model: CentreModel
             <FixtureList model={model} played={played} current={current} />
           </aside>
           <main className="min-h-0 overflow-y-auto p-3 md:p-4" data-centre-stage>
-            {fixturesOpen ? (
+            {fixturesShown ? (
               <div className="space-y-2">
                 <button type="button" onClick={() => setFixturesOpen(false)} className="h-9 rounded-lg border border-border px-3 text-xs font-semibold">← Back</button>
                 <FixtureList model={model} played={played} current={current} />
               </div>
             ) : stageBody}
-            {!fixturesOpen && (
+            {!fixturesShown && (
               <div className="mt-4 space-y-3 md:hidden">
-                <button type="button" onClick={() => setFixturesOpen(true)} className="h-10 w-full rounded-lg border border-border text-xs font-semibold">🗓 Fixtures</button>
+                {hosting === null && <button type="button" onClick={() => setFixturesOpen(true)} className="h-10 w-full rounded-lg border border-border text-xs font-semibold" data-centre-fixtures>🗓 Fixtures</button>}
                 {!wide && <TablePanel model={model} played={played} compact />}
               </div>
             )}

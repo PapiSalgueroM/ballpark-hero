@@ -27,6 +27,8 @@ export interface CentreMoment {
   line: string;
   /** What rides on it, in the sport's words. */
   objective: string;
+  /** How its board is played, shown on the offer before the go is used. */
+  how: string;
   /** In the ledger already (the attempt is used): its stars and whether it was made. */
   taken: { stars: number; made: boolean } | null;
 }
@@ -58,6 +60,8 @@ export interface CentreMoments {
    *  is false, and the sport banks only if nothing is left to play, so a
    *  player who steps out mid season finds his moments still open. */
   bank: (final: boolean) => void;
+  /** The picture the verdict card draws, the sport's own. */
+  feedback: 'goal' | 'basket';
   /** One line for the kick off card ("3 moments are yours this season: matchdays 5, 17 and 31"). */
   kickoff: string | null;
   /** Lines for the season review. */
@@ -79,7 +83,13 @@ export function MomentStars({ stars, reduced }: { stars: number; reduced: boolea
   );
 }
 
-type Step = 'offer' | 'loading' | 'failed' | 'board' | 'verdict';
+type Step = 'offer' | 'loading' | 'failed' | 'board' | 'verdict' | 'spent';
+
+/** Focus the offer card and the board's frame as each mounts, so the keyboard
+ *  stays inside the Season Centre's dialog and Escape still leaves it (the
+ *  button that was pressed is gone by then). The card takes the focus, never
+ *  one of its buttons: a key held from the last matchday must not take a go. */
+const focusOnMount = (el: HTMLDivElement | null) => { el?.focus({ preventScroll: true }); };
 
 export function MomentHost({ moment, moments, scoreLine, reduced, onDone }: {
   moment: CentreMoment;
@@ -90,7 +100,10 @@ export function MomentHost({ moment, moments, scoreLine, reduced, onDone }: {
   /** Back to the match: `took` is false when he let it play. */
   onDone: (took: boolean) => void;
 }) {
-  const [step, setStep] = useState<Step>('offer');
+  /* a moment that is already in the ledger when this card mounts was used
+     (its board opened): it is never offered again, whatever unmounted the
+     card that used it */
+  const [step, setStep] = useState<Step>(() => (moment.taken ? 'spent' : 'offer'));
   const [verdict, setVerdict] = useState<MomentVerdict | null>(null);
   /* the model is rebuilt when the ledger is written, so the callbacks read
      the newest one and the board element is made once */
@@ -104,6 +117,8 @@ export function MomentHost({ moment, moments, scoreLine, reduced, onDone }: {
     setStep(s => (s === 'offer' || s === 'failed' ? 'loading' : s));
     try { await live.current.moments.preload(live.current.moment); } catch { if (mounted.current) setStep('failed'); return; }
     if (!mounted.current) return;
+    /* one go: an attempt already in the ledger never opens a second board */
+    if (live.current.moment.taken) { setStep('spent'); return; }
     /* used before the board is on screen */
     live.current.moments.use(live.current.moment);
     setStep('board');
@@ -119,13 +134,28 @@ export function MomentHost({ moment, moments, scoreLine, reduced, onDone }: {
   const board = useMemo(() => (step === 'board' ? live.current.moments.board(live.current.moment, done) : null), [step, key, done]);
   const badge = moment.mode === 'call' ? 'YOUR CALL' : 'RECREATE';
 
-  if (step === 'board') return <div data-moment-board data-moment-mode={moment.mode}>{board}</div>;
+  if (step === 'board') return <div tabIndex={-1} ref={focusOnMount} className="outline-none" data-moment-board data-moment-mode={moment.mode}>{board}</div>;
+  if (step === 'spent') {
+    const made = !!moment.taken?.made;
+    return (
+      <div className="space-y-3 rounded-2xl border border-border bg-card p-4" data-moment-spent data-moment-mode={moment.mode}>
+        <div className="flex items-center gap-2">
+          <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] font-black tracking-wider text-muted-foreground" data-moment-badge>{badge}</span>
+          <span className="text-xs tabular-nums text-muted-foreground">{scoreLine}</span>
+        </div>
+        <p className="text-base font-black">Your go at this one is used</p>
+        <p className="text-xs text-muted-foreground">{made ? 'It is in the book with the stars you earned.' : 'One go a moment, and this one went in the book as a miss.'}</p>
+        {made && <MomentStars stars={moment.taken?.stars ?? 0} reduced />}
+        <button type="button" autoFocus onClick={() => onDone(true)} className="h-11 w-full rounded-lg bg-emerald-600 text-sm font-bold text-black hover:bg-emerald-500" data-moment-back>▶ Back to the match</button>
+      </div>
+    );
+  }
   if (step === 'verdict' && verdict) {
     return (
       <div className="relative" data-moment-verdict={verdict.made ? 'made' : 'missed'} data-moment-mode={moment.mode}>
         {verdict.wonMatch && !reduced && <ConfettiBurst seed={confettiSeedOf(key)} />}
         <ArcadeShotFeedback
-          sport="goal"
+          sport={moments.feedback}
           success={verdict.made}
           verdict={verdict.verdict}
           points={verdict.stars}
@@ -138,13 +168,14 @@ export function MomentHost({ moment, moments, scoreLine, reduced, onDone }: {
     );
   }
   return (
-    <div className={`${reduced ? '' : 'cm-slam'} space-y-3 rounded-2xl border border-primary/40 bg-card p-4`} data-moment-offer data-moment-mode={moment.mode}>
+    <div tabIndex={-1} ref={focusOnMount} className={`${reduced ? '' : 'cm-slam'} space-y-3 rounded-2xl border border-primary/40 bg-card p-4 outline-none`} data-moment-offer data-moment-mode={moment.mode}>
       <div className="flex items-center gap-2">
         <span className="rounded bg-primary/20 px-1.5 py-0.5 text-[10px] font-black tracking-wider text-primary" data-moment-badge>{badge}</span>
         <span className="text-xs tabular-nums text-muted-foreground">{scoreLine}</span>
       </div>
       <p className="text-base font-black">{moment.line}</p>
       <p className="text-xs text-muted-foreground" data-moment-objective>{moment.objective}</p>
+      <p className="rounded-lg bg-muted/30 p-2 text-[11px] leading-snug text-muted-foreground" data-moment-how><span className="font-bold text-foreground">How it plays: </span>{moment.how}</p>
       {step === 'failed' && <p className="text-xs text-amber-400" role="alert">The pitch did not load, so nothing was used. Try again or let it play.</p>}
       <div className="flex flex-col gap-2 sm:flex-row">
         <button type="button" disabled={step === 'loading'} onClick={take} className="h-11 flex-1 rounded-lg bg-emerald-600 text-sm font-bold text-black hover:bg-emerald-500 disabled:opacity-60" data-moment-take>

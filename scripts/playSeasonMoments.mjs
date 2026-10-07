@@ -223,6 +223,14 @@ const shot = async (page, name) => { fs.mkdirSync(SHOTS, { recursive: true }); a
 const clashes = page => page.evaluate(actions => [...document.querySelectorAll('[data-season-centre] button')].map(b => b.textContent.trim()).filter(l => l && actions.some(a => l.startsWith(a))), ACTIONS);
 const boxOf = (page, sel) => page.evaluate(s => { const el = document.querySelector(s); if (!el) return null; const r = el.getBoundingClientRect(); return { left: r.left, top: r.top, width: r.width, height: r.height, right: r.right, bottom: r.bottom }; }, sel);
 
+/** Where the keyboard is, and whether the phone's Fixtures button is on screen. */
+const hostState = page => page.evaluate(() => {
+  const dialog = document.querySelector('[data-season-centre] [role="dialog"]');
+  const a = document.activeElement;
+  const fx = document.querySelector('[data-centre-fixtures]');
+  return { focusInside: !!dialog && !!a && dialog.contains(a), focus: a ? a.tagName : 'nothing', fixtures: !!fx && fx.getClientRects().length > 0 };
+});
+
 /** Open the Season Centre from the summary card and return the kick off line. */
 async function openCentre(page) {
   await page.click('[data-watch-week-by-week]');
@@ -302,8 +310,8 @@ async function playBoard(page, board, setup, how) {
 
 const allErrors = [];
 const outcomes = [];
-async function walk(tag, view, how, { leaveOnBoard = false } = {}) {
-  const W = SAVES[tag];
+async function walk(tag, view, how, { leaveOnBoard = false, leaveEarly = false, save = tag } = {}) {
+  const W = SAVES[save];
   const m = W.moments[0];
   const board = M.MOMENT_BOARD[m.kind];
   const setup = M.momentSetup(board, M.momentSeed(W.key, m.md, m.id), M.momentRound(m.stakes));
@@ -321,8 +329,10 @@ async function walk(tag, view, how, { leaveOnBoard = false } = {}) {
   const offer = await P.page.evaluate(() => ({
     badge: document.querySelector('[data-moment-badge]')?.textContent ?? '', held: document.querySelector('[data-match-clock]')?.getAttribute('data-held') ?? '',
     minute: Number(document.querySelector('[data-match-clock]')?.getAttribute('data-minute') ?? -1), md: Number(document.querySelector('[data-matchday]')?.getAttribute('data-matchday') ?? 0),
-    bar: !!document.querySelector('[data-centre-bar]'),
+    bar: !!document.querySelector('[data-centre-bar]'), how: document.querySelector('[data-moment-how]')?.textContent ?? '',
   }));
+  const offerState = await hostState(P.page);
+  check(offer.how === `How it plays: ${M.MOMENT_HOW[board]}` && offerState.focusInside, `2. ${name}: the offer says how the board is played before the go is used, and holds the focus ("${offer.how.slice(0, 50)}", on ${offerState.focus})`);
   check(offered && offer.md === m.md && offer.badge === (m.mode === 'call' ? 'YOUR CALL' : 'RECREATE'), `2. ${name}: matchday ${m.md} stops for a ${m.mode} (${offer.badge} on matchday ${offer.md})`);
   check(offer.held === 'true' && offer.minute === Math.max(0, m.minute - 1) && !offer.bar, `2. ${name}: the clock holds a beat before minute ${m.minute} (${offer.minute}) and the bar steps aside`);
   check((await savedString(P.page)) === loaded, `2. ${name}: reading the offer wrote nothing`);
@@ -338,13 +348,25 @@ async function walk(tag, view, how, { leaveOnBoard = false } = {}) {
   check(fit.sw <= fit.iw + 1 && fit.left >= -1 && fit.right <= fit.iw + 1 && fit.y === y0, `8. ${name}: the board fits (${Math.round(fit.left)} to ${Math.round(fit.right)} of ${fit.iw}, page ${fit.sw} wide) and the page did not move (${y0} then ${fit.y})`);
   const bad2 = await clashes(P.page);
   await shot(P.page, `${tag}-2-board`);
+  /* 10: the keyboard stays inside the Season Centre while the board is up
+     (the pressed button is gone), and on a phone the fixtures cannot take the
+     stage away from a moment: there is no way off a board and back to its offer */
+  const onBoard = await hostState(P.page);
+  check(onBoard.focusInside, `10. ${name}: with the board open the focus is inside the Season Centre (on ${onBoard.focus})`);
+  check(!onBoard.fixtures && !offerState.fixtures, `10. ${name}: no Fixtures button while a moment is on the stage (offer ${offerState.fixtures}, board ${onBoard.fixtures})`);
   if (leaveOnBoard) {
+    /* 10: Escape leaves the Season Centre from the board, and the go stays used */
+    await P.page.keyboard.press('Escape');
+    await P.page.waitForTimeout(300);
+    const gone = await P.page.evaluate(() => !document.querySelector('[data-season-centre]'));
+    const kept = JSON.parse(await savedString(P.page)).seasonMoments?.m ?? null;
+    check(gone && JSON.stringify(kept) === JSON.stringify([[m.md, m.id, -1]]), `10. ${name}: Escape on the board closes the Season Centre and the go stays used (closed ${gone}, ${JSON.stringify(kept)})`);
     /* 7: opened and left */
     await P.load();
     const again = await openCentre(P.page);
     const rest = M.momentsKickoffLine(W.moments.slice(1).map(x => x.md), W.plan.mode === 'table' ? 'matchday' : 'league game');
     check(again.includes(rest) && !again.includes(want), `7. ${name}: after a reload on the board the moment is not offered again ("${again.slice(0, 70)}")`);
-    const entries = JSON.parse(await savedString(P.page)).seasonMoments.m;
+    const entries = JSON.parse(await savedString(P.page)).seasonMoments?.m ?? [];
     const season = C.applyDecisions(S.SOCCER, W.row, W.ctx, W.plan, W.moments, entries);
     const g = season.games[m.md - 1];
     await clickText(P.page, '⏭ Straight to');
@@ -352,7 +374,7 @@ async function walk(tag, view, how, { leaveOnBoard = false } = {}) {
     const pill = await P.page.evaluate(md => [...document.querySelectorAll('[data-fixtures] li')].find(li => li.firstElementChild?.textContent.trim() === String(md))?.textContent ?? '', m.md);
     check(pill.includes(`${g.us}-${g.them}`), `7. ${name}: an attempt opened and left is a miss, and matchday ${m.md} shows ${g.us}-${g.them} ("${pill.slice(-12)}")`);
     const banked = JSON.parse(await savedString(P.page)).seasonMoments;
-    check(banked.banked === 1 && banked.m[0][2] === -1, `6. ${name}: the left attempt banks as a miss at the review`);
+    check(banked?.banked === 1 && banked?.m?.[0]?.[2] === -1, `6. ${name}: the left attempt banks as a miss at the review`);
     outcomes.push(`${name}: left on the board`);
     allErrors.push(...P.errors);
     await P.ctx.close();
@@ -362,7 +384,15 @@ async function walk(tag, view, how, { leaveOnBoard = false } = {}) {
   await P.page.waitForSelector('[data-moment-verdict]', { timeout: 25000 }).catch(() => {});
   await P.page.waitForTimeout(view.reduced ? 100 : 1500);
   const seen = await P.page.evaluate(() => ({ verdict: document.querySelector('[data-moment-verdict]')?.getAttribute('data-moment-verdict') ?? '', stars: Number(document.querySelector('[data-moment-stars]')?.getAttribute('data-moment-stars') ?? 0), after: document.querySelector('[data-moment-after]')?.textContent ?? '', running: document.getAnimations().filter(a => a.playState === 'running' && a.effect?.target?.closest?.('[data-moment-verdict]')).length }));
-  const entry = JSON.parse(await savedString(P.page)).seasonMoments.m[0];
+  const entry = JSON.parse(await savedString(P.page)).seasonMoments?.m?.[0];
+  /* a save with no entry here (the `used` control) fails this walk and lets the next ones run */
+  if (!check(Array.isArray(entry), `4. ${name}: the save holds the moment's entry once the board has reported (${JSON.stringify(entry ?? null)})`)) {
+    allErrors.push(...P.errors);
+    await P.ctx.close();
+    return bad1.concat(bad2);
+  }
+  const atVerdict = await hostState(P.page);
+  check(!atVerdict.fixtures && atVerdict.focusInside, `10. ${name}: on the verdict card there is still no Fixtures button and the focus is inside (${atVerdict.fixtures}, on ${atVerdict.focus})`);
   const replay = M.settleMoment(board, setup, entry.slice(3), rng());
   check(seen.verdict === (entry[2] >= 1 ? 'made' : 'missed') && seen.stars === Math.max(0, entry[2]), `4. ${name}: the verdict card shows the saved result (${seen.verdict}, ${seen.stars} stars, entry ${JSON.stringify(entry)})`);
   check(replay.stars === entry[2] && replay.won === (entry[2] >= 1), `4. ${name}: the saved entry replays in node to the same result (${replay.stars} stars, "${replay.verdict}")`);
@@ -381,6 +411,30 @@ async function walk(tag, view, how, { leaveOnBoard = false } = {}) {
   await P.page.waitForSelector('[data-full-time]', { timeout: 15000 }).catch(() => {});
   const score = await P.page.evaluate(() => document.querySelector('[data-match-clock]')?.getAttribute('data-score') ?? '');
   check(score === `${g.us}-${g.them}`, `5. ${name}: full time reads ${score}, the decided match is ${g.us}-${g.them}`);
+  if (view.width === 390) check((await hostState(P.page)).fixtures, `10. ${name}: the Fixtures button is back once the moment is done`);
+  if (leaveEarly) {
+    /* 11: stepping out with moments still to play keeps them open; moving on
+       from the summary banks what was earned, against the moments on offer */
+    await P.page.click('[data-centre-exit]');
+    await P.page.waitForTimeout(300);
+    const out = JSON.parse(await savedString(P.page));
+    const backIn = (await P.page.$('[data-watch-week-by-week]')) !== null;
+    check(out.phase === 'season_summary' && !!out.seasonMoments && out.seasonMoments.banked === undefined && backIn, `11. ${name}: stepping out early banks nothing and the way back in is still there (phase ${out.phase}, banked ${out.seasonMoments?.banked}, button ${backIn})`);
+    let led = L.ledgerPut(undefined, W.key, m.md, m.id, -1, []);
+    led = L.ledgerPut(led, W.key, m.md, m.id, entry[2], entry.slice(3));
+    const closed = M.closeSeasonMoments({ ...JSON.parse(loaded), seasonMoments: led }, CLUBS);
+    const line = closed.events[closed.events.length - 1];
+    await clickText(P.page, 'Continue');
+    await P.page.waitForFunction(() => { try { return JSON.parse(localStorage.getItem('soccerCareerSave') || '{}').phase !== 'season_summary'; } catch { return false; } }, null, { timeout: 20000 }).catch(() => {});
+    const moved = JSON.parse(await savedString(P.page));
+    check(moved.phase !== 'season_summary' && JSON.stringify(moved.seasonMoments) === JSON.stringify(closed.seasonMoments) && closed.seasonMoments.banked === 1,
+      `11. ${name}: Continue on the summary banks the season's stars as the pure function does (phase ${moved.phase}, ledger ${JSON.stringify(moved.seasonMoments).slice(0, 90)})`);
+    check(line.startsWith('🎯 Season Centre moments:') && line.includes(`of ${W.moments.length * 3} stars`) && (moved.events ?? []).includes(line), `11. ${name}: the bank's line is in his events, against the ${W.moments.length} moments on offer ("${line.slice(0, 70)}")`);
+    outcomes.push(`${name}: left early, banked at Continue`);
+    allErrors.push(...P.errors);
+    await P.ctx.close();
+    return bad1.concat(bad2, bad3);
+  }
   await clickText(P.page, '⏭ Sim the rest');
   await P.page.waitForSelector('[data-review]', { timeout: 15000 }).catch(() => {});
   await P.page.waitForTimeout(400);
@@ -417,6 +471,7 @@ try {
   bad.push(...await walk('B', { ...DESK, reduced: true }, 'skilled', { leaveOnBoard: true }));
   bad.push(...await walk('C', { ...PHONE, reduced: false }, 'skilled'));
   bad.push(...await walk('D', { ...PHONE, reduced: true }, 'skilled'));
+  bad.push(...await walk('E', { ...PHONE, reduced: true }, 'skilled', { leaveEarly: true, save: 'D' }));
   check(bad.length === 0, `9. no label on the offer, the board or the verdict starts with a walker action (${JSON.stringify([...new Set(bad)])})`);
   check(allErrors.length === 0, `no page error on any walk (${allErrors.slice(0, 2).join(' | ')})`);
   console.log(`outcomes: ${outcomes.join('; ')}`);

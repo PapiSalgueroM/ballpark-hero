@@ -111,6 +111,7 @@ import { TournamentCard, InternationalHistoryTile } from "@/components/soccer-ca
 import { beatStyle, debutMomentKey, legacyMomentKey, rivalryMomentKey, settleLoadedMoments, useCareerMoment } from "@/components/soccer-career/careerMoments";
 import { isSoccerCareerSave } from '@/lib/soccerCareerSave';
 import { reloadToRetryChunk } from '@/lib/freshBuild';
+import { readSeasonMoments } from '@/lib/season/momentsSave';
 /* Round 1045: the Season Centre loads only when a person presses for it, and
    the Ratings dialog when it is opened (step 7 of the round: the weight it
    adds is paid here, never by a budget). */
@@ -1005,6 +1006,28 @@ export default function SoccerCareer() {
     toast.success(`Joined ${newCareer.currentClub}!`);
   };
 
+  /* Round 1047: the stars from this season's Season Centre moments bank before
+     the season is left behind (its summary dismissed, or the next season
+     played), so stepping out of the Centre early never drops them. Only a
+     career holding an unbanked ledger takes this path; every other press runs
+     `step` at once, exactly as before. The bank lives with the Season Centre,
+     off the first download, so it is fetched here (it is already in memory
+     when a moment was played this visit). If it cannot be fetched the career
+     still moves on. The step is worked out once, outside the updater, and
+     only lands on the career it was pressed on, so a second press in the
+     gap cannot step twice. */
+  const stepWithMomentsBanked = (step: (c: CareerState) => CareerState) => {
+    if (!career) return;
+    const ledger = readSeasonMoments(career.seasonMoments);
+    if (!ledger || ledger.banked || ledger.m.length === 0) { setCareer(step(career)); return; }
+    import('@/lib/season/soccerMoments')
+      .then(m => m.closeSeasonMoments, () => null)
+      .then(close => {
+        const next = step(close ? close(career, clubs) : career);
+        setCareer(prev => (prev === career ? next : prev));
+      });
+  };
+
   const handleNextSeason = () => {
     if (!career) return;
     if (career.phase === "youth") {
@@ -1012,7 +1035,7 @@ export default function SoccerCareer() {
       setAcademyReport(buildAcademyReport(career, next, effectivePotential(career)));
       setCareer(next);
     } else if (career.phase === "playing") {
-      setCareer(advanceProSeason(career, clubs));
+      stepWithMomentsBanked(c => advanceProSeason(c, clubs));
     }
     /* Round 159: a played season counts as playing TODAY. The header's games
        played, points and rank only ever moved at retirement, so a whole
@@ -1043,7 +1066,7 @@ export default function SoccerCareer() {
 
   const handleDismissSummary = () => {
     if (!career) return;
-    setCareer(dismissSummary(career, clubs));
+    stepWithMomentsBanked(c => dismissSummary(c, clubs));
   };
 
   const handleDismissNewspaper = () => {
