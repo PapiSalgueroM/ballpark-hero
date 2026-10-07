@@ -290,7 +290,7 @@ try {
         await activate(button('Back to your day')); await activate(page.getByRole('button', { name: /^Life off court/ }));
         const choice = careerApi.currentLifeDecision(expectedCareer).options.find(option => !option.reason);
         assert(choice);
-        const options = page.locator('[data-court-panel="life"] > button').filter({ hasText: choice.label });
+        const options = page.locator('[data-court-panel="life"] button').filter({ hasText: choice.label });
         await activate(options);
         expectedCareer = careerApi.chooseLifeDecision(expectedCareer, choice.id);
         assert.deepEqual(await readSave(), expectedCareer, 'Native life choice applies its actual resource changes');
