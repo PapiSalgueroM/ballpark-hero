@@ -17,7 +17,19 @@ import type { CareerState } from '@/lib/soccerCareerEngine';
 import motion from './ThroughBallBoard.module.css';
 
 type Phase = 'intro' | 'ready' | 'playing' | 'resolve' | 'roundEnd' | 'done';
-type Mode = 'daily' | 'practice';
+type Mode = 'daily' | 'practice' | 'match';
+
+/** Round 1047: one ball played inside a match (a Season Centre moment):
+ *  round `round` of the run `seed` deals, no daily record read or written,
+ *  reported once when the pass has been played and drawn. With no `match`
+ *  nothing about the training ground changes (src/test/drillBoardMarkup.test.tsx). */
+export interface ThroughBallMatch {
+  seed: number;
+  round: number;
+  onResult: (r: { won: boolean; points: number; verdict: string; input: number[] }) => void;
+}
+/* A match input is kept to four places, the precision the save holds. */
+const r4 = (v: number) => Math.round(v * 10000) / 10000;
 interface Aim { angle: number; weight: number; }
 const EMPTY: ThroughBallRecord = { rounds: 0, count: 0, score: 0, banked: false };
 const START_AIM: Aim = { angle: 0, weight: 0.55 };
@@ -29,7 +41,12 @@ const clampAim = (aim: Aim): Aim => ({
   weight: Math.round(Math.max(0, Math.min(1, aim.weight)) * 1000) / 1000,
 });
 
-function Rules({ trains }: { trains: string }) {
+function Rules({ trains, match }: { trains: string; match?: boolean }) {
+  if (match) return <div className="space-y-2 text-xs text-muted-foreground">
+    <p>One ball. Your runner starts onside, waits a moment, then cuts in across the defensive line. Drag on the pitch to the spot you want the ball to stop: where you drag is the direction, how far is the weight. Let go to play it.</p>
+    <p>It comes off when it goes through a gap in the line, stops short of the keeper and lands on his run in time. Play it after he crosses the line and he is offside. Too soft and it dies before the line or behind him; too hard and it runs to the keeper or away from him.</p>
+    <p>Or focus the pitch: Left and Right turn the aim, Up and Down set the weight, Space starts the run and plays the pass. Pause freezes the clock.</p>
+  </div>;
   return <div className="space-y-2 text-xs text-muted-foreground">
     <p>Ten runs. Your runner starts onside, waits a moment, then cuts in across the defensive line. Drag on the pitch to the spot you want the ball to stop: where you drag is the direction, how far is the weight. Let go to play it.</p>
     <p>A pass scores 10 when it goes through a gap in the line, stops short of the keeper and lands on his run in time. Play it after he crosses the line and he is offside. Too soft and it dies before the line or behind him; too hard and it runs to the keeper or away from him. Off the side of the pitch is out of play. Later runs are quicker and the gaps get tighter. The clock and his timings stay on screen the whole run, including with reduced motion.</p>
@@ -39,22 +56,25 @@ function Rules({ trains }: { trains: string }) {
   </div>;
 }
 
-export default function ThroughBallBoard({ career, canBank, onBank, onBack }: {
+export default function ThroughBallBoard({ career, canBank, onBank, onBack, match }: {
+  /** Round 1047: play one ball inside a match instead of the training ground's ten. */
+  match?: ThroughBallMatch;
   career: CareerState; canBank: boolean;
   onBank: (kind: DrillKind, count: number) => void; onBack: () => void;
 }) {
   const SLUG = DRILL_META.throughball.slug;
   const trains = drillStatFor('throughball', career.position).label;
   const today = useRef(getTodayET()).current;
-  const [daily, setDaily] = useState(() => readDailyRecord(SLUG, today, validateThroughBallRecord));
-  const [mode, setMode] = useState<Mode>('daily');
-  const [run, setRun] = useState(() => buildThroughBallRun(drillSeed('throughball', today)));
-  const [phase, setPhase] = useState<Phase>('intro');
-  const phaseRef = useRef<Phase>('intro');
+  const [daily, setDaily] = useState(() => (match ? null : readDailyRecord(SLUG, today, validateThroughBallRecord)));
+  const [mode, setMode] = useState<Mode>(match ? 'match' : 'daily');
+  const [run, setRun] = useState(() => buildThroughBallRun(match ? match.seed : drillSeed('throughball', today)));
+  const [phase, setPhase] = useState<Phase>(match ? 'ready' : 'intro');
+  const phaseRef = useRef<Phase>(match ? 'ready' : 'intro');
+  const told = useRef(false);
   const [record, setRecord] = useState<ThroughBallRecord>(EMPTY);
   const recordRef = useRef<ThroughBallRecord>(EMPTY);
   const bankedRef = useRef(false);
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(match ? match.round : 0);
   const [aim, setAimState] = useState<Aim>(START_AIM);
   const aimRef = useRef<Aim>(START_AIM);
   const dragging = useRef(false);
@@ -141,7 +161,8 @@ export default function ThroughBallBoard({ career, canBank, onBank, onBack }: {
     if (mode === 'daily' && restoreNewerDaily()) return;
     dragging.current = false;
     move('resolve'); stopClock(); setSeconds(press);
-    const settled = takeThroughBall({ ...aimRef.current, press }, setup);
+    const played = match ? { angle: r4(aimRef.current.angle), weight: r4(aimRef.current.weight), press: r4(press) } : { ...aimRef.current, press };
+    const settled = takeThroughBall(played, setup);
     setResult(settled);
     const previous = recordRef.current;
     const count = previous.count + Number(settled.won);
@@ -149,6 +170,7 @@ export default function ThroughBallBoard({ career, canBank, onBank, onBack }: {
     const token = ++reveal.current;
     flight.launch(() => {
       if (mounted.current && reveal.current === token && phaseRef.current === 'resolve') move(recordRef.current.rounds === 10 ? 'done' : 'roundEnd');
+      if (match && !told.current) { told.current = true; match.onResult({ won: settled.won, points: settled.points, verdict: settled.verdict, input: [played.angle, played.weight, played.press] }); }
     });
   };
 
@@ -187,6 +209,7 @@ export default function ThroughBallBoard({ career, canBank, onBank, onBack }: {
       if (document.hidden) return;
       elapsed.current = 0; setSeconds(0); move('playing'); startClock();
     } else if (phaseRef.current === 'playing') resolveRef.current(activeSeconds());
+    else if (match) return;
     else if (phaseRef.current === 'resolve' || phaseRef.current === 'roundEnd') advance();
   };
   const resume = () => {
@@ -246,14 +269,14 @@ export default function ThroughBallBoard({ career, canBank, onBank, onBack }: {
 
   return <div className={`p-3 space-y-2 ${motion.board}`} data-through-ball-board data-mode={mode} data-phase={phase}>
     <div className="flex items-center justify-between gap-2">
-      <button onClick={leave} className="px-2 text-xs font-bold text-muted-foreground">‹ Drills</button>
+      {match ? <span className="w-11" /> : <button onClick={leave} className="px-2 text-xs font-bold text-muted-foreground">‹ Drills</button>}
       <h3 className="text-sm font-black">🎯 Through Ball</h3>
       <Dialog open={help} onOpenChange={open => { if (open) pause(); helpRef.current = open; setHelp(open); }}>
         <DialogTrigger asChild><button aria-label="Through Ball rules" className="w-11 rounded-lg bg-muted/40 font-black">?</button></DialogTrigger>
         <DialogContent className={`w-[calc(100%-24px)] max-w-sm max-h-[85vh] overflow-y-auto p-5 ${motion.rules}`} onKeyDown={event => { if (event.key === 'Escape') event.stopPropagation(); }}>
           <DialogTitle>Through Ball rules</DialogTitle>
           <DialogDescription>Read his run, then weight it into his path.</DialogDescription>
-          <Rules trains={trains} />
+          <Rules trains={trains} match={!!match} />
         </DialogContent>
       </Dialog>
     </div>
@@ -263,7 +286,7 @@ export default function ThroughBallBoard({ career, canBank, onBank, onBack }: {
       <button onClick={() => startRun('daily')} className="w-full rounded-lg bg-emerald-600 px-3 font-black text-black text-sm">{daily?.rounds === 10 ? 'View today’s result' : daily?.rounds ? 'Resume today’s ten' : 'Play today’s ten'}</button>
       <button onClick={() => startRun('practice')} className="w-full rounded-lg bg-muted/40 px-3 text-sm font-bold">Practice, no banking</button>
     </div> : <>
-      <div className="flex justify-between gap-2 text-xs font-bold tabular-nums"><span>{mode === 'daily' ? 'Today' : 'Practice'} · Ball {Math.min(index + 1, 10)}/10</span><span data-through-score>{record.score}/100 · {record.count} through</span></div>
+      {match ? <div className="text-center text-xs font-bold" data-through-match>One ball. Read his run, then weight it into his path.</div> : <div className="flex justify-between gap-2 text-xs font-bold tabular-nums"><span>{mode === 'daily' ? 'Today' : 'Practice'} · Ball {Math.min(index + 1, 10)}/10</span><span data-through-score>{record.score}/100 · {record.count} through</span></div>}
       <div className={motion.field} tabIndex={0} role="group" aria-label="Through Ball pitch, Left and Right aim, Up and Down set the weight, Space starts the run or plays the pass" onKeyDown={event => {
         if (event.target !== event.currentTarget || event.repeat || pausedRef.current || helpRef.current) return;
         const turns: Record<string, [number, number]> = { ArrowLeft: [-ANGLE_STEP, 0], ArrowRight: [ANGLE_STEP, 0], ArrowUp: [0, WEIGHT_STEP], ArrowDown: [0, -WEIGHT_STEP] };
@@ -298,7 +321,7 @@ export default function ThroughBallBoard({ career, canBank, onBank, onBack }: {
         <button onClick={() => nudge(0, WEIGHT_STEP)} disabled={!canAim} className="rounded-lg border border-border bg-muted/20 text-xs font-bold disabled:opacity-50">Harder</button>
       </div>
       <div className="flex gap-2">
-        <button onClick={action} onKeyDown={event => { if (event.repeat && (event.key === ' ' || event.key === 'Enter')) event.preventDefault(); }} disabled={paused || phase === 'done'} data-through-action className="flex-1 rounded-lg bg-emerald-600 text-black text-sm font-black disabled:opacity-50">{actionText}</button>
+        <button onClick={action} onKeyDown={event => { if (event.repeat && (event.key === ' ' || event.key === 'Enter')) event.preventDefault(); }} disabled={paused || phase === 'done' || (!!match && (phase === 'resolve' || phase === 'roundEnd'))} data-through-action className="flex-1 rounded-lg bg-emerald-600 text-black text-sm font-black disabled:opacity-50">{match && (phase === 'resolve' || phase === 'roundEnd') ? 'Played' : actionText}</button>
         <button onClick={paused ? resume : pause} disabled={!active} className="w-20 rounded-lg bg-muted/40 text-xs font-bold disabled:opacity-50">{paused ? 'Resume' : 'Pause'}</button>
       </div>
       <div className="min-h-10 text-center text-xs font-bold" aria-live="polite">{result && <p data-through-verdict={result.outcome} className={`${motion.reply} ${result.won ? 'text-emerald-400' : 'text-amber-300'}`}>{result.verdict}</p>}</div>
@@ -309,7 +332,7 @@ export default function ThroughBallBoard({ career, canBank, onBank, onBack }: {
           {mode === 'practice' && <button onClick={() => startRun('practice')} className="w-full rounded-lg bg-muted/40 text-sm font-bold">Another practice</button>}
         </>}
       </div>
-      <button onClick={changeMode} className="w-full rounded-lg bg-muted/20 text-xs font-bold">Daily / practice menu</button>
+      {!match && <button onClick={changeMode} className="w-full rounded-lg bg-muted/20 text-xs font-bold">Daily / practice menu</button>}
     </>}
   </div>;
 }

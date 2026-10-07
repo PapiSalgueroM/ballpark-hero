@@ -11,7 +11,12 @@
      a late one in a derby is a harder round than a dead rubber.
    - The wall shot's spray and keeper draw from a generator keyed the same
      way and made fresh for every settle, so the same input always gives the
-     same result. The other three engines draw nothing.
+     same result. A moment is one shot, so that stream is the first of eight
+     keyed ones on which the textbook strike scores (the middle of the gap, up
+     high, as
+     it opens widest, medium power; scripts/simSeasonMoments.mjs measures it at
+     119 or 120 of 120 moments): played right it goes in, anything else
+     takes its chances. The other three engines draw nothing.
    - The input is rounded to four places before it is settled, so the entry
      the save keeps replays to exactly the result the player saw.
    - Stars: none for a miss; a make earns one to three by how well it was
@@ -24,7 +29,7 @@ import type { CareerState } from '../soccerCareerEngine';
 import { keyedRng } from '../keyedRng';
 import {
   ROUNDS_PER_RUN, drillForPosition, drillHeadroom, drillStatFor,
-  buildWallShotRun, takeWallShot, buildTackleRun, makeTackle, buildGloveRun, makeSave,
+  buildWallShotRun, takeWallShot, wallNextPeak, wallTravel, buildTackleRun, makeTackle, buildGloveRun, makeSave,
   type WallShotSetup, type TackleSetup, type GloveSetup, type PositionDrillKind,
 } from '../careerDrills';
 import { LEAD_IDEAL, buildThroughBallRun, collectWindow, takeThroughBall, type ThroughBallSetup } from '../throughBallDrill';
@@ -50,9 +55,28 @@ export function momentRound(stakes: number): number {
   return Math.min(ROUNDS_PER_RUN - 1, 2 + Math.round(s * 5));
 }
 
-/** A fresh generator for one settle of the wall shot. */
-export function momentShotRng(key: string, md: number, id: number): () => number {
-  return keyedRng(`${momentTag(key, md, id)}|shot`);
+/** The textbook strike on a wall shot: the middle of the gap, up high,
+ *  medium power, timed to arrive as the gap is widest. */
+export function textbookStrike(setup: WallShotSetup): number[] {
+  const power = 0.6;
+  let peak = wallNextPeak(setup, 0);
+  if (peak - wallTravel(power) < 0) peak += setup.period;
+  return packMomentInput([setup.gapCentre, 0.85, power, peak - wallTravel(power)]);
+}
+
+const SHOT_STREAMS = 8;
+/** A fresh generator for one settle of the wall shot: the first of the
+ *  moment's keyed streams on which the textbook strike scores (the first one
+ *  when none does, or when no setup is given). */
+export function momentShotRng(key: string, md: number, id: number, setup?: WallShotSetup): () => number {
+  const tag = `${momentTag(key, md, id)}|shot`;
+  if (setup) {
+    const [x, y, power, press] = textbookStrike(setup);
+    for (let n = 0; n < SHOT_STREAMS; n += 1) {
+      if (takeWallShot({ x, y, power, press }, setup, keyedRng(`${tag}|${n}`)).won) return keyedRng(`${tag}|${n}`);
+    }
+  }
+  return keyedRng(`${tag}|0`);
 }
 
 export function momentSetup(board: PositionDrillKind, seed: number, round: number): MomentSetup {
