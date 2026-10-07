@@ -113,6 +113,10 @@
           Hall +1.20 [-0.46, 2.86]  headline +0.9% [-4.8, 6.2]
      nhl  peak +0.12 [-0.00, 0.25]  legacy +1.8% [-0.4, 3.7]
           Hall +0.55 [-1.05, 2.15]  headline +3.0% [-1.8, 7.3]
+     Rerun after review with the show time check (same seeds): nfl, nba and
+     mlb identical to the last digit; nhl peak +0.13 [0.00, 0.25], legacy
+     +1.8% [-0.3, 3.7], Hall +0.60 [-1.00, 2.20], headline +3.0% [-1.8, 7.4],
+     so the check skipped a handful of NHL later cards in 6000 careers.
      6b on the summer loop: median career majors 0 in all four, a major
      ever won by 4.5, 16.9, 7.6 and 15.5 percent, Hall 15.1, 30.1, 32.0 and
      27.9 percent (floors: median 0, at most 25 percent, Hall at least 5).
