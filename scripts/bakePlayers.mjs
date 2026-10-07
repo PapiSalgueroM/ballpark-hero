@@ -125,6 +125,9 @@ const ENGINE_LEAGUE_TO_POOL = {
   'Serie B': 'Serie B',
   'Ligue 2': 'Ligue 2',
   'Segunda División': 'Segunda División',
+  // Release AI: Round 1035's A-League Men (league 23, Release AH) never got its
+  // row, so the bake stopped on it; 'A-League' is already in the League union.
+  'A-League Men': 'A-League',
 };
 
 /* ------------------------------------------------------------------ */
