@@ -1,0 +1,121 @@
+name: Tycoon queued goal flights
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - codex/tycoon-goal-flight-1087
+  pull_request:
+    paths:
+      - .github/workflows/tycoon-goal-flight.yml
+      - src/components/tycoon/TycoonPitch.tsx
+      - scripts/simTycoonGoalFlight.mjs
+      - scripts/qa/tycoonGoalFlight1087.mjs
+
+permissions:
+  contents: read
+concurrency:
+  group: tycoon-goal-flight-1087-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+      VITEST_MAX_FORKS: 1
+      VITEST_MIN_FORKS: 1
+      SEO_SPLIT_BASE_REF: HEAD
+      SIM_OFFLINE_RECEIPT: tycoon-goal-flight-artifacts/transport.log
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Prepare remote verification
+        run: |
+          mkdir -p tycoon-goal-flight-artifacts
+          git rev-parse HEAD > tycoon-goal-flight-artifacts/source-head.txt
+          git rev-parse 'HEAD^{tree}' > tycoon-goal-flight-artifacts/source-tree.txt
+          sha256sum package.json package-lock.json > tycoon-goal-flight-artifacts/dependencies-before.txt
+          npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const lock = JSON.parse(fs.readFileSync('package-lock.json'));
+          const rows = Object.entries(lock.packages).filter(([p]) => p.startsWith('node_modules/') && fs.existsSync(p + '/package.json')).map(([p, e]) => {
+            const version = JSON.parse(fs.readFileSync(p + '/package.json')).version;
+            assert.equal(version, e.version); return { path: p, version };
+          });
+          assert(rows.length > 0);
+          fs.writeFileSync('tycoon-goal-flight-artifacts/installed-before.json', JSON.stringify(rows, null, 2));
+          NODE
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+      - name: Actual app types and build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee tycoon-goal-flight-artifacts/types.log
+          npm run build 2>&1 | tee tycoon-goal-flight-artifacts/build.log
+      - name: Cache actual template fonts
+        id: assets
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: node scripts/qa/tycoonGoalFlight1087.mjs --prefetch-fonts-only 2>&1 | tee tycoon-goal-flight-artifacts/fonts.log
+      - name: Actual outcomes and effective copied faults
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.assets.outcome == 'success' }}
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" xvfb-run -a node scripts/simTycoonGoalFlight.mjs 2>&1 | tee tycoon-goal-flight-artifacts/outcomes.log
+      - name: Original relevant gameplay and score checks
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simTycoonPitch simTycoonPitchRunner simStadiumTycoon simTycoonClock simTycoonAway simTycoonAwayMatchdays simTycoonLeague simTycoonHelp simTycoonSetPiece simTycoonSetPiecePage simTycoonRooms simTycoonPacks simTycoonGear simScoringCoverage simScoreShown; do
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "tycoon-goal-flight-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: All built readers and source anchors
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings simSeoMetaSplit simHomeCopy simHarnessAnchors; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "tycoon-goal-flight-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Preserve engines data fixtures dependencies and source
+        if: ${{ !cancelled() }}
+        run: |
+          git diff --exit-code 5b70b05f6df7b15f64b8c5ddf1f4b7d0c7cd4c7f HEAD -- src/lib src/data src/hooks src/integrations src/types scripts/fixtures package.json package-lock.json
+          git diff --exit-code HEAD -- src scripts .github/workflows/tycoon-goal-flight.yml
+          sha256sum package.json package-lock.json > tycoon-goal-flight-artifacts/dependencies-after.txt
+          cmp tycoon-goal-flight-artifacts/dependencies-before.txt tycoon-goal-flight-artifacts/dependencies-after.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const before = JSON.parse(fs.readFileSync('tycoon-goal-flight-artifacts/installed-before.json'));
+          const after = before.map(row => ({ path: row.path, version: JSON.parse(fs.readFileSync(row.path + '/package.json')).version }));
+          assert.deepEqual(after, before);
+          fs.writeFileSync('tycoon-goal-flight-artifacts/installed-after.json', JSON.stringify(after, null, 2));
+          NODE
+          if test -f tycoon-goal-flight-artifacts/transport.log; then test ! -s tycoon-goal-flight-artifacts/transport.log; fi
+      - name: Preserve verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tycoon-goal-flight-1087-${{ github.run_id }}-${{ github.run_attempt }}
+          path: tycoon-goal-flight-artifacts/
+          retention-days: 3
+          if-no-files-found: error

@@ -1,3 +1,23 @@
+## Codex tycoon-goal-flight-1087 preparation, 2026-10-07
+
+Independent managed branch codex/tycoon-goal-flight-1087, base 5b70b05f6df7b15f64b8c5ddf1f4b7d0c7cd4c7f.
+Objective: each actual queued goal replay visibly starts on the pitch and
+lands at the actual scoring end, including consecutive same-side goals.
+Existing loop/score/engine events remain intact. Per-ID CSS keyframe begins at
+field centre and lands at unchanged engine-side endpoint in700ms. Queue lifetimes
+1300/250ms and reduced-motion immediate release are preserved. No new input,
+help/data/scoring/schema/save path or timer. This is an illustrative replay,
+not a claim of simulated shot coordinates. Verification: actual compiled component
+in remote Chromium, engine-generated replays, natural start/mid/end rectangles,
+same/opposite sides, compressed/reduced motion, full engine/RNG/save holds,
+effective copied faults and pinned original flight rejection; original pitch
+checks and all20readers. Finite component proof, not actual-route campaign proof.
+
+All runtime/install/build/browser/oracle processes run in remote GitHub Actions.
+Preparation source authored, verification pending. No ready/live/merge/publish
+claim. Claude E owns release integration, What's New, any snapshot rebuild and
+main. Frozen AL-ready branches held. Root drafts and seven stashes untouched.
+
 ## Release AK LIVE, 2026-10-07 15:12 EDT, and the split of work with Codex
 
 Claude lane (session E, a new lead: session D stopped at its weekly limit with AK's gate still running).

@@ -167,6 +167,7 @@ export default function TycoonPitch({
 
       <span
         aria-hidden="true"
+        key={replay ? `ball-${replay.id}` : 'ball-play'}
         data-ball
         data-ball-at={ballAt}
         data-replay-id={replay?.id}
@@ -199,7 +200,8 @@ export default function TycoonPitch({
         .st-push-for { transform: translateX(calc(var(--shift) + 10%)); }
         .st-push-against { transform: translateX(calc(var(--shift) - 10%)); }
         .st-ball { transition: left 1.1s ease-in-out, top 1.1s ease-in-out; }
-        .st-ball-shot { transition-duration: 0.7s; transition-timing-function: ease-in; }
+        @keyframes stShot { from { left: 50%; top: 50%; } }
+        .st-ball-shot { transition: none; animation: stShot 0.7s ease-in both; }
         .st-ball-landed { transition: none; }
         @keyframes stDrift { from { transform: translate(0, 0); } to { transform: translate(var(--dx), var(--dy)); } }
         .st-drift { animation: stDrift var(--dd) ease-in-out infinite alternate; }
@@ -212,7 +214,7 @@ export default function TycoonPitch({
         @keyframes stSpark { 0% { opacity: 1; transform: translate(0, 0); } 100% { opacity: 0; transform: translate(var(--sx), var(--sy)); } }
         .st-spark { opacity: 0; animation: stSpark 450ms ease-out forwards; }
         @media (prefers-reduced-motion: reduce) {
-          .st-drift, .st-ripple, .st-pop-a, .st-pop-b { animation: none; }
+          .st-drift, .st-ripple, .st-pop-a, .st-pop-b, .st-ball { animation: none; }
           .st-spark { animation: none; display: none; }
           .st-team, .st-ball { transition: none; }
         }
