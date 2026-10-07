@@ -122,6 +122,9 @@ console.log('7) the hand rolled dialogs behave, the banner takes focus, the tick
     ['src/components/nascar-driver/NascarDriverHowToPlay.tsx', 1],
     ['src/pages/StadiumTycoon.tsx', 2],
     ['src/pages/SoccerCareer.tsx', 2],
+    /* Round 1045: the Season Centre overlay and its entry's plain tile */
+    ['src/components/season-centre/SeasonCentre.tsx', 1],
+    ['src/components/soccer-career/SoccerSeasonCentre.tsx', 1],
   ];
   for (const [f, n] of OVERLAYS) {
     const s = strip(read(f));
@@ -139,7 +142,7 @@ console.log('7) the hand rolled dialogs behave, the banner takes focus, the tick
   if (!/aria-label=\{userPaused \? 'Resume the scores ticker' : 'Pause the scores ticker'\}/.test(ticker)) {
     fail('the ticker pause button is gone or lost its state naming');
   }
-  console.log('   7 dialogs across 5 files, the banner announces and focuses, the pause button stands');
+  console.log('   9 dialogs across 7 files, the banner announces and focuses, the pause button stands');
 }
 
 if (CONTROL) {
