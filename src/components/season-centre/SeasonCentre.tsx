@@ -9,7 +9,7 @@
    column modal that never scrolls the page; the phone is one column with a
    fixed bottom bar and the fixtures behind a tile with a back button.
    Only arrival animates, with the shared kit's classes; no number counts. */
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { soFar, tableAt, type DerivedGame, type DerivedSeason, type SeasonWords } from '@/lib/season/core';
 import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';
 import { CelebrationStyles } from '@/components/club-manager/CelebrationStyles';
@@ -344,10 +344,19 @@ export function SeasonCentre({ model, exitLabel, onClose }: { model: CentreModel
   const [postersSeen] = useState(() => new Set<number>());
 
   useEffect(() => {
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => { document.body.style.overflow = prev; };
+    /* the scroll lock pads the body by the scrollbar it hides, so the page
+       behind does not shift sideways when the overlay opens or closes */
+    const body = document.body;
+    const prev = { overflow: body.style.overflow, paddingRight: body.style.paddingRight };
+    const bar = window.innerWidth - document.documentElement.clientWidth;
+    if (bar > 0) body.style.paddingRight = `${(parseFloat(window.getComputedStyle(body).paddingRight) || 0) + bar}px`;
+    body.style.overflow = 'hidden';
+    return () => { body.style.overflow = prev.overflow; body.style.paddingRight = prev.paddingRight; };
   }, []);
+  /* focus goes back to the Season Centre when the help sheet closes, so Escape still leaves it */
+  const dialogRef = useRef<HTMLDivElement | null>(null);
+  const setDialog = useCallback((el: HTMLDivElement | null) => { dialogRef.current = el; focusDialogOnMount(el); }, []);
+  const closeHelp = useCallback(() => { setHelpOpen(false); dialogRef.current?.focus(); }, [setHelpOpen]);
 
   const go = useCallback((md: number) => {
     setFt(false);
@@ -359,8 +368,12 @@ export function SeasonCentre({ model, exitLabel, onClose }: { model: CentreModel
   const toEnd = useCallback(() => { setPlayed(M); setFt(true); setStage({ kind: 'review' }); }, [M]);
   const current = stage.kind === 'match' || stage.kind === 'poster' ? stage.md : null;
   const onFullTime = useCallback(() => { if (current !== null) { setPlayed(p => Math.max(p, current)); setFt(true); } }, [current]);
+  /* the next big game from the very next matchday on; when that next one is
+     the big game the ▶ button already plays it (poster first), so ⏩ only
+     shows for a big game further on and never jumps over one */
   let nextBig: number | null = null;
-  for (let md = played + 2; md <= M && nextBig === null; md += 1) if (postersFor(s, md).length) nextBig = md;
+  for (let md = played + 1; md <= M && nextBig === null; md += 1) if (postersFor(s, md).length) nextBig = md;
+  if (nextBig !== null && nextBig <= played + 1) nextBig = null;
   const roundWord = s.mode === 'table' ? model.words.round : 'League game';
   const keepsSheets = model.keepsSheets;
   const so = soFar(s, played);
@@ -390,7 +403,7 @@ export function SeasonCentre({ model, exitLabel, onClose }: { model: CentreModel
         aria-modal="true"
         aria-label={model.words.title}
         tabIndex={-1}
-        ref={focusDialogOnMount}
+        ref={setDialog}
         onKeyDown={escapeCloses(onClose)}
         className="relative flex h-full w-full max-w-[1100px] flex-col overflow-hidden bg-background outline-none md:h-[min(860px,calc(100vh-2rem))] md:rounded-2xl md:border md:border-border"
       >
@@ -457,7 +470,7 @@ export function SeasonCentre({ model, exitLabel, onClose }: { model: CentreModel
           )}
           {stage.kind === 'review' && <button type="button" className={`${btn} flex-1 basis-full bg-emerald-600 text-black sm:basis-0`} onClick={onClose}>{exitLabel}</button>}
         </div>)}
-        {helpOpen && <SeasonCentreHelp words={model.help} onClose={() => setHelpOpen(false)} />}
+        {helpOpen && <SeasonCentreHelp words={model.help} onClose={closeHelp} />}
       </div>
     </div>
   );

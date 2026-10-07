@@ -36,13 +36,15 @@ const HELP: HelpWords = {
   controls: '▶ plays the next matchday. ⏩ jumps to the next big game (a derby, halfway, the title or the final day). ⏭ goes straight to the end. 1x and 3x set the clock, Results shows each match at full time.',
   examples: [
     { head: 'A matchday', body: 'Matchday 12: you win 2-1 at home and score in the 67th minute, rated 7.6. The table moves you from 6th to 4th (▲2).' },
-    { head: 'An injury', body: 'Out for three weeks with a hamstring: the club plays matchdays 14 to 16 without you. Your games played do not move. The table does.' },
-    { head: 'Results only', body: 'A season the game has no verified table for (before 1995-96, a league outside the big five, or a season cut short) shows your league games with no table and no position.' },
+    { head: 'An injury', body: 'Out for five weeks with a hamstring in a 38 game season: five weeks out of a 46 week year is four matchdays, so the club plays matchdays 14 to 17 without you. Your games played do not move. The table does.' },
+    { head: 'Results only', body: 'A season the game has no verified table for (before 1995-96, a league outside the big five, or a season cut short) shows your league games with no table. If your season summary has a finish, the review still prints it.' },
   ],
   footnote: 'Cup ties and European nights count in your totals as "Cups and other games" but are not shown match by match yet. Clubs level on points are split by goal difference, then goals scored: this game\'s rule.',
 };
 
-const exitLabelOf = (mode: 'live' | 'watch') => (mode === 'live' ? 'Back to the papers' : 'Back to your career');
+/* live mode opens over the newspaper, except on a season with no news (the
+   summary card) or a severe injury (the rehab choice), where there is no paper */
+const exitLabelOf = (mode: 'live' | 'watch', phase: string) => (mode === 'live' && phase === 'newspaper' ? 'Back to the papers' : 'Back to your career');
 
 const RESULTS_WORDS = 'Results only: the game does not have a verified table for this league that season.';
 
@@ -117,7 +119,7 @@ export function Tile({ text, exitLabel, onClose, onRetry }: { text: string; exit
 }
 
 function CentreBody({ career, clubs, row, mode, onClose }: SoccerSeasonCentreProps) {
-  const exitLabel = exitLabelOf(mode);
+  const exitLabel = exitLabelOf(mode, career.phase);
   const ctx = useMemo(() => buildSoccerSeasonCtx(career, clubs, row), [career, clubs, row]);
   const key = SOCCER.seasonKey(row, ctx);
   const season = useMemo(() => (key ? deriveSeason(SOCCER, row, ctx) : null), [key, row, ctx]);
@@ -128,7 +130,7 @@ function CentreBody({ career, clubs, row, mode, onClose }: SoccerSeasonCentrePro
 
 export default function SoccerSeasonCentre(props: SoccerSeasonCentreProps) {
   return (
-    <CentreBoundary onClose={props.onClose} exitLabel={exitLabelOf(props.mode)}>
+    <CentreBoundary onClose={props.onClose} exitLabel={exitLabelOf(props.mode, props.career.phase)}>
       <CentreBody {...props} />
     </CentreBoundary>
   );

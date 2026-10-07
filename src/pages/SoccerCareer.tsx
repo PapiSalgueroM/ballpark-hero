@@ -106,6 +106,7 @@ import { useRevealScroll } from "@/hooks/useRevealScroll";
 import { TournamentCard, InternationalHistoryTile } from "@/components/soccer-career/InternationalPanel";
 import { beatStyle, debutMomentKey, legacyMomentKey, rivalryMomentKey, settleLoadedMoments, useCareerMoment } from "@/components/soccer-career/careerMoments";
 import { isSoccerCareerSave } from '@/lib/soccerCareerSave';
+import { reloadToRetryChunk } from '@/lib/freshBuild';
 /* Round 1045: the Season Centre loads only when a person presses for it, and
    the Ratings dialog when it is opened (step 7 of the round: the weight it
    adds is paid here, never by a budget). */
@@ -113,7 +114,10 @@ const SoccerSeasonCentre = lazy(() => import("@/components/soccer-career/SoccerS
 const SeasonRatings = lazy(() => import("@/components/soccer-career/SeasonRatings"));
 /* Round 1045: a boundary inside the lazy chunk cannot catch the chunk failing
    to load (a deploy swapped the files), so the mount carries its own: the
-   overlay says so with Retry and Close, and the save is never touched. */
+   overlay says so with Retry and Close, and the save is never touched.
+   Retry reloads the page (src/lib/freshBuild.ts, Round 832): a lazy import
+   that failed stays failed for the life of the page, so a remount alone
+   would throw the same error again. The save is already on disk. */
 class CentreMountBoundary extends Component<{ onClose: () => void; what?: string; children: ReactNode }, { failed: boolean; tries: number }> {
   state = { failed: false, tries: 0 };
   static getDerivedStateFromError() { return { failed: true }; }
@@ -121,10 +125,10 @@ class CentreMountBoundary extends Component<{ onClose: () => void; what?: string
     if (!this.state.failed) return <Fragment key={this.state.tries}>{this.props.children}</Fragment>;
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4" data-season-centre>
-        <div role="dialog" aria-modal="true" aria-label={this.props.what ?? "Season Centre"} className="w-full max-w-sm space-y-3 rounded-2xl border border-border bg-card p-4 text-center">
+        <div role="dialog" aria-modal="true" aria-label={this.props.what ?? "Season Centre"} tabIndex={-1} ref={focusDialogOnMount} onKeyDown={escapeCloses(this.props.onClose)} className="w-full max-w-sm space-y-3 rounded-2xl border border-border bg-card p-4 text-center outline-none">
           <p className="text-sm">Couldn't load the {this.props.what ?? "Season Centre"}. Your career is safe.</p>
           <div className="flex gap-2">
-            <button type="button" onClick={() => this.setState(s => ({ failed: false, tries: s.tries + 1 }))} className="h-10 flex-1 rounded-lg border border-border text-sm font-semibold">↻ Retry</button>
+            <button type="button" onClick={() => { if (!reloadToRetryChunk()) this.setState(s => ({ failed: false, tries: s.tries + 1 })); }} className="h-10 flex-1 rounded-lg border border-border text-sm font-semibold">↻ Retry</button>
             <button type="button" onClick={this.props.onClose} className="h-10 flex-1 rounded-lg bg-primary text-sm font-bold text-primary-foreground">✕ Close it</button>
           </div>
         </div>
@@ -3745,6 +3749,14 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
        season start, and a new career never inherits it */
     if (centreFor === null) return;
     const n = career.seasons.length;
+    const added = n === centreFor + 1 ? career.seasons[centreFor] : null;
+    if (added && added.type === "playing" && added.apps === 0) {
+      /* the press drew a season he never played in (a ban year): say so
+         instead of opening nothing */
+      setCentreFor(null);
+      toast("📺 Nothing to watch week by week: you didn't play a game this season.");
+      return;
+    }
     if (n > centreFor + 1 || n < centreFor || (career.phase === "playing" && n > centreFor)) setCentreFor(null);
   }, [centreFor, career.seasons.length, career.phase]);
   // Round 131: the whole attribute tree on its own screen with a back button

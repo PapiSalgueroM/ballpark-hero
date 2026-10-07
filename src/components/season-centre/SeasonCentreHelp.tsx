@@ -3,8 +3,11 @@
    from every "?" after that. The words come from the sport's entry, so the
    NBA and NFL binds bring their own. The "seen it" flag is a per viewer
    convenience in localStorage; every access is guarded, and a browser that
-   refuses storage simply sees the sheet again next time. */
+   refuses storage simply sees the sheet again next time. It takes focus
+   when it opens and Escape closes only the sheet (the Season Centre around
+   it stays open and gets the focus back). */
 import { useEffect, useState } from 'react';
+import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 
 const SEEN_KEY = 'seasonCentre:help';
 
@@ -31,7 +34,7 @@ export interface HelpWords {
 
 export function SeasonCentreHelp({ words, onClose }: { words: HelpWords; onClose: () => void }) {
   return (
-    <div className="absolute inset-0 z-10 flex items-start justify-center overflow-y-auto bg-background/95 p-4" role="dialog" aria-modal="true" aria-label={words.title} data-season-help>
+    <div className="absolute inset-0 z-10 flex items-start justify-center overflow-y-auto bg-background/95 p-4 outline-none" role="dialog" aria-modal="true" aria-label={words.title} tabIndex={-1} ref={focusDialogOnMount} onKeyDown={e => { if (e.key === 'Escape') e.stopPropagation(); escapeCloses(onClose)(e); }} data-season-help>
       <div className="w-full max-w-lg space-y-3 rounded-2xl border border-border bg-card p-4 text-sm">
         <h3 className="text-base font-black">{words.title}</h3>
         {words.intro.map(p => <p key={p} className="leading-relaxed text-muted-foreground">{p}</p>)}

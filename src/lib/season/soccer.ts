@@ -119,12 +119,14 @@ export function buildSoccerSeasonCtx(career: CareerState, clubs: ClubData[], row
   const derbies = readSeasonDerbies(row);
   const rivals = derbies.map(d => d.rival);
   let why: ResultsReason | null = null;
-  if (!finish) why = 'nofinish';
+  /* the injury first: the engine strips the finish from every severe injury
+     row, so read after !finish this reason could never be given */
+  if (row.injurySevere) why = 'severe';
+  else if (!finish) why = 'nofinish';
   else if (finish.size === null) why = 'nosize';
   else if (!league) why = 'league';
   else if (!leagueFormatFor(league.key, row.year)) why = 'format';
   else if (derbyMeetings(league.key, row.year) !== 2) why = 'cadence';
-  else if (row.injurySevere) why = 'severe';
   else if (rivals.some(r => !namedInLeague(r, league.key, row.year))) why = 'rival';
   const mode = why === null ? 'table' : 'results';
   const sizeKey = league?.key ?? leagueKeyInYear({ name: row.club, league: today }, row.year);
