@@ -69,7 +69,7 @@ import { bankSummary } from "@/lib/soccerMoney";
 import PhonePanel from "@/components/soccer-career/PhonePanel";
 import TrainingPanel from "@/components/soccer-career/TrainingPanel";
 import CareerStory from "@/components/soccer-career/CareerStory";
-import SeasonRatings, { BAND_CLASS } from "@/components/soccer-career/SeasonRatings";
+import { BAND_CLASS } from "@/lib/careerRatingBand";
 import { soccerRatingRows, readMatchRating, readOvr, ratingBand } from "@/lib/careerSeasonRatings";
 import { applyDrillResult, type DrillKind } from "@/lib/careerDrills";
 import { rollStartingOverall, rollPotential, potentialTier, adjustClubsForYear, allocOverall, normalizeAllocation, allocMax, ALLOC_MIN, playsLike, stepAllocation } from "@/lib/careerEras";
@@ -106,8 +106,11 @@ import { useRevealScroll } from "@/hooks/useRevealScroll";
 import { TournamentCard, InternationalHistoryTile } from "@/components/soccer-career/InternationalPanel";
 import { beatStyle, debutMomentKey, legacyMomentKey, rivalryMomentKey, settleLoadedMoments, useCareerMoment } from "@/components/soccer-career/careerMoments";
 import { isSoccerCareerSave } from '@/lib/soccerCareerSave';
-/* Round 1045: the Season Centre loads only when a person presses for it. */
+/* Round 1045: the Season Centre loads only when a person presses for it, and
+   the Ratings dialog when it is opened (step 7 of the round: the weight it
+   adds is paid here, never by a budget). */
 const SoccerSeasonCentre = lazy(() => import("@/components/soccer-career/SoccerSeasonCentre"));
+const SeasonRatings = lazy(() => import("@/components/soccer-career/SeasonRatings"));
 /* Round 1045: a boundary inside the lazy chunk cannot catch the chunk failing
    to load (a deploy swapped the files), so the mount carries its own: the
    overlay says so with Retry and Close, and the save is never touched. */
@@ -4512,7 +4515,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
         </div>
       )}
       {storyOpen && <CareerStory career={career} onClose={() => setStoryOpen(false)} />}
-      {ratingsOpen && <SeasonRatings career={career} onClose={() => setRatingsOpen(false)} />}
+      {ratingsOpen && <Suspense fallback={null}><SeasonRatings career={career} onClose={() => setRatingsOpen(false)} /></Suspense>}
       {(() => {
         const pressed = centreFor !== null && career.seasons.length === centreFor + 1 ? career.seasons[centreFor] : null;
         const live = pressed && pressed.type === "playing" && pressed.apps > 0

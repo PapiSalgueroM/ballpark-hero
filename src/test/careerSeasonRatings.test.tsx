@@ -13,7 +13,7 @@
    Negative proof, run by hand on 2026-10-05: with `ovr: overall,` taken out of
    generateSeasonStats the OVR assertions below fail (see the round report). */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { act, cleanup, render } from '@testing-library/react';
+import { act, cleanup, render, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 
@@ -199,8 +199,12 @@ describe('Soccer Career shows every season\'s rating in the history', () => {
     const open = view.container.querySelector('[data-open-season-ratings]');
     expect(open, 'no Ratings button beside Career Story').not.toBeNull();
     await act(async () => { fireEvent.click(open as Element); });
-    const dialog = view.container.querySelector('[data-season-ratings="dialog"]');
-    expect(dialog, 'the Ratings dialog did not open').not.toBeNull();
+    /* Round 1045: the dialog is lazy now, so it is found once it has loaded */
+    const dialog = await waitFor(() => {
+      const d = view.container.querySelector('[data-season-ratings="dialog"]');
+      expect(d, 'the Ratings dialog did not open').not.toBeNull();
+      return d;
+    });
     const rows = Array.from((dialog as Element).querySelectorAll('[data-season-ratings-row]'));
     const playingRows = seasons.filter(r => r.type === 'playing');
     expect(rows.length).toBe(playingRows.length);
