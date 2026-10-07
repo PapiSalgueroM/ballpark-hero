@@ -176,6 +176,8 @@ describe('set pieces on the real Stadium Tycoon page', () => {
     // Both handlers were already available before the modal's first paint.
     act(() => { opening.click(); selling.click(); });
     await settle();
+    act(() => { button(document, /^Sell and restart$/).click(); });
+    await settle();
     expect(saved().rep).toBe(offer.rep + 1);
     expect(saved().totalMatches).toBe(offer.match);
     expect(saved().setPieceAttemptedMatch).toBe(offer.match);

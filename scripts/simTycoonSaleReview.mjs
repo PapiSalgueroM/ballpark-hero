@@ -6,11 +6,9 @@ import crypto from 'node:crypto';
 import assert from 'node:assert/strict';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
-import { createRequire } from 'node:module';
 
 assert(['1', 'true'].includes(process.env.CI), 'Run sale review verification in remote CI only');
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const require = createRequire(import.meta.url);
 const out = path.resolve(process.env.TYCOON_SALE_REVIEW_ARTIFACTS || path.join(root, 'tycoon-sale-review-artifacts', 'outcomes'));
 const TEST = 'src/test/tycoonSaleReview.test.tsx';
 const PAGE = 'src/pages/StadiumTycoon.tsx';
@@ -20,7 +18,7 @@ const ENGINE = 'src/lib/stadiumTycoon.ts';
 const BASELINE = 'independent purchase preserves original engine accounting';
 const COUNT = 12;
 const sha = value => crypto.createHash('sha256').update(value).digest('hex');
-const read = file => fs.readFileSync(path.join(root, file), 'utf8');
+const read = file => fs.readFileSync(path.join(root, file), 'utf8').replaceAll('\r\n', '\n');
 const unix = value => value.replaceAll('\\', '/');
 const escape = value => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const save = (file, value) => {
@@ -33,7 +31,7 @@ const sourceFiles = ['src', 'scripts'].flatMap(dir => files(path.join(root, dir)
 const holds = () => Object.fromEntries(sourceFiles.sort().map(file => [unix(path.relative(root, file)), sha(fs.readFileSync(file))]));
 fs.mkdirSync(out, { recursive: true });
 const before = holds();
-assert.equal(sha(read('scripts/fixtures/tycoon1080Baseline/stadiumTycoon.ts').replaceAll('\r\n', '\n')), '7d5ac60884efa739aee35d0f211dbb33f072af83b11f226502eda4f2f582e58a', 'frozen original purchase baseline changed');
+assert.equal(sha(read('scripts/fixtures/tycoon1080Baseline/stadiumTycoon.ts')), '7d5ac60884efa739aee35d0f211dbb33f072af83b11f226502eda4f2f582e58a', 'frozen original purchase baseline changed');
 save(path.join(out, 'source-before.json'), before);
 process.on('exit', () => save(path.join(out, 'source-after.json'), holds()));
 
@@ -68,8 +66,8 @@ function run(name, aliases = {}, intended = null) {
   const reportPath = path.join(dir, 'vitest-report.json');
   const configPath = path.join(dir, 'vitest.config.mjs');
   const interesting = [TEST, PAGE, HOOK, CARD, ENGINE, 'scripts/fixtures/tycoon1080Baseline/stadiumTycoon.ts'].map(file => unix(path.join(root, file))).concat(Object.values(aliases));
-  const config = `import { defineConfig } from ${JSON.stringify(unix(require.resolve('vitest/config')))};
-import react from ${JSON.stringify(unix(require.resolve('@vitejs/plugin-react-swc')))};
+  const config = `import { defineConfig } from ${JSON.stringify(unix(fileURLToPath(import.meta.resolve('vitest/config'))))};
+import react from ${JSON.stringify(unix(fileURLToPath(import.meta.resolve('@vitejs/plugin-react-swc'))))};
 import fs from 'node:fs'; import path from 'node:path'; import crypto from 'node:crypto';
 const seen = new Map(); const dir = ${JSON.stringify(unix(dir))}; const wanted = ${JSON.stringify(interesting)};
 const hash = value => crypto.createHash('sha256').update(value).digest('hex');
@@ -136,12 +134,12 @@ try {
   const selected = mode === 'all' ? controls : controls.filter(row => row[0] === mode);
   assert(selected.length, `unknown control ${mode}`);
   for (const [name, file, from, to, intended] of selected) {
-    const source = read(file).replaceAll('\r\n', '\n');
+    const source = read(file);
     assert.equal(source.split(from).length - 1, 1, `${name}: executable mutation anchor not unique`);
     const changed = source.replace(from, to), copy = path.join(out, 'copies', name + path.extname(file));
     assert.notEqual(changed, source, `${name}: mutation did not fire`);
     save(copy, changed);
-    const mutation = { name, file, from, to, intended, baseline: BASELINE, originalSha256: sha(read(file)), normalizedSha256: sha(source), copiedSha256: sha(changed), copy: unix(path.relative(out, copy)) };
+    const mutation = { name, file, from, to, intended, baseline: BASELINE, originalSha256: before[file], normalizedSha256: sha(source), copiedSha256: sha(changed), copy: unix(path.relative(out, copy)) };
     save(path.join(out, 'copies', name + '.json'), mutation);
     const result = run(name, { [`@/${file.slice(4).replace(/\.tsx?$/, '')}`]: unix(copy) }, intended);
     assert.deepEqual(result.baseline, summary.normal.baseline, `${name}: complete independent baseline differs from normal`);

@@ -161,7 +161,7 @@ async function activate(page, locator, touch) {
   else { await locator.evaluate(node => node.focus({ preventScroll: true })); await page.keyboard.press('Enter'); }
 }
 async function openPage(profile, fixture, row, arm) {
-  const evidence = { arm, network: [], unexpectedRequests: [], fontResponses: [], errors: [], consoleErrors: [], writeEvents: [], pagehideEvents: [], sockets: [] };
+  const evidence = { arm, network: [], unexpectedRequests: [], fontResponses: [], errors: [], consoleErrors: [], writeEvents: [], pagehideEvents: [], sockets: [], rawConsole: [], rawLifecycle: [], rawWriteEvents: [], rawPagehideEvents: [] };
   row.arms.push(evidence);
   const context = await browser.newContext({ viewport: { width: profile.width, height: profile.height }, hasTouch: profile.touch, isMobile: profile.touch, colorScheme: profile.theme, reducedMotion: profile.reduced ? 'reduce' : 'no-preference', serviceWorkers: 'block', storageState: { cookies: [], origins: [{ origin: BASE, localStorage: Object.entries({ ...protectedStorage, [SAVE_KEY]: fixture.bytes, [A.SAVE_KEY]: academyBytes, [R.REWARDS_KEY]: ledgerBytes, 'dukb-theme': profile.theme, 'dukb-guest-handle': 'SaleReview-1083', 'cookie-consent': 'essential', 'rules-gate-seen:/stadium-tycoon': '1' }).map(([name, value]) => ({ name, value })) }] } });
   await context.route('**/*', route => {
@@ -191,6 +191,22 @@ async function openPage(profile, fixture, row, arm) {
     for (const type of ['pointerup', 'keydown', 'click']) addEventListener(type, event => window.__saleNative.events.push({ type, key: event.key, trusted: event.isTrusted, target: event.target instanceof Element ? event.target.closest('button')?.textContent : null }), true);
   }, { seed: SEED, key: SAVE_KEY });
   const page = await context.newPage(); activePage = page; page.setDefaultTimeout(15000);
+  const protocol = await context.newCDPSession(page);
+  let protocolSequence = 0;
+  protocol.on('Runtime.consoleAPICalled', event => {
+    const message = event.args[0]?.value;
+    if (typeof message !== 'string' || !/^SALE_NATIVE_(WRITE|HIDE) /.test(message)) return;
+    const sequence = ++protocolSequence;
+    evidence.rawConsole.push({ sequence, event });
+    const receipt = { sequence, executionContextId: event.executionContextId, payload: JSON.parse(message.slice(message.startsWith('SALE_NATIVE_WRITE ') ? 18 : 17)) };
+    (message.startsWith('SALE_NATIVE_WRITE ') ? evidence.rawWriteEvents : evidence.rawPagehideEvents).push(receipt);
+  });
+  for (const type of ['Runtime.executionContextCreated', 'Runtime.executionContextDestroyed', 'Runtime.executionContextsCleared', 'Page.frameNavigated', 'Page.lifecycleEvent']) {
+    protocol.on(type, event => evidence.rawLifecycle.push({ sequence: ++protocolSequence, type, event }));
+  }
+  await protocol.send('Page.enable');
+  await protocol.send('Page.setLifecycleEventsEnabled', { enabled: true });
+  await protocol.send('Runtime.enable');
   page.on('pageerror', error => evidence.errors.push(String(error)));
   page.on('console', message => { const text = message.text(); if (text.startsWith('SALE_NATIVE_WRITE ')) evidence.writeEvents.push(JSON.parse(text.slice(18))); else if (text.startsWith('SALE_NATIVE_HIDE ')) evidence.pagehideEvents.push(JSON.parse(text.slice(17))); else if (message.type() === 'error') evidence.consoleErrors.push(text); });
   page.on('response', response => { if (response.url().startsWith(BASE) && response.status() >= 400) evidence.errors.push(`Local response ${response.status()}: ${response.url()}`); });
@@ -297,11 +313,18 @@ try {
     const saleWrites = sold.writes.slice(before.writes.length); assert.equal(saleWrites.length, 1, 'One accepted activation makes one sale write'); assert.equal(saleWrites[0].value, expectedBytes); assert.equal(saleWrites[0].refused, false);
     for (const key of [A.SAVE_KEY, R.REWARDS_KEY, ...Object.keys(protectedStorage)]) assert.equal(sold.storage[key], before.storage[key], 'Sale preserves exact Academy, gear, rewards and unrelated bytes');
     await capture('accepted-sale'); row.acceptedEvents = sold.events;
-    const departureWrites = actual.evidence.writeEvents.length;
+    const departureWrites = actual.evidence.rawWriteEvents.length, departureHides = actual.evidence.rawPagehideEvents.length;
+    row.departure = { from: page.url(), to: `${BASE}/robots.txt`, rawWritesBefore: departureWrites, rawPagehidesBefore: departureHides };
     await page.goto(`${BASE}/robots.txt`, { waitUntil: 'load' });
     const departed = await snapshot(page); row.stages.push({ label: 'real-pagehide-departure', actual: departed }); assert.equal(departed.storage[SAVE_KEY], expectedBytes, 'Actual pagehide retains the sold ground');
-    assert(actual.evidence.pagehideEvents.some(event => event.trusted), 'Actual browser departure delivered a trusted pagehide');
-    assert(actual.evidence.writeEvents.slice(departureWrites).some(event => event.key === SAVE_KEY && event.value === expectedBytes && !event.refused), 'Actual departure invoked the sold-ground save handler');
+    row.departure.actualUrl = page.url();
+    row.departure.pagehides = actual.evidence.rawPagehideEvents.slice(departureHides);
+    row.departure.writes = actual.evidence.rawWriteEvents.slice(departureWrites);
+    assert.equal(row.departure.from, `${BASE}/stadium-tycoon`);
+    assert.equal(row.departure.actualUrl, row.departure.to, 'Departure evidence belongs to the requested real navigation');
+    const trustedDeparture = row.departure.pagehides.find(event => event.payload.trusted);
+    assert(trustedDeparture, 'Actual browser departure delivered a trusted pagehide');
+    assert(row.departure.writes.some(event => event.sequence > trustedDeparture.sequence && event.executionContextId === trustedDeparture.executionContextId && event.payload.key === SAVE_KEY && event.payload.value === expectedBytes && !event.payload.refused), 'Actual departure invoked the sold-ground save handler');
     await page.goto(`${BASE}/stadium-tycoon`, { waitUntil: 'networkidle' }); await page.locator('[data-room="stadium"]').waitFor();
     const reloaded = await snapshot(page); row.stages.push({ label: 'reloaded-before-flush', actual: reloaded });
     assert.equal(reloaded.storage[SAVE_KEY], expectedBytes, 'Immediate reload retains the exact saved sale bytes');

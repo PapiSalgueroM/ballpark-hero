@@ -66,6 +66,20 @@ the exact REF_FIRST_PRESTIGE source anchor to bind its existing updater fault
 to the revised function. The fault, assertions, fixtures and mappings remain
 unchanged. All authored counts await measured remote output and artifact audit.
 
+The first preparation fa6cceabc/run37643274441 failed and is retained. The new
+outcome config selected CJS package entries; ESM resolution now fixes that setup
+failure. Source reads normalize CRLF before multiline executable anchors while
+raw holds stay raw. Native departure now records raw CDP events before navigation
+because the first console observer did not retain the trusted pagehide event.
+The strict trusted event and following exact sold-ground write remain required.
+
+Original set-piece page case6 now clicks the real final Sell and restart after
+opening review, plus its existing settle helper. An exact original-byte guard
+permits only those two input lines. All six original assertions and fixtures
+hold. The original rep control must still reach the disabled-kick assertion and
+its deliberately red exit, independently of the unchanged healthy full suite.
+Early outcome/native uploads retain failures before the long physics regressions.
+
 ## Delivery
 
 Draft stacked PR, independent review and final exact-head remote acceptance

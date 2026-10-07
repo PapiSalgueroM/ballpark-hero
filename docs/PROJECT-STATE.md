@@ -1,3 +1,13 @@
+Codex1083 PREPARATION2, October7,12:06 EDT: verifier corrections.
+First run37643274441 atfa6cceabc failed and all220files retained externally.
+ESM config resolution/CRLF source normalization corrected,raw hashes held;
+native raw CDP departure retention added with strict trusted-save gate held.
+Old set-piece case6 gains only final confirmation+settle, exactbyteguard and
+original rep fault required. Early outcome/native uploads added. Same product,
+12 cases/22 source faults,6 paired journeys/15 DOM faults pending remote proof.
+No READY/live claim. ParentPR168 remains stacked dependency. No other source
+or old assertion/fixture changes. Root/sevenstashes/main/data lanes held.
+
 Codex1083 AUTHORED, October 7, 11:08 EDT: sale review and refused-save fix.
 Branch codex/tycoon-sale-review-1083, parent READY1080 4fed0eef (PR168).
 Live sale terms/reset/keep/help, one confirmation, save-first doPrestige,
