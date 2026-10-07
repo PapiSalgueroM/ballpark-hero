@@ -1919,7 +1919,7 @@
         "Handle the winter, up to three decisions one card at a time: winter training, surgery calls, trade rumors. Only the first card can move your rating, and a card you just saw rests for a while (press moments follow your season, so those can come right back).",
         "After a normal offseason choice, the result shows the actual changes. Expand it for any extra changes, then Continue opens the next card, or takes you back to your career after the last one, without applying the choice again.",
         "When team control ends, hit the open market for real: competing offers from named clubs with their own money, length and roster quality, and one push for more on any of them.",
-        "Stack awards and rings, fight aging, and retire to a verdict."
+        "Stack awards and rings, fight aging, answer the retirement talk when the rating slips, and retire to a verdict and the Hall of Fame ballot."
       ],
       "rules": [
         "You start at 21 in 2026 with 6 years of team control before free agency. The throwback starts in 2004 instead, inside a sealed 30 team league verified against the real season, with 2004 sized contracts.",
@@ -1930,7 +1930,7 @@
         "The lineup card is real: a bench season is about half the games, a spot starter gets a dozen turns, springs have memory both ways, and signing with a stacked contender can cost a mid player the everyday job.",
         "The press reads your actual season: a ring puts you on the podium, missing October badly puts you in the scrum, a bench year brings the role question. Three answers each time, safe, honest or fiery, and fiery gambles your fanbase for real.",
         "Players grow toward their potential through age 26 and decline from 32 on, faster after 37.",
-        "Retirement hits at 42, after 21 seasons, or when your rating collapses. You can walk away after season 6.",
+        "Retirement hits at 42, after 21 seasons, or when your rating collapses. Before that, from 32, slipping 8 points off your best (or down to 68) brings the talk: retire now, one more year, or a farewell season. You can walk away after season 6.",
         "Money has rules of its own. There is a 1% fee on both sides of every trade and a $100k floor in the account that cannot be invested away; a season that leaves you under the floor is covered out of savings first, then by a forced sale of holdings at whatever the price is that day. Cards win 42% of hands and a win pays 1.15x the stake, the most you can stake is $50k or 4% of your cash, and once you are $500k down for your career the guys stop dealing you in for good. Keep sitting in while you are losing and somebody at home notices, which costs morale and fanbase.",
         "The fans nag you for the thing your position is judged on and never the other way round: a starter hears go deeper into games, a closer hears shut the door, a catcher hears more pop from behind the plate. No arm is ever asked for home runs, no bat is ever asked for an ERA, and the three spots with no speed in them are never asked to run.",
         "One career at a time, saved automatically in your browser."
@@ -2230,7 +2230,7 @@
         "After a normal offseason choice, the result shows the actual changes. Expand it for any extra changes, then Continue opens the next card, or takes you back to your career after the last one, without applying the choice again.",
         "Open Career Log and pick a year to review its saved overview, regular season and postseason. Changes compare with the previous saved season; older missing values say Not recorded. Back to seasons returns to the year tiles, and Review seasons is available after retirement.",
         "When the contract runs out, work a real free agency window: competing offers from named franchises with their own money, length and roster quality, and one push for more on any of them.",
-        "Retire when the body or the fire quits, and face the legacy verdict."
+        "From 31, a falling rating brings the retirement talk: stop now, one more year, or a farewell season that ends the career after it. Then face the legacy verdict and the Hall of Fame wait."
       ],
       "rules": [
         "Archetypes shape the stat engine: Point Gods pile up assists, Paint Beasts eat rebounds, Bucket Getters score but break down more.",
@@ -2443,7 +2443,7 @@
         "Open the Bank between seasons. Savings pays 2.5% a season and never loses, five things you can put money into each have a price that moves every season whether you look or not (a fund, flats back home, two shares and a coin that halves as often as it doubles), the statement keeps your last 12 moves, and the card school in the locker room is one sitting a season on odds that are printed before you sit in.",
         "Spend the money in 7 aisles: home, rides, investments, body, flex, family, and a shady aisle that only appears once you have something to hide.",
         "Read the News box. The paper writes up every season in your own position's stat, the SocialGram shows followers read off your fanbase with three fan comments under the latest post, and the rival's card keeps the head to head against the player drafted the same year as you.",
-        "Retire, or get forced out, and face the legacy verdict.",
+        "From 30, a falling rating brings the retirement talk: stop now, play one more year, or announce a farewell season. Then the legacy verdict, and the Hall of Fame wait one ballot at a time.",
         "Collect badges in the Trophy Case: 25 of them, from a first ring and Rookie of the Year to 10,000 passing yards, a 20 sack season and $100M to your name, each lit the moment the facts of your career say so.",
         "Answer your phone. Texts from your agent, the head coach, the GM, a teammate or your mom land on the beats of the football year: draft night, camp, the bye, the trade deadline, the playoffs if you get there, the offseason, and the summer before the last year of your deal. Every text says which beat and which year it came in on, and how you answer moves your karma, morale, fanbase or bank.",
         "Some seasons your rival puts a decision in front of you instead of a story: a late hit you can answer or let go, a debate show offering real money, a youth camp his foundation wants you to co-host. Every button prints exactly what it moves, and a gamble prints its odds."
@@ -2455,7 +2455,7 @@
         "The league security meter runs 0 to 100 and cools 9 a year while you stay clean. Unexplained money keeps it warm. At 65 they open a file on you, at 90 you are suspended indefinitely, you lose the season, the money is seized, and you come back on a minimum deal if anyone calls.",
         "Money has rules of its own. There is a 1% fee on both sides of every trade and a $100k floor in the account that cannot be invested away; a season that leaves you under the floor is covered out of savings first, then by a forced sale of holdings at whatever the price is that day. Cards win 42% of hands and a win pays 1.15x the stake, the most you can stake is $50k or 4% of your cash, and once you are $500k down for your career the guys stop dealing you in for good. Keep sitting in while you are losing and somebody at home notices, which costs morale and fanbase.",
         "Injuries can erase 2 to 10 games a season and leave permanent wear on your health bar.",
-        "Retirement is forced at rating 64, age 40, 34 for backs, or 19 seasons. You can walk away after 6, and progress saves automatically.",
+        "Retirement is forced at rating 64, age 40, 34 for backs, or 19 seasons. Before that, from 30, slipping 8 points off your best (or down to 70) brings the talk: retire now, one more year, or a farewell season that ends the career after it. You can walk away after 6, and progress saves automatically.",
         "The depth chart is real: the man ahead of you is as good as your team is, camps have memory (a starter is not benched over a small gap, a backup does not need a miracle), backup quarterbacks hold clipboards, and signing with a stacked contender can cost a mid player the job. Kickers never sit.",
         "The press reads your actual season: win it all and you take the podium, collapse and you face the accountability scrum, ride the bench and someone asks the role question. Every presser is three answers, safe, honest or fiery, and the fiery one genuinely gambles your fanbase.",
         "The fans nag you for the thing your position is judged on and never the other way round: a quarterback hears touchdowns, a corner hears lock down that side, a kicker hears just make the kicks.",
@@ -2615,7 +2615,7 @@
         "After a normal offseason choice, the result shows the actual changes. Expand it for any extra changes, then Continue opens the next card, or takes you back to your career after the last one, without applying the choice again.",
         "Open Career Log and pick a year to review its saved overview, regular season and postseason. Changes compare with the previous saved season; older missing values say Not recorded. Back to seasons returns to the year tiles, and Review seasons is available after retirement.",
         "When the deal expires, hit July 1 for real: competing offers from named clubs with their own money, length and roster quality, and one push for more on any of them.",
-        "Age, decline, retire, then read the legacy verdict."
+        "Age, decline, answer the retirement talk, then read the legacy verdict and wait on the Hall of Fame ballot."
       ],
       "rules": [
         "Careers start in 2026 at age 18 or 19 and last up to 22 seasons. The throwback starts in 2006 instead, inside a sealed 30 team league verified against the real season, with 2006 sized contracts.",
@@ -2625,7 +2625,7 @@
         "When your rival makes no headline in a season, there is a 45% chance he puts a choice in front of you instead, never both in one season, and each choice comes up once before any repeats. A button only moves what it prints: morale, fanbase, net worth, karma or the heat of the feud. Morale rides straight into next season's points or save percentage.",
         "Texts only arrive on beats your season really had. No playoff texts in a year your club missed, World Juniors texts only in a season you start at 19 or younger, no contract year texts until one year is left on the deal, and draft day's text lands before you play a shift. One text a beat, up to three a season, fewer while old ones sit unanswered, and the same text never comes twice in a career.",
         "The season the game retires you (40 for skaters, 41 for goalies, 22 seasons, or a rating that collapses) sends nothing about a year you will not play: no summer skates, no new stick and skate deal, no extension talk.",
-        "Retirement hits at 40 for skaters, 41 for goalies, or earlier if your rating collapses; you can walk away after 6 seasons.",
+        "Retirement hits at 40 for skaters, 41 for goalies, or earlier if your rating collapses. Before that, from 31, slipping 8 points off your best (or down to 69) brings the talk: retire now, one more year, or a farewell season. You can walk away after 6 seasons.",
         "The legacy score weighs Cups, majors (Hart, Norris or Vezina), Conn Smythes, All-Star nods, seasons and production; 500 or more means the Hall of Fame.",
         "Money has rules of its own. There is a 1% fee on both sides of every trade and a $100k floor in the account that cannot be invested away; a season that leaves you under the floor is covered out of savings first, then by a forced sale of holdings at whatever the price is that day. Cards win 42% of hands and a win pays 1.15x the stake, the most you can stake is $50k or 4% of your cash, and once you are $500k down for your career the boys stop dealing you in for good. Keep sitting in while you are losing and somebody at home notices, which costs morale and fanbase.",
         "The fans nag you for the thing your position is judged on and never the other way round: a center hears more points, a winger hears bury more chances, the man on the blue line hears move the puck and keep it out, and a goalie only ever hears make the saves.",
