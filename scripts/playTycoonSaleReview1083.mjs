@@ -12,6 +12,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ARTIFACTS = path.join(ROOT, 'tycoon-sale-review-artifacts');
 const OUT = path.join(ARTIFACTS, 'native');
 const CACHE = path.resolve(process.env.TYCOON_SALE_FONT_CACHE || path.join(ARTIFACTS, 'font-cache'));
+const JOURNAL_KEY = 'dukb-native-sale-lifecycle-1083';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const clone = value => JSON.parse(JSON.stringify(value));
 const write = (name, value) => fs.writeFileSync(path.join(OUT, name), JSON.stringify(value, null, 2));
@@ -114,11 +115,12 @@ const ready = new Promise((resolve, reject) => { const timer = setTimeout(() => 
 const pane = page => page.locator('[data-tycoon-sale-review]');
 const button = (page, name) => page.getByRole('button', { name, exact: true });
 async function snapshot(page, flush = false) {
-  return page.evaluate(shouldFlush => {
+  return page.evaluate(({ shouldFlush, journalKey }) => {
     if (shouldFlush) window.dispatchEvent(new PageTransitionEvent('pagehide'));
     const state = window.__saleNative;
-    return { storage: Object.fromEntries(Object.entries(localStorage).sort(([a], [b]) => a.localeCompare(b))), writes: structuredClone(state.writes), rng: { seed: state.seed, draws: state.draws }, now: Date.now(), performance: performance.now(), visibility: document.visibilityState, scrollY, frames: state.frames, pagehide: structuredClone(state.pagehide), events: structuredClone(state.events) };
-  }, flush);
+    const lifecycleJournalRaw = sessionStorage.getItem(journalKey);
+    return { storage: Object.fromEntries(Object.entries(localStorage).sort(([a], [b]) => a.localeCompare(b))), writes: structuredClone(state.writes), rng: { seed: state.seed, draws: state.draws }, now: Date.now(), performance: performance.now(), visibility: document.visibilityState, scrollY, frames: state.frames, pagehide: structuredClone(state.pagehide), events: structuredClone(state.events), documentId: state.documentId, lifecycleJournalRaw, lifecycleJournal: JSON.parse(lifecycleJournalRaw) };
+  }, { shouldFlush: flush, journalKey: JOURNAL_KEY });
 }
 async function terms(page) {
   return pane(page).evaluate(node => {
@@ -173,8 +175,23 @@ async function openPage(profile, fixture, row, arm) {
     evidence.unexpectedRequests.push(receipt); return route.abort();
   });
   await context.routeWebSocket('**/*', socket => { evidence.sockets.push(socket.url()); socket.close(); });
-  await context.addInitScript(({ seed, key }) => {
+  await context.addInitScript(({ seed, key, origin, journalKey }) => {
     window.__saleNative = { seed, draws: 0, frames: 0, writes: [], events: [], pagehide: [], refuse: false };
+    const storageGet = Storage.prototype.getItem, storageSet = Storage.prototype.setItem;
+    let documentId = null;
+    if (location.origin === origin) {
+      const journal = JSON.parse(storageGet.call(sessionStorage, journalKey)) ?? { version: 1, documents: 0, sequence: 0, records: [] };
+      documentId = ++journal.documents;
+      storageSet.call(sessionStorage, journalKey, JSON.stringify(journal));
+    }
+    window.__saleNative.documentId = documentId;
+    const journalEvent = (kind, payload = {}) => {
+      if (documentId === null) return;
+      const journal = JSON.parse(storageGet.call(sessionStorage, journalKey));
+      journal.records.push({ sequence: ++journal.sequence, documentId, url: location.href, kind, now: Date.now(), performance: performance.now(), visibility: document.visibilityState, ...payload });
+      storageSet.call(sessionStorage, journalKey, JSON.stringify(journal));
+    };
+    journalEvent('document');
     Math.random = () => { const s = window.__saleNative; s.draws++; s.seed = (Math.imul(s.seed, 1664525) + 1013904223) >>> 0; return s.seed / 4294967296; };
     for (const method of ['setItem', 'removeItem', 'clear']) {
       const original = Storage.prototype[method];
@@ -184,12 +201,14 @@ async function openPage(profile, fixture, row, arm) {
         const event = { method, key: method === 'clear' ? '*' : args[0], value: args[1] == null ? null : String(args[1]), refused, now: Date.now() };
         window.__saleNative.writes.push(event); console.log('SALE_NATIVE_WRITE ' + JSON.stringify(event));
         if (refused) throw new DOMException('Injected device quota refusal', 'QuotaExceededError');
-        return original.apply(this, args);
+        const result = original.apply(this, args);
+        journalEvent('storage-complete', event);
+        return result;
       };
     }
-    addEventListener('pagehide', event => { const receipt = { trusted: event.isTrusted, now: Date.now(), visibility: document.visibilityState }; window.__saleNative.pagehide.push(receipt); console.log('SALE_NATIVE_HIDE ' + JSON.stringify(receipt)); }, true);
+    addEventListener('pagehide', event => { const receipt = { trusted: event.isTrusted, now: Date.now(), visibility: document.visibilityState }; window.__saleNative.pagehide.push(receipt); journalEvent('pagehide', { ...receipt, eventType: event.type, persisted: event.persisted }); console.log('SALE_NATIVE_HIDE ' + JSON.stringify(receipt)); }, true);
     for (const type of ['pointerup', 'keydown', 'click']) addEventListener(type, event => window.__saleNative.events.push({ type, key: event.key, trusted: event.isTrusted, target: event.target instanceof Element ? event.target.closest('button')?.textContent : null }), true);
-  }, { seed: SEED, key: SAVE_KEY });
+  }, { seed: SEED, key: SAVE_KEY, origin: BASE, journalKey: JOURNAL_KEY });
   const page = await context.newPage(); activePage = page; page.setDefaultTimeout(15000);
   const protocol = await context.newCDPSession(page);
   let protocolSequence = 0;
@@ -316,17 +335,25 @@ try {
     for (const key of [A.SAVE_KEY, R.REWARDS_KEY, ...Object.keys(protectedStorage)]) assert.equal(sold.storage[key], before.storage[key], 'Sale preserves exact Academy, gear, rewards and unrelated bytes');
     await capture('accepted-sale'); row.acceptedEvents = sold.events;
     const departureWrites = actual.evidence.rawWriteEvents.length, departureHides = actual.evidence.rawPagehideEvents.length;
-    row.departure = { from: page.url(), to: `${BASE}/robots.txt`, rawWritesBefore: departureWrites, rawPagehidesBefore: departureHides };
+    const journalBefore = await page.evaluate(key => { const raw = sessionStorage.getItem(key); return { documentId: window.__saleNative.documentId, raw, journal: JSON.parse(raw) }; }, JOURNAL_KEY);
+    row.departure = { from: page.url(), to: `${BASE}/robots.txt`, rawWritesBefore: departureWrites, rawPagehidesBefore: departureHides, sourceDocumentId: journalBefore.documentId, journalBeforeRaw: journalBefore.raw, journalBefore: journalBefore.journal, journalCutoff: journalBefore.journal.sequence };
     await page.goto(`${BASE}/robots.txt`, { waitUntil: 'load' });
     const departed = await snapshot(page); row.stages.push({ label: 'real-pagehide-departure', actual: departed }); assert.equal(departed.storage[SAVE_KEY], expectedBytes, 'Actual pagehide retains the sold ground');
     row.departure.actualUrl = page.url();
     row.departure.pagehides = actual.evidence.rawPagehideEvents.slice(departureHides);
     row.departure.writes = actual.evidence.rawWriteEvents.slice(departureWrites);
+    row.departure.journalAfter = departed.lifecycleJournal;
+    row.departure.journalAfterRaw = departed.lifecycleJournalRaw;
+    row.departure.journalEvents = departed.lifecycleJournal.records.filter(event => event.sequence > row.departure.journalCutoff);
     assert.equal(row.departure.from, `${BASE}/stadium-tycoon`);
     assert.equal(row.departure.actualUrl, row.departure.to, 'Departure evidence belongs to the requested real navigation');
-    const trustedDeparture = row.departure.pagehides.find(event => event.payload.trusted);
+    assert(journalBefore.journal.records.some(event => event.kind === 'document' && event.documentId === journalBefore.documentId && event.url === row.departure.from), 'Departure identifies the actual source document');
+    assert.notEqual(departed.documentId, journalBefore.documentId, 'Real navigation creates a different document');
+    assert.deepEqual(departed.lifecycleJournal.records.slice(0, journalBefore.journal.records.length), journalBefore.journal.records, 'Navigation preserves the existing raw lifecycle journal');
+    assert(departed.lifecycleJournal.records.some(event => event.kind === 'document' && event.documentId === departed.documentId && event.url === row.departure.to), 'Destination receipt belongs to the same-tab navigation');
+    const trustedDeparture = row.departure.journalEvents.find(event => event.kind === 'pagehide' && event.eventType === 'pagehide' && event.trusted === true && event.documentId === journalBefore.documentId && event.url === row.departure.from);
     assert(trustedDeparture, 'Actual browser departure delivered a trusted pagehide');
-    assert(row.departure.writes.some(event => event.sequence > trustedDeparture.sequence && event.executionContextId === trustedDeparture.executionContextId && event.payload.key === SAVE_KEY && event.payload.value === expectedBytes && !event.payload.refused), 'Actual departure invoked the sold-ground save handler');
+    assert(row.departure.journalEvents.some(event => event.kind === 'storage-complete' && event.sequence > trustedDeparture.sequence && event.documentId === trustedDeparture.documentId && event.url === row.departure.from && event.method === 'setItem' && event.key === SAVE_KEY && event.value === expectedBytes && !event.refused), 'Actual departure invoked the sold-ground save handler');
     await page.goto(`${BASE}/stadium-tycoon`, { waitUntil: 'networkidle' }); await page.locator('[data-room="stadium"]').waitFor();
     const reloaded = await snapshot(page); row.stages.push({ label: 'reloaded-before-flush', actual: reloaded });
     assert.equal(reloaded.storage[SAVE_KEY], expectedBytes, 'Immediate reload retains the exact saved sale bytes');

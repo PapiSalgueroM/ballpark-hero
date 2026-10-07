@@ -1,3 +1,26 @@
+## Codex1083 PREPARATION4, October7,13:16 EDT: durable departure evidence
+
+Preparation3 HEAD437612174a214489939cac07f50b9e66113ffae3, treeebde5445,
+run37654798316 finished failed only at the native departure gate. Type/build,
+12 mounted cases/22 copied faults, parent ticket20/23,15 original game gates,
+11 load controls, the exact original rep fault,20 readers and source/data/
+fixture/dependency holds passed. Full561entry artifact11500075301 retained,
+ZIP SHA8a233d36abc47c3593d3d4a4e2d0d8af860fb626746277798982ca8b3de93b53.
+The320px paired clocks and nine review/action stages now agree exactly.
+Actual same-origin departure retained the sold save, but console/CDP did not
+retain a trusted pagehide followed by its write. Surviving bytes alone do not
+prove that handler ran. No native/READY/live acceptance.
+
+Next trial changes the native driver only. A synchronous sessionStorage
+journal records actual event.isTrusted and successful storage completion
+only after the original operation returns. Require a new trusted pagehide,
+later exact saved-byte write in the same source document/URL, preserved old
+journal prefix and a distinct destination document. Synthetic events remain
+false and cannot qualify. Existing strict clocks, storage/state, RNG, geometry,
+inputs, copied/DOM controls and console/CDP evidence remain held. Journal SHA
+41c7f5c2dc76d7921311405d1463fbf51d996d579da3ff0bec28bdce2cdbeb87,
+independently reviewed twice. Product/engines/data/save format unchanged.
+Parent READY1080 PR168 remains a stacked integration dependency.
 ## Codex1083 PREPARATION3, October7,12:45 EDT: unchanged product
 
 Preparation2 db4f52c3/treedbb11b79 run37649544656 finished failed.
