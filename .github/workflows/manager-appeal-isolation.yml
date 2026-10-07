@@ -145,8 +145,17 @@ jobs:
           done
           exit "$failed"
       - name: Preserve original decision assertions and explicit default coverage red
+        id: decisions
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerDecisionRegression1081.mjs 2>&1 | tee manager-appeal-isolation-artifacts/decision-regressions.log
+      - name: Retain direct regression evidence promptly
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: manager-decision-regressions-${{ github.run_id }}-${{ github.run_attempt }}
+          path: manager-appeal-isolation-artifacts/decision-regressions/
+          retention-days: 3
+          if-no-files-found: error
       - name: All built readers and source anchors
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |

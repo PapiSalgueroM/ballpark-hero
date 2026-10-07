@@ -48,11 +48,26 @@ function run(name, root, seed, control) {
   assert((child.stdout || '').includes(`simClubManagerDecisions${control ? ` (control ${control})` : ''}: ${row.failures.length} findings`), 'Complete original terminal verdict');
   return row;
 }
-function defaultStatus(row) {
+function coverageStatus(row) {
   if (row.exit === 0) { assert.deepEqual(row.failures, []); return 'passed'; }
-  assert.equal(row.exit, 1); assert.equal(row.failures.length, 1);
-  assert(/^FAIL \[1\] only [0-5] straight reds in the play seasons, under the floor of 6$/.test(row.failures[0]), 'Default may be characterized only for its actual coverage floor');
+  assert.equal(row.exit, 1); assert(row.failures.length > 0);
+  for (const failure of row.failures) {
+    const reds = failure.match(/^FAIL \[1\] only ([0-5]) straight reds in the play seasons, under the floor of 6$/);
+    const answers = failure.match(/^FAIL \[4\] only (\d+) situation answers applied$/);
+    assert(reds || (answers && Number(answers[1]) < 200), 'Only exact original coverage floors may be characterized');
+  }
   return 'coverage-floor-red';
+}
+function pairedStatus(current, historical) {
+  const status = coverageStatus(current), previous = coverageStatus(historical);
+  if (status !== 'passed') {
+    assert.equal(previous, status, 'Every current red must also occur with frozen decisions');
+    assert.equal(current.exit, historical.exit);
+    assert.equal(current.stdoutSha256, historical.stdoutSha256, 'Complete red stdout is byte-identical to frozen decisions');
+    assert.equal(current.stderrSha256, historical.stderrSha256, 'Complete red stderr is byte-identical to frozen decisions');
+    assert.deepEqual(current.failures, historical.failures);
+  }
+  return { current: status, historical: previous };
 }
 const baseline = fs.mkdtempSync(path.join(ROOT, '.manager-decision-baseline-1081-'));
 try {
@@ -68,14 +83,38 @@ try {
   report.baselineSource = sourceHashes(baseline);
   for (const [file, hash] of Object.entries(report.sourceBefore)) assert.equal(report.baselineSource[file], file === DESK ? manifest.sha256 : hash, `Baseline differs only at frozen decisions: ${file}`);
   assert.deepEqual(Object.keys(report.baselineSource), Object.keys(report.sourceBefore));
-  report.currentDefault = defaultStatus(run('current-default', ROOT));
-  report.historicalDefault = defaultStatus(run('historical-default', baseline));
-  report.defaultLimitation = report.currentDefault === 'coverage-floor-red';
+  const currentDefault = run('current-default', ROOT), historicalDefault = run('historical-default', baseline);
+  const samples = [];
   for (const seed of [1, 2, 3, 4]) {
-    const row = run(`current-seed-${seed}`, ROOT, seed);
-    assert.equal(row.exit, 0, `Every original assertion passes on advertised supplemental seed ${seed}`);
-    assert.deepEqual(row.failures, []);
+    samples.push({ seed, current: run(`current-seed-${seed}`, ROOT, seed), historical: run(`historical-seed-${seed}`, baseline, seed) });
   }
+  const defaults = pairedStatus(currentDefault, historicalDefault);
+  report.currentDefault = defaults.current; report.historicalDefault = defaults.historical;
+  report.defaultLimitation = report.currentDefault !== 'passed';
+  report.samples = samples.map(pair => ({ seed: pair.seed, ...pairedStatus(pair.current, pair.historical) }));
+  assert.equal(samples[0].current.exit, 0, 'Seed 1 remains a genuinely healthy original assertion baseline');
+  assert.equal(samples[0].historical.exit, 0, 'Frozen seed 1 is independently healthy');
+  const redPair = [{ current: currentDefault, historical: historicalDefault }, ...samples].find(pair => coverageStatus(pair.current) !== 'passed');
+  assert(redPair, 'An actual retained coverage red exercises its comparator');
+  const observed = fs.readFileSync(path.join(OUT, `${redPair.current.name}.stdout.log`), 'utf8');
+  const observation = '5. declining is main:';
+  assert.equal(observed.split(observation).length - 1, 1, 'Unique observed output control anchor');
+  const corrupted = observed.replace(observation, '5. declining is Main:');
+  assert.notEqual(corrupted, observed); assert.notEqual(digest(corrupted), digest(observed));
+  const corruptedRow = { ...redPair.current, stdoutSha256: digest(corrupted) };
+  assert.deepEqual(corrupted.split('\n').filter(line => line.startsWith('FAIL ')), redPair.current.failures);
+  fs.writeFileSync(path.join(OUT, 'comparator-control-before.stdout.log'), observed);
+  fs.writeFileSync(path.join(OUT, 'comparator-control-fault.stdout.log'), corrupted);
+  let mismatch;
+  try { pairedStatus(corruptedRow, redPair.historical); } catch (error) { mismatch = error; }
+  assert.equal(mismatch?.name, 'AssertionError');
+  assert(mismatch.message.startsWith('Complete red stdout is byte-identical to frozen decisions'));
+  assert.equal(mismatch.actual, digest(corrupted)); assert.equal(mismatch.expected, redPair.historical.stdoutSha256);
+  assert.deepEqual(pairedStatus(redPair.current, redPair.historical), { current: 'coverage-floor-red', historical: 'coverage-floor-red' });
+  fs.writeFileSync(path.join(OUT, 'comparator-control-restored.stdout.log'), observed);
+  report.comparatorControl = { baseline: redPair.current.name, beforeSha256: digest(observed), faultSha256: digest(corrupted),
+    restoredSha256: digest(observed), corruptedRow, error: { name: mismatch.name, message: mismatch.message },
+    effective: true, restoredComparisonPassed: true, scope: 'Retained observation integrity, no gameplay or source mutation' };
   const from = '    const next = won ? 0 : p.suspendedMatches + APPEAL_LOSS_EXTRA;';
   const to = '    const next = won ? 0 : p.suspendedMatches;';
   const current = fs.readFileSync(path.join(ROOT, DESK), 'utf8').replaceAll('\r\n', '\n');
@@ -89,15 +128,23 @@ try {
   assert(control.failures.every(line => line.startsWith('FAIL [3]')), 'Only the intended original control section may fail');
   report.lossControl = { copiedSourceSha256: digest(copied), mappedSection: 3, healthyBaseline: 'current-seed-1',
     limit: 'Reconstructed exact original mutation retained; original harness removes its temporary emitted bundle' };
-  report.sourceAfter = sourceHashes(ROOT); assert.deepEqual(report.sourceAfter, report.sourceBefore, 'Actual sources stay held');
-  report.originalVerificationAfter = Object.fromEntries(Object.keys(report.originalVerificationBefore).map(file => [file, digest(fs.readFileSync(path.join(ROOT, file)))]));
-  assert.deepEqual(report.originalVerificationAfter, report.originalVerificationBefore, 'Original assertion and stream source holds');
   report.complete = true; save();
   console.log(`Default current: ${report.currentDefault}; frozen historical: ${report.historicalDefault}.`);
-  console.log('Supplemental original assertions: seeds 1, 2, 3 and 4 passed. Default status remains separately visible.');
+  console.log(`All declared paired seeds retained: ${report.samples.map(pair => `${pair.seed}=${pair.current}`).join(', ')}. Every red remains visible and matches frozen output exactly.`);
   console.log('Original loss control fired in section 3 beside a healthy seed-1 baseline.');
 } catch (error) {
   report.error = { name: error.name, message: error.message, stack: error.stack }; save(); throw error;
 } finally {
-  fs.rmSync(baseline, { recursive: true, force: true });
+  try {
+    report.sourceAfter = sourceHashes(ROOT);
+    report.originalVerificationAfter = Object.fromEntries(Object.keys(report.originalVerificationBefore).map(file => [file, digest(fs.readFileSync(path.join(ROOT, file)))]));
+    assert.deepEqual(report.sourceAfter, report.sourceBefore, 'Actual sources stay held');
+    assert.deepEqual(report.originalVerificationAfter, report.originalVerificationBefore, 'Original assertion and stream source holds');
+    report.finalHoldsPassed = true;
+  } catch (error) {
+    report.complete = false; report.finalHoldsPassed = false;
+    report.finalHoldError = { name: error.name, message: error.message }; throw error;
+  } finally {
+    fs.rmSync(baseline, { recursive: true, force: true }); save();
+  }
 }

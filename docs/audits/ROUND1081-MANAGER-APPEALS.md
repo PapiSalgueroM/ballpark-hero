@@ -11,14 +11,26 @@ Independent raw audits accepted 27 current pairs, all 54 creation holds,
 509 compatibility records and 20 effective copied faults. This is scoped
 product evidence, not overall preparation acceptance.
 
-The next remote preparation retains full direct current and frozen historical
-default-harness output, with SIM_SEED truly unset and original initialization
-filename preserved. Default status is characterized only as healthy or its
-sole observed coverage floor, and a red remains labeled RED. Unmodified
-original assertions also run on the four already-advertised seeds 1 to 4.
-An original lost-ban source fault must fail only section 3 beside a healthy
-seed-1 baseline. Original assertions, seeds and floors are not edited.
-No historical-default health or supplemental result is claimed before runtime.
+Third preparation 37624485748 retained complete current/frozen default output:
+both exit 1, solely at 3 straight reds under 6, with byte-identical full stdout
+and empty stderr. Seed 1 is genuinely healthy (13 reds, 447 situation answers).
+Current seed 2 is RED at 3 reds and 199 answers under its 200 floor. The recorder
+stopped there; historical seed 2, seeds 3/4 and the loss control were not run.
+Artifact 11484570426 has verified ZIP SHA256
+d04f93f2cab01ac1b589a26475d7a961a096166bb530ce4274708520aee07782.
+
+The amended recorder collects every declared current/frozen sample before
+classification. SIM_SEED remains truly unset for default initialization, and
+the original basename is preserved. A current RED is accepted only as an
+explicit coverage limitation at the exact original [1]/[4] floor, and only when
+its complete stdout, stderr, exit and failures match its frozen counterpart.
+All four already-advertised seeds 1 to 4 stay visible. Both current and frozen
+seed 1 must be healthy. An original lost-ban source fault must fail only section
+3 beside that healthy baseline. Original assertions, seeds and floors remain
+untouched. Final per-recorder source/harness/seedRandom holds are retained even
+after an unexpected failure. A retained output corruption must trigger its
+specific comparator AssertionError beside an unchanged passing comparison.
+Unexecuted supplemental results remain unknown.
 
 The original diagnostic is accepted at f025ecbdf9cfb033476b37e723244701a577d357
 (tree 606f81d9a24bc63796133e174c72db8dcdf2bcea), run 37617442468,
@@ -56,7 +68,7 @@ separate, and verify issued-card compatibility and effective new fault controls.
 The authored gate requires 13 compatibility groups, 509 full records and 16
 effective compatibility faults, plus the original four copied faults. It
 includes current-engine storage round trips for three keyed cards and a
-retained old winning and losing card. These counts await actual remote output.
+retained old winning and losing card. Final overall acceptance remains pending.
 Existing manager decision/save/tactics regressions and all 20 built/source
 readers run after the build. The tactics verification uses the exact accepted
 1079 cache adapter, without changing its gestures or gameplay assertions.
