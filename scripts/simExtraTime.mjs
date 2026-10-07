@@ -798,7 +798,13 @@ function readS10(r) {
 function readS7(r) {
   const hasEt = !!r.live.et;
   if (hasEt ? S7.compared >= 40 : S7.base >= 10) return;
-  const quick = withSeed(seedOf(r.fi, r.j), () => cmA.playNextEntry(r.f.pre, { skipHalftime: true }));
+  /* Release AL: the quick arm is played without the Round 1072 coach
+     (noCoach). This section holds that the live path and the quick sim are
+     one engine: the same seed, nobody touching either, the same report. The
+     coach touches the quick one on purpose (a change for an injured man
+     redraws what follows), so with him in, 38 of these went red on the merged
+     tree and none do on main. What he does is held in simCmQuickSubs. */
+  const quick = withSeed(seedOf(r.fi, r.j), () => cmA.playNextEntry(r.f.pre, { skipHalftime: true, noCoach: true }));
   const ctx = `${r.f.club} ${r.f.round} seed ${r.j}`;
   if (J(quick.report) !== J(r.report)) fail(7, `${ctx}: the quick sim's report is not the live path's${hasEt ? ' (extra time)' : ''}`);
   else if (J(quick.state.uclBracket) !== J(r.state.uclBracket)) fail(7, `${ctx}: the two ways left different brackets`);
