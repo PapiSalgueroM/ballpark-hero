@@ -1,8 +1,6 @@
 name: Manager match plans
 on:
   workflow_dispatch:
-  push:
-    branches: [codex/manager-match-plans-1079]
   pull_request:
     paths:
       - .github/workflows/manager-match-plans.yml

@@ -146,6 +146,18 @@ function checkGeometry(row, requireActions = true) {
     for (const action of row.actions) assert(action.y >= 0 && action.bottom <= row.viewport.height && action.hit, 'Plan action is visible and unobscured without driver scrolling');
   }
 }
+async function measureLineup(page) {
+  return page.locator('[data-cm-plan-lineup]').evaluate(node => {
+    const first = node.querySelector('[data-cm-plan-row="0"]');
+    if (!first) return { first:null, viewport:{width:innerWidth,height:innerHeight}, scrollY };
+    const r = first.getBoundingClientRect();
+    return { first:{x:r.x,y:r.y,width:r.width,height:r.height,right:r.right,bottom:r.bottom,text:first.textContent,player:first.getAttribute('data-cm-plan-player'),hit:first.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2))}, viewport:{width:innerWidth,height:innerHeight}, scrollY };
+  });
+}
+function checkLineup(row) {
+  assert(row.first && row.first.width > 0 && row.first.height > 0, 'Expanded kickoff lineup has a real first row');
+  assert(row.first.x >= 0 && row.first.right <= row.viewport.width && row.first.y >= 0 && row.first.bottom <= row.viewport.height && row.first.hit, 'Expanded kickoff first row is visible and unobscured without driver scrolling');
+}
 async function fontProof(page) {
   const rows = await page.evaluate(async () => { await document.fonts.ready; const rows=[]; for(const family of ['Inter','Space Grotesk']) for(const weight of [400,500,600,700]) { const faces=await document.fonts.load(`${weight} 16px "${family}"`,'Match plans'); rows.push({family,weight,faces:faces.map(face=>({family:face.family,status:face.status}))}); } return rows; });
   for (const row of rows) assert(row.faces.length > 0 && row.faces.every(face => face.status === 'loaded' && face.family.replaceAll('"','') === row.family), 'Actual requested font faces loaded');
@@ -196,7 +208,7 @@ try {
   browser=await chromium.launch({headless:true});
   for(const profile of [{width:320,height:780,touch:true,reduced:true,theme:'dark'},{width:390,height:844,touch:true,reduced:false,theme:'light'},{width:1280,height:720,touch:false,reduced:false,theme:'light'}]) {
     const id=`${profile.width}-${profile.touch?'touch':'keyboard'}-${profile.theme}`;
-    const row={id,profile,network:[],assets:[],images:[],events:[],documents:[],screenshots:[],geometry:[],checks:[],errors:[],consoleErrors:[],sockets:[],networkWrites:[],navigation:[],fonts:[]};report.cases.push(row);save();
+    const row={id,profile,network:[],assets:[],images:[],events:[],documents:[],screenshots:[],geometry:[],lineups:[],checks:[],errors:[],consoleErrors:[],sockets:[],networkWrites:[],navigation:[],fonts:[]};report.cases.push(row);save();
     const protectedStorage={soccerCareerSave:'qa-unrelated-soccer', 'nba-my-career-save-v1':'qa-unrelated-nba', 'dukb-local-completions':'qa-unrelated-completion'};
     const context=await browser.newContext({viewport:{width:profile.width,height:profile.height},hasTouch:profile.touch,isMobile:profile.touch,deviceScaleFactor:1,reducedMotion:profile.reduced?'reduce':'no-preference',colorScheme:profile.theme,serviceWorkers:'block',storageState:{cookies:[],origins:[{origin:BASE,localStorage:Object.entries({'dukb-theme':profile.theme,...protectedStorage}).map(([name,value])=>({name,value}))}]} });
     await context.route('**/*',route=>{
@@ -244,7 +256,29 @@ try {
       assert.equal(await page.locator('[data-cm-plan-fitness]').textContent(),expected.fitness===null?'No available players':`${expected.fitness}% average`);
       assert((await page.locator('[data-cm-plan-replacements]').textContent()).startsWith(expected.replacements?`${expected.replacements} saved spot${expected.replacements===1?'':'s'} need a replacement.`:'All saved picks can start.'));
       if(unaided){await page.waitForFunction(()=>[...document.querySelectorAll('[data-cm-plan-apply],[data-cm-plan-details]')].length===2&&[...document.querySelectorAll('[data-cm-plan-apply],[data-cm-plan-details]')].every(node=>{const r=node.getBoundingClientRect();return r.y>=0&&r.bottom<=innerHeight;}));const geometry=await measure(page);row.geometry.push({stage:`preview-${slot}`,value:geometry});save();checkGeometry(geometry);}
-      if(details){await activate(page.locator('[data-cm-plan-details]'));const actual=await page.locator('[data-cm-plan-row]').evaluateAll(nodes=>nodes.map(node=>({slot:Number(node.getAttribute('data-cm-plan-row')),id:node.getAttribute('data-cm-plan-player'),text:node.textContent})));assert.equal(actual.length,expected.rows.length);for(const wanted of expected.rows){const found=actual.find(item=>item.slot===wanted.slot);assert.equal(found.id,wanted.id);assert(found.text.includes(wanted.name));if(wanted.fitness!==null)assert(found.text.includes(`${wanted.fitness}% fitness`));if(wanted.duty)assert(found.text.includes(engine.DUTY_INFO[wanted.duty].label));if(wanted.unavailable)assert(found.text.includes(wanted.unavailable),'Current unavailability is explained honestly');}const names=plan.shootoutOrder.map(id=>proof.career.squad.find(player=>player.id===id)?.name).filter(Boolean);assert.equal(await page.locator('[data-cm-plan-shootout]').textContent(),`Shootout order: ${names.join(', ')||'Auto'}`);const assignments=await page.locator('[data-cm-plan-assignments] dd').allTextContents();assert.deepEqual(assignments,engine.SET_PIECE_KEYS.map(key=>proof.career.squad.find(player=>player.id===plan.setPieces[key])?.name??'Auto pick'));const detailGeometry=await measure(page);checkGeometry(detailGeometry,false);row.geometry.push({stage:'expanded-details',value:detailGeometry});await screenshot('details-'+slot+'-'+row.checks.length);await navigate(page.locator('[data-cm-plan-details]'),'User closes expanded kickoff details');await activate(page.locator('[data-cm-plan-details]'));}
+      if(details){
+        await activate(page.locator('[data-cm-plan-details]'));
+        await page.waitForFunction(()=>{const first=document.querySelector('[data-cm-plan-lineup] [data-cm-plan-row="0"]');if(!first)return false;const r=first.getBoundingClientRect();return r.y>=0&&r.bottom<=innerHeight;});
+        const lineup=await measureLineup(page);row.lineups.push({stage:`details-${slot}-${row.checks.length}`,value:lineup});save();checkLineup(lineup);
+        await screenshot('details-'+slot+'-'+row.checks.length);
+        if(!report.controls.some(control=>control.profile===id&&control.name==='lineup-offscreen')){
+          const locator=page.locator('[data-cm-plan-lineup]'),style=await locator.getAttribute('style'),before=await measureLineup(page);
+          await locator.evaluate(node=>node.style.setProperty('transform','translateY(150vh)','important'));
+          const changed=await measureLineup(page);assert.notDeepEqual(changed,before,'Lineup DOM fault changes measured values');let rejection=null;
+          try{checkLineup(changed);}catch(error){assert(error instanceof assert.AssertionError,'Lineup negative control fails an assertion');rejection={name:error.name,message:error.message};}
+          assert(rejection,'Lineup offscreen fault is rejected');await screenshot('fault-lineup-offscreen');
+          await locator.evaluate((node,old)=>old===null?node.removeAttribute('style'):node.setAttribute('style',old),style);
+          const restored=await measureLineup(page);assert.deepEqual(restored,before,'Lineup DOM geometry restores exactly');checkLineup(restored);
+          report.controls.push({profile:id,name:'lineup-offscreen',before,changed,rejection,restored});save();
+        }
+        const actual=await page.locator('[data-cm-plan-row]').evaluateAll(nodes=>nodes.map(node=>({slot:Number(node.getAttribute('data-cm-plan-row')),id:node.getAttribute('data-cm-plan-player'),text:node.textContent})));
+        assert.equal(actual.length,expected.rows.length);
+        for(const wanted of expected.rows){const found=actual.find(item=>item.slot===wanted.slot);assert.equal(found.id,wanted.id);assert(found.text.includes(wanted.name));if(wanted.fitness!==null)assert(found.text.includes(`${wanted.fitness}% fitness`));if(wanted.duty)assert(found.text.includes(engine.DUTY_INFO[wanted.duty].label));if(wanted.unavailable)assert(found.text.includes(wanted.unavailable),'Current unavailability is explained honestly');}
+        const names=plan.shootoutOrder.map(id=>proof.career.squad.find(player=>player.id===id)?.name).filter(Boolean);assert.equal(await page.locator('[data-cm-plan-shootout]').textContent(),`Shootout order: ${names.join(', ')||'Auto'}`);
+        const assignments=await page.locator('[data-cm-plan-assignments] dd').allTextContents();assert.deepEqual(assignments,engine.SET_PIECE_KEYS.map(key=>proof.career.squad.find(player=>player.id===plan.setPieces[key])?.name??'Auto pick'));
+        const detailGeometry=await measure(page);checkGeometry(detailGeometry,false);row.geometry.push({stage:'expanded-details',value:detailGeometry});
+        await navigate(page.locator('[data-cm-plan-details]'),'User closes expanded kickoff details');await activate(page.locator('[data-cm-plan-details]'));
+      }
       const after=await read();assert.deepEqual(after.career,proof.career,'Preview and details do not change career');assert.equal(after.raw,proof.raw,'Preview writes no new save value');row.checks.push({stage:`preview-${slot}`,expected:{...expected,state:undefined}});return expected;
     };
     try {
@@ -285,9 +319,9 @@ try {
       await collectDocument('before-foreign');await navigate(button('Visit foreign club fixture'),'Explicit foreign-club isolation fixture');await activateReload(button('Visit foreign club fixture'));await resume();proof=await assertPersisted();assert.equal(proof.career.clubName,'Chelsea');const foreignBefore=structuredClone(proof.career);await openPlans();assert((await page.locator('[data-cm-tile-btn="plans"]').textContent()).includes('0/3'));assert.equal(await page.locator('[data-cm-plan-preview]').count(),0);assert.equal(await page.locator('[data-cm-plan-apply]').count(),0);for(let slot=0;slot<3;slot++){await activate(page.locator(`[data-cm-plan-slot="${slot}"]`));assert.equal(await page.locator('[data-cm-plan-preview]').count(),0);}assert.deepEqual((await read()).career,foreignBefore);
       await activate(page.locator('[data-cm-plan-slot="0"]'));await typeName('Chelsea plan');await activate(page.locator('[data-cm-plan-save]'));proof=await assertPersisted();assert.equal(proof.career.matchPlans.length,1);assert.equal(proof.career.matchPlans[0].clubName,'Chelsea');await preview(0);await screenshot('foreign-club-isolated');
       await collectDocument('finished');assert(row.events.some(event=>event.type===(profile.touch?'pointerdown':'keydown')&&event.trusted));assert.deepEqual(row.errors,[]);assert.deepEqual(row.consoleErrors,[]);assert.deepEqual(row.sockets,[]);assert.deepEqual(row.networkWrites,[]);row.passed=true;save();
-    } catch(error) {row.failure=String(error.stack||error);try{row.failureText=await page.locator('body').innerText();row.failureProof=await read();if(await page.locator(paneSelector).count())row.failureGeometry=await measure(page);await collectDocument('failure');await screenshot('failure',false);}catch(retentionError){row.retentionError=String(retentionError);}save();throw error;}
+    } catch(error) {row.failure=String(error.stack||error);try{row.failureText=await page.locator('body').innerText();row.failureProof=await read();if(await page.locator(paneSelector).count())row.failureGeometry=await measure(page);if(await page.locator('[data-cm-plan-lineup]').count())row.failureLineup=await measureLineup(page);await collectDocument('failure');await screenshot('failure',false);}catch(retentionError){row.retentionError=String(retentionError);}save();throw error;}
     finally {await context.close();}
   }
-  assert.equal(report.cases.length,3);assert(report.cases.every(row=>row.passed));assert.equal(report.controls.length,9);assert.equal(report.forwardedWrites,0);report.sourceAfter=hashes();assert.deepEqual(report.sourceAfter,report.sourceBefore);report.passed=true;save();
-  console.log('PASS manager match plans native: 3 actual hook journeys, 9 effective restored DOM faults, independent engine previews and kickoff, reload and club isolation.');
+  assert.equal(report.cases.length,3);assert(report.cases.every(row=>row.passed));assert.equal(report.controls.length,12);assert.equal(report.forwardedWrites,0);report.sourceAfter=hashes();assert.deepEqual(report.sourceAfter,report.sourceBefore);report.passed=true;save();
+  console.log('PASS manager match plans native: 3 actual hook journeys, 12 effective restored DOM faults, independent engine previews and kickoff, reload and club isolation.');
 } finally {await browser?.close();if(server)await new Promise(resolve=>server.close(resolve));report.sourceAfter=hashes();report.sourcesHeld=JSON.stringify(report.sourceAfter)===JSON.stringify(report.sourceBefore);const resolved=path.resolve(temp);assert(resolved.startsWith(ROOT+path.sep+'.manager-plans-native-'));fs.rmSync(resolved,{recursive:true,force:true});save();}

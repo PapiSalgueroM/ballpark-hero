@@ -1,3 +1,11 @@
+Codex1079 FINAL PR PREPARATION, October7,07:08 EDT. Full green prep37609334335
+at5bd61605 verified13/34,4 original regressions,36 scenes,20readers and3/9
+native scope. Artifact11477492748 SHA2f86aa9e1ccfad9b6c03ab2250a53fbffad7ca1a851ba938684d043b70e21fa3 retained.
+Visual audit found expanded XI below phone screen; product reveal corrected,
+final native3/12 now checks unaided first row plus3 effective offscreen faults.
+Final PR run still required. Three original legacy reds remain visible and
+complete results equal pinned main2fff5e04. No final-ready/live claim.
+Claude keeps main/release; preserve1079+1080 notes together at integration.
 Codex1079 PREPARATION, October7,2026: saved Club Manager match plans.
 Three club-bound slots, real availability/fitness previews and atomic tactics
 apply.13 authored outcomes/34 copied faults plus native3/9 await remote CI.

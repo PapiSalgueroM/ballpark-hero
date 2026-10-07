@@ -1,7 +1,27 @@
 # Round 1079: saved Club Manager match plans
 
+Third preparation run37609334335 passed all remote steps at
+5bd61605cae9cd472b0030d946ad514e3c998d51,
+tree4e54264404f145ee9232005531feae52c2f5932e, job112752481030.
+Artifact11477492748 ZIP SHA256
+2f86aa9e1ccfad9b6c03ab2250a53fbffad7ca1a851ba938684d043b70e21fa3
+was downloaded and independently inspected.13/34 outcomes/faults,4 original
+regressions,36 scene cases, complete three-suite baseline comparisons,20 readers
+and3 native profiles/9 restored DOM controls passed. All30 screenshots were
+reviewed, with14 source holds and12 exact save records. The action margin has
+at least11.34375px observed clearance in these profiles.
+
+Visual review still found that expanding kickoff details left the new lineup
+below the phone screen. This is corrected with a dedicated reveal target that
+keeps Apply/Hide and the first row visible. Final native now requires first-row
+visibility before any driver navigation and adds one effective restored offscreen
+lineup fault per profile, for12 controls total. The final PR run and its artifact
+must verify this amendment. Original assertions and three known legacy reds
+remain intact. No final-ready, release or live claim yet.
+
 Second preparation run37606817122 at410f6d588e0d67e6546d5f18bc70dbc686427dce
-passed13 mounted outcomes/34 effective faults, all regressions and20readers.
+passed13 mounted outcomes/34 effective faults, four original regressions,
+36 rendered set-piece outcomes and20readers.
 Complete legacy comparisons retained three identical old red outcomes and a
 changed executable control, without rewriting their original assertions.
 Artifact11475976070 ZIP SHA256
@@ -28,14 +48,14 @@ match model, result probability or random stream is added or changed.
 
 Remote acceptance is pending. Authored checks: 13 mounted outcomes, 34 copied
 source faults with mapped assertion failures and an independent engine baseline,
-13 source holds; three native profiles and nine restored DOM geometry controls.
+13 source holds; three native profiles and12 restored DOM geometry controls.
 Native runs use the actual career hook and TacticsScreen in an offline fixture,
 not the full app or a live service. Availability and club transitions are explicit
 fixture inputs. Fonts and flags use actual cached dependencies. Existing tactics
 controls retain their original sizing; new plan controls must be at least 44px
 and new copy at least 12px.
 
-Workflow also runs real app types/build, eight existing manager regressions,
+Workflow also runs real app types/build, existing manager regressions,
 all 20 built/source readers, and source/data holds. All runtime is remote CI.
 No production traffic, database changes, scored games or local runtime.
 Final hashes, runs, artifacts and independent inspection will be recorded after
