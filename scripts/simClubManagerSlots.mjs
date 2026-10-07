@@ -114,14 +114,21 @@ if (CONTROL && !(CONTROL in OWN)) {
 }
 const evidenceDir = process.env.CM_SLOTS_ARTIFACTS || path.join(ROOT, 'cm-slots-artifacts');
 fs.mkdirSync(evidenceDir, { recursive: true });
-const sourceBytes = ['src/lib/clubManager.ts', 'src/lib/clubManagerSlots.ts'].map(file => ({
-  file, bytes: fs.readFileSync(path.join(ROOT, file)),
-}));
 const sha = value => createHash('sha256').update(value).digest('hex');
-const heldSources = () => sourceBytes.map(({ file, bytes }) => {
-  const after = fs.readFileSync(path.join(ROOT, file));
-  return { file, before: sha(bytes), after: sha(after), held: bytes.equals(after) };
-});
+const sourceHashes = [];
+for (const file of ['src/lib/clubManager.ts', 'src/lib/clubManagerSlots.ts']) {
+  const bytes = fs.readFileSync(path.join(ROOT, file));
+  sourceHashes.push({ file, before: sha(bytes) });
+}
+const heldSources = () => {
+  const sources = [];
+  for (const { file, before } of sourceHashes) {
+    const bytes = fs.readFileSync(path.join(ROOT, file));
+    const after = sha(bytes);
+    sources.push({ file, before, after, held: before === after });
+  }
+  return sources;
+};
 if (CONTROL === 'decisioncontent' && process.env.CM_SLOTS_EVIDENCE_CHILD !== '1') {
   const runs = [];
   for (const name of ['', CONTROL]) {
@@ -476,7 +483,7 @@ const total = cmKeys.reduce((a, k) => a + bytesOf(k), 0);
 console.log(`   seasons played: ${played.join(', ')}; keys: ${cmKeys.map(k => `${k} ${bytesOf(k)}`).join(', ')}`);
 console.log(`   total ${total} characters across ${cmKeys.length} keys (budget ${BUDGET})`);
 fs.writeFileSync(path.join(evidenceDir, `${CONTROL || 'normal'}-sizes.json`), JSON.stringify({ arm: process.env.CM_SLOTS_ARM || 'current-source',
-  control: CONTROL || 'normal', engineHash: sha(sourceBytes[0].bytes), seed: BASE_SEED, total, budget: BUDGET,
+  control: CONTROL || 'normal', engineHash: sourceHashes[0].before, seed: BASE_SEED, total, budget: BUDGET,
   slots: cmKeys.map(key => {
     const value = JSON.parse(store.get(key));
     return { key, chars: bytesOf(key), club: value.clubName ?? null, season: value.season ?? null,
