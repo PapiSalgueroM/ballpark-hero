@@ -2,6 +2,9 @@ name: Manager appeal isolation
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - codex/manager-appeal-isolation-1081
   pull_request:
     paths:
       - .github/workflows/manager-appeal-isolation.yml
