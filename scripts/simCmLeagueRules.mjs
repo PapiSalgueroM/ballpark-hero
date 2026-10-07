@@ -171,6 +171,18 @@
       objectives held and what moved is the day one pool 1033 seeds; and
       the lead's F10 call (Central Coast Mariners partial, 9529f5f5) moved
       nothing on top of it (23/0). Eras 20/0 and pure 44/0 untouched.
+      Round 1040's review (2026-10-07) re-took modern, eras and pure after
+      attribution in throwaway trees, each written with --write: the merge
+      of release-ah-int (Round 1044's daily ledger, 60224e6c) reproduced the
+      round's committed file exactly (modern 26/0, eras 20/0, pure 47/0);
+      the review's code with that merge's rosters moved exactly the six
+      pyramid leagues it names (laliga, seriea, ligue1, serieb, ligue2 and
+      segunda, modern only: the summer lines now say "to Serie A" rather than
+      "to the Serie A"); and the reviewed rosters (110 men withheld at the 58
+      new clubs, Johnsen to Palermo, eight new empty clubs on the 61 prior)
+      moved all 26 modern saves, 19 of 20 era saves (the modern clubs the
+      era AI buyers are drawn from, recorded above) and the day one
+      objectives of the three second tiers in pure.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,
