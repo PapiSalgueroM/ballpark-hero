@@ -127,6 +127,9 @@ createRoot(document.getElementById('root')).render(<App/>);`;
   fs.writeFileSync(path.join(OUT, 'entry.tsx'), entry);
   const compiled = await build({ absWorkingDir: ROOT, stdin: { contents: entry, resolveDir: ROOT, loader: 'tsx', sourcefile: 'goal-flight-entry.tsx' }, bundle: true, write: false, format: 'esm', platform: 'browser', jsx: 'automatic', define: { 'process.env.NODE_ENV': '"production"' }, alias: { '@': path.join(ROOT, 'src') }, metafile: true, logLevel: 'silent' });
   fs.writeFileSync(path.join(OUT, 'bundle.js'), compiled.outputFiles[0].contents); write('browser-metafile.json', compiled.metafile);
+  const bundleBody = Buffer.from(compiled.outputFiles[0].contents);
+  assert.equal(hash(bundleBody), hash(compiled.outputFiles[0].contents), 'Fulfillment preserves the exact emitted bundle bytes');
+  report.bundleBody = { type: 'Buffer', bytes: bundleBody.length, sha256: hash(bundleBody) };
   const inputs = Object.keys(compiled.metafile.inputs).map(file => path.resolve(ROOT, file));
   assert(inputs.includes(PITCH), 'Browser bundle binds the exact selected component');
   const originalPitch = path.join(ROOT, 'src/components/tycoon/TycoonPitch.tsx');
@@ -142,16 +145,24 @@ createRoot(document.getElementById('root')).render(<App/>);`;
   browser = await chromium.launch({ headless: false });
   const profiles = ARM === 'normal' ? [320, 390, 430, 1440] : [390];
   for (const width of profiles) for (const reduced of [false, true]) {
-    const row = { id: `${width}-${reduced ? 'reduced' : 'full'}`, width, height: width === 1440 ? 900 : 844, reduced, checks: [], runs: [], screenshots: [], network: [], responses: [], errors: [], consoleErrors: [] };
+    const row = { id: `${width}-${reduced ? 'reduced' : 'full'}`, width, height: width === 1440 ? 900 : 844, reduced, checks: [], runs: [], screenshots: [], network: [], responses: [], routeErrors: [], errors: [], consoleErrors: [] };
     report.cases.push(row); save();
     const storage = { [fixture.key]: fixture.bytes, soccerCareerSave: '{"held":1087}', 'dukb-local-completions': '[]' };
     const context = await browser.newContext({ viewport: { width, height: row.height }, hasTouch: width < 1000, isMobile: width < 1000, reducedMotion: reduced ? 'reduce' : 'no-preference', colorScheme: width === 320 ? 'dark' : 'light', serviceWorkers: 'block', storageState: { cookies: [], origins: [{ origin: BASE, localStorage: Object.entries(storage).map(([name, value]) => ({ name, value })) }] } });
-    await context.route('**/*', route => {
+    await context.route('**/*', async route => {
       const request = route.request(), url = request.url(); row.network.push({ method: request.method(), url });
-      const local = { [`${BASE}/`]: ['text/html', html], [`${BASE}/bundle.js`]: ['text/javascript', compiled.outputFiles[0].contents], [`${BASE}/style.css`]: ['text/css', css.css] }[url];
-      if (request.method() === 'GET' && local) return route.fulfill({ status: 200, contentType: local[0], body: local[1] });
-      if (request.method() === 'GET' && assets.has(url)) { const asset = assets.get(url); row.responses.push({ url, sha256: hash(asset.body), bytes: asset.body.length }); return route.fulfill({ status: 200, ...asset }); }
-      report.forwarded.push({ blocked: true, method: request.method(), url }); return route.abort();
+      try {
+        const local = { [`${BASE}/`]: ['text/html', html], [`${BASE}/bundle.js`]: ['text/javascript', bundleBody], [`${BASE}/style.css`]: ['text/css', css.css] }[url];
+        if (request.method() === 'GET' && local) {
+          await route.fulfill({ status: 200, contentType: local[0], body: local[1] });
+          row.responses.push({ url, status: 200, contentType: local[0], bodyType: Buffer.isBuffer(local[1]) ? 'Buffer' : typeof local[1], sha256: hash(local[1]), bytes: Buffer.byteLength(local[1]), phase: 'fulfilled' }); return;
+        }
+        if (request.method() === 'GET' && assets.has(url)) { const asset = assets.get(url); await route.fulfill({ status: 200, ...asset }); row.responses.push({ url, status: 200, sha256: hash(asset.body), bytes: asset.body.length, phase: 'fulfilled' }); return; }
+        report.forwarded.push({ blocked: true, method: request.method(), url }); await route.abort();
+      } catch (error) {
+        row.routeErrors.push({ url, method: request.method(), name: error.name, message: error.message, stack: error.stack }); save();
+        try { await route.abort('failed'); } catch (abortError) { row.routeErrors.push({ url, phase: 'abort-after-error', name: abortError.name, message: abortError.message }); save(); }
+      }
     });
     await context.routeWebSocket('**/*', socket => { report.sockets.push(socket.url()); socket.close(); });
     await context.addInitScript(({ now, dark }) => {
@@ -165,6 +176,10 @@ createRoot(document.getElementById('root')).render(<App/>);`;
     const page = await context.newPage(); page.on('pageerror', e => row.errors.push(String(e))); page.on('console', m => { if (m.type() === 'error') row.consoleErrors.push(m.text()); });
     try {
       await page.goto(BASE, { waitUntil: 'load' }); await page.locator('[data-tycoon-pitch]').waitFor();
+      check(row, 'baseline:bundle-delivery', () => {
+        const delivered = row.responses.filter(r => r.url === `${BASE}/bundle.js`);
+        assert.equal(delivered.length, 1); assert.equal(delivered[0].bodyType, 'Buffer'); assert.equal(delivered[0].bytes, bundleBody.length); assert.equal(delivered[0].sha256, hash(bundleBody));
+      });
       row.fonts = await page.evaluate(async () => { await document.fonts.ready; const out = []; for (const family of ['Inter', 'Space Grotesk']) for (const weight of [400, 500, 600, 700]) { const faces = await document.fonts.load(`${weight} 16px "${family}"`); out.push({ family, weight, faces: faces.map(f => ({ family: f.family, weight: f.weight, status: f.status })) }); } return out; });
       check(row, 'baseline:fonts', () => assert(row.fonts.every(r => r.faces.length && r.faces.every(f => f.status === 'loaded' && f.family.replaceAll('"', '') === r.family && f.weight === String(r.weight))), 'Eight actual font faces loaded'));
       row.actualEngine = await page.evaluate(() => window.__flightEngine);
@@ -206,10 +221,11 @@ createRoot(document.getElementById('root')).render(<App/>);`;
       check(row, 'baseline:held-state-save-rng-clock', () => assert.deepEqual(row.after, row.before, 'Rendering and completing replays preserves full state, actual save bytes, RNG, writes and clock'));
       check(row, 'baseline:storage', () => { assert.deepEqual(row.after.storage, storage); assert.deepEqual(row.after.writes, []); });
       check(row, 'baseline:trusted-input', () => assert(row.input.some(e => e.type === 'click' && e.trusted && e.target?.startsWith('start-'))));
-      check(row, 'baseline:errors', () => { assert.deepEqual(row.errors, []); assert.deepEqual(row.consoleErrors, []); });
+      check(row, 'baseline:errors', () => { assert.deepEqual(row.errors, []); assert.deepEqual(row.consoleErrors, []); assert.deepEqual(row.routeErrors, []); });
     } finally { await context.close(); save(); }
   }
   assert.deepEqual(report.forwarded, [], 'No unexpected request is forwarded or hidden'); assert.deepEqual(report.sockets, []);
+  assert(report.cases.every(row => row.routeErrors.length === 0), 'Every route exception remains a fatal setup failure after context closure');
   report.complete = true;
 } catch (error) { report.runtimeError = { name: error.name, message: error.message, stack: error.stack }; }
 finally {

@@ -67,6 +67,26 @@ jobs:
           npm install --no-save playwright
           npx playwright install --with-deps chromium
           python -m pip install fonttools pillow
+      - name: Retain the actual browser delivery runtime
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import { createHash } from 'node:crypto';
+          const packages = ['react', 'react-dom', 'vitest', 'esbuild', 'playwright', 'playwright-core'];
+          const files = [...packages.map(name => 'node_modules/' + name + '/package.json'), 'node_modules/react/cjs/react.development.js', 'node_modules/playwright-core/lib/client/network.js', 'node_modules/esbuild/lib/main.d.ts'];
+          const hashes = {};
+          for (const file of files) {
+            assert(fs.existsSync(file), 'The diagnostic runtime source exists: ' + file);
+            const bytes = fs.readFileSync(file);
+            hashes[file] = createHash('sha256').update(bytes).digest('hex');
+            const destination = 'tycoon-goal-flight-artifacts/runtime/' + file;
+            fs.mkdirSync(destination.slice(0, destination.lastIndexOf('/')), { recursive: true });
+            fs.writeFileSync(destination, bytes);
+          }
+          const versions = Object.fromEntries(packages.map(name => [name, JSON.parse(fs.readFileSync('node_modules/' + name + '/package.json')).version]));
+          fs.writeFileSync('tycoon-goal-flight-artifacts/runtime.json', JSON.stringify({ node: process.version, versions, hashes }, null, 2));
+          NODE
       - name: Actual app types and build
         id: build
         run: |
@@ -79,6 +99,14 @@ jobs:
       - name: Actual outcomes and effective copied faults
         if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.assets.outcome == 'success' }}
         run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" xvfb-run -a node scripts/simTycoonGoalFlight.mjs 2>&1 | tee tycoon-goal-flight-artifacts/outcomes.log
+      - name: Preserve new outcome evidence before original checks
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: tycoon-goal-new-${{ github.run_id }}-${{ github.run_attempt }}
+          path: tycoon-goal-flight-artifacts/
+          retention-days: 3
+          if-no-files-found: error
       - name: Original relevant gameplay and score checks
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |

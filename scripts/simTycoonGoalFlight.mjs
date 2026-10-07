@@ -5,6 +5,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { execFileSync, spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import './lib/playwrightLoader.mjs';
 
 assert(process.env.CI && process.env.GITHUB_ACTIONS, 'Goal flight verification runs only in remote GitHub Actions');
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -79,4 +80,7 @@ finally {
   save();
 }
 console.log(`simTycoonGoalFlight: ${report.complete ? 'PASS' : 'FAIL'}, ${report.controls.filter(c => c.proved).length}/4 effective copied controls; historical expected failure=${Boolean(report.historical?.expectedFailureProved)}.`);
+console.log(`Normal component case inventory: ${report.normalCases}; completed subprocess receipts: ${report.runs.length}.`);
+console.log(`Original-source holds: ${Object.keys(hold).length}; hold error retained: ${Boolean(report.sourceHoldError)}.`);
+console.log(`Scope: finite component proof; headed browser requires xvfb and prefetched actual font cache. Evidence: ${OUT}`);
 process.exitCode = report.complete ? 0 : 1;
