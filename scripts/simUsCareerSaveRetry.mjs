@@ -28,7 +28,14 @@ const escape = value => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const save = (file, value) => { fs.mkdirSync(path.dirname(file), { recursive: true }); fs.writeFileSync(file, typeof value === 'string' ? value : JSON.stringify(value, null, 2)); };
 const files = dir => fs.readdirSync(dir, { withFileTypes: true }).flatMap(entry => entry.isDirectory() ? files(path.join(dir, entry.name)) : [path.join(dir, entry.name)]);
 const sourceFiles = ['src', 'scripts'].flatMap(dir => files(path.join(root, dir))).concat(['package.json', 'package-lock.json', 'vitest.config.ts', 'vite.config.ts', 'tsconfig.app.json', 'tsconfig.json', 'index.html'].map(file => path.join(root, file)));
-const holds = () => Object.fromEntries(sourceFiles.sort().map(file => [unix(path.relative(root, file)), sha(fs.readFileSync(file))]));
+const holds = () => {
+  const hashes = {};
+  for (const file of sourceFiles.sort()) {
+    const bytes = fs.readFileSync(file);
+    hashes[unix(path.relative(root, file))] = sha(bytes);
+  }
+  return hashes;
+};
 fs.mkdirSync(out, { recursive: true }); const before = holds();
 save(path.join(out, 'source-before.json'), before);
 process.on('exit', () => save(path.join(out, 'source-after.json'), holds()));
@@ -106,7 +113,9 @@ resolve: { alias: ${JSON.stringify({ ...aliases, '@': unix(path.join(root, 'src'
   assert.equal(tests.find(test => test.title === BASELINE)?.status, 'passed', `${name}: baseline failed`);
   const transforms = JSON.parse(fs.readFileSync(path.join(dir, 'transforms.json'), 'utf8'));
   for (const [alias, file] of Object.entries(aliases)) {
-    assert(transforms.some(row => row.file === file && row.inputSha256 === sha(fs.readFileSync(file))), `${name}: copied source not executed`);
+    const bytes = fs.readFileSync(file);
+    const inputSha256 = sha(bytes);
+    assert(transforms.some(row => row.file === file && row.inputSha256 === inputSha256), `${name}: copied source not executed`);
     const original = unix(path.join(root, 'src', alias.slice(2))) + path.extname(file);
     assert(!transforms.some(row => row.file === original), `${name}: original replaced module loaded`);
   }
@@ -124,8 +133,13 @@ resolve: { alias: ${JSON.stringify({ ...aliases, '@': unix(path.join(root, 'src'
     assert(/AssertionError/.test(failure.failureMessages.join('\n')), `${name}: mapped failure is not an AssertionError`);
     assert(records.some(row => { try { assert.deepEqual(row.actual, row.expected); return false; } catch { return true; } }), `${name}: no complete actual mismatch retained`);
   }
+  const hashes = {};
+  for (const file of files(dir)) {
+    const bytes = fs.readFileSync(file);
+    hashes[unix(path.relative(dir, file))] = sha(bytes);
+  }
   return { name, intended, status: intended ? 'assertion-failed' : 'passed', passed: tests.filter(test => test.status === 'passed').length, failed: tests.filter(test => test.status === 'failed').length,
-    records: records.length, baseline, failure, hashes: Object.fromEntries(files(dir).map(file => [unix(path.relative(dir, file)), sha(fs.readFileSync(file))])) };
+    records: records.length, baseline, failure, hashes };
 }
 
 const summary = { status: 'running', normal: null, controls: [], sourceBefore: before, sourceAfter: null };

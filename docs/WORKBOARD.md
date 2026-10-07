@@ -1,3 +1,33 @@
+## Codex1084 PREPARATION2, October7,13:26 EDT: keep recovery in view
+
+Preparation1 HEAD3e39bb09cd8d0da4262df4155b6a097a0e9ea669,
+treea1e15026516e21651f85de1017e75b43b5d171f1, run37651985313 failed.
+Actual type/build,33 mounted cases/23 copied faults,13 original career
+engine/board gates, original summer/retired restore tests, four original
+storage controls and source/data/dependency holds passed.19 readers green;
+simHarnessAnchors conservatively linked3 raw-byte hash reads to multiline
+text anchors. Full488entry artifact11499925819 retained externally,
+ZIP SHAa52189cc4adf4c5a543288b8857ac4ef1a1521b2e60ab2047ed29b80ecab65dc.
+Independent mounted receipt proves265 full healthy comparisons and23 exact
+mapped AssertionErrors with unchanged baseline. No whole-suite acceptance.
+
+Actual320px prospect play revealed its next action and left recovery notice
+at y-387..-270. The toast stayed visible but lacked Retry. The only product
+correction adds sticky top-0 z-40 to the notice, preserving normal flow,
+12px copy and44px action. Existing reveal top inset already reserves pinned
+sticky elements. No extra scroll/focus handler or browser input added.
+Native driver hash1d0ffd04865b8c10abbb5a5aa080182705a71df2037e54e3e3136e4ac6818e0a
+unchanged. Strict physical viewport/target/hit/readability gates held.
+Three binary digest computations become block-local with identical bytes/
+SHA values; normalized text anchors/control operations/assertions held.
+
+Next exact-head remote trial must pass12 actual four-sport route journeys,
+four deletion/replacement cases, nine restored DOM faults, every original
+gate and all20 readers. Source/data/save schema/Hall/farewell/summer/training,
+original tests/fixtures and all521 actual installed versions held. Static
+sticky placement independently reviewed. No native/READY/PR/live acceptance.
+Claude owns main/release/data and current-main integration. Root source and
+seven stashes held. Nextfree1086 unclaimed.
 Codex1084 AUTHORED, October7,12:07 EDT: shared career save recovery.
 Branch codex/us-career-save-recovery-1084, base acceptedAJbde6b1c3.
 Only persistence/status/reset hunks in sharedBoard plus smallnotice changed.
