@@ -252,7 +252,7 @@ try {
         let changed, rejection;
         try {
           changed = await warningGeometry(page); assert.notDeepEqual(changed, prior, `${control.name} changes rendered geometry`);
-          try { checkWarning(changed); } catch (error) { rejection = String(error); }
+          try { checkWarning(changed); } catch (error) { assert(error instanceof assert.AssertionError, 'A DOM fault must fail a geometry assertion'); rejection = String(error); }
           assert(rejection, `${control.name} must fail the actual geometry assertion`);
         } finally {
           await target.evaluate((node, style) => style === null ? node.removeAttribute('style') : node.setAttribute('style', style), original);
