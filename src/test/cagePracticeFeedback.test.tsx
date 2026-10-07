@@ -188,6 +188,26 @@ describe('Cage Practice feedback outcomes', () => {
     expect(localStorage.getItem('dukb-mma-promoter-v1')).toBe(saved);
   });
 
+  it('flushes the same actual practice tick into feedback and HUD when pause or help interrupts repaint', () => {
+    for (const opener of ['Pause', 'How to play Cage Clash']) {
+      render(<CageClashBoard onHelp={() => undefined} helpOpen={false} />);
+      fireEvent.change(document.querySelector('select[aria-label="Mode"]')!, { target: { value: 'practice' } });
+      click('Start drill'); advance(3);
+      fireEvent.keyDown(document.body, { key: 'j' }); advance(1);
+      expect(feedback().progress).toBe('Shots 0/3 · Gas 100/100');
+      click(opener);
+      const player = document.querySelector('[data-cage-fighter="player"]')!;
+      const gas = Number(player.getAttribute('data-stamina'));
+      expect(gas).toBeLessThan(100);
+      expect(feedback().progress).toBe(`Shots 0/3 · Gas ${Math.floor(gas)}/100`);
+      expect(feedback().message).toBe('Last: That strike missed. Get closer.');
+      const paused = feedback().root.textContent;
+      advance(10); expect(feedback().root.textContent).toBe(paused);
+      expect(recordCompletion).not.toHaveBeenCalled(); expect(fetch).not.toHaveBeenCalled();
+      cleanup();
+    }
+  });
+
   it('holds actual practice combat and a strict saved promotion independently of feedback', () => {
     const practice = createCagePractice('submission', 'grappler', 1073), before = copy(practice);
     const next = stepCagePractice(practice, { ...blank, action: 'submit' });

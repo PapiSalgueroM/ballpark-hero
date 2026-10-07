@@ -9,7 +9,8 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..'), self = fileURLToPath(import.meta.url);
 const feedback = 'src/components/cage-clash/CagePracticeFeedback.tsx', board = 'src/components/cage-clash/CageClashBoard.tsx';
-const siblings = [feedback, board, 'src/components/cage-clash/CageClashCanvas.tsx', 'src/components/cage-clash/CageFightStats.tsx'];
+const hook = 'src/hooks/useCageClash.ts';
+const siblings = [feedback, board, 'src/components/cage-clash/CageClashCanvas.tsx', 'src/components/cage-clash/CageFightStats.tsx', hook];
 const testFile = 'src/test/cagePracticeFeedback.test.tsx';
 const titles = {
   striking: 'shows actual three shot progress and requires 90 gas after releasing controls',
@@ -18,10 +19,12 @@ const titles = {
   escape: 'requires full earned guard and actual standing rather than half guard or a flag alone',
   readonly: 'renders actual defended and resisted messages without changing input RNG scores or storage',
   mounted: 'updates feedback through actual mounted practice inputs while Quick and Circuit remain isolated',
+  pause: 'flushes the same actual practice tick into feedback and HUD when pause or help interrupts repaint',
   baseline: 'holds actual practice combat and a strict saved promotion independently of feedback',
 };
 const integration = '{practice ? <CagePracticeFeedback practice={practice} />';
 const controls = {
+  pause: { file: hook, from: 'setFight(fightRef.current);\n    setPractice(practiceRef.current);\n    setPaused(true);', to: 'setFight(fightRef.current);\n    setPaused(true);', test: titles.pause },
   shots: { file: feedback, from: 'Math.min(3, player.hits)', to: 'Math.min(3, fight.cpu.hits)', test: titles.striking },
   gas: { file: feedback, from: 'Math.floor(player.stamina)', to: 'Math.round(player.stamina)', test: titles.striking },
   gasTarget: { file: feedback, from: 'earned = player.hits >= 3 && player.stamina >= 90;', to: 'earned = player.hits >= 3 && player.stamina >= 89;', test: titles.striking },
@@ -59,7 +62,7 @@ if (mode === 'all') {
 }
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const sourceBefore = {}, held = [];
-const sources = [...siblings, 'src/lib/cageClash.ts', 'src/lib/cagePractice.ts', 'src/lib/cageCircuit.ts', 'src/hooks/useCageClash.ts', testFile];
+const sources = [...siblings, 'src/lib/cageClash.ts', 'src/lib/cagePractice.ts', 'src/lib/cageCircuit.ts', testFile];
 for (const relative of sources) {
   const file = path.join(root, relative);
   const bytes = await readFile(file);

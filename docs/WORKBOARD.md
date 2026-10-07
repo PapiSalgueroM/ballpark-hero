@@ -1,3 +1,33 @@
+## Round 1073 recovery: pause feedback fix under remote verification, October 7, 2026
+
+Continuing the prior chat in the existing Cage practice branch. Preparation 37568099560
+caught a real stale feedback tick when Help pauses between HUD refreshes. The bounded
+fix flushes the existing practice state beside fight state in useCageClash.pause.
+This adds no engine, RNG, scoring, save or data behavior. A new actual mounted
+pause/help regression and copied revert control cover the fix. Existing copied
+fight-stats/readiness harnesses now include the new feedback component dependency.
+The feedback suite now has 8 outcomes and 14 effective controls to verify remotely.
+1073 remains unaccepted and unpublished. No prior failing artifact is credited.
+Claude retains AH/main/publish; PR163 remains accepted. Preserve both rounds' guide,
+news and ledger hunks. Protected root source and stashes are untouched.
+## Round1072 accepted for AH,1073 testing, 2026-10-07 03:46 UTC
+
+Quick Sim PR163 at3304bc59 passed final CM37565507991, MMA37565507983 and
+Entry37565507990. Actual retained artifacts and mutation copies are audited.
+10 coaching outcomes/13 faults,6 full-save native journeys/3 geometry controls,
+20 manager regressions,6 Slots controls and150/150 full canonical historical
+shootout baseline pairs passed. Normalize only inactive top-level live:null.
+Six payload hashes verified. No real data or save schema changes. Not merged
+or LIVE; Claude holds AH/main/publish. Preserve1072 coach/help hunks.
+1073 replaces only the existing practice feedback slot with actual progress,
+next instructions and last attempt. All four drills are covered. Engines,
+hook, RNG, scoring and save bytes stay held. Preparation37568099560 runs at
+e5a3e3b9. First preparation failed before any app tests because /cage-clash
+is not a converted/frozen guide; removed the inapplicable --refresh command.
+No guide fixture is edited. Final acceptance and payload audit remain pending.
+Preserve1070/1071,1072 and1073 news/guide/ledger updates during AH integration.
+All runtime remote; protected root source and seven stashes untouched.
+
 ## Round1073 claimed: Cage Clash practice feedback, 2026-10-07 03:28 UTC
 
 Anthony asked to keep going and work on other things. Codex takes compact
