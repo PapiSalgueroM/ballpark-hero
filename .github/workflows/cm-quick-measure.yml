@@ -1,4 +1,4 @@
-name: Measure Club Manager save regression
+name: Diagnose Club Manager preserved shootouts
 on:
   push:
     branches: [codex/cm-quick-sim-subs-1072]
@@ -8,23 +8,18 @@ jobs:
   measure:
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    strategy:
-      fail-fast: false
-      matrix:
-        arm: [candidate, main]
     defaults:
       run:
         shell: bash
     env:
       SIM_NETWORK: offline
-      CM_SLOTS_ARM: ${{ matrix.arm }}
+      CM_SLOTS_ARM: candidate
       CM_SHOOTOUT_ARTIFACTS: cm-quick-measure-artifacts/shootout
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           persist-credentials: false
-          ref: ${{ matrix.arm == 'main' && '428881617a04543606050395d05be1a9fa4d7b3e' || github.sha }}
       - uses: actions/setup-node@v4
         with:
           node-version: 24
@@ -34,22 +29,11 @@ jobs:
           mkdir -p cm-quick-measure-artifacts
           git rev-parse HEAD > cm-quick-measure-artifacts/source-head.txt
           sha256sum src/lib/clubManager.ts src/lib/clubManagerSlots.ts > cm-quick-measure-artifacts/source-before.txt
-          git show "$GITHUB_SHA:scripts/simClubManagerSlots.mjs" > scripts/simClubManagerSlots.mjs
           sha256sum scripts/simClubManagerSlots.mjs > cm-quick-measure-artifacts/diagnostic-harness.txt
           npm ci
-      - name: Measure six career streams without changing the budget
+      - name: Check saved career parity on the measured budget
         run: |
-          failed=0
-          for seed in 0 1 2 3 4 5; do
-            set +e
-            SIM_SEED="$seed" CM_SLOTS_ARTIFACTS="cm-quick-measure-artifacts/slots/$seed" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubManagerSlots.mjs 2>&1 | tee "cm-quick-measure-artifacts/slots-$seed.log"
-            status=${PIPESTATUS[0]}
-            set -e
-            echo "$status" > "cm-quick-measure-artifacts/slots/$seed/exit.txt"
-            if [ "$status" -gt 1 ]; then failed=1; fi
-            node -e "const fs=require('fs'),r=JSON.parse(fs.readFileSync(process.argv[1])); if(r.runtimeErrors.length || r.sources.some(s=>!s.held) || !['[]','[2]'].includes(JSON.stringify(r.red)) || (r.red.length && !r.tags['2'].includes('budget'))) process.exit(1)" "cm-quick-measure-artifacts/slots/$seed/normal-report.json" || failed=1
-          done
-          exit "$failed"
+          CM_SLOTS_ARTIFACTS=cm-quick-measure-artifacts/slots NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubManagerSlots.mjs 2>&1 | tee cm-quick-measure-artifacts/slots.log
       - name: Measure one duplicated save
         run: |
           set +e
@@ -58,8 +42,17 @@ jobs:
           set -e
           test "$status" -eq 1
           grep -q 'CONTROL FIRED: SLOTS_CONTROL=dupe turned section 2 red through its budget check' cm-quick-measure-artifacts/dupe.log
-      - name: Check actual pre-change shootout replay
-        if: ${{ !cancelled() && matrix.arm == 'candidate' }}
+      - name: Check changed decision text is detected
+        if: ${{ !cancelled() }}
+        run: |
+          set +e
+          SLOTS_CONTROL=decisioncontent CM_SLOTS_ARTIFACTS=cm-quick-measure-artifacts/slots-content NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubManagerSlots.mjs 2>&1 | tee cm-quick-measure-artifacts/decisioncontent.log
+          status=${PIPESTATUS[0]}
+          set -e
+          test "$status" -eq 1
+          grep -q 'CONTROL FIRED: SLOTS_CONTROL=decisioncontent changed only decision parity' cm-quick-measure-artifacts/decisioncontent.log
+      - name: Capture actual pre-change shootout difference
+        if: ${{ !cancelled() }}
         run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmShootoutOrder.mjs 2>&1 | tee cm-quick-measure-artifacts/shootout.log
       - name: Preserve original engine and slot bytes
         if: always()
@@ -69,6 +62,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: cm-quick-measure-${{ matrix.arm }}-${{ github.run_id }}-${{ github.run_attempt }}
+          name: cm-quick-diagnostic-${{ github.run_id }}-${{ github.run_attempt }}
           path: cm-quick-measure-artifacts/
           retention-days: 7

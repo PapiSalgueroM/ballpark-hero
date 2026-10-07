@@ -162,6 +162,37 @@ try {
           assert.notDeepEqual(duplicate.resultLog, after.resultLog); assert.throws(() => settlement(duplicate, before, expected.state), /Exactly one result/);
           settlement(after, before, expected.state); report.controls.push('duplicate-settlement');
         }
+        if (id === '390-fatigue') {
+          const verdict = page.locator('h2.cm-slam'); await verdict.waitFor({ state: 'attached' });
+          const animationState = await verdict.evaluate(el => {
+            const animation = el.getAnimations().find(item => item.animationName === 'cmSlam');
+            if (!animation) throw new Error('Actual verdict animation is missing');
+            const state = { time: animation.currentTime, running: animation.playState === 'running' };
+            animation.pause(); animation.currentTime = 0; return state;
+          });
+          const readPeak = () => verdict.evaluate(el => {
+            const rect = node => { const box = node.getBoundingClientRect(); return { x: box.x, y: box.y, width: box.width, height: box.height, right: box.right, bottom: box.bottom }; };
+            return { scrollWidth: document.documentElement.scrollWidth, width: innerWidth, heading: rect(el), card: rect(el.parentElement),
+              transform: getComputedStyle(el).transform, overflow: getComputedStyle(el.parentElement).overflow };
+          });
+          const fits = value => assert(value.scrollWidth <= profile.width + 2 && value.width <= profile.width + 2, 'Animated report fits the viewport horizontally');
+          await page.evaluate(() => new Promise(requestAnimationFrame));
+          row.verdictPeak = await readPeak(); fits(row.verdictPeak);
+          assert(row.verdictPeak.heading.right > profile.width + 2, 'Actual enlarged heading exercises the overflow boundary');
+          const oldOverflow = await verdict.evaluate(el => { const value = el.parentElement.style.overflow; el.parentElement.style.overflow = 'visible'; return value; });
+          await page.evaluate(() => new Promise(requestAnimationFrame));
+          row.unclippedVerdictPeak = await readPeak();
+          assert.notEqual(row.unclippedVerdictPeak.overflow, row.verdictPeak.overflow, 'Control changes actual card containment');
+          assert.throws(() => fits(row.unclippedVerdictPeak), /Animated report fits the viewport/);
+          await verdict.evaluate((el, value) => { el.parentElement.style.overflow = value; }, oldOverflow);
+          await page.evaluate(() => new Promise(requestAnimationFrame));
+          row.restoredVerdictPeak = await readPeak(); fits(row.restoredVerdictPeak);
+          await verdict.evaluate((el, state) => {
+            const animation = el.getAnimations().find(item => item.animationName === 'cmSlam');
+            animation.currentTime = state.time; if (state.running) animation.play();
+          }, animationState);
+          report.controls.push('verdict-overflow');
+        }
         await page.locator('[data-cm-timeline]').scrollIntoViewIfNeeded();
         row.layout = await page.locator('[data-cm-timeline]').evaluate(el => {
           const rect = el.getBoundingClientRect();
@@ -196,10 +227,10 @@ try {
     }
   }
   assert.equal(report.cases.length, 6); assert(report.cases.every(row => row.passed), 'Every real Quick Sim journey passed');
-  assert.equal(report.controls.length, 2);
+  assert.equal(report.controls.length, 3);
 } finally {
   await browser?.close(); server.kill();
   report.sourceAfter = sourceHashes(); report.sourceHeld = JSON.stringify(report.sourceBefore) === JSON.stringify(report.sourceAfter); save();
 }
 assert(report.sourceHeld, 'Native proof never changes product source');
-console.log('playCmQuickSubs: 3 viewports, 2 actual saved fixtures, 6 settled reports, 2 effective controls, zero external forwarding; source held.');
+console.log('playCmQuickSubs: 3 viewports, 2 actual saved fixtures, 6 settled reports, 3 effective controls, zero external forwarding; source held.');

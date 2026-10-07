@@ -183,13 +183,18 @@ const sourceBytes = WRITE_FIXTURE ? [] : [`${ROOT}/src/lib/clubManager.ts`, FIXT
 
 const readLF = f => fs.readFileSync(f, 'utf8').split('\r\n').join('\n');
 const abort = m => { console.error(m); process.exit(1); };
+let mutation = null;
 const swap = (src, from, to, where) => {
-  if (!src.includes(from)) {
+  const hits = src.split(from).length - 1;
+  if (hits !== 1) {
     console.error(`control cannot run: ${where} is not in the shape CM_SHOOTOUT_CONTROL=${CONTROL} rewrites`);
     console.error(`  looked for: ${JSON.stringify(from)}`);
     process.exit(1);
   }
-  return src.replace(from, to);
+  const changed = src.replace(from, to);
+  mutation = { control: CONTROL, where, hits, beforeHash: createHash('sha256').update(src).digest('hex'),
+    afterHash: createHash('sha256').update(changed).digest('hex'), changed: src !== changed };
+  return changed;
 };
 
 /* ---------- the engine, or a control's copy of it ---------- */
@@ -328,7 +333,9 @@ const FIXTURE_SEEDS = Array.from({ length: 150 }, (_, i) => 782_100 + i);
 const CLUB = 'Real Madrid';
 
 let failures = 0;
-const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
+let section = 0;
+const failedSections = {};
+const fail = m => { failures += 1; (failedSections[section] ??= []).push(m); console.error('  FAIL: ' + m); };
 const pct = x => `${(x * 100).toFixed(1)}%`;
 
 /* ---------- the base career, simmed to its first cup week ---------- */
@@ -371,6 +378,7 @@ function playCup(state, seed, engine = cm) {
          the shootout cannot all land the same. */
       hash: fnv(JSON.stringify({ report: rep, state: r.state })),
       report: rep,
+      state: r.state,
     };
   });
 }
@@ -401,6 +409,7 @@ for (const p of atCup.squad) idsOfName.set(p.name, [...(idsOfName.get(p.name) ??
 
 /* ================================================================== */
 console.log('1) The walk, through the whole match: my first five kicks are the first five listed men who finished');
+section = 1;
 /* ================================================================== */
 {
   const xi = resolveXI(atCup).filter(Boolean);
@@ -515,6 +524,7 @@ console.log('1) The walk, through the whole match: my first five kicks are the f
 
 /* ================================================================== */
 console.log('2) The order is worth something: five best first beats five worst first, on common random numbers');
+section = 2;
 /* ================================================================== */
 {
   const ratings = [90, 88, 86, 84, 82, 78, 74, 70, 66, 64, 62];
@@ -556,6 +566,7 @@ console.log('2) The order is worth something: five best first beats five worst f
 
 /* ================================================================== */
 console.log('3) The cap: no edge and no kick moves past it, either way');
+section = 3;
 /* ================================================================== */
 {
   let pairs = 0;
@@ -582,6 +593,7 @@ console.log('3) The cap: no edge and no kick moves past it, either way');
 
 /* ================================================================== */
 console.log('4) Historical unmanaged play equals actual pre-1072 main, with ancient golden drift recorded');
+section = 4;
 /* ================================================================== */
 let fixture = null;
 const baselineEvidence = { baselineRef: '42888161', baselineSourceHash, rows: [], oldLoad: null };
@@ -601,10 +613,15 @@ const baselineEvidence = { baselineRef: '42888161', baselineSourceHash, rows: []
   for (const want of fixture.rows) {
     const out = playCup(historicalCup, want.seed, historical);
     const got = row(out);
-    const base = row(playCup(baselineCup, want.seed, baseline));
+    const baselineOut = playCup(baselineCup, want.seed, baseline);
+    const base = row(baselineOut);
     const goldenCandidate = JSON.stringify(got) === JSON.stringify(want);
     const goldenBaseline = JSON.stringify(base) === JSON.stringify(want);
     const paired = JSON.stringify(got) === JSON.stringify(base);
+    if (!paired && !baselineEvidence.firstDifference) baselineEvidence.firstDifference = {
+      seed: want.seed, candidate: { report: out.report, state: out.state },
+      baseline: { report: baselineOut.report, state: baselineOut.state },
+    };
     baselineEvidence.rows.push({ seed: want.seed, candidate: got, baseline: base, goldenCandidate, goldenBaseline, paired });
     if (paired) sameBaseline += 1;
     else if (shown++ < 3) console.error(`  differs from actual main428, seed ${want.seed}: got ${JSON.stringify(got)}, baseline ${JSON.stringify(base)}`);
@@ -626,6 +643,7 @@ const baselineEvidence = { baselineRef: '42888161', baselineSourceHash, rows: []
 
 /* ================================================================== */
 console.log('5) An old save loads with no order, holds its historical unmanaged play, and keeps a chosen order');
+section = 5;
 /* ================================================================== */
 {
   localStorage.clear();
@@ -673,6 +691,7 @@ console.log('5) An old save loads with no order, holds its historical unmanaged 
 
 /* ================================================================== */
 console.log('6) The keeper facing each kick, and the other side\'s order');
+section = 6;
 /* ================================================================== */
 {
   /* a) Through runShootout, on common random numbers: the same eleven on
@@ -763,6 +782,15 @@ console.log('6) The keeper facing each kick, and the other side\'s order');
 /* ================================================================== */
 const evidenceDir = process.env.CM_SHOOTOUT_ARTIFACTS || path.join(ROOT, 'cm-shootout-artifacts');
 fs.mkdirSync(evidenceDir, { recursive: true });
+baselineEvidence.failedSections = failedSections;
+baselineEvidence.mutation = mutation;
+baselineEvidence.executedSources = [['candidate', enginePath], ['historical', historicalEnginePath], ['baseline428', baselineEnginePath]].map(([role, file]) => {
+  const bytes = fs.readFileSync(file);
+  const copy = CONTROL ? `${CONTROL}-${role}.engine.ts` : null;
+  if (copy) fs.writeFileSync(path.join(evidenceDir, copy), bytes);
+  return { role, hash: createHash('sha256').update(bytes).digest('hex'), copy };
+});
+baselineEvidence.executedBundleHash = createHash('sha256').update(fs.readFileSync(BUNDLE)).digest('hex');
 baselineEvidence.sources = sourceBytes.map(({ file, bytes }) => {
   const after = fs.readFileSync(file);
   return { file: path.relative(ROOT, file), before: createHash('sha256').update(bytes).digest('hex'),

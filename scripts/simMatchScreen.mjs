@@ -585,7 +585,11 @@ if (CONTROL) {
 await new Promise(resolve => setImmediate(resolve));
 assert.deepEqual(runtimeErrors, [], 'Neither the control nor its baseline produces a runtime error');
 for (const verify of verifySources) verify();
-const sourceAfter = Object.fromEntries([ENGINE, CARD, PAGE].map(file => [path.relative(ROOT, file).replaceAll('\\', '/'), createHash('sha256').update(fs.readFileSync(file)).digest('hex')]));
+const sourceAfter = {};
+for (const file of [ENGINE, CARD, PAGE]) {
+  const bytes = fs.readFileSync(file);
+  sourceAfter[path.relative(ROOT, file).replaceAll('\\', '/')] = createHash('sha256').update(bytes).digest('hex');
+}
 assert.deepEqual(sourceAfter, sourceBefore, 'All original match-source hashes remain held through the baseline');
 fs.writeFileSync(path.join(artifacts, `${CONTROL || 'normal'}-report.json`), JSON.stringify({
   control: CONTROL || 'normal', intendedSection: intended[CONTROL] ?? null,

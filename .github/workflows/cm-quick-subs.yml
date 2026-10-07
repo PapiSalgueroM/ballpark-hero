@@ -69,18 +69,6 @@ jobs:
           npx playwright install --with-deps chromium
           python -m pip install fonttools pillow
           node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee cm-quick-subs-artifacts/fonts.log
-      - name: Generate the changed help and news snapshots
-        if: ${{ github.event_name == 'push' }}
-        run: |
-          node scripts/simGuideHeadings.mjs --refresh /club-manager 2>&1 | tee cm-quick-subs-artifacts/guide-refresh.log
-          node scripts/genSearchKeywords.mjs 2>&1 | tee cm-quick-subs-artifacts/search-generation.log
-          PRERENDER_ONLY=/club-manager,/whats-new npm run build:seo 2>&1 | tee cm-quick-subs-artifacts/seo-generation.log
-          mkdir -p cm-quick-subs-artifacts/payload
-          for file in public/club-manager/index.html public/whats-new/index.html public/sitemap.xml scripts/data/lastmod.json src/data/searchKeywords.json scripts/data/guideHeadingsFrozen.json; do
-            mkdir -p "cm-quick-subs-artifacts/payload/$(dirname "$file")"
-            cp "$file" "cm-quick-subs-artifacts/payload/$file"
-            sha256sum "$file"
-          done | tee cm-quick-subs-artifacts/payload-sha256.txt
       - name: Type check and build
         id: build
         run: |
@@ -136,50 +124,3 @@ jobs:
           name: cm-quick-subs-${{ github.run_id }}-${{ github.run_attempt }}
           retention-days: 7
           path: cm-quick-subs-artifacts/
-
-  baseline:
-    if: ${{ github.event_name == 'push' }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    defaults:
-      run:
-        shell: bash
-    env:
-      SIM_NETWORK: offline
-      VITEST_MAX_FORKS: 1
-      VITEST_MIN_FORKS: 1
-      CM_SLOTS_ARTIFACTS: cm-quick-baseline-artifacts/slots
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: 428881617a04543606050395d05be1a9fa4d7b3e
-          fetch-depth: 0
-          persist-credentials: false
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 24
-          cache: npm
-      - name: Install baseline dependencies
-        run: |
-          mkdir -p cm-quick-baseline-artifacts
-          git rev-parse HEAD > cm-quick-baseline-artifacts/source-head.txt
-          npm ci
-          sha256sum scripts/simClubManagerSlots.mjs > cm-quick-baseline-artifacts/original-harness.txt
-          git show "$GITHUB_SHA:scripts/simClubManagerSlots.mjs" > scripts/simClubManagerSlots.mjs
-          sha256sum scripts/simClubManagerSlots.mjs > cm-quick-baseline-artifacts/diagnostic-harness.txt
-          echo "$GITHUB_SHA" > cm-quick-baseline-artifacts/diagnostic-head.txt
-      - name: Measure the existing main behavior
-        run: |
-          failed=0
-          for harness in simClubManagerSlots; do
-            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node "scripts/$harness.mjs" 2>&1 | tee "cm-quick-baseline-artifacts/$harness.log" || failed=1
-          done
-          git diff --exit-code HEAD -- src scripts ':(exclude)scripts/simClubManagerSlots.mjs' || failed=1
-          exit "$failed"
-      - name: Preserve measured baseline
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: cm-quick-baseline-${{ github.run_id }}-${{ github.run_attempt }}
-          retention-days: 7
-          path: cm-quick-baseline-artifacts/

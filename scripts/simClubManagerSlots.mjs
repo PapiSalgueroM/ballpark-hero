@@ -54,18 +54,22 @@
  *                                Section 1 must still read that difference.
  *
  * MEASURED on the healthy engine, six streams (the default and SIM_SEED 1 to
- * 5), 2026-10-02:
+ * 5), 2026-10-06, Round 1072 automatic Quick Sim coaching:
  *   section 1: 20 of 20 season digests identical on every stream.
  *   section 2: everything Club Manager keeps on the device with three careers
  *     at the final whistle of season 15 (one active and full, two parked and
- *     lean): 413,738 / 416,441 / 414,717 / 416,960 / 416,606 / 415,901
- *     characters. Default stream by key: active (Barcelona, the 2010-11 world
- *     is two leagues) 90,724, Everton parked 163,966, Lincoln City parked
- *     159,017, index 31. Under the dupe control the same stream holds a fifth
- *     key, a lean 52,023 copy of the smallest career, total 465,761.
- *   BUDGET 440,000 sits 23,000 over the largest healthy total and 25,000
- *   under what the dupe control leaves (a lean copy of the smallest career),
- *   against a spread of 3,222 between streams. For scale, simClubManagerSaveSize
+ *     lean): 444,005 / 444,634 / 442,415 / 444,992 / 442,545 / 442,058
+ *     characters. Exact pre-1072 main on the same harness: 439,821 / 439,872 /
+ *     440,871 / 440,150 / 439,884 / 438,756, so the old 440,000 fence already
+ *     failed on two streams after earlier engine growth. Coaching changes
+ *     existing squad and career outcomes, with four saved keys in both arms;
+ *     existing optional live:null adds only 36 characters across the careers.
+ *     Default keys: active Barcelona 109,938, Everton parked 169,315, Lincoln
+ *     City parked 164,721, index 31. The dupe control adds a lean 57,768 copy
+ *     of Barcelona, a fifth key, total 501,773.
+ *   BUDGET 470,000 sits 25,008 over the largest healthy total and 31,773
+ *   under what the dupe control leaves, against a spread of 2,934 between
+ *   healthy streams. For scale, simClubManagerSaveSize
  *   works against a 5 MB origin quota, and three careers take under a fifth of it.
  *   section 4 (2026-10-03, default, SIM_SEED 1, 2): the lived in save stands
  *     at season 5, week 19 with 190 / 196 / 191 h2h rows (115,179 / 116,726 /
@@ -96,7 +100,7 @@ const BUNDLE = `${TMP}/bundle.mjs`;
 
 const SWITCHES = Number(process.env.SLOTS_SWITCHES || 20);
 const BUDGET_SEASON = Number(process.env.SLOTS_BUDGET_SEASON || 15);
-const BUDGET = 440_000; // healthy 413,738 to 416,960 over six streams; one duplicated career (the dupe control) 465,761
+const BUDGET = 470_000; // measured healthy 442,058 to 444,992; actual duplicated career control 501,773
 const SAVE_KEY = 'dukb-club-manager-save';
 /* SIM_SEED re-roots every career's stream, to measure the fences on fresh
    samples on purpose. The default is the stream the fences are judged on. */
