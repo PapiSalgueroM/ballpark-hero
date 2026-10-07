@@ -66,6 +66,7 @@ vi.mock('@/components/game/PostGameStats', () => ({ default: () => null }));
 import * as E from '@/lib/soccerCareerEngine';
 import type { CareerState } from '@/lib/soccerCareerEngine';
 import SoccerCareer from '@/pages/SoccerCareer';
+import { signThroughReview } from './signThroughReview';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const SAVE_KEY = 'soccerCareerSave';
@@ -126,7 +127,7 @@ const seasonStart = (s: CareerState) => s.phase === 'playing' && s.age >= 22;
 /* Same walker as careerDilemmaReach.test.tsx: the action bar on a season
    start, the first choice on a dilemma card, otherwise the screen's own
    buttons by preference, else its last one. */
-const PREFER = ['← Back', '💪 Not Done Yet', 'Stay', 'Sign', 'Continue', 'Next', 'Accept', 'Confirm', 'Done', 'Close'];
+const PREFER = ['← Back', '💪 Not Done Yet', 'Stay', 'Sign', 'Review contract', 'Continue', 'Next', 'Accept', 'Confirm', 'Done', 'Close'];
 const screenCard = (root: HTMLElement) => root.querySelector('div.space-y-3.order-1')?.firstElementChild?.firstElementChild as HTMLElement | null;
 const dilemmaCard = (root: HTMLElement) => {
   const tag = Array.from(root.querySelectorAll('span')).find(s => (s.textContent ?? '').includes('MORAL DILEMMA'));
@@ -136,7 +137,8 @@ const decidedCard = (root: HTMLElement) => {
   const h = Array.from(root.querySelectorAll('h3')).find(x => (x.textContent ?? '').trim() === 'Decision Made');
   return h ? h.closest('div.rounded-xl') as HTMLElement | null : null;
 };
-async function press(el: HTMLElement) { await act(async () => { fireEvent.click(el); }); await tick(); }
+/* Round 1082: an offer is signed in the review dialog, not on the card. */
+async function press(el: HTMLElement) { await act(async () => { fireEvent.click(el); }); await tick(); await signThroughReview(el, () => tick()); }
 async function stepOnce(root: HTMLElement): Promise<string> {
   const s = readSave();
   let target: HTMLButtonElement | undefined;
