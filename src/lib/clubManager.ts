@@ -17736,6 +17736,20 @@ export function coachQuickMatch(career: CareerState): CareerState {
     : savedMinute === 90 ? state.live!.added?.h2 ?? 0
       : savedMinute === state.live!.et?.to ? state.live!.added?.et ?? 0 : 0;
   const handled = new Set<string>();
+  /* Release AL: how a bench man fits the place the man coming off holds.
+     benchFor puts every out of position man in one tier, and a reserve keeper
+     who never plays is the freshest of them, so on the 16 man squads of the
+     second tiers the coach sent the keeper on for a midfielder while fit
+     outfield players sat beside him (51 of 439 changes over 1,326 matches).
+     The coach now crosses the keeper line only when nobody else can come on,
+     and takes a merely tired man off only for somebody who plays there. */
+  const gradeFor = (outId: string): ((p: CMPlayer) => FitGrade) => {
+    const live = state.live!;
+    const slot = liveFormationOf(state, live).slots[live.onPitch.indexOf(outId)] ?? null;
+    const out = state.squad.find(p => p.id === outId);
+    const allowed = slot ? slot.allowed : out ? [out.position] : [];
+    return p => gradeFit(heldPositions(p), allowed);
+  };
   const injuriesThrough = (to: number) => {
     while (state.live!.subsUsed < MAX_SUBS) {
       const live = state.live!;
@@ -17744,7 +17758,9 @@ export function coachQuickMatch(career: CareerState): CareerState {
         .sort(clockOrder).find(line => line.id && line.minute <= to && live.onPitch.includes(line.id) && !handled.has(line.id));
       if (!injury?.id) break;
       handled.add(injury.id);
-      const coming = benchFor(state, injury.id)[0];
+      const bench = benchFor(state, injury.id);
+      const injuredFit = gradeFor(injury.id);
+      const coming = bench.find(p => injuredFit(p) !== 'keeper') ?? bench[0];
       if (!coming) continue;
       const minute = Math.max(injury.minute, live.minute ?? 46, live.et && savedMinute === 90 ? 91 : 0);
       const plus = Math.max(minute === injury.minute ? injury.plus ?? 0 : 0, minute === savedMinute ? savedBoard : 0,
@@ -17759,8 +17775,9 @@ export function coachQuickMatch(career: CareerState): CareerState {
     for (const out of tiringAtHalftime(state)) {
       if (state.live!.subsUsed >= MAX_SUBS - 1) break;
       if (liveGoneIds(state.live!, 46).has(out.id)) continue;
-      const coming = benchFor(state, out.id).find(p => p.fitness > out.fitness
-        || (p.fitness === out.fitness && p.morale > out.morale));
+      const tiredFit = gradeFor(out.id);
+      const coming = benchFor(state, out.id).find(p => (tiredFit(p) === 'natural' || tiredFit(p) === 'family')
+        && (p.fitness > out.fitness || (p.fitness === out.fitness && p.morale > out.morale)));
       if (coming) state = changeLive(state, Math.max(46, state.live!.minute ?? 46), { kind: 'sub', outId: out.id, inId: coming.id }) ?? state;
     }
     drawSecondHalf(state, entry, state.live!);
