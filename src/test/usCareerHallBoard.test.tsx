@@ -14,6 +14,11 @@
  *      waits for the ballot to land.
  *   5. A corrupt retirement, speech or jersey block is dropped alone.
  *   6. The card prints class years only from the rules' verifiedFromClass.
+ *   7. (Review fix) The deck's own retirement cards never come after the talk,
+ *      through each of the board's three summer call sites: the deal in
+ *      playSeason, the next card in chooseOption, and the card a save is
+ *      restored onto. Each test first proves the card WOULD have been shown
+ *      with no filter, so a board that drops the filter goes red here.
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, waitFor } from '@testing-library/react';
@@ -30,8 +35,8 @@ import { NBA_CAREER_SPORT } from '@/lib/nbaCareerSport';
 import { MLB_CAREER_SPORT } from '@/lib/mlbCareerSport';
 import { NHL_CAREER_SPORT } from '@/lib/nhlCareerSport';
 import { defaultAppearance } from '@/lib/soccerCareerAppearance';
-import { dealSummer } from '@/lib/usCareerSummer';
-import { pendingTalk } from '@/lib/usCareerRetirementFlow';
+import { dealSummer, laterAnswerMovesRating, movesRating, seekSummerCard, summerCardAt, summerSeason } from '@/lib/usCareerSummer';
+import { pendingTalk, RETIREMENT_CARD_IDS, talkDeckFilter } from '@/lib/usCareerRetirementFlow';
 import { hallRecordFor, runHallBallot, type HallRecord } from '@/lib/careerHallOfFame';
 import { HallOfFameCard } from '@/components/career/HallOfFameCard';
 import type { UsCareerCore, UsCareerSport } from '@/lib/usCareerSport';
@@ -296,5 +301,170 @@ describe('the card prints class years only from the verified class', () => {
         cleanup();
       }
     }
+  });
+});
+
+/* ── 7. The deck's retirement cards never come after the talk (review fix) ── */
+
+type Vet = UsCareerCore & { health: number; earnings: number };
+const isRet = (id: string | null | undefined) => !!id && RETIREMENT_CARD_IDS.has(id);
+const shownCard = () => document.querySelector('[data-career-event]')?.getAttribute('data-career-event') ?? null;
+const option = (i: number) => document.querySelector<HTMLButtonElement>(`[data-career-decision-option="${i}"]`)!;
+
+/** A veteran twelve seasons in, played by the real engine, then set inside the
+ *  talk rule with the deck's own retirement cards open to him (old enough,
+ *  healthy, paid). No rival, so no rivalry beat stands between a season and
+ *  the talk. Built as an old save would be: no Round 1039 blocks. */
+function deckCareer(sport: UsCareerSport, seed: number): { c: UsCareerCore; tq: number } {
+  for (let s = seed; s < seed + 300; s += 1) {
+    const rng = mulberry32(s);
+    const pos = sport.create.defaultPos;
+    const c = sport.startCareer(`Deck ${sport.label} ${s}`, pos, sport.create.archetypes[pos][0], rng, defaultAppearance(), 'now') as Vet;
+    c.summerSalt = 'fixture';
+    let tq = sport.rollTeamQuality(null, rng);
+    sport.assignRole(c, tq, rng);
+    for (let y = 0; y < 12 && !sport.shouldRetire(c); y += 1) {
+      sport.campBattle(c, tq, rng);
+      sport.simSeason(c, tq, rng);
+      sport.progress(c, rng);
+      tq = sport.rollTeamQuality(tq, rng);
+    }
+    if (c.seasons.length < 12) continue;
+    c.pendingRivalryEvent = null;
+    c.pendingRivalryChoice = null;
+    delete c.rival;
+    c.suspendedSeasons = 0;
+    c.contractYears = 3;
+    c.age = 36;
+    c.ovr = 74;
+    c.health = 90;
+    c.earnings = 500;
+    c.seasons[0].ovr = 90;
+    if (sport.shouldRetire(c) || !pendingTalk(c, sport.hall)) continue;
+    if (!sport.eventDeck(c, mulberry32(s)).some(e => isRet(e.id))) continue;
+    return { c, tq };
+  }
+  throw new Error(`${sport.label}: no veteran with a deck retirement card open in 300 seeds`);
+}
+
+/** The sport with the offseason's first draw forced to a deck retirement card
+ *  whenever the deck holds one, so the test never waits on the draw to find
+ *  it. The real draw still runs first, on the same stream. */
+const rigged = (sport: UsCareerSport): UsCareerSport => ({
+  ...sport,
+  drawEvent: (c, r) => {
+    const real = sport.drawEvent(c, r);
+    return sport.eventDeck(c, r).find(e => isRet(e.id)) ?? real;
+  },
+});
+
+describe.each(SPORTS)('%s: the deck retirement cards never come after the talk', (_slug, getSport) => {
+  it('playSeason: a season played inside the rule deals none, and none is shown after One more year', async () => {
+    const sport = rigged(getSport());
+    const { c, tq } = deckCareer(sport, 71);
+    c.retirement = { declinedYears: [lastYear(c)] };
+    save(sport, c, tq, 'season');
+    mount(sport);
+    fireEvent.click(button(`Play the ${c.year} season`)!);
+    const after = read(sport);
+    expect(after.phase, 'the season ends in an offseason').toBe('event');
+    expect(after.c.pendingRivalryEvent ?? null).toBeNull();
+    expect(after.c.pendingRivalryChoice ?? null).toBeNull();
+    expect(pendingTalk(after.c, sport.hall), 'the season lands inside the rule').not.toBeNull();
+    // With no filter this same career is dealt the retirement card first.
+    const open = copy(after.c);
+    delete open.summer;
+    dealSummer(open, sport);
+    expect(isRet(open.summer?.ids[0]), 'unfiltered, the deal hands him the retirement card').toBe(true);
+    expect((after.c.summer?.ids ?? []).filter(isRet), 'the board dealt none').toEqual([]);
+    fireEvent.click(button('Continue')!);
+    await waitFor(() => expect(button('One more year')).toBeTruthy());
+    expect(shownCard(), 'the talk comes before any card').toBeNull();
+    fireEvent.click(button('One more year')!);
+    // Walk the whole summer: no card it shows is a retirement card.
+    for (let k = 0; k < 4 && shownCard(); k += 1) {
+      expect(isRet(shownCard()), `card ${k + 1} is not a retirement card`).toBe(false);
+      fireEvent.click(option(0));
+      const next = document.querySelector<HTMLButtonElement>('[data-decision-continue]');
+      if (next) fireEvent.click(next);
+    }
+    expect(read(sport).c.retirement).toEqual({ declinedYears: [lastYear(c), lastYear(c) + 1] });
+  });
+
+  it('restore: a save standing on a deck retirement card dealt before the talk never shows it', async () => {
+    const sport = getSport();
+    const { c, tq } = deckCareer(sport, 81);
+    const ret = sport.eventDeck(c, mulberry32(1)).find(e => isRet(e.id))!;
+    // A summer dealt before the talk existed (a Round 1038 save) stands on it.
+    c.summer = { year: summerSeason(c), ids: [ret.id], at: 0 };
+    expect(seekSummerCard(copy(c), sport, null)?.id, 'unfiltered, the restore shows it').toBe(ret.id);
+    save(sport, c, tq, 'event');
+    mount(sport);
+    await waitFor(() => expect(button('One more year')).toBeTruthy());
+    fireEvent.click(button('One more year')!);
+    expect(shownCard()).toBeNull();
+    expect(document.body.textContent).not.toContain(ret.title);
+    const after = read(sport).c;
+    expect(after.summer).toBeUndefined();
+    expect(after.retirement, 'none of its answers was applied').toEqual({ declinedYears: [lastYear(c)] });
+  });
+
+  it('chooseOption: a deck retirement card later in the summer is skipped after the talk was answered', () => {
+    const sport = getSport();
+    const { c, tq } = deckCareer(sport, 91);
+    c.retirement = { declinedYears: [lastYear(c)] };
+    // A rating already one over its ceiling: a +1 answer cannot move it, so
+    // the later card rule alone would let the card through.
+    c.pot = c.ovr - 1;
+    const year = summerSeason(c);
+    let found: { first: string; ret: string } | null = null;
+    for (const ret of sport.eventDeck(c, mulberry32(1)).filter(e => isRet(e.id))) {
+      for (const first of sport.eventDeck(c, mulberry32(2))) {
+        if (isRet(first.id) || first.press || movesRating(c, first)) continue;
+        const probe = copy(c);
+        probe.summer = { year, ids: [first.id, ret.id], at: 0 };
+        if (summerCardAt(probe, sport, 0)?.id !== first.id) continue;
+        const later = summerCardAt(probe, sport, 1);
+        if (!later || laterAnswerMovesRating(probe, sport, later, 1)) continue;
+        found = { first: first.id, ret: ret.id };
+        break;
+      }
+      if (found) break;
+    }
+    expect(found, `${sport.label}: a quiet first card and a still retirement card`).not.toBeNull();
+    c.summer = { year, ids: [found!.first, found!.ret], at: 0 };
+    save(sport, c, tq, 'event');
+    mount(sport);
+    expect(shownCard()).toBe(found!.first);
+    fireEvent.click(option(0));
+    const after = read(sport).c;
+    // Unfiltered, the same career after the same answer is shown the card.
+    const open = copy(after);
+    open.summer = { year, ids: [found!.first, found!.ret], at: 1 };
+    expect(seekSummerCard(open, sport, null)?.id, 'unfiltered, the next card is the retirement card').toBe(found!.ret);
+    expect(read(sport).phase, 'the summer ends instead').toBe('season');
+    expect(after.summer).toBeUndefined();
+    expect(after.retirement).toEqual({ declinedYears: [lastYear(c)] });
+    const next = document.querySelector<HTMLButtonElement>('[data-decision-continue]');
+    if (next) fireEvent.click(next);
+    expect(shownCard()).toBeNull();
+  });
+
+  it('the filter reads the career when it is asked, so a talk that comes mid-summer holds the cards out', () => {
+    const sport = getSport();
+    const { c } = deckCareer(sport, 101);
+    const ret = sport.eventDeck(c, mulberry32(1)).find(e => isRet(e.id))!;
+    const quiet = sport.eventDeck(c, mulberry32(1)).find(e => !isRet(e.id))!;
+    expect(talkDeckFilter(c, undefined), 'no Hall bound, no filter').toBeNull();
+    c.ovr = c.seasons[0].ovr;
+    const filter = talkDeckFilter(c, sport.hall)!;
+    expect(pendingTalk(c, sport.hall), 'back at his peak, no talk').toBeNull();
+    expect(filter(ret)).toBe(false);
+    c.ovr = 74;
+    expect(filter(ret), 'the same filter, after a drop into the rule').toBe(true);
+    expect(filter(quiet)).toBe(false);
+    c.retirement = { declinedYears: [lastYear(c)] };
+    expect(pendingTalk(c, sport.hall)).toBeNull();
+    expect(filter(ret), 'answered One more year this offseason').toBe(true);
   });
 });
