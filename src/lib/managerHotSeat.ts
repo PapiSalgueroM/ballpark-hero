@@ -56,14 +56,12 @@
 import {
   REAL_LEAGUES,
   answerPress,
-  clubByName,
   clubDefFor,
   cupProgressRank,
   engineRegistrations,
   fixtureFor,
   isPartialClub,
   leaguePosition,
-  leagueOf,
   matchEdge,
   nextFixture,
   objectiveStatuses,
@@ -190,11 +188,73 @@ export interface HotSeatClub { club: string; leagueId: string; leagueName: strin
 let poolCache: HotSeatClub[] | null = null;
 
 /**
- * Every real club the engine can run with full data: the REAL_LEAGUES clubs
- * it has a def for, less the ones its roster bake marks as partial
- * (CM_PARTIAL), in league order then the engine's own stature order.
+ * Round 1044: one line of src/data/dailyClubPool.json, the dailies' club
+ * ledger. A join line puts a club in the pool from an Eastern day on; a leave
+ * line (no leagueName, no from) closes that club's latest open join line in
+ * the same league from its `until` day on. The file is append only and only
+ * scripts/genDailyClubPool.mjs writes it.
  */
-export function hotSeatPool(): HotSeatClub[] {
+export type DailyPoolLine =
+  | { club: string; leagueId: string; leagueName: string; from: string }
+  | { club: string; leagueId: string; until: string };
+
+export interface DailyPoolEntry extends HotSeatClub {
+  from: string;
+  /** The first Eastern day the club is out, or null while nothing closed it. */
+  until: string | null;
+}
+
+/** Every join line of the ledger, in file order, with the day a later leave line closed it. */
+export function dailyPoolEntries(lines: readonly DailyPoolLine[]): DailyPoolEntry[] {
+  const out: DailyPoolEntry[] = [];
+  for (const l of lines) {
+    if ('from' in l) {
+      out.push({ club: l.club, leagueId: l.leagueId, leagueName: l.leagueName, from: l.from, until: null });
+      continue;
+    }
+    for (let i = out.length - 1; i >= 0; i--) {
+      if (out[i].club === l.club && out[i].leagueId === l.leagueId && out[i].until === null) {
+        out[i].until = l.until;
+        break;
+      }
+    }
+  }
+  return out;
+}
+
+/** The dailies' pool on an Eastern day: the join lines live that day, in file order. */
+export function dailyPoolOn(lines: readonly DailyPoolLine[], date: string): HotSeatClub[] {
+  return dailyPoolEntries(lines)
+    .filter(e => e.from <= date && (e.until === null || date < e.until))
+    .map(({ club, leagueId, leagueName }) => ({ club, leagueId, leagueName }));
+}
+
+const LEDGER = DAILY_CLUB_POOL.lines as DailyPoolLine[];
+/* The ledger's first day. A date before it (a device clock reset to 1970 or
+   2000) reads the founding pool instead of an empty one, which would leave
+   both dailies nothing to pick and throw on the pick. */
+const LEDGER_FIRST = LEDGER.reduce((a, l) => ('from' in l && l.from < a ? l.from : a), '9999-12-31');
+let ledgerCache: { date: string; pool: HotSeatClub[] } | null = null;
+
+/**
+ * With a date: the clubs the dailies deal from on that Eastern day, read from
+ * the committed ledger, src/data/dailyClubPool.json, never from the engine.
+ * Until Round 1044 the dailies dealt from the live list below, so any change
+ * to the leagues or to the partial list changed its length and re-dealt every
+ * day, today and the archive included. The ledger only ever gains lines, each
+ * dated after the day it ships, so a day once dealt stays dealt.
+ *
+ * Without a date: every real club the engine can run with full data, the
+ * REAL_LEAGUES clubs it has a def for less the ones its roster bake marks as
+ * partial (CM_PARTIAL), in league order then the engine's own stature order.
+ * That is free play's list, and what scripts/genDailyClubPool.mjs compares
+ * the ledger against.
+ */
+export function hotSeatPool(date?: string): HotSeatClub[] {
+  if (date !== undefined) {
+    if (ledgerCache?.date !== date) ledgerCache = { date, pool: dailyPoolOn(LEDGER, date < LEDGER_FIRST ? LEDGER_FIRST : date) };
+    return ledgerCache.pool;
+  }
   if (poolCache) return poolCache;
   /* On the static world, or a Club Manager save's promoted club would join
      the daily's pool in that one tab and shift everybody else's pick. */
@@ -217,36 +277,9 @@ export function hotSeatLeagues(): { id: string; name: string }[] {
   return REAL_LEAGUES.filter(l => ids.has(l.id)).map(l => ({ id: l.id, name: l.name }));
 }
 
-/**
- * Round 1040: the clubs a daily may deal on `date`, read from the committed
- * pool (src/data/dailyClubPool.json, append only, written by
- * scripts/genDailyClubPool.mjs), never worked out live. The daily picks by an
- * index into this list, so a list worked out from the engine re-dealt every
- * date whenever a roster bake reordered a league, tipped a squad under the
- * partial line or added a league, release day included. A line counts from
- * its date (null: always), so a club added later leaves every day before it
- * exactly as it was. The league is read live, on the static world; a club the
- * engine no longer knows is skipped. Deadline Day deals from the same list.
- */
-export function dailyPool(date: string): HotSeatClub[] {
-  const live = new Map(hotSeatPool().map(c => [c.club, c]));
-  return onStaticWorld(() => {
-    const out: HotSeatClub[] = [];
-    for (const [club, from] of DAILY_CLUB_POOL.entries as [string, string | null][]) {
-      if (from && from > date) continue;
-      const hit = live.get(club);
-      if (hit) { out.push(hit); continue; }
-      if (!clubByName(club)) continue;
-      const lg = leagueOf(club);
-      out.push({ club, leagueId: lg.id, leagueName: lg.name });
-    }
-    return out;
-  });
-}
-
 /** Today's hot seat: one club and one seed for everybody, keyed on the Eastern day. */
 export function dailyHotSeat(date: string): HotSeatSetup & { leagueName: string } {
-  const pool = dailyPool(date);
+  const pool = hotSeatPool(date);
   const pick = pool[Math.max(0, Math.min(pool.length - 1, dailyIndex(date, pool.length)))];
   return { club: pick.club, leagueName: pick.leagueName, seed: mixSeed(dailyPrngSeed(date), 719), daily: date };
 }

@@ -29,7 +29,8 @@
    D. NO INVENTED MEN (hard). Every club of the league builds its day one
       squad from its real baked roster plus youth pads that are flagged as
       pads; no unflagged man is missing from the roster, and a club is in
-      CM_PARTIAL exactly when it has fewer than 8 real players.
+      CM_PARTIAL exactly when it has fewer than 8 real players or (an
+      A-League club, Release AH) the A-League list marks it for its values.
 
    MEASURED 2026-10-02, six seasons a run, SIM_SEED unset and 1 to 5:
      pair gap   Flamengo over Remo 37.3 to 48.2 points a season,
@@ -81,6 +82,9 @@
                                go red;
      CM_NEW_CONTROL=dropcount2 Liga MX's rules row drops 2, part A and the
                                drop talk checks go red.
+     CM_NEW_CONTROL=alpartial  the engine reads only the baked partial list,
+                               forgetting the A-League one: part D goes red
+                               (Central Coast Mariners).
 
    Round 1035 added the A-League Men, the first league with a cup that two
    of its clubs do not enter; those two are played by
@@ -195,7 +199,7 @@ const ROOT_FWD = ROOT.replaceAll('\\', '/');
 const SEEDS_ALL = Number(process.env.SIM_SEEDS || 6);
 const SEED_SET = process.env.SIM_SEED || "";
 const CONTROL = process.env.CM_NEW_CONTROL || '';
-const CONTROLS = ['dropcount', 'nocup', 'swap', 'invented', 'cupon', 'dropcount2', 'nopyramid', 'emptypair', 'crowd', 'cupold', 'ligue1drop3', 'reserve'];
+const CONTROLS = ['dropcount', 'nocup', 'swap', 'invented', 'cupon', 'dropcount2', 'alpartial', 'nopyramid', 'emptypair', 'crowd', 'cupold', 'ligue1drop3', 'reserve'];
 /* Round 1040: parts E to G can be run alone (CM_NEW_PARTS=EFG), the A to D
    league rows alone (CM_NEW_PARTS=AD), or every part (unset). */
 const PARTS = process.env.CM_NEW_PARTS || 'ADEFG';
@@ -326,6 +330,7 @@ function transformEngine(src) {
   if (CONTROL === 'cupon') src = mutateOnce(src, "ligamx: {\n    nationId: 'mexico', flag: 'Mexico', cup: null,", "ligamx: {\n    nationId: 'mexico', flag: 'Mexico', cup: 'Copa MX',", 'cupon');
   if (CONTROL === 'dropcount2') src = mutateOnce(src, "ligamx: {\n    nationId: 'mexico', flag: 'Mexico', cup: null, europe: null, drop: 0,", "ligamx: {\n    nationId: 'mexico', flag: 'Mexico', cup: null, europe: null, drop: 2,", 'dropcount2');
   if (CONTROL === 'invented') src = mutateOnce(src, '    isYouth: true,\n', '    isYouth: false,\n', 'invented');
+  if (CONTROL === 'alpartial') src = mutateOnce(src, "import { CM_WORLD_ROSTERS as CM_ROSTERS, CM_WORLD_PARTIAL as CM_PARTIAL } from '@/data/clubManagerWorldRosters';", "import { CM_WORLD_ROSTERS as CM_ROSTERS } from '@/data/clubManagerWorldRosters';\nimport { CM_PARTIAL } from '@/data/clubManagerRosters';", 'alpartial');
   /* Round 1040's controls. nopyramid: Serie A loses its second tier, so it
      trades nobody (part E red). crowd: the summer news cap goes back to five
      lines, which cuts a Serie A career's own sixth line (part E red).
@@ -348,7 +353,7 @@ function transformEngine(src) {
 async function bundleEngine() {
   const entry = path.join(TMP, 'entry.mjs');
   const out = path.join(TMP, 'engine.mjs');
-  fs.writeFileSync(entry, `export * from '${ROOT_FWD}/src/lib/clubManager.ts';\n`);
+  fs.writeFileSync(entry, `export * from '${ROOT_FWD}/src/lib/clubManager.ts';\nexport * as __aleague from '${ROOT_FWD}/src/data/clubManagerALeague2026.ts';\n`);
   const enginePath = path.join(ROOT, 'src', 'lib', 'clubManager.ts');
   await build({
     entryPoints: [entry], bundle: true, format: 'esm', platform: 'node', outfile: out,
@@ -591,7 +596,14 @@ function partNoInvented(cm, row, lg) {
       else real += 1;
     }
     const isPartial = cm.CM_PARTIAL.includes(c);
-    if (isPartial !== (baked.length < 8)) fail(`${c} has ${baked.length} real players and CM_PARTIAL says ${isPartial}`);
+    /* Release AH: an A-League squad comes from its ledger, where partial
+       also means the club's page has no value for most of its ledger rows
+       (Round 1035 review F10; simClubManagerALeague holds that list to the
+       ledgers), so the world's partial list must carry the A-League list as
+       well as every thin squad. A baked club keeps the bake's rule. */
+    const fromLedger = Object.prototype.hasOwnProperty.call(cm.__aleague.CM_ALEAGUE_ROSTERS, c);
+    const wantPartial = baked.length < 8 || (fromLedger && cm.__aleague.CM_ALEAGUE_PARTIAL.includes(c));
+    if (isPartial !== wantPartial) fail(`${c} has ${baked.length} real players${fromLedger ? `, the A-League list ${cm.__aleague.CM_ALEAGUE_PARTIAL.includes(c) ? 'marks' : 'does not mark'} it` : ''}, and CM_PARTIAL says ${isPartial}`);
     if (isPartial !== cm.isPartialClub(c)) fail(`${c}: isPartialClub disagrees with CM_PARTIAL`);
     if (isPartial) partial += 1;
   }

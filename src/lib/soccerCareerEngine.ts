@@ -5146,7 +5146,9 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
    "Became X's All Time Top International Scorer" line. Every row is two source
    verified in scripts/data/soccerCareerFacts.json (holder, sources, the date
    read) and scripts/simCareerFacts.mjs holds this table to that file. Snapshot
-   of 2026-10-06: Argentina Messi, Belgium Lukaku, Brazil Neymar (full internationals only),
+   of 2026-10-06, the ten rows held by active players re-read on 2026-10-07
+   after that night's matches (Messi's farewell goal, Kane's two against
+   Czechia): Argentina Messi, Belgium Lukaku, Brazil Neymar (full internationals only),
    Colombia Falcao, Croatia Suker, Egypt Hossam Hassan, England Kane, France
    Mbappe, Germany Klose, Italy Riva, Japan Kamamoto, Netherlands Depay,
    Nigeria Yekini, Norway Haaland, Portugal Ronaldo, South Korea Son, Spain
@@ -5156,8 +5158,8 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
    rows (Spain 29, Belgium 68, Uruguay 36 and more) were far below the truth.
    Senegal is left out until two current sources agree on Mane's count. */
 export const INT_SCORING_RECORDS: Readonly<Record<string, number>> = {
-  Argentina: 125, Belgium: 94, Brazil: 80, Colombia: 36, Croatia: 45, Egypt: 69,
-  England: 89, France: 67, Germany: 71, Italy: 35, Japan: 75, Netherlands: 55,
+  Argentina: 126, Belgium: 94, Brazil: 80, Colombia: 36, Croatia: 45, Egypt: 69,
+  England: 91, France: 67, Germany: 71, Italy: 35, Japan: 75, Netherlands: 55,
   Nigeria: 37, Norway: 65, Portugal: 146, "South Korea": 59, Spain: 59, Uruguay: 69,
 };
 

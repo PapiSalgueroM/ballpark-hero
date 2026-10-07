@@ -74,6 +74,9 @@
    at Australian clubs, all for Australia, and both New Zealand clubs asked
    for New Zealand. Controls: nodedupe 2 failures, samebye 79, satout 2,
    nzcountry 2.
+   Release AH (review F10): the partial rule counts ledger rows, so Central
+   Coast Mariners (13 of 25 ledger rows with no value, 11 of the 23 that
+   ship) is partial and no other club is. Control: nopartial 1 failure.
 
    NEGATIVE CONTROLS (each must turn the run red, and each refuses to run if
    the text it mutates is missing):
@@ -99,6 +102,11 @@
                                     red (the excluded clubs)
      SIM_ALEAGUE_CONTROL=nzcountry  the rules row loses clubCountry: part D
                                     red (Auckland asked for Australians)
+     SIM_ALEAGUE_CONTROL=nopartial  the generated partial list is emptied,
+                                    which is what counting shipped rows
+                                    gave before Release AH: part B red
+                                    (Central Coast Mariners, 13 of 25
+                                    ledger rows with no value)
 
    Run: node scripts/simClubManagerALeague.mjs   (SIM_SEEDS=n, default 10)
 */
@@ -116,7 +124,7 @@ const DIR = path.join(ROOT, 'scripts/data/gatheredSquads/aleague2026');
 const SEEDS = Number(process.env.SIM_SEEDS || 10);
 const SEED_SET = process.env.SIM_SEED || '';
 const CONTROL = process.env.SIM_ALEAGUE_CONTROL || '';
-const CONTROLS = ['invented', 'offcurve', 'onehost', 'excluded', 'nobyes', 'stalecount', 'nodedupe', 'samebye', 'satout', 'nzcountry'];
+const CONTROLS = ['invented', 'offcurve', 'onehost', 'excluded', 'nobyes', 'stalecount', 'nodedupe', 'samebye', 'satout', 'nzcountry', 'nopartial'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`SIM_ALEAGUE_CONTROL=${CONTROL} is not one of ${CONTROLS.join(', ')}`); process.exit(1); }
 
 const LEAGUE = 'aleague';
@@ -169,6 +177,7 @@ function transformALeague(src) {
     if (!line) { console.error('control offcurve: no Sydney FC row found; refusing to run'); process.exit(1); }
     src = mutateOnce(src, line[1], line[1].replace(`r: ${line[2]} }`, `r: ${Number(line[2]) + 1} }`), 'offcurve');
   }
+  if (CONTROL === 'nopartial') src = mutateOnce(src, 'export const CM_ALEAGUE_PARTIAL: string[] = ["Central Coast Mariners"];', 'export const CM_ALEAGUE_PARTIAL: string[] = [];', 'nopartial');
   if (CONTROL === 'onehost') src = mutateOnce(src, 'export const CM_ALEAGUE_NATIONALITIES: Record<string, string> = {\n', "export const CM_ALEAGUE_NATIONALITIES: Record<string, string> = {\n  'Denver Minster': 'Australia',\n", 'onehost');
   return src;
 }
@@ -285,13 +294,22 @@ function partValues(cm, membership, values) {
   for (const k of noValueFound) if (!noValueListed.has(k)) fail(`${k} has no value and is missing from CM_ALEAGUE_NO_VALUE`);
   for (const k of noValueListed) if (!noValueFound.has(k)) fail(`${k} is listed with no value but has one`);
   console.log(`   ${checked} players checked against ${values.clubs.length} club pages, ${noValueFound.size} with no value at the floor (rating ${RATING_FLOOR})`);
-  /* The partial rule: a club where more than half the shipped rows have no value. */
-  for (const [club, list] of Object.entries(rosters)) {
-    const none = list.filter(p => noValueFound.has(`${p.n}|${club}`)).length;
+  /* The partial rule (Release AH, Round 1035 review F10): a club where more
+     than half its LEDGER rows, the group-less ones held back included, have
+     no value on its page. Read from the ledgers and the page, never from the
+     generated file. */
+  const partialWant = [];
+  for (const c of membership.clubs) {
+    const club = ENGINE_NAME[c.slug];
+    const rows = readJson(`${c.slug}.json`).rows;
+    const page = new Map((values.clubs.find(x => x.slug === c.slug)?.players ?? []).map(p => [p.name, p]));
+    const none = rows.filter(r => !(Number.isFinite(page.get(r.name)?.valueEur) && page.get(r.name).valueEur > 0)).length;
     const partial = cm.al.CM_ALEAGUE_PARTIAL.includes(club);
-    if (partial !== (none * 2 > list.length)) fail(`${club}: ${none} of ${list.length} with no value, and CM_ALEAGUE_PARTIAL says ${partial}`);
+    if (none * 2 > rows.length) partialWant.push(`${club} (${none} of ${rows.length})`);
+    if (partial !== (none * 2 > rows.length)) fail(`${club}: ${none} of ${rows.length} ledger rows with no value, and CM_ALEAGUE_PARTIAL says ${partial}`);
     if (partial !== cm.isPartialClub(club)) fail(`${club}: isPartialClub disagrees with CM_ALEAGUE_PARTIAL`);
   }
+  console.log(`   partial by the ledger rule: ${partialWant.length ? partialWant.join(', ') : 'none'}`);
 }
 
 /* C. Nationality on two hosts or not at all, and an age on two hosts. */

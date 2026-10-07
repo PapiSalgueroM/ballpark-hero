@@ -597,6 +597,15 @@ These are not preferences, they are the exposure.
   commit the JSON, the same idea as `genSearchKeywords`. Nothing runs it for you. A man who is
   not on the roster is never dealt, and `simCareerLadderRotation` section 7 stays red while the
   roster and the live tables disagree. The file has to be live before the date it writes.
+- **A round that changes Club Manager's `REAL_LEAGUES`, a club's def, or the partial list reruns
+  the daily club pool.** Since Round 1044 Manager Hot Seat and Deadline Day deal their daily club
+  from a committed, append only ledger, `src/data/dailyClubPool.json`, so a re-bake or a new
+  league cannot re-deal days already played (Release AF's re-bake did exactly that). After any
+  such change run `node scripts/genDailyClubPool.mjs` (new lines count from today plus 30 days)
+  and commit the JSON; `--check` exits 1 when it would write. Nothing runs it for you, and
+  `simDailyClubPool` section 2 stays red until it is run. Same deadline rule as the roster
+  above: the release carrying the new lines must be live before their date, or the lines come
+  out and the generator is rerun with a later `--since`.
 
 
 ### Never reintroduce these specific regressions

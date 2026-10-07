@@ -26,28 +26,15 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+/* The roster bake's position map and curves. Release AH: Round 1035 lifted
+   them into scripts/lib/cmValueCurve.mjs, so this imports that module as the
+   bake does instead of keeping a copy beside it. */
+import { POS_MAP, ratingOf, gbpM } from './lib/cmValueCurve.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const LEDGER = path.join(ROOT, 'scripts/data/cmFreeAgents2026.json');
 const OUT = path.join(ROOT, 'src/data/clubManagerFreeAgents2026.ts');
 const ROSTERS = path.join(ROOT, 'src/data/clubManagerRosters.ts');
-
-/* The roster bake's position map and curves, kept identical on purpose. */
-const POS_MAP = {
-  'Goalkeeper': 'GK', 'Centre-Back': 'CB', 'Left-Back': 'LB', 'Right-Back': 'RB',
-  'Defensive Midfield': 'CDM', 'Central Midfield': 'CM', 'Attacking Midfield': 'CAM',
-  'Left Midfield': 'LM', 'Right Midfield': 'RM', 'Left Winger': 'LW', 'Right Winger': 'RW',
-  'Centre-Forward': 'ST', 'Second Striker': 'CF',
-};
-function ratingOf(usd) {
-  if (!usd || usd <= 0) return 48;
-  const r = Math.round(-13.106 + 12.851 * Math.log10(usd));
-  return Math.max(48, Math.min(94, r));
-}
-function gbpM(usd) {
-  const m = (usd * 0.75) / 1e6;
-  return Math.round(m * 10) / 10;
-}
 
 export function buildFreeAgents(ledger, rosterSrc) {
   const problems = [];
