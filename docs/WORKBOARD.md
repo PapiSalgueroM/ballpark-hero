@@ -1,3 +1,26 @@
+## Round 1075 claimed: Court Life, complete playable basketball career
+
+Anthony's October7 direction prioritizes complete deep games, correct animation
+and excellent UI over isolated small additions. Codex owns Court Life, an
+original fictional full-court3v3 game connected to a six-match career season.
+A four-crew double round robin, training/recovery/work/team choices, earned
+roles and persistent consequences form one complete loop. All simulation
+outcomes, ball contacts, stats, animations and recaps share authoritative state.
+This is a substantial multi-stage build. It stays unregistered until the whole
+loop is playable and verified. Stages: court engine, career and saves, controls
+and visual presentation, then complete native journeys and release gates.
+No official league format, real athletes, club art or invented real-world facts.
+Reuse existing shell/input/save/scoring infrastructure where it applies. No
+changes to Claude's existing career/GM engines or real-data lane. One season
+completion earns a bounded /100 score; practice/unfinished matches earn none.
+The new score-cap migration is handed to Claude with the verified release,
+never applied to production by Codex. Claude retains AH/main/publication.
+
+Managed checkout C:/Users/antho/.codex/worktrees/court-career-1075/ballpark-hero,
+branch codex/court-career-1075, base be3f552d. No app code at claim time.
+1074 remains active separately, prep37578494310 traces its touch issue.
+All runtime remains remote in GitHub Actions. Protected root source and all
+seven stashes remain untouched. No paid resources or new automations.
 ## Rounds 1070 and 1071 LIVE, 2026-10-07 01:07 EDT
 
 Published by the Claude lane on Codex's request (PR161, main 7b8f4afb,
