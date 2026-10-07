@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { worldLeagueDefs, careerLeagueOf, sortedWorldTable, leagueRounds, leagueTiebreak, tiebreakFootnote, LEAGUE_NATIONS } from '@/lib/clubManager';
 import type { CareerState, TableRow } from '@/lib/clubManager';
@@ -26,17 +26,45 @@ interface WorldTablesCardProps {
 export function WorldTablesCard({ career, myRows, onClubClick }: WorldTablesCardProps) {
   const myLeague = careerLeagueOf(career);
   const [pick, setPick] = useState<string>(myLeague.id);
+  const [browsing, setBrowsing] = useState(false);
+  const [query, setQuery] = useState('');
+  const searchRef = useRef<HTMLInputElement>(null);
+  const browseRef = useRef<HTMLButtonElement>(null);
+  const returnFocus = useRef(false);
 
   // My league first, then the rest of THIS SAVE'S world in its usual order.
   // Round 312: this list came from REAL_LEAGUES, so an era save offered the
   // whole modern set, none of it simulated, with a duplicate of the save's
   // own league under the modern def's name.
   const leagues = useMemo(
-    () => [myLeague, ...worldLeagueDefs(career).filter(l => l.id !== myLeague.id)],
+    () => [myLeague, ...worldLeagueDefs(career).filter(l => l.id !== myLeague.id)].map(league => {
+      const savedClubs = league.id === myLeague.id ? career.leagueClubs : career.world?.[league.id]?.table.map(row => row.club);
+      return savedClubs?.length ? { ...league, clubs: savedClubs } : league;
+    }),
     [myLeague, career],
   );
 
   const active = leagues.find(l => l.id === pick) ?? myLeague;
+  const normalize = (text: string) => text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  const terms = normalize(query).trim().split(/\s+/).filter(Boolean);
+  const matches = leagues.filter(league => {
+    const text = normalize([league.name, LEAGUE_NATIONS[league.id] ?? '', ...league.clubs].join(' '));
+    return terms.every(term => text.includes(term));
+  });
+  const nations = [...new Set(matches.map(league => LEAGUE_NATIONS[league.id] ?? 'Other leagues'))];
+  const closeBrowser = (id?: string) => {
+    if (id) setPick(id);
+    returnFocus.current = true;
+    setBrowsing(false);
+    setQuery('');
+  };
+  useEffect(() => {
+    if (browsing) searchRef.current?.focus({ preventScroll: true });
+    else if (returnFocus.current) {
+      browseRef.current?.focus({ preventScroll: true });
+      returnFocus.current = false;
+    }
+  }, [browsing]);
   const mine = active.id === myLeague.id;
   const world = career.world?.[active.id];
   // Round 462: every table in its own league's order (Spain and Italy split
@@ -57,26 +85,40 @@ export function WorldTablesCard({ career, myRows, onClubClick }: WorldTablesCard
   const footnote = preseason ? undefined : tiebreakFootnote(leagueTiebreak(active.id), rows, career.pairResults?.[active.id]);
 
   return (
-    <div className="space-y-2">
-      <div className="flex gap-1.5 overflow-x-auto pb-1">
-        {leagues.map(l => (
-          <button
-            key={l.id}
-            onClick={() => setPick(l.id)}
-            className={cn(
-              'shrink-0 inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-[10px] font-bold transition-all',
-              l.id === pick
-                ? 'bg-primary text-primary-foreground border-primary'
-                : 'bg-card border-border text-muted-foreground hover:border-primary',
-            )}
-          >
-            {LEAGUE_NATIONS[l.id] && <FlagImg name={LEAGUE_NATIONS[l.id]} size={13} />}
-            {l.id === myLeague.id ? '⭐ ' : ''}{l.name}
-          </button>
-        ))}
-      </div>
+    <div className="space-y-3" data-world-tables>
+      {browsing ? <section aria-label="League browser" className="rounded-2xl border border-border bg-card p-3 space-y-3" onKeyDown={event => {
+        if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); closeBrowser(); }
+      }}>
+        <div className="flex items-center justify-between gap-3">
+          <div><h3 className="text-base font-black">Explore your world</h3><p className="text-xs text-muted-foreground">{leagues.length} leagues in this save</p></div>
+          <button type="button" onClick={() => closeBrowser()} className="min-h-11 shrink-0 rounded-lg border border-border px-3 text-sm font-semibold">Back</button>
+        </div>
+        <label className="block text-sm font-semibold">Find a league or club
+          <input ref={searchRef} type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder="League, country or club" className="mt-1 min-h-11 w-full rounded-xl border border-border bg-background px-3 text-base font-normal" />
+        </label>
+        <p role="status" className="text-xs text-muted-foreground">{matches.length} {matches.length === 1 ? 'league' : 'leagues'} found</p>
+        {matches.length ? <div className="max-h-[48vh] overflow-y-auto overscroll-contain space-y-4 pr-1" data-world-league-list>
+          {nations.map(nation => <section key={nation} aria-label={nation}>
+            <h4 className="mb-2 text-xs font-bold uppercase tracking-wide text-muted-foreground">{nation}</h4>
+            <div className="grid gap-2 sm:grid-cols-2">{matches.filter(league => (LEAGUE_NATIONS[league.id] ?? 'Other leagues') === nation).map(league => <button
+              type="button" key={league.id} aria-pressed={league.id === active.id} onClick={() => closeBrowser(league.id)} data-world-league={league.id}
+              className={cn('flex min-h-[60px] min-w-0 items-center gap-3 rounded-xl border p-3 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary', league.id === active.id ? 'border-primary bg-primary/10' : 'border-border bg-background hover:border-primary')}
+            >
+              {LEAGUE_NATIONS[league.id] && <FlagImg name={LEAGUE_NATIONS[league.id]} size={20} />}
+              <span className="min-w-0"><span className="block break-words text-sm font-bold">{league.name}</span><span className="block text-xs text-muted-foreground">{league.clubs.length} clubs{league.id === myLeague.id ? ' · Your league' : ''}</span></span>
+            </button>)}</div>
+          </section>)}
+        </div> : <div className="rounded-xl bg-muted/30 p-4 text-sm"><p>No leagues match that search in this save.</p><button type="button" className="mt-2 min-h-11 rounded-lg border border-border px-3 font-semibold" onClick={() => { setQuery(''); searchRef.current?.focus({ preventScroll: true }); }}>Clear search</button></div>}
+      </section> : <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-border bg-card p-3">
+        <div className="flex min-w-0 basis-full items-center gap-2 sm:basis-0 sm:flex-1">
+          {LEAGUE_NATIONS[active.id] && <FlagImg name={LEAGUE_NATIONS[active.id]} size={20} />}
+          <div className="min-w-0"><h3 className="break-words text-sm font-bold">{active.name}</h3><p className="text-xs text-muted-foreground">{active.clubs.length} clubs{active.id === myLeague.id ? ' · Your league' : ''}</p></div>
+        </div>
+        <button ref={browseRef} type="button" className="min-h-11 rounded-xl border border-primary bg-primary/10 px-3 text-sm font-bold" onClick={() => setBrowsing(true)}>Browse leagues</button>
+        {!mine && <button type="button" className="min-h-11 rounded-xl border border-border px-3 text-sm font-semibold" onClick={() => { browseRef.current?.focus({ preventScroll: true }); setPick(myLeague.id); }}>My league</button>}
+      </div>}
 
-      {rows.length > 0 ? (
+      {!browsing && (rows.length > 0 ? (
         <>
           <LeagueTableCard
             rows={rows}
@@ -103,7 +145,7 @@ export function WorldTablesCard({ career, myRows, onClubClick }: WorldTablesCard
         <div className="bg-card border border-border rounded-2xl p-4 text-xs text-muted-foreground">
           {active.name} kicks off with your next league round.
         </div>
-      )}
+      ))}
     </div>
   );
 }

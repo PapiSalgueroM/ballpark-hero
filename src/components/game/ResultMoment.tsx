@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
+import { formatNumber } from '@/lib/formatNumber';
 import { SportGlyph, sportStyle } from '@/components/home/SportGlyph';
 import { sportOf, SPORT_NAME } from '@/data/homeFront';
 
@@ -68,6 +69,7 @@ export interface ResultMomentProps {
 export function ResultMoment({ outcome, gamePath, score, scoreLabel, headline, badge, children, className }: ResultMomentProps) {
   const sport = sportOf(gamePath);
   const hasScore = score !== undefined && score !== null && score !== '';
+  const shownScore = typeof score === 'number' || typeof score === 'string' ? formatNumber(score) : score;
   return (
     <div
       data-result-moment={outcome}
@@ -96,8 +98,8 @@ export function ResultMoment({ outcome, gamePath, score, scoreLabel, headline, b
           )}
         >
           {hasScore ? (
-            <span data-result-score className={cn('font-display font-extrabold leading-none tabular-nums text-foreground break-words', scoreSize(score))}>
-              {score}
+            <span data-result-score className={cn('font-display font-extrabold leading-none tabular-nums text-foreground break-words', scoreSize(shownScore))}>
+              {shownScore}
             </span>
           ) : badge ? (
             <span aria-hidden="true" className="text-4xl leading-none">{badge}</span>

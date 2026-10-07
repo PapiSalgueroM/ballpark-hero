@@ -3,6 +3,7 @@ import type { NbaSeasonLine } from '@/lib/nbaMyCareer';
 import type { MlbCareerPos, MlbSeasonLine } from '@/lib/mlbMyCareer';
 import type { NhlCareerPos, NhlSeasonLine } from '@/lib/nhlMyCareer';
 import type { UsCareerCore, UsCareerSport } from '@/lib/usCareerSport';
+import { formatNumber } from '@/lib/formatNumber';
 
 export interface CareerReviewStat { label: string; value: string; numeric?: { raw?: number; digits?: number } }
 export interface CareerReviewStats { regular: CareerReviewStat[]; postseason: CareerReviewStat[]; gamesLabel: string; regularValues: CareerReviewStat[] }
@@ -10,7 +11,7 @@ export interface CareerReviewStats { regular: CareerReviewStat[]; postseason: Ca
 const recorded = (value: number | undefined): value is number => typeof value === 'number' && Number.isFinite(value);
 const number = (label: string, value: number | undefined, digits?: number): CareerReviewStat => ({
   label,
-  value: recorded(value) ? digits === undefined ? String(value) : value.toFixed(digits) : 'Not recorded',
+  value: recorded(value) ? formatNumber(digits === undefined ? value : value.toFixed(digits)) : 'Not recorded',
   numeric: { raw: recorded(value) ? value : undefined, digits },
 });
 const text = (label: string, value: string | undefined): CareerReviewStat => ({ label, value: typeof value === 'string' && value.trim() ? value : 'Not recorded' });
@@ -71,7 +72,7 @@ export function seasonHighs(career: UsCareerCore, sport: UsCareerSport): CareerS
     .filter(({ season }) => season.teamResult !== 'SUSPENDED');
   const metrics = [
     { label: 'Season OVR', values: seasons.map(({ season, index }) => ({ index, raw: season.ovr, value: String(season.ovr) })) },
-    { label: gamesLabel, values: seasons.map(({ season, index }) => ({ index, raw: season.games, value: String(season.games) })) },
+    { label: gamesLabel, values: seasons.map(({ season, index }) => ({ index, raw: season.games, value: formatNumber(season.games) })) },
     { label: positionLabel, values: seasons.map(({ season, index }) => {
       const stat = sport.reviewStats(season, career.pos).regularValues.find(stat => stat.label === positionLabel);
       return { index, raw: stat?.numeric?.raw, value: stat?.value ?? 'Not recorded' };

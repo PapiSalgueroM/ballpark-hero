@@ -34,7 +34,7 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       'Health reaching zero ends the fight by knockout. Full submission progress ends it by submission. Otherwise, earned round points decide the result.',
       'Your score is out of 100. A win earns 50 points and a winning knockout or submission adds 15. Damage contributes up to 20, while defense or ground control contributes up to 15. A draw earns 25 outcome points.',
       'Pause, opening the rules, losing focus or switching away stops the fight. Resume clears held controls. Quitting or refreshing gives no completion score.',
-      'Practice uses the same range, stamina and ground rules with an untimed partner. Learn striking and recovery, an earned takedown, a submission finish or escaping from mount. Only the moves for your drill are active, and practice earns no score.',
+      'Practice uses the same range, stamina and ground rules with an untimed partner. The practice panel shows earned progress, the next move and the actual result of your last attempt. Learn striking and recovery, an earned takedown, a submission finish or escaping from mount. Only the moves for your drill are active, and practice earns no score.',
       'Circuit records one completion for the run. Add the earned fight scores, divide by three and round to the nearest whole point. Unplayed fights contribute zero. Quitting or refreshing an unfinished circuit earns no points.',
       'These are original fighters and simplified arcade rules. This game does not replay real fights or use real athletes.',
       'Punches, kicks and ground strikes have moving pixel poses. With reduced motion enabled on your device, action poses stay steady and the crowd stays still. The same fighting rules apply.',
@@ -47,6 +47,7 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       'Submission progress shows actual pressure. If the opponent resists and your stamina gets low, ease off and recover instead of holding the same button until you have nothing left.',
       'A Circuit run with fight scores of 80, 90 and 85 earns 85/100. If the first fight ends in a loss with 30 earned points, the run ends at 10/100 because the two unplayed fights count as zero.',
       'If you landed 12 shots and the CPU landed 8, the Shots landed row shows 12 under You and 8 under CPU. More shots alone do not decide a fight: check the damage, takedowns and top control too.',
+      'In the takedown drill, reaching the clinch is the first step. If your partner defends the takedown, the panel shows what happened and keeps the takedown step unfinished. Release the controls to recover gas, then try again. In the escape drill, half guard is progress, but you still need to regain guard before standing up.',
     ],
     tips: [
       'Distance is a defense. Step out of punching range when you need a moment to recover.',

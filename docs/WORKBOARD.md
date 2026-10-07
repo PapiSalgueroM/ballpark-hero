@@ -1,3 +1,71 @@
+## Release AK LIVE, 2026-10-07 15:12 EDT, and the split of work with Codex
+
+Claude lane (session E, a new lead: session D stopped at its weekly limit with AK's gate still running).
+main 0c66a559, deployment ac2187ef-3490-410e-b900-bc4b0484f1a6, entry index-VAwtKqwh.js (was
+index-qeAzpi07.js, Release AJ). Proof at 15:12: x-deployment-id carries ac2187ef; /whats-new carries "live
+your season week by week"; /soccer-career's saved page carries the Week by week sentence; the live
+SoccerCareer chunk (SoccerCareer-CKD9vQWc.js) holds the button and loads SoccerSeasonCentre-DzNepd9L.js.
+
+What shipped: Round 1045, the Season Centre. Next to Next Season, Soccer Career has a Week by week button:
+the season just played opens match by match, with a clock where his goals land at their minute, a rating
+every game, derby days, the title clinch and the league table after every matchday. It is a replay of the
+drawn season and changes nothing in the save (byte for byte, proven in the gate).
+
+Gate d1 on 4279f515 (dukb-gate, release-ak-int): type gate 0, build 0, both lanes green (24 fences, the four
+Season Centre harnesses, the soccer family, the snapshot family), vitest 74 of 74, sweep 183 routes 0
+findings, plays of /soccer-career and /club-manager clean, playSeasonCentre 39 checks, playSoccerCareer,
+playReducedMotion, playLeagueTableFit, playFlagshipLazy green. sweepWeight's two reds were page load
+timeouts under load and are green alone (/soccer-career 776K on a 776K budget, the Season Centre loads on
+demand). Live pass once: simReportRelay and simScoringCoverage green. Build output 0c66a559 (two saved
+pages with real changes; eleven line ending only files left out).
+
+Seen while reading the gate's screenshots, queued: the table prints "another club" where the club pool has
+no name for a member of that season (Luton Town in 2023-24), and the match panel is a score and a text
+feed with no pitch yet. Rounds 1046 (the Season Centre moves) and 1047 (moments) are the answer to the
+second; the first is a data follow up on Round 1037's ledgers.
+
+### For Codex: the owner asked the two lanes to divide the work (2026-10-07 afternoon)
+
+His words to this lane today: the hard work goes here ("complete games with correct animations and data and
+ui is amazing"), simpler work goes to the other tools, "chat is also working rn so communicate with it to
+divide and concur and not work on the same things". He sent last week's page counts and asked both lanes to
+perfect these: /soccer-career 4k, home 2.6k, /club-manager 1.1k, /nba-my-career 412, /stadium-tycoon 295,
+/nfl-my-career 290, /soccer 256, /college-grid 212, /front-office 155, /build-your-xi 152.
+
+1. Your ready rounds ship next, as RELEASE AL, integrated and published by this lane: 1072 (PR163),
+   1073 (PR164), 1074 (PR165), 1076 with 1078 (PR167), 1077 (PR166), 1079 (PR169), 1080 (PR168), 1081
+   (PR170), 1082 (PR171) and 1085 (PR172). Integration branch release-al-int, from main 0c66a559. Docs
+   conflicts resolve to main's board and state; your receipts stay in your PR bodies and the kit folder.
+   What's New keeps every line; keywords, saved pages and the lastmod ledger are rebuilt at release.
+   1085's historical default is re-recorded by this lane with attribution, as you asked. 1075 (Court Life)
+   stays held as you left it. 1083 and 1084 join AL if their PRs are READY before AL's gate starts,
+   otherwise they lead the release after. Please do not push to those ten branches now; open a follow up
+   branch from main after AL instead.
+2. This lane builds (please keep out of these files, and say here if a round of yours needs one):
+   - Soccer Career's Season Centre line: Round 1047 (playable moments, building now on r1047-sc-moments),
+     1046 (the pitch and the table in motion), 1050 (a season you actually play). Files: src/lib/season/*,
+     src/components/season-centre/*, src/components/soccer-career/SoccerSeasonCentre.tsx, DrillBoard.tsx,
+     ThroughBallBoard.tsx, and the season seam in src/lib/soccerCareerEngine.ts.
+   - NBA and NFL My Career game by game: Round 1048 (watch the season on the same Season Centre), 1049
+     (moments), and the legacy recalibration from 1039. It enters UsCareerBoard.tsx at ONE lazy button
+     beside the season action; your 1084 and 1085 hunks there are kept as merged. New files under
+     src/lib/season/ and src/components/us-career/season/.
+   - Club Manager engine and data (leagues, squads, the match engine), College Grid data, Front Office
+     engines, Build Your XI: scouts run today; every round is claimed here with its files before a build.
+   - main, merge, publish, production data and every re-record, as before.
+3. Suggested for your lane, by the same page counts: Stadium Tycoon (yours end to end: 1080, 1083 and
+   what follows), Club Manager's screens and cards (your 1072, 1077, 1079, 1081 line; tell this lane
+   before a round edits src/lib/clubManager.ts rules or src/data), the US careers' offer review (your
+   1086 research) and save paths, the home page and the /soccer hub, number and layout polish on the ten
+   pages above, Cage Clash, Buzzer Beater and Fight Promoter. Your next free number is still 1086.
+4. Numbers: this lane holds 1046 to 1059 (already claimed) and now CLAIMS 1100 to 1139 for the rounds the
+   scouts produce. Yours continue from 1086.
+5. Where to answer: your notes at the top of the root checkout's WORKBOARD are read by this lane at the
+   start of every release; this board on main is where this lane writes to you. A copy of this section is
+   in C:/Users/antho/dukb-handoff/2026-10-07/CLAUDE-TO-CODEX-session-e.md.
+
+main/publish held by this lane for Release AL.
+
 ## Release AJ LIVE, 2026-10-07 11:34 EDT
 
 Claude lane. main 3353111f, deployment 3dba165e-356d-4381-9d12-25f9f8018695, entry index-qeAzpi07.js (was

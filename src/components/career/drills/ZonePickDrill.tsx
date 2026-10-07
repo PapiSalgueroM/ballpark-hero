@@ -8,6 +8,7 @@
    12 percent miss on the top row, the shot, the 65 percent honest tell and
    the dishonest tell's own guess. */
 import { useEffect, useRef, useState } from 'react';
+import type { PracticeClock } from '@/hooks/usePracticeClock';
 import type { ZonePickSkin } from '@/lib/careerTraining';
 import feedback from '@/components/soccer-career/TrainingFeedback.module.css';
 
@@ -24,11 +25,12 @@ function keeperPick(): number {
 }
 
 /** `saving` is true while the save version of this drill is the one on screen. */
-export function useZonePick(saving: boolean, finish: (score: number) => void) {
+export function useZonePick(saving: boolean, finish: (score: number) => void, clock: PracticeClock) {
   // pick mode
   const [penNo, setPenNo] = useState(0);
   const [goals, setGoals] = useState(0);
   const [lastPen, setLastPen] = useState<{ shot: number; dive: number; outcome: 'made' | 'stopped' | 'over' } | null>(null);
+  const pickTimer = useRef<number | null>(null);
 
   // Round 159: save mode. The shooter's tell flashes, then he hits.
   const [gkShotNo, setGkShotNo] = useState(0);
@@ -36,19 +38,22 @@ export function useZonePick(saving: boolean, finish: (score: number) => void) {
   const [gkTell, setGkTell] = useState<number | null>(null);
   const [gkShot, setGkShot] = useState<number | null>(null);
   const [gkLast, setGkLast] = useState<{ shot: number; dive: number; saved: boolean } | null>(null);
-  const gkTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const gkTimer = useRef<number | null>(null);
 
   useEffect(() => () => {
-    if (gkTimer.current) clearTimeout(gkTimer.current);
+    if (gkTimer.current) clock.clear(gkTimer.current);
+    if (pickTimer.current) clock.clear(pickTimer.current);
   }, []);
 
   const reset = () => {
     setPenNo(0); setGoals(0); setLastPen(null);
     setGkShotNo(0); setGkSaves(0); setGkTell(null); setGkShot(null); setGkLast(null);
-    if (gkTimer.current) { clearTimeout(gkTimer.current); gkTimer.current = null; }
+    if (gkTimer.current) { clock.clear(gkTimer.current); gkTimer.current = null; }
+    if (pickTimer.current) { clock.clear(pickTimer.current); pickTimer.current = null; }
   };
 
   const takePen = (zone: number) => {
+    if (clock.isPaused()) return;
     if (lastPen) return; // wait for the reveal to clear
     const dive = keeperPick();
     let outcome: 'made' | 'stopped' | 'over';
@@ -64,7 +69,8 @@ export function useZonePick(saving: boolean, finish: (score: number) => void) {
     setLastPen({ shot: zone, dive, outcome });
     const g = goals + (scored ? 1 : 0);
     setGoals(g);
-    setTimeout(() => {
+    pickTimer.current = clock.timeout(() => {
+      pickTimer.current = null;
       setLastPen(null);
       if (penNo === 4) finish(g * 20);
       else setPenNo(p => p + 1);
@@ -80,19 +86,20 @@ export function useZonePick(saving: boolean, finish: (score: number) => void) {
     const honest = Math.random() < 0.65;
     const tell = honest ? shot : keeperPick();
     setGkTell(tell);
-    gkTimer.current = setTimeout(() => {
+    gkTimer.current = clock.timeout(() => {
       setGkTell(null);
       setGkShot(shot);
     }, 650);
   };
 
   const gkDive = (zone: number) => {
+    if (clock.isPaused()) return;
     if (gkShot === null || gkLast) return;
     const saved = zone === gkShot;
     const s = gkSaves + (saved ? 1 : 0);
     setGkSaves(s);
     setGkLast({ shot: gkShot, dive: zone, saved });
-    gkTimer.current = setTimeout(() => {
+    gkTimer.current = clock.timeout(() => {
       if (gkShotNo === 4) finish(s * 20);
       else { setGkShotNo(n => n + 1); gkNextShot(); }
     }, 1100);
@@ -101,8 +108,9 @@ export function useZonePick(saving: boolean, finish: (score: number) => void) {
   /* The first shot arrives shortly after the save drill opens. */
   useEffect(() => {
     if (saving) {
-      gkTimer.current = setTimeout(gkNextShot, 600);
+      gkTimer.current = clock.timeout(gkNextShot, 600);
     }
+    return () => { clock.clear(gkTimer.current); gkTimer.current = null; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [saving]);
 
@@ -124,7 +132,7 @@ export default function ZonePickDrill({ skin, run, onBack }: {
     return (
       <div className="p-4 space-y-3">
         <div className="flex items-center justify-between text-xs font-bold">
-          <button onClick={onBack} className="text-muted-foreground hover:text-foreground">‹ Drills</button>
+          <button onClick={onBack} className="min-h-11 min-w-11 text-muted-foreground hover:text-foreground">‹ Drills</button>
           <span>{skin.unit} {gkShotNo + 1}/5</span>
           <span className="text-emerald-400">{gkSaves} {skin.tally}</span>
         </div>
@@ -155,7 +163,7 @@ export default function ZonePickDrill({ skin, run, onBack }: {
   return (
     <div className="p-4 space-y-3">
       <div className="flex items-center justify-between text-xs font-bold">
-        <button onClick={onBack} className="text-muted-foreground hover:text-foreground">‹ Drills</button>
+        <button onClick={onBack} className="min-h-11 min-w-11 text-muted-foreground hover:text-foreground">‹ Drills</button>
         <span>{skin.unit} {penNo + 1}/5</span>
         <span className="text-emerald-400">{goals} {skin.tally}</span>
       </div>

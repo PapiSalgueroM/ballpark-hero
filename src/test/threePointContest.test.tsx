@@ -135,6 +135,7 @@ describe('Buzzer Beater three-point contest', () => {
       fireEvent.click(button('Three-point contest'));
       const setups = buildThreePointContest(), rng = lehmer(freeSeed ^ 0x5eed1234);
       let score = 0, made = 0, moneyMakes = 0, misses = 0;
+      const outcomes: boolean[] = [];
       for (let index = 0; index < 25; index++) {
         const value = index % 5 === 4 ? 2 : 1;
         expect(board(view)).toHaveAttribute('data-arcade-mode', 'contest');
@@ -144,8 +145,9 @@ describe('Buzzer Beater three-point contest', () => {
         const markers = [...view.container.querySelectorAll('[data-contest-ball-marker]')];
         expect(markers).toHaveLength(5);
         for (let ball = 0; ball < 5; ball++) {
-          expect(markers[ball]).toHaveAttribute('data-ball-status', ball < index % 5 ? 'spent' : ball === index % 5 ? 'current' : 'upcoming');
-          expect(markers[ball]).toHaveAccessibleName(`Ball ${ball + 1}, ${ball === 4 ? 'money ball, 2 points' : '1 point'}, ${ball < index % 5 ? 'spent' : ball === index % 5 ? 'current' : 'upcoming'}`);
+          const status = ball < index % 5 ? outcomes[Math.floor(index / 5) * 5 + ball] ? 'made' : 'missed' : ball === index % 5 ? 'current' : 'upcoming';
+          expect(markers[ball]).toHaveAttribute('data-ball-status', status);
+          expect(markers[ball]).toHaveAccessibleName(`Ball ${ball + 1}, ${ball === 4 ? 'money ball, 2 points' : '1 point'}, ${status}`);
         }
         const fade = index % 7 === 3 ? 1 : 0, ticks = contestTicks(setups[index]);
         fireEvent.change(screen.getByRole('slider', { name: 'How far to fade off the closeout' }), { target: { value: fade } });
@@ -153,8 +155,9 @@ describe('Buzzer Beater three-point contest', () => {
         const hold = button('Hold to shoot'); fireEvent.pointerDown(hold); advance(ticks * 16); fireEvent.pointerUp(hold);
         expect(actualShot(), `contest shot ${index + 1}, reduced=${reduced}`).toEqual(expected);
         expect(board(view)).toHaveAttribute('data-arcade-phase', reduced ? 'shotEnd' : 'flying');
-        expect(markers[index % 5]).toHaveAttribute('data-ball-status', 'spent');
+        expect(markers[index % 5]).toHaveAttribute('data-ball-status', reduced ? expected.made ? 'made' : 'missed' : 'in-flight');
         settle(view);
+        outcomes.push(expected.made);
         score += expected.made ? value : 0; made += Number(expected.made);
         moneyMakes += Number(expected.made && value === 2); misses += Number(!expected.made);
         expect(view.container.querySelector('[data-contest-score]')).toHaveTextContent(String(score));

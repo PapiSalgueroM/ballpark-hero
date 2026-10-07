@@ -27,13 +27,20 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ENTRY = path.join(os.tmpdir(), 'htEntry.mjs');
 const BUNDLE = path.join(os.tmpdir(), 'ht.bundle.mjs');
+// These historical skip/watch/react comparisons deliberately omit the new Quick coach.
+const noCoachPath = path.join(os.tmpdir(), `clubManager.halftimeNoCoach.${process.pid}.ts`);
+const coachHeader = 'export function coachQuickMatch(career: CareerState): CareerState {\n';
+const engineSource = fs.readFileSync(path.join(ROOT, 'src/lib/clubManager.ts'), 'utf8').replaceAll('\r\n', '\n');
+if (engineSource.split(coachHeader).length !== 2) throw new Error('One coach export is required for the historical halftime arm');
+fs.writeFileSync(noCoachPath, engineSource.replace(coachHeader, coachHeader + '  return career;\n'));
+process.on('exit', () => fs.rmSync(noCoachPath, { force: true }));
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const mod = await import('${ROOT.replaceAll('\\', '/')}/src/lib/clubManager.ts');
+const mod = await import('${noCoachPath.replaceAll('\\', '/')}');
 export const cm = mod;
 `);
-execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
+execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --alias:@=${ROOT.replaceAll('\\', '/')}/src --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
 
 const { cm } = await import(pathToFileURL(BUNDLE).href);
 const {
