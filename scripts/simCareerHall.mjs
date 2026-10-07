@@ -291,6 +291,18 @@ const CONTROLS = {
   jerseyignore: { file: 'careerHallOfFame.ts', from: 'sport.recordedJersey?.(c) ?? jerseyFor(', to: 'jerseyFor(' },
   eraunguarded: { file: 'HallOfFameCard.tsx', from: 'rec.firstClass >= rules.verifiedFromClass', to: 'true' },
   // Round 1051, sections 15 on. v1drift: the first award weight of the sport's calibration 1 table plus one.
+  below: { file: `${SPORT}MyCareer.ts`, re: /(_LEGACY_V2: LegacyWeights = \{\s+awards: \{ \w+: )(\d+)/, to: (m, a, n) => `${a}${Number(n) - 1}` },
+  nostandout: { file: 'careerHallOfFame.ts', from: 'LEGACY_GAME_RULES = { standoutTop: 300,', to: 'LEGACY_GAME_RULES = { standoutTop: 0,' },
+  // One from mark halved (the first standout of the sport's table).
+  markdrift: { file: `${SPORT}MyCareer.ts`, re: /(standout: \[\s+\{ stat: '\w+', from: )([\d.]+)/, to: (m, a, n) => `${a}${Number(n) / 2}` },
+  // Every to mark of the sport times 0.9.
+  todrift: { file: `${SPORT}MyCareer.ts`, re: /(, to: )([\d.]+)(, label: )/g, to: (m, a, n, b) => `${a}${Number(n) * 0.9}${b}` },
+  // One to mark set to its from mark plus one.
+  noramp: { file: `${SPORT}MyCareer.ts`, re: /(standout: \[\s+\{ stat: '\w+', from: )([\d.]+)(, to: )([\d.]+)/, to: (m, a, n, b) => `${a}${n}${b}${Number(n) + 1}` },
+  // A family planted where the half rule gives none: a catcher's steals, a point guard's rebounds, a linebacker's sacks, a defenceman's goals.
+  catchersteals: { file: `${SPORT}MyCareer.ts`, re: { mlb: /(\n    C: \{\s+terms: \[[^\n]*\],\s+standout: \[)/, nba: /(\n    PG: \{\s+terms: \[[^\n]*\],\s+standout: \[)/, nfl: /(\n    LB: \{\s+terms: \[[^\n]*\],\s+standout: \[)/, nhl: /(\n    D: \{\s+terms: \[[^\n]*\],\s+standout: \[)/ }[SPORT], to: (m, a) => `${a} { stat: '${{ mlb: 'sb', nba: 'reb', nfl: 'sacks', nhl: 'goals' }[SPORT]}', from: 30, to: 40, label: 'planted' },` },
+  // The base emptied at one position (football's tight end, baseball's reliever; basketball and hockey have no base).
+  nobase: { file: `${SPORT}MyCareer.ts`, re: { nfl: /(\n    TE: \{\s+terms: \[)[^\n]*(\],)/, mlb: /(\n    RP: \{\s+terms: \[\{ stat: 'hr', per: 4 \}, \{ stat: 'rbi', per: 60 \})[^\n]*(\],)/ }[SPORT] ?? /a string that is in no file, so this control refuses to run here/, to: (m, a, b) => `${a}${b}` },
   calflip: { file: 'careerHallOfFame.ts', from: 'return c.retired ? 1 : HALL_CALIBRATION;', to: 'return HALL_CALIBRATION;' },
   v1drift: { file: `${SPORT}MyCareer.ts`, re: /(_LEGACY_V1: LegacyWeights = \{\s+awards: \{ \w+: )(\d+)/, to: (m, a, n) => `${a}${Number(n) + 1}` },
 };
@@ -1076,6 +1088,120 @@ for (const k of careers) {
   const got = scoreOn(k.c, 1);
   if (got.score !== want || got.hof !== (want >= lines.hofLine) || 'standout' in got) v1FormulaMiss += 1;
 }
+/* 17. The standout, held to the measured ledger (scripts/data/careerHallMarks.json,
+   written by scripts/genCareerHallMarks.mjs; its header says how to re-derive). */
+const MARKS = JSON.parse(readFileSync(path.join(ROOT, 'scripts/data/careerHallMarks.json'), 'utf8'));
+const ML = MARKS.sports[SPORT];
+const TOP = eng.LEGACY_GAME_RULES.standoutTop, CAP = eng.LEGACY_GAME_RULES.standoutCap;
+const tableCells = E.positions.flatMap(pos => (W2.positions[pos]?.standout ?? []).map(s => ({ pos, s })));
+const inBand = (x, b) => x >= b.lo && x <= b.hi;
+
+/* 17 (a). The marks, the tripwire for a later round that moves an engine's
+   stats: the share of a position's careers at or over a from mark (about one
+   in ten by construction), per cell and pooled, and the pooled share at or
+   over a to mark. Never a per cell check on to (a count of 0 to 5). */
+let fromHits = 0, toHits = 0, cellN = 0;
+const cellOut = [];
+for (const { pos, s } of tableCells) {
+  const mine = rows.filter(r => r.pos === pos);
+  const over = mine.filter(r => (r.t[s.stat] ?? 0) >= s.from).length;
+  const cellShare = mine.length ? over / mine.length : 0;
+  if (!inBand(cellShare, ML.bands.fromCell)) cellOut.push(`${pos} ${s.stat} ${(100 * cellShare).toFixed(1)}`);
+  fromHits += over; toHits += mine.filter(r => (r.t[s.stat] ?? 0) >= s.to).length; cellN += mine.length;
+}
+const fromPooled = cellN ? fromHits / cellN : 0, toPooled = cellN ? toHits / cellN : 0;
+const fromOk = cellOut.length === 0 && inBand(fromPooled, ML.bands.fromPooled);
+const toOk = inBand(toPooled, ML.bands.toPooled);
+console.log(`  17 (a) marks: ${tableCells.length} standout cells; at or over from, pooled ${(100 * fromPooled).toFixed(2)} percent (band ${(100 * ML.bands.fromPooled.lo).toFixed(2)} to ${(100 * ML.bands.fromPooled.hi).toFixed(2)}), cells out of ${(100 * ML.bands.fromCell.lo).toFixed(1)} to ${(100 * ML.bands.fromCell.hi).toFixed(1)}: [${cellOut.join(', ')}]; at or over to, pooled ${(100 * toPooled).toFixed(2)} percent (band ${(100 * ML.bands.toPooled.lo).toFixed(2)} to ${(100 * ML.bands.toPooled.hi).toFixed(2)})`);
+
+/* 17 (b). The table is the ledger, exactly: the list is the half rule both
+   ways (a family is on a position's list if and only if its from mark is
+   above zero and at least half the sport's largest for that family, and it is
+   not excluded by hand), every mark and label is the ledger's, every ramp
+   clears the floor, and a family's own top may only be smaller than the rule's. */
+const halfMiss = [];
+const famsAll = Object.keys(ML.positions[E.positions[0]].families).filter(f => !(f in MARKS.excluded[SPORT]));
+const onTable = new Set(tableCells.map(c => `${c.pos}:${c.s.stat}`));
+for (const f of famsAll) {
+  const largest = Math.max(...E.positions.map(p => ML.positions[p].families[f].from));
+  for (const pos of E.positions) {
+    const m = ML.positions[pos].families[f];
+    const due = largest > 0 && m.from > 0 && m.from >= MARKS.rules.half * largest;
+    if (due !== onTable.has(`${pos}:${f}`)) halfMiss.push(`${pos} ${f} ${due ? 'due and missing' : 'on the list and not due'}`);
+  }
+}
+const flatRamps = [];
+for (const { pos, s } of tableCells) {
+  const m = ML.positions[pos]?.families[s.stat];
+  if (!m || s.stat in MARKS.excluded[SPORT]) { halfMiss.push(`${pos} ${s.stat} is not a family of the ledger`); continue; }
+  if (s.from !== m.from || s.to !== m.to || s.label !== MARKS.labels[SPORT][s.stat]) halfMiss.push(`${pos} ${s.stat} off the ledger's marks`);
+  if (!(s.to >= s.from * MARKS.rules.rampFloor)) halfMiss.push(`${pos} ${s.stat} ramp under the floor`);
+  if (s.top !== undefined && !(s.top > 0 && s.top < TOP)) halfMiss.push(`${pos} ${s.stat} top ${s.top}`);
+  const perSeason = s.from / Math.max(1, ML.positions[pos].medianSeasons);
+  flatRamps.push(`${pos} ${s.stat} ${((s.to - s.from) / perSeason).toFixed(1)}s x${(s.to / Math.max(1, m.median)).toFixed(2)}${m.floored ? ' floor' : ''}${s.top !== undefined ? ` top ${s.top}` : ''}`);
+}
+console.log(`  17 (b) half rule and ledger: ${halfMiss.length} misses [${halfMiss.slice(0, 6).join('; ')}]`);
+console.log(`     ramps (width in seasons at the from mark's own rate, to over the median): ${flatRamps.join(', ')}`);
+
+/* 17 (c). The outcome: among each cell's top 5 percent by that family, the
+   Hall share on 2 against 1, pooled over the cells calibration 1 left under
+   90 percent in (pooled, so no single small cell decides it). Printed too:
+   how many careers the standout alone carries over the first ballot line. */
+let gIn1 = 0, gIn2 = 0, gN = 0;
+const cellGains = [];
+for (const { pos, s } of tableCells) {
+  const mine = rows.filter(r => r.pos === pos).sort((x, y) => (y.t[s.stat] ?? 0) - (x.t[s.stat] ?? 0));
+  const top = mine.slice(0, Math.ceil(ML.outcome.topShare * mine.length));
+  const a = top.filter(r => r.hof1).length, b = top.filter(r => r.hof2).length;
+  if (top.length) cellGains.push(`${pos} ${s.stat} ${Math.round((100 * a) / top.length)}>${Math.round((100 * b) / top.length)}`);
+  if (!top.length || a / top.length >= ML.outcome.covered) continue;
+  gIn1 += a; gIn2 += b; gN += top.length;
+}
+const pooledGain = gN ? (gIn2 - gIn1) / gN : 0;
+const firstLine = lines.firstBallotScore;
+const liftedFirst = rows.filter(r => r.s2 >= firstLine && r.s1 < firstLine);
+console.log(`  17 (c) outcome: top 5 percent by family, Hall share on 1 > on 2: ${cellGains.join(', ')}`);
+console.log(`     pooled over the cells under ${100 * ML.outcome.covered} percent on 1: ${gIn1} -> ${gIn2} of ${gN} careers, a gain of ${(100 * pooledGain).toFixed(1)} points (needs ${(100 * ML.outcome.pooledGain.floor).toFixed(1)}); over the first ballot line (${firstLine}) on 2 and not on 1: ${liftedFirst.length} careers (${liftedFirst.filter(r => !r.hof1).length} of them newly in the Hall)`);
+
+/* 17 (d). The cap and the single family, exact: the score on 2 restated here
+   (awards, seasons, the terms, and only the largest standout credit, never
+   over the rule's top times its cap) against legacyOf on every career. */
+let capMiss = 0, paidCareers = 0;
+for (const k of careers) {
+  const t = eng.TOTALS(k.c);
+  const p = W2.positions[k.pos] ?? W2.positions['*'];
+  let best = 0, bestStat = null;
+  for (const s of p.standout ?? []) {
+    const credit = (s.top ?? TOP) * Math.min(CAP, Math.max(0, ((t[s.stat] ?? 0) - s.from) / (s.to - s.from)));
+    if (credit > best) { best = credit; bestStat = s.stat; }
+  }
+  let aw = 0;
+  for (const a of AWARD_KEYS) aw += k.c[a] * W2.awards[a];
+  let production = 0;
+  for (const term of p.terms) production += (t[term.stat] ?? 0) / term.per;
+  const got = scoreOn(k.c, eng.HALL_CALIBRATION);
+  if (got.score !== Math.round(aw + k.c.seasons.length * W2.season + production + best) || (got.standout?.stat ?? null) !== bestStat || best > TOP * CAP + 1e-9 || (got.standout ? Math.abs(got.standout.credit - best) > 1e-9 : best > 0)) capMiss += 1;
+  if (best > 0) paidCareers += 1;
+}
+console.log(`  17 (d) cap: ${capMiss} of ${careers.length} careers off the restated score on 2; the standout paid on ${paidCareers}`);
+
+/* 19 (a). The base: the table's added terms are the ledger's, the median
+   career of each base position earns what was measured, and a position the
+   ledger gives no base has none (the kicker). */
+const baseOf = pos => (W2.positions[pos] ?? W2.positions['*']).terms.slice((W1.positions[pos] ?? W1.positions['*']).terms.length);
+const baseMiss = [], baseSeen = [];
+for (const [pos, band] of Object.entries(ML.outcome.baseCredit)) {
+  const terms = baseOf(pos);
+  if (!sameJson(terms, ML.base[pos].map(t => ({ stat: t.stat, per: t.per })))) baseMiss.push(`${pos} terms off the ledger`);
+  const med = medOf(rows.filter(r => r.pos === pos).map(r => terms.reduce((s, t) => s + (r.t[t.stat] ?? 0) / t.per, 0)));
+  baseSeen.push(`${pos} ${med.toFixed(1)} (${band.lo.toFixed(1)} to ${band.hi.toFixed(1)})`);
+  if (!inBand(med, band)) baseMiss.push(`${pos} median base credit ${med.toFixed(1)}`);
+}
+for (const pos of E.positions) if (!ML.base[pos] && baseOf(pos).length) baseMiss.push(`${pos} has a base the ledger does not`);
+console.log(`  19 (a) base: median base credit ${baseSeen.join(', ') || 'no base position in this sport'}; misses [${baseMiss.join('; ')}]`);
+const HALL_STOP = 0.45; // the brief's hard stop: a sport over 45 percent in is the lead's call, never a band to widen
+const hallShareOk = hall2 >= hall1 && hall2 / 100 <= Math.min(ML.outcome.hallCeiling, HALL_STOP);
+
 /* 15 (c). Who is read on which calibration, exact: a valid stamp wins; with
    none a retired career is 1 and a live one is today's; a junk stamp is no
    stamp. And on every engine career the legacy follows that rule. */
@@ -1130,6 +1256,12 @@ const checks = [
   ['calrule', calRuleMiss === 0 && stampedEngine === (CAL1 ? 0 : careers.length), `${calRuleMiss} readings off the calibration rule; ${stampedEngine} of ${careers.length} engine careers stamped`],
   ['boardstamp', boardScoreMiss === 0 && boardRetired.length > 0 && boardStamped === (CAL1 ? 0 : boardRetired.length), `${boardStamped} of ${boardRetired.length} retired board careers stamped ${CAL_NOW}, ${boardScoreMiss} scored on another calibration`],
   ['neverbelow', ruleAMiss.length === 0 && belowMiss === 0 && rows.length > 0, `calibration 2 drops or changes [${ruleAMiss.join(', ')}] of calibration 1; ${belowMiss} of ${rows.length} careers score lower, lose a tier or leave the Hall on 2 (${movedUp} moved up)`],
+  ['marks', tableCells.length > 0 && fromOk && toOk, `at or over from: pooled ${(100 * fromPooled).toFixed(2)} percent, ${cellOut.length} cells out of band [${cellOut.join(', ')}]; at or over to: pooled ${(100 * toPooled).toFixed(2)} percent`],
+  ['halfrule', halfMiss.length === 0 && tableCells.length > 0, `${halfMiss.length} cells off the half rule, the ledger's marks or the ramp floor [${halfMiss.slice(0, 4).join('; ')}]`],
+  ['standoutgain', gN > 0 && pooledGain >= ML.outcome.pooledGain.floor, `top 5 percent by family: ${gIn1} -> ${gIn2} of ${gN} in the Hall, a gain of ${(100 * pooledGain).toFixed(1)} points (needs ${(100 * ML.outcome.pooledGain.floor).toFixed(1)})`],
+  ['standoutcap', capMiss === 0 && paidCareers > 0, `${capMiss} careers off the restated score on 2 (one family, capped); the standout paid on ${paidCareers}`],
+  ['base', baseMiss.length === 0, `${baseMiss.length} base misses [${baseMiss.join('; ')}]`],
+  ['hallshare', hallShareOk, `Hall share ${hall1.toFixed(1)} -> ${hall2.toFixed(1)} percent (ceiling ${(100 * Math.min(ML.outcome.hallCeiling, HALL_STOP)).toFixed(1)})`],
   ...(balance ? [['balance', balance.cases >= BAND.balanceCases && balance.ovrNow - balance.ovrOld >= BAND.farewellOvrGain && Math.abs(balance.hallNow - balance.hallOld) <= BAND.hallShift && Math.abs(balance.legacyNow - balance.legacyOld) <= BAND.legacyShift, `${balance.cases} walk away farewells (needs ${BAND.balanceCases}); farewell OVR gain ${(balance.ovrNow - balance.ovrOld).toFixed(1)} (needs ${BAND.farewellOvrGain}); Hall share shift ${(100 * (balance.hallNow - balance.hallOld)).toFixed(2)} points (band ${100 * BAND.hallShift}); median legacy shift ${balance.legacyNow - balance.legacyOld} (band ${BAND.legacyShift})`]] : []),
 ];
 const BOARD_CHECKS = ['identity', 'ends', 'once', 'seek', 'deckJersey', 'era', 'balance', 'boardstamp'];
@@ -1139,10 +1271,14 @@ const red = shown.filter(c => !c[1]).map(c => c[0]);
 if (CONTROL) {
   const WANT = { everyonein: 'iff', bindhof: 'iff', outcomeswap: 'outcome', nominationgone: 'outcome', oldcurve: 'outcome', waitoff: 'table', shownraw: 'sides', flatfirst: 'rises', nopromise: 'promise', mathrandom: 'keyed', sharesides: 'sides', notalk: 'talk', farewelloff: 'answers', retireoff: 'answers', jerseyfirst: 'jersey', jerseyraw: 'jersey', talkdraws: 'identity', deckfarewelloff: 'ends', twice: 'once', seekexclude: 'seek', jerseyignore: 'deckJersey', eraunguarded: 'era',
     // Round 1051. An array wants every one of its checks red.
-    v1drift: ['v1replay', 'v1formula'], calflip: ['calrule'] }[CONTROL];
-  const wantRed = [].concat(WANT);
-  const fired = wantRed.every(n => red.includes(n));
-  console.log(`simCareerHall ${SPORT} CONTROL ${CONTROL}: wanted ${wantRed.join(' and ')} red, red [${red.join(',')}], ${fired ? 'FIRED' : 'DID NOT FIRE'}`);
+    v1drift: ['v1replay', 'v1formula'], calflip: ['v1replay', 'calrule'],
+    below: 'neverbelow', markdrift: 'marks', todrift: 'marks', noramp: 'halfrule', catchersteals: 'halfrule', nobase: 'base',
+    // An object also names checks that must stay green: the standout switched off moves the outcome, never the marks.
+    nostandout: { red: ['standoutgain'], green: ['marks'] } }[CONTROL];
+  const wantRed = WANT && WANT.red ? WANT.red : [].concat(WANT);
+  const wantGreen = WANT && WANT.green ? WANT.green : [];
+  const fired = wantRed.every(n => red.includes(n)) && wantGreen.every(n => !red.includes(n));
+  console.log(`simCareerHall ${SPORT} CONTROL ${CONTROL}: wanted ${wantRed.join(' and ')} red${wantGreen.length ? ` and ${wantGreen.join(' and ')} green` : ''}, red [${red.join(',')}], ${fired ? 'FIRED' : 'DID NOT FIRE'}`);
   // Exit 1 only when the check this control targets went red, so the exit
   // code alone proves the control hit its own check. Any other red is printed.
   process.exit(fired ? 1 : 0);
