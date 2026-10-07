@@ -134,6 +134,7 @@ async function accountAsks(page) {
 function checkAsks(value) { assert(value.places.length <= 2, 'At most two account prompt places appear before the first game'); }
 async function accountControl(page, row) {
   const before = await accountAsks(page); row.healthy.accountAsks = before; save(); checkAsks(before);
+  const stateBefore = await snapshot(page), htmlBefore = await page.locator('body').evaluate(node => node.outerHTML);
   assert.equal(await page.locator('[data-home-account-control]').count(), 0);
   const injected = await page.evaluate(() => {
     const top = document.querySelector('[data-home-stage] [data-stage-card]').getBoundingClientRect().y + scrollY;
@@ -141,12 +142,35 @@ async function accountControl(page, row) {
     for (let i = 0; i < 3; i++) { const ask = document.createElement('p'); ask.textContent = 'Create a free account'; ask.style.cssText = `position:absolute;left:8px;top:${top - 28 * (i + 1)}px;margin:0;font-size:12px;line-height:16px;z-index:99999`; node.append(ask); }
     document.body.append(node); return node.outerHTML;
   });
-  const fault = await accountAsks(page), screenshot = `${row.width}-account-asks-fault.png`; await page.screenshot({ path: path.join(OUT, screenshot) });
+  const fault = await accountAsks(page), screenshot = `${row.width}-account-asks-fault.png`;
+  const control = { width: row.width, name: 'account-asks', before, fault, injected, screenshot, proved: false,
+    stateBefore, htmlBefore, stateAtCapture: await snapshot(page), htmlAtCapture: await page.locator('body').evaluate(node => node.outerHTML) };
+  report.controls.push(control); save();
+  const session = await page.context().newCDPSession(page);
+  try {
+    const [layout, version, surface] = await Promise.all([
+      session.send('Page.getLayoutMetrics'), session.send('Browser.getVersion'),
+      page.evaluate(() => ({ innerWidth, innerHeight, outerWidth, outerHeight, devicePixelRatio, scrollX, scrollY,
+        screen: { width: screen.width, height: screen.height, availWidth: screen.availWidth, availHeight: screen.availHeight, colorDepth: screen.colorDepth, pixelDepth: screen.pixelDepth },
+        visualViewport: visualViewport && { width: visualViewport.width, height: visualViewport.height, offsetTop: visualViewport.offsetTop, offsetLeft: visualViewport.offsetLeft, pageTop: visualViewport.pageTop, pageLeft: visualViewport.pageLeft, scale: visualViewport.scale },
+        visibility: document.visibilityState, focused: document.hasFocus(), readyState: document.readyState,
+        document: { width: document.documentElement.scrollWidth, height: document.documentElement.scrollHeight },
+        body: { width: document.body.scrollWidth, height: document.body.scrollHeight }, activeElement: document.activeElement?.outerHTML })),
+    ]);
+    control.captureDiagnostics = { configured: { width: row.width, height: row.height }, layout, version, surface }; save();
+  } finally { await session.detach(); }
+  try { await page.screenshot({ path: path.join(OUT, screenshot) }); }
+  catch (error) { control.captureError = { name: error.name, message: error.message, stack: error.stack }; save(); throw error; }
+  finally {
+    await page.locator('[data-home-account-control]').evaluate(node => node.remove());
+    control.restored = await accountAsks(page); control.stateRestored = await snapshot(page);
+    control.htmlRestored = await page.locator('body').evaluate(node => node.outerHTML); save();
+  }
   let rejection; try { checkAsks(fault); } catch (error) { rejection = { name: error.name, message: error.message }; }
-  await page.locator('[data-home-account-control]').evaluate(node => node.remove()); const restored = await accountAsks(page);
-  report.controls.push({ width: row.width, name: 'account-asks', before, fault, restored, injected, rejection, screenshot }); save();
+  const restored = control.restored; control.rejection = rejection; save();
   assert.notDeepEqual(fault, before); assert.equal(rejection?.name, 'AssertionError'); assert.equal(rejection?.message, 'At most two account prompt places appear before the first game');
   assert.equal(await page.locator('[data-home-account-control]').count(), 0); assert.deepEqual(restored, before, 'Account control restores exact prompt and first-tile geometry'); checkAsks(restored);
+  control.proved = true; save();
 }
 async function results(page) { return page.locator('[data-home-game-card] > a').evaluateAll(nodes => nodes.map(n => ({ href: n.getAttribute('href'), label: n.querySelector('h3')?.textContent.trim() }))); }
 async function act(page, locator, touch) { if (touch) await locator.tap(); else { await locator.focus(); await page.keyboard.press('Enter'); } }
@@ -164,7 +188,7 @@ async function domControls(page, row) {
     let rejection; try { checkGeometry(fault); } catch (error) { rejection = { name: error.name, message: error.message }; }
     await locator.evaluate((node, value) => { if (value === null) node.removeAttribute('style'); else node.setAttribute('style', value); }, originalStyle);
     const restored = await measure(panel, row.width, row.height); const control = { width: row.width, name, before, fault, restored, rejection, screenshot: file }; report.controls.push(control); save();
-    assert.notDeepEqual(fault, before, 'DOM control changes its actual measured state'); assert.equal(rejection?.name, 'AssertionError'); assert.equal(rejection?.message, message); assert.deepEqual(restored, before, 'Control restores exact HTML and geometry'); checkGeometry(restored);
+    assert.notDeepEqual(fault, before, 'DOM control changes its actual measured state'); assert.equal(rejection?.name, 'AssertionError'); assert.equal(rejection?.message, message); assert.deepEqual(restored, before, 'Control restores exact HTML and geometry'); checkGeometry(restored); control.proved = true; save();
   }
   const before = await measure(panel, row.width, row.height); assert.equal(await panel.locator('[data-home-text-control]').count(), 0);
   await panel.evaluate(node => {
@@ -174,9 +198,9 @@ async function domControls(page, row) {
   const fault = await measure(panel, row.width, row.height), screenshot = `${row.width}-text-covered-fault.png`; await page.screenshot({ path: path.join(OUT, screenshot) });
   let rejection; try { checkGeometry(fault); } catch (error) { rejection = { name: error.name, message: error.message }; }
   await panel.locator('[data-home-text-control]').evaluate(node => node.remove()); const restored = await measure(panel, row.width, row.height);
-  report.controls.push({ width: row.width, name: 'text-covered', before, fault, restored, rejection, screenshot }); save();
+  const control = { width: row.width, name: 'text-covered', before, fault, restored, rejection, screenshot }; report.controls.push(control); save();
   assert.notDeepEqual(fault, before); assert.equal(rejection?.name, 'AssertionError'); assert.equal(rejection?.message, 'Recovery text is not covered by another element');
-  assert.deepEqual(restored, before, 'Text cover restores exact HTML and geometry'); checkGeometry(restored);
+  assert.deepEqual(restored, before, 'Text cover restores exact HTML and geometry'); checkGeometry(restored); control.proved = true; save();
 }
 try {
   await ready; browser = await chromium.launch({ headless: false });
@@ -268,7 +292,7 @@ try {
       row.complete = true; save();
     } finally { releaseChunk?.(); releaseDocument?.(); await context.close(); save(); }
   }
-  assert.deepEqual(report.unexpected, []); assert.deepEqual(report.sockets, []); assert.equal(report.controls.length, 20); report.complete = true;
+  assert.deepEqual(report.unexpected, []); assert.deepEqual(report.sockets, []); assert.equal(report.controls.length, 20); assert(report.controls.every(c => c.proved)); report.complete = true;
 } catch (error) { report.error = { name: error.name, message: error.message, stack: error.stack }; }
 finally {
   await browser?.close(); server.kill(); fs.writeFileSync(path.join(OUT, 'server.log'), serverLog);
@@ -278,7 +302,7 @@ finally {
   save();
 }
 console.log(`Home search native: ${report.complete ? 'PASS' : 'FAIL'}, ${report.cases.filter(c => c.complete).length}/4 completed route journeys.`);
-console.log(`Effective restored DOM controls: ${report.controls.length}/20; unexpected requests: ${report.unexpected.length}.`);
+console.log(`Effective restored DOM controls: ${report.controls.filter(c => c.proved).length}/20; unexpected requests: ${report.unexpected.length}.`);
 console.log(`Source/build/cache held: ${!report.sourceHoldError}; artifact path: ${OUT}`);
 console.log('Scope: actual built signed-out Home with explicit locally fulfilled public reads and real cached fonts/flags; no gameplay or production forwarding.');
 process.exitCode = report.complete ? 0 : 1;

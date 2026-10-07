@@ -126,7 +126,7 @@ test:{environment:'jsdom',globals:true,setupFiles:[${JSON.stringify(unix(path.jo
   let failure = null;
   if (fault) {
     assert.equal(child.status, 1); assert.equal(tests.filter(test => test.status === 'failed').length, 1); assert.equal(tests.filter(test => test.status === 'passed').length, 1);
-    assert.equal(tests.filter(test => test.status === 'pending').length, COUNT - 2);
+    assert.equal(tests.filter(test => test.status === 'skipped').length, COUNT - 2);
     failure = tests.find(test => test.title === fault[4] && test.fullName === fault[4]); assert.equal(failure?.status, 'failed');
     assert(/AssertionError/.test(failure.failureMessages.join('\n')), `${name}: exact mapped assertion failure`);
     assert(records.some(row => { try { assert.deepEqual(row.actual, row.expected); return false; } catch { return true; } }), `${name}: actual mismatched observation retained`);
