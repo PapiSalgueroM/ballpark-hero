@@ -146,7 +146,9 @@ function rewrite(file, edits, outName, what) {
   for (const [from, to] of edits) {
     if (!src.includes(from)) {
       console.error(`control cannot run: ${what} is not in the shape DEADLINE_CONTROL=${CONTROL} rewrites (${from.slice(0, 70)}...)`);
-      process.exit(1);
+      /* Exit 2, the code for a control that did not fire: exit 1 means it
+         fired, and a control that never ran proved nothing. */
+      process.exit(2);
     }
     src = src.replace(from, to);
   }
@@ -166,7 +168,7 @@ if (CONTROL === 'noclock') {
   console.log('NEGATIVE CONTROL ON: the shut leaves unfinished deals standing; section 3 must go red');
 }
 if (CONTROL === 'frozen') {
-  libPath = rewrite(LIB, [['  const pool = hotSeatPool();\n  /* Half a pool', "  date = '2026-01-01';\n  const pool = hotSeatPool();\n  /* Half a pool"]], 'deadlineDay.frozen.ts', 'the daily pick');
+  libPath = rewrite(LIB, [['  const pool = hotSeatPool(date);\n  /* Half a pool', "  date = '2026-01-01';\n  const pool = hotSeatPool(date);\n  /* Half a pool"]], 'deadlineDay.frozen.ts', 'the daily pick');
   console.log('NEGATIVE CONTROL ON: every date gets the same window; section 4 must go red');
 }
 if (CONTROL === 'drift') {
