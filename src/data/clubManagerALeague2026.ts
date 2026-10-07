@@ -15,7 +15,7 @@ export const CM_ALEAGUE_META = {
   clubs: 12,
 };
 
-/** Clubs where more than half the shipped rows have no market value. */
+/** Clubs where more than half of the club's ledger rows (Round 1034's gathered squad, the rows with no position group included) have no market value. */
 export const CM_ALEAGUE_PARTIAL: string[] = ["Central Coast Mariners"];
 
 /** Players with no value on their club's page, as "name|club": each one is
