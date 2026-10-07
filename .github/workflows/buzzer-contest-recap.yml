@@ -1,0 +1,115 @@
+name: Buzzer contest recap verification
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/buzzer-contest-recap.yml
+      - src/components/buzzer-beater/**
+      - src/lib/buzzerBeater.ts
+      - src/lib/threePointContest.ts
+      - src/hooks/useArcadeFlight.ts
+      - src/hooks/useRevealScroll.ts
+      - src/test/buzzerContestRecap.test.tsx
+      - src/test/threePointContest.test.tsx
+      - scripts/simBuzzerContestRecap.mjs
+      - scripts/simThreePointContest.mjs
+      - scripts/qa/buzzerContestRecap1074.mjs
+      - public/buzzer-beater/index.html
+  workflow_dispatch:
+
+permissions:
+  contents: read
+concurrency:
+  group: buzzer-contest-recap-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      VITEST_MAX_FORKS: 1
+      VITEST_MIN_FORKS: 1
+      SEO_SPLIT_BASE_REF: HEAD
+      BUZZER_CONTEST_RECAP_ARTIFACTS: buzzer-contest-recap-artifacts/mounted
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install verification dependencies
+        run: |
+          mkdir -p buzzer-contest-recap-artifacts
+          git rev-parse HEAD > buzzer-contest-recap-artifacts/source-head.txt
+          git rev-parse HEAD^{tree} > buzzer-contest-recap-artifacts/source-tree.txt
+          npm ci
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+      - name: Type check and build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee buzzer-contest-recap-artifacts/types.log
+          npm run build 2>&1 | tee buzzer-contest-recap-artifacts/build.log
+      - name: Actual recap outcomes and effective copied faults
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: BUZZER_CONTEST_RECAP_CONTROL=all ONLY=simBuzzerContestRecap node scripts/runAllSims.mjs 2>&1 | tee buzzer-contest-recap-artifacts/mounted.log
+      - name: Native contest outcomes and geometry
+        id: native
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          node scripts/qa/buzzerContestRecap1074.mjs --prefetch-fonts-only 2>&1 | tee buzzer-contest-recap-artifacts/fonts.log
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/buzzerContestRecap1074.mjs 2>&1 | tee buzzer-contest-recap-artifacts/native.log
+      - name: Preserve native failure for diagnosis
+        if: ${{ failure() && steps.native.outcome == 'failure' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: buzzer-contest-native-failure-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 2
+          path: |
+            buzzer-contest-recap-artifacts/native/
+            buzzer-contest-recap-artifacts/native.log
+      - name: Original basketball physics modes and effective contest controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simBuzzerBeater simBuzzerPractice simThreePointContest simArcadeShotFeedback simArcadePause simArcadeHoldRelease simNoDoubleRecord simScoringCoverage simScoreShown; do
+            ONLY="$harness" node scripts/runAllSims.mjs 2>&1 | tee "buzzer-contest-recap-artifacts/$harness.log" || failed=1
+          done
+          for control in money length completion pause; do
+            THREE_POINT_CONTEST_CONTROL="$control" ONLY=simThreePointContest node scripts/runAllSims.mjs 2>&1 | tee "buzzer-contest-recap-artifacts/contest-$control.log" || failed=1
+          done
+          ONLY=buzzer-beater NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simDailyReload.mjs 2>&1 | tee buzzer-contest-recap-artifacts/simDailyReload.log || failed=1
+          exit "$failed"
+      - name: All built pages search guide and source anchor readers
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings simSeoMetaSplit simHomeCopy simHarnessAnchors; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "buzzer-contest-recap-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Hold reviewed source and accepted engines
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          git diff --exit-code HEAD -- src/components/buzzer-beater src/test/buzzerContestRecap.test.tsx src/test/threePointContest.test.tsx scripts/simBuzzerContestRecap.mjs scripts/simThreePointContest.mjs scripts/qa/buzzerContestRecap1074.mjs src/pages/WhatsNew.tsx src/data/gameContent/basketball.ts scripts/data/guideHeadingsFrozen.json
+          git diff --exit-code be3f552d2485eecc1959776c6f8cd3efba745ec7 HEAD -- src/lib/buzzerBeater.ts src/lib/threePointContest.ts src/hooks/useArcadeFlight.ts src/hooks/useGameCompletion.ts src/lib/arcadeRecord.ts
+      - name: Preserve verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: buzzer-contest-recap-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 2
+          path: buzzer-contest-recap-artifacts/
