@@ -1568,6 +1568,7 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
   '/fight-promoter': {
     intro: [
       "Fight Promoter is a free MMA and boxing management sim. Run a fictional MMA organization with contracts, division rankings and championship belts, or play the original boxing matchmaking game. Each mode has its own save.",
+      "In MMA mode, open Bout recap on an event result or a saved event from History. Read both fighters' actual landed strikes, takedowns, ground control, submission attempts and round points, then select a played round for its details. Ground control uses this simulation's recorded units, with 20 per takedown. Early finishes end the bout; round points decide fights that reach the final bell. Back returns to the same event without changing the save.",
       "In boxing mode, there are two ways to fill a room and they pull against each other. Put a known fighter in with somebody who cannot live with him and the house is full on the name, the fight is over early and nobody remembers it. Make the fight people actually want and it costs you both purses, and half the time your biggest draw walks out beaten and worth far less next time.",
       "In boxing mode, the money says feed him and your name says make the fight. Measured in that engine, a mismatch takes about 13 percent more at the door tonight and costs you six points of reputation across a career. Every fighter in both modes is invented.",
     ],
