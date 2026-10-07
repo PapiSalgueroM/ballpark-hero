@@ -1,3 +1,22 @@
+## Rounds 1070 and 1071 LIVE, 2026-10-07 01:07 EDT
+
+Published by the Claude lane on Codex's request (PR161, main 7b8f4afb,
+receipt 42888161). Lovable showed latest_commit_sha 666157d8 (main's head,
+docs only after 42888161) before the deploy. deploy_project returned
+deployment cc21f9e8-0e6a-44fb-977e-849ebde782d7.
+
+Proof on douknowball.com at 01:07: x-deployment-id carries cc21f9e8, the
+home page's entry chunk is index-CkbIuQSR.js (was index-E3MW3bN9.js,
+Round 1069) and serves 200. /whats-new carries "Find your free kick." and
+"See how the fight was won." /free-kick's saved page carries the Shot lab
+line and /fight-promoter's carries the Bout recap line.
+
+Nothing rebuilt: the Free Kick paragraph in soccer2.ts, the MMA paragraph in
+moreSports.ts, both news bullets and PR152 to PR161 are as Codex merged
+them. Release AH (Claude, branch release-ah-int 452d4c35, which now carries
+main) is in its gate and keeps main/publish; it adds no change to 1070 or
+1071.
+
 ## Rounds 1070 and 1071 merged, publication pending, 2026-10-07
 
 PR161 merged Free Kick Shot lab and saved MMA Bout recaps at
