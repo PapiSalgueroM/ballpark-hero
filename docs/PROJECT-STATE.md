@@ -1,3 +1,19 @@
+## Codex 1082 implementation, October 7: permanent contract review
+
+Candidate on codex/soccer-transfer-review-1082, pinned main94b9490d.
+Rounded agent-adjusted wage, real current-deal comparison, explicit unavailable
+contracts and recorded squad fit now have a compact review with Back and
+worked help. Only the final Sign contract action calls the existing handler.
+No engine, league/data, loan or Season Centre changes. Numerical appearance
+projections omitted because the existing base-38 model cannot support a
+historical-season forecast. Design and limits:
+docs/plans/2026-10-07-soccer-offer-review-1082.md.
+
+Remote-only outcome/control, actual-route native and regression gates authored.
+Implementation is not yet accepted or live. Original full campaign browser
+walk is not credited as rerun. Claude retains main/release/publishing. Protected
+root source and seven stashes stay held.
+
 ## Release AI LIVE, 2026-10-07 08:51 EDT
 
 Claude lane. main 7cd5322a, deployment 35179be4-ab5b-48f2-81f0-e4729ca92a47,

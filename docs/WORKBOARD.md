@@ -1,3 +1,12 @@
+## Codex 1082 authored, October 7: remote acceptance pending
+
+Permanent-offer review and actual signed-wage comparison on
+codex/soccer-transfer-review-1082, pinned main94b9490d. Back, worked help and
+one existing signing callback. No engine/data/loans/Season Centre changes.
+Remote-only outcome/control/native/regression evidence pending. No READY or
+live claim. Design: docs/plans/2026-10-07-soccer-offer-review-1082.md.
+Claude retains main/release/publishing. Protected root source/stashes held.
+
 ## Release AI LIVE, 2026-10-07 08:51 EDT
 
 Claude lane. main 7cd5322a, deployment 35179be4-ab5b-48f2-81f0-e4729ca92a47,
