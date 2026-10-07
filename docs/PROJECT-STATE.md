@@ -1,3 +1,23 @@
+## Codex1083 PREPARATION6, October7: restart stalled remote setup
+
+Preparation5 HEAD ea79680f59d4f29ffe415cb05230497540a1823c,
+treeb49eac91dcff29f3cd0642a8b8f754b7cba0d944, run37661796408,
+remained in Prepare remote verification for over43 minutes. Type/build,
+mounted/native/old game gates and readers had not started. This docs-only
+retry starts an identical application/test/driver candidate; no useful old
+gate is cancelled. Retain the cancelled setup log to diagnose its cause.
+
+All source, original fixtures, parent1080,12/22 sale outcomes,20/23 ticket
+controls, old thresholds,15 restored DOM faults and finite-animation
+observerf4ddf972 are unchanged. Preparation4 full574-entry artifact
+11501570903 ZIPaab104bd8d9e26b2ea24821eb36902acf33fccca67901ca4456e41700c8c7cb6
+has independent scoped acceptance for mounted12/22 and all non-native
+checks, plus only two completed320px native journeys/five controls.
+No full native/PR/READY/live acceptance. Proper exact-head remote gates
+and all six paired native routes remain mandatory. No local runtime.
+Claude owns merge/publication/current-main integration. Root source and
+seven stashes held.
+
 ## Codex1083 PREPARATION5, October7,13:41 EDT: observe settled controls
 
 Preparation4 HEAD25ac9f9c3189372100255dea72a5f762efff286d,
