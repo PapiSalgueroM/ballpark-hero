@@ -34,7 +34,7 @@ export function FarewellCard({ talk, age, onChoose }: {
           <Button
             key={choice.id}
             onClick={() => onChoose(choice.id)}
-            className={`w-full h-auto py-2 justify-start text-left whitespace-normal flex-col items-start gap-0.5 ${choice.id === "oneMore" ? "bg-emerald-600 hover:bg-emerald-500 text-black" : "border border-border bg-secondary text-secondary-foreground hover:bg-secondary/80"}`}
+            className={`w-full h-auto py-2 justify-start text-left whitespace-normal flex-col items-start gap-0.5 ${choice.id === "oneMore" ? "border border-transparent bg-emerald-600 hover:bg-emerald-500 text-black" : "border border-border bg-secondary text-secondary-foreground hover:bg-secondary/80"}`}
           >
             <span className="text-xs font-bold">{`${choice.emoji} ${choice.label}`}</span>
             <span className="text-[11px] font-normal opacity-80">{choice.detail}</span>

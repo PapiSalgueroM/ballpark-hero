@@ -52,6 +52,46 @@
                    games, then the first club), named by the engine's own
                    club label, never a bare id. Controls jerseyfirst, jerseyraw.
 
+   ROUND 1039, sections 9 to 14: the same rules on the BOARD's own loop. The
+   real binding (nflCareerSport.ts and its siblings), its summer deal and
+   answers (usCareerSummer.ts) and the talk where the board asks it
+   (usCareerRetirementFlow.ts): season, progress, the hard stop or a chosen
+   end, the deal with the talk filter, the talk, every card. Each career runs
+   on its own keyed stream, so two policies on one career draw the same
+   numbers until they really differ. 400 careers a policy by default
+   (SIM_BOARD_CAREERS), 100 a league era for section 13 (SIM_ERA_CAREERS),
+   800 a build for section 14 (SIM_BALANCE_CAREERS).
+     9. identity   careers that answer 'one more year' every time are byte
+                   for byte the loop with no talk at all (the deck's
+                   retirement cards held out by this file's own reading of
+                   the rule), but for the answers block. Control talkdraws
+                   (one Math.random in pendingTalk).
+    10. ends       Retire now ends on the talk's season; a farewell, said at
+                   the talk or on a deck card ("Next season is your last"),
+                   ends exactly one season later and that season is marked.
+                   Controls farewelloff (Round 915's) and deckfarewelloff (the
+                   deck's answers back to the bare flag).
+    11. once       no offseason that has the talk is offered a deck retirement
+                   card, and RETIREMENT_CARD_IDS is every card whose answer
+                   writes a farewell or says it does, read off the engine's
+                   own deck builders, with no id that is never dealt. Control
+                   twice (the filter off).
+    12. deckJersey a club that retired the number on a deck card is the club
+                   the card names (even where another club has more seasons),
+                   on real careers and on synthetic ones with twelve seasons
+                   elsewhere; a wait answer writes no club. Control
+                   jerseyignore (the recorded club ignored).
+    13. era        the card the board renders, for careers in every league era
+                   and for synthetic ballots on both sides of the line, prints
+                   "Class of X" and the class years only when the first class
+                   is at or after the audit table's verifiedFromClass, and no
+                   year and no rule line before it. Control eraunguarded.
+    14. balance    (nhl only) the walk away card wrote OVR 63 for the farewell
+                   year; now it writes the farewell. The same careers built
+                   once with the old answer, measured: the farewell season's
+                   own line where both builds took it the same offseason, and
+                   the median legacy and Hall share over every career.
+
    A control run exits 1 only when the check it targets is red (FIRED), and 0
    when it is not (DID NOT FIRE), whatever else went red.
 
