@@ -602,9 +602,18 @@ function playSeed(seed, startYear, careers, era) {
    winners by association; 1 to 10, mean 5.75 against 6.17). The other three
    leagues: Premier League 3, Championship 5, La Liga 4 on the round's tree.
    The recipe above on either tree gives Brasileirao a floor of 1, so 2 was
-   already a coin toss for any change that moves a career; the floor is 1,
-   which nopool's 0 still turns red. The other floors stand. */
-const F_MIN_DISTINCT = { 'Premier League': 1, Championship: 3, 'La Liga': 2, Brasileirao: 1 };
+   already a coin toss for any change that moves a career.
+   Round 1041 review: a floor at the measured minimum has no margin either
+   (a seed giving 0 turns red with nothing wrong), so the statistic changed
+   rather than the floor: the gate is the MEAN over the run's seeds, not
+   each seed. Measured on the round's tree (f61ec5bd) over 48 seeds, the
+   eight six seed windows' means: Premier League 4.00 to 5.17 (one seed
+   alone 1 to 7), Championship 8.00 to 9.17 (5 to 12), La Liga 5.33 to 6.83
+   (3 to 9), Brasileirao 4.67 to 7.00 (1 to 10); a six seed mean's sd is
+   about 0.9. Each floor is half the smallest window mean, rounded down to a
+   half; nopool gives 0.00 in all four (measured, section 6 red beside its
+   own section 2). The floors hold for the default 6 seeds or more. */
+const F_MEAN_DISTINCT = { 'Premier League': 2, Championship: 4, 'La Liga': 2.5, Brasileirao: 2 };
 /* Gated only on the draws where the cap changes the odds (a league group
    over CAP in the candidate list): over all draws the uncapped control
    moved the ratio to just 1.07 to 1.14, inside the healthy spread, because
@@ -629,7 +638,6 @@ for (const seed of SEED_LIST) {
   const z = (r.bMeasured - r.bExpected) / Math.sqrt(r.bVariance || 1);
   const leagues = [...FOUR].map(l => `${l} ${r.byLeague.get(l)?.size ?? 0}`).join(', ');
   console.log(`  seed ${seed}: ${r.draws} draws (four leagues ${r.measured} vs ${r.expected.toFixed(1)}), ${r.bDraws} where the cap bites (four leagues ${r.bMeasured} vs ${r.bExpected.toFixed(1)}, ratio ${ratio.toFixed(3)}, z ${z.toFixed(2)}); ${r.offers} offers; distinct generated clubs offered: ${leagues}; uncovered ${r.uncovered.length}`);
-  for (const l of FOUR) ok((r.byLeague.get(l)?.size ?? 0) >= F_MIN_DISTINCT[l], `seed ${seed}: ${l} offered ${r.byLeague.get(l)?.size ?? 0} distinct generated clubs, at least ${F_MIN_DISTINCT[l]} expected`);
   ok(r.bDraws >= B_MIN_DRAWS, `seed ${seed}: only ${r.bDraws} draws where the cap bites, the comparison needs at least ${B_MIN_DRAWS}`);
   ok(!r.uncovered.length, `seed ${seed}: market offers that no pickAcrossLeagues call produced: ${r.uncovered.slice(0, 5).join(', ')}`);
   ok(r.academyFallbacks > 0, `seed ${seed}: no career reached a worldwide academy fallback, the coverage check below saw nothing`);
@@ -641,6 +649,11 @@ const agg = results.reduce((a, r) => ({ m: a.m + r.bMeasured, e: a.e + r.bExpect
 const aggRatio = agg.m / agg.e;
 console.log(`  over all ${SEED_LIST.length} seeds, where the cap bites: four leagues won ${agg.m} against ${agg.e.toFixed(1)} expected (ratio ${aggRatio.toFixed(3)}, z ${((agg.m - agg.e) / Math.sqrt(agg.v || 1)).toFixed(2)})`);
 ok(Math.abs(aggRatio - 1) <= D_RATIO, `where the cap bites the four leagues won ${agg.m} draws against ${agg.e.toFixed(1)} on the draws' own odds (ratio ${aggRatio.toFixed(3)}, band 1 +/- ${D_RATIO}): the market is not drawing on the capped weights`);
+for (const l of FOUR) {
+  const mean = results.reduce((a, r) => a + (r.byLeague.get(l)?.size ?? 0), 0) / results.length;
+  console.log(`  ${l}: ${mean.toFixed(2)} distinct generated clubs offered per seed over ${results.length} seeds (floor ${F_MEAN_DISTINCT[l]})`);
+  ok(mean >= F_MEAN_DISTINCT[l], `${l} offered ${mean.toFixed(2)} distinct generated clubs per seed over ${results.length} seeds, at least ${F_MEAN_DISTINCT[l]} expected`);
+}
 const mins = [...FOUR].map(l => `${l} ${Math.min(...results.map(r => r.byLeague.get(l)?.size ?? 0))}`).join(', ');
 console.log(`  ratio range ${Math.min(...ratios).toFixed(3)} to ${Math.max(...ratios).toFixed(3)}; per league minimum distinct generated clubs: ${mins}; ${((Date.now() - t0) / 1000).toFixed(0)} s`);
 const mk = results.reduce((a, r) => [a[0] + r.marketFour, a[1] + r.marketAll], [0, 0]);
