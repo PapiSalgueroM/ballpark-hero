@@ -14,16 +14,20 @@
    2. coherence, every forced season: the cup is won if and only if the final
       is; at most one tie is lost and it is the last; opponents are distinct,
       from his own association (a Welsh club plays the FA Cup, Monaco the
-      Coupe de France) or the world's winner, never his club; a lost final is
-      lost to the world's cup winner of his association's world league, and
-      no club he beat is that winner; when he wins, the world's winner is his
-      club, whatever division it plays in (a Championship side and the FA
-      Cup); a season with no cup has no cup, no run and no world winner; the
-      U.S. Open Cup is never won by a Canadian club; a name and a final score
-      appear only where the recorded table (scripts/data/
-      domesticCupSources.json) says so, and penalties only where its decider
-      is penalties; 'scored' never with 0 season goals; the event line names
-      the cup.
+      Coupe de France), clubs that existed that year, never his club; a lost
+      final is lost to the world's cup winner of his association's world
+      league wherever that club is one of them (the lead's rule: the phone's
+      era lists carry Atlanta United in 2015), and no club he beat is that
+      winner; when he wins, the world's winner is his club, whatever division
+      it plays in (a Championship side and the FA Cup); a season with no cup
+      has no cup, no run and no world winner; the U.S. Open Cup is never won
+      by a Canadian club; a run exactly where one is owed (an UNKNOWN
+      association needs a club for every named stage, critic correction 4);
+      no semi-final keeps a ground; a name and a final score appear only
+      where the recorded table (scripts/data/domesticCupSources.json) says
+      so, penalties only where its decider is penalties, and about as often
+      as real finals went to them; 'scored' never with 0 season goals; the
+      event line names the cup.
    3. outcomes against the round taken out (A): outside a season with no cup,
       every forced season wins the cup exactly when A does (the same coin);
       careers held at clubs of associations with no NONE window win exactly
@@ -37,7 +41,10 @@
       Club Manager's cup names (read from its code, comments stripped) agree
       with the table's latest window wherever both speak.
    5. display: the exit line and the won run render through react-dom/server
-      for a new row, and a row from before the round renders nothing new.
+      for a new row, and a row from before the round renders nothing new; no
+      tie prints a ground and a defeat carries no trophy.
+   6. the draw pinned: drawCupRun over clubs and statuses made up here, so
+      the digest moves with the draw itself and with nothing else.
 
    Negative controls (CUP_CONTROL=...), each refusing to run unless its edit
    lands exactly once: stream (one Math.random in the draw, 1 red),
@@ -46,34 +53,56 @@
    the coin, 2 and 3), unverifiedname (Brazil 1990 to 2025 named, 2 and 4),
    flatrounds (a uniform exit stage, 3), leaguekey (the world tick keyed by
    league again, so a Championship side's FA Cup leaves the world's winner
-   elsewhere, 2).
+   elsewhere, 2). Added by the review fixes: thinpool (a run for an UNKNOWN
+   association with fewer than three other clubs, 2), anyworld (the world's
+   winner taken where it is no club of that year, 2 and 6), semiground (a ground
+   kept on a semi-final, 2), venueline (the ground printed on the won run's
+   ties, 5), exittrophy (a trophy on the exit line, 5), pensrate (no extra
+   time, every level final to penalties, 2), drawpin (the loser's goal rate
+   moved, 6).
 
-   MEASURED 2026-10-07 over seed offsets 0, 1, 2 and 3 (CUP_PER 40: 2400
-   forced seasons an arm, 96 held careers of six seasons):
-   - section 1: 2400 compared, 1815 to 1819 with a run, 0 differ (exact).
-   - section 2: runs 1815 to 1819, cups won 297 to 354, NONE seasons 280
+   MEASURED 2026-10-07, re-measured after the review fixes on f61ec5bd, over
+   seed offsets 0, 1, 2 and 3 (CUP_PER 40: 2400 forced seasons an arm, 96
+   held careers of six seasons):
+   - section 1: 2400 compared, 1811 to 1819 with a run, 0 differ (exact).
+   - section 2: runs 1811 to 1819, cups won 297 to 354, NONE seasons 280
      (112 to 116 with a world league), lost finals against the world's
-     winner 120 to 133, Championship cups 24 to 30, penalty finals 71 to 98,
-     two legged finals 39 to 42, unnamed runs 153 to 161, worlds with an MLS
-     winner about 2080, cups the world agrees with 259 to 307. Floors at
-     about half of the smallest. 0 incoherent seasons.
+     winner 118 to 138 (and 2 to 8 where the winner was no club of that
+     year, not gated), Championship cups 22 to 30, two legged finals 39 to
+     58, unnamed runs 153 to 161, UNKNOWN seasons too thin for a run 225 to
+     230, semi-finals 682 to 765, worlds with an MLS winner about 2080, cups
+     the world agrees with 259 to 307. Penalties: 28 to 37 finals of 297 to
+     338 in windows that record them, a share of 0.111, 0.085, 0.109 and
+     0.104 against the model's 0.106 (one run's sd about 0.017; band 0.04 to
+     0.18, about four sd either side, while no extra time gives about 0.265).
+     Floors at about half of the smallest. 0 incoherent seasons.
    - section 3: 2120 seasons with a cup, 0 differ from the coin before the
-     round; NONE seasons won before the round 46 to 55, now 0; held careers
-     96 of 96, cups 135 to 139 both ways, 0 moved. Early exit share, tier 3
-     and below minus the elite: 0.179, 0.179, 0.294, 0.225 (GAP_MIN 0.09,
+     round; NONE seasons won before the round 36 to 55, now 0; held careers
+     96 of 96, cups 133 to 139 both ways, 0 moved. Early exit share, tier 3
+     and below minus the elite: 0.180, 0.179, 0.294, 0.225 (GAP_MIN 0.09,
      half the smallest). Finals reached over the model's expectation: 0.919,
      0.990, 1.067, 1.056 (band 0.82 to 1.18, about twice the largest miss).
-   - controls at offset 0, each exit 1 with its sections red: stream (2313
-     seasons draw differently), wrongcountry (2191 'country'), ignoreworld
-     (76 'beatwinner', 99 'lostfinal'), keepcoin (46 'nonecup', 46 cups won
-     with no cup), unverifiedname (37 'name', 6 'event', digest and Brazil
-     window red in 4), flatrounds (gap -0.002, finals ratio 1.384),
-     leaguekey (25 'worldwin', 11 'canadian').
+   - section 6: 420 draws, 260 runs, 54 final scores, 3 on penalties; 15
+     lost finals where the world's winner was no club of the pool, 0 runs
+     meeting it.
+   - the controls, rerun at offset 0 after the review fixes, each exit 1
+     with its sections red: stream, wrongcountry (2193 'country'),
+     ignoreworld (76 'beatwinner', 97 'lostfinal', 37 'unowed'), keepcoin,
+     unverifiedname (37 'name', 6 'event', 4 red), flatrounds (gap -0.002,
+     finals ratio 1.384), leaguekey (25 'worldwin', 11 'canadian'), thinpool
+     (152 'unowed', the reviewer's mutant), anyworld (2 'unborn', 1
+     'country', and 15 runs meeting the stranger in 6), semiground (682),
+     venueline, exittrophy, pensrate (83 of 297, 0.279), drawpin (digest
+     moved).
+   - before the review fixes, controls at offset 0: stream (2313 seasons
+     draw differently), keepcoin (46 'nonecup', 46 cups won with no cup).
    The digest was re-pinned once, on purpose, when the Canadian Championship
    from 2021 was split so that only two sourced seasons carry a final's legs
    (2021 and 2025 on) and penalties (2024); on the tree merged with release-
    ai-int 187558a5 offset 0 is green with 61 windows, 45 of them two sourced,
-   and 38 Club Manager league rows agreeing. */
+   and 38 Club Manager league rows agreeing. Re-pinned again by the review
+   fixes: Argentina 1993 split out as UNKNOWN (the AFA Copa Centenario of
+   1993-94) and the decider spelled 'penalties', 63 windows, 46 two sourced. */
 import crypto from 'node:crypto';
 import os from 'node:os';
 import fs from 'node:fs';
@@ -84,7 +113,7 @@ import { pathToFileURL, fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
 const CONTROL = process.env.CUP_CONTROL || '';
-const CONTROLS = { stream: [1], wrongcountry: [2], ignoreworld: [2], keepcoin: [2, 3], unverifiedname: [2, 4], flatrounds: [3], leaguekey: [2], thinpool: [2], anyworld: [2], semiground: [2], venueline: [5], exittrophy: [5], pensrate: [2], drawpin: [6] };
+const CONTROLS = { stream: [1], wrongcountry: [2], ignoreworld: [2], keepcoin: [2, 3], unverifiedname: [2, 4], flatrounds: [3], leaguekey: [2], thinpool: [2], anyworld: [2, 6], semiground: [2], venueline: [5], exittrophy: [5], pensrate: [2], drawpin: [6] };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error('unknown control ' + CONTROL + ' (known: ' + Object.keys(CONTROLS).join(', ') + ')'); process.exit(2); }
 const OFFSET = Number(process.argv.find((a, i) => i > 1 && /^\d+$/.test(a)) || 0);
 const TMP = process.env.TEMP || process.env.TMP || os.tmpdir();
@@ -311,7 +340,7 @@ const PER = Number(process.env.CUP_PER || 40);
 /* BANDS: set from the measurements recorded in the header. */
 const GAP_MIN = 0.09;
 const RATIO_BAND = [0.82, 1.18];
-const PEN_BAND = [0.04, 0.2];
+const PEN_BAND = [0.04, 0.18];
 const DRAW_DIGEST = '9a2909e9fd97c022b0c7fbbb2428865ba3fd31a9e02d8fc570d1ef43e15238d1';
 const TABLE_DIGEST = 'a3616009f455a63f6f080107ab01f45ff84c99dea8d45c1d14c06b13c5d5ae83';
 function fleet(e, label) {
@@ -460,7 +489,7 @@ console.log("2) every season is coherent with itself, the table and the phone's 
   console.log(`  ${JSON.stringify(n)}`);
   const total = Object.values(bad).reduce((a, b) => a + b, 0);
   if (total > 0) fail(`${total} incoherent seasons: ${JSON.stringify(bad)}`);
-  if (n.runs < 900 || n.won < 150 || n.none < 140 || n.noneWorld < 55 || n.lostFinalWorld < 60 || n.champWon < 10 || n.pens < 35 || n.twoLegs < 20 || n.unnamed < 75 || n.mlsWorlds < 1000 || n.worldWon < 130 || n.thinUnknown < 1 || n.semis < 1 || n.pensFinals < 1) {
+  if (n.runs < 900 || n.won < 150 || n.none < 140 || n.noneWorld < 55 || n.lostFinalWorld < 60 || n.champWon < 10 || n.pens < 14 || n.twoLegs < 20 || n.unnamed < 75 || n.mlsWorlds < 1000 || n.worldWon < 130 || n.thinUnknown < 110 || n.semis < 340 || n.pensFinals < 148) {
     fail(`a check above ran on too few seasons to mean anything: ${JSON.stringify(n)}`);
   }
   /* Finals in a window decided on penalties go to penalties about as often
@@ -713,6 +742,13 @@ console.log('6) the draw itself is pinned: fixed inputs over made up clubs give 
   const finals = shown.filter(r => r.final).length, pens = shown.filter(r => r.final && r.final.decidedBy === 'penalties').length;
   const digest = sha(JSON.stringify(runs));
   console.log(`  ${runs.length} draws, ${shown.length} runs, ${finals} final scores, ${pens} on penalties; digest ${digest.slice(0, 16)}`);
+  /* the world's winner that is no club of his pool (a third of the inputs)
+     is never an opponent, whatever the season's other draws */
+  const strangerFinals = runs.filter((r, i) => r && i % 60 % 3 === 2 && r.stages.some(t => t.stage === 'F' && !t.won)).length;
+  const met = runs.filter(r => r && r.stages.some(t => t.opp === 'Nowhere Pin FC')).length;
+  console.log(`  ${strangerFinals} lost finals where the world's winner was no club of the pool; runs meeting it: ${met}`);
+  if (strangerFinals < 3) fail(`only ${strangerFinals} lost finals with a stranger as the world's winner, the check below reads nothing`);
+  if (met > 0) fail(`${met} runs meet the world's winner where it is no club of the pool`);
   if (shown.length < 200 || finals < 20 || pens < 1) fail(`the pinned draws hold too little to pin anything (${shown.length} runs, ${finals} finals, ${pens} on penalties)`);
   if (digest !== DRAW_DIGEST) fail(`the draw moved (digest ${digest}, pinned ${DRAW_DIGEST.slice(0, 16)}): every new run differs from the last build's; re-pin only with the cause proven`);
 }
