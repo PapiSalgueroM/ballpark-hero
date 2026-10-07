@@ -29,6 +29,13 @@
  * Round 1009 continues past only the new transient decision receipt using
  * the Board's real callback. Its original event application, random draws,
  * saves, feed and following screen still match the unchanged recording.
+ * Round 1038 deals every offseason up to three cards (src/lib/usCareerSummer.ts)
+ * and turns that on in the four bindings. The replay mounts the shared board
+ * with each binding set to the one card knob (cards 1, cooldowns off), which
+ * must be the old offseason draw for draw and write nothing new onto the
+ * save. The fixture is not re-recorded: this replay is the proof that the
+ * knob path is today's game. The summer itself has its own tests
+ * (src/test/usCareerSummer.test.tsx, scripts/simUsCareerSummer.mjs).
  *
  *   US_BOARD_FIXTURE=record  writes the fixture to US_BOARD_FIXTURE_OUT
  *   US_BOARD_FIXTURE=replay  compares against scripts/data/usBoardFixture.json
@@ -90,10 +97,34 @@ vi.mock('@/components/us-career/CareerDecisionOutcome', async () => {
   } };
 });
 
-import NflMyCareerBoard from '@/components/nfl-my-career/NflMyCareerBoard';
-import NbaMyCareerBoard from '@/components/nba-my-career/NbaMyCareerBoard';
-import MlbMyCareerBoard from '@/components/mlb-my-career/MlbMyCareerBoard';
-import NhlMyCareerBoard from '@/components/nhl-my-career/NhlMyCareerBoard';
+import UsCareerBoard from '@/components/us-career/UsCareerBoard';
+import { NFL_CAREER_SPORT } from '@/lib/nflCareerSport';
+import { NBA_CAREER_SPORT } from '@/lib/nbaCareerSport';
+import { MLB_CAREER_SPORT } from '@/lib/mlbCareerSport';
+import { NHL_CAREER_SPORT } from '@/lib/nhlCareerSport';
+import type { UsCareerSport } from '@/lib/usCareerSport';
+
+/* Round 1038: each binding on the one card knob. Built once per binding (the
+   board restores whenever its sport object changes), and lazily, so nothing
+   imported is read while this module evaluates. */
+const ONE_CARD_KNOB = { cards: 1, cooldowns: false, fallbackCooldown: 1 };
+const knobbed = new Map<UsCareerSport, ComponentType>();
+function oneCardBoard(sport: () => UsCareerSport): ComponentType {
+  return function OneCardBoard() {
+    const s = sport();
+    let Board = knobbed.get(s);
+    if (!Board) {
+      const knob: UsCareerSport = { ...s, summer: ONE_CARD_KNOB };
+      Board = function KnobBoard() { return <UsCareerBoard sport={knob} />; };
+      knobbed.set(s, Board);
+    }
+    return <Board />;
+  };
+}
+const NflMyCareerBoard = oneCardBoard(() => NFL_CAREER_SPORT);
+const NbaMyCareerBoard = oneCardBoard(() => NBA_CAREER_SPORT);
+const MlbMyCareerBoard = oneCardBoard(() => MLB_CAREER_SPORT);
+const NhlMyCareerBoard = oneCardBoard(() => NHL_CAREER_SPORT);
 
 const MODE = process.env.US_BOARD_FIXTURE ?? '';
 const FIXTURE_PATH = process.env.US_BOARD_FIXTURE_IN || path.resolve(process.cwd(), 'scripts/data/usBoardFixture.json');

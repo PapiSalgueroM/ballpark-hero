@@ -4,7 +4,7 @@ import type { CareerDraftEntry, PreDraftState } from './careerPreDraft';
  * a fictional prospect living a whole career inside the real 30-team
  * league, hitter or pitcher. Season lines (AVG/HR/RBI or W-L/ERA/K)
  * driven by rating, health and team quality; minor league grind before
- * the call-up; one big decision per offseason; awards, rings, aging,
+ * the call-up; up to three offseason cards (Round 1038); awards, rings, aging,
  * retirement, legacy verdict. The player is fictional; the teams are real.
  */
 
@@ -25,6 +25,7 @@ import type { FaWindow, FaPushArgs } from './usCareerFreeAgency';
 import { buildExtension, type ExtensionTalk, type ExtPushArgs } from './usCareerExtension';
 // Round 184: the shared press room, same one-engine pattern.
 import { buildPressMoment, pressFactsFrom, applyPressChoice } from './usCareerPress';
+import { pickDeckCard } from './careerEventDeck';
 /* Round 470: the money app, the same engine Soccer Career's bank and market
    run on (careerMoney.ts), bound to baseball in mlbCareerMoney.ts. That file
    imports this one for the MlbCareerState type only, so there is no cycle at
@@ -241,11 +242,15 @@ export interface MlbCareerEvent {
   options: { label: string; effect: string; apply: (c: MlbCareerState, rng: () => number) => string }[];
   /** Round 919: the deck section a card sits under, the seasons it rests
       after it fires (99 means once a career), and a key shared by cards that
-      tell one story. All optional and read by nothing yet, so the draw is
-      byte for byte what it was. */
+      tell one story. All optional. Since Round 1038 the summer's cooldown ledger
+      reads them (usCareerSummer.ts); the one card draw never does. */
   category?: string;
   cooldown?: number;
   story?: string;
+  /** Round 1038: the press room's card only; cooldowns never hold it out. */
+  press?: 'big' | 'small';
+  /** Round 1038: set on the corruption deck's cards; the summer deals them as card 1 only. */
+  corruption?: boolean;
 }
 
 /* ---------- Round 173: era starts, his "add eras to every sport" ask ---------- */
@@ -782,22 +787,39 @@ export function mlbExtPushArgs(c: MlbCareerState, rng: () => number = Math.rando
   return { ovr: c.ovr, age: c.age, accolades: c.allStars, cliffAge: (MLB_POS_PROFILE[c.pos] ?? MLB_POS_PROFILE.LF).cliff, rng };
 }
 
+/** Round 1038: the whole deck, built exactly as drawMlbEvent builds it, a big
+ *  press moment included first (marked press 'big'). The summer deals from it. */
+export function mlbEventDeck(c: MlbCareerState, rng: () => number): MlbCareerEvent[] {
+  return buildMlbDeck(c, rng, false).deck;
+}
+
+/** One card, every draw what it always was. */
 export function drawMlbEvent(c: MlbCareerState, rng: () => number): MlbCareerEvent {
+  const { big, deck, corrupt, arcOpen } = buildMlbDeck(c, rng, true);
+  if (big) return big;
+  return pickDeckCard(deck, corrupt, arcOpen, rng);
+}
+
+function buildMlbDeck(c: MlbCareerState, rng: () => number, stopAtBig: boolean): { big: MlbCareerEvent | null; deck: MlbCareerEvent[]; corrupt: MlbCareerEvent[]; arcOpen: boolean } {
   const deck: MlbCareerEvent[] = [];
   /* Round 179: the 'contract' card left this deck for the free agency window. */
 
   /* Round 184: the press room reads the season. Big moments take the floor
      outright; the smaller questions join the deck. */
   const press = buildPressMoment('mlb', pressFactsFrom(c, mlbTeamLabelOf(c.team, c.eraId)), rng);
+  let big: MlbCareerEvent | null = null;
   if (press) {
     const ev: MlbCareerEvent = {
-      id: press.id, title: press.title, body: press.body,
+      id: press.id, title: press.title, body: press.body, press: press.big ? 'big' : 'small',
       options: press.options.map(o => ({
         label: o.label, effect: o.effectLine,
         apply: (cc: MlbCareerState, r: () => number) => applyPressChoice(cc, o, r),
       })),
     };
-    if (press.big) return ev;
+    if (press.big) {
+      big = ev;
+      if (stopAtBig) return { big, deck, corrupt: [], arcOpen: false };
+    }
     deck.push(ev);
   }
 
@@ -838,12 +860,11 @@ export function drawMlbEvent(c: MlbCareerState, rng: () => number): MlbCareerEve
   deck.push(...getMlbLifeEventsB(c, rng));
   deck.push(...getMlbLifeEventsC(c, rng)); /* Round 919: deck C, 36 cards, draws nothing from rng */
   const corrupt = getMlbCorruptionEvents(c, rng);
+  /* Round 1038: marked, so the summer keeps the integrity arc to card 1. */
+  for (const e of corrupt) e.corruption = true;
   deck.push(...corrupt);
   const arcOpen = Object.keys(c.lifeFlags ?? {}).some(k => ['signs', 'sticky', 'clinic', 'tips', 'academy', 'wash'].includes(k));
-  if (arcOpen && corrupt.length > 0 && rng() < 0.45) {
-    return corrupt[Math.floor(rng() * corrupt.length)];
-  }
-  return deck[Math.floor(rng() * deck.length)];
+  return { big, deck, corrupt, arcOpen };
 }
 
 export function mlbShouldRetire(c: MlbCareerState): boolean {

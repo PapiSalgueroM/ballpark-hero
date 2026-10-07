@@ -3,7 +3,7 @@ import type { CareerDraftEntry, PreDraftState } from './careerPreDraft';
  * NHL My Career engine (2026-08-05). Hockey sibling of nflMyCareer.ts:
  * a fictional prospect living a whole career inside the real 32-team
  * league. Season lines (G-A-P for skaters, W/SV% for goalies) driven by
- * rating, health and team quality; one big decision per offseason;
+ * rating, health and team quality; up to three offseason cards (Round 1038);
  * awards, Cups, aging, retirement, legacy verdict. The player is
  * fictional; the teams are real.
  */
@@ -25,6 +25,7 @@ import type { FaWindow, FaPushArgs } from './usCareerFreeAgency';
 import { buildExtension, type ExtensionTalk, type ExtPushArgs } from './usCareerExtension';
 // Round 184: the shared press room, same one-engine pattern.
 import { buildPressMoment, pressFactsFrom, applyPressChoice } from './usCareerPress';
+import { pickDeckCard } from './careerEventDeck';
 /* Round 470: the money app, the same engine Soccer Career's bank and market
    run on (careerMoney.ts), bound to hockey in nhlCareerMoney.ts. That file
    imports this one for the NhlCareerState type only, so there is no cycle at
@@ -202,13 +203,17 @@ export interface NhlCareerEvent {
   options: { label: string; effect: string; apply: (c: NhlCareerState, rng: () => number) => string }[];
   /** Round 920: the table the summer step list will read, the same three
    *  fields the flagship's cards carry (soccerCareerEngine RandomEvent).
-   *  Read by nothing yet, so the draw is byte for byte what it was.
+   *  Since Round 1038 the summer's cooldown ledger reads them (usCareerSummer.ts); the one card draw never does.
    *  category is the deck's own section; cooldown is seasons the card sits
    *  out after it fires (99 means once a career); cards sharing a story
    *  share one cooldown ledger entry. All optional. */
   category?: string;
   cooldown?: number;
   story?: string;
+  /** Round 1038: the press room's card only; cooldowns never hold it out. */
+  press?: 'big' | 'small';
+  /** Round 1038: set on the corruption deck's cards; the summer deals them as card 1 only. */
+  corruption?: boolean;
 }
 
 /* ---------- Round 173: era starts, his "add eras to every sport" ask ---------- */
@@ -718,22 +723,39 @@ export function nhlExtPushArgs(c: NhlCareerState, rng: () => number = Math.rando
   return { ovr: c.ovr, age: c.age, accolades: c.allStars, cliffAge: (NHL_POS_PROFILE[c.pos] ?? NHL_POS_PROFILE.C).cliff, rng };
 }
 
+/** Round 1038: the whole deck, built exactly as drawNhlEvent builds it, a big
+ *  press moment included first (marked press 'big'). The summer deals from it. */
+export function nhlEventDeck(c: NhlCareerState, rng: () => number): NhlCareerEvent[] {
+  return buildNhlDeck(c, rng, false).deck;
+}
+
+/** One card, every draw what it always was. */
 export function drawNhlEvent(c: NhlCareerState, rng: () => number): NhlCareerEvent {
+  const { big, deck, corrupt, arcOpen } = buildNhlDeck(c, rng, true);
+  if (big) return big;
+  return pickDeckCard(deck, corrupt, arcOpen, rng);
+}
+
+function buildNhlDeck(c: NhlCareerState, rng: () => number, stopAtBig: boolean): { big: NhlCareerEvent | null; deck: NhlCareerEvent[]; corrupt: NhlCareerEvent[]; arcOpen: boolean } {
   const deck: NhlCareerEvent[] = [];
   /* Round 179: the 'contract' card left this deck for the free agency window. */
 
   /* Round 184: the press room reads the season. Big moments take the floor
      outright; the smaller questions join the deck. */
   const press = buildPressMoment('nhl', pressFactsFrom(c, nhlTeamLabelOf(c.team, c.eraId)), rng);
+  let big: NhlCareerEvent | null = null;
   if (press) {
     const ev: NhlCareerEvent = {
-      id: press.id, title: press.title, body: press.body,
+      id: press.id, title: press.title, body: press.body, press: press.big ? 'big' : 'small',
       options: press.options.map(o => ({
         label: o.label, effect: o.effectLine,
         apply: (cc: NhlCareerState, r: () => number) => applyPressChoice(cc, o, r),
       })),
     };
-    if (press.big) return ev;
+    if (press.big) {
+      big = ev;
+      if (stopAtBig) return { big, deck, corrupt: [], arcOpen: false };
+    }
     deck.push(ev);
   }
 
@@ -772,12 +794,11 @@ export function drawNhlEvent(c: NhlCareerState, rng: () => number): NhlCareerEve
   deck.push(...getNhlLifeEventsB(c, rng));
   deck.push(...getNhlLifeEventsC(c, rng)); /* Round 920: deck C, 36 cards, draws nothing from rng */
   const corrupt = getNhlCorruptionEvents(c, rng);
+  /* Round 1038: marked, so the summer keeps the integrity arc to card 1. */
+  for (const e of corrupt) e.corruption = true;
   deck.push(...corrupt);
   const arcOpen = Object.keys(c.lifeFlags ?? {}).some(k => ['bounty', 'cap', 'doctor', 'tips', 'juniorAgent', 'wash'].includes(k));
-  if (arcOpen && corrupt.length > 0 && rng() < 0.45) {
-    return corrupt[Math.floor(rng() * corrupt.length)];
-  }
-  return deck[Math.floor(rng() * deck.length)];
+  return { big, deck, corrupt, arcOpen };
 }
 
 export function nhlShouldRetire(c: NhlCareerState): boolean {

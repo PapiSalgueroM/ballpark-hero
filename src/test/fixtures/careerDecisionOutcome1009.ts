@@ -7,8 +7,14 @@ import { pushHeadlines } from '@/lib/careerSocial';
 import { nbaEraTeamIds } from '@/lib/nbaMyCareer';
 import type { UsCareerCore, UsCareerEvent, UsCareerSport } from '@/lib/usCareerSport';
 
+/* Round 1038: these tests hold the one card offseason (one answer, then the
+   receipt, then the hub), so every binding is mounted on the one card knob,
+   the same knob the parity replay uses. The summer's own flow, receipt
+   included, is src/test/usCareerSummer.test.tsx. */
+const ONE_CARD = { cards: 1, cooldowns: false, fallbackCooldown: 1 };
 export const decisionSports: Record<string, UsCareerSport> = {
-  nba: NBA_CAREER_SPORT, nfl: NFL_CAREER_SPORT, mlb: MLB_CAREER_SPORT, nhl: NHL_CAREER_SPORT,
+  nba: { ...NBA_CAREER_SPORT, summer: ONE_CARD }, nfl: { ...NFL_CAREER_SPORT, summer: ONE_CARD },
+  mlb: { ...MLB_CAREER_SPORT, summer: ONE_CARD }, nhl: { ...NHL_CAREER_SPORT, summer: ONE_CARD },
 };
 export const copyCareer = <T,>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
 export const decisionSave = (c: UsCareerCore, teamQuality = 60, phase = 'season') => JSON.stringify({ c, phase, teamQuality, coach: null });

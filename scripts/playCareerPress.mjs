@@ -74,7 +74,14 @@ await page.reload({ waitUntil: 'networkidle' });
 await page.waitForTimeout(1200);
 
 let sawScrum = false;
-for (let step = 0; step < 18 && !sawScrum; step++) {
+/* Round 1038: the budget is five seasons, as the header says, counted by the
+   Play clicks. It used to be eighteen screens, which was about four seasons
+   when an offseason was one card; a summer of up to three cards, each with
+   its receipt, spends about twice the screens a season, so eighteen screens
+   came to two seasons and the walk went red on a career that had simply not
+   met the scrum yet. The screen cap below only stops a walk that is stuck. */
+let seasonsPlayed = 0;
+for (let step = 0; step < 90 && !sawScrum; step++) {
   const body = await page.locator('body').innerText();
   if (body.includes('The accountability scrum')) { sawScrum = true; break; }
   /* Round 186: every played season now opens with the season curtain, and
@@ -95,8 +102,18 @@ for (let step = 0; step < 18 && !sawScrum; step++) {
     await page.waitForTimeout(700);
     continue;
   }
+  /* Round 1038: every answer now shows its receipt, and the summer's next
+     card (up to three) follows its Continue. */
+  const receipt = page.locator('[data-decision-continue]');
+  if (await receipt.count()) {
+    await receipt.first().click();
+    await page.waitForTimeout(700);
+    continue;
+  }
   const play = page.locator('button:has-text("Play the")');
   if (await play.count()) {
+    if (seasonsPlayed >= 5) break;
+    seasonsPlayed += 1;
     await play.first().click();
   } else {
     /* Some other crossroads is up: answer its first option and play on. */
@@ -105,7 +122,7 @@ for (let step = 0; step < 18 && !sawScrum; step++) {
   }
   await page.waitForTimeout(900);
 }
-say(sawScrum, 'the accountability scrum arrived within the losing stretch', true);
+say(sawScrum, `the accountability scrum arrived within the losing stretch (${seasonsPlayed} seasons played)`, true);
 
 /* Without a scrum on screen there is no card to read and no answer to click
    (the old walk died on a 30 second click timeout here). The miss above is
@@ -121,7 +138,23 @@ if (sawScrum) {
   console.log('3) Answering lands in the feed');
   await page.locator('button:has-text("Own every bit of it yourself")').click();
   await page.waitForTimeout(800);
-  say(await page.locator('button:has-text("Play the")').count() >= 1, 'answering returns to the season hub');
+  /* Round 1038: the scrum is card 1 of a summer of up to three, so the hub
+     comes back once the rest of the summer is answered, each card closed
+     with its receipt's Continue. */
+  let screens = 0;
+  for (; screens < 12; screens += 1) {
+    const cont = page.locator('[data-decision-continue]');
+    if (await cont.count()) { await cont.first().click(); await page.waitForTimeout(500); continue; }
+    const opt = page.locator('[data-career-decision-option]');
+    if (await opt.count()) { await opt.first().click(); await page.waitForTimeout(500); continue; }
+    break;
+  }
+  say(screens < 12 && await page.locator('button:has-text("Play the")').count() >= 1, 'answering, then the rest of the summer, returns to the season hub');
+  /* Round 1038: the hub's News tile shows only the newest line, which after a
+     summer is the last card's, so the press line is read where the feed is
+     kept: the News panel. */
+  const news = page.locator('[data-career-hub-buttons] button:has-text("News")');
+  if (await news.count()) { await news.first().click(); await page.waitForTimeout(600); }
   const after = await page.locator('body').innerText();
   say(after.includes('🎙️'), 'the press line reached the news feed');
 }

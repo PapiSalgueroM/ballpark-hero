@@ -355,7 +355,7 @@ export function getNflLifeEventsC(c: CareerState, _rng: () => number): CareerEve
 
   /* A card is drawn in the offseason AFTER a season is played, so yrs is 1 in
      the offseason between the first year and the second, and 2 before the
-     third. One window each: the cooldown tags are read by nothing yet, so a
+     third. One window each: when this was written the cooldown tags were read by nothing, so a
      card with two windows could fire twice. */
   if (yrs === 1) {
     deck.push({

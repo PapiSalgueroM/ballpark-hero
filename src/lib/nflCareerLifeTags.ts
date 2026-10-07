@@ -2,7 +2,8 @@
    nflCareerLifeTags.ts, the tags on every NFL My Career life card (Round 917)
 
    Three optional fields joined CareerEvent in Round 917: category, cooldown
-   and story. NOTHING READS THEM YET. They are the table the summer machine
+   and story. Round 1038 reads them: the US summer (usCareerSummer.ts) rests a
+   card by them through careerEventDeck.ts. They are the table the summer machine
    that follows needs (the flagship's picker has run on the same three since
    its Round 725), written down now, card by card, so that round is a bind
    and not an audit of 126 cards.

@@ -54,7 +54,26 @@ async function passRivalry(page) {
 const onRealScreen = async page =>
   /Play the \d{4} season/.test(await page.locator('body').innerText())
   || await page.locator('div.grid.gap-1\\.5 > button').count() > 0
+  || await page.locator('[data-career-decision-option]').count() > 0
+  || await page.locator('[data-decision-continue]').count() > 0
   || await page.locator('[data-rivalry-event]').count() > 0;
+
+/* Round 1038: an offseason is a summer of up to three cards, each answered
+   and then closed with its receipt's Continue, and a reload mid-summer opens
+   on the card it left. One answer no longer brings the hub back, so answer
+   whatever is up until it does. Returns the screens passed, or -1 when the
+   hub never came back. */
+async function finishOffseason(page) {
+  for (let i = 0; i < 12; i += 1) {
+    const cont = page.locator('[data-decision-continue]');
+    if (await cont.count()) { await cont.first().click(); await page.waitForTimeout(500); continue; }
+    const opt = page.locator('[data-career-decision-option]');
+    if (await opt.count()) { await opt.first().click(); await page.waitForTimeout(500); continue; }
+    if (await passRivalry(page)) continue;
+    return i;
+  }
+  return -1;
+}
 
 const browser = await chromium.launch();
 
@@ -100,8 +119,7 @@ const browser = await chromium.launch();
     say(/Play the \d{4} season/.test(await page.locator('body').innerText()) || await page.locator('div.grid.gap-1\\.5 > button').count() > 0,
       'the crossroads or the hub is behind the rivalry card');
   }
-  const opt = page.locator('div.grid.gap-1\\.5 > button').first();
-  if (await opt.count()) { await opt.click(); await page.waitForTimeout(700); }
+  say(await finishOffseason(page) >= 0, 'every card of the summer answered, and the hub came back');
   await page.locator('button:has-text("Play the")').first().click();
   await page.waitForTimeout(900);
   say(await page.locator('[data-season-reveal]').count() === 1, 'the second season raised the curtain');
@@ -122,6 +140,8 @@ const browser = await chromium.launch();
   await page.waitForTimeout(1200);
   /* A rivalry card from the second season is on the save, so it is back. */
   if (await passRivalry(page)) console.log('  (the second season\'s rivalry card was back after the reload; clicked through it)');
+  /* The reload mid-summer reopened on the card it left (Round 1038). */
+  say(await finishOffseason(page) >= 0, 'the summer left open by the reload answered, and the hub came back');
   await page.locator('button:has-text("Play the")').first().click();
   await page.waitForTimeout(900);
   const banned = page.locator('[data-season-reveal]');

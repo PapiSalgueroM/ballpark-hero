@@ -203,7 +203,8 @@ describe('US career practice on the actual boards', () => {
     expect(view.queryByRole('button', { name: 'Start practice' })).toBeNull();
     fireEvent.click(view.getByRole('button', { name: 'Continue' }));
     // Resolve the real pending cards before the next practice session is offered.
-    for (let n = 0; n < 4 && !view.queryByRole('button', { name: 'Start practice' }); n++) {
+    // Round 1038: a summer is up to three cards, each followed by its receipt.
+    for (let n = 0; n < 12 && !view.queryByRole('button', { name: 'Start practice' }); n++) {
       expect(view.queryByRole('button', { name: 'Start practice' })).toBeNull();
       const next = view.queryByRole('button', { name: 'Continue' });
       if (next) { fireEvent.click(next); continue; }

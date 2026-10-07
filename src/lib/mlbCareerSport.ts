@@ -9,6 +9,7 @@ import { mlbPreDraftDescriptor } from '@/lib/mlbCareerPreDraft';
  */
 import {
   MLB_ARCHETYPES, MLB_ERAS, startMlbCareer, simMlbSeason, mlbProgress, drawMlbEvent,
+  mlbEventDeck,
   MLB_SPEND_ITEMS, buyMlbItem, getMlbSpendItem, repairNetWorth,
   mlbShouldRetire, mlbLegacyOf, mlbCareerTotals, mlbRollTeamQuality, mlbTeamLabelOf,
   buildMlbFaWindow, mlbFaPushArgs, buildMlbExtension, mlbExtPushArgs,
@@ -65,6 +66,9 @@ export const MLB_CAREER_SPORT: UsCareerSport<MlbCareerState, MlbSeasonLine> = {
   simSeason: simMlbSeason,
   progress: mlbProgress,
   drawEvent: drawMlbEvent,
+  eventDeck: mlbEventDeck,
+  /* Round 1038: up to three cards an offseason, each resting after it fires. */
+  summer: { cards: 3, cooldowns: true, fallbackCooldown: 1 },
   shouldRetire: mlbShouldRetire,
   legacyOf: mlbLegacyOf,
   teamLabelOf: mlbTeamLabelOf,

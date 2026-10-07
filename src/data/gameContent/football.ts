@@ -309,8 +309,8 @@ export const FOOTBALL_CONTENT: GameContentMap = {
 
   '/nfl-my-career': {
     intro: [
-      "Every draft night some kid hugs his mom and walks into an unwritten life. Here you get that life: create a fictional prospect, get drafted by a real team, and play a whole career one big decision at a time.",
-      "Seasons produce realistic stat lines from your rating, health, and team. Between them comes one crossroads drawn from over a hundred of them: contracts, trade requests, surgeries, rookie hazing, a mural in your name, and a podcast invite the front office will hate.",
+      "Every draft night some kid hugs his mom and walks into an unwritten life. Here you get that life: create a fictional prospect, get drafted by a real team, and play a whole career, up to three big calls every offseason.",
+      "Seasons produce realistic stat lines from your rating, health, and team. Between them come up to three crossroads, one at a time, drawn from over a hundred of them: contracts, trade requests, surgeries, rookie hazing, a mural in your name, and a podcast invite the front office will hate.",
       "You build your player's actual face before the draft, and there is a dirty side waiting whenever you want it. Selling the injury report to an offshore book, a bounty pool in the meeting room, a clinic in Arizona running a program the league cannot test for yet. Every dirty choice raises a hidden league security meter, and at the top of it sits an indefinite suspension and a comeback from the minimum.",
     ],
     headings: {
@@ -373,8 +373,8 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       {
         heading: "Making tough offseason calls",
         items: [
-          "Make the offseason call: train skills or body, fix the knee or play through it, take the envelope or report it.",
-          "After a normal offseason choice, the result shows the actual changes. Expand it for any extra changes, then Continue to return to your career without applying the choice again.",
+          "Make up to three offseason calls, one card at a time: train skills or body, fix the knee or play through it, take the envelope or report it. Only the first card of a summer can move your rating, and a card you just saw rests for a while before it comes back (press moments follow your season, so those can come right back).",
+          "After a normal offseason choice, the result shows the actual changes. Expand it for any extra changes, then Continue opens the next card, or takes you back to your career after the last one, without applying the choice again.",
         ],
         subsections: [
           {
@@ -482,7 +482,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       {
         heading: "Reading an actual capped change",
         paragraphs: [
-          "Say Health is 98 before a recovery choice that adds 10. The 100 cap makes the result 98 to 100, so the card shows +2. Continue returns to your career with Health still at 100.",
+          "Say Health is 98 before a recovery choice that adds 10. The 100 cap makes the result 98 to 100, so the card shows +2. Continue moves you on (to the next card, or back to your career after the last one) with Health still at 100.",
         ],
       },
       {

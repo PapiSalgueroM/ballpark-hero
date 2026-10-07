@@ -13,6 +13,7 @@ import { createUsCareerProspect, loadUsCareerProspect, type UsCareerProspect } f
 import { preDraftChoose, preDraftChoicePool, preDraftEffectText, preDraftEffectiveEffect, preDraftPlaySeason, preDraftRunDraft, preDraftShowcase, preDraftStart, type PreDraftState } from '@/lib/careerPreDraft';
 import { defaultAppearance } from '@/lib/soccerCareerAppearance';
 import { keyedRng } from '@/lib/keyedRng';
+import { newSummerSalt, summerOn } from '@/lib/usCareerSummer';
 import type { UsCareerCore, UsCareerSport } from '@/lib/usCareerSport';
 
 vi.mock('@/lib/completions', () => ({ recordCompletion: vi.fn(), recordActivity: vi.fn(), getCurrentPlayerName: () => 'Prospect fixture' }));
@@ -88,6 +89,8 @@ function expectedCareer(row: SportCase, p: UsCareerProspect): Save {
   const c = sport.startCareer(p.name, p.pos, arch, rng, p.appearance, p.eraId, { ...out, pot: state.pot, health: out.devSeasons.length ? 100 : state.health, prospect: state });
   const teamQuality = sport.rollTeamQuality(null, rng);
   sport.assignRole(c, teamQuality, rng);
+  /* Round 1038: the summer's salt is the career stream's next draw. */
+  if (summerOn(sport.summer)) c.summerSalt = newSummerSalt(rng);
   if (c.draftPick > 0 && !out.devSeasons.length) sport.draftNightInbox(c);
   return { c, phase: 'season', teamQuality, coach: null };
 }

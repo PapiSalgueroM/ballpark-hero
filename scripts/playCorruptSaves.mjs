@@ -15,6 +15,12 @@
  *              name, a small count, ended false) and nothing else exists
  *   wrongtype  the same fields hold an empty object where a string or a
  *              number belongs
+ *   summer     (Round 1038, the four US My Careers only) the shell opened mid
+ *              summer, with the summer block, the cooldown ledger and the
+ *              salt that round added all the wrong types. First run on a
+ *              build 2026-10-06 (CORRUPT_VARIANTS=summer, the four routes):
+ *              4 of 4 PASS, each needing the button (the shell under it
+ *              breaks the page) and 2 clicks, none trapped.
  *
  * What counts. The page is loaded with the save in place. If the error page
  * ("This page broke") shows, the harness clicks "Start a fresh game" (click
@@ -95,8 +101,8 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = path.resolve(process.env.CORRUPT_DIST || path.join(ROOT, 'dist'));
 const CONTROL = process.env.CORRUPT_CONTROL || '';
 if (CONTROL && !['nobutton', 'norestore', 'multiline'].includes(CONTROL)) { console.error(`CORRUPT_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
-const VARIANTS = (process.env.CORRUPT_VARIANTS || 'shell,wrongtype').split(',').map(s => s.trim()).filter(Boolean);
-for (const v of VARIANTS) if (!['shell', 'wrongtype'].includes(v)) { console.error(`unknown variant ${v}`); process.exit(1); }
+const VARIANTS = (process.env.CORRUPT_VARIANTS || 'shell,wrongtype,summer').split(',').map(s => s.trim()).filter(Boolean);
+for (const v of VARIANTS) if (!['shell', 'wrongtype', 'summer'].includes(v)) { console.error(`unknown variant ${v}`); process.exit(1); }
 const MARK = 'data-dukb-fresh-start';
 const FRESH_LABEL = 'Start a fresh game';
 /* The card on the game's page that offers the set-aside save back. */
@@ -177,8 +183,19 @@ function brokenSave(e, variant) {
   if (e.count) put(save, e.count, wrong ? {} : 3);
   if (e.ended) put(save, e.ended, wrong ? {} : false);
   if (Object.keys(save).length === 0) save.broken = wrong ? {} : true;
+  /* Round 1038: the summer shape. The shell, opened mid summer, with the two
+     blocks that round added to the save broken: a summer whose year, ids and
+     place are the wrong types, and a cooldown ledger that is not a map. */
+  if (variant === 'summer') {
+    save.phase = 'event';
+    put(save, ['c', 'summer'], { year: 'soon', ids: 7, at: -1 });
+    put(save, ['c', 'eventLastFired'], 'every card, yesterday');
+    put(save, ['c', 'summerSalt'], {});
+  }
   return JSON.stringify(save);
 }
+/* The summer shape is only about the four US My Careers, whose saves carry it. */
+const SUMMER_SAVE_KEY = /^(nfl|nba|mlb|nhl)-my-career-save-v1$/;
 
 /* ------------------------------------------------------------------ */
 /* The build has to be the tree under test, and the control has to have
@@ -350,6 +367,7 @@ try {
   if (CONTROL) console.log(`NEGATIVE CONTROL ON (${CONTROL}): the ${CONTROL === 'nobutton' ? 'fresh start button' : 'restore card'} is hidden on every page, every route that needs the button must fail`);
   for (const e of routes) {
     for (const variant of VARIANTS) {
+      if (variant === 'summer' && !SUMMER_SAVE_KEY.test(e.saveKey)) continue;
       const r = await walk(browser, e, variant);
       results.push(r);
       const how = `${r.outcome}, ${r.clicks} click(s)${r.sample.length ? `, buttons: ${r.sample.join(' | ')}` : ''}`;

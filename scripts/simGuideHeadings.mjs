@@ -70,12 +70,14 @@ const CONVERTED_FLOOR = 131;
 /* Round 1031 adds these verified instructions without rewriting the frozen
    pre-conversion record. Only these exact parts on these four routes extend it. */
 const CAREER_GUIDE_ROUTES = new Set(['/nba-my-career', '/nfl-my-career', '/mlb-my-career', '/nhl-my-career']);
+/* Round 1038: the two receipt lines reworded for the summer (Continue opens
+   the next card until the last one), in all four guides. */
 const CAREER_GUIDE_ADDITIONS = {
   howToPlay: [
-    'After a normal offseason choice, the result shows the actual changes. Expand it for any extra changes, then Continue to return to your career without applying the choice again.',
+    'After a normal offseason choice, the result shows the actual changes. Expand it for any extra changes, then Continue opens the next card, or takes you back to your career after the last one, without applying the choice again.',
     'Open Career Log and pick a year to review its saved overview, regular season and postseason. Changes compare with the previous saved season; older missing values say Not recorded. Back to seasons returns to the year tiles, and Review seasons is available after retirement.',
   ],
-  example: ['Say Health is 98 before a recovery choice that adds 10. The 100 cap makes the result 98 to 100, so the card shows +2. Continue returns to your career with Health still at 100.'],
+  example: ['Say Health is 98 before a recovery choice that adds 10. The 100 cap makes the result 98 to 100, so the card shows +2. Continue moves you on (to the next card, or back to your career after the last one) with Health still at 100.'],
 };
 const CONTROLS = { skiplevel: 2, nokeyword: 1, lostline: 1, careerline: 1, unconvert: 3, snapdrift: 4 };
 const CONTROL = process.env.GUIDE_HEADINGS_CONTROL || '';
