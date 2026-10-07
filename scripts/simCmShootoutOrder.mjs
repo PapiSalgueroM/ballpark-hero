@@ -47,14 +47,22 @@
  *   3) The cap. Over every taker rating and keeper rating 40 to 99 the
  *      taker's edge and the keeper's edge each stay inside the cap and the
  *      kick's odds stay inside twice the cap of the base rate.
- *   4) Unset means unchanged. scripts/data/cmShootoutUnset782.json holds,
+ *   4) Historical unmanaged play. scripts/data/cmShootoutUnset782.json holds,
  *      for 150 seeds of that same cup match with no order set, the result
  *      (how it was decided, who won the shootout, the score), the next
  *      number off the stream after the match, and a hash of the whole
  *      report and the save after it, written by the engine as it stood
  *      BEFORE this round (src/lib/clubManager.ts at origin/main 84d81619,
  *      unchanged since the branch point 9136539b). The engine now must
- *      reproduce every row. The next number alone is a weak witness (the
+ *      reproduce the actual pre-1072 engine at 42888161 with automatic
+ *      coaching bypassed, score, next draw and full content for every row.
+ *      The actual raw diagnostic showed only absent live versus live:null;
+ *      those two forms alone compare alike after asserting live is inactive.
+ *      Object keys are sorted, raw hashes and the first raw difference remain.
+ *      That main already reproduced zero
+ *      ancient fixture rows; both arms retain identical golden mismatch
+ *      counts as evidence. Section 1 exercises current coached matches.
+ *      The next number alone is a weak witness (the
  *      engine's later draws are conditional, so a stream shifted by one can
  *      fall back into step: under unsetpath it came out the same on 17 of
  *      the 28 shootout rows, and 8 of them matched on every other field);
@@ -68,7 +76,8 @@
  *      now, still over the floor of 12; unsetpath still breaks all 15 (135
  *      of 150 reproduced) and turns section 5 red with them.
  *   5) An old save loads. A career written without the field comes back
- *      with no order, plays the fixture's match the fixture's way, and an
+ *      with no order, equals actual pre-1072 main on its unmanaged path,
+ *      records both arms' ancient golden drift, and an
  *      order set on it survives a save and a load; a bad id is refused, and
  *      a loan signing (onLoan, a man on loan TO the club, who can start) is
  *      listed like anyone else.
@@ -152,6 +161,8 @@
  */
 import './lib/seedRandom.mjs';
 import { buildSync } from 'esbuild';
+import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -172,16 +183,26 @@ if (CONTROL && !KNOWN.includes(CONTROL)) {
   process.exit(1);
 }
 const WRITE_FIXTURE = process.env.CM_SHOOTOUT_WRITE_FIXTURE || '';
+const sourceBytes = WRITE_FIXTURE ? [] : [`${ROOT}/src/lib/clubManager.ts`, FIXTURE].map(file => ({ file, bytes: fs.readFileSync(file) }));
+const runtimeErrors = [];
+const captureRuntime = error => { runtimeErrors.push({ name: error?.name, message: String(error?.message ?? error) }); process.exitCode = 2; };
+process.on('uncaughtExceptionMonitor', captureRuntime);
+process.on('unhandledRejection', captureRuntime);
 
 const readLF = f => fs.readFileSync(f, 'utf8').split('\r\n').join('\n');
 const abort = m => { console.error(m); process.exit(1); };
+let mutation = null;
 const swap = (src, from, to, where) => {
-  if (!src.includes(from)) {
+  const hits = src.split(from).length - 1;
+  if (hits !== 1) {
     console.error(`control cannot run: ${where} is not in the shape CM_SHOOTOUT_CONTROL=${CONTROL} rewrites`);
     console.error(`  looked for: ${JSON.stringify(from)}`);
     process.exit(1);
   }
-  return src.replace(from, to);
+  const changed = src.replace(from, to);
+  mutation = { control: CONTROL, where, hits, beforeHash: createHash('sha256').update(src).digest('hex'),
+    afterHash: createHash('sha256').update(changed).digest('hex'), changed: src !== changed };
+  return changed;
 };
 
 /* ---------- the engine, or a control's copy of it ---------- */
@@ -234,6 +255,25 @@ if (CONTROL) {
   enginePath = copy;
 }
 
+/* Keep the frozen pre-coaching fixture on its unmanaged path. Current
+   coached matches are checked separately against the men who finished. */
+const historicalPath = `${TMP}/${TAG}.historical.engine.ts`;
+const baselinePath = `${TMP}/${TAG}.baseline428.engine.ts`;
+let historicalEnginePath = enginePath;
+let baselineEnginePath = enginePath;
+let baselineSourceHash = null;
+if (!WRITE_FIXTURE) {
+  const source = readLF(enginePath);
+  const header = 'export function coachQuickMatch(career: CareerState): CareerState {\n';
+  if (source.split(header).length - 1 !== 1) abort('Historical no-coach arm needs one executable coach header');
+  fs.writeFileSync(historicalPath, source.replace(header, header + '  return career;\n'));
+  historicalEnginePath = historicalPath;
+  const baselineSource = execFileSync('git', ['show', '428881617a04543606050395d05be1a9fa4d7b3e:src/lib/clubManager.ts'], { cwd: ROOT, encoding: 'utf8' });
+  fs.writeFileSync(baselinePath, baselineSource);
+  baselineSourceHash = createHash('sha256').update(baselineSource).digest('hex');
+  baselineEnginePath = baselinePath;
+}
+
 fs.writeFileSync(ENTRY, `
 let slot = {};
 globalThis.localStorage = {
@@ -243,11 +283,13 @@ globalThis.localStorage = {
   clear: () => { slot = {}; },
 };
 export const cm = await import('${enginePath}');
+export const historical = await import('${historicalEnginePath}');
+export const baseline = await import('${baselineEnginePath}');
 `);
 /* esbuild through its own module rather than a path under ROOT, so a worktree
    that resolves node_modules by walking up (no junction, ever) bundles too. */
 buildSync({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: BUNDLE, logLevel: 'error', alias: { '@': `${ROOT_URL}/src` } });
-const { cm } = await import(pathToFileURL(BUNDLE).href);
+const { cm, historical, baseline } = await import(pathToFileURL(BUNDLE).href);
 const {
   startCareer, playNextEntry, saveCareer, loadCareer, resolveXI, effectiveXIWithSlots, oppRosterFor,
   setShootoutOrder, shootoutOrderOf, runShootout, shootoutTakerOrder, shootoutSides,
@@ -299,18 +341,20 @@ const FIXTURE_SEEDS = Array.from({ length: 150 }, (_, i) => 782_100 + i);
 const CLUB = 'Real Madrid';
 
 let failures = 0;
-const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
+let section = 0;
+const failedSections = {};
+const fail = m => { failures += 1; (failedSections[section] ??= []).push(m); console.error('  FAIL: ' + m); };
 const pct = x => `${(x * 100).toFixed(1)}%`;
 
 /* ---------- the base career, simmed to its first cup week ---------- */
-const atCup = withSeed(BASE_SEED, () => {
-  const start = startCareer(CLUB);
+const reachCup = engine => withSeed(BASE_SEED, () => {
+  const start = engine.startCareer(CLUB);
   const cupIdx = start.calendar.findIndex(e => e.type === 'cup');
   if (cupIdx < 0) abort(`${CLUB} has no cup entry in its calendar`);
   /* playNextEntry hands back after every match, so the walk to the cup week is a loop. */
   let s = start;
   for (let guard = 0; s.week < cupIdx && guard < 60; guard++) {
-    const r = playNextEntry(s, { skipHalftime: true, untilWeek: cupIdx });
+    const r = engine.playNextEntry(s, { skipHalftime: true, untilWeek: cupIdx });
     s = r.state;
     if (r.kind === 'reached') break;
     if (r.kind !== 'match') abort(`could not sim to the cup week: got ${r.kind} at week ${s.week} (wanted ${cupIdx})`);
@@ -318,13 +362,16 @@ const atCup = withSeed(BASE_SEED, () => {
   if (s.week !== cupIdx) abort(`could not sim to the cup week: stopped at week ${s.week} (wanted ${cupIdx})`);
   return s;
 });
+const atCup = reachCup(cm);
+const historicalCup = WRITE_FIXTURE ? atCup : reachCup(historical);
+const baselineCup = WRITE_FIXTURE ? atCup : reachCup(baseline);
 const cupEntry = atCup.calendar[atCup.week];
 console.log(`   base: ${CLUB}, cup ${cupEntry.cupRound} in week ${atCup.week}, squad ${atCup.squad.length}, no order set: ${!('shootoutOrder' in atCup)}`);
 
 /** One cup match from the base, on a seed, and the next number off the stream once it is over. */
-function playCup(state, seed) {
+function playCup(state, seed, engine = cm) {
   return withSeed(seed, () => {
-    const r = playNextEntry(state, { skipHalftime: true });
+    const r = engine.playNextEntry(state, { skipHalftime: true });
     if (r.kind !== 'match' || !r.report) abort(`seed ${seed}: the cup week did not play a match (${r.kind})`);
     if (r.report.competition !== 'cup') abort(`seed ${seed}: played a ${r.report.competition} match, not the cup`);
     const rep = r.report;
@@ -339,10 +386,29 @@ function playCup(state, seed) {
          the shootout cannot all land the same. */
       hash: fnv(JSON.stringify({ report: rep, state: r.state })),
       report: rep,
+      state: r.state,
     };
   });
 }
 const row = ({ seed, decidedBy, shootoutWon, homeGoals, awayGoals, next, hash }) => ({ seed, decidedBy, shootoutWon, homeGoals, awayGoals, next, hash });
+const sortedJSON = value => JSON.stringify(value, (_key, item) => item && typeof item === 'object' && !Array.isArray(item)
+  ? Object.fromEntries(Object.keys(item).sort().map(key => [key, item[key]])) : item);
+function compareContent(candidate, baseline) {
+  const readings = [candidate, baseline].map(out => {
+    const present = Object.prototype.hasOwnProperty.call(out.state, 'live');
+    const inactive = !present || out.state.live === null;
+    if (!inactive) fail(`seed ${out.seed}: historical comparison contains an active live match`);
+    const state = { ...out.state };
+    if (state.live === null) delete state.live;
+    const content = sortedJSON({ report: out.report, state });
+    return { present, inactive, content, hash: createHash('sha256').update(content).digest('hex') };
+  });
+  const [a, b] = readings;
+  const sameResult = ['seed', 'decidedBy', 'shootoutWon', 'homeGoals', 'awayGoals', 'next'].every(key => candidate[key] === baseline[key]);
+  return { paired: sameResult && a.inactive && b.inactive && a.content === b.content,
+    canonicalWitness: { candidate: a.hash, baseline: b.hash },
+    allowedLive: { candidate: { present: a.present, inactive: a.inactive }, baseline: { present: b.present, inactive: b.inactive } } };
+}
 
 /* ---------- fixture writing: a deliberate act, from a pre 782 engine ---------- */
 if (WRITE_FIXTURE) {
@@ -369,6 +435,7 @@ for (const p of atCup.squad) idsOfName.set(p.name, [...(idsOfName.get(p.name) ??
 
 /* ================================================================== */
 console.log('1) The walk, through the whole match: my first five kicks are the first five listed men who finished');
+section = 1;
 /* ================================================================== */
 {
   const xi = resolveXI(atCup).filter(Boolean);
@@ -415,7 +482,11 @@ console.log('1) The walk, through the whole match: my first five kicks are the f
       played.add(ids[0]);
     }
     const off = new Set();
-    for (const s of det.subs) if (s.offId) off.add(s.offId);
+    for (const s of det.subs) {
+      const ids = idsOfName.get(s.off) ?? [];
+      if (ids.length !== 1) abort(`seed ${seed}: substituted ${s.off} maps to ${ids.length} ids in the squad`);
+      off.add(ids[0]);
+    }
     for (const c of det.cards) if (c.kind === 'red' && c.id) off.add(c.id);
     for (const inj of det.injuries) if (inj.id) off.add(inj.id);
     const finished = [...played].filter(id => !off.has(id));
@@ -479,6 +550,7 @@ console.log('1) The walk, through the whole match: my first five kicks are the f
 
 /* ================================================================== */
 console.log('2) The order is worth something: five best first beats five worst first, on common random numbers');
+section = 2;
 /* ================================================================== */
 {
   const ratings = [90, 88, 86, 84, 82, 78, 74, 70, 66, 64, 62];
@@ -520,6 +592,7 @@ console.log('2) The order is worth something: five best first beats five worst f
 
 /* ================================================================== */
 console.log('3) The cap: no edge and no kick moves past it, either way');
+section = 3;
 /* ================================================================== */
 {
   let pairs = 0;
@@ -545,40 +618,65 @@ console.log('3) The cap: no edge and no kick moves past it, either way');
 }
 
 /* ================================================================== */
-console.log('4) Unset means unchanged: the frozen fixture replays row for row');
+console.log('4) Historical unmanaged play equals actual pre-1072 main, with ancient golden drift recorded');
+section = 4;
 /* ================================================================== */
 let fixture = null;
+const baselineEvidence = { baselineRef: '42888161', baselineSourceHash, rows: [], oldLoad: null };
 {
   if (!fs.existsSync(FIXTURE)) abort(`the fixture ${path.relative(ROOT, FIXTURE)} is missing; see the header for how it is written`);
   fixture = JSON.parse(readLF(FIXTURE));
-  if (fixture.club !== CLUB || fixture.baseSeed !== BASE_SEED || fixture.cupWeek !== atCup.week) {
-    fail(`the fixture was written for ${fixture.club} seed ${fixture.baseSeed} week ${fixture.cupWeek}, this run is ${CLUB} ${BASE_SEED} ${atCup.week}`);
+  if (fixture.club !== CLUB || fixture.baseSeed !== BASE_SEED || fixture.cupWeek !== historicalCup.week) {
+    fail(`the fixture was written for ${fixture.club} seed ${fixture.baseSeed} week ${fixture.cupWeek}, this run is ${CLUB} ${BASE_SEED} ${historicalCup.week}`);
   }
   if (fixture.rows.length !== FIXTURE_SEEDS.length) fail(`the fixture holds ${fixture.rows.length} rows, the harness walks ${FIXTURE_SEEDS.length} seeds`);
   let same = 0;
   let pens = 0;
   let withKicks = 0;
   let shown = 0;
+  let sameBaseline = 0;
+  let sameRaw = 0;
+  let baselineGolden = 0;
   for (const want of fixture.rows) {
-    const out = playCup(atCup, want.seed);
+    const out = playCup(historicalCup, want.seed, historical);
     const got = row(out);
+    const baselineOut = playCup(baselineCup, want.seed, baseline);
+    const base = row(baselineOut);
+    const goldenCandidate = JSON.stringify(got) === JSON.stringify(want);
+    const goldenBaseline = JSON.stringify(base) === JSON.stringify(want);
+    const rawPaired = JSON.stringify(got) === JSON.stringify(base);
+    const content = compareContent(out, baselineOut);
+    if (!rawPaired && !baselineEvidence.firstDifference) baselineEvidence.firstDifference = {
+      seed: want.seed, candidate: { report: out.report, state: out.state },
+      baseline: { report: baselineOut.report, state: baselineOut.state },
+    };
+    baselineEvidence.rows.push({ seed: want.seed, candidate: got, baseline: base, goldenCandidate, goldenBaseline, rawPaired, ...content });
+    if (rawPaired) sameRaw += 1;
+    if (content.paired) sameBaseline += 1;
+    else if (shown++ < 3) console.error(`  differs from actual main428, seed ${want.seed}: got ${JSON.stringify(got)}, baseline ${JSON.stringify(base)}`);
+    if (goldenBaseline) baselineGolden += 1;
+    if (goldenCandidate !== goldenBaseline) fail(`ancient golden mismatch differs from actual main428 at seed ${want.seed}`);
     if (out.report.shootout) withKicks += 1;
     if (want.decidedBy === 'pens') pens += 1;
-    if (JSON.stringify(got) === JSON.stringify(want)) same += 1;
-    else if (shown++ < 3) console.error(`  differs, seed ${want.seed}: got ${JSON.stringify(got)}, fixture ${JSON.stringify(want)}`);
+    if (goldenCandidate) same += 1;
   }
   console.log(`   ${same} of ${fixture.rows.length} rows reproduced (${pens} of them shootouts, written from ${fixture.writtenFrom} on ${fixture.writtenOn}); ${withKicks} carried kicks`);
-  if (same !== fixture.rows.length) fail(`${fixture.rows.length - same} rows differ from the pre round engine with no order set`);
+  console.log(`   ${sameBaseline} of ${fixture.rows.length} rows equal actual main428 in result, next draw and full content (${sameRaw} raw hashes); ancient golden mismatches candidate ${fixture.rows.length - same}, baseline ${fixture.rows.length - baselineGolden}`);
+  baselineEvidence.summary = { rows: fixture.rows.length, paired: sameBaseline, rawPaired: sameRaw,
+    goldenCandidateMismatches: fixture.rows.length - same, goldenBaselineMismatches: fixture.rows.length - baselineGolden };
+  if (sameBaseline !== fixture.rows.length) fail(`${fixture.rows.length - sameBaseline} rows differ from the actual pre-1072 engine with no order set`);
+  if (same !== baselineGolden) fail(`ancient golden matching counts differ: candidate ${same}, actual main428 ${baselineGolden}`);
   if (withKicks) fail(`${withKicks} reports carried shootout kicks with no order set`);
   if (pens < 12) fail(`the fixture holds only ${pens} shootouts, under the floor of 12`);
 }
 
 /* ================================================================== */
-console.log('5) An old save loads with no order, plays the old way, and an order set on it is kept');
+console.log('5) An old save loads with no order, holds its historical unmanaged play, and keeps a chosen order');
+section = 5;
 /* ================================================================== */
 {
   localStorage.clear();
-  const old = JSON.parse(JSON.stringify(atCup));
+  const old = JSON.parse(JSON.stringify(historicalCup));
   delete old.shootoutOrder;
   if (!saveCareer(old)) fail('saveCareer refused the old shape');
   const back = loadCareer();
@@ -587,9 +685,23 @@ console.log('5) An old save loads with no order, plays the old way, and an order
   if (shootoutOrderOf(back) !== null) fail('shootoutOrderOf reads an order off a save that has none');
   const probe = fixture?.rows?.find(r => r.decidedBy === 'pens') ?? fixture?.rows?.[0];
   if (probe) {
-    const got = row(playCup(back, probe.seed));
-    if (JSON.stringify(got) !== JSON.stringify(probe)) fail(`the loaded old save played seed ${probe.seed} as ${JSON.stringify(got)}, the fixture says ${JSON.stringify(probe)}`);
-    else console.log(`   loaded old save, seed ${probe.seed}: ${probe.decidedBy}${probe.decidedBy === 'pens' ? `, shootout ${probe.shootoutWon ? 'won' : 'lost'}` : ''}, same as the fixture`);
+    const out = playCup(back, probe.seed, historical);
+    const got = row(out);
+    const baselineOld = JSON.parse(JSON.stringify(baselineCup));
+    delete baselineOld.shootoutOrder;
+    if (!baseline.saveCareer(baselineOld)) abort('Actual main428 refused its old save');
+    const baselineBack = baseline.loadCareer();
+    if (!baselineBack) abort('Actual main428 could not open its old save');
+    const baselineOut = playCup(baselineBack, probe.seed, baseline);
+    const base = row(baselineOut);
+    const goldenCandidate = JSON.stringify(got) === JSON.stringify(probe);
+    const goldenBaseline = JSON.stringify(base) === JSON.stringify(probe);
+    const rawPaired = JSON.stringify(got) === JSON.stringify(base);
+    const content = compareContent(out, baselineOut);
+    baselineEvidence.oldLoad = { seed: probe.seed, candidate: got, baseline: base, goldenCandidate, goldenBaseline, rawPaired, ...content };
+    if (!content.paired) fail(`the loaded old save differs from actual main428 at seed ${probe.seed}: ${JSON.stringify(got)} vs ${JSON.stringify(base)}`);
+    if (goldenCandidate !== goldenBaseline) fail('The loaded old save has a different ancient golden mismatch from actual main428');
+    console.log(`   loaded old save, seed ${probe.seed}: equal actual main428 ${content.paired}; ancient golden matches candidate ${goldenCandidate}, baseline ${goldenBaseline}`);
   }
   const ids = back.squad.filter(p => !p.onLoan).slice(0, 4).map(p => p.id);
   const set = setShootoutOrder(back, ids);
@@ -611,6 +723,7 @@ console.log('5) An old save loads with no order, plays the old way, and an order
 
 /* ================================================================== */
 console.log('6) The keeper facing each kick, and the other side\'s order');
+section = 6;
 /* ================================================================== */
 {
   /* a) Through runShootout, on common random numbers: the same eleven on
@@ -699,7 +812,31 @@ console.log('6) The keeper facing each kick, and the other side\'s order');
 }
 
 /* ================================================================== */
-for (const f of [ENTRY, BUNDLE, `${TMP}/${TAG}.control.engine.ts`]) { try { fs.unlinkSync(f); } catch { /* not there */ } }
+const evidenceDir = process.env.CM_SHOOTOUT_ARTIFACTS || path.join(ROOT, 'cm-shootout-artifacts');
+fs.mkdirSync(evidenceDir, { recursive: true });
+await new Promise(resolve => setImmediate(resolve));
+baselineEvidence.runtimeErrors = runtimeErrors;
+baselineEvidence.failedSections = failedSections;
+baselineEvidence.mutation = mutation;
+baselineEvidence.executedSources = [['candidate', enginePath], ['historical', historicalEnginePath], ['baseline428', baselineEnginePath]].map(([role, file]) => {
+  const bytes = fs.readFileSync(file);
+  const copy = CONTROL ? `${CONTROL}-${role}.engine.ts` : null;
+  if (copy) fs.writeFileSync(path.join(evidenceDir, copy), bytes);
+  return { role, hash: createHash('sha256').update(bytes).digest('hex'), copy };
+});
+baselineEvidence.executedBundleHash = createHash('sha256').update(fs.readFileSync(BUNDLE)).digest('hex');
+baselineEvidence.sources = sourceBytes.map(({ file, bytes }) => {
+  const after = fs.readFileSync(file);
+  return { file: path.relative(ROOT, file), before: createHash('sha256').update(bytes).digest('hex'),
+    after: createHash('sha256').update(after).digest('hex'), held: bytes.equals(after) };
+});
+if (baselineEvidence.sources.some(source => !source.held)) fail('Original engine or ancient fixture source bytes changed');
+fs.writeFileSync(path.join(evidenceDir, `${CONTROL || 'normal'}-baseline.json`), JSON.stringify(baselineEvidence, null, 2));
+for (const f of [ENTRY, BUNDLE, `${TMP}/${TAG}.control.engine.ts`, historicalPath, baselinePath]) { try { fs.unlinkSync(f); } catch { /* not there */ } }
+if (runtimeErrors.length || baselineEvidence.sources.some(source => !source.held)) {
+  console.error('simCmShootoutOrder: runtime errors or changed original source bytes receive no control credit');
+  process.exit(2);
+}
 if (failures) {
   console.error(`\nsimCmShootoutOrder: ${failures} FAILURE(S)`);
   process.exit(1);

@@ -116,7 +116,8 @@ export const CLUB_MANAGEMENT_CONTENT: GameContentMap = {
         items: [
           "Every league table shows goals for and against as a pair, 25-23, beside the goal difference those two make.",
           "A Champions League knockout that is still level when the 90 minutes run out plays thirty minutes of extra time before it goes to penalties: the final when it is level on the night, a second leg when the tie is level on aggregate. In the seasons before 2021-22 away goals came first, so a tie level on aggregate but not on away goals is over at 90 with no extra time, and an away goal scored in extra time still counts as one, which leaves the home side needing two. The live match and the report mark it AET, and the bracket says the tie went to extra time. The domestic cup still goes straight to penalties, because the real cups do not all play extra time and the game does not guess which ones do.",
-          "Playing a match live and quick simming it are the same simulation: both kick off through one engine and the only thing the live one adds is your say at the interval. The full time report reads like a scoreboard: both clubs named on every line, the stoppage time each half ran to (worked out from the goals, cards and injuries in that half), possession as two shares of a hundred, and a momentum graph drawn from who had the chances in each ten minutes rather than from the match's average.",
+          "Live matches and quick sims use the same match engine. In a quick sim, the coach replaces injured players when a legal bench player and a substitution are available. At the break, the coach can also replace up to two tired or low-morale players with fresher options, keeping one of the game's three substitutions for a later injury. Calendar fast forwards use the same coach. Play live to make those calls yourself. The full time report names both clubs and shows the actual substitutions, stoppage time, possession and momentum.",
+          "For example, if your defender gets injured after 20 minutes and a fit defender is on the bench, quick sim brings him on at that point. The report shows who went off, who came on and when. If all three substitutions are already used, or nobody on the bench can play, the injured player cannot be replaced. Quick simming a match you paused only makes changes from the saved clock onward.",
         ],
         subsections: [
           {
@@ -201,7 +202,7 @@ export const CLUB_MANAGEMENT_CONTENT: GameContentMap = {
       },
       {
         q: "Does quick simming a match give me a worse result than playing it?",
-        a: "No. It is the same match. Both ways kick off through the same engine, so the same fixture on the same day plays out the same either way, and the only thing playing it live adds is the interval: your subs, your shape and your team talk. Change nothing at the break and the score is what the quick sim would have given you.",
+        a: "There is no quick sim penalty. Both ways use the same match engine, but quick sim now makes legal substitutions for injuries and tired players. Those changes can affect the result, just as your own substitutions can in a live match. Play live if you want to choose the changes, shape and team talk yourself.",
       },
       {
         q: "The board wants a signing I cannot afford. Is that a bug?",

@@ -215,8 +215,12 @@ const NO_BOARD = [
   '  const hi = period ? to + boardOf(period, stoppagesIn(live, BOARD[period].from, to) + nMine + nOpp, roll) : to;\n',
   '  const hi = to;\n',
 ];
+const NO_BOARD_REDRAW = [
+  "  drawSegment(state, live, fx, period === 'h1' ? 1 : 2, to + p, to + board, lamMine * share, lamOpp * share);\n",
+  '',
+];
 const CONTROLS = {
-  noboard: { must: [1], also: [2], file: 'engine', edits: [NO_BOARD], note: 'the board is closed to events; section 1 must go red' },
+  noboard: { must: [1], also: [2], file: 'engine', edits: [NO_BOARD, NO_BOARD_REDRAW], note: 'the board is closed to events; section 1 must go red' },
   nolabel: {
     must: [2], also: [], file: 'clock',
     edits: [["  return e.plus ? `${e.minute}+${e.plus}'` : `${e.minute}'`;\n", "  return `${e.minute}'`;\n"]],
@@ -310,7 +314,7 @@ if (CONTROL) {
   console.log(`NEGATIVE CONTROL ON (${CONTROL}): ${CONTROLS[CONTROL].note}`);
 }
 /* Arm B, always from the source on disk. */
-const engineB = rewrite(engineSrc, NO_BOARD, 'arm B');
+const engineB = rewrite(rewrite(engineSrc, NO_BOARD, 'arm B'), NO_BOARD_REDRAW, 'arm B board redraw');
 const pathA = engineA === engineSrc ? ENGINE : writeCopy('clubManagerA', engineA);
 const pathB = writeCopy('clubManagerB', engineB);
 const clockPath = clockA === clockSrc ? CLOCK : writeCopy('clubManagerClockA', clockA);
