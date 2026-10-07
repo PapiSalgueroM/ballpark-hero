@@ -91,6 +91,9 @@ function noReplay() {
   expect(Math.random).not.toHaveBeenCalled(); expect(recordActivity).not.toHaveBeenCalled(); expect(recordStreakDay).not.toHaveBeenCalled();
 }
 function clearReplayCounts() { vi.mocked(Math.random).mockClear(); vi.mocked(recordActivity).mockClear(); vi.mocked(recordStreakDay).mockClear(); }
+/* The three tests that bank a sprint through the page take three to four
+   seconds alone (25 presses, each a render of the whole page), so they carry
+   a twenty second limit: on a busy machine five was not enough. */
 async function openTraining(view: ReturnType<typeof render>) {
   await act(async () => {
     fireEvent.click(view.getByRole('button', { name: 'Open the training ground' }));
@@ -143,7 +146,7 @@ describe('Soccer Career failed write recovery', () => {
     const restored = mount(read()); expect(read()).toEqual(expected); expect(warning(restored.view)).toBeNull();
     await openTraining(restored.view);
     expect(restored.view.queryByText('Already trained this season')).toBeVisible(); expect(recordCompletion).not.toHaveBeenCalled();
-  });
+  }, 20000);
   it('retries the latest earned season after more than one failed career change without rerunning its engine', async () => {
     const m = mount(), before = read(), oldBytes = localStorage.getItem(KEY);
     const trained = E.applyTrainingResult(copy(before), 'pace', 80), expected = copy(E.advanceYouthYear(copy(trained), E.FALLBACK_CLUBS));
@@ -152,13 +155,13 @@ describe('Soccer Career failed write recovery', () => {
     expect(expected.seasons).toHaveLength(before.seasons.length + 1); expect(expected.age).toBe(before.age + 1);
     clearReplayCounts(); m.refuse(false); retry(m.view); noReplay(); expect(read()).toEqual(expected);
     expect(warning(m.view)).toBeNull(); expect(recordCompletion).not.toHaveBeenCalled();
-  });
+  }, 20000);
   it('clears a failed save on the next successful automatic save and alerts again on a later refusal', async () => {
     const m = mount(nativeCareer(), true); assertWarning(m.view); m.refuse(false); await bankSprint(m.view);
     expect(warning(m.view)).toBeNull(); expect(read().statBoostNextSeason.pace).toBe(2); const saved = localStorage.getItem(KEY);
     m.refuse(true); pressNext(m.view); assertWarning(m.view);
     expect(localStorage.getItem(KEY)).toBe(saved); expect(toast.error).toHaveBeenCalledTimes(2);
-  });
+  }, 20000);
   it('clears the old failure after explicit reset and saves the replacement career without old progress', () => {
     const m = mount(nativeCareer(), true); assertWarning(m.view);
     fireEvent.click(m.view.getByRole('button', { name: /New Career/ }));
