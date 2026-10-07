@@ -198,13 +198,15 @@ try {
       model = engine.neutralizeCourtMatch(model);
       const actual = await readSave();
       assert(actual.activeMatch.paused, 'Checkpoint is saved paused');
-      assert.deepEqual(actual.activeMatch.match, model, `Complete native match equals independent physical replay: ${reason}`);
+      // Saved JSON omits optional undefined event fields. Compare the same
+      // storage form here; live physics and geometry keep the raw replay.
+      assert.deepEqual(actual.activeMatch.match, JSON.parse(JSON.stringify(model)), `Complete native match equals independent physical replay: ${reason}`);
       assert.equal(await game().getAttribute('data-court-paused'), 'true');
       assert.equal(Number(await page.locator('[data-court-score="home"]').innerText()), model.score.home);
       assert.equal(Number(await page.locator('[data-court-score="away"]').innerText()), model.score.away);
       row.replays.push({ reason, tick: model.tick, phase: model.phase, score: model.score, sha256: digest(JSON.stringify(model)) });
       expectedCareer = careerApi.updateCareerMatch(expectedCareer, model, true);
-      assert.deepEqual(actual, expectedCareer, 'Career checkpoint preserves all actual state');
+      assert.deepEqual(actual, JSON.parse(JSON.stringify(expectedCareer)), 'Career checkpoint preserves all actual state');
       return actual;
     };
     const pause = async reason => { await activate(button('Pause')); await snapshot(reason); };
