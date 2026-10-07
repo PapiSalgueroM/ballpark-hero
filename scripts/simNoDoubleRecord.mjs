@@ -251,7 +251,7 @@ const SCAN_CONTROLS = {
   },
   scanpracticefree: {
     file: 'src/components/free-kick/FreeKickBoard.tsx',
-    from: "isDone && mode !== 'practice' && !bookedAlready",
+    from: "isDone && mode !== 'practice' && mode !== 'lab' && !bookedAlready",
     to: "isDone && mode === 'daily' && !bookedAlready",
     kind: 'mode', why: 'Free Kick changes its proven practice exclusion to a different mode gate',
   },
@@ -302,8 +302,8 @@ const MODE_GATE_BASELINE = [
   // private storage refusal and later Unlimited completion with real shot rules.
   // Bind every recorder predicate and its booking/phase definitions exactly.
   { file: 'src/components/free-kick/FreeKickBoard.tsx', slug: 'free-kick',
-    done: "isDone && mode !== 'practice' && !bookedAlready", booked: "mode === 'daily' && bookedDaily", phase: "phase === 'done'",
-    why: 'practice never records; the in-memory finished daily returns booked in the same batch, including after storage refusal' },
+    done: "isDone && mode !== 'practice' && mode !== 'lab' && !bookedAlready", booked: "mode === 'daily' && bookedDaily", phase: "phase === 'done'",
+    why: 'practice and lab never record, verified by their actual Board suites; the in-memory finished daily returns booked in the same batch, including after storage refusal' },
   { file: 'src/components/buzzer-beater/BuzzerBeaterBoard.tsx', slug: 'buzzer-beater',
     done: "isDone && !bookedAlready && (mode === 'daily' || mode === 'unlimited')", booked: "mode === 'daily' && bookedDaily", phase: "phase === 'done'",
     why: 'practice and contest never record, verified by their actual Board suites; finished daily returns booked, including after storage refusal' },
