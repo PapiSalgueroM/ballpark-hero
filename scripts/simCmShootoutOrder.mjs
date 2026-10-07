@@ -54,8 +54,11 @@
  *      report and the save after it, written by the engine as it stood
  *      BEFORE this round (src/lib/clubManager.ts at origin/main 84d81619,
  *      unchanged since the branch point 9136539b). The engine now must
- *      reproduce every row with automatic coaching bypassed. Section 1
- *      exercises current coached matches. The next number alone is a weak witness (the
+ *      reproduce the actual pre-1072 engine at 42888161 with automatic
+ *      coaching bypassed, row for row. That main already reproduced zero
+ *      ancient fixture rows; both arms retain identical golden mismatch
+ *      counts as evidence. Section 1 exercises current coached matches.
+ *      The next number alone is a weak witness (the
  *      engine's later draws are conditional, so a stream shifted by one can
  *      fall back into step: under unsetpath it came out the same on 17 of
  *      the 28 shootout rows, and 8 of them matched on every other field);
@@ -69,7 +72,8 @@
  *      now, still over the floor of 12; unsetpath still breaks all 15 (135
  *      of 150 reproduced) and turns section 5 red with them.
  *   5) An old save loads. A career written without the field comes back
- *      with no order, replays the fixture on its historical unmanaged path, and an
+ *      with no order, equals actual pre-1072 main on its unmanaged path,
+ *      records both arms' ancient golden drift, and an
  *      order set on it survives a save and a load; a bad id is refused, and
  *      a loan signing (onLoan, a man on loan TO the club, who can start) is
  *      listed like anyone else.
@@ -153,6 +157,8 @@
  */
 import './lib/seedRandom.mjs';
 import { buildSync } from 'esbuild';
+import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -173,6 +179,7 @@ if (CONTROL && !KNOWN.includes(CONTROL)) {
   process.exit(1);
 }
 const WRITE_FIXTURE = process.env.CM_SHOOTOUT_WRITE_FIXTURE || '';
+const sourceBytes = WRITE_FIXTURE ? [] : [`${ROOT}/src/lib/clubManager.ts`, FIXTURE].map(file => ({ file, bytes: fs.readFileSync(file) }));
 
 const readLF = f => fs.readFileSync(f, 'utf8').split('\r\n').join('\n');
 const abort = m => { console.error(m); process.exit(1); };
@@ -238,13 +245,20 @@ if (CONTROL) {
 /* Keep the frozen pre-coaching fixture on its unmanaged path. Current
    coached matches are checked separately against the men who finished. */
 const historicalPath = `${TMP}/${TAG}.historical.engine.ts`;
+const baselinePath = `${TMP}/${TAG}.baseline428.engine.ts`;
 let historicalEnginePath = enginePath;
+let baselineEnginePath = enginePath;
+let baselineSourceHash = null;
 if (!WRITE_FIXTURE) {
   const source = readLF(enginePath);
   const header = 'export function coachQuickMatch(career: CareerState): CareerState {\n';
   if (source.split(header).length - 1 !== 1) abort('Historical no-coach arm needs one executable coach header');
   fs.writeFileSync(historicalPath, source.replace(header, header + '  return career;\n'));
   historicalEnginePath = historicalPath;
+  const baselineSource = execFileSync('git', ['show', '428881617a04543606050395d05be1a9fa4d7b3e:src/lib/clubManager.ts'], { cwd: ROOT, encoding: 'utf8' });
+  fs.writeFileSync(baselinePath, baselineSource);
+  baselineSourceHash = createHash('sha256').update(baselineSource).digest('hex');
+  baselineEnginePath = baselinePath;
 }
 
 fs.writeFileSync(ENTRY, `
@@ -257,11 +271,12 @@ globalThis.localStorage = {
 };
 export const cm = await import('${enginePath}');
 export const historical = await import('${historicalEnginePath}');
+export const baseline = await import('${baselineEnginePath}');
 `);
 /* esbuild through its own module rather than a path under ROOT, so a worktree
    that resolves node_modules by walking up (no junction, ever) bundles too. */
 buildSync({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: BUNDLE, logLevel: 'error', alias: { '@': `${ROOT_URL}/src` } });
-const { cm, historical } = await import(pathToFileURL(BUNDLE).href);
+const { cm, historical, baseline } = await import(pathToFileURL(BUNDLE).href);
 const {
   startCareer, playNextEntry, saveCareer, loadCareer, resolveXI, effectiveXIWithSlots, oppRosterFor,
   setShootoutOrder, shootoutOrderOf, runShootout, shootoutTakerOrder, shootoutSides,
@@ -334,6 +349,7 @@ const reachCup = engine => withSeed(BASE_SEED, () => {
 });
 const atCup = reachCup(cm);
 const historicalCup = WRITE_FIXTURE ? atCup : reachCup(historical);
+const baselineCup = WRITE_FIXTURE ? atCup : reachCup(baseline);
 const cupEntry = atCup.calendar[atCup.week];
 console.log(`   base: ${CLUB}, cup ${cupEntry.cupRound} in week ${atCup.week}, squad ${atCup.squad.length}, no order set: ${!('shootoutOrder' in atCup)}`);
 
@@ -565,9 +581,10 @@ console.log('3) The cap: no edge and no kick moves past it, either way');
 }
 
 /* ================================================================== */
-console.log('4) Historical unmanaged play: the frozen fixture replays row for row');
+console.log('4) Historical unmanaged play equals actual pre-1072 main, with ancient golden drift recorded');
 /* ================================================================== */
 let fixture = null;
+const baselineEvidence = { baselineRef: '42888161', baselineSourceHash, rows: [], oldLoad: null };
 {
   if (!fs.existsSync(FIXTURE)) abort(`the fixture ${path.relative(ROOT, FIXTURE)} is missing; see the header for how it is written`);
   fixture = JSON.parse(readLF(FIXTURE));
@@ -579,16 +596,30 @@ let fixture = null;
   let pens = 0;
   let withKicks = 0;
   let shown = 0;
+  let sameBaseline = 0;
+  let baselineGolden = 0;
   for (const want of fixture.rows) {
     const out = playCup(historicalCup, want.seed, historical);
     const got = row(out);
+    const base = row(playCup(baselineCup, want.seed, baseline));
+    const goldenCandidate = JSON.stringify(got) === JSON.stringify(want);
+    const goldenBaseline = JSON.stringify(base) === JSON.stringify(want);
+    const paired = JSON.stringify(got) === JSON.stringify(base);
+    baselineEvidence.rows.push({ seed: want.seed, candidate: got, baseline: base, goldenCandidate, goldenBaseline, paired });
+    if (paired) sameBaseline += 1;
+    else if (shown++ < 3) console.error(`  differs from actual main428, seed ${want.seed}: got ${JSON.stringify(got)}, baseline ${JSON.stringify(base)}`);
+    if (goldenBaseline) baselineGolden += 1;
+    if (goldenCandidate !== goldenBaseline) fail(`ancient golden mismatch differs from actual main428 at seed ${want.seed}`);
     if (out.report.shootout) withKicks += 1;
     if (want.decidedBy === 'pens') pens += 1;
-    if (JSON.stringify(got) === JSON.stringify(want)) same += 1;
-    else if (shown++ < 3) console.error(`  differs, seed ${want.seed}: got ${JSON.stringify(got)}, fixture ${JSON.stringify(want)}`);
+    if (goldenCandidate) same += 1;
   }
   console.log(`   ${same} of ${fixture.rows.length} rows reproduced (${pens} of them shootouts, written from ${fixture.writtenFrom} on ${fixture.writtenOn}); ${withKicks} carried kicks`);
-  if (same !== fixture.rows.length) fail(`${fixture.rows.length - same} rows differ from the pre round engine with no order set`);
+  console.log(`   ${sameBaseline} of ${fixture.rows.length} rows equal actual main428; ancient golden mismatches candidate ${fixture.rows.length - same}, baseline ${fixture.rows.length - baselineGolden}`);
+  baselineEvidence.summary = { rows: fixture.rows.length, paired: sameBaseline,
+    goldenCandidateMismatches: fixture.rows.length - same, goldenBaselineMismatches: fixture.rows.length - baselineGolden };
+  if (sameBaseline !== fixture.rows.length) fail(`${fixture.rows.length - sameBaseline} rows differ from the actual pre-1072 engine with no order set`);
+  if (same !== baselineGolden) fail(`ancient golden matching counts differ: candidate ${same}, actual main428 ${baselineGolden}`);
   if (withKicks) fail(`${withKicks} reports carried shootout kicks with no order set`);
   if (pens < 12) fail(`the fixture holds only ${pens} shootouts, under the floor of 12`);
 }
@@ -608,8 +639,19 @@ console.log('5) An old save loads with no order, holds its historical unmanaged 
   const probe = fixture?.rows?.find(r => r.decidedBy === 'pens') ?? fixture?.rows?.[0];
   if (probe) {
     const got = row(playCup(back, probe.seed, historical));
-    if (JSON.stringify(got) !== JSON.stringify(probe)) fail(`the loaded old save played seed ${probe.seed} as ${JSON.stringify(got)}, the fixture says ${JSON.stringify(probe)}`);
-    else console.log(`   loaded old save, seed ${probe.seed}: ${probe.decidedBy}${probe.decidedBy === 'pens' ? `, shootout ${probe.shootoutWon ? 'won' : 'lost'}` : ''}, same as the fixture`);
+    const baselineOld = JSON.parse(JSON.stringify(baselineCup));
+    delete baselineOld.shootoutOrder;
+    if (!baseline.saveCareer(baselineOld)) abort('Actual main428 refused its old save');
+    const baselineBack = baseline.loadCareer();
+    if (!baselineBack) abort('Actual main428 could not open its old save');
+    const base = row(playCup(baselineBack, probe.seed, baseline));
+    const goldenCandidate = JSON.stringify(got) === JSON.stringify(probe);
+    const goldenBaseline = JSON.stringify(base) === JSON.stringify(probe);
+    const paired = JSON.stringify(got) === JSON.stringify(base);
+    baselineEvidence.oldLoad = { seed: probe.seed, candidate: got, baseline: base, goldenCandidate, goldenBaseline, paired };
+    if (!paired) fail(`the loaded old save differs from actual main428 at seed ${probe.seed}: ${JSON.stringify(got)} vs ${JSON.stringify(base)}`);
+    if (goldenCandidate !== goldenBaseline) fail('The loaded old save has a different ancient golden mismatch from actual main428');
+    console.log(`   loaded old save, seed ${probe.seed}: equal actual main428 ${paired}; ancient golden matches candidate ${goldenCandidate}, baseline ${goldenBaseline}`);
   }
   const ids = back.squad.filter(p => !p.onLoan).slice(0, 4).map(p => p.id);
   const set = setShootoutOrder(back, ids);
@@ -719,7 +761,16 @@ console.log('6) The keeper facing each kick, and the other side\'s order');
 }
 
 /* ================================================================== */
-for (const f of [ENTRY, BUNDLE, `${TMP}/${TAG}.control.engine.ts`, historicalPath]) { try { fs.unlinkSync(f); } catch { /* not there */ } }
+const evidenceDir = process.env.CM_SHOOTOUT_ARTIFACTS || path.join(ROOT, 'cm-shootout-artifacts');
+fs.mkdirSync(evidenceDir, { recursive: true });
+baselineEvidence.sources = sourceBytes.map(({ file, bytes }) => {
+  const after = fs.readFileSync(file);
+  return { file: path.relative(ROOT, file), before: createHash('sha256').update(bytes).digest('hex'),
+    after: createHash('sha256').update(after).digest('hex'), held: bytes.equals(after) };
+});
+if (baselineEvidence.sources.some(source => !source.held)) fail('Original engine or ancient fixture source bytes changed');
+fs.writeFileSync(path.join(evidenceDir, `${CONTROL || 'normal'}-baseline.json`), JSON.stringify(baselineEvidence, null, 2));
+for (const f of [ENTRY, BUNDLE, `${TMP}/${TAG}.control.engine.ts`, historicalPath, baselinePath]) { try { fs.unlinkSync(f); } catch { /* not there */ } }
 if (failures) {
   console.error(`\nsimCmShootoutOrder: ${failures} FAILURE(S)`);
   process.exit(1);

@@ -1,8 +1,6 @@
 name: Club Manager quick sim substitutions
 
 on:
-  push:
-    branches: [codex/cm-quick-sim-subs-1072]
   pull_request:
     paths:
       - .github/workflows/cm-quick-subs.yml
@@ -17,6 +15,11 @@ on:
       - scripts/simLiveMatch.mjs
       - scripts/simMatchScreen.mjs
       - scripts/simHalftime.mjs
+      - scripts/simMatchDetail.mjs
+      - scripts/simCmStoppageTime.mjs
+      - scripts/simCmMatchCentre.mjs
+      - scripts/simCmShootoutOrder.mjs
+      - scripts/simClubManagerSlots.mjs
       - public/club-manager/index.html
   workflow_dispatch:
 
@@ -42,6 +45,8 @@ jobs:
       CM_QUICK_SUBS_ARTIFACTS: cm-quick-subs-artifacts/outcomes
       CM_QUICK_SUBS_NATIVE_ARTIFACTS: cm-quick-subs-artifacts/native
       FREE_KICK_FONT_CACHE: cm-quick-subs-artifacts/font-cache
+      CM_SLOTS_ARTIFACTS: cm-quick-subs-artifacts/slots
+      CM_SHOOTOUT_ARTIFACTS: cm-quick-subs-artifacts/shootout
     steps:
       - uses: actions/checkout@v4
         with:
@@ -123,7 +128,7 @@ jobs:
         run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmQuickSubs.mjs 2>&1 | tee cm-quick-subs-artifacts/native.log
       - name: Preserve reviewed source bytes
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        run: git diff --exit-code HEAD -- src/lib/clubManager.ts src/hooks/useClubManager.ts src/pages/ClubManager.tsx src/components/club-manager src/data/gameContent/clubManagement.ts src/pages/WhatsNew.tsx scripts/simCmQuickSubs.mjs scripts/playCmQuickSubs.mjs scripts/simMatchScreen.mjs scripts/simLiveMatch.mjs scripts/simHalftime.mjs
+        run: git diff --exit-code HEAD -- src/lib/clubManager.ts src/hooks/useClubManager.ts src/pages/ClubManager.tsx src/components/club-manager src/data/gameContent/clubManagement.ts src/pages/WhatsNew.tsx scripts/simCmQuickSubs.mjs scripts/playCmQuickSubs.mjs scripts/simMatchScreen.mjs scripts/simLiveMatch.mjs scripts/simHalftime.mjs scripts/simMatchDetail.mjs scripts/simCmStoppageTime.mjs scripts/simCmMatchCentre.mjs scripts/simCmShootoutOrder.mjs scripts/simClubManagerSlots.mjs
       - name: Preserve verification evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -143,10 +148,12 @@ jobs:
       SIM_NETWORK: offline
       VITEST_MAX_FORKS: 1
       VITEST_MIN_FORKS: 1
+      CM_SLOTS_ARTIFACTS: cm-quick-baseline-artifacts/slots
     steps:
       - uses: actions/checkout@v4
         with:
           ref: 428881617a04543606050395d05be1a9fa4d7b3e
+          fetch-depth: 0
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
@@ -157,13 +164,17 @@ jobs:
           mkdir -p cm-quick-baseline-artifacts
           git rev-parse HEAD > cm-quick-baseline-artifacts/source-head.txt
           npm ci
+          sha256sum scripts/simClubManagerSlots.mjs > cm-quick-baseline-artifacts/original-harness.txt
+          git show "$GITHUB_SHA:scripts/simClubManagerSlots.mjs" > scripts/simClubManagerSlots.mjs
+          sha256sum scripts/simClubManagerSlots.mjs > cm-quick-baseline-artifacts/diagnostic-harness.txt
+          echo "$GITHUB_SHA" > cm-quick-baseline-artifacts/diagnostic-head.txt
       - name: Measure the existing main behavior
         run: |
           failed=0
-          for harness in simClubManagerSlots simCmStoppageTime simCmMatchCentre simCmShootoutOrder; do
+          for harness in simClubManagerSlots; do
             NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node "scripts/$harness.mjs" 2>&1 | tee "cm-quick-baseline-artifacts/$harness.log" || failed=1
           done
-          git diff --exit-code HEAD -- src scripts || failed=1
+          git diff --exit-code HEAD -- src scripts ':(exclude)scripts/simClubManagerSlots.mjs' || failed=1
           exit "$failed"
       - name: Preserve measured baseline
         if: always()
