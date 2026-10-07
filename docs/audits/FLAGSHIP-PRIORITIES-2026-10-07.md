@@ -86,8 +86,11 @@ active practice time; pause must ignore input until explicit resume. Existing
 gain rules and simulation engines remain unchanged.
 
 Round1076 now also removes invented earned-stat estimates from Soccer Career's
-stats panel. Its dedicated verification is pending. Visible failed-save recovery
-remains a subsequent reliability candidate, not a completed feature.
+stats panel. Preparation37588483223 is accepted with exact evidence in
+ROUND1076-CAREER-PRACTICE-LIFECYCLE.md. Its combined PR with1078 remains pending.
+Round1078 owns bounded failed-write recovery in the central persistence effect
+and inline notice, outside1045's six integration hunks. No architecture or
+ownership overlap is claimed.
 
 A feature is complete only after its actual player journey works, consequences
 persist, displayed numbers match saved outcomes, interruption/recovery works,
