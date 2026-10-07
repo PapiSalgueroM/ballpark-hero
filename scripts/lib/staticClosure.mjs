@@ -3,8 +3,8 @@
  *
  * Lifted from scripts/simFlagshipWeight.mjs (Round 273), which kept its own copy, so that
  * scripts/simCmDataOnDemand.mjs can ask the same question of every page without a second walker
- * that drifts from the first. Two repairs came with the lift, and each can be switched off so the
- * lift itself can be proved (with both off this returns exactly what the Round 273 walker did):
+ * that drifts from the first. Three repairs came with the lift, and each can be switched off so
+ * the lift itself can be proved (with all off this returns exactly what the Round 273 walker did):
  *
  *   comments   the text is read with its comments gone. A guard has to read the code and not the
  *              prose about it: a commented out import, or a sentence in a header that happens to
@@ -15,6 +15,12 @@
  *              and keeps every other import exactly as written, used or not.
  *   exportFrom `export ... from` is an edge like `import ... from`. A file that re exports another
  *              module loads it; the Round 273 expression did not see that.
+ *   bothWays   a module one file imports BOTH statically and with import() is a static edge: the
+ *              bundler keeps it in the first download and the import() buys nothing. The Round
+ *              273 walker dropped such a module, to be safe against an `import (` it could
+ *              misread in raw text. That cannot happen in parsed code, so this repair only
+ *              applies together with `comments`. It is exactly the mistake a split has to be
+ *              guarded against: a file that loads a chunk on demand and also imports it.
  *
  * What it does NOT follow, on purpose: `import type` (erased by the compiler, it costs nothing at
  * run time) and dynamic import() (loading on demand is the whole point of asking).
@@ -74,7 +80,7 @@ export function codeOf(fileAbs, text) {
   return code;
 }
 
-const DEFAULTS = { comments: true, exportFrom: true };
+const DEFAULTS = { comments: true, exportFrom: true, bothWays: true };
 
 /** The specifiers one text imports statically, in the order they are written. */
 export function staticSpecs(fileAbs, text, opts = {}) {
@@ -85,7 +91,8 @@ export function staticSpecs(fileAbs, text, opts = {}) {
   for (let m; (m = DYNAMIC_IMPORT.exec(t)) !== null;) dyn.add(m[1]);
   const out = [];
   STATIC_IMPORT.lastIndex = 0;
-  for (let m; (m = STATIC_IMPORT.exec(t)) !== null;) if (!dyn.has(m[1])) out.push(m[1]);
+  const keepBoth = o.comments && o.bothWays;
+  for (let m; (m = STATIC_IMPORT.exec(t)) !== null;) if (keepBoth || !dyn.has(m[1])) out.push(m[1]);
   if (o.exportFrom) {
     EXPORT_FROM.lastIndex = 0;
     for (let m; (m = EXPORT_FROM.exec(t)) !== null;) out.push(m[1]);
@@ -103,14 +110,25 @@ export function dynamicSpecs(fileAbs, text, opts = {}) {
   return out;
 }
 
+/* A file read from disk is walked once per process: a harness asks about every page in turn, and
+   the pages share most of what they import. A file handed in through `override` is never cached,
+   and nothing here expects a file to change on disk while a harness runs (a negative control
+   rewrites in memory, through `override`). */
+const edgeCache = new Map();
+
 export function staticEdges(root, fileAbs, override = {}, opts = {}) {
+  const overridden = Object.prototype.hasOwnProperty.call(override, fileAbs);
+  const o = { ...DEFAULTS, ...opts };
+  const key = `${root}|${fileAbs}|${o.comments ? 1 : 0}${o.exportFrom ? 1 : 0}${o.bothWays ? 1 : 0}`;
+  if (!overridden && edgeCache.has(key)) return edgeCache.get(key);
   let t;
-  try { t = override[fileAbs] ?? readFileSync(fileAbs, 'utf8'); } catch { return []; }
+  try { t = overridden ? override[fileAbs] : readFileSync(fileAbs, 'utf8'); } catch { return []; }
   const out = [];
   for (const spec of staticSpecs(fileAbs, t, opts)) {
     const r = resolveSpec(root, spec, fileAbs);
     if (r) out.push(r);
   }
+  if (!overridden) edgeCache.set(key, out);
   return out;
 }
 
