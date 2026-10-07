@@ -188,7 +188,8 @@ export function applySeasonMomentsBank(prev: CareerState, offered: number): Care
  *  without planning anything. Pure, no draw. */
 export function closeSeasonMoments(prev: CareerState, clubs: ClubData[]): CareerState {
   const save = readSeasonMoments(prev.seasonMoments);
-  if (!save || save.banked || save.m.length === 0) return prev;
+  /* nothing to plan for: no ledger, no moment taken, or banked already */
+  if (!save?.m.length || save.banked) return prev;
   const row = prev.seasons[prev.seasons.length - 1];
   if (!row || save.key !== soccerSeasonKey(prev.playerName, row)) return prev;
   let offered = MOMENTS_PER_SEASON;
