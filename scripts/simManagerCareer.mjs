@@ -130,7 +130,9 @@
  *   unsized until the ledgers sized it (24), so the loop reads 0 where its
  *   base, release-ah fc30942e, read 1262; a probe after f2 holds the size
  *   rule for a field of unknown size knowing 24 clubs instead (the size
- *   control turns it red).
+ *   control turns it red). Controls measured red on 2026-10-06: ledgername
+ *   1194 past ledger seasons headed by the key, not the season's name;
+ *   size 4 probe failures (23 for 24, 24 for 25, before and after 2026-27).
  * Run: node scripts/simManagerCareer.mjs
  */
 import { build } from 'esbuild';
