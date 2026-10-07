@@ -1,13 +1,27 @@
-## Round1077 claimed: browse the actual Club Manager world
+## Round1077 preparation accepted, PR and publication pending, 2026-10-07
 
-Codex owns WorldTablesCard.tsx and its bounded verification. Replace the tiny
-horizontal league strip with a compact searchable league/country/club browser.
-Preserve the current table, actual era/edited-world membership, standings,
-rounds, tiebreaks and scout callbacks. No new facts or league-engine edits.
-Base2fff5e04, managed manager-world-browser-1077 checkout. This directly serves
-Anthony's October7 league-depth priority while Claude1040 keeps roster work.
-Verify actual mounted modern/era/edited worlds plus native phone/keyboard
-search and selection. All execution is remote. Next1078 is unclaimed.
+Club Manager World Tables now has a compact league/country/club browser.
+Search uses actual current, historical, custom and edited memberships, with
+accent folding and stable case folding. Existing tables, standings, rounds,
+tiebreaks and scouting are preserved. No league data or engine changes.
+
+Remote run37591285476, job112693122221 accepted at source
+cd20f6bc7d4a8c269483ad56b31b239b13efcf86, tree
+5e9d62c42ade6c8dbf9c9f820b64c4e11083eeca. Types/build,13 mounted outcomes,
+16 effective copied faults with independent baselines,3 native profiles and
+9 effective DOM faults,4 world regressions,20 readers and source holds pass.
+Artifact11469347184, manager-world-browser-37591285476-1, SHA256:
+3f0165629783348e296ce4c60b6fbcd3175175e3c5fd23b40af9a0a484a2255e.
+
+All9 screenshots reviewed. Native320/390 touch and1280 keyboard use the
+actual component and engine in an offline Chromium fixture. No browser
+errors or gameplay storage writes; the auth startup probe is retained and
+verified separately. This is preparation evidence, not a full-app, final
+PR, merge or live-site claim. Product/native source stays at cd20f6bc.
+The workflow now supports manual and path-scoped PR runs; temporary push
+execution is removed. Full receipt: docs/audits/ROUND1077-MANAGER-WORLD-BROWSER.md.
+Root owns final PR and external handoff. Claude retains roster/season-engine
+work and publication. Round1078 save recovery remains a separate lane.
 
 ## Release AH LIVE, 2026-10-07 02:43 EDT
 

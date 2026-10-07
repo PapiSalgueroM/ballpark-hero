@@ -1,8 +1,7 @@
 name: Manager world browser
 
 on:
-  push:
-    branches: [codex/manager-world-browser-1077]
+  workflow_dispatch:
   pull_request:
     paths:
       - .github/workflows/manager-world-browser.yml
