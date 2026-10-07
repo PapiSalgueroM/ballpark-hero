@@ -1,3 +1,49 @@
+## Release AI LIVE, 2026-10-07 08:51 EDT
+
+Claude lane. main 7cd5322a, deployment 35179be4-ab5b-48f2-81f0-e4729ca92a47,
+entry index-jYL_6eim.js (was index-BetRYEt2.js, Release AH). Proof at 08:51:
+x-deployment-id carries 35179be4; /whats-new carries the cup, league season,
+second tier and summer lines; /club-manager and the home hero say 438 real
+clubs across 26 leagues.
+
+What shipped:
+- Round 1037, Soccer Career league seasons: past seasons name the league the
+  club really played in (six leagues, 1990-91 to 2025-26, two sources a
+  season); Round 1022's seven pinned labels released.
+- Round 1038, US My Careers: the offseason is a summer of up to three cards
+  from one shared deck engine, with cooldowns and a saved queue (about two
+  cards a summer, 2.7 in the NFL, because cards two and three never move the
+  rating, ceiling or morale: balance first, a lead call).
+- Round 1040, Club Manager: Serie B, Ligue 2 and the Segunda, so La Liga,
+  Serie A and Ligue 1 relegate into real second tiers (58 clubs, 438 in all).
+  New clubs join the Hot Seat and Deadline Day dailies on 2026-11-06. The
+  re-bake changes Deadline Day's market on days already published (the dealt
+  club and seed stay): the caveat Round 1044 documents.
+- Round 1041, Soccer Career domestic cup: the cup has its real name, a run and
+  a final against that world's winner, and no cup is won in a season none was
+  played (20 associations, two sources a window, 19 checker corrections).
+
+Integration, each with attribution in its commit: the awards night and brand
+fixtures re-recorded for 1037 (1037 alone equals the full tree); nationality
+bake for 1040's 165 second tier men (one production read, all answered);
+bakePlayers gained the A-League Men row AH missed (pool 557); the club pool,
+the CM rules digest (three second tiers only) and the derby board (+58 clubs,
+none of the 380 changed) re-taken; simCareerKeepPlaying fixed (red on main
+since AH: its baseline lost the 1022 award code); simFlagshipWeight ceiling
+2600 and four sweepWeight budgets from measurement (on demand loading owed);
+simCareerLeagueSeasons section c green against main plus 1040 (12 of 12).
+Gate d2 on 568a009d: tsc 0, build 0, every lane green, vitest 81/81, sweep 183
+routes 0 findings, plays clean; live pass simReportRelay, simScoringCoverage.
+
+Lead calls on record: derbies stay off outside the six verified leagues before
+2026-27; DIVISION_FROM 2004; follow ups: old saves at the seven released clubs
+(load time repair), the phone feed's era lists, the Ballon d'Or night's bare
+"Cup", era club names, cup ground research, the US legacy recalibration (1039).
+
+Next: Release AJ (Round 1039, US retirement talk, farewell season and Hall of
+Fame ballot) gating now on release-aj-int; Rounds 1045 (Season Centre) building.
+main/publish held by this lane until AJ is live.
+
 ## Release AH LIVE, 2026-10-07 02:43 EDT
 
 Claude lane. main eeedbf43, deployment 02585196-9b0c-4ca0-8598-f72ce4e0e5d5, entry index-BetRYEt2.js (was
