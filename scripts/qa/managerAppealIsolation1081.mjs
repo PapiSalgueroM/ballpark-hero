@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { runCompatibility } from './managerAppealCompatibility1081.mjs';
 
 export const clone = value => JSON.parse(JSON.stringify(value));
 export const PARITY_ASSERTION = 'Equivalent appeal outcomes must agree';
@@ -25,14 +26,28 @@ function stream(seed) {
 }
 
 /* Independent historical oracle, never imported from the copied desk. */
-export function historicalWins(card, state) {
-  const key = `${card.id}|${state.clubName}|${state.manager?.name ?? ''}|verdict`;
+function independentWins(identity, card, state) {
+  const key = `${identity}|${state.clubName}|${state.manager?.name ?? ''}|verdict`;
   let hash = 2166136261;
   for (let i = 0; i < key.length; i++) hash = Math.imul(hash ^ key.charCodeAt(i), 16777619) >>> 0;
   let value = (hash + 0x6d2b79f5) | 0;
   value = Math.imul(value ^ (value >>> 15), 1 | value);
   value = (value + Math.imul(value ^ (value >>> 7), 61 | value)) ^ value;
   return ((value ^ (value >>> 14)) >>> 0) / 4294967296 < card.odds / 100;
+}
+
+export const historicalWins = (card, state) => independentWins(card.id, card, state);
+export const issuedWins = (card, state) => independentWins(card.verdictKey ?? card.id, card, state);
+
+export function expectedYouthKey(state, playerId) {
+  const target = state.squad.find(player => player.id === playerId);
+  if (target.isYouth !== true || !target.id.startsWith('youth-')) return undefined;
+  let occurrence = 0;
+  for (const player of state.squad) {
+    if (player.id === playerId) break;
+    if (player.name === target.name && player.position === target.position && player.age === target.age) occurrence += 1;
+  }
+  return JSON.stringify([1, state.season, state.week, target.name, target.position, target.age, occurrence]);
 }
 
 /* Compare actual complete structures with an explicit one-to-one ID relation.
@@ -67,9 +82,11 @@ export function answerSummary(record) {
 
 async function worker() {
   const [, , , bundle, output, mode, input] = process.argv;
+  const historical = mode.startsWith('historical:');
+  const scenario = historical ? mode.slice('historical:'.length) : mode;
   assert(process.env.CI, 'Remote CI only');
   fs.mkdirSync(output, { recursive: true });
-  const report = { mode, complete: false, rows: [], checks: [], networkAttempts: [], baseline: null };
+  const report = { mode, complete: false, rows: [], additionalPositions: [], checks: [], networkAttempts: [], baseline: null };
   const save = () => fs.writeFileSync(path.join(output, 'observations.json'), JSON.stringify(report));
   const check = (name, fn) => {
     try { fn(); report.checks.push({ name, status: 'passed' }); }
@@ -108,7 +125,7 @@ async function worker() {
         if (option === 1) {
           outcome = 'accepted'; resolved = `Accepted. ${card.playerName} serves the ${card.ban} match${card.ban === 1 ? '' : 'es'} ban.`;
         } else {
-          const won = historicalWins(card, before), player = expected.squad.find(p => p.id === card.playerId);
+          const won = issuedWins(card, before), player = expected.squad.find(p => p.id === card.playerId);
           player.suspendedMatches = won ? 0 : card.ban + 1;
           outcome = won ? 'won' : 'lost';
           resolved = won ? `Appeal won. The ban is wiped and ${player.name} is available for the next match.`
@@ -154,12 +171,21 @@ async function worker() {
           if (control === 'verdict') assert.deepEqual(actual.answers.map(answerSummary), expected.answers.map(answerSummary), names[control]);
         }
       });
+    } else if (mode === 'compatibility') {
+      const config = JSON.parse(fs.readFileSync(input, 'utf8'));
+      const { D: historicalD } = await import(pathToFileURL(config.historicalBundle).href);
+      const baselineRows = Object.entries(config.historicalRows).flatMap(([historicalArm, file]) =>
+        JSON.parse(fs.readFileSync(file, 'utf8')).rows.map(row => ({ ...row, historicalArm })));
+      report.baseline = baseline(baselineRows[0].source);
+      const observed = runCompatibility({ E, D, S, historicalD, baselineRows, snapshot: () => rng.snapshot(), clone, only: config.only });
+      report.checks = observed.checks;
+      report.records = observed.records;
     } else {
-      assert(['alone', 'interleaved'].includes(mode));
+      assert(['alone', 'interleaved'].includes(scenario));
       for (let i = 0; i < SAMPLES; i++) {
         store.clear(); E.clearCareer();
         const row = { id: `pair-${String(i + 1).padStart(2, '0')}`, interleaved: null };
-        if (mode === 'interleaved') {
+        if (scenario === 'interleaved') {
           reset(800001 + i * 7919);
           row.interleaved = { seed: 800001 + i * 7919, beforeRng: rng.snapshot(),
             state: clone(E.startCareer('Lincoln City', 'now', undefined, { ...manager, name: 'Other Manager' })) };
@@ -190,6 +216,7 @@ async function worker() {
         assert(card, 'Actual appeal opens for the planted suspension');
         assert.deepEqual(rng.snapshot(), cardRng, 'Card creation consumes no match RNG');
         assert.equal(card.playerId, player.id, 'Card links the selected actual youth');
+        assert.equal(card.verdictKey, historical ? undefined : expectedYouthKey(planted, player.id), 'Creation-time youth verdict identity');
         assert.equal(card.odds, [40, 25, 15][i % 3], 'Actual red-count odds');
         assert.deepEqual(card.options.map(option => option.effect), [{ kind: 'appeal' }, { kind: 'acceptBan' }]);
         D.settleDecisionDesk(planted, [player.id], 'Probe Town');
@@ -225,11 +252,26 @@ async function worker() {
         }
         report.rows.push(row); save();
       }
+      // These separate cases do not replace any of the original 24 first-youth repros.
+      for (const position of ['CB', 'CM', 'ST']) {
+        const source = clone(report.rows[0].source), player = source.squad.find(p => p.isYouth && p.id.startsWith('youth-') && p.position === position);
+        assert(player, `Actual generated ${position} exists in the retained source`);
+        const planted = clone(source), target = planted.squad.find(p => p.id === player.id);
+        target.suspendedMatches = 2; target.seasonReds = 1;
+        const fixtureState = clone(planted), beforeRng = rng.snapshot(), card = D.appealCard(planted, player.id, 'Probe Town');
+        assert(card); assert.equal(card.verdictKey, historical ? undefined : expectedYouthKey(planted, player.id));
+        D.settleDecisionDesk(planted, [player.id], 'Probe Town');
+        assert.deepEqual(rng.snapshot(), beforeRng, 'Additional position card preserves RNG');
+        report.additionalPositions.push({ id: `position-${position}`, position, playerId: player.id,
+          source, planted: fixtureState, card: clone(card), open: clone(planted),
+          fixture: 'Planted two-match suspension and first red on an actual generated player',
+          answers: card.options.map((_, option) => apply(planted, option)) });
+      }
       report.checks.push({ name: 'Actual answers and existing-card stability', status: 'passed' });
     }
     assert.deepEqual(report.networkAttempts, [], 'No network attempted');
     report.complete = true; save();
-    console.log(`${mode}: ${report.rows.length} retained rows; independent baseline passed; ${report.checks.filter(c => c.status === 'assertion-failed').length} mapped assertion failures`);
+    console.log(`${mode}: ${report.records?.length ?? report.rows.length} retained records; independent baseline passed; ${report.checks.filter(c => c.status === 'assertion-failed').length} mapped assertion failures`);
   } catch (error) {
     report.failure = { name: error.name, message: error.message, stack: error.stack }; save(); throw error;
   }

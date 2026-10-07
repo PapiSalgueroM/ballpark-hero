@@ -1,3 +1,15 @@
+Codex 1081 PRODUCT PREPARATION, October 7, 08:20 EDT.
+Accepted remote diagnostic 37617442468 at f025ecbd actually reproduced six
+appeal outcome differences among 24 equivalent careers. Artifact 11479948309,
+SHA a423e3ba86db41706fe6150784c0a09563e08c25e7b791a0ec5309c4fb562440.
+New youth appeal cards will retain versioned issuance metadata. Old cards keep
+their exact verdict path, and raw IDs/engine/save/slot code remain held. Frozen
+historical repros, current parity, compatibility and regressions await remote
+product acceptance. No accepted product fix, 1081 PR, merge or live claim.
+PR 168/169 remain READY separately. Protected root drafts/seven stashes and
+Claude main/release/data/cup/Season Centre/Front Office lanes stay untouched.
+Receipt: docs/audits/ROUND1081-MANAGER-APPEALS.md.
+
 Codex CLAIMS 1081, 2026-10-07: manager appeal isolation, probe first.
 
 A separate remote characterization compares actual generated-player open appeal

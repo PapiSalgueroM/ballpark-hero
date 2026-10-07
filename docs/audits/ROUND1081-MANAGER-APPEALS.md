@@ -1,6 +1,16 @@
-# Round 1081 manager appeal isolation diagnostic
+# Round 1081 manager appeal isolation
 
-Authoring complete, runtime verification pending. This is a diagnostic branch, not accepted product behavior.
+Product authoring and static review are complete. Remote product acceptance is pending.
+
+The original diagnostic is accepted at f025ecbdf9cfb033476b37e723244701a577d357
+(tree 606f81d9a24bc63796133e174c72db8dcdf2bcea), run 37617442468,
+job 112779490242. Artifact 11479948309, ZIP SHA256
+a423e3ba86db41706fe6150784c0a09563e08c25e7b791a0ec5309c4fb562440.
+Independent raw audits confirmed 24 actual pairs, four effective copied faults
+and six existing-card save/load/empty-slot checks. Gameplay parity was RED:
+pairs 08, 11, 13, 20, 22 and 24 differed only in actual appeal verdict, ban and
+resolved text. Accept-ban effects, other career state and RNG held. The
+diagnostic job's success measures its observation integrity, not healthy play.
 
 Pinned base: 2fff5e044160b70bd58b64d931793ee4e443cedd.
 Branch: codex/manager-appeal-isolation-1081.
@@ -11,6 +21,36 @@ Four unique copied source controls mislink the player, change the actual ban cal
 
 Default harness execution characterizes and enforces actual parity. Explicit --characterize accepts only observation integrity. Separate --verify-parity binds exact source/report/raw/copy/bundle hashes and recomputes actual answered differences. A detected product disparity must produce a named AssertionError and an assertion-failed parity receipt. Setup and runtime errors are not acceptable negative evidence.
 
-No app source, player IDs, old Slots assertions or fixtures change. No normalization hides the five previously observed expired-card differences. The storage budget excess remains separate. All runtime is remote GitHub Actions only. Cloud artifacts retain complete data, source copies and emitted bundles for independent static review.
+The bounded correction adds optional versioned issuance metadata only to new
+appeal cards for confirmed generated youth. It snapshots season, week, name,
+position, age and local duplicate occurrence. Already-issued cards without the
+field retain the exact original verdict computation. New malformed metadata
+fails desk validation instead of choosing a different legacy verdict. Stored
+keys survive later roster changes. Raw player/card IDs, options, text, odds,
+engine, serializer and slot code stay unchanged. Local occurrence distinguishes
+identical player tuples at issuance; it is not a persistent identity system for
+reordering indistinguishable twins before a card is created.
 
-A product verdict fix requires actual remote evidence first and exact old-card compatibility. PR 168 and 169 are READY separately. No merge/publish/live claim. Root drafts/seven stashes and Claude release/data/cup/Season Centre/Front Office lanes remain held.
+The frozen original decisions source and accepted six repros are retained in
+scripts/fixtures/managerAppealIsolation1081. Product acceptance must rerun all
+24 original pairs and additional actual CB/CM/ST cards, keep historical results
+separate, and verify issued-card compatibility and effective new fault controls.
+The authored gate requires 13 compatibility groups, 509 full records and 16
+effective compatibility faults, plus the original four copied faults. It
+includes current-engine storage round trips for three keyed cards and a
+retained old winning and losing card. These counts await actual remote output.
+Existing manager decision/save/tactics regressions and all 20 built/source
+readers run after the build. The tactics verification uses the exact accepted
+1079 cache adapter, without changing its gestures or gameplay assertions.
+
+Original Slots assertions and fixtures remain intact. No normalization hides
+the five previously observed expired-card differences. The storage budget
+excess remains separate. New metadata means whole old Slots observations are
+not claimed byte-identical to the baseline in this product round. All runtime
+is remote GitHub Actions only. Artifacts retain complete states, source copies,
+hashes, emitted bundles and logs for independent static review.
+
+A product verdict fix requires exact old-card compatibility and remote product
+acceptance. PR 168 and 169 are READY separately. No 1081 accepted fix or PR is
+claimed yet. No merge/publish/live claim. Root drafts/seven stashes and Claude
+release/data/cup/Season Centre/Front Office lanes remain held.

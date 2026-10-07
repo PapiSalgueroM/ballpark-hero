@@ -6,11 +6,13 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { identityRelation, answerSummary, PARITY_ASSERTION, SAMPLES } from './qa/managerAppealIsolation1081.mjs';
+import { clone, identityRelation, answerSummary, PARITY_ASSERTION, SAMPLES } from './qa/managerAppealIsolation1081.mjs';
+import { COMPATIBILITY_CONTROLS } from './qa/managerAppealCompatibility1081.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.resolve(process.env.MANAGER_APPEAL_ISOLATION_ARTIFACTS || path.join(ROOT, 'manager-appeal-isolation-artifacts'));
 const WORKER = path.join(ROOT, 'scripts/qa/managerAppealIsolation1081.mjs');
+const HISTORICAL = path.join(ROOT, 'scripts/fixtures/managerAppealIsolation1081');
 const mode = process.argv[2] || '--default';
 assert(['--default', '--characterize', '--verify-parity'].includes(mode), 'Known appeal isolation mode');
 assert(process.env.CI, 'Appeal isolation runs only in remote CI');
@@ -38,16 +40,16 @@ const CONTROL = {
   effect: { assertion: 'Actual appeal option effects', from: '    const next = won ? 0 : p.suspendedMatches + APPEAL_LOSS_EXTRA;',
     to: '    const next = (won ? 0 : p.suspendedMatches + APPEAL_LOSS_EXTRA) + 1;' },
   story: { assertion: 'Actual appeal story', from: 'The club secretary rates an appeal at', to: 'The club secretary incorrectly rates an appeal at' },
-  verdict: { assertion: 'Actual historical appeal verdict', from: '${item.id}|${saveKey(state)}|verdict', to: '${item.id}|${saveKey(state)}|altered-verdict-input' },
+  verdict: { assertion: 'Actual historical appeal verdict', from: '${item.verdictKey ?? item.id}|${saveKey(state)}|verdict', to: '${item.verdictKey ?? item.id}|${saveKey(state)}|altered-verdict-input' },
 };
 
-function comparePairs(alone, interleaved) {
-  assert.equal(alone.rows.length, SAMPLES); assert.equal(interleaved.rows.length, SAMPLES);
+function comparePairs(alone, interleaved, field = 'rows', count = SAMPLES) {
+  assert.equal(alone[field].length, count); assert.equal(interleaved[field].length, count);
   const pairs = [], parityFailures = [];
-  for (let i = 0; i < SAMPLES; i++) {
-    const a = alone.rows[i], b = interleaved.rows[i];
+  for (let i = 0; i < count; i++) {
+    const a = alone[field][i], b = interleaved[field][i];
     assert.equal(a.id, b.id, 'Paired row IDs');
-    const generated = identityRelation(a.generated, b.generated);
+    const generated = identityRelation(a.generated ?? a.source, b.generated ?? b.source);
     const correspondence = identityRelation(a.source, b.source);
     assert.deepEqual(a.generationBefore, b.generationBefore, 'Equivalent generation begins at the same RNG state');
     assert.deepEqual(a.generationAfter, b.generationAfter, 'Generation draws and continuation agree');
@@ -122,9 +124,63 @@ async function characterize() {
     const interleaved = run('normal/interleaved', interleavedBundle, 'interleaved');
     assert(alone.checks.every(check => check.status === 'passed') && interleaved.checks.every(check => check.status === 'passed'));
     Object.assign(report, comparePairs(alone, interleaved));
-    report.oldCardCompatibility = { passed: true, cases: [...alone.rows, ...interleaved.rows].filter(row => row.stability).length,
+    report.additionalPositions = comparePairs(alone, interleaved, 'additionalPositions', 3);
+    report.parityFailures.push(...report.additionalPositions.parityFailures);
+    report.issuedCardCompatibility = { passed: true, cases: [...alone.rows, ...interleaved.rows].filter(row => row.stability).length,
       scope: 'Same existing raw card, actual save/load and lean empty-slot round trip, every actual appeal option' };
-    assert.equal(report.oldCardCompatibility.cases, 6);
+    assert.equal(report.issuedCardCompatibility.cases, 6);
+    const manifest = JSON.parse(fs.readFileSync(path.join(HISTORICAL, 'manifest.json'), 'utf8'));
+    const historicalDesk = path.join(ROOT, manifest.frozenSource);
+    assert.equal(hash(fs.readFileSync(historicalDesk)), manifest.sha256, 'Immutable historical decisions source');
+    for (const [file, sha256] of Object.entries(manifest.unchangedSource)) assert.equal(hash(fs.readFileSync(path.join(ROOT, file))), sha256, `Historical engine and original assertion hold: ${file}`);
+    fs.copyFileSync(historicalDesk, path.join(OUT, 'copies/clubManagerDecisions.historical.ts'));
+    write('historical-manifest.json', manifest);
+    const historicalAloneBundle = await bundle('historical-alone', historicalDesk);
+    const historicalInterleavedBundle = await bundle('historical-interleaved', historicalDesk);
+    assert.deepEqual(fs.readFileSync(historicalAloneBundle.file), fs.readFileSync(historicalInterleavedBundle.file), 'Historical instances execute byte-identical frozen source');
+    const historicalAlone = run('historical/alone', historicalAloneBundle, 'historical:alone');
+    const historicalInterleaved = run('historical/interleaved', historicalInterleavedBundle, 'historical:interleaved');
+    report.historical = comparePairs(historicalAlone, historicalInterleaved);
+    assert.deepEqual(report.historical.parityFailures, manifest.historicalParityFailures, 'Frozen historical source retains all six accepted actual repros');
+    report.historical.productCorrectness = report.historical.parityFailures.length === 0;
+    report.historical.expectedDiagnosticRed = true;
+    report.historical.creationCompatibilityCases = 0;
+    for (const [current, previous] of [[alone, historicalAlone], [interleaved, historicalInterleaved]]) {
+      for (const field of ['rows', 'additionalPositions']) for (let i = 0; i < current[field].length; i++) {
+        const now = current[field][i], old = previous[field][i];
+        assert.equal(now.id, old.id);
+        for (const unchanged of ['generated', 'source', 'planted', 'generationBefore', 'generationAfter', 'preparationAfter']) assert.deepEqual(now[unchanged], old[unchanged], `Only issuance identity may change: ${now.id} ${unchanged}`);
+        const open = clone(now.open);
+        for (const card of open.decisions) delete card.verdictKey;
+        assert.deepEqual(open, old.open, 'Raw IDs, links, complete cards and unrelated state retain historical creation behavior');
+        report.historical.creationCompatibilityCases += 1;
+      }
+    }
+    write('historical-repros.json', report.historical.parityFailures.map(failure => ({ ...failure,
+      alone: historicalAlone.rows.find(row => row.id === failure.id), interleaved: historicalInterleaved.rows.find(row => row.id === failure.id) })));
+    const compatibilityInput = (name, only) => {
+      const relative = `compatibility-${name}-input.json`;
+      write(relative, { historicalBundle: historicalAloneBundle.file,
+        historicalRows: { alone: path.join(OUT, 'historical/alone/observations.json'), interleaved: path.join(OUT, 'historical/interleaved/observations.json') }, only });
+      return path.join(OUT, relative);
+    };
+    const compatibility = run('compatibility/normal', aloneBundle, 'compatibility', compatibilityInput('normal'));
+    assert(compatibility.checks.length > 0 && compatibility.checks.every(check => check.status === 'passed'), 'Every actual compatibility outcome passes');
+    report.compatibility = { checks: compatibility.checks, records: compatibility.records.length, controls: [] };
+    for (const mutation of COMPATIBILITY_CONTROLS) {
+      assert.equal(desk.split(mutation.from).length - 1, 1, `Unique compatibility mutation ${mutation.name}`);
+      const changed = desk.replace(mutation.from, mutation.to);
+      assert.notEqual(changed, desk, 'Compatibility control changes source');
+      const relative = `copies/compat-${mutation.name}.ts`, copiedDesk = path.join(OUT, relative);
+      fs.writeFileSync(copiedDesk, changed);
+      const observed = run(`compatibility/controls/${mutation.name}`, await bundle(`compat-${mutation.name}`, copiedDesk), 'compatibility', compatibilityInput(mutation.name, mutation.assertion));
+      assert.equal(observed.checks.length, 1, 'The targeted compatibility group actually runs');
+      const failed = observed.checks[0];
+      assert.equal(failed.status, 'assertion-failed'); assert.equal(failed.name, mutation.assertion); assert.equal(failed.errorName, 'AssertionError');
+      report.compatibility.controls.push({ ...mutation, copiedSource: relative, originalSha256: hash(desk), copiedSha256: hash(changed),
+        mappedFailure: failed, independentBaselinePassed: observed.baseline.passed, effective: true });
+      write('report.json', report);
+    }
     write('report.json', report);
     for (const [name, mutation] of Object.entries(CONTROL)) {
       assert.equal(desk.split(mutation.from).length - 1, 1, `Unique executable ${name} mutation`);
@@ -149,7 +205,9 @@ async function characterize() {
     console.log(`Appeal characterization integrity passed: ${SAMPLES} complete actual pairs.`);
     console.log('Existing-card compatibility: 6 save/load and empty-slot round trips, every appeal option.');
     console.log(`Effective copied controls: ${report.controls.map(control => control.name).join(', ')}; independent baseline passed in each.`);
-    console.log(`Whole-source holds: ${Object.keys(report.sourceBefore).length} exact files; 6 executed bundles retained.`);
+    console.log(`Historical baseline: ${report.historical.parityFailures.length} preserved differing pairs, separate from current product parity.`);
+    console.log(`Compatibility: ${report.compatibility.checks.length} outcome groups, ${report.compatibility.controls.length} effective mapped controls.`);
+    console.log(`Whole-source holds: ${Object.keys(report.sourceBefore).length} exact files; ${new Set(Object.values(report.raw).map(raw => raw.bundlePath)).size} executed bundles retained.`);
     console.log(`Product correctness: ${report.productCorrectness}; differing pairs: ${report.parityFailures.length}.`);
   } catch (error) {
     report.failure = { name: error.name, message: error.message, stack: error.stack };
@@ -175,17 +233,29 @@ function verifyParity() {
     assert.equal(report.controls.length, 4); assert(report.controls.every(control => control.effective && control.independentBaselinePassed));
     const original = fs.readFileSync(path.join(OUT, 'copies/clubManagerDecisions.original.ts'));
     assert.equal(hash(original), report.sourceBefore['src/lib/clubManagerDecisions.ts'], 'Exact original desk source retained');
-    for (const control of report.controls) {
+    assert(report.compatibility.checks.length > 0 && report.compatibility.checks.every(check => check.status === 'passed'));
+    assert.equal(report.compatibility.controls.length, COMPATIBILITY_CONTROLS.length);
+    assert(report.compatibility.controls.every(control => control.effective && control.independentBaselinePassed));
+    for (const control of [...report.controls, ...report.compatibility.controls]) {
       assert.equal(hash(original), control.originalSha256);
       assert.equal(hash(fs.readFileSync(path.join(OUT, control.copiedSource))), control.copiedSha256, 'Exact executed copied mutation retained');
     }
+    const historicalManifest = json('historical-manifest.json');
+    assert.deepEqual(historicalManifest, JSON.parse(fs.readFileSync(path.join(HISTORICAL, 'manifest.json'), 'utf8')), 'Exact committed historical receipt');
+    assert.equal(hash(fs.readFileSync(path.join(OUT, 'copies/clubManagerDecisions.historical.ts'))), historicalManifest.sha256);
+    assert.equal(report.raw['historical/alone'].bundleSha256, report.raw['historical/interleaved'].bundleSha256);
+    const historical = comparePairs(json(report.raw['historical/alone'].path), json(report.raw['historical/interleaved'].path));
+    assert.deepEqual(historical.parityFailures, historicalManifest.historicalParityFailures, 'Historical red remains visible and separate');
+    assert.deepEqual(historical.parityFailures, report.historical.parityFailures);
     const comparison = comparePairs(json(report.raw['normal/alone'].path), json(report.raw['normal/interleaved'].path));
+    const positions = comparePairs(json(report.raw['normal/alone'].path), json(report.raw['normal/interleaved'].path), 'additionalPositions', 3);
+    comparison.parityFailures.push(...positions.parityFailures);
     assert.deepEqual(comparison.parityFailures, report.parityFailures, 'Recompute actual disparity from the retained raw answers');
     assert.equal(report.productCorrectness, comparison.parityFailures.length === 0);
     parity.parityFailures = comparison.parityFailures; validated = true;
     assert.equal(report.productCorrectness, true, PARITY_ASSERTION);
     parity.status = 'passed'; write('parity-report.json', parity);
-    console.log(`${PARITY_ASSERTION}: passed for ${SAMPLES} retained actual pairs.`);
+    console.log(`${PARITY_ASSERTION}: passed for ${SAMPLES} original pairs and 3 separate generated-position pairs.`);
   } catch (error) {
     const expected = validated && error instanceof assert.AssertionError && error.message.includes(PARITY_ASSERTION);
     parity.status = expected ? 'assertion-failed' : 'runtime-failed';
