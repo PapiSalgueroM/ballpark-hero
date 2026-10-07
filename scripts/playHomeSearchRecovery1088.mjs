@@ -252,6 +252,12 @@ try {
     const row = { width, height, reduced, complete: false, healthy: {}, recovery: {}, documents: [], chunkRequests: [], reads: [], assetResponses: [], errors: [], console: [], requests: [], inputs: [], snapshots: [], screenshots: [] };
     report.cases.push(row); save(); let releaseChunk, releaseDocument, documentRequested; let rejectChunk = false, blockChunk = false, holdDocument = false;
     const context = await browser.newContext({ viewport: { width, height }, hasTouch: width < 1000, isMobile: width < 1000, reducedMotion: reduced ? 'reduce' : 'no-preference', colorScheme: width === 320 ? 'dark' : 'light', serviceWorkers: 'block', storageState: { cookies: [], origins: [{ origin: BASE, localStorage: Object.entries({ ...initialStorage, 'dukb-theme': width === 320 ? 'dark' : 'light' }).map(([name, value]) => ({ name, value })) }] } });
+    let receiveDeparture;
+    row.recovery.departureReceipts = [];
+    await context.exposeBinding('__homeSearchDeparture', (source, payload) => {
+      const receipt = { receivedAt: new Date().toISOString(), samePage: source.page === page, mainFrame: source.frame === source.page.mainFrame(), sourceUrl: source.frame.url(), ...payload };
+      row.recovery.departureReceipts.push(receipt); save(); receiveDeparture?.(receipt);
+    });
     await context.addInitScript(({ now, staleKey }) => {
       sessionStorage.setItem(staleKey, '1');
       const OriginalDate = Date; window.Date = class extends OriginalDate { constructor(...args) { super(...(args.length ? args : [now])); } static now() { return now; } };
@@ -259,6 +265,18 @@ try {
       Math.random = () => { a.draws++; a.seed = (Math.imul(a.seed, 1664525) + 1013904223) >>> 0; return a.seed / 4294967296; };
       for (const method of ['setItem', 'removeItem', 'clear']) { const original = Storage.prototype[method]; Storage.prototype[method] = function(...args) { a.writes.push({ local: this === localStorage, method, args }); return original.apply(this, args); }; }
       for (const type of ['click', 'input', 'keydown', 'pointerdown']) document.addEventListener(type, e => a.input.push({ type, trusted: e.isTrusted, text: e.target?.textContent?.trim().slice(0, 80), key: e.key, t: performance.now() }), true);
+      let onlineReloadClick = null;
+      document.addEventListener('click', event => {
+        const button = event.target instanceof Element ? event.target.closest('button') : null;
+        if (event.isTrusted && navigator.onLine && button?.textContent?.trim() === 'Reload page' && button.closest('[data-home-search-unavailable]')) {
+          onlineReloadClick = { trusted: event.isTrusted, type: event.type, t: performance.now() };
+        }
+      }, true);
+      window.addEventListener('beforeunload', event => {
+        if (!onlineReloadClick) return;
+        const value = { local: Object.fromEntries(Object.entries(localStorage).sort()), session: Object.fromEntries(Object.entries(sessionStorage).sort()), draws: a.draws, writes: structuredClone(a.writes), now: Date.now(), doc: performance.timeOrigin, scrollY, input: document.querySelector('input[aria-label="Search games"]')?.value, focus: document.activeElement?.getAttribute('aria-label') || document.activeElement?.textContent?.trim().slice(0, 100) };
+        void window.__homeSearchDeparture({ event: { type: event.type, trusted: event.isTrusted }, click: onlineReloadClick, snapshot: value, inputs: structuredClone(a.input) });
+      });
     }, { now: NOW, staleKey: STALE_KEY });
     await context.route('**/*', async route => {
       const req = route.request(), url = new URL(req.url()), record = { method: req.method(), url: url.href, type: req.resourceType() }; row.requests.push(record);
@@ -313,19 +331,26 @@ try {
       await page.waitForTimeout(400); row.recovery.offline = await snap('offline-after'); held(offlineBefore, row.recovery.offline); assert.equal(row.recovery.offline.doc, offlineBefore.doc, 'Offline reload keeps the current document'); assert.equal(row.documents.length, docsBefore); await shot('offline-reload-held');
       await context.setOffline(false); blockChunk = false; rejectChunk = false;
       const savedBeforeReload = await snap('before-explicit-reload');
-      // Hold only the requested document response long enough to retain the old
-      // document's real trusted click before navigation destroys its event log.
+      // The old document captures departure synchronously; await only its Node receipt.
+      const departureReceived = new Promise(resolve => { receiveDeparture = resolve; });
       holdDocument = true; const navigationStarted = new Promise(resolve => { documentRequested = resolve; });
       const activation = observe('trusted online Reload activation', () => act(page, page.getByRole('button', { name: 'Reload page', exact: true }), width < 1000)).catch(error => {
         row.recovery.activationError = { name: error.name, message: error.message }; return error;
       });
-      let watchdog; await observe('navigation requested document', () => Promise.race([navigationStarted, new Promise((_, reject) => { watchdog = setTimeout(() => reject(new Error('Explicit reload did not request a document')), 12000); })]).finally(() => clearTimeout(watchdog)));
-      row.recovery.reloadDeparture = await snap('explicit-reload-before-response'); held(savedBeforeReload, row.recovery.reloadDeparture);
-      row.inputs.push(...await page.evaluate(() => window.__homeSearchAudit.input));
-      releaseDocument(); holdDocument = false; const activationError = await activation; if (activationError) throw activationError;
+      try {
+        let watchdog; await observe('navigation requested document', () => Promise.race([navigationStarted, new Promise((_, reject) => { watchdog = setTimeout(() => reject(new Error('Explicit reload did not request a document')), 12000); })]).finally(() => clearTimeout(watchdog)));
+        let receiptTimer;
+        const departure = await observe('trusted beforeunload departure receipt', () => Promise.race([departureReceived, new Promise((_, reject) => { receiptTimer = setTimeout(() => reject(new Error('Trusted reload departure receipt was not delivered')), 12000); })]).finally(() => clearTimeout(receiptTimer)));
+        row.recovery.reloadDeparture = departure.snapshot; row.snapshots.push({ name: 'explicit-reload-before-response', ...departure.snapshot }); save();
+        assert.equal(departure.samePage, true); assert.equal(departure.mainFrame, true); assert.equal(departure.sourceUrl, new URL(BASE).href);
+        assert.deepEqual(departure.event, { type: 'beforeunload', trusted: true }); assert.equal(departure.click.trusted, true); assert.equal(departure.click.type, 'click');
+        assert.equal(row.recovery.departureReceipts.length, 1); assert.equal(departure.snapshot.doc, savedBeforeReload.doc); held(savedBeforeReload, departure.snapshot);
+        row.inputs.push(...departure.inputs);
+      } finally { releaseDocument?.(); holdDocument = false; }
+      const activationError = await activation; if (activationError) throw activationError;
       await observe('navigation explicit reload DOM ready', () => page.waitForLoadState('domcontentloaded'));
       await page.locator('[data-home-stage]').waitFor(); row.recovery.reloadFonts = await fonts(page); await finite(page); const reloaded = await snap('reloaded');
-      assert.notEqual(reloaded.doc, savedBeforeReload.doc, 'Trusted explicit reload creates a new document'); assert.equal(row.documents.length, docsBefore + 1); assert.equal(reloaded.input, ''); assert.deepEqual(reloaded.local, savedBeforeReload.local); assert.deepEqual(reloaded.session, savedBeforeReload.session); assert.deepEqual(savedBeforeReload.writes, []); assert.deepEqual(reloaded.writes, []);
+      assert.notEqual(reloaded.doc, savedBeforeReload.doc, 'Trusted explicit reload creates a new document'); assert.equal(row.documents.length, docsBefore + 1); assert.equal(reloaded.input, ''); assert.deepEqual(reloaded.local, savedBeforeReload.local); assert.deepEqual(reloaded.session, savedBeforeReload.session); assert.deepEqual(savedBeforeReload.writes, before.writes); assert.deepEqual(reloaded.writes, before.writes); assert.equal(reloaded.draws, before.draws); assert.equal(reloaded.now, before.now);
       assert.equal(await page.locator('[data-home-search-unavailable]').count(), 0); await input(page, QUERY, width < 1000);
       await page.waitForFunction(count => document.querySelectorAll('[data-home-game-card] > a').length === count, expected.length); await finite(page);
       row.recovery.resultsAfterReload = await results(page); assert.deepEqual(row.recovery.resultsAfterReload, expected); held(reloaded, await snap('reload-search')); await shot('reload-search');
