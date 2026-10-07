@@ -644,7 +644,7 @@ function SeasonSummaryCard({ season, position, onContinue, appearance, leagueOf,
   const league = leagueOf?.key;
   const leagueName = leagueOf?.name;
   const isGK = position === "GK";
-  const trophies = [season.leagueTitle && "🏆 League", season.domesticCup && `🏆 ${cupChipLabel(season)}`,season.championsLeague && "⭐ UCL", season.clubCupTitle && `⭐ ${season.clubCupTitle}`, season.worldCup && "🌍 World Cup", season.continentalCup && "🌐 Continental", season.ballonDor && "🏅 Ballon d'Or"].filter(Boolean);
+  const trophies = [season.leagueTitle && "🏆 League", season.domesticCup && `🏆 ${cupChipLabel(season)}`, season.championsLeague && "⭐ UCL", season.clubCupTitle && `⭐ ${season.clubCupTitle}`, season.worldCup && "🌍 World Cup", season.continentalCup && "🌐 Continental", season.ballonDor && "🏅 Ballon d'Or"].filter(Boolean);
   /* Round 929: the champion is the one the phone's world already crowned for
      this season, so the card and the feed can never name two winners. */
   const finish = readLeagueFinish(season);

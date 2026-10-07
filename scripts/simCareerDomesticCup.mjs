@@ -624,6 +624,14 @@ console.log('5) the summary lines render for a new row, and a row from before th
     const flipped = { ...wonNamed, domesticCup: false };
     if (cup.readCupRun(broken) || cup.readCupRun(flipped)) fail('a hand edited run is read as good');
     if (render(ui.SeasonCupWinBlock, { season: broken }) !== '') fail('a hand edited run renders');
+    /* on load, repairCareer drops the bad run, keeps the good one and leaves
+       a row from before the round exactly as it was */
+    const rr = Math.random;
+    Math.random = seeded(4242);
+    let base;
+    try { base = engine.initCareer('Repair', 'England', 'ST', '2020-24', stats(70), 70, 2020, clubs, null, 82); } finally { Math.random = rr; }
+    const fixed = engine.repairCareer({ ...base, seasons: [wonNamed, broken, legacy] }).seasons;
+    if (!fixed[0].cupRun || fixed[1].cupRun !== undefined || JSON.stringify(fixed[2]) !== JSON.stringify(legacy)) fail('loading a save does not drop a bad run and keep the rest');
   }
   if (cup.cupCabinetLabel([legacy]) !== 'Cups' || cup.cupCabinetLabel([]) !== 'Cups') fail('the cabinet label moved for old saves');
 }

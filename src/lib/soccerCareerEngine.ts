@@ -28,7 +28,7 @@ import type { PhoneChoiceDef } from "./careerEras";
 import { divisionMove, drawLeagueFinish, eliteInYear, finishZone, leagueKeyInYear, managerLeagueField, MANAGER_FIELD, ordinal } from "./soccerCareerLeague";
 /* Round 1012: real club rivalries, played as league derbies each season. */
 import { resolveSeasonDerbies, applySeasonDerbies, type SeasonDerby } from "./soccerCareerDerby";
-import { cupAssociation, cupChanceFor, cupFor, cupTitle, drawCupRun, seasonPerformanceBoost, worldLeagueOf, type CupRun } from "./soccerCareerCup";
+import { cupAssociation, cupChanceFor, cupFor, cupTitle, drawCupRun, readCupRun, seasonPerformanceBoost, worldLeagueOf, type CupRun } from "./soccerCareerCup";
 /* Round 130: the phone is a real phone now. Threads, contacts, a relationship
    that cools when you ignore people, and a sports feed driven by a world model
    that actually moves players between clubs. All of it lives in soccerPhone so
@@ -2719,6 +2719,17 @@ export function repairCareer<T extends CareerState>(state: T): T {
     s.seasons = s.seasons.map(x => {
       if (!x || x.clubCupTitle === undefined || typeof x.clubCupTitle === "string") return x;
       const { clubCupTitle: _dropped, ...rest } = x;
+      return rest;
+    });
+  }
+  /* Round 1041: a cup run its own reader refuses (hand edited, half written,
+     or out of step with the row's cup) is dropped on load, so every reader,
+     the Season Centre included, sees a good run or none. A row without one,
+     every row from before that round, is left exactly as it is. */
+  if (Array.isArray(s.seasons) && s.seasons.some(x => x && x.cupRun !== undefined && !readCupRun(x))) {
+    s.seasons = s.seasons.map(x => {
+      if (!x || x.cupRun === undefined || readCupRun(x)) return x;
+      const { cupRun: _dropped, ...rest } = x;
       return rest;
     });
   }
