@@ -74,9 +74,11 @@ export interface SoccerSeasonCtx {
 }
 
 const KEEPS_SHEETS = new Set(['GK', 'CB', 'LB', 'RB']);
-/** Points per game a results only title season must sit in. Measured from
- *  table mode's champions by scripts/simSeasonCentreAgreement.mjs. */
-export const CHAMPION_PPG = { min: 1.9, max: 2.8 };
+/** Points per game a results only title season must sit in (critic C4).
+ *  Measured from table mode's champions by scripts/simSeasonCentreAgreement.mjs
+ *  over five seed sets of 120 careers: p2 1.97 in every set, p98 2.53 to
+ *  2.55. The band keeps 0.07 below and 0.10 above. */
+export const CHAMPION_PPG = { min: 1.9, max: 2.65 };
 
 function worldFor(career: CareerState, year: number): WorldSeason | null {
   const w = career.phone?.world;

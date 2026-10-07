@@ -39,6 +39,14 @@
  *   selfcheck   the goals defect with the self check ON: the self check must
  *               refuse those seasons (the null rate goes red), never pass them
  *
+ * Control evidence, 2026-10-07 (20 or 24 careers each, every one exit 1):
+ *   goals 362 failed at item 4; position 274 at item 2; title 40 at items 2
+ *   and 13; derby 995 at item 5; cleansheet 131 at item 6; points 3 (T8 drew
+ *   a 1992 Serie A table, item 3); resultstitle 4 at item 4b (champions on
+ *   1.76 to 1.84 a game); selfcheck: the self check refused the defective
+ *   seasons (null rate 82.78 percent, table yield 20.49) and the checker saw
+ *   none of them.
+ *
  * Runs past three minutes at full size: run it through detach.sh and
  * waitfor.sh. Green is the closing "simSeasonCentreAgreement: ... 0 failed"
  * line and exit 0.
@@ -276,11 +284,18 @@ function checkSeason(career, row, ctx, s, tag) {
   if (s.labels[0]?.name !== row.club) fail('12 loan', `${tag}: slot 0 is ${s.labels[0]?.name}, the row says ${row.club}`);
 }
 
-/* ─── Thresholds (set from five seed sets; the measured spread is in the header of section M) ─── */
+/* ─── Thresholds, from five seed sets of 120 careers (SEEDSET 0 to 4, 2026-10-07):
+   null rate 0.14, 0.24, 0.09, 0.14, 0.19 percent (max 0.24, band 0.6, 2.5 times);
+   table yield 99.72, 99.71, 99.82, 99.73, 99.63 percent (min 99.63, band 99.2);
+   realism gaps, derived minus unconditioned: goals a game +0.013, +0.012,
+   +0.015, +0.008, +0.018 (band 0.05); home win share within 0.001 and draw
+   share within 0.002 (bands 0.015); champions' points a game -0.036, -0.015,
+   -0.018, -0.021, -0.021 (band 0.08). Determinism and key reconstruction
+   were exact on every season of every set. ─── */
 const BANDS = {
-  nullRateMax: 0.01,
-  tableYieldMin: 0.99,
-  realism: { gpg: 0.12, home: 0.04, draw: 0.04, champPpg: 0.12 },
+  nullRateMax: 0.006,
+  tableYieldMin: 0.992,
+  realism: { gpg: 0.05, home: 0.015, draw: 0.015, champPpg: 0.08 },
 };
 
 const stats = { seasons: 0, gate: {}, ok: { table: 0, results: 0 }, nul: { injured: 0, clean: 0 }, injuredN: 0, cleanN: 0, why: {}, attempts: {}, repairs: {}, determinism: 0, determinismBad: 0, keyOk: 0, keyBad: 0, keyN: 0 };
