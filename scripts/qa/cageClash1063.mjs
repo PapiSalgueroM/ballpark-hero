@@ -500,6 +500,7 @@ try {
       assert.equal(row.fonts.length, 8); assert(row.fonts.every(face => face.loaded), 'All eight actual site font faces load before native geometry');
       assert.equal(await page.locator('html').evaluate(el => el.classList.contains('light')), profile.theme === 'light');
       assert.equal(await page.evaluate(() => matchMedia('(prefers-reduced-motion: reduce)').matches), profile.reduced);
+      await page.clock.pauseAt(await page.evaluate(() => Date.now() + 1000));
       await inspect('setup'); assert.match(await root(page).innerText(), /Try this|Example/);
       if (report.controls.length === 0) {
         const target = button('Fight'), original = await target.getAttribute('style');
@@ -528,6 +529,20 @@ try {
         await choose(page.getByLabel('Mode', { exact: true }), 'practice', profile);
         await choose(page.getByLabel('Practice drill', { exact: true }), 'striking', profile);
         await inspect('practice-setup'); await activate(button('Start drill'), profile); await page.clock.runFor(112);
+        if (!report.controls.includes('capture-clock')) {
+          const before = await hud(page);
+          await new Promise(resolve => setTimeout(resolve, 250));
+          const held = await hud(page); assert.deepEqual(held, before, 'Capturing a fight cannot advance its clock');
+          await page.clock.resume(); await new Promise(resolve => setTimeout(resolve, 350));
+          const resumed = await hud(page);
+          assert(resumed.tick > before.tick, 'The clock control actually advances the real practice fight');
+          assert.throws(() => assert.deepEqual(resumed, before), error => error.name === 'AssertionError');
+          await page.clock.pauseAt(await page.evaluate(() => Date.now() + 1000));
+          const restored = await hud(page); await new Promise(resolve => setTimeout(resolve, 250));
+          const restoredHeld = await hud(page); assert.deepEqual(restoredHeld, restored, 'The restored capture clock holds the actual fight');
+          report.clockControl = { before, held, resumed, restored, restoredHeld, passed: true };
+          report.controls.push('capture-clock');
+        }
         for (const drill of ['striking', 'takedown', 'submission', 'escape']) {
           const initial = await hud(page); assert.equal(initial.drill, drill); assert.equal(initial.practiceComplete, false);
           assert(await page.locator('canvas').evaluate(el => el === document.activeElement), 'Starting or advancing a drill focuses the arena');
@@ -823,8 +838,9 @@ try {
     } catch (error) { row.error = String(error?.stack || error); console.error(`${id}: ${row.error}`); await page.screenshot({ path: path.join(OUT, `${id}-failure.png`) }).catch(() => {}); throw error; }
     finally { await context.close(); report.coverage = [...coverage]; save(); }
   }
-  assert.equal(report.cases.length, 4); assert.equal(report.controls.length, 9); assert(report.cases.every(row => row.passed), 'All four native profiles pass');
-  for (const name of ['action-size', 'action-clipping', 'horizontal-overflow', 'keyboard-focus', 'stats-clipping', 'readiness-font', 'readiness-description', 'readiness-wrap', 'practice-feedback-font']) assert(report.controls.includes(name), `${name}: every prior and new native control fires`);
+  assert.equal(report.cases.length, 4); assert.equal(report.controls.length, 10); assert(report.cases.every(row => row.passed), 'All four native profiles pass');
+  for (const name of ['action-size', 'action-clipping', 'horizontal-overflow', 'keyboard-focus', 'stats-clipping', 'readiness-font', 'readiness-description', 'readiness-wrap', 'practice-feedback-font', 'capture-clock']) assert(report.controls.includes(name), `${name}: every prior and new native control fires`);
+  assert(report.clockControl?.passed, 'The actual clock fault restores a stable capture baseline');
   assert(report.cases.every(row => row.fightStats.some(stats => stats.stage === 'quick-result')), 'All four profiles inspect earned Quick fight stats');
   for (const row of report.cases.filter(row => row.circuit)) assert.equal(row.fightStats.filter(stats => stats.stage.startsWith('circuit-')).length, row.circuit.runs.reduce((sum, run) => sum + run.fights.length, 0), 'Every earned Circuit result gets its own current fight recap');
   assert.equal(report.cases.filter(row => (row.id.startsWith('1280-keyboard') || row.id.startsWith('320-touch')) && row.practice?.passed && row.practice.drills.length === 4).length, 2, 'Keyboard and 320px touch retain all four practice drills');
@@ -846,5 +862,5 @@ try {
   assert.equal(report.cases.filter(row => row.circuit?.passed && row.circuit.won).length, 2, '320px touch and full-motion desktop complete winning circuits and real early stops');
   for (const needed of ['standing', 'clinch', 'ground-player', 'ground-cpu', 'submission', 'escape', 'result']) assert(coverage.has(needed), `Actual UI reaches ${needed}`);
   assert.equal(report.forwardedWrites, 0);
-  console.log(`cageClash1063: four complete native fights, every earned fight recap, twelve actual strike frames, six earned ground positions, six grapple frames, six pressure grips, two native readiness journeys, four complete practice feedback journeys, nine proven controls, seven actual combat states, input lifecycle and zero forwarded writes passed.`);
+  console.log(`cageClash1063: four complete native fights, every earned fight recap, twelve actual strike frames, six earned ground positions, six grapple frames, six pressure grips, two native readiness journeys, four complete practice feedback journeys, ten proven controls, seven actual combat states, input lifecycle and zero forwarded writes passed.`);
 } finally { if (browser) await browser.close(); server.kill(); fs.writeFileSync(path.join(OUT, 'server.log'), serverLog); save(); }

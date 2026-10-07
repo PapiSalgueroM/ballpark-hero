@@ -76,6 +76,19 @@ jobs:
       - name: Practice feedback outcomes and effective copied faults
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: CAGE_PRACTICE_FEEDBACK_CONTROL=all ONLY=simCagePracticeFeedback node scripts/runAllSims.mjs 2>&1 | tee cage-clash-artifacts/practice-feedback.log
+      - name: Native pixel combat and input lifecycle
+        id: native
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: xvfb-run -a node scripts/qa/cageClash1063.mjs 2>&1 | tee cage-clash-artifacts/native.log
+      - name: Preserve native failure for immediate diagnosis
+        if: ${{ failure() && steps.native.outcome == 'failure' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: cage-native-failure-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 1
+          path: |
+            cage-clash-artifacts/native/
+            cage-clash-artifacts/native.log
       - name: Combat controller outcomes and effective controls
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: CAGE_CLASH_CONTROL=all ONLY=simCageClash node scripts/runAllSims.mjs 2>&1 | tee cage-clash-artifacts/combat.log
@@ -117,19 +130,6 @@ jobs:
       - name: Action readiness outcomes, effective controls and prior engine equivalence
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: CAGE_READINESS_CONTROL=all ONLY=simCageReadiness node scripts/runAllSims.mjs 2>&1 | tee cage-clash-artifacts/readiness.log
-      - name: Native pixel combat and input lifecycle
-        id: native
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        run: xvfb-run -a node scripts/qa/cageClash1063.mjs 2>&1 | tee cage-clash-artifacts/native.log
-      - name: Preserve native failure for immediate diagnosis
-        if: ${{ failure() && steps.native.outcome == 'failure' }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: cage-native-failure-${{ github.run_id }}-${{ github.run_attempt }}
-          retention-days: 1
-          path: |
-            cage-clash-artifacts/native/
-            cage-clash-artifacts/native.log
       - name: Existing combat scoring guides and home
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
