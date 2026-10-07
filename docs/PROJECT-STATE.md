@@ -1,3 +1,34 @@
+## Round1072 built, final verification pending
+
+Anthony's Club Manager report is now implemented on codex/cm-quick-sim-subs-1072.
+Quick Sim and calendar fast-forward make legal injury substitutions and bring
+on fresher legs at halftime while reserving a change. Live manual controls,
+three-sub cap, saved clock, played events and one settlement are preserved.
+The result card also contains its enlarged verdict animation on phones.
+
+Remote37560193886 on1df7b9bb passed real types/build,10 coaching outcomes,
+13 effective faults, six MatchScreen controls and all19 built/guide readers.
+Those artifacts were SHA verified; five of six native journeys passed. The
+390 fatigue case exposed the verdict overflow, now fixed with one CSS class
+and a bounded remove/restore control awaiting final remote proof.
+
+Remote37561723450 measured six current and exact-main slot streams. All
+20 season digests per stream match their standalone careers. Ordinary stats
+and outcomes explain growth; current healthy totals442058 to444992 and
+actual duplicated-save total501773 set the470000 test fence with measured
+headroom. No save schema or production data changed. The old shootout
+fixture already missed150/150 onmain42888161 and stays byte-identical.
+Remote37563730587 captured full matching reports and the sole state.live
+null-versus-absent difference. Its final comparison accounts only for that
+existing optional field, preserving full gameplay and random-stream checks.
+
+Six remote-generated payloads are imported and hash verified. Only the
+Club Manager frozen guide and Club Manager/What's New ledger entries moved.
+Final PR verification is still required;1072 is not accepted, merged or LIVE.
+Claude retains AH/main/publish, with tomorrow morning publication planned.
+Preserve separate1072 coach/help hunks and merged1070/1071. No local runtime,
+production probes/completed games or protected root source/stash changes.
+
 ## Round1072 claimed: Club Manager quick-sim substitutions, 2026-10-07
 
 Anthony forwarded a footer report: quick sim should make substitutions,

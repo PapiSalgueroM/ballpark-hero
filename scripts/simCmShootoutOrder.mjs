@@ -55,7 +55,11 @@
  *      BEFORE this round (src/lib/clubManager.ts at origin/main 84d81619,
  *      unchanged since the branch point 9136539b). The engine now must
  *      reproduce the actual pre-1072 engine at 42888161 with automatic
- *      coaching bypassed, row for row. That main already reproduced zero
+ *      coaching bypassed, score, next draw and full content for every row.
+ *      The actual raw diagnostic showed only absent live versus live:null;
+ *      those two forms alone compare alike after asserting live is inactive.
+ *      Object keys are sorted, raw hashes and the first raw difference remain.
+ *      That main already reproduced zero
  *      ancient fixture rows; both arms retain identical golden mismatch
  *      counts as evidence. Section 1 exercises current coached matches.
  *      The next number alone is a weak witness (the
@@ -180,6 +184,10 @@ if (CONTROL && !KNOWN.includes(CONTROL)) {
 }
 const WRITE_FIXTURE = process.env.CM_SHOOTOUT_WRITE_FIXTURE || '';
 const sourceBytes = WRITE_FIXTURE ? [] : [`${ROOT}/src/lib/clubManager.ts`, FIXTURE].map(file => ({ file, bytes: fs.readFileSync(file) }));
+const runtimeErrors = [];
+const captureRuntime = error => { runtimeErrors.push({ name: error?.name, message: String(error?.message ?? error) }); process.exitCode = 2; };
+process.on('uncaughtExceptionMonitor', captureRuntime);
+process.on('unhandledRejection', captureRuntime);
 
 const readLF = f => fs.readFileSync(f, 'utf8').split('\r\n').join('\n');
 const abort = m => { console.error(m); process.exit(1); };
@@ -383,6 +391,24 @@ function playCup(state, seed, engine = cm) {
   });
 }
 const row = ({ seed, decidedBy, shootoutWon, homeGoals, awayGoals, next, hash }) => ({ seed, decidedBy, shootoutWon, homeGoals, awayGoals, next, hash });
+const sortedJSON = value => JSON.stringify(value, (_key, item) => item && typeof item === 'object' && !Array.isArray(item)
+  ? Object.fromEntries(Object.keys(item).sort().map(key => [key, item[key]])) : item);
+function compareContent(candidate, baseline) {
+  const readings = [candidate, baseline].map(out => {
+    const present = Object.prototype.hasOwnProperty.call(out.state, 'live');
+    const inactive = !present || out.state.live === null;
+    if (!inactive) fail(`seed ${out.seed}: historical comparison contains an active live match`);
+    const state = { ...out.state };
+    if (state.live === null) delete state.live;
+    const content = sortedJSON({ report: out.report, state });
+    return { present, inactive, content, hash: createHash('sha256').update(content).digest('hex') };
+  });
+  const [a, b] = readings;
+  const sameResult = ['seed', 'decidedBy', 'shootoutWon', 'homeGoals', 'awayGoals', 'next'].every(key => candidate[key] === baseline[key]);
+  return { paired: sameResult && a.inactive && b.inactive && a.content === b.content,
+    canonicalWitness: { candidate: a.hash, baseline: b.hash },
+    allowedLive: { candidate: { present: a.present, inactive: a.inactive }, baseline: { present: b.present, inactive: b.inactive } } };
+}
 
 /* ---------- fixture writing: a deliberate act, from a pre 782 engine ---------- */
 if (WRITE_FIXTURE) {
@@ -609,6 +635,7 @@ const baselineEvidence = { baselineRef: '42888161', baselineSourceHash, rows: []
   let withKicks = 0;
   let shown = 0;
   let sameBaseline = 0;
+  let sameRaw = 0;
   let baselineGolden = 0;
   for (const want of fixture.rows) {
     const out = playCup(historicalCup, want.seed, historical);
@@ -617,13 +644,15 @@ const baselineEvidence = { baselineRef: '42888161', baselineSourceHash, rows: []
     const base = row(baselineOut);
     const goldenCandidate = JSON.stringify(got) === JSON.stringify(want);
     const goldenBaseline = JSON.stringify(base) === JSON.stringify(want);
-    const paired = JSON.stringify(got) === JSON.stringify(base);
-    if (!paired && !baselineEvidence.firstDifference) baselineEvidence.firstDifference = {
+    const rawPaired = JSON.stringify(got) === JSON.stringify(base);
+    const content = compareContent(out, baselineOut);
+    if (!rawPaired && !baselineEvidence.firstDifference) baselineEvidence.firstDifference = {
       seed: want.seed, candidate: { report: out.report, state: out.state },
       baseline: { report: baselineOut.report, state: baselineOut.state },
     };
-    baselineEvidence.rows.push({ seed: want.seed, candidate: got, baseline: base, goldenCandidate, goldenBaseline, paired });
-    if (paired) sameBaseline += 1;
+    baselineEvidence.rows.push({ seed: want.seed, candidate: got, baseline: base, goldenCandidate, goldenBaseline, rawPaired, ...content });
+    if (rawPaired) sameRaw += 1;
+    if (content.paired) sameBaseline += 1;
     else if (shown++ < 3) console.error(`  differs from actual main428, seed ${want.seed}: got ${JSON.stringify(got)}, baseline ${JSON.stringify(base)}`);
     if (goldenBaseline) baselineGolden += 1;
     if (goldenCandidate !== goldenBaseline) fail(`ancient golden mismatch differs from actual main428 at seed ${want.seed}`);
@@ -632,8 +661,8 @@ const baselineEvidence = { baselineRef: '42888161', baselineSourceHash, rows: []
     if (goldenCandidate) same += 1;
   }
   console.log(`   ${same} of ${fixture.rows.length} rows reproduced (${pens} of them shootouts, written from ${fixture.writtenFrom} on ${fixture.writtenOn}); ${withKicks} carried kicks`);
-  console.log(`   ${sameBaseline} of ${fixture.rows.length} rows equal actual main428; ancient golden mismatches candidate ${fixture.rows.length - same}, baseline ${fixture.rows.length - baselineGolden}`);
-  baselineEvidence.summary = { rows: fixture.rows.length, paired: sameBaseline,
+  console.log(`   ${sameBaseline} of ${fixture.rows.length} rows equal actual main428 in result, next draw and full content (${sameRaw} raw hashes); ancient golden mismatches candidate ${fixture.rows.length - same}, baseline ${fixture.rows.length - baselineGolden}`);
+  baselineEvidence.summary = { rows: fixture.rows.length, paired: sameBaseline, rawPaired: sameRaw,
     goldenCandidateMismatches: fixture.rows.length - same, goldenBaselineMismatches: fixture.rows.length - baselineGolden };
   if (sameBaseline !== fixture.rows.length) fail(`${fixture.rows.length - sameBaseline} rows differ from the actual pre-1072 engine with no order set`);
   if (same !== baselineGolden) fail(`ancient golden matching counts differ: candidate ${same}, actual main428 ${baselineGolden}`);
@@ -656,20 +685,23 @@ section = 5;
   if (shootoutOrderOf(back) !== null) fail('shootoutOrderOf reads an order off a save that has none');
   const probe = fixture?.rows?.find(r => r.decidedBy === 'pens') ?? fixture?.rows?.[0];
   if (probe) {
-    const got = row(playCup(back, probe.seed, historical));
+    const out = playCup(back, probe.seed, historical);
+    const got = row(out);
     const baselineOld = JSON.parse(JSON.stringify(baselineCup));
     delete baselineOld.shootoutOrder;
     if (!baseline.saveCareer(baselineOld)) abort('Actual main428 refused its old save');
     const baselineBack = baseline.loadCareer();
     if (!baselineBack) abort('Actual main428 could not open its old save');
-    const base = row(playCup(baselineBack, probe.seed, baseline));
+    const baselineOut = playCup(baselineBack, probe.seed, baseline);
+    const base = row(baselineOut);
     const goldenCandidate = JSON.stringify(got) === JSON.stringify(probe);
     const goldenBaseline = JSON.stringify(base) === JSON.stringify(probe);
-    const paired = JSON.stringify(got) === JSON.stringify(base);
-    baselineEvidence.oldLoad = { seed: probe.seed, candidate: got, baseline: base, goldenCandidate, goldenBaseline, paired };
-    if (!paired) fail(`the loaded old save differs from actual main428 at seed ${probe.seed}: ${JSON.stringify(got)} vs ${JSON.stringify(base)}`);
+    const rawPaired = JSON.stringify(got) === JSON.stringify(base);
+    const content = compareContent(out, baselineOut);
+    baselineEvidence.oldLoad = { seed: probe.seed, candidate: got, baseline: base, goldenCandidate, goldenBaseline, rawPaired, ...content };
+    if (!content.paired) fail(`the loaded old save differs from actual main428 at seed ${probe.seed}: ${JSON.stringify(got)} vs ${JSON.stringify(base)}`);
     if (goldenCandidate !== goldenBaseline) fail('The loaded old save has a different ancient golden mismatch from actual main428');
-    console.log(`   loaded old save, seed ${probe.seed}: equal actual main428 ${paired}; ancient golden matches candidate ${goldenCandidate}, baseline ${goldenBaseline}`);
+    console.log(`   loaded old save, seed ${probe.seed}: equal actual main428 ${content.paired}; ancient golden matches candidate ${goldenCandidate}, baseline ${goldenBaseline}`);
   }
   const ids = back.squad.filter(p => !p.onLoan).slice(0, 4).map(p => p.id);
   const set = setShootoutOrder(back, ids);
@@ -782,6 +814,8 @@ section = 6;
 /* ================================================================== */
 const evidenceDir = process.env.CM_SHOOTOUT_ARTIFACTS || path.join(ROOT, 'cm-shootout-artifacts');
 fs.mkdirSync(evidenceDir, { recursive: true });
+await new Promise(resolve => setImmediate(resolve));
+baselineEvidence.runtimeErrors = runtimeErrors;
 baselineEvidence.failedSections = failedSections;
 baselineEvidence.mutation = mutation;
 baselineEvidence.executedSources = [['candidate', enginePath], ['historical', historicalEnginePath], ['baseline428', baselineEnginePath]].map(([role, file]) => {
@@ -799,6 +833,10 @@ baselineEvidence.sources = sourceBytes.map(({ file, bytes }) => {
 if (baselineEvidence.sources.some(source => !source.held)) fail('Original engine or ancient fixture source bytes changed');
 fs.writeFileSync(path.join(evidenceDir, `${CONTROL || 'normal'}-baseline.json`), JSON.stringify(baselineEvidence, null, 2));
 for (const f of [ENTRY, BUNDLE, `${TMP}/${TAG}.control.engine.ts`, historicalPath, baselinePath]) { try { fs.unlinkSync(f); } catch { /* not there */ } }
+if (runtimeErrors.length || baselineEvidence.sources.some(source => !source.held)) {
+  console.error('simCmShootoutOrder: runtime errors or changed original source bytes receive no control credit');
+  process.exit(2);
+}
 if (failures) {
   console.error(`\nsimCmShootoutOrder: ${failures} FAILURE(S)`);
   process.exit(1);

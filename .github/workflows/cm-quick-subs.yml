@@ -91,6 +91,87 @@ jobs:
             LIVE_MATCH_CONTROL="$control" ONLY=simLiveMatch node scripts/runAllSims.mjs 2>&1 | tee "cm-quick-subs-artifacts/live-match-$control.log" || failed=1
           done
           exit "$failed"
+      - name: Historical shootouts retain full content and detect a shifted stream
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set +e
+          CM_SHOOTOUT_CONTROL=unsetpath NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmShootoutOrder.mjs 2>&1 | tee cm-quick-subs-artifacts/shootout-unsetpath.log
+          status=${PIPESTATUS[0]}
+          set -e
+          test "$status" -eq 1
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import { createHash } from 'node:crypto';
+          const dir = 'cm-quick-subs-artifacts/shootout';
+          const normal = JSON.parse(fs.readFileSync(`${dir}/normal-baseline.json`));
+          const fault = JSON.parse(fs.readFileSync(`${dir}/unsetpath-baseline.json`));
+          const hash = value => createHash('sha256').update(value).digest('hex');
+          assert.deepEqual(Object.keys(normal.failedSections), []);
+          assert.equal(normal.summary.rows, 150);
+          assert.equal(normal.summary.paired, 150);
+          assert.equal(normal.oldLoad.paired, true);
+          assert.deepEqual(Object.keys(fault.failedSections).sort(), ['4', '5']);
+          assert.equal(fault.baselineSourceHash, normal.baselineSourceHash);
+          for (const report of [normal, fault]) {
+            assert.deepEqual(report.runtimeErrors, []);
+            assert.equal(report.sources.length, 2);
+            assert.ok(report.sources.every(source => source.held && source.before === source.after));
+            assert.equal(report.rows.length, 150);
+            assert.ok([...report.rows, report.oldLoad].every(row => row.allowedLive.candidate.inactive && row.allowedLive.baseline.inactive));
+          }
+          let changed = 0;
+          for (let i = 0; i < 150; i++) {
+            const a = normal.rows[i], b = fault.rows[i];
+            assert.equal(a.canonicalWitness.candidate, a.canonicalWitness.baseline);
+            assert.deepEqual(b.baseline, a.baseline);
+            assert.equal(b.canonicalWitness.baseline, a.canonicalWitness.baseline);
+            if (b.canonicalWitness.candidate !== a.canonicalWitness.candidate) changed++;
+          }
+          assert.ok(changed >= 12);
+          assert.ok(fault.summary.paired < 150);
+          assert.equal(fault.oldLoad.paired, false);
+          assert.deepEqual(fault.oldLoad.baseline, normal.oldLoad.baseline);
+          assert.equal(fault.oldLoad.canonicalWitness.baseline, normal.oldLoad.canonicalWitness.baseline);
+          assert.equal(fault.mutation.hits, 1);
+          assert.equal(fault.mutation.changed, true);
+          assert.notEqual(fault.mutation.beforeHash, fault.mutation.afterHash);
+          const copies = Object.fromEntries(fault.executedSources.map(source => {
+            assert.ok(source.copy);
+            const bytes = fs.readFileSync(`${dir}/${source.copy}`);
+            assert.equal(hash(bytes), source.hash);
+            return [source.role, bytes.toString('utf8')];
+          }));
+          const original = fs.readFileSync('src/lib/clubManager.ts', 'utf8').replaceAll('\r\n', '\n');
+          const before = '  if (!order) return { won: Math.random() < clamp(0.5 + (mine - oppS) * 0.012 + shootoutTakerEdge(taker), 0.2, 0.8) };\n';
+          const after = '  if (!order) { Math.random(); return { won: Math.random() < clamp(0.5 + (mine - oppS) * 0.012 + shootoutTakerEdge(taker), 0.2, 0.8) }; }\n';
+          assert.equal(original.split(before).length - 1, 1);
+          assert.equal(copies.candidate, original.replace(before, after));
+          assert.equal(hash(original), fault.mutation.beforeHash);
+          assert.equal(hash(copies.candidate), fault.mutation.afterHash);
+          const coach = 'export function coachQuickMatch(career: CareerState): CareerState {\n';
+          assert.equal(copies.candidate.split(coach).length - 1, 1);
+          assert.equal(copies.historical, copies.candidate.replace(coach, coach + '  return career;\n'));
+          assert.equal(hash(copies.baseline428), normal.baselineSourceHash);
+          console.log(`CONTROL FIRED: unsetpath changed ${changed} candidate rows, only sections 4 and 5 failed, all actual-main baselines and source bytes held`);
+          NODE
+      - name: Saved slots keep their corruption checks
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for control in nopark dupe norollback oldversion leanmore decisioncontent; do
+            set +e
+            SLOTS_CONTROL="$control" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubManagerSlots.mjs 2>&1 | tee "cm-quick-subs-artifacts/slot-$control.log"
+            status=${PIPESTATUS[0]}
+            set -e
+            if [ "$status" -ne 1 ] || ! grep -q "CONTROL FIRED: SLOTS_CONTROL=$control" "cm-quick-subs-artifacts/slot-$control.log"; then failed=1; fi
+            if [ "$control" = decisioncontent ]; then
+              node -e "const fs=require('fs'),r=JSON.parse(fs.readFileSync(process.argv[1])); if(!r.passed || r.sources.some(s=>!s.held)) process.exit(1)" cm-quick-subs-artifacts/slots/decisioncontent-control.json || failed=1
+            else
+              node -e "const fs=require('fs'),r=JSON.parse(fs.readFileSync(process.argv[1])); if(r.runtimeErrors.length || r.sources.some(s=>!s.held)) process.exit(1)" "cm-quick-subs-artifacts/slots/$control-report.json" || failed=1
+            fi
+          done
+          exit "$failed"
       - name: Every built page and search reader
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |

@@ -51,7 +51,7 @@
  *   SLOTS_CONTROL=leanmore    the park drops the season history too, so the
  *                             old save comes back changed. Section 4.
  *   SLOTS_CONTROL=decisioncontent the park changes a decision's words.
- *                                Section 1 must still read that difference.
+ *                                Section 4 must read that roundtrip difference.
  *
  * MEASURED on the healthy engine, six streams (the default and SIM_SEED 1 to
  * 5), 2026-10-06, Round 1072 automatic Quick Sim coaching:
@@ -107,7 +107,7 @@ const SAVE_KEY = 'dukb-club-manager-save';
 const BASE_SEED = ((Number(process.env.SIM_SEED) || 0) * 15485863 + 0x2f6b9) >>> 0;
 
 const CONTROL = process.env.SLOTS_CONTROL || '';
-const OWN = { nopark: 1, dupe: 2, norollback: 3, oldversion: 4, leanmore: 4, decisioncontent: 1 };
+const OWN = { nopark: 1, dupe: 2, norollback: 3, oldversion: 4, leanmore: 4, decisioncontent: 4 };
 if (CONTROL && !(CONTROL in OWN)) {
   console.error(`SLOTS_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(OWN).join(', ')})`);
   process.exit(1);
@@ -141,16 +141,16 @@ if (CONTROL === 'decisioncontent' && process.env.CM_SLOTS_EVIDENCE_CHILD !== '1'
   const receipt = fault.report?.mutation;
   const sources = heldSources();
   const passed = validRun(baseline) && baseline.exit === 0 && baseline.report.red.length === 0
-    && validRun(fault) && fault.exit === 1 && JSON.stringify(fault.report.red) === '[1]'
-    && fault.report.tags['1']?.includes('decision') && receipt?.anchorCount === 1
+    && validRun(fault) && fault.exit === 1 && JSON.stringify(fault.report.red) === '[4]'
+    && fault.report.tags['4']?.includes('roundtrip') && receipt?.anchorCount === 1
     && receipt.original !== receipt.changed && sources.every(row => row.held);
   fs.writeFileSync(path.join(evidenceDir, 'decisioncontent-control.json'), JSON.stringify({ passed, sources, runs }, null, 2));
   fs.rmSync(TMP, { recursive: true, force: true });
   if (!passed) {
-    console.error('CONTROL DID NOT FIRE: decisioncontent requires its sole decision failure, a fresh green normal baseline, zero runtime errors and held source bytes');
+    console.error('CONTROL DID NOT FIRE: decisioncontent requires its sole roundtrip failure, a fresh green normal baseline, zero runtime errors and held source bytes');
     process.exit(2);
   }
-  console.log('CONTROL FIRED: SLOTS_CONTROL=decisioncontent changed only decision parity; fresh normal baseline green, executable receipt verified and source bytes held');
+  console.log('CONTROL FIRED: SLOTS_CONTROL=decisioncontent changed only decision roundtrip; fresh normal baseline green, executable receipt verified and source bytes held');
   process.exit(1);
 }
 const runtimeErrors = [];
@@ -598,7 +598,7 @@ if (CONTROL) {
   const own = OWN[CONTROL];
   /* The check each control is there to prove, not a neighbour of it: the
      byte fence itself for dupe, a moved store for norollback. */
-  const needTag = { dupe: 'budget', norollback: 'moved', oldversion: 'slot1', leanmore: 'roundtrip', decisioncontent: 'decision' }[CONTROL];
+  const needTag = { dupe: 'budget', norollback: 'moved', oldversion: 'slot1', leanmore: 'roundtrip', decisioncontent: 'roundtrip' }[CONTROL];
   const firedOwn = red.includes(own) && (!needTag || tags[own]?.has(needTag));
   if (firedOwn) {
     console.log(`\nCONTROL FIRED: SLOTS_CONTROL=${CONTROL} turned section ${own} red${needTag ? ` through its ${needTag} check` : ''} (red sections: ${red.join(', ')}), as it must`);
