@@ -77,7 +77,11 @@ jobs:
           import assert from 'node:assert/strict';
           import { createHash } from 'node:crypto';
           const packages = ['react', 'react-dom', 'vitest', 'esbuild', 'playwright', 'playwright-core'];
-          const files = [...packages.map(name => 'node_modules/' + name + '/package.json'), 'node_modules/playwright-core/lib/client/network.js'];
+          const corePackage = JSON.parse(fs.readFileSync('node_modules/playwright-core/package.json'));
+          const coreExport = corePackage.exports['./lib/coreBundle'];
+          assert(typeof coreExport === 'string', 'The installed browser package declares its core source export');
+          const coreSource = 'node_modules/playwright-core/' + coreExport.replace(/^\.\//, '');
+          const files = [...packages.map(name => 'node_modules/' + name + '/package.json'), coreSource];
           const hashes = {};
           for (const file of files) {
             assert(fs.existsSync(file), 'The diagnostic runtime source exists: ' + file);
