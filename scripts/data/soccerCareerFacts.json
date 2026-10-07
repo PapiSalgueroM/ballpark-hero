@@ -1,5 +1,5 @@
 {
-  "about": "Round 1022. The two fact tables in src/lib/soccerCareerEngine.ts that a Soccer Career player sees as real: INT_SCORING_RECORDS (each nation's men's all time international scoring record, which decides the All Time Top Scorer award and its line) and the league label on every one of the 190 HAND_CLUBS rows (181 verified for the current season, 7 pinned to their old label until the league by year round, 2 with no current table online yet). Every value here was read on the date beside it from two independent sources that agree, none of them Wikipedia. Where two sources disagreed a third settled it, and where nothing settled it the value is left out (intRecordsHeld): a nation with no verified row gets no award at all, there is no default. scripts/simCareerFacts.mjs holds the engine to this file and fails if either side moves. Records held by active players move with every international window, so each row carries asOf, the last date both sources were read; refresh them together, never one side.",
+  "about": "Round 1022. The two fact tables in src/lib/soccerCareerEngine.ts that a Soccer Career player sees as real: INT_SCORING_RECORDS (each nation's men's all time international scoring record, which decides the All Time Top Scorer award and its line) and the league label on every one of the 190 HAND_CLUBS rows (188 verified for the current season and 2 with no current table online yet; Round 1037 released the 7 once pinned to their old label, because every season before 2026-27 is now answered from the league ledgers). Every value here was read on the date beside it from two independent sources that agree, none of them Wikipedia. Where two sources disagreed a third settled it, and where nothing settled it the value is left out (intRecordsHeld): a nation with no verified row gets no award at all, there is no default. scripts/simCareerFacts.mjs holds the engine to this file and fails if either side moves. Records held by active players move with every international window, so each row carries asOf, the last date both sources were read; refresh them together, never one side.",
   "checked": "2026-10-06",
   "intRecords": {
     "Argentina": {
@@ -2078,6 +2078,7 @@
     "fb-40": { "name": "Inter Miami", "league": "MLS", "evidence": "MLS 2026" },
     "fb-41": { "name": "Real Sociedad", "league": "La Liga", "evidence": "La Liga 2026-27" },
     "fb-42": { "name": "Villarreal", "league": "La Liga", "evidence": "La Liga 2026-27" },
+    "fb-43": { "name": "West Ham", "league": "Championship", "evidence": "Championship 2026-27" },
     "fb-44": { "name": "Aston Villa", "league": "Premier League", "evidence": "Premier League 2026-27" },
     "fb-45": { "name": "Everton", "league": "Premier League", "evidence": "Premier League 2026-27" },
     "fb-46": { "name": "Leverkusen", "league": "Bundesliga", "evidence": "Bundesliga 2026-27" },
@@ -2100,9 +2101,11 @@
     "fb-63": { "name": "Crystal Palace", "league": "Premier League", "evidence": "Premier League 2026-27" },
     "fb-64": { "name": "Brentford", "league": "Premier League", "evidence": "Premier League 2026-27" },
     "fb-65": { "name": "Norwich City", "league": "Championship", "evidence": "Championship 2026-27" },
+    "fb-66": { "name": "Hertha Berlin", "league": "2. Bundesliga", "evidence": "2. Bundesliga 2026-27" },
     "fb-67": { "name": "Werder Bremen", "league": "Bundesliga", "evidence": "Bundesliga 2026-27" },
     "fb-68": { "name": "Torino", "league": "Serie A", "evidence": "Serie A 2026-27" },
     "fb-69": { "name": "Bologna", "league": "Serie A", "evidence": "Serie A 2026-27" },
+    "fb-70": { "name": "Nantes", "league": "Ligue 2", "evidence": "Ligue 2 2026-27" },
     "fb-71": { "name": "Strasbourg", "league": "Ligue 1", "evidence": "Ligue 1 2026-27" },
     "fb-72": { "name": "Utrecht", "league": "Eredivisie", "evidence": "Eredivisie 2026-27" },
     "fb-73": { "name": "Braga", "league": "Primeira Liga", "evidence": "Primeira Liga 2026-27" },
@@ -2125,8 +2128,10 @@
     "fb-90": { "name": "Brighton", "league": "Premier League", "evidence": "Premier League 2026-27" },
     "fb-91": { "name": "Stuttgart", "league": "Bundesliga", "evidence": "Bundesliga 2026-27" },
     "fb-92": { "name": "LAFC", "league": "MLS", "evidence": "MLS 2026" },
+    "fb-93": { "name": "River Plate Asuncion", "league": "Primera B Paraguay", "evidence": "Paraguay Primera B 2026" },
     "fb-94": { "name": "Racing Club", "league": "Liga Profesional", "evidence": "Liga Profesional 2026" },
     "fb-95": { "name": "Zenit", "league": "Russian Premier League", "evidence": "Russian Premier League 2026-27" },
+    "fb-96": { "name": "Girona", "league": "Segunda Division", "evidence": "Segunda 2026-27" },
     "fb-97": { "name": "PAOK", "league": "Super League Greece", "evidence": "Super League Greece 2026-27" },
     "fb-98": { "name": "Panathinaikos", "league": "Super League Greece", "evidence": "Super League Greece 2026-27" },
     "fb-99": { "name": "Dinamo Zagreb", "league": "HNL", "evidence": "HNL 2026-27" },
@@ -2136,6 +2141,7 @@
     "fb-103": { "name": "Besiktas", "league": "Super Lig", "evidence": "Super Lig 2026-27" },
     "fb-104": { "name": "Trabzonspor", "league": "Super Lig", "evidence": "Super Lig 2026-27" },
     "fb-105": { "name": "Nice", "league": "Ligue 1", "evidence": "Ligue 1 2026-27" },
+    "fb-106": { "name": "Wolves", "league": "Championship", "evidence": "Championship 2026-27" },
     "fb-107": { "name": "Fulham", "league": "Premier League", "evidence": "Premier League 2026-27" },
     "fb-108": { "name": "Gremio", "league": "Brasileirao", "evidence": "Brasileirao 2026" },
     "fb-109": { "name": "Atletico Nacional", "league": "Liga BetPlay", "evidence": "Liga BetPlay Clausura 2026" },
@@ -2166,6 +2172,7 @@
     "fb-134": { "name": "Pakhtakor", "league": "Uzbekistan Super League", "evidence": "Uzbekistan Super League 2026" },
     "fb-135": { "name": "Mumbai City", "league": "Indian Super League", "evidence": "Indian Super League 2026-27" },
     "fb-136": { "name": "Buriram United", "league": "Thai League 1", "evidence": "Thai League 1 2026-27" },
+    "fb-137": { "name": "Persija Jakarta", "league": "Super League Indonesia", "evidence": "Super League Indonesia 2026-27" },
     "fb-138": { "name": "Hanoi FC", "league": "V.League 1", "evidence": "V.League 1 2026-27" },
     "fb-139": { "name": "Johor Darul Tazim", "league": "Malaysia Super League", "evidence": "Malaysia Super League 2026-27" },
     "fb-140": { "name": "Melbourne Victory", "league": "A-League", "evidence": "A-League 2026-27" },
@@ -2218,15 +2225,7 @@
     "fb-189": { "name": "Botafogo", "league": "Brasileirao", "evidence": "Brasileirao 2026" },
     "fb-190": { "name": "Cruzeiro", "league": "Brasileirao", "evidence": "Brasileirao 2026" }
   },
-  "clubLeaguesPinned": {
-    "fb-43": { "name": "West Ham", "league": "Premier League", "league2026": "Championship", "evidence": "Championship 2026-27", "reason": "Held at its old label (the lead's option (a), 2026-10-05): a label serves every season the game plays, from 1990 on, so writing league2026 here would rewrite every past season with it. The league by year round moves it and takes league2026 from here." },
-    "fb-66": { "name": "Hertha Berlin", "league": "Bundesliga", "league2026": "2. Bundesliga", "evidence": "2. Bundesliga 2026-27", "reason": "Held at its old label (the lead's option (a), 2026-10-05): a label serves every season the game plays, from 1990 on, so writing league2026 here would rewrite every past season with it. The league by year round moves it and takes league2026 from here." },
-    "fb-70": { "name": "Nantes", "league": "Ligue 1", "league2026": "Ligue 2", "evidence": "Ligue 2 2026-27", "reason": "Held at its old label (the lead's option (a), 2026-10-05): a label serves every season the game plays, from 1990 on, so writing league2026 here would rewrite every past season with it. The league by year round moves it and takes league2026 from here." },
-    "fb-93": { "name": "River Plate Asuncion", "league": "Primera Division Paraguay", "league2026": "Primera B Paraguay", "evidence": "Paraguay Primera B 2026", "reason": "Held at its old label (the lead's option (a), 2026-10-05): a label serves every season the game plays, from 1990 on, so writing league2026 here would rewrite every past season with it. The league by year round moves it and takes league2026 from here." },
-    "fb-96": { "name": "Girona", "league": "La Liga", "league2026": "Segunda Division", "evidence": "Segunda 2026-27", "reason": "Held at its old label (the lead's option (a), 2026-10-05): a label serves every season the game plays, from 1990 on, so writing league2026 here would rewrite every past season with it. The league by year round moves it and takes league2026 from here." },
-    "fb-106": { "name": "Wolves", "league": "Premier League", "league2026": "Championship", "evidence": "Championship 2026-27", "reason": "Held at its old label (the lead's option (a), 2026-10-05): a label serves every season the game plays, from 1990 on, so writing league2026 here would rewrite every past season with it. The league by year round moves it and takes league2026 from here." },
-    "fb-137": { "name": "Persija Jakarta", "league": "Liga 1 Indonesia", "league2026": "Super League Indonesia", "evidence": "Super League Indonesia 2026-27", "reason": "Held at its old label (the lead's option (a), 2026-10-05): its top flight is officially the BRI Super League for 2026-27 (the detik source still calls it Liga 1 in passing), and a label serves every season the game plays, from 1990 on. The league by year round moves it and takes league2026 from here." }
-  },
+  "clubLeaguesPinned": {},
   "clubLeaguesUnverified": {
     "fb-164": { "name": "Violette AC", "league": "Ligue Haitienne", "reason": "Read 2026-10-06: the newest season soccerway carries for Haiti's championnat is 2025 (March to June), and no 2026-27 table was found to read twice. The label is the one the table already carried; never a guess." },
     "fb-166": { "name": "Defence Force FC", "league": "TT Premier League", "reason": "Read 2026-10-06: the newest TT Premier League season soccerway carries is 2025/2026 (November 2025 to April 2026), and no 2026-27 table was found to read twice. The label is the one the table already carried; never a guess." }

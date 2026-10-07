@@ -25,7 +25,7 @@ import {
 } from "./careerEras";
 import type { PhoneChoiceDef } from "./careerEras";
 /* Round 929: every season's league finish, and the era aware elite rule. */
-import { divisionMove, drawLeagueFinish, eliteInYear, finishZone, managerLeagueField, MANAGER_FIELD, ordinal } from "./soccerCareerLeague";
+import { divisionMove, drawLeagueFinish, eliteInYear, finishZone, leagueKeyInYear, managerLeagueField, MANAGER_FIELD, ordinal } from "./soccerCareerLeague";
 /* Round 1012: real club rivalries, played as league derbies each season. */
 import { resolveSeasonDerbies, applySeasonDerbies, type SeasonDerby } from "./soccerCareerDerby";
 /* Round 130: the phone is a real phone now. Threads, contacts, a relationship
@@ -459,6 +459,10 @@ export interface ManagerState {
      *  whether his club was, so the season names no rival and no league
      *  (`league` is kept, unprinted) and the page says why. */
     lineupUnknown?: boolean;
+    /** Round 1037: the name the league carried that season, when the league
+     *  ledgers hold it and it differs from `league` (the 1997 Championship
+     *  was the First Division). Absent on older saves. */
+    leagueName?: string;
     /** W-D-L line for the league season. */
     record?: string;
     /** How far the domestic cup run went. */
@@ -3497,7 +3501,11 @@ export const ELITE_CLUBS = ["Bayern Munich", "PSG", "Man City", "Real Madrid", "
    Girona (Segunda Division), Hertha Berlin (2. Bundesliga), Nantes (Ligue 2),
    River Plate Asuncion (Primera B) and Persija Jakarta (the top flight's
    name since 2025). Labels nobody has read twice yet are listed there as
-   unverified. Tiers are balance, not fact. */
+   unverified. Tiers are balance, not fact.
+   Round 1037: those seven now carry their 2026-27 league, because a label
+   no longer serves the past: every season before 2026-27 is answered from
+   the league ledgers through leagueInYear (soccerCareerLeague.ts), and a
+   label is read only from 2026-27 on. */
 export const HAND_CLUBS: ClubData[] = [
   // Tier 1, elite
   { id: "fb-1", name: "Real Madrid", country: "Spain", tier: 1, color: "#FEBE10", league: "La Liga" },
@@ -3544,7 +3552,7 @@ export const HAND_CLUBS: ClubData[] = [
   // Tier 3, solid domestic clubs
   { id: "fb-41", name: "Real Sociedad", country: "Spain", tier: 3, color: "#0067B1", league: "La Liga" },
   { id: "fb-42", name: "Villarreal", country: "Spain", tier: 3, color: "#FFE667", league: "La Liga" },
-  { id: "fb-43", name: "West Ham", country: "England", tier: 3, color: "#7A263A", league: "Premier League" },
+  { id: "fb-43", name: "West Ham", country: "England", tier: 3, color: "#7A263A", league: "Championship" },
   { id: "fb-44", name: "Aston Villa", country: "England", tier: 3, color: "#670E36", league: "Premier League" },
   { id: "fb-45", name: "Everton", country: "England", tier: 3, color: "#003399", league: "Premier League" },
   { id: "fb-46", name: "Leverkusen", country: "Germany", tier: 3, color: "#E32221", league: "Bundesliga" },
@@ -3568,11 +3576,11 @@ export const HAND_CLUBS: ClubData[] = [
   { id: "fb-63", name: "Crystal Palace", country: "England", tier: 4, color: "#1B458F", league: "Premier League" },
   { id: "fb-64", name: "Brentford", country: "England", tier: 4, color: "#D20000", league: "Premier League" },
   { id: "fb-65", name: "Norwich City", country: "England", tier: 4, color: "#FFF200", league: "Championship" },
-  { id: "fb-66", name: "Hertha Berlin", country: "Germany", tier: 4, color: "#004C9E", league: "Bundesliga" },
+  { id: "fb-66", name: "Hertha Berlin", country: "Germany", tier: 4, color: "#004C9E", league: "2. Bundesliga" },
   { id: "fb-67", name: "Werder Bremen", country: "Germany", tier: 4, color: "#1D9053", league: "Bundesliga" },
   { id: "fb-68", name: "Torino", country: "Italy", tier: 4, color: "#881B1E", league: "Serie A" },
   { id: "fb-69", name: "Bologna", country: "Italy", tier: 4, color: "#A61C2E", league: "Serie A" },
-  { id: "fb-70", name: "Nantes", country: "France", tier: 4, color: "#FCE300", league: "Ligue 1" },
+  { id: "fb-70", name: "Nantes", country: "France", tier: 4, color: "#FCE300", league: "Ligue 2" },
   { id: "fb-71", name: "Strasbourg", country: "France", tier: 4, color: "#0072BB", league: "Ligue 1" },
   { id: "fb-72", name: "Utrecht", country: "Netherlands", tier: 4, color: "#D2122E", league: "Eredivisie" },
   { id: "fb-73", name: "Braga", country: "Portugal", tier: 4, color: "#DA020E", league: "Primeira Liga" },
@@ -3598,10 +3606,10 @@ export const HAND_CLUBS: ClubData[] = [
   { id: "fb-90", name: "Brighton", country: "England", tier: 2, color: "#0057B8", league: "Premier League" },
   { id: "fb-91", name: "Stuttgart", country: "Germany", tier: 2, color: "#E32219", league: "Bundesliga" },
   { id: "fb-92", name: "LAFC", country: "USA", tier: 2, color: "#C39E6D", league: "MLS" },
-  { id: "fb-93", name: "River Plate Asuncion", country: "Paraguay", tier: 4, color: "#CE1126", league: "Primera Division Paraguay" },
+  { id: "fb-93", name: "River Plate Asuncion", country: "Paraguay", tier: 4, color: "#CE1126", league: "Primera B Paraguay" },
   { id: "fb-94", name: "Racing Club", country: "Argentina", tier: 2, color: "#75AADB", league: "Liga Profesional" },
   { id: "fb-95", name: "Zenit", country: "Russia", tier: 2, color: "#009FDF", league: "Russian Premier League" },
-  { id: "fb-96", name: "Girona", country: "Spain", tier: 2, color: "#CD2534", league: "La Liga" },
+  { id: "fb-96", name: "Girona", country: "Spain", tier: 2, color: "#CD2534", league: "Segunda Division" },
   // Tier 3, strong clubs across Europe, Asia, Africa and the Americas.
   { id: "fb-97", name: "PAOK", country: "Greece", tier: 3, color: "#2B2B2B", league: "Super League Greece" },
   { id: "fb-98", name: "Panathinaikos", country: "Greece", tier: 3, color: "#00743F", league: "Super League Greece" },
@@ -3612,7 +3620,7 @@ export const HAND_CLUBS: ClubData[] = [
   { id: "fb-103", name: "Besiktas", country: "Turkey", tier: 3, color: "#2B2B2B", league: "Super Lig" },
   { id: "fb-104", name: "Trabzonspor", country: "Turkey", tier: 3, color: "#5C1F33", league: "Super Lig" },
   { id: "fb-105", name: "Nice", country: "France", tier: 3, color: "#CC0000", league: "Ligue 1" },
-  { id: "fb-106", name: "Wolves", country: "England", tier: 3, color: "#FDB913", league: "Premier League" },
+  { id: "fb-106", name: "Wolves", country: "England", tier: 3, color: "#FDB913", league: "Championship" },
   { id: "fb-107", name: "Fulham", country: "England", tier: 3, color: "#111111", league: "Premier League" },
   { id: "fb-108", name: "Gremio", country: "Brazil", tier: 3, color: "#0D80BF", league: "Brasileirao" },
   { id: "fb-109", name: "Atletico Nacional", country: "Colombia", tier: 3, color: "#00A650", league: "Liga BetPlay" },
@@ -3644,7 +3652,7 @@ export const HAND_CLUBS: ClubData[] = [
   { id: "fb-134", name: "Pakhtakor", country: "Uzbekistan", tier: 4, color: "#0056A3", league: "Uzbekistan Super League" },
   { id: "fb-135", name: "Mumbai City", country: "India", tier: 4, color: "#57A8E2", league: "Indian Super League" },
   { id: "fb-136", name: "Buriram United", country: "Thailand", tier: 4, color: "#0C2E5C", league: "Thai League 1" },
-  { id: "fb-137", name: "Persija Jakarta", country: "Indonesia", tier: 4, color: "#D6202B", league: "Liga 1 Indonesia" },
+  { id: "fb-137", name: "Persija Jakarta", country: "Indonesia", tier: 4, color: "#D6202B", league: "Super League Indonesia" },
   { id: "fb-138", name: "Hanoi FC", country: "Vietnam", tier: 4, color: "#5C2D91", league: "V.League 1" },
   { id: "fb-139", name: "Johor Darul Tazim", country: "Malaysia", tier: 4, color: "#0C2E5C", league: "Malaysia Super League" },
   { id: "fb-140", name: "Melbourne Victory", country: "Australia", tier: 4, color: "#0C2E5C", league: "A-League" },
@@ -4039,9 +4047,12 @@ function generateSeasonStats(state: CareerState, clubs: ClubData[]): SeasonRecor
   const winLeague = Math.random() < leagueChance;
   const winCup = Math.random() < cupChance;
   /* Round 929: the league finish, from its own generator seeded off this
-     season, so the main Math.random stream does not move. */
+     season, so the main Math.random stream does not move. Round 1037: a
+     season before 2026-27 is drawn in the league the club was really in
+     that year, at that season's verified size, and a club in none of the
+     six ledger leagues that year gets no finish but a title. */
   const finish = drawLeagueFinish({
-    league: state.currentLeague, year: seasonYear, tier: currentClubTier, elite: isElite, rating, leagueTitle: winLeague,
+    league: leagueKeyInYear({ name: state.currentClub, league: state.currentLeague }, seasonYear), year: seasonYear, tier: currentClubTier, elite: isElite, rating, leagueTitle: winLeague,
     seedKey: `${state.playerName}|${state.currentClub}|${seasonYear}|${apps}|${goals}|${assists}|${rating}`,
   });
   /* Round 1012: the season's derbies against real rivals in the same league,
@@ -8096,7 +8107,10 @@ export function choosePostRetirement(prev: CareerState, choice: PostRetirementCh
     const managerClubs = clubs.filter(c => c.tier >= 3);
     const club = managerClubs.length > 0 ? pick(managerClubs) : { name: "Unknown FC", tier: 3 };
     /* Round 1029: the first job's league, as every later job carries one */
-    const firstLeague = (club as Partial<ClubData>).league;
+    const listed = (club as Partial<ClubData>).league;
+    /* Round 1037: before 2026-27, the league the club was really in */
+    const firstYear = (s.seasons[s.seasons.length - 1]?.year ?? 2024) + 1;
+    const firstLeague = listed ? leagueKeyInYear({ name: club.name, league: listed }, firstYear) ?? listed : undefined;
     s.managerState = {
       club: club.name,
       clubTier: club.tier,
@@ -8257,6 +8271,19 @@ export function refreshManagerOffers(s: CareerState, ms: ManagerState): void {
       : `${offers.length} clubs want to talk.`;
 }
 
+/** Round 1037: the season (its start year) the next playing season is, and
+ *  so the one an offer or a loan on the table now is played in: the one
+ *  after the last on the record, as generateSeason counts it. */
+export function nextSeasonYear(s: CareerState): number {
+  return (s.seasons[s.seasons.length - 1]?.year ?? 0) + 1;
+}
+
+/** Round 1037: the season (its start year) a job taken now is first played
+ *  in, the calYear advanceManagerSeason will give the next season. */
+export function managerNextSeasonYear(s: CareerState): number {
+  return (s.seasons[s.seasons.length - 1]?.year ?? 2024) + (s.managerState?.season ?? 0) + 1;
+}
+
 /** Round 111: take one of the jobs on the table. */
 export function acceptManagerOffer(prev: CareerState, index: number): CareerState {
   const s = { ...prev };
@@ -8266,7 +8293,10 @@ export function acceptManagerOffer(prev: CareerState, index: number): CareerStat
   if (!offer) return s;
   ms.club = offer.club;
   ms.clubTier = offer.tier;
-  ms.league = offer.league;
+  /* Round 1037: a job taken before 2026-27 is played in the league the club
+     was really in that season, the one its card showed; where the ledgers
+     place it nowhere, the market's label is kept, unprinted */
+  ms.league = leagueKeyInYear({ name: offer.club, league: offer.league }, managerNextSeasonYear(s)) ?? offer.league;
   ms.unemployed = false;
   ms.seasonsOut = 0;
   ms.offers = [];
@@ -8333,9 +8363,15 @@ export function advanceManagerSeason(prev: CareerState, clubs: ClubData[]): Care
     const leagues = new Set(MARKET.allOfferClubs().filter(o => o.name === ms.club).map(o => o.league));
     if (leagues.size === 1) savedLeague = [...leagues][0];
   }
-  const lf = marketJob && !savedLeague
+  /* Round 1037: the league last season's table moved his club out of, so a
+     past season's real field gives up the seat of a club that made the
+     same move for real */
+  const prevRow = ms.seasonResults[ms.seasonResults.length - 1];
+  const movedFrom = prevRow && prevRow.year === ms.season - 1 && prevRow.club === ms.club
+    && typeof prevRow.league === "string" && prevRow.league !== savedLeague ? prevRow.league : undefined;
+  const lf: ReturnType<typeof managerLeagueField> = marketJob && !savedLeague
     ? { league: null, size: MANAGER_FIELD, sizeVerified: false, named: [] as string[], lineupUnknown: false }
-    : managerLeagueField({ clubs, club: ms.club, league: savedLeague, year: calYear }, Math.random);
+    : managerLeagueField({ clubs, club: ms.club, league: savedLeague, year: calYear, from: movedFrom }, Math.random);
   if (lf.league) ms.league = lf.league;
   const field: (string | null)[] = [...lf.named, ...Array<null>(Math.max(0, lf.size - 1 - lf.named.length)).fill(null)];
   const games = field.length * 2; // home and away vs each rival
@@ -8469,7 +8505,8 @@ export function advanceManagerSeason(prev: CareerState, clubs: ClubData[]): Care
       if (offer.tier <= 2 && earned >= 3 && Math.random() < 0.45) {
         ms.club = offer.name;
         ms.clubTier = offer.tier;
-        ms.league = offer.league;
+        /* Round 1037: next season's league, the ledgers' before 2026-27 */
+        ms.league = leagueKeyInYear(offer, calYear + 1) ?? offer.league;
         ms.departure = 'poached';
         result += ` And HIRED by ${offer.name}.`;
       }
@@ -8487,6 +8524,7 @@ export function advanceManagerSeason(prev: CareerState, clubs: ClubData[]): Care
     ...(lf.sizeVerified ? { sizeVerified: true } : {}),
     knownRivals: lf.named.length,
     ...(lf.lineupUnknown ? { lineupUnknown: true } : {}),
+    ...(lf.leagueName && lf.leagueName !== lf.league ? { leagueName: lf.leagueName } : {}),
   }];
 
   // National team offer, now earned by the season rather than rolled blind:

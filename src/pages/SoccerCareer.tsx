@@ -52,6 +52,7 @@ import {
   repairCareer, effectivePotential, careerBuildEffects,
   applyMoneyAction,
   acceptLoan, projectLeagueApps,
+  nextSeasonYear, managerNextSeasonYear,
 } from "@/lib/soccerCareerEngine";
 import type { FirstStageStage } from "@/lib/soccerCareerContinental";
 /* Round 258, his ask alongside the net worth bug: "depending where u live
@@ -72,7 +73,7 @@ import SeasonRatings, { BAND_CLASS } from "@/components/soccer-career/SeasonRati
 import { soccerRatingRows, readMatchRating, readOvr, ratingBand } from "@/lib/careerSeasonRatings";
 import { applyDrillResult, type DrillKind } from "@/lib/careerDrills";
 import { rollStartingOverall, rollPotential, potentialTier, adjustClubsForYear, allocOverall, normalizeAllocation, allocMax, ALLOC_MIN, playsLike, stepAllocation } from "@/lib/careerEras";
-import { dugoutTableWords, ordinal, leagueWithArticle, readLeagueFinish } from "@/lib/soccerCareerLeague";
+import { dugoutTableWords, ordinal, leagueWithArticle, readLeagueFinish, finishLeague, leagueInYear, leagueSeasonLine, namedInLeague } from "@/lib/soccerCareerLeague";
 import { SeasonDerbyLines, DerbyChip, CareerDerbyTotals } from "@/components/soccer-career/DerbyLines";
 import { derbyHeroSeasons, DERBY_HELP_RULES } from "@/lib/soccerCareerDerby";
 import type { WorldSeason } from "@/lib/soccerPhone";
@@ -525,7 +526,24 @@ function OfferFitLine({ offer, career }: { offer: ContractOffer; career: CareerS
   );
 }
 
+/** Round 1037: the club card's league, for the season the card is labelled
+ *  with: the ledgers' before 2026-27 (nothing when they place the club in
+ *  no league that year), the saved label from then on. */
+function clubCardLeague(career: CareerState, year: number): string {
+  const name = leagueInYear({ name: career.currentClub, league: career.currentLeague }, year);
+  return name ? `${name} · ` : "";
+}
+
+/** Round 1037: "Championship, 2005-06 · " in front of a loan's terms, the
+ *  league the club is in the season of the loan, or nothing. */
+function loanLeagueLine(club: ClubData, career: CareerState): string {
+  const line = leagueSeasonLine(club, nextSeasonYear(career));
+  return line ? `${line} · ` : "";
+}
+
 function OfferCard({ offer, onAccept, actionLabel, career }: { offer: ContractOffer; onAccept: () => void; actionLabel?: string; career?: CareerState }) {
+  /* Round 1037: the league the club is in the season this contract starts */
+  const leagueLine = career ? leagueSeasonLine(offer.club, nextSeasonYear(career)) : null;
   return (
     <div className="bg-card border border-border rounded-xl p-4 space-y-3">
       <div className="flex items-center gap-3">
@@ -535,7 +553,7 @@ function OfferCard({ offer, onAccept, actionLabel, career }: { offer: ContractOf
         </div>
         <div className="flex-1 min-w-0">
           <div className="font-bold text-sm truncate flex items-center gap-1"><FlagImg name={offer.club.country} size={16} />{offer.club.name}</div>
-          <div className="text-[11px] text-muted-foreground">{offer.club.league}</div>
+          {leagueLine && <div className="text-[11px] text-muted-foreground">{leagueLine}</div>}
         </div>
         {offer.isDreamClub && <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold">⭐ Dream Club</span>}
       </div>
@@ -618,15 +636,22 @@ function NewspaperCard({ articles, seasonKey, onContinue }: { articles: NewsArti
 }
 
 /* ─── Season Summary Card ─── */
-function SeasonSummaryCard({ season, position, onContinue, appearance, league, world }: { season: SeasonRecord; position: string; onContinue: () => void; appearance?: PlayerAppearance | null; league?: string; world?: WorldSeason | null }) {
+function SeasonSummaryCard({ season, position, onContinue, appearance, leagueOf, world }: { season: SeasonRecord; position: string; onContinue: () => void; appearance?: PlayerAppearance | null; leagueOf?: { key: string; name: string } | null; world?: WorldSeason | null }) {
+  /* Round 1037: the finish is printed in the league the club was in that
+     season (finishLeague), the phone's world is read by its key */
+  const league = leagueOf?.key;
+  const leagueName = leagueOf?.name;
   const isGK = position === "GK";
   const trophies = [season.leagueTitle && "🏆 League", season.domesticCup && "🏆 Cup", season.championsLeague && "⭐ UCL", season.clubCupTitle && `⭐ ${season.clubCupTitle}`, season.worldCup && "🌍 World Cup", season.continentalCup && "🌐 Continental", season.ballonDor && "🏅 Ballon d'Or"].filter(Boolean);
   /* Round 929: the champion is the one the phone's world already crowned for
      this season, so the card and the feed can never name two winners. */
   const finish = readLeagueFinish(season);
-  const champion = finish && finish.finish !== 1 && league && world && world.year === season.year
+  const crowned = finish && finish.finish !== 1 && league && world && world.year === season.year
     ? (world.leagues?.[league] && world.leagues[league] !== season.club ? world.leagues[league] : null)
     : null;
+  /* Round 1037: the phone's champion is named only if that club really was
+     in the league that season */
+  const champion = crowned && league && namedInLeague(crowned, league, season.year) ? crowned : null;
   const celebration = appearance ? getCelebration(appearance.celebration) : null;
   const summaryRating = readMatchRating(season);
   const summaryOvr = summaryRating !== null ? readOvr(season.ovr) : null;
@@ -640,8 +665,8 @@ function SeasonSummaryCard({ season, position, onContinue, appearance, league, w
         {finish && (
           <p className="text-xs font-semibold mt-1">
             {finish.finish === 1
-              ? <>Champions{league ? ` of ${leagueWithArticle(league)}` : ""}{finish.size ? `, top of ${finish.size}` : ""}</>
-              : <>Finished {ordinal(finish.finish)}{finish.size ? ` of ${finish.size}` : ""}{league ? ` in ${leagueWithArticle(league)}` : ""}</>}
+              ? <>Champions{leagueName ? ` of ${leagueWithArticle(leagueName)}` : ""}{finish.size ? `, top of ${finish.size}` : ""}</>
+              : <>Finished {ordinal(finish.finish)}{finish.size ? ` of ${finish.size}` : ""}{leagueName ? ` in ${leagueWithArticle(leagueName)}` : ""}</>}
             {champion && <span className="font-normal text-muted-foreground"> · {champion} won it</span>}
           </p>
         )}
@@ -2066,7 +2091,11 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
                 </div>
                 <div>
                   <div className="font-bold text-sm flex items-center gap-1"><FlagImg name={academyClub.country} size={16} />{academyClub.name} Youth</div>
-                  <div className="text-[11px] text-muted-foreground">{academyClub.league} · Tier {academyClub.tier}</div>
+                  <div className="text-[11px] text-muted-foreground">{(() => {
+                    /* Round 1037: the league the club is in the year he joins, or none */
+                    const line = leagueSeasonLine(academyClub, ERAS.find(er => er.value === era)?.startYear ?? 2020);
+                    return line ? `${line} · ` : "";
+                  })()}Tier {academyClub.tier}</div>
                 </div>
               </div>
             </div>
@@ -2160,7 +2189,7 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
                 <div className="flex items-center justify-between gap-2">
                   <div className="min-w-0">
                     <div className="font-bold text-sm truncate flex items-center gap-1"><FlagImg name={offer.club.country} size={16} />{offer.club.name}</div>
-                    <div className="text-xs text-muted-foreground">{offer.club.league} · season long loan</div>
+                    <div className="text-xs text-muted-foreground">{loanLeagueLine(offer.club, career)}season long loan</div>
                   </div>
                   <div className="text-right text-xs shrink-0">
                     <div className="font-bold text-foreground">about {lp.min} to {lp.max}</div>
@@ -2239,7 +2268,7 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
                 <div className="flex items-center justify-between gap-2">
                   <div className="min-w-0">
                     <div className="font-bold text-sm truncate flex items-center gap-1"><FlagImg name={offer.club.country} size={16} />{offer.club.name}</div>
-                    <div className="text-xs text-muted-foreground">{offer.club.league} · season long loan</div>
+                    <div className="text-xs text-muted-foreground">{loanLeagueLine(offer.club, career)}season long loan</div>
                   </div>
                   <div className="text-right text-xs shrink-0">
                     <div className="font-bold text-foreground">about {projectLeagueApps(career.overall, offer.club.tier, offer.club.name, 0).min} to {projectLeagueApps(career.overall, offer.club.tier, offer.club.name, 0).max}</div>
@@ -3202,7 +3231,11 @@ function ManagerPanel({ manager, career, onAdvance, onEnd, onAcceptOffer }: { ma
             >
               <div className="flex items-center justify-between gap-2">
                 <span className="text-xs font-black truncate">{o.club}</span>
-                <span className="text-[9px] text-muted-foreground shrink-0">Tier {o.tier} · {o.league}</span>
+                <span className="text-[9px] text-muted-foreground shrink-0">Tier {o.tier}{(() => {
+                  /* Round 1037: the league the club is in the season the job starts */
+                  const line = leagueSeasonLine({ name: o.club, league: o.league }, managerNextSeasonYear(career));
+                  return line ? ` · ${line}` : "";
+                })()}</span>
               </div>
               <div className="text-[10px] text-muted-foreground mt-0.5">{o.brief}</div>
               <div className="text-[10px] text-amber-400/90 mt-0.5">{o.reason}</div>
@@ -3884,7 +3917,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           {/* OVERLAY: Season Summary */}
           {career.phase === "season_summary" && career.pendingSummary && (
             <SeasonSummaryCard season={career.pendingSummary} position={career.position} onContinue={onDismissSummary} appearance={career.appearance}
-              league={clubs.find(c => c.name === career.pendingSummary?.club)?.league} world={career.phone?.world} />
+              leagueOf={finishLeague({ name: career.pendingSummary.club, league: clubs.find(c => c.name === career.pendingSummary?.club)?.league ?? "" }, career.pendingSummary.year, readLeagueFinish(career.pendingSummary)?.size ?? null)} world={career.phone?.world} />
           )}
 
           {/* OVERLAY: Contract Offers (youth → pro) */}
@@ -4167,7 +4200,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
               <div className="flex-1 min-w-0">
                 <div className="font-bold text-sm truncate flex items-center gap-1"><FlagImg name={career.currentClubCountry} size={16} />{career.currentClub}{(career.isClubCaptain ?? false) && <span title="Club captain" className="text-gold shrink-0">©️</span>}</div>
                 <div className="text-xs text-muted-foreground">
-                  {career.retired ? "Retired" : career.phase === "youth" ? "Youth Academy" : `${career.currentLeague} · ${career.contractYearsLeft}yr left · ${formatWage(career.weeklyWage)} · ${money(`€${career.marketValue >= 1 ? career.marketValue.toFixed(0) : career.marketValue.toFixed(1)}M`)}`}
+                  {career.retired ? "Retired" : career.phase === "youth" ? "Youth Academy" : `${clubCardLeague(career, currentSeason.year)}${career.contractYearsLeft}yr left ·${formatWage(career.weeklyWage)} · ${money(`€${career.marketValue >= 1 ? career.marketValue.toFixed(0) : career.marketValue.toFixed(1)}M`)}`}
                 </div>
               </div>
               <div className="text-right shrink-0">

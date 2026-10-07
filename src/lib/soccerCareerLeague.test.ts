@@ -6,7 +6,11 @@ const base = { league: "La Liga", year: 2020, tier: 1, elite: false, rating: 7, 
 
 describe("leagueSizeFor", () => {
   it("walks every window boundary of the verified table", () => {
-    expect(leagueSizeFor("Premier League", 1991)).toBeNull();
+    /* Round 1037: 1990-91 and 1991-92 (the First Division) answer from the
+       league ledgers now, 20 and 22 clubs; nothing before 1990 is held */
+    expect(leagueSizeFor("Premier League", 1989)).toBeNull();
+    expect(leagueSizeFor("Premier League", 1990)).toBe(20);
+    expect(leagueSizeFor("Premier League", 1991)).toBe(22);
     expect(leagueSizeFor("Premier League", 1992)).toBe(22);
     expect(leagueSizeFor("Premier League", 1994)).toBe(22);
     expect(leagueSizeFor("Premier League", 1995)).toBe(20);
@@ -193,7 +197,10 @@ describe("managerLeagueField (Round 1029)", () => {
 
   it("knows the Championship's size for the dugout only, from 2004", () => {
     expect(leagueSizeFor("Championship", 2030)).toBeNull();
-    expect(leagueSizeFor("Championship", 2003, true)).toBeNull();
+    /* Round 1037: the second tier before 2004 answers from the league
+       ledgers now (24 clubs every season from 1990-91) */
+    expect(leagueSizeFor("Championship", 2003, true)).toBe(24);
+    expect(leagueSizeFor("Championship", 1989, true)).toBeNull();
     expect(leagueSizeFor("Championship", 2004, true)).toBe(24);
     expect(leagueSizeFor("Premier League", 2030, true)).toBe(20);
   });

@@ -17,6 +17,7 @@
    Pure: no state, no clock, no Math.random. */
 import { adjustClubsForYear } from "./careerEras";
 import { SC_CLUB_CANON } from "../data/clubRivalries";
+import { CAREER_LEAGUE_SEASONS } from "../data/careerLeagueSeasons";
 import type { ClubData } from "./soccerCareerEngine";
 
 /* ─── League sizes, verified ───
@@ -74,8 +75,14 @@ const DUGOUT_SIZES: Record<string, SizeWindow[]> = {
 };
 
 /** Clubs in that league's top flight in the season starting in `year`, or
- *  null when the size is not verified for that league and season. */
+ *  null when the size is not verified for that league and season. Round
+ *  1037: a season the league ledgers hold (1990-91 to 2025-26, the six
+ *  leagues of CAREER_LEAGUE_SEASONS) answers from the ledger, which has
+ *  both tiers of England from 1990; the windows above agree with it
+ *  wherever both speak (simCareerLeagueSeasons checks that). */
 export function leagueSizeFor(league: string, year: number, dugout = false): number | null {
+  const ledger = year < LIST_SEASON ? CAREER_LEAGUE_SEASONS[league]?.[year] : undefined;
+  if (ledger) return ledger.size;
   const windows = LEAGUE_SIZES[league] ?? (dugout ? DUGOUT_SIZES[league] : undefined);
   if (!windows) return null;
   for (const w of windows) {
@@ -140,7 +147,9 @@ export function finishBand(tier: number, elite: boolean, size: number, rating: n
 }
 
 export interface LeagueFinishInput {
-  league: string;
+  /** The league the club played that season (leagueKeyInYear), or null
+   *  when the game cannot say: a title is still 1st, nothing else is drawn. */
+  league: string | null;
   /** The season's start year, the way SeasonRecord.year holds it. */
   year: number;
   tier: number;
@@ -155,7 +164,7 @@ export interface LeagueFinish { leagueFinish?: number; leagueSize?: number }
 /** The season's league finish. A title is 1st with or without a known size;
  *  any other season gets a finish only where the league's size is verified. */
 export function drawLeagueFinish(input: LeagueFinishInput): LeagueFinish {
-  const size = leagueSizeFor(input.league, input.year);
+  const size = input.league === null ? null : leagueSizeFor(input.league, input.year);
   if (input.leagueTitle) return { leagueFinish: 1, ...(size ? { leagueSize: size } : {}) };
   if (!size) return {};
   const [lo, hi] = finishBand(input.tier, input.elite, size, input.rating);
@@ -231,7 +240,11 @@ export function ordinal(n: number): string {
      league either: not over the table, not under it, not in a move line
      (dugoutTableWords below, and the engine's season line). The league
      is still kept, unprinted, so a promotion in 2015 still decides where
-     he plays from 2026-27, and from then on nothing is hidden. */
+     he plays from 2026-27, and from then on nothing is hidden.
+     Round 1037: that rule now holds only where the league ledgers are
+     silent (a league outside the six they hold). A past season of one of
+     the six is named from the ledgers, its real members and its real size
+     (ledgerField below). */
 export const MANAGER_FIELD = 20;
 /** The season (start year) the career list's league labels describe. */
 export const LIST_SEASON = 2026;
@@ -258,6 +271,159 @@ export function listLeague(clubs: readonly ClubData[], label: string): string | 
   const want = LEAGUE_ALIASES[f];
   const hit = clubs.find(c => (want ? c.league === want : foldName(c.league) === f));
   return hit ? hit.league : null;
+}
+
+/* ─── Round 1037: which league a club was in, season by season ───
+   The career list's labels are the 2026-27 season's, so before this round a
+   2015 career printed today's league for a past season. The Round 1036
+   ledgers (scripts/data/leagueSeasons/, two independent non-wiki sources a
+   season, generated into src/data/careerLeagueSeasons.ts) hold who was in
+   six leagues every season from 1990-91 to 2025-26: the Premier League (the
+   First Division to 1991-92), the Championship (Second Division to 1991-92,
+   First Division to 2003-04), La Liga, Serie A, the Bundesliga and Ligue 1
+   (Division 1 to 2001-02). This is the one lookup: every screen line,
+   finish, derby and dugout table reads it, none keeps its own year logic.
+
+   - a season before LIST_SEASON: the league the ledgers place the club in,
+     under the name it carried that season, or nothing at all when the club
+     was in none of the six that season (Ajax in any year, Brighton in
+     2008) or the season is not in the ledgers;
+   - LIST_SEASON on: today's label, exactly as before this round.
+
+   Clubs are matched by the same key the dugout uses (SC_CLUB_CANON, accents
+   folded), so a market job spelled "Manchester City" finds Man City, and
+   then by identityKey against the ways the sources spelled the clubs the
+   career world does not know, so a Club Manager job at Lazio or Union
+   Berlin finds its own league too (never to print a name: those clubs stay
+   unnamed). identityKey is scripts/genCareerLeagueSeasons.mjs's, word for
+   word; simCareerLeagueSeasons holds the two together. */
+const IDENTITY_STOP = new Set(["fc", "sc", "ac", "as", "ss", "us", "sv", "afc", "cf", "cfc", "vfl", "vfb", "tsg", "fsv", "spvgg", "calcio", "sco", "rc", "ogc", "aj", "sd", "ud", "cd", "rcd", "ca", "bsc"]);
+export function identityKey(name: string): string {
+  return name.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/ß/g, "ss").replace(/&/g, " and ")
+    .split(/[^a-z0-9]+/).filter(w => w && !IDENTITY_STOP.has(w) && !/^\d+$/.test(w)).join(" ");
+}
+/* The job market's short names whose identity none of the sources printed:
+   the spelling of the same club that they did print. */
+export const MARKET_SPELLINGS: Readonly<Record<string, string>> = {
+  "Gladbach": "Borussia Monchengladbach",
+  "Karlsruhe": "Karlsruher SC",
+  "Braunschweig": "Eintracht Braunschweig",
+};
+export interface LedgerSeason {
+  /** The league in the career list's own spelling ("Premier League"). */
+  key: string;
+  /** The name the league carried that season ("First Division" in 1991). */
+  name: string;
+  /** Clubs in it that season, verified. */
+  size: number;
+  /** The career's names of the clubs in it the career world knows; the
+   *  rest are counted in `size` and never named. */
+  clubs: readonly string[];
+  /** One entry per unnamed member: its identity keys joined by "|". */
+  others: readonly string[];
+}
+
+/* year -> a club's key or identity -> its league that season and, when the
+   career world knows it, its canon name. Built on first use. */
+interface LedgerMember { key: string; canon: string | null }
+let ledgerIndex: Map<number, Map<string, LedgerMember>> | null = null;
+function ledgerByYear(): Map<number, Map<string, LedgerMember>> {
+  if (ledgerIndex) return ledgerIndex;
+  const index = new Map<number, Map<string, LedgerMember>>();
+  for (const [key, years] of Object.entries(CAREER_LEAGUE_SEASONS)) {
+    for (const [y, season] of Object.entries(years)) {
+      const year = Number(y);
+      const byClub = index.get(year) ?? new Map<string, LedgerMember>();
+      for (const name of season.clubs) {
+        byClub.set(clubKey(name), { key, canon: name });
+        byClub.set(`#${identityKey(name)}`, { key, canon: name });
+      }
+      for (const ids of season.others) for (const id of ids.split("|")) byClub.set(`#${id}`, { key, canon: null });
+      index.set(year, byClub);
+    }
+  }
+  ledgerIndex = index;
+  return index;
+}
+function ledgerMember(club: string, year: number): LedgerMember | null {
+  const byClub = ledgerByYear().get(year);
+  if (!byClub) return null;
+  return byClub.get(clubKey(club))
+    ?? byClub.get(`#${identityKey(SC_CLUB_CANON[club] ?? club)}`)
+    ?? byClub.get(`#${identityKey(club)}`)
+    ?? (MARKET_SPELLINGS[club] ? byClub.get(`#${identityKey(MARKET_SPELLINGS[club])}`) : undefined)
+    ?? null;
+}
+
+/** The season of a league as the ledgers hold it, or null when they do not
+ *  hold that league in that season (or the season is LIST_SEASON or later,
+ *  which the ledgers do not describe). */
+export function ledgerLeague(key: string, year: number): LedgerSeason | null {
+  if (year >= LIST_SEASON) return null;
+  const s = CAREER_LEAGUE_SEASONS[key]?.[year];
+  return s ? { key, name: s.name, size: s.size, clubs: s.clubs, others: s.others } : null;
+}
+
+/** The ledger season the club played in, for a season before LIST_SEASON,
+ *  or null when it was in none of the six or the season is unknown.
+ *  `canon` is the club's name in `clubs`, or null when it is one of the
+ *  unnamed members. */
+export function clubLedgerSeason(club: string, year: number): (LedgerSeason & { canon: string | null }) | null {
+  if (year >= LIST_SEASON) return null;
+  const m = ledgerMember(club, year);
+  const s = m ? ledgerLeague(m.key, year) : null;
+  return s && m ? { ...s, canon: m.canon } : null;
+}
+
+/** The league to print for a club in the season starting in `year`: the
+ *  ledgers' answer before LIST_SEASON (null when they place it nowhere),
+ *  today's label from LIST_SEASON on. */
+export function leagueInYear(club: { name: string; league: string }, year: number): string | null {
+  if (year >= LIST_SEASON) return club.league || null;
+  return clubLedgerSeason(club.name, year)?.name ?? null;
+}
+
+/** The same answer in the career list's spelling, the one the size, derby
+ *  and division tables are keyed by ("Premier League" for the 1991-92
+ *  First Division). */
+export function leagueKeyInYear(club: { name: string; league: string }, year: number): string | null {
+  if (year >= LIST_SEASON) return club.league || null;
+  return clubLedgerSeason(club.name, year)?.key ?? null;
+}
+
+/** Whether a club may be named as part of league `key` in the season
+ *  starting in `year`: before LIST_SEASON only when the ledgers put it
+ *  there, from then on always (the career's own world). */
+export function namedInLeague(club: string, key: string, year: number): boolean {
+  return year >= LIST_SEASON || clubLedgerSeason(club, year)?.key === key;
+}
+
+/** "2009-10" for the season starting in 2009. */
+export function seasonSpan(year: number): string {
+  return `${year}-${String((year + 1) % 100).padStart(2, "0")}`;
+}
+
+/** The league line on a card for a season to come (an offer, a loan, the
+ *  academy, a dugout job): "Premier League, 2009-10" before LIST_SEASON,
+ *  nothing when the ledgers place the club in no league that season, and
+ *  today's label alone from LIST_SEASON on, exactly as before. */
+export function leagueSeasonLine(club: { name: string; league: string }, year: number): string | null {
+  const name = leagueInYear(club, year);
+  if (name === null || year >= LIST_SEASON) return name;
+  return `${name}, ${seasonSpan(year)}`;
+}
+
+/** The league a played season's finish is printed in, or null. Before
+ *  LIST_SEASON it is the ledgers' league, and only when the saved size
+ *  agrees with that season's: a save from before Round 1037 drew its
+ *  finish in today's league, and its "of 20" must not be printed beside
+ *  a league of 24. `key` is what the phone's world is keyed by. */
+export function finishLeague(club: { name: string; league: string }, year: number, savedSize: number | null): { key: string; name: string } | null {
+  const key = leagueKeyInYear(club, year);
+  const name = leagueInYear(club, year);
+  if (key === null || name === null) return null;
+  if (year < LIST_SEASON && savedSize !== null && savedSize !== leagueSizeFor(key, year)) return null;
+  return { key, name };
 }
 
 /* ─── Changing division ───
@@ -309,10 +475,17 @@ export interface ManagerLeagueInput {
   league?: string;
   /** The season's start year. */
   year: number;
+  /** Round 1037: the league a promotion or relegation of the game's own
+   *  just moved his club out of, so his club takes the place of a club
+   *  that made that move for real. */
+  from?: string;
 }
 export interface ManagerLeagueField {
   /** The league the season is played in, or null when nothing names it. */
   league: string | null;
+  /** Round 1037: the name the league carried that season when the league
+   *  ledgers hold it ("First Division" for the 1997 Championship). */
+  leagueName?: string;
   /** Positions in the table, his own included. */
   size: number;
   /** True only when `size` is the league's verified size that season. */
@@ -334,6 +507,10 @@ export function managerLeagueField(input: ManagerLeagueInput, rng: () => number)
   const league = input.league
     ? listLeague(input.clubs, input.league) ?? input.league
     : input.clubs.find(c => clubKey(c.name) === mine)?.league ?? null;
+  /* Round 1037: a past season of a league the ledgers hold is that season's
+     real field, never today's */
+  const ledger = league !== null ? ledgerLeague(league, input.year) : null;
+  if (ledger) return ledgerField(input, ledger);
   const inLeague = league !== null && world.some(c => c.league === league && clubKey(c.name) === mine);
   const myWords = nameWords(input.club);
   const rivals = league === null ? [] : world.filter(c => c.league === league && clubKey(c.name) !== mine
@@ -356,9 +533,46 @@ export function managerLeagueField(input: ManagerLeagueInput, rng: () => number)
   return { league, size, sizeVerified: verified !== null, named: lineupUnknown ? [] : names.slice(0, size - 1), lineupUnknown };
 }
 
+/* Round 1037: the manager's table in a past season of a league the ledgers
+   hold. Every place is one of that season's real clubs, named when the
+   career world knows it and counted otherwise, at the season's verified
+   size. His club sits where the simulation put it: in its own seat when it
+   really was in the league that year, and otherwise in the seat of one of
+   the real members, so no club is ever named in a league it was not in that
+   season. The seat is a club that really made the move the game's own
+   promotion or relegation just made for his (it arrived in this league that
+   season from the league he came from), and when no such club exists, one
+   drawn from the season's own seed. */
+function ledgerField(input: ManagerLeagueInput, s: LedgerSeason): ManagerLeagueField {
+  const me = clubLedgerSeason(input.club, input.year);
+  const member = me !== null && me.key === s.key;
+  /* the unnamed places are what is left: size - 1 - named */
+  let named = s.clubs.filter(n => !(member && me.canon === n));
+  if (!member) {
+    const prev = ledgerByYear().get(input.year - 1);
+    const seats = [
+      ...s.clubs.map(n => ({ name: n as string | null, ids: [clubKey(n), `#${identityKey(n)}`] })),
+      ...s.others.map(o => ({ name: null as string | null, ids: o.split("|").map(id => `#${id}`) })),
+    ];
+    const cameFrom = (ids: string[], key: string) => ids.some(id => prev?.get(id)?.key === key);
+    const moved = input.from && input.from !== s.key
+      ? seats.filter(seat => !cameFrom(seat.ids, s.key) && cameFrom(seat.ids, input.from as string))
+      : [];
+    const pool = moved.length ? moved : seats;
+    const seat = pool[Math.floor(forkRng(`${input.club}|${input.year}|${s.key}|seat`)() * pool.length)];
+    if (seat.name !== null) named = named.filter(n => n !== seat.name);
+    /* the same club under a spelling no key caught never sits beside his
+       own row: it keeps its place, unnamed */
+    const myWords = nameWords(input.club);
+    named = named.filter(n => !nameWords(n).some(w => myWords.includes(w)));
+  }
+  return { league: s.key, leagueName: s.name, size: s.size, sizeVerified: true, named, lineupUnknown: false };
+}
+
 /** One dugout season as the save holds it, old saves included. */
 export interface DugoutTableRow {
   league?: unknown;
+  leagueName?: unknown;
   sizeVerified?: unknown;
   leagueSize?: number;
   knownRivals?: unknown;
@@ -383,7 +597,10 @@ export interface DugoutTableWords {
  *  so the harness reads exactly what the page prints. A season flagged
  *  lineupUnknown names no league in any of them. */
 export function dugoutTableWords(last: DugoutTableRow): DugoutTableWords {
-  const held = typeof last.league === "string" && last.league ? last.league : null;
+  /* Round 1037: a season the league ledgers hold prints the name the league
+     carried that season */
+  const held = typeof last.leagueName === "string" && last.leagueName ? last.leagueName
+    : typeof last.league === "string" && last.league ? last.league : null;
   const league = last.lineupUnknown === true ? null : held;
   const table = last.table ?? [];
   const me = table.find(r => r.you);
