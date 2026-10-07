@@ -47,7 +47,7 @@ try {
   report.normalReportHash = report.runs[0].reportHash;
   const faults = [
     { name: 'no-restart', from: "key={replay ? `ball-${replay.id}` : 'ball-play'}", to: "key='ball-play'", allowed: ['flight:origin', 'flight:travel'], required: 'flight:origin' },
-    { name: 'endpoint-only', from: 'animation: stShot 0.7s ease-in both;', to: 'animation: none;', allowed: ['flight:origin', 'flight:travel', 'flight:duration'], required: 'flight:travel' },
+    { name: 'endpoint-only', from: '.st-ball-shot { transition: none; animation: stShot 0.7s ease-in both; }', to: '.st-ball-shot { transition: none; animation: none; }', allowed: ['flight:origin', 'flight:travel', 'flight:duration'], required: 'flight:travel' },
     { name: 'wrong-side', from: "const ball = ballAt === 'for' ? { x: 97, y: lane } : ballAt === 'against' ? { x: 3, y: lane } : idle;", to: "const ball = ballAt === 'for' ? { x: 3, y: lane } : ballAt === 'against' ? { x: 97, y: lane } : idle;", allowed: ['flight:travel', 'flight:destination', 'landing:immediate'], required: 'flight:destination' },
     { name: 'reduced-motion', from: 'const replay = reduce ? null : head;', to: 'const replay = head;', allowed: ['reduced:no-flight'], required: 'reduced:no-flight' },
   ];
