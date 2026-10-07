@@ -246,12 +246,17 @@ export function laterAnswerMovesRating<C extends UsCareerCore>(c: C, sport: UsCa
  *  so is a later card that the career as it stands now would let move the
  *  rating; `at` moves past it and `gone` counts it. When nothing is left the
  *  summer is over and leaves the career. Mutates c. */
-export function seekSummerCard<C extends UsCareerCore>(c: C, sport: UsCareerSport<C>): UsCareerEvent<C> | null {
+export function seekSummerCard<C extends UsCareerCore>(
+  c: C, sport: UsCareerSport<C>, exclude: ((e: UsCareerEvent<C>) => boolean) | null = null,
+): UsCareerEvent<C> | null {
   const s = c.summer;
   if (!s) return null;
   while (s.at < s.ids.length) {
     const card = summerCardAt(c, sport, s.at);
-    if (card && (s.at === 0 || !laterAnswerMovesRating(c, sport, card, s.at))) return card;
+    /* Round 1039: a card the board now holds out (a deck retirement card in
+       an offseason whose talk came after the deal, because card 1 moved the
+       rating into the rule) is skipped like one the career moved past. */
+    if (card && !(exclude && exclude(card)) && (s.at === 0 || !laterAnswerMovesRating(c, sport, card, s.at))) return card;
     s.at += 1;
     s.gone = (s.gone ?? 0) + 1;
   }
@@ -280,7 +285,7 @@ export function startSummer<C extends UsCareerCore>(
     return exclude && exclude(ev) ? null : ev;
   }
   dealSummer(c, sport, exclude);
-  return seekSummerCard(c, sport);
+  return seekSummerCard(c, sport, exclude);
 }
 
 /** Answer the card the summer stands on: card 1 answers on the season's own
@@ -289,6 +294,7 @@ export function startSummer<C extends UsCareerCore>(
  *  the summer is over (the board then rolls team quality, once). Mutates c. */
 export function answerSummerCard<C extends UsCareerCore>(
   c: C, sport: UsCareerSport<C>, card: UsCareerEvent<C>, optionIdx: number, mathRng: () => number,
+  exclude: ((e: UsCareerEvent<C>) => boolean) | null = null,
 ): { line: string; next: UsCareerEvent<C> | null } {
   const s = c.summer;
   const i = s?.at ?? 0;
@@ -296,7 +302,7 @@ export function answerSummerCard<C extends UsCareerCore>(
   const line = card.options[optionIdx].apply(c, rng);
   if (!c.summer) return { line, next: null };
   c.summer.at = i + 1;
-  return { line, next: seekSummerCard(c, sport) };
+  return { line, next: seekSummerCard(c, sport, exclude) };
 }
 
 /** Repair on load, the house pattern: each block is checked alone and a

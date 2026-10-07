@@ -294,7 +294,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
          it. A summer whose cards have all moved past ends here, and the team
          quality roll its last answer would have made is made now. */
       if (restoredPhase === 'season' && loaded.summer) {
-        const card = seekSummerCard(loaded, sport);
+        const card = seekSummerCard(loaded, sport, talkDeckFilter(loaded, sport.hall));
         if (card) {
           consumedSlot.current = null;
           setPendingEvent(card);
@@ -539,7 +539,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     consumedSlot.current = slot;
     consumedEvent.current = pendingEvent;
     const c: CareerState = JSON.parse(JSON.stringify(career));
-    const { line, next } = answerSummerCard(c, sport, pendingEvent, idx, Math.random);
+    const { line, next } = answerSummerCard(c, sport, pendingEvent, idx, Math.random, talkDeckFilter(c, sport.hall));
     const tq = next ? teamQuality : sport.rollTeamQuality(teamQuality, Math.random);
     setTeamQuality(tq);
     setCareer(c);
@@ -562,7 +562,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   const openNextSummerCard = () => {
     if (!career?.summer) return;
     const c: CareerState = JSON.parse(JSON.stringify(career));
-    const card = seekSummerCard(c, sport);
+    const card = seekSummerCard(c, sport, talkDeckFilter(c, sport.hall));
     if (!card) return;
     consumedEvent.current = null;
     setPendingEvent(card);

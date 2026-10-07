@@ -76,10 +76,20 @@ export function repairHallOnLoad(c: UsCareerCore): void {
   }
 }
 
-/** The filter the summer deal takes: the deck's retirement cards are out
- *  while the talk is pending, and nothing is filtered otherwise (null, so the
- *  deal is the Round 1038 one draw for draw). */
+/** True when this offseason has the talk: it is pending now, or he already
+ *  answered it 'one more year' for the season just played. (A farewell or a
+ *  retirement settles the career, and the deck's cards stop on their own.) */
+export function talkThisOffseason<C extends UsCareerCore>(c: C, hall: UsHallSport<C> | undefined): boolean {
+  if (!hall) return false;
+  return pendingTalk(c, hall) !== null || (c.retirement?.declinedYears ?? []).includes(lastSeasonYear(c));
+}
+
+/** The filter the summer takes, at the deal and at every card it opens: the
+ *  deck's retirement cards are out of any offseason that has the talk. It
+ *  reads the career when it is asked, so a talk that card 1 brings on (a
+ *  rating drop into the rule) holds the later cards out too. Null with no
+ *  Hall bound, which deals exactly the Round 1038 summer. */
 export function talkDeckFilter<C extends UsCareerCore>(c: C, hall: UsHallSport<C> | undefined): ((e: { id: string }) => boolean) | null {
-  if (!pendingTalk(c, hall)) return null;
-  return e => RETIREMENT_CARD_IDS.has(e.id);
+  if (!hall) return null;
+  return e => RETIREMENT_CARD_IDS.has(e.id) && talkThisOffseason(c, hall);
 }
