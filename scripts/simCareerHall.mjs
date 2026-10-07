@@ -97,9 +97,14 @@
                    never land on one; with no hold-out the same seek must
                    land on some (the floor), so it cannot pass on nothing.
                    At card 2 the rating rule already skips every one of them
-                   (0 landed with no hold-out in every run), so the hold-out
-                   is load-bearing at card 1 only. Control seekexclude (the
-                   review's mutation M2, the hold-out dropped from the seek).
+                   in nfl, nba and mlb (an answer moves the rating), so there
+                   the hold-out is load-bearing at card 1 only; the NHL cards
+                   leave the rating alone and land at card 2 as well. Control
+                   seekexclude (the review's mutation M2, the hold-out dropped
+                   from the seek): FIRED in all four sports with only seek
+                   red (80 board careers, 300 snapshots: met nfl 614 of 1228,
+                   nba 762 of 1524, mlb 636 of 1272, all at card 1; nhl 1696
+                   of 1696, 848 at card 1 and 848 at card 2).
     12. deckJersey a club that retired the number on a deck card is the club
                    the card names (even where another club has more seasons),
                    on real careers and on synthetic ones with twelve seasons
