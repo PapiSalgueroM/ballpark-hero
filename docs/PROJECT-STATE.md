@@ -1,3 +1,34 @@
+## Codex1083 PREPARATION7, October7: drain deferred close focus
+
+Preparation6 HEADf5a919eba4e25bae80b841eb0c2d5a33bd2c7904,
+treecda42311b0eccfc394cd0bfd18f1e732aa87fc32, run37667557430,
+finished failed only at the native390px Back focus-return assertion.
+Actual natural opening/help animations settled with complete snapshots held
+and strict geometry passing. Two320px journeys/five restored DOM faults
+completed. Proper type/build,12/22 mounted outcomes, parent20/23 ticket
+controls,15 old game gates, original load/queued-sale controls,20 readers
+and source/data/fixture/dependency holds passed. Full artifact11505520281,
+ZIP33476edb84a06d98b6efe0a502dd9ca56ad971a568b0864d23d7174b6e32a0e4.
+
+Locked FocusScope1.1.7 defers unmount autofocus with setTimeout(0); actual
+Presence detachment occurs after the driver's prior paused-clock advance.
+The preceding artifact did not directly retain pending timers. The bounded
+driver correction records focus/scroll/full snapshots and drains runFor(0)
+on BOTH paired arms after actual Back/Escape pane detachment. Full per-arm
+clock/state/save/storage/RNG/RAF/input/lifecycle snapshots must hold, then
+original paired, focus and1px scroll assertions still run. No elapsed game
+time, manual focus/scroll, animation mutation, tolerance or retry is added.
+Driver SHAcef1059ee9157ef8562ef282cc59b7307abe15e6c0f37391775bdc47bc8d52be.
+Exact removal of one helper and two calls restoresf4ddf972 byte-for-byte.
+Independent static peer receipt SHA4e68c6916c20036d3c648abd893438ed1e10a69dbbdddd236e15af61c304ca02.
+
+Only driver and these two pre-run notes change. Product/engines/data,
+original inputs256ms advances,44px/12px/1px requirements and all15 controls
+remain held. No native6/15 or PR/READY/live acceptance. The prior useful
+checks finished before this push. No local runtime. Claude owns merge,
+publication and current-main integration; parent READY1080 PR168 required.
+Root source and seven stashes held.
+
 ## Codex1083 PREPARATION6, October7: restart stalled remote setup
 
 Preparation5 HEAD ea79680f59d4f29ffe415cb05230497540a1823c,

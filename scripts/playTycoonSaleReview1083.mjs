@@ -296,6 +296,26 @@ try {
       for (const [key, value] of Object.entries(protectedStorage)) assert.equal(a.storage[key], value);
       return a;
     };
+    const drainCloseFocus = async label => {
+      const readFocus = target => target.evaluate(() => {
+        const active = document.activeElement, trigger = document.querySelector('[data-sell-up]');
+        return { active: active ? { tag: active.tagName, id: active.id, name: active.getAttribute('aria-label'), text: active.textContent.trim().slice(0, 160) } : null,
+          triggerFocused: active === trigger, triggerConnected: !!trigger?.isConnected, scrollY };
+      });
+      const observation = { label, elapsedMs: 0, before: {
+        actual: { snapshot: await snapshot(page), focus: await readFocus(page) },
+        baseline: { snapshot: await snapshot(baseline.page), focus: await readFocus(baseline.page) },
+      } };
+      row.closeTimerTurns ??= []; row.closeTimerTurns.push(observation); save();
+      try {
+        await baseline.page.clock.runFor(0); await page.clock.runFor(0);
+        observation.after = {
+          actual: { snapshot: await snapshot(page), focus: await readFocus(page) },
+          baseline: { snapshot: await snapshot(baseline.page), focus: await readFocus(baseline.page) },
+        }; save();
+        for (const arm of ['actual', 'baseline']) assert.deepEqual(observation.after[arm].snapshot, observation.before[arm].snapshot, 'Draining deferred close focus preserves the full game clock, state, storage, RNG, RAF, input and lifecycle snapshot');
+      } catch (error) { observation.error = { name: error.name, message: error.message }; save(); throw error; }
+    };
     await advance('initial real frames', 256);
     const initial = await paired('initial');
     checkOwnedGear(initial.storage[R.REWARDS_KEY]);
@@ -309,9 +329,9 @@ try {
     before = await paired('help'); const helpText = await page.locator('[data-sale-help]').innerText(), current = JSON.parse(before.storage[SAVE_KEY]);
     assert(helpText.includes(`taking your balance from ${T.legacyPointsOf(current)} to ${T.legacyPointsOf(current) + T.pointsForSale(current)}`)); checkGeometry(await geometry(page)); await capture('help');
     await activate(page, button(page, 'Back to sale review'), profile.touch); await advance('help back', 256); await paired('help-back');
-    await activate(page, button(page, 'Back'), profile.touch); await advance('cancel Back', 256); await pane(page).waitFor({ state: 'detached' }); await paired('back');
+    await activate(page, button(page, 'Back'), profile.touch); await advance('cancel Back', 256); await pane(page).waitFor({ state: 'detached' }); await drainCloseFocus('Back'); await paired('back');
     assert(await trigger.evaluate(node => document.activeElement === node)); assert(Math.abs(await page.evaluate(() => scrollY) - triggerY) <= 1, 'Back restores focus without a page jump');
-    await activate(page, trigger, profile.touch); await advance('reopen for Escape', 256); await page.keyboard.press('Escape'); await advance('cancel Escape', 256); await pane(page).waitFor({ state: 'detached' }); await paired('escape');
+    await activate(page, trigger, profile.touch); await advance('reopen for Escape', 256); await page.keyboard.press('Escape'); await advance('cancel Escape', 256); await pane(page).waitFor({ state: 'detached' }); await drainCloseFocus('Escape'); await paired('escape');
     assert(await trigger.evaluate(node => document.activeElement === node)); assert(Math.abs(await page.evaluate(() => scrollY) - triggerY) <= 1, 'Escape restores focus without a page jump');
     await activate(page, trigger, profile.touch); await advance('reopen for live terms', 256);
     const liveStart = await paired('live-start'); await advance('match keeps running during review', 10000); before = await paired('live-end');
