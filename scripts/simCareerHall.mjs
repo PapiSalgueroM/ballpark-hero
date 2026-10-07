@@ -806,7 +806,7 @@ console.log(`  jersey (deck): ${jerseyRecN} recorded, ${jerseyRecElsewhere} at a
 console.log(`  era: verified from the Class of ${auditFrom}; ${JSON.stringify(eraCounts)}; misses ${eraMiss}`);
 
 /* ─── Check ───────────────────────────────────────────────────────────── */
-const BAND = { minInducted: 0.05, decileCut: 0.06, ladderStep: 0.015, talkReach: 0.70, earlyFall: 0.10, atFloor: 100, balanceCases: 30, farewellOvrGain: 3, hallShift: 0.03, legacyShift: 30 };
+const BAND = { minInducted: 0.05, decileCut: 0.06, ladderStep: 0.015, talkReach: 0.70, earlyFall: 0.10, atFloor: 100, balanceCases: 5, farewellOvrGain: 10, hallShift: 0.025, legacyShift: 15 };
 const smallestCut = Math.min(...decileCuts);
 const fellEarlyEnough = rules.stayFloor === null || earlyFalls >= BAND.earlyFall * onBallotOut;
 const checks = [

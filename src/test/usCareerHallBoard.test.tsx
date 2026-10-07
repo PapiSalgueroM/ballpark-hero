@@ -255,8 +255,8 @@ describe.each(SPORTS)('%s: the Hall of Fame on the retirement screen', (_slug, g
     const sport = getSport();
     const { c, tq } = talkCareer(sport, 61);
     const broken = copy(c) as UsCareerCore & Record<string, unknown>;
-    broken.retirement = { declinedYears: ['soon'] };
-    broken.hallSpeech = { speechId: 'shout' };
+    broken.retirement = { declinedYears: ['soon'] } as unknown as UsCareerCore['retirement'];
+    broken.hallSpeech = { speechId: 'shout' } as unknown as UsCareerCore['hallSpeech'];
     broken.numberRetiredBy = { team: '', year: 12 };
     save(sport, broken as UsCareerCore, tq, 'season');
     mount(sport);
