@@ -7,7 +7,10 @@
    nothing. It is sport neutral: a sport brings its data and rules through a
    SeasonSport descriptor (src/lib/season/soccer.ts is the first), and the
    loop, the result shapes, the table, the clinch and the self check are
-   written once here.
+   written once here. Nothing in it is soccer's: a game's timed events come
+   from the sport's `events` hook (soccer's are src/lib/season/soccerEvents.ts),
+   his line's floor on his club's score weighs each stat by `teamPoints`, and
+   the clock's length and words come with the sport's viewer model.
 
    The derivation, one keyed stream per concern (a later concern adds a new
    suffix and never reshuffles an older one):
@@ -54,7 +57,8 @@ export interface FixedGame {
   them: number;
   played: boolean;
   line: Record<string, number>;
-  /** His goal was the one that put his club ahead for good (soccer's `won`). */
+  /** His score was the one that put his club ahead for good (soccer's `won`;
+   *  the sport's events place it and the sport's check holds it). */
   decisive?: boolean;
 }
 
@@ -73,8 +77,12 @@ export interface Availability {
   severe: boolean;
 }
 
+/** `teamFor`: each unit of this stat is also his club's score, so the club
+ *  never scores less than his line in a game; `teamPoints` is what one unit
+ *  puts on the board (1 when absent: a soccer goal or assist; 3 for a made
+ *  field goal, 6 for a touchdown). */
 export type StatTotal =
-  | { key: string; kind: 'sum'; total: number; perGameCap: number; teamFor?: boolean; noBucket?: boolean; suspends?: boolean; distinct?: string }
+  | { key: string; kind: 'sum'; total: number; perGameCap: number; teamFor?: boolean; teamPoints?: number; noBucket?: boolean; suspends?: boolean; distinct?: string }
   | { key: string; kind: 'mean'; mean: number; dp: 0 | 1; perGame: 'int' | 0.1; min: number; max: number }
   | { key: string; kind: 'count-of'; total: number; when: 'shutout' }
   | { key: string; kind: 'max'; max: number };
@@ -111,13 +119,30 @@ export interface SeasonSport<Row, Ctx> {
   /** Chance he came off the bench in a game he played. */
   subChance(played: number, games: number): number;
   labels(slots: SlotFacts[], ctx: Ctx, rng: Rng): SlotLabel[];
-  /** The sport's own agreement items, beyond the core's. */
+  /** The timed events of one game (soccer: every goal at its minute, his
+   *  assists, cards, coming on, the injury; src/lib/season/soccerEvents.ts).
+   *  It may set `started`, `onAt` and `offAt`, must leave the score and his
+   *  line alone, and draws only from the rng it is given. Absent: a game has
+   *  no events and he starts every game he plays. */
+  events?(g: DerivedGame, f: FixedGame | null, game: GameContext, rng: Rng): void;
+  /** The sport's own agreement items, beyond the core's (soccer checks its
+   *  events against the score here). */
   check?(row: Row, ctx: Ctx, s: DerivedSeason): string[];
   words: SeasonWords;
 }
 
-export type EventKind = 'goal' | 'assist' | 'yellow' | 'red' | 'injury' | 'on' | 'off';
-export interface SeasonEvent { min: number; kind: EventKind; side: 'us' | 'them'; mine?: boolean }
+/** What the core knows about one game that the sport's events need. */
+export interface GameContext {
+  /** He goes off injured in this game (the injury block starts after it). */
+  injured: boolean;
+  /** The sport's chance that he came off the bench this season. */
+  subChance: number;
+}
+
+/** A sport's event: the kind is the sport's own word ("goal", "touchdown");
+ *  `pts` is what it put on the board, so a clock can show the score true at
+ *  any minute without knowing the sport. */
+export interface SeasonEvent { min: number; kind: string; side: 'us' | 'them'; mine?: boolean; pts?: number }
 
 export interface DerivedGame {
   /** League round, 1 based. */
@@ -331,7 +356,7 @@ interface Alloc {
   lines: Record<string, number>[];
   bucket: Record<string, number>;
   marks: (DerivedGame['mark'])[];
-  /** His club's goals in each of his games may not fall below this (his goals plus his assists). */
+  /** His club's score in each of his games may not fall below this (teamFloor of his line). */
   floors: number[];
 }
 
@@ -350,6 +375,14 @@ function pickWeighted(weights: number[], rng: Rng): number {
   return -1;
 }
 
+/** The least his club can have scored in a game, from his line: every
+ *  `teamFor` stat's units times the points each puts on the board. */
+export function teamFloor(totals: readonly StatTotal[], line: Record<string, number>): number {
+  let s = 0;
+  for (const t of totals) if (t.kind === 'sum' && t.teamFor) s += (line[t.key] ?? 0) * (t.teamPoints ?? 1);
+  return s;
+}
+
 /** His line over the games he played and the bucket, exactly on the saved totals. */
 function allocate(p: Placed, av: Avail, totals: StatTotal[], bucketApps: number, rng: Rng): Alloc | null {
   const M = p.mine.length;
@@ -358,8 +391,7 @@ function allocate(p: Placed, av: Avail, totals: StatTotal[], bucketApps: number,
   const marks: Alloc['marks'] = p.mine.map(() => undefined);
   const phase = rng() * Math.PI * 2;
   const form = p.mine.map((_, i) => (1 + 0.45 * Math.sin(phase + (i / Math.max(1, M)) * Math.PI * 2)) * (0.6 + rng() * 0.8));
-  const teamKeys = totals.filter(t => t.kind === 'sum' && t.teamFor).map(t => t.key);
-  const teamSum = (i: number) => teamKeys.reduce((s, k) => s + (lines[i][k] ?? 0), 0);
+  const teamSum = (i: number) => teamFloor(totals, lines[i]);
   const cardTaken = (i: number, group: string) => totals.some(t => t.kind === 'sum' && t.distinct === group && (lines[i][t.key] ?? 0) > 0);
   const bucketCards = (group: string) => totals.reduce((s, t) => s + (t.kind === 'sum' && t.distinct === group ? bucket[t.key] ?? 0 : 0), 0);
   const order = [...totals.filter(t => t.kind === 'sum' && !t.distinct), ...totals.filter(t => t.kind === 'sum' && t.distinct && t.suspends), ...totals.filter(t => t.kind === 'sum' && t.distinct && !t.suspends), ...totals.filter(t => t.kind === 'count-of')];
@@ -377,7 +409,7 @@ function allocate(p: Placed, av: Avail, totals: StatTotal[], bucketApps: number,
         const w = p.mine.map((_, i) => {
           if (!av.played[i] || owns(i) || lines[i][t.key] >= t.perGameCap) return 0;
           const f = p.fixedAt[i];
-          if (t.teamFor && f && teamSum(i) >= f.us) return 0;
+          if (t.teamFor && f && teamSum(i) + (t.teamPoints ?? 1) > f.us) return 0;
           return form[i];
         });
         const bucketRoom = !t.noBucket && bucket[t.key] < t.perGameCap * bucketApps;
@@ -561,46 +593,6 @@ export function clinchOf(rounds: Board, teams: number, rule: PointsRule): number
   return null;
 }
 
-/** Minutes for every event of every game he played, inside his time on the
- *  pitch, with a decisive goal at its saved place in the order. */
-function placeMinutes(g: DerivedGame, f: FixedGame | null, goalsKey: string, assistsKey: string, extra: { yellow: boolean; red: boolean; injured: boolean; subChance: number }, rng: Rng): void {
-  const mins = (n: number) => Array.from({ length: n }, () => 1 + Math.floor(rng() * 90)).sort((x, y) => x - y);
-  const ourMins = mins(g.us);
-  const theirMins = mins(g.them);
-  const his = g.line[goalsKey] ?? 0;
-  const ast = g.line[assistsKey] ?? 0;
-  let onAt = 1;
-  if (g.played && rng() < extra.subChance) onAt = 46 + Math.floor(rng() * 40);
-  const order = Array.from({ length: g.us }, (_, i) => i);
-  const must = f && f.decisive ? f.them : -1;
-  const avoid = f && !f.decisive && f.us > f.them ? f.them : -1;
-  const fits = (start: number) => order.filter(i => ourMins[i] >= start && i !== avoid);
-  const after = (start: number) => order.filter(i => ourMins[i] >= start).length;
-  if (fits(onAt).length < his || after(onAt) < his + ast || (must >= 0 && ourMins[must] < onAt)) onAt = 1;
-  const pool = shuffled(fits(onAt).filter(i => i !== must), rng);
-  const mineIdx = new Set<number>(must >= 0 && his > 0 ? [must, ...pool.slice(0, his - 1)] : pool.slice(0, his));
-  const rest = shuffled(order.filter(i => ourMins[i] >= onAt && !mineIdx.has(i)), rng);
-  const astIdx = new Set<number>(rest.slice(0, ast));
-  const ev: SeasonEvent[] = [];
-  ourMins.forEach((m, i) => {
-    ev.push({ min: m, kind: 'goal', side: 'us', ...(mineIdx.has(i) ? { mine: true } : {}) });
-    if (astIdx.has(i)) ev.push({ min: m, kind: 'assist', side: 'us', mine: true });
-  });
-  for (const m of theirMins) ev.push({ min: m, kind: 'goal', side: 'them' });
-  if (g.played) {
-    const lastMine = Math.max(onAt, ...ev.filter(e => e.mine).map(e => e.min));
-    if (onAt > 1) { g.started = false; g.onAt = onAt; ev.push({ min: onAt, kind: 'on', side: 'us', mine: true }); } else g.started = true;
-    if (extra.yellow) ev.push({ min: Math.min(90, lastMine + Math.floor(rng() * Math.max(1, 91 - lastMine))), kind: 'yellow', side: 'us', mine: true });
-    if (extra.red || extra.injured) {
-      const at = Math.min(90, Math.max(lastMine + 1, 15 + Math.floor(rng() * 76)));
-      g.offAt = at;
-      ev.push({ min: at, kind: extra.red ? 'red' : 'injury', side: 'us', mine: true });
-    }
-  }
-  const rank: Record<EventKind, number> = { on: 0, goal: 1, assist: 2, yellow: 3, red: 4, injury: 4, off: 5 };
-  g.events = ev.sort((x, y) => x.min - y.min || rank[x.kind] - rank[y.kind]);
-}
-
 /** Per game values whose mean rounds to the saved mean, every value in range. */
 function fitMean(games: DerivedGame[], t: Extract<StatTotal, { kind: 'mean' }>, base: (g: DerivedGame) => number, rng: Rng): boolean {
   const on = games.filter(g => g.played);
@@ -656,9 +648,6 @@ export function deriveSeasonOrWhy<R, C>(sport: SeasonSport<R, C>, row: R, ctx: C
   for (; attempt < ATTEMPTS && !won; attempt += 1) won = playAttempt(sport, frame, rounds, L, str, key, attempt, target, p.slotOf);
   if (!won) return 'attempts';
   const board = won.board;
-  const tf = totals.filter(t => t.kind === 'sum' && t.teamFor).map(t => t.key);
-  const redKey = totals.find(t => t.kind === 'sum' && t.suspends)?.key;
-  const yellowKey = totals.find(t => t.kind === 'sum' && t.distinct && !t.suspends)?.key;
   const minRng = keyedRng(`${key}|min`);
   const subChance = sport.subChance(shown, p.mine.length);
   const games: DerivedGame[] = p.mine.map((m, i) => {
@@ -669,14 +658,10 @@ export function deriveSeasonOrWhy<R, C>(sport: SeasonSport<R, C>, row: R, ctx: C
     if (f) g.fixedKey = f.key;
     if (!av.played[i]) g.why = av.why[i];
     if (al.marks[i]) g.mark = al.marks[i];
-    const injuredNext = av.played[i] && i + 1 < p.mine.length && av.why[i + 1] === 'injured' && !av.played.slice(i + 1).some(Boolean);
-    const blockNext = av.played[i] && i + 1 < p.mine.length && av.why[i + 1] === 'injured';
-    placeMinutes(g, f, tf[0] ?? 'goals', tf[1] ?? 'assists', {
-      yellow: !!yellowKey && (g.line[yellowKey] ?? 0) > 0,
-      red: !!redKey && (g.line[redKey] ?? 0) > 0,
-      injured: injuredNext || blockNext,
-      subChance,
-    }, minRng);
+    /* the game he played just before an injury block is the one he went off in */
+    const injured = av.played[i] && i + 1 < p.mine.length && av.why[i + 1] === 'injured';
+    if (sport.events) sport.events(g, f, { injured, subChance }, minRng);
+    else g.started = g.played;
     return g;
   });
   for (const t of totals) {
@@ -737,13 +722,15 @@ export function disagreements<R, C>(sport: SeasonSport<R, C>, row: R, ctx: C, s:
       if (vals.some(v => v < t.min - 1e-9 || v > t.max + 1e-9)) out.push(`${t.key} out of range`);
     } else if (t.kind === 'max' && on.length && Math.max(...vals) !== t.max) out.push(`${t.key} max != ${t.max}`);
   }
-  const team = sport.totals(row, ctx).filter(t => t.kind === 'sum' && t.teamFor).map(t => t.key);
-  for (const g of on) {
-    if (team.reduce((x, k) => x + (g.line[k] ?? 0), 0) > g.us) out.push(`md ${g.md}: his goals and assists above the club's`);
-    const goalsEv = g.events.filter(e => e.kind === 'goal');
-    if (goalsEv.filter(e => e.side === 'us').length !== g.us || goalsEv.filter(e => e.side === 'them').length !== g.them) out.push(`md ${g.md}: events do not add up to the score`);
-    if (team[0] && goalsEv.filter(e => e.mine).length !== (g.line[team[0]] ?? 0)) out.push(`md ${g.md}: his goal events`);
-    if (team[1] && g.events.filter(e => e.kind === 'assist').length !== (g.line[team[1]] ?? 0)) out.push(`md ${g.md}: his assist events`);
+  const totalsNow = sport.totals(row, ctx);
+  for (const g of on) if (teamFloor(totalsNow, g.line) > g.us) out.push(`md ${g.md}: his line puts more on the board than his club scored`);
+  /* events with points must add up to the score (each sport's own events
+     are checked by its `check`) */
+  for (const g of s.games) {
+    if (!g.events.some(e => e.pts)) continue;
+    const us = g.events.reduce((x, e) => x + (e.side === 'us' ? e.pts ?? 0 : 0), 0);
+    const them = g.events.reduce((x, e) => x + (e.side === 'them' ? e.pts ?? 0 : 0), 0);
+    if (us !== g.us || them !== g.them) out.push(`md ${g.md}: the events' points do not make the score`);
   }
   const fixed = sport.fixed(row, ctx, frame);
   const keys = [...new Set(fixed.map(f => f.key))];
@@ -755,11 +742,6 @@ export function disagreements<R, C>(sport: SeasonSport<R, C>, row: R, ctx: C, s:
       const g = got[i];
       if (g.home !== f.home || g.us !== f.us || g.them !== f.them || g.played !== f.played) out.push(`fixed ${k} #${i + 1} differs`);
       for (const [lk, lv] of Object.entries(f.line)) if (f.played && (g.line[lk] ?? 0) !== lv) out.push(`fixed ${k} #${i + 1} ${lk}`);
-      if (f.played && f.us > f.them) {
-        const ours = g.events.filter(e => e.kind === 'goal' && e.side === 'us');
-        const decisive = !!ours[f.them]?.mine;
-        if (decisive !== !!f.decisive) out.push(`fixed ${k} #${i + 1} decisive goal`);
-      }
     });
   }
   const inj = s.games.map(g => g.why === 'injured');

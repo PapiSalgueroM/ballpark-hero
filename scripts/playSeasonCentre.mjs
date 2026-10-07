@@ -156,10 +156,12 @@ if (CONTROL === 'write') {
   console.log('CONTROL write: the served chunk writes centreSeen into the save when it loads');
 }
 if (CONTROL === 'count') {
-  const re = /(\w+)\.kind==="goal"&&\1\.min<=(\w+)/g;
+  /* scoreAt sums the points events put on the board (Round 1045 review: the
+     clock no longer knows a goal from a touchdown) */
+  const re = /(\w+)\.pts&&\1\.min<=(\w+)/g;
   const hits = centreText.match(re) ?? [];
   if (hits.length !== 1) throw new Error(`control refused: the scoreAt test appears ${hits.length} times in the chunk`);
-  CHUNK_TEXT = centreText.replace(re, (m, e, t) => `${e}.kind==="goal"&&${e}.min<=${t}+20`);
+  CHUNK_TEXT = centreText.replace(re, (m, e, t) => `${e}.pts&&${e}.min<=${t}+20`);
   console.log('CONTROL count: the served score bug reads 20 minutes ahead');
 }
 if (CONTROL === 'static') {

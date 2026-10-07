@@ -15,9 +15,11 @@ import { SOCCER, buildSoccerSeasonCtx, type SoccerSeasonCtx } from '@/lib/season
 import { readSeasonDerbies } from '@/lib/soccerCareerDerby';
 import { leagueWithArticle, ordinal } from '@/lib/soccerCareerLeague';
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
-import { SeasonCentre, type CentreModel } from '@/components/season-centre/SeasonCentre';
+import { SeasonCentre, type CentreModel, type CentreSport } from '@/components/season-centre/SeasonCentre';
+import { minuteLabel } from '@/lib/clubManagerClock';
+import { SOCCER_FULL_TIME } from '@/lib/season/soccerEvents';
 import type { HelpWords } from '@/components/season-centre/SeasonCentreHelp';
-import type { DerivedSeason } from '@/lib/season/core';
+import type { DerivedGame, DerivedSeason, SeasonEvent } from '@/lib/season/core';
 
 export interface SoccerSeasonCentreProps {
   career: CareerState;
@@ -45,6 +47,44 @@ const HELP: HelpWords = {
 /* live mode opens over the newspaper, except on a season with no news (the
    summary card) or a severe injury (the rehab choice), where there is no paper */
 const exitLabelOf = (mode: 'live' | 'watch', phase: string) => (mode === 'live' && phase === 'newspaper' ? 'Back to the papers' : 'Back to your career');
+
+/** Soccer's side of the shared viewer: the clock, the derby, his line. */
+function eventWords(e: SeasonEvent, us: string, them: string): string {
+  if (e.kind === 'goal') return e.side === 'us' ? (e.mine ? '⚽ You score!' : `⚽ Goal, ${us}`) : `⚽ Goal, ${them}`;
+  if (e.kind === 'assist') return '🅰️ You set it up';
+  if (e.kind === 'yellow') return '🟨 You go in the book';
+  if (e.kind === 'red') return '🟥 Sent off';
+  if (e.kind === 'injury') return '🚑 You go off injured';
+  if (e.kind === 'on') return '🔁 You come on';
+  return '🔁 You come off';
+}
+
+function soccerSport(keepsSheets: boolean): CentreSport {
+  return {
+    clock: { length: SOCCER_FULL_TIME, label: minute => minuteLabel({ minute }), words: eventWords },
+    fixed: { badge: 'DERBY', poster: 'Derby day', recordSoFar: 'Your derby record so far', recordPlayed: 'Derbies you played' },
+    missed: why => (why === 'injured' ? 'Not in the squad: injured' : why === 'suspended' ? 'Suspended' : 'Not in the matchday squad'),
+    lineOf: (g: DerivedGame) => {
+      const bits: string[] = [];
+      if ((g.line.goals ?? 0) > 0) bits.push(`⚽ ${g.line.goals}`);
+      if ((g.line.assists ?? 0) > 0) bits.push(`🅰️ ${g.line.assists}`);
+      if (keepsSheets && g.them === 0) bits.push('🧤 Clean sheet');
+      if ((g.line.yellow ?? 0) > 0) bits.push('🟨');
+      if ((g.line.red ?? 0) > 0) bits.push('🟥 Sent off');
+      if (g.onAt) bits.push(`Came on ${g.onAt}'`);
+      return { bits, alarm: g.events.some(e => e.kind === 'injury') ? '🚑 Injured' : null };
+    },
+    markOf: g => g.line.rating ?? 0,
+    soFar: so => [
+      ['Played', String(so.apps)],
+      ['Goals', String(so.goals ?? 0)],
+      ['Assists', String(so.assists ?? 0)],
+      ['Rating', so.apps ? ((so.rating ?? 0) / so.apps).toFixed(1) : '-'],
+    ],
+    half: so => `First half: ${so.apps} games, ${so.goals ?? 0} goals, ${so.assists ?? 0} assists`,
+    bucket: b => `Cups and other games: ${b.apps} apps, ${b.line.goals ?? 0} goals, ${b.line.assists ?? 0} assists`,
+  };
+}
 
 const RESULTS_WORDS = 'Results only: the game does not have a verified table for this league that season.';
 
@@ -75,12 +115,16 @@ function buildModel(row: SeasonRecord, ctx: SoccerSeasonCtx, s: DerivedSeason): 
     resultsWhy: s.mode === 'table' ? null : ctx.why === 'severe' ? 'Results only: your season was cut short, so there is no final table.' : RESULTS_WORDS,
     derbyBefore: { w: ctx.derbyBefore.w, d: ctx.derbyBefore.d, l: ctx.derbyBefore.l },
     review: {
-      apps: row.apps, goals: row.goals, assists: row.assists, rating: row.rating,
-      cleanSheets: ctx.position === 'GK' ? row.cleanSheets : null,
+      tiles: [
+        ['Apps', String(row.apps)],
+        ctx.position === 'GK' ? ['Clean sheets', String(row.cleanSheets)] : ['Goals', String(row.goals)],
+        ['Assists', String(row.assists)],
+        ['Avg rating', row.rating.toFixed(1)],
+      ],
       finishLine, championLine: ctx.champion ? `${ctx.champion} won it` : null,
       trophies, title: !!row.leagueTitle && !row.injurySevere, notes,
     },
-    keepsSheets: ctx.keepsSheets,
+    sport: soccerSport(ctx.keepsSheets),
     help: HELP,
     momentKey: `centre|${s.key}`,
   };

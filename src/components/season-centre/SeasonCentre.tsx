@@ -19,16 +19,13 @@ import VictoryMoment from '@/components/game/VictoryMoment';
 import { useCareerMoment } from '@/components/soccer-career/careerMoments';
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import { ordinal } from '@/lib/soccerCareerLeague';
-import { MatchClock, type ClockSpeed } from './MatchClock';
+import { MatchClock, type ClockSpeed, type SeasonClock } from './MatchClock';
 import { SeasonCentreHelp, useHelpOnce, type HelpWords } from './SeasonCentreHelp';
 
 export interface CentreReview {
-  apps: number;
-  goals: number;
-  assists: number;
-  rating: number;
-  /** Clean sheets, for the positions that keep them. */
-  cleanSheets: number | null;
+  /** The review's tiles, all competitions, labelled in the sport's words
+   *  (soccer: Apps, Goals or Clean sheets, Assists, Avg rating). */
+  tiles: [string, string][];
   /** The summary card's finish line ("Finished 4th of 20 in the Premier League"), or null. */
   finishLine: string | null;
   /** "Arsenal won it", exactly when the summary card says so. */
@@ -57,11 +54,33 @@ export interface CentreModel {
   /** His derby record before this season, for the derby day poster. */
   derbyBefore: { w: number; d: number; l: number };
   review: CentreReview;
-  /** His position keeps clean sheets (a keeper or a back four defender). */
-  keepsSheets: boolean;
+  /** Everything the viewer shows that belongs to one sport. */
+  sport: CentreSport;
   help: HelpWords;
   /** Play once keys for the clinch and the review (useCareerMoment). */
   momentKey: string;
+}
+
+/** The sport's side of the viewer: its clock, its words for a fixed game,
+ *  and how his line and totals read. Soccer's is built in
+ *  src/components/soccer-career/SoccerSeasonCentre.tsx; nothing below knows
+ *  which sport it is showing. */
+export interface CentreSport {
+  clock: SeasonClock;
+  /** A fixed game's words: its badge, its poster's head, his record so far, the review's line. */
+  fixed: { badge: string; poster: string; recordSoFar: string; recordPlayed: string };
+  /** Why he missed a game. */
+  missed: (why: DerivedGame['why']) => string;
+  /** His line in a game he played as short bits, plus an alarm shown in red (an injury). */
+  lineOf: (g: DerivedGame) => { bits: string[]; alarm: string | null };
+  /** His mark for one game (soccer's match rating), for "best match". */
+  markOf: (g: DerivedGame) => number;
+  /** His league totals so far as labelled tiles. */
+  soFar: (so: Record<string, number>) => [string, string][];
+  /** The halfway poster's line from his first half totals. */
+  half: (so: Record<string, number>) => string;
+  /** The games not shown one by one, in one line. */
+  bucket: (b: { apps: number; line: Record<string, number> }) => string;
 }
 
 type Stage = { kind: 'kickoff' } | { kind: 'poster'; md: number } | { kind: 'match'; md: number } | { kind: 'review' };
@@ -115,7 +134,7 @@ function FixtureList({ model, played, current }: { model: CentreModel; played: n
             <span className="w-6 shrink-0 tabular-nums text-muted-foreground">{g.md}</span>
             <span className="w-4 shrink-0 text-[10px] text-muted-foreground">{g.home ? 'H' : 'A'}</span>
             <span className={`min-w-0 flex-1 truncate ${done ? '' : 'text-muted-foreground'} ${names[g.opp] === words.unnamed ? 'italic' : ''}`}>{names[g.opp]}</span>
-            {g.fixedKey && <span className="shrink-0 rounded bg-amber-500/20 px-1 text-[9px] font-bold text-amber-400">DERBY</span>}
+            {g.fixedKey && <span className="shrink-0 rounded bg-amber-500/20 px-1 text-[9px] font-bold text-amber-400">{model.sport.fixed.badge}</span>}
             {g.md === s.games.length && <span className="shrink-0 rounded bg-sky-500/20 px-1 text-[9px] font-bold text-sky-400">FINAL DAY</span>}
             {done && <span className={`shrink-0 rounded px-1.5 text-[10px] font-bold tabular-nums ${PILL[r]}`}>{r} {g.us}-{g.them}</span>}
           </li>
@@ -126,23 +145,14 @@ function FixtureList({ model, played, current }: { model: CentreModel; played: n
 }
 
 /** His line in one game, after full time. */
-function HisLine({ g, keepsSheets }: { g: DerivedGame; keepsSheets: boolean }) {
-  if (!g.played) {
-    const why = g.why === 'injured' ? 'Not in the squad: injured' : g.why === 'suspended' ? 'Suspended' : 'Not in the matchday squad';
-    return <p className="text-xs text-muted-foreground" data-his-line>{why}</p>;
-  }
-  const bits: string[] = [];
-  if ((g.line.goals ?? 0) > 0) bits.push(`⚽ ${g.line.goals}`);
-  if ((g.line.assists ?? 0) > 0) bits.push(`🅰️ ${g.line.assists}`);
-  if (keepsSheets && g.them === 0) bits.push('🧤 Clean sheet');
-  if ((g.line.yellow ?? 0) > 0) bits.push('🟨');
-  if ((g.line.red ?? 0) > 0) bits.push('🟥 Sent off');
-  if (g.onAt) bits.push(`Came on ${g.onAt}'`);
+function HisLine({ g, sport }: { g: DerivedGame; sport: CentreSport }) {
+  if (!g.played) return <p className="text-xs text-muted-foreground" data-his-line>{sport.missed(g.why)}</p>;
+  const { bits, alarm } = sport.lineOf(g);
   return (
-    <div className={`flex flex-wrap items-center gap-2 text-xs ${g.events.some(e => e.kind === 'injury') ? 'cm-loss-shake' : ''}`} data-his-line>
-      <span className="rounded-md bg-primary/15 px-2 py-0.5 font-black tabular-nums text-primary">{(g.line.rating ?? 0).toFixed(1)}</span>
+    <div className={`flex flex-wrap items-center gap-2 text-xs ${alarm ? 'cm-loss-shake' : ''}`} data-his-line>
+      <span className="rounded-md bg-primary/15 px-2 py-0.5 font-black tabular-nums text-primary">{sport.markOf(g).toFixed(1)}</span>
       {bits.map(b => <span key={b}>{b}</span>)}
-      {g.events.some(e => e.kind === 'injury') && <span className="text-red-400">🚑 Injured</span>}
+      {alarm && <span className="text-red-400">{alarm}</span>}
     </div>
   );
 }
@@ -201,7 +211,7 @@ function KickOff({ model, onKick, onStraight }: { model: CentreModel; onKick: ()
               <span className="w-6 tabular-nums text-muted-foreground">{g.md}</span>
               <span className="w-10 text-muted-foreground">{g.home ? 'Home' : 'Away'}</span>
               <span className={`min-w-0 flex-1 truncate ${names[g.opp] === model.words.unnamed ? 'italic text-muted-foreground' : ''}`}>{names[g.opp]}</span>
-              {g.fixedKey && <span className="rounded bg-amber-500/20 px-1 text-[9px] font-bold text-amber-400">DERBY · {occasion[g.fixedKey] ?? ''}</span>}
+              {g.fixedKey && <span className="rounded bg-amber-500/20 px-1 text-[9px] font-bold text-amber-400">{model.sport.fixed.badge} · {occasion[g.fixedKey] ?? ''}</span>}
             </li>
           ))}
         </ul>
@@ -228,7 +238,8 @@ function Poster({ model, md, reduced }: { model: CentreModel; md: number; reduce
   const rec = { ...model.derbyBefore };
   for (const x of s.games) if (x.fixedKey && x.md < md && x.played) rec[resultOf(x) === 'W' ? 'w' : resultOf(x) === 'D' ? 'd' : 'l'] += 1;
   const half = soFar(s, Math.floor(M / 2));
-  const best = s.games.filter(x => x.played && x.md < md).sort((a, b) => (b.line.rating ?? 0) - (a.line.rating ?? 0))[0];
+  const mark = model.sport.markOf;
+  const best = s.games.filter(x => x.played && x.md < md).sort((a, b) => mark(b) - mark(a))[0];
   return (
     <div ref={moment.ref} className="space-y-3" data-poster={kinds.join(' ')}>
       {kinds.includes('title') && s.clinch && (
@@ -246,16 +257,16 @@ function Poster({ model, md, reduced }: { model: CentreModel; md: number; reduce
       )}
       {kinds.includes('derby') && g?.fixedKey && (
         <div className={`${slam} rounded-xl border border-amber-500/30 bg-card p-3`}>
-          <div className="text-xs font-black uppercase tracking-wider text-amber-400">Derby day</div>
+          <div className="text-xs font-black uppercase tracking-wider text-amber-400">{model.sport.fixed.poster}</div>
           <div className="text-sm font-bold">{occasion[g.fixedKey] ?? g.fixedKey} · {which === 0 ? 'first of two' : which === 1 ? 'second of two' : `meeting ${which + 1}`}</div>
-          <div className="text-xs text-muted-foreground">Your derby record so far: {rec.w}W {rec.d}D {rec.l}L</div>
+          <div className="text-xs text-muted-foreground">{model.sport.fixed.recordSoFar}: {rec.w}W {rec.d}D {rec.l}L</div>
         </div>
       )}
       {kinds.includes('halfway') && (
         <div className={`${slam} rounded-xl border border-border bg-card p-3`}>
           <div className="text-xs font-black uppercase tracking-wider text-muted-foreground">Halfway</div>
-          <div className="text-sm">First half: {half.apps} games, {half.goals ?? 0} goals, {half.assists ?? 0} assists</div>
-          {best && <div className="text-xs text-muted-foreground">Best so far: {model.words.round} {best.md}, {resultOf(best)} {best.us}-{best.them}, rated {(best.line.rating ?? 0).toFixed(1)}</div>}
+          <div className="text-sm">{model.sport.half(half)}</div>
+          {best && <div className="text-xs text-muted-foreground">Best so far: {model.words.round} {best.md}, {resultOf(best)} {best.us}-{best.them}, rated {mark(best).toFixed(1)}</div>}
         </div>
       )}
       {kinds.includes('final') && (
@@ -272,17 +283,13 @@ function Review({ model, reduced }: { model: CentreModel; reduced: boolean }) {
   const { season: s, review, names, words } = model;
   const moment = useCareerMoment(review.title ? `${model.momentKey}|review` : null);
   const played = s.games.filter(g => g.played);
-  const best = [...played].sort((a, b) => (b.line.rating ?? 0) - (a.line.rating ?? 0))[0];
+  const mark = model.sport.markOf;
+  const best = [...played].sort((a, b) => mark(b) - mark(a))[0];
   const form = s.games.slice(-5);
   const derbies = played.filter(g => g.fixedKey);
   const dr = { w: 0, d: 0, l: 0 };
   for (const g of derbies) dr[resultOf(g) === 'W' ? 'w' : resultOf(g) === 'D' ? 'd' : 'l'] += 1;
-  const tiles: [string, string][] = [
-    ['Apps', String(review.apps)],
-    review.cleanSheets !== null ? ['Clean sheets', String(review.cleanSheets)] : ['Goals', String(review.goals)],
-    ['Assists', String(review.assists)],
-    ['Avg rating', review.rating.toFixed(1)],
-  ];
+  const tiles = review.tiles;
   const rise = (i: number) => (reduced ? undefined : { animationDelay: revealDelay(i, 0.1, 0.16) });
   const bucket = s.bucket && s.bucket.apps > 0 ? s.bucket : null;
   return (
@@ -304,17 +311,17 @@ function Review({ model, reduced }: { model: CentreModel; reduced: boolean }) {
       <div className="text-[11px] text-muted-foreground">All competitions, the same as your season summary.</div>
       {best && (
         <div className={`${reduced ? '' : 'cm-rise'} text-xs`} style={rise(5)}>
-          ⭐ Best match: {words.round} {best.md}, {resultOf(best)} {best.us}-{best.them} vs {names[best.opp]}, rated {(best.line.rating ?? 0).toFixed(1)}
+          ⭐ Best match: {words.round} {best.md}, {resultOf(best)} {best.us}-{best.them} vs {names[best.opp]}, rated {mark(best).toFixed(1)}
         </div>
       )}
       <div className={`${reduced ? '' : 'cm-rise'} flex items-center gap-1 text-xs`} style={rise(6)}>
         <span className="mr-1 text-muted-foreground">Last five:</span>
         {form.map(g => <span key={g.md} className={`rounded px-1.5 font-bold ${PILL[resultOf(g)]}`}>{resultOf(g)}</span>)}
       </div>
-      {derbies.length > 0 && <div className="text-xs" style={rise(7)}>Derbies you played: {dr.w}W {dr.d}D {dr.l}L</div>}
+      {derbies.length > 0 && <div className="text-xs" style={rise(7)}>{model.sport.fixed.recordPlayed}: {dr.w}W {dr.d}D {dr.l}L</div>}
       {bucket && (
         <div className="text-xs text-muted-foreground" data-review-bucket>
-          Cups and other games: {bucket.apps} apps, {bucket.line.goals ?? 0} goals, {bucket.line.assists ?? 0} assists
+          {model.sport.bucket(bucket)}
         </div>
       )}
       {review.notes.map(n => <div key={n} className="text-xs text-muted-foreground">{n}</div>)}
@@ -375,9 +382,8 @@ export function SeasonCentre({ model, exitLabel, onClose }: { model: CentreModel
   for (let md = played + 1; md <= M && nextBig === null; md += 1) if (postersFor(s, md).length) nextBig = md;
   if (nextBig !== null && nextBig <= played + 1) nextBig = null;
   const roundWord = s.mode === 'table' ? model.words.round : 'League game';
-  const keepsSheets = model.keepsSheets;
   const so = soFar(s, played);
-  const avg = so.apps ? (so.rating ?? 0) / so.apps : null;
+  const soTiles = model.sport.soFar(so);
   const btn = 'h-10 shrink-0 whitespace-nowrap rounded-lg px-3 text-xs font-bold';
 
   const stageBody = (() => {
@@ -388,10 +394,10 @@ export function SeasonCentre({ model, exitLabel, onClose }: { model: CentreModel
     return (
       <div key={`m${stage.md}`} className={`${reduced ? '' : 'cm-rise'} space-y-3`} data-matchday={stage.md}>
         <div className="text-xs text-muted-foreground">
-          {roundWord} {stage.md}{s.mode === 'table' ? ` of ${M}` : ''} · {g.home ? 'Home' : 'Away'}{g.fixedKey ? ` · ${model.occasion[g.fixedKey] ?? 'Derby'}` : ''}
+          {roundWord} {stage.md}{s.mode === 'table' ? ` of ${M}` : ''} · {g.home ? 'Home' : 'Away'}{g.fixedKey ? ` · ${model.occasion[g.fixedKey] ?? model.sport.fixed.poster}` : ''}
         </div>
-        <MatchClock key={`clock-${stage.md}`} game={g} usName={model.header.club} themName={model.names[g.opp]} speed={speed} paused={paused} reduced={reduced} onFullTime={onFullTime} />
-        {(ft || !g.played) && <HisLine g={g} keepsSheets={keepsSheets} />}
+        <MatchClock key={`clock-${stage.md}`} game={g} clock={model.sport.clock} usName={model.header.club} themName={model.names[g.opp]} speed={speed} paused={paused} reduced={reduced} onFullTime={onFullTime} />
+        {(ft || !g.played) && <HisLine g={g} sport={model.sport} />}
       </div>
     );
   })();
@@ -432,10 +438,9 @@ export function SeasonCentre({ model, exitLabel, onClose }: { model: CentreModel
               </div>
             )}
             <div className="mt-3 grid grid-cols-4 gap-2 text-center md:hidden" data-so-far>
-              <div><div className="text-sm font-black tabular-nums">{so.apps}</div><div className="text-[9px] text-muted-foreground">Played</div></div>
-              <div><div className="text-sm font-black tabular-nums">{so.goals ?? 0}</div><div className="text-[9px] text-muted-foreground">Goals</div></div>
-              <div><div className="text-sm font-black tabular-nums">{so.assists ?? 0}</div><div className="text-[9px] text-muted-foreground">Assists</div></div>
-              <div><div className="text-sm font-black tabular-nums">{avg === null ? '-' : avg.toFixed(1)}</div><div className="text-[9px] text-muted-foreground">Rating</div></div>
+              {soTiles.map(([label, value]) => (
+                <div key={label}><div className="text-sm font-black tabular-nums">{value}</div><div className="text-[9px] text-muted-foreground">{label}</div></div>
+              ))}
             </div>
           </main>
           <aside className="hidden min-h-0 overflow-y-auto border-l border-border p-2 md:block" aria-label="Table">
@@ -444,7 +449,7 @@ export function SeasonCentre({ model, exitLabel, onClose }: { model: CentreModel
               : <p className="text-xs text-muted-foreground">{model.resultsWhy}</p>}
             <div className="mt-3 rounded-lg bg-muted/30 p-2 text-xs" data-so-far-desktop>
               <div className="mb-1 font-bold">League so far</div>
-              {so.apps} played · {so.goals ?? 0} goals · {so.assists ?? 0} assists{avg === null ? '' : ` · ${avg.toFixed(1)} avg`}
+              {soTiles.map(([label, value]) => `${value} ${label.toLowerCase()}`).join(' · ')}
             </div>
           </aside>
         </div>

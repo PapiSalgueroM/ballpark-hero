@@ -41,6 +41,7 @@ import { careerDerbyRecord, derbyMeetings, readSeasonDerbies, type DerbyRecord }
 import { adjustClubsForYear } from '../careerEras';
 import { keyedRng } from '../keyedRng';
 import { leagueFormatFor } from '../../data/leagueFormat';
+import { soccerEventDisagreements, soccerEvents } from './soccerEvents';
 
 /** Why a season shows results only (null: it shows a table). */
 export type ResultsReason = 'nofinish' | 'nosize' | 'league' | 'format' | 'cadence' | 'severe' | 'rival';
@@ -264,8 +265,9 @@ export const SOCCER: SeasonSport<SeasonRecord, SoccerSeasonCtx> = {
     + (g.us > g.them ? 0.25 : g.us < g.them ? -0.3 : 0) - (g.started ? 0 : 0.3),
   subChance: (played, games) => clamp(1.15 - (1.3 * played) / Math.max(1, games), 0.04, 0.55),
   labels: (slots, ctx, rng) => soccerLabels(slots, ctx, rng),
+  events: soccerEvents,
   check: (row, ctx, s) => {
-    const out: string[] = [];
+    const out: string[] = soccerEventDisagreements(s, fixedOf(row, ctx));
     const names = s.labels.filter(l => l.named).map(l => l.name);
     if (new Set(names).size !== names.length) out.push('a club named twice');
     if (s.labels[0]?.name !== row.club) out.push('his club is not slot 0');

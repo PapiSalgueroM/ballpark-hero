@@ -39,6 +39,9 @@
  *   leagueapps  the league target is one game over critic C2's  -> item 1
  *               (the review's M2: item 1 now restates the target itself;
  *               2026-10-07, 1990 failures at item 1, exit 1)
+ *   offtime     a yellow may land after he went off (the first cut), self check off -> item 8
+ *               (2026-10-07: 29 failures at item 8, a yellow at 79' after an
+ *               injury at 77', exit 1)
  *   ladder      a results only finish band starts his club on the top rung
  *               (the first cut's bug)                              -> item 4c
  *
@@ -87,6 +90,7 @@ const CONTROLS = {
   cleansheet: [{ file: 'src/lib/season/core.ts', from: "marks[i] = s ? 'shutout' : 'concede';", to: 'marks[i] = undefined;' }, SELF_OFF],
   points: [{ file: 'src/data/leagueFormat.ts', from: '"Serie A": [{ from: 1995 }],', to: '"Serie A": [{ from: 1990 }],' }],
   leagueapps: [{ file: 'src/lib/season/soccer.ts', from: 'const want = Math.min(row.leagueApps ?? row.apps, room, row.apps);', to: 'const want = Math.min((row.leagueApps ?? row.apps) + 1, room, row.apps);' }],
+  offtime: [{ file: 'src/lib/season/soccerEvents.ts', from: 'Math.max(1, offAt - lastMine)', to: 'Math.max(1, SOCCER_FULL_TIME + 1 - lastMine)' }, SELF_OFF],
   ladder: [{ file: 'src/lib/season/soccer.ts', from: "const tier = fromFinish ?? (target.kind === 'band' ? 1 : byTier);", to: "const tier = target.kind === 'band' ? 1 : fromFinish ?? byTier;" }],
   resultstitle: [{ file: 'src/lib/season/core.ts', from: "    return ppg < target.ppgMin ? { slot: 0, dir: 1 } : ppg > target.ppgMax ? { slot: 0, dir: -1 } : null;", to: '    return null;' }, SELF_OFF],
 };
@@ -302,6 +306,9 @@ function checkSeason(career, row, ctx, s, tag) {
   if (sum('yellow') !== row.yellowCards || sum('red') !== row.redCards) fail('8 cards', `${tag}: cards ${sum('yellow')}/${sum('red')} for ${row.yellowCards}/${row.redCards}`);
   s.games.forEach((g, i) => {
     if ((g.line.red ?? 0) > 0 && s.games[i + 1]?.why !== 'suspended' && s.games.slice(i + 1).some(x => x.played)) fail('8 cards', `${tag}: a red with no suspension`);
+    /* the review's finding: nothing of his after he went off (a card after the injury) */
+    const off = g.events.find(e => e.mine && (e.kind === 'injury' || e.kind === 'red'));
+    if (off && g.events.some(e => e.mine && e.min > off.min)) fail('8 cards', `${tag} md ${g.md}: ${g.events.filter(e => e.mine && e.min > off.min).map(e => `${e.kind} ${e.min}'`).join(', ')} after he went off at ${off.min}'`);
   });
   /* 9 injury */
   const w = row.injuryWeeks ?? 0;

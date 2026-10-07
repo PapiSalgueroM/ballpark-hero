@@ -8,6 +8,7 @@ import {
   type DerivedSeason, type FixedGame, type Frame, type SeasonSport, type StatTotal, type TeamTarget,
 } from '@/lib/season/core';
 import { LAW, goalLambda, poissonDraw } from '@/lib/season/law';
+import { soccerEventDisagreements, soccerEvents } from '@/lib/season/soccerEvents';
 
 interface ToyRow {
   mode: 'table' | 'results';
@@ -71,6 +72,9 @@ const TOY: SeasonSport<ToyRow, null> = {
   meanBase: (_k, g) => 6.4 + (g.line.goals ?? 0) * 0.7 + (g.line.assists ?? 0) * 0.4 + (g.us > g.them ? 0.3 : g.us < g.them ? -0.3 : 0),
   subChance: () => 0.1,
   labels: slots => slots.map(s => ({ name: s.slot === 0 ? 'Mine' : `Club ${s.slot}`, named: s.slot === 0, key: `s${s.slot}` })),
+  /* the toy table sport times its goals the way soccer does (the hook) */
+  events: soccerEvents,
+  check: (r, _c, s) => soccerEventDisagreements(s, r.fixed ?? []),
   words: { round: 'Matchday', title: 'Season Centre', unnamed: 'another club' },
 };
 
@@ -229,7 +233,8 @@ const RECORD: SeasonSport<RecordRow, null> = {
   fixed: () => [],
   availability: () => ({ played: 17, block: 0, severe: false }),
   totals: (r): StatTotal[] => [
-    { key: 'fgm', kind: 'sum', total: r.fgm, perGameCap: 4 },
+    /* a made field goal is three points on his team's board */
+    { key: 'fgm', kind: 'sum', total: r.fgm, perGameCap: 4, teamFor: true, teamPoints: 3 },
     { key: 'tackles', kind: 'mean', mean: r.tackles, dp: 1, perGame: 'int', min: 0, max: 15 },
     { key: 'longFg', kind: 'max', max: r.longFg },
   ],
@@ -266,5 +271,35 @@ describe('season core: a record sport on the same loop', () => {
     expect(Math.max(...s.games.map(g => g.line.longFg))).toBe(52);
     expect(s.games.reduce((a, g) => a + g.line.fgm, 0) + (s.bucket?.line.fgm ?? 0)).toBe(28);
     expect(tableAt(s, 17)).toEqual([]);
+  });
+  it('never has his team score less than his made field goals put on the board (three each)', () => {
+    expect(s.games.some(g => g.line.fgm > 0)).toBe(true);
+    for (const g of s.games) expect(g.us).toBeGreaterThanOrEqual(3 * g.line.fgm);
+    const broken: DerivedSeason = JSON.parse(JSON.stringify(s));
+    const g = broken.games.find(x => x.line.fgm > 0)!;
+    g.us = 3 * g.line.fgm - 1;
+    expect(disagreements(RECORD, row, null, broken).some(m => m.includes('more on the board'))).toBe(true);
+  });
+  it('gives a sport with no events hook no soccer events: none at all, and he starts every game', () => {
+    for (const g of s.games) { expect(g.events).toEqual([]); expect(g.started).toBe(g.played); }
+  });
+});
+
+describe('season core: the events hook', () => {
+  it('runs the sport\'s hook on every game, the injury on the game before the block, a card never after it', () => {
+    const row: ToyRow = { ...MID, played: 14, block: 3, yellow: 6, red: 0, seed: 'hook' };
+    const s = deriveSeason(TOY, row, null)!;
+    expect(s).not.toBeNull();
+    for (const g of s.games) expect(g.events.filter(e => e.kind === 'goal').reduce((a, e) => a + (e.pts ?? 0), 0)).toBe(g.us + g.them);
+    const first = s.games.findIndex(g => g.why === 'injured');
+    const before = s.games[first - 1];
+    expect(first).toBeGreaterThan(0);
+    expect(before.played).toBe(true);
+    {
+      const hurt = before.events.find(e => e.kind === 'injury')!;
+      expect(hurt).toBeDefined();
+      expect(before.events.filter(e => e.mine).every(e => e.min <= hurt.min)).toBe(true);
+    }
+    expect(disagreements(TOY, row, null, s)).toEqual([]);
   });
 });

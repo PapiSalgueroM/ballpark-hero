@@ -1,6 +1,9 @@
-/* Round 1045: the Season Centre's match clock.
+/* Round 1045: the Season Centre's match clock, for any sport.
 
-   A requestAnimationFrame clock from 0' to 90': about 15 seconds a match at
+   The sport brings its clock (src/components/soccer-career/SoccerSeasonCentre.tsx
+   gives soccer's: 90 minutes, "67'", "⚽ You score!"), so nothing here knows
+   which game is being played. A requestAnimationFrame clock from the kick
+   off to full time: about 15 seconds a match at
    1x, about 5 at 3x, nothing at all at Results. Every event of the derived
    game arrives at its minute and the score bug only ever shows the score
    that was true at the minute on screen (it changes when a goal lands, never
@@ -10,31 +13,30 @@
    nothing below it moves while the match plays. */
 import { useEffect, useRef, useState } from 'react';
 import type { DerivedGame, SeasonEvent } from '@/lib/season/core';
-import { minuteLabel } from '@/lib/clubManagerClock';
 
 export type ClockSpeed = 1 | 3 | 'results';
 const MATCH_SECONDS = { 1: 15, 3: 5 } as const;
-export const FULL_TIME = 90;
 
-/** The score at a minute, from the game's own events: [his club, the other side]. */
-export function scoreAt(events: readonly SeasonEvent[], minute: number): [number, number] {
-  let us = 0, them = 0;
-  for (const e of events) if (e.kind === 'goal' && e.min <= minute) { if (e.side === 'us') us += 1; else them += 1; }
-  return [us, them];
+/** A sport's clock: how long a game runs, how a minute reads, what an event says. */
+export interface SeasonClock {
+  /** Minutes from the kick off to full time (soccer 90). */
+  length: number;
+  /** The clock at a minute ("67'"). */
+  label: (minute: number) => string;
+  /** One line for an event, in the sport's words. */
+  words: (e: SeasonEvent, us: string, them: string) => string;
 }
 
-export function eventWords(e: SeasonEvent, us: string, them: string): string {
-  if (e.kind === 'goal') return e.side === 'us' ? (e.mine ? '⚽ You score!' : `⚽ Goal, ${us}`) : `⚽ Goal, ${them}`;
-  if (e.kind === 'assist') return '🅰️ You set it up';
-  if (e.kind === 'yellow') return '🟨 You go in the book';
-  if (e.kind === 'red') return '🟥 Sent off';
-  if (e.kind === 'injury') return '🚑 You go off injured';
-  if (e.kind === 'on') return '🔁 You come on';
-  return '🔁 You come off';
+/** The score at a minute, from the points the game's own events put on the board: [his club, the other side]. */
+export function scoreAt(events: readonly SeasonEvent[], minute: number): [number, number] {
+  let us = 0, them = 0;
+  for (const e of events) if (e.pts && e.min <= minute) { if (e.side === 'us') us += e.pts; else them += e.pts; }
+  return [us, them];
 }
 
 interface Props {
   game: DerivedGame;
+  clock: SeasonClock;
   usName: string;
   themName: string;
   speed: ClockSpeed;
@@ -43,7 +45,8 @@ interface Props {
   onFullTime: () => void;
 }
 
-export function MatchClock({ game, usName, themName, speed, paused, reduced, onFullTime }: Props) {
+export function MatchClock({ game, clock, usName, themName, speed, paused, reduced, onFullTime }: Props) {
+  const FULL_TIME = clock.length;
   const instant = reduced || speed === 'results';
   const [minute, setMinute] = useState(() => (instant ? FULL_TIME : 0));
   const done = minute >= FULL_TIME;
@@ -68,7 +71,7 @@ export function MatchClock({ game, usName, themName, speed, paused, reduced, onF
     };
     raf = requestAnimationFrame(tick);
     return () => { cancelAnimationFrame(raf); document.removeEventListener('visibilitychange', onVis); };
-  }, [done, instant, paused, speed]);
+  }, [done, instant, paused, speed, FULL_TIME]);
 
   useEffect(() => {
     if (done && !told.current) { told.current = true; onFullTime(); }
@@ -97,15 +100,15 @@ export function MatchClock({ game, usName, themName, speed, paused, reduced, onF
         <span className="min-w-0 flex-1 truncate text-right text-sm font-bold">{awayName}</span>
       </div>
       <div className="mt-1 flex items-center justify-between text-[11px] text-muted-foreground">
-        <span className="tabular-nums" data-clock-minute>{done ? 'FT' : minuteLabel({ minute: shown })}</span>
+        <span className="tabular-nums" data-clock-minute>{done ? 'FT' : clock.label(shown)}</span>
         {done && <span className={`${instant ? '' : 'cm-slam'} font-bold text-foreground`} data-full-time>Full time</span>}
       </div>
       <ol ref={listRef} className="mt-2 h-28 overflow-y-auto space-y-1 text-xs" aria-live="polite" data-clock-events>
         {seen.length === 0 && <li className="text-muted-foreground">Kick off.</li>}
         {seen.map((e, i) => (
           <li key={`${i}-${e.min}-${e.kind}`} className={`${instant ? '' : 'cm-tick-in'} flex gap-2`}>
-            <span className="w-8 shrink-0 tabular-nums text-muted-foreground">{minuteLabel({ minute: e.min })}</span>
-            <span className={e.mine ? 'font-bold text-primary' : ''}>{eventWords(e, usName, themName)}</span>
+            <span className="w-8 shrink-0 tabular-nums text-muted-foreground">{clock.label(e.min)}</span>
+            <span className={e.mine ? 'font-bold text-primary' : ''}>{clock.words(e, usName, themName)}</span>
           </li>
         ))}
       </ol>
