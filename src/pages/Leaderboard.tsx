@@ -309,11 +309,11 @@ export default function Leaderboard() {
       ) : mine ? (
         <div className="flex-1 min-w-0">
           <p className="font-semibold">
-            Your world rank: <span className="text-gold">#{mine.rank.toLocaleString()}</span>
+            Your world rank: <span className="text-gold">#{mine.rank.toLocaleString('en-US')}</span>
             <span className="text-muted-foreground font-normal"> in the world</span>
           </p>
           <p className="text-xs text-muted-foreground">
-            {mine.totalPoints.toLocaleString()} pts as {ownShownName}
+            {mine.totalPoints.toLocaleString('en-US')} pts as {ownShownName}
           </p>
         </div>
       ) : (
@@ -386,10 +386,10 @@ export default function Leaderboard() {
                   {row.playerName}{isOwn ? ' (you)' : ''}
                 </span>
                 <span className="block text-[11px] text-muted-foreground">
-                  {row.gamesPlayed.toLocaleString()} scored {row.gamesPlayed === 1 ? 'game' : 'games'}
+                  {row.gamesPlayed.toLocaleString('en-US')} scored {row.gamesPlayed === 1 ? 'game' : 'games'}
                 </span>
               </div>
-              <span className="text-lg font-bold text-primary">{row.totalPoints.toLocaleString()}</span>
+              <span className="text-lg font-bold text-primary">{row.totalPoints.toLocaleString('en-US')}</span>
             </div>
           );
         })}

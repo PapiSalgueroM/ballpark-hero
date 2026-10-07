@@ -23,6 +23,7 @@
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import { cn } from '@/lib/utils';
+import { formatNumber } from '@/lib/formatNumber';
 import { HelpCircle, Star, X } from 'lucide-react';
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { GameNavbar } from '@/components/game/GameNavbar';
@@ -30,7 +31,7 @@ import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import {
   TRACKS, levelOf, costOf, canBuy, capacity, attendance, incomePerSec,
-  tapValue, repMult, streakMult, prestigeThreshold, canPrestige, fmtMoney,
+  tapValue, repMult, streakMult, prestigeThreshold, canPrestige, fmtMoney as tycoonMoney,
   boostReady, boostActive, boostChargeSecOf, MILESTONES, opponentName,
   DIVISIONS, divisionOf, divisionIndex, leagueShape, leagueStandings, leaguePosition,
   clubNameOptions, ordinal, SINGLE_LEG_BELOW, YOUR_CLUB,
@@ -69,6 +70,10 @@ const SetPieceBoard = lazy(() => import('@/components/tycoon/SetPieceBoard').the
 function seatRand(i: number): number {
   const x = Math.sin(i * 127.1 + 311.7) * 43758.5453;
   return x - Math.floor(x);
+}
+
+function fmtMoney(n: number): string {
+  return tycoonMoney(n).replace(/^\$(-?\d+(?:\.\d+)?)([KMBTQ]?)$/, (_text, amount: string, unit: string) => `$${formatNumber(amount)}${unit}`);
 }
 
 /** Round 583: a rate under ten dollars a second keeps its cents, so a new club
@@ -372,7 +377,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
     { key: 'payroll', icon: '🧑‍🤝‍🧑', title: 'Payroll', value: `${totalStaffLevels(s)} hired`, accent: false },
     { key: 'ach', icon: '🏅', title: 'Badges', value: `${achCount}/${ACHIEVEMENTS.length}`, accent: false },
     { key: 'legacy', icon: '🏛️', title: 'Legacy', value: pts > 0 ? `${pts} pts` : 'boardroom', accent: pts > 0 },
-    { key: 'stats', icon: '📊', title: 'Records', value: `${s.totalWins.toLocaleString()} wins`, accent: false },
+    { key: 'stats', icon: '📊', title: 'Records', value: `${s.totalWins.toLocaleString('en-US')} wins`, accent: false },
   ];
   /* What a sale pays once this league is won: the engine's answer one division up. */
   const saleAfterTitle = lg ? pointsForSale({ ...s, league: { ...lg, division: Math.min(lg.division + 1, DIVISIONS.length - 1) } }) : pointsForSale(s);
@@ -476,8 +481,8 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
             </div>
           </div>
           <div className="text-right">
-            <div className="text-sm font-bold text-foreground tabular-nums">{fans.toLocaleString()} <span className="text-[10px] text-muted-foreground font-normal">/ {cap.toLocaleString()} seats</span></div>
-            <div className="text-[11px] text-muted-foreground">{Math.floor(s.fanbase).toLocaleString()} fans follow you</div>
+            <div className="text-sm font-bold text-foreground tabular-nums">{fans.toLocaleString('en-US')} <span className="text-[10px] text-muted-foreground font-normal">/ {cap.toLocaleString('en-US')} seats</span></div>
+            <div className="text-[11px] text-muted-foreground">{Math.floor(s.fanbase).toLocaleString('en-US')} fans follow you</div>
           </div>
         </div>
 
@@ -801,16 +806,16 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-center">
               {[
                 ['Lifetime, this ground', fmtMoney(s.lifetime)],
-                ['Career wins', s.totalWins.toLocaleString()],
-                ['Career goals', s.totalGoals.toLocaleString()],
-                ['Matches played', (s.totalMatches ?? 0).toLocaleString()],
-                ['Taps', s.totalTaps.toLocaleString()],
+                ['Career wins', s.totalWins.toLocaleString('en-US')],
+                ['Career goals', s.totalGoals.toLocaleString('en-US')],
+                ['Matches played', (s.totalMatches ?? 0).toLocaleString('en-US')],
+                ['Taps', s.totalTaps.toLocaleString('en-US')],
                 ['Best division', `${DIVISIONS[Math.min(s.bestDivision ?? 0, DIVISIONS.length - 1)].emoji} ${DIVISIONS[Math.min(s.bestDivision ?? 0, DIVISIONS.length - 1)].name}`],
-                ['Golden whistles caught', (s.goldenCaught ?? 0).toLocaleString()],
-                ['Hype boosts pressed', (s.boostsUsed ?? 0).toLocaleString()],
-                ['Reputation stars', s.rep.toLocaleString()],
-                ['Legacy points unspent', legacyPointsOf(s).toLocaleString()],
-                ['Legacy perk levels', totalPerkLevels(s).toLocaleString()],
+                ['Golden whistles caught', (s.goldenCaught ?? 0).toLocaleString('en-US')],
+                ['Hype boosts pressed', (s.boostsUsed ?? 0).toLocaleString('en-US')],
+                ['Reputation stars', s.rep.toLocaleString('en-US')],
+                ['Legacy points unspent', legacyPointsOf(s).toLocaleString('en-US')],
+                ['Legacy perk levels', totalPerkLevels(s).toLocaleString('en-US')],
               ].map(([label, value]) => (
                 <div key={label as string} className="rounded-lg bg-secondary/50 px-2 py-2">
                   <div className="text-xs font-bold font-display text-foreground truncate">{value}</div>
@@ -822,8 +827,8 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
         )}
 
         {/* lifetime line */}
-        <div className="text-[10px] text-muted-foreground text-center pb-4">
-          lifetime {fmtMoney(s.lifetime)} · {s.totalWins} wins · {s.totalGoals} goals · {s.totalTaps} taps · match #{s.matchNo + 1} · milestones {(s.claimed ?? []).length}/{MILESTONES.length} · badges {achCount}/{ACHIEVEMENTS.length}
+        <div className="text-xs text-muted-foreground text-center pb-4">
+          lifetime {fmtMoney(s.lifetime)} · {formatNumber(s.totalWins)} wins · {formatNumber(s.totalGoals)} goals · {formatNumber(s.totalTaps)} taps · match #{s.matchNo + 1} · milestones {(s.claimed ?? []).length}/{MILESTONES.length} · badges {achCount}/{ACHIEVEMENTS.length}
         </div>
 
       <Dialog open={Boolean(g.activeSetPiece)} onOpenChange={open => { if (!open) g.closeSetPiece(); }}>

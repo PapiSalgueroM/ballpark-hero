@@ -1,4 +1,5 @@
 import { Fragment, useState, useCallback, useRef, useEffect, useMemo } from "react";
+import { formatNumber } from '@/lib/formatNumber';
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import { useGameCompletion } from "@/hooks/useGameCompletion";
 import { recordCompletion, recordActivity, recordStreakDay } from "@/lib/completions";
@@ -2693,11 +2694,11 @@ function RivalComparisonPanel({ career }: { career: CareerState }) {
       {rows.map(r => (
         <div key={r.l} className="flex items-center justify-between text-xs">
           <span className={`font-bold w-12 text-right ${r.p > r.r ? "text-emerald-400" : r.p < r.r ? "text-muted-foreground" : "text-foreground"}`}>
-            {r.l === "Market Value" ? money(`€${(r.p as number).toFixed(0)}M`) : r.p}
+            {r.l === "Market Value" ? money(`€${(r.p as number).toFixed(0)}M`) : r.l === "Overall" ? r.p : formatNumber(r.p)}
           </span>
           <span className="text-[10px] text-muted-foreground flex-1 text-center">{r.l}</span>
           <span className={`font-bold w-12 text-left ${r.r > r.p ? "text-orange-400" : r.r < r.p ? "text-muted-foreground" : "text-foreground"}`}>
-            {r.l === "Market Value" ? money(`€${(r.r as number).toFixed(0)}M`) : r.r}
+            {r.l === "Market Value" ? money(`€${(r.r as number).toFixed(0)}M`) : r.l === "Overall" ? r.r : formatNumber(r.r)}
           </span>
         </div>
       ))}
@@ -2733,9 +2734,9 @@ export function RivalrySummaryCard({ summary, career }: { summary: RivalrySummar
       <div className="space-y-1.5">
         {summary.categories.map(c => (
           <div key={c.label} className="flex items-center justify-between text-xs bg-muted/20 rounded-lg px-3 py-1.5">
-            <span className={`font-bold w-14 text-right ${c.winner === "player" ? "text-emerald-400" : "text-muted-foreground"}`}>{c.playerVal}</span>
+            <span className={`font-bold w-14 text-right ${c.winner === "player" ? "text-emerald-400" : "text-muted-foreground"}`}>{formatNumber(c.playerVal)}</span>
             <span className="text-[10px] text-muted-foreground flex-1 text-center">{c.label}</span>
-            <span className={`font-bold w-14 text-left ${c.winner === "rival" ? "text-orange-400" : "text-muted-foreground"}`}>{c.rivalVal}</span>
+            <span className={`font-bold w-14 text-left ${c.winner === "rival" ? "text-orange-400" : "text-muted-foreground"}`}>{formatNumber(c.rivalVal)}</span>
           </div>
         ))}
       </div>
@@ -3067,7 +3068,7 @@ function RetirementCeremonyCard({ career, totals, onPostRetirement }: { career: 
           { l: "Ballon d'Or", v: totals.ballonDors }, { l: "Int'l Caps", v: career.intStats.caps },
         ].map((s, i) => (
           <div key={s.l} className="cm-tick-in bg-muted/20 rounded-lg p-2" style={{ animationDelay: at(i) }}>
-            <div className="text-lg font-black">{s.v}</div>
+            <div className="text-lg font-black">{formatNumber(s.v)}</div>
             <div className="text-[9px] text-muted-foreground">{s.l}</div>
           </div>
         ))}
@@ -3332,7 +3333,7 @@ export function LegacyCard({ career, totals, onShare }: { career: CareerState; t
       <div className="grid grid-cols-4 gap-2 text-center text-[10px]">
         {tiles.map((t, j) => (
           <div key={t.label} className={`bg-muted/20 rounded-lg p-1.5${fx("cm-tick-in")}`} style={at(tileBeat + j)} data-beat="tile">
-            <div className="font-black text-sm">{t.value}</div>
+            <div className="font-black text-sm">{formatNumber(t.value)}</div>
             <div className="text-muted-foreground">{t.label}</div>
           </div>
         ))}
@@ -4273,7 +4274,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 mt-3">
               {getPositionCareerStats(career.position, totals).map(s => (
                 <div key={s.l} className="text-center">
-                  <div className="text-lg sm:text-xl font-black">{s.v}</div>
+                  <div className="text-lg sm:text-xl font-black">{formatNumber(s.v)}</div>
                   <div className="text-[10px] text-muted-foreground">{s.l}</div>
                 </div>
               ))}

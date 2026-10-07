@@ -340,7 +340,7 @@ const momentFile = path.join(root, 'src/components/game/ResultMoment.tsx');
 let momentSrc = fs.readFileSync(momentFile, 'utf8');
 let screenSrc = fs.readFileSync(resultScreenFile, 'utf8');
 if (control === 'noscore') screenSrc = mutateOnce(screenSrc, 'score={score}', 'score={undefined}', 'ResultScreen.tsx');
-if (control === 'clipped') momentSrc = mutateOnce(momentSrc, '{score}\n', "{typeof score === 'string' ? score.slice(0, -1) : score}\n", 'ResultMoment.tsx');
+if (control === 'clipped') momentSrc = mutateOnce(momentSrc, '{shownScore}\n', "{typeof shownScore === 'string' ? shownScore.slice(0, -1) : shownScore}\n", 'ResultMoment.tsx');
 if (control === 'copy') momentSrc = mutateOnce(momentSrc, "close: 'Good try',", "close: 'Not this time',", 'ResultMoment.tsx');
 if (control === 'ink') momentSrc = mutateOnce(momentSrc, 'style={sportStyle(sport)}', '', 'ResultMoment.tsx');
 if (control === 'shift') momentSrc = mutateOnce(momentSrc, '@keyframes rmRise { 0% { opacity: 0; transform: translateY(6px); }', '@keyframes rmRise { 0% { opacity: 0; margin-top: 40px; }', 'ResultMoment.tsx');

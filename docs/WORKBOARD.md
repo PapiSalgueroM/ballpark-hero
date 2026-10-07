@@ -1,3 +1,41 @@
+## Codex1085 PREPARATION1, October7,13:18 EDT: commas in large values
+
+Accepted AJ base bde6b1c3797fd728dbd583a28623c34fe8452917, treef2657a3e.
+Branch codex/number-formatting-1085.14 presentation product files frozen,
+13 mounted cases/28 copied controls,6 native Tycoon/NFL routes across320,
+390 and1280px,9 restored DOM faults. Tiny numeric-token formatter preserves
+signs, decimal precision and opaque strings. Explicit leaves preserve years,
+ratings, IDs, units, existing rounding and numeric RPC inputs. Engine/data/
+schema/save handlers and public postseason countOf remain held. Changed
+career summary and Tycoon lifetime line are12px for readable grouped values.
+
+Two old tests change only declared displayed expectations. The original
+clipped-score fault now targets the formatted score variable; require its
+actual mutation, score failure and original mapped-control conclusion.
+Manifest holds all three complete original bde6 files plus exact declared
+edits. Other fixtures and substantive assertions are unchanged. Independent
+static peer found no remaining blocker. Correct type/build, old tests/nine
+relevant gates, all20 source/built readers and521 installed-version holds
+run remotely only. No PR/READY/native/runtime/live acceptance yet.
+
+Claude owns merge, release, data and current-main integration. Root source
+and seven stashes held. Nextfree1086 unclaimed.
+Codex1085 AUTHORED, October7,12:56 EDT: commas in large values.
+Accepted AJ base bde6b1c3797fd728dbd583a28623c34fe8452917, treef2657a3e.
+Branch codex/number-formatting-1085. Tiny presentation helper and explicit
+career/manager/result/profile/leaderboard numeric leaves. Preserve signs,
+precision, years/ratings/IDs, compact money units and currency conversion.
+Engines, data, saves and saved narrative remain held. Private UI count
+helper leaves public engine countOf unchanged. Tycoon changed lifetime line
+and the career summary get12px text.14 product files authored.13 mounted
+cases/28 copied controls and6 native journeys/9 restored DOM controls are
+statically reviewed. Exact-head remote verification is next.
+Old tests allow only declared display expectation edits with original inputs
+and substantive assertions held. No PR/READY/live claim. No local runtime.
+Design: docs/plans/2026-10-07-number-formatting-1085.md.
+Claude retains main/release/data,1045 and US legacy calibration lanes.
+Nextfree1086 unclaimed. Protected root/seven stashes held.
+
 ## Release AJ LIVE, 2026-10-07 11:34 EDT
 
 Claude lane. main 3353111f, deployment 3dba165e-356d-4381-9d12-25f9f8018695, entry index-qeAzpi07.js (was

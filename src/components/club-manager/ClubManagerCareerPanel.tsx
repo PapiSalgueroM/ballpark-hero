@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { formatNumber } from '@/lib/formatNumber';
 import { Pencil, UserPlus } from 'lucide-react';
 import { FlagImg } from '@/components/FlagImg';
 import { MANAGER_BACKGROUNDS, CLUB_IDENTITIES, MANAGER_AGE_BANDS, money, managerLookOf } from '@/lib/clubManager';
@@ -33,7 +34,7 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer }: {
                     <p className="text-xs text-foreground">
                       In charge since season {c.nationJob.since}. {c.nationJob.played === 0
                         ? 'Your first tournament summer is still to come.'
-                        : `${c.nationJob.played} tournament${c.nationJob.played === 1 ? '' : 's'} taken charge of, ${c.nationJob.won} won.`}
+                        : `${formatNumber(c.nationJob.played)} tournament${c.nationJob.played === 1 ? '' : 's'} taken charge of, ${formatNumber(c.nationJob.won)} won.`}
                     </p>
                     {c.nationJob.lastResult && (
                       <p className="text-[11px] text-muted-foreground mt-1">
@@ -143,7 +144,7 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer }: {
                   <EditManagerSheet career={c} open={editing} onOpenChange={setEditing} onSave={g.updateManager} />
                   <div className="grid grid-cols-3 gap-2 text-center mb-2">
                     <div>
-                      <div className="text-sm font-bold font-display text-foreground">{c.careerStats.wins}W {c.careerStats.draws}D {c.careerStats.losses}L</div>
+                      <div className="text-sm font-bold font-display text-foreground">{formatNumber(c.careerStats.wins)}W {formatNumber(c.careerStats.draws)}D {formatNumber(c.careerStats.losses)}L</div>
                       <div className="text-[9px] text-muted-foreground">Record</div>
                     </div>
                     <div>
@@ -151,7 +152,7 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer }: {
                       <div className="text-[9px] text-muted-foreground">Win rate</div>
                     </div>
                     <div>
-                      <div className="text-sm font-bold font-display text-foreground">{c.trophies.length}</div>
+                      <div className="text-sm font-bold font-display text-foreground">{formatNumber(c.trophies.length)}</div>
                       <div className="text-[9px] text-muted-foreground">Trophies</div>
                     </div>
                   </div>
