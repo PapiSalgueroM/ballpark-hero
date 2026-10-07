@@ -1,4 +1,4 @@
-import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Crown, Dumbbell, RotateCcw, Sparkles } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
 /* Round 900: the one board. The NFL, NBA, MLB and NHL careers were four copies
@@ -67,9 +67,18 @@ import { bankTrainingRating, trainingBankNote, trainingScore, trainingSessionOpe
 import { buildCareerDecisionOutcome, type CareerDecisionOutcomeData } from '@/lib/usCareerDecisionOutcome';
 import CareerDecisionOutcome from '@/components/us-career/CareerDecisionOutcome';
 import { answerSummerCard, newSummerSalt, repairSummerOnLoad, seekSummerCard, startSummer, summerOn, summerPlace } from '@/lib/usCareerSummer';
+import { answerTalk, endsAfterSeason, manualRetire, pendingTalk, repairHallOnLoad, talkDeckFilter } from '@/lib/usCareerRetirementFlow';
+import { isFarewellSeason, type RetirementChoiceId } from '@/lib/careerRetirement';
+import { hallRecordFor, type HallSpeechId } from '@/lib/careerHallOfFame';
 
 const UsCareerPractice = lazy(() => import('@/components/us-career/UsCareerPractice'));
 const CareerSeasonReview = lazy(() => import('@/components/us-career/CareerSeasonReview'));
+/* Round 1039: the retirement talk, the farewell banner and the Hall card load
+   with the moment they belong to; the speech (careerAwardsNight) rides only
+   with the Hall card. */
+const FarewellCard = lazy(() => import('@/components/career/FarewellCard').then(m => ({ default: m.FarewellCard })));
+const FarewellSeasonBanner = lazy(() => import('@/components/career/FarewellCard').then(m => ({ default: m.FarewellSeasonBanner })));
+const HallOfFameCard = lazy(() => import('@/components/career/HallOfFameCard').then(m => ({ default: m.HallOfFameCard })));
 
 /* Round 126: 'coach' is new. Retirement used to be the last screen in the
    game. Now it hands you to a job board and the save keeps going.
@@ -224,6 +233,17 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
      again. The same shape in all four My Career boards. */
   const done = phase === 'retired' || phase === 'coach';
   useGameCompletion(sport.gameSlug, done, career ? sport.legacyOf(career).score : 0);
+  /* Round 1039: the Hall record is derived (src/lib/careerHallOfFame.ts says
+     why), so a retired save from before the bind gets its ballot on its next
+     visit. hallLanded holds the Hall pill and the confetti until the card's
+     last ballot has landed; hallFolded is Continue on that card. */
+  const hallRecord = useMemo(
+    () => (phase === 'retired' && career?.retired && sport.hall ? hallRecordFor(sport.hall, career) : null),
+    [phase, career, sport],
+  );
+  const [hallLanded, setHallLanded] = useState(false);
+  const [hallFolded, setHallFolded] = useState(false);
+  useEffect(() => { setHallLanded(false); setHallFolded(false); }, [sport, career?.name, career?.retired]);
 
   useEffect(() => {
     setDecisionOutcome(null);
@@ -255,6 +275,9 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
       /* Round 1038: the summer, the ledger and the salt are each checked
          alone, and a broken one is dropped alone. Old saves have none. */
       repairSummerOnLoad(loaded);
+      /* Round 1039: the retirement answers, the speech and the recorded jersey,
+         each checked alone. Old saves have none. */
+      repairHallOnLoad(loaded);
       setCareer(loaded);
       setTeamQuality(s.teamQuality);
       /* Round 126, house pattern from ensureContracts and ensureAcademy in
@@ -414,6 +437,14 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
         subHeader: `${sport.teamLabelOf(banned.team, c.eraId)} · age ${banned.age} · ${c.pos}`,
         teamResult: 'SUSPENDED', statLine: '', campNote: null, notes: [], progressNotes: banNotes,
       }));
+      /* Round 1039: a farewell or a retirement he chose ends the career even on
+         a banned year: the card said whatever the numbers say. */
+      if (endsAfterSeason(c, banned.year)) {
+        c.retired = true;
+        setPhase('retired');
+        persist(c, 'retired', teamQuality);
+        return;
+      }
       setPhase('season');
       persist(c, 'season', teamQuality);
       return;
@@ -457,10 +488,13 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
       year: line.year,
       subHeader: `${sport.teamLabelOf(line.team, c.eraId)} · age ${line.age} · ${c.pos}`,
       teamResult: line.teamResult, statLine: statLine(line, c.pos),
-      campNote, notes, progressNotes,
+      /* Round 1039: the last season of an announced farewell says so. */
+      campNote, notes: isFarewellSeason(c.retirement, line.year) ? ['Farewell season', ...notes] : notes, progressNotes,
     }));
     const newFeed = [...(campNote ? [campNote] : []), ...notes, ...progressNotes];
-    if (sport.shouldRetire(c)) {
+    /* Round 1039: a farewell he announced (on the talk or on a deck card) ends
+       the career after its season, exactly as the hard stop does. */
+    if (sport.shouldRetire(c) || endsAfterSeason(c, line.year)) {
       c.retired = true;
       setCareer(c);
       setFeed(newFeed);
@@ -470,7 +504,10 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     }
     /* Round 1038: the summer. On the one card knob this is exactly the old
        sport.drawEvent(c, Math.random) and writes nothing onto c. */
-    const ev = startSummer(c, sport, Math.random);
+    /* Round 1039: while the retirement talk is pending, the deck's own
+       retirement cards are held out of this offseason, so it never asks twice
+       (src/lib/usCareerRetirementFlow.ts). With no Hall bound nothing is held. */
+    const ev = startSummer(c, sport, Math.random, talkDeckFilter(c, sport.hall));
     if (!ev) {
       /* Only a summer can deal nothing (every card it dealt has already moved
          past); the offseason then ends as an answered one does. */
@@ -660,9 +697,47 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     persist(res.state, phase, teamQuality);
   };
 
+  /* Round 1039: the answer to the retirement talk. Retire now ends the career
+     on the season just played, and the offseason's card is dropped unapplied
+     (its draw already happened, so no stream moves). One more year and the
+     farewell go on to the card, or to the hub. */
+  const answerRetirementTalk = (choice: RetirementChoiceId) => {
+    if (!career || !pendingTalk(career, sport.hall)) return;
+    const c: CareerState = JSON.parse(JSON.stringify(career));
+    answerTalk(c, choice);
+    if (choice === 'retireNow') {
+      c.retired = true;
+      delete c.summer;
+      setPendingEvent(null);
+      setCareer(c);
+      setPhase('retired');
+      persist(c, 'retired', teamQuality);
+      return;
+    }
+    setCareer(c);
+    persist(c, phase === 'event' ? 'event' : 'season', teamQuality);
+  };
+
+  /* Round 1039: the induction speech, given once. The speech module rides
+     with the Hall card, so it is fetched on the press (already loaded). */
+  const giveSpeech = (id: HallSpeechId) => {
+    const hall = sport.hall;
+    if (!career || !hallRecord || !hall || career.hallSpeech?.speechId) return;
+    const base = career;
+    const rec = hallRecord;
+    void import('@/lib/careerHallSpeech').then(({ giveHallSpeech }) => {
+      const c: CareerState = JSON.parse(JSON.stringify(base));
+      c.hallSpeech = giveHallSpeech(base.hallSpeech, rec, hall.key(base), id);
+      setCareer(c);
+      persist(c, 'retired', teamQuality);
+    });
+  };
+
   const retireNow = () => {
     if (!career) return;
     const c: CareerState = JSON.parse(JSON.stringify(career));
+    /* Round 1039: 'Hang them up now' writes the last season played as the last. */
+    manualRetire(c);
     c.retired = true;
     setCareer(c);
     setPhase('retired');
@@ -900,6 +975,22 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     );
   }
 
+  /* ------------------- Round 1039: the retirement talk -------------------
+     After the curtain and the rivalry beats, before the offseason's card or
+     the hub. Derived from the career, so a reload asks it again until it is
+     answered, and an old save already inside the rule is asked on its first
+     load. With no Hall bound there is never a talk. */
+  const talk = phase === 'season' || phase === 'event' ? pendingTalk(career, sport.hall) : null;
+  if (talk) {
+    return (
+      <div ref={revealRef}>
+        <Suspense fallback={<p role="status" className="text-center text-xs text-muted-foreground">Loading...</p>}>
+          <FarewellCard talk={talk} age={career.age} onChoose={answerRetirementTalk} />
+        </Suspense>
+      </div>
+    );
+  }
+
   if ((phase === 'retired' && retiredReview) || (phase !== 'retired' && phase !== 'coach' && phase !== 'freeagency' && panel === 'log')) {
     return <Suspense fallback={<p role="status">Loading season review...</p>}>
       <CareerSeasonReview career={career} sport={sport} backLabel={phase === 'retired' ? 'Back to retirement' : 'Back to career'} onBack={() => {
@@ -934,7 +1025,8 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
             motion lands every piece on its final frame (CelebrationStyles). */}
         <div className="relative rounded-2xl border border-gold/50 bg-card p-5 text-center">
           <CelebrationStyles />
-          {legacy.hof && <Confetti pieces={60} gold />}
+          {/* Round 1039: with a Hall bound, the confetti waits for the ballot. */}
+          {legacy.hof && (!hallRecord || hallLanded) && <Confetti pieces={60} gold />}
           {sport.retirementAvatar && career.appearance && (
             <div className="mb-2 flex justify-center">
               <span className="overflow-hidden rounded-xl border-2 border-gold/50 bg-secondary">
@@ -957,7 +1049,10 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
           </div>
           <div className="cm-rise mt-3 flex items-center justify-center gap-3 text-sm" style={{ animationDelay: revealDelay(legacy.bullets.length, 0.95) }}>
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Legacy <b className="text-gold">{legacy.score}</b></span>
-            <span className="rounded-full border border-border bg-background px-3 py-1.5">{sport.hallLine(legacy.hof)}</span>
+            {/* Round 1039: and so does the Hall pill, so the ballot is not spoiled. */}
+            {(!hallRecord || hallLanded) && (
+              <span className={cn('rounded-full border border-border bg-background px-3 py-1.5', hallRecord && 'cm-rise')}>{sport.hallLine(legacy.hof)}</span>
+            )}
           </div>
           <div className="mt-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
             <USCareerActionConfirm action="restart" sport={sport.label} onConfirm={reset}>
@@ -973,6 +1068,20 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
             />
           </div>
         </div>
+        {/* Round 1039: the wait, the ballot years, the jersey and the speech. */}
+        {hallRecord && sport.hall && (
+          <Suspense fallback={<p role="status" className="text-center text-xs text-muted-foreground">Counting the Hall votes...</p>}>
+            <HallOfFameCard
+              record={hallRecord}
+              rules={sport.hall.rules}
+              speech={career.hallSpeech}
+              onSpeech={giveSpeech}
+              folded={hallFolded}
+              onDismiss={() => setHallFolded(true)}
+              onLanded={() => setHallLanded(true)}
+            />
+          </Suspense>
+        )}
         {/* Round 126: the save does not end here any more. */}
         <CoachStartCard sport={sport.slug} existing={coach} onStart={startCoaching} onResume={openCoaching} />
         <button ref={retiredReviewButton} data-career-review-opener="" onClick={() => setRetiredReview(true)} className="min-h-[44px] w-full rounded-xl border border-primary/40 bg-primary/10 px-3 py-3 text-sm font-semibold text-foreground">Review seasons</button>
@@ -1206,6 +1315,11 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
 
 
 
+
+      {/* Round 1039: the announced last season carries its banner. */}
+      {isFarewellSeason(career.retirement, career.year) && (
+        <Suspense fallback={null}><FarewellSeasonBanner year={career.year} /></Suspense>
+      )}
 
       {phase === 'extension' && extTalk ? (
         <div ref={revealRef}>

@@ -12,6 +12,8 @@
    choosing. Ids are all prefixed lifeB_ so they never collide with deck A.
    ========================================================================== */
 import type { CareerState, CareerEvent } from './nflMyCareer';
+import { announceFarewell, retirementSettled } from './careerRetirement';
+import { recordNumberRetired } from './careerHallOfFame';
 import { teamLabelOf, nflEraById, POS_SALARY_MULT } from './nflMyCareer';
 /* Round 917: every card below carries a category (its section header), a
    cooldown and, where two cards tell one story, a story key. Nothing reads
@@ -358,14 +360,14 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
         {
           label: 'Halftime, keep it short', effect: 'Rafters, quick',
           apply: (cc) => {
-            setFlag(cc, 'b_jersey', 1); bumpFan(cc, 14); bumpMorale(cc, 8);
+            setFlag(cc, 'b_jersey', 1); recordNumberRetired(cc); bumpFan(cc, 14); bumpMorale(cc, 8);
             return 'Eleven minutes at halftime and your number goes up forever. Fanbase +14, morale +8.';
           },
         },
         {
           label: 'Home opener, free jerseys for the upper deck', effect: 'Enormous and expensive',
           apply: (cc) => {
-            setFlag(cc, 'b_jersey', 2); spend(cc, 1.1); bumpFan(cc, 22); bumpMorale(cc, 10);
+            setFlag(cc, 'b_jersey', 2); recordNumberRetired(cc); spend(cc, 1.1); bumpFan(cc, 22); bumpMorale(cc, 10);
             return 'You paid 1.1M so 12,000 people in the cheap seats went home wearing your name. Fanbase +22, morale +10.';
           },
         },
@@ -476,7 +478,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
     });
   }
 
-  if (yrs >= 8 && (c.age >= 33 || (c.pos === 'RB' && c.age >= 30)) && flag(c, 'b_tour') === 0) {
+  if (yrs >= 8 && (c.age >= 33 || (c.pos === 'RB' && c.age >= 30)) && flag(c, 'b_tour') === 0 && !retirementSettled(c)) {
     deck.push({
       id: 'lifeB_retirementTour',
       category: 'legacy', cooldown: CD.once,
@@ -484,10 +486,10 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
       body: 'Say this is the last one and every road stadium hands you a framed something. Say nothing and you get to play football without a receiving line.',
       options: [
         {
-          label: 'Full farewell tour', effect: 'Gifts and goodbyes',
+          label: 'Full farewell tour', effect: 'Next season is your last',
           apply: (cc) => {
-            setFlag(cc, 'b_tour', 1); earn(cc, 1); bumpFan(cc, 16); bumpMorale(cc, 8);
-            return 'Seventeen weeks of gifts, tributes and one team that gave you a canoe. 1M in tour merch, fanbase +16, morale +8.';
+            setFlag(cc, 'b_tour', 1); announceFarewell(cc); earn(cc, 1); bumpFan(cc, 16); bumpMorale(cc, 8);
+            return 'You told everyone next season is the last one. Seventeen weeks of gifts, tributes and one team with a canoe are coming. 1M in tour merch, fanbase +16, morale +8.';
           },
         },
         {
@@ -1521,7 +1523,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
     });
   }
 
-  if (yrs >= 7 && c.age >= 29 && c.health >= 70 && c.earnings >= 40 && flag(c, 'b_walkAway') === 0) {
+  if (yrs >= 7 && c.age >= 29 && c.health >= 70 && c.earnings >= 40 && flag(c, 'b_walkAway') === 0 && !retirementSettled(c)) {
     deck.push({
       id: 'lifeB_retireHealthy',
       category: 'contract', cooldown: CD.once,
@@ -1529,10 +1531,10 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
       body: 'Knees, memory and money all intact at the same time. Almost nobody in this sport ever gets handed that combination.',
       options: [
         {
-          label: 'Announce this is the last season', effect: 'Leave whole',
+          label: 'Announce this is the last season', effect: 'Next season is your last',
           apply: (cc) => {
-            setFlag(cc, 'b_walkAway', 1); bumpMorale(cc, 12); bumpFan(cc, 14); bumpHealth(cc, 4);
-            return 'You told them in March that this was it. Morale +12, fanbase +14, health +4, and every Sunday felt different.';
+            setFlag(cc, 'b_walkAway', 1); announceFarewell(cc); bumpMorale(cc, 12); bumpFan(cc, 14); bumpHealth(cc, 4);
+            return 'You told them next season is it, your last. Morale +12, fanbase +14, health +4, and every Sunday will feel different.';
           },
         },
         {
