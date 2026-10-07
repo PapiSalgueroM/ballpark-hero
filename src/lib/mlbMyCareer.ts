@@ -919,12 +919,11 @@ const MLB_LEGACY_V2: LegacyWeights = {
         { stat: 'so', from: 3700, to: 4120, label: 'strikeouts' },
       ],
     },
-    RP: {
-      terms: [{ stat: 'hr', per: 4 }, { stat: 'rbi', per: 60 }, { stat: 'saves', per: 8 }, { stat: 'holds', per: 12 }, { stat: 'so', per: 40 }],
-      standout: [
-        { stat: 'saves', from: 809, to: 966, label: 'saves' },
-      ],
-    },
+    /* The reliever is read as calibration 1 read him. A base (saves, holds,
+       strikeouts) and a saves standout were built and then taken out by the
+       real anchors: a real career the writers dropped on its one ballot went
+       in with either (scripts/data/careerHallAnchors.json, decisions). */
+    RP: { terms: [{ stat: 'hr', per: 4 }, { stat: 'rbi', per: 60 }] },
     C: {
       terms: [{ stat: 'hr', per: 4 }, { stat: 'rbi', per: 60 }],
       standout: [
@@ -965,7 +964,8 @@ const MLB_LEGACY_V2: LegacyWeights = {
       standout: [
         { stat: 'hr', from: 529, to: 607, label: 'home runs' },
         { stat: 'rbi', from: 1740, to: 1920, label: 'RBI' },
-        { stat: 'sb', from: 654, to: 745, label: 'steals' },
+        // Half the push here: the real anchors again (a real career the writers dropped went in with the full one).
+        { stat: 'sb', from: 654, to: 745, label: 'steals', top: 150 },
       ],
     },
     CF: {

@@ -22,6 +22,20 @@
       "nhl": "not built in this session"
     }
   },
+  "decisions": [
+    { "sport": "mlb", "pos": "LF", "kind": "standout", "stat": "sb", "action": "halved", "what": "steals standout",
+      "why": "mlb-sb-4 (real never: three votes on his one ballot) was in the Hall on calibration 2 with the full push, 570 in the books reading and 593 in the raw one against a line of 500. At half he is out (420 and 431).",
+      "counts": "in or out and exact, calibration 1 > 2. Before: raw 9 > 7 and 6 > 4 of 9, books 8 > 6 and 5 > 3 of 8 (with the reliever's saves below). After this and the reliever's saves both halved: raw 9 > 8 and 6 > 5, books 8 > 7 and 5 > 4." },
+    { "sport": "mlb", "pos": "RP", "kind": "standout", "stat": "saves", "action": "dropped", "what": "saves standout",
+      "why": "mlb-saves-4 (real never: 4.6 percent on his one ballot) was a first ballot Hall of Famer on calibration 2 in the books reading, 945 with the full push and still 795 with it halved.",
+      "counts": "Halved: raw 9 > 8 and 6 > 5 of 9, books 8 > 7 and 5 > 4 of 8. Dropped: raw 9 > 8 and 6 > 5 of 9, books 4 > 4 and 3 > 3 of 4 (no reliever has a books reading any more)." },
+    { "sport": "mlb", "pos": "RP", "kind": "base", "action": "dropped", "what": "base",
+      "why": "mlb-saves-4 sits at 469 on hardware and seasons alone (four All-Star seasons, 21 seasons), 31 under the line. The base (saves per 8, holds per 12, strikeouts per 40) put him in at 546 in the raw reading; halved (per 16, 24 and 80) he was still in at 508, by 8.",
+      "counts": "Base whole: raw 9 > 8 and 6 > 5 of 9. Halved: raw 9 > 8 and 6 > 5. Dropped: raw 9 > 9 and 6 > 6, books 4 > 4 and 3 > 3 of 4." }
+  ],
+  "measured": {
+    "mlb": { "raw2": { "inOut": 9, "exact": 6, "n": 9 }, "books2": { "inOut": 4, "exact": 3, "n": 4 } }
+  },
   "lists": [
     { "sport": "mlb", "family": "saves", "publisher": "Baseball-Reference", "url": "https://www.baseball-reference.com/leaders/SV_career.shtml", "read": "2026-10-07", "says": "1 Mariano Rivera+ 652, 2 Trevor Hoffman+ 601, 3 Kenley Jansen (bold, active) 498, 4 Lee Smith+ 478, 5 Craig Kimbrel (bold, active) 441, 6 Francisco Rodriguez 437, 7 John Franco 424, 8 Billy Wagner+ 422, 9 Aroldis Chapman (bold, active) 402, 10 Dennis Eckersley+ 390" },
     { "sport": "mlb", "family": "sb", "publisher": "Baseball-Reference", "url": "https://www.baseball-reference.com/leaders/SB_career.shtml", "read": "2026-10-07", "says": "1 Rickey Henderson+ 1406, 2 Lou Brock+ 938, 3 Billy Hamilton+ 914, 4 Ty Cobb+ 897, 5 Tim Raines+ 808, 6 Vince Coleman 752, 7 Arlie Latham 742, 8 Eddie Collins+ 741, 9 Max Carey+ 738, 10 Honus Wagner+ 723, 11 Joe Morgan+ 689, 12 Willie Wilson 668" }

@@ -13,10 +13,10 @@ import { HALL_CALIBRATION, hallVoterRulesFor, usCareerHall, type HallVoterWords 
    names a standout family of the calibration 2 table, and section 19 of
    scripts/simCareerHall.mjs holds it against the engine. */
 export const MLB_HALL_WORDS: HallVoterWords = {
-  weighs: "The voters weigh the hardware first: rings, the major awards, All-Star years. Then the whole stat sheet, saves and steals as much as homers.",
+  weighs: "The voters weigh the hardware first: rings, the major awards, All-Star years. Then the whole stat sheet, steals as much as homers.",
   hardware: "rings, the major awards, All-Star years",
-  families: "home runs, RBI, steals, wins, strikeouts or saves",
-  example: { positions: ["RP"], stat: "saves", one: "reliever", who: "relievers", family: "saves" },
+  families: "home runs, RBI, steals, wins or strikeouts",
+  example: { positions: ["CF"], stat: "sb", one: "center fielder", who: "center fielders", family: "steals" },
 };
 
 /** The two lines the page's "?" adds, built from the words above and the table careers retire on today. */

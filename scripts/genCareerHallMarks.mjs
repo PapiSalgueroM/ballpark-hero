@@ -64,6 +64,13 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+/* What the real anchors decided (scripts/data/careerHallAnchors.json, section
+   18 of the harness): a standout dropped at a position leaves the cells the
+   bands are measured over, and a dropped base has no credit to band. The
+   marks and the half rule's own list are never touched by them. */
+const ANCHOR_FILE = path.join(ROOT, 'scripts/data/careerHallAnchors.json');
+const DECISIONS = existsSync(ANCHOR_FILE) ? (JSON.parse(readFileSync(ANCHOR_FILE, 'utf8')).decisions ?? []) : [];
+const decided = (sport, pos, kind, stat, action) => DECISIONS.some(d => d.sport === sport && d.pos === pos && d.kind === kind && (kind === 'base' || d.stat === stat) && d.action === action);
 const DIR = process.argv[2];
 if (!DIR) { console.error('usage: node scripts/genCareerHallMarks.mjs <dir with rows-<sport>-<seed>.json>'); process.exit(2); }
 const OUT = process.env.MARKS_OUT || path.join(ROOT, 'scripts/data/careerHallMarks.json');
@@ -183,7 +190,7 @@ for (const sport of Object.keys(POSITIONS)) {
 
   /* The bands, at the default size. */
   const widen = (xs, k) => { const lo = Math.min(...xs), hi = Math.max(...xs); return { lo: Math.max(0, Math.round((lo - k * (hi - lo)) * 1e4) / 1e4), hi: Math.round((hi + k * (hi - lo)) * 1e4) / 1e4, measured: xs.map(x => Math.round(x * 1e4) / 1e4) }; };
-  const cells = POSITIONS[sport].flatMap(pos => (out.standouts[pos] ?? []).map(f => ({ pos, f, m: out.positions[pos].families[f] })));
+  const cells = POSITIONS[sport].flatMap(pos => (out.standouts[pos] ?? []).filter(f => !decided(sport, pos, 'standout', f, 'dropped')).map(f => ({ pos, f, m: out.positions[pos].families[f] })));
   const cellShares = [], fromPooled = [], toPooled = [];
   for (const run of runs) {
     let a = 0, b = 0, n = 0;
@@ -201,7 +208,7 @@ for (const sport of Object.keys(POSITIONS)) {
   /* The second pass: the outcome on calibration 2, when the rows carry it. */
   if (runs.every(run => run.every(r => typeof r.hof2 === 'boolean' && typeof r.hof2b === 'boolean'))) {
     const gains = [], own = [], hall1 = [], hall2 = [], med1 = [], med2 = [], mean1 = [], mean2 = [], newlyIn = [];
-    const baseMed = Object.fromEntries(Object.keys(out.base).map(p => [p, []]));
+    const baseMed = Object.fromEntries(Object.keys(out.base).filter(p => !decided(sport, p, 'base', null, 'dropped')).map(p => [p, []]));
     for (const run of runs) {
       let in1 = 0, in2 = 0, n = 0, sIn = 0, sOut = 0, sN = 0;
       for (const { pos, f } of cells) {
@@ -219,7 +226,7 @@ for (const sport of Object.keys(POSITIONS)) {
       newlyIn.push(run.filter(r => r.hof2 && !r.hof1).length);
       med1.push(median(run.map(r => r.s1))); med2.push(median(run.map(r => r.s2)));
       mean1.push(Math.round(10 * run.reduce((s, r) => s + r.s1, 0) / run.length) / 10); mean2.push(Math.round(10 * run.reduce((s, r) => s + r.s2, 0) / run.length) / 10);
-      for (const [pos, terms] of Object.entries(out.base)) baseMed[pos].push(median(run.filter(r => r.pos === pos).map(r => terms.reduce((s, t) => s + (r.t[t.stat] ?? 0) / t.per, 0))));
+      for (const [pos, terms] of Object.entries(out.base)) if (baseMed[pos]) baseMed[pos].push(median(run.filter(r => r.pos === pos).map(r => terms.reduce((s, t) => s + (r.t[t.stat] ?? 0) / t.per, 0))));
     }
     const r4 = xs => xs.map(x => Math.round(x * 1e4) / 1e4);
     out.outcome = {
