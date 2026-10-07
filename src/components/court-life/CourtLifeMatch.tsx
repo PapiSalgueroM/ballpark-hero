@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { COURT_HZ, courtPassTarget, courtShotMeter } from '@/lib/courtLife';
 import type { useCourtLife } from '@/hooks/useCourtLife';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { CourtLifeCanvas } from './CourtLifeCanvas';
 import CourtLifeControls from './CourtLifeControls';
 import { courtButton, courtPrimary } from './CourtLifeHub';
@@ -15,6 +16,8 @@ export default function CourtLifeMatch({ game }: { game: ReturnType<typeof useCo
   const reveal = useRevealScroll(`${match.id}:${match.phase === 'finished' ? 'finished' : match.phase === 'halftime' ? 'interval' : 'play'}:${boxOpen}`);
   const meter = courtShotMeter(match, player.id), target = match.players.find(row => row.id === courtPassTarget(match, player.id));
   const owner = match.players.find(row => row.id === match.ball.ownerId);
+  const ownsBall = owner?.id === player.id;
+  const possessionText = match.phase === 'inbound' ? `${match.teams[match.possession].name} inbound` : stopped ? 'Play stopped' : owner ? `${owner.name} has the ball` : match.ball.mode === 'shot' ? 'Shot in the air' : match.ball.mode === 'pass' ? 'Pass in the air' : 'Loose ball';
   useEffect(() => { if (!game.paused) frame.current?.querySelector('canvas')?.focus({ preventScroll: true }); }, [game.paused]);
   return <section ref={reveal} className="space-y-2" data-court-match data-court-phase={match.phase} data-court-paused={String(game.paused)}>
     <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 rounded-xl bg-[#172d3b] px-3 py-2 text-white">
@@ -31,19 +34,19 @@ export default function CourtLifeMatch({ game }: { game: ReturnType<typeof useCo
         </div>
       </div>}
     </div>
-    <div className="flex min-h-6 items-center justify-between gap-2 text-xs"><span className="min-w-0 truncate">{owner ? `${owner.name} has the ball` : match.ball.mode === 'shot' ? 'Shot in the air' : match.ball.mode === 'pass' ? 'Pass in the air' : 'Loose ball'} · Attack {player.side === 'home' ? '→' : '←'}</span><span className="shrink-0">Gas {Math.round(player.stamina)}%</span></div>
-    <div className="relative h-3 overflow-hidden rounded-full bg-muted" role="meter" aria-label="Shot release meter" aria-valuemin={0} aria-valuemax={1} aria-valuenow={meter.charge} aria-valuetext={player.chargeTicks ? 'Release inside the gold window' : 'Hold Shoot to charge'}>
+    <div className="flex min-h-6 items-center justify-between gap-2 text-xs"><span className="min-w-0 truncate">{possessionText} · Attack {player.side === 'home' ? '→' : '←'}</span><span className="shrink-0">Gas {Math.round(player.stamina)}%</span></div>
+    <div className="relative h-3 overflow-hidden rounded-full bg-muted" role="meter" aria-label="Shot release meter" aria-valuemin={0} aria-valuemax={1} aria-valuenow={meter.charge} aria-valuetext={player.chargeTicks ? 'Release inside the gold window' : ownsBall ? 'Hold Shoot to charge' : 'Available when you have the ball'}>
       <span className="absolute inset-y-0 bg-amber-400" style={{ left: `${Math.max(0, meter.ideal - meter.window) * 100}%`, width: `${meter.window * 200}%` }} />
       <span className="absolute inset-y-0 w-1 bg-foreground" style={{ left: `calc(${Math.min(1, meter.charge) * 100}% - 2px)` }} />
     </div>
-    <p className="text-xs text-muted-foreground">{player.chargeTicks ? 'Release Shoot in the gold window. Space and distance still matter.' : target && owner?.id === player.id ? `Pass target: ${target.name}, marked by the dashed ring.` : 'Hold Shoot, then release. Move into space or stay with your player.'}</p>
+    <p className="text-xs text-muted-foreground">{player.chargeTicks ? 'Release Shoot in the gold window. Space and distance still matter.' : target && ownsBall ? `Pass target: ${target.name}, marked by the dashed ring.` : match.possession === player.side ? 'Find space and Call for a pass. Jump to collect a loose ball.' : 'Stay with your player. Guard, jump to contest or try a steal.'}</p>
     {!stopped && <CourtLifeControls match={match} paused={game.paused} press={game.press} release={game.release} move={game.move} tap={game.tap} />}
     <div className="flex items-center gap-2"><p className="min-w-0 flex-1 text-xs" role="status" aria-live="polite">{match.message}</p>{!stopped && <button className={courtButton} onClick={game.paused ? game.resume : game.pause}>{game.paused ? 'Resume' : 'Pause'}</button>}</div>
     <p className="text-xs text-muted-foreground">{player.stats.points} PTS · {player.stats.assists} AST · {player.stats.rebounds} REB · {player.stats.steals} STL · {player.stats.blocks} BLK · {player.stats.turnovers} TO</p>
-    {boxOpen && match.phase === 'finished' && <div className="space-y-3 rounded-xl border border-border bg-card p-3" data-court-boxscore>
-      <h3 className="font-display text-lg font-bold">Every possession counted</h3>
+    <Dialog open={boxOpen && match.phase === 'finished'} onOpenChange={setBoxOpen}><DialogContent className="max-h-[85dvh] overflow-y-auto p-3 pt-10 [&>button]:h-11 [&>button]:w-11" data-court-boxscore>
+      <DialogTitle>Every possession counted</DialogTitle><DialogDescription>Final score {match.score.home} : {match.score.away}. These are the plays recorded in your game.</DialogDescription>
       {(['home', 'away'] as const).map(side => <div key={side} className="overflow-x-auto"><table className="w-full text-left text-xs"><caption className="py-2 text-left font-semibold">{match.teams[side].name} · {match.score[side]}</caption><thead><tr>{['Player', 'PTS', 'FG', 'AST', 'REB', 'STL', 'BLK', 'TO'].map(label => <th className="px-1 py-2" key={label}>{label}</th>)}</tr></thead><tbody>{match.players.filter(row => row.side === side).map(row => <tr key={row.id} className={row.id === player.id ? 'bg-teal-500/10' : ''}><th className="px-1 py-2">{row.name}</th><td>{row.stats.points}</td><td>{row.stats.made}/{row.stats.attempts}</td>{(['assists', 'rebounds', 'steals', 'blocks', 'turnovers'] as const).map(key => <td key={key}>{row.stats[key]}</td>)}</tr>)}</tbody></table></div>)}
       <button className={`${courtPrimary} w-full`} onClick={game.finish}>Finish game and return to your day</button>
-    </div>}
+    </DialogContent></Dialog>
   </section>;
 }

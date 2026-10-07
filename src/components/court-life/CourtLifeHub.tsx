@@ -22,6 +22,7 @@ export function CourtEffect({ effect }: { effect: CourtCareerEffect }) {
 export default function CourtLifeHub({ game }: { game: Game }) {
   const career = game.career!;
   const [panel, setPanel] = useState<'home' | 'training' | 'life' | 'team' | 'season' | 'history'>('home');
+  const [chapterNumber, setChapterNumber] = useState<number | null>(null);
   const reveal = useRevealScroll(`${panel}:${career.season}:${career.round}:${career.phase}`);
   const player = courtCareerPlayer(career), role = courtCareerRole(career.resources.trust);
   const crew = career.world.crews.find(row => row.id === career.crewId)!;
@@ -32,6 +33,8 @@ export default function CourtLifeHub({ game }: { game: Game }) {
   const actions = careerActions(career);
   const ready = career.blocksLeft === 0 && Boolean(career.decision);
   const seasonDone = career.phase === 'seasonComplete';
+  const lastWeek = career.weeks.at(-1);
+  const chapter = career.chapters.find(row => row.season === chapterNumber) ?? career.chapters.at(-1);
   return <section ref={reveal} className="space-y-3" data-court-hub data-court-panel={panel}>
     <div className="overflow-hidden rounded-2xl border border-slate-600 bg-[#172d3b] p-4 text-[#f1e4be]">
       <div className="flex items-start justify-between gap-3">
@@ -44,6 +47,7 @@ export default function CourtLifeHub({ game }: { game: Game }) {
     </div>
     {panel !== 'home' && <button type="button" className={courtButton} onClick={() => setPanel('home')}><ArrowLeft className="mr-2 inline h-4 w-4" />Back to your day</button>}
     {panel === 'home' && <>
+      {lastWeek && <p className="rounded-xl border border-border p-3 text-xs" role="status">Last game: {(['credits', 'condition', 'trust'] as const).map(key => { const delta = lastWeek.afterMatch[key] - lastWeek.beforeMatch.resources[key]; return `${delta >= 0 ? '+' : ''}${delta} ${key}`; }).join(' · ')}. Assists, defense, the result and turnovers shape trust.</p>}
       <div className="rounded-xl border border-border bg-card p-4">
         <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{seasonDone ? 'The season is in the books' : `Game ${career.round + 1} of 6`}</p>
         <h3 className="mt-1 font-display text-xl font-bold">{seasonDone ? `${score.total}/100 season score` : `${crew.name} vs ${career.world.crews.find(row => row.id === (fixture?.homeId === crew.id ? fixture.awayId : fixture?.homeId))?.name}`}</h3>
@@ -86,6 +90,6 @@ export default function CourtLifeHub({ game }: { game: Game }) {
       {seasonDone && <div className="rounded-xl border border-teal-500 bg-teal-500/5 p-4"><h4 className="font-display text-xl font-bold">Season score: {score.total}/100</h4><dl className="mt-2 grid grid-cols-2 gap-2 text-sm">{([['Results', score.wins, 50], ['Scoring', score.scoring, 20], ['Teamwork', score.teamwork, 20], ['Ball security', score.security, 10]] as const).map(([label, value, cap]) => <div key={label}><dt className="text-muted-foreground">{label}</dt><dd>{value.toFixed(1)}/{cap}</dd></div>)}</dl><p className="mt-2 text-xs text-muted-foreground">The total is rounded once. Only a completed six-game season earns a site score.</p></div>}
       <div className="space-y-2">{career.fixtures.filter(row => row.homeId === crew.id || row.awayId === crew.id).map(row => { const result = career.results.find(item => item.fixtureId === row.id); return <div key={row.id} className="flex items-center justify-between gap-3 rounded-xl border border-border p-3 text-sm"><span>Game {row.round + 1} · {career.world.crews.find(team => team.id === (row.homeId === crew.id ? row.awayId : row.homeId))!.name}</span><strong className="whitespace-nowrap">{result ? `${row.homeId === crew.id ? result.home : result.away} : ${row.homeId === crew.id ? result.away : result.home}` : 'To play'}</strong></div>; })}</div>
     </div>}
-    {panel === 'history' && <div className="space-y-3"><h3 className="font-display text-xl font-bold">Your career chapters</h3>{career.chapters.map(chapter => <div key={chapter.season} className="rounded-xl border border-border bg-card p-4"><h4 className="font-display text-lg font-bold">Season {chapter.season} · {chapter.score}/100</h4><p className="text-sm">Finished as {courtCareerRole(chapter.resources.trust).name.toLowerCase()}, with {chapter.resources.trust} trust.</p><p className="mt-1 text-xs text-muted-foreground">Shooting {chapter.attributes.shooting} · Passing {chapter.attributes.passing} · Defense {chapter.attributes.defense}</p></div>)}</div>}
+    {panel === 'history' && chapter && <div className="space-y-3"><h3 className="font-display text-xl font-bold">Your career chapters</h3><label className="block text-sm">Choose a season<select className="ml-2 min-h-[44px] rounded-xl border border-border bg-card px-3" value={chapter.season} onChange={event => setChapterNumber(Number(event.target.value))}>{career.chapters.map(row => <option key={row.season} value={row.season}>Season {row.season}</option>)}</select></label><div className="rounded-xl border border-border bg-card p-4"><h4 className="font-display text-lg font-bold">Season {chapter.season} · {chapter.score}/100</h4><p className="text-sm">Finished as {courtCareerRole(chapter.resources.trust).name.toLowerCase()}, with {chapter.resources.trust} trust.</p><p className="mt-1 text-xs text-muted-foreground">Shooting {chapter.attributes.shooting} · Passing {chapter.attributes.passing} · Defense {chapter.attributes.defense}</p></div>{chapter.weeks.map(week => <div key={week.fixtureId} className="rounded-xl border border-border p-3 text-sm"><strong>Game {week.round + 1}: {week.decision.label}</strong><CourtEffect effect={week.decision.effect} /><p className="mt-1 text-xs text-muted-foreground">{week.preparation.map(record => record.label).join(' + ')} · Played as {week.beforeMatch.role.toLowerCase()}</p></div>)}</div>}
   </section>;
 }

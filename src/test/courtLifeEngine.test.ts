@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
-  COURT_HALF_TICKS, COURT_RIM_HEIGHT, COURT_SHOT_CLOCK_TICKS, continueCourtPeriod, courtBasket,
+  COURT_HALF_TICKS, COURT_RIM_HEIGHT, COURT_SHOT_CLOCK_TICKS, continueCourtPeriod, courtBasket, courtShotMeter,
   createCourtMatch, neutralCourtInput, neutralizeCourtMatch, simulateCourtMatch, stepCourtMatch,
   type CourtInput, type CourtMatch, type CourtMatchConfig, type CourtPlayerSpec,
 } from '@/lib/courtLife';
@@ -92,9 +92,23 @@ describe('Court Life actual physical engine', () => {
     }
   });
 
+  it('shows the same finishing and shooting window used by the physical release', () => {
+    const match = court(), player = match.players[0];
+    player.y = 4; player.attrs.finishing = 99; player.attrs.shooting = 20; player.chargeTicks = 16;
+    const close = courtShotMeter(match, player.id);
+    expect(Math.abs(close.charge - close.ideal)).toBeLessThan(close.window);
+    const ideal = JSON.parse(JSON.stringify(match)) as CourtMatch; ideal.players[0].chargeTicks = 13;
+    const lateFlight = stepCourtMatch(match, input({ shoot: 'release' })).ball;
+    const idealFlight = stepCourtMatch(ideal, input({ shoot: 'release' })).ball;
+    expect({ vx: lateFlight.vx, vy: lateFlight.vy }).toEqual({ vx: idealFlight.vx, vy: idealFlight.vy });
+    player.y = 6;
+    const far = courtShotMeter(match, player.id);
+    expect(Math.abs(far.charge - far.ideal)).toBeGreaterThan(far.window);
+  });
+
   it('blocks the physical flight at a reachable defending hand', () => {
     let match = court(); const defender = match.players[3];
-    defender.x = 8; defender.y = 5; defender.z = 1.3; defender.vz = 3; defender.cooldown = 80;
+    defender.x = 8; defender.y = 5; defender.z = .7; defender.vz = 1.6; defender.cooldown = 18;
     match.players[0].chargeTicks = 13;
     match = stepCourtMatch(match, input({ shoot: 'release' }));
     match = settle(match);
@@ -107,15 +121,32 @@ describe('Court Life actual physical engine', () => {
     let match = court();
     match.players[0].x = 4; match.players[0].y = 12; match.players[0].facingX = 1; match.players[0].facingY = 0;
     match.players[1].x = 12; match.players[1].y = 12;
-    match.players[2].x = 2; match.players[2].y = 18;
+    match.players[2].x = 1; match.players[2].y = 12;
     match.players[3].x = 7; match.players[3].y = 12;
     match = stepCourtMatch(match, input({ pass: true }));
     expect(match.ball.mode).toBe('pass'); expect(match.ball.ownerId).toBeNull();
+    expect(match.ball.intendedReceiverId).toBe('h1');
     expect(match.players[0].stats.turnovers).toBe(0);
     for (let tick = 0; tick < 70 && match.possession === 'home'; tick++) match = stepCourtMatch(match);
     expect(match.possession).toBe('away'); expect(match.players[0].stats.turnovers).toBe(1);
     expect(match.players.filter(player => player.side === 'away').reduce((sum, player) => sum + player.stats.steals, 0)).toBe(1);
     expect(match.events.filter(event => event.kind === 'steal')).toHaveLength(1); reconcile(match);
+  });
+
+  it('uses an open forward outlet and physically completes the AI pass', () => {
+    let match = court(); match.controlledPlayerId = null;
+    Object.assign(match.players[0], { x: 8, y: 18 });
+    Object.assign(match.players[1], { x: 4, y: 13 });
+    Object.assign(match.players[2], { x: 12, y: 19 });
+    Object.assign(match.players[3], { x: 8, y: 16.6 });
+    Object.assign(match.players[4], { x: 2, y: 3 });
+    Object.assign(match.players[5], { x: 14, y: 3 });
+    match = stepCourtMatch(match);
+    expect(match.ball.mode).toBe('pass'); expect(match.ball.intendedReceiverId).toBe('h1');
+    for (let tick = 0; tick < 60 && match.ball.mode !== 'owned'; tick++) match = stepCourtMatch(match);
+    expect(match.ball.ownerId).toBe('h1'); expect(match.possession).toBe('home');
+    expect(match.events.some(event => event.kind === 'catch' && event.playerId === 'h1')).toBe(true);
+    expect(match.players[0].stats.turnovers).toBe(0); reconcile(match);
   });
 
   it('turns a missed physical shot into a collected live rebound', () => {

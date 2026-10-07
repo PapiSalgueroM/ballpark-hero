@@ -196,7 +196,8 @@ export function courtPassTarget(match: CourtMatch, playerId: string): string | n
 }
 export function courtShotMeter(match: CourtMatch, playerId: string): { charge: number; ideal: number; window: number } {
   const player = playerById(match, playerId);
-  return { charge: clamp((player?.chargeTicks ?? 0) / 30, 0, 1), ideal: 13 / 30, window: (1.3 + (player?.attrs.shooting ?? 50) * .025) / 30 };
+  const rating = player && distance(player, courtBasket(player.side)) < 3 ? player.attrs.finishing : player?.attrs.shooting ?? 50;
+  return { charge: clamp((player?.chargeTicks ?? 0) / 30, 0, 1), ideal: 13 / 30, window: (1.3 + rating * .025) / 30 };
 }
 
 function passBall(match: CourtMatch, player: CourtPlayer, receiver: CourtPlayer) {
@@ -214,7 +215,7 @@ function passBall(match: CourtMatch, player: CourtPlayer, receiver: CourtPlayer)
 function shootBall(match: CourtMatch, player: CourtPlayer) {
   const basket = courtBasket(player.side), length = distance(player, basket), ball = match.ball;
   const rating = length < 3 ? player.attrs.finishing : player.attrs.shooting;
-  const timingError = Math.max(0, Math.abs(player.chargeTicks - 13) - (1.3 + rating * .025));
+  const timingError = Math.max(0, Math.abs(player.chargeTicks - 13) - courtShotMeter(match, player.id).window * 30);
   const dispersion = .035 + (100 - rating) * .0035 + Math.max(0, length - 3) * .025
     + timingError * .032 + Math.hypot(player.vx, player.vy) * .012 + (100 - player.stamina) * .001;
   const time = clamp(.8 + length * .035, .82, 1.6);
@@ -243,13 +244,18 @@ function aiInput(match: CourtMatch, player: CourtPlayer): CourtInput {
     const length = distance(player, basket), open = nearestDefender(match, player);
     const teammates = match.players.filter(other => other.side === player.side && other.id !== player.id);
     const caller = teammates.find(other => other.id === match.controlledPlayerId && match.callUntilTick >= match.tick && openLane(match, player, other) > .7);
-    const best = [...teammates].sort((a, b) => (nearestDefender(match, b) - distance(b, basket) * .25) - (nearestDefender(match, a) - distance(a, basket) * .25))[0];
+    const best = teammates.filter(other => distance(player, other) > 2.2 && openLane(match, player, other) > .8)
+      .sort((a, b) => (nearestDefender(match, b) - distance(b, basket) * .25) - (nearestDefender(match, a) - distance(a, basket) * .25))[0];
+    const receivedRecently = match.lastPass?.receiverId === player.id && match.tick - match.lastPass.tick < 18;
+    const canMoveBall = !receivedRecently && match.shotClockTicks > 45;
+    const betterOutlet = best && (nearestDefender(match, best) - distance(best, basket) * .25 > open - length * .25 + .25
+      || (open < 1.65 && nearestDefender(match, best) > open + .15)
+      || (length > 8 && length - distance(best, basket) > 1.5));
     if (player.chargeTicks > 0) input.shoot = player.chargeTicks >= 13 ? 'release' : 'none';
     else if (player.cooldown === 0 && caller && match.tick % Math.max(3, Math.round(16 - match.role.callPriority * 13)) === 0) {
       player.facingX = direction(caller.x - player.x, caller.y - player.y).x;
       player.facingY = direction(caller.x - player.x, caller.y - player.y).y; input.pass = true;
-    } else if (player.cooldown === 0 && best && openLane(match, player, best) > 1 && distance(player, best) > 2
-      && nearestDefender(match, best) - distance(best, basket) * .25 > open - length * .25 + .9) {
+    } else if (player.cooldown === 0 && canMoveBall && best && betterOutlet) {
       const vector = direction(best.x - player.x, best.y - player.y); player.facingX = vector.x; player.facingY = vector.y; input.pass = true;
     } else if (player.cooldown === 0 && ((length < 5.8 && open > 1.1) || length < 2.7 || match.shotClockTicks < 80)) input.shoot = 'press';
     else {
@@ -268,9 +274,9 @@ function aiInput(match: CourtMatch, player: CourtPlayer): CourtInput {
     const mark = nearest?.id === player.id ? owner : attackers[index];
     if (mark) {
       const rim = courtBasket(mark.side), offset = direction(rim.x - mark.x, rim.y - mark.y);
-      target = { x: mark.x + offset.x * .95, y: mark.y + offset.y * .95 };
-      input.guard = distance(player, mark) < 2.5;
-      input.steal = owner?.id === mark.id && distance(player, mark) < 1 && player.cooldown === 0 && match.tick % 17 === index * 3;
+      target = { x: mark.x + offset.x * .8, y: mark.y + offset.y * .8 };
+      input.guard = distance(player, mark) < 1.2;
+      input.steal = owner?.id === mark.id && distance(player, mark) < 1.2 && player.cooldown === 0 && match.tick % 17 === index * 3;
       input.jump = mark.chargeTicks >= 9 && distance(player, mark) < 1.8 && player.cooldown === 0;
     }
   }

@@ -1,3 +1,29 @@
+## Round 1075 implementation checkpoint, October 7, 2026
+
+Court Life is implemented on codex/court-career-1075 at4e5cf5ec, still
+unregistered and NOT accepted or live. Remote prep37580856294 passed the real
+app type gate. Eleven of twelve physical engine outcomes passed; the pass
+interception case selected another teammate and is being corrected with an
+explicit actual-target assertion. Twelve copied controls fired, but the normal
+case failure means the suite is not accepted. Measurements from120 full games
+and1024 releases are retained; AI passing is too rare and is being improved.
+The UI includes create/rules, four compact day panels, actual match controls,
+paused saved matches, six-player box scores, season scoring and chapter history.
+Career and control suites are ready for the next remote run. Native and mounted
+presentation verification are being built. No local runtime or production DB
+calls. The new /100 cap migration remains unapplied for Claude's release lane.
+1074's next prep37580808071 now passes native75-shot coverage and its new
+mounted suite; closing regressions/readers are running. No1074 PR yet.
+Claude retains AH/main/publication; preserve pending PR163 and PR164.
+Protected root source and all seven stashes are untouched.
+
+Anthony's master-list question: SPEC-RECONCILIATION records361 total sections:
+52 done,216 partial,41 new,5 constrained,14 decided,32 rules,1 app-only.
+There are309 buildable sections,257 with work remaining in that dated ledger.
+Its full regrade is September19 with later row edits, so these are not a fresh
+October7 completeness audit or a reliable percentage of total effort.
+Anthony was advised to review now in small batches (Soccer Career, Club Manager,
+one action game), focusing on fun, confusion, realism and visual feel.
 ## Round 1075 claimed: Court Life, complete playable basketball career
 
 Anthony's October7 direction prioritizes complete deep games, correct animation

@@ -13,8 +13,10 @@ const controls = {
   early: { from: 'player.stats.attempts++;', to: 'match.score[player.side] += 2; player.stats.attempts++;', test: 'scores only actual downward hoop crossings once per released flight' },
   duplicate: { from: '&& ball.scoredFlightId !== ball.flightId', to: '&& true', test: 'scores only actual downward hoop crossings once per released flight' },
   upward: { from: 'previous.z > COURT_RIM_HEIGHT && ball.z <= COURT_RIM_HEIGHT && ball.vz < 0', to: 'previous.z < COURT_RIM_HEIGHT && ball.z >= COURT_RIM_HEIGHT && ball.vz > 0', test: 'keeps rising shots and passes through the hoop plane scoreless' },
+  meter: { from: 'distance(player, courtBasket(player.side)) < 3 ? player.attrs.finishing :', to: 'distance(player, courtBasket(player.side)) < 3 ? player.attrs.shooting :', test: 'shows the same finishing and shooting window used by the physical release' },
   block: { from: 'match.players.filter(player => player.side !== ball.shotSide)', to: 'match.players.filter(player => player.side === ball.shotSide)', test: 'blocks the physical flight at a reachable defending hand' },
   steal: { from: 'loser.stats.turnovers++; stealer.stats.steals++;', to: 'loser.stats.turnovers++;', test: 'resolves an intercepted moving pass as one steal and one turnover' },
+  outlet: { from: 'const canMoveBall = !receivedRecently && match.shotClockTicks > 45;', to: 'const canMoveBall = false;', test: 'uses an open forward outlet and physically completes the AI pass' },
   rebound: { from: 'player.stats.rebounds++;', to: 'void player.stats.rebounds;', test: 'turns a missed physical shot into a collected live rebound' },
   assist: { from: 'if (assist) assist.stats.assists++;', to: 'void assist;', test: 'credits an assist only after the received pass becomes an actual basket' },
   clock: { from: "next.shotClockTicks === 0 && next.ball.mode !== 'shot'", to: "next.shotClockTicks === -1 && next.ball.mode !== 'shot'", test: 'changes possession for the clock and actual out of bounds' },
@@ -67,7 +69,12 @@ if (process.env.COURT_LIFE_ENGINE_MEASURE === '1') {
     homePossessionShare: mean(arms[arm].map(row => row.possessionTicks.home / (row.possessionTicks.home + row.possessionTicks.away))),
     draws: arms[arm].filter(row => row.winner === 'draw').length } ]));
   const shotProbes = [];
-  for (const rating of [35, 85]) for (const guarded of [false, true]) {
+  for (const rating of [35, 85]) for (const scenario of [
+    { name: 'open-midrange', length: 4.4, charge: 13, guarded: false },
+    { name: 'legal-jump-contest', length: 4.4, charge: 13, guarded: true },
+    { name: 'open-long-range', length: 8, charge: 13, guarded: false },
+    { name: 'late-midrange', length: 4.4, charge: 23, guarded: false },
+  ]) {
     let made = 0, blocked = 0;
     for (let index = 0; index < 256; index++) {
       const cfg = config((index + 1) * 104729 + 71); cfg.controlledPlayerId = 'h0'; cfg.role = { inboundPriority: 1, callPriority: 1 };
@@ -75,19 +82,19 @@ if (process.env.COURT_LIFE_ENGINE_MEASURE === '1') {
       let match = engine.createCourtMatch(cfg);
       for (let tick = 0; tick < 18; tick++) match = engine.stepCourtMatch(match);
       match.players.forEach((player, index) => { player.x = 2 + index * 2; player.y = 18; });
-      match.players[0].x = 8; match.players[0].y = 6; match.players[0].chargeTicks = 13;
-      if (guarded) Object.assign(match.players[3], { x: 8, y: 5, z: 1.3, vz: 3, cooldown: 80 });
+      match.players[0].x = 8; match.players[0].y = 1.6 + scenario.length; match.players[0].chargeTicks = scenario.charge;
+      if (scenario.guarded) Object.assign(match.players[3], { x: 8, y: 5, z: .7, vz: 1.6, cooldown: 18 });
       match = engine.stepCourtMatch(match, { ...engine.neutralCourtInput(), shoot: 'release' });
       for (let tick = 0; tick < 150 && match.ball.mode === 'shot'; tick++) match = engine.stepCourtMatch(match);
       assert.notEqual(match.ball.mode, 'shot');
       made += match.players[0].stats.made; blocked += match.events.filter(event => event.kind === 'block').length;
     }
-    shotProbes.push({ rating, guarded, attempts: 256, made, blocked, rate: made / 256 });
+    shotProbes.push({ rating, ...scenario, attempts: 256, made, blocked, rate: made / 256 });
   }
   const sourceAfter = await measurementHashes(); assert.deepEqual(sourceAfter, sourceBefore);
   await writeFile(path.join(evidence, 'measurements.json'), JSON.stringify({ sourceBefore, sourceAfter, arms, summaries, shotProbes }, null, 2));
   console.log(JSON.stringify({ summaries, shotProbes }, null, 2));
-  console.log('simCourtLifeEngine measurements:120 full physical games and1024 actual released shots retained. These are measurements, not uncalibrated balance acceptance.');
+  console.log('simCourtLifeEngine measurements: 120 full physical games and 2048 actual released shots retained. These are measurements, not uncalibrated balance acceptance.');
   process.exit(0);
 }
 if (control === 'all') {
@@ -103,7 +110,7 @@ if (control === 'all') {
   }
   await writeFile(path.join(evidence, 'summary.json'), JSON.stringify(results, null, 2));
   assert(results.every(result => result.passed), 'All normal and mutation outcomes were attempted and passed');
-  console.log('simCourtLifeEngine all: twelve actual physical outcomes and twelve effective copied faults pass.');
+  console.log('simCourtLifeEngine all: fourteen actual physical outcomes and fourteen effective copied faults pass.');
   process.exit(0);
 }
 const hash = value => createHash('sha256').update(value).digest('hex');
@@ -132,14 +139,14 @@ try {
   assert(!run.error && !run.signal, 'Runner finishes normally');
   assert.doesNotMatch(output, /Unhandled (?:Error|Rejection)|Test timed out|Timeout calling|Failed to (?:resolve import|load)|Cannot find module|No test files found|SyntaxError|Transform failed/);
   const report = JSON.parse(await readFile(reportFile, 'utf8')), rows = report.testResults.flatMap(file => file.assertionResults);
-  assert.equal(rows.length, 12); assert.equal(Number(report.numUnhandledErrors ?? 0), 0);
+  assert.equal(rows.length, 14); assert.equal(Number(report.numUnhandledErrors ?? 0), 0);
   if (control) {
-    assert.equal(run.status, 1); assert.equal(report.numFailedTests, 1); assert.equal(report.numPassedTests, 1); assert.equal(report.numPendingTests, 10);
+    assert.equal(run.status, 1); assert.equal(report.numFailedTests, 1); assert.equal(report.numPassedTests, 1); assert.equal(report.numPendingTests, 12);
     const failure = rows.find(row => row.title === controls[control].test); assert.equal(failure?.status, 'failed');
     assert.match(failure.failureMessages.join('\n'), /AssertionError:|Error: expect\(/);
     assert.equal(rows.find(row => row.title === independent)?.status, 'passed');
-    console.log(`simCourtLifeEngine ${control}: effective changed source fails its mapped outcome; replay baseline passes; ten intentionally skipped.`);
-  } else { assert.equal(run.status, 0); assert.equal(report.numPassedTests, 12); assert.equal(report.numFailedTests, 0); assert.equal(report.numPendingTests, 0); }
+    console.log(`simCourtLifeEngine ${control}: effective changed source fails its mapped outcome; replay baseline passes; twelve intentionally skipped.`);
+  } else { assert.equal(run.status, 0); assert.equal(report.numPassedTests, 14); assert.equal(report.numFailedTests, 0); assert.equal(report.numPendingTests, 0); }
 } finally {
   if (copy) await rm(copy, { force: true }); if (folder) await rmdir(folder);
   const after = await hashes(); await writeFile(path.join(evidence, `${control || 'normal'}-integrity.json`), JSON.stringify({ before, after, held: JSON.stringify(before) === JSON.stringify(after) }, null, 2));

@@ -45,6 +45,12 @@ jobs:
       - name: Measure complete physical matches and release probes
         if: ${{ !cancelled() }}
         run: COURT_LIFE_ENGINE_MEASURE=1 ONLY=simCourtLifeEngine node scripts/runAllSims.mjs 2>&1 | tee court-life-artifacts/measurements.log
+      - name: Career seasons saves and effective copied faults
+        if: ${{ !cancelled() }}
+        run: COURT_LIFE_CAREER_CONTROL=all ONLY=simCourtLifeCareer node scripts/runAllSims.mjs 2>&1 | tee court-life-artifacts/career.log
+      - name: Controls persistence and effective copied faults
+        if: ${{ !cancelled() }}
+        run: COURT_LIFE_CONTROLS_CONTROL=all ONLY=simCourtLifeControls node scripts/runAllSims.mjs 2>&1 | tee court-life-artifacts/controls.log
       - name: Preserve evidence
         if: always()
         uses: actions/upload-artifact@v4
