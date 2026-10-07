@@ -17244,8 +17244,15 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
  * ties after elimination), opens the January window, or plays my next match.
  * Never mutates the input state.
  */
-export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boolean; untilWeek?: number }): PlayResult {
+export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boolean; untilWeek?: number; noCoach?: boolean }): PlayResult {
   const state: CareerState = JSON.parse(JSON.stringify(career));
+  /* Release AL: `noCoach` plays a quick sim the way it was played before
+     Round 1072, with nobody making changes. Manager Hot Seat passes it: its
+     daily deal and every saved run are a seed replayed through this function,
+     so a coach who changes results would hand today's players a different job
+     from the one the morning's players got, and turn a finished run into an
+     unfinished one. */
+  const coached = (s: CareerState): CareerState => (opts?.noCoach ? s : coachQuickMatch(s));
   // Round 95: a save made before the world existed repairs itself here, and
   // a save made after this is a no-op because it is already in step.
   if (!state.world) syncWorld(state, myRoundsPlayed(state, state.week));
@@ -17302,7 +17309,7 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
        quick sim is. */
     if (state.live && state.live.week === state.week) {
       if (!opts?.skipHalftime) return { state, kind: 'halftime', live: state.live };
-      return resumeMatch(coachQuickMatch(state));
+      return resumeMatch(coached(state));
     }
     const entry = state.calendar[state.week];
     if (entry.type === 'window') {
@@ -17384,7 +17391,7 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
       return { state, kind: 'halftime', live };
     }
     state.live = live;
-    return resumeMatch(coachQuickMatch(state));
+    return resumeMatch(coached(state));
   }
   return { state, kind: 'seasonOver' };
 }
