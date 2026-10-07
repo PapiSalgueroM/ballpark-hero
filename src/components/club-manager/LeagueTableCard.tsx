@@ -18,12 +18,17 @@ interface LeagueTableCardProps {
    *  Club Manager's Champions League four by default; the tycoon passes 1,
    *  because only its champion goes up. */
   zoneTop?: number;
+  /** Round 1045: rows whose club the game may not name (the Season Centre's
+   *  "another club"). The row keeps its unique key; only the name printed
+   *  changes, in the dugout's italic muted words. Club Manager and the
+   *  tycoon pass nothing. */
+  isUnnamed?: (club: string) => boolean;
 }
 
 /**
  * League (or UCL group) standings. Top 4 = UCL zone marker, 1st = title.
  */
-export function LeagueTableCard({ rows, myClub, compact = false, title, preseason = false, onClubClick, footnote, zoneTop = 4 }: LeagueTableCardProps) {
+export function LeagueTableCard({ rows, myClub, compact = false, title, preseason = false, onClubClick, footnote, zoneTop = 4, isUnnamed }: LeagueTableCardProps) {
   const myIdx = rows.findIndex(r => r.club === myClub);
   let visible = rows.map((r, i) => ({ r, pos: i + 1 }));
   if (compact) {
@@ -52,6 +57,7 @@ export function LeagueTableCard({ rows, myClub, compact = false, title, preseaso
               mine && 'bg-primary/10 rounded-md -mx-1 px-1',
               onClubClick && 'cursor-pointer hover:bg-secondary/40 rounded-md -mx-1 px-1 transition-colors',
             )}
+            data-club={r.club}
           >
             <span className={cn(
               'font-bold',
@@ -59,7 +65,7 @@ export function LeagueTableCard({ rows, myClub, compact = false, title, preseaso
             )}>{preseason ? (mine ? '⭐' : '·') : pos}</span>
             {/* Keep the star in the position cell. Names wrap because fallback
                 fonts and smaller phones need more room than a single line. */}
-            <span className={cn('min-w-0 break-words leading-tight', mine ? 'text-primary font-bold' : 'text-foreground')}>{r.club}</span>
+            <span className={cn('min-w-0 break-words leading-tight', mine ? 'text-primary font-bold' : 'text-foreground')}>{isUnnamed?.(r.club) ? <i className="text-muted-foreground">another club</i> : r.club}</span>
             <span className="text-center text-muted-foreground">{r.w}</span>
             <span className="text-center text-muted-foreground">{r.d}</span>
             <span className="text-center text-muted-foreground">{r.l}</span>
