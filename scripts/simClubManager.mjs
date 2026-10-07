@@ -70,7 +70,7 @@ for (const n of NATIONS) {
     }
   }
 }
-if (totalClubs !== 380) fail(`expected 380 playable clubs (186, plus 48 in Round 140, 18 in Round 142, 18 in Round 143, 12 plus 14 in Round 177, 12 plus 12 in Round 185, 10 in Round 189, 20 in Round 876, 18 in Round 883, 12 in Round 1035), got ${totalClubs}`);
+if (totalClubs !== 438) fail(`expected 438 playable clubs (186, plus 48 in Round 140, 18 in Round 142, 18 in Round 143, 12 plus 14 in Round 177, 12 plus 12 in Round 185, 10 in Round 189, 20 in Round 876, 18 in Round 883, 12 in Round 1035, 20 in Round 1040's Serie B, 18 in its Ligue 2, 20 in its Segunda División), got ${totalClubs}`);
 const ordering = [
   ['Real Madrid', 'Racing Santander'], ['Bayern Munich', 'Paderborn'], ['PSG', 'Le Havre'],
   ['Liverpool', 'Hull City'], ['Wolves', 'Lincoln City'], ['Al-Hilal', 'Al-Riyadh'],
@@ -95,7 +95,8 @@ if (rosterHas('Barcelona', 'Lewandowski')) fail('Lewandowski still at Barcelona 
   const miami = startCareer('Inter Miami');
   if (miami.uclGroup) fail('Inter Miami started in the UCL (non-euro league)');
   // Round 72: every league length now fits a full cup run.
-  for (const probe of ['Inter Miami', 'Wolves', 'Ajax', 'Al-Nassr', 'Arsenal']) {
+  // Round 1040: and second tier clubs of the new pyramids (Serie B's Palermo, the Segunda's Almería).
+  for (const probe of ['Inter Miami', 'Wolves', 'Ajax', 'Al-Nassr', 'Arsenal', 'Palermo', 'Almería']) {
     const s = startCareer(probe);
     if (!s.calendar.some(e => e.type === 'cup' && e.cupRound === 'F')) fail(`${probe}: calendar missing the cup final`);
     if (!s.calendar.some(e => e.type === 'window')) fail(`${probe}: calendar missing the January window`);

@@ -74,7 +74,7 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/dart-draft', label: 'Dart Draft', emoji: '🎯', description: 'Throw timed darts at a real world map: hit a country, draft its players', addedOn: '2026-07-10' },
       { path: '/career-ladder', label: 'Career Ladder', emoji: '🪜', description: 'Guess the player, one career stop at a time', addedOn: '2026-07-01' },
       { path: '/who-am-i', label: 'Who Am I?', emoji: '🕵️', description: 'Hunt the secret player with similarity scores', addedOn: '2026-07-02' },
-      { path: '/club-manager', label: 'Club Manager', emoji: '💼', description: 'Manage any of 380 real clubs across 23 leagues, today or in a real past season: negotiations, board objectives, trophies and the sack race', addedOn: '2026-07-09', featured: true },
+      { path: '/club-manager', label: 'Club Manager', emoji: '💼', description: 'Manage any of 438 real clubs across 26 leagues, today or in a real past season: negotiations, board objectives, trophies and the sack race', addedOn: '2026-07-09', featured: true },
       { path: '/manager-hot-seat', label: 'Manager Hot Seat', emoji: '🪑', description: 'Take over a real club on a bad run. Five league games to hit the board\'s target or you are sacked', daily: true, addedOn: '2026-09-30' },
       { path: '/deadline-day', label: 'Deadline Day', emoji: '⏰', description: 'Run recruitment at a real club on the last day of the window. Fill the board\'s needs before it shuts, without overpaying', daily: true, addedOn: '2026-10-01' },
       { path: '/soccer-conquest', label: 'Soccer Conquest', emoji: '🗺️', description: 'Imperialism across the top five leagues: 96 clubs on one map of Europe, winners annex whole empires until one club rules the continent', daily: true, addedOn: '2026-09-05' },
