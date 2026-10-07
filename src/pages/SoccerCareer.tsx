@@ -1,4 +1,4 @@
-import { Fragment, useState, useCallback, useRef, useEffect, useMemo } from "react";
+import { Component, Fragment, lazy, Suspense, useState, useCallback, useRef, useEffect, useMemo, type ReactNode } from "react";
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import { useGameCompletion } from "@/hooks/useGameCompletion";
 import { recordCompletion, recordActivity, recordStreakDay } from "@/lib/completions";
@@ -106,6 +106,29 @@ import { useRevealScroll } from "@/hooks/useRevealScroll";
 import { TournamentCard, InternationalHistoryTile } from "@/components/soccer-career/InternationalPanel";
 import { beatStyle, debutMomentKey, legacyMomentKey, rivalryMomentKey, settleLoadedMoments, useCareerMoment } from "@/components/soccer-career/careerMoments";
 import { isSoccerCareerSave } from '@/lib/soccerCareerSave';
+/* Round 1045: the Season Centre loads only when a person presses for it. */
+const SoccerSeasonCentre = lazy(() => import("@/components/soccer-career/SoccerSeasonCentre"));
+/* Round 1045: a boundary inside the lazy chunk cannot catch the chunk failing
+   to load (a deploy swapped the files), so the mount carries its own: the
+   overlay says so with Retry and Close, and the save is never touched. */
+class CentreMountBoundary extends Component<{ onClose: () => void; children: ReactNode }, { failed: boolean; tries: number }> {
+  state = { failed: false, tries: 0 };
+  static getDerivedStateFromError() { return { failed: true }; }
+  render() {
+    if (!this.state.failed) return <Fragment key={this.state.tries}>{this.props.children}</Fragment>;
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4" data-season-centre>
+        <div role="dialog" aria-modal="true" aria-label="Season Centre" className="w-full max-w-sm space-y-3 rounded-2xl border border-border bg-card p-4 text-center">
+          <p className="text-sm">Couldn't load the Season Centre. Your career is safe.</p>
+          <div className="flex gap-2">
+            <button type="button" onClick={() => this.setState(s => ({ failed: false, tries: s.tries + 1 }))} className="h-10 flex-1 rounded-lg border border-border text-sm font-semibold">↻ Retry</button>
+            <button type="button" onClick={this.props.onClose} className="h-10 flex-1 rounded-lg bg-primary text-sm font-bold text-primary-foreground">✕ Close it</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
 
 /* ─── Constants ─── */
 // Round 76: 131 nations (was 49), every one with a real flag in FlagImg,
@@ -3707,6 +3730,16 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   const [storyOpen, setStoryOpen] = useState(false);
   // Round 1011: every season's rating and the overall it was played at
   const [ratingsOpen, setRatingsOpen] = useState(false);
+  /* Round 1045: the Season Centre. centreFor is the row count when 📺 was
+     pressed, so the overlay opens on exactly the row that press added;
+     watchRow is a season opened from the summary card. Page state only. */
+  const [centreFor, setCentreFor] = useState<number | null>(null);
+  const [watchRow, setWatchRow] = useState<SeasonRecord | null>(null);
+  const onWeekByWeek = () => { const at = career.seasons.length; onNextSeason(); setCentreFor(at); };
+  const closeCentre = () => { setCentreFor(null); setWatchRow(null); };
+  useEffect(() => {
+    if (centreFor !== null && career.seasons.length > centreFor + 1) setCentreFor(null);
+  }, [centreFor, career.seasons.length]);
   // Round 131: the whole attribute tree on its own screen with a back button
   const [attrsOpen, setAttrsOpen] = useState(false);
   const showActionButton = career.phase === "youth" || career.phase === "playing" || career.phase === "manager_season" || career.phase === "pundit_season" || career.phase === "owner_season";
@@ -3918,6 +3951,14 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           {career.phase === "season_summary" && career.pendingSummary && (
             <SeasonSummaryCard season={career.pendingSummary} position={career.position} onContinue={onDismissSummary} appearance={career.appearance}
               leagueOf={finishLeague({ name: career.pendingSummary.club, league: clubs.find(c => c.name === career.pendingSummary?.club)?.league ?? "" }, career.pendingSummary.year, readLeagueFinish(career.pendingSummary)?.size ?? null)} world={career.phone?.world} />
+          )}
+
+          {/* Round 1045: the season just summed up, match by match. Only a
+              season he played: a ban, prison or doping year has nothing to watch. */}
+          {career.phase === "season_summary" && career.pendingSummary && career.pendingSummary.type === "playing" && career.pendingSummary.apps > 0 && (
+            <Button variant="outline" onClick={() => setWatchRow(career.pendingSummary)} className="w-full h-10 text-sm font-semibold" data-watch-week-by-week>
+              📺 Watch it week by week
+            </Button>
           )}
 
           {/* OVERLAY: Contract Offers (youth → pro) */}
@@ -4472,6 +4513,22 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
       )}
       {storyOpen && <CareerStory career={career} onClose={() => setStoryOpen(false)} />}
       {ratingsOpen && <SeasonRatings career={career} onClose={() => setRatingsOpen(false)} />}
+      {(() => {
+        const pressed = centreFor !== null && career.seasons.length === centreFor + 1 ? career.seasons[centreFor] : null;
+        const live = pressed && pressed.type === "playing" && pressed.apps > 0
+          && (career.phase === "newspaper" || career.phase === "season_summary" || career.phase === "rehab_choice") ? pressed : null;
+        const row = watchRow ?? live;
+        if (!row) return null;
+        return (
+          <div data-no-prerender>
+            <CentreMountBoundary onClose={closeCentre}>
+              <Suspense fallback={<div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80" data-season-centre-loading><div className="rounded-2xl border border-border bg-card px-5 py-4 text-sm">📺 Getting your season ready...</div></div>}>
+                <SoccerSeasonCentre career={career} clubs={clubs} row={row} mode={watchRow ? "watch" : "live"} onClose={closeCentre} />
+              </Suspense>
+            </CentreMountBoundary>
+          </div>
+        );
+      })()}
 
       {/* Action bar */}
       {/* Round 86: the bar only floats when it actually has buttons to offer.
@@ -4524,6 +4581,16 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             {(career.phase === "youth" || career.phase === "playing") && (
               <Button onClick={() => setShowRetireConfirm(true)} variant="outline" className="h-12 text-xs font-bold text-red-400 border-red-400/30 hover:bg-red-500/10">
                 Retire
+              </Button>
+            )}
+            {/* Round 1045: the same press as Next Season, then the season opens
+                match by match. Last in DOM order, so every test and walker that
+                presses the bar's first button still presses Next Season. */}
+            {career.phase === "playing" && (
+              <Button onClick={onWeekByWeek} variant="outline" aria-label="Week by week: live the season match by match" className="h-12 w-11 shrink-0 px-0 text-base font-bold sm:w-auto sm:px-3 sm:text-sm gap-1.5" data-week-by-week>
+                <span aria-hidden="true">📺</span>
+                <span className="hidden sm:inline">Week by week</span>
+                <span className="hidden sm:inline rounded bg-emerald-500/20 px-1 text-[9px] font-black text-emerald-400">NEW</span>
               </Button>
             )}
           </div>
