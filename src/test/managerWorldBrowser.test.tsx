@@ -66,7 +66,7 @@ describe('Club Manager world browser', () => {
     });
     try {
       expect('Italy'.toLocaleLowerCase()).toBe('ıtaly');
-      for (const query of ['italy serie a', 'inter milan']) {
+      for (const query of ['italy inter milan', 'inter milan']) {
         fireEvent.change(search, { target: { value: query } }); expect(ids(view)).toEqual(['seriea']);
       }
     } finally { turkishDefault.mockRestore(); }

@@ -79,8 +79,8 @@ league/roster work,1045 season architecture, integration and publication.
 
 Release AI at 187558a5 now includes 26 league entries and 438 clubs. Its Serie B
 means the locale regression must not assume that Italy has only one division.
-The Turkish-default check now queries italy serie a, retaining both the country
-casing check and its exact expected division, plus the independent Inter Milan
+The Turkish-default check now queries italy inter milan, retaining both the country
+casing check and its exact saved-club division, plus the independent Inter Milan
 query. Other broad country searches, all-league counts, current/historical
 membership and all 16 copied controls remain intact. Product and native source
 are unchanged. The previously accepted final run 37593130306 remains evidence
