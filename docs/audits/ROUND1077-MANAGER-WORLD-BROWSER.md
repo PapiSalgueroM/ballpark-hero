@@ -74,3 +74,15 @@ workflow triggers. Product/native source remains at cd20f6bc. The temporary push
 trigger is removed; manual dispatch and the existing path-scoped PR triggers
 remain. Root owns the final PR/checks and external handoff. Claude retains1040
 league/roster work,1045 season architecture, integration and publication.
+
+## Expansion integration test adjustment
+
+Release AI at 187558a5 now includes 26 league entries and 438 clubs. Its Serie B
+means the locale regression must not assume that Italy has only one division.
+The Turkish-default check now queries italy serie a, retaining both the country
+casing check and its exact expected division, plus the independent Inter Milan
+query. Other broad country searches, all-league counts, current/historical
+membership and all 16 copied controls remain intact. Product and native source
+are unchanged. The previously accepted final run 37593130306 remains evidence
+for head 906966a4 only; the refreshed PR is draft pending the new exact-tree run.
+This adjustment does not claim a runtime audit of the whole Release AI branch.
