@@ -1,0 +1,132 @@
+/* Round 1048: the shape of the NBA and the NFL (conferences, divisions, and how
+   often a team meets each kind of opponent), so a career's "week by week" can
+   name who he played without inventing a schedule. Team ids are the GAME'S
+   own (the ids the draft, free agency and the board already print).
+
+   This file loads only with the Season Center (never with the hub) and
+   imports nothing.
+
+   What is real here: which division and conference each team is in, and the
+   league's standard schedule formula. What is NOT claimed anywhere: who met
+   whom on which night. The Season Center deals its own keyed schedule from
+   the formula, and its "?" says so.
+
+   SOURCES, all read 2026-10-07. Two independent sources agree on each fact.
+
+   NBA divisions, 2025-26 (30 teams, 6 divisions of 5):
+   1. Basketball Reference, "2025-26 NBA Standings" (division standings).
+   2. ESPN, "NBA Standings 2025-26" grouped by division.
+   NBA 82 game formula (4 facts: 4 games against each of the 4 division
+   rivals; 4 against 6 other teams of the conference; 3 against the other 4;
+   2 against each of the 15 teams of the other conference; 41 at home):
+   1. NBAstuffer, "How the NBA Schedule is Made".
+   2. Up In The Rafters, "How Many Games Are in an NBA Season? (2026-27
+      Schedule)" (published 14 April 2026), and Hoop Heads, "How the NBA
+      Schedule Works" (41 home and 41 away).
+   THE WRINKLE both formula sources state: since the in season cup began in
+   2023-24 only 80 games are set in the summer; the four cup group games are
+   inside those 80 and the last two are set by the cup's results, so a real
+   team's count against one opponent can differ from the formula by a game.
+   So this is "the league's standard schedule formula", never a real schedule.
+
+   NFL divisions, 2025 (32 teams, 8 divisions of 4):
+   1. ESPN, "NFL Standings 2025".
+   2. NFL.com, "2025 NFL Standings, Division".
+   (src/data/frontOfficePlayers.ts holds the same table for the Front Office;
+   scripts/simUsSeasonCentre.mjs cross checks the two. That is a consistency
+   check between two files of this repo, not a source.)
+   NFL 17 game formula (5 facts: 6 division games, home and away; 4 against
+   one division of the same conference, 2 at home; 4 against one division of
+   the other conference, 2 at home; 2 against the two remaining divisions of
+   the same conference, 1 at home; 1 extra against the other conference):
+   1. NFL Football Operations, "Creating the NFL Schedule".
+   2. CBS Sports, "NFL 17-game schedule: Here's how the complicated
+      scheduling formula will work with the extra game" (30 March 2021), and
+      NFL Schedule Simulator, "How the NFL Schedule Formula Works".
+   Which conference hosts the 17th game (AFC in odd years, NFC in even years,
+   2021 to 2028):
+   1. CBS Sports, "NFL will likely be making a tweak to the scheduling formula
+      if the regular season stays at 17 games" (14 April 2026): the AFC East
+      is at home in 2021, 2023, 2025 and 2027 and away in 2022, 2024, 2026 and
+      2028, "the home conference for this game will rotate each season", and
+      the league plans to flip the pairing from 2029 if it stays at 17 games.
+   2. NFL Schedule Simulator (as above): "the AFC hosted the extra game in
+      2021, the NFC in 2022, and it has alternated since"; ESPN, "NFL moves to
+      17-game regular season in 2021" ("The AFC will have nine in 2021").
+   From 2029 nothing is verified (a plan is not a fact), so `nflHosts17`
+   answers null there and the Season Center keys who hosts.
+
+   NBA league scoring, points per team game (2 facts):
+   2003-04: 93.4. 1. Basketball Reference, "NBA League Averages - Per Game".
+   2. Land of Basketball, "2003-04 NBA Regular Season: Teams with the Most
+   Points Per Game" (29 teams, 82 games each, mean 93.40).
+   2025-26: 115.6. 1. Basketball Reference (as above). 2. Land of Basketball,
+   "2025-26 NBA Regular Season: Teams with the Most Points Per Game" (30
+   teams, mean 115.6).
+
+   LEFT OUT, marked and not filled:
+   - NFL 2005 throwback: no window. 2005 to 2020 are held (16 real games),
+     and from 2021 the game's 2005 team list is no longer that season's
+     league (three clubs had moved), so those seasons play "another team".
+   - NBA 2003-04 throwback: no window. The 2003-04 alignment of the game's 29
+     teams and that season's schedule formula were not two sourced in this
+     round, and from 2004-05 a 30th team joined and the divisions were
+     redrawn while the game's list stays 2003-04's. Those seasons play
+     "another team". */
+
+/** A division, with the game's own team ids. */
+export interface UsDivision { conf: string; name: string; teams: readonly string[] }
+/** Which schedule formula a shape is dealt with (the dealer lives with the sport's number file). */
+export type UsFormula = { kind: 'nba82' } | { kind: 'nfl17' };
+export interface UsShape { divisions: readonly UsDivision[]; formula: UsFormula }
+export interface UsShapeWindow { sport: 'nba' | 'nfl'; era: string; from: number; to: number | null; shape: UsShape }
+
+const NBA_2025: UsShape = {
+  formula: { kind: 'nba82' },
+  divisions: [
+    { conf: 'East', name: 'Atlantic', teams: ['BOS', 'BKN', 'NYK', 'PHI', 'TOR'] },
+    { conf: 'East', name: 'Central', teams: ['CHI', 'CLE', 'DET', 'IND', 'MIL'] },
+    { conf: 'East', name: 'Southeast', teams: ['ATL', 'CHA', 'MIA', 'ORL', 'WAS'] },
+    { conf: 'West', name: 'Northwest', teams: ['DEN', 'MIN', 'OKC', 'POR', 'UTA'] },
+    { conf: 'West', name: 'Pacific', teams: ['GSW', 'LAC', 'LAL', 'PHX', 'SAC'] },
+    { conf: 'West', name: 'Southwest', teams: ['DAL', 'HOU', 'MEM', 'NOP', 'SAS'] },
+  ],
+};
+
+const NFL_2025: UsShape = {
+  formula: { kind: 'nfl17' },
+  divisions: [
+    { conf: 'AFC', name: 'AFC East', teams: ['BUF', 'MIA', 'NE', 'NYJ'] },
+    { conf: 'AFC', name: 'AFC North', teams: ['BAL', 'CIN', 'CLE', 'PIT'] },
+    { conf: 'AFC', name: 'AFC South', teams: ['HOU', 'IND', 'JAX', 'TEN'] },
+    { conf: 'AFC', name: 'AFC West', teams: ['DEN', 'KC', 'LAC', 'LV'] },
+    { conf: 'NFC', name: 'NFC East', teams: ['DAL', 'NYG', 'PHI', 'WAS'] },
+    { conf: 'NFC', name: 'NFC North', teams: ['CHI', 'DET', 'GB', 'MIN'] },
+    { conf: 'NFC', name: 'NFC South', teams: ['ATL', 'CAR', 'NO', 'TB'] },
+    { conf: 'NFC', name: 'NFC West', teams: ['ARI', 'LA', 'SEA', 'SF'] },
+  ],
+};
+
+/** `to: null` carries the latest verified alignment forward: from 2026 on the
+ *  league is the career's own world on today's format. */
+export const US_LEAGUE_SHAPES: readonly UsShapeWindow[] = [
+  { sport: 'nba', era: 'now', from: 2025, to: null, shape: NBA_2025 },
+  { sport: 'nfl', era: 'now', from: 2025, to: null, shape: NFL_2025 },
+];
+
+/** The league's shape for that sport, era and season, or null (opponents are then "another team").
+ *  An absent era id on an old save is the present day era. */
+export function usLeagueShape(sport: string, eraId: string | undefined, year: number): UsShape | null {
+  const era = eraId ?? 'now';
+  const w = US_LEAGUE_SHAPES.find(x => x.sport === sport && x.era === era && year >= x.from && (x.to === null || year <= x.to));
+  return w ? w.shape : null;
+}
+
+/** Whether `conf` hosts the 17th game of the NFL season of `year`, or null where it is not verified. */
+export function nflHosts17(year: number, conf: string): boolean | null {
+  if (year < 2021 || year > 2028 || (conf !== 'AFC' && conf !== 'NFC')) return null;
+  return (year % 2 === 1) === (conf === 'AFC');
+}
+
+/** League points per team game by era id (2003-04, and 2025-26 for the present day era). */
+export const NBA_SCORING: Readonly<Record<string, number>> = { now: 115.6, y2004: 93.4 };
