@@ -17,6 +17,7 @@ on:
       - src/test/cageStrikeMotion.test.tsx
       - src/test/cageGrappleMotion.test.tsx
       - src/test/cageReadiness.test.tsx
+      - src/test/cagePracticeFeedback.test.tsx
       - scripts/simCageClash.mjs
       - scripts/simCagePractice.mjs
       - scripts/simCageCircuit.mjs
@@ -24,6 +25,7 @@ on:
       - scripts/simCageStrikeMotion.mjs
       - scripts/simCageGrappleMotion.mjs
       - scripts/simCageReadiness.mjs
+      - scripts/simCagePracticeFeedback.mjs
       - scripts/qa/cageClash1063.mjs
       - src/data/gameContent/moreSports.ts
       - src/data/gameRegistry.ts
@@ -55,6 +57,7 @@ jobs:
       CAGE_STRIKE_MOTION_ARTIFACTS: cage-clash-artifacts/motion
       CAGE_GRAPPLE_MOTION_ARTIFACTS: cage-clash-artifacts/grapple
       CAGE_READINESS_ARTIFACTS: cage-clash-artifacts/readiness
+      CAGE_PRACTICE_FEEDBACK_ARTIFACTS: cage-clash-artifacts/practice-feedback
     steps:
       - uses: actions/checkout@v4
         with:
@@ -70,6 +73,8 @@ jobs:
       - name: Install verification dependencies
         run: |
           mkdir -p cage-clash-artifacts
+          git rev-parse HEAD > cage-clash-artifacts/source-head.txt
+          git rev-parse HEAD^{tree} > cage-clash-artifacts/source-tree.txt
           npm ci
           npm install --no-save playwright
           npx playwright install --with-deps chromium
@@ -81,6 +86,9 @@ jobs:
         run: |
           node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee cage-clash-artifacts/types.log
           npm run build 2>&1 | tee cage-clash-artifacts/build.log
+      - name: Practice feedback outcomes and effective copied faults
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: CAGE_PRACTICE_FEEDBACK_CONTROL=all ONLY=simCagePracticeFeedback node scripts/runAllSims.mjs 2>&1 | tee cage-clash-artifacts/practice-feedback.log
       - name: Combat controller outcomes and effective controls
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: CAGE_CLASH_CONTROL=all ONLY=simCageClash node scripts/runAllSims.mjs 2>&1 | tee cage-clash-artifacts/combat.log
@@ -151,6 +159,9 @@ jobs:
             ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "cage-clash-artifacts/$harness.log" || failed=1
           done
           exit "$failed"
+      - name: Preserve reviewed practice and combat source bytes
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: git diff --exit-code HEAD -- src/lib/cageClash.ts src/lib/cagePractice.ts src/lib/cageCircuit.ts src/hooks/useCageClash.ts src/components/cage-clash src/pages/CageClash.tsx src/data/gameContent/moreSports.ts src/pages/WhatsNew.tsx src/test/cagePracticeFeedback.test.tsx scripts/simCagePracticeFeedback.mjs scripts/qa/cageClash1063.mjs
       - name: Preserve verification evidence
         if: always()
         uses: actions/upload-artifact@v4
