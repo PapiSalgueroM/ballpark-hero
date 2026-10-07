@@ -53,11 +53,10 @@ export function buildUsModel(sport: UsCareerSport, bind: UsSeasonBind, career: U
   const title = bind.results.length > 0 && row.teamResult === bind.results[bind.results.length - 1];
   const path = usPlayoffPath(bind, row, ctx, key);
   const post = review.postseason.filter(x => x.value !== 'Not recorded').map(x => `${x.value} ${x.label.toLowerCase()}`);
-  const notes: string[] = [];
-  if (path) {
-    notes.push(`Playoffs: ${path.steps.map(st => `${st.round}, ${pathStepText(st, view.words.unnamed)}`).join(' · ')}`);
-    if (post.length) notes.push(`Your playoffs: ${post.join(', ')}`);
-  }
+  /* the scoreboard and the phone's game log read the game's own ids in a named season */
+  const idOf = new Map<string, string>();
+  if (named) ctx.order.forEach((id, slot) => idOf.set(s.labels[slot]?.name ?? id, id));
+  const range = (n: number) => Array.from({ length: n }, (_, i) => i + 1);
   return {
     season: s,
     words: view.words,
@@ -74,18 +73,32 @@ export function buildUsModel(sport: UsCareerSport, bind: UsSeasonBind, career: U
       championLine: null,
       trophies: [...(title ? [`🏆 ${bind.league} champions`] : []), ...(Array.isArray(row.awards) ? row.awards : [])],
       title,
-      notes,
+      notes: [],
+      path: path ? {
+        head: 'Playoffs',
+        steps: path.steps.map(st => ({ label: st.round, text: pathStepText(st, view.words.unnamed), won: st.won })),
+        line: post.length ? `Your playoffs: ${post.join(', ')}` : null,
+      } : undefined,
     },
     sport: {
-      clock: { length: view.clock.length, label: view.clock.label, words: (e, us, them) => view.eventWords(e, us, them, pos) },
+      clock: {
+        length: view.clock.length, label: view.clock.label, words: (e, us, them) => view.eventWords(e, us, them, pos),
+        start: view.clock.start, end: view.clock.end, endShort: view.clock.endShort, labelClass: view.clock.labelClass,
+        short: named ? name => idOf.get(name) ?? name : undefined,
+      },
       fixed: { badge: '', poster: '', recordSoFar: '', recordPlayed: '' },
       missed: view.missed,
       lineOf: g => ({ bits: view.lineOf(g, pos), alarm: null }),
       markOf: g => view.markOf(g, pos),
+      markChip: g => view.markChip(g, pos),
+      markText: g => view.markText(g, pos),
       soFar: so => view.soFar(so, pos),
       half: so => view.half(so, pos),
       bucket: () => '',
     },
+    copy: view.copy,
+    helpKey: `seasonCentre:help:${bind.slug}`,
+    groups: named ? [{ label: 'Division', slots: range(ctx.divSlots) }, { label: 'Conference', slots: range(ctx.confSlots) }] : undefined,
     help: view.help(named),
     momentKey: `centre|${key}`,
   };

@@ -115,6 +115,7 @@ describe('splitTotal', () => {
   const rng = keyedRng('split');
   it('always sums to the total with every cap and minimum held', () => {
     let done = 0;
+    const bad: string[] = [];
     for (let n = 1; n <= 17; n += 1) {
       for (let trial = 0; trial < 40; trial += 1) {
         const weights = Array.from({ length: n }, () => (rng() < 0.2 ? 0 : rng() * 3));
@@ -123,14 +124,14 @@ describe('splitTotal', () => {
         const lo = mins.reduce((a, b) => a + b, 0);
         const hi = caps.reduce((a, b) => a + b, 0);
         for (const total of [lo, hi, lo + Math.floor((hi - lo) / 2), lo + Math.floor((hi - lo) * rng())]) {
-          const x = splitTotal(total, weights, caps, mins)!;
-          expect(x, `n ${n} total ${total}`).not.toBeNull();
-          expect(x.reduce((a, b) => a + b, 0)).toBe(total);
-          x.forEach((v, i) => { expect(Number.isInteger(v)).toBe(true); expect(v).toBeGreaterThanOrEqual(mins[i]); expect(v).toBeLessThanOrEqual(caps[i]); });
+          const x = splitTotal(total, weights, caps, mins);
+          /* plain checks, one expect at the end: 2,700 cases with an expect a number is slow on a busy machine */
+          if (!x || x.reduce((p, v) => p + v, 0) !== total || x.some((v, i) => !Number.isInteger(v) || v < mins[i] || v > caps[i])) bad.push(`n ${n} total ${total}: ${JSON.stringify(x)}`);
           done += 1;
         }
       }
     }
+    expect(bad).toEqual([]);
     expect(done).toBeGreaterThan(2000);
   });
   it('gives null when the caps or the minimums cannot hold the total', () => {

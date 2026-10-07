@@ -59,12 +59,15 @@ describe('the US Season Center, mounted by itself', () => {
     const kick = document.querySelector('[data-kickoff]')!;
     expect(kick.textContent).toContain(NBA_CAREER_SPORT.teamLabelOf(row.team, career.eraId));
     expect(kick.querySelector('[data-frame-line]')!.textContent).toContain('82 games · 41 home, 41 away');
-    press(document.querySelector('[data-kickoff] button')!.textContent!);
+    expect(kick.textContent).toContain('▶ Tip off');
+    press('Tip off');
     press('Results');
     await waitFor(() => expect(document.querySelector('[data-full-time]')).not.toBeNull());
     const clock = document.querySelector('[data-match-clock]')!;
     expect(clock.querySelectorAll('[data-clock-events] li')).toHaveLength(clock.textContent!.includes('take over') ? 9 : 8);
-    expect(document.querySelector('[data-his-line]')).not.toBeNull();
+    expect(document.querySelector('[data-his-line]')!.textContent).toMatch(/\d+ PTS/);
+    expect(document.querySelector('[data-full-time]')!.textContent).toBe('Final');
+    expect(document.querySelector('[data-record-panel]')).not.toBeNull();
     press('Sim the rest');
     const review = document.querySelector('[data-review]')!;
     expect(review.querySelector('[data-review-finish]')!.textContent).toContain(row.teamResult);
@@ -74,7 +77,7 @@ describe('the US Season Center, mounted by itself', () => {
     expect(onClose).toHaveBeenCalledTimes(1);
     /* nothing but the help flag was written, and the career in memory is untouched */
     expect(JSON.stringify(career)).toBe(saved);
-    expect(Object.keys(localStorage)).toEqual(['seasonCentre:help']);
+    expect(Object.keys(localStorage)).toEqual(['seasonCentre:help:nba']);
   });
 
   it('shows one honest tile for a year whose real length is not the one the career plays', async () => {

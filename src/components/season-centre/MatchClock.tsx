@@ -25,6 +25,15 @@ export interface SeasonClock {
   label: (minute: number) => string;
   /** One line for an event, in the sport's words. */
   words: (e: SeasonEvent, us: string, them: string) => string;
+  /** Round 1048: the feed's first line before anything happens ("Kick off." when absent). */
+  start?: string;
+  /** Round 1048: the line at the end ("Full time" when absent) and the clock's last reading ("FT"). */
+  end?: string;
+  endShort?: string;
+  /** Round 1048: the width class of the feed's time column ("w-8" when absent; a longer label needs more). */
+  labelClass?: string;
+  /** Round 1048: a short name for the two sides of the score bug only ("OKC"); the feed keeps full names. */
+  short?: (name: string) => string;
 }
 
 /** The score at a minute, from the points the game's own events put on the board: [his club, the other side]. */
@@ -86,8 +95,9 @@ export function MatchClock({ game, clock, usName, themName, speed, paused, reduc
     if (el) el.scrollTop = el.scrollHeight;
   }, [seen.length]);
 
-  const homeName = game.home ? usName : themName;
-  const awayName = game.home ? themName : usName;
+  const bugName = clock.short ?? ((name: string) => name);
+  const homeName = bugName(game.home ? usName : themName);
+  const awayName = bugName(game.home ? themName : usName);
   const hg = game.home ? us : them;
   const ag = game.home ? them : us;
   return (
@@ -100,14 +110,14 @@ export function MatchClock({ game, clock, usName, themName, speed, paused, reduc
         <span className="min-w-0 flex-1 truncate text-right text-sm font-bold">{awayName}</span>
       </div>
       <div className="mt-1 flex items-center justify-between text-[11px] text-muted-foreground">
-        <span className="tabular-nums" data-clock-minute>{done ? 'FT' : clock.label(shown)}</span>
-        {done && <span className={`${instant ? '' : 'cm-slam'} font-bold text-foreground`} data-full-time>Full time</span>}
+        <span className="tabular-nums" data-clock-minute>{done ? clock.endShort ?? 'FT' : clock.label(shown)}</span>
+        {done && <span className={`${instant ? '' : 'cm-slam'} font-bold text-foreground`} data-full-time>{clock.end ?? 'Full time'}</span>}
       </div>
       <ol ref={listRef} className="mt-2 h-28 overflow-y-auto space-y-1 text-xs" aria-live="polite" data-clock-events>
-        {seen.length === 0 && <li className="text-muted-foreground">Kick off.</li>}
+        {seen.length === 0 && <li className="text-muted-foreground">{clock.start ?? 'Kick off.'}</li>}
         {seen.map((e, i) => (
           <li key={`${i}-${e.min}-${e.kind}`} className={`${instant ? '' : 'cm-tick-in'} flex gap-2`}>
-            <span className="w-8 shrink-0 tabular-nums text-muted-foreground">{clock.label(e.min)}</span>
+            <span className={`${clock.labelClass ?? 'w-8'} shrink-0 tabular-nums text-muted-foreground`}>{clock.label(e.min)}</span>
             <span className={e.mine ? 'font-bold text-primary' : ''}>{clock.words(e, usName, themName)}</span>
           </li>
         ))}
