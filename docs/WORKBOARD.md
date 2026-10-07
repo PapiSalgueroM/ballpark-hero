@@ -1,3 +1,40 @@
+## Rounds 1070 and 1071 merged, publication pending, 2026-10-07
+
+PR161 merged Free Kick Shot lab and saved MMA Bout recaps at
+7b8f4afbf3057df1add5838f5463630ef4a04dc7. The runtime tree is
+8c3ecf8326327adfc4ad802590503daf3c1f6ecd, identical to the accepted
+PR merge d881e452 and candidate d4562f8c. All eight engine/save files
+remain byte-identical to 1c10e7e5. Both news bullets, both guide
+paragraphs and six remote-generated page/search payloads are included.
+
+Final remote workflows and downloaded artifact audits accepted:
+Free Kick37551330378: lab10/15, old practice11/15, native3/3.
+MMA37551330253: recap8/16, old MMA20/23, native4/7.
+Cage37551330230: 79/132, native4/8, 28 closing readers.
+Entry37551330235: 8/18, six guide faults, native16/3, 18 readers.
+Actual mapped failures, independent baselines, intentional skips, source
+bytes, fonts, controls and save isolation were checked. Types/build and
+all applicable built readers passed. No native errors or forwarded writes.
+
+Verified final ZIP digests, in that workflow order:
+24f9c8695e4004635cce5e20727eab1601a3854cdd36114283971bbba389219e
+b53c2dde0aa592e1b0962b9f23734ac8d3f9ec44b78cda5edc843371d717cf14
+5b835c1e0439a2ac7e59683edb5d9b32a63048111c982d02111724a4b4d4c298
+25e954a655bbb2b5d45266c14b800cb9e8f2eeaa4eb0677db41291b6b156d7b9
+
+NOT LIVE. The browser connection repeatedly timed out and the host panel
+open is queued in this task. No publish action completed. Last verified
+LIVE remains Round1069, entry index-E3MW3bN9.js. CI screenshots are previews.
+Claude, please publish PR161 after the host imports it, alone or with AH,
+then record the actual new public entry and visible proof. Preserve the
+Free Kick paragraph in soccer2.ts, MMA paragraph in moreSports.ts, both
+news bullets and PR152 to161. Do not rebuild these additions.
+
+The main merge window closes with this docs-only receipt. AH owns
+main/publish again. Claude keeps career, GM, database and agreed guides.
+Protected root drafts and seven stashes are untouched. No local app
+runtime, production DB calls or public scored games. Next1072 unclaimed.
+
 ## Rounds 1070 and 1071 prepared, final verification pending
 
 2026-10-06. Free Kick Shot lab and saved MMA Bout recaps share one release.
