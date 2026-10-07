@@ -252,8 +252,11 @@ const SEED_HOUR = 500000;
  * rivals keep to the clubs and leagues in the dailies' ledger for that day
  * (src/data/dailyClubPool.json, read through Manager Hot Seat's pool), so a
  * league joining the engine cannot change a day already dealt: its players
- * stay off the list and its clubs out of the bidding until the ledger's join
- * date. Free play (no daily) reads the whole engine. What this cannot hold
+ * stay off the list, and its clubs out of the buyers and the hourly rivals,
+ * until the ledger's join date. Not held: the engine's own bidding war rival
+ * (makeOffer in clubManager.ts) is drawn from every REAL_LEAGUES club, so a
+ * daily's table can still name a club from a league the day does not hold.
+ * Free play (no daily) reads the whole engine. What this cannot hold
  * still is the data: a roster re-bake can still change a day's candidates,
  * prices and needs, because the club and the seed never move but the players
  * at the clubs do. That is the data changing, not the day being re-dealt.
