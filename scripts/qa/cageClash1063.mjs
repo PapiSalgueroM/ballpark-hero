@@ -49,6 +49,13 @@ async function useNativeFocus(page) {
   assert.equal(typeof client?.send, 'function', 'Native focus requires the original Chromium page session');
   await client.send('Emulation.setFocusEmulationEnabled', { enabled: false });
 }
+async function waitNativeFocus(page, expected) {
+  for (let attempt = 0; attempt < 60; attempt++) {
+    if (await page.evaluate(() => document.hasFocus()) === expected) return;
+    await new Promise(resolve => setTimeout(resolve, 50));
+  }
+  assert.equal(await page.evaluate(() => document.hasFocus()), expected, 'The real browser reaches the requested focus state');
+}
 async function hud(page) {
   return root(page).evaluate(el => {
     const f = side => { const node = el.querySelector(`[data-cage-fighter="${side}"]`); return node ? { ...Object.fromEntries(['x', 'health', 'stamina', 'submission', 'hits', 'damageDealt', 'blocked', 'takedowns', 'controlTicks', 'actionTicks'].map(k => [k, Number(node.dataset[k])])), action: node.dataset.action } : null; };
@@ -540,7 +547,9 @@ try {
           await page.clock.pauseAt(await page.evaluate(() => Date.now() + 1000));
           const restored = await hud(page); await new Promise(resolve => setTimeout(resolve, 250));
           const restoredHeld = await hud(page); assert.deepEqual(restoredHeld, restored, 'The restored capture clock holds the actual fight');
-          report.clockControl = { before, held, resumed, restored, restoredHeld, passed: true };
+          await page.clock.runFor(200); const advanced = await hud(page);
+          assert(advanced.tick > restored.tick, 'Explicit input time advances the restored real fight');
+          report.clockControl = { before, held, resumed, restored, restoredHeld, advanced, passed: true };
           report.controls.push('capture-clock');
         }
         for (const drill of ['striking', 'takedown', 'submission', 'escape']) {
@@ -701,8 +710,8 @@ try {
         try {
           await useNativeFocus(other);
           await other.bringToFront();
-          await other.waitForFunction(() => document.hasFocus(), null, { polling: 100, timeout: 3000 });
-          await page.waitForFunction(() => !document.hasFocus(), null, { polling: 100, timeout: 3000 });
+          await waitNativeFocus(other, true);
+          await waitNativeFocus(page, false);
           row.focusLost = await page.evaluate(() => ({ focused: document.hasFocus(), hidden: document.hidden }));
           assert.equal(row.focusLost.focused, false); await page.clock.runFor(250);
           const frozen = await hud(page); assert(frozen.paused, 'Losing actual browser focus pauses the fight');
@@ -710,7 +719,7 @@ try {
         } finally {
           await page.keyboard.up('ArrowLeft'); await other.close(); await page.bringToFront();
         }
-        await page.waitForFunction(() => document.hasFocus(), null, { polling: 100, timeout: 3000 });
+        await waitNativeFocus(page, true);
         assert(await page.evaluate(() => document.hasFocus()), 'Browser focus is restored before explicit resume');
         const returned = await hud(page); assert(returned.paused, 'Restoring browser focus does not resume the fight');
         await activate(button('Resume fight'), profile); const x = (await hud(page)).player.x; await page.clock.runFor(180);
