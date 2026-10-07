@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { UsCareerCore, UsCareerSport } from '@/lib/usCareerSport';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { cn } from '@/lib/utils';
+import { formatNumber } from '@/lib/formatNumber';
 import CareerSeasonComparison from '@/components/us-career/CareerSeasonComparison';
 import CareerSeasonHighs from '@/components/us-career/CareerSeasonHighs';
 
@@ -11,7 +12,7 @@ function difference(value: unknown, prior: unknown, hasPrior: boolean) {
   if (!hasPrior) return 'No earlier season';
   if (!finite(value) || !finite(prior)) return 'Change not recorded';
   const change = value - prior;
-  return change === 0 ? 'Unchanged' : `${Math.abs(change)} ${change > 0 ? 'higher' : 'lower'}`;
+  return change === 0 ? 'Unchanged' : `${formatNumber(Math.abs(change))} ${change > 0 ? 'higher' : 'lower'}`;
 }
 const tabs = ['Overview', 'Regular season', 'Postseason'] as const;
 type Tab = typeof tabs[number];
@@ -93,9 +94,9 @@ export default function CareerSeasonReview({ career, sport, onBack, backLabel }:
           <p className="text-xs text-muted-foreground">{previous ? `Changes compared with your ${recorded(previous.year)} season.` : 'Your first recorded season.'}</p>
           <dl className="grid grid-cols-2 gap-2">
             <div className="rounded-xl bg-secondary/50 p-3"><dt className="text-xs text-muted-foreground">Season OVR</dt><dd data-season-ovr="" className="text-xl font-bold">{recorded(season.ovr)}</dd><dd data-season-ovr-change="" className="mt-1 text-xs">{difference(season.ovr, previous?.ovr, !!previous)}</dd></div>
-            <div className="rounded-xl bg-secondary/50 p-3"><dt className="text-xs text-muted-foreground">{detail.gamesLabel}</dt><dd data-season-games="" className="text-xl font-bold">{recorded(season.games)}</dd><dd data-season-games-change="" className="mt-1 text-xs">{difference(season.games, previous?.games, !!previous)}</dd></div>
+            <div className="rounded-xl bg-secondary/50 p-3"><dt className="text-xs text-muted-foreground">{detail.gamesLabel}</dt><dd data-season-games="" className="text-xl font-bold">{formatNumber(recorded(season.games))}</dd><dd data-season-games-change="" className="mt-1 text-xs">{difference(season.games, previous?.games, !!previous)}</dd></div>
             <div className="rounded-xl bg-secondary/50 p-3"><dt className="text-xs text-muted-foreground">Age that season</dt><dd data-season-age="" className="font-semibold">{recorded(season.age)}</dd></div>
-            <div className="rounded-xl bg-secondary/50 p-3"><dt className="text-xs text-muted-foreground">Season salary</dt><dd data-season-pay="" className="break-words font-semibold">{finite(season.salary) ? `$${season.salary}M` : 'Not recorded'}</dd></div>
+            <div className="rounded-xl bg-secondary/50 p-3"><dt className="text-xs text-muted-foreground">Season salary</dt><dd data-season-pay="" className="break-words font-semibold">{finite(season.salary) ? `$${formatNumber(season.salary)}M` : 'Not recorded'}</dd></div>
           </dl>
           <div><h3 className="text-xs font-semibold text-muted-foreground">Team result</h3><p data-season-result="" className="mt-1 break-words text-sm font-semibold">{season.teamResult || 'Not recorded'}</p></div>
           <div><h3 className="text-xs font-semibold text-muted-foreground">Awards</h3><p data-season-awards="" className="mt-1 break-words text-sm">{Array.isArray(season.awards) ? season.awards.length ? season.awards.join(', ') : 'No awards that season' : 'Not recorded'}</p></div>

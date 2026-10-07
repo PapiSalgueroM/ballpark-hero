@@ -22,6 +22,8 @@ import type { UsCareerCore } from '@/lib/usCareerSport';
 
 const boards: Record<string, ComponentType> = { nba: NbaMyCareerBoard, nfl: NflMyCareerBoard, mlb: MlbMyCareerBoard, nhl: NhlMyCareerBoard };
 const field = (name: string) => document.querySelector(`[data-season-${name}]`)?.textContent;
+// Literal display-only overlays. The original numeric fixtures and saved text remain untouched.
+const groupedReviewDisplay = (value: string) => ({ '4123': '4,123', '4312': '4,312', '1281': '1,281', '1142': '1,142', '1122': '1,122', '1023': '1,023' } as Record<string, string>)[value] ?? value;
 const stats = () => Object.fromEntries([...document.querySelectorAll('[data-season-stat]')].map(el => [el.getAttribute('data-season-stat'), el.querySelector('dd')?.textContent]));
 const comparisons = () => Object.fromEntries([...document.querySelectorAll('[data-season-compare-stat]')].map(el => [el.getAttribute('data-season-compare-stat'),
   ['first', 'second', 'delta'].map(side => el.querySelector(`[data-compare-${side}]`)?.textContent)]));
@@ -51,7 +53,7 @@ function assertPosition(fixture: ReviewFixture) {
   expect(field('games')).toBe(String(fixture.games));
   expect(document.querySelector('[data-season-games]')?.parentElement?.querySelector('dt')?.textContent).toBe(fixture.gamesLabel);
   click('Regular season');
-  expect(stats()).toEqual(fixture.regular);
+  expect(stats()).toEqual(Object.fromEntries(Object.entries(fixture.regular).map(([label, value]) => [label, groupedReviewDisplay(value)])));
   click('Postseason');
   expect(stats()).toEqual(fixture.postseason);
   unmount();
@@ -89,7 +91,7 @@ describe('saved career season review', () => {
       expect(seasonHighs(career, reviewSports[slug]), `${slug} ${pos} saved highs`).toEqual([
         { label: 'Season OVR', value: '84', indices: [1] },
         { label: gamesLabel, value: String(fixture.games), indices: [1] },
-        { label, value: String(value), indices: [1] },
+        { label, value: groupedReviewDisplay(String(value)), indices: [1] },
       ]);
       expect(JSON.stringify(career)).toBe(before);
     }
@@ -224,7 +226,7 @@ describe('saved career season review', () => {
       expect(comparisons()[fixture.gamesLabel]).toEqual([String(fixture.games), String(fixture.games - 1), '-1']);
       click('Regular season');
       expect(comparisons()).toEqual(Object.fromEntries(Object.entries(fixture.regular).map(([label, value]) => [label,
-        [value, value, label === 'ERA' ? '0.00' : ['Batting average', 'On base percentage', 'Save percentage'].includes(label) ? '0.000' : '0']])));
+        [groupedReviewDisplay(value), groupedReviewDisplay(value), label === 'ERA' ? '0.00' : ['Batting average', 'On base percentage', 'Save percentage'].includes(label) ? '0.000' : '0']])));
       expect(screen.queryByRole('button', { name: 'Postseason' })).toBeNull();
       expect(document.querySelector('[data-career-season-comparison]')?.textContent).not.toContain('Fixture conference final');
       view.unmount();
@@ -391,7 +393,7 @@ describe('saved career season review', () => {
       choose(1);
       expect(field('ovr')).toBe('84');
       click('Regular season');
-      expect(stats()).toEqual(fixture.regular);
+      expect(stats()).toEqual(Object.fromEntries(Object.entries(fixture.regular).map(([label, value]) => [label, groupedReviewDisplay(value)])));
       click('Back to seasons');
       click('Back to career');
       expect(document.activeElement).toBe(screen.queryByRole('button', { name: /Career Log/ }));
