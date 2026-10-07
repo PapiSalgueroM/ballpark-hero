@@ -29,7 +29,8 @@
    D. NO INVENTED MEN (hard). Every club of the league builds its day one
       squad from its real baked roster plus youth pads that are flagged as
       pads; no unflagged man is missing from the roster, and a club is in
-      CM_PARTIAL exactly when it has fewer than 8 real players.
+      CM_PARTIAL exactly when it has fewer than 8 real players or (an
+      A-League club, Release AH) the A-League list marks it for its values.
 
    MEASURED 2026-10-02, six seasons a run, SIM_SEED unset and 1 to 5:
      pair gap   Flamengo over Remo 37.3 to 48.2 points a season,
@@ -81,8 +82,17 @@
                                go red;
      CM_NEW_CONTROL=dropcount2 Liga MX's rules row drops 2, part A and the
                                drop talk checks go red.
+     CM_NEW_CONTROL=alpartial  the engine reads only the baked partial list,
+                               forgetting the A-League one: part D goes red
+                               (Central Coast Mariners).
 
-   Run: node scripts/simClubManagerNewLeagues.mjs   (SIM_SEEDS=n, default 6)
+   Round 1035 added the A-League Men, the first league with a cup that two
+   of its clubs do not enter; those two are played by
+   scripts/simClubManagerALeague.mjs. Its row plays twelve seasons, keeps one
+   pair and leaves the rank correlation unbanded (the reasons and the numbers
+   are beside its entry below).
+
+   Run: node scripts/simClubManagerNewLeagues.mjs   (SIM_SEEDS=n, default 6; a row may ask for more)
 */
 import { build } from 'esbuild';
 import fs from 'node:fs';
@@ -92,10 +102,10 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_FWD = ROOT.replaceAll('\\', '/');
-const SEEDS = Number(process.env.SIM_SEEDS || 6);
+const SEEDS_ALL = Number(process.env.SIM_SEEDS || 6);
 const SEED_SET = process.env.SIM_SEED || "";
 const CONTROL = process.env.CM_NEW_CONTROL || '';
-const CONTROLS = ['dropcount', 'nocup', 'swap', 'invented', 'cupon', 'dropcount2'];
+const CONTROLS = ['dropcount', 'nocup', 'swap', 'invented', 'cupon', 'dropcount2', 'alpartial'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`CM_NEW_CONTROL=${CONTROL} is not one of ${CONTROLS.join(', ')}`); process.exit(1); }
 
 /* One entry per league this round family added. size, drop and cup are the
@@ -112,6 +122,39 @@ const NEW_LEAGUES = [
     id: 'ligamx', size: 18, drop: 0, cup: null, pairGap: 4,
     pairs: [['América', 'Necaxa'], ['Guadalajara', 'FC Juárez']],
     managed: ['Pumas UNAM', 'León', 'Atlético San Luis', 'Pachuca', 'Monterrey', 'Tijuana'],
+  },
+  /* Round 1035: the A-League Men. Its managed clubs all enter the Australia
+     Cup; the two that do not (Auckland FC, Wellington Phoenix) are played by
+     scripts/simClubManagerALeague.mjs, which holds the cup exclusion. */
+  /* Its squads are rated close together (best XI 57.5 to 60.9, previews 58
+     to 61), so six seasons were too few: over six a run, the Melbourne City
+     over Brisbane Roar pair (61 against 59) measured 2.0 to 11.5 points and
+     the rank correlation over six unmanaged clubs 0.50 to 0.91, both inside
+     what noise does. So the row first played twelve seasons, kept the one
+     pair with a real rating gap (Adelaide United 61 over Central Coast
+     Mariners 58), and left the rank correlation unbanded: ten of its twelve
+     previews sit at 60 or 61, and a rank of ties is weak evidence. The
+     review fix below plays 96 and bands both.
+     MEASURED 2026-10-06, twelve seasons a run, SIM_SEED unset and 1 to 4:
+     Adelaide over Central Coast 7.4, 6.0, 8.8, 2.4 and 8.7 points a season.
+     A band of 1 sat about two standard deviations under that mean, a coin
+     toss in waiting, so the review fix plays more seasons rather than
+     loosening anything. The row's seasons are cheap (about 30 seconds for
+     96), and the spread of the gap falls as one over the root of the count:
+     twenty four seasons, SIM_SEED unset and 1 to 4: gap 5.7, 6.5, 7.3, 3.3,
+     8.8, rho 0.806, 0.836, 0.794, 0.794, 0.971.
+     NINETY SIX seasons, SIM_SEED unset and 1 to 7: gap 5.6, 6.6, 7.6, 5.6,
+     5.2, 6.1, 6.6, 4.0; rho 0.736, 0.853, 0.971, 0.971, 0.971, 0.853,
+     0.971, 0.853. Mean gap 5.9 with a standard deviation of 1.1, so the
+     band is 2 (3.6 deviations clear; the swap control turns the gap
+     negative), and the rank correlation over the
+     six unmanaged clubs is banded at 0.4, far under the lowest of fourteen
+     runs at 24 or 96 seasons (0.736): it is coarse with tied previews, so
+     the band only catches strength stopping to matter. */
+  {
+    id: 'aleague', size: 12, drop: 0, cup: 'Australia Cup', pairGap: 2, seeds: 96, rhoMin: 0.4,
+    pairs: [['Adelaide United', 'Central Coast Mariners']],
+    managed: ['Perth Glory', 'Newcastle Jets', 'Melbourne Victory', 'Western Sydney Wanderers', 'Sydney FC', 'Macarthur FC'],
   },
 ];
 /* Round 883: what a league that relegates nobody must never say. */
@@ -153,6 +196,7 @@ function transformEngine(src) {
   if (CONTROL === 'cupon') src = mutateOnce(src, "ligamx: {\n    nationId: 'mexico', flag: 'Mexico', cup: null,", "ligamx: {\n    nationId: 'mexico', flag: 'Mexico', cup: 'Copa MX',", 'cupon');
   if (CONTROL === 'dropcount2') src = mutateOnce(src, "ligamx: {\n    nationId: 'mexico', flag: 'Mexico', cup: null, europe: null, drop: 0,", "ligamx: {\n    nationId: 'mexico', flag: 'Mexico', cup: null, europe: null, drop: 2,", 'dropcount2');
   if (CONTROL === 'invented') src = mutateOnce(src, '    isYouth: true,\n', '    isYouth: false,\n', 'invented');
+  if (CONTROL === 'alpartial') src = mutateOnce(src, "import { CM_WORLD_ROSTERS as CM_ROSTERS, CM_WORLD_PARTIAL as CM_PARTIAL } from '@/data/clubManagerWorldRosters';", "import { CM_WORLD_ROSTERS as CM_ROSTERS } from '@/data/clubManagerWorldRosters';\nimport { CM_PARTIAL } from '@/data/clubManagerRosters';", 'alpartial');
   /* Private helpers the checks ask directly. */
   return `${src}\nexport { relegationSpots as __relegationSpots, buildSquad as __buildSquad, getPool as __getPool };\n`;
 }
@@ -160,7 +204,7 @@ function transformEngine(src) {
 async function bundleEngine() {
   const entry = path.join(TMP, 'entry.mjs');
   const out = path.join(TMP, 'engine.mjs');
-  fs.writeFileSync(entry, `export * from '${ROOT_FWD}/src/lib/clubManager.ts';\n`);
+  fs.writeFileSync(entry, `export * from '${ROOT_FWD}/src/lib/clubManager.ts';\nexport * as __aleague from '${ROOT_FWD}/src/data/clubManagerALeague2026.ts';\n`);
   const enginePath = path.join(ROOT, 'src', 'lib', 'clubManager.ts');
   await build({
     entryPoints: [entry], bundle: true, format: 'esm', platform: 'node', outfile: out,
@@ -238,6 +282,8 @@ function partRows(cm, row) {
 
 /* B. Full seasons. Returns each club's points per seed for part C. */
 function partSeasons(cm, row, lg) {
+  /* Round 1035: a row may ask for more seasons (the A-League, see its entry). */
+  const SEEDS = process.env.SIM_SEEDS ? SEEDS_ALL : (row.seeds ?? SEEDS_ALL);
   console.log(`B) ${row.id}: ${SEEDS} seeded seasons`);
   const clubs = new Set(lg.clubs);
   const nationClubs = new Set(cm.REAL_LEAGUES.filter(l => cm.leagueRulesOf(l.id).nationId === cm.leagueRulesOf(row.id).nationId).flatMap(l => l.clubs));
@@ -351,7 +397,11 @@ function partStrength(cm, row, lg, perClub) {
   const field = lg.clubs.filter(c => !managed.has(c) && perClub[c].length);
   const rho = spearman(field.map(c => cm.clubPreviewRating(c)), field.map(c => mean(perClub[c])));
   console.log(`   rank correlation, preview rating against mean points, ${field.length} clubs: ${rho.toFixed(3)}`);
-  if (!(rho >= RHO_MIN)) fail(`the rank correlation is ${rho.toFixed(3)}, the band is ${RHO_MIN}`);
+  /* Round 1035: a row whose clubs are rated too close together for a rank
+     correlation to mean anything sets rhoMin null and leans on its pair. */
+  const rhoMin = process.env.CM_NEW_RHO_MIN ? RHO_MIN : (row.rhoMin === undefined ? RHO_MIN : row.rhoMin);
+  if (rhoMin === null) console.log(`   (not banded for ${row.id}: its clubs are rated too close together, the pair carries this part)`);
+  else if (!(rho >= rhoMin)) fail(`the rank correlation is ${rho.toFixed(3)}, the band is ${rhoMin}`);
 }
 
 /* D. Nobody in the league is invented beyond the flagged youth pads. */
@@ -368,7 +418,14 @@ function partNoInvented(cm, row, lg) {
       else real += 1;
     }
     const isPartial = cm.CM_PARTIAL.includes(c);
-    if (isPartial !== (baked.length < 8)) fail(`${c} has ${baked.length} real players and CM_PARTIAL says ${isPartial}`);
+    /* Release AH: an A-League squad comes from its ledger, where partial
+       also means the club's page has no value for most of its ledger rows
+       (Round 1035 review F10; simClubManagerALeague holds that list to the
+       ledgers), so the world's partial list must carry the A-League list as
+       well as every thin squad. A baked club keeps the bake's rule. */
+    const fromLedger = Object.prototype.hasOwnProperty.call(cm.__aleague.CM_ALEAGUE_ROSTERS, c);
+    const wantPartial = baked.length < 8 || (fromLedger && cm.__aleague.CM_ALEAGUE_PARTIAL.includes(c));
+    if (isPartial !== wantPartial) fail(`${c} has ${baked.length} real players${fromLedger ? `, the A-League list ${cm.__aleague.CM_ALEAGUE_PARTIAL.includes(c) ? 'marks' : 'does not mark'} it` : ''}, and CM_PARTIAL says ${isPartial}`);
     if (isPartial !== cm.isPartialClub(c)) fail(`${c}: isPartialClub disagrees with CM_PARTIAL`);
     if (isPartial) partial += 1;
   }

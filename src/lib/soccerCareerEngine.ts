@@ -25,7 +25,7 @@ import {
 } from "./careerEras";
 import type { PhoneChoiceDef } from "./careerEras";
 /* Round 929: every season's league finish, and the era aware elite rule. */
-import { drawLeagueFinish, eliteInYear } from "./soccerCareerLeague";
+import { divisionMove, drawLeagueFinish, eliteInYear, finishZone, managerLeagueField, MANAGER_FIELD, ordinal } from "./soccerCareerLeague";
 /* Round 1012: real club rivalries, played as league derbies each season. */
 import { resolveSeasonDerbies, applySeasonDerbies, type SeasonDerby } from "./soccerCareerDerby";
 /* Round 130: the phone is a real phone now. Threads, contacts, a relationship
@@ -309,6 +309,10 @@ export interface WorldCupResult {
   playerAvgRating: number;
   result: string; // "Winner", "Runner-up", "Semi-final", "Quarter-final", "Group Stage"
   bestPlayer: boolean;
+  /** Round 1023: the winner's speech once given on the card, the shape a
+      Ballon d'Or night keeps (careerAwardsNight.ts). Optional, so an old save
+      loads unchanged. */
+  speech?: GivenSpeech;
 }
 
 /* ─── Ballon d'Or System ───
@@ -435,11 +439,26 @@ export interface ManagerState {
      keep every pre-227 save loading exactly as it did. */
   seasonResults: {
     year: number; club: string; tier: number; result: string; trophy: boolean;
-    /** Final table around the manager: the leaders plus his own row. */
-    table?: { club: string; pts: number; pos: number; you?: boolean }[];
+    /** Final table around the manager: the leaders plus his own row.
+     *  Round 1029: a row marked unnamed is a club of his league the game
+     *  does not know by name; it holds its position and an empty name. */
+    table?: { club: string; pts: number; pos: number; you?: boolean; unnamed?: boolean }[];
     playerPos?: number; playerPts?: number;
-    /** How many clubs the league had, so percentages read true. */
+    /** How many positions the season's table had. Round 1029: the league's
+     *  real size only where the result line prints "of N". */
     leagueSize?: number;
+    /** Round 1029: the league the season was played in, when one is known. */
+    league?: string;
+    /** Round 1029: true when leagueSize is that league's verified size. */
+    sizeVerified?: boolean;
+    /** Round 1029: how many rivals in the whole table the game could name,
+     *  so the page tells "nobody to name" from a window that missed them. */
+    knownRivals?: number;
+    /** Round 1029: a season before the list's own (2026-27) in a league the
+     *  game holds: it knows neither who was in that league that season nor
+     *  whether his club was, so the season names no rival and no league
+     *  (`league` is kept, unprinted) and the page says why. */
+    lineupUnknown?: boolean;
     /** W-D-L line for the league season. */
     record?: string;
     /** How far the domestic cup run went. */
@@ -464,6 +483,10 @@ export interface ManagerState {
   offers?: ManagerJobOffer[];
   /** What to tell the player when the feed is empty. */
   offerNote?: string;
+  /** Round 1029: the league he plays in now: the one his job came with, or
+   *  the one a promotion or relegation took his club to. Optional, so older
+   *  saves load; a season without it works it out and keeps it. */
+  league?: string;
 }
 
 /** Round 111: one job on the table, with the reason it exists. */
@@ -879,8 +902,9 @@ export interface CareerState {
   /** Legacy field, kept so a save made before Round 124 still renders its
       half finished World Cup screen instead of throwing. Nothing sets it now. */
   pendingWorldCup: WorldCupResult | null;
-  /** Round 124: the tournament waiting on the "world_cup" screen. */
-  pendingTournament?: IntlTournament | null;
+  /** Round 124: the tournament waiting on the "world_cup" screen. Round 1023:
+      it also keeps the winner's speech once given (optional). */
+  pendingTournament?: (IntlTournament & { speech?: GivenSpeech }) | null;
   /** The most recent tournament, kept in full so the bracket stays readable
       from the International tile all season. */
   lastTournament?: IntlTournament | null;
@@ -3461,7 +3485,19 @@ export const ELITE_CLUBS = ["Bayern Munich", "PSG", "Man City", "Real Madrid", "
    Round 1013: these 190 hand rows are HAND_CLUBS and are never renamed,
    removed or reordered (saves and the academy lookups read clubs by name).
    FALLBACK_CLUBS appends the clubs generated from Club Manager after them, so
-   every hand row keeps its index. */
+   every hand row keeps its index.
+   Round 1022: every row's league is checked against two sources for 2026-27
+   (2026 for calendar year leagues) in scripts/data/soccerCareerFacts.json,
+   and scripts/simCareerFacts.mjs holds this table to that file. A label
+   serves every era from 1990 on (nothing here moves a club by year), so the
+   seven clubs whose 2026-27 league differs from the one they played in for
+   most of those years keep their old label, held in the file with the
+   verified 2026-27 league beside it until the league by year round lands
+   (the lead's option (a) of 2026-10-05): West Ham and Wolves (Championship),
+   Girona (Segunda Division), Hertha Berlin (2. Bundesliga), Nantes (Ligue 2),
+   River Plate Asuncion (Primera B) and Persija Jakarta (the top flight's
+   name since 2025). Labels nobody has read twice yet are listed there as
+   unverified. Tiers are balance, not fact. */
 export const HAND_CLUBS: ClubData[] = [
   // Tier 1, elite
   { id: "fb-1", name: "Real Madrid", country: "Spain", tier: 1, color: "#FEBE10", league: "La Liga" },
@@ -5105,6 +5141,40 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   return playPendingProSeason(s, clubs);
 }
 
+/* Round 1022: each nation's men's all time international scoring record, the
+   number a career has to pass for the All Time Top Scorer award and its
+   "Became X's All Time Top International Scorer" line. Every row is two source
+   verified in scripts/data/soccerCareerFacts.json (holder, sources, the date
+   read) and scripts/simCareerFacts.mjs holds this table to that file. Snapshot
+   of 2026-10-06, the ten rows held by active players re-read on 2026-10-07
+   after that night's matches (Messi's farewell goal, Kane's two against
+   Czechia): Argentina Messi, Belgium Lukaku, Brazil Neymar (full internationals only),
+   Colombia Falcao, Croatia Suker, Egypt Hossam Hassan, England Kane, France
+   Mbappe, Germany Klose, Italy Riva, Japan Kamamoto, Netherlands Depay,
+   Nigeria Yekini, Norway Haaland, Portugal Ronaldo, South Korea Son, Spain
+   Villa, Uruguay Suarez. Records held by active players move; refresh the
+   file and this table together. A nation with no verified row gets no award:
+   the old `|| 40` default made one up for every other nation, and the old
+   rows (Spain 29, Belgium 68, Uruguay 36 and more) were far below the truth.
+   Senegal is left out until two current sources agree on Mane's count. */
+export const INT_SCORING_RECORDS: Readonly<Record<string, number>> = {
+  Argentina: 126, Belgium: 94, Brazil: 80, Colombia: 36, Croatia: 45, Egypt: 69,
+  England: 91, France: 67, Germany: 71, Italy: 35, Japan: 75, Netherlands: 55,
+  Nigeria: 37, Norway: 65, Portugal: 146, "South Korea": 59, Spain: 59, Uruguay: 69,
+};
+
+/* The award, once per career, when his international goals pass his nation's
+   verified record. No draws, so lifting it out of the season moved nothing. */
+export function awardAllTimeTopScorer(s: CareerState, thisYear: number): void {
+  if (!s.internationalCareer) return;
+  const record = INT_SCORING_RECORDS[s.nationality];
+  if (record === undefined) return;
+  const intGoals = s.intStats.goals;
+  if (intGoals <= record || s.awards.some(a => a.name === "All Time Top Scorer")) return;
+  s.awards = [...s.awards, { year: thisYear, name: "All Time Top Scorer", emoji: "👑" }];
+  s.events.push(`👑 Became ${s.nationality}'s All Time Top International Scorer with ${intGoals} goals!`);
+}
+
 /* Round 850: the season itself, split off the start of the year above so the
    retirement talk can sit between the two. Everything above is the year
    beginning (the birthday, bans, the heat, the drug test, forced retirement);
@@ -5412,22 +5482,6 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
     s.popularity = clamp(s.popularity + 15, 0, 100);
   }
 
-  // All Time Top Scorer for country, international goals record
-  const INT_RECORDS: Record<string, number> = {
-    Brazil: 77, France: 57, Argentina: 106, Germany: 71, Spain: 29, England: 66,
-    Portugal: 135, Netherlands: 50, Italy: 35, Belgium: 68, Croatia: 35, Uruguay: 36,
-    Norway: 33, Egypt: 51, Colombia: 25, Nigeria: 28, Senegal: 35, Japan: 55, "South Korea": 36,
-  };
-  if (s.internationalCareer) {
-    const intGoals = s.intStats.goals;
-    const record = INT_RECORDS[s.nationality] || 40;
-    const alreadyTopScorer = s.awards.some(a => a.name === "All Time Top Scorer");
-    if (!alreadyTopScorer && intGoals > record) {
-      s.awards = [...s.awards, { year: thisYear, name: "All Time Top Scorer", emoji: "👑" }];
-      s.events.push(`👑 Became ${s.nationality}'s All Time Top International Scorer with ${intGoals} goals!`);
-    }
-  }
-
   // Fair Play Award, good conduct season (low cards, high rating)
   if (season.yellowCards <= 1 && season.redCards === 0 && season.rating >= 7.5 && season.apps >= 25 && Math.random() < 0.1) {
     const alreadyFairPlayThisYear = s.awards.some(a => a.name === "Fair Play Award" && a.year === thisYear);
@@ -5484,6 +5538,11 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
      World Cup and the continental championships crown a winner across a whole
      career even if you never get a cap. */
   runTournamentSummer(s, season, thisYear);
+  /* Round 1022: the scoring record is checked after the summer, so goals at a
+     World Cup or a continental final count the season they are scored (a man
+     who passes it at his last tournament still gets it) and the line's total
+     is the one his screen shows. No draws, so the move changed none. */
+  awardAllTimeTopScorer(s, thisYear);
 
   /* ─── Round 130: the rest of the football world has a season too ───
      Runs BEFORE the Ballon d'Or on purpose. It decides who won each league,
@@ -6607,8 +6666,8 @@ const TOP_SCORER_BAR_PER_STAGE_GAME = 0.4;
    night may move with soccer's own clamps and rounding, the award, the copy,
    and (further down) the scoring and the speeches. */
 import {
-  runAwardsNight, settleAwardsNight, applySpeech, describeSteps, measureMoves, narrativeOf,
-  type AwardsCandidate, type AwardsNight, type AwardsMeter, type AwardsNightSport, type SpeechOption, type MeterStep,
+  runAwardsNight, settleAwardsNight, applySpeech, describeSteps, measureMoves, giveSpeechOnce, givenSpeechOf,
+  type AwardsCandidate, type AwardsNight, type AwardsMeter, type AwardsNightSport, type SpeechOption, type MeterStep, type GivenSpeech,
 } from "./careerAwardsNight";
 
 type SoccerAwardsMeter = "popularity" | "morale" | "integrityBonus" | "rivalryIntensity" | "socialMediaFollowers" | "marketValue";
@@ -6618,7 +6677,10 @@ const SOCCER_AWARDS_METERS: Record<SoccerAwardsMeter, AwardsMeter<CareerState>> 
   morale: { label: "Morale", add: (s, d) => { s.morale = clamp(s.morale + d, 0, 100); }, read: s => s.morale },
   integrityBonus: { label: "Integrity", add: (s, d) => { s.integrityBonus += d; }, read: s => s.integrityBonus },
   rivalryIntensity: { label: "Rivalry", add: (s, d) => { s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + d, 0, 100); }, read: s => s.rivalryIntensity ?? 0 },
-  socialMediaFollowers: { label: "Followers", add: (s, d) => { s.socialMediaFollowers = Math.round((s.socialMediaFollowers + d) * 100) / 100; }, read: s => s.socialMediaFollowers },
+  /* Round 1023 review: followers are counted in millions (formatFollowers),
+     so a move of 3 is three million and the card says "+3M", the way the
+     rest of the site writes a follower change ("+1M", "+500k"). */
+  socialMediaFollowers: { label: "Followers", add: (s, d) => { s.socialMediaFollowers = Math.round((s.socialMediaFollowers + d) * 100) / 100; }, read: s => s.socialMediaFollowers, show: d => `${d >= 0 ? "+" : "-"}${Math.abs(d) >= 1 ? `${Math.round(Math.abs(d) * 100) / 100}M` : `${Math.round(Math.abs(d) * 1000)}k`}` },
   marketValue: { label: "Market Value", add: (s, d) => { s.marketValue = Math.round((s.marketValue + d) * 10) / 10; }, read: s => s.marketValue, show: d => `${d >= 0 ? "+" : "-"}€${Math.abs(d)}M` },
 };
 
@@ -6745,6 +6807,14 @@ function calcBdorPoints(goals: number, assists: number, overall: number, clubTie
   if (topClubs.includes(club)) pts += 5;
   return Math.round(pts);
 }
+
+/* Round 1023 review: the rivals the last night judged dominance against, by
+   name. Kept beside the engine, never on the save and never read by the game,
+   so simBallonDorFairness can hold it against the rivals the card seats on
+   every night: judged one man short or one man over, the old outcome checks
+   stayed green while the engine judged seasons differently. */
+let lastJudged: { year: number; names: string[] } | null = null;
+export function lastBallonDorJudged(): { year: number; names: string[] } | null { return lastJudged; }
 
 function calculateBallonDor(state: CareerState, season: SeasonRecord, year: number, world?: WorldSeason): BallonDorResult {
   const yearOffset = year - 2024;
@@ -6916,7 +6986,18 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
      consistent: 43 goals, 14 assists and a title finished third behind a
      treble, because of a forward who was not on the shortlist. The harness
      and the engine now judge the same ten. */
-  const visibleField = allNomineeData.slice(0, 10);
+  /* Round 1023: nine, not ten. A season this rule calls dominant is always on
+     the ballot, and the shared night (careerAwardsNight.ts) then seats one
+     rival fewer, so only nine rivals ever stand beside him on the card. Judged
+     against ten, a tenth man nobody sees could still cost a must win season:
+     measured on main by simBallonDorFairness, 35 goals and a major against a
+     card whose best rival had 28, finished third. The field already holds no
+     repeated name and never the player, so these nine are exactly the nine the
+     card seats. A season that is not dominant against these nine is not
+     dominant against ten either, so a player left off the ballot loses
+     nothing by it. */
+  const visibleField = allNomineeData.slice(0, SOCCER_BALLON_DOR.award.shortlistSize - 1);
+  lastJudged = { year, names: visibleField.map(n => n.name) };
   const fieldBest = visibleField.reduce(
     (mx, n) => Math.max(mx, productionScore(n.goals, 12, n.trophies)),
     0,
@@ -7153,15 +7234,42 @@ export const SOCCER_BDOR_SPEECHES: SpeechOption<CareerState, SoccerAwardsMeter, 
       hit: [{ meter: "popularity", delta: -10 }, { meter: "rivalryIntensity", delta: 10 }],
       miss: [{ meter: "popularity", delta: 8 }],
     },
+    /* Round 1023: words only. speakSoccer adds what the coin really moved. */
     line: (_s, outcome) => outcome === "hit"
-      ? '🐐 "I am the greatest to ever do this." Half the room gasped, the pundits fed on it for weeks. Popularity -10, but you meant every word.'
-      : '🐐 "I am the greatest to ever do this." Delivered with such calm that people just... agreed. Popularity +8.',
+      ? '🐐 "I am the greatest to ever do this." Half the room gasped, the pundits fed on it for weeks, but you meant every word.'
+      : '🐐 "I am the greatest to ever do this." Delivered with such calm that people just... agreed.',
   },
 ];
 
+/* Round 1023: a speech's log line says what the speech really did. The two
+   gambles (greatest_ever here, call_out_doubters below) used to print the
+   number their coin asked for ("Popularity +8", "-10", "+10", "-8") whatever
+   the cap let land, so a winner already at popularity 100 read "+8" in his
+   log while nothing moved. Their lines are words only now, and this adds the
+   meters the coin can move as measured after the clamps ("Popularity -7,
+   Rivalry +10."), or nothing when the cap swallowed the whole move. Every
+   soccer speech goes through here, on a card and in one step alike, so there
+   is one rule for the log line. Returns the line and every measured move, or
+   null for an id the list does not carry (nothing moves, nothing is said).
+   The draws are applySpeech's own, in its order. */
+export function speakSoccer<Id extends string>(
+  s: CareerState, options: SpeechOption<CareerState, SoccerAwardsMeter, Id>[], id: Id, rng?: () => number,
+): { line: string; moved: MeterStep<SoccerAwardsMeter>[] } | null {
+  const option = options.find(o => o.id === id);
+  if (!option) return null;
+  const said: string[] = [];
+  const hush = { meters: SOCCER_AWARDS_METERS, say: (_s: CareerState, l: string) => { said.push(l); } };
+  const moved = measureMoves(SOCCER_AWARDS_METERS, s, () => { applySpeech(hush, options, s, id, rng); });
+  const coin = new Set((option.risk ? [...option.risk.hit, ...option.risk.miss] : []).map(st => st.meter));
+  const told = moved.filter(st => coin.has(st.meter));
+  const line = told.length ? `${said[0]} ${describeSteps(SOCCER_AWARDS_METERS, told)}.` : said[0];
+  SOCCER_BALLON_DOR.say(s, line);
+  return { line, moved };
+}
+
 export function applyBdorSpeech(prev: CareerState, choice: BdorSpeechChoice, clubs: ClubData[]): CareerState {
   const s = { ...prev };
-  applySpeech(SOCCER_BALLON_DOR, SOCCER_BDOR_SPEECHES, s, choice);
+  speakSoccer(s, SOCCER_BDOR_SPEECHES, choice);
   s.pendingBallonDor = null;
   return advanceToNextPhase(s, clubs);
 }
@@ -7190,12 +7298,11 @@ export function bdorSpeechOpen(s: CareerState): boolean {
  *  prints ("Popularity +8"), which a winner at the cap never gets; the moved
  *  line beside it carries the real one. */
 export function giveBdorSpeech(prev: CareerState, choice: BdorSpeechChoice): CareerState {
-  if (!bdorSpeechOpen(prev) || !SOCCER_BDOR_SPEECHES.some(o => o.id === choice)) return prev;
-  const s = { ...prev };
-  let line = "";
-  const moved = measureMoves(SOCCER_AWARDS_METERS, s, () => { line = applySpeech(SOCCER_BALLON_DOR, SOCCER_BDOR_SPEECHES, s, choice)!; });
-  s.pendingBallonDor = { ...prev.pendingBallonDor!, speech: { id: choice, line: narrativeOf(SOCCER_AWARDS_METERS, line), moved: describeSteps(SOCCER_AWARDS_METERS, moved) } };
-  return s;
+  return giveSpeechOnce(SOCCER_AWARDS_METERS, SOCCER_BDOR_SPEECHES, prev, choice, {
+    open: bdorSpeechOpen,
+    speak: s => speakSoccer(s, SOCCER_BDOR_SPEECHES, choice)!,
+    keep: (s, speech) => { s.pendingBallonDor = { ...prev.pendingBallonDor!, speech }; },
+  });
 }
 
 /* ─── Dismiss international debut screen ─── */
@@ -7250,9 +7357,10 @@ export const SOCCER_WORLD_CUP_SPEECHES: SpeechOption<CareerState, SoccerAwardsMe
       hit: [{ meter: "popularity", delta: -8 }],
       miss: [{ meter: "popularity", delta: 10 }],
     },
+    /* Round 1023: words only. speakSoccer adds what the coin really moved. */
     line: (_s, outcome) => outcome === "hit"
-      ? '📢 "Where are they now?" Named three pundits live on air. Iconic, petty, and replayed for a decade. Popularity -8.'
-      : '📢 "Where are they now?" Named three pundits live on air and the whole country cheered. Popularity +10.',
+      ? '📢 "Where are they now?" Named three pundits live on air. Iconic, petty, and replayed for a decade.'
+      : '📢 "Where are they now?" Named three pundits live on air and the whole country cheered.',
   },
   {
     id: "quiet_lap", emoji: "🚶", label: "Say nothing. Walk one slow lap with the trophy", tone: "quiet",
@@ -7261,12 +7369,51 @@ export const SOCCER_WORLD_CUP_SPEECHES: SpeechOption<CareerState, SoccerAwardsMe
   },
 ];
 
+/** The one step speech: given, then the tournament screen is cleared and the
+ *  career moves on. The card uses the two below instead; the harnesses still
+ *  drive this one. */
 export function applyWorldCupSpeech(prev: CareerState, choice: WorldCupSpeechChoice, clubs: ClubData[]): CareerState {
   const s = { ...prev };
-  applySpeech(SOCCER_BALLON_DOR, SOCCER_WORLD_CUP_SPEECHES, s, choice);
+  speakSoccer(s, SOCCER_WORLD_CUP_SPEECHES, choice);
   s.pendingWorldCup = null;
   s.pendingTournament = null;
   return advanceToNextPhase(s, clubs);
+}
+
+/* Round 1023: the title winner's speech stays on the card, the Ballon d'Or
+   speech's shape (giveBdorSpeech). Picking a speech used to call the one step
+   above, which cleared the card and moved on in the same tap, so the player
+   never saw what his speech did. Now the speech is given on the card, the card
+   shows its line and what it measurably moved, and Continue is the ordinary
+   dismissWorldCup. The card on screen is the tournament when there is one,
+   else the pre Round 124 World Cup result, the same order the page draws. */
+
+/** The result the tournament screen is showing, if any. */
+function tournamentOnScreen(s: CareerState): { speech?: unknown; won: boolean } | null {
+  if (s.pendingTournament) return { speech: s.pendingTournament.speech, won: s.pendingTournament.myResult === "Winner" };
+  if (s.pendingWorldCup) return { speech: s.pendingWorldCup.speech, won: s.pendingWorldCup.result === "Winner" };
+  return null;
+}
+
+/** May the tournament card still offer the winner's speech? Only on the
+ *  tournament screen, only on a title, and only once. */
+export function worldCupSpeechOpen(s: CareerState): boolean {
+  const t = s.phase === "world_cup" ? tournamentOnScreen(s) : null;
+  return !!t && t.won && !givenSpeechOf(t);
+}
+
+/** Gives the speech on the card. Applied once: the tournament keeps which
+ *  speech it was, its words and what it measurably moved, and a second call
+ *  does nothing. */
+export function giveWorldCupSpeech(prev: CareerState, choice: WorldCupSpeechChoice): CareerState {
+  return giveSpeechOnce(SOCCER_AWARDS_METERS, SOCCER_WORLD_CUP_SPEECHES, prev, choice, {
+    open: worldCupSpeechOpen,
+    speak: s => speakSoccer(s, SOCCER_WORLD_CUP_SPEECHES, choice)!,
+    keep: (s, speech) => {
+      if (prev.pendingTournament) s.pendingTournament = { ...prev.pendingTournament, speech };
+      else s.pendingWorldCup = { ...prev.pendingWorldCup!, speech };
+    },
+  });
 }
 
 /* ─── Retire from international football ─── */
@@ -7950,9 +8097,12 @@ export function choosePostRetirement(prev: CareerState, choice: PostRetirementCh
   if (choice === "manager") {
     const managerClubs = clubs.filter(c => c.tier >= 3);
     const club = managerClubs.length > 0 ? pick(managerClubs) : { name: "Unknown FC", tier: 3 };
+    /* Round 1029: the first job's league, as every later job carries one */
+    const firstLeague = (club as Partial<ClubData>).league;
     s.managerState = {
       club: club.name,
       clubTier: club.tier,
+      ...(firstLeague ? { league: firstLeague } : {}),
       season: 0,
       trophies: 0,
       promotions: 0,
@@ -8118,6 +8268,7 @@ export function acceptManagerOffer(prev: CareerState, index: number): CareerStat
   if (!offer) return s;
   ms.club = offer.club;
   ms.clubTier = offer.tier;
+  ms.league = offer.league;
   ms.unemployed = false;
   ms.seasonsOut = 0;
   ms.offers = [];
@@ -8165,11 +8316,30 @@ export function advanceManagerSeason(prev: CareerState, clubs: ClubData[]): Care
      the sack only from a finish a board genuinely acts on, and none of the
      three can contradict each other again. */
 
-  const leagueMates = clubs.filter(c => c.tier === ms.clubTier && c.name !== ms.club);
-  /* thin tiers get topped up from the neighbouring tier so the league is
-     always a real field rather than a three horse race */
-  const topUp = clubs.filter(c => Math.abs(c.tier - ms.clubTier) === 1 && c.name !== ms.club);
-  const field = [...leagueMates, ...topUp].slice(0, 19);
+  /* awards elsewhere carry calendar years, so the dugout's do too */
+  const calYear = (s.seasons[s.seasons.length - 1]?.year ?? 2024) + ms.season;
+
+  /* Round 1029: the field is his club's own league, not every club in the
+     world at his tier (an Arsenal manager used to finish behind Boca and
+     Flamengo). managerLeagueField (soccerCareerLeague.ts) finds the league
+     and its size; every position is played, but only clubs the game knows
+     in that league carry a name, and the rest hold their place unnamed. */
+  /* a saved league that is not a string (a hand edited save) is ignored */
+  let savedLeague = typeof ms.league === "string" && ms.league.trim() ? ms.league : undefined;
+  /* A save from before this round holds no league. A job he took off the
+     market (its "Took the X job." line is in his results) is looked up in
+     the market by its exact name, and never in the career's list, where a
+     club of the same name can sit in another country (Nacional). */
+  const marketJob = !savedLeague && ms.seasonResults.some(r => r.club === ms.club && typeof r.result === "string" && r.result.startsWith(`Took the ${ms.club} job.`));
+  if (marketJob && MARKET) {
+    const leagues = new Set(MARKET.allOfferClubs().filter(o => o.name === ms.club).map(o => o.league));
+    if (leagues.size === 1) savedLeague = [...leagues][0];
+  }
+  const lf = marketJob && !savedLeague
+    ? { league: null, size: MANAGER_FIELD, sizeVerified: false, named: [] as string[], lineupUnknown: false }
+    : managerLeagueField({ clubs, club: ms.club, league: savedLeague, year: calYear }, Math.random);
+  if (lf.league) ms.league = lf.league;
+  const field: (string | null)[] = [...lf.named, ...Array<null>(Math.max(0, lf.size - 1 - lf.named.length)).fill(null)];
   const games = field.length * 2; // home and away vs each rival
 
   /* His edge comes from what he has actually done: dugout honours, the
@@ -8190,10 +8360,10 @@ export function advanceManagerSeason(prev: CareerState, clubs: ClubData[]): Care
     while ((v - (v % 3)) / 3 + (v % 3) > games) v -= 1;
     return v;
   };
-  const rows = field.map(c => ({ club: c.name, pts: ptsOf(0), you: false }));
-  rows.push({ club: ms.club, pts: ptsOf(edge), you: true });
+  const rows = field.map(name => ({ club: name ?? "", pts: ptsOf(0), you: false, unnamed: name === null }));
+  rows.push({ club: ms.club, pts: ptsOf(edge), you: true, unnamed: false });
   rows.sort((a, b) => b.pts - a.pts || (a.you ? -1 : 1));
-  const table = rows.map((r, i) => ({ club: r.club, pts: r.pts, pos: i + 1, you: r.you || undefined }));
+  const table = rows.map((r, i) => ({ club: r.club, pts: r.pts, pos: i + 1, you: r.you || undefined, unnamed: r.unnamed || undefined }));
   const me = table.find(r => r.you)!;
   const leagueSize = table.length;
   const relegationLine = leagueSize - 2;
@@ -8229,16 +8399,28 @@ export function advanceManagerSeason(prev: CareerState, clubs: ClubData[]): Care
     (!relegated && ms.clubTier <= 2 && ms.season >= 2 && me.pos > Math.ceil(leagueSize * 0.6) && Math.random() < 0.35);
 
   let result = "";
-  const posLabel = me.pos === 1 ? "1st" : me.pos === 2 ? "2nd" : me.pos === 3 ? "3rd" : `${me.pos}th`;
-  /* awards elsewhere carry calendar years, so the dugout's do too */
-  const calYear = (s.seasons[s.seasons.length - 1]?.year ?? 2024) + ms.season;
+  const posLabel = ordinal(me.pos);
+  /* Round 1029: "of N" only where N is the league's verified size. In a
+     named league whose size the game does not know, no position and no
+     points either: the field is the dugout's own 20, and "18th" or 90
+     points can be a place or a total that league does not have. */
+  const ofSize = lf.sizeVerified ? ` of ${leagueSize}` : "";
+  const sizeUnknown = lf.league !== null && !lf.sizeVerified;
+  /* only the English pair moves a club between named divisions, and only
+     from 2004/05, when the second tier took the Championship's name */
+  const move = divisionMove(lf.league, me.pos, leagueSize, calYear);
+  /* a season before 2026-27 still moves the club (it decides where he plays
+     from then on) but names neither division: the game does not know which
+     league his club was in that year */
+  const dest = (to: string) => (lf.lineupUnknown ? "" : ` to the ${to}`);
 
   if (champion) {
     ms.trophies += 1;
-    result = `CHAMPIONS. ${me.pts} points, ${posLabel} of ${leagueSize}. 🏆`;
+    result = sizeUnknown ? "CHAMPIONS, top of the table. 🏆"
+      : `CHAMPIONS. ${me.pts} points, ${lf.sizeVerified ? `${posLabel}${ofSize}` : "top of the table"}. 🏆`;
     s.awards = [...(s.awards ?? []), { year: calYear, name: "League Title (Manager)", emoji: "📋" }];
   } else {
-    result = `Finished ${posLabel} of ${leagueSize} on ${me.pts} points.`;
+    result = sizeUnknown ? `Finished ${finishZone(me.pos, leagueSize)}.` : `Finished ${posLabel}${ofSize} on ${me.pts} points.`;
   }
   if (wonCup) {
     ms.trophies += 1;
@@ -8250,7 +8432,11 @@ export function advanceManagerSeason(prev: CareerState, clubs: ClubData[]): Care
     // Round 111: no more instant rehire. You are out of work, and whether
     // anyone calls depends on what you did as a player, what you have won in
     // the dugout, how badly this ended and how long you sit.
-    result += relegated ? " Relegated, and sacked on the spot." : " The board ran out of patience. Sacked.";
+    /* Round 1029: in a named league "Relegated" is said only where the club
+       really leaves it (the Premier League); elsewhere the drop is a tier */
+    result += !relegated ? " The board ran out of patience. Sacked."
+      : move && !move.up ? ` Relegated${dest(move.to)}, and sacked on the spot.`
+      : lf.league ? " Sacked on the spot." : " Relegated, and sacked on the spot.";
     ms.unemployed = true;
     ms.seasonsOut = 0;
     ms.departure = relegated ? 'relegated' : 'sacked';
@@ -8261,11 +8447,19 @@ export function advanceManagerSeason(prev: CareerState, clubs: ClubData[]): Care
       : ' Nobody has called.';
   } else if (relegated) {
     ms.clubTier += 1;
-    result += " Relegated, but the board kept faith. Going down with the club.";
+    result += move && !move.up ? ` Relegated${dest(move.to)}, but the board kept faith. Going down with the club.`
+      : lf.league ? ` Down to Tier ${ms.clubTier}, but the board kept faith.`
+      : " Relegated, but the board kept faith. Going down with the club.";
   } else if (promoted) {
     ms.promotions += 1;
     ms.clubTier -= 1;
-    result += ` Promoted with ${ms.club} to Tier ${ms.clubTier}!`;
+    result += move && move.up ? ` Promoted with ${ms.club}${dest(move.to)}!`
+      : lf.league ? ` ${ms.club} move up to Tier ${ms.clubTier}.`
+      : ` Promoted with ${ms.club} to Tier ${ms.clubTier}!`;
+  } else if (move) {
+    /* the tier ladder left him where he was (a Tier 4 club has no tier
+       below it), but the table still moves the club */
+    result += move.up ? ` Promoted with ${ms.club}${dest(move.to)}!` : ` Relegated${dest(move.to)}. The board kept faith.`;
   } else if (!champion && ms.clubTier >= 2 && me.pos <= 4 && ms.season >= 2) {
     /* A top four finish down the pyramid gets noticed. Round 111 rule kept:
        a bigger club only MOVES if the record justifies it. */
@@ -8277,17 +8471,24 @@ export function advanceManagerSeason(prev: CareerState, clubs: ClubData[]): Care
       if (offer.tier <= 2 && earned >= 3 && Math.random() < 0.45) {
         ms.club = offer.name;
         ms.clubTier = offer.tier;
+        ms.league = offer.league;
         ms.departure = 'poached';
         result += ` And HIRED by ${offer.name}.`;
       }
     }
   }
+  /* Round 1029: next season is played in the division the table sent him */
+  if (move && !sacked) ms.league = move.to;
 
   ms.seasonResults = [...ms.seasonResults, {
     year: ms.season, club: me.club,
     tier: ms.clubTier, result, trophy: champion || wonCup,
     table: table.slice(0, 5).some(r => r.you) ? table.slice(0, 5) : [...table.slice(0, 4), me],
     playerPos: me.pos, playerPts: me.pts, leagueSize, record, cup,
+    ...(lf.league ? { league: lf.league } : {}),
+    ...(lf.sizeVerified ? { sizeVerified: true } : {}),
+    knownRivals: lf.named.length,
+    ...(lf.lineupUnknown ? { lineupUnknown: true } : {}),
   }];
 
   // National team offer, now earned by the season rather than rolled blind:

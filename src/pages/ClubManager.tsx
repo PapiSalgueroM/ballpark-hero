@@ -15,8 +15,10 @@ import {
   developingPlayers, INTENSITY_INFO, FOCUS_INFO,
   brokenPromises, CM_ERAS, DEFAULT_ERA_ID, eraById, projectedXIAvg, CM_BASE_YEAR,
   worldSeasonLabel, pressOf, pressHeadline, preMatchRead,
-  nationOfferFor, SHOOTOUT_MAX_ORDER, shootoutOrderOf,
+  nationOfferFor, SHOOTOUT_MAX_ORDER, shootoutOrderOf, cupSatOutBy,
 } from '@/lib/clubManager';
+// Round 1035: the A-League Men's squads come from their own generated file.
+import { CM_ALEAGUE_META } from '@/data/clubManagerALeague2026';
 import { FACILITY_IDS, facilitiesOf } from '@/lib/clubManagerFacilities';
 import { projectFinances } from '@/lib/clubManagerFinances';
 import { fanMeter } from '@/lib/clubManagerMeters';
@@ -301,17 +303,17 @@ const ClubManager = () => {
         <GameSeoContent
           pageHasOwnH1
           title="Club Manager: Football Management Sim"
-          description="A full club-management sim in your browser: 368 clubs across 22 real leagues, from the Premier League, the 2. Bundesliga and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season."
+          description="A full club-management sim in your browser: 380 clubs across 23 real leagues, from the Premier League, the 2. Bundesliga and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season."
           howToPlay={[
             'Pick your era: 2026-27 with real players, or a real past season: 2020-21, 2015-16, 2010-11 or 2005-06, each with the Premier League, La Liga, Serie A, the Bundesliga and Ligue 1.',
-            'Pick your nation, league and club (368 clubs across 22 real leagues), or create your own club with its own crest, stadium and budget.',
+            'Pick your nation, league and club (380 clubs across 23 real leagues), or create your own club with its own crest, stadium and budget.',
             'Read the board\'s objectives: league finish, cup run, Europe where it applies, beating your rival, and a goals quota.',
             'Go and meet the two asks the board makes in the market: a country quota, an experience count, the thinnest line in your squad, a signing 21 or under at a rating floor, or one fee over a threshold, every number worked out from your club and your era.',
             'Set your formation, mentality and XI, then play through the full season week by week.',
             'Work the market: negotiate fees, pay release clauses, take loans, and field bids for your own stars, with deep filters down to exact position, age, price, league and nationality, every player under his real flag.',
             'Run the contracts desk: re-sign expiring players at full wage, or cheaper with a release clause any club can trigger, and delete a bargain clause with a full price renewal before the phone rings.',
             'Let a player go early if you have to: you keep paying half his wage until his deal would have ended, up to two seasons, it counts against your wage ceiling, the whole dressing room takes a morale hit, and a man you release never signs for you again.',
-            'Sign free agents any time, even with the window shut: made up journeymen without a club, marked MADE UP, and players whose deals ran out with you a season earlier. Only men a level below your club will sign, with no transfer fee, on the wage, contract length and signing on fee shown on the button.',
+            'Sign free agents any time, even with the window shut: made up journeymen without a club, marked MADE UP, players whose deals ran out with you a season earlier, and, on day one of a new career in today\'s world, a few real players with no club. Only men a level below your club will sign, and a man who never played for you also has to be no better than your eleventh best player. No transfer fee: the wage, contract length and signing on fee are on the button.',
             'Run the money: gate receipts from every home crowd, ticket and food prices the fans and the board react to, a shirt sponsor from three honest shapes or one bad brand that pays more and costs the fans, each one negotiable, and a projection of the season\'s books to the last day.',
             'Build the club: stadium, training ground, medical and dressing room, each level 1 to 10, paid from the kitty, each one a small real lift on the squad.',
             'Run the staff room: an attack coach, a defence coach, a goalkeeping coach and a lead scout, hired, promoted from your academy or paid off, each one growing his own part of the squad, with rivals coming in for the good ones and a limited number of offers you can match.',
@@ -706,7 +708,7 @@ const ClubManager = () => {
               {historicPick ? (
                 <>{eraHonestyLine(era)}</>
               ) : (
-                <>Squads, ratings and values from market data plus the verified summer window: {CM_ROSTER_META.players} players as of {CM_ROSTER_META.asOf}, refreshed {CM_ROSTER_META.generated}.</>
+                <>Squads, ratings and values from market data plus the verified summer window: {CM_ROSTER_META.players} players as of {CM_ROSTER_META.asOf}, refreshed {CM_ROSTER_META.generated}, and the A-League Men's {CM_ALEAGUE_META.players}, read {CM_ALEAGUE_META.read}.</>
               )}
               {eraYearsOn > 0 && (
                 <> Starting {era.label}, so those squads have been aged {eraYearsOn} years: {eraHonestyLine(era)}</>
@@ -899,6 +901,9 @@ const ClubManager = () => {
   /* Round 832: null in a league with no domestic cup; every cup line below
      then says there is none rather than "Knocked out". */
   const cupName = careerLeagueOf(c).cupName;
+  /* Round 1035: the cup a club of a cup league sits out (Auckland FC and the
+     Australia Cup), so the cupless lines name it instead of denying it exists. */
+  const cupSatOut = cupSatOutBy(c);
   const cupAlive = cupName !== null && c.cupRound !== 'out' && c.cupRound !== 'won';
   const uclAlive = (c.uclGroup !== null && c.uclKoRound === null) || (!!c.uclKoRound && c.uclKoRound !== 'out' && c.uclKoRound !== 'won');
 
@@ -1143,7 +1148,7 @@ const ClubManager = () => {
               />
               <HubTile
                 icon="🏅" title="Cups" accent={cupAlive && !!c.cupDraw[c.cupRound as CupRound]}
-                value={cupName === null ? 'No domestic cup' : cupAlive ? 'Still alive' : c.cupRound === 'won' ? 'CUP WINNERS' : 'Knocked out'}
+                value={cupName === null ? (cupSatOut ? 'Not entered' : 'No domestic cup') : cupAlive ? 'Still alive' : c.cupRound === 'won' ? 'CUP WINNERS' : 'Knocked out'}
                 sub={uclAlive ? (cupName === null ? 'UCL alive' : 'UCL alive too') : (cupName ?? careerLeagueOf(c).name)}
                 onClick={() => setHubPanel('cups')}
               />
@@ -1377,7 +1382,9 @@ const ClubManager = () => {
                       shows no bracket. */}
                   {cupName === null ? (
                     <div className="bg-card border border-border rounded-xl p-3 text-xs text-muted-foreground">
-                      🏅 There is no domestic cup in the {careerLeagueOf(c).name}, so the season is the league{careerLeagueOf(c).euro ? ' and Europe' : ''}.
+                      🏅 {cupSatOut
+                        ? <>{c.clubName} do not enter the {cupSatOut}, so the season is the league{careerLeagueOf(c).euro ? ' and Europe' : ''}.</>
+                        : <>There is no domestic cup in the {careerLeagueOf(c).name}, so the season is the league{careerLeagueOf(c).euro ? ' and Europe' : ''}.</>}
                     </div>
                   ) : (<>
                   <div className="text-[10px] text-muted-foreground uppercase tracking-wider px-1">

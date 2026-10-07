@@ -5,7 +5,8 @@ import { useRevealScroll } from "@/hooks/useRevealScroll";
 import { Confetti } from "@/components/soccer-career/CareerFx";
 import { beatStyle, tournamentMomentKey, useCareerMoment } from "@/components/soccer-career/careerMoments";
 import { revealDelay } from "@/components/club-manager/Celebration";
-import { SpeechChoices } from "@/components/career/AwardsNightCard";
+import { SpeechChoices, SpokenSpeech } from "@/components/career/AwardsNightCard";
+import { givenSpeechOf, type GivenSpeech } from "@/lib/careerAwardsNight";
 import { SOCCER_WORLD_CUP_SPEECHES } from "@/lib/soccerCareerEngine";
 import type {
   IntlTournament, IntlTie, IntlRound, IntlTableRow, IntlHistoryEntry,
@@ -133,7 +134,8 @@ function ordinal(n: number): string {
 export function TournamentCard({
   t, onDismiss, onSpeech,
 }: {
-  t: IntlTournament;
+  /** Round 1023: the tournament carries the winner's speech once given. */
+  t: IntlTournament & { speech?: GivenSpeech };
   onDismiss: () => void;
   onSpeech: (choice: "for_the_country" | "shirt_to_the_fans" | "call_out_doubters" | "quiet_lap") => void;
 }) {
@@ -158,6 +160,11 @@ export function TournamentCard({
     watchRef(el);
   }, [revealRef, watchRef]);
   const isWinner = t.myResult === "Winner";
+  /* Round 1023: a title offers the speeches until one is given (the engine's
+     giveWorldCupSpeech gives it once), then shows what it did above Continue.
+     The page mounts this card only on the tournament screen. */
+  const given = givenSpeechOf(t);
+  const speechOpen = !given;
   const missed = t.myResult === "Did Not Qualify" || t.myResult === "Not Selected";
   /* Saves written before Round 257 carry a tournament with no groupTable at
      all, and a nation that never qualified has an empty one, so the group
@@ -470,7 +477,10 @@ export function TournamentCard({
         ))}
       </div>
 
-      {isWinner ? (
+      {/* Round 1023: once given, the speech stays on the card with what it
+          really moved, above Continue. */}
+      {isWinner && given && <SpokenSpeech speech={given} />}
+      {isWinner && speechOpen ? (
         /* Round 834: the shared speech buttons, from the same options the
            engine applies (SOCCER_WORLD_CUP_SPEECHES). Round 926: on the
            night itself they land last and cannot be pressed before they show
@@ -479,7 +489,7 @@ export function TournamentCard({
           <SpeechChoices prompt="The microphone is yours" options={SOCCER_WORLD_CUP_SPEECHES} onChoose={onSpeech} />
         </div>
       ) : (
-        <Button onClick={onDismiss} className="w-full h-10 text-sm font-bold text-black bg-emerald-600 hover:bg-emerald-500">
+        <Button onClick={onDismiss} className={`w-full h-10 text-sm font-bold text-black ${isWinner ? "bg-amber-600 hover:bg-amber-500" : "bg-emerald-600 hover:bg-emerald-500"}`}>
           Continue →
         </Button>
       )}

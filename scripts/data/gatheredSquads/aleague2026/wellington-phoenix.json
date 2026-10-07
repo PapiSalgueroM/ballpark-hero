@@ -1,0 +1,2101 @@
+{
+  "club": "Wellington Phoenix FC",
+  "slug": "wellington-phoenix",
+  "shard": "C",
+  "season": "2026-27",
+  "round": 1034,
+  "read": "2026-10-06",
+  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in at least one independent 2026-27 list: ESPN's roster, Transfermarkt's 26/27 squad or FotMob's squad. A player the club page lists under an on loan heading is held out, not a first team row. Name and position text as the club prints them. group stands when an independent source puts him in the same group; otherwise it is the group two independent hosts agree on, else null. birthDate only where two independent hosts give the same date (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs: 0 only where a page says \"Not used during this season\" (named in a matchday squad, never on); a \"Not in squad during this season\" entry is not counted (Transfermarkt prints it for players who joined after the season too), so minutes are null when he has no played or unused entry on any page. A minutes value also needs a second host: ESPN's own 2025-26 regular season record (season 2025, type 1) for the ESPN id the row cites. The two hosts round substitution and stoppage minutes their own way, so they count as agreeing when they are no more than one minute an appearance apart (ESPN's appearance count); the value kept is Transfermarkt's and ESPN's sits beside it in minutesSecondSource. Where they are further apart, or only one host has a value, minutes are null and the row's notes give what each host said.",
+  "sources": {
+    "club": {
+      "host": "wellingtonphoenix.com",
+      "url": "https://wellingtonphoenix.com/squads/men",
+      "read": "2026-10-06"
+    },
+    "leagueTransferCentre": {
+      "host": "aleagues.com.au",
+      "url": "https://aleagues.com.au/news/isuzu-ute-a-league-2026-27-transfer-centre-ins-outs/",
+      "read": "2026-10-06",
+      "dated": "2026-09-21",
+      "ins": [
+        "James McGarry",
+        "Henry Gray",
+        "Rafael Duran",
+        "Riley Bidois",
+        "Max Anderson",
+        "Bryce Duke",
+        "Walter Scott"
+      ],
+      "outs": [
+        "Josh Oluwayemi",
+        "Paulo Retre",
+        "Carlo Armiento",
+        "Manjrekar James",
+        "Dan Edwards",
+        "Luke Supyk",
+        "Nikola Mileusnic",
+        "Ifeanyi Eze",
+        "Tim Payne",
+        "Gabriel Sloane-Rodrigues",
+        "Sarpeet Singh",
+        "Sander Kartum",
+        "Ramy Najjarine"
+      ],
+      "resignings": [
+        "Chris Greenacre (Head Coach)",
+        "Kazuki Nagasawa",
+        "Eamonn McCarron (2028-29)",
+        "Fin Roa Conchie (2026-27)",
+        "Alex Rufer (2028/29)"
+      ]
+    },
+    "espn": {
+      "host": "site.api.espn.com",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/8352/roster?season=2026",
+      "read": "2026-10-06"
+    },
+    "espnSeasonStats": {
+      "host": "sports.core.api.espn.com",
+      "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/<espn id>/statistics",
+      "read": "2026-10-06"
+    },
+    "transfermarkt": {
+      "host": "transfermarkt.com",
+      "url": "https://www.transfermarkt.com/wellington-phoenix/kader/verein/8445/saison_id/2026/plus/1",
+      "read": "2026-10-06"
+    },
+    "fotmob": {
+      "host": "fotmob.com",
+      "url": "https://www.fotmob.com/teams/78785/squad/wellington-phoenix",
+      "read": "2026-10-06"
+    }
+  },
+  "notes": [],
+  "count": {
+    "clubPage": 21,
+    "staffSkipped": 1,
+    "rows": 21,
+    "heldOut": 0,
+    "twoHostRows": 21,
+    "birthDateKnown": 20,
+    "groupKnown": 21,
+    "minutesKnown": 15,
+    "marketRows": 1,
+    "perfPagesLoaded": 12,
+    "independentOnly": 0
+  },
+  "rows": [
+    {
+      "name": "Alby Kelly-Heald",
+      "position": "Goalkeeper",
+      "group": "GK",
+      "birthDate": "2005-03-18",
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "minutesSecondSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wellingtonphoenix.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "wellingtonphoenix.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wellingtonphoenix.com",
+          "url": "https://wellingtonphoenix.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wellingtonphoenix.com/player/alby-kelly-heald/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/8352/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "362620"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/wellington-phoenix/kader/verein/8445/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "877280"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/78785/squad/wellington-phoenix",
+          "read": "2026-10-06",
+          "id": "1477412"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Alby Kelly-Heald",
+          "position": "Goalkeeper",
+          "number": "30"
+        },
+        "espn": {
+          "id": "362620",
+          "name": "Alby Kelly-Heald",
+          "position": "Goalkeeper",
+          "birthDate": "2005-03-18",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "877280",
+          "name": "Alby Kelly-Heald",
+          "position": "Goalkeeper",
+          "birthDate": "2005-03-18",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1477412",
+          "name": "Alby Kelly-Heald",
+          "position": "Keeper",
+          "birthDate": "2005-03-18",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "2025-26 minutes disagree: Transfermarkt 320, ESPN 315 over 4 appearances, more than a minute an appearance apart, so held as null"
+      ]
+    },
+    {
+      "name": "Eamonn McCarron",
+      "position": "Goalkeeper",
+      "group": "GK",
+      "birthDate": "2007-09-14",
+      "minutes2025_26": 529,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/wellington-phoenix/leistungsdaten/verein/8445/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Wellington Phoenix FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/376520/statistics",
+        "minutes": 529,
+        "appearances": 6
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wellingtonphoenix.com",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "wellingtonphoenix.com",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wellingtonphoenix.com",
+          "url": "https://wellingtonphoenix.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wellingtonphoenix.com/player/eamonn-mccarron/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/8352/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "376520"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/wellington-phoenix/kader/verein/8445/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1079362"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Eamonn McCarron",
+          "position": "Goalkeeper",
+          "number": "40"
+        },
+        "espn": {
+          "id": "376520",
+          "name": "Eamonn Mccarron",
+          "position": "Goalkeeper",
+          "birthDate": "2007-09-14",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1079362",
+          "name": "Eamonn McCarron",
+          "position": "Goalkeeper",
+          "birthDate": "2007-09-14",
+          "match": "exact"
+        },
+        "fotmob": null,
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Henry Gray",
+      "position": "Goalkeeper",
+      "group": "GK",
+      "birthDate": "2005-03-29",
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "minutesSecondSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wellingtonphoenix.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "wellingtonphoenix.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wellingtonphoenix.com",
+          "url": "https://wellingtonphoenix.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wellingtonphoenix.com/player/henry-gray/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/8352/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "333204"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/wellington-phoenix/kader/verein/8445/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "877945"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/78785/squad/wellington-phoenix",
+          "read": "2026-10-06",
+          "id": "1325762"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Henry Gray",
+          "position": "Goalkeeper",
+          "number": "13"
+        },
+        "espn": {
+          "id": "333204",
+          "name": "Henry Gray",
+          "position": "Goalkeeper",
+          "birthDate": "2005-03-29",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "877945",
+          "name": "Henry Gray",
+          "position": "Goalkeeper",
+          "birthDate": "2005-03-29",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1325762",
+          "name": "Henry Gray",
+          "position": "Keeper",
+          "birthDate": "2005-03-29",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "not on any 2025-26 A-League Men club page on Transfermarkt"
+      ]
+    },
+    {
+      "name": "Isaac Hughes",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2004-03-25",
+      "minutes2025_26": 2006,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/wellington-phoenix/leistungsdaten/verein/8445/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Wellington Phoenix FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/358524/statistics",
+        "minutes": 2006,
+        "appearances": 23
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wellingtonphoenix.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "wellingtonphoenix.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wellingtonphoenix.com",
+          "url": "https://wellingtonphoenix.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wellingtonphoenix.com/player/isaac-hughes/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/8352/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "358524"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/wellington-phoenix/kader/verein/8445/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "953953"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/78785/squad/wellington-phoenix",
+          "read": "2026-10-06",
+          "id": "1436840"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Isaac Hughes",
+          "position": "Defender",
+          "number": "15"
+        },
+        "espn": {
+          "id": "358524",
+          "name": "Isaac Hughes",
+          "position": "Defender",
+          "birthDate": "2004-03-25",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "953953",
+          "name": "Isaac Hughes",
+          "position": "Centre-Back",
+          "birthDate": "2004-03-25",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1436840",
+          "name": "Isaac Hughes",
+          "position": "Defender",
+          "birthDate": "2004-03-25",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Bill Tuiloma",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "1995-03-27",
+      "minutes2025_26": 1073,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/wellington-phoenix/leistungsdaten/verein/8445/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Wellington Phoenix FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/159461/statistics",
+        "minutes": 1072,
+        "appearances": 14
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wellingtonphoenix.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "wellingtonphoenix.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wellingtonphoenix.com",
+          "url": "https://wellingtonphoenix.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wellingtonphoenix.com/player/bill-tuiloma/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/8352/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "159461"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/wellington-phoenix/kader/verein/8445/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "172333"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/78785/squad/wellington-phoenix",
+          "read": "2026-10-06",
+          "id": "505792"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Bill Tuiloma",
+          "position": "Defender",
+          "number": "28"
+        },
+        "espn": {
+          "id": "159461",
+          "name": "Bill Tuiloma",
+          "position": "Defender",
+          "birthDate": "1995-03-27",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "172333",
+          "name": "Bill Tuiloma",
+          "position": "Centre-Back",
+          "birthDate": "1995-03-27",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "505792",
+          "name": "Bill Tuiloma",
+          "position": "Defender",
+          "birthDate": "1995-03-27",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Matthew Sheridan",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2004-05-09",
+      "minutes2025_26": 1833,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/wellington-phoenix/leistungsdaten/verein/8445/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Wellington Phoenix FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/212779/statistics",
+        "minutes": 1832,
+        "appearances": 26
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wellingtonphoenix.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "wellingtonphoenix.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wellingtonphoenix.com",
+          "url": "https://wellingtonphoenix.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wellingtonphoenix.com/player/matthew-sheridan/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/8352/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "212779"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/wellington-phoenix/kader/verein/8445/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "877294"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/78785/squad/wellington-phoenix",
+          "read": "2026-10-06",
+          "id": "1541879"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Matthew Sheridan",
+          "position": "Defender",
+          "number": "27"
+        },
+        "espn": {
+          "id": "212779",
+          "name": "Matthew Sheridan",
+          "position": "Defender",
+          "birthDate": "2004-05-09",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "877294",
+          "name": "Matthew Sheridan",
+          "position": "Right-Back",
+          "birthDate": "2004-05-09",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1541879",
+          "name": "Matthew Sheridan",
+          "position": "Defender",
+          "birthDate": "2004-05-09",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "James McGarry",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "1998-04-09",
+      "minutes2025_26": 2064,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/brisbane-roar/leistungsdaten/verein/7831/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Brisbane Roar FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/228280/statistics",
+        "minutes": 2064,
+        "appearances": 24
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wellingtonphoenix.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "wellingtonphoenix.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wellingtonphoenix.com",
+          "url": "https://wellingtonphoenix.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wellingtonphoenix.com/player/james-mcgarry/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/8352/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "228280"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/wellington-phoenix/kader/verein/8445/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "345343"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/78785/squad/wellington-phoenix",
+          "read": "2026-10-06",
+          "id": "686053"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "James McGarry",
+          "position": "Defender",
+          "number": "23"
+        },
+        "espn": {
+          "id": "228280",
+          "name": "James McGarry",
+          "position": "Defender",
+          "birthDate": "1998-04-09",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "345343",
+          "name": "James McGarry",
+          "position": "Left-Back",
+          "birthDate": "1998-04-09",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "686053",
+          "name": "James McGarry",
+          "position": "Defender",
+          "birthDate": "1998-04-09",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Lukas Kelly-Heald",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2005-03-18",
+      "minutes2025_26": 1279,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/wellington-phoenix/leistungsdaten/verein/8445/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Wellington Phoenix FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/362617/statistics",
+        "minutes": 1283,
+        "appearances": 23
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wellingtonphoenix.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "wellingtonphoenix.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wellingtonphoenix.com",
+          "url": "https://wellingtonphoenix.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wellingtonphoenix.com/player/lukas-kelly-heald/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/8352/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "362617"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/wellington-phoenix/kader/verein/8445/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "877290"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/78785/squad/wellington-phoenix",
+          "read": "2026-10-06",
+          "id": "1477435"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Lukas Kelly-Heald",
+          "position": "Defender",
+          "number": "18"
+        },
+        "espn": {
+          "id": "362617",
+          "name": "Lukas Kelly-Heald",
+          "position": "Defender",
+          "birthDate": "2005-03-18",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "877290",
+          "name": "Lukas Kelly-Heald",
+          "position": "Left-Back",
+          "birthDate": "2005-03-18",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1477435",
+          "name": "Lukas Kelly-Heald",
+          "position": "Defender",
+          "birthDate": "2005-03-18",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Xuan Loke",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2005-03-26",
+      "minutes2025_26": 325,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/wellington-phoenix/leistungsdaten/verein/8445/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Wellington Phoenix FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/388502/statistics",
+        "minutes": 325,
+        "appearances": 6
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wellingtonphoenix.com",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "wellingtonphoenix.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wellingtonphoenix.com",
+          "url": "https://wellingtonphoenix.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wellingtonphoenix.com/player/tze-xuan-loke/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/8352/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "388502"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/wellington-phoenix/kader/verein/8445/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "881221"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Xuan Loke",
+          "position": "Defender",
+          "number": "24"
+        },
+        "espn": {
+          "id": "388502",
+          "name": "Xuan Loke",
+          "position": "Forward",
+          "birthDate": "2005-03-26",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "881221",
+          "name": "Tze-Xuan Loke",
+          "position": "Right-Back",
+          "birthDate": "2005-03-26",
+          "match": "fuzzy"
+        },
+        "fotmob": null,
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Jayden Smith",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": null,
+      "minutes2025_26": 90,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/wellington-phoenix/leistungsdaten/verein/8445/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Wellington Phoenix FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/328031/statistics",
+        "minutes": 90,
+        "appearances": 1
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wellingtonphoenix.com",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "wellingtonphoenix.com",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": []
+      },
+      "sources": [
+        {
+          "host": "wellingtonphoenix.com",
+          "url": "https://wellingtonphoenix.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wellingtonphoenix.com/player/jayden-smith/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/8352/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "328031"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/wellington-phoenix/kader/verein/8445/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1183555"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Jayden Smith",
+          "position": "Defender",
+          "number": "39"
+        },
+        "espn": {
+          "id": "328031",
+          "name": "Jayden Smith",
+          "position": "Defender",
+          "birthDate": "2006-03-29",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1183555",
+          "name": "Jayden Smith",
+          "position": "Centre-Back",
+          "birthDate": "2007-07-04",
+          "match": "exact"
+        },
+        "fotmob": null,
+        "from": "club squad page"
+      },
+      "notes": [
+        "birth date not on two hosts (ESPN 2006-03-29, Transfermarkt 2007-07-04), held as null"
+      ]
+    },
+    {
+      "name": "Walter Scott",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "1999-10-02",
+      "minutes2025_26": 1181,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/macarthur-fc/leistungsdaten/verein/71085/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Macarthur FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/269462/statistics",
+        "minutes": 1181,
+        "appearances": 18
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wellingtonphoenix.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "wellingtonphoenix.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wellingtonphoenix.com",
+          "url": "https://wellingtonphoenix.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wellingtonphoenix.com/player/walter-scott/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/8352/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "269462"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/wellington-phoenix/kader/verein/8445/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "560827"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/78785/squad/wellington-phoenix",
+          "read": "2026-10-06",
+          "id": "914814"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Walter Scott",
+          "position": "Defender",
+          "number": "5"
+        },
+        "espn": {
+          "id": "269462",
+          "name": "Walter Scott",
+          "position": "Defender",
+          "birthDate": "1999-10-02",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "560827",
+          "name": "Walter Scott",
+          "position": "Left-Back",
+          "birthDate": "1999-10-02",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "914814",
+          "name": "Walter Scott",
+          "position": "Defender",
+          "birthDate": "1999-10-02",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Alex Rufer",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "1996-06-12",
+      "minutes2025_26": 2044,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/wellington-phoenix/leistungsdaten/verein/8445/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Wellington Phoenix FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/194736/statistics",
+        "minutes": 2044,
+        "appearances": 23
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wellingtonphoenix.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "wellingtonphoenix.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wellingtonphoenix.com",
+          "url": "https://wellingtonphoenix.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wellingtonphoenix.com/player/alex-rufer/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/8352/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "194736"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/wellington-phoenix/kader/verein/8445/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "256019"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/78785/squad/wellington-phoenix",
+          "read": "2026-10-06",
+          "id": "519240"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Alex Rufer",
+          "position": "Midfielder",
+          "number": "14"
+        },
+        "espn": {
+          "id": "194736",
+          "name": "Alex Rufer",
+          "position": "Midfielder",
+          "birthDate": "1996-06-12",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "256019",
+          "name": "Alex Rufer",
+          "position": "Defensive Midfield",
+          "birthDate": "1996-06-12",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "519240",
+          "name": "Alex Rufer",
+          "position": "Midfielder",
+          "birthDate": "1996-06-12",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Kazuki Nagasawa",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "1991-12-16",
+      "minutes2025_26": 2205,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/wellington-phoenix/leistungsdaten/verein/8445/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Wellington Phoenix FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/197630/statistics",
+        "minutes": 2204,
+        "appearances": 26
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wellingtonphoenix.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "wellingtonphoenix.com",
+          "site.api.espn.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wellingtonphoenix.com",
+          "url": "https://wellingtonphoenix.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wellingtonphoenix.com/player/kazuki-nagasawa/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/8352/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "197630"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/wellington-phoenix/kader/verein/8445/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "263685"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/78785/squad/wellington-phoenix",
+          "read": "2026-10-06",
+          "id": "459493"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Kazuki Nagasawa",
+          "position": "Midfielder",
+          "number": "25"
+        },
+        "espn": {
+          "id": "197630",
+          "name": "Kazuki Nagasawa",
+          "position": "Midfielder",
+          "birthDate": "1991-12-16",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "263685",
+          "name": "Kazuki Nagasawa",
+          "position": "Left Winger",
+          "birthDate": "1991-12-16",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "459493",
+          "name": "Kazuki Nagasawa",
+          "position": "Midfielder",
+          "birthDate": "1991-12-16",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Bryce Duke",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2001-02-28",
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "minutesSecondSource": null,
+      "marketRow": [
+        {
+          "id": 76763,
+          "player_name": "Bryce Duke",
+          "club": "CF Montréal",
+          "age": 23
+        }
+      ],
+      "facts": {
+        "name": [
+          "wellingtonphoenix.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "wellingtonphoenix.com",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wellingtonphoenix.com",
+          "url": "https://wellingtonphoenix.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wellingtonphoenix.com/player/bryce-duke/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/8352/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "302238"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/wellington-phoenix/kader/verein/8445/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "739675"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/78785/squad/wellington-phoenix",
+          "read": "2026-10-06",
+          "id": "1134447"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Bryce Duke",
+          "position": "Midfielder",
+          "number": "7"
+        },
+        "espn": {
+          "id": "302238",
+          "name": "Bryce Duke",
+          "position": "Midfielder",
+          "birthDate": "2001-02-28",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "739675",
+          "name": "Bryce Duke",
+          "position": "Attacking Midfield",
+          "birthDate": "2001-02-28",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1134447",
+          "name": "Bryce Duke",
+          "position": "Defender",
+          "birthDate": "2001-02-28",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "not on any 2025-26 A-League Men club page on Transfermarkt"
+      ]
+    },
+    {
+      "name": "Max Anderson",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2001-05-17",
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "minutesSecondSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wellingtonphoenix.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "wellingtonphoenix.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wellingtonphoenix.com",
+          "url": "https://wellingtonphoenix.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wellingtonphoenix.com/player/max-anderson/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/8352/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "240712"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/wellington-phoenix/kader/verein/8445/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "396561"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/78785/squad/wellington-phoenix",
+          "read": "2026-10-06",
+          "id": "1050300"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Max Anderson",
+          "position": "Midfielder",
+          "number": "8"
+        },
+        "espn": {
+          "id": "240712",
+          "name": "Max Anderson",
+          "position": "Midfielder",
+          "birthDate": "2001-05-17",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "396561",
+          "name": "Max Anderson",
+          "position": "Central Midfield",
+          "birthDate": "2001-05-17",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1050300",
+          "name": "Max Anderson",
+          "position": "Midfielder",
+          "birthDate": "2001-05-17",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "not on any 2025-26 A-League Men club page on Transfermarkt"
+      ]
+    },
+    {
+      "name": "Fin Roa Conchie",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2003-08-10",
+      "minutes2025_26": 536,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/wellington-phoenix/leistungsdaten/verein/8445/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Wellington Phoenix FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/362616/statistics",
+        "minutes": 535,
+        "appearances": 14
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wellingtonphoenix.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "wellingtonphoenix.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wellingtonphoenix.com",
+          "url": "https://wellingtonphoenix.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wellingtonphoenix.com/player/fin-conchie/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/8352/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "362616"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/wellington-phoenix/kader/verein/8445/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "857968"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/78785/squad/wellington-phoenix",
+          "read": "2026-10-06",
+          "id": "1477441"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Fin Roa Conchie",
+          "position": "Midfielder",
+          "number": "5"
+        },
+        "espn": {
+          "id": "362616",
+          "name": "Fin Conchie",
+          "position": "Midfielder",
+          "birthDate": "2003-08-10",
+          "match": "fuzzy"
+        },
+        "tm": {
+          "id": "857968",
+          "name": "Fin Roa Conchie",
+          "position": "Defensive Midfield",
+          "birthDate": "2003-08-10",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1477441",
+          "name": "Fin Conchie",
+          "position": "Midfielder",
+          "birthDate": "2003-08-10",
+          "match": "fuzzy"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Anaru Cassidy",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2006-02-26",
+      "minutes2025_26": 64,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/wellington-phoenix/leistungsdaten/verein/8445/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Wellington Phoenix FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/376516/statistics",
+        "minutes": 64,
+        "appearances": 2
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wellingtonphoenix.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "wellingtonphoenix.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wellingtonphoenix.com",
+          "url": "https://wellingtonphoenix.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wellingtonphoenix.com/player/anaru-cassidy/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/8352/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "376516"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/wellington-phoenix/kader/verein/8445/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1092674"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/78785/squad/wellington-phoenix",
+          "read": "2026-10-06",
+          "id": "1838724"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Anaru Cassidy",
+          "position": "Midfielder",
+          "number": "37"
+        },
+        "espn": {
+          "id": "376516",
+          "name": "Anaru Cassidy",
+          "position": "Midfielder",
+          "birthDate": "2006-02-26",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1092674",
+          "name": "Anaru Cassidy",
+          "position": "Defensive Midfield",
+          "birthDate": "2006-02-26",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1838724",
+          "name": "Anaru Cassidy",
+          "position": "Midfielder",
+          "birthDate": "2006-02-26",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Rafael Durán",
+      "position": "Forward",
+      "group": "FWD",
+      "birthDate": "1997-08-20",
+      "minutes2025_26": 1006,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/macarthur-fc/leistungsdaten/verein/71085/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Macarthur FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/259698/statistics",
+        "minutes": 1006,
+        "appearances": 19
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wellingtonphoenix.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "wellingtonphoenix.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wellingtonphoenix.com",
+          "url": "https://wellingtonphoenix.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wellingtonphoenix.com/player/rafael-duran/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/8352/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "259698"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/wellington-phoenix/kader/verein/8445/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "552958"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/78785/squad/wellington-phoenix",
+          "read": "2026-10-06",
+          "id": "861895"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Rafael Durán",
+          "position": "Forward",
+          "number": "9"
+        },
+        "espn": {
+          "id": "259698",
+          "name": "Rafael Durán",
+          "position": "Forward",
+          "birthDate": "1997-08-20",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "552958",
+          "name": "Rafael Durán",
+          "position": "Centre-Forward",
+          "birthDate": "1997-08-20",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "861895",
+          "name": "Rafael Durán",
+          "position": "Attacker",
+          "birthDate": "1997-08-20",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Corban Piper",
+      "position": "Forward",
+      "group": "FWD",
+      "birthDate": "2002-09-10",
+      "minutes2025_26": 1590,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/wellington-phoenix/leistungsdaten/verein/8445/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Wellington Phoenix FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/392328/statistics",
+        "minutes": 1590,
+        "appearances": 26
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wellingtonphoenix.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "wellingtonphoenix.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wellingtonphoenix.com",
+          "url": "https://wellingtonphoenix.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wellingtonphoenix.com/player/corban-piper/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/8352/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "392328"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/wellington-phoenix/kader/verein/8445/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "888602"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/78785/squad/wellington-phoenix",
+          "read": "2026-10-06",
+          "id": "1680420"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Corban Piper",
+          "position": "Forward",
+          "number": "99"
+        },
+        "espn": {
+          "id": "392328",
+          "name": "Corban Piper",
+          "position": "Defender",
+          "birthDate": "2002-09-10",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "888602",
+          "name": "Corban Piper",
+          "position": "Centre-Forward",
+          "birthDate": "2002-09-10",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1680420",
+          "name": "Corban Piper",
+          "position": "Attacker",
+          "birthDate": "2002-09-10",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Riley Bidois",
+      "position": "Forward",
+      "group": "FWD",
+      "birthDate": "2002-03-12",
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "minutesSecondSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wellingtonphoenix.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "wellingtonphoenix.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wellingtonphoenix.com",
+          "url": "https://wellingtonphoenix.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wellingtonphoenix.com/player/riley-bidois/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/8352/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "339118"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/wellington-phoenix/kader/verein/8445/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "724808"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/78785/squad/wellington-phoenix",
+          "read": "2026-10-06",
+          "id": "1353588"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Riley Bidois",
+          "position": "Forward",
+          "number": "11"
+        },
+        "espn": {
+          "id": "339118",
+          "name": "Riley Bidois",
+          "position": "Forward",
+          "birthDate": "2002-03-12",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "724808",
+          "name": "Riley Bidois",
+          "position": "Centre-Forward",
+          "birthDate": "2002-03-12",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1353588",
+          "name": "Riley Bidois",
+          "position": "Attacker",
+          "birthDate": "2002-03-12",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "not on any 2025-26 A-League Men club page on Transfermarkt"
+      ]
+    },
+    {
+      "name": "Nathan Walker",
+      "position": "Forward",
+      "group": "FWD",
+      "birthDate": "2006-01-30",
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "minutesSecondSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wellingtonphoenix.com",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "wellingtonphoenix.com",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wellingtonphoenix.com",
+          "url": "https://wellingtonphoenix.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wellingtonphoenix.com/player/nathan-walker/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/8352/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "32752"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/wellington-phoenix/kader/verein/8445/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1200303"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Nathan Walker",
+          "position": "Forward",
+          "number": "17"
+        },
+        "espn": {
+          "id": "32752",
+          "name": "Nathan Walker",
+          "position": "Forward",
+          "birthDate": "2006-01-30",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1200303",
+          "name": "Nathan Walker",
+          "position": "Left Winger",
+          "birthDate": "2006-01-30",
+          "match": "exact"
+        },
+        "fotmob": null,
+        "from": "club squad page"
+      },
+      "notes": [
+        "Transfermarkt's 25/26 page for Wellington Phoenix FC lists him only as \"Not in squad during this season\", which it also prints for players who joined after that season, so that page is not counted for minutes",
+        "no 2025-26 A-League Men minutes on Transfermarkt (no played or unused-substitute entry on any club page), held as null"
+      ]
+    }
+  ],
+  "heldOut": [],
+  "marketRecheck": [],
+  "notOnClubPage": [
+    {
+      "source": "espn",
+      "name": "Ben Trenberth",
+      "position": "Midfielder",
+      "birthDate": null
+    },
+    {
+      "source": "fotmob",
+      "name": "Dan Edwards",
+      "position": "Defender",
+      "birthDate": "1998-08-06"
+    }
+  ],
+  "independentOnly": []
+}

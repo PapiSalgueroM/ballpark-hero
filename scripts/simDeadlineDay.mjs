@@ -54,7 +54,8 @@
         game, so the board caps both at his ask: on every terms table, no
         offer that trades the bonus for wage or length signs him, nothing over
         his ask is recorded, and exactly his ask still signs him.
-     9) the worked examples are the engine's (hard). The 2026-10-01 daily is
+     9) the worked examples are the engine's (hard). Lorient on seed 390850 in
+        the 2023-02-21 daily market is
         played as the rules screen and the guide describe it, and every figure
         they quote, and the guide's grade arithmetic, is rebuilt from the
         engine and looked for in the copy.
@@ -81,9 +82,10 @@
        him to a circling rival, as before the review fix. Section 7 must go red.
      DEADLINE_CONTROL=freewage the board pays any wage and any length again,
        as before the review fix. Section 8 must go red.
-     DEADLINE_CONTROL=salt     the daily draws a different window for the same
-       date, the shape of an engine change under the worked example.
-       Section 9 must go red.
+     DEADLINE_CONTROL=salt     the hours draw their dice from a different
+       stream, the shape of an engine change under the worked example (Round
+       1044 moved it off the daily seed's salt: the example is an explicit
+       seed now, which that salt never reached). Section 9 must go red.
      DEADLINE_CONTROL=curve    the grade's budget points bend to a square root
        while every constant stays put, so only gradeWindow itself can tell
        the guide's grade paragraph no longer adds up. Section 9 must go red.
@@ -144,7 +146,9 @@ function rewrite(file, edits, outName, what) {
   for (const [from, to] of edits) {
     if (!src.includes(from)) {
       console.error(`control cannot run: ${what} is not in the shape DEADLINE_CONTROL=${CONTROL} rewrites (${from.slice(0, 70)}...)`);
-      process.exit(1);
+      /* Exit 2, the code for a control that did not fire: exit 1 means it
+         fired, and a control that never ran proved nothing. */
+      process.exit(2);
     }
     src = src.replace(from, to);
   }
@@ -164,7 +168,7 @@ if (CONTROL === 'noclock') {
   console.log('NEGATIVE CONTROL ON: the shut leaves unfinished deals standing; section 3 must go red');
 }
 if (CONTROL === 'frozen') {
-  libPath = rewrite(LIB, [['  const pool = hotSeatPool();\n  /* Half a pool', "  date = '2026-01-01';\n  const pool = hotSeatPool();\n  /* Half a pool"]], 'deadlineDay.frozen.ts', 'the daily pick');
+  libPath = rewrite(LIB, [['  const pool = hotSeatPool(date);\n  /* Half a pool', "  date = '2026-01-01';\n  const pool = hotSeatPool(date);\n  /* Half a pool"]], 'deadlineDay.frozen.ts', 'the daily pick');
   console.log('NEGATIVE CONTROL ON: every date gets the same window; section 4 must go red');
 }
 if (CONTROL === 'drift') {
@@ -207,8 +211,8 @@ if (CONTROL === 'freewage') {
   console.log('NEGATIVE CONTROL ON: the board pays any wage and any length, as before the review fix; section 8 must go red');
 }
 if (CONTROL === 'salt') {
-  libPath = rewrite(LIB, [['seed: mixSeed(dailyPrngSeed(date), 721)', 'seed: mixSeed(dailyPrngSeed(date), 722)']], 'deadlineDay.salt.ts', 'the daily seed');
-  console.log('NEGATIVE CONTROL ON: the daily draws a different window for the same date, the shape of an engine change under the worked example; section 9 must go red');
+  libPath = rewrite(LIB, [['const SEED_HOUR = 500000;', 'const SEED_HOUR = 500001;']], 'deadlineDay.salt.ts', 'the hourly dice salt');
+  console.log('NEGATIVE CONTROL ON: the hours draw from a different stream, the shape of an engine change under the worked example; section 9 must go red');
 }
 if (CONTROL === 'curve') {
   libPath = rewrite(LIB, [[
@@ -859,15 +863,35 @@ if (!failedSections.has(8)) ok('no wage or length buys off the bonus, nothing ov
 /* ---------- 9. the worked example is the engine's ---------- */
 section = 9;
 console.log('9) The worked example on the rules screen and in the guide is what the engine plays');
-/* The example is the 2026-10-01 daily, played: call the cheapest keeper, bid
+/* The example is the EX_DATE daily, played: call the cheapest keeper, bid
    3.1, bid 3.3, offer exactly his ask. Every number the copy quotes is
    rebuilt here from the engine and looked for in the copy, so an engine
    change under it (three other branches edit clubManager.ts) turns this red
    instead of leaving the copy wrong. The grade paragraph's arithmetic is the
-   engine's too. */
+   engine's too.
+
+   Round 1044: why Lorient on seed 390850. Round 721 wrote the copy from the
+   2026-10-01 daily, Lorient. Until Round 1044 the dailies dealt from a pool
+   worked out fresh on every load, so Release AF's re-bake re-dealt that day
+   (it became Birmingham City, a central midfielder first, and this section
+   went red on main), and the re-bake moved Lorient's budget on that seed too
+   (28m, not 29m), so no club plays the copy on 2026-10-01 any more. The copy
+   is a "say the board want" window, not a claim about one day, so the example
+   is pinned to an explicit setup: Lorient, whose squad still needs a keeper,
+   a central midfielder, a right winger and a striker; seed 390850; and the
+   market of a past daily, EX_DATE, which the dailies' ledger
+   (src/data/dailyClubPool.json) holds still, because a past day's pool is
+   lines nothing may move, so a league joining later cannot reach it. The seed
+   was found by playing the engine, not typed from the copy: no daily seed of
+   the 6152 days from 2010-01-01 to 2026-11-04 plays the whole window (three
+   play the haggle, none has the rival take the dearest keeper at noon and
+   sign him at 2pm), and of the first 3.1 million raw seeds five play every
+   figure, 390850 the first. Only an engine change or a roster re-bake can
+   move it now, and that is what this section exists to catch. */
+const EX_DATE = '2023-02-21', EX_CLUB = 'Lorient', EX_SEED = 390850;
 const WORDS = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve'];
 const clockWord = h => (clockLabel(h) === '12pm' ? 'noon' : clockLabel(h));
-const exDay = dailyDeadlineDay('2026-10-01');
+const exDay = { club: EX_CLUB, seed: EX_SEED, daily: EX_DATE };
 let ex = startDeadlineDay({ club: exDay.club, seed: exDay.seed, daily: exDay.daily });
 const exNeeds = ex.needs.map(n => `a ${slotWord(n.label)}`);
 const needsPhrase = exNeeds.length > 1 ? `${exNeeds.slice(0, -1).join(', ')} and ${exNeeds[exNeeds.length - 1]}` : exNeeds.join('');
@@ -946,8 +970,8 @@ const missingPage = pageWant.filter(s => !PAGE_SRC.includes(s));
 const missingGuide = guideWant.filter(s => !GUIDE.includes(s));
 for (const s of missingPage) fail(`the rules screen's example does not say what the engine plays: "${s}"`);
 for (const s of missingGuide) fail(`the guide's example does not say what the engine plays: "${s}"`);
-console.log(`   ${pageWant.length} figures on the rules screen and ${guideWant.length} in the guide checked against the 2026-10-01 daily (${exDay.club}), ${missingPage.length + missingGuide.length} differ; ${gradeLine}`);
-if (!failedSections.has(9)) ok('every figure in both worked examples is what the engine plays on the 2026-10-01 daily, and the grade adds up');
+console.log(`   ${pageWant.length} figures on the rules screen and ${guideWant.length} in the guide checked against ${EX_CLUB} on seed ${EX_SEED} in the ${EX_DATE} market, ${missingPage.length + missingGuide.length} differ; ${gradeLine}`);
+if (!failedSections.has(9)) ok(`every figure in both worked examples is what the engine plays for ${EX_CLUB} on seed ${EX_SEED}, and the grade adds up`);
 
 /* ---------- verdict ---------- */
 fs.rmSync(TMP, { recursive: true, force: true });

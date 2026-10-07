@@ -160,6 +160,17 @@
       the review found for the older eras, AI buyers drawn from the modern
       clubs, applies to a 2020-21 save the same way; it was not isolated
       again here).
+      Release AH (2026-10-06) merged Round 1033 (today's real free agents
+      open a modern career) beside Round 1035, whose file the merge kept,
+      and re-took modern only, after attribution in throwaway copies of the
+      merged tree fc30942e, each written with --part=modern --write: with
+      1033's merge (8a181544) reverted the tree reproduced 1035's file 23/0;
+      the merged tree itself moved all 23 modern saves in "start", "whole"
+      and "wholeNext" ("s2_whole" too for the four pyramid saves) and in no
+      other field, so table, results, world, cup, europe, trophies and
+      objectives held and what moved is the day one pool 1033 seeds; and
+      the lead's F10 call (Central Coast Mariners partial, 9529f5f5) moved
+      nothing on top of it (23/0). Eras 20/0 and pure 44/0 untouched.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,
@@ -454,8 +465,10 @@ async function partModern() {
   const saves = mod.cm.REAL_LEAGUES.map(l => ({ key: `now|${l.id}`, club: l.clubs[0], eraId: 'now', second: pyramidIds.has(l.id) }));
   /* Round 876: 21 with Brazil's Serie A. Baseline rewritten from the Round 876
      tree on purpose (see that commit for the attribution of every moved hash).
-     Round 883: 22 with Liga MX, rewritten the same way and attributed in its commit. */
-  if (saves.length !== 22) fail(`the game has ${saves.length} modern leagues where this round found 22 (a league added later regenerates the baseline on purpose)`);
+     Round 883: 22 with Liga MX, rewritten the same way and attributed in its commit.
+     Round 1035: 23 with the A-League Men, rewritten the same way and
+     attributed in its commit. */
+  if (saves.length !== 23) fail(`the game has ${saves.length} modern leagues where this round found 23 (a league added later regenerates the baseline on purpose)`);
   const got = await digestSaves(saves, mod);
   if (WRITE) written.modern = got; else compare('modern', got, baseline.parts.modern);
 }

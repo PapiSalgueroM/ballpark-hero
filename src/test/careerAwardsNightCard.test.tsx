@@ -73,7 +73,7 @@ vi.mock('@/components/game/PostGameStats', () => ({ default: () => null }));
 
 import * as E from '@/lib/soccerCareerEngine';
 import type { CareerState } from '@/lib/soccerCareerEngine';
-import { availableSpeeches } from '@/lib/careerAwardsNight';
+import { availableSpeeches, givenSpeechOf, type GivenSpeech } from '@/lib/careerAwardsNight';
 import { localizeMoney } from '@/lib/soccerCurrency';
 import SoccerCareer from '@/pages/SoccerCareer';
 
@@ -98,11 +98,28 @@ const readSave = (): CareerState | null => {
 /* Plays seeded careers with the engine, answering every screen the way the
    page does, until a ceremony of the kind asked for is on screen. */
 function saveOnCeremony(won: boolean): CareerState {
+  return saveWhere(won ? 1 : 2, s => {
+    const rank = s.pendingBallonDor?.playerRank ?? null;
+    return won ? rank === 1 : rank !== null && rank > 1;
+  }, null, `no ${won ? 'won' : 'lost'} ceremony in 59 seeded careers`);
+}
+
+/* Round 1023: the same walk, stopped on a tournament the player won. */
+function saveOnTournamentWin(): CareerState {
+  return saveWhere(3, null, s => s.pendingTournament?.myResult === 'Winner', 'no won tournament in 59 seeded careers');
+}
+
+function saveWhere(
+  salt: number,
+  onCeremony: ((s: CareerState) => boolean) | null,
+  onTournament: ((s: CareerState) => boolean) | null,
+  none: string,
+): CareerState {
   const clubs = E.FALLBACK_CLUBS;
   const real = Math.random;
   try {
     for (let seed = 1; seed < 60; seed++) {
-      Math.random = seeded(seed * 834 + (won ? 1 : 2));
+      Math.random = seeded(seed * 834 + salt);
       const o = 76 + (seed % 6);
       const st = { pace: o, shooting: o, passing: o, dribbling: o, defending: o, physical: o, reflexes: o };
       let s = E.initCareer(`Night ${seed}`, 'Brazil', 'ST', '2020s', st, o, 2020, clubs, null, 95);
@@ -122,11 +139,13 @@ function saveOnCeremony(won: boolean): CareerState {
             break;
           case 'red_card_appeal_result': s = E.dismissAppealResult(s, clubs); break;
           case 'international_debut': s = E.dismissDebut(s, clubs); break;
-          case 'world_cup': s = E.dismissWorldCup(s, clubs); break;
+          case 'world_cup':
+            if (onTournament?.(s)) return s;
+            s = E.dismissWorldCup(s, clubs);
+            break;
           case 'rivalry_event': s = E.dismissRivalryEvent(s, clubs); break;
           case 'ballon_dor': {
-            const rank = s.pendingBallonDor?.playerRank ?? null;
-            if (won ? rank === 1 : rank !== null && rank > 1) return s;
+            if (onCeremony?.(s)) return s;
             s = E.dismissBallonDor(s, clubs);
             break;
           }
@@ -139,7 +158,7 @@ function saveOnCeremony(won: boolean): CareerState {
   } finally {
     Math.random = real;
   }
-  throw new Error(`no ${won ? 'won' : 'lost'} ceremony in 59 seeded careers`);
+  throw new Error(none);
 }
 
 /** The ceremony card on screen: the rounded card holding the award title. */
@@ -267,4 +286,100 @@ describe('Soccer Career: the Ballon d\'Or ceremony card', () => {
     expect(hasContinue(card!)).toBe(true);
     v.unmount();
   }, 120_000);
+});
+
+/* Round 1023: the title winner's speech stays on the tournament card. It used
+   to clear the card and move on in the same tap, so the player never saw what
+   his speech did. */
+const METER_KEYS = ['popularity', 'morale', 'integrityBonus', 'rivalryIntensity', 'socialMediaFollowers', 'marketValue'] as const;
+/** What the meters say moved between two saves, in the card's words. */
+const movedBetween = (a: CareerState, b: CareerState) => {
+  const meters = E.SOCCER_BALLON_DOR.meters;
+  return METER_KEYS
+    .map(k => ({ k, d: Math.round((meters[k].read(b) - meters[k].read(a)) * 100) / 100 }))
+    .filter(x => x.d !== 0)
+    .map(({ k, d }) => `${meters[k].label} ${meters[k].show ? meters[k].show!(d) : `${d >= 0 ? '+' : ''}${d}`}`)
+    .join(', ');
+};
+const tournamentCard = (root: HTMLElement) => root.querySelector('[data-intl-moment]') as HTMLElement | null;
+
+describe('Soccer Career: the tournament winner\'s speech', () => {
+  it('stays on the card, shows what it really moved, a second tap does nothing, Continue leaves', async () => {
+    /* Popularity 95, so the cap cuts the speech's +18 and the card has to say
+       what landed rather than what was asked. */
+    const start: CareerState = { ...saveOnTournamentWin(), popularity: 95 };
+    expect(start.phase).toBe('world_cup');
+    expect(E.worldCupSpeechOpen(start)).toBe(true);
+    localStorage.setItem(SAVE_KEY, JSON.stringify(start));
+    let v = mount(<SoccerCareer />);
+    await tick(60);
+    let card = tournamentCard(v.container);
+    expect(card, 'the won tournament is on screen').not.toBeNull();
+    for (const o of E.SOCCER_WORLD_CUP_SPEECHES) expect(buttons(card!).some(b => (b.textContent ?? '').includes(o.label)), o.id).toBe(true);
+    expect(hasContinue(card!), 'no Continue before the speech').toBe(false);
+
+    const kids = E.SOCCER_WORLD_CUP_SPEECHES.find(o => o.id === 'for_the_country')!;
+    await act(async () => { fireEvent.click(buttons(card!).find(b => (b.textContent ?? '').includes(kids.label))!); });
+    await tick();
+    const after = readSave()!;
+    expect(after.phase, 'the card stays up').toBe('world_cup');
+    expect(after.pendingTournament?.myResult).toBe('Winner');
+    const spoken = after.pendingTournament!.speech!;
+    expect(spoken.id).toBe('for_the_country');
+    expect(after.popularity, 'the cap cut the step').toBe(100);
+    /* the moved line is the before and after of the meters, nothing else */
+    expect(spoken.moved).toBe(movedBetween(start, after));
+    expect(spoken.moved).toContain('Popularity +5');
+    /* Round 1023 review: followers are counted in millions, so +3 is "+3M" */
+    expect(spoken.moved).toContain('Followers +3M');
+    expect(after.events.length).toBe(start.events.length + 1);
+    expect(after.events[after.events.length - 1]).toBe(kids.line(after, 'sure'));
+    card = tournamentCard(v.container);
+    const shown = card!.textContent ?? '';
+    expect(shown).toContain(spoken.line);
+    expect(shown).toContain(spoken.moved);
+    expect(hasContinue(card!)).toBe(true);
+    for (const o of E.SOCCER_WORLD_CUP_SPEECHES) expect(shown).not.toContain(o.label);
+
+    /* a second tap does nothing: the engine hands the same save back */
+    expect(E.worldCupSpeechOpen(after)).toBe(false);
+    expect(E.giveWorldCupSpeech(after, 'quiet_lap')).toBe(after);
+    expect(E.giveWorldCupSpeech(after, 'for_the_country')).toBe(after);
+
+    /* the save written after the speech loads as it was */
+    v.unmount();
+    v = mount(<SoccerCareer />);
+    await tick(60);
+    card = tournamentCard(v.container);
+    expect(card!.textContent ?? '').toContain(spoken.moved);
+    for (const o of E.SOCCER_WORLD_CUP_SPEECHES) expect(card!.textContent ?? '').not.toContain(o.label);
+    const cont = buttons(card!).find(b => (b.textContent ?? '').trim().startsWith('Continue'))!;
+    await act(async () => { fireEvent.click(cont); });
+    await tick();
+    const next = readSave()!;
+    expect(next.pendingTournament ?? null).toBeNull();
+    expect(next.phase).not.toBe('world_cup');
+    expect(next.popularity).toBe(after.popularity);
+    v.unmount();
+  }, 120_000);
+
+  it('a pre Round 124 World Cup save gets the same speech, once, and a corrupt speech reads as none', () => {
+    const won = saveOnTournamentWin();
+    const t = won.pendingTournament!;
+    const legacy: CareerState = {
+      ...won, pendingTournament: null,
+      pendingWorldCup: { year: t.year, nation: t.nation, matches: [], playerApps: 7, playerGoals: 4, playerAssists: 2, playerAvgRating: 7.9, result: 'Winner', bestPlayer: false },
+    };
+    expect(E.worldCupSpeechOpen(legacy)).toBe(true);
+    const after = E.giveWorldCupSpeech(legacy, 'shirt_to_the_fans');
+    expect(after.phase).toBe('world_cup');
+    expect(after.pendingWorldCup?.speech?.moved).toBe(movedBetween(legacy, after));
+    expect(E.giveWorldCupSpeech(after, 'quiet_lap')).toBe(after);
+    const corrupt = { ...legacy, pendingWorldCup: { ...legacy.pendingWorldCup!, speech: 7 as unknown as GivenSpeech } };
+    expect(givenSpeechOf(corrupt.pendingWorldCup)).toBeNull();
+    expect(E.worldCupSpeechOpen(corrupt)).toBe(true);
+    const lost: CareerState = { ...won, pendingTournament: { ...t, myResult: 'Runner-up' } };
+    expect(E.worldCupSpeechOpen(lost)).toBe(false);
+    expect(E.giveWorldCupSpeech(lost, 'quiet_lap')).toBe(lost);
+  });
 });

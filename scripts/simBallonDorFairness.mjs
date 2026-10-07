@@ -54,11 +54,54 @@
    controls: 20 of 20 red (nodominance wins 0 to 3.6%, nofloor pushes
    monster seasons off the podium on every run).
 
+   ROUND 1023: THE ENGINE NOW JUDGES THE MEN ON SCREEN. The game change the
+   paragraph above reported to the lead is made: calculateBallonDor judges
+   dominance against the nine rivals the card seats (shortlistSize - 1, the
+   player takes the tenth seat), so the off screen tenth man cannot cost a
+   season any more. That turns must-win into an invariant like must-podium:
+   a must-win season outscored the nine on screen by five with a major, the
+   engine calls it dominant by the same field, and the dominance verdict puts
+   it first. So every must-win season must win; the 95% rate floor stays.
+   Measured, base seeds 0xb4110 and 104729k + 834 for k = 1 to 4 (20 seeds):
+     main 1aaba4d5  0xb4110 162 of 163, k1 135 of 137, k2 137 of 137,
+                    k3 132 of 134, k4 139 of 139: 705 of 710, 5 snubs
+     branch         0xb4110 157 of 157, k1 138 of 138, k2 133 of 133,
+                    k3 106 of 106, k4 135 of 135: 669 of 669, none
+   (the run is not the same run on both sides after the first season the
+   rule decides differently, because the difficulty bonus draws only for a
+   season that is not dominant). Every monster season podiumed on both.
+
+   ROUND 1023'S REVIEW: THE RULE WAS FENCED FROM ONE SIDE, ON ONE SEASON.
+   The outcome checks above cannot see the judged field directly. Judged
+   against eight (one seated rival nobody judges) every check stayed green
+   while the run moved, and the tenthman control fired on one season of one
+   seed: main's own record above has 0 snubs on k2 and k4, so put back to ten
+   the engine passed there. So the engine now notes who it judged
+   (lastBallonDorJudged, never saved), and on every night the player is on the
+   ballot this requires those names to be exactly the rivals the card seats,
+   checked per seed, and requires every seed to have such a night. Controls
+   eight and tenthman break that on every night on the ballot, so they fire on
+   every seed whatever the draws do, not only where an off card man happens to
+   cost a season. Measured on the branch: base 0xb4110 1,434 of 1,434 nights
+   on the ballot judged the seated nine (157 of 157 must-win), base 210292
+   (k2) 1,425 of 1,425 (133 of 133); eight breaks it on 1,429 and 1,438
+   nights, 4 of 4 seeds both times; tenthman on 1,437 and 1,407 nights, 4 of
+   4 seeds, and on base 210292 it costs no season at all, so before this
+   check it passed there.
+
    NEGATIVE CONTROLS (BDOR_FAIRNESS_CONTROL), each must exit 1:
      nodominance  the engine never calls a season dominant (the Round 54
                   snub machine back): the must-win rate collapses
      nofloor      the podium floor verdict is gone: monster seasons fall
                   off the podium
+     tenthman     Round 1023: the engine judges ten rivals again, the tenth
+                  off the card: on the default seed that is main's run, one
+                  must-win season (35 goals and a major against a card whose
+                  best rival scored 28) finishes third; since the review
+                  it also breaks the judged = seated check on every night
+                  on the ballot, every seed
+     eight        Round 1023 review: the engine judges eight rivals, one
+                  seated man unjudged: the judged = seated check, every seed
    Each control refuses to run unless the exact text it replaces is present.
 
    Run: node scripts/simBallonDorFairness.mjs   (BDOR_FAIRNESS_SEED=<n> to
@@ -80,6 +123,10 @@ const CONTROL = process.env.BDOR_FAIRNESS_CONTROL || "";
 const CONTROLS = {
   nodominance: ["  const playerDominant = playerCanContend && (", "  const playerDominant = false && playerCanContend && ("],
   nofloor: ["        if (statMonster && playerRank !== null && playerRank > 3) {", "        if (false && statMonster && playerRank !== null && playerRank > 3) {"],
+  /* Round 1023: the engine judges ten rivals again, one of them off the card. */
+  tenthman: ["  const visibleField = allNomineeData.slice(0, SOCCER_BALLON_DOR.award.shortlistSize - 1);", "  const visibleField = allNomineeData.slice(0, 10);"],
+  /* Round 1023 review: one man short, a seated rival nobody judges. */
+  eight: ["  const visibleField = allNomineeData.slice(0, SOCCER_BALLON_DOR.award.shortlistSize - 1);", "  const visibleField = allNomineeData.slice(0, SOCCER_BALLON_DOR.award.shortlistSize - 2);"],
 };
 if (CONTROL && !CONTROLS[CONTROL]) {
   console.error(`unknown BDOR_FAIRNESS_CONTROL=${CONTROL} (known: ${Object.keys(CONTROLS).join(", ")})`);
@@ -140,7 +187,7 @@ function eliteStriker(seed) {
 /** One seed: the same procedure the harness always ran, counted. */
 function runSeed(seed) {
   seedRandom(seed);
-  const r = { seed, mustWin: 0, won: 0, snubs: [], mustPodium: 0, podium: 0, offPodium: [] };
+  const r = { seed, mustWin: 0, won: 0, snubs: [], mustPodium: 0, podium: 0, offPodium: [], onBallot: 0, misjudged: [] };
 
   /* Case 1: a statistically dominant season must win the award. Kept as it
      was: the ceremony is module private, so this finds no hook and only
@@ -188,6 +235,17 @@ function runSeed(seed) {
       }
       const bd = s.pendingBallonDor;
       const season = s.seasons[s.seasons.length - 1];
+      /* Round 1023 review: on every night the player is on the ballot, the
+         rivals the engine judged dominance against are exactly the rivals the
+         card seats beside him, by name. */
+      if (bd && bd.playerNominated) {
+        const judged = eng.lastBallonDorJudged();
+        const seated = bd.nominees.filter(n => !n.isPlayer).map(n => n.name);
+        r.onBallot++;
+        if (!judged || judged.year !== bd.year || judged.names.length !== seated.length || !seated.every(n => judged.names.includes(n))) {
+          r.misjudged.push({ year: bd.year, judged: judged && judged.year === bd.year ? judged.names.length : "none", seated: seated.length });
+        }
+      }
       if (bd && season && season.type === "playing") {
         const ga = season.goals + season.assists;
         // Product rules under test:
@@ -227,7 +285,7 @@ const mustPodium = sum("mustPodium"), podium = sum("podium"), offPodium = sum("o
 const winRate = mustWin ? won / mustWin : 0;
 
 console.log("\n=== BALLON D'OR FAIRNESS ===");
-for (const r of runs) console.log(`seed ${r.seed}: must-win ${r.won}/${r.mustWin}, must-podium ${r.podium}/${r.mustPodium}`);
+for (const r of runs) console.log(`seed ${r.seed}: must-win ${r.won}/${r.mustWin}, must-podium ${r.podium}/${r.mustPodium}, judged the seated rivals on ${r.onBallot - r.misjudged.length}/${r.onBallot} nights on the ballot`);
 console.log(`must-win seasons tested : ${mustWin}   (outscored the field on screen by 5+ AND won a major, ${SEEDS.length} seeds pooled)`);
 console.log(`  won the award         : ${won}   (${(winRate * 100).toFixed(1)}%, floor ${MUST_WIN_FLOOR * 100}%)`);
 console.log(`  finished lower        : ${snubs}`);
@@ -236,13 +294,24 @@ console.log(`must-podium seasons     : ${mustPodium}   (45+ goals or 55+ goal in
 console.log(`  finished top 3        : ${podium}`);
 console.log(`  PUSHED OFF PODIUM     : ${offPodium}`);
 if (offPodium) console.log(runs.flatMap(r => r.offPodium).slice(0, 5));
+/* Round 1023 review: per seed, so a control that moves the judged field by
+   one man either way must show on every seed, not on a lucky one. */
+const misjudged = sum("misjudged");
+const blindSeeds = runs.filter(r => r.onBallot === 0).map(r => r.seed);
+const misjudgedSeeds = runs.filter(r => r.misjudged.length).length;
+console.log(`judged field = seated   : ${sum("onBallot") - misjudged} of ${sum("onBallot")} nights on the ballot (${misjudgedSeeds} of ${runs.length} seeds with a mismatch)`);
+if (misjudged) console.log(runs.flatMap(r => r.misjudged).slice(0, 5));
 
 if (mustWin < 60 || mustPodium < 200) {
   console.log(`\nINCONCLUSIVE: too few dominant seasons to judge (${mustWin} must-win, ${mustPodium} must-podium)`);
   process.exit(2);
 }
-const ok = winRate >= MUST_WIN_FLOOR && offPodium === 0;
+/* Round 1023: the engine judges the nine rivals the card seats, so a season
+   that outscored them by five with a major is dominant by the engine's own
+   rule and the dominance verdict puts it first. Every must-win season wins,
+   the same kind of invariant as the podium floor; the rate floor stays. */
+const ok = winRate >= MUST_WIN_FLOOR && snubs === 0 && offPodium === 0 && misjudged === 0 && blindSeeds.length === 0;
 console.log(ok
-  ? `\nPASS: ${(winRate * 100).toFixed(1)}% of must-win seasons won, every monster season podiumed`
-  : `\nFAIL: ${winRate < MUST_WIN_FLOOR ? `must-win seasons won ${(winRate * 100).toFixed(1)}%, under ${MUST_WIN_FLOOR * 100}%` : ""}${offPodium ? ` ${offPodium} monster seasons pushed off the podium` : ""}`);
+  ? `\nPASS: ${(winRate * 100).toFixed(1)}% of must-win seasons won, every monster season podiumed, every night on the ballot judged the rivals it seats`
+  : `\nFAIL: ${winRate < MUST_WIN_FLOOR ? `must-win seasons won ${(winRate * 100).toFixed(1)}%, under ${MUST_WIN_FLOOR * 100}%` : ""}${snubs ? ` ${snubs} must-win seasons lost the award` : ""}${offPodium ? ` ${offPodium} monster seasons pushed off the podium` : ""}${misjudged ? ` ${misjudged} nights judged dominance against other rivals than the card seats (${misjudgedSeeds} of ${runs.length} seeds)` : ""}${blindSeeds.length ? ` no night on the ballot on seed ${blindSeeds.join(", ")}, so the judged field was never checked` : ""}`);
 process.exit(ok ? 0 : 1);
