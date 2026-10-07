@@ -135,6 +135,25 @@
    noresume, and doubletraining (peak OVR +6.5, +6.7, +8.1 and +6.8 against
    a tolerance of 1.0).
 
+   10 to 12, added after review (2026-10-06, 400 careers a sport, default
+   seed, on the tree with the show time check in seekSummerCard):
+     10: later answers nfl 10669, nba 7361, mlb 6094, nhl 9706, none moved
+       the rating; dealt cards skipped when shown 113 of 17036, 131 of
+       14858, 47 of 13692, 75 of 17872. A counting copy of the run found
+       every skip at 40 careers was a card that left its deck: the show time
+       check never fired in real play, so sections 1 to 8 are unchanged by
+       it (depth above is the same to the third decimal). Control probe:
+       2541, 3862, 3305 and 2518 later answers moved the rating.
+     11: corruption cards as card 1 932, 1174, 847, 1350; later 0. Control
+       latercorrupt: 3001, 5481, 1039 and 3532 dealt after card 1.
+     12: card 1 was the draw itself in 6017, 7239, 7350, 7471 offseasons
+       (never otherwise); resting draws 237, 127, 201, 620, every one with a
+       fresh card of its kind (35, 33, 76, 82 of them rating cards), none
+       replaced by the other kind. Control nokind: 114 of 245, 55 of 122,
+       109 of 204 and 266 of 608 replaced by the other kind. The floor of 50
+       resting draws a sport is why this section wants the default 400
+       careers: at 40 it reads too few and says so.
+
    Nothing here reaches the network: the bundle is the four bindings, the
    summer, the ledger and the soccer engine's three exported rules, with
    localStorage stubbed. */

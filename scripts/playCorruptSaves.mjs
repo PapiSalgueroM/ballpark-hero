@@ -17,9 +17,10 @@
  *              number belongs
  *   summer     (Round 1038, the four US My Careers only) the shell opened mid
  *              summer, with the summer block, the cooldown ledger and the
- *              salt that round added all the wrong types. Not yet measured on
- *              a build when it was added: the round's builder could not run
- *              a browser walk, so the first run of this shape is the lead's.
+ *              salt that round added all the wrong types. First run on a
+ *              build 2026-10-06 (CORRUPT_VARIANTS=summer, the four routes):
+ *              4 of 4 PASS, each needing the button (the shell under it
+ *              breaks the page) and 2 clicks, none trapped.
  *
  * What counts. The page is loaded with the save in place. If the error page
  * ("This page broke") shows, the harness clicks "Start a fresh game" (click
