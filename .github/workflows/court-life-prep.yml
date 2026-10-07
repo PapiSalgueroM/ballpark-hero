@@ -1,0 +1,54 @@
+name: Court Life preparation
+
+on:
+  push:
+    branches: [codex/court-career-1075]
+permissions:
+  contents: read
+concurrency:
+  group: court-life-prep-${{ github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      VITEST_MAX_FORKS: 1
+      VITEST_MIN_FORKS: 1
+      COURT_LIFE_ENGINE_ARTIFACTS: court-life-artifacts/engine
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Prepare isolated verification
+        run: |
+          mkdir -p court-life-artifacts
+          git rev-parse HEAD > court-life-artifacts/source-head.txt
+          git rev-parse HEAD^{tree} > court-life-artifacts/source-tree.txt
+          npm ci
+          npm install --no-save playwright
+      - name: Type check
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee court-life-artifacts/types.log
+      - name: Actual physical outcomes and copied faults
+        if: ${{ !cancelled() }}
+        run: COURT_LIFE_ENGINE_CONTROL=all ONLY=simCourtLifeEngine node scripts/runAllSims.mjs 2>&1 | tee court-life-artifacts/engine.log
+      - name: Measure complete physical matches and release probes
+        if: ${{ !cancelled() }}
+        run: COURT_LIFE_ENGINE_MEASURE=1 ONLY=simCourtLifeEngine node scripts/runAllSims.mjs 2>&1 | tee court-life-artifacts/measurements.log
+      - name: Preserve evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: court-life-prep-${{ github.run_id }}-${{ github.run_attempt }}
+          path: court-life-artifacts/
+          retention-days: 3
