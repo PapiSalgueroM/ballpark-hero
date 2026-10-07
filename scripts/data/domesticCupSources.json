@@ -1,0 +1,3737 @@
+{
+ "about": "Round 1041: the sources behind src/lib/soccerCareerCup.ts DOMESTIC_CUPS, window by window. Every NAMED and NONE window cites facts that two non-Wikipedia sources back, each with its URL, the line read and the read date; an UNKNOWN window cites what made it unknown (or nothing, when nothing was read). Built from the Round 1041 research ledgers (researched 2026-10-06) after the nineteen checker corrections listed below. scripts/simCareerDomesticCup.mjs section 4 holds the table and this file together.",
+ "readDate": "2026-10-06",
+ "associations": {
+  "England": {
+   "ledger": "uk-nl:England",
+   "windows": [
+    {
+     "from": 1990,
+     "to": 1997,
+     "kind": "NAMED",
+     "name": "FA Cup",
+     "legs": 1,
+     "decider": "replay",
+     "facts": [
+      {
+       "ref": "uk-nl:England:0",
+       "verified": true,
+       "claim": "A FA Cup final was played every season 1990-91 to 2025-26 (no cancelled or unfinished edition)",
+       "sources": [
+        {
+         "host": "www.rsssf.org",
+         "url": "https://www.rsssf.org/tablese/engcuphist.html",
+         "read": "2026-10-06",
+         "line": "one final per year 1991 to 2026, e.g. 2020 Arsenal 2 Chelsea 1 / 2026 Manchester City 1 Chelsea 0"
+        },
+        {
+         "host": "www.nbcsports.com",
+         "url": "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
+         "read": "2026-10-06",
+         "line": "2019-20: Arsenal defeat Chelsea 2-1 ... 2025-26: Manchester City defeat Chelsea 1-0 (list runs 1990-91 to 2025-26 with no gap; published 16 May 2026)"
+        }
+       ]
+      },
+      {
+       "ref": "uk-nl:England:2",
+       "verified": true,
+       "claim": "FA Cup final replays were abolished from the 1998-99 competition: from then a level final goes to extra time and then penalties on the day",
+       "sources": [
+        {
+         "host": "www.independent.co.uk",
+         "url": "https://www.independent.co.uk/sport/football-end-of-cup-final-replay-1200475.html",
+         "read": "2026-10-06",
+         "line": "the chairman of the Football Supporters' Association agrees with the decision to dispense with an FA Cup final replay from this season onwards. ... the Football Association have decided that the final will go to extra time and penalties if necessary. (article of 24 September 1998)"
+        },
+        {
+         "host": "theconversation.com",
+         "url": "https://theconversation.com/scrapping-fa-cup-replays-has-upset-smaller-clubs-but-they-could-still-win-from-being-matched-against-the-top-sides-229875",
+         "read": "2026-10-06",
+         "line": "replays of the final were scrapped in 1998 (replaced by extra time and penalties); article dated 24 May 2024"
+        }
+       ]
+      },
+      {
+       "ref": "uk-nl:England:4",
+       "verified": true,
+       "claim": "The last FA Cup final to need a replay was 1993 (Arsenal 1-1 Sheffield Wednesday, Arsenal won the replay 2-1 after extra time)",
+       "sources": [
+        {
+         "host": "www.rsssf.org",
+         "url": "https://www.rsssf.org/tablese/engcuphist.html",
+         "read": "2026-10-06",
+         "line": "1993 Arsenal 1:2 Sheffield Wednesday 1:1* (first match and replay scores)"
+        },
+        {
+         "host": "www.independent.co.uk",
+         "url": "https://www.independent.co.uk/sport/football-end-of-cup-final-replay-1200475.html",
+         "read": "2026-10-06",
+         "line": "a replay has been needed on 14 occasions, the most recent having been in 1993 when Arsenal beat Sheffield Wednesday 2-1 after a 1-1 draw."
+        },
+        {
+         "host": "www.nbcsports.com",
+         "url": "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
+         "read": "2026-10-06",
+         "line": "1992-93: Arsenal defeat Sheffield Wednesday 1-1, 2-1 (replay)"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 1998,
+     "kind": "NAMED",
+     "name": "FA Cup",
+     "legs": 1,
+     "decider": "penalties",
+     "facts": [
+      {
+       "ref": "uk-nl:England:0",
+       "verified": true,
+       "claim": "A FA Cup final was played every season 1990-91 to 2025-26 (no cancelled or unfinished edition)",
+       "sources": [
+        {
+         "host": "www.rsssf.org",
+         "url": "https://www.rsssf.org/tablese/engcuphist.html",
+         "read": "2026-10-06",
+         "line": "one final per year 1991 to 2026, e.g. 2020 Arsenal 2 Chelsea 1 / 2026 Manchester City 1 Chelsea 0"
+        },
+        {
+         "host": "www.nbcsports.com",
+         "url": "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
+         "read": "2026-10-06",
+         "line": "2019-20: Arsenal defeat Chelsea 2-1 ... 2025-26: Manchester City defeat Chelsea 1-0 (list runs 1990-91 to 2025-26 with no gap; published 16 May 2026)"
+        }
+       ]
+      },
+      {
+       "ref": "uk-nl:England:2",
+       "verified": true,
+       "claim": "FA Cup final replays were abolished from the 1998-99 competition: from then a level final goes to extra time and then penalties on the day",
+       "sources": [
+        {
+         "host": "www.independent.co.uk",
+         "url": "https://www.independent.co.uk/sport/football-end-of-cup-final-replay-1200475.html",
+         "read": "2026-10-06",
+         "line": "the chairman of the Football Supporters' Association agrees with the decision to dispense with an FA Cup final replay from this season onwards. ... the Football Association have decided that the final will go to extra time and penalties if necessary. (article of 24 September 1998)"
+        },
+        {
+         "host": "theconversation.com",
+         "url": "https://theconversation.com/scrapping-fa-cup-replays-has-upset-smaller-clubs-but-they-could-still-win-from-being-matched-against-the-top-sides-229875",
+         "read": "2026-10-06",
+         "line": "replays of the final were scrapped in 1998 (replaced by extra time and penalties); article dated 24 May 2024"
+        }
+       ]
+      },
+      {
+       "ref": "uk-nl:England:3",
+       "verified": true,
+       "claim": "The final still goes to extra time and then penalties in the current rules (no replay)",
+       "sources": [
+        {
+         "host": "www.thefa.com",
+         "url": "https://www.thefa.com/-/media/thefacom-new/files/competitions/2022-23/emirates-fa-cup/rules-of-the-fa-challenge-cup-2022-23.ashx",
+         "read": "2026-10-06",
+         "line": "29. PROVISIONS FOR THE FINAL ... (f) When the match is drawn after 90 minutes, an extra 30 minutes shall be played ... (g) When the match is drawn after extra time, the winner shall be determined by the taking of kicks from the penalty mark"
+        },
+        {
+         "host": "www.thefa.com",
+         "url": "https://www.thefa.com/-/media/thefacom-new/files/competitions/2025-26/rules/rules-of-the-fa-challenge-cup-2025-26.ashx",
+         "read": "2026-10-06",
+         "line": "87. Where the score is level at full time in ... a Competition Match in the Competition Proper: 87.1. 30 minutes of extra time shall be played ... 87.2. where the score is still level after the 30 minutes of extra time, the winner shall be determined by penalties"
+        },
+        {
+         "host": "www.rsssf.org",
+         "url": "https://www.rsssf.org/tablese/engcuphist.html",
+         "read": "2026-10-06",
+         "line": "2005 Arsenal 0 Manchester United 0* 5-4 pen / 2006 Liverpool 3 West Ham United 3* 3-1 pen / 2022 Liverpool 0 Chelsea 0* 6-5 pen"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  "Scotland": {
+   "ledger": "uk-nl:Scotland",
+   "windows": [
+    {
+     "from": 1990,
+     "kind": "NAMED",
+     "name": "Scottish Cup",
+     "legs": 1,
+     "decider": "penalties",
+     "facts": [
+      {
+       "ref": "uk-nl:Scotland:0",
+       "verified": true,
+       "claim": "A Scottish Cup final was played every season 1990-91 to 2025-26 (none cancelled)",
+       "sources": [
+        {
+         "host": "www.scottishfa.co.uk",
+         "url": "https://www.scottishfa.co.uk/en/scottish-cup-winners",
+         "read": "2026-10-06",
+         "line": "1990-91 Motherwell 4-3 * Dundee United Hampden Park ... 2019-20 Celtic 3-3 (penalty shootout mark) Heart of Midlothian Hampden ... 2025-26 Celtic 3-1 Dunfermline Athletic (every season listed, dashes normalised)"
+        },
+        {
+         "host": "www.rsssf.org",
+         "url": "https://www.rsssf.org/tabless/scotcuphist.html",
+         "read": "2026-10-06",
+         "line": "1991 Motherwell 4 Dundee United 3* ... 2020 Celtic 3 Heart Of Midlothian 3* (4-3 pen) ... 2026 Celtic 3 Dunfermline Athletic 1"
+        }
+       ]
+      },
+      {
+       "ref": "uk-nl:Scotland:2",
+       "verified": true,
+       "claim": "The final is one match with extra time then penalties throughout the window; no final replay since 1978-79",
+       "sources": [
+        {
+         "host": "www.scottishfa.co.uk",
+         "url": "https://www.scottishfa.co.uk/en/scottish-cup-winners",
+         "read": "2026-10-06",
+         "line": "1978-79 Rangers 0-0 Hibernian Hampden Park Replay 0-0 * Hampden Park Second Replay 3-2 ... 1989-90 Aberdeen 0-0 (penalty shootout mark) Celtic ... * After extra time, (mark) Penalty Shootout"
+        },
+        {
+         "host": "www.rsssf.org",
+         "url": "https://www.rsssf.org/tabless/scotcuphist.html",
+         "read": "2026-10-06",
+         "line": "1990 Aberdeen 0 Celtic 0* (9-8 pen) / 2006 Heart of Midlothian 1 Gretna 1* (4-2 pen) / 2025 Aberdeen 1 Celtic 1* (4-3 pen)"
+        },
+        {
+         "host": "www.scottishfa.co.uk",
+         "url": "https://www.scottishfa.co.uk/media/13230/mens-scottish-cup-rules-2025-26.pdf",
+         "read": "2026-10-06",
+         "line": "21.3 When the Final Match is drawn, a further thirty minutes, fifteen minutes each way, of extra time shall be played. Thereafter, if the Match is still undecided, the winner shall be determined by the taking of kicks from the penalty mark"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  "Spain": {
+   "ledger": "continent:Spain",
+   "windows": [
+    {
+     "from": 1990,
+     "kind": "NAMED",
+     "name": "Copa del Rey",
+     "legs": 1,
+     "decider": "penalties",
+     "facts": [
+      {
+       "ref": "continent:Spain:0",
+       "verified": true,
+       "claim": "Copa del Rey final held every season 1990-91 to 2025-26 as a single match",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tabless/spancuphist.html",
+         "read": "2026-10-06",
+         "line": "91 [1991] 29/6 Madrid, Santiago Bernabeu - Atletico de Madrid 1-0 RCD Mallorca [aet, 0-0] ... 120 [2020] 3/4, 2021 Sevilla, La Cartuja - Real Sociedad 1-0 Athletic de Bilbao ... 126 [2026] 18/4 Sevilla, La Cartuja - Real Sociedad 2-2 Atletico de Madrid [aet, 4-3 pen]"
+        },
+        {
+         "host": "espndeportes.espn.com",
+         "url": "https://espndeportes.espn.com/futbol/espana/nota/_/id/15103716/el-historial-de-campeones-de-la-copa-del-rey",
+         "read": "2026-10-06",
+         "line": "La final de 2020 se disputó en 2021 por la pandemia de coronavirus. (table: one result per year 1991 to 2026, e.g. 2026 Real Sociedad v Atletico de Madrid 2-2 (4-3 penalties) La Cartuja)"
+        }
+       ]
+      },
+      {
+       "ref": "continent:Spain:1",
+       "verified": true,
+       "claim": "Copa del Rey final level after 90 minutes: extra time then penalties",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tabless/spancuphist.html",
+         "read": "2026-10-06",
+         "line": "94 [1994] 20/4 Madrid, Vicente Calderon - Real Zaragoza 0-0 RC Celta [aet, 5-4 pen] ; 98 [1998] ... FC Barcelona 1-1 RCD Mallorca [aet, 5-4 pen]"
+        },
+        {
+         "host": "espndeportes.espn.com",
+         "url": "https://espndeportes.espn.com/futbol/espana/nota/_/id/15103716/el-historial-de-campeones-de-la-copa-del-rey",
+         "read": "2026-10-06",
+         "line": "1994 Zaragoza Celta 0-0 Vicente Calderon ; 1998 Barcelona Mallorca 1-1 Mestalla ; 2026 Real Sociedad Atletico de Madrid 2-2 (4-3 penalties) La Cartuja"
+        }
+       ]
+      },
+      {
+       "ref": "continent:Spain:2",
+       "verified": true,
+       "claim": "Cup name 1990-91 to 2025-26",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tabless/spancuphist.html",
+         "read": "2026-10-06",
+         "line": "Copa de S.M. El Rey Don Juan Carlos I (heading over the run of finals that continues to 2026)"
+        },
+        {
+         "host": "rfef.es",
+         "url": "https://rfef.es/sites/default/files/2026-07/5._Torneos_Federacion.pdf",
+         "read": "2026-10-06",
+         "line": "TITULO II BASES DE COMPETICION DEL CAMPEONATO DE ESPANA / COPA DE S.M. EL REY"
+        },
+        {
+         "host": "espndeportes.espn.com",
+         "url": "https://espndeportes.espn.com/futbol/espana/nota/_/id/15103716/el-historial-de-campeones-de-la-copa-del-rey",
+         "read": "2026-10-06",
+         "line": "El historial de campeones de la Copa del Rey (one list 1991 to 2026)"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  "Italy": {
+   "ledger": "continent:Italy",
+   "windows": [
+    {
+     "from": 1990,
+     "to": 2006,
+     "kind": "NAMED",
+     "name": "Coppa Italia",
+     "legs": 2,
+     "decider": "awayGoals",
+     "facts": [
+      {
+       "ref": "continent:Italy:0",
+       "verified": true,
+       "claim": "Cup name across 1990-91 to 2025-26",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesi/italcuphist.html",
+         "read": "2026-10-06",
+         "line": "Coppa Italia Finals (page lists every season 1990/91 to 2025/26 under that name)"
+        },
+        {
+         "host": "numericalcio.it",
+         "url": "https://www.numericalcio.it/coppa-italia/coppa-italia-lalbo-doro-della-manifestazione/",
+         "read": "2026-10-06",
+         "line": "Coppa Italia - L'albo d'oro completo (every season 1990-91 to 2025-26 listed under Coppa Italia)"
+        }
+       ]
+      },
+      {
+       "ref": "continent:Italy:4",
+       "verified": true,
+       "claim": "Every Coppa Italia final 1990-91 to 2006-07 was two legs",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesi/italcuphist.html",
+         "read": "2026-10-06",
+         "line": "1990/91  Roma  Roma - Sampdoria  3-1  1-1 ... 2005/06  Inter  Roma - Inter  1-1  1-3"
+        },
+        {
+         "host": "numericalcio.it",
+         "url": "https://www.numericalcio.it/coppa-italia/coppa-italia-lalbo-doro-della-manifestazione/",
+         "read": "2026-10-06",
+         "line": "1990-91 Roma: 30 maggio 1991 Roma-Sampdoria 3-1 e 9 giugno 1991 Sampdoria-Roma 1-1 ... 2005-06: 3 maggio 2006 Roma-Inter 1-1 e 11 maggio 2006 Inter-Roma 3-1"
+        }
+       ]
+      },
+      {
+       "ref": "continent:Italy:5",
+       "verified": true,
+       "claim": "Two-leg final level on aggregate: decided on away goals; extra time in the second leg",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesi/italcuphist.html",
+         "read": "2026-10-06",
+         "line": "1998/99  Parma  Parma - Fiorentina  1-1  2-2 ; 1996/97  Vicenza  Napoli - Vicenza  1-0  0-3 a.e.t."
+        },
+        {
+         "host": "numericalcio.it",
+         "url": "https://www.numericalcio.it/coppa-italia/coppa-italia-lalbo-doro-della-manifestazione/",
+         "read": "2026-10-06",
+         "line": "1998-99 Parma: 14 aprile 1999 Parma-Fiorentina 1-1 e 5 maggio 1999 Fiorentina-Parma 2-2 ; 1996-97: 8 maggio 1997 Napoli-Vicenza 1-0 e 29 maggio 1997 Vicenza-Napoli 3-0 dts"
+        }
+       ]
+      },
+      {
+       "ref": "continent:Italy:8",
+       "verified": true,
+       "claim": "Coppa Italia held every season 1990-91 to 2025-26, including 2019-20 (final 17 June 2020)",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesi/italcuphist.html",
+         "read": "2026-10-06",
+         "line": "rows for every season 1990/91 to 2025/26; 2019/20  Napoli  Napoli - Juventus  0-0 (4-2 pen.)  Roma (page last updated 29 May 2026)"
+        },
+        {
+         "host": "numericalcio.it",
+         "url": "https://www.numericalcio.it/coppa-italia/coppa-italia-lalbo-doro-della-manifestazione/",
+         "read": "2026-10-06",
+         "line": "rows for every season 1990-91 to 2025-26; 2019-20 Napoli: 17 giugno 2020 Napoli-Juventus 0-0 (4-2 dcr)"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 2007,
+     "kind": "NAMED",
+     "name": "Coppa Italia",
+     "legs": 1,
+     "decider": "penalties",
+     "facts": [
+      {
+       "ref": "continent:Italy:0",
+       "verified": true,
+       "claim": "Cup name across 1990-91 to 2025-26",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesi/italcuphist.html",
+         "read": "2026-10-06",
+         "line": "Coppa Italia Finals (page lists every season 1990/91 to 2025/26 under that name)"
+        },
+        {
+         "host": "numericalcio.it",
+         "url": "https://www.numericalcio.it/coppa-italia/coppa-italia-lalbo-doro-della-manifestazione/",
+         "read": "2026-10-06",
+         "line": "Coppa Italia - L'albo d'oro completo (every season 1990-91 to 2025-26 listed under Coppa Italia)"
+        }
+       ]
+      },
+      {
+       "ref": "continent:Italy:3",
+       "verified": true,
+       "claim": "Last Coppa Italia final played over two legs, first played as a single match",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesi/italcuphist.html",
+         "read": "2026-10-06",
+         "line": "2006/07  Roma  Roma - Inter  6-2  1-2 ; 2007/08  Roma  Roma - Inter  2-1  Roma"
+        },
+        {
+         "host": "goal.com",
+         "url": "https://www.goal.com/it/liste/perche-la-finale-di-coppa-italia-si-gioca-in-casa-della-lazio-e-quanti-tifosi-biancocelesti-e-dell-inter-ci-saranno/blt386d89c53c4c2de0",
+         "read": "2026-10-06",
+         "line": "da quando cioè - era l'edizione 2007/2008 - la finale si gioca in gara unica"
+        },
+        {
+         "host": "numericalcio.it",
+         "url": "https://www.numericalcio.it/coppa-italia/coppa-italia-lalbo-doro-della-manifestazione/",
+         "read": "2026-10-06",
+         "line": "2006-07 Roma: 9 maggio 2007 Roma-Inter 6-2 e 17 maggio 2007 Inter-Roma 2-1 ; 2007-08 Roma: 24 maggio 2008 Roma-Inter 2-1"
+        }
+       ]
+      },
+      {
+       "ref": "continent:Italy:6",
+       "verified": true,
+       "claim": "Single match final level: extra time then penalties",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesi/italcuphist.html",
+         "read": "2026-10-06",
+         "line": "2008/09  Lazio  Lazio - Sampdoria  1-1 (6-5 pen.)  Roma ; 2019/20  Napoli  Napoli - Juventus  0-0 (4-2 pen.)  Roma"
+        },
+        {
+         "host": "numericalcio.it",
+         "url": "https://www.numericalcio.it/coppa-italia/coppa-italia-lalbo-doro-della-manifestazione/",
+         "read": "2026-10-06",
+         "line": "13 maggio 2009 Lazio-Sampdoria 1-1 dts (6-5 dcr) ; 17 giugno 2020 Napoli-Juventus 0-0 (4-2 dcr)"
+        }
+       ]
+      },
+      {
+       "ref": "continent:Italy:8",
+       "verified": true,
+       "claim": "Coppa Italia held every season 1990-91 to 2025-26, including 2019-20 (final 17 June 2020)",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesi/italcuphist.html",
+         "read": "2026-10-06",
+         "line": "rows for every season 1990/91 to 2025/26; 2019/20  Napoli  Napoli - Juventus  0-0 (4-2 pen.)  Roma (page last updated 29 May 2026)"
+        },
+        {
+         "host": "numericalcio.it",
+         "url": "https://www.numericalcio.it/coppa-italia/coppa-italia-lalbo-doro-della-manifestazione/",
+         "read": "2026-10-06",
+         "line": "rows for every season 1990-91 to 2025-26; 2019-20 Napoli: 17 giugno 2020 Napoli-Juventus 0-0 (4-2 dcr)"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  "Germany": {
+   "ledger": "continent:Germany",
+   "windows": [
+    {
+     "from": 1990,
+     "kind": "NAMED",
+     "name": "DFB-Pokal",
+     "legs": 1,
+     "decider": "penalties",
+     "facts": [
+      {
+       "ref": "continent:Germany:0",
+       "verified": true,
+       "claim": "DFB-Pokal finals 1990-91 to 2025-26, one match each season, extra time and penalties when level",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesd/duitcuphist.html",
+         "read": "2026-10-06",
+         "line": "1990/91 SV Werder Bremen 1-1 1.FC Koln [aet, 4-3 pen] ... 1998/99 SV Werder Bremen 1-1 FC Bayern Munchen [aet, 5-4 pen] ... 2025/26 FC Bayern Munchen 3-0 VfB Stuttgart"
+        },
+        {
+         "host": "dfb.de",
+         "url": "https://www.dfb.de/news/40-jahre-berlin-das-dfb-pokalfinale-feiert-jubilaeum",
+         "read": "2026-10-06",
+         "line": "Entscheidungen nach Elfmeterschießen: Viermal (1991, 1992, 2016 und 2022)"
+        },
+        {
+         "host": "datencenter.dfb.de",
+         "url": "https://datencenter.dfb.de/datencenter/dfb-pokal/1998-1999/finale/bayern-muenchen-sv-werder-bremen-560158",
+         "read": "2026-10-06",
+         "line": "Bayern München - Werder Bremen, 5:6 i.E., DFB-Pokal 1998/99 Finale (page title)"
+        }
+       ]
+      },
+      {
+       "ref": "continent:Germany:1",
+       "verified": true,
+       "claim": "Cup name 1990-91 to 2025-26",
+       "sources": [
+        {
+         "host": "datencenter.dfb.de",
+         "url": "https://datencenter.dfb.de/datencenter/dfb-pokal/1998-1999/finale/bayern-muenchen-sv-werder-bremen-560158",
+         "read": "2026-10-06",
+         "line": "Bayern München - Werder Bremen, 5:6 i.E., DFB-Pokal 1998/99 Finale"
+        },
+        {
+         "host": "zdf.de",
+         "url": "https://www.zdf.de/video/kurzfassungen/fussball-livestreams-highlights-ergebnisse-100/fc-bayern-muenchen-vfb-stuttgart-finale-zusammenfassung-saison-2025-26-100",
+         "read": "2026-10-06",
+         "line": "Bayern München schlägt Stuttgart 3:0 und ist DFB-Pokalsieger"
+        },
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesd/duitcuphist.html",
+         "read": "2026-10-06",
+         "line": "(West) Germany - List of Cup Finals (DFB Pokal rows 1990/91 to 2025/26)"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  "France": {
+   "ledger": "continent:France",
+   "windows": [
+    {
+     "from": 1990,
+     "to": 1990,
+     "kind": "NAMED",
+     "name": "Coupe de France",
+     "legs": 1,
+     "decider": "penalties",
+     "facts": [
+      {
+       "ref": "continent:France:1",
+       "verified": true,
+       "claim": "Cup name 1990-91 to 2025-26",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesf/francuphist.html",
+         "read": "2026-10-06",
+         "line": "French Cup finals list, every year 1991 to 2026 under one competition"
+        },
+        {
+         "host": "footmercato.net",
+         "url": "https://www.footmercato.net/france/coupe-de-france/palmares",
+         "read": "2026-10-06",
+         "line": "Palmarès Coupe de France (one list 1990/1991 to 2025/2026)"
+        }
+       ]
+      },
+      {
+       "ref": "continent:France:2",
+       "verified": true,
+       "claim": "Coupe de France held every season 1990-91 to 2025-26 except 1991-92",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesf/francuphist.html",
+         "read": "2026-10-06",
+         "line": "1991 AS Monaco 1-0 Olympique de Marseille ; 1992 no final (see below) ; 1993 Paris Saint-Germain FC 3-0 FC Nantes ... 2026 Racing Club de Lens 3-1 OGC Nice"
+        },
+        {
+         "host": "footmercato.net",
+         "url": "https://www.footmercato.net/france/coupe-de-france/palmares",
+         "read": "2026-10-06",
+         "line": "1990/1991: AS Monaco, Olympique de Marseille ; (no 1991/1992 row) ; 1992/1993: Paris Saint-Germain, FC Nantes ... 2025/2026: Racing Club de Lens, OGC Nice"
+        }
+       ]
+      },
+      {
+       "ref": "continent:France:4",
+       "verified": true,
+       "claim": "Coupe de France final level: extra time then penalties",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesf/francuphist.html",
+         "read": "2026-10-06",
+         "line": "2019 Stade Rennais UC 2-2 Paris Saint-Germain FC [aet, 6-5 pen]"
+        },
+        {
+         "host": "france24.com",
+         "url": "https://www.france24.com/fr/20190428-football-coupe-france-stade-rennais-rennes-psg-victoire-resultat",
+         "read": "2026-10-06",
+         "line": "Les deux équipes n'avaient pas pu se départager après le temps réglementaire et la prolongation (2-2). ... 6 tab à 5"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 1991,
+     "to": 1991,
+     "kind": "NONE",
+     "why": "stopped after the Furiani disaster in May 1992, no final and no winner",
+     "facts": [
+      {
+       "ref": "continent:France:0",
+       "verified": true,
+       "claim": "No Coupe de France winner in 1991-92",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesf/francuphist.html",
+         "read": "2026-10-06",
+         "line": "1992 no final (see below) ... No final was held in 1992 because of the tragedy at Furiani stadium in Bastia, just before the semi-final Sporting Club de Bastia - Olympique de Marseille."
+        },
+        {
+         "host": "franceinfo.fr",
+         "url": "https://www.franceinfo.fr/france/corse/corse/5-mai-1992-furiani-retour-sur-un-drame-a-jamais-grave-dans-la-memoire-du-sport-francais_5105425.html",
+         "read": "2026-10-06",
+         "line": "D'abord, l'arrêt de la Coupe de France 1992. Une décision aussi évidente qu'historique, puisque jamais elle n'avait été annulée, pas même lors de la Seconde Guerre mondiale."
+        }
+       ]
+      },
+      {
+       "ref": "continent:France:2",
+       "verified": true,
+       "claim": "Coupe de France held every season 1990-91 to 2025-26 except 1991-92",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesf/francuphist.html",
+         "read": "2026-10-06",
+         "line": "1991 AS Monaco 1-0 Olympique de Marseille ; 1992 no final (see below) ; 1993 Paris Saint-Germain FC 3-0 FC Nantes ... 2026 Racing Club de Lens 3-1 OGC Nice"
+        },
+        {
+         "host": "footmercato.net",
+         "url": "https://www.footmercato.net/france/coupe-de-france/palmares",
+         "read": "2026-10-06",
+         "line": "1990/1991: AS Monaco, Olympique de Marseille ; (no 1991/1992 row) ; 1992/1993: Paris Saint-Germain, FC Nantes ... 2025/2026: Racing Club de Lens, OGC Nice"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 1992,
+     "kind": "NAMED",
+     "name": "Coupe de France",
+     "legs": 1,
+     "decider": "penalties",
+     "facts": [
+      {
+       "ref": "continent:France:1",
+       "verified": true,
+       "claim": "Cup name 1990-91 to 2025-26",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesf/francuphist.html",
+         "read": "2026-10-06",
+         "line": "French Cup finals list, every year 1991 to 2026 under one competition"
+        },
+        {
+         "host": "footmercato.net",
+         "url": "https://www.footmercato.net/france/coupe-de-france/palmares",
+         "read": "2026-10-06",
+         "line": "Palmarès Coupe de France (one list 1990/1991 to 2025/2026)"
+        }
+       ]
+      },
+      {
+       "ref": "continent:France:2",
+       "verified": true,
+       "claim": "Coupe de France held every season 1990-91 to 2025-26 except 1991-92",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesf/francuphist.html",
+         "read": "2026-10-06",
+         "line": "1991 AS Monaco 1-0 Olympique de Marseille ; 1992 no final (see below) ; 1993 Paris Saint-Germain FC 3-0 FC Nantes ... 2026 Racing Club de Lens 3-1 OGC Nice"
+        },
+        {
+         "host": "footmercato.net",
+         "url": "https://www.footmercato.net/france/coupe-de-france/palmares",
+         "read": "2026-10-06",
+         "line": "1990/1991: AS Monaco, Olympique de Marseille ; (no 1991/1992 row) ; 1992/1993: Paris Saint-Germain, FC Nantes ... 2025/2026: Racing Club de Lens, OGC Nice"
+        }
+       ]
+      },
+      {
+       "ref": "continent:France:4",
+       "verified": true,
+       "claim": "Coupe de France final level: extra time then penalties",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesf/francuphist.html",
+         "read": "2026-10-06",
+         "line": "2019 Stade Rennais UC 2-2 Paris Saint-Germain FC [aet, 6-5 pen]"
+        },
+        {
+         "host": "france24.com",
+         "url": "https://www.france24.com/fr/20190428-football-coupe-france-stade-rennais-rennes-psg-victoire-resultat",
+         "read": "2026-10-06",
+         "line": "Les deux équipes n'avaient pas pu se départager après le temps réglementaire et la prolongation (2-2). ... 6 tab à 5"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  "Netherlands": {
+   "ledger": "uk-nl:Netherlands",
+   "windows": [
+    {
+     "from": 1990,
+     "to": 2008,
+     "kind": "NAMED",
+     "name": "KNVB Cup",
+     "legs": 1,
+     "decider": "penalties",
+     "facts": [
+      {
+       "ref": "uk-nl:Netherlands:0",
+       "verified": true,
+       "claim": "A KNVB Cup final was played every season 1990-91 to 2025-26 except 2019-20",
+       "sources": [
+        {
+         "host": "www.rsssf.org",
+         "url": "https://www.rsssf.org/tablesn/nedcuphist.html",
+         "read": "2026-10-06",
+         "line": "1991 Feyenoord - B.V.V. Den Bosch abd ... 2019 Ajax - Willem II 4-0 / 2020 competition abandoned [*4] / 2021 Ajax - Vitesse 2-1 ... 2026 A.Z. - N.E.C. 5-1"
+        },
+        {
+         "host": "historiek.net",
+         "url": "https://historiek.net/knvb-beker-geschiedenis-winnaars-dennenappel/102485/",
+         "read": "2026-10-06",
+         "line": "Jaar | Winnaar | 2026 AZ | 2025 Go Ahead Eagles | ... | 2021 Ajax | 2020 Finale tussen FC Utrecht en Feyenoord niet gespeeld wegens corona | 2019 Ajax | ... | 1991 Feyenoord | 1990 PSV (page modified 2026-04-20)"
+        }
+       ]
+      },
+      {
+       "ref": "uk-nl:Netherlands:6",
+       "verified": true,
+       "claim": "A level final goes to extra time and then penalties (no replay) in the window",
+       "sources": [
+        {
+         "host": "www.rsssf.org",
+         "url": "https://www.rsssf.org/tablesn/nedcuphist.html",
+         "read": "2026-10-06",
+         "line": "2001 F.C. Twente - P.S.V. 0-0 (aet) [4-3 pen] / 2007 Ajax - A.Z. 1-1 (aet) [8-7 pen] / 2009 Heerenveen - F.C. Twente 2-2 (aet) [5-4 pen] / 2023 P.S.V. - Ajax 1-1 (aet) [3-2 pen] / 2025 Go Ahead Eagles - A.Z. 1-1 (aet) [4-2 pen]"
+        },
+        {
+         "host": "www.voetbal.com",
+         "url": "https://www.voetbal.com/alle_wedstrijden/ned-knvb-beker-2024-2025/",
+         "read": "2026-10-06",
+         "line": "Finale 21.04.2025 AZ Alkmaar 18:00 2:4 n.s. Go Ahead Eagles (n.s. = na strafschoppen)"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 2009,
+     "to": 2009,
+     "kind": "NAMED",
+     "name": "KNVB Cup",
+     "legs": 2,
+     "facts": [
+      {
+       "ref": "uk-nl:Netherlands:0",
+       "verified": true,
+       "claim": "A KNVB Cup final was played every season 1990-91 to 2025-26 except 2019-20",
+       "sources": [
+        {
+         "host": "www.rsssf.org",
+         "url": "https://www.rsssf.org/tablesn/nedcuphist.html",
+         "read": "2026-10-06",
+         "line": "1991 Feyenoord - B.V.V. Den Bosch abd ... 2019 Ajax - Willem II 4-0 / 2020 competition abandoned [*4] / 2021 Ajax - Vitesse 2-1 ... 2026 A.Z. - N.E.C. 5-1"
+        },
+        {
+         "host": "historiek.net",
+         "url": "https://historiek.net/knvb-beker-geschiedenis-winnaars-dennenappel/102485/",
+         "read": "2026-10-06",
+         "line": "Jaar | Winnaar | 2026 AZ | 2025 Go Ahead Eagles | ... | 2021 Ajax | 2020 Finale tussen FC Utrecht en Feyenoord niet gespeeld wegens corona | 2019 Ajax | ... | 1991 Feyenoord | 1990 PSV (page modified 2026-04-20)"
+        }
+       ]
+      },
+      {
+       "ref": "uk-nl:Netherlands:4",
+       "verified": true,
+       "claim": "The 2009-10 final was played over two legs: Ajax 2-0 Feyenoord (25 April 2010, Amsterdam) and Feyenoord 1-4 Ajax (6 May 2010, De Kuip); Ajax won 6-1 on aggregate",
+       "sources": [
+        {
+         "host": "www.rsssf.org",
+         "url": "https://www.rsssf.org/tablesn/nedcuphist.html",
+         "read": "2026-10-06",
+         "line": "2010 Ajax - Feyenoord 2-0 [at Ajax] / 2nd Feyenoord - Ajax 1-4 [at Feyenoord]"
+        },
+        {
+         "host": "www.voetbal.com",
+         "url": "https://www.voetbal.com/alle_wedstrijden/ned-knvb-beker-2009-2010/",
+         "read": "2026-10-06",
+         "line": "Finale Heenwedstrijd 25.04.2010 Totaal: 6:1 ... AFC Ajax 2:0 Feyenoord ... Finale Returnwedstr 06.05.2010 Totaal: 1:6"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 2010,
+     "to": 2018,
+     "kind": "NAMED",
+     "name": "KNVB Cup",
+     "legs": 1,
+     "decider": "penalties",
+     "facts": [
+      {
+       "ref": "uk-nl:Netherlands:0",
+       "verified": true,
+       "claim": "A KNVB Cup final was played every season 1990-91 to 2025-26 except 2019-20",
+       "sources": [
+        {
+         "host": "www.rsssf.org",
+         "url": "https://www.rsssf.org/tablesn/nedcuphist.html",
+         "read": "2026-10-06",
+         "line": "1991 Feyenoord - B.V.V. Den Bosch abd ... 2019 Ajax - Willem II 4-0 / 2020 competition abandoned [*4] / 2021 Ajax - Vitesse 2-1 ... 2026 A.Z. - N.E.C. 5-1"
+        },
+        {
+         "host": "historiek.net",
+         "url": "https://historiek.net/knvb-beker-geschiedenis-winnaars-dennenappel/102485/",
+         "read": "2026-10-06",
+         "line": "Jaar | Winnaar | 2026 AZ | 2025 Go Ahead Eagles | ... | 2021 Ajax | 2020 Finale tussen FC Utrecht en Feyenoord niet gespeeld wegens corona | 2019 Ajax | ... | 1991 Feyenoord | 1990 PSV (page modified 2026-04-20)"
+        }
+       ]
+      },
+      {
+       "ref": "uk-nl:Netherlands:6",
+       "verified": true,
+       "claim": "A level final goes to extra time and then penalties (no replay) in the window",
+       "sources": [
+        {
+         "host": "www.rsssf.org",
+         "url": "https://www.rsssf.org/tablesn/nedcuphist.html",
+         "read": "2026-10-06",
+         "line": "2001 F.C. Twente - P.S.V. 0-0 (aet) [4-3 pen] / 2007 Ajax - A.Z. 1-1 (aet) [8-7 pen] / 2009 Heerenveen - F.C. Twente 2-2 (aet) [5-4 pen] / 2023 P.S.V. - Ajax 1-1 (aet) [3-2 pen] / 2025 Go Ahead Eagles - A.Z. 1-1 (aet) [4-2 pen]"
+        },
+        {
+         "host": "www.voetbal.com",
+         "url": "https://www.voetbal.com/alle_wedstrijden/ned-knvb-beker-2024-2025/",
+         "read": "2026-10-06",
+         "line": "Finale 21.04.2025 AZ Alkmaar 18:00 2:4 n.s. Go Ahead Eagles (n.s. = na strafschoppen)"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 2019,
+     "to": 2019,
+     "kind": "NONE",
+     "why": "the final was postponed and then cancelled, no winner was named",
+     "facts": [
+      {
+       "ref": "uk-nl:Netherlands:0",
+       "verified": true,
+       "claim": "A KNVB Cup final was played every season 1990-91 to 2025-26 except 2019-20",
+       "sources": [
+        {
+         "host": "www.rsssf.org",
+         "url": "https://www.rsssf.org/tablesn/nedcuphist.html",
+         "read": "2026-10-06",
+         "line": "1991 Feyenoord - B.V.V. Den Bosch abd ... 2019 Ajax - Willem II 4-0 / 2020 competition abandoned [*4] / 2021 Ajax - Vitesse 2-1 ... 2026 A.Z. - N.E.C. 5-1"
+        },
+        {
+         "host": "historiek.net",
+         "url": "https://historiek.net/knvb-beker-geschiedenis-winnaars-dennenappel/102485/",
+         "read": "2026-10-06",
+         "line": "Jaar | Winnaar | 2026 AZ | 2025 Go Ahead Eagles | ... | 2021 Ajax | 2020 Finale tussen FC Utrecht en Feyenoord niet gespeeld wegens corona | 2019 Ajax | ... | 1991 Feyenoord | 1990 PSV (page modified 2026-04-20)"
+        }
+       ]
+      },
+      {
+       "ref": "uk-nl:Netherlands:1",
+       "verified": true,
+       "claim": "The 2019-20 final (Feyenoord v FC Utrecht, 19 April 2020) was postponed, then cancelled; no winner was named",
+       "sources": [
+        {
+         "host": "nos.nl",
+         "url": "https://nos.nl/artikel/2327400-bekerfinale-tussen-feyenoord-en-fc-utrecht-uitgesteld",
+         "read": "2026-10-06",
+         "line": "De oorspronkelijke datum van 19 april voor het duel tussen Feyenoord en FC Utrecht ... De KNVB heeft besloten om een nieuwe datum te zoeken voor de bekerfinale. (dinsdag 17 maart 2020)"
+        },
+        {
+         "host": "www.vi.nl",
+         "url": "https://www.vi.nl/nieuws/streep-door-bekerfinale-doet-feyenoord-pijn-maar-het-begrip-overheerst",
+         "read": "2026-10-06",
+         "line": "Er is immers ook een streep gegaan door de KNVB-bekerfinale, waarvoor de Rotterdammers zich hadden geplaatst. Er komt geen nieuwe datum. (24 april 2020)"
+        },
+        {
+         "host": "nos.nl",
+         "url": "https://nos.nl/l/2337725",
+         "read": "2026-10-06",
+         "line": "FC Utrecht is er morrend mee akkoord gegaan dat er dit seizoen geen bekerfinale wordt gespeeld. (18 June 2020; Feyenoord got the Europa League group stage ticket, Utrecht 600,000 euros from the KNVB solidarity fund)"
+        },
+        {
+         "host": "www.rsssf.org",
+         "url": "https://www.rsssf.org/tablesn/nedcuphist.html",
+         "read": "2026-10-06",
+         "line": "[*4] Competition abandoned due to Covid-19 pandemic with only the final between Feyenoord and F.C. Utrecht left to be played."
+        },
+        {
+         "host": "www.voetbal.com",
+         "url": "https://www.voetbal.com/wedstrijdverslag/knvb-beker-2019-2020-finale-fc-utrecht-feyenoord/",
+         "read": "2026-10-06",
+         "line": "Finale | zon, 19.04.2020 | FC Utrecht - Feyenoord -:- (no score)"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 2020,
+     "kind": "NAMED",
+     "name": "KNVB Cup",
+     "legs": 1,
+     "decider": "penalties",
+     "facts": [
+      {
+       "ref": "uk-nl:Netherlands:0",
+       "verified": true,
+       "claim": "A KNVB Cup final was played every season 1990-91 to 2025-26 except 2019-20",
+       "sources": [
+        {
+         "host": "www.rsssf.org",
+         "url": "https://www.rsssf.org/tablesn/nedcuphist.html",
+         "read": "2026-10-06",
+         "line": "1991 Feyenoord - B.V.V. Den Bosch abd ... 2019 Ajax - Willem II 4-0 / 2020 competition abandoned [*4] / 2021 Ajax - Vitesse 2-1 ... 2026 A.Z. - N.E.C. 5-1"
+        },
+        {
+         "host": "historiek.net",
+         "url": "https://historiek.net/knvb-beker-geschiedenis-winnaars-dennenappel/102485/",
+         "read": "2026-10-06",
+         "line": "Jaar | Winnaar | 2026 AZ | 2025 Go Ahead Eagles | ... | 2021 Ajax | 2020 Finale tussen FC Utrecht en Feyenoord niet gespeeld wegens corona | 2019 Ajax | ... | 1991 Feyenoord | 1990 PSV (page modified 2026-04-20)"
+        }
+       ]
+      },
+      {
+       "ref": "uk-nl:Netherlands:6",
+       "verified": true,
+       "claim": "A level final goes to extra time and then penalties (no replay) in the window",
+       "sources": [
+        {
+         "host": "www.rsssf.org",
+         "url": "https://www.rsssf.org/tablesn/nedcuphist.html",
+         "read": "2026-10-06",
+         "line": "2001 F.C. Twente - P.S.V. 0-0 (aet) [4-3 pen] / 2007 Ajax - A.Z. 1-1 (aet) [8-7 pen] / 2009 Heerenveen - F.C. Twente 2-2 (aet) [5-4 pen] / 2023 P.S.V. - Ajax 1-1 (aet) [3-2 pen] / 2025 Go Ahead Eagles - A.Z. 1-1 (aet) [4-2 pen]"
+        },
+        {
+         "host": "www.voetbal.com",
+         "url": "https://www.voetbal.com/alle_wedstrijden/ned-knvb-beker-2024-2025/",
+         "read": "2026-10-06",
+         "line": "Finale 21.04.2025 AZ Alkmaar 18:00 2:4 n.s. Go Ahead Eagles (n.s. = na strafschoppen)"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  "Portugal": {
+   "ledger": "continent:Portugal",
+   "windows": [
+    {
+     "from": 1990,
+     "to": 1999,
+     "kind": "NAMED",
+     "name": "Taça de Portugal",
+     "legs": 1,
+     "decider": "replay",
+     "facts": [
+      {
+       "ref": "continent:Portugal:0",
+       "verified": true,
+       "claim": "Taça de Portugal finals 1990-91 to 2024-25: one per season, replays and penalties",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesp/portcuphist.html",
+         "read": "2026-10-06",
+         "line": "1993/94 FC Porto 0-0 2-1 Sporting CP [both matches aet] ; 1999/00 FC Porto 1-1 2-0 Sporting CP [1st match aet] ; 2014/15 Sporting CP 2-2 SC Braga [aet, 3-1 pen] ; 2015/16 SC Braga 2-2 FC Porto [aet, 4-2 pen] ; 2018/19 Sporting CP 2-2 FC Porto [aet, 5-4 pen]"
+        },
+        {
+         "host": "abola.pt",
+         "url": "https://www.abola.pt/noticias/taca-de-portugal-as-finais-e-todos-os-vencedores-2023081007023439433",
+         "read": "2026-10-06",
+         "line": "1993/1994: FC PORTO-Sporting 2-1 (ap)* ; 1999/2000: FC PORTO-Sporting 2-0* ; *Finalíssima ; 2014/2015: SPORTING-SC Braga 2-2 (3-1 gp) ; 2015/2016: SC BRAGA-FC Porto 2-2 (4-2 gp) ; 2018/2019: SPORTING-FC Porto 2-2 (5-4 gp)"
+        }
+       ]
+      },
+      {
+       "ref": "continent:Portugal:2",
+       "verified": true,
+       "claim": "Cup name 1990-91 to 2025-26",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesp/portcuphist.html",
+         "read": "2026-10-06",
+         "line": "Portugal - List of Cup Winners ; Taça de Portugal 1938-now"
+        },
+        {
+         "host": "abola.pt",
+         "url": "https://www.abola.pt/noticias/taca-de-portugal-as-finais-e-todos-os-vencedores-2023081007023439433",
+         "read": "2026-10-06",
+         "line": "Taça de Portugal: as finais e todos os vencedores"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 2000,
+     "to": 2013,
+     "kind": "NAMED",
+     "name": "Taça de Portugal",
+     "legs": 1,
+     "why": "no final was level after extra time, and the season the replay gave way to penalties is not two sourced",
+     "facts": [
+      {
+       "ref": "continent:Portugal:0",
+       "verified": true,
+       "claim": "Taça de Portugal finals 1990-91 to 2024-25: one per season, replays and penalties",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesp/portcuphist.html",
+         "read": "2026-10-06",
+         "line": "1993/94 FC Porto 0-0 2-1 Sporting CP [both matches aet] ; 1999/00 FC Porto 1-1 2-0 Sporting CP [1st match aet] ; 2014/15 Sporting CP 2-2 SC Braga [aet, 3-1 pen] ; 2015/16 SC Braga 2-2 FC Porto [aet, 4-2 pen] ; 2018/19 Sporting CP 2-2 FC Porto [aet, 5-4 pen]"
+        },
+        {
+         "host": "abola.pt",
+         "url": "https://www.abola.pt/noticias/taca-de-portugal-as-finais-e-todos-os-vencedores-2023081007023439433",
+         "read": "2026-10-06",
+         "line": "1993/1994: FC PORTO-Sporting 2-1 (ap)* ; 1999/2000: FC PORTO-Sporting 2-0* ; *Finalíssima ; 2014/2015: SPORTING-SC Braga 2-2 (3-1 gp) ; 2015/2016: SC BRAGA-FC Porto 2-2 (4-2 gp) ; 2018/2019: SPORTING-FC Porto 2-2 (5-4 gp)"
+        }
+       ]
+      },
+      {
+       "ref": "continent:Portugal:2",
+       "verified": true,
+       "claim": "Cup name 1990-91 to 2025-26",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesp/portcuphist.html",
+         "read": "2026-10-06",
+         "line": "Portugal - List of Cup Winners ; Taça de Portugal 1938-now"
+        },
+        {
+         "host": "abola.pt",
+         "url": "https://www.abola.pt/noticias/taca-de-portugal-as-finais-e-todos-os-vencedores-2023081007023439433",
+         "read": "2026-10-06",
+         "line": "Taça de Portugal: as finais e todos os vencedores"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 2014,
+     "kind": "NAMED",
+     "name": "Taça de Portugal",
+     "legs": 1,
+     "decider": "penalties",
+     "facts": [
+      {
+       "ref": "continent:Portugal:0",
+       "verified": true,
+       "claim": "Taça de Portugal finals 1990-91 to 2024-25: one per season, replays and penalties",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesp/portcuphist.html",
+         "read": "2026-10-06",
+         "line": "1993/94 FC Porto 0-0 2-1 Sporting CP [both matches aet] ; 1999/00 FC Porto 1-1 2-0 Sporting CP [1st match aet] ; 2014/15 Sporting CP 2-2 SC Braga [aet, 3-1 pen] ; 2015/16 SC Braga 2-2 FC Porto [aet, 4-2 pen] ; 2018/19 Sporting CP 2-2 FC Porto [aet, 5-4 pen]"
+        },
+        {
+         "host": "abola.pt",
+         "url": "https://www.abola.pt/noticias/taca-de-portugal-as-finais-e-todos-os-vencedores-2023081007023439433",
+         "read": "2026-10-06",
+         "line": "1993/1994: FC PORTO-Sporting 2-1 (ap)* ; 1999/2000: FC PORTO-Sporting 2-0* ; *Finalíssima ; 2014/2015: SPORTING-SC Braga 2-2 (3-1 gp) ; 2015/2016: SC BRAGA-FC Porto 2-2 (4-2 gp) ; 2018/2019: SPORTING-FC Porto 2-2 (5-4 gp)"
+        }
+       ]
+      },
+      {
+       "ref": "continent:Portugal:1",
+       "verified": true,
+       "claim": "Taça de Portugal 2025-26 final held",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesp/portcuphist.html",
+         "read": "2026-10-06",
+         "line": "2025/26 SCU Torreense 2-1 Sporting CP [aet]"
+        },
+        {
+         "host": "observador.pt",
+         "url": "https://observador.pt/liveblogs/sporting-torreense-temporada-chega-ao-fim-com-duelo-inedito-no-estadio-nacional/",
+         "read": "2026-10-06",
+         "line": "Torreense vence Sporting no prolongamento e faz história com a conquista da Taça de Portugal (headline)"
+        },
+        {
+         "host": "rtp.pt",
+         "url": "https://www.rtp.pt/noticias/taca-de-portugal/taca-de-portugal-sporting-torreense_d1743202",
+         "read": "2026-10-06",
+         "line": "\"Carnaval\" no Jamor. Torreense faz história e conquista a Taça de Portugal (headline)"
+        }
+       ]
+      },
+      {
+       "ref": "continent:Portugal:2",
+       "verified": true,
+       "claim": "Cup name 1990-91 to 2025-26",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesp/portcuphist.html",
+         "read": "2026-10-06",
+         "line": "Portugal - List of Cup Winners ; Taça de Portugal 1938-now"
+        },
+        {
+         "host": "abola.pt",
+         "url": "https://www.abola.pt/noticias/taca-de-portugal-as-finais-e-todos-os-vencedores-2023081007023439433",
+         "read": "2026-10-06",
+         "line": "Taça de Portugal: as finais e todos os vencedores"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  "Turkey": {
+   "ledger": "rest:Turkey",
+   "windows": [
+    {
+     "from": 1990,
+     "to": 1990,
+     "kind": "NAMED",
+     "name": "Federation Cup",
+     "legs": 1,
+     "facts": [
+      {
+       "ref": "rest:Turkey:0",
+       "verified": true,
+       "claim": "Turkish Cup held every season 1990/91 to 2025/26 (a final every season)",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablest/turkcuphist.html",
+         "read": "2026-10-06",
+         "line": "[1990/91] Galatasaray 3-1 Ankaragucu ... [2024/25] Galatasaray 3-0 Trabzonspor (one final per season, no gap)"
+        },
+        {
+         "host": "tff.org",
+         "url": "https://www.tff.org/default.aspx?pageID=267&ftxtID=25175",
+         "read": "2026-10-06",
+         "line": "1990-91 Galatasaray - Ankaragucu 3-1 (Uzatmada) ... 2014-15 Galatasaray - Bursaspor 3-2 (rows read for 1990-91 to 2014-15)"
+        },
+        {
+         "host": "aspor.com.tr",
+         "url": "https://www.aspor.com.tr/turkiye-kupasi/2026/09/29/iste-ziraat-turkiye-kupasini-evine-goturen-son-10-kulup",
+         "read": "2026-10-06",
+         "line": "2016-17 Konyaspor ... 2024-25 Galatasaray, 2025-26 Trabzonspor"
+        },
+        {
+         "host": "tff.org",
+         "url": "http://www.tff.org/default.aspx?pageID=411",
+         "read": "2026-10-06",
+         "line": "2015-2016: GALATASARAY-Fenerbahce 1-0; 2016-2017: KONYASPOR - Basaksehir 0-0 (4-1 Pen.)"
+        }
+       ]
+      },
+      {
+       "ref": "rest:Turkey:2",
+       "verified": true,
+       "claim": "1990/91 final was a single match (Galatasaray 3-1 Ankaragucu)",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablest/turkcuphist.html",
+         "read": "2026-10-06",
+         "line": "[1990/91] Galatasaray 3-1 Ankaragucu"
+        },
+        {
+         "host": "tff.org",
+         "url": "https://www.tff.org/default.aspx?pageID=267&ftxtID=25175",
+         "read": "2026-10-06",
+         "line": "1990-91 Galatasaray - Ankaragucu 3-1 (Uzatmada)"
+        }
+       ]
+      },
+      {
+       "ref": "rest:Turkey:4",
+       "verified": true,
+       "claim": "Cup was named Federasyon Kupasi (Federation Cup) from 1980-81 to 1991-92 and Turkiye Kupasi again from 1992-93",
+       "sources": [
+        {
+         "host": "tff.org",
+         "url": "https://www.tff.org/default.aspx?pageID=267&ftxtID=25175",
+         "read": "2026-10-06",
+         "line": "1980-81 sezonunda adi Federasyon Kupasi olarak degistirilmis, 1992-93 sezonundan sonra tekrar eski ismi Turkiye Kupasi'na donulmustur."
+        },
+        {
+         "host": "tff.org",
+         "url": "http://www.tff.org/default.aspx?pageID=411",
+         "read": "2026-10-06",
+         "line": "1980-1981 sezonunda Federasyon Kupasi olarak degistirildi. Ancak 1992-1993 sezonundan itibaren tekrar Turkiye Kupasi adi verilirken"
+        },
+        {
+         "host": "macanilari.com",
+         "url": "https://www.macanilari.com/29.Nisan.1992_1991-1992.Sezonu.Federasyon.Kupasi.Final.2.Maci.Trabzonspor.5-1.Bursaspor-199119928608--.html",
+         "read": "2026-10-06",
+         "line": "Trabzonspor 5-1 Bursaspor 29 Nisan 1992 1991-1992 Sezonu Federasyon Kupasi Final 2. Maci"
+        },
+        {
+         "host": "macanilari.com",
+         "url": "https://www.macanilari.com/07.Nisan.1993_1992-1993.Sezonu.Turkiye.Kupasi.Final.2.Maci.Besiktas.2-2.Galatasaray-199219938610--.html",
+         "read": "2026-10-06",
+         "line": "Besiktas 2-2 Galatasaray 07 Nisan 1993 1992-1993 Sezonu Turkiye Kupasi Final 2. Maci"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 1991,
+     "to": 1991,
+     "kind": "NAMED",
+     "name": "Federation Cup",
+     "legs": 2,
+     "facts": [
+      {
+       "ref": "rest:Turkey:0",
+       "verified": true,
+       "claim": "Turkish Cup held every season 1990/91 to 2025/26 (a final every season)",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablest/turkcuphist.html",
+         "read": "2026-10-06",
+         "line": "[1990/91] Galatasaray 3-1 Ankaragucu ... [2024/25] Galatasaray 3-0 Trabzonspor (one final per season, no gap)"
+        },
+        {
+         "host": "tff.org",
+         "url": "https://www.tff.org/default.aspx?pageID=267&ftxtID=25175",
+         "read": "2026-10-06",
+         "line": "1990-91 Galatasaray - Ankaragucu 3-1 (Uzatmada) ... 2014-15 Galatasaray - Bursaspor 3-2 (rows read for 1990-91 to 2014-15)"
+        },
+        {
+         "host": "aspor.com.tr",
+         "url": "https://www.aspor.com.tr/turkiye-kupasi/2026/09/29/iste-ziraat-turkiye-kupasini-evine-goturen-son-10-kulup",
+         "read": "2026-10-06",
+         "line": "2016-17 Konyaspor ... 2024-25 Galatasaray, 2025-26 Trabzonspor"
+        },
+        {
+         "host": "tff.org",
+         "url": "http://www.tff.org/default.aspx?pageID=411",
+         "read": "2026-10-06",
+         "line": "2015-2016: GALATASARAY-Fenerbahce 1-0; 2016-2017: KONYASPOR - Basaksehir 0-0 (4-1 Pen.)"
+        }
+       ]
+      },
+      {
+       "ref": "rest:Turkey:1",
+       "verified": true,
+       "claim": "Final played over two legs from 1991/92 to 1998/99; single match from 1999/00 onward",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablest/turkcuphist.html",
+         "read": "2026-10-06",
+         "line": "[1991/92] Trabzonspor 0-3 5-1 Bursaspor [1st leg at Bursaspor] ... [1998/99] Galatasaray 0-0 2-0 Besiktas; [1999/00] Galatasaray 5-3 Antalyaspor [aet]"
+        },
+        {
+         "host": "tff.org",
+         "url": "https://www.tff.org/default.aspx?pageID=267&ftxtID=25175",
+         "read": "2026-10-06",
+         "line": "1991-92 Trabzonspor - Bursaspor 0-3, 5-1 ... 1998-99 Galatasaray - Besiktas 0-0, 2-0; 1999-00 Galatasaray - Antalyaspor 5-3"
+        }
+       ]
+      },
+      {
+       "ref": "rest:Turkey:4",
+       "verified": true,
+       "claim": "Cup was named Federasyon Kupasi (Federation Cup) from 1980-81 to 1991-92 and Turkiye Kupasi again from 1992-93",
+       "sources": [
+        {
+         "host": "tff.org",
+         "url": "https://www.tff.org/default.aspx?pageID=267&ftxtID=25175",
+         "read": "2026-10-06",
+         "line": "1980-81 sezonunda adi Federasyon Kupasi olarak degistirilmis, 1992-93 sezonundan sonra tekrar eski ismi Turkiye Kupasi'na donulmustur."
+        },
+        {
+         "host": "tff.org",
+         "url": "http://www.tff.org/default.aspx?pageID=411",
+         "read": "2026-10-06",
+         "line": "1980-1981 sezonunda Federasyon Kupasi olarak degistirildi. Ancak 1992-1993 sezonundan itibaren tekrar Turkiye Kupasi adi verilirken"
+        },
+        {
+         "host": "macanilari.com",
+         "url": "https://www.macanilari.com/29.Nisan.1992_1991-1992.Sezonu.Federasyon.Kupasi.Final.2.Maci.Trabzonspor.5-1.Bursaspor-199119928608--.html",
+         "read": "2026-10-06",
+         "line": "Trabzonspor 5-1 Bursaspor 29 Nisan 1992 1991-1992 Sezonu Federasyon Kupasi Final 2. Maci"
+        },
+        {
+         "host": "macanilari.com",
+         "url": "https://www.macanilari.com/07.Nisan.1993_1992-1993.Sezonu.Turkiye.Kupasi.Final.2.Maci.Besiktas.2-2.Galatasaray-199219938610--.html",
+         "read": "2026-10-06",
+         "line": "Besiktas 2-2 Galatasaray 07 Nisan 1993 1992-1993 Sezonu Turkiye Kupasi Final 2. Maci"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 1992,
+     "to": 1998,
+     "kind": "NAMED",
+     "name": "Turkish Cup",
+     "legs": 2,
+     "facts": [
+      {
+       "ref": "rest:Turkey:0",
+       "verified": true,
+       "claim": "Turkish Cup held every season 1990/91 to 2025/26 (a final every season)",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablest/turkcuphist.html",
+         "read": "2026-10-06",
+         "line": "[1990/91] Galatasaray 3-1 Ankaragucu ... [2024/25] Galatasaray 3-0 Trabzonspor (one final per season, no gap)"
+        },
+        {
+         "host": "tff.org",
+         "url": "https://www.tff.org/default.aspx?pageID=267&ftxtID=25175",
+         "read": "2026-10-06",
+         "line": "1990-91 Galatasaray - Ankaragucu 3-1 (Uzatmada) ... 2014-15 Galatasaray - Bursaspor 3-2 (rows read for 1990-91 to 2014-15)"
+        },
+        {
+         "host": "aspor.com.tr",
+         "url": "https://www.aspor.com.tr/turkiye-kupasi/2026/09/29/iste-ziraat-turkiye-kupasini-evine-goturen-son-10-kulup",
+         "read": "2026-10-06",
+         "line": "2016-17 Konyaspor ... 2024-25 Galatasaray, 2025-26 Trabzonspor"
+        },
+        {
+         "host": "tff.org",
+         "url": "http://www.tff.org/default.aspx?pageID=411",
+         "read": "2026-10-06",
+         "line": "2015-2016: GALATASARAY-Fenerbahce 1-0; 2016-2017: KONYASPOR - Basaksehir 0-0 (4-1 Pen.)"
+        }
+       ]
+      },
+      {
+       "ref": "rest:Turkey:1",
+       "verified": true,
+       "claim": "Final played over two legs from 1991/92 to 1998/99; single match from 1999/00 onward",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablest/turkcuphist.html",
+         "read": "2026-10-06",
+         "line": "[1991/92] Trabzonspor 0-3 5-1 Bursaspor [1st leg at Bursaspor] ... [1998/99] Galatasaray 0-0 2-0 Besiktas; [1999/00] Galatasaray 5-3 Antalyaspor [aet]"
+        },
+        {
+         "host": "tff.org",
+         "url": "https://www.tff.org/default.aspx?pageID=267&ftxtID=25175",
+         "read": "2026-10-06",
+         "line": "1991-92 Trabzonspor - Bursaspor 0-3, 5-1 ... 1998-99 Galatasaray - Besiktas 0-0, 2-0; 1999-00 Galatasaray - Antalyaspor 5-3"
+        }
+       ]
+      },
+      {
+       "ref": "rest:Turkey:4",
+       "verified": true,
+       "claim": "Cup was named Federasyon Kupasi (Federation Cup) from 1980-81 to 1991-92 and Turkiye Kupasi again from 1992-93",
+       "sources": [
+        {
+         "host": "tff.org",
+         "url": "https://www.tff.org/default.aspx?pageID=267&ftxtID=25175",
+         "read": "2026-10-06",
+         "line": "1980-81 sezonunda adi Federasyon Kupasi olarak degistirilmis, 1992-93 sezonundan sonra tekrar eski ismi Turkiye Kupasi'na donulmustur."
+        },
+        {
+         "host": "tff.org",
+         "url": "http://www.tff.org/default.aspx?pageID=411",
+         "read": "2026-10-06",
+         "line": "1980-1981 sezonunda Federasyon Kupasi olarak degistirildi. Ancak 1992-1993 sezonundan itibaren tekrar Turkiye Kupasi adi verilirken"
+        },
+        {
+         "host": "macanilari.com",
+         "url": "https://www.macanilari.com/29.Nisan.1992_1991-1992.Sezonu.Federasyon.Kupasi.Final.2.Maci.Trabzonspor.5-1.Bursaspor-199119928608--.html",
+         "read": "2026-10-06",
+         "line": "Trabzonspor 5-1 Bursaspor 29 Nisan 1992 1991-1992 Sezonu Federasyon Kupasi Final 2. Maci"
+        },
+        {
+         "host": "macanilari.com",
+         "url": "https://www.macanilari.com/07.Nisan.1993_1992-1993.Sezonu.Turkiye.Kupasi.Final.2.Maci.Besiktas.2-2.Galatasaray-199219938610--.html",
+         "read": "2026-10-06",
+         "line": "Besiktas 2-2 Galatasaray 07 Nisan 1993 1992-1993 Sezonu Turkiye Kupasi Final 2. Maci"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 1999,
+     "kind": "NAMED",
+     "name": "Turkish Cup",
+     "legs": 1,
+     "decider": "penalties",
+     "facts": [
+      {
+       "ref": "rest:Turkey:0",
+       "verified": true,
+       "claim": "Turkish Cup held every season 1990/91 to 2025/26 (a final every season)",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablest/turkcuphist.html",
+         "read": "2026-10-06",
+         "line": "[1990/91] Galatasaray 3-1 Ankaragucu ... [2024/25] Galatasaray 3-0 Trabzonspor (one final per season, no gap)"
+        },
+        {
+         "host": "tff.org",
+         "url": "https://www.tff.org/default.aspx?pageID=267&ftxtID=25175",
+         "read": "2026-10-06",
+         "line": "1990-91 Galatasaray - Ankaragucu 3-1 (Uzatmada) ... 2014-15 Galatasaray - Bursaspor 3-2 (rows read for 1990-91 to 2014-15)"
+        },
+        {
+         "host": "aspor.com.tr",
+         "url": "https://www.aspor.com.tr/turkiye-kupasi/2026/09/29/iste-ziraat-turkiye-kupasini-evine-goturen-son-10-kulup",
+         "read": "2026-10-06",
+         "line": "2016-17 Konyaspor ... 2024-25 Galatasaray, 2025-26 Trabzonspor"
+        },
+        {
+         "host": "tff.org",
+         "url": "http://www.tff.org/default.aspx?pageID=411",
+         "read": "2026-10-06",
+         "line": "2015-2016: GALATASARAY-Fenerbahce 1-0; 2016-2017: KONYASPOR - Basaksehir 0-0 (4-1 Pen.)"
+        }
+       ]
+      },
+      {
+       "ref": "rest:Turkey:1",
+       "verified": true,
+       "claim": "Final played over two legs from 1991/92 to 1998/99; single match from 1999/00 onward",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablest/turkcuphist.html",
+         "read": "2026-10-06",
+         "line": "[1991/92] Trabzonspor 0-3 5-1 Bursaspor [1st leg at Bursaspor] ... [1998/99] Galatasaray 0-0 2-0 Besiktas; [1999/00] Galatasaray 5-3 Antalyaspor [aet]"
+        },
+        {
+         "host": "tff.org",
+         "url": "https://www.tff.org/default.aspx?pageID=267&ftxtID=25175",
+         "read": "2026-10-06",
+         "line": "1991-92 Trabzonspor - Bursaspor 0-3, 5-1 ... 1998-99 Galatasaray - Besiktas 0-0, 2-0; 1999-00 Galatasaray - Antalyaspor 5-3"
+        }
+       ]
+      },
+      {
+       "ref": "rest:Turkey:3",
+       "verified": true,
+       "claim": "Level finals go to extra time then penalties (two-leg 1997/98 decided on penalties; single-match 2000/01, 2007/08, 2010/11, 2016/17 on penalties after extra time)",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablest/turkcuphist.html",
+         "read": "2026-10-06",
+         "line": "[1997/98] Besiktas 1-1 1-1 Galatasaray [Besiktas 4-2 on pen]; [2007/08] Kayserispor 0-0 Genclerbirligi [aet, 11-10 pen]"
+        },
+        {
+         "host": "tff.org",
+         "url": "https://www.tff.org/default.aspx?pageID=267&ftxtID=25175",
+         "read": "2026-10-06",
+         "line": "1997-98 Besiktas - Galatasaray 1-1, 1-1 (5-3 Pen.); 2007-08 Kayseri - Genclerbirligi 0-0 (11-10 Pen.)"
+        }
+       ]
+      },
+      {
+       "ref": "rest:Turkey:4",
+       "verified": true,
+       "claim": "Cup was named Federasyon Kupasi (Federation Cup) from 1980-81 to 1991-92 and Turkiye Kupasi again from 1992-93",
+       "sources": [
+        {
+         "host": "tff.org",
+         "url": "https://www.tff.org/default.aspx?pageID=267&ftxtID=25175",
+         "read": "2026-10-06",
+         "line": "1980-81 sezonunda adi Federasyon Kupasi olarak degistirilmis, 1992-93 sezonundan sonra tekrar eski ismi Turkiye Kupasi'na donulmustur."
+        },
+        {
+         "host": "tff.org",
+         "url": "http://www.tff.org/default.aspx?pageID=411",
+         "read": "2026-10-06",
+         "line": "1980-1981 sezonunda Federasyon Kupasi olarak degistirildi. Ancak 1992-1993 sezonundan itibaren tekrar Turkiye Kupasi adi verilirken"
+        },
+        {
+         "host": "macanilari.com",
+         "url": "https://www.macanilari.com/29.Nisan.1992_1991-1992.Sezonu.Federasyon.Kupasi.Final.2.Maci.Trabzonspor.5-1.Bursaspor-199119928608--.html",
+         "read": "2026-10-06",
+         "line": "Trabzonspor 5-1 Bursaspor 29 Nisan 1992 1991-1992 Sezonu Federasyon Kupasi Final 2. Maci"
+        },
+        {
+         "host": "macanilari.com",
+         "url": "https://www.macanilari.com/07.Nisan.1993_1992-1993.Sezonu.Turkiye.Kupasi.Final.2.Maci.Besiktas.2-2.Galatasaray-199219938610--.html",
+         "read": "2026-10-06",
+         "line": "Besiktas 2-2 Galatasaray 07 Nisan 1993 1992-1993 Sezonu Turkiye Kupasi Final 2. Maci"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  "Greece": {
+   "ledger": "rest:Greece",
+   "windows": [
+    {
+     "from": 1990,
+     "to": 1991,
+     "kind": "NAMED",
+     "name": "Greek Cup",
+     "legs": 2,
+     "facts": [
+      {
+       "ref": "rest:Greece:0",
+       "verified": true,
+       "claim": "Greek Cup held every season 1990/91 to 2025/26 (a final every season)",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesg/grkcuphist.html",
+         "read": "2026-10-06",
+         "line": "[1990/91] Panathinaikos 3-0 2-1 Athinaikos ... [2025/26] OFI 3-2 PAOK [aet] (one final per season, no gap)"
+        },
+        {
+         "host": "epo.gr",
+         "url": "https://www.epo.gr/el/arthra/oloi-oi-telikoi-toy-kypelloy-ellados",
+         "read": "2026-10-06",
+         "line": "1990 Olympiakos-OFI 4-2 ... 2006 Olympiakos-AEK 3-0 (article of 04/05/2007, lists to 2006)"
+        },
+        {
+         "host": "documentonews.gr",
+         "url": "https://www.documentonews.gr/article/oloi-oi-telikoi-kypelloy-elladas-apo-to-1931-mexri-to-2024/",
+         "read": "2026-10-06",
+         "line": "05.05.2007 Larisa - Panathinaikos 2-1 ... 12.09.2020 Olympiakos - AEK 1-0 Panthessaliko ... 25.05.2024 Panathinaikos-Aris 1-0"
+        },
+        {
+         "host": "gazzetta.gr",
+         "url": "https://www.gazzetta.gr/football/kypello-elladas/2445091/ta-highlights-apo-ton-teliko-kypelloy-ofi-olympiakos-0-2-vid",
+         "read": "2026-10-06",
+         "line": "Ta highlights apo ton teliko Kypelloy OFI-Olympiakos 0-2 (search result title)"
+        },
+        {
+         "host": "protothema.gr",
+         "url": "https://www.protothema.gr/sports/article/1808806/paok-kai-ofi-kodrarodai-apopse-sto-panthessaliko-me-epathlo-to-kupello-elladas-sedra-stis-2030/",
+         "read": "2026-10-06",
+         "line": "Kypellouchos Elladas meta apo 39 chronia o OFI, 3-2 stin paratasi ton PAOK ston teliko tou Panthessalikou (search result title)"
+        }
+       ]
+      },
+      {
+       "ref": "rest:Greece:1",
+       "verified": true,
+       "claim": "Final played over two legs in 1990/91 and 1991/92; single match from 1992/93",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesg/grkcuphist.html",
+         "read": "2026-10-06",
+         "line": "[1990/91] Panathinaikos 3-0 2-1 Athinaikos; [1991/92] Olympiakos 1-1 2-0 PAOK; [1992/93] Panathinaikos 1-0 Olympiakos"
+        },
+        {
+         "host": "epo.gr",
+         "url": "https://www.epo.gr/el/arthra/oloi-oi-telikoi-toy-kypelloy-ellados",
+         "read": "2026-10-06",
+         "line": "1991 Panathinaikos-Athinaikos 3-0 kai 2-1; 1992 Olympiakos-PAOK 1-1 kai 2-0; 1993 Panathinaikos-Olympiakos 1-0"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 1992,
+     "kind": "NAMED",
+     "name": "Greek Cup",
+     "legs": 1,
+     "decider": "penalties",
+     "facts": [
+      {
+       "ref": "rest:Greece:0",
+       "verified": true,
+       "claim": "Greek Cup held every season 1990/91 to 2025/26 (a final every season)",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesg/grkcuphist.html",
+         "read": "2026-10-06",
+         "line": "[1990/91] Panathinaikos 3-0 2-1 Athinaikos ... [2025/26] OFI 3-2 PAOK [aet] (one final per season, no gap)"
+        },
+        {
+         "host": "epo.gr",
+         "url": "https://www.epo.gr/el/arthra/oloi-oi-telikoi-toy-kypelloy-ellados",
+         "read": "2026-10-06",
+         "line": "1990 Olympiakos-OFI 4-2 ... 2006 Olympiakos-AEK 3-0 (article of 04/05/2007, lists to 2006)"
+        },
+        {
+         "host": "documentonews.gr",
+         "url": "https://www.documentonews.gr/article/oloi-oi-telikoi-kypelloy-elladas-apo-to-1931-mexri-to-2024/",
+         "read": "2026-10-06",
+         "line": "05.05.2007 Larisa - Panathinaikos 2-1 ... 12.09.2020 Olympiakos - AEK 1-0 Panthessaliko ... 25.05.2024 Panathinaikos-Aris 1-0"
+        },
+        {
+         "host": "gazzetta.gr",
+         "url": "https://www.gazzetta.gr/football/kypello-elladas/2445091/ta-highlights-apo-ton-teliko-kypelloy-ofi-olympiakos-0-2-vid",
+         "read": "2026-10-06",
+         "line": "Ta highlights apo ton teliko Kypelloy OFI-Olympiakos 0-2 (search result title)"
+        },
+        {
+         "host": "protothema.gr",
+         "url": "https://www.protothema.gr/sports/article/1808806/paok-kai-ofi-kodrarodai-apopse-sto-panthessaliko-me-epathlo-to-kupello-elladas-sedra-stis-2030/",
+         "read": "2026-10-06",
+         "line": "Kypellouchos Elladas meta apo 39 chronia o OFI, 3-2 stin paratasi ton PAOK ston teliko tou Panthessalikou (search result title)"
+        }
+       ]
+      },
+      {
+       "ref": "rest:Greece:1",
+       "verified": true,
+       "claim": "Final played over two legs in 1990/91 and 1991/92; single match from 1992/93",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesg/grkcuphist.html",
+         "read": "2026-10-06",
+         "line": "[1990/91] Panathinaikos 3-0 2-1 Athinaikos; [1991/92] Olympiakos 1-1 2-0 PAOK; [1992/93] Panathinaikos 1-0 Olympiakos"
+        },
+        {
+         "host": "epo.gr",
+         "url": "https://www.epo.gr/el/arthra/oloi-oi-telikoi-toy-kypelloy-ellados",
+         "read": "2026-10-06",
+         "line": "1991 Panathinaikos-Athinaikos 3-0 kai 2-1; 1992 Olympiakos-PAOK 1-1 kai 2-0; 1993 Panathinaikos-Olympiakos 1-0"
+        }
+       ]
+      },
+      {
+       "ref": "rest:Greece:2",
+       "verified": true,
+       "claim": "Level single-match finals go to extra time then penalties (1993/94 and 2008/09 on penalties after extra time; 1996/97 on penalties)",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesg/grkcuphist.html",
+         "read": "2026-10-06",
+         "line": "[1993/94] Panathinaikos 3-3 AEK [aet, 4-2 pen]; [2008/09] Olympiakos 4-4 AEK [aet, 15-14 pen]"
+        },
+        {
+         "host": "epo.gr",
+         "url": "https://www.epo.gr/el/arthra/oloi-oi-telikoi-toy-kypelloy-ellados",
+         "read": "2026-10-06",
+         "line": "1994 Panathinaikos-AEK 3-3 (4-2 sta penalti); 1997 AEK-Panathinaikos 0-0 (5-3 sta penalti)"
+        },
+        {
+         "host": "documentonews.gr",
+         "url": "https://www.documentonews.gr/article/oloi-oi-telikoi-kypelloy-elladas-apo-to-1931-mexri-to-2024/",
+         "read": "2026-10-06",
+         "line": "02.05.2009 Olympiakos - AEK 4-4 par, 15-14 pen."
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  "Belgium": {
+   "ledger": "rest:Belgium",
+   "windows": [
+    {
+     "from": 1990,
+     "kind": "NAMED",
+     "name": "Belgian Cup",
+     "why": "one match finals in every season rest on one source, so no final score",
+     "facts": [
+      {
+       "ref": "rest:Belgium:0",
+       "verified": true,
+       "claim": "Belgian Cup held every season 1990-91 to 2024-25 (a final every season)",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesb/belgcuphist.html",
+         "read": "2026-10-06",
+         "line": "[1991] Club Brugge 3-1 KV Mechelen ... [2026] Union St-Gilloise 3-1 Anderlecht [aet] (one final per year, no gap)"
+        },
+        {
+         "host": "voetbalkrant.com",
+         "url": "https://www.voetbalkrant.com/belgie/beker-van-belgie/geschiedenis",
+         "read": "2026-10-06",
+         "line": "1990-1991 Club Brugge ... 2024-2025 Club Brugge (a winner every season); 2025-2026 shown as not yet determined"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  "Japan": {
+   "ledger": "rest:Japan",
+   "windows": [
+    {
+     "from": 1990,
+     "to": 2019,
+     "kind": "NAMED",
+     "name": "Emperor's Cup",
+     "legs": 1,
+     "decider": "penalties",
+     "facts": [
+      {
+       "ref": "rest:Japan:0",
+       "verified": true,
+       "claim": "Emperor's Cup held every season 1990 to 2025 as numbered editions 70th (1990) to 105th (2025), no gap",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesj/japcuphist.html",
+         "read": "2026-10-06",
+         "line": "[1990] (70th) Matsushita 0-0 Nissan [aet, 4-3 pen] ... [2025] (105th) Machida Zelvia 3-1 Vissel Kobe"
+        },
+        {
+         "host": "jfa.jp",
+         "url": "https://www.jfa.jp/match/emperorscup_2025/history.html",
+         "read": "2026-10-06",
+         "line": "70 | 1990 | 松下電器 | 日産自動車 ... 104 | 2024 | ヴィッセル神戸 | ガンバ大阪 | 105 | 2025 | (blank in cached page)"
+        },
+        {
+         "host": "web.gekisaka.jp",
+         "url": "https://web.gekisaka.jp/pickup/detail/?213472-213472-fl=",
+         "read": "2026-10-06",
+         "line": "第105回 (2025): FC町田ゼルビア 3-1 ヴィッセル神戸 (page lists 第51回 to 第105回 consecutively, no 中止)"
+        }
+       ]
+      },
+      {
+       "ref": "rest:Japan:1",
+       "verified": true,
+       "claim": "Final is a single match; when level it goes to extra time then penalties (1990, 2022 and 2023 finals decided on penalties)",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesj/japcuphist.html",
+         "read": "2026-10-06",
+         "line": "[2022] (102nd) Ventforet Kofu 1-1 Sanfrecce Hiroshima [aet, 5-4 pen]; [2000] (80th) Kashima Antlers 3-2 Shimizu S-Pulse [asdet]"
+        },
+        {
+         "host": "web.gekisaka.jp",
+         "url": "https://web.gekisaka.jp/pickup/detail/?213472-213472-fl=",
+         "read": "2026-10-06",
+         "line": "第70回: 日産自動車 0-0(PK3-4) 松下電器; 第102回: ヴァンフォーレ甲府 1-1(PK5-4)サンフレッチェ広島; 第103回: 川崎フロンターレ 0-0(PK8-7)柏レイソル"
+        }
+       ]
+      },
+      {
+       "ref": "rest:Japan:2",
+       "verified": true,
+       "claim": "The Emperor's Cup is also known as the All Japan Football Championship (name unchanged in English through the window)",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesj/japcuphist.html",
+         "read": "2026-10-06",
+         "line": "The Emperor's Cup was also known as the All Japan Football Championship."
+        },
+        {
+         "host": "jfa.jp",
+         "url": "https://www.jfa.jp/match/emperorscup_2025/about.html",
+         "read": "2026-10-06",
+         "line": "大会要項｜天皇杯 JFA 第105回全日本サッカー選手権大会｜JFA.jp (page title as shown in search results)"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 2020,
+     "to": 2020,
+     "kind": "UNKNOWN",
+     "why": "the COVID edition: only the top two J1 clubs entered",
+     "facts": [
+      {
+       "ref": "rest:Japan:4",
+       "verified": true,
+       "claim": "2020 (100th) edition, COVID format: only the top two J1 clubs of the 2020 J1 season entered, at the semi-finals; other J1 clubs did not enter",
+       "sources": [
+        {
+         "host": "jfa.jp",
+         "url": "https://www.jfa.jp/news/00024807/",
+         "read": "2026-10-06",
+         "line": "50チームによるノックアウト方式・Ｊリーグ2チーム（2020明治安田生命Ｊ1リーグ成績上位2チーム）・アマチュアシード1チーム（Honda FC）・都道府県代表47チーム (2020-04-23)"
+        },
+        {
+         "host": "goal.com",
+         "url": "https://www.goal.com/jp/%E3%83%8B%E3%83%A5%E3%83%BC%E3%82%B9/emperors-cup-jfa-japan-football-championship-j1-j2-j3/1p4ng5ny5v10t1vbb95j5g2imo",
+         "read": "2026-10-06",
+         "line": "52チームによるノックアウト方式 ... J1リーグ2チーム（2020明治安田生命J1リーグ成績上位2チーム）が準決勝から参加 (2020-06-18)"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 2021,
+     "to": 2025,
+     "kind": "NAMED",
+     "name": "Emperor's Cup",
+     "legs": 1,
+     "decider": "penalties",
+     "facts": [
+      {
+       "ref": "rest:Japan:0",
+       "verified": true,
+       "claim": "Emperor's Cup held every season 1990 to 2025 as numbered editions 70th (1990) to 105th (2025), no gap",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesj/japcuphist.html",
+         "read": "2026-10-06",
+         "line": "[1990] (70th) Matsushita 0-0 Nissan [aet, 4-3 pen] ... [2025] (105th) Machida Zelvia 3-1 Vissel Kobe"
+        },
+        {
+         "host": "jfa.jp",
+         "url": "https://www.jfa.jp/match/emperorscup_2025/history.html",
+         "read": "2026-10-06",
+         "line": "70 | 1990 | 松下電器 | 日産自動車 ... 104 | 2024 | ヴィッセル神戸 | ガンバ大阪 | 105 | 2025 | (blank in cached page)"
+        },
+        {
+         "host": "web.gekisaka.jp",
+         "url": "https://web.gekisaka.jp/pickup/detail/?213472-213472-fl=",
+         "read": "2026-10-06",
+         "line": "第105回 (2025): FC町田ゼルビア 3-1 ヴィッセル神戸 (page lists 第51回 to 第105回 consecutively, no 中止)"
+        }
+       ]
+      },
+      {
+       "ref": "rest:Japan:1",
+       "verified": true,
+       "claim": "Final is a single match; when level it goes to extra time then penalties (1990, 2022 and 2023 finals decided on penalties)",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesj/japcuphist.html",
+         "read": "2026-10-06",
+         "line": "[2022] (102nd) Ventforet Kofu 1-1 Sanfrecce Hiroshima [aet, 5-4 pen]; [2000] (80th) Kashima Antlers 3-2 Shimizu S-Pulse [asdet]"
+        },
+        {
+         "host": "web.gekisaka.jp",
+         "url": "https://web.gekisaka.jp/pickup/detail/?213472-213472-fl=",
+         "read": "2026-10-06",
+         "line": "第70回: 日産自動車 0-0(PK3-4) 松下電器; 第102回: ヴァンフォーレ甲府 1-1(PK5-4)サンフレッチェ広島; 第103回: 川崎フロンターレ 0-0(PK8-7)柏レイソル"
+        }
+       ]
+      },
+      {
+       "ref": "rest:Japan:2",
+       "verified": true,
+       "claim": "The Emperor's Cup is also known as the All Japan Football Championship (name unchanged in English through the window)",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesj/japcuphist.html",
+         "read": "2026-10-06",
+         "line": "The Emperor's Cup was also known as the All Japan Football Championship."
+        },
+        {
+         "host": "jfa.jp",
+         "url": "https://www.jfa.jp/match/emperorscup_2025/about.html",
+         "read": "2026-10-06",
+         "line": "大会要項｜天皇杯 JFA 第105回全日本サッカー選手権大会｜JFA.jp (page title as shown in search results)"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 2026,
+     "kind": "UNKNOWN",
+     "why": "the J.League moves to an autumn to spring season in 2026 and the 106th edition was not researched",
+     "facts": []
+    }
+   ]
+  },
+  "South Korea": {
+   "ledger": "rest:South Korea",
+   "windows": [
+    {
+     "from": 1990,
+     "to": 1995,
+     "kind": "NONE",
+     "why": "the KFA founded the cup in 1996",
+     "facts": [
+      {
+       "ref": "rest:South Korea:3",
+       "verified": true,
+       "claim": "Founded by the KFA in 1996 (first edition 1996)",
+       "sources": [
+        {
+         "host": "kfa.or.kr",
+         "url": "https://www.kfa.or.kr/competition/korea_cup.php",
+         "read": "2026-10-06",
+         "line": "1996년에 대한축구협회가 창설했다. 2023년까지 < FA컵 >이라는 대회명칭을 사용하였으나, 대한민국의 축구대회라는 것을 강조하고 잉글랜드의 FA컵과 구별하기 위해 2024년부터 < 코리아컵 >으로 명칭을 변경했다."
+        },
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tabless/skorcuphist.html",
+         "read": "2026-10-06",
+         "line": "[1996] Pohang Steelers 0-0 Suwon Samsung Bluewings [7-6 pen] (first edition listed; page titled FA Cup)"
+        }
+       ]
+      },
+      {
+       "ref": "rest:South Korea:0",
+       "verified": true,
+       "claim": "Korean FA Cup held every year 1996 to 2025 (a final every year)",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tabless/skorcuphist.html",
+         "read": "2026-10-06",
+         "line": "[1996] Pohang Steelers 0-0 Suwon Samsung Bluewings [7-6 pen] ... [2025] Jeonbuk Hyundai Motors 2-1 Gwangju FC [aet] (one final per year, no gap)"
+        },
+        {
+         "host": "kfa.or.kr",
+         "url": "https://www.kfa.or.kr/archive/league.php?act=fa_cup&div=ZmFfY3Vw",
+         "read": "2026-10-06",
+         "line": "2025 전북현대 / 광주FC ... 1996 포항스틸러스 / 수원삼성 (champion and runner-up every year 1996 to 2025)"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 1996,
+     "to": 2023,
+     "kind": "NAMED",
+     "name": "Korean FA Cup",
+     "why": "the final's legs by season rest on one source, and a checker found that source contradicted, so no final score",
+     "facts": [
+      {
+       "ref": "rest:South Korea:0",
+       "verified": true,
+       "claim": "Korean FA Cup held every year 1996 to 2025 (a final every year)",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tabless/skorcuphist.html",
+         "read": "2026-10-06",
+         "line": "[1996] Pohang Steelers 0-0 Suwon Samsung Bluewings [7-6 pen] ... [2025] Jeonbuk Hyundai Motors 2-1 Gwangju FC [aet] (one final per year, no gap)"
+        },
+        {
+         "host": "kfa.or.kr",
+         "url": "https://www.kfa.or.kr/archive/league.php?act=fa_cup&div=ZmFfY3Vw",
+         "read": "2026-10-06",
+         "line": "2025 전북현대 / 광주FC ... 1996 포항스틸러스 / 수원삼성 (champion and runner-up every year 1996 to 2025)"
+        }
+       ]
+      },
+      {
+       "ref": "rest:South Korea:3",
+       "verified": true,
+       "claim": "Founded by the KFA in 1996 (first edition 1996)",
+       "sources": [
+        {
+         "host": "kfa.or.kr",
+         "url": "https://www.kfa.or.kr/competition/korea_cup.php",
+         "read": "2026-10-06",
+         "line": "1996년에 대한축구협회가 창설했다. 2023년까지 < FA컵 >이라는 대회명칭을 사용하였으나, 대한민국의 축구대회라는 것을 강조하고 잉글랜드의 FA컵과 구별하기 위해 2024년부터 < 코리아컵 >으로 명칭을 변경했다."
+        },
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tabless/skorcuphist.html",
+         "read": "2026-10-06",
+         "line": "[1996] Pohang Steelers 0-0 Suwon Samsung Bluewings [7-6 pen] (first edition listed; page titled FA Cup)"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 2024,
+     "kind": "UNKNOWN",
+     "why": "the rename to Korea Cup rests on one source",
+     "facts": []
+    }
+   ]
+  },
+  "Brazil": {
+   "ledger": "americas:Brazil",
+   "windows": [
+    {
+     "from": 1990,
+     "to": 2025,
+     "kind": "UNKNOWN",
+     "why": "entry went by state championship places, not division, and the Libertadores clubs were excused 2001 to 2012",
+     "facts": [
+      {
+       "ref": "americas:Brazil:7",
+       "verified": true,
+       "claim": "Clubs playing that year Copa Libertadores did not enter the Copa do Brasil from the 2001 edition through 2012",
+       "sources": [
+        {
+         "host": "terra.com.br",
+         "url": "https://www.terra.com.br/esportes/futebol/nova-copa-do-brasil-tera-clubes-da-libertadores-a-partir-de-2013,d5b50f3e4389a310VgnCLD200000bbcceb0aRCRD.html",
+         "read": "2026-10-06",
+         "line": "Devido à coincidência de datas e ao apertado calendário do futebol brasileiro, a CBF definiu em 2001 que os times não poderiam jogar ao mesmo tempo a Libertadores e a Copa do Brasil. ... A última vez em que isso ocorreu no Brasil foi em 2000 (article of 1 December 2011)"
+        },
+        {
+         "host": "otempo.com.br",
+         "url": "https://www.otempo.com.br/sports/atletico/saiba-como-era-e-como-e-participacao-de-times-da-libertadores-na-copa-do-brasil-1.2619379",
+         "read": "2026-10-06",
+         "line": "A partir da edição de 2001, a Confederação Brasileira de Futebol (CBF) decidiu que aqueles que estavam na competição sul-americana não participariam da copa ... Mas isso mudou em 2013"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 2026,
+     "kind": "NAMED",
+     "name": "Copa do Brasil",
+     "legs": 1,
+     "why": "all 20 Serie A clubs enter; whether extra time comes before penalties in the one match final is disputed",
+     "facts": [
+      {
+       "ref": "americas:Brazil:1",
+       "verified": true,
+       "claim": "The 2026 Copa do Brasil final is a single match, the first in the cup history, scheduled for 6 December 2026",
+       "sources": [
+        {
+         "host": "cbf.com.br",
+         "url": "https://www.cbf.com.br/futebol-brasileiro/noticias/jogos/a/cbf-divulga-tabela-basica-plano-geral-de-acoes-e-regulamento-especifico-da-copa-do-brasil-2026",
+         "read": "2026-10-06",
+         "line": "A final, em jogo único, está prevista para o dia 6 de dezembro."
+        },
+        {
+         "host": "cnnbrasil.com.br",
+         "url": "https://www.cnnbrasil.com.br/esportes/futebol/copa-do-brasil/copa-do-brasil-2026-tera-final-inedita-mas-cbf-nao-define-estadio/",
+         "read": "2026-10-06",
+         "line": "A edição de 2026 será a 38ª da Copa do Brasil e marcará a primeira vez que o campeão será definido em apenas uma partida."
+        }
+       ]
+      },
+      {
+       "ref": "americas:Brazil:2",
+       "verified": true,
+       "claim": "The 2026 Copa do Brasil has 126 clubs in nine phases",
+       "sources": [
+        {
+         "host": "cbf.com.br",
+         "url": "https://www.cbf.com.br/futebol-brasileiro/noticias/jogos/a/cbf-divulga-tabela-basica-plano-geral-de-acoes-e-regulamento-especifico-da-copa-do-brasil-2026",
+         "read": "2026-10-06",
+         "line": "O torneio, pela primeira vez, terá 126 equipes participantes e será dividido em nove fases."
+        },
+        {
+         "host": "sintramog.org.br (republishing TVT News, credited to the CBF)",
+         "url": "https://www.sintramog.org.br/2026/01/07/copa-do-brasil-2026-tem-novo-formato-confira/",
+         "read": "2026-10-06",
+         "line": "126 participating clubs across nine elimination phases (summary of the article of 7 January 2026)"
+        },
+        {
+         "host": "cnnbrasil.com.br",
+         "url": "https://www.cnnbrasil.com.br/esportes/futebol/copa-do-brasil/como-fica-a-copa-do-brasil-apos-mudancas-da-cbf-no-calendario/",
+         "read": "2026-10-06",
+         "line": "the 2026 edition expands from 92 to 126 clubs, 128 in 2027 (article of 1 October 2025)"
+        }
+       ]
+      },
+      {
+       "ref": "americas:Brazil:9",
+       "verified": true,
+       "claim": "From 2026 the 20 Série A clubs enter at the fifth phase, the one before the round of 16",
+       "sources": [
+        {
+         "host": "cnnbrasil.com.br",
+         "url": "https://www.cnnbrasil.com.br/esportes/futebol/copa-do-brasil/como-fica-a-copa-do-brasil-apos-mudancas-da-cbf-no-calendario/",
+         "read": "2026-10-06",
+         "line": "Os 20 clubes da Série A do Campeonato Brasileiro só entrarão a partir da quinta fase, anterior às oitavas de final."
+        },
+        {
+         "host": "sintramog.org.br (republishing TVT News, credited to the CBF)",
+         "url": "https://www.sintramog.org.br/2026/01/07/copa-do-brasil-2026-tem-novo-formato-confira/",
+         "read": "2026-10-06",
+         "line": "Os 20 clubes da Série A só começam a jogar na quinta fase da Copa do Brasil"
+        }
+       ]
+      },
+      {
+       "ref": "americas:Brazil:11",
+       "verified": true,
+       "claim": "The Copa do Brasil has been held every year since 1989 with no edition missed: 37 editions 1989 to 2025, the 2026 edition being the 38th",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesb/brazcuphist.html",
+         "read": "2026-10-06",
+         "line": "one final listed for every year 1989 to 2025, 37 rows, no gap"
+        },
+        {
+         "host": "cnnbrasil.com.br",
+         "url": "https://www.cnnbrasil.com.br/esportes/futebol/copa-do-brasil/copa-do-brasil-2026-tera-final-inedita-mas-cbf-nao-define-estadio/",
+         "read": "2026-10-06",
+         "line": "A edição de 2026 será a 38ª da Copa do Brasil"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  "USA": {
+   "ledger": "americas:USA",
+   "windows": [
+    {
+     "from": 1990,
+     "to": 1995,
+     "kind": "UNKNOWN",
+     "why": "no MLS before 1996",
+     "facts": [
+      {
+       "ref": "americas:USA:9",
+       "verified": true,
+       "claim": "MLS first teams first entered the Open Cup in 1996, when four of the ten MLS clubs took part, starting at the quarter finals",
+       "sources": [
+        {
+         "host": "3rddegree.net",
+         "url": "https://3rddegree.net/fc-dallas-history/fc-dallas-in-the-lamar-hunt-us-open-cup",
+         "read": "2026-10-06",
+         "line": "Four of the ten teams in MLS entered the tournament, beginning play at the Quarterfinal stage."
+        },
+        {
+         "host": "thecup.us",
+         "url": "https://thecup.us/2017/01/20/us-open-cup-qualifying-history-major-league-soccer-division-1/",
+         "read": "2026-10-06",
+         "line": "The Dallas Burn, Kansas City Wiz, Los Angeles Galaxy and Tampa Bay Mutiny were chosen by Major League Soccer."
+        },
+        {
+         "host": "forwardmadisonfc.com",
+         "url": "https://www.forwardmadisonfc.com/news/2022/03/22/what-is-the-u-s-open-cup/",
+         "read": "2026-10-06",
+         "line": "The MLS joined the Open Cup competition in the 1996 season"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 1996,
+     "to": 1999,
+     "kind": "UNKNOWN",
+     "why": "only some MLS clubs entered",
+     "facts": [
+      {
+       "ref": "americas:USA:9",
+       "verified": true,
+       "claim": "MLS first teams first entered the Open Cup in 1996, when four of the ten MLS clubs took part, starting at the quarter finals",
+       "sources": [
+        {
+         "host": "3rddegree.net",
+         "url": "https://3rddegree.net/fc-dallas-history/fc-dallas-in-the-lamar-hunt-us-open-cup",
+         "read": "2026-10-06",
+         "line": "Four of the ten teams in MLS entered the tournament, beginning play at the Quarterfinal stage."
+        },
+        {
+         "host": "thecup.us",
+         "url": "https://thecup.us/2017/01/20/us-open-cup-qualifying-history-major-league-soccer-division-1/",
+         "read": "2026-10-06",
+         "line": "The Dallas Burn, Kansas City Wiz, Los Angeles Galaxy and Tampa Bay Mutiny were chosen by Major League Soccer."
+        },
+        {
+         "host": "forwardmadisonfc.com",
+         "url": "https://www.forwardmadisonfc.com/news/2022/03/22/what-is-the-u-s-open-cup/",
+         "read": "2026-10-06",
+         "line": "The MLS joined the Open Cup competition in the 1996 season"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 2000,
+     "to": 2001,
+     "kind": "NAMED",
+     "name": "U.S. Open Cup",
+     "legs": 1,
+     "facts": [
+      {
+       "ref": "americas:USA:7",
+       "verified": true,
+       "claim": "Before 2020 the Open Cup had been held every year for 106 straight years, so every season 1990 to 2019 had an edition",
+       "sources": [
+        {
+         "host": "frontrowsoccer.com",
+         "url": "https://www.frontrowsoccer.com/2020/08/17/cancelled-u-s-open-cup-streak-is-snapped-at-106-years/",
+         "read": "2026-10-06",
+         "line": "The cancelation of the tournament snaps a 106-consecutive-year run of crowning a national champion."
+        },
+        {
+         "host": "si.com",
+         "url": "https://www.si.com/soccer/2021/07/20/us-open-cup-canceled-2021-format-2022-us-soccer",
+         "read": "2026-10-06",
+         "line": "The Open Cup's uninterrupted run of 106 years, the second longest in the world behind Northern Ireland's Irish Cup (dash in the source replaced with a comma)"
+        }
+       ]
+      },
+      {
+       "ref": "americas:USA:8",
+       "verified": true,
+       "claim": "The U.S. Open Cup was renamed the Lamar Hunt U.S. Open Cup in 1999",
+       "sources": [
+        {
+         "host": "ussoccerhistory.org",
+         "url": "https://www.ussoccerhistory.org/national-soccer-hall-of-fame-biographies/national-soccer-hall-of-fame-builders-biographies/lamar-hunt/",
+         "read": "2026-10-06",
+         "line": "In honor of Hunt's various efforts, the U.S. Open Cup was renamed the Lamar Hunt U.S. Open Cup by the U.S. Soccer Federation in 1999."
+        },
+        {
+         "host": "forwardmadisonfc.com",
+         "url": "https://www.forwardmadisonfc.com/news/2022/03/22/what-is-the-u-s-open-cup/",
+         "read": "2026-10-06",
+         "line": "The competition was renamed to honor Lamar Hunt in 1999, an American soccer pioneer."
+        }
+       ]
+      },
+      {
+       "ref": "americas:USA:10",
+       "verified": true,
+       "claim": "All MLS teams entered automatically in 2000 and 2001 (12 clubs, from the second round in 2000)",
+       "sources": [
+        {
+         "host": "thecup.us",
+         "url": "https://thecup.us/2017/01/20/us-open-cup-qualifying-history-major-league-soccer-division-1/",
+         "read": "2026-10-06",
+         "line": "2000 to 2001: all 12 MLS teams entered the tournament automatically (summary of the page)"
+        },
+        {
+         "host": "3rddegree.net",
+         "url": "https://3rddegree.net/fc-dallas-history/fc-dallas-in-the-lamar-hunt-us-open-cup",
+         "read": "2026-10-06",
+         "line": "12 MLS teams enter in the 2nd Round (2000)"
+        }
+       ]
+      },
+      {
+       "ref": "americas:USA:14",
+       "verified": true,
+       "claim": "Every U.S. Open Cup final 1990 to 2025 was a single match; 2020 and 2021 have no final",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://rsssf.org/tablesu/usacuphist.html",
+         "read": "2026-10-06",
+         "line": "finals list 1990 to 2025: one score per year, e.g. 2025 Nashville SC 2-1 Austin FC; 2020 and 2021 shown as cancelled"
+        },
+        {
+         "host": "houstondynamofc.com",
+         "url": "https://www.houstondynamofc.com/news/what-do-you-need-know-lamar-hunt-us-open-cup",
+         "read": "2026-10-06",
+         "line": "describes the cup as single elimination, losing teams out immediately"
+        }
+       ]
+      },
+      {
+       "ref": "americas:USA:16",
+       "verified": true,
+       "claim": "Only clubs in the United States (affiliated with U.S. Soccer) are eligible",
+       "sources": [
+        {
+         "host": "houstondynamofc.com",
+         "url": "https://www.houstondynamofc.com/news/what-do-you-need-know-lamar-hunt-us-open-cup",
+         "read": "2026-10-06",
+         "line": "all affiliated amateur and professional clubs in the United States"
+        },
+        {
+         "host": "forwardmadisonfc.com",
+         "url": "https://www.forwardmadisonfc.com/news/2022/03/22/what-is-the-u-s-open-cup/",
+         "read": "2026-10-06",
+         "line": "The Lamar Hunt U.S. Open Cup is a tournament in which all professional and amateur teams affiliated with U.S Soccer can join."
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 2002,
+     "to": 2002,
+     "kind": "UNKNOWN",
+     "why": "only some MLS clubs entered",
+     "facts": [
+      {
+       "ref": "americas:USA:11",
+       "verified": true,
+       "claim": "All U.S.-based MLS teams entered 2003 to 2006; in 2002 and again 2007 to 2011 only some qualified automatically (2007 to 2011: the top six, the rest through a qualifying tournament)",
+       "sources": [
+        {
+         "host": "thecup.us",
+         "url": "https://thecup.us/2017/01/20/us-open-cup-qualifying-history-major-league-soccer-division-1/",
+         "read": "2026-10-06",
+         "line": "2003 to 2006: All US-based MLS teams were entered into the tournament; 2007: 6 automatic qualifiers, 6 others in a qualifying tournament; 2008 to 2011: 6 automatic qualifiers, the others in a qualifying tournament"
+        },
+        {
+         "host": "3rddegree.net",
+         "url": "https://3rddegree.net/fc-dallas-history/fc-dallas-in-the-lamar-hunt-us-open-cup",
+         "read": "2026-10-06",
+         "line": "The first Open Cup since 2002 that not all Major League Soccer teams automatically qualified (of 2007)"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 2003,
+     "to": 2006,
+     "kind": "NAMED",
+     "name": "U.S. Open Cup",
+     "legs": 1,
+     "facts": [
+      {
+       "ref": "americas:USA:7",
+       "verified": true,
+       "claim": "Before 2020 the Open Cup had been held every year for 106 straight years, so every season 1990 to 2019 had an edition",
+       "sources": [
+        {
+         "host": "frontrowsoccer.com",
+         "url": "https://www.frontrowsoccer.com/2020/08/17/cancelled-u-s-open-cup-streak-is-snapped-at-106-years/",
+         "read": "2026-10-06",
+         "line": "The cancelation of the tournament snaps a 106-consecutive-year run of crowning a national champion."
+        },
+        {
+         "host": "si.com",
+         "url": "https://www.si.com/soccer/2021/07/20/us-open-cup-canceled-2021-format-2022-us-soccer",
+         "read": "2026-10-06",
+         "line": "The Open Cup's uninterrupted run of 106 years, the second longest in the world behind Northern Ireland's Irish Cup (dash in the source replaced with a comma)"
+        }
+       ]
+      },
+      {
+       "ref": "americas:USA:8",
+       "verified": true,
+       "claim": "The U.S. Open Cup was renamed the Lamar Hunt U.S. Open Cup in 1999",
+       "sources": [
+        {
+         "host": "ussoccerhistory.org",
+         "url": "https://www.ussoccerhistory.org/national-soccer-hall-of-fame-biographies/national-soccer-hall-of-fame-builders-biographies/lamar-hunt/",
+         "read": "2026-10-06",
+         "line": "In honor of Hunt's various efforts, the U.S. Open Cup was renamed the Lamar Hunt U.S. Open Cup by the U.S. Soccer Federation in 1999."
+        },
+        {
+         "host": "forwardmadisonfc.com",
+         "url": "https://www.forwardmadisonfc.com/news/2022/03/22/what-is-the-u-s-open-cup/",
+         "read": "2026-10-06",
+         "line": "The competition was renamed to honor Lamar Hunt in 1999, an American soccer pioneer."
+        }
+       ]
+      },
+      {
+       "ref": "americas:USA:11",
+       "verified": true,
+       "claim": "All U.S.-based MLS teams entered 2003 to 2006; in 2002 and again 2007 to 2011 only some qualified automatically (2007 to 2011: the top six, the rest through a qualifying tournament)",
+       "sources": [
+        {
+         "host": "thecup.us",
+         "url": "https://thecup.us/2017/01/20/us-open-cup-qualifying-history-major-league-soccer-division-1/",
+         "read": "2026-10-06",
+         "line": "2003 to 2006: All US-based MLS teams were entered into the tournament; 2007: 6 automatic qualifiers, 6 others in a qualifying tournament; 2008 to 2011: 6 automatic qualifiers, the others in a qualifying tournament"
+        },
+        {
+         "host": "3rddegree.net",
+         "url": "https://3rddegree.net/fc-dallas-history/fc-dallas-in-the-lamar-hunt-us-open-cup",
+         "read": "2026-10-06",
+         "line": "The first Open Cup since 2002 that not all Major League Soccer teams automatically qualified (of 2007)"
+        }
+       ]
+      },
+      {
+       "ref": "americas:USA:14",
+       "verified": true,
+       "claim": "Every U.S. Open Cup final 1990 to 2025 was a single match; 2020 and 2021 have no final",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://rsssf.org/tablesu/usacuphist.html",
+         "read": "2026-10-06",
+         "line": "finals list 1990 to 2025: one score per year, e.g. 2025 Nashville SC 2-1 Austin FC; 2020 and 2021 shown as cancelled"
+        },
+        {
+         "host": "houstondynamofc.com",
+         "url": "https://www.houstondynamofc.com/news/what-do-you-need-know-lamar-hunt-us-open-cup",
+         "read": "2026-10-06",
+         "line": "describes the cup as single elimination, losing teams out immediately"
+        }
+       ]
+      },
+      {
+       "ref": "americas:USA:16",
+       "verified": true,
+       "claim": "Only clubs in the United States (affiliated with U.S. Soccer) are eligible",
+       "sources": [
+        {
+         "host": "houstondynamofc.com",
+         "url": "https://www.houstondynamofc.com/news/what-do-you-need-know-lamar-hunt-us-open-cup",
+         "read": "2026-10-06",
+         "line": "all affiliated amateur and professional clubs in the United States"
+        },
+        {
+         "host": "forwardmadisonfc.com",
+         "url": "https://www.forwardmadisonfc.com/news/2022/03/22/what-is-the-u-s-open-cup/",
+         "read": "2026-10-06",
+         "line": "The Lamar Hunt U.S. Open Cup is a tournament in which all professional and amateur teams affiliated with U.S Soccer can join."
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 2007,
+     "to": 2011,
+     "kind": "UNKNOWN",
+     "why": "the top six MLS clubs entered and the rest qualified",
+     "facts": [
+      {
+       "ref": "americas:USA:11",
+       "verified": true,
+       "claim": "All U.S.-based MLS teams entered 2003 to 2006; in 2002 and again 2007 to 2011 only some qualified automatically (2007 to 2011: the top six, the rest through a qualifying tournament)",
+       "sources": [
+        {
+         "host": "thecup.us",
+         "url": "https://thecup.us/2017/01/20/us-open-cup-qualifying-history-major-league-soccer-division-1/",
+         "read": "2026-10-06",
+         "line": "2003 to 2006: All US-based MLS teams were entered into the tournament; 2007: 6 automatic qualifiers, 6 others in a qualifying tournament; 2008 to 2011: 6 automatic qualifiers, the others in a qualifying tournament"
+        },
+        {
+         "host": "3rddegree.net",
+         "url": "https://3rddegree.net/fc-dallas-history/fc-dallas-in-the-lamar-hunt-us-open-cup",
+         "read": "2026-10-06",
+         "line": "The first Open Cup since 2002 that not all Major League Soccer teams automatically qualified (of 2007)"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 2012,
+     "to": 2019,
+     "kind": "NAMED",
+     "name": "U.S. Open Cup",
+     "legs": 1,
+     "facts": [
+      {
+       "ref": "americas:USA:7",
+       "verified": true,
+       "claim": "Before 2020 the Open Cup had been held every year for 106 straight years, so every season 1990 to 2019 had an edition",
+       "sources": [
+        {
+         "host": "frontrowsoccer.com",
+         "url": "https://www.frontrowsoccer.com/2020/08/17/cancelled-u-s-open-cup-streak-is-snapped-at-106-years/",
+         "read": "2026-10-06",
+         "line": "The cancelation of the tournament snaps a 106-consecutive-year run of crowning a national champion."
+        },
+        {
+         "host": "si.com",
+         "url": "https://www.si.com/soccer/2021/07/20/us-open-cup-canceled-2021-format-2022-us-soccer",
+         "read": "2026-10-06",
+         "line": "The Open Cup's uninterrupted run of 106 years, the second longest in the world behind Northern Ireland's Irish Cup (dash in the source replaced with a comma)"
+        }
+       ]
+      },
+      {
+       "ref": "americas:USA:8",
+       "verified": true,
+       "claim": "The U.S. Open Cup was renamed the Lamar Hunt U.S. Open Cup in 1999",
+       "sources": [
+        {
+         "host": "ussoccerhistory.org",
+         "url": "https://www.ussoccerhistory.org/national-soccer-hall-of-fame-biographies/national-soccer-hall-of-fame-builders-biographies/lamar-hunt/",
+         "read": "2026-10-06",
+         "line": "In honor of Hunt's various efforts, the U.S. Open Cup was renamed the Lamar Hunt U.S. Open Cup by the U.S. Soccer Federation in 1999."
+        },
+        {
+         "host": "forwardmadisonfc.com",
+         "url": "https://www.forwardmadisonfc.com/news/2022/03/22/what-is-the-u-s-open-cup/",
+         "read": "2026-10-06",
+         "line": "The competition was renamed to honor Lamar Hunt in 1999, an American soccer pioneer."
+        }
+       ]
+      },
+      {
+       "ref": "americas:USA:13",
+       "verified": true,
+       "claim": "All U.S.-based MLS teams have had to enter since 2012 (until the 2024 reduction)",
+       "sources": [
+        {
+         "host": "thecup.us",
+         "url": "https://thecup.us/2017/01/20/us-open-cup-qualifying-history-major-league-soccer-division-1/",
+         "read": "2026-10-06",
+         "line": "All US-based MLS teams have been required to enter starting in 2012."
+        },
+        {
+         "host": "3rddegree.net",
+         "url": "https://3rddegree.net/fc-dallas-history/fc-dallas-in-the-lamar-hunt-us-open-cup",
+         "read": "2026-10-06",
+         "line": "From 2012 forward, all 32 professional teams from the first 3 tiers of American Soccer were in the Cup"
+        }
+       ]
+      },
+      {
+       "ref": "americas:USA:14",
+       "verified": true,
+       "claim": "Every U.S. Open Cup final 1990 to 2025 was a single match; 2020 and 2021 have no final",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://rsssf.org/tablesu/usacuphist.html",
+         "read": "2026-10-06",
+         "line": "finals list 1990 to 2025: one score per year, e.g. 2025 Nashville SC 2-1 Austin FC; 2020 and 2021 shown as cancelled"
+        },
+        {
+         "host": "houstondynamofc.com",
+         "url": "https://www.houstondynamofc.com/news/what-do-you-need-know-lamar-hunt-us-open-cup",
+         "read": "2026-10-06",
+         "line": "describes the cup as single elimination, losing teams out immediately"
+        }
+       ]
+      },
+      {
+       "ref": "americas:USA:16",
+       "verified": true,
+       "claim": "Only clubs in the United States (affiliated with U.S. Soccer) are eligible",
+       "sources": [
+        {
+         "host": "houstondynamofc.com",
+         "url": "https://www.houstondynamofc.com/news/what-do-you-need-know-lamar-hunt-us-open-cup",
+         "read": "2026-10-06",
+         "line": "all affiliated amateur and professional clubs in the United States"
+        },
+        {
+         "host": "forwardmadisonfc.com",
+         "url": "https://www.forwardmadisonfc.com/news/2022/03/22/what-is-the-u-s-open-cup/",
+         "read": "2026-10-06",
+         "line": "The Lamar Hunt U.S. Open Cup is a tournament in which all professional and amateur teams affiliated with U.S Soccer can join."
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 2020,
+     "to": 2021,
+     "kind": "NONE",
+     "why": "cancelled both years (COVID-19)",
+     "facts": [
+      {
+       "ref": "americas:USA:5",
+       "verified": true,
+       "claim": "The 2020 U.S. Open Cup was cancelled (COVID-19), the first time in the tournament history",
+       "sources": [
+        {
+         "host": "frontrowsoccer.com",
+         "url": "https://www.frontrowsoccer.com/2020/08/17/cancelled-u-s-open-cup-streak-is-snapped-at-106-years/",
+         "read": "2026-10-06",
+         "line": "U.S. Soccer's Open Cup Committee has been forced to cancel the 2020 Lamar Hunt U.S. Open Cup (17 August 2020)"
+        },
+        {
+         "host": "thecup.us",
+         "url": "https://thecup.us/2021/07/21/2021-us-open-cup-officially-canceled-largest-modern-era-field-possible-for-2022/",
+         "read": "2026-10-06",
+         "line": "After the pandemic forced the US Open Cup to be canceled for the first time in the tournament's history in 2020"
+        },
+        {
+         "host": "si.com",
+         "url": "https://www.si.com/soccer/2021/07/20/us-open-cup-canceled-2021-format-2022-us-soccer",
+         "read": "2026-10-06",
+         "line": "The Open Cup's uninterrupted run of 106 years ... ended in 2020 because of the coronavirus"
+        }
+       ]
+      },
+      {
+       "ref": "americas:USA:6",
+       "verified": true,
+       "claim": "The 2021 U.S. Open Cup was cancelled too (a reduced edition was planned, then called off); the competition resumed in 2022",
+       "sources": [
+        {
+         "host": "si.com",
+         "url": "https://www.si.com/soccer/2021/07/20/us-open-cup-canceled-2021-format-2022-us-soccer",
+         "read": "2026-10-06",
+         "line": "The U.S. Soccer Federation on Tuesday confirmed the cancellation of the 2021 U.S. Open Cup (20 July 2021)"
+        },
+        {
+         "host": "thecup.us",
+         "url": "https://thecup.us/2021/07/21/2021-us-open-cup-officially-canceled-largest-modern-era-field-possible-for-2022/",
+         "read": "2026-10-06",
+         "line": "A smaller edition of the tournament was set to take place this year, but had to be called off and will not be rescheduled. ... The 2022 tournament is set to begin on March 22"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 2022,
+     "to": 2023,
+     "kind": "NAMED",
+     "name": "U.S. Open Cup",
+     "legs": 1,
+     "facts": [
+      {
+       "ref": "americas:USA:6",
+       "verified": true,
+       "claim": "The 2021 U.S. Open Cup was cancelled too (a reduced edition was planned, then called off); the competition resumed in 2022",
+       "sources": [
+        {
+         "host": "si.com",
+         "url": "https://www.si.com/soccer/2021/07/20/us-open-cup-canceled-2021-format-2022-us-soccer",
+         "read": "2026-10-06",
+         "line": "The U.S. Soccer Federation on Tuesday confirmed the cancellation of the 2021 U.S. Open Cup (20 July 2021)"
+        },
+        {
+         "host": "thecup.us",
+         "url": "https://thecup.us/2021/07/21/2021-us-open-cup-officially-canceled-largest-modern-era-field-possible-for-2022/",
+         "read": "2026-10-06",
+         "line": "A smaller edition of the tournament was set to take place this year, but had to be called off and will not be rescheduled. ... The 2022 tournament is set to begin on March 22"
+        }
+       ]
+      },
+      {
+       "ref": "americas:USA:8",
+       "verified": true,
+       "claim": "The U.S. Open Cup was renamed the Lamar Hunt U.S. Open Cup in 1999",
+       "sources": [
+        {
+         "host": "ussoccerhistory.org",
+         "url": "https://www.ussoccerhistory.org/national-soccer-hall-of-fame-biographies/national-soccer-hall-of-fame-builders-biographies/lamar-hunt/",
+         "read": "2026-10-06",
+         "line": "In honor of Hunt's various efforts, the U.S. Open Cup was renamed the Lamar Hunt U.S. Open Cup by the U.S. Soccer Federation in 1999."
+        },
+        {
+         "host": "forwardmadisonfc.com",
+         "url": "https://www.forwardmadisonfc.com/news/2022/03/22/what-is-the-u-s-open-cup/",
+         "read": "2026-10-06",
+         "line": "The competition was renamed to honor Lamar Hunt in 1999, an American soccer pioneer."
+        }
+       ]
+      },
+      {
+       "ref": "americas:USA:13",
+       "verified": true,
+       "claim": "All U.S.-based MLS teams have had to enter since 2012 (until the 2024 reduction)",
+       "sources": [
+        {
+         "host": "thecup.us",
+         "url": "https://thecup.us/2017/01/20/us-open-cup-qualifying-history-major-league-soccer-division-1/",
+         "read": "2026-10-06",
+         "line": "All US-based MLS teams have been required to enter starting in 2012."
+        },
+        {
+         "host": "3rddegree.net",
+         "url": "https://3rddegree.net/fc-dallas-history/fc-dallas-in-the-lamar-hunt-us-open-cup",
+         "read": "2026-10-06",
+         "line": "From 2012 forward, all 32 professional teams from the first 3 tiers of American Soccer were in the Cup"
+        }
+       ]
+      },
+      {
+       "ref": "americas:USA:14",
+       "verified": true,
+       "claim": "Every U.S. Open Cup final 1990 to 2025 was a single match; 2020 and 2021 have no final",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://rsssf.org/tablesu/usacuphist.html",
+         "read": "2026-10-06",
+         "line": "finals list 1990 to 2025: one score per year, e.g. 2025 Nashville SC 2-1 Austin FC; 2020 and 2021 shown as cancelled"
+        },
+        {
+         "host": "houstondynamofc.com",
+         "url": "https://www.houstondynamofc.com/news/what-do-you-need-know-lamar-hunt-us-open-cup",
+         "read": "2026-10-06",
+         "line": "describes the cup as single elimination, losing teams out immediately"
+        }
+       ]
+      },
+      {
+       "ref": "americas:USA:16",
+       "verified": true,
+       "claim": "Only clubs in the United States (affiliated with U.S. Soccer) are eligible",
+       "sources": [
+        {
+         "host": "houstondynamofc.com",
+         "url": "https://www.houstondynamofc.com/news/what-do-you-need-know-lamar-hunt-us-open-cup",
+         "read": "2026-10-06",
+         "line": "all affiliated amateur and professional clubs in the United States"
+        },
+        {
+         "host": "forwardmadisonfc.com",
+         "url": "https://www.forwardmadisonfc.com/news/2022/03/22/what-is-the-u-s-open-cup/",
+         "read": "2026-10-06",
+         "line": "The Lamar Hunt U.S. Open Cup is a tournament in which all professional and amateur teams affiliated with U.S Soccer can join."
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 2024,
+     "kind": "UNKNOWN",
+     "why": "from 2024 only some MLS clubs enter",
+     "facts": [
+      {
+       "ref": "americas:USA:0",
+       "verified": true,
+       "claim": "2024 U.S. Open Cup: eight MLS first teams, Atlanta United, FC Dallas, LAFC, Real Salt Lake, San Jose Earthquakes, Seattle Sounders, Sporting Kansas City and holders Houston Dynamo",
+       "sources": [
+        {
+         "host": "foxsports.com",
+         "url": "https://www.foxsports.com/stories/soccer/u-s-soccer-names-8-mls-participants-for-2024-u-s-open-cup",
+         "read": "2026-10-06",
+         "line": "The participating MLS clubs are Atlanta United, FC Dallas, LAFC, Real Salt Lake, San Jose Earthquakes, Seattle Sounders, Sporting Kansas City and the defending U.S. Open Cup champion Houston Dynamo."
+        },
+        {
+         "host": "cbssports.com",
+         "url": "https://www.cbssports.com/soccer/news/2024-u-s-open-cup-format-announced-lionel-messis-inter-miami-not-among-eight-mls-teams-picked-to-compete",
+         "read": "2026-10-06",
+         "line": "Seattle Sounders, Los Angeles FC, Houston Dynamo, Atlanta United, Real Salt Lake, FC Dallas, Sporting Kansas City, San Jose Earthquakes"
+        }
+       ]
+      },
+      {
+       "ref": "americas:USA:1",
+       "verified": true,
+       "claim": "2024 selection rule: the Open Cup holders plus the top seven U.S. based clubs in the 2023 Supporters Shield standings, other than clubs in the 2024 Concacaf Champions Cup",
+       "sources": [
+        {
+         "host": "mlssoccer.com",
+         "url": "https://www.mlssoccer.com/news/19-mls-and-mls-next-pro-clubs-to-compete-in-2024-lamar-hunt-u-s-open-cup",
+         "read": "2026-10-06",
+         "line": "The eight MLS clubs will include Houston Dynamo FC (last year's Open Cup champion) and the top seven ranked U.S.-based teams according to the 2023 MLS Supporters' Shield standings, other than clubs playing in the 2024 Concacaf Champions Cup."
+        },
+        {
+         "host": "foxsports.com",
+         "url": "https://www.foxsports.com/stories/soccer/u-s-soccer-names-8-mls-participants-for-2024-u-s-open-cup",
+         "read": "2026-10-06",
+         "line": "Those clubs were selected based on their finish in the 2023 MLS regular season standings."
+        }
+       ]
+      },
+      {
+       "ref": "americas:USA:3",
+       "verified": true,
+       "claim": "2025 U.S. Open Cup: 16 MLS first teams, Austin FC, Charlotte FC, Chicago Fire, D.C. United, FC Dallas, Houston Dynamo, Minnesota United, Nashville SC, New England Revolution, New York City FC, New York Red Bulls, Orlando City, Philadelphia Union, Portland Timbers, San Jose Earthquakes, St. Louis CITY, entering at the round of 32",
+       "sources": [
+        {
+         "host": "mlssoccer.com",
+         "url": "https://www.mlssoccer.com/news/every-mls-team-competing-in-2025-us-open-cup",
+         "read": "2026-10-06",
+         "line": "the 2025 US Open Cup will feature 16 MLS teams and 10 MLS NEXT Pro teams. ... The 16 competing MLS teams will enter the US Open Cup in the Round of 32."
+        },
+        {
+         "host": "ussoccer.com",
+         "url": "https://www.ussoccer.com/stories/2025/us-open-cup-preview-mls-enters-cupset-looms-round-of-32",
+         "read": "2026-10-06",
+         "line": "This year, 16 teams from MLS will compete (up eight from last year) (article of 3 May 2025, names the same 16)"
+        }
+       ]
+      },
+      {
+       "ref": "americas:USA:4",
+       "verified": true,
+       "claim": "2026 U.S. Open Cup: 16 MLS first teams enter at the round of 32: Atlanta United, Austin FC, Charlotte FC, Chicago Fire, Colorado Rapids, Columbus Crew, D.C. United, Houston Dynamo, Minnesota United, New England Revolution, New York City FC, Orlando City, New York Red Bulls, San Jose Earthquakes, Sporting Kansas City, St. Louis CITY",
+       "sources": [
+        {
+         "host": "ussoccer.com",
+         "url": "https://www.ussoccer.com/stories/2026/04/usoc/round-of-32-schedule-set-for-2026-lamar-hunt-us-open-cup-as-16-major-league-soccer-clubs-enter-competition",
+         "read": "2026-10-06",
+         "line": "The Round of 32, which features the 16 victors from this week's Second Round action facing off against 16 Major League Soccer (Div. I) clubs (article of 2 April 2026, names the 16)"
+        },
+        {
+         "host": "thecup.us",
+         "url": "https://thecup.us/2026/04/15/2026-us-open-cup-round-of-32-review-two-mls-teams-eliminated-on-first-night/",
+         "read": "2026-10-06",
+         "line": "round of 32 review of 15 April 2026 lists the same 16 MLS clubs with their opponents"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  "Canada": {
+   "ledger": "americas:Canada",
+   "windows": [
+    {
+     "from": 1990,
+     "to": 2007,
+     "kind": "NONE",
+     "why": "the Canadian Championship began in 2008, and Canadian clubs cannot enter the U.S. Open Cup",
+     "facts": [
+      {
+       "ref": "americas:Canada:0",
+       "verified": true,
+       "claim": "The Canadian Championship (Voyageurs Cup) has been played every year since 2008",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesc/canchamp.html",
+         "read": "2026-10-06",
+         "line": "official Canadian Championship winners listed for every year 2008 to 2025 (2025: Vancouver Whitecaps beat Vancouver FC 4-2)"
+        },
+        {
+         "host": "urbanpitch.com",
+         "url": "https://urbanpitch.com/the-canadian-championship-a-brief-history-of-the-voyageurs-cup/",
+         "read": "2026-10-06",
+         "line": "For the first three editions from 2008-2010, the national champion was decided between Canada's three fully professional teams: Toronto FC, Montreal Impact, and Vancouver Whitecaps."
+        }
+       ]
+      },
+      {
+       "ref": "americas:Canada:10",
+       "verified": true,
+       "claim": "Entrants: the three Canadian MLS clubs (Vancouver Whitecaps, CF Montreal, Toronto FC) play the Canadian Championship, alongside the Canadian Premier League clubs and provincial league champions",
+       "sources": [
+        {
+         "host": "truenorthfoot.ca",
+         "url": "https://truenorthfoot.ca/article/just-what-is-the-voyageurs-cup-559",
+         "read": "2026-10-06",
+         "line": "The three Major League Soccer sides: Vancouver Whitecaps, CF Montréal, and Toronto FC ... All eight Canadian Premier League clubs (2026)"
+        },
+        {
+         "host": "mlssoccer.com",
+         "url": "https://www.mlssoccer.com/news/2021-canadian-championship-format-and-schedule-announced",
+         "read": "2026-10-06",
+         "line": "three Canadian MLS teams, all Canadian Premier League clubs, and champions from two provincial leagues (2021, 13 participants)"
+        }
+       ]
+      },
+      {
+       "ref": "americas:USA:16",
+       "verified": true,
+       "claim": "Only clubs in the United States (affiliated with U.S. Soccer) are eligible",
+       "sources": [
+        {
+         "host": "houstondynamofc.com",
+         "url": "https://www.houstondynamofc.com/news/what-do-you-need-know-lamar-hunt-us-open-cup",
+         "read": "2026-10-06",
+         "line": "all affiliated amateur and professional clubs in the United States"
+        },
+        {
+         "host": "forwardmadisonfc.com",
+         "url": "https://www.forwardmadisonfc.com/news/2022/03/22/what-is-the-u-s-open-cup/",
+         "read": "2026-10-06",
+         "line": "The Lamar Hunt U.S. Open Cup is a tournament in which all professional and amateur teams affiliated with U.S Soccer can join."
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 2008,
+     "to": 2010,
+     "kind": "UNKNOWN",
+     "why": "a round robin of three clubs, no final",
+     "facts": [
+      {
+       "ref": "americas:Canada:1",
+       "verified": true,
+       "claim": "2008 to 2010: no final; a round robin between Montreal, Toronto and Vancouver decided the cup",
+       "sources": [
+        {
+         "host": "urbanpitch.com",
+         "url": "https://urbanpitch.com/the-canadian-championship-a-brief-history-of-the-voyageurs-cup/",
+         "read": "2026-10-06",
+         "line": "For the first three editions from 2008-2010, the national champion was decided between Canada's three fully professional teams"
+        },
+        {
+         "host": "wakingthered.com",
+         "url": "https://wakingthered.com/2019/02/23/327/voyageurs-cup-a-brief-history/",
+         "read": "2026-10-06",
+         "line": "For the next three years Montreal, Toronto, and Vancouver would battle for the Cup. (winner on head to head results and goal difference)"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 2011,
+     "to": 2019,
+     "kind": "NAMED",
+     "name": "Canadian Championship",
+     "legs": 2,
+     "decider": "awayGoals",
+     "facts": [
+      {
+       "ref": "americas:Canada:0",
+       "verified": true,
+       "claim": "The Canadian Championship (Voyageurs Cup) has been played every year since 2008",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesc/canchamp.html",
+         "read": "2026-10-06",
+         "line": "official Canadian Championship winners listed for every year 2008 to 2025 (2025: Vancouver Whitecaps beat Vancouver FC 4-2)"
+        },
+        {
+         "host": "urbanpitch.com",
+         "url": "https://urbanpitch.com/the-canadian-championship-a-brief-history-of-the-voyageurs-cup/",
+         "read": "2026-10-06",
+         "line": "For the first three editions from 2008-2010, the national champion was decided between Canada's three fully professional teams: Toronto FC, Montreal Impact, and Vancouver Whitecaps."
+        }
+       ]
+      },
+      {
+       "ref": "americas:Canada:2",
+       "verified": true,
+       "claim": "From 2011 semi finals and a final, both over two legs",
+       "sources": [
+        {
+         "host": "wakingthered.com",
+         "url": "https://wakingthered.com/2019/02/23/327/voyageurs-cup-a-brief-history/",
+         "read": "2026-10-06",
+         "line": "the group stage format was gone and it was replaced by more of a cup format with the teams contesting semifinals and a final with both taking place over two legs. (from 2011)"
+        },
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesc/canchamp.html",
+         "read": "2026-10-06",
+         "line": "2011 Toronto FC - Vancouver Whitecaps 1-1, 2-1 and two leg scores every year to 2019 (2019 Montreal Impact - Toronto FC 1-0, 0-1, 3-1 on penalties)"
+        }
+       ]
+      },
+      {
+       "ref": "americas:Canada:3",
+       "verified": true,
+       "claim": "The two legged finals used away goals when level on aggregate: Toronto FC won the 2016 final on away goals (2-2 on aggregate); Montreal 2013 (0-0, 2-2) the same by the scores; 2019 level with no away goal edge went to penalties",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesc/canchamp.html",
+         "read": "2026-10-06",
+         "line": "2013 Montreal Impact - Vancouver Whitecaps 0-0, 2-2; 2016 Toronto FC - Vancouver Whitecaps 1-0, 1-2; 2019 Montreal Impact - Toronto FC 1-0, 0-1 [3-1 pens]"
+        },
+        {
+         "host": "whitecapsfc.com",
+         "url": "https://www.whitecapsfc.com/news/toronto-fc-win-voyageurs-cup",
+         "read": "2026-10-06",
+         "line": "Toronto FC were crowned Canadians champions in Wednesday night's second leg at BC Place by virtue of the away goals tiebreaker. The aggregate score ended at 2-2 (30 June 2016)"
+        }
+       ]
+      },
+      {
+       "ref": "americas:Canada:10",
+       "verified": true,
+       "claim": "Entrants: the three Canadian MLS clubs (Vancouver Whitecaps, CF Montreal, Toronto FC) play the Canadian Championship, alongside the Canadian Premier League clubs and provincial league champions",
+       "sources": [
+        {
+         "host": "truenorthfoot.ca",
+         "url": "https://truenorthfoot.ca/article/just-what-is-the-voyageurs-cup-559",
+         "read": "2026-10-06",
+         "line": "The three Major League Soccer sides: Vancouver Whitecaps, CF Montréal, and Toronto FC ... All eight Canadian Premier League clubs (2026)"
+        },
+        {
+         "host": "mlssoccer.com",
+         "url": "https://www.mlssoccer.com/news/2021-canadian-championship-format-and-schedule-announced",
+         "read": "2026-10-06",
+         "line": "three Canadian MLS teams, all Canadian Premier League clubs, and champions from two provincial leagues (2021, 13 participants)"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 2020,
+     "to": 2020,
+     "kind": "UNKNOWN",
+     "why": "one final between the top Canadian MLS club and the CPL winner",
+     "facts": [
+      {
+       "ref": "americas:Canada:4",
+       "verified": true,
+       "claim": "The 2020 final was a single match between the CPL Island Games winner (Forge FC) and the top Canadian MLS side (Toronto FC); Toronto won 1-1, 5-4 on penalties",
+       "sources": [
+        {
+         "host": "northerntribune.ca",
+         "url": "https://northerntribune.ca/canadian-championship-2020-format/",
+         "read": "2026-10-06",
+         "line": "The CPL side that wins the Island Games bubble tournament will take on the top Canadian MLS side (article of 13 August 2020, the 2020 championship a single match)"
+        },
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesc/canchamp.html",
+         "read": "2026-10-06",
+         "line": "2020: Toronto FC - Forge FC 1-1 [5-4 pens]"
+        },
+        {
+         "host": "mlssoccer.com",
+         "url": "https://www.mlssoccer.com/news/2021-canadian-championship-format-and-schedule-announced",
+         "read": "2026-10-06",
+         "line": "2020 Canadian Championship Finalists Toronto FC and Forge FC (still unplayed when the 2021 format was announced)"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 2021,
+     "to": 2021,
+     "kind": "NAMED",
+     "name": "Canadian Championship",
+     "legs": 1,
+     "facts": [
+      {
+       "ref": "americas:Canada:0",
+       "verified": true,
+       "claim": "The Canadian Championship (Voyageurs Cup) has been played every year since 2008",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesc/canchamp.html",
+         "read": "2026-10-06",
+         "line": "official Canadian Championship winners listed for every year 2008 to 2025 (2025: Vancouver Whitecaps beat Vancouver FC 4-2)"
+        },
+        {
+         "host": "urbanpitch.com",
+         "url": "https://urbanpitch.com/the-canadian-championship-a-brief-history-of-the-voyageurs-cup/",
+         "read": "2026-10-06",
+         "line": "For the first three editions from 2008-2010, the national champion was decided between Canada's three fully professional teams: Toronto FC, Montreal Impact, and Vancouver Whitecaps."
+        }
+       ]
+      },
+      {
+       "ref": "americas:Canada:5",
+       "verified": true,
+       "claim": "2021: 13 clubs in a single knockout ending in one final match (CF Montreal 1-0 Toronto FC)",
+       "sources": [
+        {
+         "host": "mlssoccer.com",
+         "url": "https://www.mlssoccer.com/news/2021-canadian-championship-format-and-schedule-announced",
+         "read": "2026-10-06",
+         "line": "13 participants in a single knock-out competition culminating in the Final in October 2021."
+        },
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesc/canchamp.html",
+         "read": "2026-10-06",
+         "line": "2021: Montreal CF - Toronto FC 1-0 (one score)"
+        }
+       ]
+      },
+      {
+       "ref": "americas:Canada:10",
+       "verified": true,
+       "claim": "Entrants: the three Canadian MLS clubs (Vancouver Whitecaps, CF Montreal, Toronto FC) play the Canadian Championship, alongside the Canadian Premier League clubs and provincial league champions",
+       "sources": [
+        {
+         "host": "truenorthfoot.ca",
+         "url": "https://truenorthfoot.ca/article/just-what-is-the-voyageurs-cup-559",
+         "read": "2026-10-06",
+         "line": "The three Major League Soccer sides: Vancouver Whitecaps, CF Montréal, and Toronto FC ... All eight Canadian Premier League clubs (2026)"
+        },
+        {
+         "host": "mlssoccer.com",
+         "url": "https://www.mlssoccer.com/news/2021-canadian-championship-format-and-schedule-announced",
+         "read": "2026-10-06",
+         "line": "three Canadian MLS teams, all Canadian Premier League clubs, and champions from two provincial leagues (2021, 13 participants)"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 2022,
+     "to": 2023,
+     "kind": "NAMED",
+     "name": "Canadian Championship",
+     "why": "the one match finals of 2022 and 2023 rest on one source, so no final score",
+     "facts": [
+      {
+       "ref": "americas:Canada:0",
+       "verified": true,
+       "claim": "The Canadian Championship (Voyageurs Cup) has been played every year since 2008",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesc/canchamp.html",
+         "read": "2026-10-06",
+         "line": "official Canadian Championship winners listed for every year 2008 to 2025 (2025: Vancouver Whitecaps beat Vancouver FC 4-2)"
+        },
+        {
+         "host": "urbanpitch.com",
+         "url": "https://urbanpitch.com/the-canadian-championship-a-brief-history-of-the-voyageurs-cup/",
+         "read": "2026-10-06",
+         "line": "For the first three editions from 2008-2010, the national champion was decided between Canada's three fully professional teams: Toronto FC, Montreal Impact, and Vancouver Whitecaps."
+        }
+       ]
+      },
+      {
+       "ref": "americas:Canada:10",
+       "verified": true,
+       "claim": "Entrants: the three Canadian MLS clubs (Vancouver Whitecaps, CF Montreal, Toronto FC) play the Canadian Championship, alongside the Canadian Premier League clubs and provincial league champions",
+       "sources": [
+        {
+         "host": "truenorthfoot.ca",
+         "url": "https://truenorthfoot.ca/article/just-what-is-the-voyageurs-cup-559",
+         "read": "2026-10-06",
+         "line": "The three Major League Soccer sides: Vancouver Whitecaps, CF Montréal, and Toronto FC ... All eight Canadian Premier League clubs (2026)"
+        },
+        {
+         "host": "mlssoccer.com",
+         "url": "https://www.mlssoccer.com/news/2021-canadian-championship-format-and-schedule-announced",
+         "read": "2026-10-06",
+         "line": "three Canadian MLS teams, all Canadian Premier League clubs, and champions from two provincial leagues (2021, 13 participants)"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 2024,
+     "to": 2024,
+     "kind": "NAMED",
+     "name": "Canadian Championship",
+     "legs": 1,
+     "decider": "penalties",
+     "facts": [
+      {
+       "ref": "americas:Canada:0",
+       "verified": true,
+       "claim": "The Canadian Championship (Voyageurs Cup) has been played every year since 2008",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesc/canchamp.html",
+         "read": "2026-10-06",
+         "line": "official Canadian Championship winners listed for every year 2008 to 2025 (2025: Vancouver Whitecaps beat Vancouver FC 4-2)"
+        },
+        {
+         "host": "urbanpitch.com",
+         "url": "https://urbanpitch.com/the-canadian-championship-a-brief-history-of-the-voyageurs-cup/",
+         "read": "2026-10-06",
+         "line": "For the first three editions from 2008-2010, the national champion was decided between Canada's three fully professional teams: Toronto FC, Montreal Impact, and Vancouver Whitecaps."
+        }
+       ]
+      },
+      {
+       "ref": "americas:Canada:6",
+       "verified": true,
+       "claim": "2024 final: one match at BC Place, Vancouver Whitecaps 0-0 Toronto FC, Vancouver 4-2 on penalties (25 September 2024)",
+       "sources": [
+        {
+         "host": "canadasoccer.com",
+         "url": "https://canadasoccer.com/championship/canChamp/2024/",
+         "read": "2026-10-06",
+         "line": "Vancouver won the Final 4-2 on penalties after a 0:0 draw at BC Place on Wednesday 25 September. (read in the browser)"
+        },
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesc/canchamp.html",
+         "read": "2026-10-06",
+         "line": "2024: Vancouver Whitecaps - Toronto FC (0-0) [4-2 penalties]"
+        }
+       ]
+      },
+      {
+       "ref": "americas:Canada:10",
+       "verified": true,
+       "claim": "Entrants: the three Canadian MLS clubs (Vancouver Whitecaps, CF Montreal, Toronto FC) play the Canadian Championship, alongside the Canadian Premier League clubs and provincial league champions",
+       "sources": [
+        {
+         "host": "truenorthfoot.ca",
+         "url": "https://truenorthfoot.ca/article/just-what-is-the-voyageurs-cup-559",
+         "read": "2026-10-06",
+         "line": "The three Major League Soccer sides: Vancouver Whitecaps, CF Montréal, and Toronto FC ... All eight Canadian Premier League clubs (2026)"
+        },
+        {
+         "host": "mlssoccer.com",
+         "url": "https://www.mlssoccer.com/news/2021-canadian-championship-format-and-schedule-announced",
+         "read": "2026-10-06",
+         "line": "three Canadian MLS teams, all Canadian Premier League clubs, and champions from two provincial leagues (2021, 13 participants)"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 2025,
+     "kind": "NAMED",
+     "name": "Canadian Championship",
+     "legs": 1,
+     "why": "a one match final; penalties are two sourced for 2024 only",
+     "facts": [
+      {
+       "ref": "americas:Canada:0",
+       "verified": true,
+       "claim": "The Canadian Championship (Voyageurs Cup) has been played every year since 2008",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesc/canchamp.html",
+         "read": "2026-10-06",
+         "line": "official Canadian Championship winners listed for every year 2008 to 2025 (2025: Vancouver Whitecaps beat Vancouver FC 4-2)"
+        },
+        {
+         "host": "urbanpitch.com",
+         "url": "https://urbanpitch.com/the-canadian-championship-a-brief-history-of-the-voyageurs-cup/",
+         "read": "2026-10-06",
+         "line": "For the first three editions from 2008-2010, the national champion was decided between Canada's three fully professional teams: Toronto FC, Montreal Impact, and Vancouver Whitecaps."
+        }
+       ]
+      },
+      {
+       "ref": "americas:Canada:7",
+       "verified": true,
+       "claim": "2025 final: one match at BC Place, Vancouver Whitecaps 4-2 Vancouver FC (1 October 2025), the first CPL finalist of a full tournament",
+       "sources": [
+        {
+         "host": "onesoccer.ca",
+         "url": "https://onesoccer.ca/a/vancouver-whitecaps-win-fourth-straight-can-champ-title-with-win-over-vancouver-fc",
+         "read": "2026-10-06",
+         "line": "The Vancouver Whitecaps won their fourth straight TELUS Canadian Championship title on Wednesday night with a 4-2 victory over provincial rivals Vancouver FC in the 2025 final at BC Place. (read in the browser)"
+        },
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesc/canchamp.html",
+         "read": "2026-10-06",
+         "line": "2025: Vancouver Whitecaps beat Vancouver FC (4-2)"
+        }
+       ]
+      },
+      {
+       "ref": "americas:Canada:10",
+       "verified": true,
+       "claim": "Entrants: the three Canadian MLS clubs (Vancouver Whitecaps, CF Montreal, Toronto FC) play the Canadian Championship, alongside the Canadian Premier League clubs and provincial league champions",
+       "sources": [
+        {
+         "host": "truenorthfoot.ca",
+         "url": "https://truenorthfoot.ca/article/just-what-is-the-voyageurs-cup-559",
+         "read": "2026-10-06",
+         "line": "The three Major League Soccer sides: Vancouver Whitecaps, CF Montréal, and Toronto FC ... All eight Canadian Premier League clubs (2026)"
+        },
+        {
+         "host": "mlssoccer.com",
+         "url": "https://www.mlssoccer.com/news/2021-canadian-championship-format-and-schedule-announced",
+         "read": "2026-10-06",
+         "line": "three Canadian MLS teams, all Canadian Premier League clubs, and champions from two provincial leagues (2021, 13 participants)"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  "Mexico": {
+   "ledger": "americas:Mexico",
+   "windows": [
+    {
+     "from": 1990,
+     "to": 1996,
+     "kind": "UNKNOWN",
+     "why": "the Copa Mexico seasons of the early 1990s rest on one source",
+     "facts": []
+    },
+    {
+     "from": 1997,
+     "to": 2011,
+     "kind": "NONE",
+     "why": "no cup from 1997-98 until the Apertura 2012",
+     "facts": [
+      {
+       "ref": "americas:Mexico:1",
+       "verified": true,
+       "claim": "No cup from 1997-98 to 2011-12; revived in 2012-13 with two editions a season (Apertura and Clausura)",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesm/mexcuphist.html",
+         "read": "2026-10-06",
+         "line": "1997-12 not held; 2012-13 Dorados - Correcaminos U.A.T. 2-2 (3-2 pen) [Apertura]; 2012-13 Cruz Azul - Atlante 0-0 (4-2 pen) [Clausura]"
+        },
+        {
+         "host": "milenio.com",
+         "url": "https://www.milenio.com/deportes/los-campeones-de-la-copa-mx",
+         "read": "2026-10-06",
+         "line": "En 1997 la aparición de los torneos cortos desapareció por un par de años esta competencia ... Desde el regreso de la Copa MX en el Apertura 2012, cinco equipos diferentes se han galardonado (4 November 2014)"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 2012,
+     "to": 2019,
+     "kind": "UNKNOWN",
+     "why": "two editions a season, and clubs in continental play sat it out",
+     "facts": [
+      {
+       "ref": "americas:Mexico:1",
+       "verified": true,
+       "claim": "No cup from 1997-98 to 2011-12; revived in 2012-13 with two editions a season (Apertura and Clausura)",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesm/mexcuphist.html",
+         "read": "2026-10-06",
+         "line": "1997-12 not held; 2012-13 Dorados - Correcaminos U.A.T. 2-2 (3-2 pen) [Apertura]; 2012-13 Cruz Azul - Atlante 0-0 (4-2 pen) [Clausura]"
+        },
+        {
+         "host": "milenio.com",
+         "url": "https://www.milenio.com/deportes/los-campeones-de-la-copa-mx",
+         "read": "2026-10-06",
+         "line": "En 1997 la aparición de los torneos cortos desapareció por un par de años esta competencia ... Desde el regreso de la Copa MX en el Apertura 2012, cinco equipos diferentes se han galardonado (4 November 2014)"
+        }
+       ]
+      },
+      {
+       "ref": "americas:Mexico:5",
+       "verified": true,
+       "claim": "Clausura 2016 Copa MX: the seven Liga MX clubs in continental play sat out (América, Tigres, Querétaro, Santos in the Concacaf Champions League; Pumas, Toluca, Puebla in the Copa Libertadores); the Ascenso MX sent its 12 best placed clubs of the Apertura 2015, so its bottom three (Zacatepec, Correcaminos, Cimarrones) did not enter",
+       "sources": [
+        {
+         "host": "informador.mx",
+         "url": "https://www.informador.mx/Ideas/Futbol-sin-balon-20160119-0230.html",
+         "read": "2026-10-06",
+         "line": "Los siete clubes de Primera División que no jugarán en esta edición de la Copa MX son, América, Tigres, Santos y Querétaro por su participación en Concachampions, así como, Puebla, Toluca y Pumas por su actividad en Copa Libertadores. (19 January 2016, read in the browser)"
+        },
+        {
+         "host": "lopezdoriga.com",
+         "url": "https://lopezdoriga.com/deportes/definidos-grupos-y-horarios-de-la-copa-mx-clausura-2016/",
+         "read": "2026-10-06",
+         "line": "América, Tigres, Querétaro y Santos no participan debido a que juegan en la Concachampions 2015-2016. Por su parte, Pumas, Toluca y Puebla disputarán la Copa Libertadores 2016. Mientras que los representantes del Ascenso MX son los 12 mejor clasificados del Apertura 2015. (15 December 2015, read in the browser)"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 2020,
+     "kind": "NONE",
+     "why": "no cup since 2019-20; a return was announced in August 2026 with nothing confirmed",
+     "facts": [
+      {
+       "ref": "americas:Mexico:2",
+       "verified": true,
+       "claim": "The last edition was 2019-20 (one edition that season, Monterrey beat Tijuana in a two legged final 1-0, 1-1); none since",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesm/mexcuphist.html",
+         "read": "2026-10-06",
+         "line": "2019-20 Monterrey - Tijuana 1-0 1-1 2-1 g (last row of the table)"
+        },
+        {
+         "host": "wdeportes.com",
+         "url": "https://www.wdeportes.com/2026/08/20/liga-mx-fmf-presenta-nuevo-modelo-deportivo-para-2027-cuando-regresa-el-ascenso-y-la-copa-mx/",
+         "read": "2026-10-06",
+         "line": "La Copa MX no se disputa desde la temporada 2019-20, cuando Monterrey se coronó campeón. (20 August 2026)"
+        },
+        {
+         "host": "sdpnoticias.com",
+         "url": "https://www.sdpnoticias.com/deportes/regresa-la-copa-mx-te-decimos-cuando-y-como-seria-el-formato/",
+         "read": "2026-10-06",
+         "line": "Monterrey won the last Copa MX, beating Xolos in a two leg final, 1-0 away and 1-1 at home (article of 28 June 2024, paraphrase of the summary)"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  "Argentina": {
+   "ledger": "americas:Argentina",
+   "windows": [
+    {
+     "from": 1990,
+     "to": 1992,
+     "kind": "NONE",
+     "why": "no Copa Argentina between 1970 and 2011-12",
+     "facts": [
+      {
+       "ref": "americas:Argentina:0",
+       "verified": true,
+       "claim": "No Copa Argentina between the abandoned 1970 edition and 2011-12: none held 1990-91 to 2010-11",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesa/argcuphist.html",
+         "read": "2026-10-06",
+         "line": "1969 CA Boca Juniors 3-1 0-1 CA Atlanta; 1970 abandoned; next row 2011/12 CA Boca Juniors 2-1 Racing Club (Avellaneda)"
+        },
+        {
+         "host": "espndeportes.espn.com",
+         "url": "https://espndeportes.espn.com/futbol/argentina/nota/_/id/12987727/el-historial-de-campeones-de-la-copa-argentina",
+         "read": "2026-10-06",
+         "line": "La Copa Argentina arrancó con una edición a fines de la década del 60 y se juega de forma ininterrumpida desde 2011. (table: 1969 Boca Juniors - Atlanta 3-1 y 0-1, next row 2011/12 Boca Juniors - Racing Club 2-1; 23 February 2026, read in the browser)"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 1993,
+     "to": 1993,
+     "kind": "UNKNOWN",
+     "why": "the AFA's Copa Centenario, a knockout cup for the first division clubs, ran from June 1993 to January 1994; whether it counts as that season's domestic cup was not researched",
+     "review": {
+      "by": "Round 1041 adversarial review, applied by the fixer on 2026-10-07",
+      "note": "The window 1990 to 2010 had read NONE on facts that only establish there was no Copa Argentina. RSSSF lists an AFA knockout cup in 1993, so that season is held UNKNOWN (the coin and the generic words, the behaviour before the round) rather than called a season with no cup. Its standing (an official title, or a league cup for the first division only, the way the table treats Korea 1992 to 1995) is the open question.",
+      "sources": [
+       {
+        "host": "rsssf.org",
+        "url": "https://www.rsssf.org/tablesa/argcuphist.html",
+        "read": "2026-10-07",
+        "line": "### 1993 Copa Centenario de la AFA (heading on the page, fetched by the fixer)"
+       },
+       {
+        "host": "rsssf.org",
+        "url": "https://www.rsssf.org/tablesa/arg-centenario93.html",
+        "read": "2026-10-07",
+        "line": "AFA Copa Centenario 1993, 26 June 1993 to 30 January 1994, 18 clubs in a double knockout; Gimnasia Esgrima LP 3-1 River Plate, Jan 30, 1994, La Plata (fetched by the fixer)"
+       }
+      ]
+     }
+    },
+    {
+     "from": 1994,
+     "to": 2010,
+     "kind": "NONE",
+     "why": "no Copa Argentina between 1970 and 2011-12",
+     "facts": [
+      {
+       "ref": "americas:Argentina:0",
+       "verified": true,
+       "claim": "No Copa Argentina between the abandoned 1970 edition and 2011-12: none held 1990-91 to 2010-11",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesa/argcuphist.html",
+         "read": "2026-10-06",
+         "line": "1969 CA Boca Juniors 3-1 0-1 CA Atlanta; 1970 abandoned; next row 2011/12 CA Boca Juniors 2-1 Racing Club (Avellaneda)"
+        },
+        {
+         "host": "espndeportes.espn.com",
+         "url": "https://espndeportes.espn.com/futbol/argentina/nota/_/id/12987727/el-historial-de-campeones-de-la-copa-argentina",
+         "read": "2026-10-06",
+         "line": "La Copa Argentina arrancó con una edición a fines de la década del 60 y se juega de forma ininterrumpida desde 2011. (table: 1969 Boca Juniors - Atlanta 3-1 y 0-1, next row 2011/12 Boca Juniors - Racing Club 2-1; 23 February 2026, read in the browser)"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 2011,
+     "kind": "UNKNOWN",
+     "why": "13 editions over 15 seasons across the switch to calendar years and the COVID break, so which season played which edition is not two sourced",
+     "facts": [
+      {
+       "ref": "americas:Argentina:1",
+       "verified": true,
+       "claim": "Modern editions every season from 2011-12; one edition spans the COVID break (Boca Juniors beat Talleres on penalties), labelled 2019/20 by RSSSF and 2020/21 by ESPN, with no other edition between River Plate's 2019 title and Patronato's 2022; calendar year editions 2022 to 2025",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesa/argcuphist.html",
+         "read": "2026-10-06",
+         "line": "2018/19 River Plate 3-0 Central Córdoba; 2019/20 Boca Juniors [5] 0-0 [4] Talleres; 2020/21 not held; 2022 Patronato 1-0 Talleres; 2023 Estudiantes 1-0 Defensa y Justicia; 2024 Central Córdoba 1-0 Vélez Sarsfield; 2025 Independiente Rivadavia [5] 2-2 [3] Argentinos Juniors"
+        },
+        {
+         "host": "espndeportes.espn.com",
+         "url": "https://espndeportes.espn.com/futbol/argentina/nota/_/id/12987727/el-historial-de-campeones-de-la-copa-argentina",
+         "read": "2026-10-06",
+         "line": "2015/16 River Plate; 2017 River Plate; 2018 Rosario Central; 2019 River Plate; 2020/21 Boca Juniors - Talleres de Córdoba 0-0 (5-4); 2022 Patronato; 2023 Estudiantes (LP); 2024 Central Córdoba (SdE); 2025 Independiente Rivadavia - Argentinos Juniors 2-2 (5-3)"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  "New Zealand": {
+   "ledger": "americas:New Zealand",
+   "windows": [
+    {
+     "from": 1990,
+     "to": 2025,
+     "kind": "UNKNOWN",
+     "why": "the New Zealand A-League clubs played the Australia Cup in some years, entry not researched by year",
+     "facts": []
+    },
+    {
+     "from": 2026,
+     "kind": "NONE",
+     "why": "Auckland FC and Wellington Phoenix enter no Australia Cup from 2026 and no other domestic cup",
+     "facts": [
+      {
+       "ref": "americas:New Zealand:0",
+       "verified": true,
+       "claim": "Auckland FC and Wellington Phoenix do not take part in the Australia Cup from the 2026 edition",
+       "sources": [
+        {
+         "host": "footballaustralia.com.au",
+         "url": "https://footballaustralia.com.au/news/football-australia-announces-refined-competitions-structure-2026",
+         "read": "2026-10-06",
+         "line": "Auckland FC and Wellington Phoenix FC no longer participating in the Hahn Australia Cup 2026"
+        },
+        {
+         "host": "football360.com.au",
+         "url": "https://football360.com.au/australia-cup-wellington-auckland-new-zealand-teams-omitted/",
+         "read": "2026-10-06",
+         "line": "Wellington Phoenix and Auckland FC have not been included in the 2026 Australia Cup."
+        },
+        {
+         "host": "friendsoffootballnz.com",
+         "url": "https://www.friendsoffootballnz.com/2026/01/28/auckland-fc-and-phoenix-to-be-excluded-from-this-years-australia-cup/",
+         "read": "2026-10-06",
+         "line": "the Round of 32, the traditional entry point for A-League clubs, will include only the 10 Australian-based clubs, and not Auckland FC and the Wellington Phoenix."
+        }
+       ]
+      },
+      {
+       "ref": "americas:New Zealand:1",
+       "verified": true,
+       "claim": "The ten Australian A-League Men clubs enter the 2026 Australia Cup directly at the round of 32 and only Australian teams compete",
+       "sources": [
+        {
+         "host": "footballaustralia.com.au",
+         "url": "https://footballaustralia.com.au/news/football-australia-announces-refined-competitions-structure-2026",
+         "read": "2026-10-06",
+         "line": "all current Isuzu UTE A-League Men clubs (10 in total) will enter the competition directly at the Round of 32 and only Australian teams will compete"
+        },
+        {
+         "host": "friendsoffootballnz.com",
+         "url": "https://www.friendsoffootballnz.com/2026/01/28/auckland-fc-and-phoenix-to-be-excluded-from-this-years-australia-cup/",
+         "read": "2026-10-06",
+         "line": "will include only the 10 Australian-based clubs"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  "Saudi Arabia": {
+   "ledger": "rest:Saudi Arabia",
+   "windows": [
+    {
+     "from": 1990,
+     "kind": "UNKNOWN",
+     "why": "every fact read rests on one source",
+     "facts": []
+    }
+   ]
+  }
+ },
+ "crossBorder": {
+  "Wales": {
+   "association": "England",
+   "facts": [
+    {
+     "ref": "uk-nl:England:10",
+     "verified": true,
+     "claim": "Welsh clubs in the English league system enter the FA Cup like any English club of their division",
+     "sources": [
+      {
+       "host": "www.thefa.com",
+       "url": "https://www.thefa.com/-/media/thefacom-new/files/competitions/2025-26/emirates-fa-cup/the-emirates-fa-cup---list-of-exemptions.ashx",
+       "read": "2026-10-06",
+       "line": "44 CLUBS EXEMPT TO THIRD ROUND PROPER ... Swansea City FC ... Wrexham AFC / 48 CLUBS EXEMPT TO FIRST ROUND PROPER (EFL 1 & 2) ... Cardiff City FC ... Newport County AFC"
+      },
+      {
+       "host": "www.rsssf.org",
+       "url": "https://www.rsssf.org/tablese/engcuphist.html",
+       "read": "2026-10-06",
+       "line": "2008 Portsmouth 1 Cardiff City 0"
+      },
+      {
+       "host": "www.nbcsports.com",
+       "url": "https://www.nbcsports.com/soccer/news/fa-cup-history-list-of-fa-cup-winners-finals-and-who-has-won-the-most-fa-cups",
+       "read": "2026-10-06",
+       "line": "2007-08: Portsmouth defeat Cardiff City 1-0"
+      },
+      {
+       "host": "www.thefa.com",
+       "url": "https://www.thefa.com/-/media/thefacom-new/files/competitions/2025-26/rules/rules-of-the-fa-challenge-cup-2025-26.ashx",
+       "read": "2026-10-06",
+       "line": "19. The first team of Clubs competing in the Premier League, EFL and at Steps 1 to 5 of the National League System shall be eligible to participate in the Competition"
+      }
+     ]
+    }
+   ]
+  },
+  "Monaco": {
+   "association": "France",
+   "facts": [
+    {
+     "ref": "continent:France:3",
+     "verified": true,
+     "claim": "AS Monaco takes part in the Coupe de France",
+     "sources": [
+      {
+       "host": "rsssf.org",
+       "url": "https://www.rsssf.org/tablesf/francuphist.html",
+       "read": "2026-10-06",
+       "line": "1991 AS Monaco 1-0 Olympique de Marseille ; 2010 Paris Saint-Germain FC 1-0 AS Monaco [aet] ; 2021 Paris Saint-Germain FC 2-0 AS Monaco"
+      },
+      {
+       "host": "footmercato.net",
+       "url": "https://www.footmercato.net/france/coupe-de-france/palmares",
+       "read": "2026-10-06",
+       "line": "1990/1991: AS Monaco (winner), Olympique de Marseille (finalist) ; 2009/2010: Paris Saint-Germain, AS Monaco ; 2020/2021: Paris Saint-Germain, AS Monaco"
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "corrections": [
+  {
+   "shard": "continent",
+   "item": "France finalFormat venue note: 'Parc des Princes to 1998, Stade de France from 1999'",
+   "applied": "No venue is claimed anywhere in the table. The Coupe de France windows rest on the name, the seasons held and the extra time and penalties rule only."
+  },
+  {
+   "shard": "continent",
+   "item": "Italy entry rule from 2021-22: 'the 8 seeds ... enter at the round of 16, the other 28 Serie A and B clubs at the round of 32'",
+   "applied": "No entry round is claimed: the run never names or counts an early round, so the preliminary round question never reaches the game."
+  },
+  {
+   "shard": "continent",
+   "item": "Germany fact 20 (verified:true) and finalFormat: final at the Olympiastadion Berlin every year since 1985",
+   "applied": "No venue is claimed. The DFB-Pokal window rests on facts 0 and 1 (one match finals with extra time and penalties, and the name)."
+  },
+  {
+   "shard": "continent",
+   "item": "Spain entry row 1 (from 1990-91 to 2025-26): 'reserve (filial) sides ... may not enter ...; the RFEF gives their place to a Primera Federacion side'",
+   "applied": "Not used: no entry clause beyond first teams is claimed for Spain."
+  },
+  {
+   "shard": "continent",
+   "item": "Portugal finalFormat 1990-91 to 1999-00: 'single match at the Estadio Nacional (Jamor)'",
+   "applied": "No venue is claimed for the Taça de Portugal."
+  },
+  {
+   "shard": "rest",
+   "item": "South Korea finalFormat rows 2016 to 2022 and 1996 to 2025 ('level on aggregate goes to extra time and penalties', 'Tiebreak: extra time then penalties throughout'), and fact #2 ('Level finals go to extra time then penalties')",
+   "applied": "No legs and no decider are claimed for South Korea: the Korean FA Cup window carries no legs, so its final prints no score, and 2024 on is UNKNOWN."
+  },
+  {
+   "shard": "rest",
+   "item": "Saudi Arabia entry row 2007-08 ('8 invited clubs (top Premier League finishers plus the Crown Prince Cup winner) per Wikipedia spot check only', to UNKNOWN)",
+   "applied": "Saudi Arabia stays UNKNOWN: no fact in its ledger is two sourced."
+  },
+  {
+   "shard": "rest",
+   "item": "Japan finalFormat 1990 to 2025 ('Level after 90 minutes: extra time, then penalties') and the matching South Korea tiebreak row",
+   "applied": "Only the penalties decider is used for Japan (level finals settled on penalties, two sourced). Extra time, golden goal or not, is never printed."
+  },
+  {
+   "shard": "rest",
+   "item": "Japan coverage of calendar 2026",
+   "applied": "Japan from 2026 is UNKNOWN: the 106th edition and the switch to an autumn to spring season were not researched."
+  },
+  {
+   "shard": "rest",
+   "item": "Australia cup row 2014 to 2021 'FFA Cup (sponsor name Westfield FFA Cup)'",
+   "applied": "No Australian cup name is used: the club pool has no Australian club, and the New Zealand clubs carry no cup name in any season."
+  },
+  {
+   "shard": "uk-nl",
+   "item": "Netherlands fact 23 (2019-20 final cancelled) and the Netherlands held row for 2019-20",
+   "applied": "Only the verified core is used: the 2019-20 final was not played and nobody won it, so the season is NONE. The Europa League place, the money and the dates are not used."
+  },
+  {
+   "shard": "uk-nl",
+   "item": "England entry row 'Top flight plus second tier enter at the Third Round Proper (the 44 exempt clubs)', from 1990-91 to 2025-26",
+   "applied": "No entry round is claimed. Both England windows rest on the finals and the way a level final was settled."
+  },
+  {
+   "shard": "uk-nl",
+   "item": "England fact 9 (exactly 44 clubs join in the third round in the 1990s)",
+   "applied": "Not used."
+  },
+  {
+   "shard": "uk-nl",
+   "item": "England fact 3, The Conversation source line",
+   "applied": "The penalties decider from 1998-99 rests on facts 2 and 3 as the checker found them (the Independent and the FA rules carry the penalties); the replay window 1990-91 to 1997-98 rests on facts 2 and 4."
+  },
+  {
+   "shard": "americas",
+   "item": "Brazil#6 (and the Brazil finalFormat row 1989 to 2014, which repeats it): finals decided on away goals listed as 1991, 1997, 2008, 2011",
+   "applied": "No away goal list is used. Brazil before 2026 is UNKNOWN (entry by state championship places, and the Libertadores clubs excused 2001 to 2012)."
+  },
+  {
+   "shard": "americas",
+   "item": "Argentina#1 value '14 modern editions 2011-12 to 2025'",
+   "applied": "The table's reason says 13 editions. Argentina from 2011-12 is UNKNOWN because which season played which edition is not two sourced."
+  },
+  {
+   "shard": "americas",
+   "item": "Canada#9 (verified): 2026 final CF Montreal v Forge FC in Montreal, 21 October, single match",
+   "applied": "Not used: no 2026 Canadian final, finalist or venue is claimed."
+  },
+  {
+   "shard": "americas",
+   "item": "USA finalFormat row 1990 to 2025: 'tied after 90 minutes goes to two 15 minute periods of extra time then penalties'",
+   "applied": "No decider is claimed for the U.S. Open Cup in any window, so a level final is never drawn there; only the one match final (fact 14, two sourced) is used."
+  },
+  {
+   "shard": "americas",
+   "item": "USA#9 quoted thecup.us line naming the 1996 MLS entrants (Dallas, Kansas City, LA Galaxy, Tampa Bay)",
+   "applied": "No 1996 club is named. 1996 to 1999 is UNKNOWN because only some MLS clubs entered."
+  }
+ ]
+}

@@ -28,6 +28,7 @@ import type { PhoneChoiceDef } from "./careerEras";
 import { divisionMove, drawLeagueFinish, eliteInYear, finishZone, leagueKeyInYear, managerLeagueField, MANAGER_FIELD, ordinal } from "./soccerCareerLeague";
 /* Round 1012: real club rivalries, played as league derbies each season. */
 import { resolveSeasonDerbies, applySeasonDerbies, type SeasonDerby } from "./soccerCareerDerby";
+import { cupAssociation, cupChanceFor, cupFor as domesticCupFor, cupTitle, drawCupRun, readCupRun, seasonPerformanceBoost, worldLeagueOf, type CupRun } from "./soccerCareerCup";
 /* Round 130: the phone is a real phone now. Threads, contacts, a relationship
    that cools when you ignore people, and a sports feed driven by a world model
    that actually moves players between clubs. All of it lives in soccerPhone so
@@ -207,6 +208,12 @@ export interface SeasonRecord {
       key at all. Read it through readSeasonDerbies. */
   derbies?: SeasonDerby[];
   domesticCup: boolean;
+  /** Round 1041: how the season's domestic cup went, round by round, and its
+      real name where two sources give it (soccerCareerCup.ts). Present only
+      on a playing season whose association played a cup and could name the
+      opponents; every row from before that round has no key. Read it through
+      readCupRun, which checks it against domesticCup. */
+  cupRun?: CupRun;
   championsLeague: boolean;
   worldCup: boolean;
   ballonDor: boolean;
@@ -2715,6 +2722,17 @@ export function repairCareer<T extends CareerState>(state: T): T {
       return rest;
     });
   }
+  /* Round 1041: a cup run its own reader refuses (hand edited, half written,
+     or out of step with the row's cup) is dropped on load, so every reader,
+     the Season Centre included, sees a good run or none. A row without one,
+     every row from before that round, is left exactly as it is. */
+  if (Array.isArray(s.seasons) && s.seasons.some(x => x && x.cupRun !== undefined && !readCupRun(x))) {
+    s.seasons = s.seasons.map(x => {
+      if (!x || x.cupRun === undefined || readCupRun(x)) return x;
+      const { cupRun: _dropped, ...rest } = x;
+      return rest;
+    });
+  }
   /* Round 974: a save from before the story starts it from the season it
      loads; a damaged story resets alone and never costs the career. */
   s.story = cleanCareerStory(s.story);
@@ -3998,6 +4016,19 @@ function calcSeasonRating(position: string, apps: number, goals: number, assists
   return clamp(parseFloat(base.toFixed(1)), 3.0, 10.0);
 }
 
+/* Round 1041: the association whose cup a season's club played (a Welsh club
+   in the English leagues plays the FA Cup, Monaco the Coupe de France), and
+   that cup's name where the table names it, today's "Domestic Cup" otherwise. */
+function seasonCupAssociation(season: SeasonRecord, s: CareerState): string {
+  const league = season.club === s.currentClub ? s.currentLeague
+    : (FALLBACK_CLUBS.find(c => c.name === season.club)?.league ?? s.currentLeague);
+  return cupAssociation(season.clubCountry, league);
+}
+function seasonCupTitle(season: SeasonRecord, s: CareerState): string {
+  const st = domesticCupFor(seasonCupAssociation(season, s), season.year);
+  return cupTitle(st.kind === "NAMED" ? st.name : undefined);
+}
+
 /* ─── Season simulation ─── */
 function generateSeasonStats(state: CareerState, clubs: ClubData[]): SeasonRecord {
   const { position, age, overall, currentClubTier } = state;
@@ -4031,21 +4062,25 @@ function generateSeasonStats(state: CareerState, clubs: ClubData[]): SeasonRecor
      1990s. Same Math.random calls below, only the threshold moves. */
   const seasonYear = lastYear + 1;
   const isElite = eliteInYear(ELITE_CLUBS, state.currentClub, seasonYear);
-  const performanceBoost = (overall >= 85 && rating >= 7.5) ? 0.15 :
-                           (overall >= 80 && rating >= 7.0) ? 0.10 :
-                           (overall >= 75 && rating >= 6.8) ? 0.05 : 0;
+  const performanceBoost = seasonPerformanceBoost(overall, rating);
 
-  let leagueChance: number, cupChance: number;
-  if (isElite) { leagueChance = 0.65; cupChance = 0.35; }
-  else if (currentClubTier === 1) { leagueChance = 0.25; cupChance = 0.20; }
-  else if (currentClubTier === 2) { leagueChance = 0.10; cupChance = 0.15; }
-  else { leagueChance = 0.03; cupChance = 0.05; }
-
+  let leagueChance: number;
+  if (isElite) leagueChance = 0.65;
+  else if (currentClubTier === 1) leagueChance = 0.25;
+  else if (currentClubTier === 2) leagueChance = 0.10;
+  else leagueChance = 0.03;
   leagueChance = Math.min(0.85, leagueChance + performanceBoost);
-  cupChance = Math.min(0.60, cupChance + performanceBoost);
+  /* Round 1041: the cup's odds come from soccerCareerCup.ts, the same numbers
+     as before, so the run drawn after the season reads the coin's own odds. */
+  const cupChance = cupChanceFor({ elite: isElite, tier: currentClubTier, performanceBoost });
 
   const winLeague = Math.random() < leagueChance;
-  const winCup = Math.random() < cupChance;
+  /* Round 1041: the coin is still drawn, so the main stream does not move,
+     but a season in which the association played no cup (the KNVB Cup of
+     2019-20, the U.S. Open Cup of 2020 and 2021, Mexico after the Copa MX,
+     Argentina before 2011-12) is never won. */
+  const winCup = Math.random() < cupChance
+    && domesticCupFor(cupAssociation(state.currentClubCountry, state.currentLeague), seasonYear).kind !== "NONE";
   /* Round 929: the league finish, from its own generator seeded off this
      season, so the main Math.random stream does not move. Round 1037: a
      season before 2026-27 is drawn in the league the club was really in
@@ -5378,7 +5413,9 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
   }
 
   if (season.leagueTitle) s.events.push(`🏆 Won the league with ${s.currentClub}!`);
-  if (season.domesticCup) s.events.push(`🏆 Won the Domestic Cup with ${s.currentClub}!`);
+  /* Round 1041: the cup's real name where the table names it ("Won the FA Cup
+     with Arsenal!"), today's words everywhere else. */
+  if (season.domesticCup) s.events.push(`🏆 Won the ${seasonCupTitle(season, s)} with ${s.currentClub}!`);
 
   // Awards: Player of the Month, simulate month-by-month based on goals
   const MONTHS = ["August", "September", "October", "November", "December", "January", "February", "March", "April", "May"];
@@ -5560,12 +5597,33 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
      who won Europe and which of the era's names changed clubs, and the Ballon
      d'Or below reads the same answers, so the phone's sports feed and the
      awards screen can never contradict each other. */
+  const cupAssoc = seasonCupAssociation(season, s);
   const world = worldSeasonTick(s, {
     year: thisYear,
     playerLeagueTitle: season.leagueTitle,
     playerUcl: season.championsLeague,
     playerCup: season.domesticCup,
+    /* Round 1041: a cup belongs to an association, not a league */
+    playerCupAssociation: cupAssoc,
+    cupAssociationOf: (name: string) => {
+      const c = clubs.find(x => x.name === name) ?? FALLBACK_CLUBS.find(x => x.name === name);
+      return c ? cupAssociation(c.country, c.league) : null;
+    },
   });
+  /* Round 1041: the season's cup run, drawn from its own generator after the
+     world has crowned its winners, so a lost final is lost to the club the
+     phone and the Ballon d'Or say won it, and the main stream never moves. */
+  {
+    const worldLeague = worldLeagueOf(cupAssoc);
+    const run = drawCupRun({
+      status: domesticCupFor(cupAssoc, season.year), club: season.club, year: season.year, won: season.domesticCup,
+      chance: cupChanceFor({ elite: eliteInYear(ELITE_CLUBS, season.club, season.year), tier: season.clubTier, performanceBoost: seasonPerformanceBoost(season.ovr ?? s.overall, season.rating) }),
+      clubs, worldWinner: worldLeague ? world.cups[worldLeague] ?? null : null,
+      goals: season.goals, apps: season.apps,
+      seedKey: `${s.playerName}|${season.club}|${season.year}|${season.apps}|${season.goals}|${season.assists}|${season.rating}`,
+    });
+    if (run) season.cupRun = run;
+  }
 
   // Ballon d'Or calculation. Round 834: what the night writes on the save (the
   // staged ceremony, the place on the season, the cabinet, the winner's and the
@@ -5707,7 +5765,7 @@ function generateNewsArticles(s: CareerState, season: SeasonRecord, totalGoals: 
         body: `After ${seasonsAtClub} seasons of dedication, the ${club} faithful have spoken: ${name} is their Player of the Year. The bond between player and fans has become something truly special.` }) },
     { weight: 1, check: () => s.isLeader && (season.leagueTitle || season.domesticCup || season.championsLeague || !!season.clubCupTitle),
       gen: () => {
-        const trophy = season.championsLeague ? "Champions League" : season.clubCupTitle ? season.clubCupTitle : season.leagueTitle ? "League Title" : "Domestic Cup";
+        const trophy = season.championsLeague ? "Champions League" : season.clubCupTitle ? season.clubCupTitle : season.leagueTitle ? "League Title" : seasonCupTitle(season, s);
         return { newspaper: pick(NEWSPAPERS), type: "positive",
           headline: `CAPTAIN FANTASTIC: ${name} Leads ${club} To ${trophy} Glory`,
           body: `Wearing the armband with pride, ${name} delivered when it mattered most. A season that will live long in the memory of every ${club} supporter.` };

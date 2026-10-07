@@ -55,8 +55,29 @@ const withoutMeasured = night => {
   const { moved: _moved, ...rest } = night;
   return rest;
 };
-const saveHash = s => hashOf(s && s.pendingBallonDor && 'moved' in s.pendingBallonDor
-  ? { ...s, pendingBallonDor: withoutMeasured(s.pendingBallonDor) } : s);
+/* Round 1041 gave a played season one new field, `cupRun` (how the domestic
+   cup went, drawn from its own generator), which no tree before it writes.
+   It is taken out of every season row the same way, so the fixture recorded
+   from main still proves the rest of the save unchanged; scripts/
+   simCareerDomesticCup.mjs holds the run itself. A save with no run is
+   hashed exactly as before. */
+const withoutRun = r => {
+  if (!r || typeof r !== 'object' || !('cupRun' in r)) return r;
+  const { cupRun: _run, ...rest } = r;
+  return rest;
+};
+const withoutRuns = s => {
+  if (!s || typeof s !== 'object') return s;
+  const runs = Array.isArray(s.seasons) && s.seasons.some(r => r && typeof r === 'object' && 'cupRun' in r);
+  const pending = s.pendingSummary && typeof s.pendingSummary === 'object' && 'cupRun' in s.pendingSummary;
+  if (!runs && !pending) return s;
+  return { ...s, ...(runs ? { seasons: s.seasons.map(withoutRun) } : {}), ...(pending ? { pendingSummary: withoutRun(s.pendingSummary) } : {}) };
+};
+const saveHash = s0 => {
+  const s = withoutRuns(s0);
+  return hashOf(s && s.pendingBallonDor && 'moved' in s.pendingBallonDor
+    ? { ...s, pendingBallonDor: withoutMeasured(s.pendingBallonDor) } : s);
+};
 
 export const mulberry32 = a => () => {
   a |= 0; a = (a + 0x6D2B79F5) | 0;
