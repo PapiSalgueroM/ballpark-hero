@@ -36,7 +36,18 @@
  *      careers 0, 9, 10, 12, 20, 22, 24, 30, 31, 32 and old saves 0, 12, 19,
  *      22, 30, 32 (its own branch tip records the same list); Rounds 1029
  *      and 1032 move nothing; the union is every career and old save that
- *      moved. Soccer calls Math.random
+ *      moved. Round 1041 (the domestic cup run) re-recorded it again, twice
+ *      and identical, from a clean git archive export of its branch (the
+ *      header's sha is that branch commit), after the probe learned to hash a
+ *      save without the new season row key cupRun. Attribution on throwaway
+ *      exports with each change taken back out on disk: all three out, 0 of
+ *      48 careers and 0 of 35 old saves move; only the cup's real name in
+ *      (log lines, no draw), 37 careers and 27 old saves; only the coin fix
+ *      in (no cup won in a season with none), careers 8, 14, 30, 41 and 48
+ *      and 2 old saves; only the world rule in (the phone's cup winners by
+ *      association, written into the saved world), 25 careers and all 35 old
+ *      saves; the whole round 43 careers and 35 old saves, the union; the
+ *      post, cover and agent units move nowhere. Soccer calls Math.random
  *      in a fixed order, so a lift that moves one draw shows up here. The
  *      section also requires the fixture to have exercised what it claims
  *      (every post, every personality, every agent, the cover offer both

@@ -594,8 +594,17 @@ function playSeed(seed, startYear, careers, era) {
    distinct generated clubs offered per seed, minimum (range): Premier League
    3 (3 to 7), Championship 6 (6 to 13), La Liga 4 (4 to 8), Brasileirao 4
    (4 to 11). Each floor is half the minimum, rounded down, at least 1; the
-   nopool control gives 0. */
-const F_MIN_DISTINCT = { 'Premier League': 1, Championship: 3, 'La Liga': 2, Brasileirao: 2 };
+   nopool control gives 0.
+   Re-measured 2026-10-07 by Round 1041 over the same 12 seeds: on release-
+   ai-int (the round taken out in memory) Brasileirao's minimum is 3 (two
+   seeds; 3 to 10), and on the round's tree 1 (seed 89607, whose careers the
+   round moves: a season with no cup is never won, and the world crowns cup
+   winners by association; 1 to 10, mean 5.75 against 6.17). The other three
+   leagues: Premier League 3, Championship 5, La Liga 4 on the round's tree.
+   The recipe above on either tree gives Brasileirao a floor of 1, so 2 was
+   already a coin toss for any change that moves a career; the floor is 1,
+   which nopool's 0 still turns red. The other floors stand. */
+const F_MIN_DISTINCT = { 'Premier League': 1, Championship: 3, 'La Liga': 2, Brasileirao: 1 };
 /* Gated only on the draws where the cap changes the odds (a league group
    over CAP in the candidate list): over all draws the uncapped control
    moved the ratio to just 1.07 to 1.14, inside the healthy spread, because
