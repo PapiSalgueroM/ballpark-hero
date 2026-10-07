@@ -28,6 +28,7 @@ on:
       - scripts/simNumberFormatting.mjs
       - scripts/simResultMoment.mjs
       - scripts/qa/numberFormatting1085.mjs
+      - scripts/qa/numberFormatting1085Parity.mjs
       - scripts/qa/numberFormatting1085-expectations.json
 
 permissions:
@@ -170,11 +171,60 @@ jobs:
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/usCareerStatLines.test.tsx src/test/careerSeasonReview.test.tsx --maxWorkers=1 --no-file-parallelism --reporter=default --reporter=json --outputFile.json=number-formatting-artifacts/original-display-tests.json 2>&1 | tee number-formatting-artifacts/original-display-tests.log
+      - name: Classify unchanged historical replay without hiding its red
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/numberFormatting1085Parity.mjs 2>&1 | tee number-formatting-artifacts/parity.log
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const read = file => JSON.parse(fs.readFileSync('number-formatting-artifacts/parity/' + file));
+          const report = read('summary.json');
+          const sports = ['mlb', 'nba', 'nfl', 'nhl'];
+          assert.equal(report.status, 'raw replay red; nonpresentation held; exact old presentation reference passed');
+          assert.equal(report.base, 'bde6b1c3797fd728dbd583a28623c34fe8452917');
+          assert.deepEqual(report.original, { exit: 1, classification: 'original default replay remains red' });
+          assert.deepEqual(report.runs.map(row => row.name).sort(), ['current-raw', 'fixture-save-control', 'old-presentation-reference']);
+          const current = report.runs.find(row => row.name === 'current-raw');
+          const reference = report.runs.find(row => row.name === 'old-presentation-reference');
+          const control = report.runs.find(row => row.name === 'fixture-save-control');
+          assert.equal(current.exit, 1); assert.deepEqual(current.passed, []); assert.deepEqual([...current.failed].sort(), sports);
+          assert.equal(reference.exit, 0); assert.deepEqual([...reference.passed].sort(), sports); assert.deepEqual(reference.failed, []);
+          assert.equal(control.exit, 1); assert.deepEqual(control.failed, ['mlb']); assert.deepEqual([...control.passed].sort(), ['nba', 'nfl', 'nhl']);
+          assert(current.observations > 0); assert.equal(current.observations, reference.observations); assert.equal(control.observations, reference.observations);
+          const comparison = read('current-comparison.json');
+          assert.deepEqual(comparison.nonpresentation, []);
+          assert(sports.every(sport => comparison.presentation.some(row => row.sport === sport)));
+          assert.equal(report.presentationFieldDifferences, comparison.presentation.length);
+          assert.equal(report.presentationSteps, read('presentation-leaves.json').length); assert(report.presentationSteps > 0);
+          assert.deepEqual(read('reference-comparison.json'), { nonpresentation: [], presentation: [] });
+          const changed = read('control-comparison.json'), rejection = read('control-rejection.json');
+          assert.deepEqual(changed.presentation, []); assert.equal(changed.nonpresentation.length, 1);
+          assert.equal(changed.nonpresentation[0].sport, 'mlb'); assert.equal(changed.nonpresentation[0].field, 's');
+          assert.equal(rejection.name, 'AssertionError'); assert(rejection.message.startsWith('Historical replay changed nonpresentation fields'));
+          assert.deepEqual(rejection.actual, changed.nonpresentation); assert.deepEqual(rejection.expected, []);
+          assert.equal(report.control, 'one effective saved-hash corruption rejected, unchanged reference passed');
+          assert(Object.keys(report.sourceBefore).length > 0); assert.deepEqual(report.sourceAfter, report.sourceBefore);
+          assert.deepEqual(read('source-before.json'), report.sourceBefore); assert.deepEqual(read('source-after.json'), report.sourceAfter);
+          console.log('Historical replay remains red for all four sports; the exact old presentation reference passes four and the saved-hash control is rejected.');
+          NODE
+      - name: Retain historical replay evidence promptly
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: number-formatting-parity-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            number-formatting-artifacts/parity/
+            number-formatting-artifacts/parity.log
+            number-formatting-artifacts/source-head.txt
+            number-formatting-artifacts/source-tree.txt
+          retention-days: 3
+          if-no-files-found: error
       - name: Preserve existing relevant behavior
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
           failed=0
-          for harness in simUsCareerDefects simCareerSeasonReview simUsBoardParity simResultMoment simSoccerCareer simStadiumTycoon simTycoonClock simTycoonLeague simClubManager; do
+          for harness in simUsCareerDefects simCareerSeasonReview simResultMoment simSoccerCareer simStadiumTycoon simTycoonClock simTycoonLeague simClubManager; do
             ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "number-formatting-artifacts/$harness.log" || failed=1
           done
           exit "$failed"
@@ -199,7 +249,7 @@ jobs:
           git diff --exit-code HEAD -- src scripts .github/workflows/number-formatting.yml
           git diff --exit-code bde6b1c3797fd728dbd583a28623c34fe8452917 HEAD -- src/lib ':!src/lib/formatNumber.ts' ':!src/lib/usCareerStatLine.ts' ':!src/lib/usCareerSeasonReview.ts' src/data src/integrations src/types src/hooks scripts/fixtures scripts/data package.json package-lock.json
           git diff --exit-code bde6b1c3797fd728dbd583a28623c34fe8452917 HEAD -- src/test ':!src/test/numberFormatting.test.tsx' ':!src/test/usCareerStatLines.test.tsx' ':!src/test/careerSeasonReview.test.tsx'
-          git diff --exit-code bde6b1c3797fd728dbd583a28623c34fe8452917 HEAD -- scripts ':!scripts/simNumberFormatting.mjs' ':!scripts/simResultMoment.mjs' ':!scripts/qa/numberFormatting1085.mjs' ':!scripts/qa/numberFormatting1085-expectations.json'
+          git diff --exit-code bde6b1c3797fd728dbd583a28623c34fe8452917 HEAD -- scripts ':!scripts/simNumberFormatting.mjs' ':!scripts/simResultMoment.mjs' ':!scripts/qa/numberFormatting1085.mjs' ':!scripts/qa/numberFormatting1085Parity.mjs' ':!scripts/qa/numberFormatting1085-expectations.json'
           node --input-type=module <<'NODE'
           import assert from 'node:assert/strict';
           import fs from 'node:fs';

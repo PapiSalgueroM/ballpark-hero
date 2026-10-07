@@ -143,8 +143,16 @@ async function geometry(locator, profile) {
   return locator.evaluate((node, viewport) => {
     const r = node.getBoundingClientRect(), range = document.createRange(); range.selectNodeContents(node);
     const textRects = [...range.getClientRects()].filter(r => r.width && r.height).map(r => ({ x: r.x, y: r.y, right: r.right, bottom: r.bottom }));
+    const clips = [];
+    for (let ancestor = node; ancestor; ancestor = ancestor.parentElement) {
+      const style = getComputedStyle(ancestor), x = /^(hidden|clip|auto|scroll)$/.test(style.overflowX), y = /^(hidden|clip|auto|scroll)$/.test(style.overflowY);
+      if (!x && !y) continue;
+      const box = ancestor.getBoundingClientRect();
+      clips.push({ tag: ancestor.tagName, className: ancestor.className, x, y, left: box.x + ancestor.clientLeft, top: box.y + ancestor.clientTop,
+        right: box.x + ancestor.clientLeft + ancestor.clientWidth, bottom: box.y + ancestor.clientTop + ancestor.clientHeight });
+    }
     const style = getComputedStyle(node);
-    return { text: node.textContent.trim(), html: node.outerHTML, box: { x: r.x, y: r.y, right: r.right, bottom: r.bottom, width: r.width, height: r.height }, textRects,
+    return { text: node.textContent.trim(), html: node.outerHTML, box: { x: r.x, y: r.y, right: r.right, bottom: r.bottom, width: r.width, height: r.height }, textRects, clips,
       font: parseFloat(style.fontSize), viewport, layoutViewport: { width: innerWidth, height: innerHeight }, documentWidth: document.documentElement.scrollWidth, scrollWidth: node.scrollWidth, clientWidth: node.clientWidth,
       hit: node.contains(document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2)), scrollY };
   }, { width: profile.width, height: profile.height });
@@ -157,7 +165,8 @@ function checkGeometry(value, button = false) {
   if (button) assert(b.width >= 44 && b.height >= 44, 'Used navigation has a 44px target');
   else {
     assert(value.font >= 12, 'Changed numeric leaf is readable at 12px');
-    assert(value.textRects.every(r => r.x >= b.x - 1 && r.right <= b.right + 1 && r.y >= b.y - 1 && r.bottom <= b.bottom + 1), 'Displayed number is not clipped');
+    assert(value.textRects.every(r => r.x >= -1 && r.right <= v.width + 1 && r.y >= -1 && r.bottom <= v.height + 1 &&
+      value.clips.every(clip => (!clip.x || (r.x >= clip.left - 1 && r.right <= clip.right + 1)) && (!clip.y || (r.y >= clip.top - 1 && r.bottom <= clip.bottom + 1)))), 'Displayed number is not clipped');
   }
 }
 async function finiteAnimations(page) { await page.evaluate(async () => { await Promise.all(document.getAnimations().filter(a => a.effect?.getComputedTiming().iterations !== Infinity).map(a => a.finished.catch(() => {}))); }); }

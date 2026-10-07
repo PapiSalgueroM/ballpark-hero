@@ -102,6 +102,12 @@ it('GuestScoreBanner groups the actual score without changing guest eligibility'
 it('PostGameStats groups counts and scores while retaining numeric RPC arguments', async () => {
   const raw = { players: 2345, below: 1234, median: 1234.5, top: 9876, bucket_counts: [1234, 1111] };
   mocks.rpc.mockResolvedValue({ data: raw, error: null });
+  const setup = env();
+  // React initializes its async task queue with one random probe before this component mounts.
+  await act(async () => {});
+  const ready = env();
+  check('standing async harness preserves storage', { storage: ready.storage, writes: ready.writes, removals: ready.removals },
+    { storage: setup.storage, writes: setup.writes, removals: setup.removals }, { rngSetup: { before: setup.rngCalls, after: ready.rngCalls } });
   const before = env(), frozen = JSON.stringify(raw), buckets = [{ label: 'High', min: 2000, max: 9999 }, { label: 'Low', min: 0, max: 1999 }];
   const view = render(<PostGameStats gameSlug="formatting-fixture" userScore={4567.4} isVisible buckets={buckets} />);
   await act(async () => { await Promise.resolve(); });

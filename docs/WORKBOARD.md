@@ -1,3 +1,36 @@
+## Codex1085 PREPARATION2, October7: remote display verification
+
+Product remains frozen on accepted AJ base bde6b1c3797fd728dbd583a28623c34fe8452917.
+Preparation1 HEAD65be7fcb/tree7b4fb1c0, run37657678456, completed failed.
+Type/build, both existing display tests, eight relevant game gates, original
+clipped-score control, all20 readers and source/dependency holds passed.
+Full84-entry artifact11500183129 retained externally, ZIP SHA
+2f667c0f935b24b9dbcdf73052b69793849bb9a7a463e4574a672cad656d39eb.
+
+Only QA corrections: initialize React's own async-act task queue before
+capturing the product RNG baseline; record actual clipped ancestor bounds
+instead of treating an unclipped text line box as its clip boundary.
+Existing fixture/input/save equality, precision,44px targets,12px changed
+copy and1px geometry margins remain strict. Static peers reviewed both.
+No corrected13/28 mounted or6/9 native runtime acceptance yet.
+
+The unchanged historical board replay remains red. Its capped196 diagnostic
+messages do not prove all later saves hold. New remote-only observation
+helper retains complete original assertion results, raw step markup, saves,
+RNG, clocks and all recorded fields before those unchanged assertions.
+Its separate reference substitutes exactly two pinned old presentation
+modules, keeping actual engines, hooks, data, inputs and fixtures live.
+Acceptance requires all four reference sports green, every nonpresentation
+field/raw byte held, observed grouping/readability leaves only, and one
+effective saved-hash control with an unchanged healthy reference. Original
+default replay red is retained explicitly, never renamed green.
+Helper SHA1c5e0a13acf8783ac985e7ad0da03adcca02d8b9559f1f5e66de5752ce42d75e.
+Independent static review clear; remote results still pending.
+
+No PR/READY/live or full-suite acceptance. No local runtime. Claude owns
+merge, release, data, current-main integration and historical adapter
+reconciliation. Protected root and seven stashes held. Nextfree1086 unclaimed.
+
 ## Codex1085 PREPARATION1, October7,13:18 EDT: commas in large values
 
 Accepted AJ base bde6b1c3797fd728dbd583a28623c34fe8452917, treef2657a3e.
