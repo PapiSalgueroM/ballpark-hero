@@ -42,7 +42,7 @@ const fonts = new Map(JSON.parse(fs.readFileSync(path.join(CACHE, 'manifest.json
 }));
 assert(fonts.has(sheets[0]), 'Prefetch current fonts before the guarded native run');
 assert(fs.existsSync(path.join(ROOT, 'dist/index.html')), 'Build the actual app before native verification');
-const held = ['src/lib/stadiumTycoon.ts', 'src/hooks/useStadiumTycoon.ts', 'src/pages/StadiumTycoon.tsx', 'src/components/tycoon/TicketPolicyCard.tsx', 'src/lib/wonderkidFactory.ts', 'src/lib/tycoonRewards.ts', 'src/lib/tycoonGear.ts', 'src/components/tycoon/TycoonPitch.tsx', 'src/App.tsx', 'src/integrations/supabase/client.ts', 'index.html', 'scripts/qa/tycoonTicketPolicy1080.mjs'];
+const held = ['src/lib/stadiumTycoon.ts', 'src/hooks/useStadiumTycoon.ts', 'src/pages/StadiumTycoon.tsx', 'src/components/tycoon/TicketPolicyCard.tsx', 'src/lib/wonderkidFactory.ts', 'src/lib/tycoonRewards.ts', 'src/hooks/useTycoonRewards.ts', 'src/components/tycoon/TycoonPitch.tsx', 'src/App.tsx', 'src/integrations/supabase/client.ts', 'index.html', 'scripts/qa/tycoonTicketPolicy1080.mjs'];
 const hashes = () => Object.fromEntries(held.map(file => [file, digest(fs.readFileSync(path.join(ROOT, file)))]));
 const report = { sourceBefore: hashes(), cases: [], controls: [], forwardedWrites: 0 };
 fs.mkdirSync(OUT, { recursive: true });

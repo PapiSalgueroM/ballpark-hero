@@ -13,6 +13,7 @@ on:
       - src/test/tycoonTicketPolicy.test.tsx
       - scripts/simTycoonTicketPolicy.mjs
       - scripts/qa/tycoonTicketPolicy1080.mjs
+      - scripts/simTycoonLoads.mjs
 permissions:
   contents: read
 concurrency:
@@ -64,10 +65,13 @@ jobs:
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
           failed=0
-          for harness in simStadiumTycoon simTycoonClock simTycoonAway simTycoonAwayMatchdays simTycoonLeague simTycoonLoads simTycoonHelp simTycoonSetPiece simTycoonSetPiecePage simTycoonRooms simTycoonPacks simTycoonPackPace simTycoonGear simTycoonGearPage simTycoonPitch simTycoonPitchRunner; do
+          for harness in simStadiumTycoon simTycoonClock simTycoonAway simTycoonAwayMatchdays simTycoonLeague simTycoonHelp simTycoonSetPiece simTycoonSetPiecePage simTycoonRooms simTycoonPacks simTycoonPackPace simTycoonGear simTycoonGearPage simTycoonPitch simTycoonPitchRunner; do
             ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "tycoon-ticket-policy-artifacts/$harness.log" || failed=1
           done
           exit "$failed"
+      - name: Retain actual load and save controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: TYCOON_LOADS_ARTIFACTS="$PWD/tycoon-ticket-policy-artifacts/loads" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonLoads.mjs 2>&1 | tee tycoon-ticket-policy-artifacts/simTycoonLoads.log
       - name: Native actual game journeys
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
@@ -84,8 +88,8 @@ jobs:
       - name: Hold the reviewed source and protected game rules
         if: ${{ !cancelled() }}
         run: |
-          git diff --exit-code HEAD -- src scripts/simTycoonTicketPolicy.mjs scripts/qa/tycoonTicketPolicy1080.mjs
-          git diff --exit-code 2fff5e044160b70bd58b64d931793ee4e443cedd HEAD -- src/lib/wonderkidFactory.ts src/lib/tycoonRewards.ts src/lib/tycoonGear.ts src/lib/tycoonRooms.ts src/components/tycoon/TycoonPitch.tsx src/components/tycoon/AcademyPanel.tsx
+          git diff --exit-code HEAD -- src scripts/simTycoonTicketPolicy.mjs scripts/simTycoonLoads.mjs scripts/qa/tycoonTicketPolicy1080.mjs
+          git diff --exit-code 2fff5e044160b70bd58b64d931793ee4e443cedd HEAD -- src/lib/wonderkidFactory.ts src/lib/tycoonRewards.ts src/hooks/useTycoonRewards.ts src/lib/tycoonRooms.ts src/components/tycoon/TycoonPitch.tsx src/components/tycoon/AcademyPanel.tsx
       - name: Preserve verification evidence
         if: always()
         uses: actions/upload-artifact@v4

@@ -32,3 +32,22 @@ readers and protected source holds. The only existing office test change account
 for the sixth tile. All runtime is remote CI. No production database work or
 local runtime. Final runs, measurements, artifacts and source hashes will be
 recorded after remote evidence. No passing runtime is credited by this note.
+
+First preparation receipt: head cea71aa93018513bb10cfa341385d22adfcdf942,
+tree b6d25b8599b48f241e3dea1a3ff67c388d98efc1, run 37603596270,
+job 112733621291, artifact 11475107873. ZIP SHA256
+00210935ed0a390f70bef17564ec513a8077dda9953a4ada30f76f15bf894a63.
+Independent static artifact inspection verified 20/20 outcomes, all 23 mapped
+fault failures with independent baseline passes, 15 exact source holds and
+216 finite measurements. All 20 readers and 15/16 existing regressions passed.
+Native completed zero journeys because its held-file list named a nonexistent
+file. The load harness stopped at a stale mutation anchor before its controls.
+Both verification errors are corrected for the next remote run. Full load
+reports, logs and copied controls are now retained without changing assertions.
+
+Measured passive earnings versus Standard in the three fixed setups:
+early 60 seconds, Community -14.28%, Premium -6.85%; expanding 600 seconds,
+Community +1.59% to +10.05%, Premium -22.64% to -21.88%; mature 60 seconds,
+Community -15%, Premium +25%. The 72 paired seed triplets have equal draw counts.
+These are scenario measurements, not an upgrade-strategy sweep or universal
+balance proof. Native accounting, interaction and persistence remain pending.

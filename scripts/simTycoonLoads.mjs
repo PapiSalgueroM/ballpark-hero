@@ -81,12 +81,15 @@ const read = f => fs.readFileSync(f, 'utf8').split('\r\n').join('\n');
 
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'tycoonloads-'));
 const controlDirs = [];
+const retained = process.env.TYCOON_LOADS_ARTIFACTS ? path.resolve(process.env.TYCOON_LOADS_ARTIFACTS) : null;
+if (retained) fs.mkdirSync(retained, { recursive: true });
 process.on('exit', () => {
+  if (retained) fs.cpSync(tmp, path.join(retained, 'raw'), { recursive: true });
   for (const d of controlDirs) { try { fs.rmSync(d, { recursive: true, force: true }); } catch { /* best effort */ } }
   try { fs.rmSync(tmp, { recursive: true, force: true }); } catch { /* best effort */ }
 });
 
-function runSuite(env) {
+function runSuite(env, label = 'shipped') {
   const out = path.join(tmp, `report-${Math.random().toString(36).slice(2)}.json`);
   const r = spawnSync(
     process.execPath,
@@ -94,6 +97,10 @@ function runSuite(env) {
     { cwd: ROOT, encoding: 'utf8', env: { ...process.env, ...env, CI: '1', FORCE_COLOR: '0', NO_COLOR: '1' }, maxBuffer: 64 * 1024 * 1024 },
   );
   const text = (r.stdout || '') + (r.stderr || '');
+  if (retained) {
+    fs.writeFileSync(path.join(retained, `${label}-vitest.log`), text);
+    if (fs.existsSync(out)) fs.copyFileSync(out, path.join(retained, `${label}-report.json`));
+  }
   if (!fs.existsSync(out)) { console.error(text.slice(-3000)); return null; }
   const report = JSON.parse(fs.readFileSync(out, 'utf8'));
   const rows = [];
@@ -221,7 +228,7 @@ const CONTROLS = [
     build: () => {
       let t = read(STADIUM_HOOK);
       t = mustReplace(t, '  const stateRef = useRef(state);\n', '  const stateRef = useRef(state);\n  stateRef.current = state;\n', 'useStadiumTycoon.ts');
-      t = mustReplace(t, '    stateRef.current = next;\n    setState(next);\n  }, []);\n  const goldenRef', '    setState(next);\n  }, []);\n  const goldenRef', 'useStadiumTycoon.ts (commit)');
+      t = mustReplace(t, '    stateRef.current = next;\n    setState(next);\n  }, []);', '    setState(next);\n  }, []);', 'useStadiumTycoon.ts (commit)');
       t = mustReplace(t, '        stateRef.current = next;\n        for (const e of events)', '        for (const e of events)', 'useStadiumTycoon.ts (the loop)');
       return t;
     },
@@ -253,7 +260,8 @@ for (const control of CONTROLS) {
   fs.mkdirSync(dir, { recursive: true });
   const file = path.join(dir, control.file);
   fs.writeFileSync(file, control.build());
-  const rows = runSuite({ [control.env]: file.replaceAll('\\', '/') });
+  if (retained) fs.copyFileSync(file, path.join(retained, `${control.name}-${control.file}`));
+  const rows = runSuite({ [control.env]: file.replaceAll('\\', '/') }, control.name);
   fs.rmSync(dir, { recursive: true, force: true });
   if (!rows) { fail(`control ${control.name}: no report`); continue; }
   if (rows.loadError) { fail(`control ${control.name}: the broken copy did not load, so every red is a crash:\n${rows.loadError}`); continue; }
