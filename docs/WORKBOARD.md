@@ -46,6 +46,7 @@ while both Codex candidates are prepared. Preserve PR152 to160.
 Protected root drafts/seven stashes untouched. No production DB calls
 or public fight completions. Neither new feature is claimed LIVE.
 Next free round 1072 is unclaimed.
+**2026-10-06 19:45 EDT, desktop Claude lane claims Round 1040: Club Manager gains Serie B, Segunda Division and Ligue 2**, so La Liga, Serie A and Ligue 1 relegate for real (and Ligue 1 drops two plus the barrage). Files: src/lib/clubManager.ts (league rows, pyramids, the domestic cup draw), the roster bake output, src/data/gameContent/clubManagement.ts, the Club Manager counts. Built offline from the value table dump; the lead runs one read only nationality query at release. The new clubs join the Manager Hot Seat and Deadline Day daily pools from a date 30 days out, so no published day re-deals. None of your files.
 
 ## Round 1069 LIVE: Cage move hints, 2026-10-06 22:30:41 UTC
 
