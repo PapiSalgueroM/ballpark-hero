@@ -17244,8 +17244,15 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
  * ties after elimination), opens the January window, or plays my next match.
  * Never mutates the input state.
  */
-export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boolean; untilWeek?: number }): PlayResult {
+export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boolean; untilWeek?: number; noCoach?: boolean }): PlayResult {
   const state: CareerState = JSON.parse(JSON.stringify(career));
+  /* Release AL: `noCoach` plays a quick sim the way it was played before
+     Round 1072, with nobody making changes. Manager Hot Seat passes it: its
+     daily deal and every saved run are a seed replayed through this function,
+     so a coach who changes results would hand today's players a different job
+     from the one the morning's players got, and turn a finished run into an
+     unfinished one. */
+  const coached = (s: CareerState): CareerState => (opts?.noCoach ? s : coachQuickMatch(s));
   // Round 95: a save made before the world existed repairs itself here, and
   // a save made after this is a no-op because it is already in step.
   if (!state.world) syncWorld(state, myRoundsPlayed(state, state.week));
@@ -17302,7 +17309,7 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
        quick sim is. */
     if (state.live && state.live.week === state.week) {
       if (!opts?.skipHalftime) return { state, kind: 'halftime', live: state.live };
-      return resumeMatch(coachQuickMatch(state));
+      return resumeMatch(coached(state));
     }
     const entry = state.calendar[state.week];
     if (entry.type === 'window') {
@@ -17384,7 +17391,7 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
       return { state, kind: 'halftime', live };
     }
     state.live = live;
-    return resumeMatch(coachQuickMatch(state));
+    return resumeMatch(coached(state));
   }
   return { state, kind: 'seasonOver' };
 }
@@ -17729,6 +17736,20 @@ export function coachQuickMatch(career: CareerState): CareerState {
     : savedMinute === 90 ? state.live!.added?.h2 ?? 0
       : savedMinute === state.live!.et?.to ? state.live!.added?.et ?? 0 : 0;
   const handled = new Set<string>();
+  /* Release AL: how a bench man fits the place the man coming off holds.
+     benchFor puts every out of position man in one tier, and a reserve keeper
+     who never plays is the freshest of them, so on the 16 man squads of the
+     second tiers the coach sent the keeper on for a midfielder while fit
+     outfield players sat beside him (51 of 439 changes over 1,326 matches).
+     The coach now crosses the keeper line only when nobody else can come on,
+     and takes a merely tired man off only for somebody who plays there. */
+  const gradeFor = (outId: string): ((p: CMPlayer) => FitGrade) => {
+    const live = state.live!;
+    const slot = liveFormationOf(state, live).slots[live.onPitch.indexOf(outId)] ?? null;
+    const out = state.squad.find(p => p.id === outId);
+    const allowed = slot ? slot.allowed : out ? [out.position] : [];
+    return p => gradeFit(heldPositions(p), allowed);
+  };
   const injuriesThrough = (to: number) => {
     while (state.live!.subsUsed < MAX_SUBS) {
       const live = state.live!;
@@ -17737,7 +17758,9 @@ export function coachQuickMatch(career: CareerState): CareerState {
         .sort(clockOrder).find(line => line.id && line.minute <= to && live.onPitch.includes(line.id) && !handled.has(line.id));
       if (!injury?.id) break;
       handled.add(injury.id);
-      const coming = benchFor(state, injury.id)[0];
+      const bench = benchFor(state, injury.id);
+      const injuredFit = gradeFor(injury.id);
+      const coming = bench.find(p => injuredFit(p) !== 'keeper') ?? bench[0];
       if (!coming) continue;
       const minute = Math.max(injury.minute, live.minute ?? 46, live.et && savedMinute === 90 ? 91 : 0);
       const plus = Math.max(minute === injury.minute ? injury.plus ?? 0 : 0, minute === savedMinute ? savedBoard : 0,
@@ -17752,8 +17775,9 @@ export function coachQuickMatch(career: CareerState): CareerState {
     for (const out of tiringAtHalftime(state)) {
       if (state.live!.subsUsed >= MAX_SUBS - 1) break;
       if (liveGoneIds(state.live!, 46).has(out.id)) continue;
-      const coming = benchFor(state, out.id).find(p => p.fitness > out.fitness
-        || (p.fitness === out.fitness && p.morale > out.morale));
+      const tiredFit = gradeFor(out.id);
+      const coming = benchFor(state, out.id).find(p => (tiredFit(p) === 'natural' || tiredFit(p) === 'family')
+        && (p.fitness > out.fitness || (p.fitness === out.fitness && p.morale > out.morale)));
       if (coming) state = changeLive(state, Math.max(46, state.live!.minute ?? 46), { kind: 'sub', outId: out.id, inId: coming.id }) ?? state;
     }
     drawSecondHalf(state, entry, state.live!);

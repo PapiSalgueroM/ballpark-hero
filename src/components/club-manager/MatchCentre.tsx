@@ -184,7 +184,7 @@ export function MatchCentre({
         </button>
       </div>
       <p className="text-[9px] text-muted-foreground text-center">
-        Play Live puts it on the pitch at your speed, with the dressing room at the break and subs and shape in your hands. Quick Sim plays the same match without you and goes straight to the report. Same match either way.
+        Play Live puts it on the pitch at your speed, with the dressing room at the break and subs and shape in your hands. Quick Sim goes straight to the report and the coach makes your subs. Same engine either way, so there is no penalty for skipping.
       </p>
     </div>
   );
