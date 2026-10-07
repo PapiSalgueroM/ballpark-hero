@@ -61,6 +61,16 @@
  * used fails 3 (the entry read [md, 0, -2]) and with it 7; label fails 9
  * only ("Next chance").
  *
+ * Measured again 2026-10-07 after the review, on the build of the branch
+ * with origin/main and release-al-int merged (ca3da0b0): 112 checks, 0
+ * failed, five walks (walk E leaves early on the phone and banks at
+ * Continue: "2 of 9 stars. No gains this time", phase ballon_dor). The
+ * first run after the checks of 10 were written failed 6 of them (the
+ * focus fell to BODY with the board open, in every walk), which is how the
+ * moment host's cards came to be keyed. Controls, each exit 1 with all five
+ * walks run: used fails 3 in every walk and 7, 6 and 10 in walk B; fixtures
+ * fails 10 on the three phone walks only; label fails 9 only.
+ *
  * Run: npm run build, then ENGINES=chromium node scripts/playSeasonMoments.mjs
  * (MSYS_NO_PATHCONV=1 under Git Bash). Green is the closing
  * "playSeasonMoments: N checks, 0 failed" line and exit 0.

@@ -47,6 +47,10 @@
  *   seasons with a call     0.894 0.915 0.885 0.918 0.900   floor 0.84
  *   (a share over about 700 seasons has a standard error near 0.011, so
  *   each floor sits four or more of those under the lowest run)
+ *   (seed set 0 again after the review of 2026-10-07, on the merged tree:
+ *   54 checks, 0 failed, the same 2.983, 0.539 and 0.894; 4556 mirrored
+ *   calls, every one changing at its moment's minute and nowhere else in
+ *   its game; 707 seasons closed early, 705 of them with more on offer)
  *   boards, of 120 keyed rounds a run: a careful input makes the wall shot
  *   120 119 120 120 120 and the tackle, the glove save and the through ball
  *   120 every run (floors 0.95 and 0.97); the textbook wall shot strike
