@@ -3,6 +3,10 @@ import { act, cleanup, fireEvent, render } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { HelmetProvider } from 'react-helmet-async';
 import { MemoryRouter } from 'react-router-dom';
+/* Round 1047: the page loads the training ground when it is opened (a lazy
+   chunk). Importing it here keeps it in the module cache, so the press and
+   the load settle inside one act (openTraining below). */
+import '@/components/soccer-career/TrainingPanel';
 
 vi.mock('@/lib/completions', async (original) => ({
   ...(await original<Record<string, unknown>>()),
@@ -87,8 +91,14 @@ function noReplay() {
   expect(Math.random).not.toHaveBeenCalled(); expect(recordActivity).not.toHaveBeenCalled(); expect(recordStreakDay).not.toHaveBeenCalled();
 }
 function clearReplayCounts() { vi.mocked(Math.random).mockClear(); vi.mocked(recordActivity).mockClear(); vi.mocked(recordStreakDay).mockClear(); }
-function bankSprint(view: ReturnType<typeof render>) {
-  fireEvent.click(view.getByRole('button', { name: 'Open the training ground' }));
+async function openTraining(view: ReturnType<typeof render>) {
+  await act(async () => {
+    fireEvent.click(view.getByRole('button', { name: 'Open the training ground' }));
+    await import('@/components/soccer-career/TrainingPanel');
+  });
+}
+async function bankSprint(view: ReturnType<typeof render>) {
+  await openTraining(view);
   fireEvent.click(view.getByRole('button', { name: /Sprint Burst/ }));
   fireEvent.click(view.getByRole('button', { name: /Tap to start the 5 second sprint/ }));
   for (let i = 0; i < 25; i++) fireEvent.click(view.getByRole('button', { name: /GO GO GO/ }));
@@ -121,9 +131,9 @@ describe('Soccer Career failed write recovery', () => {
     expect(m.attempts).toHaveLength(3); expect(new Set(m.attempts).size).toBe(1); expect(localStorage.getItem(KEY)).toBe(m.raw);
     expect(m.removes).not.toHaveBeenCalled(); expect(toast.error).toHaveBeenCalledTimes(1); noReplay(); expect(recordCompletion).not.toHaveBeenCalled();
   });
-  it('retries the actually earned training result exactly once and restores it on the next mount', () => {
+  it('retries the actually earned training result exactly once and restores it on the next mount', async () => {
     const m = mount(), before = read(), oldBytes = localStorage.getItem(KEY), expected = copy(E.applyTrainingResult(copy(before), 'pace', 80));
-    m.refuse(true); bankSprint(m.view); assertWarning(m.view);
+    m.refuse(true); await bankSprint(m.view); assertWarning(m.view);
     expect(localStorage.getItem(KEY)).toBe(oldBytes); expect(JSON.parse(m.attempts[m.attempts.length - 1])).toEqual(expected);
     expect(expected.statBoostNextSeason.pace).toBe((before.statBoostNextSeason.pace || 0) + 2); const attempts = m.attempts.length;
     clearReplayCounts(); m.refuse(false); retry(m.view);
@@ -131,20 +141,20 @@ describe('Soccer Career failed write recovery', () => {
     expect(recordCompletion).not.toHaveBeenCalled(); expect(m.removes).not.toHaveBeenCalled();
     m.view.unmount(); vi.restoreAllMocks(); vi.spyOn(Math, 'random').mockReturnValue(0.52);
     const restored = mount(read()); expect(read()).toEqual(expected); expect(warning(restored.view)).toBeNull();
-    fireEvent.click(restored.view.getByRole('button', { name: 'Open the training ground' }));
+    await openTraining(restored.view);
     expect(restored.view.queryByText('Already trained this season')).toBeVisible(); expect(recordCompletion).not.toHaveBeenCalled();
   });
-  it('retries the latest earned season after more than one failed career change without rerunning its engine', () => {
+  it('retries the latest earned season after more than one failed career change without rerunning its engine', async () => {
     const m = mount(), before = read(), oldBytes = localStorage.getItem(KEY);
     const trained = E.applyTrainingResult(copy(before), 'pace', 80), expected = copy(E.advanceYouthYear(copy(trained), E.FALLBACK_CLUBS));
-    m.refuse(true); bankSprint(m.view); pressNext(m.view); assertWarning(m.view);
+    m.refuse(true); await bankSprint(m.view); pressNext(m.view); assertWarning(m.view);
     expect(localStorage.getItem(KEY)).toBe(oldBytes); expect(JSON.parse(m.attempts[m.attempts.length - 1])).toEqual(expected);
     expect(expected.seasons).toHaveLength(before.seasons.length + 1); expect(expected.age).toBe(before.age + 1);
     clearReplayCounts(); m.refuse(false); retry(m.view); noReplay(); expect(read()).toEqual(expected);
     expect(warning(m.view)).toBeNull(); expect(recordCompletion).not.toHaveBeenCalled();
   });
-  it('clears a failed save on the next successful automatic save and alerts again on a later refusal', () => {
-    const m = mount(nativeCareer(), true); assertWarning(m.view); m.refuse(false); bankSprint(m.view);
+  it('clears a failed save on the next successful automatic save and alerts again on a later refusal', async () => {
+    const m = mount(nativeCareer(), true); assertWarning(m.view); m.refuse(false); await bankSprint(m.view);
     expect(warning(m.view)).toBeNull(); expect(read().statBoostNextSeason.pace).toBe(2); const saved = localStorage.getItem(KEY);
     m.refuse(true); pressNext(m.view); assertWarning(m.view);
     expect(localStorage.getItem(KEY)).toBe(saved); expect(toast.error).toHaveBeenCalledTimes(2);
