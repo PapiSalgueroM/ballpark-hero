@@ -114,6 +114,26 @@
  *   SIZE_BUDGET 180,000 bytes at season 15. Healthy: 159,782 to 165,718.
  *     Uncapped: Real Madrid 190,088, Everton 200,065, Lincoln City 200,568
  *     (the review measured 198,436).
+ * Round 1040 moved SIZE_BUDGET to 192,000, measured the same way. The world
+ * every save carries grew by a league at a time (Round 1035's A-League,
+ * then this round's Serie B and Ligue 2, about 3,000 bytes a league at
+ * season 15), and the healthy engine reached the old budget: on the round's
+ * base tree (release-ah fc30942e) Real Madrid 171,340, Everton 172,732,
+ * Lincoln City 174,432 on the default stream; with Serie B 173,748, 176,895,
+ * 177,300; with Ligue 2 as well, over the default stream and SIM_SEED 1 to
+ * 5, 176,549 to 180,674 (Lincoln City over 180,000 on four of six). The
+ * uncapped control on that tree, default stream: Real Madrid 205,035,
+ * Everton 211,802, Lincoln City 215,036. 192,000 sits about 11,300 over
+ * the healthy top and 13,000 under the defect's bottom. The slope fence
+ * did not move: healthy 961 to 1,088, uncapped 3,329 to 4,488.
+ * With the Segunda as well (the round's last step, 26 leagues, measured
+ * the same way on the merged tree): healthy 177,355 to 184,064 over the six
+ * streams (Real Madrid 177,355 to 180,131, Everton 180,992 to 184,064,
+ * Lincoln City 182,260 to 183,660), slope 173 to 1,158; uncapped, default
+ * stream, Real Madrid 205,532, Everton 216,047, Lincoln City 217,721, slope
+ * 2,908 to 4,490. 192,000 stays: about 7,900 over the healthy top and 13,500
+ * under the defect's bottom. A league adds about 3,000 at season 15, so the
+ * next two or three leagues should re-measure and move it again.
  * The first cut of this file set 5,000 and 240,000 by feel, and both passed
  * the uncapped engine, which is exactly the mistake the house rule names.
  *
@@ -138,7 +158,7 @@ const ENTRY = `${TMP}/cmSaveSize.entry.mjs`;
 const BUNDLE = `${TMP}/cmSaveSize.bundle.mjs`;
 
 /* Measured ranges beside each, see the header. */
-const SIZE_BUDGET = 180_000;   // healthy 159,782 to 165,718; head to head uncapped 190,088 to 200,568
+const SIZE_BUDGET = 192_000;   // Round 1040, 26 leagues: healthy 177,355 to 184,064; head to head uncapped 205,532 to 217,721 (was 180,000)
 const SLOPE_CAP = 2_000;       // healthy 249 to 1,178 bytes a season; uncapped 3,052 to 4,408
 const CLUBS = ['Real Madrid', 'Everton', 'Lincoln City'];
 const SEASONS = 15;

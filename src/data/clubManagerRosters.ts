@@ -1,13 +1,16 @@
-// Rounds 70+72: real rosters for every Club Manager club, generated 2026-10-06
+// Rounds 70+72: real rosters for every Club Manager club, generated 2026-10-07
 // Source: Supabase player_market_values_dedup (2026 rows, 2025 fallback at a
 // 5% discount) PLUS the verified summer 2026 transfer overlay
 // (scripts/transferOverlay2026.mjs), so squads reflect August 2026 after the
-// window. 4253 players, 368 clubs across the big five leagues
+// window. 4401 players, 426 clubs across the big five leagues
 // (2026-27 memberships), EFL Championship, Saudi Pro League, MLS East and
 // West, Eredivisie, Primeira Liga, Scottish Premiership, Süper Lig,
 // 2. Bundesliga, Belgian Pro League, Austrian Bundesliga, Super League
 // Greece, Danish Superliga, Swiss Super League, SuperSport HNL,
-// Brazil's Serie A and Liga MX.
+// Brazil's Serie A, Liga MX, Serie B, Ligue 2 and the Segunda División.
+// The overlay does not cover Serie B, Ligue 2 or the Segunda División: their
+// squads are the table's men that each club's ESPN 2026-27 squad page still
+// lists (the roster ledger withholds the rest), with no summer arrivals added.
 // Values in £m, ratings 48-94 from the value curve.
 // Regenerate with: node scripts/bakeClubManagerRosters.mjs
 // DO NOT EDIT BY HAND.
@@ -27,16 +30,16 @@ export interface BakedPlayer {
 }
 
 export const CM_ROSTER_META = {
-  generated: '2026-10-06',
+  generated: '2026-10-07',
   asOf: 'August 2026, after the summer window',
-  players: 4253,
-  clubs: 368,
-  overlayMoves: 713,
+  players: 4401,
+  clubs: 426,
+  overlayMoves: 734,
 };
 
 /** Clubs where the dataset runs thin (under 8 real players); the game pads
  *  these squads with youth players and the picker says so. */
-export const CM_PARTIAL: string[] = ["AC Horsens","ADO Den Haag","AGF","Aberdeen","Abha","Académico de Viseu","Al-Diriyah","Al-Ettifaq","Al-Faisaly","Al-Fateh","Al-Fayha","Al-Hazem","Al-Khaleej","Al-Kholood","Al-Riyadh","Al-Taawoun","Altach","Alverca","Amedspor","Aris","Arminia Bielefeld","Arouca","Asteras Tripolis","Atlante","Atlas","Atromitos","Austria Lustenau","Austria Wien","Beveren","Blackburn Rovers","Bochum","Bolton Wanderers","Braunschweig","CF Montréal","Cambuur","Cardiff City","Casa Pia","Chapecoense","Charleroi","Coritiba","D.C. United","Darmstadt","Dundee","Dundee United","Dynamo Dresden","Energie Cottbus","Erzurumspor","Estrela Amadora","Excelsior","Eyüpspor","FC Cincinnati","FC Dallas","FC Zürich","Falkirk","Fortuna Sittard","Gaziantep FK","Gençlerbirliği","Gil Vicente","Go Ahead Eagles","Gorica","Grasshopper","Grazer AK","Greuther Fürth","Groningen","Hannover 96","Hartberg","Hearts","Hertha BSC","Hibernian","Iraklis","Istra 1961","Kaiserslautern","Kalamata","Karlsruhe","Kasımpaşa","Kifisia","Kilmarnock","Kocaelispor","Konyaspor","Kortrijk","LA Galaxy","LASK","La Louvière","Le Mans","Levadiakos","Lincoln City","Lokomotiva Zagreb","Lommel","Lugano","Luzern","Lyngby","Magdeburg","Marítimo","Mirassol","Moreirense","Motherwell","Málaga","NEC Nijmegen","Nacional","Nashville SC","OB","OFI","OH Leuven","Osijek","Osnabrück","PEC Zwolle","Panetolikos","Portsmouth","Puebla","Querétaro","Randers FC","Real Salt Lake","Remo","Ried","Rijeka","Rudeš","San Jose Earthquakes","Santa Clara","Santos Laguna","Servette","Silkeborg IF","Sion","Slaven Belupo","Sparta Rotterdam","Sporting Kansas City","St Johnstone","St Mirren","St. Gallen","Standard Liège","SønderjyskE","Telstar","Thun","Tijuana","Troyes","Vaduz","Varaždin","Viborg FF","Volos","WSG Tirol","Willem II","Wolfsberger AC","Zulte Waregem","Çorum FK"];
+export const CM_PARTIAL: string[] = ["AC Horsens","ADO Den Haag","AGF","Aberdeen","Abha","Académico de Viseu","Al-Diriyah","Al-Ettifaq","Al-Faisaly","Al-Fateh","Al-Fayha","Al-Hazem","Al-Khaleej","Al-Kholood","Al-Riyadh","Al-Taawoun","Albacete","Almería","Altach","Alverca","Amedspor","Annecy","Arezzo","Aris","Arminia Bielefeld","Arouca","Ascoli","Asteras Tripolis","Atlante","Atlas","Atromitos","Austria Lustenau","Austria Wien","Avellino","Benevento","Beveren","Blackburn Rovers","Bochum","Bolton Wanderers","Boulogne","Braunschweig","Burgos","CF Montréal","Cambuur","Cardiff City","Carrarese","Casa Pia","Castellón","Catanzaro","Cesena","Ceuta","Chapecoense","Charleroi","Clermont","Coritiba","Cremonese","Cádiz","Córdoba","D.C. United","Darmstadt","Dijon","Dundee","Dundee United","Dunkerque","Dynamo Dresden","Eibar","Eldense","Empoli","Energie Cottbus","Entella","Erzurumspor","Estrela Amadora","Excelsior","Eyüpspor","FC Andorra","FC Cincinnati","FC Dallas","FC Zürich","Falkirk","Fortuna Sittard","Gaziantep FK","Gençlerbirliği","Gil Vicente","Go Ahead Eagles","Gorica","Granada","Grasshopper","Grazer AK","Grenoble","Greuther Fürth","Groningen","Guingamp","Hannover 96","Hartberg","Hearts","Hertha BSC","Hibernian","Iraklis","Istra 1961","Juve Stabia","Kaiserslautern","Kalamata","Karlsruhe","Kasımpaşa","Kifisia","Kilmarnock","Kocaelispor","Konyaspor","Kortrijk","LA Galaxy","LASK","La Louvière","Las Palmas","Lausanne-Sport","Laval","Le Mans","Leganés","Levadiakos","Lincoln City","Lokomotiva Zagreb","Lommel","Lugano","Luzern","Lyngby","Magdeburg","Mantova","Marítimo","Metz","Mirassol","Modena","Montpellier","Moreirense","Motherwell","Málaga","NEC Nijmegen","Nacional","Nancy","Nashville SC","OB","OFI","OH Leuven","Osijek","Osnabrück","PEC Zwolle","Padova","Palermo","Panetolikos","Pau","Portsmouth","Puebla","Querétaro","Randers FC","Real Oviedo","Real Salt Lake","Red Star FC","Remo","Ried","Rijeka","Rodez","Rudeš","Sabadell","Sampdoria","San Jose Earthquakes","Santa Clara","Santos Laguna","Servette","Silkeborg IF","Sion","Slaven Belupo","Sochaux","Sparta Rotterdam","Sporting Gijón","Sporting Kansas City","St Johnstone","St Mirren","St. Gallen","Standard Liège","SønderjyskE","Südtirol","Telstar","Tenerife","Thun","Tijuana","Troyes","Vaduz","Valladolid","Varaždin","Viborg FF","Vicenza","Volos","WSG Tirol","Willem II","Wolfsberger AC","Zulte Waregem","Çorum FK"];
 
 export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
   'AC Horsens': [
@@ -60,7 +63,6 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Pervis Estupiñán', p: 'LB', a: 27, v: 11.3, r: 79 },
     { n: 'Ruben Loftus-Cheek', p: 'CM', a: 29, v: 8.3, r: 77 },
     { n: 'Alphadjo Cissè', p: 'CAM', a: 19, v: 6, r: 76 },
-    { n: 'Filippo Terracciano', p: 'CB', a: 22, v: 3.6, r: 73 },
     { n: 'Luka Modrić', p: 'CM', a: 40, v: 3, r: 72 },
   ],
   'ADO Den Haag': [
@@ -303,7 +305,7 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Antonio Blanco', p: 'CDM', a: 25, v: 8.1, r: 77 },
     { n: 'Antonio Sivera', p: 'GK', a: 29, v: 4.5, r: 74 },
     { n: 'Jon Pacheco', p: 'CB', a: 24, v: 4.5, r: 74 },
-    { n: 'Nicolás Valentini', p: 'CB', a: 24, v: 4.5, r: 74 },
+    { n: 'Nicolás Valentini', p: 'CB', a: 24, v: 4.3, r: 74 },
     { n: 'Lucas Boyé', p: 'ST', a: 29, v: 3.8, r: 73 },
     { n: 'Miguel Rodríguez', p: 'RW', a: 22, v: 3.8, r: 73 },
     { n: 'Youssef Enríquez', p: 'LB', a: 20, v: 3.6, r: 73 },
@@ -317,6 +319,16 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Victor Parada', p: 'LB', a: 23, v: 1.5, r: 68 },
     { n: 'Hugo Novoa', p: 'RB', a: 22, v: 1.4, r: 68 },
     { n: 'Tomás Conechny', p: 'LW', a: 27, v: 1.4, r: 68 },
+  ],
+  'Albacete': [
+    { n: 'Agustín Albarracín', p: 'LW', a: 20, v: 1.5, r: 68 },
+  ],
+  'Almería': [
+    { n: 'Sergio Arribas', p: 'CAM', a: 24, v: 12, r: 79 },
+    { n: 'Thalys', p: 'ST', a: 20, v: 4.5, r: 74 },
+    { n: 'Nico Melamed', p: 'CAM', a: 24, v: 2.3, r: 70 },
+    { n: 'Álex Sola', p: 'RW', a: 26, v: 2.1, r: 70 },
+    { n: 'Daijiro Chirino', p: 'RB', a: 23, v: 1.5, r: 68 },
   ],
   'Altach': [
   ],
@@ -360,7 +372,6 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Lucas Hey', p: 'CB', a: 22, v: 3.6, r: 73 },
     { n: 'Ilay Camara', p: 'RB', a: 22, v: 3, r: 72 },
     { n: 'Killian Sardella', p: 'RB', a: 23, v: 3, r: 72 },
-    { n: 'Théo Leoni', p: 'CM', a: 25, v: 2.9, r: 71 },
     { n: 'Coba da Costa', p: 'LW', a: 23, v: 2.3, r: 70 },
     { n: 'Tristan Degreef', p: 'RW', a: 20, v: 2.3, r: 70 },
     { n: 'Yari Verschaeren', p: 'CAM', a: 24, v: 2.3, r: 70 },
@@ -384,6 +395,9 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Carlens Arcus', p: 'RB', a: 29, v: 1.5, r: 68 },
     { n: 'Harouna Djibirin', p: 'RW', a: 19, v: 1.5, r: 68 },
   ],
+  'Annecy': [
+    { n: 'Clément Billemaz', p: 'LM', a: 25, v: 0.8, r: 64 },
+  ],
   'Antwerp': [
     { n: 'Arthur Vermeeren', p: 'CDM', a: 20, v: 16.2, r: 81 },
     { n: 'Vincent Janssen', p: 'ST', a: 31, v: 3.8, r: 73 },
@@ -395,6 +409,8 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Farouck Adekami', p: 'CAM', a: 19, v: 1.5, r: 68 },
     { n: 'Isaac Babadi', p: 'CAM', a: 20, v: 1.5, r: 68 },
     { n: 'Christopher Scott', p: 'LM', a: 21, v: 0.8, r: 64 },
+  ],
+  'Arezzo': [
   ],
   'Aris': [
     { n: 'Monchu', p: 'CM', a: 26, v: 4.5, r: 74 },
@@ -441,6 +457,9 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Illan Meslier', p: 'GK', a: 25, v: 8.3, r: 77 },
     { n: 'Kepa Arrizabalaga', p: 'GK', a: 31, v: 6, r: 76 },
     { n: 'Valentín Serrano', p: 'LM', a: 19, v: 0.8, r: 64 },
+  ],
+  'Ascoli': [
+    { n: 'Andrea Oliveri', p: 'RM', a: 22, v: 0.8, r: 64 },
   ],
   'Asteras Tripolis': [
   ],
@@ -497,7 +516,6 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Sead Kolasinac', p: 'CB', a: 32, v: 4.5, r: 74 },
     { n: 'Berat Djimsiti', p: 'CB', a: 32, v: 3.8, r: 73 },
     { n: 'Davide Zappacosta', p: 'RM', a: 33, v: 3, r: 72 },
-    { n: 'Juan Cuadrado', p: 'RM', a: 37, v: 0.7, r: 64 },
   ],
   'Athletic Club': [
     { n: 'Nico Williams', p: 'LW', a: 23, v: 40.5, r: 86 },
@@ -673,6 +691,10 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Marvin Senaya', p: 'RB', a: 24, v: 2.3, r: 70 },
     { n: 'Rémy Labeau Lascary', p: 'ST', a: 22, v: 2.3, r: 70 },
   ],
+  'Avellino': [
+    { n: 'Giacomo Faticanti', p: 'CDM', a: 21, v: 3.6, r: 73 },
+    { n: 'Filippo Missori', p: 'RB', a: 21, v: 1.5, r: 68 },
+  ],
   'Bahia': [
     { n: 'Jean Lucas', p: 'CM', a: 27, v: 9.8, r: 78 },
     { n: 'Santiago Ramos Mingo', p: 'CB', a: 24, v: 9.8, r: 78 },
@@ -718,7 +740,6 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Roony Bardghji', p: 'RW', a: 20, v: 12, r: 79 },
     { n: 'Andreas Christensen', p: 'CB', a: 29, v: 7.5, r: 77 },
     { n: 'João Cancelo', p: 'RB', a: 31, v: 7.5, r: 77 },
-    { n: 'Pablo Torre', p: 'CAM', a: 22, v: 4.3, r: 74 },
     { n: 'Xavi Espart', p: 'RB', a: 18, v: 3.8, r: 73 },
     { n: 'Dominik Livakovic', p: 'GK', a: 30, v: 3, r: 72 },
     { n: 'Juan Hernández', p: 'CAM', a: 18, v: 1.5, r: 68 },
@@ -805,6 +826,10 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Jakub Kaluzinski', p: 'CDM', a: 23, v: 2, r: 70 },
     { n: 'Doğan Alemdar', p: 'GK', a: 23, v: 1.5, r: 68 },
     { n: 'Edin Visca', p: 'RW', a: 35, v: 1.4, r: 68 },
+  ],
+  'Benevento': [
+    { n: 'Luigi Cherubini', p: 'LW', a: 21, v: 1.5, r: 68 },
+    { n: 'Pier Luigi Simonetti', p: 'LM', a: 22, v: 0.8, r: 64 },
   ],
   'Benfica': [
     { n: 'Vangelis Pavlidis', p: 'ST', a: 27, v: 26.3, r: 84 },
@@ -972,6 +997,9 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Mateo Ponte', p: 'RB', a: 22, v: 1.5, r: 68 },
     { n: 'Carlos Alberto', p: 'RW', a: 23, v: 1.4, r: 68 },
   ],
+  'Boulogne': [
+    { n: 'Aurélien Platret', p: 'RM', a: 22, v: 0.8, r: 64 },
+  ],
   'Bournemouth': [
     { n: 'Alex Scott', p: 'CM', a: 22, v: 32.3, r: 85 },
     { n: 'Junior Kroupi', p: 'ST', a: 19, v: 32.3, r: 85 },
@@ -1023,7 +1051,6 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Fran Navarro', p: 'ST', a: 27, v: 3, r: 72 },
     { n: 'Tommy Marqués', p: 'CDM', a: 19, v: 2.4, r: 71 },
     { n: 'Denis Huseinbasic', p: 'CM', a: 24, v: 2.3, r: 70 },
-    { n: 'João Ferreira', p: 'RB', a: 24, v: 2.1, r: 70 },
   ],
   'Braunschweig': [
     { n: 'Jovan Mijatovic', p: 'ST', a: 20, v: 2.1, r: 70 },
@@ -1128,6 +1155,9 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Sean Klaiber', p: 'RB', a: 31, v: 1.5, r: 68 },
     { n: 'Oliver Villadsen', p: 'RB', a: 24, v: 1.4, r: 68 },
   ],
+  'Burgos': [
+    { n: 'Curro Sánchez', p: 'RW', a: 29, v: 1.5, r: 68 },
+  ],
   'Burnley': [
     { n: 'Hannibal', p: 'CAM', a: 22, v: 12.8, r: 80 },
     { n: 'Bashir Humphreys', p: 'CB', a: 22, v: 12, r: 79 },
@@ -1197,12 +1227,25 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Callum O\'Dowda', p: 'LM', a: 28, v: 1.5, r: 68 },
     { n: 'Nathan Trott', p: 'GK', a: 27, v: 1.5, r: 68 },
   ],
+  'Carrarese': [
+    { n: 'Tommaso Rubino', p: 'CAM', a: 19, v: 2.3, r: 70 },
+    { n: 'Jonas Rouhi', p: 'LB', a: 21, v: 1.5, r: 68 },
+  ],
   'Casa Pia': [
     { n: 'Patrick Sequeira', p: 'GK', a: 26, v: 3, r: 72 },
     { n: 'Gaizka Larrazabal', p: 'RB', a: 28, v: 2.3, r: 70 },
     { n: 'Jérémy Livolant', p: 'RW', a: 27, v: 2.3, r: 70 },
     { n: 'Tiago Morais', p: 'LW', a: 22, v: 1.5, r: 68 },
     { n: 'Kevin Prieto', p: 'RM', a: 22, v: 0.8, r: 64 },
+  ],
+  'Castellón': [
+    { n: 'Matías Orozco', p: 'CDM', a: 18, v: 4.1, r: 73 },
+    { n: 'Romain Matthys', p: 'GK', a: 27, v: 0.8, r: 64 },
+  ],
+  'Catanzaro': [
+    { n: 'Simone Pafundi', p: 'CAM', a: 19, v: 3.8, r: 73 },
+    { n: 'Antonio Candela', p: 'RB', a: 25, v: 1.4, r: 68 },
+    { n: 'Nicolò Buso', p: 'CF', a: 25, v: 0.7, r: 64 },
   ],
   'Celta Vigo': [
     { n: 'Javi Rodríguez', p: 'CB', a: 22, v: 12, r: 79 },
@@ -1213,7 +1256,6 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Ionuț Radu', p: 'GK', a: 28, v: 6.8, r: 76 },
     { n: 'Jones El-Abdellaoui', p: 'RW', a: 19, v: 6.8, r: 76 },
     { n: 'Sergio Carreira', p: 'RB', a: 25, v: 6.8, r: 76 },
-    { n: 'Fran Beltrán', p: 'CM', a: 26, v: 6.4, r: 76 },
     { n: 'Altay Bayındır', p: 'GK', a: 27, v: 6, r: 76 },
     { n: 'Ferran Jutglà', p: 'RW', a: 26, v: 6, r: 76 },
     { n: 'Álvaro Núñez', p: 'RB', a: 25, v: 4.5, r: 74 },
@@ -1259,6 +1301,14 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Erick Nunes', p: 'RM', a: 21, v: 0.8, r: 64 },
     { n: 'Ibrahim Diakité', p: 'RB', a: 22, v: 0.8, r: 64 },
     { n: 'Warleson', p: 'GK', a: 29, v: 0.8, r: 64 },
+  ],
+  'Cesena': [
+    { n: 'Cristian Shpendi', p: 'ST', a: 22, v: 4.5, r: 74 },
+    { n: 'Jonathan Klinsmann', p: 'GK', a: 28, v: 2.3, r: 70 },
+    { n: 'Maat Daniel Caprini', p: 'LW', a: 19, v: 1.5, r: 68 },
+    { n: 'Gianluca Frabotta', p: 'LB', a: 26, v: 0.8, r: 64 },
+  ],
+  'Ceuta': [
   ],
   'Chapecoense': [
   ],
@@ -1331,6 +1381,9 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Maren Haile-Selassie', p: 'RM', a: 26, v: 1.5, r: 68 },
     { n: 'Viktor Radojević', p: 'LB', a: 21, v: 1.5, r: 68 },
     { n: 'Omari Glasgow', p: 'RM', a: 22, v: 0.7, r: 64 },
+  ],
+  'Clermont': [
+    { n: 'Florian Bianchini', p: 'RW', a: 24, v: 1.4, r: 68 },
   ],
   'Club Brugge': [
     { n: 'Joel Ordóñez', p: 'CB', a: 21, v: 27, r: 84 },
@@ -1452,6 +1505,14 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Oliver Dovin', p: 'GK', a: 23, v: 2.3, r: 70 },
     { n: 'Daniel Bentley', p: 'GK', a: 32, v: 1.4, r: 68 },
   ],
+  'Cremonese': [
+    { n: 'Jari Vandeputte', p: 'CM', a: 29, v: 3, r: 72 },
+    { n: 'Tommaso Barbieri', p: 'RB', a: 23, v: 3, r: 72 },
+    { n: 'Giuseppe Pezzella', p: 'LB', a: 28, v: 2.3, r: 70 },
+    { n: 'Michele Collocolo', p: 'CM', a: 26, v: 2.3, r: 70 },
+    { n: 'Morten Thorsby', p: 'CM', a: 29, v: 2.3, r: 70 },
+    { n: 'Andrea Fulignati', p: 'GK', a: 31, v: 0.7, r: 64 },
+  ],
   'Cruz Azul': [
     { n: 'José Paradela', p: 'CM', a: 27, v: 7.5, r: 77 },
     { n: 'Kevin Mier', p: 'GK', a: 25, v: 5.3, r: 75 },
@@ -1516,6 +1577,12 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Walter Benítez', p: 'GK', a: 32, v: 3.8, r: 73 },
     { n: 'Zavier Gozo', p: 'RW', a: 18, v: 3, r: 72 },
   ],
+  'Cádiz': [
+    { n: 'Javi Ontiveros', p: 'LW', a: 28, v: 2.1, r: 70 },
+    { n: 'Antoñito Cordero', p: 'LW', a: 19, v: 1.4, r: 68 },
+  ],
+  'Córdoba': [
+  ],
   'D.C. United': [
     { n: 'Louis Munteanu', p: 'ST', a: 23, v: 3.8, r: 73 },
     { n: 'Tai Baribo', p: 'ST', a: 27, v: 3.8, r: 73 },
@@ -1560,6 +1627,8 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Derry Murkin', p: 'LB', a: 26, v: 1.5, r: 68 },
     { n: 'Joe Ward', p: 'RM', a: 30, v: 0.8, r: 64 },
   ],
+  'Dijon': [
+  ],
   'Dinamo Zagreb': [
     { n: 'Dion Beljo', p: 'ST', a: 23, v: 3, r: 72 },
     { n: 'Arbër Hoxha', p: 'LW', a: 27, v: 2.3, r: 70 },
@@ -1578,8 +1647,15 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Neil Farrugia', p: 'LM', a: 26, v: 0.8, r: 64 },
     { n: 'Will Ferry', p: 'LM', a: 25, v: 0.7, r: 64 },
   ],
+  'Dunkerque': [
+    { n: 'Steven Nzonzi', p: 'CDM', a: 37, v: 0.2, r: 57 },
+  ],
   'Dynamo Dresden': [
     { n: 'Robert Wagner', p: 'CM', a: 22, v: 2.1, r: 70 },
+  ],
+  'Eibar': [
+    { n: 'Juan Bernat', p: 'LB', a: 32, v: 1.4, r: 68 },
+    { n: 'Jonmi Magunagoitia', p: 'GK', a: 25, v: 0.8, r: 64 },
   ],
   'Eintracht Frankfurt': [
     { n: 'Can Uzun', p: 'CAM', a: 20, v: 36.8, r: 86 },
@@ -1621,6 +1697,8 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Thomas Lemar', p: 'CAM', a: 30, v: 1.5, r: 68 },
     { n: 'Adam Boayar', p: 'CF', a: 20, v: 0.7, r: 64 },
   ],
+  'Eldense': [
+  ],
   'Elversberg': [
     { n: 'Francis Onyeka', p: 'CAM', a: 18, v: 8.3, r: 77 },
     { n: 'Cole Campbell', p: 'RW', a: 19, v: 3.8, r: 73 },
@@ -1633,7 +1711,17 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Lasse Günther', p: 'LB', a: 22, v: 0.8, r: 64 },
     { n: 'Maurice Neubauer', p: 'LM', a: 27, v: 0.8, r: 64 },
   ],
+  'Empoli': [
+    { n: 'Bogdan Popov', p: 'ST', a: 18, v: 2.3, r: 70 },
+    { n: 'Filippo Distefano', p: 'CF', a: 22, v: 1.4, r: 68 },
+    { n: 'Joseph Ceesay', p: 'RM', a: 27, v: 0.8, r: 64 },
+  ],
   'Energie Cottbus': [
+  ],
+  'Entella': [
+    { n: 'Stefano Di Mario', p: 'LM', a: 21, v: 1.5, r: 68 },
+    { n: 'Davide Bariti', p: 'RM', a: 34, v: 0.8, r: 64 },
+    { n: 'Francesco Mezzoni', p: 'RM', a: 25, v: 0.8, r: 64 },
   ],
   'Erzurumspor': [
     { n: 'Elisha Owusu', p: 'CDM', a: 28, v: 3.2, r: 72 },
@@ -1697,6 +1785,8 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
   'Eyüpspor': [
     { n: 'Calegari', p: 'RB', a: 23, v: 2.3, r: 70 },
     { n: 'Marcos Felipe', p: 'GK', a: 29, v: 1.5, r: 68 },
+  ],
+  'FC Andorra': [
   ],
   'FC Cincinnati': [
     { n: 'Evander', p: 'CAM', a: 27, v: 12.8, r: 80 },
@@ -1832,7 +1922,6 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Jakub Moder', p: 'CM', a: 26, v: 8.3, r: 77 },
     { n: 'Tsuyoshi Watanabe', p: 'CB', a: 28, v: 8.3, r: 77 },
     { n: 'Jordan Bos', p: 'LB', a: 23, v: 6.8, r: 76 },
-    { n: 'Calvin Stengs', p: 'CAM', a: 27, v: 6.4, r: 76 },
     { n: 'Thomas Beelen', p: 'CB', a: 24, v: 6, r: 76 },
     { n: 'Charles Vanhoutte', p: 'CDM', a: 27, v: 5.7, r: 75 },
     { n: 'Gijs Smal', p: 'LB', a: 28, v: 4.5, r: 74 },
@@ -1870,7 +1959,6 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'David de Gea', p: 'GK', a: 35, v: 3, r: 72 },
     { n: 'Alieu Njie', p: 'LW', a: 20, v: 2.3, r: 70 },
     { n: 'Oliver Christensen', p: 'GK', a: 26, v: 1.5, r: 68 },
-    { n: 'Tommaso Martinelli', p: 'GK', a: 19, v: 1.4, r: 68 },
   ],
   'Flamengo': [
     { n: 'Lucas Paquetá', p: 'CAM', a: 28, v: 28.5, r: 84 },
@@ -1880,7 +1968,6 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Léo Ortiz', p: 'CB', a: 29, v: 11.3, r: 79 },
     { n: 'Jorge Carrascal', p: 'CAM', a: 27, v: 9, r: 78 },
     { n: 'Vitão', p: 'CB', a: 25, v: 9, r: 78 },
-    { n: 'Lorran', p: 'CAM', a: 19, v: 8.6, r: 78 },
     { n: 'Agustín Rossi', p: 'GK', a: 30, v: 8.3, r: 77 },
     { n: 'Léo Pereira', p: 'CB', a: 29, v: 8.3, r: 77 },
     { n: 'Evertton Araújo', p: 'CDM', a: 22, v: 8.1, r: 77 },
@@ -1951,7 +2038,6 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Matteo Cichella', p: 'CDM', a: 20, v: 4.1, r: 73 },
     { n: 'Daniel Bîrligea', p: 'ST', a: 25, v: 3.8, r: 73 },
     { n: 'Patrizio Masini', p: 'CM', a: 24, v: 3.8, r: 73 },
-    { n: 'İsak Vural', p: 'CM', a: 19, v: 3.6, r: 73 },
     { n: 'Antonio Raimondo', p: 'ST', a: 21, v: 3, r: 72 },
     { n: 'Aleksa Terzic', p: 'LB', a: 26, v: 2.3, r: 70 },
     { n: 'Luis Hasa', p: 'CM', a: 21, v: 2.3, r: 70 },
@@ -2108,6 +2194,18 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Lucão', p: 'GK', a: 24, v: 0.8, r: 64 },
     { n: 'Weverson', p: 'LB', a: 25, v: 0.8, r: 64 },
   ],
+  'Girona': [
+    { n: 'Vladyslav Vanat', p: 'ST', a: 23, v: 12, r: 79 },
+    { n: 'Yáser Asprilla', p: 'RW', a: 22, v: 11.3, r: 79 },
+    { n: 'Bryan Gil', p: 'LW', a: 24, v: 9.8, r: 78 },
+    { n: 'Abel Ruiz', p: 'ST', a: 25, v: 4.3, r: 74 },
+    { n: 'Fran Beltrán', p: 'CM', a: 26, v: 3.8, r: 73 },
+    { n: 'Donny van de Beek', p: 'CM', a: 28, v: 3.6, r: 73 },
+    { n: 'Álex Moreno', p: 'LB', a: 32, v: 3, r: 72 },
+    { n: 'Carles Pérez', p: 'RW', a: 27, v: 2.1, r: 70 },
+    { n: 'Paulo Gazzaniga', p: 'GK', a: 33, v: 1.5, r: 68 },
+    { n: 'Portu', p: 'RW', a: 33, v: 1.5, r: 68 },
+  ],
   'Gladbach': [
     { n: 'Nicolas Kühn', p: 'RW', a: 26, v: 9.8, r: 78 },
     { n: 'Franck Honorat', p: 'RW', a: 29, v: 8.3, r: 77 },
@@ -2137,6 +2235,8 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
   ],
   'Gorica': [
   ],
+  'Granada': [
+  ],
   'Grasshopper': [
     { n: 'Justin Hammel', p: 'GK', a: 25, v: 1.5, r: 68 },
     { n: 'Noah Persson', p: 'LB', a: 22, v: 1.4, r: 68 },
@@ -2148,6 +2248,8 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
   'Grazer AK': [
     { n: 'Dominik Frieser', p: 'RM', a: 32, v: 0.8, r: 64 },
     { n: 'Thomas Schiestl', p: 'LM', a: 21, v: 0.8, r: 64 },
+  ],
+  'Grenoble': [
   ],
   'Greuther Fürth': [
     { n: 'Florian Hellstern', p: 'GK', a: 18, v: 2.3, r: 70 },
@@ -2196,6 +2298,9 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Santiago Sandoval', p: 'CAM', a: 18, v: 3, r: 72 },
     { n: 'Hugo Camberos', p: 'RW', a: 18, v: 2.1, r: 70 },
     { n: 'Yael Padilla', p: 'LW', a: 20, v: 1.5, r: 68 },
+  ],
+  'Guingamp': [
+    { n: 'Amine Hemia', p: 'CAM', a: 27, v: 1.5, r: 68 },
   ],
   'Göztepe': [
     { n: 'Juan', p: 'ST', a: 23, v: 6.8, r: 76 },
@@ -2311,7 +2416,6 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Mats Rots', p: 'LB', a: 19, v: 8.3, r: 77 },
     { n: 'Ozan Kabak', p: 'CB', a: 25, v: 8.3, r: 77 },
     { n: 'Robin Hranac', p: 'CB', a: 25, v: 8.3, r: 77 },
-    { n: 'Gift Orban', p: 'ST', a: 23, v: 7.8, r: 77 },
     { n: 'Adam Daghim', p: 'RW', a: 20, v: 6, r: 76 },
     { n: 'Koki Machida', p: 'CB', a: 28, v: 6, r: 76 },
     { n: 'Max Moerstedt', p: 'ST', a: 19, v: 6, r: 76 },
@@ -2469,6 +2573,8 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
   ],
   'Istra 1961': [
   ],
+  'Juve Stabia': [
+  ],
   'Juventus': [
     { n: 'Kenan Yıldız', p: 'LW', a: 20, v: 60.8, r: 89 },
     { n: 'Nick Woltemade', p: 'ST', a: 23, v: 52.5, r: 88 },
@@ -2600,15 +2706,23 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Tiago Pereira Cardoso', p: 'GK', a: 19, v: 1.5, r: 68 },
     { n: 'Jordi Liongola', p: 'RM', a: 25, v: 0.8, r: 64 },
   ],
+  'Las Palmas': [
+    { n: 'Giovanni Bonfanti', p: 'CB', a: 22, v: 3, r: 72 },
+    { n: 'Ale García', p: 'RW', a: 22, v: 1.5, r: 68 },
+    { n: 'Manu Fuster', p: 'RW', a: 28, v: 1.5, r: 68 },
+    { n: 'Viti Rozada', p: 'RB', a: 28, v: 1.5, r: 68 },
+    { n: 'Marvin Park', p: 'RB', a: 25, v: 1.4, r: 68 },
+  ],
   'Lausanne-Sport': [
     { n: 'Étienne Youté Kinkoué', p: 'CB', a: 23, v: 5.7, r: 75 },
     { n: 'Karim Sow', p: 'CB', a: 22, v: 3.8, r: 73 },
     { n: 'Omar Janneh', p: 'ST', a: 19, v: 3, r: 72 },
-    { n: 'Antoine Bernede', p: 'CM', a: 26, v: 2.9, r: 71 },
     { n: 'Gaoussou Diakité', p: 'ST', a: 20, v: 2.3, r: 70 },
     { n: 'Brandon Soppy', p: 'RM', a: 23, v: 1.5, r: 68 },
     { n: 'Karlo Letica', p: 'GK', a: 28, v: 1.5, r: 68 },
     { n: 'Dominik Schwizer', p: 'LM', a: 27, v: 0.8, r: 64 },
+  ],
+  'Laval': [
   ],
   'Lazio': [
     { n: 'Davide Frattesi', p: 'CM', a: 26, v: 18, r: 82 },
@@ -2697,7 +2811,11 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Melvin Bard', p: 'LB', a: 25, v: 8.3, r: 77 },
     { n: 'Nico Elvedi', p: 'CB', a: 29, v: 6.8, r: 76 },
     { n: 'Michael Zetterer', p: 'GK', a: 30, v: 3.8, r: 73 },
-    { n: 'Mateo Joseph', p: 'ST', a: 22, v: 2.1, r: 70 },
+  ],
+  'Leganés': [
+    { n: 'Álvaro Morata', p: 'ST', a: 33, v: 6.8, r: 76 },
+    { n: 'Zico Buurmeester', p: 'CM', a: 23, v: 2.9, r: 71 },
+    { n: 'Enric Franquesa', p: 'LB', a: 28, v: 1.4, r: 68 },
   ],
   'Lens': [
     { n: 'Robin Risser', p: 'GK', a: 21, v: 20.3, r: 82 },
@@ -2719,7 +2837,6 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Jhoanner Chávez', p: 'LB', a: 23, v: 2.3, r: 70 },
     { n: 'Ruben Aguilar', p: 'RB', a: 32, v: 2.3, r: 70 },
     { n: 'Thorgan Hazard', p: 'CAM', a: 32, v: 2.3, r: 70 },
-    { n: 'Deiver Machado', p: 'LB', a: 32, v: 2.1, r: 70 },
   ],
   'Levadiakos': [
     { n: 'Adrian Șut', p: 'CDM', a: 26, v: 2.8, r: 71 },
@@ -2768,7 +2885,6 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Gaëtan Perrin', p: 'RW', a: 29, v: 4.5, r: 74 },
     { n: 'Soriba Diaoune', p: 'LW', a: 18, v: 3.8, r: 73 },
     { n: 'Başar Önal', p: 'LM', a: 21, v: 3, r: 72 },
-    { n: 'Alan Virginius', p: 'LM', a: 20, v: 2.9, r: 71 },
     { n: 'Benjamin André', p: 'CDM', a: 35, v: 2.4, r: 71 },
     { n: 'Calvin Verdonk', p: 'LB', a: 28, v: 2.3, r: 70 },
     { n: 'Loun Srdanovic', p: 'RB', a: 19, v: 0.8, r: 64 },
@@ -2822,7 +2938,6 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Théo Le Bris', p: 'RM', a: 23, v: 3.8, r: 73 },
     { n: 'Mohamed Bamba', p: 'ST', a: 24, v: 3.6, r: 73 },
     { n: 'Sambou Soumano', p: 'ST', a: 24, v: 3, r: 72 },
-    { n: 'Julien Ponceau', p: 'CAM', a: 25, v: 2.9, r: 71 },
     { n: 'Dermane Karim', p: 'CAM', a: 22, v: 2.3, r: 70 },
     { n: 'Yvon Mvogo', p: 'GK', a: 31, v: 2.3, r: 70 },
     { n: 'Igor Silva', p: 'RB', a: 29, v: 1.5, r: 68 },
@@ -2893,6 +3008,16 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Jae-sung Lee', p: 'CAM', a: 33, v: 1.5, r: 68 },
     { n: 'Phillipp Mwene', p: 'LB', a: 31, v: 1.5, r: 68 },
   ],
+  'Mallorca': [
+    { n: 'Zito Luvumbo', p: 'RW', a: 23, v: 4.3, r: 74 },
+    { n: 'Martin Valjent', p: 'CB', a: 30, v: 3.8, r: 73 },
+    { n: 'Pablo Torre', p: 'CAM', a: 22, v: 3.8, r: 73 },
+    { n: 'Adam Buksa', p: 'ST', a: 29, v: 3, r: 72 },
+    { n: 'Sergi Darder', p: 'CM', a: 32, v: 3, r: 72 },
+    { n: 'Lucas Bergström', p: 'GK', a: 23, v: 1.5, r: 68 },
+    { n: 'Toni Lato', p: 'LB', a: 28, v: 1.5, r: 68 },
+    { n: 'Alberto Moreno', p: 'LB', a: 33, v: 1.4, r: 68 },
+  ],
   'Manchester City': [
     { n: 'Erling Haaland', p: 'ST', a: 25, v: 162, r: 94 },
     { n: 'Enzo Fernández', p: 'CM', a: 24, v: 72.8, r: 90 },
@@ -2946,6 +3071,10 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Harry Amass', p: 'LB', a: 18, v: 3.6, r: 73 },
     { n: 'Diego León', p: 'LB', a: 18, v: 3, r: 72 },
   ],
+  'Mantova': [
+    { n: 'Vanja Vlahović', p: 'ST', a: 21, v: 3.8, r: 73 },
+    { n: 'Davide Bragantini', p: 'RW', a: 22, v: 1.5, r: 68 },
+  ],
   'Marseille': [
     { n: 'Igor Paixão', p: 'LW', a: 25, v: 28.5, r: 84 },
     { n: 'Amine Gouiri', p: 'ST', a: 25, v: 22.5, r: 83 },
@@ -2957,7 +3086,6 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Emerson', p: 'LB', a: 31, v: 8.3, r: 77 },
     { n: 'Himad Abdelli', p: 'CAM', a: 26, v: 6, r: 76 },
     { n: 'Tochukwu Nnadi', p: 'CDM', a: 22, v: 3.6, r: 73 },
-    { n: 'Pol Lirola', p: 'RB', a: 28, v: 2.9, r: 71 },
     { n: 'Geoffrey Kondogbia', p: 'CDM', a: 33, v: 2.4, r: 70 },
     { n: 'Jeffrey de Lange', p: 'GK', a: 27, v: 2.3, r: 70 },
   ],
@@ -2972,6 +3100,14 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Leo Hjelde', p: 'LB', a: 22, v: 1.5, r: 68 },
     { n: 'Nacho Miras', p: 'GK', a: 28, v: 1.5, r: 68 },
     { n: 'Ortwin De Wolf', p: 'GK', a: 28, v: 1.4, r: 68 },
+  ],
+  'Metz': [
+    { n: 'Believe Munongo', p: 'CM', a: 16, v: 8.3, r: 77 },
+    { n: 'Habib Diallo', p: 'ST', a: 30, v: 3.8, r: 73 },
+    { n: 'Alpha Touré', p: 'CDM', a: 19, v: 3.2, r: 72 },
+    { n: 'Jonathan Fischer', p: 'GK', a: 24, v: 2.3, r: 70 },
+    { n: 'Koffi Kouao', p: 'RB', a: 27, v: 2.3, r: 70 },
+    { n: 'Nathan Mbala', p: 'ST', a: 17, v: 2.3, r: 70 },
   ],
   'Middlesbrough': [
     { n: 'Morgan Whittaker', p: 'RW', a: 24, v: 12.8, r: 80 },
@@ -3025,6 +3161,10 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Neto Moura', p: 'CDM', a: 29, v: 1.6, r: 68 },
     { n: 'Felipe Jonatan', p: 'LB', a: 27, v: 1.5, r: 68 },
   ],
+  'Modena': [
+    { n: 'Francesco Zampano', p: 'RM', a: 32, v: 0.8, r: 64 },
+    { n: 'Paulo Azzi', p: 'LM', a: 29, v: 0.8, r: 64 },
+  ],
   'Monaco': [
     { n: 'Lamine Camara', p: 'CM', a: 22, v: 28.5, r: 84 },
     { n: 'Folarin Balogun', p: 'ST', a: 24, v: 24, r: 83 },
@@ -3067,9 +3207,16 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Santiago Mele', p: 'GK', a: 28, v: 1.5, r: 68 },
     { n: 'Esteban Andrada', p: 'GK', a: 34, v: 1.4, r: 68 },
   ],
+  'Montpellier': [
+    { n: 'Becir Omeragic', p: 'CB', a: 23, v: 3.6, r: 73 },
+    { n: 'Khalil Fayad', p: 'CM', a: 21, v: 2.1, r: 70 },
+    { n: 'Téji Savanier', p: 'CAM', a: 34, v: 2.1, r: 70 },
+    { n: 'Nicolas Pays', p: 'RW', a: 22, v: 1.5, r: 68 },
+    { n: 'Falaye Sacko', p: 'RB', a: 30, v: 1.4, r: 68 },
+    { n: 'Issiaga Sylla', p: 'LB', a: 32, v: 1.4, r: 68 },
+  ],
   'Monza': [
     { n: 'Jan Ziolkowski', p: 'CB', a: 20, v: 9.8, r: 78 },
-    { n: 'Warren Bondo', p: 'CM', a: 22, v: 7.8, r: 77 },
     { n: 'Cyril Ngonge', p: 'RW', a: 25, v: 6.8, r: 76 },
     { n: 'Jay Robinson', p: 'LW', a: 18, v: 6.8, r: 76 },
     { n: 'Ebenezer Akinsanmiro', p: 'CM', a: 21, v: 5.3, r: 75 },
@@ -3135,6 +3282,24 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
   'Nacional': [
     { n: 'Gabriel Veron', p: 'RW', a: 23, v: 2.3, r: 70 },
     { n: 'Kaique Pereira', p: 'GK', a: 22, v: 0.8, r: 64 },
+  ],
+  'Nancy': [
+    { n: 'Thierno Baldé', p: 'RB', a: 23, v: 1.4, r: 68 },
+  ],
+  'Nantes': [
+    { n: 'Tylel Tati', p: 'CB', a: 17, v: 20.3, r: 82 },
+    { n: 'Louis Leroux', p: 'CAM', a: 19, v: 9.8, r: 78 },
+    { n: 'Herba Guirassy', p: 'LW', a: 19, v: 6.8, r: 76 },
+    { n: 'Johann Lepenant', p: 'CDM', a: 23, v: 4.9, r: 74 },
+    { n: 'Dehmaine Tabibou', p: 'CM', a: 20, v: 3, r: 72 },
+    { n: 'Mostafa Mohamed', p: 'ST', a: 28, v: 3, r: 72 },
+    { n: 'Kelvin Amian', p: 'RB', a: 27, v: 2.3, r: 70 },
+    { n: 'Nicolas Cozza', p: 'LB', a: 26, v: 2.3, r: 70 },
+    { n: 'Frédéric Guilbert', p: 'RB', a: 31, v: 2.1, r: 70 },
+    { n: 'Deiver Machado', p: 'LB', a: 32, v: 1.5, r: 68 },
+    { n: 'Antoine Joujou', p: 'LW', a: 22, v: 1.4, r: 68 },
+    { n: 'Fabien Centonze', p: 'RB', a: 29, v: 1.4, r: 68 },
+    { n: 'Anthony Lopes', p: 'GK', a: 35, v: 0.7, r: 64 },
   ],
   'Napoli': [
     { n: 'Rasmus Højlund', p: 'ST', a: 22, v: 40.5, r: 86 },
@@ -3317,7 +3482,6 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Cuiabano', p: 'LB', a: 22, v: 6.8, r: 76 },
     { n: 'Ryan Yates', p: 'CM', a: 28, v: 6.8, r: 76 },
     { n: 'John Victor', p: 'GK', a: 29, v: 6, r: 76 },
-    { n: 'Álex Moreno', p: 'LB', a: 32, v: 5.7, r: 75 },
     { n: 'Luca Netz', p: 'LB', a: 22, v: 5.7, r: 75 },
     { n: 'Chris Wood', p: 'ST', a: 34, v: 4.5, r: 74 },
     { n: 'Stefan Ortega', p: 'GK', a: 33, v: 3.8, r: 73 },
@@ -3496,6 +3660,21 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Anton Bäuerle', p: 'LM', a: 18, v: 0.8, r: 64 },
     { n: 'Marco Pledl', p: 'LM', a: 23, v: 0.8, r: 64 },
   ],
+  'Padova': [
+    { n: 'Marco Pompetti', p: 'CDM', a: 25, v: 1.6, r: 68 },
+    { n: 'Matteo Cocchi', p: 'LB', a: 18, v: 1.5, r: 68 },
+    { n: 'Gianluca Caprari', p: 'CF', a: 32, v: 1.4, r: 68 },
+    { n: 'Alessandro Capelli', p: 'RM', a: 28, v: 0.8, r: 64 },
+  ],
+  'Palermo': [
+    { n: 'Filippo Ranocchia', p: 'CM', a: 24, v: 3, r: 72 },
+    { n: 'Joel Pohjanpalo', p: 'ST', a: 31, v: 3, r: 72 },
+    { n: 'Niccolò Pierozzi', p: 'RB', a: 24, v: 3, r: 72 },
+    { n: 'Dennis Johnsen', p: 'LW', a: 27, v: 2.3, r: 70 },
+    { n: 'Mattia Perin', p: 'GK', a: 33, v: 1.5, r: 68 },
+    { n: 'Tommaso Augello', p: 'LB', a: 31, v: 1.4, r: 68 },
+    { n: 'Emmanuel Gyasi', p: 'RM', a: 31, v: 0.8, r: 64 },
+  ],
   'Palmeiras': [
     { n: 'Vitor Roque', p: 'ST', a: 20, v: 30.8, r: 85 },
     { n: 'José Manuel López', p: 'ST', a: 25, v: 18, r: 82 },
@@ -3521,7 +3700,6 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
   ],
   'Panathinaikos': [
     { n: 'Anass Salah-Eddine', p: 'LB', a: 23, v: 9.8, r: 78 },
-    { n: 'Azzedine Ounahi', p: 'CM', a: 25, v: 7.8, r: 77 },
     { n: 'Anass Zaroury', p: 'LW', a: 25, v: 6.8, r: 76 },
     { n: 'Facundo Pellistri', p: 'RW', a: 24, v: 6.4, r: 76 },
     { n: 'Santino Andino', p: 'LM', a: 20, v: 4.5, r: 74 },
@@ -3580,6 +3758,8 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Edoardo Corvi', p: 'GK', a: 24, v: 1.5, r: 68 },
     { n: 'Giovanni Daffara', p: 'GK', a: 21, v: 1.5, r: 68 },
   ],
+  'Pau': [
+  ],
   'Philadelphia Union': [
     { n: 'Cavan Sullivan', p: 'CAM', a: 16, v: 3.8, r: 73 },
     { n: 'Quinn Sullivan', p: 'CM', a: 21, v: 3.8, r: 73 },
@@ -3589,6 +3769,20 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Frankie Westfield', p: 'RB', a: 20, v: 1.5, r: 68 },
     { n: 'Nathan Harriel', p: 'RB', a: 24, v: 1.5, r: 68 },
     { n: 'Philippe Ndinga', p: 'LB', a: 20, v: 0.8, r: 64 },
+  ],
+  'Pisa': [
+    { n: 'Felipe Loyola', p: 'CM', a: 25, v: 6.8, r: 76 },
+    { n: 'Simone Canestrelli', p: 'CB', a: 25, v: 4.5, r: 74 },
+    { n: 'İsak Vural', p: 'CM', a: 19, v: 3.8, r: 73 },
+    { n: 'Matteo Tramoni', p: 'CAM', a: 25, v: 3.8, r: 73 },
+    { n: 'Samuele Angori', p: 'LM', a: 22, v: 3.8, r: 73 },
+    { n: 'Gabriele Piccinini', p: 'CM', a: 24, v: 3, r: 72 },
+    { n: 'Rosen Bozhinov', p: 'CB', a: 20, v: 3, r: 72 },
+    { n: 'Emanuele Rao', p: 'LW', a: 19, v: 2.3, r: 70 },
+    { n: 'Giuseppe Leone', p: 'CDM', a: 24, v: 1.6, r: 68 },
+    { n: 'Mehdi Léris', p: 'RW', a: 27, v: 1.5, r: 68 },
+    { n: 'Tomás Esteves', p: 'RM', a: 23, v: 1.5, r: 68 },
+    { n: 'Simone Scuffet', p: 'GK', a: 29, v: 1.4, r: 68 },
   ],
   'Portland Timbers': [
     { n: 'David Da Costa', p: 'CAM', a: 24, v: 4.5, r: 74 },
@@ -3798,8 +3992,8 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Adrià Pedrosa', p: 'LB', a: 27, v: 2.3, r: 70 },
     { n: 'Emil Audero', p: 'GK', a: 28, v: 2.3, r: 70 },
     { n: 'Fran Pérez', p: 'RW', a: 23, v: 2.3, r: 70 },
-    { n: 'Giorgi Tsitaishvili', p: 'LW', a: 25, v: 2.3, r: 70 },
     { n: 'Pedro Díaz', p: 'CM', a: 27, v: 2.3, r: 70 },
+    { n: 'Giorgi Tsitaishvili', p: 'LW', a: 25, v: 2.1, r: 70 },
     { n: 'Álvaro García', p: 'LW', a: 33, v: 1.5, r: 68 },
     { n: 'Carlos Martín', p: 'LW', a: 23, v: 1.5, r: 68 },
     { n: 'Dani Cárdenas', p: 'GK', a: 28, v: 1.5, r: 68 },
@@ -3867,6 +4061,11 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Diego Aguado', p: 'CB', a: 18, v: 3.8, r: 73 },
     { n: 'Daniel Yáñez', p: 'RW', a: 18, v: 2.3, r: 70 },
   ],
+  'Real Oviedo': [
+    { n: 'Ilyas Chaira', p: 'LW', a: 24, v: 3, r: 72 },
+    { n: 'Aarón Escandell', p: 'GK', a: 30, v: 2.3, r: 70 },
+    { n: 'Nacho Vidal', p: 'RB', a: 30, v: 1.5, r: 68 },
+  ],
   'Real Salt Lake': [
     { n: 'Diego Luna', p: 'LM', a: 22, v: 6.8, r: 76 },
     { n: 'Morgan Guilavogui', p: 'RW', a: 27, v: 3.8, r: 73 },
@@ -3891,7 +4090,6 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Yangel Herrera', p: 'CM', a: 27, v: 7.5, r: 77 },
     { n: 'Carlos Soler', p: 'CM', a: 28, v: 6.8, r: 76 },
     { n: 'Pablo Marín', p: 'CAM', a: 22, v: 6.8, r: 76 },
-    { n: 'Javi López', p: 'LB', a: 23, v: 5.7, r: 75 },
     { n: 'Gonçalo Guedes', p: 'LW', a: 29, v: 4.5, r: 74 },
     { n: 'Aihen Muñoz', p: 'LB', a: 28, v: 3, r: 72 },
     { n: 'Gorka Carrera', p: 'ST', a: 20, v: 2.3, r: 70 },
@@ -3905,7 +4103,6 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Juninho Capixaba', p: 'LB', a: 28, v: 4.3, r: 74 },
     { n: 'Cleiton', p: 'GK', a: 28, v: 3.8, r: 73 },
     { n: 'Ignacio Sosa', p: 'CM', a: 22, v: 3.8, r: 73 },
-    { n: 'Thiago Borbas', p: 'ST', a: 23, v: 3.6, r: 73 },
     { n: 'Eric Ramires', p: 'CM', a: 25, v: 3, r: 72 },
     { n: 'Gustavo Neves', p: 'CM', a: 21, v: 3, r: 72 },
     { n: 'Guzmán Rodríguez', p: 'CB', a: 25, v: 3, r: 72 },
@@ -3915,6 +4112,19 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Agustín Sant\'Anna', p: 'RB', a: 28, v: 2.3, r: 70 },
     { n: 'José Andrés Hurtado', p: 'RB', a: 24, v: 2.3, r: 70 },
     { n: 'José Herrera', p: 'RW', a: 22, v: 2.3, r: 70 },
+  ],
+  'Red Star FC': [
+    { n: 'Théo Magnin', p: 'RB', a: 22, v: 1.4, r: 68 },
+  ],
+  'Reims': [
+    { n: 'Joseph Okumu', p: 'CB', a: 28, v: 5.7, r: 75 },
+    { n: 'Sergio Akieme', p: 'LB', a: 28, v: 3.8, r: 73 },
+    { n: 'Mory Gbane', p: 'CDM', a: 25, v: 3.2, r: 72 },
+    { n: 'Teddy Teuma', p: 'CM', a: 32, v: 2.9, r: 71 },
+    { n: 'Yaya Fofana', p: 'CM', a: 21, v: 2.9, r: 71 },
+    { n: 'Hafiz Umar Ibrahim', p: 'ST', a: 20, v: 2.3, r: 70 },
+    { n: 'Mohamed Daramy', p: 'LW', a: 23, v: 2.3, r: 70 },
+    { n: 'Hiroki Sekine', p: 'RB', a: 23, v: 1.5, r: 68 },
   ],
   'Remo': [
     { n: 'Leonel Picco', p: 'CDM', a: 27, v: 2.4, r: 71 },
@@ -3978,6 +4188,8 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Mithat Pala', p: 'RB', a: 25, v: 1.5, r: 68 },
     { n: 'Ivo Grbic', p: 'GK', a: 29, v: 1.4, r: 68 },
   ],
+  'Rodez': [
+  ],
   'Roma': [
     { n: 'Manu Koné', p: 'CM', a: 24, v: 40.5, r: 86 },
     { n: 'Wesley', p: 'RB', a: 22, v: 32.3, r: 85 },
@@ -3994,7 +4206,6 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Gianluca Mancini', p: 'CB', a: 29, v: 12, r: 79 },
     { n: 'Nahuel Molina', p: 'RB', a: 27, v: 12, r: 79 },
     { n: 'Zeki Çelik', p: 'RB', a: 28, v: 9.8, r: 78 },
-    { n: 'Victor Nelsson', p: 'CB', a: 27, v: 7.8, r: 77 },
     { n: 'Lorenzo Pellegrini', p: 'CAM', a: 29, v: 7.5, r: 77 },
     { n: 'Devyne Rensch', p: 'RB', a: 22, v: 6.8, r: 76 },
     { n: 'Paulo Dybala', p: 'CF', a: 32, v: 6.4, r: 76 },
@@ -4004,6 +4215,25 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Marten de Roon', p: 'CDM', a: 34, v: 2.6, r: 71 },
   ],
   'Rudeš': [
+  ],
+  'Sabadell': [
+  ],
+  'Saint-Étienne': [
+    { n: 'Zuriko Davitashvili', p: 'LW', a: 24, v: 8.3, r: 77 },
+    { n: 'Augustine Boakye', p: 'CAM', a: 25, v: 4.5, r: 74 },
+    { n: 'Djylian N\'Guessan', p: 'ST', a: 17, v: 3.8, r: 73 },
+    { n: 'Kévin Pedro', p: 'RB', a: 19, v: 3, r: 72 },
+    { n: 'Gautier Larsonneur', p: 'GK', a: 28, v: 2.3, r: 70 },
+    { n: 'Igor Miladinovic', p: 'CAM', a: 22, v: 2.3, r: 70 },
+    { n: 'Irvin Cardona', p: 'RW', a: 28, v: 2.3, r: 70 },
+    { n: 'Yvann Maçon', p: 'RB', a: 27, v: 1.4, r: 68 },
+    { n: 'Ben Old', p: 'LB', a: 23, v: 0.8, r: 64 },
+  ],
+  'Sampdoria': [
+    { n: 'Antoine Makoumbou', p: 'CDM', a: 27, v: 3.2, r: 72 },
+    { n: 'Salvatore Esposito', p: 'CDM', a: 25, v: 2.4, r: 71 },
+    { n: 'Lorenzo Insigne', p: 'LW', a: 34, v: 1.4, r: 68 },
+    { n: 'Yann Karamoh', p: 'LW', a: 27, v: 1.4, r: 68 },
   ],
   'Samsunspor': [
     { n: 'Carlo Holse', p: 'CAM', a: 26, v: 6, r: 76 },
@@ -4091,8 +4321,6 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Ulisses Garcia', p: 'LB', a: 29, v: 2.3, r: 70 },
     { n: 'Edoardo Pieragnolo', p: 'LB', a: 22, v: 1.5, r: 68 },
     { n: 'Woyo Coulibaly', p: 'RB', a: 26, v: 1.5, r: 68 },
-    { n: 'Filippo Missori', p: 'RB', a: 21, v: 1.4, r: 68 },
-    { n: 'Horațiu Moldovan', p: 'GK', a: 27, v: 1.4, r: 68 },
     { n: 'Nemanja Matić', p: 'CDM', a: 38, v: 1.3, r: 67 },
   ],
   'Schalke 04': [
@@ -4200,6 +4428,8 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Adriano Jagusic', p: 'CAM', a: 20, v: 3.8, r: 73 },
     { n: 'Luka Lucic', p: 'LM', a: 30, v: 0.7, r: 64 },
   ],
+  'Sochaux': [
+  ],
   'Southampton': [
     { n: 'Finn Azaz', p: 'CAM', a: 25, v: 14.3, r: 80 },
     { n: 'Aaron Ramsdale', p: 'GK', a: 27, v: 9.8, r: 78 },
@@ -4253,6 +4483,12 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Matheus Reis', p: 'LB', a: 30, v: 2.3, r: 70 },
     { n: 'Salvador Blopa', p: 'RB', a: 18, v: 2.3, r: 70 },
     { n: 'Jesse Derry', p: 'LW', a: 18, v: 1.5, r: 68 },
+  ],
+  'Sporting Gijón': [
+    { n: 'César Gelabert', p: 'CAM', a: 25, v: 2.3, r: 70 },
+    { n: 'Gaspar Campos', p: 'LW', a: 25, v: 1.5, r: 68 },
+    { n: 'Guille Rosas', p: 'RB', a: 25, v: 1.5, r: 68 },
+    { n: 'Rubén Yáñez', p: 'GK', a: 32, v: 0.7, r: 64 },
   ],
   'Sporting Kansas City': [
     { n: 'Dejan Joveljić', p: 'ST', a: 26, v: 5.3, r: 75 },
@@ -4447,12 +4683,20 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
   ],
   'SønderjyskE': [
   ],
+  'Südtirol': [
+    { n: 'Fabio Rispoli', p: 'CM', a: 19, v: 3.8, r: 73 },
+    { n: 'Kevin Zeroli', p: 'CM', a: 20, v: 3, r: 72 },
+    { n: 'Alessandro Plizzari', p: 'GK', a: 25, v: 0.8, r: 64 },
+    { n: 'Salvatore Molina', p: 'RM', a: 34, v: 0.8, r: 64 },
+  ],
   'Telstar': [
     { n: 'Adil Lechkar', p: 'RM', a: 24, v: 0.8, r: 64 },
     { n: 'Jayden Turfkruier', p: 'LM', a: 21, v: 0.8, r: 64 },
     { n: 'Nigel Ogidi Nwankwo', p: 'LM', a: 27, v: 0.8, r: 64 },
     { n: 'Tyrese Noslin', p: 'RM', a: 23, v: 0.8, r: 64 },
     { n: 'Jeff Hardeveld', p: 'LM', a: 30, v: 0.7, r: 64 },
+  ],
+  'Tenerife': [
   ],
   'Thun': [
     { n: 'Franz-Ethan Meichtry', p: 'CM', a: 20, v: 2.3, r: 70 },
@@ -4729,6 +4973,10 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Stole Dimitrievski', p: 'GK', a: 32, v: 1.5, r: 68 },
     { n: 'Mouctar Diakhaby', p: 'CB', a: 29, v: 1.2, r: 67 },
   ],
+  'Valladolid': [
+    { n: 'Julien Ponceau', p: 'CAM', a: 25, v: 1.5, r: 68 },
+    { n: 'Guille Bueno', p: 'LB', a: 23, v: 0.8, r: 64 },
+  ],
   'Vancouver Whitecaps': [
     { n: 'Thomas Müller', p: 'CF', a: 36, v: 4.3, r: 74 },
     { n: 'Brian White', p: 'ST', a: 29, v: 3.8, r: 73 },
@@ -4770,7 +5018,6 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Filip Stanković', p: 'GK', a: 23, v: 6, r: 76 },
     { n: 'Gianluca Busio', p: 'CM', a: 23, v: 4.5, r: 74 },
     { n: 'Joël Schingtienne', p: 'CB', a: 23, v: 3.8, r: 73 },
-    { n: 'Joel Pohjanpalo', p: 'ST', a: 31, v: 3.6, r: 73 },
     { n: 'Andrea Adorante', p: 'ST', a: 25, v: 3, r: 72 },
     { n: 'Matías Moreno', p: 'CB', a: 22, v: 3, r: 72 },
     { n: 'Antoine Hainaut', p: 'RB', a: 23, v: 2.3, r: 70 },
@@ -4784,13 +5031,33 @@ export const CM_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Bjarki Bjarkason', p: 'LM', a: 23, v: 0.8, r: 64 },
     { n: 'Lorenzo Berardi', p: 'LM', a: 19, v: 0.8, r: 64 },
     { n: 'Lorenzo Montipò', p: 'GK', a: 29, v: 0.8, r: 64 },
-    { n: 'Francesco Zampano', p: 'RM', a: 32, v: 0.7, r: 64 },
+  ],
+  'Verona': [
+    { n: 'Tomas Suslov', p: 'CAM', a: 23, v: 3.8, r: 73 },
+    { n: 'Amin Sarr', p: 'ST', a: 24, v: 3.6, r: 73 },
+    { n: 'Antoine Bernede', p: 'CM', a: 26, v: 3, r: 72 },
+    { n: 'Gabriele Zappa', p: 'RB', a: 26, v: 3, r: 72 },
+    { n: 'Suat Serdar', p: 'CM', a: 28, v: 3, r: 72 },
+    { n: 'Samuele Mulattieri', p: 'ST', a: 25, v: 2.9, r: 71 },
+    { n: 'Domagoj Bradarić', p: 'LB', a: 26, v: 2.3, r: 70 },
+    { n: 'Martin Frese', p: 'LB', a: 27, v: 2.3, r: 70 },
+    { n: 'Andréa Le Borgne', p: 'CDM', a: 19, v: 2, r: 70 },
+    { n: 'Nicola Leali', p: 'GK', a: 32, v: 1.5, r: 68 },
+    { n: 'Mattia Compagnon', p: 'RM', a: 24, v: 0.8, r: 64 },
   ],
   'Viborg FF': [
     { n: 'Thomas Jørgensen', p: 'CM', a: 20, v: 3, r: 72 },
     { n: 'Jean Manuel Mbom', p: 'RB', a: 25, v: 1.5, r: 68 },
     { n: 'Lucas Lund', p: 'GK', a: 25, v: 1.5, r: 68 },
     { n: 'Srdjan Kuzmic', p: 'LB', a: 21, v: 1.5, r: 68 },
+  ],
+  'Vicenza': [
+    { n: 'Tommaso Corazza', p: 'LB', a: 21, v: 1.5, r: 68 },
+    { n: 'Filippo Costa', p: 'LM', a: 28, v: 0.8, r: 64 },
+    { n: 'Lorenzo Caferri', p: 'RM', a: 26, v: 0.8, r: 64 },
+    { n: 'Raul Talarico', p: 'RM', a: 23, v: 0.8, r: 64 },
+    { n: 'Nicola Rauti', p: 'CF', a: 25, v: 0.7, r: 64 },
+    { n: 'Riccardo Marchizza', p: 'LB', a: 27, v: 0.7, r: 64 },
   ],
   'Villarreal': [
     { n: 'Alberto Moleiro', p: 'LW', a: 22, v: 32.3, r: 85 },

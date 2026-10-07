@@ -214,6 +214,40 @@ export const DB_TO_ENGINE = {
   'Santos Laguna': 'Santos Laguna', 'Atlas Guadalajara': 'Atlas', 'Club Necaxa': 'Necaxa',
   'Puebla FC': 'Puebla', 'Querétaro FC': 'Querétaro', 'Club Tijuana': 'Tijuana',
   'FC Juárez': 'FC Juárez', 'Atlético de San Luis': 'Atlético San Luis',
+  // Round 1040: Serie B 2026-27. Every table spelling read off the 2026-10-02
+  // dump, one per club (the first team's). Left unmapped on purpose: the
+  // Primavera and U19 sides (Ascoli Picchio, Benevento, Cesena, Cremonese,
+  // Empoli, Hellas Verona, Sudtirol, Vicenza and Virtus Entella Primavera, US
+  // Catanzaro U19: youth rows, as no other league maps them), and "Chievo
+  // Verona", "Virtusvecomp Verona" and "Feralpisalo" (not members). Arezzo
+  // have no spelling at all and are KNOWN_EMPTY in the bake.
+  'Palermo FC': 'Palermo', 'FC Südtirol': 'Südtirol', 'Mantova 1911': 'Mantova',
+  'Modena FC': 'Modena', 'Ascoli Calcio': 'Ascoli', 'Hellas Verona': 'Verona',
+  'Cesena FC': 'Cesena', 'US Avellino 1912': 'Avellino', 'Benevento Calcio': 'Benevento',
+  'Pisa Sporting Club': 'Pisa', 'Calcio Padova': 'Padova', 'FC Empoli': 'Empoli',
+  'Virtus Entella': 'Entella', 'US Cremonese': 'Cremonese', 'LR Vicenza': 'Vicenza',
+  'UC Sampdoria': 'Sampdoria', 'SS Juve Stabia': 'Juve Stabia', 'US Catanzaro': 'Catanzaro',
+  'Carrarese Calcio 1908': 'Carrarese',
+  // Round 1040: Ligue 2 2026-27, the same way. Left unmapped on purpose:
+  // "Clermont Foot 63 U19" and "FC Metz U19" (youth rows) and "Red Star
+  // Belgrade" (the Serbian club; the Paris one is "Red Star FC"). Sochaux,
+  // Dijon and Rodez have no spelling at all and are KNOWN_EMPTY in the bake.
+  'AS Saint-Étienne': 'Saint-Étienne', 'Red Star FC': 'Red Star FC', 'Stade Reims': 'Reims',
+  'Montpellier HSC': 'Montpellier', 'FC Metz': 'Metz', 'AS Nancy-Lorraine': 'Nancy',
+  'FC Annecy': 'Annecy', 'Pau FC': 'Pau', 'EA Guingamp': 'Guingamp',
+  'USL Dunkerque': 'Dunkerque', 'Grenoble Foot 38': 'Grenoble', 'FC Nantes': 'Nantes',
+  'Clermont Foot 63': 'Clermont', 'US Boulogne': 'Boulogne', 'Stade Lavallois': 'Laval',
+  // Round 1040: the Segunda División 2026-27, the same way. Left unmapped on
+  // purpose: "Real Sociedad B" (a reserve side the game leaves out), and
+  // "CA Racing (Córdoba)" and "CA Central Córdoba (SdE)" (Argentine clubs).
+  // Tenerife, Córdoba and Eldense have no spelling at all and are
+  // KNOWN_EMPTY in the bake.
+  'Girona FC': 'Girona', 'RCD Mallorca': 'Mallorca', 'Real Oviedo': 'Real Oviedo',
+  'SD Eibar': 'Eibar', 'CD Castellón': 'Castellón', 'UD Almería': 'Almería',
+  'Burgos CF': 'Burgos', 'CE Sabadell FC': 'Sabadell', 'Sporting Gijón': 'Sporting Gijón',
+  'Granada CF': 'Granada', 'UD Las Palmas': 'Las Palmas', 'CD Leganés': 'Leganés',
+  'Real Valladolid CF': 'Valladolid', 'Cádiz CF': 'Cádiz', 'FC Andorra': 'FC Andorra',
+  'AD Ceuta FC': 'Ceuta', 'Albacete Balompié': 'Albacete',
   // UCL flavor clubs outside the baked leagues
   'Club Brugge KV': 'Club Brugge',
 };

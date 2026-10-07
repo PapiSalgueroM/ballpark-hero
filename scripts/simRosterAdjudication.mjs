@@ -75,6 +75,13 @@
  *                              the Benfica block where the bake had him. Section 5.
  *   ROSTER_ADJ_CONTROL=held    Cláudio Ramos, pending and held at his club, out
  *                              of the Porto block. Section 5.
+ *   ROSTER_ADJ_CONTROL=leftbehind  Scuffet's row back under removedClubNotModelled
+ *                              at Pisa, which Round 1040 models. Section 2b.
+ *                              (Measured 2026-10-06: 2b red, 8 of 9 Serie B rows.)
+ *   ROSTER_ADJ_CONTROL=cuadrado  Juan Cuadrado back in the Pisa block, as the round
+ *                              shipped before its review. Section 12.
+ *   ROSTER_ADJ_CONTROL=johnsen   Dennis Johnsen out of Palermo and back in the
+ *                              Cremonese block. Section 13.
  * A control refuses to run unless every block and row it touches appears exactly
  * once, and unless the edit really changes the source.
  *
@@ -109,6 +116,20 @@ const CONTROLS = {
     add: [['Benfica', `    { n: 'Renato Sanches', p: 'CM', a: 28, v: 2.9, r: 71 },`]] },
   held: { expect: '5', what: 'Cláudio Ramos (pending, held at his club) taken out of the Porto block',
     remove: [['Porto', 'Cláudio Ramos']] },
+  /* Round 1040: a ledger control, not a roster one. */
+  leftbehind: { expect: '2b', what: 'Simone Scuffet put back under removedClubNotModelled at Pisa, as the ledger read before Round 1040',
+    ledger: led => {
+      const i = led.movedTo.findIndex(m => m.name === 'Simone Scuffet' && m.to === 'Pisa');
+      if (i < 0) { console.error('CONTROL leftbehind refuses to run: no movedTo row for Simone Scuffet at Pisa'); process.exit(1); }
+      const [row] = led.movedTo.splice(i, 1);
+      led.removedClubNotModelled.push({ ...row, realClub: 'Pisa' });
+    } },
+  /* Round 1040 review: the two rows the review read by name. */
+  cuadrado: { expect: '12', what: 'Juan Cuadrado put back in the Pisa block, as the round shipped before its review',
+    add: [['Pisa', `    { n: 'Juan Cuadrado', p: 'RM', a: 37, v: 0.8, r: 64 },`]] },
+  johnsen: { expect: '13', what: 'Dennis Johnsen taken out of Palermo and put back in the Cremonese block, as the round shipped before its review',
+    remove: [['Palermo', 'Dennis Johnsen']],
+    add: [['Cremonese', `    { n: 'Dennis Johnsen', p: 'LW', a: 27, v: 2.3, r: 70 },`]] },
 };
 const CONTROL = process.env.ROSTER_ADJ_CONTROL || '';
 if (CONTROL && !Object.hasOwn(CONTROLS, CONTROL)) {
@@ -170,6 +191,7 @@ const META = eval('(' + sliceObject(source, 'export const CM_ROSTER_META') + ')'
 
 const ledgerPath = path.join(ROOT, 'scripts/data/rosterConfirmation2026.json');
 const L = JSON.parse(fs.readFileSync(ledgerPath, 'utf8'));
+if (CONTROL && CONTROLS[CONTROL].ledger) CONTROLS[CONTROL].ledger(L);
 
 const clubsOf = name => Object.keys(ROSTERS).filter(c => ROSTERS[c].some(p => p.n === name));
 const totalPlayers = Object.values(ROSTERS).reduce((s, a) => s + a.length, 0);
@@ -201,6 +223,36 @@ for (const r of L.removedClubNotModelled) {
   if (at.length) fail(`${r.name} is in the ${at.join(', ')} squad, but he plays for ${r.realClub}, which this game does not model`);
 }
 if (failures === before) console.log(`   ${L.removedClubNotModelled.length} correctly absent`);
+
+/* Round 1040: a league the game starts modelling turns some of these rows
+   true no longer. The bake deletes a removedClubNotModelled man by name, so
+   a row left behind when his real club comes in silently empties him out of
+   the squad he belongs in. Every such row moves to movedTo with the engine's
+   spelling (correction 3 of the round's brief), and the rows each new league
+   took are counted. Serie B's ten are the nine rows that left
+   removedClubNotModelled plus Dennis Johnsen, whom the round's review moved
+   from Cremonese to Palermo on two families. */
+begin('2b', '2b) No removedClubNotModelled row names a club the game models now');
+before = failures;
+{
+  const { DB_TO_ENGINE } = await import(new URL('./lib/dbClubNames.mjs', import.meta.url).href);
+  const modelled = new Set(Object.keys(ROSTERS));
+  for (const r of L.removedClubNotModelled) {
+    const engine = DB_TO_ENGINE[r.realClub] ?? r.realClub;
+    if (modelled.has(engine)) fail(`${r.name} is listed under removedClubNotModelled at ${r.realClub}, which the game models as ${engine}: move the row to movedTo`);
+  }
+  const ROUND_1040 = {
+    'Serie B': { clubs: ['Cremonese', 'Verona', 'Pisa', 'Avellino', 'Carrarese', 'Catanzaro', 'Cesena', 'Empoli', 'Entella', 'Juve Stabia', 'Mantova', 'Modena', 'Padova', 'Palermo', 'Sampdoria', 'Südtirol', 'Vicenza', 'Arezzo', 'Benevento', 'Ascoli'], moved: 10 },
+    'Ligue 2': { clubs: ['Metz', 'Nantes', 'Saint-Étienne', 'Red Star FC', 'Reims', 'Montpellier', 'Nancy', 'Annecy', 'Sochaux', 'Dijon', 'Pau', 'Guingamp', 'Dunkerque', 'Grenoble', 'Rodez', 'Clermont', 'Boulogne', 'Laval'], moved: 5 },
+    'Segunda División': { clubs: ['Real Oviedo', 'Girona', 'Mallorca', 'Eibar', 'Castellón', 'Almería', 'Burgos', 'Sabadell', 'Sporting Gijón', 'Granada', 'Las Palmas', 'Tenerife', 'Leganés', 'Valladolid', 'Córdoba', 'Eldense', 'Cádiz', 'FC Andorra', 'Ceuta', 'Albacete'], moved: 7 },
+  };
+  for (const [league, { clubs, moved }] of Object.entries(ROUND_1040)) {
+    const n = L.movedTo.filter(m => clubs.includes(m.to)).length;
+    console.log(`   ${league}: ${n} movedTo rows land at its clubs (Round 1040 moved ${moved} there)`);
+    if (n !== moved) fail(`${n} movedTo rows land at a ${league} club, Round 1040 moved ${moved}`);
+  }
+}
+if (failures === before) console.log(`   none of ${L.removedClubNotModelled.length} names a modelled club`);
 
 /* ------------------------------------------------------------------ */
 begin('3', '3) Every not-current name is in no squad at all');
@@ -311,6 +363,27 @@ before = failures;
   if (at.includes('Chelsea')) fail('Mykhaylo Mudryk is in the Chelsea block, but a season-long loanee is listed at the club he plays for (the ledger loanPolicy)');
 }
 if (failures === before) console.log('   at Tottenham, not Chelsea');
+
+/* Round 1040 review, by name. The second tier mapping baked last season's
+   club from the table's 2026 row, and no summer window research covered those
+   clubs; the review withheld every man ESPN's 2026-27 squad pages leave out
+   (pending, withheld, shard round1040-review) and moved Johnsen on two
+   families. These two are the rows the review read. */
+begin('12', '12) Juan Cuadrado is in no squad');
+before = failures;
+{
+  const at = clubsOf('Juan Cuadrado');
+  if (at.length) fail(`Juan Cuadrado is in the ${at.join(', ')} squad, but ESPN's Pisa 2026-27 squad leaves him out and he is withheld until two families say where he is`);
+}
+if (failures === before) console.log('   in no squad');
+
+begin('13', '13) Dennis Johnsen is at Palermo and not at Cremonese');
+before = failures;
+{
+  const at = clubsOf('Dennis Johnsen');
+  if (at.length !== 1 || at[0] !== 'Palermo') fail(`Dennis Johnsen should be at Palermo alone, who signed him permanently from Cremonese on 2026-02-02, and is at ${at.join(', ') || 'no club'}`);
+}
+if (failures === before) console.log('   at Palermo, not Cremonese');
 
 /* ------------------------------------------------------------------ */
 if (CONTROL) {
