@@ -513,7 +513,7 @@ console.log(`  ${RAW.length} raw label prints absent, ${NEED.length} lookups pre
 /* ─── Summary ─── */
 if (CONTROL) {
   const fired = red.has(controlSection);
-  console.log(`\nCONTROL ${CONTROL}: section ${controlSection} ${fired ? 'went red as it should' : 'stayed green: the check does not work'}`);
+  console.log(`\nCONTROL ${CONTROL}: section ${controlSection} ${fired ? `went red as it should (${shown[controlSection]} failures there, ${failures} in all)` : 'stayed green: the check does not work'}`);
   process.exit(fired ? 0 : 1);
 }
 console.log(failures ? `\nsimCareerLeagueSeasons: ${failures} failures (sections ${[...red].join(', ')})` : '\nsimCareerLeagueSeasons: all sections green');
