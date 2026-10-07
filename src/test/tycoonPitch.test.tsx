@@ -240,20 +240,24 @@ describe('the pitch plays the engine\'s match', () => {
     measured(`12 taps: the chip read "${chip?.textContent?.trim()}", 6 sparks, the pitch popped, the chip cleared at 1.5s idle; ${players} players on the pitch`);
   }, TEST_MS);
 
-  it('5 the office is five tiles, one panel at a time, Upgrades first', () => {
+  it('5 the office is six tiles, one panel at a time, Upgrades first', () => {
     const f = newTycoon(EPOCH);
     mountWith({ ...f, legacyPoints: 4, ach: ACHIEVEMENTS.slice(0, 3).map(a => a.id) });
     const tiles = [...document.querySelectorAll('[data-tile]')] as HTMLElement[];
     const titles = tiles.map(t => t.textContent ?? '');
-    for (const want of ['Upgrades', 'Payroll', 'Badges', 'Legacy', 'Records']) {
+    for (const want of ['Upgrades', 'Ticket offer', 'Payroll', 'Badges', 'Legacy', 'Records']) {
       expect(titles.some(t => t.includes(want)), `no ${want} tile`).toBe(true);
     }
-    expect(tiles.length, 'the office is not five tiles').toBe(5);
+    expect(tiles.length, 'the office is not six tiles').toBe(6);
     const has = (text: string) => [...document.querySelectorAll('button')].some(b => (b.textContent ?? '').includes(text));
     expect(has('Ticket Office'), 'Upgrades is not the panel open on arrival').toBe(true);
     expect(has('Turnstile Steward'), 'the payroll shows before its tile is opened').toBe(false);
     const open = (title: string) => act(() => { fireEvent.click(tiles.find(t => (t.textContent ?? '').includes(title)) as HTMLElement); });
+    open('Ticket offer');
+    expect(document.querySelector('[data-ticket-policy-panel]'), 'the ticket offer did not open').not.toBeNull();
+    expect(has('Ticket Office'), 'the upgrades remained stacked below the offer').toBe(false);
     open('Payroll');
+    expect(document.querySelector('[data-ticket-policy-panel]'), 'the offer remained stacked below payroll').toBeNull();
     expect(has('Turnstile Steward') && !has('Ticket Office'), 'Payroll did not replace Upgrades').toBe(true);
     open('Legacy');
     expect(document.querySelector('[data-legacy-board] [data-perk="sway"]'), 'the Legacy tile did not open the boardroom').not.toBeNull();
@@ -262,7 +266,7 @@ describe('the pitch plays the engine\'s match', () => {
     expect(document.body.textContent ?? '', 'the Badges tile did not open the badges').toContain(`3 of ${ACHIEVEMENTS.length} earned`);
     open('Records');
     expect(document.body.textContent ?? '', 'the Records tile did not open the records').toContain('Career goals');
-    measured('five tiles: Upgrades open on arrival, and Payroll, Legacy, Badges and Records each replaced it with their own panel');
+    measured('six tiles: Upgrades open on arrival, and Ticket offer, Payroll, Legacy, Badges and Records each replaced it with their own panel');
   }, TEST_MS);
 
   it('6 in a goal storm the older replays land on their final frame, so the pitch never falls behind the match', async () => {

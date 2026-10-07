@@ -1,0 +1,95 @@
+name: Tycoon ticket policy
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/tycoon-ticket-policy-1080]
+  pull_request:
+    paths:
+      - .github/workflows/tycoon-ticket-policy.yml
+      - src/components/tycoon/TicketPolicyCard.tsx
+      - src/hooks/useStadiumTycoon.ts
+      - src/lib/stadiumTycoon.ts
+      - src/pages/StadiumTycoon.tsx
+      - src/test/tycoonTicketPolicy.test.tsx
+      - scripts/simTycoonTicketPolicy.mjs
+      - scripts/qa/tycoonTicketPolicy1080.mjs
+permissions:
+  contents: read
+concurrency:
+  group: tycoon-ticket-policy-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      VITEST_MAX_FORKS: 1
+      VITEST_MIN_FORKS: 1
+      SEO_SPLIT_BASE_REF: HEAD
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Prepare remote verification
+        run: |
+          mkdir -p tycoon-ticket-policy-artifacts
+          git rev-parse HEAD > tycoon-ticket-policy-artifacts/source-head.txt
+          git rev-parse HEAD^{tree} > tycoon-ticket-policy-artifacts/source-tree.txt
+          npm ci
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+      - name: Type check and build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee tycoon-ticket-policy-artifacts/types.log
+          npm run build 2>&1 | tee tycoon-ticket-policy-artifacts/build.log
+      - name: Actual outcomes and effective copied faults
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: TYCOON_TICKET_POLICY_CONTROL=all ONLY=simTycoonTicketPolicy node scripts/runAllSims.mjs 2>&1 | tee tycoon-ticket-policy-artifacts/outcomes.log
+      - name: Preserve existing game behavior
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simStadiumTycoon simTycoonClock simTycoonAway simTycoonAwayMatchdays simTycoonLeague simTycoonLoads simTycoonHelp simTycoonSetPiece simTycoonSetPiecePage simTycoonRooms simTycoonPacks simTycoonPackPace simTycoonGear simTycoonGearPage simTycoonPitch simTycoonPitchRunner; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "tycoon-ticket-policy-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Native actual game journeys
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          node scripts/qa/tycoonTicketPolicy1080.mjs --prefetch-fonts-only 2>&1 | tee tycoon-ticket-policy-artifacts/fonts.log
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" xvfb-run -a node scripts/qa/tycoonTicketPolicy1080.mjs 2>&1 | tee tycoon-ticket-policy-artifacts/native.log
+      - name: All built readers and source anchors
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings simSeoMetaSplit simHomeCopy simHarnessAnchors; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "tycoon-ticket-policy-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Hold the reviewed source and protected game rules
+        if: ${{ !cancelled() }}
+        run: |
+          git diff --exit-code HEAD -- src scripts/simTycoonTicketPolicy.mjs scripts/qa/tycoonTicketPolicy1080.mjs
+          git diff --exit-code 2fff5e044160b70bd58b64d931793ee4e443cedd HEAD -- src/lib/wonderkidFactory.ts src/lib/tycoonRewards.ts src/lib/tycoonGear.ts src/lib/tycoonRooms.ts src/components/tycoon/TycoonPitch.tsx src/components/tycoon/AcademyPanel.tsx
+      - name: Preserve verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tycoon-ticket-policy-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 3
+          path: tycoon-ticket-policy-artifacts/

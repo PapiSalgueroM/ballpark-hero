@@ -1,3 +1,9 @@
+Codex1080 PREPARATION, October7,2026: Stadium Tycoon ticket offers.
+Dedicated office tile, real demand/gate/growth tradeoffs and latest-state save
+retry.20 authored outcomes/23 copied faults and216 measurement rows await CI;
+Standard exact baseline replay and native3/9 required. Base2fff5e04, branch
+codex/tycoon-ticket-policy-1080. Receipt: docs/audits/ROUND1080-TICKET-OFFERS.md.
+No merge or live claim. Claude retains main/release; root drafts/stashes held.
 ## Release AH LIVE, 2026-10-07 02:43 EDT
 
 Claude lane. main eeedbf43, deployment 02585196-9b0c-4ca0-8598-f72ce4e0e5d5, entry index-BetRYEt2.js (was

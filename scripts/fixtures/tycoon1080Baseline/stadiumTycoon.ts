@@ -457,8 +457,6 @@ export function startingMoneyOf(s: TycoonState): number {
 
 export interface TycoonState {
   v: number;
-  /** Absence is the original Standard offer. A new ground starts Standard. */
-  ticketPolicy?: 'community' | 'premium';
   money: number;
   lifetime: number;
   /** Reputation stars from prestiges: each is a permanent 50% income boost. */
@@ -969,33 +967,9 @@ export function capacity(s: TycoonState): number {
   return 120 + levelOf(s, 'stands') * 40;
 }
 
-export type TicketPolicy = 'standard' | 'community' | 'premium';
-export const TICKET_POLICIES = [
-  { id: 'community', label: 'Community', gate: 0.85, demand: 1, growth: 1.5 },
-  { id: 'standard', label: 'Standard', gate: 1, demand: 1, growth: 1 },
-  { id: 'premium', label: 'Premium', gate: 1.25, demand: 0.75, growth: 0.75 },
-] as const;
-
-export function ticketPolicyOf(s: TycoonState): TicketPolicy {
-  return s.ticketPolicy === 'community' || s.ticketPolicy === 'premium' ? s.ticketPolicy : 'standard';
-}
-
-function ticketTerms(s: TycoonState) {
-  return TICKET_POLICIES.find(p => p.id === ticketPolicyOf(s))!;
-}
-
-/** Switching only changes future rates. It never grants or removes money. */
-export function setTicketPolicy(s: TycoonState, policy: TicketPolicy): TycoonState {
-  if (policy === ticketPolicyOf(s)) return s;
-  const next = { ...s };
-  if (policy === 'community' || policy === 'premium') next.ticketPolicy = policy;
-  else delete next.ticketPolicy;
-  return next;
-}
-
-/** Willing supporters, capped by seats. No offer creates extra supporters. */
+/** Who actually turns up: the smaller of room and appetite. */
 export function attendance(s: TycoonState): number {
-  return Math.min(capacity(s), Math.floor(s.fanbase * ticketTerms(s).demand));
+  return Math.min(capacity(s), Math.floor(s.fanbase));
 }
 
 /** Reputation multiplier: each star is +50%, permanent. */
@@ -1014,8 +988,7 @@ function perFanRate(s: TycoonState): number {
   const sn = levelOf(s, 'snacks');
   const sh = levelOf(s, 'shop');
   // Gate money is the backbone; snacks and shop stack on top of it.
-  if (ticketPolicyOf(s) === 'standard') return 0.05 + tk * 0.011 + sn * 0.009 + sh * 0.016;
-  return (0.05 + tk * 0.011) * ticketTerms(s).gate + sn * 0.009 + sh * 0.016;
+  return 0.05 + tk * 0.011 + sn * 0.009 + sh * 0.016;
 }
 
 /** The number on the header: money per second, all sources. */
@@ -1067,28 +1040,7 @@ export function fanGrowthPerSec(s: TycoonState): number {
   const room = capacity(s) * 3;
   const pressure = s.fanbase >= room ? 0.15 : 1;
   /* Round 196: Deep Roots compounds the growth, never the pressure rule. */
-  return base * winPull * pressure * rootsMult(s) * ticketTerms(s).growth;
-}
-
-/** The office reads the same rates the clock pays. Lines include all live boosts. */
-export function ticketEconomy(s: TycoonState) {
-  const crowd = attendance(s);
-  const terms = ticketTerms(s);
-  const multiplier = repMult(s) * streakMult(s) * divisionOf(s).incomeMult * achMult(s) * swayMult(s)
-    * (boostActive(s) ? HYPE_MULT : 1)
-    * (goldenActive(s) && s.goldenKind === 'frenzy' ? FRENZY_MULT : 1);
-  return {
-    policy: terms.id,
-    crowd,
-    seats: capacity(s),
-    supporters: Math.floor(s.fanbase),
-    gatePerSec: crowd * (0.05 + levelOf(s, 'tickets') * 0.011) * terms.gate * multiplier,
-    concessionsPerSec: crowd * (levelOf(s, 'snacks') * 0.009 + levelOf(s, 'shop') * 0.016) * multiplier,
-    otherPerSec: (levelOf(s, 'parking') * 0.9 + staffBaseIncome(s)) * multiplier,
-    totalPerSec: incomePerSec(s),
-    growthPerSec: fanGrowthPerSec(s),
-    tap: tapValue(s),
-  };
+  return base * winPull * pressure * rootsMult(s);
 }
 
 /** Chance our toy team scores in one match minute. */
@@ -1575,7 +1527,6 @@ export function deserializeTycoon(raw: string | null, now: number): TycoonState 
       ...p,
       levels: { ...base.levels, ...(p.levels ?? {}) },
     };
-    if (p.ticketPolicy !== 'community' && p.ticketPolicy !== 'premium') delete s.ticketPolicy;
     // Never trust stored numbers to be finite.
     for (const k of ['money', 'lifetime', 'fanbase'] as const) {
       if (!Number.isFinite(s[k]) || s[k] < 0) s[k] = base[k];
