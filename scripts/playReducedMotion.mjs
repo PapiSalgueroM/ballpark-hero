@@ -268,6 +268,94 @@ if (!fs.existsSync(path.join(ROOT, 'dist', 'index.html'))) {
     if (got.animating > 0) { console.error(`  FAIL: ${route}: ${got.animating} reveal element(s) still animate under reduce`); badRoutes += 1; }
     if (got.invisible > 0) { console.error(`  FAIL: ${route}: ${got.invisible} reveal element(s) are invisible under reduce, worse than the motion`); badRoutes += 1; }
   }
+  /* Round 1045: the Season Centre overlay is a surface of its own (critic
+     C11). A route walk never opens it, so a career the engine itself played
+     is handed to the page at its season summary, the overlay is opened from
+     the card, and the kick off card, a matchday and the review are each
+     measured the way the routes are: no reveal still animating, none
+     invisible, nothing inside the overlay moving for more than SLOW_MS. */
+  {
+    const { bundleAwardsNight } = await import('./lib/careerAwardsNightBundle.mjs');
+    const { mulberry32 } = await import('./lib/careerAwardsNightProbe.mjs');
+    const SB = await bundleAwardsNight(ROOT);
+    const sc = SB.soccer;
+    const clubs = sc.FALLBACK_CLUBS;
+    const real = Math.random;
+    Math.random = mulberry32(1045);
+    let save = null;
+    try {
+      const o = 76;
+      let st = sc.initCareer('Motion', 'England', 'ST', '2010-14', { pace: o, shooting: o, passing: o, dribbling: o, defending: o, physical: o, reflexes: o }, o, 2010, clubs, null, 92);
+      for (let g = 0; g < 400 && !save; g += 1) {
+        if (st.phase === 'season_summary' && st.pendingSummary?.type === 'playing' && st.pendingSummary.apps > 0 && st.seasons.length >= 2) { save = JSON.stringify(st); break; }
+        const ph = st.phase;
+        st = ph === 'youth' ? sc.advanceYouthYear(st, clubs)
+          : ph === 'contract_offer' ? ((st.pendingOffers || []).length ? sc.acceptOffer(st, st.pendingOffers[0]) : { ...st, phase: 'playing' })
+          : ph === 'playing' ? sc.advanceProSeason(st, clubs)
+          : ph === 'newspaper' ? sc.dismissNewspaper(st)
+          : ph === 'season_summary' ? sc.dismissSummary(st, clubs)
+          : ph === 'ballon_dor' ? sc.dismissBallonDor(st, clubs)
+          : ph === 'international_debut' ? sc.dismissDebut(st, clubs)
+          : ph === 'world_cup' ? sc.dismissWorldCup(st, clubs)
+          : ph === 'rivalry_event' ? sc.dismissRivalryEvent(st, clubs)
+          : ph === 'social_media_action' ? sc.dismissSocialMediaPhase(st, clubs)
+          : ph === 'random_events' ? ((st.pendingEvents || [])[0]?.choices?.length ? sc.applyEventChoice(st, 0, clubs) : { ...st, phase: 'playing', pendingEvents: [] })
+          : ph === 'moral_dilemma' ? sc.dismissMoralDilemma(sc.applyMoralDilemmaChoice(st, 0), clubs)
+          : ph === 'red_card_appeal_result' ? sc.dismissAppealResult(st, clubs)
+          : ph === 'rehab_choice' ? sc.applyRehabChoice(st, 0)
+          : ph === 'transfer_window' ? sc.stayAtClub(st)
+          : ph === 'retirement_suggestion' ? sc.declineRetirementSuggestion(st, clubs)
+          : null;
+        if (!st) break;
+      }
+    } finally { Math.random = real; }
+    if (!save) { console.error('  FAIL: Season Centre surface: the engine gave no season summary to open'); badRoutes += 1; }
+    else {
+      const p = await ctx.newPage();
+      await p.addInitScript(v => { try { if (!sessionStorage.getItem('rm-centre')) { sessionStorage.setItem('rm-centre', '1'); localStorage.setItem('soccerCareerSave', v); localStorage.setItem('seasonCentre:help', '1'); } } catch { /* ignored */ } }, save);
+      await p.route('**://*.supabase.co/**', r => r.abort());
+      await p.goto(base + '/soccer-career', { waitUntil: 'networkidle' });
+      await p.waitForTimeout(600);
+      const press = label => p.evaluate(t => { const b = [...document.querySelectorAll('button')].find(x => x.textContent.trim().startsWith(t)); if (b) b.click(); return !!b; }, label);
+      const opened = await press('📺 Watch it week by week');
+      await p.waitForSelector('[data-season-centre] [role="dialog"]', { timeout: 20000 }).catch(() => {});
+      const screens = [];
+      const look = async name => {
+        await p.waitForTimeout(400);
+        const r = await p.evaluate(([classes, slowMs]) => {
+          const root = document.querySelector('[data-season-centre]');
+          if (!root) return null;
+          const ms = v => Math.max(0, ...String(v).split(',').map(x => { x = x.trim(); return x.endsWith('ms') ? parseFloat(x) : parseFloat(x) * 1000; }).filter(n => Number.isFinite(n)));
+          let reveal = 0, animating = 0, invisible = 0, slow = 0;
+          for (const el of root.querySelectorAll(classes.map(c => '.' + c).join(','))) {
+            reveal += 1;
+            const cs = getComputedStyle(el);
+            if (cs.animationName !== 'none') animating += 1;
+            if (cs.display === 'none' || Number(cs.opacity) === 0) invisible += 1;
+          }
+          for (const el of root.querySelectorAll('*')) {
+            const cs = getComputedStyle(el);
+            if (ms(cs.transitionDuration) > slowMs || (cs.animationName !== 'none' && ms(cs.animationDuration) > slowMs)) slow += 1;
+          }
+          return { reveal, animating, invisible, slow, text: (root.innerText || '').length };
+        }, [REVEAL_CLASSES, SLOW_MS]);
+        screens.push(name);
+        console.log(`   Season Centre ${name.padEnd(9)} ${r ? `text=${r.text} reveal=${r.reveal} animating=${r.animating} invisible=${r.invisible} slow=${r.slow}` : 'not open'}`);
+        if (!r || r.text < 80) { console.error(`  FAIL: Season Centre ${name}: the overlay did not draw`); badRoutes += 1; return; }
+        if (r.animating > 0) { console.error(`  FAIL: Season Centre ${name}: ${r.animating} reveal element(s) still animate under reduce`); badRoutes += 1; }
+        if (r.invisible > 0) { console.error(`  FAIL: Season Centre ${name}: ${r.invisible} reveal element(s) are invisible under reduce`); badRoutes += 1; }
+        if (r.slow > 0) { console.error(`  FAIL: Season Centre ${name}: ${r.slow} element(s) still move for more than ${SLOW_MS}ms under reduce`); slowRoutes += 1; }
+      };
+      if (!opened) { console.error('  FAIL: Season Centre surface: no "📺 Watch it week by week" on the summary card'); badRoutes += 1; }
+      await look('kick off');
+      await press('▶ Kick off');
+      if (await p.$('[data-poster]')) await press('▶ Matchday 1');
+      await look('matchday');
+      await press('⏭ Sim the rest');
+      await look('review');
+      await p.close();
+    }
+  }
   /* The stage has to have seen our own keyframe CSS somewhere, or it proved
      nothing about this site and only that a toast library exists. Asserted
      once across the walk rather than per route, because our CSS rides in with

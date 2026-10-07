@@ -224,11 +224,16 @@ function Poster({ model, md, reduced }: { model: CentreModel; md: number; reduce
   return (
     <div ref={moment.ref} className="space-y-3" data-poster={kinds.join(' ')}>
       {kinds.includes('title') && s.clinch && (
-        <div className={`${slam} ${reduced ? '' : 'cm-gold-glow'} relative overflow-hidden rounded-xl border border-amber-500/40 bg-amber-500/10 p-3 text-amber-400`}>
-          {moment.fresh && moment.live && !reduced && <Confetti pieces={40} gold />}
-          <VictoryMoment compact>
-            <span className="text-sm font-black text-foreground" data-clinch>Champions with {M - s.clinch.md} to play</span>
-          </VictoryMoment>
+        /* two elements on purpose: cm-slam and cm-gold-glow each set the
+           animation, so on one element the glow would replace the slam and
+           leave the slam's starting opacity of 0 for good */
+        <div className={slam}>
+          <div className={`${reduced ? '' : 'cm-gold-glow'} relative overflow-hidden rounded-xl border border-amber-500/40 bg-amber-500/10 p-3 text-amber-400`}>
+            {moment.fresh && moment.live && !reduced && <Confetti pieces={40} gold />}
+            <VictoryMoment compact>
+              <span className="text-sm font-black text-foreground" data-clinch>Champions with {M - s.clinch.md} to play</span>
+            </VictoryMoment>
+          </div>
         </div>
       )}
       {kinds.includes('derby') && g?.fixedKey && (
@@ -351,7 +356,7 @@ export function SeasonCentre({ model, exitLabel, onClose }: { model: CentreModel
   const keepsSheets = model.keepsSheets;
   const so = soFar(s, played);
   const avg = so.apps ? (so.rating ?? 0) / so.apps : null;
-  const btn = 'h-10 shrink-0 rounded-lg px-3 text-xs font-bold';
+  const btn = 'h-10 shrink-0 whitespace-nowrap rounded-lg px-3 text-xs font-bold';
 
   const stageBody = (() => {
     if (stage.kind === 'kickoff') return <KickOff model={model} onKick={() => go(1)} onStraight={toEnd} />;
@@ -421,13 +426,13 @@ export function SeasonCentre({ model, exitLabel, onClose }: { model: CentreModel
             </div>
           </aside>
         </div>
-        {stage.kind !== 'kickoff' && (<div className="flex items-center gap-2 overflow-x-auto border-t border-border bg-card px-2 py-2" data-centre-bar>
-          {stage.kind === 'poster' && <button type="button" className={`${btn} flex-1 bg-emerald-600 text-black`} onClick={() => setStage({ kind: 'match', md: stage.md })}>▶ {roundWord} {stage.md}</button>}
+        {stage.kind !== 'kickoff' && (<div className="flex flex-wrap items-center gap-2 border-t border-border bg-card px-2 py-2" data-centre-bar>
+          {stage.kind === 'poster' && <button type="button" className={`${btn} flex-1 basis-full bg-emerald-600 text-black sm:basis-0`} onClick={() => setStage({ kind: 'match', md: stage.md })}>▶ {roundWord} {stage.md}</button>}
           {stage.kind === 'match' && !ft && (
-            <button type="button" className={`${btn} flex-1 border border-border`} onClick={() => setPaused(p => !p)}>{paused ? '▶ Resume' : '⏸ Pause'}</button>
+            <button type="button" className={`${btn} flex-1 basis-full border border-border sm:basis-0`} onClick={() => setPaused(p => !p)}>{paused ? '▶ Resume' : '⏸ Pause'}</button>
           )}
-          {stage.kind === 'match' && ft && stage.md < M && <button type="button" className={`${btn} flex-1 bg-emerald-600 text-black`} onClick={() => go(stage.md + 1)}>▶ {roundWord} {stage.md + 1}</button>}
-          {stage.kind === 'match' && ft && stage.md === M && <button type="button" className={`${btn} flex-1 bg-emerald-600 text-black`} onClick={() => setStage({ kind: 'review' })}>📋 Season review</button>}
+          {stage.kind === 'match' && ft && stage.md < M && <button type="button" className={`${btn} flex-1 basis-full bg-emerald-600 text-black sm:basis-0`} onClick={() => go(stage.md + 1)}>▶ {roundWord} {stage.md + 1}</button>}
+          {stage.kind === 'match' && ft && stage.md === M && <button type="button" className={`${btn} flex-1 basis-full bg-emerald-600 text-black sm:basis-0`} onClick={() => setStage({ kind: 'review' })}>📋 Season review</button>}
           {(stage.kind === 'match' || stage.kind === 'poster') && nextBig !== null && ft && (
             <button type="button" className={`${btn} border border-border`} onClick={() => { setPlayed(nextBig! - 1); go(nextBig!); }}>⏩ To the next big game</button>
           )}
@@ -441,7 +446,7 @@ export function SeasonCentre({ model, exitLabel, onClose }: { model: CentreModel
               ))}
             </div>
           )}
-          {stage.kind === 'review' && <button type="button" className={`${btn} flex-1 bg-emerald-600 text-black`} onClick={onClose}>{exitLabel}</button>}
+          {stage.kind === 'review' && <button type="button" className={`${btn} flex-1 basis-full bg-emerald-600 text-black sm:basis-0`} onClick={onClose}>{exitLabel}</button>}
         </div>)}
         {helpOpen && <SeasonCentreHelp words={model.help} onClose={() => setHelpOpen(false)} />}
       </div>
