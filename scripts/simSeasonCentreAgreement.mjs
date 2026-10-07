@@ -228,11 +228,18 @@ function checkSeason(career, row, ctx, s, tag) {
     if (ev.filter(e => e.mine).length !== (g.line.goals ?? 0)) fail('4 goals', `${tag} md ${g.md}: his goal events`);
     if (g.onAt && g.events.some(e => e.mine && e.kind !== 'on' && e.min < g.onAt)) fail('4 goals', `${tag} md ${g.md}: an event before he came on`);
   }
-  if (s.target.kind === 'band' || (s.mode !== 'table' && row.leagueTitle && !row.injurySevere)) {
+  if (s.mode !== 'table' && row.leagueTitle && !row.injurySevere) {
     let w = 0, d = 0;
     for (const g of s.games) { if (g.us > g.them) w++; else if (g.us === g.them) d++; }
     const ppg = (3 * w + d) / M;
     if (ppg < S.CHAMPION_PPG.min || ppg > S.CHAMPION_PPG.max) fail('4b results title', `${tag}: champions on ${ppg.toFixed(2)} a game`);
+  } else if (s.mode !== 'table' && typeof row.leagueFinish === 'number' && row.leagueSize && !row.injurySevere) {
+    /* critic C4 widened by the review: a results only season with a saved finish plays like that finish */
+    let w = 0, d = 0;
+    for (const g of s.games) { if (g.us > g.them) w++; else if (g.us === g.them) d++; }
+    const ppg = (3 * w + d) / M;
+    const band = S.FINISH_PPG[Math.min(4, Math.floor(((row.leagueFinish - 1) / (row.leagueSize - 1)) * 5))];
+    if (ppg < band.min || ppg > band.max) fail('4b results title', `${tag}: ${row.leagueFinish} of ${row.leagueSize} on ${ppg.toFixed(2)} a game`);
   }
   /* 5 derbies */
   const derbies = DB.readSeasonDerbies(row);
@@ -302,6 +309,8 @@ const stats = { seasons: 0, gate: {}, ok: { table: 0, results: 0 }, nul: { injur
 const bump = (o, k) => { o[k] = (o[k] ?? 0) + 1; };
 const real = { d: { gpg: [], home: [], draw: [], champPpg: [] }, u: { gpg: [], home: [], draw: [], champPpg: [] } };
 const champPpgTable = [];
+/* his points a game in table mode, by where he finished (fifths of the table) */
+const finishPpg = [];
 
 function seasonShape(rounds) {
   let g = 0, n = 0, hw = 0, dr = 0;
@@ -360,6 +369,11 @@ function onSeason(career, row, c) {
     const champ = t => (C.standingsOf(t, 20, { win: 3, draw: 1, loss: 0 }, 38)[0].pts) / 38;
     for (const k of ['gpg', 'home', 'draw']) { real.d[k].push(d[k]); real.u[k].push(us[k]); }
     real.d.champPpg.push(champ(r.rounds)); real.u.champPpg.push(champ(u));
+  }
+  if (r.mode === 'table' && !row.leagueTitle) {
+    const me = C.standingsOf(r.rounds, r.teams, { win: 3, draw: 1, loss: 0 }, r.rounds.length).find(x => x.slot === 0);
+    const b = Math.min(4, Math.floor(((row.leagueFinish - 1) / (row.leagueSize - 1)) * 5));
+    (finishPpg[b] ??= []).push(me.pts / r.games.length);
   }
   if (r.mode === 'table') champPpgTable.push(C.standingsOf(r.rounds, r.teams, { win: 3, draw: 1, loss: 0 }, r.rounds.length)[0].pts / r.games.length);
 }
@@ -423,6 +437,7 @@ for (const k of ['gpg', 'home', 'draw', 'champPpg']) {
 }
 const sorted = [...champPpgTable].sort((a, b) => a - b);
 const pct = q => sorted[Math.min(sorted.length - 1, Math.floor(q * sorted.length))];
+for (let b = 0; b < 5; b += 1) { const xs = [...(finishPpg[b] ?? [])].sort((x, y) => x - y); const q = f => xs[Math.min(xs.length - 1, Math.floor(f * xs.length))]; console.log(`finish fifth ${b + 1} (not champions): points a game p1 ${q(0.01)?.toFixed(2)} p50 ${q(0.5)?.toFixed(2)} p99 ${q(0.99)?.toFixed(2)} over ${xs.length}`); }
 console.log(`champions' points a game in table mode: p2 ${pct(0.02)?.toFixed(2)} p50 ${median(sorted).toFixed(2)} p98 ${pct(0.98)?.toFixed(2)} over ${sorted.length}; results title band ${S.CHAMPION_PPG.min} to ${S.CHAMPION_PPG.max}`);
 for (const [item, msgs] of fails) console.log(`FAIL item ${item}: ${msgs.join(' | ')}`);
 check(fails.size === 0, `independent checker: ${fails.size === 0 ? 'every derived season agrees with its row' : [...fails.keys()].join(', ')}`);

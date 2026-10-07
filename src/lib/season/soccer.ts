@@ -79,6 +79,24 @@ const KEEPS_SHEETS = new Set(['GK', 'CB', 'LB', 'RB']);
  *  over five seed sets of 120 careers: p2 1.97 in every set, p98 2.53 to
  *  2.55. The band keeps 0.07 below and 0.10 above. */
 export const CHAMPION_PPG = { min: 1.9, max: 2.65 };
+/** The same for a results only season that saved a finish (a 1992-93 Serie A
+ *  4th, the abandoned Ligue 1 2019-20): his points a game must sit where clubs
+ *  finishing in that fifth of a table land, so the games shown never read like
+ *  another season than the finish beside them. Measured in table mode by
+ *  scripts/simSeasonCentreAgreement.mjs (non champions, seed set 1, 120
+ *  careers), p1 to p99 by fifth: 1.74 to 2.37, 1.47 to 1.97, 1.16 to 1.68,
+ *  0.87 to 1.37, 0.65 to 1.03; each band keeps about 0.1 either side. */
+export const FINISH_PPG = [
+  { min: 1.6, max: 2.5 },
+  { min: 1.35, max: 2.1 },
+  { min: 1.05, max: 1.8 },
+  { min: 0.75, max: 1.5 },
+  { min: 0.5, max: 1.15 },
+];
+/** Which fifth of the table a finish sits in, 0 (top) to 4. */
+export function finishFifth(finish: number, size: number): number {
+  return Math.min(4, Math.floor(((finish - 1) / Math.max(1, size - 1)) * 5));
+}
 
 function worldFor(career: CareerState, year: number): WorldSeason | null {
   const w = career.phone?.world;
@@ -184,6 +202,10 @@ export const SOCCER: SeasonSport<SeasonRecord, SoccerSeasonCtx> = {
       return { kind: 'finish', finish: ctx.finish.finish, title, champion };
     }
     if (row.leagueTitle && !row.injurySevere) return { kind: 'band', ppgMin: CHAMPION_PPG.min, ppgMax: CHAMPION_PPG.max };
+    if (ctx.finish && ctx.finish.size && !row.injurySevere) {
+      const band = FINISH_PPG[finishFifth(ctx.finish.finish, ctx.finish.size)];
+      return { kind: 'band', ppgMin: band.min, ppgMax: band.max };
+    }
     return { kind: 'none' };
   },
   fixed: (row, ctx) => fixedOf(row, ctx),

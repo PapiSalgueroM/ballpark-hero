@@ -8,14 +8,14 @@
    inside the overlay (Retry, Close); the page wraps the lazy mount in a
    second one, because a boundary inside this chunk cannot catch the chunk
    failing to load. */
-import { Component, useMemo, useState, type ReactNode } from 'react';
+import { Component, useMemo, type ReactNode } from 'react';
 import type { CareerState, ClubData, SeasonRecord } from '@/lib/soccerCareerEngine';
 import { deriveSeason, tableAt } from '@/lib/season/core';
 import { SOCCER, buildSoccerSeasonCtx, type SoccerSeasonCtx } from '@/lib/season/soccer';
 import { readSeasonDerbies } from '@/lib/soccerCareerDerby';
-import { leagueWithArticle } from '@/lib/soccerCareerLeague';
+import { leagueWithArticle, ordinal } from '@/lib/soccerCareerLeague';
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
-import { SeasonCentre, ordinalOf, type CentreModel } from '@/components/season-centre/SeasonCentre';
+import { SeasonCentre, type CentreModel } from '@/components/season-centre/SeasonCentre';
 import type { HelpWords } from '@/components/season-centre/SeasonCentreHelp';
 import type { DerivedSeason } from '@/lib/season/core';
 
@@ -31,7 +31,7 @@ const HELP: HelpWords = {
   title: 'How the Season Centre works',
   intro: [
     'Your season was played the moment you pressed Next Season. This is that same season, match by match, so nothing here can change it.',
-    "Who was in the league, how many clubs it had and how many points a win was worth are real. Every score, every other club's result and every minute are your career's own.",
+    "When a season shows a table, who was in the league, how many clubs it had and how many points a win was worth are real (from 2026-27 on, the league is your career's own world). Every score, every other club's result and every minute are your career's own.",
   ],
   controls: '▶ plays the next matchday. ⏩ jumps to the next big game (a derby, halfway, the title or the final day). ⏭ goes straight to the end. 1x and 3x set the clock, Results shows each match at full time.',
   examples: [
@@ -41,6 +41,8 @@ const HELP: HelpWords = {
   ],
   footnote: 'Cup ties and European nights count in your totals as "Cups and other games" but are not shown match by match yet. Clubs level on points are split by goal difference, then goals scored: this game\'s rule.',
 };
+
+const exitLabelOf = (mode: 'live' | 'watch') => (mode === 'live' ? 'Back to the papers' : 'Back to your career');
 
 const RESULTS_WORDS = 'Results only: the game does not have a verified table for this league that season.';
 
@@ -53,7 +55,7 @@ function buildModel(row: SeasonRecord, ctx: SoccerSeasonCtx, s: DerivedSeason): 
   const finishLine = finish
     ? finish.finish === 1
       ? `Champions${leagueName ? ` of ${leagueWithArticle(leagueName)}` : ''}${finish.size ? `, top of ${finish.size}` : ''}${pts !== null ? ` · ${pts} pts` : ''}`
-      : `Finished ${ordinalOf(finish.finish)}${finish.size ? ` of ${finish.size}` : ''}${leagueName ? ` in ${leagueWithArticle(leagueName)}` : ''}${pts !== null ? ` · ${pts} pts` : ''}`
+      : `Finished ${ordinal(finish.finish)}${finish.size ? ` of ${finish.size}` : ''}${leagueName ? ` in ${leagueWithArticle(leagueName)}` : ''}${pts !== null ? ` · ${pts} pts` : ''}`
     : row.injurySevere ? 'Your season ended early with an injury.' : null;
   const trophies = [row.leagueTitle && '🏆 League', row.domesticCup && '🏆 Cup', row.championsLeague && '⭐ UCL', row.clubCupTitle && `⭐ ${row.clubCupTitle}`, row.worldCup && '🌍 World Cup', row.continentalCup && '🌐 Continental', row.ballonDor && "🏅 Ballon d'Or"].filter((t): t is string => !!t);
   const notes: string[] = [];
@@ -67,7 +69,7 @@ function buildModel(row: SeasonRecord, ctx: SoccerSeasonCtx, s: DerivedSeason): 
     occasion,
     header: { club: row.club, seasonLabel: `${row.year}/${String(row.year + 1).slice(-2)}`, league: leagueName, loanFrom: row.onLoanFrom ?? null },
     frameLine: s.mode === 'table' ? `${s.teams} clubs · ${s.games.length} matchdays · 3 points for a win` : null,
-    lastSeason: last ? (last.finish === 1 ? `Last season: champions with ${last.club}` : `Last season: ${ordinalOf(last.finish)} with ${last.club}`) : null,
+    lastSeason: last ? (last.finish === 1 ? `Last season: champions with ${last.club}` : `Last season: ${ordinal(last.finish)} with ${last.club}`) : null,
     resultsWhy: s.mode === 'table' ? null : ctx.why === 'severe' ? 'Results only: your season was cut short, so there is no final table.' : RESULTS_WORDS,
     derbyBefore: { w: ctx.derbyBefore.w, d: ctx.derbyBefore.d, l: ctx.derbyBefore.l },
     review: {
@@ -115,7 +117,7 @@ export function Tile({ text, exitLabel, onClose, onRetry }: { text: string; exit
 }
 
 function CentreBody({ career, clubs, row, mode, onClose }: SoccerSeasonCentreProps) {
-  const exitLabel = mode === 'live' ? 'Back to the papers' : 'Back to your career';
+  const exitLabel = exitLabelOf(mode);
   const ctx = useMemo(() => buildSoccerSeasonCtx(career, clubs, row), [career, clubs, row]);
   const key = SOCCER.seasonKey(row, ctx);
   const season = useMemo(() => (key ? deriveSeason(SOCCER, row, ctx) : null), [key, row, ctx]);
@@ -125,9 +127,8 @@ function CentreBody({ career, clubs, row, mode, onClose }: SoccerSeasonCentrePro
 }
 
 export default function SoccerSeasonCentre(props: SoccerSeasonCentreProps) {
-  const [exitLabel] = useState(() => (props.mode === 'live' ? 'Back to the papers' : 'Back to your career'));
   return (
-    <CentreBoundary onClose={props.onClose} exitLabel={exitLabel}>
+    <CentreBoundary onClose={props.onClose} exitLabel={exitLabelOf(props.mode)}>
       <CentreBody {...props} />
     </CentreBoundary>
   );

@@ -18,6 +18,7 @@ import { Confetti } from '@/components/soccer-career/CareerFx';
 import VictoryMoment from '@/components/game/VictoryMoment';
 import { useCareerMoment } from '@/components/soccer-career/careerMoments';
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
+import { ordinal } from '@/lib/soccerCareerLeague';
 import { MatchClock, type ClockSpeed } from './MatchClock';
 import { SeasonCentreHelp, useHelpOnce, type HelpWords } from './SeasonCentreHelp';
 
@@ -65,13 +66,6 @@ export interface CentreModel {
 
 type Stage = { kind: 'kickoff' } | { kind: 'poster'; md: number } | { kind: 'match'; md: number } | { kind: 'review' };
 
-export function ordinalOf(n: number): string {
-  const t = n % 100;
-  if (t >= 11 && t <= 13) return `${n}th`;
-  const u = n % 10;
-  return `${n}${u === 1 ? 'st' : u === 2 ? 'nd' : u === 3 ? 'rd' : 'th'}`;
-}
-
 /** What makes matchday `md` a big game (posters before it). */
 export function postersFor(s: DerivedSeason, md: number): string[] {
   const M = s.games.length;
@@ -88,6 +82,20 @@ function resultOf(g: DerivedGame): 'W' | 'D' | 'L' {
 }
 
 const PILL = { W: 'bg-emerald-500/20 text-emerald-400', D: 'bg-muted text-muted-foreground', L: 'bg-red-500/20 text-red-400' } as const;
+
+/** Desktop (the three column modal) or the phone column, so only one table is drawn. */
+function useWide(): boolean {
+  const query = '(min-width: 768px)';
+  const [wide, setWide] = useState(() => typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia(query).matches);
+  useEffect(() => {
+    if (typeof window.matchMedia !== 'function') return;
+    const m = window.matchMedia(query);
+    const on = () => setWide(m.matches);
+    m.addEventListener('change', on);
+    return () => m.removeEventListener('change', on);
+  }, []);
+  return wide;
+}
 
 function useReducedMotion(): boolean {
   const [reduced] = useState(() => typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
@@ -155,7 +163,7 @@ function TablePanel({ model, played, compact }: { model: CentreModel; played: nu
         <span className="font-bold">{played === 0 ? 'Before a ball is kicked' : `After ${model.words.round.toLowerCase()} ${played}`}</span>
         {played > 0 && (
           <span key={`${played}-${at}`} className="cm-tick-in font-bold tabular-nums" data-his-position>
-            {ordinalOf(at)}{move > 0 ? ` ▲${move}` : move < 0 ? ` ▼${-move}` : ''}
+            {ordinal(at)}{move > 0 ? ` ▲${move}` : move < 0 ? ` ▼${-move}` : ''}
           </span>
         )}
       </div>
@@ -325,6 +333,7 @@ export function SeasonCentre({ model, exitLabel, onClose }: { model: CentreModel
   const s = model.season;
   const M = s.games.length;
   const reduced = useReducedMotion();
+  const wide = useWide();
   const [stage, setStage] = useState<Stage>({ kind: 'kickoff' });
   const [played, setPlayed] = useState(0);
   const [speed, setSpeed] = useState<ClockSpeed>(1);
@@ -406,7 +415,7 @@ export function SeasonCentre({ model, exitLabel, onClose }: { model: CentreModel
             {!fixturesOpen && (
               <div className="mt-4 space-y-3 md:hidden">
                 <button type="button" onClick={() => setFixturesOpen(true)} className="h-10 w-full rounded-lg border border-border text-xs font-semibold">🗓 Fixtures</button>
-                <TablePanel model={model} played={played} compact />
+                {!wide && <TablePanel model={model} played={played} compact />}
               </div>
             )}
             <div className="mt-3 grid grid-cols-4 gap-2 text-center md:hidden" data-so-far>
@@ -418,7 +427,7 @@ export function SeasonCentre({ model, exitLabel, onClose }: { model: CentreModel
           </main>
           <aside className="hidden min-h-0 overflow-y-auto border-l border-border p-2 md:block" aria-label="Table">
             {s.mode === 'table'
-              ? <TablePanel model={model} played={played} compact={false} />
+              ? (wide && <TablePanel model={model} played={played} compact={false} />)
               : <p className="text-xs text-muted-foreground">{model.resultsWhy}</p>}
             <div className="mt-3 rounded-lg bg-muted/30 p-2 text-xs" data-so-far-desktop>
               <div className="mb-1 font-bold">League so far</div>

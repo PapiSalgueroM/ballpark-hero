@@ -114,15 +114,15 @@ const SeasonRatings = lazy(() => import("@/components/soccer-career/SeasonRating
 /* Round 1045: a boundary inside the lazy chunk cannot catch the chunk failing
    to load (a deploy swapped the files), so the mount carries its own: the
    overlay says so with Retry and Close, and the save is never touched. */
-class CentreMountBoundary extends Component<{ onClose: () => void; children: ReactNode }, { failed: boolean; tries: number }> {
+class CentreMountBoundary extends Component<{ onClose: () => void; what?: string; children: ReactNode }, { failed: boolean; tries: number }> {
   state = { failed: false, tries: 0 };
   static getDerivedStateFromError() { return { failed: true }; }
   render() {
     if (!this.state.failed) return <Fragment key={this.state.tries}>{this.props.children}</Fragment>;
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4" data-season-centre>
-        <div role="dialog" aria-modal="true" aria-label="Season Centre" className="w-full max-w-sm space-y-3 rounded-2xl border border-border bg-card p-4 text-center">
-          <p className="text-sm">Couldn't load the Season Centre. Your career is safe.</p>
+        <div role="dialog" aria-modal="true" aria-label={this.props.what ?? "Season Centre"} className="w-full max-w-sm space-y-3 rounded-2xl border border-border bg-card p-4 text-center">
+          <p className="text-sm">Couldn't load the {this.props.what ?? "Season Centre"}. Your career is safe.</p>
           <div className="flex gap-2">
             <button type="button" onClick={() => this.setState(s => ({ failed: false, tries: s.tries + 1 }))} className="h-10 flex-1 rounded-lg border border-border text-sm font-semibold">↻ Retry</button>
             <button type="button" onClick={this.props.onClose} className="h-10 flex-1 rounded-lg bg-primary text-sm font-bold text-primary-foreground">✕ Close it</button>
@@ -3741,8 +3741,12 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   const onWeekByWeek = () => { const at = career.seasons.length; onNextSeason(); setCentreFor(at); };
   const closeCentre = () => { setCentreFor(null); setWatchRow(null); };
   useEffect(() => {
-    if (centreFor !== null && career.seasons.length > centreFor + 1) setCentreFor(null);
-  }, [centreFor, career.seasons.length]);
+    /* a press that opened nothing (a ban year) is forgotten at the next
+       season start, and a new career never inherits it */
+    if (centreFor === null) return;
+    const n = career.seasons.length;
+    if (n > centreFor + 1 || n < centreFor || (career.phase === "playing" && n > centreFor)) setCentreFor(null);
+  }, [centreFor, career.seasons.length, career.phase]);
   // Round 131: the whole attribute tree on its own screen with a back button
   const [attrsOpen, setAttrsOpen] = useState(false);
   const showActionButton = career.phase === "youth" || career.phase === "playing" || career.phase === "manager_season" || career.phase === "pundit_season" || career.phase === "owner_season";
@@ -4515,7 +4519,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
         </div>
       )}
       {storyOpen && <CareerStory career={career} onClose={() => setStoryOpen(false)} />}
-      {ratingsOpen && <Suspense fallback={null}><SeasonRatings career={career} onClose={() => setRatingsOpen(false)} /></Suspense>}
+      {ratingsOpen && <CentreMountBoundary what="season ratings" onClose={() => setRatingsOpen(false)}><Suspense fallback={null}><SeasonRatings career={career} onClose={() => setRatingsOpen(false)} /></Suspense></CentreMountBoundary>}
       {(() => {
         const pressed = centreFor !== null && career.seasons.length === centreFor + 1 ? career.seasons[centreFor] : null;
         const live = pressed && pressed.type === "playing" && pressed.apps > 0

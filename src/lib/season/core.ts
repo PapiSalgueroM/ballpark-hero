@@ -777,18 +777,20 @@ export function disagreements<R, C>(sport: SeasonSport<R, C>, row: R, ctx: C, s:
     const red = !!redKey && (g.line[redKey] ?? 0) > 0;
     if (red && s.games[i + 1]?.why !== 'suspended' && s.games.slice(i + 1).some(x => x.played)) out.push(`md ${g.md}: a red with no suspension`);
   }
-  out.push(...targetDisagreements(s, frame));
+  out.push(...targetDisagreements(s, frame, sport.target(row, ctx, frame)));
   if (sport.check) out.push(...sport.check(row, ctx, s));
   return out;
 }
 
-function targetDisagreements(s: DerivedSeason, frame: Frame): string[] {
+/** Checked against the target rebuilt from the row, never only the one the season carries. */
+function targetDisagreements(s: DerivedSeason, frame: Frame, target: TeamTarget): string[] {
   const out: string[] = [];
+  if (JSON.stringify(target) !== JSON.stringify(s.target)) out.push('the season carries another team target than its row');
   const slotOf = new Map<string, number>();
   for (const g of s.games) if (g.fixedKey) slotOf.set(g.fixedKey, g.opp);
-  if (violation(s.rounds, frame, s.target, slotOf)) out.push(`team target not met (${s.target.kind})`);
+  if (violation(s.rounds, frame, target, slotOf)) out.push(`team target not met (${target.kind})`);
   if (s.mode === 'table' && s.rule) {
-    const title = s.target.kind === 'finish' && s.target.title;
+    const title = target.kind === 'finish' && target.title;
     const md = title ? clinchOf(s.rounds, s.teams, s.rule) : null;
     if ((s.clinch?.md ?? null) !== md) out.push('clinch round');
     const rows = standingsOf(s.rounds, s.teams, s.rule, s.rounds.length);
