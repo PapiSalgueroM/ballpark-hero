@@ -86,6 +86,20 @@
                    mid-summer path never meets one here: the seek time filter
                    and the declined clause are held by the vitest file
                    src/test/usCareerHallBoard.test.tsx, whose controls do fire.
+    11b. seek      (closing check fix, 2026-10-07) so the seek time hold-out
+                   is held here too: the first 300 careers the oneMore policy
+                   brings to the talk are caught there, before the answer,
+                   and a summer is forged to stand on each deck retirement
+                   card the deck really holds then, at card 1 (a save
+                   restored on a card dealt before the talk) and at card 2,
+                   with the talk pending and again after 'One more year'.
+                   The board's seek (seekSummerCard with talkDeckFilter) must
+                   never land on one; with no hold-out the same seek must
+                   land on some (the floor), so it cannot pass on nothing.
+                   At card 2 the rating rule already skips every one of them
+                   (0 landed with no hold-out in every run), so the hold-out
+                   is load-bearing at card 1 only. Control seekexclude (the
+                   review's mutation M2, the hold-out dropped from the seek).
     12. deckJersey a club that retired the number on a deck card is the club
                    the card names (even where another club has more seasons),
                    on real careers and on synthetic ones with twelve seasons
@@ -225,6 +239,8 @@ const CONTROLS = {
   talkdraws: { file: 'usCareerRetirementFlow.ts', from: 'if (!hall || c.retired || c.seasons.length === 0) return null;', to: 'Math.random(); if (!hall || c.retired || c.seasons.length === 0) return null;' },
   deckfarewelloff: { file: `${SPORT}CareerLifeB.ts`, re: /announceFarewell\(cc\);/g, to: '' },
   twice: { file: 'usCareerRetirementFlow.ts', from: 'return e => RETIREMENT_CARD_IDS.has(e.id) && talkThisOffseason(c, hall);', to: 'return e => false && RETIREMENT_CARD_IDS.has(e.id);' },
+  // Closing check fix, 2026-10-07: the seek time hold-out dropped (the review's mutation M2), section 11b.
+  seekexclude: { file: 'usCareerSummer.ts', from: 'if (card && !(exclude && exclude(card)) && (s.at === 0', to: 'if (card && (s.at === 0' },
   jerseyignore: { file: 'careerHallOfFame.ts', from: 'sport.recordedJersey?.(c) ?? jerseyFor(', to: 'jerseyFor(' },
   eraunguarded: { file: 'HallOfFameCard.tsx', from: 'rec.firstClass >= rules.verifiedFromClass', to: 'true' },
 };
@@ -258,7 +274,7 @@ const entry = [
   // Round 1039: the board's own pieces, for sections 9 to 14.
   `export { ${E.binding} as SPORTB } from './src/lib/${SPORT}CareerSport.ts';`,
   `export { ${E.eras} as ERAS } from './src/lib/${E.file}';`,
-  `export { startSummer, answerSummerCard } from './src/lib/usCareerSummer.ts';`,
+  `export { startSummer, answerSummerCard, seekSummerCard, summerCardAt, summerSeason } from './src/lib/usCareerSummer.ts';`,
   `export { pendingTalk, answerTalk, endsAfterSeason, talkDeckFilter, RETIREMENT_CARD_IDS } from './src/lib/usCareerRetirementFlow.ts';`,
   `export { HallOfFameCard, hallYearsShown, hallHeadline, ballotLine, hallRuleLines } from './src/components/career/HallOfFameCard.tsx';`,
   `export { renderToStaticMarkup } from 'react-dom/server';`,
@@ -561,6 +577,8 @@ const POLICIES = {
 };
 let probeCareers = 0;
 const deckSeen = new Set(), farewellCards = new Set(), probedTimes = new Map();
+// Section 11b: careers caught the moment the board asks the talk, before the answer.
+const SEEK_N = 300, seekSnaps = [];
 function probeDeck(c, SB = eng.SPORTB) {
   // The deck as the engine builds it now, each answer tried on a copy, on throwaway streams.
   const keep = Math.random;
@@ -598,6 +616,7 @@ function boardCareer(i, policyName, eraId, X = eng) {
       if (o.talkAt !== null) return false;
       if (!policy.asks) { if (ruleHolds(c, X)) o.talkAt = at; return false; }
       if (!X.pendingTalk(c, SB.hall)) return false;
+      if (policyName === 'oneMore' && X === eng && seekSnaps.length < SEEK_N) seekSnaps.push(JSON.parse(JSON.stringify(c)));
       o.talkAt = at;
       log.talks.push(year);
       if (at > 0) log.midTalks += 1;
@@ -727,6 +746,46 @@ for (const p of ['oneMore', 'farewell', 'noTalk']) {
 }
 const listedHere = [...eng.RETIREMENT_CARD_IDS].filter(id => deckSeen.has(id));
 const unlisted = [...farewellCards].filter(id => !eng.RETIREMENT_CARD_IDS.has(id));
+
+/* 11b. seek (closing check fix, 2026-10-07). The loop above never meets a
+   deck retirement card after the deal (they lift morale, so the later slots
+   never take one), so it cannot see the seek time hold-out in
+   seekSummerCard. This checks it on careers caught the moment the board asks
+   the talk: a summer forged to stand on each deck retirement card the deck
+   really holds then, at card 1 (a save restored on a card dealt before the
+   talk) and at a later card (one the talk came in front of), with the talk
+   pending and again after 'One more year'. The board's seek must never land
+   on one. With no hold-out the same seek must land on it (met), so the check
+   cannot pass on nothing. Control seekexclude. */
+let seekMiss = 0, seekMet = 0, seekTried = 0;
+const seekMetAt = [0, 0];
+{
+  const SB = eng.SPORTB;
+  const keep = Math.random;
+  try {
+    seekSnaps.forEach((snap, j) => {
+      for (const declined of [false, true]) {
+        const base = JSON.parse(JSON.stringify(snap));
+        if (declined) eng.answerTalk(base, 'oneMore');
+        const year = base.summer?.year ?? eng.summerSeason(base);
+        for (const id of eng.RETIREMENT_CARD_IDS) {
+          for (const at of [0, 1]) {
+            Math.random = streamFor(`seek:${j}:${id}:${at}:${declined}`);
+            const forge = () => { const f = JSON.parse(JSON.stringify(base)); f.summer = { year, ids: [id, id], at }; return f; };
+            // Only a card the deck really holds for this career now.
+            if (!eng.summerCardAt(forge(), SB, at)) continue;
+            seekTried += 1;
+            const open = eng.seekSummerCard(forge(), SB, null);
+            if (open && open.id === id) { seekMet += 1; seekMetAt[at] += 1; }
+            const c = forge();
+            const got = eng.seekSummerCard(c, SB, eng.talkDeckFilter(c, SB.hall));
+            if (got && eng.RETIREMENT_CARD_IDS.has(got.id)) seekMiss += 1;
+          }
+        }
+      }
+    });
+  } finally { Math.random = keep; }
+}
 
 
 /* 12. jersey: a club that retired the number on a deck card is the club the
@@ -868,11 +927,12 @@ const eraBoundary = eraCounts.boundary ?? { below: 0, above: 0 };
 console.log(`  board loop: ${BOARD_N} careers a policy, ${boardCrashes} crashed; talks answered one more year ${identityTalks}; identity misses ${identityMiss}`);
 console.log(`  ends: retire now ${endsRetire}, talk farewells ${endsFarewell}, deck farewells ${endsDeck}, misses ${endsMiss}`);
 console.log(`  once: ${talkOffseasons} offseasons with the talk (${midTalkOffseasons} asked mid-summer, ${bannedTalkOffseasons} after a banned year), ${onceMiss} offered a retirement card; listed ids seen ${listedHere.length}, unseen [${deadIds.join(',')}], farewell cards not listed [${unlisted.join(',')}] (decks probed on ${probeCareers} careers)`);
+console.log(`  seek: ${seekSnaps.length} careers caught at the talk, ${seekTried} forged summers on a deck retirement card, ${seekMet} landed on it with no hold-out (at card 1 ${seekMetAt[0]}, at a later card ${seekMetAt[1]}), ${seekMiss} with the board's`);
 console.log(`  jersey (deck): ${jerseyRecN} recorded, ${jerseyRecElsewhere} at a club other than the one with most seasons, ${jerseyRecMiss} misnamed; synthetic ${jerseySynN}, ${jerseySynMiss} missed; wait answers ${waitAnswers}, ${waitWrote} wrote a club`);
 console.log(`  era: verified from the Class of ${auditFrom}; ${JSON.stringify(eraCounts)}; misses ${eraMiss}`);
 
 /* ─── Check ───────────────────────────────────────────────────────────── */
-const BAND = { minInducted: 0.05, decileCut: 0.06, ladderStep: 0.015, talkReach: 0.70, earlyFall: 0.10, atFloor: 100, balanceCases: 5, farewellOvrGain: 10, hallShift: 0.025, legacyShift: 15 };
+const BAND = { minInducted: 0.05, decileCut: 0.06, ladderStep: 0.015, talkReach: 0.70, earlyFall: 0.10, atFloor: 100, balanceCases: 5, farewellOvrGain: 10, seekMet: 1, hallShift: 0.025, legacyShift: 15 };
 const smallestCut = Math.min(...decileCuts);
 const fellEarlyEnough = rules.stayFloor === null || earlyFalls >= BAND.earlyFall * onBallotOut;
 const checks = [
@@ -890,6 +950,7 @@ const checks = [
   ['identity', boardCrashes === 0 && identityMiss === 0 && identityTalks > 0, `${identityMiss} careers answering one more year that differ from the loop with no talk (${identityTalks} talks answered), ${boardCrashes} board careers crashed`],
   ['ends', endsMiss === 0 && endsRetire > 0 && endsFarewell > 0 && endsDeck > 0, `${endsMiss} chosen ends off by a season or unmarked (retire now ${endsRetire}, talk farewells ${endsFarewell}, deck farewells ${endsDeck})`],
   ['once', onceMiss === 0 && talkOffseasons > 0 && unlisted.length === 0 && deadIds.length === 0 && sportIds.length > 0, `${onceMiss} of ${talkOffseasons} talk offseasons offered a retirement card; not listed [${unlisted.join(',')}], listed but never dealt [${deadIds.join(',')}]`],
+  ['seek', seekMiss === 0 && seekMet >= BAND.seekMet, `${seekMiss} of ${seekTried} forged summers where the board's seek landed on a deck retirement card; ${seekMet} landed on one with no hold-out (needs ${BAND.seekMet})`],
   ['deckJersey', jerseyRecMiss === 0 && jerseySynMiss === 0 && waitWrote === 0 && jerseySynN > 0 && (SPORT === 'nhl' || jerseyRecN > 0), `${jerseyRecMiss} of ${jerseyRecN} deck retired numbers not on the card, ${jerseySynMiss} of ${jerseySynN} synthetic, ${waitWrote} wait answers that wrote a club`],
   ['era', eraMiss === 0 && eraBoundary.below > 0 && eraBoundary.above > 0, `${eraMiss} cards printing a class year or rule off the audit's verified class (${auditFrom}); ${JSON.stringify(eraCounts)}`],
   ...(balance ? [['balance', balance.cases >= BAND.balanceCases && balance.ovrNow - balance.ovrOld >= BAND.farewellOvrGain && Math.abs(balance.hallNow - balance.hallOld) <= BAND.hallShift && Math.abs(balance.legacyNow - balance.legacyOld) <= BAND.legacyShift, `${balance.cases} walk away farewells (needs ${BAND.balanceCases}); farewell OVR gain ${(balance.ovrNow - balance.ovrOld).toFixed(1)} (needs ${BAND.farewellOvrGain}); Hall share shift ${(100 * (balance.hallNow - balance.hallOld)).toFixed(2)} points (band ${100 * BAND.hallShift}); median legacy shift ${balance.legacyNow - balance.legacyOld} (band ${BAND.legacyShift})`]] : []),
@@ -897,7 +958,7 @@ const checks = [
 for (const [name, ok, detail] of checks) console.log(`  ${ok ? 'ok  ' : 'FAIL'} ${name}: ${detail}`);
 const red = checks.filter(c => !c[1]).map(c => c[0]);
 if (CONTROL) {
-  const WANT = { everyonein: 'iff', bindhof: 'iff', outcomeswap: 'outcome', nominationgone: 'outcome', oldcurve: 'outcome', waitoff: 'table', shownraw: 'sides', flatfirst: 'rises', nopromise: 'promise', mathrandom: 'keyed', sharesides: 'sides', notalk: 'talk', farewelloff: 'answers', retireoff: 'answers', jerseyfirst: 'jersey', jerseyraw: 'jersey', talkdraws: 'identity', deckfarewelloff: 'ends', twice: 'once', jerseyignore: 'deckJersey', eraunguarded: 'era' }[CONTROL];
+  const WANT = { everyonein: 'iff', bindhof: 'iff', outcomeswap: 'outcome', nominationgone: 'outcome', oldcurve: 'outcome', waitoff: 'table', shownraw: 'sides', flatfirst: 'rises', nopromise: 'promise', mathrandom: 'keyed', sharesides: 'sides', notalk: 'talk', farewelloff: 'answers', retireoff: 'answers', jerseyfirst: 'jersey', jerseyraw: 'jersey', talkdraws: 'identity', deckfarewelloff: 'ends', twice: 'once', seekexclude: 'seek', jerseyignore: 'deckJersey', eraunguarded: 'era' }[CONTROL];
   console.log(`simCareerHall ${SPORT} CONTROL ${CONTROL}: wanted ${WANT} red, red [${red.join(',')}], ${red.includes(WANT) ? 'FIRED' : 'DID NOT FIRE'}`);
   // Exit 1 only when the check this control targets went red, so the exit
   // code alone proves the control hit its own check. Any other red is printed.
