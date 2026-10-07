@@ -97,7 +97,7 @@ try {
   });
   await new Promise((resolve, reject) => { server.once('error', reject); server.listen(0, '127.0.0.1', resolve); });
   const BASE = `http://127.0.0.1:${server.address().port}`;
-  browser = await chromium.launch({ headless: true });
+  browser = await chromium.launch({ headless: false });
   for (const profile of [
     { width: 320, height: 780, touch: true, reduced: true, theme: 'dark' },
     { width: 390, height: 844, touch: true, reduced: false, theme: 'light' },
@@ -120,9 +120,12 @@ try {
       return route.fulfill({ status: 200, contentType: type === 'stylesheet' ? 'text/css' : type === 'script' ? 'application/javascript' : 'application/json', body: ['stylesheet', 'script'].includes(type) ? '' : '[]' });
     });
     const page = await context.newPage(); page.setDefaultTimeout(15000);
+    const focusSession = await context.newCDPSession(page);
+    await focusSession.send('Emulation.setFocusEmulationEnabled', { enabled: false });
     await page.clock.install({ time: new Date('2026-10-07T16:00:00Z') });
     await page.addInitScript(key => {
       window.__courtWrites = []; window.__courtEvents = []; window.__courtFailSave = false;
+      window.addEventListener('blur', event => window.__courtEvents.push({ type: 'blur', trusted: event.isTrusted, hidden: document.hidden }));
       const original = Storage.prototype.setItem;
       Storage.prototype.setItem = function(name, value) {
         if (this === localStorage) {
@@ -389,7 +392,9 @@ try {
           await resume(); await advance(250);
           // Native tab focus loss exercises the actual blur path. No synthetic
           // visibility event or engine replacement is used.
+          assert(await page.evaluate(() => document.hasFocus()), 'The actual game tab owns focus before switching');
           const other = await context.newPage(); await other.goto('about:blank'); await other.bringToFront();
+          assert.equal(await page.evaluate(() => document.hasFocus()), false, 'The sibling tab actually removes game focus');
           await page.clock.runFor(1000); await snapshot('native browser focus loss');
           await other.close(); await page.bringToFront(); await page.clock.runFor(500); await snapshot('returning to tab remains paused');
           const persisted = await readSave(); await retain();

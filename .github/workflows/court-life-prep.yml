@@ -67,7 +67,7 @@ jobs:
         if: ${{ !cancelled() }}
         run: |
           node scripts/qa/courtLife1075.mjs --prefetch-fonts-only 2>&1 | tee court-life-artifacts/fonts.log
-          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/courtLife1075.mjs 2>&1 | tee court-life-artifacts/native.log
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" xvfb-run -a node scripts/qa/courtLife1075.mjs 2>&1 | tee court-life-artifacts/native.log
       - name: Preserve evidence
         if: always()
         uses: actions/upload-artifact@v4
