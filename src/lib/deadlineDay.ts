@@ -76,7 +76,7 @@ import {
   type Negotiation,
 } from '@/lib/clubManager';
 import { MIN_TERMS_YEARS, askingTerms, dealCloseness, offerVerdict, termsCloseness, valuationBand, type PersonalTerms, type ValuationRead } from '@/lib/clubManagerDeals';
-import { hotSeatPool, mixSeed, onStaticWorld, withSeed } from '@/lib/managerHotSeat';
+import { dailyPool, mixSeed, onStaticWorld, withSeed } from '@/lib/managerHotSeat';
 import { mulberry32 } from '@/lib/leagueCore';
 import { dailyIndex, dailyPrngSeed } from '@/lib/dateUtils';
 import type { Position } from '@/types/game';
@@ -225,7 +225,9 @@ export function clockLabel(hour: number): string {
 
 /** Today's window: one club and one seed for everybody, keyed on the Eastern day. */
 export function dailyDeadlineDay(date: string): DeadlineSetup & { leagueName: string; daily: string } {
-  const pool = hotSeatPool();
+  /* Round 1040: the clubs dealable on that date (dailyPool), so a league that
+     joins later re-deals no day before it joins. */
+  const pool = dailyPool(date);
   /* Half a pool on from Manager Hot Seat's pick, so the two dailies are not
      the same club on the same day. */
   const at = (dailyIndex(date, pool.length) + Math.floor(pool.length / 2)) % pool.length;

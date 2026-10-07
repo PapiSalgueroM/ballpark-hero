@@ -164,7 +164,7 @@ if (CONTROL === 'noclock') {
   console.log('NEGATIVE CONTROL ON: the shut leaves unfinished deals standing; section 3 must go red');
 }
 if (CONTROL === 'frozen') {
-  libPath = rewrite(LIB, [['  const pool = hotSeatPool();\n  /* Half a pool', "  date = '2026-01-01';\n  const pool = hotSeatPool();\n  /* Half a pool"]], 'deadlineDay.frozen.ts', 'the daily pick');
+  libPath = rewrite(LIB, [['  const pool = dailyPool(date);\n  /* Half a pool', "  date = '2026-01-01';\n  const pool = dailyPool(date);\n  /* Half a pool"]], 'deadlineDay.frozen.ts', 'the daily pick');
   console.log('NEGATIVE CONTROL ON: every date gets the same window; section 4 must go red');
 }
 if (CONTROL === 'drift') {

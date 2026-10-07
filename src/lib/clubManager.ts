@@ -1431,6 +1431,12 @@ export interface SeasonRecord {
   position: number;
   points: number;
   trophies: string[];
+  /** Round 1040: the league the season was played in and its size, written
+   *  when the season ends (before the summer moves anybody), so a finish is
+   *  read against the table it came from. A save from before this round has
+   *  neither on its old seasons. */
+  leagueId?: string;
+  leagueSize?: number;
 }
 
 export interface CareerStats {
@@ -1646,7 +1652,18 @@ export function wildernessProfile(career: CareerState): ManagerProfile {
      place is 18th) never reads as a relegation. */
   /* Round 971 closing check: a past season's finish reads that season's
      league (eraLeagueOf), not whichever era leagueOf's fallback finds first. */
-  const wentDown = (h: SeasonRecord) => h.position >= 18 && relegationSpots((eraLeagueOf(h.club, career.eraId) ?? leagueOf(h.club)).id) > 0;
+  /* Round 1040: a finish is a relegation when it sits in that league's drop
+     zone, size minus drop, read off the league the season was played in.
+     The hard coded 18th missed Ligue 1's 17th (two of eighteen go down) and
+     called a Championship 18th of 24 one. A season from before this round
+     carries no league, so it keeps the old reading. */
+  const wentDown = (h: SeasonRecord) => {
+    if (h.leagueId && h.leagueSize) {
+      const drop = relegationSpots(h.leagueId);
+      return drop > 0 && h.position > h.leagueSize - drop;
+    }
+    return h.position >= 18 && relegationSpots((eraLeagueOf(h.club, career.eraId) ?? leagueOf(h.club)).id) > 0;
+  };
   const promotions = career.history.filter(h => h.position === 1).length;
   const relegations = career.history.filter(wentDown).length;
   const def = clubDefFor(career.clubName);
@@ -2688,6 +2705,12 @@ export interface LeagueRules {
    *  been verified. Round 832 review: this sat in a map of its own keyed by
    *  league id, the one league rule left outside this table. */
   tiebreak?: TiebreakRule;
+  /** Round 1040: the Eastern date (YYYY-MM-DD) this league's clubs join the
+   *  daily games' club pools (Manager Hot Seat and Deadline Day, which deal
+   *  one club a day by an index into the pool). A league added later joins
+   *  from a date after its release, so no day already dealt is dealt again.
+   *  Absent: in the pool on every date. */
+  dailyFrom?: string;
 }
 
 const SPLIT_SIMPLIFIED = 'The real league splits into groups part way through the season; it is played here as a straight double round robin.';
@@ -2741,7 +2764,7 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
     simplified: 'Three go up and three come down in a straight swap; the real promotion playoff is not played.',
   },
   laliga: { nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: { ucl: 4, uel: 5, uecl: 6 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
-  seriea: { nationId: 'italy', flag: 'Italy', cup: 'Coppa Italia', europe: { ucl: 4, uel: 5, uecl: 6 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
+  seriea: { nationId: 'italy', flag: 'Italy', cup: 'Coppa Italia', europe: { ucl: 4, uel: 5, uecl: 6 }, drop: 3, tiebreak: 'h2h', secondTier: 'serieb', ladder: 'top', season: 'autumnSpring' },
   bundesliga: {
     nationId: 'germany', flag: 'Germany', cup: 'DFB-Pokal', europe: { ucl: 4, uel: 5, uecl: 6 }, drop: 2, tiebreak: 'gdGfAgg', secondTier: 'bundesliga2', ladder: 'top', season: 'autumnSpring',
     simplified: 'The real relegation playoff (sixteenth against the 2. Bundesliga\'s third) is not played: two go straight down and two straight up.',
@@ -2874,6 +2897,36 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
     europe: null, drop: 0, ladder: 'playoffs',
     playoff: { rankUpTo: 7, target: 6, label: 'Make the finals' }, floorFromBottom: 3, season: 'autumnSpring',
     simplified: 'The real season is 26 games (home and away plus four third meetings), and last season\'s finals series took the top six; here it is a double round robin of 22 and the finals are not played, so the table settles the season and its winner is the Premiers. Auckland FC and Wellington Phoenix play no cup, as they really do not enter the Australia Cup.',
+  },
+  /* Round 1040: Serie B 2026-27, Serie A's modelled second tier, so the
+     bottom three of Serie A go down and the top three of Serie B come up.
+     Each fact read 2026-10-06:
+     - 20 clubs: ESPN's 2026-27 table
+       (https://www.espn.com/soccer/standings/_/league/ita.2) and Sky Sport
+       Italia, "Serie B 2026-27, le squadre del prossimo campionato"
+       (https://sport.sky.it/calcio/serie-b/squadre-serie-b-2026-2027,
+       2026-06-07), which agree on all twenty.
+     - The format, as both describe the 2025-26 season: first and second go
+       straight up, third to eighth play the promotion playoff, the last three
+       go straight down and sixteenth plays seventeenth in a playout (Sky
+       Sport, https://sport.sky.it/calcio/serie-b/serie-b-2026-playoff-playout-promozioni-retrocessioni,
+       2026-05-29; Sbircia la Notizia,
+       https://www.sbircialanotizia.it/articoli/2026/05/08/serie-b-playoff-a9x3m/,
+       2026-05-08). THIN for 2026-27: the season's calendar release
+       (InfoOggi, 2026-07-10) says it again ends in playoffs and playouts but
+       restates no places, so the rung is last season's.
+     - All twenty play the Coppa Italia (44 clubs: Serie A's 20, Serie B's 20
+       and four from Serie C): Sky Sport's 2026-27 bracket
+       (https://sport.sky.it/calcio/coppa-italia/2026/06/24/tabellone-coppa-italia-2026-2027)
+       and Sport Mediaset's round of 32 draw.
+     - Clubs level on points: only one source spelled an order, so the
+       gdGfOnly default.
+     dailyFrom: release day plus thirty days (see LeagueRules.dailyFrom). */
+  serieb: {
+    nationId: 'italy', flag: 'Italy', cup: 'Coppa Italia', europe: null, drop: 3, ladder: 'promotion',
+    playoff: { rankUpTo: 10, target: 8, label: 'Make the promotion playoffs' }, season: 'autumnSpring',
+    simplified: 'The promotion playoff and the relegation playout are not played: three go straight up and three straight down.',
+    dailyFrom: '2026-11-05',
   },
   /* The era leagues. No Conference League existed before 2021, so uecl is 0
      and the board's ladder skips that band; 2005-06 still called the second
@@ -3280,6 +3333,15 @@ export const REAL_LEAGUES: LeagueDef[] = [
     id: 'aleague', name: 'A-League Men',
     clubs: ['Adelaide United', 'Auckland FC', 'Brisbane Roar', 'Central Coast Mariners', 'Macarthur FC', 'Melbourne City', 'Melbourne Victory', 'Newcastle Jets', 'Perth Glory', 'Sydney FC', 'Wellington Phoenix', 'Western Sydney Wanderers'],
   },
+  /* Round 1040: Serie B 2026-27, the twenty clubs ESPN's table and Sky Sport
+     Italia (2026-06-07) agree on, read 2026-10-06 (sources beside its
+     LEAGUE_RULES row). Cremonese, Pisa and Verona came down from Serie A;
+     Vicenza, Arezzo, Benevento and Ascoli came up from Serie C. Appended
+     after every older row, so no older list changes its order. */
+  {
+    id: 'serieb', name: 'Serie B',
+    clubs: ['Cremonese', 'Verona', 'Pisa', 'Avellino', 'Carrarese', 'Catanzaro', 'Cesena', 'Empoli', 'Entella', 'Juve Stabia', 'Mantova', 'Modena', 'Padova', 'Palermo', 'Sampdoria', 'Südtirol', 'Vicenza', 'Arezzo', 'Benevento', 'Ascoli'],
+  },
 ].map(leagueFromRow);
 
 /**
@@ -3397,6 +3459,12 @@ const STRENGTH_PRIORS: Record<string, number> = {
   // they take the same 61 every promoted side with no usable rows has
   // shipped with, Chapecoense the last of them.
   'Atlante': 61,
+  // Round 1040: Serie B. Arezzo, up from Serie C, are the one member with no
+  // row in the table under any spelling, so they take the same 61. Every
+  // other member is rated from its real men (bakedXIAvg), which a prior never
+  // reaches, so the stale top flight priors of the three relegated clubs
+  // above are left as they were.
+  'Arezzo': 61,
 };
 
 /** The real league a club plays in. Every playable club is covered.
@@ -12017,15 +12085,28 @@ function cupCountryClubs(state: CareerState): ClubDef[] {
  * reaches the last sixteen, but a couple of lower division sides get in,
  * because a cup with nobody to knock over is just another league.
  */
+/* Round 1040: a cup club's division, 2 for a second tier (a league whose
+   rules ladder is 'promotion') and 1 for every other league, read the one
+   place both the draw and the upset flag read it. Before this round both
+   asked "is it in MY league?", which in a Championship or 2. Bundesliga
+   career made the top flight clubs the 'lower division' sides and flagged a
+   top flight club knocking the manager out as a giant killing. Round 154: my
+   own club reads careerLeagueOf, since a custom club is in no league def. */
+function cupDivisionOf(state: CareerState, clubName: string): 1 | 2 {
+  const lg = clubName === state.clubName
+    ? careerLeagueOf(state)
+    : (eraLeagueOf(clubName, state.eraId) ?? leagueOf(clubName));
+  return leagueRulesOf(lg.id).ladder === 'promotion' ? 2 : 1;
+}
+
 function buildCupBracket(state: CareerState): CupTie[] {
   const all = cupCountryClubs(state).filter(c => c.name !== state.clubName);
-  // Round 154: careerLeagueOf, because a custom club resolves to its real
-  // league here where bare leagueOf would fall back to the Premier League.
-  const myLeagueNames = new Set(careerLeagueOf(state).clubs);
-  const top = shuffle(all.filter(c => myLeagueNames.has(c.name)));
-  const lower = shuffle(all.filter(c => !myLeagueNames.has(c.name)));
+  /* Round 1040: 'top' is the nation's top flight clubs and 'lower' its
+     second tier, whichever division the manager's own club is in. */
+  const top = shuffle(all.filter(c => cupDivisionOf(state, c.name) === 1));
+  const lower = shuffle(all.filter(c => cupDivisionOf(state, c.name) === 2));
   const field = [state.clubName];
-  // Two or three from outside my division when the country has one.
+  // Two or three from the second tier when the country has one.
   const lowerCount = lower.length ? ri(2, 3) : 0;
   for (const c of lower.slice(0, lowerCount)) field.push(c.name);
   for (const c of top) {
@@ -12065,13 +12146,16 @@ function buildCupBracket(state: CareerState): CupTie[] {
   return ties;
 }
 
-/** True when the winner came from a lower division than the loser. */
+/** True when the winner came from a lower division than the loser. Round
+ *  1040: the divisions are cupDivisionOf's, so a top flight club beating a
+ *  second tier one is never an upset, whoever the manager is. */
 function isCupUpset(state: CareerState, winner: string, loser: string): boolean {
-  const top = new Set(careerLeagueOf(state).clubs);
   const w = clubByName(winner);
   const l = clubByName(loser);
   if (!w || !l) return false;
-  if (top.has(loser) && !top.has(winner)) return true;
+  const dw = cupDivisionOf(state, winner);
+  const dl = cupDivisionOf(state, loser);
+  if (dw !== dl) return dw > dl;
   return w.tier - l.tier >= 2;
 }
 
@@ -18396,7 +18480,7 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
 
   state.history = [
     ...state.history.filter(h => h.season !== state.season),
-    { season: state.season, club: state.clubName, position, points: myRow.pts, trophies: seasonTrophies },
+    { season: state.season, club: state.clubName, position, points: myRow.pts, trophies: seasonTrophies, leagueId: careerLeagueOf(state).id, leagueSize: table.length },
   ];
   state.pendingSummary = summary;
   return { state, summary };
@@ -18620,6 +18704,10 @@ function runPromotionRelegation(prev: CareerState): { overrides: Record<string, 
   const myLeagueId = careerLeagueOf(prev).id;
   const next: Record<string, string[]> = carried ? { ...carried } : {};
   const lines: string[] = [];
+  /* Round 1040: the other pyramids' one line summaries wait behind the
+     manager's own pyramid. With five pyramids, a La Liga career's six lines
+     came after England's summary and the cap cut two of them. */
+  const elsewhere: string[] = [];
   let moved = false;
   for (const pyr of PYRAMIDS) {
     const topDef = REAL_LEAGUES.find(l => l.id === pyr.top);
@@ -18668,10 +18756,10 @@ function runPromotionRelegation(prev: CareerState): { overrides: Record<string, 
         else lines.push(`\u{2B07} ${c} are relegated to the ${secondDef.name}.`);
       }
     } else {
-      lines.push(`\u{1F504} ${topDef.name}: ${up.join(', ')} come up, ${down.join(', ')} go down.`);
+      elsewhere.push(`\u{1F504} ${topDef.name}: ${up.join(', ')} come up, ${down.join(', ')} go down.`);
     }
   }
-  return { overrides: moved ? next : carried, lines: lines.slice(0, 5) };
+  return { overrides: moved ? next : carried, lines: [...lines, ...elsewhere].slice(0, Math.max(5, lines.length)) };
 }
 
 /**

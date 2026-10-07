@@ -6,7 +6,9 @@
  * snapshot the dataset was imported from.
  *
  * Leagues baked: the big five (2026-27 memberships), EFL Championship,
- * Saudi Pro League, MLS East + West, Eredivisie, plus the UCL flavor clubs.
+ * Saudi Pro League, MLS East + West, Eredivisie, the later leagues the
+ * written file's own header lists (Serie B since Round 1040), plus the UCL
+ * flavor clubs.
  * Preference order per player: year 2026 row, else year 2025 row (value
  * discounted 5%, age +1). Clubs with fewer than 8 real players are listed
  * in CM_PARTIAL so the UI can say so honestly.
@@ -71,7 +73,11 @@ const KNOWN_EMPTY = ['ADO Den Haag', 'Cambuur',
   'Chapecoense',
   // Round 883: Liga MX 2026-27. Atlante have no row in the table under any
   // spelling (they were in the second tier until this season).
-  'Atlante'];
+  'Atlante',
+  // Round 1040: Serie B 2026-27. Arezzo, up from Serie C, have no row in the
+  // table under any spelling (a grep of the 2026-10-02 dump for "arezzo"
+  // finds nothing).
+  'Arezzo'];
 
 /** Core clubs (big five leagues) must have 7+ players or the bake fails. */
 const CORE_LEAGUE_CLUBS = new Set([
@@ -367,6 +373,11 @@ if (!(xiAvg('Palmeiras') > xiAvg('Vitória'))) errors.push('SANITY: Palmeiras <=
 // the pads of an empty club.
 if (!(xiAvg('América') > xiAvg('Necaxa'))) errors.push('SANITY: América <= Necaxa');
 if (!(xiAvg('Guadalajara') > xiAvg('FC Juárez'))) errors.push('SANITY: Guadalajara <= FC Juárez');
+// Round 1040: Serie B. Only Pisa (18 real men), Verona (13) and Cremonese
+// (10) carry 8 or more in the 2026-10-02 bake; every other member is under
+// it and padded, so both pairs compare real squads against a real squad.
+if (!(xiAvg('Pisa') > xiAvg('Cremonese'))) errors.push('SANITY: Pisa <= Cremonese');
+if (!(xiAvg('Verona') > xiAvg('Cremonese'))) errors.push('SANITY: Verona <= Cremonese');
 
 const total = [...byClub.values()].reduce((s, l) => s + l.length, 0);
 if (total < 2800) errors.push(`Only ${total} players total (expected 2800+)`);
@@ -392,7 +403,7 @@ let out = `// Rounds 70+72: real rosters for every Club Manager club, generated 
 // West, Eredivisie, Primeira Liga, Scottish Premiership, Süper Lig,
 // 2. Bundesliga, Belgian Pro League, Austrian Bundesliga, Super League
 // Greece, Danish Superliga, Swiss Super League, SuperSport HNL,
-// Brazil's Serie A and Liga MX.
+// Brazil's Serie A, Liga MX and Serie B.
 // Values in £m, ratings 48-94 from the value curve.
 // Regenerate with: node scripts/bakeClubManagerRosters.mjs
 // DO NOT EDIT BY HAND.

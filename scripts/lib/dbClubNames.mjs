@@ -214,6 +214,20 @@ export const DB_TO_ENGINE = {
   'Santos Laguna': 'Santos Laguna', 'Atlas Guadalajara': 'Atlas', 'Club Necaxa': 'Necaxa',
   'Puebla FC': 'Puebla', 'Querétaro FC': 'Querétaro', 'Club Tijuana': 'Tijuana',
   'FC Juárez': 'FC Juárez', 'Atlético de San Luis': 'Atlético San Luis',
+  // Round 1040: Serie B 2026-27. Every table spelling read off the 2026-10-02
+  // dump, one per club (the first team's). Left unmapped on purpose: the
+  // Primavera and U19 sides (Ascoli Picchio, Benevento, Cesena, Cremonese,
+  // Empoli, Hellas Verona, Sudtirol, Vicenza and Virtus Entella Primavera, US
+  // Catanzaro U19: youth rows, as no other league maps them), and "Chievo
+  // Verona", "Virtusvecomp Verona" and "Feralpisalo" (not members). Arezzo
+  // have no spelling at all and are KNOWN_EMPTY in the bake.
+  'Palermo FC': 'Palermo', 'FC Südtirol': 'Südtirol', 'Mantova 1911': 'Mantova',
+  'Modena FC': 'Modena', 'Ascoli Calcio': 'Ascoli', 'Hellas Verona': 'Verona',
+  'Cesena FC': 'Cesena', 'US Avellino 1912': 'Avellino', 'Benevento Calcio': 'Benevento',
+  'Pisa Sporting Club': 'Pisa', 'Calcio Padova': 'Padova', 'FC Empoli': 'Empoli',
+  'Virtus Entella': 'Entella', 'US Cremonese': 'Cremonese', 'LR Vicenza': 'Vicenza',
+  'UC Sampdoria': 'Sampdoria', 'SS Juve Stabia': 'Juve Stabia', 'US Catanzaro': 'Catanzaro',
+  'Carrarese Calcio 1908': 'Carrarese',
   // UCL flavor clubs outside the baked leagues
   'Club Brugge KV': 'Club Brugge',
 };

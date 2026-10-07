@@ -62,6 +62,7 @@ import {
   fixtureFor,
   isPartialClub,
   leaguePosition,
+  leagueRulesOf,
   matchEdge,
   nextFixture,
   objectiveStatuses,
@@ -214,9 +215,26 @@ export function hotSeatLeagues(): { id: string; name: string }[] {
   return REAL_LEAGUES.filter(l => ids.has(l.id)).map(l => ({ id: l.id, name: l.name }));
 }
 
+/**
+ * Round 1040: the clubs a daily may deal on `date`: the pool, less any league
+ * whose rules row says its clubs join later (LeagueRules.dailyFrom). The
+ * daily picks by an index into this list, so a league joining on release day
+ * would re-deal every date, release day included; one that joins from a later
+ * date leaves every day before it exactly as it was. Leagues are appended to
+ * REAL_LEAGUES, so a later league's clubs sit at the end and the list before
+ * the join is the old pool in the old order. Deadline Day deals from the same
+ * list.
+ */
+export function dailyPool(date: string): HotSeatClub[] {
+  return hotSeatPool().filter(c => {
+    const from = leagueRulesOf(c.leagueId).dailyFrom;
+    return !from || from <= date;
+  });
+}
+
 /** Today's hot seat: one club and one seed for everybody, keyed on the Eastern day. */
 export function dailyHotSeat(date: string): HotSeatSetup & { leagueName: string } {
-  const pool = hotSeatPool();
+  const pool = dailyPool(date);
   const pick = pool[Math.max(0, Math.min(pool.length - 1, dailyIndex(date, pool.length)))];
   return { club: pick.club, leagueName: pick.leagueName, seed: mixSeed(dailyPrngSeed(date), 719), daily: date };
 }

@@ -71,6 +71,12 @@ const LEAGUE_SIZES: Record<string, SizeWindow[]> = {
    so the playing finish keeps the top flights only. */
 const DUGOUT_SIZES: Record<string, SizeWindow[]> = {
   "Championship": [{ from: 2004, size: 24 }],
+  /* Round 1040: Club Manager's Serie B is a manager's job now, so a Soccer
+     Career dugout can be offered one. Only the 2026-27 season is read (20
+     clubs: espn.com/soccer/standings/_/league/ita.2 and Sky Sport Italia's
+     "Serie B 2026-27, le squadre del prossimo campionato", 2026-06-07, read
+     2026-10-06), so no size is claimed before it. */
+  "Serie B": [{ from: 2026, size: 20 }],
 };
 
 /** Clubs in that league's top flight in the season starting in `year`, or

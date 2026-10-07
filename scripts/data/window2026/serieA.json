@@ -1010,7 +1010,7 @@
   },
   {
     "name": "Simone Pafundi",
-    "to": null,
+    "to": "Catanzaro",
     "db": "US Catanzaro",
     "loan": true,
     "window": "2026-summer",
@@ -1069,7 +1069,7 @@
   },
   {
     "name": "Fabio Rispoli",
-    "to": null,
+    "to": "Südtirol",
     "db": "FC Südtirol",
     "loan": true,
     "window": "2026-summer",
@@ -1119,7 +1119,7 @@
   },
   {
     "name": "Vanja Vlahović",
-    "to": null,
+    "to": "Mantova",
     "db": "Mantova 1911",
     "loan": true,
     "window": "2026-summer",
@@ -1144,7 +1144,7 @@
   },
   {
     "name": "Kevin Zeroli",
-    "to": null,
+    "to": "Südtirol",
     "db": "FC Südtirol",
     "loan": true,
     "window": "2026-summer",
@@ -1279,7 +1279,7 @@
   },
   {
     "name": "Gabriele Zappa",
-    "to": null,
+    "to": "Verona",
     "db": "Hellas Verona",
     "loan": true,
     "window": "2026-summer",
@@ -1351,7 +1351,7 @@
   },
   {
     "name": "Morten Thorsby",
-    "to": null,
+    "to": "Cremonese",
     "db": "US Cremonese",
     "window": "2026-01",
     "checked": "2026-09-30",
@@ -1431,7 +1431,7 @@
   },
   {
     "name": "Emanuele Rao",
-    "to": null,
+    "to": "Pisa",
     "db": "Pisa Sporting Club",
     "loan": true,
     "window": "2026-summer",
@@ -1564,7 +1564,7 @@
   },
   {
     "name": "Tommaso Corazza",
-    "to": null,
+    "to": "Vicenza",
     "db": "LR Vicenza",
     "loan": true,
     "window": "2026-summer",
@@ -1589,7 +1589,7 @@
   },
   {
     "name": "Nicola Leali",
-    "to": null,
+    "to": "Verona",
     "db": "Hellas Verona",
     "window": "2026-summer",
     "checked": "2026-09-30",
@@ -1601,7 +1601,7 @@
   },
   {
     "name": "Maat Daniel Caprini",
-    "to": null,
+    "to": "Cesena",
     "db": "Cesena FC",
     "loan": true,
     "window": "2026-summer",
@@ -1625,7 +1625,7 @@
   },
   {
     "name": "Matteo Cocchi",
-    "to": null,
+    "to": "Padova",
     "db": "Calcio Padova",
     "loan": true,
     "window": "2026-summer",
@@ -1661,7 +1661,7 @@
   },
   {
     "name": "Luigi Cherubini",
-    "to": null,
+    "to": "Benevento",
     "db": "Benevento Calcio",
     "loan": true,
     "window": "2026-summer",
@@ -1685,7 +1685,7 @@
   },
   {
     "name": "Mattia Perin",
-    "to": null,
+    "to": "Palermo",
     "db": "Palermo FC",
     "window": "2026-summer",
     "checked": "2026-09-30",
@@ -1756,7 +1756,7 @@
   },
   {
     "name": "Alessandro Plizzari",
-    "to": null,
+    "to": "Südtirol",
     "db": "FC Südtirol",
     "loan": true,
     "window": "2026-summer",
@@ -1769,7 +1769,7 @@
   },
   {
     "name": "Paulo Azzi",
-    "to": null,
+    "to": "Modena",
     "db": "Modena FC",
     "window": "2026-summer",
     "checked": "2026-09-30",
@@ -1805,7 +1805,7 @@
   },
   {
     "name": "Andrea Oliveri",
-    "to": null,
+    "to": "Ascoli",
     "db": "Ascoli Calcio",
     "loan": true,
     "window": "2026-summer",
@@ -1818,7 +1818,7 @@
   },
   {
     "name": "Mattia Compagnon",
-    "to": null,
+    "to": "Verona",
     "db": "Hellas Verona",
     "loan": true,
     "window": "2026-summer",

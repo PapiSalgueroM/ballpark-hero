@@ -1,7 +1,7 @@
 {
  "measuredOn": "2026-09-11",
  "rule": "A baked Club Manager player whose newest row in public.player_market_values_dedup is year 2025, with no year-2026 row at any club the game models and none anywhere else either. The bake falls back to the 2025 row for these, which carries the 2025 CLUB, so the player ships at last season's club with nothing saying so.",
- "population": 414,
+ "population": 430,
  "populationRound876": "Round 876 mapped the table's 1.FC Nuremberg spelling to Nürnberg and re-baked from the 2026-10-02 dump. Three Nürnberg players came in on a 2025 row with no 2026 row anywhere (Berkay Yilmaz, Oliver Villadsen, Tim Janisch), so they joined the population and wait in pending like the rest. No other new fallback row appeared that an overlay row does not already source. Then Brazil's Serie A was mapped (twenty table spellings) and the bake re-run from the same dump. Twenty players at those clubs came in on a 2025 row with no 2026 row anywhere (Luiz Araújo, Gustavo Gómez, Weverton, Lima, Júnior Alonso, Everson, Zé Rafael, Lucas Ronier, Juninho Capixaba, Ignacio Laquintana, Matheus Martins, Nathan Fernandes, Matheus Nascimento, Rafael Lobato, Memphis Depay, Talles Magno, Pedro Raul, Jean Meneses, Alexander Aravena, Gustavo Prado), so they joined the population. The same day a review found two of them false, and all twenty were then checked on the web (adjudicatorWeb2026_10_02): nineteen settled, Pedro Raul still pending. Two rows that sat in removedClubNotModelled because the World Cup table put them at Vasco da Gama and Palmeiras (Andrés Gómez, Ramón Sosa) moved to movedTo on that same evidence, since both clubs are modelled now.",
  "populationRound883": "Round 883 mapped Liga MX (seventeen table spellings, Atlante having none) and re-baked from the 2026-10-02 dump. Twenty nine players at those clubs came in on a 2025 row (Esteban Andrada, Nathan Silva, Robert Ergas, Alejandro Mayorga, Dagoberto Espinoza, Pablo Bennevendo, Sebastián Santos, Pablo Monroy, Gustavo Ferrareis, Diego Valdés, Piero Quispe, Mateo Klimowicz, Lorenzo Faravelli, Luka Romero, Jairo Torres, Diego Valoyes, Hugo Camberos, Oussama Idrissi, Ronaldo Nájera, Amaury Morales, Josué Colmán, Yairo Moreno, Fernando González, Fernando Beltrán, Richard Sánchez, Érick Gutiérrez, Andrés Montaño, Emiliano Gómez, Franco Fagúndez), so they joined the population. All twenty nine were then checked on the web the same day (adjudicatorWeb2026_10_02_ligamx) and none is left pending. Nine of them do have a 2026 row, but at a club the bake does not map: four at their own club's U21 side (Dagoberto Espinoza, Pablo Bennevendo, Sebastián Santos, Pablo Monroy) and five elsewhere (Diego Valdés at Vélez Sarsfield, Mateo Klimowicz at Cerro Porteño, Diego Valoyes at Talleres, Yairo Moreno at Independiente Medellín, Fernando González at Dorados de Sinaloa), so the bake falls back to their 2025 club just the same, and they are counted here with the rest rather than trusted.",
  "populationRound883Namesakes": "The Round 883 review found the bake keyed players by name alone, so a newer row of one man deleted an older row of a different man with the same name. The bake now keeps them apart (an age move of -1 to 3 and the same position group, or they are two men), which restored six 2025 rows that had been silently dropped: Paulinho (Palmeiras), Jose Luis Rodriguez (FC Juarez), Alan Franco (Sao Paulo), Matheus Pereira (Santa Clara), Dudu (Cruzeiro) and Allan (Palmeiras). All six were read on the web on 2026-10-02: two confirmed, four moved to the modelled club they play for. Each row names the club of the other man in namesakeAt.",
@@ -7750,6 +7750,354 @@
     }
    ],
    "shard": "rest"
+  },
+  {
+   "name": "Simone Scuffet",
+   "from": "Cagliari",
+   "to": "Pisa",
+   "realClub": "Pisa",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1996-05-31. Sold by Cagliari to Pisa on 2025-07-23, contract to June 2028; Pisa's number 1, played the Coppa Italia tie at Fiorentina on 2026-09-15. Pisa is not modelled. The official voice is the league page that no longer lists him at Cagliari; Pisa's own squad page did not answer. Round 1040: Pisa is modelled now (Serie B 2026-27), so the row moved from removedClubNotModelled to movedTo with the same sources.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.legaseriea.it/team/cagliari/squad",
+     "publisher": "Lega Serie A (Cagliari squad, current)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    },
+    {
+     "family": "B",
+     "url": "https://us.soccerway.com/player/scuffet-simone/0nQhrI82/transfers",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-03",
+     "says": "Cagliari to Pisa 2025-07-23, born 1996-05-31, contract to 2028-06-30, current club Pisa"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/181784/simone-scuffet",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Pisa number 1, born 1996-05-31, played 2026-09-15"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2925/cagliari",
+     "publisher": "ESPN (Cagliari squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ],
+   "shard": "italy-france"
+  },
+  {
+   "name": "Tommaso Augello",
+   "from": "Cagliari",
+   "to": "Palermo",
+   "realClub": "Palermo",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1994-08-30. Left Cagliari on a free and joined Palermo on 2025-07-08, contract to June 2027; Palermo's number 3, with Serie B matches from 2026-08-23 to 2026-09-19. Palermo is not modelled. The official voice is the league page that no longer lists him at Cagliari; Palermo's own squad page renders no names to a reader. Round 1040: Palermo is modelled now (Serie B 2026-27), so the row moved from removedClubNotModelled to movedTo with the same sources.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.legaseriea.it/team/cagliari/squad",
+     "publisher": "Lega Serie A (Cagliari squad, current)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    },
+    {
+     "family": "B",
+     "url": "https://us.soccerway.com/player/augello-tommaso/pUpsjuw3/transfers",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-03",
+     "says": "Cagliari to Palermo free 2025-07-08, born 1994-08-30, contract to 2027-06-30, current club Palermo"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/260197/tommaso-augello",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Palermo number 3, born 1994-08-30, played 2026-09-19"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2925/cagliari",
+     "publisher": "ESPN (Cagliari squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ],
+   "shard": "italy-france"
+  },
+  {
+   "name": "Filippo Distefano",
+   "from": "Frosinone",
+   "to": "Empoli",
+   "realClub": "Empoli",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2003-08-28 (Soccerway spells him Di Stefano). His 2024-25 loan at Frosinone was from Fiorentina; after a loan at Carrarese he was sold by Fiorentina to Empoli on 2026-07-21, contract to June 2029. Empoli's number 20, with Serie B matches from 2026-08-22 to 2026-09-20. Empoli is not modelled. Round 1040: Empoli is modelled now (Serie B 2026-27), so the row moved from removedClubNotModelled to movedTo with the same sources.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.legaseriea.it/team/frosinone/squad",
+     "publisher": "Lega Serie A (Frosinone squad, current)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    },
+    {
+     "family": "B",
+     "url": "https://us.soccerway.com/player/di-stefano-filippo/YTpHlpak/transfers",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-03",
+     "says": "Fiorentina to Empoli 2026-07-21, born 2003-08-28, contract to 2029-06-30, current club Empoli"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/331072/filippo-distefano",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Empoli number 20, born 2003-08-28, played 2026-09-20"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/4057/frosinone",
+     "publisher": "ESPN (Frosinone squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ],
+   "shard": "italy-france"
+  },
+  {
+   "name": "Riccardo Marchizza",
+   "from": "Frosinone",
+   "to": "Vicenza",
+   "realClub": "Vicenza",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1998-03-26. Left Frosinone when his contract ran out and joined Vicenza on a free on 2026-07-08, contract to June 2028; Vicenza's number 5, with Serie B matches from 2026-08-21 to 2026-09-20. Vicenza is not modelled. Round 1040: Vicenza is modelled now (Serie B 2026-27), so the row moved from removedClubNotModelled to movedTo with the same sources.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.legaseriea.it/team/frosinone/squad",
+     "publisher": "Lega Serie A (Frosinone squad, current)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    },
+    {
+     "family": "B",
+     "url": "https://us.soccerway.com/player/marchizza-riccardo/fL14Xe6b/transfers",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-03",
+     "says": "Frosinone to Vicenza free 2026-07-08, born 1998-03-26, contract to 2028-06-30, current club Vicenza"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/227272/riccardo-marchizza",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Vicenza number 5, born 1998-03-26, played 2026-09-20; last Frosinone match 2026-03-04"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/4057/frosinone",
+     "publisher": "ESPN (Frosinone squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ],
+   "shard": "italy-france"
+  },
+  {
+   "name": "Antonio Candela",
+   "from": "Venezia",
+   "to": "Catanzaro",
+   "realClub": "Catanzaro, on loan from Spezia",
+   "loan": true,
+   "loanFrom": "Spezia",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2000-04-27. No longer a Venezia player: Soccerway has him on loan at Catanzaro from Spezia since July 2026, to 2027-06-30, after a loan at Empoli in the spring. Catanzaro's number 27, with Serie B matches from 2026-08-21 to 2026-09-19. Neither Catanzaro nor Spezia is modelled. Round 1040: Catanzaro is modelled now (Serie B 2026-27), so the row moved from removedClubNotModelled to movedTo with the same sources, placed at the club he plays for per loanPolicy.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.legaseriea.it/team/venezia/squad",
+     "publisher": "Lega Serie A (Venezia squad, current)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    },
+    {
+     "family": "B",
+     "url": "https://us.soccerway.com/player/candela-antonio/nHot9WLH/transfers",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-03",
+     "says": "on loan at Catanzaro from Spezia from July 2026 to 2027-06-30, born 2000-04-27"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/250668/antonio-candela",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Catanzaro number 27, born 2000-04-27, played 2026-09-19"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/17530/venezia",
+     "publisher": "ESPN (Venezia squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ],
+   "shard": "italy-france"
+  },
+  {
+   "name": "Gianluca Caprari",
+   "from": "Monza",
+   "to": "Padova",
+   "realClub": "Padova",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1993-07-30. Moved from Monza to Padova on 2026-01-30, contract to June 2027; Padova's number 10, with Serie B matches from 2026-08-23 to 2026-09-12. Padova is not modelled. Round 1040: Padova is modelled now (Serie B 2026-27), so the row moved from removedClubNotModelled to movedTo with the same sources.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.legaseriea.it/team/monza/squad",
+     "publisher": "Lega Serie A (Monza squad, current)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    },
+    {
+     "family": "B",
+     "url": "https://us.soccerway.com/player/caprari-gianluca/hM9I17fh/transfers",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-03",
+     "says": "Monza to Padova 2026-01-30, born 1993-07-30, contract to 2027-06-30, current club Padova"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/156792/gianluca-caprari",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Padova number 10, born 1993-07-30, played 2026-09-12"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/4007/monza",
+     "publisher": "ESPN (Monza squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ],
+   "shard": "italy-france"
+  },
+  {
+   "name": "Samuele Mulattieri",
+   "from": "Sassuolo",
+   "to": "Verona",
+   "realClub": "Hellas Verona, on loan from Sassuolo",
+   "loan": true,
+   "loanFrom": "Sassuolo",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2000-10-07. After a 2025-26 loan at Deportivo, Sassuolo loaned him to Hellas Verona on 2026-07-31, to June 2027; Verona's number 19, with Serie B matches from 2026-08-29 to 2026-09-20. Verona is not modelled. Round 1040: Verona is modelled now (Serie B 2026-27), so the row moved from removedClubNotModelled to movedTo with the same sources, placed at the club he plays for per loanPolicy.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.legaseriea.it/team/sassuolo/squad",
+     "publisher": "Lega Serie A (Sassuolo squad, current)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    },
+    {
+     "family": "B",
+     "url": "https://us.soccerway.com/player/mulattieri-samuele/f3tdpb62/transfers",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-03",
+     "says": "loaned to Verona from Sassuolo 2026-07-31 to 2027-06-30, born 2000-10-07"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/271140/samuele-mulattieri",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Hellas Verona number 19, born 2000-10-07, played 2026-09-20"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/3997/sassuolo",
+     "publisher": "ESPN (Sassuolo squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ],
+   "shard": "italy-france"
+  },
+  {
+   "name": "Yann Karamoh",
+   "from": "Torino",
+   "to": "Sampdoria",
+   "realClub": "Sampdoria",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1998-07-08. Left Torino on a free for Porto on 2025-09-18, then joined Sampdoria on a free on 2026-09-05, contract to June 2027; Sampdoria's number 14, played in Serie B on 2026-09-13. Sampdoria is not modelled. Round 1040: Sampdoria is modelled now (Serie B 2026-27), so the row moved from removedClubNotModelled to movedTo with the same sources.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.legaseriea.it/team/torino/squad",
+     "publisher": "Lega Serie A (Torino squad, current)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    },
+    {
+     "family": "B",
+     "url": "https://us.soccerway.com/player/karamoh-yann/OQYJ3VXT/transfers",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-03",
+     "says": "Torino to Porto free 2025-09-18, Porto to Sampdoria free 2026-09-05, born 1998-07-08, contract to 2027-06-30"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/225555/yann-karamoh",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Sampdoria number 14, born 1998-07-08, played 2026-09-13"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/239/torino",
+     "publisher": "ESPN (Torino squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ],
+   "shard": "italy-france"
+  },
+  {
+   "name": "Lorenzo Insigne",
+   "from": "Toronto FC",
+   "to": "Sampdoria",
+   "realClub": "Sampdoria",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1991-06-04 (ESPN). Toronto and Insigne ended his contract by mutual agreement on 2025-07-01; ESPN has him at Pescara in 2025-26 and at Sampdoria in Serie B in 2026-27. Sampdoria's own report of their 2-1 win over Catanzaro on 2026-09-19 names Insigne in the starting eleven and as a scorer. The report gives only the surname, and his brother Roberto is also a winger, so the first name rests on ESPN, whose Sampdoria squad carries one Insigne, Lorenzo, shirt 10. The game models no Serie B. Round 1040: Sampdoria is modelled now (Serie B 2026-27), so the row moved from removedClubNotModelled to movedTo with the same sources.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.mlssoccer.com/news/toronto-fc-mutually-part-ways-with-lorenzo-insigne",
+     "publisher": "MLS (mlssoccer.com, 2025-07-01)",
+     "readOn": "2026-10-03",
+     "says": "Toronto FC and Insigne mutually agree to terminate his contract"
+    },
+    {
+     "family": "A",
+     "url": "https://www.sampdoria.it/news/team/2026/09/19/la-samp-rimonta-il-catanzaro-e-trova-la-prima-vittoria/",
+     "publisher": "U.C. Sampdoria (match report, 2026-09-19)",
+     "readOn": "2026-10-03",
+     "says": "Serie BKT 2026/27, Sampdoria 2 Catanzaro 1, goal: Insigne; starting eleven includes Insigne"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2734",
+     "publisher": "ESPN (Sampdoria squad, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "Lorenzo Insigne, shirt 10, forward, born 1991-06-04; Sampdoria appearances 2026-08-29 to 2026-09-19; not on ESPN's Toronto FC 2026 squad"
+    }
+   ],
+   "shard": "england-mls"
   }
  ],
  "removedClubNotModelled": [
@@ -8650,82 +8998,6 @@
    "shard": "italy-france"
   },
   {
-   "name": "Simone Scuffet",
-   "from": "Cagliari",
-   "realClub": "Pisa",
-   "adjudicatedOn": "2026-10-03",
-   "note": "Born 1996-05-31. Sold by Cagliari to Pisa on 2025-07-23, contract to June 2028; Pisa's number 1, played the Coppa Italia tie at Fiorentina on 2026-09-15. Pisa is not modelled. The official voice is the league page that no longer lists him at Cagliari; Pisa's own squad page did not answer.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://www.legaseriea.it/team/cagliari/squad",
-     "publisher": "Lega Serie A (Cagliari squad, current)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    },
-    {
-     "family": "B",
-     "url": "https://us.soccerway.com/player/scuffet-simone/0nQhrI82/transfers",
-     "publisher": "Soccerway",
-     "readOn": "2026-10-03",
-     "says": "Cagliari to Pisa 2025-07-23, born 1996-05-31, contract to 2028-06-30, current club Pisa"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/player/_/id/181784/simone-scuffet",
-     "publisher": "ESPN (player page)",
-     "readOn": "2026-10-03",
-     "says": "Pisa number 1, born 1996-05-31, played 2026-09-15"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/team/squad/_/id/2925/cagliari",
-     "publisher": "ESPN (Cagliari squad page, season 2026-27)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    }
-   ],
-   "shard": "italy-france"
-  },
-  {
-   "name": "Tommaso Augello",
-   "from": "Cagliari",
-   "realClub": "Palermo",
-   "adjudicatedOn": "2026-10-03",
-   "note": "Born 1994-08-30. Left Cagliari on a free and joined Palermo on 2025-07-08, contract to June 2027; Palermo's number 3, with Serie B matches from 2026-08-23 to 2026-09-19. Palermo is not modelled. The official voice is the league page that no longer lists him at Cagliari; Palermo's own squad page renders no names to a reader.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://www.legaseriea.it/team/cagliari/squad",
-     "publisher": "Lega Serie A (Cagliari squad, current)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    },
-    {
-     "family": "B",
-     "url": "https://us.soccerway.com/player/augello-tommaso/pUpsjuw3/transfers",
-     "publisher": "Soccerway",
-     "readOn": "2026-10-03",
-     "says": "Cagliari to Palermo free 2025-07-08, born 1994-08-30, contract to 2027-06-30, current club Palermo"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/player/_/id/260197/tommaso-augello",
-     "publisher": "ESPN (player page)",
-     "readOn": "2026-10-03",
-     "says": "Palermo number 3, born 1994-08-30, played 2026-09-19"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/team/squad/_/id/2925/cagliari",
-     "publisher": "ESPN (Cagliari squad page, season 2026-27)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    }
-   ],
-   "shard": "italy-france"
-  },
-  {
    "name": "Zito Luvumbo",
    "from": "Cagliari",
    "realClub": "Mallorca, on loan from Cagliari",
@@ -8811,82 +9083,6 @@
    "shard": "italy-france"
   },
   {
-   "name": "Filippo Distefano",
-   "from": "Frosinone",
-   "realClub": "Empoli",
-   "adjudicatedOn": "2026-10-03",
-   "note": "Born 2003-08-28 (Soccerway spells him Di Stefano). His 2024-25 loan at Frosinone was from Fiorentina; after a loan at Carrarese he was sold by Fiorentina to Empoli on 2026-07-21, contract to June 2029. Empoli's number 20, with Serie B matches from 2026-08-22 to 2026-09-20. Empoli is not modelled.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://www.legaseriea.it/team/frosinone/squad",
-     "publisher": "Lega Serie A (Frosinone squad, current)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    },
-    {
-     "family": "B",
-     "url": "https://us.soccerway.com/player/di-stefano-filippo/YTpHlpak/transfers",
-     "publisher": "Soccerway",
-     "readOn": "2026-10-03",
-     "says": "Fiorentina to Empoli 2026-07-21, born 2003-08-28, contract to 2029-06-30, current club Empoli"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/player/_/id/331072/filippo-distefano",
-     "publisher": "ESPN (player page)",
-     "readOn": "2026-10-03",
-     "says": "Empoli number 20, born 2003-08-28, played 2026-09-20"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/team/squad/_/id/4057/frosinone",
-     "publisher": "ESPN (Frosinone squad page, season 2026-27)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    }
-   ],
-   "shard": "italy-france"
-  },
-  {
-   "name": "Riccardo Marchizza",
-   "from": "Frosinone",
-   "realClub": "Vicenza",
-   "adjudicatedOn": "2026-10-03",
-   "note": "Born 1998-03-26. Left Frosinone when his contract ran out and joined Vicenza on a free on 2026-07-08, contract to June 2028; Vicenza's number 5, with Serie B matches from 2026-08-21 to 2026-09-20. Vicenza is not modelled.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://www.legaseriea.it/team/frosinone/squad",
-     "publisher": "Lega Serie A (Frosinone squad, current)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    },
-    {
-     "family": "B",
-     "url": "https://us.soccerway.com/player/marchizza-riccardo/fL14Xe6b/transfers",
-     "publisher": "Soccerway",
-     "readOn": "2026-10-03",
-     "says": "Frosinone to Vicenza free 2026-07-08, born 1998-03-26, contract to 2028-06-30, current club Vicenza"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/player/_/id/227272/riccardo-marchizza",
-     "publisher": "ESPN (player page)",
-     "readOn": "2026-10-03",
-     "says": "Vicenza number 5, born 1998-03-26, played 2026-09-20; last Frosinone match 2026-03-04"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/team/squad/_/id/4057/frosinone",
-     "publisher": "ESPN (Frosinone squad page, season 2026-27)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    }
-   ],
-   "shard": "italy-france"
-  },
-  {
    "name": "Frédéric Guilbert",
    "from": "Lecce",
    "realClub": "Nantes",
@@ -8918,162 +9114,6 @@
      "family": "B",
      "url": "https://www.espn.com/soccer/team/squad/_/id/113/lecce",
      "publisher": "ESPN (Lecce squad page, season 2026-27)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    }
-   ],
-   "shard": "italy-france"
-  },
-  {
-   "name": "Antonio Candela",
-   "from": "Venezia",
-   "realClub": "Catanzaro, on loan from Spezia",
-   "loan": true,
-   "loanFrom": "Spezia",
-   "adjudicatedOn": "2026-10-03",
-   "note": "Born 2000-04-27. No longer a Venezia player: Soccerway has him on loan at Catanzaro from Spezia since July 2026, to 2027-06-30, after a loan at Empoli in the spring. Catanzaro's number 27, with Serie B matches from 2026-08-21 to 2026-09-19. Neither Catanzaro nor Spezia is modelled.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://www.legaseriea.it/team/venezia/squad",
-     "publisher": "Lega Serie A (Venezia squad, current)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    },
-    {
-     "family": "B",
-     "url": "https://us.soccerway.com/player/candela-antonio/nHot9WLH/transfers",
-     "publisher": "Soccerway",
-     "readOn": "2026-10-03",
-     "says": "on loan at Catanzaro from Spezia from July 2026 to 2027-06-30, born 2000-04-27"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/player/_/id/250668/antonio-candela",
-     "publisher": "ESPN (player page)",
-     "readOn": "2026-10-03",
-     "says": "Catanzaro number 27, born 2000-04-27, played 2026-09-19"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/team/squad/_/id/17530/venezia",
-     "publisher": "ESPN (Venezia squad page, season 2026-27)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    }
-   ],
-   "shard": "italy-france"
-  },
-  {
-   "name": "Gianluca Caprari",
-   "from": "Monza",
-   "realClub": "Padova",
-   "adjudicatedOn": "2026-10-03",
-   "note": "Born 1993-07-30. Moved from Monza to Padova on 2026-01-30, contract to June 2027; Padova's number 10, with Serie B matches from 2026-08-23 to 2026-09-12. Padova is not modelled.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://www.legaseriea.it/team/monza/squad",
-     "publisher": "Lega Serie A (Monza squad, current)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    },
-    {
-     "family": "B",
-     "url": "https://us.soccerway.com/player/caprari-gianluca/hM9I17fh/transfers",
-     "publisher": "Soccerway",
-     "readOn": "2026-10-03",
-     "says": "Monza to Padova 2026-01-30, born 1993-07-30, contract to 2027-06-30, current club Padova"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/player/_/id/156792/gianluca-caprari",
-     "publisher": "ESPN (player page)",
-     "readOn": "2026-10-03",
-     "says": "Padova number 10, born 1993-07-30, played 2026-09-12"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/team/squad/_/id/4007/monza",
-     "publisher": "ESPN (Monza squad page, season 2026-27)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    }
-   ],
-   "shard": "italy-france"
-  },
-  {
-   "name": "Samuele Mulattieri",
-   "from": "Sassuolo",
-   "realClub": "Hellas Verona, on loan from Sassuolo",
-   "loan": true,
-   "loanFrom": "Sassuolo",
-   "adjudicatedOn": "2026-10-03",
-   "note": "Born 2000-10-07. After a 2025-26 loan at Deportivo, Sassuolo loaned him to Hellas Verona on 2026-07-31, to June 2027; Verona's number 19, with Serie B matches from 2026-08-29 to 2026-09-20. Verona is not modelled.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://www.legaseriea.it/team/sassuolo/squad",
-     "publisher": "Lega Serie A (Sassuolo squad, current)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    },
-    {
-     "family": "B",
-     "url": "https://us.soccerway.com/player/mulattieri-samuele/f3tdpb62/transfers",
-     "publisher": "Soccerway",
-     "readOn": "2026-10-03",
-     "says": "loaned to Verona from Sassuolo 2026-07-31 to 2027-06-30, born 2000-10-07"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/player/_/id/271140/samuele-mulattieri",
-     "publisher": "ESPN (player page)",
-     "readOn": "2026-10-03",
-     "says": "Hellas Verona number 19, born 2000-10-07, played 2026-09-20"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/team/squad/_/id/3997/sassuolo",
-     "publisher": "ESPN (Sassuolo squad page, season 2026-27)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    }
-   ],
-   "shard": "italy-france"
-  },
-  {
-   "name": "Yann Karamoh",
-   "from": "Torino",
-   "realClub": "Sampdoria",
-   "adjudicatedOn": "2026-10-03",
-   "note": "Born 1998-07-08. Left Torino on a free for Porto on 2025-09-18, then joined Sampdoria on a free on 2026-09-05, contract to June 2027; Sampdoria's number 14, played in Serie B on 2026-09-13. Sampdoria is not modelled.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://www.legaseriea.it/team/torino/squad",
-     "publisher": "Lega Serie A (Torino squad, current)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    },
-    {
-     "family": "B",
-     "url": "https://us.soccerway.com/player/karamoh-yann/OQYJ3VXT/transfers",
-     "publisher": "Soccerway",
-     "readOn": "2026-10-03",
-     "says": "Torino to Porto free 2025-09-18, Porto to Sampdoria free 2026-09-05, born 1998-07-08, contract to 2027-06-30"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/player/_/id/225555/yann-karamoh",
-     "publisher": "ESPN (player page)",
-     "readOn": "2026-10-03",
-     "says": "Sampdoria number 14, born 1998-07-08, played 2026-09-13"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/team/squad/_/id/239/torino",
-     "publisher": "ESPN (Torino squad page, season 2026-27)",
      "readOn": "2026-10-03",
      "says": "not listed"
     }
@@ -9456,37 +9496,6 @@
      "publisher": "ESPN",
      "readOn": "2026-10-03",
      "says": "Urawa Red Diamonds; last Galaxy appearance 2026-07-26, J1 League appearances for Urawa from 2026-08-23"
-    }
-   ],
-   "shard": "england-mls"
-  },
-  {
-   "name": "Lorenzo Insigne",
-   "from": "Toronto FC",
-   "realClub": "Sampdoria",
-   "adjudicatedOn": "2026-10-03",
-   "note": "Born 1991-06-04 (ESPN). Toronto and Insigne ended his contract by mutual agreement on 2025-07-01; ESPN has him at Pescara in 2025-26 and at Sampdoria in Serie B in 2026-27. Sampdoria's own report of their 2-1 win over Catanzaro on 2026-09-19 names Insigne in the starting eleven and as a scorer. The report gives only the surname, and his brother Roberto is also a winger, so the first name rests on ESPN, whose Sampdoria squad carries one Insigne, Lorenzo, shirt 10. The game models no Serie B.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://www.mlssoccer.com/news/toronto-fc-mutually-part-ways-with-lorenzo-insigne",
-     "publisher": "MLS (mlssoccer.com, 2025-07-01)",
-     "readOn": "2026-10-03",
-     "says": "Toronto FC and Insigne mutually agree to terminate his contract"
-    },
-    {
-     "family": "A",
-     "url": "https://www.sampdoria.it/news/team/2026/09/19/la-samp-rimonta-il-catanzaro-e-trova-la-prima-vittoria/",
-     "publisher": "U.C. Sampdoria (match report, 2026-09-19)",
-     "readOn": "2026-10-03",
-     "says": "Serie BKT 2026/27, Sampdoria 2 Catanzaro 1, goal: Insigne; starting eleven includes Insigne"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/team/squad/_/id/2734",
-     "publisher": "ESPN (Sampdoria squad, season 2026-27)",
-     "readOn": "2026-10-03",
-     "says": "Lorenzo Insigne, shirt 10, forward, born 1991-06-04; Sampdoria appearances 2026-08-29 to 2026-09-19; not on ESPN's Toronto FC 2026 squad"
     }
    ],
    "shard": "england-mls"
@@ -11415,9 +11424,130 @@
    "shard": "rest",
    "withheld": true,
    "withheldWhy": "the league's own Al Fayha squad page and ESPN's both leave him out"
+  },
+  {
+   "name": "Giuseppe Panico",
+   "club": "Avellino",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Serie B was mapped, on a 2025 row at Avellino with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Ernesto Starita",
+   "club": "Benevento",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Serie B was mapped, on a 2025 row at Benevento with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Nicolò Buso",
+   "club": "Catanzaro",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Serie B was mapped, on a 2025 row at Catanzaro with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Tommaso Biasci",
+   "club": "Catanzaro",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Serie B was mapped, on a 2025 row at Catanzaro with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Emanuele Adamo",
+   "club": "Cesena",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Serie B was mapped, on his 2025 row at Cesena, but the table's own 2026 row puts him at Spezia Calcio, a club the game does not model. Not yet read on the web, so he is withheld from every squad until two source families say where he is.",
+   "shard": "round1040",
+   "withheld": true,
+   "withheldWhy": "the table's 2026 row puts him at Spezia Calcio, which the game does not model"
+  },
+  {
+   "name": "Andrea Fulignati",
+   "club": "Cremonese",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Serie B was mapped, on a 2025 row at Cremonese with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Sebastiano Esposito",
+   "club": "Empoli",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Serie B was mapped, on a 2025 row at Empoli with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Mattia Viti",
+   "club": "Empoli",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Serie B was mapped, on a 2025 row at Empoli with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Youssef Maleh",
+   "club": "Empoli",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Serie B was mapped, on a 2025 row at Empoli with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Davide Zappella",
+   "club": "Entella",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Serie B was mapped, on his 2025 row at Entella, but the table's own 2026 row puts him at Guidonia Montecelio 1937 FC, a club the game does not model. Not yet read on the web, so he is withheld from every squad until two source families say where he is.",
+   "shard": "round1040",
+   "withheld": true,
+   "withheldWhy": "the table's 2026 row puts him at Guidonia Montecelio 1937 FC, which the game does not model"
+  },
+  {
+   "name": "Lorenzo Sgarbi",
+   "club": "Juve Stabia",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Serie B was mapped, on a 2025 row at Juve Stabia with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Enej Jelenic",
+   "club": "Padova",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Serie B was mapped, on his 2025 row at Padova, but the table's own 2026 row puts him at FC Koper, a club the game does not model. Not yet read on the web, so he is withheld from every squad until two source families say where he is.",
+   "shard": "round1040",
+   "withheld": true,
+   "withheldWhy": "the table's 2026 row puts him at FC Koper, which the game does not model"
+  },
+  {
+   "name": "Olimpiu Moruțan",
+   "club": "Pisa",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Serie B was mapped, on his 2025 row at Pisa, but the table's own 2026 row puts him at FC Rapid 1923, a club the game does not model. Not yet read on the web, so he is withheld from every squad until two source families say where he is.",
+   "shard": "round1040",
+   "withheld": true,
+   "withheldWhy": "the table's 2026 row puts him at FC Rapid 1923, which the game does not model"
+  },
+  {
+   "name": "Leonardo Sernicola",
+   "club": "Pisa",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Serie B was mapped, on a 2025 row at Pisa with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Amin Sarr",
+   "club": "Verona",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Serie B was mapped, on a 2025 row at Verona with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Nicola Rauti",
+   "club": "Vicenza",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Serie B was mapped, on a 2025 row at Vicenza with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
   }
  ],
  "adjudicatorWeb2026_10_02": "Web adjudication, 2026-10-02, for the twenty Brazilian rows Round 876 added to pending, after a review found two of them false (Weverton at Grêmio since January, Júnior Alonso at Atlanta United since July). Read with WebFetch and WebSearch only. Family A is the club's own site where it could be reached; family B is independent press and ESPN's 2026-27 squad pages, read after the Brazilian window shut on 2026-09-11. A row left pending only where two publishers agreed on the club. Nineteen of the twenty were settled: ten at a new club (nine moves plus Antonio Sanabria, below), three at clubs the game does not model, seven confirmed where they were. Pedro Raul stays pending with what the check found. The same pass found Antonio Sanabria, held out as removedClubNotModelled at Cremonese, signed for Internacional on 2026-08-20, so he moves to movedTo now that Internacional are modelled.",
  "adjudicatorWeb2026_10_02_ligamx": "Web adjudication, 2026-10-02, for the twenty nine Liga MX rows Round 883 added to pending. Read with WebFetch and WebSearch only. Family A is Liga MX's own Apertura 2026 squad pages (ligamx.net) or the club's own site; family B is independent press, ESPN's 2026-27 squad pages, Soccerway and FotMob, read after the Liga MX window. All twenty nine settled: twelve confirmed at their club, seven at another modelled Mexican club (two on loan), ten at a club the game does not model. A name absent from one squad page alone was never enough to move or drop anybody.",
- "adjudicatorShards2026_10": "Web adjudication of every row still pending on 2026-10-03, in six shards read 2026-10-03 to 2026-10-05 (Rounds 930 to 935: Germany; Spain and Portugal; Italy and France; England and MLS; Belgium, the Netherlands and Turkey; the rest), folded by Round 1015 through scripts/foldRosterAdjudication.mjs. Each folded row carries shard, the file under scripts/data/rosterAdjudication2026-10/ that holds its evidence and that shard's notes for the fold. A settled row has two sources from two families (A, the club's or the league's own page; B, an independent publisher on another host). A row the shard left pending, because its families disagreed or no official page could be read, stays pending with the shard's note. Where that note says a 2026-27 squad list leaves him out of the club recorded here, or its sources disagree on that club, the row also carries withheld and withheldWhy, and the bake keeps him out of every squad until two families say where he is; the other pending rows still ship at the club recorded here. Not folded: rest.json's heldOnTwoPublishers (Andreas Hansen confirmed at FC Nordsjælland, Topi Keskinen moved to OB), which the shard keeps pending for want of an official page."
+ "adjudicatorShards2026_10": "Web adjudication of every row still pending on 2026-10-03, in six shards read 2026-10-03 to 2026-10-05 (Rounds 930 to 935: Germany; Spain and Portugal; Italy and France; England and MLS; Belgium, the Netherlands and Turkey; the rest), folded by Round 1015 through scripts/foldRosterAdjudication.mjs. Each folded row carries shard, the file under scripts/data/rosterAdjudication2026-10/ that holds its evidence and that shard's notes for the fold. A settled row has two sources from two families (A, the club's or the league's own page; B, an independent publisher on another host). A row the shard left pending, because its families disagreed or no official page could be read, stays pending with the shard's note. Where that note says a 2026-27 squad list leaves him out of the club recorded here, or its sources disagree on that club, the row also carries withheld and withheldWhy, and the bake keeps him out of every squad until two families say where he is; the other pending rows still ship at the club recorded here. Not folded: rest.json's heldOnTwoPublishers (Andreas Hansen confirmed at FC Nordsjælland, Topi Keskinen moved to OB), which the shard keeps pending for want of an official page.",
+ "populationRound1040": "Round 1040 mapped Serie B (nineteen table spellings, Arezzo having none) and re-baked from the 2026-10-02 dump. Nine rows left removedClubNotModelled for movedTo on their existing sources, since their real club is modelled now (Scuffet to Pisa, Augello to Palermo, Distefano to Empoli, Marchizza to Vicenza, Candela to Catanzaro, Caprari to Padova, Mulattieri to Verona, Karamoh and Insigne to Sampdoria). Sixteen players came in on a 2025 row at a Serie B club, so they joined the population as pending, not yet read on the web (Panico, Starita, Buso, Biasci, Adamo, Fulignati, Esposito, Viti, Maleh, Zappella, Sgarbi, Jelenic, Morutan, Sernicola, Amin Sarr, Rauti). Four of them (Adamo, Zappella, Jelenic, Morutan) have a 2026 row at a club the game does not model, so they are withheld from every squad rather than shipped at last season's club. Fourteen more men moved out of other squads on their own 2026 row, which the bake now reads because the club it names is mapped; they are not 2025 fallbacks, so they are outside this population, and none was in the ledger: Missori (Sassuolo to Avellino), Bondo (Monza to Cremonese), Terracciano (AC Milan to Cremonese), Zampano (Venezia to Modena), Pohjanpalo (Venezia to Palermo), Stengs (Feyenoord to Pisa), Lorran (Flamengo to Pisa), Vural (Frosinone to Pisa), Cuadrado (Atalanta to Pisa), Martinelli (Fiorentina to Sampdoria), Orban (Hoffenheim to Verona), Nelsson (Roma to Verona), Bernede (Lausanne-Sport to Verona) and Lirola (Marseille to Verona). Their earlier clubs were 2025 rows the table had already overtaken."
 }
