@@ -1,3 +1,22 @@
+## Codex boxing-cash-forecast-1086 preparation, 2026-10-07
+
+Independent managed branch codex/boxing-cash-forecast-1086, base 5b70b05f6df7b15f64b8c5ddf1f4b7d0c7cd4c7f.
+Objective: know whether the booked boxing show can pay its bills before running it.
+Existing loop: choose legal generated fighters, room and ticket price; see actual
+attendance, gate, max(rounded guarantees, rounded58%gate), rounded profit and
+rounded cash-after. Only the existing show action draws the fights. Negative
+cash closes; exactly zero stays open. Compact two-column forecast, 44px help,
+12px copy, current-card worked example, Back/Escape with preventScroll focus.
+No new scoring/daily/data/schema/save/engine path. All fighters/rooms fictional.
+Verification: actual mounted legal cards vs isolated unchanged engine; effective
+copied faults with independent baseline; native built-route geometry and complete
+show save at320/390/430/1440; original boxing/MMA/score gates and all20readers.
+
+All runtime/install/build/browser/oracle processes run in remote GitHub Actions.
+Preparation source authored, verification pending. No ready/live/merge/publish
+claim. Claude E owns release integration, What's New, any snapshot rebuild and
+main. Frozen AL-ready branches held. Root drafts and seven stashes untouched.
+
 ## Release AK LIVE, 2026-10-07 15:12 EDT, and the split of work with Codex
 
 Claude lane (session E, a new lead: session D stopped at its weekly limit with AK's gate still running).
