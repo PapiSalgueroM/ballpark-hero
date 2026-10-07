@@ -92,6 +92,29 @@
                    own line where both builds took it the same offseason, and
                    the median legacy and Hall share over every career.
 
+   BANDS for sections 9 to 14, measured 2026-10-06 and 07 (Round 1039) on a
+   machine shared with other builders, 400 board careers a policy:
+     9 to 13 are exact: zero misses in every run. Their floors only stop a
+     check from passing on nothing (talks answered, ends of each kind, talk
+     offseasons, synthetic jerseys, both sides of the era line). Default
+     seed: talks answered one more year nfl 1118, nba 1328, mlb 1277, nhl
+     1202; deck farewells nfl 28, nba 8, mlb 36, nhl 124; talk offseasons
+     2577 to 3054; deck retired numbers nfl 57 (5 at a club with fewer
+     seasons), nba 90 (30), mlb 75 (14), nhl none (its deck has no jersey
+     card, so the synthetic careers carry section 12 there); throwback eras
+     below the verified class nfl 28, nba 31, nhl 4 of 100, mlb 0 (its line
+     is the Class of 2014, so the synthetic boundary ballots carry it).
+     14, six NHL seeds (default and SIM_SEED 1 to 5), 800 careers a build:
+       walk away farewells taken the same offseason in both builds 16, 12,
+       12, 21, 17, 10 (of 56, 42, 43, 56, 60, 58). Band: at least 5.
+       that farewell season's OVR, old build 63.0 every time, now 83.3 to
+       86.3 (a gain of 20.3 to 23.3); points (wins for a goalie) 14.8 to
+       18.7 became 48.0 to 70.0. Band: OVR gain at least 10.
+       Hall share over every career moved -0.12 to -0.75 points. Band: 2.5.
+       median legacy over every career moved 0 to -7. Band: 15.
+       (Seeds 1 to 3 ran before the bands were set and were red only on the
+       placeholder case floor of 30; every other check was green.)
+
    A control run exits 1 only when the check it targets is red (FIRED), and 0
    when it is not (DID NOT FIRE), whatever else went red.
 
