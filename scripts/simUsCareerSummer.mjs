@@ -58,6 +58,17 @@
      9. board     src/test/usCareerSummer.test.tsx passes on the real board
                   (Vitest's own exit code and its count). Control noresume
                   (the board's summer restore switched off) must fail it.
+     10. later    no answer to a card after card 1 moves the rating or its
+                  ceiling, read off the career before and after each answer
+                  (the guides promise it). Control probe (the deal's rating
+                  probe and the show time check both off).
+     11. arc      no corruption card is dealt after card 1, and some are
+                  dealt as card 1. Control latercorrupt.
+     12. kind     card 1 is the one card draw on slot 0's stream unless that
+                  card is resting; a resting one is replaced by a fresh card
+                  of its own kind (moves the rating or not) whenever one is
+                  there, judged by this harness on the dealt state. Control
+                  nokind (any fresh card takes its place).
 
    DESIGN TOLERANCES (section 6), set before any measurement: a summer may
    move a career this much and no more, on against off.
@@ -139,7 +150,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
 const CAREERS = Number(process.argv[2] || 400);
 const CONTROL = process.env.SIM_CONTROL || '';
-const SECTIONS = new Set((process.env.SIM_SECTIONS || '1,2,3,3b,4,5,6,7,8,9').split(',').map(s => s.trim()));
+const SECTIONS = new Set((process.env.SIM_SECTIONS || '1,2,3,3b,4,5,6,7,8,9,10,11,12').split(',').map(s => s.trim()));
 const SEED = Number.isFinite(Number(process.env.SIM_SEED)) && process.env.SIM_SEED ? Number(process.env.SIM_SEED) : 0;
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'usSummer-'));
 process.on('exit', () => { try { fs.rmSync(TMP, { recursive: true, force: true }); } catch { /* best effort */ } });
@@ -166,6 +177,15 @@ const CONTROLS = {
       { file: SUMMER, from: '[e] = takeFresh(deck, 1, knob.cooldowns ? ledger : null, year, knob.fallbackCooldown, passed, r, outsideLedger);', to: "e = deck.find(x => x.id === 'training'); break;" },
     ],
   },
+  probe: {
+    section: '10', note: 'later cards are never checked for the rating, at the deal or when shown',
+    edits: [
+      { file: SUMMER, from: 'if (moraleLiftOf(c, e, snapshot) <= LATER_CARD_MORALE_LIFT && !movesRating(c, e, snapshot)) break;', to: 'if (moraleLiftOf(c, e, snapshot) <= LATER_CARD_MORALE_LIFT) break;' },
+      { file: SUMMER, from: 'if (card && (s.at === 0 || !laterAnswerMovesRating(c, sport, card, s.at))) return card;', to: 'if (card) return card;' },
+    ],
+  },
+  latercorrupt: { section: '11', note: 'the later slots may deal the corruption deck', edits: [{ file: SUMMER, from: ".filter(e => e.press !== 'big' && !e.corruption);", to: ".filter(e => e.press !== 'big');" }] },
+  nokind: { section: '12', note: 'a resting card 1 is replaced by any fresh card, whatever its kind', edits: [{ file: SUMMER, from: 'if (movesRating(c, cand, snapshot) === kind) { first = cand; break; }', to: '{ first = cand; break; }' }] },
   drift: { section: '8', note: 'the shared ledger compares with < where soccer uses <=', edits: [{ file: LEDGER, from: '  return season - last <= cooldownOf(e, fallback);', to: '  return season - last < cooldownOf(e, fallback);' }] },
   noresume: { section: '9', note: "the board's summer restore switched off", edits: [{ file: 'src/components/us-career/UsCareerBoard.tsx', from: "if (restoredPhase === 'season' && loaded.summer) {", to: "if (restoredPhase === 'season' && loaded.summer && false) {" }] },
 };
@@ -244,12 +264,50 @@ const pickOption = (tag, year, ev) => Math.floor(keyedRng(`policy:${tag}:${year}
 function offseason(sport, c, tq, tag) {
   const year = lastYear(c);
   let ev = startSummer(c, sport, Math.random);
+  const dealt = c.summer ? c.summer.ids.length : ev ? 1 : 0;
   const answered = [];
   while (ev) {
-    answered.push({ id: ev.id, story: ev.story, cooldown: ev.cooldown, press: ev.press });
-    ev = answerSummerCard(c, sport, ev, pickOption(tag, year, ev), Math.random).next;
+    /* slot: the card's place in the summer (0 is card 1); moved: whether its
+       answer changed the rating or its ceiling (sections 10 to 12). */
+    const slot = c.summer ? c.summer.at : 0;
+    const ovr = c.ovr, pot = c.pot;
+    const next = answerSummerCard(c, sport, ev, pickOption(tag, year, ev), Math.random).next;
+    answered.push({ id: ev.id, story: ev.story, cooldown: ev.cooldown, press: ev.press, corruption: !!ev.corruption, slot, moved: c.ovr !== ovr || c.pot !== pot });
+    ev = next;
   }
-  return { year, answered, tq: sport.rollTeamQuality(tq, Math.random) };
+  return { year, answered, dealt, tq: sport.rollTeamQuality(tq, Math.random) };
+}
+
+/* Section 12's independent reading of card 1, from the state the summer was
+   dealt on: the one card draw on slot 0's stream, whether it was resting, and
+   when it was, whether a fresh card of its kind (moves the rating or not)
+   was there to take its place and what kind card 1 turned out to be. Draws
+   only keyed streams, and puts the seeded stream back as it found it. */
+function card1Kind(sport, pre, first) {
+  if (!first || first.slot !== 0) return null;
+  const rs = RS, calls = CALLS;
+  const { movesRating, summerCareerKey } = B.summer;
+  const year = lastYear(pre);
+  const ledger = pre.eventLastFired ?? {};
+  const fb = sport.summer.fallbackCooldown;
+  const stream = () => keyedRng(`summer:${sport.slug}:${summerCareerKey(pre)}:${year}:0`);
+  const raw = sport.drawEvent(clone(pre), stream());
+  const resting = sport.summer.cooldowns && !raw.press && B.ledger.onCooldown(ledger, raw, year, fb);
+  let out;
+  if (!resting) out = { resting: false, same: first.id === raw.id, raw: raw.id };
+  else {
+    const deck = sport.eventDeck(clone(pre), stream()).filter(e => e.press !== 'big');
+    const rawKind = movesRating(pre, raw);
+    const card = deck.find(e => e.id === first.id);
+    let sameKindFresh = false;
+    for (const e of deck) {
+      if (keyOf(e) === keyOf(raw) || (!e.press && B.ledger.onCooldown(ledger, e, year, fb))) continue;
+      if (movesRating(pre, e) === rawKind) { sameKindFresh = true; break; }
+    }
+    out = { resting: true, rawKind, firstKind: card ? movesRating(pre, card) : null, sameKindFresh, raw: raw.id };
+  }
+  RS = rs; CALLS = calls;
+  return out;
 }
 
 /* One career on one knob, the board's order: the day you arrive (with the
@@ -289,10 +347,11 @@ function playCareer(slug, sport, ci, { probe = false, keep = 0, states = null } 
     if (sport.shouldRetire(c)) { c.retired = true; offs.push({ final: true }); break; }
     const knobBig = probe ? B[slug].drawEvent(clone(c), () => 0.5).press === 'big' : null;
     if (states && states.length < keep) states.push({ c: clone(c), tq, rs: RS, tag });
+    const pre = probe && want('12') && summerOn(sport.summer) ? clone(c) : null;
     const o = offseason(sport, c, tq, tag);
     tq = o.tq;
     peak = Math.max(peak, c.ovr);
-    offs.push({ year: o.year, answered: o.answered, knobBig });
+    offs.push({ year: o.year, answered: o.answered, dealt: o.dealt, knobBig, kind: pre ? card1Kind(sport, pre, o.answered[0]) : null });
   }
   const legacy = sport.legacyOf(c);
   return { c, peak, legacy, offs };
@@ -311,7 +370,7 @@ const headlinesOf = (slug, c) => c.seasons.reduce((n, s) => n + (s.awards ?? [])
 const want = s => SECTIONS.has(s);
 
 /* ─── the main runs: every sport, on and off, the same careers ──────────── */
-const needMain = ['1', '2', '3', '3b', '4', '5', '7'].some(want);
+const needMain = ['1', '2', '3', '3b', '4', '5', '7', '10', '11', '12'].some(want);
 const RUNS = {};
 const STATES = {};
 const t0 = Date.now();
@@ -321,7 +380,7 @@ if (needMain) {
     STATES[slug] = [];
     RUNS[slug] = { on: [], off: [] };
     for (let i = 0; i < CAREERS; i += 1) {
-      RUNS[slug].on.push(playCareer(slug, sport, i, { probe: want('3b'), keep: 400, states: STATES[slug] }));
+      RUNS[slug].on.push(playCareer(slug, sport, i, { probe: want('3b') || want('12'), keep: 400, states: STATES[slug] }));
       RUNS[slug].off.push(playCareer(slug, off, i));
     }
   }
@@ -421,6 +480,49 @@ if (want('7')) {
     const all = runs => new Set(runs.flatMap(r => played(r.offs).flatMap(o => o.answered.map(e => e.id)))).size;
     console.log(`   ${slug}: ${on.toFixed(2)} distinct cards a career on, ${off.toFixed(2)} off, lift ${(on / off).toFixed(2)}; ${all(RUNS[slug].on)} and ${all(RUNS[slug].off)} distinct over the fleet`);
     if (!(on / off >= COVERAGE_LIFT)) fail('7', `${slug}: lift ${(on / off).toFixed(2)} under ${COVERAGE_LIFT}`);
+  }
+}
+
+/* Sections 10 to 12 read the summer's own rules directly, card by card, so
+   none of them leans on section 6's statistics to notice a rule is gone. */
+const laterOf = r => played(r.offs).flatMap(o => o.answered.filter(e => e.slot > 0));
+if (want('10')) {
+  console.log('10) later cards: no answer after card 1 moves the rating or its ceiling');
+  for (const slug of Object.keys(SPORTS)) {
+    const later = RUNS[slug].on.flatMap(laterOf);
+    const moved = later.filter(e => e.moved);
+    const dealt = RUNS[slug].on.reduce((n, r) => n + played(r.offs).reduce((m, o) => m + o.dealt, 0), 0);
+    const answered = RUNS[slug].on.reduce((n, r) => n + played(r.offs).reduce((m, o) => m + o.answered.length, 0), 0);
+    console.log(`   ${slug}: ${later.length} later answers, ${moved.length} moved the rating${moved.length ? ` (first ${moved[0].id})` : ''}; ${dealt - answered} of ${dealt} dealt cards skipped when shown`);
+    if (later.length < 100) fail('10', `${slug}: only ${later.length} later answers, too few to read`);
+    if (moved.length) fail('10', `${slug}: ${moved.length} answers after card 1 moved the rating`);
+  }
+}
+
+if (want('11')) {
+  console.log('11) the integrity arc stays with card 1: no corruption card after it');
+  for (const slug of Object.keys(SPORTS)) {
+    const first = RUNS[slug].on.flatMap(r => played(r.offs).flatMap(o => o.answered.filter(e => e.slot === 0 && e.corruption)));
+    const later = RUNS[slug].on.flatMap(laterOf).filter(e => e.corruption);
+    console.log(`   ${slug}: ${first.length} corruption cards as card 1, ${later.length} later${later.length ? ` (first ${later[0].id})` : ''}`);
+    if (!first.length) fail('11', `${slug}: no corruption card was dealt at all, so this proves nothing`);
+    if (later.length) fail('11', `${slug}: ${later.length} corruption cards were dealt after card 1`);
+  }
+}
+
+if (want('12')) {
+  console.log('12) card 1: the one card draw, or when it rests, a fresh card of its kind');
+  for (const slug of Object.keys(SPORTS)) {
+    const ks = RUNS[slug].on.flatMap(r => played(r.offs).map(o => o.kind).filter(Boolean));
+    const kept = ks.filter(k => !k.resting), rested = ks.filter(k => k.resting);
+    const notRaw = kept.filter(k => !k.same);
+    const reachable = rested.filter(k => k.sameKindFresh);
+    const wrongKind = reachable.filter(k => k.firstKind !== k.rawKind);
+    const ratingRested = reachable.filter(k => k.rawKind).length;
+    console.log(`   ${slug}: ${kept.length} card 1s were the draw itself (${notRaw.length} were not); ${rested.length} draws were resting, ${reachable.length} with a fresh card of their kind (${ratingRested} rating cards), ${wrongKind.length} redrawn in another kind`);
+    if (notRaw.length) fail('12', `${slug}: ${notRaw.length} card 1s differ from a draw that was not resting`);
+    if (reachable.length < 50 || !ratingRested) fail('12', `${slug}: only ${reachable.length} resting draws (${ratingRested} of them rating cards), too few to read`);
+    if (wrongKind.length) fail('12', `${slug}: ${wrongKind.length} resting draws were replaced by a card of the other kind (first ${wrongKind[0].raw})`);
   }
 }
 
