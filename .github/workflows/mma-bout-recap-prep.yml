@@ -63,6 +63,7 @@ jobs:
           for harness in simFightPromoter simFightGym simFightCareer simNbaCareer simNflCareer simMlbCareer simNhlCareer simNoDoubleRecord simScoringCoverage simScoreShown simHarnessAnchors simGuideHeadings simSeoTitles simHomeFront simInventedNames; do
             ONLY="$harness" node scripts/runAllSims.mjs 2>&1 | tee "mma-promotion-artifacts/$harness.log" || failed=1
           done
+          NO_DOUBLE_CONTROL=scanpracticefree ONLY=simNoDoubleRecord node scripts/runAllSims.mjs 2>&1 | tee mma-promotion-artifacts/no-double-free-control.log || failed=1
           exit "$failed"
       - name: All built pages and search readers
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
