@@ -160,6 +160,17 @@
       the review found for the older eras, AI buyers drawn from the modern
       clubs, applies to a 2020-21 save the same way; it was not isolated
       again here).
+      Release AH (2026-10-06) merged Round 1033 (today's real free agents
+      open a modern career) beside Round 1035, whose file the merge kept,
+      and re-took modern only, after attribution in throwaway copies of the
+      merged tree fc30942e, each written with --part=modern --write: with
+      1033's merge (8a181544) reverted the tree reproduced 1035's file 23/0;
+      the merged tree itself moved all 23 modern saves in "start", "whole"
+      and "wholeNext" ("s2_whole" too for the four pyramid saves) and in no
+      other field, so table, results, world, cup, europe, trophies and
+      objectives held and what moved is the day one pool 1033 seeds; and
+      the lead's F10 call (Central Coast Mariners partial, 9529f5f5) moved
+      nothing on top of it (23/0). Eras 20/0 and pure 44/0 untouched.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,
