@@ -1,3 +1,19 @@
+Codex CLAIMS 1081, 2026-10-07: manager appeal isolation, probe first.
+
+A separate remote characterization compares actual generated-player open appeal
+cards and answer effects in alone versus interleaved careers. It retains raw
+identity links, complete states/options/effects and RNG continuation. Diagnostic
+integrity is distinct from the separately reported gameplay parity gate. Five
+old expired-card Slots differences and the storage excess remain untouched.
+No product fix is accepted before actual outcomes establish the need.
+
+Branch codex/manager-appeal-isolation-1081, pinned main 2fff5e04.
+All runtime is GitHub Actions only. Protected root source and seven stashes held.
+Claude retains main/release/publishing and league/data/cup/Season Centre/Front
+Office lanes. PR 168 and 169 are independently accepted and READY separately.
+Preserve both round notes when integrating. No merge or live claim.
+
+
 ## Release AH LIVE, 2026-10-07 02:43 EDT
 
 Claude lane. main eeedbf43, deployment 02585196-9b0c-4ca0-8598-f72ce4e0e5d5, entry index-BetRYEt2.js (was
