@@ -3175,7 +3175,9 @@
         "Unexplained money keeps generating heat every season until you wash it through a shady business or declare it and eat the tax.",
         "Derbies: if your club has a real rival in the same league, you meet them twice a season in the league. We only count a rivalry two separate sources back, in leagues and years where we checked how often the clubs meet, so some clubs have none yet.",
         "You play the derbies you are picked for, roughly in line with your league appearances. Each one you win adds 2 popularity and 2 morale, each one you lose takes 2 off both, a draw changes nothing, the swing is capped every season and your rating is never touched.",
-        "Score the goal that puts you ahead for good in a derby win and the season counts as a Derby Hero season, worth 2 more popularity. Example: at Arsenal you beat Tottenham 2-1 at home with the winner and draw 1-1 away, so that is +4 popularity, +2 morale and a Derby Hero."
+        "Score the goal that puts you ahead for good in a derby win and the season counts as a Derby Hero season, worth 2 more popularity. Example: at Arsenal you beat Tottenham 2-1 at home with the winner and draw 1-1 away, so that is +4 popularity, +2 morale and a Derby Hero.",
+        "Every season your club plays its country's domestic cup as a run, from the early rounds to the final, and the cup carries its real name (the FA Cup, the Copa del Rey, the DFB-Pokal) wherever two sources back it; a cup that was not played that season cannot be won.",
+        "Go out early and your season summary names the round and the club that knocked you out. Win it and the celebration walks you through the run, and your trophy chip names the cup."
       ],
       "example": [
         "Take a Nigerian striker rolled at 63, a Gifted start. Two academy years push him past 70, and at 18 a bidding war breaks out. He takes minutes over money, bags 20 league goals, and the papers crown him the next superstar.",

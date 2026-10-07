@@ -99,6 +99,21 @@
  * one field the review added; no tree before it writes one), so the fixture
  * recorded from main still proves everything else unchanged.
  *
+ * Round 1041 (the domestic cup run) re-recorded the fixture, on purpose,
+ * from a clean git archive export of its branch (twice, identical), after
+ * the probe learned to hash a save without the new season row key cupRun
+ * the way it drops `moved`. Three deliberate changes of that round move
+ * saves, attributed in throwaway copies with each taken back out in memory
+ * (scripts/lib/careerAwardsNightBundle.mjs patches): with all three out the
+ * old fixture replays whole (0 of 48 careers move, 0 nights differ). Only the
+ * cup's real name in (the log line and the leader story say "FA Cup" where
+ * they said "Domestic Cup", no draw): 34 careers move. Only the coin fix in
+ * (a season whose association played no cup is never won, which changes the
+ * newspaper's candidates): careers 3, 32 and 41 and one generated rival name.
+ * Only the world rule in (cup winners by association, none crowned in a
+ * season with no cup, Toronto FC never the U.S. Open Cup's): 25 careers and
+ * 13 nights. The whole round: 41 of 48 careers and 73 nights, the union.
+ *
  * Negative controls (SIM_AWARDS_NIGHT_CONTROL), each must turn its section red:
  *   reorderdraw   the era star loop draws assists before goals   -> section 1
  *   winnernottop  the night is no longer re-ranked after a rule  -> section 2

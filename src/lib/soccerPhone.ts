@@ -41,6 +41,7 @@
 import type { CareerState } from "./soccerCareerEngine";
 import { getEraStars, getEraTopClubs, getEraLeagueClubs, getEraRivalName } from "./careerEras";
 import { leagueKeyInYear, ledgerLeague } from "./soccerCareerLeague";
+import { cupFor, WORLD_LEAGUE_ASSOCIATION } from "./soccerCareerCup";
 
 /* ─── storage caps ─── */
 export const MAX_LINES = 6;    // lines kept per thread (three exchanges of history)
@@ -1597,7 +1598,14 @@ export function worldClubOf(s: CareerState, name: string): string | null {
  */
 export function worldSeasonTick(
   s: CareerState,
-  opts: { year: number; playerLeagueTitle: boolean; playerUcl: boolean; playerCup?: boolean },
+  opts: {
+    year: number; playerLeagueTitle: boolean; playerUcl: boolean; playerCup?: boolean;
+    /** Round 1041: the association whose cup the player's club played. */
+    playerCupAssociation?: string;
+    /** Round 1041: the association a club of the era lists plays its cup in,
+     *  or null when the club is not in the pool (it keeps its league's). */
+    cupAssociationOf?: (club: string) => string | null;
+  },
 ): WorldSeason {
   const p = ensurePhone(s);
   const rng = new Rng(p.seed || (Math.floor(Math.random() * 4294967295) >>> 0) || 11);
@@ -1685,7 +1693,21 @@ export function worldSeasonTick(
   for (const [name, clubs] of Object.entries(leagues)) {
     const mine = name === myLeague;
     leagueWinners[name] = draw(notMine(clubs, mine && opts.playerLeagueTitle));
-    cupWinners[name] = draw(notMine(clubs, mine && !!opts.playerCup));
+    /* Round 1041: the league's cup winner is its association's. His cup win
+       makes his club the winner whatever division it plays in (a Championship
+       side that wins the FA Cup), only the association's own clubs can win it
+       (Toronto FC never wins the U.S. Open Cup), and a season in which the
+       association played no cup crowns nobody. Every branch draws exactly
+       once, so the phone's later draws do not move. A caller that passes no
+       association keeps the old rule. */
+    const assoc = WORLD_LEAGUE_ASSOCIATION[name];
+    if (assoc === undefined || opts.playerCupAssociation === undefined) {
+      cupWinners[name] = draw(notMine(clubs, mine && !!opts.playerCup));
+      continue;
+    }
+    const entrants = clubs.filter(c => { const a = opts.cupAssociationOf?.(c) ?? null; return a === null || a === assoc; });
+    if (cupFor(assoc, year).kind === "NONE" || entrants.length === 0) { rng.next(); continue; }
+    cupWinners[name] = draw(notMine(entrants, assoc === opts.playerCupAssociation && !!opts.playerCup));
   }
   const ucl = draw(notMine(topClubs, opts.playerUcl));
 

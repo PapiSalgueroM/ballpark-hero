@@ -1871,6 +1871,13 @@ export const SOCCER_CONTENT_2: GameContentMap = {
           "Score the goal that puts you ahead for good in a derby win and the season counts as a Derby Hero season, worth 2 more popularity. Example: at Arsenal you beat Tottenham 2-1 at home with the winner and draw 1-1 away, so that is +4 popularity, +2 morale and a Derby Hero.",
         ],
       },
+      {
+        heading: "Your domestic cup run",
+        items: [
+          "Every season your club plays its country's domestic cup as a run, from the early rounds to the final, and the cup carries its real name (the FA Cup, the Copa del Rey, the DFB-Pokal) wherever two sources back it; a cup that was not played that season cannot be won.",
+          "Go out early and your season summary names the round and the club that knocked you out. Win it and the celebration walks you through the run, and your trophy chip names the cup.",
+        ],
+      },
     ],
     exampleSections: [
       {
