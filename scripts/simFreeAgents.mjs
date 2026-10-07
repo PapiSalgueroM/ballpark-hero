@@ -99,6 +99,7 @@
  *   elevenopen     interest forgets the eleventh best line           -> section 18, the cover and line checks
  *   elevenmine     the eleventh best line holds your ex-players too  -> section 18, the ex-player check
  *   realflip       a real free agent signs on for the plain fee      -> section 18, the sell on check
+ *   curvecopy      the generator keeps its own rating curve again    -> section 18, the one curve check
  *
  * Section 18 is Round 1033: real footballers two sources said had no club
  * (scripts/data/cmFreeAgents2026.json) open a modern career in the pool, once,
@@ -409,6 +410,8 @@ if (CONTROL === 'nosev') {
 } else if (CONTROL === 'realname') {
   /* Filled in below, once the real names are loaded: the control needs a real
      name nothing in this world already uses, or the used set re-rolls it. */
+} else if (CONTROL === 'curvecopy') {
+  /* Applied in section 18, where the generator's source is read. */
 } else if (CONTROL) {
   console.log(`   FAIL unknown control ${CONTROL}`);
   process.exit(1);
@@ -1550,12 +1553,26 @@ console.log("18) a modern day one opens with today's real free agents, and only 
   if (gen.problems.length) fail(`the generator refuses this ledger: ${gen.problems.slice(0, 2).join(' | ')}`);
   else if (renderFile(LEDGER, gen.rows) !== sources.faData) fail('src/data/clubManagerFreeAgents2026.ts is not what the ledger generates, rerun node scripts/genClubManagerFreeAgents.mjs');
   else ok('the generator accepts the ledger and the shipped file is exactly what it writes');
+  /* Release AH: Round 1035 lifted the bake's curves into
+     scripts/lib/cmValueCurve.mjs. One module, not two copies kept equal: the
+     curve lines live there, the bake and the generator both import it, and
+     neither carries a curve line of its own. */
+  const curveSrc = lf('scripts/lib/cmValueCurve.mjs');
   const bakeSrc = lf('scripts/bakeClubManagerRosters.mjs');
-  const genSrc = lf('scripts/genClubManagerFreeAgents.mjs');
+  let genSrc = lf('scripts/genClubManagerFreeAgents.mjs');
+  const CURVE_IMPORT = "import { POS_MAP, ratingOf, gbpM } from './lib/cmValueCurve.mjs';";
   const curves = ['const r = Math.round(-13.106 + 12.851 * Math.log10(usd));', 'const m = (usd * 0.75) / 1e6;', "'Centre-Forward': 'ST', 'Second Striker': 'CF',"];
-  const drift = curves.filter(c => !bakeSrc.includes(c) || !genSrc.includes(c));
-  if (drift.length) fail(`the free agent generator and the roster bake no longer share ${drift.length} curve line(s), so a real free agent is rated on another scale`);
-  else ok('a real free agent is rated, valued and placed by the roster bake\'s own curves');
+  if (CONTROL === 'curvecopy') {
+    /* The generator goes back to a copy of the rating curve of its own. */
+    if (genSrc.split(CURVE_IMPORT).length !== 2) { console.log('   FAIL control curvecopy anchor is not in the generator exactly once'); process.exit(1); }
+    genSrc = genSrc.replace(CURVE_IMPORT, () => `import { POS_MAP, gbpM } from './lib/cmValueCurve.mjs';\nfunction ratingOf(usd) {\n  ${curves[0]}\n  return r;\n}`);
+    console.log('   [control curvecopy applied to the generator source]');
+  }
+  const unlifted = curves.filter(c => !curveSrc.includes(c));
+  const copies = curves.filter(c => bakeSrc.includes(c) || genSrc.includes(c));
+  const strays = [['the roster bake', bakeSrc], ['the free agent generator', genSrc]].filter(([, s]) => !s.includes(CURVE_IMPORT)).map(([n]) => n);
+  if (unlifted.length || copies.length || strays.length) fail(`the free agent generator and the roster bake no longer rate on one curve module (${unlifted.length} curve line(s) missing from it, ${copies.length} copied beside it, not imported by: ${strays.join(', ') || 'none'}), so a real free agent could be rated on another scale`);
+  else ok('a real free agent is rated, valued and placed by the roster bake\'s own curves, one module both import');
 
   /* DAY ONE. Exactly the ledger's men, as the file has them, each a real man
      who joined the pool this season, and the six journeymen still there. */
