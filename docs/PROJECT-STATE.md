@@ -1,3 +1,25 @@
+## Release AJ LIVE, 2026-10-07 11:34 EDT
+
+Claude lane. main 3353111f, deployment 3dba165e-356d-4381-9d12-25f9f8018695, entry index-qeAzpi07.js (was
+index-jYL_6eim.js, Release AI). Proof at 11:34: x-deployment-id carries 3dba165e; /whats-new carries "you
+choose when it ends, and the Hall makes you wait"; /nba-my-career's saved page carries the Hall of Fame lines.
+
+What shipped: Round 1039, on all four US My Careers: the retirement talk (retire now, one more year, or a
+farewell season), the farewell season itself, and a Hall of Fame ballot derived and keyed from the career
+(era rules two sourced; a class year prints only where its regime is anchored). Lead call: the legacy
+calibration that makes huge counting stat careers wait up to ten ballots (nbaLegacyOf has no assist or
+rebound terms) is its own follow-up round, since fixing it re-tells every retired save's ballot.
+
+Gate d1 on 249aa16a: lanes green, vitest 246 passed, sweep 183 routes 0 findings, the four US plays clean.
+Fixed at release, each in its commit: /nfl-my-career budget 454K from measurement; playCareerPress now
+answers the retirement talk (the walk stalled on it); and two checks red on main since earlier releases,
+simCareerSeasonRatings section 3 (Round 1041's cup run reads the ovr stamp by design; the digest leaves
+cupRun out, 16 of 16 streams equal) and playSoccerCareer check 3 (Round 972 prints the play-off as
+"Play-off", the check looked for "PO").
+
+Next from this lane: Round 1045, the Season Centre (Soccer Career, a season week by week), closed at
+322e4aea after two reviews and a fix (5 majors closed), ships as Release AK. main/publish held by this lane.
+
 ## Release AI LIVE, 2026-10-07 08:51 EDT
 
 Claude lane. main 7cd5322a, deployment 35179be4-ab5b-48f2-81f0-e4729ca92a47,
