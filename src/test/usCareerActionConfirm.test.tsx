@@ -103,6 +103,8 @@ describe('US career destructive action confirmation', () => {
     dialog = open(opener, 'retire'); assertUntouched(row, bytes); fireEvent.click(within(dialog).getByRole('button', { name: confirmName('retire') })); await flush();
     expect(first.getByText(`${saved.c.name} retires`)).toBeInTheDocument();
     const expected = clone(saved); expected.c.retired = true; expected.phase = 'retired';
+    /* Round 1039: the retire button writes the last season played as the last (usCareerRetirementFlow manualRetire). */
+    expected.c.retirement = { retiredYear: saved.c.seasons[saved.c.seasons.length - 1].year };
     expect(JSON.parse(localStorage.getItem(row.saveKey)!)).toEqual(expected); expect(localStorage.getItem(SENTINEL_KEY)).toBe(SENTINEL);
     expect(recordCompletion).toHaveBeenCalledExactlyOnceWith(`/${row.slug}`, score, 'Fixture player', 0);
     const retiredBytes = localStorage.getItem(row.saveKey); first.unmount(); render(<row.Board />); await flush();
