@@ -26,7 +26,7 @@ All execution takes place in GitHub Actions. The preparation workflow runs
 the real app type gate and build, actual mounted shared and Soccer panels,
 effective copied source faults, historical uninterrupted drill replays, old
 banking controls, existing positional-drill regressions, native practice
-journeys and all20 built/search/source readers.
+journeys and all 20 built/search/source readers.
 
 Recorded-stat outcomes render the actual career card from restored season
 records for goalkeepers, defenders, midfielders and forwards. Copied faults
@@ -46,9 +46,47 @@ browser focus loss, abandoned-result isolation, a clean new attempt, actual
 one-time80-point banking, visible usable controls and font loading. Deliberate
 DOM faults must change the page, fail their intended checks and restore exactly.
 
-The authored tests and native driver have not yet been accepted. Add exact
-remote run, source and artifact receipts here after examining their output.
-This document makes no merged, published or full-career audit claim.
+## Accepted preparation, October 7
+
+GitHub Actions run 37588483223, job 112684065443, completed successfully. Its
+retained output was independently inspected, including reports, fault copies,
+source hashes and screenshots. Source commit:
+`0d4767c5a1ebae67b7a7a8d2e53e60f63f166b36`.
+Source tree: `039fec611fd9ab3f05d1e523fb628460d0673871`.
+Artifact11468093698 is `career-practice-lifecycle-37588483223-1`.
+The downloaded ZIP matches GitHub SHA256:
+`0cae65dc21edec28e2b776ab73628cb460075a04685746fe751428466665fe96`.
+
+- Shared practice: 23 outcomes and 23 controls; every mapped assertion fails
+  under its fault and the independent bank baseline passes. All 15 sources hold.
+- Soccer practice: 15 outcomes and 29 controls. Each control has exactly one
+  mapped failure, one independent pass and 13 skips. All 58 retained copied-file
+  hashes match their receipts; 30 integrity reports hold 12 sources.
+- Recorded stats: 8 outcomes and 17 controls, each with one mapped failure,
+  one independent pass and 6 skips. All 17 retained copies match their hashes;
+  all 18 integrity reports hold 8 sources.
+- Old US careers: 32 actual-board outcomes; 12 controls each produce four named
+  failures, four quiet restore passes and 24 skips. The 11 current source copies
+  contain the intended edit; the four before copies match historical a0ba8344.
+- Historical training normal and 8 controls pass, as do all 9 other practice
+  and stats regressions, the real app type gate/build and all 20 built readers.
+- Native: 9 Soccer/NBA/NFL journeys, 45 completed stages and 27 effective DOM
+  faults restored exactly. Minimum targets are 44px and feedback 14px. Real
+  focus loss preserves the run, and each journey banks one earned 80-point
+  result. Runtime, asset, storage and forwarded-write errors are zero. All 16
+  sources hold. Fresh screenshots were inspected across the three profiles.
+
+Evidence limit: the older shared harness retains mutation anchors and actual
+failed assertions but deletes temporary source copies. Historical training
+also deletes those copies and its successful wrapper logs summarize output.
+Those two harnesses do not claim retained raw mutation copies. The newer
+Soccer/stats and old-US suites retain the copied-source evidence above.
+
+This accepts preparation only. The docs-only AH receipt merge 879c6e92 stays
+in the branch. Rounds 1076 and 1078 will share one career PR from the 1078 branch;
+both permanent workflows must pass against that combined tree. No standalone
+1076 PR, merge, publication or full-career audit is claimed. The temporary
+branch-push trigger is removed; PR path triggers and manual dispatch remain.
 
 ## Boundaries
 

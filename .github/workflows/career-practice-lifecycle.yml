@@ -1,8 +1,7 @@
 name: Career practice lifecycle
 
 on:
-  push:
-    branches: [codex/career-practice-integrity-1076]
+  workflow_dispatch:
   pull_request:
     paths:
       - .github/workflows/career-practice-lifecycle.yml

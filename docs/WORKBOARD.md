@@ -1,3 +1,30 @@
+## Round 1076 preparation accepted, combined career PR pending, October 7
+
+Remote run 37588483223 (job 112684065443) passed at source
+0d4767c5a1ebae67b7a7a8d2e53e60f63f166b36, tree
+039fec611fd9ab3f05d1e523fb628460d0673871. Independently inspected artifact
+11468093698, career-practice-lifecycle-37588483223-1, has verified ZIP SHA256
+0cae65dc21edec28e2b776ab73628cb460075a04685746fe751428466665fe96.
+
+Actual outcomes/controls: shared 23/23, Soccer 15/29, recorded stats 8/17.
+Old US careers passed 32 outcomes; all 12 controls had four named failures and
+four independent quiet restores. Historical training normal plus 8 controls,
+all 9 practice/stats regressions and all 20 built readers passed. Native passed
+9 journeys and 27 effective restored faults, with 44px targets, 14px feedback,
+real focus-loss proof, one 80-point bank each and no runtime or asset errors,
+storage writes or forwarded writes. Source holds passed. Detailed counts and copy hashes are in
+docs/audits/ROUND1076-CAREER-PRACTICE-LIFECYCLE.md.
+
+Limit: shared and historical training retain assertion/log evidence but delete
+temporary mutation copies. New Soccer/stats and old-US copies were retained
+and inspected. This is preparation acceptance, not a final PR or live receipt.
+The local docs-only AH merge 879c6e92 and both publication notes are preserved.
+Rounds 1076 and 1078 will ship through one career PR from the 1078 branch; both
+permanent workflows must pass on the combined tree. No standalone 1076 PR.
+The temporary branch-push trigger is removed; PR paths and workflow_dispatch
+remain. Claude 1045 is active on r1045-season-centre per 03:45 EDT status; its
+architecture and six integration hunks remain outside the bounded Codex work.
+
 ## Round1076 scope addition: recorded career stats only
 
 The flagship audit confirmed six Soccer Career totals were invented from
@@ -8,7 +35,8 @@ panel. Preserve actual saved totals and the existing unknown clean-sheet
 convention for old defenders. No engine/save or1045 integration-hunk changes.
 Dedicated actual-stat outcomes and effective copied faults join the remote gate.
 First1076 prep37585618434 caught three unsupported Testing Library options;
-those test-only type errors are corrected. No outcome acceptance yet.
+those test-only type errors are corrected. Preparation is accepted above;
+the combined career PR remains pending.
 
 ## Round 1076 claimed: career practice lifecycle integrity, October 7
 

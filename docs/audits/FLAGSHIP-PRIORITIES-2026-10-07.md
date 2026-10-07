@@ -78,16 +78,19 @@ contracts, transfers, tactics and finances affecting the same saved world.
 Career depth means playable match progression, earned stats, training, roles,
 relationships, money and life choices with lasting consequences.
 
-Claude's1045 design already owns the match-by-match season architecture,
-Soccer first and NBA/NFL next. That build is waiting on its existing lane's
-budget. Codex1076 owns the independent practice lifecycle bugs: abandoned
+Claude's1045 design owns the match-by-match season architecture, Soccer first
+and NBA/NFL next. Session D's03:45 EDT ledger records its implementation launched
+on r1045-season-centre. Codex1076 owns the independent practice lifecycle bugs: abandoned
 results must not overwrite another drill; help and focus loss must preserve
 active practice time; pause must ignore input until explicit resume. Existing
 gain rules and simulation engines remain unchanged.
 
 Round1076 now also removes invented earned-stat estimates from Soccer Career's
-stats panel. Its dedicated verification is pending. Visible failed-save recovery
-remains a subsequent reliability candidate, not a completed feature.
+stats panel. Preparation37588483223 is accepted with exact evidence in
+ROUND1076-CAREER-PRACTICE-LIFECYCLE.md. Its combined PR with1078 remains pending.
+Round1078 owns bounded failed-write recovery in the central persistence effect
+and inline notice, outside1045's six integration hunks. No architecture or
+ownership overlap is claimed.
 
 A feature is complete only after its actual player journey works, consequences
 persist, displayed numbers match saved outcomes, interruption/recovery works,
@@ -112,4 +115,5 @@ save using the current in-memory career. Retry must not rerun the simulation,
 training or score submission. Keep old disk bytes and earned memory intact;
 clear the notice only after a successful write. Extend the actual-page save
 recovery tests with refused write, recovery and reload outcomes. Apply the same
-behavior to NBA/NFL's shared board afterward. No1078 claim or implementation yet.
+behavior to NBA/NFL's shared board afterward. Round1078 now owns the bounded
+Soccer implementation and verification; acceptance remains pending.
