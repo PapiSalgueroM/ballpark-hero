@@ -1,16 +1,33 @@
-## Round 1078 claimed: Soccer Career failed-save recovery
+## Round 1078 preparation accepted, combined career PR pending, October 7
 
-A refused browser write currently leaves the new season or training result in
-memory without warning, while a reload restores older disk bytes. This round
-adds a persistent failure notice and Retry save for the current career. Retry
-must never rerun gameplay, award training twice or submit another completion.
-Old saved bytes survive refusal; a successful current write clears the warning.
+Soccer Career now keeps earned progress in the open tab after a refused save,
+shows a visible warning and retries the current state without replaying gameplay.
+Remote run 37592350309 (job 112696619333) passed at source
+e7edff98d72e2db71cfd26a542d9559ffef5674b, tree
+c1983b47fc8fdb40973e346998dfa4e0e4523c02. Artifact 11469632564,
+soccer-career-save-retry-37592350309-1, matched ZIP SHA256
+938ce488e5db2ff30d6bc0dc62be7c5b63177f2458509690d2e6b2de8449be33.
 
-Base0d4767c5 includes1076 practice and recorded-stat work. Keep its exact source
-unless1076 needs a verified follow-up. No engine, schema or1045 integration-hunk
-change. Actual-page old/current saves, refused writes, retries and reloads plus
-native phone/keyboard evidence run only in GitHub Actions. Claude retains main
-and publication. Next1079 unclaimed. This is an implementation claim, not LIVE.
+Independent audit accepted 8 actual page outcomes and 16 mapped assertion
+faults, each retaining a healthy restore baseline and its exact copied source.
+All 17 receipts held 12 source hashes. Native passed all 3 actual route
+journeys and 9 effective restored DOM faults: 25 trusted inputs earned 80,
+one bank survived two refused writes, then Retry/reload kept exact earned
+bytes. Both full-motion profiles completed real animation waits; training
+pane/score movement was 0px. Retry was 105x44px with 14px text, no overflow,
+48 real loaded font-face checks and no runtime/asset errors or network writes.
+All 10 native source hashes held. Type/build, recorded stats 8/8, five existing
+regressions and all 20 readers passed. Old save recovery's 39+2 wrapper passed;
+it deletes raw reports/copies, limiting the retained legacy audit to its log.
+Full receipt: docs/audits/ROUND1078-SOCCER-SAVE-RETRY.md.
+
+1076 and 1078 await one combined career PR. Both permanent workflows, Career
+practice lifecycle and Soccer career save retry, plus the older Four career
+practice verification companion must pass on the combined PR tree. The 1078
+push trigger is removed; PR paths and manual dispatch remain. No engine, schema or 1045
+integration-hunk changes. Claude retains main and publication. This is accepted
+preparation, not merged or LIVE. Next 1079 remains unclaimed.
+
 ## Round 1076 preparation accepted, combined career PR pending, October 7
 
 Remote run 37588483223 (job 112684065443) passed at source

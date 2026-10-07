@@ -181,4 +181,3 @@ describe('Soccer Career failed write recovery', () => {
     expect(JSON.stringify(saved)).toBe(raw); expect(isSoccerCareerSave(copy(next))).toBe(true); expect(recordCompletion).not.toHaveBeenCalled();
   });
 });
-

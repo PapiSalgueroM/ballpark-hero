@@ -1,8 +1,7 @@
 name: Soccer career save retry
 
 on:
-  push:
-    branches: [codex/soccer-save-recovery-1078]
+  workflow_dispatch:
   pull_request:
     paths:
       - .github/workflows/soccer-career-save-retry.yml
