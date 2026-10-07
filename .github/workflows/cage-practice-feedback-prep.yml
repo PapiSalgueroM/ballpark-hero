@@ -51,9 +51,8 @@ jobs:
           npm install --no-save playwright
           npx playwright install --with-deps chromium
           python -m pip install fonttools pillow
-      - name: Generate reviewed practice guide and two changed snapshots
+      - name: Generate search and two changed snapshots
         run: |
-          node scripts/simGuideHeadings.mjs --refresh /cage-clash 2>&1 | tee cage-clash-artifacts/guide-refresh.log
           node scripts/genSearchKeywords.mjs
           node scripts/genSitemap.mjs --routes-only
           npm run build 2>&1 | tee cage-clash-artifacts/pre-snapshot-build.log
