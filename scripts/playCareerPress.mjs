@@ -110,6 +110,16 @@ for (let step = 0; step < 90 && !sawScrum; step++) {
     await page.waitForTimeout(700);
     continue;
   }
+  /* Round 1039: a struggling career is asked "Is it time?" (the retirement
+     talk) after the curtain, with buttons the crossroads selector below does
+     not match, so the walk stalled on it after one season. This walk wants the
+     losing stretch, so it plays one more year. */
+  const oneMore = page.locator('button:has-text("One more year")');
+  if (await oneMore.count()) {
+    await oneMore.first().click();
+    await page.waitForTimeout(700);
+    continue;
+  }
   const play = page.locator('button:has-text("Play the")');
   if (await play.count()) {
     if (seasonsPlayed >= 5) break;
