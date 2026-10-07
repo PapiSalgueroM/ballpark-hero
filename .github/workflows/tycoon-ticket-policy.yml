@@ -1,8 +1,6 @@
 name: Tycoon ticket policy
 on:
   workflow_dispatch:
-  push:
-    branches: [codex/tycoon-ticket-policy-1080]
   pull_request:
     paths:
       - .github/workflows/tycoon-ticket-policy.yml

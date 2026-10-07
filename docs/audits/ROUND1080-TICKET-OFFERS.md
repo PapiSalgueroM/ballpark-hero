@@ -1,5 +1,19 @@
 # Round 1080: Stadium Tycoon ticket offers
 
+Second preparation run37607879133 passed all remote steps at
+653fd5ad07c1d930b4242cb42e957e9525717047,
+tree d28df81472c71c7d965a0fef64bf58170ea87f01, job112747712911.
+Artifact11477437096 ZIP SHA256
+7665244c7a9baa8366e9b64311272f3a7bb18abe7fc97beb8bf00238c45ebb70
+was downloaded and hash-verified.20/23 source outcomes/faults,16 original
+regressions including all11 load controls,3 built-route native journeys/9 DOM
+controls,20 readers and source holds passed. Independent artifact audits remain
+pending before final PR acceptance. Three root-inspected screenshots show the
+complete ticket panel, unaided save warning and restored offer on phone/desktop.
+Final workflow also retains every actual current/V1 loaded save and the three
+corpus-control reports; assertions and fixtures are unchanged. That retention
+amendment still needs the final PR run. No merge, release or live claim.
+
 Preparation, October 7, 2026. Base main 2fff5e044160b70bd58b64d931793ee4e443cedd.
 Branch codex/tycoon-ticket-policy-1080. No live claim, merge or publish.
 

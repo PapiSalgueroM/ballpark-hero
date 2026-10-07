@@ -309,14 +309,18 @@ function loadWith(stadiumLib, academyLib, e, raw, now) {
  *  the committed file, so the committed file cannot vouch for itself. */
 function saveSections(corpus, stadiumLib, academyLib) {
   const out = { C0: [], C1: [], C2: [] };
+  if (retained) out.loads = [];
   const now = corpus.now;
   const changed = [];
   for (const e of corpus.entries) {
     const today = loadWith(stadiumLib, academyLib, e, e.raw, now);
+    const observed = { key: e.key, name: e.name, raw: e.raw, loaded: today };
+    if (retained) out.loads.push(observed);
     if (today !== e.current) out.C0.push(`${e.key}/${e.name}: today's loader no longer gives the committed answer; regenerate the corpus on purpose or find what moved`);
     if (withoutAdded(e.key, today) !== e.loaded) changed.push(`${e.key}/${e.name}`);
     if (today === null) continue;
     const back = loadWith(v1Stadium, v1Academy, e, today, now);
+    if (retained) observed.v1Loaded = back;
     if (back === null) out.C1.push(`${e.key}/${e.name}: the V1 build refuses the save this build writes`);
     else if (back !== today) {
       const a = JSON.parse(today); const b = JSON.parse(back);
@@ -340,6 +344,10 @@ console.log('');
 console.log('B) the saves');
 const corpus = JSON.parse(read(CORPUS));
 const plain = saveSections(corpus, todayStadium, todayAcademy);
+if (retained) {
+  fs.writeFileSync(path.join(retained, 'save-corpus.json'), JSON.stringify(corpus));
+  fs.writeFileSync(path.join(retained, 'save-baseline-report.json'), JSON.stringify(plain));
+}
 report(plain);
 for (const k of ['C0', 'C1', 'C2']) for (const m of plain[k]) fail(`${k}: ${m}`);
 if (!corpus.entries.some(e => e.current && /"awayMs":/.test(e.current))) fail('no corpus save carries the away meter, so C1 never proves the V1 build keeps it');
@@ -379,6 +387,7 @@ for (const control of SAVE_CONTROLS) {
   if (control.corpus) control.corpus(copy);
   const [sLib, aLib] = control.libs ? control.libs() : [todayStadium, todayAcademy];
   const result = saveSections(copy, sLib, aLib);
+  if (retained) fs.writeFileSync(path.join(retained, `save-${control.name}-report.json`), JSON.stringify({ corpus: copy, result }));
   report(result);
   for (const s of control.red) if (result[s].length === 0) fail(`control ${control.name}: ${s} stayed green, so that check is dead`);
   for (const s of control.green) if (result[s].length > 0) fail(`control ${control.name}: ${s} went red too (${result[s][0]})`);

@@ -1,3 +1,10 @@
+Codex1080 GREEN PREPARATION, October7,06:59 EDT. Run37607879133 at653fd5ad
+passed20 outcomes/23 effective faults,16 original regressions with11 load
+controls,3 built-route journeys/9 restored DOM controls,20readers and holds.
+Artifact11477437096 SHA7665244c7a9baa8366e9b64311272f3a7bb18abe7fc97beb8bf00238c45ebb70
+is retained and independently under audit. Final PR run still required for
+same source plus expanded raw save/corpus retention. No ready/live claim.
+Claude keeps main/release; preserve1079+1080 notes together at integration.
 Codex1080 PREPARATION, October7,2026: Stadium Tycoon ticket offers.
 Dedicated office tile, real demand/gate/growth tradeoffs and latest-state save
 retry.20 authored outcomes/23 copied faults and216 measurement rows await CI;
