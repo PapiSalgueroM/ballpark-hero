@@ -1,3 +1,16 @@
+## Codex 1082 green preparation, October 7, 11:36 EDT
+
+Run 37643150121/job112866918302 succeeded at f221a52d/treec844c36e.
+Measured 237 comparisons/28 fixtures/19 copied faults, nine native journeys
+and twelve restored DOM faults, six career regressions and twenty readers.
+The prior phone jump is corrected by wrapping the dream-club action row;
+open/Back/Escape now move zero pixels with the exact unchanged driver.
+Full artifact11493033381 retained,368 files, SHA256
+6bb4a11918ff5c06ad1c009b905f2013d8ea7bed41a56d7bf8d87b207f453101.
+Independent native/reader/hold audit accepted in scope. Final PR exact-head
+acceptance still owed. No READY/live claim. Original campaign walk and rapid
+native duplicate attempt not credited. Engine/data/loans/Season Centre held.
+
 ## Codex 1082 phone correction trial, October 7, 11:18 EDT
 
 Diagnostic run37640124252 on1b3b0db2 retained the same290px failure.
