@@ -24,6 +24,7 @@ import { MLB_BADGES } from '@/lib/careerBadges';
 import { mlbUnreadInboxCount, answerMlbInboxMessage, mlbDraftNightInbox, MLB_CALENDAR } from '@/lib/mlbCareerInbox';
 import { dismissMlbRivalryEvent, resolveMlbRivalryChoice } from '@/lib/mlbCareerRivalryEvents';
 import type { UsCareerSport } from '@/lib/usCareerSport';
+import { MLB_CAREER_HALL } from '@/lib/mlbCareerHall';
 import { mlbSeasonReview } from '@/lib/usCareerSeasonReview';
 
 /* The key this career saves under. It stays a named constant so the home
@@ -125,4 +126,6 @@ export const MLB_CAREER_SPORT: UsCareerSport<MlbCareerState, MlbSeasonLine> = {
   shareText: (c, legacy) =>
     `MLB My Career ⚾ ${c.name}: ${c.seasons.length} seasons, ${countOf(c.rings, 'ring', 'rings')}, ${countOf(c.mvpCys, mlbMajorAward(c.pos).one, mlbMajorAward(c.pos).many)}. Verdict: ${legacy.verdict}. Legacy ${legacy.score}. douknowball.com/mlb-my-career`,
   retirementAvatar: false,
+  /* Round 1039: the retirement talk, the farewell season and the Hall. */
+  hall: MLB_CAREER_HALL,
 };

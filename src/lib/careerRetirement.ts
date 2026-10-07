@@ -18,14 +18,14 @@
    `sanitizeRetirement` turns a corrupt block into an empty one on its own,
    leaving the rest of the save alone.
 
-   FOR THE ROUND THAT WIRES THIS (open, found in review). The life decks
-   already offer retirement choices that end nothing: lifeB_retireHealthy
-   (nflCareerLifeB, flag b_walkAway; the nba and mlb decks have the same
-   event, and nothing reads the flag to end a career), the farewell tour
-   events in all four decks, and nhlCareerLifeB's "One farewell year, then
-   done". A board that mounts FarewellCard should stop drawing those, or
-   route their answers through answerRetirement, so one offseason never asks
-   twice and a farewell said in the deck really ends the career.
+   THE DECKS (Round 1039 closed what Round 915 left open). The life decks'
+   own retirement cards (the healthy walk away and the farewell tour in all
+   four, and the NHL's walk away, which used to cap the rating at 63 instead)
+   write their farewell through announceFarewell below, so a farewell said on
+   a card ends the career a season later exactly as the talk's does. Each of
+   those cards also stops coming once retirementSettled holds, and the board
+   holds them out of an offseason whose talk is pending
+   (src/lib/usCareerRetirementFlow.ts), so one offseason never asks twice.
 
    SOCCER (a later round). Soccer asks once (retirementSuggested) and then
    re-asks only from 34 at 65 or lower, on a 40 percent coin. RetirementRule
@@ -123,6 +123,20 @@ export function answerRetirement(block: RetirementBlock | undefined, year: numbe
 /** True when the season labelled `year` is the announced farewell season. */
 export function isFarewellSeason(block: RetirementBlock | undefined, year: number): boolean {
   return block?.farewellYear === year;
+}
+
+/** Round 1039: a deck card's farewell, said in the offseason after the season
+ *  just played, so the next season is the last. Mutates c, the deck's own
+ *  working copy. */
+export function announceFarewell(c: { year: number; seasons: { year: number }[]; retirement?: RetirementBlock }): void {
+  const year = c.seasons.length ? c.seasons[c.seasons.length - 1].year : c.year;
+  c.retirement = answerRetirement(c.retirement, year, "farewell");
+}
+
+/** Round 1039: true once the end is decided (a farewell announced or a
+ *  retirement taken). The deck's retirement cards stop coming from then. */
+export function retirementSettled(c: { year: number; retirement?: RetirementBlock }): boolean {
+  return c.retirement?.farewellYear !== undefined || c.retirement?.retiredYear !== undefined;
 }
 
 /** True when a decision of his ends the career after the season labelled

@@ -23,6 +23,7 @@ import { NFL_BADGES } from '@/lib/careerBadges';
 import { nflUnreadInboxCount, answerNflInboxMessage, nflDraftNightInbox, NFL_CALENDAR } from '@/lib/nflCareerInbox';
 import { dismissNflRivalryEvent, resolveNflRivalryChoice } from '@/lib/nflCareerRivalryEvents';
 import type { UsCareerSport } from '@/lib/usCareerSport';
+import { NFL_CAREER_HALL } from '@/lib/nflCareerHall';
 import { nflSeasonReview } from '@/lib/usCareerSeasonReview';
 
 /* The key this career saves under. It stays a named constant so the home
@@ -124,4 +125,6 @@ export const NFL_CAREER_SPORT: UsCareerSport<CareerState, SeasonLine> = {
   shareText: (c, legacy) =>
     `NFL My Career 🏈 ${c.name}: ${c.seasons.length} seasons, ${countOf(c.rings, 'ring', 'rings')}, ${countOf(c.mvps, nflMajorAward(c.pos).one, nflMajorAward(c.pos).many)}. Verdict: ${legacy.verdict}. Legacy ${legacy.score}. douknowball.com/nfl-my-career`,
   retirementAvatar: true,
+  /* Round 1039: the retirement talk, the farewell season and the Hall. */
+  hall: NFL_CAREER_HALL,
 };

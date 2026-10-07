@@ -19,13 +19,32 @@ section below holds that offset to real players' first eligible classes, with da
 the data files mark it `firstClass: "verified"` and only then does the card print
 "Eligible from the Class of ...".
 
+The last column (Round 1039) is the first class these rules are anchored on: the rule year each
+section below names, for which the section carries two sources. A career whose first class falls
+before it ran under an older regime this file has not two-sourced (the NBA's wait before the
+Class of 2025 was three full seasons, an "effectively four year" wait by CBS's account, and the
+wait before that is unknown here; the NFL's bylaws before the Class of 2027; the NHL before the
+Class of 2026; the BBWAA's fifteen year ballot before 2014). So the card prints no class year
+and no rule line for such a career: its ballots read "First ballot", "Second ballot".
+`scripts/simCareerHall.mjs` section 13 reads this column. An older regime is keyed in only when
+two non-Wikipedia sources anchor it on real first eligible classes, as Carmelo Anthony anchors
+the NBA's current one.
+
+Round 1039 re-read, 2026-10-07: baseball-reference.com/about/hof_voting.shtml still dates the ten
+ballot drop "2014-present" (the MLB column's 2014); hhof.com/induction/electionprocedures.html
+still says three playing seasons and 75 percent of the committee present; the nba.com Class of
+2025 piece still says three full seasons became two (it names no first class, which is why the
+NBA's 2025 rests on Carmelo Anthony as a first time nominee in the CBS piece). The PFHOF selection
+page did not load in this pass (a timeout), so the NFL column stands on the 2026-10-02 and 10-03
+reads above. No value changed.
+
 <!-- hall-table:start -->
-| sport | wait | ballot | threshold | stayFloor | firstClassOffset |
-|---|---|---|---|---|---|
-| nfl | 5 | none | 80 | none | 6 |
-| nba | 2 | none | 75 | none | 4 |
-| mlb | 5 | 10 | 75 | 5 | 6 |
-| nhl | 3 | none | 75 | none | 4 |
+| sport | wait | ballot | threshold | stayFloor | firstClassOffset | verifiedFromClass |
+|---|---|---|---|---|---|---|
+| nfl | 5 | none | 80 | none | 6 | 2027 |
+| nba | 2 | none | 75 | none | 4 | 2025 |
+| mlb | 5 | 10 | 75 | 5 | 6 | 2014 |
+| nhl | 3 | none | 75 | none | 4 | 2026 |
 <!-- hall-table:end -->
 
 ## Pro Football Hall of Fame (NFL career). Rule year: Class of 2027 onward

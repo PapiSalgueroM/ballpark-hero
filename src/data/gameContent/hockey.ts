@@ -909,7 +909,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
           "After a normal offseason choice, the result shows the actual changes. Expand it for any extra changes, then Continue opens the next card, or takes you back to your career after the last one, without applying the choice again.",
           "Open Career Log and pick a year to review its saved overview, regular season and postseason. Changes compare with the previous saved season; older missing values say Not recorded. Back to seasons returns to the year tiles, and Review seasons is available after retirement.",
           "When the deal expires, hit July 1 for real: competing offers from named clubs with their own money, length and roster quality, and one push for more on any of them.",
-          "Age, decline, retire, then read the legacy verdict.",
+          "Age, decline, answer the retirement talk, then read the legacy verdict and wait on the Hall of Fame ballot.",
         ],
       },
     ],
@@ -944,7 +944,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
       {
         heading: "Retirement and the legacy score",
         items: [
-          "Retirement hits at 40 for skaters, 41 for goalies, or earlier if your rating collapses; you can walk away after 6 seasons.",
+          "Retirement hits at 40 for skaters, 41 for goalies, or earlier if your rating collapses. Before that, from 31, slipping 8 points off your best (or down to 69) brings the talk: retire now, one more year, or a farewell season. You can walk away after 6 seasons.",
           "The legacy score weighs Cups, majors (Hart, Norris or Vezina), Conn Smythes, All-Star nods, seasons and production; 500 or more means the Hall of Fame.",
         ],
       },

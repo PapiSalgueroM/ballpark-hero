@@ -17,6 +17,8 @@
    module scope. nbaTeamLabelOf is only ever called inside a function body.
    ========================================================================== */
 import type { NbaCareerState, NbaCareerEvent } from './nbaMyCareer';
+import { announceFarewell, retirementSettled } from './careerRetirement';
+import { recordNumberRetired } from './careerHallOfFame';
 import { nbaEraById, nbaEraTeamIds, nbaTeamLabelOf, nbaMarketSalary } from './nbaMyCareer';
 
 /** Round 833: the first offseason the supermax could be offered (the 2017
@@ -355,7 +357,11 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
     });
   }
 
-  if (yrs >= 8 && (c.rings >= 1 || c.allNbas >= 2 || c.fanbase >= 78) && flag(c, 'nb_jersey') === 0) {
+  /* Round 1039: only a club he has played a season for. Later summer cards
+     are rebuilt from the career after card 1, so a trade ahead of this card
+     used to hang the number at a club he had never played for (0 seasons).
+     At a deal the last season is always at c.team, so no draw moves. */
+  if (yrs >= 8 && (c.rings >= 1 || c.allNbas >= 2 || c.fanbase >= 78) && flag(c, 'nb_jersey') === 0 && c.seasons.some(s => s.team === c.team)) {
     deck.push({
       id: 'nbaB_jerseyRetirement',
       category: 'legacy', cooldown: 99,
@@ -365,14 +371,14 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
         {
           label: 'Halftime, keep it short', effect: 'Rafters, quick',
           apply: (cc) => {
-            setFlag(cc, 'nb_jersey', 1); bumpFan(cc, 14); bumpMorale(cc, 8);
+            setFlag(cc, 'nb_jersey', 1); recordNumberRetired(cc); bumpFan(cc, 14); bumpMorale(cc, 8);
             return 'Eleven minutes at halftime and your number goes up forever. Fanbase +14, morale +8.';
           },
         },
         {
           label: 'Home opener, free jerseys for the upper bowl', effect: 'Enormous and expensive',
           apply: (cc) => {
-            setFlag(cc, 'nb_jersey', 2); spend(cc, 1.1); bumpFan(cc, 22); bumpMorale(cc, 10);
+            setFlag(cc, 'nb_jersey', 2); recordNumberRetired(cc); spend(cc, 1.1); bumpFan(cc, 22); bumpMorale(cc, 10);
             return 'You paid 1.1M so 7,000 people in the cheap seats went home wearing your name. Fanbase +22, morale +10.';
           },
         },
@@ -483,7 +489,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
     });
   }
 
-  if (yrs >= 8 && c.age >= 33 && flag(c, 'nb_tour') === 0) {
+  if (yrs >= 8 && c.age >= 33 && flag(c, 'nb_tour') === 0 && !retirementSettled(c)) {
     deck.push({
       id: 'nbaB_farewellTour',
       category: 'legacy', cooldown: 99,
@@ -491,10 +497,10 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
       body: 'Say this is the last one and every road arena hands you a framed something at halftime. Say nothing and you get to play basketball without a receiving line.',
       options: [
         {
-          label: 'Full farewell tour', effect: 'Gifts and goodbyes',
+          label: 'Full farewell tour', effect: 'Next season is your last',
           apply: (cc) => {
-            setFlag(cc, 'nb_tour', 1); earn(cc, 1.2); bumpFan(cc, 16); bumpMorale(cc, 8);
-            return '29 tributes, 29 framed jerseys and one team that gave you a canoe. 1.2M in tour merch, fanbase +16, morale +8.';
+            setFlag(cc, 'nb_tour', 1); announceFarewell(cc); earn(cc, 1.2); bumpFan(cc, 16); bumpMorale(cc, 8);
+            return 'You told everyone next season is the last one. 29 tributes, 29 framed jerseys and one team with a canoe are coming. 1.2M in tour merch, fanbase +16, morale +8.';
           },
         },
         {
@@ -1544,7 +1550,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
     });
   }
 
-  if (yrs >= 7 && c.age >= 30 && c.health >= 70 && c.earnings >= 60 && flag(c, 'nb_walkAway') === 0) {
+  if (yrs >= 7 && c.age >= 30 && c.health >= 70 && c.earnings >= 60 && flag(c, 'nb_walkAway') === 0 && !retirementSettled(c)) {
     deck.push({
       id: 'nbaB_retireHealthy',
       category: 'contract', cooldown: 99,
@@ -1552,10 +1558,10 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
       body: 'Knees, back and bank account all intact at the same time. Almost nobody in this league is ever handed that exact combination.',
       options: [
         {
-          label: 'Announce this is the last season', effect: 'Leave whole',
+          label: 'Announce this is the last season', effect: 'Next season is your last',
           apply: (cc) => {
-            setFlag(cc, 'nb_walkAway', 1); bumpMorale(cc, 12); bumpFan(cc, 14); bumpHealth(cc, 5);
-            return 'You told them in July that this was the last one. Morale +12, fanbase +14, health +5, and every road game felt different.';
+            setFlag(cc, 'nb_walkAway', 1); announceFarewell(cc); bumpMorale(cc, 12); bumpFan(cc, 14); bumpHealth(cc, 5);
+            return 'You told them next season is the last one. Morale +12, fanbase +14, health +5, and every road game will feel different.';
           },
         },
         {

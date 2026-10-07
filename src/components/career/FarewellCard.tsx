@@ -5,8 +5,9 @@ import { RETIREMENT_CHOICES, type RetirementChoiceId, type RetirementTalk } from
    One card for all four US careers. It is drawn from careerRetirement.ts and
    nothing else: the reason comes off the talk, and each button carries the
    words RETIREMENT_CHOICES writes for it, which the vitest file holds to what
-   answerRetirement really does. Not wired into a board yet: the boards are
-   being merged into one in another round, and that round mounts this. */
+   answerRetirement really does. Round 1039 mounts it on the one US board
+   (src/components/us-career/UsCareerBoard.tsx), lazily, and fixed the light
+   mode contrast of its buttons with theme tokens. */
 
 /** Why the talk came, in the player's terms. */
 export function talkReason(talk: RetirementTalk, age: number): string {
@@ -33,7 +34,7 @@ export function FarewellCard({ talk, age, onChoose }: {
           <Button
             key={choice.id}
             onClick={() => onChoose(choice.id)}
-            className={`w-full h-auto py-2 justify-start text-left whitespace-normal flex-col items-start gap-0.5 ${choice.id === "oneMore" ? "bg-emerald-600 hover:bg-emerald-500 text-black" : "bg-muted hover:bg-muted/80 text-white"}`}
+            className={`w-full h-auto py-2 justify-start text-left whitespace-normal flex-col items-start gap-0.5 ${choice.id === "oneMore" ? "border border-transparent bg-emerald-600 hover:bg-emerald-500 text-black" : "border border-border bg-secondary text-secondary-foreground hover:bg-secondary/80"}`}
           >
             <span className="text-xs font-bold">{`${choice.emoji} ${choice.label}`}</span>
             <span className="text-[11px] font-normal opacity-80">{choice.detail}</span>
@@ -48,7 +49,7 @@ export function FarewellCard({ talk, age, onChoose }: {
 export function FarewellSeasonBanner({ year }: { year: number }) {
   return (
     <div className="rounded-lg border border-amber-400/40 bg-amber-500/10 px-3 py-2 text-center animate-fade-in">
-      <p className="text-xs font-bold text-amber-300">🎤 Farewell season, {year}</p>
+      <p className="text-xs font-bold text-gold">🎤 Farewell season, {year}</p>
       <p className="text-[11px] text-muted-foreground">Everyone knows this is the last one. Every road crowd gets one more look.</p>
     </div>
   );

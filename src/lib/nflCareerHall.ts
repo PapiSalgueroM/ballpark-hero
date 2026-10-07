@@ -11,6 +11,8 @@ export const NFL_CAREER_HALL = usCareerHall<CareerState>({
     sport: "nfl",
     hallName: "Pro Football Hall of Fame",
     ruleYear: "Class of 2027 onward",
+    // The rules are the Class of 2027 ones; earlier classes ran under bylaws the audit has not two-sourced.
+    verifiedFromClass: 2027,
     waitSeasons: 5,
     firstClassOffset: 6,
     threshold: 80,
@@ -27,4 +29,5 @@ export const NFL_CAREER_HALL = usCareerHall<CareerState>({
   legacy: legacyOf,
   shouldRetire,
   teamLabel: teamLabelOf,
+  deckJerseyFlag: "b_jersey",
 });

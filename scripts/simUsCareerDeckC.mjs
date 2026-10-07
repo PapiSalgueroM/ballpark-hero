@@ -21,6 +21,14 @@
    tree before the fix and the tree after it. The full digest then changed
    on 36 NFL cards (66 of 1,920 draws) and 19 NHL cards (13 of 1,200 draws),
    and not at all for the NBA and MLB.
+   Re-recorded on purpose in Round 1039, which reconciles the life B decks' own
+   retirement cards (their farewell answers write the farewell, the jersey
+   answers record the club, the NHL walk away no longer caps the rating at
+   63). Deck C's cards did not move. The seeded draw changed on four saves,
+   each one a reconciled card: NFL saves 238 and 1198 (lifeB_retirementTour,
+   whose first answer now reads "Next season is your last"), MLB save 829
+   (mlbB_numberRetired, which now records the club) and NHL save 1074
+   (nhlB_walkAwayHealthy, which now writes the farewell). The NBA did not move.
 
    Section 2, WORDS AGAINST EFFECTS (see its own comment below): the log,
    the button, the gamble's odds, the era's money, the trade's league and

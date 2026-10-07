@@ -14,6 +14,7 @@
  */
 
 import type { NhlCareerState, NhlCareerEvent } from './nhlMyCareer';
+import { announceFarewell, retirementSettled } from './careerRetirement';
 import { nhlTeamLabelOf, nhlEraTeamIds, nhlEraById } from './nhlMyCareer';
 
 /** Round 59 life fields are not on NhlCareerState yet, so read them through here. */
@@ -411,7 +412,7 @@ export function getNhlLifeEventsB(c: NhlCareerState, rng: () => number): NhlCare
     });
   }
 
-  if (c.age >= 35 && yrs >= 12) {
+  if (c.age >= 35 && yrs >= 12 && !retirementSettled(c)) {
     deck.push({
       id: 'nhlB_farewellTour',
       category: 'legacy', cooldown: 99,
@@ -420,8 +421,8 @@ export function getNhlLifeEventsB(c: NhlCareerState, rng: () => number): NhlCare
       options: [
         {
           label: 'Announce it, take the tour',
-          effect: 'Long goodbye',
-          apply: (cc) => { const f0 = cc.fanbase, m0 = cc.morale, h0 = cc.health; fans(cc, 16); mood(cc, 8); const nw = addNet(cc, 0.4); hp(cc, -4); return `Standing ovations in buildings that booed you for fifteen years. Fanbase +${cc.fanbase - f0}, morale +${cc.morale - m0}, 400k in tour sponsorship, net worth ${nw}M, health ${cc.health - h0}.`; },
+          effect: 'Next season is your last',
+          apply: (cc) => { announceFarewell(cc); const f0 = cc.fanbase, m0 = cc.morale, h0 = cc.health; fans(cc, 16); mood(cc, 8); const nw = addNet(cc, 0.4); hp(cc, -4); return `Next season is the last one, and everyone knows it. Standing ovations are coming in buildings that booed you for fifteen years. Fanbase +${cc.fanbase - f0}, morale +${cc.morale - m0}, 400k in tour sponsorship, net worth ${nw}M, health ${cc.health - h0}.`; },
         },
         {
           label: 'Say nothing, decide in June',
@@ -1267,7 +1268,7 @@ export function getNhlLifeEventsB(c: NhlCareerState, rng: () => number): NhlCare
     });
   }
 
-  if (c.age >= 30 && c.health >= 72 && yrs >= 8) {
+  if (c.age >= 30 && c.health >= 72 && yrs >= 8 && !retirementSettled(c)) {
     const left = m1(c.salary * Math.max(1, c.contractYears));
     deck.push({
       id: 'nhlB_walkAwayHealthy',
@@ -1277,8 +1278,8 @@ export function getNhlLifeEventsB(c: NhlCareerState, rng: () => number): NhlCare
       options: [
         {
           label: 'One farewell year, then done',
-          effect: 'Out at the top',
-          apply: (cc) => { cc.ovr = Math.min(cc.ovr, 63); cc.health = 100; cc.morale = 95; const nw = addNet(cc, 3); fans(cc, 12); flag(cc, 'retiringHealthy'); return `You told the room this is it. One farewell season, then out at full health. Net worth +3M to ${nw}M from the broadcast deal, morale 95, fanbase +12.`; },
+          effect: 'Next season is your last',
+          apply: (cc) => { announceFarewell(cc); cc.health = 100; cc.morale = 95; const nw = addNet(cc, 3); fans(cc, 12); flag(cc, 'retiringHealthy'); return `You told the room next season is it. One farewell season, then out at full health. Net worth +3M to ${nw}M from the broadcast deal, morale 95, fanbase +12.`; },
         },
         {
           label: 'Keep playing, chase one more',

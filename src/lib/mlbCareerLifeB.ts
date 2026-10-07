@@ -16,6 +16,8 @@
    ever called inside function bodies. Never hoist it into a constant.
    ========================================================================== */
 import type { MlbCareerState, MlbCareerEvent } from './mlbMyCareer';
+import { announceFarewell, retirementSettled } from './careerRetirement';
+import { recordNumberRetired } from './careerHallOfFame';
 import { mlbTeamLabelOf, mlbEraTeamIds, mlbEraById, mlbMarketSalary } from './mlbMyCareer';
 
 /** Round 833: the career year from which the qualifying offer card can be
@@ -325,7 +327,11 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
     });
   }
 
-  if (yrs >= 9 && (c.rings >= 1 || c.allStars >= 3 || c.fanbase >= 78) && flag(c, 'b_number') === 0) {
+  /* Round 1039: only a club he has played a season for. Later summer cards
+     are rebuilt from the career after card 1, so a trade ahead of this card
+     used to hang the number at a club he had never played for (0 seasons).
+     At a deal the last season is always at c.team, so no draw moves. */
+  if (yrs >= 9 && (c.rings >= 1 || c.allStars >= 3 || c.fanbase >= 78) && flag(c, 'b_number') === 0 && c.seasons.some(s => s.team === c.team)) {
     deck.push({
       id: 'mlbB_numberRetired',
       category: 'legacy', cooldown: 99,
@@ -335,14 +341,14 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
         {
           label: 'Sunday afternoon, keep it short', effect: 'Wall forever, quick',
           apply: (cc) => {
-            setFlag(cc, 'b_number', 1); bumpFan(cc, 14); bumpMorale(cc, 8);
+            setFlag(cc, 'b_number', 1); recordNumberRetired(cc); bumpFan(cc, 14); bumpMorale(cc, 8);
             return 'Eleven minutes before a 1:10 first pitch and your number goes up forever. Fanbase +14, morale +8.';
           },
         },
         {
           label: 'Opening Day, free jerseys for the bleachers', effect: 'Enormous and expensive',
           apply: (cc) => {
-            setFlag(cc, 'b_number', 2); spend(cc, 1.1); bumpFan(cc, 22); bumpMorale(cc, 10);
+            setFlag(cc, 'b_number', 2); recordNumberRetired(cc); spend(cc, 1.1); bumpFan(cc, 22); bumpMorale(cc, 10);
             return 'You paid 1.1M so 14,000 people in the cheap seats went home wearing your name. Fanbase +22, morale +10.';
           },
         },
@@ -453,7 +459,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
     });
   }
 
-  if (yrs >= 12 && c.age >= 35 && flag(c, 'b_tour') === 0) {
+  if (yrs >= 12 && c.age >= 35 && flag(c, 'b_tour') === 0 && !retirementSettled(c)) {
     deck.push({
       id: 'mlbB_farewellTour',
       category: 'legacy', cooldown: 99,
@@ -461,10 +467,10 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
       body: 'Say this is the last one and all 29 road parks hand you a framed something. Say nothing and you get to play baseball without a receiving line at second base.',
       options: [
         {
-          label: 'Full farewell tour', effect: 'Gifts and goodbyes',
+          label: 'Full farewell tour', effect: 'Next season is your last',
           apply: (cc) => {
-            setFlag(cc, 'b_tour', 1); earn(cc, 1); bumpFan(cc, 16); bumpMorale(cc, 8);
-            return 'Six months of tributes, rocking chairs and one club that gave you a surfboard. 1M in tour merch, fanbase +16, morale +8.';
+            setFlag(cc, 'b_tour', 1); announceFarewell(cc); earn(cc, 1); bumpFan(cc, 16); bumpMorale(cc, 8);
+            return 'You told everyone next season is the last one. Six months of tributes, rocking chairs and one club with a surfboard are coming. 1M in tour merch, fanbase +16, morale +8.';
           },
         },
         {
@@ -1545,7 +1551,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
     });
   }
 
-  if (yrs >= 8 && c.age >= 30 && c.health >= 70 && c.earnings >= 40 && flag(c, 'b_walkAway') === 0) {
+  if (yrs >= 8 && c.age >= 30 && c.health >= 70 && c.earnings >= 40 && flag(c, 'b_walkAway') === 0 && !retirementSettled(c)) {
     deck.push({
       id: 'mlbB_retireHealthy',
       category: 'contract', cooldown: 99,
@@ -1553,10 +1559,10 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
       body: 'Elbow, shoulder, knees and money all intact at the same time. Almost nobody in this sport ever gets handed that combination.',
       options: [
         {
-          label: 'Announce this is the last one', effect: 'Leave whole',
+          label: 'Announce this is the last one', effect: 'Next season is your last',
           apply: (cc) => {
-            setFlag(cc, 'b_walkAway', 1); cc.contractYears = 1; bumpMorale(cc, 12); bumpFan(cc, 14); bumpHealth(cc, 4);
-            return 'You told them in January that this was the last one. Morale +12, fanbase +14, health +4, and every single game felt different.';
+            setFlag(cc, 'b_walkAway', 1); announceFarewell(cc); cc.contractYears = 1; bumpMorale(cc, 12); bumpFan(cc, 14); bumpHealth(cc, 4);
+            return 'You told them next season is the last one. Morale +12, fanbase +14, health +4, and every single game will feel different.';
           },
         },
         {

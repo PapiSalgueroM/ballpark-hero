@@ -25,9 +25,9 @@ import {
 } from '@/lib/careerRetirement';
 import {
   runHallBallot, firstBallotChance, laterCallChance, mostSeasonsTeam, jerseyFor, hallRecordFor,
-  HALL_SPEECHES, HALL_SPEECH_METERS, speechPromise, giveHallSpeech, sanitizeHallSpeech,
-  type HallRecord, type UsHallSport,
+  sanitizeHallSpeech, type HallRecord, type UsHallSport,
 } from '@/lib/careerHallOfFame';
+import { HALL_SPEECHES, HALL_SPEECH_METERS, speechPromise, giveHallSpeech } from '@/lib/careerHallSpeech';
 import { describeSteps, measureMoves, applyMeterSteps } from '@/lib/careerAwardsNight';
 import { NFL_CAREER_HALL } from '@/lib/nflCareerHall';
 import { NBA_CAREER_HALL } from '@/lib/nbaCareerHall';

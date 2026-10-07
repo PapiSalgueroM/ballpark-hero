@@ -27,21 +27,34 @@
    Every draw is on keyedRng, keyed to the career, so the same career always
    gets the same ballot and nothing here shifts a season's seeded stream.
 
-   FOR THE ROUND THAT WIRES THIS (open, found in review). The life decks
-   already have a number retirement event: flags b_jersey (nflCareerLifeB),
-   nb_jersey (nbaCareerLifeB) and b_number (mlbCareerLifeB); 1 or 2 mean the
-   club retired it, 3 means "wait until you are done". It fires for c.team in
-   that season, and the flag does not keep which club. jerseyFor reads only the
-   seasons, so a wired board could log one club retiring the number and show
-   another on this card. Reconcile before mounting it: have the deck record
-   the club, and add an adapter here that lets a recorded retirement win (and
-   brings the "wait" answer back at the end). */
+   THE JERSEY (Round 1039 closed the gap Round 915 left open). The life decks
+   have a number retirement card (flags b_jersey, nb_jersey and b_number);
+   answers 1 and 2 now also write c.numberRetiredBy, the club and the year,
+   through recordNumberRetired below, and a recorded retirement wins over
+   jerseyFor (the recordedJersey adapter). The "wait until you are done"
+   answer records nothing, so jerseyFor decides at the end as before. A save
+   from before this round whose card retired the number (flag 1 or 2) kept no
+   club, so its card prints no jersey line (jerseyUnknown) rather than let
+   jerseyFor name a club the deck never named.
+
+   THE RECORD IS DERIVED, ON PURPOSE (Round 1039). The HallRecord is never
+   saved: it is computed from the season lines and the sport's legacyOf on a
+   keyed stream, so the same career shows the same ballot every visit and a
+   retired save from before the bind gets its record on its next visit. The
+   price: a later change to any sport's legacyOf re-tells every retired
+   player's ballot (a first ballot can become ballot three). A round that
+   touches a legacyOf reruns scripts/simCareerHall.mjs and accepts that, or
+   freezes the first record into the save as one more optional field.
+
+   ERA TRUTH (Round 1039). HallRules.verifiedFromClass is the first class
+   the audit anchors the printed rules on with two sources. The card prints a
+   class year and the rule lines only for a first class at or after it; an
+   earlier career's ballots read "First ballot", "Second ballot" with no year,
+   because an older regime's wait is not keyed in (no two sources yet). */
 
 import { keyedRng } from "./keyedRng";
 import { peakRating } from "./careerRetirement";
 import type { RetirementRule, RetirementSnapshot } from "./careerRetirement";
-import { applySpeech, describeSteps } from "./careerAwardsNight";
-import type { AwardsMeter, SpeechOption } from "./careerAwardsNight";
 
 export type HallSportId = "nfl" | "nba" | "mlb" | "nhl";
 export type Provenance = "verified" | "believed";
@@ -51,6 +64,10 @@ export interface HallRules {
   hallName: string;
   /** Which year's rules the model follows. */
   ruleYear: string;
+  /** The first class the audit anchors these rules on with two sources
+   *  (docs/audits/US-HALL-RULES-2026-10.md). A first class before it prints
+   *  no class year and no rule line. */
+  verifiedFromClass: number;
   /** Seasons away from the game before he can be considered. */
   waitSeasons: number;
   /** Years from the last season's label to the first class he can join. */
@@ -93,6 +110,13 @@ export interface HallSport<C> {
   seasons: (c: C) => HallSeason[];
   /** The club's name for a season line's club id; without it the card prints the id. */
   teamName?: (team: string, c: C) => string;
+  /** Round 1039: a number a club already retired on a deck card, which wins
+   *  over jerseyFor, or null when nothing was recorded. */
+  recordedJersey?: (c: C) => HallJersey | null;
+  /** Round 1039: true when a deck card retired the number on a save from
+   *  before this round, which recorded no club. The card then prints no
+   *  jersey line rather than let jerseyFor name a club the deck never did. */
+  jerseyUnknown?: (c: C) => boolean;
 }
 
 export type HallOutcome = "inducted" | "fellOff" | "waiting" | "notOnBallot";
@@ -256,8 +280,31 @@ export function hallRecordFor<C>(sport: HallSport<C>, c: C): HallRecord {
   const ballot = runHallBallot(sport.rules, sport.lines, {
     key: sport.key(c), hof: legacy.hof, score: legacy.score, lastSeasonYear: sport.lastSeasonYear(c),
   });
-  const jersey = jerseyFor(sport.seasons(c), ballot.outcome === "inducted", legacy.score, sport.lines);
+  // A deck card retired the number on a save that kept no club: name none.
+  const jersey = sport.jerseyUnknown?.(c) ? null : sport.recordedJersey?.(c) ?? jerseyFor(sport.seasons(c), ballot.outcome === "inducted", legacy.score, sport.lines);
   return { ...ballot, jersey: jersey && sport.teamName ? { ...jersey, teamName: sport.teamName(jersey.team, c) } : jersey };
+}
+
+/** A club retiring the number on a deck card, as the save keeps it. */
+export interface NumberRetiredBy {
+  team: string;
+  year: number;
+}
+
+/** Writes the club retiring the number now: the career's club, and the
+ *  season just played. Mutates c (the deck's own working copy). */
+export function recordNumberRetired(c: { team: string; year: number; seasons: { year: number }[]; numberRetiredBy?: NumberRetiredBy }): void {
+  c.numberRetiredBy = { team: c.team, year: c.seasons.length ? c.seasons[c.seasons.length - 1].year : c.year };
+}
+
+/** The recorded club off a save, checked: a non empty club and a four digit
+ *  year, or undefined (the block is dropped alone). */
+export function sanitizeNumberRetired(raw: unknown): NumberRetiredBy | undefined {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return undefined;
+  const r = raw as Record<string, unknown>;
+  if (typeof r.team !== "string" || !r.team.trim()) return undefined;
+  if (typeof r.year !== "number" || !Number.isInteger(r.year) || r.year < 1000 || r.year > 9999) return undefined;
+  return { team: r.team, year: r.year };
 }
 
 /** The shape all four American careers share, so one binding serves them all. */
@@ -271,6 +318,10 @@ export interface UsCareerShape {
   /** The era the career started in, for club names. */
   eraId?: string;
   seasons: { year: number; team: string; games: number; ovr: number }[];
+  /** Round 1039: a club that retired the number on a deck card. */
+  numberRetiredBy?: NumberRetiredBy;
+  /** The life deck's flags, read only for the deck jersey card's own flag. */
+  lifeFlags?: Record<string, number>;
 }
 
 export interface UsHallSport<C extends UsCareerShape> extends HallSport<C> {
@@ -288,6 +339,9 @@ export function usCareerHall<C extends UsCareerShape>(def: {
   shouldRetire: (c: C) => boolean;
   /** The sport's own club label, (abbreviation, era) to name. */
   teamLabel: (team: string, eraId?: string) => string;
+  /** The life B flag the deck's jersey card sets (1 or 2 retired the number,
+   *  3 waits), or undefined for a sport with no such card. */
+  deckJerseyFlag?: string;
 }): UsHallSport<C> {
   const lastSeasonYear = (c: C) => (c.seasons.length ? c.seasons[c.seasons.length - 1].year : c.year);
   return {
@@ -299,17 +353,26 @@ export function usCareerHall<C extends UsCareerShape>(def: {
     lastSeasonYear,
     seasons: c => c.seasons,
     teamName: (team, c) => def.teamLabel(team, c.eraId),
+    // A number a club retired on a deck card wins, counted over his season lines there.
+    recordedJersey: c => (c.numberRetiredBy
+      ? { team: c.numberRetiredBy.team, seasons: c.seasons.filter(s => s.team === c.numberRetiredBy?.team).length }
+      : null),
+    // A save from before Round 1039 whose deck card retired the number kept
+    // no club, so the card names none rather than contradict the deck.
+    jerseyUnknown: c => {
+      if (!def.deckJerseyFlag || c.numberRetiredBy) return false;
+      const f = c.lifeFlags?.[def.deckJerseyFlag];
+      return f === 1 || f === 2;
+    },
     snapshot: c => ({ year: lastSeasonYear(c), age: c.age, rating: c.ovr, peak: peakRating(c.seasons, c.ovr), forced: def.shouldRetire(c) }),
   };
 }
 
-/* ─── The induction speech ────────────────────────────────────────────────
-   The speaker is the player's own generated character. The options are
-   SpeechOption lists from careerAwardsNight, so a button's words are built
-   from the same steps applySpeech applies. Every line is narration in the
-   second person and thanks roles, never a real person by name. The two
-   meters live on the speech block itself: how the crowd and the old room
-   took it. Nothing in the career score reads them. */
+/* ─── The induction speech's save block ──────────────────────────────────
+   The speech itself (its options, its button words and giveHallSpeech) is in
+   careerHallSpeech.ts since Round 1039, loaded only with the card, so the
+   board's eager path does not carry careerAwardsNight. The block and its
+   sanitizer stay here, because the board restores the save. */
 
 export type HallMeterId = "crowd" | "room";
 
@@ -322,61 +385,6 @@ export interface HallSpeechBlock {
 }
 
 export type HallSpeechId = "fans" | "room" | "story" | "short";
-
-const clampMeter = (n: number) => Math.max(0, Math.min(100, Math.round(n)));
-
-export const HALL_SPEECH_METERS: Record<HallMeterId, AwardsMeter<HallSpeechBlock>> = {
-  crowd: { label: "Crowd", add: (s, d) => { s.crowd = clampMeter((s.crowd ?? 50) + d); }, read: s => s.crowd ?? 50 },
-  room: { label: "Old room", add: (s, d) => { s.room = clampMeter((s.room ?? 50) + d); }, read: s => s.room ?? 50 },
-};
-
-export const HALL_SPEECHES: SpeechOption<HallSpeechBlock, HallMeterId, HallSpeechId>[] = [
-  {
-    id: "fans", emoji: "🙌", label: "Thank the fans", tone: "gold",
-    effect: [{ meter: "crowd", delta: 12 }],
-    line: () => "You gave the longest stretch to the people in the seats, the ones who drove in for every home game. The crowd stood for it.",
-  },
-  {
-    id: "room", emoji: "🤝", label: "Thank the locker room", tone: "bold",
-    effect: [{ meter: "room", delta: 12 }],
-    line: () => "You went role by role: the trainers, the equipment staff, the backups who pushed you every practice, your first head coach. The old room was on its feet.",
-  },
-  {
-    id: "story", emoji: "📖", label: "Tell the whole story, bad years too", tone: "bold",
-    effect: [],
-    risk: { chance: 0.5, hit: [{ meter: "crowd", delta: 16 }, { meter: "room", delta: 6 }], miss: [{ meter: "crowd", delta: -6 }, { meter: "room", delta: -4 }] },
-    line: (_s, outcome) => outcome === "hit"
-      ? "You told all of it, the slumps and the injuries included, and the room went quiet in the right way."
-      : "You told all of it and ran twenty minutes long. Half the room was checking the time.",
-  },
-  {
-    id: "short", emoji: "⏱️", label: "Keep it short", tone: "quiet",
-    effect: [{ meter: "crowd", delta: 4 }, { meter: "room", delta: 4 }],
-    line: () => "Four minutes, a thank you to your family and the people who taught you the game, and off the stage.",
-  },
-];
-
-/** What a speech button promises, built from its own steps. */
-export function speechPromise(option: SpeechOption<HallSpeechBlock, HallMeterId, HallSpeechId>): string {
-  const sure = option.effect.length ? describeSteps(HALL_SPEECH_METERS, option.effect) : "";
-  if (!option.risk) return sure;
-  const pct = Math.round(option.risk.chance * 100);
-  const risk = `${pct} percent: ${describeSteps(HALL_SPEECH_METERS, option.risk.hit)}. Otherwise: ${describeSteps(HALL_SPEECH_METERS, option.risk.miss)}`;
-  return sure ? `${sure}. ${risk}` : risk;
-}
-
-/** Gives the speech once. The coin, where there is one, is keyedRng on the
- *  career's key, so a reload cannot reroll it. A second call changes nothing. */
-export function giveHallSpeech(block: HallSpeechBlock | undefined, record: HallRecord, careerKey: string, id: HallSpeechId): HallSpeechBlock {
-  const b: HallSpeechBlock = { ...(block ?? {}) };
-  if (record.outcome !== "inducted" || b.speechId) return b;
-  const line = applySpeech(
-    { meters: HALL_SPEECH_METERS, say: (s, l) => { s.line = l; } },
-    HALL_SPEECHES, b, id, keyedRng(`hall-speech:${record.sport}:${careerKey}`),
-  );
-  if (line !== null) b.speechId = id;
-  return b;
-}
 
 const SPEECH_IDS: HallSpeechId[] = ["fans", "room", "story", "short"];
 const isMeter = (v: unknown) => typeof v === "number" && Number.isFinite(v) && v >= 0 && v <= 100;

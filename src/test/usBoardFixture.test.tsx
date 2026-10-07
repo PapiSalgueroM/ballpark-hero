@@ -114,7 +114,9 @@ function oneCardBoard(sport: () => UsCareerSport): ComponentType {
     const s = sport();
     let Board = knobbed.get(s);
     if (!Board) {
-      const knob: UsCareerSport = { ...s, summer: ONE_CARD_KNOB };
+      /* Round 1039: and with no Hall bound, so no retirement talk is asked and
+         the retirement screen is the old one. */
+      const knob: UsCareerSport = { ...s, summer: ONE_CARD_KNOB, hall: undefined };
       Board = function KnobBoard() { return <UsCareerBoard sport={knob} />; };
       knobbed.set(s, Board);
     }

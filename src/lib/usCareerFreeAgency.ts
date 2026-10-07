@@ -236,6 +236,9 @@ export interface FaPushArgs {
   accolades: number;
   cliffAge: number;
   rng: () => number;
+  /** Round 1039: the longest deal a push can reach (5 when absent). A
+      farewell season passes 1, so a push never adds a year that never comes. */
+  maxYears?: number;
 }
 
 export interface FaPushResult {
@@ -267,7 +270,7 @@ export function pushFaOffer(w: FaWindow, index: number, p: FaPushArgs): FaPushRe
     const bump = 1.08 + p.rng() * 0.10;
     o.salary = round1(o.salary * bump);
     let line = `${o.label} came up. ${o.salary}M a year now.`;
-    if (o.years < 5 && p.rng() < 0.35) {
+    if (o.years < (p.maxYears ?? 5) && p.rng() < 0.35) {
       o.years += 1;
       line = `${o.label} came up on money AND length. ${o.salary}M x${o.years}.`;
     }
@@ -315,6 +318,14 @@ export function applyFaSigning<T extends FaSignable>(c: T, offer: FaOffer): stri
   }
   c.fanbase = 40;
   return `✍️ Signed with ${offer.label}: ${offer.salary}M x${offer.years}. New city, new pressure.`;
+}
+
+/** Round 1039: an announced farewell season is the last one, so every offer
+    in its window is a one year deal. Draws nothing and changes no salary:
+    the season is paid at the signed rate either way, the card just stops
+    promising years that never come. Returns a NEW window. */
+export function oneYearWindow(w: FaWindow): FaWindow {
+  return { ...w, offers: w.offers.map(o => ({ ...o, years: 1 })) };
 }
 
 /** Total value line for the cards. */

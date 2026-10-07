@@ -54,6 +54,21 @@
  * ("Health +5, morale +3" became "Morale +3"), the NHL in 3 screens and 1
  * label ("Morale up" became "No change"). Recorded twice on the merged
  * tree (origin/main 211da297), byte for byte the same; 1,864,921 bytes.
+ * Round 1039 re-recorded it on purpose, with the Round 988 method. The
+ * replay mounts every binding with no Hall bound (hall: undefined), so no
+ * retirement talk is asked and the retirement screen is the old one; the
+ * retire button writes nothing new there either. Recorded on one tree (head
+ * 69a106fa) with and without the life B deck change (the four decks at
+ * 27f37b71: the retirement and farewell answers, the jersey record and the
+ * NHL walk away): WITHOUT it the recording equals the 1038 fixture byte for
+ * byte, header aside, in all four sports, so the board and the summer
+ * filter are invisible with no Hall bound. WITH it the four click paths and
+ * every save stay identical; the only change is one screen of markup in two
+ * sports, the healthy walk away card (lifeB_retireHealthy and
+ * mlbB_retireHealthy) showing its first answer's new effect, "Next season is
+ * your last" where it said "Leave whole": NFL fixed save "mid" step 53 and
+ * MLB fixed save "suspended" step 41. NBA and NHL do not move at all: their
+ * recorded careers never draw a reconciled card. Still 1,864,921 bytes.
  * Recorded twice from the same tree, the fixture came out byte for byte the
  * same (cmp exit 0), which is what makes a red replay mean something. There is no
  * band here on purpose: the check is byte equality, and a path either

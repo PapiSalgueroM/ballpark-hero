@@ -133,8 +133,12 @@ export const LATER_CARD_MORALE_LIFT = 0;
 /** Deal the summer onto the career: the ids, and every dealt card stamped in
  *  the ledger (press moments never are). Mutates c, which is always the
  *  board's own working copy. */
-export function dealSummer<C extends UsCareerCore>(c: C, sport: UsCareerSport<C>): UsCareerSummer {
+export function dealSummer<C extends UsCareerCore>(c: C, sport: UsCareerSport<C>, exclude: ((e: UsCareerEvent<C>) => boolean) | null = null): UsCareerSummer {
   const knob = sport.summer;
+  /* Round 1039: cards the board holds out of this offseason (the deck's
+     retirement cards while the retirement talk is pending). Null deals
+     exactly the Round 1038 summer. */
+  const out = (e: UsCareerEvent<C>) => !!exclude && exclude(e);
   const year = summerSeason(c);
   const ledger = knob.cooldowns ? sanitizeLedger(c.eventLastFired) : {};
   const outsideLedger = (e: UsCareerEvent<C>) => !!e.press;
@@ -148,10 +152,10 @@ export function dealSummer<C extends UsCareerCore>(c: C, sport: UsCareerSport<C>
      than it ever was: measured on MLB, 38 percent of card 1s became 49. */
   const raw = sport.drawEvent(c, slotStream(c, sport.slug, year, 0));
   let first = raw;
-  if (knob.cooldowns && !outsideLedger(raw) && onCooldown(ledger, raw, year, knob.fallbackCooldown)) {
+  if (out(raw) || (knob.cooldowns && !outsideLedger(raw) && onCooldown(ledger, raw, year, knob.fallbackCooldown))) {
     const kind = movesRating(c, raw, snapshot);
     const redraw = keyedRng(`summer-redraw:${sport.slug}:${summerCareerKey(c)}:${year}`);
-    const deck = sport.eventDeck(c, slotStream(c, sport.slug, year, 0)).filter(e => e.press !== 'big');
+    const deck = sport.eventDeck(c, slotStream(c, sport.slug, year, 0)).filter(e => e.press !== 'big' && !out(e));
     const passed = new Set<string>();
     let any: UsCareerEvent<C> | undefined;
     for (;;) {
@@ -164,6 +168,12 @@ export function dealSummer<C extends UsCareerCore>(c: C, sport: UsCareerSport<C>
     /* No fresh card of that kind: any fresh card, and if every card in the
        deck is resting, the drawn one anyway, so a summer is never empty. */
     if (first === raw && any) first = any;
+    /* A held out card is never dealt: with nothing else fresh, any card the
+       filter allows, and with none at all the summer is empty. */
+    if (out(first)) {
+      if (!deck.length) { delete c.summer; return { year, ids: [], at: 0 }; }
+      first = deck[0];
+    }
   }
   const picked: UsCareerEvent<C>[] = [first];
   const taken = new Set<string>([ledgerKey(first)]);
@@ -178,7 +188,7 @@ export function dealSummer<C extends UsCareerCore>(c: C, sport: UsCareerSport<C>
        corruption deck is dealt there only, as it always was, because arcs
        opened by the later slots came back as card 1's arc cards (MLB's PED
        clinic) and lifted the rating that way. */
-    const deck = sport.eventDeck(c, r).filter(e => e.press !== 'big' && !e.corruption);
+    const deck = sport.eventDeck(c, r).filter(e => e.press !== 'big' && !e.corruption && !out(e));
     const passed = new Set<string>(taken);
     let e: UsCareerEvent<C> | undefined;
     for (;;) {
@@ -236,12 +246,17 @@ export function laterAnswerMovesRating<C extends UsCareerCore>(c: C, sport: UsCa
  *  so is a later card that the career as it stands now would let move the
  *  rating; `at` moves past it and `gone` counts it. When nothing is left the
  *  summer is over and leaves the career. Mutates c. */
-export function seekSummerCard<C extends UsCareerCore>(c: C, sport: UsCareerSport<C>): UsCareerEvent<C> | null {
+export function seekSummerCard<C extends UsCareerCore>(
+  c: C, sport: UsCareerSport<C>, exclude: ((e: UsCareerEvent<C>) => boolean) | null = null,
+): UsCareerEvent<C> | null {
   const s = c.summer;
   if (!s) return null;
   while (s.at < s.ids.length) {
     const card = summerCardAt(c, sport, s.at);
-    if (card && (s.at === 0 || !laterAnswerMovesRating(c, sport, card, s.at))) return card;
+    /* Round 1039: a card the board now holds out (a deck retirement card in
+       an offseason whose talk came after the deal, because card 1 moved the
+       rating into the rule) is skipped like one the career moved past. */
+    if (card && !(exclude && exclude(card)) && (s.at === 0 || !laterAnswerMovesRating(c, sport, card, s.at))) return card;
     s.at += 1;
     s.gone = (s.gone ?? 0) + 1;
   }
@@ -260,10 +275,17 @@ export function summerPlace(s: UsCareerSummer): { n: number; of: number; done: n
 
 /** The offseason's first card. On the knob path this is exactly the old
  *  draw and c is not touched; otherwise the summer is dealt onto c. */
-export function startSummer<C extends UsCareerCore>(c: C, sport: UsCareerSport<C>, mathRng: () => number): UsCareerEvent<C> | null {
-  if (!summerOn(sport.summer)) return sport.drawEvent(c, mathRng);
-  dealSummer(c, sport);
-  return seekSummerCard(c, sport);
+export function startSummer<C extends UsCareerCore>(
+  c: C, sport: UsCareerSport<C>, mathRng: () => number, exclude: ((e: UsCareerEvent<C>) => boolean) | null = null,
+): UsCareerEvent<C> | null {
+  if (!summerOn(sport.summer)) {
+    /* Round 1039: on the one card knob a held out card is dropped unapplied
+       (its draw has happened, so the stream is where it always was). */
+    const ev = sport.drawEvent(c, mathRng);
+    return exclude && exclude(ev) ? null : ev;
+  }
+  dealSummer(c, sport, exclude);
+  return seekSummerCard(c, sport, exclude);
 }
 
 /** Answer the card the summer stands on: card 1 answers on the season's own
@@ -272,6 +294,7 @@ export function startSummer<C extends UsCareerCore>(c: C, sport: UsCareerSport<C
  *  the summer is over (the board then rolls team quality, once). Mutates c. */
 export function answerSummerCard<C extends UsCareerCore>(
   c: C, sport: UsCareerSport<C>, card: UsCareerEvent<C>, optionIdx: number, mathRng: () => number,
+  exclude: ((e: UsCareerEvent<C>) => boolean) | null = null,
 ): { line: string; next: UsCareerEvent<C> | null } {
   const s = c.summer;
   const i = s?.at ?? 0;
@@ -279,7 +302,7 @@ export function answerSummerCard<C extends UsCareerCore>(
   const line = card.options[optionIdx].apply(c, rng);
   if (!c.summer) return { line, next: null };
   c.summer.at = i + 1;
-  return { line, next: seekSummerCard(c, sport) };
+  return { line, next: seekSummerCard(c, sport, exclude) };
 }
 
 /** Repair on load, the house pattern: each block is checked alone and a

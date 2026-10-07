@@ -52,6 +52,133 @@
                    games, then the first club), named by the engine's own
                    club label, never a bare id. Controls jerseyfirst, jerseyraw.
 
+   ROUND 1039, sections 9 to 14: the same rules on the BOARD's own loop. The
+   real binding (nflCareerSport.ts and its siblings), its summer deal and
+   answers (usCareerSummer.ts) and the talk where the board asks it
+   (usCareerRetirementFlow.ts): season, progress, the hard stop or a chosen
+   end, the deal with the talk filter, the talk, every card. Each career runs
+   on its own keyed stream, so two policies on one career draw the same
+   numbers until they really differ. 400 careers a policy by default
+   (SIM_BOARD_CAREERS), 100 a league era for section 13 (SIM_ERA_CAREERS),
+   800 a build for section 14 (SIM_BALANCE_CAREERS).
+     9. identity   careers that answer 'one more year' every time are byte
+                   for byte the loop with no talk at all (the deck's
+                   retirement cards held out by this file's own reading of
+                   the rule), but for the answers block. Control talkdraws
+                   (one Math.random in pendingTalk).
+    10. ends       Retire now ends on the talk's season; a farewell, said at
+                   the talk or on a deck card ("Next season is your last"),
+                   ends exactly one season later and that season is marked.
+                   Controls farewelloff (Round 915's) and deckfarewelloff (the
+                   deck's answers back to the bare flag).
+    11. once       no offseason that has the talk is offered a deck retirement
+                   card, and RETIREMENT_CARD_IDS is every card whose answer
+                   writes a farewell or says it does, read off the engine's
+                   own deck builders, with no id that is never dealt. Control
+                   twice (the filter off). Since the review fix of 2026-10-07
+                   the loop asks the talk where the board does in every case:
+                   right after the deal, after a card whose answer moved the
+                   rating into the rule (before the next card, or on the hub),
+                   and on the hub after a banned year, which deals no summer
+                   and has no hard stop, as on the board. Only the cards from
+                   the talk on are checked. The deck's retirement cards lift
+                   morale, so the deal never puts one in a later slot, and the
+                   mid-summer path never meets one here: the seek time filter
+                   and the declined clause are held by the vitest file
+                   src/test/usCareerHallBoard.test.tsx, whose controls do fire.
+    11b. seek      (closing check fix, 2026-10-07) so the seek time hold-out
+                   is held here too: the first 300 talks the oneMore policy's
+                   careers are asked in the board loop are caught, before
+                   the answer, and a summer is forged to stand on each deck
+                   retirement card the deck really holds then, at card 1 (a save
+                   restored on a card dealt before the talk) and at card 2,
+                   with the talk pending and again after 'One more year'.
+                   The board's seek (seekSummerCard with talkDeckFilter) must
+                   never land on one; with no hold-out the same seek must
+                   land on some (the floor), so it cannot pass on nothing.
+                   At card 2 the rating rule already skips every one of them
+                   in nfl, nba and mlb (an answer moves the rating), so there
+                   the hold-out is load-bearing at card 1 only; the NHL cards
+                   leave the rating alone and land at card 2 as well. Control
+                   seekexclude (the review's mutation M2, the hold-out dropped
+                   from the seek): FIRED in all four sports with only seek
+                   red (80 board careers, so every talk is under the cap of
+                   300: met nfl 614 of 1228, nba 762 of 1524, mlb 636 of
+                   1272, all at card 1; nhl 1696 of 1696, 848 at card 1 and
+                   848 at card 2).
+    12. deckJersey a club that retired the number on a deck card is the club
+                   the card names (even where another club has more seasons),
+                   on real careers and on synthetic ones with twelve seasons
+                   elsewhere; a wait answer writes no club. Control
+                   jerseyignore (the recorded club ignored).
+    13. era        the card the board renders, for careers in every league era
+                   and for synthetic ballots on both sides of the line, prints
+                   "Class of X" and the class years only when the first class
+                   is at or after the audit table's verifiedFromClass, and no
+                   year and no rule line before it. Control eraunguarded.
+    14. balance    (nhl only) the walk away card wrote OVR 63 for the farewell
+                   year; now it writes the farewell. The same careers built
+                   once with the old answer, measured: the farewell season's
+                   own line where both builds took it the same offseason, and
+                   the median legacy and Hall share over every career.
+
+   BANDS for sections 9 to 14, measured 2026-10-06 and 07 (Round 1039) on a
+   machine shared with other builders, 400 board careers a policy:
+     9 to 13 are exact: zero misses in every run. Their floors only stop a
+     check from passing on nothing (talks answered, ends of each kind, talk
+     offseasons, synthetic jerseys, both sides of the era line). Default
+     seed: talks answered one more year nfl 1118, nba 1328, mlb 1277, nhl
+     1202; deck farewells nfl 28, nba 8, mlb 36, nhl 124; talk offseasons
+     2577 to 3054; deck retired numbers nfl 57 (5 at a club with fewer
+     seasons), nba 90 (30), mlb 75 (14), nhl none (its deck has no jersey
+     card, so the synthetic careers carry section 12 there); throwback eras
+     below the verified class nfl 28, nba 31, nhl 4 of 100, mlb 0 (its line
+     is the Class of 2014, so the synthetic boundary ballots carry it).
+     Re-measured 2026-10-07 on the review fix's loop (the talk asked
+     mid-summer and after a banned year, no summer after a banned year),
+     default seed, all four green: talks answered one more year nfl 1122,
+     nba 1325, mlb 1281, nhl 1206; talk offseasons nfl 2585, nba 3048, mlb
+     2952, nhl 2781, of them asked mid-summer 9, 0, 9, 6 and after a banned
+     year 11, 42, 10, 32; deck farewells and deck retired numbers unchanged
+     (nfl 57, 5 elsewhere; nba 90, 30; mlb 75, 14); section 14 unchanged.
+     14, six NHL seeds (default and SIM_SEED 1 to 5), 800 careers a build:
+       walk away farewells taken the same offseason in both builds 16, 12,
+       12, 21, 17, 10 (of 56, 42, 43, 56, 60, 58). Band: at least 5.
+       that farewell season's OVR, old build 63.0 every time, now 83.3 to
+       86.3 (a gain of 20.3 to 23.3); points (wins for a goalie) 14.8 to
+       18.7 became 48.0 to 70.0. Band: OVR gain at least 10.
+       Hall share over every career moved -0.12 to -0.75 points. Band: 2.5.
+       median legacy over every career moved 0 to -7. Band: 15.
+       (Seeds 1 to 3 ran before the bands were set and were red only on the
+       placeholder case floor of 30; every other check was green.)
+     AT THE BRIEF'S SIZE, measured 2026-10-07 by the closing check fix:
+     SIM_BOARD_CAREERS=2000 (2000 board careers a policy) and 2000 engine
+     careers, the default seed plus SIM_SEED 1 to 5, all four sports, 24
+     runs, every one green on its closing line with zero misses in sections
+     9 to 13 and 11b. Ranges over the six seeds:
+       talks answered one more year nfl 5677 to 5829, nba 6668 to 6758,
+         mlb 6500 to 6655, nhl 6147 to 6282.
+       retire now (and talk farewells, the same count) nfl 1699 to 1721,
+         nba 1972 to 1979, mlb 1961 to 1972, nhl 1822 to 1866; deck farewells
+         nfl 80 to 166, nba 84 to 112, mlb 100 to 140, nhl 520 to 696.
+       talk offseasons nfl 13075 to 13361 (26 to 55 asked mid-summer, 69 to
+         106 after a banned year), nba 15313 to 15491 (3 to 18, 95 to 170),
+         mlb 14965 to 15280 (39 to 63, 58 to 88), nhl 14137 to 14430 (51
+         to 62, 135 to 157).
+       11b, forged summers landed with no hold-out (300 talks caught):
+         nfl 780 to 808 of 1560 to 1616, nba 786 to 850 of 1572 to 1700,
+         mlb 714 to 812 of 1428 to 1624 (all at card 1), nhl 2000 to 2148
+         of as many (card 1 and card 2 alike). Band: at least 300, about
+         half the smallest measured anywhere (614, nfl at 80 careers).
+       deck retired numbers nfl 227 to 308 (13 to 29 at a club with fewer
+         seasons), nba 308 to 373 (56 to 106), mlb 282 to 315 (27 to 56).
+       section 13 (100 a league era, unchanged by SIM_BOARD_CAREERS):
+         throwback careers below the verified class nfl 27 to 35, nba 22
+         to 36, nhl 3 to 6, mlb 0. Section 14 as above.
+     One run took 36 to 72 minutes on the shared machine, so runAllSims
+     keeps 400 board careers on the default seed; rerun the long form above
+     after any change to the board, the summer, the talk or a life B deck.
+
    A control run exits 1 only when the check it targets is red (FIRED), and 0
    when it is not (DID NOT FIRE), whatever else went red.
 
@@ -101,10 +228,10 @@ const CAREERS = Number(process.argv[3] || 2000);
 const CONTROL = process.env.SIM_CONTROL || '';
 
 const ENGINES = {
-  nfl: { file: 'nflMyCareer.ts', hall: 'NFL_CAREER_HALL', legacy: 'legacyOf', label: 'teamLabelOf', arch: 'ARCHETYPES', start: 'startCareer', season: 'simSeason', progress: 'progress', event: 'drawEvent', stop: 'shouldRetire', roll: 'rollTeamQuality', positions: ['QB', 'RB', 'WR', 'TE', 'LB', 'CB', 'EDGE', 'K'] },
-  nba: { file: 'nbaMyCareer.ts', hall: 'NBA_CAREER_HALL', legacy: 'nbaLegacyOf', label: 'nbaTeamLabelOf', arch: 'NBA_ARCHETYPES', start: 'startNbaCareer', season: 'simNbaSeason', progress: 'nbaProgress', event: 'drawNbaEvent', stop: 'nbaShouldRetire', roll: 'nbaRollTeamQuality', positions: ['PG', 'SG', 'SF', 'PF', 'C'], banned: { ppg: 0, rpg: 0, apg: 0 } },
-  mlb: { file: 'mlbMyCareer.ts', hall: 'MLB_CAREER_HALL', legacy: 'mlbLegacyOf', label: 'mlbTeamLabelOf', arch: 'MLB_ARCHETYPES', start: 'startMlbCareer', season: 'simMlbSeason', progress: 'mlbProgress', event: 'drawMlbEvent', stop: 'mlbShouldRetire', roll: 'mlbRollTeamQuality', positions: ['SP', 'RP', 'C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'DH'] },
-  nhl: { file: 'nhlMyCareer.ts', hall: 'NHL_CAREER_HALL', legacy: 'nhlLegacyOf', label: 'nhlTeamLabelOf', arch: 'NHL_ARCHETYPES', start: 'startNhlCareer', season: 'simNhlSeason', progress: 'nhlProgress', event: 'drawNhlEvent', stop: 'nhlShouldRetire', roll: 'nhlRollTeamQuality', positions: ['C', 'LW', 'RW', 'D', 'G'] },
+  nfl: { file: 'nflMyCareer.ts', hall: 'NFL_CAREER_HALL', legacy: 'legacyOf', label: 'teamLabelOf', arch: 'ARCHETYPES', start: 'startCareer', season: 'simSeason', progress: 'progress', event: 'drawEvent', stop: 'shouldRetire', roll: 'rollTeamQuality', binding: 'NFL_CAREER_SPORT', eras: 'NFL_ERAS', positions: ['QB', 'RB', 'WR', 'TE', 'LB', 'CB', 'EDGE', 'K'] },
+  nba: { file: 'nbaMyCareer.ts', hall: 'NBA_CAREER_HALL', legacy: 'nbaLegacyOf', label: 'nbaTeamLabelOf', arch: 'NBA_ARCHETYPES', start: 'startNbaCareer', season: 'simNbaSeason', progress: 'nbaProgress', event: 'drawNbaEvent', stop: 'nbaShouldRetire', roll: 'nbaRollTeamQuality', binding: 'NBA_CAREER_SPORT', eras: 'NBA_ERAS', positions: ['PG', 'SG', 'SF', 'PF', 'C'], banned: { ppg: 0, rpg: 0, apg: 0 } },
+  mlb: { file: 'mlbMyCareer.ts', hall: 'MLB_CAREER_HALL', legacy: 'mlbLegacyOf', label: 'mlbTeamLabelOf', arch: 'MLB_ARCHETYPES', start: 'startMlbCareer', season: 'simMlbSeason', progress: 'mlbProgress', event: 'drawMlbEvent', stop: 'mlbShouldRetire', roll: 'mlbRollTeamQuality', binding: 'MLB_CAREER_SPORT', eras: 'MLB_ERAS', positions: ['SP', 'RP', 'C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'DH'] },
+  nhl: { file: 'nhlMyCareer.ts', hall: 'NHL_CAREER_HALL', legacy: 'nhlLegacyOf', label: 'nhlTeamLabelOf', arch: 'NHL_ARCHETYPES', start: 'startNhlCareer', season: 'simNhlSeason', progress: 'nhlProgress', event: 'drawNhlEvent', stop: 'nhlShouldRetire', roll: 'nhlRollTeamQuality', binding: 'NHL_CAREER_SPORT', eras: 'NHL_ERAS', positions: ['C', 'LW', 'RW', 'D', 'G'] },
 };
 if (!SPORT) {
   // runAllSims calls every harness with no arguments: run the four sports, one child each.
@@ -141,6 +268,14 @@ const CONTROLS = {
   notalk: { file: 'careerRetirement.ts', from: 'if (drop >= rule.dropFromPeak) return', to: 'if (false) return' },
   jerseyfirst: { file: 'careerHallOfFame.ts', from: 't.seasons > best.seasons ||', to: 't.seasons < best.seasons ||' },
   jerseyraw: { file: 'careerHallOfFame.ts', from: 'teamName: (team, c) => def.teamLabel(team, c.eraId),', to: 'teamName: (team) => team,' },
+  // Round 1039, sections 9 to 13.
+  talkdraws: { file: 'usCareerRetirementFlow.ts', from: 'if (!hall || c.retired || c.seasons.length === 0) return null;', to: 'Math.random(); if (!hall || c.retired || c.seasons.length === 0) return null;' },
+  deckfarewelloff: { file: `${SPORT}CareerLifeB.ts`, re: /announceFarewell\(cc\);/g, to: '' },
+  twice: { file: 'usCareerRetirementFlow.ts', from: 'return e => RETIREMENT_CARD_IDS.has(e.id) && talkThisOffseason(c, hall);', to: 'return e => false && RETIREMENT_CARD_IDS.has(e.id);' },
+  // Closing check fix, 2026-10-07: the seek time hold-out dropped (the review's mutation M2), section 11b.
+  seekexclude: { file: 'usCareerSummer.ts', from: 'if (card && !(exclude && exclude(card)) && (s.at === 0', to: 'if (card && (s.at === 0' },
+  jerseyignore: { file: 'careerHallOfFame.ts', from: 'sport.recordedJersey?.(c) ?? jerseyFor(', to: 'jerseyFor(' },
+  eraunguarded: { file: 'HallOfFameCard.tsx', from: 'rec.firstClass >= rules.verifiedFromClass', to: 'true' },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown SIM_CONTROL ${CONTROL}`); process.exit(2); }
 let controlFired = false;
@@ -149,13 +284,13 @@ const controlPlugin = {
   setup(b) {
     if (!CONTROL) return;
     const ctl = CONTROLS[CONTROL];
-    b.onLoad({ filter: /\.ts$/ }, args => {
+    b.onLoad({ filter: /\.tsx?$/ }, args => {
       if (path.basename(args.path) !== ctl.file) return undefined;
       const src = readFileSync(args.path, 'utf8');
       const hit = ctl.re ? ctl.re.test(src) : src.includes(ctl.from);
       if (!hit) throw new Error(`control ${CONTROL}: its string is not in ${ctl.file}, refusing to run`);
       controlFired = true;
-      return { contents: ctl.re ? src.replace(ctl.re, ctl.to) : src.replace(ctl.from, ctl.to), loader: 'ts' };
+      return { contents: ctl.re ? src.replace(ctl.re, ctl.to) : src.replace(ctl.from, ctl.to), loader: args.path.endsWith('x') ? 'tsx' : 'ts' };
     });
   },
 };
@@ -166,14 +301,26 @@ const entry = [
   // never goes through the Hall binding it is checking.
   `export { ${E.legacy} as LEGACY, ${E.label} as LABEL, ${E.arch} as ARCH, ${E.start} as start, ${E.season} as season, ${E.progress} as progress, ${E.event} as drawEvent, ${E.stop} as stop, ${E.roll} as roll } from './src/lib/${E.file}';`,
   `export { ${E.hall} as HALL } from './src/lib/${SPORT}CareerHall.ts';`,
-  `export { hallRecordFor, runHallBallot, giveHallSpeech, HALL_SPEECHES } from './src/lib/careerHallOfFame.ts';`,
+  `export { hallRecordFor, runHallBallot } from './src/lib/careerHallOfFame.ts';`,
+  `export { giveHallSpeech, HALL_SPEECHES } from './src/lib/careerHallSpeech.ts';`,
   `export { retirementTalk, answerRetirement, careerEndsAfter, isFarewellSeason } from './src/lib/careerRetirement.ts';`,
+  // Round 1039: the board's own pieces, for sections 9 to 14.
+  `export { ${E.binding} as SPORTB } from './src/lib/${SPORT}CareerSport.ts';`,
+  `export { ${E.eras} as ERAS } from './src/lib/${E.file}';`,
+  `export { startSummer, answerSummerCard, seekSummerCard, summerCardAt, summerSeason } from './src/lib/usCareerSummer.ts';`,
+  `export { pendingTalk, answerTalk, endsAfterSeason, talkDeckFilter, RETIREMENT_CARD_IDS } from './src/lib/usCareerRetirementFlow.ts';`,
+  `export { HallOfFameCard, hallYearsShown, hallHeadline, ballotLine, hallRuleLines } from './src/components/career/HallOfFameCard.tsx';`,
+  `export { renderToStaticMarkup } from 'react-dom/server';`,
+  `export { createElement } from 'react';`,
 ].join('\n');
 await build({
   stdin: { contents: entry, resolveDir: ROOT, loader: 'ts' },
   bundle: true, format: 'esm', platform: 'node', outfile: OUT, absWorkingDir: ROOT,
-  logLevel: 'error', alias: { '@': './src' }, plugins: [controlPlugin],
+  logLevel: 'error', alias: { '@': './src' }, plugins: [controlPlugin], jsx: 'automatic', banner: { js: "import { createRequire as __hallRequire } from 'node:module'; const require = __hallRequire(import.meta.url);" },
 });
+// Round 1039: the bindings read localStorage; this run keeps it in memory.
+const store = new Map();
+globalThis.localStorage ??= { getItem: k => (store.has(k) ? store.get(k) : null), setItem: (k, v) => { store.set(k, String(v)); }, removeItem: k => { store.delete(k); }, clear: () => store.clear(), key: () => null, length: 0 };
 const eng = await import(pathToFileURL(OUT).href);
 try { unlinkSync(OUT); } catch { /* the temp file is only a copy */ }
 if (CONTROL && !controlFired) { console.error(`control ${CONTROL} never reached its file, refusing to report`); process.exit(2); }
@@ -244,6 +391,8 @@ for (let i = 0; i < CAREERS; i += 1) {
       score: legacy.score, hof: legacy.hof, rec, same: JSON.stringify(rec) === JSON.stringify(again),
       // Read off the save, not through HALL.lastSeasonYear, which is under test.
       last: c.seasons.at(-1)?.year ?? Number.NaN, seasons: c.seasons.map(s => ({ team: s.team, games: s.games })),
+      // Round 1039: the club a deck card retired the number at, and every season line, for section 8.
+      numberRetiredBy: c.numberRetiredBy ?? null, allSeasons: c.seasons.map(s => ({ team: s.team })),
       talks, firstTalkAge, speech, finalAge: c.age, seasonsPlayed: c.seasons.length, eraId: c.eraId, answer,
     });
   } catch (err) {
@@ -280,7 +429,7 @@ const tableBlock = doc.split('<!-- hall-table:start -->')[1].split('<!-- hall-ta
 const row = tableBlock.split(String.fromCharCode(10)).find(l => l.startsWith(`| ${SPORT} |`));
 const cells = row.split('|').map(s => s.trim()).filter(Boolean);
 const num = v => (v === 'none' ? null : Number(v));
-const table = { waitSeasons: num(cells[1]), ballotYears: num(cells[2]), threshold: num(cells[3]), stayFloor: num(cells[4]), firstClassOffset: num(cells[5]) };
+const table = { waitSeasons: num(cells[1]), ballotYears: num(cells[2]), threshold: num(cells[3]), stayFloor: num(cells[4]), firstClassOffset: num(cells[5]), verifiedFromClass: num(cells[6]) };
 const tableDiffs = Object.keys(table).filter(k => rules[k] !== table[k]);
 const offsetMiss = careers.filter(c => c.rec.firstClass !== c.last + table.firstClassOffset).length;
 
@@ -359,7 +508,9 @@ for (const c of careers) {
   const best = club(c.seasons);
   const promised = lines.jerseyScore !== null && c.score >= lines.jerseyScore;
   const due = best && (promised || (c.rec.outcome === 'inducted' && best.seasons >= 5) || (best.seasons >= 12 && c.score >= lines.hofLine * 0.85));
-  const want = due ? { team: best.team, seasons: best.seasons } : null;
+  const want = c.numberRetiredBy
+    ? { team: c.numberRetiredBy.team, seasons: c.allSeasons.filter(s => s.team === c.numberRetiredBy.team).length }
+    : due ? { team: best.team, seasons: best.seasons } : null;
   const got = c.rec.jersey ? { team: c.rec.jersey.team, seasons: c.rec.jersey.seasons } : null;
   if (JSON.stringify(want) !== JSON.stringify(got)) jerseyMiss += 1;
   // The card names the club with the engine's own label, never a bare abbreviation it knows.
@@ -416,8 +567,408 @@ if (SPORT === 'mlb') console.log(`  under ten seasons played: ${careers.filter(c
 const med = a => { const s = [...a].sort((x, y) => x - y); return s.length ? s[Math.floor(s.length / 2)] : null; };
 console.log(`  talk timing: talks a career, median ${med(careers.map(c => c.talks))}; first talk at ${med(careers.filter(c => c.firstTalkAge !== null).map(c => c.firstTalkAge))}; career ends at ${med(careers.map(c => c.finalAge))}; non finite scores ${careers.filter(c => !Number.isFinite(c.score)).length}`);
 
+/* ─── Sections 9 to 14 (Round 1039): the board's own loop ────────────────
+   The sections above run Round 915's loop on the engine. These run the
+   board's: the real binding (SPORTB), its summer deal and answers
+   (usCareerSummer.ts) and the talk exactly where the board asks it
+   (usCareerRetirementFlow.ts). One offseason: the season, its progress, the
+   hard stop or a chosen end, the deal (with the talk filter), the talk, then
+   every card. Each career runs on its own stream (mulberry32 keyed to the
+   seed and the career), so two policies on one career draw the same numbers
+   until they really differ, and card answers come off a second stream. */
+// The board loop costs about ten engine careers a career (the summer probes every later card), so it runs
+// 400 careers a policy by default; SIM_BOARD_CAREERS=2000 is the long measuring run.
+const BOARD_N = Number(process.env.SIM_BOARD_CAREERS || Math.min(CAREERS, 400));
+const FAREWELL_EFFECT = 'Next season is your last';
+const hashStr = s => { let h = 0x811c9dc5 >>> 0; for (let k = 0; k < s.length; k += 1) { h ^= s.charCodeAt(k); h = Math.imul(h, 0x01000193) >>> 0; } return h >>> 0; };
+const streamFor = key => {
+  let a = hashStr(`${SEED}:${key}`);
+  return () => {
+    a |= 0; a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+};
+const ruleHolds = (c, X = eng) => {
+  const SB = X.SPORTB, HALL = X.HALL;
+  // Section 9's own reading of the talk rule, never through pendingTalk.
+  const r = HALL.retirement;
+  if (c.retired || !c.seasons.length || SB.shouldRetire(c)) return false;
+  if (c.retirement?.farewellYear !== undefined || c.retirement?.retiredYear !== undefined) return false;
+  const peak = Math.max(c.ovr, ...c.seasons.map(s => s.ovr));
+  return c.age >= r.minAge && (peak - c.ovr >= r.dropFromPeak || c.ovr <= r.floor);
+};
+/* Policies. asks: the board's own talk. answer: what the talk gets. filter:
+   the deal's filter (the board's, or section 9's own reading). */
+const POLICIES = {
+  oneMore: { asks: true, answer: () => 'oneMore', filter: (c, X) => X.talkDeckFilter(c, X.SPORTB.hall) },
+  retireNow: { asks: true, answer: () => 'retireNow', filter: (c, X) => X.talkDeckFilter(c, X.SPORTB.hall) },
+  farewell: { asks: true, answer: () => 'farewell', filter: (c, X) => X.talkDeckFilter(c, X.SPORTB.hall) },
+  // Today's engine loop: no talk at all, the deck's retirement cards held out by section 9's own reading.
+  noTalk: { asks: false, answer: () => null, filter: (c, X) => e => X.RETIREMENT_CARD_IDS.has(e.id) && ruleHolds(c, X) },
+};
+let probeCareers = 0;
+const deckSeen = new Set(), farewellCards = new Set(), probedTimes = new Map();
+// Section 11b: careers caught the moment the board asks the talk, before the answer.
+const SEEK_N = 300, seekSnaps = [];
+let seekOpen = true; // closed once 11b has read them, so sections 13 and 14 add none
+function probeDeck(c, SB = eng.SPORTB) {
+  // The deck as the engine builds it now, each answer tried on a copy, on throwaway streams.
+  const keep = Math.random;
+  Math.random = streamFor(`probe:${c.name}:${c.year}`);
+  try {
+    for (const e of SB.eventDeck(JSON.parse(JSON.stringify(c)), streamFor(`probe-deck:${c.name}:${c.year}`))) {
+      deckSeen.add(e.id);
+      // Each card's answers are tried on its first five deals: what an answer writes is the card's, not the career's.
+      const n = probedTimes.get(e.id) ?? 0;
+      if (n >= 5) continue;
+      probedTimes.set(e.id, n + 1);
+      e.options.forEach((o, k) => {
+        const copy = JSON.parse(JSON.stringify(c));
+        try { o.apply(copy, streamFor(`probe-apply:${c.name}:${c.year}:${e.id}:${k}`)); } catch { return; }
+        if (copy.retirement?.farewellYear !== undefined && c.retirement?.farewellYear === undefined) farewellCards.add(e.id);
+        if (o.effect === FAREWELL_EFFECT) farewellCards.add(e.id);
+      });
+    }
+  } finally { Math.random = keep; }
+}
+function boardCareer(i, policyName, eraId, X = eng) {
+  const policy = POLICIES[policyName];
+  const SB = X.SPORTB;
+  const keep = Math.random;
+  Math.random = streamFor(`board:${eraId ?? 'default'}:${i}`);
+  const pick = streamFor(`pick:${eraId ?? 'default'}:${i}`);
+  const log = { offseasons: [], talks: [], deckFarewells: [], farewellSeasons: [], waitJersey: 0, waitWrote: 0, walkAway: null, endedBy: null, midTalks: 0 };
+  try {
+    const pos = E.positions[i % E.positions.length];
+    const archs = X.ARCH[pos];
+    const c = SB.startCareer(`Board ${i}`, pos, archs[i % archs.length], Math.random, null, eraId);
+    let tq = null, banned = false;
+    // The talk exactly where the board asks it: on the hub or before the next card. True when it ended the career.
+    const askTalk = (year, at, o) => {
+      if (o.talkAt !== null) return false;
+      if (!policy.asks) { if (ruleHolds(c, X)) o.talkAt = at; return false; }
+      if (!X.pendingTalk(c, SB.hall)) return false;
+      if (seekOpen && policyName === 'oneMore' && X === eng && seekSnaps.length < SEEK_N) seekSnaps.push(JSON.parse(JSON.stringify(c)));
+      o.talkAt = at;
+      log.talks.push(year);
+      if (at > 0) log.midTalks += 1;
+      const choice = policy.answer();
+      X.answerTalk(c, choice);
+      if (choice !== 'retireNow') return false;
+      c.retired = true; delete c.summer; log.endedBy = 'talk';
+      return true;
+    };
+    for (let guard = 0; guard < 32 && !c.retired; guard += 1) {
+      // The board rolls the next season's team quality when an offseason ends, never after a banned year.
+      if (!banned) tq = SB.rollTeamQuality(tq, Math.random);
+      banned = (c.suspendedSeasons ?? 0) > 0;
+      if (banned) {
+        c.suspendedSeasons -= 1;
+        c.seasons.push(SB.suspendedLine(c));
+        SB.progress(c, Math.random);
+        /* The board's banned year: a chosen end still ends it, but there is no
+           hard stop and no summer; the talk, if the rule holds, is asked on the hub. */
+        const year = c.seasons.at(-1).year;
+        if (X.isFarewellSeason(c.retirement, year)) log.farewellSeasons.push(year);
+        if (X.endsAfterSeason(c, year)) { c.retired = true; log.endedBy = 'choice'; break; }
+        const o = { year, talkAt: null, shown: [], banned: true };
+        if (askTalk(year, 0, o)) break;
+        log.offseasons.push(o);
+        continue;
+      }
+      SB.campBattle(c, tq, Math.random);
+      SB.simSeason(c, tq, Math.random);
+      SB.progress(c, Math.random);
+      const year = c.seasons.at(-1).year;
+      if (X.isFarewellSeason(c.retirement, year)) log.farewellSeasons.push(year);
+      if (SB.shouldRetire(c)) { c.retired = true; log.endedBy = 'stop'; break; }
+      if (X.endsAfterSeason(c, year)) { c.retired = true; log.endedBy = 'choice'; break; }
+      if (probeCareers < 150 && i < 150 && policyName === 'oneMore') probeDeck(c, SB);
+      const filter = policy.filter(c, X);
+      let ev = X.startSummer(c, SB, Math.random, filter);
+      /* An offseason has the talk from the card it was asked before (talkAt):
+         right after the deal, or, when a card's answer moved the rating into
+         the rule, before the next card or on the hub when the summer is over.
+         For the no talk loop, from where the rule first held. */
+      const o = { year, talkAt: null, shown: [] };
+      if (askTalk(year, 0, o)) break;
+      let ended = false;
+      while (ev) {
+        o.shown.push(ev.id);
+        const k = Math.floor(pick() * ev.options.length);
+        if (ev.options[k].effect === FAREWELL_EFFECT && c.retirement?.farewellYear === undefined) log.deckFarewells.push(year);
+        const waits = /wait until you are done/i.test(ev.options[k].label) && c.numberRetiredBy === undefined;
+        if (ev.id === 'nhlB_walkAwayHealthy' && k === 0 && !log.walkAway) log.walkAway = { year };
+        ev = X.answerSummerCard(c, SB, ev, k, Math.random, filter).next;
+        if (waits) { log.waitJersey += 1; if (c.numberRetiredBy !== undefined) log.waitWrote += 1; }
+        if (askTalk(year, o.shown.length, o)) { ended = true; break; }
+      }
+      if (ended) break;
+      log.offseasons.push(o);
+    }
+    if (policyName === 'oneMore' && i < 150) probeCareers += 1;
+    return { c, log };
+  } finally {
+    Math.random = keep;
+  }
+}
+
+
+const strip = c => { const o = JSON.parse(JSON.stringify(c)); delete o.retirement; return JSON.stringify(o); };
+const runs = { oneMore: [], retireNow: [], farewell: [], noTalk: [] };
+let boardCrashes = 0;
+for (let i = 0; i < BOARD_N; i += 1) {
+  for (const p of Object.keys(runs)) {
+    try { runs[p].push(boardCareer(i, p)); } catch (err) {
+      boardCrashes += 1;
+      if (boardCrashes <= 3) console.error(`board career ${i} (${p}) crashed:`, err && err.message);
+    }
+  }
+}
+
+/* 9. identity: one more year every time is today's loop, byte for byte, but
+   for the answers block itself. */
+let identityMiss = 0, identityTalks = 0;
+for (let i = 0; i < Math.min(runs.oneMore.length, runs.noTalk.length); i += 1) {
+  if (strip(runs.oneMore[i].c) !== strip(runs.noTalk[i].c)) identityMiss += 1;
+  identityTalks += runs.oneMore[i].log.talks.length;
+}
+
+/* 10. ends: retire now ends on the talk's season; a farewell, at the talk or
+   on a deck card, ends exactly one season later and that season is marked. */
+let endsMiss = 0, endsRetire = 0, endsFarewell = 0, endsDeck = 0;
+const lastOf = c => c.seasons.at(-1).year;
+for (const { c, log } of runs.retireNow) {
+  if (!log.talks.length) continue;
+  endsRetire += 1;
+  if (lastOf(c) !== log.talks[0] || log.endedBy !== 'talk') endsMiss += 1;
+}
+for (const { c, log } of runs.farewell) {
+  if (!log.talks.length) continue;
+  endsFarewell += 1;
+  const want = log.talks[0] + 1;
+  if (lastOf(c) !== want || !log.farewellSeasons.includes(want)) endsMiss += 1;
+}
+for (const p of Object.keys(runs)) {
+  for (const { c, log } of runs[p]) {
+    if (!log.deckFarewells.length) continue;
+    // The talk's own farewell or retirement can come first only on the talk policies, and only before the card.
+    if ((p === 'retireNow' || p === 'farewell') && log.talks.length && log.talks[0] < log.deckFarewells[0]) continue;
+    endsDeck += 1;
+    const want = log.deckFarewells[0] + 1;
+    if (lastOf(c) !== want || !log.farewellSeasons.includes(want)) endsMiss += 1;
+  }
+}
+
+/* 11. once: no offseason with the talk is offered a deck retirement card,
+   and the board's list of those cards is every card whose answer announces
+   a farewell, as the engine's own deck builders hand them out. */
+let onceMiss = 0, talkOffseasons = 0, eligibleClashes = 0, midTalkOffseasons = 0, bannedTalkOffseasons = 0;
+for (const p of ['oneMore', 'farewell', 'noTalk']) {
+  for (const { log } of runs[p]) {
+    for (const o of log.offseasons) {
+      if (o.talkAt === null) continue;
+      talkOffseasons += 1;
+      if (o.talkAt > 0) midTalkOffseasons += 1;
+      if (o.banned) bannedTalkOffseasons += 1;
+      // Only the cards from the talk on: a card the talk came after was shown before it existed.
+      if (o.shown.slice(o.talkAt).some(id => eng.RETIREMENT_CARD_IDS.has(id))) onceMiss += 1;
+    }
+  }
+}
+const listedHere = [...eng.RETIREMENT_CARD_IDS].filter(id => deckSeen.has(id));
+const unlisted = [...farewellCards].filter(id => !eng.RETIREMENT_CARD_IDS.has(id));
+
+/* 11b. seek (closing check fix, 2026-10-07). The loop above never meets a
+   deck retirement card after the deal (they lift morale, so the later slots
+   never take one), so it cannot see the seek time hold-out in
+   seekSummerCard. This checks it on careers caught the moment the board asks
+   the talk: a summer forged to stand on each deck retirement card the deck
+   really holds then, at card 1 (a save restored on a card dealt before the
+   talk) and at a later card (one the talk came in front of), with the talk
+   pending and again after 'One more year'. The board's seek must never land
+   on one. With no hold-out the same seek must land on it (met), so the check
+   cannot pass on nothing. Control seekexclude. */
+seekOpen = false;
+const seekCaught = seekSnaps.length;
+let seekMiss = 0, seekMet = 0, seekTried = 0;
+const seekMetAt = [0, 0];
+{
+  const SB = eng.SPORTB;
+  const keep = Math.random;
+  try {
+    seekSnaps.forEach((snap, j) => {
+      for (const declined of [false, true]) {
+        const base = JSON.parse(JSON.stringify(snap));
+        if (declined) eng.answerTalk(base, 'oneMore');
+        const year = base.summer?.year ?? eng.summerSeason(base);
+        for (const id of eng.RETIREMENT_CARD_IDS) {
+          for (const at of [0, 1]) {
+            Math.random = streamFor(`seek:${j}:${id}:${at}:${declined}`);
+            const forge = () => { const f = JSON.parse(JSON.stringify(base)); f.summer = { year, ids: [id, id], at }; return f; };
+            // Only a card the deck really holds for this career now.
+            if (!eng.summerCardAt(forge(), SB, at)) continue;
+            seekTried += 1;
+            const open = eng.seekSummerCard(forge(), SB, null);
+            if (open && open.id === id) { seekMet += 1; seekMetAt[at] += 1; }
+            const c = forge();
+            const got = eng.seekSummerCard(c, SB, eng.talkDeckFilter(c, SB.hall));
+            if (got && eng.RETIREMENT_CARD_IDS.has(got.id)) seekMiss += 1;
+          }
+        }
+      }
+    });
+  } finally { Math.random = keep; }
+}
+
+
+/* 12. jersey: a club that retired the number on a deck card is the club the
+   card names, even where another club has more seasons; a wait answer
+   records nothing, so jerseyFor still decides (section 8 reads those). */
+let jerseyRecMiss = 0, jerseyRecN = 0, jerseyRecElsewhere = 0, jerseySynMiss = 0, jerseySynN = 0, waitAnswers = 0, waitWrote = 0;
+for (const p of Object.keys(runs)) {
+  for (const { c, log } of runs[p]) {
+    waitAnswers += log.waitJersey;
+    waitWrote += log.waitWrote;
+    if (!c.numberRetiredBy) continue;
+    jerseyRecN += 1;
+    const most = club(c.seasons);
+    if (most && most.team !== c.numberRetiredBy.team) jerseyRecElsewhere += 1;
+    const rec = eng.hallRecordFor(HALL, c);
+    if (!rec.jersey || rec.jersey.team !== c.numberRetiredBy.team || rec.jersey.teamName !== eng.LABEL(c.numberRetiredBy.team, c.eraId)) jerseyRecMiss += 1;
+  }
+}
+// Synthetic, every sport: the first club recorded, then twelve seasons somewhere else.
+for (const { c } of runs.noTalk.slice(0, 300)) {
+  if (!c.seasons.length) continue;
+  const copy = JSON.parse(JSON.stringify(c));
+  copy.numberRetiredBy = { team: copy.seasons[0].team, year: copy.seasons[0].year };
+  for (let k = 0; k < 12; k += 1) copy.seasons.push({ ...copy.seasons.at(-1), team: 'ZZZ', year: copy.seasons.at(-1).year + 1, games: 80 });
+  jerseySynN += 1;
+  const rec = eng.hallRecordFor(HALL, copy);
+  if (!rec.jersey || rec.jersey.team !== copy.seasons[0].team) jerseySynMiss += 1;
+}
+
+/* 13. era class: a class year (and the rule lines) only where the audit
+   anchors the first class, read off the card the board renders. */
+const auditFrom = table.verifiedFromClass;
+const ERA_N = Number(process.env.SIM_ERA_CAREERS || 100);
+const YEAR_RE = /\b(19|20)\d\d\b/;
+let eraMiss = 0;
+const eraCounts = {};
+const cardText = rec => eng.renderToStaticMarkup(eng.createElement(eng.HallOfFameCard, { record: rec, rules, onSpeech() {}, onDismiss() {} })).replace(/<[^>]+>/g, ' ');
+const eraCheck = (rec, last, tag) => {
+  const first = last + table.firstClassOffset;
+  const text = cardText(rec);
+  const side = first >= auditFrom ? 'above' : 'below';
+  eraCounts[tag] ??= { below: 0, above: 0 };
+  eraCounts[tag][side] += 1;
+  if (side === 'above') {
+    if (!text.includes(`Eligible from the Class of ${first}.`)) eraMiss += 1;
+    rec.ballots.forEach((b, k) => { if (!text.includes(`${first + k}: `)) eraMiss += 1; });
+  } else if (YEAR_RE.test(text) || hallRuleCount(text)) {
+    eraMiss += 1;
+  }
+};
+const hallRuleCount = text => eng.hallRuleLines(rules).filter(l => text.includes(l)).length;
+for (const era of eng.ERAS) {
+  for (let i = 0; i < ERA_N; i += 1) {
+    const { c } = boardCareer(100000 + i, 'oneMore', era.id);
+    eraCheck(eng.hallRecordFor(HALL, c), lastOf(c), era.id);
+  }
+}
+// The boundary, both sides of it, on synthetic ballots.
+for (const last of [auditFrom - table.firstClassOffset - 1, auditFrom - table.firstClassOffset]) {
+  for (let j = 0; j < 50; j += 1) {
+    for (const hof of [true, false]) {
+      const rec = { ...eng.runHallBallot(rules, lines, { key: `era:${SEED}:${last}:${j}:${hof}`, hof, score: hof ? lines.hofLine + 3 * j : lines.hofLine * 0.7, lastSeasonYear: last }), jersey: null };
+      eraCheck(rec, last, 'boundary');
+    }
+  }
+}
+
+
+/* 14. NHL balance (nhl only): the walk away card used to cap the rating at
+   63 for the farewell year; now it writes the farewell and the year is played
+   at the rating he has. The same careers on the same streams, built once with
+   the old answer, measured against today's: the farewell season's own line
+   and the legacy and Hall shift. Reported; the bands are from seeds. */
+let balance = null;
+if (SPORT === 'nhl') {
+  const OLD_FROM = 'apply: (cc) => { announceFarewell(cc); cc.health = 100;';
+  const OLD_TO = 'apply: (cc) => { cc.ovr = Math.min(cc.ovr, 63); cc.health = 100;';
+  const oldPlugin = {
+    name: 'old-walk-away',
+    setup(b) {
+      b.onLoad({ filter: /nhlCareerLifeB\.ts$/ }, args => {
+        const src = readFileSync(args.path, 'utf8');
+        if (!src.includes(OLD_FROM)) throw new Error('section 14: the walk away answer is not where it was, refusing to measure');
+        return { contents: src.replace(OLD_FROM, OLD_TO), loader: 'ts' };
+      });
+    },
+  };
+  const OUT_OLD = path.join(os.tmpdir(), `career-hall-nhl-old-${process.pid}.mjs`);
+  await build({
+    stdin: { contents: entry, resolveDir: ROOT, loader: 'ts' },
+    bundle: true, format: 'esm', platform: 'node', outfile: OUT_OLD, absWorkingDir: ROOT,
+    logLevel: 'error', alias: { '@': './src' }, plugins: [oldPlugin], jsx: 'automatic', banner: { js: "import { createRequire as __hallRequire } from 'node:module'; const require = __hallRequire(import.meta.url);" },
+  });
+  const old = await import(pathToFileURL(OUT_OLD).href);
+  try { unlinkSync(OUT_OLD); } catch { /* the temp file is only a copy */ }
+  const nowRuns = [], oldRuns = [];
+  // Its own count: the walk away answer comes in about one NHL career in thirteen.
+  const N14 = Number(process.env.SIM_BALANCE_CAREERS || 800);
+  for (let i = 0; i < N14; i += 1) {
+    nowRuns.push(boardCareer(200000 + i, 'oneMore', undefined, eng));
+    oldRuns.push(boardCareer(200000 + i, 'oneMore', undefined, old));
+  }
+  /* The farewell season itself is compared only where both builds took the
+     walk away answer in the same offseason. They can part earlier: Round
+     1038's deal sorts card 1's stand in by whether it moves the rating, and
+     the old answer did (the cap), so the old build deals some summers
+     differently. The legacy and Hall lines below are over every career. */
+  const cases = [];
+  let walkNow = 0;
+  nowRuns.forEach((r, i) => {
+    if (!r.log.walkAway) return;
+    walkNow += 1;
+    if (oldRuns[i].log.walkAway?.year !== r.log.walkAway.year) return;
+    const y = r.log.walkAway.year + 1;
+    const a = r.c.seasons.find(s => s.year === y), b = oldRuns[i].c.seasons.find(s => s.year === y);
+    if (a && b) cases.push({ now: a, old: b, nowC: r.c, oldC: oldRuns[i].c });
+  });
+  const mean = xs => (xs.length ? xs.reduce((s, x) => s + x, 0) / xs.length : 0);
+  const median = xs => { const s = [...xs].sort((x, y) => x - y); return s.length ? s[Math.floor(s.length / 2)] : 0; };
+  const legacyOf = (X, c) => X.LEGACY(c);
+  balance = {
+    cases: cases.length, walkNow,
+    ptsNow: mean(cases.map(k => k.now.points ?? k.now.wins ?? 0)), ptsOld: mean(cases.map(k => k.old.points ?? k.old.wins ?? 0)),
+    ovrNow: mean(cases.map(k => k.now.ovr)), ovrOld: mean(cases.map(k => k.old.ovr)),
+    gamesNow: mean(cases.map(k => k.now.games)), gamesOld: mean(cases.map(k => k.old.games)),
+    lineNow: cases[0] ? eng.SPORTB.statLine(cases[0].now, cases[0].nowC.pos) : '', lineOld: cases[0] ? old.SPORTB.statLine(cases[0].old, cases[0].oldC.pos) : '',
+    caseLegacyNow: median(cases.map(k => legacyOf(eng, k.nowC).score)), caseLegacyOld: median(cases.map(k => legacyOf(old, k.oldC).score)),
+    legacyNow: median(nowRuns.map(r => legacyOf(eng, r.c).score)), legacyOld: median(oldRuns.map(r => legacyOf(old, r.c).score)),
+    hallNow: share(nowRuns, r => legacyOf(eng, r.c).hof), hallOld: share(oldRuns, r => legacyOf(old, r.c).hof),
+  };
+  console.log(`  14 balance: ${balance.walkNow} walk away farewells, ${balance.cases} taken the same offseason in both builds; that farewell season: OVR ${balance.ovrOld.toFixed(1)} -> ${balance.ovrNow.toFixed(1)}, games ${balance.gamesOld.toFixed(1)} -> ${balance.gamesNow.toFixed(1)}, points (wins for a goalie) ${balance.ptsOld.toFixed(1)} -> ${balance.ptsNow.toFixed(1)}`);
+  console.log(`     first case's farewell line: old "${balance.lineOld}" now "${balance.lineNow}"`);
+  console.log(`     median legacy of those careers ${balance.caseLegacyOld} -> ${balance.caseLegacyNow}; all careers median ${balance.legacyOld} -> ${balance.legacyNow}; Hall share ${(100 * balance.hallOld).toFixed(1)} -> ${(100 * balance.hallNow).toFixed(1)} percent`);
+}
+
+const sportIds = [...eng.RETIREMENT_CARD_IDS].filter(id => id.startsWith({ nfl: 'lifeB_', nba: 'nbaB_', mlb: 'mlbB_', nhl: 'nhlB_' }[SPORT]));
+const deadIds = sportIds.filter(id => !deckSeen.has(id));
+const eraBoundary = eraCounts.boundary ?? { below: 0, above: 0 };
+console.log(`  board loop: ${BOARD_N} careers a policy, ${boardCrashes} crashed; talks answered one more year ${identityTalks}; identity misses ${identityMiss}`);
+console.log(`  ends: retire now ${endsRetire}, talk farewells ${endsFarewell}, deck farewells ${endsDeck}, misses ${endsMiss}`);
+console.log(`  once: ${talkOffseasons} offseasons with the talk (${midTalkOffseasons} asked mid-summer, ${bannedTalkOffseasons} after a banned year), ${onceMiss} offered a retirement card; listed ids seen ${listedHere.length}, unseen [${deadIds.join(',')}], farewell cards not listed [${unlisted.join(',')}] (decks probed on ${probeCareers} careers)`);
+console.log(`  seek: ${seekCaught} talks caught in the board loop, ${seekTried} forged summers on a deck retirement card, ${seekMet} landed on it with no hold-out (at card 1 ${seekMetAt[0]}, at a later card ${seekMetAt[1]}), ${seekMiss} with the board's`);
+console.log(`  jersey (deck): ${jerseyRecN} recorded, ${jerseyRecElsewhere} at a club other than the one with most seasons, ${jerseyRecMiss} misnamed; synthetic ${jerseySynN}, ${jerseySynMiss} missed; wait answers ${waitAnswers}, ${waitWrote} wrote a club`);
+console.log(`  era: verified from the Class of ${auditFrom}; ${JSON.stringify(eraCounts)}; misses ${eraMiss}`);
+
 /* ─── Check ───────────────────────────────────────────────────────────── */
-const BAND = { minInducted: 0.05, decileCut: 0.06, ladderStep: 0.015, talkReach: 0.70, earlyFall: 0.10, atFloor: 100 };
+const BAND = { minInducted: 0.05, decileCut: 0.06, ladderStep: 0.015, talkReach: 0.70, earlyFall: 0.10, atFloor: 100, balanceCases: 5, farewellOvrGain: 10, seekMet: 300, hallShift: 0.025, legacyShift: 15 };
 const smallestCut = Math.min(...decileCuts);
 const fellEarlyEnough = rules.stayFloor === null || earlyFalls >= BAND.earlyFall * onBallotOut;
 const checks = [
@@ -432,11 +983,18 @@ const checks = [
   ['talk', talkMismatch === 0 && talkBeforeAge === 0 && talked >= BAND.talkReach, `${talkMismatch} talks off the rule, ${talkBeforeAge} before the age, reached ${(100 * talked).toFixed(1)} percent (needs ${100 * BAND.talkReach})`],
   ['answers', answerMiss === 0 && Object.values(answered).every(n => n > 0), `${answerMiss} answers that did not do what the button says; answered ${JSON.stringify(answered)}`],
   ['jersey', jerseyMiss === 0 && jerseyRaw === 0 && jerseys > 0, `${jerseyMiss} jerseys off the rule or misnamed, ${jerseyRaw} named by a bare club id, ${jerseys} retired`],
+  ['identity', boardCrashes === 0 && identityMiss === 0 && identityTalks > 0, `${identityMiss} careers answering one more year that differ from the loop with no talk (${identityTalks} talks answered), ${boardCrashes} board careers crashed`],
+  ['ends', endsMiss === 0 && endsRetire > 0 && endsFarewell > 0 && endsDeck > 0, `${endsMiss} chosen ends off by a season or unmarked (retire now ${endsRetire}, talk farewells ${endsFarewell}, deck farewells ${endsDeck})`],
+  ['once', onceMiss === 0 && talkOffseasons > 0 && unlisted.length === 0 && deadIds.length === 0 && sportIds.length > 0, `${onceMiss} of ${talkOffseasons} talk offseasons offered a retirement card; not listed [${unlisted.join(',')}], listed but never dealt [${deadIds.join(',')}]`],
+  ['seek', seekMiss === 0 && seekMet >= BAND.seekMet, `${seekMiss} of ${seekTried} forged summers where the board's seek landed on a deck retirement card; ${seekMet} landed on one with no hold-out (needs ${BAND.seekMet})`],
+  ['deckJersey', jerseyRecMiss === 0 && jerseySynMiss === 0 && waitWrote === 0 && jerseySynN > 0 && (SPORT === 'nhl' || jerseyRecN > 0), `${jerseyRecMiss} of ${jerseyRecN} deck retired numbers not on the card, ${jerseySynMiss} of ${jerseySynN} synthetic, ${waitWrote} wait answers that wrote a club`],
+  ['era', eraMiss === 0 && eraBoundary.below > 0 && eraBoundary.above > 0, `${eraMiss} cards printing a class year or rule off the audit's verified class (${auditFrom}); ${JSON.stringify(eraCounts)}`],
+  ...(balance ? [['balance', balance.cases >= BAND.balanceCases && balance.ovrNow - balance.ovrOld >= BAND.farewellOvrGain && Math.abs(balance.hallNow - balance.hallOld) <= BAND.hallShift && Math.abs(balance.legacyNow - balance.legacyOld) <= BAND.legacyShift, `${balance.cases} walk away farewells (needs ${BAND.balanceCases}); farewell OVR gain ${(balance.ovrNow - balance.ovrOld).toFixed(1)} (needs ${BAND.farewellOvrGain}); Hall share shift ${(100 * (balance.hallNow - balance.hallOld)).toFixed(2)} points (band ${100 * BAND.hallShift}); median legacy shift ${balance.legacyNow - balance.legacyOld} (band ${BAND.legacyShift})`]] : []),
 ];
 for (const [name, ok, detail] of checks) console.log(`  ${ok ? 'ok  ' : 'FAIL'} ${name}: ${detail}`);
 const red = checks.filter(c => !c[1]).map(c => c[0]);
 if (CONTROL) {
-  const WANT = { everyonein: 'iff', bindhof: 'iff', outcomeswap: 'outcome', nominationgone: 'outcome', oldcurve: 'outcome', waitoff: 'table', shownraw: 'sides', flatfirst: 'rises', nopromise: 'promise', mathrandom: 'keyed', sharesides: 'sides', notalk: 'talk', farewelloff: 'answers', retireoff: 'answers', jerseyfirst: 'jersey', jerseyraw: 'jersey' }[CONTROL];
+  const WANT = { everyonein: 'iff', bindhof: 'iff', outcomeswap: 'outcome', nominationgone: 'outcome', oldcurve: 'outcome', waitoff: 'table', shownraw: 'sides', flatfirst: 'rises', nopromise: 'promise', mathrandom: 'keyed', sharesides: 'sides', notalk: 'talk', farewelloff: 'answers', retireoff: 'answers', jerseyfirst: 'jersey', jerseyraw: 'jersey', talkdraws: 'identity', deckfarewelloff: 'ends', twice: 'once', seekexclude: 'seek', jerseyignore: 'deckJersey', eraunguarded: 'era' }[CONTROL];
   console.log(`simCareerHall ${SPORT} CONTROL ${CONTROL}: wanted ${WANT} red, red [${red.join(',')}], ${red.includes(WANT) ? 'FIRED' : 'DID NOT FIRE'}`);
   // Exit 1 only when the check this control targets went red, so the exit
   // code alone proves the control hit its own check. Any other red is printed.

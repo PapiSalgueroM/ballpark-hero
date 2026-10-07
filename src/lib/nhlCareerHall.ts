@@ -11,6 +11,8 @@ export const NHL_CAREER_HALL = usCareerHall<NhlCareerState>({
     sport: "nhl",
     hallName: "Hockey Hall of Fame",
     ruleYear: "Current bylaws, Class of 2026",
+    // The audit anchors the current bylaws on the Class of 2026; earlier classes print no year.
+    verifiedFromClass: 2026,
     waitSeasons: 3,
     firstClassOffset: 4,
     // 75 percent of the Selection Committee members present.

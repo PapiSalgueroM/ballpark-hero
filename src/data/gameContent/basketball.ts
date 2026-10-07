@@ -2045,7 +2045,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
           {
             heading: "Retiring and facing the legacy verdict",
             items: [
-              "Retire when the body or the fire quits, and face the legacy verdict.",
+              "From 31, a falling rating brings the retirement talk: stop now, one more year, or a farewell season that ends the career after it. Then face the legacy verdict and the Hall of Fame wait.",
             ],
           },
         ],

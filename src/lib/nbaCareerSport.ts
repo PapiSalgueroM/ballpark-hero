@@ -24,6 +24,7 @@ import { NBA_BADGES } from '@/lib/careerBadges';
 import { nbaUnreadInboxCount, answerNbaInboxMessage, nbaDraftNightInbox, NBA_CALENDAR } from '@/lib/nbaCareerInbox';
 import { dismissNbaRivalryEvent, resolveNbaRivalryChoice } from '@/lib/nbaCareerRivalryEvents';
 import type { UsCareerSport } from '@/lib/usCareerSport';
+import { NBA_CAREER_HALL } from '@/lib/nbaCareerHall';
 import { nbaSeasonReview } from '@/lib/usCareerSeasonReview';
 
 /* The key this career saves under. It stays a named constant so the home
@@ -125,4 +126,6 @@ export const NBA_CAREER_SPORT: UsCareerSport<NbaCareerState, NbaSeasonLine> = {
   shareText: (c, legacy) =>
     `NBA My Career 🏀 ${c.name}: ${c.seasons.length} seasons, ${countOf(c.rings, 'ring', 'rings')}, ${countOf(c.mvps, 'MVP', 'MVPs')}. Verdict: ${legacy.verdict}. Legacy ${legacy.score}. douknowball.com/nba-my-career`,
   retirementAvatar: false,
+  /* Round 1039: the retirement talk, the farewell season and the Hall. */
+  hall: NBA_CAREER_HALL,
 };
