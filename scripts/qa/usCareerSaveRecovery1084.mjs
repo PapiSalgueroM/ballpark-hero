@@ -83,6 +83,7 @@ const report = {
   scope: 'Actual built four US career routes, real prospect and career writers, independently derived engine payloads, key-specific storage refusal and actual reload.',
   limits: ['Fixtures start at an actual engine-created showcase, not a naturally completed browser campaign.', 'Deletion fixtures explicitly restore a player manually retired after two actual engine seasons.', 'Recovery geometry covers the new notice and Retry control, not all older career controls.', 'No production services, scoring or database calls are forwarded.'],
   sourceBefore: sourceHashes(), buildBefore: buildHashes(), assetManifestSha256: digest(fs.readFileSync(CACHE)), assetPayloadBefore: assetPayloadHashes(), cases: [], deletions: [], controls: [], forwardedWrites: 0,
+  transportErrors: [], serverEvents: [],
 };
 const save = () => writeJSON('report.json', report);
 save();
@@ -185,8 +186,18 @@ const protectedStorage = { 'soccerCareerSave': '{"native-protected":1084}', 'unr
 const port = await new Promise((resolve, reject) => { const probe = createServer(); probe.once('error', reject); probe.listen(0, '127.0.0.1', () => { const value = probe.address().port; probe.close(error => error ? reject(error) : resolve(value)); }); });
 const BASE = `http://127.0.0.1:${port}`;
 const server = spawn(process.execPath, ['scripts/lib/hostLikeServer.mjs', 'dist', String(port)], { cwd: ROOT, stdio: ['ignore', 'pipe', 'pipe'], windowsHide: true });
-let serverLog = '', browser, activePage, activeRow;
-server.stdout.on('data', data => { serverLog += data; }); server.stderr.on('data', data => { serverLog += data; });
+let serverLog = '', browser, activePage, activeRow, serverStopping = false;
+const pendingRoutes = new Set();
+fs.writeFileSync(path.join(OUT, 'server.log'), '');
+const serverOutput = data => { serverLog += data; fs.appendFileSync(path.join(OUT, 'server.log'), data); };
+server.stdout.on('data', serverOutput); server.stderr.on('data', serverOutput);
+for (const type of ['error', 'exit']) server.on(type, (value, signal) => {
+  const event = { type, at: new Date().toISOString(), stopping: serverStopping, value: type === 'error' ? String(value) : value, signal: signal ?? null };
+  report.serverEvents.push(event);
+  if (!serverStopping) report.transportErrors.push({ kind: 'owned-server', ...event });
+  save();
+});
+const serverClosed = new Promise(resolve => server.once('close', resolve));
 const serverReady = new Promise((resolve, reject) => {
   const timer = setTimeout(() => reject(new Error(`Owned server timeout: ${serverLog}`)), 15000);
   server.once('error', error => { clearTimeout(timer); reject(error); });
@@ -253,17 +264,52 @@ function quietRetry(before, after) {
   assert.equal(after.now, before.now);
   assert.equal(after.gameText, before.gameText, 'Retry does not replay a gameplay action');
 }
+function transportHealthy() {
+  assert.deepEqual(report.transportErrors, [], 'Owned transport and server have no failed operation');
+  for (const row of report.cases.concat(report.deletions)) assert.deepEqual(row.assetErrors, [], `Owned requests remain healthy for ${row.id}`);
+}
 async function openCase(slug, profile, kind, initial) {
   const id = `${profile.width}-${slug}-${kind}`, key = saveKey(slug);
   const protectedValues = { ...protectedStorage, ...Object.fromEntries(SLUGS.filter(other => other !== slug).map(other => [saveKey(other), JSON.stringify(fixtures[other].career)])) };
-  const row = { id, slug, profile, kind, key, staging: fixtures[slug].staging, protected: protectedValues, stages: [], screenshots: [], recovery: [], navigation: [], network: [], unexpectedRequests: [], assetResponses: [], errors: [], consoleErrors: [], assetErrors: [], sockets: [], complete: false };
+  const row = { id, slug, profile, kind, key, staging: fixtures[slug].staging, protected: protectedValues, stages: [], screenshots: [], recovery: [], navigation: [], network: [], unexpectedRequests: [], assetResponses: [], errors: [], consoleErrors: [], assetErrors: [], sockets: [], complete: false,
+    routePhase: 'opening', routeLifecycle: [], localRequests: [] };
   (kind === 'latest-write' ? report.cases : report.deletions).push(row); activeRow = row; save();
   const context = await browser.newContext({ viewport: { width: profile.width, height: profile.height }, hasTouch: profile.touch, isMobile: profile.touch, deviceScaleFactor: 1, colorScheme: profile.theme, reducedMotion: profile.reduced ? 'reduce' : 'no-preference', serviceWorkers: 'block', storageState: { cookies: [], origins: [{ origin: BASE, localStorage: [
     { name: key, value: JSON.stringify(initial) }, { name: 'cookie-consent', value: 'essential' }, { name: 'dukb-theme', value: profile.theme }, { name: 'dukb-guest-handle', value: 'TidyAnchor-17' }, { name: `rules-gate-seen:/${slug}-my-career`, value: '1' }, ...Object.entries(protectedValues).map(([name, value]) => ({ name, value })),
   ] }] } });
+  const localPending = new Set();
+  const phase = name => { row.routePhase = name; row.routeLifecycle.push({ phase: name, at: new Date().toISOString(), pending: localPending.size }); save(); };
+  const drain = async name => {
+    phase(name);
+    while (localPending.size) await Promise.all([...localPending]);
+    phase(`${name}-drained`); transportHealthy();
+  };
   await context.route('**/*', route => {
     const request = route.request(), url = new URL(request.url());
-    if (url.origin === BASE && ['GET', 'HEAD'].includes(request.method())) return route.continue();
+    if (url.origin === BASE && ['GET', 'HEAD'].includes(request.method())) {
+      const receipt = { id: row.localRequests.length + 1, rowId: id, phase: row.routePhase, url: url.href, method: request.method(), started: new Date().toISOString(), connection: 'close', maxRedirects: 0, maxRetries: 0 };
+      row.localRequests.push(receipt); save();
+      const task = (async () => {
+        try {
+          // Avoid pooled loopback socket reuse; the previous socket failure's cause remains unconfirmed.
+          const response = await route.fetch({ headers: { ...request.headers(), connection: 'close' }, maxRedirects: 0, maxRetries: 0 });
+          receipt.status = response.status(); receipt.responseUrl = response.url(); receipt.headers = response.headers(); save();
+          const body = await response.body(); receipt.bodyBytes = body.length; receipt.bodySha256 = digest(body); save();
+          assert.equal(new URL(response.url()).origin, BASE, 'Owned response stays on the original local server');
+          assert(response.status() >= 200 && response.status() < 300, 'Owned application response succeeds without a redirect');
+          await route.fulfill({ response, body }); receipt.fulfilled = true;
+        } catch (error) {
+          receipt.error = { name: error.name, message: error.message, stack: error.stack };
+          report.transportErrors.push({ kind: 'owned-route', rowId: id, requestId: receipt.id, phase: row.routePhase, url: url.href, error: receipt.error });
+          row.assetErrors.push(`${url.href}: ${error.message}`); save();
+          try { await route.abort('failed'); receipt.aborted = true; }
+          catch (abortError) { receipt.abortError = String(abortError); }
+        } finally { receipt.ended = new Date().toISOString(); receipt.endPhase = row.routePhase; save(); }
+      })();
+      localPending.add(task); pendingRoutes.add(task);
+      const release = () => { localPending.delete(task); pendingRoutes.delete(task); };
+      task.then(release, release); return task;
+    }
     const receipt = { method: request.method(), origin: url.origin, path: url.pathname, query: url.search, type: request.resourceType(), handling: 'blocked' }; row.network.push(receipt);
     if (request.method() === 'GET' && assets.has(url.href)) {
       const asset = assets.get(url.href); receipt.handling = 'actual cached asset'; row.assetResponses.push({ url: url.href, sha256: digest(asset.body), bytes: asset.body.length });
@@ -301,7 +347,7 @@ async function openCase(slug, profile, kind, initial) {
   page.on('console', message => { if (message.type() === 'error') row.consoleErrors.push(message.text()); });
   page.on('requestfailed', request => { if (request.url().startsWith(BASE)) row.assetErrors.push(`${request.url()}: ${request.failure()?.errorText}`); });
   page.on('response', response => { if (response.url().startsWith(BASE) && response.status() >= 400) row.assetErrors.push(`${response.url()}: ${response.status()}`); });
-  const stage = async label => { const state = await snapshot(page); row.stages.push({ label, ...state }); checkProtected(row, state); save(); return state; };
+  const stage = async label => { transportHealthy(); const state = await snapshot(page); row.stages.push({ label, ...state }); checkProtected(row, state); save(); transportHealthy(); return state; };
   const picture = async label => { const file = `${id}-${label}.png`; await page.screenshot({ path: path.join(OUT, file), fullPage: false }); row.screenshots.push(file); save(); };
   const notice = async (label, operation) => {
     await page.locator('[data-us-career-save-error]').waitFor();
@@ -321,7 +367,8 @@ async function openCase(slug, profile, kind, initial) {
   const initialState = await stage('loaded');
   assert.equal(initialState.storage[key], JSON.stringify(initial), 'Quiet route restore preserves original save bytes');
   assert.equal(await page.locator('[data-us-career-save-error]').count(), 0, 'Healthy restore has no failed-save warning');
-  return { row, page, context, stage, picture, notice, initialState, button: name => page.getByRole('button', { name, exact: true }) };
+  phase('active');
+  return { row, page, context, stage, picture, notice, initialState, drain, phase, button: name => page.getByRole('button', { name, exact: true }) };
 }
 async function controlNotice(session) {
   const { row, page, picture } = session;
@@ -368,7 +415,9 @@ async function recover(session, label, expected) {
   assert.equal(extra[0].method, 'setItem'); assert.equal(extra[0].key, row.key); assert.equal(extra[0].value, intended.value); assert.equal(extra[0].refused, false);
   assert.equal(after.storage[row.key], intended.value, 'Successful Retry commits exact latest intended bytes'); quietRetry(before, after); await picture(label);
   row.preReload = after; save();
+  await session.drain('before-reload'); session.phase('reloading');
   await page.reload({ waitUntil: 'networkidle' }); row.reloadFonts = await loadedFonts(page); await settle(page);
+  await session.drain('after-reload'); session.phase('active-after-reload');
   const restored = await stage(`${label}-reloaded`);
   assert.equal(restored.storage[row.key], intended.value, 'Real reload restores the recovered save byte for byte');
   assert.deepEqual(JSON.parse(restored.storage[row.key]), expected);
@@ -441,10 +490,13 @@ async function proveRestoredGameplay(session, expected) {
 }
 async function finishCase(session) {
   const { row, context } = session;
+  await session.drain('before-close');
   assert(row.stages.some(stage => stage.events.some(event => event.trusted && event.type === (row.profile.touch ? 'pointerup' : 'keydown'))), 'Journey uses trusted browser input');
   assert(row.network.every(request => request.method === 'GET'), 'No external write or scoring request is attempted');
   assert.deepEqual(row.unexpectedRequests, []); assert.deepEqual(row.errors, []); assert.deepEqual(row.consoleErrors, []); assert.deepEqual(row.assetErrors, []); assert.deepEqual(row.sockets, []);
-  row.complete = true; save(); await context.close(); activePage = null; activeRow = null;
+  session.phase('closing'); await context.close(); await session.drain('after-close');
+  assert.deepEqual(row.assetErrors, []); assert.deepEqual(row.errors, []); assert.deepEqual(row.consoleErrors, []);
+  row.complete = true; session.phase('closed'); activePage = null; activeRow = null;
 }
 try {
   await serverReady; browser = await chromium.launch({ headless: true });
@@ -498,8 +550,8 @@ try {
   }
   assert.equal(report.cases.length, 12); assert.equal(report.deletions.length, 4); assert.equal(report.controls.length, 9);
   assert(report.cases.concat(report.deletions).every(row => row.complete));
+  transportHealthy(); assert.equal(pendingRoutes.size, 0, 'All owned route handlers finish before acceptance');
   report.complete = true;
-  console.log('US career recovery: 12 actual-route latest-write journeys, 4 deletion/replacement cases, 9 effective restored DOM controls, no forwarded writes.');
 } catch (error) {
   report.error = { name: error.name, message: error.message, stack: error.stack };
   if (activePage && !activePage.isClosed()) {
@@ -507,10 +559,16 @@ try {
   }
   throw error;
 } finally {
-  await browser?.close(); server.kill(); fs.writeFileSync(path.join(OUT, 'server.log'), serverLog);
+  while (pendingRoutes.size) await Promise.all([...pendingRoutes]);
+  await browser?.close();
+  while (pendingRoutes.size) await Promise.all([...pendingRoutes]);
+  serverStopping = true; server.kill(); await serverClosed; fs.writeFileSync(path.join(OUT, 'server.log'), serverLog);
+  if (report.transportErrors.length || report.cases.concat(report.deletions).some(row => row.assetErrors.length)) report.complete = false;
   report.sourceAfter = sourceHashes(); report.buildAfter = buildHashes(); report.assetManifestAfter = digest(fs.readFileSync(CACHE)); report.assetPayloadAfter = assetPayloadHashes(); save();
+  transportHealthy();
   assert.deepEqual(report.sourceAfter, report.sourceBefore, 'Native verification leaves original sources unchanged');
   assert.deepEqual(report.buildAfter, report.buildBefore, 'Native verification leaves actual built assets unchanged');
   assert.equal(report.assetManifestAfter, report.assetManifestSha256, 'Native verification preserves cached asset identity');
   assert.deepEqual(report.assetPayloadAfter, report.assetPayloadBefore, 'Native verification preserves every actual cached payload');
 }
+console.log('US career recovery: 12 actual-route latest-write journeys, 4 deletion/replacement cases, 9 effective restored DOM controls, no forwarded writes.');

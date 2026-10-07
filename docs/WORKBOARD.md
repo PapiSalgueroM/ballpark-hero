@@ -1,3 +1,39 @@
+## Codex1084 PREPARATION3, October7: retain owned transport outcomes
+
+Preparation2 HEAD51a0be33062c61d3f371b7d5b1601f8443b5b8a8,
+tree13c14dd3f70288f8c6ef32311671c5871f0cb8a6, run37658199420.
+Type/build and33/23 mounted proof passed. Early native retained all12
+latest-write journeys and nine restored controls complete, plus NBA/NFL
+deletion/replacement rows. MLB deletion saved the replacement correctly but
+stopped before its reload proof. An unhandled loopback route.fetch socket
+error bypassed the driver's main catch/finally, so final source/build/cache
+and server receipts were absent. Request-to-context cause remains unknown.
+Full112entry early native artifact11498958619 retained, ZIP SHA
+a3f0f47537d6e3cf0b79547e0ecd11333bbdcfa263cd0ae1f33a4a5cb86df5fe.
+Independent diagnostic retains14 full reloaded outcomes and244 protected
+stages. No complete native/READY/live acceptance.
+
+Next driver-only correction explicitly awaits the owned local response,
+retaining request lifecycle, exact response body hash/status and every
+transport failure. Failed requests abort and remain fatal. There is no
+teardown exception or tolerated app error. Drain pending local handlers
+before reload/close and check errors after cleanup. Retain owned server
+output and exit/error events as they happen. Connection: close with zero
+redirects/retries is a mitigation, not a proven diagnosis. Actual app bytes
+and response status remain unchanged. All12/four-deletion/nine-control
+inputs, strict geometry, clocks/RNG, fixtures and save comparisons held.
+Product/engines/data unchanged. Preparation2 finished failed only on native.
+All13 existing career/board gates, original summer40 and retired restore4
+tests, four rebound original storage controls, all20 readers including the
+raw-hash anchor fence, and source/dependency holds passed remotely.
+Full artifact11502222602 ZIP SHA
+4c1f819f4c41cd8632e0399227a2441c9e0ee35aca2a3894124943ad0065e183.
+Independent full regression audit pending. Mounted33/23 independently
+verified:265 healthy comparisons,23 mapped faults with unchanged baselines,
+all384 records,192 transforms and2716 source holds. Its24 record files
+are byte-identical to preparation1. Native driver9297cab124768667e4136cec250635ce6aef4af2de9dc3f1c423f41481a76019
+independently reviewed. Next exact-head source/build/font/dependency holds
+and complete12/four/nine native proof remain mandatory. No PR/READY.
 ## Codex1084 PREPARATION2, October7,13:26 EDT: keep recovery in view
 
 Preparation1 HEAD3e39bb09cd8d0da4262df4155b6a097a0e9ea669,
