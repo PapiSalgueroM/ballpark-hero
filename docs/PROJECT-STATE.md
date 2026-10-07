@@ -1,3 +1,105 @@
+## Rounds 1070 and 1071 merged, publication pending, 2026-10-07
+
+PR161 merged Free Kick Shot lab and saved MMA Bout recaps at
+7b8f4afbf3057df1add5838f5463630ef4a04dc7. The runtime tree is
+8c3ecf8326327adfc4ad802590503daf3c1f6ecd, identical to the accepted
+PR merge d881e452 and candidate d4562f8c. All eight engine/save files
+remain byte-identical to 1c10e7e5. Both news bullets, both guide
+paragraphs and six remote-generated page/search payloads are included.
+
+Final remote workflows and downloaded artifact audits accepted:
+Free Kick37551330378: lab10/15, old practice11/15, native3/3.
+MMA37551330253: recap8/16, old MMA20/23, native4/7.
+Cage37551330230: 79/132, native4/8, 28 closing readers.
+Entry37551330235: 8/18, six guide faults, native16/3, 18 readers.
+Actual mapped failures, independent baselines, intentional skips, source
+bytes, fonts, controls and save isolation were checked. Types/build and
+all applicable built readers passed. No native errors or forwarded writes.
+
+Verified final ZIP digests, in that workflow order:
+24f9c8695e4004635cce5e20727eab1601a3854cdd36114283971bbba389219e
+b53c2dde0aa592e1b0962b9f23734ac8d3f9ec44b78cda5edc843371d717cf14
+5b835c1e0439a2ac7e59683edb5d9b32a63048111c982d02111724a4b4d4c298
+25e954a655bbb2b5d45266c14b800cb9e8f2eeaa4eb0677db41291b6b156d7b9
+
+NOT LIVE. The browser connection repeatedly timed out and the host panel
+open is queued in this task. No publish action completed. Last verified
+LIVE remains Round1069, entry index-E3MW3bN9.js. CI screenshots are previews.
+Claude, please publish PR161 after the host imports it, alone or with AH,
+then record the actual new public entry and visible proof. Preserve the
+Free Kick paragraph in soccer2.ts, MMA paragraph in moreSports.ts, both
+news bullets and PR152 to161. Do not rebuild these additions.
+
+The main merge window closes with this docs-only receipt. AH owns
+main/publish again. Claude keeps career, GM, database and agreed guides.
+Protected root drafts and seven stashes are untouched. No local app
+runtime, production DB calls or public scored games. Next1072 unclaimed.
+
+## Rounds 1070 and 1071 prepared, final verification pending
+
+2026-10-06. Free Kick Shot lab and saved MMA Bout recaps share one release.
+Remote preparation run 37550034776 passed on b421d0b7. It generated the
+three touched pages, sitemap, lastmod ledger and search keywords. The
+artifact ZIP digest is fd8b69eb71303fc4e086c981cd46c370fcad4b00f5f30c786c827d4ff75e2e3e.
+Final Free Kick, MMA, Cage and entry-guide workflows must all pass on the
+PR merge tree before release. Preparation is not final acceptance or LIVE.
+
+Claude's Round 1040 workboard claim on f492d78b is preserved. The Free Kick
+paragraph and MMA paragraph are the only game-guide additions in this
+release. Existing engines, saves and scoring are unchanged. No local app
+runtime, production DB calls, public scored games or root draft changes.
+AH retains main/publish until a narrow coordinated release claim. Next
+free round 1072 remains unclaimed.
+
+## Rounds 1070 and 1071 preparing one release
+
+2026-10-06. Codex combines Free Kick Shot lab and saved MMA bout recaps
+on codex/mma-bout-recap-1071 to avoid another integration and publish cycle.
+Free Kick source 9810ecc1 includes exact wall input fixtures and 16px
+clearance below the final reveal action. MMA source c939f197 passed its
+preparation gates, including eight recap outcomes, sixteen effective
+faults and all four native profiles. This is preparation, not acceptance.
+
+The combined source must pass final Free Kick, MMA, Cage and entry-guide
+workflows before merging and publishing. Generate only the Free Kick,
+Fight Promoter and news snapshots plus their sitemap, ledger and search
+payloads in remote CI. No app runtime on Anthony's computer.
+
+No engine, record, save schema, real data or scoring changes. Claude keeps
+career, GM, database and agreed guide lanes. AH retains main/publish while
+this candidate is checked. Preserve PR152 to160 and both new guide lines.
+Protected root drafts and seven stashes remain untouched. No production
+DB calls or public scored games. Neither new addition is claimed LIVE.
+Next free round 1072 is unclaimed.
+
+## Round 1071 claimed: MMA bout recaps, parallel preparation
+
+2026-10-06. Codex continues beyond Cage with Free Kick lab (1070) and
+a compact saved bout recap inside Fight Promoter's MMA mode (1071).
+Objective: after a card or from history, select a bout, read its actual
+saved round counters, then return to the same event result.
+Show recorded landed strikes, takedowns, ground control, submission
+attempts and round points for both fictional fighters. No invented
+thrown shots, clock time or unplayed rounds. Early finishes stay explicit.
+Ground control uses the engine's recorded units; never call them seconds.
+
+Read-only presentation. No new action, engine, RNG, cash, rankings,
+contract, save schema, score or boxing change. Compact round tabs and
+Back to event, 44px targets, pre-play rules and reopenable help.
+Success: asymmetric literal counters, early-finish bounds, preserved
+event context and byte-identical saves through open/back/reload;
+effective faults and native phone proof. All runtime stays remote.
+
+Reuse attached managed career-release-compatibility checkout, branch
+codex/mma-bout-recap-1071 from main 1c10e7e5, separate from 1070.
+Own MmaPromotionBoard result/help slice, new MmaBoutRecap component,
+MMA-only moreSports guide paragraph, one news bullet and targeted QA.
+Claude retains career/GM and agreed guide lanes. AH keeps main/publish
+while both Codex candidates are prepared. Preserve PR152 to160.
+Protected root drafts/seven stashes untouched. No production DB calls
+or public fight completions. Neither new feature is claimed LIVE.
+Next free round 1072 is unclaimed.
+
 ## Round 1069 LIVE: Cage move hints, 2026-10-06 22:30:41 UTC
 
 Cage Clash at https://douknowball.com/cage-clash now shows Ready, Move
