@@ -48,7 +48,8 @@ assert(fs.existsSync(path.join(ROOT, 'dist/index.html')), 'Build the actual app 
 const sourceFiles = [
   'src/pages/SoccerCareer.tsx', 'src/components/soccer-career/TrainingPanel.tsx',
   'src/lib/soccerCareerEngine.ts', 'src/lib/soccerCareerSave.ts', 'src/hooks/usePracticeClock.ts',
-  'src/components/ui/sonner.tsx', 'src/App.tsx', 'index.html', 'scripts/qa/soccerCareerSaveRetry1078.mjs',
+  'src/components/soccer-career/TrainingFeedback.module.css', 'src/components/ui/sonner.tsx',
+  'src/App.tsx', 'index.html', 'scripts/qa/soccerCareerSaveRetry1078.mjs',
 ];
 const sourceHashes = () => Object.fromEntries(sourceFiles.map(file => [file, digest(fs.readFileSync(path.join(ROOT, file)))]));
 const report = { started: new Date().toISOString(), sourceBefore: sourceHashes(), cases: [], controls: [], forwardedWrites: 0 };
@@ -93,6 +94,13 @@ async function loadedFonts(page) {
 }
 async function rect(locator) {
   return locator.evaluate(node => { const r = node.getBoundingClientRect(); return { x: r.x, y: r.y, right: r.right, bottom: r.bottom, width: r.width, height: r.height }; });
+}
+async function settleFiniteAnimations(page) {
+  // The fake JS clock does not advance CSS compositor animations. Observe their
+  // real completion before measuring, without changing motion or taking a screenshot.
+  await page.evaluate(async () => {
+    await Promise.all(document.getAnimations().filter(animation => animation.effect?.getComputedTiming().iterations !== Infinity).map(animation => animation.finished.catch(() => {})));
+  });
 }
 async function warningGeometry(page) {
   return page.locator('[data-soccer-save-status="failed"]').evaluate(node => {
@@ -206,6 +214,7 @@ try {
       assert.equal(expected.events.length, repaired.events.length + 1);
       fs.writeFileSync(path.join(OUT, `${id}-expected-career.json`), JSON.stringify(expected, null, 2));
       await button('Bank the session').scrollIntoViewIfNeeded();
+      await settleFiniteAnimations(page);
       const before = { pane: await rect(training()), score: await rect(page.locator('[data-training-score]')) };
       await screenshot('earned-before-save');
       await page.evaluate(() => { window.__saveRetry.refuse = true; });
@@ -215,9 +224,11 @@ try {
       assert.deepEqual(JSON.parse(attempts[0].value), expected, 'Refused write contains the exact earned engine reward');
       assert.equal(failed.bytes, loaded.bytes, 'Failed save preserves old bytes');
       assert(await button('Back to your career').isVisible(), 'Earned practice remains banked in memory');
+      await settleFiniteAnimations(page);
       const after = { pane: await rect(training()), score: await rect(page.locator('[data-training-score]')) };
-      for (const part of ['pane', 'score']) for (const axis of ['x', 'y', 'width', 'height']) assert(Math.abs(before[part][axis] - after[part][axis]) <= 1, 'Save warning does not move the active training viewport');
       row.geometry.push({ stage: 'failure leaves active training in place without driver scroll', before, after });
+      save();
+      for (const part of ['pane', 'score']) for (const axis of ['x', 'y', 'width', 'height']) assert(Math.abs(before[part][axis] - after[part][axis]) <= 1, 'Save warning does not move the active training viewport');
       const toast = page.locator('[data-sonner-toast]').filter({ hasText: WARNING }); await toast.waitFor();
       const toastBox = await rect(toast);
       assert(toastBox.x >= -1 && toastBox.right <= profile.width + 1 && toastBox.y >= -1 && toastBox.bottom <= profile.height + 1, 'Save failure notification is visible without driver scroll');
