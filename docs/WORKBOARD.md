@@ -1,3 +1,67 @@
+## Rounds 1070 and 1071 prepared, final verification pending
+
+2026-10-06. Free Kick Shot lab and saved MMA Bout recaps share one release.
+Remote preparation run 37550034776 passed on b421d0b7. It generated the
+three touched pages, sitemap, lastmod ledger and search keywords. The
+artifact ZIP digest is fd8b69eb71303fc4e086c981cd46c370fcad4b00f5f30c786c827d4ff75e2e3e.
+Final Free Kick, MMA, Cage and entry-guide workflows must all pass on the
+PR merge tree before release. Preparation is not final acceptance or LIVE.
+
+Claude's Round 1040 workboard claim on f492d78b is preserved. The Free Kick
+paragraph and MMA paragraph are the only game-guide additions in this
+release. Existing engines, saves and scoring are unchanged. No local app
+runtime, production DB calls, public scored games or root draft changes.
+AH retains main/publish until a narrow coordinated release claim. Next
+free round 1072 remains unclaimed.
+
+## Rounds 1070 and 1071 preparing one release
+
+2026-10-06. Codex combines Free Kick Shot lab and saved MMA bout recaps
+on codex/mma-bout-recap-1071 to avoid another integration and publish cycle.
+Free Kick source 9810ecc1 includes exact wall input fixtures and 16px
+clearance below the final reveal action. MMA source c939f197 passed its
+preparation gates, including eight recap outcomes, sixteen effective
+faults and all four native profiles. This is preparation, not acceptance.
+
+The combined source must pass final Free Kick, MMA, Cage and entry-guide
+workflows before merging and publishing. Generate only the Free Kick,
+Fight Promoter and news snapshots plus their sitemap, ledger and search
+payloads in remote CI. No app runtime on Anthony's computer.
+
+No engine, record, save schema, real data or scoring changes. Claude keeps
+career, GM, database and agreed guide lanes. AH retains main/publish while
+this candidate is checked. Preserve PR152 to160 and both new guide lines.
+Protected root drafts and seven stashes remain untouched. No production
+DB calls or public scored games. Neither new addition is claimed LIVE.
+Next free round 1072 is unclaimed.
+
+## Round 1071 claimed: MMA bout recaps, parallel preparation
+
+2026-10-06. Codex continues beyond Cage with Free Kick lab (1070) and
+a compact saved bout recap inside Fight Promoter's MMA mode (1071).
+Objective: after a card or from history, select a bout, read its actual
+saved round counters, then return to the same event result.
+Show recorded landed strikes, takedowns, ground control, submission
+attempts and round points for both fictional fighters. No invented
+thrown shots, clock time or unplayed rounds. Early finishes stay explicit.
+Ground control uses the engine's recorded units; never call them seconds.
+
+Read-only presentation. No new action, engine, RNG, cash, rankings,
+contract, save schema, score or boxing change. Compact round tabs and
+Back to event, 44px targets, pre-play rules and reopenable help.
+Success: asymmetric literal counters, early-finish bounds, preserved
+event context and byte-identical saves through open/back/reload;
+effective faults and native phone proof. All runtime stays remote.
+
+Reuse attached managed career-release-compatibility checkout, branch
+codex/mma-bout-recap-1071 from main 1c10e7e5, separate from 1070.
+Own MmaPromotionBoard result/help slice, new MmaBoutRecap component,
+MMA-only moreSports guide paragraph, one news bullet and targeted QA.
+Claude retains career/GM and agreed guide lanes. AH keeps main/publish
+while both Codex candidates are prepared. Preserve PR152 to160.
+Protected root drafts/seven stashes untouched. No production DB calls
+or public fight completions. Neither new feature is claimed LIVE.
+Next free round 1072 is unclaimed.
 **2026-10-06 19:45 EDT, desktop Claude lane claims Round 1040: Club Manager gains Serie B, Segunda Division and Ligue 2**, so La Liga, Serie A and Ligue 1 relegate for real (and Ligue 1 drops two plus the barrage). Files: src/lib/clubManager.ts (league rows, pyramids, the domestic cup draw), the roster bake output, src/data/gameContent/clubManagement.ts, the Club Manager counts. Built offline from the value table dump; the lead runs one read only nationality query at release. The new clubs join the Manager Hot Seat and Deadline Day daily pools from a date 30 days out, so no published day re-deals. None of your files.
 
 ## Round 1069 LIVE: Cage move hints, 2026-10-06 22:30:41 UTC
