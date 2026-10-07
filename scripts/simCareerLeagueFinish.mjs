@@ -297,7 +297,10 @@ for (const [startYear, era] of STARTS) for (const nation of NATIONS) for (const 
   for (const r of s.seasons || []) if (r.type === 'playing') seasons.push(r);
 }
 const leagueOf = name => (clubs.find(c => c.name === name) || {}).league || '';
-const sized = seasons.filter(r => league.leagueSizeFor(leagueOf(r.club), r.year));
+/* Round 1037: a season is played in the league the club was really in that
+   year (the league ledgers before 2026-27), not today's label */
+const seasonLeague = r => league.leagueKeyInYear({ name: r.club, league: leagueOf(r.club) }, r.year) ?? '';
+const sized = seasons.filter(r => league.leagueSizeFor(seasonLeague(r), r.year));
 console.log(`pool: ${careers} careers, ${seasons.length} playing seasons, ${sized.length} in a league with a verified size, ${seasons.filter(r => r.leagueTitle).length} titles`);
 if (seasons.length < careers * 4) { section = 1; fail(`only ${seasons.length} playing seasons over ${careers} careers, the walk is not reaching the season loop`); }
 
@@ -350,7 +353,7 @@ console.log('2) never above the league size, never below 1, and a verified leagu
 {
   let over = 0, under = 0, missing = 0, wrongSize = 0, unsizedClaim = 0, cutShort = 0;
   for (const r of seasons) {
-    const size = league.leagueSizeFor(leagueOf(r.club), r.year);
+    const size = league.leagueSizeFor(seasonLeague(r), r.year);
     if (r.leagueFinish !== undefined && r.leagueFinish < 1) under += 1;
     if (r.leagueSize !== undefined && r.leagueFinish > r.leagueSize) over += 1;
     /* A severe injury stops the season at the rehab choice and drops the

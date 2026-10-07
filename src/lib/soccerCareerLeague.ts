@@ -348,10 +348,10 @@ function ledgerByYear(): Map<number, Map<string, LedgerMember>> {
 function ledgerMember(club: string, year: number): LedgerMember | null {
   const byClub = ledgerByYear().get(year);
   if (!byClub) return null;
+  /* a club the rivalry table spells another way is matched only under that
+     spelling: Leipzig is RB Leipzig, never the VfB Leipzig of 1993-94 */
   return byClub.get(clubKey(club))
-    ?? byClub.get(`#${identityKey(SC_CLUB_CANON[club] ?? club)}`)
-    ?? byClub.get(`#${identityKey(club)}`)
-    ?? (MARKET_SPELLINGS[club] ? byClub.get(`#${identityKey(MARKET_SPELLINGS[club])}`) : undefined)
+    ?? byClub.get(`#${identityKey(SC_CLUB_CANON[club] ?? MARKET_SPELLINGS[club] ?? club)}`)
     ?? null;
 }
 
