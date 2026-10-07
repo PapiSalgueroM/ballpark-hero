@@ -133,7 +133,14 @@
    Controls, each run alone at the default size, every one FIRED: onecard,
    nocooldown, samestory, pressfilter, mathrandom, nofallback, drift,
    noresume, and doubletraining (peak OVR +6.5, +6.7, +8.1 and +6.8 against
-   a tolerance of 1.0).
+   a tolerance of 1.0). After review (the show time check and sections 10
+   to 12), each control run alone on its own section, every one FIRED again:
+   onecard, nocooldown, samestory, pressfilter, mathrandom and nofallback at
+   150 careers, drift and noresume, and probe, latercorrupt and nokind at
+   400. doubletraining now also switches the show time check off (it skips
+   a later rating card when shown, so the forced card was never answered)
+   and, at SIM_BALANCE_CAREERS=200, pushed peak OVR +6.31, +6.48 and +7.87
+   for nfl, nba and mlb, every interval outside 1.0.
 
    10 to 12, added after review (2026-10-06, 400 careers a sport, default
    seed, on the tree with the show time check in seekSummerCard):
@@ -194,6 +201,9 @@ const CONTROLS = {
     edits: [
       { file: SUMMER, from: 'const picked: UsCareerEvent<C>[] = [first];', to: "first = sport.eventDeck(c, slotStream(c, sport.slug, year, 0)).find(x => x.id === 'training') ?? first; const picked: UsCareerEvent<C>[] = [first];" },
       { file: SUMMER, from: '[e] = takeFresh(deck, 1, knob.cooldowns ? ledger : null, year, knob.fallbackCooldown, passed, r, outsideLedger);', to: "e = deck.find(x => x.id === 'training'); break;" },
+      /* Since the show time check, a later rating card is skipped when shown,
+         so the forced card would never be answered without this. */
+      { file: SUMMER, from: 'if (card && (s.at === 0 || !laterAnswerMovesRating(c, sport, card, s.at))) return card;', to: 'if (card) return card;' },
     ],
   },
   probe: {
