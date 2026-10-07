@@ -49,6 +49,14 @@
      todaylabel   a past offer card prints today's label              -> b
      finishwrong  the finish drawn in today's league again           -> b
      cardwire     the club card prints the saved label again          -> d
+   Each measured red on 2026-10-06 (seed 1, base origin/release-ah): the
+   file differs from the ledgers and the lookup has West Ham in two leagues
+   in 2011 (wrongseason); Fiorentina meets Bologna in seasons Bologna was a
+   division down (crossdiv); a Malaga 2015-16 table names Osasuna, who were
+   in the Segunda (wrongtable); an AZ Alkmaar card for 1992-93 says
+   "Eredivisie, 1992-93" (todaylabel); a Fiorentina 1993-94 finish of 18 in a
+   season the club was in Serie B (finishwrong); the card's raw label is
+   back and its lookup gone (cardwire, 2 failures).
 
    Run: node scripts/simCareerLeagueSeasons.mjs
    No network and no database: everything is bundled from this tree (and,
@@ -100,7 +108,7 @@ const CONTROLS = {
   }],
   crossdiv: ['b', 'src/lib/soccerCareerDerby.ts', swap('canonClub(c.name) === other && derbyLeague(c.name, c.league, year) === league);', 'canonClub(c.name) === other);')],
   wrongtable: ['b', 'src/lib/soccerCareerLeague.ts', swap('const ledger = league !== null ? ledgerLeague(league, input.year) : null;', 'const ledger = league !== null ? ledgerLeague(league, input.year + 1) : null;')],
-  todaylabel: ['b', 'src/lib/soccerCareerLeague.ts', s => swap('export function leagueSeasonLine(club: { name: string; league: string }, year: number): string | null {\n  const name = leagueInYear(club, year);', 'export function leagueSeasonLine(club: { name: string; league: string }, year: number): string | null {\n  const name = club.league || null;')(s.replace(/\r\n/g, '\n'))],
+  todaylabel: ['b', 'src/lib/soccerCareerLeague.ts', swap('return `${name}, ${seasonSpan(year)}`;', 'return `${club.league}, ${seasonSpan(year)}`;')],
   finishwrong: ['b', 'src/lib/soccerCareerEngine.ts', swap('league: leagueKeyInYear({ name: state.currentClub, league: state.currentLeague }, seasonYear), year: seasonYear,', 'league: state.currentLeague, year: seasonYear,')],
   cardwire: ['d', 'src/pages/SoccerCareer.tsx', swap('`${clubCardLeague(career, currentSeason.year)}${career.contractYearsLeft}yr left · ', '`${career.currentLeague} · ${career.contractYearsLeft}yr left · ')],
 };

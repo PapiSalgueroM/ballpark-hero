@@ -22,6 +22,12 @@
    season tier is the competition's official name, "Primera Division", and
    says so in its tierNote; its span carries the career's label).
 
+   One change was made to the ledgers as copied, and it is not data: La
+   Liga's tierNote listed the league's sponsor names, one of which is a
+   video game brand simNoRivalNames bans from the public repo, so the note
+   now says only that sponsor names were not researched. Every season, club,
+   size, source and ruling is byte for byte the research's.
+
    Run: node scripts/genCareerLeagueSeasons.mjs          (writes the file)
         node scripts/genCareerLeagueSeasons.mjs --check  (exit 1 if stale)
    No network, no database. */
