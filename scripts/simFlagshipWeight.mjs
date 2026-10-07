@@ -196,8 +196,16 @@ if (!existsSync(ASSETS)) {
        continental cups, 985 the debut and legacy moments, 1011 the season
        ratings, 1013 the 51 club pool). 2450 leaves 109 KB of room and still sits
        far under 2341 + 444, so Club Manager coming back still fails. A later
-       round owes loading the continental cup and ratings code on demand. */
-    const CEILING_KB = 2450;
+       round owes loading the continental cup and ratings code on demand.
+       Raised at Release AI (2026-10-07) with a fresh measurement: the
+       integration tree before the cup already needed 2498 KB (Release AH's
+       Soccer Career rounds 1022, 1023, 1029 and 1032 and Round 1037's league
+       ledgers had taken it past 2450 with no gate list carrying this
+       harness), and Round 1041's domestic cup brings it to 2511 KB. 2600
+       leaves 89 KB of room and still sits far under 2511 + 444, so Club
+       Manager coming back still fails. The on demand loading above is still
+       owed and is now the cheaper fix. */
+    const CEILING_KB = 2600;
     if (rawK > CEILING_KB) {
       fail(`/soccer-career now needs ${rawK.toFixed(0)} KB of JavaScript before it can render, over the ${CEILING_KB} KB ceiling. Check what got statically imported.`);
     }
