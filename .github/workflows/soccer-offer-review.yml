@@ -126,6 +126,19 @@ jobs:
           assert.deepEqual(report.sourceAfter, report.sourceBefore);
           console.log('Accepted nine actual-route signing journeys and twelve restored DOM controls.');
           NODE
+      - name: Retain native evidence promptly
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.assets.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: soccer-offer-native-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            soccer-offer-review-artifacts/native/
+            soccer-offer-review-artifacts/native.log
+            soccer-offer-review-artifacts/font-cache/manifest.json
+            soccer-offer-review-artifacts/source-head.txt
+            soccer-offer-review-artifacts/source-tree.txt
+          retention-days: 3
+          if-no-files-found: error
       - name: Preserve existing career rules, squads and saves
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |

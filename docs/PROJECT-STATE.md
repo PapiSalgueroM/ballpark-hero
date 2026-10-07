@@ -9,7 +9,14 @@ projections omitted because the existing base-38 model cannot support a
 historical-season forecast. Design and limits:
 docs/plans/2026-10-07-soccer-offer-review-1082.md.
 
-Remote-only outcome/control, actual-route native and regression gates authored.
+Preparation37637170770/job112846329325 on head3bbfb6ca/tree6941663c failed
+the native no-jump check: second320px current-offer case moved scroll476 to186.
+First320px first-contract case completed signature/save/reload. Nine outcome
+groups,237 comparisons across28fixtures and19 effective copied faults passed;
+6unchanged regressions,20readers,521installed-version holds and91asset hashes
+passed. ZIP11491282367,16337599bytes,312files, SHA256
+33acb38af0d368510f90c15bc7f399d49fcfc853d6eb9839724b4a4b58d0c6d2.
+Diagnostic-only native traces added next; strict1px requirement unchanged.
 Implementation is not yet accepted or live. Original full campaign browser
 walk is not credited as rerun. Claude retains main/release/publishing. Protected
 root source and seven stashes stay held.

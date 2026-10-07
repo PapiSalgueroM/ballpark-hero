@@ -168,7 +168,8 @@ async function loadedFonts(page) {
   assert(result.every(row => row.faces.length && row.faces.every(face => face.status === 'loaded' && face.family.replaceAll('"', '') === row.family)), 'All eight actual template font faces loaded');
   return result;
 }
-const snapshot = page => page.evaluate(() => ({ storage: Object.fromEntries(Object.entries(localStorage).sort(([a], [b]) => a.localeCompare(b))), writes: structuredClone(window.__offerReview.writes), rng: { seed: window.__offerReview.seed, draws: window.__offerReview.draws }, now: Date.now(), scrollY }));
+const snapshot = page => page.evaluate(() => ({ storage: Object.fromEntries(Object.entries(localStorage).sort(([a], [b]) => a.localeCompare(b))), writes: structuredClone(window.__offerReview.writes), rng: { seed: window.__offerReview.seed, draws: window.__offerReview.draws }, now: Date.now(), scrollY,
+  layout: window.__offerReview.readLayout(), telemetry: { events: structuredClone(window.__offerReview.events), trace: structuredClone(window.__offerReview.trace) } }));
 async function visibleImages(page, trigger, country) {
   await page.waitForFunction(() => [...document.images].filter(node => { const r = node.getBoundingClientRect(); return r.width > 0 && r.height > 0 && r.bottom > 0 && r.y < innerHeight; }).every(node => node.complete && node.naturalWidth > 0));
   const result = await page.evaluate(() => [...document.images].filter(node => { const r = node.getBoundingClientRect(); return r.width > 0 && r.height > 0 && r.bottom > 0 && r.y < innerHeight; }).map(node => ({ src: node.currentSrc, complete: node.complete, naturalWidth: node.naturalWidth, alt: node.alt })));
@@ -287,8 +288,36 @@ try {
       return route.abort();
     });
     await context.routeWebSocket('**/*', socket => { row.webSockets.push(socket.url()); socket.close(); });
-    await context.addInitScript(({ seed, now }) => {
-      window.__offerReview = { writes: [], seed, draws: 0, events: [] };
+    await context.addInitScript(({ seed, now, triggerName }) => {
+      const state = window.__offerReview = { writes: [], seed, draws: 0, events: [], trace: [], frames: false };
+      const label = node => node instanceof Element ? { tag: node.tagName, id: node.id, name: node.getAttribute('aria-label') || node.textContent?.slice(0, 160), class: String(node.className) } : null;
+      const box = node => {
+        if (!(node instanceof Element)) return null;
+        const r = node.getBoundingClientRect(), css = getComputedStyle(node);
+        return { ...label(node), x: r.x, y: r.y, width: r.width, height: r.height, right: r.right, bottom: r.bottom, scrollWidth: node.scrollWidth, scrollHeight: node.scrollHeight, clientWidth: node.clientWidth, clientHeight: node.clientHeight, scrollTop: node.scrollTop,
+          position: css.position, overflowX: css.overflowX, overflowY: css.overflowY, overflowAnchor: css.overflowAnchor, marginTop: css.marginTop, marginRight: css.marginRight, paddingTop: css.paddingTop, paddingRight: css.paddingRight, transform: css.transform };
+      };
+      state.readLayout = () => {
+        const trigger = [...document.querySelectorAll('button[aria-label]')].find(node => node.getAttribute('aria-label') === triggerName), viewport = window.visualViewport;
+        return { time: performance.now(), scrollX, scrollY, innerWidth, innerHeight, document: box(document.documentElement), body: box(document.body), scrollLock: document.body?.getAttribute('data-scroll-locked'),
+          visualViewport: viewport ? { width: viewport.width, height: viewport.height, scale: viewport.scale, offsetTop: viewport.offsetTop, offsetLeft: viewport.offsetLeft, pageTop: viewport.pageTop, pageLeft: viewport.pageLeft } : null,
+          trigger: box(trigger), card: box(trigger?.parentElement), pane: box(document.querySelector('[data-soccer-offer-review]')), focus: box(document.activeElement) };
+      };
+      const trace = (type, detail = {}) => state.trace.push({ type, ...detail, layout: state.readLayout() });
+      const delegate = (owner, method) => {
+        const original = owner[method];
+        owner[method] = function(...args) {
+          const detail = { method, receiver: label(this), args: args.map(value => value instanceof Element ? label(value) : value), stack: new Error().stack };
+          trace('call-before', detail);
+          try { return Reflect.apply(original, this, args); }
+          finally { trace('call-after', detail); }
+        };
+      };
+      delegate(HTMLElement.prototype, 'focus'); delegate(Element.prototype, 'scrollIntoView'); delegate(window, 'scrollTo'); delegate(window, 'scrollBy');
+      for (const type of ['scroll', 'resize']) window.addEventListener(type, event => trace(type, { target: label(event.target) }), { capture: true, passive: true });
+      for (const type of ['scroll', 'resize']) window.visualViewport?.addEventListener(type, () => trace(`visual-viewport-${type}`), { passive: true });
+      state.startFrames = label => { state.frames = true; trace('frame-start', { label }); const frame = () => { if (!state.frames) return; trace('frame'); requestAnimationFrame(frame); }; requestAnimationFrame(frame); };
+      state.stopFrames = label => { trace('frame-stop', { label }); state.frames = false; };
       const OriginalDate = Date;
       window.Date = class extends OriginalDate { constructor(...args) { super(...(args.length ? args : [now])); } static now() { return now; } };
       Math.random = () => { const state = window.__offerReview; state.draws++; state.seed = (Math.imul(state.seed, 1664525) + 1013904223) >>> 0; return state.seed / 4294967296; };
@@ -296,8 +325,8 @@ try {
         const original = Storage.prototype[method];
         Storage.prototype[method] = function(...args) { if (this === localStorage) window.__offerReview.writes.push({ method, key: method === 'clear' ? '*' : args[0], value: args[1] ?? null }); return original.apply(this, args); };
       }
-      for (const type of ['pointerdown', 'pointerup', 'click', 'keydown', 'keyup', 'focusin']) window.addEventListener(type, event => { const target = event.target instanceof Element ? event.target : null; window.__offerReview.events.push({ type, trusted: event.isTrusted, key: event.key, pointerType: event.pointerType, target: target?.closest('button')?.getAttribute('aria-label') || target?.closest('button')?.textContent || target?.tagName }); }, true);
-    }, { seed: BROWSER_SEED, now: FROZEN_NOW });
+      for (const type of ['pointerdown', 'pointerup', 'touchstart', 'touchend', 'click', 'keydown', 'keyup', 'focusin']) window.addEventListener(type, event => { const target = event.target instanceof Element ? event.target : null; state.events.push({ type, trusted: event.isTrusted, key: event.key, pointerType: event.pointerType, target: target?.closest('button')?.getAttribute('aria-label') || target?.closest('button')?.textContent || target?.tagName, layout: state.readLayout() }); }, true);
+    }, { seed: BROWSER_SEED, now: FROZEN_NOW, triggerName: `Review contract with ${fixture.offer.club.name}` });
     const page = await context.newPage(); activePage = page; page.setDefaultTimeout(15000);
     page.on('pageerror', error => row.errors.push(String(error)));
     page.on('console', message => { if (message.type() === 'error') row.consoleErrors.push(message.text()); });
@@ -348,7 +377,10 @@ try {
         checkCard(control.restored.card, before, fixture, signed); save();
       }
     }
+    await page.evaluate(() => window.__offerReview.startFrames('initial review open'));
+    await stage('immediately-before-open');
     await activate(trigger, profile.touch); await settle(page);
+    await page.evaluate(() => window.__offerReview.stopFrames('initial review opened'));
     const opened = await stage('opened'); unchanged(start, opened, 'Open review');
     assert(Math.abs(opened.scrollY - start.scrollY) <= 1, 'Opening review preserves the gameplay viewport');
     row.terms = await readTerms(page); checkTerms(row.terms, before, fixture, signed);
@@ -430,7 +462,11 @@ try {
   report.complete = true;
 } catch (error) {
   report.error = { name: error.name, message: error.message, stack: error.stack };
-  if (activePage && !activePage.isClosed()) { try { await activePage.screenshot({ path: path.join(OUT, 'failure.png'), fullPage: false }); } catch {} }
+  if (activePage && !activePage.isClosed()) {
+    try { await activePage.evaluate(() => window.__offerReview?.stopFrames('failure')); report.failureObservation = await snapshot(activePage); } catch (observationError) { report.failureObservationError = String(observationError); }
+    save();
+    try { await activePage.screenshot({ path: path.join(OUT, 'failure.png'), fullPage: false }); } catch {}
+  }
   throw error;
 } finally {
   report.sourceAfter = sourceHashes();

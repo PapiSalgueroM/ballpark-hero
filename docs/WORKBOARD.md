@@ -3,7 +3,10 @@
 Permanent-offer review and actual signed-wage comparison on
 codex/soccer-transfer-review-1082, pinned main94b9490d. Back, worked help and
 one existing signing callback. No engine/data/loans/Season Centre changes.
-Remote-only outcome/control/native/regression evidence pending. No READY or
+Prep37637170770 retained237comparisons/28fixtures/19effective copied faults
+and green6regressions/20readers. Native failed second320case scroll476to186;
+first320signature/reload passed. Read-only viewport/focus traces added for
+diagnosis, without changing1px check or product. No READY or
 live claim. Design: docs/plans/2026-10-07-soccer-offer-review-1082.md.
 Claude retains main/release/publishing. Protected root source/stashes held.
 
