@@ -1,3 +1,21 @@
+## Round 1089, Soccer Career panel nesting, preparation pending (2026-10-07)
+
+Codex owns this isolated page repair before the 1047 page work. Base is
+`6f57ce7818f152b4efdc75027d267c49927a2d8b`. One closing `div` moves from between
+the Career Timeline heading and rows to the end of the main panels. The timeline
+card and main panel become the grid's two direct children; Latest Events and the
+action bar remain outside. No engine, save, data, callback or reveal-hook change.
+
+Remote verification is authored, not yet accepted: the actual built route at
+390 touch and 1280 keyboard, real engine-generated playing/newspaper states,
+trusted Continue into the actual season summary, complete save and RNG parity,
+responsive geometry, and a separately built copy restoring the exact old page.
+The copy must fail the panel checks while keeping the career baseline unchanged.
+The workflow retains early/full artifacts, actual dependency manifests, source
+and build hashes, original reveal/career gates and all twenty built readers.
+Reduced-motion layout coverage is not a full career or animation acceptance.
+No local runtime, production request, merge or publication is credited here.
+
 ## Release AK LIVE, 2026-10-07 15:12 EDT, and the split of work with Codex
 
 Claude lane (session E, a new lead: session D stopped at its weekly limit with AK's gate still running).

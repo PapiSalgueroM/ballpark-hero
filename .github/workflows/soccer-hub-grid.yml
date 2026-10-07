@@ -1,0 +1,175 @@
+name: Soccer career hub grid
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/soccer-hub-grid-1089]
+  pull_request:
+    paths:
+      - src/pages/SoccerCareer.tsx
+      - src/hooks/useRevealScroll.ts
+      - scripts/playSoccerHubGrid1089.mjs
+      - .github/workflows/soccer-hub-grid.yml
+
+permissions:
+  contents: read
+concurrency:
+  group: soccer-hub-grid-1089-${{ github.event.pull_request.head.sha || github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+      VITEST_MAX_FORKS: 1
+      VITEST_MIN_FORKS: 1
+      SEO_SPLIT_BASE_REF: HEAD
+      SIM_LEAGUE_SEASONS_BASE: 6f57ce7818f152b4efdc75027d267c49927a2d8b
+      SIM_OFFLINE_RECEIPT: soccer-hub-grid-artifacts/transport.log
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Retain exact candidate and install remote dependencies
+        run: |
+          mkdir -p soccer-hub-grid-artifacts/dependencies soccer-hub-grid-artifacts/regressions
+          git rev-parse HEAD > soccer-hub-grid-artifacts/source-head.txt
+          git rev-parse 'HEAD^{tree}' > soccer-hub-grid-artifacts/source-tree.txt
+          printf '%s\n' '${{ github.run_id }}' '${{ github.run_attempt }}' '${{ github.job }}' > soccer-hub-grid-artifacts/run.txt
+          cp package.json package-lock.json soccer-hub-grid-artifacts/dependencies/
+          npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import { createHash } from 'node:crypto';
+          const out = 'soccer-hub-grid-artifacts';
+          const sha = value => createHash('sha256').update(value).digest('hex');
+          const lock = JSON.parse(fs.readFileSync('package-lock.json'));
+          const rows = Object.entries(lock.packages).filter(([p]) => p.startsWith('node_modules/') && fs.existsSync(p + '/package.json')).map(([p, e]) => {
+            const bytes = fs.readFileSync(p + '/package.json'), version = JSON.parse(bytes).version;
+            assert.equal(version, e.version);
+            const hash = sha(bytes); fs.writeFileSync(`${out}/dependencies/${hash}.json`, bytes);
+            return { path: p, version, sha256: hash };
+          });
+          assert(rows.length > 0);
+          fs.writeFileSync(`${out}/installed-before.json`, JSON.stringify(rows, null, 2));
+          fs.writeFileSync(`${out}/node-versions.json`, JSON.stringify(process.versions, null, 2));
+          console.log(`Retained ${rows.length} actual installed package manifests.`);
+          NODE
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import { createRequire } from 'node:module';
+          import path from 'node:path';
+          import { createHash } from 'node:crypto';
+          const require = createRequire(import.meta.url), out = 'soccer-hub-grid-artifacts/dependencies';
+          const rows = [];
+          for (const name of ['playwright', 'playwright-core', 'vite', 'esbuild', 'react', 'react-dom']) {
+            const file = require.resolve(`${name}/package.json`), bytes = fs.readFileSync(file);
+            const hash = createHash('sha256').update(bytes).digest('hex');
+            fs.writeFileSync(`${out}/${name}-package.json`, bytes);
+            rows.push({ name, version: JSON.parse(bytes).version, sha256: hash });
+            if (name === 'playwright-core') fs.copyFileSync(path.join(path.dirname(file), 'browsers.json'), `${out}/browsers.json`);
+          }
+          fs.writeFileSync(`${out}/verification-packages.json`, JSON.stringify(rows, null, 2));
+          NODE
+      - name: Actual app types and production build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee soccer-hub-grid-artifacts/types.log
+          npm run build 2>&1 | tee soccer-hub-grid-artifacts/build.log
+      - name: Generate actual engine fixtures and cache declared presentation assets
+        id: assets
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: node scripts/playSoccerHubGrid1089.mjs --prepare-assets-only 2>&1 | tee soccer-hub-grid-artifacts/preparation.log
+      - name: Actual built route and effective old-page nesting control
+        id: native
+        if: ${{ !cancelled() && steps.assets.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" timeout --signal=TERM --kill-after=15s 12m node scripts/playSoccerHubGrid1089.mjs 2>&1 | tee soccer-hub-grid-artifacts/native.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const r = JSON.parse(fs.readFileSync('soccer-hub-grid-artifacts/native/report.json'));
+          assert.equal(r.complete, true);
+          assert.equal(r.cases.length, 8);
+          assert(r.cases.every(row => row.complete && row.errors.length === 0));
+          assert.equal(r.comparisons.length, 4);
+          assert(r.comparisons.every(row => row.effective && row.baselineEqual && row.failures.length > 0));
+          assert(r.cases.filter(row => row.arm === 'healthy').every(row => row.checks.every(check => check.passed)));
+          assert.deepEqual(r.sourceAfter, r.sourceBefore);
+          assert.deepEqual(r.buildAfter, r.buildBefore);
+          assert.deepEqual(r.cacheAfter, r.cacheBefore);
+          console.log('Four healthy journeys and four copied old-layout journeys proved structure and complete unchanged Continue outcomes.');
+          NODE
+      - name: Preserve early layout and control evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: soccer-hub-grid-new-${{ github.run_id }}-${{ github.run_attempt }}
+          path: soccer-hub-grid-artifacts/
+          retention-days: 5
+          if-no-files-found: error
+      - name: Original reveal scroll and Soccer Career regressions
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simRevealScroll simSoccerCareer simSoccerCareerUcl simSoccerCareerSaveRecovery simCareerAcademy simCareerAwardsNight simCareerCleanSheets simCareerClubPool simCareerContinental simCareerDerbies simCareerDilemmaReach simCareerDilemmaTruth simCareerDomesticCup simCareerDrills simCareerEngaged simCareerEras simCareerFacts simCareerInbox simCareerInboxBeats simCareerKeepPlaying simCareerLeagueFinish simCareerLeagueSeasons simCareerLife simCareerLifeCooldowns simCareerMoneyAfterRetirement simCareerNoDeadEnd simCareerParity simCareerPositionRatings simCareerRivalryEvents simCareerSeasonRatings simCareerSocialBrands simCareerStory simCareerTraining simSeasonCentreNeutral simSeasonCentreTable simSeasonCentreAgreement; do
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "soccer-hub-grid-artifacts/regressions/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: All twenty built readers and executable source anchors
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings simSeoMetaSplit simHomeCopy simHarnessAnchors; do
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "soccer-hub-grid-artifacts/regressions/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Original engine data fixtures tests and installed versions held
+        if: ${{ !cancelled() }}
+        run: |
+          git diff --exit-code 6f57ce7818f152b4efdc75027d267c49927a2d8b HEAD -- src/lib src/data src/hooks src/test src/integrations src/types scripts/fixtures package.json package-lock.json
+          git diff --exit-code HEAD -- src scripts .github/workflows/soccer-hub-grid.yml
+          cmp package.json soccer-hub-grid-artifacts/dependencies/package.json
+          cmp package-lock.json soccer-hub-grid-artifacts/dependencies/package-lock.json
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import { createHash } from 'node:crypto';
+          const out = 'soccer-hub-grid-artifacts';
+          const before = JSON.parse(fs.readFileSync(`${out}/installed-before.json`));
+          const after = before.map(row => {
+            const bytes = fs.readFileSync(row.path + '/package.json');
+            return { path: row.path, version: JSON.parse(bytes).version, sha256: createHash('sha256').update(bytes).digest('hex') };
+          });
+          fs.writeFileSync(`${out}/installed-after.json`, JSON.stringify(after, null, 2));
+          assert.deepEqual(after, before);
+          console.log(`Held ${after.length} installed versions and exact package manifest bytes.`);
+          NODE
+      - name: Preserve complete evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: soccer-hub-grid-${{ github.run_id }}-${{ github.run_attempt }}
+          path: soccer-hub-grid-artifacts/
+          retention-days: 5
+          if-no-files-found: error
