@@ -45,7 +45,7 @@ export function useBurstTap(active: boolean, finish: (score: number) => void, cl
       finish(clicks * 3.2);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paceRunning, paceLeft]);
+  }, [paceRunning, paceLeft, clock.paused]);
 
   const tap = () => { if (paceRunning && !clock.isPaused()) setClicks(c => c + 1); };
 

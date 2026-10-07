@@ -242,46 +242,44 @@ function clubCupTileLabel(seasons: SeasonRecord[]): string {
 }
 
 /* ─── Position-specific career stats display ─── */
-function getPositionCareerStats(pos: string, totals: { apps: number; goals: number; assists: number; cleanSheets: number; leagueTitles: number; domesticCups: number; championsLeagues: number; worldCups: number; continentalCups: number; clubCups: number; yellowCards: number; redCards: number }) {
+function getPositionCareerStats(pos: string, totals: ReturnType<typeof getCareerTotals>, seasons: SeasonRecord[]): { l: string; v: number | null }[] {
   const trophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups + totals.clubCups;
-  // Derive approximate stats from existing data
-  const saves = totals.cleanSheets * 4 + Math.round(totals.apps * 2.5); // ~estimated saves
-  const pensSaved = Math.max(0, Math.floor(totals.cleanSheets / 5)); // ~1 per 5 clean sheets
-  const tackles = Math.round(totals.apps * 2.8); // ~2.8 tackles per game for defenders
-  const interceptions = Math.round(totals.apps * 1.6); // ~1.6 per game
-  const keyPasses = Math.round(totals.assists * 3.2 + totals.apps * 0.8); // derived from assists
-  const hatTricks = Math.max(0, Math.floor(totals.goals / 15)); // ~1 hat trick per 15 goals
+  const backLine = ["CB", "LB", "RB"].includes(pos);
+  const missingSheets = backLine && soccerRatingRows(seasons, pos).some(row => row.stats.some(stat => stat.short === "CS" && stat.value === null));
 
   if (pos === "GK") return [
     { l: "Apps", v: totals.apps },
     { l: "Clean Sheets", v: totals.cleanSheets },
-    { l: "Saves", v: saves },
-    { l: "Pens Saved", v: pensSaved },
     { l: "Trophies", v: trophies },
   ];
-  if (["CB", "LB", "RB"].includes(pos)) return [
-    { l: "Apps", v: totals.apps },
-    { l: "Tackles", v: tackles },
-    { l: "Interceptions", v: interceptions },
-    { l: "Goals", v: totals.goals },
-    { l: "Clean Sheets", v: totals.cleanSheets },
-    { l: "Trophies", v: trophies },
-  ];
-  if (["CDM", "CM", "CAM"].includes(pos)) return [
+  if (backLine) return [
     { l: "Apps", v: totals.apps },
     { l: "Goals", v: totals.goals },
-    { l: "Assists", v: totals.assists },
-    { l: "Key Passes", v: keyPasses },
+    { l: "Clean Sheets", v: missingSheets ? null : totals.cleanSheets },
     { l: "Trophies", v: trophies },
   ];
-  // Forwards: ST, LW, RW
   return [
     { l: "Apps", v: totals.apps },
     { l: "Goals", v: totals.goals },
     { l: "Assists", v: totals.assists },
-    { l: "Hat Tricks", v: hatTricks },
     { l: "Trophies", v: trophies },
   ];
+}
+
+export function CareerStatsCard({ career, totals }: { career: Pick<CareerState, "position" | "seasons">; totals: ReturnType<typeof getCareerTotals> }) {
+  const stats = getPositionCareerStats(career.position, totals, career.seasons);
+  return <div className="bg-card border border-border rounded-xl p-4" data-career-recorded-stats>
+    <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Career Stats</span>
+    <p className="mt-1 text-xs text-muted-foreground">Only stats kept in your season records are shown.</p>
+    <div className={`grid gap-3 mt-3 ${stats.length === 3 ? "grid-cols-3" : "grid-cols-2 sm:grid-cols-4"}`}>
+      {stats.map(s => <div key={s.l} className="text-center" data-career-stat={s.l}>
+        <div className="text-lg sm:text-xl font-black">{s.v === null ? <span aria-label="may not have been counted" title="May not have been counted in every season">-</span> : s.v}</div>
+        <div className="text-xs text-muted-foreground">{s.l}</div>
+      </div>)}
+    </div>
+    {stats.some(s => s.v === null) && <p className="mt-2 text-xs text-muted-foreground">Clean sheets may not have been counted in older seasons.</p>}
+    <CareerDerbyTotals seasons={career.seasons} />
+  </div>;
 }
 
 /* ─── Stat Bar ─── */
@@ -4229,19 +4227,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           </div>
 
           {/* Career totals, position-specific */}
-          <div className="bg-card border border-border rounded-xl p-4">
-            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Career Stats</span>
-            <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 mt-3">
-              {getPositionCareerStats(career.position, totals).map(s => (
-                <div key={s.l} className="text-center">
-                  <div className="text-lg sm:text-xl font-black">{s.v}</div>
-                  <div className="text-[10px] text-muted-foreground">{s.l}</div>
-                </div>
-              ))}
-            </div>
-            {/* Round 1012: the career's derby record, summed from the seasons. */}
-            <CareerDerbyTotals seasons={career.seasons} />
-          </div>
+          <CareerStatsCard career={career} totals={totals} />
 
           {/* Trophies */}
           <div className="bg-card border border-border rounded-xl p-4">

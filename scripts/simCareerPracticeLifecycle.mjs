@@ -35,6 +35,7 @@ const controls = {
   inactive: { file: CLOCK, from: 'if (!active) clock.reset();', to: 'if (false) clock.reset();', test: 'inactive transition cancels work and does not pause unrelated screens' },
   close: { file: GROUND, from: 'const close = () => { attemptRef.current += 1; clock.clearAll(); onClose(); };', to: 'const close = () => { attemptRef.current += 1; onClose(); };', test: 'close and unmount cancel the pending penalty reveal' },
   burst_back: { file: drill('BurstTap'), from: '<button onClick={onBack}', to: '<button onClick={() => { if (!paceRunning) onBack(); }}', test: 'Back immediately abandons an active burst and resets the next attempt' },
+  burst_boundary: { file: drill('BurstTap'), from: '[paceRunning, paceLeft, clock.paused]', to: '[paceRunning, paceLeft]', test: 'burst completion at the blur boundary settles after explicit resume' },
   resume_label: { file: GROUND, from: "'Resume practice' : 'Pause practice'", to: "'Paused practice' : 'Pause practice'", test: 'help preserves the remaining shot reveal and requires explicit resume' },
   score: { file: GROUND, from: 'setScore(trainingScore(sc));', to: 'setScore(trainingScore(sc - 1));', test: 'supersedes the abandoned fifth penalty with the new drill result' },
   gate_gap: { file: drill('GateTap'), from: 'gateTimer.current = clock.timeout(() => lightGate(n + 1), 350);', to: 'gateTimer.current = window.setTimeout(() => lightGate(n + 1), 350);', test: 'gates preserve both the open window and between-gate delay' },
@@ -67,7 +68,7 @@ function run(name, swap) {
   assert(fs.existsSync(json), `${name}: mounted suite produced no JSON result`);
   const data = JSON.parse(fs.readFileSync(json, 'utf8'));
   const assertions = data.testResults.flatMap(file => file.assertionResults || []);
-  assert.equal(assertions.length, 22, `${name}: every expected outcome must run`);
+  assert.equal(assertions.length, 23, `${name}: every expected outcome must run`);
   assert(assertions.every(row => ['passed', 'failed'].includes(row.status)), `${name}: no pending or skipped cases`);
   assert.equal(assertions.find(row => row.title === BANK_BASELINE)?.status, 'passed', `${name}: the unchanged independent bank baseline must pass`);
   return { exit: result.status, passed: assertions.filter(row => row.status === 'passed').length, failed: assertions.filter(row => row.status === 'failed').map(row => ({ title: row.title, messages: row.failureMessages })) };
@@ -75,7 +76,7 @@ function run(name, swap) {
 try {
   report.baseline = run('baseline'); save();
   assert.equal(report.baseline.exit, 0, 'The unchanged product must pass before any control');
-  assert.equal(report.baseline.passed, 22, 'All shared practice outcomes pass');
+  assert.equal(report.baseline.passed, 23, 'All shared practice outcomes pass');
   for (const name of requested === 'all' ? Object.keys(controls) : requested ? [requested] : []) {
     const control = controls[name];
     const source = fs.readFileSync(path.join(ROOT, control.file), 'utf8').replace(/\r\n/g, '\n');
@@ -99,4 +100,4 @@ try {
   fs.rmSync(temp, { recursive: true, force: true });
   assert.deepEqual(report.sourceAfter, before, 'Production sources, tests and historical fixture must remain unchanged by execution');
 }
-console.log(`simCareerPracticeLifecycle: 21 mounted outcomes and the independent bank baseline passed; ${report.controls.length} copied faults rejected; source hold passed.`);
+console.log(`simCareerPracticeLifecycle: 22 mounted outcomes and the independent bank baseline passed; ${report.controls.length} copied faults rejected; source hold passed.`);

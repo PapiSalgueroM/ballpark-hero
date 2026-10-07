@@ -1,3 +1,15 @@
+## Round1076 scope addition: recorded career stats only
+
+The flagship audit confirmed six Soccer Career totals were invented from
+unrelated saved aggregates: Saves, Pens Saved, Tackles, Interceptions, Key
+Passes and Hat Tricks. Correct data takes priority, so1076 also owns removing
+those six helper cells and clarifying recorded-only stats in the local lifetime
+panel. Preserve actual saved totals and the existing unknown clean-sheet
+convention for old defenders. No engine/save or1045 integration-hunk changes.
+Dedicated actual-stat outcomes and effective copied faults join the remote gate.
+First1076 prep37585618434 caught three unsupported Testing Library options;
+those test-only type errors are corrected. No outcome acceptance yet.
+
 ## Round 1076 claimed: career practice lifecycle integrity, October 7
 
 Codex owns bounded practice lifecycle fixes on fresh main eeedbf43 in

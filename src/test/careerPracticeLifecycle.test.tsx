@@ -242,6 +242,26 @@ describe('shared practice lifecycle', () => {
     expect(g.onComplete).not.toHaveBeenCalled();
   });
 
+  it('burst completion at the blur boundary settles after explicit resume', () => {
+    const g = ground();
+    g.open('lane'); g.tap('🏁 Tap to start the 5 second lane drill Then tap the floor as fast as you can');
+    for (let i = 0; i < 25; i++) fireEvent.click(g.getByText('GO GO GO'));
+    // The expiry update and real blur listener run before React flushes the
+    // completion effect, which must defer the earned result until Resume.
+    act(() => {
+      vi.advanceTimersByTime(5000);
+      window.dispatchEvent(new Event('blur'));
+    });
+    expect(g.paused()).toBe('true');
+    expect(g.queryByText('0.0s')).toBeInTheDocument();
+    expect(g.score()).toBeNull();
+    expect(g.onComplete).not.toHaveBeenCalled();
+    g.tap('Resume practice');
+    expect(g.score()).toBe('80');
+    bank(g);
+    expect(g.onComplete).toHaveBeenCalledExactlyOnceWith('lane', 80);
+  });
+
   for (const id of ['handles', 'lane', 'spots', 'reads']) {
     it(`${id} ignores starting input while paused`, () => {
       const g = ground();

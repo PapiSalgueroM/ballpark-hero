@@ -85,9 +85,9 @@ results must not overwrite another drill; help and focus loss must preserve
 active practice time; pause must ignore input until explicit resume. Existing
 gain rules and simulation engines remain unchanged.
 
-Subsequent bounded reliability work includes visible failed-save recovery and
-removing invented earned-stat estimates from Soccer Career's stats panel.
-These are findings, not implementation or acceptance claims in1076.
+Round1076 now also removes invented earned-stat estimates from Soccer Career's
+stats panel. Its dedicated verification is pending. Visible failed-save recovery
+remains a subsequent reliability candidate, not a completed feature.
 
 A feature is complete only after its actual player journey works, consequences
 persist, displayed numbers match saved outcomes, interruption/recovery works,
@@ -98,3 +98,18 @@ from a new claim about current completeness.
 Anthony should review short batches now, beginning with Soccer Career and Club
 Manager. His useful feedback is fun, confusion, realism and visual feel. Full
 technical regression checking remains the builders' work.
+
+## Next bounded reliability candidate, read-only audit
+
+SoccerCareer.tsx's central persistence effect silently catches storage refusal.
+Training and season results still advance in memory, while the disk retains
+older bytes. Reload can therefore lose earned progress without a warning.
+The shared US career board has the same defect. Club Manager already exposes
+saveFailed and tests refusal/recovery.
+
+After1076/1077, prioritize a visible Soccer failed-save notice and explicit Retry
+save using the current in-memory career. Retry must not rerun the simulation,
+training or score submission. Keep old disk bytes and earned memory intact;
+clear the notice only after a successful write. Extend the actual-page save
+recovery tests with refused write, recovery and reload outcomes. Apply the same
+behavior to NBA/NFL's shared board afterward. No1078 claim or implementation yet.

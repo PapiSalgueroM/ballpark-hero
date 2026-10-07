@@ -8,13 +8,16 @@ on:
       - .github/workflows/career-practice-lifecycle.yml
       - src/components/career/**
       - src/components/soccer-career/TrainingPanel.tsx
+      - src/pages/SoccerCareer.tsx
       - src/hooks/usePracticeClock.ts
       - src/test/careerPracticeLifecycle.test.tsx
       - src/test/soccerPracticeLifecycle.test.tsx
       - src/test/careerTrainingGround.test.tsx
+      - src/test/careerRecordedStats.test.tsx
       - scripts/simCareerPracticeLifecycle.mjs
       - scripts/simSoccerPracticeLifecycle.mjs
       - scripts/simCareerTraining.mjs
+      - scripts/simCareerRecordedStats.mjs
       - scripts/qa/careerPractice1076.mjs
 permissions:
   contents: read
@@ -67,19 +70,24 @@ jobs:
       - name: Soccer practice outcomes and effective copied faults
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: SOCCER_PRACTICE_LIFECYCLE_CONTROL=all ONLY=simSoccerPracticeLifecycle node scripts/runAllSims.mjs 2>&1 | tee career-practice-lifecycle-artifacts/soccer.log
+      - name: Recorded career totals and effective copied faults
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: CAREER_RECORDED_STATS_CONTROL=all ONLY=simCareerRecordedStats node scripts/runAllSims.mjs 2>&1 | tee career-practice-lifecycle-artifacts/recorded-stats.log
       - name: Preserve uninterrupted drills and banking
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
           failed=0
+          export TMPDIR="$PWD/career-practice-lifecycle-artifacts/regression-evidence"
+          mkdir -p "$TMPDIR"
           ONLY=simCareerTraining node scripts/runAllSims.mjs 2>&1 | tee career-practice-lifecycle-artifacts/training.log || failed=1
           for control in tier overcap promise skinstat tell miss window slip; do
             CAREER_TRAINING_CONTROL="$control" ONLY=simCareerTraining node scripts/runAllSims.mjs 2>&1 | tee "career-practice-lifecycle-artifacts/training-$control.log" || failed=1
           done
-          ONLY=simUsCareerPractice node scripts/runAllSims.mjs 2>&1 | tee career-practice-lifecycle-artifacts/banking.log || failed=1
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simUsCareerPractice.mjs 2>&1 | tee career-practice-lifecycle-artifacts/banking.log || failed=1
           for control in before gain cap once save receipt renew rules abort pending reset carry; do
-            US_CAREER_PRACTICE_CONTROL="$control" ONLY=simUsCareerPractice node scripts/runAllSims.mjs 2>&1 | tee "career-practice-lifecycle-artifacts/banking-$control.log" || failed=1
+            US_CAREER_PRACTICE_CONTROL="$control" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simUsCareerPractice.mjs 2>&1 | tee "career-practice-lifecycle-artifacts/banking-$control.log" || failed=1
           done
-          for harness in simTrainingFeedbackMotion simCareerDrills simDrillMotion simFirstTouchDrill simThroughBallDrill simNoDoubleRecord; do
+          for harness in simTrainingFeedbackMotion simCareerDrills simDrillMotion simFirstTouchDrill simThroughBallDrill simNoDoubleRecord simCareerCleanSheets simCareerSeasonRatings simCareerDerbies; do
             ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "career-practice-lifecycle-artifacts/$harness.log" || failed=1
           done
           exit "$failed"
@@ -99,7 +107,7 @@ jobs:
       - name: Hold the reviewed implementation and untouched game rules
         if: ${{ !cancelled() }}
         run: |
-          git diff --exit-code HEAD -- src/components/career src/components/soccer-career/TrainingPanel.tsx src/hooks/usePracticeClock.ts src/test scripts/simCareerPracticeLifecycle.mjs scripts/simSoccerPracticeLifecycle.mjs scripts/simCareerTraining.mjs scripts/qa/careerPractice1076.mjs
+          git diff --exit-code HEAD -- src/pages/SoccerCareer.tsx src/components/career src/components/soccer-career/TrainingPanel.tsx src/hooks/usePracticeClock.ts src/test scripts/simCareerPracticeLifecycle.mjs scripts/simSoccerPracticeLifecycle.mjs scripts/simCareerTraining.mjs scripts/simCareerRecordedStats.mjs scripts/qa/careerPractice1076.mjs
           git diff --exit-code eeedbf433b07423b8fd27f0b8863b0ff9dddac8f HEAD -- src/lib/soccerCareerEngine.ts src/lib/careerTraining.ts src/lib/careerDrills.ts src/components/soccer-career/ThroughBallBoard.tsx src/components/soccer-career/FirstTouchBoard.tsx src/components/soccer-career/DrillBoard.tsx src/components/us-career/UsCareerBoard.tsx
       - name: Preserve verification evidence
         if: always()

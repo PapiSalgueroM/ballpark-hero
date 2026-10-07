@@ -134,7 +134,7 @@ try {
     assert.equal(run.status, 1); assert.equal(report.numFailedTests, 1); assert.equal(report.numPassedTests, 1); assert.equal(report.numPendingTests, count - 2);
     const intended = rows.find(row => row.title === controls[control].test); assert.equal(intended?.status, 'failed');
     const failure = intended.failureMessages.join('\n').replace(/\u001b\[[0-9;]*m/g, '');
-    assert.match(failure, /AssertionError:|Error: expect\(element\)/, 'The named outcome fails an actual assertion');
+    assert.match(failure, /AssertionError:|Error: expect\((?:element|received)\)/, 'The named outcome fails an actual assertion');
     assert.equal(rows.find(row => row.title === cases.independent)?.status, 'passed');
     console.log(`simSoccerPracticeLifecycle ${control}: mapped outcome rejected changed source; independent engine baseline passed.`);
   } else {

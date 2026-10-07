@@ -13,6 +13,13 @@ Soccer's newer positional boards retain their own controls and engines. Entering
 them clears legacy help state. Existing scoring, attribute gains, random draws,
 season limits and career save schemas are unchanged.
 
+The Soccer Career lifetime card also stops inventing saves, penalties saved,
+tackles, interceptions, key passes and hat tricks from unrelated totals. It
+shows recorded appearances, goals, assists, clean sheets and trophies as
+appropriate to the position. Older defender seasons with unrecorded clean
+sheets keep the existing unknown marker, with a short explanation. The actual
+derby record remains in the card. No saved stat is rewritten or backfilled.
+
 ## Verification contract
 
 All execution takes place in GitHub Actions. The preparation workflow runs
@@ -20,6 +27,11 @@ the real app type gate and build, actual mounted shared and Soccer panels,
 effective copied source faults, historical uninterrupted drill replays, old
 banking controls, existing positional-drill regressions, native practice
 journeys and all20 built/search/source readers.
+
+Recorded-stat outcomes render the actual career card from restored season
+records for goalkeepers, defenders, midfielders and forwards. Copied faults
+must restore each invented counter or corrupt a real total and fail the mapped
+outcome while the independent saved-total reader still passes.
 
 The historical fixture is immutable. Four old runs intentionally recorded
 abandoned-timer bugs; new lifecycle outcomes supersede those behaviors.
