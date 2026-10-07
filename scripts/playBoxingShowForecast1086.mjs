@@ -81,13 +81,14 @@ function outcome(value, expected) {
 async function geometry(page, selector) {
   return page.locator(selector).evaluate((node, viewport) => {
     const box = el => { const r = el.getBoundingClientRect(); return { left: r.left, right: r.right, top: r.top, bottom: r.bottom, width: r.width, height: r.height }; };
-    return { width: viewport.width, height: viewport.height, layout: { width: innerWidth, height: innerHeight }, documentWidth: document.documentElement.scrollWidth, root: box(node), text: [...node.querySelectorAll('p,dt,dd,h3')].map(el => ({ ...box(el), text: el.textContent, font: parseFloat(getComputedStyle(el).fontSize), overflow: el.scrollWidth > el.clientWidth + 1 })), buttons: [...node.querySelectorAll('button')].map(el => ({ ...box(el), text: el.textContent, hit: (() => { const r = el.getBoundingClientRect(), hit = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2); return hit === el || el.contains(hit); })() })) };
+    const hit = el => { const r = el.getBoundingClientRect(), target = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2); return target === el || el.contains(target); };
+    return { width: viewport.width, height: viewport.height, layout: { width: innerWidth, height: innerHeight }, documentWidth: document.documentElement.scrollWidth, root: box(node), text: [...node.querySelectorAll('p,dt,dd,h3')].map(el => ({ ...box(el), text: el.textContent, font: parseFloat(getComputedStyle(el).fontSize), overflow: el.scrollWidth > el.clientWidth + 1, hit: hit(el) })), buttons: [...node.querySelectorAll('button')].map(el => ({ ...box(el), text: el.textContent, hit: hit(el) })) };
   }, page.viewportSize());
 }
 function visible(m) {
   assert(m.documentWidth <= m.width + 1, 'No horizontal page overflow');
   for (const value of [...m.text, ...m.buttons]) assert(value.left >= -1 && value.right <= m.width + 1 && value.top >= -1 && value.bottom <= m.height + 1, 'Forecast/help content is visible');
-  for (const value of m.text) { assert(value.font >= 12, 'Forecast/help text at least 12px'); assert(!value.overflow, 'Forecast/help text is not clipped'); }
+  for (const value of m.text) { assert(value.font >= 12, 'Forecast/help text at least 12px'); assert(!value.overflow, 'Forecast/help text is not clipped'); assert(value.hit, 'Forecast/help text is not covered'); }
   for (const value of m.buttons) { assert(value.width >= 44 && value.height >= 44, 'Forecast/help actions at least 44px'); assert(value.hit, 'Forecast/help actions receive hits'); }
 }
 async function natural(page, selector) {
@@ -120,6 +121,7 @@ try {
       if (request.method() === 'GET' && fonts.has(url.href)) { const font = fonts.get(url.href); row.responses.push({ url: url.href, sha256: hash(font.body), bytes: font.body.length }); return route.fulfill({ status: 200, contentType: font.contentType, body: font.body }); }
       if (request.method() === 'GET' && url.origin === serviceOrigin && url.pathname === '/rest/v1/live_scores') { row.responses.push({ url: url.href, handling: 'explicit local empty live board' }); return route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }); }
       if (request.method() === 'POST' && url.origin === serviceOrigin && url.pathname === '/rest/v1/game_completions') { row.emulatedCompletionWrites.push({ url: url.href, body: request.postDataJSON(), handling: 'CI-local emulation, never forwarded' }); return route.fulfill({ status: 201, contentType: 'application/json', body: '[]' }); }
+      if (request.method() === 'GET' && url.origin === serviceOrigin && url.pathname === '/rest/v1/game_completions' && url.searchParams.size === 4 && url.searchParams.get('select') === 'game,completed_on' && url.searchParams.get('order') === 'completed_on.desc' && url.searchParams.get('limit') === '500' && row.emulatedCompletionWrites.some(write => url.searchParams.get('player_name') === `eq.${write.body.player_name}`)) { row.responses.push({ url: url.href, handling: 'CI-local empty badge history after the emulated completion, never forwarded' }); return route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }); }
       row.unexpectedRequests.push({ url: url.href, method: request.method(), type: request.resourceType() }); return route.abort('blockedbyclient');
     });
     await context.routeWebSocket('**/*', socket => socket.close());
@@ -134,6 +136,8 @@ try {
     const activate = async target => { if (profile.touch) await target.tap(); else { await target.focus(); await page.keyboard.press('Enter'); } };
     try {
       await page.goto(`${BASE}/fight-promoter`, { waitUntil: 'domcontentloaded' }); await button('Put the show on').waitFor();
+      row.consentBefore = await snapshot(page); await activate(button('Essential only')); await button('Essential only').waitFor({ state: 'detached' }); row.consentAfter = await snapshot(page);
+      assert.equal(row.consentAfter.storage['cookie-consent'], 'essential', 'Trusted essential-only choice precedes the protected game preview');
       await page.evaluate(async () => { await document.fonts.ready; for (const family of ['Inter', 'Space Grotesk']) for (const weight of [400, 600]) { const list = await document.fonts.load(`${weight} 16px "${family}"`); if (!list.length || !list.every(f => f.status === 'loaded')) throw new Error('Required actual font unavailable'); } });
       const held = await snapshot(page);
       if (plan.venueId !== 'hall') await activate(page.getByRole('button').filter({ has: page.getByText(engine.venueById(plan.venueId).name, { exact: true }) }));
@@ -165,6 +169,10 @@ try {
         const triggerStyle = await rules.getAttribute('style'); await rules.evaluate(el => { el.style.width = '20px'; el.style.height = '20px'; });
         const narrow = await geometry(page, '[data-boxing-forecast]'); assert(narrow.buttons.some(t => t.width === 20)); assert.throws(() => visible(narrow), /at least 44px/);
         await rules.evaluate((el, held) => held === null ? el.removeAttribute('style') : el.setAttribute('style', held), triggerStyle); visible(await geometry(page, '[data-boxing-forecast]')); report.controls.push({ name: 'actual-help-target', changed: narrow, restored: true });
+        const beforeCover = await geometry(page, '[data-boxing-forecast]');
+        await page.locator('[data-boxing-forecast] dt').first().evaluate(el => { const r = el.getBoundingClientRect(), cover = document.createElement('div'); cover.dataset.cashCoverControl = ''; Object.assign(cover.style, { position: 'fixed', left: `${r.left}px`, top: `${r.top}px`, width: `${r.width}px`, height: `${r.height}px`, background: 'red', zIndex: '2147483647' }); document.body.append(cover); });
+        const covered = await geometry(page, '[data-boxing-forecast]'); assert.notDeepEqual(covered, beforeCover); assert.throws(() => visible(covered), /Forecast\/help text is not covered/);
+        await page.locator('[data-cash-cover-control]').evaluate(el => el.remove()); const uncovered = await geometry(page, '[data-boxing-forecast]'); assert.deepEqual(uncovered, beforeCover); visible(uncovered); report.controls.push({ name: 'actual-text-occlusion', changed: covered, restored: uncovered });
       }
       await page.screenshot({ path: path.join(OUT, `${profile.width}-forecast.png`) });
       const beforeShow = await snapshot(page); await activate(button('Put the show on'));
@@ -180,7 +188,7 @@ try {
     } catch (error) { row.error = { name: error.name, message: error.message, stack: error.stack }; await page.screenshot({ path: path.join(OUT, `${profile.width}-failure.png`) }).catch(() => {}); save(); }
     finally { await context.close(); }
   }
-  assert(report.cases.every(row => row.complete), 'Every actual-route boxing forecast journey passes'); assert.equal(report.controls.length, 3); report.complete = true;
+  assert(report.cases.every(row => row.complete), 'Every actual-route boxing forecast journey passes'); assert.equal(report.controls.length, 4); report.complete = true;
 } finally {
   if (browser) await browser.close(); server.kill(); fs.writeFileSync(path.join(OUT, 'server.log'), serverLog); report.sourceAfter = hashes();
   try { assert.deepEqual(report.sourceAfter, report.sourceBefore); } catch (error) { report.complete = false; report.sourceHoldError = { name: error.name, message: error.message }; save(); throw error; }

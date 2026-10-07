@@ -85,6 +85,14 @@ jobs:
       - name: Native built-route cash and unchanged complete show receipts
         if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.assets.outcome == 'success' }}
         run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playBoxingShowForecast1086.mjs 2>&1 | tee boxing-show-forecast-artifacts/native.log
+      - name: Preserve new outcome evidence before original checks
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: boxing-cash-new-${{ github.run_id }}-${{ github.run_attempt }}
+          path: boxing-show-forecast-artifacts/
+          retention-days: 3
+          if-no-files-found: error
       - name: Original relevant gameplay and score checks
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |

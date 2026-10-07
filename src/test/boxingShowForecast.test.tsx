@@ -10,6 +10,7 @@ vi.mock('sonner', () => ({ toast: { success: () => undefined } }));
 
 const KEY = 'fight-promoter-save-v1';
 const BASELINE = 'unchanged handover engine keeps its complete outcome and input';
+const randomDrawStacks: string[] = [];
 const clone = <T,>(value: T): T => JSON.parse(JSON.stringify(value));
 const storage = () => Object.fromEntries(Object.keys(localStorage).sort().map(key => [key, localStorage.getItem(key)]));
 const environment = () => ({ storage: storage(), writes: clone(vi.mocked(Storage.prototype.setItem).mock.calls),
@@ -131,16 +132,30 @@ async function playCashCase(kind: 'guarantee' | 'share' | 'loss' | 'negative' | 
   check('reload holds result bytes without another payout: ' + kind, environment(), after);
 }
 
-beforeEach(() => {
+beforeEach(async () => {
+  randomDrawStacks.length = 0;
+  // React's first awaited act initializes its task scheduler before protected gameplay measurements.
+  const setupDraws: { value: number; stack: string }[] = [], originalRandom = Math.random;
+  const setupRandom = vi.spyOn(Math, 'random').mockImplementation(() => {
+    const value = originalRandom(); setupDraws.push({ value, stack: new Error('Setup Math.random call').stack ?? '' }); return value;
+  });
+  try { await act(async () => {}); } finally {
+    setupRandom.mockRestore();
+    console.log('BOXING_FORECAST_SETUP_RANDOM|' + JSON.stringify({ test: expect.getState().currentTestName, draws: setupDraws }));
+  }
   vi.resetModules(); localStorage.clear(); sessionStorage.clear(); mocks.completion.mockReset();
   // Opaque byte sentinels on actual unrelated keys; these are not claimed as loaded game worlds.
   localStorage.setItem('dukb-mma-promoter-v1', '{"keep":"opaque MMA sentinel"}');
   localStorage.setItem('fight-promoter-mode-v1', 'boxing'); localStorage.setItem('wonderkidFactoryV1', '{"keep":"opaque Academy sentinel"}');
   vi.useFakeTimers({ toFake: ['Date', 'setTimeout', 'clearTimeout'] }); vi.setSystemTime(1791374400000);
-  vi.spyOn(Math, 'random').mockReturnValue(.37); vi.spyOn(Storage.prototype, 'setItem'); vi.spyOn(Storage.prototype, 'removeItem');
+  vi.spyOn(Math, 'random').mockImplementation(() => { randomDrawStacks.push(new Error('Protected Math.random call').stack ?? ''); return .37; }); vi.spyOn(Storage.prototype, 'setItem'); vi.spyOn(Storage.prototype, 'removeItem');
   vi.stubGlobal('requestAnimationFrame', () => 1); vi.stubGlobal('cancelAnimationFrame', () => undefined);
 });
-afterEach(() => { cleanup(); vi.useRealTimers(); vi.restoreAllMocks(); vi.unstubAllGlobals(); });
+afterEach(() => {
+  cleanup();
+  console.log('BOXING_FORECAST_RANDOM|' + JSON.stringify({ test: expect.getState().currentTestName, draws: randomDrawStacks.length, stacks: randomDrawStacks }));
+  vi.useRealTimers(); vi.restoreAllMocks(); vi.unstubAllGlobals();
+});
 
 it(BASELINE, async () => {
   const E = await import('@/lib/fightPromoter'), state = E.newPromoter('Baseline', 'baseline-1086');
