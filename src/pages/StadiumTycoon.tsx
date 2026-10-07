@@ -31,7 +31,7 @@ import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import {
   TRACKS, levelOf, costOf, canBuy, capacity, attendance, incomePerSec,
-  ticketPolicyOf,
+  ticketPolicyOf, TICKET_POLICIES,
   tapValue, repMult, streakMult, prestigeThreshold, canPrestige, fmtMoney as tycoonMoney,
   boostReady, boostActive, boostChargeSecOf, MILESTONES, opponentName,
   DIVISIONS, divisionOf, divisionIndex, leagueShape, leagueStandings, leaguePosition,
@@ -252,6 +252,15 @@ function helpFacts() {
     standsCost: costOf(fresh, 'stands'),
     seatsPerStand: capacity({ ...fresh, levels: { ...fresh.levels, stands: 1 } }) - capacity(fresh),
     exampleFans: attendance(full),
+    /* Release AL: the ticket offers (Round 1080), read off the engine's own
+       table so the rules can never quote a rate the game does not use. */
+    ticketCommunityCut: Math.round((1 - (TICKET_POLICIES.find(p => p.id === 'community')?.gate ?? 1)) * 100),
+    ticketCommunityGrowth: Math.round(((TICKET_POLICIES.find(p => p.id === 'community')?.growth ?? 1) - 1) * 100),
+    ticketPremiumGate: Math.round(((TICKET_POLICIES.find(p => p.id === 'premium')?.gate ?? 1) - 1) * 100),
+    ticketPremiumDemand: Math.round((TICKET_POLICIES.find(p => p.id === 'premium')?.demand ?? 1) * 100),
+    ticketPremiumGrowth: Math.round((1 - (TICKET_POLICIES.find(p => p.id === 'premium')?.growth ?? 1)) * 100),
+    freshSeats: capacity(fresh),
+    freshPremiumCrowd: attendance({ ...fresh, ticketPolicy: 'premium' }),
     rate400: incomePerSec(full),
     goal400: goalBonus(full),
     win400: winBonus(full),
@@ -376,7 +385,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
   const affordable = TRACKS.filter(t => canBuy(s, t.id)).length;
   const officeTiles: { key: OfficePanel; icon: string; title: string; value: string; accent: boolean }[] = [
     { key: 'upgrades', icon: '🏗️', title: 'Upgrades', value: affordable > 0 ? `${affordable} ready` : 'saving up', accent: false },
-    { key: 'tickets', icon: '🎟️', title: 'Ticket offer', value: `${ticketPolicyOf(s)} · ${attendance(s)} fans`, accent: false },
+    { key: 'tickets', icon: '🎟️', title: 'Ticket offer', value: TICKET_POLICIES.find(p => p.id === ticketPolicyOf(s))?.label ?? 'Standard', accent: false },
     { key: 'payroll', icon: '🧑‍🤝‍🧑', title: 'Payroll', value: `${totalStaffLevels(s)} hired`, accent: false },
     { key: 'ach', icon: '🏅', title: 'Badges', value: `${achCount}/${ACHIEVEMENTS.length}`, accent: false },
     { key: 'legacy', icon: '🏛️', title: 'Legacy', value: pts > 0 ? `${pts} pts` : 'boardroom', accent: pts > 0 },
@@ -904,6 +913,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
               <p>You run a tiny club's matchday money machine. Fans show up if there are seats and things to spend on; every fan pays you every second.</p>
               <p>The match on screen is real: your Squad level drives goals, goals pay a bonus scaled by the crowd, wins extend a streak that multiplies everything and pulls in new fans. A division's rivals stay as strong as they were when you arrived, but every division up is tougher, and the longer the club has played the tougher each new one is.</p>
               <p>Tap the stadium for instant cash (Megaphone makes taps stronger). Buy Stands when the ground is full, spending tracks when it is not.</p>
+              <p>The Ticket offer tile sets your matchday price, and switching is free at any time. Standard is the regular game. Community takes {h.ticketCommunityCut}% off the gate money each fan pays and your supporters grow {h.ticketCommunityGrowth}% faster. Premium adds {h.ticketPremiumGate}% to the gate money each fan pays, but only {h.ticketPremiumDemand}% of your supporters turn up and they grow {h.ticketPremiumGrowth}% slower. Only the ticket price moves: snacks, the shop, parking and the payroll keep their own rates. Example: a new {h.freshSeats} seat ground with {h.freshFans} supporters draws {h.freshPremiumCrowd} on Premium, so Premium pays less there, and it pays more once {h.ticketPremiumDemand}% of your supporters still fill the ground. Selling up puts the offer back to Standard.</p>
               <p>Matchday Hype charges over {h.chargeMin} minutes of play (Stadium Voltage in the boardroom trims that to {h.voltage1}, then {h.voltage2}). Press it and your income pays double for {h.hypeSec} seconds, and your taps rise with it; goal and win bonuses are not doubled. It does not charge or burn while you are away.</p>
               <p>Your ground plays in a league, {h.divisions} divisions from the {h.firstDivision} to {h.lastDivision}. Each division is a small league of named rivals: {leagueShape(0).clubs} clubs playing each other once in the bottom {SINGLE_LEG_BELOW} divisions, then {leagueShape(3).clubs} and {leagueShape(6).clubs} clubs home and away. Only the champion goes up, and nobody ever goes down. Every division multiplies all income, up to x{h.topMult} at the top, going up pays a promotion bonus on the spot, and a title at {h.lastDivision} pays it again. Higher divisions send tougher opponents. The League tab shows the table.</p>
               <p>The payroll hires {h.staff} staff, from a {h.firstStaff} to a {h.lastStaff}. Every staff level adds steady income of its own before the multipliers touch it, so a deep payroll compounds hard.</p>

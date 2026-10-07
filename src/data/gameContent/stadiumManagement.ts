@@ -89,7 +89,8 @@ export const STADIUM_MANAGEMENT_CONTENT: GameContentMap = {
       {
         heading: "Attendance, the match clock and the win streak",
         items: [
-          "Attendance is the smaller of your seats and your fanbase, so Stands matter only when the ground is full and spending tracks matter only when it is not.",
+          "Attendance is the smaller of your seats and the supporters who want a ticket. On Standard and Community that is your whole fanbase, and on Premium it is 75 percent of it. So Stands matter only when the ground is full and spending tracks matter only when it is not.",
+          "The Ticket offer tile sets your matchday price, and switching is free at any time. Community takes 15 percent off the gate money each fan pays and grows your supporters 50 percent faster. Premium adds 25 percent to the gate money each fan pays, draws 75 percent of your supporters and grows them 25 percent slower. Snacks, the shop, parking and the payroll keep their own rates. A new 120 seat ground with 90 supporters draws 67 on Premium and earns less than Standard, and Premium earns more once 75 percent of your supporters still fill the ground.",
           "Matches run about two real minutes. Your Squad level drives your goal chance. A division's rivals stay as strong as they were when you arrived, so a club that can compete there can always win it in time, but every division up is tougher, and the longer the club has played the tougher each new division is.",
           "A win extends the streak, a draw keeps it alive without extending it, a loss ends it. The streak multiplier caps at ten wins.",
         ],
@@ -214,7 +215,7 @@ export const STADIUM_MANAGEMENT_CONTENT: GameContentMap = {
     faqs: [
       {
         q: "Do I lose everything when I sell up?",
-        a: "Levels, money, fanbase, staff and your place on the division ladder reset. Reputation stars, all 47 badges, club records and lifetime totals stay, along with the separate academy and its first team. Each star is a permanent 50 percent income boost and each badge a permanent two percent, so runs get faster every time.",
+        a: "Levels, money, fanbase, staff, your ticket offer and your place on the division ladder reset. Reputation stars, all 47 badges, club records and lifetime totals stay, along with the separate academy and its first team. Each star is a permanent 50 percent income boost and each badge a permanent two percent, so runs get faster every time.",
       },
       {
         q: "What is the golden whistle?",

@@ -1,5 +1,6 @@
 import { TICKET_POLICIES, newTycoon, setTicketPolicy, ticketEconomy } from '@/lib/stadiumTycoon';
 import type { TicketPolicy, TycoonState } from '@/lib/stadiumTycoon';
+import { formatNumber } from '@/lib/formatNumber';
 
 export interface TicketPolicyCardProps {
   state: TycoonState;
@@ -24,7 +25,7 @@ export default function TicketPolicyCard({ state, onSelect, saveFailed, onRetryS
   const fullStandard = ticketEconomy(full);
   const fullPremium = ticketEconomy(setTicketPolicy(full, 'premium'));
   const metrics = [
-    ['crowd', 'Crowd / seats', current.crowd, `${current.crowd} / ${current.seats}`],
+    ['crowd', 'Crowd / seats', current.crowd, `${formatNumber(current.crowd)} / ${formatNumber(current.seats)}`],
     ['gate', 'Gate / sec', current.gatePerSec, dollars(current.gatePerSec)],
     ['concessions', 'Snacks + shop / sec', current.concessionsPerSec, dollars(current.concessionsPerSec)],
     ['other', 'Parking + payroll / sec', current.otherPerSec, dollars(current.otherPerSec)],
@@ -32,7 +33,7 @@ export default function TicketPolicyCard({ state, onSelect, saveFailed, onRetryS
     ['growth', 'New supporters / sec', current.growthPerSec, current.growthPerSec.toFixed(3)],
   ] as const;
   return <section data-ticket-policy-panel data-current-policy={current.policy} data-save-status={saveFailed ? 'failed' : 'current'} className="rounded-xl border border-border bg-card p-3 mb-3 text-xs">
-    <h3 className="font-bold text-sm">Ticket Office: pick your offer</h3>
+    <h3 className="font-bold text-sm">Ticket offer: pick your price</h3>
     <p className="text-muted-foreground mt-1">Trade gate money for supporter growth. Choose freely; your money stays put.</p>
     {saveFailed && <div role="alert" className="mt-3 rounded-lg border border-destructive p-2">
       <p>Active now, but not saved on this device. Keep this page open and retry.</p>
@@ -48,7 +49,7 @@ export default function TicketPolicyCard({ state, onSelect, saveFailed, onRetryS
         <dd data-ticket-value={key} data-value={value} className="font-bold break-words">{shown}</dd>
       </div>)}
     </dl>
-    <p className="text-muted-foreground mt-2">{current.supporters} supporters. Each tap pays {dollars(current.tap)} from this income. Live boosts are included above.</p>
+    <p className="text-muted-foreground mt-2">{formatNumber(current.supporters)} supporters. Each tap pays {dollars(current.tap)} from this income. Live boosts are included above.</p>
     {!saveFailed && <p className="text-muted-foreground mt-2">Active now. The offer applies to future earnings. Selling the ground resets it to Standard.</p>}
     <details className="mt-2">
       <summary className="min-h-[44px] flex items-center cursor-pointer font-bold">How ticket offers work</summary>
