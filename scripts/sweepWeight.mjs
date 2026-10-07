@@ -138,6 +138,25 @@
  * room the next leagues use. (Before Release P the same pair measured 629K
  * and 599.6K.)
  *
+ * ROUND 1042: THE DATA A PAGE NEVER READS IS IN NONE OF THE FILES IT FETCHES.
+ * Section 4 reads the files each route asked for in section 1 and looks in
+ * them for probes: short strings a data file prints into whatever chunk
+ * carries it (scripts/lib/dataProbes.mjs derives them from the source files
+ * when this runs, none is typed). /club-manager, /manager-hot-seat and
+ * /deadline-day must fetch no file holding a national team pool, a past
+ * season's nationalities or squads, or Footle's data; /transfer-path none
+ * holding the pools or a past season; /soccer-career still fetches the pools,
+ * because it reads them. The section refuses to pass empty: every probe set
+ * has to be found somewhere in dist/assets, each past season's in one file
+ * and no two seasons in the same file, or it fails with "cannot tell".
+ * Negative control, SWEEP_WEIGHT_CONTROL=planted: after the fetch one pools
+ * probe, one 2010 nationality probe and one Footle probe are appended IN
+ * MEMORY to the text of the largest file only /club-manager fetched (each
+ * asserted absent first); section 4 must then report exactly three findings,
+ * all for /club-manager. Exit 1 when it does, 2 when it does not.
+ * SWEEP_OFFLINE=1 blocks the database host on every context (a builder may
+ * not let a walk reach production; the release gate runs it as it always did).
+ *
  * Run: npm run build && npx serve -s dist -l 4173, then
  *      ENGINES=chromium node scripts/sweepWeight.mjs
  */
@@ -146,6 +165,7 @@ import path from 'node:path';
 import zlib from 'node:zlib';
 import { fileURLToPath } from 'node:url';
 import pw from './lib/playwrightLoader.mjs';
+import { dataProbes, findProbes } from './lib/dataProbes.mjs';
 
 const { chromium, devices } = pw;
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -172,6 +192,11 @@ const BUDGETS = [
   ['/front-office', 353], /* Release AF: 353K measured (314 at Release AE); Round 1019 mounts the shared GM desk on the NFL Front Office (staff, re-sign desk with the NFL contract rules, pick ledger, trade packages and the deadline); loading the desk panels on demand is owed by a later round; was 314 */ /* Release AE: 314K measured; no front office code changed, the shared chunks every route loads grew with Release AE (the error boundary that offers a fresh start for a broken save, Round 958; the result moment for the clue guessers and chains, Round 953) and with the other lane's PR140 and PR141 merged into it; was 311 */ /* Release AD: 311K measured; no front office code changed, the shared chunks every route loads grew with Release AD (the Transfer Path pool aware autocomplete text in PlayerAutocomplete, Round 1010a; the result moment wiring for the comparison games and Perfect Season, Rounds 986 and 954; the profile on a second device, Round 981); was 309 */ /* Release Z: 308K measured (307 at Release T); Codex 904's traded draft capital on the NFL front office board. */ /* Release T: 307K measured (306 at Release S and with Round 832 alone); the shared celebration styles gained the gated rise Round 834's speech choices wait behind */ /* release R: 305K measured, the board for a full 53 and the practice squad (Round 828; the roster data is its own chunk, loaded on a team tap); was 304 */ /* Round 700: 299.5K measured with the seoMeta split, 307.7K on main; was 312 */ /* release K: 308K measured, the franchise tag and the depth chart (723); was 304 */ /* release H: 302K measured, the entry chunk's ticker menu (711); was 300 */ /* release G: 299K measured, same shared chunks as above; was 296 */
   ['/soccer-grid', 307], /* Release AH: 307K measured; no soccer grid code changed, the soccer guides chunk it shares with /soccer-career and /footle grew with Round 1032's drill and derby lines; was 306 */ /* Release AE: 306K measured; no soccer grid code changed, the shared chunks every route loads grew with Release AE (the error boundary that offers a fresh start for a broken save, Round 958; the result moment for the clue guessers and chains, Round 953) and with the other lane's PR140 and PR141 merged into it; was 304 */ /* Release AD: 304K measured; no soccer grid code changed, the autocomplete it uses (Round 1010a) and the shared chunks every route loads grew with Release AD (the Transfer Path pool aware autocomplete text in PlayerAutocomplete, Round 1010a; the result moment wiring for the comparison games and Perfect Season, Rounds 986 and 954; the profile on a second device, Round 981); was 302 */ /* Round 700: 299.7K measured with the seoMeta split, 308.0K on main; was 308 */ /* release J: 304K measured; this release changes no soccer grid code, the growth is in the shared chunks every route loads; was 300 */
   ['/leaderboard', 266],
+  /* Round 1042: three routes that had no row, so a saving on them could be given back silently.
+     Added at the END of the table on purpose (the rows above are edited by other rounds). */
+  ['/manager-hot-seat', 723], /* Round 1042: base figure, lowered in the next commit. 722.9K measured 2026-10-07 on release-al-int at 6f99ccdf, before the round moved any data */
+  ['/deadline-day', 733], /* Round 1042: base figure, lowered in the next commit. 733.0K measured 2026-10-07 on release-al-int at 6f99ccdf */
+  ['/transfer-path', 441], /* Round 1042: base figure, lowered in the next commit. 440.6K measured 2026-10-07 on release-al-int at 6f99ccdf */
 ];
 
 const gzCache = new Map();
@@ -187,8 +212,11 @@ const browser = await chromium.launch();
 
 console.log('1) Every page is inside its download budget');
 const measured = [];
+/* Round 1042: the files each route asked for, kept for section 4. */
+const fetched = new Map();
 for (const [route, budget] of BUDGETS) {
   const ctx = await browser.newContext({ ...devices['iPhone 13'] });
+  if (process.env.SWEEP_OFFLINE === '1') await ctx.route(/supabase\.co/, r => r.abort());
   const page = await ctx.newPage();
   const files = new Set();
   page.on('request', req => {
@@ -206,7 +234,8 @@ for (const [route, budget] of BUDGETS) {
   let total = 0;
   for (const f of files) total += gzSize(path.join(ROOT, 'dist/assets', f));
   const kb = Math.round(total / 1024);
-  measured.push({ route, kb, budget, files: files.size });
+  measured.push({ route, kb, exact: (total / 1024).toFixed(1), budget, files: files.size });
+  fetched.set(route, [...files].sort());
   if (kb > budget) fail(`${route}: ${kb}K of gzipped JavaScript against a budget of ${budget}K`);
   /* A budget nobody is near is a budget nobody is keeping. If a page comes
      in under half its ceiling the ceiling is stale and should come down. */
@@ -216,7 +245,7 @@ for (const [route, budget] of BUDGETS) {
   await ctx.close();
 }
 for (const m of measured) {
-  console.log(`   ${m.route.padEnd(18)} ${String(m.kb).padStart(4)}K gz over ${String(m.files).padStart(3)} files (budget ${m.budget}K)`);
+  console.log(`   ${m.route.padEnd(18)} ${String(m.kb).padStart(4)}K gz over ${String(m.files).padStart(3)} files (budget ${m.budget}K, ${m.exact}K to the tenth)`);
 }
 
 console.log('2) The two things Round 210 moved off the critical path stay off it');
@@ -278,6 +307,91 @@ console.log('3) Every guide is still reachable, one sport at a time');
     if (!BUNDLES.includes(b)) fail(`loader.ts points ${p} at an unknown bundle ${b}`);
   }
   console.log(`   ${keys} guides across ${BUNDLES.length} sport files, every one of them routed`);
+}
+
+console.log('4) The data these pages never read is in none of the files they fetch');
+{
+  /* Round 1042. A probe is a short string a data file prints into the chunk that carries it,
+     derived from the source when this runs (scripts/lib/dataProbes.mjs). */
+  const probes = dataProbes(ROOT);
+  const ASSETS = path.join(ROOT, 'dist/assets');
+  const textCache = new Map();
+  const textOf = f => {
+    if (!textCache.has(f)) { let t = ''; try { t = fs.readFileSync(path.join(ASSETS, f), 'utf-8'); } catch { t = ''; } textCache.set(f, t); }
+    return textCache.get(f);
+  };
+  const eraIds = Object.keys(probes.eras);
+  const sets = [['the national team pools', probes.pools, 'pools'], ["Footle's data", probes.footle, 'footle']];
+  for (const id of eraIds) sets.push([`the ${id} nationalities`, probes.eras[id], `nat-${id}`]);
+  for (const id of eraIds) sets.push([`the ${id} squads`, probes.eraSquads[id], `squads-${id}`]);
+
+  /* Not vacuous: every set is somewhere in the build, each past season's in exactly one file and
+     no two seasons' nationalities (or squads) in the same file. Otherwise this cannot tell. */
+  let allFiles = [];
+  try { allFiles = fs.readdirSync(ASSETS).filter(f => f.endsWith('.js')); } catch { allFiles = []; }
+  if (!allFiles.length) fail('section 4 cannot tell: no built files in dist/assets');
+  const home = new Map();
+  for (const [what, list, key] of sets) {
+    const holders = allFiles.filter(f => findProbes(textOf(f), list) > 0);
+    const full = holders.filter(f => findProbes(textOf(f), list) === list.length);
+    home.set(key, holders);
+    if (!holders.length) fail(`section 4 cannot tell: none of the ${list.length} probes for ${what} is in any built file`);
+    else if (key !== 'pools' && key !== 'footle' && (holders.length !== 1 || full.length !== 1)) fail(`section 4 cannot tell: the probes for ${what} are spread over ${holders.length} files (${holders.slice(0, 3).join(', ')}), not all in one`);
+    else if (!full.length) fail(`section 4 cannot tell: no built file holds all ${list.length} probes for ${what}`);
+  }
+  for (const kind of ['nat', 'squads']) {
+    const seen = new Map();
+    for (const id of eraIds) for (const f of home.get(`${kind}-${id}`) ?? []) {
+      if (seen.has(f)) fail(`section 4 cannot tell: ${f} holds the ${kind === 'nat' ? 'nationalities' : 'squads'} of both ${seen.get(f)} and ${id}, so a past season does not arrive by itself`);
+      seen.set(f, id);
+    }
+  }
+
+  /* SWEEP_WEIGHT_CONTROL=planted: three probes appended, in memory, to the largest file that
+     /club-manager fetched and no other route of this section did. */
+  const CONTROL = process.env.SWEEP_WEIGHT_CONTROL ?? '';
+  const ENGINE_ROUTES = ['/club-manager', '/manager-hot-seat', '/deadline-day'];
+  const WATCHED = [...ENGINE_ROUTES, '/transfer-path', '/soccer-career'];
+  if (CONTROL && CONTROL !== 'planted') { console.error(`SWEEP_WEIGHT_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(2); }
+  if (CONTROL === 'planted') {
+    const mine = fetched.get('/club-manager') ?? [];
+    const others = new Set(WATCHED.filter(r => r !== '/club-manager').flatMap(r => fetched.get(r) ?? []));
+    const own = mine.filter(f => !others.has(f)).sort((a, b) => gzSize(path.join(ASSETS, b)) - gzSize(path.join(ASSETS, a)));
+    if (!own.length) { console.error('control planted cannot run: /club-manager fetched no file of its own'); process.exit(2); }
+    const plant = [probes.pools[0], probes.eras.era2010[0], probes.footle[0]];
+    for (const pr of plant) if (textOf(own[0]).includes(pr)) { console.error(`control planted cannot run: ${own[0]} already holds ${pr}`); process.exit(2); }
+    textCache.set(own[0], textOf(own[0]) + '\n' + plant.join('\n'));
+    console.log(`   CONTROL planted: one pools probe, one 2010 nationality probe and one Footle probe appended in memory to ${own[0]}`);
+  }
+
+  const found = [];
+  const mustNotFetch = (route, keys) => {
+    const files = fetched.get(route);
+    if (!files) { fail(`section 4 cannot tell: ${route} was not measured in section 1 (it needs a row in BUDGETS)`); return; }
+    for (const [what, list, key] of sets) {
+      if (!keys(key)) continue;
+      for (const f of files) {
+        const n = findProbes(textOf(f), list);
+        if (n) { found.push({ route, key, file: f }); fail(`${route} fetches ${f}, which holds ${n} of the ${list.length} probes for ${what}: the page downloads data it never reads`); }
+      }
+    }
+  };
+  for (const r of ENGINE_ROUTES) mustNotFetch(r, () => true);
+  mustNotFetch('/transfer-path', key => key !== 'footle');
+  /* The other half: the one page that reads the pools still gets them. The follow up that makes
+     them load with the season there will turn this line around on purpose. */
+  const sc = fetched.get('/soccer-career') ?? [];
+  const scPools = sc.filter(f => findProbes(textOf(f), probes.pools) > 0);
+  if (!scPools.length) fail('/soccer-career fetches no file with the national team pools, and it is the page that reads them: either they moved or the probes cannot see them');
+  console.log(`   ${sets.length} probe sets (${sets.reduce((n, x) => n + x[1].length, 0)} probes) all found in the build; ${ENGINE_ROUTES.length + 1} routes checked, ${found.length} findings; /soccer-career still fetches the pools (${scPools.join(', ') || 'no file'})`);
+
+  if (CONTROL === 'planted') {
+    await browser.close();
+    const mineFound = found.filter(f => f.route === '/club-manager');
+    const ok = found.length === 3 && mineFound.length === 3 && new Set(mineFound.map(f => f.key)).size === 3;
+    console.log(ok ? 'CONTROL planted FIRED: exactly three findings, all for /club-manager, one for each planted probe' : `CONTROL planted DID NOT FIRE as predicted: ${found.length} findings, ${mineFound.length} of them for /club-manager`);
+    process.exit(ok ? 1 : 2);
+  }
 }
 
 await browser.close();
