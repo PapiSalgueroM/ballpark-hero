@@ -179,6 +179,111 @@
      keeps 400 board careers on the default seed; rerun the long form above
      after any change to the board, the summer, the talk or a life B deck.
 
+   ROUND 1051, sections 15 to 20: the legacy recalibration. The legacy score
+   reads a table per CALIBRATION (legacyRead, careerHallOfFame.ts) and a
+   career is judged on the one it retired on: the save that retires it is
+   stamped (hallCal), a retired save with no stamp is calibration 1. Every
+   loop here stamps the career it retires, as the board does, so sections 1
+   to 14 measure the live game (calibration 2).
+     SIM_CAL=1         no loop stamps: every career is read on calibration 1.
+                       The attribution switch: with it every line of the
+                       Round 1039 log comes back exactly (measured 2026-10-07
+                       on e21ea05a, full runs, nfl, nba and mlb: zero
+                       differing lines against the logs of the base commit).
+     SIM_SKIP_BOARD=1  sections 9 to 14 and 20 play no board career. The run
+                       prints BOARD SECTIONS SKIPPED and exits 3 whatever
+                       else happened, so it can never be read as green. The
+                       six seed measuring runs end on that line by design;
+                       runAllSims never sets it.
+     SIM_DUMP_ROWS=f   one row a career (totals, awards, both scores) to f,
+                       the input of scripts/genCareerHallMarks.mjs.
+     15. v1         (a) every save of src/test/fixtures/careerHallV1.json
+                    (recorded by scripts/recordCareerHallV1.mjs on the base's
+                    code, none stamped) reads today the legacy and the Hall
+                    record it was told, whole objects. (b) legacyOf stamped 1
+                    equals the four Round 123 formulas restated here, on
+                    every engine career. (c) the calibration rule, exact.
+                    Controls v1drift (a, b), calflip (a, c).
+     16. neverbelow calibration 2 contains calibration 1 unchanged and only
+                    adds; no career scores lower, loses a verdict tier or
+                    leaves the Hall on 2. Control below.
+     17. standout   (a) the marks, the tripwire for a round that moves an
+                    engine's stats: a cell's share of careers at or over its
+                    from mark, the pooled share at or over from and at or
+                    over to (never a per cell check on to: a count of 0 to
+                    5). (b) the table is the ledger: the half rule both ways,
+                    every mark, the ramp floor, and the anchors' decisions.
+                    (c) among each family's top 5 percent the Hall share on
+                    2 against 1, pooled, and the standout's own part (in on 2
+                    against the same score with the standout taken out).
+                    (d) the score on 2 restated: one family, capped.
+                    Controls markdrift, todrift (a), noramp, catchersteals
+                    (b), nostandout (c red, a green).
+     18. anchors    real career shapes, two sourced, and the ballot the real
+                    Hall gave them (scripts/data/careerHallAnchors.json; its
+                    selection rule was written before any score). Raw and
+                    books readings on 1 and on 2, the engine's ballot by the
+                    majority of 400 keyed copies. Agreement on 2 may not fall
+                    under agreement on 1, and stays within two of the count
+                    recorded in the file. Where it fell, the anchors made the
+                    table smaller (a standout halved, then dropped; a base
+                    halved, then dropped) and the file records each decision
+                    with its counts. A SPORT WHOSE ANCHORS ARE NOT BUILT
+                    ASSERTS NOTHING HERE and says so on its closing line.
+                    Built 2026-10-07: baseball only. Controls standoutbig
+                    (the agreement), anchorwiki (the ledger's shape).
+     19. base, words (a) the base terms are the ledger's and the median
+                    career of a base position earns what was measured. (b)
+                    the Hall share on 2 is at or over 1 and under its
+                    ceiling (never over 45 percent: that is the lead's call).
+                    (c) the two lines of the "?" carry the rule's numbers,
+                    the worked example holds on the engine, and the ballot
+                    card prints the voters' line on calibration 2 only.
+                    Controls nobase (football only now), examplelie,
+                    nocardline.
+     20. boardstamp every career the board loop retires is stamped and scored
+                    on today's calibration (none under SIM_CAL=1).
+
+   BANDS for sections 17 and 19 live in scripts/data/careerHallMarks.json
+   and are computed by scripts/genCareerHallMarks.mjs (its header has the
+   recipe and the rule for each band). Measured 2026-10-07, the default seed
+   and SIM_SEED 1 to 5, 2000 careers a run (2750 in baseball for the marks,
+   the first 2000 of each run for the bands), the board skipped:
+     marks: at least 1,500 pooled careers a position. A cell's share at or
+       over from: nfl 6.4 to 15.2 percent, nba 6.3 to 14.5, mlb 5.0 to 17.0,
+       nhl 7.5 to 13.0 (band: that envelope widened a quarter each side).
+       Pooled at or over from: nfl 9.90 to 10.50, nba 9.41 to 10.41, mlb
+       9.60 to 11.63, nhl 9.42 to 11.06; at or over to: nfl 0.40 to 1.07,
+       nba 0.64 to 1.14, mlb 0.78 to 1.35, nhl 0.63 to 1.33 (bands: the six
+       run range widened by half its width each side).
+     Hall share on 1 and on 2: nfl 19.6 to 21.4 and 25.4 to 27.0, nba 30.3
+       to 32.5 and 32.3 to 34.9, mlb 36.4 to 40.5 and 37.4 to 41.3, nhl 29.3
+       to 31.8 and 30.3 to 33.1. Ceiling: the largest plus the spread (nfl
+       28.5, nba 37.6, nhl 35.9; mlb 45.0, the hard stop).
+     top 5 percent by family, pooled gain 2 over 1: nfl 30.2 to 39.1 points
+       (needs 15.1), nba 19.4 to 28.7 (9.7), mlb 15.0 to 28.0 (7.5), nhl
+       16.3 to 35.0 (8.1). The standout's own part: nfl 11.1 to 19.7 (5.5),
+       nba 12.5 to 17.9 (6.3), mlb 3.6 to 10.0 (1.8), nhl 5.8 to 7.9 (2.9).
+       Each floor is half the smallest of the six.
+     base, median credit: TE 110.5 to 113.3, LB 107.9 to 110.8, CB 107.5 to
+       111.9, EDGE 107.1 to 110.2 (bands: the range widened by half).
+     points paid (the legacy is the finished game's score), median on 1 and
+       on 2: nfl 293 to 314 and 348 to 372, nba 348 to 362 and 356 to 368,
+       mlb 420 to 434 and 424 to 436, nhl 356 to 372 and 360 to 375.
+     anchors, baseball, in or out and exact, calibration 1 > 2: raw 9 > 9
+       and 6 > 6 of 9, books 4 > 4 and 3 > 3 of 4, after three decisions (a
+       left fielder's steals halved; the reliever's saves standout and his
+       base dropped). Before them: raw 9 > 7 and 6 > 4, books 8 > 6, 5 > 3.
+   Controls of sections 15 to 19, run 2026-10-07 with the board skipped
+   (which is enough: none of them reads a board career): on 109b6ce8 all
+   four sports FIRED on v1drift, calflip, below, markdrift, todrift, noramp
+   and catchersteals, and football and baseball on nobase (basketball and
+   hockey have no base and refuse). nostandout fired everywhere but in
+   football, where the base alone kept the pooled gain up; the standout's
+   own part was added for that and is what it now turns red.
+   A control that refuses to run (its string is not in the source) exits 2,
+   never the 1 that means FIRED.
+
    A control run exits 1 only when the check it targets is red (FIRED), and 0
    when it is not (DID NOT FIRE), whatever else went red.
 
