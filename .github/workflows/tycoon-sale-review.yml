@@ -177,6 +177,7 @@ jobs:
           import assert from 'node:assert/strict';
           import fs from 'node:fs';
           import { spawnSync } from 'node:child_process';
+          import { stripVTControlCharacters } from 'node:util';
           const run = spawnSync(process.execPath, ['scripts/simTycoonSetPiecePage.mjs'], {
             env: { ...process.env, SETPIECE_PAGE_CONTROL: 'rep' }, encoding: 'utf8', timeout: 180000, maxBuffer: 12 * 1024 * 1024,
           });
@@ -187,7 +188,7 @@ jobs:
           assert.equal(run.status, 1, 'The original rep control deliberately exits one after proving its intended failure');
           const proof = 'CONTROL PROVED rep: 6 selling up expires the queued board even while the career match count stays the same';
           assert.equal(output.split(proof).length - 1, 1);
-          assert.match(output, /expect\(element\)\.toBeDisabled\(\)/);
+          assert.match(stripVTControlCharacters(output), /expect\(element\)\.toBeDisabled\(\)/);
           assert.doesNotMatch(output, /Startup Error|TypeError|ReferenceError|SyntaxError|Unhandled|timed out|Transform failed|Cannot find module|SIM_OFFLINE_BLOCK/);
           console.log('Original queued-sale defect rejected by the unchanged disabled-kick assertion.');
           NODE

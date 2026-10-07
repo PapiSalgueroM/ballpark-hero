@@ -210,7 +210,7 @@ async function openPage(profile, fixture, row, arm) {
   page.on('pageerror', error => evidence.errors.push(String(error)));
   page.on('console', message => { const text = message.text(); if (text.startsWith('SALE_NATIVE_WRITE ')) evidence.writeEvents.push(JSON.parse(text.slice(18))); else if (text.startsWith('SALE_NATIVE_HIDE ')) evidence.pagehideEvents.push(JSON.parse(text.slice(17))); else if (message.type() === 'error') evidence.consoleErrors.push(text); });
   page.on('response', response => { if (response.url().startsWith(BASE) && response.status() >= 400) evidence.errors.push(`Local response ${response.status()}: ${response.url()}`); });
-  await page.clock.install({ time: NOW }); await page.clock.pauseAt(START);
+  await page.clock.pauseAt(START);
   await page.goto(`${BASE}/stadium-tycoon`, { waitUntil: 'networkidle' }); await page.locator('[data-sell-up]').waitFor();
   evidence.fonts = await page.evaluate(async () => { await document.fonts.ready; const out = []; for (const family of ['Inter', 'Space Grotesk']) for (const weight of [400, 500, 600, 700]) { const faces = await document.fonts.load(`${weight} 16px "${family}"`, 'Sell up review'); out.push({ family, weight, faces: faces.map(face => ({ family: face.family, status: face.status })) }); } return out; });
   assert(evidence.fonts.every(row => row.faces.length && row.faces.every(face => face.status === 'loaded' && face.family.replaceAll('"', '') === row.family)), 'All eight actual font faces loaded');
@@ -218,7 +218,9 @@ async function openPage(profile, fixture, row, arm) {
     const raf = window.requestAnimationFrame;
     window.requestAnimationFrame = callback => raf.call(window, time => { window.__saleNative.frames++; callback(time); });
   });
-  assert.equal(await page.evaluate(() => Date.now()), START, 'Initial load does not advance the controlled clock');
+  evidence.clockSetup = await page.evaluate(() => ({ now: Date.now(), performance: performance.now(), visibility: document.visibilityState }));
+  assert.equal(evidence.clockSetup.now, START, 'Initial load does not advance the controlled clock');
+  assert.equal(evidence.clockSetup.performance, 0, 'The single paused clock command starts both monotonic clocks at zero');
   return { page, context, evidence };
 }
 try {

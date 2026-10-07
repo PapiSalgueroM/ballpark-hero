@@ -1,3 +1,24 @@
+## Codex1083 PREPARATION3, October7,12:45 EDT: unchanged product
+
+Preparation2 db4f52c3/treedbb11b79 run37649544656 finished failed.
+Retained full556file artifact11497182954, ZIP SHA
+23ed752da2df34f730a0935f88f7cbfcfd07504b73424f04625dd346acf8b995.
+Actual12 cases/22 copied faults, ticket20/23,15 original game gates and11
+load controls passed.19 readers passed; anchor reader conservatively linked
+raw binary hash reads to multiline control anchors. Exact original rep
+fault produced its intended disabled-kick failure and exit1; color escapes
+made only the new wrapper's literal matcher red. Native paired monotonic
+clock257 versus258ms failed before review. No native/READY/live acceptance.
+
+Next remote trial leaves product, original fixtures/assertions, controls,
+font/browser inputs and strict state/save/clock/geometry assertions held.
+Use one paused native clock command and assert both initial monotonic clocks
+are exactly0; retain raw logs but strip terminal escapes for the same exact
+original failure matcher; keep unchanged raw-byte hash computation inside
+local digest blocks so the source-anchor fence can identify its actual fate.
+Parent READY1080 PR168 is still a stacked integration dependency. Source,
+data, installed dependency and transport holds remain mandatory.
+
 Codex1083 PREPARATION2, October7,12:06 EDT: verifier corrections.
 First run37643274441 atfa6cceabc failed and all220files retained externally.
 ESM config resolution/CRLF source normalization corrected,raw hashes held;
