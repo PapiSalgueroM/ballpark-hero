@@ -1,3 +1,19 @@
+## Rounds 1070 and 1071 prepared, final verification pending
+
+2026-10-06. Free Kick Shot lab and saved MMA Bout recaps share one release.
+Remote preparation run 37550034776 passed on b421d0b7. It generated the
+three touched pages, sitemap, lastmod ledger and search keywords. The
+artifact ZIP digest is fd8b69eb71303fc4e086c981cd46c370fcad4b00f5f30c786c827d4ff75e2e3e.
+Final Free Kick, MMA, Cage and entry-guide workflows must all pass on the
+PR merge tree before release. Preparation is not final acceptance or LIVE.
+
+Claude's Round 1040 workboard claim on f492d78b is preserved. The Free Kick
+paragraph and MMA paragraph are the only game-guide additions in this
+release. Existing engines, saves and scoring are unchanged. No local app
+runtime, production DB calls, public scored games or root draft changes.
+AH retains main/publish until a narrow coordinated release claim. Next
+free round 1072 remains unclaimed.
+
 ## Rounds 1070 and 1071 preparing one release
 
 2026-10-06. Codex combines Free Kick Shot lab and saved MMA bout recaps
