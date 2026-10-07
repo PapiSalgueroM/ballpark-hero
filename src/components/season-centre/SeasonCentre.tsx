@@ -449,7 +449,7 @@ export function SeasonCentre({ model, exitLabel, onClose }: { model: CentreModel
               : <p className="text-xs text-muted-foreground">{model.resultsWhy}</p>}
             <div className="mt-3 rounded-lg bg-muted/30 p-2 text-xs" data-so-far-desktop>
               <div className="mb-1 font-bold">League so far</div>
-              {soTiles.map(([label, value]) => `${value} ${label.toLowerCase()}`).join(' · ')}
+              {soTiles.filter(([, value]) => value !== '-').map(([label, value]) => `${value} ${label.toLowerCase()}`).join(' · ')}
             </div>
           </aside>
         </div>

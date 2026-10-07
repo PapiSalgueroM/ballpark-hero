@@ -52,7 +52,8 @@
  * 0.1) must be at least 0.8, and a fifth with five or more of them must have
  * a mean within 0.45 of the table's. Measured over five seed sets (SEEDSET 0
  * to 4, 2026-10-07): inside 34 of 35, 34 of 35, 25 of 27, 37 of 41, 23 of
- * 24 (min 0.90); fifth mean gaps at most 0.17 (the standard error of a five
+ * 24 (min 0.90; 24 of 27 on seed set 2 after Round 1041 merged); fifth mean
+ * gaps at most 0.17 (the standard error of a five
  * season mean is about 0.13). Control ladder: 14 of 35 inside, mean gaps
  * 0.52, 0.71 and 0.90 in fifths 2 to 4 (seed set 0), exit 1.
  *   selfcheck   the goals defect with the self check ON: the self check must
