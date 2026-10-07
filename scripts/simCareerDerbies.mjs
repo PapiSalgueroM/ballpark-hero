@@ -430,9 +430,15 @@ console.log('2) Club Manager reads exactly what it read before the lift');
      c9b27c674c4b, exactly; the merged tree adds the twelve A-League clubs
      (each board naming its nearestRival pick, none hand mapped) and changes
      none of the 368 others; the lead's F10 call (Central Coast Mariners
-     partial) moves nothing. RIVALS_HASH did not move. */
+     partial) moves nothing. RIVALS_HASH did not move.
+     BOARD_HASH re-taken at Release AI (2026-10-07), for Round 1040's Serie B,
+     Ligue 2 and Segunda: the board now covers 438 clubs. Attribution, full
+     snapshots dumped in throwaway copies of --record: origin/main 2fff5e04
+     gives the Release AH hash, fcc9f161da14, over 380 clubs; the merged tree
+     adds exactly 58 clubs, the three second tiers, and changes and drops none
+     of the 380. RIVALS_HASH did not move. */
   const RIVALS_HASH = '565e14623c2fe3607eec8864303d001fce77c4308c1a408c6c49114ea9b679d6';
-  const BOARD_HASH = 'fcc9f161da14271127aa08be03723f69f004bd9b5f579659e35642cf84790096';
+  const BOARD_HASH = 'c37dbeb1ca09ccdfe49770579b3f8cbe0b2bf4ab7a61e72c558092cae0a08230';
   const h = sha(sortedJson(data.PRIMARY_RIVAL));
   const snap = boardSnapshot();
   const b = sha(sortedJson(snap));
