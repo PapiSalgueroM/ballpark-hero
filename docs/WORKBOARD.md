@@ -1,3 +1,27 @@
+## Codex1083 PREPARATION5, October7,13:41 EDT: observe settled controls
+
+Preparation4 HEAD25ac9f9c3189372100255dea72a5f762efff286d,
+treee784517730eb4ad9aa5fad57a01f8fd31261fb8c, run37657592399.
+Both320px first/late-ground journeys completed, including actual trusted
+pagehide and later successful exact sold-save writes in source document1,
+then a distinct document2. Five restored DOM faults passed. Early29entry
+artifact11500051412 retained, ZIP SHA
+f869a93522535861a26abacd78791739056f6e8b61368b16b65ab26970e85f86.
+Native now fails390px animated controls at unchanged44px minimum. The
+failed measurement was not retained, so exact dimensions and animation
+causation remain unproven. No full native/READY/live acceptance.
+
+Next driver-only correction retains pre/post pane/button geometry and finite
+pane-subtree animation state. Await only natural finished promises, with a
+remote-side5s timeout. No forced animation completion/cancellation, extra
+browser input or simulated game-clock advance. Require exact full snapshots
+before/after the wait, including state/storage/RNG/clock/RAF/input/journal.
+Keep existing44px/12px/1px geometry, original controls and all gameplay/save/
+loader/departure comparisons unchanged. Driver SHA
+f4ddf972a146e483bfd3ce893a4c04eeb5a3b6f989d7bce923b726bce58f49db,
+independently peer reviewed. Reverse bytes reproduce prior41c7f5c2 exactly.
+Product/engines/data unchanged. Parent READY1080 PR168 remains required.
+The current original-gate run must finish before the next push.
 ## Codex1083 PREPARATION4, October7,13:16 EDT: durable departure evidence
 
 Preparation3 HEAD437612174a214489939cac07f50b9e66113ffae3, treeebde5445,

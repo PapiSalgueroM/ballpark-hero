@@ -139,7 +139,7 @@ function checkTerms(value, state) {
   for (const phrase of ["This ground's earnings reset to 0", `Fans return to ${T.newTycoon(0).fanbase}`, 'Ground upgrades and staff start at level 0', T.DIVISIONS[0].name, 'current match, table, win streak and temporary boosts reset', 'Ticket offer returns to Standard']) assert(value.resets.text.includes(phrase), `Actual reset disclosure: ${phrase}`);
   for (const phrase of ['club name, reputation, legacy points and perks', 'badges, league titles and career records', 'Academy players, first team, gems and gear stay as they are']) assert(value.keeps.text.includes(phrase), `Actual retention disclosure: ${phrase}`);
 }
-async function geometry(page) {
+async function readGeometry(page) {
   return pane(page).evaluate(node => {
     const box = el => { const r = el.getBoundingClientRect(); return { x: r.x, y: r.y, right: r.right, bottom: r.bottom, width: r.width, height: r.height }; };
     const text = el => ({ ...box(el), text: el.textContent, font: parseFloat(getComputedStyle(el).fontSize), scroll: el.scrollWidth, client: el.clientWidth });
@@ -147,6 +147,41 @@ async function geometry(page) {
       buttons: [...node.querySelectorAll('button')].map(el => { const r = el.getBoundingClientRect(), hit = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2); return { ...text(el), name: el.getAttribute('aria-label') || el.textContent, hit: hit === el || el.contains(hit) }; }),
       text: [...node.querySelectorAll('p,dt,dd')].map(text), critical: [...node.querySelectorAll('[data-sale-award],[data-sale-starting-cash],[data-sale-rep-next],[data-sale-save-error]')].map(text) };
   });
+}
+async function geometry(page) {
+  const row = report.cases.at(-1);
+  row.geometry ??= [];
+  const observation = { index: row.geometry.length, snapshotBefore: await snapshot(page), before: await readGeometry(page) };
+  row.geometry.push(observation); save();
+  const animations = await pane(page).evaluateHandle(node => node.getAnimations({ subtree: true }).filter(animation => Number.isFinite(animation.effect?.getComputedTiming().endTime)));
+  let deadline;
+  try {
+    observation.animations = await animations.evaluate(list => list.map(animation => {
+      const timing = animation.effect.getComputedTiming(), target = animation.effect.target;
+      return { type: animation.constructor.name, name: animation.animationName ?? animation.transitionProperty ?? '', playState: animation.playState, pending: animation.pending,
+        currentTime: animation.currentTime, startTime: animation.startTime, playbackRate: animation.playbackRate,
+        timing: { duration: timing.duration, delay: timing.delay, endDelay: timing.endDelay, iterations: timing.iterations, endTime: timing.endTime, progress: timing.progress },
+        target: target?.tagName, transform: target ? getComputedStyle(target).transform : null };
+    }));
+    save();
+    observation.finished = await Promise.race([
+      animations.evaluate(list => Promise.all(list.map(async animation => {
+        try { await animation.finished; return { status: 'fulfilled', playState: animation.playState, currentTime: animation.currentTime }; }
+        catch (error) { return { status: 'rejected', name: error.name, message: error.message, playState: animation.playState, currentTime: animation.currentTime }; }
+      }))),
+      new Promise((_, reject) => { deadline = setTimeout(() => reject(new Error('Finite sale animation did not finish naturally within 5000ms')), 5000); }),
+    ]);
+    observation.after = await readGeometry(page);
+    observation.snapshotAfter = await snapshot(page); save();
+    assert.deepEqual(observation.snapshotAfter, observation.snapshotBefore, 'Waiting for sale animations preserves the full game clock, state, storage, RNG, RAF, input and lifecycle snapshot');
+    assert(observation.finished.every(animation => animation.status === 'fulfilled' && animation.playState === 'finished'), 'Finite sale animations finish naturally without cancellation');
+    return observation.after;
+  } catch (error) {
+    observation.error = { name: error.name, message: error.message };
+    observation.after ??= await readGeometry(page);
+    observation.snapshotAfter ??= await snapshot(page); save();
+    throw error;
+  } finally { clearTimeout(deadline); await animations.dispose(); }
 }
 function checkGeometry(value) {
   const visible = r => r.x >= -1 && r.right <= value.viewport.width + 1 && r.y >= -1 && r.bottom <= value.viewport.height + 1;
