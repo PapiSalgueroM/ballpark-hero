@@ -190,6 +190,24 @@ describe.each(SPORTS)('%s: the retirement talk on the board', (_slug, getSport) 
     expect(document.body.textContent).toContain('Farewell season');
   });
 
+  it('a farewell season on the last year of the deal opens no extension talk (review fix)', async () => {
+    const sport = getSport();
+    const { c, tq } = talkCareer(sport, 45);
+    c.contractYears = 1;
+    save(sport, c, tq, 'season');
+    mount(sport);
+    await waitFor(() => expect(button('Announce a farewell season')).toBeTruthy());
+    fireEvent.click(button('Announce a farewell season')!);
+    await waitFor(() => expect(document.body.textContent).toContain(`Farewell season, ${c.year}`));
+    const salary = read(sport).c.salary;
+    fireEvent.click(button(`Play the ${c.year} season`)!);
+    const after = read(sport);
+    expect(after.phase, 'the season is played, not an extension talk').toBe('retired');
+    expect(lastYear(after.c)).toBe(lastYear(c) + 1);
+    expect(after.c.salary, 'the last year is paid at his own deal').toBe(salary);
+    expect(document.body.textContent).not.toContain('reach free agency');
+  });
+
   it('Retire now in the middle of an offseason drops the dealt card unapplied', async () => {
     const sport = getSport();
     const { c, tq } = talkCareer(sport, 51);

@@ -456,7 +456,11 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     /* Round 207: the last year of a deal is a decision, not just another
        season. Offered before the season is played, because that is when a
        club and a player actually have this conversation. */
-    if (extensionDue(c) && !extDeclinedRef.current) {
+    /* Round 1039: never in an announced farewell season. That season ends
+       the career, so the card's "play the year out and reach free agency" is
+       false, and signing would pay the last year at a rate for years that
+       never come (MLB's deck farewell leaves exactly one year on the deal). */
+    if (extensionDue(c) && !isFarewellSeason(c.retirement, c.year) && !extDeclinedRef.current) {
       setExtTalk(sport.buildExtension(c, Math.random));
       /* Persisted as 'season' on purpose: a reload puts you back on the hub
          with the season still unplayed, and Play opens a fresh talk. */
