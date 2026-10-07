@@ -21,6 +21,7 @@ import ExtensionCard from '@/components/us-career/ExtensionCard';
 // Round 186: the season curtain, shared engine and shared card.
 import { buildSeasonReveal, draftPressureLine, type SeasonReveal } from '@/lib/usCareerReveal';
 import { SeasonRevealCard } from '@/components/us-career/SeasonRevealCard';
+import { UsSeasonCentreEntry } from '@/components/us-career/season/UsSeasonCentreEntry';
 /* Round 530: draft day as a moment, and the retirement card on the same
    celebration kit the season curtain uses. */
 import DraftDayCard, { type DraftDayFacts } from '@/components/us-career/DraftDayCard';
@@ -1391,6 +1392,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
           >
             <Dumbbell className="h-4 w-4" /> Play the {career.year} season
           </button>
+          <UsSeasonCentreEntry sport={sport} career={career} busy={practiceOpen} onPlay={playSeason} />
           <p className="mt-2 text-xs text-muted-foreground">
             Career so far: {sport.careerSoFar(career)}
           </p>

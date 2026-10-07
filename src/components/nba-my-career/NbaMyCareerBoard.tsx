@@ -8,6 +8,9 @@
    (usCareerToCoach.ts), as it did before Round 900. */
 import UsCareerBoard from '@/components/us-career/UsCareerBoard';
 import { NBA_CAREER_SPORT } from '@/lib/nbaCareerSport';
+/* Round 1048: the host owns the Season Center's overlay, because the board
+   shows only the season curtain once a season is played. */
+import { UsSeasonCentreHost } from '@/components/us-career/season/UsSeasonCentreHost';
 
 /* Round 530 review: one number for round one, used by the pressure line and
    by the card's confetti rule, so the card and the line under it can never
@@ -15,5 +18,5 @@ import { NBA_CAREER_SPORT } from '@/lib/nbaCareerSport';
 export const FIRST_ROUND_END = NBA_CAREER_SPORT.firstRoundEnd;
 
 export default function NbaMyCareerBoard() {
-  return <UsCareerBoard sport={NBA_CAREER_SPORT} />;
+  return <UsSeasonCentreHost sport={NBA_CAREER_SPORT}><UsCareerBoard sport={NBA_CAREER_SPORT} /></UsSeasonCentreHost>;
 }
