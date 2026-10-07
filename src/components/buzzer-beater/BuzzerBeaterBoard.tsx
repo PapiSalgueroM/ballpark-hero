@@ -78,6 +78,7 @@ export default function BuzzerBeaterBoard() {
   const [charging, setCharging] = useState(false);
   const chargingRef = useRef(false);
   const heldPointerRef = useRef<{ id: number; target: Element } | null>(null);
+  const nextShotPointerRef = useRef(false);
 
   const clearPointerHold = useCallback(() => {
     const held = heldPointerRef.current;
@@ -147,6 +148,7 @@ export default function BuzzerBeaterBoard() {
 
   const start = useCallback((m: Mode) => {
     clearPointerHold();
+    nextShotPointerRef.current = false;
     setPracticeHelp(false);
     aimingRef.current = false;
     setContestOutcomes([]);
@@ -255,6 +257,7 @@ export default function BuzzerBeaterBoard() {
   };
 
   const nextShot = useCallback(() => {
+    nextShotPointerRef.current = false;
     aimingRef.current = false;
     resetFlight();
     if (shotIdx + 1 >= rounds) { setPhase('done'); return; }
@@ -658,7 +661,16 @@ export default function BuzzerBeaterBoard() {
               ? `, so you had ${Math.round(result.depthWindow * 100)} cm of room short or long.`
               : ', which is too flat for the ball to fit through at all.'}</>}
           </p>}>
-          <Button ref={mode === 'practice' || mode === 'contest' ? practiceActionRef : undefined} className={cn('mt-3 gap-2', (mode === 'practice' || mode === 'contest') && 'min-h-[44px]')} onClick={nextShot} onKeyDown={practiceKeyDown}>
+          <Button ref={mode === 'practice' || mode === 'contest' ? practiceActionRef : undefined} className={cn('mt-3 gap-2', (mode === 'practice' || mode === 'contest') && 'min-h-[44px]')}
+            onPointerDown={event => { nextShotPointerRef.current = event.button === 0 && event.isPrimary !== false; }}
+            onPointerCancel={() => { nextShotPointerRef.current = false; }}
+            onClick={event => {
+              // A released touch can retarget its click to this new button.
+              const pressed = nextShotPointerRef.current;
+              nextShotPointerRef.current = false;
+              if (event.detail !== 0 && !pressed) return;
+              nextShot();
+            }} onKeyDown={practiceKeyDown}>
             {shotIdx + 1 >= rounds ? 'See the run' : 'Next shot'}
           </Button>
         </ArcadeShotFeedback>

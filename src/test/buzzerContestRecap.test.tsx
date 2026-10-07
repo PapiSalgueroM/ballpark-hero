@@ -109,10 +109,10 @@ function contestPlan() {
   planned = plan;
   return plan;
 }
-function releaseContest(shot: PlannedShot) {
+function releaseContest(shot: PlannedShot, pointerType: 'mouse' | 'touch' = 'mouse') {
   fireEvent.change(screen.getByRole('slider', { name: 'How high to put the arc on the shot' }), { target: { value: shot.release.arc } });
   fireEvent.change(screen.getByRole('slider', { name: 'How far to fade off the closeout' }), { target: { value: shot.release.x } });
-  const hold = button('Hold to shoot'); fireEvent.pointerDown(hold); advance(shot.ticks * 16); fireEvent.pointerUp(hold);
+  const hold = button('Hold to shoot'); fireEvent.pointerDown(hold, { pointerType }); advance(shot.ticks * 16); fireEvent.pointerUp(hold, { pointerType });
   expect(actualShot()).toEqual(shot.result);
 }
 function expectBall(marker: Element, ball: number, made: boolean) {
@@ -236,6 +236,35 @@ describe('Buzzer contest recap', () => {
       fireEvent.click(button('Next shot'));
     }
     expect(markers(view).map(marker => marker.getAttribute('data-ball-status'))).toEqual(['current', 'upcoming', 'upcoming', 'upcoming', 'upcoming']);
+  });
+
+  it('keeps a released touch from also advancing the freshly shown result', () => {
+    reducedMotion(); const view = startContest(), plan = contestPlan();
+    releaseContest(plan[0], 'touch'); state(view, 'shotEnd');
+    const points = view.container.querySelector('[data-contest-score]')!.textContent;
+    const next = button('Next shot');
+    fireEvent.click(next, { detail: 1 });
+    state(view, 'shotEnd');
+    expect(view.container.querySelector('[data-contest-ball]')).toHaveAttribute('data-contest-ball', '1');
+    expect(view.container.querySelector('[data-contest-score]')).toHaveTextContent(points!);
+    expectBall(markers(view)[0], 0, plan[0].result.made);
+
+    fireEvent.pointerDown(next, { pointerId: 10, pointerType: 'touch' });
+    fireEvent.pointerCancel(next, { pointerId: 10, pointerType: 'touch' });
+    fireEvent.click(next, { detail: 1 });
+    state(view, 'shotEnd');
+    fireEvent.pointerDown(next, { pointerId: 11, pointerType: 'touch' });
+    fireEvent.pointerUp(next, { pointerId: 11, pointerType: 'touch' });
+    fireEvent.click(next, { detail: 1 });
+    state(view, 'aiming');
+    expect(view.container.querySelector('[data-contest-ball]')).toHaveAttribute('data-contest-ball', '2');
+
+    releaseContest(plan[1], 'touch'); state(view, 'shotEnd');
+    fireEvent.click(button('Next shot'), { detail: 1 });
+    state(view, 'shotEnd');
+    fireEvent.click(button('Next shot'), { detail: 0 });
+    state(view, 'aiming');
+    expect(view.container.querySelector('[data-contest-ball]')).toHaveAttribute('data-contest-ball', '3');
   });
 
   it('does not invent a rim crossing for an actual blocked practice shot', () => {

@@ -18,6 +18,7 @@ const racks = 'revisits every actual rack with distinct outcomes and exact money
 const replay = 'clears all earned balls and rack selection when another contest starts';
 const local = 'keeps contest results local across restored daily exit and reentry';
 const reduced = 'settles reduced motion once and keeps missed money balls distinct from unused balls';
+const touchRelease = 'keeps a released touch from also advancing the freshly shown result';
 const blocked = 'does not invent a rim crossing for an actual blocked practice shot';
 const low = 'does not invent a rim crossing for a shot that never reaches rim height';
 const independent = 'preserves original recorded daily and unlimited engine outcomes independently';
@@ -42,7 +43,9 @@ const controls = {
   lowLanding: { file: board, from: '(result && !result.blocked && result.entryDeg > 0)', to: '(result && !result.blocked)', test: low },
   blockedWindow: { file: board, from: 'result.depthWindow > 0 && !result.blocked && result.entryDeg > 0', to: 'result.depthWindow > 0 && result.entryDeg > 0', test: blocked },
   flying: { file: board, from: "flying={phase === 'flying'}", to: 'flying={false}', test: settled },
+  releaseClick: { file: board, from: 'if (event.detail !== 0 && !pressed) return;', to: 'void pressed;', test: touchRelease },
 };
+const outcomeCount = 9;
 const control = process.env.BUZZER_CONTEST_RECAP_CONTROL || '';
 assert.ok(!control || control === 'all' || control in controls, 'Known contest recap control');
 const evidence = path.resolve(process.env.BUZZER_CONTEST_RECAP_ARTIFACTS || path.join(root, 'buzzer-contest-recap-artifacts/mounted'));
@@ -62,7 +65,7 @@ if (control === 'all') {
   }
   await writeFile(path.join(evidence, 'summary.json'), JSON.stringify(results, null, 2));
   assert.ok(results.every(result => result.passed), 'Every normal and control gate passes; all were attempted');
-  console.log(`simBuzzerContestRecap all: eight actual Board outcomes and ${Object.keys(controls).length} effective copied faults pass; every fault preserves one independent recorded-mode baseline.`);
+  console.log(`simBuzzerContestRecap all: ${outcomeCount} actual Board outcomes and ${Object.keys(controls).length} effective copied faults pass; every fault preserves one independent recorded-mode baseline.`);
   process.exit(0);
 }
 
@@ -105,18 +108,18 @@ try {
   assert.doesNotMatch(output, /Unhandled (?:Error|Rejection)|Test timed out|Timeout calling|Failed to (?:resolve import|load)|Cannot find module|No test files found|SyntaxError|Transform failed/, 'Runtime faults earn no control credit');
   const report = JSON.parse(await readFile(reportFile, 'utf8'));
   const rows = report.testResults.flatMap(file => file.assertionResults);
-  assert.equal(rows.length, 8); assert.equal(Number(report.numUnhandledErrors ?? 0), 0);
+  assert.equal(rows.length, outcomeCount); assert.equal(Number(report.numUnhandledErrors ?? 0), 0);
   if (control) {
-    assert.equal(run.status, 1); assert.equal(report.numFailedTests, 1); assert.equal(report.numPassedTests, 1); assert.equal(report.numPendingTests, 6);
+    assert.equal(run.status, 1); assert.equal(report.numFailedTests, 1); assert.equal(report.numPassedTests, 1); assert.equal(report.numPendingTests, outcomeCount - 2);
     const intended = rows.filter(row => row.title === controls[control].test);
     assert.equal(intended.length, 1); assert.equal(intended[0].status, 'failed');
     const failure = intended[0].failureMessages.join('\n').replace(/\x1b\[[0-9;]*m/g, '');
     assert.match(failure, /AssertionError:|Error: expect\(element\)/, 'A named outcome assertion rejects the copied fault');
     assert.equal(rows.find(row => row.title === independent)?.status, 'passed', 'Untouched original recorded-mode baseline passes');
-    console.log(`simBuzzerContestRecap ${control}: one mapped outcome rejected the effective copied fault; one original-mode baseline passed and six cases were intentionally skipped.`);
+    console.log(`simBuzzerContestRecap ${control}: one mapped outcome rejected the effective copied fault; one original-mode baseline passed and ${outcomeCount - 2} cases were intentionally skipped.`);
   } else {
-    assert.equal(run.status, 0); assert.equal(report.numPassedTests, 8); assert.equal(report.numFailedTests, 0); assert.equal(report.numPendingTests, 0);
-    console.log('simBuzzerContestRecap: eight real Board outcomes pass for settled25-shot racks, both money-ball results, replay, local-only records, actual stopped shots and original recorded modes.');
+    assert.equal(run.status, 0); assert.equal(report.numPassedTests, outcomeCount); assert.equal(report.numFailedTests, 0); assert.equal(report.numPendingTests, 0);
+    console.log(`simBuzzerContestRecap: ${outcomeCount} real Board outcomes pass for settled25-shot racks, both money-ball results, replay, local-only records, touch release, actual stopped shots and original recorded modes.`);
   }
 } finally {
   if (copy) await rm(copy, { force: true });
