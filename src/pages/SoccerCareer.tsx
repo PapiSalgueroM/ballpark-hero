@@ -96,6 +96,8 @@ import { AwardsNightCard, SpeechChoices, SpokenSpeech } from "@/components/caree
 import { availableSpeeches, givenSpeechOf } from "@/lib/careerAwardsNight";
 import { CelebrationStyles, revealDelay } from "@/components/club-manager/Celebration";
 import { SignedSlip } from "@/components/soccer-career/SignedSlip";
+import { SoccerOfferReview } from "@/components/soccer-career/SoccerOfferReview";
+import { buildSoccerOfferReview } from "@/lib/soccerOfferReview";
 import type { SignedNote } from "@/components/soccer-career/SignedSlip";
 import { AcademyFocusPicker, AcademyReportCard } from "@/components/soccer-career/AcademyReportCard";
 import { buildAcademyReport, academyFocusOf, withAcademyFocus } from "@/lib/soccerCareerAcademy";
@@ -571,9 +573,10 @@ function loanLeagueLine(club: ClubData, career: CareerState): string {
   return line ? `${line} · ` : "";
 }
 
-function OfferCard({ offer, onAccept, actionLabel, career }: { offer: ContractOffer; onAccept: () => void; actionLabel?: string; career?: CareerState }) {
+function OfferCard({ offer, onAccept, career }: { offer: ContractOffer; onAccept: () => void; actionLabel?: string; career: CareerState }) {
   /* Round 1037: the league the club is in the season this contract starts */
-  const leagueLine = career ? leagueSeasonLine(offer.club, nextSeasonYear(career)) : null;
+  const leagueLine = leagueSeasonLine(offer.club, nextSeasonYear(career));
+  const review = buildSoccerOfferReview(career, offer);
   return (
     <div className="bg-card border border-border rounded-xl p-4 space-y-3">
       <div className="flex items-center gap-3">
@@ -589,16 +592,14 @@ function OfferCard({ offer, onAccept, actionLabel, career }: { offer: ContractOf
       </div>
       <div className="flex items-center gap-3 text-xs text-muted-foreground flex-wrap">
         <span>📋 {offer.contractYears}yr</span>
-        <span>💰 {formatWage(offer.wage)}</span>
+        <span>💰 {formatWage(review.signedWage)}</span>
         {offer.transferFee > 0 && <span>🏷️ {money(`€${offer.transferFee.toFixed(1)}M`)} fee</span>}
         {offer.transferFee === 0 && offer.contractYears > 0 && <span className="text-emerald-400 font-semibold">Free transfer</span>}
         <span className="text-[10px] px-1.5 py-0.5 rounded bg-muted/40">Tier {offer.club.tier}</span>
       </div>
-      {offer.isPayCut && <div className="text-[11px] text-amber-400">⚠️ Lower wages, but it's a dream move</div>}
+      {review.wageDelta !== null && review.wageDelta < 0 && <div className="text-xs text-amber-400">Lower weekly wage than your current deal</div>}
       {career && <OfferFitLine offer={offer} career={career} />}
-      <Button onClick={onAccept} className="w-full h-9 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-black">
-        {actionLabel || "Sign Contract ✍️"}
-      </Button>
+      <SoccerOfferReview club={offer.club.name} review={review} onAccept={onAccept} />
     </div>
   );
 }
@@ -2406,12 +2407,12 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
             <span className="text-sm font-bold">⭐ Dream Club Interest!</span>
             <p className="text-xs text-muted-foreground mt-1">A top club wants you, but they're offering below market value</p>
           </div>
-          <OfferCard offer={situation.offer} onAccept={() => onAcceptOffer(situation.offer)} actionLabel="Accept pay cut for dream move ⭐" career={career} />
-          <div className="flex gap-2">
-            <Button variant="outline" onClick={onStay} className="flex-1 h-9 text-sm">
-              Stay for better money 💰
+          <OfferCard offer={situation.offer} onAccept={() => onAcceptOffer(situation.offer)} actionLabel="Sign for your dream club ⭐" career={career} />
+          <div className="grid grid-cols-2 gap-2">
+            <Button variant="outline" onClick={onStay} className="min-w-0 min-h-11 h-auto whitespace-normal px-2 py-2 text-sm">
+              Stay at your club
             </Button>
-            <Button variant="outline" onClick={onRequestTransfer} className="flex-1 h-9 text-sm">
+            <Button variant="outline" onClick={onRequestTransfer} className="min-w-0 min-h-11 h-auto whitespace-normal px-2 py-2 text-sm">
               Wait for better offer 🔍
             </Button>
           </div>
