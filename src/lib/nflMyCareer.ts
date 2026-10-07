@@ -1053,7 +1053,80 @@ const NFL_LEGACY_V1: LegacyWeights = {
     '*': { terms: [] },
   },
 };
-export const NFL_LEGACY_WEIGHTS: Record<HallCalibration, LegacyWeights> = { 1: NFL_LEGACY_V1, 2: NFL_LEGACY_V1 };
+/* Calibration 2 (Round 1051). It contains calibration 1 unchanged (the same
+   awards, the same season weight, each position's old terms first and in
+   order) and only adds, so no career scores lower on it. What it adds:
+   a base where calibration 1 read nothing, and the standout: a career total
+   near the top of this game's books for the position, in any family on the
+   list, earns credit of its own (legacyRead; only the best family counts).
+   Every from and to mark, the list itself (the half rule) and the measured
+   base terms come from scripts/data/careerHallMarks.json, which
+   scripts/genCareerHallMarks.mjs derives from measured careers; section 17 of
+   scripts/simCareerHall.mjs fails if this table and that ledger disagree. */
+const NFL_LEGACY_V2: LegacyWeights = {
+  awards: { rings: 80, mvps: 230, allPros: 150 },
+  season: 11,
+  positions: {
+    QB: {
+      terms: [{ stat: 'passYds', per: 800 }, { stat: 'passTd', per: 2 }],
+      standout: [
+        { stat: 'passYds', from: 72800, to: 80100, label: 'passing yards' },
+        { stat: 'passTd', from: 525, to: 580, label: 'touchdown passes' },
+      ],
+    },
+    RB: {
+      terms: [{ stat: 'rushYds', per: 120 }],
+      standout: [
+        { stat: 'rushYds', from: 14800, to: 17300, label: 'rushing yards' },
+        { stat: 'rushTd', from: 122, to: 145, label: 'rushing touchdowns' },
+      ],
+    },
+    WR: {
+      terms: [{ stat: 'recYds', per: 140 }],
+      standout: [
+        { stat: 'rec', from: 1470, to: 1660, label: 'catches' },
+        { stat: 'recYds', from: 18500, to: 21000, label: 'receiving yards' },
+        { stat: 'recTd', from: 154, to: 179, label: 'touchdown catches' },
+      ],
+    },
+    TE: {
+      terms: [{ stat: 'recYds', per: 180 }, { stat: 'rec', per: 34 }, { stat: 'recTd', per: 4.9 }],
+      standout: [
+        { stat: 'rec', from: 1170, to: 1310, label: 'catches' },
+        { stat: 'recYds', from: 12600, to: 14100, label: 'receiving yards' },
+        { stat: 'recTd', from: 169, to: 188, label: 'touchdown catches' },
+      ],
+    },
+    LB: {
+      terms: [{ stat: 'tackles', per: 34 }, { stat: 'sacks', per: 2.6 }, { stat: 'picks', per: 1.3 }, { stat: 'forcedFum', per: 1.3 }],
+      standout: [
+        { stat: 'tackles', from: 2310, to: 2610, label: 'tackles' },
+        { stat: 'picks', from: 28, to: 34, label: 'interceptions' },
+      ],
+    },
+    CB: {
+      terms: [{ stat: 'picks', per: 0.75 }, { stat: 'passDef', per: 8.2 }, { stat: 'tackles', per: 33 }],
+      standout: [
+        { stat: 'picks', from: 48, to: 59, label: 'interceptions' },
+        { stat: 'passDef', from: 341, to: 394, label: 'passes defensed' },
+      ],
+    },
+    EDGE: {
+      terms: [{ stat: 'sacks', per: 2.5 }, { stat: 'tackles', per: 41 }, { stat: 'forcedFum', per: 1.3 }],
+      standout: [
+        { stat: 'sacks', from: 213, to: 250, label: 'sacks' },
+      ],
+    },
+    K: {
+      terms: [],
+      standout: [
+        { stat: 'fgMade', from: 512, to: 563, label: 'field goals' },
+      ],
+    },
+    '*': { terms: [] },
+  },
+};
+export const NFL_LEGACY_WEIGHTS: Record<HallCalibration, LegacyWeights> = { 1: NFL_LEGACY_V1, 2: NFL_LEGACY_V2 };
 
 export function legacyOf(c: CareerState): Legacy {
   const totals = careerTotals(c);
