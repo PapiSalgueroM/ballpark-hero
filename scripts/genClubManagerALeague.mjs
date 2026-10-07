@@ -173,7 +173,7 @@ export const CM_ALEAGUE_META = {
   clubs: ${clubs.length},
 };
 
-/** Clubs where more than half the shipped rows have no market value. */
+/** Clubs where more than half of the club's ledger rows (Round 1034's gathered squad, the rows with no position group included) have no market value. */
 export const CM_ALEAGUE_PARTIAL: string[] = ${JSON.stringify(partial.sort())};
 
 /** Players with no value on their club's page, as "name|club": each one is
