@@ -717,13 +717,23 @@ if (SPORT === 'nhl') {
   const old = await import(pathToFileURL(OUT_OLD).href);
   try { unlinkSync(OUT_OLD); } catch { /* the temp file is only a copy */ }
   const nowRuns = [], oldRuns = [];
-  for (let i = 0; i < BOARD_N; i += 1) {
+  // Its own count: the walk away answer comes in about one NHL career in thirteen.
+  const N14 = Number(process.env.SIM_BALANCE_CAREERS || 800);
+  for (let i = 0; i < N14; i += 1) {
     nowRuns.push(boardCareer(200000 + i, 'oneMore', undefined, eng));
     oldRuns.push(boardCareer(200000 + i, 'oneMore', undefined, old));
   }
+  /* The farewell season itself is compared only where both builds took the
+     walk away answer in the same offseason. They can part earlier: Round
+     1038's deal sorts card 1's stand in by whether it moves the rating, and
+     the old answer did (the cap), so the old build deals some summers
+     differently. The legacy and Hall lines below are over every career. */
   const cases = [];
+  let walkNow = 0;
   nowRuns.forEach((r, i) => {
     if (!r.log.walkAway) return;
+    walkNow += 1;
+    if (oldRuns[i].log.walkAway?.year !== r.log.walkAway.year) return;
     const y = r.log.walkAway.year + 1;
     const a = r.c.seasons.find(s => s.year === y), b = oldRuns[i].c.seasons.find(s => s.year === y);
     if (a && b) cases.push({ now: a, old: b, nowC: r.c, oldC: oldRuns[i].c });
@@ -732,7 +742,8 @@ if (SPORT === 'nhl') {
   const median = xs => { const s = [...xs].sort((x, y) => x - y); return s.length ? s[Math.floor(s.length / 2)] : 0; };
   const legacyOf = (X, c) => X.LEGACY(c);
   balance = {
-    cases: cases.length,
+    cases: cases.length, walkNow,
+    ptsNow: mean(cases.map(k => k.now.points ?? k.now.wins ?? 0)), ptsOld: mean(cases.map(k => k.old.points ?? k.old.wins ?? 0)),
     ovrNow: mean(cases.map(k => k.now.ovr)), ovrOld: mean(cases.map(k => k.old.ovr)),
     gamesNow: mean(cases.map(k => k.now.games)), gamesOld: mean(cases.map(k => k.old.games)),
     lineNow: cases[0] ? eng.SPORTB.statLine(cases[0].now, cases[0].nowC.pos) : '', lineOld: cases[0] ? old.SPORTB.statLine(cases[0].old, cases[0].oldC.pos) : '',
@@ -740,7 +751,7 @@ if (SPORT === 'nhl') {
     legacyNow: median(nowRuns.map(r => legacyOf(eng, r.c).score)), legacyOld: median(oldRuns.map(r => legacyOf(old, r.c).score)),
     hallNow: share(nowRuns, r => legacyOf(eng, r.c).hof), hallOld: share(oldRuns, r => legacyOf(old, r.c).hof),
   };
-  console.log(`  14 balance: ${balance.cases} walk away farewells; farewell season OVR ${balance.ovrOld.toFixed(1)} -> ${balance.ovrNow.toFixed(1)}, games ${balance.gamesOld.toFixed(1)} -> ${balance.gamesNow.toFixed(1)}`);
+  console.log(`  14 balance: ${balance.walkNow} walk away farewells, ${balance.cases} taken the same offseason in both builds; that farewell season: OVR ${balance.ovrOld.toFixed(1)} -> ${balance.ovrNow.toFixed(1)}, games ${balance.gamesOld.toFixed(1)} -> ${balance.gamesNow.toFixed(1)}, points (wins for a goalie) ${balance.ptsOld.toFixed(1)} -> ${balance.ptsNow.toFixed(1)}`);
   console.log(`     first case's farewell line: old "${balance.lineOld}" now "${balance.lineNow}"`);
   console.log(`     median legacy of those careers ${balance.caseLegacyOld} -> ${balance.caseLegacyNow}; all careers median ${balance.legacyOld} -> ${balance.legacyNow}; Hall share ${(100 * balance.hallOld).toFixed(1)} -> ${(100 * balance.hallNow).toFixed(1)} percent`);
 }
