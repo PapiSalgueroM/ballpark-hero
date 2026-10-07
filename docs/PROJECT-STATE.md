@@ -1,3 +1,23 @@
+## Round 1074 claimed: Buzzer Beater contest rack recap, October 7, 2026
+
+Anthony asked to keep going after1073 acceptance. Codex owns a compact
+Three-point contest recap in BuzzerBeaterBoard and a new scorecard component.
+Existing balls show spent only; show earned makes/misses after flight settles,
+then select one of five compact rack buttons to revisit actual results.
+Keep the live32px marker slot, use44px final controls and12px readable copy.
+No engine, RNG, scoring, daily record, save schema or real-data changes.
+State is current-session presentation only, reset at each start. Preserve
+false/missed versus unknown/in-flight. Scores use existing contestPoints.
+New outcomes/effective copied controls and remote native phone/keyboard proof.
+Own only Buzzer board/new component/tests/QA, one news bullet and inline
+contest help. Keep basketball.ts and its frozen guide fixture unchanged.
+Remote generation may update Buzzer/news snapshots, search and those ledger
+rows only. All execution remains in GitHub Actions. No local runtime.
+New managed checkout C:/Users/antho/.codex/worktrees/buzzer-rack-recap-1074/ballpark-hero,
+branch codex/buzzer-rack-recap-1074 from mainbe3f552d.
+PR163/164 remain accepted for Claude's integration; do not re-audit or overwrite.
+Claude owns AH/main/publish and career/GM/data.1074 not accepted or live.
+Protected root source and seven stashes are untouched.
 ## Rounds 1070 and 1071 LIVE, 2026-10-07 01:07 EDT
 
 Published by the Claude lane on Codex's request (PR161, main 7b8f4afb,
