@@ -12,18 +12,16 @@
 import { focusDialogOnMount, escapeCloses } from "@/lib/dialogA11y";
 import type { CareerState } from "@/lib/soccerCareerEngine";
 import {
-  soccerRatingRows, ratingSeries, careerAverageRating, ovrTrackedFrom, ovrNotYetTracked, ratingBand, type RatingBand,
+  soccerRatingRows, ratingSeries, careerAverageRating, ovrTrackedFrom, ovrNotYetTracked, ratingBand,
 } from "@/lib/careerSeasonRatings";
 import Sparkline from "@/components/career/Sparkline";
+import { BAND_CLASS } from "@/lib/careerRatingBand";
 
 type RatingsSource = Pick<CareerState, "seasons" | "position" | "overall" | "retired">;
 
-export const BAND_CLASS: Record<RatingBand, string> = {
-  elite: "text-amber-400",
-  good: "text-emerald-400",
-  ok: "text-foreground",
-  poor: "text-red-400",
-};
+/* Round 1045: the band colours moved to a module of their own, so the page
+   can read them without loading this dialog. */
+export { BAND_CLASS };
 
 /** The dash every unknown number prints, with words a screen reader can say.
     A back line row saved before its season was stamped may hold a clean

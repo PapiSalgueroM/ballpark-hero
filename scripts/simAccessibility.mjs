@@ -13,7 +13,10 @@
    names; this file is the static side: structure that a grep can hold.
 
    Negative control: SIM_A11Y_CONTROL=strip deletes the skip target id from
-   an in memory copy of GameShell and the run must fail.
+   an in memory copy of GameShell and the run must fail. SIM_A11Y_CONTROL=dialog
+   drops one dialog's Escape handler from SoccerCareer.tsx in memory and
+   section 7 must fail (2026-10-07: "2 Escape handlers for 3 dialogs"). A
+   control run prints "fired as expected" and exits 0, or exits 1 when dead.
 
    Run: node scripts/simAccessibility.mjs
 */
@@ -25,6 +28,9 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const CONTROL = process.env.SIM_A11Y_CONTROL === 'strip';
+/* Round 1045 review: SIM_A11Y_CONTROL=dialog drops the Escape handler from
+   one dialog of SoccerCareer.tsx in memory; section 7 must go red. */
+const DIALOG_CONTROL = process.env.SIM_A11Y_CONTROL === 'dialog';
 const read = f => fs.readFileSync(path.join(ROOT, f), 'utf8');
 /* Guards read code, not comments: the four-in-one-day lesson. */
 const strip = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
@@ -121,16 +127,31 @@ console.log('7) the hand rolled dialogs behave, the banner takes focus, the tick
     ['src/components/soccer-career/PhonePanel.tsx', 1],
     ['src/components/nascar-driver/NascarDriverHowToPlay.tsx', 1],
     ['src/pages/StadiumTycoon.tsx', 2],
-    ['src/pages/SoccerCareer.tsx', 2],
+    /* Round 1045: two confirms and the Season Centre's mount boundary */
+    ['src/pages/SoccerCareer.tsx', 3],
+    /* Round 1045: the Season Centre overlay, its entry's plain tile and the "?" sheet */
+    ['src/components/season-centre/SeasonCentre.tsx', 1],
+    ['src/components/soccer-career/SoccerSeasonCentre.tsx', 1],
+    ['src/components/season-centre/SeasonCentreHelp.tsx', 1],
   ];
+  /* Round 1045 review: the count is exact, so a new dialog in a listed file
+     has to be listed (an "at least" count let a third one in unchecked), and
+     every dialog role needs its own Escape handler and focus call. */
+  let dialogsSeen = 0;
   for (const [f, n] of OVERLAYS) {
-    const s = strip(read(f));
+    let s = strip(read(f));
+    if (DIALOG_CONTROL && f === 'src/pages/SoccerCareer.tsx') {
+      const needle = 'onKeyDown={escapeCloses(this.props.onClose)}';
+      if (!s.includes(needle)) { console.error('control run: the Escape handler the control drops is not there, refusing a dead control'); process.exit(1); }
+      s = s.replace(needle, '');
+    }
     const dialogs = (s.match(/role="dialog"/g) || []).length;
-    if (dialogs < n) fail(`${f}: ${dialogs} dialog roles, expected ${n}`);
+    dialogsSeen += dialogs;
+    if (dialogs !== n) fail(`${f}: ${dialogs} dialog roles, the list says ${n} (list a new dialog here once it has Escape and focus)`);
     const esc = (s.match(/escapeCloses\(/g) || []).length;
-    if (esc < n) fail(`${f}: ${esc} Escape handlers, expected ${n}`);
+    if (esc < dialogs) fail(`${f}: ${esc} Escape handlers for ${dialogs} dialogs`);
     const foc = (s.match(/focusDialogOnMount/g) || []).length;
-    if (foc < n + 1 && !s.includes("from '@/lib/dialogA11y'")) fail(`${f}: dialog focus helper missing`);
+    if (!s.includes("from '@/lib/dialogA11y'") || foc < dialogs + 1) fail(`${f}: ${foc - 1} focus calls for ${dialogs} dialogs`);
   }
   const banner = strip(read('src/components/CookieConsent.tsx'));
   if (!banner.includes('aria-label="Cookie choices"')) fail('the cookie banner lost its region name');
@@ -139,12 +160,12 @@ console.log('7) the hand rolled dialogs behave, the banner takes focus, the tick
   if (!/aria-label=\{userPaused \? 'Resume the scores ticker' : 'Pause the scores ticker'\}/.test(ticker)) {
     fail('the ticker pause button is gone or lost its state naming');
   }
-  console.log('   7 dialogs across 5 files, the banner announces and focuses, the pause button stands');
+  console.log(`   ${dialogsSeen} dialogs across ${OVERLAYS.length} files, the banner announces and focuses, the pause button stands`);
 }
 
-if (CONTROL) {
+if (CONTROL || DIALOG_CONTROL) {
   if (failures > 0) { console.log(`\ncontrol run: ${failures} failure(s) fired as expected`); process.exit(0); }
-  console.error('\ncontrol run: stripping the skip target changed NOTHING, the checks are dead');
+  console.error(`\ncontrol run: ${DIALOG_CONTROL ? 'dropping a dialog Escape handler' : 'stripping the skip target'} changed NOTHING, the checks are dead`);
   process.exit(1);
 }
 console.log('   teeth: comment stripped sources, clone lists pinned by file, the statement held to its own claims');

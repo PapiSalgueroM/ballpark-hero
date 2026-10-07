@@ -180,8 +180,12 @@ function trySpeech(fn, s, choice, clubs, seed) {
  *   the output, so a recording does not depend on it.
  * @param opts.onTournament (save, won) Round 1023: the same, on every tournament
  *   screen as it comes up, before anything is chosen.
+ * @param opts.onStep (save, career index) Round 1045: the same contract, after
+ *   every recorded step (scripts/simSeasonCentreNeutral.mjs reads every season
+ *   the Season Centre can show from here). It must not touch the save and adds
+ *   nothing to the output.
  */
-export function probeAwardsNight({ soccer, appearance, cards }, { onNight, onTournament } = {}) {
+export function probeAwardsNight({ soccer, appearance, cards }, { onNight, onTournament, onStep } = {}) {
   const clubs = soccer.FALLBACK_CLUBS;
   const careers = [];
   const nights = [];
@@ -209,7 +213,7 @@ export function probeAwardsNight({ soccer, appearance, cards }, { onNight, onTou
         c % 3 === 0 ? appearance.defaultAppearance() : null,
         POT_LADDER[c % POT_LADDER.length],
       );
-      const rec = label => steps.push(`${CODE[label] ?? label}${saveHash(s)}`);
+      const rec = label => { steps.push(`${CODE[label] ?? label}${saveHash(s)}`); onStep?.(s, c); };
       rec('init');
       let guard = 0, step = 0;
       while (!s.retired && guard++ < 700) {
