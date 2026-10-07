@@ -233,6 +233,13 @@ const ENGINES = {
   mlb: { file: 'mlbMyCareer.ts', hall: 'MLB_CAREER_HALL', legacy: 'mlbLegacyOf', label: 'mlbTeamLabelOf', arch: 'MLB_ARCHETYPES', start: 'startMlbCareer', season: 'simMlbSeason', progress: 'mlbProgress', event: 'drawMlbEvent', stop: 'mlbShouldRetire', roll: 'mlbRollTeamQuality', binding: 'MLB_CAREER_SPORT', eras: 'MLB_ERAS', positions: ['SP', 'RP', 'C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'DH'] },
   nhl: { file: 'nhlMyCareer.ts', hall: 'NHL_CAREER_HALL', legacy: 'nhlLegacyOf', label: 'nhlTeamLabelOf', arch: 'NHL_ARCHETYPES', start: 'startNhlCareer', season: 'simNhlSeason', progress: 'nhlProgress', event: 'drawNhlEvent', stop: 'nhlShouldRetire', roll: 'nhlRollTeamQuality', binding: 'NHL_CAREER_SPORT', eras: 'NHL_ERAS', positions: ['C', 'LW', 'RW', 'D', 'G'] },
 };
+// Round 1051: the engine's own career totals, its legacy tables and the award counts the legacy reads.
+const LEGACY_INPUT = {
+  nfl: { totals: 'careerTotals', weights: 'NFL_LEGACY_WEIGHTS', awards: ['rings', 'mvps', 'allPros'] },
+  nba: { totals: 'nbaCareerTotals', weights: 'NBA_LEGACY_WEIGHTS', awards: ['rings', 'mvps', 'finalsMvps', 'allNbas'] },
+  mlb: { totals: 'mlbCareerTotals', weights: 'MLB_LEGACY_WEIGHTS', awards: ['rings', 'mvpCys', 'allStars'] },
+  nhl: { totals: 'nhlCareerTotals', weights: 'NHL_LEGACY_WEIGHTS', awards: ['cups', 'harts', 'connSmythes', 'allStars'] },
+};
 if (!SPORT) {
   // runAllSims calls every harness with no arguments: run the four sports, one child each.
   let worst = 0;
@@ -276,6 +283,8 @@ const CONTROLS = {
   seekexclude: { file: 'usCareerSummer.ts', from: 'if (card && !(exclude && exclude(card)) && (s.at === 0', to: 'if (card && (s.at === 0' },
   jerseyignore: { file: 'careerHallOfFame.ts', from: 'sport.recordedJersey?.(c) ?? jerseyFor(', to: 'jerseyFor(' },
   eraunguarded: { file: 'HallOfFameCard.tsx', from: 'rec.firstClass >= rules.verifiedFromClass', to: 'true' },
+  // Round 1051, sections 15 on. v1drift: the first award weight of the sport's calibration 1 table plus one.
+  v1drift: { file: `${SPORT}MyCareer.ts`, re: /(_LEGACY_V1: LegacyWeights = \{\s+awards: \{ \w+: )(\d+)/, to: (m, a, n) => `${a}${Number(n) + 1}` },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown SIM_CONTROL ${CONTROL}`); process.exit(2); }
 let controlFired = false;
@@ -302,6 +311,9 @@ const entry = [
   `export { ${E.legacy} as LEGACY, ${E.label} as LABEL, ${E.arch} as ARCH, ${E.start} as start, ${E.season} as season, ${E.progress} as progress, ${E.event} as drawEvent, ${E.stop} as stop, ${E.roll} as roll } from './src/lib/${E.file}';`,
   `export { ${E.hall} as HALL } from './src/lib/${SPORT}CareerHall.ts';`,
   `export { hallRecordFor, runHallBallot } from './src/lib/careerHallOfFame.ts';`,
+  // Round 1051: the totals the legacy reads and the sport's tables, for sections 15 on.
+  `export { ${LEGACY_INPUT[SPORT].totals} as TOTALS, ${LEGACY_INPUT[SPORT].weights} as WEIGHTS } from './src/lib/${E.file}';`,
+  `export { legacyRead, hallCalibrationOf, sanitizeHallCal, stampHallCalibration, HALL_CALIBRATION, LEGACY_GAME_RULES } from './src/lib/careerHallOfFame.ts';`,
   `export { giveHallSpeech, HALL_SPEECHES } from './src/lib/careerHallSpeech.ts';`,
   `export { retirementTalk, answerRetirement, careerEndsAfter, isFarewellSeason } from './src/lib/careerRetirement.ts';`,
   // Round 1039: the board's own pieces, for sections 9 to 14.
@@ -394,6 +406,8 @@ for (let i = 0; i < CAREERS; i += 1) {
       // Round 1039: the club a deck card retired the number at, and every season line, for section 8.
       numberRetiredBy: c.numberRetiredBy ?? null, allSeasons: c.seasons.map(s => ({ team: s.team })),
       talks, firstTalkAge, speech, finalAge: c.age, seasonsPlayed: c.seasons.length, eraId: c.eraId, answer,
+      // Round 1051: the career itself, for sections 15 on (scored again per calibration).
+      c, pos, policy: Math.floor(i / E.positions.length) % 4,
     });
   } catch (err) {
     counting = false;
@@ -967,6 +981,40 @@ console.log(`  seek: ${seekCaught} talks caught in the board loop, ${seekTried} 
 console.log(`  jersey (deck): ${jerseyRecN} recorded, ${jerseyRecElsewhere} at a club other than the one with most seasons, ${jerseyRecMiss} misnamed; synthetic ${jerseySynN}, ${jerseySynMiss} missed; wait answers ${waitAnswers}, ${waitWrote} wrote a club`);
 console.log(`  era: verified from the Class of ${auditFrom}; ${JSON.stringify(eraCounts)}; misses ${eraMiss}`);
 
+/* ─── Sections 15 to 20 (Round 1051): the legacy recalibration ───────────
+   These run on the engine careers of sections 1 to 8, each scored again per
+   calibration (a shallow copy with the stamp set), so both arms are the same
+   careers. */
+const scoreOn = (c, cal) => eng.LEGACY({ ...c, retired: true, hallCal: cal });
+
+/* 15 (a). The version 1 recording: every save in the fixture, unstamped, reads
+   today what the base's code told it, whole objects. */
+const V1_FIXTURE = JSON.parse(readFileSync(path.join(ROOT, 'src/test/fixtures/careerHallV1.json'), 'utf8'));
+const v1Saves = V1_FIXTURE.sports[SPORT] ?? [];
+let v1ReplayMiss = 0;
+for (const e of v1Saves) {
+  const save = JSON.parse(JSON.stringify(e.save));
+  if (JSON.stringify(eng.LEGACY(save)) !== JSON.stringify(e.legacy)) v1ReplayMiss += 1;
+  if (JSON.stringify(eng.hallRecordFor(HALL, save)) !== JSON.stringify(e.hall)) v1ReplayMiss += 1;
+}
+
+/* 15 (b). Calibration 1 is the Round 123 formula: the four one line formulas
+   restated here, independent of the tables, against legacyOf stamped 1 on
+   every engine career. */
+const V1_FORMULA = {
+  nfl: (c, t) => { let s = c.rings * 80 + c.mvps * 230 + c.allPros * 150 + c.seasons.length * 11; if (c.pos === 'QB') s += t.passYds / 800 + t.passTd * 0.5; if (c.pos === 'RB') s += t.rushYds / 120; if (c.pos === 'WR') s += t.recYds / 140; return Math.round(s); },
+  nba: (c, t) => Math.round(c.rings * 95 + c.mvps * 155 + c.finalsMvps * 90 + c.allNbas * 48 + c.seasons.length * 8 + t.pts / 430),
+  mlb: (c, t) => { let s = c.rings * 85 + c.mvpCys * 220 + c.allStars * 70 + c.seasons.length * 9; s += c.pos === 'SP' ? t.wins * 0.5 + t.so / 70 : t.hr * 0.25 + t.rbi / 60; return Math.round(s); },
+  nhl: (c, t) => { let s = c.cups * 85 + c.harts * 160 + c.connSmythes * 85 + c.allStars * 45 + c.seasons.length * 7; s += c.pos === 'G' ? t.wins / 6.5 : t.points / 18; return Math.round(s); },
+};
+let v1FormulaMiss = 0;
+for (const k of careers) {
+  const want = V1_FORMULA[SPORT](k.c, eng.TOTALS(k.c));
+  const got = scoreOn(k.c, 1);
+  if (got.score !== want || got.hof !== (want >= lines.hofLine) || 'standout' in got) v1FormulaMiss += 1;
+}
+console.log(`  15 v1: ${v1Saves.length} recorded saves (base ${String(V1_FIXTURE.baseCommit).slice(0, 8)}), ${v1ReplayMiss} read differently today; ${v1FormulaMiss} of ${careers.length} engine careers off the Round 123 formula on calibration 1`);
+
 /* ─── Check ───────────────────────────────────────────────────────────── */
 const BAND = { minInducted: 0.05, decileCut: 0.06, ladderStep: 0.015, talkReach: 0.70, earlyFall: 0.10, atFloor: 100, balanceCases: 5, farewellOvrGain: 10, seekMet: 300, hallShift: 0.025, legacyShift: 15 };
 const smallestCut = Math.min(...decileCuts);
@@ -989,16 +1037,22 @@ const checks = [
   ['seek', seekMiss === 0 && seekMet >= BAND.seekMet, `${seekMiss} of ${seekTried} forged summers where the board's seek landed on a deck retirement card; ${seekMet} landed on one with no hold-out (needs ${BAND.seekMet})`],
   ['deckJersey', jerseyRecMiss === 0 && jerseySynMiss === 0 && waitWrote === 0 && jerseySynN > 0 && (SPORT === 'nhl' || jerseyRecN > 0), `${jerseyRecMiss} of ${jerseyRecN} deck retired numbers not on the card, ${jerseySynMiss} of ${jerseySynN} synthetic, ${waitWrote} wait answers that wrote a club`],
   ['era', eraMiss === 0 && eraBoundary.below > 0 && eraBoundary.above > 0, `${eraMiss} cards printing a class year or rule off the audit's verified class (${auditFrom}); ${JSON.stringify(eraCounts)}`],
+  ['v1replay', v1ReplayMiss === 0 && v1Saves.length >= 16, `${v1ReplayMiss} readings of ${v1Saves.length} recorded saves differ from the version 1 recording`],
+  ['v1formula', v1FormulaMiss === 0 && careers.length > 0, `${v1FormulaMiss} of ${careers.length} engine careers score off the Round 123 formula on calibration 1`],
   ...(balance ? [['balance', balance.cases >= BAND.balanceCases && balance.ovrNow - balance.ovrOld >= BAND.farewellOvrGain && Math.abs(balance.hallNow - balance.hallOld) <= BAND.hallShift && Math.abs(balance.legacyNow - balance.legacyOld) <= BAND.legacyShift, `${balance.cases} walk away farewells (needs ${BAND.balanceCases}); farewell OVR gain ${(balance.ovrNow - balance.ovrOld).toFixed(1)} (needs ${BAND.farewellOvrGain}); Hall share shift ${(100 * (balance.hallNow - balance.hallOld)).toFixed(2)} points (band ${100 * BAND.hallShift}); median legacy shift ${balance.legacyNow - balance.legacyOld} (band ${BAND.legacyShift})`]] : []),
 ];
 for (const [name, ok, detail] of checks) console.log(`  ${ok ? 'ok  ' : 'FAIL'} ${name}: ${detail}`);
 const red = checks.filter(c => !c[1]).map(c => c[0]);
 if (CONTROL) {
-  const WANT = { everyonein: 'iff', bindhof: 'iff', outcomeswap: 'outcome', nominationgone: 'outcome', oldcurve: 'outcome', waitoff: 'table', shownraw: 'sides', flatfirst: 'rises', nopromise: 'promise', mathrandom: 'keyed', sharesides: 'sides', notalk: 'talk', farewelloff: 'answers', retireoff: 'answers', jerseyfirst: 'jersey', jerseyraw: 'jersey', talkdraws: 'identity', deckfarewelloff: 'ends', twice: 'once', seekexclude: 'seek', jerseyignore: 'deckJersey', eraunguarded: 'era' }[CONTROL];
-  console.log(`simCareerHall ${SPORT} CONTROL ${CONTROL}: wanted ${WANT} red, red [${red.join(',')}], ${red.includes(WANT) ? 'FIRED' : 'DID NOT FIRE'}`);
+  const WANT = { everyonein: 'iff', bindhof: 'iff', outcomeswap: 'outcome', nominationgone: 'outcome', oldcurve: 'outcome', waitoff: 'table', shownraw: 'sides', flatfirst: 'rises', nopromise: 'promise', mathrandom: 'keyed', sharesides: 'sides', notalk: 'talk', farewelloff: 'answers', retireoff: 'answers', jerseyfirst: 'jersey', jerseyraw: 'jersey', talkdraws: 'identity', deckfarewelloff: 'ends', twice: 'once', seekexclude: 'seek', jerseyignore: 'deckJersey', eraunguarded: 'era',
+    // Round 1051. An array wants every one of its checks red.
+    v1drift: ['v1replay', 'v1formula'] }[CONTROL];
+  const wantRed = [].concat(WANT);
+  const fired = wantRed.every(n => red.includes(n));
+  console.log(`simCareerHall ${SPORT} CONTROL ${CONTROL}: wanted ${wantRed.join(' and ')} red, red [${red.join(',')}], ${fired ? 'FIRED' : 'DID NOT FIRE'}`);
   // Exit 1 only when the check this control targets went red, so the exit
   // code alone proves the control hit its own check. Any other red is printed.
-  process.exit(red.includes(WANT) ? 1 : 0);
+  process.exit(fired ? 1 : 0);
 }
 console.log(`simCareerHall ${SPORT}: ${red.length ? `RED [${red.join(',')}]` : `all ${checks.length} checks green`}`);
 process.exit(red.length ? 1 : 0);

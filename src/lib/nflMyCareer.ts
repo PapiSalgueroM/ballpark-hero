@@ -50,6 +50,7 @@ import { countOf, nflCareerStatBullet, nflMajorAward, type NflCareerSums } from 
 import { raiseWithinPotential, ratingRaiseNote } from './careerHeadroom';
 import { applyUsCareerAnnualBenefits } from './usCareerAnnualBenefits';
 import { careerRecoveryRisk } from './usCareerRecovery';
+import { hallCalibrationOf, legacyRead, type HallCalibration, type LegacyRead, type LegacyWeights } from './careerHallOfFame';
 
 export type CareerPos = 'QB' | 'RB' | 'WR' | 'TE' | 'LB' | 'CB' | 'EDGE' | 'K';
 
@@ -1035,7 +1036,24 @@ export interface Legacy {
   verdict: string;
   hof: boolean;
   bullets: string[];
+  standout?: LegacyRead['standout'];
 }
+
+/* Round 1051: the legacy score reads a table per calibration through the one
+   scorer (legacyRead, careerHallOfFame.ts). Calibration 1 is the Round 123
+   formula below to the last bit; a career is read on the calibration it
+   retired on (hallCalibrationOf). */
+const NFL_LEGACY_V1: LegacyWeights = {
+  awards: { rings: 80, mvps: 230, allPros: 150 },
+  season: 11,
+  positions: {
+    QB: { terms: [{ stat: 'passYds', per: 800 }, { stat: 'passTd', per: 2 }] },
+    RB: { terms: [{ stat: 'rushYds', per: 120 }] },
+    WR: { terms: [{ stat: 'recYds', per: 140 }] },
+    '*': { terms: [] },
+  },
+};
+export const NFL_LEGACY_WEIGHTS: Record<HallCalibration, LegacyWeights> = { 1: NFL_LEGACY_V1, 2: NFL_LEGACY_V1 };
 
 export function legacyOf(c: CareerState): Legacy {
   const totals = careerTotals(c);
@@ -1050,11 +1068,11 @@ export function legacyOf(c: CareerState): Legacy {
      score 266, Hall of Fame 11.9 percent, inner circle 1.4 percent, and a
      forced elite career (90 ceiling) goes in at 70 percent. A great career
      still comes out great, which was the thing to protect. */
-  let score = c.rings * 80 + c.mvps * 230 + c.allPros * 150 + c.seasons.length * 11;
-  if (c.pos === 'QB') score += totals.passYds / 800 + totals.passTd * 0.5;
-  if (c.pos === 'RB') score += totals.rushYds / 120;
-  if (c.pos === 'WR') score += totals.recYds / 140;
-  score = Math.round(score);
+  const read = legacyRead(NFL_LEGACY_WEIGHTS[hallCalibrationOf(c)], {
+    pos: c.pos, seasons: c.seasons.length,
+    awards: { rings: c.rings, mvps: c.mvps, allPros: c.allPros }, totals: { ...totals },
+  });
+  const score = read.score;
   const hof = score >= 520;
   const verdict = score >= 900 ? 'Inner-circle, first-ballot immortal'
     : score >= 520 ? 'Hall of Famer'
@@ -1071,7 +1089,7 @@ export function legacyOf(c: CareerState): Legacy {
     nflCareerStatBullet(totals, c.pos),
     `${Math.round(c.earnings)}M career earnings, ${c.draftPick > 0 ? `drafted pick ${c.draftPick}` : 'undrafted signing'}`,
   ];
-  return { score, verdict, hof, bullets };
+  return read.standout ? { score, verdict, hof, bullets, standout: read.standout } : { score, verdict, hof, bullets };
 }
 
 export function careerTotals(c: CareerState): NflCareerSums {
