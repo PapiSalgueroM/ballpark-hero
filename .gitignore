@@ -84,3 +84,8 @@ src/pages/__control_*.tsx
 docs/research/R1_soccer_sites.md
 docs/research/R2_us_sports_sites.md
 docs/research/R3_creator_formats.md
+
+# Evidence folders the harnesses of the other lane write at the repo root on a
+# local run (cm-quick-subs-artifacts, number-formatting-artifacts and the
+# rest). CI uploads them as workflow artifacts; they are never committed.
+/*-artifacts/

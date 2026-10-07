@@ -63,14 +63,18 @@ const controls = {
   late: { from: '  injuriesThrough(90);', to: '  injuriesThrough(45);', test: 'late' },
   extra: { from: '  if (state.live!.et) injuriesThrough(state.live!.et.to);', to: '  if (false) injuriesThrough(state.live!.et.to);', test: 'extra' },
   clock: { from: "state = changeLive(state, minute, { kind: 'sub', outId: injury.id, inId: coming.id }, plus) ?? state;", to: "state = changeLive(state, minute, { kind: 'sub', outId: injury.id, inId: coming.id }) ?? state;", test: 'clock' },
-  loan: { from: 'const coming = benchFor(state, injury.id)[0];', to: 'const coming = benchFor(state, injury.id).find(p => !p.onLoan);', test: 'legal' },
+  /* Release AL: the three anchors below follow the release's own edits to the
+     coach (the injury pick skips a man who would cross the keeper line, and
+     playNextEntry reaches the coach through `coached`, which Manager Hot Seat
+     switches off). Each mutation is the one Round 1072 wrote. */
+  loan: { from: "const coming = bench.find(p => injuredFit(p) !== 'keeper') ?? bench[0];", to: 'const coming = bench.find(p => !p.onLoan);', test: 'legal' },
   fourth: { from: '    if (live.subsUsed >= MAX_HALFTIME_SUBS) return null;', to: '    if (live.subsUsed > MAX_HALFTIME_SUBS) return null;', test: 'legal' },
   red: { from: '    if (reds.length) return null;', to: '    if (false) return null;', test: 'legal' },
   unavailable: { from: '    if (!coming || !isAvailable(coming)) return null;', to: '    if (!coming) return null;', test: 'legal' },
   fresh: { from: 'for (const out of tiringAtHalftime(state)) {', to: 'for (const out of [] as CMPlayer[]) {', test: 'fatigue' },
   reserve: { from: 'if (state.live!.subsUsed >= MAX_SUBS - 1) break;', to: 'if (state.live!.subsUsed >= MAX_SUBS) break;', test: 'fatigue' },
-  paused: { from: "      return resumeMatch(coachQuickMatch(state));", to: '      return resumeMatch(state);', test: 'paths' },
-  entry: { from: '    state.live = live;\n    return resumeMatch(coachQuickMatch(state));', to: '    state.live = live;\n    return resumeMatch(state);', test: 'manual' },
+  paused: { from: "      return resumeMatch(coached(state));", to: '      return resumeMatch(state);', test: 'paths' },
+  entry: { from: '    state.live = live;\n    return resumeMatch(coached(state));', to: '    state.live = live;\n    return resumeMatch(state);', test: 'manual' },
   immutable: { from: '  let state: CareerState = JSON.parse(JSON.stringify(career));\n  const entry = state.calendar[state.live!.week];', to: '  let state: CareerState = career;\n  const entry = state.calendar[state.live!.week];', test: 'immutable' },
 };
 
@@ -287,7 +291,17 @@ async function main() {
         const f = forced(original, 'early', 45), on = new Set(f.state.live.onPitch);
         f.state.live.added.h1 = 0;
         for (const p of f.state.squad) if (!on.has(p.id)) p.injuryWeeks = 0;
-        for (const id of f.state.live.onPitch.slice(2, 5)) f.state.squad.find(p => p.id === id).fitness = 40;
+        const tired = f.state.live.onPitch.slice(2, 5).map(id => f.state.squad.find(p => p.id === id));
+        for (const p of tired) p.fitness = 40;
+        /* Release AL: the coach now takes a tired man off only for somebody
+           who plays his position, so the bench is handed one such man for
+           each of the three. Left as the squad comes, the bench covers one of
+           them at most, a second change is impossible whatever the rule says,
+           and the reserve control below has nothing to catch (it stopped
+           firing the moment the fit rule went in). */
+        const spare = f.state.squad.filter(p => !on.has(p.id) && p.id !== f.incoming.id && p.position !== 'GK');
+        assert.ok(spare.length >= tired.length, 'Three outfield men are on the bench to cover the three tired ones');
+        tired.forEach((p, i) => { spare[i].position = p.position; spare[i].secondaryPositions = []; spare[i].fitness = 100; });
         const after = withQuickSubsSeed(3108, () => cm.coachQuickMatch(f.state));
         assert.equal(after.live.subs[0].offId, f.out.id); assert.equal(after.live.subs[0].minute, 45);
         const restart = after.live.subs.filter(s => s.minute === 46);

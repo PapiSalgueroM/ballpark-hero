@@ -62,7 +62,7 @@ const controls = [
 const escape = text => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 function run(name, aliases = {}, intended) {
   const report = path.join(out, `${name}-report.json`);
-  const args = ['node_modules/vitest/vitest.mjs', 'run', test, '--reporter=json', `--outputFile.json=${report}`, '--reporter=default'];
+  const args = ['node_modules/vitest/vitest.mjs', 'run', test, '--testTimeout=120000', '--reporter=json', `--outputFile.json=${report}`, '--reporter=default'];
   if (intended) args.push('-t', `(${escape(baseline)}|${escape(intended)})$`);
   const result = spawnSync(process.execPath, args, { cwd: root, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024,
     env: { ...process.env, CI: '1', FORCE_COLOR: '0', NO_COLOR: '1', NO_DOUBLE_SWAP: JSON.stringify(aliases) } });

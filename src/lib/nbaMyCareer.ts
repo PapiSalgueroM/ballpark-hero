@@ -1,4 +1,5 @@
 import type { CareerDraftEntry, PreDraftState } from './careerPreDraft';
+import { formatNumber } from './formatNumber';
 /**
  * NBA My Career engine (2026-08-05). Basketball sibling of nflMyCareer.ts:
  * a fictional prospect living a whole career inside the real 30-team
@@ -998,7 +999,7 @@ export function nbaLegacyOf(c: NbaCareerState): NbaLegacy {
     : 'Ten-day contracts and what-ifs';
   const bullets = [
     `${c.seasons.length} seasons, ${c.rings} ring${c.rings === 1 ? '' : 's'}, ${c.mvps} MVP${c.mvps === 1 ? '' : 's'}, ${c.finalsMvps} Finals MVP${c.finalsMvps === 1 ? '' : 's'}, ${c.allNbas} All-NBA`,
-    `${t.pts.toLocaleString()} points, ${t.reb.toLocaleString()} rebounds, ${t.ast.toLocaleString()} assists in ${t.games} games`,
+    `${t.pts.toLocaleString()} points, ${t.reb.toLocaleString()} rebounds, ${t.ast.toLocaleString()} assists in ${formatNumber(t.games)} games`,
     `${Math.round(c.earnings)}M career earnings, ${c.draftPick > 0 ? `drafted pick ${c.draftPick}` : 'undrafted signing'}`,
   ];
   return read.standout ? { score, verdict, hof, bullets, standout: read.standout } : { score, verdict, hof, bullets };
