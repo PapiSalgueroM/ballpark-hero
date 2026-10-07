@@ -1,4 +1,5 @@
 import type { CareerDraftEntry, PreDraftState } from './careerPreDraft';
+import { formatNumber } from './formatNumber';
 /**
  * NHL My Career engine (2026-08-05). Hockey sibling of nflMyCareer.ts:
  * a fictional prospect living a whole career inside the real 32-team
@@ -842,7 +843,7 @@ export function nhlLegacyOf(c: NhlCareerState): NhlLegacy {
   const award = nhlMajorAward(c.pos);
   const bullets = [
     `${c.seasons.length} seasons, ${c.cups} Cup${c.cups === 1 ? '' : 's'}, ${countOf(c.harts, award.one, award.many)}, ${c.connSmythes} Conn Smythe${c.connSmythes === 1 ? '' : 's'}, ${c.allStars} All-Star nods`,
-    c.pos === 'G' ? `${t.wins} wins in ${t.games} games` : `${t.goals} goals, ${t.assists} assists, ${t.points} points in ${t.games} games`,
+    c.pos === 'G' ? `${formatNumber(t.wins)} wins in ${formatNumber(t.games)} games` : `${formatNumber(t.goals)} goals, ${formatNumber(t.assists)} assists, ${formatNumber(t.points)} points in ${formatNumber(t.games)} games`,
     `${Math.round(c.earnings)}M career earnings, ${c.draftPick > 0 ? `drafted pick ${c.draftPick}` : 'undrafted signing'}`,
   ];
   return { score, verdict, hof, bullets };
