@@ -23,6 +23,7 @@ const cases = {
   guards: 'blocks saved plan actions during a live match a sack or a stale manager slot',
   controls: 'shows the worked example and current assignments then restores focus when the plan tile closes',
   reveal: 'reveals the actual plan action row after opening and selecting a saved setup',
+  refused: 'reports refused actual plan clicks without success notices or clearing a pending bench selection',
 };
 const controls = {
   captureXi: { file: helper, from: 'xiIds: formation.slots.map((_, i) => career.xiIds[i] ?? null),', to: 'xiIds: formation.slots.map(() => null),', test: cases.capture },
@@ -51,12 +52,14 @@ const controls = {
   takers: { file: helper, from: 'setPieces: currentSetPieces(career, plan.setPieces),', to: 'setPieces: { ...plan.setPieces },', test: cases.takers },
   removedShootout: { file: helper, from: 'shootoutOrder: plan.shootoutOrder.filter(id => career.squad.some(p => p.id === id)),', to: 'shootoutOrder: [...plan.shootoutOrder],', test: cases.takers },
   live: { file: helper, from: 'return !career.live && !career.sacked && !career.wilderness;', to: 'return !career.sacked && !career.wilderness;', test: cases.guards },
-  phase: { file: hook, from: "const saveMatchPlan = useCallback((slot: number, name: string) => {\n    if (phase !== 'hub' || !holdsActiveSlot()) return;", to: "const saveMatchPlan = useCallback((slot: number, name: string) => {\n    if (!holdsActiveSlot()) return;", test: cases.guards },
-  stale: { file: hook, from: "const saveMatchPlan = useCallback((slot: number, name: string) => {\n    if (phase !== 'hub' || !holdsActiveSlot()) return;", to: "const saveMatchPlan = useCallback((slot: number, name: string) => {\n    if (phase !== 'hub') return;", test: cases.guards },
+  phase: { file: hook, from: "const saveMatchPlan = useCallback((slot: number, name: string) => {\n    if (phase !== 'hub' || !holdsActiveSlot()) return false;", to: "const saveMatchPlan = useCallback((slot: number, name: string) => {\n    if (!holdsActiveSlot()) return false;", test: cases.guards },
+  stale: { file: hook, from: "const saveMatchPlan = useCallback((slot: number, name: string) => {\n    if (phase !== 'hub' || !holdsActiveSlot()) return false;", to: "const saveMatchPlan = useCallback((slot: number, name: string) => {\n    if (phase !== 'hub') return false;", test: cases.guards },
   focus: { file: card, from: 'triggerRef.current?.focus({ preventScroll: true });', to: 'void 0;', test: cases.controls },
   selection: { file: tactics, from: 'setSelSlot(null); setBenchPick(null); setOpenSlot(null); setDutySlot(null);', to: 'setOpenSlot(null); setDutySlot(null);', test: cases.controls },
   rules: { file: card, from: 'For example, save your first XI, rotate on the pitch, then save a second plan.', to: 'Save a setup.', test: cases.controls },
   reveal: { file: card, from: '<div ref={actionRef} data-cm-plan-actions', to: '<div data-cm-plan-actions', test: cases.reveal },
+  refusedNotice: { file: card, from: 'setNotice(accepted ? success : REFUSED_MATCH_PLAN);', to: 'setNotice(success);', test: cases.refused },
+  refusedSelection: { file: tactics, from: 'if (!onApplyMatchPlan(slot)) return false;', to: 'onApplyMatchPlan(slot);', test: cases.refused },
 };
 const control = process.env.MANAGER_MATCH_PLANS_CONTROL || '', count = Object.keys(cases).length;
 assert(!control || control === 'all' || control in controls, 'Known match-plan fault');

@@ -301,6 +301,29 @@ describe('Club Manager saved match plans', () => {
     expect(api.career!.xiIds).toEqual(beforeTap);
   });
 
+  it('reports refused actual plan clicks without success notices or clearing a pending bench selection', async () => {
+    await mountCareer(saveMatchPlan(fixture(), 0, 'First XI'));
+    act(() => api.setMentality('defensive'));
+    fireEvent.click(q('[data-cm-tile-btn="bench"]'));
+    fireEvent.click(q('[data-cm-bench]'));
+    expect(q('[data-cm-hint]')).toHaveTextContent('Tap a spot on the pitch');
+    openPlans();
+    fireEvent.change(screen.getByRole('textbox', { name: 'Plan name' }), { target: { value: 'Changed name' } });
+    const career = api.career, disk = localStorage.getItem(SAVE_KEY);
+    localStorage.setItem(SLOTS_INDEX_KEY, JSON.stringify({ active: 2 }));
+    random.mockClear();
+    for (const selector of ['[data-cm-plan-apply]', '[data-cm-plan-save]', '[data-cm-plan-delete]']) {
+      fireEvent.click(q(selector));
+      expect(q('[data-cm-hint]')).toHaveTextContent('Tap a spot on the pitch');
+      expect(q('[data-cm-plan-notice]')).toHaveTextContent('Reopen your active manager save and try again.');
+      expect(q('[data-cm-plan-notice]')).toHaveAttribute('role', 'alert');
+      expect(q('[data-cm-plan-notice]')).not.toHaveTextContent(/Saved |Applied |Removed /);
+      expect(api.career).toBe(career); expect(localStorage.getItem(SAVE_KEY)).toBe(disk);
+    }
+    expect(random).not.toHaveBeenCalled();
+    expect(api.saveFailed).toBe(false);
+  });
+
   it('reveals the actual plan action row after opening and selecting a saved setup', async () => {
     let career = saveMatchPlan(fixture(), 0, 'First XI');
     career = saveMatchPlan({ ...career, mentality: 'defensive' }, 1, 'Rotation');

@@ -60,9 +60,9 @@ interface TacticsScreenProps {
   onAutoSetPieces: () => void;
   /** Round 782: the shootout order, player ids in kicking order; an empty list clears it. */
   onShootoutOrder: (ids: string[]) => void;
-  onSaveMatchPlan?: (slot: number, name: string) => void;
-  onApplyMatchPlan?: (slot: number) => void;
-  onDeleteMatchPlan?: (slot: number) => void;
+  onSaveMatchPlan?: (slot: number, name: string) => boolean;
+  onApplyMatchPlan?: (slot: number) => boolean;
+  onDeleteMatchPlan?: (slot: number) => boolean;
   /** Round 782: the hub's pre match card can ask for the shootout tile to be
    *  open on arrival; the screen opens it once and says so. */
   openTileRequest?: 'shootout' | null;
@@ -690,8 +690,9 @@ export function TacticsScreen({
       {onSaveMatchPlan && onApplyMatchPlan && onDeleteMatchPlan && <div data-cm-tile="plans" data-cm-tile-open={openTile === 'plans' ? '1' : undefined}>
         <MatchPlansCard career={career} open={openTile === 'plans'} onToggle={() => setOpenTile(openTile === 'plans' ? null : 'plans')}
           onSave={onSaveMatchPlan} onApply={slot => {
-            onApplyMatchPlan(slot);
+            if (!onApplyMatchPlan(slot)) return false;
             setSelSlot(null); setBenchPick(null); setOpenSlot(null); setDutySlot(null);
+            return true;
           }} onDelete={onDeleteMatchPlan} />
       </div>}
 

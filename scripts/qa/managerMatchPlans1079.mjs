@@ -157,8 +157,24 @@ try {
   const baselineFile = path.join(temp, 'independent-engine.mjs');
   await bundle({ entryPoints:[path.join(ROOT,'src/lib/clubManager.ts')], outfile:baselineFile, bundle:true, platform:'node', format:'esm', alias:{'@':path.join(ROOT,'src')}, logLevel:'silent' });
   fs.copyFileSync(baselineFile, path.join(OUT, 'independent-engine.mjs'));
-  const engine = await import(pathToFileURL(baselineFile).href);
-  report.baseline = { sha256:digest(fs.readFileSync(baselineFile)), source:'Unchanged clubManager.ts bundled independently of React and match-plan helper' };
+  const previousStorage = Object.getOwnPropertyDescriptor(globalThis, 'localStorage');
+  const baselineStore = new Map();
+  const baselineStorage = {
+    getItem: key => baselineStore.get(String(key)) ?? null,
+    setItem: (key, value) => { baselineStore.set(String(key), String(value)); },
+    removeItem: key => { baselineStore.delete(String(key)); },
+    clear: () => baselineStore.clear(),
+  };
+  let engine;
+  // The client captures this empty adapter during import. It never sees browser career storage.
+  Object.defineProperty(globalThis, 'localStorage', { configurable:true, value:baselineStorage });
+  try { engine = await import(pathToFileURL(baselineFile).href); }
+  finally {
+    if (previousStorage) Object.defineProperty(globalThis, 'localStorage', previousStorage);
+    else Reflect.deleteProperty(globalThis, 'localStorage');
+  }
+  assert.deepEqual(Object.getOwnPropertyDescriptor(globalThis, 'localStorage'), previousStorage, 'Baseline import restores the exact Node storage global');
+  report.baseline = { sha256:digest(fs.readFileSync(baselineFile)), source:'Unchanged clubManager.ts bundled independently of React and match-plan helper', storage:'Fresh in-memory adapter at import only; original Node global restored before browser setup' };
   const expectedPreview = (career, plan) => {
     const state = {...structuredClone(career), ...tactics(plan)};
     const formation = engine.FORMATIONS[state.formationIndex], actual = engine.effectiveXIWithSlots(state);

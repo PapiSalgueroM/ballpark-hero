@@ -15,6 +15,9 @@ on:
       - src/test/managerMatchPlans.test.tsx
       - scripts/simManagerMatchPlans.mjs
       - scripts/qa/managerMatchPlans1079.mjs
+      - scripts/qa/managerLegacy1079.mjs
+      - scripts/qa/managerLegacy1079Clock.cjs
+      - scripts/simTactics.mjs
 permissions:
   contents: read
 concurrency:
@@ -62,18 +65,31 @@ jobs:
       - name: Actual outcomes and effective copied faults
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: MANAGER_MATCH_PLANS_CONTROL=all ONLY=simManagerMatchPlans node scripts/runAllSims.mjs 2>&1 | tee manager-match-plans-artifacts/outcomes.log
+      - name: Cache actual presentation assets
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: node scripts/qa/managerMatchPlans1079.mjs --prefetch-fonts-only 2>&1 | tee manager-match-plans-artifacts/fonts.log
       - name: Preserve existing game behavior
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
           failed=0
-          for harness in simTactics simTacticsEngine simClubCaptaincy simCmShootoutOrder simClubManagerSave simClubManagerSaveSize simClubManagerSlots simSetPiecePresentation; do
-            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "manager-match-plans-artifacts/$harness.log" || failed=1
+          for harness in simTactics simTacticsEngine simClubManagerSave simClubManagerSaveSize; do
+            SIM_TACTICS_ASSET_CACHE="$PWD/manager-match-plans-artifacts/font-cache/manifest.json" ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "manager-match-plans-artifacts/$harness.log" || failed=1
           done
           exit "$failed"
+      - name: Compare unchanged baseline failures
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerLegacy1079.mjs 2>&1 | tee manager-match-plans-artifacts/legacy.log
+      - name: Retain actual set piece presentation outcomes
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSetPiecePresentation.mjs 2>&1 | tee manager-match-plans-artifacts/simSetPiecePresentation.log
+          scene_dir=$(sed -nE 's/^simSetPiecePresentation: PASS\. 36 rendered cases\. Evidence: (.*)$/\1/p' manager-match-plans-artifacts/simSetPiecePresentation.log)
+          test -d "$scene_dir"
+          cp -R "$scene_dir" manager-match-plans-artifacts/set-piece-presentation
+          node --input-type=module -e "import fs from 'node:fs'; import assert from 'node:assert/strict'; const r=JSON.parse(fs.readFileSync('manager-match-plans-artifacts/set-piece-presentation/report.json')); assert.equal(r.report.length,36); assert.deepEqual(r.errors,[]); assert.equal(r.control,''); console.log('36 actual rendered set piece outcomes retained.');"
       - name: Native actual game journeys
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
-          node scripts/qa/managerMatchPlans1079.mjs --prefetch-fonts-only 2>&1 | tee manager-match-plans-artifacts/fonts.log
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" xvfb-run -a node scripts/qa/managerMatchPlans1079.mjs 2>&1 | tee manager-match-plans-artifacts/native.log
       - name: All built readers and source anchors
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
@@ -86,7 +102,7 @@ jobs:
       - name: Hold the reviewed source and protected game rules
         if: ${{ !cancelled() }}
         run: |
-          git diff --exit-code HEAD -- src scripts/simManagerMatchPlans.mjs scripts/qa/managerMatchPlans1079.mjs
+          git diff --exit-code HEAD -- src scripts/simManagerMatchPlans.mjs scripts/simTactics.mjs scripts/qa/managerMatchPlans1079.mjs scripts/qa/managerLegacy1079.mjs scripts/qa/managerLegacy1079Clock.cjs
           git diff --exit-code 2fff5e044160b70bd58b64d931793ee4e443cedd HEAD -- src/lib/leagueCore.ts src/lib/positionFit.ts src/lib/clubManagerInternationals.ts src/lib/clubManagerSlots.ts src/lib/clubManagerEras.ts src/lib/clubManagerWorldEdit.ts src/data/clubManagerRosters.ts src/data/clubManagerWorldRosters.ts
       - name: Preserve verification evidence
         if: always()

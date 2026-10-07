@@ -10,10 +10,12 @@ interface MatchPlansCardProps {
   career: CareerState;
   open: boolean;
   onToggle: () => void;
-  onSave: (slot: number, name: string) => void;
-  onApply: (slot: number) => void;
-  onDelete: (slot: number) => void;
+  onSave: (slot: number, name: string) => boolean;
+  onApply: (slot: number) => boolean;
+  onDelete: (slot: number) => boolean;
 }
+
+const REFUSED_MATCH_PLAN = 'This setup could not be changed. Reopen your active manager save and try again.';
 
 export function MatchPlansCard({ career, open, onToggle, onSave, onApply, onDelete }: MatchPlansCardProps) {
   const [selected, setSelected] = useState(0);
@@ -28,10 +30,16 @@ export function MatchPlansCard({ career, open, onToggle, onSave, onApply, onDele
   const preview = previewMatchPlan(career, selected);
   const editable = canEditMatchPlans(career);
   const actionRef = useRevealScroll<HTMLDivElement>(`${open}:${selected}:${!!plan}:${saveReveal}`, { enabled: open, skipFirst: false, block: 'end' });
+  const refused = notice === REFUSED_MATCH_PLAN;
+  const noticeRef = useRevealScroll<HTMLParagraphElement>(refused, { enabled: open && refused, skipFirst: false, block: 'end' });
   useEffect(() => { setName(plan?.name ?? ''); }, [selected, plan?.name, career.clubName, career.eraId]);
   useEffect(() => { setDetails(false); setNotice(''); }, [selected, career.clubName, career.eraId]);
   const button = 'min-h-[44px] min-w-[44px] rounded-lg border px-3 text-xs font-semibold disabled:opacity-50';
   const close = () => { onToggle(); triggerRef.current?.focus({ preventScroll: true }); };
+  const showResult = (accepted: boolean, success: string) => {
+    setNotice(accepted ? success : REFUSED_MATCH_PLAN);
+    return accepted;
+  };
   return <>
     <button ref={triggerRef} type="button" data-cm-tile-btn="plans" aria-expanded={open} onClick={onToggle}
       className={cn('w-full flex items-center justify-between gap-2 rounded-xl border bg-card px-3 min-h-[44px] text-left text-xs', open && 'rounded-b-none border-primary')}>
@@ -62,7 +70,7 @@ export function MatchPlansCard({ career, open, onToggle, onSave, onApply, onDele
             className="mt-1 w-full min-h-[44px] rounded-lg border bg-background px-2 text-xs" />
         </label>
         <button type="button" data-cm-plan-save disabled={!editable || !name.trim()}
-          onClick={() => { onSave(selected, name); setNotice(`Saved ${name.trim().slice(0, MATCH_PLAN_NAME_LIMIT)}.`); setSaveReveal(n => n + 1); }}
+          onClick={() => { if (showResult(onSave(selected, name), `Saved ${name.trim().slice(0, MATCH_PLAN_NAME_LIMIT)}.`)) setSaveReveal(n => n + 1); }}
           className={cn(button, 'self-end border-primary text-primary')}>{plan ? 'Replace plan' : 'Save setup'}</button>
       </div>
       {!editable && <p role="status">Plans can be changed between matches while you manage this club.</p>}
@@ -75,7 +83,7 @@ export function MatchPlansCard({ career, open, onToggle, onSave, onApply, onDele
         <p data-cm-plan-replacements>{preview.replacements ? `${preview.replacements} saved spot${preview.replacements === 1 ? '' : 's'} need a replacement.` : 'All saved picks can start.'} Strength includes current fitness, morale, form and position fit. Mentality and duties affect the match separately.</p>
         <div ref={actionRef} data-cm-plan-actions className="grid grid-cols-2 gap-2">
           <button type="button" data-cm-plan-apply disabled={!editable} className={cn(button, 'bg-primary text-primary-foreground')}
-            onClick={() => { onApply(selected); setNotice(`Applied ${plan!.name}.`); }}>Apply plan</button>
+            onClick={() => showResult(onApply(selected), `Applied ${plan!.name}.`)}>Apply plan</button>
           <button type="button" aria-expanded={details} data-cm-plan-details onClick={() => setDetails(!details)} className={button}>{details ? 'Hide kickoff XI' : 'View kickoff XI'}</button>
         </div>
         {details && <div className="space-y-2" data-cm-plan-lineup>
@@ -90,9 +98,9 @@ export function MatchPlansCard({ career, open, onToggle, onSave, onApply, onDele
           <dl className="grid grid-cols-2 gap-2" data-cm-plan-assignments>{SET_PIECE_KEYS.map(key => <div key={key}><dt>{SET_PIECE_INFO[key].label}</dt><dd className="font-semibold">{career.squad.find(p => p.id === preview.state.setPieces?.[key])?.name ?? 'Auto pick'}</dd></div>)}</dl>
           <p data-cm-plan-shootout>Shootout order: {preview.state.shootoutOrder?.map(id => career.squad.find(p => p.id === id)?.name).join(', ') || 'Auto'}</p>
         </div>}
-        <button type="button" data-cm-plan-delete disabled={!editable} onClick={() => { onDelete(selected); setNotice(`Removed ${plan!.name}.`); }} className={button}>Delete plan</button>
+        <button type="button" data-cm-plan-delete disabled={!editable} onClick={() => showResult(onDelete(selected), `Removed ${plan!.name}.`)} className={button}>Delete plan</button>
       </div>}
-      <p role="status" aria-live="polite" data-cm-plan-notice className="min-h-4">{notice}</p>
+      <p ref={noticeRef} role={refused ? 'alert' : 'status'} aria-live={refused ? 'assertive' : 'polite'} data-cm-plan-notice className="min-h-4">{notice}</p>
     </section>}
   </>;
 }

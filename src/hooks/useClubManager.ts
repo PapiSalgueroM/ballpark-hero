@@ -487,19 +487,25 @@ export function useClubManager() {
 
   /* ---------- tactics ---------- */
   const saveMatchPlan = useCallback((slot: number, name: string) => {
-    if (phase !== 'hub' || !holdsActiveSlot()) return;
+    if (phase !== 'hub' || !holdsActiveSlot()) return false;
+    if (!career || savePlan(career, slot, name) === career) return false;
     setCareer(prev => prev ? savePlan(prev, slot, name) : prev);
-  }, [phase, holdsActiveSlot]);
+    return true;
+  }, [career, phase, holdsActiveSlot]);
 
   const applyMatchPlan = useCallback((slot: number) => {
-    if (phase !== 'hub' || !holdsActiveSlot()) return;
+    if (phase !== 'hub' || !holdsActiveSlot()) return false;
+    if (!career || applyPlan(career, slot) === career) return false;
     setCareer(prev => prev ? applyPlan(prev, slot) : prev);
-  }, [phase, holdsActiveSlot]);
+    return true;
+  }, [career, phase, holdsActiveSlot]);
 
   const deleteMatchPlan = useCallback((slot: number) => {
-    if (phase !== 'hub' || !holdsActiveSlot()) return;
+    if (phase !== 'hub' || !holdsActiveSlot()) return false;
+    if (!career || deletePlan(career, slot) === career) return false;
     setCareer(prev => prev ? deletePlan(prev, slot) : prev);
-  }, [phase, holdsActiveSlot]);
+    return true;
+  }, [career, phase, holdsActiveSlot]);
 
   const setFormationIndex = useCallback((idx: number) => {
     setCareer(prev => {
