@@ -40,6 +40,7 @@
 
 import type { CareerState } from "./soccerCareerEngine";
 import { getEraStars, getEraTopClubs, getEraLeagueClubs, getEraRivalName } from "./careerEras";
+import { leagueKeyInYear, ledgerLeague } from "./soccerCareerLeague";
 
 /* ─── storage caps ─── */
 export const MAX_LINES = 6;    // lines kept per thread (three exchanges of history)
@@ -1675,10 +1676,16 @@ export function worldSeasonTick(
   const draw = (clubs: string[]): string => clubs[Math.floor(rng.next() * clubs.length)];
   const leagueWinners: Record<string, string> = {};
   const cupWinners: Record<string, string> = {};
+  /* Round 1037: his league is the one his season card names, the league the
+     ledgers put his club in that season (none of the six: no league they
+     hold), and today's label only where the ledgers say nothing. Whatever
+     the era lists say, his club wins no other league. */
+  const myLeague = leagueKeyInYear({ name: s.currentClub, league: s.currentLeague }, year)
+    ?? (ledgerLeague(s.currentLeague, year) ? null : s.currentLeague);
   for (const [name, clubs] of Object.entries(leagues)) {
-    const mine = name === s.currentLeague;
-    leagueWinners[name] = draw(mine ? notMine(clubs, opts.playerLeagueTitle) : clubs);
-    cupWinners[name] = draw(mine ? notMine(clubs, !!opts.playerCup) : clubs);
+    const mine = name === myLeague;
+    leagueWinners[name] = draw(notMine(clubs, mine && opts.playerLeagueTitle));
+    cupWinners[name] = draw(notMine(clubs, mine && !!opts.playerCup));
   }
   const ucl = draw(notMine(topClubs, opts.playerUcl));
 

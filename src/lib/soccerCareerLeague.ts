@@ -189,9 +189,10 @@ export function readLeagueFinish(r: { leagueFinish?: unknown; leagueSize?: unkno
 }
 
 /** "La Liga", "Serie A", "MLS", but "the Premier League", "the Bundesliga":
- *  the phone feed's rule, plus MLS, which takes no article. */
+ *  the phone feed's rule, plus MLS, which takes no article, and Round 1037's
+ *  "Division 1" (Ligue 1 to 2001-02), which takes none either. */
 export function leagueWithArticle(name: string): string {
-  return /^(la |serie |ligue |eredivisie|primeira|liga |mls$)/i.test(name) ? name : `the ${name}`;
+  return /^(la |serie |ligue |eredivisie|primeira|liga |division \d|mls$)/i.test(name) ? name : `the ${name}`;
 }
 
 /** "1st", "2nd", "3rd", "11th", "22nd". */
@@ -479,6 +480,12 @@ export interface ManagerLeagueInput {
    *  just moved his club out of, so his club takes the place of a club
    *  that made that move for real. */
   from?: string;
+  /** Round 1037: false when nothing the game played put his club in this
+   *  league this season (the first season of a job, or the one after a
+   *  season it could not name). A past season then follows the ledgers: the
+   *  league the club was really in, and no league at all when they place it
+   *  in none of the six. Absent means the game did put it there. */
+  placed?: boolean;
 }
 export interface ManagerLeagueField {
   /** The league the season is played in, or null when nothing names it. */
@@ -504,9 +511,21 @@ export function managerLeagueField(input: ManagerLeagueInput, rng: () => number)
   const world = adjustClubsForYear([...input.clubs], input.year);
   const mine = clubKey(input.club);
   /* the job's league first: the card showed it, so the table agrees with it */
-  const league = input.league
+  let league = input.league
     ? listLeague(input.clubs, input.league) ?? input.league
     : input.clubs.find(c => clubKey(c.name) === mine)?.league ?? null;
+  /* Round 1037: a past season the game did not put his club in is played
+     where the ledgers put the club; a job's label (today's) never seats a
+     club in a past league it was not in. Placed in none of the six while the
+     label names one of them, the season names no league and nobody, and no
+     table moves the club (the label is kept, unprinted, for 2026-27 on). */
+  if (input.placed === false && input.year < LIST_SEASON) {
+    const real = clubLedgerSeason(input.club, input.year);
+    if (real) league = real.key;
+    else if (league !== null && ledgerLeague(league, input.year)) {
+      return { league: null, size: MANAGER_FIELD, sizeVerified: false, named: [], lineupUnknown: true };
+    }
+  }
   /* Round 1037: a past season of a league the ledgers hold is that season's
      real field, never today's */
   const ledger = league !== null ? ledgerLeague(league, input.year) : null;

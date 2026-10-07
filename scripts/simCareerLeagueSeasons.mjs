@@ -79,7 +79,13 @@ const NODE_MODULES = (() => {
   return p.slice(0, p.lastIndexOf('node_modules') + 'node_modules'.length);
 })();
 const CONTROL = process.env.SIM_LEAGUE_SEASONS_CONTROL || '';
-const BASE = process.env.SIM_LEAGUE_SEASONS_BASE || 'origin/main';
+/* the base: origin/main, or Release AH while it is not on main (this round
+   is built on it, and a main without Rounds 1022 and 1029 moves for reasons
+   that are not this round's) */
+const gitOk = cmd => { try { execSync(cmd, { cwd: ROOT, stdio: 'ignore' }); return true; } catch { return false; } };
+const BASE = process.env.SIM_LEAGUE_SEASONS_BASE
+  || (gitOk('git rev-parse --verify --quiet origin/release-ah') && !gitOk('git merge-base --is-ancestor origin/release-ah origin/main')
+    ? 'origin/release-ah' : 'origin/main');
 const SEED = Number(process.env.SIM_LEAGUE_SEASONS_SEED || 1);
 const LIST_SEASON = 2026;
 
@@ -111,6 +117,12 @@ const CONTROLS = {
   todaylabel: ['b', 'src/lib/soccerCareerLeague.ts', swap('return `${name}, ${seasonSpan(year)}`;', 'return `${club.league}, ${seasonSpan(year)}`;')],
   finishwrong: ['b', 'src/lib/soccerCareerEngine.ts', swap('league: leagueKeyInYear({ name: state.currentClub, league: state.currentLeague }, seasonYear), year: seasonYear,', 'league: state.currentLeague, year: seasonYear,')],
   cardwire: ['d', 'src/pages/SoccerCareer.tsx', swap('`${clubCardLeague(career, currentSeason.year)}${career.contractYearsLeft}yr left · ', '`${career.currentLeague} · ${career.contractYearsLeft}yr left · ')],
+  oldsize: ['a', 'src/lib/soccerCareerLeague.ts', swap('  if (year < LIST_SEASON && savedSize !== null && savedSize !== leagueSizeFor(key, year)) return null;\n', '')],
+  jobleak: ['b', 'src/lib/soccerCareerEngine.ts', swap('year: calYear, from: movedFrom, placed }', 'year: calYear, from: movedFrom }')],
+  jobyear: ['b', 'src/lib/soccerCareerEngine.ts', swap('?? 2024) + (s.managerState?.season ?? 0) + 1;', '?? 2024) + (s.managerState?.season ?? 0);')],
+  offeryear: ['b', 'src/lib/soccerCareerEngine.ts', swap('return (s.seasons[s.seasons.length - 1]?.year ?? 0) + 1;', 'return (s.seasons[s.seasons.length - 1]?.year ?? 0);')],
+  selfnamed: ['b', 'src/lib/soccerCareerLeague.ts', swap('let named = s.clubs.filter(n => !(member && me.canon === n));', 'let named = [...s.clubs];')],
+  phonemine: ['b', 'src/lib/soccerPhone.ts', swap('const mine = name === myLeague;', 'const mine = name === s.currentLeague;')],
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
 const [controlSection, controlFile, controlEdit] = CONTROLS[CONTROL] || [];
@@ -149,6 +161,7 @@ export * as E from '${r}/src/lib/soccerCareerEngine.ts';
 export * as L from '${r}/src/lib/soccerCareerLeague.ts';
 export * as D from '${r}/src/lib/soccerCareerDerby.ts';
 export * as J from '${r}/src/lib/managerJobMarket.ts';
+export * as P from '${r}/src/lib/soccerPhone.ts';
 ${withLedger ? "" : "// "}export * as S from '${r}/src/data/careerLeagueSeasons.ts';
 `);
   const out = path.join(tmp, `${name}.mjs`);
@@ -159,7 +172,7 @@ ${withLedger ? "" : "// "}export * as S from '${r}/src/data/careerLeagueSeasons.
 const M = await bundle(ROOT, 'tree', [controlPlugin]);
 if (CONTROL && controlFile.endsWith('.ts') && !controlFired) { console.error(`control ${CONTROL} never reached ${controlFile}`); process.exit(2); }
 if (CONTROL) console.log(`CONTROL ${CONTROL} applied: section ${controlSection} is meant to go red`);
-const { E, L, J, S } = M;
+const { E, L, J, S, P } = M;
 
 /* ─── The ledgers, read here on their own ───
    truth.get(year).get(canon) = { key, name, size }, by exact canon name. */
@@ -216,6 +229,22 @@ for (const c of WORLD) {
   }
   ok(L.leagueInYear(c, LIST_SEASON) === (c.league || null), `${c.name}: from 2026-27 the lookup must answer today's label "${c.league}"`);
 }
+/* the summary's old save guard (decision 7): a finish saved at a size that
+   is not the season's own was drawn in today's league before this round,
+   so no league is printed beside it; the season's own size prints the
+   ledgers' league */
+let guarded = 0;
+for (const c of WORLD) {
+  for (let y = 1990; y < LIST_SEASON; y++) {
+    const want = truthOf(c.name, y);
+    if (!want) continue;
+    guarded += 1;
+    const other = want.size === 20 ? 24 : 20;
+    ok(L.finishLeague(c, y, want.size)?.name === want.name, `${c.name} ${span(y)}: a finish saved at ${want.size} prints ${L.finishLeague(c, y, want.size)?.name ?? 'no league'}, the ledgers ${want.name}`);
+    ok(L.finishLeague(c, y, other) === null, `${c.name} ${span(y)}: a finish saved at ${other} is printed beside ${want.name}, which had ${want.size}`);
+  }
+}
+ok(guarded >= 1000, `only ${guarded} club seasons held the old save guard (floor 1000)`);
 /* the job market's clubs: one league a season at most, and the spellings */
 await J.loadManagerMarket?.();
 const market = J.allOfferClubs();
@@ -237,7 +266,7 @@ for (const [from, to] of Object.entries(L.MARKET_SPELLINGS)) {
 }
 let printedNames = 0;
 for (const row of byLeague.values()) for (const ps of row.printed) for (const p of ps) { printedNames += 1; ok(L.identityKey(p) === genIdentity(p), `identityKey disagrees with the generator on "${p}"`); }
-console.log(`  ${seasonsIn} seasons, ${canonIn} named places; ${answers} club seasons answered (${placed} in a league); ${market.length} market clubs placed in ${marketPlaced} club seasons; ${printedNames} printed names keyed alike`);
+console.log(`  ${seasonsIn} seasons, ${canonIn} named places; ${answers} club seasons answered (${placed} in a league); ${market.length} market clubs placed in ${marketPlaced} club seasons; ${printedNames} printed names keyed alike; ${guarded} club seasons hold the old save guard`);
 
 /* ─── b. PLAYED ─── */
 head('b', 'PLAYED: seeded careers from 1990 to 2019, to retirement and into the dugout');
@@ -276,7 +305,8 @@ const step = (s, clubs, X = E) => {
   }
 };
 const cov = { careers: 0, seasons: 0, past: 0, pastSized: 0, pastChamp: 0, pastNone: 0, pastTitleNone: 0, derbies: 0,
-  offers: 0, offersNone: 0, cards: 0, dugout: 0, dugoutLedger: 0, dugoutNamed: 0, dugoutUnknown: 0, jobs: 0, jobsNone: 0, stuck: 0 };
+  offers: 0, offersNone: 0, cards: 0, dugout: 0, dugoutLedger: 0, dugoutNamed: 0, dugoutUnknown: 0, jobs: 0, jobsNone: 0, stuck: 0,
+  offerYears: 0, jobYears: 0, dugoutSeated: 0, dugoutUnplaced: 0, forced: 0, phone: 0, phoneSwapped: 0 };
 const checkOffer = (club, y, where) => {
   cov.offers += 1;
   const want = lineWant(truthOf(club.name, y), y, club.league);
@@ -325,13 +355,14 @@ const offersOf = s => {
   if (t?.offers) out.push(...t.offers.filter(o => o?.club));
   return out;
 };
-const checkDugoutRow = (s, row, calYear) => {
+const checkDugoutRow = (s, row, calYear, prev) => {
   if (calYear >= LIST_SEASON || !row.table) return;
   cov.dugout += 1;
   const lr = typeof row.league === 'string' ? byLeague.get(`${row.league}|${calYear}`) ?? null : null;
   const words = L.dugoutTableWords(row);
   const rivals = row.table.filter(r => !r.you && !r.unnamed && r.club);
-  const where = `${s.managerState.club} ${span(calYear)}`;
+  const club = row.table.find(r => r.you)?.club ?? row.club;
+  const where = `${club} ${span(calYear)}`;
   if (lr) {
     cov.dugoutLedger += 1;
     cov.dugoutNamed += rivals.length;
@@ -340,11 +371,73 @@ const checkDugoutRow = (s, row, calYear) => {
     ok(row.lineupUnknown !== true, `${where}: a ledger season still marked lineup unknown`);
     for (const r of rivals) ok(lr.canon.includes(r.club), `${where}: ${r.club} named in ${lr.name}, which it was not in that season`);
     ok((row.knownRivals ?? 0) <= lr.size - 1, `${where}: ${row.knownRivals} rivals named for ${lr.size} places`);
+    /* his own row: in a league he was not in that season only where the
+       game itself put him (a season it named at this club, or a move out
+       of one), never by a job's label, which is today's */
+    const t = marketTruth(club, calYear);
+    if (!t || t.key !== lr.key) {
+      cov.dugoutSeated += 1;
+      ok(!!prev && prev.year === row.year - 1 && prev.club === club && typeof prev.league === 'string' && prev.lineupUnknown !== true,
+        `${where}: seated in the ${lr.name}, which the club was not in (${t ? t.name : 'none of the six'}), with no season of the game's own behind it`);
+    }
+    /* nobody twice, and never his own club as a rival */
+    const mine = L.clubLedgerSeason(club, calYear)?.canon ?? null;
+    ok(new Set(rivals.map(r => r.club)).size === rivals.length, `${where}: a rival named twice (${rivals.map(r => r.club).join(', ')})`);
+    ok(!rivals.some(r => r.club === club || (mine !== null && r.club === mine)), `${where}: his own club named as a rival too`);
   } else {
+    if (row.lineupUnknown === true && row.league === undefined) cov.dugoutUnplaced += 1;
     cov.dugoutUnknown += 1;
     ok(words.header === 'Final table', `${where}: a season the ledgers do not hold is headed "${words.header}"`);
     ok(rivals.length === 0, `${where}: names ${rivals.map(r => r.club).join(', ')} in a league the ledgers do not hold`);
   }
+};
+/* The dugout, season by season: every job card, the season it names held
+   to the season the table that follows is drawn for, and every past table. */
+const playDugout = (s, seasons) => {
+  for (let d = 0; d < seasons; d++) {
+    const ms = s.managerState;
+    let jobYear = null;
+    if (ms.unemployed) {
+      const y = E.managerNextSeasonYear(s);
+      for (const off of ms.offers ?? []) {
+        cov.jobs += 1;
+        const got = L.leagueSeasonLine({ name: off.club, league: off.league }, y);
+        if (got === null && y < LIST_SEASON) cov.jobsNone += 1;
+        ok(got === lineWant(marketTruth(off.club, y), y, off.league), `dugout job ${off.club} for ${span(y)}: the card says ${JSON.stringify(got)}`);
+      }
+      if ((ms.offers ?? []).length) { s = E.acceptManagerOffer(s, 0); jobYear = y; }
+    }
+    const before = s.managerState.seasonResults;
+    const prev = before[before.length - 1];
+    s = E.advanceManagerSeason(s, WORLD);
+    const after = s.managerState;
+    const row = after.seasonResults[after.seasonResults.length - 1];
+    const calYear = (s.seasons[s.seasons.length - 1]?.year ?? 2024) + after.season;
+    if (jobYear !== null && row && row.table) {
+      cov.jobYears += 1;
+      ok(calYear === jobYear, `dugout job at ${row.club}: its card named ${span(jobYear)}, and the table that followed was ${span(calYear)}`);
+    }
+    if (row && row.year === after.season) checkDugoutRow(s, row, calYear, prev);
+  }
+  return s;
+};
+/* The phone's world against the season card: his title is crowned in the
+   league the card names (where the phone keeps that league), and his club
+   is crowned nowhere else, nor anywhere when he did not win. A season in
+   none of the six may be crowned only under a label the ledgers do not
+   hold (Ajax and the Eredivisie). */
+const phoneAgrees = (club, label, year, won, w, key, where) => {
+  cov.phone += 1;
+  const allowed = key ?? (L.ledgerLeague(label, year) ? null : label);
+  if (won && allowed && allowed in w.leagues) ok(w.leagues[allowed] === club, `${where}: the card says he won the ${allowed}, the phone crowns ${w.leagues[allowed]}`);
+  const crowned = Object.entries(w.leagues).filter(([, c]) => c === club).map(([lg]) => lg);
+  ok(crowned.every(lg => won && lg === allowed), `${where}: the phone crowns him in the ${crowned.join(' and ')} (his title ${won}, the card's league ${allowed ?? 'none'})`);
+};
+const checkPhone = (s, row) => {
+  const w = s.phone?.world;
+  if (!w || w.year !== row.year || row.year >= LIST_SEASON || row.club !== s.currentClub) return;
+  const key = L.finishLeague({ name: row.club, league: s.currentLeague }, row.year, row.leagueSize ?? null)?.key ?? null;
+  phoneAgrees(row.club, s.currentLeague, row.year, row.leagueTitle === true, w, key, `${row.club} ${span(row.year)}`);
 };
 for (const [start, era] of STARTS) {
   for (let k = 0; k < PER_START; k++) {
@@ -357,8 +450,14 @@ for (const [start, era] of STARTS) {
     cov.careers += 1;
     let seen = s.seasons.length;
     let steps = 0;
+    /* the season an offer or loan card names must be the season that is
+       then played: the page reads nextSeasonYear, so this holds it to the
+       record rather than to itself */
+    let offerYear = null;
     for (; steps < 1200 && !s.retired; steps++) {
-      for (const off of offersOf(s)) checkOffer(off.club, E.nextSeasonYear(s), s.phase);
+      const offs = offersOf(s);
+      for (const off of offs) checkOffer(off.club, E.nextSeasonYear(s), s.phase);
+      if (offs.length && s.phase !== 'youth') offerYear = E.nextSeasonYear(s);
       if (s.phase === 'playing' && s.seasons.length) {
         cov.cards += 1;
         const y = s.seasons[s.seasons.length - 1].year;
@@ -369,34 +468,66 @@ for (const [start, era] of STARTS) {
       const n = step(s, WORLD);
       if (!n) { cov.stuck += 1; break; }
       s = n;
-      while (seen < s.seasons.length) { const row = s.seasons[seen]; if (row.type === 'playing') checkSeason(row); seen += 1; }
+      while (seen < s.seasons.length) {
+        const row = s.seasons[seen];
+        if (row.type === 'playing') {
+          if (offerYear !== null) {
+            cov.offerYears += 1;
+            ok(row.year === offerYear, `an offer card named ${span(offerYear)}, and the season played next was ${span(row.year)}`);
+            offerYear = null;
+          }
+          checkSeason(row);
+          checkPhone(s, row);
+        }
+        seen += 1;
+      }
     }
     if (!s.retired) { cov.stuck += 1; continue; }
     s = E.choosePostRetirement(s, 'manager', WORLD);
     if (!s.managerState) { cov.stuck += 1; continue; }
-    for (let d = 0; d < DUGOUT_SEASONS; d++) {
-      const ms = s.managerState;
-      if (ms.unemployed) {
-        const y = E.managerNextSeasonYear(s);
-        for (const off of ms.offers ?? []) {
-          cov.jobs += 1;
-          const got = L.leagueSeasonLine({ name: off.club, league: off.league }, y);
-          if (got === null && y < LIST_SEASON) cov.jobsNone += 1;
-          ok(got === lineWant(marketTruth(off.club, y), y, off.league), `dugout job ${off.club} for ${span(y)}: the card says ${JSON.stringify(got)}`);
-        }
-        if ((ms.offers ?? []).length) s = E.acceptManagerOffer(s, 0);
-      }
-      s = E.advanceManagerSeason(s, WORLD);
-      const after = s.managerState;
-      const row = after.seasonResults[after.seasonResults.length - 1];
-      const calYear = (s.seasons[s.seasons.length - 1]?.year ?? 2024) + after.season;
-      if (row && row.year === after.season) checkDugoutRow(s, row, calYear);
+    playDugout(s, DUGOUT_SEASONS);
+  }
+}
+/* Forced jobs, the same on every seed, so the past tables are checked on a
+   floor no draw can empty (seed 4 once drew no dugout season in the six):
+   clubs in one of the six that season, and clubs whose label (today's) is
+   one of the six while the ledgers put them in none that season. */
+const FORCED = [['Leeds United', 2010], ['Newcastle', 2008], ['Ipswich Town', 1997], ['Fiorentina', 1994], ['Malaga', 2015],
+  ['Wolves', 2010], ['West Ham', 2011], ['Sunderland', 2018], ['Nottingham Forest', 2005], ['Brentford', 2005], ['Juventus', 2006], ['Ipswich Town', 2019]];
+Math.random = mulberry32(20261006);
+const forcedBase = E.initCareer('Forced', 'England', 'CM', '2005-09', { pace: 70, shooting: 70, passing: 70, dribbling: 70, defending: 70, physical: 70, reflexes: 40 }, 70, 2005, WORLD, null, 80);
+for (const [name, y] of FORCED) {
+  const w = WORLD.find(c => c.name === name);
+  if (!ok(!!w, `forced job: ${name} is not a club of the career's world`)) continue;
+  Math.random = mulberry32(y * 131 + name.length);
+  const s = { ...forcedBase, retired: true, phase: 'retired', seasons: [{ ...(forcedBase.seasons[0] ?? {}), year: y - 1 }],
+    managerState: { club: 'Out of work', clubTier: 4, season: 0, trophies: 0, promotions: 0, seasonResults: [], unemployed: true, seasonsOut: 0,
+      offers: [{ club: name, tier: w.tier, league: w.league, brief: 'A forced job.' }], nationalTeamOffer: false, managingNationalTeam: false } };
+  if (!ok(E.managerNextSeasonYear(s) === y, `forced job ${name}: the state does not start in ${span(y)}`)) continue;
+  cov.forced += 1;
+  playDugout(s, 8);
+}
+/* The phone's world against the season card, over every club of the world
+   in one season of each five: when he wins his league the phone crowns him
+   in the league the card names, and nowhere else; when he does not, it
+   crowns him nowhere. */
+Math.random = mulberry32(4242);
+const phoneBase = E.initCareer('Phone', 'England', 'ST', '2005-09', { pace: 80, shooting: 80, passing: 80, dribbling: 80, defending: 80, physical: 80, reflexes: 50 }, 80, 2005, WORLD, null, 88);
+for (const y of [1991, 1996, 2001, 2006, 2011, 2016, 2021, 2025]) {
+  for (const c of WORLD) {
+    const key = L.finishLeague(c, y, null)?.key ?? null;
+    if (key === null && !L.ledgerLeague(c.league, y)) continue;
+    if (key !== c.league) cov.phoneSwapped += 1;
+    for (const won of [true, false]) {
+      const w = P.worldSeasonTick({ ...phoneBase, currentClub: c.name, currentLeague: c.league }, { year: y, playerLeagueTitle: won, playerUcl: false });
+      phoneAgrees(c.name, c.league, y, won, w, key, `phone ${c.name} ${span(y)}`);
     }
   }
 }
 Math.random = realRandom;
 console.log(`  ${cov.careers} careers, ${cov.seasons} playing seasons (${cov.past} before 2026-27: ${cov.pastSized} finishes sized from the ledgers, ${cov.pastChamp} of them in the Championship, ${cov.pastNone} in no ledger league, ${cov.pastTitleNone} titles there), ${cov.derbies} past derbies`);
-console.log(`  ${cov.offers} offer and loan cards (${cov.offersNone} past ones with no league), ${cov.cards} club cards, ${cov.jobs} dugout jobs (${cov.jobsNone} with no league); dugout ${cov.dugout} past seasons: ${cov.dugoutLedger} from the ledgers naming ${cov.dugoutNamed} rivals, ${cov.dugoutUnknown} unknown; ${cov.stuck} stuck`);
+console.log(`  ${cov.offers} offer and loan cards (${cov.offersNone} past ones with no league), ${cov.cards} club cards, ${cov.jobs} dugout jobs (${cov.jobsNone} with no league); dugout ${cov.dugout} past seasons: ${cov.dugoutLedger} from the ledgers naming ${cov.dugoutNamed} rivals, ${cov.dugoutUnknown} unknown (${cov.dugoutUnplaced} of them a club the ledgers put in none of the six), ${cov.dugoutSeated} seated by the game's own seasons; ${cov.stuck} stuck`);
+console.log(`  years held to the record: ${cov.offerYears} offer seasons, ${cov.jobYears} dugout jobs; ${cov.forced} forced jobs; phone against the card ${cov.phone} times (${cov.phoneSwapped} club seasons whose label is not that season's league)`);
 ok(cov.stuck === 0, `${cov.stuck} careers stuck on a screen this harness cannot answer`);
 /* Floors, so a run that saw too little cannot pass for a green one. Measured
    2026-10-06 over SIM_LEAGUE_SEASONS_SEED 1, 2 and 3 (40 careers each):

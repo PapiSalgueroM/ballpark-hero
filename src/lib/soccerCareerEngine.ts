@@ -8369,9 +8369,14 @@ export function advanceManagerSeason(prev: CareerState, clubs: ClubData[]): Care
   const prevRow = ms.seasonResults[ms.seasonResults.length - 1];
   const movedFrom = prevRow && prevRow.year === ms.season - 1 && prevRow.club === ms.club
     && typeof prevRow.league === "string" && prevRow.league !== savedLeague ? prevRow.league : undefined;
+  /* Round 1037: the game itself put his club in this league only by a move
+     of its own or a season it named at this club in this league; the first
+     season of a job was put there by the job's label, which is today's */
+  const placed = movedFrom !== undefined || (!!prevRow && prevRow.year === ms.season - 1 && prevRow.club === ms.club
+    && typeof prevRow.league === "string" && prevRow.league === savedLeague && prevRow.lineupUnknown !== true);
   const lf: ReturnType<typeof managerLeagueField> = marketJob && !savedLeague
     ? { league: null, size: MANAGER_FIELD, sizeVerified: false, named: [] as string[], lineupUnknown: false }
-    : managerLeagueField({ clubs, club: ms.club, league: savedLeague, year: calYear, from: movedFrom }, Math.random);
+    : managerLeagueField({ clubs, club: ms.club, league: savedLeague, year: calYear, from: movedFrom, placed }, Math.random);
   if (lf.league) ms.league = lf.league;
   const field: (string | null)[] = [...lf.named, ...Array<null>(Math.max(0, lf.size - 1 - lf.named.length)).fill(null)];
   const games = field.length * 2; // home and away vs each rival

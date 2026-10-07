@@ -118,6 +118,10 @@ describe("leagueWithArticle", () => {
     expect(["Premier League", "La Liga", "Bundesliga", "Serie A", "Ligue 1", "MLS", "Eredivisie"].map(leagueWithArticle))
       .toEqual(["the Premier League", "La Liga", "the Bundesliga", "Serie A", "Ligue 1", "MLS", "Eredivisie"]);
   });
+  it("Round 1037: the old French name takes no article, the old English ones do", () => {
+    expect(["Division 1", "First Division", "Second Division", "Championship"].map(leagueWithArticle))
+      .toEqual(["Division 1", "the First Division", "the Second Division", "the Championship"]);
+  });
 });
 
 describe("ordinal", () => {
@@ -277,6 +281,19 @@ describe("managerLeagueField (Round 1029)", () => {
     const promoted = real.clubs.filter(n => CAREER_LEAGUE_SEASONS["Championship"][2011].clubs.includes(n));
     const gone = real.clubs.filter(n => !up.named.includes(n));
     if (gone.length === 1) expect(promoted).toContain(gone[0]);
+  });
+
+  it("never seats a club by today's label alone: a job's first past season follows the ledgers", () => {
+    /* a job at Wolves for 2012-13 under a Premier League label is played in
+       the Championship they were really in */
+    const w = managerLeagueField({ clubs: CLUBS, club: "Wolves", league: "Premier League", year: 2012, placed: false }, seq(0.5));
+    expect([w.league, w.size, w.sizeVerified, w.lineupUnknown]).toEqual(["Championship", CAREER_LEAGUE_SEASONS["Championship"][2012].size, true, false]);
+    /* Brentford were in none of the six in 2005-06: no league, nobody named,
+       no verified size, whatever the label says */
+    const b = managerLeagueField({ clubs: CLUBS, club: "Brentford", league: "Premier League", year: 2005, placed: false }, seq(0.5));
+    expect(b).toEqual({ league: null, size: MANAGER_FIELD, sizeVerified: false, named: [], lineupUnknown: true });
+    /* from 2026-27 the label is the league, as before */
+    expect(managerLeagueField({ clubs: CLUBS, club: "Brentford", league: "Premier League", year: 2030, placed: false }, seq(0.5)).league).toBe("Premier League");
   });
 
   it("flags a past season in a league it holds even when it knows no other club there", () => {
