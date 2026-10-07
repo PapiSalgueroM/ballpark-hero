@@ -12,7 +12,7 @@ function ground(sport: TrainingSport = nbaTraining('PG')) {
   const onComplete = vi.fn();
   const onClose = vi.fn();
   const view = render(<TrainingGround sport={sport} available onComplete={onComplete} onClose={onClose} instructions={RULES} />);
-  const button = (name: string) => view.getByRole('button', { name, exact: true });
+  const button = (name: string) => view.getByRole('button', { name });
   const tap = (name: string) => fireEvent.click(button(name));
   const open = (id: string) => {
     const drill = sport.drills.find(d => d.id === id)!;
@@ -110,7 +110,7 @@ describe('shared practice lifecycle', () => {
     const marker = g.container.querySelector('[data-training-feedback]');
     g.tap('Practice rules');
     expect(g.paused()).toBe('true');
-    expect(g.queryByRole('button', { name: 'Resume practice', exact: true })).toBeInTheDocument();
+    expect(g.queryByRole('button', { name: 'Resume practice' })).toBeInTheDocument();
     expect(g.queryByText(RULES)).toBeInTheDocument();
     wait(10000);
     g.tap('Practice rules');
@@ -184,7 +184,7 @@ describe('shared practice lifecycle', () => {
     g.tap('🙋'); wait(100); g.tap('Pause practice'); wait(5000);
     expect(Math.random).toHaveBeenCalledTimes(2);
     g.tap('Resume practice'); wait(249);
-    expect(g.queryByRole('button', { name: '🙋', exact: true })).toBeNull();
+    expect(g.queryByRole('button', { name: '🙋' })).toBeNull();
     wait(1);
     for (let i = 2; i < 8; i++) { g.tap('🙋'); wait(350); }
     expect(g.score()).toBe('88');
