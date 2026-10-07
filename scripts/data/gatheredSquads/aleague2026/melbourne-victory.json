@@ -1,0 +1,2523 @@
+{
+  "club": "Melbourne Victory",
+  "slug": "melbourne-victory",
+  "shard": "B",
+  "season": "2026-27",
+  "round": 1034,
+  "read": "2026-10-06",
+  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in at least one independent 2026-27 list: ESPN's roster, Transfermarkt's 26/27 squad or FotMob's squad. A player the club page lists under an on loan heading is held out, not a first team row. Name and position text as the club prints them. group stands when an independent source puts him in the same group; otherwise it is the group two independent hosts agree on, else null. birthDate only where two independent hosts give the same date (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs: 0 only where a page says \"Not used during this season\" (named in a matchday squad, never on); a \"Not in squad during this season\" entry is not counted (Transfermarkt prints it for players who joined after the season too), so minutes are null when he has no played or unused entry on any page. A minutes value also needs a second host: ESPN's own 2025-26 regular season record (season 2025, type 1) for the ESPN id the row cites. The two hosts round substitution and stoppage minutes their own way, so they count as agreeing when they are no more than one minute an appearance apart (ESPN's appearance count); the value kept is Transfermarkt's and ESPN's sits beside it in minutesSecondSource. Where they are further apart, or only one host has a value, minutes are null and the row's notes give what each host said.",
+  "sources": {
+    "club": {
+      "host": "melbournevictory.com.au",
+      "url": "https://melbournevictory.com.au/squads/men",
+      "read": "2026-10-06"
+    },
+    "leagueTransferCentre": {
+      "host": "aleagues.com.au",
+      "url": "https://aleagues.com.au/news/isuzu-ute-a-league-2026-27-transfer-centre-ins-outs/",
+      "read": "2026-10-06",
+      "dated": "2026-09-21",
+      "ins": [
+        "Giovanni Savarese (Head Coach)",
+        "Harry Shillington",
+        "Harrison Sawyer",
+        "Franco Lino (Loan)",
+        "Phillip Ziereis",
+        "Tom Lockyer",
+        "Guillermo May"
+      ],
+      "outs": [
+        "Adama Traore",
+        "Lachlan Jackson",
+        "Reno Piscopo",
+        "Nikos Vergos",
+        "Jing Reec",
+        "Emre Saglam",
+        "Joshua Rawlins (Dundee United)",
+        "Arthur Diles (Head Coach)",
+        "Roderick Miranda",
+        "Sebastian Esposito",
+        "Nishan Velupillay",
+        "Juan Mata"
+      ],
+      "resignings": [
+        "Charles Nduka",
+        "Jack Warshawsky",
+        "Mikey Ghossaini",
+        "Jack Mihailidis",
+        "Brendan Hamill",
+        "Jack Duncan"
+      ]
+    },
+    "espn": {
+      "host": "site.api.espn.com",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5328/roster?season=2026",
+      "read": "2026-10-06"
+    },
+    "espnSeasonStats": {
+      "host": "sports.core.api.espn.com",
+      "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/<espn id>/statistics",
+      "read": "2026-10-06"
+    },
+    "transfermarkt": {
+      "host": "transfermarkt.com",
+      "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
+      "read": "2026-10-06"
+    },
+    "fotmob": {
+      "host": "fotmob.com",
+      "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+      "read": "2026-10-06"
+    }
+  },
+  "notes": [
+    "The club's squad page lists only 16 players. Seven more rows come from the league transfer centre's Ins and Re-signings, each confirmed by ESPN or Transfermarkt.",
+    "5 players are on two or more independent 2026-27 lists for this club but on neither the club squad page nor the transfer centre's Ins or Re-signings, so they are not rows and this squad may be incomplete without them: Oskar Von Schrenk (espn, fotmob); John Radimisis (espn, fotmob); William Kengni (espn, transfermarkt); Malik Olukhale (espn, transfermarkt); Theodore Limberis (espn, fotmob). See independentOnly."
+  ],
+  "count": {
+    "clubPage": 16,
+    "staffSkipped": 1,
+    "rows": 23,
+    "heldOut": 0,
+    "twoHostRows": 23,
+    "birthDateKnown": 23,
+    "groupKnown": 23,
+    "minutesKnown": 19,
+    "marketRows": 0,
+    "perfPagesLoaded": 12,
+    "independentOnly": 5
+  },
+  "rows": [
+    {
+      "name": "Jack Duncan",
+      "position": "Goalkeeper",
+      "group": "GK",
+      "birthDate": "1993-04-19",
+      "minutes2025_26": 990,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/melbourne-victory/leistungsdaten/verein/7006/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Melbourne Victory"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/154406/statistics",
+        "minutes": 990,
+        "appearances": 11
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "melbournevictory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "melbournevictory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "melbournevictory.com.au",
+          "url": "https://melbournevictory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://melbournevictory.com.au/player/jack-duncan/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5328/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "154406"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "171382"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "240056"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Jack Duncan",
+          "position": "Goalkeeper",
+          "number": "25"
+        },
+        "espn": {
+          "id": "154406",
+          "name": "Jack Duncan",
+          "position": "Goalkeeper",
+          "birthDate": "1993-04-19",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "171382",
+          "name": "Jack Duncan",
+          "position": "Goalkeeper",
+          "birthDate": "1993-04-19",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "240056",
+          "name": "Jack Duncan",
+          "position": "Keeper",
+          "birthDate": "1993-04-19",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Daniel Graskoski",
+      "position": "Goalkeeper",
+      "group": "GK",
+      "birthDate": "2007-01-28",
+      "minutes2025_26": 0,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/melbourne-victory/leistungsdaten/verein/7006/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Melbourne Victory"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/386314/statistics",
+        "minutes": 0,
+        "appearances": 0
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "melbournevictory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "melbournevictory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "melbournevictory.com.au",
+          "url": "https://melbournevictory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://melbournevictory.com.au/player/daniel-graskoski/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5328/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "386314"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1106575"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "1686140"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Daniel Graskoski",
+          "position": "Goalkeeper",
+          "number": "30"
+        },
+        "espn": {
+          "id": "386314",
+          "name": "Daniel Graskoski",
+          "position": "Goalkeeper",
+          "birthDate": "2007-01-28",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1106575",
+          "name": "Daniel Graskoski",
+          "position": "Goalkeeper",
+          "birthDate": "2007-01-28",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1686140",
+          "name": "Daniel Graskoski",
+          "position": "Keeper",
+          "birthDate": "2007-01-28",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Jack Warshawsky",
+      "position": "Goalkeeper",
+      "group": "GK",
+      "birthDate": "2004-08-08",
+      "minutes2025_26": 1350,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/melbourne-victory/leistungsdaten/verein/7006/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Melbourne Victory"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/328546/statistics",
+        "minutes": 1350,
+        "appearances": 15
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "melbournevictory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "melbournevictory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "melbournevictory.com.au",
+          "url": "https://melbournevictory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://melbournevictory.com.au/player/jack-warshawsky/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5328/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "328546"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1005338"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "1356317"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Jack Warshawsky",
+          "position": "Goalkeeper",
+          "number": "40"
+        },
+        "espn": {
+          "id": "328546",
+          "name": "Jack Warshawsky",
+          "position": "Goalkeeper",
+          "birthDate": "2004-08-08",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1005338",
+          "name": "Jack Warshawsky",
+          "position": "Goalkeeper",
+          "birthDate": "2004-08-08",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1356317",
+          "name": "Jack Warshawsky",
+          "position": "Keeper",
+          "birthDate": "2004-08-08",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Jason Davidson",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "1991-06-29",
+      "minutes2025_26": 1951,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/melbourne-victory/leistungsdaten/verein/7006/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Melbourne Victory"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/143791/statistics",
+        "minutes": 1951,
+        "appearances": 23
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "melbournevictory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "melbournevictory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "melbournevictory.com.au",
+          "url": "https://melbournevictory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://melbournevictory.com.au/player/jason-davidson/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5328/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "143791"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "137669"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "192303"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Jason Davidson",
+          "position": "Defender",
+          "number": "2"
+        },
+        "espn": {
+          "id": "143791",
+          "name": "Jason Davidson",
+          "position": "Defender",
+          "birthDate": "1991-06-29",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "137669",
+          "name": "Jason Davidson",
+          "position": "Centre-Back",
+          "birthDate": "1991-06-29",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "192303",
+          "name": "Jason Davidson",
+          "position": "Defender",
+          "birthDate": "1991-06-29",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Brendan Hamill",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "1992-09-18",
+      "minutes2025_26": 1,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/melbourne-victory/leistungsdaten/verein/7006/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Melbourne Victory"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/150380/statistics",
+        "minutes": 1,
+        "appearances": 1
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "melbournevictory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "melbournevictory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "melbournevictory.com.au",
+          "url": "https://melbournevictory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://melbournevictory.com.au/player/brendan-hamill/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5328/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "150380"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "147600"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "207037"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Brendan Hamill",
+          "position": "Defender",
+          "number": "5"
+        },
+        "espn": {
+          "id": "150380",
+          "name": "Brendan Hamill",
+          "position": "Defender",
+          "birthDate": "1992-09-18",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "147600",
+          "name": "Brendan Hamill",
+          "position": "Centre-Back",
+          "birthDate": "1992-09-18",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "207037",
+          "name": "Brendan Hamill",
+          "position": "Defender",
+          "birthDate": "1992-09-18",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Joshua Inserra",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2005-01-21",
+      "minutes2025_26": 769,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/melbourne-victory/leistungsdaten/verein/7006/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Melbourne Victory"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/362165/statistics",
+        "minutes": 769,
+        "appearances": 11
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "melbournevictory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "melbournevictory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "melbournevictory.com.au",
+          "url": "https://melbournevictory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://melbournevictory.com.au/player/joshua-inserra/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5328/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "362165"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1132512"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "1467027"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Joshua Inserra",
+          "position": "Defender",
+          "number": "16"
+        },
+        "espn": {
+          "id": "362165",
+          "name": "Joshua Inserra",
+          "position": "Defender",
+          "birthDate": "2005-01-21",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1132512",
+          "name": "Joshua Inserra",
+          "position": "Right-Back",
+          "birthDate": "2005-01-21",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1467027",
+          "name": "Joshua Inserra",
+          "position": "Defender",
+          "birthDate": "2005-01-21",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Franco Lino",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2005-08-26",
+      "minutes2025_26": 440,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/melbourne-victory/leistungsdaten/verein/7006/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Melbourne Victory"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/366386/statistics",
+        "minutes": 438,
+        "appearances": 5
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "melbournevictory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "melbournevictory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "melbournevictory.com.au",
+          "url": "https://melbournevictory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://melbournevictory.com.au/player/franco-lino/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5328/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "366386"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1144488"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "1565855"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Franco Lino",
+          "position": "Defender",
+          "number": "18"
+        },
+        "espn": {
+          "id": "366386",
+          "name": "Franco Lino",
+          "position": "Defender",
+          "birthDate": "2005-08-26",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1144488",
+          "name": "Franco Lino",
+          "position": "Left-Back",
+          "birthDate": "2005-08-26",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1565855",
+          "name": "Franco Lino",
+          "position": "Defender",
+          "birthDate": "2005-08-26",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Jordi Valadon",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2003-03-04",
+      "minutes2025_26": 1805,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/melbourne-victory/leistungsdaten/verein/7006/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Melbourne Victory"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/334866/statistics",
+        "minutes": 1828,
+        "appearances": 23
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "melbournevictory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "melbournevictory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "melbournevictory.com.au",
+          "url": "https://melbournevictory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://melbournevictory.com.au/player/jordi-valadon/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5328/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "334866"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "979025"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "1332670"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Jordi Valadon",
+          "position": "Midfielder",
+          "number": "8"
+        },
+        "espn": {
+          "id": "334866",
+          "name": "Jordi Valadon",
+          "position": "Midfielder",
+          "birthDate": "2003-03-04",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "979025",
+          "name": "Jordi Valadon",
+          "position": "Defensive Midfield",
+          "birthDate": "2003-03-04",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1332670",
+          "name": "Jordi Valadon",
+          "position": "Midfielder",
+          "birthDate": "2003-03-04",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Denis Genreau",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "1999-05-21",
+      "minutes2025_26": 1773,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/melbourne-victory/leistungsdaten/verein/7006/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Melbourne Victory"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/240957/statistics",
+        "minutes": 1773,
+        "appearances": 24
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "melbournevictory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "melbournevictory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "melbournevictory.com.au",
+          "url": "https://melbournevictory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://melbournevictory.com.au/player/denis-genreau/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5328/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "240957"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "470618"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "814530"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Denis Genreau",
+          "position": "Midfielder",
+          "number": "10"
+        },
+        "espn": {
+          "id": "240957",
+          "name": "Denis Genreau",
+          "position": "Midfielder",
+          "birthDate": "1999-05-21",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "470618",
+          "name": "Denis Genreau",
+          "position": "Attacking Midfield",
+          "birthDate": "1999-05-21",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "814530",
+          "name": "Denis Genreau",
+          "position": "Midfielder",
+          "birthDate": "1999-05-21",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Louis D'Arrigo",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2001-09-23",
+      "minutes2025_26": 971,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/melbourne-victory/leistungsdaten/verein/7006/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Melbourne Victory"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/269578/statistics",
+        "minutes": 970,
+        "appearances": 16
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "melbournevictory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "melbournevictory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "melbournevictory.com.au",
+          "url": "https://melbournevictory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://melbournevictory.com.au/player/louis-darrigo/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5328/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "269578"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "561650"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "915630"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Louis D'Arrigo",
+          "position": "Midfielder",
+          "number": "27"
+        },
+        "espn": {
+          "id": "269578",
+          "name": "Louis D'Arrigo",
+          "position": "Midfielder",
+          "birthDate": "2001-09-23",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "561650",
+          "name": "Louis D'Arrigo",
+          "position": "Defensive Midfield",
+          "birthDate": "2001-09-23",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "915630",
+          "name": "Louis D'Arrigo",
+          "position": "Midfielder",
+          "birthDate": "2001-09-23",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Oliver Dragicevic",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2007-10-10",
+      "minutes2025_26": 64,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/melbourne-victory/leistungsdaten/verein/7006/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Melbourne Victory"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/412860/statistics",
+        "minutes": 64,
+        "appearances": 7
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "melbournevictory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "melbournevictory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "melbournevictory.com.au",
+          "url": "https://melbournevictory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://melbournevictory.com.au/player/oliver-dragicevic/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5328/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "412860"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1356499"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "1823288"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Oliver Dragicevic",
+          "position": "Midfielder",
+          "number": "29"
+        },
+        "espn": {
+          "id": "412860",
+          "name": "Oliver Dragicevic",
+          "position": "Midfielder",
+          "birthDate": "2007-10-10",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1356499",
+          "name": "Oliver Dragicevic",
+          "position": "Central Midfield",
+          "birthDate": "2007-10-10",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1823288",
+          "name": "Oliver Dragicevic",
+          "position": "Midfielder",
+          "birthDate": "2007-10-10",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Xavier Stella",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2006-08-21",
+      "minutes2025_26": 305,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/melbourne-victory/leistungsdaten/verein/7006/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Melbourne Victory"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/409326/statistics",
+        "minutes": 305,
+        "appearances": 9
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "melbournevictory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "melbournevictory.com.au",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "melbournevictory.com.au",
+          "url": "https://melbournevictory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://melbournevictory.com.au/player/xavier-stella/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5328/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "409326"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1232652"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "1823290"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Xavier Stella",
+          "position": "Midfielder",
+          "number": "34"
+        },
+        "espn": {
+          "id": "409326",
+          "name": "Xavier Stella",
+          "position": "Defender",
+          "birthDate": "2006-08-21",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1232652",
+          "name": "Xavier Stella",
+          "position": "Defensive Midfield",
+          "birthDate": "2006-08-21",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1823290",
+          "name": "Xavier Stella",
+          "position": "Midfielder",
+          "birthDate": "2006-08-21",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Clerismario Santos Rodrigues",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2001-07-27",
+      "minutes2025_26": 1242,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/melbourne-victory/leistungsdaten/verein/7006/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Melbourne Victory"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/363862/statistics",
+        "minutes": 1242,
+        "appearances": 24
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "melbournevictory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "melbournevictory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "melbournevictory.com.au",
+          "url": "https://melbournevictory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://melbournevictory.com.au/player/clarismario-santos-rodrigues/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5328/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "363862"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "697520"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Clerismario Santos Rodrigues",
+          "position": "Attacker",
+          "number": "11"
+        },
+        "espn": {
+          "id": "363862",
+          "name": "Clarismario Rodrigues",
+          "position": "Forward",
+          "birthDate": "2001-07-27",
+          "match": "alias"
+        },
+        "tm": {
+          "id": "697520",
+          "name": "Santos",
+          "position": "Left Winger",
+          "birthDate": "2001-07-27",
+          "match": "alias"
+        },
+        "fotmob": null,
+        "from": "club squad page"
+      },
+      "notes": [
+        "identity linked by hand: ESPN prints Clarismario Rodrigues and Transfermarkt prints Santos; both give birth date 2001-07-27, so it is the same man"
+      ]
+    },
+    {
+      "name": "Matthew Grimaldi",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2003-11-28",
+      "minutes2025_26": 980,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/melbourne-victory/leistungsdaten/verein/7006/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Melbourne Victory"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/368565/statistics",
+        "minutes": 980,
+        "appearances": 26
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "melbournevictory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "melbournevictory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "melbournevictory.com.au",
+          "url": "https://melbournevictory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://melbournevictory.com.au/player/matthew-grimaldi/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5328/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "368565"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1127122"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "1534818"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Matthew Grimaldi",
+          "position": "Attacker",
+          "number": "14"
+        },
+        "espn": {
+          "id": "368565",
+          "name": "Matthew Grimaldi",
+          "position": "Forward",
+          "birthDate": "2003-11-28",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1127122",
+          "name": "Matthew Grimaldi",
+          "position": "Right Winger",
+          "birthDate": "2003-11-28",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1534818",
+          "name": "Matthew Grimaldi",
+          "position": "Midfielder",
+          "birthDate": "2003-11-28",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Keegan Jelacic",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2002-07-31",
+      "minutes2025_26": 1287,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/melbourne-victory/leistungsdaten/verein/7006/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Melbourne Victory"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/297813/statistics",
+        "minutes": 1286,
+        "appearances": 26
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "melbournevictory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "melbournevictory.com.au",
+          "site.api.espn.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "melbournevictory.com.au",
+          "url": "https://melbournevictory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://melbournevictory.com.au/player/keegan-jelacic/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5328/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "297813"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "677510"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "1224986"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Keegan Jelacic",
+          "position": "Attacker",
+          "number": "23"
+        },
+        "espn": {
+          "id": "297813",
+          "name": "Keegan Jelacic",
+          "position": "Forward",
+          "birthDate": "2002-07-31",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "677510",
+          "name": "Keegan Jelacic",
+          "position": "Attacking Midfield",
+          "birthDate": "2002-07-31",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1224986",
+          "name": "Keegan Jelacic",
+          "position": "Attacker",
+          "birthDate": "2002-07-31",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Charles Nduka",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "1998-08-08",
+      "minutes2025_26": 788,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/melbourne-victory/leistungsdaten/verein/7006/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Melbourne Victory"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/418068/statistics",
+        "minutes": 788,
+        "appearances": 12
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "melbournevictory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "melbournevictory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "melbournevictory.com.au",
+          "url": "https://melbournevictory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://melbournevictory.com.au/player/charles-nduka/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5328/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "418068"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "856284"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "1241593"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Charles Nduka",
+          "position": "Attacker",
+          "number": "44"
+        },
+        "espn": {
+          "id": "418068",
+          "name": "Charles Nduka",
+          "position": "Forward",
+          "birthDate": "1998-08-08",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "856284",
+          "name": "Charles Nduka",
+          "position": "Centre-Forward",
+          "birthDate": "1998-08-08",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1241593",
+          "name": "Charles Nduka",
+          "position": "Attacker",
+          "birthDate": "1998-08-08",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Harry Shillington",
+      "position": null,
+      "group": "DEF",
+      "birthDate": "2005-06-30",
+      "minutes2025_26": 515,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/melbourne-city-fc/leistungsdaten/verein/25580/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Melbourne City FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/368568/statistics",
+        "minutes": 505,
+        "appearances": 13
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aleagues.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "aleagues.com.au",
+          "url": "https://aleagues.com.au/news/isuzu-ute-a-league-2026-27-transfer-centre-ins-outs/",
+          "read": "2026-10-06",
+          "note": "league transfer centre dated 21 September 2026, Ins or Re-signings"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5328/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "368568"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1144487"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "1554828"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Harry Shillington",
+          "position": null,
+          "number": null
+        },
+        "espn": {
+          "id": "368568",
+          "name": "Harrison Shillington",
+          "position": "Defender",
+          "birthDate": "2005-06-30",
+          "match": "fuzzy"
+        },
+        "tm": {
+          "id": "1144487",
+          "name": "Harrison Shillington",
+          "position": "Right-Back",
+          "birthDate": "2005-06-30",
+          "match": "fuzzy"
+        },
+        "fotmob": {
+          "id": "1554828",
+          "name": "Harrison Shillington",
+          "position": "Defender",
+          "birthDate": "2005-06-30",
+          "match": "fuzzy"
+        },
+        "from": "league transfer centre only (not on the club squad page)"
+      },
+      "notes": [
+        "not on the club squad page; named for 2026-27 by the league's transfer centre",
+        "Transfermarkt's 25/26 page for Melbourne Victory lists him only as \"Not in squad during this season\", which it also prints for players who joined after that season, so that page is not counted for minutes"
+      ]
+    },
+    {
+      "name": "Harrison Sawyer",
+      "position": null,
+      "group": "FWD",
+      "birthDate": "1996-12-31",
+      "minutes2025_26": 1092,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/macarthur-fc/leistungsdaten/verein/71085/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Macarthur FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/251930/statistics",
+        "minutes": 1092,
+        "appearances": 26
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aleagues.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "aleagues.com.au",
+          "url": "https://aleagues.com.au/news/isuzu-ute-a-league-2026-27-transfer-centre-ins-outs/",
+          "read": "2026-10-06",
+          "note": "league transfer centre dated 21 September 2026, Ins or Re-signings"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5328/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "251930"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "483593"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "821489"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Harrison Sawyer",
+          "position": null,
+          "number": null
+        },
+        "espn": {
+          "id": "251930",
+          "name": "Harrison Sawyer",
+          "position": "Forward",
+          "birthDate": "1996-12-31",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "483593",
+          "name": "Harry Sawyer",
+          "position": "Centre-Forward",
+          "birthDate": "1996-12-31",
+          "match": "fuzzy"
+        },
+        "fotmob": {
+          "id": "821489",
+          "name": "Harry Sawyer",
+          "position": "Attacker",
+          "birthDate": "1996-12-31",
+          "match": "fuzzy"
+        },
+        "from": "league transfer centre only (not on the club squad page)"
+      },
+      "notes": [
+        "not on the club squad page; named for 2026-27 by the league's transfer centre",
+        "Transfermarkt's 25/26 page for Melbourne Victory lists him only as \"Not in squad during this season\", which it also prints for players who joined after that season, so that page is not counted for minutes"
+      ]
+    },
+    {
+      "name": "Phillip Ziereis",
+      "position": null,
+      "group": "DEF",
+      "birthDate": "1993-03-14",
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "minutesSecondSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aleagues.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "aleagues.com.au",
+          "url": "https://aleagues.com.au/news/isuzu-ute-a-league-2026-27-transfer-centre-ins-outs/",
+          "read": "2026-10-06",
+          "note": "league transfer centre dated 21 September 2026, Ins or Re-signings"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5328/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "154326"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "152627"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "276711"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Phillip Ziereis",
+          "position": null,
+          "number": null
+        },
+        "espn": {
+          "id": "154326",
+          "name": "Philipp Ziereis",
+          "position": "Defender",
+          "birthDate": "1993-03-14",
+          "match": "fuzzy"
+        },
+        "tm": {
+          "id": "152627",
+          "name": "Philipp Ziereis",
+          "position": "Centre-Back",
+          "birthDate": "1993-03-14",
+          "match": "fuzzy"
+        },
+        "fotmob": {
+          "id": "276711",
+          "name": "Philipp Ziereis",
+          "position": "Defender",
+          "birthDate": "1993-03-14",
+          "match": "fuzzy"
+        },
+        "from": "league transfer centre only (not on the club squad page)"
+      },
+      "notes": [
+        "not on the club squad page; named for 2026-27 by the league's transfer centre",
+        "Transfermarkt's 25/26 page for Melbourne Victory lists him only as \"Not in squad during this season\", which it also prints for players who joined after that season, so that page is not counted for minutes",
+        "no 2025-26 A-League Men minutes on Transfermarkt (no played or unused-substitute entry on any club page), held as null"
+      ]
+    },
+    {
+      "name": "Tom Lockyer",
+      "position": null,
+      "group": "DEF",
+      "birthDate": "1994-12-03",
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "minutesSecondSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aleagues.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "aleagues.com.au",
+          "url": "https://aleagues.com.au/news/isuzu-ute-a-league-2026-27-transfer-centre-ins-outs/",
+          "read": "2026-10-06",
+          "note": "league transfer centre dated 21 September 2026, Ins or Re-signings"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5328/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "168695"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "207742"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "369761"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Tom Lockyer",
+          "position": null,
+          "number": null
+        },
+        "espn": {
+          "id": "168695",
+          "name": "Tom Lockyer",
+          "position": "Defender",
+          "birthDate": "1994-12-03",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "207742",
+          "name": "Tom Lockyer",
+          "position": "Centre-Back",
+          "birthDate": "1994-12-03",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "369761",
+          "name": "Tom Lockyer",
+          "position": "Defender",
+          "birthDate": "1994-12-03",
+          "match": "exact"
+        },
+        "from": "league transfer centre only (not on the club squad page)"
+      },
+      "notes": [
+        "not on the club squad page; named for 2026-27 by the league's transfer centre",
+        "Transfermarkt's 25/26 page for Melbourne Victory lists him only as \"Not in squad during this season\", which it also prints for players who joined after that season, so that page is not counted for minutes",
+        "no 2025-26 A-League Men minutes on Transfermarkt (no played or unused-substitute entry on any club page), held as null"
+      ]
+    },
+    {
+      "name": "Guillermo May",
+      "position": null,
+      "group": "FWD",
+      "birthDate": "1998-03-11",
+      "minutes2025_26": 1359,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/auckland-fc/leistungsdaten/verein/118373/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Auckland FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/235848/statistics",
+        "minutes": 1358,
+        "appearances": 24
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aleagues.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "aleagues.com.au",
+          "url": "https://aleagues.com.au/news/isuzu-ute-a-league-2026-27-transfer-centre-ins-outs/",
+          "read": "2026-10-06",
+          "note": "league transfer centre dated 21 September 2026, Ins or Re-signings"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5328/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "235848"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "479718"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "979800"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Guillermo May",
+          "position": null,
+          "number": null
+        },
+        "espn": {
+          "id": "235848",
+          "name": "Guillermo May",
+          "position": "Forward",
+          "birthDate": "1998-03-11",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "479718",
+          "name": "Guillermo May",
+          "position": "Centre-Forward",
+          "birthDate": "1998-03-11",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "979800",
+          "name": "Guillermo May",
+          "position": "Attacker",
+          "birthDate": "1998-03-11",
+          "match": "exact"
+        },
+        "from": "league transfer centre only (not on the club squad page)"
+      },
+      "notes": [
+        "not on the club squad page; named for 2026-27 by the league's transfer centre"
+      ]
+    },
+    {
+      "name": "Mikey Ghossaini",
+      "position": null,
+      "group": "FWD",
+      "birthDate": "2007-08-25",
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "minutesSecondSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aleagues.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "aleagues.com.au",
+          "url": "https://aleagues.com.au/news/isuzu-ute-a-league-2026-27-transfer-centre-ins-outs/",
+          "read": "2026-10-06",
+          "note": "league transfer centre dated 21 September 2026, Ins or Re-signings"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5328/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "398152"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1234302"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Mikey Ghossaini",
+          "position": null,
+          "number": null
+        },
+        "espn": {
+          "id": "398152",
+          "name": "Michael Ghossaini",
+          "position": "Forward",
+          "birthDate": "2007-08-25",
+          "match": "alias"
+        },
+        "tm": {
+          "id": "1234302",
+          "name": "Mikey Ghossaini",
+          "position": "Left Winger",
+          "birthDate": "2007-08-25",
+          "match": "exact"
+        },
+        "fotmob": null,
+        "from": "league transfer centre only (not on the club squad page)"
+      },
+      "notes": [
+        "identity linked by hand: ESPN prints Michael Ghossaini; ESPN and Transfermarkt both give birth date 2007-08-25, so it is the same man",
+        "not on the club squad page; named for 2026-27 by the league's transfer centre",
+        "Transfermarkt's 25/26 page for Melbourne Victory lists him only as \"Not in squad during this season\", which it also prints for players who joined after that season, so that page is not counted for minutes",
+        "no 2025-26 A-League Men minutes on Transfermarkt (no played or unused-substitute entry on any club page), held as null"
+      ]
+    },
+    {
+      "name": "Jack Mihailidis",
+      "position": null,
+      "group": "MID",
+      "birthDate": "2006-10-17",
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "minutesSecondSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aleagues.com.au",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "aleagues.com.au",
+          "url": "https://aleagues.com.au/news/isuzu-ute-a-league-2026-27-transfer-centre-ins-outs/",
+          "read": "2026-10-06",
+          "note": "league transfer centre dated 21 September 2026, Ins or Re-signings"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1373901"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "1823286"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Jack Mihailidis",
+          "position": null,
+          "number": null
+        },
+        "espn": null,
+        "tm": {
+          "id": "1373901",
+          "name": "Jack Mihailidis",
+          "position": "Attacking Midfield",
+          "birthDate": "2006-10-17",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1823286",
+          "name": "Jack Mihailidis",
+          "position": "Midfielder",
+          "birthDate": "2006-10-17",
+          "match": "exact"
+        },
+        "from": "league transfer centre only (not on the club squad page)"
+      },
+      "notes": [
+        "not on the club squad page; named for 2026-27 by the league's transfer centre",
+        "Transfermarkt's 25/26 page for Melbourne Victory lists him only as \"Not in squad during this season\", which it also prints for players who joined after that season, so that page is not counted for minutes",
+        "no 2025-26 A-League Men minutes on Transfermarkt (no played or unused-substitute entry on any club page), held as null"
+      ]
+    }
+  ],
+  "heldOut": [],
+  "marketRecheck": [
+    {
+      "id": 176468,
+      "player_name": "Juan Mata",
+      "club": "Melbourne Victory",
+      "position": "Attacking Midfield",
+      "age": 38,
+      "onClubPage": false,
+      "onEspn": false,
+      "onTm": false,
+      "inTransferCentre": [
+        "outs at Melbourne Victory"
+      ],
+      "verdict": "not in the club's 2026-27 squad on the club page, ESPN or Transfermarkt: the dump row is stale"
+    }
+  ],
+  "notOnClubPage": [
+    {
+      "source": "espn",
+      "name": "Oskar Von Schrenk",
+      "position": "Goalkeeper",
+      "birthDate": "2008-06-09"
+    },
+    {
+      "source": "espn",
+      "name": "John Radimisis",
+      "position": "Defender",
+      "birthDate": "2007-01-02"
+    },
+    {
+      "source": "espn",
+      "name": "Winston Ashburner",
+      "position": "Defender",
+      "birthDate": "2009-02-02"
+    },
+    {
+      "source": "espn",
+      "name": "Oliver James Dimovski",
+      "position": "Defender",
+      "birthDate": null
+    },
+    {
+      "source": "espn",
+      "name": "William Kengni",
+      "position": "Defender",
+      "birthDate": null
+    },
+    {
+      "source": "espn",
+      "name": "Matias Aloisi",
+      "position": "Defender",
+      "birthDate": null
+    },
+    {
+      "source": "espn",
+      "name": "Lewis Domenic Marinucci",
+      "position": "Defender",
+      "birthDate": null
+    },
+    {
+      "source": "espn",
+      "name": "Jack",
+      "position": "Midfielder",
+      "birthDate": null
+    },
+    {
+      "source": "espn",
+      "name": "Noah Mirko Tanfara",
+      "position": "Midfielder",
+      "birthDate": null
+    },
+    {
+      "source": "espn",
+      "name": "Malik Olukhale",
+      "position": "Forward",
+      "birthDate": null
+    },
+    {
+      "source": "espn",
+      "name": "Theodore Limberis",
+      "position": "Forward",
+      "birthDate": null
+    },
+    {
+      "source": "transfermarkt",
+      "name": "William Kengni",
+      "position": "Left-Back",
+      "birthDate": "2009-02-23"
+    },
+    {
+      "source": "transfermarkt",
+      "name": "Malik Olukhale",
+      "position": "Right Winger",
+      "birthDate": "2009-01-27"
+    },
+    {
+      "source": "fotmob",
+      "name": "Oskar Von Schrenk",
+      "position": "Keeper",
+      "birthDate": "2008-06-09"
+    },
+    {
+      "source": "fotmob",
+      "name": "John Radimisis",
+      "position": "Defender",
+      "birthDate": "2007-02-01"
+    },
+    {
+      "source": "fotmob",
+      "name": "Clarismario Santos",
+      "position": "Attacker",
+      "birthDate": "2001-07-27",
+      "sameBirthDateAsRow": "Clerismario Santos Rodrigues"
+    },
+    {
+      "source": "fotmob",
+      "name": "Theodore Limberis",
+      "position": "Attacker",
+      "birthDate": "2007-04-10"
+    },
+    {
+      "source": "fotmob",
+      "name": "Michael Ghossaini",
+      "position": "Attacker",
+      "birthDate": "2007-08-25",
+      "sameBirthDateAsRow": "Mikey Ghossaini"
+    }
+  ],
+  "independentOnly": [
+    {
+      "name": "Oskar Von Schrenk",
+      "listedBy": [
+        "espn",
+        "fotmob"
+      ],
+      "birthDateOnTwo": "2008-06-09",
+      "inTransferCentre": [],
+      "outHere": false
+    },
+    {
+      "name": "John Radimisis",
+      "listedBy": [
+        "espn",
+        "fotmob"
+      ],
+      "birthDateOnTwo": null,
+      "inTransferCentre": [],
+      "outHere": false
+    },
+    {
+      "name": "William Kengni",
+      "listedBy": [
+        "espn",
+        "transfermarkt"
+      ],
+      "birthDateOnTwo": null,
+      "inTransferCentre": [],
+      "outHere": false
+    },
+    {
+      "name": "Malik Olukhale",
+      "listedBy": [
+        "espn",
+        "transfermarkt"
+      ],
+      "birthDateOnTwo": null,
+      "inTransferCentre": [],
+      "outHere": false
+    },
+    {
+      "name": "Theodore Limberis",
+      "listedBy": [
+        "espn",
+        "fotmob"
+      ],
+      "birthDateOnTwo": null,
+      "inTransferCentre": [],
+      "outHere": false
+    }
+  ]
+}

@@ -234,6 +234,7 @@ export function CupBracketCard({ career, onClubClick }: CupBracketCardProps) {
   const winner = bracket.find(t => t.round === 'F')?.winner ?? null;
   const cupName = careerLeagueOf(career).cupName;
   const upsets = bracket.filter(t => t.upset && t.winner).length;
+  const byes = career.cupByes ?? [];
 
   return (
     <div className="bg-card border border-border rounded-2xl p-3 md:p-4 space-y-3">
@@ -297,7 +298,11 @@ export function CupBracketCard({ career, onClubClick }: CupBracketCardProps) {
       })}
 
       <p className="text-[9px] text-muted-foreground">
-        Sixteen clubs from across the country, every tie played.
+        {/* Round 1035: a nation with fewer than sixteen clubs in the game
+            gives the rest a bye, so the line says who skipped a round. */}
+        {byes.length
+          ? `${16 - byes.length} clubs from across the country, so ${byes.length} went straight to the quarter-finals: ${byes.join(', ')}.`
+          : 'Sixteen clubs from across the country, every tie played.'}
         {upsets > 0 && ` ${upsets} giant killing${upsets === 1 ? '' : 's'} so far.`}
       </p>
       {/* Round 983: the kit's keyframes, only while a moment plays, and last

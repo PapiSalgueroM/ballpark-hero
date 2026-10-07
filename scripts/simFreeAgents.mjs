@@ -48,7 +48,7 @@
  *   openall        startNegotiation stops checking the window        -> section 3
  *   offeropen      makeOffer stops checking the window               -> section 3
  *   bidopen        acceptBid stops checking the window               -> section 3
- *   keenall        every free agent will sign for anyone             -> sections 4 and 9
+ *   keenall        every free agent will sign for anyone             -> sections 4, 9 and 18
  *   nodecay        the pool never ages out                           -> section 4
  *   nodecaywire    the rollover skips the decay                      -> section 4
  *   nodedupe       the pool accepts a duplicate                      -> section 5
@@ -75,7 +75,7 @@
  *   nojourneymen   the pool is never topped up                       -> sections 13 and 16
  *   movekeeps      the old club's journeymen follow a job move       -> section 13, both move checks
  *   goodjourneymen journeymen rated above the club's level           -> sections 13 and 16
- *   unflagged      journeymen not flagged as made up                 -> section 13
+ *   unflagged      journeymen not flagged as made up                 -> sections 13 and 18
  *   realname       a journeyman wears a real player's name           -> section 13
  *   novalue        journeymen priced with no value, so wages go wild -> section 13
  *   projall        the projection bills a settlement all season      -> section 14
@@ -85,11 +85,26 @@
  *   onetap         Release fires on the first tap                    -> section 15
  *   nofee          a signing takes no signing on fee from the kitty  -> sections 15 and 16
  *   jmworth        journeymen valued like squad players again        -> section 16
- *   feefloor       the signing on fee can drop to 0.1m               -> section 16
+ *   feefloor       the signing on fee can drop to 0.1m               -> sections 16 and 18
  *   marketreleased the market lists a man you released               -> section 17
  *   buyreleased    a deal signs a man you released                   -> section 17
  *   noreleasedlist a release is not written to the permanent list    -> section 17
  *   blocklist      the signing rule reads only the pool record       -> section 17
+ *   ledgersquad    a man on a baked squad is in the ledger as free   -> section 18, the ledger and day one checks
+ *   noseed         a new modern career is never seeded               -> section 18, day one
+ *   realcount      the real men count as journeymen in the top up    -> section 18, the summer top up check
+ *   eraseed        era saves are seeded too                          -> section 18, the once check
+ *   worldseed      a job move's fresh club is seeded too             -> section 18, the once check
+ *   rollseed       every summer seeds them again                     -> section 18, the once check
+ *   elevenopen     interest forgets the eleventh best line           -> section 18, the cover and line checks
+ *   elevenmine     the eleventh best line holds your ex-players too  -> section 18, the ex-player check
+ *   realflip       a real free agent signs on for the plain fee      -> section 18, the sell on check
+ *   curvecopy      the generator keeps its own rating curve again    -> section 18, the one curve check
+ *
+ * Section 18 is Round 1033: real footballers two sources said had no club
+ * (scripts/data/cmFreeAgents2026.json) open a modern career in the pool, once,
+ * and the pool stays cover with them in it. Journeyman checks in sections 13
+ * and 16 read the made up men only (isJourneyman).
  */
 
 import './lib/seedRandom.mjs';
@@ -99,6 +114,7 @@ import path from 'node:path';
 import { execSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
+import { buildFreeAgents, renderFile } from './genClubManagerFreeAgents.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
@@ -137,7 +153,12 @@ const sources = {
   engine: lf('src/lib/clubManager.ts'),
   fin: lf('src/lib/clubManagerFinances.ts'),
   card: lf('src/components/club-manager/ContractsCard.tsx'),
+  faData: lf('src/data/clubManagerFreeAgents2026.ts'),
 };
+/* Round 1033: the ledger the real free agents come from, and the roster
+   names a ledger man must never be among. */
+const LEDGER = JSON.parse(lf('scripts/data/cmFreeAgents2026.json'));
+const ROSTER_SRC = lf('src/data/clubManagerRosters.ts');
 
 /* Every control asserts its anchor exists EXACTLY ONCE before it edits, so a
    control that matches nothing (or the wrong one of two) cannot leave this
@@ -180,8 +201,51 @@ if (CONTROL === 'nosev') {
     '  if (!bid) return null;\n  if (false) return null;');
 } else if (CONTROL === 'keenall') {
   rewrite('keenall', 'engine',
-    '  return fa.rating <= mine - 6;',
+    '  return fa.rating <= mine - 6 && (fa.fromMyClub === true || fa.rating <= eleventhBestRating(career.squad));',
     '  return true;');
+} else if (CONTROL === 'elevenopen') {
+  rewrite('elevenopen', 'engine',
+    '  return fa.rating <= mine - 6 && (fa.fromMyClub === true || fa.rating <= eleventhBestRating(career.squad));',
+    '  return fa.rating <= mine - 6;');
+} else if (CONTROL === 'elevenmine') {
+  rewrite('elevenmine', 'engine',
+    '  return fa.rating <= mine - 6 && (fa.fromMyClub === true || fa.rating <= eleventhBestRating(career.squad));',
+    '  return fa.rating <= mine - 6 && fa.rating <= eleventhBestRating(career.squad);');
+} else if (CONTROL === 'realflip') {
+  rewrite('realflip', 'engine',
+    "  const floor = fa.reason === 'unattached' && !fa.generated ? Math.max(FREE_AGENT_MIN_FEE, fa.value ?? 0) : FREE_AGENT_MIN_FEE;",
+    '  const floor = FREE_AGENT_MIN_FEE;');
+} else if (CONTROL === 'realcount') {
+  rewrite('realcount', 'engine',
+    "  let have = pool.filter(f => f.reason === 'unattached' && f.generated).length;",
+    "  let have = pool.filter(f => f.reason === 'unattached').length;");
+} else if (CONTROL === 'noseed') {
+  rewrite('noseed', 'engine',
+    '  if (!world && !historic && startYearsOn === 0) seedRealFreeAgents(state);',
+    '');
+} else if (CONTROL === 'eraseed') {
+  rewrite('eraseed', 'engine',
+    '  if (!world && !historic && startYearsOn === 0) seedRealFreeAgents(state);',
+    '  if (!world) seedRealFreeAgents(state);');
+} else if (CONTROL === 'worldseed') {
+  rewrite('worldseed', 'engine',
+    '  if (!world && !historic && startYearsOn === 0) seedRealFreeAgents(state);',
+    '  if (!historic) seedRealFreeAgents(state);');
+} else if (CONTROL === 'rollseed') {
+  /* The summer seeds them again, the way a rollover would if it called the
+     day one seed after its own top up. */
+  rewrite('rollseed', 'engine',
+    'export function decayFreeAgents(pool: FreeAgent[], nextSeason: number, gone: Set<string>): FreeAgent[] {\n  return pool',
+    'export function decayFreeAgents(pool: FreeAgent[], nextSeason: number, gone: Set<string>): FreeAgent[] {\n  return [...pool.filter(f => !CM_REAL_FREE_AGENTS.some(r => r.name === f.name)), ...CM_REAL_FREE_AGENTS.map(r => ({ name: r.name, position: r.position, age: r.age, rating: r.rating, value: r.value, since: nextSeason - 1, reason: \'unattached\' as const }))]');
+} else if (CONTROL === 'ledgersquad') {
+  /* A man on a baked 2026 squad written into the ledger as unattached, and
+     the file regenerated from it, ignoring the generator's own refusal. */
+  const baked = [...ROSTER_SRC.matchAll(/\bn: '([^']+)'/g)].map(m => m[1]);
+  const pick = baked[Math.floor(baked.length / 2)];
+  LEDGER.unattached = [...LEDGER.unattached, { name: pick, tablePosition: 'Central Midfield', age: 27, valueUsd: 4000000, sources: LEDGER.unattached[0].sources.map((s, i) => ({ ...s, publisher: `control ${i}` })) }];
+  LEDGER.population += 1;
+  sources.faData = renderFile(LEDGER, buildFreeAgents(LEDGER, ROSTER_SRC).rows);
+  console.log(`   [control ledgersquad: ${pick}, on a baked squad, written into the ledger and the file]`);
 } else if (CONTROL === 'nodecay') {
   rewrite('nodecay', 'engine',
     '.filter(f => !gone.has(f.name) && nextSeason - f.since < 2)',
@@ -305,7 +369,7 @@ if (CONTROL === 'nosev') {
     '      value: worth,\n');
 } else if (CONTROL === 'feefloor') {
   rewrite('feefloor', 'engine',
-    '  const fee = Math.max(FREE_AGENT_MIN_FEE, Math.round(wage * years * 0.045 * 10) / 10);',
+    '  const fee = Math.max(floor, Math.round(wage * years * 0.045 * 10) / 10);',
     '  const fee = Math.max(0.1, Math.round(wage * years * 0.045 * 10) / 10);');
 } else if (CONTROL === 'nofee') {
   rewrite('nofee', 'engine',
@@ -346,6 +410,8 @@ if (CONTROL === 'nosev') {
 } else if (CONTROL === 'realname') {
   /* Filled in below, once the real names are loaded: the control needs a real
      name nothing in this world already uses, or the used set re-rolls it. */
+} else if (CONTROL === 'curvecopy') {
+  /* Applied in section 18, where the generator's source is read. */
 } else if (CONTROL) {
   console.log(`   FAIL unknown control ${CONTROL}`);
   process.exit(1);
@@ -361,8 +427,16 @@ const CARD = `${TMP_URL}/ContractsCard.tsx`;
    and an engine control are measured against the same rules. */
 const toEngine = (s) => s.replaceAll("from '@/lib/clubManager'", `from '${SRC}'`);
 
+/* Round 1033: the real free agent file the engine reads, through one path the
+   harness controls, so the ledgersquad control can hand the engine a ledger
+   with a baked squad man in it and section 18 sees the engine's own pool. */
+const FA_DATA = `${TMP_URL}/clubManagerFreeAgents2026.ts`;
+const FA_IMPORT = "import { CM_REAL_FREE_AGENTS } from '@/data/clubManagerFreeAgents2026';";
+
 function bundle(outfile) {
-  fs.writeFileSync(SRC, sources.engine);
+  if (sources.engine.split(FA_IMPORT).length !== 2) { console.log('   FAIL the engine no longer imports the real free agent file the way section 18 expects'); process.exit(1); }
+  fs.writeFileSync(FA_DATA, sources.faData);
+  fs.writeFileSync(SRC, sources.engine.replace(FA_IMPORT, `import { CM_REAL_FREE_AGENTS } from '${FA_DATA}';`));
   fs.writeFileSync(FIN, toEngine(sources.fin));
   fs.writeFileSync(CARD, toEngine(sources.card));
   fs.writeFileSync(path.join(TMP, 'entry.mjs'), `
@@ -370,6 +444,7 @@ export * as cm from '${SRC}';
 export * as fin from '${FIN}';
 export { ContractsCard } from '${CARD}';
 export { HISTORIC_ROSTERS } from '${ROOT_URL}/src/lib/clubManagerEras.ts';
+export { CM_REAL_FREE_AGENTS } from '${FA_DATA}';
 import React from '${NM}/react/index.js';
 import { renderToStaticMarkup } from '${NM}/react-dom/server.node.js';
 export const render = (Component, props) => renderToStaticMarkup(React.createElement(Component, props));
@@ -402,7 +477,7 @@ if (CONTROL === 'realname') {
 }
 
 bundle(BUNDLE);
-const { cm, fin, ContractsCard, HISTORIC_ROSTERS, render } = createRequire(import.meta.url)(BUNDLE);
+const { cm, fin, ContractsCard, HISTORIC_ROSTERS, render, CM_REAL_FREE_AGENTS } = createRequire(import.meta.url)(BUNDLE);
 /* Round 832: HISTORIC_ROSTERS fills as each era loads, so load all three first. */
 await cm.ensureAllEraRosters();
 
@@ -413,6 +488,11 @@ const REAL_NAMES = new Set([
   ...Object.values(cm.CM_ROSTERS).flat().map(p => p.n),
   ...Object.values(HISTORIC_ROSTERS).flatMap(w => Object.values(w).flat()).map(p => p.n),
 ]);
+/* Round 1033: a modern day one also lists today's real free agents, who are
+   unattached too. The journeyman checks are about the made up six, so they
+   read the made up six: anybody unattached who is not a real free agent. */
+const REAL_FA = new Set(CM_REAL_FREE_AGENTS.map(r => r.name));
+const isJourneyman = (f) => f.reason === 'unattached' && !REAL_FA.has(f.name);
 
 const mulberry32 = (a) => () => {
   a |= 0; a = (a + 0x6D2B79F5) | 0;
@@ -1141,7 +1221,7 @@ console.log('13) a new save has free agents, and they are made up cover');
   const clash = [];
   let seen = 0;
   const inspect = (st, when) => {
-    const jm = (st.freeAgents ?? []).filter(f => f.reason === 'unattached');
+    const jm = (st.freeAgents ?? []).filter(isJourneyman);
     if (jm.length !== cm.FREE_AGENT_POOL_TARGET) { presentEverywhere = false; console.log(`   ${when}: ${jm.length} journeymen, expected ${cm.FREE_AGENT_POOL_TARGET}`); }
     const level = st.clubStrengths[st.clubName];
     const squadNames = new Set(st.squad.map(p => p.name));
@@ -1173,7 +1253,7 @@ console.log('13) a new save has free agents, and they are made up cover');
     const n2 = seeded(7175 + i, () => cm.startNextSeason(n1));
     inspect(n2, `${CLUBS[i]} season 3`);
     if (i === 0) {
-      const dayOne = (st.freeAgents ?? []).filter(f => f.reason === 'unattached').map(f => f.name);
+      const dayOne = (st.freeAgents ?? []).filter(isJourneyman).map(f => f.name);
       const lingering = (n2.freeAgents ?? []).filter(f => dayOne.includes(f.name)).length;
       console.log(`   ${CLUBS[i]}: ${lingering} of the day one journeymen still listed two summers later`);
     }
@@ -1219,11 +1299,11 @@ console.log('13) a new save has free agents, and they are made up cover');
   for (let i = 0; i < MOVES.length; i += 1) {
     const [from, to] = MOVES[i];
     const st = seeded(7200 + i, () => cm.startCareer(from));
-    const oldSix = new Set((st.freeAgents ?? []).filter(f => f.reason === 'unattached').map(f => f.name));
+    const oldSix = new Set((st.freeAgents ?? []).filter(isJourneyman).map(f => f.name));
     const n = seeded(7225 + i, () => cm.startNextSeason(st, to));
     if (n.clubName !== to || oldSix.size === 0) { fail(`the move from ${from} to ${to} did not happen with journeymen to carry (now at ${n.clubName}, ${oldSix.size} before)`); continue; }
     const level = n.clubStrengths[n.clubName];
-    const jm = (n.freeAgents ?? []).filter(f => f.reason === 'unattached');
+    const jm = (n.freeAgents ?? []).filter(isJourneyman);
     if (jm.length !== cm.FREE_AGENT_POOL_TARGET) wrongForNewClub.push(`${to} holds ${jm.length} journeymen, not ${cm.FREE_AGENT_POOL_TARGET}`);
     for (const f of jm) {
       movedSeen += 1;
@@ -1368,7 +1448,7 @@ console.log('16) signing a journeyman to sell him on does not pay');
     seeded(7600 + i, () => {
       let st = cm.startCareer(flipClubs[i]);
       const paid = new Map();
-      for (const f of (st.freeAgents ?? []).filter(x => x.reason === 'unattached')) {
+      for (const f of (st.freeAgents ?? []).filter(isJourneyman)) {
         const next = cm.signFreeAgent(st, f.name);
         if (!next) continue;
         paid.set(f.name, Math.round((st.budget - next.budget) * 10) / 10);
@@ -1453,6 +1533,279 @@ console.log('17) a man you release never signs for you again, by any door');
       else ok(`${name} cannot be signed off the free agent list whatever his record says`);
     }
   }
+}
+
+/* ═══════════════ 18) Round 1033: today's real free agents ═══════════════ */
+console.log("18) a modern day one opens with today's real free agents, and only then");
+{
+  /* Calling a real man unattached is a factual claim, so the ledger behind
+     the list is held first: two sources each, nobody on a baked squad or the
+     market, the file current with the ledger, and the curves the bake's. */
+  const shipped = LEDGER.unattached.map(u => u.name);
+  const gen = buildFreeAgents(LEDGER, ROSTER_SRC);
+  const bakedNames = new Set(Object.values(cm.CM_ROSTERS).flat().map(p => p.n));
+  const everton = seeded(9000, () => cm.startCareer('Everton'));
+  const marketNames = new Set(cm.buildMarket(everton).map(m => m.name));
+  const onBooks = shipped.filter(n => bakedNames.has(n) || marketNames.has(n));
+  if (!shipped.length) fail('the ledger ships nobody, so this section checks nothing');
+  else if (onBooks.length) fail(`a ledger man is on a baked squad or the market, so the list would hold a man with a club: ${onBooks.join(', ')}`);
+  else ok(`none of the ${shipped.length} ledger men is on any of ${bakedNames.size} baked squad places or the ${marketNames.size} name market`);
+  if (gen.problems.length) fail(`the generator refuses this ledger: ${gen.problems.slice(0, 2).join(' | ')}`);
+  else if (renderFile(LEDGER, gen.rows) !== sources.faData) fail('src/data/clubManagerFreeAgents2026.ts is not what the ledger generates, rerun node scripts/genClubManagerFreeAgents.mjs');
+  else ok('the generator accepts the ledger and the shipped file is exactly what it writes');
+  /* Release AH: Round 1035 lifted the bake's curves into
+     scripts/lib/cmValueCurve.mjs. One module, not two copies kept equal: the
+     curve lines live there, the bake and the generator both import it, and
+     neither carries a curve line of its own. */
+  const curveSrc = lf('scripts/lib/cmValueCurve.mjs');
+  const bakeSrc = lf('scripts/bakeClubManagerRosters.mjs');
+  let genSrc = lf('scripts/genClubManagerFreeAgents.mjs');
+  const CURVE_IMPORT = "import { POS_MAP, ratingOf, gbpM } from './lib/cmValueCurve.mjs';";
+  const curves = ['const r = Math.round(-13.106 + 12.851 * Math.log10(usd));', 'const m = (usd * 0.75) / 1e6;', "'Centre-Forward': 'ST', 'Second Striker': 'CF',"];
+  if (CONTROL === 'curvecopy') {
+    /* The generator goes back to a copy of the rating curve of its own. */
+    if (genSrc.split(CURVE_IMPORT).length !== 2) { console.log('   FAIL control curvecopy anchor is not in the generator exactly once'); process.exit(1); }
+    genSrc = genSrc.replace(CURVE_IMPORT, () => `import { POS_MAP, gbpM } from './lib/cmValueCurve.mjs';\nfunction ratingOf(usd) {\n  ${curves[0]}\n  return r;\n}`);
+    console.log('   [control curvecopy applied to the generator source]');
+  }
+  const unlifted = curves.filter(c => !curveSrc.includes(c));
+  const copies = curves.filter(c => bakeSrc.includes(c) || genSrc.includes(c));
+  const strays = [['the roster bake', bakeSrc], ['the free agent generator', genSrc]].filter(([, s]) => !s.includes(CURVE_IMPORT)).map(([n]) => n);
+  if (unlifted.length || copies.length || strays.length) fail(`the free agent generator and the roster bake no longer rate on one curve module (${unlifted.length} curve line(s) missing from it, ${copies.length} copied beside it, not imported by: ${strays.join(', ') || 'none'}), so a real free agent could be rated on another scale`);
+  else ok('a real free agent is rated, valued and placed by the roster bake\'s own curves, one module both import');
+
+  /* DAY ONE. Exactly the ledger's men, as the file has them, each a real man
+     who joined the pool this season, and the six journeymen still there. */
+  const DAY_CLUBS = [...CLUBS, 'Inter Miami', 'Lommel'];
+  const wrongSet = [];
+  const wrongRow = [];
+  const shortJm = [];
+  for (let i = 0; i < DAY_CLUBS.length; i += 1) {
+    const st = i === 0 && DAY_CLUBS[0] === 'Everton' ? everton : seeded(9000 + i, () => cm.startCareer(DAY_CLUBS[i]));
+    const realIn = (st.freeAgents ?? []).filter(f => f.reason === 'unattached' && !f.generated);
+    const want = shipped.filter(n => !st.squad.some(p => p.name === n)).sort();
+    const got = realIn.map(f => f.name).sort();
+    if (JSON.stringify(got) !== JSON.stringify(want)) wrongSet.push(`${DAY_CLUBS[i]} lists [${got.join(', ')}]`);
+    for (const f of realIn) {
+      const row = CM_REAL_FREE_AGENTS.find(r => r.name === f.name);
+      if (!row || f.since !== st.season || f.rating !== row.rating || f.age !== row.age || f.value !== row.value || f.wage !== undefined || f.fromMyClub) wrongRow.push(`${f.name} at ${DAY_CLUBS[i]}`);
+    }
+    const jm = (st.freeAgents ?? []).filter(f => f.reason === 'unattached' && f.generated).length;
+    if (jm !== cm.FREE_AGENT_POOL_TARGET) shortJm.push(`${DAY_CLUBS[i]} ${jm}`);
+  }
+  if (wrongSet.length) fail(`day one does not list exactly the ledger's ${shipped.length} men: ${wrongSet.slice(0, 2).join(' | ')}`);
+  else ok(`day one at ${DAY_CLUBS.length} clubs lists exactly the ledger's ${shipped.length} men`);
+  if (wrongRow.length) fail(`${wrongRow.length} real free agents are not on the pool as the file has them: ${wrongRow.slice(0, 3).join(', ')}`);
+  else ok('every one is in as the file rates, ages and values him, priced by freeAgentTerms off that value');
+  if (shortJm.length) fail(`the real men took journeyman places, made up men on day one: ${shortJm.join(', ')} (want ${cm.FREE_AGENT_POOL_TARGET})`);
+  else ok(`the ${cm.FREE_AGENT_POOL_TARGET} made up journeymen are still there beside them`);
+  /* And after a summer. Day one tops up before the real men arrive, so it
+     cannot tell whether the top up counts them; a summer can. Sign two
+     journeymen and the summer must make up two more, real men or not. */
+  let jst = { ...clone(everton), wageCap: Number.MAX_SAFE_INTEGER };
+  let signedJm = 0;
+  for (const f of (jst.freeAgents ?? []).filter(x => x.reason === 'unattached' && x.generated)) {
+    if (signedJm >= 2) break;
+    const nx = cm.signFreeAgent(jst, f.name);
+    if (nx) { jst = nx; signedJm += 1; }
+  }
+  const jn1 = seeded(9054, () => cm.startNextSeason(jst));
+  const jmAfter = (jn1.freeAgents ?? []).filter(f => f.reason === 'unattached' && f.generated).length;
+  if (signedJm < 2) fail(`only ${signedJm} journeymen could be signed at Everton, so the summer top up check sees nothing`);
+  else if (jmAfter !== cm.FREE_AGENT_POOL_TARGET) fail(`two journeymen signed, and the summer leaves ${jmAfter} made up men, not ${cm.FREE_AGENT_POOL_TARGET}: the real men are counted as journeymen`);
+  else ok(`two journeymen signed on day one, and the summer tops the made up men back up to ${cm.FREE_AGENT_POOL_TARGET} with the real men still listed`);
+
+  /* ONCE. The claim is about today, so nothing but a brand new career in
+     today's world is seeded: not an era save, not a job move's fresh club, not
+     an old save loading, not a summer. Each start below would list them if
+     the seed were not guarded, which the controls prove. */
+  const realOf = (st) => (st?.freeAgents ?? []).filter(f => REAL_FA.has(f.name) && f.reason === 'unattached');
+  const leaks = [];
+  for (const [club, era] of [['Arsenal', 'era2020'], ['Arsenal', 'era2005']]) {
+    const st = seeded(9050, () => cm.startCareer(club, era));
+    if (st.eraId !== era) leaks.push(`${club} ${era} did not start in that era`);
+    else if (realOf(st).length) leaks.push(`${club} in ${era} lists ${realOf(st).length}`);
+  }
+  const moved = seeded(9051, () => cm.startCareer('Brentford', 'now', undefined, undefined, { yearsOn: 0, uclField: null, keepLeagueOverrides: false }));
+  if (realOf(moved).length) leaks.push(`a job move's fresh club lists ${realOf(moved).length}`);
+  const saved = clone(everton);
+  delete saved.freeAgents;
+  const realGet = globalThis.localStorage.getItem;
+  globalThis.localStorage.getItem = (k) => (k === 'dukb-club-manager-save' ? JSON.stringify(saved) : null);
+  let loaded = null;
+  try { loaded = cm.loadCareer(); } finally { globalThis.localStorage.getItem = realGet; }
+  if (!loaded) leaks.push('an old save did not load');
+  else if (realOf(loaded).length) leaks.push(`an old save with no pool opens listing ${realOf(loaded).length}`);
+  /* Summers: a man not signed is carried one summer, a year older, and then
+     gone with everybody else the pool ages out; a man signed is never back. */
+  const signable = realOf(everton).find(f => cm.freeAgentBlock({ ...everton, wageCap: Number.MAX_SAFE_INTEGER }, f) === null);
+  const signedSt = signable ? cm.signFreeAgent({ ...clone(everton), wageCap: Number.MAX_SAFE_INTEGER }, signable.name) : null;
+  if (!signedSt) leaks.push('no real free agent could be signed at Everton, so the summer checks see nothing');
+  else {
+    const n1 = seeded(9052, () => cm.startNextSeason(signedSt));
+    const n2 = seeded(9053, () => cm.startNextSeason(n1));
+    const carried = realOf(n1);
+    const want = realOf(everton).filter(f => f.name !== signable.name);
+    if (carried.some(f => f.name === signable.name)) leaks.push(`${signable.name}, signed in season one, is back in the pool the next summer`);
+    if (carried.length !== want.length || carried.some(f => f.since !== everton.season || f.age !== (want.find(w => w.name === f.name)?.age ?? -9) + 1)) leaks.push(`season two holds ${carried.length} real men, not the ${want.length} unsigned ones a year older`);
+    if (realOf(n2).length) leaks.push(`season three still lists ${realOf(n2).length} real men, so the summer re-seeds them`);
+  }
+  if (leaks.length) fail(`the real free agents are listed somewhere other than a new modern day one: ${leaks.slice(0, 3).join(' | ')}`);
+  else ok('never in an era save, a job move, an old save or a later summer; a signed man never comes back and the rest age out in two');
+
+  /* COVER, NOT AN UPGRADE. The rule this pool has lived under since Round
+     619. Journeymen sit 20 to 26 under the club; a real man sits wherever his
+     value puts him, so the interest rule now also refuses a man who never
+     played for you if he is above your eleventh best. Measured with probes
+     over 53 clubs (every 7th of the leagues) and seeds 1 to 3 while eight
+     real men shipped, the strongest signal being whether signing him
+     raises the best eleven average every level in this game is read off:
+       before the round:            0 of 954 signable men raised it
+       real men, no eleventh line: 12 of 681 signable real men did (1, 7, 4)
+       real men, with it:           0 of 669 (signable real 219, 226, 224)
+     Review of the round: that sample (every 14th club, one seed) never met
+     a club where the line binds, so it stayed green with the line removed.
+     It now runs every club on day one AND in season two (the real men
+     carried a summer, squads thinned by deals left to run out), with the
+     seven men that ship after the review. Club i at seed base + i, season
+     two at base + 500 + i, three at base + 900 + i; bases 9100, 19100, 29100:
+       with the line, raises on day one and in season two:  0, 0, 0
+       no line (elevenopen), base 9100:  18 on day one, 31 in season two
+       signable real men on day one:  1487, 1535, 1510 (4.0 to 4.2 a club)
+       of signable strangers, day one and season two, the share who would
+       start in the picked XI:  9.5, 8.9, 9.9 percent (journeymen alone
+       before the round 5.0 to 5.7; nobody refused, keenall, 17.7)
+       own ex-players in season three above the eleventh best but inside
+       the level rule:  242, 234, 220, none refused (elevenmine: all)
+     Zero raises is the rule, not a band. The floors are a third of the
+     measured rates, and the start share ceiling of 13 percent sits between
+     the 9.9 measured and the 17.7 of a pool nobody refuses. This runs 9100. */
+  const sample = cm.REAL_LEAGUES.flatMap(l => l.clubs);
+  const top11 = (sq) => { const rs = sq.map(p => p.rating).sort((a, b) => b - a).slice(0, 11); while (rs.length < 11) rs.push(60); return rs.reduce((a, b) => a + b, 0) / 11; };
+  let signableAll = 0;
+  let dayOneReal = 0;
+  let walkIn = 0;
+  let exGap = 0;
+  const raised = [];
+  const exRefused = [];
+  let wide = null;
+  for (let i = 0; i < sample.length; i += 1) {
+    let s1;
+    let s2;
+    let s3;
+    try {
+      s1 = seeded(9100 + i, () => cm.startCareer(sample[i]));
+      s2 = seeded(9600 + i, () => cm.startNextSeason(s1));
+      s3 = seeded(10000 + i, () => cm.startNextSeason(s2));
+    } catch { continue; }
+    for (const st of [s1, s2]) {
+      const level = st.clubStrengths[st.clubName];
+      const eleventh = cm.eleventhBestRating(st.squad);
+      if (!wide && eleventh + 1 <= level - 6) wide = st;
+      for (const fa of st.freeAgents ?? []) {
+        if (fa.fromMyClub || cm.freeAgentBlock(st, fa) !== null) continue;
+        signableAll += 1;
+        if (st === s1 && REAL_FA.has(fa.name)) dayOneReal += 1;
+        const after = cm.signFreeAgent(st, fa.name);
+        if (!after) continue;
+        if (top11(after.squad) > top11(st.squad) + 1e-9) raised.push(`${fa.name} ${fa.rating} at ${sample[i]} in season ${st === s1 ? 'one' : 'two'} (eleventh ${eleventh})`);
+        const me = after.squad[after.squad.length - 1];
+        if (cm.autoPickXI(after.squad, cm.FORMATIONS[after.formationIndex]).includes(me.id)) walkIn += 1;
+      }
+    }
+    /* Your own ex-players: a man whose deal ran out comes back after his
+       season away under the level rule alone, as before the round. */
+    const level3 = s3.clubStrengths[s3.clubName];
+    const e3 = cm.eleventhBestRating(s3.squad);
+    for (const fa of s3.freeAgents ?? []) {
+      if (!fa.fromMyClub || fa.reason !== 'expired' || fa.since === s3.season) continue;
+      if (!(fa.rating <= level3 - 6 && fa.rating > e3)) continue;
+      exGap += 1;
+      if (!cm.freeAgentInterest(s3, fa)) exRefused.push(`${fa.name} ${fa.rating} at ${sample[i]} (eleventh ${e3})`);
+    }
+  }
+  const realFloor = Math.round(sample.length * 4.1 / 3);
+  const exFloor = Math.round(sample.length * 0.63 / 3);
+  const share = walkIn / Math.max(1, signableAll);
+  console.log(`   ${sample.length} clubs, day one and season two: ${signableAll} signable strangers (${dayOneReal} real men on day one), ${walkIn} would start in the picked XI (${(100 * share).toFixed(1)} percent), ${raised.length} raise the best eleven`);
+  if (raised.length) fail(`${raised.length} signable free agents raise the best eleven, so the pool is an upgrade rack: ${raised.slice(0, 3).join(', ')}`);
+  else ok(`no signable stranger at ${sample.length} clubs raises the best eleven, on day one or in season two`);
+  if (dayOneReal < realFloor) fail(`only ${dayOneReal} real free agents are signable on day one across ${sample.length} clubs (floor ${realFloor}), so the list is cover only by being out of reach`);
+  else ok(`${dayOneReal} real free agents are signable on day one across ${sample.length} clubs (floor ${realFloor})`);
+  if (!(share < 0.13)) fail(`${(100 * share).toFixed(1)} percent of signable strangers would start in the picked XI (ceiling 13), so the pool is a first team source`);
+  else ok(`${(100 * share).toFixed(1)} percent of signable strangers would start in the picked XI (ceiling 13)`);
+  if (exGap < exFloor) fail(`only ${exGap} ex-players in season three sit above the eleventh best inside the level rule (floor ${exFloor}), so the ex-player check sees too little`);
+  else if (exRefused.length) fail(`${exRefused.length} of ${exGap} of your own ex-players are refused by the eleventh best line, which is for strangers: ${exRefused.slice(0, 3).join(', ')}`);
+  else ok(`all ${exGap} of your own ex-players in season three above the eleventh best come back under the level rule, as before the round`);
+  /* The rule itself, one step either side of the line, at a sampled club
+     whose eleventh man sits far enough under its level for the step to land
+     between the two rules. When none does, Everton's squad is made wide by
+     hand: the ten best keep their ratings (and the club its level), everyone
+     from the eleventh down drops to 12 under the level. */
+  if (!wide) {
+    const lvl = everton.clubStrengths[everton.clubName];
+    const order = [...everton.squad].sort((a, b) => b.rating - a.rating).map(p => p.id);
+    wide = { ...clone(everton), wageCap: Number.MAX_SAFE_INTEGER };
+    wide.squad = wide.squad.map(p => (order.indexOf(p.id) >= 10 ? { ...p, rating: Math.min(p.rating, Math.floor(lvl) - 12) } : p));
+  }
+  {
+    const e = cm.eleventhBestRating(wide.squad);
+    const base = { ...CM_REAL_FREE_AGENTS[0], since: wide.season, reason: 'unattached' };
+    const at = cm.freeAgentInterest(wide, { ...base, rating: e });
+    const over = cm.freeAgentInterest(wide, { ...base, rating: e + 1 });
+    if (!at) fail(`a real man rated ${e}, level with the eleventh best at ${wide.clubName}, is refused, so the line is in the wrong place`);
+    else if (over) fail(`a real man rated ${e + 1}, above the eleventh best at ${wide.clubName} (level ${wide.clubStrengths[wide.clubName].toFixed(1)}), would sign`);
+    else ok(`at ${wide.clubName} a man level with the eleventh best signs and one point above him does not`);
+  }
+
+  /* NOT A FREE ASSET. Section 16's policy on the real men: sign every one
+     who will come, list him, take every bid in the window. Their values are
+     real, so on a 0.5m fee a man worth 1.5m sold on at a profit. The fee
+     floor at his value closes it. Measured per sale over these ten clubs,
+     seeds 1 to 3 (per club seed = 100 x seed + club index), with the seven
+     men that ship after the review (the 1.5m man was dropped):
+       no floor:       +0.05, +0.07, +0.06 a sale, 24, 24, 20 of 48, 46, 46
+                       sales at a profit (43 to 52 percent)
+       floor at value: -0.09, -0.08, -0.06 a sale, 3, 2, 2 at a profit
+                       (4 to 6 percent)
+     The profit share is the stronger signal, so it carries the check, with
+     its ceiling of 25 percent between the two; the mean must also stay under
+     zero, which is what "does not pay" means. This runs seed 1. */
+  const FLIP = ['Everton', 'Brentford', 'Napoli', 'Ajax', 'Arsenal', 'Inter Miami', 'Real Madrid', 'Sheffield United', 'Hamburg', 'Le Havre'];
+  const flips = [];
+  for (let i = 0; i < FLIP.length; i += 1) {
+    seeded(100 + i, () => {
+      let st = cm.startCareer(FLIP[i]);
+      const paid = new Map();
+      for (const f of (st.freeAgents ?? []).filter(x => REAL_FA.has(x.name))) {
+        const next = cm.signFreeAgent(st, f.name);
+        if (!next) continue;
+        paid.set(f.name, Math.round((st.budget - next.budget) * 10) / 10);
+        st = next;
+      }
+      const ids = st.squad.filter(p => paid.has(p.name)).map(p => p.id);
+      for (const id of ids) st = cm.setTransferStatus(st, id, 'listed');
+      let calls = 0;
+      while (st.transferWindow && calls < 12 && !st.sacked) {
+        for (const b of [...(st.incomingBids ?? [])]) {
+          if (b.loan || !ids.includes(b.playerId)) continue;
+          const man = st.squad.find(p => p.id === b.playerId);
+          const next = man ? cm.acceptBid(st, b.playerId) : null;
+          if (!next) continue;
+          flips.push(b.offer - paid.get(man.name));
+          st = next;
+        }
+        st = cm.playNextEntry(st, { skipHalftime: true }).state;
+        calls += 1;
+      }
+    });
+  }
+  const flipMean = mean(flips);
+  const flipShare = flips.filter(m => m > 0).length / Math.max(1, flips.length);
+  console.log(`   ${flips.length} real free agents signed and sold on at ${FLIP.length} clubs, ${flipMean.toFixed(2)}m a sale against what he cost`);
+  if (flips.length < 20) fail(`only ${flips.length} real free agents sold on, too few to say what a sale earns`);
+  else if (!(flipShare < 0.25) || !(flipMean < 0)) fail(`signing a real free agent to sell him on pays: ${(100 * flipShare).toFixed(0)} percent of sales at a profit (ceiling 25), ${flipMean.toFixed(2)}m a sale (ceiling 0), so the list is a free asset`);
+  else ok(`signing a real free agent to sell him on does not pay: ${(100 * flipShare).toFixed(0)} percent of sales at a profit (ceiling 25), ${flipMean.toFixed(2)}m a sale`);
 }
 
 try { fs.rmSync(TMP, { recursive: true, force: true }); } catch { /* best effort */ }

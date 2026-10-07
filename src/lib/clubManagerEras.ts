@@ -43,8 +43,10 @@
    out identical every time it is asked. No Math.random anywhere in this file.
    ──────────────────────────────────────────────────────────────────────────── */
 import type { Position } from '@/types/game';
-import { CM_ROSTERS, CM_ROSTER_META } from '@/data/clubManagerRosters';
+import { CM_ROSTER_META } from '@/data/clubManagerRosters';
 import type { BakedPlayer } from '@/data/clubManagerRosters';
+// Round 1035: the modern squads, baked plus the A-League Men, joined once.
+import { CM_WORLD_ROSTERS as CM_ROSTERS } from '@/data/clubManagerWorldRosters';
 /* Round 832: the three era bakes are no longer imported here. Each one is its
    own chunk, fetched when its era is picked or an era save is opened (see
    ensureEraRosters below), so the page stops carrying all three past worlds

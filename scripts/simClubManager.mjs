@@ -48,7 +48,7 @@ console.log('1) Nations and leagues');
 /* Round 140 added Portugal, Scotland and Turkey. Every nation must map to
    real leagues and every league to a nation, so the count is derived rather
    than pinned, and a nation with no playable league is the failure mode. */
-if (NATIONS.length !== 19) fail(`expected 19 nations, got ${NATIONS.length}`);  // Round 177: Austria and Greece; Round 185: Denmark and Switzerland; Round 189: Croatia; Round 876: Brazil; Round 883: Mexico
+if (NATIONS.length !== 20) fail(`expected 20 nations, got ${NATIONS.length}`);  // Round 177: Austria and Greece; Round 185: Denmark and Switzerland; Round 189: Croatia; Round 876: Brazil; Round 883: Mexico; Round 1035: Australia
 const mappedLeagueIds = new Set(NATIONS.flatMap(n => n.leagueIds));
 for (const lg of REAL_LEAGUES) {
   if (!mappedLeagueIds.has(lg.id)) fail(`league ${lg.id} belongs to no nation, it is unreachable from the picker`);
@@ -70,7 +70,7 @@ for (const n of NATIONS) {
     }
   }
 }
-if (totalClubs !== 368) fail(`expected 368 playable clubs (186, plus 48 in Round 140, 18 in Round 142, 18 in Round 143, 12 plus 14 in Round 177, 12 plus 12 in Round 185, 10 in Round 189, 20 in Round 876, 18 in Round 883), got ${totalClubs}`);
+if (totalClubs !== 380) fail(`expected 380 playable clubs (186, plus 48 in Round 140, 18 in Round 142, 18 in Round 143, 12 plus 14 in Round 177, 12 plus 12 in Round 185, 10 in Round 189, 20 in Round 876, 18 in Round 883, 12 in Round 1035), got ${totalClubs}`);
 const ordering = [
   ['Real Madrid', 'Racing Santander'], ['Bayern Munich', 'Paderborn'], ['PSG', 'Le Havre'],
   ['Liverpool', 'Hull City'], ['Wolves', 'Lincoln City'], ['Al-Hilal', 'Al-Riyadh'],
@@ -123,12 +123,15 @@ for (const name of allClubNames) {
   const countryClubs = new Set((nation ? nation.leagueIds : [myLeagueId]).flatMap(id => cm.playableClubs(id).map(c => c.name)));
   /* Round 883: Liga MX is the first real league with no domestic cup. A
      cupless club must have no draw at all; every other club keeps the
-     Round 102 rule. */
-  if (leagueOf(name).cupName === null) {
+     Round 102 rule. Round 1035: read through careerLeagueOf, the career's own
+     view, because a club its league leaves out of the cup (Auckland FC and
+     Wellington Phoenix) plays a cupless season in a league that has one. */
+  if (cm.careerLeagueOf(s).cupName === null) {
     if (cup) fail(`${name}: plays in a league with no cup and was drawn against "${cup}"`);
   } else {
     if (!cup || !countryClubs.has(cup)) fail(`${name}: cup R16 draw "${cup}" is not a club from this country`);
     if (cup === name) fail(`${name}: drawn against itself in the cup`);
+    if (cup && !cm.clubEntersCup(leagueOf(cup).id, cup)) fail(`${name}: drawn against ${cup}, a club its league leaves out of the cup`);
   }
   for (const p of s.squad) {
     if (!isNum(p.rating) || p.rating < 40 || p.rating > 95) fail(`${name}: ${p.name} rating ${p.rating}`);

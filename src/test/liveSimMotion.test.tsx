@@ -48,7 +48,11 @@ function findTerminalFixtures() {
   const base = fixtures.get('goal')!.career;
   // Spread the LCG seeds across its range instead of sampling correlated consecutive seeds.
   // Redraw actual halves with the engine. No event minute, scorer or outcome is invented.
-  for (let attempt = 0; attempt < 300 && terminalFixtures.size < 4; attempt++) {
+  /* 3000, not 300: Release AH puts the A-League in the modern world (Round 1035, league 23), which moves every
+     draw after it, and none of the first 300 seeds ended a second half on a goal at the whistle any more
+     (main be3f552d finds all four, the AH tree only three). The search stops at the first of each kind, and
+     every assertion below still runs on what it finds. */
+  for (let attempt = 0; attempt < 3000 && terminalFixtures.size < 4; attempt++) {
     vi.mocked(Math.random).mockImplementation(seeded(6034500 + attempt * 104729));
     const first = changeLive(base, 0, { kind: 'shape', mentality: 'balanced' })!;
     const second = startSecondHalf(first)!;

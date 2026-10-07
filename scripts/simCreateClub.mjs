@@ -45,7 +45,9 @@ const mod = await import('${ROOT.replaceAll('\\', '/')}/src/lib/clubManager.ts')
 const eras = await import('${ROOT.replaceAll('\\', '/')}/src/lib/clubManagerEras.ts');
 const e10 = await import('${ROOT.replaceAll('\\', '/')}/src/data/clubManagerEra2010.ts');
 export const cm = mod;
-export const worlds = { modern: (await import('${ROOT.replaceAll('\\', '/')}/src/data/clubManagerRosters.ts')).CM_ROSTERS, era2010: e10.ERA2010_ROSTERS };
+// Round 1035: the modern world is the joined one the engine plays (the bake
+// plus the A-League Men's generated squads), not the bake file alone.
+export const worlds = { modern: mod.CM_ROSTERS, era2010: e10.ERA2010_ROSTERS };
 export const erasMod = eras;
 `);
 execSync(

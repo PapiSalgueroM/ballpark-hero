@@ -1785,7 +1785,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         heading: "Advancing seasons through the training ground",
         items: [
           "Advance season by season through simulated stats, newspaper headlines, random events, and decisions.",
-          "Open the training ground (the dumbbell button, bottom right) once a season. Your position picks a drill you actually play: keepers hold and drag a glove save dive, centre backs, full backs and defensive midfielders time a tackle on a moving ball, and everyone else times a wall shot through a gap that opens and closes. Today's ten rounds are the same for everyone at your position and count once; practice is unlimited and banks nothing.",
+          "Open the training ground (the dumbbell button, bottom right) once a season. Your position picks a drill you actually play: keepers hold and drag a glove save dive, centre backs, full backs and defensive midfielders time a tackle on a moving ball, central and attacking midfielders thread a through ball onto a runner before he is offside, and everyone else times a wall shot through a gap that opens and closes. Today's ten rounds are the same for everyone at your position and count once; practice is unlimited and banks nothing.",
         ],
       },
       {
@@ -1836,7 +1836,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
           {
             heading: "How a position drill trains your attributes",
             items: [
-              "A position drill is ten rounds and its session score is wins times ten. 50 pays +1 to the drill's attribute with next season's growth (shooting for the wall shot, defending for the tackle, reflexes for the glove save) and 80 pays +2, capped at the room between your overall and your ceiling, so a drill never lifts you past it. It shares the one training session a season with the cone slalom, sprint burst, passing gates and penalty sessions.",
+              "A position drill is ten rounds and its session score is wins times ten. 50 pays +1 to the drill's attribute with next season's growth (shooting for the wall shot, defending for the tackle, passing for the through ball, reflexes for the glove save) and 80 pays +2, capped at the room between your overall and your ceiling, so a drill never lifts you past it. It shares the one training session a season with the cone slalom, sprint burst, passing gates and penalty sessions.",
             ],
           },
         ],
@@ -1861,6 +1861,14 @@ export const SOCCER_CONTENT_2: GameContentMap = {
               "Unexplained money keeps generating heat every season until you wash it through a shady business or declare it and eat the tax.",
             ],
           },
+        ],
+      },
+      {
+        heading: "Derby days against your club's rivals",
+        items: [
+          "Derbies: if your club has a real rival in the same league, you meet them twice a season in the league. We only count a rivalry two separate sources back, in leagues and years where we checked how often the clubs meet, so some clubs have none yet.",
+          "You play the derbies you are picked for, roughly in line with your league appearances. Each one you win adds 2 popularity and 2 morale, each one you lose takes 2 off both, a draw changes nothing, the swing is capped every season and your rating is never touched.",
+          "Score the goal that puts you ahead for good in a derby win and the season counts as a Derby Hero season, worth 2 more popularity. Example: at Arsenal you beat Tottenham 2-1 at home with the winner and draw 1-1 away, so that is +4 popularity, +2 morale and a Derby Hero.",
         ],
       },
     ],

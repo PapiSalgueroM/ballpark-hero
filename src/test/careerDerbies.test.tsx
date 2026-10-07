@@ -7,7 +7,7 @@
  *      carries the W-D-L chip, and the Career Stats card the career line.
  *   2. The same save with every derby stripped, which is what a save from
  *      before this round looks like: none of it shows, and no Derby Hero.
- *   3. The "?" help shows each derby rule exactly once.
+ *   3. The "?" help shows each derby rule exactly once, and so does the guide.
  *   4. An extra rule the guide already carries is not shown twice.
  * Mocks as in careerStory.test.tsx: nothing here reaches the network.
  */
@@ -173,8 +173,12 @@ describe('Soccer Career: derbies on the real page', () => {
   }, 120_000);
 
   /* The "?" help on /soccer-career carries the derby rules once each, next
-     to the guide's own rules. Without the page's extraRules this goes red
-     while the held guide has no derby paragraph of its own. */
+     to the guide's own rules. Round 1032 moved them into the guide word for
+     word, so the guide block at the bottom of the page shows them once too,
+     and the help shows them once only because GameHelp skips the page's
+     extra copy of a rule the guide already has. Each is counted inside its
+     own block: twice in the help means the skip broke, none means the rule
+     left both the guide and the page. */
   it('the "?" help explains derbies, once each', async () => {
     const v = render(<HelmetProvider><MemoryRouter initialEntries={['/soccer-career']}><SoccerCareer /></MemoryRouter></HelmetProvider>);
     let trigger: HTMLElement | null = null;
@@ -185,10 +189,18 @@ describe('Soccer Career: derbies on the real page', () => {
     expect(trigger, 'the guide loaded and the "?" trigger rendered').not.toBeNull();
     await act(async () => { trigger!.click(); });
     await tick(20);
-    const text = document.body.textContent ?? '';
-    expect(text).toContain('The rules');
+    const help = document.querySelector('[role="dialog"]')?.textContent ?? '';
+    expect(help).toContain('The rules');
+    let guide: Element | null = null;
+    for (let i = 0; i < 100 && !guide; i++) {
+      guide = document.querySelector('section[data-seo-content="ready"]');
+      if (!guide) await tick(50);
+    }
+    expect(guide, 'the guide block below the game loaded').not.toBeNull();
+    const guideText = guide!.textContent ?? '';
     for (const rule of DERBY_HELP_RULES) {
-      expect(text.split(rule).length - 1, rule.slice(0, 40)).toBe(1);
+      expect(help.split(rule).length - 1, `help: ${rule.slice(0, 40)}`).toBe(1);
+      expect(guideText.split(rule).length - 1, `guide: ${rule.slice(0, 40)}`).toBe(1);
     }
   }, 120_000);
 

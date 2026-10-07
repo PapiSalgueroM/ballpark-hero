@@ -1,0 +1,95 @@
+{
+  "round": 1033,
+  "checkedOn": "2026-10-06",
+  "table": "player_market_values_dedup, year 2026 rows whose club is 'Without Club', read from the 2026-10-02 dump (market-2025-2026.json in the lead's kit, the same dump Round 1015 baked the rosters from). 17 such rows.",
+  "population": 17,
+  "rule": "A man ships as a real free agent only when two independent non wiki sources, read on checkedOn, say he has no club and no source says he has signed or retired. A live career page counts as read on checkedOn. Anyone in a baked 2026 squad is dropped whatever his status, because a man cannot be on a club's books and unattached at once. Ages, positions and values are the table's, exactly as the roster bake takes them.",
+  "unattached": [
+    {
+      "name": "Sergio Ramos", "tablePosition": "Centre-Back", "age": 40, "valueUsd": 900000,
+      "sources": [
+        { "publisher": "fichajes.net", "url": "https://fichajes.net/noticias/mejor-once-jugadores-equipo-20260929.html", "dated": "2026-09-29", "says": "Listed among the players still without a club, last club Monterrey." },
+        { "publisher": "FotMob", "url": "https://www.fotmob.com/players/30962/sergio-ramos", "dated": "live page, read 2026-10-06", "says": "Career ends at Monterrey, Feb 2025 to Dec 2025; no later club." }
+      ],
+      "note": "Aston Villa talks were reported in mid September (caughtoffside.com 2026-09-16); nothing found saying they finished in a signing."
+    },
+    {
+      "name": "Edinson Cavani", "tablePosition": "Centre-Forward", "age": 39, "valueUsd": 500000,
+      "sources": [
+        { "publisher": "El Intransigente", "url": "https://elintransigente.com/2026/09/edinson-cavani-futuro-boca/", "dated": "2026-09-22", "says": "Still without a club after ending his Boca Juniors contract; has not retired." },
+        { "publisher": "FotMob", "url": "https://www.fotmob.com/players/49677/edinson-cavani", "dated": "live page, read 2026-10-06", "says": "Career ends at Boca Juniors, Jul 2023 to Jul 2026; no later club." }
+      ]
+    },
+    {
+      "name": "Dani Parejo", "tablePosition": "Central Midfield", "age": 37, "valueUsd": 1100000,
+      "sources": [
+        { "publisher": "Infobae", "url": "https://www.infobae.com/espana/deportes/2026/09/02/los-jugadores-que-se-han-quedado-sin-equipo-tras-el-cierre-del-mercado-de-fichajes-de-carvajal-a-parejo-o-sergio-ramos/", "dated": "2026-09-02", "says": "Named among the players left without a club when the window shut." },
+        { "publisher": "FotMob", "url": "https://www.fotmob.com/players/75307/daniel-parejo", "dated": "live page, read 2026-10-06", "says": "Career ends at Villarreal, Aug 2020 to Jun 2026; no later club." }
+      ],
+      "note": "No signing or retirement found when searched on checkedOn."
+    },
+    {
+      "name": "Dele Alli", "tablePosition": "Attacking Midfield", "age": 30, "valueUsd": 1100000,
+      "sources": [
+        { "publisher": "Yahoo Sports (All Out Soccer)", "url": "https://sports.yahoo.com/articles/ex-england-star-dele-alli-174912372.html", "dated": "2026-09-24", "says": "Without a team since leaving Como in September 2025; a League Two club has offered him the chance to train." },
+        { "publisher": "FotMob", "url": "https://www.fotmob.com/players/363333/dele-alli", "dated": "live page, read 2026-10-06", "says": "Career ends at Como, Jan 2025 to Sep 2025; no later club." }
+      ]
+    },
+    {
+      "name": "Tiemoué Bakayoko", "tablePosition": "Defensive Midfield", "age": 32, "valueUsd": 500000,
+      "sources": [
+        { "publisher": "livefoot.fr", "url": "https://www.livefoot.fr/joueur/tiemoue-bakayoko/actualite/", "dated": "news feed, read 2026-10-06 (newest item 2026-02-05)", "says": "No signing since leaving PAOK; the newest item has Celtic choosing another midfielder over him." },
+        { "publisher": "FotMob", "url": "https://www.fotmob.com/players/478393/tiemoue-bakayoko", "dated": "live page, read 2026-10-06", "says": "Career ends at PAOK, Aug 2024 to Jun 2025; no later club." }
+      ],
+      "note": "Thin: the newest dated news is from February 2026. footmercato.net (2025-12-07) also had him without a club since July 2025."
+    },
+    {
+      "name": "Willian", "tablePosition": "Left Winger", "age": 38, "valueUsd": 400000,
+      "sources": [
+        { "publisher": "Bolavip Brasil", "url": "https://br.bolavip.com/mercado-da-bola/william-segue-sem-clube-apos-deixar-o-gremio", "dated": "2026-08-30", "says": "Still without a club since ending his Gremio contract (the article spells him William; his family were preparing a return to England)." },
+        { "publisher": "FotMob", "url": "https://www.fotmob.com/pt-BR/players/94086/willian", "dated": "live page, read 2026-10-06", "says": "Career ends at Gremio, Sep 2025 to Jul 2026; no later club." }
+      ],
+      "note": "The Gremio exit itself: Jornal do Comercio 2026-08-05 and O Povo 2026-08-10 (amicable termination)."
+    },
+    {
+      "name": "Wissam Ben Yedder", "tablePosition": "Centre-Forward", "age": 36, "valueUsd": 500000,
+      "sources": [
+        { "publisher": "Afrik-Foot", "url": "https://www.afrik-foot.com/wydad-casablanca-wissam-ben-yedder-part-deja-nordin-amrabat-aussi", "dated": "2026-07-07", "says": "Said goodbye to Wydad Casablanca with three teammates. Gives no reason for the exit and no next club." },
+        { "publisher": "FotMob", "url": "https://www.fotmob.com/players/210184/wissam-ben-yedder", "dated": "live page, read 2026-10-06", "says": "Career ends at Wydad Casablanca, Jan 2026 to Jul 2026; no later club." }
+      ],
+      "note": "Thin: no dated source after July 2026 says either way; the claim rests on nothing newer having appeared. livefoot.fr's feed, read 2026-10-06, has him signing a six month renewable deal at Wydad on 2026-01-07 and nothing about a club after June 2026."
+    }
+  ],
+  "dropped": [
+    { "name": "Iuri Medeiros", "why": "unconfirmed", "tablePosition": "Right Winger", "age": 31, "valueUsd": 2000000,
+      "sources": [{ "publisher": "A Bola", "url": "https://www.abola.pt/noticias/mercado-ex-sporting-provoca-disputa-intensa-no-estrangeiro-2026062516110176054", "dated": "2026-06-25 (player feed read 2026-10-06, nothing later)", "says": "Free after leaving Ujpest, with two Cypriot clubs after him and a decision expected within days." },
+                  { "publisher": "FotMob", "url": "https://www.fotmob.com/players/361321/iuri-medeiros", "dated": "live page, read 2026-10-06", "says": "Career list ends at Ujpest, Jul 2025 to Apr 2026, but the page header still names Ujpest as his club." },
+                  { "publisher": "Soccerway", "url": "https://us.soccerway.com/player/medeiros-iuri/xblMKCRr/", "dated": "live page, read 2026-10-06", "says": "Still lists Ujpest, contract to June 2027." }],
+      "note": "Dropped in the review of this round: no source dated after June 2026 says he is still without a club, the newest one reported a move as days away, and both live pages still name Ujpest. Ships again only on a September or October source. The table's age is a year low: FotMob and Soccerway both give 10 July 1994, so he was 32 in August 2026." },
+    { "name": "Georginio Wijnaldum", "why": "signed", "club": "Al-Ittihad", "modelled": true,
+      "sources": [{ "publisher": "Goal", "url": "https://www.goal.com/en/news/official-al-ittihad-sign-veteran-european-star/blt4e4ed61b36456568", "dated": "2026-09-07", "says": "Joins Al-Ittihad for one season." },
+                  { "publisher": "Soft Football", "url": "https://www.softfootball.com/georginio-wijnaldum-joins-al-ittihad-on-one-year-deal-after-al-ettifaq-exit/", "dated": "2026-09-07", "says": "One year deal at Al-Ittihad after Al-Ettifaq." }],
+      "note": "Al-Ittihad is a Club Manager club: owed to the next roster re-bake." },
+    { "name": "Stanley Nwabali", "why": "reportedSigned", "club": "Chippa United (one source)", "modelled": false,
+      "note": "One source, enough to keep him off the list and not enough to state as checked: his club is as that source reports it.",
+      "sources": [{ "publisher": "Premium Times Nigeria", "url": "https://www.premiumtimesng.com/news/top-news/894814-just-in-super-eagles-goalkeeper-stanley-nwabali-returns-to-chippa-united.html", "dated": "2026-07-12", "says": "Back at Chippa United, club statement." }] },
+    { "name": "Masango Akale", "why": "reportedSigned", "club": "Minneapolis City SC (one source)", "modelled": false,
+      "note": "One source, enough to keep him off the list and not enough to state as checked: his club is as that source reports it.",
+      "sources": [{ "publisher": "Minneapolis City SC", "url": "https://mplscitysc.com/list/2026-roster/", "dated": "2026 season roster, read 2026-10-06", "says": "On the 2026 roster, playing in the July 2026 playoffs." }] },
+    { "name": "Radim Sudak", "why": "reportedSigned", "club": "Banik Ostrava / Vitkovice (loan, one source)", "modelled": false,
+      "note": "One source, enough to keep him off the list and not enough to state as checked: his club is as that source reports it.",
+      "sources": [{ "publisher": "Soccerway", "url": "https://kr.soccerway.com/player/sudak-radim/hUNpQvSn", "dated": "read 2026-10-06", "says": "Loan from 2026-07-23 to 2026-12-31." }] },
+    { "name": "Maikell Díaz", "why": "reportedSigned", "club": "Union Cocle (one source)", "modelled": false,
+      "note": "One source, enough to keep him off the list and not enough to state as checked: his club is as that source reports it.",
+      "sources": [{ "publisher": "Soccerway", "url": "https://ve.soccerway.com/jugador/diaz-maikell/tl4HAPxh/traspasos", "dated": "read 2026-10-06", "says": "Alianza to Union Cocle, 2026-07-01." }] },
+    { "name": "Brooks Lennon", "why": "inBakedSquad", "bakedAt": "Atlanta United", "club": "Columbus Crew", "modelled": true,
+      "sources": [{ "publisher": "Columbus Crew", "url": "https://www.columbuscrew.com/news/columbus-crew-sign-free-agent-defender-brooks-lennon", "dated": "June 2026", "says": "Signed as an MLS free agent." }],
+      "note": "Bake defect: the 2026 row says Without Club, the bake skipped it and fell back to his 2025 Atlanta row. He is at Columbus." },
+    { "name": "Amine Bassi", "why": "inBakedSquad", "bakedAt": "Houston Dynamo", "club": "not checked",
+      "note": "Bake defect, same 2025 fallback: the 2026 table has him without a club and the bake placed him at his 2025 club. Nothing about his status was checked twice, so nothing is claimed here; a re-bake needs two sources before it places him." },
+    { "name": "Ryan Kent", "why": "inBakedSquad", "bakedAt": "Seattle Sounders", "club": "not checked",
+      "note": "Bake defect, same 2025 fallback: the 2026 table has him without a club and the bake placed him at his 2025 club. Nothing about his status was checked twice, so nothing is claimed here; a re-bake needs two sources before it places him." },
+    { "name": "Felipe Carballo", "why": "inBakedSquad", "bakedAt": "New York Red Bulls", "club": "not checked",
+      "note": "Bake defect, same 2025 fallback: the 2026 table has him without a club and the bake placed him at his 2025 club. Nothing about his status was checked twice, so nothing is claimed here; a re-bake needs two sources before it places him." }
+  ]
+}

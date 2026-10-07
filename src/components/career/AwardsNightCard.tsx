@@ -4,7 +4,7 @@ import { Confetti } from "@/components/soccer-career/CareerFx";
 import { revealDelay } from "@/components/club-manager/Celebration";
 import {
   countdownSlot, placeMark,
-  type AwardsCandidate, type AwardsDef, type AwardsNight, type AwardsNightCopy,
+  type AwardsCandidate, type AwardsDef, type AwardsNight, type AwardsNightCopy, type GivenSpeech,
 } from "@/lib/careerAwardsNight";
 
 /* ─── Round 834: the awards night card, shared ───
@@ -99,12 +99,7 @@ export function AwardsNightCard<C extends AwardsCandidate>({
         ))}
       </div>
 
-      {isWinner && night.speech && (
-        <div className="rounded-lg border border-amber-400/30 bg-amber-500/10 p-3 space-y-1 text-center animate-fade-in">
-          <p className="text-xs">{night.speech.line}</p>
-          {night.speech.moved && <p className="text-[11px] font-bold text-amber-300">{night.speech.moved}</p>}
-        </div>
-      )}
+      {isWinner && night.speech && <SpokenSpeech speech={night.speech} />}
 
       {/* The speech is the result, so it arrives with the headline, never
           before it: hidden and unclickable until the countdown has landed. */}
@@ -117,6 +112,18 @@ export function AwardsNightCard<C extends AwardsCandidate>({
           Continue →
         </Button>
       )}
+    </div>
+  );
+}
+
+/** A winner's speech once given, as a card keeps showing it: the words, then
+ *  what it really moved. Round 1023's review: the one block every card that
+ *  keeps a speech draws (this card, Soccer Career's tournament cards). */
+export function SpokenSpeech({ speech }: { speech: GivenSpeech }) {
+  return (
+    <div data-spoken-speech={speech.id} className="rounded-lg border border-amber-400/30 bg-amber-500/10 p-3 space-y-1 text-center animate-fade-in">
+      <p className="text-xs">{speech.line}</p>
+      {speech.moved && <p className="text-[11px] font-bold text-amber-300">{speech.moved}</p>}
     </div>
   );
 }

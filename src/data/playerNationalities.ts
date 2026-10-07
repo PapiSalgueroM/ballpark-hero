@@ -10,6 +10,7 @@
    (scripts/lib/eraBakeExtend.mjs, updateNationalityBlock) also rewrites that
    world's block, with the nationality on each baked row. Earlier hand edits
    (Rounds 567 and 616) are in the git history of this file. */
+import { CM_ALEAGUE_NATIONALITIES } from '@/data/clubManagerALeague2026';
 
 export const NATIONALITY_BY_WORLD: Record<string, Record<string, string>> = {
 now: {
@@ -11177,8 +11178,11 @@ era2005: {
 
 /** The world's honest answer, or null: generated and academy players are
     made up and get no flag, and an unresolved real name shows nothing
-    rather than a guess. */
+    rather than a guess. Round 1035: the modern world also reads the A-League
+    Men's map, generated with its squads (two hosts a nationality,
+    scripts/genClubManagerALeague.mjs), after its own entries. */
 export function nationalityOf(eraId: string | undefined, name: string): string | null {
   const world = NATIONALITY_BY_WORLD[eraId ?? 'now'] ?? NATIONALITY_BY_WORLD.now;
+  if (world === NATIONALITY_BY_WORLD.now) return world[name] ?? CM_ALEAGUE_NATIONALITIES[name] ?? null;
   return world[name] ?? null;
 }

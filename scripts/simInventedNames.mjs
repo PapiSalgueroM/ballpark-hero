@@ -119,8 +119,8 @@ const real = new Set();
      this block must go red rather than quietly harvest nothing from it. The
      run stops here with the verdict. */
   const LEDGER_CONTROL = process.env.INVENTED_LEDGER_CONTROL || '';
-  if (LEDGER_CONTROL && LEDGER_CONTROL !== 'renamed') { console.error(`INVENTED_LEDGER_CONTROL=${LEDGER_CONTROL} is not a control this harness knows`); process.exit(1); }
-  if (LEDGER_CONTROL) {
+  if (LEDGER_CONTROL && !['renamed', 'faledger'].includes(LEDGER_CONTROL)) { console.error(`INVENTED_LEDGER_CONTROL=${LEDGER_CONTROL} is not a control this harness knows`); process.exit(1); }
+  if (LEDGER_CONTROL === 'renamed') {
     if (!Array.isArray(ledger.notCurrent) || !ledger.notCurrent.length) { console.error('control refuses to run: the ledger has no notCurrent rows to hide'); process.exit(1); }
     ledger.notCurrentRenamed = ledger.notCurrent;
     delete ledger.notCurrent;
@@ -137,9 +137,35 @@ const real = new Set();
      holds the ledger to that), so a lost key or a lost row shows here. */
   if (ledgerRows !== ledger.population) fail(`harvested ${ledgerRows} ledger rows, but the ledger's population is ${ledger.population}`);
   console.log(`   ${ledgerRows} ledger rows harvested; ${real.size - shipped.size} of the ledger's men are known to the harvest only through the ledger`);
-  if (LEDGER_CONTROL) {
+  if (LEDGER_CONTROL === 'renamed') {
     const hit = failures > ledgerFailsBefore;
     console.log(hit ? '   CONTROL FIRED: renamed caught by the ledger harvest' : '   CONTROL DID NOT FIRE: the ledger harvest stayed green');
+    process.exit(hit ? 0 : 1);
+  }
+  /* Round 1033: the free agent ledger. Every 'Without Club' man of the 2026
+     table is a real man, the ones who signed elsewhere and the ones dropped
+     for sitting on a baked squad as much as the eight Club Manager lists, so
+     a generator must never build any of their names. The eight reach the
+     harvest through src/data as well; the dropped ones only through here.
+     NEGATIVE CONTROL: INVENTED_LEDGER_CONTROL=faledger loses the dropped
+     rows in memory and this block must go red; the run stops with the verdict. */
+  const faLedger = JSON.parse(read('scripts/data/cmFreeAgents2026.json'));
+  if (LEDGER_CONTROL === 'faledger') {
+    if (!Array.isArray(faLedger.dropped) || !faLedger.dropped.length) { console.error('control refuses to run: the free agent ledger has no dropped rows to lose'); process.exit(1); }
+    delete faLedger.dropped;
+    console.log('   NEGATIVE CONTROL ON: the free agent ledger lost its dropped rows, this block must go red');
+  }
+  const faFailsBefore = failures;
+  const faRows = [...(faLedger.unattached ?? []), ...(faLedger.dropped ?? [])];
+  for (const r of faRows) if (r.name) real.add(r.name);
+  if (faRows.length !== faLedger.population) fail(`harvested ${faRows.length} free agent ledger rows, but its population is ${faLedger.population}`);
+  const faShipped = [...read('src/data/clubManagerFreeAgents2026.ts').matchAll(/\bname: '([^']+)'/g)].map(m => m[1]);
+  const faMissing = faShipped.filter(n => !real.has(n));
+  if (!faShipped.length || faMissing.length) fail(`the real free agent file gives the harvest ${faShipped.length} names and ${faMissing.length} are not in it`);
+  console.log(`   ${faRows.length} free agent ledger rows harvested, ${faShipped.length} of them the real free agents Club Manager lists`);
+  if (LEDGER_CONTROL === 'faledger') {
+    const hit = failures > faFailsBefore;
+    console.log(hit ? '   CONTROL FIRED: faledger caught by the free agent ledger harvest' : '   CONTROL DID NOT FIRE: the free agent ledger harvest stayed green');
     process.exit(hit ? 0 : 1);
   }
   /* Plus the baked Club Manager worlds, through the bundler, because their

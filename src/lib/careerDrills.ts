@@ -24,9 +24,11 @@
  * the same seed plays the same ten rounds for everybody at that position on
  * that day and scripts/simCareerDrills.mjs can play thousands of them.
  *
- * THE THREE DRILLS, and who gets which (drillForPosition):
+ * THE FOUR POSITION DRILLS, and who gets which (drillForPosition). Three
+ * have their rules in this file; the fourth, THROUGH BALL for CM and CAM
+ * (Round 1032), has them in src/lib/throughBallDrill.ts beside First Touch's.
  *
- *   WALL SHOT, for CM, CAM, LW, RW and ST. Two axis aim (across and up) and
+ *   WALL SHOT, for LW, RW and ST. Two axis aim (across and up) and
  *   one timed press. A wall stands taller than you can clip from this range,
  *   and a gap in it opens and closes on a cycle: the men step apart and back
  *   together. The rules know the gap, not a count of men, and the board
@@ -67,15 +69,19 @@ import { effectivePotential, trainingStatFor, type CareerState, type TrainingSta
 
 export { daySeed, lehmer, ROUNDS_PER_RUN };
 
-export type PositionDrillKind = 'wallshot' | 'tackle' | 'gloves';
+/* Round 1032: THROUGH BALL, for CM and CAM, is the fourth position drill. Its
+   rules live beside First Touch's in src/lib/throughBallDrill.ts and its board
+   in ThroughBallBoard.tsx; this file only deals it, seeds it and banks it. */
+export type PositionDrillKind = 'wallshot' | 'tackle' | 'gloves' | 'throughball';
 export type DrillKind = PositionDrillKind | 'firsttouch';
-export type DrillStat = 'shooting' | 'defending' | 'reflexes' | 'dribbling';
+export type DrillStat = 'shooting' | 'defending' | 'reflexes' | 'dribbling' | 'passing';
 
 export const DRILL_META: Record<DrillKind, { name: string; stat: DrillStat; statLabel: string; emoji: string; verb: string; slug: string }> = {
   wallshot: { name: 'Wall Shot', stat: 'shooting', statLabel: 'Shooting', emoji: '🧱', verb: 'scored', slug: 'career-drill-wallshot' },
   tackle: { name: 'Tackle', stat: 'defending', statLabel: 'Defending', emoji: '🦵', verb: 'won', slug: 'career-drill-tackle' },
   gloves: { name: 'Glove Save', stat: 'reflexes', statLabel: 'Reflexes', emoji: '🧤', verb: 'saved', slug: 'career-drill-gloves' },
   firsttouch: { name: 'First Touch', stat: 'dribbling', statLabel: 'Dribbling', emoji: '👟', verb: 'controlled', slug: 'career-drill-firsttouch' },
+  throughball: { name: 'Through Ball', stat: 'passing', statLabel: 'Passing', emoji: '🎯', verb: 'completed', slug: 'career-drill-throughball' },
 };
 
 /** What a drill trains for the man doing it, and the word his attribute
@@ -88,20 +94,26 @@ export const DRILL_META: Record<DrillKind, { name: string; stat: DrillStat; stat
     attribute screen calls Penalty Saving, under a tile that said Dribbling. */
 export function drillStatFor(kind: DrillKind, position: string): { stat: TrainingStat; label: string } {
   if (kind === 'firsttouch') return trainingStatFor(position, 'dribbling');
+  /* Round 1032: Through Ball pays what Passing Gates pays, through the same
+     mapping, so the tile, the event line and the attribute screen agree. */
+  if (kind === 'throughball') return trainingStatFor(position, 'passing');
   return { stat: DRILL_META[kind].stat, label: DRILL_META[kind].statLabel };
 }
 
 /** The player's position picks the drill. Keepers dive, the back line and the
-    holding midfielder tackle, everybody else shoots through the wall. */
+    holding midfielder tackle, the central and attacking midfielders thread
+    through balls (Round 1032), everybody else shoots through the wall. */
 export function drillForPosition(position: string): PositionDrillKind {
   if (position === 'GK') return 'gloves';
   if (position === 'CB' || position === 'LB' || position === 'RB' || position === 'CDM') return 'tackle';
+  if (position === 'CM' || position === 'CAM') return 'throughball';
   return 'wallshot';
 }
 
-/* One day is one run for everybody at that position, and the three drills on
-   the same day are three different runs. */
-const KIND_SALT: Record<DrillKind, number> = { wallshot: 1719, tackle: 4583, gloves: 8317, firsttouch: 12011 };
+/* One day is one run for everybody at that position, and the drills on the
+   same day are different runs. A new drill takes a new salt and never moves
+   an old one, so every existing daily replays exactly as it did. */
+const KIND_SALT: Record<DrillKind, number> = { wallshot: 1719, tackle: 4583, gloves: 8317, firsttouch: 12011, throughball: 15887 };
 export function drillSeed(kind: DrillKind, dateStr: string): number {
   return ((daySeed(dateStr) * 7919 + KIND_SALT[kind]) % 2147483646) + 1;
 }

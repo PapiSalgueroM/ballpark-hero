@@ -350,9 +350,11 @@ beginSection(1, 'one seed, one run: the daily is the same ten rounds for everybo
     if (one.score !== two.score) fail(`${kind}: the same seed and strategy scored ${one.score} then ${two.score}, so the engine is not pure`);
     console.log(`   ${kind}: 2026-09-05 is stable, differs from the next day, and a replay of seed 777 scores ${one.score} twice`);
   }
-  const seeds = new Set(['wallshot', 'tackle', 'gloves'].map(k => drillSeed(k, '2026-09-05')));
-  if (seeds.size !== 3) fail('the three drills share a seed on the same day');
-  if (drillForPosition('GK') !== 'gloves' || drillForPosition('CB') !== 'tackle' || drillForPosition('CDM') !== 'tackle' || drillForPosition('ST') !== 'wallshot' || drillForPosition('CM') !== 'wallshot') fail('a position is not routed to the drill the guide says it gets');
+  /* Round 1032: Through Ball (CM and CAM) and First Touch take their own
+     salts, so every drill on the same day is a different run. */
+  const seeds = new Set(['wallshot', 'tackle', 'gloves', 'throughball', 'firsttouch'].map(k => drillSeed(k, '2026-09-05')));
+  if (seeds.size !== 5) fail('two drills share a seed on the same day');
+  if (drillForPosition('GK') !== 'gloves' || drillForPosition('CB') !== 'tackle' || drillForPosition('CDM') !== 'tackle' || drillForPosition('ST') !== 'wallshot' || drillForPosition('LW') !== 'wallshot' || drillForPosition('CM') !== 'throughball' || drillForPosition('CAM') !== 'throughball') fail('a position is not routed to the drill the guide says it gets');
 }
 
 beginSection(2, 'skill beats spam: reading the round is worth more than any one fixed input, named or swept');
