@@ -56,7 +56,32 @@ jobs:
           git rev-parse 'HEAD^{tree}' > manager-appeal-isolation-artifacts/source-tree.txt
           sha256sum package.json package-lock.json > manager-appeal-isolation-artifacts/dependencies-before.txt
           npm ci
-          npm install --no-save --package-lock=false playwright
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const lock = JSON.parse(fs.readFileSync('package-lock.json'));
+          const installed = [];
+          for (const [path, entry] of Object.entries(lock.packages)) {
+            const file = path + '/package.json';
+            if (!path.startsWith('node_modules/') || !fs.existsSync(file)) continue;
+            const version = JSON.parse(fs.readFileSync(file)).version;
+            assert.equal(version, entry.version, `Locked installed version: ${path}`);
+            installed.push({ path, version });
+          }
+          assert(installed.length > 0, 'Actual locked installation is captured');
+          fs.writeFileSync('manager-appeal-isolation-artifacts/installed-before.json', JSON.stringify(installed, null, 2));
+          NODE
+          npm install --no-save playwright
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const before = JSON.parse(fs.readFileSync('manager-appeal-isolation-artifacts/installed-before.json'));
+          const after = before.map(entry => ({ path: entry.path,
+            version: JSON.parse(fs.readFileSync(entry.path + '/package.json')).version }));
+          fs.writeFileSync('manager-appeal-isolation-artifacts/installed-after.json', JSON.stringify(after, null, 2));
+          assert.deepEqual(after, before, 'Adding the browser runner preserves every installed locked dependency');
+          console.log(`Held ${after.length} actual installed dependency versions.`);
+          NODE
           npx playwright install --with-deps chromium
           python -m pip install fonttools pillow
       - name: Actual application type gate and build
