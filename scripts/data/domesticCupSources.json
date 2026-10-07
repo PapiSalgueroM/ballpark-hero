@@ -3028,10 +3028,10 @@
     },
     {
      "from": 2021,
+     "to": 2021,
      "kind": "NAMED",
      "name": "Canadian Championship",
      "legs": 1,
-     "decider": "pens",
      "facts": [
       {
        "ref": "americas:Canada:0",
@@ -3072,6 +3072,101 @@
        ]
       },
       {
+       "ref": "americas:Canada:10",
+       "verified": true,
+       "claim": "Entrants: the three Canadian MLS clubs (Vancouver Whitecaps, CF Montreal, Toronto FC) play the Canadian Championship, alongside the Canadian Premier League clubs and provincial league champions",
+       "sources": [
+        {
+         "host": "truenorthfoot.ca",
+         "url": "https://truenorthfoot.ca/article/just-what-is-the-voyageurs-cup-559",
+         "read": "2026-10-06",
+         "line": "The three Major League Soccer sides: Vancouver Whitecaps, CF Montréal, and Toronto FC ... All eight Canadian Premier League clubs (2026)"
+        },
+        {
+         "host": "mlssoccer.com",
+         "url": "https://www.mlssoccer.com/news/2021-canadian-championship-format-and-schedule-announced",
+         "read": "2026-10-06",
+         "line": "three Canadian MLS teams, all Canadian Premier League clubs, and champions from two provincial leagues (2021, 13 participants)"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 2022,
+     "to": 2023,
+     "kind": "NAMED",
+     "name": "Canadian Championship",
+     "why": "the one match finals of 2022 and 2023 rest on one source, so no final score",
+     "facts": [
+      {
+       "ref": "americas:Canada:0",
+       "verified": true,
+       "claim": "The Canadian Championship (Voyageurs Cup) has been played every year since 2008",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesc/canchamp.html",
+         "read": "2026-10-06",
+         "line": "official Canadian Championship winners listed for every year 2008 to 2025 (2025: Vancouver Whitecaps beat Vancouver FC 4-2)"
+        },
+        {
+         "host": "urbanpitch.com",
+         "url": "https://urbanpitch.com/the-canadian-championship-a-brief-history-of-the-voyageurs-cup/",
+         "read": "2026-10-06",
+         "line": "For the first three editions from 2008-2010, the national champion was decided between Canada's three fully professional teams: Toronto FC, Montreal Impact, and Vancouver Whitecaps."
+        }
+       ]
+      },
+      {
+       "ref": "americas:Canada:10",
+       "verified": true,
+       "claim": "Entrants: the three Canadian MLS clubs (Vancouver Whitecaps, CF Montreal, Toronto FC) play the Canadian Championship, alongside the Canadian Premier League clubs and provincial league champions",
+       "sources": [
+        {
+         "host": "truenorthfoot.ca",
+         "url": "https://truenorthfoot.ca/article/just-what-is-the-voyageurs-cup-559",
+         "read": "2026-10-06",
+         "line": "The three Major League Soccer sides: Vancouver Whitecaps, CF Montréal, and Toronto FC ... All eight Canadian Premier League clubs (2026)"
+        },
+        {
+         "host": "mlssoccer.com",
+         "url": "https://www.mlssoccer.com/news/2021-canadian-championship-format-and-schedule-announced",
+         "read": "2026-10-06",
+         "line": "three Canadian MLS teams, all Canadian Premier League clubs, and champions from two provincial leagues (2021, 13 participants)"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 2024,
+     "to": 2024,
+     "kind": "NAMED",
+     "name": "Canadian Championship",
+     "legs": 1,
+     "decider": "pens",
+     "facts": [
+      {
+       "ref": "americas:Canada:0",
+       "verified": true,
+       "claim": "The Canadian Championship (Voyageurs Cup) has been played every year since 2008",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesc/canchamp.html",
+         "read": "2026-10-06",
+         "line": "official Canadian Championship winners listed for every year 2008 to 2025 (2025: Vancouver Whitecaps beat Vancouver FC 4-2)"
+        },
+        {
+         "host": "urbanpitch.com",
+         "url": "https://urbanpitch.com/the-canadian-championship-a-brief-history-of-the-voyageurs-cup/",
+         "read": "2026-10-06",
+         "line": "For the first three editions from 2008-2010, the national champion was decided between Canada's three fully professional teams: Toronto FC, Montreal Impact, and Vancouver Whitecaps."
+        }
+       ]
+      },
+      {
        "ref": "americas:Canada:6",
        "verified": true,
        "claim": "2024 final: one match at BC Place, Vancouver Whitecaps 0-0 Toronto FC, Vancouver 4-2 on penalties (25 September 2024)",
@@ -3087,6 +3182,53 @@
          "url": "https://www.rsssf.org/tablesc/canchamp.html",
          "read": "2026-10-06",
          "line": "2024: Vancouver Whitecaps - Toronto FC (0-0) [4-2 penalties]"
+        }
+       ]
+      },
+      {
+       "ref": "americas:Canada:10",
+       "verified": true,
+       "claim": "Entrants: the three Canadian MLS clubs (Vancouver Whitecaps, CF Montreal, Toronto FC) play the Canadian Championship, alongside the Canadian Premier League clubs and provincial league champions",
+       "sources": [
+        {
+         "host": "truenorthfoot.ca",
+         "url": "https://truenorthfoot.ca/article/just-what-is-the-voyageurs-cup-559",
+         "read": "2026-10-06",
+         "line": "The three Major League Soccer sides: Vancouver Whitecaps, CF Montréal, and Toronto FC ... All eight Canadian Premier League clubs (2026)"
+        },
+        {
+         "host": "mlssoccer.com",
+         "url": "https://www.mlssoccer.com/news/2021-canadian-championship-format-and-schedule-announced",
+         "read": "2026-10-06",
+         "line": "three Canadian MLS teams, all Canadian Premier League clubs, and champions from two provincial leagues (2021, 13 participants)"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 2025,
+     "kind": "NAMED",
+     "name": "Canadian Championship",
+     "legs": 1,
+     "why": "a one match final; penalties are two sourced for 2024 only",
+     "facts": [
+      {
+       "ref": "americas:Canada:0",
+       "verified": true,
+       "claim": "The Canadian Championship (Voyageurs Cup) has been played every year since 2008",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesc/canchamp.html",
+         "read": "2026-10-06",
+         "line": "official Canadian Championship winners listed for every year 2008 to 2025 (2025: Vancouver Whitecaps beat Vancouver FC 4-2)"
+        },
+        {
+         "host": "urbanpitch.com",
+         "url": "https://urbanpitch.com/the-canadian-championship-a-brief-history-of-the-voyageurs-cup/",
+         "read": "2026-10-06",
+         "line": "For the first three editions from 2008-2010, the national champion was decided between Canada's three fully professional teams: Toronto FC, Montreal Impact, and Vancouver Whitecaps."
         }
        ]
       },

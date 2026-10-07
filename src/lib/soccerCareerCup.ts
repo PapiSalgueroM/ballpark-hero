@@ -142,7 +142,10 @@ export const DOMESTIC_CUPS: Readonly<Record<string, readonly CupWindow[]>> = {
     { from: 2008, to: 2010, kind: "UNKNOWN", why: "a round robin of three clubs, no final" },
     { from: 2011, to: 2019, kind: "NAMED", name: "Canadian Championship", legs: 2, decider: "awayGoals" },
     { from: 2020, to: 2020, kind: "UNKNOWN", why: "one final between the top Canadian MLS club and the CPL winner" },
-    { from: 2021, kind: "NAMED", name: "Canadian Championship", legs: 1, decider: "pens" },
+    { from: 2021, to: 2021, kind: "NAMED", name: "Canadian Championship", legs: 1 },
+    { from: 2022, to: 2023, kind: "NAMED", name: "Canadian Championship", why: "the one match finals of 2022 and 2023 rest on one source, so no final score" },
+    { from: 2024, to: 2024, kind: "NAMED", name: "Canadian Championship", legs: 1, decider: "pens" },
+    { from: 2025, kind: "NAMED", name: "Canadian Championship", legs: 1, why: "a one match final; penalties are two sourced for 2024 only" },
   ],
   Mexico: [
     { from: 1990, to: 1996, kind: "UNKNOWN", why: "the Copa Mexico seasons of the early 1990s rest on one source" },

@@ -68,7 +68,12 @@
      (76 'beatwinner', 99 'lostfinal'), keepcoin (46 'nonecup', 46 cups won
      with no cup), unverifiedname (37 'name', 6 'event', digest and Brazil
      window red in 4), flatrounds (gap -0.002, finals ratio 1.384),
-     leaguekey (25 'worldwin', 11 'canadian'). */
+     leaguekey (25 'worldwin', 11 'canadian').
+   The digest was re-pinned once, on purpose, when the Canadian Championship
+   from 2021 was split so that only two sourced seasons carry a final's legs
+   (2021 and 2025 on) and penalties (2024); on the tree merged with release-
+   ai-int 187558a5 offset 0 is green with 61 windows, 45 of them two sourced,
+   and 38 Club Manager league rows agreeing. */
 import crypto from 'node:crypto';
 import os from 'node:os';
 import fs from 'node:fs';
@@ -293,7 +298,7 @@ const PER = Number(process.env.CUP_PER || 40);
 /* BANDS: set from the measurements recorded in the header. */
 const GAP_MIN = 0.09;
 const RATIO_BAND = [0.82, 1.18];
-const TABLE_DIGEST = 'd5063861f76d487c54b80e7f8c686b6cfad79b4a3b8765791bad651cf00d2e71';
+const TABLE_DIGEST = '93f8ef7185d11c4f575a5dd07b07169d72ccfc18d032bc54691227f049e47dd4';
 function fleet(e, label) {
   const t0 = Date.now();
   const out = [];
