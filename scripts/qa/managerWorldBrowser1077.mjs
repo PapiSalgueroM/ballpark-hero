@@ -142,9 +142,10 @@ try {
     });
     const page = await context.newPage(); page.setDefaultTimeout(15000);
     await page.addInitScript(() => {
-      window.__worldEvents=[]; window.__worldWrites=[];
-      const original=Storage.prototype.setItem;
-      Storage.prototype.setItem=function(key,value){if(this===localStorage)window.__worldWrites.push({key,bytes:String(value).length});return original.call(this,key,value);};
+      window.__worldEvents=[]; window.__worldWrites=[]; window.__worldRemovals=[];
+      const original=Storage.prototype.setItem, originalRemove=Storage.prototype.removeItem;
+      Storage.prototype.setItem=function(key,value){if(this===localStorage)window.__worldWrites.push({key,value:String(value),bytes:String(value).length});return original.call(this,key,value);};
+      Storage.prototype.removeItem=function(key){if(this===localStorage)window.__worldRemovals.push(key);return originalRemove.call(this,key);};
       for(const type of ['pointerdown','pointerup','click','input','keydown','keyup']) document.addEventListener(type,event=>{const node=event.target instanceof Element?event.target:null;window.__worldEvents.push({type,trusted:event.isTrusted,key:event.key,pointerType:event.pointerType,target:node?.getAttribute('data-world-league')||node?.getAttribute('aria-label')||node?.closest('button')?.textContent||node?.tagName});},true);
     });
     page.on('pageerror',error=>row.errors.push(String(error)));
@@ -179,6 +180,12 @@ try {
       await page.goto(BASE,{waitUntil:'domcontentloaded'});await button('Browse leagues').waitFor();
       row.fonts=await page.evaluate(async()=>{await document.fonts.ready;const result=[];for(const family of ['Inter','Space Grotesk'])for(const weight of [400,500,600,700]){const faces=await document.fonts.load(`${weight} 16px "${family}"`,'Explore your world');result.push({family,weight,faces:faces.map(face=>({family:face.family,status:face.status}))});}return result;});
       for(const font of row.fonts)assert(font.faces.length>0&&font.faces.every(face=>face.status==='loaded'&&face.family.replaceAll('"','')===font.family));
+      // The imported auth client tests storage once before the journey. Retain
+      // that exact write/remove pair, then require browsing to add no writes.
+      row.startupStorage=await page.evaluate(()=>({writes:window.__worldWrites,removals:window.__worldRemovals,values:{...localStorage}}));
+      assert.equal(row.startupStorage.writes.length,1,'One auth startup storage probe');
+      const probe=row.startupStorage.writes[0];assert.match(probe.key,/^lswt-/);assert.equal(probe.value,probe.key);assert.equal(probe.bytes,probe.key.length);
+      assert.deepEqual(row.startupStorage.removals,[probe.key]);assert.deepEqual(row.startupStorage.values,{'dukb-theme':profile.theme});
       const initial=await proof();assert(initial.expected.length>0);const beforeSave=digest(JSON.stringify(initial.career));
       await page.evaluate(()=>scrollTo(0,48));const beforeY=await page.evaluate(()=>scrollY);
       await activate(button('Browse leagues'));assert(await search().evaluate(node=>document.activeElement===node));assert.equal(await page.evaluate(()=>scrollY),beforeY,'Opening browser does not jump the page');
@@ -207,10 +214,13 @@ try {
       await screenshot('saved-table');
       await activate(button('Use edited world'));await activate(button('Browse leagues'));await type('Celtic England');assert.deepEqual(await ids(),['premier']);await type('Brentford Scotland');assert.deepEqual(await ids(),['scottish']);await activate(page.locator('[data-world-league="scottish"]'));await tableProof('scottish');await screenshot('edited-table');
       await activate(button('Use 2005 world'));await page.waitForFunction(()=>window.__worldProof.mode==='era2005'&&window.__worldProof.career.eraId==='era2005');await activate(button('Browse leagues'));assert.deepEqual((await ids()).sort(),(await proof()).expected.map(league=>league.id).sort());await type('Australia');assert.deepEqual(await ids(),[]);await activate(button('Back'));assert((await proof()).mode==='era2005');
-      row.events=await page.evaluate(()=>window.__worldEvents);row.storageWrites=await page.evaluate(()=>window.__worldWrites);
+      row.events=await page.evaluate(()=>window.__worldEvents);row.allStorageWrites=await page.evaluate(()=>window.__worldWrites);row.storageRemovals=await page.evaluate(()=>window.__worldRemovals);
+      assert.deepEqual(row.allStorageWrites.slice(0,row.startupStorage.writes.length),row.startupStorage.writes);
+      row.storageWrites=row.allStorageWrites.slice(row.startupStorage.writes.length);
+      assert.deepEqual(row.storageRemovals,row.startupStorage.removals);assert.deepEqual(await page.evaluate(()=>({...localStorage})),row.startupStorage.values);
       assert(row.events.some(event=>event.type===(profile.touch?'pointerdown':'keydown')&&event.trusted),'Actual trusted native input retained');assert.equal(row.storageWrites.length,0);assert.deepEqual(row.errors,[]);
       row.passed=true;save();
-    }catch(error){row.failure=String(error.stack||error);try{row.events=await page.evaluate(()=>window.__worldEvents);row.failureText=await page.locator('body').innerText();await screenshot('failure',false);}catch{}save();throw error;}
+    }catch(error){row.failure=String(error.stack||error);try{row.events=await page.evaluate(()=>window.__worldEvents);row.allStorageWrites=await page.evaluate(()=>window.__worldWrites);row.storageRemovals=await page.evaluate(()=>window.__worldRemovals);row.failureText=await page.locator('body').innerText();await screenshot('failure',false);}catch{}save();throw error;}
     finally{await context.close();}
   }
   assert.equal(report.cases.length,3);assert(report.cases.every(row=>row.passed));assert.equal(report.controls.length,9);
