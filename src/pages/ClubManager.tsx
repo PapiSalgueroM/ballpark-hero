@@ -1515,6 +1515,9 @@ const ClubManager = () => {
             onSetPiece={g.assignSetPiece}
             onAutoSetPieces={g.autoPickSetPieces}
             onShootoutOrder={g.setShootoutOrder}
+            onSaveMatchPlan={g.saveMatchPlan}
+            onApplyMatchPlan={g.applyMatchPlan}
+            onDeleteMatchPlan={g.deleteMatchPlan}
             openTileRequest={tacticsTile}
             onOpenTileRequestDone={() => setTacticsTile(null)}
           /></ScreenLoading>

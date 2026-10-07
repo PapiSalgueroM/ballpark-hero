@@ -2345,6 +2345,8 @@ export interface CareerState {
    *  shootout is settled the way it always was, in one draw. With an order
    *  set the shootout goes kick by kick, see settleShootout. */
   shootoutOrder?: string[];
+  /** Three club-bound tactics setups. Older saves have none; the match-plan reader validates entries. */
+  matchPlans?: import('@/lib/clubManagerMatchPlans').SavedMatchPlan[];
 }
 
 /* ---------- Round 505: the armband and the set piece takers ---------- */
