@@ -137,7 +137,15 @@ function swap(src, from, to, label) {
    four new rows out. Every anchor must match exactly once or the harness
    refuses to run, so a later edit cannot quietly turn the baseline into a
    copy of the current engine. */
-const SPLIT_RE = /  return playPendingProSeason\(s, clubs\);\n\}\n\n\/\*[^]*?\*\/\nfunction playPendingProSeason\(s: CareerState, clubs: ClubData\[\]\): CareerState \{\n/g;
+/* Release AI: Round 1022 (Release AH) put INT_SCORING_RECORDS and
+   awardAllTimeTopScorer between the year's beginning and playPendingProSeason's
+   comment, and the old lazy match ran through that code to the comment, so the
+   baseline lost the award and every pre-850 career threw "awardAllTimeTopScorer
+   is not defined" (red on main since AH; no gate list carried this harness).
+   The comment part now cannot cross a closing comment mark, and whatever sits
+   between the two functions is kept: it moves to the end of the baseline, where
+   its top level declarations mean the same thing (nothing runs them at load). */
+const SPLIT_RE = /  return playPendingProSeason\(s, clubs\);\n\}\n\n([^]*?)\/\*(?:[^*]|\*(?!\/))*\*\/\nfunction playPendingProSeason\(s: CareerState, clubs: ClubData\[\]\): CareerState \{\n/g;
 const DECLINE_RE = /export function declineRetirementSuggestion\(prev: CareerState, clubs: ClubData\[\]\): CareerState \{\n[^]*?\n\}\n/g;
 const OLD_DECLINE = 'export function declineRetirementSuggestion(prev: CareerState): CareerState {\n'
   + '  const s = { ...prev };\n'
@@ -158,7 +166,9 @@ if (splitHits !== 1 || declineHits !== 1) {
   console.error(`  FAIL: cannot rebuild the pre-850 engine (split anchor ${splitHits}, decline anchor ${declineHits}, each must be 1)`);
   process.exit(1);
 }
-let BASELINE_SRC = SRC.replace(SPLIT_RE, "").replace(DECLINE_RE, () => OLD_DECLINE);
+let between = '';
+let BASELINE_SRC = SRC.replace(SPLIT_RE, (_m, kept) => { between = kept; return ''; }).replace(DECLINE_RE, () => OLD_DECLINE);
+if (between) BASELINE_SRC += `\n${between}`;
 for (const [k, [from, to]] of Object.entries(ROWS)) BASELINE_SRC = swap(BASELINE_SRC, from, to, `revert ${k}`);
 
 /* the negative controls mutate the CURRENT engine */
