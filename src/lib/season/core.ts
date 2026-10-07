@@ -41,6 +41,8 @@ export interface Frame {
   /** His club's league games in the season. */
   games: number;
   rule: PointsRule | null;
+  /** Most goals (points) a side may hold after a repair; 7 when absent (Club Manager's cap). */
+  cap?: number;
 }
 
 /** A game whose result and his line are already on the save (a derby). */
@@ -429,19 +431,19 @@ function allocate(p: Placed, av: Avail, totals: StatTotal[], bucketApps: number,
 type Board = [number, number, number, number][][];
 const GOAL_CAP = 7;
 
-interface Locks { at: Map<string, number>; p: Placed; al: Alloc }
+interface Locks { at: Map<string, number>; p: Placed; al: Alloc; cap: number; wide: boolean }
 const cell = (r: number, k: number) => `${r}:${k}`;
 
 /** The goals a side may hold in a game: his floors and clean sheet marks, a fixed game not at all. */
 function bounds(L: Locks, r: number, k: number, homeSide: boolean): [number, number] | null {
   const i = L.at.get(cell(r, k));
-  if (i === undefined) return [0, GOAL_CAP];
+  if (i === undefined) return [0, L.cap];
   if (L.p.fixedAt[i]) return null;
   const m = L.p.mine[i];
   const usSide = m.home === homeSide;
-  if (usSide) return [L.al.floors[i], GOAL_CAP];
+  if (usSide) return [L.al.floors[i], L.cap];
   const mark = L.al.marks[i];
-  return mark === 'shutout' ? [0, 0] : mark === 'concede' ? [1, GOAL_CAP] : [0, GOAL_CAP];
+  return mark === 'shutout' ? [0, 0] : mark === 'concede' ? [1, L.cap] : [0, L.cap];
 }
 
 /** One goal moved so that `slot` gains (dir 1) or loses (dir -1) points, or false. */
@@ -454,6 +456,12 @@ function nudge(board: Board, L: Locks, slot: number, dir: 1 | -1, rng: Rng): boo
     const sb = bounds(L, r, k, home); const ob = bounds(L, r, k, !home);
     if (!sb || !ob) return;
     const s = g[si]; const o = g[oi];
+    if (L.wide) {
+      /* a record sport: a lost or drawn game becomes a one point win, a won or drawn one a one point loss */
+      if (dir === 1 && s <= o && o + 1 <= sb[1]) opts.push([r, k, si, o + 1 - s]);
+      if (dir === -1 && s >= o && s + 1 <= ob[1]) opts.push([r, k, oi, s + 1 - o]);
+      return;
+    }
     if (dir === 1 && (s === o || s === o - 1)) {
       if (s + 1 <= sb[1]) opts.push([r, k, si, 1]);
       if (o - 1 >= ob[0]) opts.push([r, k, oi, -1]);
@@ -524,7 +532,7 @@ function playAttempt<R, C>(sport: SeasonSport<R, C>, frame: Frame, rounds: [numb
     let us: number; let them: number;
     if (f) { us = f.us; them = f.them; } else {
       [us, them] = sport.score(str[0] - str[m.opp], m.home, rng);
-      us = Math.min(GOAL_CAP, Math.max(us, L.al.floors[i]));
+      us = Math.min(L.cap, Math.max(us, L.al.floors[i]));
       const mark = L.al.marks[i];
       if (mark === 'shutout') them = 0; else if (mark === 'concede') them = Math.max(1, them);
     }
@@ -635,7 +643,7 @@ export function deriveSeason<R, C>(sport: SeasonSport<R, C>, row: R, ctx: C): De
   const target = sport.target(row, ctx, frame);
   const at = new Map<string, number>();
   p.mine.forEach((m, i) => at.set(cell(m.r, rounds[m.r].findIndex(([h, a]) => h === 0 || a === 0)), i));
-  const L: Locks = { at, p, al };
+  const L: Locks = { at, p, al, cap: frame.cap ?? GOAL_CAP, wide: frame.mode === 'record' };
   const str = sport.strengths(frame, target, p.slotOf, ctx, keyedRng(`${key}|str`));
   let won: { board: Board; repairs: number } | null = null;
   let attempt = 0;
