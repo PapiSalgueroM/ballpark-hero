@@ -9,6 +9,7 @@ import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useArcadeFlight } from '@/hooks/useArcadeFlight';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import ShotLabComparison, { type LabShot } from '@/components/buzzer-beater/ShotLabComparison';
+import ContestScorecard, { ContestBalls } from '@/components/buzzer-beater/ContestScorecard';
 import { CourtArtwork, BallSeams } from '@/components/buzzer-beater/BuzzerCourtArtwork';
 import { getTodayET } from '@/lib/dateUtils';
 import { readArcadeRun, writeArcadeRun } from '@/lib/arcadeRecord';
@@ -93,6 +94,7 @@ export default function BuzzerBeaterBoard() {
   const practiceActionRef = useRef<HTMLButtonElement | null>(null);
   const [practiceHelp, setPracticeHelp] = useState(false);
   const [labShots, setLabShots] = useState<LabShot[]>([]);
+  const [contestOutcomes, setContestOutcomes] = useState<boolean[]>([]);
   const labSeedRef = useRef(1);
   const labReleaseLock = useRef(false);
   const labAttemptRef = useRef(0);
@@ -109,6 +111,7 @@ export default function BuzzerBeaterBoard() {
   const setup = shots[shotIdx] ?? null;
   const rounds = mode === 'contest' ? CONTEST_SHOTS : ROUNDS_PER_RUN;
   const isDone = phase === 'done';
+  const contestRecapRef = useRevealScroll<HTMLDivElement>(phase, { enabled: mode === 'contest' && isDone, skipFirst: false });
   const bookedAlready = mode === 'daily' && bookedDaily;
   useGameCompletion(SLUG, isDone && !bookedAlready && (mode === 'daily' || mode === 'unlimited'), score, made);
 
@@ -146,6 +149,7 @@ export default function BuzzerBeaterBoard() {
     clearPointerHold();
     setPracticeHelp(false);
     aimingRef.current = false;
+    setContestOutcomes([]);
     chargingRef.current = false;
     setCharging(false);
     setLabShots([]);
@@ -194,6 +198,7 @@ export default function BuzzerBeaterBoard() {
        player watches is what was scored, never a separate animation. The frames
        and the backup timer live in useArcadeFlight, shared with Free Kick. */
     launch(() => {
+      if (mode === 'contest') setContestOutcomes(previous => [...previous, r.made]);
       if (labShot) setLabShots(previous => [...previous.slice(-1), labShot]);
       else {
         setScore(s => s + (mode === 'contest' ? contestPoints(shotIdx, r.made) : r.points));
@@ -345,6 +350,7 @@ export default function BuzzerBeaterBoard() {
     <p>Three-point contest: five arcade racks, five shots each. The first four balls at each rack are worth 1 point. The last money ball is worth 2. Make all 25 for 30 points.</p>
     <p>Use the usual Arc and Fade controls, hold Space or Hold to shoot to charge, then release. On a phone, drag the court and let go. Nobody contests these shots.</p>
     <p>A rack with three regular makes and a made money ball scores 5 points. These are our arcade practice rules. The contest is unranked, nothing is saved or added to your records, and you can replay or reopen the rules any time.</p>
+    <p>The balls show ✓ for a make and × for a miss once each shot lands. At the end, pick any rack to see its five shots and points out of 6. A made money ball shows ✓2 and adds 2 points.</p>
   </>;
   const ball = result && phase !== 'aiming'
     ? result.path[Math.min(result.path.length - 1, Math.round(flight * (result.path.length - 1)))]
@@ -424,18 +430,7 @@ export default function BuzzerBeaterBoard() {
       {mode === 'contest' && <p className="text-center text-sm text-muted-foreground" data-contest-rack={Math.floor(shotIdx / BALLS_PER_RACK) + 1} data-contest-ball={shotIdx % BALLS_PER_RACK + 1} data-contest-value={contestShotValue(shotIdx)}>
         Rack {Math.floor(shotIdx / BALLS_PER_RACK) + 1}/{CONTEST_RACKS}, ball {shotIdx % BALLS_PER_RACK + 1}/{BALLS_PER_RACK}. {contestShotValue(shotIdx) === 2 ? 'Money ball, 2 points.' : 'Regular ball, 1 point.'}
       </p>}
-      {mode === 'contest' && <div className="flex justify-center gap-2" aria-label="Balls at this rack. Spent means taken, not made.">
-        {Array.from({ length: BALLS_PER_RACK }, (_, i) => {
-          const current = shotIdx % BALLS_PER_RACK;
-          const status = i < current || (i === current && phase !== 'aiming') ? 'spent' : i === current ? 'current' : 'upcoming';
-          return <span key={i} role="img" aria-label={`Ball ${i + 1}, ${i === BALLS_PER_RACK - 1 ? 'money ball, 2 points' : '1 point'}, ${status}`}
-            data-contest-ball-marker={i + 1} data-ball-status={status}
-            className={cn('flex h-8 w-8 items-center justify-center rounded-full border text-sm font-semibold transition-colors motion-reduce:transition-none',
-              status === 'current' ? 'border-gold bg-gold/20 text-gold' : status === 'spent' ? 'border-border bg-muted text-muted-foreground' : 'border-border bg-card text-foreground')}>
-            {i === BALLS_PER_RACK - 1 ? 2 : 1}
-          </span>;
-        })}
-      </div>}
+      {mode === 'contest' && <ContestBalls outcomes={contestOutcomes} rack={Math.floor(shotIdx / BALLS_PER_RACK)} currentShot={shotIdx} flying={phase === 'flying'} />}
 
       {(phase === 'aiming' || phase === 'flying') && (
         <div className="flex flex-wrap items-center justify-end gap-2">
@@ -545,15 +540,15 @@ export default function BuzzerBeaterBoard() {
         <g>
           <circle cx={INSET_CX} cy={INSET_CY} r={34} fill="hsl(28 30% 12%)" stroke="hsl(28 20% 32%)" strokeWidth={1} />
           <circle cx={INSET_CX} cy={INSET_CY} r={RIM_RADIUS * INSET_PX_PER_M} fill="none" stroke="hsl(18 85% 55%)" strokeWidth={2} />
-          {result && phase !== 'aiming' && result.depthWindow > 0 && (mode !== 'lab' || (!result.blocked && result.entryDeg > 0)) && (
-            <ellipse
+          {result && phase !== 'aiming' && result.depthWindow > 0 && !result.blocked && result.entryDeg > 0 && (
+            <ellipse data-rim-window=""
               cx={INSET_CX} cy={INSET_CY}
               rx={result.lateralWindow * INSET_PX_PER_M}
               ry={result.depthWindow * INSET_PX_PER_M}
               fill="none" stroke="hsl(var(--primary))" strokeWidth={0.8} strokeDasharray="2 2" opacity={0.7}
             />
           )}
-          {(mode !== 'lab' || phase === 'aiming') && <circle
+          {(mode !== 'lab' || phase === 'aiming') && (phase === 'aiming' || (result && !result.blocked && result.entryDeg > 0)) && <circle data-rim-landing=""
             cx={INSET_CX + (result && phase !== 'aiming' ? result.lateral : fade * 0.3) * INSET_PX_PER_M}
             cy={INSET_CY - (result && phase !== 'aiming' ? Math.max(-0.34, Math.min(0.34, result.depth)) : 0) * INSET_PX_PER_M}
             r={BALL_RADIUS * INSET_PX_PER_M}
@@ -658,10 +653,10 @@ export default function BuzzerBeaterBoard() {
 
       {mode !== 'lab' && phase === 'shotEnd' && result && (
         <ArcadeShotFeedback key={`${mode}-${shotIdx}`} sport="basket" success={result.made} verdict={result.verdict} points={mode === 'contest' ? contestPoints(shotIdx, result.made) : result.points} detail={<p className="mt-1 text-xs text-muted-foreground">
-            Came in at {Math.round(result.entryDeg)}&deg;
+            {result.blocked ? 'Stopped at the defender. No rim crossing.' : result.entryDeg <= 0 ? 'Never reached rim height.' : <>Came in at {Math.round(result.entryDeg)}&deg;
             {result.depthWindow > 0
               ? `, so you had ${Math.round(result.depthWindow * 100)} cm of room short or long.`
-              : ', which is too flat for the ball to fit through at all.'}
+              : ', which is too flat for the ball to fit through at all.'}</>}
           </p>}>
           <Button ref={mode === 'practice' || mode === 'contest' ? practiceActionRef : undefined} className={cn('mt-3 gap-2', (mode === 'practice' || mode === 'contest') && 'min-h-[44px]')} onClick={nextShot} onKeyDown={practiceKeyDown}>
             {shotIdx + 1 >= rounds ? 'See the run' : 'Next shot'}
@@ -676,6 +671,7 @@ export default function BuzzerBeaterBoard() {
             {score} points{best ? ` out of a possible ${best}` : ''}.
             {mode === 'contest' ? ' Unranked local contest. Nothing saved.' : made >= 8 ? ' Cold blooded.' : made >= 6 ? ' You would take that shot again.' : made >= 3 ? ' Keep firing.' : ' Long night at the office.'}
           </p>
+          {mode === 'contest' && <div ref={contestRecapRef}><ContestScorecard outcomes={contestOutcomes} /></div>}
           {labEntry}
           {mode !== 'practice' && <div className="mt-3 space-y-2 text-xs text-muted-foreground">{mode === 'contest' ? contestRules : practiceRules}</div>}
           {mode !== 'contest' && <div className="mt-3 space-y-2 text-xs text-muted-foreground">{contestRules}</div>}
