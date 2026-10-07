@@ -83,15 +83,19 @@ export const CHAMPION_PPG = { min: 1.9, max: 2.65 };
  *  4th, the abandoned Ligue 1 2019-20): his points a game must sit where clubs
  *  finishing in that fifth of a table land, so the games shown never read like
  *  another season than the finish beside them. Measured in table mode by
- *  scripts/simSeasonCentreAgreement.mjs (non champions, seed set 1, 120
- *  careers), p1 to p99 by fifth: 1.74 to 2.37, 1.47 to 1.97, 1.16 to 1.68,
- *  0.87 to 1.37, 0.65 to 1.03; each band keeps about 0.1 either side. */
+ *  scripts/simSeasonCentreAgreement.mjs (non champions, five seed sets of
+ *  120 careers, SEEDSET 0 to 4, 2026-10-07), p1 to p99 by fifth, the
+ *  extremes over the five sets: 1.71 to 2.39, 1.45 to 2.03, 1.13 to 1.76,
+ *  0.84 to 1.47, 0.39 to 1.11; each band keeps 0.07 to 0.11 outside them.
+ *  (The first cut was one seed set and left the bottom fifth's p1 outside.)
+ *  The ladder places his club by the same finish (strengths below), and
+ *  the harness's item 4c holds the goal difference to that finish too. */
 export const FINISH_PPG = [
   { min: 1.6, max: 2.5 },
   { min: 1.35, max: 2.1 },
-  { min: 1.05, max: 1.8 },
-  { min: 0.75, max: 1.5 },
-  { min: 0.5, max: 1.15 },
+  { min: 1.05, max: 1.85 },
+  { min: 0.75, max: 1.55 },
+  { min: 0.3, max: 1.2 },
 ];
 /** Which fifth of the table a finish sits in, 0 (top) to 4. */
 export function finishFifth(finish: number, size: number): number {
@@ -237,7 +241,14 @@ export const SOCCER: SeasonSport<SeasonRecord, SoccerSeasonCtx> = {
     const n = frame.teams;
     const ladder = Array.from({ length: n }, (_, i) => 85 - (20 * i) / Math.max(1, n - 1));
     const byTier = Math.ceil(n * (ctx.clubTier <= 1 ? 0.15 : ctx.clubTier === 2 ? 0.4 : ctx.clubTier === 3 ? 0.6 : 0.8));
-    const tier = target.kind === 'band' ? 1 : ctx.finish ? ctx.finish.finish : byTier;
+    /* his place on the ladder is the saved finish, scaled to this frame's
+       clubs (a results only season's frame can differ from the table it
+       saved); the champions' band without a finish starts on top. The
+       review found every finish band on the top rung, so a 13th of 22 was
+       drawn as a contender and dragged down by one goal losses. */
+    const f = ctx.finish;
+    const fromFinish = f ? (f.size ? 1 + Math.round(((f.finish - 1) / Math.max(1, f.size - 1)) * (n - 1)) : f.finish) : null;
+    const tier = fromFinish ?? (target.kind === 'band' ? 1 : byTier);
     const mine = clamp(target.kind === 'finish' ? target.finish : tier, 1, n);
     const out = new Array<number>(n).fill(0);
     out[0] = ladder[mine - 1];

@@ -36,6 +36,19 @@
  *   cleansheet  clean sheet marks skipped, self check off         -> item 6
  *   points      the format ledger opens tables from 1990          -> item 3 (gate)
  *   resultstitle a results only title ignores the champions' band, self check off -> item 4b
+ *   ladder      a results only finish band starts his club on the top rung
+ *               (the first cut's bug)                              -> item 4c
+ *
+ * Item 4c (Round 1045 review): a results only season that saved a finish
+ * has that finish's goal difference, not only its points. Each such season
+ * is set against the table mode seasons that finished in the same fifth:
+ * the share inside the table's p1 to p99 goal difference a game (widened by
+ * 0.1) must be at least 0.8, and a fifth with five or more of them must have
+ * a mean within 0.45 of the table's. Measured over five seed sets (SEEDSET 0
+ * to 4, 2026-10-07): inside 34 of 35, 34 of 35, 25 of 27, 37 of 41, 23 of
+ * 24 (min 0.90); fifth mean gaps at most 0.17 (the standard error of a five
+ * season mean is about 0.13). Control ladder: 14 of 35 inside, mean gaps
+ * 0.52, 0.71 and 0.90 in fifths 2 to 4 (seed set 0), exit 1.
  *   selfcheck   the goals defect with the self check ON: the self check must
  *               refuse those seasons (the null rate goes red), never pass them
  *
@@ -70,6 +83,7 @@ const CONTROLS = {
   derby: [{ file: 'src/lib/season/soccer.ts', from: 'const g: FixedGame = { key: d.rival, home: m.home,', to: 'const g: FixedGame = { key: d.rival, home: !m.home,' }],
   cleansheet: [{ file: 'src/lib/season/core.ts', from: "marks[i] = s ? 'shutout' : 'concede';", to: 'marks[i] = undefined;' }, SELF_OFF],
   points: [{ file: 'src/data/leagueFormat.ts', from: '"Serie A": [{ from: 1995 }],', to: '"Serie A": [{ from: 1990 }],' }],
+  ladder: [{ file: 'src/lib/season/soccer.ts', from: "const tier = fromFinish ?? (target.kind === 'band' ? 1 : byTier);", to: "const tier = target.kind === 'band' ? 1 : fromFinish ?? byTier;" }],
   resultstitle: [{ file: 'src/lib/season/core.ts', from: "    return ppg < target.ppgMin ? { slot: 0, dir: 1 } : ppg > target.ppgMax ? { slot: 0, dir: -1 } : null;", to: '    return null;' }, SELF_OFF],
 };
 if (CONTROL && !CONTROLS[CONTROL]) throw new Error(`unknown AGREEMENT_CONTROL ${CONTROL}`);
@@ -303,6 +317,7 @@ const BANDS = {
   nullRateMax: 0.006,
   tableYieldMin: 0.992,
   realism: { gpg: 0.05, home: 0.015, draw: 0.015, champPpg: 0.08 },
+  shape: { pad: 0.1, meanGap: 0.45, insideMin: 0.8 },
 };
 
 const stats = { seasons: 0, gate: {}, ok: { table: 0, results: 0 }, nul: { injured: 0, clean: 0 }, injuredN: 0, cleanN: 0, why: {}, attempts: {}, repairs: {}, determinism: 0, determinismBad: 0, keyOk: 0, keyBad: 0, keyN: 0 };
@@ -311,6 +326,9 @@ const real = { d: { gpg: [], home: [], draw: [], champPpg: [] }, u: { gpg: [], h
 const champPpgTable = [];
 /* his points a game in table mode, by where he finished (fifths of the table) */
 const finishPpg = [];
+/* his goal difference a game, table mode by fifth, and results only seasons with a saved finish by fifth */
+const finishGd = [];
+const resultsGd = [];
 
 function seasonShape(rounds) {
   let g = 0, n = 0, hw = 0, dr = 0;
@@ -374,6 +392,14 @@ function onSeason(career, row, c) {
     const me = C.standingsOf(r.rounds, r.teams, { win: 3, draw: 1, loss: 0 }, r.rounds.length).find(x => x.slot === 0);
     const b = Math.min(4, Math.floor(((row.leagueFinish - 1) / (row.leagueSize - 1)) * 5));
     (finishPpg[b] ??= []).push(me.pts / r.games.length);
+    (finishGd[b] ??= []).push((me.gf - me.ga) / r.games.length);
+  }
+  if (r.mode !== 'table' && typeof row.leagueFinish === 'number' && row.leagueSize && !row.leagueTitle && !row.injurySevere) {
+    /* 4c: the shape of a results only season that saved a finish */
+    let gf = 0, ga = 0;
+    for (const g of r.games) { gf += g.us; ga += g.them; }
+    const b = Math.min(4, Math.floor(((row.leagueFinish - 1) / (row.leagueSize - 1)) * 5));
+    (resultsGd[b] ??= []).push({ gd: (gf - ga) / r.games.length, tag: `${tag} ${row.leagueFinish} of ${row.leagueSize} GD ${gf - ga}` });
   }
   if (r.mode === 'table') champPpgTable.push(C.standingsOf(r.rounds, r.teams, { win: 3, draw: 1, loss: 0 }, r.rounds.length)[0].pts / r.games.length);
 }
@@ -438,6 +464,26 @@ for (const k of ['gpg', 'home', 'draw', 'champPpg']) {
 const sorted = [...champPpgTable].sort((a, b) => a - b);
 const pct = q => sorted[Math.min(sorted.length - 1, Math.floor(q * sorted.length))];
 for (let b = 0; b < 5; b += 1) { const xs = [...(finishPpg[b] ?? [])].sort((x, y) => x - y); const q = f => xs[Math.min(xs.length - 1, Math.floor(f * xs.length))]; console.log(`finish fifth ${b + 1} (not champions): points a game p1 ${q(0.01)?.toFixed(2)} p50 ${q(0.5)?.toFixed(2)} p99 ${q(0.99)?.toFixed(2)} over ${xs.length}`); }
+/* 4c: a results only season with a saved finish has the goal difference of
+   that finish. Every one of them is held to its fifth's table band: inside
+   the table's p1 to p99 (widened by BANDS.shape.pad), and the fifth's mean
+   within BANDS.shape.meanGap of the table's. */
+let shapeN = 0, shapeIn = 0;
+for (let b = 0; b < 5; b += 1) {
+  const tb = [...(finishGd[b] ?? [])].sort((x, y) => x - y);
+  const rs = resultsGd[b] ?? [];
+  if (!tb.length) continue;
+  const q = f => tb[Math.min(tb.length - 1, Math.floor(f * tb.length))];
+  const lo = q(0.01) - BANDS.shape.pad, hi = q(0.99) + BANDS.shape.pad;
+  const inside = rs.filter(x => x.gd >= lo && x.gd <= hi);
+  shapeN += rs.length; shapeIn += inside.length;
+  const rm = rs.length ? mean(rs.map(x => x.gd)) : NaN;
+  console.log(`finish fifth ${b + 1}: goal difference a game, table p1 ${q(0.01).toFixed(2)} p50 ${q(0.5).toFixed(2)} p99 ${q(0.99).toFixed(2)} over ${tb.length}; results only mean ${rs.length ? rm.toFixed(2) : '-'} over ${rs.length}, ${inside.length} inside`);
+  for (const x of rs.filter(x => !(x.gd >= lo && x.gd <= hi)).slice(0, 2)) console.log(`   outside: ${x.tag}`);
+  if (rs.length >= 5 && Math.abs(rm - mean(tb)) > BANDS.shape.meanGap) fail('4c results shape', `fifth ${b + 1}: results only mean ${rm.toFixed(2)} against the table's ${mean(tb).toFixed(2)}`);
+}
+if (shapeN && shapeIn / shapeN < BANDS.shape.insideMin) fail('4c results shape', `${shapeIn} of ${shapeN} results only finishes inside their fifth's goal difference band`);
+check(shapeN > 0, `results only seasons with a saved finish: ${shapeN}, ${shapeIn} inside their fifth's table goal difference band`);
 console.log(`champions' points a game in table mode: p2 ${pct(0.02)?.toFixed(2)} p50 ${median(sorted).toFixed(2)} p98 ${pct(0.98)?.toFixed(2)} over ${sorted.length}; results title band ${S.CHAMPION_PPG.min} to ${S.CHAMPION_PPG.max}`);
 for (const [item, msgs] of fails) console.log(`FAIL item ${item}: ${msgs.join(' | ')}`);
 check(fails.size === 0, `independent checker: ${fails.size === 0 ? 'every derived season agrees with its row' : [...fails.keys()].join(', ')}`);
