@@ -13,7 +13,9 @@ on:
       - src/hooks/useMmaPromotion.ts
       - src/lib/mmaPromotion.ts
       - src/test/mmaPromotion.test.tsx
+      - src/test/mmaBoutRecap.test.tsx
       - scripts/simMmaPromotion.mjs
+      - scripts/simMmaBoutRecap.mjs
       - scripts/simInventedNames.mjs
       - scripts/qa/mmaPromotion1062.mjs
       - public/fight-promoter/index.html
@@ -37,10 +39,13 @@ jobs:
       ENGINES: chromium
       VITEST_MAX_FORKS: 1
       VITEST_MIN_FORKS: 1
+      SEO_SPLIT_BASE_REF: HEAD
+      MMA_BOUT_RECAP_ARTIFACTS: mma-promotion-artifacts/recap
     steps:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 24
@@ -55,6 +60,8 @@ jobs:
           npm install --no-save playwright
           npx playwright install --with-deps chromium
           python -m pip install fonttools pillow
+      - name: Preserve accepted MMA and boxing engines and saves
+        run: git diff --exit-code 1c10e7e5c11a3d502afb16070af462086874014d HEAD -- src/lib/mmaPromotion.ts src/hooks/useMmaPromotion.ts src/lib/fightPromoter.ts src/hooks/useFightPromoter.ts
       - name: Type check and build
         id: build
         run: |
@@ -63,6 +70,9 @@ jobs:
       - name: MMA mounted outcomes distributions and effective controls
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: MMA_PROMOTION_CONTROL=all ONLY=simMmaPromotion node scripts/runAllSims.mjs 2>&1 | tee mma-promotion-artifacts/mma.log
+      - name: Saved bout recap outcomes and effective copied controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: MMA_BOUT_RECAP_CONTROL=all ONLY=simMmaBoutRecap node scripts/runAllSims.mjs 2>&1 | tee mma-promotion-artifacts/recap.log
       - name: Existing fight saves careers and scoring
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
@@ -70,6 +80,7 @@ jobs:
           for harness in simFightPromoter simFightGym simFightCareer simNbaCareer simNflCareer simMlbCareer simNhlCareer simNoDoubleRecord simScoringCoverage simScoreShown simHarnessAnchors simGuideHeadings simSeoTitles simHomeFront simInventedNames; do
             ONLY="$harness" node scripts/runAllSims.mjs 2>&1 | tee "mma-promotion-artifacts/$harness.log" || failed=1
           done
+          NO_DOUBLE_CONTROL=scanpracticefree ONLY=simNoDoubleRecord node scripts/runAllSims.mjs 2>&1 | tee mma-promotion-artifacts/no-double-free-control.log || failed=1
           exit "$failed"
       - name: All built pages and search readers
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}

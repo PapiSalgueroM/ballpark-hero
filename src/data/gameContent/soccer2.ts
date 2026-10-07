@@ -2576,6 +2576,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
     intro: [
       "Every other game here asks you a question. This one asks you to hit it. Ten free kicks, a wall that grows, and a keeper who leans one way before you strike.",
       "Aim across the goal, bend it with the inside or the outside, and stop the power bar where you dare. Smash it and it sprays. Roll it and he reaches it. The corners are the only safe place and they are the hardest to find.",
+      "Shot lab keeps the same distance, wall and keeper while you work on a kick. Set aim, power and bend, then retry with your settings still in place. Identical settings repeat exactly, so changing one setting shows what it did to the actual flight. Compare your latest two kicks, or change setup for a fresh wall and keeper. A shot stopped by the wall has no goal crossing to compare. The lab earns no points and saves no records.",
     ],
     headings: {
       howToPlay: "How to play Free Kick, a free online soccer shooting game",
