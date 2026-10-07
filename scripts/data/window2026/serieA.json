@@ -639,7 +639,7 @@
   },
   {
     "name": "Álvaro Morata",
-    "to": null,
+    "to": "Leganés",
     "db": "CD Leganés",
     "loan": true,
     "window": "2026-summer",
@@ -1169,7 +1169,7 @@
   },
   {
     "name": "Giovanni Bonfanti",
-    "to": null,
+    "to": "Las Palmas",
     "db": "UD Las Palmas",
     "loan": true,
     "window": "2026-summer",
@@ -1254,7 +1254,7 @@
   },
   {
     "name": "Adam Buksa",
-    "to": null,
+    "to": "Mallorca",
     "db": "RCD Mallorca",
     "loan": true,
     "window": "2026-summer",
@@ -1551,7 +1551,7 @@
   },
   {
     "name": "Agustín Albarracín",
-    "to": null,
+    "to": "Albacete",
     "db": "Albacete Balompié",
     "loan": true,
     "window": "2026-summer",

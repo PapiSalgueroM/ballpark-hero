@@ -2757,7 +2757,7 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
     playoff: { rankUpTo: 8, target: 6, label: 'Make the promotion playoffs' }, season: 'autumnSpring',
     simplified: 'Three go up and three come down in a straight swap; the real promotion playoff is not played.',
   },
-  laliga: { nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: { ucl: 4, uel: 5, uecl: 6 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
+  laliga: { nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: { ucl: 4, uel: 5, uecl: 6 }, drop: 3, tiebreak: 'h2h', secondTier: 'segunda', ladder: 'top', season: 'autumnSpring' },
   seriea: { nationId: 'italy', flag: 'Italy', cup: 'Coppa Italia', europe: { ucl: 4, uel: 5, uecl: 6 }, drop: 3, tiebreak: 'h2h', secondTier: 'serieb', ladder: 'top', season: 'autumnSpring' },
   bundesliga: {
     nationId: 'germany', flag: 'Germany', cup: 'DFB-Pokal', europe: { ucl: 4, uel: 5, uecl: 6 }, drop: 2, tiebreak: 'gdGfAgg', secondTier: 'bundesliga2', ladder: 'top', season: 'autumnSpring',
@@ -2960,6 +2960,35 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
     nationId: 'france', flag: 'France', cup: 'Coupe de France', europe: null, drop: 2, ladder: 'promotion',
     playoff: { rankUpTo: 7, target: 5, label: 'Make the promotion playoffs' }, season: 'autumnSpring',
     simplified: 'The promotion playoffs, the barrage against Ligue 1\'s sixteenth and the relegation barrage are not played: two go straight up and Ligue 1\'s bottom two come down in a straight swap.',
+  },
+  /* Round 1040: the Segunda División 2026-27 (LALIGA HYPERMOTION), La Liga's
+     modelled second tier, so La Liga's bottom three go down and the
+     Segunda's top three come up. Each fact read 2026-10-06:
+     - 22 clubs, two of them reserve sides (Real Sociedad B and Celta
+       Fortuna): ESPN's 2026-27 table
+       (https://www.espn.com/soccer/standings/_/league/esp.2) and LaLiga's own
+       (https://www.laliga.com/en-GB/laliga-hypermotion/standing), which agree
+       on all twenty two. The game plays the other twenty.
+     - First and second go straight up and third to sixth play the promotion
+       playoff: LaLiga, "Quiénes juegan el play-off de ascenso" (2026-06-21,
+       https://www.laliga.com/noticias/quienes-juegan-el-play-off-de-ascenso)
+       and elDiario.es on the format (2025-08-13,
+       https://www.eldiario.es/spin/deportes/calendario-laliga-hypermotion-2025-26-partidos-formato-ver-segunda-division-futbol-pm_1_12531612.html).
+     - Four go down: LaLiga (https://www.laliga.com/noticias/descensos-de-segunda-division)
+       and Sportpunta (2026-06-01, four since 1995-96,
+       https://www.sportpunta.com/noticia/10398/fuera-de-juego/cuatro-equipos-descienden-de-laliga-hypermotion-a-primera-rfef.html).
+     - The 2026-27 Copa del Rey's first round has twenty Segunda clubs, the
+       two reserve sides left out: Infobae (EFE, 2026-10-04,
+       https://www.infobae.com/espana/agencias/2026/10/04/16-equipos-de-primera-iniciaran-su-andadura-en-la-primera-eliminatoria-de-la-copa-del-rey/)
+       and ElDesmarque's draw (2026-10-05,
+       https://www.eldesmarque.com/futbol/copa-del-rey/20261005/directo-sorteo-primera-ronda-copa-rey-2027_19_020349979.html),
+       FC Andorra among them. Whether a reserve side may be promoted was found
+       in one source only, so the row does not lean on it.
+     - Clubs level on points: not two-sourced, so the gdGfOnly default. */
+  segunda: {
+    nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: null, drop: 4, ladder: 'promotion',
+    playoff: { rankUpTo: 8, target: 6, label: 'Make the promotion playoffs' }, season: 'autumnSpring',
+    simplified: 'The promotion playoff (third to sixth) is not played: three go straight up and La Liga\'s bottom three come down in a straight swap. The real league has 22 clubs, and its two reserve sides, Real Sociedad B and Celta Fortuna, are left out because they do not play the Copa del Rey, so 20 of the real 22 clubs play.',
   },
   /* The era leagues. No Conference League existed before 2021, so uecl is 0
      and the board's ladder skips that band; 2005-06 still called the second
@@ -3385,6 +3414,17 @@ export const REAL_LEAGUES: LeagueDef[] = [
     id: 'ligue2', name: 'Ligue 2',
     clubs: ['Metz', 'Nantes', 'Saint-Étienne', 'Red Star FC', 'Reims', 'Montpellier', 'Nancy', 'Annecy', 'Sochaux', 'Dijon', 'Pau', 'Guingamp', 'Dunkerque', 'Grenoble', 'Rodez', 'Clermont', 'Boulogne', 'Laval'],
   },
+  /* Round 1040: the Segunda División 2026-27, the twenty clubs of the real
+     twenty two that ESPN's table and LaLiga's own agree on, less the two
+     reserve sides, Real Sociedad B and Celta Fortuna (sources beside its
+     LEAGUE_RULES row). Real Oviedo, Girona and Mallorca came down from La
+     Liga. FC Andorra are the Andorran club that plays in Spain's league.
+     Valladolid keeps the spelling the era leagues already use. Appended
+     after every older row. */
+  {
+    id: 'segunda', name: 'Segunda División',
+    clubs: ['Real Oviedo', 'Girona', 'Mallorca', 'Eibar', 'Castellón', 'Almería', 'Burgos', 'Sabadell', 'Sporting Gijón', 'Granada', 'Las Palmas', 'Tenerife', 'Leganés', 'Valladolid', 'Córdoba', 'Eldense', 'Cádiz', 'FC Andorra', 'Ceuta', 'Albacete'],
+  },
 ].map(leagueFromRow);
 
 /**
@@ -3512,6 +3552,9 @@ const STRENGTH_PRIORS: Record<string, number> = {
   // under any spelling (a grep of the 2026-10-02 dump finds none), so they
   // take the same 61; every other member is rated from its real men.
   'Sochaux': 61, 'Dijon': 61, 'Rodez': 61,
+  // Round 1040: the Segunda División. Tenerife, Córdoba and Eldense have no
+  // row in the table under any spelling, so the same 61.
+  'Tenerife': 61, 'Córdoba': 61, 'Eldense': 61,
 };
 
 /** The real league a club plays in. Every playable club is covered.

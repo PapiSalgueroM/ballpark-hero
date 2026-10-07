@@ -156,6 +156,18 @@
    third summer in 21 of 29 careers, which starved E of summers (Mainz
    reached 4 of 6) and ended every one of G's four second seasons.
 
+   The Segunda División (the round's third step): 20 of the real 22 clubs,
+   the two reserve sides left out. Girona (13 real men), Mallorca (12), Real
+   Oviedo (9) and Las Palmas (8) are its squads at 8 or more, so the pairs
+   are Girona (rated 75) over Real Oviedo (69) and Mallorca (72) over Las
+   Palmas (68). 48 seasons a run, SIM_SEED unset and 1 to 5: Girona over
+   Oviedo 19.4, 21.8, 18.2, 19.5, 19.3, 17.4; Mallorca over Las Palmas 10.4,
+   12.8, 8.3, 11.5, 12.6, 10.4 (mean 11.0, standard deviation 1.6, band 4,
+   4.4 deviations clear); rank correlation over the 14 unmanaged clubs
+   0.740, 0.682, 0.606, 0.789, 0.706, 0.805 (band 0.4). Day one: 87 real
+   men, 239 flagged pads, 16 of 20 clubs partial (realMin 60, as Ligue 2).
+   Part F also holds that neither reserve side is a club of the game.
+
    Round 1040's controls (each must turn the run red):
      CM_NEW_CONTROL=nopyramid  Serie A loses its second tier: E red;
      CM_NEW_CONTROL=emptypair  Serie B's pair sets Pisa against empty
@@ -165,7 +177,9 @@
      CM_NEW_CONTROL=cupold     a cup club's division is "in my league or
                                not" again: F red;
      CM_NEW_CONTROL=ligue1drop3  Ligue 1 relegates three again: the Ligue 2
-                               row's top flight drop (A) and E red.
+                               row's top flight drop (A) and E red;
+     CM_NEW_CONTROL=reserve    Real Sociedad B joins the Segunda: its size
+                               (A) and F's reserve check red.
 
    Run: node scripts/simClubManagerNewLeagues.mjs   (SIM_SEEDS=n, default 6; a row may ask for more)
         CM_NEW_PARTS=AD or EFG runs those parts, CM_NEW_ROWS=serieb those rows
@@ -181,7 +195,7 @@ const ROOT_FWD = ROOT.replaceAll('\\', '/');
 const SEEDS_ALL = Number(process.env.SIM_SEEDS || 6);
 const SEED_SET = process.env.SIM_SEED || "";
 const CONTROL = process.env.CM_NEW_CONTROL || '';
-const CONTROLS = ['dropcount', 'nocup', 'swap', 'invented', 'cupon', 'dropcount2', 'nopyramid', 'emptypair', 'crowd', 'cupold', 'ligue1drop3'];
+const CONTROLS = ['dropcount', 'nocup', 'swap', 'invented', 'cupon', 'dropcount2', 'nopyramid', 'emptypair', 'crowd', 'cupold', 'ligue1drop3', 'reserve'];
 /* Round 1040: parts E to G can be run alone (CM_NEW_PARTS=EFG), the A to D
    league rows alone (CM_NEW_PARTS=AD), or every part (unset). */
 const PARTS = process.env.CM_NEW_PARTS || 'ADEFG';
@@ -259,6 +273,15 @@ const NEW_LEAGUES = [
     pairs: [],
     managed: ['Montpellier', 'Metz', 'Guingamp', 'Dunkerque', 'Annecy', 'Laval'],
   },
+  /* Round 1040: the Segunda División, La Liga's second tier: 20 of the real
+     22 clubs (the two reserve sides are left out). Girona (13 real men),
+     Mallorca (12), Real Oviedo (9) and Las Palmas (8) carry 8 or more.
+     MEASURED in the Round 1040 header section. */
+  {
+    id: 'segunda', size: 20, drop: 4, topDrop: 3, cup: 'Copa del Rey', pairGap: 4, rhoMin: 0.4, realPairs: true, seeds: 48, realMin: 60,
+    pairs: [['Girona', 'Real Oviedo'], ['Mallorca', 'Las Palmas']],
+    managed: ['Almería', 'Leganés', 'Sporting Gijón', 'Granada', 'Cádiz', 'Castellón'],
+  },
 ];
 /* Round 1040: a pair is only evidence when both clubs field real men, so a
    pair needs 8 or more baked players a side (the CM_PARTIAL line); the
@@ -314,6 +337,9 @@ function transformEngine(src) {
   /* ligue1drop3: Ligue 1 relegates three again, as it did before the round:
      the Ligue 2 row (its top flight's drop) and part E go red. */
   if (CONTROL === 'ligue1drop3') src = mutateOnce(src, "europe: { ucl: 3, uel: 4, uecl: 5 }, drop: 2, tiebreak: 'gdH2h', secondTier: 'ligue2'", "europe: { ucl: 3, uel: 4, uecl: 5 }, drop: 3, tiebreak: 'gdH2h', secondTier: 'ligue2'", 'ligue1drop3');
+  /* reserve: Real Sociedad B joins the Segunda, the real league's 21st club:
+     the row's size (A) goes red. */
+  if (CONTROL === 'reserve') src = mutateOnce(src, "'Cádiz', 'FC Andorra', 'Ceuta', 'Albacete'],", "'Cádiz', 'FC Andorra', 'Ceuta', 'Albacete', 'Real Sociedad B'],", 'reserve');
   if (CONTROL === 'cupold') src = mutateOnce(src, "return leagueRulesOf(lg.id).ladder === 'promotion' ? 2 : 1;", 'return lg.id === careerLeagueOf(state).id ? 1 : 2;', 'cupold');
   /* Private helpers the checks ask directly. */
   return `${src}\nexport { relegationSpots as __relegationSpots, buildSquad as __buildSquad, getPool as __getPool, isCupUpset as __isCupUpset };\n`;
@@ -585,6 +611,7 @@ const PYRAMID_EXPECT = [
   { top: 'bundesliga', second: 'bundesliga2', count: 2, club: 'Mainz' },
   { top: 'seriea', second: 'serieb', count: 3, club: 'Bologna' },
   { top: 'ligue1', second: 'ligue2', count: 2, club: 'Toulouse' },
+  { top: 'laliga', second: 'segunda', count: 3, club: 'Getafe' },
 ];
 const RELEGATION_TOP = 'seriea';
 const E_SEEDS = Number(process.env.CM_NEW_E_SEEDS || 2);
@@ -737,10 +764,14 @@ const CUP_EXPECT = [
   { top: 'bundesliga', second: 'bundesliga2', topClub: 'Mainz', secondClub: null },
   { top: 'seriea', second: 'serieb', topClub: 'Bologna', secondClub: 'Palermo' },
   { top: 'ligue1', second: 'ligue2', topClub: 'Toulouse', secondClub: 'Montpellier' },
+  { top: 'laliga', second: 'segunda', topClub: 'Getafe', secondClub: 'Almería' },
 ];
 const F_SEEDS = Number(process.env.CM_NEW_F_SEEDS || 4);
 function partCup(cm) {
   console.log('F) cup underdogs and the upset flag');
+  /* The Segunda's two reserve sides do not play the Copa del Rey and are not
+     in the game at all, so no draw can hold one. */
+  for (const r of ['Real Sociedad B', 'Celta Fortuna']) if (cm.clubByName(r)) fail(`F: ${r}, a reserve side, is a club of the game`);
   for (const ce of CUP_EXPECT) {
     const counts = [];
     for (let k = 0; k < F_SEEDS; k++) {
@@ -776,7 +807,7 @@ function partCup(cm) {
    four league weeks left, seed 1040, a world of 22 leagues with no Serie B).
    It loads, finishes, rolls its first summer without a throw while the
    pairs it has no table for stay put, and the summer after trades them. */
-const OLD_SAVE_NEW_PAIRS = ['seriea', 'ligue1'];
+const OLD_SAVE_NEW_PAIRS = ['seriea', 'ligue1', 'laliga'];
 function partOldSave(cm) {
   console.log('G) a save written before the round');
   const raw = fs.readFileSync(path.join(ROOT, 'scripts', 'data', 'cmSecondTierOldSaveFixture.json'), 'utf8');

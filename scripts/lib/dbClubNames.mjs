@@ -237,6 +237,17 @@ export const DB_TO_ENGINE = {
   'FC Annecy': 'Annecy', 'Pau FC': 'Pau', 'EA Guingamp': 'Guingamp',
   'USL Dunkerque': 'Dunkerque', 'Grenoble Foot 38': 'Grenoble', 'FC Nantes': 'Nantes',
   'Clermont Foot 63': 'Clermont', 'US Boulogne': 'Boulogne', 'Stade Lavallois': 'Laval',
+  // Round 1040: the Segunda División 2026-27, the same way. Left unmapped on
+  // purpose: "Real Sociedad B" (a reserve side the game leaves out), and
+  // "CA Racing (Córdoba)" and "CA Central Córdoba (SdE)" (Argentine clubs).
+  // Tenerife, Córdoba and Eldense have no spelling at all and are
+  // KNOWN_EMPTY in the bake.
+  'Girona FC': 'Girona', 'RCD Mallorca': 'Mallorca', 'Real Oviedo': 'Real Oviedo',
+  'SD Eibar': 'Eibar', 'CD Castellón': 'Castellón', 'UD Almería': 'Almería',
+  'Burgos CF': 'Burgos', 'CE Sabadell FC': 'Sabadell', 'Sporting Gijón': 'Sporting Gijón',
+  'Granada CF': 'Granada', 'UD Las Palmas': 'Las Palmas', 'CD Leganés': 'Leganés',
+  'Real Valladolid CF': 'Valladolid', 'Cádiz CF': 'Cádiz', 'FC Andorra': 'FC Andorra',
+  'AD Ceuta FC': 'Ceuta', 'Albacete Balompié': 'Albacete',
   // UCL flavor clubs outside the baked leagues
   'Club Brugge KV': 'Club Brugge',
 };

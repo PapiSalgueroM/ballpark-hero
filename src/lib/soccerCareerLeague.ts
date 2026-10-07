@@ -81,6 +81,11 @@ const DUGOUT_SIZES: Record<string, SizeWindow[]> = {
      _/league/fra.2 and Saint-Étienne's own Ligue 2 BKT table, asse.fr, both
      read 2026-10-06). */
   "Ligue 2": [{ from: 2026, size: 18 }],
+  /* And the Segunda División: 22 clubs in 2026-27 (espn.com/soccer/standings/
+     _/league/esp.2 and laliga.com's LALIGA HYPERMOTION table, both read
+     2026-10-06). Club Manager plays 20 of them, but the dugout's table is
+     the real league's size, the clubs it does not know unnamed. */
+  "Segunda División": [{ from: 2026, size: 22 }],
 };
 
 /** Clubs in that league's top flight in the season starting in `year`, or

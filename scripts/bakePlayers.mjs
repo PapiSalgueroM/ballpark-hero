@@ -124,6 +124,7 @@ const ENGINE_LEAGUE_TO_POOL = {
   // League union).
   'Serie B': 'Serie B',
   'Ligue 2': 'Ligue 2',
+  'Segunda División': 'Segunda División',
 };
 
 /* ------------------------------------------------------------------ */

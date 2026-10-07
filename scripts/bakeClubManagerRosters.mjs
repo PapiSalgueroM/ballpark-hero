@@ -7,7 +7,7 @@
  *
  * Leagues baked: the big five (2026-27 memberships), EFL Championship,
  * Saudi Pro League, MLS East + West, Eredivisie, the later leagues the
- * written file's own header lists (Serie B and Ligue 2 since Round 1040), plus the UCL
+ * written file's own header lists (Serie B, Ligue 2 and the Segunda División since Round 1040), plus the UCL
  * flavor clubs.
  * Preference order per player: year 2026 row, else year 2025 row (value
  * discounted 5%, age +1). Clubs with fewer than 8 real players are listed
@@ -80,7 +80,11 @@ const KNOWN_EMPTY = ['ADO Den Haag', 'Cambuur',
   'Arezzo',
   // Round 1040: Ligue 2 2026-27. Sochaux, Dijon and Rodez have no row under
   // any spelling (grep of the 2026-10-02 dump for sochaux, dijon, rodez).
-  'Sochaux', 'Dijon', 'Rodez'];
+  'Sochaux', 'Dijon', 'Rodez',
+  // Round 1040: the Segunda División 2026-27. Tenerife, Córdoba and Eldense
+  // have no row under any spelling (grep of the dump for tenerife, c.rdoba,
+  // eldense finds only two Argentine clubs, left unmapped).
+  'Tenerife', 'Córdoba', 'Eldense'];
 
 /** Core clubs (big five leagues) must have 7+ players or the bake fails. */
 const CORE_LEAGUE_CLUBS = new Set([
@@ -385,6 +389,10 @@ if (!(xiAvg('Verona') > xiAvg('Cremonese'))) errors.push('SANITY: Verona <= Crem
 // 8 or more real men; Pau (3) is mostly pads, so this only asks that a real
 // squad clears a padded one.
 if (!(xiAvg('Saint-Étienne') > xiAvg('Pau'))) errors.push('SANITY: Saint-Étienne <= Pau');
+// Round 1040: the Segunda División. Girona (13), Mallorca (12), Real Oviedo (9)
+// and Las Palmas (8) carry 8 or more real men; Castellón (4) is mostly pads.
+if (!(xiAvg('Girona') > xiAvg('Castellón'))) errors.push('SANITY: Girona <= Castellón');
+if (!(xiAvg('Girona') > xiAvg('Real Oviedo'))) errors.push('SANITY: Girona <= Real Oviedo');
 
 const total = [...byClub.values()].reduce((s, l) => s + l.length, 0);
 if (total < 2800) errors.push(`Only ${total} players total (expected 2800+)`);
@@ -410,7 +418,7 @@ let out = `// Rounds 70+72: real rosters for every Club Manager club, generated 
 // West, Eredivisie, Primeira Liga, Scottish Premiership, Süper Lig,
 // 2. Bundesliga, Belgian Pro League, Austrian Bundesliga, Super League
 // Greece, Danish Superliga, Swiss Super League, SuperSport HNL,
-// Brazil's Serie A, Liga MX, Serie B and Ligue 2.
+// Brazil's Serie A, Liga MX, Serie B, Ligue 2 and the Segunda División.
 // Values in £m, ratings 48-94 from the value curve.
 // Regenerate with: node scripts/bakeClubManagerRosters.mjs
 // DO NOT EDIT BY HAND.

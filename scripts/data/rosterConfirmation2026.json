@@ -1,7 +1,7 @@
 {
  "measuredOn": "2026-09-11",
  "rule": "A baked Club Manager player whose newest row in public.player_market_values_dedup is year 2025, with no year-2026 row at any club the game models and none anywhere else either. The bake falls back to the 2025 row for these, which carries the 2025 CLUB, so the player ships at last season's club with nothing saying so.",
- "population": 450,
+ "population": 473,
  "populationRound876": "Round 876 mapped the table's 1.FC Nuremberg spelling to Nürnberg and re-baked from the 2026-10-02 dump. Three Nürnberg players came in on a 2025 row with no 2026 row anywhere (Berkay Yilmaz, Oliver Villadsen, Tim Janisch), so they joined the population and wait in pending like the rest. No other new fallback row appeared that an overlay row does not already source. Then Brazil's Serie A was mapped (twenty table spellings) and the bake re-run from the same dump. Twenty players at those clubs came in on a 2025 row with no 2026 row anywhere (Luiz Araújo, Gustavo Gómez, Weverton, Lima, Júnior Alonso, Everson, Zé Rafael, Lucas Ronier, Juninho Capixaba, Ignacio Laquintana, Matheus Martins, Nathan Fernandes, Matheus Nascimento, Rafael Lobato, Memphis Depay, Talles Magno, Pedro Raul, Jean Meneses, Alexander Aravena, Gustavo Prado), so they joined the population. The same day a review found two of them false, and all twenty were then checked on the web (adjudicatorWeb2026_10_02): nineteen settled, Pedro Raul still pending. Two rows that sat in removedClubNotModelled because the World Cup table put them at Vasco da Gama and Palmeiras (Andrés Gómez, Ramón Sosa) moved to movedTo on that same evidence, since both clubs are modelled now.",
  "populationRound883": "Round 883 mapped Liga MX (seventeen table spellings, Atlante having none) and re-baked from the 2026-10-02 dump. Twenty nine players at those clubs came in on a 2025 row (Esteban Andrada, Nathan Silva, Robert Ergas, Alejandro Mayorga, Dagoberto Espinoza, Pablo Bennevendo, Sebastián Santos, Pablo Monroy, Gustavo Ferrareis, Diego Valdés, Piero Quispe, Mateo Klimowicz, Lorenzo Faravelli, Luka Romero, Jairo Torres, Diego Valoyes, Hugo Camberos, Oussama Idrissi, Ronaldo Nájera, Amaury Morales, Josué Colmán, Yairo Moreno, Fernando González, Fernando Beltrán, Richard Sánchez, Érick Gutiérrez, Andrés Montaño, Emiliano Gómez, Franco Fagúndez), so they joined the population. All twenty nine were then checked on the web the same day (adjudicatorWeb2026_10_02_ligamx) and none is left pending. Nine of them do have a 2026 row, but at a club the bake does not map: four at their own club's U21 side (Dagoberto Espinoza, Pablo Bennevendo, Sebastián Santos, Pablo Monroy) and five elsewhere (Diego Valdés at Vélez Sarsfield, Mateo Klimowicz at Cerro Porteño, Diego Valoyes at Talleres, Yairo Moreno at Independiente Medellín, Fernando González at Dorados de Sinaloa), so the bake falls back to their 2025 club just the same, and they are counted here with the rest rather than trusted.",
  "populationRound883Namesakes": "The Round 883 review found the bake keyed players by name alone, so a newer row of one man deleted an older row of a different man with the same name. The bake now keeps them apart (an age move of -1 to 3 and the same position group, or they are two men), which restored six 2025 rows that had been silently dropped: Paulinho (Palmeiras), Jose Luis Rodriguez (FC Juarez), Alan Franco (Sao Paulo), Matheus Pereira (Santa Clara), Dudu (Cruzeiro) and Allan (Palmeiras). All six were read on the web on 2026-10-02: two confirmed, four moved to the modelled club they play for. Each row names the club of the other man in namesakeAt.",
@@ -8281,6 +8281,260 @@
     }
    ],
    "shard": "rest"
+  },
+  {
+   "name": "Álex Sola",
+   "from": "Getafe",
+   "to": "Almería",
+   "realClub": "Almería",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1999-06-09, the winger. Not in Getafe's 2025-26 or 2026-27 squad on ESPN; plays for Almería in LaLiga Hypermotion (the second tier), shirt 20. The second tier of Spain is not modelled. Not the Getafe forward Álex Sancris. Round 1040: Almería is modelled now (the Segunda División), so the row moved from removedClubNotModelled to movedTo with the same sources.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-hypermotion-rcd-mallorca-ud-almeria-7",
+     "publisher": "LaLiga (match page, Mallorca v Almería, LaLiga Hypermotion matchday 7, 2026-09-27)",
+     "readOn": "2026-10-03",
+     "says": "Álex Sola on the Almería bench, came on in the 79th minute"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/286167/alex-sola",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Almería, shirt 20, born 1999-06-09, five LaLiga 2 matches from 2026-08-23 to 2026-09-27"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2922",
+     "publisher": "ESPN (Getafe squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ],
+   "shard": "spain-portugal"
+  },
+  {
+   "name": "Carles Pérez",
+   "from": "Getafe",
+   "to": "Girona",
+   "realClub": "Girona",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1998-02-16, the winger. Getafe had him in 2024-25; ESPN shows him in the Greek Super League in May 2026 and at Girona in LaLiga Hypermotion (the second tier, after Girona went down) from September 2026, shirt 23. Girona is not in Club Manager's 2026-27 La Liga and the second tier of Spain is not modelled. Round 1040: Girona is modelled now (the Segunda División), so the row moved from removedClubNotModelled to movedTo with the same sources.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-hypermotion-girona-fc-albacete-bp-7",
+     "publisher": "LaLiga (match page, Girona v Albacete, LaLiga Hypermotion matchday 7, 2026-09-25)",
+     "readOn": "2026-10-03",
+     "says": "C. Pérez, shirt 23, in the Girona starting eleven, off in the 84th minute"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/261468/carles-perez",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Girona, shirt 23, born 1998-02-16, four LaLiga 2 matches from 2026-09-05 to 2026-09-25"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2922",
+     "publisher": "ESPN (Getafe squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ],
+   "shard": "spain-portugal"
+  },
+  {
+   "name": "Juan Bernat",
+   "from": "Getafe",
+   "to": "Eibar",
+   "realClub": "Eibar",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1993-03-01, the left back. Getafe had him in 2024-25; he starts for Eibar in LaLiga Hypermotion (the second tier) in 2026-27, shirt 24. The second tier of Spain is not modelled. Round 1040: Eibar is modelled now (the Segunda División), so the row moved from removedClubNotModelled to movedTo with the same sources.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-hypermotion-sd-eibar-ud-las-palmas-7",
+     "publisher": "LaLiga (match page, Eibar v Las Palmas, LaLiga Hypermotion matchday 7, 2026-09-27)",
+     "readOn": "2026-10-03",
+     "says": "Juan Bernat, shirt 24, in the Eibar starting eleven"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/164194/juan-bernat",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Eibar, shirt 24, born 1993-03-01, started five LaLiga 2 matches from 2026-08-23 to 2026-09-27"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2922",
+     "publisher": "ESPN (Getafe squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ],
+   "shard": "spain-portugal"
+  },
+  {
+   "name": "Antoñito Cordero",
+   "from": "Málaga",
+   "to": "Cádiz",
+   "realClub": "Cádiz",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Antonio Cordero, born 2006-11-14, the winger. Málaga's number 26 in 2024-25, not in Málaga's 2026-27 squad; plays for Cádiz in LaLiga Hypermotion (the second tier), shirt 16. The second tier of Spain is not modelled. Round 1040: Cádiz is modelled now (the Segunda División), so the row moved from removedClubNotModelled to movedTo with the same sources.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-hypermotion-cadiz-cf-girona-fc-6",
+     "publisher": "LaLiga (match page, Cádiz v Girona, LaLiga Hypermotion matchday 6, 2026-09-19)",
+     "readOn": "2026-10-03",
+     "says": "16 Antoñito C. on the Cádiz bench, came on at 61 minutes"
+    },
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-ea-sports-malaga-cf-levante-ud-4",
+     "publisher": "LaLiga (match page, Málaga v Levante, matchday 4, 2026-09-06)",
+     "readOn": "2026-10-03",
+     "says": "not in the Málaga eleven or among the substitutes"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/375875/antonio-cordero",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Cádiz, shirt 16, born 2006-11-14, five LaLiga 2 matches for Cádiz from 2026-08-30 to 2026-09-26"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/99",
+     "publisher": "ESPN (Málaga squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ],
+   "shard": "spain-portugal"
+  },
+  {
+   "name": "Zito Luvumbo",
+   "from": "Cagliari",
+   "to": "Mallorca",
+   "realClub": "Mallorca, on loan from Cagliari",
+   "loan": true,
+   "loanFrom": "Cagliari",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2002-03-09. Loaned by Cagliari to Mallorca on 2026-02-02, and on 2026-07-10 Cagliari announced a new loan to Mallorca to the end of 2026-27, with an option to buy that becomes an obligation on sporting conditions. Mallorca went down from LaLiga in 2026 and is not modelled in the current game. ESPN's two Zito Luvumbo player pages are Angola national team records, but ESPN's 2026-27 Mallorca squad page lists him at 11, aged 24, Angola, which matches his birth date. Round 1040: Mallorca is modelled now (the Segunda División), so the row moved from removedClubNotModelled to movedTo with the same sources, placed at the club he plays for per loanPolicy.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.legaseriea.it/team/cagliari/squad",
+     "publisher": "Lega Serie A (Cagliari squad, current)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    },
+    {
+     "family": "A",
+     "url": "https://cagliaricalcio.com/news/luvumbo-al-maiorca-cagliaricalcio-seria-liga/",
+     "publisher": "Cagliari Calcio (club announcement, 2026-07-10)",
+     "readOn": "2026-10-03",
+     "says": "Zito Luvumbo joins RCD Mallorca on loan to the end of the 2026/27 season, option to buy that becomes an obligation on sporting conditions"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/84/mallorca",
+     "publisher": "ESPN (Mallorca squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "Zito Luvumbo, forward, shirt 11, age 24, Angola, 5 appearances"
+    },
+    {
+     "family": "B",
+     "url": "https://us.soccerway.com/player/luvumbo-zito/QZQ9DtPs/transfers",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-03",
+     "says": "on loan at Mallorca from Cagliari since 2026-02-02, to 2027-06-30, born 2002-03-09"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2925/cagliari",
+     "publisher": "ESPN (Cagliari squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ],
+   "shard": "italy-france"
+  },
+  {
+   "name": "Alberto Moreno",
+   "from": "Como",
+   "to": "Mallorca",
+   "realClub": "Mallorca",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1992-07-05. Left Como when his contract ran out and joined Mallorca on a free on 2026-08-24, contract to June 2027; Mallorca's number 5, played in LALIGA 2 on 2026-09-27. Mallorca went down from LaLiga in 2026 and is not modelled in the current game. Round 1040: Mallorca is modelled now (the Segunda División), so the row moved from removedClubNotModelled to movedTo with the same sources.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.legaseriea.it/team/como/squad",
+     "publisher": "Lega Serie A (Como squad, current)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    },
+    {
+     "family": "B",
+     "url": "https://us.soccerway.com/player/moreno-alberto/pdBI3oS8/transfers",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-03",
+     "says": "Como to Mallorca free 2026-08-24, born 1992-07-05, contract to 2027-06-30, current club Mallorca"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/172998/alberto-moreno",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Mallorca number 5, born 1992-07-05, played 2026-09-27; last Como match 2026-05-24"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2572/como",
+     "publisher": "ESPN (Como squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ],
+   "shard": "italy-france"
+  },
+  {
+   "name": "Zico Buurmeester",
+   "from": "AZ Alkmaar",
+   "to": "Leganés",
+   "realClub": "Leganés",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2002-06-07, midfielder. Leganés number 10 in LaLiga Hypermotion for 2026-27, seven starts so far; on neither AZ list. Spain's second tier is not modelled. Round 1040: Leganés is modelled now (the Segunda División), so the row moved from removedClubNotModelled to movedTo with the same sources.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/player/zico-buurmeester",
+     "publisher": "LaLiga (player page, season 2026-2027)",
+     "readOn": "2026-10-03",
+     "says": "Club Deportivo Leganés, shirt 10, born 7 June 2002, 7 matches in 2026-27"
+    },
+    {
+     "family": "A",
+     "url": "https://eredivisie.nl/competitie/clubs/az/",
+     "publisher": "Eredivisie (AZ club page)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/306400/zico-buurmeester",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "team Leganés, born 2002-06-07"
+    }
+   ],
+   "shard": "benelux-turkey"
   }
  ],
  "removedClubNotModelled": [
@@ -8965,137 +9219,6 @@
    "shard": "spain-portugal"
   },
   {
-   "name": "Álex Sola",
-   "from": "Getafe",
-   "realClub": "Almería",
-   "adjudicatedOn": "2026-10-03",
-   "note": "Born 1999-06-09, the winger. Not in Getafe's 2025-26 or 2026-27 squad on ESPN; plays for Almería in LaLiga Hypermotion (the second tier), shirt 20. The second tier of Spain is not modelled. Not the Getafe forward Álex Sancris.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-hypermotion-rcd-mallorca-ud-almeria-7",
-     "publisher": "LaLiga (match page, Mallorca v Almería, LaLiga Hypermotion matchday 7, 2026-09-27)",
-     "readOn": "2026-10-03",
-     "says": "Álex Sola on the Almería bench, came on in the 79th minute"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/player/_/id/286167/alex-sola",
-     "publisher": "ESPN (player page)",
-     "readOn": "2026-10-03",
-     "says": "Almería, shirt 20, born 1999-06-09, five LaLiga 2 matches from 2026-08-23 to 2026-09-27"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/team/squad/_/id/2922",
-     "publisher": "ESPN (Getafe squad page, season 2026-27)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    }
-   ],
-   "shard": "spain-portugal"
-  },
-  {
-   "name": "Carles Pérez",
-   "from": "Getafe",
-   "realClub": "Girona",
-   "adjudicatedOn": "2026-10-03",
-   "note": "Born 1998-02-16, the winger. Getafe had him in 2024-25; ESPN shows him in the Greek Super League in May 2026 and at Girona in LaLiga Hypermotion (the second tier, after Girona went down) from September 2026, shirt 23. Girona is not in Club Manager's 2026-27 La Liga and the second tier of Spain is not modelled.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-hypermotion-girona-fc-albacete-bp-7",
-     "publisher": "LaLiga (match page, Girona v Albacete, LaLiga Hypermotion matchday 7, 2026-09-25)",
-     "readOn": "2026-10-03",
-     "says": "C. Pérez, shirt 23, in the Girona starting eleven, off in the 84th minute"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/player/_/id/261468/carles-perez",
-     "publisher": "ESPN (player page)",
-     "readOn": "2026-10-03",
-     "says": "Girona, shirt 23, born 1998-02-16, four LaLiga 2 matches from 2026-09-05 to 2026-09-25"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/team/squad/_/id/2922",
-     "publisher": "ESPN (Getafe squad page, season 2026-27)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    }
-   ],
-   "shard": "spain-portugal"
-  },
-  {
-   "name": "Juan Bernat",
-   "from": "Getafe",
-   "realClub": "Eibar",
-   "adjudicatedOn": "2026-10-03",
-   "note": "Born 1993-03-01, the left back. Getafe had him in 2024-25; he starts for Eibar in LaLiga Hypermotion (the second tier) in 2026-27, shirt 24. The second tier of Spain is not modelled.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-hypermotion-sd-eibar-ud-las-palmas-7",
-     "publisher": "LaLiga (match page, Eibar v Las Palmas, LaLiga Hypermotion matchday 7, 2026-09-27)",
-     "readOn": "2026-10-03",
-     "says": "Juan Bernat, shirt 24, in the Eibar starting eleven"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/player/_/id/164194/juan-bernat",
-     "publisher": "ESPN (player page)",
-     "readOn": "2026-10-03",
-     "says": "Eibar, shirt 24, born 1993-03-01, started five LaLiga 2 matches from 2026-08-23 to 2026-09-27"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/team/squad/_/id/2922",
-     "publisher": "ESPN (Getafe squad page, season 2026-27)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    }
-   ],
-   "shard": "spain-portugal"
-  },
-  {
-   "name": "Antoñito Cordero",
-   "from": "Málaga",
-   "realClub": "Cádiz",
-   "adjudicatedOn": "2026-10-03",
-   "note": "Antonio Cordero, born 2006-11-14, the winger. Málaga's number 26 in 2024-25, not in Málaga's 2026-27 squad; plays for Cádiz in LaLiga Hypermotion (the second tier), shirt 16. The second tier of Spain is not modelled.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-hypermotion-cadiz-cf-girona-fc-6",
-     "publisher": "LaLiga (match page, Cádiz v Girona, LaLiga Hypermotion matchday 6, 2026-09-19)",
-     "readOn": "2026-10-03",
-     "says": "16 Antoñito C. on the Cádiz bench, came on at 61 minutes"
-    },
-    {
-     "family": "A",
-     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-ea-sports-malaga-cf-levante-ud-4",
-     "publisher": "LaLiga (match page, Málaga v Levante, matchday 4, 2026-09-06)",
-     "readOn": "2026-10-03",
-     "says": "not in the Málaga eleven or among the substitutes"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/player/_/id/375875/antonio-cordero",
-     "publisher": "ESPN (player page)",
-     "readOn": "2026-10-03",
-     "says": "Cádiz, shirt 16, born 2006-11-14, five LaLiga 2 matches for Cádiz from 2026-08-30 to 2026-09-26"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/team/squad/_/id/99",
-     "publisher": "ESPN (Málaga squad page, season 2026-27)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    }
-   ],
-   "shard": "spain-portugal"
-  },
-  {
    "name": "Damián Pizarro",
    "from": "Udinese",
    "realClub": "Audax Italiano, on loan from Udinese",
@@ -9174,91 +9297,6 @@
      "family": "B",
      "url": "https://www.espn.com/soccer/team/squad/_/id/110/internazionale",
      "publisher": "ESPN (Internazionale squad page, season 2026-27)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    }
-   ],
-   "shard": "italy-france"
-  },
-  {
-   "name": "Zito Luvumbo",
-   "from": "Cagliari",
-   "realClub": "Mallorca, on loan from Cagliari",
-   "loan": true,
-   "loanFrom": "Cagliari",
-   "adjudicatedOn": "2026-10-03",
-   "note": "Born 2002-03-09. Loaned by Cagliari to Mallorca on 2026-02-02, and on 2026-07-10 Cagliari announced a new loan to Mallorca to the end of 2026-27, with an option to buy that becomes an obligation on sporting conditions. Mallorca went down from LaLiga in 2026 and is not modelled in the current game. ESPN's two Zito Luvumbo player pages are Angola national team records, but ESPN's 2026-27 Mallorca squad page lists him at 11, aged 24, Angola, which matches his birth date.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://www.legaseriea.it/team/cagliari/squad",
-     "publisher": "Lega Serie A (Cagliari squad, current)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    },
-    {
-     "family": "A",
-     "url": "https://cagliaricalcio.com/news/luvumbo-al-maiorca-cagliaricalcio-seria-liga/",
-     "publisher": "Cagliari Calcio (club announcement, 2026-07-10)",
-     "readOn": "2026-10-03",
-     "says": "Zito Luvumbo joins RCD Mallorca on loan to the end of the 2026/27 season, option to buy that becomes an obligation on sporting conditions"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/team/squad/_/id/84/mallorca",
-     "publisher": "ESPN (Mallorca squad page, season 2026-27)",
-     "readOn": "2026-10-03",
-     "says": "Zito Luvumbo, forward, shirt 11, age 24, Angola, 5 appearances"
-    },
-    {
-     "family": "B",
-     "url": "https://us.soccerway.com/player/luvumbo-zito/QZQ9DtPs/transfers",
-     "publisher": "Soccerway",
-     "readOn": "2026-10-03",
-     "says": "on loan at Mallorca from Cagliari since 2026-02-02, to 2027-06-30, born 2002-03-09"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/team/squad/_/id/2925/cagliari",
-     "publisher": "ESPN (Cagliari squad page, season 2026-27)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    }
-   ],
-   "shard": "italy-france"
-  },
-  {
-   "name": "Alberto Moreno",
-   "from": "Como",
-   "realClub": "Mallorca",
-   "adjudicatedOn": "2026-10-03",
-   "note": "Born 1992-07-05. Left Como when his contract ran out and joined Mallorca on a free on 2026-08-24, contract to June 2027; Mallorca's number 5, played in LALIGA 2 on 2026-09-27. Mallorca went down from LaLiga in 2026 and is not modelled in the current game.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://www.legaseriea.it/team/como/squad",
-     "publisher": "Lega Serie A (Como squad, current)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    },
-    {
-     "family": "B",
-     "url": "https://us.soccerway.com/player/moreno-alberto/pdBI3oS8/transfers",
-     "publisher": "Soccerway",
-     "readOn": "2026-10-03",
-     "says": "Como to Mallorca free 2026-08-24, born 1992-07-05, contract to 2027-06-30, current club Mallorca"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/player/_/id/172998/alberto-moreno",
-     "publisher": "ESPN (player page)",
-     "readOn": "2026-10-03",
-     "says": "Mallorca number 5, born 1992-07-05, played 2026-09-27; last Como match 2026-05-24"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/team/squad/_/id/2572/como",
-     "publisher": "ESPN (Como squad page, season 2026-27)",
      "readOn": "2026-10-03",
      "says": "not listed"
     }
@@ -9765,37 +9803,6 @@
      "publisher": "ESPN (player page)",
      "readOn": "2026-10-03",
      "says": "team Lech Poznan, born 2001-06-29, Iran"
-    }
-   ],
-   "shard": "benelux-turkey"
-  },
-  {
-   "name": "Zico Buurmeester",
-   "from": "AZ Alkmaar",
-   "realClub": "Leganés",
-   "adjudicatedOn": "2026-10-03",
-   "note": "Born 2002-06-07, midfielder. Leganés number 10 in LaLiga Hypermotion for 2026-27, seven starts so far; on neither AZ list. Spain's second tier is not modelled.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://www.laliga.com/en-GB/player/zico-buurmeester",
-     "publisher": "LaLiga (player page, season 2026-2027)",
-     "readOn": "2026-10-03",
-     "says": "Club Deportivo Leganés, shirt 10, born 7 June 2002, 7 matches in 2026-27"
-    },
-    {
-     "family": "A",
-     "url": "https://eredivisie.nl/competitie/clubs/az/",
-     "publisher": "Eredivisie (AZ club page)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/player/_/id/306400/zico-buurmeester",
-     "publisher": "ESPN (player page)",
-     "readOn": "2026-10-03",
-     "says": "team Leganés, born 2002-06-07"
     }
    ],
    "shard": "benelux-turkey"
@@ -11695,10 +11702,173 @@
    "addedOn": "2026-10-06",
    "note": "Round 1040: came in when Ligue 2 was mapped, on a 2025 row at Saint-Étienne with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
    "shard": "round1040"
+  },
+  {
+   "name": "Lucas Robertone",
+   "club": "Almería",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Almería with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Álex Centelles",
+   "club": "Almería",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Almería with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Anderson Arroyo",
+   "club": "Burgos",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on his 2025 row at Burgos, but the table's own 2026 row puts him at Rubin Kazan, a club the game does not model. Not yet read on the web, so he is withheld from every squad until two source families say where he is.",
+   "shard": "round1040",
+   "withheld": true,
+   "withheldWhy": "the table's 2026 row puts him at Rubin Kazan, which the game does not model"
+  },
+  {
+   "name": "Pipa",
+   "club": "Burgos",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Burgos with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Dani Aquino",
+   "club": "Ceuta",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Ceuta with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Manu Vallejo",
+   "club": "Ceuta",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Ceuta with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Javi Ontiveros",
+   "club": "Cádiz",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Cádiz with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Abel Ruiz",
+   "club": "Girona",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Girona with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Arnaut Danjuma",
+   "club": "Girona",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Girona with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Donny van de Beek",
+   "club": "Girona",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Girona with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Carlos Neva",
+   "club": "Granada",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Granada with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Luca Zidane",
+   "club": "Granada",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Granada with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Scott McKenna",
+   "club": "Las Palmas",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Las Palmas with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Marvin Park",
+   "club": "Las Palmas",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Las Palmas with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Juan Cruz",
+   "club": "Leganés",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Leganés with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Dani Raba",
+   "club": "Leganés",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Leganés with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Enric Franquesa",
+   "club": "Leganés",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Leganés with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Juan Soriano",
+   "club": "Leganés",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Leganés with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Haissem Hassan",
+   "club": "Real Oviedo",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Real Oviedo with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Miguelete",
+   "club": "Sabadell",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Sabadell with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Álex Oyón",
+   "club": "Sporting Gijón",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Sporting Gijón with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Rubén Yáñez",
+   "club": "Sporting Gijón",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Sporting Gijón with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Luis Pérez",
+   "club": "Valladolid",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Valladolid with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
   }
  ],
  "adjudicatorWeb2026_10_02": "Web adjudication, 2026-10-02, for the twenty Brazilian rows Round 876 added to pending, after a review found two of them false (Weverton at Grêmio since January, Júnior Alonso at Atlanta United since July). Read with WebFetch and WebSearch only. Family A is the club's own site where it could be reached; family B is independent press and ESPN's 2026-27 squad pages, read after the Brazilian window shut on 2026-09-11. A row left pending only where two publishers agreed on the club. Nineteen of the twenty were settled: ten at a new club (nine moves plus Antonio Sanabria, below), three at clubs the game does not model, seven confirmed where they were. Pedro Raul stays pending with what the check found. The same pass found Antonio Sanabria, held out as removedClubNotModelled at Cremonese, signed for Internacional on 2026-08-20, so he moves to movedTo now that Internacional are modelled.",
  "adjudicatorWeb2026_10_02_ligamx": "Web adjudication, 2026-10-02, for the twenty nine Liga MX rows Round 883 added to pending. Read with WebFetch and WebSearch only. Family A is Liga MX's own Apertura 2026 squad pages (ligamx.net) or the club's own site; family B is independent press, ESPN's 2026-27 squad pages, Soccerway and FotMob, read after the Liga MX window. All twenty nine settled: twelve confirmed at their club, seven at another modelled Mexican club (two on loan), ten at a club the game does not model. A name absent from one squad page alone was never enough to move or drop anybody.",
  "adjudicatorShards2026_10": "Web adjudication of every row still pending on 2026-10-03, in six shards read 2026-10-03 to 2026-10-05 (Rounds 930 to 935: Germany; Spain and Portugal; Italy and France; England and MLS; Belgium, the Netherlands and Turkey; the rest), folded by Round 1015 through scripts/foldRosterAdjudication.mjs. Each folded row carries shard, the file under scripts/data/rosterAdjudication2026-10/ that holds its evidence and that shard's notes for the fold. A settled row has two sources from two families (A, the club's or the league's own page; B, an independent publisher on another host). A row the shard left pending, because its families disagreed or no official page could be read, stays pending with the shard's note. Where that note says a 2026-27 squad list leaves him out of the club recorded here, or its sources disagree on that club, the row also carries withheld and withheldWhy, and the bake keeps him out of every squad until two families say where he is; the other pending rows still ship at the club recorded here. Not folded: rest.json's heldOnTwoPublishers (Andreas Hansen confirmed at FC Nordsjælland, Topi Keskinen moved to OB), which the shard keeps pending for want of an official page.",
- "populationRound1040": "Round 1040 mapped Serie B (nineteen table spellings, Arezzo having none) and re-baked from the 2026-10-02 dump. Nine rows left removedClubNotModelled for movedTo on their existing sources, since their real club is modelled now (Scuffet to Pisa, Augello to Palermo, Distefano to Empoli, Marchizza to Vicenza, Candela to Catanzaro, Caprari to Padova, Mulattieri to Verona, Karamoh and Insigne to Sampdoria). Sixteen players came in on a 2025 row at a Serie B club, so they joined the population as pending, not yet read on the web (Panico, Starita, Buso, Biasci, Adamo, Fulignati, Esposito, Viti, Maleh, Zappella, Sgarbi, Jelenic, Morutan, Sernicola, Amin Sarr, Rauti). Four of them (Adamo, Zappella, Jelenic, Morutan) have a 2026 row at a club the game does not model, so they are withheld from every squad rather than shipped at last season's club. Fourteen more men moved out of other squads on their own 2026 row, which the bake now reads because the club it names is mapped; they are not 2025 fallbacks, so they are outside this population, and none was in the ledger: Missori (Sassuolo to Avellino), Bondo (Monza to Cremonese), Terracciano (AC Milan to Cremonese), Zampano (Venezia to Modena), Pohjanpalo (Venezia to Palermo), Stengs (Feyenoord to Pisa), Lorran (Flamengo to Pisa), Vural (Frosinone to Pisa), Cuadrado (Atalanta to Pisa), Martinelli (Fiorentina to Sampdoria), Orban (Hoffenheim to Verona), Nelsson (Roma to Verona), Bernede (Lausanne-Sport to Verona) and Lirola (Marseille to Verona). Their earlier clubs were 2025 rows the table had already overtaken. Ligue 2 (fifteen table spellings, Sochaux, Dijon and Rodez having none) was mapped in the same round's second step. Five rows left removedClubNotModelled for movedTo on their existing sources (Guilbert and Joujou to Nantes, Baldé to Nancy, Bianchini to Clermont on his loan from Swansea City, Magnin to Red Star FC). Twenty players came in on a 2025 row at a Ligue 2 club and joined the population as pending (Averlant, Rivera, Vargas, Kokolo, Sabaly, Omeragic, Fayad, Savanier, Sacko, Issiaga Sylla, Maouassa, Cropanese, Douglas Augusto, Saïdou Sow, Centonze, Anthony Lopes, Okumu, Teuma, Yaya Fofana, Maçon); three of them (Averlant, Kokolo, Douglas Augusto) have a 2026 row at a club the game does not model and are withheld. Four more men moved out of other squads on their own 2026 row, none of them in the ledger: Virginius (Lille to Clermont), Machado (Lens to Nantes), Leoni (Anderlecht to Reims) and João Ferreira (Braga to Saint-Étienne)."
+ "populationRound1040": "Round 1040 mapped Serie B (nineteen table spellings, Arezzo having none) and re-baked from the 2026-10-02 dump. Nine rows left removedClubNotModelled for movedTo on their existing sources, since their real club is modelled now (Scuffet to Pisa, Augello to Palermo, Distefano to Empoli, Marchizza to Vicenza, Candela to Catanzaro, Caprari to Padova, Mulattieri to Verona, Karamoh and Insigne to Sampdoria). Sixteen players came in on a 2025 row at a Serie B club, so they joined the population as pending, not yet read on the web (Panico, Starita, Buso, Biasci, Adamo, Fulignati, Esposito, Viti, Maleh, Zappella, Sgarbi, Jelenic, Morutan, Sernicola, Amin Sarr, Rauti). Four of them (Adamo, Zappella, Jelenic, Morutan) have a 2026 row at a club the game does not model, so they are withheld from every squad rather than shipped at last season's club. Fourteen more men moved out of other squads on their own 2026 row, which the bake now reads because the club it names is mapped; they are not 2025 fallbacks, so they are outside this population, and none was in the ledger: Missori (Sassuolo to Avellino), Bondo (Monza to Cremonese), Terracciano (AC Milan to Cremonese), Zampano (Venezia to Modena), Pohjanpalo (Venezia to Palermo), Stengs (Feyenoord to Pisa), Lorran (Flamengo to Pisa), Vural (Frosinone to Pisa), Cuadrado (Atalanta to Pisa), Martinelli (Fiorentina to Sampdoria), Orban (Hoffenheim to Verona), Nelsson (Roma to Verona), Bernede (Lausanne-Sport to Verona) and Lirola (Marseille to Verona). Their earlier clubs were 2025 rows the table had already overtaken. Ligue 2 (fifteen table spellings, Sochaux, Dijon and Rodez having none) was mapped in the same round's second step. Five rows left removedClubNotModelled for movedTo on their existing sources (Guilbert and Joujou to Nantes, Baldé to Nancy, Bianchini to Clermont on his loan from Swansea City, Magnin to Red Star FC). Twenty players came in on a 2025 row at a Ligue 2 club and joined the population as pending (Averlant, Rivera, Vargas, Kokolo, Sabaly, Omeragic, Fayad, Savanier, Sacko, Issiaga Sylla, Maouassa, Cropanese, Douglas Augusto, Saïdou Sow, Centonze, Anthony Lopes, Okumu, Teuma, Yaya Fofana, Maçon); three of them (Averlant, Kokolo, Douglas Augusto) have a 2026 row at a club the game does not model and are withheld. Four more men moved out of other squads on their own 2026 row, none of them in the ledger: Virginius (Lille to Clermont), Machado (Lens to Nantes), Leoni (Anderlecht to Reims) and João Ferreira (Braga to Saint-Étienne). The Segunda División (seventeen table spellings, Tenerife, Córdoba and Eldense having none, and the two reserve sides left out of the game) was mapped in the third step. Seven rows left removedClubNotModelled for movedTo on their existing sources (Sola to Almería, Carles Pérez to Girona, Bernat to Eibar, Cordero to Cádiz, Luvumbo to Mallorca on his loan from Cagliari, Alberto Moreno to Mallorca, Buurmeester to Leganés). Twenty three players came in on a 2025 row at a Segunda club and joined the population as pending (Robertone, Centelles, Anderson Arroyo, Pipa, Dani Aquino, Manu Vallejo, Ontiveros, Abel Ruiz, Danjuma, van de Beek, Carlos Neva, Luca Zidane, McKenna, Marvin Park, Juan Cruz, Dani Raba, Franquesa, Juan Soriano, Haissem Hassan, Miguelete, Oyón, Rubén Yáñez, Luis Pérez); one of them (Anderson Arroyo) has a 2026 row at a club the game does not model and is withheld. Nine more men moved out of other squads on their own 2026 row, none of them in the ledger: Ounahi (Panathinaikos to Girona), Fran Beltrán (Celta Vigo to Girona), Álex Moreno (Nottingham Forest to Girona), Pablo Torre (Barcelona to Mallorca), Mateo Joseph (Leeds United to Mallorca), Javi López (Real Sociedad to Real Oviedo), Borbas (Red Bull Bragantino to Real Oviedo), Moldovan (Sassuolo to Real Oviedo) and Ponceau (Lorient to Valladolid)."
 }

@@ -456,8 +456,8 @@ async function partModern() {
      tree on purpose (see that commit for the attribution of every moved hash).
      Round 883: 22 with Liga MX, rewritten the same way and attributed in its commit.
      Round 1035: 23 with the A-League Men, rewritten the same way and
-     attributed in its commit. Round 1040: 24 with Serie B, then 25 with Ligue 2, the same way. */
-  if (saves.length !== 25) fail(`the game has ${saves.length} modern leagues where this round found 25 (a league added later regenerates the baseline on purpose)`);
+     attributed in its commit. Round 1040: 24 with Serie B, 25 with Ligue 2 and 26 with the Segunda División, the same way. */
+  if (saves.length !== 26) fail(`the game has ${saves.length} modern leagues where this round found 26 (a league added later regenerates the baseline on purpose)`);
   const got = await digestSaves(saves, mod);
   if (WRITE) written.modern = got; else compare('modern', got, baseline.parts.modern);
 }
