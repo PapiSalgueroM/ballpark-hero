@@ -57,6 +57,8 @@ export interface UsSeasonView {
   markText(g: DerivedGame, pos: string): string;
   soFar(so: Record<string, number>, pos: string): [string, string][];
   half(so: Record<string, number>, pos: string): string;
+  /** The board's review labels by their short tile label ('Points per game' to 'PPG'); a label not here prints as it is. */
+  tileLabels: Record<string, string>;
   /** The "?" sheet. `named`: opponents are named this season. */
   help(named: boolean): UsHelp;
 }
@@ -318,4 +320,25 @@ export function usPlayoffPath(bind: UsSeasonBind, row: UsRow, ctx: UsSeasonCtx, 
     }
   }
   return { steps: Array.from({ length: n }, (_, r) => ({ round: bind.rounds[r], opp: opps[r], won: wonAt(r), score: scores[r] })) };
+}
+
+/** The "?" sheet every US sport shares; a sport adds its own worked examples.
+ *  The record numbers are read from the bind's bands, never typed twice. */
+export function usHelp(o: { named: boolean; games: number; bands: readonly (readonly [number, number])[]; examples: UsHelp['examples'] }): UsHelp {
+  const missed = o.bands[0];
+  const champion = o.bands[o.bands.length - 1];
+  return {
+    title: 'How the Season Center works',
+    intro: [
+      'Your season was played the moment you pressed the button. This is that same season, game by game, so nothing here can change it. Your career is the same whether you watch or not.',
+      o.named
+        ? "The teams, the divisions and how often you meet each one follow the league's standard schedule formula. Who you meet on which night, every score and every stat line are this career's own, not a real schedule."
+        : "Opponents are not named this season, because the game's team list is not that season's real league. Every score and every stat line are this career's own.",
+      `Your team's record is this career's own too. It always fits how your season ended: here a champion wins ${champion[0]} to ${champion[1]} of ${o.games} and a team that missed the playoffs ${missed[0]} to ${missed[1]}.`,
+      'If a contract talk comes up when you press Week by week, answer it first. If you play the year out, the season runs straight away and you can open it afterwards with Watch again.',
+    ],
+    controls: '▶ plays the next game. ⏩ jumps to the next big one (halfway, the last game). ⏭ goes straight to the end. 1x and 3x set the clock, Results shows each game at the final.',
+    examples: o.examples,
+    footnote: "The playoffs show as a path, round by round, with the numbers your season card already has. From 2026 on, the league is this career's own world on today's format.",
+  };
 }

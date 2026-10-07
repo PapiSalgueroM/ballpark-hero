@@ -8,7 +8,10 @@ import {
 } from '@/data/usSeasonLengths';
 import { NBA_SCORING, US_LEAGUE_SHAPES, nflHosts17, usLeagueShape } from '@/data/usLeagueShape';
 import { keyedRng } from '@/lib/keyedRng';
-import { dealUnnamed, splitTotal } from '@/lib/season/us';
+import { buildUsSeason, dealUnnamed, splitTotal, usBandOf, usPlayoffPath, type UsRow } from '@/lib/season/us';
+import { deriveSeason, type DerivedGame } from '@/lib/season/core';
+import { NBA_SEASON, nbaDeal, nbaDealProblems } from '@/lib/season/nba';
+import { NBA_MISSED_PLAYOFFS, NBA_PLAYOFF_RESULTS, nbaEraTeamIds, nbaTeamLabelOf } from '@/lib/nbaMyCareer';
 
 const SPORTS: UsLengthSport[] = ['nba', 'nfl'];
 
@@ -165,5 +168,140 @@ describe('dealUnnamed', () => {
     const homes = new Set<number>();
     for (let seed = 0; seed < 40; seed += 1) homes.add(dealUnnamed(17, keyedRng(`odd|${seed}`)).filter(r => r[0][0] === 0).length);
     expect([...homes].sort()).toEqual([8, 9]);
+  });
+});
+
+/* ───────────────────────── src/lib/season/nba.ts ───────────────────────── */
+
+const NBA_ROW = (over: Partial<UsRow> = {}): UsRow => ({
+  year: 2026, team: 'DEN', age: 24, ovr: 84, games: 80, ppg: 25, rpg: 6.4, apg: 5.1,
+  awards: [], teamResult: 'Lost in the conference semis', salary: 20, poGames: 11, poPpg: 26, poRpg: 6.1, poApg: 5,
+  ...over,
+} as UsRow);
+const NBA_CAREER = { name: 'Trey Buckets', pos: 'SG', eraId: undefined as string | undefined };
+const built = (row: UsRow, career = NBA_CAREER) => {
+  const b = buildUsSeason(NBA_SEASON, career, row, nbaTeamLabelOf);
+  if (b.ok === false) throw new Error(`usSeason.test: ${b.why}`);
+  return b;
+};
+const asGames = (rounds: [number, number][][]) =>
+  rounds.map((r, i) => ({ md: i + 1, opp: r[0][0] === 0 ? r[0][1] : r[0][0], home: r[0][0] === 0 })) as unknown as DerivedGame[];
+
+describe('the NBA schedule formula, dealt for every team', () => {
+  it('meets every kind of opponent as often as the formula says, 41 at home, whoever he plays for', () => {
+    const ids = nbaEraTeamIds('now');
+    expect(ids).toHaveLength(30);
+    for (const team of ids) {
+      const { ctx } = built(NBA_ROW({ team }));
+      expect(ctx.order[0]).toBe(team);
+      expect([...ctx.order].sort()).toEqual([...ids].sort());
+      expect([ctx.divSlots, ctx.confSlots]).toEqual([4, 14]);
+      for (let seed = 0; seed < 6; seed += 1) {
+        const rounds = nbaDeal(ctx, keyedRng(`deal|${team}|${seed}`));
+        expect(rounds).toHaveLength(82);
+        expect(rounds.every(r => r.length === 1 && (r[0][0] === 0) !== (r[0][1] === 0))).toBe(true);
+        expect(nbaDealProblems(ctx, asGames(rounds)), `${team} seed ${seed}`).toEqual([]);
+      }
+    }
+  });
+  it('is caught when a division rival is met three times', () => {
+    const { ctx } = built(NBA_ROW());
+    const games = asGames(nbaDeal(ctx, keyedRng('broken')));
+    games.splice(games.findIndex(g => g.opp === 1), 1);
+    expect(nbaDealProblems(ctx, games).length).toBeGreaterThan(0);
+  });
+});
+
+describe('an NBA season, derived from its saved line', () => {
+  it('lands the games played, the averages, the band and the names', () => {
+    const row = NBA_ROW();
+    const b = built(row);
+    const s = deriveSeason(b.sport, row, b.ctx)!;
+    expect(s).not.toBeNull();
+    expect(s.games).toHaveLength(82);
+    const on = s.games.filter(g => g.played);
+    expect(on).toHaveLength(80);
+    const mean = (k: string) => on.reduce((a, g) => a + g.line[k], 0) / on.length;
+    expect(Math.round(mean('pts'))).toBe(25);
+    expect(Math.round(mean('reb') * 10)).toBe(64);
+    expect(Math.round(mean('ast') * 10)).toBe(51);
+    expect(on.every(g => Number.isInteger(g.line.pts) && Number.isInteger(g.line.reb) && Number.isInteger(g.line.ast) && g.line.pts < g.us)).toBe(true);
+    const wins = s.games.filter(g => g.us > g.them).length;
+    expect(wins).toBeGreaterThanOrEqual(45);
+    expect(wins).toBeLessThanOrEqual(57);
+    expect(s.games.every(g => g.us !== g.them && g.events.filter(e => e.kind === 'quarter').length === 8)).toBe(true);
+    expect(s.labels[0].name).toBe('Denver Nuggets');
+    expect(new Set(s.labels.map(l => l.name)).size).toBe(30);
+    expect(deriveSeason(b.sport, JSON.parse(JSON.stringify(row)), b.ctx)).toEqual(s);
+  });
+  it('holds a year whose real length is not 82, and never names a throwback opponent', () => {
+    const old = { ...NBA_CAREER, eraId: 'y2004' };
+    for (const year of [2011, 2012, 2019, 2020]) {
+      const b = buildUsSeason(NBA_SEASON, old, NBA_ROW({ year, team: 'SEA' }), nbaTeamLabelOf);
+      expect(b.ok).toBe(false);
+      if (b.ok === false) { expect(b.why).toBe('held'); expect(b.line).toBe(usSeasonHeldLine('nba', year)); }
+    }
+    const row = NBA_ROW({ year: 2003, team: 'SEA' });
+    const b = built(row, old);
+    expect(b.ctx.shape).toBeNull();
+    const s = deriveSeason(b.sport, row, b.ctx)!;
+    expect(s).not.toBeNull();
+    expect(s.labels[0]).toEqual({ name: 'Seattle SuperSonics', named: true, key: 'SEA' });
+    expect(s.labels.slice(1).every(l => !l.named && l.name === 'another team')).toBe(true);
+    /* a present day id the 2003-04 list does not hold is still not named in a throwback season */
+    expect(built(NBA_ROW({ year: 2026, team: 'OKC' }), old).ctx.shape).toBeNull();
+  });
+  it('gives no view to a banned year or a season with no games', () => {
+    for (const row of [NBA_ROW({ games: 0, teamResult: 'SUSPENDED' }), NBA_ROW({ games: 0 })]) {
+      const b = buildUsSeason(NBA_SEASON, NBA_CAREER, row, nbaTeamLabelOf);
+      expect(b.ok).toBe(false);
+      if (b.ok === false) expect(b.why).toBe('empty');
+    }
+  });
+});
+
+describe('the NBA playoff path', () => {
+  it('lays out every depth and every number of playoff games that fits it', () => {
+    const { ctx, key } = built(NBA_ROW());
+    NBA_PLAYOFF_RESULTS.forEach((teamResult, i) => {
+      const n = Math.min(4, i + 1);
+      for (let po = 4 * n; po <= 7 * n; po += 1) {
+        const path = usPlayoffPath(NBA_SEASON, NBA_ROW({ teamResult, poGames: po }), ctx, `${key}|${po}`)!;
+        expect(path.steps).toHaveLength(n);
+        let sum = 0;
+        path.steps.forEach((st, r) => {
+          const [a, b] = st.score!.split('-').map(Number);
+          expect(st.won).toBe(r < n - 1 || i === 4);
+          expect(st.won ? a : b).toBe(4);
+          expect(st.won ? b : a).toBeLessThanOrEqual(3);
+          sum += a + b;
+          expect(st.round).toBe(NBA_SEASON.rounds[r]);
+          expect(st.opp).not.toBe('Denver Nuggets');
+        });
+        expect(sum).toBe(po);
+        expect(new Set(path.steps.map(st => st.opp)).size).toBe(n);
+      }
+      /* playoff games that cannot be four to seven a round: the rounds show, no score is claimed */
+      for (const po of [4 * n - 1, 7 * n + 1, 5.5, undefined]) {
+        const path = usPlayoffPath(NBA_SEASON, NBA_ROW({ teamResult, poGames: po }), ctx, key)!;
+        expect(path.steps).toHaveLength(n);
+        expect(path.steps.every(st => st.score === null)).toBe(true);
+      }
+    });
+  });
+  it('has no path for a missed postseason or a result the engine never wrote', () => {
+    const { ctx, key } = built(NBA_ROW());
+    expect(usPlayoffPath(NBA_SEASON, NBA_ROW({ teamResult: NBA_MISSED_PLAYOFFS }), ctx, key)).toBeNull();
+    expect(usPlayoffPath(NBA_SEASON, NBA_ROW({ teamResult: 'Lost in the first round ' }), ctx, key)).toBeNull();
+    expect(usBandOf(NBA_SEASON, 'Lost in the first round ')).toBeNull();
+    expect(usBandOf(NBA_SEASON, NBA_MISSED_PLAYOFFS)).toEqual([17, 40]);
+    expect(usBandOf(NBA_SEASON, 'WON THE NBA FINALS')).toEqual([52, 67]);
+  });
+});
+
+describe('the NBA clock', () => {
+  it('reads a quarter at every minute', () => {
+    const { label } = NBA_SEASON.view.clock;
+    for (let m = 0; m <= 48; m += 1) expect(label(m)).toBe(`Q${m <= 12 ? 1 : m <= 24 ? 2 : m <= 36 ? 3 : 4}`);
   });
 });
