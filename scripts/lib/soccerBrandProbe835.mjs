@@ -101,8 +101,25 @@ ${Object.entries(extra).map(([name, rel]) => `export const ${name} = await impor
   }
 }
 
-/** The whole state, every field, as one short string. */
-const hashOf = v => createHash('sha256').update(JSON.stringify(v)).digest('hex').slice(0, 16);
+/** The whole state, every field, as one short string. Round 1041 gave a
+ *  played season one new key, cupRun (the domestic cup's run, drawn from its
+ *  own keyed generator), which no tree before it writes; it is taken out of
+ *  every season row before the hash, the way the awards night probe drops it,
+ *  so a fixture recorded from main still proves the rest of the save. A save
+ *  with no run is hashed exactly as before. */
+const withoutRun = r => {
+  if (!r || typeof r !== 'object' || !('cupRun' in r)) return r;
+  const { cupRun: _run, ...rest } = r;
+  return rest;
+};
+const withoutRuns = v => {
+  if (!v || typeof v !== 'object') return v;
+  const runs = Array.isArray(v.seasons) && v.seasons.some(r => r && typeof r === 'object' && 'cupRun' in r);
+  const pending = v.pendingSummary && typeof v.pendingSummary === 'object' && 'cupRun' in v.pendingSummary;
+  if (!runs && !pending) return v;
+  return { ...v, ...(runs ? { seasons: v.seasons.map(withoutRun) } : {}), ...(pending ? { pendingSummary: withoutRun(v.pendingSummary) } : {}) };
+};
+const hashOf = v => createHash('sha256').update(JSON.stringify(withoutRuns(v))).digest('hex').slice(0, 16);
 
 const mulberry32 = a => () => {
   a |= 0; a = (a + 0x6D2B79F5) | 0;
