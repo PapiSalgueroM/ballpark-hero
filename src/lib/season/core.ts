@@ -625,21 +625,27 @@ function fitMean(games: DerivedGame[], t: Extract<StatTotal, { kind: 'mean' }>, 
 
 /** Derive the season, or null when the saved row cannot be laid out match by match. */
 export function deriveSeason<R, C>(sport: SeasonSport<R, C>, row: R, ctx: C): DerivedSeason | null {
+  const s = deriveSeasonOrWhy(sport, row, ctx);
+  return typeof s === 'string' ? null : s;
+}
+
+/** The same, saying which stage refused a season (the harnesses print the split). */
+export function deriveSeasonOrWhy<R, C>(sport: SeasonSport<R, C>, row: R, ctx: C): DerivedSeason | string {
   const key = sport.seasonKey(row, ctx);
-  if (key === null) return null;
+  if (key === null) return 'nokey';
   const frame = sport.frame(row, ctx);
   const cal = keyedRng(`${key}|cal`);
   const rounds = sport.fixtures(frame, cal);
   const p = placeFixed(rounds, sport.fixed(row, ctx, frame), cal);
-  if (!p) return null;
+  if (!p) return 'fixed';
   const av = chooseAvailability(p, sport.availability(row, ctx, frame), keyedRng(`${key}|avail`));
-  if (!av) return null;
+  if (!av) return 'availability';
   const shown = av.played.filter(Boolean).length;
   const bucketApps = sport.apps(row) - shown;
-  if (bucketApps < 0) return null;
+  if (bucketApps < 0) return 'apps';
   const totals = sport.totals(row, ctx);
   const al = allocate(p, av, totals, bucketApps, keyedRng(`${key}|alloc`));
-  if (!al) return null;
+  if (!al) return 'allocation';
   const target = sport.target(row, ctx, frame);
   const at = new Map<string, number>();
   p.mine.forEach((m, i) => at.set(cell(m.r, rounds[m.r].findIndex(([h, a]) => h === 0 || a === 0)), i));
@@ -648,7 +654,7 @@ export function deriveSeason<R, C>(sport: SeasonSport<R, C>, row: R, ctx: C): De
   let won: { board: Board; repairs: number } | null = null;
   let attempt = 0;
   for (; attempt < ATTEMPTS && !won; attempt += 1) won = playAttempt(sport, frame, rounds, L, str, key, attempt, target, p.slotOf);
-  if (!won) return null;
+  if (!won) return 'attempts';
   const board = won.board;
   const tf = totals.filter(t => t.kind === 'sum' && t.teamFor).map(t => t.key);
   const redKey = totals.find(t => t.kind === 'sum' && t.suspends)?.key;
@@ -674,7 +680,7 @@ export function deriveSeason<R, C>(sport: SeasonSport<R, C>, row: R, ctx: C): De
     return g;
   });
   for (const t of totals) {
-    if (t.kind === 'mean' && !fitMean(games, t, g => sport.meanBase(t.key, g), minRng)) return null;
+    if (t.kind === 'mean' && !fitMean(games, t, g => sport.meanBase(t.key, g), minRng)) return 'mean';
     if (t.kind === 'max') {
       const on = games.filter(g => g.played);
       if (on.length) {
@@ -698,7 +704,8 @@ export function deriveSeason<R, C>(sport: SeasonSport<R, C>, row: R, ctx: C): De
     rounds: board, bucket: { apps: bucketApps, line: al.bucket }, clinch: md ? { md } : null,
     target, attempt: attempt - 1, repairs: won.repairs,
   };
-  return disagreements(sport, row, ctx, s).length === 0 ? s : null;
+  const bad = disagreements(sport, row, ctx, s);
+  return bad.length === 0 ? s : `self: ${bad[0]}`;
 }
 
 /** Every way the derived season disagrees with the saved row (empty: it agrees). */
