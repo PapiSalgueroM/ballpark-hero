@@ -143,7 +143,7 @@
     ],
     "window": "2026-summer",
     "checked": "2026-09-30",
-    "note": "LALIGA registration 2026-08-27 (ARNAU), transfer from Girona. add is his 2026 row at Girona FC (the table's own position, age and value), a club the bake does not model.",
+    "note": "LALIGA registration 2026-08-27 (ARNAU), transfer from Girona. add is his 2026 row at Girona FC (the table's own position, age and value), a club the bake did not model when this row was written (Round 1040 maps it as Girona).",
     "add": {
       "p": "Right-Back",
       "a": 22,
@@ -161,7 +161,7 @@
     ],
     "window": "2026-summer",
     "checked": "2026-09-30",
-    "note": "LALIGA registration 2026-08-21, loan from Olympiacos (he left Mallorca for Olympiacos this summer). add is his 2026 row at RCD Mallorca (the table's own position, age and value), a club the bake does not model.",
+    "note": "LALIGA registration 2026-08-21, loan from Olympiacos (he left Mallorca for Olympiacos this summer). add is his 2026 row at RCD Mallorca (the table's own position, age and value), a club the bake did not model when this row was written (Round 1040 maps it as Mallorca).",
     "add": {
       "p": "Right-Back",
       "a": 28,
@@ -222,7 +222,7 @@
     ],
     "window": "2026-summer",
     "checked": "2026-09-30",
-    "note": "LALIGA registration 2026-09-01, loan from Saint-Etienne. add is his 2026 row at AS Saint-Étienne (the table's own position, age and value), a club the bake does not model.",
+    "note": "LALIGA registration 2026-09-01, loan from Saint-Etienne. add is his 2026 row at AS Saint-Étienne (the table's own position, age and value), a club the bake did not model when this row was written (Round 1040 maps it as Saint-Étienne).",
     "add": {
       "p": "Centre-Forward",
       "a": 21,
@@ -370,7 +370,7 @@
     ],
     "window": "2026-summer",
     "checked": "2026-09-30",
-    "note": "LALIGA registration 2026-08-14, transfer from Mallorca. add is his 2026 row at RCD Mallorca (the table's own position, age and value), a club the bake does not model.",
+    "note": "LALIGA registration 2026-08-14, transfer from Mallorca. add is his 2026 row at RCD Mallorca (the table's own position, age and value), a club the bake did not model when this row was written (Round 1040 maps it as Mallorca).",
     "add": {
       "p": "Left-Back",
       "a": 33,
@@ -424,7 +424,7 @@
     ],
     "window": "2026-summer",
     "checked": "2026-09-30",
-    "note": "LALIGA registration 2026-08-14, transfer from Sporting Gijon. add is his 2026 row at Sporting Gijón (the table's own position, age and value), a club the bake does not model.",
+    "note": "LALIGA registration 2026-08-14, transfer from Sporting Gijon. add is his 2026 row at Sporting Gijón (the table's own position, age and value), a club the bake did not model when this row was written (Round 1040 maps it as Sporting Gijón).",
     "add": {
       "p": "Right Winger",
       "a": 25,
@@ -454,7 +454,7 @@
     ],
     "window": "2026-summer",
     "checked": "2026-09-30",
-    "note": "LALIGA registration 2026-09-01, loan from Como; his 2026 row sits at Cremonese. add is his 2026 row at US Cremonese (the table's own position, age and value), a club the bake does not model.",
+    "note": "LALIGA registration 2026-09-01, loan from Como; his 2026 row sits at Cremonese. add is his 2026 row at US Cremonese (the table's own position, age and value), a club the bake did not model when this row was written (Round 1040 maps it as Cremonese).",
     "add": {
       "p": "Goalkeeper",
       "a": 28,
@@ -608,7 +608,7 @@
     ],
     "window": "2026-summer",
     "checked": "2026-09-30",
-    "note": "LALIGA registration 2026-08-24 (THIAGO), loan from Villarreal; his 2026 row sits at Oviedo. add is his 2026 row at Real Oviedo (the table's own position, age and value), a club the bake does not model.",
+    "note": "LALIGA registration 2026-08-24 (THIAGO), loan from Villarreal; his 2026 row sits at Oviedo. add is his 2026 row at Real Oviedo (the table's own position, age and value), a club the bake did not model when this row was written (Round 1040 maps it as Real Oviedo).",
     "add": {
       "p": "Left Winger",
       "a": 21,
@@ -625,7 +625,7 @@
     ],
     "window": "2026-summer",
     "checked": "2026-09-30",
-    "note": "LALIGA registration 2026-08-16, free from Dunkerque. add is his 2026 row at USL Dunkerque (the table's own position, age and value), a club the bake does not model.",
+    "note": "LALIGA registration 2026-08-16, free from Dunkerque. add is his 2026 row at USL Dunkerque (the table's own position, age and value), a club the bake did not model when this row was written (Round 1040 maps it as Dunkerque).",
     "add": {
       "p": "Central Midfield",
       "a": 24,
@@ -692,7 +692,7 @@
     ],
     "window": "2026-summer",
     "checked": "2026-09-30",
-    "note": "LALIGA registration 2026-07-29, release clause paid to Mallorca. add is his 2026 row at RCD Mallorca (the table's own position, age and value), a club the bake does not model.",
+    "note": "LALIGA registration 2026-07-29, release clause paid to Mallorca. add is his 2026 row at RCD Mallorca (the table's own position, age and value), a club the bake did not model when this row was written (Round 1040 maps it as Mallorca).",
     "add": {
       "p": "Goalkeeper",
       "a": 25,
@@ -757,7 +757,7 @@
     ],
     "window": "2026-summer",
     "checked": "2026-09-30",
-    "note": "Girona loan ended, back at Athletic. LALIGA page: Athletic, 2 matches in 2026-27. add is his 2026 row at Girona FC (the table's own position, age and value), a club the bake does not model.",
+    "note": "Girona loan ended, back at Athletic. LALIGA page: Athletic, 2 matches in 2026-27. add is his 2026 row at Girona FC (the table's own position, age and value), a club the bake did not model when this row was written (Round 1040 maps it as Girona).",
     "add": {
       "p": "Right-Back",
       "a": 22,
@@ -1155,7 +1155,7 @@
     ],
     "window": "2026-summer",
     "checked": "2026-10-01",
-    "note": "LALIGA player page: Real Racing Club SAD, 2026-27, 5 matches, born 1999-02-14 in Bilbao; ESPN lists Ivan Martin, midfielder, 27. His 2026 row sits at Girona FC and is the only 2026 row with this name. add is his 2026 row at Girona FC (the table's own position, age and value), a club the bake does not model.",
+    "note": "LALIGA player page: Real Racing Club SAD, 2026-27, 5 matches, born 1999-02-14 in Bilbao; ESPN lists Ivan Martin, midfielder, 27. His 2026 row sits at Girona FC and is the only 2026 row with this name. add is his 2026 row at Girona FC (the table's own position, age and value), a club the bake did not model when this row was written (Round 1040 maps it as Girona).",
     "add": {
       "p": "Central Midfield",
       "a": 26,

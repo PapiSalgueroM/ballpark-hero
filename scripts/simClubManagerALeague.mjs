@@ -536,7 +536,9 @@ function partCounts(cm) {
   console.log(`   engine: ${leagues} leagues, ${clubs} clubs, ${countries} countries, ${players} real players in the joined world`);
   const read = f => {
     let t = fs.readFileSync(path.join(ROOT, f), 'utf8');
-    if (CONTROL === 'stalecount' && f === 'src/data/gameContent/clubManagement.ts') t = mutateOnce(t, '380 real clubs across 23 leagues', '368 real clubs across 23 leagues', 'stalecount');
+    /* Round 1040: the anchor is the engine's own count, so the control
+       outlives the next league a round adds. */
+    if (CONTROL === 'stalecount' && f === 'src/data/gameContent/clubManagement.ts') t = mutateOnce(t, `${clubs} real clubs across ${leagues} leagues`, `368 real clubs across ${leagues} leagues`, 'stalecount');
     return t;
   };
   const seoPart = fs.readdirSync(path.join(ROOT, 'src/data/seoMetaParts')).map(f => `src/data/seoMetaParts/${f}`).find(f => fs.readFileSync(path.join(ROOT, f), 'utf8').includes("'/club-manager'") || fs.readFileSync(path.join(ROOT, f), 'utf8').includes('"/club-manager"'));

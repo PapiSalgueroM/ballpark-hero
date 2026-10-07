@@ -120,6 +120,11 @@ const ENGINE_LEAGUE_TO_POOL = {
   'Brasileirão Série A': 'Brazilian Série A',
   // Round 883: the same, for Liga MX.
   'Liga MX': 'Liga MX',
+  // Round 1040: the same, for the second tiers (all three are already in the
+  // League union).
+  'Serie B': 'Serie B',
+  'Ligue 2': 'Ligue 2',
+  'Segunda División': 'Segunda División',
 };
 
 /* ------------------------------------------------------------------ */

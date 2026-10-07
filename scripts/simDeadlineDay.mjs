@@ -54,7 +54,7 @@
         game, so the board caps both at his ask: on every terms table, no
         offer that trades the bonus for wage or length signs him, nothing over
         his ask is recorded, and exactly his ask still signs him.
-     9) the worked examples are the engine's (hard). Lorient on seed 390850 in
+     9) the worked examples are the engine's (hard). Lorient on seed 1618079 in
         the 2023-02-21 daily market is
         played as the rules screen and the guide describe it, and every figure
         they quote, and the guide's grade arithmetic, is rebuilt from the
@@ -887,8 +887,20 @@ console.log('9) The worked example on the rules screen and in the guide is what 
    play the haggle, none has the rival take the dearest keeper at noon and
    sign him at 2pm), and of the first 3.1 million raw seeds five play every
    figure, 390850 the first. Only an engine change or a roster re-bake can
-   move it now, and that is what this section exists to catch. */
-const EX_DATE = '2023-02-21', EX_CLUB = 'Lorient', EX_SEED = 390850;
+   move it now, and that is what this section exists to catch.
+
+   Round 1040: a roster re-bake did. Mapping the three second tiers sent
+   Julien Ponceau, Lorient's central midfielder on a 2025 fallback, to
+   Valladolid on the table's own 2026 row, so the central midfield line fell
+   from 72 to 71, the cheapest man over it became a 2.6m one instead of a
+   3.8m one, and seed 390850 opened on 26.5m rather than the copy's 29m,
+   every other figure unchanged. The copy names no club and no seed, so the
+   setup moved, not the copy: on the re-baked rosters no seed from 3000 to
+   963000 plays the whole window (three miss only the rival's 2pm), and
+   1618079 does, found when the same search went on from 963000. Lorient
+   is still the only club in the 2023-02-21 pool whose squad opens on a
+   keeper, a central midfielder, a right winger and a striker. */
+const EX_DATE = '2023-02-21', EX_CLUB = 'Lorient', EX_SEED = 1618079;
 const WORDS = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve'];
 const clockWord = h => (clockLabel(h) === '12pm' ? 'noon' : clockLabel(h));
 const exDay = { club: EX_CLUB, seed: EX_SEED, daily: EX_DATE };

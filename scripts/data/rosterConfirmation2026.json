@@ -1,7 +1,7 @@
 {
  "measuredOn": "2026-09-11",
  "rule": "A baked Club Manager player whose newest row in public.player_market_values_dedup is year 2025, with no year-2026 row at any club the game models and none anywhere else either. The bake falls back to the 2025 row for these, which carries the 2025 CLUB, so the player ships at last season's club with nothing saying so.",
- "population": 414,
+ "population": 564,
  "populationRound876": "Round 876 mapped the table's 1.FC Nuremberg spelling to Nürnberg and re-baked from the 2026-10-02 dump. Three Nürnberg players came in on a 2025 row with no 2026 row anywhere (Berkay Yilmaz, Oliver Villadsen, Tim Janisch), so they joined the population and wait in pending like the rest. No other new fallback row appeared that an overlay row does not already source. Then Brazil's Serie A was mapped (twenty table spellings) and the bake re-run from the same dump. Twenty players at those clubs came in on a 2025 row with no 2026 row anywhere (Luiz Araújo, Gustavo Gómez, Weverton, Lima, Júnior Alonso, Everson, Zé Rafael, Lucas Ronier, Juninho Capixaba, Ignacio Laquintana, Matheus Martins, Nathan Fernandes, Matheus Nascimento, Rafael Lobato, Memphis Depay, Talles Magno, Pedro Raul, Jean Meneses, Alexander Aravena, Gustavo Prado), so they joined the population. The same day a review found two of them false, and all twenty were then checked on the web (adjudicatorWeb2026_10_02): nineteen settled, Pedro Raul still pending. Two rows that sat in removedClubNotModelled because the World Cup table put them at Vasco da Gama and Palmeiras (Andrés Gómez, Ramón Sosa) moved to movedTo on that same evidence, since both clubs are modelled now.",
  "populationRound883": "Round 883 mapped Liga MX (seventeen table spellings, Atlante having none) and re-baked from the 2026-10-02 dump. Twenty nine players at those clubs came in on a 2025 row (Esteban Andrada, Nathan Silva, Robert Ergas, Alejandro Mayorga, Dagoberto Espinoza, Pablo Bennevendo, Sebastián Santos, Pablo Monroy, Gustavo Ferrareis, Diego Valdés, Piero Quispe, Mateo Klimowicz, Lorenzo Faravelli, Luka Romero, Jairo Torres, Diego Valoyes, Hugo Camberos, Oussama Idrissi, Ronaldo Nájera, Amaury Morales, Josué Colmán, Yairo Moreno, Fernando González, Fernando Beltrán, Richard Sánchez, Érick Gutiérrez, Andrés Montaño, Emiliano Gómez, Franco Fagúndez), so they joined the population. All twenty nine were then checked on the web the same day (adjudicatorWeb2026_10_02_ligamx) and none is left pending. Nine of them do have a 2026 row, but at a club the bake does not map: four at their own club's U21 side (Dagoberto Espinoza, Pablo Bennevendo, Sebastián Santos, Pablo Monroy) and five elsewhere (Diego Valdés at Vélez Sarsfield, Mateo Klimowicz at Cerro Porteño, Diego Valoyes at Talleres, Yairo Moreno at Independiente Medellín, Fernando González at Dorados de Sinaloa), so the bake falls back to their 2025 club just the same, and they are counted here with the rest rather than trusted.",
  "populationRound883Namesakes": "The Round 883 review found the bake keyed players by name alone, so a newer row of one man deleted an older row of a different man with the same name. The bake now keeps them apart (an age move of -1 to 3 and the same position group, or they are two men), which restored six 2025 rows that had been silently dropped: Paulinho (Palmeiras), Jose Luis Rodriguez (FC Juarez), Alan Franco (Sao Paulo), Matheus Pereira (Santa Clara), Dudu (Cruzeiro) and Allan (Palmeiras). All six were read on the web on 2026-10-02: two confirmed, four moved to the modelled club they play for. Each row names the club of the other man in namesakeAt.",
@@ -7750,6 +7750,823 @@
     }
    ],
    "shard": "rest"
+  },
+  {
+   "name": "Simone Scuffet",
+   "from": "Cagliari",
+   "to": "Pisa",
+   "realClub": "Pisa",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1996-05-31. Sold by Cagliari to Pisa on 2025-07-23, contract to June 2028; Pisa's number 1, played the Coppa Italia tie at Fiorentina on 2026-09-15. Pisa is not modelled. The official voice is the league page that no longer lists him at Cagliari; Pisa's own squad page did not answer. Round 1040: Pisa is modelled now (Serie B 2026-27), so the row moved from removedClubNotModelled to movedTo with the same sources.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.legaseriea.it/team/cagliari/squad",
+     "publisher": "Lega Serie A (Cagliari squad, current)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    },
+    {
+     "family": "B",
+     "url": "https://us.soccerway.com/player/scuffet-simone/0nQhrI82/transfers",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-03",
+     "says": "Cagliari to Pisa 2025-07-23, born 1996-05-31, contract to 2028-06-30, current club Pisa"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/181784/simone-scuffet",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Pisa number 1, born 1996-05-31, played 2026-09-15"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2925/cagliari",
+     "publisher": "ESPN (Cagliari squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ],
+   "shard": "italy-france"
+  },
+  {
+   "name": "Tommaso Augello",
+   "from": "Cagliari",
+   "to": "Palermo",
+   "realClub": "Palermo",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1994-08-30. Left Cagliari on a free and joined Palermo on 2025-07-08, contract to June 2027; Palermo's number 3, with Serie B matches from 2026-08-23 to 2026-09-19. Palermo is not modelled. The official voice is the league page that no longer lists him at Cagliari; Palermo's own squad page renders no names to a reader. Round 1040: Palermo is modelled now (Serie B 2026-27), so the row moved from removedClubNotModelled to movedTo with the same sources.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.legaseriea.it/team/cagliari/squad",
+     "publisher": "Lega Serie A (Cagliari squad, current)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    },
+    {
+     "family": "B",
+     "url": "https://us.soccerway.com/player/augello-tommaso/pUpsjuw3/transfers",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-03",
+     "says": "Cagliari to Palermo free 2025-07-08, born 1994-08-30, contract to 2027-06-30, current club Palermo"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/260197/tommaso-augello",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Palermo number 3, born 1994-08-30, played 2026-09-19"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2925/cagliari",
+     "publisher": "ESPN (Cagliari squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ],
+   "shard": "italy-france"
+  },
+  {
+   "name": "Filippo Distefano",
+   "from": "Frosinone",
+   "to": "Empoli",
+   "realClub": "Empoli",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2003-08-28 (Soccerway spells him Di Stefano). His 2024-25 loan at Frosinone was from Fiorentina; after a loan at Carrarese he was sold by Fiorentina to Empoli on 2026-07-21, contract to June 2029. Empoli's number 20, with Serie B matches from 2026-08-22 to 2026-09-20. Empoli is not modelled. Round 1040: Empoli is modelled now (Serie B 2026-27), so the row moved from removedClubNotModelled to movedTo with the same sources.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.legaseriea.it/team/frosinone/squad",
+     "publisher": "Lega Serie A (Frosinone squad, current)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    },
+    {
+     "family": "B",
+     "url": "https://us.soccerway.com/player/di-stefano-filippo/YTpHlpak/transfers",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-03",
+     "says": "Fiorentina to Empoli 2026-07-21, born 2003-08-28, contract to 2029-06-30, current club Empoli"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/331072/filippo-distefano",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Empoli number 20, born 2003-08-28, played 2026-09-20"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/4057/frosinone",
+     "publisher": "ESPN (Frosinone squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ],
+   "shard": "italy-france"
+  },
+  {
+   "name": "Riccardo Marchizza",
+   "from": "Frosinone",
+   "to": "Vicenza",
+   "realClub": "Vicenza",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1998-03-26. Left Frosinone when his contract ran out and joined Vicenza on a free on 2026-07-08, contract to June 2028; Vicenza's number 5, with Serie B matches from 2026-08-21 to 2026-09-20. Vicenza is not modelled. Round 1040: Vicenza is modelled now (Serie B 2026-27), so the row moved from removedClubNotModelled to movedTo with the same sources.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.legaseriea.it/team/frosinone/squad",
+     "publisher": "Lega Serie A (Frosinone squad, current)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    },
+    {
+     "family": "B",
+     "url": "https://us.soccerway.com/player/marchizza-riccardo/fL14Xe6b/transfers",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-03",
+     "says": "Frosinone to Vicenza free 2026-07-08, born 1998-03-26, contract to 2028-06-30, current club Vicenza"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/227272/riccardo-marchizza",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Vicenza number 5, born 1998-03-26, played 2026-09-20; last Frosinone match 2026-03-04"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/4057/frosinone",
+     "publisher": "ESPN (Frosinone squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ],
+   "shard": "italy-france"
+  },
+  {
+   "name": "Antonio Candela",
+   "from": "Venezia",
+   "to": "Catanzaro",
+   "realClub": "Catanzaro, on loan from Spezia",
+   "loan": true,
+   "loanFrom": "Spezia",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2000-04-27. No longer a Venezia player: Soccerway has him on loan at Catanzaro from Spezia since July 2026, to 2027-06-30, after a loan at Empoli in the spring. Catanzaro's number 27, with Serie B matches from 2026-08-21 to 2026-09-19. Neither Catanzaro nor Spezia is modelled. Round 1040: Catanzaro is modelled now (Serie B 2026-27), so the row moved from removedClubNotModelled to movedTo with the same sources, placed at the club he plays for per loanPolicy.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.legaseriea.it/team/venezia/squad",
+     "publisher": "Lega Serie A (Venezia squad, current)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    },
+    {
+     "family": "B",
+     "url": "https://us.soccerway.com/player/candela-antonio/nHot9WLH/transfers",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-03",
+     "says": "on loan at Catanzaro from Spezia from July 2026 to 2027-06-30, born 2000-04-27"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/250668/antonio-candela",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Catanzaro number 27, born 2000-04-27, played 2026-09-19"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/17530/venezia",
+     "publisher": "ESPN (Venezia squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ],
+   "shard": "italy-france"
+  },
+  {
+   "name": "Gianluca Caprari",
+   "from": "Monza",
+   "to": "Padova",
+   "realClub": "Padova",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1993-07-30. Moved from Monza to Padova on 2026-01-30, contract to June 2027; Padova's number 10, with Serie B matches from 2026-08-23 to 2026-09-12. Padova is not modelled. Round 1040: Padova is modelled now (Serie B 2026-27), so the row moved from removedClubNotModelled to movedTo with the same sources.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.legaseriea.it/team/monza/squad",
+     "publisher": "Lega Serie A (Monza squad, current)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    },
+    {
+     "family": "B",
+     "url": "https://us.soccerway.com/player/caprari-gianluca/hM9I17fh/transfers",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-03",
+     "says": "Monza to Padova 2026-01-30, born 1993-07-30, contract to 2027-06-30, current club Padova"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/156792/gianluca-caprari",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Padova number 10, born 1993-07-30, played 2026-09-12"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/4007/monza",
+     "publisher": "ESPN (Monza squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ],
+   "shard": "italy-france"
+  },
+  {
+   "name": "Samuele Mulattieri",
+   "from": "Sassuolo",
+   "to": "Verona",
+   "realClub": "Hellas Verona, on loan from Sassuolo",
+   "loan": true,
+   "loanFrom": "Sassuolo",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2000-10-07. After a 2025-26 loan at Deportivo, Sassuolo loaned him to Hellas Verona on 2026-07-31, to June 2027; Verona's number 19, with Serie B matches from 2026-08-29 to 2026-09-20. Verona is not modelled. Round 1040: Verona is modelled now (Serie B 2026-27), so the row moved from removedClubNotModelled to movedTo with the same sources, placed at the club he plays for per loanPolicy.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.legaseriea.it/team/sassuolo/squad",
+     "publisher": "Lega Serie A (Sassuolo squad, current)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    },
+    {
+     "family": "B",
+     "url": "https://us.soccerway.com/player/mulattieri-samuele/f3tdpb62/transfers",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-03",
+     "says": "loaned to Verona from Sassuolo 2026-07-31 to 2027-06-30, born 2000-10-07"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/271140/samuele-mulattieri",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Hellas Verona number 19, born 2000-10-07, played 2026-09-20"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/3997/sassuolo",
+     "publisher": "ESPN (Sassuolo squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ],
+   "shard": "italy-france"
+  },
+  {
+   "name": "Yann Karamoh",
+   "from": "Torino",
+   "to": "Sampdoria",
+   "realClub": "Sampdoria",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1998-07-08. Left Torino on a free for Porto on 2025-09-18, then joined Sampdoria on a free on 2026-09-05, contract to June 2027; Sampdoria's number 14, played in Serie B on 2026-09-13. Sampdoria is not modelled. Round 1040: Sampdoria is modelled now (Serie B 2026-27), so the row moved from removedClubNotModelled to movedTo with the same sources.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.legaseriea.it/team/torino/squad",
+     "publisher": "Lega Serie A (Torino squad, current)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    },
+    {
+     "family": "B",
+     "url": "https://us.soccerway.com/player/karamoh-yann/OQYJ3VXT/transfers",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-03",
+     "says": "Torino to Porto free 2025-09-18, Porto to Sampdoria free 2026-09-05, born 1998-07-08, contract to 2027-06-30"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/225555/yann-karamoh",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Sampdoria number 14, born 1998-07-08, played 2026-09-13"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/239/torino",
+     "publisher": "ESPN (Torino squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ],
+   "shard": "italy-france"
+  },
+  {
+   "name": "Lorenzo Insigne",
+   "from": "Toronto FC",
+   "to": "Sampdoria",
+   "realClub": "Sampdoria",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1991-06-04 (ESPN). Toronto and Insigne ended his contract by mutual agreement on 2025-07-01; ESPN has him at Pescara in 2025-26 and at Sampdoria in Serie B in 2026-27. Sampdoria's own report of their 2-1 win over Catanzaro on 2026-09-19 names Insigne in the starting eleven and as a scorer. The report gives only the surname, and his brother Roberto is also a winger, so the first name rests on ESPN, whose Sampdoria squad carries one Insigne, Lorenzo, shirt 10. The game models no Serie B. Round 1040: Sampdoria is modelled now (Serie B 2026-27), so the row moved from removedClubNotModelled to movedTo with the same sources.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.mlssoccer.com/news/toronto-fc-mutually-part-ways-with-lorenzo-insigne",
+     "publisher": "MLS (mlssoccer.com, 2025-07-01)",
+     "readOn": "2026-10-03",
+     "says": "Toronto FC and Insigne mutually agree to terminate his contract"
+    },
+    {
+     "family": "A",
+     "url": "https://www.sampdoria.it/news/team/2026/09/19/la-samp-rimonta-il-catanzaro-e-trova-la-prima-vittoria/",
+     "publisher": "U.C. Sampdoria (match report, 2026-09-19)",
+     "readOn": "2026-10-03",
+     "says": "Serie BKT 2026/27, Sampdoria 2 Catanzaro 1, goal: Insigne; starting eleven includes Insigne"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2734",
+     "publisher": "ESPN (Sampdoria squad, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "Lorenzo Insigne, shirt 10, forward, born 1991-06-04; Sampdoria appearances 2026-08-29 to 2026-09-19; not on ESPN's Toronto FC 2026 squad"
+    }
+   ],
+   "shard": "england-mls"
+  },
+  {
+   "name": "Frédéric Guilbert",
+   "from": "Lecce",
+   "to": "Nantes",
+   "realClub": "Nantes",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1994-12-24. Left Lecce and joined Nantes on a free on 2026-01-28, contract to June 2028; Nantes's number 24, with Ligue 2 matches from 2026-08-14 to 2026-09-19. Nantes is in Ligue 2 and not modelled. Round 1040: Nantes is modelled now (Ligue 2), so the row moved from removedClubNotModelled to movedTo with the same sources.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.legaseriea.it/team/lecce/squad",
+     "publisher": "Lega Serie A (Lecce squad, current)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    },
+    {
+     "family": "B",
+     "url": "https://us.soccerway.com/player/guilbert-frederic/6TtQuJeb/transfers",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-03",
+     "says": "Lecce to Nantes free 2026-01-28, born 1994-12-24, contract to 2028-06-30, current club Nantes"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/215709/frederic-guilbert",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Nantes number 24, born 1994-12-24, played 2026-09-19"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/113/lecce",
+     "publisher": "ESPN (Lecce squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ],
+   "shard": "italy-france"
+  },
+  {
+   "name": "Antoine Joujou",
+   "from": "Le Havre",
+   "to": "Nantes",
+   "realClub": "Nantes",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2003-03-12. His Le Havre spell was a loan from Parma; Parma then loaned him to Famalicao and sold him to Nantes on 2026-08-21, contract to June 2029. Nantes's number 7, with Ligue 2 matches from 2026-08-29 to 2026-09-19. Nantes is in Ligue 2 and not modelled. Round 1040: Nantes is modelled now (Ligue 2), so the row moved from removedClubNotModelled to movedTo with the same sources.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://hac.football/fr/players?competition=LI1",
+     "publisher": "Le Havre AC (Ligue 1 squad)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    },
+    {
+     "family": "B",
+     "url": "https://us.soccerway.com/player/joujou-antoine/n5pKaQsh/transfers",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-03",
+     "says": "Parma to Nantes 2026-08-21, born 2003-03-12, contract to 2029-06-30"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/357235/antoine-joujou",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Nantes number 7, born 2003-03-12, played 2026-09-19"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/3236/le-havre-ac",
+     "publisher": "ESPN (Le Havre squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ],
+   "shard": "italy-france"
+  },
+  {
+   "name": "Thierno Baldé",
+   "from": "Troyes",
+   "to": "Nancy",
+   "realClub": "Nancy",
+   "adjudicatedOn": "2026-10-03",
+   "note": "The right back born 2002-06-10, a PSG academy player. Left Troyes on a free and joined Nancy on 2026-08-05, contract to June 2028; Nancy's number 19, played in Ligue 2 on 2026-08-14. Nancy is in Ligue 2 and not modelled. Round 1040: Nancy is modelled now (Ligue 2), so the row moved from removedClubNotModelled to movedTo with the same sources.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.estac.fr/equipe-premiere/effectif/",
+     "publisher": "ESTAC Troyes (first team squad)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    },
+    {
+     "family": "B",
+     "url": "https://us.soccerway.com/player/balde-thierno/OAOSz9F9/transfers",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-03",
+     "says": "Troyes to Nancy free 2026-08-05, born 2002-06-10, defender, contract to 2028-06-30"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/322891/thierno-balde",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "AS Nancy Lorraine number 19, born 2002-06-10, played 2026-08-14"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/170/troyes",
+     "publisher": "ESPN (Troyes squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ],
+   "shard": "italy-france"
+  },
+  {
+   "name": "Florian Bianchini",
+   "from": "Swansea City",
+   "to": "Clermont",
+   "realClub": "Clermont Foot, on loan from Swansea City",
+   "loan": true,
+   "loanFrom": "Swansea City",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2001-06-25 (ESPN). Swansea list him as out on loan and Clermont list him in their squad; he plays in Ligue 2, which the game does not model. Placed at the club he plays for, the ledger's loanPolicy, so he leaves Swansea's squad. Round 1040: Clermont is modelled now (Ligue 2), so the row moved from removedClubNotModelled to movedTo with the same sources, placed at the club he plays for per loanPolicy.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.swanseacity.com/players/149",
+     "publisher": "Swansea City AFC (players page)",
+     "readOn": "2026-10-03",
+     "says": "Out on Loan: Florian Bianchini"
+    },
+    {
+     "family": "A",
+     "url": "https://www.clermontfoot.com/equipes",
+     "publisher": "Clermont Foot 63 (squad page)",
+     "readOn": "2026-10-03",
+     "says": "Attaquant: 7 Florian Bianchini"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/307854/florian-bianchini",
+     "publisher": "ESPN",
+     "readOn": "2026-10-03",
+     "says": "Clermont Foot, born 2001-06-25; Ligue 2 appearances 2026-09-04 to 2026-09-18"
+    }
+   ],
+   "shard": "england-mls"
+  },
+  {
+   "name": "Théo Magnin",
+   "from": "Servette",
+   "to": "Red Star FC",
+   "realClub": "Red Star FC (France, Ligue 2)",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Swiss right back born 2003-08-09. Left Servette on a free for Red Star on 2026-02-01, shirt 2, seven Ligue 2 starts in 2026-27. Ligue 2 is not modelled. Round 1040: Red Star FC is modelled now (Ligue 2), so the row moved from removedClubNotModelled to movedTo with the same sources.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://servettefc.ch/equipe-premiere/effectif/",
+     "publisher": "Servette FC (Effectif page)",
+     "readOn": "2026-10-03",
+     "says": "not in the squad"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/334979/theo-magnin",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Red Star FC 93, shirt 2, born 2003-08-09, Ligue 2 starts 2026-08-21 to 2026-09-19"
+    },
+    {
+     "family": "B",
+     "url": "https://www.soccerway.com/player/magnin-theo/A9rfNiEq/",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-03",
+     "says": "Servette to Red Star 2026-02-01 free, contract to 2028-06-30, 7 Ligue 2 appearances in 2026/2027"
+    }
+   ],
+   "shard": "rest"
+  },
+  {
+   "name": "Álex Sola",
+   "from": "Getafe",
+   "to": "Almería",
+   "realClub": "Almería",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1999-06-09, the winger. Not in Getafe's 2025-26 or 2026-27 squad on ESPN; plays for Almería in LaLiga Hypermotion (the second tier), shirt 20. The second tier of Spain is not modelled. Not the Getafe forward Álex Sancris. Round 1040: Almería is modelled now (the Segunda División), so the row moved from removedClubNotModelled to movedTo with the same sources.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-hypermotion-rcd-mallorca-ud-almeria-7",
+     "publisher": "LaLiga (match page, Mallorca v Almería, LaLiga Hypermotion matchday 7, 2026-09-27)",
+     "readOn": "2026-10-03",
+     "says": "Álex Sola on the Almería bench, came on in the 79th minute"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/286167/alex-sola",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Almería, shirt 20, born 1999-06-09, five LaLiga 2 matches from 2026-08-23 to 2026-09-27"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2922",
+     "publisher": "ESPN (Getafe squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ],
+   "shard": "spain-portugal"
+  },
+  {
+   "name": "Carles Pérez",
+   "from": "Getafe",
+   "to": "Girona",
+   "realClub": "Girona",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1998-02-16, the winger. Getafe had him in 2024-25; ESPN shows him in the Greek Super League in May 2026 and at Girona in LaLiga Hypermotion (the second tier, after Girona went down) from September 2026, shirt 23. Girona is not in Club Manager's 2026-27 La Liga and the second tier of Spain is not modelled. Round 1040: Girona is modelled now (the Segunda División), so the row moved from removedClubNotModelled to movedTo with the same sources.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-hypermotion-girona-fc-albacete-bp-7",
+     "publisher": "LaLiga (match page, Girona v Albacete, LaLiga Hypermotion matchday 7, 2026-09-25)",
+     "readOn": "2026-10-03",
+     "says": "C. Pérez, shirt 23, in the Girona starting eleven, off in the 84th minute"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/261468/carles-perez",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Girona, shirt 23, born 1998-02-16, four LaLiga 2 matches from 2026-09-05 to 2026-09-25"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2922",
+     "publisher": "ESPN (Getafe squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ],
+   "shard": "spain-portugal"
+  },
+  {
+   "name": "Juan Bernat",
+   "from": "Getafe",
+   "to": "Eibar",
+   "realClub": "Eibar",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1993-03-01, the left back. Getafe had him in 2024-25; he starts for Eibar in LaLiga Hypermotion (the second tier) in 2026-27, shirt 24. The second tier of Spain is not modelled. Round 1040: Eibar is modelled now (the Segunda División), so the row moved from removedClubNotModelled to movedTo with the same sources.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-hypermotion-sd-eibar-ud-las-palmas-7",
+     "publisher": "LaLiga (match page, Eibar v Las Palmas, LaLiga Hypermotion matchday 7, 2026-09-27)",
+     "readOn": "2026-10-03",
+     "says": "Juan Bernat, shirt 24, in the Eibar starting eleven"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/164194/juan-bernat",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Eibar, shirt 24, born 1993-03-01, started five LaLiga 2 matches from 2026-08-23 to 2026-09-27"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2922",
+     "publisher": "ESPN (Getafe squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ],
+   "shard": "spain-portugal"
+  },
+  {
+   "name": "Antoñito Cordero",
+   "from": "Málaga",
+   "to": "Cádiz",
+   "realClub": "Cádiz",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Antonio Cordero, born 2006-11-14, the winger. Málaga's number 26 in 2024-25, not in Málaga's 2026-27 squad; plays for Cádiz in LaLiga Hypermotion (the second tier), shirt 16. The second tier of Spain is not modelled. Round 1040: Cádiz is modelled now (the Segunda División), so the row moved from removedClubNotModelled to movedTo with the same sources.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-hypermotion-cadiz-cf-girona-fc-6",
+     "publisher": "LaLiga (match page, Cádiz v Girona, LaLiga Hypermotion matchday 6, 2026-09-19)",
+     "readOn": "2026-10-03",
+     "says": "16 Antoñito C. on the Cádiz bench, came on at 61 minutes"
+    },
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-ea-sports-malaga-cf-levante-ud-4",
+     "publisher": "LaLiga (match page, Málaga v Levante, matchday 4, 2026-09-06)",
+     "readOn": "2026-10-03",
+     "says": "not in the Málaga eleven or among the substitutes"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/375875/antonio-cordero",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Cádiz, shirt 16, born 2006-11-14, five LaLiga 2 matches for Cádiz from 2026-08-30 to 2026-09-26"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/99",
+     "publisher": "ESPN (Málaga squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ],
+   "shard": "spain-portugal"
+  },
+  {
+   "name": "Zito Luvumbo",
+   "from": "Cagliari",
+   "to": "Mallorca",
+   "realClub": "Mallorca, on loan from Cagliari",
+   "loan": true,
+   "loanFrom": "Cagliari",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2002-03-09. Loaned by Cagliari to Mallorca on 2026-02-02, and on 2026-07-10 Cagliari announced a new loan to Mallorca to the end of 2026-27, with an option to buy that becomes an obligation on sporting conditions. Mallorca went down from LaLiga in 2026 and is not modelled in the current game. ESPN's two Zito Luvumbo player pages are Angola national team records, but ESPN's 2026-27 Mallorca squad page lists him at 11, aged 24, Angola, which matches his birth date. Round 1040: Mallorca is modelled now (the Segunda División), so the row moved from removedClubNotModelled to movedTo with the same sources, placed at the club he plays for per loanPolicy.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.legaseriea.it/team/cagliari/squad",
+     "publisher": "Lega Serie A (Cagliari squad, current)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    },
+    {
+     "family": "A",
+     "url": "https://cagliaricalcio.com/news/luvumbo-al-maiorca-cagliaricalcio-seria-liga/",
+     "publisher": "Cagliari Calcio (club announcement, 2026-07-10)",
+     "readOn": "2026-10-03",
+     "says": "Zito Luvumbo joins RCD Mallorca on loan to the end of the 2026/27 season, option to buy that becomes an obligation on sporting conditions"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/84/mallorca",
+     "publisher": "ESPN (Mallorca squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "Zito Luvumbo, forward, shirt 11, age 24, Angola, 5 appearances"
+    },
+    {
+     "family": "B",
+     "url": "https://us.soccerway.com/player/luvumbo-zito/QZQ9DtPs/transfers",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-03",
+     "says": "on loan at Mallorca from Cagliari since 2026-02-02, to 2027-06-30, born 2002-03-09"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2925/cagliari",
+     "publisher": "ESPN (Cagliari squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ],
+   "shard": "italy-france"
+  },
+  {
+   "name": "Alberto Moreno",
+   "from": "Como",
+   "to": "Mallorca",
+   "realClub": "Mallorca",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1992-07-05. Left Como when his contract ran out and joined Mallorca on a free on 2026-08-24, contract to June 2027; Mallorca's number 5, played in LALIGA 2 on 2026-09-27. Mallorca went down from LaLiga in 2026 and is not modelled in the current game. Round 1040: Mallorca is modelled now (the Segunda División), so the row moved from removedClubNotModelled to movedTo with the same sources.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.legaseriea.it/team/como/squad",
+     "publisher": "Lega Serie A (Como squad, current)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    },
+    {
+     "family": "B",
+     "url": "https://us.soccerway.com/player/moreno-alberto/pdBI3oS8/transfers",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-03",
+     "says": "Como to Mallorca free 2026-08-24, born 1992-07-05, contract to 2027-06-30, current club Mallorca"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/172998/alberto-moreno",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Mallorca number 5, born 1992-07-05, played 2026-09-27; last Como match 2026-05-24"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2572/como",
+     "publisher": "ESPN (Como squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ],
+   "shard": "italy-france"
+  },
+  {
+   "name": "Zico Buurmeester",
+   "from": "AZ Alkmaar",
+   "to": "Leganés",
+   "realClub": "Leganés",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2002-06-07, midfielder. Leganés number 10 in LaLiga Hypermotion for 2026-27, seven starts so far; on neither AZ list. Spain's second tier is not modelled. Round 1040: Leganés is modelled now (the Segunda División), so the row moved from removedClubNotModelled to movedTo with the same sources.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/player/zico-buurmeester",
+     "publisher": "LaLiga (player page, season 2026-2027)",
+     "readOn": "2026-10-03",
+     "says": "Club Deportivo Leganés, shirt 10, born 7 June 2002, 7 matches in 2026-27"
+    },
+    {
+     "family": "A",
+     "url": "https://eredivisie.nl/competitie/clubs/az/",
+     "publisher": "Eredivisie (AZ club page)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/306400/zico-buurmeester",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "team Leganés, born 2002-06-07"
+    }
+   ],
+   "shard": "benelux-turkey"
+  },
+  {
+   "name": "Dennis Johnsen",
+   "from": "Cremonese",
+   "to": "Palermo",
+   "realClub": "Palermo",
+   "adjudicatedOn": "2026-10-07",
+   "note": "Round 1040 review: the Serie B mapping baked him at Cremonese from the table's 2026 row, which predates his move. Palermo signed him permanently from Cremonese on 2026-02-02 on a multi year contract, and ESPN's Palermo 2026-27 squad lists him while its Cremonese squad does not. Both clubs are in Serie B and modelled.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.palermofc.com/en/news/johnsen-is-rosanero",
+     "publisher": "Palermo FC (club news)",
+     "readOn": "2026-10-07",
+     "says": "transferred permanently to Palermo on a multi-year contract, 2026-02-02"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2923/palermo",
+     "publisher": "ESPN (Palermo squad page, season 2026-27)",
+     "readOn": "2026-10-07",
+     "says": "Dennis Johnsen listed"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/4050/cremonese",
+     "publisher": "ESPN (Cremonese squad page, season 2026-27)",
+     "readOn": "2026-10-07",
+     "says": "not listed"
+    }
+   ],
+   "shard": "round1040-review"
   }
  ],
  "removedClubNotModelled": [
@@ -8434,137 +9251,6 @@
    "shard": "spain-portugal"
   },
   {
-   "name": "Álex Sola",
-   "from": "Getafe",
-   "realClub": "Almería",
-   "adjudicatedOn": "2026-10-03",
-   "note": "Born 1999-06-09, the winger. Not in Getafe's 2025-26 or 2026-27 squad on ESPN; plays for Almería in LaLiga Hypermotion (the second tier), shirt 20. The second tier of Spain is not modelled. Not the Getafe forward Álex Sancris.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-hypermotion-rcd-mallorca-ud-almeria-7",
-     "publisher": "LaLiga (match page, Mallorca v Almería, LaLiga Hypermotion matchday 7, 2026-09-27)",
-     "readOn": "2026-10-03",
-     "says": "Álex Sola on the Almería bench, came on in the 79th minute"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/player/_/id/286167/alex-sola",
-     "publisher": "ESPN (player page)",
-     "readOn": "2026-10-03",
-     "says": "Almería, shirt 20, born 1999-06-09, five LaLiga 2 matches from 2026-08-23 to 2026-09-27"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/team/squad/_/id/2922",
-     "publisher": "ESPN (Getafe squad page, season 2026-27)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    }
-   ],
-   "shard": "spain-portugal"
-  },
-  {
-   "name": "Carles Pérez",
-   "from": "Getafe",
-   "realClub": "Girona",
-   "adjudicatedOn": "2026-10-03",
-   "note": "Born 1998-02-16, the winger. Getafe had him in 2024-25; ESPN shows him in the Greek Super League in May 2026 and at Girona in LaLiga Hypermotion (the second tier, after Girona went down) from September 2026, shirt 23. Girona is not in Club Manager's 2026-27 La Liga and the second tier of Spain is not modelled.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-hypermotion-girona-fc-albacete-bp-7",
-     "publisher": "LaLiga (match page, Girona v Albacete, LaLiga Hypermotion matchday 7, 2026-09-25)",
-     "readOn": "2026-10-03",
-     "says": "C. Pérez, shirt 23, in the Girona starting eleven, off in the 84th minute"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/player/_/id/261468/carles-perez",
-     "publisher": "ESPN (player page)",
-     "readOn": "2026-10-03",
-     "says": "Girona, shirt 23, born 1998-02-16, four LaLiga 2 matches from 2026-09-05 to 2026-09-25"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/team/squad/_/id/2922",
-     "publisher": "ESPN (Getafe squad page, season 2026-27)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    }
-   ],
-   "shard": "spain-portugal"
-  },
-  {
-   "name": "Juan Bernat",
-   "from": "Getafe",
-   "realClub": "Eibar",
-   "adjudicatedOn": "2026-10-03",
-   "note": "Born 1993-03-01, the left back. Getafe had him in 2024-25; he starts for Eibar in LaLiga Hypermotion (the second tier) in 2026-27, shirt 24. The second tier of Spain is not modelled.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-hypermotion-sd-eibar-ud-las-palmas-7",
-     "publisher": "LaLiga (match page, Eibar v Las Palmas, LaLiga Hypermotion matchday 7, 2026-09-27)",
-     "readOn": "2026-10-03",
-     "says": "Juan Bernat, shirt 24, in the Eibar starting eleven"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/player/_/id/164194/juan-bernat",
-     "publisher": "ESPN (player page)",
-     "readOn": "2026-10-03",
-     "says": "Eibar, shirt 24, born 1993-03-01, started five LaLiga 2 matches from 2026-08-23 to 2026-09-27"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/team/squad/_/id/2922",
-     "publisher": "ESPN (Getafe squad page, season 2026-27)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    }
-   ],
-   "shard": "spain-portugal"
-  },
-  {
-   "name": "Antoñito Cordero",
-   "from": "Málaga",
-   "realClub": "Cádiz",
-   "adjudicatedOn": "2026-10-03",
-   "note": "Antonio Cordero, born 2006-11-14, the winger. Málaga's number 26 in 2024-25, not in Málaga's 2026-27 squad; plays for Cádiz in LaLiga Hypermotion (the second tier), shirt 16. The second tier of Spain is not modelled.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-hypermotion-cadiz-cf-girona-fc-6",
-     "publisher": "LaLiga (match page, Cádiz v Girona, LaLiga Hypermotion matchday 6, 2026-09-19)",
-     "readOn": "2026-10-03",
-     "says": "16 Antoñito C. on the Cádiz bench, came on at 61 minutes"
-    },
-    {
-     "family": "A",
-     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-ea-sports-malaga-cf-levante-ud-4",
-     "publisher": "LaLiga (match page, Málaga v Levante, matchday 4, 2026-09-06)",
-     "readOn": "2026-10-03",
-     "says": "not in the Málaga eleven or among the substitutes"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/player/_/id/375875/antonio-cordero",
-     "publisher": "ESPN (player page)",
-     "readOn": "2026-10-03",
-     "says": "Cádiz, shirt 16, born 2006-11-14, five LaLiga 2 matches for Cádiz from 2026-08-30 to 2026-09-26"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/team/squad/_/id/99",
-     "publisher": "ESPN (Málaga squad page, season 2026-27)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    }
-   ],
-   "shard": "spain-portugal"
-  },
-  {
    "name": "Damián Pizarro",
    "from": "Udinese",
    "realClub": "Audax Italiano, on loan from Udinese",
@@ -8650,437 +9336,6 @@
    "shard": "italy-france"
   },
   {
-   "name": "Simone Scuffet",
-   "from": "Cagliari",
-   "realClub": "Pisa",
-   "adjudicatedOn": "2026-10-03",
-   "note": "Born 1996-05-31. Sold by Cagliari to Pisa on 2025-07-23, contract to June 2028; Pisa's number 1, played the Coppa Italia tie at Fiorentina on 2026-09-15. Pisa is not modelled. The official voice is the league page that no longer lists him at Cagliari; Pisa's own squad page did not answer.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://www.legaseriea.it/team/cagliari/squad",
-     "publisher": "Lega Serie A (Cagliari squad, current)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    },
-    {
-     "family": "B",
-     "url": "https://us.soccerway.com/player/scuffet-simone/0nQhrI82/transfers",
-     "publisher": "Soccerway",
-     "readOn": "2026-10-03",
-     "says": "Cagliari to Pisa 2025-07-23, born 1996-05-31, contract to 2028-06-30, current club Pisa"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/player/_/id/181784/simone-scuffet",
-     "publisher": "ESPN (player page)",
-     "readOn": "2026-10-03",
-     "says": "Pisa number 1, born 1996-05-31, played 2026-09-15"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/team/squad/_/id/2925/cagliari",
-     "publisher": "ESPN (Cagliari squad page, season 2026-27)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    }
-   ],
-   "shard": "italy-france"
-  },
-  {
-   "name": "Tommaso Augello",
-   "from": "Cagliari",
-   "realClub": "Palermo",
-   "adjudicatedOn": "2026-10-03",
-   "note": "Born 1994-08-30. Left Cagliari on a free and joined Palermo on 2025-07-08, contract to June 2027; Palermo's number 3, with Serie B matches from 2026-08-23 to 2026-09-19. Palermo is not modelled. The official voice is the league page that no longer lists him at Cagliari; Palermo's own squad page renders no names to a reader.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://www.legaseriea.it/team/cagliari/squad",
-     "publisher": "Lega Serie A (Cagliari squad, current)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    },
-    {
-     "family": "B",
-     "url": "https://us.soccerway.com/player/augello-tommaso/pUpsjuw3/transfers",
-     "publisher": "Soccerway",
-     "readOn": "2026-10-03",
-     "says": "Cagliari to Palermo free 2025-07-08, born 1994-08-30, contract to 2027-06-30, current club Palermo"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/player/_/id/260197/tommaso-augello",
-     "publisher": "ESPN (player page)",
-     "readOn": "2026-10-03",
-     "says": "Palermo number 3, born 1994-08-30, played 2026-09-19"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/team/squad/_/id/2925/cagliari",
-     "publisher": "ESPN (Cagliari squad page, season 2026-27)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    }
-   ],
-   "shard": "italy-france"
-  },
-  {
-   "name": "Zito Luvumbo",
-   "from": "Cagliari",
-   "realClub": "Mallorca, on loan from Cagliari",
-   "loan": true,
-   "loanFrom": "Cagliari",
-   "adjudicatedOn": "2026-10-03",
-   "note": "Born 2002-03-09. Loaned by Cagliari to Mallorca on 2026-02-02, and on 2026-07-10 Cagliari announced a new loan to Mallorca to the end of 2026-27, with an option to buy that becomes an obligation on sporting conditions. Mallorca went down from LaLiga in 2026 and is not modelled in the current game. ESPN's two Zito Luvumbo player pages are Angola national team records, but ESPN's 2026-27 Mallorca squad page lists him at 11, aged 24, Angola, which matches his birth date.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://www.legaseriea.it/team/cagliari/squad",
-     "publisher": "Lega Serie A (Cagliari squad, current)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    },
-    {
-     "family": "A",
-     "url": "https://cagliaricalcio.com/news/luvumbo-al-maiorca-cagliaricalcio-seria-liga/",
-     "publisher": "Cagliari Calcio (club announcement, 2026-07-10)",
-     "readOn": "2026-10-03",
-     "says": "Zito Luvumbo joins RCD Mallorca on loan to the end of the 2026/27 season, option to buy that becomes an obligation on sporting conditions"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/team/squad/_/id/84/mallorca",
-     "publisher": "ESPN (Mallorca squad page, season 2026-27)",
-     "readOn": "2026-10-03",
-     "says": "Zito Luvumbo, forward, shirt 11, age 24, Angola, 5 appearances"
-    },
-    {
-     "family": "B",
-     "url": "https://us.soccerway.com/player/luvumbo-zito/QZQ9DtPs/transfers",
-     "publisher": "Soccerway",
-     "readOn": "2026-10-03",
-     "says": "on loan at Mallorca from Cagliari since 2026-02-02, to 2027-06-30, born 2002-03-09"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/team/squad/_/id/2925/cagliari",
-     "publisher": "ESPN (Cagliari squad page, season 2026-27)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    }
-   ],
-   "shard": "italy-france"
-  },
-  {
-   "name": "Alberto Moreno",
-   "from": "Como",
-   "realClub": "Mallorca",
-   "adjudicatedOn": "2026-10-03",
-   "note": "Born 1992-07-05. Left Como when his contract ran out and joined Mallorca on a free on 2026-08-24, contract to June 2027; Mallorca's number 5, played in LALIGA 2 on 2026-09-27. Mallorca went down from LaLiga in 2026 and is not modelled in the current game.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://www.legaseriea.it/team/como/squad",
-     "publisher": "Lega Serie A (Como squad, current)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    },
-    {
-     "family": "B",
-     "url": "https://us.soccerway.com/player/moreno-alberto/pdBI3oS8/transfers",
-     "publisher": "Soccerway",
-     "readOn": "2026-10-03",
-     "says": "Como to Mallorca free 2026-08-24, born 1992-07-05, contract to 2027-06-30, current club Mallorca"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/player/_/id/172998/alberto-moreno",
-     "publisher": "ESPN (player page)",
-     "readOn": "2026-10-03",
-     "says": "Mallorca number 5, born 1992-07-05, played 2026-09-27; last Como match 2026-05-24"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/team/squad/_/id/2572/como",
-     "publisher": "ESPN (Como squad page, season 2026-27)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    }
-   ],
-   "shard": "italy-france"
-  },
-  {
-   "name": "Filippo Distefano",
-   "from": "Frosinone",
-   "realClub": "Empoli",
-   "adjudicatedOn": "2026-10-03",
-   "note": "Born 2003-08-28 (Soccerway spells him Di Stefano). His 2024-25 loan at Frosinone was from Fiorentina; after a loan at Carrarese he was sold by Fiorentina to Empoli on 2026-07-21, contract to June 2029. Empoli's number 20, with Serie B matches from 2026-08-22 to 2026-09-20. Empoli is not modelled.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://www.legaseriea.it/team/frosinone/squad",
-     "publisher": "Lega Serie A (Frosinone squad, current)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    },
-    {
-     "family": "B",
-     "url": "https://us.soccerway.com/player/di-stefano-filippo/YTpHlpak/transfers",
-     "publisher": "Soccerway",
-     "readOn": "2026-10-03",
-     "says": "Fiorentina to Empoli 2026-07-21, born 2003-08-28, contract to 2029-06-30, current club Empoli"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/player/_/id/331072/filippo-distefano",
-     "publisher": "ESPN (player page)",
-     "readOn": "2026-10-03",
-     "says": "Empoli number 20, born 2003-08-28, played 2026-09-20"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/team/squad/_/id/4057/frosinone",
-     "publisher": "ESPN (Frosinone squad page, season 2026-27)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    }
-   ],
-   "shard": "italy-france"
-  },
-  {
-   "name": "Riccardo Marchizza",
-   "from": "Frosinone",
-   "realClub": "Vicenza",
-   "adjudicatedOn": "2026-10-03",
-   "note": "Born 1998-03-26. Left Frosinone when his contract ran out and joined Vicenza on a free on 2026-07-08, contract to June 2028; Vicenza's number 5, with Serie B matches from 2026-08-21 to 2026-09-20. Vicenza is not modelled.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://www.legaseriea.it/team/frosinone/squad",
-     "publisher": "Lega Serie A (Frosinone squad, current)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    },
-    {
-     "family": "B",
-     "url": "https://us.soccerway.com/player/marchizza-riccardo/fL14Xe6b/transfers",
-     "publisher": "Soccerway",
-     "readOn": "2026-10-03",
-     "says": "Frosinone to Vicenza free 2026-07-08, born 1998-03-26, contract to 2028-06-30, current club Vicenza"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/player/_/id/227272/riccardo-marchizza",
-     "publisher": "ESPN (player page)",
-     "readOn": "2026-10-03",
-     "says": "Vicenza number 5, born 1998-03-26, played 2026-09-20; last Frosinone match 2026-03-04"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/team/squad/_/id/4057/frosinone",
-     "publisher": "ESPN (Frosinone squad page, season 2026-27)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    }
-   ],
-   "shard": "italy-france"
-  },
-  {
-   "name": "Frédéric Guilbert",
-   "from": "Lecce",
-   "realClub": "Nantes",
-   "adjudicatedOn": "2026-10-03",
-   "note": "Born 1994-12-24. Left Lecce and joined Nantes on a free on 2026-01-28, contract to June 2028; Nantes's number 24, with Ligue 2 matches from 2026-08-14 to 2026-09-19. Nantes is in Ligue 2 and not modelled.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://www.legaseriea.it/team/lecce/squad",
-     "publisher": "Lega Serie A (Lecce squad, current)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    },
-    {
-     "family": "B",
-     "url": "https://us.soccerway.com/player/guilbert-frederic/6TtQuJeb/transfers",
-     "publisher": "Soccerway",
-     "readOn": "2026-10-03",
-     "says": "Lecce to Nantes free 2026-01-28, born 1994-12-24, contract to 2028-06-30, current club Nantes"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/player/_/id/215709/frederic-guilbert",
-     "publisher": "ESPN (player page)",
-     "readOn": "2026-10-03",
-     "says": "Nantes number 24, born 1994-12-24, played 2026-09-19"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/team/squad/_/id/113/lecce",
-     "publisher": "ESPN (Lecce squad page, season 2026-27)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    }
-   ],
-   "shard": "italy-france"
-  },
-  {
-   "name": "Antonio Candela",
-   "from": "Venezia",
-   "realClub": "Catanzaro, on loan from Spezia",
-   "loan": true,
-   "loanFrom": "Spezia",
-   "adjudicatedOn": "2026-10-03",
-   "note": "Born 2000-04-27. No longer a Venezia player: Soccerway has him on loan at Catanzaro from Spezia since July 2026, to 2027-06-30, after a loan at Empoli in the spring. Catanzaro's number 27, with Serie B matches from 2026-08-21 to 2026-09-19. Neither Catanzaro nor Spezia is modelled.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://www.legaseriea.it/team/venezia/squad",
-     "publisher": "Lega Serie A (Venezia squad, current)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    },
-    {
-     "family": "B",
-     "url": "https://us.soccerway.com/player/candela-antonio/nHot9WLH/transfers",
-     "publisher": "Soccerway",
-     "readOn": "2026-10-03",
-     "says": "on loan at Catanzaro from Spezia from July 2026 to 2027-06-30, born 2000-04-27"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/player/_/id/250668/antonio-candela",
-     "publisher": "ESPN (player page)",
-     "readOn": "2026-10-03",
-     "says": "Catanzaro number 27, born 2000-04-27, played 2026-09-19"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/team/squad/_/id/17530/venezia",
-     "publisher": "ESPN (Venezia squad page, season 2026-27)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    }
-   ],
-   "shard": "italy-france"
-  },
-  {
-   "name": "Gianluca Caprari",
-   "from": "Monza",
-   "realClub": "Padova",
-   "adjudicatedOn": "2026-10-03",
-   "note": "Born 1993-07-30. Moved from Monza to Padova on 2026-01-30, contract to June 2027; Padova's number 10, with Serie B matches from 2026-08-23 to 2026-09-12. Padova is not modelled.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://www.legaseriea.it/team/monza/squad",
-     "publisher": "Lega Serie A (Monza squad, current)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    },
-    {
-     "family": "B",
-     "url": "https://us.soccerway.com/player/caprari-gianluca/hM9I17fh/transfers",
-     "publisher": "Soccerway",
-     "readOn": "2026-10-03",
-     "says": "Monza to Padova 2026-01-30, born 1993-07-30, contract to 2027-06-30, current club Padova"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/player/_/id/156792/gianluca-caprari",
-     "publisher": "ESPN (player page)",
-     "readOn": "2026-10-03",
-     "says": "Padova number 10, born 1993-07-30, played 2026-09-12"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/team/squad/_/id/4007/monza",
-     "publisher": "ESPN (Monza squad page, season 2026-27)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    }
-   ],
-   "shard": "italy-france"
-  },
-  {
-   "name": "Samuele Mulattieri",
-   "from": "Sassuolo",
-   "realClub": "Hellas Verona, on loan from Sassuolo",
-   "loan": true,
-   "loanFrom": "Sassuolo",
-   "adjudicatedOn": "2026-10-03",
-   "note": "Born 2000-10-07. After a 2025-26 loan at Deportivo, Sassuolo loaned him to Hellas Verona on 2026-07-31, to June 2027; Verona's number 19, with Serie B matches from 2026-08-29 to 2026-09-20. Verona is not modelled.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://www.legaseriea.it/team/sassuolo/squad",
-     "publisher": "Lega Serie A (Sassuolo squad, current)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    },
-    {
-     "family": "B",
-     "url": "https://us.soccerway.com/player/mulattieri-samuele/f3tdpb62/transfers",
-     "publisher": "Soccerway",
-     "readOn": "2026-10-03",
-     "says": "loaned to Verona from Sassuolo 2026-07-31 to 2027-06-30, born 2000-10-07"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/player/_/id/271140/samuele-mulattieri",
-     "publisher": "ESPN (player page)",
-     "readOn": "2026-10-03",
-     "says": "Hellas Verona number 19, born 2000-10-07, played 2026-09-20"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/team/squad/_/id/3997/sassuolo",
-     "publisher": "ESPN (Sassuolo squad page, season 2026-27)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    }
-   ],
-   "shard": "italy-france"
-  },
-  {
-   "name": "Yann Karamoh",
-   "from": "Torino",
-   "realClub": "Sampdoria",
-   "adjudicatedOn": "2026-10-03",
-   "note": "Born 1998-07-08. Left Torino on a free for Porto on 2025-09-18, then joined Sampdoria on a free on 2026-09-05, contract to June 2027; Sampdoria's number 14, played in Serie B on 2026-09-13. Sampdoria is not modelled.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://www.legaseriea.it/team/torino/squad",
-     "publisher": "Lega Serie A (Torino squad, current)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    },
-    {
-     "family": "B",
-     "url": "https://us.soccerway.com/player/karamoh-yann/OQYJ3VXT/transfers",
-     "publisher": "Soccerway",
-     "readOn": "2026-10-03",
-     "says": "Torino to Porto free 2025-09-18, Porto to Sampdoria free 2026-09-05, born 1998-07-08, contract to 2027-06-30"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/player/_/id/225555/yann-karamoh",
-     "publisher": "ESPN (player page)",
-     "readOn": "2026-10-03",
-     "says": "Sampdoria number 14, born 1998-07-08, played 2026-09-13"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/team/squad/_/id/239/torino",
-     "publisher": "ESPN (Torino squad page, season 2026-27)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    }
-   ],
-   "shard": "italy-france"
-  },
-  {
    "name": "Farid El Melali",
    "from": "Angers",
    "realClub": "CR Belouizdad",
@@ -9107,44 +9362,6 @@
      "publisher": "Soccerway",
      "readOn": "2026-10-03",
      "says": "Angers to CR Belouizdad free 2025-08-31, born 1997-07-13, contract to 2030-06-30"
-    }
-   ],
-   "shard": "italy-france"
-  },
-  {
-   "name": "Antoine Joujou",
-   "from": "Le Havre",
-   "realClub": "Nantes",
-   "adjudicatedOn": "2026-10-03",
-   "note": "Born 2003-03-12. His Le Havre spell was a loan from Parma; Parma then loaned him to Famalicao and sold him to Nantes on 2026-08-21, contract to June 2029. Nantes's number 7, with Ligue 2 matches from 2026-08-29 to 2026-09-19. Nantes is in Ligue 2 and not modelled.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://hac.football/fr/players?competition=LI1",
-     "publisher": "Le Havre AC (Ligue 1 squad)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    },
-    {
-     "family": "B",
-     "url": "https://us.soccerway.com/player/joujou-antoine/n5pKaQsh/transfers",
-     "publisher": "Soccerway",
-     "readOn": "2026-10-03",
-     "says": "Parma to Nantes 2026-08-21, born 2003-03-12, contract to 2029-06-30"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/player/_/id/357235/antoine-joujou",
-     "publisher": "ESPN (player page)",
-     "readOn": "2026-10-03",
-     "says": "Nantes number 7, born 2003-03-12, played 2026-09-19"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/team/squad/_/id/3236/le-havre-ac",
-     "publisher": "ESPN (Le Havre squad page, season 2026-27)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
     }
    ],
    "shard": "italy-france"
@@ -9328,44 +9545,6 @@
    "shard": "italy-france"
   },
   {
-   "name": "Thierno Baldé",
-   "from": "Troyes",
-   "realClub": "Nancy",
-   "adjudicatedOn": "2026-10-03",
-   "note": "The right back born 2002-06-10, a PSG academy player. Left Troyes on a free and joined Nancy on 2026-08-05, contract to June 2028; Nancy's number 19, played in Ligue 2 on 2026-08-14. Nancy is in Ligue 2 and not modelled.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://www.estac.fr/equipe-premiere/effectif/",
-     "publisher": "ESTAC Troyes (first team squad)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    },
-    {
-     "family": "B",
-     "url": "https://us.soccerway.com/player/balde-thierno/OAOSz9F9/transfers",
-     "publisher": "Soccerway",
-     "readOn": "2026-10-03",
-     "says": "Troyes to Nancy free 2026-08-05, born 2002-06-10, defender, contract to 2028-06-30"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/player/_/id/322891/thierno-balde",
-     "publisher": "ESPN (player page)",
-     "readOn": "2026-10-03",
-     "says": "AS Nancy Lorraine number 19, born 2002-06-10, played 2026-08-14"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/team/squad/_/id/170/troyes",
-     "publisher": "ESPN (Troyes squad page, season 2026-27)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    }
-   ],
-   "shard": "italy-france"
-  },
-  {
    "name": "Osman Bukari",
    "from": "Austin FC",
    "realClub": "Red Star Belgrade (Crvena zvezda)",
@@ -9456,37 +9635,6 @@
      "publisher": "ESPN",
      "readOn": "2026-10-03",
      "says": "Urawa Red Diamonds; last Galaxy appearance 2026-07-26, J1 League appearances for Urawa from 2026-08-23"
-    }
-   ],
-   "shard": "england-mls"
-  },
-  {
-   "name": "Lorenzo Insigne",
-   "from": "Toronto FC",
-   "realClub": "Sampdoria",
-   "adjudicatedOn": "2026-10-03",
-   "note": "Born 1991-06-04 (ESPN). Toronto and Insigne ended his contract by mutual agreement on 2025-07-01; ESPN has him at Pescara in 2025-26 and at Sampdoria in Serie B in 2026-27. Sampdoria's own report of their 2-1 win over Catanzaro on 2026-09-19 names Insigne in the starting eleven and as a scorer. The report gives only the surname, and his brother Roberto is also a winger, so the first name rests on ESPN, whose Sampdoria squad carries one Insigne, Lorenzo, shirt 10. The game models no Serie B.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://www.mlssoccer.com/news/toronto-fc-mutually-part-ways-with-lorenzo-insigne",
-     "publisher": "MLS (mlssoccer.com, 2025-07-01)",
-     "readOn": "2026-10-03",
-     "says": "Toronto FC and Insigne mutually agree to terminate his contract"
-    },
-    {
-     "family": "A",
-     "url": "https://www.sampdoria.it/news/team/2026/09/19/la-samp-rimonta-il-catanzaro-e-trova-la-prima-vittoria/",
-     "publisher": "U.C. Sampdoria (match report, 2026-09-19)",
-     "readOn": "2026-10-03",
-     "says": "Serie BKT 2026/27, Sampdoria 2 Catanzaro 1, goal: Insigne; starting eleven includes Insigne"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/team/squad/_/id/2734",
-     "publisher": "ESPN (Sampdoria squad, season 2026-27)",
-     "readOn": "2026-10-03",
-     "says": "Lorenzo Insigne, shirt 10, forward, born 1991-06-04; Sampdoria appearances 2026-08-29 to 2026-09-19; not on ESPN's Toronto FC 2026 squad"
     }
    ],
    "shard": "england-mls"
@@ -9592,39 +9740,6 @@
    "shard": "england-mls"
   },
   {
-   "name": "Florian Bianchini",
-   "from": "Swansea City",
-   "realClub": "Clermont Foot, on loan from Swansea City",
-   "loan": true,
-   "loanFrom": "Swansea City",
-   "adjudicatedOn": "2026-10-03",
-   "note": "Born 2001-06-25 (ESPN). Swansea list him as out on loan and Clermont list him in their squad; he plays in Ligue 2, which the game does not model. Placed at the club he plays for, the ledger's loanPolicy, so he leaves Swansea's squad.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://www.swanseacity.com/players/149",
-     "publisher": "Swansea City AFC (players page)",
-     "readOn": "2026-10-03",
-     "says": "Out on Loan: Florian Bianchini"
-    },
-    {
-     "family": "A",
-     "url": "https://www.clermontfoot.com/equipes",
-     "publisher": "Clermont Foot 63 (squad page)",
-     "readOn": "2026-10-03",
-     "says": "Attaquant: 7 Florian Bianchini"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/player/_/id/307854/florian-bianchini",
-     "publisher": "ESPN",
-     "readOn": "2026-10-03",
-     "says": "Clermont Foot, born 2001-06-25; Ligue 2 appearances 2026-09-04 to 2026-09-18"
-    }
-   ],
-   "shard": "england-mls"
-  },
-  {
    "name": "Kelechi Iheanacho",
    "from": "Middlesbrough",
    "realClub": "Bursaspor",
@@ -9720,37 +9835,6 @@
      "publisher": "ESPN (player page)",
      "readOn": "2026-10-03",
      "says": "team Lech Poznan, born 2001-06-29, Iran"
-    }
-   ],
-   "shard": "benelux-turkey"
-  },
-  {
-   "name": "Zico Buurmeester",
-   "from": "AZ Alkmaar",
-   "realClub": "Leganés",
-   "adjudicatedOn": "2026-10-03",
-   "note": "Born 2002-06-07, midfielder. Leganés number 10 in LaLiga Hypermotion for 2026-27, seven starts so far; on neither AZ list. Spain's second tier is not modelled.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://www.laliga.com/en-GB/player/zico-buurmeester",
-     "publisher": "LaLiga (player page, season 2026-2027)",
-     "readOn": "2026-10-03",
-     "says": "Club Deportivo Leganés, shirt 10, born 7 June 2002, 7 matches in 2026-27"
-    },
-    {
-     "family": "A",
-     "url": "https://eredivisie.nl/competitie/clubs/az/",
-     "publisher": "Eredivisie (AZ club page)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/player/_/id/306400/zico-buurmeester",
-     "publisher": "ESPN (player page)",
-     "readOn": "2026-10-03",
-     "says": "team Leganés, born 2002-06-07"
     }
    ],
    "shard": "benelux-turkey"
@@ -10116,37 +10200,6 @@
      "publisher": "ESPN (St Johnstone squad page, season 2026-27)",
      "readOn": "2026-10-03",
      "says": "not in the squad"
-    }
-   ],
-   "shard": "rest"
-  },
-  {
-   "name": "Théo Magnin",
-   "from": "Servette",
-   "realClub": "Red Star FC (France, Ligue 2)",
-   "adjudicatedOn": "2026-10-03",
-   "note": "Swiss right back born 2003-08-09. Left Servette on a free for Red Star on 2026-02-01, shirt 2, seven Ligue 2 starts in 2026-27. Ligue 2 is not modelled.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://servettefc.ch/equipe-premiere/effectif/",
-     "publisher": "Servette FC (Effectif page)",
-     "readOn": "2026-10-03",
-     "says": "not in the squad"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/player/_/id/334979/theo-magnin",
-     "publisher": "ESPN (player page)",
-     "readOn": "2026-10-03",
-     "says": "Red Star FC 93, shirt 2, born 2003-08-09, Ligue 2 starts 2026-08-21 to 2026-09-19"
-    },
-    {
-     "family": "B",
-     "url": "https://www.soccerway.com/player/magnin-theo/A9rfNiEq/",
-     "publisher": "Soccerway",
-     "readOn": "2026-10-03",
-     "says": "Servette to Red Star 2026-02-01 free, contract to 2028-06-30, 7 Ligue 2 appearances in 2026/2027"
     }
    ],
    "shard": "rest"
@@ -11415,9 +11468,1409 @@
    "shard": "rest",
    "withheld": true,
    "withheldWhy": "the league's own Al Fayha squad page and ESPN's both leave him out"
+  },
+  {
+   "name": "Giuseppe Panico",
+   "club": "Avellino",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Serie B was mapped, on a 2025 row at Avellino with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population. Round 1040 review, 2026-10-07: ESPN's Avellino 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/4055/us-avellino) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040",
+   "checkedOn": "2026-10-07",
+   "withheld": true,
+   "withheldWhy": "ESPN's Avellino 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Ernesto Starita",
+   "club": "Benevento",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Serie B was mapped, on a 2025 row at Benevento with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population. Round 1040 review, 2026-10-07: ESPN's Benevento 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/4059/benevento) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040",
+   "checkedOn": "2026-10-07",
+   "withheld": true,
+   "withheldWhy": "ESPN's Benevento 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Nicolò Buso",
+   "club": "Catanzaro",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Serie B was mapped, on a 2025 row at Catanzaro with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Tommaso Biasci",
+   "club": "Catanzaro",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Serie B was mapped, on a 2025 row at Catanzaro with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population. Round 1040 review, 2026-10-07: ESPN's Catanzaro 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/3257/catanzaro) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040",
+   "checkedOn": "2026-10-07",
+   "withheld": true,
+   "withheldWhy": "ESPN's Catanzaro 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Emanuele Adamo",
+   "club": "Cesena",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Serie B was mapped, on his 2025 row at Cesena, but the table's own 2026 row puts him at Spezia Calcio, a club the game does not model. Not yet read on the web, so he is withheld from every squad until two source families say where he is.",
+   "shard": "round1040",
+   "withheld": true,
+   "withheldWhy": "the table's 2026 row puts him at Spezia Calcio, which the game does not model"
+  },
+  {
+   "name": "Andrea Fulignati",
+   "club": "Cremonese",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Serie B was mapped, on a 2025 row at Cremonese with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Sebastiano Esposito",
+   "club": "Empoli",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Serie B was mapped, on a 2025 row at Empoli with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population. Round 1040 review, 2026-10-07: ESPN's Empoli 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/2574/empoli) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040",
+   "checkedOn": "2026-10-07",
+   "withheld": true,
+   "withheldWhy": "ESPN's Empoli 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Mattia Viti",
+   "club": "Empoli",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Serie B was mapped, on a 2025 row at Empoli with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population. Round 1040 review, 2026-10-07: ESPN's Empoli 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/2574/empoli) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040",
+   "checkedOn": "2026-10-07",
+   "withheld": true,
+   "withheldWhy": "ESPN's Empoli 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Youssef Maleh",
+   "club": "Empoli",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Serie B was mapped, on a 2025 row at Empoli with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population. Round 1040 review, 2026-10-07: ESPN's Empoli 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/2574/empoli) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040",
+   "checkedOn": "2026-10-07",
+   "withheld": true,
+   "withheldWhy": "ESPN's Empoli 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Davide Zappella",
+   "club": "Entella",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Serie B was mapped, on his 2025 row at Entella, but the table's own 2026 row puts him at Guidonia Montecelio 1937 FC, a club the game does not model. Not yet read on the web, so he is withheld from every squad until two source families say where he is.",
+   "shard": "round1040",
+   "withheld": true,
+   "withheldWhy": "the table's 2026 row puts him at Guidonia Montecelio 1937 FC, which the game does not model"
+  },
+  {
+   "name": "Lorenzo Sgarbi",
+   "club": "Juve Stabia",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Serie B was mapped, on a 2025 row at Juve Stabia with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population. Round 1040 review, 2026-10-07: ESPN's Juve Stabia 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/3975/juve-stabia) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040",
+   "checkedOn": "2026-10-07",
+   "withheld": true,
+   "withheldWhy": "ESPN's Juve Stabia 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Enej Jelenic",
+   "club": "Padova",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Serie B was mapped, on his 2025 row at Padova, but the table's own 2026 row puts him at FC Koper, a club the game does not model. Not yet read on the web, so he is withheld from every squad until two source families say where he is.",
+   "shard": "round1040",
+   "withheld": true,
+   "withheldWhy": "the table's 2026 row puts him at FC Koper, which the game does not model"
+  },
+  {
+   "name": "Olimpiu Moruțan",
+   "club": "Pisa",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Serie B was mapped, on his 2025 row at Pisa, but the table's own 2026 row puts him at FC Rapid 1923, a club the game does not model. Not yet read on the web, so he is withheld from every squad until two source families say where he is.",
+   "shard": "round1040",
+   "withheld": true,
+   "withheldWhy": "the table's 2026 row puts him at FC Rapid 1923, which the game does not model"
+  },
+  {
+   "name": "Leonardo Sernicola",
+   "club": "Pisa",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Serie B was mapped, on a 2025 row at Pisa with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population. Round 1040 review, 2026-10-07: ESPN's Pisa 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/3956/pisa) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040",
+   "checkedOn": "2026-10-07",
+   "withheld": true,
+   "withheldWhy": "ESPN's Pisa 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Amin Sarr",
+   "club": "Verona",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Serie B was mapped, on a 2025 row at Verona with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Nicola Rauti",
+   "club": "Vicenza",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Serie B was mapped, on a 2025 row at Vicenza with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Teddy Averlant",
+   "club": "Boulogne",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Ligue 2 was mapped, on his 2025 row at Boulogne, but the table's own 2026 row puts him at Amiens SC, a club the game does not model. Not yet read on the web, so he is withheld from every squad until two source families say where he is.",
+   "shard": "round1040",
+   "withheld": true,
+   "withheldWhy": "the table's 2026 row puts him at Amiens SC, which the game does not model"
+  },
+  {
+   "name": "Maxence Rivera",
+   "club": "Dunkerque",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Ligue 2 was mapped, on a 2025 row at Dunkerque with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population. Round 1040 review, 2026-10-07: ESPN's Dunkerque 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/7732/dunkerque) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040",
+   "checkedOn": "2026-10-07",
+   "withheld": true,
+   "withheldWhy": "ESPN's Dunkerque 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Thibaut Vargas",
+   "club": "Laval",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Ligue 2 was mapped, on a 2025 row at Laval with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population. Round 1040 review, 2026-10-07: ESPN's Laval 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/3266/stade-laval) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040",
+   "checkedOn": "2026-10-07",
+   "withheld": true,
+   "withheldWhy": "ESPN's Laval 2026-27 squad page does not list him"
+  },
+  {
+   "name": "William Kokolo",
+   "club": "Laval",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Ligue 2 was mapped, on his 2025 row at Laval, but the table's own 2026 row puts him at Swindon Town, a club the game does not model. Not yet read on the web, so he is withheld from every squad until two source families say where he is.",
+   "shard": "round1040",
+   "withheld": true,
+   "withheldWhy": "the table's 2026 row puts him at Swindon Town, which the game does not model"
+  },
+  {
+   "name": "Cheikh Sabaly",
+   "club": "Metz",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Ligue 2 was mapped, on a 2025 row at Metz with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population. Round 1040 review, 2026-10-07: ESPN's Metz 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/177/metz) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040",
+   "checkedOn": "2026-10-07",
+   "withheld": true,
+   "withheldWhy": "ESPN's Metz 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Becir Omeragic",
+   "club": "Montpellier",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Ligue 2 was mapped, on a 2025 row at Montpellier with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Khalil Fayad",
+   "club": "Montpellier",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Ligue 2 was mapped, on a 2025 row at Montpellier with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Téji Savanier",
+   "club": "Montpellier",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Ligue 2 was mapped, on a 2025 row at Montpellier with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Falaye Sacko",
+   "club": "Montpellier",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Ligue 2 was mapped, on a 2025 row at Montpellier with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Issiaga Sylla",
+   "club": "Montpellier",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Ligue 2 was mapped, on a 2025 row at Montpellier with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Faitout Maouassa",
+   "club": "Nancy",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Ligue 2 was mapped, on a 2025 row at Nancy with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population. Round 1040 review, 2026-10-07: ESPN's Nancy 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/3267/as-nancy-lorraine) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040",
+   "checkedOn": "2026-10-07",
+   "withheld": true,
+   "withheldWhy": "ESPN's Nancy 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Alexandre Cropanese",
+   "club": "Nancy",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Ligue 2 was mapped, on a 2025 row at Nancy with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population. Round 1040 review, 2026-10-07: ESPN's Nancy 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/3267/as-nancy-lorraine) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040",
+   "checkedOn": "2026-10-07",
+   "withheld": true,
+   "withheldWhy": "ESPN's Nancy 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Douglas Augusto",
+   "club": "Nantes",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Ligue 2 was mapped, on his 2025 row at Nantes, but the table's own 2026 row puts him at FC Krasnodar, a club the game does not model. Not yet read on the web, so he is withheld from every squad until two source families say where he is.",
+   "shard": "round1040",
+   "withheld": true,
+   "withheldWhy": "the table's 2026 row puts him at FC Krasnodar, which the game does not model"
+  },
+  {
+   "name": "Saïdou Sow",
+   "club": "Nantes",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Ligue 2 was mapped, on a 2025 row at Nantes with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population. Round 1040 review, 2026-10-07: ESPN's Nantes 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/165/nantes) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040",
+   "checkedOn": "2026-10-07",
+   "withheld": true,
+   "withheldWhy": "ESPN's Nantes 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Fabien Centonze",
+   "club": "Nantes",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Ligue 2 was mapped, on a 2025 row at Nantes with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Anthony Lopes",
+   "club": "Nantes",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Ligue 2 was mapped, on a 2025 row at Nantes with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Joseph Okumu",
+   "club": "Reims",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Ligue 2 was mapped, on a 2025 row at Reims with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Teddy Teuma",
+   "club": "Reims",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Ligue 2 was mapped, on a 2025 row at Reims with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Yaya Fofana",
+   "club": "Reims",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Ligue 2 was mapped, on a 2025 row at Reims with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Yvann Maçon",
+   "club": "Saint-Étienne",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Ligue 2 was mapped, on a 2025 row at Saint-Étienne with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Lucas Robertone",
+   "club": "Almería",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Almería with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population. Round 1040 review, 2026-10-07: ESPN's Almería 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/6832/almeria) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040",
+   "checkedOn": "2026-10-07",
+   "withheld": true,
+   "withheldWhy": "ESPN's Almería 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Álex Centelles",
+   "club": "Almería",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Almería with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population. Round 1040 review, 2026-10-07: ESPN's Almería 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/6832/almeria) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040",
+   "checkedOn": "2026-10-07",
+   "withheld": true,
+   "withheldWhy": "ESPN's Almería 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Anderson Arroyo",
+   "club": "Burgos",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on his 2025 row at Burgos, but the table's own 2026 row puts him at Rubin Kazan, a club the game does not model. Not yet read on the web, so he is withheld from every squad until two source families say where he is.",
+   "shard": "round1040",
+   "withheld": true,
+   "withheldWhy": "the table's 2026 row puts him at Rubin Kazan, which the game does not model"
+  },
+  {
+   "name": "Pipa",
+   "club": "Burgos",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Burgos with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population. Round 1040 review, 2026-10-07: ESPN's Burgos 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/12597/burgos) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040",
+   "checkedOn": "2026-10-07",
+   "withheld": true,
+   "withheldWhy": "ESPN's Burgos 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Dani Aquino",
+   "club": "Ceuta",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Ceuta with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population. Round 1040 review, 2026-10-07: ESPN's Ceuta 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/5404/ceuta) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040",
+   "checkedOn": "2026-10-07",
+   "withheld": true,
+   "withheldWhy": "ESPN's Ceuta 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Manu Vallejo",
+   "club": "Ceuta",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Ceuta with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population. Round 1040 review, 2026-10-07: ESPN's Ceuta 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/5404/ceuta) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040",
+   "checkedOn": "2026-10-07",
+   "withheld": true,
+   "withheldWhy": "ESPN's Ceuta 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Javi Ontiveros",
+   "club": "Cádiz",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Cádiz with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Abel Ruiz",
+   "club": "Girona",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Girona with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Arnaut Danjuma",
+   "club": "Girona",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Girona with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population. Round 1040 review, 2026-10-07: ESPN's Girona 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/9812/girona) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040",
+   "checkedOn": "2026-10-07",
+   "withheld": true,
+   "withheldWhy": "ESPN's Girona 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Donny van de Beek",
+   "club": "Girona",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Girona with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Carlos Neva",
+   "club": "Granada",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Granada with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population. Round 1040 review, 2026-10-07: ESPN's Granada 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/3747/granada) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040",
+   "checkedOn": "2026-10-07",
+   "withheld": true,
+   "withheldWhy": "ESPN's Granada 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Luca Zidane",
+   "club": "Granada",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Granada with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population. Round 1040 review, 2026-10-07: ESPN's Granada 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/3747/granada) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040",
+   "checkedOn": "2026-10-07",
+   "withheld": true,
+   "withheldWhy": "ESPN's Granada 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Scott McKenna",
+   "club": "Las Palmas",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Las Palmas with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population. Round 1040 review, 2026-10-07: ESPN's Las Palmas 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/98/las-palmas) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040",
+   "checkedOn": "2026-10-07",
+   "withheld": true,
+   "withheldWhy": "ESPN's Las Palmas 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Marvin Park",
+   "club": "Las Palmas",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Las Palmas with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Juan Cruz",
+   "club": "Leganés",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Leganés with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population. Round 1040 review, 2026-10-07: ESPN's Leganés 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/17534/leganes) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040",
+   "checkedOn": "2026-10-07",
+   "withheld": true,
+   "withheldWhy": "ESPN's Leganés 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Dani Raba",
+   "club": "Leganés",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Leganés with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population. Round 1040 review, 2026-10-07: ESPN's Leganés 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/17534/leganes) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040",
+   "checkedOn": "2026-10-07",
+   "withheld": true,
+   "withheldWhy": "ESPN's Leganés 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Enric Franquesa",
+   "club": "Leganés",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Leganés with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Juan Soriano",
+   "club": "Leganés",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Leganés with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population. Round 1040 review, 2026-10-07: ESPN's Leganés 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/17534/leganes) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040",
+   "checkedOn": "2026-10-07",
+   "withheld": true,
+   "withheldWhy": "ESPN's Leganés 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Haissem Hassan",
+   "club": "Real Oviedo",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Real Oviedo with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population. Round 1040 review, 2026-10-07: ESPN's Real Oviedo 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/92/real-oviedo) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040",
+   "checkedOn": "2026-10-07",
+   "withheld": true,
+   "withheldWhy": "ESPN's Real Oviedo 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Miguelete",
+   "club": "Sabadell",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Sabadell with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population. Round 1040 review, 2026-10-07: ESPN's Sabadell 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/11487/cd-sabadell) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040",
+   "checkedOn": "2026-10-07",
+   "withheld": true,
+   "withheldWhy": "ESPN's Sabadell 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Álex Oyón",
+   "club": "Sporting Gijón",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Sporting Gijón with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population. Round 1040 review, 2026-10-07: ESPN's Sporting Gijón 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/3788/sporting-gijon) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040",
+   "checkedOn": "2026-10-07",
+   "withheld": true,
+   "withheldWhy": "ESPN's Sporting Gijón 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Rubén Yáñez",
+   "club": "Sporting Gijón",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Sporting Gijón with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Luis Pérez",
+   "club": "Valladolid",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when the Segunda División was mapped, on a 2025 row at Valladolid with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population. Round 1040 review, 2026-10-07: ESPN's Valladolid 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/95/real-valladolid) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040",
+   "checkedOn": "2026-10-07",
+   "withheld": true,
+   "withheldWhy": "ESPN's Valladolid 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Warren Bondo",
+   "club": "Cremonese",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Cremonese from the table's 2026 row, which moved him out of another squad when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Cremonese 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/4050/cremonese) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Cremonese 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Filippo Terracciano",
+   "club": "Cremonese",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Cremonese from the table's 2026 row, which moved him out of another squad when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Cremonese 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/4050/cremonese) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Cremonese 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Faris Moumbagna",
+   "club": "Cremonese",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Cremonese from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Cremonese 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/4050/cremonese) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Cremonese 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Romano Floriani Mussolini",
+   "club": "Cremonese",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Cremonese from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Cremonese 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/4050/cremonese) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Cremonese 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Gift Orban",
+   "club": "Verona",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Verona from the table's 2026 row, which moved him out of another squad when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Verona 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/119/hellas-verona) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Verona 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Victor Nelsson",
+   "club": "Verona",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Verona from the table's 2026 row, which moved him out of another squad when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Verona 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/119/hellas-verona) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Verona 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Rúben Vinagre",
+   "club": "Verona",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Verona from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Verona 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/119/hellas-verona) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Verona 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Darko Lazović",
+   "club": "Verona",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Verona from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Verona 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/119/hellas-verona) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Verona 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Pol Lirola",
+   "club": "Verona",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Verona from the table's 2026 row, which moved him out of another squad when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Verona 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/119/hellas-verona) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Verona 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Rafiu Durosinmi",
+   "club": "Pisa",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Pisa from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Pisa 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/3956/pisa) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Pisa 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Calvin Stengs",
+   "club": "Pisa",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Pisa from the table's 2026 row, which moved him out of another squad when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Pisa 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/3956/pisa) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Pisa 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Lorran",
+   "club": "Pisa",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Pisa from the table's 2026 row, which moved him out of another squad when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Pisa 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/3956/pisa) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Pisa 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Henrik Meister",
+   "club": "Pisa",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Pisa from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Pisa 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/3956/pisa) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Pisa 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Adrian Semper",
+   "club": "Pisa",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Pisa from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Pisa 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/3956/pisa) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Pisa 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Juan Cuadrado",
+   "club": "Pisa",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Pisa from the table's 2026 row, which moved him out of another squad when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Pisa 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/3956/pisa) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Pisa 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Simone Zanon",
+   "club": "Carrarese",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Carrarese from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Carrarese 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/3988/carrarese) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Carrarese 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Devid Eugene Bouah",
+   "club": "Carrarese",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Carrarese from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Carrarese 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/3988/carrarese) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Carrarese 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Manuel Cicconi",
+   "club": "Carrarese",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Carrarese from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Carrarese 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/3988/carrarese) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Carrarese 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Tommaso Berti",
+   "club": "Cesena",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Cesena from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Cesena 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/3337/cesena) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Cesena 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Salvatore Elia",
+   "club": "Empoli",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Empoli from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Empoli 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/2574/empoli) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Empoli 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Antonio Boccadamo",
+   "club": "Entella",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Entella from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Entella 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/11137/virtus-entella) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Entella 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Salim Diakité",
+   "club": "Juve Stabia",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Juve Stabia from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Juve Stabia 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/3975/juve-stabia) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Juve Stabia 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Junior Ligue",
+   "club": "Mantova",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Mantova from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Mantova 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/3991/mantova) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Mantova 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Gady Beyuku",
+   "club": "Modena",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Modena from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Modena 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/2573/modena) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Modena 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Mattia Fortin",
+   "club": "Padova",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Padova from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Padova 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/3952/padova) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Padova 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Rui Modesto",
+   "club": "Palermo",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Palermo from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Palermo 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/2923/palermo) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Palermo 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Tommaso Martinelli",
+   "club": "Sampdoria",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Sampdoria from the table's 2026 row, which moved him out of another squad when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Sampdoria 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/2734/sampdoria) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Sampdoria 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Gaëtan Coucke",
+   "club": "Sampdoria",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Sampdoria from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Sampdoria 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/2734/sampdoria) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Sampdoria 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Matteo Rover",
+   "club": "Südtirol",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Südtirol from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Südtirol 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/11139/sudtirol) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Südtirol 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Alessio Tribuzzi",
+   "club": "Vicenza",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Vicenza from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Vicenza 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/120/vicenza) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Vicenza 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Jean Freddi Greco",
+   "club": "Vicenza",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Vicenza from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Vicenza 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/120/vicenza) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Vicenza 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Edoardo Masciangelo",
+   "club": "Benevento",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Benevento from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Benevento 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/4059/benevento) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Benevento 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Karim Zedadka",
+   "club": "Ascoli",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Ascoli from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Ascoli 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/3346/ascoli) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Ascoli 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Chico Lamba",
+   "club": "Saint-Étienne",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Saint-Étienne from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Saint-Étienne 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/178/saint-etienne) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Saint-Étienne 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Tamar Svetlin",
+   "club": "Saint-Étienne",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Saint-Étienne from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Saint-Étienne 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/178/saint-etienne) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Saint-Étienne 2026-27 squad page does not list him"
+  },
+  {
+   "name": "João Ferreira",
+   "club": "Saint-Étienne",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Saint-Étienne from the table's 2026 row, which moved him out of another squad when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Saint-Étienne 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/178/saint-etienne) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Saint-Étienne 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Ebenezer Annan",
+   "club": "Saint-Étienne",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Saint-Étienne from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Saint-Étienne 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/178/saint-etienne) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Saint-Étienne 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Dembo Sylla",
+   "club": "Red Star FC",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Red Star FC from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Red Star FC 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/11884/red-star-fc-93) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Red Star FC 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Patrick Zabi",
+   "club": "Reims",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Reims from the table's 2026 row when Ligue 2 was mapped. ESPN's Reims 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/3243/stade-de-reims) lists a 20 year old midfielder Zabi Gueu, number 86, but Connectionivoirienne reported on 2026-02-04 (https://connectionivoirienne.net/2026/02/04/mercato-achete-a-100-000-euros-gueu-patrick-zabi-quitte-reims-pour-le-paris-fc-contre-25-millions-deuros/) that he leaves Reims for Paris FC that summer. The sources disagree, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "the sources disagree: ESPN's Reims 2026-27 squad lists a Zabi Gueu, but a February 2026 report has him joining Paris FC that summer"
+  },
+  {
+   "name": "Martial Tia",
+   "club": "Reims",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Reims from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Reims 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/3243/stade-de-reims) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Reims 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Théo Leoni",
+   "club": "Reims",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Reims from the table's 2026 row, which moved him out of another squad when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Reims 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/3243/stade-de-reims) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Reims 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Yassine Benhattab",
+   "club": "Reims",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Reims from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Reims 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/3243/stade-de-reims) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Reims 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Simon Ngapandouetnbu",
+   "club": "Montpellier",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Montpellier from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Montpellier 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/274/montpellier) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Montpellier 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Giovani Versini",
+   "club": "Pau",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Pau from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Pau 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/10678/pau) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Pau 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Joseph Kalulu",
+   "club": "Pau",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Pau from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Pau 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/10678/pau) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Pau 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Noah Raveyre",
+   "club": "Pau",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Pau from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Pau 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/10678/pau) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Pau 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Alpha Sissoko",
+   "club": "Guingamp",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Guingamp from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Guingamp 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/171/guingamp) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Guingamp 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Maxime Barthelmé",
+   "club": "Guingamp",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Guingamp from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Guingamp 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/171/guingamp) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Guingamp 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Antoine Sekongo",
+   "club": "Dunkerque",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Dunkerque from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Dunkerque 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/7732/dunkerque) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Dunkerque 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Aristide Zossou",
+   "club": "Dunkerque",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Dunkerque from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Dunkerque 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/7732/dunkerque) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Dunkerque 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Mathys Niflore",
+   "club": "Dunkerque",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Dunkerque from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Dunkerque 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/7732/dunkerque) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Dunkerque 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Alec Georgen",
+   "club": "Dunkerque",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Dunkerque from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Dunkerque 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/7732/dunkerque) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Dunkerque 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Geoffrey Kondo",
+   "club": "Dunkerque",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Dunkerque from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Dunkerque 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/7732/dunkerque) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Dunkerque 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Mamadou Diop",
+   "club": "Grenoble",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Grenoble from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Grenoble 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/6994/grenoble) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Grenoble 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Alan Virginius",
+   "club": "Clermont",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Clermont from the table's 2026 row, which moved him out of another squad when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Clermont 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/3171/clermont-foot) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Clermont 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Cheick Oumar Konaté",
+   "club": "Clermont",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Clermont from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Clermont 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/3171/clermont-foot) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Clermont 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Christ-Owen Kouassi",
+   "club": "Laval",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Laval from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Laval 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/3266/stade-laval) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Laval 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Javi López",
+   "club": "Real Oviedo",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Real Oviedo from the table's 2026 row, which moved him out of another squad when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Real Oviedo 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/92/real-oviedo) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Real Oviedo 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Federico Viñas",
+   "club": "Real Oviedo",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Real Oviedo from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Real Oviedo 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/92/real-oviedo) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Real Oviedo 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Thiago Borbas",
+   "club": "Real Oviedo",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Real Oviedo from the table's 2026 row, which moved him out of another squad when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Real Oviedo 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/92/real-oviedo) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Real Oviedo 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Horațiu Moldovan",
+   "club": "Real Oviedo",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Real Oviedo from the table's 2026 row, which moved him out of another squad when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Real Oviedo 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/92/real-oviedo) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Real Oviedo 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Luka Ilic",
+   "club": "Real Oviedo",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Real Oviedo from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Real Oviedo 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/92/real-oviedo) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Real Oviedo 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Viktor Tsygankov",
+   "club": "Girona",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Girona from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Girona 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/9812/girona) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Girona 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Azzedine Ounahi",
+   "club": "Girona",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Girona from the table's 2026 row, which moved him out of another squad when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Girona 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/9812/girona) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Girona 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Jan Virgili",
+   "club": "Mallorca",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Mallorca from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Mallorca 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/84/mallorca) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Mallorca 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Vedat Muriqi",
+   "club": "Mallorca",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Mallorca from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Mallorca 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/84/mallorca) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Mallorca 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Mateo Joseph",
+   "club": "Mallorca",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Mallorca from the table's 2026 row, which moved him out of another squad when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Mallorca 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/84/mallorca) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Mallorca 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Mateu Morey",
+   "club": "Mallorca",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Mallorca from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Mallorca 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/84/mallorca) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Mallorca 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Takuma Asano",
+   "club": "Mallorca",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Mallorca from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Mallorca 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/84/mallorca) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Mallorca 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Álex Calatrava",
+   "club": "Castellón",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Castellón from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Castellón 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/4438/castellon) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Castellón 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Brian Cipenga",
+   "club": "Castellón",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Castellón from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Castellón 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/4438/castellon) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Castellón 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Souleymane Faye",
+   "club": "Granada",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Granada from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Granada 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/3747/granada) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Granada 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Mika Mármol",
+   "club": "Las Palmas",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Las Palmas from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Las Palmas 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/98/las-palmas) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Las Palmas 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Dinko Horkas",
+   "club": "Las Palmas",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Las Palmas from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Las Palmas 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/98/las-palmas) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Las Palmas 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Nicolás Benedetti",
+   "club": "Las Palmas",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Las Palmas from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Las Palmas 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/98/las-palmas) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Las Palmas 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Seydouba Cissé",
+   "club": "Leganés",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Leganés from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Leganés 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/17534/leganes) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Leganés 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Victor Aznar",
+   "club": "Cádiz",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Cádiz from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Cádiz 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/3842/cadiz) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Cádiz 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Áron Yaakobishvili",
+   "club": "FC Andorra",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at FC Andorra from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's FC Andorra 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/20179/fc-andorra) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's FC Andorra 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Min-su Kim",
+   "club": "FC Andorra",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at FC Andorra from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's FC Andorra 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/20179/fc-andorra) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's FC Andorra 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Jon Morcillo",
+   "club": "Albacete",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: baked at Albacete from the table's 2026 row when the club was mapped. The table's 2026 row is last season's club, and no summer window research covers clubs the game did not model. ESPN's Albacete 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/2737/albacete) does not list him, so he is withheld until two families say where he is.",
+   "shard": "round1040-review",
+   "withheld": true,
+   "withheldWhy": "ESPN's Albacete 2026-27 squad page does not list him"
+  },
+  {
+   "name": "Filippo Missori",
+   "club": "Avellino",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: moved out of another squad on the table's own 2026 row when Avellino's league was mapped (the ledger's populationRound1040 note). ESPN's Avellino 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/4055/us-avellino) lists him; that is one family, so he ships at Avellino as pending until a second confirms it.",
+   "shard": "round1040-review"
+  },
+  {
+   "name": "Francesco Zampano",
+   "club": "Modena",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: moved out of another squad on the table's own 2026 row when Modena's league was mapped (the ledger's populationRound1040 note). ESPN's Modena 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/2573/modena) lists him; that is one family, so he ships at Modena as pending until a second confirms it.",
+   "shard": "round1040-review"
+  },
+  {
+   "name": "Joel Pohjanpalo",
+   "club": "Palermo",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: moved out of another squad on the table's own 2026 row when Palermo's league was mapped (the ledger's populationRound1040 note). ESPN's Palermo 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/2923/palermo) lists him; that is one family, so he ships at Palermo as pending until a second confirms it.",
+   "shard": "round1040-review"
+  },
+  {
+   "name": "İsak Vural",
+   "club": "Pisa",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: moved out of another squad on the table's own 2026 row when Pisa's league was mapped (the ledger's populationRound1040 note). ESPN's Pisa 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/3956/pisa) lists him; that is one family, so he ships at Pisa as pending until a second confirms it.",
+   "shard": "round1040-review"
+  },
+  {
+   "name": "Antoine Bernede",
+   "club": "Verona",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: moved out of another squad on the table's own 2026 row when Verona's league was mapped (the ledger's populationRound1040 note). ESPN's Verona 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/119/hellas-verona) lists him; that is one family, so he ships at Verona as pending until a second confirms it.",
+   "shard": "round1040-review"
+  },
+  {
+   "name": "Deiver Machado",
+   "club": "Nantes",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: moved out of another squad on the table's own 2026 row when Nantes's league was mapped (the ledger's populationRound1040 note). ESPN's Nantes 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/165/nantes) lists him; that is one family, so he ships at Nantes as pending until a second confirms it.",
+   "shard": "round1040-review"
+  },
+  {
+   "name": "Fran Beltrán",
+   "club": "Girona",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: moved out of another squad on the table's own 2026 row when Girona's league was mapped (the ledger's populationRound1040 note). ESPN's Girona 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/9812/girona) lists him; that is one family, so he ships at Girona as pending until a second confirms it.",
+   "shard": "round1040-review"
+  },
+  {
+   "name": "Álex Moreno",
+   "club": "Girona",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: moved out of another squad on the table's own 2026 row when Girona's league was mapped (the ledger's populationRound1040 note). ESPN's Girona 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/9812/girona) lists him; that is one family, so he ships at Girona as pending until a second confirms it.",
+   "shard": "round1040-review"
+  },
+  {
+   "name": "Pablo Torre",
+   "club": "Mallorca",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: moved out of another squad on the table's own 2026 row when Mallorca's league was mapped (the ledger's populationRound1040 note). ESPN's Mallorca 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/84/mallorca) lists him; that is one family, so he ships at Mallorca as pending until a second confirms it.",
+   "shard": "round1040-review"
+  },
+  {
+   "name": "Julien Ponceau",
+   "club": "Valladolid",
+   "addedOn": "2026-10-07",
+   "checkedOn": "2026-10-07",
+   "note": "Round 1040 review, 2026-10-07: moved out of another squad on the table's own 2026 row when Valladolid's league was mapped (the ledger's populationRound1040 note). ESPN's Valladolid 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/95/real-valladolid) lists him; that is one family, so he ships at Valladolid as pending until a second confirms it.",
+   "shard": "round1040-review"
   }
  ],
  "adjudicatorWeb2026_10_02": "Web adjudication, 2026-10-02, for the twenty Brazilian rows Round 876 added to pending, after a review found two of them false (Weverton at Grêmio since January, Júnior Alonso at Atlanta United since July). Read with WebFetch and WebSearch only. Family A is the club's own site where it could be reached; family B is independent press and ESPN's 2026-27 squad pages, read after the Brazilian window shut on 2026-09-11. A row left pending only where two publishers agreed on the club. Nineteen of the twenty were settled: ten at a new club (nine moves plus Antonio Sanabria, below), three at clubs the game does not model, seven confirmed where they were. Pedro Raul stays pending with what the check found. The same pass found Antonio Sanabria, held out as removedClubNotModelled at Cremonese, signed for Internacional on 2026-08-20, so he moves to movedTo now that Internacional are modelled.",
  "adjudicatorWeb2026_10_02_ligamx": "Web adjudication, 2026-10-02, for the twenty nine Liga MX rows Round 883 added to pending. Read with WebFetch and WebSearch only. Family A is Liga MX's own Apertura 2026 squad pages (ligamx.net) or the club's own site; family B is independent press, ESPN's 2026-27 squad pages, Soccerway and FotMob, read after the Liga MX window. All twenty nine settled: twelve confirmed at their club, seven at another modelled Mexican club (two on loan), ten at a club the game does not model. A name absent from one squad page alone was never enough to move or drop anybody.",
- "adjudicatorShards2026_10": "Web adjudication of every row still pending on 2026-10-03, in six shards read 2026-10-03 to 2026-10-05 (Rounds 930 to 935: Germany; Spain and Portugal; Italy and France; England and MLS; Belgium, the Netherlands and Turkey; the rest), folded by Round 1015 through scripts/foldRosterAdjudication.mjs. Each folded row carries shard, the file under scripts/data/rosterAdjudication2026-10/ that holds its evidence and that shard's notes for the fold. A settled row has two sources from two families (A, the club's or the league's own page; B, an independent publisher on another host). A row the shard left pending, because its families disagreed or no official page could be read, stays pending with the shard's note. Where that note says a 2026-27 squad list leaves him out of the club recorded here, or its sources disagree on that club, the row also carries withheld and withheldWhy, and the bake keeps him out of every squad until two families say where he is; the other pending rows still ship at the club recorded here. Not folded: rest.json's heldOnTwoPublishers (Andreas Hansen confirmed at FC Nordsjælland, Topi Keskinen moved to OB), which the shard keeps pending for want of an official page."
+ "adjudicatorShards2026_10": "Web adjudication of every row still pending on 2026-10-03, in six shards read 2026-10-03 to 2026-10-05 (Rounds 930 to 935: Germany; Spain and Portugal; Italy and France; England and MLS; Belgium, the Netherlands and Turkey; the rest), folded by Round 1015 through scripts/foldRosterAdjudication.mjs. Each folded row carries shard, the file under scripts/data/rosterAdjudication2026-10/ that holds its evidence and that shard's notes for the fold. A settled row has two sources from two families (A, the club's or the league's own page; B, an independent publisher on another host). A row the shard left pending, because its families disagreed or no official page could be read, stays pending with the shard's note. Where that note says a 2026-27 squad list leaves him out of the club recorded here, or its sources disagree on that club, the row also carries withheld and withheldWhy, and the bake keeps him out of every squad until two families say where he is; the other pending rows still ship at the club recorded here. Not folded: rest.json's heldOnTwoPublishers (Andreas Hansen confirmed at FC Nordsjælland, Topi Keskinen moved to OB), which the shard keeps pending for want of an official page.",
+ "populationRound1040": "Round 1040 mapped Serie B (nineteen table spellings, Arezzo having none) and re-baked from the 2026-10-02 dump. Nine rows left removedClubNotModelled for movedTo on their existing sources, since their real club is modelled now (Scuffet to Pisa, Augello to Palermo, Distefano to Empoli, Marchizza to Vicenza, Candela to Catanzaro, Caprari to Padova, Mulattieri to Verona, Karamoh and Insigne to Sampdoria). Sixteen players came in on a 2025 row at a Serie B club, so they joined the population as pending, not yet read on the web (Panico, Starita, Buso, Biasci, Adamo, Fulignati, Esposito, Viti, Maleh, Zappella, Sgarbi, Jelenic, Morutan, Sernicola, Amin Sarr, Rauti). Four of them (Adamo, Zappella, Jelenic, Morutan) have a 2026 row at a club the game does not model, so they are withheld from every squad rather than shipped at last season's club. Fourteen more men moved out of other squads on their own 2026 row, which the bake now reads because the club it names is mapped; they are not 2025 fallbacks, so they are outside this population, and none was in the ledger: Missori (Sassuolo to Avellino), Bondo (Monza to Cremonese), Terracciano (AC Milan to Cremonese), Zampano (Venezia to Modena), Pohjanpalo (Venezia to Palermo), Stengs (Feyenoord to Pisa), Lorran (Flamengo to Pisa), Vural (Frosinone to Pisa), Cuadrado (Atalanta to Pisa), Martinelli (Fiorentina to Sampdoria), Orban (Hoffenheim to Verona), Nelsson (Roma to Verona), Bernede (Lausanne-Sport to Verona) and Lirola (Marseille to Verona). Their earlier clubs were 2025 rows the table had already overtaken. Ligue 2 (fifteen table spellings, Sochaux, Dijon and Rodez having none) was mapped in the same round's second step. Five rows left removedClubNotModelled for movedTo on their existing sources (Guilbert and Joujou to Nantes, Baldé to Nancy, Bianchini to Clermont on his loan from Swansea City, Magnin to Red Star FC). Twenty players came in on a 2025 row at a Ligue 2 club and joined the population as pending (Averlant, Rivera, Vargas, Kokolo, Sabaly, Omeragic, Fayad, Savanier, Sacko, Issiaga Sylla, Maouassa, Cropanese, Douglas Augusto, Saïdou Sow, Centonze, Anthony Lopes, Okumu, Teuma, Yaya Fofana, Maçon); three of them (Averlant, Kokolo, Douglas Augusto) have a 2026 row at a club the game does not model and are withheld. Four more men moved out of other squads on their own 2026 row, none of them in the ledger: Virginius (Lille to Clermont), Machado (Lens to Nantes), Leoni (Anderlecht to Reims) and João Ferreira (Braga to Saint-Étienne). The Segunda División (seventeen table spellings, Tenerife, Córdoba and Eldense having none, and the two reserve sides left out of the game) was mapped in the third step. Seven rows left removedClubNotModelled for movedTo on their existing sources (Sola to Almería, Carles Pérez to Girona, Bernat to Eibar, Cordero to Cádiz, Luvumbo to Mallorca on his loan from Cagliari, Alberto Moreno to Mallorca, Buurmeester to Leganés). Twenty three players came in on a 2025 row at a Segunda club and joined the population as pending (Robertone, Centelles, Anderson Arroyo, Pipa, Dani Aquino, Manu Vallejo, Ontiveros, Abel Ruiz, Danjuma, van de Beek, Carlos Neva, Luca Zidane, McKenna, Marvin Park, Juan Cruz, Dani Raba, Franquesa, Juan Soriano, Haissem Hassan, Miguelete, Oyón, Rubén Yáñez, Luis Pérez); one of them (Anderson Arroyo) has a 2026 row at a club the game does not model and is withheld. Nine more men moved out of other squads on their own 2026 row, none of them in the ledger: Ounahi (Panathinaikos to Girona), Fran Beltrán (Celta Vigo to Girona), Álex Moreno (Nottingham Forest to Girona), Pablo Torre (Barcelona to Mallorca), Mateo Joseph (Leeds United to Mallorca), Javi López (Real Sociedad to Real Oviedo), Borbas (Red Bull Bragantino to Real Oviedo), Moldovan (Sassuolo to Real Oviedo) and Ponceau (Lorient to Valladolid). Round 1040's review (2026-10-07) found those 27 men were never read, and that the table's 2026 row is last season's club: no summer window research covers clubs the game did not model, so a man who left one of the 58 new clubs that summer was still in its squad (Cuadrado at Pisa, who has since signed for Millonarios, for one). Every baked man at the 58 clubs was checked against his club's ESPN 2026-27 squad page on 2026-10-07. Of the 114 names those pages leave out, 110 are withheld (pending, withheld, shard round1040-review, the Round 1015 rule), 30 of them the 2025 fallbacks above and 80 on 2026 rows, 17 of those the drained men; Patrick Zabi is among them because the sources disagree (ESPN's Reims page has a Zabi Gueu, a February report has him joining Paris FC). Dennis Johnsen, baked at Cremonese, moves to Palermo on two families (Palermo's own news of 2026-02-02 and ESPN's Palermo 2026-27 squad). The ten drained men ESPN does list join pending at their new club, one family read (Missori, Zampano, Pohjanpalo, Vural, Bernede, Machado, Fran Beltrán, Álex Moreno, Pablo Torre, Ponceau). Two names were read as the same man under another spelling and kept: Andréa Le Borgne (ESPN Andréa Leborgne, Verona) and Herba Guirassy (ESPN Bahereba Guirassy, Nantes); Joujou keeps his two-source movedTo row although ESPN's Nantes squad page omits him. The population grows by 91, to 564. Arrivals at these clubs are not researched either, so the squads stay padded with youth where the table runs out."
 }

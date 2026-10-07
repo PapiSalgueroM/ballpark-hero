@@ -1431,6 +1431,12 @@ export interface SeasonRecord {
   position: number;
   points: number;
   trophies: string[];
+  /** Round 1040: the league the season was played in and its size, written
+   *  when the season ends (before the summer moves anybody), so a finish is
+   *  read against the table it came from. A save from before this round has
+   *  neither on its old seasons. */
+  leagueId?: string;
+  leagueSize?: number;
 }
 
 export interface CareerStats {
@@ -1646,7 +1652,24 @@ export function wildernessProfile(career: CareerState): ManagerProfile {
      place is 18th) never reads as a relegation. */
   /* Round 971 closing check: a past season's finish reads that season's
      league (eraLeagueOf), not whichever era leagueOf's fallback finds first. */
-  const wentDown = (h: SeasonRecord) => h.position >= 18 && relegationSpots((eraLeagueOf(h.club, career.eraId) ?? leagueOf(h.club)).id) > 0;
+  /* Round 1040: a finish is a relegation when it sits in that league's drop
+     zone, size minus drop, read off the league the season was played in.
+     The hard coded 18th missed Ligue 1's 17th (two of eighteen go down) and
+     called a Championship 18th of 24 one. A season from before this round
+     carries no league, so it keeps the old reading. On purpose, the round's
+     review: a second tier's drop zone (Serie B 18th to 20th, the Segunda
+     17th to 20th, Ligue 2 17th and 18th, the Championship 22nd to 24th) also
+     reads as a relegation on the record, although the game has no third
+     tier and the club stays where it is; that is correction 8's formula and
+     the convention Brazil's drop zone already had, a finish the real league
+     would have sent down. */
+  const wentDown = (h: SeasonRecord) => {
+    if (h.leagueId && h.leagueSize) {
+      const drop = relegationSpots(h.leagueId);
+      return drop > 0 && h.position > h.leagueSize - drop;
+    }
+    return h.position >= 18 && relegationSpots((eraLeagueOf(h.club, career.eraId) ?? leagueOf(h.club)).id) > 0;
+  };
   const promotions = career.history.filter(h => h.position === 1).length;
   const relegations = career.history.filter(wentDown).length;
   const def = clubDefFor(career.clubName);
@@ -2740,13 +2763,27 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
     playoff: { rankUpTo: 8, target: 6, label: 'Make the promotion playoffs' }, season: 'autumnSpring',
     simplified: 'Three go up and three come down in a straight swap; the real promotion playoff is not played.',
   },
-  laliga: { nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: { ucl: 4, uel: 5, uecl: 6 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
-  seriea: { nationId: 'italy', flag: 'Italy', cup: 'Coppa Italia', europe: { ucl: 4, uel: 5, uecl: 6 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
+  laliga: { nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: { ucl: 4, uel: 5, uecl: 6 }, drop: 3, tiebreak: 'h2h', secondTier: 'segunda', ladder: 'top', season: 'autumnSpring' },
+  seriea: { nationId: 'italy', flag: 'Italy', cup: 'Coppa Italia', europe: { ucl: 4, uel: 5, uecl: 6 }, drop: 3, tiebreak: 'h2h', secondTier: 'serieb', ladder: 'top', season: 'autumnSpring' },
   bundesliga: {
     nationId: 'germany', flag: 'Germany', cup: 'DFB-Pokal', europe: { ucl: 4, uel: 5, uecl: 6 }, drop: 2, tiebreak: 'gdGfAgg', secondTier: 'bundesliga2', ladder: 'top', season: 'autumnSpring',
     simplified: 'The real relegation playoff (sixteenth against the 2. Bundesliga\'s third) is not played: two go straight down and two straight up.',
   },
-  ligue1: { nationId: 'france', flag: 'France', cup: 'Coupe de France', europe: { ucl: 3, uel: 4, uecl: 5 }, drop: 3, tiebreak: 'gdH2h', ladder: 'top', season: 'autumnSpring' },
+  /* Round 1040: two go down, not three, and Ligue 2 is modelled under it.
+     2025-26: Metz and Nantes went straight down and sixteenth placed Nice
+     kept their place in the barrage against Saint-Étienne, Ligue 2's
+     playoff winner (franceinfo, 2026-05-29,
+     https://www.franceinfo.fr/sports/foot/ligue-1/barrage-ligue-1-ligue-2-vainqueur-au-match-retour-nice-se-maintient-dans-l-elite-saint-etienne-reste-en-deuxieme-division_8036279.html;
+     LFP, "2025-2026 : tout savoir sur les play-offs et les barrages de
+     Ligue 2 BKT", https://ligue1.com/fr/articles/l1_article_3785-2025-2026-tout-savoir-sur-les-play-offs-et-les-barrages-de-ligue-2-bkt).
+     2026-27: Foot Mercato's table legend (read 2026-10-06,
+     https://www.footmercato.net/france/ligue-1/classement) says the same, the
+     last two down and sixteenth in a barrage; THIN for 2026-27 in that it is
+     one publisher, on the same shape as the season before. */
+  ligue1: {
+    nationId: 'france', flag: 'France', cup: 'Coupe de France', europe: { ucl: 3, uel: 4, uecl: 5 }, drop: 2, tiebreak: 'gdH2h', secondTier: 'ligue2', ladder: 'top', season: 'autumnSpring',
+    simplified: 'The real relegation barrage (sixteenth against the winner of Ligue 2\'s playoffs) is not played: two go straight down and two straight up.',
+  },
   eredivisie: { nationId: 'netherlands', flag: 'Netherlands', cup: 'KNVB Cup', europe: { ucl: 2, uel: 3, uecl: 4 }, drop: 2, ladder: 'top', season: 'autumnSpring' },
   saudi: {
     nationId: 'saudi', flag: 'Saudi Arabia', cup: "King's Cup", europe: null, drop: 3, ladder: 'top', season: 'autumnSpring',
@@ -2874,6 +2911,98 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
     europe: null, drop: 0, ladder: 'playoffs',
     playoff: { rankUpTo: 7, target: 6, label: 'Make the finals' }, floorFromBottom: 3, season: 'autumnSpring',
     simplified: 'The real season is 26 games (home and away plus four third meetings), and last season\'s finals series took the top six; here it is a double round robin of 22 and the finals are not played, so the table settles the season and its winner is the Premiers. Auckland FC and Wellington Phoenix play no cup, as they really do not enter the Australia Cup.',
+  },
+  /* Round 1040: Serie B 2026-27, Serie A's modelled second tier, so the
+     bottom three of Serie A go down and the top three of Serie B come up.
+     Each fact read 2026-10-06:
+     - 20 clubs: ESPN's 2026-27 table
+       (https://www.espn.com/soccer/standings/_/league/ita.2) and Sky Sport
+       Italia, "Serie B 2026-27, le squadre del prossimo campionato"
+       (https://sport.sky.it/calcio/serie-b/squadre-serie-b-2026-2027,
+       2026-06-07), which agree on all twenty.
+     - The format, as both describe the 2025-26 season: first and second go
+       straight up, third to eighth play the promotion playoff, the last three
+       go straight down and sixteenth plays seventeenth in a playout (Sky
+       Sport, https://sport.sky.it/calcio/serie-b/serie-b-2026-playoff-playout-promozioni-retrocessioni,
+       2026-05-29; Sbircia la Notizia,
+       https://www.sbircialanotizia.it/articoli/2026/05/08/serie-b-playoff-a9x3m/,
+       2026-05-08). THIN for 2026-27: the season's calendar release
+       (InfoOggi, 2026-07-10) says it again ends in playoffs and playouts but
+       restates no places, so the rung is last season's.
+     - All twenty play the Coppa Italia (44 clubs: Serie A's 20, Serie B's 20
+       and four from Serie C): Sky Sport's 2026-27 bracket
+       (https://sport.sky.it/calcio/coppa-italia/2026/06/24/tabellone-coppa-italia-2026-2027)
+       and Sport Mediaset's round of 32 draw.
+     - Clubs level on points: only one source spelled an order, so the
+       gdGfOnly default. */
+  serieb: {
+    nationId: 'italy', flag: 'Italy', cup: 'Coppa Italia', europe: null, drop: 3, ladder: 'promotion',
+    playoff: { rankUpTo: 10, target: 8, label: 'Make the promotion playoffs' }, season: 'autumnSpring',
+    simplified: 'The promotion playoff and the relegation playout are not played: three go straight up and Serie A\'s bottom three come down in a straight swap.',
+  },
+  /* Round 1040: Ligue 2 2026-27, Ligue 1's modelled second tier, so the
+     bottom two of Ligue 1 go down and the top two of Ligue 2 come up. Each
+     fact read 2026-10-06:
+     - 18 clubs: ESPN's 2026-27 table
+       (https://www.espn.com/soccer/standings/_/league/fra.2) and
+       Saint-Étienne's own Ligue 2 BKT table, matchday 7
+       (https://www.asse.fr/fr/club/saison-2026-2027/classement-ligue-2-bkt/),
+       which agree on all eighteen.
+     - First and second go straight up: Troyes and Le Mans in 2025-26 (LFP,
+       https://ligue1.com/en/articles/l1_article_5560-promoted-pair-troyes-and-le-mans-prepare-for-the-ligue-1-challenge;
+       Eurosport France on Troyes' direct promotion,
+       https://www.eurosport.fr/football/ligue-2/2025-2026/ligue-2-vainqueur-de-saint-etienne-3-0-troyes-sassure-de-la-promotion-directe-en-ligue-1_sto23293849/story.shtml).
+     - Third to fifth play the playoffs, whose winner meets Ligue 1's
+       sixteenth in the barrage, and sixteenth plays the National's third:
+       the LFP's 2025-26 guide (ligue1.com, the article beside the ligue1 row)
+       and Foot Mercato's 2026-27 table legend
+       (https://www.footmercato.net/france/ligue-2/classement).
+     - Seventeenth and eighteenth go straight down (the drop of 2). The LFP
+       guide above says nothing about direct relegation (Round 1040 review),
+       so the two sources are Foot Mercato's 2026-27 legend above and Sports
+       Infos on the final 2025-26 table, Bastia 17th and Amiens 18th both
+       relegated to the National (2026-05-09,
+       https://www.ski-nordique.net/classement-ligue-2-2025-2026-journee-28-sports-infos.6725171-72348.html,
+       read 2026-10-07). THIN for 2026-27 in the same way as the ligue1 row:
+       Foot Mercato is the one 2026-27 publisher, the other describes 2025-26.
+     - Ligue 2 clubs play the Coupe de France, entering in the seventh round
+       (14 and 15 November 2026), Ligue 1's at the round of 64: Metro Sports
+       (https://metro-sports.fr/le-calendrier-de-ledition-2026-2027-de-la-coupe-de-france-devoile/)
+       and Radio Sports (https://radiosports.fr/coupe-de-france-football-calendrier-et-resultats.html).
+     - Clubs level on points: not two-sourced, so the gdGfOnly default. */
+  ligue2: {
+    nationId: 'france', flag: 'France', cup: 'Coupe de France', europe: null, drop: 2, ladder: 'promotion',
+    playoff: { rankUpTo: 7, target: 5, label: 'Make the promotion playoffs' }, season: 'autumnSpring',
+    simplified: 'The promotion playoffs, the barrage against Ligue 1\'s sixteenth and the relegation barrage are not played: two go straight up and Ligue 1\'s bottom two come down in a straight swap.',
+  },
+  /* Round 1040: the Segunda División 2026-27 (LALIGA HYPERMOTION), La Liga's
+     modelled second tier, so La Liga's bottom three go down and the
+     Segunda's top three come up. Each fact read 2026-10-06:
+     - 22 clubs, two of them reserve sides (Real Sociedad B and Celta
+       Fortuna): ESPN's 2026-27 table
+       (https://www.espn.com/soccer/standings/_/league/esp.2) and LaLiga's own
+       (https://www.laliga.com/en-GB/laliga-hypermotion/standing), which agree
+       on all twenty two. The game plays the other twenty.
+     - First and second go straight up and third to sixth play the promotion
+       playoff: LaLiga, "Quiénes juegan el play-off de ascenso" (2026-06-21,
+       https://www.laliga.com/noticias/quienes-juegan-el-play-off-de-ascenso)
+       and elDiario.es on the format (2025-08-13,
+       https://www.eldiario.es/spin/deportes/calendario-laliga-hypermotion-2025-26-partidos-formato-ver-segunda-division-futbol-pm_1_12531612.html).
+     - Four go down: LaLiga (https://www.laliga.com/noticias/descensos-de-segunda-division)
+       and Sportpunta (2026-06-01, four since 1995-96,
+       https://www.sportpunta.com/noticia/10398/fuera-de-juego/cuatro-equipos-descienden-de-laliga-hypermotion-a-primera-rfef.html).
+     - The 2026-27 Copa del Rey's first round has twenty Segunda clubs, the
+       two reserve sides left out: Infobae (EFE, 2026-10-04,
+       https://www.infobae.com/espana/agencias/2026/10/04/16-equipos-de-primera-iniciaran-su-andadura-en-la-primera-eliminatoria-de-la-copa-del-rey/)
+       and ElDesmarque's draw (2026-10-05,
+       https://www.eldesmarque.com/futbol/copa-del-rey/20261005/directo-sorteo-primera-ronda-copa-rey-2027_19_020349979.html),
+       FC Andorra among them. Whether a reserve side may be promoted was found
+       in one source only, so the row does not lean on it.
+     - Clubs level on points: not two-sourced, so the gdGfOnly default. */
+  segunda: {
+    nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: null, drop: 4, ladder: 'promotion',
+    playoff: { rankUpTo: 8, target: 6, label: 'Make the promotion playoffs' }, season: 'autumnSpring',
+    simplified: 'The promotion playoff (third to sixth) is not played: three go straight up and La Liga\'s bottom three come down in a straight swap. The real league has 22 clubs, and its two reserve sides, Real Sociedad B and Celta Fortuna, are left out because they do not play the Copa del Rey, so 20 of the real 22 clubs play.',
   },
   /* The era leagues. No Conference League existed before 2021, so uecl is 0
      and the board's ladder skips that band; 2005-06 still called the second
@@ -3280,6 +3409,36 @@ export const REAL_LEAGUES: LeagueDef[] = [
     id: 'aleague', name: 'A-League Men',
     clubs: ['Adelaide United', 'Auckland FC', 'Brisbane Roar', 'Central Coast Mariners', 'Macarthur FC', 'Melbourne City', 'Melbourne Victory', 'Newcastle Jets', 'Perth Glory', 'Sydney FC', 'Wellington Phoenix', 'Western Sydney Wanderers'],
   },
+  /* Round 1040: Serie B 2026-27, the twenty clubs ESPN's table and Sky Sport
+     Italia (2026-06-07) agree on, read 2026-10-06 (sources beside its
+     LEAGUE_RULES row). Cremonese, Pisa and Verona came down from Serie A;
+     Vicenza, Arezzo, Benevento and Ascoli came up from Serie C. Appended
+     after every older row, so no older list changes its order. */
+  {
+    id: 'serieb', name: 'Serie B',
+    clubs: ['Cremonese', 'Verona', 'Pisa', 'Avellino', 'Carrarese', 'Catanzaro', 'Cesena', 'Empoli', 'Entella', 'Juve Stabia', 'Mantova', 'Modena', 'Padova', 'Palermo', 'Sampdoria', 'Südtirol', 'Vicenza', 'Arezzo', 'Benevento', 'Ascoli'],
+  },
+  /* Round 1040: Ligue 2 2026-27, the eighteen clubs ESPN's table and
+     Saint-Étienne's own Ligue 2 BKT table agree on, read 2026-10-06 (sources
+     beside its LEAGUE_RULES row). Metz and Nantes came down from Ligue 1;
+     Saint-Étienne lost the barrage to Nice and stayed. The Paris club is
+     'Red Star FC', never 'Red Star', which reads as Belgrade. Appended after
+     every older row. */
+  {
+    id: 'ligue2', name: 'Ligue 2',
+    clubs: ['Metz', 'Nantes', 'Saint-Étienne', 'Red Star FC', 'Reims', 'Montpellier', 'Nancy', 'Annecy', 'Sochaux', 'Dijon', 'Pau', 'Guingamp', 'Dunkerque', 'Grenoble', 'Rodez', 'Clermont', 'Boulogne', 'Laval'],
+  },
+  /* Round 1040: the Segunda División 2026-27, the twenty clubs of the real
+     twenty two that ESPN's table and LaLiga's own agree on, less the two
+     reserve sides, Real Sociedad B and Celta Fortuna (sources beside its
+     LEAGUE_RULES row). Real Oviedo, Girona and Mallorca came down from La
+     Liga. FC Andorra are the Andorran club that plays in Spain's league.
+     Valladolid keeps the spelling the era leagues already use. Appended
+     after every older row. */
+  {
+    id: 'segunda', name: 'Segunda División',
+    clubs: ['Real Oviedo', 'Girona', 'Mallorca', 'Eibar', 'Castellón', 'Almería', 'Burgos', 'Sabadell', 'Sporting Gijón', 'Granada', 'Las Palmas', 'Tenerife', 'Leganés', 'Valladolid', 'Córdoba', 'Eldense', 'Cádiz', 'FC Andorra', 'Ceuta', 'Albacete'],
+  },
 ].map(leagueFromRow);
 
 /**
@@ -3397,6 +3556,25 @@ const STRENGTH_PRIORS: Record<string, number> = {
   // they take the same 61 every promoted side with no usable rows has
   // shipped with, Chapecoense the last of them.
   'Atlante': 61,
+  // Round 1040: Serie B. Arezzo, up from Serie C, are the one member with no
+  // row in the table under any spelling, so they take the same 61. Every
+  // other member is rated from its real men (bakedXIAvg), which a prior never
+  // reaches, so the stale top flight priors of the three relegated clubs
+  // above are left as they were.
+  'Arezzo': 61,
+  // Round 1040: Ligue 2. Sochaux, Dijon and Rodez have no row in the table
+  // under any spelling (a grep of the 2026-10-02 dump finds none), so they
+  // take the same 61; every other member is rated from its real men.
+  'Sochaux': 61, 'Dijon': 61, 'Rodez': 61,
+  // Round 1040: the Segunda División. Tenerife, Córdoba and Eldense have no
+  // row in the table under any spelling, so the same 61.
+  'Tenerife': 61, 'Córdoba': 61, 'Eldense': 61,
+  // Round 1040's review withheld every baked man at the new clubs that his
+  // club's ESPN 2026-27 squad page leaves out (the roster ledger's
+  // round1040-review rows), which left these eight with no baked player at
+  // all, so they take the same 61 rather than the 65 an unknown club gets.
+  'Juve Stabia': 61, 'Pau': 61, 'Grenoble': 61, 'Laval': 61,
+  'Sabadell': 61, 'Granada': 61, 'FC Andorra': 61, 'Ceuta': 61,
 };
 
 /** The real league a club plays in. Every playable club is covered.
@@ -12017,15 +12195,28 @@ function cupCountryClubs(state: CareerState): ClubDef[] {
  * reaches the last sixteen, but a couple of lower division sides get in,
  * because a cup with nobody to knock over is just another league.
  */
+/* Round 1040: a cup club's division, 2 for a second tier (a league whose
+   rules ladder is 'promotion') and 1 for every other league, read the one
+   place both the draw and the upset flag read it. Before this round both
+   asked "is it in MY league?", which in a Championship or 2. Bundesliga
+   career made the top flight clubs the 'lower division' sides and flagged a
+   top flight club knocking the manager out as a giant killing. Round 154: my
+   own club reads careerLeagueOf, since a custom club is in no league def. */
+function cupDivisionOf(state: CareerState, clubName: string): 1 | 2 {
+  const lg = clubName === state.clubName
+    ? careerLeagueOf(state)
+    : (eraLeagueOf(clubName, state.eraId) ?? leagueOf(clubName));
+  return leagueRulesOf(lg.id).ladder === 'promotion' ? 2 : 1;
+}
+
 function buildCupBracket(state: CareerState): CupTie[] {
   const all = cupCountryClubs(state).filter(c => c.name !== state.clubName);
-  // Round 154: careerLeagueOf, because a custom club resolves to its real
-  // league here where bare leagueOf would fall back to the Premier League.
-  const myLeagueNames = new Set(careerLeagueOf(state).clubs);
-  const top = shuffle(all.filter(c => myLeagueNames.has(c.name)));
-  const lower = shuffle(all.filter(c => !myLeagueNames.has(c.name)));
+  /* Round 1040: 'top' is the nation's top flight clubs and 'lower' its
+     second tier, whichever division the manager's own club is in. */
+  const top = shuffle(all.filter(c => cupDivisionOf(state, c.name) === 1));
+  const lower = shuffle(all.filter(c => cupDivisionOf(state, c.name) === 2));
   const field = [state.clubName];
-  // Two or three from outside my division when the country has one.
+  // Two or three from the second tier when the country has one.
   const lowerCount = lower.length ? ri(2, 3) : 0;
   for (const c of lower.slice(0, lowerCount)) field.push(c.name);
   for (const c of top) {
@@ -12065,13 +12256,21 @@ function buildCupBracket(state: CareerState): CupTie[] {
   return ties;
 }
 
-/** True when the winner came from a lower division than the loser. */
+/** True when the winner came from a lower division than the loser. Round
+ *  1040: the divisions are cupDivisionOf's, so a top flight club beating a
+ *  second tier one is never an upset, whoever the manager is. And a
+ *  historic save reads its clubs' tiers off its own era (eraClubDefFor), as
+ *  its draw does: read off the modern world, an era cup's upsets moved each
+ *  time a round made one of its clubs modern (Dijon, Metz and Nantes joined
+ *  Ligue 2 here and changed a 2020-21 Coupe de France). */
 function isCupUpset(state: CareerState, winner: string, loser: string): boolean {
-  const top = new Set(careerLeagueOf(state).clubs);
-  const w = clubByName(winner);
-  const l = clubByName(loser);
+  const historic = !!state.eraId && isHistoricEra(state.eraId);
+  const w = historic && eraLeagueOf(winner, state.eraId) ? eraClubDefFor(winner, state.eraId) : clubByName(winner);
+  const l = historic && eraLeagueOf(loser, state.eraId) ? eraClubDefFor(loser, state.eraId) : clubByName(loser);
   if (!w || !l) return false;
-  if (top.has(loser) && !top.has(winner)) return true;
+  const dw = cupDivisionOf(state, winner);
+  const dl = cupDivisionOf(state, loser);
+  if (dw !== dl) return dw > dl;
   return w.tier - l.tier >= 2;
 }
 
@@ -18396,7 +18595,7 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
 
   state.history = [
     ...state.history.filter(h => h.season !== state.season),
-    { season: state.season, club: state.clubName, position, points: myRow.pts, trophies: seasonTrophies },
+    { season: state.season, club: state.clubName, position, points: myRow.pts, trophies: seasonTrophies, leagueId: careerLeagueOf(state).id, leagueSize: table.length },
   ];
   state.pendingSummary = summary;
   return { state, summary };
@@ -18620,6 +18819,10 @@ function runPromotionRelegation(prev: CareerState): { overrides: Record<string, 
   const myLeagueId = careerLeagueOf(prev).id;
   const next: Record<string, string[]> = carried ? { ...carried } : {};
   const lines: string[] = [];
+  /* Round 1040: the other pyramids' one line summaries wait behind the
+     manager's own pyramid. With five pyramids, a La Liga career's six lines
+     came after England's summary and the cap cut two of them. */
+  const elsewhere: string[] = [];
   let moved = false;
   for (const pyr of PYRAMIDS) {
     const topDef = REAL_LEAGUES.find(l => l.id === pyr.top);
@@ -18661,17 +18864,26 @@ function runPromotionRelegation(prev: CareerState): { overrides: Record<string, 
       // The player's own pyramid gets a line per moved club, own club first.
       for (const c of up) {
         if (c === prev.clubName) lines.unshift(`\u{2B06} You are up: ${c} will play ${topDef.name} football next season.`);
-        else lines.push(`\u{2B06} ${c} win promotion to the ${topDef.name}.`);
+        else lines.push(`\u{2B06} ${c} win promotion to ${toLeague(topDef.name)}.`);
       }
       for (const c of down) {
-        if (c === prev.clubName) lines.unshift(`\u{2B07} Relegated. ${c} go down to the ${secondDef.name}.`);
-        else lines.push(`\u{2B07} ${c} are relegated to the ${secondDef.name}.`);
+        if (c === prev.clubName) lines.unshift(`\u{2B07} Relegated. ${c} go down to ${toLeague(secondDef.name)}.`);
+        else lines.push(`\u{2B07} ${c} are relegated to ${toLeague(secondDef.name)}.`);
       }
     } else {
-      lines.push(`\u{1F504} ${topDef.name}: ${up.join(', ')} come up, ${down.join(', ')} go down.`);
+      elsewhere.push(`\u{1F504} ${topDef.name}: ${up.join(', ')} come up, ${down.join(', ')} go down.`);
     }
   }
-  return { overrides: moved ? next : carried, lines: lines.slice(0, 5) };
+  return { overrides: moved ? next : carried, lines: [...lines, ...elsewhere].slice(0, Math.max(5, lines.length)) };
+}
+
+/* Round 1040 review: the summer lines name the league the way people say it.
+   The Premier League, the Bundesliga, the Championship, the 2. Bundesliga and
+   the Segunda División take the article; La Liga carries its own, and Serie A,
+   Serie B, Ligue 1 and Ligue 2 read without one ("win promotion to Serie A",
+   never "to the Serie A"). */
+export function toLeague(name: string): string {
+  return /^(La Liga|Serie |Ligue )/.test(name) ? name : `the ${name}`;
 }
 
 /**

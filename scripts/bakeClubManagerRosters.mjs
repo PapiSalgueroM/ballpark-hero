@@ -6,7 +6,9 @@
  * snapshot the dataset was imported from.
  *
  * Leagues baked: the big five (2026-27 memberships), EFL Championship,
- * Saudi Pro League, MLS East + West, Eredivisie, plus the UCL flavor clubs.
+ * Saudi Pro League, MLS East + West, Eredivisie, the later leagues the
+ * written file's own header lists (Serie B, Ligue 2 and the Segunda División since Round 1040), plus the UCL
+ * flavor clubs.
  * Preference order per player: year 2026 row, else year 2025 row (value
  * discounted 5%, age +1). Clubs with fewer than 8 real players are listed
  * in CM_PARTIAL so the UI can say so honestly.
@@ -71,7 +73,18 @@ const KNOWN_EMPTY = ['ADO Den Haag', 'Cambuur',
   'Chapecoense',
   // Round 883: Liga MX 2026-27. Atlante have no row in the table under any
   // spelling (they were in the second tier until this season).
-  'Atlante'];
+  'Atlante',
+  // Round 1040: Serie B 2026-27. Arezzo, up from Serie C, have no row in the
+  // table under any spelling (a grep of the 2026-10-02 dump for "arezzo"
+  // finds nothing).
+  'Arezzo',
+  // Round 1040: Ligue 2 2026-27. Sochaux, Dijon and Rodez have no row under
+  // any spelling (grep of the 2026-10-02 dump for sochaux, dijon, rodez).
+  'Sochaux', 'Dijon', 'Rodez',
+  // Round 1040: the Segunda División 2026-27. Tenerife, Córdoba and Eldense
+  // have no row under any spelling (grep of the dump for tenerife, c.rdoba,
+  // eldense finds only two Argentine clubs, left unmapped).
+  'Tenerife', 'Córdoba', 'Eldense'];
 
 /** Core clubs (big five leagues) must have 7+ players or the bake fails. */
 const CORE_LEAGUE_CLUBS = new Set([
@@ -367,6 +380,21 @@ if (!(xiAvg('Palmeiras') > xiAvg('Vitória'))) errors.push('SANITY: Palmeiras <=
 // the pads of an empty club.
 if (!(xiAvg('América') > xiAvg('Necaxa'))) errors.push('SANITY: América <= Necaxa');
 if (!(xiAvg('Guadalajara') > xiAvg('FC Juárez'))) errors.push('SANITY: Guadalajara <= FC Juárez');
+// Round 1040: Serie B. After the round's review withheld every man ESPN's
+// 2026-27 squad pages leave out, only Pisa (12 real men) and Verona (11)
+// carry 8 or more in the 2026-10-02 bake; Cremonese (6) is padded, so these
+// pairs ask that a real squad clears a mostly padded one.
+if (!(xiAvg('Pisa') > xiAvg('Cremonese'))) errors.push('SANITY: Pisa <= Cremonese');
+if (!(xiAvg('Verona') > xiAvg('Cremonese'))) errors.push('SANITY: Verona <= Cremonese');
+// Round 1040: Ligue 2. Nantes (13), Saint-Étienne (9) and Reims (8) carry
+// 8 or more real men; Pau (none after the review) is all pads, so this only
+// asks that a real squad clears a padded one.
+if (!(xiAvg('Saint-Étienne') > xiAvg('Pau'))) errors.push('SANITY: Saint-Étienne <= Pau');
+// Round 1040: the Segunda División. Girona (10) and Mallorca (8) carry 8 or
+// more real men after the review; Real Oviedo (3) and Castellón (2) are
+// mostly pads.
+if (!(xiAvg('Girona') > xiAvg('Castellón'))) errors.push('SANITY: Girona <= Castellón');
+if (!(xiAvg('Girona') > xiAvg('Real Oviedo'))) errors.push('SANITY: Girona <= Real Oviedo');
 
 const total = [...byClub.values()].reduce((s, l) => s + l.length, 0);
 if (total < 2800) errors.push(`Only ${total} players total (expected 2800+)`);
@@ -392,7 +420,10 @@ let out = `// Rounds 70+72: real rosters for every Club Manager club, generated 
 // West, Eredivisie, Primeira Liga, Scottish Premiership, Süper Lig,
 // 2. Bundesliga, Belgian Pro League, Austrian Bundesliga, Super League
 // Greece, Danish Superliga, Swiss Super League, SuperSport HNL,
-// Brazil's Serie A and Liga MX.
+// Brazil's Serie A, Liga MX, Serie B, Ligue 2 and the Segunda División.
+// The overlay does not cover Serie B, Ligue 2 or the Segunda División: their
+// squads are the table's men that each club's ESPN 2026-27 squad page still
+// lists (the roster ledger withholds the rest), with no summer arrivals added.
 // Values in £m, ratings 48-94 from the value curve.
 // Regenerate with: node scripts/bakeClubManagerRosters.mjs
 // DO NOT EDIT BY HAND.
