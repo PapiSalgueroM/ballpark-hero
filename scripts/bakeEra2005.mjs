@@ -777,7 +777,7 @@ if (bigFiveArg) {
     process.exit(0);
   }
   if (!process.argv.includes('--dry')) {
-    const n = updateNationalityBlock(path.join(ROOT, 'src/data/playerNationalities.ts'), 'era2005', res);
+    const n = updateNationalityBlock(path.join(ROOT, 'src/data/nationalities/era2005.ts'), 'era2005', res);
     console.log(`Nationalities, era2005 block: ${n.added} added, ${n.changed} re-pointed, ${n.dropped} dropped, ${n.total} entries for ${s.players} players.`);
   }
   process.exit(0);

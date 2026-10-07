@@ -548,6 +548,6 @@ if (check) {
 /* The market's nationality filter reads one map per world, holding exactly
    this world's names, each with the nationality on the row it was baked from. */
 if (!dry) {
-  const n = updateNationalityBlock(path.join(ROOT, 'src/data/playerNationalities.ts'), 'era2020', res);
+  const n = updateNationalityBlock(path.join(ROOT, 'src/data/nationalities/era2020.ts'), 'era2020', res);
   console.log(`Nationalities, era2020 block: ${n.added} added, ${n.changed} re-pointed, ${n.dropped} dropped, ${n.total} entries for ${s.players} players.`);
 }
