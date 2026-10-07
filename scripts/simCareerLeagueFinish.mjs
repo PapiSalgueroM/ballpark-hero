@@ -264,8 +264,26 @@ const DIGEST_SEEDS = 16;
    only 1012 in, 1012's own list 16 of 16; only 1024, 1024's 16 of 16;
    only 1016, 1016's 16 of 16 (careers 2, 6, 7, 10, 14 and 15 moved); only
    1015 or only the citation fix, Release AD's list unchanged; only 1027,
-   all 16 moved. So nothing else in the release moves a digest. */
-const BASELINE = ['a7c772c3784e216a', '759bf037c867971d', '74e7fc332f6821fb', 'fafb27882724df58', 'cc6fa1f296a3bde8', 'b829c5dd07cfb3af', 'f539f12f1794c921', 'a5de9a434ad21895', '52e3772cb77b5986', '120dd615a6cd5dc1', '5372f38d44597423', 'f810d1daa7ffd030', 'f47e78ff107bf228', 'e3e83a57c9b96439', '8ae2cceb487c0598', '55bf134cb33eacee'];
+   all 16 moved. So nothing else in the release moves a digest.
+   Re-recorded by Round 1037 (2026-10-06, twice, identical), on purpose:
+   these careers start in 2020, so their seasons to 2025-26 are past ones,
+   now played in the league each club was really in (the league ledgers),
+   with derbies only against clubs in the same league that year; and the
+   round releases Round 1022's seven held labels (West Ham, Wolves, Girona,
+   Hertha Berlin, Nantes, River Plate Asuncion, Persija Jakarta), which
+   moves the market's league groups. 9 of 16 moved (careers 1, 2, 3, 4, 5,
+   8, 9, 12 and 16). Attribution, each a throwaway copy: the round taken
+   out (release-ah fc30942e) records the list below it 16 of 16; only the
+   seven labels released, 9 of 16 match it; only the binds (the labels put
+   back), 14 of 16. Sections 1, 2, 3 and 5 stayed green; section 2 now
+   sizes a season by its real league (leagueKeyInYear). The list it
+   replaced (release-ah's): ['a7c772c3784e216a', '759bf037c867971d',
+   '74e7fc332f6821fb', 'fafb27882724df58', 'cc6fa1f296a3bde8',
+   'b829c5dd07cfb3af', 'f539f12f1794c921', 'a5de9a434ad21895',
+   '52e3772cb77b5986', '120dd615a6cd5dc1', '5372f38d44597423',
+   'f810d1daa7ffd030', 'f47e78ff107bf228', 'e3e83a57c9b96439',
+   '8ae2cceb487c0598', '55bf134cb33eacee']. */
+const BASELINE =['9376570a25d3a155', 'fcb98e5a6f7c482c', 'ee8e07e3bb4c47f8', '4bc40153f6613fc8', 'db3a34cd89e14e3d', 'b829c5dd07cfb3af', 'f539f12f1794c921', '29e192b38eae5882', 'd763d6e12bcf7689', '120dd615a6cd5dc1', '5372f38d44597423', '63a6b8575832dc54', 'f47e78ff107bf228', 'e3e83a57c9b96439', '8ae2cceb487c0598', '7498856a14c25cc2'];
 if (RECORD) {
   const out = [];
   for (let i = 1; i <= DIGEST_SEEDS; i++) out.push(digest(runCareer(i)));
@@ -297,7 +315,10 @@ for (const [startYear, era] of STARTS) for (const nation of NATIONS) for (const 
   for (const r of s.seasons || []) if (r.type === 'playing') seasons.push(r);
 }
 const leagueOf = name => (clubs.find(c => c.name === name) || {}).league || '';
-const sized = seasons.filter(r => league.leagueSizeFor(leagueOf(r.club), r.year));
+/* Round 1037: a season is played in the league the club was really in that
+   year (the league ledgers before 2026-27), not today's label */
+const seasonLeague = r => league.leagueKeyInYear({ name: r.club, league: leagueOf(r.club) }, r.year) ?? '';
+const sized = seasons.filter(r => league.leagueSizeFor(seasonLeague(r), r.year));
 console.log(`pool: ${careers} careers, ${seasons.length} playing seasons, ${sized.length} in a league with a verified size, ${seasons.filter(r => r.leagueTitle).length} titles`);
 if (seasons.length < careers * 4) { section = 1; fail(`only ${seasons.length} playing seasons over ${careers} careers, the walk is not reaching the season loop`); }
 
@@ -350,7 +371,7 @@ console.log('2) never above the league size, never below 1, and a verified leagu
 {
   let over = 0, under = 0, missing = 0, wrongSize = 0, unsizedClaim = 0, cutShort = 0;
   for (const r of seasons) {
-    const size = league.leagueSizeFor(leagueOf(r.club), r.year);
+    const size = league.leagueSizeFor(seasonLeague(r), r.year);
     if (r.leagueFinish !== undefined && r.leagueFinish < 1) under += 1;
     if (r.leagueSize !== undefined && r.leagueFinish > r.leagueSize) over += 1;
     /* A severe injury stops the season at the rehab choice and drops the

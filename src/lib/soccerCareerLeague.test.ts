@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { CAREER_LEAGUE_SEASONS } from "../data/careerLeagueSeasons";
 import { divisionMove, drawLeagueFinish, dugoutTableWords, eliteInYear, finishBand, finishZone, leagueSizeFor, listLeague, leagueWithArticle, LIST_SEASON, managerLeagueField, MANAGER_FIELD, ordinal, readLeagueFinish } from "./soccerCareerLeague";
 
 const ELITE = ["Bayern Munich", "PSG", "Man City", "Real Madrid", "Barcelona", "Liverpool"];
@@ -6,7 +7,11 @@ const base = { league: "La Liga", year: 2020, tier: 1, elite: false, rating: 7, 
 
 describe("leagueSizeFor", () => {
   it("walks every window boundary of the verified table", () => {
-    expect(leagueSizeFor("Premier League", 1991)).toBeNull();
+    /* Round 1037: 1990-91 and 1991-92 (the First Division) answer from the
+       league ledgers now, 20 and 22 clubs; nothing before 1990 is held */
+    expect(leagueSizeFor("Premier League", 1989)).toBeNull();
+    expect(leagueSizeFor("Premier League", 1990)).toBe(20);
+    expect(leagueSizeFor("Premier League", 1991)).toBe(22);
     expect(leagueSizeFor("Premier League", 1992)).toBe(22);
     expect(leagueSizeFor("Premier League", 1994)).toBe(22);
     expect(leagueSizeFor("Premier League", 1995)).toBe(20);
@@ -113,6 +118,10 @@ describe("leagueWithArticle", () => {
     expect(["Premier League", "La Liga", "Bundesliga", "Serie A", "Ligue 1", "MLS", "Eredivisie"].map(leagueWithArticle))
       .toEqual(["the Premier League", "La Liga", "the Bundesliga", "Serie A", "Ligue 1", "MLS", "Eredivisie"]);
   });
+  it("Round 1037: the old French name takes no article, the old English ones do", () => {
+    expect(["Division 1", "First Division", "Second Division", "Championship"].map(leagueWithArticle))
+      .toEqual(["Division 1", "the First Division", "the Second Division", "the Championship"]);
+  });
 });
 
 describe("ordinal", () => {
@@ -193,7 +202,10 @@ describe("managerLeagueField (Round 1029)", () => {
 
   it("knows the Championship's size for the dugout only, from 2004", () => {
     expect(leagueSizeFor("Championship", 2030)).toBeNull();
-    expect(leagueSizeFor("Championship", 2003, true)).toBeNull();
+    /* Round 1037: the second tier before 2004 answers from the league
+       ledgers now (24 clubs every season from 1990-91) */
+    expect(leagueSizeFor("Championship", 2003, true)).toBe(24);
+    expect(leagueSizeFor("Championship", 1989, true)).toBeNull();
     expect(leagueSizeFor("Championship", 2004, true)).toBe(24);
     expect(leagueSizeFor("Premier League", 2030, true)).toBe(20);
   });
@@ -227,18 +239,61 @@ describe("managerLeagueField (Round 1029)", () => {
     expect(managerLeagueField({ clubs: CLUBS, club: "Bayern Munich", year: 2030 }, seq(0.5)).named).toEqual(["Dortmund"]);
   });
 
-  it("names nobody in a season before the list's own, at the same size", () => {
+  it("names a past season of a ledger league from the ledgers, never today's clubs", () => {
     const at = (y: number) => managerLeagueField({ clubs: CLUBS, club: "Bayern Munich", year: y }, seq(0.5));
     expect(LIST_SEASON).toBe(2026);
-    expect([1990, 2012, 2025, 2026, 2030].map(y => at(y).named)).toEqual([[], [], [], ["Dortmund"], ["Dortmund"]]);
-    expect([1990, 2025, 2026].map(y => at(y).lineupUnknown)).toEqual([true, true, false]);
-    expect([at(2025).size, at(2025).league, at(2025).sizeVerified]).toEqual([18, "Bundesliga", true]);
-    /* a past season draws from the rng exactly as a later one does, so the
-       races the table settles do not move */
-    const big = Array.from({ length: 30 }, (_, i) => row(`PL ${i}`, "Premier League", "England"));
-    const calls = (y: number) => { let n = 0; managerLeagueField({ clubs: big, club: "PL 0", year: y }, () => { n += 1; return 0.5; }); return n; };
-    expect(calls(2012)).toBe(calls(2030));
-    expect(calls(2012)).toBeGreaterThan(0);
+    /* Round 1037 (this pin moved from Round 1029's "names nobody"): before
+       2026-27 the Bundesliga's table is that season's real one, Bayern in
+       its own seat, the rest named only where the career world knows them */
+    for (const y of [1990, 2012, 2025]) {
+      const f = at(y);
+      const real = CAREER_LEAGUE_SEASONS["Bundesliga"][y];
+      expect([f.league, f.leagueName, f.size, f.sizeVerified, f.lineupUnknown]).toEqual(["Bundesliga", "Bundesliga", real.size, true, false]);
+      expect(f.named).not.toContain("Bayern Munich");
+      expect(f.named.length).toBe(real.clubs.length - 1);
+      for (const n of f.named) expect(real.clubs).toContain(n);
+    }
+    expect([2026, 2030].map(y => at(y).named)).toEqual([["Dortmund"], ["Dortmund"]]);
+    expect(at(2026).lineupUnknown).toBe(false);
+    /* a past season of a league the ledgers do not hold still draws from the
+       rng exactly as a later one does (Round 1029), so the races the table
+       settles do not move; a ledger season draws nothing, its field is fixed */
+    const big = Array.from({ length: 30 }, (_, i) => row(`NL ${i}`, "Eredivisie", "Netherlands"));
+    const calls = (clubs: typeof big, club: string, y: number) => { let n = 0; managerLeagueField({ clubs, club, year: y }, () => { n += 1; return 0.5; }); return n; };
+    expect(calls(big, "NL 0", 2012)).toBe(calls(big, "NL 0", 2030));
+    const pl = Array.from({ length: 30 }, (_, i) => row(`PL ${i}`, "Premier League", "England"));
+    expect(calls(pl, "PL 0", 2030)).toBeGreaterThan(0);
+    expect(calls(pl, "PL 0", 2012)).toBe(0);
+  });
+
+  it("seats a club the ledgers had elsewhere in a real member's place", () => {
+    /* Wolves were in the Championship in 2012-13: a game that has them in
+       the Premier League gives them one real member's seat */
+    const f = managerLeagueField({ clubs: CLUBS, club: "Wolves", league: "Premier League", year: 2012 }, seq(0.5));
+    const real = CAREER_LEAGUE_SEASONS["Premier League"][2012];
+    expect([f.league, f.size, f.sizeVerified]).toEqual(["Premier League", real.size, true]);
+    expect(f.named).not.toContain("Wolves");
+    expect(real.clubs.length - f.named.length).toBeLessThanOrEqual(1);
+    for (const n of f.named) expect(real.clubs).toContain(n);
+    /* promoted by the game from the Championship, he takes the seat of a
+       club that really came up from the Championship that season */
+    const up = managerLeagueField({ clubs: CLUBS, club: "Wolves", league: "Premier League", year: 2012, from: "Championship" }, seq(0.5));
+    const promoted = real.clubs.filter(n => CAREER_LEAGUE_SEASONS["Championship"][2011].clubs.includes(n));
+    const gone = real.clubs.filter(n => !up.named.includes(n));
+    if (gone.length === 1) expect(promoted).toContain(gone[0]);
+  });
+
+  it("never seats a club by today's label alone: a job's first past season follows the ledgers", () => {
+    /* a job at Wolves for 2012-13 under a Premier League label is played in
+       the Championship they were really in */
+    const w = managerLeagueField({ clubs: CLUBS, club: "Wolves", league: "Premier League", year: 2012, placed: false }, seq(0.5));
+    expect([w.league, w.size, w.sizeVerified, w.lineupUnknown]).toEqual(["Championship", CAREER_LEAGUE_SEASONS["Championship"][2012].size, true, false]);
+    /* Brentford were in none of the six in 2005-06: no league, nobody named,
+       no verified size, whatever the label says */
+    const b = managerLeagueField({ clubs: CLUBS, club: "Brentford", league: "Premier League", year: 2005, placed: false }, seq(0.5));
+    expect(b).toEqual({ league: null, size: MANAGER_FIELD, sizeVerified: false, named: [], lineupUnknown: true });
+    /* from 2026-27 the label is the league, as before */
+    expect(managerLeagueField({ clubs: CLUBS, club: "Brentford", league: "Premier League", year: 2030, placed: false }, seq(0.5)).league).toBe("Premier League");
   });
 
   it("flags a past season in a league it holds even when it knows no other club there", () => {

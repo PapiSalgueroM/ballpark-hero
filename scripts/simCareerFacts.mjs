@@ -40,7 +40,8 @@
                 changed league inside that span (the lead's option (a) of
                 2026-10-05, until the league by year round); the verified
                 2026-27 league sits beside it with its evidence, and the list
-                may only shrink (PINNED_MAX). Unverified: a ratchet, its count
+                may only shrink (PINNED_MAX; 0 since Round 1037 released the
+                seven, the past being the league ledgers' now). Unverified: a ratchet, its count
                 may only fall (UNVERIFIED_MAX) and its labels must still equal
                 the engine's, so nothing changes unseen.
    5 PLAYED     seeded careers played step by step through the real screens'
@@ -63,8 +64,8 @@
      unwired    the season stops calling awardAllTimeTopScorer       -> 3
      label      Norwich City (verified Championship) relabelled
                 "Premier League"                                     -> 4
-     relabel    Hertha Berlin (pinned) given its 2026-27 label
-                "2. Bundesliga" in every era                         -> 4
+     relabel    Hertha Berlin (released by Round 1037 to its verified
+                "2. Bundesliga") put back to its old "Bundesliga"    -> 4
      early      the award call back above the summer tournament      -> 5
      early2     the award call above the season's own int goals      -> 5
      wrongkey   the record looked up by the club's country first     -> 5
@@ -91,9 +92,11 @@ const CONTROL = process.env.SIM_CAREER_FACTS_CONTROL || '';
    this number comes down with it. */
 const UNVERIFIED_MAX = 2;
 /* The pinned labels: 7 on 2026-10-06 (West Ham, Wolves, Girona, Hertha
-   Berlin, Nantes, River Plate Asuncion, Persija Jakarta). It may only fall,
-   and falls to 0 when the league by year round lands. */
-const PINNED_MAX = 7;
+   Berlin, Nantes, River Plate Asuncion, Persija Jakarta). It may only fall.
+   Round 1037 (the league by year round) released all seven to their
+   verified 2026-27 league, so it stands at 0: a past season is answered by
+   the league ledgers, never by a label. */
+const PINNED_MAX = 0;
 /* The season a label is true for. A calendar year league's 2026 season and a
    split season league's 2026-27 are both the current one; anything older is
    evidence about a league the club may have left. */
@@ -125,7 +128,7 @@ const CONTROLS = {
   equal: ['2', swap('if (intGoals <= record ||', 'if (intGoals < record ||')],
   unwired: ['3', swap('  awardAllTimeTopScorer(s, thisYear);\n', '\n')],
   label: ['4', swap('name: "Norwich City", country: "England", tier: 4, color: "#FFF200", league: "Championship"', 'name: "Norwich City", country: "England", tier: 4, color: "#FFF200", league: "Premier League"')],
-  relabel: ['4', swap('name: "Hertha Berlin", country: "Germany", tier: 4, color: "#004C9E", league: "Bundesliga"', 'name: "Hertha Berlin", country: "Germany", tier: 4, color: "#004C9E", league: "2. Bundesliga"')],
+  relabel: ['4', swap('name: "Hertha Berlin", country: "Germany", tier: 4, color: "#004C9E", league: "2. Bundesliga"', 'name: "Hertha Berlin", country: "Germany", tier: 4, color: "#004C9E", league: "Bundesliga"')],
   early: ['5', s => swap('  // Fair Play Award', '  awardAllTimeTopScorer(s, thisYear);\n  // Fair Play Award')(swap('  awardAllTimeTopScorer(s, thisYear);\n', '')(s))],
   early2: ['5', s => swap('  const intSeason = generateIntSeasonStats(s, thisYear);\n', '  awardAllTimeTopScorer(s, thisYear);\n  const intSeason = generateIntSeasonStats(s, thisYear);\n')(swap('  awardAllTimeTopScorer(s, thisYear);\n', '')(s))],
   wrongkey: ['5', swap('const record = INT_SCORING_RECORDS[s.nationality];', 'const record = INT_SCORING_RECORDS[s.currentClubCountry] ?? INT_SCORING_RECORDS[s.nationality];')],

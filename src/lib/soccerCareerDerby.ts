@@ -23,14 +23,17 @@
    awards list, so the Hall of Fame ballot count and the corruption arc's
    "hand the trophy back" read exactly what they read before this round.
 
-   Nothing here is real history: the game keeps every club in its league
-   every year, so a derby can be played in a season the real rival was down a
-   division. The copy says the derbies are played in your career's league.
+   The results are not real history, but since Round 1037 the fixture is: a
+   season before 2026-27 has a derby only when the league ledgers put both
+   clubs in the same league that year (leagueKeyInYear), so a rival who was
+   down a division is not met, and a league outside the six the ledgers
+   hold has no derby before 2026-27. The copy says the derbies are played in
+   your career's league.
 
    Imports: types only from the engine, so there is no runtime cycle. */
 import { keyedRng } from "./keyedRng";
 import { adjustClubsForYear } from "./careerEras";
-import { eliteInYear } from "./soccerCareerLeague";
+import { eliteInYear, leagueKeyInYear } from "./soccerCareerLeague";
 import { CLUB_RIVALRIES, SC_CLUB_CANON, type RivalryKind } from "../data/clubRivalries";
 import type { CareerState, ClubData, SeasonRecord } from "./soccerCareerEngine";
 
@@ -151,6 +154,13 @@ export function derbyMeetings(league: string, year: number): number | null {
   return null;
 }
 
+/** The league a club plays its derbies in that season: the ledgers' league
+ *  before 2026-27 (null when they place the club in none of the six), the
+ *  league it holds from then on. */
+function derbyLeague(club: string, league: string, year: number): string | null {
+  return leagueKeyInYear({ name: club, league }, year);
+}
+
 /** The canonical name of a Soccer Career club (the spelling the shared table
  *  uses). Exact match only. */
 export function canonClub(scName: string): string {
@@ -162,15 +172,20 @@ export interface DetectedDerby { rival: string; name: string; kind: RivalryKind 
 /** DETECTION. The derbies your club plays in the season starting in `year`,
  *  rivals listed under their Soccer Career names, in table order. Pure. */
 export function seasonDerbies(input: { club: string; league: string; year: number; clubs: ClubData[] }): DetectedDerby[] {
-  const { club, league, year, clubs } = input;
-  if (derbyMeetings(league, year) === null) return [];
+  const { club, year, clubs } = input;
+  /* Round 1037: before 2026-27 both clubs must sit in the same league that
+     season by the league ledgers (leagueKeyInYear), so a derby is never
+     played against a rival who was down a division; from 2026-27 on it is
+     the career's league, exactly as before. */
+  const league = derbyLeague(club, input.league, year);
+  if (league === null || derbyMeetings(league, year) === null) return [];
   const canon = canonClub(club);
   const world = adjustClubsForYear(clubs, year);
   const detected: DetectedDerby[] = [];
   for (const row of CLUB_RIVALRIES) {
     if (row.a !== canon && row.b !== canon) continue;
     const other = row.a === canon ? row.b : row.a;
-    const rival = world.find(c => c.name !== club && canonClub(c.name) === other && c.league === league);
+    const rival = world.find(c => c.name !== club && canonClub(c.name) === other && derbyLeague(c.name, c.league, year) === league);
     if (!rival) continue;
     detected.push({ rival: rival.name, name: row.name, kind: row.kind });
   }
@@ -236,7 +251,8 @@ export interface DerbyResolveInput {
  *  + rival), so the main Math.random stream never moves. */
 export function resolveSeasonDerbies(input: DerbyResolveInput): SeasonDerby[] {
   const found = seasonDerbies(input);
-  const meetings = derbyMeetings(input.league, input.year);
+  const league = derbyLeague(input.club, input.league, input.year);
+  const meetings = league === null ? null : derbyMeetings(league, input.year);
   if (found.length === 0 || meetings === null) return [];
   const world = adjustClubsForYear(input.clubs, input.year);
   const myStr = clubStrength(world, input.club, input.year, input.elite);
