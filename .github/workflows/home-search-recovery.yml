@@ -17,8 +17,8 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: home-search-recovery-1088-${{ github.head_ref || github.ref_name }}
-  cancel-in-progress: true
+  group: home-search-recovery-1088-${{ github.event.pull_request.head.sha || github.sha }}
+  cancel-in-progress: false
 
 jobs:
   verify:
@@ -94,6 +94,7 @@ jobs:
           const versions = Object.fromEntries(packages.map(name => [name, JSON.parse(fs.readFileSync('node_modules/' + name + '/package.json')).version]));
           fs.writeFileSync('home-search-recovery-artifacts/runtime.json', JSON.stringify({ node: process.version, versions, hashes }, null, 2));
           NODE
+          timeout --version > home-search-recovery-artifacts/timeout-version.txt
       - name: Actual app types and build
         id: build
         run: |
@@ -106,9 +107,59 @@ jobs:
       - name: Actual outcomes and effective copied faults
         if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.assets.outcome == 'success' }}
         run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simHomeSearchRecovery.mjs 2>&1 | tee home-search-recovery-artifacts/outcomes.log
+      - name: Retain completed mounted and runtime evidence before native
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: home-search-mounted-${{ github.run_id }}-${{ github.run_attempt }}
+          path: home-search-recovery-artifacts/
+          retention-days: 3
+          if-no-files-found: error
+      - name: Prove the native deadline fails and cleans only owned processes
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.assets.outcome == 'success' }}
+        run: |
+          set +e
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" xvfb-run -a timeout --verbose --signal=TERM --kill-after=15s 30s node scripts/playHomeSearchRecovery1088.mjs --deadline-control 2>&1 | tee home-search-recovery-artifacts/deadline-control.log
+          result=${PIPESTATUS[0]}
+          set -e
+          printf '%s\n' "$result" > home-search-recovery-artifacts/deadline-control-exit.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const dir = 'home-search-recovery-artifacts';
+          const report = JSON.parse(fs.readFileSync(dir + '/native-deadline-control/report.json'));
+          const result = Number(fs.readFileSync(dir + '/deadline-control-exit.txt', 'utf8').trim());
+          const proof = { result, complete: report.complete, error: report.error, termination: report.termination, checks: [] };
+          try {
+            assert.equal(result, 124);
+            assert.equal(report.error?.name, 'NativeDeadlineError'); assert.equal(report.complete, false);
+            assert.deepEqual(report.cases, []); assert.deepEqual(report.controls, []);
+            assert(report.termination.activeOperations.some(op => op.name === 'deadline control deliberate unresolved promise'));
+            for (const field of ['source', 'build', 'cache']) assert.deepEqual(report[field + 'After'], report[field + 'Before']);
+            assert.equal(report.sourceHoldError, undefined);
+            const pids = [...new Set([report.deadlineControl.serverPid, ...report.deadlineControl.browserProcesses.map(p => Number(p.id))])];
+            assert(pids.length >= 2 && pids.every(pid => Number.isSafeInteger(pid) && pid > 1 && pid !== process.pid));
+            for (let attempt = 0; attempt < 21; attempt++) {
+              const states = pids.map(pid => ({ pid, exists: fs.existsSync('/proc/' + pid) }));
+              proof.checks.push({ attempt, states });
+              if (states.every(row => !row.exists)) break;
+              if (attempt < 20) await new Promise(resolve => setTimeout(resolve, 250));
+            }
+            assert(proof.checks.at(-1).states.every(row => !row.exists), 'All recorded owned server/browser PIDs are gone');
+            assert(!/Home search native: PASS/.test(fs.readFileSync(dir + '/deadline-control.log', 'utf8')));
+            proof.proved = true;
+          } catch (error) { proof.proved = false; proof.failure = { name: error.name, message: error.message }; throw error; }
+          finally { fs.writeFileSync(dir + '/deadline-control-proof.json', JSON.stringify(proof, null, 2)); }
+          NODE
       - name: Native built Home failed search recovery and healthy fold
         if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.assets.outcome == 'success' }}
-        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" xvfb-run -a node scripts/playHomeSearchRecovery1088.mjs 2>&1 | tee home-search-recovery-artifacts/native.log
+        run: |
+          set +e
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" xvfb-run -a timeout --verbose --signal=TERM --kill-after=15s 8m node scripts/playHomeSearchRecovery1088.mjs 2>&1 | tee home-search-recovery-artifacts/native.log
+          result=${PIPESTATUS[0]}
+          set -e
+          printf '%s\n' "$result" > home-search-recovery-artifacts/native-exit.txt
+          exit "$result"
       - name: Retain new verification evidence promptly
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         uses: actions/upload-artifact@v4
