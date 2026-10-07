@@ -111,7 +111,7 @@ try {
   await ready; browser = await chromium.launch({ headless: true });
   for (const profile of [{ width: 320, height: 780, touch: true, theme: 'dark', reduced: true }, { width: 390, height: 844, touch: true, theme: 'light', reduced: false }, { width: 1280, height: 720, touch: false, theme: 'light', reduced: false }]) {
     const id = `${profile.width}-${profile.touch ? 'touch' : 'keyboard'}-${profile.theme}`;
-    const row = { id, profile, stages: [], geometry: [], screenshots: [], network: [], fontResponses: [], errors: [], consoleErrors: [], assetErrors: [] };
+    const row = { id, profile, stages: [], geometry: [], screenshots: [], documents: [], network: [], fontResponses: [], errors: [], consoleErrors: [], assetErrors: [] };
     report.cases.push(row); save();
     const context = await browser.newContext({ viewport: { width: profile.width, height: profile.height }, hasTouch: profile.touch, isMobile: profile.touch, colorScheme: profile.theme, reducedMotion: profile.reduced ? 'reduce' : 'no-preference', serviceWorkers: 'block', storageState: { cookies: [], origins: [{ origin: BASE, localStorage: [{ name: SAVE_KEY, value: initialBytes }, { name: 'dukb-theme', value: profile.theme }, { name: 'dukb-guest-handle', value: 'NativeTickets-10' }, { name: 'cookie-consent', value: 'essential' }, { name: 'rules-gate-seen:/stadium-tycoon', value: '1' }, ...Object.entries(protectedStorage).map(([name, value]) => ({ name, value }))] }] } });
     await context.route('**/*', route => {
@@ -142,6 +142,12 @@ try {
     await page.clock.install({ time: NOW });
     const advance = () => page.clock.runFor(100);
     const storage = () => page.evaluate(key => ({ bytes: localStorage.getItem(key), ...window.__ticketNative }), SAVE_KEY);
+    const retainStorage = async stage => {
+      const value = await storage();
+      const protectedValues = await page.evaluate(keys => Object.fromEntries(keys.map(key => [key, localStorage.getItem(key)])), Object.keys(protectedStorage));
+      row.documents.push({ stage, ...value, protectedValues }); save();
+      return value;
+    };
     const activate = async (locator, advanceTime = true) => {
       await locator.scrollIntoViewIfNeeded(); const rect = await locator.boundingBox(); assert(rect && rect.width >= 44 && rect.height >= 44, 'Actual control is reachable and at least 44px');
       assert(await locator.evaluate(node => { const r = node.getBoundingClientRect(), hit = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2); return hit === node || node.contains(hit); }), 'Action owns its hit target');
@@ -173,7 +179,7 @@ try {
         await activate(panel(page).locator(`[data-ticket-policy="${policy}"]`), false);
         await page.waitForFunction(wanted => document.querySelector('[data-ticket-policy-panel]')?.getAttribute('data-current-policy') === wanted, policy);
         assert.equal(await page.evaluate(() => scrollY), y, 'Selecting policy keeps the viewport steady');
-        const after = await storage(); assert.equal(engine.ticketPolicyOf(JSON.parse(after.bytes)), policy);
+        const after = await retainStorage(`selected-${policy}`); assert.equal(engine.ticketPolicyOf(JSON.parse(after.bytes)), policy);
         assert(JSON.parse(after.bytes).money >= JSON.parse(before.bytes).money, 'Changing the offer does not spend or rewind money');
         await verifyMetrics(policy, after.bytes);
       }
@@ -194,11 +200,12 @@ try {
       await activate(panel(page).locator('[data-ticket-policy="premium"]'), false);
       await page.waitForFunction(() => document.querySelector('[data-ticket-policy-panel]')?.getAttribute('data-current-policy') === 'premium');
       assert.equal((await storage()).bytes, prior, 'A newer intended policy retains old bytes while refused');
+      await retainStorage('latest-policy-refused');
       await panel(page).scrollIntoViewIfNeeded(); checkGeometry(await measure(page)); await capture('latest-policy-refused');
       await page.evaluate(() => { window.__ticketNative.refuse = false; });
       await activate(panel(page).getByRole('button', { name: 'Retry save', exact: true }), false);
       await page.waitForFunction(() => document.querySelector('[data-ticket-policy-panel]')?.getAttribute('data-save-status') === 'current');
-      const accepted = await storage(); assert.equal(engine.ticketPolicyOf(JSON.parse(accepted.bytes)), 'premium', 'Retry stores the latest intended offer');
+      const accepted = await retainStorage('retry-accepted'); assert.equal(engine.ticketPolicyOf(JSON.parse(accepted.bytes)), 'premium', 'Retry stores the latest intended offer');
       assert.equal(await panel(page).getAttribute('data-save-status'), 'current'); await verifyMetrics('premium', accepted.bytes);
       row.refusedWrites = accepted.writes.filter(write => write.key === SAVE_KEY && write.refused); assert(row.refusedWrites.length >= 3, 'Actual selection and Retry refusals were exercised');
       fs.writeFileSync(path.join(OUT, `${id}-saved-premium.json`), accepted.bytes);
@@ -206,6 +213,7 @@ try {
       await activate(page.locator('[data-office-panel="tickets"]')); await panel(page).waitFor();
       assert.equal(await panel(page).getAttribute('data-current-policy'), 'premium', 'Real reload restores the policy');
       assert.equal(await panel(page).getAttribute('data-save-status'), 'current');
+      await retainStorage('reloaded-policy');
       row.reloadFonts = await loadFonts(page);
       for (const font of row.reloadFonts) assert(font.faces.length && font.faces.every(face => face.status === 'loaded' && face.family.replaceAll('"', '') === font.family), 'Actual fonts remain loaded after reload');
       await panel(page).scrollIntoViewIfNeeded(); await capture('reloaded-offer');
@@ -223,6 +231,7 @@ try {
       }
       await activate(page.locator('[data-office-panel="upgrades"]')); await panel(page).waitFor({ state: 'detached' });
       const protectedAfter = await page.evaluate(keys => Object.fromEntries(keys.map(key => [key, localStorage.getItem(key)])), Object.keys(protectedStorage)); assert.deepEqual(protectedAfter, protectedStorage);
+      row.protectedStorage = { before: protectedStorage, after: protectedAfter };
       row.storage = await storage(); assert(row.storage.events.some(event => event.trusted && (profile.touch ? event.type === 'pointerup' : event.key === ' ')), 'Actual trusted touch or keyboard input occurred');
       assert.deepEqual(row.errors, []); assert.deepEqual(row.consoleErrors, []); assert.deepEqual(row.assetErrors, []);
       const writes = row.network.filter(request => !['GET', 'HEAD'].includes(request.method));
