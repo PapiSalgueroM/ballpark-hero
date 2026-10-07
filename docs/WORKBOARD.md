@@ -1,3 +1,145 @@
+## Codex1083 PREPARATION7, October7: drain deferred close focus
+
+Preparation6 HEADf5a919eba4e25bae80b841eb0c2d5a33bd2c7904,
+treecda42311b0eccfc394cd0bfd18f1e732aa87fc32, run37667557430,
+finished failed only at the native390px Back focus-return assertion.
+Actual natural opening/help animations settled with complete snapshots held
+and strict geometry passing. Two320px journeys/five restored DOM faults
+completed. Proper type/build,12/22 mounted outcomes, parent20/23 ticket
+controls,15 old game gates, original load/queued-sale controls,20 readers
+and source/data/fixture/dependency holds passed. Full artifact11505520281,
+ZIP33476edb84a06d98b6efe0a502dd9ca56ad971a568b0864d23d7174b6e32a0e4.
+
+Locked FocusScope1.1.7 defers unmount autofocus with setTimeout(0); actual
+Presence detachment occurs after the driver's prior paused-clock advance.
+The preceding artifact did not directly retain pending timers. The bounded
+driver correction records focus/scroll/full snapshots and drains runFor(0)
+on BOTH paired arms after actual Back/Escape pane detachment. Full per-arm
+clock/state/save/storage/RNG/RAF/input/lifecycle snapshots must hold, then
+original paired, focus and1px scroll assertions still run. No elapsed game
+time, manual focus/scroll, animation mutation, tolerance or retry is added.
+Driver SHAcef1059ee9157ef8562ef282cc59b7307abe15e6c0f37391775bdc47bc8d52be.
+Exact removal of one helper and two calls restoresf4ddf972 byte-for-byte.
+Independent static peer receipt SHA4e68c6916c20036d3c648abd893438ed1e10a69dbbdddd236e15af61c304ca02.
+
+Only driver and these two pre-run notes change. Product/engines/data,
+original inputs256ms advances,44px/12px/1px requirements and all15 controls
+remain held. No native6/15 or PR/READY/live acceptance. The prior useful
+checks finished before this push. No local runtime. Claude owns merge,
+publication and current-main integration; parent READY1080 PR168 required.
+Root source and seven stashes held.
+
+## Codex1083 PREPARATION6, October7: restart stalled remote setup
+
+Preparation5 HEAD ea79680f59d4f29ffe415cb05230497540a1823c,
+treeb49eac91dcff29f3cd0642a8b8f754b7cba0d944, run37661796408,
+remained in Prepare remote verification for over43 minutes. Type/build,
+mounted/native/old game gates and readers had not started. This docs-only
+retry starts an identical application/test/driver candidate; no useful old
+gate is cancelled. Retain the cancelled setup log to diagnose its cause.
+
+All source, original fixtures, parent1080,12/22 sale outcomes,20/23 ticket
+controls, old thresholds,15 restored DOM faults and finite-animation
+observerf4ddf972 are unchanged. Preparation4 full574-entry artifact
+11501570903 ZIPaab104bd8d9e26b2ea24821eb36902acf33fccca67901ca4456e41700c8c7cb6
+has independent scoped acceptance for mounted12/22 and all non-native
+checks, plus only two completed320px native journeys/five controls.
+No full native/PR/READY/live acceptance. Proper exact-head remote gates
+and all six paired native routes remain mandatory. No local runtime.
+Claude owns merge/publication/current-main integration. Root source and
+seven stashes held.
+
+## Codex1083 PREPARATION5, October7,13:41 EDT: observe settled controls
+
+Preparation4 HEAD25ac9f9c3189372100255dea72a5f762efff286d,
+treee784517730eb4ad9aa5fad57a01f8fd31261fb8c, run37657592399.
+Both320px first/late-ground journeys completed, including actual trusted
+pagehide and later successful exact sold-save writes in source document1,
+then a distinct document2. Five restored DOM faults passed. Early29entry
+artifact11500051412 retained, ZIP SHA
+f869a93522535861a26abacd78791739056f6e8b61368b16b65ab26970e85f86.
+Native now fails390px animated controls at unchanged44px minimum. The
+failed measurement was not retained, so exact dimensions and animation
+causation remain unproven. No full native/READY/live acceptance.
+
+Next driver-only correction retains pre/post pane/button geometry and finite
+pane-subtree animation state. Await only natural finished promises, with a
+remote-side5s timeout. No forced animation completion/cancellation, extra
+browser input or simulated game-clock advance. Require exact full snapshots
+before/after the wait, including state/storage/RNG/clock/RAF/input/journal.
+Keep existing44px/12px/1px geometry, original controls and all gameplay/save/
+loader/departure comparisons unchanged. Driver SHA
+f4ddf972a146e483bfd3ce893a4c04eeb5a3b6f989d7bce923b726bce58f49db,
+independently peer reviewed. Reverse bytes reproduce prior41c7f5c2 exactly.
+Product/engines/data unchanged. Parent READY1080 PR168 remains required.
+The current original-gate run must finish before the next push.
+## Codex1083 PREPARATION4, October7,13:16 EDT: durable departure evidence
+
+Preparation3 HEAD437612174a214489939cac07f50b9e66113ffae3, treeebde5445,
+run37654798316 finished failed only at the native departure gate. Type/build,
+12 mounted cases/22 copied faults, parent ticket20/23,15 original game gates,
+11 load controls, the exact original rep fault,20 readers and source/data/
+fixture/dependency holds passed. Full561entry artifact11500075301 retained,
+ZIP SHA8a233d36abc47c3593d3d4a4e2d0d8af860fb626746277798982ca8b3de93b53.
+The320px paired clocks and nine review/action stages now agree exactly.
+Actual same-origin departure retained the sold save, but console/CDP did not
+retain a trusted pagehide followed by its write. Surviving bytes alone do not
+prove that handler ran. No native/READY/live acceptance.
+
+Next trial changes the native driver only. A synchronous sessionStorage
+journal records actual event.isTrusted and successful storage completion
+only after the original operation returns. Require a new trusted pagehide,
+later exact saved-byte write in the same source document/URL, preserved old
+journal prefix and a distinct destination document. Synthetic events remain
+false and cannot qualify. Existing strict clocks, storage/state, RNG, geometry,
+inputs, copied/DOM controls and console/CDP evidence remain held. Journal SHA
+41c7f5c2dc76d7921311405d1463fbf51d996d579da3ff0bec28bdce2cdbeb87,
+independently reviewed twice. Product/engines/data/save format unchanged.
+Parent READY1080 PR168 remains a stacked integration dependency.
+## Codex1083 PREPARATION3, October7,12:45 EDT: unchanged product
+
+Preparation2 db4f52c3/treedbb11b79 run37649544656 finished failed.
+Retained full556file artifact11497182954, ZIP SHA
+23ed752da2df34f730a0935f88f7cbfcfd07504b73424f04625dd346acf8b995.
+Actual12 cases/22 copied faults, ticket20/23,15 original game gates and11
+load controls passed.19 readers passed; anchor reader conservatively linked
+raw binary hash reads to multiline control anchors. Exact original rep
+fault produced its intended disabled-kick failure and exit1; color escapes
+made only the new wrapper's literal matcher red. Native paired monotonic
+clock257 versus258ms failed before review. No native/READY/live acceptance.
+
+Next remote trial leaves product, original fixtures/assertions, controls,
+font/browser inputs and strict state/save/clock/geometry assertions held.
+Use one paused native clock command and assert both initial monotonic clocks
+are exactly0; retain raw logs but strip terminal escapes for the same exact
+original failure matcher; keep unchanged raw-byte hash computation inside
+local digest blocks so the source-anchor fence can identify its actual fate.
+Parent READY1080 PR168 is still a stacked integration dependency. Source,
+data, installed dependency and transport holds remain mandatory.
+
+Codex1083 PREPARATION2, October7,12:06 EDT: verifier corrections.
+First run37643274441 atfa6cceabc failed and all220files retained externally.
+ESM config resolution/CRLF source normalization corrected,raw hashes held;
+native raw CDP departure retention added with strict trusted-save gate held.
+Old set-piece case6 gains only final confirmation+settle, exactbyteguard and
+original rep fault required. Early outcome/native uploads added. Same product,
+12 cases/22 source faults,6 paired journeys/15 DOM faults pending remote proof.
+No READY/live claim. ParentPR168 remains stacked dependency. No other source
+or old assertion/fixture changes. Root/sevenstashes/main/data lanes held.
+
+Codex1083 AUTHORED, October 7, 11:08 EDT: sale review and refused-save fix.
+Branch codex/tycoon-sale-review-1083, parent READY1080 4fed0eef (PR168).
+Live sale terms/reset/keep/help, one confirmation, save-first doPrestige,
+failure notice and latest-state retry. Engine/data/ticket policy held.
+Twelve mounted cases and twenty-two copied controls authored. Native six
+paired journeys/fifteen DOM controls under construction. Remote acceptance
+pending. No PR, READY or live claim. Stacked integration belongs to Claude.
+Design: docs/plans/2026-10-07-tycoon-sale-review-1083.md.
+Original Loads anchor only rebound; old fault/assertions/fixtures held.
+Original Legacy walk only gains final confirmation navigation, not executed.
+Parent1080 final READY acceptance is recorded externally; older notes below
+are historical. Root source/seven stashes and release/data lanes stay held.
+
 Codex1080 GREEN PREPARATION, October7,06:59 EDT. Run37607879133 at653fd5ad
 passed20 outcomes/23 effective faults,16 original regressions with11 load
 controls,3 built-route journeys/9 restored DOM controls,20readers and holds.
