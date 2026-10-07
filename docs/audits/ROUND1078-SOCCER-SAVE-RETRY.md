@@ -109,3 +109,25 @@ The accepted 1076 preparation receipt and AH publication notes have now been
 merged into this branch. Both permanent career workflows must pass on its
 combined PR, alongside the older Four career practice verification companion,
 before final acceptance. No merge or publication is claimed.
+
+## Combined PR companion alignment
+
+The first PR167 save-retry run37594643703 passed at PR checkout
+2fdaa3dd74589c17e638f0b140e981c1afaaed1a, tree9b7dad5e (branch d9aaf608).
+Artifact11470363174 has verified ZIP SHA256
+bc03da61a3537ca314c258e4b0c83a13889ddc025d77e69c3d3272c41c5b32e9.
+The mounted8/16 and native3/9 evidence, regressions, readers and source hashes
+were independently accepted. This does not by itself accept the whole PR.
+
+The original Four career practice companion37594643718 failed in all six
+native profiles because its play script closed practice rules and tried to
+start without pressing Resume. Retained HTML showed the correctly paused
+screen, Resume practice and Tap to start, with no app errors. Artifact
+11470608411, ZIP SHA256
+fa833e74d7fbc674f24b7a882c23f94e1eb04d3e58df0898f37ce7625bcf6a79,
+contains that failure. The driver now checks the explicit pause, checks the
+44px Resume target and uses its existing trusted input helper to resume.
+The old score80, one-time bank, OVR70-to72, saved-state/reload, other-sport,
+focus/scroll and layout assertions remain unchanged. The new lifecycle suite
+retains the effective source faults for pause and explicit-resume behavior.
+All three PR workflows must pass again on the corrected combined tree.
