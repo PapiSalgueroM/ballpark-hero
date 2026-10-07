@@ -736,8 +736,9 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   const retireNow = () => {
     if (!career) return;
     const c: CareerState = JSON.parse(JSON.stringify(career));
-    /* Round 1039: 'Hang them up now' writes the last season played as the last. */
-    manualRetire(c);
+    /* Round 1039: 'Hang them up now' writes the last season played as the last.
+       With no Hall bound (the parity replay) the save stays the old one. */
+    if (sport.hall) manualRetire(c);
     c.retired = true;
     setCareer(c);
     setPhase('retired');
