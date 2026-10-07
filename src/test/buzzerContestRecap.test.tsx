@@ -66,7 +66,7 @@ function reducedMotion() {
     addListener: () => {}, removeListener: () => {}, addEventListener: () => {}, removeEventListener: () => {}, dispatchEvent: () => false,
   }));
 }
-const button = (name: string) => screen.getByRole('button', { name, exact: true });
+const button = (name: string) => screen.getByRole('button', { name });
 const board = (view: View) => view.container.querySelector('[data-arcade-phase]')!;
 const actualShot = () => vi.mocked(takeShot).mock.results.at(-1)!.value as HoopResult;
 const strip = (view: View, recap = false) => view.container.querySelector(`[data-contest-balls="${recap ? 'recap' : 'live'}"]`)!;

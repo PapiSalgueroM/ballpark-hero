@@ -35,7 +35,7 @@ const controls = {
   name: { file: scorecard, from: "${status === 'in-flight' ? 'in flight' : status}", to: '${"upcoming"}', test: settled },
   symbol: { file: scorecard, from: "`✓${value === 2 ? '2' : ''}`", to: "`•${value === 2 ? '2' : ''}`", test: racks },
   completion: { file: board, from: "isDone && !bookedAlready && (mode === 'daily' || mode === 'unlimited')", to: "isDone && !bookedAlready && mode !== 'practice' && mode !== 'lab'", test: local },
-  record: { file: board, from: "phase !== 'done' || mode !== 'daily' || savedRef.current", to: "phase !== 'done' || mode === 'practice' || mode === 'lab' || savedRef.current", test: local },
+  record: { file: board, from: "phase !== 'done' || mode !== 'daily' || savedRef.current", to: "phase !== 'done' || (mode !== 'daily' && mode !== 'contest') || savedRef.current", test: local },
   blockedDetail: { file: board, from: "result.blocked ? 'Stopped at the defender. No rim crossing.'", to: "false ? 'Stopped at the defender. No rim crossing.'", test: blocked },
   lowDetail: { file: board, from: "result.entryDeg <= 0 ? 'Never reached rim height.' : <>Came in at", to: "false ? 'Never reached rim height.' : <>Came in at", test: low },
   blockedLanding: { file: board, from: '(result && !result.blocked && result.entryDeg > 0)', to: '(result && result.entryDeg > 0)', test: blocked },
