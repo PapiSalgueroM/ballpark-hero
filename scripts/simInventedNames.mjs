@@ -174,7 +174,7 @@ const real = new Set();
   const BUNDLE = BUNDLE_WORLDS;
   fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-export { NATIONALITY_BY_WORLD } from '${ROOT.replaceAll('\\', '/')}/src/data/playerNationalities.ts';
+export { NATIONALITY_BY_WORLD } from '${ROOT.replaceAll('\\', '/')}/src/data/nationalities/allWorlds.ts';
 export { allIntlNames } from '${ROOT.replaceAll('\\', '/')}/src/lib/intlNames.ts';
 `);
   execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });

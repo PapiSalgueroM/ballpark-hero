@@ -168,8 +168,8 @@ describe('Round 1042 identity: every name of every world wears the same flag', (
   it('C. the five worlds, read through nationalityOf', async () => {
     vi.resetModules();
     const cm = await import('@/lib/clubManager');
-    /* Round 1042, step 5: this ONE import line moves to '@/data/nationalities/allWorlds'. */
-    const { NATIONALITY_BY_WORLD } = await import('@/data/playerNationalities');
+    /* Round 1042, step 5: this ONE import line moved here from '@/data/playerNationalities'. */
+    const { NATIONALITY_BY_WORLD } = await import('@/data/nationalities/allWorlds');
     const { nationalityOf } = await import('@/data/playerNationalities');
     await cm.ensureAllEraRosters();
     const names: Record<string, string[]> = {};

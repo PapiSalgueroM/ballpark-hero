@@ -42,7 +42,7 @@ globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: 
 export { xiMen, NATION_CONFED } from '${ROOT.replaceAll('\\', '/')}/src/lib/soccerInternational.ts';
 export { pickSquad } from '${ROOT.replaceAll('\\', '/')}/src/lib/soccerInternationalSquads.ts';
 export { allIntlNames, intlName, NATION_FAMILY, NAME_FAMILIES, familyFor } from '${ROOT.replaceAll('\\', '/')}/src/lib/intlNames.ts';
-export { NATIONALITY_BY_WORLD } from '${ROOT.replaceAll('\\', '/')}/src/data/playerNationalities.ts';
+export { NATIONALITY_BY_WORLD } from '${ROOT.replaceAll('\\', '/')}/src/data/nationalities/allWorlds.ts';
 `);
 execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
 const {
