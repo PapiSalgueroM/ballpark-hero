@@ -208,7 +208,7 @@ const clickText = async (page, text) => {
   await page.waitForTimeout(250);
   return ok;
 };
-const shot = async (page, name) => { fs.mkdirSync(SHOTS, { recursive: true }); await page.screenshot({ path: path.join(SHOTS, `${name}.png`) }); };
+const shot = async (page, name) => { fs.mkdirSync(SHOTS, { recursive: true }); await page.waitForTimeout(900); await page.screenshot({ path: path.join(SHOTS, `${name}.png`) }); };
 
 /* The walker's pick on this screen, and every label the Season Centre shows. */
 async function walkerCheck(page, where) {

@@ -387,7 +387,7 @@ export function SeasonCentre({ model, exitLabel, onClose }: { model: CentreModel
           <button type="button" onClick={() => setHelpOpen(true)} className="h-9 w-9 shrink-0 rounded-lg border border-border text-sm font-bold" aria-label="How the Season Centre works">?</button>
           <button type="button" onClick={onClose} className="h-9 shrink-0 rounded-lg border border-border px-3 text-xs font-semibold" data-centre-exit>{exitLabel}</button>
         </div>
-        <div className="grid min-h-0 flex-1 grid-cols-1 md:grid-cols-[260px_1fr_320px]">
+        <div className="grid min-h-0 flex-1 grid-cols-1 md:grid-cols-[240px_1fr_380px]">
           <aside className="hidden min-h-0 overflow-y-auto border-r border-border p-2 md:block" aria-label="Fixtures">
             <FixtureList model={model} played={played} current={current} />
           </aside>
@@ -411,7 +411,7 @@ export function SeasonCentre({ model, exitLabel, onClose }: { model: CentreModel
               <div><div className="text-sm font-black tabular-nums">{avg === null ? '-' : avg.toFixed(1)}</div><div className="text-[9px] text-muted-foreground">Rating</div></div>
             </div>
           </main>
-          <aside className="hidden min-h-0 overflow-y-auto border-l border-border p-3 md:block" aria-label="Table">
+          <aside className="hidden min-h-0 overflow-y-auto border-l border-border p-2 md:block" aria-label="Table">
             {s.mode === 'table'
               ? <TablePanel model={model} played={played} compact={false} />
               : <p className="text-xs text-muted-foreground">{model.resultsWhy}</p>}
@@ -421,7 +421,7 @@ export function SeasonCentre({ model, exitLabel, onClose }: { model: CentreModel
             </div>
           </aside>
         </div>
-        <div className="flex items-center gap-2 overflow-x-auto border-t border-border bg-card px-2 py-2" data-centre-bar>
+        {stage.kind !== 'kickoff' && (<div className="flex items-center gap-2 overflow-x-auto border-t border-border bg-card px-2 py-2" data-centre-bar>
           {stage.kind === 'poster' && <button type="button" className={`${btn} flex-1 bg-emerald-600 text-black`} onClick={() => setStage({ kind: 'match', md: stage.md })}>▶ {roundWord} {stage.md}</button>}
           {stage.kind === 'match' && !ft && (
             <button type="button" className={`${btn} flex-1 border border-border`} onClick={() => setPaused(p => !p)}>{paused ? '▶ Resume' : '⏸ Pause'}</button>
@@ -432,7 +432,7 @@ export function SeasonCentre({ model, exitLabel, onClose }: { model: CentreModel
             <button type="button" className={`${btn} border border-border`} onClick={() => { setPlayed(nextBig! - 1); go(nextBig!); }}>⏩ To the next big game</button>
           )}
           {(stage.kind === 'match' || stage.kind === 'poster') && <button type="button" className={`${btn} border border-border`} onClick={toEnd}>⏭ Sim the rest</button>}
-          {stage.kind !== 'review' && stage.kind !== 'kickoff' && (
+          {stage.kind !== 'review' && (
             <div className="ml-auto flex shrink-0 gap-1" role="group" aria-label="Clock speed">
               {([1, 3, 'results'] as ClockSpeed[]).map(v => (
                 <button key={String(v)} type="button" aria-pressed={speed === v} onClick={() => setSpeed(v)} className={`${btn} px-2 ${speed === v ? 'bg-primary text-primary-foreground' : 'border border-border'}`}>
@@ -442,7 +442,7 @@ export function SeasonCentre({ model, exitLabel, onClose }: { model: CentreModel
             </div>
           )}
           {stage.kind === 'review' && <button type="button" className={`${btn} flex-1 bg-emerald-600 text-black`} onClick={onClose}>{exitLabel}</button>}
-        </div>
+        </div>)}
         {helpOpen && <SeasonCentreHelp words={model.help} onClose={() => setHelpOpen(false)} />}
       </div>
     </div>
