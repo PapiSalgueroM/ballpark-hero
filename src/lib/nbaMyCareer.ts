@@ -918,7 +918,63 @@ const NBA_LEGACY_V1: LegacyWeights = {
   season: 8,
   positions: { '*': { terms: [{ stat: 'pts', per: 430 }] } },
 };
-export const NBA_LEGACY_WEIGHTS: Record<HallCalibration, LegacyWeights> = { 1: NBA_LEGACY_V1, 2: NBA_LEGACY_V1 };
+/* Calibration 2 (Round 1051). It contains calibration 1 unchanged (the same
+   awards, the same season weight, each position's old terms first and in
+   order) and only adds, so no career scores lower on it. What it adds:
+   a base where calibration 1 read nothing, and the standout: a career total
+   near the top of this game's books for the position, in any family on the
+   list, earns credit of its own (legacyRead; only the best family counts).
+   Every from and to mark, the list itself (the half rule) and the measured
+   base terms come from scripts/data/careerHallMarks.json, which
+   scripts/genCareerHallMarks.mjs derives from measured careers; section 17 of
+   scripts/simCareerHall.mjs fails if this table and that ledger disagree. */
+const NBA_LEGACY_V2: LegacyWeights = {
+  awards: { rings: 95, mvps: 155, finalsMvps: 90, allNbas: 48 },
+  season: 8,
+  positions: {
+    PG: {
+      terms: [{ stat: 'pts', per: 430 }],
+      standout: [
+        { stat: 'pts', from: 37400, to: 45300, label: 'points' },
+        { stat: 'ast', from: 14800, to: 17800, label: 'assists' },
+      ],
+    },
+    SG: {
+      terms: [{ stat: 'pts', per: 430 }],
+      standout: [
+        { stat: 'pts', from: 38800, to: 47100, label: 'points' },
+        { stat: 'reb', from: 8560, to: 10000, label: 'rebounds' },
+        { stat: 'ast', from: 9790, to: 11300, label: 'assists' },
+      ],
+    },
+    SF: {
+      terms: [{ stat: 'pts', per: 430 }],
+      standout: [
+        { stat: 'pts', from: 37100, to: 45300, label: 'points' },
+        { stat: 'reb', from: 11500, to: 12900, label: 'rebounds' },
+        { stat: 'ast', from: 13500, to: 16000, label: 'assists' },
+      ],
+    },
+    PF: {
+      terms: [{ stat: 'pts', per: 430 }],
+      standout: [
+        { stat: 'pts', from: 31800, to: 36400, label: 'points' },
+        { stat: 'reb', from: 14400, to: 17200, label: 'rebounds' },
+        { stat: 'ast', from: 10100, to: 12300, label: 'assists' },
+      ],
+    },
+    C: {
+      terms: [{ stat: 'pts', per: 430 }],
+      standout: [
+        { stat: 'pts', from: 29800, to: 35200, label: 'points' },
+        { stat: 'reb', from: 15200, to: 17800, label: 'rebounds' },
+        { stat: 'ast', from: 7490, to: 8930, label: 'assists' },
+      ],
+    },
+    '*': { terms: [{ stat: 'pts', per: 430 }] },
+  },
+};
+export const NBA_LEGACY_WEIGHTS: Record<HallCalibration, LegacyWeights> = { 1: NBA_LEGACY_V1, 2: NBA_LEGACY_V2 };
 
 export function nbaLegacyOf(c: NbaCareerState): NbaLegacy {
   const t = nbaCareerTotals(c);
