@@ -183,6 +183,13 @@
       moved all 26 modern saves, 19 of 20 era saves (the modern clubs the
       era AI buyers are drawn from, recorded above) and the day one
       objectives of the three second tiers in pure.
+      Release AI (2026-10-07) re-took modern only, with --part=modern
+      --write on the merged tree, after the lead's nationality bake for
+      Round 1040 (one production read, 165 second tier men given their
+      flags, 36b4cd32): with the map before that bake (c9bb8fe0) the merged
+      tree reproduced the committed file exactly (modern 26/0, eras 20/0,
+      pure 47/0); with it, now|serieb, now|ligue2 and now|segunda moved and
+      nothing else did, so what moved is those men's nationality.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,
