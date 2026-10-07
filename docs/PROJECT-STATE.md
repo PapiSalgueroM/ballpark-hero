@@ -1,3 +1,16 @@
+## Round 1078 claimed: Soccer Career failed-save recovery
+
+A refused browser write currently leaves the new season or training result in
+memory without warning, while a reload restores older disk bytes. This round
+adds a persistent failure notice and Retry save for the current career. Retry
+must never rerun gameplay, award training twice or submit another completion.
+Old saved bytes survive refusal; a successful current write clears the warning.
+
+Base0d4767c5 includes1076 practice and recorded-stat work. Keep its exact source
+unless1076 needs a verified follow-up. No engine, schema or1045 integration-hunk
+change. Actual-page old/current saves, refused writes, retries and reloads plus
+native phone/keyboard evidence run only in GitHub Actions. Claude retains main
+and publication. Next1079 unclaimed. This is an implementation claim, not LIVE.
 ## Round1076 scope addition: recorded career stats only
 
 The flagship audit confirmed six Soccer Career totals were invented from

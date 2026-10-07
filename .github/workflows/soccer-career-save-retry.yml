@@ -1,0 +1,96 @@
+name: Soccer career save retry
+
+on:
+  push:
+    branches: [codex/soccer-save-recovery-1078]
+  pull_request:
+    paths:
+      - .github/workflows/soccer-career-save-retry.yml
+      - src/pages/SoccerCareer.tsx
+      - src/lib/soccerCareerSave.ts
+      - src/test/soccerCareerSaveRetry.test.tsx
+      - scripts/simSoccerCareerSaveRetry.mjs
+      - scripts/qa/soccerCareerSaveRetry1078.mjs
+permissions:
+  contents: read
+concurrency:
+  group: soccer-career-save-retry-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      VITEST_MAX_FORKS: 1
+      VITEST_MIN_FORKS: 1
+      SEO_SPLIT_BASE_REF: HEAD
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Prepare remote verification
+        run: |
+          mkdir -p soccer-career-save-retry-artifacts
+          git rev-parse HEAD > soccer-career-save-retry-artifacts/source-head.txt
+          git rev-parse HEAD^{tree} > soccer-career-save-retry-artifacts/source-tree.txt
+          npm ci
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+      - name: Type check and build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee soccer-career-save-retry-artifacts/types.log
+          npm run build 2>&1 | tee soccer-career-save-retry-artifacts/build.log
+      - name: Actual failed writes earned state and effective copied faults
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: SOCCER_CAREER_SAVE_RETRY_CONTROL=all ONLY=simSoccerCareerSaveRetry node scripts/runAllSims.mjs 2>&1 | tee soccer-career-save-retry-artifacts/mounted.log
+      - name: Preserve existing saves actual totals and single completions
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          SOCCER_CAREER_SAVE_CONTROL=all ONLY=simSoccerCareerSaveRecovery node scripts/runAllSims.mjs 2>&1 | tee soccer-career-save-retry-artifacts/old-save-recovery.log || failed=1
+          CAREER_RECORDED_STATS_ARTIFACTS="$PWD/soccer-career-save-retry-artifacts/recorded-stats" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerRecordedStats.mjs 2>&1 | tee soccer-career-save-retry-artifacts/recorded-stats.log || failed=1
+          for harness in simNoDoubleRecord simScoreShown simCareerCleanSheets simCareerSeasonRatings simCareerDerbies; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "soccer-career-save-retry-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Native refused save retry and reload journeys
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          node scripts/qa/soccerCareerSaveRetry1078.mjs --prefetch-fonts-only 2>&1 | tee soccer-career-save-retry-artifacts/fonts.log
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" xvfb-run -a node scripts/qa/soccerCareerSaveRetry1078.mjs 2>&1 | tee soccer-career-save-retry-artifacts/native.log
+      - name: All built readers and source anchors
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings simSeoMetaSplit simHomeCopy simHarnessAnchors; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "soccer-career-save-retry-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Hold reviewed sources and existing simulation and save rules
+        if: ${{ !cancelled() }}
+        run: |
+          git diff --exit-code HEAD -- src/pages/SoccerCareer.tsx src/test/soccerCareerSaveRetry.test.tsx scripts/simSoccerCareerSaveRetry.mjs scripts/qa/soccerCareerSaveRetry1078.mjs
+          git diff --exit-code 0d4767c5a1ebae67b7a7a8d2e53e60f63f166b36 HEAD -- src/lib/soccerCareerEngine.ts src/lib/soccerCareerSave.ts src/lib/careerTraining.ts src/lib/careerSeasonRatings.ts src/hooks/usePracticeClock.ts src/components/career src/components/soccer-career/TrainingPanel.tsx src/test/soccerCareerSaveRecovery.test.tsx scripts/simSoccerCareerSaveRecovery.mjs
+      - name: Preserve verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: soccer-career-save-retry-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 3
+          path: soccer-career-save-retry-artifacts/

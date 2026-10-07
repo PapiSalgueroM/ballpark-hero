@@ -78,9 +78,9 @@ contracts, transfers, tactics and finances affecting the same saved world.
 Career depth means playable match progression, earned stats, training, roles,
 relationships, money and life choices with lasting consequences.
 
-Claude's1045 design already owns the match-by-match season architecture,
-Soccer first and NBA/NFL next. That build is waiting on its existing lane's
-budget. Codex1076 owns the independent practice lifecycle bugs: abandoned
+Claude's1045 design owns the match-by-match season architecture, Soccer first
+and NBA/NFL next. Session D's03:45 EDT ledger records its implementation launched
+on r1045-season-centre. Codex1076 owns the independent practice lifecycle bugs: abandoned
 results must not overwrite another drill; help and focus loss must preserve
 active practice time; pause must ignore input until explicit resume. Existing
 gain rules and simulation engines remain unchanged.
@@ -112,4 +112,5 @@ save using the current in-memory career. Retry must not rerun the simulation,
 training or score submission. Keep old disk bytes and earned memory intact;
 clear the notice only after a successful write. Extend the actual-page save
 recovery tests with refused write, recovery and reload outcomes. Apply the same
-behavior to NBA/NFL's shared board afterward. No1078 claim or implementation yet.
+behavior to NBA/NFL's shared board afterward. Round1078 now owns the bounded
+Soccer implementation and verification; acceptance remains pending.

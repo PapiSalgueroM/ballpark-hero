@@ -819,6 +819,7 @@ export default function SoccerCareer() {
   });
   const [career, setCareer] = useState<CareerState | null>(restoredSave.career);
   const [saveError, setSaveError] = useState(restoredSave.invalid);
+  const [saveFailed, setSaveFailed] = useState(false);
   const [clubs, setClubs] = useState<ClubData[]>([]);
   const [clubsLoading, setClubsLoading] = useState(true);
   const [clubsError, setClubsError] = useState(false);
@@ -894,12 +895,17 @@ export default function SoccerCareer() {
     setClubsLoading(false);
   }, []);
 
-  // Save career to localStorage whenever it changes
-  useEffect(() => {
-    if (career) {
-      try { localStorage.setItem(SAVE_KEY, JSON.stringify(career)); } catch {}
-    }
+  const saveCurrentCareer = useCallback(() => {
+    if (!career) { setSaveFailed(false); return; }
+    try {
+      localStorage.setItem(SAVE_KEY, JSON.stringify(career));
+      setSaveFailed(false);
+    } catch { setSaveFailed(true); }
   }, [career]);
+  useEffect(() => { saveCurrentCareer(); }, [saveCurrentCareer]);
+  useEffect(() => {
+    if (saveFailed) toast.error("Your latest progress could not be saved. Keep this tab open, then try again.");
+  }, [saveFailed]);
 
   const isFormValid = playerName.trim().length > 0 && nationality && position && era;
 
@@ -1266,6 +1272,12 @@ export default function SoccerCareer() {
         <GameNavbar />
         <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp extraRules={DERBY_HELP_RULES} /></div>
         <main id="dukb-main" className="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4">
+          {career && saveFailed && (
+            <div role="alert" data-soccer-save-status="failed" className="mb-4 rounded-xl border border-amber-500/40 bg-amber-500/10 p-3 text-sm sm:flex sm:items-center sm:gap-4">
+              <p className="flex-1">Your latest progress could not be saved. Keep this tab open, then try again.</p>
+              <Button variant="outline" className="mt-2 min-h-11 shrink-0 sm:mt-0" onClick={saveCurrentCareer}>Retry save</Button>
+            </div>
+          )}
           {saveError && !career && (
             <div role="alert" className="mb-4 rounded-xl border border-amber-500/40 bg-amber-500/10 p-4 space-y-3 text-sm">
               <p>We couldn't open this save. You can create a new player below. Your old save stays here until you begin a new career or delete it.</p>
