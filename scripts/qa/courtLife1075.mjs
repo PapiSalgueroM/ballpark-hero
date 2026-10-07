@@ -393,7 +393,13 @@ try {
           // Native tab focus loss exercises the actual blur path. No synthetic
           // visibility event or engine replacement is used.
           assert(await page.evaluate(() => document.hasFocus()), 'The actual game tab owns focus before switching');
-          const other = await context.newPage(); await other.goto('about:blank'); await other.bringToFront();
+          const other = await context.newPage();
+          const otherFocus = await context.newCDPSession(other);
+          await otherFocus.send('Emulation.setFocusEmulationEnabled', { enabled: false });
+          await other.goto('about:blank'); await other.bringToFront();
+          for (let attempt = 0; attempt < 30 && await page.evaluate(() => document.hasFocus()); attempt++) {
+            await new Promise(resolve => setTimeout(resolve, 100));
+          }
           assert.equal(await page.evaluate(() => document.hasFocus()), false, 'The sibling tab actually removes game focus');
           await page.clock.runFor(1000); await snapshot('native browser focus loss');
           await other.close(); await page.bringToFront(); await page.clock.runFor(500); await snapshot('returning to tab remains paused');
