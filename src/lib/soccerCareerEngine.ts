@@ -28,7 +28,7 @@ import type { PhoneChoiceDef } from "./careerEras";
 import { divisionMove, drawLeagueFinish, eliteInYear, finishZone, leagueKeyInYear, managerLeagueField, MANAGER_FIELD, ordinal } from "./soccerCareerLeague";
 /* Round 1012: real club rivalries, played as league derbies each season. */
 import { resolveSeasonDerbies, applySeasonDerbies, type SeasonDerby } from "./soccerCareerDerby";
-import { cupAssociation, cupChanceFor, cupFor, cupTitle, drawCupRun, readCupRun, seasonPerformanceBoost, worldLeagueOf, type CupRun } from "./soccerCareerCup";
+import { cupAssociation, cupChanceFor, cupFor as domesticCupFor, cupTitle, drawCupRun, readCupRun, seasonPerformanceBoost, worldLeagueOf, type CupRun } from "./soccerCareerCup";
 /* Round 130: the phone is a real phone now. Threads, contacts, a relationship
    that cools when you ignore people, and a sports feed driven by a world model
    that actually moves players between clubs. All of it lives in soccerPhone so
@@ -4025,7 +4025,7 @@ function seasonCupAssociation(season: SeasonRecord, s: CareerState): string {
   return cupAssociation(season.clubCountry, league);
 }
 function seasonCupTitle(season: SeasonRecord, s: CareerState): string {
-  const st = cupFor(seasonCupAssociation(season, s), season.year);
+  const st = domesticCupFor(seasonCupAssociation(season, s), season.year);
   return cupTitle(st.kind === "NAMED" ? st.name : undefined);
 }
 
@@ -4080,7 +4080,7 @@ function generateSeasonStats(state: CareerState, clubs: ClubData[]): SeasonRecor
      2019-20, the U.S. Open Cup of 2020 and 2021, Mexico after the Copa MX,
      Argentina before 2011-12) is never won. */
   const winCup = Math.random() < cupChance
-    && cupFor(cupAssociation(state.currentClubCountry, state.currentLeague), seasonYear).kind !== "NONE";
+    && domesticCupFor(cupAssociation(state.currentClubCountry, state.currentLeague), seasonYear).kind !== "NONE";
   /* Round 929: the league finish, from its own generator seeded off this
      season, so the main Math.random stream does not move. Round 1037: a
      season before 2026-27 is drawn in the league the club was really in
@@ -5616,7 +5616,7 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
   {
     const worldLeague = worldLeagueOf(cupAssoc);
     const run = drawCupRun({
-      status: cupFor(cupAssoc, season.year), club: season.club, year: season.year, won: season.domesticCup,
+      status: domesticCupFor(cupAssoc, season.year), club: season.club, year: season.year, won: season.domesticCup,
       chance: cupChanceFor({ elite: eliteInYear(ELITE_CLUBS, season.club, season.year), tier: season.clubTier, performanceBoost: seasonPerformanceBoost(season.ovr ?? s.overall, season.rating) }),
       clubs, worldWinner: worldLeague ? world.cups[worldLeague] ?? null : null,
       goals: season.goals, apps: season.apps,

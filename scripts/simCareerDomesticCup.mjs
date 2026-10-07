@@ -136,7 +136,7 @@ const PHONE = 'src/lib/soccerPhone.ts';
 const SRC = { [CUP]: read(CUP), [ENGINE]: read(ENGINE), [PHONE]: read(PHONE) };
 const DRAW_HEAD = 'export function drawCupRun(input: CupRunInput): CupRun | null {';
 const NO_RUN = s => edit(s, DRAW_HEAD, DRAW_HEAD + ' if (input) return null;', 'run off', CUP);
-const COIN = '\n    && cupFor(cupAssociation(state.currentClubCountry, state.currentLeague), seasonYear).kind !== "NONE";';
+const COIN = '\n    && domesticCupFor(cupAssociation(state.currentClubCountry, state.currentLeague), seasonYear).kind !== "NONE";';
 const OLD_WORLD = 'if (assoc === undefined || opts.playerCupAssociation === undefined) {';
 
 const main = { ...SRC };

@@ -656,7 +656,7 @@ async function replay(T, seed) {
    printed; still different, it fails as before. When the base already holds
    Round 1041 the anchors still match and the arm is simply not needed. */
 const R1041_OUT = [
-  ['soccerCareerEngine.ts', '\n    && cupFor(cupAssociation(state.currentClubCountry, state.currentLeague), seasonYear).kind !== "NONE";', ';'],
+  ['soccerCareerEngine.ts', '\n    && domesticCupFor(cupAssociation(state.currentClubCountry, state.currentLeague), seasonYear).kind !== "NONE";', ';'],
   ['soccerPhone.ts', 'if (assoc === undefined || opts.playerCupAssociation === undefined) {', 'if (true) {'],
 ];
 const r1041Out = { name: 'r1041out', setup(b) {
