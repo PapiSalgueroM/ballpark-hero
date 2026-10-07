@@ -230,6 +230,10 @@ export function dailyPoolOn(lines: readonly DailyPoolLine[], date: string): HotS
 }
 
 const LEDGER = DAILY_CLUB_POOL.lines as DailyPoolLine[];
+/* The ledger's first day. A date before it (a device clock reset to 1970 or
+   2000) reads the founding pool instead of an empty one, which would leave
+   both dailies nothing to pick and throw on the pick. */
+const LEDGER_FIRST = LEDGER.reduce((a, l) => ('from' in l && l.from < a ? l.from : a), '9999-12-31');
 let ledgerCache: { date: string; pool: HotSeatClub[] } | null = null;
 
 /**
@@ -248,7 +252,7 @@ let ledgerCache: { date: string; pool: HotSeatClub[] } | null = null;
  */
 export function hotSeatPool(date?: string): HotSeatClub[] {
   if (date !== undefined) {
-    if (ledgerCache?.date !== date) ledgerCache = { date, pool: dailyPoolOn(LEDGER, date) };
+    if (ledgerCache?.date !== date) ledgerCache = { date, pool: dailyPoolOn(LEDGER, date < LEDGER_FIRST ? LEDGER_FIRST : date) };
     return ledgerCache.pool;
   }
   if (poolCache) return poolCache;

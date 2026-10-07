@@ -264,7 +264,9 @@ function dailyReach(daily: string | undefined): { clubs: Set<string>; leagues: S
   return { clubs: new Set(pool.map(c => c.club)), leagues: new Set(pool.map(c => c.leagueId)) };
 }
 
-function rivalPool(state: CareerState, daily?: string): string[] {
+/* `daily` is required on purpose: a call that drops it would let a pre-join
+   daily's rivals come from leagues the ledger has not added yet. */
+function rivalPool(state: CareerState, daily: string | undefined): string[] {
   const reach = dailyReach(daily);
   return REAL_LEAGUES.filter(l => !reach || reach.leagues.has(l.id))
     .flatMap(l => playableClubs(l.id).slice(0, 6).map(c => c.name))
