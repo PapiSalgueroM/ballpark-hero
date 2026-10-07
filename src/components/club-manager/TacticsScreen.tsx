@@ -12,6 +12,7 @@ import {
 import type { CareerState, CMPlayer, Mentality, Duty, SetPieceKey, FitGrade } from '@/lib/clubManager';
 import { ratingTint, SecondPositionChips } from '@/components/club-manager/SquadScreen';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
+import { MatchPlansCard } from '@/components/club-manager/MatchPlansCard';
 
 const lastName = (n: string) => n.replace(' (Youth)', '').split(' ').slice(-1)[0];
 
@@ -59,6 +60,9 @@ interface TacticsScreenProps {
   onAutoSetPieces: () => void;
   /** Round 782: the shootout order, player ids in kicking order; an empty list clears it. */
   onShootoutOrder: (ids: string[]) => void;
+  onSaveMatchPlan?: (slot: number, name: string) => void;
+  onApplyMatchPlan?: (slot: number) => void;
+  onDeleteMatchPlan?: (slot: number) => void;
   /** Round 782: the hub's pre match card can ask for the shootout tile to be
    *  open on arrival; the screen opens it once and says so. */
   openTileRequest?: 'shootout' | null;
@@ -109,7 +113,7 @@ interface TacticsScreenProps {
  */
 export function TacticsScreen({
   career, onFormation, onMentality, onSlot, onSwap, onAutoPick, onDuty, onSetPiece, onAutoSetPieces,
-  onShootoutOrder, openTileRequest, onOpenTileRequestDone,
+  onShootoutOrder, openTileRequest, onOpenTileRequestDone, onSaveMatchPlan, onApplyMatchPlan, onDeleteMatchPlan,
 }: TacticsScreenProps) {
   const [openSlot, setOpenSlot] = useState<number | null>(null);
   // A one-shot pitch flourish on top of the shape move, keyed so it replays.
@@ -133,7 +137,7 @@ export function TacticsScreen({
   /* Round 505 review: the bench and the set pieces are tiles under the pitch
      that open one at a time, so the tab is the pitch plus two headers rather
      than a long stack with a scroll list inside it. */
-  const [openTile, setOpenTile] = useState<'bench' | 'setpieces' | 'shootout' | null>(() => (openTileRequest === 'shootout' ? 'shootout' : null));
+  const [openTile, setOpenTile] = useState<'bench' | 'setpieces' | 'shootout' | 'plans' | null>(() => (openTileRequest === 'shootout' ? 'shootout' : null));
 
   /* Round 782: the pre match card's shortcut lands here with the shootout
      tile asked for; open it once and hand the request back. */
@@ -682,6 +686,14 @@ export function TacticsScreen({
           </div>
         )}
       </div>
+
+      {onSaveMatchPlan && onApplyMatchPlan && onDeleteMatchPlan && <div data-cm-tile="plans" data-cm-tile-open={openTile === 'plans' ? '1' : undefined}>
+        <MatchPlansCard career={career} open={openTile === 'plans'} onToggle={() => setOpenTile(openTile === 'plans' ? null : 'plans')}
+          onSave={onSaveMatchPlan} onApply={slot => {
+            onApplyMatchPlan(slot);
+            setSelSlot(null); setBenchPick(null); setOpenSlot(null); setDutySlot(null);
+          }} onDelete={onDeleteMatchPlan} />
+      </div>}
 
       {/* Round 505: the bench, a tile under the pitch, ordered for the spot
           you tapped. A tapped spot or a held bench man opens it on its own,

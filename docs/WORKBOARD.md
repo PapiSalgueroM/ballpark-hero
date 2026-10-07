@@ -1,3 +1,9 @@
+Codex1079 PREPARATION, October7,2026: saved Club Manager match plans.
+Three club-bound slots, real availability/fitness previews and atomic tactics
+apply.12 authored outcomes/32 copied faults plus native3/9 await remote CI.
+Base2fff5e04, branch codex/manager-match-plans-1079. No merge or live claim.
+Receipt: docs/audits/ROUND1079-MATCH-PLANS.md. Claude retains main/release,
+manager data, cup and Season Centre; protected root drafts/stashes untouched.
 ## Release AH LIVE, 2026-10-07 02:43 EDT
 
 Claude lane. main eeedbf43, deployment 02585196-9b0c-4ca0-8598-f72ce4e0e5d5, entry index-BetRYEt2.js (was
