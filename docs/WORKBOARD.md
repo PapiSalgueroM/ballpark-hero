@@ -1,3 +1,21 @@
+## October 7 priority steering: perfect the games visitors already choose
+
+Anthony supplied last-week traffic and search screenshots, then explicitly
+prioritized deeper league/team coverage in Club Manager and feature depth in
+existing career/manager games. Main focus is now Soccer Career, Club Manager,
+NBA/NFL careers, Stadium Tycoon, College Grid, Front Office and Build Your XI.
+Court Life1075 is preserved on its isolated branch, unregistered and unpublished.
+Finish its already-written safety/verification checkpoint, then direct new
+feature work to the proven games. Do not count queued leagues as live.
+
+Current1075 checkpoint e86b358c passed app types,14 engine outcomes/14 copied
+faults and10 career outcomes/23 faults in remote37581666803. Nine normal controls
+passed, but two negative checks required strengthening. Pending changes add
+save-claim durability, preserve failed replacement downloads, reject corrupt
+shot shooters and scope claims to the current completed season. New totals:
+career12/25, controls11/15, presentation10/24; native three profiles/eight fixtures
+is written but unexecuted. Everything remains subject to the next remote run.
+The /100 cap migration is still UNAPPLIED. No local runtime or production DB.
 ## Round 1075 implementation checkpoint, October 7, 2026
 
 Court Life is implemented on codex/court-career-1075 at4e5cf5ec, still

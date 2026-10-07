@@ -25,6 +25,8 @@ export default function CourtLifeMatch({ game }: { game: ReturnType<typeof useCo
       <div className="text-center"><span className="block text-xs text-slate-300">{match.period <= 2 ? `Half ${match.period}` : `Overtime ${match.period - 2}`}</span><strong className="font-mono text-xl" data-court-clock>{clockText(match.remainingTicks)}</strong><span className="block text-xs text-amber-200">Shot clock {Math.ceil(match.shotClockTicks / COURT_HZ)}</span></div>
       <div className="text-right"><span className="block text-xs" style={{ color: match.teams.away.color }}>{match.teams.away.name}{player.side === 'away' ? ' (you)' : ''}</span><strong className="font-display text-3xl tabular-nums" data-court-score="away">{match.score.away}</strong></div>
     </div>
+    <div className="space-y-2 md:grid md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] md:items-start md:gap-3 md:space-y-0">
+    <div className="min-w-0 space-y-2">
     <div ref={frame} className="relative">
       <CourtLifeCanvas matchRef={game.matchRef} drawRef={game.drawRef} />
       {game.paused && <div className="absolute inset-0 flex items-center justify-center rounded-xl bg-slate-950/75 p-3 text-center text-white">
@@ -40,9 +42,13 @@ export default function CourtLifeMatch({ game }: { game: ReturnType<typeof useCo
       <span className="absolute inset-y-0 w-1 bg-foreground" style={{ left: `calc(${Math.min(1, meter.charge) * 100}% - 2px)` }} />
     </div>
     <p className="text-xs text-muted-foreground">{player.chargeTicks ? 'Release Shoot in the gold window. Space and distance still matter.' : target && ownsBall ? `Pass target: ${target.name}, marked by the dashed ring.` : match.possession === player.side ? 'Find space and Call for a pass. Jump to collect a loose ball.' : 'Stay with your player. Guard, jump to contest or try a steal.'}</p>
+    </div>
+    <div className="min-w-0 space-y-2">
     {!stopped && <CourtLifeControls match={match} paused={game.paused} press={game.press} release={game.release} move={game.move} tap={game.tap} />}
     <div className="flex items-center gap-2"><p className="min-w-0 flex-1 text-xs" role="status" aria-live="polite">{match.message}</p>{!stopped && <button className={courtButton} onClick={game.paused ? game.resume : game.pause}>{game.paused ? 'Resume' : 'Pause'}</button>}</div>
     <p className="text-xs text-muted-foreground">{player.stats.points} PTS · {player.stats.assists} AST · {player.stats.rebounds} REB · {player.stats.steals} STL · {player.stats.blocks} BLK · {player.stats.turnovers} TO</p>
+    </div>
+    </div>
     <Dialog open={boxOpen && match.phase === 'finished'} onOpenChange={setBoxOpen}><DialogContent className="max-h-[85dvh] overflow-y-auto p-3 pt-10 [&>button]:h-11 [&>button]:w-11" data-court-boxscore>
       <DialogTitle>Every possession counted</DialogTitle><DialogDescription>Final score {match.score.home} : {match.score.away}. These are the plays recorded in your game.</DialogDescription>
       {(['home', 'away'] as const).map(side => <div key={side} className="overflow-x-auto"><table className="w-full text-left text-xs"><caption className="py-2 text-left font-semibold">{match.teams[side].name} · {match.score[side]}</caption><thead><tr>{['Player', 'PTS', 'FG', 'AST', 'REB', 'STL', 'BLK', 'TO'].map(label => <th className="px-1 py-2" key={label}>{label}</th>)}</tr></thead><tbody>{match.players.filter(row => row.side === side).map(row => <tr key={row.id} className={row.id === player.id ? 'bg-teal-500/10' : ''}><th className="px-1 py-2">{row.name}</th><td>{row.stats.points}</td><td>{row.stats.made}/{row.stats.attempts}</td>{(['assists', 'rebounds', 'steals', 'blocks', 'turnovers'] as const).map(key => <td key={key}>{row.stats[key]}</td>)}</tr>)}</tbody></table></div>)}

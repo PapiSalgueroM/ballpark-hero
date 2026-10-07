@@ -16,9 +16,11 @@ const decisions = 'makes contextual life decisions once with honest costs and pe
 const effects = 'changes actual shot windows stamina and inbound decisions through preparation and earned roles';
 const season = 'reconciles a complete season from twelve actual engine fixtures without duplicate progress';
 const chapters = 'claims each completed season once and carries actual attributes resources and history forward';
+const currentClaim = 'claims only the current finished season when an older saved chapter remains unclaimed';
 const arithmetic = 'scores the stated season arithmetic with caps draws and turnovers';
 const restore = 'restores an active match paused with its exact RNG and neutral continuation';
 const corrupt = 'rejects corrupt unknown and inconsistent saves while leaving the supplied bytes untouched';
+const airborne = 'rejects missing or mismatched airborne shooters while preserving actual shot and loose continuations';
 const independent = 'keeps separately created careers isolated with their own sealed world';
 const controls = {
   balanced: { file: world, from: 'attrs: { finishing: 78, shooting: 54, passing: 54, defense: 54, conditioning: 60 }', to: 'attrs: { finishing: 79, shooting: 54, passing: 54, defense: 54, conditioning: 60 }', test: schedule, baseline: actions },
@@ -35,7 +37,8 @@ const controls = {
   otherFixture: { from: 'simulateCourtMatch(careerMatchConfig(career, otherFixture))', to: 'simulateCourtMatch({ ...careerMatchConfig(career, otherFixture), seed: otherFixture.seed + 1 })', test: season },
   duplicate: { from: 'const results = [...career.results, compactResult(match), compactResult(otherMatch)];', to: 'const results = [...career.results, compactResult(match), compactResult(match), compactResult(otherMatch)];', test: season },
   history: { from: 'fixtureId: fixture.id, preparation: copy(career.preparation),', to: 'fixtureId: fixture.id, preparation: [],', test: season },
-  claim: { from: 'career.chapters.find(row => !row.claimed)', to: 'career.chapters.find(row => true)', test: chapters },
+  claim: { from: 'career.chapters.find(row => row.season === career.season && !row.claimed)', to: 'career.chapters.find(row => row.season === career.season)', test: chapters },
+  currentClaim: { from: 'row.season === career.season && !row.claimed', to: '!row.claimed', test: currentClaim },
   chapter: { from: 'next.results = []; next.weeks = [];', to: 'next.results = []; next.weeks = []; next.chapters = [];', test: chapters },
   wins: { from: 'const wins = 50 * (line.wins + line.draws * 0.5) / 6;', to: 'const wins = 0;', test: arithmetic },
   scoring: { from: 'const scoring = 20 * Math.min(stats.points, 60) / 60;', to: 'const scoring = 0;', test: arithmetic },
@@ -44,6 +47,7 @@ const controls = {
   paused: { from: 'value.activeMatch = { ...value.activeMatch, paused: true, match:', to: 'value.activeMatch = { ...value.activeMatch, paused: false, match:', test: restore },
   rng: { from: 'match: neutralizeCourtMatch(value.activeMatch.match)', to: 'match: { ...neutralizeCourtMatch(value.activeMatch.match), rngState: 1 }', test: restore },
   validation: { from: 'if (!validCareer(value)) return', to: 'if (false) return', test: corrupt },
+  airborne: { from: "if (ball.mode === 'shot' && (ball.ownerId !== null", to: "if (false && (ball.ownerId !== null", test: airborne },
 };
 const control = process.env.COURT_LIFE_CAREER_CONTROL || '';
 assert.ok(!control || control === 'all' || control in controls, 'Known Court Life career control');
@@ -64,7 +68,7 @@ if (control === 'all') {
   }
   await writeFile(path.join(evidence, 'summary.json'), JSON.stringify(results, null, 2));
   assert.ok(results.every(row => row.passed), 'All career outcomes and controls pass; every gate was attempted');
-  console.log(`simCourtLifeCareer all: ten outcomes and ${Object.keys(controls).length} effective controls, each with an independent passing baseline.`);
+  console.log(`simCourtLifeCareer all: twelve outcomes and ${Object.keys(controls).length} effective controls, each with an independent passing baseline.`);
   process.exit(0);
 }
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -98,17 +102,17 @@ try {
   assert.ok(!run.error && !run.signal, 'Actual runner completes without interruption');
   assert.doesNotMatch(output, /Unhandled (?:Error|Rejection)|Test timed out|Timeout calling|Failed to (?:resolve import|load)|Cannot find module|No test files found|SyntaxError|Transform failed/, 'Runtime faults earn no credit');
   const report = JSON.parse(await readFile(reportFile, 'utf8')), rows = report.testResults.flatMap(file => file.assertionResults);
-  assert.equal(rows.length, 10); assert.equal(Number(report.numUnhandledErrors ?? 0), 0);
+  assert.equal(rows.length, 12); assert.equal(Number(report.numUnhandledErrors ?? 0), 0);
   if (control) {
     const spec = controls[control], failed = rows.filter(row => row.status === 'failed');
-    assert.equal(run.status, 1); assert.equal(report.numFailedTests, 1); assert.equal(report.numPassedTests, 1); assert.equal(report.numPendingTests, 8);
+    assert.equal(run.status, 1); assert.equal(report.numFailedTests, 1); assert.equal(report.numPassedTests, 1); assert.equal(report.numPendingTests, 10);
     assert.equal(failed.length, 1); assert.equal(failed[0].title, spec.test);
     assert.match(failed[0].failureMessages.join('\n').replace(/\x1b\[[0-9;]*m/g, ''), /AssertionError:|Error: expect\(element\)/, 'Mapped assertion rejects the executable fault');
     assert.equal(rows.find(row => row.title === (spec.baseline || independent))?.status, 'passed');
-    console.log(`simCourtLifeCareer ${control}: one mapped assertion rejected the copied fault, one independent case passed, eight intentional skips.`);
+    console.log(`simCourtLifeCareer ${control}: one mapped assertion rejected the copied fault, one independent case passed, ten intentional skips.`);
   } else {
-    assert.equal(run.status, 0); assert.equal(report.numPassedTests, 10); assert.equal(report.numFailedTests, 0); assert.equal(report.numPendingTests, 0);
-    console.log('simCourtLifeCareer: ten real career outcomes pass, including twelve actual engine fixtures, exact preparation effects, earned roles, chapter history, score claims and paused RNG continuation.');
+    assert.equal(run.status, 0); assert.equal(report.numPassedTests, 12); assert.equal(report.numFailedTests, 0); assert.equal(report.numPendingTests, 0);
+    console.log('simCourtLifeCareer: twelve real career outcomes pass, including actual two-season engine fixtures, exact preparation effects, earned roles, chapter history, current score claims and valid airborne RNG continuation.');
   }
 } finally {
   if (copyFile) await rm(copyFile, { force: true });

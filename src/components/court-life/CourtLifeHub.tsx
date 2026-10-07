@@ -52,8 +52,9 @@ export default function CourtLifeHub({ game }: { game: Game }) {
         <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{seasonDone ? 'The season is in the books' : `Game ${career.round + 1} of 6`}</p>
         <h3 className="mt-1 font-display text-xl font-bold">{seasonDone ? `${score.total}/100 season score` : `${crew.name} vs ${career.world.crews.find(row => row.id === (fixture?.homeId === crew.id ? fixture.awayId : fixture?.homeId))?.name}`}</h3>
         <p className="my-2 text-sm text-muted-foreground">{seasonDone ? 'Your results, role and choices stay in your career.' : ready ? 'Your preparation is done. Take it to the court.' : `${career.blocksLeft} time blocks left. ${career.decision ? 'Your life choice is settled.' : 'One life choice to make.'}`}</p>
-        {seasonDone ? <div className="flex flex-wrap gap-2"><button className={courtPrimary} onClick={() => setPanel('season')}>Season recap</button><button className={courtButton} onClick={() => { game.nextSeason(); setPanel('home'); }}>Next season</button></div>
+        {seasonDone ? <div className="flex flex-wrap gap-2"><button className={courtPrimary} onClick={() => setPanel('season')}>Season recap</button><button className={courtButton} disabled={game.scorePending} onClick={() => { game.nextSeason(); setPanel('home'); }}>Next season</button></div>
           : <button className={courtPrimary} disabled={!ready} onClick={game.start}>Go to the court <ArrowUpRight className="ml-1 inline h-4 w-4" /></button>}
+        {game.scorePending && <p className="mt-2 text-xs">Save this finished season with Retry saving before starting the next one. Your score is waiting for that save.</p>}
       </div>
       <div className="grid grid-cols-2 gap-2">
         {([

@@ -35,6 +35,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const read = f => fs.readFileSync(path.join(ROOT, f), 'utf-8');
+const COURT_WORLD = 'src/data/courtLifeWorld.ts';
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
@@ -101,6 +102,7 @@ const real = new Set();
       const p = path.join(d, e.name);
       if (e.isDirectory()) walk(p);
       else if (/\.tsx?$/.test(e.name)) {
+        if (path.relative(ROOT, p).replaceAll('\\', '/') === COURT_WORLD) continue;
         const t = fs.readFileSync(p, 'utf-8');
         for (const m of t.matchAll(/\b(?:name|n|player|playerName):\s*'([A-Z][^']{2,40})'/g)) real.add(m[1]);
         for (const m of t.matchAll(/\b(?:name|n|player|playerName):\s*"([A-Z][^"]{2,40})"/g)) real.add(m[1]);
@@ -150,11 +152,13 @@ const real = new Set();
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
 export { NATIONALITY_BY_WORLD } from '${ROOT.replaceAll('\\', '/')}/src/data/playerNationalities.ts';
 export { allIntlNames } from '${ROOT.replaceAll('\\', '/')}/src/lib/intlNames.ts';
+export { createCourtLifeWorld } from '${ROOT.replaceAll('\\', '/')}/src/data/courtLifeWorld.ts';
 `);
   execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
-  const { NATIONALITY_BY_WORLD, allIntlNames } = await import(pathToFileURL(BUNDLE).href);
+  const { NATIONALITY_BY_WORLD, allIntlNames, createCourtLifeWorld } = await import(pathToFileURL(BUNDLE).href);
   for (const world of Object.values(NATIONALITY_BY_WORLD)) for (const n of Object.keys(world)) real.add(n);
   globalThis.__intl = allIntlNames();
+  globalThis.__courtNames = createCourtLifeWorld().crews.flatMap(crew => crew.players.map(player => player.name));
   if (real.size < 8000) fail(`only ${real.size} real names harvested, the check is not checking much`);
   /* Round 971: every sealed world feeds the guard, the 2020-21 one included
      (its bake writes its block), so the filler cannot hand a padded 2020
@@ -165,6 +169,34 @@ export { allIntlNames } from '${ROOT.replaceAll('\\', '/')}/src/lib/intlNames.ts
     if (!Object.keys(NATIONALITY_BY_WORLD[w] ?? {}).length) fail(`the ${w} world gives the guard no names`);
   }
   console.log(`   ${real.size} real names, from src/data and the ${worlds.length} sealed worlds (${worlds.join(', ')})`);
+}
+
+console.log('1b) Every authored Court Life player against the real-name universe');
+{
+  const original = globalThis.__courtNames;
+  const problems = names => [
+    ...(Array.isArray(names) && names.length === 12 ? [] : ['The authored roster must contain twelve names']),
+    ...(Array.isArray(names) ? names.filter(name => real.has(name)).map(name => `Authored player collides with a real name: ${name}`) : []),
+  ];
+  const baseline = problems(original);
+  const control = process.env.COURT_NAMES_CONTROL || '';
+  if (control && !['collision', 'missing'].includes(control)) { fail('Unknown Court Life name control'); process.exit(1); }
+  if (control) {
+    if (baseline.length) { baseline.forEach(fail); process.exit(1); }
+    const changed = [...original];
+    if (control === 'collision') {
+      if (!real.has('Michael Jordan')) { fail('The real-name control is absent from the harvested universe'); process.exit(1); }
+      changed[0] = 'Michael Jordan';
+    } else changed.pop();
+    const faults = problems(changed);
+    const changedBytes = JSON.stringify(changed) !== JSON.stringify(original);
+    const expected = control === 'collision' ? 'Authored player collides with a real name:' : 'The authored roster must contain twelve names';
+    const caught = changedBytes && faults.length === 1 && faults[0].startsWith(expected) && problems(original).length === 0;
+    console.log(caught ? `CONTROL FIRED: ${control}; original roster still passes` : `CONTROL DID NOT FIRE: ${control}`);
+    process.exit(caught ? 0 : 1);
+  }
+  baseline.forEach(fail);
+  console.log(`   ${original.length} authored players checked`);
 }
 
 /* ---------- 2. Every generator, every combination ---------- */

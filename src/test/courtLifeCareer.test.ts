@@ -213,6 +213,28 @@ describe('Court Life career', () => {
     expect(courtSeasonScore(scoreFixture(false, 20, 20))).toBe(90);
   });
 
+  it('claims only the current finished season when an older saved chapter remains unclaimed', () => {
+    const previous = finishedSeason();
+    expect(previous.chapters[0].claimed).toBe(false);
+    const restored = decodeCourtLifeSave(encodeCourtLifeSave(previous));
+    expect(restored.status).toBe('valid');
+    if (restored.status !== 'valid') throw new Error(restored.reason);
+    let value = nextCareerSeason(restored.career);
+    expect(claimCourtSeasonScore(value)).toEqual({ career: value, completion: null });
+    for (let round = 0; round < 6; round++) {
+      value = startCareerMatch(prepared(value));
+      value = completeCareerMatch(value, simulateCourtMatch(careerMatchConfig(value)));
+      expect(value.round).toBe(round + 1);
+    }
+    expect(value.season).toBe(2); expect(value.chapters).toHaveLength(2);
+    const claimed = claimCourtSeasonScore(value);
+    expect(claimed.completion, 'A new finish cannot repay a previous saved chapter').toMatchObject({ id: `${value.id}:season:2`, score: value.chapters[1].score });
+    expect(claimed.career.chapters[0]).toEqual(previous.chapters[0]);
+    expect(claimed.career.chapters[1].claimed).toBe(true);
+    expect(claimCourtSeasonScore(claimed.career)).toEqual({ career: claimed.career, completion: null });
+    expect(decodeCourtLifeSave(encodeCourtLifeSave(claimed.career)).status).toBe('valid');
+  }, 60000);
+
   it('restores an active match paused with its exact RNG and neutral continuation', () => {
     let value = startCareerMatch(prepared(career('resume')));
     const current = advance(value.activeMatch!.match, 140);
@@ -246,6 +268,35 @@ describe('Court Life career', () => {
     expect(decodeCourtLifeSave(JSON.stringify({ ...value, version: 999 })).status).toBe('unsupported');
     expect(decodeCourtLifeSave(JSON.stringify({ ...value, world: null })).status).toBe('invalid');
     expect(decodeCourtLifeSave(encodeCourtLifeSave(value)).status).toBe('valid');
+  });
+
+  it('rejects missing or mismatched airborne shooters while preserving actual shot and loose continuations', () => {
+    const value = startCareerMatch(prepared(career('airborne')));
+    let match = value.activeMatch!.match, airborne: CourtMatch | undefined, loose: CourtMatch | undefined;
+    for (let tick = 0; tick < 6000 && (!airborne || !loose); tick++) {
+      match = match.phase === 'halftime' ? continueCourtPeriod(match) : stepCourtMatch(match);
+      if (!airborne && match.ball.mode === 'shot') airborne = match;
+      if (!loose && match.ball.mode === 'loose' && match.ball.shooterId !== null) loose = match;
+    }
+    expect(airborne, 'The actual engine releases a shot').toBeDefined();
+    expect(loose, 'The actual engine retains the shooter on a live miss or block').toBeDefined();
+    const shotCareer = updateCareerMatch(value, airborne!, true);
+    for (const live of [airborne!, loose!]) {
+      const decoded = decodeCourtLifeSave(encodeCourtLifeSave(updateCareerMatch(value, live, true)));
+      expect(decoded.status, `An actual ${live.ball.mode} possession remains loadable`).toBe('valid');
+      if (decoded.status === 'valid') expect(advance(decoded.career.activeMatch!.match, 45)).toEqual(advance(neutralizeCourtMatch(live), 45));
+    }
+    const damage: Array<(ball: CourtMatch['ball']) => void> = [
+      ball => { ball.shooterId = null; }, ball => { ball.shotSide = null; },
+      ball => { ball.shotSide = ball.shotSide === 'home' ? 'away' : 'home'; },
+      ball => { ball.ownerId = ball.shooterId; },
+    ];
+    for (const corrupt of damage) {
+      const changed = clone(shotCareer); corrupt(changed.activeMatch!.match.ball);
+      const raw = encodeCourtLifeSave(changed), kept = raw;
+      expect(decodeCourtLifeSave(raw).status, 'An airborne shot needs its real shooter side and no owner').toBe('invalid');
+      expect(raw).toBe(kept);
+    }
   });
 
   it(independent, () => {

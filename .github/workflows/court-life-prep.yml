@@ -12,7 +12,7 @@ concurrency:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 55
     defaults:
       run:
         shell: bash
@@ -37,6 +37,7 @@ jobs:
           git rev-parse HEAD^{tree} > court-life-artifacts/source-tree.txt
           npm ci
           npm install --no-save playwright
+          npx playwright install --with-deps chromium
       - name: Type check
         run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee court-life-artifacts/types.log
       - name: Actual physical outcomes and copied faults
@@ -44,13 +45,29 @@ jobs:
         run: COURT_LIFE_ENGINE_CONTROL=all ONLY=simCourtLifeEngine node scripts/runAllSims.mjs 2>&1 | tee court-life-artifacts/engine.log
       - name: Measure complete physical matches and release probes
         if: ${{ !cancelled() }}
-        run: COURT_LIFE_ENGINE_MEASURE=1 ONLY=simCourtLifeEngine node scripts/runAllSims.mjs 2>&1 | tee court-life-artifacts/measurements.log
+        run: |
+          COURT_LIFE_ENGINE_MEASURE=1 ONLY=simCourtLifeEngine node scripts/runAllSims.mjs 2>&1 | tee court-life-artifacts/measurements.log
+          COURT_LIFE_ENGINE_MEASURE=1 COURT_LIFE_ENGINE_SEED_OFFSET=500 COURT_LIFE_ENGINE_ARTIFACTS=court-life-artifacts/engine-repeat ONLY=simCourtLifeEngine node scripts/runAllSims.mjs 2>&1 | tee court-life-artifacts/measurements-repeat.log
       - name: Career seasons saves and effective copied faults
         if: ${{ !cancelled() }}
         run: COURT_LIFE_CAREER_CONTROL=all ONLY=simCourtLifeCareer node scripts/runAllSims.mjs 2>&1 | tee court-life-artifacts/career.log
       - name: Controls persistence and effective copied faults
         if: ${{ !cancelled() }}
         run: COURT_LIFE_CONTROLS_CONTROL=all ONLY=simCourtLifeControls node scripts/runAllSims.mjs 2>&1 | tee court-life-artifacts/controls.log
+      - name: Authored names and effective name controls
+        if: ${{ !cancelled() }}
+        run: |
+          ONLY=simInventedNames node scripts/runAllSims.mjs 2>&1 | tee court-life-artifacts/names.log
+          COURT_NAMES_CONTROL=collision ONLY=simInventedNames node scripts/runAllSims.mjs 2>&1 | tee court-life-artifacts/names-collision.log
+          COURT_NAMES_CONTROL=missing ONLY=simInventedNames node scripts/runAllSims.mjs 2>&1 | tee court-life-artifacts/names-missing.log
+      - name: Actual player screens renderer and effective copied faults
+        if: ${{ !cancelled() }}
+        run: COURT_LIFE_PRESENTATION_CONTROL=all ONLY=simCourtLifePresentation node scripts/runAllSims.mjs 2>&1 | tee court-life-artifacts/presentation.log
+      - name: Native complete career and physical presentation
+        if: ${{ !cancelled() }}
+        run: |
+          node scripts/qa/courtLife1075.mjs --prefetch-fonts-only 2>&1 | tee court-life-artifacts/fonts.log
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/courtLife1075.mjs 2>&1 | tee court-life-artifacts/native.log
       - name: Preserve evidence
         if: always()
         uses: actions/upload-artifact@v4

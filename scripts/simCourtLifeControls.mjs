@@ -19,6 +19,8 @@ const cases = {
   restore: 'restores live play paused and holds invalid raw until explicit replacement',
   storage: 'keeps actual play running on storage failure and retries its current snapshot',
   season: 'records a season transition once and never repays a restored finished season',
+  claim: 'defers the season score until its claim is durable across failure retry and reload',
+  replacement: 'keeps the original recovery bytes and download state until replacement saves successfully',
   independent: 'retains the independent seeded engine baseline without hook input',
 };
 const controls = {
@@ -30,11 +32,13 @@ const controls = {
   cancel: { from: 'if (cancelled) {', to: 'if (false) {', test: cases.cancel },
   catchup: { from: 'elapsed > 150 ? 0 : elapsed', to: 'elapsed', test: cases.pause },
   neutral: { from: 'const next = neutralizeCourtMatch(matchRef.current);', to: 'const next = matchRef.current;', test: cases.pause },
-  recovery: { from: 'if (protectRecovery.current)', to: 'if (false)', test: cases.restore },
+  recovery: { from: 'if (protectRecovery.current && !replaceProtected)', to: 'if (false)', test: cases.restore },
   click: { file: controlsFile, from: 'if (event.detail === 0) tap(slot);', to: 'tap(slot);', test: cases.cancel },
   pad: { file: controlsFile, from: 'if (disabled) padPointer.current = null;', to: 'void disabled;', test: cases.cancel },
   restored: { from: 'const pausedRef = useRef(true);', to: 'const pausedRef = useRef(false);', test: cases.restore },
   storage: { from: "setStorageError('Could not save this career. You can keep playing and retry saving.');", to: 'setStorageError(null);', test: cases.storage },
+  claim: { from: 'if (!saved || !pendingCompletion.current) return;', to: 'if (!pendingCompletion.current) return;', test: cases.claim },
+  replacement: { from: 'if (persist(careerRef.current, true)) {', to: 'if (true) {', test: cases.replacement },
 };
 const count = Object.keys(cases).length;
 const control = process.env.COURT_LIFE_CONTROLS_CONTROL || '';

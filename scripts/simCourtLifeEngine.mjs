@@ -39,26 +39,50 @@ if (process.env.COURT_LIFE_ENGINE_MEASURE === '1') {
   const spec = id => ({ id, name: id, condition: 100, attrs: { finishing: 65, shooting: 65, passing: 65, defense: 65, conditioning: 65 } });
   const config = seed => ({ id: `measure-${seed}`, seed, home: { id: 'home', name: 'Harbor', chemistry: 50, players: ['h0', 'h1', 'h2'].map(spec) },
     away: { id: 'away', name: 'Foundry', chemistry: 50, players: ['a0', 'a1', 'a2'].map(spec) }, controlledPlayerId: null });
-  const armNames = ['baseline', 'weakShooting', 'weakDefense', 'tired', 'idle'];
+  const seedOffset = Number(process.env.COURT_LIFE_ENGINE_SEED_OFFSET || 0);
+  assert(Number.isInteger(seedOffset) && seedOffset >= 0 && seedOffset < 10000);
+  const armNames = ['baseline', 'weakFinishing', 'weakShooting', 'weakPassing', 'weakDefense', 'weakConditioning', 'tired', 'idle'];
   const arms = Object.fromEntries(armNames.map(name => [name, []]));
   for (let index = 0; index < 24; index++) for (const arm of armNames) {
-    const cfg = config((index + 1) * 104729 + 71);
+    const cfg = config((index + 1 + seedOffset) * 104729 + 71);
     for (const player of cfg.home.players) {
-      if (arm === 'weakShooting') { player.attrs.shooting = 35; player.attrs.finishing = 35; }
+      if (arm === 'weakFinishing') player.attrs.finishing = 35;
+      if (arm === 'weakShooting') player.attrs.shooting = 35;
+      if (arm === 'weakPassing') player.attrs.passing = 20;
       if (arm === 'weakDefense') player.attrs.defense = 20;
+      if (arm === 'weakConditioning') player.attrs.conditioning = 20;
       if (arm === 'tired') player.condition = 15;
     }
     if (arm === 'idle') cfg.controlledPlayerId = 'h0';
     let match = engine.createCourtMatch(cfg), ticks = { home: 0, away: 0 };
+    const defense = { reachableTicks: 0, pokeAttempts: 0, loosePokes: 0, sameTeamRecoveries: 0, pokeWins: 0 };
+    let pendingPokeOwner = null;
     for (let tick = 0; tick < 30000 && match.phase !== 'finished'; tick++) {
       if (match.phase === 'playing') ticks[match.possession]++;
+      const before = match, owner = match.players.find(player => player.id === match.ball.ownerId);
+      if (match.phase === 'playing' && owner) defense.reachableTicks += match.players.filter(player => player.side !== owner.side
+        && player.cooldown === 0 && Math.hypot(player.x - owner.x, player.y - owner.y) < 1.2).length;
       match = match.phase === 'halftime' ? engine.continueCourtPeriod(match) : engine.stepCourtMatch(match);
+      defense.pokeAttempts += match.players.filter(player => player.action === 'steal' && player.actionTicks === 10 && player.cooldown === 24
+        && before.players.find(previous => previous.id === player.id).cooldown <= 1).length;
+      if (owner && match.ball.mode === 'loose' && match.ball.turnoverOwnerId === owner.id && match.ball.releasedTick === match.tick) {
+        defense.loosePokes++; pendingPokeOwner = owner.id;
+      }
+      if (pendingPokeOwner && match.ball.mode === 'owned') {
+        if (match.players.find(player => player.id === match.ball.ownerId).side === match.players.find(player => player.id === pendingPokeOwner).side) defense.sameTeamRecoveries++;
+        else defense.pokeWins++;
+        pendingPokeOwner = null;
+      }
+      if (match.phase !== 'playing') pendingPokeOwner = null;
     }
     assert.equal(match.phase, 'finished');
     const stats = side => Object.fromEntries(Object.keys(match.players[0].stats).map(key => [key, match.players.filter(player => player.side === side).reduce((sum, player) => sum + player.stats[key], 0)]));
     for (const side of ['home', 'away']) assert.equal(match.score[side], match.events.filter(event => event.kind === 'basket' && event.side === side).reduce((sum, event) => sum + event.points, 0));
     arms[arm].push({ seed: cfg.seed, tick: match.tick, period: match.period, winner: match.result.winner, score: match.score, possessionTicks: ticks,
-      home: stats('home'), away: stats('away'), passes: match.events.filter(event => event.kind === 'pass').length });
+      home: stats('home'), away: stats('away'), defense, passes: match.events.filter(event => event.kind === 'pass').length,
+      homePasses: match.events.filter(event => event.kind === 'pass' && event.side === 'home').length,
+      homeCompletedPasses: match.events.filter(event => event.kind === 'catch' && event.side === 'home'
+        && match.players.find(player => player.id === event.otherPlayerId)?.side === 'home').length });
   }
   const mean = values => values.reduce((sum, value) => sum + value, 0) / values.length;
   const summaries = Object.fromEntries(armNames.map(arm => [arm, { games: arms[arm].length,
@@ -66,10 +90,18 @@ if (process.env.COURT_LIFE_ENGINE_MEASURE === '1') {
     homeAttempts: mean(arms[arm].map(row => row.home.attempts)), awayAttempts: mean(arms[arm].map(row => row.away.attempts)),
     homeTurnovers: mean(arms[arm].map(row => row.home.turnovers)), awayTurnovers: mean(arms[arm].map(row => row.away.turnovers)),
     homeRebounds: mean(arms[arm].map(row => row.home.rebounds)), passes: mean(arms[arm].map(row => row.passes)),
+    homeAssists: mean(arms[arm].map(row => row.home.assists)), homeSteals: mean(arms[arm].map(row => row.home.steals)),
+    homeBlocks: mean(arms[arm].map(row => row.home.blocks)), homePasses: mean(arms[arm].map(row => row.homePasses)),
+    homeCompletedPasses: mean(arms[arm].map(row => row.homeCompletedPasses)),
+    reachableDefenseTicks: mean(arms[arm].map(row => row.defense.reachableTicks)), pokeAttempts: mean(arms[arm].map(row => row.defense.pokeAttempts)),
+    loosePokes: mean(arms[arm].map(row => row.defense.loosePokes)), sameTeamPokeRecoveries: mean(arms[arm].map(row => row.defense.sameTeamRecoveries)),
+    pokeWins: mean(arms[arm].map(row => row.defense.pokeWins)),
+    pairedMarginChange: mean(arms[arm].map((row, index) => row.score.home - row.score.away - arms.baseline[index].score.home + arms.baseline[index].score.away)),
     homePossessionShare: mean(arms[arm].map(row => row.possessionTicks.home / (row.possessionTicks.home + row.possessionTicks.away))),
     draws: arms[arm].filter(row => row.winner === 'draw').length } ]));
   const shotProbes = [];
   for (const rating of [35, 85]) for (const scenario of [
+    { name: 'open-close-finish', length: 2.4, charge: 13, guarded: false },
     { name: 'open-midrange', length: 4.4, charge: 13, guarded: false },
     { name: 'legal-jump-contest', length: 4.4, charge: 13, guarded: true },
     { name: 'open-long-range', length: 8, charge: 13, guarded: false },
@@ -77,7 +109,7 @@ if (process.env.COURT_LIFE_ENGINE_MEASURE === '1') {
   ]) {
     let made = 0, blocked = 0;
     for (let index = 0; index < 256; index++) {
-      const cfg = config((index + 1) * 104729 + 71); cfg.controlledPlayerId = 'h0'; cfg.role = { inboundPriority: 1, callPriority: 1 };
+      const cfg = config((index + 1 + seedOffset) * 104729 + 71); cfg.controlledPlayerId = 'h0'; cfg.role = { inboundPriority: 1, callPriority: 1 };
       cfg.home.players[0].attrs.shooting = rating; cfg.home.players[0].attrs.finishing = rating;
       let match = engine.createCourtMatch(cfg);
       for (let tick = 0; tick < 18; tick++) match = engine.stepCourtMatch(match);
@@ -91,10 +123,33 @@ if (process.env.COURT_LIFE_ENGINE_MEASURE === '1') {
     }
     shotProbes.push({ rating, ...scenario, attempts: 256, made, blocked, rate: made / 256 });
   }
+  const pokeProbes = [];
+  for (const rating of [20, 85]) {
+    const samples = [];
+    for (let index = 0; index < 256; index++) {
+      const cfg = config((index + 1 + seedOffset) * 104729 + 71); cfg.controlledPlayerId = 'h0';
+      cfg.home.players[0].attrs.defense = rating;
+      let match = engine.createCourtMatch(cfg);
+      for (let tick = 0; tick < 18; tick++) match = engine.stepCourtMatch(match);
+      match.players.forEach((player, index) => { player.x = 2 + index * 2; player.y = 3; });
+      Object.assign(match.players[0], { x: 8, y: 13, facingX: 0, facingY: -1 });
+      Object.assign(match.players[3], { x: 8, y: 12, facingX: 0, facingY: 1, cooldown: 30 });
+      match.possession = 'away';
+      Object.assign(match.ball, { mode: 'owned', ownerId: 'a0', lastTouchId: 'a0', x: 8, y: 12.28, z: .8 });
+      match = engine.stepCourtMatch(match, { ...engine.neutralCourtInput(), steal: true, guard: true, moveY: -1 });
+      const attempted = match.players[0].action === 'steal', poked = match.ball.mode === 'loose';
+      for (let tick = 0; tick < 20 && match.ball.mode === 'loose'; tick++) match = engine.stepCourtMatch(match, { ...engine.neutralCourtInput(), guard: true, moveY: -1 });
+      samples.push({ seed: cfg.seed, attempted, poked, ownerId: match.ball.ownerId, mode: match.ball.mode,
+        steals: match.players[0].stats.steals, turnovers: match.players[3].stats.turnovers });
+    }
+    pokeProbes.push({ rating, attempts: samples.filter(row => row.attempted).length, poked: samples.filter(row => row.poked).length,
+      won: samples.filter(row => row.steals === 1 && row.turnovers === 1).length,
+      recoveredByOwner: samples.filter(row => row.poked && row.ownerId === 'a0').length, samples });
+  }
   const sourceAfter = await measurementHashes(); assert.deepEqual(sourceAfter, sourceBefore);
-  await writeFile(path.join(evidence, 'measurements.json'), JSON.stringify({ sourceBefore, sourceAfter, arms, summaries, shotProbes }, null, 2));
-  console.log(JSON.stringify({ summaries, shotProbes }, null, 2));
-  console.log('simCourtLifeEngine measurements: 120 full physical games and 2048 actual released shots retained. These are measurements, not uncalibrated balance acceptance.');
+  await writeFile(path.join(evidence, 'measurements.json'), JSON.stringify({ sourceBefore, sourceAfter, seedOffset, arms, summaries, shotProbes, pokeProbes }, null, 2));
+  console.log(JSON.stringify({ summaries, shotProbes, pokeProbes: pokeProbes.map(({ samples, ...summary }) => summary) }, null, 2));
+  console.log('simCourtLifeEngine measurements: 192 full physical games, 2560 released shots and 512 legal defensive poke probes retained. These are measurements, not uncalibrated balance acceptance.');
   process.exit(0);
 }
 if (control === 'all') {

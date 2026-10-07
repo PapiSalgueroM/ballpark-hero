@@ -58,6 +58,17 @@ function mount(career = playingCareer()) {
   vi.mocked(stepCourtMatch).mockClear();
   return hook;
 }
+function finishedSeasonMatch() {
+  let career = playingCareer();
+  for (let round = 0; round < 6; round++) {
+    if (round) career = startCareerMatch(prepare(career));
+    const match = simulateCourtMatch(careerMatchConfig(career));
+    match.controlledPlayerId = career.playerId;
+    if (round === 5) return updateCareerMatch(career, match, true);
+    career = completeCareerMatch(career, match);
+  }
+  throw new Error('The actual sixth fixture must finish.');
+}
 const player = (match: CourtMatch) => match.players.find(row => row.id === match.controlledPlayerId)!;
 
 describe('Court Life controls and actual match persistence', () => {
@@ -148,7 +159,10 @@ describe('Court Life controls and actual match persistence', () => {
     fireEvent.pointerDown(primary, { pointerId: 8, pointerType: 'touch' }); run(4);
     fireEvent.pointerUp(primary, { pointerId: 8, pointerType: 'touch' }); run(1);
     expect(player(game!.matchRef.current!).stats.attempts).toBe(1);
+    const beforeClick = game.matchRef.current!;
     fireEvent.click(primary, { detail: 1 }); run(1);
+    expect(vi.mocked(stepCourtMatch).mock.calls.at(-1)![1]).toEqual(neutralCourtInput());
+    expect(game.matchRef.current).toEqual(realStep(beforeClick));
     expect(player(game!.matchRef.current!).z).toBe(0);
     fireEvent.click(primary, { detail: 0 }); run(1);
     expect(vi.mocked(stepCourtMatch).mock.calls.at(-1)![1]?.jump).toBe(true);
@@ -174,7 +188,7 @@ describe('Court Life controls and actual match persistence', () => {
   it('keeps actual play running on storage failure and retries its current snapshot', () => {
     const hook = mount();
     const write = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => { throw new DOMException('Full', 'QuotaExceededError'); });
-    act(() => hook.result.current.retrySave()); expect(hook.result.current.storageError).toMatch(/Could not save/);
+    act(() => hook.result.current.retrySave()); expect(hook.result.current.storageError).toEqual(expect.stringContaining('Could not save'));
     const before = hook.result.current.matchRef.current!; run(3);
     expect(hook.result.current.matchRef.current!.tick).toBe(before.tick + 3);
     write.mockRestore(); act(() => hook.result.current.retrySave());
@@ -188,14 +202,7 @@ describe('Court Life controls and actual match persistence', () => {
   });
 
   it('records a season transition once and never repays a restored finished season', () => {
-    let career = playingCareer();
-    for (let round = 0; round < 6; round++) {
-      if (round) career = startCareerMatch(prepare(career));
-      const match = simulateCourtMatch(careerMatchConfig(career));
-      match.controlledPlayerId = career.playerId;
-      if (round === 5) { career = updateCareerMatch(career, match, true); break; }
-      career = completeCareerMatch(career, match);
-    }
+    const career = finishedSeasonMatch();
     localStorage.setItem(COURT_CAREER_SAVE_KEY, encodeCourtLifeSave(career));
     const hook = renderHook(() => useCourtLife()); expect(hook.result.current.career).not.toBeNull();
     act(() => hook.result.current.finish());
@@ -204,6 +211,49 @@ describe('Court Life controls and actual match persistence', () => {
     const restored = renderHook(() => useCourtLife()); expect(restored.result.current.career!.phase).toBe('seasonComplete');
     run(5); expect(recordCompletion).toHaveBeenCalledTimes(1);
   }, 30000);
+
+  it('defers the season score until its claim is durable across failure retry and reload', () => {
+    const durable = encodeCourtLifeSave(finishedSeasonMatch());
+    localStorage.setItem(COURT_CAREER_SAVE_KEY, durable);
+    const hook = renderHook(() => useCourtLife());
+    const write = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => { throw new DOMException('Full', 'QuotaExceededError'); });
+    act(() => hook.result.current.finish());
+    expect(hook.result.current.career!.phase).toBe('seasonComplete'); expect(hook.result.current.scorePending).toBe(true);
+    expect(recordCompletion).not.toHaveBeenCalled(); expect(localStorage.getItem(COURT_CAREER_SAVE_KEY)).toBe(durable);
+    act(() => hook.result.current.retrySave()); expect(recordCompletion).not.toHaveBeenCalled();
+    act(() => hook.result.current.nextSeason()); expect(hook.result.current.career!.season).toBe(1);
+    expect(hook.result.current.storageError).toEqual(expect.stringContaining('Save your finished season first'));
+    hook.unmount();
+    const restored = renderHook(() => useCourtLife());
+    expect(restored.result.current.matchRef.current!.phase).toBe('finished'); expect(recordCompletion).not.toHaveBeenCalled();
+    act(() => restored.result.current.finish()); expect(restored.result.current.scorePending).toBe(true);
+    write.mockRestore(); act(() => restored.result.current.retrySave());
+    expect(recordCompletion).toHaveBeenCalledTimes(1); expect(restored.result.current.scorePending).toBe(false);
+    const claimed = decodeCourtLifeSave(localStorage.getItem(COURT_CAREER_SAVE_KEY)!);
+    expect(claimed.status).toBe('valid'); if (claimed.status === 'valid') expect(claimed.career.chapters.at(-1)!.claimed).toBe(true);
+    act(() => restored.result.current.retrySave()); expect(recordCompletion).toHaveBeenCalledTimes(1); restored.unmount();
+    const final = renderHook(() => useCourtLife()); run(3); expect(recordCompletion).toHaveBeenCalledTimes(1);
+    act(() => final.result.current.nextSeason()); expect(final.result.current.career!.season).toBe(2);
+  }, 30000);
+
+  it('keeps the original recovery bytes and download state until replacement saves successfully', () => {
+    for (const raw of ['{broken', '{"version":99}']) {
+      localStorage.setItem(COURT_CAREER_SAVE_KEY, raw);
+      const hook = renderHook(() => useCourtLife());
+      act(() => hook.result.current.create({ name: 'Retry replacement', crewId: 'copper-owls', archetypeId: 'runner' }));
+      const write = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => { throw new DOMException('Full', 'QuotaExceededError'); });
+      act(() => hook.result.current.replaceRecovery());
+      expect(hook.result.current.recovery?.raw).toBe(raw); expect(localStorage.getItem(COURT_CAREER_SAVE_KEY)).toBe(raw);
+      expect(hook.result.current.storageError).toEqual(expect.stringContaining('Could not save'));
+      write.mockRestore(); act(() => hook.result.current.prepare({ kind: 'recovery' }));
+      expect(localStorage.getItem(COURT_CAREER_SAVE_KEY)).toBe(raw); expect(hook.result.current.recovery?.raw).toBe(raw);
+      act(() => hook.result.current.replaceRecovery());
+      expect(hook.result.current.recovery).toBeNull(); expect(hook.result.current.storageError).toBeNull();
+      const saved = decodeCourtLifeSave(localStorage.getItem(COURT_CAREER_SAVE_KEY)!);
+      expect(saved.status).toBe('valid'); if (saved.status === 'valid') expect(saved.career.blocksLeft).toBe(1);
+      hook.unmount();
+    }
+  });
 
   it('retains the independent seeded engine baseline without hook input', () => {
     const world = createCourtLifeWorld();

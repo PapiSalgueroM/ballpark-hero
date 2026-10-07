@@ -221,7 +221,8 @@ export function completeCareerMatch(career: CourtCareer, match = career.activeMa
   return next;
 }
 export function claimCourtSeasonScore(career: CourtCareer): { career: CourtCareer; completion: null | { id: string; score: number; wins: number } } {
-  const chapter = career.chapters.find(row => !row.claimed);
+  if (career.phase !== 'seasonComplete') return { career, completion: null };
+  const chapter = career.chapters.find(row => row.season === career.season && !row.claimed);
   if (!chapter) return { career, completion: null };
   const next = copy(career); next.chapters.find(row => row.season === chapter.season)!.claimed = true;
   const own = courtStandings(career.world, chapter.fixtures, chapter.results).find(row => row.crewId === career.crewId)!;
@@ -296,6 +297,7 @@ function validMatch(value: unknown): value is CourtMatch {
     || !integer(ball.flightId, 0, 36000) || !integer(ball.scoredFlightId, -1, 36000) || !(ball.shotSide === null || side(ball.shotSide)) || ![2, 3].includes(ball.shotValue)
     || !integer(ball.releasedTick, 0, value.tick) || typeof ball.reboundEligible !== 'boolean' || typeof ball.rimTouched !== 'boolean'
     || (ball.mode === 'owned' && ball.ownerId === null)) return false;
+  if (ball.mode === 'shot' && (ball.ownerId !== null || !side(ball.shotSide) || !value.players.some((player: any) => player.id === ball.shooterId && player.side === ball.shotSide))) return false;
   if (value.lastPass !== null && (!object(value.lastPass) || !ids.includes(value.lastPass.passerId) || !ids.includes(value.lastPass.receiverId) || !integer(value.lastPass.tick, 0, value.tick))) return false;
   if (!Array.isArray(value.events) || value.events.length > 36000 || !value.events.every((event: any, index: number) => object(event) && integer(event.id) && (index === 0 || event.id > value.events[index - 1].id)
     && integer(event.tick, 0, value.tick) && ['inbound', 'pass', 'catch', 'shot', 'basket', 'miss', 'rim', 'block', 'rebound', 'steal', 'turnover', 'out', 'halftime', 'overtime', 'finish'].includes(event.kind)

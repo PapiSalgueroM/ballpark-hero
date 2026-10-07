@@ -33,6 +33,8 @@ export function useCourtLife(helpOpen = false) {
   const pausedRef = useRef(true);
   const [storageError, setStorageError] = useState(loaded.error);
   const [completion, setCompletion] = useState<{ id: string; score: number; wins: number } | null>(null);
+  const pendingCompletion = useRef<typeof completion>(null);
+  const [scorePending, setScorePending] = useState(false);
   const [recovery, setRecovery] = useState(loaded.recovery);
   const protectRecovery = useRef(Boolean(loaded.recovery));
   const helpRef = useRef(helpOpen); helpRef.current = helpOpen;
@@ -42,10 +44,14 @@ export function useCourtLife(helpOpen = false) {
   const clock = useRef({ last: null as number | null, debt: 0, hud: 0, savedTick: 0 });
   useGameCompletion('court-life', completion !== null, completion?.score, completion?.wins ?? 0);
 
-  const persist = useCallback((next: CourtCareer) => {
-    if (protectRecovery.current) { setStorageError('Your original save is kept. This new career is running without saving.'); return; }
-    try { localStorage.setItem(COURT_CAREER_SAVE_KEY, encodeCourtLifeSave(next)); setStorageError(null); }
-    catch { setStorageError('Could not save this career. You can keep playing and retry saving.'); }
+  const persist = useCallback((next: CourtCareer, replaceProtected = false) => {
+    if (protectRecovery.current && !replaceProtected) { setStorageError('Your original save is kept. This new career is running without saving.'); return false; }
+    try { localStorage.setItem(COURT_CAREER_SAVE_KEY, encodeCourtLifeSave(next)); setStorageError(null); return true; }
+    catch { setStorageError('Could not save this career. You can keep playing and retry saving.'); return false; }
+  }, []);
+  const releaseCompletion = useCallback((saved: boolean) => {
+    if (!saved || !pendingCompletion.current) return;
+    setCompletion(pendingCompletion.current); pendingCompletion.current = null; setScorePending(false);
   }, []);
   const clearInput = useCallback(() => {
     held.current.clear(); movement.current.clear(); edges.current = [];
@@ -55,13 +61,14 @@ export function useCourtLife(helpOpen = false) {
     careerRef.current = next; setCareer(next);
     matchRef.current = next.activeMatch?.match ?? null; setMatch(matchRef.current);
     pausedRef.current = next.activeMatch?.paused ?? true; setPaused(pausedRef.current);
-    persist(next);
+    return persist(next);
   }, [persist]);
   const checkpoint = useCallback((next: CourtMatch, stopped: boolean) => {
-    if (!careerRef.current) return;
+    if (!careerRef.current) return false;
     const saved = updateCareerMatch(careerRef.current, next, stopped);
-    careerRef.current = saved; setCareer(saved); persist(saved);
+    careerRef.current = saved; setCareer(saved); const written = persist(saved);
     clock.current.savedTick = next.tick;
+    return written;
   }, [persist]);
   const pause = useCallback(() => {
     clearInput(); pausedRef.current = true; setPaused(true);
@@ -76,7 +83,7 @@ export function useCourtLife(helpOpen = false) {
     pausedRef.current = false; setPaused(false); checkpoint(current, false);
   }, [checkpoint, clearInput]);
   const create = useCallback((options: { name: string; crewId: string; archetypeId: string }) => {
-    clearInput(); setCompletion(null);
+    clearInput(); setCompletion(null); pendingCompletion.current = null; setScorePending(false);
     publish(createCourtLifeCareer({ ...options, id: crypto.randomUUID(), seed: crypto.getRandomValues(new Uint32Array(1))[0] % 2147483646 + 1 }));
   }, [clearInput, publish]);
   const prepare = useCallback((action: CourtCareerAction) => { if (careerRef.current) publish(applyCareerAction(careerRef.current, action)); }, [publish]);
@@ -93,18 +100,24 @@ export function useCourtLife(helpOpen = false) {
     if (next === careerRef.current) return;
     clearInput();
     if (next.phase === 'seasonComplete') {
-      const claimed = claimCourtSeasonScore(next); publish(claimed.career); setCompletion(claimed.completion);
+      const claimed = claimCourtSeasonScore(next); pendingCompletion.current = claimed.completion;
+      const saved = publish(claimed.career); setScorePending(!saved && Boolean(claimed.completion)); releaseCompletion(saved);
     } else publish(next);
+  }, [clearInput, publish, releaseCompletion]);
+  const nextSeason = useCallback(() => {
+    if (pendingCompletion.current) { setStorageError('Save your finished season first so its score is recorded once. Use Retry saving before starting the next season.'); return; }
+    if (careerRef.current?.phase === 'seasonComplete') { clearInput(); setCompletion(null); publish(nextCareerSeason(careerRef.current)); }
   }, [clearInput, publish]);
-  const nextSeason = useCallback(() => { if (careerRef.current?.phase === 'seasonComplete') { clearInput(); setCompletion(null); publish(nextCareerSeason(careerRef.current)); } }, [clearInput, publish]);
   const retrySave = useCallback(() => {
-    if (matchRef.current) checkpoint(matchRef.current, pausedRef.current);
-    else if (careerRef.current) persist(careerRef.current);
-  }, [checkpoint, persist]);
+    const saved = matchRef.current ? checkpoint(matchRef.current, pausedRef.current) : careerRef.current ? persist(careerRef.current) : false;
+    releaseCompletion(saved);
+  }, [checkpoint, persist, releaseCompletion]);
   const replaceRecovery = useCallback(() => {
     if (!careerRef.current) return;
-    protectRecovery.current = false; setRecovery(null); persist(careerRef.current);
-  }, [persist]);
+    if (persist(careerRef.current, true)) {
+      protectRecovery.current = false; setRecovery(null); releaseCompletion(true);
+    }
+  }, [persist, releaseCompletion]);
   const acceptsInput = () => !pausedRef.current && !helpRef.current && !document.hidden && matchRef.current?.phase === 'playing';
   const press = useCallback((source: string, slot: CourtControlSlot) => {
     if (!acceptsInput() || held.current.has(source)) return;
@@ -186,5 +199,5 @@ export function useCourtLife(helpOpen = false) {
       window.removeEventListener('blur', pause); document.removeEventListener('visibilitychange', hidden);
     };
   }, [checkpoint, clearInput, move, pause, persist, press, release]);
-  return { career, match, matchRef, drawRef, paused, recovery, storageError, create, prepare, decide, start, pause, resume, continuePeriod, finish, nextSeason, retrySave, replaceRecovery, press, release, move, tap };
+  return { career, match, matchRef, drawRef, paused, recovery, storageError, scorePending, create, prepare, decide, start, pause, resume, continuePeriod, finish, nextSeason, retrySave, replaceRecovery, press, release, move, tap };
 }
