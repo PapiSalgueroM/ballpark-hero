@@ -1,3 +1,24 @@
+## Round 1073 implementation and release candidate, October 7, 2026
+
+Cage Clash practice now shows earned progress, the next move and the actual
+last attempt for striking, takedowns, submission and escape. Defended attempts
+stay unfinished. Help/pause flushes the same actual practice tick as the HUD.
+Quick/Circuit behavior, engines, RNG, scoring and saves remain unchanged.
+
+Remote preparation verified types/build, 8 feedback outcomes and 14 effective
+copied faults. Desktop and 320px touch completed all four drills, full fights
+and circuits. The remaining 390px check caught measurement during Help's exit
+animation; the final harness waits for the real dialog to close. Its explicit
+capture clock and native focus polling preserve all original input journeys,
+viewports, geometry thresholds and random seeds. Ten native controls are required.
+Final PR checks are the acceptance gate; this note does not claim publication.
+
+Six generated payload hashes from 37568099560 were verified before import.
+Their guide/news sources remain byte-identical to generation. Only Cage Clash
+and What's New ledger entries change; frozen guide fixture is unchanged.
+The temporary preparation workflow is removed. All tests/builds stay remote.
+Claude owns AH/main/publish. Preserve both PR163 and this round's news, guide
+and ledger hunks during integration. Protected root drafts/stashes are held.
 ## Round 1073 recovery: pause feedback fix under remote verification, October 7, 2026
 
 Continuing the prior chat in the existing Cage practice branch. Preparation 37568099560

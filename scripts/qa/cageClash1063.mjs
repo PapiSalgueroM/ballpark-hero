@@ -576,6 +576,7 @@ try {
             const frozen = await hud(page); await page.clock.runFor(500); assert.deepEqual(await hud(page), frozen, 'Help freezes the real drill');
             const frozenFeedback = await inspectFeedback('practice-help-frozen', frozen);
             await activate(page.getByRole('dialog').getByRole('button', { name: /close/i }), profile); await page.clock.runFor(300);
+            await page.getByRole('dialog').waitFor({ state: 'hidden' });
             assert.deepEqual(await hud(page), frozen, 'Closing practice help still requires resume');
             assert.deepEqual(await inspectFeedback('practice-help-closed'), frozenFeedback, 'Help close preserves feedback until explicit resume');
             await activate(button('Resume drill'), profile); await page.clock.runFor(112);
@@ -688,6 +689,7 @@ try {
       await inspect('help');
       const helpTick = (await hud(page)).tick; await page.clock.runFor(1000); assert.equal((await hud(page)).tick, helpTick, 'Help freezes actual combat');
       await activate(page.getByRole('dialog').getByRole('button', { name: /close/i }), profile);
+      await page.getByRole('dialog').waitFor({ state: 'hidden' });
       await page.clock.runFor(300); assert.equal((await hud(page)).tick, helpTick, 'Closing help still waits for explicit resume');
       await activate(button('Resume fight'), profile); await page.clock.runFor(150); assert((await hud(page)).tick > helpTick);
       if (profile.input === 'keyboard') {
