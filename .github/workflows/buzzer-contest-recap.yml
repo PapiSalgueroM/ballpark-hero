@@ -12,6 +12,7 @@ on:
       - src/test/buzzerContestRecap.test.tsx
       - src/test/threePointContest.test.tsx
       - scripts/simBuzzerContestRecap.mjs
+      - scripts/simThreePointContest.mjs
       - scripts/qa/buzzerContestRecap1074.mjs
       - public/buzzer-beater/index.html
   workflow_dispatch:
