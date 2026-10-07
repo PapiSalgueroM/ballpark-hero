@@ -1,40 +1,40 @@
 {
   "about": "Round 1022. The two fact tables in src/lib/soccerCareerEngine.ts that a Soccer Career player sees as real: INT_SCORING_RECORDS (each nation's men's all time international scoring record, which decides the All Time Top Scorer award and its line) and the league label on every one of the 190 HAND_CLUBS rows (181 verified for the current season, 7 pinned to their old label until the league by year round, 2 with no current table online yet). Every value here was read on the date beside it from two independent sources that agree, none of them Wikipedia. Where two sources disagreed a third settled it, and where nothing settled it the value is left out (intRecordsHeld): a nation with no verified row gets no award at all, there is no default. scripts/simCareerFacts.mjs holds the engine to this file and fails if either side moves. Records held by active players move with every international window, so each row carries asOf, the last date both sources were read; refresh them together, never one side.",
-  "checked": "2026-10-06",
+  "checked": "2026-10-07",
   "intRecords": {
     "Argentina": {
       "holder": "Lionel Messi",
-      "goals": 125,
-      "asOf": "2026-10-06",
-      "note": "Active. Farewell match against Benin was scheduled for the evening of 2026-10-06, after this read.",
+      "goals": 126,
+      "asOf": "2026-10-07",
+      "note": "Final. His farewell match, Argentina 3-0 Benin on 2026-10-06, ended his international career, and his penalty in it was his 126th goal.",
       "sources": [
         {
-          "url": "https://www.infobae.com/deportes/2026/10/06/los-impactantes-numeros-de-lionel-andres-messi-en-la-seleccion-argentina/",
-          "read": "2026-10-06",
-          "says": "125 goals in 207 matches"
+          "url": "https://www.abc.net.au/news/2026-10-07/lionel-messi-final-argentina-international-benin/107238572",
+          "read": "2026-10-07",
+          "says": "Reuters copy, published Oct 7, 2026: 'Messi played his 208th international and scored his 126th goal for Argentina, both records' and 'Messi converted a penalty for 3-0, his 126th international goal'. Argentina 3-0 Benin."
         },
         {
-          "url": "https://voetbalfocus.be/lukaku-nadert-chhetri-na-treffer-rode-duivels/",
-          "read": "2026-10-06",
-          "says": "published 2026-10-03: Messi 125 for Argentina"
+          "url": "https://www.espn.com/soccer/report/_/gameId/401921408",
+          "read": "2026-10-07",
+          "says": "ESPN match report, Oct 6, 2026: Argentina 3-0 Benin (Otamendi 48', Nico Paz 61', Messi 71' pen). The penalty was 'his 126th and last international goal', and he ends 'with 208 senior caps' and '126 goals for Argentina'."
         }
       ]
     },
     "Belgium": {
       "holder": "Romelu Lukaku",
       "goals": 94,
-      "asOf": "2026-10-06",
+      "asOf": "2026-10-07",
       "note": "Active. 94th goal against Turkey in the October 2026 Nations League window.",
       "sources": [
         {
-          "url": "https://www.uefa.com/european-qualifiers/news/0253-0d81f47dfe05-e92503acfb7d-1000--europe-s-top-international-scorers-cristiano-ronaldo-out/",
-          "read": "2026-10-06",
-          "says": "Romelu Lukaku (Belgium) 94 in 135"
+          "url": "https://www.uefa.com/uefanationsleague/news/0253-0d81f47dfe05-e92503acfb7d-1000--europe-s-top-international-scorers-cristiano-ronaldo-out-/",
+          "read": "2026-10-07",
+          "says": "UEFA.com, Europe's all-time top international scorers, figures 'correct as of 6 October 2026': Romelu Lukaku (Belgium) 94 in 135."
         },
         {
-          "url": "https://voetbalfocus.be/lukaku-nadert-chhetri-na-treffer-rode-duivels/",
-          "read": "2026-10-06",
-          "says": "published 2026-10-03: 94 goals in 134 matches"
+          "url": "https://www.espn.com/soccer/story/_/id/50119334/harry-kane-england-czechia-nationsl-league-goals-record",
+          "read": "2026-10-07",
+          "says": "ESPN, Oct 6, 2026 (after France-Belgium on Oct 5): 'Kane is the fifth active player to reach 90 international goals, joining Cristiano Ronaldo (146), Lionel Messi (125), Romelu Lukaku (94) and Robert Lewandowski (92).'"
         }
       ]
     },
@@ -94,54 +94,54 @@
     "Egypt": {
       "holder": "Hossam Hassan",
       "goals": 69,
-      "asOf": "2026-10-06",
-      "note": "Mohamed Salah is on 68 and still active.",
+      "asOf": "2026-10-07",
+      "note": "Mohamed Salah is on 68 and still active (last cap 2026-09-25, no goal; he missed the next two matches). A second counting line exists: Ahram Online, africasoccer.com and Al Shorouk (all before 2026-09-25) give Hassan 68 and Salah 67, a dispute over Hassan's own career count (rsssf: 69 in 177, excluding ten non-A matches). The gap is one goal on both lines. 69 is kept because it is the higher count: a career has to pass it to win the award, and a total above 69 is above Hassan on either line, so the line the game prints is true whichever count a reader trusts.",
       "sources": [
         {
-          "url": "https://www.rsssf.org/miscellaneous/egy-recintlp.html",
-          "read": "2026-10-06",
-          "says": "updated 2026-10-06: Hossam Hassan 69 goals, 177 caps; Salah 68"
+          "url": "https://www.aljazeera.com/sports/2026/9/26/mohamed-salah-egypt-south-sudan-afcon-qualifier-artificial-turf-pitch",
+          "read": "2026-10-07",
+          "says": "Published 2026-09-26, after the Angola 0-0. Salah has 68 goals for Egypt, one short of coach Hossam Hassan's record of 69. He is rested for South Sudan."
         },
         {
-          "url": "https://www.masrawy.com/sports/sports-arab-international/details/2026/6/22/3006544/",
-          "read": "2026-10-06",
-          "says": "published 2026-06-22: Salah on 68, one short of Hossam Hassan's 69"
+          "url": "https://www.elwatannews.com/news/details/8365612",
+          "read": "2026-10-07",
+          "says": "El Watan, 2026-09-26. Salah failed to score against Angola and stays on 68, with Hossam Hassan leading on 69."
         }
       ]
     },
     "England": {
       "holder": "Harry Kane",
-      "goals": 89,
-      "asOf": "2026-10-06",
-      "note": "Active. Two against Croatia on 2026-10-03.",
+      "goals": 91,
+      "asOf": "2026-10-07",
+      "note": "Active. Two against Croatia on 2026-10-03 and two against Czechia on 2026-10-06 took him from 87 to 91.",
       "sources": [
         {
-          "url": "https://www.uefa.com/european-qualifiers/news/0253-0d81f47dfe05-e92503acfb7d-1000--europe-s-top-international-scorers-cristiano-ronaldo-out/",
-          "read": "2026-10-06",
-          "says": "Harry Kane (England) 89 in 124"
+          "url": "https://www.espn.com/soccer/story/_/id/50119334/harry-kane-england-czechia-nationsl-league-goals-record",
+          "read": "2026-10-07",
+          "says": "ESPN, Oct 6, 2026 5:43 pm ET: Kane scored in the 40th and 57th minutes of the 3-0 win over Czechia at Wembley, taking his international tally to 91 on a record-tying 125th appearance."
         },
         {
-          "url": "https://www.aljazeera.com/sports/2026/10/3/england-trounce-croatia-7-0-in-nations-league-as-kane-goal-run-continues",
-          "read": "2026-10-06",
-          "says": "published 2026-10-03: Kane's double extended his record tally to 89"
+          "url": "https://www.goal.com/en/news/harry-kane-breaks-the-magical-barrier-of-90-goals-for-england/bltae33e8612a785cef",
+          "read": "2026-10-07",
+          "says": "Goal.com, Oct 6, 2026: 'Harry Kane was on target again in an England shirt and now has 91 international goals.' England 3-0 Czech Republic, and his second was a header from a corner in the 57th minute."
         }
       ]
     },
     "France": {
       "holder": "Kylian Mbappe",
       "goals": 67,
-      "asOf": "2026-10-06",
+      "asOf": "2026-10-07",
       "note": "Active. Passed Olivier Giroud's 57 at the 2026 World Cup.",
       "sources": [
         {
-          "url": "https://www.uefa.com/european-qualifiers/news/0253-0d81f47dfe05-e92503acfb7d-1000--europe-s-top-international-scorers-cristiano-ronaldo-out/",
-          "read": "2026-10-06",
-          "says": "Kylian Mbappe (France) 67 in 107"
+          "url": "https://www.uefa.com/uefanationsleague/news/0253-0d81f47dfe05-e92503acfb7d-1000--europe-s-top-international-scorers-cristiano-ronaldo-out-/",
+          "read": "2026-10-07",
+          "says": "UEFA.com, correct as of 6 October 2026: Kylian Mbappe (France) 67 in 107."
         },
         {
-          "url": "https://www.equipe-france.fr/football/masculin/classement-des-buteurs",
-          "read": "2026-10-06",
-          "says": "Mbappe 67 goals in 107 matches, Giroud 57 in 136"
+          "url": "https://abcnews.com/amp/Sports/wireStory/mbapp-limps-off-apparent-knee-injury-after-scoring-136766211",
+          "read": "2026-10-07",
+          "says": "AP, Sept 25, 2026 (covers his last appearance, Turkey 0-1 France): 'Moments after his France record-extending 67th goal, the Real Madrid star sat on the ground and grimaced...'"
         }
       ]
     },
@@ -199,90 +199,90 @@
     "Netherlands": {
       "holder": "Memphis Depay",
       "goals": 55,
-      "asOf": "2026-10-06",
+      "asOf": "2026-10-07",
       "note": "Active.",
       "sources": [
         {
-          "url": "https://www.rsssf.org/miscellaneous/ned-recintlp.html",
-          "read": "2026-10-06",
-          "says": "last match included 2025-11-17: Depay 55 goals, 108 caps"
+          "url": "https://www.espn.com/soccer/story/_/id/49972936/xavi-hernandez-leaves-all-top-scorer-memphis-depay-first-netherlands-squad",
+          "read": "2026-10-07",
+          "says": "ESPN, Sept 18, 2026: Depay is left out of Xavi's first squad for Germany (Sept 24), Serbia (Sept 27), Greece (Oct 1) and Serbia (Oct 4). He is the all-time top scorer with '55 goals in 112 international appearances'."
         },
         {
-          "url": "https://www.uefa.com/european-qualifiers/news/0253-0d81f47dfe05-e92503acfb7d-1000--europe-s-top-international-scorers-cristiano-ronaldo-out/",
-          "read": "2026-10-06",
-          "says": "Memphis Depay (Netherlands) 55 in 112"
+          "url": "https://www.uefa.com/uefanationsleague/news/0253-0d81f47dfe05-e92503acfb7d-1000--europe-s-top-international-scorers-cristiano-ronaldo-out-/",
+          "read": "2026-10-07",
+          "says": "UEFA.com, correct as of 6 October 2026: Memphis Depay (Netherlands) 55 in 112."
         }
       ]
     },
     "Nigeria": {
       "holder": "Rashidi Yekini",
       "goals": 37,
-      "asOf": "2026-10-06",
+      "asOf": "2026-10-07",
       "note": "Victor Osimhen is on 35 and still active.",
       "sources": [
         {
-          "url": "https://www.rsssf.org/miscellaneous/nig-recintlp.html",
-          "read": "2026-10-06",
-          "says": "updated 2026-10-06: Yekini 37 goals, 62 caps; Osimhen 35"
+          "url": "https://businessday.ng/sports/article/osimhen-ruled-out-of-nigerias-afcon-2027-qualifiers/",
+          "read": "2026-10-07",
+          "says": "BusinessDay, 2026-09-20 (Anthony Nlebem). Osimhen has 35 goals, Yekini's all-time record is 37. Osimhen is ruled out of Madagascar (09-25) and Guinea-Bissau (09-29) with an adductor strain."
         },
         {
-          "url": "https://allafrica.com/stories/202601140297.html",
-          "read": "2026-10-06",
-          "says": "published 2026-01-13: Yekini 37, Osimhen two short on 35"
+          "url": "https://dailytrust.com/osimhen-ruled-out-of-afcon-qualifiers-due-to-injury/",
+          "read": "2026-10-07",
+          "says": "Daily Trust, 2026-09-20. Osimhen 35 goals, Yekini record 37. Ruled out of the two September AFCON qualifiers."
         }
       ]
     },
     "Norway": {
       "holder": "Erling Haaland",
       "goals": 65,
-      "asOf": "2026-10-06",
+      "asOf": "2026-10-07",
       "note": "Active.",
       "sources": [
         {
-          "url": "https://www.uefa.com/european-qualifiers/news/0253-0d81f47dfe05-e92503acfb7d-1000--europe-s-top-international-scorers-cristiano-ronaldo-out/",
-          "read": "2026-10-06",
-          "says": "Erling Haaland (Norway) 65 in 59"
+          "url": "https://www.espn.com/soccer/report/_/gameId/401861126",
+          "read": "2026-10-07",
+          "says": "Portugal 2-1 Norway, 2026-10-04, published 2026-10-05. Scorers: Ajer 36', Cancelo 38', Ramos 79'. Haaland failed to score for the second game running and has 65 goals in 59 appearances."
         },
         {
-          "url": "https://es-us.noticias.yahoo.com/deportes/erling-haaland-marc%C3%B3-portugal-gol-201500459.html",
-          "read": "2026-10-06",
-          "says": "published 2026-09-27: 65th goal for Norway, against Portugal"
+          "url": "https://www.sportsmole.co.uk/football/man-city/injury-news/news/should-man-city-be-concerned-fresh-haaland-injury-update-before-liverpool-showdown_606266.html",
+          "read": "2026-10-07",
+          "says": "Published 2026-10-05. Haaland was subbed in the 67th minute of the 2-1 loss to Portugal and did not score. He has 65 goals in 59 appearances for Norway."
         }
       ]
     },
     "Portugal": {
       "holder": "Cristiano Ronaldo",
       "goals": 146,
-      "asOf": "2026-10-06",
+      "asOf": "2026-10-07",
       "note": "Active.",
       "sources": [
         {
-          "url": "https://www.uefa.com/european-qualifiers/news/0253-0d81f47dfe05-e92503acfb7d-1000--europe-s-top-international-scorers-cristiano-ronaldo-out/",
-          "read": "2026-10-06",
-          "says": "Cristiano Ronaldo (Portugal) 146 in 234"
+          "url": "https://www.espn.com/soccer/story/_/id/50118693/ronaldo-jesus-broke-word-apologizes-portugal",
+          "read": "2026-10-07",
+          "says": "Published 2026-10-06. Ronaldo has 146 goals in 234 appearances. He was an unused sub against Norway on 09-27, then walked out. He says he is available after any suspension, and Portugal play Denmark and Wales in November."
         },
         {
-          "url": "https://voetbalfocus.be/lukaku-nadert-chhetri-na-treffer-rode-duivels/",
-          "read": "2026-10-06",
-          "says": "published 2026-10-03: Ronaldo 146 for Portugal"
+          "url": "https://www.irishtimes.com/sport/soccer/2026/09/30/cristiano-ronaldo-walks-out-of-portugal-camp-vowing-to-eventually-reveal-all/",
+          "read": "2026-10-07",
+          "says": "Published 2026-09-30. 146 goals in 234 appearances. He started the 1-0 win over Wales and stayed on the bench throughout the win in Norway."
         }
       ]
     },
     "South Korea": {
       "holder": "Son Heung-min",
       "goals": 59,
-      "asOf": "2026-10-06",
+      "asOf": "2026-10-07",
       "note": "Active. Passed Cha Bum-kun's 58 with a free kick against Uzbekistan on 2026-10-06, his 151st cap. rsssf (updated 2026-10-03) still had him on 56, behind both goals since.",
       "sources": [
         {
-          "url": "https://fnnews.com/news/202610062204257279",
-          "read": "2026-10-06",
-          "says": "published 2026-10-06: 59th goal in his 151st A match, past Cha Bum-kun's 58 in 136"
+          "url": "https://www.mlssoccer.com/news/son-heung-min-makes-south-korea-history-with-free-kick-golazo",
+          "read": "2026-10-07",
+          "says": "Published 2026-10-06. South Korea 2-0 Uzbekistan friendly at Yongin Mireu Stadium. Son opened with a 6th-minute free kick, his 59th international goal, passing Cha Bum-kun's 58."
         },
         {
-          "url": "https://news.sbs.co.kr/news/endPage.do?news_id=N1008785548",
-          "read": "2026-10-06",
-          "says": "published 2026-10-06: Son's 59th A match goal, new Korean record past Cha Bum-kun"
+          "url": "https://news.sbs.co.kr/english/article.do?news_id=N1008785997",
+          "read": "2026-10-07",
+          "says": "SBS, published 2026-10-07. Korea beat Uzbekistan 2-0. Son's free kick was his 59th international goal, breaking Cha Bum-kun's 58. Oh Se-hun headed the second around the 65th minute."
         }
       ]
     },
