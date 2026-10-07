@@ -48,7 +48,27 @@
    league again, so a Championship side's FA Cup leaves the world's winner
    elsewhere, 2).
 
-   MEASURED: filled in below the bands. */
+   MEASURED 2026-10-07 over seed offsets 0, 1, 2 and 3 (CUP_PER 40: 2400
+   forced seasons an arm, 96 held careers of six seasons):
+   - section 1: 2400 compared, 1815 to 1819 with a run, 0 differ (exact).
+   - section 2: runs 1815 to 1819, cups won 297 to 354, NONE seasons 280
+     (112 to 116 with a world league), lost finals against the world's
+     winner 120 to 133, Championship cups 24 to 30, penalty finals 71 to 98,
+     two legged finals 39 to 42, unnamed runs 153 to 161, worlds with an MLS
+     winner about 2080, cups the world agrees with 259 to 307. Floors at
+     about half of the smallest. 0 incoherent seasons.
+   - section 3: 2120 seasons with a cup, 0 differ from the coin before the
+     round; NONE seasons won before the round 46 to 55, now 0; held careers
+     96 of 96, cups 135 to 139 both ways, 0 moved. Early exit share, tier 3
+     and below minus the elite: 0.179, 0.179, 0.294, 0.225 (GAP_MIN 0.09,
+     half the smallest). Finals reached over the model's expectation: 0.919,
+     0.990, 1.067, 1.056 (band 0.82 to 1.18, about twice the largest miss).
+   - controls at offset 0, each exit 1 with its sections red: stream (2313
+     seasons draw differently), wrongcountry (2191 'country'), ignoreworld
+     (76 'beatwinner', 99 'lostfinal'), keepcoin (46 'nonecup', 46 cups won
+     with no cup), unverifiedname (37 'name', 6 'event', digest and Brazil
+     window red in 4), flatrounds (gap -0.002, finals ratio 1.384),
+     leaguekey (25 'worldwin', 11 'canadian'). */
 import crypto from 'node:crypto';
 import os from 'node:os';
 import fs from 'node:fs';
@@ -271,8 +291,8 @@ const CASES = [
 const CHAMPIONSHIP = clubs.filter(c => c.country === 'England' && c.league === 'Championship').slice(0, 6).map(c => [c.name, 2018]);
 const PER = Number(process.env.CUP_PER || 40);
 /* BANDS: set from the measurements recorded in the header. */
-const GAP_MIN = 0.1;
-const RATIO_BAND = [0.85, 1.15];
+const GAP_MIN = 0.09;
+const RATIO_BAND = [0.82, 1.18];
 const TABLE_DIGEST = 'd5063861f76d487c54b80e7f8c686b6cfad79b4a3b8765791bad651cf00d2e71';
 function fleet(e, label) {
   const t0 = Date.now();
@@ -326,7 +346,7 @@ console.log('1) the run draws from its own generator: MAIN and B draw Math.rando
     if (b.row.cupRun) rowDiff += 1;
   }
   console.log(`  ${compared} seasons compared, ${withRun} with a run; Math.random counts differ in ${callDiff}, rows or events differ in ${rowDiff}`);
-  if (compared < 500 || withRun < 300) fail(`too few seasons to say anything (${compared}, ${withRun} with a run)`);
+  if (compared < 1200 || withRun < 900) fail(`too few seasons to say anything (${compared}, ${withRun} with a run)`);
   if (callDiff > 0) fail(`${callDiff} seasons drew Math.random a different number of times with the run on`);
   if (rowDiff > 0) fail(`${rowDiff} seasons differ beyond cupRun with the run on`);
 }
@@ -406,7 +426,7 @@ console.log("2) every season is coherent with itself, the table and the phone's 
   console.log(`  ${JSON.stringify(n)}`);
   const total = Object.values(bad).reduce((a, b) => a + b, 0);
   if (total > 0) fail(`${total} incoherent seasons: ${JSON.stringify(bad)}`);
-  if (n.runs < 600 || n.won < 60 || n.none < 150 || n.noneWorld < 40 || n.lostFinalWorld < 15 || n.champWon < 3 || n.pens < 5 || n.twoLegs < 10 || n.unnamed < 60 || n.mlsWorlds < 30 || n.worldWon < 40) {
+  if (n.runs < 900 || n.won < 150 || n.none < 140 || n.noneWorld < 55 || n.lostFinalWorld < 60 || n.champWon < 10 || n.pens < 35 || n.twoLegs < 20 || n.unnamed < 75 || n.mlsWorlds < 1000 || n.worldWon < 130) {
     fail(`a check above ran on too few seasons to mean anything: ${JSON.stringify(n)}`);
   }
 }
@@ -424,9 +444,9 @@ console.log('3) the same coin as before the round outside a season with no cup, 
   }
   console.log(`  forced seasons with a cup: ${same} win or lose exactly as before the round, ${differ} differ`);
   console.log(`  seasons with no cup: ${noneSeasons}; cups won there before the round ${noneA}, now ${noneMain}`);
-  if (same < 500) fail(`only ${same} seasons compared`);
+  if (same < 1000) fail(`only ${same} seasons compared`);
   if (differ > 0) fail(`${differ} seasons won or lost a cup differently from the coin before the round`);
-  if (noneA < 10) fail(`before the round only ${noneA} cups were won in a season with none, too few to show the fix`);
+  if (noneA < 20) fail(`before the round only ${noneA} cups were won in a season with none, too few to show the fix`);
   if (noneMain > 0) fail(`${noneMain} cups are still won in a season with no cup`);
 }
 
@@ -468,7 +488,7 @@ const PIN_PER = Number(process.env.CUP_PIN_PER || 12);
     if (m.length !== a.length || m.some((r, j) => strip(r) !== strip(a[j]))) { careersDiffer += 1; if (careersDiffer <= 3) console.error(`    ${club} ${year} seed ${seed} moved`); }
   }
   console.log(`  held careers: ${held} of ${careers} stayed in associations with no NONE window, ${rowsCompared} seasons, cups ${cupsMain} now and ${cupsA} before the round, ${careersDiffer} careers moved`);
-  if (held < PINS.length * PIN_PER / 2 || cupsA < 20) fail(`too few held careers or cups (${held}, ${cupsA})`);
+  if (held < PINS.length * PIN_PER / 2 || cupsA < 60) fail(`too few held careers or cups (${held}, ${cupsA})`);
   if (careersDiffer > 0 || cupsMain !== cupsA) fail(`${careersDiffer} held careers moved and cups went from ${cupsA} to ${cupsMain}`);
 }
 
@@ -507,7 +527,7 @@ const PIN_PER = Number(process.env.CUP_PIN_PER || 12);
   console.log(`  finals reached ${all.finals}, expected ${all.expect.toFixed(1)}, ratio ${ratio.toFixed(3)}`);
   const gap = share(B4['t3+']) - share(B4.elite);
   console.log(`  early exit share, tier 3 and below minus the elite: ${gap.toFixed(3)}`);
-  if (B4.elite.lost < 100 || B4['t3+'].lost < 100) fail('too few lost runs at the ends of the ladder');
+  if (B4.elite.lost < 50 || B4['t3+'].lost < 300) fail('too few lost runs at the ends of the ladder');
   if (!(gap >= GAP_MIN)) fail(`the early exit share does not fall with strength (gap ${gap.toFixed(3)}, need ${GAP_MIN})`);
   if (!(ratio >= RATIO_BAND[0] && ratio <= RATIO_BAND[1])) fail(`finals reached ${ratio.toFixed(3)} of the model's expectation, band ${RATIO_BAND.join(' to ')}`);
 }
