@@ -1,6 +1,28 @@
 # Round 1081 manager appeal isolation
 
-Product authoring and static review are complete. Remote product acceptance is pending.
+Product authoring and static review are complete. Final exact-head PR acceptance is pending.
+
+Fourth preparation 37627655942/job112813491818 completed successfully at
+5fbb52cb30b86605a3f545d857601ab36a743e16, tree
+f6a57252640c57ae016e6464b328018755fa607d. Full artifact 11485281996 has
+verified ZIP SHA256
+80f5c4216cb7120e6ea59970491c0b6e09d6afa7eb782cd638f530fd71aa5125.
+Its 27 current pairs, 54 creation holds, 509 compatibility records, 20 copied
+faults, four other original regressions and all 20 readers passed. Default and
+seed 2 remain named coverage reds with byte-identical old/current full output.
+Both arms of seeds 1, 3 and 4 have actual zero-finding passes. The original loss
+fault yields eight section-3 findings beside the healthy seed-1 baseline.
+An actual output byte change triggers the mapped comparator AssertionError;
+restored observations compare successfully. Final source and original harness
+holds passed. Full artifact independent review and final PR acceptance remain
+pending. Earlier failed attempts remain retained below.
+
+The final workflow explicitly checks the PR head, pinned to base 2fff5e04.
+Latest main 94b9490d changes clubManager.ts and game data while leaving this
+round's product file, original decision/slot assertions and dependencies
+unchanged. Candidate-head evidence does not validate that newer engine/data.
+Separate integration verification is required before merge/release. Historical
+manifests remain frozen rather than relabeling newer source as the old baseline.
 
 Second preparation 37621727542 at eef4b2df completed with all new product gates,
 four old manager regressions and all 20 readers green, but overall RED solely

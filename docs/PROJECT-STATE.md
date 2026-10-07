@@ -1,3 +1,22 @@
+Codex 1081 FINAL CANDIDATE PREPARATION, October 7, 09:29 EDT.
+Remote preparation37627655942/job112813491818 passed its scoped gate at
+5fbb52cb30b86605a3f545d857601ab36a743e16, tree
+f6a57252640c57ae016e6464b328018755fa607d. Artifact11485281996 verified ZIP
+SHA80f5c4216cb7120e6ea59970491c0b6e09d6afa7eb782cd638f530fd71aa5125.
+27current appealpairs,54creationholds,509compatibilityrecords,20copiedfaults,
+4other originalregressions and20built/source readers passed. Original decision
+default and seed2 remain exact paired coverage reds; seeds1/3/4 pass in both
+arms. Original loss fault has8mapped findings; output corruption is rejected.
+Independent full artifact reviews and final exact-head PR evidence are pending.
+
+The final workflow explicitly validates the pinned PR head. Latest main94b9490d
+changed engine/data but left the product file untouched. This round requires
+separate latest-main integration evidence before merge/release. Historical
+manifests and original assertions/floors/fixtures stay frozen. No1081final
+acceptance/live claim yet. PR168/169 remain READY separately. Claude retains
+main/release/publishing/data/cup/Season Centre/Front Office. Protected root
+source/seven stashes held. Receipt: docs/audits/ROUND1081-MANAGER-APPEALS.md.
+
 Codex 1081 PRODUCT PREPARATION, October 7, 08:20 EDT.
 Accepted remote diagnostic 37617442468 at f025ecbd actually reproduced six
 appeal outcome differences among 24 equivalent careers. Artifact 11479948309,
