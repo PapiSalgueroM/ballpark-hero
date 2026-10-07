@@ -225,7 +225,9 @@ export function clockLabel(hour: number): string {
 
 /** Today's window: one club and one seed for everybody, keyed on the Eastern day. */
 export function dailyDeadlineDay(date: string): DeadlineSetup & { leagueName: string; daily: string } {
-  const pool = hotSeatPool();
+  /* Round 1044: the day's pool from the dailies' ledger, never the live list,
+     so a league joining later cannot re-deal a day already played. */
+  const pool = hotSeatPool(date);
   /* Half a pool on from Manager Hot Seat's pick, so the two dailies are not
      the same club on the same day. */
   const at = (dailyIndex(date, pool.length) + Math.floor(pool.length / 2)) % pool.length;
@@ -245,8 +247,27 @@ const SEED_HOUR = 500000;
 
 /* ---------------- the brief ---------------- */
 
-function rivalPool(state: CareerState): string[] {
-  return REAL_LEAGUES.flatMap(l => playableClubs(l.id).slice(0, 6).map(c => c.name))
+/**
+ * Round 1044: what a daily may deal from on its day. A daily's market and
+ * rivals keep to the clubs and leagues in the dailies' ledger for that day
+ * (src/data/dailyClubPool.json, read through Manager Hot Seat's pool), so a
+ * league joining the engine cannot change a day already dealt: its players
+ * stay off the list and its clubs out of the bidding until the ledger's join
+ * date. Free play (no daily) reads the whole engine. What this cannot hold
+ * still is the data: a roster re-bake can still change a day's candidates,
+ * prices and needs, because the club and the seed never move but the players
+ * at the clubs do. That is the data changing, not the day being re-dealt.
+ */
+function dailyReach(daily: string | undefined): { clubs: Set<string>; leagues: Set<string> } | null {
+  if (!daily) return null;
+  const pool = hotSeatPool(daily);
+  return { clubs: new Set(pool.map(c => c.club)), leagues: new Set(pool.map(c => c.leagueId)) };
+}
+
+function rivalPool(state: CareerState, daily?: string): string[] {
+  const reach = dailyReach(daily);
+  return REAL_LEAGUES.filter(l => !reach || reach.leagues.has(l.id))
+    .flatMap(l => playableClubs(l.id).slice(0, 6).map(c => c.name))
     .filter(n => n !== state.clubName);
 }
 
@@ -279,7 +300,7 @@ function readNeeds(state: CareerState): DeadlineNeed[] {
 }
 
 /** Real players who can play the slot and clear its line: a cheap one, a middling one and a dear one. */
-function readCandidates(state: CareerState, need: DeadlineNeed, market: MarketPlayer[], taken: Set<string>, rng: () => number): MarketPlayer[] {
+function readCandidates(state: CareerState, need: DeadlineNeed, market: MarketPlayer[], taken: Set<string>, rng: () => number, clubs: Set<string> | null): MarketPlayer[] {
   let fits: MarketPlayer[] = [];
   /* The market is the top divisions, so a small club's weakest starter can sit
      under everybody on it. The line stays where it is and the window widens
@@ -288,7 +309,7 @@ function readCandidates(state: CareerState, need: DeadlineNeed, market: MarketPl
     fits = market.filter(m => need.allowed.includes(m.position)
       && m.rating >= need.min && m.rating <= need.min + span
       && m.age <= 33 && !taken.has(m.name) && m.club !== state.clubName
-      && !isPartialClub(m.club) && (m.value ?? m.price) > 0);
+      && !isPartialClub(m.club) && (!clubs || clubs.has(m.club)) && (m.value ?? m.price) > 0);
     if (fits.length >= CANDIDATES_PER_NEED * 3) break;
   }
   fits.sort((a, b) => (a.value ?? a.price) - (b.value ?? b.price) || a.name.localeCompare(b.name));
@@ -319,6 +340,7 @@ export function startDeadlineDay(setup: DeadlineSetup): DeadlineRun {
     const rng = mulberry32(mixSeed(setup.seed, SEED_BRIEF));
     const count = rng() < 0.5 ? 3 : 4;
     const market = buildMarket(state0);
+    const reach = dailyReach(setup.daily);
     const taken = new Set<string>();
     const targets: DeadlineTarget[] = [];
     const needs: DeadlineNeed[] = [];
@@ -328,7 +350,7 @@ export function startDeadlineDay(setup: DeadlineSetup): DeadlineRun {
        at the next one rather than send you after nobody. */
     for (const need of readNeeds(state0)) {
       if (needs.length >= count) break;
-      const picks = readCandidates(state0, need, market, taken, rng);
+      const picks = readCandidates(state0, need, market, taken, rng, reach?.clubs ?? null);
       if (picks.length < 2) continue;
       const ni = needs.length;
       needs.push(need);
@@ -341,7 +363,7 @@ export function startDeadlineDay(setup: DeadlineSetup): DeadlineRun {
     const startBudget = Math.max(1, Math.round(kitty * BUDGET_SHARE * 2) / 2);
     /* Bench men a club will take off your hands today, at a deadline day discount. */
     const xiIds = new Set(state0.xiIds.filter((id): id is string => !!id));
-    const buyers = rivalPool(state0);
+    const buyers = rivalPool(state0, setup.daily);
     const bench = state0.squad
       .filter(p => !xiIds.has(p.id) && canLeaveSquad(state0, p) && sellValue(p) >= 0.3)
       .sort((a, b) => sellValue(b) - sellValue(a) || a.name.localeCompare(b.name))
@@ -473,7 +495,7 @@ function loseTo(run: DeadlineRun, t: DeadlineTarget, club: string, fee: number):
 function passHour(run: DeadlineRun, pushed: number | null): void {
   run.hour += 1;
   const rng = mulberry32(mixSeed(run.setup.seed, SEED_HOUR + run.hour));
-  const pool = rivalPool(run.state);
+  const pool = rivalPool(run.state, run.setup.daily);
   const enter = RIVAL_ENTER_BASE + RIVAL_ENTER_LATE * (run.hour / DEADLINE_HOURS);
   run.targets.forEach((t, i) => {
     const a = rng(), b = rng(), c = rng(), d = rng();
