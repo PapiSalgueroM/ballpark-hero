@@ -1785,6 +1785,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         heading: "Advancing seasons through the training ground",
         items: [
           "Advance season by season through simulated stats, newspaper headlines, random events, and decisions.",
+          "Want to see it happen? The 📺 Week by week button plays the same season match by match, with your rating every game and the league table after every matchday, then hands you back to the newspaper. Its ? button has the rules and worked examples.",
           "Open the training ground (the dumbbell button, bottom right) once a season. Your position picks a drill you actually play: keepers hold and drag a glove save dive, centre backs, full backs and defensive midfielders time a tackle on a moving ball, central and attacking midfielders thread a through ball onto a runner before he is offside, and everyone else times a wall shot through a gap that opens and closes. Today's ten rounds are the same for everyone at your position and count once; practice is unlimited and banks nothing.",
         ],
       },
