@@ -3,7 +3,7 @@ import type { CareerDraftEntry, PreDraftState } from './careerPreDraft';
  * NBA My Career engine (2026-08-05). Basketball sibling of nflMyCareer.ts:
  * a fictional prospect living a whole career inside the real 30-team
  * league. Per-game stat lines (points, rebounds, assists) driven by
- * rating, role, health and team quality; one big decision per offseason;
+ * rating, role, health and team quality; up to three offseason cards (Round 1038);
  * awards, rings, aging, retirement, legacy verdict with GOAT-tier
  * language. The player is fictional; the teams are real.
  */

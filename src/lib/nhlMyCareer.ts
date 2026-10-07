@@ -3,7 +3,7 @@ import type { CareerDraftEntry, PreDraftState } from './careerPreDraft';
  * NHL My Career engine (2026-08-05). Hockey sibling of nflMyCareer.ts:
  * a fictional prospect living a whole career inside the real 32-team
  * league. Season lines (G-A-P for skaters, W/SV% for goalies) driven by
- * rating, health and team quality; one big decision per offseason;
+ * rating, health and team quality; up to three offseason cards (Round 1038);
  * awards, Cups, aging, retirement, legacy verdict. The player is
  * fictional; the teams are real.
  */

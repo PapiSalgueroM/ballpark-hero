@@ -32,7 +32,7 @@ const NbaMyCareer = () => {
               'Create your player: name, one of 5 positions (PG, SG, SF, PF, C) and archetype, from Point God to Paint Beast.',
               'Pick your league first: today\'s NBA, or the 2003-04 throwback with the SuperSonics in Seattle and no Charlotte yet.',
               'Play each season for a per-game stat line driven by your rating, health and team quality.',
-              'Up to three decisions land every summer, one card at a time: contracts, trade demands, surgeries, brand building. A card you just saw rests for a while.',
+              'Up to three decisions land every summer, one card at a time: contracts, trade demands, surgeries, brand building. A card you just saw rests for a while (press moments follow your season, so those can come right back).',
               'Open the Bank when you like: savings that pays 2.5% a season, a market of five moving prices, a statement, the card school on the team plane and the shop.',
               'The News box carries the paper, your SocialGram and your draft class rival\'s card. The Trophy Case holds 21 badges, lit off the facts of your career.',
               'Awards stack your legacy: Rookie of the Year, All-NBA, MVP, Finals MVP, rings.',

@@ -4,7 +4,7 @@ import type { CareerDraftEntry, PreDraftState } from './careerPreDraft';
  * a fictional prospect living a whole career inside the real 30-team
  * league, hitter or pitcher. Season lines (AVG/HR/RBI or W-L/ERA/K)
  * driven by rating, health and team quality; minor league grind before
- * the call-up; one big decision per offseason; awards, rings, aging,
+ * the call-up; up to three offseason cards (Round 1038); awards, rings, aging,
  * retirement, legacy verdict. The player is fictional; the teams are real.
  */
 

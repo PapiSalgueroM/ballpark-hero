@@ -2031,7 +2031,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
         heading: "Playing seasons and handling the offseason",
         items: [
           "Sim each season for a full line: games, points, rebounds, assists, awards, team result.",
-          "Handle the summer, up to three decisions one card at a time. Only the first card can move your rating, and a card you just saw rests for a while.",
+          "Handle the summer, up to three decisions one card at a time. Only the first card can move your rating, and a card you just saw rests for a while (press moments follow your season, so those can come right back).",
           "After a normal offseason choice, the result shows the actual changes. Expand it for any extra changes, then Continue opens the next card, or takes you back to your career after the last one, without applying the choice again.",
           "Open Career Log and pick a year to review its saved overview, regular season and postseason. Changes compare with the previous saved season; older missing values say Not recorded. Back to seasons returns to the year tiles, and Review seasons is available after retirement.",
         ],

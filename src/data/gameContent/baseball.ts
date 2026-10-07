@@ -918,7 +918,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
           {
             heading: "Handling offseason events",
             items: [
-              "Handle the winter, up to three decisions one card at a time: winter training, surgery calls, trade rumors. Only the first card can move your rating, and a card you just saw rests for a while.",
+              "Handle the winter, up to three decisions one card at a time: winter training, surgery calls, trade rumors. Only the first card can move your rating, and a card you just saw rests for a while (press moments follow your season, so those can come right back).",
               "After a normal offseason choice, the result shows the actual changes. Expand it for any extra changes, then Continue opens the next card, or takes you back to your career after the last one, without applying the choice again.",
             ],
           },
