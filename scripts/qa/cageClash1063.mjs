@@ -11,6 +11,9 @@ import { chromium } from '../lib/playwrightLoader.mjs';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const OUT = path.resolve(process.env.CAGE_CLASH_NATIVE_ARTIFACTS || path.join(ROOT, 'cage-clash-artifacts/native'));
 fs.mkdirSync(OUT, { recursive: true }); assert(fs.existsSync(path.join(ROOT, 'dist/index.html')), 'Build before native combat');
+const sourceBytes = ['src/lib/cageClash.ts', 'src/lib/cagePractice.ts', 'src/lib/cageCircuit.ts', 'src/hooks/useCageClash.ts',
+  'src/components/cage-clash/CageClashBoard.tsx', 'src/components/cage-clash/CageClashCanvas.tsx', 'src/components/cage-clash/CagePracticeFeedback.tsx']
+  .map(file => ({ file, bytes: fs.readFileSync(path.join(ROOT, file)) }));
 const fontLinks = [...fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8').matchAll(/<link\s+href="(https:\/\/fonts\.googleapis\.com\/[^\"]+)"\s+rel="stylesheet"/g)].map(m => new URL(m[1]).href);
 assert.equal(fontLinks.length, 1, 'Fonts use the actual template stylesheet');
 const profiles = [
@@ -20,7 +23,12 @@ const profiles = [
   { width: 1280, height: 720, input: 'mouse', theme: 'dark', reduced: false },
 ];
 const report = { cases: [], controls: [], coverage: [], forwardedWrites: 0 };
-const save = () => fs.writeFileSync(path.join(OUT, 'report.json'), JSON.stringify(report, null, 2));
+const save = () => {
+  report.sources = sourceBytes.map(({ file, bytes }) => { const after = fs.readFileSync(path.join(ROOT, file)); return {
+    file, before: createHash('sha256').update(bytes).digest('hex'), after: createHash('sha256').update(after).digest('hex'), held: bytes.equals(after),
+  }; });
+  fs.writeFileSync(path.join(OUT, 'report.json'), JSON.stringify(report, null, 2));
+};
 const port = await new Promise((resolve, reject) => { const probe = createServer(); probe.once('error', reject); probe.listen(0, '127.0.0.1', () => { const p = probe.address().port; probe.close(error => error ? reject(error) : resolve(p)); }); });
 const BASE = `http://127.0.0.1:${port}`;
 const server = spawn(process.execPath, ['scripts/lib/hostLikeServer.mjs', 'dist', String(port)], { cwd: ROOT, stdio: ['ignore', 'pipe', 'pipe'], windowsHide: true });
@@ -33,6 +41,7 @@ const ready = new Promise((resolve, reject) => {
 });
 const keys = { left: 'ArrowLeft', right: 'ArrowRight', guard: 'Space', jab: 'j', power: 'k', kick: 'l', grapple: 'u', submit: 'i', escape: 'o' };
 const fightStats = [['hits', 'Shots landed'], ['damageDealt', 'Damage dealt'], ['blocked', 'Blocks'], ['takedowns', 'Takedowns'], ['controlTicks', 'Top control']];
+const practiceObjectives = { striking: 'Land 3 shots, then recover to 90 gas.', takedown: 'Clinch, then take your partner down.', submission: 'Build submission pressure to a finish.', escape: 'Regain guard, then return to your feet.' };
 const root = page => page.locator('[data-cage-screen]');
 async function useNativeFocus(page) {
   assert.equal(typeof page._connection?.toImpl, 'function', 'Native focus requires the in-process browser connection');
@@ -43,7 +52,11 @@ async function useNativeFocus(page) {
 async function hud(page) {
   return root(page).evaluate(el => {
     const f = side => { const node = el.querySelector(`[data-cage-fighter="${side}"]`); return node ? { ...Object.fromEntries(['x', 'health', 'stamina', 'submission', 'hits', 'damageDealt', 'blocked', 'takedowns', 'controlTicks', 'actionTicks'].map(k => [k, Number(node.dataset[k])])), action: node.dataset.action } : null; };
+    const feedback = el.querySelector('[data-cage-practice-feedback]');
     return { phase: el.dataset.cagePhase, tick: Number(el.dataset.cageTick), tickMs: Number(el.dataset.cageTickMs), position: el.dataset.cagePosition, top: el.dataset.cageTop,
+      feedback: feedback ? { drill: feedback.dataset.cagePracticeFeedback, complete: feedback.dataset.cageFeedbackComplete === 'true', message: feedback.dataset.cageMessage, recoveredGuard: feedback.dataset.cageRecoveredGuard === 'true',
+        progress: feedback.querySelector('[data-cage-practice-progress]')?.textContent, status: feedback.querySelector('[data-cage-practice-status]')?.textContent, outcome: feedback.querySelector('[data-cage-practice-message]')?.textContent,
+        announcements: [...feedback.querySelectorAll('[aria-live]')].map(node => ({ role: node.getAttribute('role'), live: node.getAttribute('aria-live'), atomic: node.getAttribute('aria-atomic') })) } : null,
       drill: el.dataset.cageDrill, practiceComplete: el.dataset.cagePracticeComplete === 'true',
       circuitStage: el.dataset.cageCircuitStage, circuitComplete: el.dataset.cageCircuitComplete === 'true',
       fightScore: Number(el.dataset.cageFightScore), winner: el.dataset.cageWinner, circuitScore: Number(el.dataset.cageCircuitScore),
@@ -56,7 +69,13 @@ async function measure(page) {
     const box = el => { const r = el.getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width, height: r.height, right: r.right, bottom: r.bottom, text: el.textContent }; };
     const canvas = document.querySelector('[data-cage-screen] canvas');
     const stats = document.querySelector('[data-cage-fight-stats]');
+    const feedback = area.querySelector('[data-cage-practice-feedback]');
     return { scrollY, scrollWidth: document.documentElement.scrollWidth, area: box(area), canvas: canvas ? box(canvas) : null,
+      feedback: feedback ? { ...box(feedback), followingControl: feedback.closest('[data-cage-screen]').querySelector('[data-cage-control]') ? box(feedback.closest('[data-cage-screen]').querySelector('[data-cage-control]')) : null,
+        readings: ['progress', 'status', 'message'].map(kind => { const el = feedback.querySelector(`[data-cage-practice-${kind}]`); if (!el) return { kind, missing: true };
+          const range = document.createRange(); range.selectNodeContents(el); return { kind, ...box(el), fontSize: parseFloat(getComputedStyle(el).fontSize),
+            scrollWidth: el.scrollWidth, clientWidth: el.clientWidth, scrollHeight: el.scrollHeight, clientHeight: el.clientHeight,
+            textRects: [...range.getClientRects()].map(r => ({ x: r.x, y: r.y, right: r.right, bottom: r.bottom })) }; }) } : null,
       stats: stats ? { area: box(stats), arena: box(canvas.parentElement), rows: [...stats.querySelectorAll('tr')].map(el => ({ ...box(el), cells: [...el.children].map(cell => ({ ...box(cell), scrollWidth: cell.scrollWidth, clientWidth: cell.clientWidth, fontSize: parseFloat(getComputedStyle(cell).fontSize) })) })) } : null,
       fonts: ['Inter', 'Space Grotesk'].flatMap(family => [400, 500, 600, 700].map(weight => ({ family, weight, loaded: document.fonts.check(`${weight} 16px "${family}"`, 'Cage Clash') }))),
       hints: [...area.querySelectorAll('[data-cage-readiness]')].map(el => { const target = el.closest('button'); return { ...box(el), action: el.dataset.cageReadiness, fontSize: parseFloat(getComputedStyle(el).fontSize), scrollWidth: el.scrollWidth, clientWidth: el.clientWidth, target: box(target), label: box(target.firstElementChild), described: Boolean(el.id && target.getAttribute('aria-describedby')?.split(/\s+/).includes(el.id) && document.getElementById(el.id) === el) }; }),
@@ -75,6 +94,19 @@ function geometry(value, profile, stage) {
     assert(hint.fontSize >= 10 && hint.height > 0, `${stage}: readiness text below10px`);
     assert(hint.described, `${stage}: readiness description link is broken`);
     assert(inside(hint) && hint.scrollWidth <= hint.clientWidth + 1 && hint.x >= hint.target.x - .5 && hint.right <= hint.target.right + .5 && hint.y >= hint.label.bottom - .5 && hint.bottom <= hint.target.bottom + .5, `${stage}: readiness text clipped or overlapping`);
+  }
+  if (value.feedback) {
+    const slot = value.feedback;
+    assert(inside(slot) && Math.abs(slot.height - 72) <= .5, `${stage}: practice feedback slot clipped or changes height`);
+    assert.equal(slot.readings.length, 3, `${stage}: feedback has progress, status and actual outcome`);
+    for (const [index, reading] of slot.readings.entries()) {
+      assert(!reading.missing && reading.fontSize >= 12 && reading.height > 0 && reading.textRects.length > 0, `${stage}: practice feedback below12px or missing`);
+      const contained = r => r.x >= slot.x - .5 && r.right <= slot.right + .5 && r.y >= slot.y - .5 && r.bottom <= slot.bottom + .5;
+      assert(contained(reading) && reading.scrollWidth <= reading.clientWidth + 1 && reading.scrollHeight <= reading.clientHeight + 1, `${stage}: practice feedback text clipped`);
+      assert(reading.textRects.every(r => contained(r) && r.y >= reading.y - .5 && r.bottom <= reading.bottom + .5), `${stage}: practice feedback text leaves its row`);
+      if (index) assert(slot.readings[index - 1].bottom <= reading.y + .5, `${stage}: practice feedback rows overlap`);
+    }
+    if (slot.followingControl) assert(slot.bottom <= slot.followingControl.y + .5, `${stage}: practice feedback overlaps controls`);
   }
   if (value.stats) {
     assert(value.canvas, `${stage}: recap keeps the actual arena`);
@@ -111,7 +143,7 @@ try {
   await ready; browser = await chromium.launch({ headless: false });
   for (const profile of profiles) {
     const id = `${profile.width}-${profile.input}-${profile.theme}${profile.reduced ? '-reduced' : ''}`;
-    const row = { id, steps: [], screenshots: [], errors: [], assetErrors: [], blockedWrites: [], blockedDatabase: [], fonts: [], inputs: 0, fightStats: [], strikeAnimations: [], groundAnimation: null };
+    const row = { id, steps: [], screenshots: [], errors: [], assetErrors: [], blockedWrites: [], blockedDatabase: [], fonts: [], inputs: 0, fightStats: [], strikeAnimations: [], groundAnimation: null, practiceFeedback: [] };
     report.cases.push(row); const fontAssets = new Set();
     const context = await browser.newContext({ viewport: { width: profile.width, height: profile.height }, hasTouch: profile.input === 'touch', isMobile: profile.input === 'touch',
       colorScheme: profile.theme, reducedMotion: profile.reduced ? 'reduce' : 'no-preference', serviceWorkers: 'block',
@@ -168,6 +200,50 @@ try {
         : /· Guard$/.test(state.status) ? 'grapple' : 'kick';
       await hold(next, 250);
     }
+    async function inspectFeedback(stage, state = null) {
+      state ??= await hud(page);
+      const target = page.locator('[data-cage-practice-feedback]');
+      assert.equal(await target.count(), 1, `${stage}: actual practice has one feedback slot`);
+      const feedback = state.feedback; assert(feedback, `${stage}: feedback and fighter facts share one actual DOM sample`);
+      assert.equal(feedback.drill, state.drill); assert.equal(feedback.complete, state.practiceComplete);
+      const recovered = state.drill === 'escape' && ((state.position === 'ground' && /· Guard$/.test(state.status)) || (state.position === 'standing' && state.practiceComplete));
+      assert.equal(feedback.recoveredGuard, recovered, `${stage}: guard milestone comes from actually reaching full Guard`);
+      let progress, instruction;
+      if (state.drill === 'striking') {
+        progress = `Shots ${Math.min(3, state.player.hits)}/3 · Gas ${Math.floor(state.player.stamina)}/100`;
+        instruction = state.player.hits >= 3 ? 'Shots done. Release to reach 90 gas.' : 'Get close and land 3 shots.';
+      } else if (state.drill === 'takedown') {
+        progress = `Takedowns ${Math.min(1, state.player.takedowns)}/1 · ${state.position === 'ground' && state.top === 'player' ? 'You on top' : state.position === 'clinch' ? 'In clinch' : 'No top position'}`;
+        instruction = state.position === 'clinch' ? 'Clinch set. Use Takedown.' : state.position === 'standing' ? 'Move close and use Clinch.' : 'Earn a takedown from the clinch.';
+      } else if (state.drill === 'escape') {
+        progress = `Guard ${recovered ? 1 : 0}/1 · Back on feet ${recovered && state.position === 'standing' ? 1 : 0}/1`;
+        instruction = recovered ? 'Guard earned. Use Stand up.' : 'Use Regain guard until full Guard.';
+      } else {
+        const level = state.status.match(/· (Guard|Half guard|Mount)$/)?.[1]; assert(level, `${stage}: actual ground position is readable`);
+        progress = `Your pressure ${Math.floor(state.player.submission)}% · ${level}`;
+        instruction = state.phase === 'fight' && !state.practiceComplete && (await control('kick').getAttribute('aria-label')) === 'Lower posture' ? 'Use Lower posture, then hold Submit.' : 'Hold Submit. Passing improves pressure.';
+      }
+      if (state.practiceComplete) instruction = 'Drill complete. Retry or move on.';
+      else if (state.phase === 'finished') instruction = 'Attempt ended. Retry this drill.';
+      assert.equal(feedback.progress, progress, `${stage}: visible progress matches actual fighter facts`);
+      assert.equal(feedback.status, instruction, `${stage}: next step follows the actual earned state`);
+      assert.equal(feedback.outcome, feedback.message === practiceObjectives[state.drill] ? 'No attempt yet.' : `Last: ${feedback.message}`, `${stage}: only actual attempts show a last outcome`);
+      assert.deepEqual(feedback.announcements, [{ role: 'status', live: 'polite', atomic: 'true' }], `${stage}: only changed instructions announce`);
+      const value = await measure(page); geometry(value, profile, stage);
+      row.practiceFeedback.push({ stage, hud: state, feedback, slot: value.feedback });
+      if (!report.controls.includes('practice-feedback-font')) {
+        const reading = target.locator('[data-cage-practice-progress]'), original = await reading.getAttribute('style');
+        await reading.evaluate(el => { el.style.fontSize = '11px'; });
+        assert.equal(await reading.evaluate(el => parseFloat(getComputedStyle(el).fontSize)), 11);
+        const fault = await measure(page);
+        assert.throws(() => geometry(fault, profile, 'practice-feedback-font'), error => error.name === 'AssertionError' && /practice feedback below12px/.test(error.message));
+        await reading.evaluate((el, style) => style === null ? el.removeAttribute('style') : el.setAttribute('style', style), original);
+        assert.equal(await reading.getAttribute('style'), original); geometry(await measure(page), profile, 'practice-feedback-font-restored');
+        assert.equal(await reading.textContent(), feedback.progress, 'Restoring the isolated font fault leaves real progress intact');
+        report.controls.push('practice-feedback-font'); report.practiceFeedbackControl = { before: value.feedback, fault: fault.feedback, restored: (await measure(page)).feedback, passed: true };
+      }
+      return feedback;
+    }
     const inspect = async stage => {
       const value = await measure(page); geometry(value, profile, stage);
       if (stage === 'practice-submission' && profile.width === 320 && !report.controls.includes('readiness-wrap')) {
@@ -184,6 +260,8 @@ try {
       }
       const file = `${id}-${stage}.png`; await page.screenshot({ path: path.join(OUT, file), animations: 'disabled' });
       const state = await hud(page);
+      if (state.drill !== 'none') await inspectFeedback(stage, state);
+      else assert.equal(await page.locator('[data-cage-practice-feedback]').count(), 0, `${stage}: scored modes contain no drill feedback`);
       if (state.phase !== 'finished' || state.drill !== 'none') {
         assert.equal(await button('Fight stats').count(), 0, `${stage}: only a completed scored fight offers stats`);
         assert.equal(await page.locator('[data-cage-fight-stats]').count(), 0, `${stage}: no recap outside a completed scored fight`);
@@ -442,7 +520,7 @@ try {
         geometry(await measure(page), profile, 'controls-restored');
       }
       assert.equal(await page.getByLabel('Mode', { exact: true }).inputValue(), 'quick', 'A fresh visit still defaults to a quick fight');
-      if (profile.input === 'keyboard' || profile.width === 320) {
+      {
         const storage = () => page.evaluate(() => ({ local: Object.entries(localStorage).sort(), session: Object.entries(sessionStorage).sort() }));
         const beforePractice = await storage(), writesBeforePractice = row.blockedWrites.length;
         const originalStyle = await page.getByLabel('Your style', { exact: true }).inputValue();
@@ -452,6 +530,7 @@ try {
         await inspect('practice-setup'); await activate(button('Start drill'), profile); await page.clock.runFor(112);
         for (const drill of ['striking', 'takedown', 'submission', 'escape']) {
           const initial = await hud(page); assert.equal(initial.drill, drill); assert.equal(initial.practiceComplete, false);
+          assert(await page.locator('canvas').evaluate(el => el === document.activeElement), 'Starting or advancing a drill focuses the arena');
           await inspect(`practice-${drill}`);
           if (drill === 'striking') {
             assert(Math.abs(initial.player.x - initial.cpu.x) > 20, 'Striking starts outside every attack range');
@@ -459,6 +538,7 @@ try {
             assert.equal((await hud(page)).phase, 'fight', 'Practice remains untimed beyond a normal round');
             assert.equal((await hud(page)).player.health, 100, 'The passive practice partner does not attack');
             assert.equal((await hud(page)).practiceComplete, false, 'Waiting does not complete the lesson');
+            assert.equal((await inspectFeedback('practice-idle-before-attempt')).outcome, 'No attempt yet.', 'Untimed idle does not invent an attempted move');
             if (profile.width === 320) { await inspectStrikeAnimations(); await inspectReadiness(); }
             const healthBeforeMiss = (await hud(page)).cpu.health;
             await hold('jab', 250); assert.equal((await hud(page)).cpu.health, healthBeforeMiss, 'Out-of-range practice strikes really miss');
@@ -470,8 +550,10 @@ try {
             });
             assert.deepEqual(settled, [1, 0, 0, 1, 1]); await inspect('practice-help');
             const frozen = await hud(page); await page.clock.runFor(500); assert.deepEqual(await hud(page), frozen, 'Help freezes the real drill');
+            const frozenFeedback = await inspectFeedback('practice-help-frozen', frozen);
             await activate(page.getByRole('dialog').getByRole('button', { name: /close/i }), profile); await page.clock.runFor(300);
             assert.deepEqual(await hud(page), frozen, 'Closing practice help still requires resume');
+            assert.deepEqual(await inspectFeedback('practice-help-closed'), frozenFeedback, 'Help close preserves feedback until explicit resume');
             await activate(button('Resume drill'), profile); await page.clock.runFor(112);
             for (let move = 0; move < 40 && Math.abs((await hud(page)).player.x - (await hud(page)).cpu.x) > 8; move++) await hold('right', 150);
             assert(Math.abs((await hud(page)).player.x - (await hud(page)).cpu.x) <= 8, 'Real movement reaches striking range');
@@ -479,14 +561,19 @@ try {
               const health = (await hud(page)).cpu.health; await hold('jab', 250);
               assert((await hud(page)).cpu.health < health, `Practice shot ${shot + 1} lands`);
               if (shot < 2) assert.equal((await hud(page)).practiceComplete, false, 'Fewer than three landed shots cannot complete striking');
+              await inspectFeedback(`practice-shot-${shot + 1}`);
               await page.clock.runFor(600);
             }
             for (let rest = 0; rest < 80 && !(await hud(page)).practiceComplete; rest++) await page.clock.runFor(250);
             assert((await hud(page)).player.stamina >= 90, 'Striking completes only after gas recovery');
           } else if (drill === 'takedown') {
             assert.equal(initial.position, 'standing'); await hold('grapple', 250); assert.equal((await hud(page)).position, 'clinch', 'First grapple earns a real clinch');
+            await inspectFeedback('practice-earned-clinch');
             for (let attempt = 0; attempt < 30 && !(await hud(page)).practiceComplete; attempt++) {
-              if ((await hud(page)).player.stamina < 30) await page.clock.runFor(1500); else await hold('grapple', 1200);
+              const before = await hud(page);
+              if (before.player.stamina < 30) await page.clock.runFor(1500); else await hold('grapple', 1200);
+              const after = await hud(page), feedback = await inspectFeedback(`practice-takedown-attempt-${attempt}`, after);
+              if (before.player.stamina >= 30 && after.position === 'clinch' && after.player.stamina < before.player.stamina) assert.equal(feedback.message, 'Takedown defended.', 'An actual defended takedown remains visible');
             }
             assert.equal((await hud(page)).position, 'ground'); assert.equal((await hud(page)).top, 'player', 'A real takedown earns top position');
           } else if (drill === 'submission') {
@@ -499,9 +586,17 @@ try {
           } else {
             assert.equal(initial.position, 'ground'); assert.equal(initial.top, 'cpu'); assert.match(initial.status, /· Mount$/);
             assert(await control('escape').isDisabled(), 'Mount must be escaped through recovered guard');
-            for (let attempt = 0; attempt < 30 && !/· Guard$/.test((await hud(page)).status); attempt++) { await hold('kick', 250); await page.clock.runFor(1000); }
+            for (let attempt = 0; attempt < 30 && !/· Guard$/.test((await hud(page)).status); attempt++) {
+              const before = await hud(page); await hold('kick', 250); const after = await hud(page), feedback = await inspectFeedback(`practice-regain-attempt-${attempt}`, after);
+              if (after.status === before.status && after.player.stamina < before.player.stamina) assert.equal(feedback.message, 'No space yet. Guard and try again.', 'An actual resisted guard recovery remains visible');
+              await page.clock.runFor(1000);
+            }
             assert.match((await hud(page)).status, /· Guard$/); assert.equal((await hud(page)).top, 'cpu'); await inspect('practice-guard-recovered');
-            for (let attempt = 0; attempt < 30 && !(await hud(page)).practiceComplete; attempt++) { await hold('escape', 250); await page.clock.runFor(1100); }
+            for (let attempt = 0; attempt < 30 && !(await hud(page)).practiceComplete; attempt++) {
+              const before = await hud(page); await hold('escape', 250); const after = await hud(page), feedback = await inspectFeedback(`practice-stand-attempt-${attempt}`, after);
+              if (after.position === 'ground' && after.player.stamina < before.player.stamina) assert.equal(feedback.message, 'Escape resisted. Guard and make space.', 'An actual resisted stand-up remains visible');
+              await page.clock.runFor(1100);
+            }
             assert.equal((await hud(page)).position, 'standing', 'Actual escape input returns to the feet');
           }
           assert.equal((await hud(page)).practiceComplete, true, `${drill} finishes through actual controls`);
@@ -513,6 +608,7 @@ try {
         await activate(button('Retry drill'), profile); await page.clock.runFor(112);
         assert.equal((await hud(page)).drill, 'escape'); assert.equal((await hud(page)).practiceComplete, false);
         assert.equal((await hud(page)).top, 'cpu'); assert.match((await hud(page)).status, /· Mount$/); assert.equal((await hud(page)).player.stamina, 100, 'Retry resets the actual drill');
+        assert(await page.locator('canvas').evaluate(el => el === document.activeElement), 'Retry returns focus to the arena'); await inspectFeedback('practice-retry-reset');
         await activate(button('Pause'), profile); await inspect('practice-paused'); const paused = await hud(page);
         await page.clock.runFor(500); assert.deepEqual(await hud(page), paused); await activate(button('Leave drill'), profile); await page.clock.runFor(112);
         assert.equal((await hud(page)).phase, 'setup'); assert.equal(row.blockedWrites.length, writesBeforePractice, 'Leaving a drill sends no completion attempt');
@@ -525,6 +621,7 @@ try {
         assert.equal(await page.getByLabel('Your style', { exact: true }).inputValue(), originalStyle); assert.equal(await page.getByLabel('Opponent style', { exact: true }).inputValue(), 'balanced');
         assert.equal(row.blockedWrites.length, writesBeforePractice); assert.deepEqual(await storage(), beforePractice, 'Drills, retry and leaving do not write local or session saves');
         await inspect('quick-after-practice'); row.practice.passed = true;
+        row.practice.isolation = { writesBefore: writesBeforePractice, writesAfter: row.blockedWrites.length, localAndSessionHeld: JSON.stringify(await storage()) === JSON.stringify(beforePractice) };
         console.log(`cageClash1063 ${id}: four real practice drills, help/pause, retry/leave, quick setup and zero practice writes passed.`);
       }
       if (profile.width === 390) {
@@ -726,15 +823,28 @@ try {
     } catch (error) { row.error = String(error?.stack || error); console.error(`${id}: ${row.error}`); await page.screenshot({ path: path.join(OUT, `${id}-failure.png`) }).catch(() => {}); throw error; }
     finally { await context.close(); report.coverage = [...coverage]; save(); }
   }
-  assert.equal(report.cases.length, 4); assert.equal(report.controls.length, 8); assert(report.cases.every(row => row.passed), 'All four native profiles pass');
+  assert.equal(report.cases.length, 4); assert.equal(report.controls.length, 9); assert(report.cases.every(row => row.passed), 'All four native profiles pass');
+  for (const name of ['action-size', 'action-clipping', 'horizontal-overflow', 'keyboard-focus', 'stats-clipping', 'readiness-font', 'readiness-description', 'readiness-wrap', 'practice-feedback-font']) assert(report.controls.includes(name), `${name}: every prior and new native control fires`);
   assert(report.cases.every(row => row.fightStats.some(stats => stats.stage === 'quick-result')), 'All four profiles inspect earned Quick fight stats');
   for (const row of report.cases.filter(row => row.circuit)) assert.equal(row.fightStats.filter(stats => stats.stage.startsWith('circuit-')).length, row.circuit.runs.reduce((sum, run) => sum + run.fights.length, 0), 'Every earned Circuit result gets its own current fight recap');
-  assert.equal(report.cases.filter(row => row.practice?.passed && row.practice.drills.length === 4).length, 2, 'Keyboard and 320px touch complete all four practice drills');
+  assert.equal(report.cases.filter(row => (row.id.startsWith('1280-keyboard') || row.id.startsWith('320-touch')) && row.practice?.passed && row.practice.drills.length === 4).length, 2, 'Keyboard and 320px touch retain all four practice drills');
+  assert.equal(report.cases.filter(row => row.practice?.passed && row.practice.drills.length === 4).length, 4, 'All four original profiles complete actual drills and feedback');
+  for (const row of report.cases) {
+    assert(row.practice.isolation.localAndSessionHeld && row.practice.isolation.writesBefore === row.practice.isolation.writesAfter, 'All practice feedback journeys keep storage and outbound writes unchanged');
+    for (const drill of ['striking', 'takedown', 'submission', 'escape']) {
+      assert(row.practiceFeedback.some(sample => sample.stage === `practice-${drill}` && !sample.feedback.complete), `${row.id}: ${drill} starts with unearned feedback`);
+      assert(row.practiceFeedback.some(sample => sample.stage === `practice-${drill}-complete` && sample.feedback.complete), `${row.id}: ${drill} earns completion feedback`);
+    }
+    assert(row.practiceFeedback.some(sample => sample.stage === 'practice-earned-clinch' && sample.feedback.progress === 'Takedowns 0/1 · In clinch'), 'Clinch remains an intermediate milestone');
+    assert(row.practiceFeedback.some(sample => sample.stage === 'practice-submission-progress' && !sample.feedback.complete && sample.hud.player.submission > 0), 'Partial actual submission pressure stays incomplete');
+  }
+  assert(report.practiceFeedbackControl?.passed, 'The isolated feedback fault restores a clean real baseline');
+  assert.equal(report.sources.length, 7); assert(report.sources.every(source => source.held), 'All native engine, input, renderer and new feedback source bytes remain held');
   assert.equal(report.cases.filter(row => row.strikeAnimations.length === 2 && row.strikeAnimations.every(animation => animation.frames.length === 3)).length, 2, '320px reduced motion and 390px full motion each capture three real Jab and Kick action windows');
   assert.equal(report.cases.filter(row => row.readiness?.passed && row.readiness.states.length === 7).length, 2, 'Both phone profiles prove actual descriptive readiness without changing practice writes or saves');
   assert.equal(report.cases.filter(row => row.groundAnimation?.passed && ['levels', 'effort', 'pressure'].every(kind => row.groundAnimation[kind].length === 3)).length, 2, '320px reduced motion and 390px full motion each prove three earned ground positions, grapple frames and actual submission pressure grips');
   assert.equal(report.cases.filter(row => row.circuit?.passed && row.circuit.won).length, 2, '320px touch and full-motion desktop complete winning circuits and real early stops');
   for (const needed of ['standing', 'clinch', 'ground-player', 'ground-cpu', 'submission', 'escape', 'result']) assert(coverage.has(needed), `Actual UI reaches ${needed}`);
   assert.equal(report.forwardedWrites, 0);
-  console.log(`cageClash1063: four complete native fights, every earned fight recap, twelve actual strike frames, six earned ground positions, six grapple frames, six pressure grips, two native readiness journeys, eight proven controls, seven actual combat states, input lifecycle and zero forwarded writes passed.`);
+  console.log(`cageClash1063: four complete native fights, every earned fight recap, twelve actual strike frames, six earned ground positions, six grapple frames, six pressure grips, two native readiness journeys, four complete practice feedback journeys, nine proven controls, seven actual combat states, input lifecycle and zero forwarded writes passed.`);
 } finally { if (browser) await browser.close(); server.kill(); fs.writeFileSync(path.join(OUT, 'server.log'), serverLog); save(); }

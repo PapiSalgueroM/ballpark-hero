@@ -1,41 +1,13 @@
-name: Cage Clash verification
+name: Cage Clash practice feedback preparation
 
 on:
-  pull_request:
-    paths:
-      - .github/workflows/cage-clash.yml
-      - src/pages/CageClash.tsx
-      - src/components/cage-clash/**
-      - src/hooks/useCageClash.ts
-      - src/lib/cageClash.ts
-      - src/lib/cagePractice.ts
-      - src/lib/cageCircuit.ts
-      - src/test/cageClash.test.tsx
-      - src/test/cagePractice.test.tsx
-      - src/test/cageCircuit.test.tsx
-      - src/test/cageFightStats.test.tsx
-      - src/test/cageStrikeMotion.test.tsx
-      - src/test/cageGrappleMotion.test.tsx
-      - src/test/cageReadiness.test.tsx
-      - src/test/cagePracticeFeedback.test.tsx
-      - scripts/simCageClash.mjs
-      - scripts/simCagePractice.mjs
-      - scripts/simCageCircuit.mjs
-      - scripts/simCageFightStats.mjs
-      - scripts/simCageStrikeMotion.mjs
-      - scripts/simCageGrappleMotion.mjs
-      - scripts/simCageReadiness.mjs
-      - scripts/simCagePracticeFeedback.mjs
-      - scripts/qa/cageClash1063.mjs
-      - src/data/gameContent/moreSports.ts
-      - src/data/gameRegistry.ts
-      - src/data/seoMeta.ts
-      - public/cage-clash/index.html
+  push:
+    branches: [codex/cage-practice-feedback-1073]
 
 permissions:
   contents: read
 concurrency:
-  group: cage-clash-${{ github.head_ref || github.ref_name }}
+  group: cage-practice-feedback-prep-${{ github.head_ref || github.ref_name }}
   cancel-in-progress: true
 
 jobs:
@@ -79,6 +51,22 @@ jobs:
           npm install --no-save playwright
           npx playwright install --with-deps chromium
           python -m pip install fonttools pillow
+      - name: Generate reviewed practice guide and two changed snapshots
+        run: |
+          node scripts/simGuideHeadings.mjs --refresh /cage-clash 2>&1 | tee cage-clash-artifacts/guide-refresh.log
+          node scripts/genSearchKeywords.mjs
+          node scripts/genSitemap.mjs --routes-only
+          npm run build 2>&1 | tee cage-clash-artifacts/pre-snapshot-build.log
+          PRERENDER_ONLY=/cage-clash,/whats-new NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/prerender.mjs 2>&1 | tee cage-clash-artifacts/generate.log
+          node scripts/genSitemap.mjs
+          mkdir -p cage-clash-artifacts/payload/public/cage-clash cage-clash-artifacts/payload/public/whats-new cage-clash-artifacts/payload/scripts/data cage-clash-artifacts/payload/src/data
+          for file in public/cage-clash/index.html public/whats-new/index.html public/sitemap.xml scripts/data/lastmod.json src/data/searchKeywords.json scripts/data/guideHeadingsFrozen.json; do cp "$file" "cage-clash-artifacts/payload/$file"; done
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import { createHash } from 'node:crypto';
+          const files = ['public/cage-clash/index.html', 'public/whats-new/index.html', 'public/sitemap.xml', 'scripts/data/lastmod.json', 'src/data/searchKeywords.json', 'scripts/data/guideHeadingsFrozen.json'];
+          fs.writeFileSync('cage-clash-artifacts/payload-manifest.json', JSON.stringify(files.map(file => ({ file, sha256: createHash('sha256').update(fs.readFileSync(file)).digest('hex') })), null, 2));
+          NODE
       - name: Harness source and mutation anchors
         run: ONLY=simHarnessAnchors node scripts/runAllSims.mjs 2>&1 | tee cage-clash-artifacts/simHarnessAnchors.log
       - name: Type check and build

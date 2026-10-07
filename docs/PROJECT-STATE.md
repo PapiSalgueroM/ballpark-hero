@@ -1,3 +1,16 @@
+## Round1073 claimed: Cage Clash practice feedback, 2026-10-07 03:28 UTC
+
+Anthony asked to keep going and work on other things. Codex takes compact
+practice progress and actual attempt feedback on codex/cage-practice-feedback-1073.
+Current grappling practice keeps the static objective and hides real outcome
+messages. Replace that existing slot with earned steps and the next move.
+Own Board/new feedback UI, narrow help/news/guide updates and remote proof.
+No combat/practice/circuit engines, hook, RNG, scoring, saves or real data changes.
+Claude keeps AH, career/GM/data and morning main/publish. Preserve1070/1071
+and1072 PR163.1072 final head3304bc59 has Entry/MMA accepted; CM37565507991
+still running.1073 is implementation only, not accepted, merged or LIVE.
+Protected root source and seven stashes remain held; all runtime remote.
+
 ## Rounds 1070 and 1071 merged, publication pending, 2026-10-07
 
 PR161 merged Free Kick Shot lab and saved MMA Bout recaps at
