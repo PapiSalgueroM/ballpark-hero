@@ -114,6 +114,13 @@
      card, so the synthetic careers carry section 12 there); throwback eras
      below the verified class nfl 28, nba 31, nhl 4 of 100, mlb 0 (its line
      is the Class of 2014, so the synthetic boundary ballots carry it).
+     Re-measured 2026-10-07 on the review fix's loop (the talk asked
+     mid-summer and after a banned year, no summer after a banned year),
+     default seed, all four green: talks answered one more year nfl 1122,
+     nba 1325, mlb 1281, nhl 1206; talk offseasons nfl 2585, nba 3048, mlb
+     2952, nhl 2781, of them asked mid-summer 9, 0, 9, 6 and after a banned
+     year 11, 42, 10, 32; deck farewells and deck retired numbers unchanged
+     (nfl 57, 5 elsewhere; nba 90, 30; mlb 75, 14); section 14 unchanged.
      14, six NHL seeds (default and SIM_SEED 1 to 5), 800 careers a build:
        walk away farewells taken the same offseason in both builds 16, 12,
        12, 21, 17, 10 (of 56, 42, 43, 56, 60, 58). Band: at least 5.
