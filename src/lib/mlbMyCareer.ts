@@ -964,7 +964,7 @@ const MLB_LEGACY_V2: LegacyWeights = {
       terms: [{ stat: 'hr', per: 4 }, { stat: 'rbi', per: 60 }],
       standout: [
         { stat: 'hr', from: 529, to: 607, label: 'home runs' },
-        { stat: 'rbi', from: 1740, to: 1910, label: 'RBI' },
+        { stat: 'rbi', from: 1740, to: 1920, label: 'RBI' },
         { stat: 'sb', from: 654, to: 745, label: 'steals' },
       ],
     },

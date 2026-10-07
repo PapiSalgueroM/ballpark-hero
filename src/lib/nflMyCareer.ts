@@ -1120,7 +1120,7 @@ const NFL_LEGACY_V2: LegacyWeights = {
     K: {
       terms: [],
       standout: [
-        { stat: 'fgMade', from: 512, to: 563, label: 'field goals' },
+        { stat: 'fgMade', from: 512, to: 564, label: 'field goals' },
       ],
     },
     '*': { terms: [] },

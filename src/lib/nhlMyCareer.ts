@@ -876,7 +876,7 @@ const NHL_LEGACY_V2: LegacyWeights = {
     G: {
       terms: [{ stat: 'wins', per: 6.5 }],
       standout: [
-        { stat: 'wins', from: 721, to: 793, label: 'wins' },
+        { stat: 'wins', from: 721, to: 794, label: 'wins' },
       ],
     },
     '*': { terms: [{ stat: 'points', per: 18 }] },
