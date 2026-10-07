@@ -40,6 +40,13 @@ not credited as executed by this round.
 
 ## Verification
 
+Preparation and diagnostic runs retained a290px movement on the320px dream
+offer. Scroll had changed before first pointerdown and before React focus;
+the old sibling action row made a352px layout viewport on the320px screen.
+A bounded trial wraps the Stay/Wait actions inside equal grid columns with
+44px minimum height. The driver and strict1px no-jump requirement stay intact.
+Remote rerun must establish whether this corrects the observed failure.
+
 All application execution happens in remote GitHub Actions. Before import,
 outcome workers freeze time and install counted deterministic RNG, storage and
 transport guards. Engine-generated careers and offers supply the baselines;

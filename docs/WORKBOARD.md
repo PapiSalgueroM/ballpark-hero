@@ -1,3 +1,15 @@
+## Codex 1082 phone correction trial, October 7, 11:18 EDT
+
+Diagnostic run37640124252 on1b3b0db2 retained the same290px failure.
+Its trace shows scroll186 at the first pointerdown, before React autofocus;
+the layout viewport was352px wide versus320px visible. The dream-club Stay
+and Wait row overflowed. Trial fix gives those two actions equal grid columns,
+wrapping text and44px minimum height. Native driver,1px assertion, oracle,
+waits and inputs unchanged. Remote rerun still required to establish cause.
+Full312-file diagnostic ZIP11492647969 SHA256
+1102a3dcc99598188a3666692ed3ac6b037105bdee64f4c933e0bf37078ee53b
+retained externally. No READY, PR or live claim. Engine/data remain held.
+
 ## Codex 1082 authored, October 7: remote acceptance pending
 
 Permanent-offer review and actual signed-wage comparison on
