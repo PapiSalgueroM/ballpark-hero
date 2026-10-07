@@ -95,6 +95,14 @@ for (let step = 0; step < 18 && !sawScrum; step++) {
     await page.waitForTimeout(700);
     continue;
   }
+  /* Round 1038: every answer now shows its receipt, and the summer's next
+     card (up to three) follows its Continue. */
+  const receipt = page.locator('[data-decision-continue]');
+  if (await receipt.count()) {
+    await receipt.first().click();
+    await page.waitForTimeout(700);
+    continue;
+  }
   const play = page.locator('button:has-text("Play the")');
   if (await play.count()) {
     await play.first().click();
@@ -121,7 +129,18 @@ if (sawScrum) {
   console.log('3) Answering lands in the feed');
   await page.locator('button:has-text("Own every bit of it yourself")').click();
   await page.waitForTimeout(800);
-  say(await page.locator('button:has-text("Play the")').count() >= 1, 'answering returns to the season hub');
+  /* Round 1038: the scrum is card 1 of a summer of up to three, so the hub
+     comes back once the rest of the summer is answered, each card closed
+     with its receipt's Continue. */
+  let screens = 0;
+  for (; screens < 12; screens += 1) {
+    const cont = page.locator('[data-decision-continue]');
+    if (await cont.count()) { await cont.first().click(); await page.waitForTimeout(500); continue; }
+    const opt = page.locator('[data-career-decision-option]');
+    if (await opt.count()) { await opt.first().click(); await page.waitForTimeout(500); continue; }
+    break;
+  }
+  say(screens < 12 && await page.locator('button:has-text("Play the")').count() >= 1, 'answering, then the rest of the summer, returns to the season hub');
   const after = await page.locator('body').innerText();
   say(after.includes('🎙️'), 'the press line reached the news feed');
 }
