@@ -10,7 +10,8 @@ export function SeasonCupExitLine({ season }: { season: unknown }) {
   const run = readCupRun(season);
   const line = run ? cupExitLine(run) : null;
   if (!line) return null;
-  return <p className="text-[11px] text-muted-foreground leading-snug" data-cup-exit={run?.stages.length}>🏆 {line}</p>;
+  /* no trophy on a defeat: a lost final must not read like a win at a glance */
+  return <p className="text-[11px] text-muted-foreground leading-snug" data-cup-exit={run?.stages.length}>{line}</p>;
 }
 
 /** The short block for a won cup, inside the season's VictoryMoment. */

@@ -84,7 +84,7 @@ import { pathToFileURL, fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
 const CONTROL = process.env.CUP_CONTROL || '';
-const CONTROLS = { stream: [1], wrongcountry: [2], ignoreworld: [2], keepcoin: [2, 3], unverifiedname: [2, 4], flatrounds: [3], leaguekey: [2] };
+const CONTROLS = { stream: [1], wrongcountry: [2], ignoreworld: [2], keepcoin: [2, 3], unverifiedname: [2, 4], flatrounds: [3], leaguekey: [2], thinpool: [2], anyworld: [2], semiground: [2], venueline: [5], exittrophy: [5], pensrate: [2], drawpin: [6] };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error('unknown control ' + CONTROL + ' (known: ' + Object.keys(CONTROLS).join(', ') + ')'); process.exit(2); }
 const OFFSET = Number(process.argv.find((a, i) => i > 1 && /^\d+$/.test(a)) || 0);
 const TMP = process.env.TEMP || process.env.TMP || os.tmpdir();
@@ -133,7 +133,8 @@ function edit(src, anchor, replacement, why, file) {
 const CUP = 'src/lib/soccerCareerCup.ts';
 const ENGINE = 'src/lib/soccerCareerEngine.ts';
 const PHONE = 'src/lib/soccerPhone.ts';
-const SRC = { [CUP]: read(CUP), [ENGINE]: read(ENGINE), [PHONE]: read(PHONE) };
+const UI = 'src/components/soccer-career/CupRunLines.tsx';
+const SRC = { [CUP]: read(CUP), [ENGINE]: read(ENGINE), [PHONE]: read(PHONE), [UI]: read(UI) };
 const DRAW_HEAD = 'export function drawCupRun(input: CupRunInput): CupRun | null {';
 const NO_RUN = s => edit(s, DRAW_HEAD, DRAW_HEAD + ' if (input) return null;', 'run off', CUP);
 const COIN = '\n    && domesticCupFor(cupAssociation(state.currentClubCountry, state.currentLeague), seasonYear).kind !== "NONE";';
@@ -143,7 +144,19 @@ const main = { ...SRC };
 const ctl = (file, anchor, replacement) => { main[file] = edit(main[file], anchor, replacement, CONTROL, file); };
 if (CONTROL === 'stream') ctl(CUP, DRAW_HEAD, DRAW_HEAD + ' Math.random();');
 if (CONTROL === 'wrongcountry') ctl(CUP, 'if (seen.has(c.name) || cupAssociation(c.country, c.league) !== association) continue;', 'if (seen.has(c.name)) continue;');
-if (CONTROL === 'ignoreworld') ctl(CUP, 'const winner = input.worldWinner && input.worldWinner !== input.club ? input.worldWinner : null;', 'const winner = null as string | null;');
+if (CONTROL === 'ignoreworld') ctl(CUP, 'const winner = input.worldWinner && all.some(c => c.name === input.worldWinner) ? input.worldWinner : null;', 'const winner = null as string | null;');
+/* review fixes: a run for an UNKNOWN association whose pool cannot name a
+   club at every stage; the world's winner taken even where it is not a club
+   of that year (Atlanta United in 2015); a semi-final kept with a ground; a
+   ground printed on the won run's ties; no extra time before penalties; the
+   draw's own numbers moved */
+if (CONTROL === 'thinpool') ctl(CUP, 'if (status.kind === "UNKNOWN" ? named < NAMED_STAGES.length : named < 1) return null;', 'if (named < 1) return null;');
+if (CONTROL === 'anyworld') ctl(CUP, 'all.some(c => c.name === input.worldWinner)', 'input.worldWinner !== input.club');
+if (CONTROL === 'semiground') ctl(CUP, '...(stage === "QF" ? { home } : {})', 'home');
+if (CONTROL === 'venueline') ctl(CUP, '${t.opp} ${t.for}-${t.against}`;', '${t.opp} ${t.for}-${t.against} ${t.home ? "at home" : "away"}`;');
+if (CONTROL === 'pensrate') ctl(CUP, 'const EXTRA_TIME_SETTLES = 0.6;', 'const EXTRA_TIME_SETTLES = 0;');
+if (CONTROL === 'exittrophy') ctl(UI, 'data-cup-exit={run?.stages.length}>{line}</p>', 'data-cup-exit={run?.stages.length}>🏆 {line}</p>');
+if (CONTROL === 'drawpin') ctl(CUP, 'const TIE_LAMBDA_LO = 1.0;', 'const TIE_LAMBDA_LO = 1.05;');
 if (CONTROL === 'keepcoin') ctl(ENGINE, COIN, ';');
 if (CONTROL === 'unverifiedname') ctl(CUP, '{ from: 1990, to: 2025, kind: "UNKNOWN", why: "entry went by state', '{ from: 1990, to: 2025, kind: "NAMED", name: "Copa do Brasil", why: "entry went by state');
 if (CONTROL === 'flatrounds') ctl(CUP, 'const w = Math.pow(p, i) * (1 - p);', 'const w = (1 - Math.pow(p, k)) / k;');
@@ -175,9 +188,9 @@ export const render = (Component, props) => renderToStaticMarkup(React.createEle
     define: { 'process.env.NODE_ENV': '"production"' },
     banner: { js: "import { createRequire as __cr } from 'node:module'; const require = __cr(import.meta.url);" },
     plugins: [{ name: 'cup-variant', setup(b) {
-      b.onLoad({ filter: /(soccerCareerCup|soccerCareerEngine|soccerPhone)\.ts$/ }, args => {
+      b.onLoad({ filter: /(soccerCareerCup|soccerCareerEngine|soccerPhone|CupRunLines)\.tsx?$/ }, args => {
         const src = byKey[path.resolve(args.path).toLowerCase()];
-        return src !== undefined ? { contents: src, loader: 'ts' } : undefined;
+        return src !== undefined ? { contents: src, loader: args.path.endsWith('.tsx') ? 'tsx' : 'ts' } : undefined;
       });
     } }],
   });
@@ -298,7 +311,9 @@ const PER = Number(process.env.CUP_PER || 40);
 /* BANDS: set from the measurements recorded in the header. */
 const GAP_MIN = 0.09;
 const RATIO_BAND = [0.82, 1.18];
-const TABLE_DIGEST = '93f8ef7185d11c4f575a5dd07b07169d72ccfc18d032bc54691227f049e47dd4';
+const PEN_BAND = [0.04, 0.2];
+const DRAW_DIGEST = '9a2909e9fd97c022b0c7fbbb2428865ba3fd31a9e02d8fc570d1ef43e15238d1';
+const TABLE_DIGEST = 'a3616009f455a63f6f080107ab01f45ff84c99dea8d45c1d14c06b13c5d5ae83';
 function fleet(e, label) {
   const t0 = Date.now();
   const out = [];
@@ -359,7 +374,7 @@ console.log('1) the run draws from its own generator: MAIN and B draw Math.rando
 section = 2;
 console.log("2) every season is coherent with itself, the table and the phone's world");
 {
-  const n = { seasons: 0, runs: 0, won: 0, none: 0, noneWorld: 0, lostFinalWorld: 0, champWon: 0, pens: 0, twoLegs: 0, named: 0, unnamed: 0, noRun: 0, worldWon: 0, mlsWorlds: 0 };
+  const n = { seasons: 0, runs: 0, won: 0, none: 0, noneWorld: 0, lostFinalWorld: 0, lostFinalElsewhere: 0, champWon: 0, pens: 0, pensFinals: 0, twoLegs: 0, named: 0, unnamed: 0, noRun: 0, thinUnknown: 0, worldWon: 0, mlsWorlds: 0, semis: 0 };
   const bad = {};
   const flag = (k, m) => { bad[k] = (bad[k] || 0) + 1; if (bad[k] <= 3) console.error(`    ${k}: ${m}`); };
   for (const x of RUN_MAIN) {
@@ -394,12 +409,23 @@ console.log("2) every season is coherent with itself, the table and the phone's 
       if (!r.events.includes(want)) flag('event', `${x.club} ${row.year} has no line "${want}"`);
     }
     const pool = cup.cupOpponentPool(assoc, row.year, row.club, clubs).filter(c => c.name !== winner);
+    /* The clubs that played that year, read from the era filter, not from the
+       cup module the controls edit: the world's winner is his final's
+       opponent only where it is one of them (the lead's rule), since the
+       phone's era lists carry clubs before they existed. */
+    const alive = new Set(eras.adjustClubsForYear(clubs, row.year).map(c => c.name));
+    const winnerIn = winner !== undefined && winner !== row.club && alive.has(winner) && assocOf(winner) === assoc;
+    const owed = rec.kind === 'NAMED' ? pool.length >= 1 : pool.length >= 3;
+    if (rec.kind === 'UNKNOWN' && pool.length < 3) n.thinUnknown += 1;
     if (!run) {
       n.noRun += 1;
-      const owed = rec.kind === 'NAMED' ? pool.length >= 1 : pool.length >= 3;
       if (owed) flag('missing', `${x.club} ${row.year} (${rec.kind}, ${pool.length} other clubs) has no run`);
       continue;
     }
+    /* and the mirror: a run where none is owed (critic correction 4, an
+       UNKNOWN association whose pool cannot name a club at every stage) */
+    if (!owed) flag('unowed', `${x.club} ${row.year} (${rec.kind}, ${pool.length} other clubs) has a run`);
+    for (const t of row.cupRun.stages) if (t.stage === 'SF') { n.semis += 1; if ('home' in t) flag('semiground', `${x.club} ${row.year} keeps a ground on a semi-final`); }
     n.runs += 1;
     if (run.cup !== (rec.kind === 'NAMED' ? rec.name : undefined)) flag('name', `${x.club} ${row.year} names "${run.cup}" where the table records ${rec.kind} ${rec.name ?? ''}`);
     if (run.cup) n.named += 1; else n.unnamed += 1;
@@ -413,9 +439,11 @@ console.log("2) every season is coherent with itself, the table and the phone's 
       if (!t.opp) continue;
       if (t.opp === row.club) flag('self', `${x.club} ${row.year} drew itself`);
       const lostFinal = t.stage === 'F' && !t.won;
-      if (!(lostFinal && t.opp === winner) && assocOf(t.opp) !== assoc) flag('country', `${x.club} (${assoc}) ${row.year} met ${t.opp} (${assocOf(t.opp)})`);
+      if (assocOf(t.opp) !== assoc) flag('country', `${x.club} (${assoc}) ${row.year} met ${t.opp} (${assocOf(t.opp)})`);
+      if (!alive.has(t.opp)) flag('unborn', `${x.club} ${row.year} met ${t.opp}, not a club that year`);
       if (t.won && winner !== undefined && t.opp === winner) flag('beatwinner', `${x.club} ${row.year} beat ${t.opp}, the world's winner`);
-      if (lostFinal && winner !== undefined) { n.lostFinalWorld += 1; if (t.opp !== winner) flag('lostfinal', `${x.club} ${row.year} lost the final to ${t.opp}, the world says ${winner} won it`); }
+      if (lostFinal && winnerIn) { n.lostFinalWorld += 1; if (t.opp !== winner) flag('lostfinal', `${x.club} ${row.year} lost the final to ${t.opp}, the world says ${winner} won it`); }
+      if (lostFinal && winner !== undefined && !winnerIn) n.lostFinalElsewhere += 1;
     }
     const reachedF = end.stage === 'F';
     const wantFinal = reachedF && rec.kind === 'NAMED' && !!rec.legs;
@@ -423,17 +451,23 @@ console.log("2) every season is coherent with itself, the table and the phone's 
     if (run.final) {
       if (run.final.legs !== rec.legs) flag('legs', `${x.club} ${row.year} final over ${run.final.legs} legs, recorded ${rec.legs}`);
       if (run.final.legs === 2) n.twoLegs += 1;
-      if (run.final.pens) { n.pens += 1; if (rec.decider !== 'pens') flag('pens', `${x.club} ${row.year} penalties where the decider is ${rec.decider ?? 'unrecorded'}`); }
-      if (run.final.for === run.final.against && !run.final.pens) flag('level', `${x.club} ${row.year} a level final with no decider`);
+      if (rec.decider === 'penalties') n.pensFinals += 1;
+      if (run.final.decidedBy === 'penalties') { n.pens += 1; if (rec.decider !== 'penalties') flag('pens', `${x.club} ${row.year} penalties where the decider is ${rec.decider ?? 'unrecorded'}`); }
+      if (run.final.for === run.final.against && run.final.decidedBy !== 'penalties') flag('level', `${x.club} ${row.year} a level final with no decider`);
       if (run.final.scored && row.goals === 0) flag('scored', `${x.club} ${row.year} scored in the final with no goals all season`);
     }
   }
   console.log(`  ${JSON.stringify(n)}`);
   const total = Object.values(bad).reduce((a, b) => a + b, 0);
   if (total > 0) fail(`${total} incoherent seasons: ${JSON.stringify(bad)}`);
-  if (n.runs < 900 || n.won < 150 || n.none < 140 || n.noneWorld < 55 || n.lostFinalWorld < 60 || n.champWon < 10 || n.pens < 35 || n.twoLegs < 20 || n.unnamed < 75 || n.mlsWorlds < 1000 || n.worldWon < 130) {
+  if (n.runs < 900 || n.won < 150 || n.none < 140 || n.noneWorld < 55 || n.lostFinalWorld < 60 || n.champWon < 10 || n.pens < 35 || n.twoLegs < 20 || n.unnamed < 75 || n.mlsWorlds < 1000 || n.worldWon < 130 || n.thinUnknown < 1 || n.semis < 1 || n.pensFinals < 1) {
     fail(`a check above ran on too few seasons to mean anything: ${JSON.stringify(n)}`);
   }
+  /* Finals in a window decided on penalties go to penalties about as often
+     as the real ones did (about one in ten), not every level draw. */
+  const penShare = n.pens / Math.max(1, n.pensFinals);
+  console.log(`  finals settled on penalties: ${n.pens} of ${n.pensFinals} in windows that record them (${penShare.toFixed(3)}, band ${PEN_BAND.join(' to ')})`);
+  if (!(penShare >= PEN_BAND[0] && penShare <= PEN_BAND[1])) fail(`${penShare.toFixed(3)} of finals went to penalties, band ${PEN_BAND.join(' to ')}`);
 }
 
 section = 3;
@@ -543,7 +577,7 @@ console.log('4) the table, its recorded copy and sources, the checker correction
   const table = cup.DOMESTIC_CUPS;
   const digest = sha(JSON.stringify(table));
   console.log(`  table digest ${digest.slice(0, 16)}, ${Object.keys(table).length} associations, ${Object.values(table).reduce((a, w) => a + w.length, 0)} windows`);
-  if (digest !== TABLE_DIGEST) fail(`the table moved (digest ${digest.slice(0, 16)}, pinned ${TABLE_DIGEST.slice(0, 16)}): re-record only with its sources`);
+  if (digest !== TABLE_DIGEST) fail(`the table moved (digest ${digest}, pinned ${TABLE_DIGEST.slice(0, 16)}): re-record only with its sources`);
   const keys = new Set([...Object.keys(table), ...Object.keys(RECORDED.associations)]);
   let windows = 0, sourced = 0;
   const KEYS = ['from', 'to', 'kind', 'name', 'legs', 'decider'];
@@ -609,6 +643,11 @@ console.log('5) the summary lines render for a new row, and a row from before th
     console.log(`  won: ${win.replace(/<[^>]+>/g, ' | ').replace(/( \| )+/g, ' | ').slice(0, 220)}`);
     console.log(`  exit: ${out.replace(/<[^>]+>/g, '').slice(0, 160)}`);
     if (!win.includes(`${wonNamed.cupRun.cup} winners`) || !win.includes('Final: beat ')) fail('the won run does not print its cup and its final');
+    /* no ground on any tie: semi-finals can be at a neutral ground (Wembley)
+       and nobody researched how each cup played its quarter-finals */
+    if (!/(Quarter|Semi)-final: beat /.test(win)) fail('the won run printed no tie before the final, so the ground check reads nothing');
+    if (/ at home\b| away\b/.test(win)) fail('a won run prints a ground for a tie');
+    if (/🏆/.test(out)) fail('the exit line, a defeat, carries a trophy');
     if (!/knocked out by|lost the final to|early rounds/.test(out)) fail('the exit line does not say how the run ended');
     if (!anon.includes('Domestic cup winners')) fail('an unnamed run is not printed in the old words');
     if (/<button/i.test(win + out + anon)) fail('the cup lines carry a button');
@@ -639,6 +678,43 @@ console.log('5) the summary lines render for a new row, and a row from before th
     if (!fixed[0].cupRun || fixed[1].cupRun !== undefined || JSON.stringify(fixed[2]) !== JSON.stringify(legacy)) fail('loading a save does not drop a bad run and keep the rest');
   }
   if (cup.cupCabinetLabel([legacy]) !== 'Cups' || cup.cupCabinetLabel([]) !== 'Cups') fail('the cabinet label moved for old saves');
+}
+
+section = 6;
+console.log('6) the draw itself is pinned: fixed inputs over made up clubs give the same runs');
+{
+  /* Sections 2 and 3 check that runs are coherent, not what they hold, and
+     the career fixtures hash saves without cupRun, so nothing else notices a
+     change in drawCupRun's own draw order or numbers. These inputs use clubs
+     and statuses made up here, so the digest moves only with the cup module
+     (and keyedRng and poissonGoals beside it), never with the game's club
+     list, its table or the engine. Re-pin only with the cause proven. */
+  const mk = (assoc, league, n) => Array.from({ length: n }, (_, i) => ({ id: `pin-${assoc}-${i}`, name: `${assoc} Pin ${i}`, country: assoc, tier: 1 + (i % 4), color: '#000000', league }));
+  const pinClubs = [...mk('England', 'Premier League', 12), ...mk('Italy', 'Serie A', 6), ...mk('Brazil', 'Brasileirao', 4), ...mk('Korea', 'K League 1', 2)];
+  const STATUSES = [
+    { kind: 'NAMED', association: 'England', name: 'Pin Cup', legs: 1, decider: 'penalties' },
+    { kind: 'NAMED', association: 'England', name: 'Pin Cup', legs: 1, decider: 'replay' },
+    { kind: 'NAMED', association: 'Italy', name: 'Pin Coppa', legs: 2, decider: 'awayGoals' },
+    { kind: 'NAMED', association: 'Korea', name: 'Pin Korea Cup' },
+    { kind: 'UNKNOWN', association: 'Brazil' },
+    { kind: 'UNKNOWN', association: 'Korea' },
+    { kind: 'NONE', association: 'England' },
+  ];
+  const runs = [];
+  STATUSES.forEach((status, si) => {
+    const own = pinClubs.find(c => c.country === status.association).name;
+    for (let i = 0; i < 60; i++) {
+      const others = pinClubs.filter(c => c.country === status.association && c.name !== own);
+      const worldWinner = i % 3 === 0 ? null : i % 3 === 1 ? others[i % others.length].name : 'Nowhere Pin FC';
+      runs.push(cup.drawCupRun({ status, club: own, year: 2000 + (i % 25), won: i % 5 === 0, chance: 0.05 + (i % 8) * 0.07, clubs: pinClubs, worldWinner, goals: i % 6 === 0 ? 0 : 2 + (i % 19), apps: 20 + (i % 15), seedKey: `pin|${si}|${i}` }));
+    }
+  });
+  const shown = runs.filter(Boolean);
+  const finals = shown.filter(r => r.final).length, pens = shown.filter(r => r.final && r.final.decidedBy === 'penalties').length;
+  const digest = sha(JSON.stringify(runs));
+  console.log(`  ${runs.length} draws, ${shown.length} runs, ${finals} final scores, ${pens} on penalties; digest ${digest.slice(0, 16)}`);
+  if (shown.length < 200 || finals < 20 || pens < 1) fail(`the pinned draws hold too little to pin anything (${shown.length} runs, ${finals} finals, ${pens} on penalties)`);
+  if (digest !== DRAW_DIGEST) fail(`the draw moved (digest ${digest}, pinned ${DRAW_DIGEST.slice(0, 16)}): every new run differs from the last build's; re-pin only with the cause proven`);
 }
 
 console.log(failures === 0

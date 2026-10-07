@@ -83,7 +83,7 @@
      "kind": "NAMED",
      "name": "FA Cup",
      "legs": 1,
-     "decider": "pens",
+     "decider": "penalties",
      "facts": [
       {
        "ref": "uk-nl:England:0",
@@ -160,7 +160,7 @@
      "kind": "NAMED",
      "name": "Scottish Cup",
      "legs": 1,
-     "decider": "pens",
+     "decider": "penalties",
      "facts": [
       {
        "ref": "uk-nl:Scotland:0",
@@ -218,7 +218,7 @@
      "kind": "NAMED",
      "name": "Copa del Rey",
      "legs": 1,
-     "decider": "pens",
+     "decider": "penalties",
      "facts": [
       {
        "ref": "continent:Spain:0",
@@ -381,7 +381,7 @@
      "kind": "NAMED",
      "name": "Coppa Italia",
      "legs": 1,
-     "decider": "pens",
+     "decider": "penalties",
      "facts": [
       {
        "ref": "continent:Italy:0",
@@ -477,7 +477,7 @@
      "kind": "NAMED",
      "name": "DFB-Pokal",
      "legs": 1,
-     "decider": "pens",
+     "decider": "penalties",
      "facts": [
       {
        "ref": "continent:Germany:0",
@@ -542,7 +542,7 @@
      "kind": "NAMED",
      "name": "Coupe de France",
      "legs": 1,
-     "decider": "pens",
+     "decider": "penalties",
      "facts": [
       {
        "ref": "continent:France:1",
@@ -654,7 +654,7 @@
      "kind": "NAMED",
      "name": "Coupe de France",
      "legs": 1,
-     "decider": "pens",
+     "decider": "penalties",
      "facts": [
       {
        "ref": "continent:France:1",
@@ -726,7 +726,7 @@
      "kind": "NAMED",
      "name": "KNVB Cup",
      "legs": 1,
-     "decider": "pens",
+     "decider": "penalties",
      "facts": [
       {
        "ref": "uk-nl:Netherlands:0",
@@ -821,7 +821,7 @@
      "kind": "NAMED",
      "name": "KNVB Cup",
      "legs": 1,
-     "decider": "pens",
+     "decider": "penalties",
      "facts": [
       {
        "ref": "uk-nl:Netherlands:0",
@@ -932,7 +932,7 @@
      "kind": "NAMED",
      "name": "KNVB Cup",
      "legs": 1,
-     "decider": "pens",
+     "decider": "penalties",
      "facts": [
       {
        "ref": "uk-nl:Netherlands:0",
@@ -1080,7 +1080,7 @@
      "kind": "NAMED",
      "name": "Taça de Portugal",
      "legs": 1,
-     "decider": "pens",
+     "decider": "penalties",
      "facts": [
       {
        "ref": "continent:Portugal:0",
@@ -1427,7 +1427,7 @@
      "kind": "NAMED",
      "name": "Turkish Cup",
      "legs": 1,
-     "decider": "pens",
+     "decider": "penalties",
      "facts": [
       {
        "ref": "rest:Turkey:0",
@@ -1606,7 +1606,7 @@
      "kind": "NAMED",
      "name": "Greek Cup",
      "legs": 1,
-     "decider": "pens",
+     "decider": "penalties",
      "facts": [
       {
        "ref": "rest:Greece:0",
@@ -1734,7 +1734,7 @@
      "kind": "NAMED",
      "name": "Emperor's Cup",
      "legs": 1,
-     "decider": "pens",
+     "decider": "penalties",
      "facts": [
       {
        "ref": "rest:Japan:0",
@@ -1834,7 +1834,7 @@
      "kind": "NAMED",
      "name": "Emperor's Cup",
      "legs": 1,
-     "decider": "pens",
+     "decider": "penalties",
      "facts": [
       {
        "ref": "rest:Japan:0",
@@ -3145,7 +3145,7 @@
      "kind": "NAMED",
      "name": "Canadian Championship",
      "legs": 1,
-     "decider": "pens",
+     "decider": "penalties",
      "facts": [
       {
        "ref": "americas:Canada:0",
@@ -3396,6 +3396,57 @@
    "windows": [
     {
      "from": 1990,
+     "to": 1992,
+     "kind": "NONE",
+     "why": "no Copa Argentina between 1970 and 2011-12",
+     "facts": [
+      {
+       "ref": "americas:Argentina:0",
+       "verified": true,
+       "claim": "No Copa Argentina between the abandoned 1970 edition and 2011-12: none held 1990-91 to 2010-11",
+       "sources": [
+        {
+         "host": "rsssf.org",
+         "url": "https://www.rsssf.org/tablesa/argcuphist.html",
+         "read": "2026-10-06",
+         "line": "1969 CA Boca Juniors 3-1 0-1 CA Atlanta; 1970 abandoned; next row 2011/12 CA Boca Juniors 2-1 Racing Club (Avellaneda)"
+        },
+        {
+         "host": "espndeportes.espn.com",
+         "url": "https://espndeportes.espn.com/futbol/argentina/nota/_/id/12987727/el-historial-de-campeones-de-la-copa-argentina",
+         "read": "2026-10-06",
+         "line": "La Copa Argentina arrancó con una edición a fines de la década del 60 y se juega de forma ininterrumpida desde 2011. (table: 1969 Boca Juniors - Atlanta 3-1 y 0-1, next row 2011/12 Boca Juniors - Racing Club 2-1; 23 February 2026, read in the browser)"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "from": 1993,
+     "to": 1993,
+     "kind": "UNKNOWN",
+     "why": "the AFA's Copa Centenario, a knockout cup for the first division clubs, ran from June 1993 to January 1994; whether it counts as that season's domestic cup was not researched",
+     "review": {
+      "by": "Round 1041 adversarial review, applied by the fixer on 2026-10-07",
+      "note": "The window 1990 to 2010 had read NONE on facts that only establish there was no Copa Argentina. RSSSF lists an AFA knockout cup in 1993, so that season is held UNKNOWN (the coin and the generic words, the behaviour before the round) rather than called a season with no cup. Its standing (an official title, or a league cup for the first division only, the way the table treats Korea 1992 to 1995) is the open question.",
+      "sources": [
+       {
+        "host": "rsssf.org",
+        "url": "https://www.rsssf.org/tablesa/argcuphist.html",
+        "read": "2026-10-07",
+        "line": "### 1993 Copa Centenario de la AFA (heading on the page, fetched by the fixer)"
+       },
+       {
+        "host": "rsssf.org",
+        "url": "https://www.rsssf.org/tablesa/arg-centenario93.html",
+        "read": "2026-10-07",
+        "line": "AFA Copa Centenario 1993, 26 June 1993 to 30 January 1994, 18 clubs in a double knockout; Gimnasia Esgrima LP 3-1 River Plate, Jan 30, 1994, La Plata (fetched by the fixer)"
+       }
+      ]
+     }
+    },
+    {
+     "from": 1994,
      "to": 2010,
      "kind": "NONE",
      "why": "no Copa Argentina between 1970 and 2011-12",

@@ -19,12 +19,14 @@
 import { adjustClubsForYear } from "./careerEras";
 import { poissonGoals } from "./soccerCareerContinental";
 import { keyedRng } from "./keyedRng";
-import type { ClubData } from "./soccerCareerEngine";
+import type { ClubData, UCLKnockoutMatch } from "./soccerCareerEngine";
 
 /** How a final that is level at the end was settled, where two sources
  *  record it: a replay (a one match final), penalties, or away goals (a two
- *  legged final). A window with no decider never draws a level final. */
-export type CupDecider = "replay" | "pens" | "awayGoals";
+ *  legged final). A window with no decider never draws a level final. The
+ *  words are the Champions League knockout's own (UCLKnockoutMatch.decidedBy),
+ *  plus 'replay', which that competition never had. */
+export type CupDecider = "replay" | Extract<UCLKnockoutMatch["decidedBy"], "penalties" | "awayGoals">;
 
 interface CupWindow {
   from: number;
@@ -73,47 +75,47 @@ interface CupWindow {
 export const DOMESTIC_CUPS: Readonly<Record<string, readonly CupWindow[]>> = {
   England: [
     { from: 1990, to: 1997, kind: "NAMED", name: "FA Cup", legs: 1, decider: "replay" },
-    { from: 1998, kind: "NAMED", name: "FA Cup", legs: 1, decider: "pens" },
+    { from: 1998, kind: "NAMED", name: "FA Cup", legs: 1, decider: "penalties" },
   ],
-  Scotland: [{ from: 1990, kind: "NAMED", name: "Scottish Cup", legs: 1, decider: "pens" }],
-  Spain: [{ from: 1990, kind: "NAMED", name: "Copa del Rey", legs: 1, decider: "pens" }],
+  Scotland: [{ from: 1990, kind: "NAMED", name: "Scottish Cup", legs: 1, decider: "penalties" }],
+  Spain: [{ from: 1990, kind: "NAMED", name: "Copa del Rey", legs: 1, decider: "penalties" }],
   Italy: [
     { from: 1990, to: 2006, kind: "NAMED", name: "Coppa Italia", legs: 2, decider: "awayGoals" },
-    { from: 2007, kind: "NAMED", name: "Coppa Italia", legs: 1, decider: "pens" },
+    { from: 2007, kind: "NAMED", name: "Coppa Italia", legs: 1, decider: "penalties" },
   ],
-  Germany: [{ from: 1990, kind: "NAMED", name: "DFB-Pokal", legs: 1, decider: "pens" }],
+  Germany: [{ from: 1990, kind: "NAMED", name: "DFB-Pokal", legs: 1, decider: "penalties" }],
   France: [
-    { from: 1990, to: 1990, kind: "NAMED", name: "Coupe de France", legs: 1, decider: "pens" },
+    { from: 1990, to: 1990, kind: "NAMED", name: "Coupe de France", legs: 1, decider: "penalties" },
     { from: 1991, to: 1991, kind: "NONE", why: "stopped after the Furiani disaster in May 1992, no final and no winner" },
-    { from: 1992, kind: "NAMED", name: "Coupe de France", legs: 1, decider: "pens" },
+    { from: 1992, kind: "NAMED", name: "Coupe de France", legs: 1, decider: "penalties" },
   ],
   Netherlands: [
-    { from: 1990, to: 2008, kind: "NAMED", name: "KNVB Cup", legs: 1, decider: "pens" },
+    { from: 1990, to: 2008, kind: "NAMED", name: "KNVB Cup", legs: 1, decider: "penalties" },
     { from: 2009, to: 2009, kind: "NAMED", name: "KNVB Cup", legs: 2 },
-    { from: 2010, to: 2018, kind: "NAMED", name: "KNVB Cup", legs: 1, decider: "pens" },
+    { from: 2010, to: 2018, kind: "NAMED", name: "KNVB Cup", legs: 1, decider: "penalties" },
     { from: 2019, to: 2019, kind: "NONE", why: "the final was postponed and then cancelled, no winner was named" },
-    { from: 2020, kind: "NAMED", name: "KNVB Cup", legs: 1, decider: "pens" },
+    { from: 2020, kind: "NAMED", name: "KNVB Cup", legs: 1, decider: "penalties" },
   ],
   Portugal: [
     { from: 1990, to: 1999, kind: "NAMED", name: "Taça de Portugal", legs: 1, decider: "replay" },
     { from: 2000, to: 2013, kind: "NAMED", name: "Taça de Portugal", legs: 1, why: "no final was level after extra time, and the season the replay gave way to penalties is not two sourced" },
-    { from: 2014, kind: "NAMED", name: "Taça de Portugal", legs: 1, decider: "pens" },
+    { from: 2014, kind: "NAMED", name: "Taça de Portugal", legs: 1, decider: "penalties" },
   ],
   Turkey: [
     { from: 1990, to: 1990, kind: "NAMED", name: "Federation Cup", legs: 1 },
     { from: 1991, to: 1991, kind: "NAMED", name: "Federation Cup", legs: 2 },
     { from: 1992, to: 1998, kind: "NAMED", name: "Turkish Cup", legs: 2 },
-    { from: 1999, kind: "NAMED", name: "Turkish Cup", legs: 1, decider: "pens" },
+    { from: 1999, kind: "NAMED", name: "Turkish Cup", legs: 1, decider: "penalties" },
   ],
   Greece: [
     { from: 1990, to: 1991, kind: "NAMED", name: "Greek Cup", legs: 2 },
-    { from: 1992, kind: "NAMED", name: "Greek Cup", legs: 1, decider: "pens" },
+    { from: 1992, kind: "NAMED", name: "Greek Cup", legs: 1, decider: "penalties" },
   ],
   Belgium: [{ from: 1990, kind: "NAMED", name: "Belgian Cup", why: "one match finals in every season rest on one source, so no final score" }],
   Japan: [
-    { from: 1990, to: 2019, kind: "NAMED", name: "Emperor's Cup", legs: 1, decider: "pens" },
+    { from: 1990, to: 2019, kind: "NAMED", name: "Emperor's Cup", legs: 1, decider: "penalties" },
     { from: 2020, to: 2020, kind: "UNKNOWN", why: "the COVID edition: only the top two J1 clubs entered" },
-    { from: 2021, to: 2025, kind: "NAMED", name: "Emperor's Cup", legs: 1, decider: "pens" },
+    { from: 2021, to: 2025, kind: "NAMED", name: "Emperor's Cup", legs: 1, decider: "penalties" },
     { from: 2026, kind: "UNKNOWN", why: "the J.League moves to an autumn to spring season in 2026 and the 106th edition was not researched" },
   ],
   "South Korea": [
@@ -144,7 +146,7 @@ export const DOMESTIC_CUPS: Readonly<Record<string, readonly CupWindow[]>> = {
     { from: 2020, to: 2020, kind: "UNKNOWN", why: "one final between the top Canadian MLS club and the CPL winner" },
     { from: 2021, to: 2021, kind: "NAMED", name: "Canadian Championship", legs: 1 },
     { from: 2022, to: 2023, kind: "NAMED", name: "Canadian Championship", why: "the one match finals of 2022 and 2023 rest on one source, so no final score" },
-    { from: 2024, to: 2024, kind: "NAMED", name: "Canadian Championship", legs: 1, decider: "pens" },
+    { from: 2024, to: 2024, kind: "NAMED", name: "Canadian Championship", legs: 1, decider: "penalties" },
     { from: 2025, kind: "NAMED", name: "Canadian Championship", legs: 1, why: "a one match final; penalties are two sourced for 2024 only" },
   ],
   Mexico: [
@@ -154,7 +156,9 @@ export const DOMESTIC_CUPS: Readonly<Record<string, readonly CupWindow[]>> = {
     { from: 2020, kind: "NONE", why: "no cup since 2019-20; a return was announced in August 2026 with nothing confirmed" },
   ],
   Argentina: [
-    { from: 1990, to: 2010, kind: "NONE", why: "no Copa Argentina between 1970 and 2011-12" },
+    { from: 1990, to: 1992, kind: "NONE", why: "no Copa Argentina between 1970 and 2011-12" },
+    { from: 1993, to: 1993, kind: "UNKNOWN", why: "the AFA's Copa Centenario, a knockout cup for the first division clubs, ran from June 1993 to January 1994; whether it counts as that season's domestic cup was not researched" },
+    { from: 1994, to: 2010, kind: "NONE", why: "no Copa Argentina between 1970 and 2011-12" },
     { from: 2011, kind: "UNKNOWN", why: "13 editions over 15 seasons across the switch to calendar years and the COVID break, so which season played which edition is not two sourced" },
   ],
   "New Zealand": [
@@ -256,9 +260,15 @@ export interface CupTie {
   /** The opponent, on every stage but the early rounds, which are never named. */
   opp?: string;
   won: boolean;
-  /** A quarter-final or semi-final, shown as one match: the score and the ground. */
+  /** A quarter-final or semi-final, shown as one match: the score. */
   for?: number;
   against?: number;
+  /** A quarter-final only: drawn at his ground or away. No line prints it,
+   *  because how each cup's quarter-finals were played (one match at a
+   *  club's ground, or two legs) by season was not researched; a reader that
+   *  wants to print it needs that research first. A semi-final carries no
+   *  ground at all: the FA Cup's are played at a neutral ground (Wembley
+   *  since 2008), and other cups played theirs over two legs. */
   home?: boolean;
 }
 export interface CupFinal {
@@ -266,8 +276,12 @@ export interface CupFinal {
   for: number;
   against: number;
   legs: 1 | 2;
-  /** Only where the window's decider is penalties and the final was level. */
-  pens?: [number, number];
+  /** How a level final was settled, in the Champions League knockout's
+   *  words and fields (UCLKnockoutMatch.decidedBy, pensFor, pensAgainst):
+   *  only penalties, and only where the window's decider is penalties. */
+  decidedBy?: Extract<UCLKnockoutMatch["decidedBy"], "penalties">;
+  pensFor?: number;
+  pensAgainst?: number;
   /** He scored in the final. Never set in a season he scored no goals. */
   scored?: boolean;
 }
@@ -285,6 +299,10 @@ const NAMED_STAGES: readonly CupStage[] = ["QF", "SF", "F"];
  *  3-1) without a model of either club. */
 const TIE_LAMBDA_HI = 1.45;
 const TIE_LAMBDA_LO = 1.0;
+/** The share of level finals, in a window decided on penalties, that extra
+ *  time settles: 0.6 leaves about 10.6 percent of those finals to penalties
+ *  (0.265 level at these rates, times 0.4). */
+const EXTRA_TIME_SETTLES = 0.6;
 
 /** The clubs a season's cup can draw him against: the same association that
  *  year (the era filter the transfer market uses), never his own club, each
@@ -323,13 +341,18 @@ export interface CupRunInput {
  *  keyedRng(seedKey + '|cup'). Each tie is won with p = chance^(1/k) over the
  *  k stages played, so a won run is exactly the coin's win, and a lost one
  *  exits at stage i with weight p^i (1 - p): a lost final is possible and
- *  properly rare. A lost final is lost to the world's winner where the world
- *  has one, and no club he beat is ever that winner. */
+ *  properly rare. A lost final is lost to the world's winner where that club
+ *  is in his pool that year, and no club he beat is ever that winner. */
 export function drawCupRun(input: CupRunInput): CupRun | null {
   const { status } = input;
   if (status.kind === "NONE") return null;
-  const winner = input.worldWinner && input.worldWinner !== input.club ? input.worldWinner : null;
-  const pool = cupOpponentPool(status.association, input.year, input.club, input.clubs).filter(c => c.name !== winner);
+  const all = cupOpponentPool(status.association, input.year, input.club, input.clubs);
+  /* The world's winner is his final's opponent only where it is in the pool
+     (the lead's rule): the phone draws it from five year era lists, which
+     carry clubs before they played (Atlanta United in 2015, Houston Dynamo
+     in 2005), while the pool keeps only the clubs of that year. */
+  const winner = input.worldWinner && all.some(c => c.name === input.worldWinner) ? input.worldWinner : null;
+  const pool = all.filter(c => c.name !== winner);
   const named = Math.min(NAMED_STAGES.length, pool.length);
   if (status.kind === "UNKNOWN" ? named < NAMED_STAGES.length : named < 1) return null;
   const stages: CupStage[] = ["early", ...NAMED_STAGES.slice(NAMED_STAGES.length - named)];
@@ -362,11 +385,16 @@ export function drawCupRun(input: CupRunInput): CupRun | null {
     opps[i] = left[j].name;
     left.splice(j, 1);
   }
+  /* A level draw is settled in the winner's favour, except in a final whose
+     window records penalties, where extra time still settles most of them:
+     two goal draws at these rates are level about 26 percent of the time,
+     and the real finals went to penalties about one time in ten (FA Cup 3 of
+     28 from 1999, Coupe de France 4 of 35, Emperor's Cup 3 of 36). */
   const score = (won: boolean, legs: number, level: boolean): [number, number] => {
     let a = 0, b = 0;
     for (let l = 0; l < legs; l++) { a += poissonGoals(TIE_LAMBDA_HI, rng); b += poissonGoals(TIE_LAMBDA_LO, rng); }
     let hi = Math.max(a, b), lo = Math.min(a, b);
-    if (hi === lo && !level) hi += 1;
+    if (hi === lo && (!level || rng() < EXTRA_TIME_SETTLES)) hi += 1;
     return won ? [hi, lo] : [lo, hi];
   };
   const out: CupTie[] = [];
@@ -377,18 +405,23 @@ export function drawCupRun(input: CupRunInput): CupRun | null {
     if (stage === "early") { out.push({ stage, won }); continue; }
     if (stage !== "F") {
       const [f, a] = score(won, 1, false);
-      out.push({ stage, opp: opps[i], won, for: f, against: a, home: rng() < 0.5 });
+      /* the ground is drawn for every tie, so the draws after it never move,
+         and kept on a quarter-final only (see CupTie.home) */
+      const home = rng() < 0.5;
+      out.push({ stage, opp: opps[i], won, for: f, against: a, ...(stage === "QF" ? { home } : {}) });
       continue;
     }
     out.push({ stage, opp: opps[i], won });
     if (status.kind !== "NAMED" || !status.legs) continue;
     const legs = status.legs;
-    const [f, a] = score(won, legs, status.decider === "pens");
+    const [f, a] = score(won, legs, status.decider === "penalties");
     final = { for: f, against: a, legs };
     if (f === a) {
       const w = 3 + Math.floor(rng() * 3);
       const l = Math.max(0, w - 1 - (rng() < 0.4 ? 1 : 0));
-      final.pens = won ? [w, l] : [l, w];
+      final.decidedBy = "penalties";
+      final.pensFor = won ? w : l;
+      final.pensAgainst = won ? l : w;
     }
     if (input.goals > 0 && f > 0) {
       const perGame = Math.min(0.8, input.goals / Math.max(1, input.apps));
@@ -427,8 +460,10 @@ export function readCupRun(row: unknown): CupRun | null {
     const tie: CupTie = { stage: t.stage as CupStage, won: t.won };
     if (at > 0) { if (!nameOk(t.opp)) return null; tie.opp = t.opp; }
     if (t.stage === "QF" || t.stage === "SF") {
-      if (!goalsOk(t.for) || !goalsOk(t.against) || t.for === t.against || (t.for > t.against) !== t.won || typeof t.home !== "boolean") return null;
-      Object.assign(tie, { for: t.for, against: t.against, home: t.home });
+      if (!goalsOk(t.for) || !goalsOk(t.against) || t.for === t.against || (t.for > t.against) !== t.won) return null;
+      Object.assign(tie, { for: t.for, against: t.against });
+      /* the ground on a quarter-final only; a semi-final's is never kept */
+      if (t.stage === "QF") { if (typeof t.home !== "boolean") return null; tie.home = t.home; }
     }
     stages.push(tie);
   }
@@ -441,10 +476,10 @@ export function readCupRun(row: unknown): CupRun | null {
     const f = raw.final as Partial<CupFinal> | null;
     if (!f || typeof f !== "object" || end.stage !== "F" || !goalsOk(f.for) || !goalsOk(f.against) || (f.legs !== 1 && f.legs !== 2)) return null;
     const final: CupFinal = { for: f.for, against: f.against, legs: f.legs };
-    if (f.pens !== undefined) {
-      const pn = f.pens;
-      if (f.for !== f.against || !Array.isArray(pn) || pn.length !== 2 || !goalsOk(pn[0]) || !goalsOk(pn[1]) || pn[0] === pn[1] || (pn[0] > pn[1]) !== won) return null;
-      final.pens = [pn[0], pn[1]];
+    if (f.decidedBy !== undefined || f.pensFor !== undefined || f.pensAgainst !== undefined) {
+      const { pensFor: pf, pensAgainst: pa } = f;
+      if (f.decidedBy !== "penalties" || f.for !== f.against || !goalsOk(pf) || !goalsOk(pa) || pf === pa || (pf > pa) !== won) return null;
+      Object.assign(final, { decidedBy: "penalties", pensFor: pf, pensAgainst: pa });
     } else if (f.for === f.against || (f.for > f.against) !== won) return null;
     if (f.scored === true) { if (f.for < 1) return null; final.scored = true; }
     run.final = final;
@@ -469,7 +504,7 @@ const STAGE_WORD: Record<CupStage, string> = { early: "the early rounds", QF: "q
 
 function finalScore(final: CupFinal): string {
   const base = `${final.for}-${final.against}`;
-  if (final.pens) return `${base}, ${final.pens[0]}-${final.pens[1]} on penalties`;
+  if (final.decidedBy === "penalties") return `${base}, ${final.pensFor}-${final.pensAgainst} on penalties`;
   return final.legs === 2 ? `${base} on aggregate` : base;
 }
 
@@ -496,7 +531,9 @@ export function cupWinLines(run: CupRun): string[] {
       const score = run.final ? ` ${finalScore(run.final)}` : "";
       return `Final: beat ${t.opp}${score}${run.final?.scored ? ", and you scored" : ""}`;
     }
-    return `${t.stage === "QF" ? "Quarter-final" : "Semi-final"}: beat ${t.opp} ${t.for}-${t.against} ${t.home ? "at home" : "away"}`;
+    /* no ground: a semi-final may have been at a neutral one, and how each
+       cup played its quarter-finals was not researched (CupTie.home) */
+    return `${t.stage === "QF" ? "Quarter-final" : "Semi-final"}: beat ${t.opp} ${t.for}-${t.against}`;
   });
 }
 
