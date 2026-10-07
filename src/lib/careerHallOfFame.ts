@@ -280,8 +280,8 @@ export function hallRecordFor<C>(sport: HallSport<C>, c: C): HallRecord {
   const ballot = runHallBallot(sport.rules, sport.lines, {
     key: sport.key(c), hof: legacy.hof, score: legacy.score, lastSeasonYear: sport.lastSeasonYear(c),
   });
-  const jersey = sport.recordedJersey?.(c)
-    ?? (sport.jerseyUnknown?.(c) ? null : jerseyFor(sport.seasons(c), ballot.outcome === "inducted", legacy.score, sport.lines));
+  // A deck card retired the number on a save that kept no club: name none.
+  const jersey = sport.jerseyUnknown?.(c) ? null : sport.recordedJersey?.(c) ?? jerseyFor(sport.seasons(c), ballot.outcome === "inducted", legacy.score, sport.lines);
   return { ...ballot, jersey: jersey && sport.teamName ? { ...jersey, teamName: sport.teamName(jersey.team, c) } : jersey };
 }
 
