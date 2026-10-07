@@ -103,7 +103,7 @@ jobs:
       - name: Hold reviewed source and accepted engines
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
-          git diff --exit-code HEAD -- src/components/buzzer-beater src/test/buzzerContestRecap.test.tsx src/test/threePointContest.test.tsx scripts/simBuzzerContestRecap.mjs scripts/qa/buzzerContestRecap1074.mjs src/pages/WhatsNew.tsx src/data/gameContent/basketball.ts scripts/data/guideHeadingsFrozen.json
+          git diff --exit-code HEAD -- src/components/buzzer-beater src/test/buzzerContestRecap.test.tsx src/test/threePointContest.test.tsx scripts/simBuzzerContestRecap.mjs scripts/simThreePointContest.mjs scripts/qa/buzzerContestRecap1074.mjs src/pages/WhatsNew.tsx src/data/gameContent/basketball.ts scripts/data/guideHeadingsFrozen.json
           git diff --exit-code be3f552d2485eecc1959776c6f8cd3efba745ec7 HEAD -- src/lib/buzzerBeater.ts src/lib/threePointContest.ts src/hooks/useArcadeFlight.ts src/hooks/useGameCompletion.ts src/lib/arcadeRecord.ts
       - name: Preserve verification evidence
         if: always()

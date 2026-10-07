@@ -234,12 +234,12 @@ try {
       Math.random = () => 0.25;
       window.__contestWrites = [];
       window.__contestInputs = [];
-      for (const type of ['pointerdown', 'pointerup', 'pointercancel', 'gotpointercapture', 'lostpointercapture', 'touchstart', 'touchend', 'touchcancel', 'click']) {
+      for (const type of ['pointerdown', 'pointerup', 'pointercancel', 'gotpointercapture', 'lostpointercapture', 'touchstart', 'touchend', 'touchcancel', 'click', 'keydown', 'keyup', 'focusin']) {
         document.addEventListener(type, event => {
           const board = document.querySelector('[data-arcade-mode]');
           if (!board) return;
           const button = event.target instanceof Element ? event.target.closest('button') : null;
-          window.__contestInputs.push({ type, trusted: event.isTrusted, pointerType: event.pointerType, pointerId: event.pointerId, detail: event.detail, stamp: event.timeStamp,
+          window.__contestInputs.push({ type, trusted: event.isTrusted, pointerType: event.pointerType, pointerId: event.pointerId, key: event.key, detail: event.detail, stamp: event.timeStamp,
             target: button?.textContent ?? event.target?.nodeName, phase: board.getAttribute('data-arcade-phase'),
             ball: board.querySelector('[data-contest-ball]')?.getAttribute('data-contest-ball'), rack: board.querySelector('[data-contest-rack]')?.getAttribute('data-contest-rack'),
             score: board.querySelector('[data-contest-score]')?.textContent });
@@ -294,6 +294,10 @@ try {
       await dialog.press('Space'); assert.equal(await state(page).getAttribute('data-arcade-phase'), 'aiming');
       await screenshot('help');
       await dialog.press('Escape'); await page.locator('[role="dialog"]').waitFor({ state: 'detached' });
+      // The modal restores focus in a queued timer after its node is removed.
+      // Flush that lifecycle while paused, before starting a keyboard charge.
+      await page.clock.runFor(16);
+      assert(await help.evaluate(el => document.activeElement === el), 'Closed rules restore focus before play resumes');
       assert.equal(await state(page).getAttribute('data-arcade-paused'), 'true', 'Closing Help still awaits explicit Resume');
       await activate(button('Resume'), profile);
       let earned = 0;
@@ -318,6 +322,7 @@ try {
         });
         for (const key of ['x', 'arc', 'power']) assert(Math.abs(release[key] - shot.release[key]) < 1e-9, `Shot ${shot.index + 1} actual ${key} matches independent engine input`);
         attempt.actual = release;
+        if (!profile.touch) assert(await button('Release to shoot').evaluate(el => document.activeElement === el), 'Keyboard release stays on the button that began charging');
         if (profile.touch) await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
         else await page.keyboard.up('Space');
         attempt.afterRelease = await state(page).evaluate(el => ({ phase: el.getAttribute('data-arcade-phase'), paused: el.getAttribute('data-arcade-paused'), rack: el.querySelector('[data-contest-rack]')?.getAttribute('data-contest-rack'), ball: el.querySelector('[data-contest-ball]')?.getAttribute('data-contest-ball'), score: el.querySelector('[data-contest-score]')?.textContent,
