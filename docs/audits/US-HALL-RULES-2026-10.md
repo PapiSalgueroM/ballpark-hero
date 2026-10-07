@@ -19,13 +19,24 @@ section below holds that offset to real players' first eligible classes, with da
 the data files mark it `firstClass: "verified"` and only then does the card print
 "Eligible from the Class of ...".
 
+The last column (Round 1039) is the first class these rules are anchored on: the rule year each
+section below names, for which the section carries two sources. A career whose first class falls
+before it ran under an older regime this file has not two-sourced (the NBA's wait before the
+Class of 2025 was three full seasons, an "effectively four year" wait by CBS's account, and the
+wait before that is unknown here; the NFL's bylaws before the Class of 2027; the NHL before the
+Class of 2026; the BBWAA's fifteen year ballot before 2014). So the card prints no class year
+and no rule line for such a career: its ballots read "First ballot", "Second ballot".
+`scripts/simCareerHall.mjs` section 13 reads this column. An older regime is keyed in only when
+two non-Wikipedia sources anchor it on real first eligible classes, as Carmelo Anthony anchors
+the NBA's current one.
+
 <!-- hall-table:start -->
-| sport | wait | ballot | threshold | stayFloor | firstClassOffset |
-|---|---|---|---|---|---|
-| nfl | 5 | none | 80 | none | 6 |
-| nba | 2 | none | 75 | none | 4 |
-| mlb | 5 | 10 | 75 | 5 | 6 |
-| nhl | 3 | none | 75 | none | 4 |
+| sport | wait | ballot | threshold | stayFloor | firstClassOffset | verifiedFromClass |
+|---|---|---|---|---|---|---|
+| nfl | 5 | none | 80 | none | 6 | 2027 |
+| nba | 2 | none | 75 | none | 4 | 2025 |
+| mlb | 5 | 10 | 75 | 5 | 6 | 2014 |
+| nhl | 3 | none | 75 | none | 4 | 2026 |
 <!-- hall-table:end -->
 
 ## Pro Football Hall of Fame (NFL career). Rule year: Class of 2027 onward
