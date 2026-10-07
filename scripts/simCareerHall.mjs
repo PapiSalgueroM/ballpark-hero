@@ -75,7 +75,17 @@
                    card, and RETIREMENT_CARD_IDS is every card whose answer
                    writes a farewell or says it does, read off the engine's
                    own deck builders, with no id that is never dealt. Control
-                   twice (the filter off).
+                   twice (the filter off). Since the review fix of 2026-10-07
+                   the loop asks the talk where the board does in every case:
+                   right after the deal, after a card whose answer moved the
+                   rating into the rule (before the next card, or on the hub),
+                   and on the hub after a banned year, which deals no summer
+                   and has no hard stop, as on the board. Only the cards from
+                   the talk on are checked. The deck's retirement cards lift
+                   morale, so the deal never puts one in a later slot, and the
+                   mid-summer path never meets one here: the seek time filter
+                   and the declined clause are held by the vitest file
+                   src/test/usCareerHallBoard.test.tsx, whose controls do fire.
     12. deckJersey a club that retired the number on a deck card is the club
                    the card names (even where another club has more seasons),
                    on real careers and on synthetic ones with twelve seasons
@@ -570,23 +580,47 @@ function boardCareer(i, policyName, eraId, X = eng) {
   const keep = Math.random;
   Math.random = streamFor(`board:${eraId ?? 'default'}:${i}`);
   const pick = streamFor(`pick:${eraId ?? 'default'}:${i}`);
-  const log = { offseasons: [], talks: [], deckFarewells: [], farewellSeasons: [], waitJersey: 0, waitWrote: 0, walkAway: null, endedBy: null };
+  const log = { offseasons: [], talks: [], deckFarewells: [], farewellSeasons: [], waitJersey: 0, waitWrote: 0, walkAway: null, endedBy: null, midTalks: 0 };
   try {
     const pos = E.positions[i % E.positions.length];
     const archs = X.ARCH[pos];
     const c = SB.startCareer(`Board ${i}`, pos, archs[i % archs.length], Math.random, null, eraId);
-    let tq = null;
+    let tq = null, banned = false;
+    // The talk exactly where the board asks it: on the hub or before the next card. True when it ended the career.
+    const askTalk = (year, at, o) => {
+      if (o.talkAt !== null) return false;
+      if (!policy.asks) { if (ruleHolds(c, X)) o.talkAt = at; return false; }
+      if (!X.pendingTalk(c, SB.hall)) return false;
+      o.talkAt = at;
+      log.talks.push(year);
+      if (at > 0) log.midTalks += 1;
+      const choice = policy.answer();
+      X.answerTalk(c, choice);
+      if (choice !== 'retireNow') return false;
+      c.retired = true; delete c.summer; log.endedBy = 'talk';
+      return true;
+    };
     for (let guard = 0; guard < 32 && !c.retired; guard += 1) {
-      tq = SB.rollTeamQuality(tq, Math.random);
-      if ((c.suspendedSeasons ?? 0) > 0) {
+      // The board rolls the next season's team quality when an offseason ends, never after a banned year.
+      if (!banned) tq = SB.rollTeamQuality(tq, Math.random);
+      banned = (c.suspendedSeasons ?? 0) > 0;
+      if (banned) {
         c.suspendedSeasons -= 1;
         c.seasons.push(SB.suspendedLine(c));
         SB.progress(c, Math.random);
-      } else {
-        SB.campBattle(c, tq, Math.random);
-        SB.simSeason(c, tq, Math.random);
-        SB.progress(c, Math.random);
+        /* The board's banned year: a chosen end still ends it, but there is no
+           hard stop and no summer; the talk, if the rule holds, is asked on the hub. */
+        const year = c.seasons.at(-1).year;
+        if (X.isFarewellSeason(c.retirement, year)) log.farewellSeasons.push(year);
+        if (X.endsAfterSeason(c, year)) { c.retired = true; log.endedBy = 'choice'; break; }
+        const o = { year, talkAt: null, shown: [], banned: true };
+        if (askTalk(year, 0, o)) break;
+        log.offseasons.push(o);
+        continue;
       }
+      SB.campBattle(c, tq, Math.random);
+      SB.simSeason(c, tq, Math.random);
+      SB.progress(c, Math.random);
       const year = c.seasons.at(-1).year;
       if (X.isFarewellSeason(c.retirement, year)) log.farewellSeasons.push(year);
       if (SB.shouldRetire(c)) { c.retired = true; log.endedBy = 'stop'; break; }
@@ -594,26 +628,25 @@ function boardCareer(i, policyName, eraId, X = eng) {
       if (probeCareers < 150 && i < 150 && policyName === 'oneMore') probeDeck(c, SB);
       const filter = policy.filter(c, X);
       let ev = X.startSummer(c, SB, Math.random, filter);
-      const talk = policy.asks ? X.pendingTalk(c, SB.hall) : null;
-      const shown = [];
-      if (talk) {
-        log.talks.push(year);
-        const choice = policy.answer();
-        X.answerTalk(c, choice);
-        if (choice === 'retireNow') { c.retired = true; delete c.summer; log.endedBy = 'talk'; break; }
-      }
-      // An offseason has the talk when it was asked, or, for the no talk loop, when the rule held.
-      const hadTalk = !!talk || (!policy.asks && ruleHolds(c, X));
+      /* An offseason has the talk from the card it was asked before (talkAt):
+         right after the deal, or, when a card's answer moved the rating into
+         the rule, before the next card or on the hub when the summer is over.
+         For the no talk loop, from where the rule first held. */
+      const o = { year, talkAt: null, shown: [] };
+      if (askTalk(year, 0, o)) break;
+      let ended = false;
       while (ev) {
-        shown.push(ev.id);
+        o.shown.push(ev.id);
         const k = Math.floor(pick() * ev.options.length);
         if (ev.options[k].effect === FAREWELL_EFFECT && c.retirement?.farewellYear === undefined) log.deckFarewells.push(year);
         const waits = /wait until you are done/i.test(ev.options[k].label) && c.numberRetiredBy === undefined;
         if (ev.id === 'nhlB_walkAwayHealthy' && k === 0 && !log.walkAway) log.walkAway = { year };
         ev = X.answerSummerCard(c, SB, ev, k, Math.random, filter).next;
         if (waits) { log.waitJersey += 1; if (c.numberRetiredBy !== undefined) log.waitWrote += 1; }
+        if (askTalk(year, o.shown.length, o)) { ended = true; break; }
       }
-      log.offseasons.push({ year, hadTalk, shown });
+      if (ended) break;
+      log.offseasons.push(o);
     }
     if (policyName === 'oneMore' && i < 150) probeCareers += 1;
     return { c, log };
@@ -672,13 +705,16 @@ for (const p of Object.keys(runs)) {
 /* 11. once: no offseason with the talk is offered a deck retirement card,
    and the board's list of those cards is every card whose answer announces
    a farewell, as the engine's own deck builders hand them out. */
-let onceMiss = 0, talkOffseasons = 0, eligibleClashes = 0;
+let onceMiss = 0, talkOffseasons = 0, eligibleClashes = 0, midTalkOffseasons = 0, bannedTalkOffseasons = 0;
 for (const p of ['oneMore', 'farewell', 'noTalk']) {
   for (const { log } of runs[p]) {
     for (const o of log.offseasons) {
-      if (!o.hadTalk) continue;
+      if (o.talkAt === null) continue;
       talkOffseasons += 1;
-      if (o.shown.some(id => eng.RETIREMENT_CARD_IDS.has(id))) onceMiss += 1;
+      if (o.talkAt > 0) midTalkOffseasons += 1;
+      if (o.banned) bannedTalkOffseasons += 1;
+      // Only the cards from the talk on: a card the talk came after was shown before it existed.
+      if (o.shown.slice(o.talkAt).some(id => eng.RETIREMENT_CARD_IDS.has(id))) onceMiss += 1;
     }
   }
 }
@@ -824,7 +860,7 @@ const deadIds = sportIds.filter(id => !deckSeen.has(id));
 const eraBoundary = eraCounts.boundary ?? { below: 0, above: 0 };
 console.log(`  board loop: ${BOARD_N} careers a policy, ${boardCrashes} crashed; talks answered one more year ${identityTalks}; identity misses ${identityMiss}`);
 console.log(`  ends: retire now ${endsRetire}, talk farewells ${endsFarewell}, deck farewells ${endsDeck}, misses ${endsMiss}`);
-console.log(`  once: ${talkOffseasons} offseasons with the talk, ${onceMiss} offered a retirement card; listed ids seen ${listedHere.length}, unseen [${deadIds.join(',')}], farewell cards not listed [${unlisted.join(',')}] (decks probed on ${probeCareers} careers)`);
+console.log(`  once: ${talkOffseasons} offseasons with the talk (${midTalkOffseasons} asked mid-summer, ${bannedTalkOffseasons} after a banned year), ${onceMiss} offered a retirement card; listed ids seen ${listedHere.length}, unseen [${deadIds.join(',')}], farewell cards not listed [${unlisted.join(',')}] (decks probed on ${probeCareers} careers)`);
 console.log(`  jersey (deck): ${jerseyRecN} recorded, ${jerseyRecElsewhere} at a club other than the one with most seasons, ${jerseyRecMiss} misnamed; synthetic ${jerseySynN}, ${jerseySynMiss} missed; wait answers ${waitAnswers}, ${waitWrote} wrote a club`);
 console.log(`  era: verified from the Class of ${auditFrom}; ${JSON.stringify(eraCounts)}; misses ${eraMiss}`);
 
