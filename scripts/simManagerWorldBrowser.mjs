@@ -86,7 +86,7 @@ try {
   if (control) {
     assert.equal(run.status, 1); assert.equal(report.numFailedTests, 1); assert.equal(report.numPassedTests, 1); assert.equal(report.numPendingTests, COUNT - 2);
     const intended = rows.find(row => row.title === faults[control].test); assert.equal(intended?.status, 'failed');
-    assert.match(intended.failureMessages.join('\n').replace(/\x1b\[[0-9;]*m/g, ''), /AssertionError:|Error: expect\(element\)/);
+    assert.match(intended.failureMessages.join('\n').replace(/\x1b\[[0-9;]*m/g, ''), /AssertionError:|Error: expect\(element\)|Error: expect\(received\)\.toBeVisible\(\)/);
     assert.equal(rows.find(row => row.title === names.independent)?.status, 'passed');
     console.log(`simManagerWorldBrowser ${control}: changed component rejected by mapped outcome; independent engine and table passed.`);
   } else {

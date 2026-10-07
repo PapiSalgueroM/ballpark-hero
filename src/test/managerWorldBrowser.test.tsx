@@ -50,7 +50,7 @@ describe('Club Manager world browser', () => {
   it('finds countries clubs accents and every term without inventing results', () => {
     const career = startCareer('Arsenal'), view = mount(career), search = browse(view);
     for (const [query, expected] of [
-      ['England', ['premier', 'championship']], ['AUSTRALIA', ['aleague']],
+      ['England', ['premier', 'championship', 'mlsEast']], ['New England Revolution', ['mlsEast']], ['AUSTRALIA', ['aleague']],
       ['Süper Lig', ['superlig']], ['super lig', ['superlig']],
       ['Atletico Madrid', ['laliga']], ['australia sydney', ['aleague']],
       ['England Arsenal', ['premier']], ['Arsenal Australia', []], ['not-a-real-league', []],
