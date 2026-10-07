@@ -54,8 +54,16 @@
  *      report and the save after it, written by the engine as it stood
  *      BEFORE this round (src/lib/clubManager.ts at origin/main 84d81619,
  *      unchanged since the branch point 9136539b). The engine now must
- *      reproduce the actual pre-1072 engine at 42888161 with automatic
+ *      reproduce the actual pre-1072 engine with automatic
  *      coaching bypassed, score, next draw and full content for every row.
+ *      That engine is read out of git at one commit. Round 1072 pinned its
+ *      own branch base, 42888161. Release AL (2026-10-07) moved the pin to
+ *      5b70b05f, the main the round was merged onto, because main's engine
+ *      had moved in eighteen commits since (Rounds 1035 to 1045) and the
+ *      coachless merged engine can only equal the main it sits on: with the
+ *      old pin 150 of 150 rows differed, with this one 150 of 150 are equal
+ *      and the loaded old save is equal too. Whoever next merges an engine
+ *      round under this one moves the pin to the main of that merge.
  *      The actual raw diagnostic showed only absent live versus live:null;
  *      those two forms alone compare alike after asserting live is inactive.
  *      Object keys are sorted, raw hashes and the first raw difference remain.
@@ -268,7 +276,7 @@ if (!WRITE_FIXTURE) {
   if (source.split(header).length - 1 !== 1) abort('Historical no-coach arm needs one executable coach header');
   fs.writeFileSync(historicalPath, source.replace(header, header + '  return career;\n'));
   historicalEnginePath = historicalPath;
-  const baselineSource = execFileSync('git', ['show', '428881617a04543606050395d05be1a9fa4d7b3e:src/lib/clubManager.ts'], { cwd: ROOT, encoding: 'utf8' });
+  const baselineSource = execFileSync('git', ['show', '5b70b05f6df7b15f64b8c5ddf1f4b7d0c7cd4c7f:src/lib/clubManager.ts'], { cwd: ROOT, encoding: 'utf8' });
   fs.writeFileSync(baselinePath, baselineSource);
   baselineSourceHash = createHash('sha256').update(baselineSource).digest('hex');
   baselineEnginePath = baselinePath;
@@ -622,7 +630,7 @@ console.log('4) Historical unmanaged play equals actual pre-1072 main, with anci
 section = 4;
 /* ================================================================== */
 let fixture = null;
-const baselineEvidence = { baselineRef: '42888161', baselineSourceHash, rows: [], oldLoad: null };
+const baselineEvidence = { baselineRef: '5b70b05f', baselineSourceHash, rows: [], oldLoad: null };
 {
   if (!fs.existsSync(FIXTURE)) abort(`the fixture ${path.relative(ROOT, FIXTURE)} is missing; see the header for how it is written`);
   fixture = JSON.parse(readLF(FIXTURE));
@@ -653,19 +661,19 @@ const baselineEvidence = { baselineRef: '42888161', baselineSourceHash, rows: []
     baselineEvidence.rows.push({ seed: want.seed, candidate: got, baseline: base, goldenCandidate, goldenBaseline, rawPaired, ...content });
     if (rawPaired) sameRaw += 1;
     if (content.paired) sameBaseline += 1;
-    else if (shown++ < 3) console.error(`  differs from actual main428, seed ${want.seed}: got ${JSON.stringify(got)}, baseline ${JSON.stringify(base)}`);
+    else if (shown++ < 3) console.error(`  differs from actual pre-1072 main, seed ${want.seed}: got ${JSON.stringify(got)}, baseline ${JSON.stringify(base)}`);
     if (goldenBaseline) baselineGolden += 1;
-    if (goldenCandidate !== goldenBaseline) fail(`ancient golden mismatch differs from actual main428 at seed ${want.seed}`);
+    if (goldenCandidate !== goldenBaseline) fail(`ancient golden mismatch differs from actual pre-1072 main at seed ${want.seed}`);
     if (out.report.shootout) withKicks += 1;
     if (want.decidedBy === 'pens') pens += 1;
     if (goldenCandidate) same += 1;
   }
   console.log(`   ${same} of ${fixture.rows.length} rows reproduced (${pens} of them shootouts, written from ${fixture.writtenFrom} on ${fixture.writtenOn}); ${withKicks} carried kicks`);
-  console.log(`   ${sameBaseline} of ${fixture.rows.length} rows equal actual main428 in result, next draw and full content (${sameRaw} raw hashes); ancient golden mismatches candidate ${fixture.rows.length - same}, baseline ${fixture.rows.length - baselineGolden}`);
+  console.log(`   ${sameBaseline} of ${fixture.rows.length} rows equal actual pre-1072 main in result, next draw and full content (${sameRaw} raw hashes); ancient golden mismatches candidate ${fixture.rows.length - same}, baseline ${fixture.rows.length - baselineGolden}`);
   baselineEvidence.summary = { rows: fixture.rows.length, paired: sameBaseline, rawPaired: sameRaw,
     goldenCandidateMismatches: fixture.rows.length - same, goldenBaselineMismatches: fixture.rows.length - baselineGolden };
   if (sameBaseline !== fixture.rows.length) fail(`${fixture.rows.length - sameBaseline} rows differ from the actual pre-1072 engine with no order set`);
-  if (same !== baselineGolden) fail(`ancient golden matching counts differ: candidate ${same}, actual main428 ${baselineGolden}`);
+  if (same !== baselineGolden) fail(`ancient golden matching counts differ: candidate ${same}, actual pre-1072 main ${baselineGolden}`);
   if (withKicks) fail(`${withKicks} reports carried shootout kicks with no order set`);
   if (pens < 12) fail(`the fixture holds only ${pens} shootouts, under the floor of 12`);
 }
@@ -689,9 +697,9 @@ section = 5;
     const got = row(out);
     const baselineOld = JSON.parse(JSON.stringify(baselineCup));
     delete baselineOld.shootoutOrder;
-    if (!baseline.saveCareer(baselineOld)) abort('Actual main428 refused its old save');
+    if (!baseline.saveCareer(baselineOld)) abort('Actual pre-1072 main refused its old save');
     const baselineBack = baseline.loadCareer();
-    if (!baselineBack) abort('Actual main428 could not open its old save');
+    if (!baselineBack) abort('Actual pre-1072 main could not open its old save');
     const baselineOut = playCup(baselineBack, probe.seed, baseline);
     const base = row(baselineOut);
     const goldenCandidate = JSON.stringify(got) === JSON.stringify(probe);
@@ -699,9 +707,9 @@ section = 5;
     const rawPaired = JSON.stringify(got) === JSON.stringify(base);
     const content = compareContent(out, baselineOut);
     baselineEvidence.oldLoad = { seed: probe.seed, candidate: got, baseline: base, goldenCandidate, goldenBaseline, rawPaired, ...content };
-    if (!content.paired) fail(`the loaded old save differs from actual main428 at seed ${probe.seed}: ${JSON.stringify(got)} vs ${JSON.stringify(base)}`);
-    if (goldenCandidate !== goldenBaseline) fail('The loaded old save has a different ancient golden mismatch from actual main428');
-    console.log(`   loaded old save, seed ${probe.seed}: equal actual main428 ${content.paired}; ancient golden matches candidate ${goldenCandidate}, baseline ${goldenBaseline}`);
+    if (!content.paired) fail(`the loaded old save differs from actual pre-1072 main at seed ${probe.seed}: ${JSON.stringify(got)} vs ${JSON.stringify(base)}`);
+    if (goldenCandidate !== goldenBaseline) fail('The loaded old save has a different ancient golden mismatch from actual pre-1072 main');
+    console.log(`   loaded old save, seed ${probe.seed}: equal actual pre-1072 main ${content.paired}; ancient golden matches candidate ${goldenCandidate}, baseline ${goldenBaseline}`);
   }
   const ids = back.squad.filter(p => !p.onLoan).slice(0, 4).map(p => p.id);
   const set = setShootoutOrder(back, ids);
