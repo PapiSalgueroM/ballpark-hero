@@ -2,33 +2,35 @@
    panel (Round 81) so every career can play it. Hook and view, for the reason
    ConeRunDrill gives. */
 import { useEffect, useRef, useState } from 'react';
+import type { PracticeClock } from '@/hooks/usePracticeClock';
 import type { BurstTapSkin } from '@/lib/careerTraining';
 
 /** `active` is true while this drill is the one on screen. */
-export function useBurstTap(active: boolean, finish: (score: number) => void) {
+export function useBurstTap(active: boolean, finish: (score: number) => void, clock: PracticeClock) {
   const [clicks, setClicks] = useState(0);
   const [paceLeft, setPaceLeft] = useState(5.0);
   const [paceRunning, setPaceRunning] = useState(false);
-  const paceTimer = useRef<ReturnType<typeof setInterval> | null>(null);
+  const paceTimer = useRef<number | null>(null);
 
   useEffect(() => () => {
-    if (paceTimer.current) clearInterval(paceTimer.current);
+    if (paceTimer.current) clock.clear(paceTimer.current);
   }, []);
 
   const reset = () => {
     setClicks(0); setPaceLeft(5.0); setPaceRunning(false);
-    if (paceTimer.current) { clearInterval(paceTimer.current); paceTimer.current = null; }
+    if (paceTimer.current) { clock.clear(paceTimer.current); paceTimer.current = null; }
   };
 
   const startPace = () => {
+    if (clock.isPaused()) return;
     setPaceRunning(true);
     setClicks(0);
     setPaceLeft(5.0);
-    const startedAt = Date.now();
-    paceTimer.current = setInterval(() => {
-      const left = 5 - (Date.now() - startedAt) / 1000;
+    const startedAt = clock.now();
+    paceTimer.current = clock.interval(() => {
+      const left = 5 - (clock.now() - startedAt) / 1000;
       if (left <= 0) {
-        if (paceTimer.current) clearInterval(paceTimer.current);
+        if (paceTimer.current) clock.clear(paceTimer.current);
         paceTimer.current = null;
         setPaceLeft(0);
         setPaceRunning(false);
@@ -45,7 +47,7 @@ export function useBurstTap(active: boolean, finish: (score: number) => void) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paceRunning, paceLeft]);
 
-  const tap = () => { if (paceRunning) setClicks(c => c + 1); };
+  const tap = () => { if (paceRunning && !clock.isPaused()) setClicks(c => c + 1); };
 
   return { clicks, paceLeft, paceRunning, startPace, tap, reset };
 }
@@ -59,7 +61,7 @@ export default function BurstTapDrill({ skin, run, onBack }: {
   return (
     <div className="p-4 space-y-3">
       <div className="flex items-center justify-between text-xs font-bold">
-        <button onClick={() => { if (!paceRunning) onBack(); }} className="text-muted-foreground hover:text-foreground">‹ Drills</button>
+        <button onClick={onBack} className="min-h-11 min-w-11 text-muted-foreground hover:text-foreground">‹ Drills</button>
         <span className="tabular-nums">{paceLeft.toFixed(1)}s</span>
         <span className="text-emerald-400 tabular-nums">{clicks} {skin.unit}</span>
       </div>
