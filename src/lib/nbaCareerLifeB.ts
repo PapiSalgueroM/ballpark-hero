@@ -357,7 +357,11 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
     });
   }
 
-  if (yrs >= 8 && (c.rings >= 1 || c.allNbas >= 2 || c.fanbase >= 78) && flag(c, 'nb_jersey') === 0) {
+  /* Round 1039: only a club he has played a season for. Later summer cards
+     are rebuilt from the career after card 1, so a trade ahead of this card
+     used to hang the number at a club he had never played for (0 seasons).
+     At a deal the last season is always at c.team, so no draw moves. */
+  if (yrs >= 8 && (c.rings >= 1 || c.allNbas >= 2 || c.fanbase >= 78) && flag(c, 'nb_jersey') === 0 && c.seasons.some(s => s.team === c.team)) {
     deck.push({
       id: 'nbaB_jerseyRetirement',
       category: 'legacy', cooldown: 99,

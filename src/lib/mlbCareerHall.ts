@@ -29,4 +29,5 @@ export const MLB_CAREER_HALL = usCareerHall<MlbCareerState>({
   legacy: mlbLegacyOf,
   shouldRetire: mlbShouldRetire,
   teamLabel: mlbTeamLabelOf,
+  deckJerseyFlag: "b_number",
 });

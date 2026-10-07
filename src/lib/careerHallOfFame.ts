@@ -32,7 +32,10 @@
    answers 1 and 2 now also write c.numberRetiredBy, the club and the year,
    through recordNumberRetired below, and a recorded retirement wins over
    jerseyFor (the recordedJersey adapter). The "wait until you are done"
-   answer records nothing, so jerseyFor decides at the end as before.
+   answer records nothing, so jerseyFor decides at the end as before. A save
+   from before this round whose card retired the number (flag 1 or 2) kept no
+   club, so its card prints no jersey line (jerseyUnknown) rather than let
+   jerseyFor name a club the deck never named.
 
    THE RECORD IS DERIVED, ON PURPOSE (Round 1039). The HallRecord is never
    saved: it is computed from the season lines and the sport's legacyOf on a
@@ -110,6 +113,10 @@ export interface HallSport<C> {
   /** Round 1039: a number a club already retired on a deck card, which wins
    *  over jerseyFor, or null when nothing was recorded. */
   recordedJersey?: (c: C) => HallJersey | null;
+  /** Round 1039: true when a deck card retired the number on a save from
+   *  before this round, which recorded no club. The card then prints no
+   *  jersey line rather than let jerseyFor name a club the deck never did. */
+  jerseyUnknown?: (c: C) => boolean;
 }
 
 export type HallOutcome = "inducted" | "fellOff" | "waiting" | "notOnBallot";
@@ -273,7 +280,8 @@ export function hallRecordFor<C>(sport: HallSport<C>, c: C): HallRecord {
   const ballot = runHallBallot(sport.rules, sport.lines, {
     key: sport.key(c), hof: legacy.hof, score: legacy.score, lastSeasonYear: sport.lastSeasonYear(c),
   });
-  const jersey = sport.recordedJersey?.(c) ?? jerseyFor(sport.seasons(c), ballot.outcome === "inducted", legacy.score, sport.lines);
+  const jersey = sport.recordedJersey?.(c)
+    ?? (sport.jerseyUnknown?.(c) ? null : jerseyFor(sport.seasons(c), ballot.outcome === "inducted", legacy.score, sport.lines));
   return { ...ballot, jersey: jersey && sport.teamName ? { ...jersey, teamName: sport.teamName(jersey.team, c) } : jersey };
 }
 
@@ -312,6 +320,8 @@ export interface UsCareerShape {
   seasons: { year: number; team: string; games: number; ovr: number }[];
   /** Round 1039: a club that retired the number on a deck card. */
   numberRetiredBy?: NumberRetiredBy;
+  /** The life deck's flags, read only for the deck jersey card's own flag. */
+  lifeFlags?: Record<string, number>;
 }
 
 export interface UsHallSport<C extends UsCareerShape> extends HallSport<C> {
@@ -329,6 +339,9 @@ export function usCareerHall<C extends UsCareerShape>(def: {
   shouldRetire: (c: C) => boolean;
   /** The sport's own club label, (abbreviation, era) to name. */
   teamLabel: (team: string, eraId?: string) => string;
+  /** The life B flag the deck's jersey card sets (1 or 2 retired the number,
+   *  3 waits), or undefined for a sport with no such card. */
+  deckJerseyFlag?: string;
 }): UsHallSport<C> {
   const lastSeasonYear = (c: C) => (c.seasons.length ? c.seasons[c.seasons.length - 1].year : c.year);
   return {
@@ -344,6 +357,13 @@ export function usCareerHall<C extends UsCareerShape>(def: {
     recordedJersey: c => (c.numberRetiredBy
       ? { team: c.numberRetiredBy.team, seasons: c.seasons.filter(s => s.team === c.numberRetiredBy?.team).length }
       : null),
+    // A save from before Round 1039 whose deck card retired the number kept
+    // no club, so the card names none rather than contradict the deck.
+    jerseyUnknown: c => {
+      if (!def.deckJerseyFlag || c.numberRetiredBy) return false;
+      const f = c.lifeFlags?.[def.deckJerseyFlag];
+      return f === 1 || f === 2;
+    },
     snapshot: c => ({ year: lastSeasonYear(c), age: c.age, rating: c.ovr, peak: peakRating(c.seasons, c.ovr), forced: def.shouldRetire(c) }),
   };
 }

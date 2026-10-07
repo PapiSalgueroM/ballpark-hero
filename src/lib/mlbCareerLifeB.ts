@@ -327,7 +327,11 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
     });
   }
 
-  if (yrs >= 9 && (c.rings >= 1 || c.allStars >= 3 || c.fanbase >= 78) && flag(c, 'b_number') === 0) {
+  /* Round 1039: only a club he has played a season for. Later summer cards
+     are rebuilt from the career after card 1, so a trade ahead of this card
+     used to hang the number at a club he had never played for (0 seasons).
+     At a deal the last season is always at c.team, so no draw moves. */
+  if (yrs >= 9 && (c.rings >= 1 || c.allStars >= 3 || c.fanbase >= 78) && flag(c, 'b_number') === 0 && c.seasons.some(s => s.team === c.team)) {
     deck.push({
       id: 'mlbB_numberRetired',
       category: 'legacy', cooldown: 99,

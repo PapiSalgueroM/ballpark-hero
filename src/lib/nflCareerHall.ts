@@ -29,4 +29,5 @@ export const NFL_CAREER_HALL = usCareerHall<CareerState>({
   legacy: legacyOf,
   shouldRetire,
   teamLabel: teamLabelOf,
+  deckJerseyFlag: "b_jersey",
 });

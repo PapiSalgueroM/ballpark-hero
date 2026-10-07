@@ -486,3 +486,55 @@ describe.each(SPORTS)('%s: the deck retirement cards never come after the talk',
     expect(filter(ret), 'answered One more year this offseason').toBe(true);
   });
 });
+
+/* ── 8. The jersey: the deck card's club, and saves from before the record (review fixes) ── */
+
+const JERSEY: [string, () => UsCareerSport, string, string][] = [
+  ['nfl', () => NFL_CAREER_SPORT, 'lifeB_jerseyRetirement', 'b_jersey'],
+  ['nba', () => NBA_CAREER_SPORT, 'nbaB_jerseyRetirement', 'nb_jersey'],
+  ['mlb', () => MLB_CAREER_SPORT, 'mlbB_numberRetired', 'b_number'],
+];
+type Flagged = UsCareerCore & { lifeFlags?: Record<string, number>; fanbase: number };
+
+describe.each(JERSEY)('%s: the deck jersey card and the Hall card', (_slug, getSport, cardId, flagName) => {
+  it('the card is offered only by a club he has played a season for', () => {
+    const sport = getSport();
+    const { c } = deckCareer(sport, 111);
+    const f = c as Flagged;
+    f.fanbase = 90;
+    expect(sport.eventDeck(c, mulberry32(3)).some(e => e.id === cardId), 'a long career at his club is offered it').toBe(true);
+    // The same career just traded: not one season line at the club he is at.
+    for (const s of c.seasons) s.team = `${s.team}-before`;
+    expect(sport.eventDeck(c, mulberry32(3)).some(e => e.id === cardId), 'a club he never played for is not').toBe(false);
+  });
+
+  it('an old save whose deck card retired the number, with no club kept, shows no jersey line', async () => {
+    const sport = getSport();
+    let c: UsCareerCore | null = null;
+    for (let s = 200; !c; s += 1) {
+      const cand = retiredCareer(sport, s, true);
+      if (hallRecordFor(sport.hall!, cand).jersey) c = cand;
+    }
+    const plain = hallRecordFor(sport.hall!, c);
+    const old = copy(c) as Flagged;
+    old.lifeFlags = { ...(old.lifeFlags ?? {}), [flagName]: 1 };
+    expect(hallRecordFor(sport.hall!, old).jersey, 'retired on the card, club unknown').toBeNull();
+    old.lifeFlags[flagName] = 2;
+    expect(hallRecordFor(sport.hall!, old).jersey).toBeNull();
+    old.lifeFlags[flagName] = 3;
+    expect(hallRecordFor(sport.hall!, old).jersey, 'the wait answer leaves jerseyFor deciding').toEqual(plain.jersey);
+    old.lifeFlags[flagName] = 1;
+    old.numberRetiredBy = { team: c.seasons[0].team, year: c.seasons[0].year };
+    expect(hallRecordFor(sport.hall!, old).jersey?.team, 'a recorded club wins').toBe(c.seasons[0].team);
+    delete old.numberRetiredBy;
+    save(sport, old, null, 'retired');
+    mount(sport);
+    await waitFor(() => expect(document.body.textContent).toContain(sport.hall!.rules.hallName));
+    expect(document.body.textContent).not.toContain('retired your number');
+    // The same career without the flag prints the line, so the check above is not empty.
+    cleanup();
+    save(sport, c, null, 'retired');
+    mount(sport);
+    await waitFor(() => expect(document.body.textContent).toContain('retired your number'));
+  }, 20000);
+});

@@ -31,4 +31,5 @@ export const NBA_CAREER_HALL = usCareerHall<NbaCareerState>({
   legacy: nbaLegacyOf,
   shouldRetire: nbaShouldRetire,
   teamLabel: nbaTeamLabelOf,
+  deckJerseyFlag: "nb_jersey",
 });
