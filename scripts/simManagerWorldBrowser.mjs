@@ -27,7 +27,8 @@ const names = {
 const faults = {
   missing: { from: 'worldLeagueDefs(career).filter(l => l.id !== myLeague.id)', to: 'worldLeagueDefs(career).filter(l => l.id === myLeague.id)', test: names.world },
   country: { from: "[league.name, LEAGUE_NATIONS[league.id] ?? '', ...league.clubs]", to: "[league.name, '', ...league.clubs]", test: names.search },
-  accent: { from: "text.normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').toLocaleLowerCase()", to: 'text.toLocaleLowerCase()', test: names.search },
+  accent: { from: "text.normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').toLowerCase()", to: 'text.toLowerCase()', test: names.search },
+  casing: { from: '.toLowerCase()', to: '.toLocaleLowerCase()', test: names.search },
   terms: { from: 'terms.every(term => text.includes(term))', to: 'terms.some(term => text.includes(term))', test: names.search },
   clubs: { from: '...league.clubs', to: '...[]', test: names.edited },
   selection: { from: 'if (id) setPick(id);', to: 'if (id) setPick(myLeague.id);', test: names.select },

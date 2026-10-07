@@ -194,7 +194,7 @@ try {
         await locator.evaluate((node,style)=>{if(style===null)node.removeAttribute('style');else node.setAttribute('style',style);},original);const restored=await measure(page);assert.deepEqual(restored,before);checkMeasure(restored);
         report.controls.push({case:id,name,changed:true,rejected,restored:true,before,fault:changed});save();
       }
-      for(const [query,expected] of [['England',['premier','championship','mlsEast']],['New England Revolution',['mlsEast']],['super lig',['superlig']],['Atletico Madrid',['laliga']],['Australia Sydney',['aleague']],['Arsenal Australia',[]]]){await type(query);assert.deepEqual((await ids()).sort(),expected.sort());}
+      for(const [query,expected] of [['England',['premier','championship','mlsEast']],['New England Revolution',['mlsEast']],['super lig',['denmark','superlig']],['Atletico Madrid',['laliga']],['Australia Sydney',['aleague']],['Arsenal Australia',[]]]){await type(query);assert.deepEqual((await ids()).sort(),expected.sort());}
       assert(await button('Clear search').isVisible());await activate(button('Clear search'));assert.equal((await ids()).length,initial.expected.length);
       await type('Australia');await activate(page.locator('[data-world-league="aleague"]'));assert(await button('Browse leagues').evaluate(node=>document.activeElement===node));assert.equal(await page.evaluate(()=>scrollY),beforeY,'Selection keeps scroll position');await tableProof('aleague');
       await activate(button('Browse leagues'));await type('not a real league');await activate(button('Back'));await tableProof('aleague');

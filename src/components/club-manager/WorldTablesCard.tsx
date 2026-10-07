@@ -45,7 +45,7 @@ export function WorldTablesCard({ career, myRows, onClubClick }: WorldTablesCard
   );
 
   const active = leagues.find(l => l.id === pick) ?? myLeague;
-  const normalize = (text: string) => text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase();
+  const normalize = (text: string) => text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
   const terms = normalize(query).trim().split(/\s+/).filter(Boolean);
   const matches = leagues.filter(league => {
     const text = normalize([league.name, LEAGUE_NATIONS[league.id] ?? '', ...league.clubs].join(' '));

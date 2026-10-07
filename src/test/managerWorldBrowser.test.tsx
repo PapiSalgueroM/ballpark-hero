@@ -51,7 +51,7 @@ describe('Club Manager world browser', () => {
     const career = startCareer('Arsenal'), view = mount(career), search = browse(view);
     for (const [query, expected] of [
       ['England', ['premier', 'championship', 'mlsEast']], ['New England Revolution', ['mlsEast']], ['AUSTRALIA', ['aleague']],
-      ['Süper Lig', ['superlig']], ['super lig', ['superlig']],
+      ['Süper Lig', ['denmark', 'superlig']], ['super lig', ['denmark', 'superlig']],
       ['Atletico Madrid', ['laliga']], ['australia sydney', ['aleague']],
       ['England Arsenal', ['premier']], ['Arsenal Australia', []], ['not-a-real-league', []],
     ] as Array<[string, string[]]>) {
@@ -60,6 +60,16 @@ describe('Club Manager world browser', () => {
     expect(view.getByText('No leagues match that search in this save.')).toBeVisible();
     fireEvent.click(view.getByRole('button', { name: 'Clear search' }));
     expect(ids(view)).toHaveLength(worldLeagueDefs(career).length); expect(search).toHaveFocus();
+    const localeLowerCase = String.prototype.toLocaleLowerCase;
+    const turkishDefault = vi.spyOn(String.prototype, 'toLocaleLowerCase').mockImplementation(function (this: string) {
+      return localeLowerCase.call(this, 'tr');
+    });
+    try {
+      expect('Italy'.toLocaleLowerCase()).toBe('ıtaly');
+      for (const query of ['italy', 'inter milan']) {
+        fireEvent.change(search, { target: { value: query } }); expect(ids(view)).toEqual(['seriea']);
+      }
+    } finally { turkishDefault.mockRestore(); }
   });
 
   it('keeps selection through empty searches Back and Escape and returns to My league', () => {
