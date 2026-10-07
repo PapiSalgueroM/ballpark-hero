@@ -75,6 +75,8 @@ import { applyDrillResult, type DrillKind } from "@/lib/careerDrills";
 import { rollStartingOverall, rollPotential, potentialTier, adjustClubsForYear, allocOverall, normalizeAllocation, allocMax, ALLOC_MIN, playsLike, stepAllocation } from "@/lib/careerEras";
 import { dugoutTableWords, ordinal, leagueWithArticle, readLeagueFinish, finishLeague, leagueInYear, leagueSeasonLine, namedInLeague } from "@/lib/soccerCareerLeague";
 import { SeasonDerbyLines, DerbyChip, CareerDerbyTotals } from "@/components/soccer-career/DerbyLines";
+import { SeasonCupExitLine, SeasonCupWinBlock } from "@/components/soccer-career/CupRunLines";
+import { cupCabinetLabel, cupChipLabel } from "@/lib/soccerCareerCup";
 import { derbyHeroSeasons, DERBY_HELP_RULES } from "@/lib/soccerCareerDerby";
 import type { WorldSeason } from "@/lib/soccerPhone";
 /* Round 131: height, weight and the specifics under each family. */
@@ -642,7 +644,7 @@ function SeasonSummaryCard({ season, position, onContinue, appearance, leagueOf,
   const league = leagueOf?.key;
   const leagueName = leagueOf?.name;
   const isGK = position === "GK";
-  const trophies = [season.leagueTitle && "🏆 League", season.domesticCup && "🏆 Cup", season.championsLeague && "⭐ UCL", season.clubCupTitle && `⭐ ${season.clubCupTitle}`, season.worldCup && "🌍 World Cup", season.continentalCup && "🌐 Continental", season.ballonDor && "🏅 Ballon d'Or"].filter(Boolean);
+  const trophies = [season.leagueTitle && "🏆 League", season.domesticCup && `🏆 ${cupChipLabel(season)}`,season.championsLeague && "⭐ UCL", season.clubCupTitle && `⭐ ${season.clubCupTitle}`, season.worldCup && "🌍 World Cup", season.continentalCup && "🌐 Continental", season.ballonDor && "🏅 Ballon d'Or"].filter(Boolean);
   /* Round 929: the champion is the one the phone's world already crowned for
      this season, so the card and the feed can never name two winners. */
   const finish = readLeagueFinish(season);
@@ -705,6 +707,8 @@ function SeasonSummaryCard({ season, position, onContinue, appearance, leagueOf,
 
       {/* Round 1012: how each derby went, at most three lines, nothing on old saves. */}
       <SeasonDerbyLines season={season} />
+      {/* Round 1041: a cup run that ended early, one line; nothing on old saves. */}
+      <SeasonCupExitLine season={season} />
 
       {season.injury && (
         /* Round 530: one shake as it lands, nothing more. */
@@ -728,6 +732,8 @@ function SeasonSummaryCard({ season, position, onContinue, appearance, leagueOf,
         <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-2 text-center text-amber-400">
           <VictoryMoment key={`${season.year}-${season.club}`}>
             <span className="text-sm font-bold text-foreground">{trophies.join(" · ")}</span>
+            {/* Round 1041: the won cup's run, round by round */}
+            <SeasonCupWinBlock season={season} />
           </VictoryMoment>
         </div>
       )}
@@ -4282,7 +4288,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             <div className={`grid grid-cols-3 gap-2 mt-3 ${totals.clubCups > 0 ? "sm:grid-cols-7" : "sm:grid-cols-6"}`}>
               {[
                 { emoji: "🏆", l: "Leagues", v: totals.leagueTitles },
-                { emoji: "🏆", l: "Cups", v: totals.domesticCups },
+                { emoji: "🏆", l: cupCabinetLabel(career.seasons), v: totals.domesticCups },
                 { emoji: "⭐", l: "UCL", v: totals.championsLeagues },
                 // Round 972: a continental club cup won outside UEFA gets its
                 // own tile under its own name, never the UCL one.
