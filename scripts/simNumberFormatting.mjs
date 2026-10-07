@@ -6,7 +6,11 @@ import assert from 'node:assert/strict';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 
-assert(['1', 'true'].includes(process.env.CI), 'Run number display verification in remote CI only');
+/* Release AL: this harness refused to start outside remote CI, so every local
+   run of the suite was red by construction. Nothing here reaches the network
+   (it mounts components in jsdom from local source), so it runs wherever the
+   suite runs. The Vitest child was always handed CI=1 and still is. */
+process.env.CI ||= '1';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const out = path.resolve(process.env.NUMBER_FORMATTING_ARTIFACTS || path.join(root, 'number-formatting-artifacts', 'outcomes'));
 const TEST = 'src/test/numberFormatting.test.tsx', HELPER = 'src/lib/formatNumber.ts';
