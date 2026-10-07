@@ -36,7 +36,6 @@
  */
 import type { CareerState } from '@/lib/clubManager';
 import { money } from '@/lib/clubManager';
-import { ALL_POSITIONS } from '@/lib/positionFit';
 
 /** A number the desk is allowed to move. One per answer, at most. */
 export type DeskMeter = 'board' | 'press' | 'morale' | 'budget';
@@ -74,9 +73,6 @@ export interface DeskItem {
   ban?: number;
   /** Appeal: the stated chance of winning, in whole percent. */
   odds?: number;
-  /** Versioned JSON tuple, stored once for new youth appeals. Older cards keep
-   *  their raw-ID verdict because this field is absent. */
-  verdictKey?: string;
   /** Situation: which card of the deck. */
   deckId?: string;
   /** Appeal: how it went, once answered (for the screen and the harness). */
@@ -106,23 +102,6 @@ function isValidEffect(e: unknown): e is DeskEffect {
     && typeof o.delta === 'number' && Number.isFinite(o.delta);
 }
 
-function isValidVerdictKey(value: unknown, item: Record<string, unknown>): boolean {
-  if (typeof value !== 'string') return false;
-  try {
-    const key: unknown = JSON.parse(value);
-    return Array.isArray(key) && key.length === 7 && key[0] === 1
-      && Number.isSafeInteger(key[1]) && key[1] >= 1
-      && Number.isSafeInteger(key[2]) && key[2] >= 0
-      && typeof key[3] === 'string' && key[3].length > 0
-      && ALL_POSITIONS.includes(key[4])
-      && Number.isSafeInteger(key[5]) && key[5] >= 0
-      && Number.isSafeInteger(key[6]) && key[6] >= 0
-      && key[1] === item.season && key[2] === item.week && key[3] === item.playerName
-      && typeof item.playerId === 'string' && item.playerId.startsWith('youth-')
-      && JSON.stringify(key) === value;
-  } catch { return false; }
-}
-
 export function isValidDeskItem(x: unknown): x is DeskItem {
   if (!x || typeof x !== 'object' || Array.isArray(x)) return false;
   const o = x as Record<string, unknown>;
@@ -134,7 +113,6 @@ export function isValidDeskItem(x: unknown): x is DeskItem {
     && (o.options as unknown[]).every(op => !!op && typeof op === 'object'
       && typeof (op as DeskOption).label === 'string' && isValidEffect((op as DeskOption).effect))
     && (o.resolved === undefined || typeof o.resolved === 'string')
-    && (o.verdictKey === undefined || (o.kind === 'appeal' && isValidVerdictKey(o.verdictKey, o)))
     && (o.kind !== 'appeal' || (typeof o.playerId === 'string' && Number.isInteger(o.ban) && Number.isInteger(o.odds)));
 }
 
@@ -175,8 +153,8 @@ export function appealOddsFor(seasonReds: number): number {
 }
 
 /** How an appeal goes. Read off the card and the save, never off Math.random. */
-export function appealWins(item: Pick<DeskItem, 'id' | 'odds' | 'verdictKey'>, state: Pick<CareerState, 'clubName' | 'manager'>): boolean {
-  return deskRoll(`${item.verdictKey ?? item.id}|${saveKey(state)}|verdict`) < (item.odds ?? 0) / 100;
+export function appealWins(item: Pick<DeskItem, 'id' | 'odds'>, state: Pick<CareerState, 'clubName' | 'manager'>): boolean {
+  return deskRoll(`${item.id}|${saveKey(state)}|verdict`) < (item.odds ?? 0) / 100;
 }
 
 /* ---------- the words on the button ---------- */
@@ -316,10 +294,6 @@ export function appealCard(state: CareerState, playerId: string, opponent: strin
   const odds = appealOddsFor(p.seasonReds ?? 1);
   const worse = ban + APPEAL_LOSS_EXTRA;
   const record = (p.seasonReds ?? 1) > 1 ? ` It is his ${ordinal(p.seasonReds ?? 1)} red of the season, which the panel will not ignore.` : '';
-  const verdictKey = p.isYouth === true && p.id.startsWith('youth-')
-    ? JSON.stringify([1, state.season, state.week, p.name, p.position, p.age,
-      state.squad.slice(0, state.squad.indexOf(p)).filter(other => other.name === p.name && other.position === p.position && other.age === p.age).length])
-    : undefined;
   return {
     id: `desk-${state.season}-${state.week}-appeal-${p.id}`,
     kind: 'appeal', season: state.season, week: state.week,
@@ -330,7 +304,6 @@ export function appealCard(state: CareerState, playerId: string, opponent: strin
       { label: `Accept the ban (${plural(ban, 'match')}, nothing changes)`, effect: { kind: 'acceptBan' } },
     ],
     playerId: p.id, playerName: p.name, ban, odds,
-    ...(verdictKey === undefined ? {} : { verdictKey }),
   };
 }
 
