@@ -34,7 +34,7 @@ import { NBA_CAREER_SPORT } from '@/lib/nbaCareerSport';
 import { MLB_CAREER_SPORT } from '@/lib/mlbCareerSport';
 import { NHL_CAREER_SPORT } from '@/lib/nhlCareerSport';
 import { defaultAppearance } from '@/lib/soccerCareerAppearance';
-import { answerSummerCard, dealSummer, startSummer, summerCardAt } from '@/lib/usCareerSummer';
+import { answerSummerCard, dealSummer, laterAnswerMovesRating, repairSummerOnLoad, seekSummerCard, startSummer, summerCardAt, summerPlace } from '@/lib/usCareerSummer';
 import type { UsCareerCore, UsCareerSport } from '@/lib/usCareerSport';
 
 const SPORTS: [string, () => UsCareerSport][] = [
@@ -117,8 +117,9 @@ describe.each(SPORTS)('%s summer on the board', (_slug, getSport) => {
     save(sport, c, tq);
     mount(sport);
     expect(shownCard()?.getAttribute('data-career-event')).toBe(c.summer!.ids[c.summer!.at]);
-    expect(summerStep()).toBe(String(c.summer!.at + 1));
-    expect(shownCard()?.textContent).toContain(`Offseason, card ${c.summer!.at + 1} of ${c.summer!.ids.length}`);
+    const place = summerPlace(c.summer!);
+    expect(summerStep()).toBe(String(place.n));
+    expect(shownCard()?.textContent).toContain(`Offseason, card ${place.n} of ${place.of}`);
   });
 
   it('answering advances, Continue opens the next card, and the last answer rolls team quality once', () => {
@@ -184,7 +185,10 @@ describe.each(SPORTS)('%s summer on the board', (_slug, getSport) => {
     save(sport, c, tq);
     mount(sport);
     expect(shownCard()?.getAttribute('data-career-event')).toBe(ids[1]);
-    expect(summerStep()).toBe('2');
+    /* The skipped card was never shown, so it is not counted: this is card 1
+       of 1, never 'card 2 of 2' with no card 1. */
+    expect(summerStep()).toBe('1');
+    expect(shownCard()?.textContent).toContain('Offseason, card 1 of 1');
   });
 });
 
@@ -248,6 +252,46 @@ describe.each(SPORTS)('%s summer saves', (_slug, getSport) => {
     expect(twice.draws).toBe(once.draws);
     expect(twice.save).toBe(once.save);
     expect(JSON.parse(twice.save!).c.summer.at).toBe(1);
+  });
+
+  it('a broken skip count is dropped alone and the summer stays', () => {
+    const sport = getSport();
+    const { c } = playedCareer(sport, 91);
+    dealSummer(c, sport);
+    for (const bad of [-1, 1.5, 'two', c.summer!.at + 1]) {
+      const d = copy(c);
+      (d.summer as unknown as Record<string, unknown>).gone = bad;
+      repairSummerOnLoad(d);
+      expect(d.summer, `gone ${String(bad)}`).toBeDefined();
+      expect(d.summer!.gone, `gone ${String(bad)}`).toBeUndefined();
+      expect(d.summer!.ids).toEqual(c.summer!.ids);
+    }
+  });
+});
+
+describe.each(SPORTS)('%s later cards and the rating', (_slug, getSport) => {
+  it('a later card that could now move the rating is skipped when shown; card 1 never is', () => {
+    const sport = getSport();
+    const { c } = playedCareer(sport, 101);
+    dealSummer(c, sport);
+    const ids = [...c.summer!.ids];
+    /* The same deck, except that every answer to the card dealt second now
+       lifts the rating, as an earlier answer could make a capped raise land. */
+    const lifted = (target: string): UsCareerSport => ({
+      ...sport,
+      eventDeck: (cc, r) => sport.eventDeck(cc, r).map(e => (e.id !== target ? e : {
+        ...e, options: e.options.map(o => ({ ...o, apply: (x: UsCareerCore, rr: () => number) => { x.ovr += 1; return o.apply(x, rr); } })),
+      })),
+    });
+    const atTwo = copy(c);
+    atTwo.summer!.at = 1;
+    expect(laterAnswerMovesRating(atTwo, sport, summerCardAt(atTwo, sport, 1)!, 1), 'the real card 2 leaves the rating alone').toBe(false);
+    const shown = seekSummerCard(atTwo, lifted(ids[1]));
+    expect(shown?.id ?? null).not.toBe(ids[1]);
+    expect(atTwo.summer?.gone ?? 1).toBeGreaterThanOrEqual(1);
+    const atOne = copy(c);
+    expect(seekSummerCard(atOne, lifted(ids[0]))?.id, 'card 1 may move the rating').toBe(ids[0]);
+    expect(atOne.summer!.gone).toBeUndefined();
   });
 });
 

@@ -66,7 +66,7 @@ import { keyedRng } from '@/lib/keyedRng';
 import { bankTrainingRating, trainingBankNote, trainingScore, trainingSessionOpen } from '@/lib/careerTraining';
 import { buildCareerDecisionOutcome, type CareerDecisionOutcomeData } from '@/lib/usCareerDecisionOutcome';
 import CareerDecisionOutcome from '@/components/us-career/CareerDecisionOutcome';
-import { answerSummerCard, newSummerSalt, repairSummerOnLoad, seekSummerCard, startSummer, summerOn } from '@/lib/usCareerSummer';
+import { answerSummerCard, newSummerSalt, repairSummerOnLoad, seekSummerCard, startSummer, summerOn, summerPlace } from '@/lib/usCareerSummer';
 
 const UsCareerPractice = lazy(() => import('@/components/us-career/UsCareerPractice'));
 const CareerSeasonReview = lazy(() => import('@/components/us-career/CareerSeasonReview'));
@@ -1157,6 +1157,9 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
       accent: unread > 0,
     },
   ];
+  /* Round 1038: where the event card stands in its summer, counted over the
+     cards you actually get (a skipped card is never shown). */
+  const place = career.summer ? summerPlace(career.summer) : null;
 
   /* ------------------------------ season hub ------------------------------ */
   return (
@@ -1216,13 +1219,13 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
         <div ref={revealRef} data-career-event={pendingEvent.id} data-career-decision-event={pendingEvent.id} className={career.summer ? 'cm-rise rounded-2xl border border-gold/40 bg-card p-4' : 'rounded-2xl border border-gold/40 bg-card p-4'}>
           {/* Round 1038: where you are in the summer. Drawn only on a summer,
               so the one card knob's markup is exactly what it was. */}
-          {career.summer && (
-            <div data-career-summer-step={career.summer.at + 1} className="mb-2 flex items-center justify-center gap-2">
+          {place && (
+            <div data-career-summer-step={place.n} className="mb-2 flex items-center justify-center gap-2">
               <CelebrationStyles />
-              <span className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground">Offseason, card {career.summer.at + 1} of {career.summer.ids.length}</span>
+              <span className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground">Offseason, card {place.n} of {place.of}</span>
               <span className="flex gap-1" aria-hidden="true">
-                {career.summer.ids.map((id, i) => (
-                  <span key={id} className={cn('h-1.5 w-1.5 rounded-full', i < career.summer!.at ? 'bg-gold' : i === career.summer!.at ? 'bg-gold/50' : 'bg-border')} />
+                {Array.from({ length: place.of }, (_, i) => (
+                  <span key={i} className={cn('h-1.5 w-1.5 rounded-full', i < place.done ? 'bg-gold' : i === place.done ? 'bg-gold/50' : 'bg-border')} />
                 ))}
               </span>
             </div>

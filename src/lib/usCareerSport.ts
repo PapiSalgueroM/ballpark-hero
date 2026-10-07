@@ -99,7 +99,15 @@ export interface UsCareerCore {
 }
 
 /** Round 1038: one offseason's cards, as ids, and how many are answered. */
-export interface UsCareerSummer { year: number; ids: string[]; at: number }
+export interface UsCareerSummer {
+  year: number;
+  ids: string[];
+  at: number;
+  /** How many dealt cards were skipped because the career moved past them.
+   *  Every skip sits before `at`, so the board counts 'card N of M' over the
+   *  cards you actually get. Optional: a summer with no skip has none. */
+  gone?: number;
+}
 
 /** Round 1038: how a sport deals its offseason. cards 1 with cooldowns off
  *  is the one-card offseason every US career had before this round, draw for

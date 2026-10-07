@@ -6,10 +6,17 @@
    with other cards), and a card is held out while (this season minus that
    season) is at most its cooldown. Those rules lived inside
    soccerCareerEngine.ts. They live here now, once, with the same key format
-   and the same comparison, so the four US careers read the same rule and
-   Soccer Career can switch to these imports without changing a single draw.
-   Until it does, scripts/simUsCareerSummer.mjs (section 8) holds the two
-   copies to the same answers.
+   and the same comparison, so the four US careers read the same rule.
+   Soccer Career can switch its LEDGER RULES to these imports (ledgerKey,
+   cooldownOf with its own default as the fallback, onCooldown, stampFired)
+   without changing a single draw. Its PICK is another matter: soccer
+   shuffles the eligible cards with a sort on Math.random and takes the
+   first distinct keys, while takeFresh below draws one uniform pick per
+   card, so the two consume the stream differently. The soccer follow-up
+   keeps its own shuffle, or swaps it for takeFresh as a deliberate draw
+   change with its cooldown replay re-recorded. Until soccer imports
+   anything, scripts/simUsCareerSummer.mjs (section 8) holds the two copies
+   of the ledger rules to the same answers; it does not compare the picks.
 
    Imports nothing, on purpose: every career engine can reach it without
    pulling another sport in with it. */

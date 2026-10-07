@@ -208,20 +208,54 @@ export function summerCardAt<C extends UsCareerCore>(c: C, sport: UsCareerSport<
   return sport.eventDeck(c, slotStream(c, sport.slug, s.year, i)).find(e => e.id === s.ids[i]) ?? null;
 }
 
+/** Whether any answer to later card i would move the rating or its ceiling
+ *  from where the career stands NOW, each answer tried on a copy with the
+ *  very stream it will apply on (summerApplyRng is keyed, so the copy sees
+ *  exactly the draws the real answer will). The deal judged the card on the
+ *  career before card 1 was answered, and an answer in between can open a
+ *  raise that the ceiling capped then (a rating lowered under the same
+ *  ceiling). This is what makes 'only the first card can move your rating'
+ *  exact. An answer that throws counts as a move. */
+export function laterAnswerMovesRating<C extends UsCareerCore>(c: C, sport: UsCareerSport<C>, e: UsCareerEvent<C>, i: number): boolean {
+  const year = c.summer?.year ?? summerSeason(c);
+  const snapshot = JSON.stringify(c);
+  for (let k = 0; k < e.options.length; k += 1) {
+    const probe = JSON.parse(snapshot) as C;
+    try {
+      e.options[k].apply(probe, summerApplyRng(c, sport.slug, year, i));
+    } catch {
+      return true;
+    }
+    if (probe.ovr !== c.ovr || probe.pot !== c.pot) return true;
+  }
+  return false;
+}
+
 /** The card the summer stands on. A card no longer in its deck (a trade or a
  *  fixed knee moved the career past it) is skipped, the flagship's rule, and
- *  `at` moves past it. When nothing is left the summer is over and leaves
- *  the career. Mutates c. */
+ *  so is a later card that the career as it stands now would let move the
+ *  rating; `at` moves past it and `gone` counts it. When nothing is left the
+ *  summer is over and leaves the career. Mutates c. */
 export function seekSummerCard<C extends UsCareerCore>(c: C, sport: UsCareerSport<C>): UsCareerEvent<C> | null {
   const s = c.summer;
   if (!s) return null;
   while (s.at < s.ids.length) {
     const card = summerCardAt(c, sport, s.at);
-    if (card) return card;
+    if (card && (s.at === 0 || !laterAnswerMovesRating(c, sport, card, s.at))) return card;
     s.at += 1;
+    s.gone = (s.gone ?? 0) + 1;
   }
   delete c.summer;
   return null;
+}
+
+/** Where the board says you are: card `n` of `of`, counted over the cards you
+ *  actually get (a skipped card is never shown, so it is never counted), and
+ *  `done` of them answered. A card skipped later in the summer can still end
+ *  it one early. */
+export function summerPlace(s: UsCareerSummer): { n: number; of: number; done: number } {
+  const gone = s.gone ?? 0;
+  return { n: s.at + 1 - gone, of: s.ids.length - gone, done: s.at - gone };
 }
 
 /** The offseason's first card. On the knob path this is exactly the old
@@ -250,7 +284,8 @@ export function answerSummerCard<C extends UsCareerCore>(
 
 /** Repair on load, the house pattern: each block is checked alone and a
  *  broken one is dropped alone. summer needs a four digit year that is the
- *  last season played, a non empty list of ids and an `at` inside it; the
+ *  last season played, a non empty list of ids and an `at` inside it (its
+ *  optional skip count, a whole number no larger than `at`); the
  *  ledger keeps finite numbers only; the salt must be a string. Old saves,
  *  with none of the three, come back untouched. Mutates c. */
 export function repairSummerOnLoad(c: UsCareerCore): void {
@@ -263,6 +298,8 @@ export function repairSummerOnLoad(c: UsCareerCore): void {
       && Array.isArray(o.ids) && o.ids.length > 0 && o.ids.every(x => typeof x === 'string')
       && Number.isInteger(o.at) && (o.at as number) >= 0 && (o.at as number) < o.ids.length;
     if (!ok) delete c.summer;
+    /* The skip count only labels the cards: a broken one is dropped alone. */
+    else if (o.gone !== undefined && !(Number.isInteger(o.gone) && (o.gone as number) >= 0 && (o.gone as number) <= (o.at as number))) delete o.gone;
   }
   if (c.eventLastFired !== undefined) c.eventLastFired = sanitizeLedger(c.eventLastFired);
   if (c.summerSalt !== undefined && typeof c.summerSalt !== 'string') delete c.summerSalt;
