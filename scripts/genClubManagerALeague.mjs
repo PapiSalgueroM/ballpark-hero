@@ -25,8 +25,8 @@
  *   Where it falls outside the ledger's two source group (or is generic, like
  *   "Striker"), the group wins and the player takes the group's default.
  * - A ledger row with no group is skipped (two rows, both unsettled).
- * - A club where more than half the rows have no value is in
- *   CM_ALEAGUE_PARTIAL, the CM_PARTIAL shape.
+ * - A club where more than half its ledger rows (the group-less ones
+ *   included) have no value is in CM_ALEAGUE_PARTIAL, the CM_PARTIAL shape.
  * - Nationality ships only where _people.json found two hosts agreeing.
  *
  * Regenerate with: node scripts/genClubManagerALeague.mjs
@@ -62,7 +62,6 @@ for (const club of membership.clubs) {
   if (!engine) { errors.push(`no engine name for ${club.slug}`); continue; }
   const ledger = read(`${club.slug}.json`);
   const list = [];
-  let clubNoValue = 0;
   for (const row of ledger.rows) {
     if (!row.group) { skipped += 1; continue; }
     if (!GROUP_DEFAULT[row.group]) { errors.push(`${row.name}: unknown group ${row.group}`); continue; }
@@ -76,7 +75,7 @@ for (const club of membership.clubs) {
     if (!p || GROUP_OF[p] !== row.group) { p = GROUP_DEFAULT[row.group]; groupWon += 1; }
     let usd;
     if (Number.isFinite(val.valueEur) && val.valueEur > 0) usd = usdOfEur(val.valueEur);
-    else { usd = FLOOR_USD; clubNoValue += 1; noValue.push(`${row.name}|${engine}`); }
+    else { usd = FLOOR_USD; noValue.push(`${row.name}|${engine}`); }
     list.push({ n: row.name, p, a: person.age, v: gbpM(usd, 2), r: ratingOf(usd) });
     if (person.nationality) {
       if (person.nationalityHosts.length < 2) errors.push(`${row.name}: nationality on one host`);
@@ -86,7 +85,12 @@ for (const club of membership.clubs) {
   }
   list.sort((a, b) => b.v - a.v || a.n.localeCompare(b.n));
   rosters[engine] = list;
-  if (clubNoValue * 2 > list.length) partial.push(engine);
+  /* Release AH (Round 1035 review F10): the partial mark counts the club's
+     LEDGER rows, the group-less rows held back included, so a club whose
+     page has no value for most of its squad is marked even when the rows
+     that ship fall just under half. */
+  const ledgerNoValue = ledger.rows.filter(row => !(valueOf.get(`${club.slug}|${row.name}`)?.valueEur > 0)).length;
+  if (ledgerNoValue * 2 > ledger.rows.length) partial.push(engine);
 }
 
 /* One name, one man: a name in two A-League squads would merge two players

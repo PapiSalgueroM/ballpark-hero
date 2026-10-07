@@ -16,7 +16,7 @@ export const CM_ALEAGUE_META = {
 };
 
 /** Clubs where more than half the shipped rows have no market value. */
-export const CM_ALEAGUE_PARTIAL: string[] = [];
+export const CM_ALEAGUE_PARTIAL: string[] = ["Central Coast Mariners"];
 
 /** Players with no value on their club's page, as "name|club": each one is
  *  rated at the curve's floor, never given an invented value. */
