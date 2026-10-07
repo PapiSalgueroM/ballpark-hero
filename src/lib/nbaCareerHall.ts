@@ -3,8 +3,24 @@
    real rule below is sourced in docs/audits/US-HALL-RULES-2026-10.md and
    scripts/simCareerHall.mjs holds these numbers to that file's table. */
 
-import { nbaLegacyOf, nbaShouldRetire, nbaTeamLabelOf, type NbaCareerState } from "./nbaMyCareer";
-import { usCareerHall } from "./careerHallOfFame";
+import { nbaLegacyOf, NBA_LEGACY_WEIGHTS, nbaShouldRetire, nbaTeamLabelOf, type NbaCareerState } from "./nbaMyCareer";
+import { HALL_CALIBRATION, hallVoterRulesFor, usCareerHall, type HallVoterWords } from "./careerHallOfFame";
+
+/* Round 1051: what the voters weigh, in words. The card prints the sentence;
+   the "?" builds its rule and its worked example from the rest. "The major
+   awards" on purpose: the engine counts a different trophy by position under
+   one name, and a sentence that names none cannot mislabel one. The example
+   names a standout family of the calibration 2 table, and section 19 of
+   scripts/simCareerHall.mjs holds it against the engine. */
+export const NBA_HALL_WORDS: HallVoterWords = {
+  weighs: "The voters weigh the hardware first: rings, the major awards, All-NBA years. Then the whole stat sheet, boards and assists as much as points.",
+  hardware: "rings, the major awards, All-NBA years",
+  families: "points, rebounds or assists",
+  example: { positions: ["PG"], stat: "ast", one: "point guard", who: "point guards", family: "assists" },
+};
+
+/** The two lines the page's "?" adds, built from the words above and the table careers retire on today. */
+export const nbaHallHelpRules = (): string[] => hallVoterRulesFor(NBA_HALL_WORDS, NBA_LEGACY_WEIGHTS[HALL_CALIBRATION]);
 
 export const NBA_CAREER_HALL = usCareerHall<NbaCareerState>({
   rules: {
@@ -29,6 +45,7 @@ export const NBA_CAREER_HALL = usCareerHall<NbaCareerState>({
   // Game tuning. The hard stop (nbaShouldRetire) is untouched.
   retirement: { minAge: 31, dropFromPeak: 8, floor: 72 },
   legacy: nbaLegacyOf,
+  weighs: NBA_HALL_WORDS.weighs,
   shouldRetire: nbaShouldRetire,
   teamLabel: nbaTeamLabelOf,
   deckJerseyFlag: "nb_jersey",

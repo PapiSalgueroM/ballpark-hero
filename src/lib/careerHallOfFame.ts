@@ -40,11 +40,18 @@
    THE RECORD IS DERIVED, ON PURPOSE (Round 1039). The HallRecord is never
    saved: it is computed from the season lines and the sport's legacyOf on a
    keyed stream, so the same career shows the same ballot every visit and a
-   retired save from before the bind gets its record on its next visit. The
-   price: a later change to any sport's legacyOf re-tells every retired
-   player's ballot (a first ballot can become ballot three). A round that
-   touches a legacyOf reruns scripts/simCareerHall.mjs and accepts that, or
-   freezes the first record into the save as one more optional field.
+   retired save from before the bind gets its record on its next visit.
+
+   AND IT NO LONGER MOVES UNDER A RETIRED PLAYER (Round 1051). The legacy
+   score reads a table per CALIBRATION, and the calibration a career retired
+   on is stamped on its save (hallCal, written once by the save that retires
+   it; no stamp on a retired save means calibration 1). So a change to how
+   the voters weigh a career is a new table and a bump of HALL_CALIBRATION:
+   careers already retired keep the legacy and the ballot they were told,
+   and only careers that retire afterwards are read on the new one. Never
+   edit a calibration that has shipped: add calibration 3 beside it. The
+   version 1 recording (src/test/fixtures/careerHallV1.json) and section 15
+   of scripts/simCareerHall.mjs hold that promise.
 
    ERA TRUTH (Round 1039). HallRules.verifiedFromClass is the first class
    the audit anchors the printed rules on with two sources. The card prints a
@@ -53,6 +60,7 @@
    because an older regime's wait is not keyed in (no two sources yet). */
 
 import { keyedRng } from "./keyedRng";
+import { formatNumber } from "./formatNumber";
 import { peakRating } from "./careerRetirement";
 import type { RetirementRule, RetirementSnapshot } from "./careerRetirement";
 
@@ -104,6 +112,9 @@ export interface HallSport<C> {
   lines: HallLines;
   retirement: RetirementRule;
   legacy: (c: C) => { score: number; hof: boolean };
+  /** Round 1051: the card's line on what the voters weighed, or null for a
+   *  career read on calibration 1 (its card is the card it always had). */
+  weighs?: (c: C) => string | null;
   /** A stable key for this career, for keyedRng. */
   key: (c: C) => string;
   lastSeasonYear: (c: C) => number;
@@ -146,6 +157,8 @@ export interface HallRecord {
   firstBallot: boolean;
   jersey: HallJersey | null;
   score: number;
+  /** Round 1051: what the voters weighed, one line. Only on a career retired on calibration 2 or later. */
+  weighs?: string;
 }
 
 /** Game rules, not real world numbers. */
@@ -222,6 +235,43 @@ export function legacyRead(w: LegacyWeights, f: LegacyFacts): LegacyRead {
     if (credit > 0 && (!standout || credit > standout.credit)) standout = { stat: s.stat, label: s.label, total, credit };
   }
   return { score: Math.round(awards + f.seasons * w.season + production + (standout ? standout.credit : 0)), standout };
+}
+
+/** The words a sport gives the voters: the card's sentence, and the nouns of
+ *  the "?" rule and its worked example. Data, in the sport's own Hall file. */
+export interface HallVoterWords {
+  /** The ballot card's line. Names no trophy the engines count differently by position. */
+  weighs: string;
+  hardware: string;
+  /** The stats a position can stand out in, as the rule says them. */
+  families: string;
+  /** The worked example: the table cells it is about, and its nouns. */
+  example: { positions: string[]; stat: string; one: string; who: string; family: string };
+}
+
+/** The ballot card's line: the sport's sentence, and the standout when one counted. */
+export function hallWeighLine(sentence: string, standout: LegacyRead["standout"]): string {
+  if (!standout) return sentence;
+  return `${sentence} Your ${formatNumber(standout.total)} ${standout.label} sat near the top of this game's books, and that got a real push.`;
+}
+
+/** The two lines the "?" adds: the rule in one sentence, and a worked example.
+ *  Every number is written in from the rules, so the copy cannot drift. `top`
+ *  is the example family's own, where the table gives it one. */
+export function hallVoterRules(n: { hardware: string; families: string; one: string; who: string; family: string; top?: number }): string[] {
+  const top = n.top ?? LEGACY_GAME_RULES.standoutTop;
+  const cap = Math.round(LEGACY_GAME_RULES.standoutTop * LEGACY_GAME_RULES.standoutCap);
+  return [
+    `Hall of Fame voters weigh the hardware first (${n.hardware}), then your seasons and your whole stat sheet, and a career total near the top of this game's books in a stat your position really piles up (${n.families}) earns a push of its own, up to ${cap} legacy points.`,
+    `Example: take a ${n.one} with ordinary numbers and one with the same hardware and more ${n.family} than 99 of 100 ${n.who} this game has seen. The second scores at least ${top} legacy points more, which can be the whole gap between a long wait and the Hall. A career you already retired keeps the ballot it was told.`,
+  ];
+}
+
+/** The same two lines off a sport's words and its table (the example family's own top). */
+export function hallVoterRulesFor(words: HallVoterWords, weights: LegacyWeights): string[] {
+  const { positions, stat, one, who, family } = words.example;
+  const tops = positions.map(p => weights.positions[p]?.standout?.find(s => s.stat === stat)?.top ?? LEGACY_GAME_RULES.standoutTop);
+  return hallVoterRules({ hardware: words.hardware, families: words.families, one, who, family, top: Math.min(...tops) });
 }
 
 /** A stamp off a save, checked: exactly the whole numbers 1 to HALL_CALIBRATION, or undefined. */
@@ -358,7 +408,10 @@ export function hallRecordFor<C>(sport: HallSport<C>, c: C): HallRecord {
   });
   // A deck card retired the number on a save that kept no club: name none.
   const jersey = sport.jerseyUnknown?.(c) ? null : sport.recordedJersey?.(c) ?? jerseyFor(sport.seasons(c), ballot.outcome === "inducted", legacy.score, sport.lines);
-  return { ...ballot, jersey: jersey && sport.teamName ? { ...jersey, teamName: sport.teamName(jersey.team, c) } : jersey };
+  const record: HallRecord = { ...ballot, jersey: jersey && sport.teamName ? { ...jersey, teamName: sport.teamName(jersey.team, c) } : jersey };
+  // The key is added only when there is a line, so a calibration 1 record has exactly the keys it always had.
+  const weighs = sport.weighs?.(c);
+  return typeof weighs === "string" ? { ...record, weighs } : record;
 }
 
 /** A club retiring the number on a deck card, as the save keeps it. */
@@ -414,7 +467,9 @@ export function usCareerHall<C extends UsCareerShape>(def: {
   rules: HallRules;
   lines: HallLines;
   retirement: RetirementRule;
-  legacy: (c: C) => { score: number; hof: boolean };
+  legacy: (c: C) => { score: number; hof: boolean; standout?: LegacyRead["standout"] };
+  /** Round 1051: the sport's sentence on what the voters weigh (its HallVoterWords). */
+  weighs: string;
   shouldRetire: (c: C) => boolean;
   /** The sport's own club label, (abbreviation, era) to name. */
   teamLabel: (team: string, eraId?: string) => string;
@@ -428,6 +483,7 @@ export function usCareerHall<C extends UsCareerShape>(def: {
     lines: def.lines,
     retirement: def.retirement,
     legacy: c => { const l = def.legacy(c); return { score: l.score, hof: l.hof }; },
+    weighs: c => (hallCalibrationOf(c) === 1 ? null : hallWeighLine(def.weighs, def.legacy(c).standout ?? null)),
     key: c => `${c.name}|${c.pos}|${c.draftPick}|${c.seasons[0]?.year ?? c.year}`,
     lastSeasonYear,
     seasons: c => c.seasons,

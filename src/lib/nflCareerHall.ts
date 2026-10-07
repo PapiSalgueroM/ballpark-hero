@@ -3,8 +3,24 @@
    real rule below is sourced in docs/audits/US-HALL-RULES-2026-10.md and
    scripts/simCareerHall.mjs holds these numbers to that file's table. */
 
-import { legacyOf, shouldRetire, teamLabelOf, type CareerState } from "./nflMyCareer";
-import { usCareerHall } from "./careerHallOfFame";
+import { legacyOf, NFL_LEGACY_WEIGHTS, shouldRetire, teamLabelOf, type CareerState } from "./nflMyCareer";
+import { HALL_CALIBRATION, hallVoterRulesFor, usCareerHall, type HallVoterWords } from "./careerHallOfFame";
+
+/* Round 1051: what the voters weigh, in words. The card prints the sentence;
+   the "?" builds its rule and its worked example from the rest. "The major
+   awards" on purpose: the engine counts a different trophy by position under
+   one name, and a sentence that names none cannot mislabel one. The example
+   names a standout family of the calibration 2 table, and section 19 of
+   scripts/simCareerHall.mjs holds it against the engine. */
+export const NFL_HALL_WORDS: HallVoterWords = {
+  weighs: "The voters weigh the hardware first: rings, the major awards, All-Pro years. Then the whole stat sheet, whatever you played.",
+  hardware: "rings, the major awards, All-Pro years",
+  families: "passing yards for a quarterback, interceptions for a corner, sacks for an edge rusher, field goals for a kicker and so on",
+  example: { positions: ["CB"], stat: "picks", one: "corner", who: "corners", family: "interceptions" },
+};
+
+/** The two lines the page's "?" adds, built from the words above and the table careers retire on today. */
+export const nflHallHelpRules = (): string[] => hallVoterRulesFor(NFL_HALL_WORDS, NFL_LEGACY_WEIGHTS[HALL_CALIBRATION]);
 
 export const NFL_CAREER_HALL = usCareerHall<CareerState>({
   rules: {
@@ -27,6 +43,7 @@ export const NFL_CAREER_HALL = usCareerHall<CareerState>({
   // Game tuning. The hard stop (shouldRetire) is untouched.
   retirement: { minAge: 30, dropFromPeak: 8, floor: 70 },
   legacy: legacyOf,
+  weighs: NFL_HALL_WORDS.weighs,
   shouldRetire,
   teamLabel: teamLabelOf,
   deckJerseyFlag: "b_jersey",

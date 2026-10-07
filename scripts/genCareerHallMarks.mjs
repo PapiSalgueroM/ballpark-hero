@@ -199,19 +199,21 @@ for (const sport of Object.keys(POSITIONS)) {
   out.bands = { defaultCareers: DEFAULT_N, fromCell: { lo: env.lo, hi: env.hi, measuredLo: Math.min(...env.measured), measuredHi: Math.max(...env.measured), cells: cellShares.length }, fromPooled: widen(fromPooled, 0.5), toPooled: widen(toPooled, 0.5) };
 
   /* The second pass: the outcome on calibration 2, when the rows carry it. */
-  if (runs.every(run => run.every(r => typeof r.hof2 === 'boolean'))) {
-    const gains = [], hall1 = [], hall2 = [], med1 = [], med2 = [], mean1 = [], mean2 = [], newlyIn = [];
+  if (runs.every(run => run.every(r => typeof r.hof2 === 'boolean' && typeof r.hof2b === 'boolean'))) {
+    const gains = [], own = [], hall1 = [], hall2 = [], med1 = [], med2 = [], mean1 = [], mean2 = [], newlyIn = [];
     const baseMed = Object.fromEntries(Object.keys(out.base).map(p => [p, []]));
     for (const run of runs) {
-      let in1 = 0, in2 = 0, n = 0;
+      let in1 = 0, in2 = 0, n = 0, sIn = 0, sOut = 0, sN = 0;
       for (const { pos, f } of cells) {
         const mine = run.filter(r => r.pos === pos).sort((x, y) => (y.t[f] ?? 0) - (x.t[f] ?? 0));
         const top = mine.slice(0, Math.ceil(TOP_SHARE * mine.length));
         const s1 = top.filter(r => r.hof1).length;
+        sIn += top.filter(r => r.hof2).length; sOut += top.filter(r => r.hof2b).length; sN += top.length;
         if (s1 / top.length >= COVERED) continue;
         in1 += s1; in2 += top.filter(r => r.hof2).length; n += top.length;
       }
       gains.push(n ? (in2 - in1) / n : 0);
+      own.push(sN ? (sIn - sOut) / sN : 0);
       hall1.push(run.filter(r => r.hof1).length / run.length);
       hall2.push(run.filter(r => r.hof2).length / run.length);
       newlyIn.push(run.filter(r => r.hof2 && !r.hof1).length);
@@ -223,6 +225,8 @@ for (const sport of Object.keys(POSITIONS)) {
     out.outcome = {
       topShare: TOP_SHARE, covered: COVERED,
       pooledGain: { measured: r4(gains), floor: Math.round((Math.min(...gains) / 2) * 1e4) / 1e4 },
+      // The same top 5 percent, every cell: in the Hall on 2 against the same score with the standout taken out.
+      standoutGain: { measured: r4(own), floor: Math.round((Math.min(...own) / 2) * 1e4) / 1e4 },
       hallShare1: r4(hall1), hallShare2: r4(hall2),
       hallCeiling: Math.round((Math.max(...hall2) + (Math.max(...hall2) - Math.min(...hall2))) * 1e4) / 1e4,
       newlyIn, medianScore1: med1, medianScore2: med2, meanScore1: mean1, meanScore2: mean2,
@@ -248,7 +252,7 @@ for (const sport of Object.keys(POSITIONS)) {
   console.log(`  bands at ${DEFAULT_N} careers: a cell's share at or over from ${(100 * out.bands.fromCell.measuredLo).toFixed(1)} to ${(100 * out.bands.fromCell.measuredHi).toFixed(1)} percent over ${out.bands.fromCell.cells} cell runs (band ${(100 * out.bands.fromCell.lo).toFixed(1)} to ${(100 * out.bands.fromCell.hi).toFixed(1)}); pooled from ${out.bands.fromPooled.measured.map(x => (100 * x).toFixed(2)).join(' ')} (band ${(100 * out.bands.fromPooled.lo).toFixed(2)} to ${(100 * out.bands.fromPooled.hi).toFixed(2)}); pooled to ${out.bands.toPooled.measured.map(x => (100 * x).toFixed(2)).join(' ')} (band ${(100 * out.bands.toPooled.lo).toFixed(2)} to ${(100 * out.bands.toPooled.hi).toFixed(2)})`);
   if (out.outcome) {
     const o = out.outcome;
-    console.log(`  outcome: Hall share on 1 ${o.hallShare1.map(x => (100 * x).toFixed(1)).join(' ')}; on 2 ${o.hallShare2.map(x => (100 * x).toFixed(1)).join(' ')} (ceiling ${(100 * o.hallCeiling).toFixed(1)}); newly in ${o.newlyIn.join(' ')}; pooled top 5 percent gain ${o.pooledGain.measured.map(x => (100 * x).toFixed(1)).join(' ')} points (floor ${(100 * o.pooledGain.floor).toFixed(1)})`);
+    console.log(`  outcome: Hall share on 1 ${o.hallShare1.map(x => (100 * x).toFixed(1)).join(' ')}; on 2 ${o.hallShare2.map(x => (100 * x).toFixed(1)).join(' ')} (ceiling ${(100 * o.hallCeiling).toFixed(1)}); newly in ${o.newlyIn.join(' ')}; pooled top 5 percent gain ${o.pooledGain.measured.map(x => (100 * x).toFixed(1)).join(' ')} points (floor ${(100 * o.pooledGain.floor).toFixed(1)}); owed to the standout alone ${o.standoutGain.measured.map(x => (100 * x).toFixed(1)).join(' ')} (floor ${(100 * o.standoutGain.floor).toFixed(1)})`);
     console.log(`  points paid: median ${o.medianScore1.join(' ')} -> ${o.medianScore2.join(' ')}; mean ${o.meanScore1.join(' ')} -> ${o.meanScore2.join(' ')}`);
     for (const [p, b] of Object.entries(o.baseCredit)) console.log(`  base credit, median ${p}: ${b.measured.join(' ')} (band ${b.lo} to ${b.hi})`);
   }

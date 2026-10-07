@@ -382,6 +382,11 @@ describe.each(SPORTS)('%s: the calibration stamp (Round 1051)', (_slug, getSport
     // The retired screen reads the stamped career: its legacy is the saved one's.
     await waitFor(() => expect(document.body.textContent).toContain(`${c.name} retires`));
     expect(document.body.textContent).toContain(sport.legacyOf(after).verdict);
+    // The ballot card says what the voters weighed: the record's own line, which opens with the sport's sentence.
+    const line = await waitFor(() => { const el = document.querySelector('[data-hall-weighs]'); expect(el).toBeTruthy(); return el!; }, { timeout: 12000 });
+    const rec = hallRecordFor(sport.hall!, after);
+    expect(line.textContent).toBe(rec.weighs);
+    expect(rec.weighs!.startsWith('The voters weigh the hardware first: ')).toBe(true);
     // A reload keeps the stamp and writes nothing.
     const bytes = localStorage.getItem(sport.saveKey);
     cleanup();
@@ -410,6 +415,8 @@ describe.each(SPORTS)('%s: the calibration stamp (Round 1051)', (_slug, getSport
     save(sport, c, null, 'retired');
     mount(sport);
     await waitFor(() => expect(document.body.textContent).toContain('Your induction speech'));
+    expect(document.querySelector('[data-hall-weighs]'), 'a calibration 1 card prints no voters line').toBeNull();
+    expect('weighs' in hallRecordFor(sport.hall!, c)).toBe(false);
     fireEvent.click(button('Keep it short')!);
     await waitFor(() => expect(read(sport).c.hallSpeech?.speechId).toBe('short'));
     expect('hallCal' in read(sport).c, 'the speech writes no stamp on an old retired save').toBe(false);
@@ -459,6 +466,7 @@ describe.each(SPORTS)('%s: the calibration stamp (Round 1051)', (_slug, getSport
     cleanup();
     mount(sport);
     await waitFor(() => expect(document.body.textContent).toContain(sport.hall!.rules.hallName));
+    await waitFor(() => expect(document.querySelector('[data-hall-weighs]')).toBeTruthy(), { timeout: 12000 });
     expect(read(sport).c.hallCal).toBe(2);
     expect(hallCalibrationOf(read(sport).c)).toBe(2);
   }, 20000);
