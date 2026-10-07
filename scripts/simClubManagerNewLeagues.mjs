@@ -109,11 +109,27 @@
       line, and its board asks with the promotion ladder. And the drop zone
       is read off the league's own size and drop: the first drop place of
       every modelled top flight reads as a relegation, the place above it
-      does not.
+      does not. Round 1040 review: every season E and R finish must file its
+      own league and that league's size on the season's record (the fields
+      the drop zone is read from; without them the old 18th rule comes back
+      and Ligue 1's 17th reads as no relegation), and no mover's summer line
+      puts "the" before La Liga, Serie A or B, or Ligue 1 or 2.
+      A drop zone finish in a SECOND tier (Serie B 18th to 20th, the Segunda
+      17th to 20th, Ligue 2 17th and 18th, the Championship 22nd to 24th)
+      also reads as a relegation on the manager's record, though the game has
+      no third tier to send the club to: correction 8's formula, the same
+      convention Brazil's drop zone already had on main. Recorded here and in
+      wildernessProfile, on purpose, not checked as a defect.
    F. CUP UNDERDOGS (hard). A top flight career's domestic cup holds two or
       three clubs of its second tier, and a top flight winner over a second
       tier loser is never an upset while the reverse always is, asked from a
-      top flight career and from a second tier one.
+      top flight career and from a second tier one. Round 1040 review: MLS
+      East and West are one division sharing the U.S. Open Cup, so neither
+      beating the other is an upset (before the round the other conference
+      was the "lower" one); the cupold control turns that red as well.
+   THIN. The round's three facts with one 2026-27 source (THIN_FACTS below)
+      must stay marked THIN for 2026-27 in their engine rows, and the run
+      prints them.
    G. OLD SAVE (hard). scripts/data/cmSecondTierOldSaveFixture.json, written
       once by the engine BEFORE the round (release-ah fc30942e: a Valencia
       career seeded 1040, four league weeks left, 129,093 bytes, a world of
@@ -133,49 +149,55 @@
    premier 3, championship 3, bundesliga 2, bundesliga2 2, seriea 3,
    serieb 3; Frosinone, Serie A's weakest (rated 73), went down 18th on the
    first try and its board asked "Make the promotion playoffs".
-   Serie B (A to D): only Pisa, Verona and Cremonese carry 8 or more real
-   men, so the one pair is Pisa (rated 74) over Cremonese (71); Verona (73)
-   over Cremonese measured 8.7, 2.6, 2.2, 5.7, 8.8 and 3.5 points over 24
-   seasons, SIM_SEED unset and 1 to 5, a two point rating gap that noise
-   swamps, so it is not a pair. Six seasons a run were too few (Pisa's gap
-   12.0, 4.0, 11.0), so the row plays 48: gap 10.3, 5.8, 7.9, 8.4, 6.4, 9.3
-   (mean 8.0, standard deviation 1.7, band 2, 3.5 deviations clear); rank
-   correlation over the 14 unmanaged clubs 0.755, 0.705, 0.633, 0.809,
-   0.800, 0.755 (band 0.4). Day one: 119 real men, 208 flagged pads, 16 of
-   20 clubs partial.
+   RE-MEASURED 2026-10-07 for the three rows, after the round's review
+   withheld every baked man at the new clubs that his club's ESPN 2026-27
+   squad page leaves out (110 men; the roster ledger's round1040-review
+   rows). The first build's numbers, a Pisa over Cremonese pair among them,
+   were measured on squads that still held last season's departures. Every
+   row plays 48 seasons a run, SIM_SEED unset and 1 to 5. A club with no
+   baked man previews at the picker's 66 while it plays at its 61 prior, so
+   the three rows leave those clubs out of the rank correlation (a
+   placeholder is not a rating); the weakest club asked to stay up is the
+   lowest preview, ties broken by the engine's own expectation rank.
+   Serie B (A to D): only Pisa (12 real men, rated 72) and Verona (11, 71)
+   carry 8 or more, a one point gap noise swamps, so the row keeps no pair
+   (correction 9: skip only the pair). Rank correlation over the 12 unmanaged
+   clubs with baked men 0.955, 0.941, 0.839, 0.912, 0.937, 0.837 (band 0.4).
+   Day one: 78 real men, 244 flagged pads, 18 of 20 clubs partial (realMin
+   60). The weakest, Ascoli (60), is asked to finish 17th or better.
 
    Ligue 2 (the round's second step, which also takes Ligue 1's drop from
-   three to two, the real league's): Nantes (14 real men), Saint-Étienne
-   (13) and Reims (12) are its only squads at 8 or more and they are rated
-   73, 72 and 72, so Nantes over Saint-Étienne measured 6.3, 4.0, 5.8, 2.4,
-   3.6 and 7.0 points over 48 seasons, SIM_SEED unset and 1 to 5 (mean 4.9,
-   standard deviation 1.7: a band of 2 would be a coin toss), and the row
-   keeps no pair. Its part C is the rank correlation over the 12 unmanaged
-   clubs: 0.629, 0.615, 0.671, 0.735, 0.565, 0.728 (band 0.4). Day one: 79
-   real men, 213 flagged pads, 15 of 18 clubs partial, so its floor of real
-   men is its own (realMin 60) rather than ten a club. The F part's Coupe de
-   France holds 2 or 3 Ligue 2 clubs; part E trades ligue1 2 and ligue2 2.
+   three to two, the real league's): Nantes (13 real men, rated 73),
+   Saint-Étienne (9, 69) and Reims (8, 68) are its squads at 8 or more, so
+   the pair is Nantes over Reims: 13.7, 13.5, 12.0, 11.6, 11.9, 10.8 points a
+   season (mean 12.3, standard deviation 1.0, band 5, about half the lowest
+   and 7 deviations clear). Rank correlation over the 7 unmanaged clubs with
+   baked men 0.964, 0.889, 0.741, 0.964, 0.704, 0.741 (band 0.4). Day one:
+   49 real men, 240 flagged pads, 15 of 18 clubs partial (realMin 36). The
+   F part's Coupe de France holds 2 or 3 Ligue 2 clubs; part E trades ligue1
+   2 and ligue2 2.
    Parts E, G and the relegation career hold the board at full confidence
    before every entry: the engine sacked a mid table manager before his
    third summer in 21 of 29 careers, which starved E of summers (Mainz
    reached 4 of 6) and ended every one of G's four second seasons.
 
    The Segunda División (the round's third step): 20 of the real 22 clubs,
-   the two reserve sides left out. Girona (13 real men), Mallorca (12), Real
-   Oviedo (9) and Las Palmas (8) are its squads at 8 or more, so the pairs
-   are Girona (rated 75) over Real Oviedo (69) and Mallorca (72) over Las
-   Palmas (68). 48 seasons a run, SIM_SEED unset and 1 to 5: Girona over
-   Oviedo 19.4, 21.8, 18.2, 19.5, 19.3, 17.4; Mallorca over Las Palmas 10.4,
-   12.8, 8.3, 11.5, 12.6, 10.4 (mean 11.0, standard deviation 1.6, band 4,
-   4.4 deviations clear); rank correlation over the 14 unmanaged clubs
-   0.740, 0.682, 0.606, 0.789, 0.706, 0.805 (band 0.4). Day one: 87 real
-   men, 239 flagged pads, 16 of 20 clubs partial (realMin 60, as Ligue 2).
-   Part F also holds that neither reserve side is a club of the game.
+   the two reserve sides left out. Girona (10 real men, rated 72) and
+   Mallorca (8, 68) are its squads at 8 or more, so the pair is Girona over
+   Mallorca: 11.9, 10.6, 10.7, 10.4, 12.4, 11.5 points a season (mean 11.3,
+   standard deviation 0.8, band 5). Rank correlation over the 8 unmanaged
+   clubs with baked men 0.939, 0.939, 0.939, 0.875, 0.939, 0.939 (band 0.4;
+   with the six empty clubs left in it read 0.274 on the unset stream,
+   which is why they are left out). Day one: 48 real men, 274 flagged pads,
+   18 of 20 clubs partial (realMin 36). The weakest by preview ties at 61
+   (Eibar, Burgos, Valladolid, Albacete); the engine ranks Albacete last and
+   asks it to finish 16th or better. Part F also holds that neither reserve
+   side is a club of the game.
 
    Round 1040's controls (each must turn the run red):
      CM_NEW_CONTROL=nopyramid  Serie A loses its second tier: E red;
-     CM_NEW_CONTROL=emptypair  Serie B's pair sets Pisa against empty
-                               Arezzo: the real squad pair rule red;
+     CM_NEW_CONTROL=emptypair  the Segunda's pair sets Girona against empty
+                               Tenerife: the real squad pair rule red;
      CM_NEW_CONTROL=crowd      the summer news cap goes back to five lines:
                                E red (a Serie A career's sixth mover);
      CM_NEW_CONTROL=cupold     a cup club's division is "in my league or
@@ -184,6 +206,14 @@
                                row's top flight drop (A) and E red;
      CM_NEW_CONTROL=reserve    Real Sociedad B joins the Segunda: its size
                                (A) and F's reserve check red.
+   The review's controls:
+     CM_NEW_CONTROL=nohistleague  finishSeason stops filing the league and
+                               its size on the season's record (the
+                               reviewer's mutant): E and R red;
+     CM_NEW_CONTROL=article    the promotion line says "to the" before every
+                               league again: E red;
+     CM_NEW_CONTROL=thin       the Serie B row's THIN mark is dropped: the
+                               THIN part red.
 
    Run: node scripts/simClubManagerNewLeagues.mjs   (SIM_SEEDS=n, default 6; a row may ask for more)
         CM_NEW_PARTS=AD or EFG runs those parts, CM_NEW_ROWS=serieb those rows
@@ -199,7 +229,7 @@ const ROOT_FWD = ROOT.replaceAll('\\', '/');
 const SEEDS_ALL = Number(process.env.SIM_SEEDS || 6);
 const SEED_SET = process.env.SIM_SEED || "";
 const CONTROL = process.env.CM_NEW_CONTROL || '';
-const CONTROLS = ['dropcount', 'nocup', 'swap', 'invented', 'cupon', 'dropcount2', 'alpartial', 'nopyramid', 'emptypair', 'crowd', 'cupold', 'ligue1drop3', 'reserve'];
+const CONTROLS = ['dropcount', 'nocup', 'swap', 'invented', 'cupon', 'dropcount2', 'alpartial', 'nopyramid', 'emptypair', 'crowd', 'cupold', 'ligue1drop3', 'reserve', 'nohistleague', 'article', 'thin'];
 /* Round 1040: parts E to G can be run alone (CM_NEW_PARTS=EFG), the A to D
    league rows alone (CM_NEW_PARTS=AD), or every part (unset). */
 const PARTS = process.env.CM_NEW_PARTS || 'ADEFG';
@@ -255,34 +285,32 @@ const NEW_LEAGUES = [
     pairs: [['Adelaide United', 'Central Coast Mariners']],
     managed: ['Perth Glory', 'Newcastle Jets', 'Melbourne Victory', 'Western Sydney Wanderers', 'Sydney FC', 'Macarthur FC'],
   },
-  /* Round 1040: Serie B, Serie A's second tier. Only three of its twenty
-     clubs carry 8 or more real men (Pisa 18, Verona 13, Cremonese 10, all
-     three down from Serie A), so the one pair is Pisa over Cremonese (Verona
-     over Cremonese is a two point rating gap noise swamps) and every other
-     club is mostly youth pads. 48 seasons a run; MEASURED in the Round 1040
-     header section. */
+  /* Round 1040: Serie B, Serie A's second tier. After the round's review
+     withheld every man ESPN's 2026-27 squads leave out, only Pisa (12 real
+     men) and Verona (11) carry 8 or more, rated 72 and 71: a one point gap
+     noise swamps, so the row keeps no pair and part C is the rank
+     correlation alone (correction 9: the pair is skipped, the rest is
+     measured). 48 seasons a run; MEASURED in the Round 1040 header section. */
   {
     id: 'serieb', size: 20, drop: 3, topDrop: 3, cup: 'Coppa Italia', pairGap: 2, rhoMin: 0.4, realPairs: true, seeds: 48, realMin: 60,
     pairs: [],
     managed: ['Palermo', 'Sampdoria', 'Empoli', 'Modena', 'Cesena', 'Padova'],
   },
-  /* Round 1040: Ligue 2, Ligue 1's second tier. Nantes (14 real men),
-     Saint-Étienne (13) and Reims (12) are the only clubs with 8 or more and
-     they are rated 73, 72 and 72, so no pair of real squads has a rating
-     gap noise does not swamp (Nantes over Saint-Étienne measured 2.4 to 7.0
-     points over 48 seasons). The row keeps no pair, and part C here is the
-     rank correlation alone. MEASURED in the Round 1040 header section. */
+  /* Round 1040: Ligue 2, Ligue 1's second tier. After the review Nantes
+     (13 real men), Saint-Étienne (9) and Reims (8) carry 8 or more, rated
+     73, 69 and 68, so the pair is Nantes over Reims. MEASURED in the Round
+     1040 header section. */
   {
-    id: 'ligue2', size: 18, drop: 2, topDrop: 2, cup: 'Coupe de France', pairGap: 2, rhoMin: 0.4, realPairs: true, seeds: 48, realMin: 36,
+    id: 'ligue2', size: 18, drop: 2, topDrop: 2, cup: 'Coupe de France', pairGap: 5, rhoMin: 0.4, realPairs: true, seeds: 48, realMin: 36,
     pairs: [['Nantes', 'Reims']],
     managed: ['Montpellier', 'Metz', 'Guingamp', 'Dunkerque', 'Annecy', 'Laval'],
   },
   /* Round 1040: the Segunda División, La Liga's second tier: 20 of the real
-     22 clubs (the two reserve sides are left out). Girona (13 real men),
-     Mallorca (12), Real Oviedo (9) and Las Palmas (8) carry 8 or more.
-     MEASURED in the Round 1040 header section. */
+     22 clubs (the two reserve sides are left out). After the review Girona
+     (10 real men) and Mallorca (8) carry 8 or more, rated 72 and 68, so the
+     pair is Girona over Mallorca. MEASURED in the Round 1040 header section. */
   {
-    id: 'segunda', size: 20, drop: 4, topDrop: 3, cup: 'Copa del Rey', pairGap: 4, rhoMin: 0.4, realPairs: true, seeds: 48, realMin: 36,
+    id: 'segunda', size: 20, drop: 4, topDrop: 3, cup: 'Copa del Rey', pairGap: 5, rhoMin: 0.4, realPairs: true, seeds: 48, realMin: 36,
     pairs: [['Girona', 'Mallorca']],
     managed: ['Almería', 'Leganés', 'Sporting Gijón', 'Granada', 'Cádiz', 'Castellón'],
   },
@@ -291,6 +319,35 @@ const NEW_LEAGUES = [
    pair needs 8 or more baked players a side (the CM_PARTIAL line); the
    emptypair control swaps one in for an empty club and must turn this red. */
 const PAIR_MIN_REAL = 8;
+/* Round 1040 review, decision 4 of the round's brief: a fact with no second
+   2026-27 source is marked THIN in the engine's comment AND here. These are
+   the round's three; each row's comment must still say THIN for 2026-27 until
+   a second 2026-27 source is written beside it, and the run prints them, so
+   a green run never reads as "all two sourced".
+     ligue1  the drop of two plus the barrage for 2026-27: Foot Mercato is the
+             one 2026-27 publisher, the second source describes 2025-26.
+     serieb  the promotion playoff rung (third to eighth, the board's target)
+             for 2026-27: last season's places, the 2026-27 calendar release
+             restates none.
+     ligue2  the drop of two (seventeenth and eighteenth straight down) for
+             2026-27: Foot Mercato again the one 2026-27 publisher. */
+const THIN_FACTS = [
+  { id: 'ligue1', fact: "Ligue 1's 2026-27 drop of two and the barrage" },
+  { id: 'serieb', fact: "Serie B's 2026-27 promotion playoff rung (third to eighth)" },
+  { id: 'ligue2', fact: "Ligue 2's 2026-27 drop of two" },
+];
+function partThin() {
+  let src = fs.readFileSync(path.join(ROOT, 'src', 'lib', 'clubManager.ts'), 'utf8').split('\r\n').join('\n');
+  /* thin: the Serie B row's mark is dropped, as if the rung were two sourced. */
+  if (CONTROL === 'thin') src = mutateOnce(src, '2026-05-08). THIN for 2026-27: the season', '2026-05-08). For 2026-27: the season', 'thin');
+  for (const { id, fact } of THIN_FACTS) {
+    const at = src.indexOf(`\n  ${id}: {\n    nationId:`);
+    const open = at < 0 ? -1 : src.lastIndexOf('/*', at);
+    const comment = open < 0 ? '' : src.slice(open, at);
+    if (at < 0 || !comment.includes('*/') || !/THIN for 2026-27/.test(comment)) fail(`THIN: ${fact} has one 2026-27 source, and the ${id} row's comment no longer marks it THIN for 2026-27`);
+    else console.log(`   THIN (one 2026-27 source, marked in the ${id} row): ${fact}`);
+  }
+}
 /* Round 883: what a league that relegates nobody must never say. */
 /* The review widened it past the three phrasings the engine used then to
    every way it words the drop today (grep of clubManager.ts on 2026-10-02:
@@ -345,6 +402,14 @@ function transformEngine(src) {
   /* reserve: Real Sociedad B joins the Segunda, the real league's 21st club:
      the row's size (A) goes red. */
   if (CONTROL === 'reserve') src = mutateOnce(src, "'Cádiz', 'FC Andorra', 'Ceuta', 'Albacete'],", "'Cádiz', 'FC Andorra', 'Ceuta', 'Albacete', 'Real Sociedad B'],", 'reserve');
+  /* nohistleague (Round 1040 review): finishSeason stops filing the league
+     and its size on the season's record, as the reviewer's mutant did:
+     checkSeasonRecord in E and R goes red. */
+  /* article: the summer's promotion line goes back to "to the" before every
+     league name, as the round first shipped it: E red on Serie A, Ligue 1
+     and La Liga careers. */
+  if (CONTROL === 'article') src = mutateOnce(src, 'win promotion to ${toLeague(topDef.name)}.', 'win promotion to the ${topDef.name}.', 'article');
+  if (CONTROL === 'nohistleague') src = mutateOnce(src, 'trophies: seasonTrophies, leagueId: careerLeagueOf(state).id, leagueSize: table.length },', 'trophies: seasonTrophies },', 'nohistleague');
   if (CONTROL === 'cupold') src = mutateOnce(src, "return leagueRulesOf(lg.id).ladder === 'promotion' ? 2 : 1;", 'return lg.id === careerLeagueOf(state).id ? 1 : 2;', 'cupold');
   /* Private helpers the checks ask directly. */
   return `${src}\nexport { relegationSpots as __relegationSpots, buildSquad as __buildSquad, getPool as __getPool, isCupUpset as __isCupUpset };\n`;
@@ -421,8 +486,11 @@ function partRows(cm, row) {
     else if (above.count !== row.topDrop || cm.__relegationSpots(above.top) !== row.topDrop) fail(`${above.top} sends ${above.count} down to ${row.id} (drop ${cm.__relegationSpots(above.top)}), the real league sends ${row.topDrop}`);
   }
   for (const c of lg.clubs) if (cm.leagueOf(c).id !== row.id) fail(`${c} resolves to league ${cm.leagueOf(c).id}`);
-  /* The weakest club by the engine's own preview is asked to stay up. */
-  const byRating = [...lg.clubs].sort((a, b) => cm.clubPreviewRating(a) - cm.clubPreviewRating(b));
+  /* The weakest club by the engine's own preview is asked to stay up.
+     Round 1040 review: previews are rounded, so several thin Segunda squads
+     tie at the bottom (61); the tie goes to the club the engine itself ranks
+     weakest (its def's expectation), not to whichever the list names first. */
+  const byRating = [...lg.clubs].sort((a, b) => cm.clubPreviewRating(a) - cm.clubPreviewRating(b) || cm.clubDefFor(b).expectation - cm.clubDefFor(a).expectation);
   Math.random = seeded(hashKey(`newleagues|${row.id}|weakest`));
   const weak = cm.startCareer(byRating[0], 'now');
   Math.random = REAL_RANDOM;
@@ -572,7 +640,13 @@ function partStrength(cm, row, lg, perClub) {
     if (!(gap >= band)) fail(`${strong} beat ${weak} by ${gap.toFixed(1)} points a season, the band is ${band}`);
   }
   const managed = new Set(row.managed);
-  const field = lg.clubs.filter(c => !managed.has(c) && perClub[c].length);
+  /* Round 1040 review: a club with no baked man previews at the 66 the
+     picker fills an empty squad with, while it plays at its 61 prior, so its
+     preview is a placeholder rather than a rating of anything; a row that
+     asks for real pairs leaves those clubs out of the correlation. */
+  const empty = row.realPairs ? lg.clubs.filter(c => !managed.has(c) && !(cm.CM_ROSTERS[c]?.length)) : [];
+  const field = lg.clubs.filter(c => !managed.has(c) && perClub[c].length && !empty.includes(c));
+  if (empty.length) console.log(`   ${empty.length} unmanaged clubs with no baked man left out of the correlation: ${empty.join(', ')}`);
   const rho = spearman(field.map(c => cm.clubPreviewRating(c)), field.map(c => mean(perClub[c])));
   console.log(`   rank correlation, preview rating against mean points, ${field.length} clubs: ${rho.toFixed(3)}`);
   /* Round 1035: a row whose clubs are rated too close together for a rank
@@ -647,6 +721,22 @@ function finishedSnapshot(cm, fin) {
   return { own: cm.careerLeagueOf(fin).id, tables };
 }
 
+/* Round 1040 review: wentDown reads a finish against the league it was
+   played in only when finishSeason files that league on the season's record
+   (leagueId and the table's size). Without them it falls back to the old
+   18th and below, which misses Ligue 1's 17th, and partWentDown alone would
+   stay green because it writes both fields itself. So every season E and R
+   play must file both, read before the summer re-registers the leagues.
+   Control: CM_NEW_CONTROL=nohistleague. */
+let seasonRecordsChecked = 0;
+let summerLinesRead = 0;
+function checkSeasonRecord(cm, fin, tag) {
+  const h = fin.history[fin.history.length - 1];
+  const lg = cm.careerLeagueOf(fin);
+  seasonRecordsChecked += 1;
+  if (!h || h.leagueId !== lg.id || h.leagueSize !== lg.clubs.length) fail(`${tag}: the finished season's record files league ${h?.leagueId} of size ${h?.leagueSize}, it was played in ${lg.id} of ${lg.clubs.length}`);
+}
+
 function checkSummer(cm, fin, next, tag, snap) {
   const moved = {};
   for (const pe of PYRAMID_EXPECT) {
@@ -671,6 +761,13 @@ function checkSummer(cm, fin, next, tag, snap) {
     if (own === pe.top || own === pe.second) {
       for (const c of [...up, ...down]) if (!(next.aiHeadlines ?? []).some(h => h.includes(c))) fail(`${tag}: no summer line names ${c}, who moved in the manager's own pyramid`);
     }
+  }
+  /* Round 1040 review: a mover's line names Serie A, Ligue 1, La Liga and
+     their second tiers without a stray article ("to the Serie A" read wrong
+     every summer). Control: CM_NEW_CONTROL=article. */
+  for (const h of (next.aiHeadlines ?? []).filter(x => x.startsWith('\u{2B06}') || x.startsWith('\u{2B07}'))) {
+    summerLinesRead += 1;
+    if (/\bto the (La Liga|Serie [AB]|Ligue [12])\b/.test(h)) fail(`${tag}: the summer line "${h}" puts "the" before the league`);
   }
   const seen = new Map();
   for (const l of cm.REAL_LEAGUES) for (const c of membersOf(cm, next, l.id)) {
@@ -698,6 +795,7 @@ function partPyramids(cm) {
         if (played.stuck) { fail(`E ${pe.club} seed ${k} season ${y + 1}: never ended`); break; }
         if (played.sacked) { sacked += 1; break; }
         const fin = cm.finishSeason(played.state).state;
+        checkSeasonRecord(cm, fin, `E ${pe.club} seed ${k} season ${y + 1}`);
         const snap = finishedSnapshot(cm, fin);
         const next = cm.startNextSeason(fin);
         const moved = checkSummer(cm, fin, next, `E ${pe.club} seed ${k} summer ${y + 1}`, snap);
@@ -710,6 +808,9 @@ function partPyramids(cm) {
     }
     if (own < 3 * E_SEEDS) fail(`E ${pe.top}: only ${own} summers of a ${pe.club} career were played, ${3 * E_SEEDS} wanted`);
   }
+  console.log(`   ${seasonRecordsChecked} finished seasons filed their own league and its size on the record; ${summerLinesRead} mover lines read for the league's name`);
+  if (!summerLinesRead) fail('E: no mover line was read for the league name');
+  if (!seasonRecordsChecked) fail('E: no finished season was checked for its league on the record');
   console.log(`   ${summers} summers checked (${sacked} careers sacked on the way); clubs moved into each league per summer: ${Object.entries(movedTotals).map(([id, a]) => `${id} ${[...new Set(a)].join('/')}`).join(', ')}`);
   partRelegatedCareer(cm);
   partWentDown(cm);
@@ -731,6 +832,7 @@ function partRelegatedCareer(cm) {
     const played = playSeason(cm, cm.startCareer(club, 'now'), true);
     if (played.stuck || played.sacked) { Math.random = REAL_RANDOM; finishes.push(played.sacked ? 'sacked' : 'stuck'); continue; }
     const fin = cm.finishSeason(played.state).state;
+    checkSeasonRecord(cm, fin, `R ${club} try ${tries}`);
     const pos = fin.history[fin.history.length - 1].position;
     finishes.push(pos);
     if (pos <= lg.clubs.length - pe.count) { Math.random = REAL_RANDOM; continue; }
@@ -739,7 +841,7 @@ function partRelegatedCareer(cm) {
     const next = cm.startNextSeason(fin);
     const nowIn = cm.careerLeagueOf(next).id;
     if (nowIn !== pe.second) fail(`R: ${club} went down ${pos}th and starts next season in ${nowIn}`);
-    if (!(next.aiHeadlines ?? []).some(h => h.includes(`Relegated. ${club} go down to the ${secondDef.name}.`))) fail(`R: no Relegated line for ${club}: ${(next.aiHeadlines ?? []).slice(0, 3).join(' | ')}`);
+    if (!(next.aiHeadlines ?? []).some(h => h.includes(`Relegated. ${club} go down to ${secondDef.name}.`))) fail(`R: no Relegated line for ${club}: ${(next.aiHeadlines ?? []).slice(0, 3).join(' | ')}`);
     if (cm.leagueRulesOf(nowIn).ladder !== 'promotion') fail(`R: ${nowIn}'s ladder is ${cm.leagueRulesOf(nowIn).ladder}`);
     const ask = (next.boardObjectives ?? []).find(o => o.id === 'league');
     if (!ask || !ladderLabels.has(ask.label)) fail(`R: ${club}'s board in ${nowIn} asks "${ask?.label}", not a promotion ladder ask`);
@@ -812,6 +914,31 @@ function partCup(cm) {
     if (misfires) fail(`F ${ce.top}: a top flight club beating a ${ce.second} club was flagged a giant killing ${misfires} times`);
     if (misses) fail(`F ${ce.top}: a ${ce.second} club beating a top flight club went unflagged ${misses} times`);
   }
+  /* Round 1040 review: cupDivisionOf reads a club's own ladder, so MLS East
+     and MLS West, one division in two conferences that share the U.S. Open
+     Cup, are both the top division. Before the round "not my league" made the
+     other conference the lower division: two or three of its clubs were drawn
+     as the underdogs and a win over them read as a giant killing. Neither
+     conference beating the other is an upset now, and the draw seeds no
+     second tier. The cupold control turns this red too. */
+  {
+    const owner = cm.REAL_LEAGUES.find(l => l.id === 'mlsEast').clubs[0];
+    Math.random = seeded(hashKey(`newleagues${SEED_SET}|F|mls`));
+    const s = cm.startCareer(owner, 'now');
+    Math.random = REAL_RANDOM;
+    const east = membersOf(cm, s, 'mlsEast').filter(c => c !== owner).slice(0, 8);
+    const west = membersOf(cm, s, 'mlsWest').slice(0, 8);
+    let flagged = 0, pairs = 0;
+    for (const e of east) for (const w of west) {
+      pairs += 2;
+      if (cm.__isCupUpset(s, e, w)) flagged += 1;
+      if (cm.__isCupUpset(s, w, e)) flagged += 1;
+    }
+    const r16 = (s.cupBracket ?? []).filter(t => t.round === 'R16');
+    console.log(`   MLS (${owner}): ${r16.length} cup ties in the last sixteen; over ${pairs} East and West pairings ${flagged} flagged an upset`);
+    if (!pairs) fail('F MLS: no East and West pairing was read');
+    if (flagged) fail(`F MLS: a win between the two MLS conferences was flagged a giant killing ${flagged} times, but they are one division`);
+  }
 }
 
 /* G. OLD SAVE (Round 1040). scripts/data/cmSecondTierOldSaveFixture.json is
@@ -881,6 +1008,7 @@ if (CONTROL === 'emptypair') {
   row.pairs[0] = [row.pairs[0][0], 'Tenerife'];
   console.log('NEGATIVE CONTROL ON: a Segunda pair sets Girona against empty Tenerife; the real squad pair rule must go red');
 }
+if (PARTS.includes('A')) { console.log('THIN facts'); partThin(); }
 if (PARTS.includes('A') || PARTS.includes('D')) {
   for (const row of NEW_LEAGUES.filter(r => !ROWS || ROWS.includes(r.id))) {
     const lg = partRows(cm, row);

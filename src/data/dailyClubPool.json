@@ -236,6 +236,14 @@
     {"club":"Perth Glory","leagueId":"aleague","leagueName":"A-League Men","from":"2026-11-05"},
     {"club":"Wellington Phoenix","leagueId":"aleague","leagueName":"A-League Men","from":"2026-11-05"},
     {"club":"Western Sydney Wanderers","leagueId":"aleague","leagueName":"A-League Men","from":"2026-11-05"},
-    {"club":"Brisbane Roar","leagueId":"aleague","leagueName":"A-League Men","from":"2026-11-05"}
+    {"club":"Brisbane Roar","leagueId":"aleague","leagueName":"A-League Men","from":"2026-11-05"},
+    {"club":"Pisa","leagueId":"serieb","leagueName":"Serie B","from":"2026-11-06"},
+    {"club":"Verona","leagueId":"serieb","leagueName":"Serie B","from":"2026-11-06"},
+    {"club":"Nantes","leagueId":"ligue2","leagueName":"Ligue 2","from":"2026-11-06"},
+    {"club":"Saint-Étienne","leagueId":"ligue2","leagueName":"Ligue 2","from":"2026-11-06"},
+    {"club":"Reims","leagueId":"ligue2","leagueName":"Ligue 2","from":"2026-11-06"},
+    {"club":"Girona","leagueId":"segunda","leagueName":"Segunda División","from":"2026-11-06"},
+    {"club":"Mallorca","leagueId":"segunda","leagueName":"Segunda División","from":"2026-11-06"},
+    {"club":"Lausanne-Sport","leagueId":"switzerland","until":"2026-11-06"}
   ]
 }

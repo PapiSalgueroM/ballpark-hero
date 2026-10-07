@@ -1656,7 +1656,13 @@ export function wildernessProfile(career: CareerState): ManagerProfile {
      zone, size minus drop, read off the league the season was played in.
      The hard coded 18th missed Ligue 1's 17th (two of eighteen go down) and
      called a Championship 18th of 24 one. A season from before this round
-     carries no league, so it keeps the old reading. */
+     carries no league, so it keeps the old reading. On purpose, the round's
+     review: a second tier's drop zone (Serie B 18th to 20th, the Segunda
+     17th to 20th, Ligue 2 17th and 18th, the Championship 22nd to 24th) also
+     reads as a relegation on the record, although the game has no third
+     tier and the club stays where it is; that is correction 8's formula and
+     the convention Brazil's drop zone already had, a finish the real league
+     would have sent down. */
   const wentDown = (h: SeasonRecord) => {
     if (h.leagueId && h.leagueSize) {
       const drop = relegationSpots(h.leagueId);
@@ -2947,10 +2953,18 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
        Eurosport France on Troyes' direct promotion,
        https://www.eurosport.fr/football/ligue-2/2025-2026/ligue-2-vainqueur-de-saint-etienne-3-0-troyes-sassure-de-la-promotion-directe-en-ligue-1_sto23293849/story.shtml).
      - Third to fifth play the playoffs, whose winner meets Ligue 1's
-       sixteenth in the barrage; seventeenth and eighteenth go straight down
-       and sixteenth plays the National's third: the LFP's 2025-26 guide
-       (ligue1.com, the article beside the ligue1 row) and Foot Mercato's
-       2026-27 table legend (https://www.footmercato.net/france/ligue-2/classement).
+       sixteenth in the barrage, and sixteenth plays the National's third:
+       the LFP's 2025-26 guide (ligue1.com, the article beside the ligue1 row)
+       and Foot Mercato's 2026-27 table legend
+       (https://www.footmercato.net/france/ligue-2/classement).
+     - Seventeenth and eighteenth go straight down (the drop of 2). The LFP
+       guide above says nothing about direct relegation (Round 1040 review),
+       so the two sources are Foot Mercato's 2026-27 legend above and Sports
+       Infos on the final 2025-26 table, Bastia 17th and Amiens 18th both
+       relegated to the National (2026-05-09,
+       https://www.ski-nordique.net/classement-ligue-2-2025-2026-journee-28-sports-infos.6725171-72348.html,
+       read 2026-10-07). THIN for 2026-27 in the same way as the ligue1 row:
+       Foot Mercato is the one 2026-27 publisher, the other describes 2025-26.
      - Ligue 2 clubs play the Coupe de France, entering in the seventh round
        (14 and 15 November 2026), Ligue 1's at the round of 64: Metro Sports
        (https://metro-sports.fr/le-calendrier-de-ledition-2026-2027-de-la-coupe-de-france-devoile/)
@@ -18850,17 +18864,26 @@ function runPromotionRelegation(prev: CareerState): { overrides: Record<string, 
       // The player's own pyramid gets a line per moved club, own club first.
       for (const c of up) {
         if (c === prev.clubName) lines.unshift(`\u{2B06} You are up: ${c} will play ${topDef.name} football next season.`);
-        else lines.push(`\u{2B06} ${c} win promotion to the ${topDef.name}.`);
+        else lines.push(`\u{2B06} ${c} win promotion to ${toLeague(topDef.name)}.`);
       }
       for (const c of down) {
-        if (c === prev.clubName) lines.unshift(`\u{2B07} Relegated. ${c} go down to the ${secondDef.name}.`);
-        else lines.push(`\u{2B07} ${c} are relegated to the ${secondDef.name}.`);
+        if (c === prev.clubName) lines.unshift(`\u{2B07} Relegated. ${c} go down to ${toLeague(secondDef.name)}.`);
+        else lines.push(`\u{2B07} ${c} are relegated to ${toLeague(secondDef.name)}.`);
       }
     } else {
       elsewhere.push(`\u{1F504} ${topDef.name}: ${up.join(', ')} come up, ${down.join(', ')} go down.`);
     }
   }
   return { overrides: moved ? next : carried, lines: [...lines, ...elsewhere].slice(0, Math.max(5, lines.length)) };
+}
+
+/* Round 1040 review: the summer lines name the league the way people say it.
+   The Premier League, the Bundesliga, the Championship, the 2. Bundesliga and
+   the Segunda División take the article; La Liga carries its own, and Serie A,
+   Serie B, Ligue 1 and Ligue 2 read without one ("win promotion to Serie A",
+   never "to the Serie A"). */
+export function toLeague(name: string): string {
+  return /^(La Liga|Serie |Ligue )/.test(name) ? name : `the ${name}`;
 }
 
 /**
