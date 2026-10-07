@@ -2763,7 +2763,21 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
     nationId: 'germany', flag: 'Germany', cup: 'DFB-Pokal', europe: { ucl: 4, uel: 5, uecl: 6 }, drop: 2, tiebreak: 'gdGfAgg', secondTier: 'bundesliga2', ladder: 'top', season: 'autumnSpring',
     simplified: 'The real relegation playoff (sixteenth against the 2. Bundesliga\'s third) is not played: two go straight down and two straight up.',
   },
-  ligue1: { nationId: 'france', flag: 'France', cup: 'Coupe de France', europe: { ucl: 3, uel: 4, uecl: 5 }, drop: 3, tiebreak: 'gdH2h', ladder: 'top', season: 'autumnSpring' },
+  /* Round 1040: two go down, not three, and Ligue 2 is modelled under it.
+     2025-26: Metz and Nantes went straight down and sixteenth placed Nice
+     kept their place in the barrage against Saint-Étienne, Ligue 2's
+     playoff winner (franceinfo, 2026-05-29,
+     https://www.franceinfo.fr/sports/foot/ligue-1/barrage-ligue-1-ligue-2-vainqueur-au-match-retour-nice-se-maintient-dans-l-elite-saint-etienne-reste-en-deuxieme-division_8036279.html;
+     LFP, "2025-2026 : tout savoir sur les play-offs et les barrages de
+     Ligue 2 BKT", https://ligue1.com/fr/articles/l1_article_3785-2025-2026-tout-savoir-sur-les-play-offs-et-les-barrages-de-ligue-2-bkt).
+     2026-27: Foot Mercato's table legend (read 2026-10-06,
+     https://www.footmercato.net/france/ligue-1/classement) says the same, the
+     last two down and sixteenth in a barrage; THIN for 2026-27 in that it is
+     one publisher, on the same shape as the season before. */
+  ligue1: {
+    nationId: 'france', flag: 'France', cup: 'Coupe de France', europe: { ucl: 3, uel: 4, uecl: 5 }, drop: 2, tiebreak: 'gdH2h', secondTier: 'ligue2', ladder: 'top', season: 'autumnSpring',
+    simplified: 'The real relegation barrage (sixteenth against the winner of Ligue 2\'s playoffs) is not played: two go straight down and two straight up.',
+  },
   eredivisie: { nationId: 'netherlands', flag: 'Netherlands', cup: 'KNVB Cup', europe: { ucl: 2, uel: 3, uecl: 4 }, drop: 2, ladder: 'top', season: 'autumnSpring' },
   saudi: {
     nationId: 'saudi', flag: 'Saudi Arabia', cup: "King's Cup", europe: null, drop: 3, ladder: 'top', season: 'autumnSpring',
@@ -2918,7 +2932,34 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
   serieb: {
     nationId: 'italy', flag: 'Italy', cup: 'Coppa Italia', europe: null, drop: 3, ladder: 'promotion',
     playoff: { rankUpTo: 10, target: 8, label: 'Make the promotion playoffs' }, season: 'autumnSpring',
-    simplified: 'The promotion playoff and the relegation playout are not played: three go straight up and three straight down.',
+    simplified: 'The promotion playoff and the relegation playout are not played: three go straight up and Serie A\'s bottom three come down in a straight swap.',
+  },
+  /* Round 1040: Ligue 2 2026-27, Ligue 1's modelled second tier, so the
+     bottom two of Ligue 1 go down and the top two of Ligue 2 come up. Each
+     fact read 2026-10-06:
+     - 18 clubs: ESPN's 2026-27 table
+       (https://www.espn.com/soccer/standings/_/league/fra.2) and
+       Saint-Étienne's own Ligue 2 BKT table, matchday 7
+       (https://www.asse.fr/fr/club/saison-2026-2027/classement-ligue-2-bkt/),
+       which agree on all eighteen.
+     - First and second go straight up: Troyes and Le Mans in 2025-26 (LFP,
+       https://ligue1.com/en/articles/l1_article_5560-promoted-pair-troyes-and-le-mans-prepare-for-the-ligue-1-challenge;
+       Eurosport France on Troyes' direct promotion,
+       https://www.eurosport.fr/football/ligue-2/2025-2026/ligue-2-vainqueur-de-saint-etienne-3-0-troyes-sassure-de-la-promotion-directe-en-ligue-1_sto23293849/story.shtml).
+     - Third to fifth play the playoffs, whose winner meets Ligue 1's
+       sixteenth in the barrage; seventeenth and eighteenth go straight down
+       and sixteenth plays the National's third: the LFP's 2025-26 guide
+       (ligue1.com, the article beside the ligue1 row) and Foot Mercato's
+       2026-27 table legend (https://www.footmercato.net/france/ligue-2/classement).
+     - Ligue 2 clubs play the Coupe de France, entering in the seventh round
+       (14 and 15 November 2026), Ligue 1's at the round of 64: Metro Sports
+       (https://metro-sports.fr/le-calendrier-de-ledition-2026-2027-de-la-coupe-de-france-devoile/)
+       and Radio Sports (https://radiosports.fr/coupe-de-france-football-calendrier-et-resultats.html).
+     - Clubs level on points: not two-sourced, so the gdGfOnly default. */
+  ligue2: {
+    nationId: 'france', flag: 'France', cup: 'Coupe de France', europe: null, drop: 2, ladder: 'promotion',
+    playoff: { rankUpTo: 7, target: 5, label: 'Make the promotion playoffs' }, season: 'autumnSpring',
+    simplified: 'The promotion playoffs, the barrage against Ligue 1\'s sixteenth and the relegation barrage are not played: two go straight up and Ligue 1\'s bottom two come down in a straight swap.',
   },
   /* The era leagues. No Conference League existed before 2021, so uecl is 0
      and the board's ladder skips that band; 2005-06 still called the second
@@ -3334,6 +3375,16 @@ export const REAL_LEAGUES: LeagueDef[] = [
     id: 'serieb', name: 'Serie B',
     clubs: ['Cremonese', 'Verona', 'Pisa', 'Avellino', 'Carrarese', 'Catanzaro', 'Cesena', 'Empoli', 'Entella', 'Juve Stabia', 'Mantova', 'Modena', 'Padova', 'Palermo', 'Sampdoria', 'Südtirol', 'Vicenza', 'Arezzo', 'Benevento', 'Ascoli'],
   },
+  /* Round 1040: Ligue 2 2026-27, the eighteen clubs ESPN's table and
+     Saint-Étienne's own Ligue 2 BKT table agree on, read 2026-10-06 (sources
+     beside its LEAGUE_RULES row). Metz and Nantes came down from Ligue 1;
+     Saint-Étienne lost the barrage to Nice and stayed. The Paris club is
+     'Red Star FC', never 'Red Star', which reads as Belgrade. Appended after
+     every older row. */
+  {
+    id: 'ligue2', name: 'Ligue 2',
+    clubs: ['Metz', 'Nantes', 'Saint-Étienne', 'Red Star FC', 'Reims', 'Montpellier', 'Nancy', 'Annecy', 'Sochaux', 'Dijon', 'Pau', 'Guingamp', 'Dunkerque', 'Grenoble', 'Rodez', 'Clermont', 'Boulogne', 'Laval'],
+  },
 ].map(leagueFromRow);
 
 /**
@@ -3457,6 +3508,10 @@ const STRENGTH_PRIORS: Record<string, number> = {
   // reaches, so the stale top flight priors of the three relegated clubs
   // above are left as they were.
   'Arezzo': 61,
+  // Round 1040: Ligue 2. Sochaux, Dijon and Rodez have no row in the table
+  // under any spelling (a grep of the 2026-10-02 dump finds none), so they
+  // take the same 61; every other member is rated from its real men.
+  'Sochaux': 61, 'Dijon': 61, 'Rodez': 61,
 };
 
 /** The real league a club plays in. Every playable club is covered.
@@ -12140,10 +12195,15 @@ function buildCupBracket(state: CareerState): CupTie[] {
 
 /** True when the winner came from a lower division than the loser. Round
  *  1040: the divisions are cupDivisionOf's, so a top flight club beating a
- *  second tier one is never an upset, whoever the manager is. */
+ *  second tier one is never an upset, whoever the manager is. And a
+ *  historic save reads its clubs' tiers off its own era (eraClubDefFor), as
+ *  its draw does: read off the modern world, an era cup's upsets moved each
+ *  time a round made one of its clubs modern (Dijon, Metz and Nantes joined
+ *  Ligue 2 here and changed a 2020-21 Coupe de France). */
 function isCupUpset(state: CareerState, winner: string, loser: string): boolean {
-  const w = clubByName(winner);
-  const l = clubByName(loser);
+  const historic = !!state.eraId && isHistoricEra(state.eraId);
+  const w = historic && eraLeagueOf(winner, state.eraId) ? eraClubDefFor(winner, state.eraId) : clubByName(winner);
+  const l = historic && eraLeagueOf(loser, state.eraId) ? eraClubDefFor(loser, state.eraId) : clubByName(loser);
   if (!w || !l) return false;
   const dw = cupDivisionOf(state, winner);
   const dl = cupDivisionOf(state, loser);

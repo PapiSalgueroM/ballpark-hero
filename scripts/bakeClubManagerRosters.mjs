@@ -7,7 +7,7 @@
  *
  * Leagues baked: the big five (2026-27 memberships), EFL Championship,
  * Saudi Pro League, MLS East + West, Eredivisie, the later leagues the
- * written file's own header lists (Serie B since Round 1040), plus the UCL
+ * written file's own header lists (Serie B and Ligue 2 since Round 1040), plus the UCL
  * flavor clubs.
  * Preference order per player: year 2026 row, else year 2025 row (value
  * discounted 5%, age +1). Clubs with fewer than 8 real players are listed
@@ -77,7 +77,10 @@ const KNOWN_EMPTY = ['ADO Den Haag', 'Cambuur',
   // Round 1040: Serie B 2026-27. Arezzo, up from Serie C, have no row in the
   // table under any spelling (a grep of the 2026-10-02 dump for "arezzo"
   // finds nothing).
-  'Arezzo'];
+  'Arezzo',
+  // Round 1040: Ligue 2 2026-27. Sochaux, Dijon and Rodez have no row under
+  // any spelling (grep of the 2026-10-02 dump for sochaux, dijon, rodez).
+  'Sochaux', 'Dijon', 'Rodez'];
 
 /** Core clubs (big five leagues) must have 7+ players or the bake fails. */
 const CORE_LEAGUE_CLUBS = new Set([
@@ -378,6 +381,10 @@ if (!(xiAvg('Guadalajara') > xiAvg('FC Juárez'))) errors.push('SANITY: Guadalaj
 // it and padded, so both pairs compare real squads against a real squad.
 if (!(xiAvg('Pisa') > xiAvg('Cremonese'))) errors.push('SANITY: Pisa <= Cremonese');
 if (!(xiAvg('Verona') > xiAvg('Cremonese'))) errors.push('SANITY: Verona <= Cremonese');
+// Round 1040: Ligue 2. Nantes (14), Saint-Étienne (13) and Reims (12) carry
+// 8 or more real men; Pau (3) is mostly pads, so this only asks that a real
+// squad clears a padded one.
+if (!(xiAvg('Saint-Étienne') > xiAvg('Pau'))) errors.push('SANITY: Saint-Étienne <= Pau');
 
 const total = [...byClub.values()].reduce((s, l) => s + l.length, 0);
 if (total < 2800) errors.push(`Only ${total} players total (expected 2800+)`);
@@ -403,7 +410,7 @@ let out = `// Rounds 70+72: real rosters for every Club Manager club, generated 
 // West, Eredivisie, Primeira Liga, Scottish Premiership, Süper Lig,
 // 2. Bundesliga, Belgian Pro League, Austrian Bundesliga, Super League
 // Greece, Danish Superliga, Swiss Super League, SuperSport HNL,
-// Brazil's Serie A, Liga MX and Serie B.
+// Brazil's Serie A, Liga MX, Serie B and Ligue 2.
 // Values in £m, ratings 48-94 from the value curve.
 // Regenerate with: node scripts/bakeClubManagerRosters.mjs
 // DO NOT EDIT BY HAND.

@@ -70,7 +70,7 @@ for (const n of NATIONS) {
     }
   }
 }
-if (totalClubs !== 400) fail(`expected 400 playable clubs (186, plus 48 in Round 140, 18 in Round 142, 18 in Round 143, 12 plus 14 in Round 177, 12 plus 12 in Round 185, 10 in Round 189, 20 in Round 876, 18 in Round 883, 12 in Round 1035, 20 in Round 1040's Serie B), got ${totalClubs}`);
+if (totalClubs !== 418) fail(`expected 418 playable clubs (186, plus 48 in Round 140, 18 in Round 142, 18 in Round 143, 12 plus 14 in Round 177, 12 plus 12 in Round 185, 10 in Round 189, 20 in Round 876, 18 in Round 883, 12 in Round 1035, 20 in Round 1040's Serie B, 18 in its Ligue 2), got ${totalClubs}`);
 const ordering = [
   ['Real Madrid', 'Racing Santander'], ['Bayern Munich', 'Paderborn'], ['PSG', 'Le Havre'],
   ['Liverpool', 'Hull City'], ['Wolves', 'Lincoln City'], ['Al-Hilal', 'Al-Riyadh'],

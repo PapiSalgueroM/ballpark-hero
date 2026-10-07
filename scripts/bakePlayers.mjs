@@ -123,6 +123,7 @@ const ENGINE_LEAGUE_TO_POOL = {
   // Round 1040: the same, for the second tiers (all three are already in the
   // League union).
   'Serie B': 'Serie B',
+  'Ligue 2': 'Ligue 2',
 };
 
 /* ------------------------------------------------------------------ */

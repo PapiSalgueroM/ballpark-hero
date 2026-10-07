@@ -1,7 +1,7 @@
 {
  "measuredOn": "2026-09-11",
  "rule": "A baked Club Manager player whose newest row in public.player_market_values_dedup is year 2025, with no year-2026 row at any club the game models and none anywhere else either. The bake falls back to the 2025 row for these, which carries the 2025 CLUB, so the player ships at last season's club with nothing saying so.",
- "population": 430,
+ "population": 450,
  "populationRound876": "Round 876 mapped the table's 1.FC Nuremberg spelling to Nürnberg and re-baked from the 2026-10-02 dump. Three Nürnberg players came in on a 2025 row with no 2026 row anywhere (Berkay Yilmaz, Oliver Villadsen, Tim Janisch), so they joined the population and wait in pending like the rest. No other new fallback row appeared that an overlay row does not already source. Then Brazil's Serie A was mapped (twenty table spellings) and the bake re-run from the same dump. Twenty players at those clubs came in on a 2025 row with no 2026 row anywhere (Luiz Araújo, Gustavo Gómez, Weverton, Lima, Júnior Alonso, Everson, Zé Rafael, Lucas Ronier, Juninho Capixaba, Ignacio Laquintana, Matheus Martins, Nathan Fernandes, Matheus Nascimento, Rafael Lobato, Memphis Depay, Talles Magno, Pedro Raul, Jean Meneses, Alexander Aravena, Gustavo Prado), so they joined the population. The same day a review found two of them false, and all twenty were then checked on the web (adjudicatorWeb2026_10_02): nineteen settled, Pedro Raul still pending. Two rows that sat in removedClubNotModelled because the World Cup table put them at Vasco da Gama and Palmeiras (Andrés Gómez, Ramón Sosa) moved to movedTo on that same evidence, since both clubs are modelled now.",
  "populationRound883": "Round 883 mapped Liga MX (seventeen table spellings, Atlante having none) and re-baked from the 2026-10-02 dump. Twenty nine players at those clubs came in on a 2025 row (Esteban Andrada, Nathan Silva, Robert Ergas, Alejandro Mayorga, Dagoberto Espinoza, Pablo Bennevendo, Sebastián Santos, Pablo Monroy, Gustavo Ferrareis, Diego Valdés, Piero Quispe, Mateo Klimowicz, Lorenzo Faravelli, Luka Romero, Jairo Torres, Diego Valoyes, Hugo Camberos, Oussama Idrissi, Ronaldo Nájera, Amaury Morales, Josué Colmán, Yairo Moreno, Fernando González, Fernando Beltrán, Richard Sánchez, Érick Gutiérrez, Andrés Montaño, Emiliano Gómez, Franco Fagúndez), so they joined the population. All twenty nine were then checked on the web the same day (adjudicatorWeb2026_10_02_ligamx) and none is left pending. Nine of them do have a 2026 row, but at a club the bake does not map: four at their own club's U21 side (Dagoberto Espinoza, Pablo Bennevendo, Sebastián Santos, Pablo Monroy) and five elsewhere (Diego Valdés at Vélez Sarsfield, Mateo Klimowicz at Cerro Porteño, Diego Valoyes at Talleres, Yairo Moreno at Independiente Medellín, Fernando González at Dorados de Sinaloa), so the bake falls back to their 2025 club just the same, and they are counted here with the rest rather than trusted.",
  "populationRound883Namesakes": "The Round 883 review found the bake keyed players by name alone, so a newer row of one man deleted an older row of a different man with the same name. The bake now keeps them apart (an age move of -1 to 3 and the same position group, or they are two men), which restored six 2025 rows that had been silently dropped: Paulinho (Palmeiras), Jose Luis Rodriguez (FC Juarez), Alan Franco (Sao Paulo), Matheus Pereira (Santa Clara), Dudu (Cruzeiro) and Allan (Palmeiras). All six were read on the web on 2026-10-02: two confirmed, four moved to the modelled club they play for. Each row names the club of the other man in namesakeAt.",
@@ -8098,6 +8098,189 @@
     }
    ],
    "shard": "england-mls"
+  },
+  {
+   "name": "Frédéric Guilbert",
+   "from": "Lecce",
+   "to": "Nantes",
+   "realClub": "Nantes",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1994-12-24. Left Lecce and joined Nantes on a free on 2026-01-28, contract to June 2028; Nantes's number 24, with Ligue 2 matches from 2026-08-14 to 2026-09-19. Nantes is in Ligue 2 and not modelled. Round 1040: Nantes is modelled now (Ligue 2), so the row moved from removedClubNotModelled to movedTo with the same sources.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.legaseriea.it/team/lecce/squad",
+     "publisher": "Lega Serie A (Lecce squad, current)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    },
+    {
+     "family": "B",
+     "url": "https://us.soccerway.com/player/guilbert-frederic/6TtQuJeb/transfers",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-03",
+     "says": "Lecce to Nantes free 2026-01-28, born 1994-12-24, contract to 2028-06-30, current club Nantes"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/215709/frederic-guilbert",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Nantes number 24, born 1994-12-24, played 2026-09-19"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/113/lecce",
+     "publisher": "ESPN (Lecce squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ],
+   "shard": "italy-france"
+  },
+  {
+   "name": "Antoine Joujou",
+   "from": "Le Havre",
+   "to": "Nantes",
+   "realClub": "Nantes",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2003-03-12. His Le Havre spell was a loan from Parma; Parma then loaned him to Famalicao and sold him to Nantes on 2026-08-21, contract to June 2029. Nantes's number 7, with Ligue 2 matches from 2026-08-29 to 2026-09-19. Nantes is in Ligue 2 and not modelled. Round 1040: Nantes is modelled now (Ligue 2), so the row moved from removedClubNotModelled to movedTo with the same sources.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://hac.football/fr/players?competition=LI1",
+     "publisher": "Le Havre AC (Ligue 1 squad)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    },
+    {
+     "family": "B",
+     "url": "https://us.soccerway.com/player/joujou-antoine/n5pKaQsh/transfers",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-03",
+     "says": "Parma to Nantes 2026-08-21, born 2003-03-12, contract to 2029-06-30"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/357235/antoine-joujou",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Nantes number 7, born 2003-03-12, played 2026-09-19"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/3236/le-havre-ac",
+     "publisher": "ESPN (Le Havre squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ],
+   "shard": "italy-france"
+  },
+  {
+   "name": "Thierno Baldé",
+   "from": "Troyes",
+   "to": "Nancy",
+   "realClub": "Nancy",
+   "adjudicatedOn": "2026-10-03",
+   "note": "The right back born 2002-06-10, a PSG academy player. Left Troyes on a free and joined Nancy on 2026-08-05, contract to June 2028; Nancy's number 19, played in Ligue 2 on 2026-08-14. Nancy is in Ligue 2 and not modelled. Round 1040: Nancy is modelled now (Ligue 2), so the row moved from removedClubNotModelled to movedTo with the same sources.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.estac.fr/equipe-premiere/effectif/",
+     "publisher": "ESTAC Troyes (first team squad)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    },
+    {
+     "family": "B",
+     "url": "https://us.soccerway.com/player/balde-thierno/OAOSz9F9/transfers",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-03",
+     "says": "Troyes to Nancy free 2026-08-05, born 2002-06-10, defender, contract to 2028-06-30"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/322891/thierno-balde",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "AS Nancy Lorraine number 19, born 2002-06-10, played 2026-08-14"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/170/troyes",
+     "publisher": "ESPN (Troyes squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ],
+   "shard": "italy-france"
+  },
+  {
+   "name": "Florian Bianchini",
+   "from": "Swansea City",
+   "to": "Clermont",
+   "realClub": "Clermont Foot, on loan from Swansea City",
+   "loan": true,
+   "loanFrom": "Swansea City",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2001-06-25 (ESPN). Swansea list him as out on loan and Clermont list him in their squad; he plays in Ligue 2, which the game does not model. Placed at the club he plays for, the ledger's loanPolicy, so he leaves Swansea's squad. Round 1040: Clermont is modelled now (Ligue 2), so the row moved from removedClubNotModelled to movedTo with the same sources, placed at the club he plays for per loanPolicy.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.swanseacity.com/players/149",
+     "publisher": "Swansea City AFC (players page)",
+     "readOn": "2026-10-03",
+     "says": "Out on Loan: Florian Bianchini"
+    },
+    {
+     "family": "A",
+     "url": "https://www.clermontfoot.com/equipes",
+     "publisher": "Clermont Foot 63 (squad page)",
+     "readOn": "2026-10-03",
+     "says": "Attaquant: 7 Florian Bianchini"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/307854/florian-bianchini",
+     "publisher": "ESPN",
+     "readOn": "2026-10-03",
+     "says": "Clermont Foot, born 2001-06-25; Ligue 2 appearances 2026-09-04 to 2026-09-18"
+    }
+   ],
+   "shard": "england-mls"
+  },
+  {
+   "name": "Théo Magnin",
+   "from": "Servette",
+   "to": "Red Star FC",
+   "realClub": "Red Star FC (France, Ligue 2)",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Swiss right back born 2003-08-09. Left Servette on a free for Red Star on 2026-02-01, shirt 2, seven Ligue 2 starts in 2026-27. Ligue 2 is not modelled. Round 1040: Red Star FC is modelled now (Ligue 2), so the row moved from removedClubNotModelled to movedTo with the same sources.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://servettefc.ch/equipe-premiere/effectif/",
+     "publisher": "Servette FC (Effectif page)",
+     "readOn": "2026-10-03",
+     "says": "not in the squad"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/334979/theo-magnin",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Red Star FC 93, shirt 2, born 2003-08-09, Ligue 2 starts 2026-08-21 to 2026-09-19"
+    },
+    {
+     "family": "B",
+     "url": "https://www.soccerway.com/player/magnin-theo/A9rfNiEq/",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-03",
+     "says": "Servette to Red Star 2026-02-01 free, contract to 2028-06-30, 7 Ligue 2 appearances in 2026/2027"
+    }
+   ],
+   "shard": "rest"
   }
  ],
  "removedClubNotModelled": [
@@ -9083,44 +9266,6 @@
    "shard": "italy-france"
   },
   {
-   "name": "Frédéric Guilbert",
-   "from": "Lecce",
-   "realClub": "Nantes",
-   "adjudicatedOn": "2026-10-03",
-   "note": "Born 1994-12-24. Left Lecce and joined Nantes on a free on 2026-01-28, contract to June 2028; Nantes's number 24, with Ligue 2 matches from 2026-08-14 to 2026-09-19. Nantes is in Ligue 2 and not modelled.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://www.legaseriea.it/team/lecce/squad",
-     "publisher": "Lega Serie A (Lecce squad, current)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    },
-    {
-     "family": "B",
-     "url": "https://us.soccerway.com/player/guilbert-frederic/6TtQuJeb/transfers",
-     "publisher": "Soccerway",
-     "readOn": "2026-10-03",
-     "says": "Lecce to Nantes free 2026-01-28, born 1994-12-24, contract to 2028-06-30, current club Nantes"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/player/_/id/215709/frederic-guilbert",
-     "publisher": "ESPN (player page)",
-     "readOn": "2026-10-03",
-     "says": "Nantes number 24, born 1994-12-24, played 2026-09-19"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/team/squad/_/id/113/lecce",
-     "publisher": "ESPN (Lecce squad page, season 2026-27)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    }
-   ],
-   "shard": "italy-france"
-  },
-  {
    "name": "Farid El Melali",
    "from": "Angers",
    "realClub": "CR Belouizdad",
@@ -9147,44 +9292,6 @@
      "publisher": "Soccerway",
      "readOn": "2026-10-03",
      "says": "Angers to CR Belouizdad free 2025-08-31, born 1997-07-13, contract to 2030-06-30"
-    }
-   ],
-   "shard": "italy-france"
-  },
-  {
-   "name": "Antoine Joujou",
-   "from": "Le Havre",
-   "realClub": "Nantes",
-   "adjudicatedOn": "2026-10-03",
-   "note": "Born 2003-03-12. His Le Havre spell was a loan from Parma; Parma then loaned him to Famalicao and sold him to Nantes on 2026-08-21, contract to June 2029. Nantes's number 7, with Ligue 2 matches from 2026-08-29 to 2026-09-19. Nantes is in Ligue 2 and not modelled.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://hac.football/fr/players?competition=LI1",
-     "publisher": "Le Havre AC (Ligue 1 squad)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    },
-    {
-     "family": "B",
-     "url": "https://us.soccerway.com/player/joujou-antoine/n5pKaQsh/transfers",
-     "publisher": "Soccerway",
-     "readOn": "2026-10-03",
-     "says": "Parma to Nantes 2026-08-21, born 2003-03-12, contract to 2029-06-30"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/player/_/id/357235/antoine-joujou",
-     "publisher": "ESPN (player page)",
-     "readOn": "2026-10-03",
-     "says": "Nantes number 7, born 2003-03-12, played 2026-09-19"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/team/squad/_/id/3236/le-havre-ac",
-     "publisher": "ESPN (Le Havre squad page, season 2026-27)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
     }
    ],
    "shard": "italy-france"
@@ -9363,44 +9470,6 @@
      "publisher": "Soccerway",
      "readOn": "2026-10-03",
      "says": "on loan at United FC from Crvena zvezda from 2026-07-26 to 2027-06-30, Toulouse to Crvena zvezda August 2025"
-    }
-   ],
-   "shard": "italy-france"
-  },
-  {
-   "name": "Thierno Baldé",
-   "from": "Troyes",
-   "realClub": "Nancy",
-   "adjudicatedOn": "2026-10-03",
-   "note": "The right back born 2002-06-10, a PSG academy player. Left Troyes on a free and joined Nancy on 2026-08-05, contract to June 2028; Nancy's number 19, played in Ligue 2 on 2026-08-14. Nancy is in Ligue 2 and not modelled.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://www.estac.fr/equipe-premiere/effectif/",
-     "publisher": "ESTAC Troyes (first team squad)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
-    },
-    {
-     "family": "B",
-     "url": "https://us.soccerway.com/player/balde-thierno/OAOSz9F9/transfers",
-     "publisher": "Soccerway",
-     "readOn": "2026-10-03",
-     "says": "Troyes to Nancy free 2026-08-05, born 2002-06-10, defender, contract to 2028-06-30"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/player/_/id/322891/thierno-balde",
-     "publisher": "ESPN (player page)",
-     "readOn": "2026-10-03",
-     "says": "AS Nancy Lorraine number 19, born 2002-06-10, played 2026-08-14"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/team/squad/_/id/170/troyes",
-     "publisher": "ESPN (Troyes squad page, season 2026-27)",
-     "readOn": "2026-10-03",
-     "says": "not listed"
     }
    ],
    "shard": "italy-france"
@@ -9596,39 +9665,6 @@
      "publisher": "ESPN",
      "readOn": "2026-10-03",
      "says": "Wycombe Wanderers, shirt 28, born 1992-07-23; Sheffield United appearances to 2026-05-02, scored for Wycombe v Reading 2026-09-26"
-    }
-   ],
-   "shard": "england-mls"
-  },
-  {
-   "name": "Florian Bianchini",
-   "from": "Swansea City",
-   "realClub": "Clermont Foot, on loan from Swansea City",
-   "loan": true,
-   "loanFrom": "Swansea City",
-   "adjudicatedOn": "2026-10-03",
-   "note": "Born 2001-06-25 (ESPN). Swansea list him as out on loan and Clermont list him in their squad; he plays in Ligue 2, which the game does not model. Placed at the club he plays for, the ledger's loanPolicy, so he leaves Swansea's squad.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://www.swanseacity.com/players/149",
-     "publisher": "Swansea City AFC (players page)",
-     "readOn": "2026-10-03",
-     "says": "Out on Loan: Florian Bianchini"
-    },
-    {
-     "family": "A",
-     "url": "https://www.clermontfoot.com/equipes",
-     "publisher": "Clermont Foot 63 (squad page)",
-     "readOn": "2026-10-03",
-     "says": "Attaquant: 7 Florian Bianchini"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/player/_/id/307854/florian-bianchini",
-     "publisher": "ESPN",
-     "readOn": "2026-10-03",
-     "says": "Clermont Foot, born 2001-06-25; Ligue 2 appearances 2026-09-04 to 2026-09-18"
     }
    ],
    "shard": "england-mls"
@@ -10125,37 +10161,6 @@
      "publisher": "ESPN (St Johnstone squad page, season 2026-27)",
      "readOn": "2026-10-03",
      "says": "not in the squad"
-    }
-   ],
-   "shard": "rest"
-  },
-  {
-   "name": "Théo Magnin",
-   "from": "Servette",
-   "realClub": "Red Star FC (France, Ligue 2)",
-   "adjudicatedOn": "2026-10-03",
-   "note": "Swiss right back born 2003-08-09. Left Servette on a free for Red Star on 2026-02-01, shirt 2, seven Ligue 2 starts in 2026-27. Ligue 2 is not modelled.",
-   "sources": [
-    {
-     "family": "A",
-     "url": "https://servettefc.ch/equipe-premiere/effectif/",
-     "publisher": "Servette FC (Effectif page)",
-     "readOn": "2026-10-03",
-     "says": "not in the squad"
-    },
-    {
-     "family": "B",
-     "url": "https://www.espn.com/soccer/player/_/id/334979/theo-magnin",
-     "publisher": "ESPN (player page)",
-     "readOn": "2026-10-03",
-     "says": "Red Star FC 93, shirt 2, born 2003-08-09, Ligue 2 starts 2026-08-21 to 2026-09-19"
-    },
-    {
-     "family": "B",
-     "url": "https://www.soccerway.com/player/magnin-theo/A9rfNiEq/",
-     "publisher": "Soccerway",
-     "readOn": "2026-10-03",
-     "says": "Servette to Red Star 2026-02-01 free, contract to 2028-06-30, 7 Ligue 2 appearances in 2026/2027"
     }
    ],
    "shard": "rest"
@@ -11544,10 +11549,156 @@
    "addedOn": "2026-10-06",
    "note": "Round 1040: came in when Serie B was mapped, on a 2025 row at Vicenza with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
    "shard": "round1040"
+  },
+  {
+   "name": "Teddy Averlant",
+   "club": "Boulogne",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Ligue 2 was mapped, on his 2025 row at Boulogne, but the table's own 2026 row puts him at Amiens SC, a club the game does not model. Not yet read on the web, so he is withheld from every squad until two source families say where he is.",
+   "shard": "round1040",
+   "withheld": true,
+   "withheldWhy": "the table's 2026 row puts him at Amiens SC, which the game does not model"
+  },
+  {
+   "name": "Maxence Rivera",
+   "club": "Dunkerque",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Ligue 2 was mapped, on a 2025 row at Dunkerque with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Thibaut Vargas",
+   "club": "Laval",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Ligue 2 was mapped, on a 2025 row at Laval with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "William Kokolo",
+   "club": "Laval",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Ligue 2 was mapped, on his 2025 row at Laval, but the table's own 2026 row puts him at Swindon Town, a club the game does not model. Not yet read on the web, so he is withheld from every squad until two source families say where he is.",
+   "shard": "round1040",
+   "withheld": true,
+   "withheldWhy": "the table's 2026 row puts him at Swindon Town, which the game does not model"
+  },
+  {
+   "name": "Cheikh Sabaly",
+   "club": "Metz",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Ligue 2 was mapped, on a 2025 row at Metz with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Becir Omeragic",
+   "club": "Montpellier",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Ligue 2 was mapped, on a 2025 row at Montpellier with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Khalil Fayad",
+   "club": "Montpellier",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Ligue 2 was mapped, on a 2025 row at Montpellier with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Téji Savanier",
+   "club": "Montpellier",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Ligue 2 was mapped, on a 2025 row at Montpellier with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Falaye Sacko",
+   "club": "Montpellier",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Ligue 2 was mapped, on a 2025 row at Montpellier with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Issiaga Sylla",
+   "club": "Montpellier",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Ligue 2 was mapped, on a 2025 row at Montpellier with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Faitout Maouassa",
+   "club": "Nancy",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Ligue 2 was mapped, on a 2025 row at Nancy with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Alexandre Cropanese",
+   "club": "Nancy",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Ligue 2 was mapped, on a 2025 row at Nancy with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Douglas Augusto",
+   "club": "Nantes",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Ligue 2 was mapped, on his 2025 row at Nantes, but the table's own 2026 row puts him at FC Krasnodar, a club the game does not model. Not yet read on the web, so he is withheld from every squad until two source families say where he is.",
+   "shard": "round1040",
+   "withheld": true,
+   "withheldWhy": "the table's 2026 row puts him at FC Krasnodar, which the game does not model"
+  },
+  {
+   "name": "Saïdou Sow",
+   "club": "Nantes",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Ligue 2 was mapped, on a 2025 row at Nantes with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Fabien Centonze",
+   "club": "Nantes",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Ligue 2 was mapped, on a 2025 row at Nantes with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Anthony Lopes",
+   "club": "Nantes",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Ligue 2 was mapped, on a 2025 row at Nantes with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Joseph Okumu",
+   "club": "Reims",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Ligue 2 was mapped, on a 2025 row at Reims with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Teddy Teuma",
+   "club": "Reims",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Ligue 2 was mapped, on a 2025 row at Reims with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Yaya Fofana",
+   "club": "Reims",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Ligue 2 was mapped, on a 2025 row at Reims with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
+  },
+  {
+   "name": "Yvann Maçon",
+   "club": "Saint-Étienne",
+   "addedOn": "2026-10-06",
+   "note": "Round 1040: came in when Ligue 2 was mapped, on a 2025 row at Saint-Étienne with no 2026 row anywhere in the table. Not yet read on the web, so he ships at his 2025 club as pending, like the rest of the population.",
+   "shard": "round1040"
   }
  ],
  "adjudicatorWeb2026_10_02": "Web adjudication, 2026-10-02, for the twenty Brazilian rows Round 876 added to pending, after a review found two of them false (Weverton at Grêmio since January, Júnior Alonso at Atlanta United since July). Read with WebFetch and WebSearch only. Family A is the club's own site where it could be reached; family B is independent press and ESPN's 2026-27 squad pages, read after the Brazilian window shut on 2026-09-11. A row left pending only where two publishers agreed on the club. Nineteen of the twenty were settled: ten at a new club (nine moves plus Antonio Sanabria, below), three at clubs the game does not model, seven confirmed where they were. Pedro Raul stays pending with what the check found. The same pass found Antonio Sanabria, held out as removedClubNotModelled at Cremonese, signed for Internacional on 2026-08-20, so he moves to movedTo now that Internacional are modelled.",
  "adjudicatorWeb2026_10_02_ligamx": "Web adjudication, 2026-10-02, for the twenty nine Liga MX rows Round 883 added to pending. Read with WebFetch and WebSearch only. Family A is Liga MX's own Apertura 2026 squad pages (ligamx.net) or the club's own site; family B is independent press, ESPN's 2026-27 squad pages, Soccerway and FotMob, read after the Liga MX window. All twenty nine settled: twelve confirmed at their club, seven at another modelled Mexican club (two on loan), ten at a club the game does not model. A name absent from one squad page alone was never enough to move or drop anybody.",
  "adjudicatorShards2026_10": "Web adjudication of every row still pending on 2026-10-03, in six shards read 2026-10-03 to 2026-10-05 (Rounds 930 to 935: Germany; Spain and Portugal; Italy and France; England and MLS; Belgium, the Netherlands and Turkey; the rest), folded by Round 1015 through scripts/foldRosterAdjudication.mjs. Each folded row carries shard, the file under scripts/data/rosterAdjudication2026-10/ that holds its evidence and that shard's notes for the fold. A settled row has two sources from two families (A, the club's or the league's own page; B, an independent publisher on another host). A row the shard left pending, because its families disagreed or no official page could be read, stays pending with the shard's note. Where that note says a 2026-27 squad list leaves him out of the club recorded here, or its sources disagree on that club, the row also carries withheld and withheldWhy, and the bake keeps him out of every squad until two families say where he is; the other pending rows still ship at the club recorded here. Not folded: rest.json's heldOnTwoPublishers (Andreas Hansen confirmed at FC Nordsjælland, Topi Keskinen moved to OB), which the shard keeps pending for want of an official page.",
- "populationRound1040": "Round 1040 mapped Serie B (nineteen table spellings, Arezzo having none) and re-baked from the 2026-10-02 dump. Nine rows left removedClubNotModelled for movedTo on their existing sources, since their real club is modelled now (Scuffet to Pisa, Augello to Palermo, Distefano to Empoli, Marchizza to Vicenza, Candela to Catanzaro, Caprari to Padova, Mulattieri to Verona, Karamoh and Insigne to Sampdoria). Sixteen players came in on a 2025 row at a Serie B club, so they joined the population as pending, not yet read on the web (Panico, Starita, Buso, Biasci, Adamo, Fulignati, Esposito, Viti, Maleh, Zappella, Sgarbi, Jelenic, Morutan, Sernicola, Amin Sarr, Rauti). Four of them (Adamo, Zappella, Jelenic, Morutan) have a 2026 row at a club the game does not model, so they are withheld from every squad rather than shipped at last season's club. Fourteen more men moved out of other squads on their own 2026 row, which the bake now reads because the club it names is mapped; they are not 2025 fallbacks, so they are outside this population, and none was in the ledger: Missori (Sassuolo to Avellino), Bondo (Monza to Cremonese), Terracciano (AC Milan to Cremonese), Zampano (Venezia to Modena), Pohjanpalo (Venezia to Palermo), Stengs (Feyenoord to Pisa), Lorran (Flamengo to Pisa), Vural (Frosinone to Pisa), Cuadrado (Atalanta to Pisa), Martinelli (Fiorentina to Sampdoria), Orban (Hoffenheim to Verona), Nelsson (Roma to Verona), Bernede (Lausanne-Sport to Verona) and Lirola (Marseille to Verona). Their earlier clubs were 2025 rows the table had already overtaken."
+ "populationRound1040": "Round 1040 mapped Serie B (nineteen table spellings, Arezzo having none) and re-baked from the 2026-10-02 dump. Nine rows left removedClubNotModelled for movedTo on their existing sources, since their real club is modelled now (Scuffet to Pisa, Augello to Palermo, Distefano to Empoli, Marchizza to Vicenza, Candela to Catanzaro, Caprari to Padova, Mulattieri to Verona, Karamoh and Insigne to Sampdoria). Sixteen players came in on a 2025 row at a Serie B club, so they joined the population as pending, not yet read on the web (Panico, Starita, Buso, Biasci, Adamo, Fulignati, Esposito, Viti, Maleh, Zappella, Sgarbi, Jelenic, Morutan, Sernicola, Amin Sarr, Rauti). Four of them (Adamo, Zappella, Jelenic, Morutan) have a 2026 row at a club the game does not model, so they are withheld from every squad rather than shipped at last season's club. Fourteen more men moved out of other squads on their own 2026 row, which the bake now reads because the club it names is mapped; they are not 2025 fallbacks, so they are outside this population, and none was in the ledger: Missori (Sassuolo to Avellino), Bondo (Monza to Cremonese), Terracciano (AC Milan to Cremonese), Zampano (Venezia to Modena), Pohjanpalo (Venezia to Palermo), Stengs (Feyenoord to Pisa), Lorran (Flamengo to Pisa), Vural (Frosinone to Pisa), Cuadrado (Atalanta to Pisa), Martinelli (Fiorentina to Sampdoria), Orban (Hoffenheim to Verona), Nelsson (Roma to Verona), Bernede (Lausanne-Sport to Verona) and Lirola (Marseille to Verona). Their earlier clubs were 2025 rows the table had already overtaken. Ligue 2 (fifteen table spellings, Sochaux, Dijon and Rodez having none) was mapped in the same round's second step. Five rows left removedClubNotModelled for movedTo on their existing sources (Guilbert and Joujou to Nantes, Baldé to Nancy, Bianchini to Clermont on his loan from Swansea City, Magnin to Red Star FC). Twenty players came in on a 2025 row at a Ligue 2 club and joined the population as pending (Averlant, Rivera, Vargas, Kokolo, Sabaly, Omeragic, Fayad, Savanier, Sacko, Issiaga Sylla, Maouassa, Cropanese, Douglas Augusto, Saïdou Sow, Centonze, Anthony Lopes, Okumu, Teuma, Yaya Fofana, Maçon); three of them (Averlant, Kokolo, Douglas Augusto) have a 2026 row at a club the game does not model and are withheld. Four more men moved out of other squads on their own 2026 row, none of them in the ledger: Virginius (Lille to Clermont), Machado (Lens to Nantes), Leoni (Anderlecht to Reims) and João Ferreira (Braga to Saint-Étienne)."
 }

@@ -228,6 +228,15 @@ export const DB_TO_ENGINE = {
   'Virtus Entella': 'Entella', 'US Cremonese': 'Cremonese', 'LR Vicenza': 'Vicenza',
   'UC Sampdoria': 'Sampdoria', 'SS Juve Stabia': 'Juve Stabia', 'US Catanzaro': 'Catanzaro',
   'Carrarese Calcio 1908': 'Carrarese',
+  // Round 1040: Ligue 2 2026-27, the same way. Left unmapped on purpose:
+  // "Clermont Foot 63 U19" and "FC Metz U19" (youth rows) and "Red Star
+  // Belgrade" (the Serbian club; the Paris one is "Red Star FC"). Sochaux,
+  // Dijon and Rodez have no spelling at all and are KNOWN_EMPTY in the bake.
+  'AS Saint-Étienne': 'Saint-Étienne', 'Red Star FC': 'Red Star FC', 'Stade Reims': 'Reims',
+  'Montpellier HSC': 'Montpellier', 'FC Metz': 'Metz', 'AS Nancy-Lorraine': 'Nancy',
+  'FC Annecy': 'Annecy', 'Pau FC': 'Pau', 'EA Guingamp': 'Guingamp',
+  'USL Dunkerque': 'Dunkerque', 'Grenoble Foot 38': 'Grenoble', 'FC Nantes': 'Nantes',
+  'Clermont Foot 63': 'Clermont', 'US Boulogne': 'Boulogne', 'Stade Lavallois': 'Laval',
   // UCL flavor clubs outside the baked leagues
   'Club Brugge KV': 'Club Brugge',
 };

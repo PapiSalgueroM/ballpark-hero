@@ -231,6 +231,7 @@ before = failures;
   }
   const ROUND_1040 = {
     'Serie B': { clubs: ['Cremonese', 'Verona', 'Pisa', 'Avellino', 'Carrarese', 'Catanzaro', 'Cesena', 'Empoli', 'Entella', 'Juve Stabia', 'Mantova', 'Modena', 'Padova', 'Palermo', 'Sampdoria', 'Südtirol', 'Vicenza', 'Arezzo', 'Benevento', 'Ascoli'], moved: 9 },
+    'Ligue 2': { clubs: ['Metz', 'Nantes', 'Saint-Étienne', 'Red Star FC', 'Reims', 'Montpellier', 'Nancy', 'Annecy', 'Sochaux', 'Dijon', 'Pau', 'Guingamp', 'Dunkerque', 'Grenoble', 'Rodez', 'Clermont', 'Boulogne', 'Laval'], moved: 5 },
   };
   for (const [league, { clubs, moved }] of Object.entries(ROUND_1040)) {
     const n = L.movedTo.filter(m => clubs.includes(m.to)).length;
