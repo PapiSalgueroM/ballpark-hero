@@ -1,8 +1,6 @@
 import { Button } from "@/components/ui/button";
-import {
-  HALL_SPEECHES, HALL_SPEECH_METERS, speechPromise,
-  type HallRecord, type HallRules, type HallSpeechBlock, type HallSpeechId,
-} from "@/lib/careerHallOfFame";
+import type { HallRecord, HallRules, HallSpeechBlock, HallSpeechId } from "@/lib/careerHallOfFame";
+import { HALL_SPEECHES, HALL_SPEECH_METERS, speechPromise } from "@/lib/careerHallSpeech";
 
 /* ─── Round 915: the Hall of Fame card, shared ───
    The wait, the ballot years, the jersey and the speech for any of the four

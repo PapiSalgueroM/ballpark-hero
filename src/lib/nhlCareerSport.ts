@@ -24,6 +24,7 @@ import { NHL_BADGES } from '@/lib/careerBadges';
 import { nhlUnreadInboxCount, answerNhlInboxMessage, nhlDraftNightInbox, NHL_CALENDAR } from '@/lib/nhlCareerInbox';
 import { dismissNhlRivalryEvent, resolveNhlRivalryChoice } from '@/lib/nhlCareerRivalryEvents';
 import type { UsCareerSport } from '@/lib/usCareerSport';
+import { NHL_CAREER_HALL } from '@/lib/nhlCareerHall';
 import { nhlSeasonReview } from '@/lib/usCareerSeasonReview';
 
 /* The key this career saves under. It stays a named constant so the home
@@ -125,4 +126,6 @@ export const NHL_CAREER_SPORT: UsCareerSport<NhlCareerState, NhlSeasonLine> = {
   shareText: (c, legacy) =>
     `NHL My Career 🏒 ${c.name}: ${c.seasons.length} seasons, ${countOf(c.cups, 'Cup', 'Cups')}, ${countOf(c.harts, nhlMajorAward(c.pos).one, nhlMajorAward(c.pos).many)}. Verdict: ${legacy.verdict}. Legacy ${legacy.score}. douknowball.com/nhl-my-career`,
   retirementAvatar: false,
+  /* Round 1039: the retirement talk, the farewell season and the Hall. */
+  hall: NHL_CAREER_HALL,
 };

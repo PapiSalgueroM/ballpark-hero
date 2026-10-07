@@ -11,6 +11,8 @@ export const MLB_CAREER_HALL = usCareerHall<MlbCareerState>({
     sport: "mlb",
     hallName: "National Baseball Hall of Fame",
     ruleYear: "BBWAA ballot, 2014 onward",
+    // The ten ballot rule is dated 2014 onward in the audit; earlier classes print no year.
+    verifiedFromClass: 2014,
     waitSeasons: 5,
     firstClassOffset: 6,
     threshold: 75,

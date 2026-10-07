@@ -31,6 +31,8 @@ import type { ExtPushArgs, ExtensionTalk } from '@/lib/usCareerExtension';
 import type { UsSport } from '@/lib/usCareerToCoach';
 import type { TrainingBank, TrainingSport } from '@/lib/careerTraining';
 import type { CareerReviewStats } from '@/lib/usCareerSeasonReview';
+import type { RetirementBlock } from '@/lib/careerRetirement';
+import type { HallSpeechBlock, NumberRetiredBy, UsHallSport } from '@/lib/careerHallOfFame';
 
 export interface UsCareerPracticeResult extends TrainingBank {
   year: number;
@@ -96,6 +98,13 @@ export interface UsCareerCore {
   /** Round 1038: drawn once when a career starts, so two careers with the
    *  same name, position, pick and first year are dealt different summers. */
   summerSalt?: string;
+  /** Round 1039: the retirement talk's answers (src/lib/careerRetirement.ts).
+   *  Optional: an old save reads as never asked. */
+  retirement?: RetirementBlock;
+  /** Round 1039: the induction speech, given once. Optional. */
+  hallSpeech?: HallSpeechBlock;
+  /** Round 1039: the club that retired the number on a deck card. Optional. */
+  numberRetiredBy?: NumberRetiredBy;
 }
 
 /** Round 1038: one offseason's cards, as ids, and how many are answered. */
@@ -292,4 +301,8 @@ export interface UsCareerSport<C extends UsCareerCore = any, L extends UsCareerS
    *  ever did, so only the NFL binding says yes (Round 900 moved the boards
    *  and changed nothing a player sees). */
   retirementAvatar: boolean;
+  /** Round 1039: the retirement talk, the farewell season and the Hall of
+   *  Fame (src/lib/careerHallOfFame.ts). Optional, so the parity replay can
+   *  mount a binding without it and play the old board draw for draw. */
+  hall?: UsHallSport<C>;
 }

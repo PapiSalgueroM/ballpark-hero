@@ -166,7 +166,8 @@ const entry = [
   // never goes through the Hall binding it is checking.
   `export { ${E.legacy} as LEGACY, ${E.label} as LABEL, ${E.arch} as ARCH, ${E.start} as start, ${E.season} as season, ${E.progress} as progress, ${E.event} as drawEvent, ${E.stop} as stop, ${E.roll} as roll } from './src/lib/${E.file}';`,
   `export { ${E.hall} as HALL } from './src/lib/${SPORT}CareerHall.ts';`,
-  `export { hallRecordFor, runHallBallot, giveHallSpeech, HALL_SPEECHES } from './src/lib/careerHallOfFame.ts';`,
+  `export { hallRecordFor, runHallBallot } from './src/lib/careerHallOfFame.ts';`,
+  `export { giveHallSpeech, HALL_SPEECHES } from './src/lib/careerHallSpeech.ts';`,
   `export { retirementTalk, answerRetirement, careerEndsAfter, isFarewellSeason } from './src/lib/careerRetirement.ts';`,
 ].join('\n');
 await build({

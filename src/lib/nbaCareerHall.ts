@@ -11,6 +11,8 @@ export const NBA_CAREER_HALL = usCareerHall<NbaCareerState>({
     sport: "nba",
     hallName: "Naismith Memorial Basketball Hall of Fame",
     ruleYear: "Class of 2025 onward",
+    // The two season wait starts with the Class of 2025; the older wait is not two-sourced, so earlier classes print no year.
+    verifiedFromClass: 2025,
     // Two full seasons since the Class of 2025 (NBA.com and CBS, Dec 2024). A 2026 ESPN
     // piece still says three; the audit records the conflict.
     waitSeasons: 2,
