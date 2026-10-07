@@ -2,6 +2,24 @@
 
 Product authoring and static review are complete. Remote product acceptance is pending.
 
+Second preparation 37621727542 at eef4b2df completed with all new product gates,
+four old manager regressions and all 20 readers green, but overall RED solely
+on the original decision harness's straight-red coverage floor (3 under 6).
+Artifact 11482477497 has verified ZIP SHA256
+d7d84fc0b0ea0816fbd28fa9717f1a88755f625311dabd1c550a418d80d9d950.
+Independent raw audits accepted 27 current pairs, all 54 creation holds,
+509 compatibility records and 20 effective copied faults. This is scoped
+product evidence, not overall preparation acceptance.
+
+The next remote preparation retains full direct current and frozen historical
+default-harness output, with SIM_SEED truly unset and original initialization
+filename preserved. Default status is characterized only as healthy or its
+sole observed coverage floor, and a red remains labeled RED. Unmodified
+original assertions also run on the four already-advertised seeds 1 to 4.
+An original lost-ban source fault must fail only section 3 beside a healthy
+seed-1 baseline. Original assertions, seeds and floors are not edited.
+No historical-default health or supplemental result is claimed before runtime.
+
 The original diagnostic is accepted at f025ecbdf9cfb033476b37e723244701a577d357
 (tree 606f81d9a24bc63796133e174c72db8dcdf2bcea), run 37617442468,
 job 112779490242. Artifact 11479948309, ZIP SHA256

@@ -12,6 +12,7 @@ on:
       - scripts/qa/managerAppealIsolation1081.mjs
       - scripts/qa/managerAppealCompatibility1081.mjs
       - scripts/qa/managerAppealAssets1081.mjs
+      - scripts/qa/managerDecisionRegression1081.mjs
       - scripts/fixtures/managerAppealIsolation1081/**
       - scripts/simTactics.mjs
       - src/lib/clubManagerDecisions.ts
@@ -139,10 +140,13 @@ jobs:
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
           failed=0
-          for harness in simClubManagerDecisions simTactics simTacticsEngine simClubManagerSave simClubManagerSaveSize; do
+          for harness in simTactics simTacticsEngine simClubManagerSave simClubManagerSaveSize; do
             SIM_TACTICS_ASSET_CACHE="$PWD/manager-appeal-isolation-artifacts/font-cache/manifest.json" ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "manager-appeal-isolation-artifacts/$harness.log" || failed=1
           done
           exit "$failed"
+      - name: Preserve original decision assertions and explicit default coverage red
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerDecisionRegression1081.mjs 2>&1 | tee manager-appeal-isolation-artifacts/decision-regressions.log
       - name: All built readers and source anchors
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
@@ -154,7 +158,7 @@ jobs:
       - name: Hold source, original assertions and protected game rules
         if: ${{ !cancelled() }}
         run: |
-          git diff --exit-code HEAD -- src scripts/simManagerAppealIsolation.mjs scripts/simTactics.mjs scripts/qa/managerAppealIsolation1081.mjs scripts/qa/managerAppealCompatibility1081.mjs scripts/qa/managerAppealAssets1081.mjs scripts/fixtures/managerAppealIsolation1081
+          git diff --exit-code HEAD -- src scripts/simManagerAppealIsolation.mjs scripts/simTactics.mjs scripts/qa/managerAppealIsolation1081.mjs scripts/qa/managerAppealCompatibility1081.mjs scripts/qa/managerAppealAssets1081.mjs scripts/qa/managerDecisionRegression1081.mjs scripts/fixtures/managerAppealIsolation1081
           git diff --exit-code 2fff5e044160b70bd58b64d931793ee4e443cedd HEAD -- src/lib/clubManager.ts src/lib/leagueCore.ts src/lib/positionFit.ts src/lib/clubManagerInternationals.ts src/lib/clubManagerSlots.ts src/lib/clubManagerEras.ts src/lib/clubManagerWorldEdit.ts src/data/clubManagerRosters.ts src/data/clubManagerWorldRosters.ts scripts/simClubManagerDecisions.mjs scripts/simClubManagerSlots.mjs scripts/simClubManagerSave.mjs scripts/simClubManagerSaveSize.mjs
           sha256sum package.json package-lock.json > manager-appeal-isolation-artifacts/dependencies-after.txt
           cmp manager-appeal-isolation-artifacts/dependencies-before.txt manager-appeal-isolation-artifacts/dependencies-after.txt
