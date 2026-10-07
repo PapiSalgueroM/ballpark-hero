@@ -35,7 +35,7 @@ const MlbMyCareer = () => {
               'Up to three decisions land every offseason, one card at a time: contracts, trades, surgeries, fame. A card you just saw rests for a while (press moments follow your season, so those can come right back).',
               'Open the Bank when you like: savings that pays 2.5% a season, a market of five moving prices, a statement, the clubhouse card school and the shop.',
               'The News box carries the paper, your SocialGram and your draft class rival\'s card. The Trophy Case holds 26 badges, lit off the facts of your career.',
-              'Stack awards and rings, fight the aging curve, and retire to the verdict.',
+              'Stack awards and rings, fight the aging curve, and answer the retirement talk when the rating slips: stop, one more year, or a farewell season. Then the verdict and the Hall of Fame ballot.',
             ]}
             examples={[
               'A generational talent who delivers on every ounce of hype',

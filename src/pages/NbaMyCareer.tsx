@@ -36,7 +36,7 @@ const NbaMyCareer = () => {
               'Open the Bank when you like: savings that pays 2.5% a season, a market of five moving prices, a statement, the card school on the team plane and the shop.',
               'The News box carries the paper, your SocialGram and your draft class rival\'s card. The Trophy Case holds 21 badges, lit off the facts of your career.',
               'Awards stack your legacy: Rookie of the Year, All-NBA, MVP, Finals MVP, rings.',
-              'Retire and face the verdict. The GOAT debate tier is real and it is brutal to reach.',
+              'From 31, a falling rating brings the retirement talk: stop, one more year, or a farewell season. Then the verdict and the Hall of Fame wait. The GOAT debate tier is real and it is brutal to reach.',
             ]}
             examples={[
               'A Point God who wins back-to-back MVPs and never gets the ring',

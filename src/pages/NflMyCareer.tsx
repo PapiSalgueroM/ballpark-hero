@@ -36,7 +36,7 @@ const NflMyCareer = () => {
               'Open the Bank when you like: savings that pays 2.5% a season, a market of five moving prices, a statement, the locker room card school and the shop.',
               'The News box carries the paper, your SocialGram and your draft class rival\'s card. The Trophy Case holds 25 badges, lit off the facts of your career.',
               'Running backs fall off a cliff early, field surgeons age like wine. Plan the career, not the season.',
-              'Retire (or get forced out) and face the legacy verdict: from cup of coffee to first-ballot immortal.',
+              'From 30, a falling rating brings the retirement talk: stop, one more year, or a farewell season. Then the legacy verdict (cup of coffee to first-ballot immortal) and the Hall of Fame ballot, year by year.',
             ]}
             examples={[
               'A dual-threat QB who wins MVP at 25 and blows a knee at 28',

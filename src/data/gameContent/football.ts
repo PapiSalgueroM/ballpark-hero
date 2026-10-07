@@ -395,7 +395,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
         heading: "Following the news through retirement",
         items: [
           "Read the News box. The paper writes up every season in your own position's stat, the SocialGram shows followers read off your fanbase with three fan comments under the latest post, and the rival's card keeps the head to head against the player drafted the same year as you.",
-          "Retire, or get forced out, and face the legacy verdict.",
+          "From 30, a falling rating brings the retirement talk: stop now, play one more year, or announce a farewell season. Then the legacy verdict, and the Hall of Fame wait one ballot at a time.",
         ],
         subsections: [
           {
@@ -446,7 +446,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
         heading: "Injuries and when retirement is forced",
         items: [
           "Injuries can erase 2 to 10 games a season and leave permanent wear on your health bar.",
-          "Retirement is forced at rating 64, age 40, 34 for backs, or 19 seasons. You can walk away after 6, and progress saves automatically.",
+          "Retirement is forced at rating 64, age 40, 34 for backs, or 19 seasons. Before that, from 30, slipping 8 points off your best (or down to 70) brings the talk: retire now, one more year, or a farewell season that ends the career after it. You can walk away after 6, and progress saves automatically.",
         ],
         subsections: [
           {

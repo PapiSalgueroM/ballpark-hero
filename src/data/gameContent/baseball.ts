@@ -928,7 +928,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
         heading: "Hitting the open market and closing your career",
         items: [
           "When team control ends, hit the open market for real: competing offers from named clubs with their own money, length and roster quality, and one push for more on any of them.",
-          "Stack awards and rings, fight aging, and retire to a verdict.",
+          "Stack awards and rings, fight aging, answer the retirement talk when the rating slips, and retire to a verdict and the Hall of Fame ballot.",
         ],
       },
     ],
@@ -981,7 +981,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
           {
             heading: "Retiring at 42 or walking away at season 6",
             items: [
-              "Retirement hits at 42, after 21 seasons, or when your rating collapses. You can walk away after season 6.",
+              "Retirement hits at 42, after 21 seasons, or when your rating collapses. Before that, from 32, slipping 8 points off your best (or down to 68) brings the talk: retire now, one more year, or a farewell season. You can walk away after season 6.",
             ],
           },
         ],
