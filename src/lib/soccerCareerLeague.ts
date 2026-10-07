@@ -418,12 +418,14 @@ export function leagueSeasonLine(club: { name: string; league: string }, year: n
  *  LIST_SEASON it is the ledgers' league, and only when the saved size
  *  agrees with that season's: a save from before Round 1037 drew its
  *  finish in today's league, and its "of 20" must not be printed beside
- *  a league of 24. `key` is what the phone's world is keyed by. */
+ *  a league of 24. The same holds from LIST_SEASON on, where an old save at
+ *  one of the seven clubs Round 1037 relabelled still draws in the old
+ *  label's league. `key` is what the phone's world is keyed by. */
 export function finishLeague(club: { name: string; league: string }, year: number, savedSize: number | null): { key: string; name: string } | null {
   const key = leagueKeyInYear(club, year);
   const name = leagueInYear(club, year);
   if (key === null || name === null) return null;
-  if (year < LIST_SEASON && savedSize !== null && savedSize !== leagueSizeFor(key, year)) return null;
+  if (savedSize !== null && savedSize !== leagueSizeFor(key, year)) return null;
   return { key, name };
 }
 

@@ -16,7 +16,9 @@
                world is matched to an unnamed member (a missed canon); every
                job market club matches at most one league a season, and every
                MARKET_SPELLINGS entry finds its club; the module's identityKey
-               is the generator's on every printed name.
+               is the generator's on every printed name; the summary's old
+               save guard prints no league beside a saved size that is not
+               the season's own, before 2026-27 and after it.
    b PLAYED    seeded careers starting in 1990, 1998, 2005, 2012 and 2019,
                played screen by screen to retirement and then into the dugout.
                Every offer, loan and dugout job line names the league the
@@ -26,10 +28,22 @@
                that league; every derby of a past season is against a club
                in the same league that year; every dugout table of a past
                season in one of the six is headed by that season's name, has
-               the verified size, and names only that season's members.
+               the verified size, and names only that season's members, none
+               twice and never his own club; his own club sits in a league
+               it was not in that season only where the game itself put it
+               there (a season it named at that club, or a move out of one),
+               never by a job's label, which is today's. The season an
+               offer, loan or dugout job card names is the season then
+               played (held to the record, not to the helper the page
+               reads). Twelve forced dugout jobs, the same on every seed,
+               keep a floor under the past tables. The phone's world agrees
+               with the season card: a title is crowned in the league the
+               card names and the club is crowned nowhere else (every club
+               of the world, one season in five, title and no title).
    c BASELINE  from 2026-27 on nothing moves: careers starting in 2025 are
                replayed on this tree and on SIM_LEAGUE_SEASONS_BASE (default
-               origin/main, read with git archive) with the seven Round 1022
+               origin/main, or origin/release-ah while that is not on main,
+               read with git archive) with the seven Round 1022
                pins released in the baseline too, so the comparison isolates
                the binds; every season from 2026 and every dugout row from
                2026 must be identical. The pins' own effect is printed (the
@@ -49,6 +63,13 @@
      todaylabel   a past offer card prints today's label              -> b
      finishwrong  the finish drawn in today's league again           -> b
      cardwire     the club card prints the saved label again          -> d
+     oldsize      finishLeague's saved size guard deleted             -> a
+     jobleak      the dugout no longer told whether the game placed
+                  his club, so a job's label seats it again           -> b
+     jobyear      managerNextSeasonYear one season early              -> b
+     offeryear    nextSeasonYear one season early                     -> b
+     selfnamed    his own club left among a past table's rivals       -> b
+     phonemine    the phone reads his league from today's label       -> b
    Each measured red on 2026-10-06 (seed 1, base origin/release-ah): the
    file differs from the ledgers and the lookup has West Ham in two leagues
    in 2011 (wrongseason); Fiorentina meets Bologna in seasons Bologna was a
@@ -56,7 +77,16 @@
    in the Segunda (wrongtable); an AZ Alkmaar card for 1992-93 says
    "Eredivisie, 1992-93" (todaylabel); a Fiorentina 1993-94 finish of 18 in a
    season the club was in Serie B (finishwrong); the card's raw label is
-   back and its lookup gone (cardwire, 2 failures).
+   back and its lookup gone (cardwire, 2 failures). The review fixes' six,
+   measured red on 2026-10-07 (seed 1): 2635 finishes printed beside a
+   league of another size, Real Madrid 2000-01 at 24 beside La Liga's 20
+   (oldsize); Wrexham 2010-11, Bristol City 1995-96 and Sunderland 2018-19
+   seated in a league they were not in on the strength of the job's label,
+   7 failures (jobleak); a Dortmund job card for 2020-21 played in 2021-22,
+   18 failures (jobyear); an offer card for 1991-92 before a 1992-93
+   season, 668 (offeryear); Dortmund named as Dortmund's rival, 16
+   (selfnamed); Nottingham Forest 2012-13 and Newcastle 1991-92 crowned in
+   the Premier League while the card says Championship, 193 (phonemine).
 
    Run: node scripts/simCareerLeagueSeasons.mjs
    No network and no database: everything is bundled from this tree (and,
@@ -117,7 +147,7 @@ const CONTROLS = {
   todaylabel: ['b', 'src/lib/soccerCareerLeague.ts', swap('return `${name}, ${seasonSpan(year)}`;', 'return `${club.league}, ${seasonSpan(year)}`;')],
   finishwrong: ['b', 'src/lib/soccerCareerEngine.ts', swap('league: leagueKeyInYear({ name: state.currentClub, league: state.currentLeague }, seasonYear), year: seasonYear,', 'league: state.currentLeague, year: seasonYear,')],
   cardwire: ['d', 'src/pages/SoccerCareer.tsx', swap('`${clubCardLeague(career, currentSeason.year)}${career.contractYearsLeft}yr left · ', '`${career.currentLeague} · ${career.contractYearsLeft}yr left · ')],
-  oldsize: ['a', 'src/lib/soccerCareerLeague.ts', swap('  if (year < LIST_SEASON && savedSize !== null && savedSize !== leagueSizeFor(key, year)) return null;\n', '')],
+  oldsize: ['a', 'src/lib/soccerCareerLeague.ts', swap('if (savedSize !== null && savedSize !== leagueSizeFor(key, year)) return null;', '')],
   jobleak: ['b', 'src/lib/soccerCareerEngine.ts', swap('year: calYear, from: movedFrom, placed }', 'year: calYear, from: movedFrom }')],
   jobyear: ['b', 'src/lib/soccerCareerEngine.ts', swap('?? 2024) + (s.managerState?.season ?? 0) + 1;', '?? 2024) + (s.managerState?.season ?? 0);')],
   offeryear: ['b', 'src/lib/soccerCareerEngine.ts', swap('return (s.seasons[s.seasons.length - 1]?.year ?? 0) + 1;', 'return (s.seasons[s.seasons.length - 1]?.year ?? 0);')],
@@ -242,6 +272,14 @@ for (const c of WORLD) {
     const other = want.size === 20 ? 24 : 20;
     ok(L.finishLeague(c, y, want.size)?.name === want.name, `${c.name} ${span(y)}: a finish saved at ${want.size} prints ${L.finishLeague(c, y, want.size)?.name ?? 'no league'}, the ledgers ${want.name}`);
     ok(L.finishLeague(c, y, other) === null, `${c.name} ${span(y)}: a finish saved at ${other} is printed beside ${want.name}, which had ${want.size}`);
+  }
+  /* and from 2026-27: an old save at one of the seven released clubs drew
+     its finish in the old label's league, whose size is not the new one's */
+  const now = L.leagueSizeFor(c.league, 2030);
+  if (now) {
+    guarded += 1;
+    ok(L.finishLeague(c, 2030, now)?.name === c.league, `${c.name} 2030-31: a finish saved at ${now} prints ${L.finishLeague(c, 2030, now)?.name ?? 'no league'}, the label ${c.league}`);
+    ok(L.finishLeague(c, 2030, now === 20 ? 24 : 20) === null, `${c.name} 2030-31: a finish saved at another size is printed beside the ${c.league} of ${now}`);
   }
 }
 ok(guarded >= 1000, `only ${guarded} club seasons held the old save guard (floor 1000)`);
@@ -495,6 +533,7 @@ for (const [start, era] of STARTS) {
 const FORCED = [['Leeds United', 2010], ['Newcastle', 2008], ['Ipswich Town', 1997], ['Fiorentina', 1994], ['Malaga', 2015],
   ['Wolves', 2010], ['West Ham', 2011], ['Sunderland', 2018], ['Nottingham Forest', 2005], ['Brentford', 2005], ['Juventus', 2006], ['Ipswich Town', 2019]];
 Math.random = mulberry32(20261006);
+const before = { ledger: cov.dugoutLedger, unplaced: cov.dugoutUnplaced, seated: cov.dugoutSeated };
 const forcedBase = E.initCareer('Forced', 'England', 'CM', '2005-09', { pace: 70, shooting: 70, passing: 70, dribbling: 70, defending: 70, physical: 70, reflexes: 40 }, 70, 2005, WORLD, null, 80);
 for (const [name, y] of FORCED) {
   const w = WORLD.find(c => c.name === name);
@@ -507,6 +546,7 @@ for (const [name, y] of FORCED) {
   cov.forced += 1;
   playDugout(s, 8);
 }
+const forced = { ledger: cov.dugoutLedger - before.ledger, unplaced: cov.dugoutUnplaced - before.unplaced, seated: cov.dugoutSeated - before.seated };
 /* The phone's world against the season card, over every club of the world
    in one season of each five: when he wins his league the phone crowns him
    in the league the card names, and nowhere else; when he does not, it
@@ -527,16 +567,24 @@ for (const y of [1991, 1996, 2001, 2006, 2011, 2016, 2021, 2025]) {
 Math.random = realRandom;
 console.log(`  ${cov.careers} careers, ${cov.seasons} playing seasons (${cov.past} before 2026-27: ${cov.pastSized} finishes sized from the ledgers, ${cov.pastChamp} of them in the Championship, ${cov.pastNone} in no ledger league, ${cov.pastTitleNone} titles there), ${cov.derbies} past derbies`);
 console.log(`  ${cov.offers} offer and loan cards (${cov.offersNone} past ones with no league), ${cov.cards} club cards, ${cov.jobs} dugout jobs (${cov.jobsNone} with no league); dugout ${cov.dugout} past seasons: ${cov.dugoutLedger} from the ledgers naming ${cov.dugoutNamed} rivals, ${cov.dugoutUnknown} unknown (${cov.dugoutUnplaced} of them a club the ledgers put in none of the six), ${cov.dugoutSeated} seated by the game's own seasons; ${cov.stuck} stuck`);
-console.log(`  years held to the record: ${cov.offerYears} offer seasons, ${cov.jobYears} dugout jobs; ${cov.forced} forced jobs; phone against the card ${cov.phone} times (${cov.phoneSwapped} club seasons whose label is not that season's league)`);
+console.log(`  years held to the record: ${cov.offerYears} offer seasons, ${cov.jobYears} dugout jobs; ${cov.forced} forced jobs (${forced.ledger} ledger seasons, ${forced.unplaced} unplaced, ${forced.seated} seated); phone against the card ${cov.phone} times (${cov.phoneSwapped} club seasons whose label is not that season's league)`);
 ok(cov.stuck === 0, `${cov.stuck} careers stuck on a screen this harness cannot answer`);
 /* Floors, so a run that saw too little cannot pass for a green one. Measured
-   2026-10-06 over SIM_LEAGUE_SEASONS_SEED 1, 2 and 3 (40 careers each):
-   past finishes sized from the ledgers 221, 278, 319; past derbies 167, 275,
-   302; offer and loan cards 1676, 1728, 1697; dugout seasons from the
-   ledgers 22, 53, 45 naming 66, 140, 132 rivals. Each floor sits near half
-   the lowest seed. Championship finishes ran 13, 0, 36, so they get no floor
-   (the vitest file and section a hold the Championship's sizes). */
-const FLOOR = { pastSized: 110, derbies: 80, offers: 800, dugoutLedger: 10, dugoutNamed: 30 };
+   2026-10-07 after the review fixes over SIM_LEAGUE_SEASONS_SEED 1 to 5 (40
+   careers each, plus the forced jobs): past finishes sized from the ledgers
+   221, 278, 319, 287, 334; past derbies 167, 275, 302, 266, 348; offer and
+   loan cards 1676, 1728, 1697, 1678, 1713; dugout seasons from the ledgers
+   88, 105, 110, 66, 90 naming 259, 289, 321, 193, 266 rivals (the forced
+   jobs alone give 66: before them seed 4 drew none at all, and the seeded
+   careers' share is bimodal); unplaced 29, 43, 30, 29, 30 and seated 31,
+   29, 36, 23, 29 (forced alone 29 and 23); dugout jobs held to their season
+   21, 28, 28, 23, 20; offer seasons held 668, 697, 671, 678, 692; the phone
+   held to the card 2052, 2050 and 2049 times on seeds 1, 2 and 5 (nearly all
+   of it the fixed sweep). Each floor sits near half the lowest seed.
+   Championship finishes ran 13, 0, 36, 24, 6, so they get no floor (the
+   vitest file and section a hold the Championship's sizes). */
+const FLOOR = { pastSized: 110, derbies: 80, offers: 800, dugoutLedger: 33, dugoutNamed: 95, dugoutUnplaced: 14, dugoutSeated: 11,
+  jobYears: 10, offerYears: 330, phone: 1000 };
 for (const [k, min] of Object.entries(FLOOR)) ok(cov[k] >= min, `coverage: ${k} ${cov[k]}, the floor is ${min}`);
 
 /* ─── c. BASELINE ─── */

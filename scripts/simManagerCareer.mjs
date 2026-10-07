@@ -158,7 +158,7 @@ const CONTROLS = {
     to: '? input.clubs.find(c => clubKey(c.name) === mine)?.league ?? listLeague(input.clubs, input.league) ?? input.league' },
   zones: { file: 'soccerCareerEngine.ts', from: 'const sizeUnknown = lf.league !== null && !lf.sizeVerified;', to: 'const sizeUnknown = false;' },
   size: { file: 'soccerCareerLeague.ts', from: 'Math.max(MANAGER_FIELD, names.length + 1)', to: 'Math.max(MANAGER_FIELD, names.length)' },
-  noaccept: { file: 'soccerCareerEngine.ts', from: '  ms.league = offer.league;', to: '' },
+  noaccept: { file: 'soccerCareerEngine.ts', from: '  ms.league = leagueKeyInYear({ name: offer.club, league: offer.league }, managerNextSeasonYear(s)) ?? offer.league;', to: '' },
   nofold: { file: 'soccerCareerLeague.ts', from: 'const f = foldName(label);', to: 'const f = label.toLowerCase().trim();' },
   nomarket: { file: 'soccerCareerEngine.ts', from: 'if (marketJob && MARKET) {', to: 'if (false) {' },
   /* the closing check's controls: a past season names the 2026-27 list again; the English pair moves before the Championship had its name */
@@ -378,6 +378,19 @@ function poachLeague(club, year) {
   const c = FB.find(x => x.name === club);
   return c ? (lg.leagueKeyInYear(c, year) ?? c.league) : null;
 }
+/* Round 1037 review: a season before 2026-27 that nothing the game played
+   put his club in (a job's first season, or one after a season it could not
+   name) is played where the ledgers put the club that year, and when they
+   put it in none of the six while the label names one of them, in no league
+   at all (unplaced: no league, nobody named, lineup unknown). Today's label
+   never seats a club in a past league. `placed` is this harness's own: the
+   season before was played at this club in a league it named. */
+function settle(club, want, calYear, placed) {
+  if (placed || calYear >= LIST_SEASON) return { want, unplaced: false };
+  const real = lg.leagueKeyInYear({ name: club, league: want ?? '' }, calYear);
+  if (real) return { want: real, unplaced: false };
+  return want && lg.ledgerLeague(want, calYear) ? { want: null, unplaced: true } : { want, unplaced: false };
+}
 /* The closing check's two year rules, held here rather than read from the
    module: the list's league labels are the 2026-27 season's (the pool says
    so in its header, and a regenerated pool that moves on has to move this
@@ -418,7 +431,7 @@ function dugout(club, tier, lastYear, league) {
 }
 const cover = { seasons: 0, home: 0, market: 0, verified: 0, thin: 0, named: 0, unnamed: 0,
   accepted: 0, relabelled: 0, up: 0, down: 0, zones: 0, bigUnverified: 0, past: 0, early: 0,
-  pastHeld: 0, pastMoves: 0, headed: 0, pastLedger: 0, yearJobs: 0 };
+  pastHeld: 0, pastMoves: 0, headed: 0, pastLedger: 0, yearJobs: 0, unplaced: 0 };
 const bad = { league: 0, self: 0, ofN: 0, size: 0, table: 0, known: 0, zone: 0, words: 0, past: 0, pastLeague: 0, header: 0, pastLedger: 0 };
 /* the lead's decision on F14: every league label the game can print (the
    list's and the job market's). A club whose name holds a league label is
@@ -437,7 +450,7 @@ const firstBad = [];
 const note = s => { if (firstBad.length < 6) firstBad.push(s); };
 /** Every check of a), b) and e) on one employed season. `want` is the league
  *  this harness tracked for him: his job's, moved by the table's own rule. */
-function checkSeason(s, club0, want, lastYear) {
+function checkSeason(s, club0, want, lastYear, unplaced = false) {
   const ms = s.managerState;
   const row = ms.seasonResults[ms.seasonResults.length - 1];
   const calYear = lastYear + ms.season;
@@ -457,7 +470,8 @@ function checkSeason(s, club0, want, lastYear) {
   const ledger = past && row.league ? lg.ledgerLeague(row.league, calYear) : null;
   if (ledger ? !(row.knownRivals <= ledger.clubs.length && row.knownRivals >= ledger.clubs.length - 3)
     : row.knownRivals !== (past ? 0 : Math.min(K, row.leagueSize - 1))) { bad.known += 1; note(`${want} ${calYear}: ${row.knownRivals} known, the ${ledger ? 'ledgers name' : 'list has'} ${ledger ? ledger.clubs.length : K}`); }
-  if (!!row.lineupUnknown !== (past && want !== null && !ledger)) { bad.past += 1; note(`${want} ${calYear}: lineupUnknown ${row.lineupUnknown}, the list has ${K}`); }
+  if (!!row.lineupUnknown !== (past && ((want !== null && !ledger) || unplaced))) { bad.past += 1; note(`${want} ${calYear}: lineupUnknown ${row.lineupUnknown}, the list has ${K}${unplaced ? ', unplaced' : ''}`); }
+  if (unplaced) cover.unplaced += 1;
   if (past && K > 0) cover.past += 1;
   /* F14: a past season the ledgers do not hold names no league over the
      table, under it or in its season line; from 2026-27 on the header names
@@ -529,6 +543,7 @@ for (const seed of SEEDS) {
       const lastYear = k % 4 === 0 ? 1996 : 2030;
       let s = dugout(pool[k % pool.length].name, tier, lastYear);
       let want = expectedLeague(s.managerState.club);
+      let placed = false;
       for (let y = 0; y < SEASONS; y++) {
         if (s.managerState.unemployed) {
           const offer = (s.managerState.offers ?? [])[0];
@@ -537,16 +552,23 @@ for (const seed of SEEDS) {
             s = e.acceptManagerOffer(s, 0);
             cover.accepted += 1;
             if (want !== offer.league) cover.relabelled += 1;
-          } else { s = e.advanceManagerSeason(s, FB); continue; }
+            placed = false;
+          } else { s = e.advanceManagerSeason(s, FB); placed = false; continue; }
         }
         const t0 = s.managerState.clubTier, c0 = s.managerState.club;
+        const st = settle(c0, want, lastYear + s.managerState.season + 1, placed);
+        /* an unplaced season is played in no league; the job's league is
+           kept, unprinted, as the engine keeps it */
+        if (!st.unplaced) want = st.want;
         s = e.advanceManagerSeason(s, FB);
-        const row = checkSeason(s, c0, want, lastYear);
+        const row = checkSeason(s, c0, st.want, lastYear, st.unplaced);
         const ms = s.managerState;
+        placed = !ms.unemployed && ms.club === c0 && typeof row.league === 'string' && row.lineupUnknown !== true;
         /* where he plays next: a poaching club's own league, or the table's
            move (Premier League bottom three down, Championship top two up) */
         if (!ms.unemployed) {
-          if (ms.club !== c0) want = poachLeague(ms.club, lastYear + ms.season + 1);
+          if (ms.club !== c0) { want = poachLeague(ms.club, lastYear + ms.season + 1); placed = false; }
+          else if (st.unplaced) { /* a season in no league moves nothing */ }
           else if (lastYear + ms.season < MOVES_FROM) { /* before 2004/05 the pair does not move */ }
           else if (want === 'Premier League' && row.playerPos >= row.leagueSize - 2) { want = 'Championship'; cover.down += 1; }
           else if (want === 'Championship' && row.playerPos <= 2) { want = 'Premier League'; cover.up += 1; }
@@ -566,7 +588,7 @@ console.log(`   ${cover.accepted} market jobs taken (${cover.relabelled} in a le
 console.log(`   table not his league ${bad.table}, known clubs wrong ${bad.known}, a position in a league of unknown size ${bad.zone}, promotion or relegation words wrong ${bad.words}`);
 console.log(`   ${cover.past} seasons before 2026-27 in a league the list knows clubs of, ${cover.early} finishes in the English pair's move zones before 2004/05; a past season naming a rival or misflagged ${bad.past}`);
 console.log(`   ${cover.pastHeld} past seasons in a league the game holds, ${cover.pastMoves} of them with a move line; naming a league ${bad.pastLeague}; ${cover.headed} later seasons, header without his league ${bad.header}`);
-console.log(`   Round 1037: ${cover.pastLedger} past seasons in a league the ledgers hold, headed wrong ${bad.pastLedger}; ${cover.yearJobs} jobs placed in the league their club was in that year`);
+console.log(`   Round 1037: ${cover.pastLedger} past seasons in a league the ledgers hold, headed wrong ${bad.pastLedger}; ${cover.yearJobs} jobs placed in the league their club was in that year; ${cover.unplaced} past seasons unplaced (the ledgers put the club in none of the six while its label names one)`);
 for (const f of firstBad.slice(0, 6)) console.log(`     e.g. ${f}`);
 /* coverage floors, about half of what this branch measured (29311 seasons:
    28814 at a club of the list, 497 at a market club, 9471 with a verified
@@ -621,15 +643,20 @@ if (cover.pastLedger < PAST_LEDGER_FLOOR || cover.yearJobs < YEAR_JOBS_FLOOR) fa
     const club = pair[k % pair.length];
     let s = dugout(club.name, club.tier, 2010);
     let want = expectedLeague(club.name);
+    let placed = false;
     for (let y = 0; y < 8 && !s.managerState.unemployed; y++) {
       const c0 = s.managerState.club;
+      const st = settle(c0, want, 2010 + s.managerState.season + 1, placed);
+      if (!st.unplaced) want = st.want;
       s = e.advanceManagerSeason(s, FB);
-      const row = checkSeason(s, c0, want, 2010);
+      const row = checkSeason(s, c0, st.want, 2010, st.unplaced);
       seasons += 1;
       if (/Promoted with|Relegated/.test(row.result)) said += 1;
       const ms = s.managerState;
       if (ms.unemployed) break;
-      if (ms.club !== c0) want = poachLeague(ms.club, 2010 + ms.season + 1);
+      placed = ms.club === c0 && typeof row.league === 'string' && row.lineupUnknown !== true;
+      if (ms.club !== c0) { want = poachLeague(ms.club, 2010 + ms.season + 1); placed = false; }
+      else if (st.unplaced) { /* a season in no league moves nothing */ }
       else if (want === 'Premier League' && row.playerPos >= row.leagueSize - 2) { want = 'Championship'; moves += 1; }
       else if (want === 'Championship' && row.playerPos <= 2) { want = 'Premier League'; moves += 1; }
     }
