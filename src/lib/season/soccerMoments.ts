@@ -178,3 +178,41 @@ export function applySeasonMomentsBank(prev: CareerState, offered: number): Care
 export function momentsStatLabel(position: string): string {
   return drillStatFor(drillForPosition(position), position).label;
 }
+
+/* ─── the words (roles only: nobody on the pitch is a named person) ─── */
+
+/** What is happening when the clock stops. */
+export const MOMENT_LINE: Record<SoccerMomentKind, string> = {
+  finish: 'The ball breaks to you on the edge of the box',
+  pass: 'You have it in midfield and your striker is on the move',
+  save: 'Their striker is through and it is you or the net',
+  tackle: 'Their winger is running at your back line',
+};
+/** A RECREATE's objective: the record stands, he plays it again. */
+export const RECREATE_LINE: Record<SoccerMomentKind, string> = {
+  finish: 'On the record you scored here. Do it again.',
+  pass: 'On the record you set this one up. Do it again.',
+  save: 'On the record you kept a clean sheet here. Keep this one out again.',
+  tackle: 'They never scored in this one. Win this ball again.',
+};
+/** A YOUR CALL's objective. */
+export const CALL_LINE = 'What you do here is what happened in this match.';
+
+/** What a settled moment means, for the verdict card. */
+export function momentAfter(mode: 'call' | 'recreate', made: boolean, flipped: boolean, mirrorMd: number | null, round = 'matchday'): string {
+  if (mode === 'recreate') return made ? 'The record stands, and the stars are yours.' : 'The record stands: on the day you got this one right. No stars this time.';
+  if (!flipped) return made ? 'That is how the match went. The stars are yours.' : 'That is how the match went.';
+  const back = mirrorMd === null ? 'A later game' : `The return game on ${round} ${mirrorMd}`;
+  return made
+    ? `It counts, and the match changes from here. ${back} takes the other side of it, so your season totals stay as they are.`
+    : `It did not go your way, so the match changes from here. ${back} takes the other side of it, so your season totals stay as they are.`;
+}
+
+/** The kick off card's line about the season's moments, or null when there are none. */
+export function momentsKickoffLine(mds: readonly number[], round = 'matchday'): string | null {
+  if (mds.length === 0) return null;
+  const list = mds.length === 1 ? `${mds[0]}` : `${mds.slice(0, -1).join(', ')} and ${mds[mds.length - 1]}`;
+  return mds.length === 1
+    ? `1 moment is yours to play this season: ${round} ${list}.`
+    : `${mds.length} moments are yours to play this season: ${round}s ${list}.`;
+}

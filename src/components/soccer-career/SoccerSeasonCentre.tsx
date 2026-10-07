@@ -7,11 +7,20 @@
    tile instead of a guess. Its own error boundary keeps a render error
    inside the overlay (Retry, Close); the page wraps the lazy mount in a
    second one, because a boundary inside this chunk cannot catch the chunk
-   failing to load. */
+   failing to load.
+
+   Round 1047: the latest season also offers his moments (planMoments). The
+   season on screen is the plan with the ledger's decisions applied
+   (applyDecisions), and the only writes are the ledger entries and the
+   bank, through `onCareer`, after he presses "Take it yourself". Without
+   `onCareer`, or on a season that is not the latest, nothing is offered. */
 import { Component, useMemo, type ReactNode } from 'react';
 import type { CareerState, ClubData, SeasonRecord } from '@/lib/soccerCareerEngine';
-import { deriveSeason, tableAt } from '@/lib/season/core';
-import { SOCCER, buildSoccerSeasonCtx, type SoccerSeasonCtx } from '@/lib/season/soccer';
+import { applyDecisions, deriveSeason, planMoments, tableAt } from '@/lib/season/core';
+import { SOCCER, buildSoccerSeasonCtx, soccerSeasonKey, type SoccerSeasonCtx } from '@/lib/season/soccer';
+import { ledgerOf, readSeasonMoments } from '@/lib/season/momentsSave';
+import type { CentreMoments } from '@/components/season-centre/MomentHost';
+import { useSoccerMoments } from './useSoccerMoments';
 import { readSeasonDerbies } from '@/lib/soccerCareerDerby';
 import { leagueWithArticle, ordinal } from '@/lib/soccerCareerLeague';
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
@@ -27,16 +36,26 @@ export interface SoccerSeasonCentreProps {
   row: SeasonRecord;
   mode: 'live' | 'watch';
   onClose: () => void;
+  /** Round 1047: how a moment writes to the save (the ledger, then the bank). Absent: no moments. */
+  onCareer?: (fn: (prev: CareerState) => CareerState) => void;
 }
 
 const HELP: HelpWords = {
   title: 'How the Season Centre works',
   intro: [
-    'Your season was played the moment you pressed Next Season. This is that same season, match by match, so nothing here can change it.',
+    'Your season was played the moment you pressed Next Season. This is that same season, match by match: the final table and your season totals are settled, and nothing here can change them.',
     "When a season shows a table, who was in the league, how many clubs it had and how many points a win was worth are real (from 2026-27 on, the league is your career's own world). Every score, every other club's result and every minute are your career's own.",
   ],
   controls: '▶ plays the next matchday. ⏩ jumps to the next big game (a derby, halfway, the title or the final day). ⏭ goes straight to the end. 1x and 3x set the clock, Results shows each match at full time.',
+  moments: [
+    'Up to three moments a season are yours to play, marked 🎯 on the fixtures of the season you just played. The clock stops a beat before one. 🎯 Take it yourself plays it on your training ground board, one go. ▶ Let it play leaves the match as it was. Once the board opens the go is used, so closing the tab counts as a miss.',
+    'YOUR CALL: what you do is what happened in that match. Score a chance that was missed and the goal is yours; miss one that went in and it is gone. The return game against the same club takes the other side of it, so the final table and your season totals end exactly where your season summary has them.',
+    'RECREATE: the record stands whatever you do. You play a goal, an assist or a clean sheet again, for stars only.',
+    'A make earns one to three stars for how well you struck it. At the season review, or when you leave, the stars bank once: 60% of the stars on offer is +1 to the stat your position trains, 85% is +2, never past your ceiling, and it arrives with next season\'s growth.',
+  ],
   examples: [
+    { head: 'A YOUR CALL', body: 'Matchday 9, 1-1 in the 82nd minute, and on your season this chance was missed. You take it and score: the match ends 2-1 and you climb the table that week. In the return game on matchday 28, a 2-1 win on your season, your goal there is not scored and it ends 1-1. You gain two points on matchday 9 and give two back on matchday 28, they lose one and get it back: the final table and your goals for the season end exactly where they were.' },
+    { head: 'A RECREATE', body: 'Derby day, and on the record you scored in the 74th minute. You play it again on the Wall Shot: through the gap and into the top corner is three stars, a miss is none. Either way the derby ends as it did. Three moments worth 3, 2 and 1 stars are 6 of 9, which is 67%: +1 next season.' },
     { head: 'A matchday', body: 'Matchday 12: you win 2-1 at home and score in the 67th minute, rated 7.6. The table moves you from 6th to 4th (▲2).' },
     { head: 'An injury', body: 'Out for five weeks with a hamstring in a 38 game season: five weeks out of a 46 week year is four matchdays, so the club plays matchdays 14 to 17 without you. Your games played do not move. The table does.' },
     { head: 'Results only', body: 'A season the game has no verified table for (before 1995-96, a league outside the big five, or a season cut short) shows your league games with no table. If your season summary has a finish, the review still prints it.' },
@@ -88,7 +107,7 @@ function soccerSport(keepsSheets: boolean): CentreSport {
 
 const RESULTS_WORDS = 'Results only: the game does not have a verified table for this league that season.';
 
-function buildModel(row: SeasonRecord, ctx: SoccerSeasonCtx, s: DerivedSeason): CentreModel {
+function buildModel(row: SeasonRecord, ctx: SoccerSeasonCtx, s: DerivedSeason, moments: CentreMoments | null): CentreModel {
   const occasion: Record<string, string> = {};
   for (const d of readSeasonDerbies(row)) occasion[d.rival] = d.name;
   const finish = ctx.finish;
@@ -127,6 +146,7 @@ function buildModel(row: SeasonRecord, ctx: SoccerSeasonCtx, s: DerivedSeason): 
     sport: soccerSport(ctx.keepsSheets),
     help: HELP,
     momentKey: `centre|${s.key}`,
+    moments,
   };
 }
 
@@ -162,12 +182,23 @@ export function Tile({ text, exitLabel, onClose, onRetry }: { text: string; exit
   );
 }
 
-function CentreBody({ career, clubs, row, mode, onClose }: SoccerSeasonCentreProps) {
+function CentreBody({ career, clubs, row, mode, onClose, onCareer }: SoccerSeasonCentreProps) {
   const exitLabel = exitLabelOf(mode, career.phase);
-  const ctx = useMemo(() => buildSoccerSeasonCtx(career, clubs, row), [career, clubs, row]);
+  /* the season's facts come from fields a moment never writes, so the plan is
+     derived once for the row and not again on every ledger entry */
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const ctx = useMemo(() => buildSoccerSeasonCtx(career, clubs, row), [career.playerName, career.position, career.phone, career.awards, career.seasons, clubs, row]);
   const key = SOCCER.seasonKey(row, ctx);
-  const season = useMemo(() => (key ? deriveSeason(SOCCER, row, ctx) : null), [key, row, ctx]);
-  const model = useMemo(() => (season ? buildModel(row, ctx, season) : null), [season, row, ctx]);
+  const plan = useMemo(() => (key ? deriveSeason(SOCCER, row, ctx) : null), [key, row, ctx]);
+  /* moments are the latest season's only: its key is the one the ledger and the bank answer to */
+  const latest = career.seasons[career.seasons.length - 1];
+  const canPlay = !!onCareer && !!plan && !!key && !!latest && soccerSeasonKey(career.playerName, latest) === key;
+  const offered = useMemo(() => (canPlay && plan ? planMoments(SOCCER, row, ctx, plan) : []), [canPlay, plan, row, ctx]);
+  const ledger = readSeasonMoments(career.seasonMoments);
+  const entriesKey = JSON.stringify(ledgerOf(ledger, key ?? ''));
+  const season = useMemo(() => (plan && offered.length ? applyDecisions(SOCCER, row, ctx, plan, offered, JSON.parse(entriesKey) as number[][]) : plan), [plan, offered, entriesKey, row, ctx]);
+  const moments = useSoccerMoments({ career, row, ctx, plan, key, offered, entriesKey, banked: !!ledger?.banked && ledger.key === key, onCareer });
+  const model = useMemo(() => (season ? buildModel(row, ctx, season, moments) : null), [season, row, ctx, moments]);
   if (!model) return <Tile text="This season cannot be shown match by match." exitLabel={exitLabel} onClose={onClose} />;
   return <SeasonCentre model={model} exitLabel={exitLabel} onClose={onClose} />;
 }
