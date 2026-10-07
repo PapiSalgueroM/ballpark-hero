@@ -61,14 +61,14 @@ function resolveSpec(spec, importer) {
   return null;
 }
 
-function staticClosure(entryRel) {
+function staticClosure(entryRel, override = {}) {
   const entry = path.join(ROOT, entryRel);
   const seen = new Set([entry]);
   const queue = [entry];
   while (queue.length) {
     const cur = queue.pop();
     let t;
-    try { t = readFileSync(cur, 'utf8'); } catch { continue; }
+    try { t = override[cur] ?? readFileSync(cur, 'utf8'); } catch { continue; }
     const dyn = new Set();
     DYNAMIC_IMPORT.lastIndex = 0;
     for (let m; (m = DYNAMIC_IMPORT.exec(t)) !== null;) dyn.add(m[1]);
@@ -101,6 +101,27 @@ for (const [mod, what] of Object.entries(FOREIGN)) {
 }
 const srcBytes = [...flagship].reduce((s, f) => { try { return s + readFileSync(path.join(ROOT, f)).length; } catch { return s; } }, 0);
 console.log(`   ${flagship.size} modules, ${(srcBytes / 1024).toFixed(0)} KB of source, ${Object.keys(FOREIGN).length} foreign engines checked, ${foreignFound} present`);
+
+/* Round 1045: the Season Centre is loaded only when a person presses for it.
+   None of these may be in the flagship's static closure. Control
+   FLAGSHIP_LAZY_CONTROL=static walks the page with its lazy() line rewritten
+   as a static import (in memory; the file is never written) and must go red. */
+console.log('1b) the Season Centre is not in the first download');
+const MUST_BE_LAZY = ['src/lib/season/', 'src/components/season-centre/', 'src/components/soccer-career/SoccerSeasonCentre.tsx', 'src/data/leagueFormat.ts'];
+let lazyClosure = flagship;
+if (process.env.FLAGSHIP_LAZY_CONTROL === 'static') {
+  const pagePath = path.join(ROOT, 'src/pages/SoccerCareer.tsx');
+  const pageText = readFileSync(pagePath, 'utf8');
+  const needle = 'const SoccerSeasonCentre = lazy(() => import("@/components/soccer-career/SoccerSeasonCentre"));';
+  if (!pageText.includes(needle)) throw new Error('control refused: SoccerCareer.tsx has no lazy SoccerSeasonCentre line');
+  lazyClosure = staticClosure('src/pages/SoccerCareer.tsx', { [pagePath]: pageText.replace(needle, 'import SoccerSeasonCentre from "@/components/soccer-career/SoccerSeasonCentre";') });
+  console.log('   CONTROL static: the lazy line read as a static import');
+}
+const eager = [...lazyClosure].filter(f => MUST_BE_LAZY.some(m => f === m || f.startsWith(m)));
+if (eager.length) fail(`/soccer-career statically imports the Season Centre (${eager.join(', ')}), so every player downloads it before the first screen`);
+const pageSrc = readFileSync(path.join(ROOT, 'src/pages/SoccerCareer.tsx'), 'utf8');
+if (!pageSrc.includes('lazy(() => import("@/components/soccer-career/SoccerSeasonCentre"))')) fail('SoccerCareer.tsx no longer loads SoccerSeasonCentre with lazy(), so nothing opens the Season Centre');
+console.log(`   ${MUST_BE_LAZY.length} paths that must stay lazy, ${eager.length} in the static closure`);
 
 /* ── the gates that keep it that way ───────────────────────────────────── */
 console.log('2) the job market is loaded on demand, and something loads it');
