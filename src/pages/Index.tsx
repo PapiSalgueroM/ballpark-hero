@@ -8,6 +8,7 @@ import PageSeo from '@/components/seo/PageSeo';
 import { StreakReminder } from '@/components/game/StreakReminder';
 import { useMostPlayed } from '@/hooks/useMostPlayed';
 import { PollsPlaceholder } from '@/components/home/PollsPlaceholder';
+import HomeSearchUnavailable from '@/components/home/HomeSearchUnavailable';
 import { FeaturedStage } from '@/components/home/FeaturedStage';
 import { DailyRail } from '@/components/home/DailyRail';
 import { JustShipped } from '@/components/home/JustShipped';
@@ -83,6 +84,7 @@ export default function Index() {
   const accountId = user?.id ?? null;
   const canReadPersonal = !!accountId && profile?.user_id === accountId;
   const [searchQuery, setSearchQuery] = useState('');
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const [bestScores, setBestScores] = useState<Record<string, number>>({});
   const isSearching = searchQuery.trim().length > 0;
   const { paths: gamePicks, toggle: changeGamePick, storageFailed: picksStorageFailed } = useGamePicks();
@@ -123,9 +125,10 @@ export default function Index() {
   // The engine builds its index once on first call and caches it, so this is
   // scoring only, re-run when the query text changes and not before.
   const [engine, setEngine] = useState<SearchEngine | null>(null);
+  const [searchFailed, setSearchFailed] = useState(false);
   const warmSearch = () => {
-    if (engine) return;
-    loadSearchEngine().then(setEngine).catch(() => { enginePromise = null; });
+    if (engine || searchFailed) return;
+    loadSearchEngine().then(setEngine).catch(() => { setSearchFailed(true); });
   };
   const filteredGames = useMemo(
     () => (isSearching && engine ? engine.searchSite(searchQuery).map(r => r.game) : []),
@@ -285,6 +288,7 @@ export default function Index() {
             <div className="relative mt-3 md:mt-0 md:w-[340px] md:shrink-0">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
               <input
+                ref={searchInputRef}
                 type="text"
                 value={searchQuery}
                 onChange={e => { warmSearch(); setSearchQuery(e.target.value); }}
@@ -315,7 +319,9 @@ export default function Index() {
             /* the few milliseconds before the engine lands on a first
                keystroke: hold the space, and never say "no games found"
                for a search that has not run yet */
-            !engine ? (
+            searchFailed ? (
+              <HomeSearchUnavailable onBack={() => { setSearchQuery(''); searchInputRef.current?.focus({ preventScroll: true }); }} />
+            ) : !engine ? (
               <div aria-busy="true" className="min-h-[120px]" />
             ) : filteredGames.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">

@@ -1,3 +1,19 @@
+## Codex1088 Home search recovery preparation, 2026-10-07
+
+Managed codex/home-search-recovery-1088 from main5b70b05f. Objective: explain a
+failed lazy search load and let a visitor reach the game list again. Index's
+healthy loader/catalog/ranking stay intact. Failure is terminal for the current
+page because browser imports cache failures; Back clears only the query and
+restores the search input with preventScroll. Explicit Reload uses the existing
+offline-safe helper. Small eager unavailable card with44px controls and readable
+copy, no new save/query persistence, engine/data, scoring or daily mechanics.
+Remote verification: actual Index rejected/pending/healthy import outcomes plus
+effective copied controls; built Home mobile/desktop failure, Back, offline hold,
+trusted online new-document reload and healthy ranking/fold checks. Original
+Home/picks/search/score gates and all20builtreaders. No local runtime/production.
+Preparation pending, no readiness or release claim. Claude owns integration,
+What's New/publication and any generated page rebuild. Root drafts/stashes held.
+
 ## Release AK LIVE, 2026-10-07 15:12 EDT, and the split of work with Codex
 
 Claude lane (session E, a new lead: session D stopped at its weekly limit with AK's gate still running).
