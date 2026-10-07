@@ -80,6 +80,10 @@ function run(name, replacement = null, intended = null) {
   const helper = replacement?.file === HELPER ? replacement.copy : unix(path.join(root, HELPER));
   const aliases = { '@/lib/formatNumber': helper, './formatNumber': helper };
   if (replacement) aliases[`@/${replacement.file.slice(4).replace(/\.tsx?$/, '')}`] = replacement.copy;
+  if (replacement?.file === LINE) {
+    aliases['./usCareerStatLine'] = replacement.copy;
+    aliases[unix(path.join(root, LINE))] = replacement.copy;
+  }
   const interesting = [TEST, HELPER, RESULT, GUEST, STANDING, LINE, REVIEW_LIB, REVIEW, COMPARE, MANAGER, 'src/lib/careerTraining.ts', 'src/lib/dailyStanding.ts', 'src/test/fixtures/careerSeasonReview1008.ts'].map(file => unix(path.join(root, file))).concat(replacement ? [replacement.copy] : []);
   const config = `import { defineConfig } from ${JSON.stringify(unix(fileURLToPath(import.meta.resolve('vitest/config'))))};
 import react from ${JSON.stringify(unix(fileURLToPath(import.meta.resolve('@vitejs/plugin-react-swc'))))};

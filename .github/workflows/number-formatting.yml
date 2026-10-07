@@ -197,6 +197,9 @@ jobs:
           assert(sports.every(sport => comparison.presentation.some(row => row.sport === sport)));
           assert.equal(report.presentationFieldDifferences, comparison.presentation.length);
           assert.equal(report.presentationSteps, read('presentation-leaves.json').length); assert(report.presentationSteps > 0);
+          const actions = comparison.presentation.filter(row => row.field === 'a'), targets = read('action-label-differences.json');
+          assert.equal(actions.length, 11); assert.deepEqual(report.actionLabelDifferences, actions); assert.deepEqual(targets.labels, actions);
+          assert.equal(report.actionTargetCount, 11); assert.equal(targets.targets.length, 11); assert.equal(report.actionTargetIdentityHeld, true);
           assert.deepEqual(read('reference-comparison.json'), { nonpresentation: [], presentation: [] });
           const changed = read('control-comparison.json'), rejection = read('control-rejection.json');
           assert.deepEqual(changed.presentation, []); assert.equal(changed.nonpresentation.length, 1);

@@ -1,3 +1,38 @@
+## Codex1085 PREPARATION3, October7: complete copied-source binding and target identity
+
+Preparation2 HEAD60001b86097d0dafaa43783eb58a4885f8feb666/treec27b8f88,
+run37664023655, finished failed only in two QA gates. Proper type/build,
+native6 routes/9 restored DOM faults, both original display tests, eight
+relevant game gates, original clipped-score control, all20 readers and
+source/dependency holds passed. Full artifact11502089641 ZIP SHA
+5001ce7572d7c8c8fe428efb8ef7b5cbf601c8db23b4180937266a7b243552ea.
+Native independently audited; root viewed five retained phone/desktop frames.
+
+All13 normal display cases passed.15 copied controls accepted; the next
+yards control produced its actual mapped AssertionError with healthy
+baseline, but also loaded the replaced original via a relative import.
+Add only the missing relative/resolved aliases; keep original-absent
+transform gate, all28 faults and unchanged baseline requirements strict.
+Wrapper SHAfd6a58f6a567dd6d77fab198dcf192b76cb3a7384e82f15f57b82d4a3cc50dda.
+
+Historical raw four-sport replay remains red and the exact two-module
+old-presentation reference passed all four. Full4604 paired observations
+hold saves, RNG, clock, storage and phase/season/field hashes.11 NFL Career
+Log button labels change only receiver yard grouping. Those log labels
+were incorrectly classified as gameplay. New copied observer retains actual
+pre-click button tag/complete attributes/DOM path/text/prefix/step index.
+Only that measured label shape may differ, with season/rec/TD counts exact,
+every actual target identity held and all other actions exact. It does not
+drop generic action fields, change fixtures or weaken original assertions.
+Helper SHA5bb29d447e4d69883db29555b8749eec7e811a1852183e1a3af9182a69eb9340.
+Workflow binds all11 label/target proofs. MLB saved-hash control and full
+DOM-leaf classification were not reached in preparation2 and remain required.
+Only QA/workflow/two managed notes change; all14 product files stay frozen.
+
+No final13/28 or complete historical acceptance, PR, READY or live claim.
+No local runtime. Claude retains merge/current-main/historical adapter/data.
+Protected root and seven stashes held. Nextfree1086 unclaimed.
+
 ## Codex1085 PREPARATION2, October7: remote display verification
 
 Product remains frozen on accepted AJ base bde6b1c3797fd728dbd583a28623c34fe8452917.

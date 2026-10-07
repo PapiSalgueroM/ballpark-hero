@@ -47,10 +47,20 @@ function execute(dir, args, env = {}) {
 }
 const observationCode = `
 const __qaIds = new WeakMap<object, number>();
+const __qaClicks = new WeakMap<object, unknown>();
 let __qaNext = 0;
+function __qaClick(walker: object, target: HTMLElement, index: number, prefix: string) {
+  const domPath: number[] = [];
+  for (let node: Element | null = target; node?.parentElement; node = node.parentElement) domPath.unshift(Array.from(node.parentElement.children).indexOf(node));
+  if (__qaClicks.has(walker)) throw new Error('Unrecorded click observation');
+  __qaClicks.set(walker, { index, prefix, tag: target.tagName, domPath, attributes: Object.fromEntries(Array.from(target.attributes).map(attr => [attr.name, attr.value]).sort(([a], [b]) => a.localeCompare(b))), text: target.textContent ?? '', label: labelOf(target) });
+}
 function __qaRecord(walker: object, row: unknown) {
   if (!__qaIds.has(walker)) __qaIds.set(walker, ++__qaNext);
-  fs.appendFileSync(path.join(process.env.NUMBER_PARITY_DIR!, 'steps.jsonl'), JSON.stringify({ walker: __qaIds.get(walker), ...(row as object) }) + '\\n');
+  const click = __qaClicks.get(walker) ?? null;
+  if (click && (click as { index: number }).index !== (row as { index: number }).index) throw new Error('Click observation must bind the next recorded step');
+  __qaClicks.delete(walker);
+  fs.appendFileSync(path.join(process.env.NUMBER_PARITY_DIR!, 'steps.jsonl'), JSON.stringify({ walker: __qaIds.get(walker), ...(row as object), click }) + '\\n');
 }
 function __qaBuild(slug: string, want: unknown, got: unknown) {
   fs.writeFileSync(path.join(process.env.NUMBER_PARITY_DIR!, slug + '.json'), JSON.stringify({ want, got }, null, 2));
@@ -60,6 +70,7 @@ const replacements = [
   ['const built: Record<string, SportFixture> = {};', observationCode + '\nconst built: Record<string, SportFixture> = {};'],
   ['    this.onStep?.(this);', "    __qaRecord(this, { step: this.steps.at(-1), index: this.steps.length - 1, key: this.saveKey, raw, markup: markupNow(), text: textNow(), now: Date.now(), rngCalls: vi.mocked(Math.random).mock.calls.length, storage: Object.fromEntries(Object.keys(localStorage).sort().map(key => [key, localStorage.getItem(key)])) });\n    this.onStep?.(this);"],
   ['    built[slug] = got;', '    built[slug] = got;\n    __qaBuild(slug, want, got);'],
+  ['    const label = `${tag}${labelOf(b)}`;\n    fireEvent.click(b);', '    const label = `${tag}${labelOf(b)}`;\n    __qaClick(this, b, this.steps.length, tag);\n    fireEvent.click(b);'],
 ];
 
 function configuration(dir, copy, reference, referenceFiles) {
@@ -130,13 +141,18 @@ function differences(builds) {
       if (expected.length !== actual.length) nonpresentation.push({ sport, sequence, field: 'length', expected: expected.length, actual: actual.length });
       for (let index = 0; index < Math.min(expected.length, actual.length); index++) {
         for (const step of [expected[index], actual[index]]) assert.deepEqual(Object.keys(step).sort(), ['a', 'p', 'n', 's', 'd', 'm', 't'].sort(), 'All recorded step fields are classified');
-        for (const field of ['a', 'p', 'n', 's', 'd', 'm', 't']) if (!equal(expected[index][field], actual[index][field])) (['m', 't'].includes(field) ? presentation : nonpresentation).push({ sport, sequence, index, field, expected: expected[index][field], actual: actual[index][field] });
+        for (const field of ['a', 'p', 'n', 's', 'd', 'm', 't']) if (!equal(expected[index][field], actual[index][field])) (['m', 't'].includes(field) || (field === 'a' && sport === 'nfl' && careerLogYardsOnly(expected[index][field], actual[index][field])) ? presentation : nonpresentation).push({ sport, sequence, index, field, expected: expected[index][field], actual: actual[index][field] });
       }
     }
   }
   return { nonpresentation, presentation };
 }
 function requireHeld(comparison) { assert.deepEqual(comparison.nonpresentation, [], 'Historical replay changed nonpresentation fields'); }
+function careerLogYardsOnly(beforeLabel, afterLabel) {
+  const shape = /^(open: |hub: )📜Career Log([0-9]+) seasons([0-9]+) rec, ([0-9,]+) yds, ([0-9]+) TD$/;
+  const a = shape.exec(beforeLabel), b = shape.exec(afterLabel);
+  return !!a && !!b && /^[0-9]{4,}$/.test(a[4]) && [1, 2, 3, 5].every(index => a[index] === b[index]) && a[4].replace(/\B(?=(\d{3})+(?!\d))/g, ',') === b[4];
+}
 function groupedOnly(beforeText, afterText) {
   const tokens = /\d[\d,]*(?:\.\d+)?/g;
   const a = beforeText.match(tokens) || [], b = afterText.match(tokens) || [];
@@ -197,14 +213,35 @@ try {
   assert(current.result.tests.every(test => test.failureMessages.some(message => message.startsWith('AssertionError:'))), 'Every current raw failure is the unchanged fixture assertion');
   assert(SPORTS.every(sport => comparison.presentation.some(row => row.sport === sport)), 'Every raw red has observed presentation differences');
   assert.equal(current.observations.length, reference.observations.length);
-  const leaves = [];
+  const leaves = [], actionTargets = [];
   for (let index = 0; index < current.observations.length; index++) {
     const a = reference.observations[index], b = current.observations[index];
     const keep = row => ({ walker: row.walker, index: row.index, key: row.key, raw: row.raw, now: row.now, rngCalls: row.rngCalls, storage: row.storage, step: Object.fromEntries(['a', 'p', 'n', 's', 'd'].map(key => [key, row.step[key]])) });
-    assert.deepEqual(keep(b), keep(a), 'Every actual raw save, RNG count, clock and nonpresentation step equals the old presentation reference');
+    const expected = keep(a), actual = keep(b);
+    if (a.step.a !== b.step.a) {
+      assert(careerLogYardsOnly(a.step.a, b.step.a), 'Only the measured Career Log receiver yard label may change');
+      assert(a.click && b.click, 'Changed action labels retain their actual pre-click target');
+      assert.deepEqual({ ...b.click, text: a.click.text, label: a.click.label }, a.click, 'Actual action target tag, complete attributes, DOM path, prefix and step index stay exact');
+      for (const row of [a, b]) {
+        assert.equal(row.click.tag, 'BUTTON'); assert.equal(row.click.index, row.index);
+        assert.equal(row.step.a, row.click.prefix + row.click.label);
+        assert.equal(row.click.label, row.click.text.replace(/\s+/g, ' ').trim(), 'Changed label retains the complete target text');
+      }
+      assert(groupedOnly(a.click.text, b.click.text), 'Actual target text changes only numeric grouping');
+      actionTargets.push({ index, walker: b.walker, stepIndex: b.index, key: b.key, before: a.step.a, after: b.step.a, beforeTarget: a.click, afterTarget: b.click });
+      expected.step.a = b.step.a;
+    } else assert.deepEqual(b.click, a.click, 'Every unchanged action retains the exact actual target');
+    assert.deepEqual(actual, expected, 'Every actual raw save, RNG count, clock and nonpresentation step equals the old presentation reference');
     if (a.markup !== b.markup) leaves.push({ index, walker: b.walker, action: b.step.a, changes: leafChanges(a.markup, b.markup) });
   }
   save(path.join(OUT, 'presentation-leaves.json'), leaves); assert(leaves.length);
+  const actionLabels = comparison.presentation.filter(row => row.field === 'a');
+  save(path.join(OUT, 'action-label-differences.json'), { labels: actionLabels, targets: actionTargets });
+  assert.equal(actionLabels.length, 11, 'Exactly the measured eleven Career Log labels change');
+  assert.equal(actionTargets.length, actionLabels.length);
+  const pairs = rows => rows.map(row => JSON.stringify([row.expected ?? row.before, row.actual ?? row.after])).sort();
+  assert.deepEqual(pairs(actionTargets), pairs(actionLabels), 'Every classified action label has one matching actual target proof');
+  report.actionLabelDifferences = actionLabels; report.actionTargetCount = actionTargets.length; report.actionTargetIdentityHeld = true;
   const fixture = JSON.parse(fs.readFileSync(fixturePath, 'utf8')), changed = structuredClone(fixture);
   assert(/^[a-f0-9]{12}$/.test(changed.sports.mlb.path[40].s) && changed.sports.mlb.path[40].s !== '000000000000');
   changed.sports.mlb.path[40].s = '000000000000';
