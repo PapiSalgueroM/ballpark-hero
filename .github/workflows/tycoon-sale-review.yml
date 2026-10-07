@@ -1,0 +1,191 @@
+name: Tycoon sale review
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - codex/tycoon-sale-review-1083
+  pull_request:
+    paths:
+      - .github/workflows/tycoon-sale-review.yml
+      - src/components/tycoon/TycoonSaleReview.tsx
+      - src/hooks/useStadiumTycoon.ts
+      - src/pages/StadiumTycoon.tsx
+      - src/test/tycoonSaleReview.test.tsx
+      - scripts/simTycoonSaleReview.mjs
+      - scripts/playTycoonSaleReview1083.mjs
+      - scripts/simTycoonLoads.mjs
+      - scripts/playLegacy.mjs
+
+permissions:
+  contents: read
+concurrency:
+  group: tycoon-sale-review-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      VITEST_MAX_FORKS: 1
+      VITEST_MIN_FORKS: 1
+      SEO_SPLIT_BASE_REF: HEAD
+      TZ: UTC
+      SIM_OFFLINE_RECEIPT: tycoon-sale-review-artifacts/transport.log
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Prepare remote verification
+        run: |
+          mkdir -p tycoon-sale-review-artifacts
+          git rev-parse HEAD > tycoon-sale-review-artifacts/source-head.txt
+          git rev-parse 'HEAD^{tree}' > tycoon-sale-review-artifacts/source-tree.txt
+          sha256sum package.json package-lock.json > tycoon-sale-review-artifacts/dependencies-before.txt
+          npm ci
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const lock = JSON.parse(fs.readFileSync('package-lock.json'));
+          const installed = [];
+          for (const [path, entry] of Object.entries(lock.packages)) {
+            const file = path + '/package.json';
+            if (!path.startsWith('node_modules/') || !fs.existsSync(file)) continue;
+            const version = JSON.parse(fs.readFileSync(file)).version;
+            assert.equal(version, entry.version, `Locked installed version: ${path}`);
+            installed.push({ path, version });
+          }
+          assert(installed.length > 0);
+          fs.writeFileSync('tycoon-sale-review-artifacts/installed-before.json', JSON.stringify(installed, null, 2));
+          NODE
+          npm install --no-save playwright
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const before = JSON.parse(fs.readFileSync('tycoon-sale-review-artifacts/installed-before.json'));
+          const after = before.map(entry => ({ path: entry.path, version: JSON.parse(fs.readFileSync(entry.path + '/package.json')).version }));
+          fs.writeFileSync('tycoon-sale-review-artifacts/installed-after.json', JSON.stringify(after, null, 2));
+          assert.deepEqual(after, before, 'Browser runner preserves actual locked dependency versions');
+          console.log(`Held ${after.length} actual installed dependency versions.`);
+          NODE
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+      - name: Actual application type gate and build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee tycoon-sale-review-artifacts/types.log
+          npm run build 2>&1 | tee tycoon-sale-review-artifacts/build.log
+      - name: Actual sale outcomes and effective copied faults
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonSaleReview.mjs 2>&1 | tee tycoon-sale-review-artifacts/outcomes.log
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const report = JSON.parse(fs.readFileSync('tycoon-sale-review-artifacts/outcomes/summary.json'));
+          assert.equal(report.status, 'passed');
+          assert.equal(report.normal.passed, 12);
+          assert.equal(report.normal.failed, 0);
+          assert(report.normal.records > 0);
+          assert.equal(report.controls.length, 22);
+          assert(report.controls.every(row => row.status === 'assertion-failed' && row.failed === 1 && row.passed === 1));
+          assert.deepEqual(report.sourceAfter, report.sourceBefore);
+          console.log('Accepted twelve mounted cases and twenty-two effective copied controls.');
+          NODE
+      - name: Cache actual template font dependencies
+        id: assets
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: node scripts/playTycoonSaleReview1083.mjs --prefetch-fonts-only 2>&1 | tee tycoon-sale-review-artifacts/fonts.log
+      - name: Actual stadium sale and paired running grounds
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.assets.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" xvfb-run -a node scripts/playTycoonSaleReview1083.mjs 2>&1 | tee tycoon-sale-review-artifacts/native.log
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const report = JSON.parse(fs.readFileSync('tycoon-sale-review-artifacts/native/report.json'));
+          assert.equal(report.complete, true);
+          assert.equal(report.cases.length, 6);
+          assert(report.cases.every(row => row.complete));
+          assert.equal(report.controls.length, 15);
+          assert.equal(report.forwardedWrites, 0);
+          assert.deepEqual(report.sourceAfter, report.sourceBefore);
+          assert.deepEqual(report.buildAfter, report.buildBefore);
+          assert.deepEqual(report.cacheAfter, report.cacheBefore);
+          console.log('Accepted six paired actual-route journeys and fifteen restored DOM controls.');
+          NODE
+      - name: Retain native evidence promptly
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.assets.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: tycoon-sale-native-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            tycoon-sale-review-artifacts/native/
+            tycoon-sale-review-artifacts/native.log
+            tycoon-sale-review-artifacts/font-cache/manifest.json
+            tycoon-sale-review-artifacts/source-head.txt
+            tycoon-sale-review-artifacts/source-tree.txt
+          retention-days: 3
+          if-no-files-found: error
+      - name: Preserve ticket policy outcomes and copied faults
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: TYCOON_TICKET_POLICY_ARTIFACTS="$PWD/tycoon-sale-review-artifacts/ticket-policy" TYCOON_TICKET_POLICY_CONTROL=all ONLY=simTycoonTicketPolicy node scripts/runAllSims.mjs 2>&1 | tee tycoon-sale-review-artifacts/ticket-policy.log
+      - name: Preserve existing tycoon game behavior
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simStadiumTycoon simTycoonClock simTycoonAway simTycoonAwayMatchdays simTycoonLeague simTycoonHelp simTycoonSetPiece simTycoonSetPiecePage simTycoonRooms simTycoonPacks simTycoonPackPace simTycoonGear simTycoonGearPage simTycoonPitch simTycoonPitchRunner; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "tycoon-sale-review-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Preserve original load and save controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: TYCOON_LOADS_ARTIFACTS="$PWD/tycoon-sale-review-artifacts/loads" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simTycoonLoads.mjs 2>&1 | tee tycoon-sale-review-artifacts/simTycoonLoads.log
+      - name: All built readers and source anchors
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings simSeoMetaSplit simHomeCopy simHarnessAnchors; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "tycoon-sale-review-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Hold source data original fixtures and dependencies
+        if: ${{ !cancelled() }}
+        run: |
+          git diff --exit-code HEAD -- src scripts .github/workflows/tycoon-sale-review.yml
+          git diff --exit-code 4fed0eefb92fc932531f34631dd731dd849337b8 HEAD -- src/lib src/data src/integrations src/types scripts/fixtures src/components/tycoon/TicketPolicyCard.tsx src/components/tycoon/AcademyPanel.tsx src/hooks/useTycoonRewards.ts scripts/simTycoonTicketPolicy.mjs scripts/qa/tycoonTicketPolicy1080.mjs
+          git diff --exit-code 4fed0eefb92fc932531f34631dd731dd849337b8 HEAD -- src/test ':!src/test/tycoonSaleReview.test.tsx'
+          sha256sum package.json package-lock.json > tycoon-sale-review-artifacts/dependencies-after.txt
+          cmp tycoon-sale-review-artifacts/dependencies-before.txt tycoon-sale-review-artifacts/dependencies-after.txt
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const before = JSON.parse(fs.readFileSync('tycoon-sale-review-artifacts/installed-before.json'));
+          const final = before.map(entry => ({ path: entry.path, version: JSON.parse(fs.readFileSync(entry.path + '/package.json')).version }));
+          fs.writeFileSync('tycoon-sale-review-artifacts/installed-final.json', JSON.stringify(final, null, 2));
+          assert.deepEqual(final, before, 'All runners preserve locked installed dependency versions');
+          NODE
+          if test -f tycoon-sale-review-artifacts/transport.log; then test ! -s tycoon-sale-review-artifacts/transport.log; fi
+      - name: Preserve verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tycoon-sale-review-${{ github.run_id }}-${{ github.run_attempt }}
+          path: tycoon-sale-review-artifacts/
+          retention-days: 3
+          if-no-files-found: error

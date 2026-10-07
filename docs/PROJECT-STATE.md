@@ -1,3 +1,16 @@
+Codex1083 AUTHORED, October 7, 11:08 EDT: sale review and refused-save fix.
+Branch codex/tycoon-sale-review-1083, parent READY1080 4fed0eef (PR168).
+Live sale terms/reset/keep/help, one confirmation, save-first doPrestige,
+failure notice and latest-state retry. Engine/data/ticket policy held.
+Twelve mounted cases and twenty-two copied controls authored. Native six
+paired journeys/fifteen DOM controls under construction. Remote acceptance
+pending. No PR, READY or live claim. Stacked integration belongs to Claude.
+Design: docs/plans/2026-10-07-tycoon-sale-review-1083.md.
+Original Loads anchor only rebound; old fault/assertions/fixtures held.
+Original Legacy walk only gains final confirmation navigation, not executed.
+Parent1080 final READY acceptance is recorded externally; older notes below
+are historical. Root source/seven stashes and release/data lanes stay held.
+
 Codex1080 GREEN PREPARATION, October7,06:59 EDT. Run37607879133 at653fd5ad
 passed20 outcomes/23 effective faults,16 original regressions with11 load
 controls,3 built-route journeys/9 restored DOM controls,20readers and holds.

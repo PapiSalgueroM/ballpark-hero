@@ -48,6 +48,7 @@ import VictoryMoment from '@/components/tycoon/TycoonVictoryMoment';
 import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';
 import TycoonPitch from '@/components/tycoon/TycoonPitch';
 import TicketPolicyCard from '@/components/tycoon/TicketPolicyCard';
+import TycoonSaleReview from '@/components/tycoon/TycoonSaleReview';
 import { useTycoonRewards } from '@/hooks/useTycoonRewards';
 import { balance, GEM_PAY, loadLedger } from '@/lib/tycoonRewards';
 import type { TapFx } from '@/components/tycoon/TycoonPitch';
@@ -627,9 +628,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
         {/* Prestige bar */}
         <div className="mb-3">
           {canPrestige(s) ? (
-            <button onClick={g.doPrestige} data-sell-up className="w-full py-2.5 rounded-xl font-bold bg-yellow-500 text-black hover:opacity-90 transition-opacity st-glow">
-              ⭐ Sell up: permanent +{Math.round((repMult({ ...s, rep: s.rep + 1 }) - repMult(s)) * 100)}% income, +{pointsForSale(s)} legacy point{pointsForSale(s) === 1 ? '' : 's'}
-            </button>
+            <TycoonSaleReview state={s} onSell={g.doPrestige} />
           ) : (
             <div className="relative h-2 rounded-full bg-secondary overflow-hidden" title="Progress to your next reputation star">
               <div className="absolute inset-y-0 left-0 bg-yellow-500/80 transition-all duration-700" style={{ width: `${Math.min(100, (s.lifetime / prestigeThreshold(s)) * 100)}%` }} />

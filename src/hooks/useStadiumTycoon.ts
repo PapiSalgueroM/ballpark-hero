@@ -398,10 +398,11 @@ export function useStadiumTycoon(getEdge?: () => number) {
   const doPrestige = useCallback(() => {
     const now = Date.now();
     const next = prestige(stateRef.current, now);
-    if (next === stateRef.current) return;
+    if (next === stateRef.current) return false;
+    try { localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(next, now)); } catch { return false; }
     stateRef.current = next;
-    try { localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(next, now)); } catch { /* ignore */ }
     setState(next);
+    return true;
   }, []);
 
   /* Round 196: the boardroom. Spending legacy is a meaningful action too,
