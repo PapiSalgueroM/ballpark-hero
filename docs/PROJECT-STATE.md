@@ -1,3 +1,14 @@
+## Round1077 claimed: browse the actual Club Manager world
+
+Codex owns WorldTablesCard.tsx and its bounded verification. Replace the tiny
+horizontal league strip with a compact searchable league/country/club browser.
+Preserve the current table, actual era/edited-world membership, standings,
+rounds, tiebreaks and scout callbacks. No new facts or league-engine edits.
+Base2fff5e04, managed manager-world-browser-1077 checkout. This directly serves
+Anthony's October7 league-depth priority while Claude1040 keeps roster work.
+Verify actual mounted modern/era/edited worlds plus native phone/keyboard
+search and selection. All execution is remote. Next1078 is unclaimed.
+
 ## Release AH LIVE, 2026-10-07 02:43 EDT
 
 Claude lane. main eeedbf43, deployment 02585196-9b0c-4ca0-8598-f72ce4e0e5d5, entry index-BetRYEt2.js (was
