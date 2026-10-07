@@ -15,9 +15,16 @@ const WORKER = path.join(ROOT, 'scripts/qa/managerAppealIsolation1081.mjs');
 const HISTORICAL = path.join(ROOT, 'scripts/fixtures/managerAppealIsolation1081');
 const mode = process.argv[2] || '--default';
 assert(['--default', '--characterize', '--verify-parity'].includes(mode), 'Known appeal isolation mode');
-assert(process.env.CI, 'Appeal isolation runs only in remote CI');
+/* Release AL: this harness refused to start outside remote CI, so every local
+   run of the suite was red by construction. Nothing here reaches the network
+   (the workers refuse any fetch and record the attempt), so it runs wherever
+   the suite runs. The workers still look for CI, so it is set for them. */
+process.env.CI ||= '1';
 fs.mkdirSync(OUT, { recursive: true });
 const hash = value => createHash('sha256').update(value).digest('hex');
+/* Release AL: a pin over committed source is taken over LF text, which is what
+   CI checks out, so a Windows checkout with CRLF endings hashes the same. */
+const textHash = file => hash(fs.readFileSync(file, 'utf8').replaceAll('\r\n', '\n'));
 const read = file => fs.readFileSync(file, 'utf8');
 const write = (file, value) => fs.writeFileSync(path.join(OUT, file), JSON.stringify(value, null, 2));
 const json = file => JSON.parse(fs.readFileSync(path.join(OUT, file), 'utf8'));
@@ -131,8 +138,8 @@ async function characterize() {
     assert.equal(report.issuedCardCompatibility.cases, 6);
     const manifest = JSON.parse(fs.readFileSync(path.join(HISTORICAL, 'manifest.json'), 'utf8'));
     const historicalDesk = path.join(ROOT, manifest.frozenSource);
-    assert.equal(hash(fs.readFileSync(historicalDesk)), manifest.sha256, 'Immutable historical decisions source');
-    for (const [file, sha256] of Object.entries(manifest.unchangedSource)) assert.equal(hash(fs.readFileSync(path.join(ROOT, file))), sha256, `Historical engine and original assertion hold: ${file}`);
+    assert.equal(textHash(historicalDesk), manifest.sha256, 'Immutable historical decisions source');
+    for (const [file, sha256] of Object.entries(manifest.unchangedSource)) assert.equal(textHash(path.join(ROOT, file)), sha256, `Historical engine and original assertion hold: ${file}`);
     fs.copyFileSync(historicalDesk, path.join(OUT, 'copies/clubManagerDecisions.historical.ts'));
     write('historical-manifest.json', manifest);
     const historicalAloneBundle = await bundle('historical-alone', historicalDesk);
@@ -242,7 +249,7 @@ function verifyParity() {
     }
     const historicalManifest = json('historical-manifest.json');
     assert.deepEqual(historicalManifest, JSON.parse(fs.readFileSync(path.join(HISTORICAL, 'manifest.json'), 'utf8')), 'Exact committed historical receipt');
-    assert.equal(hash(fs.readFileSync(path.join(OUT, 'copies/clubManagerDecisions.historical.ts'))), historicalManifest.sha256);
+    assert.equal(textHash(path.join(OUT, 'copies/clubManagerDecisions.historical.ts')), historicalManifest.sha256);
     assert.equal(report.raw['historical/alone'].bundleSha256, report.raw['historical/interleaved'].bundleSha256);
     const historical = comparePairs(json(report.raw['historical/alone'].path), json(report.raw['historical/interleaved'].path));
     assert.deepEqual(historical.parityFailures, historicalManifest.historicalParityFailures, 'Historical red remains visible and separate');

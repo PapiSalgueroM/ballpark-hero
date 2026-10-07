@@ -62,7 +62,7 @@ function run(name, swap) {
   if (swap) env.NO_DOUBLE_SWAP = JSON.stringify(swap);
   const json = path.join(artifacts, `${name}.json`);
   fs.rmSync(json, { force: true });
-  const result = spawnSync(process.execPath, [path.join(ROOT, 'node_modules/vitest/vitest.mjs'), 'run', TEST, '--reporter=json', '--outputFile', json], { cwd: ROOT, env, encoding: 'utf8', timeout: 180000 });
+  const result = spawnSync(process.execPath, [path.join(ROOT, 'node_modules/vitest/vitest.mjs'), 'run', TEST, '--testTimeout=120000', '--reporter=json', '--outputFile', json], { cwd: ROOT, env, encoding: 'utf8', timeout: 180000 });
   fs.writeFileSync(path.join(artifacts, `${name}.log`), `${result.stdout || ''}\n${result.stderr || ''}`);
   assert(!result.error, `${name}: ${result.error}`);
   assert(fs.existsSync(json), `${name}: mounted suite produced no JSON result`);

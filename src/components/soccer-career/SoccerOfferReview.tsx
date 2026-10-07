@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { formatNumber } from '@/lib/formatNumber';
 import type { SoccerOfferReviewData } from '@/lib/soccerOfferReview';
 import { localizeMoney as money, rateNote } from '@/lib/soccerCurrency';
 
@@ -12,7 +13,15 @@ export function SoccerOfferReview({ club, review, onAccept }: {
   const trigger = useRef<HTMLButtonElement>(null);
   const heading = useRef<HTMLHeadingElement>(null);
   const signing = useRef(false);
-  const wage = (value: number) => money(`€${value}/wk`);
+  /* Release AL: in euros the figure passes through as typed, so it is grouped
+     here like every other number since Round 1085 (€340,696/wk, not
+     €340696/wk). A converted figure is already shortened to k or M by
+     localizeMoney and is left as it comes back. */
+  const wage = (value: number) => {
+    const typed = `€${value}/wk`;
+    const shown = money(typed);
+    return shown === typed ? `€${formatNumber(value)}/wk` : shown;
+  };
   const currencyNote = rateNote();
   const changeOpen = (next: boolean) => {
     if (next) { signing.current = false; setHelp(false); }

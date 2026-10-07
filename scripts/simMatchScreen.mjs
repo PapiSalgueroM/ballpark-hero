@@ -198,8 +198,9 @@ if (CONTROL === 'flat') {
 }
 if (CONTROL === 'twoengines') {
   enginePath = rewrite(ENGINE, [[
-    '    state.live = live;\n    return resumeMatch(coachQuickMatch(state));\n',
-    '    state.live = kickOff(state, entry);\n    return resumeMatch(coachQuickMatch(state));\n',
+    /* Release AL: playNextEntry reaches the coach through `coached` now. */
+    '    state.live = live;\n    return resumeMatch(coached(state));\n',
+    '    state.live = kickOff(state, entry);\n    return resumeMatch(coached(state));\n',
   ]], 'clubManager.twoengines.ts', 'the quick path');
   console.log('NEGATIVE CONTROL ON: the quick path kicks off a second half of its own, so the two ways stop agreeing; section 6 must go red');
 }
@@ -537,8 +538,13 @@ console.log(`   ${pairs} fixtures replayed both ways, ${scorelines.size} distinc
   if (calls.length !== 1) fail(`the engine holds ${calls.length} calls to playMyMatch, and both paths share one settlement`);
   const withLive = engineSrc.match(/playMyMatch\(state, entry, [a-zA-Z]/g) ?? [];
   if (withLive.length !== 1) fail(`${withLive.length} settlement calls hand over a kicked off match; the shared settlement must`);
-  const coached = engineSrc.match(/resumeMatch\(coachQuickMatch\(state\)\)/g) ?? [];
+  /* Release AL: both quick paths reach the coach through `coached`, the one
+     switch Manager Hot Seat's noCoach turns off, so the count is of that
+     call and the switch itself must exist exactly once and be the coach. */
+  const coached = engineSrc.match(/resumeMatch\(coached\(state\)\)/g) ?? [];
   if (coached.length !== 2) fail(`${coached.length} Quick paths use the same coach and settlement; both must`);
+  const coachSwitch = engineSrc.match(/const coached = \(s: CareerState\): CareerState => \(opts\?\.noCoach \? s : coachQuickMatch\(s\)\);/g) ?? [];
+  if (coachSwitch.length !== 1) fail(`${coachSwitch.length} switches decide whether the quick sim coach runs; there is one, and it calls the coach unless noCoach is passed`);
   const kickOffs = engineSrc.match(/[^n] kickOff\(state, entry\)/g) ?? [];
   if (kickOffs.length !== 1) fail(`${kickOffs.length} places kick a match off, and there is one`);
   /* And the two screens that start a match. The hub is counted in the source
