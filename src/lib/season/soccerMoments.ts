@@ -13,10 +13,9 @@
      way and made fresh for every settle, so the same input always gives the
      same result. A moment is one shot, so that stream is the first of eight
      keyed ones on which the textbook strike scores (the middle of the gap, up
-     high, as
-     it opens widest, medium power; scripts/simSeasonMoments.mjs measures it at
-     119 or 120 of 120 moments): played right it goes in, anything else
-     takes its chances. The other three engines draw nothing.
+     high, as it opens widest, medium power; scripts/simSeasonMoments.mjs
+     measures it at 119 or 120 of 120 moments): played right it goes in,
+     anything else takes its chances. The other three engines draw nothing.
    - The input is rounded to four places before it is settled, so the entry
      the save keeps replays to exactly the result the player saw.
    - Stars: none for a miss; a make earns one to three by how well it was
@@ -211,7 +210,8 @@ export function momentsStatLabel(position: string): string {
 /** What is happening when the clock stops. */
 export const MOMENT_LINE: Record<SoccerMomentKind, string> = {
   finish: 'The ball breaks to you on the edge of the box',
-  pass: 'You have it in midfield and your striker is on the move',
+  /* a striker and a winger replay their own assists here too, so it names no position */
+  pass: 'You have the ball and a teammate is making the run',
   save: 'Their striker is through and it is you or the net',
   tackle: 'Their winger is running at your back line',
 };

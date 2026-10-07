@@ -9,6 +9,14 @@
    file was written from the boards as they stood on main before the prop
    existed (commit "Round 1047: record the training boards' markup").
 
+   The three drills on DrillBoard also hold the result card of a round and
+   the second round's ready card, the two frames the prop's edits sit in
+   (the Next button and the "Next one" label). Those six frames were added
+   after the review of 2026-10-07 and were recorded from main's own
+   DrillBoard.tsx (git show origin/main, before the prop), never from the
+   board they are compared with. The one edited line no frame draws is the
+   points line of a made round.
+
    It fails closed: a missing record is a failure, never a fresh recording.
    To record on purpose (only when the training ground itself is meant to
    change): RECORD_DRILL_MARKUP=1 vitest run src/test/drillBoardMarkup.test.tsx */
@@ -19,6 +27,7 @@ import { resolve } from 'node:path';
 import DrillBoard from '@/components/soccer-career/DrillBoard';
 import ThroughBallBoard from '@/components/soccer-career/ThroughBallBoard';
 import type { CareerState } from '@/lib/soccerCareerEngine';
+import { drillFrames } from './fixtures/drillBoardFrames';
 
 const RECORD = resolve(process.cwd(), 'src/test/fixtures/drillBoardMarkup.recorded.json');
 const recording = process.env.RECORD_DRILL_MARKUP === '1';
@@ -33,13 +42,8 @@ beforeEach(() => {
 afterEach(() => { cleanup(); vi.useRealTimers(); vi.restoreAllMocks(); });
 
 function drill(position: string, name: string) {
-  const view = render(<DrillBoard career={fixture(position)} canBank onBank={vi.fn()} onBack={vi.fn()} />);
-  seen[`${name}:intro`] = view.container.innerHTML;
-  fireEvent.click(view.getByRole('button', { name: /Today's ten/ }));
-  seen[`${name}:ready`] = view.container.innerHTML;
-  fireEvent.click(view.getByRole('button', { name: 'Start' }));
-  seen[`${name}:playing`] = view.container.innerHTML;
-  expect(view.container.querySelector('[data-drill-phase="playing"]')).not.toBeNull();
+  /* five frames: the two after the round is over are where the match prop's edits sit */
+  expect(drillFrames(DrillBoard, fixture(position), name, seen)).toEqual({ live: true, ended: true, second: true });
 }
 
 describe('the training boards with no match prop', { timeout: 20000 }, () => {
@@ -58,7 +62,7 @@ describe('the training boards with no match prop', { timeout: 20000 }, () => {
 
   it('matches the record made before the match prop existed', () => {
     const keys = Object.keys(seen).sort();
-    expect(keys.length).toBe(12);
+    expect(keys.length).toBe(18);
     for (const k of keys) expect(seen[k].length).toBeGreaterThan(200);
     if (recording) {
       writeFileSync(RECORD, `${JSON.stringify(seen, keys, 1)}\n`);

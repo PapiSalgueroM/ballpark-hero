@@ -31,12 +31,25 @@
  *     inside the screen's width, the page does not scroll.
  *  9. Walker safety: no label on the offer, the board or the verdict starts
  *     with an entry of playSoccerCareer's ACTIONS.
+ * 10. One go, and the keyboard: while a moment is on the stage (offer, board,
+ *     verdict) the phone draws no Fixtures button, so nothing can take the
+ *     stage from a board and hand its offer back; the button returns once
+ *     the moment is done. The focus is inside the Season Centre on the
+ *     offer, the board and the verdict, and Escape on the board closes the
+ *     Centre with the go still used (walk B).
+ * 11. Leaving early (walk E, the phone's glove save again): stepping out
+ *     with moments still to play banks nothing and leaves the way back in;
+ *     Continue on the season summary banks the stars as closeSeasonMoments
+ *     does in node, against the moments on offer, and the career moves on.
  *
  * Controls (SEASON_MOMENTS_PLAY_CONTROL=), applied to what is SERVED (the
  * built files are never written; each refuses to run unless its needle is in
  * the chunk exactly once):
  *   used   the "used" entry is not written when the board opens  -> 3 red
  *   label  "Let it play" is served as "Next chance"              -> 9 red
+ *   fixtures  the phone draws Fixtures while a moment is hosted  -> 10 red
+ * A walk whose save has no entry after the board reported (the used control)
+ * fails its own check and the walks after it still run.
  *
  * Measured 2026-10-07 on the build of 7e573b8a: 69 checks, 0 failed. Walk A
  * (desktop, wall shot) missed a YOUR CALL the record had as a goal and the
@@ -67,7 +80,7 @@ const PORT = Number(process.env.PORT || 4547);
 const BASE = `http://127.0.0.1:${PORT}`;
 const SHOTS = path.resolve(ROOT, process.env.SHOTS || '.tmp-fx/shots-moments');
 const CONTROL = process.env.SEASON_MOMENTS_PLAY_CONTROL ?? '';
-if (CONTROL && !['used', 'label'].includes(CONTROL)) throw new Error(`unknown SEASON_MOMENTS_PLAY_CONTROL ${CONTROL}`);
+if (CONTROL && !['used', 'label', 'fixtures'].includes(CONTROL)) throw new Error(`unknown SEASON_MOMENTS_PLAY_CONTROL ${CONTROL}`);
 
 let checks = 0, failed = 0;
 const check = (ok, label) => { checks += 1; if (ok) console.log(`ok   ${label}`); else { failed += 1; console.log(`FAIL ${label}`); } return ok; };
@@ -87,6 +100,14 @@ let CHUNK_TEXT = centreText;
 const swapOnce = (from, to) => { const n = CHUNK_TEXT.split(from).length - 1; if (n !== 1) throw new Error(`control refused: ${JSON.stringify(from)} appears ${n} times in the chunk`); CHUNK_TEXT = CHUNK_TEXT.replace(from, to); };
 if (CONTROL === 'used') { swapOnce(',-1,[])', ',-2,[])'); console.log('CONTROL used: opening the board writes an entry no reader accepts, so the attempt is not used'); }
 if (CONTROL === 'label') { swapOnce('children:"▶ Let it play"', 'children:"Next chance"'); console.log('CONTROL label: "Let it play" is served as "Next chance"'); }
+if (CONTROL === 'fixtures') {
+  /* the guard in front of the phone's Fixtures button, whatever the minifier named the hosting state */
+  const guard = /[\w$]+===null&&([\w$]+\.jsx\("button",\{type:"button",onClick:\(\)=>[\w$]+\(!0\),className:"[^"]*","data-centre-fixtures":!0)/g;
+  const n = (CHUNK_TEXT.match(guard) ?? []).length;
+  if (n !== 1) throw new Error(`control refused: the Fixtures guard appears ${n} times in the chunk`);
+  CHUNK_TEXT = CHUNK_TEXT.replace(guard, '$1');
+  console.log('CONTROL fixtures: the phone draws its Fixtures button while a moment is on the stage');
+}
 
 /* the walker's ACTIONS, read from its file's text (it runs on import) */
 function walkerActions() {

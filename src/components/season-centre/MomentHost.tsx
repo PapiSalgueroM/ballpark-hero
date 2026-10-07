@@ -134,11 +134,13 @@ export function MomentHost({ moment, moments, scoreLine, reduced, onDone }: {
   const board = useMemo(() => (step === 'board' ? live.current.moments.board(live.current.moment, done) : null), [step, key, done]);
   const badge = moment.mode === 'call' ? 'YOUR CALL' : 'RECREATE';
 
-  if (step === 'board') return <div tabIndex={-1} ref={focusOnMount} className="outline-none" data-moment-board data-moment-mode={moment.mode}>{board}</div>;
+  /* each card is its own element (the keys): React would otherwise keep the
+     offer's div for the board, and a div that is kept is never focused again */
+  if (step === 'board') return <div key="board" tabIndex={-1} ref={focusOnMount} className="outline-none" data-moment-board data-moment-mode={moment.mode}>{board}</div>;
   if (step === 'spent') {
     const made = !!moment.taken?.made;
     return (
-      <div className="space-y-3 rounded-2xl border border-border bg-card p-4" data-moment-spent data-moment-mode={moment.mode}>
+      <div key="spent" className="space-y-3 rounded-2xl border border-border bg-card p-4" data-moment-spent data-moment-mode={moment.mode}>
         <div className="flex items-center gap-2">
           <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] font-black tracking-wider text-muted-foreground" data-moment-badge>{badge}</span>
           <span className="text-xs tabular-nums text-muted-foreground">{scoreLine}</span>
@@ -152,7 +154,7 @@ export function MomentHost({ moment, moments, scoreLine, reduced, onDone }: {
   }
   if (step === 'verdict' && verdict) {
     return (
-      <div className="relative" data-moment-verdict={verdict.made ? 'made' : 'missed'} data-moment-mode={moment.mode}>
+      <div key="verdict" className="relative" data-moment-verdict={verdict.made ? 'made' : 'missed'} data-moment-mode={moment.mode}>
         {verdict.wonMatch && !reduced && <ConfettiBurst seed={confettiSeedOf(key)} />}
         <ArcadeShotFeedback
           sport={moments.feedback}
@@ -168,7 +170,7 @@ export function MomentHost({ moment, moments, scoreLine, reduced, onDone }: {
     );
   }
   return (
-    <div tabIndex={-1} ref={focusOnMount} className={`${reduced ? '' : 'cm-slam'} space-y-3 rounded-2xl border border-primary/40 bg-card p-4 outline-none`} data-moment-offer data-moment-mode={moment.mode}>
+    <div key="offer" tabIndex={-1} ref={focusOnMount} className={`${reduced ? '' : 'cm-slam'} space-y-3 rounded-2xl border border-primary/40 bg-card p-4 outline-none`} data-moment-offer data-moment-mode={moment.mode}>
       <div className="flex items-center gap-2">
         <span className="rounded bg-primary/20 px-1.5 py-0.5 text-[10px] font-black tracking-wider text-primary" data-moment-badge>{badge}</span>
         <span className="text-xs tabular-nums text-muted-foreground">{scoreLine}</span>

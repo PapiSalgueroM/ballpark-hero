@@ -30,6 +30,11 @@ import { SOCCER_FULL_TIME } from '@/lib/season/soccerEvents';
 import type { HelpWords } from '@/components/season-centre/SeasonCentreHelp';
 import type { DerivedGame, DerivedSeason, SeasonEvent } from '@/lib/season/core';
 
+/* the page banks a season's moments on the way out of it (the summary
+   dismissed, the next season played) through this same lazy entry, so the
+   bank never rides the first download */
+export { closeSeasonMoments } from '@/lib/season/soccerMoments';
+
 export interface SoccerSeasonCentreProps {
   career: CareerState;
   clubs: ClubData[];
