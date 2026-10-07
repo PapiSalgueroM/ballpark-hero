@@ -75,6 +75,9 @@
  *                              the Benfica block where the bake had him. Section 5.
  *   ROSTER_ADJ_CONTROL=held    Cláudio Ramos, pending and held at his club, out
  *                              of the Porto block. Section 5.
+ *   ROSTER_ADJ_CONTROL=leftbehind  Scuffet's row back under removedClubNotModelled
+ *                              at Pisa, which Round 1040 models. Section 2b.
+ *                              (Measured 2026-10-06: 2b red, 8 of 9 Serie B rows.)
  * A control refuses to run unless every block and row it touches appears exactly
  * once, and unless the edit really changes the source.
  *
@@ -109,6 +112,14 @@ const CONTROLS = {
     add: [['Benfica', `    { n: 'Renato Sanches', p: 'CM', a: 28, v: 2.9, r: 71 },`]] },
   held: { expect: '5', what: 'Cláudio Ramos (pending, held at his club) taken out of the Porto block',
     remove: [['Porto', 'Cláudio Ramos']] },
+  /* Round 1040: a ledger control, not a roster one. */
+  leftbehind: { expect: '2b', what: 'Simone Scuffet put back under removedClubNotModelled at Pisa, as the ledger read before Round 1040',
+    ledger: led => {
+      const i = led.movedTo.findIndex(m => m.name === 'Simone Scuffet' && m.to === 'Pisa');
+      if (i < 0) { console.error('CONTROL leftbehind refuses to run: no movedTo row for Simone Scuffet at Pisa'); process.exit(1); }
+      const [row] = led.movedTo.splice(i, 1);
+      led.removedClubNotModelled.push({ ...row, realClub: 'Pisa' });
+    } },
 };
 const CONTROL = process.env.ROSTER_ADJ_CONTROL || '';
 if (CONTROL && !Object.hasOwn(CONTROLS, CONTROL)) {
@@ -170,6 +181,7 @@ const META = eval('(' + sliceObject(source, 'export const CM_ROSTER_META') + ')'
 
 const ledgerPath = path.join(ROOT, 'scripts/data/rosterConfirmation2026.json');
 const L = JSON.parse(fs.readFileSync(ledgerPath, 'utf8'));
+if (CONTROL && CONTROLS[CONTROL].ledger) CONTROLS[CONTROL].ledger(L);
 
 const clubsOf = name => Object.keys(ROSTERS).filter(c => ROSTERS[c].some(p => p.n === name));
 const totalPlayers = Object.values(ROSTERS).reduce((s, a) => s + a.length, 0);
@@ -201,6 +213,32 @@ for (const r of L.removedClubNotModelled) {
   if (at.length) fail(`${r.name} is in the ${at.join(', ')} squad, but he plays for ${r.realClub}, which this game does not model`);
 }
 if (failures === before) console.log(`   ${L.removedClubNotModelled.length} correctly absent`);
+
+/* Round 1040: a league the game starts modelling turns some of these rows
+   true no longer. The bake deletes a removedClubNotModelled man by name, so
+   a row left behind when his real club comes in silently empties him out of
+   the squad he belongs in. Every such row moves to movedTo with the engine's
+   spelling (correction 3 of the round's brief), and the rows each new league
+   took are counted. */
+begin('2b', '2b) No removedClubNotModelled row names a club the game models now');
+before = failures;
+{
+  const { DB_TO_ENGINE } = await import(new URL('./lib/dbClubNames.mjs', import.meta.url).href);
+  const modelled = new Set(Object.keys(ROSTERS));
+  for (const r of L.removedClubNotModelled) {
+    const engine = DB_TO_ENGINE[r.realClub] ?? r.realClub;
+    if (modelled.has(engine)) fail(`${r.name} is listed under removedClubNotModelled at ${r.realClub}, which the game models as ${engine}: move the row to movedTo`);
+  }
+  const ROUND_1040 = {
+    'Serie B': { clubs: ['Cremonese', 'Verona', 'Pisa', 'Avellino', 'Carrarese', 'Catanzaro', 'Cesena', 'Empoli', 'Entella', 'Juve Stabia', 'Mantova', 'Modena', 'Padova', 'Palermo', 'Sampdoria', 'Südtirol', 'Vicenza', 'Arezzo', 'Benevento', 'Ascoli'], moved: 9 },
+  };
+  for (const [league, { clubs, moved }] of Object.entries(ROUND_1040)) {
+    const n = L.movedTo.filter(m => clubs.includes(m.to)).length;
+    console.log(`   ${league}: ${n} movedTo rows land at its clubs (Round 1040 moved ${moved} there)`);
+    if (n !== moved) fail(`${n} movedTo rows land at a ${league} club, Round 1040 moved ${moved}`);
+  }
+}
+if (failures === before) console.log(`   none of ${L.removedClubNotModelled.length} names a modelled club`);
 
 /* ------------------------------------------------------------------ */
 begin('3', '3) Every not-current name is in no squad at all');

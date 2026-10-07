@@ -56,13 +56,14 @@
 import {
   REAL_LEAGUES,
   answerPress,
+  clubByName,
   clubDefFor,
   cupProgressRank,
   engineRegistrations,
   fixtureFor,
   isPartialClub,
   leaguePosition,
-  leagueRulesOf,
+  leagueOf,
   matchEdge,
   nextFixture,
   objectiveStatuses,
@@ -85,6 +86,7 @@ import {
 import { FAN_SINGING, boardMeter, fanMeter, type Meter, type MeterTone } from '@/lib/clubManagerMeters';
 import type { SeasonHandover } from '@/lib/clubManagerScore';
 import { dailyIndex, dailyPrngSeed } from '@/lib/dateUtils';
+import DAILY_CLUB_POOL from '@/data/dailyClubPool.json';
 
 /* ---------------- the numbers ---------------- */
 
@@ -216,19 +218,29 @@ export function hotSeatLeagues(): { id: string; name: string }[] {
 }
 
 /**
- * Round 1040: the clubs a daily may deal on `date`: the pool, less any league
- * whose rules row says its clubs join later (LeagueRules.dailyFrom). The
- * daily picks by an index into this list, so a league joining on release day
- * would re-deal every date, release day included; one that joins from a later
- * date leaves every day before it exactly as it was. Leagues are appended to
- * REAL_LEAGUES, so a later league's clubs sit at the end and the list before
- * the join is the old pool in the old order. Deadline Day deals from the same
- * list.
+ * Round 1040: the clubs a daily may deal on `date`, read from the committed
+ * pool (src/data/dailyClubPool.json, append only, written by
+ * scripts/genDailyClubPool.mjs), never worked out live. The daily picks by an
+ * index into this list, so a list worked out from the engine re-dealt every
+ * date whenever a roster bake reordered a league, tipped a squad under the
+ * partial line or added a league, release day included. A line counts from
+ * its date (null: always), so a club added later leaves every day before it
+ * exactly as it was. The league is read live, on the static world; a club the
+ * engine no longer knows is skipped. Deadline Day deals from the same list.
  */
 export function dailyPool(date: string): HotSeatClub[] {
-  return hotSeatPool().filter(c => {
-    const from = leagueRulesOf(c.leagueId).dailyFrom;
-    return !from || from <= date;
+  const live = new Map(hotSeatPool().map(c => [c.club, c]));
+  return onStaticWorld(() => {
+    const out: HotSeatClub[] = [];
+    for (const [club, from] of DAILY_CLUB_POOL.entries as [string, string | null][]) {
+      if (from && from > date) continue;
+      const hit = live.get(club);
+      if (hit) { out.push(hit); continue; }
+      if (!clubByName(club)) continue;
+      const lg = leagueOf(club);
+      out.push({ club, leagueId: lg.id, leagueName: lg.name });
+    }
+    return out;
   });
 }
 

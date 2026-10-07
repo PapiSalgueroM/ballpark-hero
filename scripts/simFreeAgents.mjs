@@ -1550,7 +1550,12 @@ console.log("18) a modern day one opens with today's real free agents, and only 
   if (gen.problems.length) fail(`the generator refuses this ledger: ${gen.problems.slice(0, 2).join(' | ')}`);
   else if (renderFile(LEDGER, gen.rows) !== sources.faData) fail('src/data/clubManagerFreeAgents2026.ts is not what the ledger generates, rerun node scripts/genClubManagerFreeAgents.mjs');
   else ok('the generator accepts the ledger and the shipped file is exactly what it writes');
-  const bakeSrc = lf('scripts/bakeClubManagerRosters.mjs');
+  /* Round 1040: Round 1035 lifted the bake's curve into
+     scripts/lib/cmValueCurve.mjs, which the bake imports, so the bake's
+     curve is read there (this section was red on release-ah fc30942e, where
+     the two rounds met, for that reason alone). */
+  const bakeOwn = lf('scripts/bakeClubManagerRosters.mjs');
+  const bakeSrc = bakeOwn + (bakeOwn.includes("from './lib/cmValueCurve.mjs'") ? lf('scripts/lib/cmValueCurve.mjs') : '');
   const genSrc = lf('scripts/genClubManagerFreeAgents.mjs');
   const curves = ['const r = Math.round(-13.106 + 12.851 * Math.log10(usd));', 'const m = (usd * 0.75) / 1e6;', "'Centre-Forward': 'ST', 'Second Striker': 'CF',"];
   const drift = curves.filter(c => !bakeSrc.includes(c) || !genSrc.includes(c));

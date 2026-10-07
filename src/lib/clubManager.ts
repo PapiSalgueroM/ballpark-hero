@@ -2705,12 +2705,6 @@ export interface LeagueRules {
    *  been verified. Round 832 review: this sat in a map of its own keyed by
    *  league id, the one league rule left outside this table. */
   tiebreak?: TiebreakRule;
-  /** Round 1040: the Eastern date (YYYY-MM-DD) this league's clubs join the
-   *  daily games' club pools (Manager Hot Seat and Deadline Day, which deal
-   *  one club a day by an index into the pool). A league added later joins
-   *  from a date after its release, so no day already dealt is dealt again.
-   *  Absent: in the pool on every date. */
-  dailyFrom?: string;
 }
 
 const SPLIT_SIMPLIFIED = 'The real league splits into groups part way through the season; it is played here as a straight double round robin.';
@@ -2920,13 +2914,11 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
        (https://sport.sky.it/calcio/coppa-italia/2026/06/24/tabellone-coppa-italia-2026-2027)
        and Sport Mediaset's round of 32 draw.
      - Clubs level on points: only one source spelled an order, so the
-       gdGfOnly default.
-     dailyFrom: release day plus thirty days (see LeagueRules.dailyFrom). */
+       gdGfOnly default. */
   serieb: {
     nationId: 'italy', flag: 'Italy', cup: 'Coppa Italia', europe: null, drop: 3, ladder: 'promotion',
     playoff: { rankUpTo: 10, target: 8, label: 'Make the promotion playoffs' }, season: 'autumnSpring',
     simplified: 'The promotion playoff and the relegation playout are not played: three go straight up and three straight down.',
-    dailyFrom: '2026-11-05',
   },
   /* The era leagues. No Conference League existed before 2021, so uecl is 0
      and the board's ladder skips that band; 2005-06 still called the second
