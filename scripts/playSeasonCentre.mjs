@@ -38,6 +38,13 @@
  *   label   a Season Centre button is renamed "Next matchday"   -> 5 red
  *   count   the score bug reads 20 minutes ahead of the clock    -> 4 red
  *
+ * Measured 2026-10-07 on the merged release-ai-int tree: 39 checks, 0 failed
+ * (the score bug sampled over 126 to 142 frames a match with 0 wrong; Next
+ * Season 173 px beside the 44 px 📺, 225 px without it). Controls, each exit 1:
+ * static fails 1 (49 scripts on the hub); write fails 1 (the press no longer
+ * writes the save Next Season writes); label fails 4, among them 5 ("Next
+ * matchday" clashes with the walker); count fails 2 (34 and 35 wrong frames).
+ *
  * Run: npm run build, then ENGINES=chromium node scripts/playSeasonCentre.mjs
  * (MSYS_NO_PATHCONV=1 under Git Bash). Green is the closing
  * "playSeasonCentre: N checks, 0 failed" line and exit 0.
