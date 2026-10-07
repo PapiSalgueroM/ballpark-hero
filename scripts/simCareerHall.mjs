@@ -1013,6 +1013,42 @@ const rows = careers.map(k => {
   };
 });
 if (process.env.SIM_DUMP_ROWS) writeFileSync(process.env.SIM_DUMP_ROWS, JSON.stringify(rows));
+const medOf = xs => { const s = [...xs].sort((a, b) => a - b); return s.length ? s[Math.floor(s.length / 2)] : 0; };
+const meanOf = xs => (xs.length ? xs.reduce((s, x) => s + x, 0) / xs.length : 0);
+const W1 = eng.WEIGHTS[1], W2 = eng.WEIGHTS[eng.HALL_CALIBRATION];
+
+/* 16. Never below (exact). The calibration 2 table contains calibration 1
+   unchanged and only adds: the same awards and season weight, and each
+   position's old terms first, in order. And on every engine career the score
+   on 2 is at least the score on 1, the verdict tier is the same or higher,
+   and a career in the Hall on 1 is in on 2. */
+const sameJson = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+const ruleAMiss = [];
+if (!sameJson(W1.awards, W2.awards)) ruleAMiss.push('awards');
+if (W1.season !== W2.season) ruleAMiss.push('season');
+for (const pos of new Set([...E.positions, ...Object.keys(W1.positions), ...Object.keys(W2.positions)])) {
+  const old = (W1.positions[pos] ?? W1.positions['*']).terms;
+  const now = (W2.positions[pos] ?? W2.positions['*']).terms;
+  if (!sameJson(old, now.slice(0, old.length))) ruleAMiss.push(`terms of ${pos}`);
+}
+// The tier order, read off the careers themselves: a verdict ranks by the lowest score that earned it.
+const tierFloor = new Map();
+for (const r of rows) for (const [s, v] of [[r.s1, r.v1], [r.s2, r.v2]]) tierFloor.set(v, Math.min(tierFloor.get(v) ?? Infinity, s));
+let belowMiss = 0, movedUp = 0, newlyIn = 0, tierUp = 0;
+for (const r of rows) {
+  if (r.s2 < r.s1 || (r.hof1 && !r.hof2) || tierFloor.get(r.v2) < tierFloor.get(r.v1)) belowMiss += 1;
+  if (r.s2 > r.s1) movedUp += 1;
+  if (r.hof2 && !r.hof1) newlyIn += 1;
+  if (tierFloor.get(r.v2) > tierFloor.get(r.v1)) tierUp += 1;
+}
+console.log(`  16 never below: table misses [${ruleAMiss.join(', ')}]; ${belowMiss} of ${rows.length} careers lower on 2; ${movedUp} moved up, ${tierUp} up a verdict tier, ${newlyIn} newly in the Hall`);
+
+/* 19 (b). The Hall share by position on 1 and on 2, and the points paid (the
+   legacy score is also the finished game's recorded score). */
+const shareOf = (list, f) => (list.length ? (100 * list.filter(f).length) / list.length : 0);
+const hall1 = shareOf(rows, r => r.hof1), hall2 = shareOf(rows, r => r.hof2);
+console.log(`  19 (b) Hall share ${hall1.toFixed(1)} -> ${hall2.toFixed(1)} percent; legacy score median ${medOf(rows.map(r => r.s1))} -> ${medOf(rows.map(r => r.s2))}, mean ${meanOf(rows.map(r => r.s1)).toFixed(1)} -> ${meanOf(rows.map(r => r.s2)).toFixed(1)} (points paid)`);
+console.log(`     by position: ${E.positions.map(p => { const m = rows.filter(r => r.pos === p); return `${p} ${shareOf(m, r => r.hof1).toFixed(1)} -> ${shareOf(m, r => r.hof2).toFixed(1)}`; }).join(', ')}`);
 
 /* 15 (a). The version 1 recording: every save in the fixture, unstamped, reads
    today what the base's code told it, whole objects. */
@@ -1093,6 +1129,7 @@ const checks = [
   ['v1formula', v1FormulaMiss === 0 && careers.length > 0, `${v1FormulaMiss} of ${careers.length} engine careers score off the Round 123 formula on calibration 1`],
   ['calrule', calRuleMiss === 0 && stampedEngine === (CAL1 ? 0 : careers.length), `${calRuleMiss} readings off the calibration rule; ${stampedEngine} of ${careers.length} engine careers stamped`],
   ['boardstamp', boardScoreMiss === 0 && boardRetired.length > 0 && boardStamped === (CAL1 ? 0 : boardRetired.length), `${boardStamped} of ${boardRetired.length} retired board careers stamped ${CAL_NOW}, ${boardScoreMiss} scored on another calibration`],
+  ['neverbelow', ruleAMiss.length === 0 && belowMiss === 0 && rows.length > 0, `calibration 2 drops or changes [${ruleAMiss.join(', ')}] of calibration 1; ${belowMiss} of ${rows.length} careers score lower, lose a tier or leave the Hall on 2 (${movedUp} moved up)`],
   ...(balance ? [['balance', balance.cases >= BAND.balanceCases && balance.ovrNow - balance.ovrOld >= BAND.farewellOvrGain && Math.abs(balance.hallNow - balance.hallOld) <= BAND.hallShift && Math.abs(balance.legacyNow - balance.legacyOld) <= BAND.legacyShift, `${balance.cases} walk away farewells (needs ${BAND.balanceCases}); farewell OVR gain ${(balance.ovrNow - balance.ovrOld).toFixed(1)} (needs ${BAND.farewellOvrGain}); Hall share shift ${(100 * (balance.hallNow - balance.hallOld)).toFixed(2)} points (band ${100 * BAND.hallShift}); median legacy shift ${balance.legacyNow - balance.legacyOld} (band ${BAND.legacyShift})`]] : []),
 ];
 const BOARD_CHECKS = ['identity', 'ends', 'once', 'seek', 'deckJersey', 'era', 'balance', 'boardstamp'];
