@@ -148,7 +148,8 @@ export function momentsBoost(stars: number, offered: number, room: number): numb
 
 /** Bank this season's moments, once: the latest season only, after at least
  *  one moment was played (an attempt that was opened and left counts as a
- *  miss). `offered` is how many moments the season held. Pure, no draw; a
+ *  miss). The Season Centre calls it at the season review, or on the way out
+ *  when no moment is left to play. `offered` is how many moments the season held. Pure, no draw; a
  *  career with no ledger comes back as the same object. */
 export function applySeasonMomentsBank(prev: CareerState, offered: number): CareerState {
   const save = readSeasonMoments(prev.seasonMoments);

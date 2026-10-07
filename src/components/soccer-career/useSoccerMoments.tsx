@@ -48,7 +48,7 @@ export function useSoccerMoments({ career, row, ctx, plan, key, offered, entries
     const entries = JSON.parse(entriesKey) as number[][];
     const word = plan.mode === 'table' ? 'matchday' : 'league game';
     const find = (m: CentreMoment) => offered.find(x => x.md === m.md && x.id === m.id) ?? null;
-    const list: CentreMoment[] = offered.map(m => {
+    const all: CentreMoment[] = offered.map(m => {
       const r = momentResult(m, entries);
       const kind = m.kind as SoccerMomentKind;
       return {
@@ -57,6 +57,8 @@ export function useSoccerMoments({ career, row, ctx, plan, key, offered, entries
         taken: r.taken ? { stars: r.stars, made: r.stars >= 1 } : null,
       };
     });
+    /* once the season's stars are banked its moments are closed: the ones he took stay on the fixtures */
+    const list = banked ? all.filter(m => m.taken) : all;
     const taken = list.filter(m => m.taken);
     const stars = taken.reduce((n, m) => n + (m.taken?.stars ?? 0), 0);
     const review: string[] = [];
@@ -96,7 +98,7 @@ export function useSoccerMoments({ career, row, ctx, plan, key, offered, entries
         }
         return { made: play.won, stars: play.stars, verdict: play.verdict, after: momentAfter(mm.mode, play.won, flipped, mm.mirrorMd, word), wonMatch };
       },
-      bank: () => onCareer(prev => applySeasonMomentsBank(prev, offered.length)),
+      bank: final => { if (final || all.every(m => m.taken)) onCareer(prev => applySeasonMomentsBank(prev, offered.length)); },
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onCareer, plan, key, offered, entriesKey, banked, row, ctx, career.events, career.position]);

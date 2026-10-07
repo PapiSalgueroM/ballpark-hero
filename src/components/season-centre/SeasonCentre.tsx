@@ -393,11 +393,11 @@ export function SeasonCentre({ model, exitLabel, onClose }: { model: CentreModel
     else setStage({ kind: 'match', md });
   }, [s, postersSeen]);
   const toEnd = useCallback(() => { setHosting(null); setPlayed(M); setFt(true); setStage({ kind: 'review' }); }, [M]);
-  /* the season's stars bank at the review and on the way out, once (a season with no moment taken banks nothing) */
+  /* the season's stars bank at the review, once, or on the way out when no moment is left to play (a season with no moment taken banks nothing) */
   const bankRef = useRef(moments?.bank);
   bankRef.current = moments?.bank;
-  useEffect(() => { if (stage.kind === 'review') bankRef.current?.(); }, [stage.kind]);
-  const leave = useCallback(() => { bankRef.current?.(); onClose(); }, [onClose]);
+  useEffect(() => { if (stage.kind === 'review') bankRef.current?.(true); }, [stage.kind]);
+  const leave = useCallback(() => { bankRef.current?.(false); onClose(); }, [onClose]);
   const current = stage.kind === 'match' || stage.kind === 'poster' ? stage.md : null;
   const onFullTime = useCallback(() => { if (current !== null) { setPlayed(p => Math.max(p, current)); setFt(true); } }, [current]);
   /* the next big game from the very next matchday on; when that next one is

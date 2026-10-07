@@ -53,8 +53,11 @@ export interface CentreMoments {
   board: (m: CentreMoment, done: (input: number[]) => void) => ReactNode;
   /** Settle and save the result. */
   settle: (m: CentreMoment, input: number[]) => MomentVerdict;
-  /** Bank the season's stars (once; a season with no moment taken banks nothing). */
-  bank: () => void;
+  /** Bank the season's stars, once (a season with no moment taken banks
+   *  nothing). `final` is true at the season review; on the way out early it
+   *  is false, and the sport banks only if nothing is left to play, so a
+   *  player who steps out mid season finds his moments still open. */
+  bank: (final: boolean) => void;
   /** One line for the kick off card ("3 moments are yours this season: matchdays 5, 17 and 31"). */
   kickoff: string | null;
   /** Lines for the season review. */
