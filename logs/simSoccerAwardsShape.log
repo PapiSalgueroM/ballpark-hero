@@ -1,0 +1,28 @@
+
+--- 1. the shape test refuses every junk shape the scrape produced ---
+   31 of 31 junk shapes refused
+
+--- 2. the shape test keeps real winners, cleans their tags, and passes every recorded winner ---
+   16 of 16 real winners kept and cleaned; 119 recorded winners pass; 0 of 0 World Cup migration rows pass
+
+--- 3. the reader: verified awards only, the shape test always, nothing else reads the table ---
+   3 puzzles read European Golden Shoe, Premier League Player of the Season, MLS MVP; readers of the table: src/integrations/supabase/types.ts, src/lib/listQuiz.ts
+
+--- 4. the three soccer lists as the quiz deals them ---
+   golden-shoe-winners: SKIPPED, SUPABASE UNREACHABLE. THIS LIST WAS NOT CHECKED.
+   pl-player-of-season: SKIPPED, SUPABASE UNREACHABLE. THIS LIST WAS NOT CHECKED.
+   mls-mvps: SKIPPED, SUPABASE UNREACHABLE. THIS LIST WAS NOT CHECKED.
+   NO LIST WAS CHECKED.
+
+--- 5. the verified awards against the record ---
+   SKIPPED, SUPABASE UNREACHABLE. THE TABLE WAS NOT CHECKED.
+
+--- 6. the World Cup awards: the migration, the record, the live table ---
+   PENDING: supabase/migrations/20260930120000_round_708_soccer_awards_world_cup.sql and its record rows are not shipped. The three awards stay on the DO NOT USE list until they are.
+
+--- 7. national_team_squads: names only, name shaped, and the migration read ---
+   PENDING: supabase/migrations/20260930121000_round_708_national_team_squads_realign.sql is not shipped. Readers take player_name only, which is what makes the table safe today.
+   SKIPPED, SUPABASE UNREACHABLE. THE TABLE WAS NOT CHECKED.
+
+AT LEAST ONE SECTION DID NOT RUN (4, 5, 6, 7). Re-run from a sandbox that reaches Supabase before trusting it.
+simSoccerAwardsShape: sections 1, 2, 3 green; sections 4, 5, 6, 7 did not run. The live tables were NOT checked.

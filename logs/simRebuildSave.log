@@ -1,0 +1,41 @@
+Rebuild save: 66 clubs, 2914 market rows pulled 2026-09-05
+save version 2, key rebuild-table, cap 400 moves a seat
+
+1) a save written at any point restores the same run
+   deep: 952 saves taken and restored across 10 tables, one after every move
+   wide: 2284 saves taken and restored across 140 finished tables of one to four seats
+   a seat's window took 26.8 moves on average and 59 at the longest, against a cap of 400
+   28 saves landed between a bid and the rival's answer, and every one of them can be answered
+
+2) a tampered, truncated or stale save opens fresh, never half restored
+   58 of 58 wrecked saves opened fresh, none half restored
+   a club that has left the list, and a market cut a different way, both refuse
+
+3) an absent save opens fresh
+   five empty or nonsense values read as no save; a table before the first club pick writes nothing
+
+4) no restore hands a seat another seat's board
+   1155 seat pairs across 448 restored tables share no man and no club
+   31 restores taken mid hand over put no run on the board
+
+5) a reload does not record a second completion or pay the score twice
+   a finish plus two reloads of 140 shut tables recorded 1 completion; 308 unfinished restores still record their own
+   the hook announces the restore before it applies it, decides a finish the same way the restore does, and the completion hook still consumes the mark first
+
+6) every action the hook can reach has a case in the save
+   23 engine actions, 22 of them reachable from the board, 22 with a case in applyMove
+   the move union names 22 kinds and every one of them replays
+
+7) a version 1 save, played on the three perk deck, comes back the same and plays on
+   144 saves written on main before this round (89 with an old perk dealt or held): 144 come back to the byte, 0 differ, 0 do not read, 0 step up onto the wrong deck, 0 are not version 1
+   written again: 0 differ; mid window: 100 take their next move, 0 are stuck
+   seats opened after the restore: 93, on a deck other than the table's 0
+
+   section 1: green
+   section 2: green
+   section 3: green
+   section 4: green
+   section 5: green
+   section 6: green
+   section 7: green
+simRebuildSave: green. A Rebuild run written at any point comes back the same, and anything else opens fresh.

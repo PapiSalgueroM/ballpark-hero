@@ -1,0 +1,11 @@
+1) ReportQuestion sends the route and the Eastern date with every report, on both delivery paths
+   path, date, spread, 2 delivery paths
+2) Footle reports its mode and the tier that mode used
+   mode and tier present, the unlimited selector gone
+3) Inventory: what the other pages send (printed, not failed)
+   76 report buttons across 170 pages; 28 pass no context, 0 pass an empty one: AlphabetSprint.tsx, CbbGrid.tsx, ClueAuction.tsx, DealOrNoDeal.tsx, GauntletDraft.tsx, HigherLowerTransfers.tsx, HockeyGrid.tsx, ListQuiz.tsx, MissingXi.tsx, MlbGauntletDraft.tsx, MlbGrid.tsx, NbaGauntletDraft.tsx, NbaGrid.tsx, NbaStatLine.tsx, NflGauntletDraft.tsx, NhlGauntletDraft.tsx, PackBattle.tsx, PerfectSeasonMlb.tsx, PerfectSeasonNba.tsx, PerfectSeasonNfl.tsx, PerfectSeasonNhl.tsx, PuckDetective.tsx, SearchAndDiscard.tsx, SportsBingo.tsx, SportsMillionaire.tsx, StatDetective.tsx, WhoAmI.tsx, WorldXi.tsx
+   every one of them now carries the route and the date through the component
+4) The privacy page says what the report flow already sends
+   category, typed text, page, Eastern date and limited game details disclosed on both lines
+
+simReportContext: all green

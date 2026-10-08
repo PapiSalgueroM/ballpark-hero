@@ -1,0 +1,17 @@
+0) as code: one writer per key, the case still derived, the calendar on your own profile only
+   ledger writes 1, streak keys DIARY_KEY and STORAGE_KEY, diary write sites 3, case settles 1 time(s) inside its load, calendar mounts 1
+1) the diary: a scripted month through the real recorder, day for day
+   71 finishes over 40 days (some sent twice): 28 played days, best run 7, runs agree with the counters on 4 games and overall
+2) three marks: played, rest, and unknown for what nobody saw
+   held run of 5 copied in, 44 earlier days unknown, today rest, 6 days ahead, same picture with and without the diary
+   a new game and a brand new browser: every day before today is rest, 50 of them
+3) the clock: Eastern midnight, both daylight saving changes, an old tab
+   midnight, spring forward, fall back and a UTC evening all land on the right Eastern days; an old tab leaves the diary alone; 3 calendars across the clock changes are 56 straight days from a Monday
+4) dates from the game days: the first day the case's own predicates say yes
+   108 game days over 41 days: 19 achievements dated, every one matching the day by day scan (first-finish 2026-06-01, three-games 2026-06-02, two-sports 2026-06-02, favourite-five 2026-06-12, ...)
+5) dates from the diary: never for a run the diary did not see
+   straddling run dated 2026-09-10; held 30 day run dates 0 streak achievements; new browser dates streak-5 2026-09-05, game-streak-10 2026-09-10
+6) the ledger: true on every line, and a shown date never moves
+   first sight, later sight, contradiction and removal rules hold; the whole path dates 2 earned ones (first-finish 2026-09-01, streak-5 2026-09-05) and leaves the facts alone
+
+simStreakHistory: all 7 sections green

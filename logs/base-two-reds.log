@@ -1,0 +1,7 @@
+      Tests  4 failed | 20 passed (24)
+ FAIL  src/lib/frontOfficeRatings.test.ts > NFL opening rating checkpoint > keeps source-stat observations and fitted models outside the browser data with a dated manifest
+ FAIL  src/test/guessFinishMoment.test.tsx > a clue guesser ends on the shared result moment > plays a live win with the points the board scored, and keeps the answer line, share and nothing invented
+ FAIL  src/test/guessFinishMoment.test.tsx > a clue guesser ends on the shared result moment > shows a reloaded daily settled, with the same facts and no confetti
+ FAIL  src/test/guessFinishMoment.test.tsx > a clue guesser ends on the shared result moment > walks every clue: the pill shows exactly the score the board saved
+ Test Files  2 failed (2)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯

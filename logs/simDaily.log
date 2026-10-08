@@ -1,0 +1,17 @@
+1) Every daily game deals a different board tomorrow
+   Missing XI         173 distinct in 365 days, longest identical run 2
+   Missing XI blank   217 distinct in 365 days, longest identical run 1
+   Missing Five        40 distinct in 365 days, longest identical run 1
+   Missing Nine        30 distinct in 365 days, longest identical run 1
+   Missing Eleven      40 distinct in 365 days, longest identical run 1
+   Order the List      14 distinct in 365 days, longest identical run 1
+   Rarity Round       365 distinct in 365 days, longest identical run 1
+   Pack Battle        365 distinct in 365 days, longest identical run 1
+   Sign the Player      9 distinct in 365 days, longest identical run 3
+2) The date is hashed before it seeds a random stream, everywhere
+   1685 source files scanned, 30 with a Lehmer step, 0 seeded from a raw date
+   hashed seed reaches 20/20 buckets in 60 days; the raw seed reaches 1
+3) The order through the pool is a real shuffle, not a straight line
+   6 pool sizes walked through 6 cycles each, full coverage, no repeats, no straight line; 13 games on it
+
+simDaily: green. Every daily game is a different game tomorrow.

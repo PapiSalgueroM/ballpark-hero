@@ -1,0 +1,28 @@
+
+--- 1. the record: two hosts per player, two values per fact, one fact per shown line ---
+  50 players, 501 facts
+
+--- 2. every line follows from its source values by the record's rules ---
+  501 facts derived from their source values
+
+--- 3. the shipped file equals the record, row by row, both ways ---
+  50 of 50 rows equal the record, every ISO code equal to FlagImg's code for the country
+  50 of 50 result lines count the franchises he played for (3 name a team joined and not played for yet)
+
+--- 4. no repeats: ids, names, and the guesses the game accepts ---
+  50 ids, 50 distinct players, 100 distinct guesses
+
+--- 5. no removed line ships on its player, no held out player ships ---
+  36 removed lines absent, 1 held out player absent
+
+--- 6. the daily walk: full cycles, fewer quick repeats, and a safe release window ---
+  21 whole cycles of 50 days from 2026 to 2028
+  2026: a player back inside 14 days, old pool 81 times, new pool 12
+  2027: a player back inside 14 days, old pool 87 times, new pool 18
+  2028: a player back inside 14 days, old pool 78 times, new pool 11
+  the hook passes getPuzzleId, so saves written from the release on carry the puzzle id
+  window 2026-10-04 to 2026-10-30: shortest old to new gap 17 days (Larry Bird, release 2026-10-28), shortest run of new players 11 days (release 2026-10-30)
+  a release on 2026-10-31: Larry Bird comes back after 17 days, new run 10, Allen Iverson's morning save would load on Magic Johnson (index 11)
+  release days to 2026-12-31 where a morning save loads on another player: 2026-10-31, 2026-12-09, 2026-12-11
+
+simNbaCareerPathFacts: PASS

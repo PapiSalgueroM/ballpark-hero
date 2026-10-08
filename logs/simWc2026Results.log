@@ -1,0 +1,18 @@
+1) The results file is internally true
+   12 groups, 48 teams, 32 knockout matches, champion Spain
+2) The page's groups are the real groups
+   48 team slots on the page checked against the results
+3) The page path can reach the maximum
+   perfect 166/166, empty 0, wrong champion 151
+4) The award pick lists can name the winners
+   96 pick names checked against the three awards
+5) The page's seeding rebuilds the real round of 32
+   16 pairings built (official allocation), 16 played
+6) All 495 Annex C allocations are official
+   495 source rows, 495 group sets, digest and permutations checked
+7) The reviewed fixture dates are exact
+   8 fixture dates checked
+8) Reset invalidation removes child state
+   knockout, signature, awards, seed changes and delayed writes checked
+
+simWc2026Results: all green

@@ -1,0 +1,36 @@
+#!build
+#!playwright
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000 2>&1 | sed 's/\x1b\[[0-9;]*m//g' | grep -E "FAIL|Test Files|Tests |Error:" | sort -u | head -60; exit ${PIPESTATUS[0]}
+base-two-reds: git fetch -q origin r1140-translate-guard; git worktree add -f --detach $RUNNER_TEMP/b2 FETCH_HEAD >/dev/null 2>&1; ln -s $PWD/node_modules $RUNNER_TEMP/b2/node_modules; cd $RUNNER_TEMP/b2 && node_modules/.bin/vitest run src/test/guessFinishMoment.test.tsx src/lib/frontOfficeRatings.test.ts --testTimeout=300000 2>&1 | sed 's/\x1b\[[0-9;]*m//g' | grep -E "FAIL|Test Files|Tests " | sort -u | head -20; exit ${PIPESTATUS[0]}
+simClubManagerDeskCues: node scripts/simClubManagerDeskCues.mjs
+simCollegeGridPage: node scripts/simCollegeGridPage.mjs
+simDaily: node scripts/simDaily.mjs
+simFootleClueDesk: node scripts/simFootleClueDesk.mjs
+simFootleCurrency: node scripts/simFootleCurrency.mjs
+simFootlePractice995: node scripts/simFootlePractice995.mjs
+simFootleUnlimited: node scripts/simFootleUnlimited.mjs
+simHomeCopy: node scripts/simHomeCopy.mjs
+simNationalityFlags: node scripts/simNationalityFlags.mjs
+simNbaCareerPathFacts: node scripts/simNbaCareerPathFacts.mjs
+simNbaDraftCapital: node scripts/simNbaDraftCapital.mjs
+simNflGridPage: node scripts/simNflGridPage.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simPlayerSearchKeyboard: node scripts/simPlayerSearchKeyboard.mjs
+simPrerender: node scripts/simPrerender.mjs
+simQuotaHonesty: node scripts/simQuotaHonesty.mjs
+simReportContext: node scripts/simReportContext.mjs
+simResultPillComparison: node scripts/simResultPillComparison.mjs
+simScoreShown: node scripts/simScoreShown.mjs
+simScoringCoverage: node scripts/simScoringCoverage.mjs
+simSoccerAwardsShape: node scripts/simSoccerAwardsShape.mjs
+simTriviaFacts: node scripts/simTriviaFacts.mjs
+simWc2026Results: node scripts/simWc2026Results.mjs
+simWorldXiSeasonReport: node scripts/simWorldXiSeasonReport.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simGamePicks: node scripts/simGamePicks.mjs
+simSoccerCareerSaveRetry: node scripts/simSoccerCareerSaveRetry.mjs
+simRebuildSave: node scripts/simRebuildSave.mjs
+simStreakHistory: node scripts/simStreakHistory.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simWhatsNewish: ls scripts | grep -iE "whats|changelog" | head

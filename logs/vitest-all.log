@@ -1,0 +1,21 @@
+      Tests  4 failed | 4334 passed | 45 skipped (4383)
+    'Caused by: Error: connect ECONNREFUSED 127.0.0.1:443 (ECONNREFUSED)\n' +
+    'Error: connect ECONNREFUSED 127.0.0.1:443\n' +
+    at captureCommitPhaseError (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:27165:5) TypeError: Cannot read properties of undefined (reading 'unsubscribe')
+  details: 'TypeError: fetch failed\n' +
+  message: 'TypeError: fetch failed',
+ FAIL  src/lib/frontOfficeRatings.test.ts > NFL opening rating checkpoint > keeps source-stat observations and fitted models outside the browser data with a dated manifest
+ FAIL  src/test/guessFinishMoment.test.tsx > a clue guesser ends on the shared result moment > plays a live win with the points the board scored, and keeps the answer line, share and nothing invented
+ FAIL  src/test/guessFinishMoment.test.tsx > a clue guesser ends on the shared result moment > shows a reloaded daily settled, with the same facts and no confetti
+ FAIL  src/test/guessFinishMoment.test.tsx > a clue guesser ends on the shared result moment > walks every clue: the pill shows exactly the score the board saved
+ Test Files  2 failed | 317 passed | 1 skipped (320)
+404 Error: User attempted to access non-existent route: /no-such-page-r848
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/frontOfficeRatings.test.ts,title=src/lib/frontOfficeRatings.test.ts > NFL opening rating checkpoint > keeps source-stat observations and fitted models outside the browser data with a dated manifest,line=216,column=60::AssertionError: expected 'e3d221a9eb40873a8b9920efacb73250d8483…' to be 'cd0befccedbba0b74d06620ad47feb0f28cc2…' // Object.is equality%0A%0AExpected: "cd0befccedbba0b74d06620ad47feb0f28cc2f08cc240200c4b8133f8970581f"%0AReceived: "e3d221a9eb40873a8b9920efacb73250d8483f7e0f34d06204a061c2d8e9de8d"%0A%0A ❯ src/lib/frontOfficeRatings.test.ts:216:60%0A%0A
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/guessFinishMoment.test.tsx,title=src/test/guessFinishMoment.test.tsx > a clue guesser ends on the shared result moment > plays a live win with the points the board scored%2C and keeps the answer line%2C share and nothing invented,line=53,column=24::AssertionError: expected '1,000' to be '1000' // Object.is equality%0A%0AExpected: "1000"%0AReceived: "1,000"%0A%0A ❯ src/test/guessFinishMoment.test.tsx:53:24%0A%0A
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/guessFinishMoment.test.tsx,title=src/test/guessFinishMoment.test.tsx > a clue guesser ends on the shared result moment > shows a reloaded daily settled%2C with the same facts and no confetti,line=91,column=25::AssertionError: expected '1,000' to be '1000' // Object.is equality%0A%0AExpected: "1000"%0AReceived: "1,000"%0A%0A ❯ src/test/guessFinishMoment.test.tsx:91:25%0A%0A
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/guessFinishMoment.test.tsx,title=src/test/guessFinishMoment.test.tsx > a clue guesser ends on the shared result moment > walks every clue%3A the pill shows exactly the score the board saved,line=68,column=26::AssertionError: expected '1,000' to be '1000' // Object.is equality%0A%0AExpected: "1000"%0AReceived: "1,000"%0A%0A ❯ src/test/guessFinishMoment.test.tsx:68:26%0A%0A
+AssertionError: expected '1,000' to be '1000' // Object.is equality
+AssertionError: expected 'e3d221a9eb40873a8b9920efacb73250d8483…' to be 'cd0befccedbba0b74d06620ad47feb0f28cc2…' // Object.is equality
+Error: Not implemented: HTMLCanvasElement.prototype.getContext (without installing the canvas npm package)
+Error: Uncaught [TypeError: Cannot read properties of undefined (reading 'unsubscribe')]
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯

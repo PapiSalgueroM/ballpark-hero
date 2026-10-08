@@ -1,0 +1,27 @@
+
+--- 1. the record: two sources on two sites, one official or a reason, one independent, no wiki, no script shell, real dates ---
+  597 facts, each on two sites with an independent one; 421 carry a readable official source, 33 lines are editorial with a reason
+  176 stand on independent sources with a stated reason, for example hofOrBust.soc-1.stats[0]; hofOrBust.soc-1.hints[0]; hofOrBust.soc-1.hints[1]
+
+--- 2. Hall of Fame or Bust: every card line equals the record, and an active player's counts are floors or dated ---
+  25 cards, 200 lines, each equal to its record line; 22 counts for players still playing carry their asOf
+
+--- 3. Guess the Year: every clue equals the record, six clues a year ---
+  50 years, 300 clues, each equal to its record entry
+
+--- 4. Score Predictor: sides, competition, date, year, score, hint and fun fact ---
+  35 matches compared on sides, competition, date, year, score, hint and fun fact
+
+--- 5. no record entry the files no longer ship ---
+  110 record entries, each still shipped
+
+--- 6. the real Hall of Fame: sourced, never contradicted by the verdict, and the reveal says it ---
+  9 cards in a real hall with the year, 13 not in (each dated), 3 soccer cards with no single hall; the reveal says "Our call" and prints the hall line
+
+--- 7. Score Predictor: a saved guess follows the sides it was typed against ---
+  9 turned round matches, the list agrees with the record; 183 save cases hold, and the hook reads and writes through them
+
+--- 8. List Quiz: Champions League season top scorers, joint ones and 2025-26 included ---
+  24 supplement rows, each on uefa.com and one independent source; code, record and migration agree; the shape keeps 2 real rows and drops 5 bad shapes; 21 answers with no table, 9 must accept names resolve
+
+simTriviaFacts: every Hall of Fame or Bust line, Guess the Year clue and Score Predictor match matches its two source record, the reveal says who is really in a Hall of Fame, old Score Predictor saves follow the new sides, the Champions League top scorer list takes every joint top scorer, and the record holds nothing the files dropped.
