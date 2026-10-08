@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+#!serial
+nav3: node .rc/x/nav3.mjs
