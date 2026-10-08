@@ -1,0 +1,2 @@
+#!serial
+start-options-1164: bash .rc/x/cm-start-options-pressed-1164.sh
