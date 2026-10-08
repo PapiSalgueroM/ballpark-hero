@@ -1,0 +1,47 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/soundToggle.test.tsx src/test/awardsNightSound.test.tsx src/test/freshBuildOptionalChunk.test.ts src/components/auth/googlePaused.test.tsx src/test/appearanceSportCopy.test.tsx src/test/authModalFocus.test.tsx src/test/clubManagerEraLoad.test.tsx src/test/clubManagerJobHunt.test.ts --testTimeout=300000 --hookTimeout=120000
+simSound: node scripts/simSound.mjs
+gate: ENGINES=chromium node scripts/playSoundGate.mjs
+simSound-all: SIM_SOUND_CONTROL=all node scripts/simSound.mjs
+simCareerAwardsNight: node scripts/simCareerAwardsNight.mjs
+sweepWeight: node scripts/sweepWeight.mjs
+eager: SOUND_GATE_CONTROL=eager PORT=4601 ENGINES=chromium node scripts/playSoundGate.mjs
+everytick: SOUND_GATE_CONTROL=everytick PORT=4602 ENGINES=chromium node scripts/playSoundGate.mjs
+nowait: SOUND_GATE_CONTROL=nowait PORT=4603 ENGINES=chromium node scripts/playSoundGate.mjs
+nohide: SOUND_GATE_CONTROL=nohide PORT=4604 ENGINES=chromium node scripts/playSoundGate.mjs
+reloadkit: SOUND_GATE_CONTROL=reloadkit PORT=4605 ENGINES=chromium node scripts/playSoundGate.mjs
+slowkit: SOUND_GATE_CONTROL=slowkit PORT=4606 ENGINES=chromium node scripts/playSoundGate.mjs
+playLightMode: ENGINES=chromium node scripts/playLightMode.mjs
+playHomeFold: ENGINES=chromium node scripts/playHomeFold.mjs
+simMobileChrome: ENGINES=chromium node scripts/simMobileChrome.mjs
+playIphone: ENGINES=chromium node scripts/playIphone.mjs
+drift: ONLY=/soccer-career ENGINES=chromium node scripts/playSnapshotDrift.mjs
+stability: ONLY=/soccer-career ENGINES=chromium node scripts/playRenderStability.mjs
+simStaleChunk: node scripts/simStaleChunk.mjs
+simSingleFooter: node scripts/simSingleFooter.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simCompletionOnce: node scripts/simCompletionOnce.mjs
+simNoDoubleRecord: node scripts/simNoDoubleRecord.mjs
+simDailyPuzzleContract: node scripts/simDailyPuzzleContract.mjs
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+simFetchRetry: node scripts/simFetchRetry.mjs
+simGoogleOnlyReturn: node scripts/simGoogleOnlyReturn.mjs
+simNavbarStatsReads: node scripts/simNavbarStatsReads.mjs
+simScoringCoverage: node scripts/simScoringCoverage.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simAdsense: node scripts/simAdsense.mjs
+simBrand: node scripts/simBrand.mjs
+simNbaDraftCapital: node scripts/simNbaDraftCapital.mjs
+wav: SIM_SOUND_WAV=$RC_OUT/wav node scripts/simSound.mjs | tail -20
