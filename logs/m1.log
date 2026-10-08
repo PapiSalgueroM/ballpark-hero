@@ -1,0 +1,8 @@
+MUTATION m1: RankShift: a commit after one drawn with slide off now slides (the !prev.slide test dropped)
+src/components/motion/RankShiftTable.tsx | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+RESULT m1 vitest exit=0 |     at SeasonCentre (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:1087:25)
+RESULT m1 playB exit=1 | playSeasonCentreMotion: 14 checks, 1 failed (only B1,B1i,B2,B3,B4)
+   FAIL B3. pre season to matchday 1 does not slide (20 of 20 did)
+restored: tree clean under src and scripts
+rvMut m1: 1 of 2 gates went red (caught)

@@ -1,0 +1,11 @@
+MUTATION m4: entry: moments are offered whenever the page hands onCareer (offer !== false dropped)
+src/components/soccer-career/SoccerSeasonCentre.tsx | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+build exit=0
+RESULT m4 vitest exit=0 |     at SeasonCentre (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:1087:25)
+RESULT m4 playC exit=1 | Node.js v24.21.0
+   FAIL C4. opened from the career page the latest season offers no moment
+RESULT m4 playSeasonMoments exit=0 | playSeasonMoments: 117 checks, 0 failed
+RESULT m4 playSeasonCentre exit=0 | playSeasonCentre: 40 checks, 0 failed
+restored: tree clean under src and scripts
+rvMut m4: 1 of 4 gates went red (caught)

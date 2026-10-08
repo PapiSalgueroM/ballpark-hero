@@ -1,0 +1,9 @@
+MUTATION m3: entry: finishing ANY season clears the kept place (the key guard dropped)
+src/components/soccer-career/SoccerSeasonCentre.tsx | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+build exit=0
+RESULT m3 vitest exit=0 |     at SeasonCentre (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:1087:25)
+RESULT m3 sim exit=0 | simSeasonCentreMotion: 17 checks, 0 failed
+RESULT m3 playC exit=0 | playSeasonCentreMotion: 52 checks, 0 failed (only C)
+restored: tree clean under src and scripts
+rvMut m3: 0 of 3 gates went red (SURVIVED: nothing caught it)

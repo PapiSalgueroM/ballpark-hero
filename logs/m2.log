@@ -1,0 +1,10 @@
+MUTATION m2: viewer: a resume at the LAST round is accepted (md <= M, off by one)
+src/components/season-centre/SeasonCentre.tsx | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+build exit=0
+RESULT m2 vitest exit=1 | ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+      × Season Centre: opened where he stopped (Round 1046) > is the fresh card when the place does not fit this season 312ms
+    FAIL  src/test/seasonCentreSlots.test.tsx > Season Centre: opened where he stopped (Round 1046) > is the fresh card when the place does not fit this season
+RESULT m2 playC exit=0 | playSeasonCentreMotion: 52 checks, 0 failed (only C)
+restored: tree clean under src and scripts
+rvMut m2: 1 of 2 gates went red (caught)

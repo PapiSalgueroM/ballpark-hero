@@ -1,0 +1,5 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+m1 exit=0 46s | rvMut m1: 1 of 2 gates went red (caught)
+m2 exit=0 89s | rvMut m2: 1 of 2 gates went red (caught)
+m3 exit=0 97s | rvMut m3: 0 of 3 gates went red (SURVIVED: nothing caught it)
+m4 exit=0 230s | rvMut m4: 1 of 4 gates went red (caught)
