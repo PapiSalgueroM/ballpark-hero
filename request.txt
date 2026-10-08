@@ -1,0 +1,35 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-round: node_modules/.bin/vitest run src/test/seasonCentreSlots.test.tsx src/test/rankShift.test.ts src/test/seasonResume.test.ts src/test/seasonReplays.test.tsx src/test/miniPitchScene.test.ts src/test/seasonCore.test.ts --testTimeout=300000 --hookTimeout=120000
+sim: node scripts/simSeasonCentreMotion.mjs
+sim-shift: SEASON_MOTION_SIM_CONTROL=shift node scripts/simSeasonCentreMotion.mjs
+sim-resumetag: SEASON_MOTION_SIM_CONTROL=resumetag node scripts/simSeasonCentreMotion.mjs
+sim-pagekey: SEASON_MOTION_SIM_CONTROL=pagekey node scripts/simSeasonCentreMotion.mjs
+sim-fence: SEASON_MOTION_SIM_CONTROL=fence node scripts/simSeasonCentreMotion.mjs
+flagship: node scripts/simFlagshipWeight.mjs
+flagship-static: FLAGSHIP_LAZY_CONTROL=static node scripts/simFlagshipWeight.mjs
+flagship-training: FLAGSHIP_LAZY_CONTROL=training node scripts/simFlagshipWeight.mjs
+flagship-eagerimport: FLAGSHIP_LAZY_CONTROL=eagerimport node scripts/simFlagshipWeight.mjs
+play: SHOTS=$RC_OUT ENGINES=chromium node scripts/playSeasonCentreMotion.mjs
+play-count: SEASON_MOTION_CONTROL=count ONLY=B1,B1i,B2,B3,B4 SHOTS=/tmp/ns1 ENGINES=chromium node scripts/playSeasonCentreMotion.mjs
+play-firstmount: SEASON_MOTION_CONTROL=firstmount ONLY=B1,B1i,B2,B3,B4 SHOTS=/tmp/ns2 ENGINES=chromium node scripts/playSeasonCentreMotion.mjs
+play-nosnap: SEASON_MOTION_CONTROL=nosnap ONLY=B1,B1i,B2,B3,B4 SHOTS=/tmp/ns3 ENGINES=chromium node scripts/playSeasonCentreMotion.mjs
+play-pitchside: SEASON_MOTION_CONTROL=pitchside ONLY=B5 SHOTS=/tmp/ns4 ENGINES=chromium node scripts/playSeasonCentreMotion.mjs
+play-floor: SEASON_MOTION_CONTROL=floor ONLY=C PORT=4561 SHOTS=/tmp/ns5 ENGINES=chromium node scripts/playSeasonCentreMotion.mjs
+play-lock: SEASON_MOTION_CONTROL=lock ONLY=C PORT=4562 SHOTS=/tmp/ns6 ENGINES=chromium node scripts/playSeasonCentreMotion.mjs
+play-tableview: SEASON_MOTION_CONTROL=tableview ONLY=C PORT=4563 SHOTS=/tmp/ns7 ENGINES=chromium node scripts/playSeasonCentreMotion.mjs
+play-pitchlayer: SEASON_MOTION_CONTROL=pitchlayer ONLY=C PORT=4564 SHOTS=/tmp/ns8 ENGINES=chromium node scripts/playSeasonCentreMotion.mjs
+sweep: ENGINES=chromium node scripts/sweepWeight.mjs
+a11y: node scripts/simAccessibility.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rivals: node scripts/simNoRivalNames.mjs
+playSeasonCentre: ENGINES=chromium node scripts/playSeasonCentre.mjs
+playSeasonMoments: ENGINES=chromium node scripts/playSeasonMoments.mjs
+playReducedMotion: ENGINES=chromium node scripts/playReducedMotion.mjs
+playLeagueTableFit: ENGINES=chromium node scripts/playLeagueTableFit.mjs
+playFlagshipLazy: ENGINES=chromium node scripts/playFlagshipLazy.mjs
+simSeasonLaw: node scripts/simSeasonLaw.mjs
+simSeasonMoments: node scripts/simSeasonMoments.mjs
+simSeasonCentreTable: node scripts/simSeasonCentreTable.mjs
+simPrerender: node scripts/simPrerender.mjs
