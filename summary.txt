@@ -1,0 +1,5 @@
+vitest-whole exit=1 413s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/frontOfficeRatings.test.ts,title=src/lib/frontOfficeRatings.test.ts > NFL opening rating checkpoint > k
+offline-nocount exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridOffline.test.tsx,title=src/test/collegeGridOffline.test.tsx > College Grid offline > (4b) a
+fc-paged exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridFailClosed.test.tsx,title=src/test/collegeGridFailClosed.test.tsx > College Grid fail close
+fc-acceptmissing exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridFailClosed.test.tsx,title=src/test/collegeGridFailClosed.test.tsx > College Grid fail close
+round-files exit=1 20s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/dailySaveShapes.test.tsx,title=src/test/dailySaveShapes.test.tsx > a damaged daily save resets itself 
