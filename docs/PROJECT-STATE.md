@@ -1,4 +1,4 @@
-## Round 1089, Soccer Career panel nesting, QA3 pending (2026-10-07)
+## Round 1089, Soccer Career panel nesting, QA4 pending (2026-10-07)
 
 Codex owns this isolated page repair before the 1047 page work. Base is
 `6f57ce7818f152b4efdc75027d267c49927a2d8b`. One closing `div` moves from between
@@ -20,7 +20,15 @@ QA3 adds a Reveal-only local fixture from the existing 557 baked 2026 player rec
 actual cached assets, an explicit empty live board and rejected completion writes.
 It preserves rounded-value/current-club limits and requires real Dart/Clue play.
 Unknown requests stay fatal; the original harness, inputs, guard and assertions hold.
-QA3 is pending. No full-career, animation, local runtime, merge or publication claim.
+QA3 `6d7a8845`, run `37708456018`, remains RED: 55/56 old checks passed,
+including all twenty readers. Native passed unchanged; full artifact `11521138817`
+retains 1,744 files. Direct Reveal reached 60 presses with zero yanks/lost tops,
+but the fixture observer did not record Clue play. Its mixed-case bank check conflicts
+with the source's uppercase CSS; the failed Clue DOM was not retained to confirm that
+explanation. The runner also rejected two exact GETs for `flagcdn.com/w40/qa.png`.
+QA4 adds existing map-country flag mappings, narrowly normalizes the bank label's
+case, and retains closing Dart/Clue DOM even when a required surface is missing.
+All prior reds remain recorded. No full-career, animation, local runtime, merge or publication claim.
 
 ## Release AK LIVE, 2026-10-07 15:12 EDT, and the split of work with Codex
 

@@ -140,6 +140,7 @@ async function prepare() {
   for (const row of assets) { const body = fs.readFileSync(path.join(ROOT, 'soccer-hub-grid-artifacts/asset-cache', row.file)); assert.equal(sha(body), row.sha256); fs.writeFileSync(path.join(OUT, 'cache', row.file), body); }
   const countries = new Set(['un']);
   for (const p of [...E.players, ...E.LEGENDS]) { const code = E.flagEmojiToIso(E.flagFor(p.nationality)); if (code) countries.add(code); const mapped = E.FLAG_CODES[p.nationality]; if (mapped) countries.add(mapped); }
+  for (const country of E.GEO_COUNTRIES) { const mapped = E.FLAG_CODES[E.dbNamesFor(country)[0]]; if (mapped) countries.add(mapped); }
   for (const code of [...countries].sort()) for (const width of [40, 80]) {
     if (code === 'gb-eng') continue; // Both actual flag components render this code inline.
     const url = `https://flagcdn.com/w${width}/${code}.png`; if (assets.some(row => row.url === url)) continue;
@@ -166,7 +167,7 @@ function install() {
   for (const [input, hash] of Object.entries(prep.inputAfter)) assert.equal(fileSha(path.join(ROOT, input)), hash);
   const assetsFile = path.join(OUT, 'assets.json'); assert.equal(fileSha(assetsFile), prep.assetsSha256);
   const assets = new Map(JSON.parse(fs.readFileSync(assetsFile)).map(row => { const body = fs.readFileSync(path.join(OUT, 'cache', row.file)); assert.equal(sha(body), row.sha256); assert.equal(body.length, row.bytes); return [row.url, { ...row, body }]; }));
-  const report = { status: 'running', sourceBefore: sourceHashes(), preparation: prep, requests: [], surfaces: [], errors: [], sockets: [], realForwardedWrites: 0 };
+  const report = { status: 'running', sourceBefore: sourceHashes(), preparation: prep, requests: [], surfaces: [], closingObservations: [], errors: [], sockets: [], realForwardedWrites: 0 };
   const persist = () => save(path.join(dir, 'report.json'), report);
   const fail = error => { report.errors.push({ name: error.name, message: error.message, stack: error.stack }); persist(); };
   const pending = new Set();
@@ -175,14 +176,19 @@ function install() {
     await context.addInitScript(() => {
       window.__revealFixtureSurfaces = [];
       const inspect = () => {
+        if (!['/dart-draft', '/clue-auction'].includes(location.pathname)) return;
         const main = document.querySelector('#dukb-main') || document.querySelector('main'); if (!main) return;
         const text = main.innerText || '';
         const target = location.pathname === '/clue-auction' ? main.querySelector('input[aria-label="Name the secret player"]') : [...main.querySelectorAll('h2')].find(el => el.textContent === 'Pick the position you throw for');
         const rect = target?.getBoundingClientRect(), visible = rect && rect.width > 0 && rect.height > 0 && getComputedStyle(target).visibility === 'visible';
         const dart = !!visible && location.pathname === '/dart-draft' && /Throw\s+\d+\/11/.test(text);
-        const clue = !!visible && location.pathname === '/clue-auction' && text.includes('Bank, and your score if you solve it now');
-        if ((dart || clue) && !window.__revealFixtureSurfaces.some(row => row.route === location.pathname)) window.__revealFixtureSurfaces.push({ route: location.pathname, dart, clue, target: target.outerHTML, rect: rect.toJSON(), text, html: main.outerHTML });
+        const bankTextPresent = text.toLowerCase().includes('bank, and your score if you solve it now');
+        const clue = !!visible && location.pathname === '/clue-auction' && bankTextPresent;
+        const observation = { route: location.pathname, dart, clue, bankTextPresent, targetVisible: !!visible, target: target?.outerHTML || null, rect: rect?.toJSON() || null, text, html: main.outerHTML };
+        window.__revealFixtureLastObservation = observation;
+        if ((dart || clue) && !window.__revealFixtureSurfaces.some(row => row.route === location.pathname)) window.__revealFixtureSurfaces.push(observation);
       };
+      window.__inspectRevealFixture = inspect;
       document.addEventListener('DOMContentLoaded', () => { inspect(); new MutationObserver(inspect).observe(document.documentElement, { subtree: true, childList: true, characterData: true }); });
     });
     await context.route('**/*', route => {
@@ -204,7 +210,14 @@ function install() {
     await context.routeWebSocket('**/*', route => { report.sockets.push(new URL(route.url()).origin); fail(new Error('Unexpected socket')); return route.close(); });
     const close = context.close.bind(context);
     context.close = async (...args) => {
-      try { for (const page of context.pages()) report.surfaces.push(...await page.evaluate(() => window.__revealFixtureSurfaces || [])); await Promise.all([...pending]); persist(); }
+      try {
+        for (const page of context.pages()) {
+          const observed = await page.evaluate(() => { window.__inspectRevealFixture?.(); return { surfaces: window.__revealFixtureSurfaces || [], closing: window.__revealFixtureLastObservation || null }; });
+          report.surfaces.push(...observed.surfaces);
+          if (observed.closing) report.closingObservations.push(observed.closing);
+        }
+        await Promise.all([...pending]); persist();
+      }
       catch (error) { fail(error); }
       return close(...args);
     };

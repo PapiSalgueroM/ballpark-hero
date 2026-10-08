@@ -214,6 +214,7 @@ jobs:
             report.blocks = fs.readFileSync(receipt, 'utf8').split('\n').filter(Boolean);
             const requests = fs.readFileSync(path.join(out, 'requests.jsonl'), 'utf8').split('\n').filter(Boolean).map(line => JSON.parse(line));
             report.observations = { installed: requests.filter(row => row.event === 'observer-installed'), requests: requests.filter(row => row.event === 'request').length, responses: requests.filter(row => row.event === 'response').length, failures: requests.filter(row => row.event === 'requestfailed').length, socketOrigins: requests.filter(row => row.event === 'websocket').map(row => row.origin) };
+            report.fixture = JSON.parse(fs.readFileSync(path.join(childEnv.REVEAL_FIXTURE_REPORT, 'report.json')));
             report.status = report.process.code === 0 && report.process.signal === null && !report.process.error && report.blocks.length === 0 ? 'passed' : 'failed';
             save();
             assert(report.observations.installed.length > 0 && report.observations.installed.every(row => row.packageVersion === corePackage.version) && report.observations.requests > 0, 'The passive observer recorded the actual installed browser runtime requests');
@@ -221,10 +222,10 @@ jobs:
             assert.equal(report.process.signal, null, 'The original diagnostic harness was not signaled');
             assert.equal(report.process.code, 0, 'The original diagnostic harness exited successfully');
             assert.equal(report.blocks.length, 0, 'Diagnostic remains red after any offline transport block');
-            report.fixture = JSON.parse(fs.readFileSync(path.join(childEnv.REVEAL_FIXTURE_REPORT, 'report.json')));
             assert.equal(report.fixture.status, 'passed');
             assert.equal(report.fixture.errors.length, 0); assert.equal(report.fixture.sockets.length, 0); assert.equal(report.fixture.realForwardedWrites, 0);
             assert(report.fixture.surfaces.some(row => row.dart) && report.fixture.surfaces.some(row => row.clue));
+            assert(['/dart-draft', '/clue-auction'].every(route => report.fixture.closingObservations.some(row => row.route === route)), 'Actual closing DOM is retained for both fixture-backed games');
             assert.deepEqual(report.fixture.sourceAfter, report.fixture.sourceBefore);
             assert.deepEqual(report.fixture.inputAfter, report.fixture.preparation.inputAfter);
           } catch (error) { report.status = 'failed'; report.failure = { name: error.name, message: error.message, stack: error.stack }; throw error; }
@@ -249,6 +250,7 @@ jobs:
           const r = JSON.parse(fs.readFileSync('soccer-hub-grid-artifacts/reveal-runner/report.json'));
           assert.equal(r.status, 'passed'); assert.equal(r.errors.length, 0); assert.equal(r.sockets.length, 0); assert.equal(r.realForwardedWrites, 0);
           assert(r.surfaces.some(row => row.dart) && r.surfaces.some(row => row.clue));
+          assert(['/dart-draft', '/clue-auction'].every(route => r.closingObservations.some(row => row.route === route)), 'Actual closing DOM is retained for both fixture-backed games');
           assert.deepEqual(r.sourceAfter, r.sourceBefore); assert.deepEqual(r.inputAfter, r.preparation.inputAfter);
           console.log('The unchanged Reveal harness reached actual Dart and Clue play under the declared finite fixture.');
           NODE
