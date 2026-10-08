@@ -1,0 +1,6 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+probe exit=0 2s |    Duration  1.48s (transform 87ms, setup 0ms, collect 98ms, tests 39ms, environment 567ms, prepare 333ms)
+vitest exit=0 6s |    Duration  4.65s (transform 210ms, setup 97ms, collect 331ms, tests 2.86s, environment 542ms, prepare 245ms)
+tsc exit=0 93s | 
+plain exit=0 135s | playTranslatedPage: 447 checks, 0 failed
+undocopies exit=1 135s | playTranslatedPage: 447 checks, 8 failed (control "undocopies", red on purpose)

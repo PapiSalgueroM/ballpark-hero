@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/translateGuard.test.tsx --testTimeout=300000 --hookTimeout=120000
+probe: node_modules/.bin/vitest run --config .rc/x/vf-vitest.config.ts
+plain: ENGINES=chromium node scripts/playTranslatedPage.mjs
+undocopies: PLAY_TRANSLATED_CONTROL=undocopies ENGINES=chromium node scripts/playTranslatedPage.mjs

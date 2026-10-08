@@ -1,0 +1,14 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | .rc/x/vf-probe.test.ts[2m > [22m[2mreviewer probe: show original after layer two refreshed a string[2m > [22m[2mthe number React writes after the translator undid itself reaches the page
+[22m[39mPROBE after show original: page says "Age 18", React holds "Age 18"; stats before {"swaps":4,"removed":0,"inserted":0,"restored":2,"returned":0} after {"swaps":4,"removed":0,"inserted":0,"restored":4,"returned":2}; num.isConnected=false
+PROBE removeChild(num): threw="" page says "Age "
+
+ [32m✓[39m .rc/x/vf-probe.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 39[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m   Start at [22m 09:52:19
+[2m   Duration [22m 1.48s[2m (transform 87ms, setup 0ms, collect 98ms, tests 39ms, environment 567ms, prepare 333ms)[22m
+
