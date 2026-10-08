@@ -3,8 +3,24 @@
    real rule below is sourced in docs/audits/US-HALL-RULES-2026-10.md and
    scripts/simCareerHall.mjs holds these numbers to that file's table. */
 
-import { nhlLegacyOf, nhlShouldRetire, nhlTeamLabelOf, type NhlCareerState } from "./nhlMyCareer";
-import { usCareerHall } from "./careerHallOfFame";
+import { nhlLegacyOf, NHL_LEGACY_WEIGHTS, nhlShouldRetire, nhlTeamLabelOf, type NhlCareerState } from "./nhlMyCareer";
+import { HALL_CALIBRATION, hallVoterRulesFor, usCareerHall, type HallVoterWords } from "./careerHallOfFame";
+
+/* Round 1051: what the voters weigh, in words. The card prints the sentence;
+   the "?" builds its rule and its worked example from the rest. "The major
+   awards" on purpose: the engine counts a different trophy by position under
+   one name, and a sentence that names none cannot mislabel one. The example
+   names a standout family of the calibration 2 table, and section 19 of
+   scripts/simCareerHall.mjs holds it against the engine. */
+export const NHL_HALL_WORDS: HallVoterWords = {
+  weighs: "The voters weigh the hardware first: Cups, the major awards, All-Star years. Then the whole stat sheet, goals and assists each on their own.",
+  hardware: "Cups, the major awards, All-Star years",
+  families: "goals, assists, points or a goalie's wins",
+  example: { positions: ["LW", "RW"], stat: "assists", one: "winger", who: "wingers", family: "assists" },
+};
+
+/** The two lines the page's "?" adds, built from the words above and the table careers retire on today. */
+export const nhlHallHelpRules = (): string[] => hallVoterRulesFor(NHL_HALL_WORDS, NHL_LEGACY_WEIGHTS[HALL_CALIBRATION]);
 
 export const NHL_CAREER_HALL = usCareerHall<NhlCareerState>({
   rules: {
@@ -28,6 +44,7 @@ export const NHL_CAREER_HALL = usCareerHall<NhlCareerState>({
   // Game tuning. The hard stop (nhlShouldRetire) is untouched.
   retirement: { minAge: 31, dropFromPeak: 8, floor: 69 },
   legacy: nhlLegacyOf,
+  weighs: NHL_HALL_WORDS.weighs,
   shouldRetire: nhlShouldRetire,
   teamLabel: nhlTeamLabelOf,
 });

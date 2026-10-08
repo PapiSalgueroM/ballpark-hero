@@ -3,8 +3,24 @@
    real rule below is sourced in docs/audits/US-HALL-RULES-2026-10.md and
    scripts/simCareerHall.mjs holds these numbers to that file's table. */
 
-import { mlbLegacyOf, mlbShouldRetire, mlbTeamLabelOf, type MlbCareerState } from "./mlbMyCareer";
-import { usCareerHall } from "./careerHallOfFame";
+import { mlbLegacyOf, MLB_LEGACY_WEIGHTS, mlbShouldRetire, mlbTeamLabelOf, type MlbCareerState } from "./mlbMyCareer";
+import { HALL_CALIBRATION, hallVoterRulesFor, usCareerHall, type HallVoterWords } from "./careerHallOfFame";
+
+/* Round 1051: what the voters weigh, in words. The card prints the sentence;
+   the "?" builds its rule and its worked example from the rest. "The major
+   awards" on purpose: the engine counts a different trophy by position under
+   one name, and a sentence that names none cannot mislabel one. The example
+   names a standout family of the calibration 2 table, and section 19 of
+   scripts/simCareerHall.mjs holds it against the engine. */
+export const MLB_HALL_WORDS: HallVoterWords = {
+  weighs: "The voters weigh the hardware first: rings, the major awards, All-Star years. Then the whole stat sheet, steals as much as homers.",
+  hardware: "rings, the major awards, All-Star years",
+  families: "home runs, RBI, steals, wins or strikeouts",
+  example: { positions: ["CF"], stat: "sb", one: "center fielder", who: "center fielders", family: "steals" },
+};
+
+/** The two lines the page's "?" adds, built from the words above and the table careers retire on today. */
+export const mlbHallHelpRules = (): string[] => hallVoterRulesFor(MLB_HALL_WORDS, MLB_LEGACY_WEIGHTS[HALL_CALIBRATION]);
 
 export const MLB_CAREER_HALL = usCareerHall<MlbCareerState>({
   rules: {
@@ -27,6 +43,7 @@ export const MLB_CAREER_HALL = usCareerHall<MlbCareerState>({
   // Game tuning. The hard stop (mlbShouldRetire) is untouched.
   retirement: { minAge: 32, dropFromPeak: 8, floor: 68 },
   legacy: mlbLegacyOf,
+  weighs: MLB_HALL_WORDS.weighs,
   shouldRetire: mlbShouldRetire,
   teamLabel: mlbTeamLabelOf,
   deckJerseyFlag: "b_number",

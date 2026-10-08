@@ -1,0 +1,211 @@
+{
+  "note": "Round 1051: real career shapes and the ballot the real Hall gave them, for section 18 of scripts/simCareerHall.mjs. Scripts side only: nothing in src or in shipped copy names a real player. Every value was read off a page fetched on the read date, and each source records the words the page said. A fact that could not be two sourced from two different publishers (neither a wiki) is not here: a thin table is honest, a padded one is not.",
+  "read": "2026-10-07",
+  "selection": {
+    "writtenBeforeScoring": true,
+    "rule": [
+      "FAMILIES. Every standout family of the calibration 2 tables that calibration 1 did not read and that has an official published career list: NBA rebounds and assists; NFL receptions, receiving touchdowns, interceptions, sacks and field goals; MLB saves and steals; NHL goals and assists.",
+      "NO FAMILY ANCHORS for tackles (the league keeps no official career list), passes defensed and forced fumbles (not counted the same way across eras), or holds (not an official statistic).",
+      "WHO. For each family, the first five names in the published career list's own order who are retired, whose last season is 2015 or earlier (so at least five classes have judged them), and who are not skipped below.",
+      "BASEBALL. The writers' ballot runs ten years, so a man whose last season is 2011 to 2015 and who is not yet inducted would be recorded as pending and kept out of every count. A man the writers dropped under five percent is never, whatever the year. A man already inducted is settled.",
+      "TWO OF EACH. If a sport then holds fewer than two anchors of any ballot kind (first, later, never), the next names down the same lists are added, one list at a time in the order above, until it holds two.",
+      "SKIPPED, each recorded with its reason: a ban or a scandal that decided his case; a career or part of a stat line in a league the engine does not model; a position change that splits his line; a career that ended before the awards the engine counts were given.",
+      "COUNTS. Awards are the engine's own counts and nothing else. A ring is a league title won as a player. An All-Star count is seasons selected, never games. NBA: titles, MVPs, Finals MVPs, All-NBA selections of any team. NFL: titles, first team AP All-Pro selections, and the AP MVP for QB, RB, WR, TE and K but the AP Defensive Player of the Year for LB, CB and EDGE. MLB: World Series titles, All-Star seasons, and MVPs for hitters but Cy Young Awards for pitchers. NHL: Stanley Cups, Conn Smythes, All-Star Game selections, and the Hart for forwards, the Norris for defencemen, the Vezina for goalies.",
+      "TOTALS. Regular season only, every family the engine's season line records for the position. A total that could not be two sourced is null with its reason, and the harness reads it as zero and says so.",
+      "BALLOT. Judged on the ballot the engine models (the writers' ballot in baseball, the modern era vote in football, the North American committee in basketball, the player category in hockey). first: the first class he was eligible for took him. later: a later class of that same ballot took him. never: it has not as of the read date. A man a veterans or era committee put in after the main ballot passed on him is never with route committee, and is printed apart, outside every count.",
+      "TWO READINGS, both printed. raw: the real line as it is, at real scale, with no conversion constant. books: for an anchor taken off a family list whose position carries that family as a standout, the engine career with that family's total set to the calibration 2 table's to mark for his position, every other total multiplied by the same factor (the to mark over his real total, rounded), his awards raw, his seasons raw but no more than the sport's hard stop (19 NFL, 21 NBA, 21 MLB, 22 NHL). A top five career on the real list is a top of the books career by the standout's own definition, and that is all the rule claims. An anchor whose position does not carry his family as a standout, and a name added from lower down a list only to reach two of each ballot, is read raw only and printed apart."
+    ],
+    "sportsBuilt": ["mlb"],
+    "sportsNotBuilt": {
+      "nba": "not built in this session (the family lists were read; the per player sourcing was not finished)",
+      "nfl": "not built in this session (Pro Football Reference refused the fetch; nfl.com and the Hall's site would have to carry every group)",
+      "nhl": "not built in this session"
+    }
+  },
+  "decisions": [
+    { "sport": "mlb", "pos": "LF", "kind": "standout", "stat": "sb", "action": "halved", "what": "steals standout",
+      "why": "mlb-sb-4 (real never: three votes on his one ballot) was in the Hall on calibration 2 with the full push, 570 in the books reading and 593 in the raw one against a line of 500. At half he is out (420 and 431).",
+      "counts": "in or out and exact, calibration 1 > 2. Before: raw 9 > 7 and 6 > 4 of 9, books 8 > 6 and 5 > 3 of 8 (with the reliever's saves below). After this and the reliever's saves both halved: raw 9 > 8 and 6 > 5, books 8 > 7 and 5 > 4." },
+    { "sport": "mlb", "pos": "RP", "kind": "standout", "stat": "saves", "action": "dropped", "what": "saves standout",
+      "why": "mlb-saves-4 (real never: 4.6 percent on his one ballot) was a first ballot Hall of Famer on calibration 2 in the books reading, 945 with the full push and still 795 with it halved.",
+      "counts": "Halved: raw 9 > 8 and 6 > 5 of 9, books 8 > 7 and 5 > 4 of 8. Dropped: raw 9 > 8 and 6 > 5 of 9, books 4 > 4 and 3 > 3 of 4 (no reliever has a books reading any more)." },
+    { "sport": "mlb", "pos": "RP", "kind": "base", "action": "dropped", "what": "base",
+      "why": "mlb-saves-4 sits at 469 on hardware and seasons alone (four All-Star seasons, 21 seasons), 31 under the line. The base (saves per 8, holds per 12, strikeouts per 40) put him in at 546 in the raw reading; halved (per 16, 24 and 80) he was still in at 508, by 8.",
+      "counts": "Base whole: raw 9 > 8 and 6 > 5 of 9. Halved: raw 9 > 8 and 6 > 5. Dropped: raw 9 > 9 and 6 > 6, books 4 > 4 and 3 > 3 of 4." }
+  ],
+  "measured": {
+    "mlb": { "raw2": { "inOut": 9, "exact": 6, "n": 9 }, "books2": { "inOut": 4, "exact": 3, "n": 4 } }
+  },
+  "lists": [
+    { "sport": "mlb", "family": "saves", "publisher": "Baseball-Reference", "url": "https://www.baseball-reference.com/leaders/SV_career.shtml", "read": "2026-10-07", "says": "1 Mariano Rivera+ 652, 2 Trevor Hoffman+ 601, 3 Kenley Jansen (bold, active) 498, 4 Lee Smith+ 478, 5 Craig Kimbrel (bold, active) 441, 6 Francisco Rodriguez 437, 7 John Franco 424, 8 Billy Wagner+ 422, 9 Aroldis Chapman (bold, active) 402, 10 Dennis Eckersley+ 390" },
+    { "sport": "mlb", "family": "sb", "publisher": "Baseball-Reference", "url": "https://www.baseball-reference.com/leaders/SB_career.shtml", "read": "2026-10-07", "says": "1 Rickey Henderson+ 1406, 2 Lou Brock+ 938, 3 Billy Hamilton+ 914, 4 Ty Cobb+ 897, 5 Tim Raines+ 808, 6 Vince Coleman 752, 7 Arlie Latham 742, 8 Eddie Collins+ 741, 9 Max Carey+ 738, 10 Honus Wagner+ 723, 11 Joe Morgan+ 689, 12 Willie Wilson 668" }
+  ],
+  "skipped": [
+    { "sport": "mlb", "family": "saves", "player": "Kenley Jansen", "reason": "active (bold on the career list)" },
+    { "sport": "mlb", "family": "saves", "player": "Craig Kimbrel", "reason": "active (bold on the career list)" },
+    { "sport": "mlb", "family": "saves", "player": "Francisco Rodriguez", "reason": "last season after 2015: Baseball-Reference gives his last game as June 22, 2017", "url": "https://www.baseball-reference.com/players/r/rodrifr03.shtml" },
+    { "sport": "mlb", "family": "sb", "player": "Billy Hamilton", "reason": "career ended before the awards the engine counts were given: Baseball-Reference gives his last game as September 16, 1901", "url": "https://www.baseball-reference.com/players/h/hamilbi01.shtml" },
+    { "sport": "mlb", "family": "sb", "player": "Ty Cobb", "reason": "career ended before the awards the engine counts were given: Baseball-Reference gives his last game as September 11, 1928", "url": "https://www.baseball-reference.com/players/c/cobbty01.shtml" },
+    { "sport": "mlb", "family": "sb", "player": "Arlie Latham", "reason": "career ended before the awards the engine counts were given: Baseball-Reference gives his last game as September 30, 1909", "url": "https://www.baseball-reference.com/players/l/lathaar01.shtml" },
+    { "sport": "mlb", "family": "sb", "player": "Eddie Collins", "reason": "career ended before the awards the engine counts were given: Baseball-Reference gives his last game as August 5, 1930", "url": "https://www.baseball-reference.com/players/c/collied01.shtml" },
+    { "sport": "mlb", "family": "sb", "player": "Max Carey", "reason": "career ended before the awards the engine counts were given: Baseball-Reference gives his last game as September 29, 1929", "url": "https://www.baseball-reference.com/players/c/careyma01.shtml" },
+    { "sport": "mlb", "family": "sb", "player": "Honus Wagner", "reason": "career ended before the awards the engine counts were given: Baseball-Reference gives his last game as September 17, 1917", "url": "https://www.baseball-reference.com/players/w/wagneho01.shtml" }
+  ],
+  "anchors": [
+    { "id": "mlb-saves-1", "sport": "mlb", "player": "Mariano Rivera", "pos": "RP", "family": "saves", "fromList": true,
+      "seasons": 19, "lastSeason": 2013, "games": 1115,
+      "totals": { "wins": 82, "so": 1173, "saves": 652, "holds": null },
+      "nulls": { "holds": "not an official statistic; no two sources" },
+      "awards": { "rings": 5, "mvpCys": 0, "allStars": 13 },
+      "hall": { "ballot": "first", "class": 2019, "firstEligibleClass": 2019, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "Baseball-Reference", "url": "https://www.baseball-reference.com/players/r/riverma01.shtml", "read": "2026-10-07", "says": "19 Yrs; W 82, SV 652, SO 1173, G 1115; last game September 26, 2013" },
+          { "publisher": "Baseball Almanac", "url": "https://www.baseball-almanac.com/players/player.php?p=riverma01", "read": "2026-10-07", "says": "19 Years; G 1,115, W 82, SV 652, SO 1,173; last game 09-26-2013" } ],
+        "awards": [
+          { "publisher": "Baseball-Reference", "url": "https://www.baseball-reference.com/players/r/riverma01.shtml", "read": "2026-10-07", "says": "13x All-Star, 5x World Series; no Cy Young Award listed" },
+          { "publisher": "National Baseball Hall of Fame", "url": "https://baseballhall.org/hall-of-famers/rivera-mariano", "read": "2026-10-07", "says": "The Yankees won five World Series titles during his 19-season career; his 13th appearance on the AL All-Star squad" } ],
+        "hall": [
+          { "publisher": "Baseball-Reference", "url": "https://www.baseball-reference.com/players/r/riverma01.shtml", "read": "2026-10-07", "says": "Inducted as a player in 2019. Voted by BBWAA on 425/425 ballots." },
+          { "publisher": "Baseball Almanac", "url": "https://www.baseball-almanac.com/players/player.php?p=riverma01", "read": "2026-10-07", "says": "Class of 2019; a first ballot inductee into the National Baseball Hall of Fame" } ] } },
+    { "id": "mlb-saves-2", "sport": "mlb", "player": "Trevor Hoffman", "pos": "RP", "family": "saves", "fromList": true,
+      "seasons": 18, "lastSeason": 2010, "games": 1035,
+      "totals": { "wins": 61, "so": 1133, "saves": 601, "holds": null },
+      "nulls": { "holds": "not an official statistic; no two sources" },
+      "awards": { "rings": 0, "mvpCys": 0, "allStars": 7 },
+      "hall": { "ballot": "later", "class": 2018, "firstEligibleClass": 2016, "ballotNumber": 3, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "Baseball-Reference", "url": "https://www.baseball-reference.com/players/h/hoffmtr01.shtml", "read": "2026-10-07", "says": "Trevor Hoffman played 18 seasons; W 61, SV 601, SO 1133, G 1035; last game September 29, 2010" },
+          { "publisher": "National Baseball Hall of Fame", "url": "https://baseballhall.org/hall-of-famers/hoffman-trevor", "read": "2026-10-07", "says": "After 18 major league seasons; Games 1,035, Wins 61, Saves 601, Strikeouts 1,133" } ],
+        "awards": [
+          { "publisher": "Baseball-Reference", "url": "https://www.baseball-reference.com/players/h/hoffmtr01.shtml", "read": "2026-10-07", "says": "7x All-Star; Trevor Hoffman has never won a World Series; no Cy Young Award listed, only voting finishes" },
+          { "publisher": "Baseball Almanac", "url": "https://www.baseball-almanac.com/players/player.php?p=hoffmtr01", "read": "2026-10-07", "says": "All-Star game stats for 1998, 1999, 2000, 2002, 2006, 2007 and 2009 (seven seasons); no championship and no Cy Young Award listed" } ],
+        "hall": [
+          { "publisher": "Baseball-Reference", "url": "https://www.baseball-reference.com/players/h/hoffmtr01.shtml", "read": "2026-10-07", "says": "Inducted as a player in 2018. Voted by BBWAA on 337/422 ballots." },
+          { "publisher": "Baseball Writers' Association of America", "url": "https://bbwaa.com/18-hof/", "read": "2026-10-07", "says": "Hoffman with 337 votes (79.9); Hoffman, who missed election in 2017 by five votes, was in his third year of eligibility" } ] } },
+    { "id": "mlb-saves-3", "sport": "mlb", "player": "Lee Smith", "pos": "RP", "family": "saves", "fromList": true,
+      "seasons": 18, "lastSeason": 1997, "games": 1022,
+      "totals": { "wins": 71, "so": 1251, "saves": 478, "holds": null },
+      "nulls": { "holds": "not an official statistic; no two sources" },
+      "awards": { "rings": 0, "mvpCys": 0, "allStars": 7 },
+      "hall": { "ballot": "never", "route": "committee", "committeeClass": 2019, "firstEligibleClass": 2003 },
+      "sources": {
+        "line": [
+          { "publisher": "Baseball-Reference", "url": "https://www.baseball-reference.com/players/s/smithle02.shtml", "read": "2026-10-07", "says": "18 Yrs; W 71, SV 478, SO 1,251, G 1,022; last game July 2, 1997" },
+          { "publisher": "Baseball Almanac", "url": "https://www.baseball-almanac.com/players/player.php?p=smithle02", "read": "2026-10-07", "says": "18 Years; 1,022 G, 71 W, 478 SV, 1,251 SO; last game July 2, 1997" } ],
+        "awards": [
+          { "publisher": "Baseball-Reference", "url": "https://www.baseball-reference.com/players/s/smithle02.shtml", "read": "2026-10-07", "says": "7x All-Star; has never won a World Series; no Cy Young Award listed" },
+          { "publisher": "Baseball Almanac", "url": "https://www.baseball-almanac.com/players/player.php?p=smithle02", "read": "2026-10-07", "says": "All-Star game stats in seven seasons (1983, 1987, 1991, 1992, 1993, 1994, 1995); every World Series entry is marked with a dash; no Cy Young Award mentioned" } ],
+        "hall": [
+          { "publisher": "Baseball-Reference", "url": "https://www.baseball-reference.com/awards/hof_2011.shtml", "read": "2026-10-07", "says": "Lee Smith, 9th year on the ballot, 263 votes, 45.3%" },
+          { "publisher": "Baseball Almanac", "url": "https://www.baseball-almanac.com/players/player.php?p=smithle02", "read": "2026-10-07", "says": "inducted by the Today's Game Committee unanimously (16 of 16 votes) on December 9, 2018; appeared on the ballot from 2003 through 2017; Class of 2019" } ] } },
+    { "id": "mlb-saves-4", "sport": "mlb", "player": "John Franco", "pos": "RP", "family": "saves", "fromList": true,
+      "seasons": 21, "lastSeason": 2005, "games": 1119,
+      "totals": { "wins": 90, "so": 975, "saves": 424, "holds": null },
+      "nulls": { "holds": "not an official statistic; no two sources" },
+      "awards": { "rings": 0, "mvpCys": 0, "allStars": 4 },
+      "hall": { "ballot": "never", "route": "main", "firstEligibleClass": 2011 },
+      "sources": {
+        "line": [
+          { "publisher": "Baseball-Reference", "url": "https://www.baseball-reference.com/players/f/francjo01.shtml", "read": "2026-10-07", "says": "21 Yrs; W 90, SV 424, SO 975, G 1119; last game July 1, 2005" },
+          { "publisher": "Baseball Almanac", "url": "https://www.baseball-almanac.com/players/player.php?p=francjo01", "read": "2026-10-07", "says": "21 Years; 1,119 games, 90 wins, 424 saves, 975 strikeouts; last game 07-01-2005" } ],
+        "awards": [
+          { "publisher": "Baseball-Reference", "url": "https://www.baseball-reference.com/players/f/francjo01.shtml", "read": "2026-10-07", "says": "4x All-Star; has never won a World Series; no Cy Young or MVP wins listed" },
+          { "publisher": "Baseball Almanac", "url": "https://www.baseball-almanac.com/players/player.php?p=francjo01", "read": "2026-10-07", "says": "four-time All-Star (1986, 1987, 1989, 1990); no World Series title and no Cy Young Award mentioned" } ],
+        "hall": [
+          { "publisher": "Baseball-Reference", "url": "https://www.baseball-reference.com/awards/hof_2011.shtml", "read": "2026-10-07", "says": "John Franco, 1st year on the ballot, 27 votes, 4.6%; players are removed from the ballot if named on fewer than 5% of ballots" },
+          { "publisher": "Baseball Almanac", "url": "https://www.baseball-almanac.com/players/player.php?p=francjo01", "read": "2026-10-07", "says": "received 27 votes (4.6% of the 581 ballots) during his first year of eligibility on the 2011 Hall of Fame Ballot, missing the required 5% threshold" } ] } },
+    { "id": "mlb-saves-5", "sport": "mlb", "player": "Billy Wagner", "pos": "RP", "family": "saves", "fromList": true,
+      "seasons": 16, "lastSeason": 2010, "games": 853,
+      "totals": { "wins": 47, "so": 1196, "saves": 422, "holds": null },
+      "nulls": { "holds": "not an official statistic; no two sources" },
+      "awards": { "rings": 0, "mvpCys": 0, "allStars": 7 },
+      "hall": { "ballot": "later", "class": 2025, "firstEligibleClass": 2016, "ballotNumber": 10, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "Baseball-Reference", "url": "https://www.baseball-reference.com/players/w/wagnebi02.shtml", "read": "2026-10-07", "says": "16 Yrs; W 47, SV 422, SO 1196, G 853; last game October 3, 2010" },
+          { "publisher": "National Baseball Hall of Fame", "url": "https://baseballhall.org/hall-of-famers/wagner-billy", "read": "2026-10-07", "says": "16-year MLB career; Games 853, Wins 47, Saves 422, Strikeouts 1,196" } ],
+        "awards": [
+          { "publisher": "Baseball-Reference", "url": "https://www.baseball-reference.com/players/w/wagnebi02.shtml", "read": "2026-10-07", "says": "7x All-Star; Billy Wagner has never won a World Series; no Cy Young or MVP wins listed" },
+          { "publisher": "National Baseball Hall of Fame", "url": "https://baseballhall.org/hall-of-famers/wagner-billy", "read": "2026-10-07", "says": "earned seven All-Star selections" } ],
+        "hall": [
+          { "publisher": "Baseball-Reference", "url": "https://www.baseball-reference.com/players/w/wagnebi02.shtml", "read": "2026-10-07", "says": "Inducted in 2025. Voted by BBWAA on 325/394 ballots." },
+          { "publisher": "Baseball Writers' Association of America", "url": "https://bbwaa.com/25-hof/", "read": "2026-10-07", "says": "Billy Wagner 325 votes, 82.5 percent, on the ballot for the 10th-and-final time" } ] } },
+    { "id": "mlb-sb-1", "sport": "mlb", "player": "Rickey Henderson", "pos": "LF", "family": "sb", "fromList": true,
+      "seasons": 25, "lastSeason": 2003, "games": 3081,
+      "totals": { "hr": 297, "rbi": 1115, "sb": 1406 },
+      "awards": { "rings": 2, "mvpCys": 1, "allStars": 10 },
+      "hall": { "ballot": "first", "class": 2009, "firstEligibleClass": 2009, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "Baseball-Reference", "url": "https://www.baseball-reference.com/players/h/henderi01.shtml", "read": "2026-10-07", "says": "Leftfielder; 25 Yrs; G 3081, HR 297, RBI 1115, SB 1406; last game September 19, 2003" },
+          { "publisher": "Baseball Almanac", "url": "https://www.baseball-almanac.com/players/player.php?p=henderi01", "read": "2026-10-07", "says": "25 Years; G 3,081, HR 297, RBI 1,115, SB 1,406; last game 09-19-2003" } ],
+        "awards": [
+          { "publisher": "Baseball-Reference", "url": "https://www.baseball-reference.com/players/h/henderi01.shtml", "read": "2026-10-07", "says": "10x All-Star, 2x World Series, MVP (1990, MVP-1)" },
+          { "publisher": "National Baseball Hall of Fame", "url": "https://baseballhall.org/hall-of-famers/henderson-rickey", "read": "2026-10-07", "says": "The 10-time All-Star won the AL MVP Award in 1990; Henderson won two World Series during his career" } ],
+        "hall": [
+          { "publisher": "Baseball-Reference", "url": "https://www.baseball-reference.com/players/h/henderi01.shtml", "read": "2026-10-07", "says": "Inducted as Player in 2009. (Voted by BBWAA on 511/539 ballots)" },
+          { "publisher": "Baseball Almanac", "url": "https://www.baseball-almanac.com/players/player.php?p=henderi01", "read": "2026-10-07", "says": "Class of 2009, on his first ballot" } ] } },
+    { "id": "mlb-sb-2", "sport": "mlb", "player": "Lou Brock", "pos": "LF", "family": "sb", "fromList": true,
+      "seasons": 19, "lastSeason": 1979, "games": 2616,
+      "totals": { "hr": 149, "rbi": 900, "sb": 938 },
+      "awards": { "rings": 2, "mvpCys": 0, "allStars": 6 },
+      "hall": { "ballot": "first", "class": 1985, "firstEligibleClass": 1985, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "Baseball-Reference", "url": "https://www.baseball-reference.com/players/b/brocklo01.shtml", "read": "2026-10-07", "says": "Leftfielder; 19 Yrs; G 2616, HR 149, RBI 900, SB 938; last game September 30, 1979" },
+          { "publisher": "Baseball Almanac", "url": "https://www.baseball-almanac.com/players/player.php?p=brocklo01", "read": "2026-10-07", "says": "19 Years; G 2,616, HR 149, RBI 900, SB 938; last game 09-30-1979" } ],
+        "awards": [
+          { "publisher": "Baseball-Reference", "url": "https://www.baseball-reference.com/players/b/brocklo01.shtml", "read": "2026-10-07", "says": "6x All-Star, 2x World Series; no MVP award listed, only voting finishes" },
+          { "publisher": "Baseball Almanac", "url": "https://www.baseball-almanac.com/players/player.php?p=brocklo01", "read": "2026-10-07", "says": "a six-time N.L. All-Star; the Cardinals won the World Series in 1964 and again in 1967; no MVP award for Brock" } ],
+        "hall": [
+          { "publisher": "Baseball-Reference", "url": "https://www.baseball-reference.com/players/b/brocklo01.shtml", "read": "2026-10-07", "says": "Inducted as Player in 1985. Voted by BBWAA on 315/395 ballots." },
+          { "publisher": "Baseball Almanac", "url": "https://www.baseball-almanac.com/players/player.php?p=brocklo01", "read": "2026-10-07", "says": "elected in 1985 in his first year of eligibility; a first-ballot Hall of Fame inductee in 1985" } ] } },
+    { "id": "mlb-sb-3", "sport": "mlb", "player": "Tim Raines", "pos": "LF", "family": "sb", "fromList": true,
+      "seasons": 23, "lastSeason": 2002, "games": 2502,
+      "totals": { "hr": 170, "rbi": 980, "sb": 808 },
+      "awards": { "rings": 2, "mvpCys": 0, "allStars": 7 },
+      "hall": { "ballot": "later", "class": 2017, "firstEligibleClass": 2008, "ballotNumber": 10, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "Baseball-Reference", "url": "https://www.baseball-reference.com/players/r/raineti01.shtml", "read": "2026-10-07", "says": "Leftfielder; 23 Yrs; G 2,502, HR 170, RBI 980, SB 808; last game September 29, 2002" },
+          { "publisher": "Baseball Almanac", "url": "https://www.baseball-almanac.com/players/player.php?p=raineti01", "read": "2026-10-07", "says": "23 Years; G 2,502, HR 170, RBI 980; SB 808; last game 09-29-2002" } ],
+        "awards": [
+          { "publisher": "Baseball-Reference", "url": "https://www.baseball-reference.com/players/r/raineti01.shtml", "read": "2026-10-07", "says": "7x All-Star, 2x World Series; no MVP award listed, only voting finishes" },
+          { "publisher": "National Baseball Hall of Fame", "url": "https://baseballhall.org/hall-of-famers/raines-tim", "read": "2026-10-07", "says": "earned All-Star Game selections in each of his first seven full seasons; Raines helped the Bronx Bombers to World Series Championships in 1996 and 1998" } ],
+        "hall": [
+          { "publisher": "Baseball-Reference", "url": "https://www.baseball-reference.com/players/r/raineti01.shtml", "read": "2026-10-07", "says": "Inducted as a player in 2017, voted by the BBWAA on 380 of 442 ballots" },
+          { "publisher": "Baseball Writers' Association of America", "url": "https://bbwaa.com/17-hof/", "read": "2026-10-07", "says": "Tim Raines 380 (86.0); gained election in his 10th and final year of consideration" } ] } },
+    { "id": "mlb-sb-4", "sport": "mlb", "player": "Vince Coleman", "pos": "LF", "family": "sb", "fromList": true,
+      "seasons": 13, "lastSeason": 1997, "games": 1371,
+      "totals": { "hr": 28, "rbi": 346, "sb": 752 },
+      "awards": { "rings": 0, "mvpCys": 0, "allStars": 2 },
+      "hall": { "ballot": "never", "route": "main", "firstEligibleClass": 2003 },
+      "sources": {
+        "line": [
+          { "publisher": "Baseball-Reference", "url": "https://www.baseball-reference.com/players/c/colemvi01.shtml", "read": "2026-10-07", "says": "Leftfielder; 13 Yrs; G 1,371, HR 28, RBI 346, SB 752; last game April 14, 1997" },
+          { "publisher": "Baseball Almanac", "url": "https://www.baseball-almanac.com/players/player.php?p=colemvi01", "read": "2026-10-07", "says": "13 years; 1,371 games, 28 home runs, 346 RBI, 752 stolen bases; last game 04-14-1997" } ],
+        "awards": [
+          { "publisher": "Baseball-Reference", "url": "https://www.baseball-reference.com/players/c/colemvi01.shtml", "read": "2026-10-07", "says": "2x All-Star; Vince Coleman has never won a World Series; no MVP award, only voting finishes" },
+          { "publisher": "Baseball Almanac", "url": "https://www.baseball-almanac.com/players/player.php?p=colemvi01", "read": "2026-10-07", "says": "two-time All-Star (1988 and 1989); no championship and no MVP award mentioned" } ],
+        "hall": [
+          { "publisher": "Baseball-Reference", "url": "https://www.baseball-reference.com/awards/hof_2003.shtml", "read": "2026-10-07", "says": "Vince Coleman, 1st year on the ballot, 3 votes, 0.6%" },
+          { "publisher": "Baseball Almanac", "url": "https://www.baseball-almanac.com/hof/hofball9.shtml", "read": "2026-10-07", "says": "Vince Coleman 3 votes (0.60%), under Removed, Low Percentage; twenty-five votes (or 5%) were needed for an individual to remain on the ballot" } ] } },
+    { "id": "mlb-sb-5", "sport": "mlb", "player": "Joe Morgan", "pos": "2B", "family": "sb", "fromList": true,
+      "seasons": 22, "lastSeason": 1984, "games": 2649,
+      "totals": { "hr": 268, "rbi": 1133, "sb": 689 },
+      "awards": { "rings": 2, "mvpCys": 2, "allStars": 10 },
+      "hall": { "ballot": "first", "class": 1990, "firstEligibleClass": 1990, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "Baseball-Reference", "url": "https://www.baseball-reference.com/players/m/morgajo02.shtml", "read": "2026-10-07", "says": "Second Baseman; 22 Yrs; G 2,649, HR 268, RBI 1,133, SB 689; last season 1984" },
+          { "publisher": "Baseball Almanac", "url": "https://www.baseball-almanac.com/players/player.php?p=morgajo02", "read": "2026-10-07", "says": "22 Years; 2,649 G, 268 HR, 1,133 RBI, 689 SB; last game 09-30-1984" } ],
+        "awards": [
+          { "publisher": "Baseball-Reference", "url": "https://www.baseball-reference.com/players/m/morgajo02.shtml", "read": "2026-10-07", "says": "2x MVP, 10x All-Star, 2x World Series" },
+          { "publisher": "National Baseball Hall of Fame", "url": "https://baseballhall.org/hall-of-famers/morgan-joe", "read": "2026-10-07", "says": "Morgan won back-to-back MVP awards in the National League; the Reds' back-to-back World Series championship years in 1975-76; two All-Star Game appearances with Houston and All-Star Game nods in each of his eight seasons with the Reds" } ],
+        "hall": [
+          { "publisher": "Baseball-Reference", "url": "https://www.baseball-reference.com/players/m/morgajo02.shtml", "read": "2026-10-07", "says": "Inducted as a player in 1990. Voted by the BBWAA on 363 of 444 ballots." },
+          { "publisher": "Baseball Almanac", "url": "https://www.baseball-almanac.com/players/player.php?p=morgajo02", "read": "2026-10-07", "says": "elected to the National Baseball Hall of Fame in 1990, the first year of his eligibility" } ] } }
+  ]
+}

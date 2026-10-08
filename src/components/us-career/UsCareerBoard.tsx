@@ -68,6 +68,7 @@ import { buildCareerDecisionOutcome, type CareerDecisionOutcomeData } from '@/li
 import CareerDecisionOutcome from '@/components/us-career/CareerDecisionOutcome';
 import { answerSummerCard, newSummerSalt, repairSummerOnLoad, seekSummerCard, startSummer, summerOn, summerPlace } from '@/lib/usCareerSummer';
 import { answerTalk, endsAfterSeason, manualRetire, pendingTalk, repairHallOnLoad, talkDeckFilter } from '@/lib/usCareerRetirementFlow';
+import { stampOnRetirement } from '@/lib/usCareerRetirementFlow';
 import { isFarewellSeason, type RetirementChoiceId } from '@/lib/careerRetirement';
 import { hallRecordFor, type HallSpeechId } from '@/lib/careerHallOfFame';
 
@@ -310,6 +311,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   }, [sport]);
 
   const persist = useCallback((c: CareerState, ph: Phase, tq: number | null) => {
+    if (sport.hall) stampOnRetirement(c, sport.saveKey); // Round 1051: the calibration stamp, on the write that retires a career
     try { localStorage.setItem(sport.saveKey, JSON.stringify({ c, phase: ph, teamQuality: tq, coach: coachRef.current } satisfies SaveShape)); } catch { /* full */ }
   }, [sport]);
 
