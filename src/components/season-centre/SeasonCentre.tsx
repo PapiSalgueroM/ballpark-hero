@@ -28,6 +28,7 @@ import { ordinal } from '@/lib/soccerCareerLeague';
 import { MatchClock, scoreAt, type ClockSpeed, type SeasonClock } from './MatchClock';
 import { MomentHost, type CentreMoment, type CentreMoments } from './MomentHost';
 import { SeasonCentreHelp, useHelpOnce, type HelpWords } from './SeasonCentreHelp';
+import { RecordPanel } from './RecordPanel';
 
 export interface CentreReview {
   /** The review's tiles, all competitions, labelled in the sport's words
@@ -42,7 +43,43 @@ export interface CentreReview {
   title: boolean;
   /** Extra lines (the Golden Boot in all competitions, the derby record). */
   notes: string[];
+  /** Round 1048: a playoff run round by round (a US season), then one line of his own playoff numbers. */
+  path?: { head: string; steps: { label: string; text: string; won: boolean }[]; line: string | null };
 }
+
+/** Round 1048: the few words the viewer says itself. A sport may replace any
+ *  of them; soccer's are the defaults, so a model with no `copy` reads exactly
+ *  as it did before these became lookups. */
+export interface CentreCopy {
+  start: string;
+  lastBadge: string;
+  lastHead: string;
+  lastBody: (round: string) => string;
+  best: string;
+  bestSoFar: string;
+  scope: string;
+  soFarHead: string;
+  /** The letter a level game prints. */
+  tie: string;
+  /** The left column and the phone's tile ("Fixtures"). */
+  list: string;
+  /** The right column ("Table"). */
+  side: string;
+}
+export const SOCCER_COPY: CentreCopy = {
+  start: '▶ Kick off',
+  lastBadge: 'FINAL DAY',
+  lastHead: 'Final day',
+  lastBody: round => `The last ${round.toLowerCase()} of the season.`,
+  best: 'Best match',
+  bestSoFar: 'Best so far',
+  scope: 'All competitions, the same as your season summary.',
+  soFarHead: 'League so far',
+  tie: 'D',
+  list: 'Fixtures',
+  side: 'Table',
+};
+const copyOf = (model: CentreModel): CentreCopy => (model.copy ? { ...SOCCER_COPY, ...model.copy } : SOCCER_COPY);
 
 export interface CentreModel {
   season: DerivedSeason;
@@ -63,6 +100,12 @@ export interface CentreModel {
   review: CentreReview;
   /** Everything the viewer shows that belongs to one sport. */
   sport: CentreSport;
+  /** Round 1048: the viewer's own words, where a sport's differ from soccer's. */
+  copy?: Partial<CentreCopy>;
+  /** Round 1048: the help sheet's "seen it" key, when a sport keeps its own. */
+  helpKey?: string;
+  /** Round 1048: slots grouped for the record panel (a division, a conference). */
+  groups?: { label: string; slots: number[] }[];
   help: HelpWords;
   /** Play once keys for the clinch and the review (useCareerMoment). */
   momentKey: string;
@@ -84,6 +127,10 @@ export interface CentreSport {
   lineOf: (g: DerivedGame) => { bits: string[]; alarm: string | null };
   /** His mark for one game (soccer's match rating), for "best match". */
   markOf: (g: DerivedGame) => number;
+  /** Round 1048: the chip beside his line, when it is not the mark to one decimal ("31 PTS"). */
+  markChip?: (g: DerivedGame) => string;
+  /** Round 1048: how "best match" says his game, when it is not "rated 7.6". */
+  markText?: (g: DerivedGame) => string;
   /** His league totals so far as labelled tiles. */
   soFar: (so: Record<string, number>) => [string, string][];
   /** The halfway poster's line from his first half totals. */
@@ -133,6 +180,7 @@ function useReducedMotion(): boolean {
 function FixtureList({ model, played, current }: { model: CentreModel; played: number; current: number | null }) {
   const { season: s, names, words } = model;
   const yours = new Set((model.moments?.list ?? []).map(m => m.md));
+  const copy = copyOf(model);
   return (
     <ol className="space-y-1" data-fixtures>
       {s.games.map(g => {
@@ -146,8 +194,8 @@ function FixtureList({ model, played, current }: { model: CentreModel; played: n
             <span className={`min-w-0 flex-1 truncate ${done ? '' : 'text-muted-foreground'} ${names[g.opp] === words.unnamed ? 'italic' : ''}`}>{names[g.opp]}</span>
             {g.fixedKey && <span className="shrink-0 rounded bg-amber-500/20 px-1 text-[9px] font-bold text-amber-400">{model.sport.fixed.badge}</span>}
             {yours.has(g.md) && <span className="shrink-0 text-[10px]" title="One of your moments" data-fixture-moment>🎯</span>}
-            {g.md === s.games.length && <span className="shrink-0 rounded bg-sky-500/20 px-1 text-[9px] font-bold text-sky-400">FINAL DAY</span>}
-            {done && <span className={`shrink-0 rounded px-1.5 text-[10px] font-bold tabular-nums ${PILL[r]}`}>{r} {g.us}-{g.them}</span>}
+            {g.md === s.games.length && <span className="shrink-0 rounded bg-sky-500/20 px-1 text-[9px] font-bold text-sky-400">{copy.lastBadge}</span>}
+            {done && <span className={`shrink-0 rounded px-1.5 text-[10px] font-bold tabular-nums ${PILL[r]}`}>{r === 'D' ? copy.tie : r} {g.us}-{g.them}</span>}
           </li>
         );
       })}
@@ -161,7 +209,7 @@ function HisLine({ g, sport }: { g: DerivedGame; sport: CentreSport }) {
   const { bits, alarm } = sport.lineOf(g);
   return (
     <div className={`flex flex-wrap items-center gap-2 text-xs ${alarm ? 'cm-loss-shake' : ''}`} data-his-line>
-      <span className="rounded-md bg-primary/15 px-2 py-0.5 font-black tabular-nums text-primary">{sport.markOf(g).toFixed(1)}</span>
+      <span className="rounded-md bg-primary/15 px-2 py-0.5 font-black tabular-nums text-primary">{sport.markChip ? sport.markChip(g) : sport.markOf(g).toFixed(1)}</span>
       {bits.map(b => <span key={b}>{b}</span>)}
       {alarm && <span className="text-red-400">{alarm}</span>}
     </div>
@@ -203,6 +251,7 @@ function TablePanel({ model, played, compact }: { model: CentreModel; played: nu
 
 function KickOff({ model, onKick, onStraight }: { model: CentreModel; onKick: () => void; onStraight: () => void }) {
   const { season: s, header, names, occasion } = model;
+  const copy = copyOf(model);
   return (
     <div className="cm-rise space-y-3" data-kickoff>
       <div>
@@ -229,7 +278,7 @@ function KickOff({ model, onKick, onStraight }: { model: CentreModel; onKick: ()
         </ul>
       </div>
       <div className="flex flex-col gap-2 sm:flex-row">
-        <button type="button" onClick={onKick} className="h-11 flex-1 rounded-lg bg-emerald-600 text-sm font-bold text-black hover:bg-emerald-500">▶ Kick off</button>
+        <button type="button" onClick={onKick} className="h-11 flex-1 rounded-lg bg-emerald-600 text-sm font-bold text-black hover:bg-emerald-500">{copy.start}</button>
         <button type="button" onClick={onStraight} className="h-11 flex-1 rounded-lg border border-border text-sm font-semibold hover:bg-muted/40">
           {s.mode === 'table' ? '⏭ Straight to the final table' : '⏭ Straight to the season review'}
         </button>
@@ -251,6 +300,9 @@ function Poster({ model, md, reduced }: { model: CentreModel; md: number; reduce
   for (const x of s.games) if (x.fixedKey && x.md < md && x.played) rec[resultOf(x) === 'W' ? 'w' : resultOf(x) === 'D' ? 'd' : 'l'] += 1;
   const half = soFar(s, Math.floor(M / 2));
   const mark = model.sport.markOf;
+  const copy = copyOf(model);
+  const markText = model.sport.markText ?? ((x: DerivedGame) => `rated ${mark(x).toFixed(1)}`);
+  const letter = (x: DerivedGame) => (resultOf(x) === 'D' ? copy.tie : resultOf(x));
   const best = s.games.filter(x => x.played && x.md < md).sort((a, b) => mark(b) - mark(a))[0];
   return (
     <div ref={moment.ref} className="space-y-3" data-poster={kinds.join(' ')}>
@@ -278,13 +330,13 @@ function Poster({ model, md, reduced }: { model: CentreModel; md: number; reduce
         <div className={`${slam} rounded-xl border border-border bg-card p-3`}>
           <div className="text-xs font-black uppercase tracking-wider text-muted-foreground">Halfway</div>
           <div className="text-sm">{model.sport.half(half)}</div>
-          {best && <div className="text-xs text-muted-foreground">Best so far: {model.words.round} {best.md}, {resultOf(best)} {best.us}-{best.them}, rated {mark(best).toFixed(1)}</div>}
+          {best && <div className="text-xs text-muted-foreground">{copy.bestSoFar}: {model.words.round} {best.md}, {letter(best)} {best.us}-{best.them}, {markText(best)}</div>}
         </div>
       )}
       {kinds.includes('final') && (
         <div className={`${slam} rounded-xl border border-sky-500/30 bg-card p-3`}>
-          <div className="text-xs font-black uppercase tracking-wider text-sky-400">Final day</div>
-          <div className="text-sm">The last {model.words.round.toLowerCase()} of the season.</div>
+          <div className="text-xs font-black uppercase tracking-wider text-sky-400">{copy.lastHead}</div>
+          <div className="text-sm">{copy.lastBody(model.words.round)}</div>
         </div>
       )}
     </div>
@@ -296,6 +348,9 @@ function Review({ model, reduced }: { model: CentreModel; reduced: boolean }) {
   const moment = useCareerMoment(review.title ? `${model.momentKey}|review` : null);
   const played = s.games.filter(g => g.played);
   const mark = model.sport.markOf;
+  const copy = copyOf(model);
+  const markText = model.sport.markText ?? ((x: DerivedGame) => `rated ${mark(x).toFixed(1)}`);
+  const letter = (x: DerivedGame) => (resultOf(x) === 'D' ? copy.tie : resultOf(x));
   const best = [...played].sort((a, b) => mark(b) - mark(a))[0];
   const form = s.games.slice(-5);
   const derbies = played.filter(g => g.fixedKey);
@@ -320,15 +375,15 @@ function Review({ model, reduced }: { model: CentreModel; reduced: boolean }) {
           </div>
         ))}
       </div>
-      <div className="text-[11px] text-muted-foreground">All competitions, the same as your season summary.</div>
+      <div className="text-[11px] text-muted-foreground">{copy.scope}</div>
       {best && (
         <div className={`${reduced ? '' : 'cm-rise'} text-xs`} style={rise(5)}>
-          ⭐ Best match: {words.round} {best.md}, {resultOf(best)} {best.us}-{best.them} vs {names[best.opp]}, rated {mark(best).toFixed(1)}
+          ⭐ {copy.best}: {words.round} {best.md}, {letter(best)} {best.us}-{best.them} vs {names[best.opp]}, {markText(best)}
         </div>
       )}
       <div className={`${reduced ? '' : 'cm-rise'} flex items-center gap-1 text-xs`} style={rise(6)}>
         <span className="mr-1 text-muted-foreground">Last five:</span>
-        {form.map(g => <span key={g.md} className={`rounded px-1.5 font-bold ${PILL[resultOf(g)]}`}>{resultOf(g)}</span>)}
+        {form.map(g => <span key={g.md} className={`rounded px-1.5 font-bold ${PILL[resultOf(g)]}`}>{letter(g)}</span>)}
       </div>
       {derbies.length > 0 && <div className="text-xs" style={rise(7)}>{model.sport.fixed.recordPlayed}: {dr.w}W {dr.d}D {dr.l}L</div>}
       {bucket && (
@@ -343,6 +398,21 @@ function Review({ model, reduced }: { model: CentreModel; reduced: boolean }) {
           {review.title
             ? <VictoryMoment compact><span className="text-sm font-bold text-foreground">{review.trophies.join(' · ')}</span></VictoryMoment>
             : <span className="text-sm font-bold text-foreground">{review.trophies.join(' · ')}</span>}
+        </div>
+      )}
+      {review.path && (
+        <div className="rounded-lg border border-border bg-card p-2" data-playoff-path>
+          <div className="mb-1 text-xs font-black uppercase tracking-wider text-muted-foreground">{review.path.head}</div>
+          <ol className="space-y-1">
+            {review.path.steps.map((st, i) => (
+              <li key={st.label} className={`${reduced ? '' : 'cm-rise'} flex items-center gap-2 text-xs`} style={rise(8 + i)} data-playoff-round={st.won ? 'W' : 'L'}>
+                <span className={`shrink-0 rounded px-1.5 font-bold ${PILL[st.won ? 'W' : 'L']}`}>{st.won ? 'W' : 'L'}</span>
+                <span className="shrink-0 font-semibold">{st.label}</span>
+                <span className="min-w-0 text-muted-foreground">{st.text}</span>
+              </li>
+            ))}
+          </ol>
+          {review.path.line && <div className="mt-1 text-[11px] text-muted-foreground" data-playoff-line>{review.path.line}</div>}
         </div>
       )}
     </div>
@@ -360,7 +430,8 @@ export function SeasonCentre({ model, exitLabel, onClose }: { model: CentreModel
   const [paused, setPaused] = useState(false);
   const [ft, setFt] = useState(false);
   const [fixturesOpen, setFixturesOpen] = useState(false);
-  const [helpOpen, setHelpOpen] = useHelpOnce();
+  const [helpOpen, setHelpOpen] = useHelpOnce(model.helpKey);
+  const copy = copyOf(model);
   const [postersSeen] = useState(() => new Set<number>());
   /* Round 1047: the moment on the stage ("md|id"), and the ones he let play in this visit */
   const [hosting, setHosting] = useState<string | null>(null);
@@ -406,7 +477,7 @@ export function SeasonCentre({ model, exitLabel, onClose }: { model: CentreModel
   let nextBig: number | null = null;
   for (let md = played + 1; md <= M && nextBig === null; md += 1) if (postersFor(s, md).length || openMoment(md)) nextBig = md;
   if (nextBig !== null && nextBig <= played + 1) nextBig = null;
-  const roundWord = s.mode === 'table' ? model.words.round : 'League game';
+  const roundWord = s.mode === 'results' ? 'League game' : model.words.round;
   const so = soFar(s, played);
   const soTiles = model.sport.soFar(so);
   const btn = 'h-10 shrink-0 whitespace-nowrap rounded-lg px-3 text-xs font-bold';
@@ -459,11 +530,11 @@ export function SeasonCentre({ model, exitLabel, onClose }: { model: CentreModel
         <div className="flex items-center gap-2 border-b border-border px-3 py-2">
           <span className="text-sm font-black">📺 {model.words.title}</span>
           <span className="min-w-0 flex-1 truncate text-xs text-muted-foreground">{model.header.club} · {model.header.seasonLabel}</span>
-          <button type="button" onClick={() => setHelpOpen(true)} className="h-9 w-9 shrink-0 rounded-lg border border-border text-sm font-bold" aria-label="How the Season Centre works">?</button>
+          <button type="button" onClick={() => setHelpOpen(true)} className="h-9 w-9 shrink-0 rounded-lg border border-border text-sm font-bold" aria-label={model.help.title}>?</button>
           <button type="button" onClick={leave} className="h-9 shrink-0 rounded-lg border border-border px-3 text-xs font-semibold" data-centre-exit>{exitLabel}</button>
         </div>
         <div className="grid min-h-0 flex-1 grid-cols-1 md:grid-cols-[240px_1fr_380px]">
-          <aside className="hidden min-h-0 overflow-y-auto border-r border-border p-2 md:block" aria-label="Fixtures">
+          <aside className="hidden min-h-0 overflow-y-auto border-r border-border p-2 md:block" aria-label={copy.list}>
             <FixtureList model={model} played={played} current={current} />
           </aside>
           <main className="min-h-0 overflow-y-auto p-3 md:p-4" data-centre-stage>
@@ -475,8 +546,9 @@ export function SeasonCentre({ model, exitLabel, onClose }: { model: CentreModel
             ) : stageBody}
             {!fixturesShown && (
               <div className="mt-4 space-y-3 md:hidden">
-                {hosting === null && <button type="button" onClick={() => setFixturesOpen(true)} className="h-10 w-full rounded-lg border border-border text-xs font-semibold" data-centre-fixtures>🗓 Fixtures</button>}
+                {hosting === null && <button type="button" onClick={() => setFixturesOpen(true)} className="h-10 w-full rounded-lg border border-border text-xs font-semibold" data-centre-fixtures>🗓 {copy.list}</button>}
                 {!wide && <TablePanel model={model} played={played} compact />}
+                {!wide && s.mode === 'record' && <RecordPanel model={model} played={played} compact reduced={reduced} tie={copy.tie} groups={model.groups} short={model.sport.clock.short} />}
               </div>
             )}
             <div className="mt-3 grid grid-cols-4 gap-2 text-center md:hidden" data-so-far>
@@ -485,12 +557,14 @@ export function SeasonCentre({ model, exitLabel, onClose }: { model: CentreModel
               ))}
             </div>
           </main>
-          <aside className="hidden min-h-0 overflow-y-auto border-l border-border p-2 md:block" aria-label="Table">
+          <aside className="hidden min-h-0 overflow-y-auto border-l border-border p-2 md:block" aria-label={copy.side}>
             {s.mode === 'table'
               ? (wide && <TablePanel model={model} played={played} compact={false} />)
-              : <p className="text-xs text-muted-foreground">{model.resultsWhy}</p>}
+              : s.mode === 'record'
+                ? (wide && <RecordPanel model={model} played={played} compact={false} reduced={reduced} tie={copy.tie} groups={model.groups} />)
+                : <p className="text-xs text-muted-foreground">{model.resultsWhy}</p>}
             <div className="mt-3 rounded-lg bg-muted/30 p-2 text-xs" data-so-far-desktop>
-              <div className="mb-1 font-bold">League so far</div>
+              <div className="mb-1 font-bold">{copy.soFarHead}</div>
               {soTiles.filter(([, value]) => value !== '-').map(([label, value]) => `${value} ${label.toLowerCase()}`).join(' · ')}
             </div>
           </aside>

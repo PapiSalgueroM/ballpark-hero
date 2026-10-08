@@ -32,7 +32,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
-  US_CAREER_BOARD, US_CAREER_DESCRIPTOR, US_CAREER_SPORTS, readUsSource,
+  US_CAREER_BOARD, US_CAREER_DESCRIPTOR, US_CAREER_SEASON_DIR, US_CAREER_SPORTS, readUsSource,
   allWrapperProblems, wrapperProblems, weightProblems, weightProblemsIn, weightFiles, importsOf, stripComments,
 } from './lib/usCareerFiles.mjs';
 
@@ -66,6 +66,11 @@ console.log(`   ${files.length} files read (${files.filter(f => !f.own).length} 
 
 console.log('3) the weight rule can fail: planted imports');
 const board = readUsSource(ROOT, US_CAREER_BOARD);
+/* Round 1048: the Season Center's host is shared by every sport that binds
+   one (it sits in the season folder the rule now reads), so it may import no
+   sport's number file. Always on. */
+const SEASON_HOST = `${US_CAREER_SEASON_DIR}/UsSeasonCentreHost.tsx`;
+ok(files.some(f => f.file === SEASON_HOST && f.own === null), `${SEASON_HOST} is not among the shared files the weight rule reads`);
 const desc = readUsSource(ROOT, US_CAREER_DESCRIPTOR);
 const nfl = US_CAREER_SPORTS.find(s => s.slug === 'nfl');
 const nflBinding = readUsSource(ROOT, nfl.binding);
@@ -76,6 +81,7 @@ const PLANTS = [
   { what: 'the board loads MLB code on demand', file: US_CAREER_BOARD, code: board, own: null, line: "const later = () => import('@/lib/mlbMyCareer');", names: 'mlbMyCareer' },
   { what: 'the descriptor imports NHL content by a suffix name', file: US_CAREER_DESCRIPTOR, code: desc, own: null, line: "import { X } from './conquestDataNhl';", names: 'conquestDataNhl' },
   { what: 'the NFL binding imports an NHL module', file: nfl.binding, code: nflBinding, own: 'nfl', line: "import { NHL_ERAS } from '@/lib/nhlMyCareer';", names: 'nhlMyCareer' },
+  { what: 'the Season Center host imports the NBA number file', file: SEASON_HOST, code: readUsSource(ROOT, SEASON_HOST), own: null, line: "import { NBA_SEASON } from '@/lib/season/nba';", names: 'season/nba' },
 ];
 for (const p of PLANTS) {
   const clean = weightProblemsIn(p.file, p.code, p.own);

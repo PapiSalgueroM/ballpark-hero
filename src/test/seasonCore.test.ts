@@ -7,10 +7,11 @@ import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { describe, expect, it } from 'vitest';
 import {
-  deriveSeason, disagreements, ownRowRounds, reverseOf, roundRobinRounds, standingsOf, tableAt, soFar,
+  deriveSeason, deriveSeasonOrWhy, disagreements, ownRowRounds, reverseOf, roundRobinRounds, standingsOf, tableAt, soFar,
   type DerivedSeason, type FixedGame, type Frame, type SeasonSport, type StatTotal, type TeamTarget,
 } from '@/lib/season/core';
 import { LAW, goalLambda, poissonDraw } from '@/lib/season/law';
+import { keyedRng } from '@/lib/keyedRng';
 import { soccerEventDisagreements, soccerEvents } from '@/lib/season/soccerEvents';
 
 interface ToyRow {
@@ -325,6 +326,49 @@ describe('season core: the recorded derive snapshot (Round 1048)', () => {
     const recorded = JSON.parse(fs.readFileSync(DERIVED_FIXTURE, 'utf8'));
     expect(Object.keys(now).sort()).toEqual(Object.keys(recorded).sort());
     for (const k of Object.keys(recorded)) expect(now[k], k).toEqual(recorded[k]);
+  });
+});
+
+describe('season core: the finish hook (Round 1048)', () => {
+  it('runs once, after the means and the max, on its own keyed stream, and may add keys and events', () => {
+    let calls = 0;
+    let sawFitted = false;
+    let first = -1;
+    const WITH: SeasonSport<RecordRow, null> = {
+      ...RECORD,
+      finish: (games, _row, _ctx, rng) => {
+        calls += 1;
+        sawFitted = games.every(g => Number.isInteger(g.line.tackles)) && games.some(g => g.line.longFg === 52);
+        first = rng();
+        for (const g of games) {
+          g.line.yards = 10 * g.line.fgm;
+          g.events = [{ min: 60, kind: 'final', side: 'us', pts: g.us }, { min: 60, kind: 'final', side: 'them', pts: g.them }];
+        }
+        return true;
+      },
+    };
+    const s = deriveSeason(WITH, RECORD_ROW, null)!;
+    expect(s).not.toBeNull();
+    expect(calls).toBe(1);
+    expect(sawFitted).toBe(true);
+    expect(first).toBe(keyedRng(`${s.key}|fin`)());
+    /* everything the core laid out is what it lays out without the hook */
+    const plain = deriveSeason(RECORD, RECORD_ROW, null)!;
+    const coreOf = (x: DerivedSeason) => x.games.map(g => [g.md, g.opp, g.home, g.us, g.them, g.played, g.line.fgm, g.line.tackles, g.line.longFg]);
+    expect(coreOf(s)).toEqual(coreOf(plain));
+    expect(s.games.every(g => g.line.yards === 10 * g.line.fgm)).toBe(true);
+    expect(disagreements(WITH, RECORD_ROW, null, s)).toEqual([]);
+  });
+  it('gives null when the hook cannot lay the row out, and refuses a hook whose events do not make the score', () => {
+    const no: SeasonSport<RecordRow, null> = { ...RECORD, finish: () => false };
+    expect(deriveSeason(no, RECORD_ROW, null)).toBeNull();
+    expect(deriveSeasonOrWhy(no, RECORD_ROW, null)).toBe('finish');
+    const lying: SeasonSport<RecordRow, null> = {
+      ...RECORD,
+      finish: games => { for (const g of games) g.events = [{ min: 1, kind: 'drive', side: 'us', pts: g.us + 1 }]; return true; },
+    };
+    expect(deriveSeason(lying, RECORD_ROW, null)).toBeNull();
+    expect(String(deriveSeasonOrWhy(lying, RECORD_ROW, null))).toContain('do not make the score');
   });
 });
 
