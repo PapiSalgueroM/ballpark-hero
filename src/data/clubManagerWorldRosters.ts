@@ -9,10 +9,22 @@
  *
  * The A-League ledgers are the newer read: a man the generator proved is the
  * same person as a baked row elsewhere (CM_ALEAGUE_SUPERSEDES) is dropped
- * from that baked club, so nobody is in two squads at once. */
+ * from that baked club, so nobody is in two squads at once.
+ *
+ * Round 1052: the gathered leagues join here too, one generated file a
+ * league (scripts/genClubManagerGathered.mjs, the table in
+ * scripts/lib/gatheredLeagues.mjs), each after the A-League's and in the
+ * order it was added. Existing keys keep their place in the object and the
+ * new clubs come after them, so walking the old world is untouched. Their
+ * supersedes tables are empty on purpose (that round moved nobody out of an
+ * existing squad), so the loop below still reads the A-League's alone.
+ * CM_GENERATED_LEAGUES is what each generated file says about itself, in
+ * join order: the picker's date line and the count under it print from it,
+ * so the next gathered league needs no page edit. */
 import { CM_ROSTERS as CM_ROSTERS_BAKED, CM_PARTIAL as CM_PARTIAL_BAKED } from '@/data/clubManagerRosters';
 import type { BakedPlayer } from '@/data/clubManagerRosters';
-import { CM_ALEAGUE_ROSTERS, CM_ALEAGUE_PARTIAL, CM_ALEAGUE_SUPERSEDES } from '@/data/clubManagerALeague2026';
+import { CM_ALEAGUE_ROSTERS, CM_ALEAGUE_PARTIAL, CM_ALEAGUE_SUPERSEDES, CM_ALEAGUE_META } from '@/data/clubManagerALeague2026';
+import { CM_RUSSIA_ROSTERS, CM_RUSSIA_PARTIAL, CM_RUSSIA_META } from '@/data/clubManagerRussia2026';
 
 function joinWorld(): Record<string, BakedPlayer[]> {
   const out: Record<string, BakedPlayer[]> = { ...CM_ROSTERS_BAKED };
@@ -20,8 +32,34 @@ function joinWorld(): Record<string, BakedPlayer[]> {
     const list = out[club];
     if (list) out[club] = list.filter(p => p.n !== name);
   }
-  return { ...out, ...CM_ALEAGUE_ROSTERS };
+  return { ...out, ...CM_ALEAGUE_ROSTERS, ...CM_RUSSIA_ROSTERS };
 }
 
 export const CM_WORLD_ROSTERS: Record<string, BakedPlayer[]> = joinWorld();
-export const CM_WORLD_PARTIAL: string[] = [...CM_PARTIAL_BAKED, ...CM_ALEAGUE_PARTIAL];
+export const CM_WORLD_PARTIAL: string[] = [...CM_PARTIAL_BAKED, ...CM_ALEAGUE_PARTIAL, ...CM_RUSSIA_PARTIAL];
+
+/** One generated league's own facts: how its squads are named on the
+ *  picker's date line, how many men it ships, and the first and last day its
+ *  clubs were read (the same day twice when it was read in one). */
+export interface GeneratedLeagueFacts { label: string; players: number; read: string; readTo: string; }
+
+export const CM_GENERATED_LEAGUES: GeneratedLeagueFacts[] = [
+  { label: 'A-League Men', players: CM_ALEAGUE_META.players, read: CM_ALEAGUE_META.read, readTo: CM_ALEAGUE_META.read },
+  { label: CM_RUSSIA_META.label, players: CM_RUSSIA_META.players, read: CM_RUSSIA_META.read, readTo: CM_RUSSIA_META.readTo },
+];
+
+/** When a generated league's squads were read, from its own file and never the clock:
+ *  one day, or "between A and B" when its clubs were read on more than one. */
+function readWhen(g: GeneratedLeagueFacts): string {
+  return g.read === g.readTo ? g.read : `between ${g.read} and ${g.readTo}`;
+}
+
+/** "A-League Men squads as of 2026-10-06", one a generated league, for the picker's date line. */
+export function generatedLeagueDateClauses(): string[] {
+  return CM_GENERATED_LEAGUES.map(g => `${g.label} squads as of ${readWhen(g)}`);
+}
+
+/** "the A-League Men's 310, read 2026-10-06", one a generated league, for the count under the picker. */
+export function generatedLeagueCountClauses(): string[] {
+  return CM_GENERATED_LEAGUES.map(g => `the ${g.label}'s ${g.players}, read ${readWhen(g)}`);
+}

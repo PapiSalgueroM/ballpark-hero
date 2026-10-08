@@ -18,7 +18,7 @@ import {
   nationOfferFor, SHOOTOUT_MAX_ORDER, shootoutOrderOf, cupSatOutBy,
 } from '@/lib/clubManager';
 // Round 1035: the A-League Men's squads come from their own generated file.
-import { CM_ALEAGUE_META } from '@/data/clubManagerALeague2026';
+import { generatedLeagueCountClauses } from '@/data/clubManagerWorldRosters';
 import { FACILITY_IDS, facilitiesOf } from '@/lib/clubManagerFacilities';
 import { projectFinances } from '@/lib/clubManagerFinances';
 import { fanMeter } from '@/lib/clubManagerMeters';
@@ -708,7 +708,7 @@ const ClubManager = () => {
               {historicPick ? (
                 <>{eraHonestyLine(era)}</>
               ) : (
-                <>Squads, ratings and values from market data plus the verified summer window: {CM_ROSTER_META.players} players as of {CM_ROSTER_META.asOf}, refreshed {CM_ROSTER_META.generated}, and the A-League Men's {CM_ALEAGUE_META.players}, read {CM_ALEAGUE_META.read}.</>
+                <>Squads, ratings and values from market data plus the verified summer window: {CM_ROSTER_META.players} players as of {CM_ROSTER_META.asOf}, refreshed {CM_ROSTER_META.generated}, and {generatedLeagueCountClauses().join(', and ')}.</>
               )}
               {eraYearsOn > 0 && (
                 <> Starting {era.label}, so those squads have been aged {eraYearsOn} years: {eraHonestyLine(era)}</>

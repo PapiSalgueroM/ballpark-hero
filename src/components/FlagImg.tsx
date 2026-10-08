@@ -50,6 +50,8 @@ export const FLAG_CODES: Record<string, string> = {
   // Round 1035: Transfermarkt's spelling, and ESPN's and FotMob's, for an
   // A-League Men player whose nationality two of them agree on.
   "Southern Sudan": "ss", "South Sudan": "ss",
+  // Round 1052: a Russian Premier League player whose nationality two hosts agree on.
+  "Turkmenistan": "tm",
   // Round 925: Tim Duncan's birth country on nba.com and basketball-reference.
   "US Virgin Islands": "vi",
   // July 2026 site-wide flag-image sweep: names used by pools that previously

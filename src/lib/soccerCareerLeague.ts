@@ -87,6 +87,12 @@ const DUGOUT_SIZES: Record<string, SizeWindow[]> = {
      2026-10-06). Club Manager plays 20 of them, but the dugout's table is
      the real league's size, the clubs it does not know unnamed. */
   "Segunda División": [{ from: 2026, size: 22 }],
+  /* Round 1052, the Russian Premier League: 16 clubs in 2026-27 (Sports.ru's
+     season guide of 2026-07-16 and Sport-Express's list of the participants
+     of 2026-07-23, both read 2026-10-08; the addresses are in the league's
+     rules row in src/lib/clubManager.ts and in
+     scripts/data/gatheredSquads/russia2026/research.json). */
+  "Russian Premier League": [{ from: 2026, size: 16 }],
 };
 
 /** Clubs in that league's top flight in the season starting in `year`, or

@@ -20,9 +20,12 @@
  *   3. PARTIAL MARKS. A club reads "(partial data)" exactly when isPartialClub
  *      says so, the line explaining the mark is there, and every club with an
  *      empty baked squad is marked (it is all youth players).
- *   4. THE DATE. Exactly one "Squads as of X; A-League Men squads as of Y."
+ *   4. THE DATE. Exactly one "Squads as of X; A-League Men squads as of Y; ..."
  *      line, X CM_ROSTER_META.asOf, the roster bake's own date, and Y
- *      CM_ALEAGUE_META.read, the A-League ledgers' read date (Round 1035).
+ *      CM_ALEAGUE_META.read, the A-League ledgers' read date (Round 1035), then
+ *      one clause a generated league after it, from CM_GENERATED_LEAGUES in
+ *      src/data/clubManagerWorldRosters.ts (Round 1052): its label and the day
+ *      its squads were read, or "between A and B" when it took more than one.
  *      Never the clock.
  *   5. NO OTHER ERA. No club that exists only in a past season's world
  *      (ERA_LEAGUES) appears anywhere in the block.
@@ -101,6 +104,7 @@ import GameSeoContent from '${ROOT_URL}/src/components/seo/GameSeoContent.tsx';
 import { ClubManagerClubList } from '${ROOT_URL}/src/components/club-manager/ClubManagerClubList.tsx';
 export { REAL_LEAGUES, ERA_LEAGUES, isPartialClub, playableClubs, CM_ROSTER_META, CM_ROSTERS } from '${ROOT_URL}/src/lib/clubManager.ts';
 export { CM_ALEAGUE_META } from '${ROOT_URL}/src/data/clubManagerALeague2026.ts';
+export { CM_GENERATED_LEAGUES } from '${ROOT_URL}/src/data/clubManagerWorldRosters.ts';
 export const render = () => renderToStaticMarkup(
   React.createElement(HelmetProvider, { context: {} },
     React.createElement(MemoryRouter, { initialEntries: ['/club-manager'] },
@@ -123,11 +127,15 @@ esbuild.buildSync({
    render of the data, with no save and no promotions registered. */
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
 const {
-  REAL_LEAGUES, ERA_LEAGUES, isPartialClub, playableClubs, CM_ROSTER_META, CM_ROSTERS, CM_ALEAGUE_META, render: renderRaw,
+  REAL_LEAGUES, ERA_LEAGUES, isPartialClub, playableClubs, CM_ROSTER_META, CM_ROSTERS, CM_ALEAGUE_META, CM_GENERATED_LEAGUES, render: renderRaw,
 } = require(BUNDLE);
 /* Round 1035: the A-League Men squads carry their own read date, so the one
    date line names both, each from its own data file, never the clock. */
-const DATE_LINE = `Squads as of ${CM_ROSTER_META.asOf}; A-League Men squads as of ${CM_ALEAGUE_META.read}.`;
+/* Round 1052: one clause a generated league, built here from the list's own facts (label, first and
+   last read day) and not from the component's helper, so the two are held to each other. The
+   A-League's clause must still be the Round 1035 one, from its own META. */
+if (CM_GENERATED_LEAGUES[0]?.label !== 'A-League Men' || CM_GENERATED_LEAGUES[0].read !== CM_ALEAGUE_META.read) { console.error('simClubManagerClubList: the first generated league is not the A-League Men on its own read date'); process.exit(1); }
+const DATE_LINE = `Squads as of ${CM_ROSTER_META.asOf}; ${CM_GENERATED_LEAGUES.map(g => `${g.label} squads as of ${g.read === g.readTo ? g.read : `between ${g.read} and ${g.readTo}`}`).join('; ')}.`;
 const renderHtml = (() => {
   const error = console.error;
   console.error = (...a) => { if (!String(a[0]).includes('useLayoutEffect does nothing on the server')) error(...a); };

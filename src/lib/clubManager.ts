@@ -3006,6 +3006,42 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
     playoff: { rankUpTo: 8, target: 6, label: 'Make the promotion playoffs' }, season: 'autumnSpring',
     simplified: 'The promotion playoff (third to sixth) is not played: three go straight up and La Liga\'s bottom three come down in a straight swap. The real league has 22 clubs, and its two reserve sides, Real Sociedad B and Celta Fortuna, are left out because they do not play the Copa del Rey, so 20 of the real 22 clubs play.',
   },
+  /* Round 1052: the Russian Premier League 2026-27, the Brazil shape (a drop
+     count with no second tier in the game, so the drop zone is what the board
+     asks and what the record reads, and no club is traded; no European
+     places). Every fact below is on two publishers or more, read 2026-10-08,
+     and copied from scripts/data/gatheredSquads/russia2026/research.json
+     (its `facts`), which also holds the squads:
+     - ru-format, sixteen clubs, thirty rounds, home and away: Sports.ru's
+       season guide (2026-07-16, https://www.sports.ru/football/blogs/3421868.html)
+       and Sport-Express's list of the participants (2026-07-23,
+       https://www.sport-express.ru/football/rfpl/news/rpl-sezon-2026-27-polnyy-spisok-uchastnikov-chempionata-rossii-2441637/).
+     - ru-drop, fifteenth and sixteenth go straight down, thirteenth and
+       fourteenth play the First League's fourth and third over two legs:
+       Sports.ru's season guide (above) and Cybersport.ru's 2026-2027 page
+       (https://www.cybersport.ru/tournaments/football/rpl-2026-2027-rossiiskaia-premer-liga);
+       Sport-Express (above) for the same rule as it was applied in May 2026.
+       drop is 2, the automatic places only: the game has no second tier to
+       play a playoff against, and a drop of 4 would send down two clubs the
+       real rules only send to a playoff.
+     - ru-uefa, Russian clubs are suspended from UEFA's club competitions in
+       2026-27: Euronews (2026-06-07,
+       https://www.euronews.com/my-europe/2026/06/07/uefa-extends-ban-on-russian-national-teams-and-clubs-from-competitions-for-202627-season)
+       and Ukrainska Pravda (2026-06-07,
+       https://www.pravda.com.ua/eng/news/2026/06/07/8038150/). So europe is
+       null. A fact only: the game says nothing else about it.
+     - ru-cup, the Russian Cup is played and the Premier League clubs enter
+       it through four groups of four, the top two into the playoffs and the
+       third into the lower divisions' knockout path: Sovetsky Sport
+       (2026-06-19, https://www.sovsport.ru/football/news/sostoyalas-zherebyovka-puti-rpl-kubka-rossii-sezona-2026-2027)
+       and Rossiyskaya Gazeta (2026-07-28, https://rg.ru/2026/07/29/sto-k-odnomu.html).
+     - ru-tiebreak is THIN for 2026-27: head to head first, then wins, on one
+       publisher (Sports.ru's guide), so the row takes the gdGfOnly default
+       and no sentence states an order. */
+  russia: {
+    nationId: 'russia', flag: 'Russia', cup: 'Russian Cup', europe: null, drop: 2, ladder: 'top', season: 'autumnSpring',
+    simplified: 'The relegation playoffs (thirteenth and fourteenth against the fourth and third of the division below) are not played, so two go straight down. Russian clubs are suspended from UEFA competitions, so the table hands out no European places. The Russian Cup, which really starts with groups for the top flight, is played as a straight knockout.',
+  },
   /* The era leagues. No Conference League existed before 2021, so uecl is 0
      and the board's ladder skips that band; 2005-06 still called the second
      competition the UEFA Cup. */
@@ -3440,6 +3476,22 @@ export const REAL_LEAGUES: LeagueDef[] = [
   {
     id: 'segunda', name: 'Segunda División',
     clubs: ['Real Oviedo', 'Girona', 'Mallorca', 'Eibar', 'Castellón', 'Almería', 'Burgos', 'Sabadell', 'Sporting Gijón', 'Granada', 'Las Palmas', 'Tenerife', 'Leganés', 'Valladolid', 'Córdoba', 'Eldense', 'Cádiz', 'FC Andorra', 'Ceuta', 'Albacete'],
+  },
+  /* Round 1052: the Russian Premier League 2026-27. The same sixteen clubs
+     on three independent tables read 2026-10-08 (ESPN's standings, the
+     Transfermarkt competition page and FotMob's table, all recorded in
+     scripts/data/gatheredSquads/russia2026/research.json under
+     `membership`) and in Sport-Express's list of the participants
+     (2026-07-23, the address is in the rules row's comment): Fakel Voronezh
+     and Rodina Moscow came up, Pari Nizhny Novgorod and Sochi went down.
+     Zenit, Krasnodar, Spartak Moscow, CSKA Moscow, Lokomotiv Moscow and
+     Rubin Kazan keep the spellings the past seasons' Champions League
+     fields already use for them (ERA_UCL_FIELDS); the rest are the short
+     English names. Squads: src/data/clubManagerRussia2026.ts, generated.
+     Appended after every older row. */
+  {
+    id: 'russia', name: 'Russian Premier League',
+    clubs: ['Zenit', 'Krasnodar', 'Spartak Moscow', 'CSKA Moscow', 'Lokomotiv Moscow', 'Rubin Kazan', 'Dynamo Moscow', 'Rostov', 'Akhmat Grozny', 'Krylia Sovetov', 'Baltika', 'Orenburg', 'Akron Tolyatti', 'Dynamo Makhachkala', 'Rodina Moscow', 'Fakel Voronezh'],
   },
 ].map(leagueFromRow);
 
@@ -3970,6 +4022,8 @@ export const NATIONS: NationDef[] = [
   { id: 'mexico', name: 'Mexico', flag: '🇲🇽' },
   // Round 1035
   { id: 'australia', name: 'Australia', flag: '🇦🇺' },
+  // Round 1052
+  { id: 'russia', name: 'Russia', flag: '🇷🇺' },
 ].map(n => ({ ...n, leagueIds: REAL_LEAGUES.filter(l => leagueRulesOf(l.id).nationId === n.id).map(l => l.id) }));
 
 /** Primary kit colors for the club dot in the UI (approximate, decorative). */
