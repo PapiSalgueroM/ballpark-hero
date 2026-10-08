@@ -1,0 +1,14 @@
+prep-head exit=0 0s | mkprobe: src/test/dailySaveShapes.test.tsx now prints both pages around the first difference
+head-1 exit=1 20s | simDailySaveHardening: 2 failure(s)
+head-2 exit=1 20s | simDailySaveHardening: 2 failure(s)
+head-3 exit=1 19s | simDailySaveHardening: 2 failure(s)
+head-4 exit=0 19s | simDailySaveHardening: part shapes green
+head-5 exit=0 19s | simDailySaveHardening: part shapes green
+head-6 exit=0 20s | simDailySaveHardening: part shapes green
+prep-main exit=0 1s | 795926e37
+main-1 exit=0 20s | simDailySaveHardening: part shapes green
+main-2 exit=1 20s | simDailySaveHardening: 2 failure(s)
+main-3 exit=1 20s | simDailySaveHardening: 2 failure(s)
+main-4 exit=1 20s | simDailySaveHardening: 2 failure(s)
+main-5 exit=1 20s | simDailySaveHardening: 2 failure(s)
+main-6 exit=1 20s | simDailySaveHardening: 2 failure(s)

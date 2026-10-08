@@ -1,0 +1,17 @@
+# Release AN fix pass 2: is the /olympics red of simDailySaveHardening this branch's or main's? Six runs of the shapes
+# part on this head, six on origin/main, one at a time, with the test printing both pages around the difference
+#!serial
+prep-head: node .rc/x/mkprobe.mjs .
+head-1: R848_PART=shapes node scripts/simDailySaveHardening.mjs
+head-2: R848_PART=shapes node scripts/simDailySaveHardening.mjs
+head-3: R848_PART=shapes node scripts/simDailySaveHardening.mjs
+head-4: R848_PART=shapes node scripts/simDailySaveHardening.mjs
+head-5: R848_PART=shapes node scripts/simDailySaveHardening.mjs
+head-6: R848_PART=shapes node scripts/simDailySaveHardening.mjs
+prep-main: git fetch -q origin main && git worktree add -q --detach "$RUNNER_TEMP/main" FETCH_HEAD && ln -s "$GITHUB_WORKSPACE/node_modules" "$RUNNER_TEMP/main/node_modules" && node .rc/x/mkprobe.mjs "$RUNNER_TEMP/main" && git -C "$RUNNER_TEMP/main" rev-parse --short HEAD
+main-1: cd "$RUNNER_TEMP/main" && R848_PART=shapes node scripts/simDailySaveHardening.mjs
+main-2: cd "$RUNNER_TEMP/main" && R848_PART=shapes node scripts/simDailySaveHardening.mjs
+main-3: cd "$RUNNER_TEMP/main" && R848_PART=shapes node scripts/simDailySaveHardening.mjs
+main-4: cd "$RUNNER_TEMP/main" && R848_PART=shapes node scripts/simDailySaveHardening.mjs
+main-5: cd "$RUNNER_TEMP/main" && R848_PART=shapes node scripts/simDailySaveHardening.mjs
+main-6: cd "$RUNNER_TEMP/main" && R848_PART=shapes node scripts/simDailySaveHardening.mjs
