@@ -239,6 +239,11 @@
  *                shape the control rewrites (it changed nothing), layer two
  *                ran, a walk broke, a check outside its own list failed
  *                (2, 13 and the nolive list), or 13 stayed green somewhere.
+ *                Measured on a GitHub runner, 2026-10-08: 79 checks, 28
+ *                failed, which is checks 2, 10, 11, 13, 14, 18 and 19 on
+ *                each of the 4 create walks; every box read its placeholder
+ *                beside its pick ("Choose nationalityBrazil"). The plain run
+ *                of the same build: 447 checks, 0 failed.
  *   undocopies   (after review) both layers on, and the translator's undo
  *                gives back a COPY of every node it took in place of the node
  *                itself. No translator was seen to do that and no guard can
