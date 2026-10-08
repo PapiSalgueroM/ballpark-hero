@@ -55,11 +55,20 @@
        B1  no MVP on a club that missed the playoffs (main: one in four), none off the All-NBA First Team,
            none who is also Most Improved, no Most Improved after an earlier All-NBA.
        B2  every Rookie of the Year is on the All-Rookie First Team (main: none was on a team at all), and
-           All-Rookie is won in a first season only.
+           All-Rookie is won in a first season only. The share of first seasons on an All-Rookie team is the
+           real class's (10 picks of about 45 rookies who play, 22 percent): 21.6 to 22.9 percent on five full size
+           seeds, 22.0 over the run (band 18 to 26; the grade moves the share about 4 points a tenth).
+           The two teams have a grade of their own since the fix pass of 2026-10-08: on the Rookie of the Year's
+           grade 51 percent of first seasons made a team, bench rookies at 5 points a game among them, and
+           nothing held it from above.
        B3  from 2023-24 nobody under the games bar holds an award the real rule names; before it such seasons
            exist (about 2,170 under 65 games in a full size run, band at least 1,750: the old 62 game gate
            leaves 1,341, so the bar62 control turns both halves red); every Sixth Man is a bench season;
-           nothing but a Finals MVP is won on less than half a season.
+           nothing but a Finals MVP is won on less than half a season. The bar the fleet check judges with is
+           65 of 82 from 2023-24 TYPED IN THIS FILE (REAL_GAMES_RULE), and a drawn check holds the first season
+           itself: one standout season at 64 games in 2023-24 never holds a rule award in 300 draws, at 65 it
+           does, and at 64 the season before it does too. Before the fix pass the bar was read off the engine,
+           so an off by one on the first season and a 62 typed into the data both passed everything.
        B4  no All-NBA season without an All-Star selection; All-Star selections a career are 1.59 to 1.63 times
            All-NBA (band 1.25 to 2.4; 24 picks against 15 is 1.6).
        B5  All-Defensive goes to defenders: each of pest, twoway, threed and anchor above each of the six
@@ -70,17 +79,31 @@
            All-Rookie. How the awards are SPREAD (careers with an MVP, with an All-NBA) is held where Round
            1103 shipped it, and main's is printed beside.
        B7  decideNbaAwards draws exactly NBA_AWARD_DRAWS times and is pure.
+       B8  the rules a fleet cannot see, each on drawn seasons against numbers typed in this file: every stat
+           title is judged on its OWN league leaders' bar (an average just under their lowest bar never wins
+           in 300 draws, one just over their highest always does); the fans alone pick the All-Star starters
+           before 2016-17 and never after (a fan favourite on a 6 point season starts 145 of 300 times in
+           2015-16 and 0 in 2016-17); and a stat title asks for that season's real minimum of games (70 or
+           the total before 2013-14, 56 or its own totals in the 66 game 2011-12 season, 58 of 82 since, 51
+           of 72 in 2020-21).
    D   One function scores an award for both games: NBA Front Office and NBA My Career import the same file,
        Front Office adds no sum of its own, the two win weights are one number, and cutting the winning term
        out of the shared score (a second bundle) changes BOTH Front Office's ranking and the career's MVPs.
    F   The words: the worked example in the "?" recomputed through the shared score, its clubs checked against
-       the engine's record bands, the games rule and the All-Star picks against the rule numbers, the badge
-       count on the page against NBA_BADGES.
+       the engine's record bands, the games rule, its first season, the All-Star picks and the fan vote's era
+       against the real numbers typed in this file (never against the rule table the help is built from: the
+       two agreeing is one mistake said twice), the badge count on the page against NBA_BADGES.
    C   The NFL, MLB and NHL careers hash equal to the baseline (under SENSE_PROVE_OTHERS=1 only).
-   R, H and B6 compare the mean over the run's seeds with the mean over main's, within three standard errors
-   (heldAt below says why a seed by seed band was thrown away). An award count's error is worked out from how
-   unevenly the award falls over careers, measured in the run: the sd of MVPs a career is 0.82 to 0.86 where
-   Poisson would say 0.56 (All-NBA 2.3 to 2.4 against 1.41, All-Defensive 1.9 to 2.5 against 1.16).
+   R, H and B6 compare the mean over the run's seeds with the mean over main's, within a FIXED width typed in
+   HELD_TOL (heldAt below says why a seed by seed band was thrown away, and why the width is no longer worked
+   out from the spread of the run being judged). Each width is what three standard errors came to at full
+   size, with an award count's error taken from how unevenly the award falls over careers: the sd of MVPs a
+   career is 0.82 to 0.86 where Poisson would say 0.56 (All-NBA 2.3 to 2.4 against 1.41, All-Defensive 1.9 to
+   2.5 against 1.16).
+   NOT HELD AT MAIN'S, and said on every run: careers with an MVP (17.4 percent against main's 16.6) and with
+   an All-NBA (61.9 against 58.8). The brief's critic asked for main's band on both. The awards a career are
+   main's; they fall on more careers, because the MVP score now carries the club's wins, and one grade an
+   award cannot undo that. The two are fenced at this round's own rate (SPREAD_1103) and the lead rules on them.
 
    NEGATIVE CONTROLS, SIM_NBA_SENSE_CONTROL=<name>. Each swaps one line of SOURCE in memory (a plugin, never a
    file), refuses when its anchor is not there exactly once or the swap changed nothing, and must turn its own
@@ -98,7 +121,13 @@
      scorersdefend    the defensive awards read the MVP score          B5 red (may: B6)
      oldgrades        the All-NBA and MVP grades back to 0.15 and none   B6 red (may: H, B4)
      privatecopy      Front Office adding its own sum again            D red
-     weightdrift      the career's win weight at 19                    D red (may: E, B6)
+     weightdrift      the career's win weight at 19                    D red (may: E, B6, H)
+     barfrom          the games rule starting a season late            B3 red (the drawn check)
+     bar62data        the sourced 65 typed as 62 in the data file      B3, F red (may: B6, H)
+     rookieflood      the All-Rookie teams on the Rookie of the Year's grade   B2 red (may: B6)
+     titlebar         the rebounding title judged on the assists leaders' bar   B8 red
+     fanvoteera       the two eras of the All-Star fan vote swapped    B8 red (may: B4)
+     shortseason      the 2011-12 season's own stat title minimum never handed over   B8 red
      example          the worked example's winning club read as its losing one   F red
      othersport       one NFL All-Pro grade moved by a hundredth       C red (needs SENSE_PROVE_OTHERS=1)
    A control is run at full size where a full run is cheap (about two minutes on a CI runner), or shrunk and
@@ -151,7 +180,7 @@ const REAL_ALL_STAR = { picks: 24, weightedFrom: 2016 };
 const REAL_SHORT_2011 = { year: 2011, length: 66, games: 56, pts: 1127, reb: 644, ast: 321 };
 /* B2: the share of first seasons that land on an All-Rookie team, percent. The real class is 10 picks of about
    45 rookies who play, 22 percent. See the header for the measured five seeds the band was set from. */
-const ALL_ROOKIE_SHARE = { lo: 16, hi: 29 };
+const ALL_ROOKIE_SHARE = { lo: 18, hi: 26 };
 
 /* ------------------------------------------------------------------ */
 /* Controls: one line of SOURCE swapped in memory, never a file        */

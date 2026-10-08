@@ -1061,13 +1061,33 @@ export function nbaShouldRetire(c: NbaCareerState): boolean {
 
 export interface NbaLegacy { score: number; verdict: string; hof: boolean; bullets: string[]; standout?: LegacyRead['standout'] }
 
+/** The career's real totals. Round 1103: a career with a season on the new line also carries `newLinePts`,
+ *  the points of those seasons alone, which the calibration 2 legacy table reads as a term of its own (see
+ *  NBA_LEGACY_NEW_LINE_SCALE). It is part of `pts`, never added to it, never printed and never a standout. A
+ *  career with no such season returns exactly the four keys it always did. */
 export function nbaCareerTotals(c: NbaCareerState) {
-  let pts = 0, reb = 0, ast = 0, games = 0;
+  let pts = 0, reb = 0, ast = 0, games = 0, newLine = 0;
   for (const s of c.seasons) {
     pts += s.ppg * s.games; reb += s.rpg * s.games; ast += s.apg * s.games; games += s.games;
+    if (isNbaNewLine(s)) newLine += s.ppg * s.games;
   }
-  return { pts: Math.round(pts), reb: Math.round(reb), ast: Math.round(ast), games };
+  const totals = { pts: Math.round(pts), reb: Math.round(reb), ast: Math.round(ast), games };
+  return newLine > 0 ? { ...totals, newLinePts: Math.round(newLine) } : totals;
 }
+
+/** Round 1103: what the POINTS of a season on the new line are worth to the legacy score against a season on
+ *  the old one. 1 is no adjustment. The new line scores about a fifth lower than the old on purpose, and the
+ *  Hall of Fame is held, not recalibrated, in this round: this is the one lever, set from the measured Hall
+ *  rate (scripts/simNbaAwardsSense.mjs section H, the table in docs/audits/NBA-LINE-NORMS-2026-10.md). It
+ *  weighs the points TERM only: it enters the calibration 2 table as a term of its own on the new line's
+ *  points (NBA_NEW_LINE_TERM), so every total the scorer, the standout and the ballot card read is the
+ *  career's real one. The legacy recalibration round replaces it. */
+export const NBA_LEGACY_NEW_LINE_SCALE: number = 1.4;
+/** The constant as the table carries it: the new line's points at the points term's own rate (430 a point)
+ *  times the constant less one, a whole number (1,075 at 1.4). The marks ledger records the same number as a
+ *  fixed added term (scripts/genCareerHallMarks.mjs, FIXED_BASE), and section 19 of scripts/simCareerHall.mjs
+ *  fails when the two differ, so the constant cannot move without the ledger. */
+const NBA_NEW_LINE_TERM = { stat: 'newLinePts', per: Math.round(430 / (NBA_LEGACY_NEW_LINE_SCALE - 1)) };
 
 /* Round 1051: the legacy score reads a table per calibration through the one
    scorer (legacyRead, careerHallOfFame.ts). Calibration 1 is the Round 123
@@ -1087,72 +1107,56 @@ const NBA_LEGACY_V1: LegacyWeights = {
    Every from and to mark, the list itself (the half rule) and the measured
    base terms come from scripts/data/careerHallMarks.json, which
    scripts/genCareerHallMarks.mjs derives from measured careers; section 17 of
-   scripts/simCareerHall.mjs fails if this table and that ledger disagree. */
+   scripts/simCareerHall.mjs fails if this table and that ledger disagree.
+   Round 1103 (the fix pass of 2026-10-08): the marks were measured again on the
+   new stat line, where a centre no longer passes like a guard (so the big
+   men's assists left the list by the half rule), and every position gained
+   one fixed term, the points of seasons on the new line (NBA_NEW_LINE_TERM). */
 const NBA_LEGACY_V2: LegacyWeights = {
   awards: { rings: 95, mvps: 155, finalsMvps: 90, allNbas: 48 },
   season: 8,
   positions: {
     PG: {
-      terms: [{ stat: 'pts', per: 430 }],
+      terms: [{ stat: 'pts', per: 430 }, NBA_NEW_LINE_TERM],
       standout: [
-        { stat: 'pts', from: 37400, to: 45300, label: 'points' },
-        { stat: 'ast', from: 14800, to: 17800, label: 'assists' },
+        { stat: 'pts', from: 31000, to: 38700, label: 'points' },
+        { stat: 'ast', from: 10700, to: 13700, label: 'assists' },
       ],
     },
     SG: {
-      terms: [{ stat: 'pts', per: 430 }],
+      terms: [{ stat: 'pts', per: 430 }, NBA_NEW_LINE_TERM],
       standout: [
-        { stat: 'pts', from: 38800, to: 47100, label: 'points' },
-        { stat: 'reb', from: 8560, to: 10000, label: 'rebounds' },
-        { stat: 'ast', from: 9790, to: 11300, label: 'assists' },
+        { stat: 'pts', from: 32500, to: 39900, label: 'points' },
+        { stat: 'reb', from: 7850, to: 9610, label: 'rebounds' },
+        { stat: 'ast', from: 5420, to: 6470, label: 'assists' },
       ],
     },
     SF: {
-      terms: [{ stat: 'pts', per: 430 }],
+      terms: [{ stat: 'pts', per: 430 }, NBA_NEW_LINE_TERM],
       standout: [
-        { stat: 'pts', from: 37100, to: 45300, label: 'points' },
-        { stat: 'reb', from: 11500, to: 12900, label: 'rebounds' },
-        { stat: 'ast', from: 13500, to: 16000, label: 'assists' },
+        { stat: 'pts', from: 31800, to: 39900, label: 'points' },
+        { stat: 'reb', from: 10400, to: 11800, label: 'rebounds' },
+        { stat: 'ast', from: 8270, to: 10300, label: 'assists' },
       ],
     },
     PF: {
-      terms: [{ stat: 'pts', per: 430 }],
+      terms: [{ stat: 'pts', per: 430 }, NBA_NEW_LINE_TERM],
       standout: [
-        { stat: 'pts', from: 31800, to: 36400, label: 'points' },
-        { stat: 'reb', from: 14400, to: 17200, label: 'rebounds' },
-        { stat: 'ast', from: 10100, to: 12300, label: 'assists' },
+        { stat: 'pts', from: 28700, to: 34100, label: 'points' },
+        { stat: 'reb', from: 11000, to: 13400, label: 'rebounds' },
       ],
     },
     C: {
-      terms: [{ stat: 'pts', per: 430 }],
+      terms: [{ stat: 'pts', per: 430 }, NBA_NEW_LINE_TERM],
       standout: [
-        { stat: 'pts', from: 29800, to: 35200, label: 'points' },
-        { stat: 'reb', from: 15200, to: 17800, label: 'rebounds' },
-        { stat: 'ast', from: 7490, to: 8930, label: 'assists' },
+        { stat: 'pts', from: 26700, to: 32200, label: 'points' },
+        { stat: 'reb', from: 15600, to: 18400, label: 'rebounds' },
       ],
     },
-    '*': { terms: [{ stat: 'pts', per: 430 }] },
+    '*': { terms: [{ stat: 'pts', per: 430 }, NBA_NEW_LINE_TERM] },
   },
 };
 export const NBA_LEGACY_WEIGHTS: Record<HallCalibration, LegacyWeights> = { 1: NBA_LEGACY_V1, 2: NBA_LEGACY_V2 };
-
-/** Round 1103: what the POINTS of a season on the new line are worth to the legacy score against a season on
- *  the old one. 1 is no adjustment. The new line scores about a fifth lower than the old on purpose, and the
- *  Hall of Fame is held, not recalibrated, in this round: this is the one lever, set from the measured Hall
- *  rate (scripts/simNbaAwardsSense.mjs section H). The legacy recalibration round replaces it. */
-export const NBA_LEGACY_NEW_LINE_SCALE: number = 1.25;
-/** The key the new line's points ride under in the totals handed to the scorer. Never printed, never a standout. */
-const NBA_NEW_LINE_PTS = 'newLinePts';
-/** One position's row of a legacy table with the constant's term added after its own: the points of seasons on
- *  the new line, at the points term's own rate times the constant less one. The table itself is never touched. */
-function withNewLineTerm(w: LegacyWeights, pos: string): LegacyWeights {
-  const key = w.positions[pos] ? pos : '*';
-  const row = w.positions[key];
-  const pts = row.terms.find(term => term.stat === 'pts');
-  if (!pts) return w;
-  const extra = { stat: NBA_NEW_LINE_PTS, per: pts.per / (NBA_LEGACY_NEW_LINE_SCALE - 1) };
-  return { ...w, positions: { ...w.positions, [key]: { ...row, terms: [...row.terms, extra] } } };
-}
 
 export function nbaLegacyOf(c: NbaCareerState): NbaLegacy {
   const t = nbaCareerTotals(c);
@@ -1162,22 +1166,15 @@ export function nbaLegacyOf(c: NbaCareerState): NbaLegacy {
      what it should be. Measured over 1100 careers after: median score 295,
      Hall of Fame 18.0 percent, GOAT tier 2.4 percent, and a forced 90
      ceiling career gets in 66 percent of the time. */
-  /* Round 1103: only the points of seasons on the new line are scaled, so a career with no new season adds
-     exactly nothing and its score, verdict and ballot are the ones it was told. */
+  /* Round 1103: the table is read as it is written, on the career's real totals. The points of seasons on the
+     new line weigh more through the table's own term for them (NBA_NEW_LINE_TERM), so a career with no new
+     season adds exactly nothing, and the standout and the ballot card read what he really scored. Calibration
+     1 is the Round 123 formula to the last bit: its table has no such term. */
   const cal = hallCalibrationOf(c);
-  /* Calibration 1 is the Round 123 formula to the last bit: a career read on it retired before the new line
-     existed, so it has no season to scale, and the constant is never applied to it. */
-  const newPts = cal === 1 || NBA_LEGACY_NEW_LINE_SCALE === 1 ? 0 : c.seasons.reduce((n, s) => n + (isNbaNewLine(s) ? s.ppg * s.games : 0), 0);
-  /* The constant weighs the POINTS TERM only. It rides in as one more term of its own (the new line's points,
-     at the points term's rate times the constant less one), so the totals handed to the scorer are the career's
-     real ones: the standout is judged on what he really scored, and the ballot card prints that number and no
-     other. With the constant at 1, or no season on the new line, the table is read exactly as it is written. */
-  const table = NBA_LEGACY_WEIGHTS[cal];
-  const weights: LegacyWeights = newPts > 0 ? withNewLineTerm(table, c.pos) : table;
-  const read = legacyRead(weights, {
+  const read = legacyRead(NBA_LEGACY_WEIGHTS[cal], {
     pos: c.pos, seasons: c.seasons.length,
     awards: { rings: c.rings, mvps: c.mvps, finalsMvps: c.finalsMvps, allNbas: c.allNbas },
-    totals: newPts > 0 ? { ...t, [NBA_NEW_LINE_PTS]: newPts } : t,
+    totals: t,
   });
   const score = read.score;
   const hof = score >= 500;
