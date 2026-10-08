@@ -1,4 +1,4 @@
-## Round 1089, Soccer Career panel nesting, QA2 pending (2026-10-07)
+## Round 1089, Soccer Career panel nesting, QA3 pending (2026-10-07)
 
 Codex owns this isolated page repair before the 1047 page work. Base is
 `6f57ce7818f152b4efdc75027d267c49927a2d8b`. One closing `div` moves from between
@@ -12,10 +12,15 @@ journeys, four real Continue transitions and complete save/RNG parity. The whole
 candidate is unaccepted: 54/56 old checks passed (35/36 career, 19/20 readers).
 Reveal rejected an unretained offline block; Anchors flagged the raw hash helper.
 Full artifact `11518001717` retains 1,415 files; source and 521 package holds passed.
-QA2 retains raw digest bytes in a lexical block and adds twelve viewport captures
-beside the full-page images. A direct guarded Reveal diagnostic retains actual
-requests and both output streams; blocks remain RED and original gates stay intact.
-QA2 is pending. No full-career, animation, local runtime, merge or publication claim.
+QA2 `f913107a`, run `37704245348`, remains RED: 55/56 old checks passed,
+including all twenty readers. Native passed with twelve additional viewport images.
+Full artifact `11519029921` retains 1,437 files. The direct Reveal diagnostic found
+91 actual external blocks, including player-pool reads; no blocked result is waived.
+QA3 adds a Reveal-only local fixture from the existing 557 baked 2026 player records,
+actual cached assets, an explicit empty live board and rejected completion writes.
+It preserves rounded-value/current-club limits and requires real Dart/Clue play.
+Unknown requests stay fatal; the original harness, inputs, guard and assertions hold.
+QA3 is pending. No full-career, animation, local runtime, merge or publication claim.
 
 ## Release AK LIVE, 2026-10-07 15:12 EDT, and the split of work with Codex
 

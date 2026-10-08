@@ -9,6 +9,7 @@ on:
       - src/pages/SoccerCareer.tsx
       - src/hooks/useRevealScroll.ts
       - scripts/playSoccerHubGrid1089.mjs
+      - scripts/qa/revealScrollOffline1089.cjs
       - .github/workflows/soccer-hub-grid.yml
 
 permissions:
@@ -128,8 +129,12 @@ jobs:
           path: soccer-hub-grid-artifacts/
           retention-days: 5
           if-no-files-found: error
-      - name: Direct unchanged Reveal diagnostic with retained guarded requests
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+      - name: Prepare finite source-backed Reveal reads and actual cached assets
+        id: reveal_assets
+        if: ${{ !cancelled() && steps.assets.outcome == 'success' }}
+        run: node scripts/qa/revealScrollOffline1089.cjs 2>&1 | tee soccer-hub-grid-artifacts/reveal-fixture-preparation.log
+      - name: Direct unchanged Reveal diagnostic with declared local fixtures
+        if: ${{ !cancelled() && steps.reveal_assets.outcome == 'success' }}
         timeout-minutes: 10
         run: |
           NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module <<'NODE'
@@ -141,7 +146,7 @@ jobs:
           const out = path.resolve('soccer-hub-grid-artifacts/reveal-diagnostic');
           fs.mkdirSync(out, { recursive: true });
           const sha = value => createHash('sha256').update(value).digest('hex');
-          const report = { status: 'running', diagnosticOnly: true, originalRunnerUnchanged: true, command: ['node', 'scripts/simRevealScroll.mjs'], events: [] };
+          const report = { status: 'running', diagnosticOnly: true, originalRunnerUnchanged: true, fixtureScope: 'Reconstructed existing 2026 baked player display rows, explicit empty live board, rejected completions and actual cached assets', defaultUnfixturedAcceptance: false, command: ['node', 'scripts/simRevealScroll.mjs'], events: [] };
           const save = () => fs.writeFileSync(path.join(out, 'report.json'), JSON.stringify(report, null, 2));
           const held = execFileSync('git', ['ls-files', '-z', 'src', 'scripts', '.github/workflows/soccer-hub-grid.yml', 'index.html', 'package.json', 'package-lock.json', 'vite.config.ts']).toString().split('\0').filter(Boolean);
           const visit = dir => fs.readdirSync(dir, { withFileTypes: true }).flatMap(row => row.isDirectory() ? visit(path.join(dir, row.name)) : [path.join(dir, row.name)]);
@@ -183,7 +188,7 @@ jobs:
           const receipt = path.join(out, 'offline-receipt.log');
           for (const name of ['offline-receipt.log', 'requests.jsonl', 'stdout.log', 'stderr.log', 'server.log']) fs.writeFileSync(path.join(out, name), '');
           report.observerSha256 = sha(fs.readFileSync(observer));
-          const childEnv = { ...process.env, BASE: 'http://127.0.0.1:4173', SWEEP_BASE: 'http://127.0.0.1:4173', PORT: '4173', SIM_OFFLINE_RECEIPT: receipt, NODE_OPTIONS: process.env.NODE_OPTIONS + ' --require=' + observer };
+          const childEnv = { ...process.env, BASE: 'http://127.0.0.1:4173', SWEEP_BASE: 'http://127.0.0.1:4173', PORT: '4173', SIM_OFFLINE_RECEIPT: receipt, REVEAL_FIXTURE_REPORT: path.join(out, 'fixture'), NODE_OPTIONS: process.env.NODE_OPTIONS + ' --require=' + path.resolve('scripts/qa/revealScrollOffline1089.cjs') + ' --require=' + observer };
           delete childEnv.ONLY; delete childEnv.BROWSER;
           report.environment = { BASE: childEnv.BASE, SWEEP_BASE: childEnv.SWEEP_BASE, PORT: childEnv.PORT, SIM_NETWORK: childEnv.SIM_NETWORK, NODE_OPTIONS: childEnv.NODE_OPTIONS };
           const serverFd = fs.openSync(path.join(out, 'server.log'), 'a');
@@ -216,6 +221,12 @@ jobs:
             assert.equal(report.process.signal, null, 'The original diagnostic harness was not signaled');
             assert.equal(report.process.code, 0, 'The original diagnostic harness exited successfully');
             assert.equal(report.blocks.length, 0, 'Diagnostic remains red after any offline transport block');
+            report.fixture = JSON.parse(fs.readFileSync(path.join(childEnv.REVEAL_FIXTURE_REPORT, 'report.json')));
+            assert.equal(report.fixture.status, 'passed');
+            assert.equal(report.fixture.errors.length, 0); assert.equal(report.fixture.sockets.length, 0); assert.equal(report.fixture.realForwardedWrites, 0);
+            assert(report.fixture.surfaces.some(row => row.dart) && report.fixture.surfaces.some(row => row.clue));
+            assert.deepEqual(report.fixture.sourceAfter, report.fixture.sourceBefore);
+            assert.deepEqual(report.fixture.inputAfter, report.fixture.preparation.inputAfter);
           } catch (error) { report.status = 'failed'; report.failure = { name: error.name, message: error.message, stack: error.stack }; throw error; }
           finally {
             if (stdoutFd !== undefined) fs.closeSync(stdoutFd); if (stderrFd !== undefined) fs.closeSync(stderrFd);
@@ -230,7 +241,20 @@ jobs:
         run: |
           failed=0
           for harness in simRevealScroll simSoccerCareer simSoccerCareerUcl simSoccerCareerSaveRecovery simCareerAcademy simCareerAwardsNight simCareerCleanSheets simCareerClubPool simCareerContinental simCareerDerbies simCareerDilemmaReach simCareerDilemmaTruth simCareerDomesticCup simCareerDrills simCareerEngaged simCareerEras simCareerFacts simCareerInbox simCareerInboxBeats simCareerKeepPlaying simCareerLeagueFinish simCareerLeagueSeasons simCareerLife simCareerLifeCooldowns simCareerMoneyAfterRetirement simCareerNoDeadEnd simCareerParity simCareerPositionRatings simCareerRivalryEvents simCareerSeasonRatings simCareerSocialBrands simCareerStory simCareerTraining simSeasonCentreNeutral simSeasonCentreTable simSeasonCentreAgreement; do
-            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "soccer-hub-grid-artifacts/regressions/$harness.log" || failed=1
+            if [[ "$harness" == simRevealScroll ]]; then
+              REVEAL_FIXTURE_REPORT="$PWD/soccer-hub-grid-artifacts/reveal-runner" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs --require=$PWD/scripts/qa/revealScrollOffline1089.cjs" ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "soccer-hub-grid-artifacts/regressions/$harness.log" || failed=1
+              node --input-type=module <<'NODE' || failed=1
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const r = JSON.parse(fs.readFileSync('soccer-hub-grid-artifacts/reveal-runner/report.json'));
+          assert.equal(r.status, 'passed'); assert.equal(r.errors.length, 0); assert.equal(r.sockets.length, 0); assert.equal(r.realForwardedWrites, 0);
+          assert(r.surfaces.some(row => row.dart) && r.surfaces.some(row => row.clue));
+          assert.deepEqual(r.sourceAfter, r.sourceBefore); assert.deepEqual(r.inputAfter, r.preparation.inputAfter);
+          console.log('The unchanged Reveal harness reached actual Dart and Clue play under the declared finite fixture.');
+          NODE
+            else
+              NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "soccer-hub-grid-artifacts/regressions/$harness.log" || failed=1
+            fi
           done
           exit "$failed"
       - name: All twenty built readers and executable source anchors
