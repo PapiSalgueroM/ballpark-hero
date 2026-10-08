@@ -203,7 +203,17 @@
                     record it was told, whole objects. (b) legacyOf stamped 1
                     equals the four Round 123 formulas restated here, on
                     every engine career. (c) the calibration rule, exact.
-                    Controls v1drift (a, b), calflip (a, c).
+                    (d) calibration 2 as recorded (scripts/data/
+                    careerHallV2.json): the sport's calibration 2 table and
+                    the two scoring rules whole, and what each fixture save
+                    is told when stamped 2. A career retired on 2 keeps its
+                    ballot, so after the release that first ships 2 the
+                    table is never edited: a later change is calibration 3.
+                    Before that release a deliberate change is recorded
+                    again with SIM_RECORD_V2=1 (never a green run).
+                    Controls v1drift (a, b), calflip (a, c), v2drift (d: one
+                    to mark plus one, too small to move a recorded save, so
+                    the recorded table itself has to catch it).
      16. neverbelow calibration 2 contains calibration 1 unchanged and only
                     adds; no career scores lower, loses a verdict tier or
                     leaves the Hall on 2. Control below.
@@ -218,7 +228,8 @@
                     against the same score with the standout taken out).
                     (d) the score on 2 restated: one family, capped.
                     Controls markdrift, todrift (a), noramp, catchersteals
-                    (b), nostandout (c red, a green).
+                    (b), nostandout (c red, a green), twofamilies (d: every
+                    paying family added up instead of the best one taken).
      18. anchors    real career shapes, two sourced, and the ballot the real
                     Hall gave them (scripts/data/careerHallAnchors.json; its
                     selection rule was written before any score). Raw and
@@ -249,7 +260,9 @@
                     and says why. In football only decisionback fires: with
                     the push tripled or off no counted call moves past the
                     band, because the real later men of the books reading
-                    are already sent in on the first ballot.
+                    are already sent in on the first ballot. And for (c),
+                    the majority call against firstBallotChance: ballotflip
+                    (the ballot draws against the wrong side of the chance).
      19. base, words (a) the base terms are the ledger's and the median
                     career of a base position earns what was measured. (b)
                     the Hall share on 2 is at or over 1 and under its
@@ -257,10 +270,20 @@
                     (c) the two lines of the "?" carry the rule's numbers,
                     the worked example holds on the engine, and the ballot
                     card prints the voters' line on calibration 2 only.
-                    Controls nobase (football only now), examplelie,
-                    nocardline.
+                    Controls nobase (football only now) and plantbase (a
+                    base term planted where the ledger gives none, every
+                    sport) for (a); seasonbig (calibration 2 pays every
+                    season double) for (b); examplelie, nocardline,
+                    clausealways and wholesheet for (c).
      20. boardstamp every career the board loop retires is stamped and scored
-                    on today's calibration (none under SIM_CAL=1).
+                    on today's calibration (none under SIM_CAL=1). Control
+                    nostamp (the stamp writes nothing): 15 (c) goes red on
+                    any run and this check on a run that plays the board
+                    loop. The loop stamps through the engine's own
+                    stampHallCalibration; the board's React side (persist,
+                    stampOnRetirement) is held by the vitest cases in
+                    src/test/usCareerHallBoard.test.tsx and by the browser
+                    walk scripts/playCareerHallLine.mjs.
 
    BANDS for sections 17 and 19 live in scripts/data/careerHallMarks.json
    and are computed by scripts/genCareerHallMarks.mjs (its header has the
@@ -317,7 +340,8 @@
    and basketball and refuses in hockey and football; standoutgone FIRED in
    hockey and refuses in the other three; decisionback FIRED in football
    and baseball and refuses in the other two; plantbase FIRED in all four;
-   anchorwiki FIRED.
+   anchorwiki FIRED; twofamilies, ballotflip, seasonbig and nostamp (on
+   15 c) FIRED in all four.
    Controls of sections 15 to 19, run 2026-10-07 with the board skipped
    (which is enough: none of them reads a board career): on 109b6ce8 all
    four sports FIRED on v1drift, calflip, below, markdrift, todrift, noramp
@@ -366,7 +390,7 @@ import './lib/seedRandom.mjs';
 import os from 'node:os';
 import path from 'node:path';
 import { build } from 'esbuild';
-import { readFileSync, unlinkSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 
@@ -468,6 +492,16 @@ const CONTROLS = {
   decisionback: { file: `${SPORT}MyCareer.ts`, re: { nfl: /(\n    K: \{\s+terms: \[\],)/, mlb: /(\{ stat: 'sb', from: [\d.]+, to: [\d.]+, label: 'steals'), top: \d+( \})/ }[SPORT] ?? /a string that is in no file, so this control refuses to run here/, to: (m, a, b) => (SPORT === 'nfl' ? `${a} standout: [{ stat: 'fgMade', from: 512, to: 564, label: 'field goals' }],` : `${a}${b}`) },
   // Section 19 (a), for every sport: a base term planted at a position the ledger gives none (a point guard's assists, a kicker's field goals, the reliever's saves back, a defenceman's assists).
   plantbase: { file: `${SPORT}MyCareer.ts`, re: { nba: /(\n    PG: \{\s+terms: \[\{ stat: 'pts', per: 430 \})(\],)/, nfl: /(\n    K: \{\s+terms: \[)(\],)/, mlb: /(\n    RP: \{ terms: \[\{ stat: 'hr', per: 4 \}, \{ stat: 'rbi', per: 60 \})(\] \},)/, nhl: /(\n    D: \{\s+terms: \[\{ stat: 'points', per: 18 \})(\],)/ }[SPORT], to: (m, a, b) => `${a}${SPORT === 'nfl' ? '' : ', '}{ stat: '${{ nba: 'ast', nfl: 'fgMade', mlb: 'saves', nhl: 'assists' }[SPORT]}', per: 8 }${b}` },
+  // Section 17 (d): every paying family added up instead of the best one taken.
+  twofamilies: { file: 'careerHallOfFame.ts', from: 'if (credit > 0 && (!standout || credit > standout.credit)) standout = { stat: s.stat, label: s.label, total, credit };', to: 'if (credit > 0) standout = { stat: s.stat, label: s.label, total, credit: credit + (standout ? standout.credit : 0) };' },
+  // Section 15 (d): one to mark of the calibration 2 table plus one (too small to move a recorded save: the recorded table itself must catch it).
+  v2drift: { file: `${SPORT}MyCareer.ts`, re: /(, to: )([\d.]+)(, label: )/, to: (m, a, n, b) => `${a}${Number(n) + 1}${b}` },
+  // Section 18 (c): the ballot draws its first call against the wrong side of the chance.
+  ballotflip: { file: 'careerHallOfFame.ts', from: 'if (rng() >= firstBallotChance(cand.score, lines)) {', to: 'if (rng() >= 1 - firstBallotChance(cand.score, lines)) {' },
+  // Section 19 (b): calibration 2 pays every season double, so the Hall fills past its ceiling.
+  seasonbig: { file: `${SPORT}MyCareer.ts`, re: /(_LEGACY_V2: LegacyWeights = \{\s+awards: \{[^}]*\},\s+season: )(\d+)/, to: (m, a, n) => `${a}${Number(n) * 2}` },
+  // Sections 15 (c) and 20: the stamp writes nothing, so a career the loops retire is read on calibration 1.
+  nostamp: { file: 'careerHallOfFame.ts', from: 'if (c.retired && c.hallCal === undefined) c.hallCal = HALL_CALIBRATION;', to: 'if (false) c.hallCal = HALL_CALIBRATION;' },
   // The ledger with one source host swapped for a wiki (done in memory where the ledger is read).
   anchorwiki: { file: 'careerHallOfFame.ts', from: 'export type HallCalibration = 1 | 2;', to: 'export type HallCalibration = 1 | 2;' },
   calflip: { file: 'careerHallOfFame.ts', from: 'return c.retired ? 1 : HALL_CALIBRATION;', to: 'return HALL_CALIBRATION;' },
@@ -1254,6 +1288,39 @@ for (const e of v1Saves) {
   if (JSON.stringify(eng.hallRecordFor(HALL, save)) !== JSON.stringify(e.hall)) v1ReplayMiss += 1;
 }
 
+/* 15 (d). The calibration 2 recording (scripts/data/careerHallV2.json): the
+   sport's calibration 2 table and the two scoring rules, whole, and what each
+   save of the version 1 fixture is told when it is stamped 2 (the score, the
+   Hall call, the standout, and the Hall record without the card's sentence,
+   which is copy). A career retired on calibration 2 keeps the ballot it was
+   told, so once the release that first ships calibration 2 is out, this table
+   is never edited again: a later change is calibration 3 beside it. Until
+   then a deliberate change is recorded again with SIM_RECORD_V2=1, a run
+   that never ends green. */
+const V2_FILE = path.join(ROOT, 'scripts/data/careerHallV2.json');
+const toldOn2 = e => {
+  const save = { ...JSON.parse(JSON.stringify(e.save)), retired: true, hallCal: 2 };
+  const l = eng.LEGACY(save);
+  const { weighs: _copy, ...hall } = eng.hallRecordFor(HALL, save);
+  return { id: e.id, score: l.score, hof: l.hof, standout: l.standout ?? null, hall };
+};
+const v2Now = { table: eng.WEIGHTS[2], readings: v1Saves.map(toldOn2) };
+const v2RulesNow = { standoutTop: eng.LEGACY_GAME_RULES.standoutTop, standoutCap: eng.LEGACY_GAME_RULES.standoutCap };
+const RECORD_V2 = process.env.SIM_RECORD_V2 === '1';
+if (RECORD_V2) {
+  if (CONTROL || CAL1) { console.error('SIM_RECORD_V2 records the tree as it is: no control, no SIM_CAL'); process.exit(2); }
+  const file = existsSync(V2_FILE) ? JSON.parse(readFileSync(V2_FILE, 'utf8')) : { sports: {} };
+  file.sports[SPORT] = v2Now;
+  const body = Object.keys(ENGINES).filter(s => file.sports[s]).map(s => `    ${JSON.stringify(s)}: {\n      "table": ${JSON.stringify(file.sports[s].table)},\n      "readings": [\n${file.sports[s].readings.map(r => `        ${JSON.stringify(r)}`).join(',\n')}\n      ]\n    }`).join(',\n');
+  const note = 'Round 1051: calibration 2 of the Hall of Fame legacy score as recorded, for section 15 (d) of scripts/simCareerHall.mjs. Per sport: the calibration 2 table whole, and what each save of src/test/fixtures/careerHallV1.json is told when stamped 2. Written by SIM_RECORD_V2=1 node scripts/simCareerHall.mjs <sport>; never edited by hand. Once the release that first ships calibration 2 is out, never recorded again: a career retired on calibration 2 keeps the ballot it was told, so a later change is calibration 3.';
+  writeFileSync(V2_FILE, `{\n  "note": ${JSON.stringify(note)},\n  "rules": ${JSON.stringify(v2RulesNow)},\n  "sports": {\n${body}\n  }\n}\n`);
+}
+const V2_RECORDED = existsSync(V2_FILE) ? JSON.parse(readFileSync(V2_FILE, 'utf8')) : null;
+const v2Was = V2_RECORDED?.sports?.[SPORT];
+const v2TableSame = Boolean(v2Was) && sameJson(v2Was.table, v2Now.table) && sameJson(V2_RECORDED.rules, v2RulesNow);
+const v2ReadMiss = v2Was ? v2Now.readings.filter((r, i) => !sameJson(r, v2Was.readings[i])).length + Math.abs(v2Now.readings.length - v2Was.readings.length) : v2Now.readings.length;
+console.log(`  15 (d) calibration 2 as recorded: the table and the rules ${v2TableSame ? 'equal' : 'DIFFER FROM'} the recording; ${v2ReadMiss} of ${v2Now.readings.length} recorded saves are told something else on 2 (${v2Now.readings.filter(r => r.standout).length} of them with a standout)${RECORD_V2 ? '; RECORDED ON THIS RUN' : ''}`);
+
 /* 15 (b). Calibration 1 is the Round 123 formula: the four one line formulas
    restated here, independent of the tables, against legacyOf stamped 1 on
    every engine career. */
@@ -1706,6 +1773,7 @@ const checks = [
   ['deckJersey', jerseyRecMiss === 0 && jerseySynMiss === 0 && waitWrote === 0 && jerseySynN > 0 && (SPORT === 'nhl' || jerseyRecN > 0), `${jerseyRecMiss} of ${jerseyRecN} deck retired numbers not on the card, ${jerseySynMiss} of ${jerseySynN} synthetic, ${waitWrote} wait answers that wrote a club`],
   ['era', eraMiss === 0 && eraBoundary.below > 0 && eraBoundary.above > 0, `${eraMiss} cards printing a class year or rule off the audit's verified class (${auditFrom}); ${JSON.stringify(eraCounts)}`],
   ['v1replay', v1ReplayMiss === 0 && v1Saves.length >= 16, `${v1ReplayMiss} readings of ${v1Saves.length} recorded saves differ from the version 1 recording`],
+  ['v2replay', v2TableSame && v2ReadMiss === 0 && v2Now.readings.length >= 16, `calibration 2 against its recording: the table and the rules ${v2TableSame ? 'equal' : 'differ'}, ${v2ReadMiss} of ${v2Now.readings.length} recorded saves told something else (a shipped calibration is never edited: add calibration 3)`],
   ['v1formula', v1FormulaMiss === 0 && careers.length > 0, `${v1FormulaMiss} of ${careers.length} engine careers score off the Round 123 formula on calibration 1`],
   ['calrule', calRuleMiss === 0 && stampedEngine === (CAL1 ? 0 : careers.length), `${calRuleMiss} readings off the calibration rule; ${stampedEngine} of ${careers.length} engine careers stamped`],
   ['boardstamp', boardScoreMiss === 0 && boardRetired.length > 0 && boardStamped === (CAL1 ? 0 : boardRetired.length), `${boardStamped} of ${boardRetired.length} retired board careers stamped ${CAL_NOW}, ${boardScoreMiss} scored on another calibration`],
@@ -1732,6 +1800,9 @@ if (CONTROL) {
     v1drift: ['v1replay', 'v1formula'], calflip: ['v1replay', 'calrule'],
     examplelie: 'words', nocardline: 'words', clausealways: 'words', wholesheet: 'words', standoutbig: 'anchors', standoutgone: 'anchors', decisionback: 'anchors', anchorwiki: 'anchorshape', plantbase: 'base',
     below: 'neverbelow', markdrift: 'marks', todrift: 'marks', noramp: 'halfrule', catchersteals: 'halfrule', nobase: 'base',
+    twofamilies: 'standoutcap', ballotflip: 'anchorcalls', seasonbig: 'hallshare', v2drift: 'v2replay',
+    // The board loop's own stamp check only exists on a run that plays the board loop.
+    nostamp: SKIP_BOARD ? 'calrule' : ['calrule', 'boardstamp'],
     // An object also names checks that must stay green: the standout switched off moves the outcome, never the marks.
     nostandout: { red: ['standoutgain'], green: ['marks'] } }[CONTROL];
   const wantRed = WANT && WANT.red ? WANT.red : [].concat(WANT);
@@ -1741,6 +1812,10 @@ if (CONTROL) {
   // Exit 1 only when the check this control targets went red, so the exit
   // code alone proves the control hit its own check. Any other red is printed.
   process.exit(fired ? 1 : 0);
+}
+if (RECORD_V2) {
+  console.log(`simCareerHall ${SPORT}: CALIBRATION 2 RECORDED INTO scripts/data/careerHallV2.json, NOT A GREEN RUN (${red.length ? `red [${red.join(',')}]` : 'nothing red'})`);
+  process.exit(3);
 }
 if (SKIP_BOARD) {
   console.log(`simCareerHall ${SPORT}: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (${red.length ? `red [${red.join(',')}]` : `the ${shown.length} checks that ran are green`})`);

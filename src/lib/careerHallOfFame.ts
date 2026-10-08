@@ -50,8 +50,9 @@
    careers already retired keep the legacy and the ballot they were told,
    and only careers that retire afterwards are read on the new one. Never
    edit a calibration that has shipped: add calibration 3 beside it. The
-   version 1 recording (src/test/fixtures/careerHallV1.json) and section 15
-   of scripts/simCareerHall.mjs hold that promise.
+   version 1 recording (src/test/fixtures/careerHallV1.json), the
+   calibration 2 recording (scripts/data/careerHallV2.json, the four tables
+   whole) and section 15 of scripts/simCareerHall.mjs hold that promise.
 
    ERA TRUTH (Round 1039). HallRules.verifiedFromClass is the first class
    the audit anchors the printed rules on with two sources. The card prints a
