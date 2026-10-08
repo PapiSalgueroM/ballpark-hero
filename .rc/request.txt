@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+play: ENGINES=chromium REQUIRE_PAGE=1 PORT=4810 SHOTS=$RC_OUT/shots node scripts/playCareerSquad.mjs
+play-noscroll: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=noscroll PORT=4820 SHOTS=/tmp/shots-noscroll node scripts/playCareerSquad.mjs
+play-notrap: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=notrap PORT=4830 SHOTS=/tmp/shots-notrap node scripts/playCareerSquad.mjs
+play-ellipsis: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=ellipsis PORT=4840 SHOTS=/tmp/shots-ellipsis node scripts/playCareerSquad.mjs
