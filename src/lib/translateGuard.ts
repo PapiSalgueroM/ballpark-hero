@@ -40,16 +40,21 @@
  *    within about a tenth of a second. So React's own node is never put back. A
  *    fresh stand in with the same words goes where the wrapper was, the translator
  *    takes that, and the map follows.
- *  - Writing into a stand in the translator is still working on freezes an older
- *    value. So a stand in that has been on the page for a turn is never written,
- *    it is replaced.
+ *  - The translator reads a text node once, when it first sees it, and answers a
+ *    moment later with a translation of the words it READ, whatever the node says
+ *    by then. A node rewritten five milliseconds after it appeared was swapped for
+ *    its first words, and stayed that way. That freezes any figure that ticks and
+ *    then stops (a roll, a count up) on an older value, with or without a guard.
+ *    So a stand in is never written, only replaced, and a text node that was
+ *    rewritten while it was on the page is refreshed once more the moment the
+ *    translator takes it.
  * Which gives one rule: whenever React removes, inserts before, or rewrites a text
- * node the translator took, every translated string directly inside that same
- * element is handed back to the translator as fresh text, in React's order, with
- * React's current words. Measured on the real translator: one rewrite caused
- * exactly one new swap for each string of the group and nothing after it, and a
- * hundred rewrites in a row left the element with exactly the nodes it started
- * with.
+ * node the translator took, or the translator takes a node that was rewritten
+ * under it, every translated string directly inside that same element is handed
+ * back to the translator as fresh text, in React's order, with React's current
+ * words. Measured on the real translator: one rewrite caused exactly one new swap
+ * for each string of the group and nothing after it, and a hundred rewrites in a
+ * row left the element with exactly the nodes it started with.
  *
  * Layer two cannot touch an untranslated page: it writes to the DOM only from
  * inside a call that names a text node with a translator's copy on record, and a
@@ -92,6 +97,8 @@ const MARK = '__dukbTranslateGuard';
 interface Natives {
   removeChild: Node['removeChild'];
   insertBefore: Node['insertBefore'];
+  /** The browser's own nodeValue setter, for the writes layer two makes itself. */
+  setValue: (this: Node, value: string | null) => void;
 }
 
 interface Live {
@@ -101,6 +108,8 @@ interface Live {
   before(parent: Node, reference: Node): Node | null;
   /** React wrote new words into `text` while it is off the page. `was` is what it held before. */
   wrote(text: Node, was: string | null): void;
+  /** Somebody other than layer two wrote into `text` while it is on the page. */
+  touched(text: Node): void;
 }
 
 const isWrapper = (node: Node | null): node is Element => !!node && node.nodeType === 1 && node.nodeName === 'FONT';
@@ -117,8 +126,18 @@ function makeLive(win: GuardWindow, native: Natives): Live | null {
   const shown = new WeakMap<Node, Node>();
   /** The other way round. */
   const owner = new WeakMap<Node, Node>();
-  /** Stand ins made in this same turn. No translator has read them yet: it reads the page in a microtask at the earliest. */
+  /**
+   * Stand ins made in this same turn. No translator has read them yet (it reads the page in a microtask at
+   * the earliest), so one commit that touches an element five times makes its stand ins once.
+   */
   let young: Set<Node> | null = null;
+  /**
+   * Text nodes that were rewritten while on the page. The translator reads a node once, when it first sees
+   * it, and answers a moment later with a translation of the words it READ, whatever the node says by then
+   * (measured: a node rewritten five milliseconds after it appeared was swapped for its first words). So a
+   * wrapper that takes one of these may be showing words that are already old.
+   */
+  const rewritten = new WeakSet<Node>();
 
   /**
    * THE MAP. A swap is a text node leaving while a <font> that arrived in the same batch sits where it stood:
@@ -127,6 +146,7 @@ function makeLive(win: GuardWindow, native: Natives): Live | null {
    */
   const take = (records: MutationRecord[]) => {
     let arrived: Set<Node> | null = null;
+    let late: Node[] | null = null;
     for (let i = 0; i < records.length; i++) {
       const record = records[i];
       const gone = record.removedNodes;
@@ -153,8 +173,11 @@ function makeLive(win: GuardWindow, native: Natives): Live | null {
         shown.set(mine, wrapper);
         owner.set(wrapper, mine);
         stats.swaps += 1;
+        if (rewritten.has(text)) (late || (late = [])).push(record.target);
       }
     }
+    // Only once the whole batch is on the map: a sentence is refreshed whole or not at all.
+    if (late) for (let i = 0; i < late.length; i++) refresh(late[i]);
   };
   const observer = new win.MutationObserver(take);
   observer.observe(doc, { childList: true, subtree: true });
@@ -164,31 +187,28 @@ function makeLive(win: GuardWindow, native: Natives): Live | null {
   /**
    * THE ONE RULE. Every translated string directly inside `parent` goes back to the translator as a brand new
    * text node holding React's current words. Never React's own node (the translator would not look at it
-   * again) and never a write into a stand in from an earlier turn (the translator may be working on it).
+   * again) and never a write into a stand in (the translator may be working on it): a stand in whose words
+   * are out of date is replaced like any wrapper.
    */
   const refresh = (parent: Node) => {
     let child = parent.firstChild;
     while (child) {
       const next = child.nextSibling;
       const mine = owner.get(child);
-      if (mine) {
-        const words = mine.nodeValue || '';
-        if (young && young.has(child)) {
-          if (child.nodeValue !== words) child.nodeValue = words;
-        } else {
-          const standIn = (mine.ownerDocument || doc).createTextNode(words);
-          native.insertBefore.call(parent, standIn, child);
-          native.removeChild.call(parent, child);
-          owner.delete(child);
-          owner.set(standIn, mine);
-          shown.set(mine, standIn);
-          if (!young) {
-            young = new Set();
-            Promise.resolve().then(() => { young = null; });
-          }
-          young.add(standIn);
-          stats.restored += 1;
+      // A stand in made earlier in this same turn, still saying the right words, is fresh enough.
+      if (mine && !(young && young.has(child) && child.nodeValue === (mine.nodeValue || ''))) {
+        const standIn = (mine.ownerDocument || doc).createTextNode(mine.nodeValue || '');
+        native.insertBefore.call(parent, standIn, child);
+        native.removeChild.call(parent, child);
+        owner.delete(child);
+        owner.set(standIn, mine);
+        shown.set(mine, standIn);
+        if (!young) {
+          young = new Set();
+          Promise.resolve().then(() => { young = null; });
         }
+        young.add(standIn);
+        stats.restored += 1;
       }
       child = next;
     }
@@ -228,6 +248,18 @@ function makeLive(win: GuardWindow, native: Natives): Live | null {
       if (!parent || text.nodeValue === was) return;
       refresh(parent);
     },
+    touched(text) {
+      const mine = owner.get(text);
+      if (!mine) {
+        rewritten.add(text);
+        return;
+      }
+      // A stand in was rewritten in place: React found it as the only child of its element and wrote
+      // to it. The node behind it gets the same words, and the stand in is made again, because the
+      // translator may already be working on the old one.
+      native.setValue.call(mine, text.nodeValue);
+      if (text.parentNode) refresh(text.parentNode);
+    },
   };
 }
 
@@ -240,7 +272,14 @@ export function installTranslateGuard(win: GuardWindow = window as GuardWindow):
 
   const nativeRemoveChild = proto.removeChild;
   const nativeInsertBefore = proto.insertBefore;
-  const live = win.__DUKB_NO_TRANSLATE_LIVE__ ? null : makeLive(win, { removeChild: nativeRemoveChild, insertBefore: nativeInsertBefore });
+  // React rewrites a string in place through nodeValue, and uses nothing else for it. Layer two has to
+  // see those writes, so it only exists where that property can be wrapped (every browser, and jsdom).
+  const slot = Object.getOwnPropertyDescriptor(proto, 'nodeValue');
+  const readValue = slot && slot.configurable ? slot.get : undefined;
+  const writeValue = slot && slot.configurable ? slot.set : undefined;
+  const live = win.__DUKB_NO_TRANSLATE_LIVE__ || !readValue || !writeValue
+    ? null
+    : makeLive(win, { removeChild: nativeRemoveChild, insertBefore: nativeInsertBefore, setValue: writeValue });
 
   // One line in the console is enough to explain an odd looking translated page.
   let told = false;
@@ -282,26 +321,26 @@ export function installTranslateGuard(win: GuardWindow = window as GuardWindow):
     return nativeInsertBefore.call(this, node, reference) as T;
   };
 
-  // React rewrites a string in place through nodeValue (and uses nothing else for it). On a node the
-  // translator took, that write lands off the page and the screen keeps the old words. A node that is on
-  // the page, or is not text, costs two reads here and goes straight to the browser's own setter.
-  const slot = live ? Object.getOwnPropertyDescriptor(proto, 'nodeValue') : undefined;
-  if (live && slot && slot.get && slot.set && slot.configurable) {
-    const readValue = slot.get;
-    const writeValue = slot.set;
+  // The write itself always goes to the browser's own setter first, untouched. After it: a text node that
+  // is OFF the page may be one the translator took, and then the screen has to follow. A text node that is
+  // ON the page is remembered as rewritten (one set entry), because the translator may be about to swap it
+  // for a translation of its older words. Anything that is not text costs one read here.
+  if (live && slot && readValue && writeValue) {
     Object.defineProperty(proto, 'nodeValue', {
       configurable: true,
       enumerable: slot.enumerable,
       get: readValue,
       set(this: Node, value: string | null) {
-        if (this.nodeType !== 3 || this.isConnected) {
+        if (this.nodeType !== 3) {
           writeValue.call(this, value);
           return;
         }
-        const was = readValue.call(this) as string | null;
+        const offPage = !this.isConnected;
+        const was = offPage ? (readValue.call(this) as string | null) : null;
         writeValue.call(this, value);
         try {
-          live.wrote(this, was);
+          if (offPage) live.wrote(this, was);
+          else live.touched(this);
         } catch {
           // the write itself went through, which is all layer one promises
         }

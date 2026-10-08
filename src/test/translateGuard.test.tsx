@@ -181,6 +181,17 @@ function Ledger() {
   );
 }
 
+/** The roll's shape: a figure that is its element's only child, so React writes it through the element. */
+function Roll() {
+  const [n, setN] = useState(50);
+  return (
+    <div>
+      <button onClick={() => setN(v => v + 1)}>roll</button>
+      <div data-testid="roll">{n}</div>
+    </div>
+  );
+}
+
 /** Stands in for the route error boundary: what a player sees when a commit throws. */
 class Boundary extends Component<{ children: ReactNode }, { broke: boolean }> {
   state = { broke: false };
@@ -521,10 +532,26 @@ describe('layer two: a string React rewrites in place shows its new words', () =
     });
     expect(ledger.textContent).toBe('+$50k');
     expect(ledger.childNodes.length).toBe(2);
-    // one stand in for the figure, made by the insert and then written in the same turn, not made twice
-    expect(stats().restored).toBe(before.restored + 1);
     translateReal(container);
     expect(ledger.textContent).toBe('pt:+$50k');
+  });
+
+  it('one commit that rewrites three strings of a line makes its stand ins once, not three times', async () => {
+    const p = document.body.appendChild(document.createElement('p'));
+    const parts = ['1', ' of ', '10', ' matches won (', '10', '%)'].map(s => p.appendChild(document.createTextNode(s)));
+    translateReal(p);
+    await settle();
+    const before = stats();
+    parts[0].nodeValue = '2';
+    parts[2].nodeValue = '11';
+    parts[4].nodeValue = '18';
+    expect(p.textContent).toBe('2 of 11 matches won (18%)');
+    expect(p.childNodes.length).toBe(6);
+    // six for the first rewrite, then only the one whose words changed: eight, where eighteen would be every one every time
+    expect(stats().restored).toBe(before.restored + 8);
+    translateReal(p);
+    expect(p.textContent).toBe('pt:2 of 11 matches won (18%)');
+    p.remove();
   });
 
   it('hiding a string and showing it again works off the page too', () => {
@@ -583,6 +610,79 @@ describe('layer two: a string React rewrites in place shows its new words', () =
     expect(screen.getByTestId('ledger').textContent).toBe('+$50k');
     expect(document.querySelectorAll('font').length).toBe(0);
     expect(stats()).toEqual(before);
+  });
+});
+
+/**
+ * The translator's own delay. It reads a node when it first sees it and answers later with the words it
+ * read. Measured on the real one: a node rewritten 5 ms after it appeared was swapped for its FIRST words
+ * and stayed that way. No guard is involved in that at all, and it froze the roll on the create screen.
+ */
+describe('layer two: a string rewritten while the translator was working on it', () => {
+  it('is not left showing its first words', async () => {
+    const p = document.body.appendChild(document.createElement('p'));
+    const words = p.appendChild(document.createTextNode('First words here'));
+    const late = readNewText(p); // the translator has read it
+    words.nodeValue = 'Second words here'; // and the page moves on
+    answer(late); // the answer lands, for the first words
+    expect(p.textContent).toBe('pt:First words here');
+    await settle(); // the observer's turn
+    expect(p.textContent).toBe('Second words here');
+    expect(fontsIn(p)).toBe(0);
+    translateReal(p);
+    expect(p.textContent).toBe('pt:Second words here');
+    // and that is the end of it: nothing keeps handing the same words back
+    await settle();
+    const before = stats();
+    await settle();
+    expect(stats()).toEqual(before);
+    expect(p.textContent).toBe('pt:Second words here');
+    p.remove();
+  });
+
+  it('a figure that is its element\'s only child and keeps ticking ends on its last value', async () => {
+    const { container } = render(<Boundary><Roll /></Boundary>);
+    const roll = screen.getByTestId('roll');
+    const press = () => act(() => { fireEvent.click(screen.getByRole('button')); });
+    translateReal(screen.getByRole('button'));
+    let late = readNewText(container); // reads "50"
+    press(); // 51, written into the very node the translator is working on
+    answer(late);
+    expect(roll.textContent).toBe('pt:50');
+    await settle();
+    expect(roll.textContent).toBe('51');
+    // from here React finds the stand in as the element's only child and writes straight into it
+    late = readNewText(container); // reads "51"
+    await settle();
+    press(); // 52
+    expect(roll.textContent).toBe('52');
+    answer(late); // the late answer is for a node that is gone
+    expect(roll.textContent).toBe('52');
+    late = readNewText(container); // reads "52"
+    await settle();
+    press(); // 53
+    press(); // 54, the last one
+    answer(late);
+    await settle();
+    expect(roll.textContent).toBe('54');
+    translateReal(container);
+    expect(roll.textContent).toBe('pt:54');
+    expect(roll.childNodes.length).toBe(1);
+    expect(screen.queryByRole('alert')).toBeNull();
+  });
+
+  it('a string that was never rewritten is left alone when it is taken', async () => {
+    const p = document.body.appendChild(document.createElement('p'));
+    p.appendChild(document.createTextNode('Quiet words'));
+    await settle();
+    const before = stats();
+    translateReal(p);
+    const wrapper = p.firstChild;
+    await settle();
+    expect(p.firstChild).toBe(wrapper);
+    expect(stats().restored).toBe(before.restored);
+    expect(stats().swaps).toBe(before.swaps + 1);
+    p.remove();
   });
 });
 

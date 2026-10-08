@@ -344,7 +344,7 @@ function pageInit(cfg) {
     return s;
   }
   const taken = new WeakSet();
-  const w = { origText, moved: [], simCount: 0, sweeps: 0, simStarted: false, counting: false };
+  const w = { origText, moved: [], simCount: 0, sweeps: 0, simStarted: false, counting: false, cost: !!cfg.cost };
   window.__walk = w;
 
   /* THE RECORDER. It changes nothing: it counts a call that names a node its parent no longer owns,
@@ -355,6 +355,7 @@ function pageInit(cfg) {
   const brief = n => (n && n.nodeType === 3 ? (n.nodeValue || '') : origText(n)).replace(/\s+/g, ' ').trim().slice(0, 60);
   const tagOf = n => (n && n.nodeType === 1 ? n.tagName.toLowerCase() : n ? '#' + n.nodeType : '');
   function layRecorder() {
+    if (cfg.cost) { w.counting = true; return; } // the cost run times the page as shipped, nothing laid over it
     if (Node.prototype.removeChild !== myRemove) {
       const under = Node.prototype.removeChild;
       myRemove = function (child) {
@@ -576,11 +577,11 @@ const LOCAL_HOSTS = new Set(['localhost', '127.0.0.1', new URL(BASE).hostname]);
 browser = await chromium.launch({ args: ['--no-sandbox', '--no-proxy-server'] });
 if (SHOTS) fs.mkdirSync(SHOTS, { recursive: true });
 
-async function openWalk(view, mode) {
+async function openWalk(view, mode, switches = { noguard: CONTROL === 'noguard', nolive: CONTROL === 'nolive' }) {
   const ctx = await browser.newContext({ viewport: VIEW_SIZES[view], locale: 'pt-BR', timezoneId: 'America/Sao_Paulo' });
   await ctx.addInitScript(pageInit, {
     seed: SEED, translate: mode !== 'off', text: mode, simDelay: SIM_DELAY, simStart: SIM_START, simRead: SIM_READ, late: SIM_LATE,
-    noguard: CONTROL === 'noguard', nolive: CONTROL === 'nolive',
+    noguard: !!switches.noguard, nolive: !!switches.nolive, cost: !!switches.cost,
   });
   const w = { ctx, page: null, blocked: new Set(), dbBlocked: 0, guardLines: 0, notFound: [], consoleErrors: [], pageErrors: [] };
   /* nothing leaves this machine: flags get one local pixel, everything else that is not the server is aborted */
@@ -639,7 +640,8 @@ async function probe(page) {
     let save = null;
     try { const raw = localStorage.getItem('soccerCareerSave'); save = raw ? JSON.parse(raw) : null; } catch (e) { save = null; }
     const root = document.getElementById('root');
-    const says = w.reactSays();
+    /* the cost run times the page's own work, so the judge stays out of it */
+    const says = w.cost ? { elements: 0, stale: [], order: [] } : w.reactSays();
     /* the career hub's own line, "Striker · Age 17 · Brazil", as the screen has it */
     let headerAge = null;
     for (const p of document.querySelectorAll('p')) {
@@ -1171,6 +1173,90 @@ async function runWalk({ mode, view, route }, out) {
   return row;
 }
 
+/* ------------------------------------------------------------------ *
+ * COST=1 (Round 1141): what the guard costs a page nobody translated.
+ * Not a gate. It prints numbers for the header above and exits 0.
+ * Two measurements, three builds of the same page each (both layers,
+ * layer one only, no guard at all, picked with the two switches), one
+ * walk at a time, COST_REPS times each in turn:
+ *   the walk   the whole create flow and CAREER_PRESSES presses of a real
+ *              career, untranslated, same dice: the browser's own count of
+ *              seconds spent running script and doing tasks on that page.
+ *   the calls  the same page then makes the calls React makes, a great
+ *              many times, on a hidden box of its own: 100,000 rewrites of
+ *              a text node that is on the page, 20,000 inserts and removals
+ *              of an element, 20,000 of a text node (the one kind of record
+ *              the observer has to look at twice). Milliseconds for each,
+ *              the observer's own turn included.
+ * ------------------------------------------------------------------ */
+function stress() {
+  return (async () => {
+    const turn = () => new Promise(r => setTimeout(r, 0));
+    const host = document.createElement('div');
+    host.style.display = 'none';
+    document.body.appendChild(host);
+    const N = 2000;
+    const texts = [];
+    for (let i = 0; i < N; i += 1) {
+      const p = document.createElement('p');
+      p.appendChild(document.createTextNode('Age '));
+      const t = document.createTextNode('16');
+      p.appendChild(t);
+      host.appendChild(p);
+      texts.push(t);
+    }
+    await turn();
+    const t0 = performance.now();
+    for (let r = 0; r < 50; r += 1) for (let i = 0; i < N; i += 1) texts[i].nodeValue = String(r + i);
+    await turn();
+    const t1 = performance.now();
+    for (let r = 0; r < 10; r += 1) for (let i = 0; i < N; i += 1) { const p = texts[i].parentNode; const b = document.createElement('b'); p.insertBefore(b, texts[i]); p.removeChild(b); }
+    await turn();
+    const t2 = performance.now();
+    for (let r = 0; r < 10; r += 1) for (let i = 0; i < N; i += 1) { const p = texts[i].parentNode; const x = document.createTextNode('x'); p.insertBefore(x, texts[i]); p.removeChild(x); }
+    await turn();
+    const t3 = performance.now();
+    host.remove();
+    return { writes: t1 - t0, elements: t2 - t1, textNodes: t3 - t2 };
+  })();
+}
+async function costRun() {
+  const reps = Math.max(1, Number(env.COST_REPS || 3));
+  const kinds = [['both layers', {}], ['layer one only', { nolive: true }], ['no guard', { noguard: true }]];
+  const got = new Map(kinds.map(([name]) => [name, []]));
+  for (let rep = 0; rep < reps; rep += 1) {
+    for (const [name, sw] of kinds) {
+      const W = await openWalk('desktop', 'off', { ...sw, cost: true });
+      const rec = newRecord(CREATE_ROUTE, 'desktop', 'off', '', () => {});
+      const cdp = await W.ctx.newCDPSession(W.page);
+      await cdp.send('Performance.enable');
+      await W.page.goto(BASE + CREATE_ROUTE, { waitUntil: 'load', timeout: 45000 });
+      await walkCreate(W, rec);
+      const m = (await cdp.send('Performance.getMetrics')).metrics;
+      const get = n => (m.find(x => x.name === n) || { value: 0 }).value;
+      const calls = await W.page.evaluate(stress);
+      const state = rec.state || {};
+      got.get(name).push({
+        script: get('ScriptDuration'), task: get('TaskDuration'), steps: rec.steps.length, age: state.save ? state.save.age : null,
+        guardOn: (rec.first || {}).guardOn === true, live: !!state.live, stuck: rec.stuckAt || rec.boundaryAt || '', ...calls,
+      });
+      await W.ctx.close();
+    }
+  }
+  const mid = a => { const s = a.slice().sort((x, y) => x - y); return s[Math.floor(s.length / 2)]; };
+  const f = (n, d = 0) => n.toFixed(d);
+  console.log(`\nCOST, ${reps} run(s) of each, the middle one shown (all runs in brackets). The walk: ${CREATE_ROUTE} untranslated, create flow and ${CAREER_PRESSES} career presses, 1280 by 900.`);
+  console.log(`  ${'build'.padEnd(16)}${'script s'.padEnd(26)}${'tasks s'.padEnd(26)}${'100k rewrites ms'.padEnd(24)}${'20k element ms'.padEnd(24)}${'20k text node ms'.padEnd(24)}walk`);
+  for (const [name] of kinds) {
+    const rows = got.get(name);
+    const col = (k, d) => `${f(mid(rows.map(r => r[k])), d)} [${rows.map(r => f(r[k], d)).join(' ')}]`;
+    console.log(`  ${name.padEnd(16)}${col('script', 2).padEnd(26)}${col('task', 2).padEnd(26)}${col('writes', 0).padEnd(24)}${col('elements', 0).padEnd(24)}${col('textNodes', 0).padEnd(24)}${rows.map(r => `${r.steps} steps to age ${r.age}${r.stuck ? ' STUCK ' + r.stuck.slice(0, 30) : ''} (guard ${r.guardOn ? 'on' : 'off'}, layer two ${r.live ? 'on' : 'off'})`)[0]}`);
+  }
+  if (OUT_JSON) { try { fs.mkdirSync(path.dirname(OUT_JSON), { recursive: true }); fs.writeFileSync(OUT_JSON, JSON.stringify({ base: BASE, cost: Object.fromEntries(got) }, null, 1)); } catch { /* the numbers are on the screen */ } }
+  console.log('playTranslatedPage: cost measured, 0 checks, 0 failed');
+}
+if (env.COST) { await costRun(); await stop(0); }
+
 /* JOBS walks at a time (three by default), each in its own context with its own seeded dice, so the
    order they finish in changes nothing but the order of the lines. The tables below are in the
    fixed order of the list. */
@@ -1262,7 +1348,8 @@ const movedAll = rows.reduce((a, r) => a + r.moved, 0);
 if (CONTROL === 'notranslate') {
   checkLine('9. with the translator off the guard printed nothing and no call named a moved node', guardPages === 0 && movedAll === 0, `${guardPages} of ${rows.length} page(s) printed the guard's line, ${movedAll} moved node(s)`);
 } else if (CONTROL !== 'noguard') {
-  console.log(`THE GUARD WAS NEEDED on ${guardPages} of ${rows.length} page load(s): ${movedAll} call(s) in all named a node its parent no longer owned.`);
+  /* Layer one prints its line only when it had to fall back: a moved node nobody had on record. */
+  console.log(`${movedAll} call(s) in all named a node its parent no longer owned, each one a crash without the guard. Layer one had to fall back, and printed its line, on ${guardPages} of ${rows.length} page load(s).`);
 }
 
 if (OUT_JSON) {
