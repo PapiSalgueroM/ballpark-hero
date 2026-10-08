@@ -1,0 +1,4 @@
+m1 exit=0 52s | M1 vitest=1 simUsBoardParity=0
+m2 exit=0 33s | m2 vitest=1 simUsSeasonCentre=0 simSeasonCentreNeutral=0
+m3 exit=0 34s | m3 vitest=1 simUsSeasonCentre=0 simSeasonCentreNeutral=0
+m4 exit=0 34s | m4 vitest=1 simUsSeasonCentre=0 simSeasonCentreNeutral=0
