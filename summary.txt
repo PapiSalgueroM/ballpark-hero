@@ -1,0 +1,2 @@
+simDailySaveHardening-alone exit=0 40s | simDailySaveHardening: part all green
+simDailySaveHardening-again exit=0 42s | simDailySaveHardening: part all green
