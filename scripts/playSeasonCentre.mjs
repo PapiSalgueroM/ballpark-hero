@@ -45,6 +45,12 @@
  * writes the save Next Season writes); label fails 4, among them 5 ("Next
  * matchday" clashes with the walker); count fails 2 (34 and 35 wrong frames).
  *
+ * Round 1047: a matchday can now stop for one of his moments. This harness
+ * never takes one: wherever the offer card shows it checks the walker on it
+ * and presses "▶ Let it play", so "the save is byte for byte the same after a
+ * full watch" now also says that letting every moment play writes nothing.
+ * Taking a moment is scripts/playSeasonMoments.mjs.
+ *
  * Run: npm run build, then ENGINES=chromium node scripts/playSeasonCentre.mjs
  * (MSYS_NO_PATHCONV=1 under Git Bash). Green is the closing
  * "playSeasonCentre: N checks, 0 failed" line and exit 0.
@@ -243,6 +249,7 @@ async function walkerCheck(page, where) {
 }
 
 const allErrors = [];
+let LET_PLAY = 0;
 const SCREEN_LABELS = new Set();
 let pickOnNew = 0, clashes = new Set();
 async function walkerAt(page, where) {
@@ -251,10 +258,18 @@ async function walkerAt(page, where) {
   for (const c of r.clash) clashes.add(c);
   for (const l of r.labels) SCREEN_LABELS.add(l);
 }
+/** A moment's offer card: check the walker on it, then let it play (Round 1047). */
+async function letPlay(page, where) {
+  if (!(await page.$('[data-moment-offer]'))) return false;
+  await walkerAt(page, `${where} moment`);
+  LET_PLAY += 1;
+  return clickText(page, '▶ Let it play');
+}
 /** Play on at Results speed until the review shows. */
 async function toReview(page, where) {
   for (let i = 0; i < 140; i += 1) {
     if (await page.$('[data-review]')) return true;
+    await letPlay(page, `${where} step ${i}`);
     await walkerAt(page, `${where} step ${i}`);
     await clickText(page, 'Results');
     if (!(await clickText(page, '▶ Matchday')) && !(await clickText(page, '▶ League game'))) await clickText(page, '📋 Season review');
@@ -292,6 +307,7 @@ try {
   check(!(await X.page.$('[data-season-centre]')), '2. Back to the papers closes the overlay');
   const after = await savedString(X.page);
   check(after === sx, `2. the save is byte for byte the same after a full watch (${after === sx ? 'same' : 'changed'})`);
+  check(LET_PLAY > 0, `2. that watch met his moments and let every one play (${LET_PLAY} offers)`);
   allErrors.push(...X.errors, ...Y.errors);
   await X.ctx.close(); await Y.ctx.close();
 
@@ -379,6 +395,7 @@ try {
       if (f.s !== scoreAt(g1.events, f.m)) wrong += 1;
       if (!shotTaken && f.m >= 35) { await shot(P.page, `${tag}-3-matchday-mid-clock`); shotTaken = true; }
       if (f.ft) break;
+      await letPlay(P.page, `${tag} first match`);
       await P.page.waitForTimeout(90);
     }
     check(samples >= 20 && wrong === 0, `4. ${tag}: the score bug equals the derived goals at every sampled minute (${samples} frames, ${wrong} wrong)`);
@@ -386,6 +403,7 @@ try {
     await clickText(P.page, 'Results');
     let derbyShot = false, clinchShot = false;
     for (let i = 0; i < 40 && !(derbyShot && clinchShot); i += 1) {
+      await letPlay(P.page, `${tag} tour ${i}`);
       const kinds = await P.page.evaluate(() => document.querySelector('[data-poster]')?.getAttribute('data-poster') ?? '');
       if (kinds.includes('derby') && !derbyShot) { await shot(P.page, `${tag}-2-derby-day`); derbyShot = true; }
       if (kinds.includes('title') && !clinchShot) { await shot(P.page, `${tag}-4-title-clinch`); clinchShot = true; }
@@ -429,6 +447,7 @@ try {
   const k0 = await running();
   await clickText(R.page, '▶ Kick off');
   if (await R.page.$('[data-poster]')) { await R.page.waitForTimeout(100); await clickText(R.page, '▶ Matchday 1'); }
+  await letPlay(R.page, 'reduced motion');
   const firstFrame = await R.page.evaluate(() => !!document.querySelector('[data-full-time]'));
   await R.page.waitForTimeout(100);
   const k1 = await running();

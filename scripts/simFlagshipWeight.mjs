@@ -105,9 +105,26 @@ console.log(`   ${flagship.size} modules, ${(srcBytes / 1024).toFixed(0)} KB of 
 /* Round 1045: the Season Centre is loaded only when a person presses for it.
    None of these may be in the flagship's static closure. Control
    FLAGSHIP_LAZY_CONTROL=static walks the page with its lazy() line rewritten
-   as a static import (in memory; the file is never written) and must go red. */
-console.log('1b) the Season Centre is not in the first download');
-const MUST_BE_LAZY = ['src/lib/season/', 'src/components/season-centre/', 'src/components/soccer-career/SoccerSeasonCentre.tsx', 'src/data/leagueFormat.ts'];
+   as a static import (in memory; the file is never written) and must go red.
+
+   Round 1047: the training ground and its boards load when they are opened
+   (the Season Centre's moments reuse the boards), so they joined the list.
+   FLAGSHIP_LAZY_CONTROL=training reads the training ground's lazy() line as a
+   static import and must go red. One file of src/lib/season is allowed in
+   the first download: momentsSave.ts, the save's own ledger reader, which
+   the engine's repair line calls. It must import nothing, and that is
+   checked here with comments stripped. */
+console.log('1b) the Season Centre and the training ground are not in the first download');
+const MUST_BE_LAZY = [
+  'src/lib/season/', 'src/components/season-centre/', 'src/components/soccer-career/SoccerSeasonCentre.tsx', 'src/data/leagueFormat.ts',
+  'src/components/soccer-career/TrainingPanel.tsx', 'src/components/soccer-career/DrillBoard.tsx', 'src/components/soccer-career/ThroughBallBoard.tsx',
+  'src/components/soccer-career/FirstTouchBoard.tsx', 'src/components/soccer-career/SoccerMomentBoard.tsx', 'src/components/soccer-career/useSoccerMoments.tsx',
+];
+const MAY_BE_EAGER = ['src/lib/season/momentsSave.ts'];
+{
+  const ledger = readFileSync(path.join(ROOT, MAY_BE_EAGER[0]), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/[^\n]*/g, '');
+  if (/^\s*import\s/m.test(ledger) || /\bimport\(/.test(ledger) || /\brequire\(/.test(ledger)) fail(`${MAY_BE_EAGER[0]} imports something: it is the one season file in the first download and must import nothing`);
+}
 let lazyClosure = flagship;
 if (process.env.FLAGSHIP_LAZY_CONTROL === 'static') {
   const pagePath = path.join(ROOT, 'src/pages/SoccerCareer.tsx');
@@ -117,10 +134,19 @@ if (process.env.FLAGSHIP_LAZY_CONTROL === 'static') {
   lazyClosure = staticClosure('src/pages/SoccerCareer.tsx', { [pagePath]: pageText.replace(needle, 'import SoccerSeasonCentre from "@/components/soccer-career/SoccerSeasonCentre";') });
   console.log('   CONTROL static: the lazy line read as a static import');
 }
-const eager = [...lazyClosure].filter(f => MUST_BE_LAZY.some(m => f === m || f.startsWith(m)));
-if (eager.length) fail(`/soccer-career statically imports the Season Centre (${eager.join(', ')}), so every player downloads it before the first screen`);
+if (process.env.FLAGSHIP_LAZY_CONTROL === 'training') {
+  const pagePath = path.join(ROOT, 'src/pages/SoccerCareer.tsx');
+  const pageText = readFileSync(pagePath, 'utf8');
+  const needle = 'const TrainingPanel = lazy(() => import("@/components/soccer-career/TrainingPanel"));';
+  if (!pageText.includes(needle)) throw new Error('control refused: SoccerCareer.tsx has no lazy TrainingPanel line');
+  lazyClosure = staticClosure('src/pages/SoccerCareer.tsx', { [pagePath]: pageText.replace(needle, 'import TrainingPanel from "@/components/soccer-career/TrainingPanel";') });
+  console.log('   CONTROL training: the training ground\'s lazy line read as a static import');
+}
+const eager = [...lazyClosure].filter(f => !MAY_BE_EAGER.includes(f) && MUST_BE_LAZY.some(m => f === m || f.startsWith(m)));
+if (eager.length) fail(`/soccer-career statically imports the Season Centre or the training ground (${eager.join(', ')}), so every player downloads it before the first screen`);
 const pageSrc = readFileSync(path.join(ROOT, 'src/pages/SoccerCareer.tsx'), 'utf8');
 if (!pageSrc.includes('lazy(() => import("@/components/soccer-career/SoccerSeasonCentre"))')) fail('SoccerCareer.tsx no longer loads SoccerSeasonCentre with lazy(), so nothing opens the Season Centre');
+if (!pageSrc.includes('lazy(() => import("@/components/soccer-career/TrainingPanel"))')) fail('SoccerCareer.tsx no longer loads TrainingPanel with lazy(), so nothing opens the training ground');
 console.log(`   ${MUST_BE_LAZY.length} paths that must stay lazy, ${eager.length} in the static closure`);
 
 /* ── the gates that keep it that way ───────────────────────────────────── */
