@@ -1,11 +1,15 @@
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { Confetti } from "@/components/soccer-career/CareerFx";
-import { revealDelay } from "@/components/club-manager/Celebration";
+import { revealAfter, revealDelay } from "@/components/club-manager/Celebration";
+import { stillMotion, useSoundPlan } from "@/hooks/useSoundPlan";
 import {
   countdownSlot, placeMark,
   type AwardsCandidate, type AwardsDef, type AwardsNight, type AwardsNightCopy, type GivenSpeech,
 } from "@/lib/careerAwardsNight";
+
+/* cmSlam (CelebrationStyles) runs 0.4 s and is fully on screen at 60 percent */
+const SLAM_LANDS = 0.24;
 
 /* ─── Round 834: the awards night card, shared ───
    Lifted from Soccer Career's Ballon d'Or ceremony, markup unchanged. The list
@@ -44,6 +48,19 @@ export function AwardsNightCard<C extends AwardsCandidate>({
   const borderColor = isWinner ? "border-amber-400/60" : isPodium ? "border-amber-500/30" : "border-border";
   const bgGrad = isWinner ? "from-amber-500/20 to-transparent" : isPodium ? "from-amber-500/10 to-transparent" : "from-transparent to-transparent";
   const n = night.nominees.length;
+
+  /* Round 1132: the night out loud, for a player who switched sound on. One tick as each name arrives, the
+     last name first, then the result as the headline lands: a sting on the podium, a sting and the crowd for
+     the winner, nothing for anyone else. Reduced motion shows the card at once, so it gets the result alone.
+     The key names the award, so two awards of one year that he finishes level on are two plans. Speaking
+     re-renders the card with the same key: no second sting. This draws nothing. */
+  useSoundPlan(`${award.id}|${night.year}|${place}|${n}`, play => {
+    const still = stillMotion();
+    if (!still) for (let k = 0; k < n; k += 1) play("tap", { delay: revealAfter(k) });
+    const lands = still ? 0 : revealAfter(n, 0.75) + SLAM_LANDS;
+    if (isWinner) play("awardWin", { delay: lands });
+    else if (isPodium && isNominated) play("award", { delay: lands });
+  });
 
   return (
     <div className={`relative rounded-xl border-2 ${borderColor} bg-gradient-to-b ${bgGrad} p-5 space-y-4 animate-in fade-in zoom-in-90 duration-700`}>
