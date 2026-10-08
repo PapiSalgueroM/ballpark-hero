@@ -464,7 +464,8 @@ if (want('B5')) {
       };
     };
   `;
-  const netOf = (key, limit = 30000) => `(() => { const b = document.querySelector('[data-mini-pitch]'); return b && b.dataset.pitchGoal === ${JSON.stringify(key)} && b.dataset.pitchPhase === 'net'; })()`;
+  const netOf = (key, limit = 30000) => `(() => { const b = document.querySelector('[data-mini-pitch]'); return b && b.dataset.pitchGoal === ${JSON.stringify(key)} && b.dataset.pitchPhase === 'net' && !b.hasAttribute('data-pitch-live'); })()`;
+  const flyingOf = key => `(() => { const b = document.querySelector('[data-mini-pitch]'); return b && b.dataset.pitchGoal === ${JSON.stringify(key)} && b.hasAttribute('data-pitch-live') && b.dataset.pitchPhase !== 'net'; })()`;
   const p5 = { n: 0, bad: [] };
   const hold = (ok, msg) => { p5.n += 1; if (!ok) p5.bad.push(msg); };
   for (const [vw, wrap] of [[320, 296], [390, 366]]) {
@@ -508,9 +509,10 @@ if (want('B5')) {
 
     /* his goal, and a second goal two minutes later while the first is still in the air */
     await page.evaluate(() => __watch());
-    const kicked = await set({ shown: 67 });
+    await set({ shown: 67 });
+    await page.waitForFunction(flyingOf('1|67|us|0'), null, { timeout: 30000 });
+    const kicked = await see();
     hold(kicked.yours === '⚽ Yours' && kicked.rings.join() === 'me', `${tag}: his goal does not say Yours with one ring (${kicked.yours})`);
-    await page.waitForFunction(() => document.querySelector('[data-mini-pitch]').dataset.pitchPhase !== 'idle', null, { timeout: 30000 });
     await set({ shown: 69 });
     const second = await landed('1|69|us|0');
     const nets = k => second.log.filter(x => x === `${k}:net`).length;

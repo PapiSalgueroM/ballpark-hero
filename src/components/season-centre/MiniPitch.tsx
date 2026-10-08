@@ -181,7 +181,7 @@ function MiniPitch({ md, events, shown, paused, instant, usColor, role, onFrom, 
   const his = drawn && frame.mine.concat(frame.theirs).some(p => p.ring) ? (drawn.mine ? '⚽ Yours' : drawn.assist ? '🅰️ Your assist' : null) : null;
   return (
     <div aria-hidden="true">
-      <div className={boxClass} data-mini-pitch data-pitch-phase={frame.phase} data-pitch-side={drawn ? drawn.side : 'us'} data-pitch-goal={drawn ? drawn.key : undefined}>
+      <div className={boxClass} data-mini-pitch data-pitch-phase={frame.phase} data-pitch-side={drawn ? drawn.side : 'us'} data-pitch-goal={drawn ? drawn.key : undefined} data-pitch-live={moving ? '' : undefined}>
         <Surface frame={frame} usColor={usColor} top={top} />
       </div>
       <div className="h-5 text-xs font-bold leading-5 text-primary" data-pitch-yours>
