@@ -1,0 +1,10 @@
+CONTROL firstmount: rewritten in the bundled source or in what is served, never a file on disk
+tables from node: 356 table seasons in the probe, five used: Probe 0 2001 AC Milan (34); Probe 9 2013 Atletico Madrid (38); Probe 16 2006 Chelsea (38); Probe 33 1997 Fiorentina (34); Probe 38 2034 Real Madrid (38)
+B1) 520 transitions over 4 layouts and 5 seasons; largest deviation at the first frame 0.000 px, at the last 0.000 px; 434 rows entered a compact window
+   B3: 320 compact Probe 0 2001 AC Milan: mounting at matchday 1 started 5 transitions
+   B3: 320 compact Probe 0 2001 AC Milan: mounting at matchday 4 started 5 transitions
+   B3: 320 compact Probe 0 2001 AC Milan: mounting at matchday 9 started 5 transitions
+   B3: 320 compact Probe 0 2001 AC Milan: mounting at matchday 17 started 5 transitions
+FAIL B3. a first mount plays nothing (520 of 520 mounts moved)
+ok   B3. pre season to matchday 1 does not slide (0 of 20 did)
+playSeasonCentreMotion: 2 checks, 1 failed (control firstmount) (only B3)
