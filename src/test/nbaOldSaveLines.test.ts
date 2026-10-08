@@ -34,7 +34,7 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import {
   NBA_ARCHETYPES, startNbaCareer, nbaRollTeamQuality, nbaAssignRole, nbaCampBattle, simNbaSeason, nbaProgress,
-  drawNbaEvent, isNbaNewLine, nbaShouldRetire, nbaCareerTotals, nbaLegacyOf, type NbaCareerPos, type NbaCareerState,
+  drawNbaEvent, isNbaNewLine, nbaSeasonGames, nbaShouldRetire, nbaCareerTotals, nbaLegacyOf, type NbaCareerPos, type NbaCareerState,
 } from '@/lib/nbaMyCareer';
 import { NBA_CAREER_HALL } from '@/lib/nbaCareerHall';
 import { hallRecordFor, stampHallCalibration } from '@/lib/careerHallOfFame';
@@ -201,6 +201,11 @@ describe('Round 1103: an old NBA save reads exactly as it did', () => {
       /* The season played after the round is on the new line: minutes, steals and blocks, points to a tenth. */
       expect(isNbaNewLine(added)).toBe(true);
       for (const k of ['mpg', 'spg', 'bpg'] as const) expect(typeof added[k], k).toBe('number');
+      /* It also holds the club's record its awards were decided on, and the record adds up to a season. */
+      expect((added.clubWins ?? -1) + (added.clubLosses ?? -1)).toBe(nbaSeasonGames(added.year));
+      /* A man coming off a season on the old line does not win Most Improved on his first new one: the old
+         line ran about a fifth higher, so his production "fell". */
+      expect(added.awards).not.toContain('Most Improved Player');
       expect(Math.abs(added.ppg * 10 - Math.round(added.ppg * 10))).toBeLessThan(1e-9);
       expect(nbaStatLine(added)).toMatch(/^\d+\.\d ppg, \d+\.\d rpg, \d+\.\d apg$/);
       /* And the old ones did not gain a key on the way. */

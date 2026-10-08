@@ -36,25 +36,25 @@ type Row = readonly [mean: number, sd: number];
  *  when the fleet drifts off these rows. */
 type FieldByPos = Record<string, Row>;
 export const NBA_FIELD: { mvp: FieldByPos; defense: FieldByPos; production: FieldByPos; bench: Row; jump: Row; fans: Row } = {
-  mvp: { PG: [32.91, 11.12], SG: [31.93, 10.9], SF: [33.51, 11.41], PF: [31.88, 10.43], C: [32.81, 10.82] },
-  defense: { PG: [3.01, 1.08], SG: [3.32, 1.28], SF: [4.09, 1.35], PF: [4.08, 1.43], C: [5.61, 2.08] },
-  production: { PG: [22.97, 10.27], SG: [22.06, 9.9], SF: [23.8, 10.44], PF: [22.09, 9.49], C: [23.2, 9.96] },
-  bench: [7.71, 3.31],
-  jump: [-0.01, 7.06],
-  fans: [61.82, 24.56],
+  mvp: { PG: [32.92, 11.23], SG: [31.95, 10.85], SF: [33.67, 11.54], PF: [31.75, 10.35], C: [32.93, 10.95] },
+  defense: { PG: [3.02, 1.06], SG: [3.34, 1.28], SF: [4.08, 1.38], PF: [4.05, 1.41], C: [5.59, 2.08] },
+  production: { PG: [23.1, 10.29], SG: [22.15, 9.87], SF: [23.8, 10.59], PF: [21.9, 9.39], C: [23.15, 10.01] },
+  bench: [7.71, 3.3],
+  jump: [-0.01, 7.09],
+  fans: [61.81, 24.35],
 };
 
 /** How hard each award is. Pools and slots are real counts (150 starters, 24 All-Stars, 15 All-NBA, 10
  *  All-Defensive, 45 rookies who play, 10 All-Rookie, about 60 sixth men). The grade is the one number tuned,
  *  each only to put its own rate where the harness holds it (section B). */
-const G_ALL_STAR = -0.19;
-const G_ALL_NBA = -0.14;
+const G_ALL_STAR = -0.18;
+const G_ALL_NBA = -0.13;
 const G_MVP = -0.33;
 const G_ALL_DEF = 0.2;
-const G_DPOY = 0.22;
-const G_ROOKIE = -2.37;
-const G_SIXTH = -0.63;
-const G_MIP = -0.18;
+const G_DPOY = 0.24;
+const G_ROOKIE = -2.39;
+const G_SIXTH = -0.64;
+const G_MIP = -0.17;
 /** Defensive Player goes to big men far more often than to wings and guards. An estimate, and named as one. */
 const DPOY_POS_EXTRA: Record<string, number> = { C: 0, PF: 0, SF: 0.3, SG: 0.6, PG: 0.6 };
 /** The grades as the pass applies them, for the harness that fits and fences them. */
@@ -199,4 +199,29 @@ export function decideNbaAwards(rng: () => number, x: NbaAwardInput): NbaAwardRe
   if (sixth) out.awards.push('Sixth Man of the Year');
   if (out.allRookieTeam) out.awards.push('All-Rookie Team');
   return out;
+}
+
+/** The worked example the "?" prints, as numbers: a line, a club record, and the same line on a losing club.
+ *  The sentence below is built from these, so the words cannot drift from the score. */
+export const NBA_MVP_EXAMPLE = { ppg: 27.4, rpg: 6.1, apg: 5.3, wins: 54, losses: 28, losingWins: 34, losingLosses: 48 } as const;
+
+/** The award rules the page's "?" adds, built from the rule numbers the pass applies. */
+export function nbaAwardHelpRules(): string[] {
+  const R = NBA_AWARD_RULES;
+  const season = (startYear: number): string => `${startYear}-${String((startYear + 1) % 100).padStart(2, '0')}`;
+  const e = NBA_MVP_EXAMPLE;
+  const production = nbaProduction(e.ppg, e.rpg, e.apg);
+  const share = e.wins / (e.wins + e.losses);
+  const total = nbaMvpValue(production, share, NBA_CAREER_MVP_WIN_WEIGHT);
+  return [
+    `MVP only goes to an All-NBA First Team player whose club made the playoffs. The score is your points plus rebounds plus assists a game, plus ${NBA_CAREER_MVP_WIN_WEIGHT} times your club's winning share, the same score NBA Front Office uses.`,
+    `From the ${season(R.gamesBarFrom)} season on, All-NBA, MVP, Defensive Player of the Year, All-Defensive and Most Improved need ${R.gamesBar} games. Before that season there is no games rule, and Rookie of the Year, All-Rookie and Sixth Man never carry it. The real rule's exception for a season ending injury is not in the game. The game adds one floor of its own: nothing but a Finals MVP is won on less than half a season.`,
+    `All-Star is ${R.allStarPicks} picks a season. Half of a starter's case is the fan vote, which here is your fanbase (in seasons before ${season(R.allStarFanShareFrom)} the fans pick the starters alone), and the reserves are picked on the season you are having. Every All-NBA season is an All-Star season.`,
+    'All-Defensive and Defensive Player of the Year read your defence: steals plus blocks plus half your rebounds a game, against your own position, with a little weight for the kind of player you built.',
+    'All-Rookie is for your first season only, and the Rookie of the Year is always on the first team.',
+    'Most Improved never goes to a player who has already made All-NBA, or to that season\'s MVP.',
+    'To lead the league in points, rebounds or assists you need that season\'s real minimum of games and an average that beats the league leaders of the era you play in.',
+    'A season card shows points, rebounds and assists on its line and your minutes, steals and blocks in a note. Seasons you played before this update keep the line they were saved with: whole number points and no minutes, steals or blocks.',
+    `An MVP case by the numbers: you average ${e.ppg.toFixed(1)} points, ${e.rpg.toFixed(1)} rebounds and ${e.apg.toFixed(1)} assists and your club goes ${e.wins}-${e.losses}. That is ${production.toFixed(1)} for the production plus ${NBA_CAREER_MVP_WIN_WEIGHT} times ${share.toFixed(3).replace(/^0/, '')} for the winning: ${total.toFixed(1)}. Make the All-NBA First Team with that on a playoff club and you are in the MVP race. Put up the same line on a ${e.losingWins}-${e.losingLosses} club and you are not, whatever the numbers say.`,
+  ];
 }

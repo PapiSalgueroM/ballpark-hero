@@ -100,7 +100,7 @@ const SPREAD_1103 = { everMvp: [19.05, 18.17, 18.63, 17.98, 18.3], everAllNba: [
 const E_MEAN_TOL = 0.08;
 const E_SD_TOL = 0.06;
 /* B3: seasons under 65 games before 2023-24 holding an award the games rule names, in a full size run. */
-const UNDER65_FLOOR = 1;
+const UNDER65_FLOOR = 1750;
 /* B5: how many times the scorers' All-Defensive rate the defenders' must be. */
 const B5_FACTOR = 3;
 
@@ -149,6 +149,8 @@ const CONTROLS = {
   /* D: NBA Front Office adding its own sum again instead of calling the shared score. */
   privatecopy: { file: 'src/lib/nbaSeasonStats.ts', find: "  return nbaMvpValue(nbaProduction(foPerGame(p, 'pts'), foPerGame(p, 'reb'), foPerGame(p, 'ast')), winShare(league, p.team), NBA_MVP_WIN_WEIGHT);", put: "  return foPerGame(p, 'pts') + foPerGame(p, 'reb') + foPerGame(p, 'ast') + NBA_MVP_WIN_WEIGHT * winShare(league, p.team);", needs: 'D' },
   /* D: the career's win weight drifting off NBA Front Office's. */
+  /* F: the worked example's winning club read as its losing one. The sum still adds up; the claim is false. */
+  example: { file: 'src/lib/nbaCareerAwards.ts', find: 'export const NBA_MVP_EXAMPLE = { ppg: 27.4, rpg: 6.1, apg: 5.3, wins: 54, losses: 28, losingWins: 34, losingLosses: 48 } as const;', put: 'export const NBA_MVP_EXAMPLE = { ppg: 27.4, rpg: 6.1, apg: 5.3, wins: 34, losses: 48, losingWins: 34, losingLosses: 48 } as const;', needs: 'F' },
   weightdrift: { file: 'src/lib/nbaCareerAwards.ts', find: 'export const NBA_CAREER_MVP_WIN_WEIGHT = 20;', put: 'export const NBA_CAREER_MVP_WIN_WEIGHT = 19;', needs: 'D', may: 'E,B6' },
 };
 /* Controls that swap more than one line of one file (each anchor exactly once, the edit must change the text). */
@@ -989,6 +991,39 @@ if (HAS_PASS()) {
   const mvpsOf = M => playFleet(1, 400, M).careers.reduce((t, c) => t + c.mvps, 0);
   const mine = mvpsOf(E); const probed = mvpsOf(P);
   exact('D', mine !== probed, `the career's MVPs over 400 careers change with the same swap (${mine} against ${probed})`);
+}
+
+/* F, the words: what the "?" and the page say is what the code does. */
+if (HAS_PASS() && typeof E.nbaAwards.nbaAwardHelpRules === 'function') {
+  const rules = E.nbaAwards.nbaAwardHelpRules();
+  const R = E.norms.NBA_AWARD_RULES;
+  const text = rules.join('\n');
+  const ex = text.match(/you average ([0-9.]+) points, ([0-9.]+) rebounds and ([0-9.]+) assists and your club goes ([0-9]+)-([0-9]+)[.] That is ([0-9.]+) for the production plus ([0-9]+) times ([.][0-9]+) for the winning: ([0-9.]+)[.]/);
+  const losing = text.match(/the same line on a ([0-9]+)-([0-9]+) club/);
+  if (!ex || !losing) exact('F', false, 'the worked example is not in the help rules in the shape this check reads');
+  else {
+    const [p, r, a, w, l] = ex.slice(1, 6).map(Number);
+    const production = E.decision.nbaProduction(p, r, a);
+    const share = w / (w + l);
+    const total = E.decision.nbaMvpValue(production, share, Number(ex[7]));
+    exact('F', production.toFixed(1) === ex[6] && share.toFixed(3).replace(/^0/, '') === ex[8] && total.toFixed(1) === ex[9] && Number(ex[7]) === E.nbaAwards.NBA_CAREER_MVP_WIN_WEIGHT,
+      `the worked example recomputed through the shared score: production ${production.toFixed(1)} (printed ${ex[6]}), winning share ${share.toFixed(3)} (printed ${ex[8]}), weight ${ex[7]}, total ${total.toFixed(1)} (printed ${ex[9]})`);
+    const bands = nba.NBA_RECORD_BANDS;
+    const playoffFloor = Math.min(...nba.NBA_PLAYOFF_RESULTS.map(k => bands[k][0])); const playoffTop = Math.max(...nba.NBA_PLAYOFF_RESULTS.map(k => bands[k][1]));
+    exact('F', w >= playoffFloor && w <= playoffTop && Number(losing[1]) <= bands[nba.NBA_MISSED_PLAYOFFS][1] && Number(losing[1]) < playoffFloor && w + l === 82 && Number(losing[1]) + Number(losing[2]) === 82,
+      `the example's ${w}-${l} club is a playoff club by the engine's record bands (${playoffFloor} to ${playoffTop} wins) and its ${losing[1]}-${losing[2]} club is not (${bands[nba.NBA_MISSED_PLAYOFFS].join(' to ')})`);
+  }
+  const games = text.match(/need ([0-9]+) games/); const picks = text.match(/All-Star is ([0-9]+) picks/);
+  exact('F', !!games && Number(games[1]) === R.gamesBar && !!picks && Number(picks[1]) === R.allStarPicks, `the help says ${games?.[1]} games and ${picks?.[1]} All-Star picks; the rules say ${R.gamesBar} and ${R.allStarPicks}`);
+  const strip = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+  const page = strip(underControl('src/pages/NbaMyCareer.tsx'));
+  const typed = page.match(/The Trophy Case holds ([0-9]+) badges/);
+  exact('F', !!typed && Number(typed[1]) === E.NBA_BADGES.length, `the page says the Trophy Case holds ${typed?.[1]} badges; NBA_BADGES has ${E.NBA_BADGES.length}`);
+  exact('F', /extraRules=\{\[\.\.\.nbaAwardHelpRules\(\), /.test(page), 'the page hands the award rules to its "?"');
+  exact('F', !/—|–/.test(text), 'no em or en dash in the help rules');
+  /* The guide file is not this round's (its owner holds it). What it still says is printed for the lead. */
+  const guide = srcOf('src/data/gameContent/basketball.ts');
+  console.log(`  note [F] the guide for /nba-my-career still says, and its owner owes the change: ${[/62 games/.test(guide) ? '"62 games"' : null, /21 of them/.test(guide) ? '"21 of them"' : null, /Each of the 21 badges/.test(guide) ? '"Each of the 21 badges"' : null].filter(Boolean).join(', ') || 'nothing stale'}`);
 }
 
 /* C, the other sports did not move. A proof for one round, judged only when asked. */
