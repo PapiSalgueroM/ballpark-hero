@@ -1,0 +1,10 @@
+1) No page downloads data it never reads (the static import closure of every page)
+   169 pages walked; 3 hold the Club Manager engine, 1 the national team pools, 3 today's nationalities, 16 the squad shape, 13 Squad Deal's loader
+2) A past world answers nobody before its season is asked for, and everybody after
+   4 past worlds, the same list three ways; before any gate 6910 of 6910 past names answer nobody; at the moment each gate opens 6910 of 6910 answer their own world; after the gates 11299 of 11299 names answer their own world
+   (1101 of those past names are also in today's maps, 23 of them with a different country there: that is what the null protects)
+3) Each world's file is a header, one export and one sorted block (what the era bakes parse)
+   CONTROL reformat: line 11 of src/data/nationalities/era2010.ts indented by two more spaces (in memory)
+  FAIL: src/data/nationalities/era2010.ts:11: a line the era bakes cannot parse (updateNationalityBlock accepts two spaces, a quoted name, a colon, a quoted country, a comma): "    'Aaron Hughes': 'Northern Ireland',"
+   5 files, 11298 entries, every block sorted and in the one form the era bakes accept; 4 on demand loads for 4 era files
+CONTROL reformat FIRED: section 3 named src/data/nationalities/era2010.ts:11

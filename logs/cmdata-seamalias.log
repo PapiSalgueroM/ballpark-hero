@@ -1,0 +1,15 @@
+CONTROL seamalias: soccerInternational.ts imports the invented name pools as '@/lib/intlNames' (in memory)
+1) No page downloads data it never reads (the static import closure of every page)
+  FAIL: src/pages/ClubManager.tsx holds the Club Manager engine and downloads src/lib/intlNames.ts (the squad picker's invented name pools) with it
+  FAIL: src/pages/DeadlineDay.tsx holds the Club Manager engine and downloads src/lib/intlNames.ts (the squad picker's invented name pools) with it
+  FAIL: src/pages/ManagerHotSeat.tsx holds the Club Manager engine and downloads src/lib/intlNames.ts (the squad picker's invented name pools) with it
+  FAIL: src/lib/soccerInternational.ts imports src/lib/intlNames.ts again (the squad picker's invented name pools): every game that plays a tournament would download it
+   169 pages walked; 3 hold the Club Manager engine, 1 the national team pools, 3 today's nationalities, 16 the squad shape, 13 Squad Deal's loader
+2) A past world answers nobody before its season is asked for, and everybody after
+   4 past worlds, the same list three ways; before any gate 6910 of 6910 past names answer nobody; at the moment each gate opens 6910 of 6910 answer their own world; after the gates 11299 of 11299 names answer their own world
+   (1101 of those past names are also in today's maps, 23 of them with a different country there: that is what the null protects)
+3) Each world's file is a header, one export and one sorted block (what the era bakes parse)
+   5 files, 11299 entries, every block sorted and in the one form the era bakes accept; 4 on demand loads for 4 era files
+4) Nothing reads the worlds from the old place, and only the squad picker imports the pools
+   2650 files read (0 with the fallback comment blanker); 9 use NATIONALITY_BY_WORLD, all through allWorlds; 2 import the national team pools, both allowed
+CONTROL seamalias FIRED: rule 1e named src/lib/intlNames.ts through its alias, and rule 1c named the 3 engine pages that would carry it

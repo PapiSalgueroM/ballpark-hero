@@ -1,0 +1,22 @@
+cells that clear the floor: 410 of 572 (44 schools x 13 criteria)
+   Quarterback        38 schools
+   Running Back       43 schools
+   Wide Receiver      41 schools
+   Tight End          26 schools
+   Offensive Lineman  43 schools
+   Defensive Lineman  43 schools
+   Linebacker         41 schools
+   Defensive Back     43 schools
+   Heisman Winner      9 schools: Alabama, Auburn, Florida, LSU, Michigan, Notre Dame, Ohio State, Oklahoma, USC
+   First Round Pick   41 schools
+   Top 10 Pick        24 schools
+   Top 5 Pick         17 schools
+   1st Overall Pick    1 schools: Oklahoma
+dealt cells 675: two-source answers min 3, median 7, max 49; all yes answers min 3, median 25, max 78
+two-source answers per dealt cell: 3: 67, 4: 60, 5-9: 323, 10-24: 215, 25-49: 10, 50+: 0
+thinnest dealt cells: Michigan x Heisman Winner; Clemson x Quarterback; Baylor x Quarterback; Florida x Top 5 Pick; Tennessee x Top 5 Pick; Texas A&M x Top 5 Pick; Colorado x Quarterback; Colorado x First Round Pick
+label use across the boards:
+   criteria: Quarterback 22, Running Back 22, Wide Receiver 21, Tight End 21, Offensive Lineman 21, Defensive Lineman 21, Linebacker 21, Defensive Back 21, Heisman Winner 5, First Round Pick 21, Top 10 Pick 20, Top 5 Pick 9, 1st Overall Pick 0
+   schools:  Alabama 6, Arizona State 5, Arkansas 5, Auburn 5, Baylor 5, Boise State 4, BYU 5, Cincinnati 5, Clemson 5, Colorado 5, Florida 5, Florida State 5, Georgia 6, Houston 5, Iowa 5, LSU 5, Louisville 5, Miami (FL) 6, Michigan 5, Michigan State 6, Mississippi State 4, Nebraska 5, Notre Dame 5, Ohio State 6, Oklahoma 5, Oklahoma State 5, Ole Miss 5, Oregon 5, Penn State 5, Pittsburgh 5, Purdue 5, South Carolina 5, Stanford 5, Syracuse 5, TCU 5, Tennessee 6, Texas 5, Texas A&M 5, UCLA 5, USC 6, Virginia Tech 5, Washington 5, West Virginia 5, Wisconsin 5
+boards with a rare column: 14, with two or more: 0; distinct boards 75 of 75
+up to date: src/data/collegeGridPuzzles.ts matches the derivation

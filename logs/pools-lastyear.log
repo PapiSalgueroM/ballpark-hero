@@ -1,0 +1,15 @@
+CONTROL lastyear: realPool treats the last year of the window as outside it (in the bundle)
+1) 533 nation seasons, 2016 to 2026
+   12703 player rows, all on the 48-94 curve, every pool fieldable
+  FAIL: 47 of the 47 pools the file ships for 2026 are not what realPool hands the picker (Albania (no pool for 18 rows), Argentina (no pool for 25 rows), Austria (no pool for 22 rows)): those squads would be invented men in a year the data covers
+1b) 486 of 533 pools found by the picker under the file's own nation and year
+2) no man appears under two nations in the same year
+   11 years checked, 0 men in two squads
+3) the team sheet, sampled across nations and years
+   432 sheets built, 360 pool backed, 72 fully generated
+   3600 real men placed, all at positions they play and all on their own rating
+4) past the data, and nations we have no pool for
+   11 sheets outside the data, every one a complete generated eleven
+5) the bake records where it came from
+   source named in both the script and the file it writes
+CONTROL lastyear FIRED: all 47 pools of 2026 were lost to the picker and no pool of any other year (3600 real men placed by the sample, which said nothing)

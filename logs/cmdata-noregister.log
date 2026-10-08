@@ -1,0 +1,9 @@
+1) No page downloads data it never reads (the static import closure of every page)
+   169 pages walked; 3 hold the Club Manager engine, 1 the national team pools, 3 today's nationalities, 16 the squad shape, 13 Squad Deal's loader
+2) A past world answers nobody before its season is asked for, and everybody after
+   CONTROL noregister: ensureEraRosters no longer registers the nationalities it fetched (in the bundle)
+  FAIL: 6910 of 6910 past names had no country, or the wrong one, at the moment their season's gate opened (era2020 Aaron Connolly; era2020 Aaron Cresswell; era2020 Aaron Lennon): the gate hands out the squads without waiting for the nationalities, so the first screen draws a squad with no flags and nationBars caches an empty world
+  FAIL: 6910 of 11299 names did not answer their own world's country after every season had loaded (6910 of them in a past world)
+   4 past worlds, the same list three ways; before any gate 6910 of 6910 past names answer nobody; at the moment each gate opens 0 of 6910 answer their own world; after the gates 4389 of 11299 names answer their own world
+   (1101 of those past names are also in today's maps, 23 of them with a different country there: that is what the null protects)
+CONTROL noregister FIRED: all 6910 past names went unanswered at their gate and after their seasons had loaded

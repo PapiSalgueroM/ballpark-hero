@@ -1,0 +1,19 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/playerAutocompleteInteraction.test.tsx > player autocomplete interactions > selects on pointerdown before blur and ignores the later pointer click 146ms
+ ✓ src/test/playerAutocompleteInteraction.test.tsx > player autocomplete interactions > selects exactly once from a native keyboard or assistive click 36ms
+ ✓ src/test/playerAutocompleteInteraction.test.tsx > player autocomplete interactions > keeps ArrowDown and Enter selection on the focused input 36ms
+ ✓ src/test/playerAutocompleteInteraction.test.tsx > player autocomplete interactions > keeps ArrowUp and highlighted Tab selection with input focus 25ms
+ ✓ src/test/playerAutocompleteInteraction.test.tsx > player autocomplete interactions > disables existing options and rejects stale pointer and keyboard activation 59ms
+ ✓ src/test/playerAutocompleteInteraction.test.tsx > player autocomplete interactions > rejects a stale highlighted input event after disabling 24ms
+ ✓ src/test/playerAutocompleteInteraction.test.tsx > player autocomplete interactions > rejects disabled free text while preserving the enabled submit behavior 8ms
+ ✓ src/test/playerAutocompleteInteraction.test.tsx > player autocomplete interactions > preserves namesake identities, disambiguators and the caller search filters 35ms
+
+ Test Files  1 passed (1)
+      Tests  8 passed (8)
+   Start at  17:20:45
+   Duration  1.88s (transform 185ms, setup 76ms, collect 490ms, tests 371ms, environment 377ms, prepare 189ms)
+
+
+simPlayerAutocompleteInteraction: eight actual-component pointer, keyboard, disabled, free-text, identity and filter checks passed.

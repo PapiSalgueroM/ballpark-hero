@@ -1,0 +1,63 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/cmDataOnDemandIdentity.test.ts[2m > [22m[2mRound 1042 identity: the dailies deal the same club, seed and run[2m > [22m[2mA. Manager Hot Seat, then Deadline Day, on every date
+[22m[39m  A: 35 dates, 70 runs, first Monterrey, last Rio Ave
+
+[90mstdout[2m | src/test/cmDataOnDemandIdentity.test.ts[2m > [22m[2mRound 1042 identity: the squad picker picks the same squads[2m > [22m[2mB. pickSquad and runInternationalSummer over 140 seeded cases
+[22m[39m  B: 140 cases, 58 sheets carried a real pool man
+
+[90mstdout[2m | src/test/cmDataOnDemandIdentity.test.ts[2m > [22m[2mRound 1042 identity: every name of every world wears the same flag[2m > [22m[2mC. the five worlds, read through nationalityOf
+[22m[39m  C: now 4389, era2020 1774, era2015 1658, era2010 1751, era2005 1727
+
+[90mstdout[2m | src/test/cmDataOnDemandIdentity.test.ts[2m > [22m[2mRound 1042 identity: the squad shape is the same shape[2m > [22m[2mD. formations, slot rules, position names and the rating curve
+[22m[39m  D: 9 formations, ladder 58 58 61 65 68 62 62 64 ...
+
+ [31m❯[39m src/test/cmDataOnDemandIdentity.test.ts [2m([22m[2m4 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 7764[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1042 identity: the dailies deal the same club, seed and run[2m > [22mA. Manager Hot Seat, then Deadline Day, on every date [33m 6667[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1042 identity: the squad picker picks the same squads[2m > [22mB. pickSquad and runInternationalSummer over 140 seeded cases [33m 306[2mms[22m[39m
+[31m   [31m×[31m Round 1042 identity: every name of every world wears the same flag[2m > [22mC. the five worlds, read through nationalityOf[39m[33m 716[2mms[22m[39m
+[31m     → expected { …(3) } to deeply equal { …(3) }[39m
+   [32m✓[39m Round 1042 identity: the squad shape is the same shape[2m > [22mD. formations, slot rules, position names and the rating curve[32m 70[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/cmDataOnDemandIdentity.test.ts[2m > [22mRound 1042 identity: every name of every world wears the same flag[2m > [22mC. the five worlds, read through nationalityOf
+[31m[1mAssertionError[22m: expected { …(3) } to deeply equal { …(3) }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[33m@@ -18,11 +18,11 @@[39m
+[2m        "count": 1727,[22m
+[2m        "digest": "9a7cb37804112de754757fe94b5cad7f2e72d0c24131391564074a1659fd3931",[22m
+[2m      },[22m
+[2m      "era2010": {[22m
+[2m        "count": 1751,[22m
+[32m-       "digest": "c710d3eaed8c2aeb8f796ecda355089074262c90440f2d682d3584f6384a8d14",[39m
+[31m+       "digest": "00582538469699fe1cecdf98989bf9a6c2430704c2fcdf952b20aeabde323292",[39m
+[2m      },[22m
+[2m      "era2015": {[22m
+[2m        "count": 1658,[22m
+[2m        "digest": "db44dd056e3a22b12b832680616fac9f408335bb8e1831288d90351155862628",[22m
+[2m      },[22m
+
+[36m [2m❯[22m check src/test/cmDataOnDemandIdentity.test.ts:[2m79:21[22m[39m
+    [90m 77| [39m  [35mif[39m ([33mRECORD[39m) [35mreturn[39m[33m;[39m
+    [90m 78| [39m  expect(fixture, 'the fixture src/test/fixtures/cmDataOnDemandIdentit…
+    [90m 79| [39m  [34mexpect[39m(got[part])[33m.[39m[34mtoEqual[39m(fixture[part])[33m;[39m
+    [90m   | [39m                    [31m^[39m
+    [90m 80| [39m}
+    [90m 81| [39m
+[90m [2m❯[22m src/test/cmDataOnDemandIdentity.test.ts:[2m199:5[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (4)[39m
+[2m   Start at [22m 17:19:56
+[2m   Duration [22m 9.05s[2m (transform 3.26s, setup 81ms, collect 120ms, tests 7.76s, environment 455ms, prepare 262ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmDataOnDemandIdentity.test.ts,title=src/test/cmDataOnDemandIdentity.test.ts > Round 1042 identity%3A every name of every world wears the same flag > C. the five worlds%2C read through nationalityOf,line=79,column=21::AssertionError: expected { …(3) } to deeply equal { …(3) }%0A%0A- Expected%0A+ Received%0A%0A@@ -18,11 +18,11 @@%0A        "count": 1727,%0A        "digest": "9a7cb37804112de754757fe94b5cad7f2e72d0c24131391564074a1659fd3931",%0A      },%0A      "era2010": {%0A        "count": 1751,%0A-       "digest": "c710d3eaed8c2aeb8f796ecda355089074262c90440f2d682d3584f6384a8d14",%0A+       "digest": "00582538469699fe1cecdf98989bf9a6c2430704c2fcdf952b20aeabde323292",%0A      },%0A      "era2015": {%0A        "count": 1658,%0A        "digest": "db44dd056e3a22b12b832680616fac9f408335bb8e1831288d90351155862628",%0A      },%0A%0A ❯ check src/test/cmDataOnDemandIdentity.test.ts:79:21%0A ❯ src/test/cmDataOnDemandIdentity.test.ts:199:5%0A%0A

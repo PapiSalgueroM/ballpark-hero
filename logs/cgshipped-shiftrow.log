@@ -1,0 +1,26 @@
+simCollegeGridShipped, control shiftrow: the world is mutated in memory; sections 2 and 3 must go red
+
+1) None of the thirteen ships
+   35,598 key rows and 35,598 search names read; 13 names read out of the migration's DELETE statement; 1,163 distinct schools in the key (1,165 before the thirteen left, measured 2026-10-07)
+
+2) The compact files are the key
+  FAIL: 35387 decoded rows differ from the key in a judged column (first: Morten Andersen: a judged column differs from the key)
+  FAIL: 4097 decoded rows carry a namesake flag the key does not set (first: Morten Andersen: a judged column differs from the key)
+  FAIL: 171933 verdicts differ between the files and the key (first: Morten Andersen: a judged column differs from the key)
+
+3) Recorded before: nothing moved for anyone who stayed
+  FAIL: the shipped files judge differently from the untouched lib over the untouched key: {"yes":44917,"no":312741,"unknown":1671428} now, {"yes":44917,"no":312741,"unknown":1671428} recorded
+
+4) Not stale: both files are what the generator renders
+  FAIL: src/data/collegeGrid/collegeGridJudge.json is not what the generator renders from the committed key; run node scripts/genCollegeGridData.mjs --compact
+
+5) Every board keeps its answers
+  FAIL: 675 of 675 cells hold different answers from the recorded ones with the audited names left out (first: cg611-001 Pittsburgh x Defensive Lineman: 37 answers now, 37 recorded)
+
+6) The budget
+   search 599,136 raw, 205,231 gzip; judge 542,050 raw, 133,311 gzip; pair 1,141,186 raw, 338,542 gzip in 2 requests (ceilings 1,313,000 and 390,000). Before: 36 table reads decoding 9,462,264 bytes (the key file is 6,233,432 raw, 1,241,950 gzip). CPU for parse, decode and index of 35,598 rows: median 158.2 ms of 7 [234, 128, 266, 149, 205, 126, 158], ceiling 1150 ms (measured medians: 312, 344, 374, 375, 407, 438, 469)
+
+7) The source stage drops the audited row and keeps another name at the same pick
+   5 draft rows and 2 careers in, 4 entries out (Probe Opener, Probe Passer, Probe Realpick, Probe Runner); 1 audited row left out at 1977 pick 320
+
+control "shiftrow": fired in section 2 and 3 as expected, the check works (red sections in all: 2, 3, 4, 5)

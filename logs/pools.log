@@ -1,0 +1,14 @@
+1) 533 nation seasons, 2016 to 2026
+   12703 player rows, all on the 48-94 curve, every pool fieldable
+1b) 533 of 533 pools found by the picker under the file's own nation and year
+2) no man appears under two nations in the same year
+   11 years checked, 0 men in two squads
+3) the team sheet, sampled across nations and years
+   432 sheets built, 432 pool backed, 0 fully generated
+   4320 real men placed, all at positions they play and all on their own rating
+4) past the data, and nations we have no pool for
+   11 sheets outside the data, every one a complete generated eleven
+5) the bake records where it came from
+   source named in both the script and the file it writes
+
+simNationalPools: green. Real internationals, at their own positions, only in years we have them.
