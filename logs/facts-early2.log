@@ -1,0 +1,112 @@
+
+1. RECORDS: INT_SCORING_RECORDS equals the verified file, both ways
+  18 engine rows, 18 verified rows, 1 held (Senegal)
+
+2. PICKER: every nation on the creation screen, the award only on a verified row
+  134 nations on the picker: 18 can win it on a verified record, 116 cannot win it at all
+
+3. WIRING: the season calls the award, nothing else grants it, no fallback number
+  FAIL [3]: the award is checked before the summer tournament, so tournament goals count a season late
+  1 call from the season, after the summer tournament, 1 grant, inside awardAllTimeTopScorer, no fallback
+
+4. LABELS: every HAND_CLUBS league label verified, pinned or listed as unverified
+  188 labels verified across 82 evidence groups (all 2026-27 or 2026), 0 pinned to their old label (ratchet 0), 2 unverified (ratchet 2)
+
+5. PLAYED: seeded careers, the award the season his goals pass HIS nation's record
+  FAIL [5]: Italy seed 100003: the season 2033 ended on 37 goals, past Italy's record of 35, with no award
+  FAIL [5]: Italy seed 100003: the screen says 43 goals, the line reads "👑 Became Italy's All Time Top International Scorer with 37 goals!"
+  FAIL [5]: Italy seed 107922: the season 2030 ended on 48 goals, past Italy's record of 35, with no award
+  FAIL [5]: Italy seed 107922: the screen says 52 goals, the line reads "👑 Became Italy's All Time Top International Scorer with 48 goals!"
+  FAIL [5]: Italy seed 115841: the season 2036 ended on 38 goals, past Italy's record of 35, with no award
+  FAIL [5]: Italy seed 123760: the season 2033 ended on 37 goals, past Italy's record of 35, with no award
+  FAIL [5]: Italy seed 123760: the screen says 43 goals, the line reads "👑 Became Italy's All Time Top International Scorer with 37 goals!"
+  FAIL [5]: Italy seed 131679: the season 2029 ended on 36 goals, past Italy's record of 35, with no award
+  FAIL [5]: Italy seed 131679: the screen says 39 goals, the line reads "👑 Became Italy's All Time Top International Scorer with 36 goals!"
+  FAIL [5]: Italy seed 139598: the season 2029 ended on 36 goals, past Italy's record of 35, with no award
+  FAIL [5]: Italy seed 139598: the screen says 51 goals, the line reads "👑 Became Italy's All Time Top International Scorer with 36 goals!"
+  FAIL [5]: Colombia seed 101012: the season 2032 ended on 46 goals, past Colombia's record of 36, with no award
+  FAIL [5]: Colombia seed 101012: the screen says 50 goals, the line reads "👑 Became Colombia's All Time Top International Scorer with 46 goals!"
+  FAIL [5]: Colombia seed 108931: the season 2030 ended on 39 goals, past Colombia's record of 36, with no award
+  FAIL [5]: Colombia seed 108931: the screen says 41 goals, the line reads "👑 Became Colombia's All Time Top International Scorer with 39 goals!"
+  FAIL [5]: Colombia seed 116850: the season 2032 ended on 41 goals, past Colombia's record of 36, with no award
+  FAIL [5]: Colombia seed 116850: the screen says 47 goals, the line reads "👑 Became Colombia's All Time Top International Scorer with 41 goals!"
+  FAIL [5]: Colombia seed 124769: the season 2031 ended on 39 goals, past Colombia's record of 36, with no award
+  FAIL [5]: Colombia seed 124769: the screen says 47 goals, the line reads "👑 Became Colombia's All Time Top International Scorer with 39 goals!"
+  FAIL [5]: Colombia seed 132688: the season 2030 ended on 41 goals, past Colombia's record of 36, with no award
+  FAIL [5]: Colombia seed 132688: the screen says 44 goals, the line reads "👑 Became Colombia's All Time Top International Scorer with 41 goals!"
+  FAIL [5]: Colombia seed 140607: the season 2030 ended on 46 goals, past Colombia's record of 36, with no award
+  FAIL [5]: Colombia seed 140607: the screen says 50 goals, the line reads "👑 Became Colombia's All Time Top International Scorer with 46 goals!"
+  FAIL [5]: Nigeria seed 102021: the season 2034 ended on 39 goals, past Nigeria's record of 37, with no award
+  FAIL [5]: Nigeria seed 102021: the screen says 41 goals, the line reads "👑 Became Nigeria's All Time Top International Scorer with 39 goals!"
+  FAIL [5]: Nigeria seed 109940: the season 2030 ended on 43 goals, past Nigeria's record of 37, with no award
+  FAIL [5]: Nigeria seed 109940: the screen says 46 goals, the line reads "👑 Became Nigeria's All Time Top International Scorer with 43 goals!"
+  FAIL [5]: Nigeria seed 117859: the season 2030 ended on 41 goals, past Nigeria's record of 37, with no award
+  FAIL [5]: Nigeria seed 117859: the screen says 44 goals, the line reads "👑 Became Nigeria's All Time Top International Scorer with 41 goals!"
+  FAIL [5]: Nigeria seed 125778: the season 2030 ended on 39 goals, past Nigeria's record of 37, with no award
+  FAIL [5]: Nigeria seed 125778: the screen says 42 goals, the line reads "👑 Became Nigeria's All Time Top International Scorer with 39 goals!"
+  FAIL [5]: Nigeria seed 133697: the season 2030 ended on 44 goals, past Nigeria's record of 37, with no award
+  FAIL [5]: Nigeria seed 133697: the screen says 46 goals, the line reads "👑 Became Nigeria's All Time Top International Scorer with 44 goals!"
+  FAIL [5]: Nigeria seed 141616: the season 2029 ended on 38 goals, past Nigeria's record of 37, with no award
+  FAIL [5]: Nigeria seed 141616: the screen says 49 goals, the line reads "👑 Became Nigeria's All Time Top International Scorer with 38 goals!"
+  FAIL [5]: Croatia seed 103030: the season 2032 ended on 55 goals, past Croatia's record of 45, with no award
+  FAIL [5]: Croatia seed 103030: the screen says 60 goals, the line reads "👑 Became Croatia's All Time Top International Scorer with 55 goals!"
+  FAIL [5]: Croatia seed 110949: the season 2034 ended on 48 goals, past Croatia's record of 45, with no award
+  FAIL [5]: Croatia seed 110949: the screen says 52 goals, the line reads "👑 Became Croatia's All Time Top International Scorer with 48 goals!"
+  FAIL [5]: Croatia seed 118868: the season 2032 ended on 46 goals, past Croatia's record of 45, with no award
+  FAIL [5]: Croatia seed 118868: the screen says 50 goals, the line reads "👑 Became Croatia's All Time Top International Scorer with 46 goals!"
+  FAIL [5]: Croatia seed 126787: the season 2031 ended on 47 goals, past Croatia's record of 45, with no award
+  FAIL [5]: Croatia seed 126787: the screen says 56 goals, the line reads "👑 Became Croatia's All Time Top International Scorer with 47 goals!"
+  FAIL [5]: Croatia seed 134706: the season 2032 ended on 47 goals, past Croatia's record of 45, with no award
+  FAIL [5]: Croatia seed 134706: the screen says 51 goals, the line reads "👑 Became Croatia's All Time Top International Scorer with 47 goals!"
+  FAIL [5]: Croatia seed 142625: the season 2031 ended on 47 goals, past Croatia's record of 45, with no award
+  FAIL [5]: Croatia seed 142625: the screen says 62 goals, the line reads "👑 Became Croatia's All Time Top International Scorer with 47 goals!"
+  FAIL [5]: Spain seed 104039: the season 2034 ended on 61 goals, past Spain's record of 59, with no award
+  FAIL [5]: Spain seed 104039: the screen says 65 goals, the line reads "👑 Became Spain's All Time Top International Scorer with 61 goals!"
+  FAIL [5]: Spain seed 111958: the season 2033 ended on 61 goals, past Spain's record of 59, with no award
+  FAIL [5]: Spain seed 111958: the screen says 68 goals, the line reads "👑 Became Spain's All Time Top International Scorer with 61 goals!"
+  FAIL [5]: Spain seed 119877: the season 2036 ended on 65 goals, past Spain's record of 59, with no award
+  FAIL [5]: Spain seed 119877: the screen says 68 goals, the line reads "👑 Became Spain's All Time Top International Scorer with 65 goals!"
+  FAIL [5]: Spain seed 127796: the season 2034 ended on 60 goals, past Spain's record of 59, with no award
+  FAIL [5]: Spain seed 127796: the screen says 76 goals, the line reads "👑 Became Spain's All Time Top International Scorer with 60 goals!"
+  FAIL [5]: Spain seed 135715: the season 2034 ended on 62 goals, past Spain's record of 59, with no award
+  FAIL [5]: Spain seed 135715: the screen says 65 goals, the line reads "👑 Became Spain's All Time Top International Scorer with 62 goals!"
+  FAIL [5]: Spain seed 143634: the season 2033 ended on 64 goals, past Spain's record of 59, with no award
+  FAIL [5]: Spain seed 143634: the screen says 75 goals, the line reads "👑 Became Spain's All Time Top International Scorer with 64 goals!"
+  FAIL [5]: South Korea seed 105048: the season 2035 ended on 62 goals, past South Korea's record of 59, with no award
+  FAIL [5]: South Korea seed 105048: the screen says 69 goals, the line reads "👑 Became South Korea's All Time Top International Scorer with 62 goals!"
+  FAIL [5]: South Korea seed 112967: the season 2033 ended on 60 goals, past South Korea's record of 59, with no award
+  FAIL [5]: South Korea seed 112967: the screen says 71 goals, the line reads "👑 Became South Korea's All Time Top International Scorer with 60 goals!"
+  FAIL [5]: South Korea seed 120886: the season 2032 ended on 62 goals, past South Korea's record of 59, with no award
+  FAIL [5]: South Korea seed 120886: the screen says 64 goals, the line reads "👑 Became South Korea's All Time Top International Scorer with 62 goals!"
+  FAIL [5]: South Korea seed 128805: the season 2037 ended on 61 goals, past South Korea's record of 59, with no award
+  FAIL [5]: South Korea seed 128805: the screen says 66 goals, the line reads "👑 Became South Korea's All Time Top International Scorer with 61 goals!"
+  FAIL [5]: South Korea seed 136724: the season 2033 ended on 61 goals, past South Korea's record of 59, with no award
+  FAIL [5]: South Korea seed 136724: the screen says 68 goals, the line reads "👑 Became South Korea's All Time Top International Scorer with 61 goals!"
+  FAIL [5]: South Korea seed 144643: the season 2034 ended on 61 goals, past South Korea's record of 59, with no award
+  FAIL [5]: South Korea seed 144643: the screen says 64 goals, the line reads "👑 Became South Korea's All Time Top International Scorer with 61 goals!"
+  FAIL [5]: Norway seed 106057: the season 2038 ended on 66 goals, past Norway's record of 65, with no award
+  FAIL [5]: Norway seed 106057: the screen says 69 goals, the line reads "👑 Became Norway's All Time Top International Scorer with 66 goals!"
+  FAIL [5]: Norway seed 113976: the season 2039 ended on 66 goals, past Norway's record of 65, with no award
+  FAIL [5]: Norway seed 121895: the season 2040 ended on 68 goals, past Norway's record of 65, with no award
+  FAIL [5]: Norway seed 129814: the season 2038 ended on 67 goals, past Norway's record of 65, with no award
+  FAIL [5]: Norway seed 129814: the screen says 70 goals, the line reads "👑 Became Norway's All Time Top International Scorer with 67 goals!"
+  FAIL [5]: Norway seed 137733: the season 2038 ended on 69 goals, past Norway's record of 65, with no award
+  FAIL [5]: Norway seed 137733: the screen says 72 goals, the line reads "👑 Became Norway's All Time Top International Scorer with 69 goals!"
+  FAIL [5]: Norway seed 145652: the season 2034 ended on 70 goals, past Norway's record of 65, with no award
+  FAIL [5]: Norway seed 145652: the screen says 73 goals, the line reads "👑 Became Norway's All Time Top International Scorer with 70 goals!"
+  FAIL [5]: Brazil seed 114985: the season 2038 ended on 81 goals, past Brazil's record of 80, with no award
+  FAIL [5]: Brazil seed 114985: the screen says 84 goals, the line reads "👑 Became Brazil's All Time Top International Scorer with 81 goals!"
+  FAIL [5]: Brazil seed 122904: the season 2038 ended on 83 goals, past Brazil's record of 80, with no award
+  FAIL [5]: Brazil seed 122904: the screen says 86 goals, the line reads "👑 Became Brazil's All Time Top International Scorer with 83 goals!"
+  FAIL [5]: Brazil seed 130823: the season 2037 ended on 81 goals, past Brazil's record of 80, with no award
+  FAIL [5]: Brazil seed 130823: the screen says 86 goals, the line reads "👑 Became Brazil's All Time Top International Scorer with 81 goals!"
+  FAIL [5]: Brazil seed 138742: the season 2036 ended on 85 goals, past Brazil's record of 80, with no award
+  FAIL [5]: Brazil seed 138742: the screen says 87 goals, the line reads "👑 Became Brazil's All Time Top International Scorer with 85 goals!"
+  FAIL [5]: Brazil seed 146661: the season 2036 ended on 87 goals, past Brazil's record of 80, with no award
+  FAIL [5]: Brazil seed 146661: the screen says 89 goals, the line reads "👑 Became Brazil's All Time Top International Scorer with 87 goals!"
+  48 careers (seed 1), 1115 full seasons, 47 awards, every one the season his goals passed his own record (24 while abroad, 18 ina tournament season)
+
+6. LEAGUE WORLD: the pool generator and the facts file say the same thing
+  26 leagues, 454 member names, each lineup read from two hosts; 11 with a format read from two hosts, 3 with no format page and so no shape stated, 3 with no points rule stated; 1 colour(s) in words; 51 shipped, 275 held before 2026, 0 with a first season
+
+control early2: section 5 went red as it must (red: 3, 5)

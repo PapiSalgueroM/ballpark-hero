@@ -1,0 +1,494 @@
+
+1. FRESH: the committed pool equals a fresh derive from Club Manager
+  270 generated rows, the file matches a fresh derive line for line
+
+2. MEMBERSHIP: each label carries Club Manager's lineup in the 2026 view
+  FAIL [2]: Premier League: extra [] missing [Bournemouth, Coventry City, Hull City, Ipswich Town, Leeds United, Nottingham Forest, Sunderland]
+  FAIL [2]: Championship: extra [] missing [Birmingham City, Blackburn Rovers, Bolton Wanderers, Bristol City, Burnley, Cardiff City, Charlton Athletic, Derby County, Lincoln City, Middlesbrough, Millwall, Portsmouth, Preston North End, QPR, Sheffield United, Southampton, Stoke City, Swansea City, Watford, West Brom, Wrexham]
+  FAIL [2]: La Liga: extra [] missing [Alaves, Deportivo, Elche, Espanyol, Getafe, Levante, Malaga, Osasuna, Racing Santander, Rayo Vallecano, Valencia]
+  FAIL [2]: Brasileirao: extra [] missing [Athletico Paranaense, Fluminense, Bahia, Atletico Mineiro, Coritiba, Red Bull Bragantino, Vitoria, Mirassol, Vasco da Gama, Internacional, Remo, Chapecoense]
+  FAIL [2]: Serie A: extra [] missing [Cagliari, Como, Frosinone, Genoa, Lazio, Lecce, Monza, Parma, Sassuolo, Udinese, Venezia]
+  FAIL [2]: Bundesliga: extra [] missing [Augsburg, Gladbach, Freiburg, Hamburg, Hoffenheim, Koln, Mainz, Schalke 04, Elversberg, Paderborn, Union Berlin]
+  FAIL [2]: Ligue 1: extra [] missing [Angers, Auxerre, Brest, Le Havre, Le Mans, Lens, Lorient, Paris FC, Rennes, Toulouse, Troyes]
+  FAIL [2]: Eredivisie: extra [] missing [ADO Den Haag, Cambuur, Excelsior, Fortuna Sittard, Go Ahead Eagles, Groningen, Heerenveen, NEC Nijmegen, PEC Zwolle, Sparta Rotterdam, Telstar, Willem II]
+  FAIL [2]: Saudi Pro League: extra [] missing [Abha, Al Diriyah, Al Ettifaq, Al Faisaly, Al Fateh, Al Fayha, Al Hazem, Al Khaleej, Al Kholood, Al Qadsiah, Al Riyadh, Al Taawoun, NEOM SC]
+  FAIL [2]: MLS: extra [] missing [Charlotte FC, Chicago Fire, FC Cincinnati, DC United, CF Montreal, Nashville SC, New England Revolution, New York City FC, New York Red Bulls, Orlando City, Philadelphia Union, Austin FC, Colorado Rapids, FC Dallas, Houston Dynamo, Minnesota United, Portland Timbers, Real Salt Lake, San Diego FC, San Jose Earthquakes, Sporting Kansas City, St. Louis City]
+  FAIL [2]: Primeira Liga: extra [] missing [Famalicao, Rio Ave, Casa Pia, Estoril, Moreirense, Arouca, Gil Vicente, Santa Clara, CD Nacional, Estrela Amadora, Alverca, Maritimo, Academico de Viseu]
+  FAIL [2]: Scottish Premiership: extra [] missing [Dundee United, Dundee, Motherwell, St Mirren, Kilmarnock, Falkirk, St Johnstone]
+  FAIL [2]: Super Lig: extra [] missing [Basaksehir, Samsunspor, Eyupspor, Goztepe, Kasimpasa, Alanyaspor, Konyaspor, Gaziantep FK, Genclerbirligi, Kocaelispor, Rizespor, Erzurumspor, Amedspor, Corum FK]
+  FAIL [2]: 2. Bundesliga: extra [] missing [Wolfsburg, Heidenheim, St. Pauli, Bochum, Magdeburg, Kaiserslautern, Holstein Kiel, Hannover 96, Dynamo Dresden, Braunschweig, Greuther Furth, Nurnberg, Darmstadt, Arminia Bielefeld, Karlsruhe, Osnabruck, Energie Cottbus]
+  FAIL [2]: Belgian Pro League: extra [] missing [Union Saint-Gilloise, Gent, Antwerp, Standard Liege, Mechelen, Charleroi, Westerlo, Sint-Truiden, OH Leuven, Cercle Brugge, La Louviere, Zulte Waregem, Beveren, Kortrijk, Lommel]
+  FAIL [2]: Austrian Bundesliga: extra [] missing [Sturm Graz, Rapid Wien, LASK, Wolfsberger AC, Austria Wien, Grazer AK, Hartberg, Ried, Altach, WSG Tirol, Austria Lustenau]
+  FAIL [2]: Super League Greece: extra [] missing [AEK Athens, Aris, Asteras Tripolis, Atromitos, Iraklis, Kalamata, Kifisia, Levadiakos, OFI, Panetolikos, Volos]
+  FAIL [2]: Danish Superliga: extra [] missing [FC Midtjylland, Brondby IF, AGF, FC Nordsjaelland, Viborg FF, Randers FC, OB, Silkeborg IF, Lyngby, AC Horsens, SonderjyskE]
+  FAIL [2]: Swiss Super League: extra [] missing [Young Boys, Thun, St. Gallen, Lugano, Servette, Luzern, Lausanne-Sport, FC Zurich, Grasshopper, Sion, Vaduz]
+  FAIL [2]: HNL: extra [] missing [Rijeka, Osijek, Varazdin, Slaven Belupo, Istra 1961, Lokomotiva Zagreb, Gorica, Rudes]
+  FAIL [2]: Liga MX: extra [] missing [Toluca, Pachuca, Leon, Santos Laguna, Atlas, Necaxa, Puebla, Queretaro, Tijuana, FC Juarez, Atletico San Luis, Atlante]
+  FAIL [2]: A-League: extra [] missing [Adelaide United, Brisbane Roar, Central Coast Mariners, Macarthur FC, Melbourne City, Newcastle Jets, Perth Glory, Sydney FC, Western Sydney Wanderers]
+  22 labels, each carrying Club Manager's lineup and the facts file's members in the 2026 view: Premier League 13, Championship 3, La Liga 9, Brasileirao 8, Serie A 9, Bundesliga 7, Ligue 1 7, Eredivisie 6, Saudi Pro League 5, MLS 8, Primeira Liga 5, Scottish Premiership 5, Super Lig 4, 2. Bundesliga 1, Belgian Pro League 3, Austrian Bundesliga 1, Super League Greece 3, Danish Superliga 1, Swiss Super League 1, HNL 2, Liga MX 6, A-League 3
+  held, none of their clubs generated: Serie B, Ligue 2, Segunda Division, Russian Premier League
+  FAIL [2]: the engine appends generated rows (0)
+  a two league fixture (a top flight with a hand club and two thin squads, a second flight) derives rows and ladders from its table rows alone; with no rankable it ranks nobody
+
+3. IDENTITY: names, ids, careerEras strings, colours, countries, labels
+  FAIL [3]: Leeds United is in the generated pool
+  FAIL [3]: Blackburn Rovers is in the generated pool
+  FAIL [3]: Valencia is in the generated pool
+  FAIL [3]: Deportivo is in the generated pool
+  FAIL [3]: Fluminense is in the generated pool
+  FAIL [3]: Internacional is in the generated pool
+  FAIL [3]: Atletico Mineiro is in the generated pool
+  FAIL [3]: Vasco da Gama is in the generated pool
+  95 careerEras contender names, 72 of them in the pool, all byte identical
+  270 colours checked (derived and bundled rows), none is the fallback grey
+  1 colour(s) supplied where Club Manager is grey (Macarthur FC), each in the facts file
+  FAIL [3]: Cardiff City is Welsh
+  FAIL [3]: Swansea City is Welsh
+  FAIL [3]: Wrexham is Welsh
+  0 generated countries checked, 0 of them not their league's (Cardiff City Wales, Swansea City Wales, Wrexham Wales, CF Montreal Canada, Vaduz Liechtenstein)
+  FAIL [3]: the since rule saw 0 shipped and 0 held clubs
+  since: 0 shipped clubs in every list 1980 to 2060, 0 held out of every list before 2026, 0 from a two sourced first season, 0 under a typed row (Red Bull Bragantino 2020, New York City FC 2015, Austin FC 2021, Charlotte FC 2022)
+
+4. TIERS: the rule worked again, hand rows frozen, Forest across eras
+  FAIL [4]: Bournemouth is in the pool
+  FAIL [4]: Coventry City is in the pool
+  FAIL [4]: Hull City is in the pool
+  FAIL [4]: Ipswich Town is in the pool
+  FAIL [4]: Leeds United is in the pool
+  FAIL [4]: Nottingham Forest is in the pool
+  FAIL [4]: Sunderland is in the pool
+  FAIL [4]: Premier League: its ladder is not in tier order
+  FAIL [4]: Birmingham City is in the pool
+  FAIL [4]: Blackburn Rovers is in the pool
+  FAIL [4]: Bolton Wanderers is in the pool
+  FAIL [4]: Bristol City is in the pool
+  FAIL [4]: Burnley is in the pool
+  FAIL [4]: Cardiff City is in the pool
+  FAIL [4]: Charlton Athletic is in the pool
+  FAIL [4]: Derby County is in the pool
+  FAIL [4]: Lincoln City is in the pool
+  FAIL [4]: Middlesbrough is in the pool
+  FAIL [4]: Millwall is in the pool
+  FAIL [4]: Portsmouth is in the pool
+  FAIL [4]: Preston North End is in the pool
+  FAIL [4]: QPR is in the pool
+  FAIL [4]: Sheffield United is in the pool
+  FAIL [4]: Southampton is in the pool
+  FAIL [4]: Stoke City is in the pool
+  FAIL [4]: Swansea City is in the pool
+  FAIL [4]: Watford is in the pool
+  FAIL [4]: West Brom is in the pool
+  FAIL [4]: Wrexham is in the pool
+  FAIL [4]: Championship: its ladder is not in tier order
+  FAIL [4]: Alaves is in the pool
+  FAIL [4]: Deportivo is in the pool
+  FAIL [4]: Elche is in the pool
+  FAIL [4]: Espanyol is in the pool
+  FAIL [4]: Getafe is in the pool
+  FAIL [4]: Levante is in the pool
+  FAIL [4]: Malaga is in the pool
+  FAIL [4]: Osasuna is in the pool
+  FAIL [4]: Racing Santander is in the pool
+  FAIL [4]: Rayo Vallecano is in the pool
+  FAIL [4]: Valencia is in the pool
+  FAIL [4]: La Liga: its ladder is not in tier order
+  FAIL [4]: Athletico Paranaense is in the pool
+  FAIL [4]: Fluminense is in the pool
+  FAIL [4]: Bahia is in the pool
+  FAIL [4]: Atletico Mineiro is in the pool
+  FAIL [4]: Coritiba is in the pool
+  FAIL [4]: Red Bull Bragantino is in the pool
+  FAIL [4]: Vitoria is in the pool
+  FAIL [4]: Mirassol is in the pool
+  FAIL [4]: Vasco da Gama is in the pool
+  FAIL [4]: Internacional is in the pool
+  FAIL [4]: Remo is in the pool
+  FAIL [4]: Chapecoense is in the pool
+  FAIL [4]: Brasileirao: its ladder is not in tier order
+  FAIL [4]: Cagliari is in the pool
+  FAIL [4]: Como is in the pool
+  FAIL [4]: Frosinone is in the pool
+  FAIL [4]: Genoa is in the pool
+  FAIL [4]: Lazio is in the pool
+  FAIL [4]: Lecce is in the pool
+  FAIL [4]: Monza is in the pool
+  FAIL [4]: Parma is in the pool
+  FAIL [4]: Sassuolo is in the pool
+  FAIL [4]: Udinese is in the pool
+  FAIL [4]: Venezia is in the pool
+  FAIL [4]: Serie A: its ladder is not in tier order
+  FAIL [4]: Augsburg is in the pool
+  FAIL [4]: Gladbach is in the pool
+  FAIL [4]: Freiburg is in the pool
+  FAIL [4]: Hamburg is in the pool
+  FAIL [4]: Hoffenheim is in the pool
+  FAIL [4]: Koln is in the pool
+  FAIL [4]: Mainz is in the pool
+  FAIL [4]: Schalke 04 is in the pool
+  FAIL [4]: Elversberg is in the pool
+  FAIL [4]: Paderborn is in the pool
+  FAIL [4]: Union Berlin is in the pool
+  FAIL [4]: Bundesliga: its ladder is not in tier order
+  FAIL [4]: Angers is in the pool
+  FAIL [4]: Auxerre is in the pool
+  FAIL [4]: Brest is in the pool
+  FAIL [4]: Le Havre is in the pool
+  FAIL [4]: Le Mans is in the pool
+  FAIL [4]: Lens is in the pool
+  FAIL [4]: Lorient is in the pool
+  FAIL [4]: Paris FC is in the pool
+  FAIL [4]: Rennes is in the pool
+  FAIL [4]: Toulouse is in the pool
+  FAIL [4]: Troyes is in the pool
+  FAIL [4]: Ligue 1: its ladder is not in tier order
+  FAIL [4]: ADO Den Haag is in the pool
+  FAIL [4]: Cambuur is in the pool
+  FAIL [4]: Excelsior is in the pool
+  FAIL [4]: Fortuna Sittard is in the pool
+  FAIL [4]: Go Ahead Eagles is in the pool
+  FAIL [4]: Groningen is in the pool
+  FAIL [4]: Heerenveen is in the pool
+  FAIL [4]: NEC Nijmegen is in the pool
+  FAIL [4]: PEC Zwolle is in the pool
+  FAIL [4]: Sparta Rotterdam is in the pool
+  FAIL [4]: Telstar is in the pool
+  FAIL [4]: Willem II is in the pool
+  FAIL [4]: Eredivisie: its ladder is not in tier order
+  FAIL [4]: Abha is in the pool
+  FAIL [4]: Al Diriyah is in the pool
+  FAIL [4]: Al Ettifaq is in the pool
+  FAIL [4]: Al Faisaly is in the pool
+  FAIL [4]: Al Fateh is in the pool
+  FAIL [4]: Al Fayha is in the pool
+  FAIL [4]: Al Hazem is in the pool
+  FAIL [4]: Al Khaleej is in the pool
+  FAIL [4]: Al Kholood is in the pool
+  FAIL [4]: Al Qadsiah is in the pool
+  FAIL [4]: Al Riyadh is in the pool
+  FAIL [4]: Al Taawoun is in the pool
+  FAIL [4]: NEOM SC is in the pool
+  FAIL [4]: Saudi Pro League: its ladder is not in tier order
+  FAIL [4]: Charlotte FC is in the pool
+  FAIL [4]: Chicago Fire is in the pool
+  FAIL [4]: FC Cincinnati is in the pool
+  FAIL [4]: DC United is in the pool
+  FAIL [4]: CF Montreal is in the pool
+  FAIL [4]: Nashville SC is in the pool
+  FAIL [4]: New England Revolution is in the pool
+  FAIL [4]: New York City FC is in the pool
+  FAIL [4]: New York Red Bulls is in the pool
+  FAIL [4]: Orlando City is in the pool
+  FAIL [4]: Philadelphia Union is in the pool
+  FAIL [4]: Austin FC is in the pool
+  FAIL [4]: Colorado Rapids is in the pool
+  FAIL [4]: FC Dallas is in the pool
+  FAIL [4]: Houston Dynamo is in the pool
+  FAIL [4]: Minnesota United is in the pool
+  FAIL [4]: Portland Timbers is in the pool
+  FAIL [4]: Real Salt Lake is in the pool
+  FAIL [4]: San Diego FC is in the pool
+  FAIL [4]: San Jose Earthquakes is in the pool
+  FAIL [4]: Sporting Kansas City is in the pool
+  FAIL [4]: St. Louis City is in the pool
+  FAIL [4]: MLS: its ladder is not in tier order
+  FAIL [4]: Famalicao is in the pool
+  FAIL [4]: Rio Ave is in the pool
+  FAIL [4]: Casa Pia is in the pool
+  FAIL [4]: Estoril is in the pool
+  FAIL [4]: Moreirense is in the pool
+  FAIL [4]: Arouca is in the pool
+  FAIL [4]: Gil Vicente is in the pool
+  FAIL [4]: Santa Clara is in the pool
+  FAIL [4]: CD Nacional is in the pool
+  FAIL [4]: Estrela Amadora is in the pool
+  FAIL [4]: Alverca is in the pool
+  FAIL [4]: Maritimo is in the pool
+  FAIL [4]: Academico de Viseu is in the pool
+  FAIL [4]: Primeira Liga: its ladder is not in tier order
+  FAIL [4]: Dundee United is in the pool
+  FAIL [4]: Dundee is in the pool
+  FAIL [4]: Motherwell is in the pool
+  FAIL [4]: St Mirren is in the pool
+  FAIL [4]: Kilmarnock is in the pool
+  FAIL [4]: Falkirk is in the pool
+  FAIL [4]: St Johnstone is in the pool
+  FAIL [4]: Scottish Premiership: its ladder is not in tier order
+  FAIL [4]: Basaksehir is in the pool
+  FAIL [4]: Samsunspor is in the pool
+  FAIL [4]: Eyupspor is in the pool
+  FAIL [4]: Goztepe is in the pool
+  FAIL [4]: Kasimpasa is in the pool
+  FAIL [4]: Alanyaspor is in the pool
+  FAIL [4]: Konyaspor is in the pool
+  FAIL [4]: Gaziantep FK is in the pool
+  FAIL [4]: Genclerbirligi is in the pool
+  FAIL [4]: Kocaelispor is in the pool
+  FAIL [4]: Rizespor is in the pool
+  FAIL [4]: Erzurumspor is in the pool
+  FAIL [4]: Amedspor is in the pool
+  FAIL [4]: Corum FK is in the pool
+  FAIL [4]: Super Lig: its ladder is not in tier order
+  FAIL [4]: Wolfsburg is in the pool
+  FAIL [4]: Heidenheim is in the pool
+  FAIL [4]: St. Pauli is in the pool
+  FAIL [4]: Bochum is in the pool
+  FAIL [4]: Magdeburg is in the pool
+  FAIL [4]: Kaiserslautern is in the pool
+  FAIL [4]: Holstein Kiel is in the pool
+  FAIL [4]: Hannover 96 is in the pool
+  FAIL [4]: Dynamo Dresden is in the pool
+  FAIL [4]: Braunschweig is in the pool
+  FAIL [4]: Greuther Furth is in the pool
+  FAIL [4]: Nurnberg is in the pool
+  FAIL [4]: Darmstadt is in the pool
+  FAIL [4]: Arminia Bielefeld is in the pool
+  FAIL [4]: Karlsruhe is in the pool
+  FAIL [4]: Osnabruck is in the pool
+  FAIL [4]: Energie Cottbus is in the pool
+  FAIL [4]: 2. Bundesliga: its ladder is not in tier order
+  FAIL [4]: Union Saint-Gilloise is in the pool
+  FAIL [4]: Gent is in the pool
+  FAIL [4]: Antwerp is in the pool
+  FAIL [4]: Standard Liege is in the pool
+  FAIL [4]: Mechelen is in the pool
+  FAIL [4]: Charleroi is in the pool
+  FAIL [4]: Westerlo is in the pool
+  FAIL [4]: Sint-Truiden is in the pool
+  FAIL [4]: OH Leuven is in the pool
+  FAIL [4]: Cercle Brugge is in the pool
+  FAIL [4]: La Louviere is in the pool
+  FAIL [4]: Zulte Waregem is in the pool
+  FAIL [4]: Beveren is in the pool
+  FAIL [4]: Kortrijk is in the pool
+  FAIL [4]: Lommel is in the pool
+  FAIL [4]: Belgian Pro League: its ladder is not in tier order
+  FAIL [4]: Sturm Graz is in the pool
+  FAIL [4]: Rapid Wien is in the pool
+  FAIL [4]: LASK is in the pool
+  FAIL [4]: Wolfsberger AC is in the pool
+  FAIL [4]: Austria Wien is in the pool
+  FAIL [4]: Grazer AK is in the pool
+  FAIL [4]: Hartberg is in the pool
+  FAIL [4]: Ried is in the pool
+  FAIL [4]: Altach is in the pool
+  FAIL [4]: WSG Tirol is in the pool
+  FAIL [4]: Austria Lustenau is in the pool
+  FAIL [4]: Austrian Bundesliga: its ladder is not in tier order
+  FAIL [4]: AEK Athens is in the pool
+  FAIL [4]: Aris is in the pool
+  FAIL [4]: Asteras Tripolis is in the pool
+  FAIL [4]: Atromitos is in the pool
+  FAIL [4]: Iraklis is in the pool
+  FAIL [4]: Kalamata is in the pool
+  FAIL [4]: Kifisia is in the pool
+  FAIL [4]: Levadiakos is in the pool
+  FAIL [4]: OFI is in the pool
+  FAIL [4]: Panetolikos is in the pool
+  FAIL [4]: Volos is in the pool
+  FAIL [4]: Super League Greece: its ladder is not in tier order
+  FAIL [4]: FC Midtjylland is in the pool
+  FAIL [4]: Brondby IF is in the pool
+  FAIL [4]: AGF is in the pool
+  FAIL [4]: FC Nordsjaelland is in the pool
+  FAIL [4]: Viborg FF is in the pool
+  FAIL [4]: Randers FC is in the pool
+  FAIL [4]: OB is in the pool
+  FAIL [4]: Silkeborg IF is in the pool
+  FAIL [4]: Lyngby is in the pool
+  FAIL [4]: AC Horsens is in the pool
+  FAIL [4]: SonderjyskE is in the pool
+  FAIL [4]: Danish Superliga: its ladder is not in tier order
+  FAIL [4]: Young Boys is in the pool
+  FAIL [4]: Thun is in the pool
+  FAIL [4]: St. Gallen is in the pool
+  FAIL [4]: Lugano is in the pool
+  FAIL [4]: Servette is in the pool
+  FAIL [4]: Luzern is in the pool
+  FAIL [4]: Lausanne-Sport is in the pool
+  FAIL [4]: FC Zurich is in the pool
+  FAIL [4]: Grasshopper is in the pool
+  FAIL [4]: Sion is in the pool
+  FAIL [4]: Vaduz is in the pool
+  FAIL [4]: Swiss Super League: its ladder is not in tier order
+  FAIL [4]: Rijeka is in the pool
+  FAIL [4]: Osijek is in the pool
+  FAIL [4]: Varazdin is in the pool
+  FAIL [4]: Slaven Belupo is in the pool
+  FAIL [4]: Istra 1961 is in the pool
+  FAIL [4]: Lokomotiva Zagreb is in the pool
+  FAIL [4]: Gorica is in the pool
+  FAIL [4]: Rudes is in the pool
+  FAIL [4]: HNL: its ladder is not in tier order
+  FAIL [4]: Toluca is in the pool
+  FAIL [4]: Pachuca is in the pool
+  FAIL [4]: Leon is in the pool
+  FAIL [4]: Santos Laguna is in the pool
+  FAIL [4]: Atlas is in the pool
+  FAIL [4]: Necaxa is in the pool
+  FAIL [4]: Puebla is in the pool
+  FAIL [4]: Queretaro is in the pool
+  FAIL [4]: Tijuana is in the pool
+  FAIL [4]: FC Juarez is in the pool
+  FAIL [4]: Atletico San Luis is in the pool
+  FAIL [4]: Atlante is in the pool
+  FAIL [4]: Liga MX: its ladder is not in tier order
+  FAIL [4]: Adelaide United is in the pool
+  FAIL [4]: Brisbane Roar is in the pool
+  FAIL [4]: Central Coast Mariners is in the pool
+  FAIL [4]: Macarthur FC is in the pool
+  FAIL [4]: Melbourne City is in the pool
+  FAIL [4]: Newcastle Jets is in the pool
+  FAIL [4]: Perth Glory is in the pool
+  FAIL [4]: Sydney FC is in the pool
+  FAIL [4]: Western Sydney Wanderers is in the pool
+  FAIL [4]: A-League: its ladder is not in tier order
+  22 leagues re-derived club by club, 0 generated clubs above tier 4 (POOL_TABLE=1 prints every club with its XI and tier)
+  Forest XI 83.8 vs Aston Villa (t3) 83.7: margin 0.1. At or below 0 Forest drops to tier 3 on the next regenerate.
+  FAIL [4]: Forest in 1993-94: tier undefined, 4 expected (outside the top flight)
+  FAIL [4]: Forest in 1997-98: tier undefined, 4 expected (outside the top flight)
+  FAIL [4]: Forest in 1999-00: tier undefined, 4 expected (outside the top flight)
+  FAIL [4]: Forest in 2000-01: tier undefined, 4 expected (outside the top flight)
+  FAIL [4]: Forest in 2001-02: tier undefined, 4 expected (outside the top flight)
+  FAIL [4]: Forest in 2002-03: tier undefined, 4 expected (outside the top flight)
+  FAIL [4]: Forest in 2003-04: tier undefined, 4 expected (outside the top flight)
+  FAIL [4]: Forest in 2004-05: tier undefined, 4 expected (outside the top flight)
+  FAIL [4]: Forest in 2005-06: tier undefined, 4 expected (outside the top flight)
+  FAIL [4]: Forest in 2006-07: tier undefined, 4 expected (outside the top flight)
+  FAIL [4]: Forest in 2007-08: tier undefined, 4 expected (outside the top flight)
+  FAIL [4]: Forest in 2008-09: tier undefined, 4 expected (outside the top flight)
+  FAIL [4]: Forest in 2009-10: tier undefined, 4 expected (outside the top flight)
+  FAIL [4]: Forest in 2010-11: tier undefined, 4 expected (outside the top flight)
+  FAIL [4]: Forest in 2011-12: tier undefined, 4 expected (outside the top flight)
+  FAIL [4]: Forest in 2012-13: tier undefined, 4 expected (outside the top flight)
+  FAIL [4]: Forest in 2013-14: tier undefined, 4 expected (outside the top flight)
+  FAIL [4]: Forest in 2014-15: tier undefined, 4 expected (outside the top flight)
+  FAIL [4]: Forest in 2015-16: tier undefined, 4 expected (outside the top flight)
+  FAIL [4]: Forest in 2016-17: tier undefined, 4 expected (outside the top flight)
+  FAIL [4]: Forest in 2017-18: tier undefined, 4 expected (outside the top flight)
+  FAIL [4]: Forest in 2018-19: tier undefined, 4 expected (outside the top flight)
+  FAIL [4]: Forest in 2019-20: tier undefined, 4 expected (outside the top flight)
+  FAIL [4]: Forest in 2020-21: tier undefined, 4 expected (outside the top flight)
+  FAIL [4]: Forest in 2021-22: tier undefined, 4 expected (outside the top flight)
+  HAND_CLUBS 190 rows, fingerprint e12e673153af2568; Forest tundefined, t4 in 1993, 1997 and 1999 to 2021, checked every season 1988 to 2060 (25 wrong)
+
+4L. LADDER: thin squads share one unranked group a tier, ranked clubs stand alone by XI
+  FAIL [4L]: Premier League: its ladder is not the rule's
+    first difference at group 8: the ladder has ["Nottingham Forest"], the rule gives ["Brighton"]
+  FAIL [4L]: Championship: its ladder is not the rule's
+    first difference at group 3: the ladder has ["Burnley"], the rule gives ["Norwich City"]
+  FAIL [4L]: La Liga: its ladder is not the rule's
+    first difference at group 9: the ladder has ["Valencia"], the rule gives ["Celta Vigo"]
+  FAIL [4L]: Brasileirao: its ladder is not the rule's
+    first difference at group 8: the ladder has ["Bahia"], the rule gives ["Santos"]
+  FAIL [4L]: Serie A: its ladder is not the rule's
+    first difference at group 4: the ladder has ["Como"], the rule gives ["AC Milan"]
+  FAIL [4L]: Bundesliga: its ladder is not the rule's
+    first difference at group 7: the ladder has ["Hoffenheim"], the rule gives ["Werder Bremen"]
+  FAIL [4L]: Saudi Pro League: its ladder is not the rule's
+    first difference at group 4: the ladder has ["Al Qadsiah"], the rule gives ["Al Nassr"]
+  FAIL [4L]: MLS: its ladder is not the rule's
+    first difference at group 2: the ladder has ["New York City FC"], the rule gives ["LAFC"]
+  FAIL [4L]: Primeira Liga: its ladder is not the rule's
+    first difference at group 5: the ladder has ["Famalicao"], the rule gives ["Vitoria Guimaraes"]
+  FAIL [4L]: Scottish Premiership: its ladder is not the rule's
+    first difference at group 3: the ladder has ["Aberdeen","Dundee","Dundee United","Falkirk","Hearts","Hibernian","Kilmarnock","Motherwell","St Johnstone","St Mirren"], the rule gives ["Aberdeen","Hearts","Hibernian"]
+  FAIL [4L]: 2. Bundesliga: its ladder is not the rule's
+    first difference at group 1: the ladder has ["Wolfsburg"], the rule gives ["Hertha Berlin"]
+  FAIL [4L]: Belgian Pro League: its ladder is not the rule's
+    first difference at group 3: the ladder has ["Union Saint-Gilloise"], the rule gives ["Anderlecht"]
+  FAIL [4L]: Danish Superliga: its ladder is not the rule's
+    first difference at group 1: the ladder has ["FC Midtjylland"], the rule gives ["FC Copenhagen"]
+  FAIL [4L]: Swiss Super League: its ladder is not the rule's
+    first difference at group 1: the ladder has ["Young Boys"], the rule gives ["Basel"]
+  FAIL [4L]: Liga MX: its ladder is not the rule's
+    first difference at group 4: the ladder has ["Toluca"], the rule gives ["Cruz Azul"]
+  FAIL [4L]: A-League: its ladder is not the rule's
+    first difference at group 1: the ladder has ["Adelaide United"], the rule gives ["Auckland FC"]
+  22 ladders equal the rule worked from Club Manager's data: 236 clubs ranked on their own, 144 thin squads in 21 shared groups
+  ranked clubs a league: Premier League 20 of 20, Championship 19 of 24, La Liga 19 of 20, Brasileirao 16 of 20, Serie A 20 of 20, Bundesliga 18 of 18, Ligue 1 16 of 18, Eredivisie 7 of 18, Saudi Pro League 7 of 18, MLS 21 of 30, Primeira Liga 8 of 18, Scottish Premiership 2 of 12, Super Lig 9 of 18, 2. Bundesliga 5 of 18, Belgian Pro League 10 of 18, Austrian Bundesliga 3 of 12, Super League Greece 4 of 14, Danish Superliga 4 of 12, Swiss Super League 2 of 12, HNL 2 of 10, Liga MX 12 of 18, A-League 12 of 12
+
+5. WEIGHTS: exact odds from leagueDrawGroups, as rationals
+  HAND_CLUBS tier 1: 18 clubs, 9 league groups (largest 5), every club exactly 1/18; the sampler matched it on a 192 draw grid
+  HAND_CLUBS tier 2: 36 clubs, 19 league groups (largest 3), every club exactly 1/36; the sampler matched it on a 320 draw grid
+  HAND_CLUBS tier 3: 49 clubs, 33 league groups (largest 3), every club exactly 1/49; the sampler matched it on a 340 draw grid
+  HAND_CLUBS tier 4: 87 clubs, 70 league groups (largest 3), every club exactly 1/87; the sampler matched it on a 508 draw grid
+  HAND_CLUBS tier 1+2: 54 clubs, 28 league groups (largest 5), every club exactly 1/54; the sampler matched it on a 512 draw grid
+  HAND_CLUBS tier 2+3: 85 clubs, 52 league groups (largest 3), every club exactly 1/85; the sampler matched it on a 660 draw grid
+  HAND_CLUBS tier 3+4: 136 clubs, 103 league groups (largest 3), every club exactly 1/136; the sampler matched it on a 848 draw grid
+  HAND_CLUBS by season 1980 to 2060: 81 seasons every club exactly 1/n; Premier League tier 3 over the cap in 0 seasons, as pinned
+  FAIL [5]: tier 4: the four leagues hold 7, the read labels 29, of 87 over 70 groups; 20, 109, 167 and 76 expected
+  FAIL [5]: tier 1 to 3 draw weights 18, 36, 49; 18, 39 and 69 expected
+  pickAcrossLeagues over tier 4: 70 league groups, both Math.random calls on a 508 draw grid, every club drawn exactly weight/87 x 1/size
+  full pool tier 4: four leagues 7/87 capped; a plain pick would give them 7/87
+  FAIL [5]: Norwich City: tier 4 share 1/87, 5/3674 stated
+  FAIL [5]: Brentford: tier 4 share 2/174, 5/1336 stated
+  FAIL [5]: Crystal Palace: tier 4 share 2/174, 5/1336 stated
+  FAIL [5]: Real Betis: tier 4 share 2/174, 5/2171 stated
+  FAIL [5]: Celta Vigo: tier 4 share 2/174, 5/2171 stated
+  FAIL [5]: Cruzeiro: tier 4 share 2/174, 5/2338 stated
+  FAIL [5]: Santos: tier 4 share 2/174, 5/2338 stated
+  FAIL [5]: Enyimba: tier 4 share 1/87, 1/167 stated
+  FAIL [5]: Twente: tier 4 share 2/174, 5/2338 stated
+  FAIL [5]: Utrecht: tier 4 share 2/174, 5/2338 stated
+  FAIL [5]: Hearts: tier 4 share 3/261, 5/1670 stated
+  hand tier 4 clubs before: each 1/87; now 1/87 outside the four leagues, Norwich 1/87, Brentford 2/174, Betis 2/174, Cruzeiro 2/174
+
+6. OFFERS: 6 seeds x 48 careers from 2020 through the real loop
+  seed 65850: 1236 draws (four leagues 300 vs 300.1), 0 where the cap bites (four leagues 0 vs 0.0, ratio NaN, z 0.00); 1280 offers; distinct generated clubs offered: Premier League 0, Championship 0, La Liga 0, Brasileirao 0; uncovered 0
+  FAIL [6]: seed 65850: only 0 draws where the cap bites, the comparison needs at least 115
+    11 careers started at a worldwide academy fallback, uncovered 0
+  seed 73769: 1213 draws (four leagues 304 vs 305.1), 0 where the cap bites (four leagues 0 vs 0.0, ratio NaN, z 0.00); 1256 offers; distinct generated clubs offered: Premier League 0, Championship 0, La Liga 0, Brasileirao 0; uncovered 0
+  FAIL [6]: seed 73769: only 0 draws where the cap bites, the comparison needs at least 115
+    11 careers started at a worldwide academy fallback, uncovered 0
+  seed 81688: 1135 draws (four leagues 264 vs 273.1), 0 where the cap bites (four leagues 0 vs 0.0, ratio NaN, z 0.00); 1179 offers; distinct generated clubs offered: Premier League 0, Championship 0, La Liga 0, Brasileirao 0; uncovered 0
+  FAIL [6]: seed 81688: only 0 draws where the cap bites, the comparison needs at least 115
+    11 careers started at a worldwide academy fallback, uncovered 0
+  seed 89607: 1211 draws (four leagues 309 vs 294.0), 0 where the cap bites (four leagues 0 vs 0.0, ratio NaN, z 0.00); 1258 offers; distinct generated clubs offered: Premier League 0, Championship 0, La Liga 0, Brasileirao 0; uncovered 0
+  FAIL [6]: seed 89607: only 0 draws where the cap bites, the comparison needs at least 115
+    11 careers started at a worldwide academy fallback, uncovered 0
+  seed 97526: 1202 draws (four leagues 315 vs 304.8), 0 where the cap bites (four leagues 0 vs 0.0, ratio NaN, z 0.00); 1247 offers; distinct generated clubs offered: Premier League 0, Championship 0, La Liga 0, Brasileirao 0; uncovered 0
+  FAIL [6]: seed 97526: only 0 draws where the cap bites, the comparison needs at least 115
+    11 careers started at a worldwide academy fallback, uncovered 0
+  seed 105445: 1184 draws (four leagues 305 vs 290.5), 0 where the cap bites (four leagues 0 vs 0.0, ratio NaN, z 0.00); 1228 offers; distinct generated clubs offered: Premier League 0, Championship 0, La Liga 0, Brasileirao 0; uncovered 0
+  FAIL [6]: seed 105445: only 0 draws where the cap bites, the comparison needs at least 115
+    11 careers started at a worldwide academy fallback, uncovered 0
+  over all 6 seeds, where the cap bites: four leagues won 0 against 0.0 expected (ratio NaN, z 0.00)
+  FAIL [6]: where the cap bites the four leagues won 0 draws against 0.0 on the draws' own odds (ratio NaN, band 1 +/- 0.25): the market is not drawing on the capped weights
+  Premier League: 0.00 distinct generated clubs offered per seed over 6 seeds (floor 2)
+  FAIL [6]: Premier League offered 0.00 distinct generated clubs per seed over 6 seeds, at least 2 expected
+  Championship: 0.00 distinct generated clubs offered per seed over 6 seeds (floor 4)
+  FAIL [6]: Championship offered 0.00 distinct generated clubs per seed over 6 seeds, at least 4 expected
+  La Liga: 0.00 distinct generated clubs offered per seed over 6 seeds (floor 2.5)
+  FAIL [6]: La Liga offered 0.00 distinct generated clubs per seed over 6 seeds, at least 2.5 expected
+  Brasileirao: 0.00 distinct generated clubs offered per seed over 6 seeds (floor 2)
+  FAIL [6]: Brasileirao offered 0.00 distinct generated clubs per seed over 6 seeds, at least 2 expected
+  ratio range NaN to NaN; per league minimum distinct generated clubs: Premier League 0, Championship 0, La Liga 0, Brasileirao 0; 5 s
+  (printed, not gated) market offers from the four leagues 1777/7115; rivals 79/287
+  (printed, not gated) manager and owner clubs are a plain pick over tier 3 and 4: four leagues 16/136 (before this round 16/136)
+  (printed, not gated) a 1995 start: four leagues won 105 of 419 draws (97.4 expected); market offers 102/413; uncovered 0
+  academies, youths rated 40 to 54, 2020 pool:
+    before England: home list 10, tier 3 7/10 (70.0%), generated 0.0%; largest seed deviation 0.0143
+    before Spain: home list 5, tier 3 2/5 (40.0%), generated 0.0%; largest seed deviation 0.0190
+    before Brazil: home list 4, tier 3 2/4 (50.0%), generated 0.0%; largest seed deviation 0.0140
+    before Wales: no home club at tier 3 or 4
+    after  England: home list 10, tier 3 7/10 (70.0%), generated 0.0%; largest seed deviation 0.0143
+    after  Spain: home list 5, tier 3 2/5 (40.0%), generated 0.0%; largest seed deviation 0.0190
+    after  Brazil: home list 4, tier 3 2/4 (50.0%), generated 0.0%; largest seed deviation 0.0140
+    after  Wales: no home club at tier 3 or 4
+  worldwide academy fallbacks (exact grid):
+    Nigeria 70 on the 2020 pool: 49 candidates, 460 grid draws; four leagues 15/49 capped, 15/49 by a plain pick
+    Nigeria 60 on the 2020 pool: 81 candidates, 660 grid draws; four leagues 17/81 capped, 17/81 by a plain pick
+    Montenegro 47 on the 2020 pool: 140 candidates, 944 grid draws; four leagues 18/140 capped, 18/140 by a plain pick
+    Montenegro 30 on the 2020 pool: 90 candidates, 552 grid draws; four leagues 7/90 capped, 7/90 by a plain pick
+    Montenegro 80 on a pool with no elite club: 12 candidates, 104 grid draws; four leagues 5/12 capped, 5/12 by a plain pick
+    Montenegro 30 on a pool with no tier 4 club: 50 candidates, 392 grid draws; four leagues 11/50 capped, 11/50 by a plain pick
+
+7. OLD SAVES: careers signed on the pre-round pool load and play on
+  West Ham: 3 seasons on the new pool, still West Ham|Championship|3
+  Wolves: 3 seasons on the new pool, still Wolves|Championship|3
+  Girona: 3 seasons on the new pool, still Girona|Segunda Division|2
+  Norwich City: 3 seasons on the new pool, still Norwich City|Championship|4
+  Flamengo: 3 seasons on the new pool, still Flamengo|Brasileirao|1
+  Real Madrid: 3 seasons on the new pool, still Real Madrid|La Liga|1
+
+control nopool: section 2 went red as it must (red: 2, 3, 4, 4L, 5, 6)
