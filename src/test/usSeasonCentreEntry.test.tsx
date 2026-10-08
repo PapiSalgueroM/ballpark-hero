@@ -10,7 +10,13 @@
    that opens a contract talk or the market opens no overlay, the bare board
    (no host) plays and opens nothing, a sport with no Season Center bound
    renders no entry, and a season already played opens from "Watch again"
-   without touching the save or the generator. */
+   without touching the save or the generator.
+
+   The fix pass of 2026-10-08 added: the viewer is loaded BEFORE the season
+   is played, so a chunk that cannot be loaded costs no season (with an
+   always on control that plays first and must then show a season lost to
+   the failed load), and the press never opens a line another tab saved for
+   a different year. */
 import fs from 'node:fs';
 import path from 'node:path';
 import type { ComponentType } from 'react';
@@ -23,12 +29,24 @@ vi.mock('@/lib/badges', () => ({ getNewlyEarnedBadges: () => Promise.resolve([])
 vi.mock('@/contexts/AuthContext', () => ({ useAuth: () => ({ user: null, profile: null, refreshProfile: () => undefined }) }));
 vi.mock('sonner', () => ({ toast: { success: () => undefined } }));
 /* The control's switch: the real entry, its press followed by one extra draw when the switch is on. */
-const ctl = vi.hoisted(() => ({ extraDraw: false }));
+const ctl = vi.hoisted(() => ({ extraDraw: false, playFirst: false }));
 vi.mock('@/components/us-career/season/UsSeasonCentreEntry', async importOriginal => {
   const original = await importOriginal<typeof import('@/components/us-career/season/UsSeasonCentreEntry')>();
+  const host = await import('@/components/us-career/season/UsSeasonCentreHost');
+  const { useContext } = await import('react');
   const Entry = original.UsSeasonCentreEntry;
   type P = Parameters<typeof Entry>[0];
-  return { ...original, UsSeasonCentreEntry: (props: P) => <Entry {...props} onPlay={() => { props.onPlay(); if (ctl.extraDraw) Math.random(); }} /> };
+  const Wrapped = (props: P) => {
+    const centre = useContext(host.UsSeasonCentreOpen);
+    /* the load first control: the OLD order, the season played before the viewer is asked for */
+    const api = ctl.playFirst && centre ? { ...centre, ready: (from?: HTMLElement | null) => { props.onPlay(); return centre.ready(from); } } : centre;
+    return (
+      <host.UsSeasonCentreOpen.Provider value={api}>
+        <Entry {...props} onPlay={() => { props.onPlay(); if (ctl.extraDraw) Math.random(); }} />
+      </host.UsSeasonCentreOpen.Provider>
+    );
+  };
+  return { ...original, UsSeasonCentreEntry: Wrapped };
 });
 
 import NbaMyCareerBoard from '@/components/nba-my-career/NbaMyCareerBoard';
@@ -52,6 +70,9 @@ const buttons = (root: ParentNode) => ([...root.querySelectorAll('button')] as H
 const playButton = () => buttons(document.body).find(b => /^Play the \d+ season$/.test(squash(b.textContent ?? '')));
 const click = async (el: Element | null | undefined) => { if (!el) throw new Error('usSeasonCentreEntry.test: nothing to click'); fireEvent.click(el); await flush(); };
 const q = (sel: string) => document.querySelector<HTMLElement>(sel);
+/** The press loads the viewer before it plays: wait until the entry is no longer loading (the hub may be gone by then). */
+const settled = async () => { await waitFor(() => expect(q('[data-season-centre-entry] [aria-busy="true"]')).toBeNull(), { timeout: 20000 }); await flush(); };
+const pressWatch = async () => { await click(q('[data-week-by-week]')); await settled(); };
 
 /** A career one press away from its first season, made with the binding's own calls on a keyed stream. */
 function seedSave(sport: UsCareerSport, pos: string, seed: string, eraId = 'now', change?: (c: UsCareerCore) => void) {
@@ -109,7 +130,7 @@ async function runArm(Board: ComponentType, sport: UsCareerSport, pos: string, w
     if ((await toHub(sport)) === 'retired') break;
     if (!watch) await click(playButton());
     else {
-      await click(q('[data-week-by-week]'));
+      await pressWatch();
       if (q('[data-us-centre-cover]')) {
         await waitFor(() => expect(q('[data-season-centre]')).not.toBeNull(), { timeout: 4000 });
         out.opened += 1;
@@ -127,6 +148,7 @@ async function runArm(Board: ComponentType, sport: UsCareerSport, pos: string, w
 
 beforeEach(() => {
   ctl.extraDraw = false;
+  ctl.playFirst = false;
   vi.useFakeTimers({ toFake: ['Date'] });
   vi.setSystemTime(new Date('2026-10-07T12:00:00Z'));
   localStorage.clear();
@@ -187,7 +209,7 @@ describe.each(BOUND)('$name My Career: watching changes nothing', ({ Board, spor
     seedSave(sport, pos, `bare|${sport.slug}`);
     render(<MemoryRouter><UsCareerBoard sport={sport} /></MemoryRouter>);
     await flush();
-    await click(q('[data-week-by-week]'));
+    await pressWatch();
     expect(savedCareer(sport).seasons).toHaveLength(1);
     expect(q('[data-us-centre-cover]')).toBeNull();
     expect(q('[data-season-reveal]')).not.toBeNull();
@@ -200,7 +222,7 @@ describe.each(BOUND)('$name My Career: watching changes nothing', ({ Board, spor
     const random = vi.spyOn(Math, 'random').mockImplementation(mulberry32(77));
     render(<MemoryRouter><Board /></MemoryRouter>);
     await flush();
-    await click(q('[data-week-by-week]'));
+    await pressWatch();
     expect(q('[data-extension-talk]')).not.toBeNull();
     expect(q('[data-us-centre-cover]')).toBeNull();
     expect(savedCareer(sport).seasons).toHaveLength(0);
@@ -216,12 +238,89 @@ describe.each(BOUND)('$name My Career: watching changes nothing', ({ Board, spor
     const bytes = localStorage.getItem(sport.saveKey);
     const draws = random.mock.calls.length;
     await click(again);
+    await settled();
     await waitFor(() => expect(q('[data-season-centre]')).not.toBeNull(), { timeout: 4000 });
     await click(q('[data-centre-exit]'));
     expect(q('[data-us-centre-cover]')).toBeNull();
     expect(localStorage.getItem(sport.saveKey)).toBe(bytes);
     expect(random.mock.calls.length).toBe(draws);
     expect(document.activeElement).toBe(q('[data-watch-last]'));
+  }, 30000);
+
+  /** One press of Week by week while the sport's number file cannot be loaded (a tab left open across a release). */
+  async function pressWithAFailedChunk(seed: string) {
+    seedSave(sport, pos, `${seed}|${sport.slug}`);
+    const load = vi.spyOn(sport as Required<Pick<UsCareerSport, 'loadSeasonCentre'>>, 'loadSeasonCentre')
+      .mockImplementationOnce(() => Promise.reject(new Error('Failed to fetch dynamically imported module')));
+    render(<MemoryRouter><Board /></MemoryRouter>);
+    await flush();
+    const bytes = localStorage.getItem(sport.saveKey);
+    await click(q('[data-week-by-week]'));
+    await waitFor(() => expect(q('[data-season-centre-failed]')).not.toBeNull(), { timeout: 20000 });
+    expect(load).toHaveBeenCalledTimes(1);
+    return bytes;
+  }
+
+  it('plays nothing when the viewer cannot be loaded: a failed chunk costs no season', async () => {
+    const bytes = await pressWithAFailedChunk('stale');
+    /* nothing was played: the save, the hub and the screen are where they were */
+    expect(localStorage.getItem(sport.saveKey)).toBe(bytes);
+    expect(savedCareer(sport).seasons).toHaveLength(0);
+    expect(q('[data-season-reveal]')).toBeNull();
+    expect(q('[data-us-centre-cover]')).toBeNull();
+    expect(playButton()).toBeDefined();
+    expect(q('[data-season-centre-failed]')!.textContent).toContain('your season has not been played');
+    /* Back closes the tile and gives the focus back to the button he pressed */
+    await click([...q('[data-season-centre-failed]')!.querySelectorAll('button')].find(b => /Back to your season/.test(b.textContent ?? '')));
+    expect(q('[data-season-centre-failed]')).toBeNull();
+    expect(document.activeElement).toBe(q('[data-week-by-week]'));
+    /* the next press finds its chunks, plays and opens as usual */
+    await pressWatch();
+    await waitFor(() => expect(q('[data-season-centre]')).not.toBeNull(), { timeout: 4000 });
+    expect(savedCareer(sport).seasons).toHaveLength(1);
+  }, 60000);
+
+  it('CONTROL: the old order (play, then load) loses a season to the same failed chunk', async () => {
+    /* the needle: the entry asks for the viewer before its one call of Play */
+    const src = fs.readFileSync(path.resolve(process.cwd(), 'src/components/us-career/season/UsSeasonCentreEntry.tsx'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+    expect(src.split('await centre.ready(from)')).toHaveLength(3);
+    expect(src.indexOf('await centre.ready(from)')).toBeLessThan(src.indexOf('onPlay();'));
+    ctl.playFirst = true;
+    const bytes = await pressWithAFailedChunk('stale-control');
+    ctl.playFirst = false;
+    /* the season is on the save and the viewer never came: exactly what the test above forbids */
+    expect(localStorage.getItem(sport.saveKey)).not.toBe(bytes);
+    expect(savedCareer(sport).seasons).toHaveLength(1);
+    expect(q('[data-season-centre]')).toBeNull();
+  }, 60000);
+
+  it('never opens a line another tab saved: the saved line must be the year he pressed for', async () => {
+    seedSave(sport, pos, `tab|${sport.slug}`);
+    render(<MemoryRouter><Board /></MemoryRouter>);
+    await flush();
+    /* another tab has saved this career one season on, in a different year, and this tab's own write is refused */
+    const other = JSON.parse(localStorage.getItem(sport.saveKey)!) as { c: UsCareerCore; teamQuality: number };
+    const year = other.c.year;
+    other.c.year = year + 3;
+    const rng = keyedRng(`tab|other|${sport.slug}`);
+    sport.campBattle(other.c as never, other.teamQuality, rng);
+    sport.simSeason(other.c as never, other.teamQuality, rng);
+    expect(other.c.seasons).toHaveLength(1);
+    expect(other.c.seasons[0].year).toBe(year + 3);
+    expect(other.c.seasons[0].games).toBeGreaterThan(0);
+    localStorage.setItem(sport.saveKey, JSON.stringify(other));
+    const stored = localStorage.getItem(sport.saveKey);
+    const real = Storage.prototype.setItem;
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, k: string, v: string) {
+      if (k === sport.saveKey) throw new Error('QuotaExceededError');
+      real.call(this, k, v);
+    });
+    await pressWatch();
+    /* this tab played its own season in memory (the curtain is up), the stored line is the other tab's, and nothing opens */
+    expect(localStorage.getItem(sport.saveKey)).toBe(stored);
+    expect(q('[data-season-reveal]')).not.toBeNull();
+    expect(q('[data-us-centre-cover]')).toBeNull();
+    expect(q('[data-season-centre]')).toBeNull();
   }, 30000);
 
   it('opens the viewer or the plain tile, never a throw, for a last line from an older build', async () => {
@@ -241,6 +340,7 @@ describe.each(BOUND)('$name My Career: watching changes nothing', ({ Board, spor
     await flush();
     await toHub(sport);
     await click(q('[data-watch-last]'));
+    await settled();
     await waitFor(() => expect(q('[data-season-centre]')).not.toBeNull(), { timeout: 4000 });
     expect(q('[data-season-centre-failed]')).toBeNull();
   }, 30000);

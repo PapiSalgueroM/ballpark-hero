@@ -23,7 +23,6 @@ import {
   type SeasonWords, type SlotLabel, type StatTotal, type TeamTarget,
 } from './core';
 import { keyedRng } from '../keyedRng';
-import { usSeasonHeldLine, usSeasonLength } from '@/data/usSeasonLengths';
 import { usLeagueShape, type UsShape } from '@/data/usLeagueShape';
 import type { UsCareerCore, UsCareerSeason } from '../usCareerSport';
 
@@ -49,18 +48,21 @@ export interface UsSeasonView {
   clock: UsClock;
   eventWords(e: SeasonEvent, us: string, them: string, pos: string): string;
   missed(why: DerivedGame['why']): string;
-  /** His line in a game as short bits, no two alike in one game. */
+  /** The rest of his line in a game as short bits, no two alike in one game.
+   *  The headline number is the chip (markChip), so it is not repeated here. */
   lineOf(g: DerivedGame, pos: string): string[];
   /** One number for "best game". */
   markOf(g: DerivedGame, pos: string): number;
+  /** The headline of his line in a game ("31 PTS"), printed first, before the bits. */
   markChip(g: DerivedGame, pos: string): string;
   markText(g: DerivedGame, pos: string): string;
   soFar(so: Record<string, number>, pos: string): [string, string][];
   half(so: Record<string, number>, pos: string): string;
   /** The board's review labels by their short tile label ('Points per game' to 'PPG'); a label not here prints as it is. */
   tileLabels: Record<string, string>;
-  /** The "?" sheet. `named`: opponents are named this season. */
-  help(named: boolean): UsHelp;
+  /** The "?" sheet. `named`: opponents are named this season. `opp`: a team of
+   *  this season that is not his, for the worked example; absent when nobody is named. */
+  help(named: boolean, opp?: string): UsHelp;
 }
 
 export interface UsSeasonCtx {
@@ -84,6 +86,11 @@ export interface UsSeasonBind {
   league: string;
   /** The season this career plays in full: 82, 17. */
   fullSeason: number;
+  /** The real season's games a team that year, from the sport's own two sourced ledger
+   *  (src/data/usSeasonLengths.ts); null: no single length, or a year the ledger does not hold. */
+  realLength(year: number): number | null;
+  /** Why that year has no game by game view, in the words the hub already shows; null: it has one. */
+  heldLine(year: number): string | null;
   /** The ENGINE'S exported word for a missed postseason, never a copy. */
   missed: string;
   /** The engine's exported results, in playoff depth order. */
@@ -202,10 +209,9 @@ export function buildUsSeason(
 ): UsSeasonBuild {
   const eraId = career.eraId;
   const pos = career.pos;
-  const length = bind.slug === 'nba' || bind.slug === 'nfl' ? usSeasonLength(bind.slug, row.year) : null;
+  const length = bind.realLength(row.year);
   if (length === null || length !== bind.fullSeason) {
-    const line = (bind.slug === 'nba' || bind.slug === 'nfl' ? usSeasonHeldLine(bind.slug, row.year) : null)
-      ?? '📺 No week by week this season: the game has no verified length for the real season.';
+    const line = bind.heldLine(row.year) ?? '📺 No week by week this season: the game has no verified length for the real season.';
     return { ok: false, why: 'held', line };
   }
   if (!(row.games > 0) || row.teamResult === 'SUSPENDED') return { ok: false, why: 'empty', line: 'There are no games to show for this season.' };
@@ -333,7 +339,7 @@ export function usHelp(o: { named: boolean; games: number; bands: readonly (read
       'Your season was played the moment you pressed the button. This is that same season, game by game, so nothing here can change it. Your career is the same whether you watch or not.',
       o.named
         ? "The teams, the divisions and how often you meet each one follow the league's standard schedule formula. Who you meet on which night, every score and every stat line are this career's own, not a real schedule."
-        : "Opponents are not named this season, because the game's team list is not that season's real league. Every score and every stat line are this career's own.",
+        : "Opponents are not named this season, because the game does not hold that season's divisions and schedule. Every score and every stat line are this career's own.",
       `Your team's record is this career's own too. It always fits how your season ended: here a champion wins ${champion[0]} to ${champion[1]} of ${o.games} and a team that missed the playoffs ${missed[0]} to ${missed[1]}.`,
       'If a contract talk comes up when you press Week by week, answer it first. If you play the year out, the season runs straight away and you can open it afterwards with Watch again.',
     ],

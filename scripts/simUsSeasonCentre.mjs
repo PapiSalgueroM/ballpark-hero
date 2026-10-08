@@ -41,6 +41,9 @@
  *            check goes red and the binding still names nobody -> section 5
  *   formula  a division rival hosted three times, the bind's
  *            own schedule check off                            -> section 5
+ *   conf     a first round loser meets the other conference   -> section 4
+ *   hot      the feed's takeover line on any night at or above
+ *            his average (the rule before the fix pass)        -> section 3
  *   static   a static import of the viewer planted in a route
  *            file (in memory; the same text in a comment stays
  *            green)                                            -> section 8
@@ -77,6 +80,8 @@ const CONTROLS = {
   names: { section: 5, patches: [WINDOW, { file: US, from: '  if (ledger.length !== own.length || new Set(ledger).size !== ledger.length) return null;\n  const ownSet = new Set(own);\n  if (ownSet.size !== own.length || !ledger.every(id => ownSet.has(id))) return null;\n', to: '  const ownSet = new Set(own);\n' }] },
   window: { section: 5, patches: [WINDOW] },
   formula: { section: 5, patches: [{ file: NBA, from: 'for (let s = 1; s <= d; s += 1) add(s, 2, 2);', to: 'for (let s = 1; s <= d; s += 1) add(s, 3, 1);' }, { file: NBA, from: '  if (ctx.shape) out.push(...nbaDealProblems(ctx, s.games));\n', to: '' }] },
+  conf: { section: 4, patches: [{ file: US, from: '      const slot = r === bind.rounds.length - 1 ? other[0] : conf[r];', to: '      const slot = r === n - 1 ? other[0] : conf[r];' }] },
+  hot: { section: 3, patches: [{ file: NBA, from: '  return won && pts >= 20 && pts >= 1.3 * ppg;', to: '  return pts >= ppg;' }] },
   static: { section: 8, patches: [] },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown US_SEASON_CONTROL ${CONTROL}`); process.exit(2); }
@@ -270,6 +275,10 @@ function shownIsSavedNba(row, s) {
   for (const g of s.games) {
     if (g.us === g.them) out.push(`md ${g.md}: level`);
     if (!g.played && Object.keys(g.line).length) out.push(`md ${g.md}: a line in a game he missed`);
+    /* the feed's "You take over" line, restated here: once, and only in a win, on 20 or more, at 1.3 times his average */
+    const said = g.events.filter(e => e.kind === 'hot').length;
+    const earned = g.played && g.us > g.them && isNum(row.ppg) && g.line.pts >= 20 && g.line.pts >= 1.3 * row.ppg;
+    if (said !== (earned ? 1 : 0)) out.push(`md ${g.md}: ${said} takeover lines for ${g.played ? g.line.pts : 'no'} points against ${row.ppg} a game in a ${g.us > g.them ? 'win' : 'loss'}`);
   }
   return out;
 }
@@ -297,7 +306,7 @@ function boardIsTrue(slug, s) {
 }
 
 /** Section 4: the path against the harness's own reading of the saved result. */
-function pathProblems(slug, row, path, target) {
+function pathProblems(slug, row, path, target, who) {
   const out = [];
   const o = OWN[slug];
   const i = o.results.indexOf(row.teamResult);
@@ -310,6 +319,27 @@ function pathProblems(slug, row, path, target) {
   if (!path) { if (!(slug === 'nfl' && isNum(row.poGames) && row.poGames !== n)) out.push('no path for a playoff season'); return out; }
   if (path.steps.length !== n) out.push(`rounds ${path.steps.length} != ${n}`);
   path.steps.forEach((st, r) => { if (st.won !== (r < n - 1 || i === 4)) out.push(`round ${r + 1} won ${st.won}`); });
+  /* who he meets, by the harness's own reading of a bracket of four rounds: in a named season every
+     opponent is a team of the game's list for the era, never his own, none twice; rounds one to three
+     are his own conference and only the fourth (the Finals, the Super Bowl) is the other. Unnamed:
+     "another team" in every round. */
+  if (who.named) {
+    const shape = M.usLeagueShape(slug, who.eraId, row.year);
+    const ids = gameIds(slug, who.eraId);
+    const confOf = id => shape?.divisions.find(dv => dv.teams.includes(id))?.conf;
+    const mine = confOf(row.team);
+    const met = new Set();
+    path.steps.forEach((st, r) => {
+      const id = ids.find(x => who.SB.teamLabelOf(x, who.eraId) === st.opp);
+      if (!id || !mine || !confOf(id)) { out.push(`round ${r + 1}: "${st.opp}" is not a team of the game's list in a conference`); return; }
+      if (id === row.team) out.push(`round ${r + 1}: he meets his own team`);
+      if (met.has(id)) out.push(`round ${r + 1}: ${id} met twice`);
+      met.add(id);
+      const finals = r === 3;
+      who.count[finals ? 'finals' : 'early'] += 1;
+      if ((confOf(id) === mine) === finals) out.push(`round ${r + 1}: ${id} is ${finals ? 'his own' : 'the other'} conference (he is ${row.team})`);
+    });
+  } else if (path.steps.some(st => st.opp !== 'another team')) out.push('an unnamed season names a playoff opponent');
   if (o.series) {
     const fits = Number.isInteger(row.poGames) && row.poGames >= o.series[0] * n && row.poGames <= o.series[1] * n;
     if (!fits) { if (path.steps.some(st => st.score !== null)) out.push('a series score with playoff games that do not fit'); return out; }
@@ -388,8 +418,11 @@ function scheduleProblems(slug, SB, row, eraId, s, named) {
      7.9 was kept as designed.
    A refused season is not a wrong season (the player gets the plain tile), but more than 1 in 100 would
    be a hole a player meets, so that is where the band sits. */
-const REFUSED_MAX = { nba: 0.01, nfl: 0.5 };
-const NO_REPAIR_MIN = { nba: 0.8, nfl: 0.0 };
+/* The NFL has no bands yet (its number file is not built). null fails the run on purpose: whoever binds
+   the NFL measures five seed sets and writes the numbers here, so the harness can never be green for it
+   on a band that cannot fail. */
+const REFUSED_MAX = { nba: 0.01, nfl: null };
+const NO_REPAIR_MIN = { nba: 0.8, nfl: null };
 const NBA_POINTS_TOL = 1.0;
 const NBA_SHARE_P99_MAX = 0.5;
 
@@ -397,6 +430,7 @@ const NBA_SHARE_P99_MAX = 0.5;
 const seen = [];
 const points = {};   // slug|era -> { sum, n } his team's and the other side's points
 const shares = { nba: [] };
+const poRounds = {};  // slug -> named playoff rounds checked for their conference: { early, finals }
 function observe(c, line, who) {
   const d = SPORT_DEFS[who.slug];
   const SB = M[d.binding];
@@ -430,7 +464,9 @@ function observe(c, line, who) {
   /* section 4 */
   const pathNow = M.usPlayoffPath(bind, row, b.ctx, b.key);
   rec.path = !!pathNow;
-  rec.p4.push(...pathProblems(who.slug, row, pathNow, s.target));
+  rec.p4.push(...pathProblems(who.slug, row, pathNow, s.target, { named: rec.named, eraId: career.eraId, SB, count: poRounds[who.slug] ??= { early: 0, finals: 0 } }));
+  rec.hot = s.games.filter(g => g.events.some(e => e.kind === 'hot')).length;
+  rec.on = s.games.filter(g => g.played).length;
   /* section 5 */
   rec.p5.push(...scheduleProblems(who.slug, SB, row, career.eraId, s, rec.named));
   /* section 6: twice, from a JSON round trip, and soFar at every game */
@@ -483,7 +519,7 @@ for (const slug of SPORTS) {
   tally('2', `${slug} the hub's held line is there exactly when the binding holds the season`,
     live.filter(r => (r.heldLine !== null) !== (r.build === 'held')).map(r => `${r.year}: line ${r.heldLine ? 'yes' : 'no'}, build ${r.build}`), live.length);
   tally('2', `${slug} no held season yields a derived season`, live.filter(r => r.heldLine !== null && r.derived).map(r => `${r.year}`), live.filter(r => r.heldLine !== null).length);
-  const heldYears = slug === 'nba' ? [2011, 2012, 2019, 2020] : [2005, 2012, 2020];
+  const heldYears = slug === 'nba' ? [2011, 2012, 2019, 2020] : [2005, 2012, 2020, 2022];
   for (const y of heldYears) {
     const at = live.filter(r => r.year === y);
     const org = at.filter(r => !r.targeted).length;
@@ -502,11 +538,19 @@ for (const slug of SPORTS) {
   console.log(`     open ${open.length}, derived ${derived.length}, refused ${refused.length} (${share(refused.length, open.length)}) ${JSON.stringify(byWhy)}`);
   if (refused.length) console.log(`     first refusals: ${refused.slice(0, 3).map(r => `${r.year} ${r.pos} ${r.games}g "${r.teamResult}": ${r.whyFull}`).join(' || ')}`);
   check('3', open.length > 100, `${slug} enough open seasons to mean anything (${open.length})`);
-  check('3', refused.length <= open.length * REFUSED_MAX[slug], `${slug} seasons that cannot be laid out stay under ${(100 * REFUSED_MAX[slug]).toFixed(1)}% (${share(refused.length, open.length)})`);
+  check('7', REFUSED_MAX[slug] !== null && NO_REPAIR_MIN[slug] !== null, `${slug} has measured bands (five seed sets, written above REFUSED_MAX)`);
+  check('3', refused.length <= open.length * (REFUSED_MAX[slug] ?? 0), `${slug} seasons that cannot be laid out stay under ${(100 * (REFUSED_MAX[slug] ?? 0)).toFixed(1)}% (${share(refused.length, open.length)})`);
   tally('3', `${slug} the season shown is the season saved (independent checker)`, derived.filter(r => r.p3.length).map(r => `${r.year} ${r.pos}: ${r.p3[0]}`), derived.length);
+  if (slug === 'nba') {
+    const hot = derived.reduce((a, r) => a + r.hot, 0); const on = derived.reduce((a, r) => a + r.on, 0);
+    console.log(`     takeover lines: ${hot} in ${on} games he played (${share(hot, on)}), in ${derived.filter(r => r.hot > 0).length} of ${derived.length} seasons`);
+    check('3', hot > 0, `${slug} the feed's takeover line is in the population (${hot})`);
+  }
 
   /* 4 */
-  tally('4', `${slug} the playoff path follows the saved result and playoff games`, derived.filter(r => r.p4.length).map(r => `${r.year} "${r.teamResult}": ${r.p4[0]}`), derived.length);
+  tally('4', `${slug} the playoff path follows the saved result, the playoff games and the bracket's conferences`, derived.filter(r => r.p4.length).map(r => `${r.year} "${r.teamResult}": ${r.p4[0]}`), derived.length);
+  const po = poRounds[slug] ?? { early: 0, finals: 0 };
+  check('4', po.early > 0 && po.finals > 0, `${slug} named playoff rounds were checked for their conference (${po.early} before the last round, ${po.finals} in it)`);
   console.log(`     paths shown: ${derived.filter(r => r.path).length}; playoff seasons ${derived.filter(r => o.results.includes(r.teamResult)).length}`);
 
   /* 5 */
@@ -531,7 +575,7 @@ for (const slug of SPORTS) {
     const dd = derived.filter(r => r.seedset === ss);
     console.log(`       seed set ${ss}: ${dd.length} derived, no repair ${share(dd.filter(r => r.repairs === 0).length, dd.length)}, refused ${share(open.filter(r => r.seedset === ss && !r.derived).length, open.filter(r => r.seedset === ss).length)}`);
   }
-  check('7', noRepair >= derived.length * NO_REPAIR_MIN[slug], `${slug} at least ${(100 * NO_REPAIR_MIN[slug]).toFixed(0)}% of seasons need no repair (${share(noRepair, derived.length)})`);
+  check('7', noRepair >= derived.length * (NO_REPAIR_MIN[slug] ?? 1), `${slug} at least ${(100 * (NO_REPAIR_MIN[slug] ?? 1)).toFixed(0)}% of seasons need no repair (${share(noRepair, derived.length)})`);
   [o.missed, ...o.results].forEach((t, i) => {
     const w = derived.filter(r => r.teamResult === t).map(r => r.wins);
     const [lo, hi] = o.bands[i];
@@ -646,6 +690,16 @@ if (CONTROL) {
   if (CONTROL === 'window') { ok = ok && labels.some(l => l.includes("are exactly the game's list")) && !labels.some(l => l.includes('never names an opponent')); note = '; the binding still named no throwback opponent'; }
   if (CONTROL === 'formula') ok = ok && labels.some(l => l.includes('follows the formula'));
   if (CONTROL === 'record') ok = ok && labels.some(l => l.includes('independent checker'));
+  if (CONTROL === 'conf') {
+    const wrong = seen.filter(r => r.p4.some(p => p.includes('conference'))).length;
+    ok = ok && labels.some(l => l.includes("bracket's conferences")) && wrong > 0;
+    note = `; ${wrong} seasons send a round to the wrong conference`;
+  }
+  if (CONTROL === 'hot') {
+    const wrong = seen.filter(r => r.p3.some(p => p.includes('takeover'))).length;
+    ok = ok && labels.some(l => l.includes('independent checker')) && wrong > 0;
+    note = `; ${wrong} seasons print a takeover line the rule does not earn`;
+  }
   console.log(ok
     ? `control ${CONTROL}: RED AT THE NAMED CHECK (section ${c.section}); sections red: ${red.join(', ')}${note}`
     : `control ${CONTROL}: DID NOT FIRE AT ITS NAMED CHECK (section ${c.section}); sections red: ${red.join(', ') || 'none'}${note}`);

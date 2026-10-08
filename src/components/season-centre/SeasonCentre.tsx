@@ -168,7 +168,7 @@ function useReducedMotion(): boolean {
   return reduced;
 }
 
-function FixtureList({ model, played, current }: { model: CentreModel; played: number; current: number | null }) {
+function FixtureList({ model, played, current, short }: { model: CentreModel; played: number; current: number | null; short?: (name: string) => string }) {
   const { season: s, names, words } = model;
   const copy = copyOf(model);
   return (
@@ -181,7 +181,7 @@ function FixtureList({ model, played, current }: { model: CentreModel; played: n
           <li key={g.md} className={`flex items-center gap-2 rounded-lg px-2 py-1 text-xs ${on ? 'bg-primary/15 ring-1 ring-primary/40' : ''}`} aria-current={on ? 'true' : undefined}>
             <span className="w-6 shrink-0 tabular-nums text-muted-foreground">{g.md}</span>
             <span className="w-4 shrink-0 text-[10px] text-muted-foreground">{g.home ? 'H' : 'A'}</span>
-            <span className={`min-w-0 flex-1 truncate ${done ? '' : 'text-muted-foreground'} ${names[g.opp] === words.unnamed ? 'italic' : ''}`}>{names[g.opp]}</span>
+            <span className={`min-w-0 flex-1 truncate ${done ? '' : 'text-muted-foreground'} ${names[g.opp] === words.unnamed ? 'italic' : ''}`}>{short ? short(names[g.opp]) : names[g.opp]}</span>
             {g.fixedKey && <span className="shrink-0 rounded bg-amber-500/20 px-1 text-[9px] font-bold text-amber-400">{model.sport.fixed.badge}</span>}
             {g.md === s.games.length && <span className="shrink-0 rounded bg-sky-500/20 px-1 text-[9px] font-bold text-sky-400">{copy.lastBadge}</span>}
             {done && <span className={`shrink-0 rounded px-1.5 text-[10px] font-bold tabular-nums ${PILL[r]}`}>{r === 'D' ? copy.tie : r} {g.us}-{g.them}</span>}
@@ -493,7 +493,7 @@ export function SeasonCentre({ model, exitLabel, onClose }: { model: CentreModel
         </div>
         <div className="grid min-h-0 flex-1 grid-cols-1 md:grid-cols-[240px_1fr_380px]">
           <aside className="hidden min-h-0 overflow-y-auto border-r border-border p-2 md:block" aria-label={copy.list}>
-            <FixtureList model={model} played={played} current={current} />
+            <FixtureList model={model} played={played} current={current} short={model.sport.clock.short} />
           </aside>
           <main className="min-h-0 overflow-y-auto p-3 md:p-4" data-centre-stage>
             {fixturesOpen ? (

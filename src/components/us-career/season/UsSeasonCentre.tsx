@@ -65,13 +65,14 @@ export function buildUsModel(sport: UsCareerSport, bind: UsSeasonBind, career: U
     header: { club: ctx.teamLabel, seasonLabel: bind.seasonLabel(row.year), league: bind.league, loanFrom: null },
     frameLine: `${s.games.length} games · ${homes} home, ${s.games.length - homes} away · ${named ? "the league's schedule formula, this career's own draw" : "this career's own draw"}`,
     lastSeason: prev ? `Last season: ${prev.teamResult === 'SUSPENDED' ? 'suspended' : prev.teamResult}` : null,
-    resultsWhy: named ? null : "Opponents are not named this season: the game's team list is not that season's real league.",
+    resultsWhy: named ? null : "Opponents are not named this season: the game does not hold that season's divisions and schedule.",
     derbyBefore: { w: 0, d: 0, l: 0 },
     review: {
       tiles: [['Games', String(row.games)], ...review.regular.slice(0, 3).map((x): [string, string] => [view.tileLabels[x.label] ?? x.label, x.value])],
       finishLine: `${record} · ${row.teamResult}`,
       championLine: null,
-      trophies: [...(title ? [`🏆 ${bind.league} champions`] : []), ...(Array.isArray(row.awards) ? row.awards : [])],
+      /* no trophy emoji here: the title card draws its own */
+      trophies: [...(title ? [`${bind.league} champions`] : []), ...(Array.isArray(row.awards) ? row.awards : [])],
       title,
       notes: [],
       path: path ? {
@@ -99,7 +100,8 @@ export function buildUsModel(sport: UsCareerSport, bind: UsSeasonBind, career: U
     copy: view.copy,
     helpKey: `seasonCentre:help:${bind.slug}`,
     groups: named ? [{ label: 'Division', slots: range(ctx.divSlots) }, { label: 'Conference', slots: range(ctx.confSlots) }] : undefined,
-    help: view.help(named),
+    /* the worked example names a team of THIS season that is not his (his first division rival), or nobody */
+    help: view.help(named, named ? ctx.names[1] : undefined),
     momentKey: `centre|${key}`,
   };
 }
@@ -143,7 +145,10 @@ function CentreBody({ sport, career, row, onClose }: UsSeasonCentreProps) {
   if (!bind || !built) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-background p-4" data-season-centre-loading>
-        <div role="status" className="rounded-2xl border border-border bg-card px-4 py-3 text-sm font-semibold">📺 Getting your season ready...</div>
+        <div className="space-y-3 rounded-2xl border border-border bg-card px-4 py-3 text-center">
+          <div role="status" className="text-sm font-semibold">📺 Getting your season ready...</div>
+          <button type="button" onClick={onClose} className="h-11 w-full rounded-lg border border-border px-3 text-xs font-semibold">{EXIT}</button>
+        </div>
       </div>
     );
   }
