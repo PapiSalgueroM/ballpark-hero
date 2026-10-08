@@ -1,0 +1,2 @@
+simStartingXi: node scripts/simStartingXi.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
