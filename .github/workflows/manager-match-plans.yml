@@ -1,0 +1,111 @@
+name: Manager match plans
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - .github/workflows/manager-match-plans.yml
+      - src/components/club-manager/MatchPlansCard.tsx
+      - src/components/club-manager/TacticsScreen.tsx
+      - src/hooks/useClubManager.ts
+      - src/lib/clubManagerMatchPlans.ts
+      - src/lib/clubManager.ts
+      - src/pages/ClubManager.tsx
+      - src/test/managerMatchPlans.test.tsx
+      - scripts/simManagerMatchPlans.mjs
+      - scripts/qa/managerMatchPlans1079.mjs
+      - scripts/qa/managerLegacy1079.mjs
+      - scripts/qa/managerLegacy1079Clock.cjs
+      - scripts/simTactics.mjs
+permissions:
+  contents: read
+concurrency:
+  group: manager-match-plans-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      VITEST_MAX_FORKS: 1
+      VITEST_MIN_FORKS: 1
+      SEO_SPLIT_BASE_REF: HEAD
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Prepare remote verification
+        run: |
+          mkdir -p manager-match-plans-artifacts
+          git rev-parse HEAD > manager-match-plans-artifacts/source-head.txt
+          git rev-parse HEAD^{tree} > manager-match-plans-artifacts/source-tree.txt
+          npm ci
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+      - name: Type check and build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee manager-match-plans-artifacts/types.log
+          npm run build 2>&1 | tee manager-match-plans-artifacts/build.log
+      - name: Actual outcomes and effective copied faults
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: MANAGER_MATCH_PLANS_CONTROL=all ONLY=simManagerMatchPlans node scripts/runAllSims.mjs 2>&1 | tee manager-match-plans-artifacts/outcomes.log
+      - name: Cache actual presentation assets
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: node scripts/qa/managerMatchPlans1079.mjs --prefetch-fonts-only 2>&1 | tee manager-match-plans-artifacts/fonts.log
+      - name: Preserve existing game behavior
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simTactics simTacticsEngine simClubManagerSave simClubManagerSaveSize; do
+            SIM_TACTICS_ASSET_CACHE="$PWD/manager-match-plans-artifacts/font-cache/manifest.json" ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "manager-match-plans-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Compare unchanged baseline failures
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerLegacy1079.mjs 2>&1 | tee manager-match-plans-artifacts/legacy.log
+      - name: Retain actual set piece presentation outcomes
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSetPiecePresentation.mjs 2>&1 | tee manager-match-plans-artifacts/simSetPiecePresentation.log
+          scene_dir=$(sed -nE 's/^simSetPiecePresentation: PASS\. 36 rendered cases\. Evidence: (.*)$/\1/p' manager-match-plans-artifacts/simSetPiecePresentation.log)
+          test -d "$scene_dir"
+          cp -R "$scene_dir" manager-match-plans-artifacts/set-piece-presentation
+          node --input-type=module -e "import fs from 'node:fs'; import assert from 'node:assert/strict'; const r=JSON.parse(fs.readFileSync('manager-match-plans-artifacts/set-piece-presentation/report.json')); assert.equal(r.report.length,36); assert.deepEqual(r.errors,[]); assert.equal(r.control,''); console.log('36 actual rendered set piece outcomes retained.');"
+      - name: Native actual game journeys
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" xvfb-run -a node scripts/qa/managerMatchPlans1079.mjs 2>&1 | tee manager-match-plans-artifacts/native.log
+      - name: All built readers and source anchors
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings simSeoMetaSplit simHomeCopy simHarnessAnchors; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "manager-match-plans-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Hold the reviewed source and protected game rules
+        if: ${{ !cancelled() }}
+        run: |
+          git diff --exit-code HEAD -- src scripts/simManagerMatchPlans.mjs scripts/simTactics.mjs scripts/qa/managerMatchPlans1079.mjs scripts/qa/managerLegacy1079.mjs scripts/qa/managerLegacy1079Clock.cjs
+          git diff --exit-code 2fff5e044160b70bd58b64d931793ee4e443cedd HEAD -- src/lib/leagueCore.ts src/lib/positionFit.ts src/lib/clubManagerInternationals.ts src/lib/clubManagerSlots.ts src/lib/clubManagerEras.ts src/lib/clubManagerWorldEdit.ts src/data/clubManagerRosters.ts src/data/clubManagerWorldRosters.ts
+      - name: Preserve verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: manager-match-plans-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 3
+          path: manager-match-plans-artifacts/

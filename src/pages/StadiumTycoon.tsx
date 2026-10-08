@@ -23,6 +23,7 @@
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import { cn } from '@/lib/utils';
+import { formatNumber } from '@/lib/formatNumber';
 import { HelpCircle, Star, X } from 'lucide-react';
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { GameNavbar } from '@/components/game/GameNavbar';
@@ -30,7 +31,8 @@ import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import {
   TRACKS, levelOf, costOf, canBuy, capacity, attendance, incomePerSec,
-  tapValue, repMult, streakMult, prestigeThreshold, canPrestige, fmtMoney,
+  ticketPolicyOf, TICKET_POLICIES,
+  tapValue, repMult, streakMult, prestigeThreshold, canPrestige, fmtMoney as tycoonMoney,
   boostReady, boostActive, boostChargeSecOf, MILESTONES, opponentName,
   DIVISIONS, divisionOf, divisionIndex, leagueShape, leagueStandings, leaguePosition,
   clubNameOptions, ordinal, SINGLE_LEG_BELOW, YOUR_CLUB,
@@ -46,6 +48,7 @@ import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Cele
 import VictoryMoment from '@/components/tycoon/TycoonVictoryMoment';
 import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';
 import TycoonPitch from '@/components/tycoon/TycoonPitch';
+import TicketPolicyCard from '@/components/tycoon/TicketPolicyCard';
 import { useTycoonRewards } from '@/hooks/useTycoonRewards';
 import { balance, GEM_PAY, loadLedger } from '@/lib/tycoonRewards';
 import type { TapFx } from '@/components/tycoon/TycoonPitch';
@@ -71,6 +74,10 @@ function seatRand(i: number): number {
   return x - Math.floor(x);
 }
 
+function fmtMoney(n: number): string {
+  return tycoonMoney(n).replace(/^\$(-?\d+(?:\.\d+)?)([KMBTQ]?)$/, (_text, amount: string, unit: string) => `$${formatNumber(amount)}${unit}`);
+}
+
 /** Round 583: a rate under ten dollars a second keeps its cents, so a new club
  *  reads $4.50 a second as the rules say, and a Turnstile Steward $0.60, not $0. */
 function fmtRate(n: number): string {
@@ -80,7 +87,7 @@ function fmtRate(n: number): string {
 const CONFETTI_COLORS = ['#22c55e', '#eab308', '#3b82f6', '#ef4444', '#a855f7', '#f97316'];
 
 /** Round 583: the Stadium tab's office panels, one open at a time. */
-type OfficePanel = 'upgrades' | 'payroll' | 'ach' | 'legacy' | 'stats';
+type OfficePanel = 'upgrades' | 'tickets' | 'payroll' | 'ach' | 'legacy' | 'stats';
 
 export default function StadiumTycoon() {
   const [savedAcademy] = useState(() => {
@@ -245,6 +252,15 @@ function helpFacts() {
     standsCost: costOf(fresh, 'stands'),
     seatsPerStand: capacity({ ...fresh, levels: { ...fresh.levels, stands: 1 } }) - capacity(fresh),
     exampleFans: attendance(full),
+    /* Release AL: the ticket offers (Round 1080), read off the engine's own
+       table so the rules can never quote a rate the game does not use. */
+    ticketCommunityCut: Math.round((1 - (TICKET_POLICIES.find(p => p.id === 'community')?.gate ?? 1)) * 100),
+    ticketCommunityGrowth: Math.round(((TICKET_POLICIES.find(p => p.id === 'community')?.growth ?? 1) - 1) * 100),
+    ticketPremiumGate: Math.round(((TICKET_POLICIES.find(p => p.id === 'premium')?.gate ?? 1) - 1) * 100),
+    ticketPremiumDemand: Math.round((TICKET_POLICIES.find(p => p.id === 'premium')?.demand ?? 1) * 100),
+    ticketPremiumGrowth: Math.round((1 - (TICKET_POLICIES.find(p => p.id === 'premium')?.growth ?? 1)) * 100),
+    freshSeats: capacity(fresh),
+    freshPremiumCrowd: attendance({ ...fresh, ticketPolicy: 'premium' }),
     rate400: incomePerSec(full),
     goal400: goalBonus(full),
     win400: winBonus(full),
@@ -369,10 +385,11 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
   const affordable = TRACKS.filter(t => canBuy(s, t.id)).length;
   const officeTiles: { key: OfficePanel; icon: string; title: string; value: string; accent: boolean }[] = [
     { key: 'upgrades', icon: '🏗️', title: 'Upgrades', value: affordable > 0 ? `${affordable} ready` : 'saving up', accent: false },
+    { key: 'tickets', icon: '🎟️', title: 'Ticket offer', value: TICKET_POLICIES.find(p => p.id === ticketPolicyOf(s))?.label ?? 'Standard', accent: false },
     { key: 'payroll', icon: '🧑‍🤝‍🧑', title: 'Payroll', value: `${totalStaffLevels(s)} hired`, accent: false },
     { key: 'ach', icon: '🏅', title: 'Badges', value: `${achCount}/${ACHIEVEMENTS.length}`, accent: false },
     { key: 'legacy', icon: '🏛️', title: 'Legacy', value: pts > 0 ? `${pts} pts` : 'boardroom', accent: pts > 0 },
-    { key: 'stats', icon: '📊', title: 'Records', value: `${s.totalWins.toLocaleString()} wins`, accent: false },
+    { key: 'stats', icon: '📊', title: 'Records', value: `${s.totalWins.toLocaleString('en-US')} wins`, accent: false },
   ];
   /* What a sale pays once this league is won: the engine's answer one division up. */
   const saleAfterTitle = lg ? pointsForSale({ ...s, league: { ...lg, division: Math.min(lg.division + 1, DIVISIONS.length - 1) } }) : pointsForSale(s);
@@ -476,8 +493,8 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
             </div>
           </div>
           <div className="text-right">
-            <div className="text-sm font-bold text-foreground tabular-nums">{fans.toLocaleString()} <span className="text-[10px] text-muted-foreground font-normal">/ {cap.toLocaleString()} seats</span></div>
-            <div className="text-[11px] text-muted-foreground">{Math.floor(s.fanbase).toLocaleString()} fans follow you</div>
+            <div className="text-sm font-bold text-foreground tabular-nums">{fans.toLocaleString('en-US')} <span className="text-[10px] text-muted-foreground font-normal">/ {cap.toLocaleString('en-US')} seats</span></div>
+            <div className="text-[11px] text-muted-foreground">{Math.floor(s.fanbase).toLocaleString('en-US')} fans follow you</div>
           </div>
         </div>
 
@@ -641,12 +658,13 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
 
         {/* Round 583: the office. Each tile's title is contract: the browser walks
             open a panel by it. */}
-        <div className="grid grid-cols-5 gap-1.5 mb-2" role="group" aria-label="The club office">
+        <div className="grid grid-cols-3 sm:grid-cols-6 gap-1.5 mb-2" role="group" aria-label="The club office">
           {officeTiles.map(t => (
             <button
               key={t.key}
               type="button"
               data-tile={t.key}
+              data-office-panel={t.key}
               {...(t.key === 'legacy' ? { 'data-legacy-drawer': '' } : {})}
               aria-pressed={panel === t.key}
               onClick={() => setPanel(t.key)}
@@ -657,8 +675,8 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
               )}
             >
               <span className="block text-sm leading-none" aria-hidden="true">{t.icon}</span>
-              <span className="mt-1 block text-[10px] font-bold leading-tight">{t.title}</span>
-              <span className={cn('block truncate text-[9px] leading-tight tabular-nums', panel === t.key ? 'text-primary-foreground/80' : 'text-muted-foreground')}>{t.value}</span>
+              <span className="mt-1 block text-xs font-bold leading-tight">{t.title}</span>
+              <span className={cn('block text-xs leading-tight tabular-nums', panel === t.key ? 'text-primary-foreground/80' : 'text-muted-foreground')}>{t.value}</span>
             </button>
           ))}
         </div>
@@ -691,6 +709,8 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
           })}
         </div>
         )}
+
+        {panel === 'tickets' && <TicketPolicyCard state={s} onSelect={g.doSetTicketPolicy} saveFailed={g.ticketSaveFailed} onRetrySave={g.retryTicketSave} />}
 
         {/* Round 162: the payroll. Staff earn every second, forever, and the
             tiers escalate the way an idle game should: each one about five
@@ -801,16 +821,16 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-center">
               {[
                 ['Lifetime, this ground', fmtMoney(s.lifetime)],
-                ['Career wins', s.totalWins.toLocaleString()],
-                ['Career goals', s.totalGoals.toLocaleString()],
-                ['Matches played', (s.totalMatches ?? 0).toLocaleString()],
-                ['Taps', s.totalTaps.toLocaleString()],
+                ['Career wins', s.totalWins.toLocaleString('en-US')],
+                ['Career goals', s.totalGoals.toLocaleString('en-US')],
+                ['Matches played', (s.totalMatches ?? 0).toLocaleString('en-US')],
+                ['Taps', s.totalTaps.toLocaleString('en-US')],
                 ['Best division', `${DIVISIONS[Math.min(s.bestDivision ?? 0, DIVISIONS.length - 1)].emoji} ${DIVISIONS[Math.min(s.bestDivision ?? 0, DIVISIONS.length - 1)].name}`],
-                ['Golden whistles caught', (s.goldenCaught ?? 0).toLocaleString()],
-                ['Hype boosts pressed', (s.boostsUsed ?? 0).toLocaleString()],
-                ['Reputation stars', s.rep.toLocaleString()],
-                ['Legacy points unspent', legacyPointsOf(s).toLocaleString()],
-                ['Legacy perk levels', totalPerkLevels(s).toLocaleString()],
+                ['Golden whistles caught', (s.goldenCaught ?? 0).toLocaleString('en-US')],
+                ['Hype boosts pressed', (s.boostsUsed ?? 0).toLocaleString('en-US')],
+                ['Reputation stars', s.rep.toLocaleString('en-US')],
+                ['Legacy points unspent', legacyPointsOf(s).toLocaleString('en-US')],
+                ['Legacy perk levels', totalPerkLevels(s).toLocaleString('en-US')],
               ].map(([label, value]) => (
                 <div key={label as string} className="rounded-lg bg-secondary/50 px-2 py-2">
                   <div className="text-xs font-bold font-display text-foreground truncate">{value}</div>
@@ -822,8 +842,8 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
         )}
 
         {/* lifetime line */}
-        <div className="text-[10px] text-muted-foreground text-center pb-4">
-          lifetime {fmtMoney(s.lifetime)} · {s.totalWins} wins · {s.totalGoals} goals · {s.totalTaps} taps · match #{s.matchNo + 1} · milestones {(s.claimed ?? []).length}/{MILESTONES.length} · badges {achCount}/{ACHIEVEMENTS.length}
+        <div className="text-xs text-muted-foreground text-center pb-4">
+          lifetime {fmtMoney(s.lifetime)} · {formatNumber(s.totalWins)} wins · {formatNumber(s.totalGoals)} goals · {formatNumber(s.totalTaps)} taps · match #{s.matchNo + 1} · milestones {(s.claimed ?? []).length}/{MILESTONES.length} · badges {achCount}/{ACHIEVEMENTS.length}
         </div>
 
       <Dialog open={Boolean(g.activeSetPiece)} onOpenChange={open => { if (!open) g.closeSetPiece(); }}>
@@ -893,6 +913,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
               <p>You run a tiny club's matchday money machine. Fans show up if there are seats and things to spend on; every fan pays you every second.</p>
               <p>The match on screen is real: your Squad level drives goals, goals pay a bonus scaled by the crowd, wins extend a streak that multiplies everything and pulls in new fans. A division's rivals stay as strong as they were when you arrived, but every division up is tougher, and the longer the club has played the tougher each new one is.</p>
               <p>Tap the stadium for instant cash (Megaphone makes taps stronger). Buy Stands when the ground is full, spending tracks when it is not.</p>
+              <p>The Ticket offer tile sets your matchday price, and switching is free at any time. Standard is the regular game. Community takes {h.ticketCommunityCut}% off the gate money each fan pays and your supporters grow {h.ticketCommunityGrowth}% faster. Premium adds {h.ticketPremiumGate}% to the gate money each fan pays, but only {h.ticketPremiumDemand}% of your supporters turn up and they grow {h.ticketPremiumGrowth}% slower. Only the ticket price moves: snacks, the shop, parking and the payroll keep their own rates. Example: a new {h.freshSeats} seat ground with {h.freshFans} supporters draws {h.freshPremiumCrowd} on Premium, so Premium pays less there, and it pays more once {h.ticketPremiumDemand}% of your supporters still fill the ground. Selling up puts the offer back to Standard.</p>
               <p>Matchday Hype charges over {h.chargeMin} minutes of play (Stadium Voltage in the boardroom trims that to {h.voltage1}, then {h.voltage2}). Press it and your income pays double for {h.hypeSec} seconds, and your taps rise with it; goal and win bonuses are not doubled. It does not charge or burn while you are away.</p>
               <p>Your ground plays in a league, {h.divisions} divisions from the {h.firstDivision} to {h.lastDivision}. Each division is a small league of named rivals: {leagueShape(0).clubs} clubs playing each other once in the bottom {SINGLE_LEG_BELOW} divisions, then {leagueShape(3).clubs} and {leagueShape(6).clubs} clubs home and away. Only the champion goes up, and nobody ever goes down. Every division multiplies all income, up to x{h.topMult} at the top, going up pays a promotion bonus on the spot, and a title at {h.lastDivision} pays it again. Higher divisions send tougher opponents. The League tab shows the table.</p>
               <p>The payroll hires {h.staff} staff, from a {h.firstStaff} to a {h.lastStaff}. Every staff level adds steady income of its own before the multipliers touch it, so a deep payroll compounds hard.</p>

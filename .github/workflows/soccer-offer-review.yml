@@ -1,0 +1,173 @@
+name: Soccer offer review
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - codex/soccer-transfer-review-1082
+  pull_request:
+    paths:
+      - .github/workflows/soccer-offer-review.yml
+      - src/pages/SoccerCareer.tsx
+      - src/lib/soccerOfferReview.ts
+      - src/components/soccer-career/SoccerOfferReview.tsx
+      - scripts/simSoccerOfferReview.mjs
+      - scripts/qa/soccerOfferReview1082.mjs
+      - scripts/qa/soccerOfferAssets1082.mjs
+      - scripts/playSoccerOfferReview1082.mjs
+      - scripts/playSoccerCareer.mjs
+
+permissions:
+  contents: read
+concurrency:
+  group: soccer-offer-review-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      SEO_SPLIT_BASE_REF: HEAD
+      SIM_LEAGUE_SEASONS_BASE: 94b9490dde4cc2b4d59c4551a1aa9d31eb0806d8
+      TZ: UTC
+      SIM_OFFLINE_RECEIPT: soccer-offer-review-artifacts/transport.log
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Prepare remote verification
+        run: |
+          mkdir -p soccer-offer-review-artifacts
+          git rev-parse HEAD > soccer-offer-review-artifacts/source-head.txt
+          git rev-parse 'HEAD^{tree}' > soccer-offer-review-artifacts/source-tree.txt
+          sha256sum package.json package-lock.json > soccer-offer-review-artifacts/dependencies-before.txt
+          npm ci
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const lock = JSON.parse(fs.readFileSync('package-lock.json'));
+          const installed = [];
+          for (const [path, entry] of Object.entries(lock.packages)) {
+            const file = path + '/package.json';
+            if (!path.startsWith('node_modules/') || !fs.existsSync(file)) continue;
+            const version = JSON.parse(fs.readFileSync(file)).version;
+            assert.equal(version, entry.version, `Locked installed version: ${path}`);
+            installed.push({ path, version });
+          }
+          assert(installed.length > 0);
+          fs.writeFileSync('soccer-offer-review-artifacts/installed-before.json', JSON.stringify(installed, null, 2));
+          NODE
+          npm install --no-save playwright
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const before = JSON.parse(fs.readFileSync('soccer-offer-review-artifacts/installed-before.json'));
+          const after = before.map(entry => ({ path: entry.path, version: JSON.parse(fs.readFileSync(entry.path + '/package.json')).version }));
+          fs.writeFileSync('soccer-offer-review-artifacts/installed-after.json', JSON.stringify(after, null, 2));
+          assert.deepEqual(after, before, 'Browser runner preserves actual locked dependency versions');
+          console.log(`Held ${after.length} actual installed dependency versions.`);
+          NODE
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+      - name: Actual application type gate and build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee soccer-offer-review-artifacts/types.log
+          npm run build 2>&1 | tee soccer-offer-review-artifacts/build.log
+      - name: Actual offer outcomes and copied faults
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerOfferReview.mjs 2>&1 | tee soccer-offer-review-artifacts/outcomes.log
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const report = JSON.parse(fs.readFileSync('soccer-offer-review-artifacts/report.json'));
+          assert.equal(report.complete, true);
+          assert.equal(report.passed, true);
+          assert.equal(report.normal.checks.length, 9);
+          assert(report.normal.checks.every(check => check.status === 'passed' && check.records > 0));
+          assert.equal(report.controls.length, 19);
+          assert(report.controls.every(control => control.effective && control.independentBaselinePassed));
+          assert.deepEqual(report.sourceAfter, report.sourceBefore);
+          console.log('Accepted all actual offer outcomes and effective copied controls.');
+          NODE
+      - name: Cache actual presentation assets
+        id: assets
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: node scripts/qa/soccerOfferAssets1082.mjs 2>&1 | tee soccer-offer-review-artifacts/assets.log
+      - name: Actual Soccer Career route signing and mobile review
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.assets.outcome == 'success' }}
+        run: |
+          SOCCER_OFFER_REVIEW_ASSET_CACHE="$PWD/soccer-offer-review-artifacts/font-cache/manifest.json" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerOfferReview1082.mjs 2>&1 | tee soccer-offer-review-artifacts/native.log
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const report = JSON.parse(fs.readFileSync('soccer-offer-review-artifacts/native/report.json'));
+          assert.equal(report.complete, true);
+          assert.equal(report.cases.length, 9);
+          assert(report.cases.every(row => row.complete));
+          assert.equal(report.controls.length, 12);
+          assert.equal(report.forwardedWrites, 0);
+          assert.deepEqual(report.sourceAfter, report.sourceBefore);
+          console.log('Accepted nine actual-route signing journeys and twelve restored DOM controls.');
+          NODE
+      - name: Retain native evidence promptly
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.assets.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: soccer-offer-native-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            soccer-offer-review-artifacts/native/
+            soccer-offer-review-artifacts/native.log
+            soccer-offer-review-artifacts/font-cache/manifest.json
+            soccer-offer-review-artifacts/source-head.txt
+            soccer-offer-review-artifacts/source-tree.txt
+          retention-days: 3
+          if-no-files-found: error
+      - name: Preserve existing career rules, squads and saves
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simCareerLife simLoanSpell simClubSquads simCareerLeagueSeasons simSoccerCareerSaveRecovery simSoccerCurrency; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "soccer-offer-review-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: All built readers and source anchors
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings simSeoMetaSplit simHomeCopy simHarnessAnchors; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "soccer-offer-review-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Hold source, data and original assertions
+        if: ${{ !cancelled() }}
+        run: |
+          git diff --exit-code HEAD -- src scripts
+          git diff --exit-code 94b9490dde4cc2b4d59c4551a1aa9d31eb0806d8 HEAD -- src/lib/soccerCareerEngine.ts src/lib/soccerCareerLife.ts src/lib/soccerClubSquad.ts src/lib/soccerCareerLeague.ts src/lib/soccerCareerSave.ts src/data scripts/simCareerLife.mjs scripts/simLoanSpell.mjs scripts/simClubSquads.mjs scripts/simCareerLeagueSeasons.mjs scripts/simSoccerCareerSaveRecovery.mjs scripts/simSoccerCurrency.mjs
+          sha256sum package.json package-lock.json > soccer-offer-review-artifacts/dependencies-after.txt
+          cmp soccer-offer-review-artifacts/dependencies-before.txt soccer-offer-review-artifacts/dependencies-after.txt
+          if test -f soccer-offer-review-artifacts/transport.log; then test ! -s soccer-offer-review-artifacts/transport.log; fi
+      - name: Preserve verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: soccer-offer-review-${{ github.run_id }}-${{ github.run_attempt }}
+          path: soccer-offer-review-artifacts/
+          retention-days: 3
+          if-no-files-found: error

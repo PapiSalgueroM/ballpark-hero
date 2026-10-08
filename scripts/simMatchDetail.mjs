@@ -15,7 +15,7 @@
  *    >= goals on both sides, xG positive and finite
  *  - every card and injury names a player who was actually in my XI, minutes
  *    in 1..90, cards sorted
- *  - halftime subs recorded exactly when subs were made, and never on quick sim
+ *  - legal quick-sim subs match their timeline; manual subs match changes made
  *  - ratings: one line per starter, 4.5..10, exactly one man of the match
  *  - momentum: 9 buckets, all within [-1, 1]
  * And across a season:
@@ -120,8 +120,11 @@ function checkDetail(report, ctx, { viaHalftime, subsMade }) {
     if (!isNum(inj.weeks) || inj.weeks < 1) fail(`${ctx}: injury weeks ${inj.weeks}`);
   }
 
-  // Subs: recorded exactly when made, never invented on a quick sim.
-  if (!viaHalftime && d.subs.length > 0) fail(`${ctx}: quick sim reported ${d.subs.length} subs, none were possible`);
+  // Subs: legal automatic changes and exact manual changes, each with its own row.
+  if (d.subs.length > cm.MAX_SUBS) fail(`${ctx}: reported ${d.subs.length} subs, over the legal cap`);
+  const subRows = d.timeline.filter(e => e.kind === 'sub' && e.side === 'me');
+  if (subRows.length !== d.subs.length || d.subs.some(s => !subRows.some(e => e.minute === s.minute
+    && (e.plus ?? 0) === (s.plus ?? 0) && e.text === `${s.on} on for ${s.off}`))) fail(`${ctx}: sub lines do not match their timeline rows`);
   if (viaHalftime && subsMade > 0 && d.subs.length !== subsMade) {
     fail(`${ctx}: made ${subsMade} halftime subs, report shows ${d.subs.length}`);
   }

@@ -3,35 +3,37 @@
    lit for a shrinking window; tap the lit one in time or it counts as gone.
    Hook and view, for the reason ConeRunDrill gives. */
 import { useEffect, useRef, useState } from 'react';
+import type { PracticeClock } from '@/hooks/usePracticeClock';
 import type { GateTapSkin } from '@/lib/careerTraining';
 
 const GATE_COUNT = 8;
 const gateWindowFor = (n: number) => Math.max(650, 1400 - n * 100);
 
-export function useGateTap(finish: (score: number) => void) {
+export function useGateTap(finish: (score: number) => void, clock: PracticeClock) {
   const [gateNo, setGateNo] = useState(0);
   const [gateHits, setGateHits] = useState(0);
   const [litGate, setLitGate] = useState<number | null>(null);
   const [gateWindow, setGateWindow] = useState(0);
-  const gateTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const gateTimer = useRef<number | null>(null);
   // Refs mirror the two counters so the timeout chain reads fresh values.
   const gateHitsRef = useRef(0);
   const gateNoRef = useRef(0);
 
   useEffect(() => () => {
-    if (gateTimer.current) clearTimeout(gateTimer.current);
+    if (gateTimer.current) clock.clear(gateTimer.current);
   }, []);
 
   const reset = () => {
     setGateNo(0); setGateHits(0); setLitGate(null); setGateWindow(0);
-    if (gateTimer.current) { clearTimeout(gateTimer.current); gateTimer.current = null; }
+    gateHitsRef.current = 0; gateNoRef.current = 0;
+    if (gateTimer.current) { clock.clear(gateTimer.current); gateTimer.current = null; }
   };
 
   const lightGate = (n: number) => {
     const g = Math.floor(Math.random() * 6);
     setLitGate(g);
     setGateWindow(gateWindowFor(n));
-    gateTimer.current = setTimeout(() => {
+    gateTimer.current = clock.timeout(() => {
       // Too slow: the gate shuts itself and the drill moves on.
       setLitGate(null);
       if (n === GATE_COUNT - 1) finish((gateHitsRef.current) * 12.5);
@@ -39,8 +41,9 @@ export function useGateTap(finish: (score: number) => void) {
     }, gateWindowFor(n));
   };
   const tapGate = (g: number) => {
+    if (clock.isPaused()) return;
     if (litGate === null) return;
-    if (gateTimer.current) { clearTimeout(gateTimer.current); gateTimer.current = null; }
+    if (gateTimer.current) { clock.clear(gateTimer.current); gateTimer.current = null; }
     const hit = g === litGate;
     if (hit) { gateHitsRef.current += 1; setGateHits(h => h + 1); }
     setLitGate(null);
@@ -50,10 +53,11 @@ export function useGateTap(finish: (score: number) => void) {
     } else {
       gateNoRef.current = n + 1;
       setGateNo(n + 1);
-      gateTimer.current = setTimeout(() => lightGate(n + 1), 350);
+      gateTimer.current = clock.timeout(() => lightGate(n + 1), 350);
     }
   };
   const startGates = () => {
+    if (clock.isPaused()) return;
     gateHitsRef.current = 0;
     gateNoRef.current = 0;
     setGateHits(0);
@@ -73,7 +77,7 @@ export default function GateTapDrill({ skin, run, onBack }: {
   return (
     <div className="p-4 space-y-3">
       <div className="flex items-center justify-between text-xs font-bold">
-        <button onClick={onBack} className="text-muted-foreground hover:text-foreground">‹ Drills</button>
+        <button onClick={onBack} className="min-h-11 min-w-11 text-muted-foreground hover:text-foreground">‹ Drills</button>
         <span>{skin.unit} {Math.min(gateNo + 1, GATE_COUNT)}/{GATE_COUNT}</span>
         <span className="text-emerald-400">{gateHits} {skin.tally}</span>
       </div>

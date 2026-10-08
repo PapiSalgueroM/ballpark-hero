@@ -1,4 +1,5 @@
 import { Component, Fragment, lazy, Suspense, useState, useCallback, useRef, useEffect, useMemo, type ReactNode } from "react";
+import { formatNumber } from '@/lib/formatNumber';
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import { useGameCompletion } from "@/hooks/useGameCompletion";
 import { recordCompletion, recordActivity, recordStreakDay } from "@/lib/completions";
@@ -96,6 +97,8 @@ import { AwardsNightCard, SpeechChoices, SpokenSpeech } from "@/components/caree
 import { availableSpeeches, givenSpeechOf } from "@/lib/careerAwardsNight";
 import { CelebrationStyles, revealDelay } from "@/components/club-manager/Celebration";
 import { SignedSlip } from "@/components/soccer-career/SignedSlip";
+import { SoccerOfferReview } from "@/components/soccer-career/SoccerOfferReview";
+import { buildSoccerOfferReview } from "@/lib/soccerOfferReview";
 import type { SignedNote } from "@/components/soccer-career/SignedSlip";
 import { AcademyFocusPicker, AcademyReportCard } from "@/components/soccer-career/AcademyReportCard";
 import { buildAcademyReport, academyFocusOf, withAcademyFocus } from "@/lib/soccerCareerAcademy";
@@ -275,46 +278,44 @@ function clubCupTileLabel(seasons: SeasonRecord[]): string {
 }
 
 /* ─── Position-specific career stats display ─── */
-function getPositionCareerStats(pos: string, totals: { apps: number; goals: number; assists: number; cleanSheets: number; leagueTitles: number; domesticCups: number; championsLeagues: number; worldCups: number; continentalCups: number; clubCups: number; yellowCards: number; redCards: number }) {
+function getPositionCareerStats(pos: string, totals: ReturnType<typeof getCareerTotals>, seasons: SeasonRecord[]): { l: string; v: number | null }[] {
   const trophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups + totals.clubCups;
-  // Derive approximate stats from existing data
-  const saves = totals.cleanSheets * 4 + Math.round(totals.apps * 2.5); // ~estimated saves
-  const pensSaved = Math.max(0, Math.floor(totals.cleanSheets / 5)); // ~1 per 5 clean sheets
-  const tackles = Math.round(totals.apps * 2.8); // ~2.8 tackles per game for defenders
-  const interceptions = Math.round(totals.apps * 1.6); // ~1.6 per game
-  const keyPasses = Math.round(totals.assists * 3.2 + totals.apps * 0.8); // derived from assists
-  const hatTricks = Math.max(0, Math.floor(totals.goals / 15)); // ~1 hat trick per 15 goals
+  const backLine = ["CB", "LB", "RB"].includes(pos);
+  const missingSheets = backLine && soccerRatingRows(seasons, pos).some(row => row.stats.some(stat => stat.short === "CS" && stat.value === null));
 
   if (pos === "GK") return [
     { l: "Apps", v: totals.apps },
     { l: "Clean Sheets", v: totals.cleanSheets },
-    { l: "Saves", v: saves },
-    { l: "Pens Saved", v: pensSaved },
     { l: "Trophies", v: trophies },
   ];
-  if (["CB", "LB", "RB"].includes(pos)) return [
-    { l: "Apps", v: totals.apps },
-    { l: "Tackles", v: tackles },
-    { l: "Interceptions", v: interceptions },
-    { l: "Goals", v: totals.goals },
-    { l: "Clean Sheets", v: totals.cleanSheets },
-    { l: "Trophies", v: trophies },
-  ];
-  if (["CDM", "CM", "CAM"].includes(pos)) return [
+  if (backLine) return [
     { l: "Apps", v: totals.apps },
     { l: "Goals", v: totals.goals },
-    { l: "Assists", v: totals.assists },
-    { l: "Key Passes", v: keyPasses },
+    { l: "Clean Sheets", v: missingSheets ? null : totals.cleanSheets },
     { l: "Trophies", v: trophies },
   ];
-  // Forwards: ST, LW, RW
   return [
     { l: "Apps", v: totals.apps },
     { l: "Goals", v: totals.goals },
     { l: "Assists", v: totals.assists },
-    { l: "Hat Tricks", v: hatTricks },
     { l: "Trophies", v: trophies },
   ];
+}
+
+export function CareerStatsCard({ career, totals }: { career: Pick<CareerState, "position" | "seasons">; totals: ReturnType<typeof getCareerTotals> }) {
+  const stats = getPositionCareerStats(career.position, totals, career.seasons);
+  return <div className="bg-card border border-border rounded-xl p-4" data-career-recorded-stats>
+    <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Career Stats</span>
+    <p className="mt-1 text-xs text-muted-foreground">Only stats kept in your season records are shown.</p>
+    <div className={`grid gap-3 mt-3 ${stats.length === 3 ? "grid-cols-3" : "grid-cols-2 sm:grid-cols-4"}`}>
+      {stats.map(s => <div key={s.l} className="text-center" data-career-stat={s.l}>
+        <div className="text-lg sm:text-xl font-black">{s.v === null ? <span aria-label="may not have been counted" title="May not have been counted in every season">-</span> : formatNumber(s.v)}</div>
+        <div className="text-xs text-muted-foreground">{s.l}</div>
+      </div>)}
+    </div>
+    {stats.some(s => s.v === null) && <p className="mt-2 text-xs text-muted-foreground">Clean sheets may not have been counted in older seasons.</p>}
+    <CareerDerbyTotals seasons={career.seasons} />
+  </div>;
 }
 
 /* ─── Stat Bar ─── */
@@ -573,9 +574,10 @@ function loanLeagueLine(club: ClubData, career: CareerState): string {
   return line ? `${line} · ` : "";
 }
 
-function OfferCard({ offer, onAccept, actionLabel, career }: { offer: ContractOffer; onAccept: () => void; actionLabel?: string; career?: CareerState }) {
+function OfferCard({ offer, onAccept, career }: { offer: ContractOffer; onAccept: () => void; career: CareerState }) {
   /* Round 1037: the league the club is in the season this contract starts */
-  const leagueLine = career ? leagueSeasonLine(offer.club, nextSeasonYear(career)) : null;
+  const leagueLine = leagueSeasonLine(offer.club, nextSeasonYear(career));
+  const review = buildSoccerOfferReview(career, offer);
   return (
     <div className="bg-card border border-border rounded-xl p-4 space-y-3">
       <div className="flex items-center gap-3">
@@ -591,16 +593,14 @@ function OfferCard({ offer, onAccept, actionLabel, career }: { offer: ContractOf
       </div>
       <div className="flex items-center gap-3 text-xs text-muted-foreground flex-wrap">
         <span>📋 {offer.contractYears}yr</span>
-        <span>💰 {formatWage(offer.wage)}</span>
+        <span>💰 {formatWage(review.signedWage)}</span>
         {offer.transferFee > 0 && <span>🏷️ {money(`€${offer.transferFee.toFixed(1)}M`)} fee</span>}
         {offer.transferFee === 0 && offer.contractYears > 0 && <span className="text-emerald-400 font-semibold">Free transfer</span>}
         <span className="text-[10px] px-1.5 py-0.5 rounded bg-muted/40">Tier {offer.club.tier}</span>
       </div>
-      {offer.isPayCut && <div className="text-[11px] text-amber-400">⚠️ Lower wages, but it's a dream move</div>}
+      {review.wageDelta !== null && review.wageDelta < 0 && <div className="text-xs text-amber-400">Lower weekly wage than your current deal</div>}
       {career && <OfferFitLine offer={offer} career={career} />}
-      <Button onClick={onAccept} className="w-full h-9 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-black">
-        {actionLabel || "Sign Contract ✍️"}
-      </Button>
+      <SoccerOfferReview club={offer.club.name} review={review} onAccept={onAccept} />
     </div>
   );
 }
@@ -882,6 +882,7 @@ export default function SoccerCareer() {
   });
   const [career, setCareer] = useState<CareerState | null>(restoredSave.career);
   const [saveError, setSaveError] = useState(restoredSave.invalid);
+  const [saveFailed, setSaveFailed] = useState(false);
   const [clubs, setClubs] = useState<ClubData[]>([]);
   const [clubsLoading, setClubsLoading] = useState(true);
   const [clubsError, setClubsError] = useState(false);
@@ -957,12 +958,17 @@ export default function SoccerCareer() {
     setClubsLoading(false);
   }, []);
 
-  // Save career to localStorage whenever it changes
-  useEffect(() => {
-    if (career) {
-      try { localStorage.setItem(SAVE_KEY, JSON.stringify(career)); } catch {}
-    }
+  const saveCurrentCareer = useCallback(() => {
+    if (!career) { setSaveFailed(false); return; }
+    try {
+      localStorage.setItem(SAVE_KEY, JSON.stringify(career));
+      setSaveFailed(false);
+    } catch { setSaveFailed(true); }
   }, [career]);
+  useEffect(() => { saveCurrentCareer(); }, [saveCurrentCareer]);
+  useEffect(() => {
+    if (saveFailed) toast.error("Your latest progress could not be saved. Keep this tab open, then try again.");
+  }, [saveFailed]);
 
   const isFormValid = playerName.trim().length > 0 && nationality && position && era;
 
@@ -1329,6 +1335,12 @@ export default function SoccerCareer() {
         <GameNavbar />
         <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp extraRules={DERBY_HELP_RULES} /></div>
         <main id="dukb-main" className="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4">
+          {career && saveFailed && (
+            <div role="alert" data-soccer-save-status="failed" className="mb-4 rounded-xl border border-amber-500/40 bg-amber-500/10 p-3 text-sm sm:flex sm:items-center sm:gap-4">
+              <p className="flex-1">Your latest progress could not be saved. Keep this tab open, then try again.</p>
+              <Button variant="outline" className="mt-2 min-h-11 shrink-0 sm:mt-0" onClick={saveCurrentCareer}>Retry save</Button>
+            </div>
+          )}
           {saveError && !career && (
             <div role="alert" className="mb-4 rounded-xl border border-amber-500/40 bg-amber-500/10 p-4 space-y-3 text-sm">
               <p>We couldn't open this save. You can create a new player below. Your old save stays here until you begin a new career or delete it.</p>
@@ -2321,7 +2333,6 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
                 offer={offer}
                 career={career}
                 onAccept={() => onAcceptOffer(offer)}
-                actionLabel={situation.mode === "released" ? "Sign as a free agent ✍️" : "Accept and go ✍️"}
               />
             )
           ))}
@@ -2363,7 +2374,7 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
       {/* Situation: One Offer */}
       {situation.type === "one_offer" && (
         <div className="space-y-3">
-          <OfferCard offer={situation.offer} onAccept={() => onAcceptOffer(situation.offer)} actionLabel="Accept Offer ✍️" career={career} />
+          <OfferCard offer={situation.offer} onAccept={() => onAcceptOffer(situation.offer)} career={career} />
           <div className="flex gap-2">
             <Button variant="outline" onClick={onStay} className="flex-1 h-9 text-sm">
               Reject & Stay
@@ -2381,8 +2392,8 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
           <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 text-center">
             <span className="text-sm font-bold">🔥 Bidding War! Two clubs competing for your signature</span>
           </div>
-          <OfferCard offer={situation.offerA} onAccept={() => onAcceptOffer(situation.offerA)} actionLabel="Join Club A ✍️" career={career} />
-          <OfferCard offer={situation.offerB} onAccept={() => onAcceptOffer(situation.offerB)} actionLabel="Join Club B ✍️" career={career} />
+          <OfferCard offer={situation.offerA} onAccept={() => onAcceptOffer(situation.offerA)} career={career} />
+          <OfferCard offer={situation.offerB} onAccept={() => onAcceptOffer(situation.offerB)} career={career} />
           <Button variant="outline" onClick={onStay} className="w-full h-9 text-sm">
             Stay at {career.currentClub}
           </Button>
@@ -2396,12 +2407,12 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
             <span className="text-sm font-bold">⭐ Dream Club Interest!</span>
             <p className="text-xs text-muted-foreground mt-1">A top club wants you, but they're offering below market value</p>
           </div>
-          <OfferCard offer={situation.offer} onAccept={() => onAcceptOffer(situation.offer)} actionLabel="Accept pay cut for dream move ⭐" career={career} />
-          <div className="flex gap-2">
-            <Button variant="outline" onClick={onStay} className="flex-1 h-9 text-sm">
-              Stay for better money 💰
+          <OfferCard offer={situation.offer} onAccept={() => onAcceptOffer(situation.offer)} career={career} />
+          <div className="grid grid-cols-2 gap-2">
+            <Button variant="outline" onClick={onStay} className="min-w-0 min-h-11 h-auto whitespace-normal px-2 py-2 text-sm">
+              Stay at your club
             </Button>
-            <Button variant="outline" onClick={onRequestTransfer} className="flex-1 h-9 text-sm">
+            <Button variant="outline" onClick={onRequestTransfer} className="min-w-0 min-h-11 h-auto whitespace-normal px-2 py-2 text-sm">
               Wait for better offer 🔍
             </Button>
           </div>
@@ -2419,7 +2430,7 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
             Sign Extension with {career.currentClub} 📝
           </Button>
           {situation.offers.map((offer) => (
-            <OfferCard key={offer.club.name} offer={offer} onAccept={() => onAcceptOffer(offer)} actionLabel="Leave on free transfer ✍️" career={career} />
+            <OfferCard key={offer.club.name} offer={offer} onAccept={() => onAcceptOffer(offer)} career={career} />
           ))}
         </div>
       )}
@@ -2723,11 +2734,11 @@ function RivalComparisonPanel({ career }: { career: CareerState }) {
       {rows.map(r => (
         <div key={r.l} className="flex items-center justify-between text-xs">
           <span className={`font-bold w-12 text-right ${r.p > r.r ? "text-emerald-400" : r.p < r.r ? "text-muted-foreground" : "text-foreground"}`}>
-            {r.l === "Market Value" ? money(`€${(r.p as number).toFixed(0)}M`) : r.p}
+            {r.l === "Market Value" ? money(`€${(r.p as number).toFixed(0)}M`) : r.l === "Overall" ? r.p : formatNumber(r.p)}
           </span>
           <span className="text-[10px] text-muted-foreground flex-1 text-center">{r.l}</span>
           <span className={`font-bold w-12 text-left ${r.r > r.p ? "text-orange-400" : r.r < r.p ? "text-muted-foreground" : "text-foreground"}`}>
-            {r.l === "Market Value" ? money(`€${(r.r as number).toFixed(0)}M`) : r.r}
+            {r.l === "Market Value" ? money(`€${(r.r as number).toFixed(0)}M`) : r.l === "Overall" ? r.r : formatNumber(r.r)}
           </span>
         </div>
       ))}
@@ -2763,9 +2774,9 @@ export function RivalrySummaryCard({ summary, career }: { summary: RivalrySummar
       <div className="space-y-1.5">
         {summary.categories.map(c => (
           <div key={c.label} className="flex items-center justify-between text-xs bg-muted/20 rounded-lg px-3 py-1.5">
-            <span className={`font-bold w-14 text-right ${c.winner === "player" ? "text-emerald-400" : "text-muted-foreground"}`}>{c.playerVal}</span>
+            <span className={`font-bold w-14 text-right ${c.winner === "player" ? "text-emerald-400" : "text-muted-foreground"}`}>{formatNumber(c.playerVal)}</span>
             <span className="text-[10px] text-muted-foreground flex-1 text-center">{c.label}</span>
-            <span className={`font-bold w-14 text-left ${c.winner === "rival" ? "text-orange-400" : "text-muted-foreground"}`}>{c.rivalVal}</span>
+            <span className={`font-bold w-14 text-left ${c.winner === "rival" ? "text-orange-400" : "text-muted-foreground"}`}>{formatNumber(c.rivalVal)}</span>
           </div>
         ))}
       </div>
@@ -3097,7 +3108,7 @@ function RetirementCeremonyCard({ career, totals, onPostRetirement }: { career: 
           { l: "Ballon d'Or", v: totals.ballonDors }, { l: "Int'l Caps", v: career.intStats.caps },
         ].map((s, i) => (
           <div key={s.l} className="cm-tick-in bg-muted/20 rounded-lg p-2" style={{ animationDelay: at(i) }}>
-            <div className="text-lg font-black">{s.v}</div>
+            <div className="text-lg font-black">{formatNumber(s.v)}</div>
             <div className="text-[9px] text-muted-foreground">{s.l}</div>
           </div>
         ))}
@@ -3362,7 +3373,7 @@ export function LegacyCard({ career, totals, onShare }: { career: CareerState; t
       <div className="grid grid-cols-4 gap-2 text-center text-[10px]">
         {tiles.map((t, j) => (
           <div key={t.label} className={`bg-muted/20 rounded-lg p-1.5${fx("cm-tick-in")}`} style={at(tileBeat + j)} data-beat="tile">
-            <div className="font-black text-sm">{t.value}</div>
+            <div className="font-black text-sm">{formatNumber(t.value)}</div>
             <div className="text-muted-foreground">{t.label}</div>
           </div>
         ))}
@@ -4328,19 +4339,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           </div>
 
           {/* Career totals, position-specific */}
-          <div className="bg-card border border-border rounded-xl p-4">
-            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Career Stats</span>
-            <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 mt-3">
-              {getPositionCareerStats(career.position, totals).map(s => (
-                <div key={s.l} className="text-center">
-                  <div className="text-lg sm:text-xl font-black">{s.v}</div>
-                  <div className="text-[10px] text-muted-foreground">{s.l}</div>
-                </div>
-              ))}
-            </div>
-            {/* Round 1012: the career's derby record, summed from the seasons. */}
-            <CareerDerbyTotals seasons={career.seasons} />
-          </div>
+          <CareerStatsCard career={career} totals={totals} />
 
           {/* Trophies */}
           <div className="bg-card border border-border rounded-xl p-4">

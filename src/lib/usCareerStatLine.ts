@@ -18,13 +18,14 @@
      placeholder number. A line with nothing left says so plainly.
    - A suspended season is the same sentence in all four games.
 
-   This file imports types only, so the engines and the boards can both import
+   Sport imports are types only; the display formatter has no engine dependency, so both can import
    it without a cycle. */
 
 import type { CareerPos, SeasonLine } from './nflMyCareer';
 import type { NbaSeasonLine } from './nbaMyCareer';
 import type { MlbCareerPos, MlbSeasonLine } from './mlbMyCareer';
 import type { NhlCareerPos, NhlSeasonLine } from './nhlMyCareer';
+import { formatNumber } from './formatNumber';
 
 export const SUSPENDED_STAT_LINE = 'Suspended, no season played';
 export const NO_STATS_LINE = 'No stats recorded';
@@ -45,6 +46,9 @@ export function countOf(n: number, one: string, many: string): string {
   return `${n.toLocaleString()} ${n === 1 ? one : many}`;
 }
 
+const displayCountOf = (n: number, one: string, many: string): string =>
+  `${formatNumber(n)} ${n === 1 ? one : many}`;
+
 const seasonLine = (teamResult: string, parts: readonly Part[]): string =>
   teamResult === 'SUSPENDED' ? SUSPENDED_STAT_LINE : joinStatParts(parts);
 
@@ -53,16 +57,16 @@ const seasonLine = (teamResult: string, parts: readonly Part[]): string =>
 /** One NFL season, in the numbers simSeason writes for that position. */
 export function nflStatLine(s: SeasonLine, p: CareerPos): string {
   switch (p) {
-    case 'QB': return seasonLine(s.teamResult, [[s.passYds, n => `${n} yds`], [s.passTd, n => `${n} TD`], [s.ints, n => `${n} INT`]]);
-    case 'RB': return seasonLine(s.teamResult, [[s.rushYds, n => `${n} rush yds`], [s.rushTd, n => `${n} TD`], [s.rec, n => `${n} rec`]]);
+    case 'QB': return seasonLine(s.teamResult, [[s.passYds, n => `${formatNumber(n)} yds`], [s.passTd, n => `${formatNumber(n)} TD`], [s.ints, n => `${formatNumber(n)} INT`]]);
+    case 'RB': return seasonLine(s.teamResult, [[s.rushYds, n => `${formatNumber(n)} rush yds`], [s.rushTd, n => `${formatNumber(n)} TD`], [s.rec, n => `${formatNumber(n)} rec`]]);
     case 'WR':
-    case 'TE': return seasonLine(s.teamResult, [[s.rec, n => `${n} rec`], [s.recYds, n => `${n} yds`], [s.recTd, n => `${n} TD`]]);
-    case 'LB': return seasonLine(s.teamResult, [[s.tackles, n => countOf(n, 'tackle', 'tackles')], [s.sacks, n => countOf(n, 'sack', 'sacks')], [s.picks, n => `${n} INT`]]);
-    case 'CB': return seasonLine(s.teamResult, [[s.picks, n => `${n} INT`], [s.passDef, n => countOf(n, 'pass defended', 'passes defended')], [s.tackles, n => countOf(n, 'tackle', 'tackles')]]);
-    case 'EDGE': return seasonLine(s.teamResult, [[s.sacks, n => countOf(n, 'sack', 'sacks')], [s.tackles, n => countOf(n, 'tackle', 'tackles')], [s.forcedFum, n => countOf(n, 'forced fumble', 'forced fumbles')]]);
+    case 'TE': return seasonLine(s.teamResult, [[s.rec, n => `${formatNumber(n)} rec`], [s.recYds, n => `${formatNumber(n)} yds`], [s.recTd, n => `${formatNumber(n)} TD`]]);
+    case 'LB': return seasonLine(s.teamResult, [[s.tackles, n => displayCountOf(n, 'tackle', 'tackles')], [s.sacks, n => displayCountOf(n, 'sack', 'sacks')], [s.picks, n => `${formatNumber(n)} INT`]]);
+    case 'CB': return seasonLine(s.teamResult, [[s.picks, n => `${formatNumber(n)} INT`], [s.passDef, n => displayCountOf(n, 'pass defended', 'passes defended')], [s.tackles, n => displayCountOf(n, 'tackle', 'tackles')]]);
+    case 'EDGE': return seasonLine(s.teamResult, [[s.sacks, n => displayCountOf(n, 'sack', 'sacks')], [s.tackles, n => displayCountOf(n, 'tackle', 'tackles')], [s.forcedFum, n => displayCountOf(n, 'forced fumble', 'forced fumbles')]]);
     case 'K': return seasonLine(s.teamResult, [
-      [s.fgMade, n => (isNum(s.fgAtt) ? `${n} of ${s.fgAtt} FG` : `${n} FG`)],
-      [s.longFg, n => `long of ${n}`],
+      [s.fgMade, n => (isNum(s.fgAtt) ? `${formatNumber(n)} of ${formatNumber(s.fgAtt)} FG` : `${formatNumber(n)} FG`)],
+      [s.longFg, n => `long of ${formatNumber(n)}`],
     ]);
     default: return seasonLine(s.teamResult, []);
   }
@@ -80,14 +84,14 @@ export interface NflCareerSums {
 /** The retirement card's stat bullet for an NFL career. */
 export function nflCareerStatBullet(t: NflCareerSums, p: CareerPos): string {
   switch (p) {
-    case 'QB': return `${t.passYds.toLocaleString()} passing yards, ${t.passTd} touchdowns`;
-    case 'RB': return `${t.rushYds.toLocaleString()} rushing yards, ${t.rushTd} touchdowns`;
+    case 'QB': return `${t.passYds.toLocaleString('en-US')} passing yards, ${formatNumber(t.passTd)} touchdowns`;
+    case 'RB': return `${t.rushYds.toLocaleString('en-US')} rushing yards, ${formatNumber(t.rushTd)} touchdowns`;
     case 'WR':
-    case 'TE': return `${t.rec} catches for ${t.recYds.toLocaleString()} yards, ${t.recTd} touchdowns`;
-    case 'LB': return `${countOf(t.tackles, 'tackle', 'tackles')}, ${countOf(t.sacks, 'sack', 'sacks')}, ${countOf(t.picks, 'interception', 'interceptions')}`;
-    case 'CB': return `${countOf(t.picks, 'interception', 'interceptions')}, ${countOf(t.passDef, 'pass defended', 'passes defended')}, ${countOf(t.tackles, 'tackle', 'tackles')}`;
-    case 'EDGE': return `${countOf(t.sacks, 'sack', 'sacks')}, ${countOf(t.tackles, 'tackle', 'tackles')}, ${countOf(t.forcedFum, 'forced fumble', 'forced fumbles')}`;
-    case 'K': return `${t.fgMade} of ${t.fgAtt} field goals made`;
+    case 'TE': return `${formatNumber(t.rec)} catches for ${t.recYds.toLocaleString('en-US')} yards, ${formatNumber(t.recTd)} touchdowns`;
+    case 'LB': return `${displayCountOf(t.tackles, 'tackle', 'tackles')}, ${displayCountOf(t.sacks, 'sack', 'sacks')}, ${displayCountOf(t.picks, 'interception', 'interceptions')}`;
+    case 'CB': return `${displayCountOf(t.picks, 'interception', 'interceptions')}, ${displayCountOf(t.passDef, 'pass defended', 'passes defended')}, ${displayCountOf(t.tackles, 'tackle', 'tackles')}`;
+    case 'EDGE': return `${displayCountOf(t.sacks, 'sack', 'sacks')}, ${displayCountOf(t.tackles, 'tackle', 'tackles')}, ${displayCountOf(t.forcedFum, 'forced fumble', 'forced fumbles')}`;
+    case 'K': return `${formatNumber(t.fgMade)} of ${formatNumber(t.fgAtt)} field goals made`;
     default: return '';
   }
 }
@@ -95,14 +99,14 @@ export function nflCareerStatBullet(t: NflCareerSums, p: CareerPos): string {
 /** The hub's "career so far" figure: the one number that position is about. */
 export function nflCareerSoFar(t: NflCareerSums, p: CareerPos): string {
   switch (p) {
-    case 'QB': return `${t.passYds.toLocaleString()} pass yds`;
-    case 'RB': return `${t.rushYds.toLocaleString()} rush yds`;
+    case 'QB': return `${t.passYds.toLocaleString('en-US')} pass yds`;
+    case 'RB': return `${t.rushYds.toLocaleString('en-US')} rush yds`;
     case 'WR':
-    case 'TE': return `${t.recYds.toLocaleString()} rec yds`;
-    case 'LB': return countOf(t.tackles, 'tackle', 'tackles');
-    case 'CB': return `${t.picks} INT`;
-    case 'EDGE': return countOf(t.sacks, 'sack', 'sacks');
-    case 'K': return `${t.fgMade} FG made`;
+    case 'TE': return `${t.recYds.toLocaleString('en-US')} rec yds`;
+    case 'LB': return displayCountOf(t.tackles, 'tackle', 'tackles');
+    case 'CB': return `${formatNumber(t.picks)} INT`;
+    case 'EDGE': return displayCountOf(t.sacks, 'sack', 'sacks');
+    case 'K': return `${formatNumber(t.fgMade)} FG made`;
     default: return '';
   }
 }
@@ -120,7 +124,7 @@ export function nflMajorAward(p: CareerPos): { one: string; many: string } {
 
 /** One NBA season. Every position records the same three averages. */
 export function nbaStatLine(s: NbaSeasonLine): string {
-  return seasonLine(s.teamResult, [[s.ppg, n => `${n} ppg`], [s.rpg, n => `${n} rpg`], [s.apg, n => `${n} apg`]]);
+  return seasonLine(s.teamResult, [[s.ppg, n => `${formatNumber(n)} ppg`], [s.rpg, n => `${formatNumber(n)} rpg`], [s.apg, n => `${formatNumber(n)} apg`]]);
 }
 
 /* ─── MLB ─────────────────────────────────────────────────────────────────── */
@@ -131,20 +135,20 @@ const avg3 = (n: number): string => `.${String(Math.round(n * 1000)).padStart(3,
 export function mlbStatLine(s: MlbSeasonLine, p: MlbCareerPos): string {
   if (p === 'SP') {
     return seasonLine(s.teamResult, [
-      [s.wins, n => (isNum(s.lossesP) ? `${n}-${s.lossesP}` : countOf(n, 'win', 'wins'))],
+      [s.wins, n => (isNum(s.lossesP) ? `${formatNumber(n)}-${formatNumber(s.lossesP)}` : displayCountOf(n, 'win', 'wins'))],
       [s.era, n => `${n.toFixed(2)} ERA`],
-      [s.so, n => `${n} K`],
+      [s.so, n => `${formatNumber(n)} K`],
     ]);
   }
   if (p === 'RP') {
     return seasonLine(s.teamResult, [
-      [s.saves, n => countOf(n, 'save', 'saves')],
-      [s.holds, n => countOf(n, 'hold', 'holds')],
+      [s.saves, n => displayCountOf(n, 'save', 'saves')],
+      [s.holds, n => displayCountOf(n, 'hold', 'holds')],
       [s.era, n => `${n.toFixed(2)} ERA`],
-      [s.so, n => `${n} K`],
+      [s.so, n => `${formatNumber(n)} K`],
     ]);
   }
-  return seasonLine(s.teamResult, [[s.avg, avg3], [s.hr, n => `${n} HR`], [s.rbi, n => `${n} RBI`]]);
+  return seasonLine(s.teamResult, [[s.avg, avg3], [s.hr, n => `${formatNumber(n)} HR`], [s.rbi, n => `${formatNumber(n)} RBI`]]);
 }
 
 export interface MlbCareerSums { hr: number; rbi: number; sb: number; wins: number; so: number; saves: number; holds: number }
@@ -153,16 +157,16 @@ export interface MlbCareerSums { hr: number; rbi: number; sb: number; wins: numb
  *  is holds (simMlbSeason gives him a handful of saves and up to 41 holds a
  *  year), so a reliever's career carries both, never saves alone. */
 export function mlbCareerStatBullet(t: MlbCareerSums, p: MlbCareerPos): string {
-  if (p === 'SP') return `${t.wins} wins, ${t.so.toLocaleString()} strikeouts`;
-  if (p === 'RP') return `${countOf(t.saves, 'save', 'saves')}, ${countOf(t.holds, 'hold', 'holds')}, ${t.so.toLocaleString()} strikeouts`;
-  return `${t.hr} home runs, ${t.rbi.toLocaleString()} RBI, ${t.sb} steals`;
+  if (p === 'SP') return `${formatNumber(t.wins)} wins, ${t.so.toLocaleString('en-US')} strikeouts`;
+  if (p === 'RP') return `${displayCountOf(t.saves, 'save', 'saves')}, ${displayCountOf(t.holds, 'hold', 'holds')}, ${t.so.toLocaleString('en-US')} strikeouts`;
+  return `${formatNumber(t.hr)} home runs, ${t.rbi.toLocaleString('en-US')} RBI, ${formatNumber(t.sb)} steals`;
 }
 
 /** The hub's "career so far" figure for an MLB career. */
 export function mlbCareerSoFar(t: MlbCareerSums, p: MlbCareerPos): string {
-  if (p === 'SP') return `${t.wins} career wins`;
-  if (p === 'RP') return `${countOf(t.saves, 'save', 'saves')} and ${countOf(t.holds, 'hold', 'holds')}`;
-  return `${t.hr} career home runs`;
+  if (p === 'SP') return `${formatNumber(t.wins)} career wins`;
+  if (p === 'RP') return `${displayCountOf(t.saves, 'save', 'saves')} and ${displayCountOf(t.holds, 'hold', 'holds')}`;
+  return `${formatNumber(t.hr)} career home runs`;
 }
 
 /** Pitchers win the Cy Young on the meter hitters fill with MVPs. */
@@ -174,8 +178,8 @@ export function mlbMajorAward(p: MlbCareerPos): { one: string; many: string } {
 
 /** One NHL season: a goalie's wins and save percentage, or a skater's points. */
 export function nhlStatLine(s: NhlSeasonLine, p: NhlCareerPos): string {
-  if (p === 'G') return seasonLine(s.teamResult, [[s.wins, n => `${n} W`], [s.svpct, n => `${avg3(n)} SV%`]]);
-  return seasonLine(s.teamResult, [[s.goals, n => `${n} G`], [s.assists, n => `${n} A`], [s.points, n => `${n} P`]]);
+  if (p === 'G') return seasonLine(s.teamResult, [[s.wins, n => `${formatNumber(n)} W`], [s.svpct, n => `${avg3(n)} SV%`]]);
+  return seasonLine(s.teamResult, [[s.goals, n => `${formatNumber(n)} G`], [s.assists, n => `${formatNumber(n)} A`], [s.points, n => `${formatNumber(n)} P`]]);
 }
 
 /** The trophy the position chases: the Vezina in net, the Norris on the blue
