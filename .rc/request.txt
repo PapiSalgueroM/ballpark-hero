@@ -1,0 +1,2 @@
+saves-main: node .rc/x/rvsaves.mjs origin/main
+saves-alint: node .rc/x/rvsaves.mjs origin/release-al-int
