@@ -1,0 +1,4 @@
+truth exit=0 63s | simNflTruth: green. Seasons are their real length, awards survive a 16 game schedule, rookies are paid their slot, kickers go in round four or later, sacks come in halves
+vitest-rookie exit=0 2s |    Duration  1.82s (transform 544ms, setup 80ms, collect 682ms, tests 36ms, environment 467ms, prepare 160ms)
+tsc exit=0 77s | 
+hall exit=1 863s | simCareerHall: RED
