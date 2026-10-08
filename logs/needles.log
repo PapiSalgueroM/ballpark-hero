@@ -1,0 +1,6 @@
+centre chunks: SoccerSeasonCentre-DELORIee.js
+held 1 w==null?void 0:w.key)===x,f=u.useMemo(()=>(h||v)&&c?ft(Y,n,l,c):[],[h,v,c,n,l]),g=
+otherplace 1 ound:R.round}):((A=be(Z))==null?void 0:A.key)===x&&$t(Z))},[x,n.year,C]);if(!$)return t.
+pitchgone 1 :!1})}static getDerivedStateFromError(){return{gone:!0}}render(){return this.state.go
+chipword 1 ar:n.year,md:R.md,speed:R.speed,stable:C,round:R.round}):((A=be(Z))==null?void 0:A.ke
+SeasonResumeChip-DxNyS_cp.js 713 bytes; import{r,j as u,B as p}from"./index-DQcyq-Ik.js";import{a as l,b as d,c as f}from"./resume-iKq-NREI.js";function y({career:a,at:m,onOpen:i}){var o,n;const[t,c]=r.useState(()=>l("soccer"));r.useEffect(()=>{c(l("soccer"))},[m]);const s=a.seasons[d(t,a.seasons,e=>`${a.playerName}|${e.club}|${e.year}|${e.apps}|${e.goals}|${e.assists}|${e.rating}|centre`,(n=(o=a.phone)==null?void 0:o.world)==null?void 0:n.year)];return!t||!s||s.type!=="playing"||!(s.apps>0)?null:u.jsx("div",{className:"mt-2",children:u.jsxs(p,{onClick:()=>i(s),variant:"outline",className:"w-full h-11 text-sm font-bold","data-season-resume":!0,children:["📺 ",f(t,`${s.year}/${String(s.year+1).slice(-2)}`,"matchday")]})})}export{y 

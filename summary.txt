@@ -1,0 +1,10 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+needles exit=0 0s | SeasonResumeChip-DxNyS_cp.js 713 bytes; import{r,j as u,B as p}from"./index-DQcyq-Ik.js";import{a as l,b as d,c as f}from"./resume-iKq-NREI.js";function y({career:a,at:m,
+play-b5 exit=0 31s | playSeasonCentreMotion: 2 checks, 0 failed (only B5)
+play-pitchqueue exit=1 31s | playSeasonCentreMotion: 2 checks, 1 failed (control pitchqueue) (only B5)
+play-c exit=0 76s | playSeasonCentreMotion: 61 checks, 0 failed (only C)
+play-held exit=1 77s | playSeasonCentreMotion: 61 checks, 2 failed (control held) (only C)
+play-otherplace exit=1 77s | playSeasonCentreMotion: 61 checks, 1 failed (control otherplace) (only C)
+play-chipword exit=1 77s | playSeasonCentreMotion: 61 checks, 3 failed (control chipword) (only C)
+vitest-round exit=0 50s |    Duration  49.92s (transform 5.51s, setup 720ms, collect 9.04s, tests 44.76s, environment 3.94s, prepare 985ms)
+play-pitchgone exit=1 106s | playSeasonCentreMotion: 61 checks, 1 failed (control pitchgone) (only C)
