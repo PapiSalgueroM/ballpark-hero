@@ -1,0 +1,45 @@
+#!serve
+#!playwright
+a.tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+a.vitest: node_modules/.bin/vitest run src/test/careerMilestones.test.ts src/test/careerMomentKit.test.tsx src/test/careerMomentKitLift.test.tsx src/test/tournamentCardMoment.test.tsx src/test/soccerCareerDebutLegacy.test.tsx src/test/careerAwardsNightCard.test.tsx src/test/usCareerReveals.test.tsx src/test/momentHost.test.tsx --testTimeout=300000 --hookTimeout=120000
+a.simCareerMoments: node scripts/simCareerMoments.mjs
+a.k-import: CAREER_MOMENTS_CONTROL=import node scripts/simCareerMoments.mjs
+a.k-clock: CAREER_MOMENTS_CONTROL=clock node scripts/simCareerMoments.mjs
+a.k-stripe: CAREER_MOMENTS_CONTROL=stripe node scripts/simCareerMoments.mjs
+a.k-unbind: CAREER_MOMENTS_CONTROL=unbind node scripts/simCareerMoments.mjs
+a.k-ungated: CAREER_MOMENTS_CONTROL=ungated node scripts/simCareerMoments.mjs
+a.k-dupbind: CAREER_MOMENTS_CONTROL=dupbind node scripts/simCareerMoments.mjs
+a.k-enginevalue: CAREER_MOMENTS_CONTROL=enginevalue node scripts/simCareerMoments.mjs
+a.k-stray: CAREER_MOMENTS_CONTROL=stray node scripts/simCareerMoments.mjs
+a.k-grow: CAREER_MOMENTS_CONTROL=grow node scripts/simCareerMoments.mjs
+a.k-third: CAREER_MOMENTS_CONTROL=third node scripts/simCareerMoments.mjs
+a.k-frozen: CAREER_MOMENTS_CONTROL=frozen node scripts/simCareerMoments.mjs
+a.k-motion: CAREER_MOMENTS_CONTROL=motion node scripts/simCareerMoments.mjs
+a.k-replay: CAREER_MOMENTS_CONTROL=replay node scripts/simCareerMoments.mjs
+a.k-eager: CAREER_MOMENTS_CONTROL=eager node scripts/simCareerMoments.mjs
+a.k-wide: CAREER_MOMENTS_CONTROL=wide node scripts/simCareerMoments.mjs
+a.k-gated: CAREER_MOMENTS_CONTROL=gated node scripts/simCareerMoments.mjs
+a.k-savewrite: CAREER_MOMENTS_CONTROL=savewrite node scripts/simCareerMoments.mjs
+a.k-unknown: CAREER_MOMENTS_CONTROL=nosuchcontrol node scripts/simCareerMoments.mjs
+a.simRevealMoments: node scripts/simRevealMoments.mjs
+a.simVictoryMoment: node scripts/simVictoryMoment.mjs
+a.simCareerAwardsNight: node scripts/simCareerAwardsNight.mjs
+a.simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+a.simNoRivalNames: node scripts/simNoRivalNames.mjs
+a.simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+a.simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+a.simPrerender: node scripts/simPrerender.mjs
+b.walk: CAREER_MOMENTS_SHOTS=$RC_OUT/builder node scripts/playCareerMoments.mjs
+b.w-unbind-signing: PORT=4581 PLAY_CAREER_MOMENTS_CONTROL=unbind-signing node scripts/playCareerMoments.mjs
+b.w-unbind-trophy: PORT=4582 PLAY_CAREER_MOMENTS_CONTROL=unbind-trophy node scripts/playCareerMoments.mjs
+b.w-wrongfact: PORT=4583 PLAY_CAREER_MOMENTS_CONTROL=wrongfact node scripts/playCareerMoments.mjs
+b.w-vanish: PORT=4584 PLAY_CAREER_MOMENTS_CONTROL=vanish node scripts/playCareerMoments.mjs
+b.w-replayed: PORT=4585 PLAY_CAREER_MOMENTS_CONTROL=replayed node scripts/playCareerMoments.mjs
+b.w-savewrite: PORT=4586 PLAY_CAREER_MOMENTS_CONTROL=savewrite node scripts/playCareerMoments.mjs
+b.w-jump: PORT=4587 PLAY_CAREER_MOMENTS_CONTROL=jump node scripts/playCareerMoments.mjs
+b.w-noisy: PORT=4588 PLAY_CAREER_MOMENTS_CONTROL=noisy node scripts/playCareerMoments.mjs
+b.reduced: node scripts/playReducedMotion.mjs; echo "CLEAN_EXIT=$?"; REDUCED_MOTION_CONTROL=noguard node scripts/playReducedMotion.mjs; echo "NOGUARD_EXIT=$?"; REDUCED_MOTION_CONTROL=noblanket node scripts/playReducedMotion.mjs; echo "NOBLANKET_EXIT=$?"
+b.playSoccerCareer: node scripts/playSoccerCareer.mjs
+c.reduced: node scripts/playReducedMotion.mjs
+c.reduced-noguard: REDUCED_MOTION_CONTROL=noguard node scripts/playReducedMotion.mjs
+c.reduced-noblanket: REDUCED_MOTION_CONTROL=noblanket node scripts/playReducedMotion.mjs

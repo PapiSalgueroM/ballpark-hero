@@ -1,0 +1,31 @@
+
+prefers-reduced-motion: no-preference
+   rise      animation=cmRise         opacity=0 display=block
+   slam      animation=cmSlam         opacity=0 display=block
+   glow      animation=cmGoldGlow     opacity=1 display=block
+   confetti  animation=cmConfettiFall opacity=0 display=inline
+
+prefers-reduced-motion: reduce
+   rise      animation=none           opacity=1 display=block
+   slam      animation=none           opacity=1 display=block
+   glow      animation=none           opacity=1 display=block
+   confetti  animation=cmConfettiFall opacity=1 display=none
+
+Round 530 routes under prefers-reduced-motion: reduce, 20 routes served from dist
+   /                   text=22408 keyframeBlocks=3 ours=2 thirdParty=1 unguarded=0 reveal=10 animating=0 invisible=0 slowMotion=0/4668
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4189/cfb-dynasty
+Call log:
+  - navigating to "http://127.0.0.1:4189/cfb-dynasty", waiting until "networkidle"
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playReducedMotion.mjs:223:13 {
+  log: [
+    '  - navigating to "http://127.0.0.1:4189/cfb-dynasty", waiting until "networkidle"'
+  ],
+  name: 'Error'
+}
+
+Node.js v24.21.0
