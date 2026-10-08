@@ -1,0 +1,15 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/momentHost.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 125[2mms[22m[39m
+ [32m✓[39m src/test/drillBoardMatch.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 322[2mms[22m[39m
+ [2m[90m↓[39m[22m src/test/usBoardFixture.test.tsx [2m([22m[2m4 tests[22m[2m | [22m[33m4 skipped[39m[2m)[22m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (3)[39m
+[2m      Tests [22m [1m[32m8 passed[39m[22m[2m | [22m[33m4 skipped[39m[90m (12)[39m
+[2m   Start at [22m 10:23:11
+[2m   Duration [22m 4.55s[2m (transform 3.98s, setup 309ms, collect 7.32s, tests 448ms, environment 1.40s, prepare 471ms)[22m
+

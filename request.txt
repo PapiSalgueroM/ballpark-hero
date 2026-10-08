@@ -1,0 +1,37 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest5: node_modules/.bin/vitest run src/test/seasonCore.test.ts src/test/seasonCentreWords.test.tsx src/test/usSeason.test.ts src/test/usSeasonCentre.test.tsx src/test/usSeasonCentreEntry.test.tsx --testTimeout=300000 --hookTimeout=120000
+play: PORT=4401 node scripts/playUsSeasonCentre.mjs
+play-ctl-playfirst: PORT=4402 US_SEASON_PLAY_CONTROL=playfirst node scripts/playUsSeasonCentre.mjs
+play-ctl-cover: PORT=4403 US_SEASON_PLAY_CONTROL=cover node scripts/playUsSeasonCentre.mjs
+play-ctl-static: PORT=4404 US_SEASON_PLAY_CONTROL=static node scripts/playUsSeasonCentre.mjs
+play-ctl-write: PORT=4405 US_SEASON_PLAY_CONTROL=write node scripts/playUsSeasonCentre.mjs
+play-ctl-count: PORT=4406 US_SEASON_PLAY_CONTROL=count node scripts/playUsSeasonCentre.mjs
+sim: node scripts/simUsSeasonCentre.mjs
+sim-ctl-stream: SEEDSET=0 US_SEASON_CONTROL=stream node scripts/simUsSeasonCentre.mjs
+sim-ctl-record: SEEDSET=0 US_SEASON_CONTROL=record node scripts/simUsSeasonCentre.mjs
+sim-ctl-length: SEEDSET=0 US_SEASON_CONTROL=length node scripts/simUsSeasonCentre.mjs
+sim-ctl-stage: SEEDSET=0 US_SEASON_CONTROL=stage node scripts/simUsSeasonCentre.mjs
+sim-ctl-names: SEEDSET=0 US_SEASON_CONTROL=names node scripts/simUsSeasonCentre.mjs
+sim-ctl-window: SEEDSET=0 US_SEASON_CONTROL=window node scripts/simUsSeasonCentre.mjs
+sim-ctl-formula: SEEDSET=0 US_SEASON_CONTROL=formula node scripts/simUsSeasonCentre.mjs
+sim-ctl-conf: SEEDSET=0 US_SEASON_CONTROL=conf node scripts/simUsSeasonCentre.mjs
+sim-ctl-hot: SEEDSET=0 US_SEASON_CONTROL=hot node scripts/simUsSeasonCentre.mjs
+sim-ctl-static: SEEDSET=0 US_SEASON_CONTROL=static node scripts/simUsSeasonCentre.mjs
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+walker-playGames: ONLY=/nba-my-career OFFLINE=1 node .rc/x/rcw-playGames.mjs
+walker-sweepGames: ONLY=/nba-my-career OFFLINE=1 SIZES=phone,tablet,desktop node .rc/x/rcw-sweepGames.mjs
+vt-1047: node_modules/.bin/vitest run src/test/momentHost.test.tsx src/test/drillBoardMatch.test.tsx src/test/usBoardFixture.test.tsx --testTimeout=300000 --hookTimeout=120000
+simSeasonMoments: node scripts/simSeasonMoments.mjs
+simSeasonCentreAgreement: node scripts/simSeasonCentreAgreement.mjs
+simSeasonCentreNeutral: node scripts/simSeasonCentreNeutral.mjs
+simSeasonCentreTable: node scripts/simSeasonCentreTable.mjs
+simSeasonLaw: node scripts/simSeasonLaw.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+playSeasonCentre: PORT=4411 node scripts/playSeasonCentre.mjs
+playSeasonMoments: PORT=4412 node scripts/playSeasonMoments.mjs
