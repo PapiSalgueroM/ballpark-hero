@@ -21,7 +21,7 @@ const SHOWCASE = 'rules reopen and showcase approaches pay their displayed stock
 const HISTORICAL = 'historical completed outcomes survive reload and remain the career archive';
 const entry = '{ ...outcome, pot: state.pot, health: outcome.devSeasons.length ? 100 : state.health, prospect: state }';
 const controls = {
-  save: { file: BOARD, from: "localStorage.setItem(sport.saveKey, JSON.stringify({ c: null, phase: 'prospect', teamQuality: null, coach: null, prospect: next } satisfies SaveShape));", to: 'void sport.saveKey;', test: JOURNEY },
+  save: { file: BOARD, from: "saveValue(JSON.stringify({ c: null, phase: 'prospect', teamQuality: null, coach: null, prospect: next } satisfies SaveShape));", to: 'void sport.saveKey;', test: JOURNEY },
   restore: { file: BOARD, from: 'const pending = loadUsCareerProspect(sport, s.prospect);', to: 'const pending = null;', test: JOURNEY },
   handoff: { file: BOARD, from: entry, to: 'undefined', test: JOURNEY },
   duplicate: { file: BOARD, from: 'if (!prospect || prospectRef.current !== prospect || next === prospect.state) return;', to: 'if (!prospect) return;', test: 'accepts each same-frame journey action only once' },
@@ -32,7 +32,7 @@ const controls = {
   archive: { file: BOARD, from: 'const campNote = sport.campBattle(c, teamQuality, Math.random);', to: 'delete c.prospect;\n    const campNote = sport.campBattle(c, teamQuality, Math.random);', test: JOURNEY },
   corrupt: { file: 'src/lib/usCareerProspect.ts', from: 'const state = loadPreDraft(p.state, desc);', to: 'const state = p.state;', test: 'rejects corrupt nested journey saves without changing storage' },
   outcome: { file: ENGINE, from: "if (s.phase === 'done' && s.draft) {", to: 'if (false) {', test: 'rejects corrupt nested journey saves without changing storage' },
-  back: { file: BOARD, from: "prospectRef.current = null; setProspect(null); setPhase('create');\n      localStorage.removeItem(sport.saveKey);", to: "prospectRef.current = null; setProspect(null); setPhase('create');", test: 'back before route selection preserves the player and clears only the unfinished save' },
+  back: { file: BOARD, from: "prospectRef.current = null; setProspect(null); setPhase('create');\n      saveValue(null);", to: "prospectRef.current = null; setProspect(null); setPhase('create');", test: 'back before route selection preserves the player and clears only the unfinished save' },
   rules: { file: 'src/components/us-career/ProspectJourney.tsx', from: 'The button shows the exact change before you choose.', to: 'Pick whatever you want.', test: SHOWCASE },
 };
 assert(!CONTROL || CONTROL === 'before' || CONTROL === 'historical' || controls[CONTROL], `Unknown prospect control: ${CONTROL}`);

@@ -28,7 +28,7 @@ const controls = {
   rules: { file: 'src/components/us-career/UsCareerPractice.tsx', from: 'Example: an 80 score at 74 OVR with a 75 ceiling earns +1.', to: 'Every score earns a rating increase.', test: GAIN },
   abort: { file: BOARD, from: 'const closePractice = () => {', to: "const closePractice = () => { bankPractice('closed', 80);", test: 'abort leaves no save changes and rules reopen during play' },
   pending: { file: BOARD, from: 'if (career.pendingRivalryEvent) {', to: 'if (false && career.pendingRivalryEvent) {', test: 'keeps pending rivalry ahead of practice and resets a finished career cleanly' },
-  reset: { file: BOARD, from: 'const reset = () => {\n    localStorage.removeItem(sport.saveKey);', to: 'const reset = () => {\n    void sport.saveKey;', test: 'keeps pending rivalry ahead of practice and resets a finished career cleanly' },
+  reset: { file: BOARD, from: 'const reset = () => {\n    saveValue(null);', to: 'const reset = () => {\n    void sport.saveKey;', test: 'keeps pending rivalry ahead of practice and resets a finished career cleanly' },
   carry: { file: BOARD, from: 'const campNote = sport.campBattle(c, teamQuality, Math.random);', to: 'c.ovr -= c.practice?.gain ?? 0;\n    const campNote = sport.campBattle(c, teamQuality, Math.random);', test: 'earned rating reaches the next real season and practice renews afterwards' },
 };
 assert(!CONTROL || CONTROL === 'before' || controls[CONTROL], `Unknown practice control: ${CONTROL}`);
