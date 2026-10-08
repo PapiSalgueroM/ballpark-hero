@@ -1,0 +1,47 @@
+In the job at Crystal Palace.
+1) The goal in order
+      a goal is coming at 38, the clock is at 2
+  ok    the goal in order: 46 frames of wind up and flight all read 0 - 0, and the first frame reading 0 - 1 is in phase net with the net marked
+  ok    the line under the pitch never read GOAL! while the ball was on its way (46 frames)
+  ok    the scorer card was inside the pitch on all 29 frames it was up
+  ok    a tap on the card ended the hold (45 frames after it, none with the card)
+      what was drawn: pass/pass 0 - 0 36' e492 x47 | pass/pass 0 - 0 37' e492 x7 | pass/pass 0 - 0 37' e953 x12 | pass/pass 0 - 0 37' e492 x23 | pass/pass 0 - 0 37' e862 x1 | pass/pass 0 - 0 37' e492 x17 | goal/plant 0 - 0 38' e492 x16 | goal/flight 0 - 0 38' e492 x25 | goal/flight 0 - 0 38' e781 x5 | goal/net 0 - 1 card 38' e781 x21 | goal/net 0 - 1 card 38' e546 x4 | TAP | goal/net 0 - 1 card 38' e546 x3 | goal/net 0 - 1 card 38' e776 x1 | pass/pass 0 - 1 39' e492 x1 | pass/pass 0 - 1 39' e776 x2 | pass/pass 0 - 1 39' e492 x54 | pass/pass 0 - 1 40' e492 x3
+      the goal watched: 38' Keane Lewis-Potter; the list at the end: 40'Foul by Jaydee Canvot / 38'GOAL! Keane Lewis-Potter / 35'Booked: Igor Thiago / 35'Foul by Igor Thiago / 34'Foul by Sepp van den Berg
+4) Nothing moves the page
+  ok    window.scrollY stayed at 0 through 242 frames before, during and after a goal
+  ok    window.scrollY stayed at 0 with the change sheet, the squad panel, the help panel, the stats panel open
+3) The fit
+  ok    320 by 568: the stage is the window, strip at 0, pitch 320 by 392 (69 percent of the height), control row ends at 568 of 568, 7 controls all 44 px and none covered
+  [labels 320 by 568] mean overlapping name labels a frame 2.80 over 10 frames of 22 labels
+  ok    390 by 844: the stage is the window, strip at 0, pitch 390 by 668 (79.1 percent of the height), control row ends at 844 of 844, 7 controls all 44 px and none covered
+  [labels 390] mean overlapping name labels a frame 0.54 over 24 frames of 22 labels; before match mode 1.63 at 6b1caa20, ratio 0.33
+  ok    name labels overlap 0.54 a frame, fewer than the 1.63 before match mode
+  ok    768 by 1024: the stage is the window, strip at 12, pitch 372 by 651 (63.6 percent of the height), control row ends at 1012 of 1024, 7 controls all 44 px and none covered
+  [labels 768 by 1024] mean overlapping name labels a frame 0.90 over 10 frames of 22 labels
+  ok    1280 by 900: the stage is the window, strip at 12, pitch 541.5 by 722 (80.2 percent of the height), control row ends at 888 of 900, 7 controls all 44 px and none covered
+  [labels 1280 by 900] mean overlapping name labels a frame 0.30 over 10 frames of 22 labels
+  ok    844 by 390: the stage is the window, strip at 0, pitch 518 by 388.5 (99.6 percent of the height), control row ends at 390 of 390, 7 controls all 44 px and none covered
+  [labels 844 by 390] mean overlapping name labels a frame 0.00 over 10 frames of 22 labels
+6) Back folds the match away
+  ok    Back folds the match to a card reading "Premier League · Round 1Crystal Palace1 - 1BrentfordPaused at 66'Back ", and the clock held at 66' for 2.6 seconds
+  ok    Back to the match puts the stage back and the clock runs on (66' to 67')
+5) The reload
+  ok    reload: left at 67', the save holds 67, the match came back at 67'
+  ok    close: left at 69', the save holds 69, the match came back at 69'
+  ok    hidden tab: the clock read 71' and the save holds 71
+2) Reduced motion
+      a goal is coming at 82, the clock is at 46
+  ok    under reduced motion the score reads 0 - 1 on a frame in phase net
+  ok    the scorer card was inside the pitch on all 155 frames it was up
+      what was drawn: shot/wide 0 - 0 80' e472 x49 | shot/wide 0 - 0 81' e472 x5 | pass/pass 0 - 0 81' e472 x55 | goal/net 0 - 1 card 82' e136 x151 | goal/net 0 - 1 card 83' e136 x4 | pass/pass 0 - 1 83' e472 x56 | pass/pass 0 - 1 84' e472 x1
+      the goal watched: 82' Elliot Stroud; the list at the end: 84'Foul by Charlie Hughes / 82'GOAL! Elliot Stroud / 82'Foul by Charlie Hughes / 80'Shot: Hidemasa Morita / 80'Throw in, Hull City
+  ok    nothing under the pitch or the card was animating in open play, inside a goal, after the goal
+7) A wide screen
+      a goal is coming at 31, the clock is at 2
+  ok    the goal in order: 46 frames of wind up and flight all read 0 - 0, and the first frame reading 1 - 0 is in phase net with the net marked
+  ok    the line under the pitch never read GOAL! while the ball was on its way (46 frames)
+  ok    the list beside the pitch said GOAL! only once the ball was in (first on a frame reading goal/net, score 1 - 0)
+  ok    the scorer card was inside the pitch on all 105 frames it was up
+      what was drawn: pass/pass 0 - 0 29' e949 x48 | shot/plant 0 - 0 30' e949 x16 | shot/flight 0 - 0 30' e949 x30 | shot/wide 0 - 0 30' e949 x14 | shot/wide 0 - 0 31' e949 x4 | pass/pass 0 - 0 31' e949 x14 | goal/plant 0 - 0 31' e949 x16 | goal/flight 0 - 0 31' e949 x26 | goal/flight 0 - 0 32' e949 x4 | goal/net 1 - 0 card 32' e949 x105 | pass/pass 1 - 0 32' e949 x5 | pass/pass 1 - 0 32' e841 x1 | pass/pass 1 - 0 32' e949 x23 | pass/pass 1 - 0 32' e841 x1 | pass/pass 1 - 0 32' e949 x8 | shot/plant 1 - 0 33' e949 x3
+      the goal watched: 31' Quinten Timber; the list at the end: 33'Shot: Daichi Kamada / 33'Save! Carl Rushworth / 31'GOAL! Quinten Timber / 30'Shot: Dwight McNeil / 30'Corner, left, Ismaïla Sarr
+playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
