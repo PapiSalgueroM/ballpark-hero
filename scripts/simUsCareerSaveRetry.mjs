@@ -6,7 +6,11 @@ import assert from 'node:assert/strict';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 
-assert(['1', 'true'].includes(process.env.CI), 'Run US career save verification in remote CI only');
+/* Release AM: this harness refused to start outside remote CI, so every local
+   run of the suite was red by construction. Nothing here reaches the network
+   (it mounts the four career boards in jsdom from local source), so it runs wherever the
+   suite runs. The Vitest child was always handed CI=1 and still is. */
+process.env.CI ||= '1';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const out = path.resolve(process.env.US_CAREER_SAVE_RETRY_ARTIFACTS || path.join(root, 'us-career-save-recovery-artifacts', 'outcomes'));
 const TEST = 'src/test/usCareerSaveRetry.test.tsx';

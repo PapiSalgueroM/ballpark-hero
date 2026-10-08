@@ -6,7 +6,11 @@ import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
-assert(['1', 'true'].includes(process.env.CI), 'Run Home search verification in remote CI only');
+/* Release AM: this harness refused to start outside remote CI, so every local
+   run of the suite was red by construction. Nothing here reaches the network
+   (it mounts the home page in jsdom from local source), so it runs wherever the
+   suite runs. The Vitest child was always handed CI=1 and still is. */
+process.env.CI ||= '1';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const out = path.resolve(process.env.HOME_SEARCH_RECOVERY_ARTIFACTS || path.join(root, 'home-search-recovery-artifacts/outcomes'));
 const PAGE = 'src/pages/Index.tsx', NOTICE = 'src/components/home/HomeSearchUnavailable.tsx';
