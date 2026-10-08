@@ -54,6 +54,17 @@
         or under 0.05 (the same observer scripts/playGridCls.mjs installs).
         The longest task while the key lands and on the first search, at 4
         times throttle, is printed, not asserted.
+        The first read of the rectangle waits for the page's web fonts, with
+        the key still held. The fonts load with display swap, and when they
+        land after the board's first paint the title above the board goes
+        from three lines to two at 1,280 wide and the board moves up 60 px.
+        Measured 2026-10-08 on runners: two walks of eleven read the board
+        at y 465 before and 405 after (both on the fastest runner, about 500
+        ms to nine cells); a probe that held the fonts back 2.5 seconds
+        moved the board the same 60 px with both key files long landed, and
+        with the fonts blocked it never moved. That is the font's doing,
+        not the key's, so this section keeps it out and measures the key
+        alone.
 
    NEGATIVE CONTROLS (CGFIRST_CONTROL=<name>, applied to the served world, the
    files on disk never written; each run exits 0 only when its section went red):
@@ -316,6 +327,11 @@ const guessesLeft = (page) => page.evaluate(() => {
   return m ? Number(m[1]) : null;
 });
 const toastTexts = (page) => page.evaluate(() => [...document.querySelectorAll('[data-sonner-toast]')].map((t) => t.textContent || ''));
+/** Waits, ten seconds at most, until the web fonts the page asked for are in (see section 7 in the header). */
+const fontsIn = (page) => page.evaluate(() => Promise.race([
+  document.fonts.ready.then(() => true),
+  new Promise((resolve) => { setTimeout(() => resolve(false), 10_000); }),
+])).catch(() => false);
 const boardRect = (page) => page.evaluate(() => {
   const cell = document.querySelector('button[data-grid-cell-status]');
   const r = cell.parentElement.parentElement.getBoundingClientRect();
@@ -500,6 +516,7 @@ async function sectionSeven(viewport, withShift) {
   const world = await open({ viewport, hold: ['search', 'judge'], lateCells: CONTROL === 'latecells' });
   const { page } = world;
   const up = await nineVisible(page, CONTROL === 'latecells' ? 5_000 : WAIT);
+  if (up) await fontsIn(page);
   const before = up ? await boardRect(page) : 'no board';
   await world.release();
   await keyLanded(world);
