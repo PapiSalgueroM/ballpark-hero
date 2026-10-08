@@ -1,0 +1,146 @@
+{
+ "base": "http://localhost:4173",
+ "cost": {
+  "both layers": [
+   {
+    "script": 0.589631,
+    "task": 1.771936,
+    "steps": 26,
+    "age": 18,
+    "weekScript": 0.34871699999999994,
+    "weekTask": 1.9551070000000002,
+    "weekStarted": 5,
+    "guardOn": true,
+    "live": true,
+    "stuck": "",
+    "writes": 61.60000000000582,
+    "elements": 55.5,
+    "textNodes": 74.70000000001164
+   },
+   {
+    "script": 0.488364,
+    "task": 1.27827,
+    "steps": 26,
+    "age": 18,
+    "weekScript": 0.31245199999999995,
+    "weekTask": 1.7681820000000001,
+    "weekStarted": 5,
+    "guardOn": true,
+    "live": true,
+    "stuck": "",
+    "writes": 51.09999999997672,
+    "elements": 68,
+    "textNodes": 45.29999999998836
+   },
+   {
+    "script": 0.514253,
+    "task": 1.339113,
+    "steps": 26,
+    "age": 18,
+    "weekScript": 0.2671509999999999,
+    "weekTask": 1.501575,
+    "weekStarted": 5,
+    "guardOn": true,
+    "live": true,
+    "stuck": "",
+    "writes": 60.40000000002328,
+    "elements": 59.300000000046566,
+    "textNodes": 47.79999999993015
+   }
+  ],
+  "layer one only": [
+   {
+    "script": 0.587048,
+    "task": 1.702974,
+    "steps": 26,
+    "age": 18,
+    "weekScript": 0.29035999999999995,
+    "weekTask": 1.690393,
+    "weekStarted": 5,
+    "guardOn": true,
+    "live": false,
+    "stuck": "",
+    "writes": 48.5,
+    "elements": 50.600000000034925,
+    "textNodes": 47.29999999998836
+   },
+   {
+    "script": 0.46369,
+    "task": 1.222315,
+    "steps": 26,
+    "age": 18,
+    "weekScript": 0.26256700000000005,
+    "weekTask": 1.511289,
+    "weekStarted": 5,
+    "guardOn": true,
+    "live": false,
+    "stuck": "",
+    "writes": 47.899999999965075,
+    "elements": 45.90000000002328,
+    "textNodes": 35.29999999998836
+   },
+   {
+    "script": 0.476248,
+    "task": 1.227425,
+    "steps": 26,
+    "age": 18,
+    "weekScript": 0.27517800000000003,
+    "weekTask": 1.56921,
+    "weekStarted": 5,
+    "guardOn": true,
+    "live": false,
+    "stuck": "",
+    "writes": 51.59999999997672,
+    "elements": 52.800000000046566,
+    "textNodes": 39.90000000002328
+   }
+  ],
+  "no guard": [
+   {
+    "script": 0.564612,
+    "task": 1.623887,
+    "steps": 26,
+    "age": 18,
+    "weekScript": 0.298793,
+    "weekTask": 1.691661,
+    "weekStarted": 5,
+    "guardOn": false,
+    "live": false,
+    "stuck": "",
+    "writes": 54.90000000002328,
+    "elements": 56.899999999965075,
+    "textNodes": 29
+   },
+   {
+    "script": 0.468447,
+    "task": 1.192744,
+    "steps": 26,
+    "age": 18,
+    "weekScript": 0.279542,
+    "weekTask": 1.607556,
+    "weekStarted": 5,
+    "guardOn": false,
+    "live": false,
+    "stuck": "",
+    "writes": 51.29999999998836,
+    "elements": 60.800000000046566,
+    "textNodes": 42.5
+   },
+   {
+    "script": 0.536379,
+    "task": 1.45366,
+    "steps": 26,
+    "age": 18,
+    "weekScript": 0.28777300000000006,
+    "weekTask": 1.636809,
+    "weekStarted": 5,
+    "guardOn": false,
+    "live": false,
+    "stuck": "",
+    "writes": 49.39999999990687,
+    "elements": 61.800000000046566,
+    "textNodes": 40.59999999997672
+   }
+  ]
+ }
+}

@@ -1,0 +1,11 @@
+playTranslatedPage: http://localhost:4173, 10 page(s), views phone and desktop, text keep and alter
+  PASS  0. the served entry chunk (/assets/index-CZtnK1wl.js) holds the guard's off switch __DUKB_NO_TRANSLATE_GUARD__
+  PASS  0. the served entry chunk holds the guard's console line
+  PASS  0. the served entry chunk holds layer two's off switch __DUKB_NO_TRANSLATE_LIVE__
+
+COST, 3 run(s) of each, the middle one shown (all runs in brackets). The walk: /soccer-career untranslated, create flow and 12 career presses, 1280 by 900.
+  build           walk script s             walk tasks s              week by week script s     week by week tasks s      100k rewrites ms        20k element ms          20k text node ms        walk
+  both layers     0.51 [0.59 0.49 0.51]     1.34 [1.77 1.28 1.34]     0.31 [0.35 0.31 0.27]     1.77 [1.96 1.77 1.50]     60 [62 51 60]           59 [56 68 59]           48 [75 45 48]           26 steps to age 18 (guard on, layer two on); matches started week by week: 5 5 5
+  layer one only  0.48 [0.59 0.46 0.48]     1.23 [1.70 1.22 1.23]     0.28 [0.29 0.26 0.28]     1.57 [1.69 1.51 1.57]     49 [49 48 52]           51 [51 46 53]           40 [47 35 40]           26 steps to age 18 (guard on, layer two off); matches started week by week: 5 5 5
+  no guard        0.54 [0.56 0.47 0.54]     1.45 [1.62 1.19 1.45]     0.29 [0.30 0.28 0.29]     1.64 [1.69 1.61 1.64]     51 [55 51 49]           61 [57 61 62]           41 [29 43 41]           26 steps to age 18 (guard off, layer two off); matches started week by week: 5 5 5
+playTranslatedPage: cost measured, 0 checks, 0 failed
