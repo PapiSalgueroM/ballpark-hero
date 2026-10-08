@@ -1,0 +1,2 @@
+#!serial
+roles-count-1152: bash .rc/x/roles-count-1152.sh
