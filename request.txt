@@ -1,0 +1,23 @@
+#!build
+#!playwright
+simLiveScores: ENGINES=chromium node scripts/simLiveScores.mjs
+simNoInventedConduct: ENGINES=chromium node scripts/simNoInventedConduct.mjs
+simLegalPages: ENGINES=chromium node scripts/simLegalPages.mjs
+simSingleFooter: ENGINES=chromium node scripts/simSingleFooter.mjs
+simCompletionOnce: ENGINES=chromium node scripts/simCompletionOnce.mjs
+simNoDoubleRecord: ENGINES=chromium node scripts/simNoDoubleRecord.mjs
+simDailyPuzzleContract: ENGINES=chromium node scripts/simDailyPuzzleContract.mjs
+simDailySaveHardening: ENGINES=chromium node scripts/simDailySaveHardening.mjs
+simFetchRetry: ENGINES=chromium node scripts/simFetchRetry.mjs
+simGoogleOnlyReturn: ENGINES=chromium node scripts/simGoogleOnlyReturn.mjs
+simNavbarStatsReads: ENGINES=chromium node scripts/simNavbarStatsReads.mjs
+simScoringCoverage: ENGINES=chromium node scripts/simScoringCoverage.mjs
+simSiteSearch: ENGINES=chromium node scripts/simSiteSearch.mjs
+simGuideHeadings: ENGINES=chromium node scripts/simGuideHeadings.mjs
+simWritesAreSent: ENGINES=chromium node scripts/simWritesAreSent.mjs
+simResultMoment: ENGINES=chromium node scripts/simResultMoment.mjs
+simRevealScroll: ENGINES=chromium node scripts/simRevealScroll.mjs
+simScoreShown: ENGINES=chromium node scripts/simScoreShown.mjs
+simMobileChrome: ENGINES=chromium node scripts/simMobileChrome.mjs
+simCareerTraining: ENGINES=chromium node scripts/simCareerTraining.mjs
+vitest-all-league: node_modules/.bin/vitest run src/lib/soccerCareerLeague.test.ts src/lib/soccerCareerLeagueBand.test.ts src/lib/soccerCareerLeagueSeasons.test.ts src/lib/soccerCareerContinental.test.ts src/lib/soccerCareerDerby.test.ts --testTimeout=300000 --hookTimeout=120000
