@@ -1,0 +1,6 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fit1 exit=0 85s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at four sizes, nothing moves the page, the reload, Back.
+fit2 exit=0 72s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at four sizes, nothing moves the page, the reload, Back.
+fit3 exit=0 75s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at four sizes, nothing moves the page, the reload, Back.
+fit4 exit=0 75s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at four sizes, nothing moves the page, the reload, Back.
+fit-bar exit=1 76s | playLiveMatchFit: control bar turned section 3 red and left sections 1, 2 and 4 green, as it must.

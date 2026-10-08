@@ -1,0 +1,31 @@
+In the job at Crystal Palace.
+1) The goal in order
+      a goal is coming at 66, the clock is at 46
+  ok    the goal in order: 46 frames of wind up and flight all read 0 - 0, and the first frame reading 1 - 0 is in phase net with the net marked
+  ok    the scorer card was inside the pitch on all 29 frames it was up
+  ok    a tap on the card ended the hold (44 frames after it, none with the card)
+      what was drawn: pass/pass 0 - 0 64' x47 | shot/plant 0 - 0 65' x16 | shot/flight 0 - 0 65' x30 | shot/wide 0 - 0 65' x14 | goal/plant 0 - 0 66' x16 | goal/flight 0 - 0 66' x30 | goal/net 1 - 0 card 66' x24 | TAP | goal/net 1 - 0 card 66' x5 | pass/pass 1 - 0 67' x56 | shot/plant 1 - 0 68' x3
+4) Nothing moves the page
+  ok    window.scrollY stayed at 976 through 241 frames before, during and after a goal
+  ok    window.scrollY stayed at 976 with the change sheet, the squad panel, the help panel, the stats panel open
+3) The fit
+  ok    320 by 568: the stage is the window, strip at 0, pitch 320 by 392 (69 percent of the height), control row ends at 568 of 568, 7 controls all 44 px and none covered
+  ok    390 by 844: the stage is the window, strip at 0, pitch 390 by 668 (79.1 percent of the height), control row ends at 844 of 844, 7 controls all 44 px and none covered
+  [labels 390] mean overlapping name labels a frame 0.38 over 24 frames of 20 labels; before match mode 1.63 at 6b1caa20, ratio 0.23
+  ok    name labels overlap 0.38 a frame, fewer than the 1.63 before match mode
+  ok    768 by 1024: the stage is the window, strip at 12, pitch 372 by 651 (63.6 percent of the height), control row ends at 1012 of 1024, 7 controls all 44 px and none covered
+  ok    1280 by 900: the stage is the window, strip at 12, pitch 541.5 by 722 (80.2 percent of the height), control row ends at 888 of 900, 7 controls all 44 px and none covered
+6) Back folds the match away
+  ok    Back folds the match to a card reading "Premier League · Round 1Crystal Palace1 - 0EvertonPaused at 81'Back to", and the clock held at 81' for 2.6 seconds
+  ok    Back to the match puts the stage back and the clock runs on (81' to 82')
+5) The reload
+  ok    reload: left at 82', the save holds 82, the match came back at 82'
+  ok    close: left at 84', the save holds 84, the match came back at 84'
+  ok    hidden tab: the clock read 86' and the save holds 86
+2) Reduced motion
+      a goal is coming at 57, the clock is at 46
+  ok    under reduced motion the score reads 0 - 1 on a frame in phase net
+  ok    the scorer card was inside the pitch on all 155 frames it was up
+      what was drawn: pass/pass 0 - 0 55' x48 | pass/pass 0 - 0 56' x60 | goal/net 0 - 1 card 57' x151 | goal/net 0 - 1 card 58' x4 | pass/pass 0 - 1 58' x56 | pass/pass 0 - 1 59' x1
+  ok    nothing under the pitch or the card was animating in open play, inside a goal, after the goal
+playLiveMatchFit: all green. The goal in order, reduced motion, the fit at four sizes, nothing moves the page, the reload, Back.

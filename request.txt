@@ -1,0 +1,8 @@
+#!build
+#!playwright
+#!serial
+fit1: VERBOSE=1 node scripts/playLiveMatchFit.mjs
+fit2: VERBOSE=1 node scripts/playLiveMatchFit.mjs
+fit3: VERBOSE=1 node scripts/playLiveMatchFit.mjs
+fit4: VERBOSE=1 node scripts/playLiveMatchFit.mjs
+fit-bar: LIVE_FIT_CONTROL=bar node scripts/playLiveMatchFit.mjs
