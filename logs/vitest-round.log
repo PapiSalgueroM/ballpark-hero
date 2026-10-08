@@ -1,0 +1,33 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/usSeason.test.ts [2m([22m[2m21 tests[22m[2m)[22m[32m 212[2mms[22m[39m
+ [32m✓[39m src/test/careerPreDraft.test.tsx [2m([22m[2m26 tests[22m[2m)[22m[33m 402[2mms[22m[39m
+ [32m✓[39m src/test/usCareerSmallItems1104.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 339[2mms[22m[39m
+ [32m✓[39m src/test/usFranchiseYears.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m src/test/usCareerBank.test.ts [2m([22m[2m16 tests[22m[2m)[22m[33m 3407[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1104: real careers never show a balance below zero[2m > [22mNFL: 6 seeded careers, 14 seasons, checked after every call [33m 783[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1104: real careers never show a balance below zero[2m > [22mNBA: 6 seeded careers, 14 seasons, checked after every call [33m 935[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1104: real careers never show a balance below zero[2m > [22mMLB: 6 seeded careers, 14 seasons, checked after every call [33m 957[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1104: real careers never show a balance below zero[2m > [22mNHL: 6 seeded careers, 14 seasons, checked after every call [33m 688[2mms[22m[39m
+ [32m✓[39m src/test/usCareerRookieDeal.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProspect.test.tsx [2m([22m[2m36 tests[22m[2m)[22m[33m 10037[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NFL' quiet legacy restore preserves the existing career unchanged [33m 721[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NHL' quiet legacy restore preserves the existing career unchanged [33m 317[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NFL' plays every saved prospect stage into the earned career and first season [33m 1119[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NBA' plays every saved prospect stage into the earned career and first season [33m 604[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'MLB' plays every saved prospect stage into the earned career and first season [33m 600[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NHL' plays every saved prospect stage into the earned career and first season [33m 351[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NFL' rejects corrupt nested journey saves without changing storage [33m 856[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NBA' rejects corrupt nested journey saves without changing storage [33m 671[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'MLB' rejects corrupt nested journey saves without changing storage [33m 675[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NHL' rejects corrupt nested journey saves without changing storage [33m 722[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m      Tests [22m [1m[32m123 passed[39m[22m[90m (123)[39m
+[2m   Start at [22m 06:10:23
+[2m   Duration [22m 14.28s[2m (transform 3.87s, setup 481ms, collect 7.91s, tests 14.43s, environment 3.68s, prepare 911ms)[22m
+
