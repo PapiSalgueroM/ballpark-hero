@@ -23,11 +23,38 @@
  *     ([data-dukb-storage-notice]), it is one line tall on a phone, and the
  *     game sits no more than that one line lower than it does untouched;
  *   - the home page's first game tile is still above y=430 on a phone;
- *   - nothing reached the browser's real storage in BLOCKED;
  *   - no request to an analytics or ad host without Accept.
  * Then the cookie banner, each choice in a fresh context in each mode: the
- * banner leaves, stays gone after moving to another page in the same visit,
- * and analytics requests appear after Accept and only after Accept.
+ * banner leaves, the next page of the visit is DRAWN with the banner still
+ * gone, and the answer is read where the app reads it: on a game page with an
+ * ad slot (/footle), which shows its slot and asks for the ad script after
+ * Accept and does neither after Essential only.
+ *
+ * ADDED AFTER THE REVIEW, each for something the first cut passed and should
+ * not have:
+ *   LEAVING. Twelve routes, each sat on for one idle second and then left
+ *     through the footer's link, untouched, BLOCKED and FULL. The next page's
+ *     own heading has to be on the screen inside ten seconds, and in FULL the
+ *     page may not spin on refused writes. Measured on the first cut with
+ *     storage full and no guest handle stored yet: 4,440 to 5,882 refused
+ *     writes of the guest handle a second on every game page, and a link that
+ *     changed the address while the next page never drew in 25 seconds
+ *     (getGuestHandle minted a new name on every call, the navbar's stats
+ *     hook depends on it, so the page rendered for ever). The first cut only
+ *     ever left from the home page and only read the pathname.
+ *   A DAILY, PLAYED. The vote on /hof-or-bust (its data is in the bundle):
+ *     vote, leave through a link, come back with the back button. Untouched
+ *     and BLOCKED the verdict is still up and one community vote went out; in
+ *     FULL nothing remembers the vote, the page offers it again, and for that
+ *     reason no vote is sent at all (the first cut sent one every time).
+ *   NARROWER PHONES. The notice at 320, 344 and 360 wide. The first copy was
+ *     56 characters and wrapped to a second line (48px) at 360 and below.
+ *   THE PRESSES. As many presses must change the page as do untouched, less
+ *     one (the idle game moves on its own). One working press used to pass.
+ * Two families of checks were taken out because they could not fail: "nothing
+ * reached the browser's real storage" in the simulated BLOCKED arm (the only
+ * road to it is the accessor this harness replaced) and the same for the
+ * banner in FULL (every write throws there by construction).
  *
  * And the NATIVE arm, which simulates nothing: a real Chromium profile with
  * the cookie content setting on block, the "block all cookies" a person can
@@ -152,6 +179,20 @@ const COUNT_MARGIN = 3;
 const NOTICE_MAX_HEIGHT = 30;
 const GAME_SHIFT_MAX = 30;
 const PRESSES = 4;
+const CHANGED_MARGIN = 1;
+/** Leaving a game through a link: the next page has to be drawn inside this. */
+const LEAVE_CAP_MS = 10000;
+/** Writes refused in one idle second with storage full. */
+const IDLE_REFUSED_CEILING = 50;
+/** Phones narrower than the 390 the main walk uses: the notice must still be one line. */
+const NARROW_WIDTHS = [320, 344, 360];
+/** Left through a real link with storage broken: every game route, a daily, and a hub. */
+const LEAVE_ROUTES = ['/soccer-career', '/club-manager', '/nba-my-career', '/nfl-my-career', '/stadium-tycoon',
+  '/college-grid', '/front-office', '/build-your-xi', '/footle', '/free-kick', '/hof-or-bust', '/soccer'];
+/** A daily with its data in the bundle, so it can be played with the database host blocked. */
+const DAILY_ROUTE = '/hof-or-bust';
+/** A game page that carries an ad slot, for the cookie answer to be read on. */
+const AD_ROUTE = '/footle';
 
 const THIRD_PARTY = /googletagmanager\.com|google-analytics\.com|googlesyndication\.com|doubleclick\.net|googleadservices\.com/;
 const STORAGE_WORDS = /storage|SecurityError|QuotaExceeded|quota has been exceeded|Access is denied/i;
@@ -178,6 +219,9 @@ function breakStorage({ mode, raw, rawSwitch }) {
     value: { own: !!native, configurable: native ? !!native.configurable : null },
     enumerable: false, configurable: true,
   });
+  /* every write the FULL arm refuses is counted, so a page that spins on a
+     refused write shows up as a rate and not just as a slow page */
+  Object.defineProperty(window, '__harnessRefused', { value: { total: 0 }, enumerable: false, configurable: true });
   if (raw) window[rawSwitch] = true;
   if (mode === 'blocked') {
     for (const name of ['localStorage', 'sessionStorage']) {
@@ -199,6 +243,7 @@ function breakStorage({ mode, raw, rawSwitch }) {
     }
   } else if (mode === 'full') {
     Storage.prototype.setItem = function setItem() {
+      window.__harnessRefused.total += 1;
       throw new DOMException('The quota has been exceeded.', 'QuotaExceededError');
     };
   }
@@ -208,12 +253,14 @@ async function openPage(browser, { view, mode, raw }) {
   const ctx = await browser.newContext({ viewport: { width: view.width, height: view.height } });
   await ctx.addInitScript(breakStorage, { mode, raw, rawSwitch: RAW_SWITCH });
   const page = await ctx.newPage();
-  const seen = { pageErrors: [], storageConsole: [], thirdParty: [] };
+  const seen = { pageErrors: [], storageConsole: [], thirdParty: [], votesSent: 0 };
   const origin = new URL(BASE).origin;
   await page.route(/supabase\.co/, r => r.abort());
   await page.route('**/*', r => {
     const url = r.request().url();
     if (THIRD_PARTY.test(url)) seen.thirdParty.push(url.slice(0, 90));
+    /* a community vote on its way out (it is aborted like every other request off the origin) */
+    if (/\/rest\/v1\/hof_votes/.test(url) && r.request().method() === 'POST') seen.votesSent += 1;
     let sameOrigin = false;
     try { sameOrigin = new URL(url).origin === origin; } catch { /* data: and the like */ sameOrigin = true; }
     return sameOrigin ? r.continue() : r.abort();
@@ -261,8 +308,6 @@ function readState() {
     .map(a => ({ p: a.getAttribute('href') || '', top: a.getBoundingClientRect().top + window.scrollY }))
     .filter(x => x.p !== '/' && !NON_GAME.test(x.p) && x.top > 0)
     .sort((a, b) => a.top - b.top);
-  let realKeys = null;
-  try { realKeys = window.__harnessRealLocal ? window.__harnessRealLocal.length : null; } catch (e) { realKeys = null; }
   let storageKind = 'threw';
   try { storageKind = Object.prototype.toString.call(window.localStorage); } catch (e) { storageKind = 'threw'; }
   return {
@@ -281,7 +326,6 @@ function readState() {
     mainTop: main ? Math.round(main.getBoundingClientRect().top + window.scrollY) : null,
     firstTile: tiles[0] || null,
     banner: !!document.querySelector('[role="region"][aria-label="Cookie choices"]'),
-    realKeys,
     storageKind,
     native: window.__harnessNative || null,
   };
@@ -380,15 +424,16 @@ function judgeArm(arm, open, { isGame, expectNotice, mountOnly }) {
   say(arm.pageErrors.length <= open.pageErrors.length,
     `${tag(arm)}: ${arm.pageErrors.length} uncaught errors (untouched ${open.pageErrors.length})${arm.pageErrors.length ? ': ' + arm.pageErrors[0] : ''}`);
   say(arm.thirdParty === 0, `${tag(arm)}: ${arm.thirdParty} analytics or ad requests without Accept`);
-  if (arm.mode === 'blocked') {
-    say(s.realKeys === 0 && (stateNow.realKeys === 0), `${tag(arm)}: nothing reached the browser's real storage (${stateNow.realKeys} keys)`);
-  }
   if (mountOnly) return;
   if (isGame) {
     const pressedOk = arm.presses.filter(p => !p.threw && !p.failed).length;
     const basePressed = open.presses.filter(p => !p.threw && !p.failed).length;
-    say(pressedOk >= basePressed && arm.changed >= Math.min(1, open.changed),
-      `${tag(arm)}: ${pressedOk} presses went through, ${arm.changed} changed the page (untouched ${basePressed} and ${open.changed}): ${arm.presses.map(p => p.label).join(' > ') || 'nothing to press'}`);
+    /* as many presses have to change the page as do untouched, less the one
+       press of run to run noise measured on the idle game. One press that
+       works is no longer enough on a page where four do. */
+    const changedFloor = Math.max(Math.min(1, open.changed), open.changed - CHANGED_MARGIN);
+    say(pressedOk >= basePressed && arm.changed >= changedFloor,
+      `${tag(arm)}: ${pressedOk} presses went through, ${arm.changed} changed the page (untouched ${basePressed} and ${open.changed}, floor ${changedFloor}): ${arm.presses.map(p => p.label).join(' > ') || 'nothing to press'}`);
     if (expectNotice) {
       say(!!s.notice && s.notice.shown && s.notice.kind === arm.mode,
         `${tag(arm)}: the notice is on the page${s.notice ? ` ("${s.notice.text}")` : ''}`);
@@ -410,6 +455,157 @@ function judgeArm(arm, open, { isGame, expectNotice, mountOnly }) {
   }
 }
 
+/** What is on the screen right now: the address and the page's own heading. */
+function drawn() {
+  const root = document.getElementById('root');
+  const h = root && root.querySelector('h1');
+  const clean = t => (t || '').replace(/\s+/g, ' ').trim();
+  return { path: location.pathname, h1: clean(h && h.innerText).slice(0, 40) };
+}
+
+/**
+ * Leave the page through a real link in the app (the footer's What's New) and
+ * wait for the next page to be DRAWN: the address alone is not enough. The
+ * review measured a game page under full storage where a link changed the
+ * address and the next page never drew in 25 seconds, and the first cut of
+ * this harness, which read only the pathname, passed it.
+ */
+async function leaveThroughLink(page, before) {
+  const out = { clicked: false, drewMs: null, after: before };
+  out.clicked = await page.evaluate(() => {
+    const a = document.querySelector('footer a[href="/whats-new"]') || document.querySelector('#root a[href="/whats-new"]');
+    if (!a) return false;
+    a.click();
+    return true;
+  });
+  const started = Date.now();
+  while (out.clicked && Date.now() - started < LEAVE_CAP_MS) {
+    const now = await page.evaluate(drawn).catch(() => null);
+    if (now) out.after = now;
+    if (now && now.path === '/whats-new' && now.h1 && now.h1 !== before.h1) { out.drewMs = Date.now() - started; break; }
+    await page.waitForTimeout(100);
+  }
+  return out;
+}
+
+/** One route, one mode, on a phone: sit idle for a second, then leave through a link. */
+async function leaveVisit(browser, { route, mode, raw }) {
+  const { ctx, page, seen } = await openPage(browser, { view: VIEWS[0], mode, raw });
+  const out = { route, mode, idleRefused: null, clicked: false, drewMs: null, before: null, after: null };
+  try {
+    await page.goto(BASE + route, { waitUntil: 'load', timeout: 45000 });
+    await settle(page);
+    const refused = () => page.evaluate(() => (window.__harnessRefused ? window.__harnessRefused.total : 0));
+    const r0 = await refused();
+    await page.waitForTimeout(1000);
+    out.idleRefused = (await refused()) - r0;
+    out.before = await page.evaluate(drawn);
+    Object.assign(out, await leaveThroughLink(page, out.before));
+  } catch (e) {
+    out.crash = String(e && e.message ? e.message : e).split('\n')[0].slice(0, 160);
+  }
+  out.pageErrors = seen.pageErrors.slice();
+  await ctx.close();
+  return out;
+}
+
+function judgeLeave(arm, open, label) {
+  const name = `${arm.route} phone ${label.toUpperCase()} leaving`;
+  if (arm.crash || !arm.before) { say(false, `${name}: did not load (${arm.crash || 'no state'})`); return; }
+  say(arm.clicked && arm.drewMs !== null,
+    `${name}: ${arm.clicked ? 'the link was pressed' : 'NO LINK TO PRESS'}, ${arm.drewMs === null ? `the next page NEVER DREW in ${LEAVE_CAP_MS} ms (address ${arm.after.path}, heading still "${arm.after.h1}")` : `"${arm.after.h1}" drew in ${arm.drewMs} ms`} (untouched ${open.drewMs === null ? 'never' : open.drewMs + ' ms'})`);
+  if (arm.mode === 'full') {
+    say(arm.idleRefused <= IDLE_REFUSED_CEILING,
+      `${name}: ${arm.idleRefused} writes refused in one idle second (ceiling ${IDLE_REFUSED_CEILING})`);
+  }
+}
+
+/**
+ * A daily, actually played with storage broken: the vote on HoF or Bust (its
+ * data is in the bundle, so it plays with the database host blocked). Vote,
+ * leave through a link, come back with the browser's back button, and see
+ * what the game remembers and how many community votes went out.
+ *   untouched and BLOCKED: the verdict is still up on the way back (in
+ *     BLOCKED the seam's stand in kept it for the visit) and exactly one
+ *     vote was sent.
+ *   FULL: nothing remembers the vote, so the page offers it again, and for
+ *     that very reason NO vote is sent, however often it is cast. The first
+ *     cut sent one each time.
+ */
+async function dailyVisit(browser, { mode, raw }) {
+  const { ctx, page, seen } = await openPage(browser, { view: VIEWS[0], mode, raw });
+  const out = { mode, steps: [] };
+  const voteUp = () => page.evaluate(() => [...document.querySelectorAll('#root button')].some(b => /^\s*Bust\s*$/.test(b.innerText || '')));
+  const revealed = () => page.evaluate(() => /Verdict Revealed/.test((document.getElementById('root') || {}).innerText || ''));
+  const castVote = () => page.evaluate(() => {
+    const b = [...document.querySelectorAll('#root button')].find(x => /^\s*Bust\s*$/.test(x.innerText || ''));
+    if (!b) return false;
+    b.click();
+    return true;
+  });
+  try {
+    await page.goto(BASE + DAILY_ROUTE, { waitUntil: 'load', timeout: 45000 });
+    await settle(page);
+    out.offered = await voteUp();
+    out.cast = await castVote();
+    await page.waitForTimeout(800);
+    out.revealedAfterVote = await revealed();
+    out.sentAfterVote = seen.votesSent;
+    const before = await page.evaluate(drawn);
+    const left = await leaveThroughLink(page, before);
+    out.left = left.drewMs !== null;
+    await page.evaluate(() => window.history.back());
+    const started = Date.now();
+    while (Date.now() - started < LEAVE_CAP_MS) {
+      const now = await page.evaluate(drawn).catch(() => null);
+      if (now && now.path === DAILY_ROUTE && now.h1 === before.h1) break;
+      await page.waitForTimeout(100);
+    }
+    await settle(page, 6000);
+    out.revealedOnReturn = await revealed();
+    out.offeredOnReturn = await voteUp();
+    if (out.offeredOnReturn) {
+      out.castAgain = await castVote();
+      await page.waitForTimeout(800);
+      out.revealedAfterSecond = await revealed();
+    }
+    out.sentInAll = seen.votesSent;
+  } catch (e) {
+    out.crash = String(e && e.message ? e.message : e).split('\n')[0].slice(0, 160);
+  }
+  out.pageErrors = seen.pageErrors.slice();
+  await ctx.close();
+  return out;
+}
+
+function judgeDaily(run, label) {
+  const name = `${DAILY_ROUTE} phone ${label.toUpperCase()} played`;
+  if (run.crash) { say(false, `${name}: ${run.crash}`); return; }
+  say(run.offered && run.cast && run.revealedAfterVote, `${name}: the vote was offered (${run.offered}), cast (${run.cast}) and the verdict came up (${run.revealedAfterVote})`);
+  say(run.left, `${name}: left through a link and the next page drew`);
+  say(run.pageErrors.length === 0, `${name}: ${run.pageErrors.length} uncaught errors${run.pageErrors.length ? ': ' + run.pageErrors[0] : ''}`);
+  if (run.mode === 'full') {
+    say(!run.revealedOnReturn && run.offeredOnReturn && run.revealedAfterSecond === true,
+      `${name}: nothing was kept, so the vote is offered again on the way back (${run.offeredOnReturn}) and can be cast again (${run.revealedAfterSecond})`);
+    say(run.sentInAll === 0, `${name}: ${run.sentInAll} community votes sent for 2 votes cast (a vote nothing remembers is not sent)`);
+  } else {
+    say(run.revealedOnReturn && !run.offeredOnReturn, `${name}: the verdict is still up on the way back (${run.revealedOnReturn}) and the vote is not offered again`);
+    say(run.sentAfterVote === 1 && run.sentInAll === 1, `${name}: ${run.sentInAll} community vote sent in the visit (${run.sentAfterVote} at the vote)`);
+  }
+}
+
+/** The notice on a phone narrower than 390: still one line. */
+async function narrowCheck(browser, { width, mode, raw, expectNotice }) {
+  const view = { name: `${width} wide`, width, height: 740 };
+  const run = await visit(browser, { route: '/soccer-career', view, mode, raw, walk: false });
+  const name = `/soccer-career ${width} wide ${mode.toUpperCase()}`;
+  const s = run.first;
+  if (!s) { say(false, `${name}: did not load (${run.crash || 'no state'})`); return; }
+  if (!expectNotice) { say(!s.notice, `${name}: no notice (storage was left alone)`); return; }
+  say(!!s.notice && s.notice.shown && s.notice.height <= NOTICE_MAX_HEIGHT,
+    `${name}: the notice is one line tall, ${s.notice ? s.notice.height + 'px' : 'MISSING'} (ceiling ${NOTICE_MAX_HEIGHT})${s.notice ? `: "${s.notice.text}"` : ''}`);
+}
+
 /** The cookie banner, one choice, one mode, in a fresh context on a phone. */
 async function bannerCheck(browser, { mode, raw, choice }) {
   const { ctx, page, seen } = await openPage(browser, { view: VIEWS[0], mode, raw });
@@ -427,28 +623,52 @@ async function bannerCheck(browser, { mode, raw, choice }) {
       await page.waitForTimeout(800);
     }
     say((await banner.count()) === 0, `${name}: the banner left`);
-    /* on to another page of the same visit, through a real link in the app */
-    const moved = await page.evaluate(() => {
-      const a = document.querySelector('footer a[href="/whats-new"]') || document.querySelector('#root a[href="/whats-new"]');
-      if (!a) return false;
-      a.click();
-      return true;
-    });
-    await page.waitForTimeout(500);
-    await settle(page);
-    const where = await page.evaluate(() => location.pathname);
-    say(moved && where === '/whats-new' && (await banner.count()) === 0, `${name}: still gone on the next page of the visit (${where})`);
+    /* on to another page of the same visit, through a real link in the app.
+       The banner lives in the app shell and stays mounted across the move,
+       so "still gone" alone would pass for an answer that was lost and for a
+       page that never drew: the next page has to be on the screen too. */
+    await page.evaluate(() => { window.__harnessVisit = 'same page load'; });
+    const home = await page.evaluate(drawn);
+    const left = await leaveThroughLink(page, home);
+    say(left.drewMs !== null && (await banner.count()) === 0,
+      `${name}: still gone on the next page of the visit, and that page drew (${left.after.path}, "${left.after.h1}"${left.drewMs === null ? ', NEVER DREW' : ` in ${left.drewMs} ms`})`);
+    /* And the answer itself, read where the app reads it: a game page with an
+       ad slot mounts it fresh and asks the seam what was answered. After
+       Accept the slot appears and asks for the ad script; after Essential
+       only there is no slot and no request. With storage full the answer
+       lives only in the seam, so an ad slot reading the bare localStorage
+       fails this line (it failed nothing before). */
+    await page.evaluate(route => {
+      window.history.pushState({}, '', route);
+      window.dispatchEvent(new PopStateEvent('popstate', { state: {} }));
+    }, AD_ROUTE);
+    let slot = false;
+    const started = Date.now();
+    while (Date.now() - started < 6000) {
+      slot = await page.evaluate(() => !!document.querySelector('[data-dukb-manual-ad] ins.adsbygoogle')).catch(() => false);
+      if (slot) break;
+      await page.waitForTimeout(150);
+    }
+    await page.waitForTimeout(400);
+    const there = await page.evaluate(drawn);
+    const sameLoad = await page.evaluate(() => window.__harnessVisit === 'same page load').catch(() => false);
+    const adAsked = seen.thirdParty.filter(u => /adsbygoogle\.js/.test(u)).length;
+    say(there.path === AD_ROUTE && there.h1 !== left.after.h1 && sameLoad && (await banner.count()) === 0,
+      `${name}: on to ${AD_ROUTE} inside the same page load, drawn ("${there.h1}"), banner still gone`);
+    if (choice === 'accept') say(slot && adAsked > 0, `${name}: the answer held, ${AD_ROUTE} mounted its ad slot (${slot}) and asked for the ad script ${adAsked} time(s)`);
+    else say(!slot && adAsked === 0, `${name}: the answer held, no ad slot (${slot}) and ${adAsked} requests for the ad script on ${AD_ROUTE}`);
     const after = seen.thirdParty.length;
-    if (choice === 'accept') say(after > 0, `${name}: ${after} analytics requests after Accept`);
+    if (choice === 'accept') say(after > 0, `${name}: ${after} analytics or ad requests after Accept`);
     else say(after === 0, `${name}: ${after} analytics or ad requests after Essential only`);
     const errors = [...seen.pageErrors, ...seen.storageConsole];
     say(errors.length === 0, `${name}: no uncaught error${errors.length ? ': ' + errors[0] : ''}`);
-    const held = await page.evaluate(() => {
-      try { return window.__harnessRealLocal ? window.__harnessRealLocal.getItem('cookie-consent') : null; } catch (e) { return 'threw'; }
-    });
-    const answer = choice === 'accept' ? 'accepted' : 'essential';
-    if (mode === 'open') say(held === answer, `${name}: the answer is in the browser's real storage (${held})`);
-    else say(held === null, `${name}: nothing was written to the browser's real storage (${held})`);
+    if (mode === 'open') {
+      const held = await page.evaluate(() => {
+        try { return window.__harnessRealLocal ? window.__harnessRealLocal.getItem('cookie-consent') : null; } catch (e) { return 'threw'; }
+      });
+      const answer = choice === 'accept' ? 'accepted' : 'essential';
+      say(held === answer, `${name}: the answer is in the browser's real storage (${held})`);
+    }
   } catch (e) {
     say(false, `${name}: ${String(e && e.message ? e.message : e).split('\n')[0].slice(0, 160)}`);
   }
@@ -595,6 +815,39 @@ for (const arm of ARMS) {
   const mode = CONTROL === 'open' ? 'open' : arm;
   for (const choice of ['essential', 'accept']) await bannerCheck(browser, { mode, raw, choice });
   if (CONTROL === 'open') break;
+}
+
+console.log('\nleaving a page through a link');
+const leaving = await pool(LEAVE_ROUTES.filter(r => !ONLY || ONLY.includes(r)), JOBS, async route => {
+  const open = await leaveVisit(browser, { route, mode: 'open', raw: false });
+  const arms = [];
+  for (const arm of ARMS) {
+    const mode = CONTROL === 'open' ? 'open' : arm;
+    arms.push({ run: await leaveVisit(browser, { route, mode, raw }), label: CONTROL === 'open' ? `open again (${arm} arm)` : arm });
+  }
+  return { route, open, arms };
+});
+for (const l of leaving) {
+  say(l.open.clicked && l.open.drewMs !== null,
+    `${l.route} phone OPEN leaving: baseline, ${l.open.drewMs === null ? `NEVER DREW (${l.open.crash || (l.open.clicked ? 'no new heading' : 'no link')})` : `"${l.open.after.h1}" drew in ${l.open.drewMs} ms`}`);
+  for (const a of l.arms) judgeLeave(a.run, l.open, a.label);
+}
+
+if (!ONLY || ONLY.includes(DAILY_ROUTE)) {
+  console.log('\na daily, played: the vote on ' + DAILY_ROUTE);
+  judgeDaily(await dailyVisit(browser, { mode: 'open', raw: false }), 'open');
+  for (const arm of ARMS) {
+    const mode = CONTROL === 'open' ? 'open' : arm;
+    judgeDaily(await dailyVisit(browser, { mode, raw }), CONTROL === 'open' ? `open again (${arm} arm)` : arm);
+  }
+}
+
+if (!ONLY || ONLY.includes('/soccer-career')) {
+  console.log('\nthe notice on narrower phones');
+  for (const arm of ARMS) {
+    const mode = CONTROL === 'open' ? 'open' : arm;
+    for (const width of NARROW_WIDTHS) await narrowCheck(browser, { width, mode, raw, expectNotice: CONTROL !== 'open' });
+  }
 }
 await browser.close();
 
