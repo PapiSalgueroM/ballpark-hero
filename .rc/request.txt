@@ -1,0 +1,34 @@
+# Round 1105 fixes, merged head: the first tap walk plain and under every control, the fixer's probe, then one mutation at a time (each line exits 0 only when every named gate went red)
+#!serve
+#!playwright
+#!serial
+walk: node scripts/playCollegeGridFirstTap.mjs
+walk-2: node scripts/playCollegeGridFirstTap.mjs
+walk-3: node scripts/playCollegeGridFirstTap.mjs
+walk-nosurname: CGFIRST_CONTROL=nosurname node scripts/playCollegeGridFirstTap.mjs
+walk-latecells: CGFIRST_CONTROL=latecells node scripts/playCollegeGridFirstTap.mjs
+walk-paged: CGFIRST_CONTROL=paged node scripts/playCollegeGridFirstTap.mjs
+walk-slow: CGFIRST_CONTROL=slow node scripts/playCollegeGridFirstTap.mjs
+walk-nolist: CGFIRST_CONTROL=nolist node scripts/playCollegeGridFirstTap.mjs
+walk-nojudge: CGFIRST_CONTROL=nojudge node scripts/playCollegeGridFirstTap.mjs
+walk-accepted: CGFIRST_CONTROL=accepted node scripts/playCollegeGridFirstTap.mjs
+walk-unknown-control: CGFIRST_CONTROL=nosuchcontrol node scripts/playCollegeGridFirstTap.mjs
+fxprobe: node .rc/x/fxprobe.mjs
+M8: bash .rc/x/fxmutrun.sh M8 fc
+M12: bash .rc/x/fxmutrun.sh M12 search shipped
+M13: bash .rc/x/fxmutrun.sh M13 search shipped
+M23: bash .rc/x/fxmutrun.sh M23 search
+M24: bash .rc/x/fxmutrun.sh M24 search
+N1: bash .rc/x/fxmutrun.sh N1 engine
+N2: bash .rc/x/fxmutrun.sh N2 engine
+N3: bash .rc/x/fxmutrun.sh N3 engine
+N4: bash .rc/x/fxmutrun.sh N4 fc
+N5: bash .rc/x/fxmutrun.sh N5 fc
+N6: bash .rc/x/fxmutrun.sh N6 fc
+N7: bash .rc/x/fxmutrun.sh N7 fc
+N8: bash .rc/x/fxmutrun.sh N8 fc
+N9: bash .rc/x/fxmutrun.sh N9 engine
+N10: bash .rc/x/fxmutrun.sh N10 engine
+N11: bash .rc/x/fxmutrun.sh N11 engine
+M12-walk: bash .rc/x/fxmutrun.sh M12 walk
+clean: git status --porcelain --untracked-files=no | wc -l
