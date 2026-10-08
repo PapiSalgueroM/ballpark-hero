@@ -1,0 +1,4 @@
+build exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+codex-boxing exit=0 8s | Boxing forecast: 4 actual-route journeys passed.
+codex-home exit=0 36s | Scope: actual built signed-out Home with explicit locally fulfilled public reads and real cached fonts/flags; no gameplay or production forwarding.
+codex-hub exit=1 2s | Node.js v24.21.0

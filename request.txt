@@ -1,0 +1,6 @@
+#!build
+#!playwright
+#!serial
+codex-boxing: mkdir -p boxing-show-forecast-artifacts && node scripts/playBoxingShowForecast1086.mjs --prefetch-fonts-only && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playBoxingShowForecast1086.mjs
+codex-home: mkdir -p home-search-recovery-artifacts && node scripts/playHomeSearchRecovery1088.mjs --prefetch-assets-only && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" xvfb-run -a timeout --signal=TERM --kill-after=15s 8m node scripts/playHomeSearchRecovery1088.mjs
+codex-hub: mkdir -p soccer-hub-grid-artifacts && node scripts/playSoccerHubGrid1089.mjs --prepare-assets-only && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" timeout --signal=TERM --kill-after=15s 12m node scripts/playSoccerHubGrid1089.mjs

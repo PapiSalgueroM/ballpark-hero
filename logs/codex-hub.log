@@ -1,0 +1,363 @@
+Prepared real playing, newspaper and summary states from attempt 0.
+Retained actual engine bundle, every attempt and 93 declared asset payloads.
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Two-line inverse exactly restores pinned old page
++ actual - expected
+... Skipped lines
+
+  'import { Component, Fragment, lazy, Suspense, useState, useCallback, useRef, useEffect, useMemo, type ReactNode } from "react";\n' +
++   "import { formatNumber } from '@/lib/formatNumber';\n" +
+    "import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';\n" +
+    'import { useGameCompletion } from "@/hooks/useGameCompletion";\n' +
+    'import { recordCompletion, recordActivity, recordStreakDay } from "@/lib/completions";\n' +
+    'import PageSeo from "@/components/seo/PageSeo";\n' +
+    "import GameSeoContent from '@/components/seo/GameSeoContent';\n" +
+...
+    'import PhonePanel from "@/components/soccer-career/PhonePanel";\n' +
+-   'import TrainingPanel from "@/components/soccer-career/TrainingPanel";\n' +
+    'import CareerStory from "@/components/soccer-career/CareerStory";\n' +
+    'import { BAND_CLASS } from "@/lib/careerRatingBand";\n' +
+    'import { soccerRatingRows, readMatchRating, readOvr, ratingBand } from "@/lib/careerSeasonRatings";\n' +
+    'import { applyDrillResult, type DrillKind } from "@/lib/careerDrills";\n' +
+    'import { rollStartingOverall, rollPotential, potentialTier, adjustClubsForYear, allocOverall, normalizeAllocation, allocMax, ALLOC_MIN, playsLike, stepAllocation } from "@/lib/careerEras";\n' +
+...
+    'import { SignedSlip } from "@/components/soccer-career/SignedSlip";\n' +
++   'import { SoccerOfferReview } from "@/components/soccer-career/SoccerOfferReview";\n' +
++   'import { buildSoccerOfferReview } from "@/lib/soccerOfferReview";\n' +
+    'import type { SignedNote } from "@/components/soccer-career/SignedSlip";\n' +
+    'import { AcademyFocusPicker, AcademyReportCard } from "@/components/soccer-career/AcademyReportCard";\n' +
+    'import { buildAcademyReport, academyFocusOf, withAcademyFocus } from "@/lib/soccerCareerAcademy";\n' +
+    'import type { AcademyFocus, AcademyReport } from "@/lib/soccerCareerAcademy";\n' +
+    'import { heatLabel } from "@/lib/soccerCareerCorruption";\n' +
+...
+    "import { reloadToRetryChunk } from '@/lib/freshBuild';\n" +
++   "import { readSeasonMoments } from '@/lib/season/momentsSave';\n" +
+    '/* Round 1045: the Season Centre loads only when a person presses for it, and\n' +
+    '   the Ratings dialog when it is opened (step 7 of the round: the weight it\n' +
+    '   adds is paid here, never by a budget). */\n' +
+    'const SoccerSeasonCentre = lazy(() => import("@/components/soccer-career/SoccerSeasonCentre"));\n' +
+    'const SeasonRatings = lazy(() => import("@/components/soccer-career/SeasonRatings"));\n' +
++   '/* Round 1047: the training ground (its drills and its boards) loads when it\n' +
++   "   is opened, not with the page; the page's budget came down by what it weighed. */\n" +
++   'const TrainingPanel = lazy(() => import("@/components/soccer-career/TrainingPanel"));\n' +
+    '/* Round 1045: a boundary inside the lazy chunk cannot catch the chunk failing\n' +
+    '   to load (a deploy swapped the files), so the mount carries its own: the\n' +
+    '   overlay says so with Retry and Close, and the save is never touched.\n' +
+    '   Retry reloads the page (src/lib/freshBuild.ts, Round 832): a lazy import\n' +
+    '   that failed stays failed for the life of the page, so a remount alone\n' +
+...
+    '            <button type="button" onClick={() => { if (!reloadToRetryChunk()) this.setState(s => ({ failed: false, tries: s.tries + 1 })); }} className="h-10 flex-1 rounded-lg border border-border text-sm font-semibold">↻ Retry</button>\n' +
++   '            <button type="button" onClick={this.props.onClose} className="h-10 flex-1 rounded'... 252659 more characters
+-   '            <button type="button" onClick={this.props.onClose} className="h-10 flex-1 rounded-lg bg-primary text-sm font-bold text-primary-foreground">✕ Close it</button>\n' +
+-   '          </div>\n' +
+-   '        </div>\n' +
+-   '      </div>\n' +
+-   '    );\n' +
+-   '  }\n' +
+-   '}\n' +
+-   '\n' +
+-   '/* ─── Constants ─── */\n' +
+-   '// Round 76: 131 nations (was 49), every one with a real flag in FlagImg,\n' +
+-   '// sorted alphabetically so yours is findable in the scroll.\n' +
+-   'const NATIONALITIES = [\n' +
+-   '  "Albania","Algeria","Angola","Argentina","Armenia","Australia","Austria","Azerbaijan",\n' +
+-   '  "Bahrain","Belarus","Belgiu'... 249475 more characters
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerHubGrid1089.mjs:137:46 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'import { Component, Fragment, lazy, Suspense, useState, useCallback, useRef, useEffect, useMemo, type ReactNode } from "react";\n' +
+    "import { formatNumber } from '@/lib/formatNumber';\n" +
+    "import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';\n" +
+    'import { useGameCompletion } from "@/hooks/useGameCompletion";\n' +
+    'import { recordCompletion, recordActivity, recordStreakDay } from "@/lib/completions";\n' +
+    'import PageSeo from "@/components/seo/PageSeo";\n' +
+    "import GameSeoContent from '@/components/seo/GameSeoContent';\n" +
+    'import { GameNavbar } from "@/components/game/GameNavbar";\n' +
+    'import { GameHelp } from "@/components/game/GameHelp";\n' +
+    "import VictoryMoment from '@/components/game/VictoryMoment';\n" +
+    'import { Button } from "@/components/ui/button";\n' +
+    'import { Input } from "@/components/ui/input";\n' +
+    'import { Label } from "@/components/ui/label";\n' +
+    'import {\n' +
+    '  Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue,\n' +
+    '} from "@/components/ui/select";\n' +
+    'import { groupByConfederation } from "@/lib/confederationGroups";\n' +
+    'import { useAuth } from "@/contexts/AuthContext";\n' +
+    'import { AuthModal } from "@/components/auth/AuthModal";\n' +
+    'import { toast } from "sonner";\n' +
+    'import { ChevronRight } from "lucide-react";\n' +
+    'import { getPersonalityDef, getAgentDef } from "@/lib/soccerCareerLife";\n' +
+    'import {\n' +
+    '  type CareerState, type SeasonRecord, type ClubData, type ContractOffer, type TransferSituation,\n' +
+    '  type RandomEvent, type EventChoice, type WorldCupResult, type WCMatch,\n' +
+    '  type RivalPlayer, type RivalryEvent, type RivalrySummary,\n' +
+    '  type LifestyleLevel, type FamilyStatus, type BallonDorResult, type BallonDorNominee,\n' +
+    '  type UCLResult, type UCLKnockoutMatch, type Award,\n' +
+    '  type LegacyResult, type LegacyTier, type PostRetirementChoice, type ManagerState,\n' +
+    '  type PunditState, type OwnerState, type PunditAction,\n' +
+    '  type NewsArticle, type SpendingItem, type SpendingCategory,\n' +
+    '  type SocialMediaAction, type SponsorshipTier,\n' +
+    '  type MoralDilemma, type MoralDilemmaChoice,\n' +
+    '  initCareer, advanceYouthYear, acceptOffer, advanceProSeason,\n' +
+    '  dismissSummary, stayAtClub, signExtension, requestTransfer, applyEventChoice,\n' +
+    '  dismissDebut, dismissWorldCup, retireFromInternational, dismissRivalryEvent,\n' +
+    '  dismissBallonDor, giveBdorSpeech, bdorSpeechOpen, type BdorSpeechChoice, SOCCER_BALLON_DOR, SOCCER_BDOR_SPEECHES, SOCCER_WORLD_CUP_SPEECHES,\n' +
+    '  giveWorldCupSpeech, type WorldCupSpeechChoice, manualRetire, choosePostRetirement, advanceManagerSeason, acceptManagerOffer, endManagerCareer, loadManagerMarket,\n' +
+    '  acceptRetirementSuggestion, declineRetirementSuggestion,\n' +
+    '  advancePunditSeason, endPunditCareer, punditLegacyPaid, playedSeniorSeason, POST_RETIREMENT_BONUS_CAP,\n' +
+    '  advanceOwnerSeason, endOwnerCareer,\n' +
+    '  dismissNewspaper, purchaseSpendingItem, SPENDING_ITEMS,\n' +
+    '  applySocialMediaAction, handleCoverAthleteDecision, dismissSocialMediaPhase,\n' +
+    '  applyMoralDilemmaChoice, dismissMoralDilemma, MORAL_DILEMMAS,\n' +
+    '  applyRehabChoice,\n' +
+    '  SOCIAL_MEDIA_ACTIONS, SPONSORSHIP_TIERS, SOCCER_COVER,\n' +
+    '  dismissAppealResult,\n' +
+    '  generateShareText, getYouthAcademyClub,\n' +
+    '  getCareerTotals, calcOverall, formatWage, formatNetWorth, formatFollowers,\n' +
+    '  FALLBACK_CLUBS,\n' +
+    '  answerPhoneText, unreadPhoneCount,\n' +
+    '  applyTrainingResult, trainingAvailable, type TrainingDrill,\n' +
+    '  repairCareer, effectivePotential, careerBuildEffects,\n' +
+    '  applyMoneyAction,\n' +
+    '  acceptLoan, projectLeagueApps,\n' +
+    '  nextSeasonYear, managerNextSeasonYear,\n' +
+    '} from "@/lib/soccerCareerEngine";\n' +
+    'import type { FirstStageStage } from "@/lib/soccerCareerContinental";\n' +
+    '/* Round 258, his ask alongside the net worth bug: "depending where u live\n' +
+    '   ur currency will be diffrent". `money` rewrites the euro amounts inside\n' +
+    '   any line the game draws, so a wage slip, an event consequence and a\n' +
+    '   transfer fee all follow the same chosen currency. Display only: every\n' +
+    '   number in the save stays in euros. */\n' +
+    'import { localizeMoney as money, CURRENCIES, getCurrency, setCurrency, rateNote } from "@/lib/soccerCurrency";\n' +
+    '/* Round 262: the squad you are actually in. Display only, and it renders\n' +
+    '   nothing at all when we have no honest answer for that club and season. */\n' +
+    'import { depthChart, GROUP_LABEL, type DepthChart, type SquadMan } from "@/lib/soccerClubSquad";\n' +
+    'import type { MoneyAction } from "@/lib/soccerMoney";\n' +
+    'import { bankSummary } from "@/lib/soccerMoney";\n' +
+    'import PhonePanel from "@/components/soccer-career/PhonePanel";\n' +
+    'import CareerStory from "@/components/soccer-career/CareerStory";\n' +
+    'import { BAND_CLASS } from "@/lib/careerRatingBand";\n' +
+    'import { soccerRatingRows, readMatchRating, readOvr, ratingBand } from "@/lib/careerSeasonRatings";\n' +
+    'import { applyDrillResult, type DrillKind } from "@/lib/careerDrills";\n' +
+    'import { rollStartingOverall, rollPotential, potentialTier, adjustClubsForYear, allocOverall, normalizeAllocation, allocMax, ALLOC_MIN, playsLike, stepAllocation } from "@/lib/careerEras";\n' +
+    'import { dugoutTableWords, ordinal, leagueWithArticle, readLeagueFinish, finishLeague, leagueInYear, leagueSeasonLine, namedInLeague } from "@/lib/soccerCareerLeague";\n' +
+    'import { SeasonDerbyLines, DerbyChip, CareerDerbyTotals } from "@/components/soccer-career/DerbyLines";\n' +
+    'import { SeasonCupExitLine, SeasonCupWinBlock } from "@/components/soccer-career/CupRunLines";\n' +
+    'import { cupCabinetLabel, cupChipLabel } from "@/lib/soccerCareerCup";\n' +
+    'import { derbyHeroSeasons, DERBY_HELP_RULES } from "@/lib/soccerCareerDerby";\n' +
+    'import type { WorldSeason } from "@/lib/soccerPhone";\n' +
+    '/* Round 131: height, weight and the specifics under each family. */\n' +
+    'import {\n' +
+    '  type PlayerPhysique, type AttrShape,\n' +
+    '  attrTreeFor, deriveAttributes, buildEffects, effectsSummary, safePhysique,\n' +
+    '  applyFamilyOffset, defaultPhysique, heightLabel, weightLabel, buildLabel,\n' +
+    '  POSITION_OFFSETS, SHAPE_MAX, HEIGHT_MIN, HEIGHT_MAX, WEIGHT_MIN, WEIGHT_MAX,\n' +
+    '} from "@/lib/soccerCareerAttributes";\n' +
+    'import {\n' +
+    '  type PlayerAppearance, defaultAppearance, getCelebration,\n' +
+    '} from "@/lib/soccerCareerAppearance";\n' +
+    'import PlayerAvatar from "@/components/soccer-career/PlayerAvatar";\n' +
+    'import AppearanceBuilder from "@/components/soccer-career/AppearanceBuilder";\n' +
+    'import { Confetti } from "@/components/soccer-career/CareerFx";\n' +
+    'import { AwardsNightCard, SpeechChoices, SpokenSpeech } from "@/components/career/AwardsNightCard";\n' +
+    'import { availableSpeeches, givenSpeechOf } from "@/lib/careerAwardsNight";\n' +
+    'import { CelebrationStyles, revealDelay } from "@/components/club-manager/Celebration";\n' +
+    'import { SignedSlip } from "@/components/soccer-career/SignedSlip";\n' +
+    'import { SoccerOfferReview } from "@/components/soccer-career/SoccerOfferReview";\n' +
+    'import { buildSoccerOfferReview } from "@/lib/soccerOfferReview";\n' +
+    'import type { SignedNote } from "@/components/soccer-career/SignedSlip";\n' +
+    'import { AcademyFocusPicker, AcademyReportCard } from "@/components/soccer-career/AcademyReportCard";\n' +
+    'import { buildAcademyReport, academyFocusOf, withAcademyFocus } from "@/lib/soccerCareerAcademy";\n' +
+    'import type { AcademyFocus, AcademyReport } from "@/lib/soccerCareerAcademy";\n' +
+    'import { heatLabel } from "@/lib/soccerCareerCorruption";\n' +
+    'import ShareButtons from "@/components/game/ShareButtons";\n' +
+    'import { FlagImg, FlagFromEmoji, TextWithFlags } from "@/components/FlagImg";\n' +
+    'import { shareResult } from "@/lib/share";\n' +
+    'import { useRevealScroll } from "@/hooks/useRevealScroll";\n' +
+    'import { TournamentCard, InternationalHistoryTile } from "@/components/soccer-career/InternationalPanel";\n' +
+    'import { beatStyle, debutMomentKey, legacyMomentKey, rivalryMomentKey, settleLoadedMoments, useCareerMoment } from "@/components/soccer-career/careerMoments";\n' +
+    "import { isSoccerCareerSave } from '@/lib/soccerCareerSave';\n" +
+    "import { reloadToRetryChunk } from '@/lib/freshBuild';\n" +
+    "import { readSeasonMoments } from '@/lib/season/momentsSave';\n" +
+    '/* Round 1045: the Season Centre loads only when a person presses for it, and\n' +
+    '   the Ratings dialog when it is opened (step 7 of the round: the weight it\n' +
+    '   adds is paid here, never by a budget). */\n' +
+    'const SoccerSeasonCentre = lazy(() => import("@/components/soccer-career/SoccerSeasonCentre"));\n' +
+    'const SeasonRatings = lazy(() => import("@/components/soccer-career/SeasonRatings"));\n' +
+    '/* Round 1047: the training ground (its drills and its boards) loads when it\n' +
+    "   is opened, not with the page; the page's budget came down by what it weighed. */\n" +
+    'const TrainingPanel = lazy(() => import("@/components/soccer-career/TrainingPanel"));\n' +
+    '/* Round 1045: a boundary inside the lazy chunk cannot catch the chunk failing\n' +
+    '   to load (a deploy swapped the files), so the mount carries its own: the\n' +
+    '   overlay says so with Retry and Close, and the save is never touched.\n' +
+    '   Retry reloads the page (src/lib/freshBuild.ts, Round 832): a lazy import\n' +
+    '   that failed stays failed for the life of the page, so a remount alone\n' +
+    '   would throw the same error again. The save is already on disk. */\n' +
+    'class CentreMountBoundary extends Component<{ onClose: () => void; what?: string; children: ReactNode }, { failed: boolean; tries: number }> {\n' +
+    '  state = { failed: false, tries: 0 };\n' +
+    '  static getDerivedStateFromError() { return { failed: true }; }\n' +
+    '  render() {\n' +
+    '    if (!this.state.failed) return <Fragment key={this.state.tries}>{this.props.children}</Fragment>;\n' +
+    '    return (\n' +
+    '      <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4" data-season-centre>\n' +
+    '        <div role="dialog" aria-modal="true" aria-label={this.props.what ?? "Season Centre"} tabIndex={-1} ref={focusDialogOnMount} onKeyDown={escapeCloses(this.props.onClose)} className="w-full max-w-sm space-y-3 rounded-2xl border border-border bg-card p-4 text-center outline-none">\n' +
+    `          <p className="text-sm">Couldn't load the {this.props.what ?? "Season Centre"}. Your career is safe.</p>\n` +
+    '          <div className="flex gap-2">\n' +
+    '            <button type="button" onClick={() => { if (!reloadToRetryChunk()) this.setState(s => ({ failed: false, tries: s.tries + 1 })); }} className="h-10 flex-1 rounded-lg border border-border text-sm font-semibold">↻ Retry</button>\n' +
+    '            <button type="button" onClick={this.props.onClose} className="h-10 flex-1 rounded'... 252659 more characters,
+  expected: 'import { Component, Fragment, lazy, Suspense, useState, useCallback, useRef, useEffect, useMemo, type ReactNode } from "react";\n' +
+    "import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';\n" +
+    'import { useGameCompletion } from "@/hooks/useGameCompletion";\n' +
+    'import { recordCompletion, recordActivity, recordStreakDay } from "@/lib/completions";\n' +
+    'import PageSeo from "@/components/seo/PageSeo";\n' +
+    "import GameSeoContent from '@/components/seo/GameSeoContent';\n" +
+    'import { GameNavbar } from "@/components/game/GameNavbar";\n' +
+    'import { GameHelp } from "@/components/game/GameHelp";\n' +
+    "import VictoryMoment from '@/components/game/VictoryMoment';\n" +
+    'import { Button } from "@/components/ui/button";\n' +
+    'import { Input } from "@/components/ui/input";\n' +
+    'import { Label } from "@/components/ui/label";\n' +
+    'import {\n' +
+    '  Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue,\n' +
+    '} from "@/components/ui/select";\n' +
+    'import { groupByConfederation } from "@/lib/confederationGroups";\n' +
+    'import { useAuth } from "@/contexts/AuthContext";\n' +
+    'import { AuthModal } from "@/components/auth/AuthModal";\n' +
+    'import { toast } from "sonner";\n' +
+    'import { ChevronRight } from "lucide-react";\n' +
+    'import { getPersonalityDef, getAgentDef } from "@/lib/soccerCareerLife";\n' +
+    'import {\n' +
+    '  type CareerState, type SeasonRecord, type ClubData, type ContractOffer, type TransferSituation,\n' +
+    '  type RandomEvent, type EventChoice, type WorldCupResult, type WCMatch,\n' +
+    '  type RivalPlayer, type RivalryEvent, type RivalrySummary,\n' +
+    '  type LifestyleLevel, type FamilyStatus, type BallonDorResult, type BallonDorNominee,\n' +
+    '  type UCLResult, type UCLKnockoutMatch, type Award,\n' +
+    '  type LegacyResult, type LegacyTier, type PostRetirementChoice, type ManagerState,\n' +
+    '  type PunditState, type OwnerState, type PunditAction,\n' +
+    '  type NewsArticle, type SpendingItem, type SpendingCategory,\n' +
+    '  type SocialMediaAction, type SponsorshipTier,\n' +
+    '  type MoralDilemma, type MoralDilemmaChoice,\n' +
+    '  initCareer, advanceYouthYear, acceptOffer, advanceProSeason,\n' +
+    '  dismissSummary, stayAtClub, signExtension, requestTransfer, applyEventChoice,\n' +
+    '  dismissDebut, dismissWorldCup, retireFromInternational, dismissRivalryEvent,\n' +
+    '  dismissBallonDor, giveBdorSpeech, bdorSpeechOpen, type BdorSpeechChoice, SOCCER_BALLON_DOR, SOCCER_BDOR_SPEECHES, SOCCER_WORLD_CUP_SPEECHES,\n' +
+    '  giveWorldCupSpeech, type WorldCupSpeechChoice, manualRetire, choosePostRetirement, advanceManagerSeason, acceptManagerOffer, endManagerCareer, loadManagerMarket,\n' +
+    '  acceptRetirementSuggestion, declineRetirementSuggestion,\n' +
+    '  advancePunditSeason, endPunditCareer, punditLegacyPaid, playedSeniorSeason, POST_RETIREMENT_BONUS_CAP,\n' +
+    '  advanceOwnerSeason, endOwnerCareer,\n' +
+    '  dismissNewspaper, purchaseSpendingItem, SPENDING_ITEMS,\n' +
+    '  applySocialMediaAction, handleCoverAthleteDecision, dismissSocialMediaPhase,\n' +
+    '  applyMoralDilemmaChoice, dismissMoralDilemma, MORAL_DILEMMAS,\n' +
+    '  applyRehabChoice,\n' +
+    '  SOCIAL_MEDIA_ACTIONS, SPONSORSHIP_TIERS, SOCCER_COVER,\n' +
+    '  dismissAppealResult,\n' +
+    '  generateShareText, getYouthAcademyClub,\n' +
+    '  getCareerTotals, calcOverall, formatWage, formatNetWorth, formatFollowers,\n' +
+    '  FALLBACK_CLUBS,\n' +
+    '  answerPhoneText, unreadPhoneCount,\n' +
+    '  applyTrainingResult, trainingAvailable, type TrainingDrill,\n' +
+    '  repairCareer, effectivePotential, careerBuildEffects,\n' +
+    '  applyMoneyAction,\n' +
+    '  acceptLoan, projectLeagueApps,\n' +
+    '  nextSeasonYear, managerNextSeasonYear,\n' +
+    '} from "@/lib/soccerCareerEngine";\n' +
+    'import type { FirstStageStage } from "@/lib/soccerCareerContinental";\n' +
+    '/* Round 258, his ask alongside the net worth bug: "depending where u live\n' +
+    '   ur currency will be diffrent". `money` rewrites the euro amounts inside\n' +
+    '   any line the game draws, so a wage slip, an event consequence and a\n' +
+    '   transfer fee all follow the same chosen currency. Display only: every\n' +
+    '   number in the save stays in euros. */\n' +
+    'import { localizeMoney as money, CURRENCIES, getCurrency, setCurrency, rateNote } from "@/lib/soccerCurrency";\n' +
+    '/* Round 262: the squad you are actually in. Display only, and it renders\n' +
+    '   nothing at all when we have no honest answer for that club and season. */\n' +
+    'import { depthChart, GROUP_LABEL, type DepthChart, type SquadMan } from "@/lib/soccerClubSquad";\n' +
+    'import type { MoneyAction } from "@/lib/soccerMoney";\n' +
+    'import { bankSummary } from "@/lib/soccerMoney";\n' +
+    'import PhonePanel from "@/components/soccer-career/PhonePanel";\n' +
+    'import TrainingPanel from "@/components/soccer-career/TrainingPanel";\n' +
+    'import CareerStory from "@/components/soccer-career/CareerStory";\n' +
+    'import { BAND_CLASS } from "@/lib/careerRatingBand";\n' +
+    'import { soccerRatingRows, readMatchRating, readOvr, ratingBand } from "@/lib/careerSeasonRatings";\n' +
+    'import { applyDrillResult, type DrillKind } from "@/lib/careerDrills";\n' +
+    'import { rollStartingOverall, rollPotential, potentialTier, adjustClubsForYear, allocOverall, normalizeAllocation, allocMax, ALLOC_MIN, playsLike, stepAllocation } from "@/lib/careerEras";\n' +
+    'import { dugoutTableWords, ordinal, leagueWithArticle, readLeagueFinish, finishLeague, leagueInYear, leagueSeasonLine, namedInLeague } from "@/lib/soccerCareerLeague";\n' +
+    'import { SeasonDerbyLines, DerbyChip, CareerDerbyTotals } from "@/components/soccer-career/DerbyLines";\n' +
+    'import { SeasonCupExitLine, SeasonCupWinBlock } from "@/components/soccer-career/CupRunLines";\n' +
+    'import { cupCabinetLabel, cupChipLabel } from "@/lib/soccerCareerCup";\n' +
+    'import { derbyHeroSeasons, DERBY_HELP_RULES } from "@/lib/soccerCareerDerby";\n' +
+    'import type { WorldSeason } from "@/lib/soccerPhone";\n' +
+    '/* Round 131: height, weight and the specifics under each family. */\n' +
+    'import {\n' +
+    '  type PlayerPhysique, type AttrShape,\n' +
+    '  attrTreeFor, deriveAttributes, buildEffects, effectsSummary, safePhysique,\n' +
+    '  applyFamilyOffset, defaultPhysique, heightLabel, weightLabel, buildLabel,\n' +
+    '  POSITION_OFFSETS, SHAPE_MAX, HEIGHT_MIN, HEIGHT_MAX, WEIGHT_MIN, WEIGHT_MAX,\n' +
+    '} from "@/lib/soccerCareerAttributes";\n' +
+    'import {\n' +
+    '  type PlayerAppearance, defaultAppearance, getCelebration,\n' +
+    '} from "@/lib/soccerCareerAppearance";\n' +
+    'import PlayerAvatar from "@/components/soccer-career/PlayerAvatar";\n' +
+    'import AppearanceBuilder from "@/components/soccer-career/AppearanceBuilder";\n' +
+    'import { Confetti } from "@/components/soccer-career/CareerFx";\n' +
+    'import { AwardsNightCard, SpeechChoices, SpokenSpeech } from "@/components/career/AwardsNightCard";\n' +
+    'import { availableSpeeches, givenSpeechOf } from "@/lib/careerAwardsNight";\n' +
+    'import { CelebrationStyles, revealDelay } from "@/components/club-manager/Celebration";\n' +
+    'import { SignedSlip } from "@/components/soccer-career/SignedSlip";\n' +
+    'import type { SignedNote } from "@/components/soccer-career/SignedSlip";\n' +
+    'import { AcademyFocusPicker, AcademyReportCard } from "@/components/soccer-career/AcademyReportCard";\n' +
+    'import { buildAcademyReport, academyFocusOf, withAcademyFocus } from "@/lib/soccerCareerAcademy";\n' +
+    'import type { AcademyFocus, AcademyReport } from "@/lib/soccerCareerAcademy";\n' +
+    'import { heatLabel } from "@/lib/soccerCareerCorruption";\n' +
+    'import ShareButtons from "@/components/game/ShareButtons";\n' +
+    'import { FlagImg, FlagFromEmoji, TextWithFlags } from "@/components/FlagImg";\n' +
+    'import { shareResult } from "@/lib/share";\n' +
+    'import { useRevealScroll } from "@/hooks/useRevealScroll";\n' +
+    'import { TournamentCard, InternationalHistoryTile } from "@/components/soccer-career/InternationalPanel";\n' +
+    'import { beatStyle, debutMomentKey, legacyMomentKey, rivalryMomentKey, settleLoadedMoments, useCareerMoment } from "@/components/soccer-career/careerMoments";\n' +
+    "import { isSoccerCareerSave } from '@/lib/soccerCareerSave';\n" +
+    "import { reloadToRetryChunk } from '@/lib/freshBuild';\n" +
+    '/* Round 1045: the Season Centre loads only when a person presses for it, and\n' +
+    '   the Ratings dialog when it is opened (step 7 of the round: the weight it\n' +
+    '   adds is paid here, never by a budget). */\n' +
+    'const SoccerSeasonCentre = lazy(() => import("@/components/soccer-career/SoccerSeasonCentre"));\n' +
+    'const SeasonRatings = lazy(() => import("@/components/soccer-career/SeasonRatings"));\n' +
+    '/* Round 1045: a boundary inside the lazy chunk cannot catch the chunk failing\n' +
+    '   to load (a deploy swapped the files), so the mount carries its own: the\n' +
+    '   overlay says so with Retry and Close, and the save is never touched.\n' +
+    '   Retry reloads the page (src/lib/freshBuild.ts, Round 832): a lazy import\n' +
+    '   that failed stays failed for the life of the page, so a remount alone\n' +
+    '   would throw the same error again. The save is already on disk. */\n' +
+    'class CentreMountBoundary extends Component<{ onClose: () => void; what?: string; children: ReactNode }, { failed: boolean; tries: number }> {\n' +
+    '  state = { failed: false, tries: 0 };\n' +
+    '  static getDerivedStateFromError() { return { failed: true }; }\n' +
+    '  render() {\n' +
+    '    if (!this.state.failed) return <Fragment key={this.state.tries}>{this.props.children}</Fragment>;\n' +
+    '    return (\n' +
+    '      <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4" data-season-centre>\n' +
+    '        <div role="dialog" aria-modal="true" aria-label={this.props.what ?? "Season Centre"} tabIndex={-1} ref={focusDialogOnMount} onKeyDown={escapeCloses(this.props.onClose)} className="w-full max-w-sm space-y-3 rounded-2xl border border-border bg-card p-4 text-center outline-none">\n' +
+    `          <p className="text-sm">Couldn't load the {this.props.what ?? "Season Centre"}. Your career is safe.</p>\n` +
+    '          <div className="flex gap-2">\n' +
+    '            <button type="button" onClick={() => { if (!reloadToRetryChunk()) this.setState(s => ({ failed: false, tries: s.tries + 1 })); }} className="h-10 flex-1 rounded-lg border border-border text-sm font-semibold">↻ Retry</button>\n' +
+    '            <button type="button" onClick={this.props.onClose} className="h-10 flex-1 rounded-lg bg-primary text-sm font-bold text-primary-foreground">✕ Close it</button>\n' +
+    '          </div>\n' +
+    '        </div>\n' +
+    '      </div>\n' +
+    '    );\n' +
+    '  }\n' +
+    '}\n' +
+    '\n' +
+    '/* ─── Constants ─── */\n' +
+    '// Round 76: 131 nations (was 49), every one with a real flag in FlagImg,\n' +
+    '// sorted alphabetically so yours is findable in the scroll.\n' +
+    'const NATIONALITIES = [\n' +
+    '  "Albania","Algeria","Angola","Argentina","Armenia","Australia","Austria","Azerbaijan",\n' +
+    '  "Bahrain","Belarus","Belgiu'... 249475 more characters,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
