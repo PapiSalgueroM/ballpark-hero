@@ -81,11 +81,13 @@ const DESKTOP = { width: 1280, height: 900 };
 
 /* Main's read, live, 2026-10-07 (the scouts' runs). */
 const BASELINE = { keyReads: 36, requests: 72, bytesDecoded: 9_462_264, boardMsFastest: 9_528, boardMsSlowest: 15_553 };
-/* One third of main's fastest measured board. Measured here on 2026-10-07
-   (three runs, medians in TIME_MEASURED_MS); the tight figure, 1.5 times the
-   median of those, is printed beside the result and never asserted. */
+/* One third of main's fastest measured board. Measured on 2026-10-08, three
+   runs on an idle Linux runner (their medians are in TIME_MEASURED_MS); the
+   owner's PC at full load gave 2,601 ms the night before. The tight figure,
+   1.5 times the median of the three rounded up to 50, is printed beside the
+   result and never asserted. */
 const TIME_CEILING_MS = 3_150;
-const TIME_MEASURED_MS = 'PENDING';
+const TIME_MEASURED_MS = '776, 771 and 769 ms (tight figure 1,200 ms; 2,601 ms on a PC at full load)';
 const CLS_CEILING = 0.05;
 const HOLD_MS = 1_500;
 const WAIT = 30_000;
