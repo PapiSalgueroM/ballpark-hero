@@ -19,6 +19,7 @@
      |alloc  his line (goals, assists, clean sheet marks, cards) over games
      |score|t  attempt t of every other score, then up to 40 one goal repairs
      |min    minutes of every event, and the per game means (ratings)
+     |fin    the sport's optional `finish` pass (Round 1048; the US binds)
    It fails closed: a season whose saved numbers cannot be laid out gives
    null, and an attempt budget spent without acceptance gives null too (the
    sport decides whether a results only season is offered instead).
@@ -125,6 +126,16 @@ export interface SeasonSport<Row, Ctx> {
    *  line alone, and draws only from the rng it is given. Absent: a game has
    *  no events and he starts every game he plays. */
   events?(g: DerivedGame, f: FixedGame | null, game: GameContext, rng: Rng): void;
+  /** Round 1048. After every score is accepted and every mean is fitted: the
+   *  sport's last pass over the whole season, for numbers that hang off other
+   *  numbers of the same game (yards off catches, a kicker's field goals off
+   *  his team's score) and the timed events that need them. It may add keys
+   *  to a played game's line and set `events`; it must leave scores, `played`,
+   *  `why` and every key the core's totals own alone. false: the row cannot
+   *  be laid out. Absent: nothing happens (soccer). A sport that has both
+   *  this and playable moments must run its finish again after a decision is
+   *  applied (Round 1049's job; no sport has both yet). */
+  finish?(games: DerivedGame[], row: Row, ctx: Ctx, rng: Rng): boolean;
   /** The sport's own agreement items, beyond the core's (soccer checks its
    *  events against the score here). */
   check?(row: Row, ctx: Ctx, s: DerivedSeason): string[];
@@ -722,6 +733,7 @@ export function deriveSeasonOrWhy<R, C>(sport: SeasonSport<R, C>, row: R, ctx: C
       }
     }
   }
+  if (sport.finish && !sport.finish(games, row, ctx, keyedRng(`${key}|fin`))) return 'finish';
   const rows = frame.mode === 'table' && frame.rule ? standingsOf(board, frame.teams, frame.rule, board.length) : [];
   const keyOfSlot = new Map<number, string>();
   p.slotOf.forEach((s, k) => keyOfSlot.set(s, k));

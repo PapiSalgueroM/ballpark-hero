@@ -33,6 +33,7 @@ import type { TrainingBank, TrainingSport } from '@/lib/careerTraining';
 import type { CareerReviewStats } from '@/lib/usCareerSeasonReview';
 import type { RetirementBlock } from '@/lib/careerRetirement';
 import type { HallSpeechBlock, NumberRetiredBy, UsHallSport } from '@/lib/careerHallOfFame';
+import type { UsSeasonBind } from '@/lib/season/us';
 
 export interface UsCareerPracticeResult extends TrainingBank {
   year: number;
@@ -305,4 +306,10 @@ export interface UsCareerSport<C extends UsCareerCore = any, L extends UsCareerS
    *  Fame (src/lib/careerHallOfFame.ts). Optional, so the parity replay can
    *  mount a binding without it and play the old board draw for draw. */
   hall?: UsHallSport<C>;
+  /** Round 1048: the Season Center's numbers for this sport (src/lib/season/us.ts), loaded when he first
+   *  watches a season. Optional: a binding without it shows no button, which is MLB and the NHL today. */
+  loadSeasonCentre?: () => Promise<UsSeasonBind>;
+  /** Round 1048: why the coming season has no game by game view (its real length is not the one this
+   *  career plays), or null. Tiny and eager, from src/data/usSeasonLengths.ts. Absent: never held. */
+  seasonCentreHeld?: (year: number, eraId?: string) => string | null;
 }
