@@ -1,0 +1,24 @@
+hostile saves on head: dist /home/runner/work/ballpark-hero/ballpark-hero/dist
+plain            | lib: view invented rank 1/6 trust 71, last 24 | page: root 16760 chars, hub yes, tile yes, boundary no, sheet opened | page errors 0
+tierString       | lib: no view | page: root 15675 chars, hub no, tile no, boundary no | page errors 0
+tierMissing      | lib: no view | page: root 15675 chars, hub no, tile no, boundary no | page errors 0
+noSeasons        | lib: view roles rank 2/6 trust 71 | page: root 15675 chars, hub no, tile no, boundary no | page errors 0
+seasonsObject    | lib: THROWS TypeError: c.seasons.filter is not a function | page: root 15675 chars, hub no, tile no, boundary no | page errors 0
+posUnknown       | lib: view invented rank 2/8 trust 71, last 24 | page: root 16763 chars, hub yes, tile yes, boundary no, sheet opened | page errors 0
+posMissing       | lib: view invented rank 2/8 trust 71, last 24 | page: root 15675 chars, hub no, tile no, boundary no | page errors 0
+overallNull      | lib: view invented rank 6/6 trust 26, last 24 | page: root 15675 chars, hub no, tile no, boundary no | page errors 0
+overallString    | lib: view invented rank 1/6 trust 26, last 24 | page: root 15675 chars, hub no, tile no, boundary no | page errors 0
+phoneNull        | lib: view invented rank 1/6 trust 79, last 24 | page: root 16760 chars, hub yes, tile yes, boundary no, sheet opened | page errors 0
+phoneGarbage     | lib: view invented rank 1/6 trust 79, last 24 | page: root 16760 chars, hub yes, tile yes, boundary no, sheet opened | page errors 0
+clubNumber       | lib: view invented rank 1/6 trust 71, last 24 | page: root 15675 chars, hub no, tile no, boundary no | page errors 0
+clubEmpty        | lib: no view | page: root 16678 chars, hub yes, tile no, boundary no | page errors 0
+countryMissing   | lib: view invented rank 1/6 trust 71, last 24 | page: root 15675 chars, hub no, tile no, boundary no | page errors 0
+frozenString     | lib: view invented rank 1/6 trust 71, last 24 | page: root 16760 chars, hub yes, tile yes, boundary no, sheet opened | page errors 0
+nameMissing      | lib: view invented rank 1/6 trust 71, last 24 | page: root 15675 chars, hub no, tile no, boundary no | page errors 0
+firstRowGarbage  | lib: view invented rank 2/6 trust 71, last 24 | page: root 15675 chars, hub no, tile no, boundary no | page errors 0
+lastRowNoYear    | lib: view roles rank 2/6 trust 71, last 24 | page: root 15675 chars, hub no, tile no, boundary no | page errors 0
+lastRowHugeYear  | lib: view invented rank 2/6 trust 71, last 24 | page: root 16761 chars, hub yes, tile yes, boundary no, sheet opened | page errors 0
+lastRowNoApps    | lib: view invented rank 1/6 trust 71 | page: root 15675 chars, hub no, tile no, boundary no | page errors 0
+lastRowNullTier  | lib: view invented rank 1/6 trust 71, last 24 | page: root 15675 chars, hub no, tile no, boundary no | page errors 0
+yearsAncient     | lib: view roles rank 1/6 trust 71, last 24 | page: root 16741 chars, hub yes, tile yes, boundary no, sheet opened | page errors 0
+hostile saves on head: 22 saves, lib threw on 1, page errors on 0

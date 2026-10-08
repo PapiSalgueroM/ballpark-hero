@@ -1,0 +1,6 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+tsc exit=0 56s | 
+vitest-lib exit=0 2s |    Duration  1.84s (transform 821ms, setup 42ms, collect 995ms, tests 248ms, environment 246ms, prepare 101ms)
+simClubSquads exit=0 1s | simClubSquads: green. The squad is the real one, you are in the right place in it, and the game never noticed.
+hostile-head exit=0 92s | hostile saves on head: 22 saves, lib threw on 1, page errors on 0
+hostile-base exit=0 116s | hostile saves on base: 22 saves, lib threw on 1, page errors on 0
