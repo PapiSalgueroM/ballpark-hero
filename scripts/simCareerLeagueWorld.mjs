@@ -35,6 +35,7 @@ const RECORD = process.env.RECORD || '';
 const PART = process.env.RECORD_PART || '';
 const SEEDSET = Number(process.env.SEEDSET || 0);
 const CAREERS = Number(process.env.CAREERS || 300);
+const PARTS = process.env.WORLD_PARTS || path.join(ROOT, '.tmp-fx');
 const F = {
   pool: path.join(DATA, 'careerPoolMain1100.json'),
   finish: path.join(DATA, 'careerLeagueFinish1100.json'),
@@ -134,12 +135,246 @@ function recordFinish() {
   if (bytes > 1e6) { console.error('  the cross is over 1 MB'); process.exit(1); }
 }
 
+/* ─── Old saves (section E, critic 6) ───
+   Built through the engine's own doors: a 2025 career walks its academy
+   years, signs for the named club through acceptOffer, and stays put (the
+   one choice that differs from careerStep: a transfer window is declined)
+   until two playing seasons from 2026 sit in the save. Hertha Berlin and
+   Nantes sign under the label they carried before Round 1037 moved it, which
+   is what a save from before that round still holds. The two dugout saves
+   are simManagerCareer's hand built shape, played two seasons. */
+const clone = v => JSON.parse(JSON.stringify(v));
+const abil = o => ({ pace: o, shooting: o, passing: o, dribbling: o, defending: o, physical: o, reflexes: o });
+const clubRow = name => { const c = POOL.find(x => x.name === name); if (!c) throw new Error(`no club ${name} in the list`); return c; };
+export const SAVE_PLAN = [
+  { id: 'ere', kind: 'player', club: 'Twente', nat: 'Netherlands' },
+  { id: 'cha', kind: 'player', club: 'Norwich City', nat: 'England' },
+  { id: 'sco', kind: 'player', club: 'Hearts', nat: 'Scotland' },
+  { id: 'her', kind: 'player', club: 'Hertha Berlin', nat: 'Germany', oldLabel: 'Bundesliga' },
+  { id: 'nan', kind: 'player', club: 'Nantes', nat: 'France', oldLabel: 'Ligue 1' },
+  { id: 'mgrSco', kind: 'manager', club: 'Hearts', league: 'Scottish Premiership' },
+  { id: 'mgrSeg', kind: 'manager', club: 'Girona', league: 'Segunda Division' },
+];
+function stayStep(s) {
+  if (s.phase === 'transfer_window') return engine.stayAtClub(s, POOL);
+  return careerStep(engine, s, POOL);
+}
+const settled = (s, club) => {
+  const rows = s.seasons.filter(r => r.type === 'playing');
+  const last = rows.slice(-2);
+  return s.phase === 'playing' && !s.retired && s.currentClub === club && last.length === 2
+    && last.every(r => r.club === club && r.year >= 2026 && r.apps > 0 && !r.injurySevere);
+};
+function buildPlayerSave(plan) {
+  const row = clubRow(plan.club);
+  const signFor = plan.oldLabel ? { ...row, league: plan.oldLabel } : row;
+  for (let seed = 1; seed <= 40; seed += 1) {
+    seedRandom(0x1100a + seed * 7919);
+    let s = engine.initCareer(`World ${plan.id}`, plan.nat, 'CM', '2025', abil(68), 68, 2025, POOL, null, 86);
+    let guard = 0;
+    while (s.phase !== 'contract_offer' && !s.retired && guard++ < 80) s = careerStep(engine, s, POOL);
+    if (s.phase !== 'contract_offer') continue;
+    s = engine.acceptOffer(s, { club: signFor, contractYears: 5, wage: 20000, transferFee: 0 });
+    guard = 0;
+    while (!settled(s, plan.club) && !s.retired && guard++ < 200) s = stayStep(s);
+    if (settled(s, plan.club)) return { seed, state: s };
+  }
+  throw new Error(`no seed in 40 left a player two seasons into ${plan.club}`);
+}
+function seasonRow(year, tier) {
+  return { year, age: 28, club: 'Club', clubCountry: 'England', clubTier: tier, apps: 34, goals: 10,
+    assists: 5, cleanSheets: 0, yellowCards: 2, redCards: 0, rating: 7.1, leagueTitle: false, domesticCup: false,
+    championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null, type: 'playing',
+    intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null };
+}
+export function dugoutState(club, tier, lastYear, league) {
+  return { nationality: 'England', peakOverall: 80, intStats: { caps: 10 },
+    seasons: Array.from({ length: 12 }, (_, i) => seasonRow(lastYear - 11 + i, 2)), events: [], awards: [],
+    phase: 'manager_season', overall: 80, age: 40,
+    managerState: { club, clubTier: tier, season: 0, trophies: 0, promotions: 0, seasonResults: [],
+      nationalTeamOffer: false, managingNationalTeam: false, ...(league ? { league } : {}) } };
+}
+function buildManagerSave(plan) {
+  const row = clubRow(plan.club);
+  for (let seed = 1; seed <= 40; seed += 1) {
+    seedRandom(0x1100b + seed * 7919);
+    let s = dugoutState(plan.club, row.tier, 2029, plan.league);
+    s = engine.advanceManagerSeason(s, POOL);
+    s = engine.advanceManagerSeason(s, POOL);
+    const ms = s.managerState;
+    if (!ms.unemployed && ms.club === plan.club && ms.seasonResults.length === 2) return { seed, state: s };
+  }
+  throw new Error(`no seed in 40 kept a manager two seasons at ${plan.club}`);
+}
+/** What a tree reads from a save: repairCareer's bytes and, per playing row
+ *  from 2026, the finish and the Season Centre's mode, reason and games. */
+function readSave(state) {
+  /* null when repairCareer leaves the save's own bytes alone */
+  const fixed = JSON.stringify(engine.repairCareer(clone(state)));
+  const repaired = fixed === JSON.stringify(state) ? null : fixed;
+  const keep = Math.random;
+  Math.random = () => { throw new Error('Math.random called while reading a save'); };
+  try {
+    const rows = state.seasons.filter(r => r.type === 'playing' && r.year >= 2026 && r.club !== 'Club').map(r => {
+      const ctx = SE.buildSoccerSeasonCtx(state, POOL, r);
+      return { year: r.year, club: r.club, finish: LG.readLeagueFinish(r), league: ctx.league ? ctx.league.name : null, mode: ctx.mode, why: ctx.why, games: ctx.games };
+    });
+    const dugout = (state.managerState?.seasonResults ?? []).map(r => {
+      const w = LG.dugoutTableWords(r);
+      return { league: r.league ?? null, leagueSize: r.leagueSize ?? null, sizeVerified: r.sizeVerified === true, result: r.result, header: w.header, orderNote: w.orderNote, note: w.note };
+    });
+    return { repaired, rows, dugout };
+  } finally { Math.random = keep; }
+}
+/* ─── The world (section D) ───
+   CAREERS careers from the 2025 start for each of 17 starting nations,
+   stepped by careerStep (simCareerClubPool section 6's dispatch: he takes the
+   first offer and goes where the window sends him), seeded per seed set and
+   nation. Every playing season from 2026 with a game played and no severe
+   injury is measured: does the row hold a league finish, does the Season
+   Centre open a table for it, and how much of that table carries a name. */
+export const NATIONS = ['England', 'Spain', 'Germany', 'Italy', 'France', 'Netherlands', 'Portugal', 'Turkey', 'Belgium', 'Scotland', 'Brazil', 'Argentina', 'Mexico', 'USA', 'Saudi Arabia', 'Japan', 'Nigeria'];
+const POSITIONS = ['ST', 'CM', 'CB', 'GK'];
+const todayLeague = club => POOL.find(c => c.name === club)?.league ?? '';
+function measureSeason(career, row) {
+  const keep = Math.random;
+  Math.random = () => { throw new Error('Math.random called while reading a season'); };
+  try {
+    const ctx = SE.buildSoccerSeasonCtx(career, POOL, row);
+    const finish = LG.readLeagueFinish(row);
+    const table = ctx.mode === 'table';
+    const size = table ? finish.size : 0;
+    const names = new Set([...ctx.rivals, ...ctx.named, ...(ctx.champion ? [ctx.champion] : [])]);
+    names.delete(row.club);
+    return { finish, table, named: table ? Math.min(size, 1 + names.size) / size : 0, namedRows: table ? Math.min(size, 1 + names.size) : 0, size, ctx };
+  } finally { Math.random = keep; }
+}
+function playWorld(seedset, careers, onSeason, nations = NATIONS) {
+  for (const nat of nations) {
+    const ni = NATIONS.indexOf(nat);
+    seedRandom(0x1100c + seedset * 100003 + ni * 7919);
+    for (let c = 0; c < careers; c += 1) {
+      const ovr = 45 + (c % 28);
+      let s = engine.initCareer(`World ${seedset}.${ni}.${c}`, nat, POSITIONS[c % POSITIONS.length], '2025', abil(ovr), ovr, 2025, POOL, null);
+      let rows = s.seasons.length;
+      let guard = 0;
+      while (!s.retired && guard++ < 140) {
+        s = careerStep(engine, s, POOL);
+        if (s.seasons.length > rows) {
+          rows = s.seasons.length;
+          const row = s.seasons[rows - 1];
+          if (row.type === 'playing' && row.year >= 2026 && row.apps > 0 && !row.injurySevere) onSeason(s, row, nat);
+        }
+      }
+    }
+  }
+}
+const tally = () => ({ seasons: 0, finish: 0, table: 0, named: 0 });
+function addSeason(t, m) { t.seasons += 1; if (m.finish) t.finish += 1; if (m.table) t.table += 1; t.named += m.named; }
+const shares = t => ({ finishShare: t.seasons ? t.finish / t.seasons : 0, tableShare: t.seasons ? t.table / t.seasons : 0, namedShare: t.seasons ? t.named / t.seasons : 0 });
+const pct = v => `${(v * 100).toFixed(1)}%`;
+/** One seed set's world: overall, per nation and per league tallies. */
+function worldRun(seedset, careers, nations, onEach) {
+  const out = { careers, overall: tally(), nations: {}, leagues: {} };
+  playWorld(seedset, careers, (career, row, nat) => {
+    const m = measureSeason(career, row);
+    addSeason(out.overall, m);
+    addSeason(out.nations[nat] ??= tally(), m);
+    addSeason(out.leagues[todayLeague(row.club) || '(none)'] ??= tally(), m);
+    if (onEach) onEach(career, row, m);
+  }, nations);
+  return out;
+}
+function recordWorld() {
+  const nations = process.env.NATION ? [process.env.NATION] : NATIONS;
+  const t = Date.now();
+  const run = worldRun(SEEDSET, CAREERS, nations);
+  const s = shares(run.overall);
+  console.log(`  seed set ${SEEDSET}, ${CAREERS} careers x ${nations.length} nations: ${run.overall.seasons} seasons, finish ${pct(s.finishShare)}, table ${pct(s.tableShare)}, named ${pct(s.namedShare)} (${((Date.now() - t) / 1000).toFixed(1)} s)`);
+  if (process.env.NATION) return;
+  /* one part a seed set, so three runs can go side by side; RECORD_PART=merge folds them */
+  const part = path.join(PARTS, `world-main-seed${SEEDSET}.json`);
+  writeJson(part, run);
+  console.log(`  wrote ${part}`);
+}
+function recordMerge() {
+  const world = {};
+  for (const set of [0, 1, 2]) {
+    const part = path.join(PARTS, `world-main-seed${set}.json`);
+    if (!fs.existsSync(part)) { console.error(`  missing ${part}: run RECORD_PART=world SEEDSET=${set} first`); process.exit(2); }
+    world[set] = readJson(part);
+  }
+  const dugout = dugoutRates();
+  writeJson(F.baseline, { note: 'Round 1100 step 0: the world as main plays it, recorded on the untouched tree by RECORD=main node scripts/simCareerLeagueWorld.mjs with RECORD_PART=world SEEDSET=0, 1 and 2, then RECORD_PART=merge. world: per seed set, overall, per starting nation and per league (the label the list gives the club): seasons, seasons holding a league finish, seasons the Season Centre opens a table for, and the summed share of table rows that carry a name. dugout: title, top two, bottom three and sack counts by the number of rows in the table and by league.', world, dugout });
+  for (const set of [0, 1, 2]) { const sh = shares(world[set].overall); console.log(`  seed set ${set}: ${world[set].overall.seasons} seasons, finish ${pct(sh.finishShare)}, table ${pct(sh.tableShare)}, named ${pct(sh.namedShare)}`); }
+  console.log(`  dugout: ${Object.entries(dugout.bySize).map(([n, t]) => `size ${n}: ${t.seasons} seasons, title ${t.title}, top two ${t.topTwo}, bottom three ${t.bottomThree}, sacked ${t.sack}`).join('; ')}`);
+  console.log(`  wrote ${path.relative(ROOT, F.baseline)}: ${fs.statSync(F.baseline).size} bytes`);
+}
+
+/* ─── The dugout (section D3) ───
+   120 dugout careers a tier over the HAND clubs of that tier (the same clubs
+   on main and on the branch, so the two can be read side by side), eight
+   seasons each from 2030, simManagerCareer's loop: a sacked manager takes the
+   first job offered. onRow sees every employed season as the save holds it. */
+function dugoutRun(onRow) {
+  seedRandom(0x1100d);
+  for (const tier of [1, 2, 3, 4]) {
+    const pool = HAND.filter(c => c.tier === tier);
+    for (let k = 0; k < 120; k += 1) {
+      const club = pool[k % pool.length];
+      let s = dugoutState(club.name, tier, 2029, club.league);
+      for (let y = 0; y < 8; y += 1) {
+        if (s.managerState.unemployed) {
+          if ((s.managerState.offers ?? [])[0]) s = engine.acceptManagerOffer(s, 0);
+          else { s = engine.advanceManagerSeason(s, POOL); continue; }
+        }
+        const tierBefore = s.managerState.clubTier;
+        s = engine.advanceManagerSeason(s, POOL);
+        const ms = s.managerState;
+        onRow(ms.seasonResults[ms.seasonResults.length - 1], ms, tierBefore);
+      }
+    }
+  }
+}
+const dugTally = () => ({ seasons: 0, title: 0, topTwo: 0, bottomThree: 0, sack: 0 });
+/** Rates by the table's row count and by league, as the tree plays them. */
+function dugoutRates(check) {
+  const bySize = {};
+  const byLeague = {};
+  dugoutRun((row, ms, tier) => {
+    for (const t of [bySize[row.leagueSize] ??= dugTally(), byLeague[row.league ?? '(none)'] ??= dugTally()]) {
+      t.seasons += 1;
+      if (row.playerPos === 1) t.title += 1;
+      if (row.playerPos <= 2) t.topTwo += 1;
+      if (row.playerPos >= row.leagueSize - 2) t.bottomThree += 1;
+      if (ms.unemployed) t.sack += 1;
+    }
+    if (check) check(row, ms, tier);
+  });
+  return { bySize, byLeague };
+}
+function recordSaves() {
+  const saves = SAVE_PLAN.map(plan => {
+    const built = plan.kind === 'player' ? buildPlayerSave(plan) : buildManagerSave(plan);
+    const state = clone(built.state);
+    const main = readSave(state);
+    console.log(`  ${plan.id}: seed ${built.seed}, ${plan.kind === 'player' ? main.rows.map(r => `${r.year} ${r.club} ${r.finish ? `${r.finish.finish}/${r.finish.size}` : 'no finish'} ${r.mode}${r.why ? `(${r.why})` : ''} ${r.games}g`).join('; ') : main.dugout.map(r => `${r.league} size ${r.leagueSize}${r.sizeVerified ? ' verified' : ''}: ${r.result.slice(0, 50)}`).join('; ')}`);
+    return { ...plan, seed: built.seed, state, main };
+  });
+  writeJson(F.saves, { note: 'Round 1100 step 0: seven saves built on the untouched tree by RECORD=main node scripts/simCareerLeagueWorld.mjs (RECORD_PART=saves), each with what main reads from it: repairCareer serialised, and per playing row from 2026 the finish, the Season Centre mode, reason and games; per dugout season the size and the words around the table.', saves });
+  console.log(`  wrote ${path.relative(ROOT, F.saves)}: ${saves.length} saves, ${fs.statSync(F.saves).size} bytes`);
+}
+
 /* ─── main ─── */
+await engine.loadManagerMarket();
 if (RECORD === 'main') {
   recordGuard();
   console.log('RECORD=main: writing what the untouched tree answers');
   if (!PART || PART === 'pool') recordPool();
   if (!PART || PART === 'finish') recordFinish();
+  if (!PART || PART === 'saves') recordSaves();
+  if (PART === 'world') recordWorld();
+  if (PART === 'merge') recordMerge();
   console.log(`simCareerLeagueWorld: recorded (${((Date.now() - t0) / 1000).toFixed(1)} s)`);
   process.exit(0);
 }
