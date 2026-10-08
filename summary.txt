@@ -1,0 +1,13 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=0 57s | playCareerMoments: 34 checks, 0 failed
+w-unbind-signing exit=0 73s | playCareerMoments CONTROL unbind-signing: 20 checks, red on S1280:P1, S390:P1 (expected S1280:P1, S390:P1); the fault fired in the served file: the control turned its own
+w-wrongfact exit=0 56s | playCareerMoments CONTROL wrongfact: 34 checks, red on S1280:P2, S390:P2, T1280:P2, T390:P2 (expected S1280:P2, S390:P2, T1280:P2, T390:P2); the fault fired 2 time(s) in 
+w-unbind-trophy exit=0 74s | playCareerMoments CONTROL unbind-trophy: 20 checks, red on T1280:P1, T390:P1 (expected T1280:P1, T390:P1); the fault fired in the served file: the control turned its own 
+w-vanish exit=0 56s | playCareerMoments CONTROL vanish: 34 checks, red on S1280:P3, S390:P3, T1280:P3, T390:P3 (expected S1280:P3, S390:P3, T1280:P3, T390:P3); the fault fired 2 time(s) in wal
+w-replayed exit=0 56s | playCareerMoments CONTROL replayed: 34 checks, red on S1280:P4, S390:P4, T1280:P4, T390:P4 (expected S1280:P4, S390:P4, T1280:P4, T390:P4); the fault fired 2 time(s) in w
+w-savewrite exit=0 55s | playCareerMoments CONTROL savewrite: 34 checks, red on S1280:P5, S390:P5, T1280:P5, T390:P5 (expected S1280:P5, S390:P5, T1280:P5, T390:P5); the fault fired 2 time(s) in 
+w-jump exit=0 55s | playCareerMoments CONTROL jump: 34 checks, red on S1280:P6, S390:P6, T1280:P6, T390:P6 (expected S1280:P6, S390:P6, T1280:P6, T390:P6); the fault fired 2 time(s) in walk 
+w-noisy exit=0 56s | playCareerMoments CONTROL noisy: 34 checks, red on S1280:P7, S390:P7, T1280:P7, T390:P7 (expected S1280:P7, S390:P7, T1280:P7, T390:P7); the fault fired 2 time(s) in walk
+rvwalk exit=0 344s | rvwalk: 19 runs, supabase requests refused 38
+reduced exit=0 116s | NOBLANKET_EXIT=0
+playSoccerCareer exit=1 78s |   - 6. no console or page errors across the walk: Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to 

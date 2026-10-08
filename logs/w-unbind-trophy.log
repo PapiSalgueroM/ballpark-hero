@@ -1,0 +1,34 @@
+ok   served:sc-signing the bind id "sc-signing" is in the served JavaScript 1 time(s), in SoccerCareer-Bvy-zcXR.js (the walk finds its scene by it, so it must be there exactly once)
+ok   served:sc-intl-trophy the bind id "sc-intl-trophy" is in the served JavaScript 1 time(s), in SoccerCareer-Bvy-zcXR.js (the walk finds its scene by it, so it must be there exactly once)
+CONTROL unbind-trophy: SoccerCareer-Bvy-zcXR.js is served with "sc-intl-trophy" written as "sc-intl-trophy-x"
+saves: signing seed 1107, first offer Liverpool (3 years at €98k/wk); won tournament seed 1 of 1 tried, Copa América 2028 with Brazil, award rank 20
+walk S (signing) at 390 by 844 with touch
+ok   S390:P1 the scene is on the page as [data-signed-slip] [data-career-moment="signing"][data-cmo-bind="sc-signing"] and went live; the slip is the signing scene
+ok   S390:P6 no jump: 2.5 s after the page settled (frame 10) scrollY 0 then 0, page height 11503 then 11503, scene 12,520.5,366,166.5 then 12,520.5,366,166.5; its size over 192 frames of play: 366.00x166.50; the page was at most 0 px wider than its window
+     S390:boxes at rest, x y w h: card 12,521,366,167, art 29,534,56,56, pill 125,598,144,48
+ok   S390:P2 the facts are the save's: "✍️ Signed with Liverpool", "3 years at €98k/wk", the number €98k/wk (the save: Liverpool, 3 years at €98k/wk, €98k/wk); 1 avatar(s), shirt #C8102E, scene colour #c8102e (the save: #C8102E)
+ok   S390:P3 it holds: six seconds on the scene is there with 0 animation(s) running, the same words and rect 12,520.5,366,166.5 then 12,520.5,366,166.5
+ok   S390:P4 once: after the attributes screen and Back the scene is still with 0 confetti piece(s) on the page
+ok   S390:P5 the save is byte equal: 0 write(s) to soccerCareerSave in the window, the same string of 6424 characters
+ok   S390:P4 once: after a reload the page holds 0 slip(s) and 0 scene(s), expected none
+ok   S390:P7 clean: 0 console or page error(s)
+     S390:info 2 resource(s) did not load (refused requests, not counted)
+walk S (signing) at 1280 by 900
+ok   S1280:P1 the scene is on the page as [data-signed-slip] [data-career-moment="signing"][data-cmo-bind="sc-signing"] and went live; the slip is the signing scene
+ok   S1280:P6 no jump: 2.5 s after the page settled (frame 10) scrollY 0 then 0, page height 8174 then 8174, scene 144,407.5,992,166.5 then 144,407.5,992,166.5; its size over 192 frames of play: 992.00x166.50; the page was at most 0 px wider than its window
+     S1280:boxes at rest, x y w h: card 144,408,992,167, art 161,421,56,56, pill 570,485,144,48
+ok   S1280:P2 the facts are the save's: "✍️ Signed with Liverpool", "3 years at €98k/wk", the number €98k/wk (the save: Liverpool, 3 years at €98k/wk, €98k/wk); 1 avatar(s), shirt #C8102E, scene colour #c8102e (the save: #C8102E)
+ok   S1280:P3 it holds: six seconds on the scene is there with 0 animation(s) running, the same words and rect 144,407.5,992,166.5 then 144,407.5,992,166.5
+ok   S1280:P4 once: after the attributes screen and Back the scene is still with 0 confetti piece(s) on the page
+ok   S1280:P5 the save is byte equal: 0 write(s) to soccerCareerSave in the window, the same string of 6424 characters
+ok   S1280:P4 once: after a reload the page holds 0 slip(s) and 0 scene(s), expected none
+ok   S1280:P7 clean: 0 console or page error(s)
+     S1280:info 2 resource(s) did not load (refused requests, not counted)
+walk T (trophy) at 390 by 844 with touch
+FAIL T390:P1 the scene is on the page as [data-intl-moment] [data-career-moment="trophy"][data-cmo-bind="sc-intl-trophy"] and went no scene; 0 cup(s), its lift undefined long and not found ? frame(s) after it went live
+     T390:P2 to P7 not walked: there is no played scene to walk
+walk T (trophy) at 1280 by 900
+FAIL T1280:P1 the scene is on the page as [data-intl-moment] [data-career-moment="trophy"][data-cmo-bind="sc-intl-trophy"] and went no scene; 0 cup(s), its lift undefined long and not found ? frame(s) after it went live
+     T1280:P2 to P7 not walked: there is no played scene to walk
+requests to supabase.co refused: 6
+playCareerMoments CONTROL unbind-trophy: 20 checks, red on T1280:P1, T390:P1 (expected T1280:P1, T390:P1); the fault fired in the served file: the control turned its own check red and left the others green

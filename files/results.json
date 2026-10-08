@@ -1,0 +1,2729 @@
+{
+ "notes": [
+  "engine for saves: the BASE tree at /home/runner/work/ballpark-hero/ballpark-hero/.rvbase",
+  "byte equal, base engine against head engine: signing save true (6943 chars), won save true (54205 chars, seed 1)",
+  "saves made: signing, won, wonEarly, wonOnCard, quiet, extension, signingLong; missing: loan",
+  "facts: {\"signingClub\":\"Liverpool\",\"won\":{\"seed\":1,\"name\":\"Copa América\",\"year\":2028,\"nation\":\"Brazil\",\"rank\":20},\"wonEarlyPhase\":\"newspaper\",\"quiet\":\"World Cup 2014, Round of 16, seed 1\",\"extension\":\"seed 1, Liverpool, wage 106958\",\"longClub\":\"River Plate Asuncion\"}",
+  "walk signing-390: mounted true; state live, \"✍️ Signed with Liverpool\" | [\"3 years at €98k/wk\"] | number €98k/wk | card 12,521,366,167 art 29,534,56,56 pill 125,598,144,48 | running 0 paused 0 | beats art=1 title=1 line=1 ink=1 | old none in DOM | cups 0 (null) avatars 1 shirt #C8102E ink #c8102e | confetti 0 | wider 0 | spill [] clipped [] overlaps [] | timeline [{\"s\":\"fresh\",\"t\":0},{\"s\":\"live\",\"t\":23}] first {\"state\":\"fresh\",\"titleOpacity\":\"0\",\"artOpacity\":\"0\",\"top\":521,\"bottom\":687,\"vh\":844} widest 0 | saved {\"phase\":\"playing\",\"club\":\"Liverpool\",\"colour\":\"#C8102E\",\"years\":3,\"wage\":\"€98k/wk\",\"loan\":null,\"t\":null} | reload {\"scenes\":0,\"slips\":0,\"state\":null,\"confetti\":0} | trouble []",
+  "walk signing-1280: mounted true; state live, \"✍️ Signed with Liverpool\" | [\"3 years at €98k/wk\"] | number €98k/wk | card 144,408,992,167 art 161,421,56,56 pill 570,485,144,48 | running 0 paused 0 | beats art=1 title=1 line=1 ink=1 | old none in DOM | cups 0 (null) avatars 1 shirt #C8102E ink #c8102e | confetti 0 | wider 0 | spill [] clipped [] overlaps [] | timeline [{\"s\":\"fresh\",\"t\":0},{\"s\":\"live\",\"t\":20}] first {\"state\":\"fresh\",\"titleOpacity\":\"0\",\"artOpacity\":\"0\",\"top\":408,\"bottom\":574,\"vh\":900} widest 0 | saved {\"phase\":\"playing\",\"club\":\"Liverpool\",\"colour\":\"#C8102E\",\"years\":3,\"wage\":\"€98k/wk\",\"loan\":null,\"t\":null} | reload {\"scenes\":0,\"slips\":0,\"state\":null,\"confetti\":0} | trouble []",
+  "walk signing-390rm: mounted true; state live, \"✍️ Signed with Liverpool\" | [\"3 years at €98k/wk\"] | number €98k/wk | card 12,521,366,167 art 29,534,56,56 pill 125,598,144,48 | running 0 paused 0 | beats art=1 title=1 line=1 ink=1 | old none in DOM | cups 0 (null) avatars 1 shirt #C8102E ink #c8102e | confetti 0 | wider 0 | spill [] clipped [] overlaps [] | timeline [{\"s\":\"fresh\",\"t\":0},{\"s\":\"live\",\"t\":13}] first {\"state\":\"fresh\",\"titleOpacity\":\"1\",\"artOpacity\":\"1\",\"top\":521,\"bottom\":687,\"vh\":844} widest 0 | saved {\"phase\":\"playing\",\"club\":\"Liverpool\",\"colour\":\"#C8102E\",\"years\":3,\"wage\":\"€98k/wk\",\"loan\":null,\"t\":null} | reload {\"scenes\":0,\"slips\":0,\"state\":null,\"confetti\":0} | trouble []",
+  "walk signing-1280rm: mounted true; state live, \"✍️ Signed with Liverpool\" | [\"3 years at €98k/wk\"] | number €98k/wk | card 144,408,992,167 art 161,421,56,56 pill 570,485,144,48 | running 0 paused 0 | beats art=1 title=1 line=1 ink=1 | old none in DOM | cups 0 (null) avatars 1 shirt #C8102E ink #c8102e | confetti 0 | wider 0 | spill [] clipped [] overlaps [] | timeline [{\"s\":\"fresh\",\"t\":0},{\"s\":\"live\",\"t\":31}] first {\"state\":\"fresh\",\"titleOpacity\":\"1\",\"artOpacity\":\"1\",\"top\":408,\"bottom\":574,\"vh\":900} widest 0 | saved {\"phase\":\"playing\",\"club\":\"Liverpool\",\"colour\":\"#C8102E\",\"years\":3,\"wage\":\"€98k/wk\",\"loan\":null,\"t\":null} | reload {\"scenes\":0,\"slips\":0,\"state\":null,\"confetti\":0} | trouble []",
+  "walk signing-320: mounted true; state live, \"✍️ Signed with Liverpool\" | [\"3 years at €98k/wk\"] | number €98k/wk | card 12,51,296,174 art 29,67,56,56 pill 90,135,144,48 | running 0 paused 0 | beats art=1 title=1 line=1 ink=1 | old none in DOM | cups 0 (null) avatars 1 shirt #C8102E ink #c8102e | confetti 0 | wider 0 | spill [] clipped [] overlaps [] | timeline [{\"s\":\"fresh\",\"t\":0},{\"s\":\"live\",\"t\":21}] first {\"state\":\"fresh\",\"titleOpacity\":\"0\",\"artOpacity\":\"0\",\"top\":51,\"bottom\":225,\"vh\":568} widest 0 | saved {\"phase\":\"playing\",\"club\":\"Liverpool\",\"colour\":\"#C8102E\",\"years\":3,\"wage\":\"€98k/wk\",\"loan\":null,\"t\":null} | reload {\"scenes\":0,\"slips\":0,\"state\":null,\"confetti\":0} | trouble []",
+  "walk signingLong-320: mounted true; state live, \"✍️ Signed with River Plate Asuncion\" | [\"3 years at €98k/wk\"] | number €98k/wk | card 12,51,296,174 art 29,67,56,56 pill 90,135,144,48 | running 0 paused 0 | beats art=1 title=1 line=1 ink=1 | old none in DOM | cups 0 (null) avatars 1 shirt #CE1126 ink #ce1126 | confetti 0 | wider 0 | spill [] clipped [] overlaps [] | timeline [{\"s\":\"fresh\",\"t\":0},{\"s\":\"live\",\"t\":23}] first {\"state\":\"fresh\",\"titleOpacity\":\"0\",\"artOpacity\":\"0\",\"top\":51,\"bottom\":225,\"vh\":568} widest 0 | saved {\"phase\":\"playing\",\"club\":\"River Plate Asuncion\",\"colour\":\"#CE1126\",\"years\":3,\"wage\":\"€98k/wk\",\"loan\":null,\"t\":null} | reload {\"scenes\":0,\"slips\":0,\"state\":null,\"confetti\":0} | trouble []",
+  "walk signingLong-390: mounted true; state live, \"✍️ Signed with River Plate Asuncion\" | [\"3 years at €98k/wk\"] | number €98k/wk | card 12,521,366,174 art 29,537,56,56 pill 125,605,144,48 | running 0 paused 0 | beats art=1 title=1 line=1 ink=1 | old none in DOM | cups 0 (null) avatars 1 shirt #CE1126 ink #ce1126 | confetti 0 | wider 0 | spill [] clipped [] overlaps [] | timeline [{\"s\":\"fresh\",\"t\":0},{\"s\":\"live\",\"t\":25}] first {\"state\":\"fresh\",\"titleOpacity\":\"0\",\"artOpacity\":\"0\",\"top\":521,\"bottom\":695,\"vh\":844} widest 0 | saved {\"phase\":\"playing\",\"club\":\"River Plate Asuncion\",\"colour\":\"#CE1126\",\"years\":3,\"wage\":\"€98k/wk\",\"loan\":null,\"t\":null} | reload {\"scenes\":0,\"slips\":0,\"state\":null,\"confetti\":0} | trouble []",
+  "walk extension-390: mounted true; state live, \"📝 Extended at Liverpool\" | [\"2 years at €123k/wk\"] | number €123k/wk | card 12,164,366,167 art 29,177,56,56 pill 117,241,160,48 | running 0 paused 0 | beats art=1 title=1 line=1 ink=1 | old none in DOM | cups 0 (null) avatars 1 shirt #C8102E ink #c8102e | confetti 0 | wider 0 | spill [] clipped [] overlaps [] | timeline [{\"s\":\"fresh\",\"t\":0},{\"s\":\"live\",\"t\":24}] first {\"state\":\"fresh\",\"titleOpacity\":\"0\",\"artOpacity\":\"0\",\"top\":164,\"bottom\":330,\"vh\":844} widest 0 | saved {\"phase\":\"playing\",\"club\":\"Liverpool\",\"colour\":\"#C8102E\",\"years\":2,\"wage\":\"€123k/wk\",\"loan\":null,\"t\":null} | reload {\"scenes\":0,\"slips\":0,\"state\":null,\"confetti\":0} | trouble []",
+  "walk extension-1280: mounted true; state live, \"📝 Extended at Liverpool\" | [\"3 years at €123k/wk\"] | number €123k/wk | card 144,636,992,167 art 161,649,56,56 pill 562,713,160,48 | running 0 paused 0 | beats art=1 title=1 line=1 ink=1 | old none in DOM | cups 0 (null) avatars 1 shirt #C8102E ink #c8102e | confetti 0 | wider 0 | spill [] clipped [] overlaps [] | timeline [{\"s\":\"fresh\",\"t\":0},{\"s\":\"live\",\"t\":22}] first {\"state\":\"fresh\",\"titleOpacity\":\"0\",\"artOpacity\":\"0\",\"top\":636,\"bottom\":802,\"vh\":900} widest 0 | saved {\"phase\":\"playing\",\"club\":\"Liverpool\",\"colour\":\"#C8102E\",\"years\":3,\"wage\":\"€123k/wk\",\"loan\":null,\"t\":null} | reload {\"scenes\":0,\"slips\":0,\"state\":null,\"confetti\":0} | trouble []",
+  "walk loan: NO SAVE, not walked",
+  "walk trophy-390: mounted true; state live, \"Copa América 2028\" | [] | number null | card 30,30,330,146 art 163,30,64,64 pill null | running 0 paused 0 | beats title=1 | old none in DOM | cups 1 (0.9s) avatars 0 shirt  ink #f59e0b | confetti 60 | wider 0 | spill [] clipped [] overlaps [] | timeline [{\"s\":\"fresh\",\"t\":0},{\"s\":\"live\",\"t\":21}] first {\"state\":\"fresh\",\"titleOpacity\":\"0\",\"artOpacity\":\"1\",\"top\":-133,\"bottom\":12,\"vh\":844} widest 0 | saved {\"phase\":\"world_cup\",\"club\":\"Sao Paulo\",\"colour\":\"#B40404\",\"years\":1,\"wage\":\"€280k/wk\",\"loan\":null,\"t\":\"Copa América 2028 Winner\"} | reload {\"scenes\":1,\"slips\":0,\"state\":\"still\",\"confetti\":0} | trouble []",
+  "walk trophy-1280: mounted true; state live, \"Copa América 2028\" | [] | number null | card 162,30,956,146 art 608,30,64,64 pill null | running 0 paused 0 | beats title=1 | old none in DOM | cups 1 (0.9s) avatars 0 shirt  ink #f59e0b | confetti 60 | wider 0 | spill [] clipped [] overlaps [] | timeline [{\"s\":\"fresh\",\"t\":0},{\"s\":\"live\",\"t\":30}] first {\"state\":\"fresh\",\"titleOpacity\":\"0\",\"artOpacity\":\"1\",\"top\":-105,\"bottom\":40,\"vh\":900} widest 0 | saved {\"phase\":\"world_cup\",\"club\":\"Sao Paulo\",\"colour\":\"#B40404\",\"years\":1,\"wage\":\"€280k/wk\",\"loan\":null,\"t\":\"Copa América 2028 Winner\"} | reload {\"scenes\":1,\"slips\":0,\"state\":\"still\",\"confetti\":0} | trouble []",
+  "walk trophy-390rm: mounted true; state live, \"Copa América 2028\" | [] | number null | card 30,30,330,146 art 163,30,64,64 pill null | running 0 paused 0 | beats title=1 | old none in DOM | cups 1 (1e-06s) avatars 0 shirt  ink #f59e0b | confetti 0 | wider 0 | spill [] clipped [] overlaps [] | timeline [{\"s\":\"fresh\",\"t\":0},{\"s\":\"live\",\"t\":22}] first {\"state\":\"fresh\",\"titleOpacity\":\"1\",\"artOpacity\":\"1\",\"top\":-133,\"bottom\":12,\"vh\":844} widest 0 | saved {\"phase\":\"world_cup\",\"club\":\"Sao Paulo\",\"colour\":\"#B40404\",\"years\":1,\"wage\":\"€280k/wk\",\"loan\":null,\"t\":\"Copa América 2028 Winner\"} | reload {\"scenes\":1,\"slips\":0,\"state\":\"still\",\"confetti\":0} | trouble []",
+  "walk trophy-1280rm: mounted true; state live, \"Copa América 2028\" | [] | number null | card 162,30,956,146 art 608,30,64,64 pill null | running 0 paused 0 | beats title=1 | old none in DOM | cups 1 (1e-06s) avatars 0 shirt  ink #f59e0b | confetti 0 | wider 0 | spill [] clipped [] overlaps [] | timeline [{\"s\":\"fresh\",\"t\":0},{\"s\":\"live\",\"t\":17}] first {\"state\":\"fresh\",\"titleOpacity\":\"1\",\"artOpacity\":\"1\",\"top\":-105,\"bottom\":40,\"vh\":900} widest 0 | saved {\"phase\":\"world_cup\",\"club\":\"Sao Paulo\",\"colour\":\"#B40404\",\"years\":1,\"wage\":\"€280k/wk\",\"loan\":null,\"t\":\"Copa América 2028 Winner\"} | reload {\"scenes\":1,\"slips\":0,\"state\":\"still\",\"confetti\":0} | trouble []",
+  "walk trophy-320: mounted true; state live, \"Copa América 2028\" | [] | number null | card 30,30,260,146 art 128,30,64,64 pill null | running 0 paused 0 | beats title=1 | old none in DOM | cups 1 (0.9s) avatars 0 shirt  ink #f59e0b | confetti 60 | wider 0 | spill [] clipped [] overlaps [] | timeline [{\"s\":\"fresh\",\"t\":0},{\"s\":\"live\",\"t\":12}] first {\"state\":\"fresh\",\"titleOpacity\":\"0\",\"artOpacity\":\"1\",\"top\":-287,\"bottom\":-142,\"vh\":568} widest 0 | saved {\"phase\":\"world_cup\",\"club\":\"Sao Paulo\",\"colour\":\"#B40404\",\"years\":1,\"wage\":\"€280k/wk\",\"loan\":null,\"t\":\"Copa América 2028 Winner\"} | reload {\"scenes\":1,\"slips\":0,\"state\":\"still\",\"confetti\":0} | trouble []",
+  "   trophyEarly-390 step 0: before the press the page holds 0 cup(s), 0 confetti piece(s); headings [\"THE COLUMN: Gwendolyn Villiers Has Seen \",\"FROM ZERO TO HERO: Scene's Incredible Ri\",\"Soccer Career: Free Football Career Simu\",\"How to play Soccer Career, a free footba\",\"Creating your player and building your l\",\"Rolling potential and customizing your b\"]",
+  "   trophyEarly-390 step 1: before the press the page holds 1 cup(s), 55 confetti piece(s); headings [\"Season Summary\",\"Soccer Career: Free Football Career Simu\",\"How to play Soccer Career, a free footba\",\"Creating your player and building your l\",\"Rolling potential and customizing your b\",\"Starting in the academy and turning pro\"]",
+  "   trophyEarly-390 step 2: before the press the page holds 0 cup(s), 0 confetti piece(s); headings [\"Ballon d'Or 2028\",\"Soccer Career: Free Football Career Simu\",\"How to play Soccer Career, a free footba\",\"Creating your player and building your l\",\"Rolling potential and customizing your b\",\"Starting in the academy and turning pro\"]",
+  "walk trophyEarly-390: mounted true; state live, \"Copa América 2028\" | [] | number null | card 30,225,330,146 art 163,225,64,64 pill null | running 0 paused 0 | beats title=1 | old none in DOM | cups 1 (0.9s) avatars 0 shirt  ink #f59e0b | confetti 60 | wider 0 | spill [] clipped [] overlaps [] | timeline [{\"s\":\"fresh\",\"t\":0},{\"s\":\"live\",\"t\":15}] first {\"state\":\"fresh\",\"titleOpacity\":\"0\",\"artOpacity\":\"1\",\"top\":225,\"bottom\":370,\"vh\":844} widest 0 | saved {\"phase\":\"world_cup\",\"club\":\"Sao Paulo\",\"colour\":\"#B40404\",\"years\":1,\"wage\":\"€280k/wk\",\"loan\":null,\"t\":\"Copa América 2028 Winner\"} | reload {\"scenes\":1,\"slips\":0,\"state\":\"still\",\"confetti\":0} | trouble []",
+  "   trophyEarly-390rm step 0: before the press the page holds 0 cup(s), 0 confetti piece(s); headings [\"THE COLUMN: Gwendolyn Villiers Has Seen \",\"FROM ZERO TO HERO: Scene's Incredible Ri\",\"Soccer Career: Free Football Career Simu\",\"How to play Soccer Career, a free footba\",\"Creating your player and building your l\",\"Rolling potential and customizing your b\"]",
+  "   trophyEarly-390rm step 1: before the press the page holds 1 cup(s), 0 confetti piece(s); headings [\"Season Summary\",\"Soccer Career: Free Football Career Simu\",\"How to play Soccer Career, a free footba\",\"Creating your player and building your l\",\"Rolling potential and customizing your b\",\"Starting in the academy and turning pro\"]",
+  "   trophyEarly-390rm step 2: before the press the page holds 0 cup(s), 0 confetti piece(s); headings [\"Ballon d'Or 2028\",\"Soccer Career: Free Football Career Simu\",\"How to play Soccer Career, a free footba\",\"Creating your player and building your l\",\"Rolling potential and customizing your b\",\"Starting in the academy and turning pro\"]",
+  "walk trophyEarly-390rm: mounted true; state live, \"Copa América 2028\" | [] | number null | card 30,225,330,146 art 163,225,64,64 pill null | running 0 paused 0 | beats title=1 | old none in DOM | cups 1 (1e-06s) avatars 0 shirt  ink #f59e0b | confetti 0 | wider 0 | spill [] clipped [] overlaps [] | timeline [{\"s\":\"fresh\",\"t\":0},{\"s\":\"live\",\"t\":9}] first {\"state\":\"fresh\",\"titleOpacity\":\"1\",\"artOpacity\":\"1\",\"top\":225,\"bottom\":370,\"vh\":844} widest 0 | saved {\"phase\":\"world_cup\",\"club\":\"Sao Paulo\",\"colour\":\"#B40404\",\"years\":1,\"wage\":\"€280k/wk\",\"loan\":null,\"t\":\"Copa América 2028 Winner\"} | reload {\"scenes\":1,\"slips\":0,\"state\":\"still\",\"confetti\":0} | trouble []",
+  "walk trophyOnCard-390: mounted true; state still, \"Copa América 2028\" | [] | number null | card 30,671,330,146 art 163,671,64,64 pill null | running 0 paused 0 | beats title=1 | old none in DOM | cups 1 (1e-06s) avatars 0 shirt  ink #f59e0b | confetti 0 | wider 0 | spill [] clipped [] overlaps [] | timeline [{\"s\":\"still\",\"t\":0}] first {\"state\":\"still\",\"titleOpacity\":\"1\",\"artOpacity\":\"1\",\"top\":671,\"bottom\":816,\"vh\":844} widest 0 | saved {\"phase\":\"world_cup\",\"club\":\"Sao Paulo\",\"colour\":\"#B40404\",\"years\":1,\"wage\":\"€280k/wk\",\"loan\":null,\"t\":\"Copa América 2028 Winner\"} | reload {\"scenes\":1,\"slips\":0,\"state\":\"still\",\"confetti\":0} | trouble []",
+  "walk trophyOnCard-1280: mounted true; state still, \"Copa América 2028\" | [] | number null | card 162,758,956,146 art 608,758,64,64 pill null | running 0 paused 0 | beats title=1 | old none in DOM | cups 1 (1e-06s) avatars 0 shirt  ink #f59e0b | confetti 0 | wider 0 | spill [] clipped [] overlaps [] | timeline [{\"s\":\"still\",\"t\":0}] first {\"state\":\"still\",\"titleOpacity\":\"1\",\"artOpacity\":\"1\",\"top\":758,\"bottom\":903,\"vh\":900} widest 0 | saved {\"phase\":\"world_cup\",\"club\":\"Sao Paulo\",\"colour\":\"#B40404\",\"years\":1,\"wage\":\"€280k/wk\",\"loan\":null,\"t\":\"Copa América 2028 Winner\"} | reload {\"scenes\":1,\"slips\":0,\"state\":\"still\",\"confetti\":0} | trouble []",
+  "walk quiet-390: mounted true; {\"scenesInside\":0,\"cups\":0,\"kind\":\"quiet\"} | timeline [] first null widest 0 | saved {\"phase\":\"world_cup\",\"club\":\"Liverpool\",\"colour\":\"#C8102E\",\"years\":1,\"wage\":\"€107k/wk\",\"loan\":null,\"t\":\"World Cup 2014 Round of 16\"} | reload {\"scenes\":0,\"slips\":0,\"state\":null,\"confetti\":0} | trouble []"
+ ],
+ "results": [
+  {
+   "walk": "signing",
+   "view": "390",
+   "reduce": false,
+   "mounted": true,
+   "mid": {
+    "state": "live",
+    "tone": "good",
+    "text": "✍️ Signed with Liverpool3 years at €98k/wk€98k/wkyour wage",
+    "title": "✍️ Signed with Liverpool",
+    "lines": [
+     "3 years at €98k/wk"
+    ],
+    "number": "€98k/wk",
+    "card": [
+     12,
+     521,
+     366,
+     167
+    ],
+    "art": [
+     29,
+     537,
+     56,
+     56
+    ],
+    "pill": [
+     125,
+     598,
+     144,
+     48
+    ],
+    "titleBox": [
+     97,
+     542,
+     214,
+     23
+    ],
+    "vw": 390,
+    "vh": 844,
+    "scrollY": 0,
+    "pageWider": 0,
+    "running": 5,
+    "paused": 0,
+    "beatOpacity": [
+     "art=0.534767",
+     "title=0",
+     "line=0",
+     "ink=1"
+    ],
+    "finalOpacity": "0",
+    "oldShown": "none in DOM",
+    "cups": 0,
+    "cupDuration": null,
+    "avatars": 1,
+    "shirt": "#C8102E",
+    "ink": "#c8102e",
+    "confetti": 0,
+    "spill": [],
+    "clipped": [],
+    "overlaps": []
+   },
+   "rest": {
+    "state": "live",
+    "tone": "good",
+    "text": "✍️ Signed with Liverpool3 years at €98k/wk€98k/wkyour wage",
+    "title": "✍️ Signed with Liverpool",
+    "lines": [
+     "3 years at €98k/wk"
+    ],
+    "number": "€98k/wk",
+    "card": [
+     12,
+     521,
+     366,
+     167
+    ],
+    "art": [
+     29,
+     534,
+     56,
+     56
+    ],
+    "pill": [
+     125,
+     598,
+     144,
+     48
+    ],
+    "titleBox": [
+     97,
+     542,
+     214,
+     23
+    ],
+    "vw": 390,
+    "vh": 844,
+    "scrollY": 0,
+    "pageWider": 0,
+    "running": 0,
+    "paused": 0,
+    "beatOpacity": [
+     "art=1",
+     "title=1",
+     "line=1",
+     "ink=1"
+    ],
+    "finalOpacity": "1",
+    "oldShown": "none in DOM",
+    "cups": 0,
+    "cupDuration": null,
+    "avatars": 1,
+    "shirt": "#C8102E",
+    "ink": "#c8102e",
+    "confetti": 0,
+    "spill": [],
+    "clipped": [],
+    "overlaps": []
+   },
+   "rv": {
+    "states": [
+     {
+      "s": "fresh",
+      "t": 0
+     },
+     {
+      "s": "live",
+      "t": 23
+     }
+    ],
+    "firstSeen": 1804.7999999999884,
+    "widest": 0,
+    "firstFrame": {
+     "state": "fresh",
+     "titleOpacity": "0",
+     "artOpacity": "0",
+     "top": 521,
+     "bottom": 687,
+     "vh": 844
+    }
+   },
+   "saved": {
+    "phase": "playing",
+    "club": "Liverpool",
+    "colour": "#C8102E",
+    "years": 3,
+    "wage": "€98k/wk",
+    "loan": null,
+    "t": null
+   },
+   "afterReload": {
+    "scenes": 0,
+    "slips": 0,
+    "state": null,
+    "confetti": 0
+   },
+   "trouble": []
+  },
+  {
+   "walk": "signing",
+   "view": "1280",
+   "reduce": false,
+   "mounted": true,
+   "mid": {
+    "state": "live",
+    "tone": "good",
+    "text": "✍️ Signed with Liverpool3 years at €98k/wk€98k/wkyour wage",
+    "title": "✍️ Signed with Liverpool",
+    "lines": [
+     "3 years at €98k/wk"
+    ],
+    "number": "€98k/wk",
+    "card": [
+     144,
+     408,
+     992,
+     167
+    ],
+    "art": [
+     161,
+     423,
+     56,
+     56
+    ],
+    "pill": [
+     570,
+     485,
+     144,
+     48
+    ],
+    "titleBox": [
+     229,
+     429,
+     214,
+     23
+    ],
+    "vw": 1280,
+    "vh": 900,
+    "scrollY": 0,
+    "pageWider": 0,
+    "running": 5,
+    "paused": 0,
+    "beatOpacity": [
+     "art=0.579641",
+     "title=0",
+     "line=0",
+     "ink=1"
+    ],
+    "finalOpacity": "0",
+    "oldShown": "none in DOM",
+    "cups": 0,
+    "cupDuration": null,
+    "avatars": 1,
+    "shirt": "#C8102E",
+    "ink": "#c8102e",
+    "confetti": 0,
+    "spill": [],
+    "clipped": [],
+    "overlaps": []
+   },
+   "rest": {
+    "state": "live",
+    "tone": "good",
+    "text": "✍️ Signed with Liverpool3 years at €98k/wk€98k/wkyour wage",
+    "title": "✍️ Signed with Liverpool",
+    "lines": [
+     "3 years at €98k/wk"
+    ],
+    "number": "€98k/wk",
+    "card": [
+     144,
+     408,
+     992,
+     167
+    ],
+    "art": [
+     161,
+     421,
+     56,
+     56
+    ],
+    "pill": [
+     570,
+     485,
+     144,
+     48
+    ],
+    "titleBox": [
+     229,
+     429,
+     214,
+     23
+    ],
+    "vw": 1280,
+    "vh": 900,
+    "scrollY": 0,
+    "pageWider": 0,
+    "running": 0,
+    "paused": 0,
+    "beatOpacity": [
+     "art=1",
+     "title=1",
+     "line=1",
+     "ink=1"
+    ],
+    "finalOpacity": "1",
+    "oldShown": "none in DOM",
+    "cups": 0,
+    "cupDuration": null,
+    "avatars": 1,
+    "shirt": "#C8102E",
+    "ink": "#c8102e",
+    "confetti": 0,
+    "spill": [],
+    "clipped": [],
+    "overlaps": []
+   },
+   "rv": {
+    "states": [
+     {
+      "s": "fresh",
+      "t": 0
+     },
+     {
+      "s": "live",
+      "t": 20
+     }
+    ],
+    "firstSeen": 1733.2000000000116,
+    "widest": 0,
+    "firstFrame": {
+     "state": "fresh",
+     "titleOpacity": "0",
+     "artOpacity": "0",
+     "top": 408,
+     "bottom": 574,
+     "vh": 900
+    }
+   },
+   "saved": {
+    "phase": "playing",
+    "club": "Liverpool",
+    "colour": "#C8102E",
+    "years": 3,
+    "wage": "€98k/wk",
+    "loan": null,
+    "t": null
+   },
+   "afterReload": {
+    "scenes": 0,
+    "slips": 0,
+    "state": null,
+    "confetti": 0
+   },
+   "trouble": []
+  },
+  {
+   "walk": "signing",
+   "view": "390rm",
+   "reduce": true,
+   "mounted": true,
+   "early": {
+    "state": "live",
+    "tone": "good",
+    "text": "✍️ Signed with Liverpool3 years at €98k/wk€98k/wkyour wage",
+    "title": "✍️ Signed with Liverpool",
+    "lines": [
+     "3 years at €98k/wk"
+    ],
+    "number": "€98k/wk",
+    "card": [
+     12,
+     521,
+     366,
+     167
+    ],
+    "art": [
+     29,
+     534,
+     56,
+     56
+    ],
+    "pill": [
+     125,
+     598,
+     144,
+     48
+    ],
+    "titleBox": [
+     97,
+     542,
+     214,
+     23
+    ],
+    "vw": 390,
+    "vh": 844,
+    "scrollY": 0,
+    "pageWider": 0,
+    "running": 0,
+    "paused": 0,
+    "beatOpacity": [
+     "art=1",
+     "title=1",
+     "line=1",
+     "ink=1"
+    ],
+    "finalOpacity": "1",
+    "oldShown": "none in DOM",
+    "cups": 0,
+    "cupDuration": null,
+    "avatars": 1,
+    "shirt": "#C8102E",
+    "ink": "#c8102e",
+    "confetti": 0,
+    "spill": [],
+    "clipped": [],
+    "overlaps": []
+   },
+   "rest": {
+    "state": "live",
+    "tone": "good",
+    "text": "✍️ Signed with Liverpool3 years at €98k/wk€98k/wkyour wage",
+    "title": "✍️ Signed with Liverpool",
+    "lines": [
+     "3 years at €98k/wk"
+    ],
+    "number": "€98k/wk",
+    "card": [
+     12,
+     521,
+     366,
+     167
+    ],
+    "art": [
+     29,
+     534,
+     56,
+     56
+    ],
+    "pill": [
+     125,
+     598,
+     144,
+     48
+    ],
+    "titleBox": [
+     97,
+     542,
+     214,
+     23
+    ],
+    "vw": 390,
+    "vh": 844,
+    "scrollY": 0,
+    "pageWider": 0,
+    "running": 0,
+    "paused": 0,
+    "beatOpacity": [
+     "art=1",
+     "title=1",
+     "line=1",
+     "ink=1"
+    ],
+    "finalOpacity": "1",
+    "oldShown": "none in DOM",
+    "cups": 0,
+    "cupDuration": null,
+    "avatars": 1,
+    "shirt": "#C8102E",
+    "ink": "#c8102e",
+    "confetti": 0,
+    "spill": [],
+    "clipped": [],
+    "overlaps": []
+   },
+   "rv": {
+    "states": [
+     {
+      "s": "fresh",
+      "t": 0
+     },
+     {
+      "s": "live",
+      "t": 13
+     }
+    ],
+    "firstSeen": 1528.2000000000116,
+    "widest": 0,
+    "firstFrame": {
+     "state": "fresh",
+     "titleOpacity": "1",
+     "artOpacity": "1",
+     "top": 521,
+     "bottom": 687,
+     "vh": 844
+    }
+   },
+   "saved": {
+    "phase": "playing",
+    "club": "Liverpool",
+    "colour": "#C8102E",
+    "years": 3,
+    "wage": "€98k/wk",
+    "loan": null,
+    "t": null
+   },
+   "afterReload": {
+    "scenes": 0,
+    "slips": 0,
+    "state": null,
+    "confetti": 0
+   },
+   "trouble": []
+  },
+  {
+   "walk": "signing",
+   "view": "1280rm",
+   "reduce": true,
+   "mounted": true,
+   "early": {
+    "state": "live",
+    "tone": "good",
+    "text": "✍️ Signed with Liverpool3 years at €98k/wk€98k/wkyour wage",
+    "title": "✍️ Signed with Liverpool",
+    "lines": [
+     "3 years at €98k/wk"
+    ],
+    "number": "€98k/wk",
+    "card": [
+     144,
+     408,
+     992,
+     167
+    ],
+    "art": [
+     161,
+     421,
+     56,
+     56
+    ],
+    "pill": [
+     570,
+     485,
+     144,
+     48
+    ],
+    "titleBox": [
+     229,
+     429,
+     214,
+     23
+    ],
+    "vw": 1280,
+    "vh": 900,
+    "scrollY": 0,
+    "pageWider": 0,
+    "running": 0,
+    "paused": 0,
+    "beatOpacity": [
+     "art=1",
+     "title=1",
+     "line=1",
+     "ink=1"
+    ],
+    "finalOpacity": "1",
+    "oldShown": "none in DOM",
+    "cups": 0,
+    "cupDuration": null,
+    "avatars": 1,
+    "shirt": "#C8102E",
+    "ink": "#c8102e",
+    "confetti": 0,
+    "spill": [],
+    "clipped": [],
+    "overlaps": []
+   },
+   "rest": {
+    "state": "live",
+    "tone": "good",
+    "text": "✍️ Signed with Liverpool3 years at €98k/wk€98k/wkyour wage",
+    "title": "✍️ Signed with Liverpool",
+    "lines": [
+     "3 years at €98k/wk"
+    ],
+    "number": "€98k/wk",
+    "card": [
+     144,
+     408,
+     992,
+     167
+    ],
+    "art": [
+     161,
+     421,
+     56,
+     56
+    ],
+    "pill": [
+     570,
+     485,
+     144,
+     48
+    ],
+    "titleBox": [
+     229,
+     429,
+     214,
+     23
+    ],
+    "vw": 1280,
+    "vh": 900,
+    "scrollY": 0,
+    "pageWider": 0,
+    "running": 0,
+    "paused": 0,
+    "beatOpacity": [
+     "art=1",
+     "title=1",
+     "line=1",
+     "ink=1"
+    ],
+    "finalOpacity": "1",
+    "oldShown": "none in DOM",
+    "cups": 0,
+    "cupDuration": null,
+    "avatars": 1,
+    "shirt": "#C8102E",
+    "ink": "#c8102e",
+    "confetti": 0,
+    "spill": [],
+    "clipped": [],
+    "overlaps": []
+   },
+   "rv": {
+    "states": [
+     {
+      "s": "fresh",
+      "t": 0
+     },
+     {
+      "s": "live",
+      "t": 31
+     }
+    ],
+    "firstSeen": 1649.2999999999884,
+    "widest": 0,
+    "firstFrame": {
+     "state": "fresh",
+     "titleOpacity": "1",
+     "artOpacity": "1",
+     "top": 408,
+     "bottom": 574,
+     "vh": 900
+    }
+   },
+   "saved": {
+    "phase": "playing",
+    "club": "Liverpool",
+    "colour": "#C8102E",
+    "years": 3,
+    "wage": "€98k/wk",
+    "loan": null,
+    "t": null
+   },
+   "afterReload": {
+    "scenes": 0,
+    "slips": 0,
+    "state": null,
+    "confetti": 0
+   },
+   "trouble": []
+  },
+  {
+   "walk": "signing",
+   "view": "320",
+   "reduce": false,
+   "mounted": true,
+   "mid": {
+    "state": "live",
+    "tone": "good",
+    "text": "✍️ Signed with Liverpool3 years at €98k/wk€98k/wkyour wage",
+    "title": "✍️ Signed with Liverpool",
+    "lines": [
+     "3 years at €98k/wk"
+    ],
+    "number": "€98k/wk",
+    "card": [
+     12,
+     51,
+     296,
+     174
+    ],
+    "art": [
+     29,
+     71,
+     56,
+     56
+    ],
+    "pill": [
+     90,
+     135,
+     144,
+     48
+    ],
+    "titleBox": [
+     97,
+     64,
+     198,
+     45
+    ],
+    "vw": 320,
+    "vh": 568,
+    "scrollY": 470,
+    "pageWider": 0,
+    "running": 5,
+    "paused": 0,
+    "beatOpacity": [
+     "art=0.53497",
+     "title=0",
+     "line=0",
+     "ink=1"
+    ],
+    "finalOpacity": "0",
+    "oldShown": "none in DOM",
+    "cups": 0,
+    "cupDuration": null,
+    "avatars": 1,
+    "shirt": "#C8102E",
+    "ink": "#c8102e",
+    "confetti": 0,
+    "spill": [],
+    "clipped": [],
+    "overlaps": []
+   },
+   "rest": {
+    "state": "live",
+    "tone": "good",
+    "text": "✍️ Signed with Liverpool3 years at €98k/wk€98k/wkyour wage",
+    "title": "✍️ Signed with Liverpool",
+    "lines": [
+     "3 years at €98k/wk"
+    ],
+    "number": "€98k/wk",
+    "card": [
+     12,
+     51,
+     296,
+     174
+    ],
+    "art": [
+     29,
+     67,
+     56,
+     56
+    ],
+    "pill": [
+     90,
+     135,
+     144,
+     48
+    ],
+    "titleBox": [
+     97,
+     64,
+     198,
+     45
+    ],
+    "vw": 320,
+    "vh": 568,
+    "scrollY": 470,
+    "pageWider": 0,
+    "running": 0,
+    "paused": 0,
+    "beatOpacity": [
+     "art=1",
+     "title=1",
+     "line=1",
+     "ink=1"
+    ],
+    "finalOpacity": "1",
+    "oldShown": "none in DOM",
+    "cups": 0,
+    "cupDuration": null,
+    "avatars": 1,
+    "shirt": "#C8102E",
+    "ink": "#c8102e",
+    "confetti": 0,
+    "spill": [],
+    "clipped": [],
+    "overlaps": []
+   },
+   "rv": {
+    "states": [
+     {
+      "s": "fresh",
+      "t": 0
+     },
+     {
+      "s": "live",
+      "t": 21
+     }
+    ],
+    "firstSeen": 1730.7999999999884,
+    "widest": 0,
+    "firstFrame": {
+     "state": "fresh",
+     "titleOpacity": "0",
+     "artOpacity": "0",
+     "top": 51,
+     "bottom": 225,
+     "vh": 568
+    }
+   },
+   "saved": {
+    "phase": "playing",
+    "club": "Liverpool",
+    "colour": "#C8102E",
+    "years": 3,
+    "wage": "€98k/wk",
+    "loan": null,
+    "t": null
+   },
+   "afterReload": {
+    "scenes": 0,
+    "slips": 0,
+    "state": null,
+    "confetti": 0
+   },
+   "trouble": []
+  },
+  {
+   "walk": "signingLong",
+   "view": "320",
+   "reduce": false,
+   "mounted": true,
+   "mid": {
+    "state": "live",
+    "tone": "good",
+    "text": "✍️ Signed with River Plate Asuncion3 years at €98k/wk€98k/wkyour wage",
+    "title": "✍️ Signed with River Plate Asuncion",
+    "lines": [
+     "3 years at €98k/wk"
+    ],
+    "number": "€98k/wk",
+    "card": [
+     12,
+     51,
+     296,
+     174
+    ],
+    "art": [
+     29,
+     71,
+     56,
+     56
+    ],
+    "pill": [
+     90,
+     135,
+     144,
+     48
+    ],
+    "titleBox": [
+     97,
+     64,
+     198,
+     45
+    ],
+    "vw": 320,
+    "vh": 568,
+    "scrollY": 470,
+    "pageWider": 0,
+    "running": 5,
+    "paused": 0,
+    "beatOpacity": [
+     "art=0.534836",
+     "title=0",
+     "line=0",
+     "ink=1"
+    ],
+    "finalOpacity": "0",
+    "oldShown": "none in DOM",
+    "cups": 0,
+    "cupDuration": null,
+    "avatars": 1,
+    "shirt": "#CE1126",
+    "ink": "#ce1126",
+    "confetti": 0,
+    "spill": [],
+    "clipped": [],
+    "overlaps": []
+   },
+   "rest": {
+    "state": "live",
+    "tone": "good",
+    "text": "✍️ Signed with River Plate Asuncion3 years at €98k/wk€98k/wkyour wage",
+    "title": "✍️ Signed with River Plate Asuncion",
+    "lines": [
+     "3 years at €98k/wk"
+    ],
+    "number": "€98k/wk",
+    "card": [
+     12,
+     51,
+     296,
+     174
+    ],
+    "art": [
+     29,
+     67,
+     56,
+     56
+    ],
+    "pill": [
+     90,
+     135,
+     144,
+     48
+    ],
+    "titleBox": [
+     97,
+     64,
+     198,
+     45
+    ],
+    "vw": 320,
+    "vh": 568,
+    "scrollY": 470,
+    "pageWider": 0,
+    "running": 0,
+    "paused": 0,
+    "beatOpacity": [
+     "art=1",
+     "title=1",
+     "line=1",
+     "ink=1"
+    ],
+    "finalOpacity": "1",
+    "oldShown": "none in DOM",
+    "cups": 0,
+    "cupDuration": null,
+    "avatars": 1,
+    "shirt": "#CE1126",
+    "ink": "#ce1126",
+    "confetti": 0,
+    "spill": [],
+    "clipped": [],
+    "overlaps": []
+   },
+   "rv": {
+    "states": [
+     {
+      "s": "fresh",
+      "t": 0
+     },
+     {
+      "s": "live",
+      "t": 23
+     }
+    ],
+    "firstSeen": 1706.899999999965,
+    "widest": 0,
+    "firstFrame": {
+     "state": "fresh",
+     "titleOpacity": "0",
+     "artOpacity": "0",
+     "top": 51,
+     "bottom": 225,
+     "vh": 568
+    }
+   },
+   "saved": {
+    "phase": "playing",
+    "club": "River Plate Asuncion",
+    "colour": "#CE1126",
+    "years": 3,
+    "wage": "€98k/wk",
+    "loan": null,
+    "t": null
+   },
+   "afterReload": {
+    "scenes": 0,
+    "slips": 0,
+    "state": null,
+    "confetti": 0
+   },
+   "trouble": []
+  },
+  {
+   "walk": "signingLong",
+   "view": "390",
+   "reduce": false,
+   "mounted": true,
+   "mid": {
+    "state": "live",
+    "tone": "good",
+    "text": "✍️ Signed with River Plate Asuncion3 years at €98k/wk€98k/wkyour wage",
+    "title": "✍️ Signed with River Plate Asuncion",
+    "lines": [
+     "3 years at €98k/wk"
+    ],
+    "number": "€98k/wk",
+    "card": [
+     12,
+     521,
+     366,
+     174
+    ],
+    "art": [
+     29,
+     541,
+     56,
+     56
+    ],
+    "pill": [
+     125,
+     605,
+     144,
+     48
+    ],
+    "titleBox": [
+     97,
+     534,
+     268,
+     45
+    ],
+    "vw": 390,
+    "vh": 844,
+    "scrollY": 0,
+    "pageWider": 0,
+    "running": 5,
+    "paused": 0,
+    "beatOpacity": [
+     "art=0.534888",
+     "title=0",
+     "line=0",
+     "ink=1"
+    ],
+    "finalOpacity": "0",
+    "oldShown": "none in DOM",
+    "cups": 0,
+    "cupDuration": null,
+    "avatars": 1,
+    "shirt": "#CE1126",
+    "ink": "#ce1126",
+    "confetti": 0,
+    "spill": [],
+    "clipped": [],
+    "overlaps": []
+   },
+   "rest": {
+    "state": "live",
+    "tone": "good",
+    "text": "✍️ Signed with River Plate Asuncion3 years at €98k/wk€98k/wkyour wage",
+    "title": "✍️ Signed with River Plate Asuncion",
+    "lines": [
+     "3 years at €98k/wk"
+    ],
+    "number": "€98k/wk",
+    "card": [
+     12,
+     521,
+     366,
+     174
+    ],
+    "art": [
+     29,
+     537,
+     56,
+     56
+    ],
+    "pill": [
+     125,
+     605,
+     144,
+     48
+    ],
+    "titleBox": [
+     97,
+     534,
+     268,
+     45
+    ],
+    "vw": 390,
+    "vh": 844,
+    "scrollY": 0,
+    "pageWider": 0,
+    "running": 0,
+    "paused": 0,
+    "beatOpacity": [
+     "art=1",
+     "title=1",
+     "line=1",
+     "ink=1"
+    ],
+    "finalOpacity": "1",
+    "oldShown": "none in DOM",
+    "cups": 0,
+    "cupDuration": null,
+    "avatars": 1,
+    "shirt": "#CE1126",
+    "ink": "#ce1126",
+    "confetti": 0,
+    "spill": [],
+    "clipped": [],
+    "overlaps": []
+   },
+   "rv": {
+    "states": [
+     {
+      "s": "fresh",
+      "t": 0
+     },
+     {
+      "s": "live",
+      "t": 25
+     }
+    ],
+    "firstSeen": 1719.1999999999534,
+    "widest": 0,
+    "firstFrame": {
+     "state": "fresh",
+     "titleOpacity": "0",
+     "artOpacity": "0",
+     "top": 521,
+     "bottom": 695,
+     "vh": 844
+    }
+   },
+   "saved": {
+    "phase": "playing",
+    "club": "River Plate Asuncion",
+    "colour": "#CE1126",
+    "years": 3,
+    "wage": "€98k/wk",
+    "loan": null,
+    "t": null
+   },
+   "afterReload": {
+    "scenes": 0,
+    "slips": 0,
+    "state": null,
+    "confetti": 0
+   },
+   "trouble": []
+  },
+  {
+   "walk": "extension",
+   "view": "390",
+   "reduce": false,
+   "mounted": true,
+   "mid": {
+    "state": "live",
+    "tone": "good",
+    "text": "📝 Extended at Liverpool2 years at €123k/wk€123k/wkyour wage",
+    "title": "📝 Extended at Liverpool",
+    "lines": [
+     "2 years at €123k/wk"
+    ],
+    "number": "€123k/wk",
+    "card": [
+     12,
+     164,
+     366,
+     167
+    ],
+    "art": [
+     29,
+     180,
+     56,
+     56
+    ],
+    "pill": [
+     117,
+     241,
+     160,
+     48
+    ],
+    "titleBox": [
+     97,
+     185,
+     216,
+     23
+    ],
+    "vw": 390,
+    "vh": 844,
+    "scrollY": 504,
+    "pageWider": 0,
+    "running": 5,
+    "paused": 0,
+    "beatOpacity": [
+     "art=0.534754",
+     "title=0",
+     "line=0",
+     "ink=1"
+    ],
+    "finalOpacity": "0",
+    "oldShown": "none in DOM",
+    "cups": 0,
+    "cupDuration": null,
+    "avatars": 1,
+    "shirt": "#C8102E",
+    "ink": "#c8102e",
+    "confetti": 0,
+    "spill": [],
+    "clipped": [],
+    "overlaps": []
+   },
+   "rest": {
+    "state": "live",
+    "tone": "good",
+    "text": "📝 Extended at Liverpool2 years at €123k/wk€123k/wkyour wage",
+    "title": "📝 Extended at Liverpool",
+    "lines": [
+     "2 years at €123k/wk"
+    ],
+    "number": "€123k/wk",
+    "card": [
+     12,
+     164,
+     366,
+     167
+    ],
+    "art": [
+     29,
+     177,
+     56,
+     56
+    ],
+    "pill": [
+     117,
+     241,
+     160,
+     48
+    ],
+    "titleBox": [
+     97,
+     185,
+     216,
+     23
+    ],
+    "vw": 390,
+    "vh": 844,
+    "scrollY": 504,
+    "pageWider": 0,
+    "running": 0,
+    "paused": 0,
+    "beatOpacity": [
+     "art=1",
+     "title=1",
+     "line=1",
+     "ink=1"
+    ],
+    "finalOpacity": "1",
+    "oldShown": "none in DOM",
+    "cups": 0,
+    "cupDuration": null,
+    "avatars": 1,
+    "shirt": "#C8102E",
+    "ink": "#c8102e",
+    "confetti": 0,
+    "spill": [],
+    "clipped": [],
+    "overlaps": []
+   },
+   "rv": {
+    "states": [
+     {
+      "s": "fresh",
+      "t": 0
+     },
+     {
+      "s": "live",
+      "t": 24
+     }
+    ],
+    "firstSeen": 1454.100000000035,
+    "widest": 0,
+    "firstFrame": {
+     "state": "fresh",
+     "titleOpacity": "0",
+     "artOpacity": "0",
+     "top": 164,
+     "bottom": 330,
+     "vh": 844
+    }
+   },
+   "saved": {
+    "phase": "playing",
+    "club": "Liverpool",
+    "colour": "#C8102E",
+    "years": 2,
+    "wage": "€123k/wk",
+    "loan": null,
+    "t": null
+   },
+   "afterReload": {
+    "scenes": 0,
+    "slips": 0,
+    "state": null,
+    "confetti": 0
+   },
+   "trouble": []
+  },
+  {
+   "walk": "extension",
+   "view": "1280",
+   "reduce": false,
+   "mounted": true,
+   "mid": {
+    "state": "live",
+    "tone": "good",
+    "text": "📝 Extended at Liverpool3 years at €123k/wk€123k/wkyour wage",
+    "title": "📝 Extended at Liverpool",
+    "lines": [
+     "3 years at €123k/wk"
+    ],
+    "number": "€123k/wk",
+    "card": [
+     144,
+     636,
+     992,
+     167
+    ],
+    "art": [
+     161,
+     651,
+     56,
+     56
+    ],
+    "pill": [
+     562,
+     713,
+     160,
+     48
+    ],
+    "titleBox": [
+     229,
+     657,
+     216,
+     23
+    ],
+    "vw": 1280,
+    "vh": 900,
+    "scrollY": 0,
+    "pageWider": 0,
+    "running": 5,
+    "paused": 0,
+    "beatOpacity": [
+     "art=0.622951",
+     "title=0",
+     "line=0",
+     "ink=1"
+    ],
+    "finalOpacity": "0",
+    "oldShown": "none in DOM",
+    "cups": 0,
+    "cupDuration": null,
+    "avatars": 1,
+    "shirt": "#C8102E",
+    "ink": "#c8102e",
+    "confetti": 0,
+    "spill": [],
+    "clipped": [],
+    "overlaps": []
+   },
+   "rest": {
+    "state": "live",
+    "tone": "good",
+    "text": "📝 Extended at Liverpool3 years at €123k/wk€123k/wkyour wage",
+    "title": "📝 Extended at Liverpool",
+    "lines": [
+     "3 years at €123k/wk"
+    ],
+    "number": "€123k/wk",
+    "card": [
+     144,
+     636,
+     992,
+     167
+    ],
+    "art": [
+     161,
+     649,
+     56,
+     56
+    ],
+    "pill": [
+     562,
+     713,
+     160,
+     48
+    ],
+    "titleBox": [
+     229,
+     657,
+     216,
+     23
+    ],
+    "vw": 1280,
+    "vh": 900,
+    "scrollY": 0,
+    "pageWider": 0,
+    "running": 0,
+    "paused": 0,
+    "beatOpacity": [
+     "art=1",
+     "title=1",
+     "line=1",
+     "ink=1"
+    ],
+    "finalOpacity": "1",
+    "oldShown": "none in DOM",
+    "cups": 0,
+    "cupDuration": null,
+    "avatars": 1,
+    "shirt": "#C8102E",
+    "ink": "#c8102e",
+    "confetti": 0,
+    "spill": [],
+    "clipped": [],
+    "overlaps": []
+   },
+   "rv": {
+    "states": [
+     {
+      "s": "fresh",
+      "t": 0
+     },
+     {
+      "s": "live",
+      "t": 22
+     }
+    ],
+    "firstSeen": 1465.6999999999534,
+    "widest": 0,
+    "firstFrame": {
+     "state": "fresh",
+     "titleOpacity": "0",
+     "artOpacity": "0",
+     "top": 636,
+     "bottom": 802,
+     "vh": 900
+    }
+   },
+   "saved": {
+    "phase": "playing",
+    "club": "Liverpool",
+    "colour": "#C8102E",
+    "years": 3,
+    "wage": "€123k/wk",
+    "loan": null,
+    "t": null
+   },
+   "afterReload": {
+    "scenes": 0,
+    "slips": 0,
+    "state": null,
+    "confetti": 0
+   },
+   "trouble": []
+  },
+  {
+   "walk": "trophy",
+   "view": "390",
+   "reduce": false,
+   "mounted": true,
+   "mid": {
+    "state": "live",
+    "tone": "gold",
+    "text": "Copa América 2028🇧🇷BrazilWinnerChampions: 🇧🇷Brazilbeat USA in the final",
+    "title": "Copa América 2028",
+    "lines": [],
+    "number": null,
+    "card": [
+     30,
+     30,
+     330,
+     146
+    ],
+    "art": [
+     163,
+     30,
+     64,
+     64
+    ],
+    "pill": null,
+    "titleBox": [
+     111,
+     103,
+     168,
+     23
+    ],
+    "vw": 390,
+    "vh": 844,
+    "scrollY": 641,
+    "pageWider": 0,
+    "running": 8,
+    "paused": 0,
+    "beatOpacity": [
+     "title=0"
+    ],
+    "finalOpacity": null,
+    "oldShown": "none in DOM",
+    "cups": 1,
+    "cupDuration": "0.9s",
+    "avatars": 0,
+    "shirt": "",
+    "ink": "#f59e0b",
+    "confetti": 60,
+    "spill": [],
+    "clipped": [],
+    "overlaps": []
+   },
+   "rest": {
+    "state": "live",
+    "tone": "gold",
+    "text": "Copa América 2028🇧🇷BrazilWinnerChampions: 🇧🇷Brazilbeat USA in the final",
+    "title": "Copa América 2028",
+    "lines": [],
+    "number": null,
+    "card": [
+     30,
+     30,
+     330,
+     146
+    ],
+    "art": [
+     163,
+     30,
+     64,
+     64
+    ],
+    "pill": null,
+    "titleBox": [
+     111,
+     103,
+     168,
+     23
+    ],
+    "vw": 390,
+    "vh": 844,
+    "scrollY": 641,
+    "pageWider": 0,
+    "running": 0,
+    "paused": 0,
+    "beatOpacity": [
+     "title=1"
+    ],
+    "finalOpacity": null,
+    "oldShown": "none in DOM",
+    "cups": 1,
+    "cupDuration": "0.9s",
+    "avatars": 0,
+    "shirt": "",
+    "ink": "#f59e0b",
+    "confetti": 60,
+    "spill": [],
+    "clipped": [],
+    "overlaps": []
+   },
+   "rv": {
+    "states": [
+     {
+      "s": "fresh",
+      "t": 0
+     },
+     {
+      "s": "live",
+      "t": 21
+     }
+    ],
+    "firstSeen": 1431.5999999999767,
+    "widest": 0,
+    "firstFrame": {
+     "state": "fresh",
+     "titleOpacity": "0",
+     "artOpacity": "1",
+     "top": -133,
+     "bottom": 12,
+     "vh": 844
+    }
+   },
+   "saved": {
+    "phase": "world_cup",
+    "club": "Sao Paulo",
+    "colour": "#B40404",
+    "years": 1,
+    "wage": "€280k/wk",
+    "loan": null,
+    "t": "Copa América 2028 Winner"
+   },
+   "afterReload": {
+    "scenes": 1,
+    "slips": 0,
+    "state": "still",
+    "confetti": 0
+   },
+   "trouble": []
+  },
+  {
+   "walk": "trophy",
+   "view": "1280",
+   "reduce": false,
+   "mounted": true,
+   "mid": {
+    "state": "live",
+    "tone": "gold",
+    "text": "Copa América 2028🇧🇷BrazilWinnerChampions: 🇧🇷Brazilbeat USA in the final",
+    "title": "Copa América 2028",
+    "lines": [],
+    "number": null,
+    "card": [
+     162,
+     30,
+     956,
+     146
+    ],
+    "art": [
+     608,
+     30,
+     64,
+     64
+    ],
+    "pill": null,
+    "titleBox": [
+     544,
+     101,
+     192,
+     26
+    ],
+    "vw": 1280,
+    "vh": 900,
+    "scrollY": 728,
+    "pageWider": 0,
+    "running": 8,
+    "paused": 0,
+    "beatOpacity": [
+     "title=0.695578"
+    ],
+    "finalOpacity": null,
+    "oldShown": "none in DOM",
+    "cups": 1,
+    "cupDuration": "0.9s",
+    "avatars": 0,
+    "shirt": "",
+    "ink": "#f59e0b",
+    "confetti": 60,
+    "spill": [],
+    "clipped": [],
+    "overlaps": []
+   },
+   "rest": {
+    "state": "live",
+    "tone": "gold",
+    "text": "Copa América 2028🇧🇷BrazilWinnerChampions: 🇧🇷Brazilbeat USA in the final",
+    "title": "Copa América 2028",
+    "lines": [],
+    "number": null,
+    "card": [
+     162,
+     30,
+     956,
+     146
+    ],
+    "art": [
+     608,
+     30,
+     64,
+     64
+    ],
+    "pill": null,
+    "titleBox": [
+     556,
+     103,
+     168,
+     23
+    ],
+    "vw": 1280,
+    "vh": 900,
+    "scrollY": 728,
+    "pageWider": 0,
+    "running": 0,
+    "paused": 0,
+    "beatOpacity": [
+     "title=1"
+    ],
+    "finalOpacity": null,
+    "oldShown": "none in DOM",
+    "cups": 1,
+    "cupDuration": "0.9s",
+    "avatars": 0,
+    "shirt": "",
+    "ink": "#f59e0b",
+    "confetti": 60,
+    "spill": [],
+    "clipped": [],
+    "overlaps": []
+   },
+   "rv": {
+    "states": [
+     {
+      "s": "fresh",
+      "t": 0
+     },
+     {
+      "s": "live",
+      "t": 30
+     }
+    ],
+    "firstSeen": 1598.4000000000233,
+    "widest": 0,
+    "firstFrame": {
+     "state": "fresh",
+     "titleOpacity": "0",
+     "artOpacity": "1",
+     "top": -105,
+     "bottom": 40,
+     "vh": 900
+    }
+   },
+   "saved": {
+    "phase": "world_cup",
+    "club": "Sao Paulo",
+    "colour": "#B40404",
+    "years": 1,
+    "wage": "€280k/wk",
+    "loan": null,
+    "t": "Copa América 2028 Winner"
+   },
+   "afterReload": {
+    "scenes": 1,
+    "slips": 0,
+    "state": "still",
+    "confetti": 0
+   },
+   "trouble": []
+  },
+  {
+   "walk": "trophy",
+   "view": "390rm",
+   "reduce": true,
+   "mounted": true,
+   "early": {
+    "state": "live",
+    "tone": "gold",
+    "text": "Copa América 2028🇧🇷BrazilWinnerChampions: 🇧🇷Brazilbeat USA in the final",
+    "title": "Copa América 2028",
+    "lines": [],
+    "number": null,
+    "card": [
+     30,
+     30,
+     330,
+     146
+    ],
+    "art": [
+     163,
+     30,
+     64,
+     64
+    ],
+    "pill": null,
+    "titleBox": [
+     111,
+     103,
+     168,
+     23
+    ],
+    "vw": 390,
+    "vh": 844,
+    "scrollY": 641,
+    "pageWider": 0,
+    "running": 0,
+    "paused": 0,
+    "beatOpacity": [
+     "title=1"
+    ],
+    "finalOpacity": null,
+    "oldShown": "none in DOM",
+    "cups": 1,
+    "cupDuration": "1e-06s",
+    "avatars": 0,
+    "shirt": "",
+    "ink": "#f59e0b",
+    "confetti": 0,
+    "spill": [],
+    "clipped": [],
+    "overlaps": []
+   },
+   "rest": {
+    "state": "live",
+    "tone": "gold",
+    "text": "Copa América 2028🇧🇷BrazilWinnerChampions: 🇧🇷Brazilbeat USA in the final",
+    "title": "Copa América 2028",
+    "lines": [],
+    "number": null,
+    "card": [
+     30,
+     30,
+     330,
+     146
+    ],
+    "art": [
+     163,
+     30,
+     64,
+     64
+    ],
+    "pill": null,
+    "titleBox": [
+     111,
+     103,
+     168,
+     23
+    ],
+    "vw": 390,
+    "vh": 844,
+    "scrollY": 641,
+    "pageWider": 0,
+    "running": 0,
+    "paused": 0,
+    "beatOpacity": [
+     "title=1"
+    ],
+    "finalOpacity": null,
+    "oldShown": "none in DOM",
+    "cups": 1,
+    "cupDuration": "1e-06s",
+    "avatars": 0,
+    "shirt": "",
+    "ink": "#f59e0b",
+    "confetti": 0,
+    "spill": [],
+    "clipped": [],
+    "overlaps": []
+   },
+   "rv": {
+    "states": [
+     {
+      "s": "fresh",
+      "t": 0
+     },
+     {
+      "s": "live",
+      "t": 22
+     }
+    ],
+    "firstSeen": 1627.8000000000466,
+    "widest": 0,
+    "firstFrame": {
+     "state": "fresh",
+     "titleOpacity": "1",
+     "artOpacity": "1",
+     "top": -133,
+     "bottom": 12,
+     "vh": 844
+    }
+   },
+   "saved": {
+    "phase": "world_cup",
+    "club": "Sao Paulo",
+    "colour": "#B40404",
+    "years": 1,
+    "wage": "€280k/wk",
+    "loan": null,
+    "t": "Copa América 2028 Winner"
+   },
+   "afterReload": {
+    "scenes": 1,
+    "slips": 0,
+    "state": "still",
+    "confetti": 0
+   },
+   "trouble": []
+  },
+  {
+   "walk": "trophy",
+   "view": "1280rm",
+   "reduce": true,
+   "mounted": true,
+   "early": {
+    "state": "live",
+    "tone": "gold",
+    "text": "Copa América 2028🇧🇷BrazilWinnerChampions: 🇧🇷Brazilbeat USA in the final",
+    "title": "Copa América 2028",
+    "lines": [],
+    "number": null,
+    "card": [
+     162,
+     30,
+     956,
+     146
+    ],
+    "art": [
+     608,
+     30,
+     64,
+     64
+    ],
+    "pill": null,
+    "titleBox": [
+     556,
+     103,
+     168,
+     23
+    ],
+    "vw": 1280,
+    "vh": 900,
+    "scrollY": 728,
+    "pageWider": 0,
+    "running": 0,
+    "paused": 0,
+    "beatOpacity": [
+     "title=1"
+    ],
+    "finalOpacity": null,
+    "oldShown": "none in DOM",
+    "cups": 1,
+    "cupDuration": "1e-06s",
+    "avatars": 0,
+    "shirt": "",
+    "ink": "#f59e0b",
+    "confetti": 0,
+    "spill": [],
+    "clipped": [],
+    "overlaps": []
+   },
+   "rest": {
+    "state": "live",
+    "tone": "gold",
+    "text": "Copa América 2028🇧🇷BrazilWinnerChampions: 🇧🇷Brazilbeat USA in the final",
+    "title": "Copa América 2028",
+    "lines": [],
+    "number": null,
+    "card": [
+     162,
+     30,
+     956,
+     146
+    ],
+    "art": [
+     608,
+     30,
+     64,
+     64
+    ],
+    "pill": null,
+    "titleBox": [
+     556,
+     103,
+     168,
+     23
+    ],
+    "vw": 1280,
+    "vh": 900,
+    "scrollY": 728,
+    "pageWider": 0,
+    "running": 0,
+    "paused": 0,
+    "beatOpacity": [
+     "title=1"
+    ],
+    "finalOpacity": null,
+    "oldShown": "none in DOM",
+    "cups": 1,
+    "cupDuration": "1e-06s",
+    "avatars": 0,
+    "shirt": "",
+    "ink": "#f59e0b",
+    "confetti": 0,
+    "spill": [],
+    "clipped": [],
+    "overlaps": []
+   },
+   "rv": {
+    "states": [
+     {
+      "s": "fresh",
+      "t": 0
+     },
+     {
+      "s": "live",
+      "t": 17
+     }
+    ],
+    "firstSeen": 1456.0999999999767,
+    "widest": 0,
+    "firstFrame": {
+     "state": "fresh",
+     "titleOpacity": "1",
+     "artOpacity": "1",
+     "top": -105,
+     "bottom": 40,
+     "vh": 900
+    }
+   },
+   "saved": {
+    "phase": "world_cup",
+    "club": "Sao Paulo",
+    "colour": "#B40404",
+    "years": 1,
+    "wage": "€280k/wk",
+    "loan": null,
+    "t": "Copa América 2028 Winner"
+   },
+   "afterReload": {
+    "scenes": 1,
+    "slips": 0,
+    "state": "still",
+    "confetti": 0
+   },
+   "trouble": []
+  },
+  {
+   "walk": "trophy",
+   "view": "320",
+   "reduce": false,
+   "mounted": true,
+   "mid": {
+    "state": "live",
+    "tone": "gold",
+    "text": "Copa América 2028🇧🇷BrazilWinnerChampions: 🇧🇷Brazilbeat USA in the final",
+    "title": "Copa América 2028",
+    "lines": [],
+    "number": null,
+    "card": [
+     30,
+     30,
+     260,
+     146
+    ],
+    "art": [
+     128,
+     30,
+     64,
+     64
+    ],
+    "pill": null,
+    "titleBox": [
+     76,
+     103,
+     168,
+     23
+    ],
+    "vw": 320,
+    "vh": 568,
+    "scrollY": 641,
+    "pageWider": 0,
+    "running": 8,
+    "paused": 0,
+    "beatOpacity": [
+     "title=0"
+    ],
+    "finalOpacity": null,
+    "oldShown": "none in DOM",
+    "cups": 1,
+    "cupDuration": "0.9s",
+    "avatars": 0,
+    "shirt": "",
+    "ink": "#f59e0b",
+    "confetti": 60,
+    "spill": [],
+    "clipped": [],
+    "overlaps": []
+   },
+   "rest": {
+    "state": "live",
+    "tone": "gold",
+    "text": "Copa América 2028🇧🇷BrazilWinnerChampions: 🇧🇷Brazilbeat USA in the final",
+    "title": "Copa América 2028",
+    "lines": [],
+    "number": null,
+    "card": [
+     30,
+     30,
+     260,
+     146
+    ],
+    "art": [
+     128,
+     30,
+     64,
+     64
+    ],
+    "pill": null,
+    "titleBox": [
+     76,
+     103,
+     168,
+     23
+    ],
+    "vw": 320,
+    "vh": 568,
+    "scrollY": 641,
+    "pageWider": 0,
+    "running": 0,
+    "paused": 0,
+    "beatOpacity": [
+     "title=1"
+    ],
+    "finalOpacity": null,
+    "oldShown": "none in DOM",
+    "cups": 1,
+    "cupDuration": "0.9s",
+    "avatars": 0,
+    "shirt": "",
+    "ink": "#f59e0b",
+    "confetti": 60,
+    "spill": [],
+    "clipped": [],
+    "overlaps": []
+   },
+   "rv": {
+    "states": [
+     {
+      "s": "fresh",
+      "t": 0
+     },
+     {
+      "s": "live",
+      "t": 12
+     }
+    ],
+    "firstSeen": 1567.8999999999069,
+    "widest": 0,
+    "firstFrame": {
+     "state": "fresh",
+     "titleOpacity": "0",
+     "artOpacity": "1",
+     "top": -287,
+     "bottom": -142,
+     "vh": 568
+    }
+   },
+   "saved": {
+    "phase": "world_cup",
+    "club": "Sao Paulo",
+    "colour": "#B40404",
+    "years": 1,
+    "wage": "€280k/wk",
+    "loan": null,
+    "t": "Copa América 2028 Winner"
+   },
+   "afterReload": {
+    "scenes": 1,
+    "slips": 0,
+    "state": "still",
+    "confetti": 0
+   },
+   "trouble": []
+  },
+  {
+   "walk": "trophyEarly",
+   "view": "390",
+   "reduce": false,
+   "mounted": true,
+   "mid": {
+    "state": "live",
+    "tone": "gold",
+    "text": "Copa América 2028🇧🇷BrazilWinnerChampions: 🇧🇷Brazilbeat USA in the final",
+    "title": "Copa América 2028",
+    "lines": [],
+    "number": null,
+    "card": [
+     30,
+     225,
+     330,
+     146
+    ],
+    "art": [
+     163,
+     225,
+     64,
+     64
+    ],
+    "pill": null,
+    "titleBox": [
+     111,
+     297,
+     168,
+     23
+    ],
+    "vw": 390,
+    "vh": 844,
+    "scrollY": 446,
+    "pageWider": 0,
+    "running": 8,
+    "paused": 0,
+    "beatOpacity": [
+     "title=1"
+    ],
+    "finalOpacity": null,
+    "oldShown": "none in DOM",
+    "cups": 1,
+    "cupDuration": "0.9s",
+    "avatars": 0,
+    "shirt": "",
+    "ink": "#f59e0b",
+    "confetti": 60,
+    "spill": [
+     "p.text-[11px].text-muted-foreground 52,135,-51,6",
+     "span.inline-flex.items-center 120,138,-196,3",
+     "img.inline-block.align-middle 120,138,-196,3",
+     "span.font-bold.text-foreground 138,135,-163,6",
+     "span. 171,135,-51,6"
+    ],
+    "clipped": [],
+    "overlaps": []
+   },
+   "rest": {
+    "state": "live",
+    "tone": "gold",
+    "text": "Copa América 2028🇧🇷BrazilWinnerChampions: 🇧🇷Brazilbeat USA in the final",
+    "title": "Copa América 2028",
+    "lines": [],
+    "number": null,
+    "card": [
+     30,
+     225,
+     330,
+     146
+    ],
+    "art": [
+     163,
+     225,
+     64,
+     64
+    ],
+    "pill": null,
+    "titleBox": [
+     111,
+     298,
+     168,
+     23
+    ],
+    "vw": 390,
+    "vh": 844,
+    "scrollY": 446,
+    "pageWider": 0,
+    "running": 0,
+    "paused": 0,
+    "beatOpacity": [
+     "title=1"
+    ],
+    "finalOpacity": null,
+    "oldShown": "none in DOM",
+    "cups": 1,
+    "cupDuration": "0.9s",
+    "avatars": 0,
+    "shirt": "",
+    "ink": "#f59e0b",
+    "confetti": 60,
+    "spill": [],
+    "clipped": [],
+    "overlaps": []
+   },
+   "rv": {
+    "states": [
+     {
+      "s": "fresh",
+      "t": 0
+     },
+     {
+      "s": "live",
+      "t": 15
+     }
+    ],
+    "firstSeen": 5924.400000000023,
+    "widest": 0,
+    "firstFrame": {
+     "state": "fresh",
+     "titleOpacity": "0",
+     "artOpacity": "1",
+     "top": 225,
+     "bottom": 370,
+     "vh": 844
+    }
+   },
+   "saved": {
+    "phase": "world_cup",
+    "club": "Sao Paulo",
+    "colour": "#B40404",
+    "years": 1,
+    "wage": "€280k/wk",
+    "loan": null,
+    "t": "Copa América 2028 Winner"
+   },
+   "afterReload": {
+    "scenes": 1,
+    "slips": 0,
+    "state": "still",
+    "confetti": 0
+   },
+   "trouble": []
+  },
+  {
+   "walk": "trophyEarly",
+   "view": "390rm",
+   "reduce": true,
+   "mounted": true,
+   "early": {
+    "state": "live",
+    "tone": "gold",
+    "text": "Copa América 2028🇧🇷BrazilWinnerChampions: 🇧🇷Brazilbeat USA in the final",
+    "title": "Copa América 2028",
+    "lines": [],
+    "number": null,
+    "card": [
+     30,
+     225,
+     330,
+     146
+    ],
+    "art": [
+     163,
+     225,
+     64,
+     64
+    ],
+    "pill": null,
+    "titleBox": [
+     111,
+     298,
+     168,
+     23
+    ],
+    "vw": 390,
+    "vh": 844,
+    "scrollY": 446,
+    "pageWider": 0,
+    "running": 0,
+    "paused": 0,
+    "beatOpacity": [
+     "title=1"
+    ],
+    "finalOpacity": null,
+    "oldShown": "none in DOM",
+    "cups": 1,
+    "cupDuration": "1e-06s",
+    "avatars": 0,
+    "shirt": "",
+    "ink": "#f59e0b",
+    "confetti": 0,
+    "spill": [],
+    "clipped": [],
+    "overlaps": []
+   },
+   "rest": {
+    "state": "live",
+    "tone": "gold",
+    "text": "Copa América 2028🇧🇷BrazilWinnerChampions: 🇧🇷Brazilbeat USA in the final",
+    "title": "Copa América 2028",
+    "lines": [],
+    "number": null,
+    "card": [
+     30,
+     225,
+     330,
+     146
+    ],
+    "art": [
+     163,
+     225,
+     64,
+     64
+    ],
+    "pill": null,
+    "titleBox": [
+     111,
+     298,
+     168,
+     23
+    ],
+    "vw": 390,
+    "vh": 844,
+    "scrollY": 446,
+    "pageWider": 0,
+    "running": 0,
+    "paused": 0,
+    "beatOpacity": [
+     "title=1"
+    ],
+    "finalOpacity": null,
+    "oldShown": "none in DOM",
+    "cups": 1,
+    "cupDuration": "1e-06s",
+    "avatars": 0,
+    "shirt": "",
+    "ink": "#f59e0b",
+    "confetti": 0,
+    "spill": [],
+    "clipped": [],
+    "overlaps": []
+   },
+   "rv": {
+    "states": [
+     {
+      "s": "fresh",
+      "t": 0
+     },
+     {
+      "s": "live",
+      "t": 9
+     }
+    ],
+    "firstSeen": 5938.699999999953,
+    "widest": 0,
+    "firstFrame": {
+     "state": "fresh",
+     "titleOpacity": "1",
+     "artOpacity": "1",
+     "top": 225,
+     "bottom": 370,
+     "vh": 844
+    }
+   },
+   "saved": {
+    "phase": "world_cup",
+    "club": "Sao Paulo",
+    "colour": "#B40404",
+    "years": 1,
+    "wage": "€280k/wk",
+    "loan": null,
+    "t": "Copa América 2028 Winner"
+   },
+   "afterReload": {
+    "scenes": 1,
+    "slips": 0,
+    "state": "still",
+    "confetti": 0
+   },
+   "trouble": []
+  },
+  {
+   "walk": "trophyOnCard",
+   "view": "390",
+   "reduce": false,
+   "mounted": true,
+   "mid": {
+    "state": "still",
+    "tone": "gold",
+    "text": "Copa América 2028🇧🇷BrazilWinnerChampions: 🇧🇷Brazilbeat USA in the final",
+    "title": "Copa América 2028",
+    "lines": [],
+    "number": null,
+    "card": [
+     30,
+     671,
+     330,
+     146
+    ],
+    "art": [
+     163,
+     671,
+     64,
+     64
+    ],
+    "pill": null,
+    "titleBox": [
+     111,
+     744,
+     168,
+     23
+    ],
+    "vw": 390,
+    "vh": 844,
+    "scrollY": 0,
+    "pageWider": 0,
+    "running": 0,
+    "paused": 0,
+    "beatOpacity": [
+     "title=1"
+    ],
+    "finalOpacity": null,
+    "oldShown": "none in DOM",
+    "cups": 1,
+    "cupDuration": "1e-06s",
+    "avatars": 0,
+    "shirt": "",
+    "ink": "#f59e0b",
+    "confetti": 0,
+    "spill": [],
+    "clipped": [],
+    "overlaps": []
+   },
+   "rest": {
+    "state": "still",
+    "tone": "gold",
+    "text": "Copa América 2028🇧🇷BrazilWinnerChampions: 🇧🇷Brazilbeat USA in the final",
+    "title": "Copa América 2028",
+    "lines": [],
+    "number": null,
+    "card": [
+     30,
+     671,
+     330,
+     146
+    ],
+    "art": [
+     163,
+     671,
+     64,
+     64
+    ],
+    "pill": null,
+    "titleBox": [
+     111,
+     744,
+     168,
+     23
+    ],
+    "vw": 390,
+    "vh": 844,
+    "scrollY": 0,
+    "pageWider": 0,
+    "running": 0,
+    "paused": 0,
+    "beatOpacity": [
+     "title=1"
+    ],
+    "finalOpacity": null,
+    "oldShown": "none in DOM",
+    "cups": 1,
+    "cupDuration": "1e-06s",
+    "avatars": 0,
+    "shirt": "",
+    "ink": "#f59e0b",
+    "confetti": 0,
+    "spill": [],
+    "clipped": [],
+    "overlaps": []
+   },
+   "rv": {
+    "states": [
+     {
+      "s": "still",
+      "t": 0
+     }
+    ],
+    "firstSeen": 317.80000000004657,
+    "widest": 0,
+    "firstFrame": {
+     "state": "still",
+     "titleOpacity": "1",
+     "artOpacity": "1",
+     "top": 671,
+     "bottom": 816,
+     "vh": 844
+    }
+   },
+   "saved": {
+    "phase": "world_cup",
+    "club": "Sao Paulo",
+    "colour": "#B40404",
+    "years": 1,
+    "wage": "€280k/wk",
+    "loan": null,
+    "t": "Copa América 2028 Winner"
+   },
+   "afterReload": {
+    "scenes": 1,
+    "slips": 0,
+    "state": "still",
+    "confetti": 0
+   },
+   "trouble": []
+  },
+  {
+   "walk": "trophyOnCard",
+   "view": "1280",
+   "reduce": false,
+   "mounted": true,
+   "mid": {
+    "state": "still",
+    "tone": "gold",
+    "text": "Copa América 2028🇧🇷BrazilWinnerChampions: 🇧🇷Brazilbeat USA in the final",
+    "title": "Copa América 2028",
+    "lines": [],
+    "number": null,
+    "card": [
+     162,
+     758,
+     956,
+     146
+    ],
+    "art": [
+     608,
+     758,
+     64,
+     64
+    ],
+    "pill": null,
+    "titleBox": [
+     556,
+     831,
+     168,
+     23
+    ],
+    "vw": 1280,
+    "vh": 900,
+    "scrollY": 0,
+    "pageWider": 0,
+    "running": 0,
+    "paused": 0,
+    "beatOpacity": [
+     "title=1"
+    ],
+    "finalOpacity": null,
+    "oldShown": "none in DOM",
+    "cups": 1,
+    "cupDuration": "1e-06s",
+    "avatars": 0,
+    "shirt": "",
+    "ink": "#f59e0b",
+    "confetti": 0,
+    "spill": [],
+    "clipped": [],
+    "overlaps": []
+   },
+   "rest": {
+    "state": "still",
+    "tone": "gold",
+    "text": "Copa América 2028🇧🇷BrazilWinnerChampions: 🇧🇷Brazilbeat USA in the final",
+    "title": "Copa América 2028",
+    "lines": [],
+    "number": null,
+    "card": [
+     162,
+     758,
+     956,
+     146
+    ],
+    "art": [
+     608,
+     758,
+     64,
+     64
+    ],
+    "pill": null,
+    "titleBox": [
+     556,
+     831,
+     168,
+     23
+    ],
+    "vw": 1280,
+    "vh": 900,
+    "scrollY": 0,
+    "pageWider": 0,
+    "running": 0,
+    "paused": 0,
+    "beatOpacity": [
+     "title=1"
+    ],
+    "finalOpacity": null,
+    "oldShown": "none in DOM",
+    "cups": 1,
+    "cupDuration": "1e-06s",
+    "avatars": 0,
+    "shirt": "",
+    "ink": "#f59e0b",
+    "confetti": 0,
+    "spill": [],
+    "clipped": [],
+    "overlaps": []
+   },
+   "rv": {
+    "states": [
+     {
+      "s": "still",
+      "t": 0
+     }
+    ],
+    "firstSeen": 398,
+    "widest": 0,
+    "firstFrame": {
+     "state": "still",
+     "titleOpacity": "1",
+     "artOpacity": "1",
+     "top": 758,
+     "bottom": 903,
+     "vh": 900
+    }
+   },
+   "saved": {
+    "phase": "world_cup",
+    "club": "Sao Paulo",
+    "colour": "#B40404",
+    "years": 1,
+    "wage": "€280k/wk",
+    "loan": null,
+    "t": "Copa América 2028 Winner"
+   },
+   "afterReload": {
+    "scenes": 1,
+    "slips": 0,
+    "state": "still",
+    "confetti": 0
+   },
+   "trouble": []
+  },
+  {
+   "walk": "quiet",
+   "view": "390",
+   "reduce": false,
+   "mounted": true,
+   "scenesInside": 0,
+   "cups": 0,
+   "kind": "quiet",
+   "rv": {
+    "states": [],
+    "firstSeen": null,
+    "widest": 0,
+    "firstFrame": null
+   },
+   "saved": {
+    "phase": "world_cup",
+    "club": "Liverpool",
+    "colour": "#C8102E",
+    "years": 1,
+    "wage": "€107k/wk",
+    "loan": null,
+    "t": "World Cup 2014 Round of 16"
+   },
+   "afterReload": {
+    "scenes": 0,
+    "slips": 0,
+    "state": null,
+    "confetti": 0
+   },
+   "trouble": []
+  }
+ ]
+}

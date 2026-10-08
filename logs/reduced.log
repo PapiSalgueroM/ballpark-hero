@@ -1,0 +1,176 @@
+
+prefers-reduced-motion: no-preference
+   rise      animation=cmRise         opacity=0 display=block
+   slam      animation=cmSlam         opacity=0 display=block
+   glow      animation=cmGoldGlow     opacity=1 display=block
+   confetti  animation=cmConfettiFall opacity=0 display=inline
+
+prefers-reduced-motion: reduce
+   rise      animation=none           opacity=1 display=block
+   slam      animation=none           opacity=1 display=block
+   glow      animation=none           opacity=1 display=block
+   confetti  animation=cmConfettiFall opacity=1 display=none
+
+Round 530 routes under prefers-reduced-motion: reduce, 20 routes served from dist
+   /                   text=22395 keyframeBlocks=3 ours=2 thirdParty=1 unguarded=0 reveal=10 animating=0 invisible=0 slowMotion=0/4664
+   /cfb-dynasty        text=9512 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/453
+   /cbb-dynasty        text=9347 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/439
+   /front-office       text=13615 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/423
+   /nba-front-office   text=13215 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/410
+   /mlb-front-office   text=9470 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/403
+   /nhl-front-office   text=13886 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/422
+   /nfl-my-career      text=25080 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/491
+   /nba-my-career      text=23701 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/482
+   /mlb-my-career      text=23556 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/487
+   /nhl-my-career      text=22779 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/463
+   /club-manager       text=34061 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/469
+   /soccer-career      text=15521 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/370
+   /rebuild            text=16021 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/327
+   /idle-arena         text=11962 keyframeBlocks=3 ours=2 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/366
+   /stadium-tycoon     text=20728 keyframeBlocks=4 ours=3 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/488
+   /wonderkid-factory  text=13513 keyframeBlocks=2 ours=1 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/341
+   /fight-career       text=13495 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/391
+   /fight-gym          text=7470 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/296
+   /fight-promoter     text=10826 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/313
+   Season Centre kick off  text=663 reveal=1 animating=0 invisible=0 slow=0
+   Season Centre matchday  text=505 reveal=1 animating=0 invisible=0 slow=0
+   Season Centre review    text=769 reveal=1 animating=0 invisible=0 slow=0
+   Round 1107 signing scene text=63 checked=5 animating=0 invisible=0 notGone=0 slow=0 confetti=0
+   Round 1107 trophy scene  text=72 checked=11 animating=0 invisible=0 notGone=0 slow=0 confetti=0
+   our own keyframe CSS was present and guarded on 4 of 20 routes; the rest had not reached a reveal yet
+   no preference /front-office    elements that move for more than 10ms: 70 of 423
+   no preference /fight-career    elements that move for more than 10ms: 57 of 391
+   no preference /stadium-tycoon  elements that move for more than 10ms: 82 of 488
+
+playReducedMotion: green. Motion stops for a visitor who asked for less, content stays visible, every Round 530 route lands its reveals on the final frame, and everyone else keeps the celebration.
+CLEAN_EXIT=0
+   NEGATIVE CONTROL ON: the guards are stripped, this run must go red
+
+prefers-reduced-motion: no-preference
+   rise      animation=cmRise         opacity=0 display=block
+   slam      animation=cmSlam         opacity=0 display=block
+   glow      animation=cmGoldGlow     opacity=1 display=block
+   confetti  animation=cmConfettiFall opacity=0 display=inline
+
+prefers-reduced-motion: reduce
+   rise      animation=cmRise         opacity=0 display=block
+   slam      animation=cmSlam         opacity=0 display=block
+   glow      animation=cmGoldGlow     opacity=1 display=block
+   confetti  animation=cmConfettiFall opacity=0 display=inline
+  FAIL: cm-rise still animates under reduce
+  FAIL: cm-slam still animates under reduce
+  FAIL: cm-gold-glow still animates under reduce
+  FAIL: cm-rise left invisible at opacity 0, worse than the bug
+  FAIL: cm-slam left invisible at opacity 0
+  FAIL: confetti still falls under reduce
+
+Round 530 routes under prefers-reduced-motion: reduce, 20 routes served from dist
+   /                   text=22395 keyframeBlocks=3 ours=2 thirdParty=1 unguarded=1 reveal=10 animating=0 invisible=0 slowMotion=0/4664
+  FAIL: / mounts 1 <style> block(s) of our own with a keyframe and no reduced motion rule
+   /cfb-dynasty        text=9512 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/453
+   /cbb-dynasty        text=9347 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/439
+   /front-office       text=13615 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/423
+   /nba-front-office   text=13215 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/410
+   /mlb-front-office   text=9470 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/403
+   /nhl-front-office   text=13886 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/422
+   /nfl-my-career      text=25080 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/491
+   /nba-my-career      text=23701 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/482
+   /mlb-my-career      text=23556 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/487
+   /nhl-my-career      text=22779 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/463
+   /club-manager       text=34061 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/469
+   /soccer-career      text=15521 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/370
+   /rebuild            text=16021 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/327
+   /idle-arena         text=11962 keyframeBlocks=3 ours=2 thirdParty=1 unguarded=2 reveal=0 animating=0 invisible=0 slowMotion=0/366
+  FAIL: /idle-arena mounts 2 <style> block(s) of our own with a keyframe and no reduced motion rule
+   /stadium-tycoon     text=20728 keyframeBlocks=4 ours=3 thirdParty=1 unguarded=3 reveal=0 animating=0 invisible=0 slowMotion=0/488
+  FAIL: /stadium-tycoon mounts 3 <style> block(s) of our own with a keyframe and no reduced motion rule
+   /wonderkid-factory  text=13513 keyframeBlocks=2 ours=1 thirdParty=1 unguarded=1 reveal=0 animating=0 invisible=0 slowMotion=0/341
+  FAIL: /wonderkid-factory mounts 1 <style> block(s) of our own with a keyframe and no reduced motion rule
+   /fight-career       text=13495 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/391
+   /fight-gym          text=7470 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/296
+   /fight-promoter     text=10826 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/313
+   Season Centre kick off  text=663 reveal=1 animating=1 invisible=0 slow=0
+  FAIL: Season Centre kick off: 1 reveal element(s) still animate under reduce
+   Season Centre matchday  text=471 reveal=2 animating=2 invisible=0 slow=0
+  FAIL: Season Centre matchday: 2 reveal element(s) still animate under reduce
+   Season Centre review    text=769 reveal=8 animating=8 invisible=0 slow=0
+  FAIL: Season Centre review: 8 reveal element(s) still animate under reduce
+   Round 1107 signing scene text=63 checked=5 animating=5 invisible=0 notGone=0 slow=0 confetti=0
+  FAIL: signing scene: 5 element(s) still animate under reduce
+   Round 1107 trophy scene  text=72 checked=11 animating=11 invisible=0 notGone=0 slow=0 confetti=60
+  FAIL: trophy scene: 11 element(s) still animate under reduce
+  FAIL: trophy scene: 60 confetti piece(s) fall under reduce
+   our own keyframe CSS was present and guarded on 4 of 20 routes; the rest had not reached a reveal yet
+   no preference /front-office    elements that move for more than 10ms: 70 of 423
+   no preference /fight-career    elements that move for more than 10ms: 57 of 391
+   no preference /stadium-tycoon  elements that move for more than 10ms: 82 of 488
+
+playReducedMotion control: green. The stripped guard was reported on the synthetic page (6 findings) and on the routes (10), so both stages work.
+NOGUARD_EXIT=0
+
+prefers-reduced-motion: no-preference
+   rise      animation=cmRise         opacity=0 display=block
+   slam      animation=cmSlam         opacity=0 display=block
+   glow      animation=cmGoldGlow     opacity=1 display=block
+   confetti  animation=cmConfettiFall opacity=0 display=inline
+
+prefers-reduced-motion: reduce
+   rise      animation=none           opacity=1 display=block
+   slam      animation=none           opacity=1 display=block
+   glow      animation=none           opacity=1 display=block
+   confetti  animation=cmConfettiFall opacity=1 display=none
+
+Round 530 routes under prefers-reduced-motion: reduce, 20 routes served from dist
+   /                   text=22395 keyframeBlocks=3 ours=2 thirdParty=1 unguarded=0 reveal=10 animating=0 invisible=0 slowMotion=712/4664
+  FAIL: /: 712 element(s) still move for more than 10ms under reduce (button.items-center.justify-center t=150 a=0, button.inline-flex.items-center t=150 a=0, button.inline-flex.items-center t=150 a=0)
+   /cfb-dynasty        text=9512 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=82/453
+  FAIL: /cfb-dynasty: 82 element(s) still move for more than 10ms under reduce (a.order-1.shrink-0 t=150 a=0, button.order-2.lg:order-3 t=150 a=0, button.inline-flex.items-center t=150 a=0)
+   /cbb-dynasty        text=9347 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=78/439
+  FAIL: /cbb-dynasty: 78 element(s) still move for more than 10ms under reduce (a.order-1.shrink-0 t=150 a=0, button.order-2.lg:order-3 t=150 a=0, button.inline-flex.items-center t=150 a=0)
+   /front-office       text=13615 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=70/423
+  FAIL: /front-office: 70 element(s) still move for more than 10ms under reduce (a.order-1.shrink-0 t=150 a=0, button.order-2.lg:order-3 t=150 a=0, button.inline-flex.items-center t=150 a=0)
+   /nba-front-office   text=13215 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=68/410
+  FAIL: /nba-front-office: 68 element(s) still move for more than 10ms under reduce (a.order-1.shrink-0 t=150 a=0, button.order-2.lg:order-3 t=150 a=0, button.inline-flex.items-center t=150 a=0)
+   /mlb-front-office   text=9470 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=68/403
+  FAIL: /mlb-front-office: 68 element(s) still move for more than 10ms under reduce (a.order-1.shrink-0 t=150 a=0, button.order-2.lg:order-3 t=150 a=0, button.inline-flex.items-center t=150 a=0)
+   /nhl-front-office   text=13886 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=70/422
+  FAIL: /nhl-front-office: 70 element(s) still move for more than 10ms under reduce (a.order-1.shrink-0 t=150 a=0, button.order-2.lg:order-3 t=150 a=0, button.inline-flex.items-center t=150 a=0)
+   /nfl-my-career      text=25080 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=68/491
+  FAIL: /nfl-my-career: 68 element(s) still move for more than 10ms under reduce (a.order-1.shrink-0 t=150 a=0, button.order-2.lg:order-3 t=150 a=0, button.inline-flex.items-center t=150 a=0)
+   /nba-my-career      text=23701 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=65/482
+  FAIL: /nba-my-career: 65 element(s) still move for more than 10ms under reduce (a.order-1.shrink-0 t=150 a=0, button.order-2.lg:order-3 t=150 a=0, button.inline-flex.items-center t=150 a=0)
+   /mlb-my-career      text=23556 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=71/487
+  FAIL: /mlb-my-career: 71 element(s) still move for more than 10ms under reduce (a.order-1.shrink-0 t=150 a=0, button.order-2.lg:order-3 t=150 a=0, button.inline-flex.items-center t=150 a=0)
+   /nhl-my-career      text=22779 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=65/463
+  FAIL: /nhl-my-career: 65 element(s) still move for more than 10ms under reduce (a.order-1.shrink-0 t=150 a=0, button.order-2.lg:order-3 t=150 a=0, button.inline-flex.items-center t=150 a=0)
+   /club-manager       text=34061 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=44/469
+  FAIL: /club-manager: 44 element(s) still move for more than 10ms under reduce (a.order-1.shrink-0 t=150 a=0, button.order-2.lg:order-3 t=150 a=0, button.inline-flex.items-center t=150 a=0)
+   /soccer-career      text=15521 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=48/370
+  FAIL: /soccer-career: 48 element(s) still move for more than 10ms under reduce (a.order-1.shrink-0 t=150 a=0, button.order-2.lg:order-3 t=150 a=0, button.inline-flex.items-center t=150 a=0)
+   /rebuild            text=16021 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=47/327
+  FAIL: /rebuild: 47 element(s) still move for more than 10ms under reduce (a.order-1.shrink-0 t=150 a=0, button.order-2.lg:order-3 t=150 a=0, button.inline-flex.items-center t=150 a=0)
+   /idle-arena         text=11962 keyframeBlocks=3 ours=2 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=39/366
+  FAIL: /idle-arena: 39 element(s) still move for more than 10ms under reduce (a.order-1.shrink-0 t=150 a=0, button.order-2.lg:order-3 t=150 a=0, button.inline-flex.items-center t=150 a=0)
+   /stadium-tycoon     text=20728 keyframeBlocks=4 ours=3 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=57/488
+  FAIL: /stadium-tycoon: 57 element(s) still move for more than 10ms under reduce (a.order-1.shrink-0 t=150 a=0, button.order-2.lg:order-3 t=150 a=0, button.inline-flex.items-center t=150 a=0)
+   /wonderkid-factory  text=13513 keyframeBlocks=2 ours=1 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=37/341
+  FAIL: /wonderkid-factory: 37 element(s) still move for more than 10ms under reduce (a.order-1.shrink-0 t=150 a=0, button.order-2.lg:order-3 t=150 a=0, button.inline-flex.items-center t=150 a=0)
+   /fight-career       text=13495 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=57/391
+  FAIL: /fight-career: 57 element(s) still move for more than 10ms under reduce (a.order-1.shrink-0 t=150 a=0, button.order-2.lg:order-3 t=150 a=0, button.inline-flex.items-center t=150 a=0)
+   /fight-gym          text=7470 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=39/296
+  FAIL: /fight-gym: 39 element(s) still move for more than 10ms under reduce (a.order-1.shrink-0 t=150 a=0, button.order-2.lg:order-3 t=150 a=0, button.inline-flex.items-center t=150 a=0)
+   /fight-promoter     text=10826 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=38/313
+  FAIL: /fight-promoter: 38 element(s) still move for more than 10ms under reduce (a.order-1.shrink-0 t=150 a=0, button.order-2.lg:order-3 t=150 a=0, button.inline-flex.items-center t=150 a=0)
+   Season Centre kick off  text=663 reveal=1 animating=0 invisible=0 slow=0
+   Season Centre matchday  text=505 reveal=1 animating=0 invisible=0 slow=0
+   Season Centre review    text=769 reveal=1 animating=0 invisible=0 slow=0
+   Round 1107 signing scene text=63 checked=5 animating=0 invisible=0 notGone=0 slow=0 confetti=0
+   Round 1107 trophy scene  text=72 checked=11 animating=0 invisible=0 notGone=0 slow=8 confetti=0
+  FAIL: trophy scene: 8 element(s) in its card still move for more than 10ms under reduce
+   our own keyframe CSS was present and guarded on 4 of 20 routes; the rest had not reached a reveal yet
+   no preference /front-office    elements that move for more than 10ms: 70 of 423
+   no preference /fight-career    elements that move for more than 10ms: 57 of 391
+   no preference /stadium-tycoon  elements that move for more than 10ms: 82 of 488
+
+playReducedMotion control: green. With the blanket rule's transition duration rewritten out of 23 served file(s), the duration stage went red on 21 route(s) and nothing else moved.
+NOBLANKET_EXIT=0
