@@ -1,3 +1,43 @@
+## Round 1091 preparation, 2026-10-07, legal direct-kick range
+
+Unverified preparation on codex/free-kick-range-1091 from Release AL integration
+8fe82a4dc1346f7d5b8072f387f3acb34bbaa3c8. The clean owned managed
+soccer-transfer-review-1082 checkout was reused; accepted1082 remains frozen.
+The only engine change floors generated walled attacking direct kicks at17m.
+The11m penalty, later indices4..9, random draw order, wall and keeper fields,
+explicit shot rules, Tycoon offer indices, saves and original consumers stay held.
+Three old generated setups were12.6/14.1/15.7m. Indirect kicks inside an area
+are a separate restart that this direct-shot game does not model.
+
+Two official rulebook sources were checked on2026-10-07:
+https://theifab.com/laws/latest/the-field-of-play/
+https://theifab.com/laws/latest/the-penalty-kick/
+https://www.thefa.com/football-rules-governance/lawsandrules/laws/football-11-11/law-14---the-penalty-kick
+The penalty area includes its boundary;17m keeps these goal-facing kicks outside.
+No new player, club, score or season data is added. Existing goal dimensions held.
+
+Authored proof remains unexecuted: six engine outcome groups against the actual
+pinned old engine and twelve uniquely reversible copied faults, complete setup/
+shot/RNG/input comparisons, actual unchanged Tycoon offers, changed low-power
+reach and all800 diagnostic daily cap rows with a conservative analytic bound.
+Four finite actual React consumer journeys are also authored: practice and
+watched Tycoon at390 touch and1280 keyboard, two pinned-old engine controls,
+and two separately labeled restored DOM clipping controls. Selected labels,
+pitches and results retain physical viewport/clipping measurements, actual
+fonts and readable PNGs. Full shot inputs, four-draw streams, results, storage
+and callbacks are held against the pinned old rules at unchanged explicit setups.
+Practice stops after two kicks. Tycoon stages an offer time and match count;
+this is not a full route, match settlement, earned score or campaign proof.
+Remote gates retain proper app types/build, old arcade/set-piece regressions,
+alltwenty built readers and source/dependency holds. Runtime and native acceptance,
+PR and release integration remain pending. No local runtime or production calls.
+
+Release dependency: the historical committed note says Free Kick cap3424;
+that is not current production authority. Distance-based points can change.
+The release owner must check the actual game_score_caps row and handle any
+necessary authoritative adjustment before release. Completed daily records and
+scoring coefficients must not be rewritten to hide that dependency. No live claim.
+
 ## Release AK LIVE, 2026-10-07 15:12 EDT, and the split of work with Codex
 
 Claude lane (session E, a new lead: session D stopped at its weekly limit with AK's gate still running).
