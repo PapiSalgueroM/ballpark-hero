@@ -1,0 +1,9 @@
+tsc exit=0 52s | 
+simNoRivalNames exit=0 11s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 32s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+shootout exit=0 14s | simCmShootoutOrder: all sections passed
+prep-probe exit=0 0s | mkprobe: src/test/dailySaveShapes.test.tsx now prints both pages around the first difference
+oly-1 exit=1 19s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/dailySaveShapes.test.tsx,title=src/test/dailySaveShapes.test.tsx > a damaged daily save rese
+oly-2 exit=0 19s |    Duration  18.29s (transform 2.49s, setup 44ms, collect 247ms, tests 17.36s, environment 256ms, prepare 123ms)
+oly-3 exit=0 19s |    Duration  18.63s (transform 2.60s, setup 43ms, collect 249ms, tests 17.69s, environment 258ms, prepare 159ms)
+oly-4 exit=1 19s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/dailySaveShapes.test.tsx,title=src/test/dailySaveShapes.test.tsx > a damaged daily save rese

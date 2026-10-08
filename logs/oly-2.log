@@ -1,0 +1,6 @@
+[22m[39mR848_SHAPES {"route":"/olympics","slugs":[{"s":"olympics","i":28,"id":null}],"failures":[]}
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m36 passed[39m[22m[90m (36)[39m
+[2m   Start at [22m 15:44:09
+[2m   Duration [22m 18.29s[2m (transform 2.49s, setup 44ms, collect 247ms, tests 17.36s, environment 256ms, prepare 123ms)[22m
+
