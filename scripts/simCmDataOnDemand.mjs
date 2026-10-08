@@ -57,6 +57,34 @@
  * exactly what the control plants. scripts/lib/staticClosure.mjs gained its bothWays repair for
  * it, so that mistake is caught here from now on.
  *
+ * THREE MORE, added 2026-10-08 after the round's review broke this harness three ways it could
+ * not see. Each is a check that was missing or loose, with the control that proves it:
+ *   nowait      ensureEraRosters hands out the squads without waiting for the nationalities (the
+ *               load is started and left to land when it lands). The AFTER check of 2) could never
+ *               see that: it reads once every gate has opened, by when a late load has landed too,
+ *               and the review's mutation left this harness green. 2) now also reads AT the gate:
+ *               each past world's file is held back a moment, and the very next thing after the
+ *               gate opens is asking that world for every one of its names. The control predicts
+ *               every past name unanswered at the gate AND the AFTER check green.
+ *   seamalias   soccerInternational.ts imports the invented name pools under the alias spelling
+ *               ('@/lib/intlNames'). Rule 1e compared spelled specifiers and knew './intlNames'
+ *               only; it now compares the files the specifiers resolve to. The control predicts
+ *               the seam named for src/lib/intlNames.ts, and every engine page under rule 1c.
+ *   stragglers  section 4 had no control at all. Three files rewritten in memory, one per rule:
+ *               a harness takes the whole of playerNationalities under a name and reads
+ *               NATIONALITY_BY_WORLD off it while naming allWorlds elsewhere (the shape
+ *               simEra2005 had before this round repaired it; the old rule, "the file names
+ *               allWorlds somewhere", passed it); a lib file imports the national team pools;
+ *               a lib file imports allWorlds. The control predicts exactly those three findings.
+ * All nine controls and the plain run, 2026-10-08 on this checkout: plain exit 0 (at the moment
+ * each gate opens 6910 of 6910 past names answer their own world); nowait exit 1 (all 6910
+ * unanswered at their gate, 11299 of 11299 answering after, so the AFTER check alone was blind);
+ * seamalias exit 1 (the seam named for src/lib/intlNames.ts, the three engine pages under 1c);
+ * stragglers exit 1 (exactly the three planted files: simEra2005.mjs read off NAT, a name that
+ * holds playerNationalities; confederationGroups.ts; clubManagerInternationals.ts); and the six
+ * older ones exit 1 with the same counts as before (noregister now also reports all 6910
+ * unanswered at the gate).
+ *
  * Run: node scripts/simCmDataOnDemand.mjs
  */
 import fs from 'node:fs';
@@ -64,7 +92,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
-import { staticClosure, staticSpecs, dynamicSpecs, codeOf } from './lib/staticClosure.mjs';
+import { staticClosure, staticEdges, dynamicSpecs, codeOf } from './lib/staticClosure.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const R = ROOT.replaceAll('\\', '/');
@@ -74,7 +102,7 @@ const abs = rel => path.join(ROOT, rel);
 const read = rel => fs.readFileSync(abs(rel), 'utf8').replace(/\r\n/g, '\n');
 
 const CONTROL = process.env.CM_DATA_CONTROL ?? '';
-const CONTROLS = ['pools', 'eranat', 'squad', 'noregister', 'eager', 'reformat'];
+const CONTROLS = ['pools', 'eranat', 'squad', 'noregister', 'eager', 'reformat', 'nowait', 'seamalias', 'stragglers'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`CM_DATA_CONTROL=${CONTROL} is not a control this harness knows (${CONTROLS.join(', ')})`); process.exit(2); }
 
 /* Findings are kept by section and by rule, so a control can ask whether ITS rule went red. */
@@ -123,6 +151,12 @@ if (CONTROL === 'squad') {
     "import { FORMATIONS as SHARED_FORMATIONS, SLOT_ALLOWED, playerRating } from '@/lib/squadDeal';");
   console.log('CONTROL squad: clubManager.ts reads the squad shape from squadDeal again (in memory)');
 }
+if (CONTROL === 'seamalias') {
+  /* The same place the pools control writes to, and the spelling rule 1e did not know. */
+  override[abs(F.intl)] = rewriteOnce(F.intl, "import {\n  periodInForce, playedPeriod, wcFieldMixFor, type IntlCompetition,\n} from './intlFormatHistory';",
+    "import { intlName } from '@/lib/intlNames';\nimport {\n  periodInForce, playedPeriod, wcFieldMixFor, type IntlCompetition,\n} from './intlFormatHistory';\nvoid intlName;");
+  console.log("CONTROL seamalias: soccerInternational.ts imports the invented name pools as '@/lib/intlNames' (in memory)");
+}
 
 /* ---------- 1. The closures ---------- */
 console.log('1) No page downloads data it never reads (the static import closure of every page)');
@@ -165,10 +199,15 @@ if (enginePages.length < 3) refuse(`only ${enginePages.length} pages hold ${F.en
   need('src/pages/ClubManager.tsx', F.squadShape, 'Club Manager reads the squad shape');
   need('src/pages/ClubManager.tsx', F.intl, 'Club Manager plays the international tournaments');
   /* e. the seam itself: the tournament engine imports neither the pools nor what only the picker uses */
+  /* Compared as the FILES the specifiers resolve to, never as they are spelled: './intlNames' and
+     '@/lib/intlNames' are one file, and until 2026-10-08 this rule knew only the first spelling
+     (control seamalias). The pages rules above would still catch the pools and the engine pages,
+     but the invented name pools coming back to Transfer Path is caught here and nowhere else. */
   const intlAbs = abs(F.intl);
-  const intlSpecs = staticSpecs(intlAbs, override[intlAbs] ?? read(F.intl));
-  for (const bad of ['./intlNames', '@/data/nationalPools', './soccerInternationalSquads']) {
-    if (intlSpecs.includes(bad)) fail(1, 'seam', `${F.intl} imports ${bad} again: every game that plays a tournament would download it`);
+  const intlEdges = new Set(staticEdges(ROOT, intlAbs, override).map(f => path.relative(ROOT, f).replaceAll('\\', '/')));
+  if (!intlEdges.has('src/lib/intlFormatHistory.ts')) fail(1, 'presence', `the static imports of ${F.intl} no longer resolve to src/lib/intlFormatHistory.ts, so the seam rule is not reading that file's imports`);
+  for (const [rel, what] of [[F.intlNames, "the squad picker's invented name pools"], [F.pools, 'the national team pools'], [F.squads, "Soccer Career's squad picker"]]) {
+    if (intlEdges.has(rel)) fail(1, 'seam', `${F.intl} imports ${rel} again (${what}): every game that plays a tournament would download it`, { file: rel });
   }
   console.log(`   ${pageFiles.length} pages walked; ${holding(F.engine).length} hold the Club Manager engine, ${holding(F.pools).length} the national team pools, ${holding(F.nat).length} today's nationalities, ${holding(F.squadShape).length} the squad shape, ${holding(F.squadDeal).length} Squad Deal's loader`);
 }
@@ -188,6 +227,17 @@ let pastPairs = 0;
   if (CONTROL === 'eager') {
     patched = { file: abs(F.nat), contents: rewriteOnce(F.nat, '  if (Object.prototype.hasOwnProperty.call(NATIONALITY_WORLD_LOADERS, key)) return null;\n', '') };
     console.log('   CONTROL eager: nationalityOf no longer answers null for a past world that has not arrived (in the bundle)');
+  }
+  if (CONTROL === 'nowait') {
+    /* The review's mutation, word for word: the squads are handed out as soon as they are here
+       and the nationalities are left to land whenever they do. Two edits, each anchor once. */
+    const gateLine = '  const p = Promise.all([ERA_BAKES[eraId](), loadNationalityWorld(eraId)]).then(([bake, nationalities]) => {\n';
+    const registerLine = '    registerNationalityWorld(eraId, nationalities);\n';
+    rewriteOnce(F.eras, registerLine, '');
+    const first = rewriteOnce(F.eras, gateLine, '  const p = ERA_BAKES[eraId]().then(bake => {\n    loadNationalityWorld(eraId).then(nationalities => registerNationalityWorld(eraId, nationalities));\n');
+    patched = { file: abs(F.eras), contents: first.replace(registerLine, () => '') };
+    if (patched.contents.includes(registerLine) || patched.contents.includes('Promise.all([ERA_BAKES[eraId]()')) refuse('control nowait: the gate was not rewritten');
+    console.log('   CONTROL nowait: ensureEraRosters hands out the squads without waiting for the nationalities (in the bundle)');
   }
   const entry = path.join(TMP, 'entry.mjs');
   const bundle = path.join(TMP, 'bundle.mjs');
@@ -247,6 +297,34 @@ let pastPairs = 0;
   const unknown = nat.nationalityOf('era1990', 'Erling Haaland');
   if (unknown !== nat.nationalityOf(undefined, 'Erling Haaland') || unknown === null) fail(2, 'before', `an id no table knows answered ${unknown}, not what today's world answers`);
 
+  /* AT the gate (added 2026-10-08, control nowait). The AFTER check below reads once every season
+     has loaded, and in one bundle a nationality load that nobody waited for has landed by then
+     too, so it cannot tell a gate that waits from one that does not. Here each past world's file
+     is held back for a moment through the table the loader reads (NATIONALITY_WORLD_LOADERS),
+     the season is asked for, and the very next thing after the gate opens, with no await in
+     between, is asking that world for every one of its names. A gate that waits answers all of
+     them however long the file took; a gate that does not answers none. HOLD_MS is not a band
+     and nothing is asserted on it: the squads arrive in microtasks, so any timer at all is later.
+     The call count keeps the check honest: if the gate stopped fetching through the table, the
+     hold would hold nothing and this would pass without having looked. */
+  const HOLD_MS = 100;
+  let gateMissing = 0;
+  const gateNames = [];
+  for (const w of past) {
+    const real = nat.NATIONALITY_WORLD_LOADERS[w];
+    let calls = 0;
+    nat.NATIONALITY_WORLD_LOADERS[w] = () => { calls += 1; return new Promise(res => setTimeout(res, HOLD_MS)).then(() => real()); };
+    await eras.ensureEraRosters(w);
+    for (const name of Object.keys(worlds[w])) {
+      if (nat.nationalityOf(w, name) !== worlds[w][name]) { gateMissing += 1; if (gateNames.length < 3) gateNames.push(`${w} ${name}`); }
+    }
+    nat.NATIONALITY_WORLD_LOADERS[w] = real;
+    if (calls !== 1) fail(2, 'gate', `opening ${w} asked the table of nationality files ${calls} times, not once: the gate no longer fetches through NATIONALITY_WORLD_LOADERS, so holding the file back held nothing and the check above saw nothing`);
+  }
+  if (gateMissing) fail(2, 'gate', `${gateMissing} of ${pastPairs} past names had no country, or the wrong one, at the moment their season's gate opened (${gateNames.join('; ')}): the gate hands out the squads without waiting for the nationalities, so the first screen draws a squad with no flags and nationBars caches an empty world`, { gateMissing });
+  /* let a load nobody waited for land, so the AFTER check reads a settled registry either way */
+  await new Promise(res => setTimeout(res, HOLD_MS * 3));
+
   /* AFTER every gate. Every pair of every world answers its own world's value. */
   await eras.ensureAllEraRosters();
   let total = 0, missing = 0, missingPast = 0;
@@ -257,7 +335,7 @@ let pastPairs = 0;
     }
   }
   if (missing) fail(2, 'after', `${missing} of ${total} names did not answer their own world's country after every season had loaded (${missingPast} of them in a past world)`, { missing, missingPast });
-  console.log(`   ${past.length} past worlds, the same list three ways; before any gate ${pastPairs - early} of ${pastPairs} past names answer nobody; after the gates ${total - missing} of ${total} names answer their own world`);
+  console.log(`   ${past.length} past worlds, the same list three ways; before any gate ${pastPairs - early} of ${pastPairs} past names answer nobody; at the moment each gate opens ${pastPairs - gateMissing} of ${pastPairs} answer their own world; after the gates ${total - missing} of ${total} names answer their own world`);
   console.log(`   (${sharedWithToday} of those past names are also in today's maps, ${sharedDifferent} of them with a different country there: that is what the null protects)`);
 
   if (CONTROL === 'eager') {
@@ -268,10 +346,20 @@ let pastPairs = 0;
     process.exit(ok ? 1 : 2);
   }
   if (CONTROL === 'noregister') {
-    const ok = missingPast === pastPairs && missing === pastPairs && early === 0;
+    const ok = missingPast === pastPairs && missing === pastPairs && gateMissing === pastPairs && early === 0;
     console.log(ok
-      ? `CONTROL noregister FIRED: all ${pastPairs} past names went unanswered after their seasons had loaded`
-      : `CONTROL noregister DID NOT FIRE as predicted: ${missingPast} past names unanswered (expected ${pastPairs})`);
+      ? `CONTROL noregister FIRED: all ${pastPairs} past names went unanswered at their gate and after their seasons had loaded`
+      : `CONTROL noregister DID NOT FIRE as predicted: ${missingPast} past names unanswered after the gates, ${gateMissing} at them (expected ${pastPairs} both times)`);
+    process.exit(ok ? 1 : 2);
+  }
+  if (CONTROL === 'nowait') {
+    /* Every past name unanswered AT its gate, and the AFTER check green: the second half is the
+       review's finding itself, that the old check alone could not see this. */
+    const others = findings.filter(f => !(f.section === 2 && f.rule === 'gate'));
+    const ok = gateMissing === pastPairs && pastPairs > 0 && missing === 0 && early === 0 && others.length === 0;
+    console.log(ok
+      ? `CONTROL nowait FIRED: all ${pastPairs} past names were unanswered at the moment their gate opened, and the AFTER check alone saw nothing (${total - missing} of ${total} answered once the late loads had landed)`
+      : `CONTROL nowait DID NOT FIRE as predicted: ${gateMissing} past names unanswered at their gate (expected ${pastPairs}), ${missing} after (expected 0), ${early} early (expected 0), ${others.length} findings outside the gate rule (expected 0)`);
     process.exit(ok ? 1 : 2);
   }
 }
@@ -346,6 +434,7 @@ let reformatAt = null;
 
 /* ---------- 4. No stragglers ---------- */
 console.log('4) Nothing reads the worlds from the old place, and only the squad picker imports the pools');
+let strayExpected = null;
 {
   const walk = (dir, out = []) => {
     for (const e of fs.readdirSync(abs(dir), { withFileTypes: true })) {
@@ -361,8 +450,10 @@ console.log('4) Nothing reads the worlds from the old place, and only the squad 
      blanker simNationalityFlags uses, and counted, so a weaker read is never a silent one. */
   const blank = s => s.replace(/\/\*[\s\S]*?\*\//g, m => m.replace(/[^\n]/g, ' ')).replace(/(^|[\s(,{=])\/\/.*$/gm, '$1');
   let fallback = 0;
+  /* Control stragglers: three files read from memory in place of the disk, one per rule below. */
+  const planted = {};
   const code = rel => {
-    const text = read(rel);
+    const text = planted[rel]?.text ?? read(rel);
     try { return codeOf(abs(rel), text); } catch { fallback += 1; return blank(text); }
   };
   /* An import, an export ... from or an import() whose path, on the same line, ends in the module.
@@ -370,20 +461,85 @@ console.log('4) Nothing reads the worlds from the old place, and only the squad 
      rule looks for the statement and then the name on the line, not for one clean string. */
   const imports = (c, mod) => new RegExp(`(?:\\bfrom\\s*|\\bimport\\s*\\(\\s*|\\bimport\\s+)['"\`][^\\n]*?${mod}(?:\\.ts)?['"\`]`).test(c);
   const SELF = 'scripts/simCmDataOnDemand.mjs';
+  /* Who takes NATIONALITY_BY_WORLD from the OLD module (tightened 2026-10-08, control stragglers).
+     The rule used to be "a file that uses the name also names allWorlds somewhere", and a file
+     can do that and still read the worlds off playerNationalities, where the export is gone and
+     the read is undefined: scripts/simEra2005.mjs did exactly that until this round repaired it
+     by hand. So the rule now also finds the three ways a file can take the name from there:
+       1. it names it in an import or an export ... from playerNationalities;
+       2. it destructures it from an import() of playerNationalities;
+       3. it holds the whole of playerNationalities under a name (import * as, export * as, or
+          x = await import(...)), or under a renamed copy of that name (a destructure such as
+          { nat: NAT }), and reads the worlds off it with a dot, a ?. or a bracket.
+     The path may hold a ${...} with quotes of its own, so it is matched up to the module's name
+     within one statement (no newline, no semicolon). */
+  const ID = '[A-Za-z_$][\\w$]*';
+  const Q = '[\'"`]';
+  const OLD = `${Q}[^\\n;]*?playerNationalities`;
+  const esc = s => s.replace(/\$/g, '\\$');
+  const takesFromOldPlace = c => {
+    const why = [];
+    if (new RegExp(`\\b(?:import|export)\\s*\\{[^}]*\\bNATIONALITY_BY_WORLD\\b[^}]*\\}\\s*from\\s*${OLD}`).test(c)) why.push('names it in an import or an export from playerNationalities');
+    if (new RegExp(`\\{[^}]*\\bNATIONALITY_BY_WORLD\\b[^}]*\\}\\s*=\\s*(?:await\\s+)?import\\s*\\(\\s*${OLD}`).test(c)) why.push('destructures it from an import() of playerNationalities');
+    const holders = new Set();
+    for (const re of [new RegExp(`\\*\\s*as\\s+(${ID})\\s+from\\s*${OLD}`, 'g'), new RegExp(`\\b(${ID})\\s*=\\s*(?:await\\s+)?import\\s*\\(\\s*${OLD}`, 'g')]) {
+      for (const m of c.matchAll(re)) holders.add(m[1]);
+    }
+    for (let grew = true; grew;) {
+      grew = false;
+      for (const h of [...holders]) for (const m of c.matchAll(new RegExp(`\\b${esc(h)}\\s*:\\s*(${ID})`, 'g'))) {
+        if (!holders.has(m[1])) { holders.add(m[1]); grew = true; }
+      }
+    }
+    for (const h of holders) {
+      const off = new RegExp(`\\b${esc(h)}\\s*(?:\\?\\.|\\.)\\s*NATIONALITY_BY_WORLD\\b`).test(c)
+        || new RegExp(`\\b${esc(h)}\\s*(?:\\?\\.)?\\[\\s*${Q}NATIONALITY_BY_WORLD${Q}\\s*\\]`).test(c)
+        || new RegExp(`\\{[^}]*\\bNATIONALITY_BY_WORLD\\b[^}]*\\}\\s*=\\s*${esc(h)}\\b`).test(c);
+      if (off) why.push(`reads it off ${h}, a name that holds playerNationalities`);
+    }
+    return why;
+  };
+  if (CONTROL === 'stragglers') {
+    /* a. the shape simEra2005 had: the whole old module under `nat`, renamed NAT by a destructure,
+          NAT.NATIONALITY_BY_WORLD read further down, and allWorlds still named in the file. */
+    const a = 'scripts/simEra2005.mjs';
+    const lines = read(a).split('\n');
+    const tail = "/src/data/nationalities/allWorlds.ts');";
+    const at = lines.map((l, i) => (l.startsWith('const nat = await import(') && l.endsWith(tail) ? i : -1)).filter(i => i >= 0);
+    if (at.length !== 1) refuse(`control stragglers: ${a} holds the line that takes allWorlds under the name nat ${at.length} times, not once`);
+    if (!/\bnat\s*:\s*NAT\b/.test(lines.join('\n')) || !/\bNAT\.NATIONALITY_BY_WORLD\b/.test(lines.join('\n'))) refuse(`control stragglers: ${a} no longer renames nat to NAT and reads NAT.NATIONALITY_BY_WORLD, so the plant would prove nothing`);
+    const keep = lines[at[0]];
+    lines[at[0]] = `${keep.slice(0, -tail.length)}/src/data/playerNationalities.ts');\n${keep.replace('const nat =', 'const worldsToo =')} void worldsToo;`;
+    planted[a] = { rule: 'oldplace', text: lines.join('\n') };
+    /* b. a lib file imports the national team pools; c. a lib file imports allWorlds. */
+    const b = 'src/lib/confederationGroups.ts';
+    const cFile = 'src/lib/clubManagerInternationals.ts';
+    planted[b] = { rule: 'pools', text: `import { NATIONAL_POOLS } from '@/data/nationalPools';\nvoid NATIONAL_POOLS;\n${read(b)}` };
+    planted[cFile] = { rule: 'allworlds', text: `import { NATIONALITY_BY_WORLD } from '@/data/nationalities/allWorlds';\nvoid NATIONALITY_BY_WORLD;\n${read(cFile)}` };
+    for (const rel of Object.keys(planted)) if (!files.includes(rel)) refuse(`control stragglers: ${rel} is not among the files section 4 reads`);
+    /* each plant must be something the file does not already do, and the first one must be a file
+       the OLD rule would have passed, or this control proves nothing about the tightening */
+    if (imports(codeOf(abs(b), read(b)), 'nationalPools')) refuse(`control stragglers: ${b} already imports the pools`);
+    if (imports(codeOf(abs(cFile), read(cFile)), 'nationalities/allWorlds')) refuse(`control stragglers: ${cFile} already imports allWorlds`);
+    if (!code(a).includes('nationalities/allWorlds')) refuse(`control stragglers: the rewritten ${a} no longer names allWorlds, so the old rule would have caught it too`);
+    console.log(`   CONTROL stragglers: ${a} reads the worlds off playerNationalities while still naming allWorlds, ${b} imports the pools, ${cFile} imports allWorlds (all in memory)`);
+    strayExpected = Object.entries(planted).map(([rel, p]) => `${p.rule} ${rel}`).sort();
+  }
   let namers = 0, poolImporters = 0;
   for (const rel of files) {
     if (rel === SELF) continue;
     const c = code(rel);
     if (/\bNATIONALITY_BY_WORLD\b/.test(c) && rel !== F.allWorlds) {
       namers += 1;
-      if (!c.includes('nationalities/allWorlds')) fail(4, 'oldplace', `${rel} uses NATIONALITY_BY_WORLD and never names src/data/nationalities/allWorlds.ts: playerNationalities.ts holds one world now, so this file would quietly see one world of five`);
+      if (!c.includes('nationalities/allWorlds')) fail(4, 'oldplace', `${rel} uses NATIONALITY_BY_WORLD and never names src/data/nationalities/allWorlds.ts: playerNationalities.ts holds one world now, so this file would quietly see one world of five`, { file: rel });
+      for (const why of takesFromOldPlace(c)) fail(4, 'oldplace', `${rel} ${why}: that module holds today's world only and exports no NATIONALITY_BY_WORLD, so the read is undefined. Take it from src/data/nationalities/allWorlds.ts`, { file: rel });
     }
     if (imports(c, 'nationalPools')) {
       poolImporters += 1;
-      if (rel !== F.squads && rel !== 'scripts/simNationalPools.mjs') fail(4, 'pools', `${rel} imports the national team pools: only ${F.squads} (and the pools' own harness) may, or whatever imports this file downloads 12,703 rows`);
+      if (rel !== F.squads && rel !== 'scripts/simNationalPools.mjs') fail(4, 'pools', `${rel} imports the national team pools: only ${F.squads} (and the pools' own harness) may, or whatever imports this file downloads 12,703 rows`, { file: rel });
     }
     if (rel.startsWith('src/') && !/\.test\.tsx?$/.test(rel) && !rel.startsWith('src/test/') && rel !== F.allWorlds && imports(c, 'nationalities/allWorlds')) {
-      fail(4, 'allworlds', `${rel} imports allWorlds.ts, which is for scripts and tests: it pulls every past world back onto the page`);
+      fail(4, 'allworlds', `${rel} imports allWorlds.ts, which is for scripts and tests: it pulls every past world back onto the page`, { file: rel });
     }
   }
   if (namers < 5) fail(4, 'oldplace', `only ${namers} files use NATIONALITY_BY_WORLD, there were nine readers when this was written: the search is not reading them`);
@@ -411,6 +567,30 @@ if (CONTROL === 'pools' || CONTROL === 'eranat' || CONTROL === 'squad') {
   console.log(ok
     ? `CONTROL ${CONTROL} FIRED: section 1 named ${named.length} pages, exactly the ones it must (${named.map(p => path.basename(p, '.tsx')).join(', ')})`
     : `CONTROL ${CONTROL} DID NOT FIRE as predicted: named ${named.join(', ') || 'nothing'}, expected ${expected.join(', ')}`);
+  process.exit(ok ? 1 : 2);
+}
+if (CONTROL === 'seamalias') {
+  /* The seam, named for the FILE the alias resolves to, and rule 1c for every engine page (they
+     hold the tournaments, so the name pools ride along). Nothing else may go red. */
+  const isSeam = f => f.section === 1 && f.rule === 'seam';
+  const isRide = f => f.section === 1 && f.rule === 'squad' && f.file === F.intlNames;
+  const seam = findings.filter(isSeam);
+  const ride = findings.filter(isRide).map(f => f.page).sort();
+  const others = findings.filter(f => !isSeam(f) && !isRide(f));
+  const ok = seam.length === 1 && seam[0].file === F.intlNames && enginePages.length >= 3
+    && JSON.stringify(ride) === JSON.stringify([...enginePages].sort()) && others.length === 0;
+  console.log(ok
+    ? `CONTROL seamalias FIRED: rule 1e named ${F.intlNames} through its alias, and rule 1c named the ${ride.length} engine pages that would carry it`
+    : `CONTROL seamalias DID NOT FIRE as predicted: ${seam.length} seam findings (${seam.map(f => f.file).join(', ') || 'none'}), ${ride.length} engine pages named (expected ${enginePages.length}), ${others.length} other findings (expected 0)`);
+  process.exit(ok ? 1 : 2);
+}
+if (CONTROL === 'stragglers') {
+  const got = findings.filter(f => f.section === 4).map(f => `${f.rule} ${f.file}`).sort();
+  const others = findings.filter(f => f.section !== 4);
+  const ok = strayExpected !== null && strayExpected.length === 3 && JSON.stringify(got) === JSON.stringify(strayExpected) && others.length === 0;
+  console.log(ok
+    ? `CONTROL stragglers FIRED: section 4 named exactly the three planted files, one per rule (${got.join('; ')})`
+    : `CONTROL stragglers DID NOT FIRE as predicted: section 4 found ${got.join('; ') || 'nothing'}, expected ${(strayExpected ?? []).join('; ')}; ${others.length} findings outside section 4 (expected 0)`);
   process.exit(ok ? 1 : 2);
 }
 
