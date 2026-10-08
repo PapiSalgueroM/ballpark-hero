@@ -1,0 +1,4 @@
+swap exit=0 1s |  M src/lib/soccerCareerLeague.ts
+b7-simCareerLeagueFinish exit=0 5s | simCareerLeagueFinish: green. 756 careers, 6048 seasons, 4764 in a verified league; finish and title agree, the ladder holds, main's stream is untouched and the elite boo
+b7-simCareerAwardsNight exit=0 6s | simCareerAwardsNight: ALL 170 CHECKS PASSED
+b7-simCareerSocialBrands exit=0 6s | ALL SOCIAL AND BRAND CHECKS PASSED

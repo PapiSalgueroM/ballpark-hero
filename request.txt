@@ -1,0 +1,5 @@
+#!serial
+swap: for f in careerLeagueSeasons clubRivalries leagueFormat soccerCareerClubPool; do cp .rc/x/$f.ts src/data/$f.ts; done; for f in careerEras soccerCareerDerby soccerCareerLeague; do cp .rc/x/$f.ts src/lib/$f.ts; done; git status --short | grep -v "^??" | head -12
+b7-simCareerLeagueFinish: node scripts/simCareerLeagueFinish.mjs
+b7-simCareerAwardsNight: node scripts/simCareerAwardsNight.mjs
+b7-simCareerSocialBrands: node scripts/simCareerSocialBrands.mjs

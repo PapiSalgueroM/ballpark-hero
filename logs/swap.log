@@ -1,0 +1,7 @@
+ M src/data/careerLeagueSeasons.ts
+ M src/data/clubRivalries.ts
+ M src/data/leagueFormat.ts
+ M src/data/soccerCareerClubPool.ts
+ M src/lib/careerEras.ts
+ M src/lib/soccerCareerDerby.ts
+ M src/lib/soccerCareerLeague.ts
