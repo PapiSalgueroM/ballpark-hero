@@ -1,0 +1,22 @@
+russia2026: 16 clubs, 357 men in the generated file
+  FAIL [A]: russia2026: an address in the research is on a wiki host: https://en.wikipedia.org/wiki/A_squad_list
+   Zenit                ships 20 (GK 3 DEF 8 MID 5 FWD 4); left out 7: 2 one source only, 2 not on the squad list the name and value come from, 3 already in the game
+   Krasnodar            ships 19 (GK 2 DEF 8 MID 6 FWD 3); left out 17: 1 age on one host, 4 not on the squad list the name and value come from, 11 one source only, 1 already in the game
+   Spartak Moscow       ships 17 (GK 3 DEF 4 MID 5 FWD 5); left out 13: 1 no position group agreed, 5 not on the squad list the name and value come from, 3 one source only, 4 already in the game
+   CSKA Moscow          ships 19 (GK 4 DEF 4 MID 6 FWD 5); left out 15: 9 not on the squad list the name and value come from, 3 one source only, 3 already in the game
+   Lokomotiv Moscow     ships 20 (GK 2 DEF 4 MID 7 FWD 7); left out 10: 1 no position group agreed, 9 not on the squad list the name and value come from
+   Rubin Kazan          ships 24 (GK 3 DEF 11 MID 6 FWD 4); left out 8: 1 age on one host, 1 no position group agreed, 3 not on the squad list the name and value come from, 3 one source only
+   Dynamo Moscow        ships 19 (GK 3 DEF 5 MID 6 FWD 5); left out 12: 4 one source only, 2 not on the squad list the name and value come from, 6 already in the game
+   Rostov               ships 24 (GK 3 DEF 9 MID 5 FWD 7); left out 9: 5 not on the squad list the name and value come from, 4 one source only
+   Akhmat Grozny        ships 24 (GK 3 DEF 7 MID 8 FWD 6); left out 5: 2 not on the squad list the name and value come from, 3 one source only
+   Krylia Sovetov       ships 24 (GK 2 DEF 9 MID 8 FWD 5); left out 9: 3 not on the squad list the name and value come from, 6 one source only
+   Baltika              ships 24 (GK 3 DEF 11 MID 6 FWD 4); left out 14: 4 not on the squad list the name and value come from, 10 one source only
+   Orenburg             ships 30 (GK 2 DEF 11 MID 11 FWD 6); left out 14: 5 not on the squad list the name and value come from, 9 one source only
+   Akron Tolyatti       ships 24 (GK 2 DEF 6 MID 9 FWD 7); left out 17: 8 one source only, 7 not on the squad list the name and value come from, 2 already in the game
+   Dynamo Makhachkala   ships 23 (GK 3 DEF 6 MID 10 FWD 4); left out 8: 6 not on the squad list the name and value come from, 1 one source only, 1 already in the game
+   Rodina Moscow        ships 25 (GK 2 DEF 9 MID 6 FWD 8); left out 22: 4 not on the squad list the name and value come from, 15 one source only, 1 namesake inside the round, 2 already in the game
+   Fakel Voronezh       ships 21 (GK 4 DEF 5 MID 7 FWD 5); left out 9: 1 age on one host, 3 not on the squad list the name and value come from, 4 one source only, 1 already in the game
+   356 of 357 men carry a two host nationality; 3 have no value; 82 addresses read, none on a wiki; 5 facts cited by the rules rows
+D) 454 engine clubs fold to 454 names; 6 gathered table spellings
+G) the old save loaded as Sevilla, played its four weeks: 26 leagues before its summer, 27 after; a second summer ran (season 3)
+simClubManagerGathered: 1 failure(s) under control wiki (A 1)
