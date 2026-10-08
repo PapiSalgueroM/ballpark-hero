@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+#!serial
+# Round 1051 reviewer (runner lens): the three reds of remote B, once more alone on the branch and once on the base it merged
+press-head-again: node scripts/playCareerPress.mjs
+writes-head-again: node scripts/simWritesAreSent.mjs
+daily-head-again: node scripts/simDailySaveHardening.mjs
+base3: bash .rc/x/base3.sh
