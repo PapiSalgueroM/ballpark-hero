@@ -1,0 +1,1 @@
+bash_.rc_x_cm-bracket-keyboard-1159.sh exit=0 241s | Club Manager bracket1159 strict label: failed=0, complete=1, source=bf2dc9629a05cdabb1b1141da8157779a960bd03, request=c16ae5199640f3368146dc9ef83a158b2eb48389.
