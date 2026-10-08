@@ -1,0 +1,9 @@
+CONTROL nosnap: rewritten in the bundled source or in what is served, never a file on disk
+tables from node: 356 table seasons in the probe, five used: Probe 0 2001 AC Milan (34); Probe 9 2013 Atletico Madrid (38); Probe 16 2006 Chelsea (38); Probe 33 1997 Fiorentina (34); Probe 38 2034 Real Madrid (38)
+   B4: 390 compact Probe 0 2001 AC Milan 1>2: 0 transitions under reduced motion
+   B4: 390 compact Probe 0 2001 AC Milan 5>6: 0 transitions under reduced motion
+   B4: 390 compact Probe 0 2001 AC Milan 9>12: 0 transitions under reduced motion
+   B4: 390 compact Probe 0 2001 AC Milan 14>24: 0 transitions under reduced motion
+FAIL B4. under reduced motion no step slides (50 of 50 did)
+ok   B4. and every row is at its new place in the same frame (0 were not)
+playSeasonCentreMotion: 2 checks, 1 failed (control nosnap) (only B4)

@@ -1,0 +1,29 @@
+CONTROL shift: applied to the bundled copy or the text the fence reads, never a file on disk
+1) every step: 356 table seasons, 240044 pairs of tables, 0 of 85 one matchday steps moved a club (0 club moves)
+ok   1. the probe reached enough table seasons (356, floor 300)
+ok   1. every step of every season was compared (240044 pairs, floor 150000)
+FAIL 1. one matchday steps that moved at least one club: 0.0% (floor 90%)
+FAIL item 1 shift: 239947 times, first: Probe 0 1997 Marseille: matchday 1 plus 1, a club's from or to is not its place in the two tables | Probe 0 1997 Marseille: matchday 1 plus 2, a club's from or to is not its place in the two tables | Probe 0 1997 Marseille: matchday 1 plus 3, a club's from or to is not its place in the two tables
+FAIL 1. every club's from and to are its places in the two tables (1 shift: 239947)
+ok   2. a record round trips under seasonCentre:v1:soccer
+ok   2. a cleared record is gone
+ok   2. 14 shapes that are not a record, text that is not JSON and a storage that throws: 0 read as a record, 0 threw
+2) the resume record: 48 careers, 880 played rows, 15824 checks against another career that played the same year
+ok   2. the probe gave enough careers and played rows (48 careers, 880 rows; floors 40 and 600)
+ok   2. every record finds its own row (880 of 880); rows of one career sharing a key: 0
+ok   2. a record finds nothing in another career (0 of 15824 did; floor 5000 checks)
+ok   2. a record that is not stable is held to the league year of the save (0 of 880 were not)
+ok   2. the career page holds its key template on one line (1 lines found)
+ok   2. the page's key for a season is the Season Centre's own key on every played row (0 of 880 differ)
+3) source fences: 1 files in src/lib/motion, 1 in src/components/motion, 8 that may draw nothing
+ok   3. the fenced folders are not empty
+ok   3. imports and random draws (0 findings)
+ok   3. the call written in a comment and in a string is not a finding
+ok   3. the same call in code is exactly one finding
+ok   3. MiniPitch.tsx does bind the pitch part (the rules below are about a part that is really there)
+ok   3. the match clock reaching for the pitch part as Club Manager keeps it, for a type alone, is exactly one finding
+ok   3. the match clock reaching for the pitch part as Round 1101 keeps it is exactly one finding
+ok   3. MiniPitch carrying Club Manager's engine as code is exactly one finding
+ok   3. MiniPitch carrying Club Manager's match viewer is exactly one finding
+ok   3. the engine's types, which are erased at build, are not a finding
+simSeasonCentreMotion: 23 checks, 2 failed (control shift)

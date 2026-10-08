@@ -1,0 +1,40 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/seasonCore.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 148[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/seasonCentreSlots.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[33m 305[2mms[22m[39m
+ [32m✓[39m src/test/miniPitchScene.test.ts [2m([22m[2m20 tests[22m[2m)[22m[33m 398[2mms[22m[39m
+ [32m✓[39m src/test/seasonResume.test.ts [2m([22m[2m32 tests[22m[2m)[22m[32m 72[2mms[22m[39m
+ [32m✓[39m src/test/rankShift.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 316[2mms[22m[39m
+ [32m✓[39m src/test/seasonReplays.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/test/liveSimMotion.test.tsx [2m([22m[2m24 tests[22m[2m)[22m[33m 36385[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mactual feed triggers player strikes, ball flight, saves and net contact [33m 1918[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mpause freezes the ball and player pose, and the same player still opens changes [33m 542[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mmotion leaves committed state and settled results identical [33m 784[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22ma substitution during a paused action replaces the clickable player immediately [33m 534[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mspeed changes scale action time with the match clock [33m 492[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (45 'goal' reduced=false) [33m 4300[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (45 'goal' reduced=true) [33m 1593[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (45 'save' reduced=false) [33m 1670[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (45 'save' reduced=true) [33m 1343[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (90 'goal' reduced=false) [33m 1346[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (90 'goal' reduced=true) [33m 1340[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (90 'save' reduced=false) [33m 1035[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (90 'save' reduced=true) [33m 878[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal resume shows contact and Skip keeps immediate exactly-once whistle callbacks [33m 6938[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22ma tactics redraw cancels a terminal action that is no longer committed [33m 745[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mthe ninetieth minute asks the latest save: refused means full time, never thirty empty minutes [33m 4435[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mthe ninetieth minute asks the latest save: extra time drawn there is played, whatever this render was given [33m 2349[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mthe extra time banner says what is true: a second leg is level on aggregate [33m 1524[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mthe clock runs into the board as 90 plus, with the running aggregate under the score [33m 435[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22ma goal in the board is announced with its plus, GOAL! ... 90+N [33m 1146[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mthe extra time clock runs into its own board as ET 120 plus [33m 508[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m      Tests [22m [1m[32m125 passed[39m[22m[90m (125)[39m
+[2m   Start at [22m 16:32:44
+[2m   Duration [22m 43.93s[2m (transform 7.17s, setup 955ms, collect 11.38s, tests 37.63s, environment 4.93s, prepare 2.71s)[22m
+

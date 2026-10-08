@@ -1,0 +1,20 @@
+figure file in: LiveSimMotion-D9e4-Zm0.js (2063 gz)
+match viewer in: LiveSimScreen-BFp7zhE0.js (9956 gz)
+little pitch in: MiniPitch-B8871Y2A.js (2507 gz)
+pitch css in: LiveSimMotion-BIVdauyH.css (462 gz)
+ok   one chunk holds the figure, one the match viewer, one stylesheet holds the pitch rules
+the match viewer's static imports: index-ima46aRD.js clubManager-B6FI8vbc.js HalftimeScreen-DNvzckSt.js SquadScreen-CIRoFzyI.js ShootoutKicks-Cl-SZ99h.js useRevealScroll-DYucO-JU.js LiveSimMotion-D9e4-Zm0.js clubManagerClock-C1EiWjUJ.js users-BPGXpaCx.js fast-forward-6JUMoNWf.js arrow-left-right-DJdT4bC0.js nameFold-Cxobkrgg.js soccerInternational-Xer_3kxD.js intlNames-CkDsBUot.js soccerCareerAppearance-BF4Z2JDW.js soccerBoots-BK_dXNrV.js soccerBootIds-BWkyFIXk.js managerOffers-_ah8loUP.js squadDeal-CoLICjUb.js footleEnrichment-BZzeJ_uB.js positionFit-BbUnYZIs.js gmStaff-CQgWbtVe.js gmDealTable-DYyD4N4_.js TeamTalkRow-CHL4VvKL.js FlagImg-Re8_60yI.js arrow-up-Bstd-6u7.js arrow-down-CmKJEiT7.js chevron-down-CRXTYM6D.js
+ok   the match viewer imports the chunk that holds the figure (or holds it itself)
+the little pitch's static imports: index-ima46aRD.js LiveSimMotion-D9e4-Zm0.js
+ok   the little pitch imports the chunk that holds the figure
+ok   the figure is not inside the match viewer chunk (the little pitch would pull the whole viewer)
+ok   neither the figure chunk nor the little pitch holds a line of Club Manager's engine
+asks for the match viewer: ClubManager-DxKDbuc6.js
+ok   something asks for the match viewer
+ok   ClubManager-DxKDbuc6.js lists the figure chunk and the pitch stylesheet with the viewer, so a live match gets both
+ok   Club Manager's first screen asks for neither the viewer nor the figure
+the viewer chunk, imported in the page, exports: function function
+ok   the viewer chunk loads in a browser and brings the figure chunk, both answered 200
+ok   no page error ()
+a live match asks for: LiveSimScreen-BFp7zhE0.js 200, LiveSimMotion-D9e4-Zm0.js 200 and the stylesheet LiveSimMotion-BIVdauyH.css
+cmLiveChunks: 0 failed
