@@ -1,0 +1,17 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/collegeGridSearchMemory.test.ts[2m > [22m[2mthe College Grid search, from memory (Round 1105)[2m > [22m[2ma surname lists the man, and the check fails when names are found by their first letters only
+[22m[39mCGSEARCH| surname: 74 sampled names each listed by their second word
+
+[90mstdout[2m | src/test/collegeGridSearchMemory.test.ts[2m > [22m[2mthe College Grid search, from memory (Round 1105)[2m > [22m[2ma file of the wrong shape is refused and forgotten, 7 ways, and a 200 that is not JSON is a failed fetch
+[22m[39mCGSEARCH| 7 wrong shapes, an HTML body and a 404 each failed the search and were asked for again
+
+ [32m✓[39m src/test/collegeGridSearchMemory.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 1145[2mms[22m[39m
+   [33m[2m✓[22m[39m the College Grid search, from memory (Round 1105)[2m > [22ma file of the wrong shape is refused and forgotten, 7 ways, and a 200 that is not JSON is a failed fetch [33m 687[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m   Start at [22m 10:44:29
+[2m   Duration [22m 2.39s[2m (transform 202ms, setup 76ms, collect 239ms, tests 1.15s, environment 481ms, prepare 90ms)[22m
+

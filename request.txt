@@ -1,0 +1,8 @@
+# Round 1105 closing check A (static): the type gate, the new memory search suite alone, the round's vitest files, the shipped harness plain (its section 8 runs the search suite)
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+search: node_modules/.bin/vitest run src/test/collegeGridSearchMemory.test.ts --testTimeout=300000 --hookTimeout=120000
+vt-round: node_modules/.bin/vitest run src/test/gridEngineSource.test.ts src/test/playerSearchLocal.test.ts src/test/playerSearchFailure.test.tsx src/test/gridNamesakes.test.ts src/test/collegeGridFailClosed.test.tsx src/test/collegeGridOffline.test.tsx --testTimeout=300000 --hookTimeout=120000
+shipped: node scripts/simCollegeGridShipped.mjs
+page: node scripts/simCollegeGridPage.mjs
+compact-check: node scripts/genCollegeGridData.mjs --compact --check
+norival: node scripts/simNoRivalNames.mjs

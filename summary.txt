@@ -1,0 +1,7 @@
+search exit=0 3s |    Duration  2.39s (transform 202ms, setup 76ms, collect 239ms, tests 1.15s, environment 481ms, prepare 90ms)
+vt-round exit=0 5s |    Duration  5.24s (transform 632ms, setup 448ms, collect 1.68s, tests 7.19s, environment 2.45s, prepare 980ms)
+page exit=0 0s | simCollegeGridPage: green. The page judges in memory, charges only a no, offers the key's names from memory, says only what the key holds, drops another board's save, loa
+compact-check exit=0 0s | up to date: 35598 rows, stamp cf90e69d60395171, key and both compact files match
+norival exit=0 10s | No rival product names found. 0 findings.
+shipped exit=0 15s | simCollegeGridShipped: green. None of the thirteen ships, the two files are the key row for row and verdict for verdict, every board keeps its answers and its floor, the 
+tsc exit=0 39s | 
