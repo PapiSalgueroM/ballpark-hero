@@ -1,0 +1,1 @@
+deckc exit=1 24s | simUsCareerDeckC: 1 failure(s)
