@@ -97,3 +97,45 @@ Smell checks passed: quartiles in order everywhere, no position under 15 starter
 
 Every `y2004.<pos>.<stat>` and `now.<pos>.<stat>` starter quartile (sixty keys), `rules.statTitleShareFrom`,
 `rules.statTitleGamesBefore`, `rules.statTitleTotalsBefore`, `rules.allStarFanShareFrom`.
+
+## 7. What the round measured (for the legacy recalibration round)
+
+Every number here is scripts/simNbaAwardsSense.mjs at full size: 6,000 careers a seed, seeds 1 to 5, the board's
+own order, one career in four in the 2003-04 era. "Main" is the game before Round 1103, recorded once in
+scripts/data/nbaAwardsSenseBaseline.json.
+
+| What | Main (five seeds) | Round 1103 (five seeds) |
+|---|---|---|
+| Hall of Fame inducted, percent of careers | 31.70, 31.88, 31.78, 31.75, 31.55 | 31.43, 31.52, 32.07, 31.62, 30.98 |
+| First ballot, percent of careers | 27.03, 27.93, 27.83, 27.57, 27.45 | 27.13, 27.40, 27.83, 27.02, 27.15 |
+| MVPs a career | 0.316, 0.323, 0.310, 0.313, 0.311 | 0.296, 0.315, 0.319, 0.304, 0.304 |
+| All-NBA a career | 1.972, 2.006, 1.981, 1.987, 1.986 | 1.955, 1.969, 2.002, 1.956, 1.974 |
+| All-Star a career | none existed | 3.162, 3.151, 3.187, 3.179, 3.165 |
+| All-Defensive a career | 1.342, 1.383, 1.357, 1.337, 1.361 | 1.349, 1.302, 1.365, 1.362, 1.377 |
+| Careers with an MVP, percent | 16.22, 16.85, 16.27, 16.75, 16.68 | 17.18, 17.07, 17.73, 17.70, 17.53 |
+| Careers with an All-NBA, percent | 59.07, 58.88, 58.60, 58.68, 58.93 | 61.70, 60.98, 62.35, 62.47, 62.20 |
+| My share of the head to head years with the rival, percent | 62.33, 63.02, 62.30, 62.52, 62.80 | 62.32, 62.25, 62.35, 62.97, 62.51 |
+
+The legacy constant. `NBA_LEGACY_NEW_LINE_SCALE` in src/lib/nbaMyCareer.ts is what the points of a season on the
+new line are worth to the legacy score against a season on the old one. It was set from the Hall rate, by the
+harness's own knob (`SENSE_TRY_SCALE`), on fleets of 3,000 careers and then at full size:
+
+| Constant | Inducted, percent | First ballot, percent | Read on |
+|---|---|---|---|
+| 1.00 | 30.00, 30.97 | 25.30, 25.87 | 3,000 careers, seeds 1 and 2 |
+| 1.15 | 30.97, 32.13 (five full seeds: mean 30.14) | 26.20, 27.30 (five full seeds: mean 25.90) | both sizes |
+| 1.30 | 32.83, 34.53 | 28.50, 29.97 | 3,000 careers, seeds 1 and 2 |
+| 1.25, the value shipped | mean 31.52 over five full seeds, main 31.73 | mean 27.31, main 27.56 | 6,000 careers, seeds 1 to 5 |
+
+The trials at 1.00, 1.15 and 1.30 were read while the old awards block still decided the awards (the round's
+first pass). At 1.25 that tree gave 31.81 and 27.64 over five full seeds; the finished round gives the row above.
+
+It is applied only to seasons on the new line, and never to a career read on Hall calibration 1 (those retired
+before the line existed). A career with no season played after the round scores exactly what it scored.
+
+What the Hall of Fame ballot's own harness says on this line (scripts/simCareerHall.mjs nba, 2,000 careers, not
+this round's file and not retuned here): the Hall share is 33.7 percent with 91.2 percent of it first ballot, and
+two of its checks are red by construction. Its standout marks were measured on the old line, so 2.41 percent of
+careers reach one where its band asks for 8.91 to 10.91 (most of its fourteen cells are out of band), and its restated
+calibration 2 score does not know the constant above, so every career is off the restatement. Regenerating the
+marks on the new line raises the Hall rate, and the constant above then has to be measured again.

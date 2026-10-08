@@ -21,6 +21,10 @@
      wide    the Career Log tile's second line is handed the six part line the round first drew, which does not
              fit: the cut off check must go red (it measures the tile).
 
+   Measured 2026-10-08 on the build of 94286364: 68 checks, 0 failed. The Career Log tile's second line has 149
+   pixels at 390 wide and 182 at 1280, and the three part line needs exactly that or less; the six part line the
+   wide control hands it does not fit, and both controls fired.
+
    Run: npm run build && node scripts/lib/hostLikeServer.mjs dist 4173, then
         ENGINES=chromium node scripts/playNbaNumbers.mjs */
 import { readFileSync } from 'node:fs';

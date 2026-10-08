@@ -103,6 +103,9 @@
      othersport       one NFL All-Pro grade moved by a hundredth       C red (needs SENSE_PROVE_OTHERS=1)
    A control is run at full size where a full run is cheap (about two minutes on a CI runner), or shrunk and
    judged, SENSE_JUDGE=1 SENSE_CAREERS=1500 SENSE_SEEDS=1,2, after the plain run at that size is green.
+   Measured 2026-10-08 on 94286364: 124 checks, 0 failed at full size, the shrunk plain run green on seeds 1,2
+   and on 3,4, and all fifteen controls fired as designed, each red in its own section and nowhere it may not be
+   (the eleven that move a band at full size, privatecopy, weightdrift and example on a quick run of exact checks).
 
    KNOBS for a builder, none of which may record: SENSE_TRY_SCALE=1.2 (the legacy constant at another value),
    SENSE_FIELD_POP=starters (the field measured on starter seasons only). */
@@ -1068,6 +1071,28 @@ else if (base.others.per !== OTHERS_PER || base.others.seeds.join() !== SEEDS.jo
 else for (const sport of Object.keys(OTHER)) {
   const same = others[sport].every((o, k) => o.hash === base.others.hashes[sport][k]);
   exact('C', same, `${sport.toUpperCase()} careers hash equal to the baseline on every seed (${others[sport].map(o => o.hash.slice(0, 8)).join(', ')})`);
+}
+
+/* C's prints, never judged: in the other three careers, how often the sport's major award goes to a club that
+   missed the playoffs, and to a man without that season's all league pick. The legacy recalibration round is
+   sized from these. The words are each engine's own, and a word that is no longer in its source is said so. */
+{
+  const WORDS = {
+    nfl: { file: 'src/lib/nflMyCareer.ts', major: ['MVP'], pick: 'All-Pro', missed: 'Missed the playoffs', anchor: "export const NFL_MISSED_PLAYOFFS = 'Missed the playoffs';" },
+    mlb: { file: 'src/lib/mlbMyCareer.ts', major: ['MVP', 'Cy Young'], pick: 'All-Star', missed: 'Missed October', anchor: "let result = 'Missed October';" },
+    nhl: { file: 'src/lib/nhlMyCareer.ts', major: ['Hart', 'Norris', 'Vezina'], pick: 'All-Star', missed: 'Missed the playoffs', anchor: "let result = 'Missed the playoffs';" },
+  };
+  for (const sport of Object.keys(OTHER)) {
+    const w = WORDS[sport];
+    const src = srcOf(w.file);
+    if (!src.includes(w.anchor) || !w.major.every(a => src.includes(`'${a}'`)) || !src.includes(`awards.push('${w.pick}')`)) { console.log(`  note [C, printed] ${sport.toUpperCase()}: the engine's award or result words are not where this print reads them; nothing printed`); continue; }
+    const all = others[sport].flatMap(o => o.lines);
+    const won = all.filter(s => (s.awards ?? []).some(a => w.major.includes(a)));
+    const missed = won.filter(s => s.teamResult === w.missed).length;
+    const noPick = won.filter(s => !(s.awards ?? []).includes(w.pick)).length;
+    const pc = n => (won.length ? `${((100 * n) / won.length).toFixed(1)} percent` : 'none');
+    console.log(`  note [C, printed for the legacy recalibration round] ${sport.toUpperCase()}: ${won.length} seasons won ${w.major.join(' or ')} over ${OTHERS_PER * SEEDS.length} careers; ${missed} of them (${pc(missed)}) on a club that missed the playoffs, ${noPick} (${pc(noPick)}) without that season's ${w.pick}`);
+  }
 }
 
 const size = FULL ? 'full size' : JUDGE ? 'shrunk run, judged at its own size' : 'quick run, bands not judged';
