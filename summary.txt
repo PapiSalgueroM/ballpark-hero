@@ -1,0 +1,4 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+press-ten exit=0 159s | press ten: 0 red of 10
+press-noscrum exit=0 37s | playCareerPress control noscrum: all 1 guarded checks fired (mutations landed: {"scrumTrigger":2})
+sweepWeight exit=1 19s | sweepWeight: 1 failure
