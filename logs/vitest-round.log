@@ -1,0 +1,24 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstderr[2m | src/test/supabaseClientBlockedStorage.test.ts[2m > [22m[2mthe Supabase client when the browser blocks storage[2m > [22m[2mpins the same two strings in a browser that stores normally, and restores a stored session
+[22m[39mGoTrueClient@sb-flawuiqbvjobmkfkauhw-auth-token:1 (2.95.3) 2026-10-08T07:46:30.686Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+
+[90mstderr[2m | src/test/supabaseClientBlockedStorage.test.ts[2m > [22m[2mthe Supabase client when the browser blocks storage[2m > [22m[2mkeeps a signed in player signed in when storage is full (reads still reach the stored session)
+[22m[39mGoTrueClient@sb-flawuiqbvjobmkfkauhw-auth-token:2 (2.95.3) 2026-10-08T07:46:30.713Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+
+[90mstderr[2m | src/test/supabaseClientBlockedStorage.test.ts[2m > [22m[2mthe Supabase client when the browser refuses Web Locks as well[2m > [22m[2mstill answers getSession, signed out, with nothing thrown
+[22m[39mGoTrueClient@sb-flawuiqbvjobmkfkauhw-auth-token:3 (2.95.3) 2026-10-08T07:46:30.732Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+
+ [32m✓[39m src/test/supabaseClientBlockedStorage.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 179[2mms[22m[39m
+ [32m✓[39m src/test/safeStorage.test.ts [2m([22m[2m23 tests[22m[2m)[22m[32m 155[2mms[22m[39m
+ [32m✓[39m src/test/freshBuildBlockedStorage.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 61[2mms[22m[39m
+ [32m✓[39m src/test/storageBlockedBoot.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[33m 629[2mms[22m[39m
+   [33m[2m✓[22m[39m a game under blocked storage[2m > [22mthe page itself mounts, and its first press is kept for the visit [33m 330[2mms[22m[39m
+ [32m✓[39m src/test/cookieConsentStorage.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 399[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m      Tests [22m [1m[32m50 passed[39m[22m[90m (50)[39m
+[2m   Start at [22m 07:46:28
+[2m   Duration [22m 3.40s[2m (transform 795ms, setup 421ms, collect 1.70s, tests 1.42s, environment 3.21s, prepare 841ms)[22m
+

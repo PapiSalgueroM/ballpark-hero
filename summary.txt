@@ -1,0 +1,22 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+ssw-main exit=0 2s | simStorageWrites: all green
+vitest-round exit=0 4s |    Duration  3.40s (transform 795ms, setup 421ms, collect 1.70s, tests 1.42s, environment 3.21s, prepare 841ms)
+ssw-unguard exit=1 2s | simStorageWrites (control unguard): 1 failed
+ssw-order exit=1 2s | simStorageWrites (control order): 1 failed
+ssw-client exit=1 1s | simStorageWrites (control client): 1 failed
+ssw-bogus exit=2 1s | unknown SIM_STORAGE_WRITES_CONTROL=bogus
+ssw-caller exit=1 2s | simStorageWrites (control caller): 1 failed
+simCompletionOnce exit=0 6s | simCompletionOnce: all green
+simNoRivalNames exit=0 13s | No rival product names found. 0 findings.
+simNoDoubleRecord exit=0 35s | simNoDoubleRecord: all green (67 rows and checks, each recorded once across the finish, the toggles, the coaching, the reveals and the reloads; 115 recorders read)
+simLiveScores exit=0 1s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simStaleChunk exit=0 0s | simStaleChunk: green. A tab left open across a deploy reloads once for a missing chunk instead of painting the broken page.
+simAdsense exit=0 1s | simAdsense: green. Verification, ads.txt, the policy pages and the ad component are all review ready.
+simLegalPages exit=0 1s | simLegalPages: all green
+simAccessibility exit=0 0s | simAccessibility: all green
+simHelpConsentFocus exit=0 3s | simHelpConsentFocus: real source held, disposable copies cleaned, no vendor requests.
+simRulesGateConsentFocus exit=0 3s | simRulesGateConsentFocus: source held, owned copies cleaned, no backend or vendor requests.
+simWhatsNew exit=1 0s | 
+dashes exit=0 0s | dash scan done
+tsc exit=0 67s | 
+simHarnessAnchors exit=0 39s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.

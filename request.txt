@@ -1,0 +1,22 @@
+#!build
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-round: node_modules/.bin/vitest run src/test/safeStorage.test.ts src/test/supabaseClientBlockedStorage.test.ts src/test/cookieConsentStorage.test.tsx src/test/storageBlockedBoot.test.tsx src/test/freshBuildBlockedStorage.test.ts --testTimeout=300000 --hookTimeout=120000
+ssw-main: node scripts/simStorageWrites.mjs
+ssw-unguard: SIM_STORAGE_WRITES_CONTROL=unguard node scripts/simStorageWrites.mjs
+ssw-order: SIM_STORAGE_WRITES_CONTROL=order node scripts/simStorageWrites.mjs
+ssw-client: SIM_STORAGE_WRITES_CONTROL=client node scripts/simStorageWrites.mjs
+ssw-caller: SIM_STORAGE_WRITES_CONTROL=caller node scripts/simStorageWrites.mjs
+ssw-bogus: SIM_STORAGE_WRITES_CONTROL=bogus node scripts/simStorageWrites.mjs
+simCompletionOnce: node scripts/simCompletionOnce.mjs
+simNoDoubleRecord: node scripts/simNoDoubleRecord.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simStaleChunk: node scripts/simStaleChunk.mjs
+simAdsense: node scripts/simAdsense.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simHelpConsentFocus: node scripts/simHelpConsentFocus.mjs
+simRulesGateConsentFocus: node scripts/simRulesGateConsentFocus.mjs
+simWhatsNew: ls scripts | grep -i -E "whatsnew|WhatsNew" ; for f in scripts/simWhatsNew*.mjs; do [ -f "$f" ] && node "$f"; done
+dashes: git diff origin/r1140-translate-guard...HEAD^ -- src scripts | grep -n -P "^\+.*[\x{2013}\x{2014}]" | head -20; echo "dash scan done"
