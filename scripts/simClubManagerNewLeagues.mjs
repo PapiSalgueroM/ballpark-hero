@@ -219,6 +219,7 @@
         CM_NEW_PARTS=AD or EFG runs those parts, CM_NEW_ROWS=serieb those rows
 */
 import { build } from 'esbuild';
+import { GATHERED_LEAGUES } from './lib/gatheredLeagues.mjs';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -229,10 +230,10 @@ const ROOT_FWD = ROOT.replaceAll('\\', '/');
 const SEEDS_ALL = Number(process.env.SIM_SEEDS || 6);
 const SEED_SET = process.env.SIM_SEED || "";
 const CONTROL = process.env.CM_NEW_CONTROL || '';
-const CONTROLS = ['dropcount', 'nocup', 'swap', 'invented', 'cupon', 'dropcount2', 'alpartial', 'nopyramid', 'emptypair', 'crowd', 'cupold', 'ligue1drop3', 'reserve', 'nohistleague', 'article', 'thin'];
+const CONTROLS = ['dropcount', 'nocup', 'swap', 'invented', 'cupon', 'dropcount2', 'alpartial', 'nopyramid', 'emptypair', 'crowd', 'cupold', 'ligue1drop3', 'reserve', 'nohistleague', 'article', 'thin', 'rudrop', 'rueuro', 'ruswap', 'ruflavour'];
 /* Round 1040: parts E to G can be run alone (CM_NEW_PARTS=EFG), the A to D
    league rows alone (CM_NEW_PARTS=AD), or every part (unset). */
-const PARTS = process.env.CM_NEW_PARTS || 'ADEFG';
+const PARTS = process.env.CM_NEW_PARTS || 'ADEFGH';
 /* CM_NEW_ROWS=serieb,ligue2 plays only those league rows in A to D. */
 const ROWS = process.env.CM_NEW_ROWS ? process.env.CM_NEW_ROWS.split(',') : null;
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`CM_NEW_CONTROL=${CONTROL} is not one of ${CONTROLS.join(', ')}`); process.exit(1); }
@@ -314,6 +315,19 @@ const NEW_LEAGUES = [
     pairs: [['Girona', 'Mallorca']],
     managed: ['Almería', 'Leganés', 'Sporting Gijón', 'Granada', 'Cádiz', 'Castellón'],
   },
+  /* Round 1052: the Russian Premier League, the Brazil shape (a drop count
+     with no second tier in the game). The pairs are set by rule and not by
+     taste: strong is the two highest preview ratings of the league (Zenit
+     76, Spartak Moscow 74), weak the two lowest among clubs that are not
+     partial (Fakel Voronezh 62, Dynamo Makhachkala 65; no club of the
+     league is partial). The managed clubs are the six in the middle by
+     rating. The two bands are PROVISIONAL (1 and 0.4) until the six stream
+     measurement is written here. */
+  {
+    id: 'russia', size: 16, drop: 2, cup: 'Russian Cup', pairGap: 1, rhoMin: 0.4,
+    pairs: [['Zenit', 'Fakel Voronezh'], ['Spartak Moscow', 'Dynamo Makhachkala']],
+    managed: ['Lokomotiv Moscow', 'Rubin Kazan', 'Rostov', 'Baltika', 'Akhmat Grozny', 'Akron Tolyatti'],
+  },
 ];
 /* Round 1040: a pair is only evidence when both clubs field real men, so a
    pair needs 8 or more baked players a side (the CM_PARTIAL line); the
@@ -335,6 +349,8 @@ const THIN_FACTS = [
   { id: 'ligue1', fact: "Ligue 1's 2026-27 drop of two and the barrage" },
   { id: 'serieb', fact: "Serie B's 2026-27 promotion playoff rung (third to eighth)" },
   { id: 'ligue2', fact: "Ligue 2's 2026-27 drop of two" },
+  /* Round 1052: one publisher read, so the row takes the default order and no copy states one. */
+  { id: 'russia', fact: "the Russian Premier League's 2026-27 order for clubs level on points (head to head first)" },
 ];
 function partThin() {
   let src = fs.readFileSync(path.join(ROOT, 'src', 'lib', 'clubManager.ts'), 'utf8').split('\r\n').join('\n');
@@ -410,6 +426,13 @@ function transformEngine(src) {
      and La Liga careers. */
   if (CONTROL === 'article') src = mutateOnce(src, 'win promotion to ${toLeague(topDef.name)}.', 'win promotion to the ${topDef.name}.', 'article');
   if (CONTROL === 'nohistleague') src = mutateOnce(src, 'trophies: seasonTrophies, leagueId: careerLeagueOf(state).id, leagueSize: table.length },', 'trophies: seasonTrophies },', 'nohistleague');
+  /* Round 1052's controls. rudrop: the Russian row drops three (part A red).
+     rueuro: the Russian row hands out European places (H1 red). ruflavour:
+     a past season no longer reads its own prior for a Champions League
+     opponent, so a 2015-16 Zenit is rated off the 2026 squad (H4 red). */
+  if (CONTROL === 'rudrop') src = mutateOnce(src, "cup: 'Russian Cup', europe: null, drop: 2, ladder: 'top'", "cup: 'Russian Cup', europe: null, drop: 3, ladder: 'top'", 'rudrop');
+  if (CONTROL === 'rueuro') src = mutateOnce(src, "cup: 'Russian Cup', europe: null, drop: 2, ladder: 'top'", "cup: 'Russian Cup', europe: { ucl: 2, uel: 1, uecl: 1 }, drop: 2, ladder: 'top'", 'rueuro');
+  if (CONTROL === 'ruflavour') src = mutateOnce(src, 'const eraPrior = state.eraId && isHistoricEra(state.eraId) ? eraEuroPrior(state.eraId, club) : null;', 'const eraPrior = null;', 'ruflavour');
   if (CONTROL === 'cupold') src = mutateOnce(src, "return leagueRulesOf(lg.id).ladder === 'promotion' ? 2 : 1;", 'return lg.id === careerLeagueOf(state).id ? 1 : 2;', 'cupold');
   /* Private helpers the checks ask directly. */
   return `${src}\nexport { relegationSpots as __relegationSpots, buildSquad as __buildSquad, getPool as __getPool, isCupUpset as __isCupUpset };\n`;
@@ -418,7 +441,7 @@ function transformEngine(src) {
 async function bundleEngine() {
   const entry = path.join(TMP, 'entry.mjs');
   const out = path.join(TMP, 'engine.mjs');
-  fs.writeFileSync(entry, `export * from '${ROOT_FWD}/src/lib/clubManager.ts';\nexport * as __aleague from '${ROOT_FWD}/src/data/clubManagerALeague2026.ts';\n`);
+  fs.writeFileSync(entry, `export * from '${ROOT_FWD}/src/lib/clubManager.ts';\nexport * as __aleague from '${ROOT_FWD}/src/data/clubManagerALeague2026.ts';\nexport * as __jobs from '${ROOT_FWD}/src/lib/managerJobMarket.ts';\nexport * as __scl from '${ROOT_FWD}/src/lib/soccerCareerLeague.ts';\nexport { ensureAllEraRosters as __ensureAllEraRosters } from '${ROOT_FWD}/src/lib/clubManagerEras.ts';\n${GATHERED_LEAGUES.map(l => `export * as __g_${l.id} from '${ROOT_FWD}/${l.out}';`).join('\n')}\n`);
   const enginePath = path.join(ROOT, 'src', 'lib', 'clubManager.ts');
   await build({
     entryPoints: [entry], bundle: true, format: 'esm', platform: 'node', outfile: out,
@@ -676,7 +699,9 @@ function partNoInvented(cm, row, lg) {
        ledgers), so the world's partial list must carry the A-League list as
        well as every thin squad. A baked club keeps the bake's rule. */
     const fromLedger = Object.prototype.hasOwnProperty.call(cm.__aleague.CM_ALEAGUE_ROSTERS, c);
-    const wantPartial = baked.length < 8 || (fromLedger && cm.__aleague.CM_ALEAGUE_PARTIAL.includes(c));
+    /* Round 1052: the same for every gathered league (scripts/lib/gatheredLeagues.mjs), each from its own generated list. */
+    const gatheredMarks = GATHERED_LEAGUES.some(l => (cm[`__g_${l.id}`]?.[`CM_${l.prefix}_PARTIAL`] ?? []).includes(c));
+    const wantPartial = baked.length < 8 || (fromLedger && cm.__aleague.CM_ALEAGUE_PARTIAL.includes(c)) || gatheredMarks;
     if (isPartial !== wantPartial) fail(`${c} has ${baked.length} real players${fromLedger ? `, the A-League list ${cm.__aleague.CM_ALEAGUE_PARTIAL.includes(c) ? 'marks' : 'does not mark'} it` : ''}, and CM_PARTIAL says ${isPartial}`);
     if (isPartial !== cm.isPartialClub(c)) fail(`${c}: isPartialClub disagrees with CM_PARTIAL`);
     if (isPartial) partial += 1;
@@ -1008,6 +1033,95 @@ if (CONTROL === 'emptypair') {
   row.pairs[0] = [row.pairs[0][0], 'Tenerife'];
   console.log('NEGATIVE CONTROL ON: a Segunda pair sets Girona against empty Tenerife; the real squad pair rule must go red');
 }
+if (CONTROL === 'ruswap') {
+  /* Round 1052: the Russian pairs swap rosters in memory, nothing else moves: part C red for russia alone. */
+  for (const [a, b] of NEW_LEAGUES.find(r => r.id === 'russia')?.pairs ?? []) {
+    if (!(cm.CM_ROSTERS[a]?.length && cm.CM_ROSTERS[b]?.length) || cm.clubPreviewRating(a) <= cm.clubPreviewRating(b)) { console.error(`control ruswap: ${a} is not rated over ${b}; refusing to run`); process.exit(1); }
+    [cm.CM_ROSTERS[a], cm.CM_ROSTERS[b]] = [cm.CM_ROSTERS[b], cm.CM_ROSTERS[a]];
+  }
+}
+
+/* H. COUNTRIES (Round 1052). What a new country must not break, by outcome.
+   H1. No Europe from Russia: a Zenit career has no Champions League group in
+       season one, and a career that wins the league has none the season
+       after (the title is played for, never forced: Zenit careers are played
+       until three have won it).
+   H2. The Russian Cup's last sixteen is the sixteen Russian clubs, no bye
+       and no club of another nation, on every seed read.
+   H3. The job market offers exactly the league's sixteen clubs under Russia
+       with the league's name; the dugout's table knows the league is 16 and
+       the playing career's table still does not; a manager's table at
+       Spartak Moscow has sixteen places and names Zenit.
+   H4. The past seasons keep their own Russia: every Russian club a past
+       season's Champions League field names is rated, in a fresh career of
+       that season seeded 1052, at exactly the value the engine gave BEFORE
+       the round (src/test/fixtures/cmWorldIdentity1052.json, eraFlavour),
+       never off the 2026 squad that now carries the same club name. */
+async function partCountries(cm) {
+  console.log('H) the countries of Round 1052');
+  const ru = cm.REAL_LEAGUES.find(l => l.id === 'russia');
+  if (!ru) { fail('H: russia is not in REAL_LEAGUES'); return; }
+  /* the parts before this one traded clubs in their summers: the static world is put back first */
+  cm.registerLeagueOverrides(null);
+  /* H1 */
+  Math.random = seeded(hashKey('newleagues|H1|start'));
+  const z0 = cm.startCareer('Zenit', 'now');
+  Math.random = REAL_RANDOM;
+  if (z0.uclGroup) fail('H1: a Zenit career starts in a Champions League group');
+  let titles = 0, played = 0, afterTitleInEurope = 0;
+  for (let k = 0; k < 16 && titles < 3; k++) {
+    Math.random = seeded(hashKey(`newleagues${SEED_SET}|H1|${k}`));
+    const season = playSeason(cm, cm.startCareer('Zenit', 'now'), true);
+    if (season.stuck || season.sacked) continue;
+    played += 1;
+    const fin = cm.finishSeason(season.state).state;
+    if (fin.history[fin.history.length - 1].position !== 1) continue;
+    titles += 1;
+    const next = cm.startNextSeason(fin);
+    if (next.uclGroup) afterTitleInEurope += 1;
+  }
+  Math.random = REAL_RANDOM;
+  console.log(`   H1: Zenit won the league in ${titles} of ${played} seasons played; ${afterTitleInEurope} of those started the next season in a Champions League group`);
+  if (titles < 3) fail(`H1: only ${titles} Zenit titles in ${played} seasons, three are needed to read the season after one`);
+  if (afterTitleInEurope) fail(`H1: ${afterTitleInEurope} title winners started the next season in the Champions League`);
+  /* H2 */
+  let brackets = 0;
+  for (const club of ['Zenit', 'Rostov', 'Fakel Voronezh']) for (let k = 0; k < 4; k++) {
+    Math.random = seeded(hashKey(`newleagues${SEED_SET}|H2|${club}|${k}`));
+    const s = cm.startCareer(club, 'now');
+    Math.random = REAL_RANDOM;
+    const field = new Set((s.cupBracket ?? []).filter(x => x.round === 'R16').flatMap(x => [x.home, x.away]));
+    brackets += 1;
+    if (field.size !== 16) fail(`H2 ${club} seed ${k}: the Russian Cup's last sixteen holds ${field.size} clubs`);
+    const strangers = [...field].filter(c => !ru.clubs.includes(c));
+    if (strangers.length) fail(`H2 ${club} seed ${k}: the Russian Cup drew ${strangers.join(', ')}`);
+  }
+  console.log(`   H2: ${brackets} Russian Cup brackets read, each the sixteen Russian clubs`);
+  /* H3 */
+  const offers = cm.__jobs.allOfferClubs().filter(o => o.country === 'Russia');
+  const offered = offers.map(o => o.name ?? o.club).sort();
+  if (JSON.stringify(offered) !== JSON.stringify([...ru.clubs].sort())) fail(`H3: the job market's Russian clubs are ${offered.length} (${offered.slice(0, 4).join(', ')}...), not the league's sixteen`);
+  for (const o of offers) if (o.league !== ru.name) fail(`H3: the job market files ${o.name ?? o.club} under ${o.league}`);
+  if (cm.__scl.leagueSizeFor(ru.name, 2026, true) !== 16) fail(`H3: the dugout's table says ${cm.__scl.leagueSizeFor(ru.name, 2026, true)} for ${ru.name}, not 16`);
+  if (cm.__scl.leagueSizeFor(ru.name, 2026) !== null) fail(`H3: the playing career's table now sizes ${ru.name} (${cm.__scl.leagueSizeFor(ru.name, 2026)}); that table did not change`);
+  console.log(`   H3: ${offers.length} Russian clubs on the job market under ${ru.name}; dugout size ${cm.__scl.leagueSizeFor(ru.name, 2026, true)}, playing career size ${cm.__scl.leagueSizeFor(ru.name, 2026)}`);
+  /* H4 */
+  await cm.__ensureAllEraRosters();
+  const fixture = JSON.parse(fs.readFileSync(path.join(ROOT, 'src', 'test', 'fixtures', 'cmWorldIdentity1052.json'), 'utf8'));
+  const lcg = s => { let x = (s >>> 0) || 1; return () => { x ^= x << 13; x >>>= 0; x ^= x >>> 17; x ^= x << 5; x >>>= 0; return x / 4294967296; }; };
+  let read = 0;
+  const careers = new Map();
+  for (const row of fixture.eraFlavour) {
+    if (!careers.has(row.season)) { Math.random = lcg(1052); careers.set(row.season, cm.startCareer(fixture.eraClub, row.season)); Math.random = REAL_RANDOM; }
+    const got = cm.strengthOf(careers.get(row.season), row.club);
+    read += 1;
+    if (got !== row.value) fail(`H4: ${row.club} in ${row.season} is rated ${got}, the engine gave ${row.value} before the round`);
+    if (!ru.clubs.includes(row.club)) fail(`H4: ${row.club} is a past season's Russian club and no member of today's league, so this check reads nothing`);
+  }
+  console.log(`   H4: ${read} past season Russian clubs read, each at its own season's strength`);
+  if (read < 7) fail(`H4: only ${read} past season rows read, the fixture held 7`);
+}
+
 if (PARTS.includes('A')) { console.log('THIN facts'); partThin(); }
 if (PARTS.includes('A') || PARTS.includes('D')) {
   for (const row of NEW_LEAGUES.filter(r => !ROWS || ROWS.includes(r.id))) {
@@ -1021,5 +1135,6 @@ if (PARTS.includes('A') || PARTS.includes('D')) {
 if (PARTS.includes('E')) partPyramids(cm);
 if (PARTS.includes('F')) partCup(cm);
 if (PARTS.includes('G')) partOldSave(cm);
+if (PARTS.includes('H')) await partCountries(cm);
 console.log(failures ? `simClubManagerNewLeagues: ${failures} failure(s)${CONTROL ? ` under control ${CONTROL}` : ''}` : `simClubManagerNewLeagues: all checks passed${CONTROL ? ` (control ${CONTROL} did NOT fire)` : ''}`);
 process.exit(failures ? 1 : 0);
