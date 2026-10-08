@@ -1141,6 +1141,18 @@ export const NBA_LEGACY_WEIGHTS: Record<HallCalibration, LegacyWeights> = { 1: N
  *  Hall of Fame is held, not recalibrated, in this round: this is the one lever, set from the measured Hall
  *  rate (scripts/simNbaAwardsSense.mjs section H). The legacy recalibration round replaces it. */
 export const NBA_LEGACY_NEW_LINE_SCALE: number = 1.25;
+/** The key the new line's points ride under in the totals handed to the scorer. Never printed, never a standout. */
+const NBA_NEW_LINE_PTS = 'newLinePts';
+/** One position's row of a legacy table with the constant's term added after its own: the points of seasons on
+ *  the new line, at the points term's own rate times the constant less one. The table itself is never touched. */
+function withNewLineTerm(w: LegacyWeights, pos: string): LegacyWeights {
+  const key = w.positions[pos] ? pos : '*';
+  const row = w.positions[key];
+  const pts = row.terms.find(term => term.stat === 'pts');
+  if (!pts) return w;
+  const extra = { stat: NBA_NEW_LINE_PTS, per: pts.per / (NBA_LEGACY_NEW_LINE_SCALE - 1) };
+  return { ...w, positions: { ...w.positions, [key]: { ...row, terms: [...row.terms, extra] } } };
+}
 
 export function nbaLegacyOf(c: NbaCareerState): NbaLegacy {
   const t = nbaCareerTotals(c);
@@ -1155,11 +1167,17 @@ export function nbaLegacyOf(c: NbaCareerState): NbaLegacy {
   const cal = hallCalibrationOf(c);
   /* Calibration 1 is the Round 123 formula to the last bit: a career read on it retired before the new line
      existed, so it has no season to scale, and the constant is never applied to it. */
-  const newPts = cal === 1 ? 0 : c.seasons.reduce((n, s) => n + (isNbaNewLine(s) ? s.ppg * s.games : 0), 0);
-  const read = legacyRead(NBA_LEGACY_WEIGHTS[cal], {
+  const newPts = cal === 1 || NBA_LEGACY_NEW_LINE_SCALE === 1 ? 0 : c.seasons.reduce((n, s) => n + (isNbaNewLine(s) ? s.ppg * s.games : 0), 0);
+  /* The constant weighs the POINTS TERM only. It rides in as one more term of its own (the new line's points,
+     at the points term's rate times the constant less one), so the totals handed to the scorer are the career's
+     real ones: the standout is judged on what he really scored, and the ballot card prints that number and no
+     other. With the constant at 1, or no season on the new line, the table is read exactly as it is written. */
+  const table = NBA_LEGACY_WEIGHTS[cal];
+  const weights: LegacyWeights = newPts > 0 ? withNewLineTerm(table, c.pos) : table;
+  const read = legacyRead(weights, {
     pos: c.pos, seasons: c.seasons.length,
     awards: { rings: c.rings, mvps: c.mvps, finalsMvps: c.finalsMvps, allNbas: c.allNbas },
-    totals: { ...t, pts: t.pts + Math.round(newPts * (NBA_LEGACY_NEW_LINE_SCALE - 1)) },
+    totals: newPts > 0 ? { ...t, [NBA_NEW_LINE_PTS]: newPts } : t,
   });
   const score = read.score;
   const hof = score >= 500;

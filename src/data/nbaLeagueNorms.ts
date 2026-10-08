@@ -74,6 +74,9 @@ export const NBA_AWARD_RULES = {
   statTitleShare: 0.7, statTitleShareFrom: 2013,
   /** Before it: 70 games, or the season total. */
   statTitleGamesBefore: 70, statTitleTotalsBefore: { pts: 1400, reb: 800, ast: 400 },
+  /** The one short season before the share that a career can play, keyed by its start year: the 66 game
+   *  2011-12 season asked for 56 games, or 1,127 points, 644 rebounds, 321 assists. One source (PARTIAL). */
+  statTitleShortBefore: { 2011: { games: 56, totals: { pts: 1127, reb: 644, ast: 321 } } } as Record<number, { games: number; totals: { pts: number; reb: number; ast: number } }>,
   /** 24 All-Stars: five starters a conference by a weighted vote (fans half of it from the 2016-17 season; the
    *  fans alone before that), seven reserves a conference picked by the head coaches. */
   allStarPicks: 24, allStarStarters: 10, allStarFanShare: 0.5, allStarFanShareFrom: 2016,
@@ -90,7 +93,7 @@ const NORM_STATS = ['mpg', 'pts', 'reb', 'ast', 'stl', 'blk'] as const;
  *  facts read from one source each (the audit note says which). A harness check on a partial key is looser. */
 export const NBA_NORMS_PARTIAL: string[] = [
   ...ERAS.flatMap(e => POSITIONS.flatMap(p => NORM_STATS.map(s => `${e}.${p}.${s}`))),
-  'rules.statTitleShareFrom', 'rules.statTitleGamesBefore', 'rules.statTitleTotalsBefore', 'rules.allStarFanShareFrom',
+  'rules.statTitleShareFrom', 'rules.statTitleGamesBefore', 'rules.statTitleTotalsBefore', 'rules.statTitleShortBefore',
 ];
 
 type Five = { pts: number; reb: number; ast: number; stl: number; blk: number };

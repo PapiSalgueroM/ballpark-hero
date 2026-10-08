@@ -76,10 +76,11 @@ Smell checks passed: quartiles in order everywhere, no position under 15 starter
 | The rule's exceptions | NOT MODELLED: 62 games and a season ending injury with 85 percent of the club's games before it; a game counts at 20 minutes | both pages above | | The engine does not know when in a season he was hurt. The game applies the plain bar and its help says so |
 | Stat title minimum today | 70 percent of the club's games (58 of 82) | nba.com/stats/help/statminimums | basketball-reference.com/about/rate_stat_req.html ("58 G" for 2013-14 on) | AGREE |
 | ... from which season | 2013-14 | basketball-reference.com/about/rate_stat_req.html | none read | PARTIAL (`rules.statTitleShareFrom`) |
-| ... before it | 70 games, or 1,400 points, 800 rebounds, 400 assists (1999-2000 to 2010-11 and 2012-13) | the same page | none read | PARTIAL (`rules.statTitleGamesBefore`, `rules.statTitleTotalsBefore`). The short 2011-12 season (56 games, or 1,127, 644, 321) is not stored: the game uses the 70 percent share for it |
+| ... before it | 70 games, or 1,400 points, 800 rebounds, 400 assists (1999-2000 to 2010-11 and 2012-13) | the same page | none read | PARTIAL (`rules.statTitleGamesBefore`, `rules.statTitleTotalsBefore`) |
+| ... the short 2011-12 season | 56 games, or 1,127 points, 644 rebounds, 321 assists (the 66 game season; stored as `statTitleShortBefore` under its start year, 2011, and applied as written since the fix pass of 2026-10-08, when the page was read again) | the same page ("2011-12 NBA 56 G or 1610 MP/1127 PTS/644 TRB/321 AST") | none read | PARTIAL (`rules.statTitleShortBefore`). The 72 game 2020-21 season is after the share came in: the page reads "58 G, or on pace for 58 G", and the game asks 70 percent of 72, which is 51 |
 | All-Star size | 24: five starters and seven reserves a conference | pr.nba.com/2026-nba-all-star-game-starters-voting-results (five starters a conference) and nba.com/news/2026-all-star-reserves (seven a conference) | espn.com/nba/story/_/id/47348186 (five starters a conference; "head coaches will pick seven reserves from each conference (regardless of position)") | AGREE. A report of 25 players in the 2026 game counts an addition made for that year's three team format; the selection itself is 24 |
 | All-Star starters' vote | fans 50 percent, players 25, media 25 | pr.nba.com (as above) | espn.com (as above) | AGREE |
-| ... since which season | the 2016-17 season; the fans alone picked the starters from 1974-75 until then | nba.com/all-star-voting-format-explained | none read | PARTIAL (`rules.allStarFanShareFrom`) |
+| ... since which season | the 2016-17 season; the fans alone picked the starters from 1974-75 until then | nba.com/all-star-voting-format-explained | stlamerican.com/sports/local-sports/nba-players-media-to-join-fans-in-voting-for-2017-all-star-game (read 2026-10-08, carrying the league release: fans 50 percent, players and a media panel 25 each for the 2017 game; "Previously, only fans voted for the starters") | AGREE |
 | All-NBA | 15, three teams of five, picked without regard to position | nba.com/news/2025-26-all-nba-teams-announced | sports.yahoo.com (the 2026 All-NBA teams story, the same fifteen in three teams) | AGREE |
 | All-Defensive | 10, two teams of five | nba.com/news/2025-26-all-defensive-teams-announced | hoopsrumors.com/2026/05/nba-announces-2025-26-all-defensive-teams.html | AGREE |
 | All-Rookie | 10, two teams of five, first year players, no games minimum | hoopsrumors.com/2025/05/nba-announces-2024-25-all-rookie-teams.html | nba.com/news/2025-26-all-rookie-teams-announced (two teams of five) | AGREE on the size and the missing minimum. "First year players" is the award's own name; neither page spells the eligibility out |
@@ -96,7 +97,7 @@ Smell checks passed: quartiles in order everywhere, no position under 15 starter
 ## 6. PARTIAL keys, in one list
 
 Every `y2004.<pos>.<stat>` and `now.<pos>.<stat>` starter quartile (sixty keys), `rules.statTitleShareFrom`,
-`rules.statTitleGamesBefore`, `rules.statTitleTotalsBefore`, `rules.allStarFanShareFrom`.
+`rules.statTitleGamesBefore`, `rules.statTitleTotalsBefore`, `rules.statTitleShortBefore`.
 
 ## 7. What the round measured (for the legacy recalibration round)
 

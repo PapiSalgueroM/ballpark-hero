@@ -29,12 +29,18 @@ export function nbaAwardGamesBar(year: number, length: number, rule: { gamesBarF
 }
 
 /** May he lead the league in a stat: the share of the club's games from `statTitleShareFrom` on, and before it
- *  the old rule, the games or the season total (`total` is his, `totalNeeded` the stat's). A season shorter
- *  than a full one in the old era uses the share, the way the real short seasons scaled the minimum. */
+ *  the old rule, the games or the season total (`total` is his, `totalNeeded` the stat's). A short season of
+ *  the old era had a minimum of its own (the league cut the 70 games and the totals down with the schedule):
+ *  the caller hands that season's own row as `shortSeason` when the rules hold one, and it is applied as
+ *  written. A short old season with no row (none is played today) falls back to the share, which is the game's
+ *  stand in and not the real minimum. */
 export function nbaQualifiesForStatTitle(
   games: number, total: number, totalNeeded: number, year: number, length: number,
   rule: { statTitleShare: number; statTitleShareFrom: number; statTitleGamesBefore: number; gamesBarOf: number },
+  shortSeason?: { games: number; total: number },
 ): boolean {
-  if (year >= rule.statTitleShareFrom || length < rule.gamesBarOf) return games >= Math.ceil(rule.statTitleShare * length);
+  if (year >= rule.statTitleShareFrom) return games >= Math.ceil(rule.statTitleShare * length);
+  if (shortSeason) return games >= shortSeason.games || total >= shortSeason.total;
+  if (length < rule.gamesBarOf) return games >= Math.ceil(rule.statTitleShare * length);
   return games >= rule.statTitleGamesBefore || total >= totalNeeded;
 }

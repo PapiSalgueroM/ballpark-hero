@@ -62,12 +62,18 @@ const G_MVP = -0.33;
 const G_ALL_DEF = 0.2;
 const G_DPOY = 0.24;
 const G_ROOKIE = -2.39;
+/** The two All-Rookie teams, on their own grade. One grade for the whole rookie class put more than half of
+ *  all first seasons on a team (the Rookie of the Year's grade is that low because a rookie is judged against
+ *  the field of EVERY season, where he sits about one sd under an average year), bench rookies at 5 points a
+ *  game among them. This one is set so the share of first seasons on a team is the real class's, 10 picks of
+ *  about 45 rookies who play (section B2 of the harness holds it). */
+const G_ALL_ROOKIE = -1.8;
 const G_SIXTH = -0.64;
 const G_MIP = -0.17;
 /** Defensive Player goes to big men far more often than to wings and guards. An estimate, and named as one. */
 const DPOY_POS_EXTRA: Record<string, number> = { C: 0, PF: 0, SF: 0.3, SG: 0.6, PG: 0.6 };
 /** The grades as the pass applies them, for the harness that fits and fences them. */
-export const NBA_AWARD_GRADES = { allStar: G_ALL_STAR, allNba: G_ALL_NBA, mvp: G_MVP, allDef: G_ALL_DEF, dpoy: G_DPOY, rookie: G_ROOKIE, sixth: G_SIXTH, mip: G_MIP } as const;
+export const NBA_AWARD_GRADES = { allStar: G_ALL_STAR, allNba: G_ALL_NBA, mvp: G_MVP, allDef: G_ALL_DEF, dpoy: G_DPOY, rookie: G_ROOKIE, allRookie: G_ALL_ROOKIE, sixth: G_SIXTH, mip: G_MIP } as const;
 
 export interface NbaAwardInput {
   pos: string;
@@ -169,10 +175,10 @@ export function decideNbaAwards(rng: () => number, x: NbaAwardInput): NbaAwardRe
   }
   const dpoy = out.allDefensiveTeam !== undefined && zDef > bar(150, 1, G_DPOY + (DPOY_POS_EXTRA[x.pos] ?? 0.6), g2);
 
-  /* The rookie class: a first season only. */
+  /* The rookie class: a first season only. The two teams have a grade of their own (see G_ALL_ROOKIE). */
   if (x.rookie && half) {
-    if (zProd > bar(45, 5, G_ROOKIE, g3)) out.allRookieTeam = 1;
-    else if (zProd > bar(45, R.allRookiePicks, G_ROOKIE, g3)) out.allRookieTeam = 2;
+    if (zProd > bar(45, 5, G_ALL_ROOKIE, g3)) out.allRookieTeam = 1;
+    else if (zProd > bar(45, R.allRookiePicks, G_ALL_ROOKIE, g3)) out.allRookieTeam = 2;
   }
   const roy = out.allRookieTeam === 1 && zProd > bar(45, 1, G_ROOKIE, g3);
 
@@ -187,7 +193,10 @@ export function decideNbaAwards(rng: () => number, x: NbaAwardInput): NbaAwardRe
      around that era's league leaders (their mean, give or take 1.73 of their standard deviations). */
   const title = (stat: 'pts' | 'reb' | 'ast', avg: number, u: number): boolean => {
     const b = nbaLeaderBar(stat, x.year);
-    return half && nbaQualifiesForStatTitle(x.games, avg * x.games, R.statTitleTotalsBefore[stat], x.year, x.seasonLength, R)
+    /* A short season of the old era carries its own minimum (2011-12: 56 games or its own totals). */
+    const short = x.seasonLength < R.gamesBarOf ? R.statTitleShortBefore[x.year] : undefined;
+    return half && nbaQualifiesForStatTitle(x.games, avg * x.games, R.statTitleTotalsBefore[stat], x.year, x.seasonLength, R,
+      short ? { games: short.games, total: short.totals[stat] } : undefined)
       && avg >= b.mean + b.sd * (u - 0.5) * 3.46;
   };
   const scoring = title('pts', x.ppg, u6);
@@ -226,7 +235,7 @@ export function nbaAwardHelpRules(): string[] {
     `MVP only goes to an All-NBA First Team player whose club made the playoffs. The score is your points plus rebounds plus assists a game, plus ${NBA_CAREER_MVP_WIN_WEIGHT} times your club's winning share, the same score NBA Front Office uses.`,
     `From the ${season(R.gamesBarFrom)} season on, All-NBA, MVP, Defensive Player of the Year, All-Defensive and Most Improved need ${R.gamesBar} games. Before that season there is no games rule, and Rookie of the Year, All-Rookie and Sixth Man never carry it. The real rule's exception for a season ending injury is not in the game. The game adds one floor of its own: nothing but a Finals MVP is won on less than half a season.`,
     `All-Star is ${R.allStarPicks} picks a season. Half of a starter's case is the fan vote, which here is your fanbase (in seasons before ${season(R.allStarFanShareFrom)} the fans pick the starters alone), and the reserves are picked on the season you are having. Every All-NBA season is an All-Star season.`,
-    'All-Defensive and Defensive Player of the Year read your defence: steals plus blocks plus half your rebounds a game, against your own position, with a little weight for the kind of player you built.',
+    'All-Defensive and Defensive Player of the Year read your defence: steals plus blocks plus half your rebounds a game, against your own position. The kind of player you built counts for a lot here: the defenders by trade (The Pest, Two-Way Menace, 3-and-D Wing, Defensive Anchor) take most of these, a big man who lives on the glass takes some, and a scorer by trade almost never does.',
     'All-Rookie is for your first season only, and the Rookie of the Year is always on the first team.',
     'Most Improved never goes to a player who has already made All-NBA, or to that season\'s MVP.',
     'To lead the league in points, rebounds or assists you need that season\'s real minimum of games and an average that beats the league leaders of the era you play in.',

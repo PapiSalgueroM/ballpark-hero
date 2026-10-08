@@ -139,8 +139,19 @@ const E_MEAN_TOL = 0.08;
 const E_SD_TOL = 0.06;
 /* B3: seasons under 65 games before 2023-24 holding an award the games rule names, in a full size run. */
 const UNDER65_FLOOR = 1750;
+/* What the two All-Rookie teams are set to: the real class's share, a career. */
+const R_ALL_ROOKIE_TARGET = 10 / 45;
 /* B5: how many times the scorers' All-Defensive rate the defenders' must be. */
 const B5_FACTOR = 3;
+/* The real rules this harness holds the game to, typed here on purpose (sourced in docs/audits/
+   NBA-LINE-NORMS-2026-10.md). They are never read off the engine or its data file: section B3, B8 and F compare
+   the engine and the help text WITH these, so a wrong number in the data cannot agree its way to green. */
+const REAL_GAMES_RULE = { from: 2023, games: 65, of: 82, season: '2023-24' };
+const REAL_ALL_STAR = { picks: 24, weightedFrom: 2016 };
+const REAL_SHORT_2011 = { year: 2011, length: 66, games: 56, pts: 1127, reb: 644, ast: 321 };
+/* B2: the share of first seasons that land on an All-Rookie team, percent. The real class is 10 picks of about
+   45 rookies who play, 22 percent. See the header for the measured five seeds the band was set from. */
+const ALL_ROOKIE_SHARE = { lo: 16, hi: 29 };
 
 /* ------------------------------------------------------------------ */
 /* Controls: one line of SOURCE swapped in memory, never a file        */
@@ -157,6 +168,10 @@ const LEGACY_SCALE_LINE = scaleLine ? scaleLine[0] : 'the legacy scale constant 
 const awardMvpRow = srcOf('src/lib/nbaCareerAwards.ts').match(/^ {2}mvp: \{ PG: \[([-0-9.]+), ([0-9.]+)\], (.*)$/m);
 const AWARD_FIELD_ROW = awardMvpRow ? awardMvpRow[0] : 'the mvp row of NBA_FIELD is not in nbaCareerAwards.ts';
 const AWARD_FIELD_STALE = awardMvpRow ? `  mvp: { PG: [${(Number(awardMvpRow[1]) + Number(awardMvpRow[2])).toFixed(2)}, ${awardMvpRow[2]}], ${awardMvpRow[3]}` : '';
+const allRookieGrade = srcOf('src/lib/nbaCareerAwards.ts').match(/^const G_ALL_ROOKIE = [-0-9.]+;$/m);
+const rookieGrade = srcOf('src/lib/nbaCareerAwards.ts').match(/^const G_ROOKIE = ([-0-9.]+);$/m);
+const ALL_ROOKIE_GRADE_LINE = allRookieGrade ? allRookieGrade[0] : 'the All-Rookie grade is not in nbaCareerAwards.ts';
+const ALL_ROOKIE_GRADE_FLOOD = rookieGrade ? `const G_ALL_ROOKIE = ${rookieGrade[1]};` : '';
 const CONTROLS = {
   /* C: one NFL All-Pro grade moved by a hundredth. Judged under SENSE_PROVE_OTHERS=1. */
   othersport: { file: 'src/lib/careerAwards.ts', find: "  QB: { pool: 32, slots: 1, grade: 0.25 },\n  RB:", put: "  QB: { pool: 32, slots: 1, grade: 0.26 },\n  RB:", needs: 'C' },
@@ -189,7 +204,22 @@ const CONTROLS = {
   /* D: the career's win weight drifting off NBA Front Office's. */
   /* F: the worked example's winning club read as its losing one. The sum still adds up; the claim is false. */
   example: { file: 'src/lib/nbaCareerAwards.ts', find: 'export const NBA_MVP_EXAMPLE = { ppg: 27.4, rpg: 6.1, apg: 5.3, wins: 54, losses: 28, losingWins: 34, losingLosses: 48 } as const;', put: 'export const NBA_MVP_EXAMPLE = { ppg: 27.4, rpg: 6.1, apg: 5.3, wins: 34, losses: 48, losingWins: 34, losingLosses: 48 } as const;', needs: 'F' },
-  weightdrift: { file: 'src/lib/nbaCareerAwards.ts', find: 'export const NBA_CAREER_MVP_WIN_WEIGHT = 20;', put: 'export const NBA_CAREER_MVP_WIN_WEIGHT = 19;', needs: 'D', may: 'E,B6' },
+  weightdrift: { file: 'src/lib/nbaCareerAwards.ts', find: 'export const NBA_CAREER_MVP_WIN_WEIGHT = 20;', put: 'export const NBA_CAREER_MVP_WIN_WEIGHT = 19;', needs: 'D', may: 'E,B6,H' },
+  /* B3: the games rule starting a season late (2023-24 itself carrying no bar). The fleet has few 2023-24
+     seasons, so the unit check of B3 is what must catch it. */
+  barfrom: { file: 'src/lib/awardDecision.ts', find: '  return year >= rule.gamesBarFrom ? Math.ceil((rule.gamesBar / rule.gamesBarOf) * length) : 0;', put: '  return year > rule.gamesBarFrom ? Math.ceil((rule.gamesBar / rule.gamesBarOf) * length) : 0;', needs: 'B3' },
+  /* B3 and F: the sourced 65 typed as 62 in the data. The engine and the help then agree with each other, and
+     only a number written in this harness can tell. */
+  bar62data: { file: 'src/data/nbaLeagueNorms.ts', find: '  gamesBarFrom: 2023, gamesBar: 65, gamesBarOf: 82,', put: '  gamesBarFrom: 2023, gamesBar: 62, gamesBarOf: 82,', needs: 'B3,F', may: 'B6,H' },
+  /* B8: the rebounding title judged against the assists leaders' bar. */
+  titlebar: { file: 'src/lib/nbaCareerAwards.ts', find: "  const rebounding = title('reb', x.rpg, u7);", put: "  const rebounding = title('ast', x.rpg, u7);", needs: 'B8' },
+  /* B8: the two eras of the All-Star starters' vote swapped (the fans alone today, the weighted vote before). */
+  fanvoteera: { file: 'src/lib/nbaCareerAwards.ts', find: '    const fanShare = x.year >= R.allStarFanShareFrom ? R.allStarFanShare : 1;', put: '    const fanShare = x.year >= R.allStarFanShareFrom ? 1 : R.allStarFanShare;', needs: 'B8', may: 'B4' },
+  /* B8: the short 2011-12 season's own stat title minimum never handed over (the share stands in for it). */
+  shortseason: { file: 'src/lib/nbaCareerAwards.ts', find: '    const short = x.seasonLength < R.gamesBarOf ? R.statTitleShortBefore[x.year] : undefined;', put: '    const short = undefined;', needs: 'B8' },
+  /* B2: the two All-Rookie teams back on the Rookie of the Year's grade, which put half of all first seasons
+     on a team. */
+  rookieflood: { file: 'src/lib/nbaCareerAwards.ts', find: ALL_ROOKIE_GRADE_LINE, put: ALL_ROOKIE_GRADE_FLOOD, needs: 'B2', may: 'B6' },
 };
 /* Controls that swap more than one line of one file (each anchor exactly once, the edit must change the text). */
 const MULTI = {
@@ -417,7 +447,20 @@ function measure(f) {
   const any = (s, list) => list.some(a => has(s.line, a));
   const count = fn => S.filter(fn).length;
   const len = s => nba.nbaSeasonGames ? nba.nbaSeasonGames(s.line.year) : 82;
-  const barOf = s => (E.decision && E.norms ? E.decision.nbaAwardGamesBar(s.line.year, len(s), E.norms.NBA_AWARD_RULES) : 0);
+  /* The real games rule, written HERE and never read off the engine or its data: a bar the engine computes
+     for itself only proves the engine agrees with itself (an off by one on the first season and a 62 typed
+     into the data both passed that way). 65 of 82 from 2023-24, scaled to a shorter season. */
+  const barOf = s => (s.line.year >= REAL_GAMES_RULE.from ? Math.ceil((REAL_GAMES_RULE.games / REAL_GAMES_RULE.of) * len(s)) : 0);
+  const firsts = S.filter(s => s.n === 0 && s.line.games > 0);
+  const team = k => firsts.filter(s => s.line.allRookieTeam === k);
+  m.rookies = {
+    firstSeasons: firsts.length,
+    onTeam: firsts.filter(s => s.line.allRookieTeam != null).length,
+    first: team(1).length, second: team(2).length,
+    firstMedPpg: r1(pctl(team(1).map(s => s.line.ppg), 0.5)), secondMedPpg: r1(pctl(team(2).map(s => s.line.ppg), 0.5)),
+    firstBench: r1(share(team(1).filter(s => s.role === 'backup').length, team(1).length)), secondBench: r1(share(team(2).filter(s => s.role === 'backup').length, team(2).length)),
+    under6: firsts.filter(s => s.line.allRookieTeam != null && s.line.ppg < 6).length,
+  };
   m.b = {
     mvp: mvp.length,
     mvpMissed: mvp.filter(s => s.line.teamResult === nba.NBA_MISSED_PLAYOFFS).length,
@@ -487,7 +530,7 @@ function awardFit(f) {
     allNba: sum((r, g) => P(allNbaT(r, g))),
     mvp: gA => sum((r, g) => (r.v.overBar && r.x.madePlayoffs ? P(Math.min(t(r.zMvp, 30, gA), t(r.zMvp, 150, g))) : 0)),
     allDef: sum((r, g) => (r.v.overBar ? P(Math.max(t(r.zDef, 30, g), t(r.zDef, 15, g))) : 0)),
-    roy: sum((r, g) => (r.x.rookie ? P(Math.min(t(r.zProd, 9, g), t(r.zProd, 45, g))) : 0)),
+    roy: gT => sum((r, g) => (r.x.rookie ? P(Math.min(t(r.zProd, 9, gT), t(r.zProd, 45, g))) : 0)),
     allRookie: sum((r, g) => (r.x.rookie ? P(Math.max(t(r.zProd, 9, g), t(r.zProd, 4.5, g))) : 0)),
     dpoy: gD => sum((r, g) => (r.v.overBar ? P(Math.min(Math.max(t(r.zDef, 30, gD), t(r.zDef, 15, gD)), t(r.zDef, 150, g + r.posExtra))) : 0)),
     sixth: sum((r, g) => (r.x.bench ? P(t(r.zBench, 60, g)) : 0)),
@@ -685,34 +728,35 @@ function banded(section, cond, msg) {
   exact(section, cond, msg);
 }
 const get = (o, key) => key.split('.').reduce((x, k) => (x == null ? x : x[k]), o);
-/** Held at main's rate: the mean over this run's seeds against the mean over main's, within three standard
- *  errors of the difference of the two means.
+/** Held at a recorded rate: the mean over this run's seeds against the mean over the recorded five, within a
+ *  FIXED width.
  *
- *  Why not "every seed inside main's lowest to highest, give or take its spread", which is what this check
- *  first was: main's five seeds happened to land within 0.33 of each other on the Hall rate, where the plain
- *  sampling error of a share near 32 percent over 6,000 careers is 0.6 a seed, so that band was narrower than
- *  the noise of the thing it measured and a healthy tree failed it on one seed in three (measured: seeds 1 and
- *  2 of one unchanged tree came out at 31.2 and 29.2). A mean of five is the stronger signal, and its error is
- *  known. The seed to seed sd used is the larger of what the ten seeds show and the floor a count of that size
- *  has by arithmetic: a share is binomial, an award count a career is at least Poisson. */
-function heldAtMain(section, base, per, key, label, kind, careerSd) {
-  heldAt(section, base.seeds.map(s => get(s.m, key)), base.careers, per.map(m => get(m, key)), label, kind, "main's", careerSd);
+ *  Why a mean of five and not "every seed inside main's lowest to highest": main's five seeds happened to land
+ *  within 0.33 of each other on the Hall rate, where the plain sampling error of a share near 32 percent over
+ *  6,000 careers is 0.6 a seed, so that band was narrower than the noise of the thing it measured and a healthy
+ *  tree failed it on one seed in three (measured: seeds 1 and 2 of one unchanged tree came out at 31.2 and 29.2).
+ *
+ *  Why the width is typed and not worked out in the run: it used to be three standard errors with the seed to
+ *  seed spread of the run being judged inside it, so a noisier run passed a wider gap, which is a test that
+ *  gets easier the worse its data is. The widths below are what three standard errors came to at full size on
+ *  the round's gate of 2026-10-08 (five seeds of 6,000 careers on each side, the error of a share by the
+ *  binomial, of an award count by its measured sd over careers: 0.83 for MVPs where Poisson says 0.56, 2.37 for
+ *  All-NBA, 2.45 for All-Defensive, 0.45 for Finals MVPs). A shrunk judged run widens each by the root of the
+ *  size ratio, which is arithmetic and not that run's own noise. */
+const HELD_TOL = {
+  myShare: 0.59, inducted: 1.14, firstBallot: 1.09,
+  'perCareer.MVP': 0.02, 'perCareer.All-NBA': 0.058, 'perCareer.All-Defensive Team': 0.06, 'perCareer.Finals MVP': 0.011,
+  everMvp: 0.93, everAllNba: 1.19,
+};
+const HELD_WIDEN = Math.sqrt(Math.max(1, (6000 * 5) / (CAREERS * SEEDS.length)));
+function heldAtMain(section, base, per, key, label) {
+  heldAt(section, base.seeds.map(s => get(s.m, key)), per.map(m => get(m, key)), label, key, "main's");
 }
 /** The same test against any five recorded seeds (main's, or the ones a round shipped). */
-function heldAt(section, main, mainCareers, now, label, kind, whose, careerSd = 0) {
-  const base = { careers: mainCareers };
-  const n = Math.min(CAREERS, base.careers);
+function heldAt(section, main, now, label, key, whose) {
   const m0 = mean(main); const m1 = mean(now);
-  /* 'share' is a percent of careers; 'share-years' a percent of head to head years (several a career, and a
-     career's years lean the same way, so four independent years a career is the floor used); else a count a
-     career, whose floor is the larger of Poisson's and the sd over careers this run measured (`careerSd`: an
-     MVP winner tends to win several, so the count is wider than Poisson: 0.82 against 0.56 measured over 30,000
-     careers; the check prints the sd it used). */
-  const floorSd = c => (kind === 'share' ? Math.sqrt(Math.max(1e-9, m0 * (100 - m0)) / c) : kind === 'share-years' ? Math.sqrt(Math.max(1e-9, m0 * (100 - m0)) / (c * 4)) : Math.max(Math.sqrt(Math.max(1e-9, m0)), careerSd) / Math.sqrt(c));
-  const sample = Math.sqrt((sdOf(main) ** 2 * main.length + sdOf(now) ** 2 * now.length) / Math.max(1, main.length + now.length - 2));
-  const se = Math.sqrt(Math.max(sample, floorSd(base.careers)) ** 2 / main.length + Math.max(sample, floorSd(CAREERS)) ** 2 / now.length);
-  const tol = 3 * se;
-  banded(section, Math.abs(m1 - m0) <= tol, `${label}: mean ${r3(m1)} (${now.join(', ')}) against ${whose} ${r3(m0)} (${main.join(', ')}), ${r3(Math.abs(m1 - m0))} apart, allowed ${r3(tol)} (three standard errors at ${n} careers a seed)`);
+  const tol = HELD_TOL[key] * HELD_WIDEN;
+  banded(section, Number.isFinite(tol) && Math.abs(m1 - m0) <= tol, `${label}: mean ${r3(m1)} (${now.join(', ')}) against ${whose} ${r3(m0)} (${main.join(', ')}), ${r3(Math.abs(m1 - m0))} apart, allowed ${r3(tol)} (a fixed width${HELD_WIDEN > 1 ? `, widened ${HELD_WIDEN.toFixed(2)} times for a run of ${CAREERS} careers on ${SEEDS.length} seeds` : ''})`);
 }
 
 /* ------------------------------------------------------------------ */
@@ -819,18 +863,20 @@ if (awardFieldMean) {
     const gM = solveGrade(passFits.map(x => x.mvp(gA)), tMvp);
     const gD = solveGrade(passFits.map(x => x.allDef), tDef);
     const gS = solveGrade(passFits.map(x => x.allStar(gA)), 1.6 * tAllNba);
-    const gR = solveGrade(passFits.map(x => x.roy), 2 * tRoy);
+    const gT = solveGrade(passFits.map(x => x.allRookie), R_ALL_ROOKIE_TARGET);
+    const gR = solveGrade(passFits.map(x => x.roy(gT)), 2 * tRoy);
     console.log('The grade that puts each award on its target, on this fleet\'s own field (worked out, not drawn; committed grade in brackets):');
     console.log(`    All-NBA        main ${tAllNba.toFixed(3)} a career: ${gA.toFixed(2)} [${G.allNba}]`);
     console.log(`    MVP            main ${tMvp.toFixed(3)} a career, at that All-NBA grade: ${gM.toFixed(2)} [${G.mvp}]`);
     console.log(`    All-Defensive  main ${tDef.toFixed(3)} a career: ${gD.toFixed(2)} [${G.allDef}]`);
     console.log(`    All-Star       1.6 times main's All-NBA (24 picks against 15), ${(1.6 * tAllNba).toFixed(3)} a career: ${gS.toFixed(2)} [${G.allStar}]`);
-    console.log(`    Rookies        twice main's Rookie of the Year, ${(2 * tRoy).toFixed(3)} a career: ${gR.toFixed(2)} [${G.rookie}]; All-Rookie at that grade ${mean(passFits.map(x => x.allRookie(gR))).toFixed(3)} a career`);
+    console.log(`    All-Rookie     the real class, 10 picks of 45 rookies who play, ${R_ALL_ROOKIE_TARGET.toFixed(3)} a career: ${gT.toFixed(2)} [${G.allRookie}]`);
+    console.log(`    Rookie of the Year  twice main's, ${(2 * tRoy).toFixed(3)} a career, at that All-Rookie grade: ${gR.toFixed(2)} [${G.rookie}]; on one grade for the whole class All-Rookie would be ${mean(passFits.map(x => x.allRookie(gR))).toFixed(3)} a career`);
     const tDpoy = meanOfSeeds('perCareer.Defensive Player of the Year'); const tSixth = meanOfSeeds('perCareer.Sixth Man of the Year'); const tMip = meanOfSeeds('perCareer.Most Improved Player');
     console.log(`    Defensive Player  main ${tDpoy.toFixed(3)} a career, at that All-Defensive grade: ${solveGrade(passFits.map(x => x.dpoy(gD)), tDpoy).toFixed(2)} [${G.dpoy}]`);
     console.log(`    Sixth Man      main ${tSixth.toFixed(3)} a career: ${solveGrade(passFits.map(x => x.sixth), tSixth).toFixed(2)} [${G.sixth}]`);
     console.log(`    Most Improved  main ${tMip.toFixed(3)} a career: ${solveGrade(passFits.map(x => x.mip), tMip).toFixed(2)} [${G.mip}]`);
-    console.log(`    at the committed grades the fit expects: All-NBA ${mean(passFits.map(x => x.allNba(G.allNba))).toFixed(3)}, MVP ${mean(passFits.map(x => x.mvp(G.allNba)(G.mvp))).toFixed(3)}, All-Defensive ${mean(passFits.map(x => x.allDef(G.allDef))).toFixed(3)}, All-Star ${mean(passFits.map(x => x.allStar(G.allNba)(G.allStar))).toFixed(3)}, Rookie of the Year ${mean(passFits.map(x => x.roy(G.rookie))).toFixed(3)}`);
+    console.log(`    at the committed grades the fit expects: All-NBA ${mean(passFits.map(x => x.allNba(G.allNba))).toFixed(3)}, MVP ${mean(passFits.map(x => x.mvp(G.allNba)(G.mvp))).toFixed(3)}, All-Defensive ${mean(passFits.map(x => x.allDef(G.allDef))).toFixed(3)}, All-Star ${mean(passFits.map(x => x.allStar(G.allNba)(G.allStar))).toFixed(3)}, Rookie of the Year ${mean(passFits.map(x => x.roy(G.allRookie)(G.rookie))).toFixed(3)}, All-Rookie ${mean(passFits.map(x => x.allRookie(G.allRookie))).toFixed(3)}`);
   }
 }
 
@@ -936,19 +982,21 @@ const B6 = HAS_PASS() ? 'B6' : 'B6a';
 if (!base.nba) exact('baseline', false, 'scripts/data/nbaAwardsSenseBaseline.json has no nba key: record it once with --record-nba-baseline');
 else {
   /* R, the rival: my share of the head to head years stays where main had it. */
-  heldAtMain('R', base.nba, per, 'myShare', 'my share of the head to head years, percent', 'share-years');
+  heldAtMain('R', base.nba, per, 'myShare', 'my share of the head to head years, percent');
   /* H, the Hall: inducted and first ballot stay where main had them. */
-  heldAtMain('H', base.nba, per, 'inducted', 'Hall of Fame inducted, percent', 'share');
-  heldAtMain('H', base.nba, per, 'firstBallot', 'first ballot, percent', 'share');
+  heldAtMain('H', base.nba, per, 'inducted', 'Hall of Fame inducted, percent');
+  heldAtMain('H', base.nba, per, 'firstBallot', 'first ballot, percent');
   /* B6a, the award rates the old grades were set for, held where main had them. */
   for (const [award, label] of [['MVP', 'MVPs a career'], ['All-NBA', 'All-NBA a career'], ['All-Defensive Team', 'All-Defensive a career'], ['Finals MVP', 'Finals MVPs a career']]) {
     const careerSd = mean(per.map(m => m.sdCareer[award]));
-    heldAtMain(B6, base.nba, per, `perCareer.${award}`, `${label} (sd over careers ${r3(careerSd)})`, 'count', careerSd);
+    heldAtMain(B6, base.nba, per, `perCareer.${award}`, `${label} (sd over careers ${r3(careerSd)})`);
   }
   /* How the awards are SPREAD over careers is not main's on this line, and one grade an award cannot make it so
      (see the header). The two shares are held where Round 1103 shipped them, and main's are printed beside. */
   for (const [key, label] of [['everMvp', 'careers with an MVP, percent'], ['everAllNba', 'careers with an All-NBA, percent']]) {
-    heldAt(B6, SPREAD_1103[key], 6000, per.map(m => m[key]), `${label} (main ${base.nba.seeds.map(s => s.m[key]).join(', ')}: the same awards a career, spread over more careers)`, 'share', 'what Round 1103 shipped,');
+    heldAt(B6, SPREAD_1103[key], per.map(m => m[key]), `${label}, a fence at this round's own rate`, key, 'what Round 1103 shipped,');
+    const mainMean = mean(base.nba.seeds.map(s => s.m[key])); const nowMean = mean(per.map(m => m[key]));
+    console.log(`  note [${B6}] NOT held at main's: ${label} is ${nowMean.toFixed(2)} here against main's ${mainMean.toFixed(2)} (${base.nba.seeds.map(s => s.m[key]).join(', ')}), ${(nowMean - mainMean).toFixed(2)} points more careers for the same awards a career. The brief's critic asked for main's band; one grade an award cannot give it, and the lead rules on it.`);
   }
 }
 
@@ -972,12 +1020,63 @@ if (HAS_PASS()) {
   exact('B2', tot('royOffFirst') === 0, `Rookie of the Year seasons off the All-Rookie First Team: ${list('royOffFirst')} of ${list('roy')} (main: every one)`);
   exact('B2', tot('allRookieLater') === 0, `All-Rookie outside a first season: ${list('allRookieLater')}`);
   banded('B2', tot('allRookieFirstSeason') > 0, `All-Rookie selections in first seasons: ${list('allRookieFirstSeason')} (main: none)`);
+  /* All-Rookie is 10 picks of about 45 rookies who play. One grade for the whole class once put 51 percent of
+     first seasons on a team, bench rookies at 5 points a game among them, with nothing holding it from above. */
+  { const shares = per.map(m => share(m.rookies.onTeam, m.rookies.firstSeasons)); const all = share(per.reduce((t, m) => t + m.rookies.onTeam, 0), per.reduce((t, m) => t + m.rookies.firstSeasons, 0));
+    banded('B2', all >= ALL_ROOKIE_SHARE.lo && all <= ALL_ROOKIE_SHARE.hi, `first seasons on an All-Rookie team: ${shares.map(x => x.toFixed(1)).join(', ')} percent, ${all.toFixed(1)} over the run (${ALL_ROOKIE_SHARE.lo} to ${ALL_ROOKIE_SHARE.hi}; the real class is 10 of 45, 22 percent; one grade for the class gave 51)`);
+    console.log(`  note [B2] First Team: ${per.map(m => m.rookies.first).join(', ')} seasons, median ${per.map(m => m.rookies.firstMedPpg).join(', ')} points, ${per.map(m => m.rookies.firstBench).join(', ')} percent bench men. Second Team: ${per.map(m => m.rookies.second).join(', ')}, median ${per.map(m => m.rookies.secondMedPpg).join(', ')} points, ${per.map(m => m.rookies.secondBench).join(', ')} percent bench men. On a team under 6 points a game: ${per.map(m => m.rookies.under6).join(', ')}`); }
   floor('B3', 'barAwardsFrom2023', 2000, 'seasons from 2023-24 with an award the games rule names');
   exact('B3', tot('underBarFrom2023') === 0, `from 2023-24, seasons under the games bar holding an award the rule names: ${list('underBarFrom2023')} of ${list('barAwardsFrom2023')}`);
   banded('B3', tot('under65Before2023') >= Math.ceil(UNDER65_FLOOR * sizeShare), `before 2023-24 the rule did not exist: ${list('under65Before2023')} seasons under 65 games hold one of those awards (at least ${Math.ceil(UNDER65_FLOOR * sizeShare)} in the run, so "none before" is seen to fire)`);
   floor('B3', 'sixth', 100, 'Sixth Man seasons');
   exact('B3', tot('sixthStarter') === 0, `Sixth Man seasons by a starter: ${list('sixthStarter')} of ${list('sixth')}`);
   exact('B3', tot('underHalf') === 0, `seasons under half a schedule holding any award but a Finals MVP: ${list('underHalf')}`);
+  /* B3, drawn: the rule's first season and its number, against the literals at the top of this file. The fleet
+     cannot hold the first season (few careers reach 2023-24 from 2003), and a bar the engine computes for itself
+     cannot hold the number. One standout season, drawn 300 times a case: it holds one of the five awards the
+     rule names nearly every time it may, and never when it may not. */
+  { const A = E.nbaAwards;
+    const star = { pos: 'SF', defenceRep: -0.6, bench: false, rookie: false, year: 2026, seasonLength: 82, games: 78, ppg: 33, rpg: 9, apg: 8, spg: 2.4, bpg: 1.4, winShare: 0.75, madePlayoffs: true, fanbase: 90, prev: { year: 2025, games: 75, ppg: 14, rpg: 4, apg: 3 }, everAllNba: false };
+    const held = x => { const r = mulberry32(41); let k = 0; for (let i = 0; i < 300; i++) if (A.decideNbaAwards(r, x).awards.some(a => BAR_AWARDS.includes(a))) k++; return k; };
+    const at = (year, games) => held({ ...star, year, games, prev: { ...star.prev, year: year - 1 } });
+    const G = REAL_GAMES_RULE;
+    const under = at(G.from, G.games - 1); const on = at(G.from, G.games); const before = at(G.from - 1, G.games - 1); const halfOff = at(G.from - 1, 40);
+    exact('B3', under === 0 && on >= 290, `drawn, the ${G.season} season itself: ${G.games - 1} games hold a rule award in ${under} of 300 draws (must be 0), ${G.games} games in ${on} (at least 290)`);
+    exact('B3', before >= 290 && halfOff === 0, `drawn, the season before the rule: ${G.games - 1} games hold a rule award in ${before} of 300 draws (at least 290: no games rule yet), 40 of 82 games in ${halfOff} (must be 0: the game's own half season floor)`); }
+  /* B8, the rules a fleet cannot see, each against a number typed in this file: which leaders' bar a stat title
+     is judged on, which era the fans alone pick the All-Star starters in, and each season's real minimum of
+     games for a stat title. Exact, on drawn seasons. */
+  { const A = E.nbaAwards; const N = E.norms; const Rr = N.NBA_AWARD_RULES;
+    const quiet = { pos: 'SF', defenceRep: 0, bench: false, rookie: false, year: 2026, seasonLength: 82, games: 78, ppg: 8, rpg: 3, apg: 2, spg: 0.8, bpg: 0.3, winShare: 0.4, madePlayoffs: false, fanbase: 40, prev: null, everAllNba: false };
+    const draws = (x, hit) => { const r = mulberry32(53); let k = 0; for (let i = 0; i < 300; i++) if (hit(A.decideNbaAwards(r, x))) k++; return k; };
+    const TITLES = [['pts', 'ppg', 'Scoring Champion'], ['reb', 'rpg', 'Rebounding Champion'], ['ast', 'apg', 'Assists Leader']];
+    for (const [stat, key, award] of TITLES) {
+      const b = N.nbaLeaderBar(stat, 2026);
+      const lo = b.mean - 1.73 * b.sd - 0.05; const hi = b.mean + 1.73 * b.sd + 0.05;
+      const never = draws({ ...quiet, [key]: lo }, o => o.awards.includes(award)); const always = draws({ ...quiet, [key]: hi }, o => o.awards.includes(award));
+      exact('B8', never === 0 && always === 300, `${award}: an average just under its own league leaders' lowest bar (${lo.toFixed(2)}) wins in ${never} of 300 draws (must be 0), one just over their highest (${hi.toFixed(2)}) in ${always} (must be 300)`);
+    }
+    /* A fan favourite on a poor season: the fans alone make him a starter, the weighted vote never does. */
+    const favourite = { ...quiet, fanbase: 100, games: 60, ppg: 6, rpg: 2, apg: 1 };
+    const W = REAL_ALL_STAR.weightedFrom;
+    const alone = draws({ ...favourite, year: W - 1 }, o => o.allStar === 'starter'); const weighted = draws({ ...favourite, year: W }, o => o.allStar === 'starter');
+    exact('B8', alone >= 60 && weighted === 0, `a fan favourite (fanbase 100) on a 6 point season starts the All-Star Game in ${alone} of 300 draws in ${W - 1}-${String(W % 100).padStart(2, '0')}, when the fans picked alone (at least 60), and in ${weighted} in ${W}-${String((W + 1) % 100).padStart(2, '0')}, the first weighted vote (must be 0)`);
+    /* Each season's real minimum for a stat title, as the shared rule applies it. */
+    const Q = E.decision.nbaQualifiesForStatTitle;
+    const S11 = REAL_SHORT_2011; const row = Rr.statTitleShortBefore?.[S11.year];
+    const short = t => (row ? { games: row.games, total: row.totals[t] } : undefined);
+    const rowOk = !!row && row.games === S11.games && row.totals.pts === S11.pts && row.totals.reb === S11.reb && row.totals.ast === S11.ast;
+    const q11 = (g, total, t) => Q(g, total, Rr.statTitleTotalsBefore[t], S11.year, S11.length, Rr, short(t));
+    exact('B8', rowOk && nba.nbaSeasonGames(S11.year) === S11.length && !q11(S11.games - 1, S11.pts - 1, 'pts') && q11(S11.games, 0, 'pts') && q11(10, S11.pts, 'pts') && q11(10, S11.reb, 'reb') && q11(10, S11.ast, 'ast') && !q11(10, S11.ast - 1, 'ast'),
+      `the 66 game 2011-12 season asks for its own real minimum, ${S11.games} games or ${S11.pts} points, ${S11.reb} rebounds, ${S11.ast} assists (the rules hold ${row ? `${row.games}, ${row.totals.pts}, ${row.totals.reb}, ${row.totals.ast}` : 'no row'})`);
+    exact('B8', !Q(69, 1399, 1400, 2010, 82, Rr) && Q(70, 0, 1400, 2010, 82, Rr) && Q(40, 1400, 1400, 2012, 82, Rr) && !Q(57, 9999, 1400, 2013, 82, Rr) && Q(58, 0, 1400, 2013, 82, Rr) && !Q(50, 9999, 1400, 2020, 72, Rr) && Q(51, 0, 1400, 2020, 72, Rr),
+      'a full season before 2013-14 asks for 70 games or the total (1,400 points), from 2013-14 for 58 of 82 with no way in on totals, and the 72 game 2020-21 season for 51');
+    /* End to end: the career hands the short season's own row over. A scorer over every bar on 40 of 66 games
+       has the 1,127 points and leads the league; the game's old stand in (70 percent of the games) said no. */
+    const b11 = N.nbaLeaderBar('pts', S11.year);
+    const scorer = { ...quiet, year: S11.year, seasonLength: S11.length, games: 40, ppg: Math.round((b11.mean + 1.73 * b11.sd + 0.5) * 10) / 10 };
+    const led = draws(scorer, o => o.awards.includes('Scoring Champion'));
+    exact('B8', scorer.ppg * scorer.games >= S11.pts && led === 300, `2011-12, ${scorer.ppg} points a game over 40 of 66 games (${Math.round(scorer.ppg * scorer.games)} points, over the ${S11.pts} the season asked for): Scoring Champion in ${led} of 300 draws (must be 300)`); }
   exact('B4', tot('allNbaNoAllStar') === 0, `All-NBA seasons without an All-Star selection: ${list('allNbaNoAllStar')}`);
   { const ratio = per.map(m => m.perCareer['All-Star'] / Math.max(1e-9, m.perCareer['All-NBA']));
     banded('B4', mean(ratio) >= 1.25 && mean(ratio) <= 2.4, `All-Star selections a career over All-NBA: ${ratio.map(r => r.toFixed(2)).join(', ')}, mean ${mean(ratio).toFixed(2)} (1.25 to 2.4; 24 picks against 15 is 1.6); ${per.map(m => m.perCareer['All-Star']).join(', ')} All-Star a career, ${list('starters')} of them starters`); }
@@ -1052,13 +1151,17 @@ if (HAS_PASS() && typeof E.nbaAwards.nbaAwardHelpRules === 'function') {
       `the example's ${w}-${l} club is a playoff club by the engine's record bands (${playoffFloor} to ${playoffTop} wins) and its ${losing[1]}-${losing[2]} club is not (${bands[nba.NBA_MISSED_PLAYOFFS].join(' to ')})`);
   }
   const games = text.match(/need ([0-9]+) games/); const picks = text.match(/All-Star is ([0-9]+) picks/);
-  exact('F', !!games && Number(games[1]) === R.gamesBar && !!picks && Number(picks[1]) === R.allStarPicks, `the help says ${games?.[1]} games and ${picks?.[1]} All-Star picks; the rules say ${R.gamesBar} and ${R.allStarPicks}`);
+  /* Against the real numbers typed at the top of this file, not the rule table the help is built from: the help
+     and the table agreeing with each other is one mistake said twice. */
+  const weightedSeason = `${REAL_ALL_STAR.weightedFrom}-${String((REAL_ALL_STAR.weightedFrom + 1) % 100).padStart(2, '0')}`;
+  exact('F', !!games && Number(games[1]) === REAL_GAMES_RULE.games && text.includes(`From the ${REAL_GAMES_RULE.season} season on`) && !!picks && Number(picks[1]) === REAL_ALL_STAR.picks && text.includes(`in seasons before ${weightedSeason} the fans pick the starters alone`),
+    `the help says ${games?.[1]} games from the ${REAL_GAMES_RULE.season} season, ${picks?.[1]} All-Star picks and the fans alone before ${weightedSeason}; the real rules are ${REAL_GAMES_RULE.games}, ${REAL_ALL_STAR.picks} and ${weightedSeason} (the rule table holds ${R.gamesBar} from ${R.gamesBarFrom}, ${R.allStarPicks} and ${R.allStarFanShareFrom})`);
   const strip = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
   const page = strip(underControl('src/pages/NbaMyCareer.tsx'));
   const typed = page.match(/The Trophy Case holds ([0-9]+) badges/);
   exact('F', !!typed && Number(typed[1]) === E.NBA_BADGES.length, `the page says the Trophy Case holds ${typed?.[1]} badges; NBA_BADGES has ${E.NBA_BADGES.length}`);
   exact('F', /extraRules=\{\[\.\.\.nbaAwardHelpRules\(\), /.test(page), 'the page hands the award rules to its "?"');
-  exact('F', !/—|–/.test(text), 'no em or en dash in the help rules');
+  exact('F', !/[\u2013\u2014]/.test(text), 'no em or en dash in the help rules');
   /* The guide file is not this round's (its owner holds it). What it still says is printed for the lead. */
   const guide = srcOf('src/data/gameContent/basketball.ts');
   console.log(`  note [F] the guide for /nba-my-career still says, and its owner owes the change: ${[/62 games/.test(guide) ? '"62 games"' : null, /21 of them/.test(guide) ? '"21 of them"' : null, /Each of the 21 badges/.test(guide) ? '"Each of the 21 badges"' : null].filter(Boolean).join(', ') || 'nothing stale'}`);
