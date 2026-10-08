@@ -1,0 +1,8 @@
+#!serial
+probe: cp .rc/x/rvProbe.test.tsx src/test/rvProbe.test.tsx && node_modules/.bin/vitest run src/test/rvProbe.test.tsx --testTimeout=300000 --hookTimeout=120000; rc=$?; rm -f src/test/rvProbe.test.tsx; exit $rc
+probe2: cp .rc/x/rvProbe2.test.tsx src/test/rvProbe2.test.tsx && node_modules/.bin/vitest run src/test/rvProbe2.test.tsx --testTimeout=300000 --hookTimeout=120000; rc=$?; rm -f src/test/rvProbe2.test.tsx; exit $rc
+m-throwside: node .rc/x/rv-mutate.mjs throwside && node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx src/test/liveSimCelebration.test.tsx --testTimeout=300000 --hookTimeout=120000; rc=$?; git checkout -- src; exit $rc
+m-foulside: node .rc/x/rv-mutate.mjs foulside && node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx src/test/liveSimCelebration.test.tsx --testTimeout=300000 --hookTimeout=120000; rc=$?; git checkout -- src; exit $rc
+m-cornerflank: node .rc/x/rv-mutate.mjs cornerflank && node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx src/test/liveSimCelebration.test.tsx --testTimeout=300000 --hookTimeout=120000; rc=$?; git checkout -- src; exit $rc
+m-goalkickside: node .rc/x/rv-mutate.mjs goalkickside && node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx src/test/liveSimCelebration.test.tsx --testTimeout=300000 --hookTimeout=120000; rc=$?; git checkout -- src; exit $rc
+m-secondkick: node .rc/x/rv-mutate.mjs secondkick && node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx src/test/liveSimCelebration.test.tsx --testTimeout=300000 --hookTimeout=120000; rc=$?; git checkout -- src; exit $rc
