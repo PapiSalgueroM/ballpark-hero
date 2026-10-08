@@ -1,0 +1,9 @@
+#!serial
+# Round 1104 review: mutations D
+mut-floorgone: bash .rc/x/rv-mutrun2.sh floorgone bank vround
+mut-cardraw: bash .rc/x/rv-mutrun2.sh cardraw bank vround
+mut-posacktenths: bash .rc/x/rv-mutrun2.sh posacktenths truth digest
+mut-lbtenths: bash .rc/x/rv-mutrun2.sh lbtenths truth
+mut-tecapoff: bash .rc/x/rv-mutrun2.sh tecapoff truth
+mut-wrreccapoff: bash .rc/x/rv-mutrun2.sh wrreccapoff truth
+mut-loop17: bash .rc/x/rv-mutrun2.sh loop17 parity facts boardparity
