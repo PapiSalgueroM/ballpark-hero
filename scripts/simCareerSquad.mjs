@@ -271,10 +271,27 @@ function record(mods, size, seed) {
 }
 
 /* ── one pass over the recording with a given copy of the code ──────────── */
-/* The harness's OWN copy of the verified window: the data file must agree. */
+/* The harness's OWN copy of the verified window: the data file must agree.
+   A baked row is keyed by the calendar year its season ENDS in. */
 const WINDOW = { first: 2016, last: 2026 };
+/* And its own copy of which row a season is. The game counts a season by the
+   year it starts in, so a season reads the row one year on, and the real
+   seasons run from 2015 (2015/16) to 2025 (2025/26). */
+const ROW_OF = season => season + 1;
+const REAL = { first: 2015, last: 2025 };
 /* The last season a real squad is shown for, as the readers count seasons. */
-const LAST_REAL_SEASON = 2026;
+const LAST_REAL_SEASON = REAL.last;
+/* Two summer moves, each read in two sources on 2026-10-07 by the review of
+   this round: Erling Haaland joined Manchester City on 1 July 2022
+   (mancity.com, premierleague.com) and Kylian Mbappe signed for Real Madrid on
+   3 June 2024 (espn.com, skysports.com). The season that starts in that year
+   is his first at the new club and the old club's first without him. Before
+   the review the rows were read with no step, and both men turned up a season
+   late at one club and stayed a season too long at the other. */
+const MOVES = [
+  { name: 'Erling Haaland', from: 'Dortmund', to: 'Man City', season: 2022 },
+  { name: 'Kylian Mbapp\u00e9', from: 'PSG', to: 'Real Madrid', season: 2024 },
+];
 
 function realNameSet(mods) {
   const set = new Set();
@@ -366,9 +383,9 @@ function scan(mods, R) {
       }
     }
     /* 5: real, by role or invented, and never one passed off as another */
-    const baked = lib.clubSquad(v.club, v.year);
-    const inWindow = v.year >= WINDOW.first && v.year <= WINDOW.last;
-    const want = baked ? 'real' : v.year > WINDOW.last ? 'invented' : 'roles';
+    const baked = lib.clubSquad(v.club, ROW_OF(v.year));
+    const inWindow = v.year >= REAL.first && v.year <= REAL.last;
+    const want = baked ? 'real' : v.year > REAL.last ? 'invented' : 'roles';
     if (v.source !== want || (v.source === 'real' && !inWindow)) { C.srcBad += 1; note('source', `${v.club} ${v.year} is ${v.source}, should be ${want}`); }
     if (v.source === 'real') {
       C.realChecked += 1;
@@ -478,7 +495,7 @@ function scan(mods, R) {
    Printed, never asserted (a real squad is a picture of the real club, and
    the plan is the game's): rating and plan disagree in 45.5 to 50.5 percent
    of the seasons read against a REAL squad and in 28.9 to 34.3 percent of
-   those in a squad that still carries real men after 2026. The smallest
+   those in a squad that still carries real men after 2025/26. The smallest
    bucket behind a line: 391 seasons ranked 3rd in one era, 368 ranked 3rd in
    a real squad. A full run takes about 20 minutes on a loaded machine. */
 const FLOORS = {
@@ -540,6 +557,9 @@ function sec2(mods) {
   check('2', xi.length === 11, `the national eleven has ${xi.length} men`);
   for (const g of Object.keys(lines)) check('2', gen.ELEVEN_SHAPE[g] === lines[g], `the ${g} line is ${gen.ELEVEN_SHAPE[g]} here and ${lines[g]} on the national sheet`);
   check('2', mods.data.CLUB_SQUAD_YEARS.first === WINDOW.first && mods.data.CLUB_SQUAD_YEARS.last === WINDOW.last, 'the baked window moved: this harness holds 2016 to 2026');
+  const seasons = lib.realSeasons();
+  say(`   real seasons, as the readers count them: ${seasons.first} to ${seasons.last} (rows ${WINDOW.first} to ${WINDOW.last})`);
+  check('2', seasons.first === REAL.first && seasons.last === REAL.last, `the readers count the real seasons from ${seasons.first} to ${seasons.last}, this harness holds ${REAL.first} to ${REAL.last}`);
 }
 
 function sec3(R, S) {
@@ -591,6 +611,19 @@ function sec5(C, mods) {
   check('5', C.inventedReal === 0, `${C.inventedReal} invented men carry a real player's name`);
   check('5', C.carriedStranger === 0, `${C.carriedStranger} real men appear at a club whose last real squad they were not in`);
   check('5', C.familyBad === 0, `${C.familyBad} invented names are not from the man's own name family`);
+  /* a season reads its own squad: the two checked summer moves */
+  let moved = 0; let movedBad = 0;
+  const inSquad = (club, season, name) => (mods.lib.seasonSquad(club, season) || []).some(m => m.name === name);
+  const inChart = (club, season, name) => ((mods.lib.depthChart(club, season, 'GK', 99, 'Harness') || {}).squad || []).some(m => m.name === name);
+  for (const mv of MOVES) {
+    for (const read of [inSquad, inChart]) {
+      moved += 1;
+      const got = [read(mv.to, mv.season, mv.name), read(mv.to, mv.season - 1, mv.name), read(mv.from, mv.season - 1, mv.name), read(mv.from, mv.season, mv.name)];
+      if (got.join() !== 'true,false,true,false') { movedBad += 1; say(`   ${mv.name}: at ${mv.to} in ${mv.season} ${got[0]}, the season before ${got[1]}; at ${mv.from} the season before ${got[2]}, in ${mv.season} ${got[3]}`); }
+    }
+  }
+  say(`   ${moved} readings of ${MOVES.length} checked summer moves (the squad and the depth chart): ${movedBad} put the man in the wrong season`);
+  check('5', moved === MOVES.length * 2 && movedBad === 0, `${movedBad} readings show a summer signing a season late, or a man who left still there`);
   say(`   ${C.roleSheets} sheets by role: his own line numbered wrongly in ${C.roleOrderBad}; ${C.roleFresh} have a new man in his line underneath, an arrival is shown on ${C.roleArrival}`);
   check('5', C.roleSheets >= SIZE * 10 && C.roleFresh >= SIZE, `too few sheets by role (${C.roleSheets}, ${C.roleFresh} with a new man underneath) to mean anything`);
   check('5', C.roleOrderBad === 0, `${C.roleOrderBad} sheets by role do not count him in his own line, so a role and his rank share a place`);
@@ -640,7 +673,7 @@ async function sec6(mods, R, C, text) {
   check('6c', C.randomDraws === 0, `the readers drew from Math.random ${C.randomDraws} times`);
   let pairs = 0; let same = 0;
   for (const q of asked) {
-    if (mods.lib.clubSquad(q.at.club, q.at.year)) continue;
+    if (mods.lib.clubSquad(q.at.club, ROW_OF(q.at.year))) continue;
     pairs += 1;
     const a = JSON.stringify(mods.lib.livingSquad(q.key, q.at).men.filter(m => m.id !== undefined).map(m => [m.id, m.age, m.ovr, m.since]));
     const b = JSON.stringify(mods.lib.livingSquad(`${q.key}|another save`, q.at).men.filter(m => m.id !== undefined).map(m => [m.id, m.age, m.ovr, m.since]));
@@ -917,7 +950,7 @@ function sec13(mods, R, S) {
     }
     if (kind === 'invented') check('13', all.includes('INVENTED TEAMMATES') && all.includes('data-squad-age'), 'an invented squad is not labelled, or prints no ages');
     if (kind === 'mixed') {
-      check('13', txt.includes('of the real 2026 squad are still here'), 'a squad that carries real men on does not say so');
+      check('13', txt.includes('of the real 2025/26 squad are still here'), 'a squad that carries real men on does not say so');
       check('13', all.includes('REAL AND INVENTED') && !all.includes('INVENTED TEAMMATES') && view.carried > 0, 'a squad that still holds real men wears the INVENTED TEAMMATES chip');
     }
     const help = sheet.squadHelp();
@@ -993,6 +1026,8 @@ const CONTROLS = [
     needle: 'arrivals: squad.source === "invented" ? men.filter(', swap: 'arrivals: true ? men.filter(' },
   { name: 'stay', red: ['5'], what: 'the real men of the last real squad never leave',
     needle: 'const left = base.year + 1 + Math.floor(stream(`${seed}|r|${real.name}`)() * CARRY_SEASONS);', swap: 'const left = 9999;' },
+  { name: 'noshift', red: ['5'], what: 'a season reads the row keyed by the year it starts in, which is last season\'s squad',
+    needle: 'SEASON_TO_KEY = 1;', swap: 'SEASON_TO_KEY = 0;' },
   { name: 'thaw', red: ['9'], what: 'a frozen out save reads as if the club still planned to play him',
     needle: 'const frozen = at.club === c.currentClub && (c.frozenOut ?? 0) > 0;', swap: 'const frozen = false;' },
   { name: 'nocut', red: ['10'], what: 'an injured season prints its league figure as games played',

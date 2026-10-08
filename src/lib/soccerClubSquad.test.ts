@@ -7,13 +7,22 @@
  * edited, which is the proof that the real squad readers (the offer fit line
  * and the club verdict line on the page) answer exactly what they answered
  * before this round.
+ *
+ * One thing did change after review, and it is the one thing the digest was
+ * never about: WHICH baked row a season reads. A row is keyed by the year its
+ * season ended in, the game counts a season by the year it starts in, so a
+ * season now reads the row one year on (soccerClubSquad.ts, seasonSquad). The
+ * digest still walks the same rows in the same order and still must not move:
+ * it asks depthChart for the season that ends in each row's year.
  */
 import { describe, expect, it } from 'vitest';
 import { CLUB_DATA_NAME, CLUB_SQUADS } from '@/data/clubSquads';
-import { clubSquad, depthChart, livingSquad, managerTrust, squadNow, squadSaveKey, squadView } from '@/lib/soccerClubSquad';
+import {
+  clubSquad, depthChart, livingSquad, managerTrust, realSeasons, seasonSquad, squadNow, squadSaveKey, squadView, SEASON_TO_KEY,
+} from '@/lib/soccerClubSquad';
 import {
   isMixed, lastGamesLine, lastSeason, lastTileValue, lastWorthLine, offerFit, rankHeadline, realAmongInvented,
-  sourceChip, squadHelp, squadHelpExamples, trustLines,
+  seasonLabel, sourceChip, sourceLine, squadHelp, squadHelpExamples, trustLines,
 } from '@/lib/soccerClubSquadSheet';
 import { FALLBACK_CLUBS, initCareer } from '@/lib/soccerCareerEngine';
 import type { CareerState, SeasonRecord } from '@/lib/soccerCareerEngine';
@@ -43,7 +52,8 @@ describe('the real squad readers, recorded before Round 1115 touched them', () =
       for (let year = 2014; year <= 2028; year += 1) {
         for (const pos of POSITIONS) {
           for (const ovr of RATINGS) {
-            const c = depthChart(club, year, pos, ovr, 'Test Player');
+            /* the row keyed `year` is the season that starts the year before */
+            const c = depthChart(club, year - SEASON_TO_KEY, pos, ovr, 'Test Player');
             if (!c) { nulls += 1; out.push(null); continue; }
             charts += 1;
             out.push([
@@ -182,20 +192,22 @@ describe('the invented squad', () => {
   });
 
   it('carries a real squad on into the game\'s own years, man by man', () => {
-    const real = clubSquad('Real Madrid', 2026);
+    const lastReal = realSeasons().last;
+    const real = seasonSquad('Real Madrid', lastReal);
     expect(real).not.toBeNull();
-    const base = { men: real ?? [], year: 2026 };
+    expect(real).toBe(clubSquad('Real Madrid', 2026));
+    const base = { men: real ?? [], year: lastReal };
     const realNames = new Set(base.men.map(m => m.name));
     const q = { ...Q, club: 'Real Madrid', country: 'Spain', tier: 1, base };
     let before = base.men.length;
     let seenReal = 0;
-    for (let year = 2027; year <= 2026 + CARRY_SEASONS + 1; year += 1) {
+    for (let year = lastReal + 1; year <= lastReal + CARRY_SEASONS + 1; year += 1) {
       const men = genClubSquad({ ...q, year });
       const kept = men.filter(m => !m.id);
       for (const m of kept) { expect(realNames.has(m.name)).toBe(true); expect(m.age).toBeUndefined(); }
       for (const m of men.filter(x => x.id)) {
         expect(realNames.has(m.name)).toBe(false);
-        expect(m.since).toBeGreaterThanOrEqual(2027);
+        expect(m.since).toBeGreaterThanOrEqual(lastReal + 1);
         expect(m.since).toBeLessThanOrEqual(year);
       }
       expect(kept.length).toBeLessThanOrEqual(before);
@@ -207,7 +219,7 @@ describe('the invented squad', () => {
     expect(seenReal).toBeGreaterThan(20);
     expect(before).toBe(0);
     /* inside the real window the base is ignored: the caller shows the real squad itself */
-    expect(genClubSquad({ ...q, year: 2026 }).every(m => m.id)).toBe(true);
+    expect(genClubSquad({ ...q, year: lastReal }).every(m => m.id)).toBe(true);
   });
 });
 
@@ -473,7 +485,8 @@ describe('the sheet does not argue with itself', () => {
     expect(isMixed(mixed)).toBe(true);
     expect(sourceChip(mixed)).toBe('REAL AND INVENTED');
     const everyone = [...Object.values(mixed.eleven).flat(), ...mixed.bench];
-    const real = new Set((clubSquad('Real Madrid', 2026) ?? []).map(m => m.name));
+    const real = new Set((seasonSquad('Real Madrid', realSeasons().last) ?? []).map(m => m.name));
+    expect(real.size).toBeGreaterThan(15);
     let marked = 0;
     for (const m of everyone) {
       const isReal = realAmongInvented(mixed, m);
@@ -546,15 +559,73 @@ describe('odd saves and odd years', () => {
     expect(managerTrust(renamed, at).band).toEqual(managerTrust(base, squadNow(base) ?? at).band);
   });
 
-  it('never calls a career in a real past season by an invented name, in any year before 2027', () => {
+  it('never calls a career in a real past season by an invented name, in any season up to the last real one', () => {
     const pool = new Set(allIntlNames());
-    for (let year = 1989; year <= 2025; year += 1) {
+    /* the save's last row is `year`, so the season read is the one after it */
+    for (let year = 1989; year < realSeasons().last; year += 1) {
       const v = squadView(save('Wrexham', 'Wales', 3, 60, year));
       expect(v?.source).toBe('roles');
       for (const m of [...(v?.bench ?? []), ...Object.values(v?.eleven ?? {}).flat()]) {
         if (!m.me) expect(pool.has(m.name)).toBe(false);
       }
     }
-    expect(squadView(save('Wrexham', 'Wales', 3, 60, 2026))?.source).toBe('invented');
+    expect(squadView(save('Wrexham', 'Wales', 3, 60, realSeasons().last))?.source).toBe('invented');
+  });
+});
+
+/* ── after review: a season reads its own squad, not last season's ──────── */
+describe('which baked row is a season', () => {
+  /* Two moves everybody can check, each with two sources read on 2026-10-07
+     (the review of this round): Erling Haaland joined Manchester City on 1 July
+     2022 (mancity.com, premierleague.com) and Kylian Mbappe signed for Real
+     Madrid on 3 June 2024 (espn.com, skysports.com). So the season that starts
+     in 2022 is his first at City and his old club's first without him, and the
+     same for 2024 in Madrid and Paris. */
+  const has = (club: string, season: number, name: string) => (seasonSquad(club, season) ?? []).some(m => m.name === name);
+  const MOVES: [string, string, string, number][] = [
+    ['Erling Haaland', 'Dortmund', 'Man City', 2022],
+    ['Kylian Mbapp\u00e9', 'PSG', 'Real Madrid', 2024],
+  ];
+
+  it('puts a summer signing in the season he signed for, and takes him out of the club he left', () => {
+    for (const [name, from, to, season] of MOVES) {
+      expect([name, has(to, season, name), has(to, season - 1, name)]).toEqual([name, true, false]);
+      expect([name, has(from, season - 1, name), has(from, season, name)]).toEqual([name, true, false]);
+    }
+  });
+
+  it('gives the page readers the same season: the squad view, the depth chart and the label', () => {
+    for (const [name, , to, season] of MOVES) {
+      const club = FALLBACK_CLUBS.find(c => c.name === to);
+      if (!club) throw new Error(`no club ${to}`);
+      /* a save whose last row is the season before reads the season he signed for */
+      const view = squadView(save(to, club.country, club.tier, 70, season - 1));
+      if (!view) throw new Error('no view');
+      const everyone = [...Object.values(view.eleven).flat(), ...view.bench];
+      expect([view.source, view.year, everyone.some(m => m.name === name)]).toEqual(['real', season, true]);
+      expect(sourceLine(view)).toContain(`The real ${to} squad of ${seasonLabel(season)}`);
+      const before = squadView(save(to, club.country, club.tier, 70, season - 2));
+      expect([...Object.values(before?.eleven ?? {}).flat(), ...(before?.bench ?? [])].some(m => m.name === name)).toBe(false);
+      expect(depthChart(to, season, 'GK', 99, 'Test Player')?.squad.some(m => m.name === name)).toBe(true);
+      expect(depthChart(to, season - 1, 'GK', 99, 'Test Player')?.squad.some(m => m.name === name)).toBe(false);
+    }
+  });
+
+  it('counts the real seasons from the data file, and the words follow them', () => {
+    const real = realSeasons();
+    expect([real.first, real.last]).toEqual([2015, 2025]);
+    expect(seasonLabel(real.first)).toBe('2015/16');
+    expect(seasonLabel(1999)).toBe('1999/00');
+    const rule = squadHelp().rules[4];
+    expect(rule).toContain('from 2015/16 to 2025/26');
+    expect(rule).toContain('From 2026/27 the world is your career\'s own');
+    /* the first season of the game's own world, at a club with a real squad and at one without */
+    const mixed = squadView(save('Real Madrid', 'Spain', 1, 84, real.last));
+    expect([mixed?.source, mixed?.year]).toEqual(['invented', real.last + 1]);
+    expect(sourceLine(mixed ?? ({} as never))).toContain('of the real 2025/26 squad are still here');
+    const made = squadView(save('Wrexham', 'Wales', 3, 60, real.last));
+    expect(sourceLine(made ?? ({} as never))).toContain('From 2026/27 this is your career\'s own world');
+    /* and the last real season is still the real squad */
+    expect(squadView(save('Real Madrid', 'Spain', 1, 84, real.last - 1))?.source).toBe('real');
   });
 });

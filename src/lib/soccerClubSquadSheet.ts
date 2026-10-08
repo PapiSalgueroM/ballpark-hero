@@ -21,7 +21,7 @@ import { projectLeagueApps, ELITE_CLUBS } from './soccerCareerEngine';
 import { ordinal } from './soccerCareerLeague';
 import { squadCentre } from './soccerClubSquadGen';
 import {
-  chartFrom, squadView, GROUP_LABEL,
+  chartFrom, squadView, realSeasons, GROUP_LABEL,
   type SquadAt, type SquadMan, type SquadView, type Trust,
 } from './soccerClubSquad';
 
@@ -78,19 +78,26 @@ export function planLine(trust: Trust): string {
 
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
-/** One honest line saying what kind of squad this is. */
+/** A season the way the game prints one: "2023/24" starts in 2023. */
+export function seasonLabel(startYear: number): string {
+  return `${startYear}/${String((startYear + 1) % 100).padStart(2, '0')}`;
+}
+
+/** One honest line saying what kind of squad this is. The seasons it names
+ *  come from the lib's own window, never from a typed year. */
 export function sourceLine(view: SquadView): string {
-  const season = `${view.year}/${String((view.year + 1) % 100).padStart(2, '0')}`;
+  const season = seasonLabel(view.year);
+  const lastReal = realSeasons().last;
   if (view.source === 'real') {
-    return `The real ${view.club} squad that season, rated on the same scale as the rest of the site.`;
+    return `The real ${view.club} squad of ${season}, rated on the same scale as the rest of the site.`;
   }
   if (view.source === 'roles') {
     return `The game has no checked squad list for ${view.club} in ${season}, so nobody is named: these are the roles, ages and ratings a squad at this level has.`;
   }
   if (view.carried > 0) {
-    return `From 2027 this is your career's own world. ${view.carried} of the real 2026 squad are still here, and the new faces are invented.`;
+    return `From ${seasonLabel(lastReal + 1)} this is your career's own world. ${view.carried} of the real ${seasonLabel(lastReal)} squad are still here, and the new faces are invented.`;
   }
-  return `From 2027 this is your career's own world: these ${view.club} teammates are invented for your career.`;
+  return `From ${seasonLabel(lastReal + 1)} this is your career's own world: these ${view.club} teammates are invented for your career.`;
 }
 
 export const SOURCE_CHIP: Record<SquadView['source'], string> = {
@@ -284,6 +291,7 @@ export interface SquadHelp { title: string; rules: string[]; examples: string[] 
 export function squadHelp(): SquadHelp {
   const n = squadHelpExamples();
   const list = `${n.forwards.slice(0, -1).join(', ')} and ${n.forwards[n.forwards.length - 1]}`;
+  const real = realSeasons();
   return {
     title: 'How the squad works',
     rules: [
@@ -291,7 +299,7 @@ export function squadHelp(): SquadHelp {
       'Your rank is where your rating puts you among the players in your position group at the club. A teammate on the same rating counts as ahead of you: to pass him you have to be rated higher.',
       'The eleven is the highest rated keeper, four defenders, three midfielders and three forwards on our ratings. It is a picture of the squad, not the manager\'s team sheet.',
       'Trust is how much of the league season the manager plans to give you. It comes from your rating against the level the squad expects, how long you have been at the club, and how the dressing room feels about you. That last part is your phone.',
-      'Real, roles or invented: from 2016 to 2026 you see the club\'s real squad where we have it. A real past season with no checked squad list shows roles, ages and ratings, and no names. From 2027 the world is your career\'s own: the last real squad carries on, players leave, and every new face is invented. Invented teammates get a year older every summer.',
+      `Real, roles or invented: from ${seasonLabel(real.first)} to ${seasonLabel(real.last)} you see the club's real squad of that season where we have it. A real past season with no checked squad list shows roles, ages and ratings, and no names. From ${seasonLabel(real.last + 1)} the world is your career's own: the last real squad carries on, players leave, and every new face is invented. Invented teammates get a year older every summer.`,
     ],
     examples: [
       `Rank. You are a ${n.mine} rated striker and the club's forwards are ${list}. ${n.atOrAbove} of them are rated ${n.mine} or more (a tie goes to the other ${n.mine}), so on our ratings you are ${ordinal(n.rank)} of ${n.groupSize} forwards: the last one into the front three.`,

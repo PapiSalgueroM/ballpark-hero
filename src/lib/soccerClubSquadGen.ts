@@ -1,10 +1,10 @@
 /**
  * Round 1115: the squad a club has when nobody baked one.
  *
- * The real squads in clubSquads.ts cover 2016 to 2026 for the clubs in its
- * map. Everywhere else the Squad tile used to show nothing, which in the
- * default era is every single season. This file builds the 22 men who stand
- * in for that squad. It is pure and it is DISPLAY ONLY: nothing in the
+ * The real squads in clubSquads.ts cover the seasons 2015/16 to 2025/26 for
+ * the clubs in its map. Everywhere else the Squad tile used to show nothing,
+ * which in the default era is every single season. This file builds the 22
+ * men who stand in for that squad. It is pure and it is DISPLAY ONLY: nothing in the
  * simulation reads it, and it never draws from the season's random stream.
  *
  * THE SAME ON EVERY RELOAD. Nothing is stored. A squad is rebuilt from a key

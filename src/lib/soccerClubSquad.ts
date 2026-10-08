@@ -17,7 +17,7 @@
  * the card says which club and which season it is describing so nobody has to
  * guess.
  *
- * REAL OR NOT, NEVER PASSED OFF. `clubSquad` and `depthChart` answer with
+ * REAL OR NOT, NEVER PASSED OFF. `seasonSquad` and `depthChart` answer with
  * the real squad or with null, exactly as they always have: a club outside
  * the hand written map in clubSquads.ts, a season outside the baked window,
  * or a club whose data that year could not field a team all produce null,
@@ -31,7 +31,7 @@
  *             drawn by role only (position, age, rating), with NO names,
  *             because an invented name is never attached to a real club in
  *             a real past season;
- *   invented  from the summer after the baked window the world is the
+ *   invented  from the summer after the last real season the world is the
  *             game's own: the club's last real squad carries on, each man
  *             until he leaves, and the men who replace them are invented
  *             and named from the fenced name families.
@@ -77,8 +77,10 @@ export function groupOf(pos: string): SquadGroup {
 const cache = new Map<string, SquadMan[] | null>();
 
 /**
- * The real squad a club had in a season, best first, or null when we have no
- * honest answer. Never throws and never invents.
+ * One baked row, best first, or null when we have no honest answer. Never
+ * throws and never invents. `year` is the row's own key, which is the year
+ * its season ENDED in (see seasonSquad): callers that hold a season use
+ * seasonSquad, and only the checks that walk the baked rows call this.
  */
 export function clubSquad(club: string, year: number): SquadMan[] | null {
   if (!club || !Number.isFinite(year)) return null;
@@ -101,6 +103,27 @@ export function clubSquad(club: string, year: number): SquadMan[] | null {
   return value;
 }
 
+/**
+ * WHICH ROW IS A SEASON. The rows in clubSquads.ts are keyed by the calendar
+ * year a season ends in: "Manchester City|2023" is the squad of 2022/23 (the
+ * striker who signed in the summer of 2022 is in it and is not in the 2022
+ * row), and "Real Madrid|2025" is 2024/25. The game counts a season by the
+ * year it STARTS in, so a season reads the row one year on. Until the review
+ * of Round 1115 the rows were read with no step, and every real squad was
+ * shown under the label of the season after its own.
+ */
+export const SEASON_TO_KEY = 1;
+
+/** The seasons, by the year they start in, a real squad can exist for. */
+export function realSeasons(): { first: number; last: number } {
+  return { first: CLUB_SQUAD_YEARS.first - SEASON_TO_KEY, last: CLUB_SQUAD_YEARS.last - SEASON_TO_KEY };
+}
+
+/** The real squad a club had in the season that starts in `startYear`, or null. */
+export function seasonSquad(club: string, startYear: number): SquadMan[] | null {
+  return Number.isFinite(startYear) ? clubSquad(club, startYear + SEASON_TO_KEY) : null;
+}
+
 export interface DepthChart {
   club: string;
   year: number;
@@ -117,7 +140,8 @@ export interface DepthChart {
 }
 
 /**
- * Where the player sits in his own position queue at his club this season.
+ * Where the player sits in his own position queue at his club in the season
+ * that starts in `year`.
  *
  * Ties go to the REAL player, not to the user: a man already at the club who
  * rates the same as you is ahead of you, because he is the one in the team.
@@ -127,7 +151,7 @@ export interface DepthChart {
 export function depthChart(
   club: string, year: number, position: string, myOverall: number, myName: string,
 ): DepthChart | null {
-  const squad = clubSquad(club, year);
+  const squad = seasonSquad(club, year);
   return squad ? chartFrom(squad, club, year, position, myOverall, myName) : null;
 }
 
@@ -239,12 +263,13 @@ export function squadNow(c: CareerState): SquadAt | null {
 
 export function livingSquad(saveKey: string, at: SquadAt): LivingSquad | null {
   if (!at.club || !Number.isFinite(at.year) || !Number.isFinite(at.tier)) return null;
-  const real = clubSquad(at.club, at.year);
+  const real = seasonSquad(at.club, at.year);
   if (real) return { club: at.club, year: at.year, source: 'real', men: real };
   const q = { saveKey, club: at.club, country: at.country ?? '', tier: at.tier, year: at.year };
-  if (at.year > CLUB_SQUAD_YEARS.last) {
-    const last = clubSquad(at.club, CLUB_SQUAD_YEARS.last);
-    const base = last ? { men: last, year: CLUB_SQUAD_YEARS.last } : null;
+  const lastReal = realSeasons().last;
+  if (at.year > lastReal) {
+    const last = seasonSquad(at.club, lastReal);
+    const base = last ? { men: last, year: lastReal } : null;
     return { club: at.club, year: at.year, source: 'invented', men: genClubSquad({ ...q, base }) };
   }
   return { club: at.club, year: at.year, source: 'roles', men: genClubSquad({ ...q, named: false }) };

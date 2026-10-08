@@ -172,13 +172,20 @@ console.log(`   ${byYear.size} years checked, ${doubles} men in two dressing roo
 /* ── 5: the depth chart arithmetic ────────────────────────────────────── */
 console.log('4) the depth chart, across clubs, positions and ratings');
 const SAMPLE_CLUBS = careerClubs.slice(0, 20);
-const SAMPLE_YEARS = [2018, 2021, 2023, 2026];
+/* Since the review of Round 1115 a depth chart is asked for a SEASON, counted
+   by the year it starts in, and a baked row is keyed by the year its season
+   ends in: the season that starts in 2017 is the row 2018. This harness keeps
+   its own copy of that step (simCareerSquad fences it against two checked
+   summer transfers), so the four seasons below read the same four rows this
+   section always sampled. */
+const ROW_OF = season => season + 1;
+const SAMPLE_YEARS = [2017, 2020, 2022, 2025];
 const SAMPLE_POS = ['GK', 'CB', 'LB', 'CM', 'CAM', 'LW', 'ST'];
 const SAMPLE_OVR = [55, 68, 74, 82, 90, 96];
 let charts = 0, firstChoice = 0, buried = 0;
 for (const club of SAMPLE_CLUBS) {
   for (const year of SAMPLE_YEARS) {
-    const squad = clubSquad(club, year);
+    const squad = clubSquad(club, ROW_OF(year));
     for (const pos of SAMPLE_POS) {
       for (const ovr of SAMPLE_OVR) {
         const chart = depthChart(club, year, pos, ovr, 'Test Player');
@@ -234,15 +241,27 @@ if (buried < 20) fail(`only ${buried} buried charts, so the bottom of the queue 
 
 /* ── 6: it shows nothing rather than guessing ─────────────────────────── */
 console.log('5) no honest answer means the real readers say nothing, and the Squad tile never passes a made squad off as real');
+/* Seasons, by the year they start in: the season before the first real one
+   (2014/15, whose row would be 2015) and the one after the last (2026/27,
+   whose row would be 2027) have no row behind them. */
 const NOWHERE = [
   ['Some Invented FC', 2023], ['Wrexham', 2023], ['', 2023],
-  [careerClubs[0], CLUB_SQUAD_YEARS.first - 1],
-  [careerClubs[0], CLUB_SQUAD_YEARS.last + 1],
+  [careerClubs[0], CLUB_SQUAD_YEARS.first - 2],
+  [careerClubs[0], CLUB_SQUAD_YEARS.last],
   [careerClubs[0], 2045],
 ];
 for (const [club, year] of NOWHERE) {
-  if (clubSquad(club, year) !== null) fail(`${JSON.stringify(club)} ${year} returned a squad it should not have`);
+  if (clubSquad(club, ROW_OF(year)) !== null) fail(`${JSON.stringify(club)} ${year} has a baked row it should not have`);
+  if (lib.seasonSquad(club, year) !== null) fail(`${JSON.stringify(club)} ${year} returned a squad it should not have`);
   if (depthChart(club, year, 'ST', 80, 'Test') !== null) fail(`${JSON.stringify(club)} ${year} returned a depth chart`);
+}
+/* and the two ends of the window DO answer, with the row one year on */
+for (const year of [CLUB_SQUAD_YEARS.first - 1, CLUB_SQUAD_YEARS.last - 1]) {
+  const row = clubSquad(careerClubs[0], ROW_OF(year));
+  if (!row) fail(`${careerClubs[0]} has no baked row for the season that starts in ${year}`);
+  else if (lib.seasonSquad(careerClubs[0], year) !== row || depthChart(careerClubs[0], year, 'ST', 80, 'Test')?.squad !== row) {
+    fail(`${careerClubs[0]}: the season that starts in ${year} does not read the row ${ROW_OF(year)}`);
+  }
 }
 /* Round 1115: the living squad answers where the real readers stay silent,
    and it must never pass itself off as real there. For the same six pairs it
@@ -304,7 +323,7 @@ if (offerCardsWithCareer !== offerCards) {
    squad card, pointed at the OFFERING club rather than the current one */
 let fits = 0;
 for (const club of careerClubs.slice(0, 12)) {
-  for (const year of [2019, 2023, 2026]) {
+  for (const year of [2018, 2022, 2025]) {
     const chart = depthChart(club, year, 'ST', 79, 'Test Player');
     if (!chart) continue;
     fits += 1;
