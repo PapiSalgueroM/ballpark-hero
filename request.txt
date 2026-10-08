@@ -1,0 +1,3 @@
+vitest-motion: node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx --testTimeout=300000 --hookTimeout=120000
+m-skipmoment: LIVE_MOTION_CONTROL=skipmoment node scripts/simLiveSimMotion.mjs
+simLiveSimMotion: node scripts/simLiveSimMotion.mjs

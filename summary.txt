@@ -1,0 +1,3 @@
+m-skipmoment exit=1 7s | simLiveSimMotion: control skipmoment turned "after Skip the second half opens" red on an assertion (1 failed), as it must.
+simLiveSimMotion exit=1 38s | simLiveSimMotion: RED. vitest exit 1, 1 failed, 38 passed.
+vitest-motion exit=1 38s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/liveSimMotion.test.tsx,title=src/test/liveSimMotion.test.tsx > The goal sequence > after Skip the seco
