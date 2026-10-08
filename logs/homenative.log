@@ -1,0 +1,9 @@
+Home search: 21 actual template font and baked-poll flag payloads cached.
+complete true | cases ?:true ?:true ?:true ?:true
+controls 20 proved 20 | unexpected 0 | sockets 0
+--- native.log
+Home search native: PASS, 4/4 completed route journeys.
+Effective restored DOM controls: 20/20; unexpected requests: 0.
+Source/build/cache held: true; artifact path: /home/runner/work/ballpark-hero/ballpark-hero/home-search-recovery-artifacts/native
+Scope: actual built signed-out Home with explicit locally fulfilled public reads and real cached fonts/flags; no gameplay or production forwarding.
+homenative exit code 0 | Home search native: PASS, 4/4 completed route journeys.

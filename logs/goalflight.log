@@ -1,0 +1,19 @@
+Goal flight: prefetched 9 actual template font assets.
+complete true | runs normal:0 no-restart:1 endpoint-only:1 wrong-side:1 reduced-motion:1 historical:1
+control no-restart proved true | failures flight:origin,flight:travel
+control endpoint-only proved true | failures flight:origin,flight:travel,flight:duration
+control wrong-side proved true | failures flight:travel,flight:destination,landing:immediate
+control reduced-motion proved true | failures reduced:no-flight
+historical proved true | flight:origin,flight:duration,flight:travel
+arm endpoint-only complete true cases 2 failures {"flight:origin":6,"flight:travel":6,"flight:duration":6} 
+arm historical complete true cases 2 failures {"flight:origin":6,"flight:duration":6,"flight:travel":2} 
+arm no-restart complete true cases 2 failures {"flight:origin":3,"flight:travel":3} 
+arm normal complete true cases 8 failures {} 
+arm reduced-motion complete true cases 2 failures {"reduced:no-flight":1} 
+arm wrong-side complete true cases 2 failures {"flight:travel":6,"flight:destination":6,"landing:immediate":2} 
+--- outcomes.log
+simTycoonGoalFlight: PASS, 4/4 effective copied controls; historical expected failure=true.
+Normal component case inventory: 8; completed subprocess receipts: 6.
+Original-source holds: 11; hold error retained: false.
+Scope: finite component proof; headed browser requires xvfb and prefetched actual font cache. Evidence: /home/runner/work/ballpark-hero/ballpark-hero/tycoon-goal-flight-artifacts
+goalflight exit code 0 | simTycoonGoalFlight: PASS, 4/4 effective copied controls; historical expected failure=true.
