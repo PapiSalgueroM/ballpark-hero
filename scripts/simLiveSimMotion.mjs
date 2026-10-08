@@ -13,7 +13,7 @@
  * 120' all through its board); each must turn its own test red. Before the
  * review both left every gate green.
  *
- * Round 1101: the pitch is a shared part now (src/components/pitch-motion), and fourteen controls came with it.
+ * Round 1101: the pitch is a shared part now (src/components/pitch-motion), and fifteen controls came with it.
  * Each names the one test it must turn red, on an assertion:
  *   block       the block's back line stops reading where the ball is             R4
  *   kickoff     a kick off is drawn with the open play rows                       R3 (the hard rule: own half)
@@ -29,6 +29,7 @@
  *   onepanel    a tap on a player leaves the open panel waiting under the sheet   one panel at a time
  *   labels      no name ever goes above its figure                                a name goes above its figure
  *   stalejoin   the viewer keeps the eleven it mounted with for its dots          a substitution during a paused action
+ *   takenback   the hook plays on an action the binder has taken back             the part drops an action the binder has taken back
  *   cmimport    the part's barrel re-exports from Club Manager's engine           the bundle section below
  * And one old control has a new test to turn red: lineup takes the hook's own guard out (an action is dropped
  * when the line up under it changes). The viewer joins the frame to its eleven by key now, so its substitution
@@ -54,11 +55,11 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const control = process.env.LIVE_MOTION_CONTROL || '';
 const only = process.env.LIVE_MOTION_ONLY || '';
 const OLD = ['trigger', 'save', 'pause', 'mutation', 'lineup', 'speed', 'reduced', 'terminal', 'redraw', 'whistle', 'banner', 'boardgoal', 'etclock'];
-const NEW = ['block', 'kickoff', 'overlap', 'mouth', 'draw', 'approach', 'lag', 'hold', 'skipmoment', 'back', 'onepanel', 'labels', 'stalejoin', 'cmimport'];
+const NEW = ['block', 'kickoff', 'overlap', 'mouth', 'draw', 'approach', 'lag', 'hold', 'skipmoment', 'back', 'onepanel', 'labels', 'stalejoin', 'takenback', 'cmimport'];
 assert.ok(['', ...OLD, ...NEW].includes(control), 'Unknown live motion control');
 assert.ok(['', 'bundle'].includes(only), 'Unknown LIVE_MOTION_ONLY');
 /* Minified bytes and gzip bytes of the part alone, and the ceiling: each plus a fifth. */
-const BUNDLE_MEASURED = { min: 18141, gzip: 7675 };
+const BUNDLE_MEASURED = { min: 18154, gzip: 7680 };
 const BUNDLE_CEILING = { min: Math.ceil(BUNDLE_MEASURED.min * 1.2), gzip: Math.ceil(BUNDLE_MEASURED.gzip * 1.2) };
 const PART = path.join(root, 'src/components/pitch-motion');
 const lf = async file => (await readFile(file, 'utf8')).replaceAll('\r\n', '\n');
@@ -113,6 +114,7 @@ try {
     if (control === 'back') viewer = replace(viewer, '    setPaused(true);\n    setCollapsed(true);', '    setCollapsed(true);');
     if (control === 'onepanel') viewer = replace(viewer, '    setPicking(id);\n    setPanel(null);', '    setPicking(id);');
     if (control === 'labels') viewer = replace(viewer, 'const LABEL_BELOW = 6;', 'const LABEL_BELOW = -1;');
+    if (control === 'takenback') motion = replace(motion, 'action.event === event && ', '');
     if (control === 'stalejoin') viewer = replace(viewer, 'const manOf = useMemo(() => new Map([...men.mine, ...men.theirs].map(m => [m.key, m])), [men]);', 'const manOf = useMemo(() => new Map([...men.mine, ...men.theirs].map(m => [m.key, m])), []);');
     const componentPath = path.join(folder, 'LiveSimMotion.tsx').replaceAll('\\', '/');
     viewer = replace(viewer, "import { LivePitchPlayer, useLiveSimMotion } from '@/components/club-manager/LiveSimMotion';", "import { LivePitchPlayer, useLiveSimMotion } from './LiveSimMotion';");
@@ -143,7 +145,7 @@ try {
 
   /* ---- the tests: all of them clean, the one a control names otherwise ---- */
   const selected = {
-    trigger: 'actual feed', save: 'committed action|actual feed', pause: 'pause freezes', mutation: 'settled results', lineup: 'substitution during|the part drops an action', stalejoin: 'substitution during', speed: 'speed changes', reduced: 'reduced motion', terminal: 'terminal goal and save contact', redraw: 'a tactics redraw cancels', whistle: 'the ninetieth minute asks the latest save', banner: 'the extra time banner says what is true', boardgoal: 'a goal in the board is announced with its plus', etclock: 'the extra time clock runs into its own board',
+    trigger: 'actual feed', save: 'committed action|actual feed', pause: 'pause freezes', mutation: 'settled results', lineup: 'substitution during|the part drops an action', stalejoin: 'substitution during', takenback: 'the part drops an action the binder has taken back', speed: 'speed changes', reduced: 'reduced motion', terminal: 'terminal goal and save contact', redraw: 'a tactics redraw cancels', whistle: 'the ninetieth minute asks the latest save', banner: 'the extra time banner says what is true', boardgoal: 'a goal in the board is announced with its plus', etclock: 'the extra time clock runs into its own board',
     block: 'R4: the block follows the ball', kickoff: 'R3: at a kick off', overlap: 'R2: nobody stands on a team mate', mouth: 'R1: the ball is in the goal mouth', draw: 'R5: nothing is decided here', approach: 'R6: a chance starts with the ball',
     lag: 'the score waits for the ball', hold: 'the score waits for the ball', skipmoment: 'after Skip the second half opens',
     back: 'Back folds the match', onepanel: 'one panel at a time', labels: 'a name goes above its figure',

@@ -1188,3 +1188,32 @@ describe('The part and a change of line up', () => {
     expect(probe().getAttribute('data-names')).toBe('Home keeper,Home sub');
   });
 });
+
+/* Round 1101: and it plays only the action it is being handed. The Skip test above found this one: a line
+   fired late by Skip was cleared by the viewer at the break, and the hook, which kept its own copy, played
+   it again from its wind up when the clock went back to 46 (a goal nobody scored, for as long as the board
+   had been). It hid for a while because the halves the test found all had a change of eleven in them. */
+describe('The part and an action taken back', () => {
+  it('the part drops an action the binder has taken back, even with the clock set back before its start', async () => {
+    type Line = { event: { minute: number; side: 'me'; kind: 'goal'; text: string }; key: string; at: number };
+    const goal: Line = { event: { minute: 10, side: 'me', kind: 'goal', text: 'Home striker' }, key: 'probe', at: 10 };
+    function Probe({ line, clock }: { line: Line | null; clock: number }) {
+      const frame = useLiveSimMotion(scene, line, clock, true, false);
+      return <div data-probe={frame.action} data-phase={frame.phase} />;
+    }
+    const mounted = render(<Probe line={goal} clock={10.3} />);
+    await step(32);
+    const probe = () => mounted.container.querySelector('[data-probe]')!;
+    expect(probe().getAttribute('data-probe')).toBe('goal');
+    /* The period ends: the binder takes the action back and its clock goes back to the next kick off. */
+    mounted.rerender(<Probe line={null} clock={9} />);
+    await step(32);
+    expect(probe().getAttribute('data-probe')).toBe('pass');
+    /* And nothing of it comes back as the clock runs up through where it had started. */
+    for (const clock of [9.5, 10, 10.4, 11]) {
+      mounted.rerender(<Probe line={null} clock={clock} />);
+      await step(16);
+      expect(probe().getAttribute('data-probe')).toBe('pass');
+    }
+  });
+});

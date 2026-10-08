@@ -157,7 +157,10 @@ export function useLiveSimMotion<T extends MotionPlayer>(scene: MotionScene<T>, 
     return () => media.removeEventListener('change', changed);
   }, []);
   const samePlayers = (a: T[], b: T[]) => a.length === b.length && a.every(player => b.some(other => player.key === other.key && player.name === other.name));
-  const inAction = active && action && clock - action.event.at <= 1.05
+  /* Round 1101: only the action the binder is handing over right now is played. One it has taken back (a
+     period ended and the clock went back to the next kick off) used to stay in here and play again from
+     its wind up, a goal nobody scored at the start of the second half. */
+  const inAction = active && action && action.event === event && clock - action.event.at <= 1.05
     && samePlayers(action.scene.mine, scene.mine) && samePlayers(action.scene.theirs, scene.theirs);
   const base = reduced ? scene : between(travel.from, travel.to, smooth((clock - travel.at) / .3));
   const frame: MotionFrame<T> = inAction
