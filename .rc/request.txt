@@ -1,0 +1,3 @@
+#!serial
+vitest-whole: node_modules/.bin/vitest run --reporter=dot --testTimeout=300000 --hookTimeout=120000
+vitest-whole-on-main: git worktree add /tmp/r1138-mainc origin/main > /dev/null 2>&1 || git worktree add /tmp/r1138-mainc c623e77d; ln -s "$PWD/node_modules" /tmp/r1138-mainc/node_modules; cd /tmp/r1138-mainc && git log --oneline -1 && node_modules/.bin/vitest run --reporter=dot --testTimeout=300000 --hookTimeout=120000
