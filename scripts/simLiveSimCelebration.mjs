@@ -52,7 +52,7 @@ try {
   const report = JSON.parse(await readFile(reportPath, 'utf8'));
   assert.equal(Number(report.numUnhandledErrors ?? 0), 0);
   const rows = report.testResults.flatMap(suite => suite.assertionResults);
-  assert.equal(rows.length, 11);
+  assert.equal(rows.length, 13);
   if (control) {
     assert.equal(run.status, 1);
     assert.equal(report.numFailedTests, 1);
@@ -64,8 +64,8 @@ try {
     console.log(`simLiveSimCelebration: ${control} changed source, intended assertion failed, independent destinations stayed green.`);
   } else {
     assert.equal(run.status, 0);
-    assert.equal(report.numPassedTests, 11);
-    console.log('simLiveSimCelebration: 11 outcome checks passed, correct side, net-first, real figure, freeze/expiry, reduced motion, the three recorded digests of the lift and the part behind its contract.');
+    assert.equal(report.numPassedTests, 13);
+    console.log('simLiveSimCelebration: 13 outcome checks passed, correct side, net-first, real figure, freeze/expiry, reduced motion, the three recorded digests of the lift, the part behind its contract, the penalty line up and the free kick wall.');
   }
 } finally {
   for (const file of owned) await rm(file, { force: true });

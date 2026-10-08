@@ -118,7 +118,9 @@ function grid(flags: Flags) {
    change in Round 1101. FLAGGED is re-recorded once, in the commit that moves the penalty
    spot and stands the free kick wall, and that commit's message says so. */
 const PLAIN_DIGEST = '2e5a23e4';
-const FLAGGED_DIGEST = '41b9e02c';
+/* Re-recorded once, in the step 4 commit that moves the penalty spot to 12, lines both sides up outside the
+   area, puts the keeper on his line and stands the free kick wall. It was 41b9e02c on the base. */
+const FLAGGED_DIGEST = 'ae7ebea0';
 const FIGURE_DIGEST = '443c524e';
 
 describe('The lift keeps every frame', () => {
@@ -254,5 +256,99 @@ describe('The pitch part behind its contract', () => {
     expect(result.current.action).toBe('goal');
     rerender({ clock: 5 + ACTION_SPAN + .01 });
     expect(result.current.action).toBe('pass');
+  });
+});
+
+/* Round 1101, dead balls inside an action. An invented scene again, crowded on purpose: both sides have men
+   in my attacking area, so the line up and the wall have somebody to move. */
+const crowded = {
+  mine: [
+    { key: 'm0', name: 'Home keeper', keeper: true, x: 50, y: 90 },
+    { key: 'm9', name: 'Home scorer', keeper: false, x: 48.7, y: 13 },
+    { key: 'm8', name: 'Home near', keeper: false, x: 40, y: 10 },
+    { key: 'm7', name: 'Home next', keeper: false, x: 62, y: 16 },
+    { key: 'm4', name: 'Home far', keeper: false, x: 30, y: 40 },
+  ],
+  theirs: [
+    { key: 'o0', name: 'Away keeper', keeper: true, x: 52, y: 8 },
+    { key: 'o2', name: 'Away left', keeper: false, x: 44, y: 9 },
+    { key: 'o3', name: 'Away right', keeper: false, x: 57, y: 14 },
+    { key: 'o5', name: 'Away mid', keeper: false, x: 50, y: 24 },
+    { key: 'o9', name: 'Away scorer', keeper: false, x: 55, y: 60 },
+  ],
+  ball: { x: 50, y: 12 }, holderKey: 'm9',
+};
+type Crowd = typeof crowded;
+/** The same scene seen from the other end: the sides swapped and the pitch turned top to bottom. */
+const turned = (s: Crowd): Crowd => ({
+  mine: s.theirs.map(p => ({ ...p, y: 100 - p.y })), theirs: s.mine.map(p => ({ ...p, y: 100 - p.y })),
+  ball: { x: s.ball.x, y: 100 - s.ball.y }, holderKey: s.holderKey,
+});
+
+describe('Dead balls inside an action', () => {
+  it('a penalty lines both sides up outside the area', () => {
+    const random = vi.spyOn(Math, 'random');
+    for (const side of ['me', 'opp'] as const) {
+      const from = side === 'me' ? crowded : turned(crowded);
+      const before = structuredClone(from);
+      const line = side === 'me' ? 0 : 100;
+      const penalty: MotionEvent = { key: `pen:${side}`, at: 5, event: { side, kind: 'goal', minute: 5, text: 'Home scorer', penalty: true } };
+      /* The ball starts on the spot, 12 from the goal line, and the taker steps up to it. */
+      expect(actionFrame(from, penalty, 0).ball.x).toBeCloseTo(50, 6);
+      expect(Math.abs(actionFrame(from, penalty, 0).ball.y - line)).toBeCloseTo(12, 6);
+      const frame = actionFrame(from, penalty, .3);
+      const all = [...frame.mine, ...frame.theirs];
+      const was = [...from.mine, ...from.theirs];
+      const taker = all.find(p => p.key === 'm9')!;
+      expect(taker.x).toBeCloseTo(50, 6);
+      expect(Math.abs(taker.y - line)).toBeCloseTo(12, 6);
+      const moved: string[] = [];
+      for (const p of all) {
+        if (p.keeper || p.key === 'm9') continue;
+        expect(Math.abs(p.y - line), `${p.key} is outside the area`).toBeGreaterThanOrEqual(18 - 1e-9);
+        const old = was.find(o => o.key === p.key)!;
+        expect(p.x).toBe(old.x);
+        if (p.y !== old.y) moved.push(p.key);
+      }
+      /* Exactly the four who stood inside it moved, and nobody who was already out. */
+      expect(moved.sort()).toEqual(['m7', 'm8', 'o2', 'o3']);
+      /* The keeper facing it is on his line, 3 out, before he goes; the other keeper has not moved. */
+      const facing = (side === 'me' ? frame.theirs : frame.mine).find(p => p.keeper)!;
+      expect(facing.x).toBeCloseTo(50, 6);
+      expect(Math.abs(facing.y - line)).toBeCloseTo(3, 6);
+      const far = (side === 'me' ? frame.mine : frame.theirs).find(p => p.keeper)!;
+      expect(far.y).toBe((side === 'me' ? from.mine : from.theirs).find(p => p.keeper)!.y);
+      expect(from).toEqual(before);
+    }
+    expect(random).not.toHaveBeenCalled();
+  });
+
+  it('a direct free kick stands a wall of three', () => {
+    for (const side of ['me', 'opp'] as const) {
+      const base = side === 'me' ? crowded : turned(crowded);
+      /* The taker a step behind a ball 30 from the goal line, at x 40. */
+      const move = (list: Crowd['mine']) => list.map(p => (p.key === 'm9' ? { ...p, x: 38.7, y: side === 'me' ? 31 : 69 } : p));
+      const from: Crowd = { ...base, mine: move(base.mine), theirs: move(base.theirs), ball: { x: 40, y: side === 'me' ? 30 : 70 } };
+      const before = structuredClone(from);
+      const kick: MotionEvent = { key: `fk:${side}`, at: 5, event: { side, kind: 'goal', minute: 5, text: 'Home scorer', freeKick: true } };
+      expect(actionFrame(from, kick, 0).ball.x).toBeCloseTo(40, 6);
+      expect(actionFrame(from, kick, 0).ball.y).toBeCloseTo(side === 'me' ? 30 : 70, 6);
+      const frame = actionFrame(from, kick, .3);
+      const defenders = side === 'me' ? frame.theirs : frame.mine;
+      const wallY = side === 'me' ? 21 : 79;
+      /* The three defenders nearest the ball, 9 goal side of it, 3.5 apart, in the order they stood across the pitch. */
+      const wall = ['o2', 'o5', 'o3'].map(key => defenders.find(p => p.key === key)!);
+      expect(wall.map(p => Number(p.x.toFixed(6)))).toEqual([36.5, 40, 43.5]);
+      for (const p of wall) expect(p.y).toBeCloseTo(wallY, 6);
+      const stood = side === 'me' ? from.theirs : from.mine;
+      /* The keeper and the man who was far away stay where they were. */
+      for (const key of ['o0', 'o9']) {
+        const now = defenders.find(p => p.key === key)!, then = stood.find(p => p.key === key)!;
+        expect({ x: now.x, y: now.y }).toEqual({ x: then.x, y: then.y });
+      }
+      /* The ball still bends on its way and still ends in the net. */
+      expect(actionFrame(from, kick, 1.05).net).toBe(side === 'me' ? 'opp' : 'me');
+      expect(from).toEqual(before);
+    }
   });
 });

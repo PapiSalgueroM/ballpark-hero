@@ -36,7 +36,7 @@ export function actionFrame<T extends MotionPlayer>(scene: MotionScene<T>, actio
   const resolve = bounded((p - .72) / .28);
   const wing = event.flank === 'left' ? -1 : event.flank === 'right' ? 1 : event.minute % 2 < 1 ? -1 : 1;
   const source = striker ?? scene.ball;
-  const spot = { x: event.penalty ? 50 : Math.max(25, Math.min(75, source.x)), y: mine ? (event.penalty ? 20 : event.freeKick ? 30 : 26) : (event.penalty ? 80 : event.freeKick ? 70 : 74) };
+  const spot = { x: event.penalty ? 50 : Math.max(25, Math.min(75, source.x)), y: mine ? (event.penalty ? 12 : event.freeKick ? 30 : 26) : (event.penalty ? 88 : event.freeKick ? 70 : 74) };
   const planted = point(source, spot, plant);
   const end = { x: event.kind === 'shot' ? 50 + wing * 24 : 50 + wing * 7, y: mine ? (event.kind === 'save' ? 8 : 1) : (event.kind === 'save' ? 92 : 99) };
   const foot = { x: planted.x + 1.3, y: planted.y + (mine ? -1 : 1) };
@@ -44,7 +44,9 @@ export function actionFrame<T extends MotionPlayer>(scene: MotionScene<T>, actio
   if (flight > 0 && flight < 1) ball.x += Math.sin(flight * Math.PI) * wing * (event.freeKick ? 4 : 1.4);
   const dive = smooth((flight - .1) / .9);
   const keeperEnd = event.kind === 'save' ? end : { x: 50 - wing * 5, y: mine ? 10 : 90 };
-  const keeperPosition = keeper ? point(keeper, keeperEnd, dive) : null;
+  // Round 1101: for a penalty the keeper is on his line before he goes.
+  const keeperFrom = keeper && event.penalty ? point(keeper, { x: 50, y: mine ? 3 : 97 }, plant) : keeper;
+  const keeperPosition = keeperFrom ? point(keeperFrom, keeperEnd, dive) : null;
   // Only the committed scorer's side celebrates, after the ball reaches the net.
   const celebration = event.kind === 'goal' && flight === 1 ? smooth(resolve / .55) : 0;
   const teammates = celebration && striker ? attackers.filter(player => !player.keeper && player.key !== striker.key)
@@ -53,9 +55,36 @@ export function actionFrame<T extends MotionPlayer>(scene: MotionScene<T>, actio
   const aside = (player: T): T => striker && attackers.includes(player) && !player.keeper && player.key !== striker.key
     && Math.abs(player.x - spot.x) < 5 && Math.abs(player.y - spot.y) < 4
     ? { ...player, x: player.x + (player.x > spot.x || (player.x === spot.x && wing < 0) ? 6 : -6) * plant } : player;
+  // Round 1101, dead balls inside an action. A penalty: everybody but the taker and the keepers is outside the area,
+  // 18 from that goal line, on its edge. A direct free kick: the three defenders nearest the ball stand as a wall, 9 goal side of it.
+  const goalLine = mine ? 0 : 100;
+  const wall = event.freeKick ? defenders.filter(player => !player.keeper)
+    .sort((a, b) => Math.hypot(a.x - spot.x, a.y - spot.y) - Math.hypot(b.x - spot.x, b.y - spot.y)).slice(0, 3).sort((a, b) => a.x - b.x) : [];
+  const lineUp = new Map<T, Point>();
+  if (event.penalty) for (const side of [scene.mine, scene.theirs]) {
+    const inside = (player: T) => !player.keeper && player !== striker && Math.abs(player.y - goalLine) < 18;
+    const edge = goalLine + (mine ? 18 : -18);
+    const taken: Point[] = side.filter(player => !inside(player)).map(player => ({ x: player.x, y: player.y }));
+    // Nearest the goal line first, so nobody has to walk through a team mate to get out.
+    for (const player of side.filter(inside).sort((a, b) => Math.abs(a.y - goalLine) - Math.abs(b.y - goalLine))) {
+      let x = player.x;
+      for (let k = 1; k < 24 && taken.some(other => Math.abs(other.x - x) < 4 && Math.abs(other.y - edge) < 3); k++) {
+        x = Math.max(4, Math.min(96, player.x + (k % 2 ? 1 : -1) * Math.ceil(k / 2) * 4));
+      }
+      taken.push({ x, y: edge });
+      lineUp.set(player, { x, y: edge });
+    }
+  }
+  const stand = (player: T): T => {
+    const inWall = wall.indexOf(player);
+    if (inWall >= 0) return { ...player, ...point(player, { x: spot.x + 1.3 + (inWall - (wall.length - 1) / 2) * 3.5, y: spot.y + (mine ? -9 : 9) }, plant) };
+    const out = lineUp.get(player);
+    if (out) return { ...player, ...point(player, out, plant) };
+    return aside(player);
+  };
   const patch = (players: T[]) => players.map(player => player.key === striker?.key ? { ...player, ...planted }
     : player.key === keeper?.key && keeperPosition ? { ...player, ...keeperPosition }
-    : teammates.some(teammate => teammate.key === player.key) ? { ...aside(player), ...point(aside(player), planted, celebration * .18) } : aside(player));
+    : teammates.some(teammate => teammate.key === player.key) ? { ...stand(player), ...point(stand(player), planted, celebration * .18) } : stand(player));
   const poses: Record<string, Pose> = {};
   if (striker) poses[striker.key] = { kick: Math.sin(bounded((p - .12) / .24) * Math.PI) };
   if (keeper) poses[keeper.key] = { dive: (event.kind === 'save' ? wing : -wing) * dive * 68, catching: event.kind === 'save' ? dive : 0 };

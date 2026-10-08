@@ -158,12 +158,15 @@ export function pitchPlan(input: PitchInput): PitchPlan {
       start: a.at - 2 * BEAT_SPAN, end: a.at - BEAT_SPAN, priority: 2, order: n, state: 'open', via: 'approach', side,
       carrier: feeder.key, dead: false, id: `a${a.order}`, anchor: zoneAnchor(side, feeder, rng),
     });
+    /* From the spot (12 from the goal line) or a direct free kick (30 from it) the ball is dead: it sits on its
+       spot with the taker a step behind it. From open play the shooter has it at his feet, 22 to 30 out. */
+    const set = !!(a.event.penalty || a.event.freeKick);
     const shot = a.event.penalty
-      ? { x: 50, y: 20 }
+      ? { x: 50, y: 12 }
       : { x: clamp((shooter?.slot.x ?? 50) + (rng() * 2 - 1) * 6, 25, 75), y: a.event.freeKick ? 30 : 22 + rng() * 8 };
     layers.push({
-      start: a.at - BEAT_SPAN, end: a.at + ACTION_SPAN, priority: 4, order: n, state: 'open', via: 'carrier', side,
-      carrier: shooter?.key ?? null, dead: false, id: `c${a.order}`, anchor: turn(side, shot),
+      start: a.at - BEAT_SPAN, end: a.at + ACTION_SPAN, priority: 4, order: n, state: set ? 'freekick' : 'open', via: 'carrier', side,
+      carrier: shooter?.key ?? null, dead: set, id: `c${a.order}`, anchor: turn(side, shot),
     });
     const after = a.at + ACTION_SPAN;
     if (after >= to - EPS) return;
@@ -347,6 +350,8 @@ function blockOf(plan: PitchPlan, beat: PitchBeat, side: PitchSide): Own[] {
     if (beat.dead) {
       /* On a dead ball the man stands a step and a half behind it, on his own side of it. */
       if (beat.state === 'keeper') { carrier.x = clamp(b.x, 40, 60); carrier.y = clamp(b.y, 86, 95); }
+      /* A set shot: he stands so the ball is at the foot the action draws it on, and nothing jumps when he steps up. */
+      else if (beat.via === 'carrier') { carrier.x = b.x + (side === 'me' ? -1.3 : 1.3); carrier.y = b.y + 1; }
       else { carrier.x = b.x; carrier.y = Math.min(97, b.y + 1.5); }
     } else {
       /* A man with the ball goes most of the way to where it is wanted. The shooter of a chance is all the

@@ -24,4 +24,6 @@
 .pm-surface[data-pm-orient="landscape"] .cm-live-net{left:auto;right:auto;top:38%;bottom:38%;height:auto;width:2.5%}
 .pm-surface[data-pm-orient="landscape"] .cm-live-net--top{right:0;transform-origin:right center}
 .pm-surface[data-pm-orient="landscape"] .cm-live-net--bottom{left:0;transform-origin:left center}
+.cm-live-net-bulge{position:absolute;left:50%;top:50%;width:30%;height:220%;border-radius:50%;background:#ffffff59;pointer-events:none}
+.pm-surface[data-pm-orient="landscape"] .cm-live-net-bulge{width:220%;height:30%}
 .pm-figure{position:absolute;display:flex;flex-direction:column;align-items:center;pointer-events:none;transform:translate(-50%,-24px)}

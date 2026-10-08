@@ -13,7 +13,7 @@ const motionPath = process.env.LIVE_MOTION_COMPONENT;
 const { actionFrame, between } = motionPath ? await import(/* @vite-ignore */ motionPath) : await import('@/components/pitch-motion/motion');
 
 const viewerPath = process.env.LIVE_MOTION_VIEWER;
-const { LiveSimScreen, stagePitchInput } = viewerPath ? await import(/* @vite-ignore */ viewerPath) : await import('@/components/club-manager/LiveSimScreen');
+const { LiveSimScreen, stagePitchInput, goalCardCount } = viewerPath ? await import(/* @vite-ignore */ viewerPath) : await import('@/components/club-manager/LiveSimScreen');
 const seeded = (seed: number) => () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
 const scene = {
   mine: [{ key: 'm0', name: 'Home keeper', keeper: true, x: 50, y: 90 }, { key: 'm9', name: 'Home striker', keeper: false, x: 40, y: 40 }],
@@ -73,6 +73,11 @@ function findTerminalFixtures() {
          may still be in the air when the wind up is read: a chance two minutes
          before the whistle would be. */
       if (feed.some(e => e !== event && ['goal', 'save', 'shot'].includes(e.kind) && clockPos(e) === cap + board - 2)) continue;
+      /* Round 1101: a goal that plays out inside the stretch these tests walk (a goal of this period, at or
+         after the opening minute, not the last kick itself) now holds the clock for its card, and the whistle
+         these tests time to the frame would come late. No assertion and no timing below changes: such a half
+         is simply not taken as the fixture. */
+      if (feed.some(e => e !== event && e.kind === 'goal' && e.minute <= cap && e.minute > cap - 45 && clockPos(e) >= cap - 1.2)) continue;
       const key = `${cap}:${event.kind}`;
       if (terminalFixtures.has(key)) continue;
       const copy = structuredClone(career);
@@ -113,6 +118,8 @@ function findWhistleMaterial() {
     const r1 = playNextEntry(pre!);
     if (r1.kind !== 'halftime' || !r1.state.live) continue;
     const second = startSecondHalf(r1.state)!;
+    /* Round 1101: for the same reason a second half with a goal from the 90th minute on is not taken. */
+    if (liveFeed(second.live!).some(e => e.kind === 'goal' && e.minute >= 90)) continue;
     if (isExtraTimeDue(second)) due ??= second; else notDue ??= second;
   }
   expect(due, 'no seed left the decider level at 90').not.toBeNull();
@@ -535,7 +542,11 @@ describe('Live simcast motion', () => {
     const root = () => mounted.container.querySelector('[data-cm-live-stage]')!;
     for (let t = 0; t < 12000 && root().getAttribute('data-cm-live-plus') !== String(plus); t += 100) await step(100);
     expect(root().getAttribute('data-cm-live-plus')).toBe(String(plus));
-    const banner = [...mounted.container.querySelectorAll('div')].find(d => d.childElementCount > 0 && (d.textContent ?? '').startsWith('GOAL!') && d.className.includes('truncate'));
+    /* Round 1101: the goal plays out before it is announced, so its line rises with the card when the ball is
+       in the net. Wait for it, 1,200 ms at most; the three assertions below are as they were. */
+    const announced = () => [...mounted.container.querySelectorAll('div')].find(d => d.childElementCount > 0 && (d.textContent ?? '').startsWith('GOAL!') && d.className.includes('truncate'));
+    for (let waited = 0; waited < 1200 && !announced(); waited += 50) await step(50);
+    const banner = announced();
     expect(banner, 'no goal banner on screen at the goal').toBeTruthy();
     expect(banner!.textContent).toContain(goal!.text);
     expect(banner!.textContent!.endsWith(` 90+${plus}'`), `the banner reads "${banner!.textContent}"`).toBe(true);
@@ -910,4 +921,120 @@ describe('The pitch part on real feeds', () => {
     /* The set aside cases stay the exception: a goal in the first minute of a period, two chances a minute apart. */
     expect(total(t => t.underKickoff) + total(t => t.cutShort)).toBeLessThan(total(t => t.chances) / 3);
   }, LONG);
+});
+
+/* ─────────────────────────────────────────────────────────────────────────────────────────────
+   Round 1101: the goal sequence, through the real viewer on real engine feeds. */
+describe('The goal sequence', () => {
+  it('the score waits for the ball and the card lands at net contact', async () => {
+    const fixture = fixtures.get('goal')!;
+    const career = structuredClone(fixture.career);
+    const place = clockPos(fixture.event);
+    const before = scoreBy(career, place - 1), after = scoreBy(career, place);
+    expect(after).not.toBe(before);
+    const mounted = mount(career);
+    const pitch = () => mounted.container.querySelector('[data-cm-live-pitch]')!;
+    const card = () => mounted.container.querySelector<HTMLButtonElement>('[data-cm-goal-card]');
+    await step(430);
+    /* The line has fired and the ball is on its way: the old score, and no card yet. */
+    expect(pitch().getAttribute('data-cm-motion')).toBe('goal');
+    expect(readScore(mounted.container)).toBe(before);
+    expect(card()).toBeNull();
+    await step(660);
+    /* 1,090 ms in: the ball is in the net, the score has changed, the card is up with the scorer's line. */
+    expect(pitch().getAttribute('data-cm-motion-phase')).toBe('net');
+    expect(readScore(mounted.container)).toBe(after);
+    expect(card()).not.toBeNull();
+    expect(card()!.firstElementChild!.className).toContain('truncate');
+    expect(card()!.firstElementChild!.textContent!.startsWith('GOAL!')).toBe(true);
+    expect(card()!.firstElementChild!.textContent).toContain(fixture.event.text);
+    /* The clock all but stops while the card is up: well over a second later the goal is still being shown.
+       (At the default 2x the hold is 1.8 real seconds; without it the action would have ended 0.3 seconds in.) */
+    await step(1400);
+    expect(pitch().getAttribute('data-cm-motion')).toBe('goal');
+    expect(card()).not.toBeNull();
+    /* A tap carries on. */
+    fireEvent.click(card()!);
+    await step(48);
+    expect(card()).toBeNull();
+    expect(pitch().getAttribute('data-cm-motion')).toBe('pass');
+    expect(readScore(mounted.container)).toBe(after);
+    expect(mounted.callbacks.onChange).not.toHaveBeenCalled();
+  }, 60000);
+
+  it("the card's season count is the settled count", () => {
+    vi.mocked(Math.random).mockImplementation(seeded(110177));
+    let career = startCareer('Aston Villa');
+    let checked = 0, matches = 0;
+    for (let guard = 0; guard < 300 && checked < 8; guard++) {
+      const next = playNextEntry(career);
+      career = next.state;
+      if (next.kind === 'seasonOver' || career.sacked) break;
+      if (next.kind !== 'halftime' || !career.live) continue;
+      const second = startSecondHalf(career)!;
+      const feed = liveFeed(second.live!);
+      /* What each of my goals' cards would print, read before the match is settled. */
+      const cards = feed.filter(e => e.kind === 'goal' && e.side === 'me').map(e => ({ e, count: goalCardCount(second, feed, e) }));
+      const done = resumeMatch(second);
+      career = done.state;
+      matches++;
+      for (const { e, count } of cards) {
+        const row = career.squad.find(p => p.name === e.text);
+        if (!row || count.season === null) continue;
+        /* His goals later in that match: all the settled report gives him, less the ones up to this card. */
+        const later = (done.report?.myScorers ?? []).filter(line => line.name === e.text).length - count.nth;
+        expect(later).toBeGreaterThanOrEqual(0);
+        expect(count.season, `${e.text} at ${e.minute}'`).toBe(row.seasonGoals - later);
+        checked++;
+      }
+    }
+    console.log(`[1101 card] matches ${matches}, cards of mine checked against the settled squad row ${checked}`);
+    expect(checked).toBeGreaterThanOrEqual(8);
+  }, 120000);
+
+  /* Skip fires every line still to come at once, late. The last chance of the half, when it is a goal, used
+     to stay behind as the action on the pitch and was replayed when the second half opened, and a moment
+     built from it would open the second half one goal short or under a card for a first half goal. */
+  it('after Skip the second half opens on the right score, with no card and nothing replayed', async () => {
+    const base = fixtures.get('goal')!.career;
+    let first: CareerState | null = null;
+    let second: CareerState | null = null;
+    for (let attempt = 0; attempt < 3000 && !first; attempt++) {
+      vi.mocked(Math.random).mockImplementation(seeded(110190 + attempt * 104729));
+      const drawn = changeLive(base, 0, { kind: 'shape', mentality: 'balanced' })!;
+      const board = boardAt(drawn, 45);
+      const chances = liveFeed(drawn.live!).filter(e => e.minute <= 45 && ['goal', 'save', 'shot'].includes(e.kind));
+      const last = chances[chances.length - 1];
+      /* The last chance of the half is a goal, inside the forty five, and nothing is struck with the last kick. */
+      if (!last || last.kind !== 'goal' || clockPos(last) > 45 || chances.some(e => clockPos(e) === 45 + board)) continue;
+      const next = startSecondHalf(structuredClone(drawn))!;
+      /* And nothing real happens in the first two minutes of the second half, so what is on screen there is the restart. */
+      if (liveFeed(next.live!).some(e => e.minute >= 46 && e.minute <= 47 && e.kind !== 'halftime')) continue;
+      first = structuredClone(drawn);
+      second = next;
+    }
+    expect(first, 'no seed ended a first half on a goal as its last chance').not.toBeNull();
+    first!.live!.minute = 1;
+    const callbacks = { onSub: vi.fn(), onShape: vi.fn(), onTalk: vi.fn(), onSecondHalf: vi.fn(), onExit: vi.fn(), onStartSecondHalf: vi.fn(), onStartExtraTime: vi.fn(), onChange: vi.fn(), onMark: vi.fn() };
+    function Page() {
+      const [career, setCareer] = useState<CareerState>(first!);
+      return <LiveSimScreen career={career} live={career.live ?? null} report={null} clubColor="#86bced" {...callbacks}
+        onStartSecondHalf={() => { callbacks.onStartSecondHalf(); setCareer(() => second!); }} />;
+    }
+    const mounted = render(<Page />);
+    await step(160);
+    fireEvent.click(mounted.getByRole('button', { name: /Skip/ }));
+    await step(64);
+    expect(stageOf(mounted.container)).toBe('interval');
+    fireEvent.click(mounted.getByRole('button', { name: 'Second half' }));
+    await step(64);
+    expect(stageOf(mounted.container)).toBe('second');
+    expect(callbacks.onStartSecondHalf).toHaveBeenCalledTimes(1);
+    for (let waited = 0; waited < 800; waited += 100) {
+      expect(readScore(mounted.container)).toBe(scoreAt(first!, 45));
+      expect(mounted.container.querySelector('[data-cm-goal-card]')).toBeNull();
+      expect(mounted.container.querySelector('[data-cm-live-pitch]')!.getAttribute('data-cm-motion')).toBe('pass');
+      await step(100);
+    }
+  }, 120000);
 });
