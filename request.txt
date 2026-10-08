@@ -1,0 +1,3 @@
+#!playwright
+writesaresent: node scripts/simWritesAreSent.mjs
+vitest-whole: node node_modules/vitest/vitest.mjs run --reporter=dot

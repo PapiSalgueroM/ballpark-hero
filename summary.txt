@@ -1,0 +1,2 @@
+writesaresent exit=1 1s | simWritesAreSent: 1 failure
+vitest-whole exit=1 378s |    Duration  377.69s (transform 27.94s, setup 16.57s, collect 121.44s, tests 786.59s, environment 123.16s, prepare 25.24s)
