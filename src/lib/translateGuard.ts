@@ -99,6 +99,8 @@ interface Live {
   remove(parent: Node, child: Node): boolean;
   /** React inserts before `reference`, which `parent` no longer holds. What stands there now, or null. */
   before(parent: Node, reference: Node): Node | null;
+  /** React wrote new words into `text` while it is off the page. `was` is what it held before. */
+  wrote(text: Node, was: string | null): void;
 }
 
 const isWrapper = (node: Node | null): node is Element => !!node && node.nodeType === 1 && node.nodeName === 'FONT';
@@ -217,6 +219,15 @@ function makeLive(win: GuardWindow, native: Natives): Live | null {
       stats.inserted += 1;
       return shown.get(reference) || null;
     },
+    wrote(text, was) {
+      flush();
+      const copy = shown.get(text);
+      if (!copy) return;
+      const parent = copy.parentNode;
+      // Nothing to do when the translator's copy is gone, or when the words did not change.
+      if (!parent || text.nodeValue === was) return;
+      refresh(parent);
+    },
   };
 }
 
@@ -270,6 +281,33 @@ export function installTranslateGuard(win: GuardWindow = window as GuardWindow):
     }
     return nativeInsertBefore.call(this, node, reference) as T;
   };
+
+  // React rewrites a string in place through nodeValue (and uses nothing else for it). On a node the
+  // translator took, that write lands off the page and the screen keeps the old words. A node that is on
+  // the page, or is not text, costs two reads here and goes straight to the browser's own setter.
+  const slot = live ? Object.getOwnPropertyDescriptor(proto, 'nodeValue') : undefined;
+  if (live && slot && slot.get && slot.set && slot.configurable) {
+    const readValue = slot.get;
+    const writeValue = slot.set;
+    Object.defineProperty(proto, 'nodeValue', {
+      configurable: true,
+      enumerable: slot.enumerable,
+      get: readValue,
+      set(this: Node, value: string | null) {
+        if (this.nodeType !== 3 || this.isConnected) {
+          writeValue.call(this, value);
+          return;
+        }
+        const was = readValue.call(this) as string | null;
+        writeValue.call(this, value);
+        try {
+          live.wrote(this, was);
+        } catch {
+          // the write itself went through, which is all layer one promises
+        }
+      },
+    });
+  }
 
   proto[MARK] = true;
   return true;

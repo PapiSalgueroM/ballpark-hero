@@ -20,6 +20,19 @@
  *  3. Ordinary calls are untouched: a real child is removed, a real reference
  *     is respected, and a null child still throws as the browser's own does.
  *  4. Installing twice wraps once, and the off switch leaves the methods alone.
+ *
+ * Round 1141 adds layer two, and what its tests hold is not "it did not throw"
+ * but the words on the page afterwards, under a translator that behaves the
+ * way the real one was measured to (translateReal below):
+ *  5. A string React removes takes its translated copy with it, and the rest of
+ *     the sentence goes back to the translator whole.
+ *  6. A new node lands before the translated string it precedes.
+ *  7. A string React rewrites in place shows its new words, the label beside it
+ *     stays, a hundred rewrites leave the same two nodes, and a translator
+ *     answer that arrives late cannot bring older words back.
+ *  8. An untranslated page triggers nothing: every counter stays where it was.
+ *  9. The control: a second window with layer two switched off gets the same
+ *     calls and shows the frozen number and the stale word again.
  */
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { Component, useState, type ReactNode } from 'react';
@@ -82,9 +95,9 @@ function Banner() {
  * Called again after a change, it does what the real one does next: it takes whatever text is new.
  */
 const takenOnce = new WeakSet<Node>();
-function translateReal(root: Element) {
-  const doc = root.ownerDocument;
-  const walker = doc.createTreeWalker(root, 4 /* NodeFilter.SHOW_TEXT */);
+/** What the translator reads: every sentence of new text under root, with the words it holds right now. */
+function readNewText(root: Element) {
+  const walker = root.ownerDocument.createTreeWalker(root, 4 /* NodeFilter.SHOW_TEXT */);
   const texts: Text[] = [];
   while (walker.nextNode()) texts.push(walker.currentNode as Text);
   const fresh = texts.filter(t => t.nodeValue && t.nodeValue.trim() && !takenOnce.has(t) && !t.parentElement?.closest('font'));
@@ -94,20 +107,30 @@ function translateReal(root: Element) {
     if (last && last[last.length - 1].nextSibling === t) last.push(t);
     else runs.push([t]);
   }
-  for (const run of runs) {
-    const wrappers = run.map(t => {
+  return runs.map(run => ({ run, words: run.map(t => t.nodeValue).join('') }));
+}
+/** What it does with the answer: the swap, with the words it READ, on whichever of those nodes are still on the page. */
+function answer(jobs: ReturnType<typeof readNewText>) {
+  for (const { run, words } of jobs) {
+    const here = run.filter(t => t.isConnected);
+    if (!here.length) continue;
+    const doc = here[0].ownerDocument;
+    const wrappers = here.map(t => {
       const outer = doc.createElement('font');
       t.parentNode!.insertBefore(outer, t);
       return outer;
     });
     const inner = doc.createElement('font');
-    inner.textContent = `pt:${run.map(t => t.nodeValue).join('')}`;
+    inner.textContent = `pt:${words}`;
     wrappers[wrappers.length - 1].appendChild(inner);
-    for (const t of run) {
+    for (const t of here) {
       takenOnce.add(t);
       t.parentNode!.removeChild(t);
     }
   }
+}
+function translateReal(root: Element) {
+  answer(readNewText(root));
 }
 const fontsIn = (el: Element) => el.querySelectorAll('font').length;
 /** Lets the observer read what has happened so far, so a count taken next is a count of what comes after. */
@@ -132,6 +155,28 @@ function Money() {
     <div>
       <button onClick={() => setPlus(true)}>gain</button>
       <p data-testid="money">{plus ? '+' : ''}{'$50k'}</p>
+    </div>
+  );
+}
+
+/** The header's shape: a label and a number React rewrites in place. */
+function Counter() {
+  const [age, setAge] = useState(16);
+  return (
+    <div>
+      <button onClick={() => setAge(a => a + 1)}>older</button>
+      <p data-testid="age">Age {age}</p>
+    </div>
+  );
+}
+
+/** The Bank again, whole: the sign arrives and the figure changes in one commit. */
+function Ledger() {
+  const [amount, setAmount] = useState(-100);
+  return (
+    <div>
+      <button onClick={() => setAmount(50)}>repay</button>
+      <p data-testid="ledger">{amount >= 0 ? '+' : ''}{`$${amount}k`}</p>
     </div>
   );
 }
@@ -382,5 +427,208 @@ describe('layer two: a new node lands before the string it precedes', () => {
     const fresh = document.createElement('i');
     parent.insertBefore(fresh, document.createTextNode('gone'));
     expect(Array.from(parent.childNodes)).toEqual([kept, fresh]);
+  });
+});
+
+describe('layer two: a string React rewrites in place shows its new words', () => {
+  it('a number beside a label shows the new number, and the label is still there', async () => {
+    const { container } = render(<Boundary><Counter /></Boundary>);
+    const age = screen.getByTestId('age');
+    const [label, number] = Array.from(age.childNodes);
+    translateReal(container);
+    // the label's own wrapper is empty: its word lives in the number's wrapper
+    expect(Array.from(age.children).map(c => c.textContent)).toEqual(['', 'pt:Age 16']);
+    await settle();
+    const before = stats();
+    act(() => {
+      fireEvent.click(screen.getByRole('button'));
+    });
+    expect(age.textContent).toBe('Age 17');
+    expect(fontsIn(age)).toBe(0);
+    expect(age.childNodes.length).toBe(2);
+    expect(stats().restored).toBe(before.restored + 2);
+    // React's own nodes stay off the page: the translator would never look at them again
+    expect(label.isConnected).toBe(false);
+    expect(number.isConnected).toBe(false);
+    expect(number.nodeValue).toBe('17');
+    translateReal(container);
+    expect(age.textContent).toBe('pt:Age 17');
+    // and again, now over the wrappers the translator made for the stand ins
+    act(() => {
+      fireEvent.click(screen.getByRole('button'));
+    });
+    expect(age.textContent).toBe('Age 18');
+    translateReal(container);
+    expect(age.textContent).toBe('pt:Age 18');
+  });
+
+  it('a hundred updates leave exactly the nodes it started with', async () => {
+    const { container } = render(<Boundary><Counter /></Boundary>);
+    const age = screen.getByTestId('age');
+    translateReal(container);
+    for (let i = 1; i <= 100; i++) {
+      act(() => {
+        fireEvent.click(screen.getByRole('button'));
+      });
+      expect(age.childNodes.length).toBe(2);
+      expect(age.textContent).toBe(`Age ${16 + i}`);
+      // the translator answers some of the time, and is still working at others
+      if (i % 3 === 0) {
+        translateReal(container);
+        expect(age.textContent).toBe(`pt:Age ${16 + i}`);
+      }
+      if (i % 2 === 0) await settle();
+    }
+    translateReal(container);
+    expect(age.textContent).toBe('pt:Age 116');
+    expect(age.childNodes.length).toBe(2);
+    expect(fontsIn(age)).toBe(3);
+    expect(screen.queryByRole('alert')).toBeNull();
+  });
+
+  it('a translator still working on older words cannot bring them back', async () => {
+    const { container } = render(<Boundary><Counter /></Boundary>);
+    const age = screen.getByTestId('age');
+    translateReal(container);
+    await settle();
+    act(() => {
+      fireEvent.click(screen.getByRole('button'));
+    });
+    expect(age.textContent).toBe('Age 17');
+    // the translator has read "Age " and "17", and its answer is on the way
+    const late = readNewText(age);
+    expect(late.map(j => j.words)).toEqual(['Age 17']);
+    await settle();
+    act(() => {
+      fireEvent.click(screen.getByRole('button'));
+    });
+    // measured on the real one: an answer lands on the node it read, with the words it read then
+    answer(late);
+    expect(age.textContent).toBe('Age 18');
+    translateReal(container);
+    expect(age.textContent).toBe('pt:Age 18');
+  });
+
+  it('a sign that arrives and a figure that changes in the same commit both show', async () => {
+    const { container } = render(<Boundary><Ledger /></Boundary>);
+    translateReal(container);
+    const ledger = screen.getByTestId('ledger');
+    expect(ledger.textContent).toBe('pt:$-100k');
+    await settle();
+    const before = stats();
+    act(() => {
+      fireEvent.click(screen.getByRole('button'));
+    });
+    expect(ledger.textContent).toBe('+$50k');
+    expect(ledger.childNodes.length).toBe(2);
+    // one stand in for the figure, made by the insert and then written in the same turn, not made twice
+    expect(stats().restored).toBe(before.restored + 1);
+    translateReal(container);
+    expect(ledger.textContent).toBe('pt:+$50k');
+  });
+
+  it('hiding a string and showing it again works off the page too', () => {
+    const p = document.body.appendChild(document.createElement('p'));
+    const words = p.appendChild(document.createTextNode('Sponsor deal signed'));
+    translateReal(p);
+    expect(p.textContent).toBe('pt:Sponsor deal signed');
+    words.nodeValue = '';
+    expect(p.textContent).toBe('');
+    expect(fontsIn(p)).toBe(0);
+    words.nodeValue = 'Sponsor deal signed';
+    expect(p.textContent).toBe('Sponsor deal signed');
+    expect(p.childNodes.length).toBe(1);
+    translateReal(p);
+    expect(p.textContent).toBe('pt:Sponsor deal signed');
+    p.remove();
+  });
+
+  it('writing the same words again leaves the translation alone', async () => {
+    const p = document.body.appendChild(document.createElement('p'));
+    const words = p.appendChild(document.createTextNode('Season one'));
+    translateReal(p);
+    const wrapper = p.firstChild;
+    await settle();
+    const before = stats();
+    words.nodeValue = 'Season one';
+    expect(p.firstChild).toBe(wrapper);
+    expect(stats()).toEqual(before);
+    p.remove();
+  });
+
+  it('an untranslated page triggers nothing at all', async () => {
+    await settle();
+    const before = stats();
+    render(
+      <Boundary>
+        <Picker />
+        <Banner />
+        <Header />
+        <Money />
+        <Counter />
+        <Ledger />
+      </Boundary>,
+    );
+    for (const button of screen.getAllByRole('button')) {
+      act(() => {
+        fireEvent.click(button);
+      });
+    }
+    await settle();
+    expect(screen.getByTestId('trigger').textContent).toBe('Brazil');
+    expect(screen.getByTestId('line').textContent).toBe('NEWtail words');
+    expect(screen.getByTestId('header').textContent).toBe('Striker · Age  · England');
+    expect(screen.getByTestId('money').textContent).toBe('+$50k');
+    expect(screen.getByTestId('age').textContent).toBe('Age 17');
+    expect(screen.getByTestId('ledger').textContent).toBe('+$50k');
+    expect(document.querySelectorAll('font').length).toBe(0);
+    expect(stats()).toEqual(before);
+  });
+});
+
+/**
+ * THE CONTROL. A second window (a frame has its own Node.prototype) gets the guard with layer two switched
+ * off, and the same calls React makes are played in both. Without layer two the page does not throw, and
+ * the number is frozen and the old word stays: exactly what Round 1140 shipped and this round is for.
+ */
+describe('the control: layer one alone leaves the stale word and the frozen number', () => {
+  function play(doc: Document) {
+    const p = doc.body.appendChild(doc.createElement('p'));
+    const label = p.appendChild(doc.createTextNode('Age '));
+    const number = p.appendChild(doc.createTextNode('16'));
+    translateReal(p);
+    const translated = p.textContent;
+    number.nodeValue = '17';
+    const afterWrite = p.textContent;
+    p.insertBefore(doc.createElement('i'), number).textContent = 'NEW ';
+    const afterInsert = p.textContent;
+    p.removeChild(label);
+    const afterRemove = p.textContent;
+    p.remove();
+    return { translated, afterWrite, afterInsert, afterRemove };
+  }
+
+  it('the same calls, with and without layer two', () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const frame = document.body.appendChild(document.createElement('iframe'));
+    const other = frame.contentWindow as unknown as NonNullable<Parameters<typeof installTranslateGuard>[0]>;
+    expect(other.Node === Node).toBe(false);
+    other.__DUKB_NO_TRANSLATE_LIVE__ = true;
+    expect(installTranslateGuard(other)).toBe(true);
+    expect(other.__dukbTranslateStats).toBeUndefined();
+
+    expect(play(other.document)).toEqual({
+      translated: 'pt:Age 16',
+      afterWrite: 'pt:Age 16', // frozen
+      afterInsert: 'pt:Age 16NEW ', // at the end, not before the number
+      afterRemove: 'pt:Age 16NEW ', // the label's words never leave
+    });
+    expect(play(document)).toEqual({
+      translated: 'pt:Age 16',
+      afterWrite: 'Age 17',
+      afterInsert: 'Age NEW 17',
+      afterRemove: 'NEW 17',
+    });
+    frame.remove();
   });
 });
