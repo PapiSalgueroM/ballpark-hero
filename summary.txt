@@ -1,0 +1,3 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=0 15s | playClubManagerNewCountries: green. Russia can be picked, started and reopened at 390x844 and 1280x800.
+walk-nonation exit=1 20s | playClubManagerNewCountries: 2 failure(s) under control nonation
