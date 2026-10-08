@@ -1,0 +1,15 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+coach: node scripts/simUsCoachPoaching.mjs
+coach-phantom: US_COACH_POACHING_CONTROL=phantom node scripts/simUsCoachPoaching.mjs
+coach-credit: US_COACH_POACHING_CONTROL=credit node scripts/simUsCoachPoaching.mjs
+coach-rng: US_COACH_POACHING_CONTROL=rng node scripts/simUsCoachPoaching.mjs
+coachcareer: node scripts/simUsCoachCareer.mjs
+season: node scripts/simUsSeasonCentre.mjs
+season-short82: US_SEASON_CONTROL=short82 node scripts/simUsSeasonCentre.mjs
+sense-full: SENSE_PROVE_OTHERS=1 node scripts/simNbaAwardsSense.mjs
+parity: node scripts/simUsBoardParity.mjs
+vitest-fix: node_modules/.bin/vitest run src/lib/usCoachPoaching.test.ts src/test/nbaTrophyTile.test.ts src/test/usSeason.test.ts src/test/usSeasonCentre.test.tsx src/test/nbaOldSaveLines.test.ts --testTimeout=300000 --hookTimeout=120000
+hall-nba: node scripts/simCareerHall.mjs nba
+anchors: node scripts/simHarnessAnchors.mjs
+probe3: node .rc/x/rv-probe3.mjs 1500 4
+tileprobe: node .rc/x/fx2-probe.mjs 1500 4
