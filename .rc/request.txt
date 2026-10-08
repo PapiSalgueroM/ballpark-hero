@@ -1,0 +1,12 @@
+#!serve
+#!playwright
+plain: ENGINES=chromium node scripts/playTranslatedPage.mjs
+noguard: PLAY_TRANSLATED_CONTROL=noguard ENGINES=chromium node scripts/playTranslatedPage.mjs
+notranslate: PLAY_TRANSLATED_CONTROL=notranslate ENGINES=chromium node scripts/playTranslatedPage.mjs
+bogus: PLAY_TRANSLATED_CONTROL=bogus ENGINES=chromium node scripts/playTranslatedPage.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/translateGuard.test.tsx --testTimeout=300000 --hookTimeout=120000
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simSingleFooter: node scripts/simSingleFooter.mjs
