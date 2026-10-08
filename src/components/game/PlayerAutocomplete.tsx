@@ -1,3 +1,4 @@
+import { flushSync } from 'react-dom';
 import { foldSpecialLatin } from '@/lib/nameFold';
 import { useState, useEffect, useRef, useCallback, useMemo, useId, type KeyboardEvent } from 'react';
 import { Loader2, Search } from 'lucide-react';
@@ -332,7 +333,12 @@ export function PlayerAutocomplete({
     const mergeLocal = (remote: PlayerEntity[]): PlayerEntity[] =>
       mergeLocalNames(remote, localNames, value, searchOptions.exclude);
 
-    debounceRef.current = window.setTimeout(() => {
+    /* Release AO, Round 1138's close on Round 1105: a box with no debounce
+       (College Grid's board answers from memory) calls the search at once, not
+       through a zero timer, and commits the answer inside flushSync. With the
+       timer the "Finding players" row was painted for a frame on most keys.
+       A box with a debounce runs exactly as it did. */
+    const runSearch = () => {
       const thisRequestId = ++requestIdRef.current;
       abortRef.current?.abort();
       const controller = new AbortController();
@@ -344,11 +350,14 @@ export function PlayerAutocomplete({
           // longer the latest one fired (covers out-of-order network
           // resolution, not just cancellation).
           if (thisRequestId !== requestIdRef.current) return;
-          setSuggestions(mergeLocal(results));
-          setHeldTag(requestTag);
-          setSearchFailed(Boolean(error));
-          setLoading(false);
-          setHighlightedIndex(-1);
+          const commit = () => {
+            setSuggestions(mergeLocal(results));
+            setHeldTag(requestTag);
+            setSearchFailed(Boolean(error));
+            setLoading(false);
+            setHighlightedIndex(-1);
+          };
+          if (debounceMs <= 0) flushSync(commit); else commit();
           // searchPlayers settles an aborted search as empty with no error, so
           // the signal is checked too: an abort is never a "no results". The
           // merge is only redone for a caller that listens.
@@ -363,7 +372,8 @@ export function PlayerAutocomplete({
           setSearchFailed(!(error instanceof DOMException && error.name === 'AbortError'));
           setLoading(false);
         });
-    }, debounceMs);
+    };
+    if (debounceMs <= 0) runSearch(); else debounceRef.current = window.setTimeout(runSearch, debounceMs);
 
     return () => {
       if (debounceRef.current) window.clearTimeout(debounceRef.current);

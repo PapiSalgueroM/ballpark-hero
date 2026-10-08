@@ -17,7 +17,9 @@ const controls = {
   local: { file: 'component', test: 'keeps useful local matches selectable', edits: [['{!loading && suggestions.length === 0 && (', '{!loading && (']] },
   stale: { file: 'component', test: 'ignores an old failure after a newer request', edits: [['if (thisRequestId !== requestIdRef.current) return;', '', 2]] },
   cleanup: { file: 'component', test: 'keeps a cleared in-flight search quiet', edits: [['      ++requestIdRef.current;\n      abortRef.current?.abort();', '']] },
-  abort: { file: 'library', test: 'suppresses an intentionally aborted request', edits: [['    if (signal?.aborted) return { results: [], error: null };', '']] },
+  /* Release AO: since Round 1105 the library holds this statement twice (the in memory source got its own). The
+     named test aborts a REQUEST, so the control binds the one after the two request legs, by the line above it. */
+  abort: { file: 'library', test: 'suppresses an intentionally aborted request', edits: [['    ]);\n\n    if (signal?.aborted) return { results: [], error: null };', '    ]);\n']] },
 };
 assert.ok(!control || Object.hasOwn(controls, control), 'Unknown player-search failure control');
 const verifyBytes = [];
