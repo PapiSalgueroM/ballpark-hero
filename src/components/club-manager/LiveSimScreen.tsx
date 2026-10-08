@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
-import { Pause, Play, FastForward, Users, ArrowLeftRight, Gauge, X } from 'lucide-react';
+import { Pause, Play, FastForward, Users, ArrowLeft, ArrowLeftRight, Gauge, X } from 'lucide-react';
 import {
   FORMATIONS, MENTALITIES, slotPosition, pitchLineOf, resolveXI, extraTimeCall,
   liveFeed, liveStatsAt, myOnPitchAt, oppOnPitchAt, squadNumbers, benchFor, MAX_SUBS, liveGoneIds,
@@ -103,6 +103,10 @@ interface Seg { t: string; gen?: boolean; }
 interface Banner { segs: Seg[]; club: string; tone: Side | 'none'; }
 /** Round 1101: a goal that is playing out on the pitch. The card rises with it when the ball is in the net. */
 interface GoalMoment { key: string; at: number; side: Side; segs: Seg[]; club: string; nth: number; season: number | null; }
+/** Round 1101: the one panel that can be open beside (or, on a phone, over the foot of) the pitch. */
+type Panel = 'stats' | 'squad' | 'help' | 'kicks';
+/** Round 1101: one line of the match as it was announced, for the list beside the pitch on a wide screen. */
+interface LogLine { key: string; at: string; segs: Seg[]; }
 
 interface LiveSimScreenProps {
   career: CareerState;
@@ -234,6 +238,25 @@ export function goalCardCount(career: CareerState, feed: LiveFeedEvent[], goal: 
   const nth = feed.filter((e, i) => e.kind === 'goal' && e.side === goal.side && e.text === goal.text && (upTo < 0 || i <= upTo)).length;
   const player = goal.side === 'me' ? career.squad.find(p => p.name === goal.text) : undefined;
   return { nth, season: player ? (player.seasonGoals ?? 0) + nth : null };
+}
+
+/**
+ * Round 1101: whose name is drawn above his figure instead of under it. A name sits just under its figure,
+ * which is exactly where the next man and his name are when two stand close, so the name of the one in
+ * front goes up out of the way: another figure within LABEL_ACROSS units across and 0 to LABEL_BELOW units
+ * below him. Two men level with each other take one each (the later key keeps his under). A pure function
+ * of the frame. The brief drew the rule at 7 across, which keeps a name off the next FIGURE; a name is up to
+ * 52 px wide, 13 units of a phone's pitch, so two names still ran into each other between 7 and 12.
+ */
+const LABEL_ACROSS = 12;
+const LABEL_BELOW = 6;
+export function labelsAbove(figures: { key: string; x: number; y: number }[]): Set<string> {
+  const up = new Set<string>();
+  for (const a of figures) {
+    if (figures.some(b => b !== a && Math.abs(b.x - a.x) < LABEL_ACROSS
+      && (b.y - a.y > 0 || (b.y === a.y && b.key > a.key)) && b.y - a.y <= LABEL_BELOW)) up.add(a.key);
+  }
+  return up;
 }
 
 /** Round 1101: a 32 bit hash of a string, the pitch's seed. Nothing in this file draws a random number. */
@@ -391,7 +414,12 @@ export function LiveSimScreen({
   const [speed, setSpeed] = useState<(typeof SPEEDS)[number]>(2);
   const [paused, setPaused] = useState(false);
   const [finished, setFinished] = useState(false);
-  const [showSquad, setShowSquad] = useState(false);
+  /* Round 1101: match mode. One panel at a time, the kicks of a shootout open by themselves at the
+     whistle, and Back folds the whole screen away to a small card in the page. */
+  const [panel, setPanel] = useState<Panel | null>(() => (report?.shootout ? 'kicks' : null));
+  const [collapsed, setCollapsed] = useState(false);
+  const pausedBeforeBack = useRef(false);
+  const [log, setLog] = useState<LogLine[]>([]);
   const [banner, setBanner] = useState<Banner | null>(null);
   const [eventLine, setEventLine] = useState<Seg[] | null>(null);
   const [motionEvent, setMotionEvent] = useState<MotionEvent | null>(null);
@@ -399,7 +427,6 @@ export function LiveSimScreen({
      hold rate is read by the clock's own frame, and the render sets it. */
   const [goalMoment, setGoalMoment] = useState<GoalMoment | null>(null);
   const holdRate = useRef(0);
-  const [showHelp, setShowHelp] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(() => typeof window !== 'undefined' && typeof window.matchMedia === 'function'
     && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   useEffect(() => {
@@ -663,6 +690,8 @@ export function LiveSimScreen({
       setClock(report.detail?.et?.to ?? 90);
       setPicking(null);
       setEventLine(null);
+      /* Round 1101: a match settled on penalties opens its kicks at the whistle. */
+      setPanel(report.shootout ? 'kicks' : null);
     }
   }, [report, stage]);
 
@@ -719,6 +748,7 @@ export function LiveSimScreen({
     let small: Seg[] | null = null;
     let moved: LiveFeedEvent | null = null;
     let scored: { e: LiveFeedEvent; key: string; banner: Banner } | null = null;
+    const lines: LogLine[] = [];
     for (const e of feed) {
       /* Round 781: a line in the board fires when the clock reaches its plus. */
       if (e.kind === 'halftime' || e.minute < lo || e.minute > hi || e.minute + (e.plus ?? 0) > clock) continue;
@@ -736,6 +766,8 @@ export function LiveSimScreen({
       const x: Extra | undefined = e.flank || e.penalty || e.freeKick
         ? { flank: e.flank, penalty: e.penalty, freeKick: e.freeKick }
         : extras.get(`${e.kind}:${e.side}:${e.minute}:${e.text}`);
+      const bigBefore = big as Banner | null;
+      const smallBefore = small as Seg[] | null;
       switch (e.kind) {
         case 'goal':
           big = {
@@ -772,7 +804,17 @@ export function LiveSimScreen({
         case 'foul': small = [{ t: 'Foul by ' }, who]; break;
         default: break;
       }
+      /* Round 1101: whatever this line announced also goes on the list beside the pitch, with its minute
+         in front (so the minute a banner ends on is left off). */
+      const bigNow = big as Banner | null;
+      const smallNow = small as Seg[] | null;
+      const said = bigNow !== bigBefore && bigNow ? bigNow.segs : smallNow !== smallBefore ? smallNow : null;
+      if (said) {
+        const at = minuteLabel(e);
+        lines.unshift({ key, at, segs: said.filter(sg => sg.t !== ` ${at}`) });
+      }
     }
+    if (lines.length) setLog(prev => [...lines, ...prev].slice(0, 5));
     /* Round 1101: a goal that fired on time and has the pitch (it is the last chance at its place, so its
        action is the one playing) gets the goal sequence in place of the pill: its card rises when the ball
        is in the net. A goal fired late (Skip, a catch up) keeps the pill, and so does the last kick of a period. */
@@ -854,7 +896,48 @@ export function LiveSimScreen({
     if (picking === id) { closeSheet(); return; }
     if (picking === null) { pausedBefore.current = paused; setPaused(true); }
     setPicking(id);
+    setPanel(null);
   };
+
+  /* ---- match mode (Round 1101): one panel at a time, Back, Escape, and a page that stays put ---- */
+  const togglePanel = (p: Panel) => {
+    if (picking !== null) closeSheet();
+    setPanel(current => (current === p ? null : p));
+  };
+  /* The interval is the real dressing room, drawn in the page as it always was. Everything else of a
+     match (a period being played, the whistle, full time) is the stage. */
+  const stageUp = (!!live || !!report) && !(stage === 'interval' && !!career.live) && !collapsed;
+  /* Back pauses the match and folds the stage away to a small card in the page. */
+  const leaveStage = () => {
+    pausedBeforeBack.current = picking !== null ? pausedBefore.current : paused;
+    setPicking(null);
+    setPaused(true);
+    setCollapsed(true);
+  };
+  /* And the card's one button puts the stage back, with the pause it had. */
+  const backToMatch = () => {
+    setCollapsed(false);
+    setPaused(pausedBeforeBack.current);
+  };
+  /* Escape closes whatever is open, and with nothing open it is Back. */
+  const onEscape = useRef<() => void>(() => {});
+  onEscape.current = () => {
+    if (picking !== null) closeSheet();
+    else if (panel !== null) setPanel(null);
+    else leaveStage();
+  };
+  useEffect(() => {
+    if (!stageUp) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onEscape.current(); };
+    window.addEventListener('keydown', onKey);
+    /* The stage is the whole window, so the page under it must not scroll while it is up. */
+    const was = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      document.body.style.overflow = was;
+    };
+  }, [stageUp]);
   const changeMinute = Math.min(stageEnd, Math.floor(clock));
   /* The sheet holds the clock, and the pause button is locked under it, so
      the only way the picked man leaves the grass with it open is a skip or
@@ -968,341 +1051,458 @@ export function LiveSimScreen({
     ? (report?.detail?.et ? 'AET' : report?.detail?.added ? `FT 90+${report.detail.added.h2}'` : 'FT')
     : finished ? 'Full time' : stage === 'extra' ? `ET ${minuteLabel({ minute, plus })}` : `LIVE ${minuteLabel({ minute, plus })}`;
 
+  /* ---- match mode's own bits (Round 1101) ---- */
+  const kicksUp = panel === 'kicks' && stage === 'done' && !!report?.shootout;
+  const sidePanel: Panel | 'change' | null = sheetOpen ? 'change' : panel === 'kicks' ? (kicksUp ? 'kicks' : null) : panel;
+  const above = labelsAbove([...motion.mine, ...motion.theirs]);
+  const poss = stats ? Math.round(stats.possession) : null;
+  const scoreDigits = (
+    <>
+      <span key={`m${shownMy}`} className={cardUp && gm?.side === 'me' ? 'cm-slam inline-block' : undefined}>{shownMy}</span>
+      {' - '}
+      <span key={`o${shownOpp}`} className={cardUp && gm?.side === 'opp' ? 'cm-slam inline-block' : undefined}>{shownOpp}</span>
+    </>
+  );
+
   return (
-    <div className="max-w-md mx-auto space-y-2.5" data-cm-live-stage={stage} data-cm-live-minute={minute} data-cm-live-plus={plus ?? 0}>
+    <div className="max-w-md mx-auto" data-cm-live-stage={stage} data-cm-live-minute={minute} data-cm-live-plus={plus ?? 0}>
       <CelebrationStyles />
-      {/* Scoreboard */}
-      <div className="bg-card border border-border rounded-2xl p-3">
-        <div className="flex items-center justify-between">
-          <div className="text-[10px] text-muted-foreground uppercase tracking-widest truncate">{compLabel}</div>
+      {collapsed ? (
+        /* Back was pressed: the match waits here, paused, one tap from the stage. */
+        <div data-cm-live-compact="1" className="bg-card border border-border rounded-2xl p-4 text-center">
+          <div className="text-[11px] text-muted-foreground uppercase tracking-widest truncate">{compLabel}</div>
+          <div className="mt-1 flex items-center justify-center gap-3">
+            <div className="flex-1 text-right text-sm font-bold text-primary truncate">{career.clubName}</div>
+            <div data-cm-live-score className="px-3 py-1 rounded-xl bg-secondary font-display text-xl font-bold text-foreground shrink-0 tabular-nums">
+              {scoreDigits}
+            </div>
+            <div className="flex-1 text-left text-sm font-bold text-foreground truncate">{opponent}</div>
+          </div>
+          <div className="mt-1 text-xs text-muted-foreground">
+            {stage === 'done' || finished ? 'Full time' : `Paused at ${minuteLabel({ minute, plus })}`}
+          </div>
           <button
             type="button"
-            onClick={() => setShowHelp(v => !v)}
-            aria-label="How watching a match works"
-            aria-expanded={showHelp}
-            className="ml-auto mr-2 w-11 h-11 shrink-0 rounded-full border border-border bg-background text-sm font-bold text-foreground"
+            onClick={backToMatch}
+            className="mt-3 w-full min-h-[44px] rounded-lg bg-primary text-primary-foreground px-3 text-sm font-bold hover:opacity-90 transition-opacity"
           >
-            ?
+            Back to the match
           </button>
-          <div className={cn(
-            'text-[10px] font-bold px-2 py-0.5 rounded-full',
-            stage === 'done' || finished ? 'bg-secondary text-muted-foreground' : 'bg-red-500/15 text-red-400',
-          )}>
-            {/* Round 472: the whistle went after the board went up, so the
-                badge says when. The number is the report's own. */}
-            {badge}
-          </div>
         </div>
-        <div className="flex items-center justify-center gap-3 mt-1">
-          <div className="flex-1 text-right text-sm font-bold text-primary truncate">{career.clubName}</div>
-          <div data-cm-live-score className="px-3 py-1 rounded-xl bg-secondary font-display text-xl font-bold text-foreground shrink-0 tabular-nums">
-            <span key={`m${shownMy}`} className={cardUp && gm?.side === 'me' ? 'cm-slam inline-block' : undefined}>{shownMy}</span>
-            {' - '}
-            <span key={`o${shownOpp}`} className={cardUp && gm?.side === 'opp' ? 'cm-slam inline-block' : undefined}>{shownOpp}</span>
-          </div>
-          <div className="flex-1 text-left text-sm font-bold text-foreground truncate">{opponent}</div>
-        </div>
-        {/* Round 781: the tie on a second leg, so the night's score is never read alone. */}
-        {legCtx && (
-          <div className="mt-1 text-center text-[10px] text-muted-foreground tabular-nums" data-cm-live-agg={`${legCtx.aggMine}-${legCtx.aggTheirs}`}>
-            First leg {legCtx.leg1Mine}-{legCtx.leg1Theirs} {legCtx.leg1Home ? 'at home' : 'away'} · Agg {legCtx.aggMine - (waitingSide === 'me' ? 1 : 0)}-{legCtx.aggTheirs - (waitingSide === 'opp' ? 1 : 0)}
-          </div>
-        )}
-        {/* The small stuff: chances, saves, corners, throw ins, fouls, at their minutes. */}
-        <div className="min-h-[14px] mt-1 text-center text-[10px] text-muted-foreground truncate" data-cm-live-event="1">
-          {running && !finished && eventLine ? eventLine.map((sg, i) => (
-            <span key={i}>{sg.t}{sg.gen && <MadeUpTag className="ml-1" />}</span>
-          )) : ''}
-        </div>
-      </div>
-
-      {/* The pitch: the shared surface (grass, markings, nets, ball), with this screen's own dots on it. */}
-      <PitchSurface frame={motion} className="w-full rounded-2xl border border-border">
-        {/* their dots: numbers, and names when the engine has an eleven for them */}
-        {motion.theirs.map(d => {
-          const m = manOf.get(d.key);
-          if (!m) return null;
-          return (
-            <div
-              key={d.key}
-              data-cm-dot-opp={m.number}
-              className="absolute flex flex-col items-center pointer-events-none"
-              style={{ left: `${d.x}%`, top: `${d.y}%`, transform: 'translate(-50%, -24px)' }}
-            >
-              <LivePitchPlayer color="#d6e6ed" keeper={d.keeper} pose={motion.poses[d.key]} />
-              <span className="text-[7px] text-white/80 leading-none mt-0.5 max-w-[48px] truncate tabular-nums">
-                {m.number}{m.label ? ` ${m.label}` : ''}{m.gen ? '*' : ''}
-              </span>
-            </div>
-          );
-        })}
-
-        {/* my dots: a tap area a thumb can hit around a dot that stays small */}
-        {motion.mine.map(d => {
-          const m = manOf.get(d.key);
-          if (!m) return null;
-          const captain = !!m.id && m.id === captainId;
-          return (
-            <button
-              key={d.key}
-              type="button"
-              data-cm-dot={m.id ?? ''}
-              data-cm-captain={captain ? '1' : undefined}
-              aria-label={`${m.label}, number ${m.number}${captain ? ', captain' : ''}. Tap to bring somebody on or change the shape.`}
-              disabled={!canChange || !m.id}
-              onClick={() => { if (m.id) openSheet(m.id); }}
-              className={cn(
-                'absolute flex flex-col items-center w-9 min-h-[28px] bg-transparent border-0 p-0 rounded-md',
-                canChange ? 'cursor-pointer' : 'cursor-default',
-              )}
-              style={{ left: `${d.x}%`, top: `${d.y}%`, transform: 'translate(-50%, -24px)' }}
-            >
-              <LivePitchPlayer color={clubColor} keeper={d.keeper} pose={motion.poses[d.key]} selected={picking === m.id} />
-              <span className="text-[7px] text-white/90 leading-none mt-0.5 max-w-[48px] truncate tabular-nums">
-                {m.number} {m.label}
-                {captain && (
-                  <span className="ml-0.5 inline-block px-[2px] rounded-sm bg-yellow-400 text-black font-black leading-[8px] align-middle">C</span>
-                )}
-              </span>
-            </button>
-          );
-        })}
-
-        {/* event banner */}
-        {banner && (
-          <div className={cn(
-            'absolute left-1/2 top-3 -translate-x-1/2 px-3 py-1.5 rounded-full text-[11px] font-bold shadow-lg animate-in fade-in slide-in-from-top-2 pointer-events-none text-center max-w-[92%]',
-            banner.tone === 'me' ? 'bg-emerald-500 text-black' : banner.tone === 'opp' ? 'bg-red-500 text-black' : 'bg-background/90 text-foreground border border-border',
-          )}>
-            <div className="truncate">
-              {banner.segs.map((sg, i) => (
-                <span key={i}>{sg.t}{sg.gen && <MadeUpTag className="ml-1" />}</span>
-              ))}
-            </div>
-            <div className={cn('text-[8px] font-normal leading-none truncate', banner.tone === 'none' ? 'text-muted-foreground' : 'text-black/70')}>{banner.club}</div>
-          </div>
-        )}
-
-        {/* Round 1101: the scorer card. Facts only: who, when, and his count. A tap carries on. */}
-        {cardUp && gm && (
-          <button
-            type="button"
-            data-cm-goal-card={gm.side}
-            onClick={skipGoal}
-            className={cn(
-              'cm-rise absolute inset-x-[7%] top-[16%] z-20 mx-auto max-w-[320px] rounded-2xl border-0 px-3 py-2 text-center shadow-xl',
-              gm.side === 'me' ? 'bg-emerald-500 text-black' : 'bg-red-500 text-black',
-            )}
-          >
-            <div className="truncate text-sm font-bold">
-              {gm.segs.map((sg, i) => (
-                <span key={i}>{sg.t}{sg.gen && <MadeUpTag className="ml-1" />}</span>
-              ))}
-            </div>
-            <div className="truncate text-[11px] leading-tight text-black/75">
-              {gm.club}{gm.nth >= 2 ? ` · ${ordinal(gm.nth)} of the match` : ''}{gm.season !== null ? ` · ${gm.season} this season` : ''}
-            </div>
-            <span className="sr-only">Tap to carry on</span>
-          </button>
-        )}
-
-        {stage === 'done' && (
-          <div className="absolute inset-0 bg-black/45 flex items-center justify-center pointer-events-none">
-            <div className="text-center">
-              <div className="text-white font-display font-bold text-2xl">FULL TIME</div>
-              {report?.decidedBy === 'pens' && (
-                <div className="text-white/90 text-xs mt-1">
-                  {/* Round 782: the count, when the kicks were played one by one. */}
-                  Decided on penalties{report.shootout ? `, ${report.shootout.mine}-${report.shootout.theirs}` : ''}
-                </div>
-              )}
-              {report?.decidedBy === 'aet' && (
-                <div className="text-white/90 text-xs mt-1">Decided in extra time</div>
-              )}
-            </div>
-          </div>
-        )}
-      </PitchSurface>
-
-      {/* The asterisk on a dot is the ratings sheet's MADE UP, at dot size. */}
-      {men.theirs.some(d => d.gen) && (
-        <p className="text-[9px] text-muted-foreground text-center flex items-center justify-center gap-1">
-          * on a dot is <MadeUpTag />
-        </p>
-      )}
-
-      {injuredWaiting.map(p => (
-        subsLeft > 0 ? (
-          <button
-            key={p.id}
-            onClick={() => openSheet(p.id)}
-            className="w-full min-h-[44px] rounded-xl border border-yellow-500/40 bg-yellow-500/10 px-3 py-2 text-[11px] font-bold text-yellow-400 text-center"
-          >
-            🩹 {p.name} is down. Tap to bring somebody on.
-          </button>
-        ) : (
-          <p key={p.id} className="text-[10px] text-yellow-400 text-center">🩹 {p.name} is down and you have no changes left.</p>
-        )
-      ))}
-
-      {/* Round 782: at the whistle, the shootout kick by kick when the manager had set an order. */}
-      {stage === 'done' && report?.shootout && (
-        <ShootoutKicks shootout={report.shootout} clubName={career.clubName} opponent={opponent} />
-      )}
-
-      {/* the live stats, the report's own numbers counted up to this minute.
-          Round 472: with the other club's name on it rather than "Them". */}
-      <LiveStats stats={stats} counts={counts} clubName={career.clubName} opponent={opponent} />
-
-      {/* controls */}
-      <div className="flex items-center gap-1.5">
-        <button
-          onClick={() => setPaused(p => !p)}
-          disabled={stage === 'done' || finished || sheetOpen}
-          aria-label={paused ? 'Resume' : 'Pause'}
-          className="min-h-[44px] rounded-lg border border-border bg-card px-2.5 text-foreground hover:border-primary/60 transition-colors disabled:opacity-40"
-        >
-          {paused ? <Play className="w-3.5 h-3.5" /> : <Pause className="w-3.5 h-3.5" />}
-        </button>
-        {SPEEDS.map(s => (
-          <button
-            key={s}
-            onClick={() => setSpeed(s)}
-            className={cn(
-              'flex-1 min-h-[44px] rounded-lg border px-1 text-[11px] font-bold transition-colors',
-              speed === s ? 'border-primary bg-primary/10 text-primary' : 'border-border bg-card text-foreground hover:border-primary/50',
-            )}
-          >
-            {s}x
-          </button>
-        ))}
-        <button
-          onClick={() => setShowSquad(v => !v)}
-          aria-label="Squad and stamina"
-          className={cn(
-            'min-h-[44px] rounded-lg border px-2.5 transition-colors',
-            showSquad ? 'border-primary bg-primary/10 text-primary' : 'border-border bg-card text-foreground hover:border-primary/60',
-          )}
-        >
-          <Users className="w-3.5 h-3.5" />
-        </button>
-        {stage === 'done' ? (
-          <button
-            onClick={onExit}
-            className="min-h-[44px] rounded-lg bg-primary text-primary-foreground px-3 text-[11px] font-bold hover:opacity-90 transition-opacity"
-          >
-            Full report
-          </button>
-        ) : finished ? null : (
-          <button
-            onClick={() => setClock(stageStop)}
-            className="min-h-[44px] rounded-lg border border-border bg-card px-2.5 text-[11px] font-bold text-foreground hover:border-primary/60 transition-colors inline-flex items-center gap-1"
-          >
-            <FastForward className="w-3.5 h-3.5" /> Skip
-          </button>
-        )}
-      </div>
-
-      {/* Round 1101: how watching a match works, under the controls, only while it is asked for. */}
-      {showHelp && <LiveMatchHelp onClose={() => setShowHelp(false)} />}
-
-      {/* the change sheet: a sub or a shape, at this minute */}
-      {sheetOpen && picked && (
-        <div ref={sheetRef} className="bg-card border border-border rounded-xl p-3" data-cm-live-sheet={picking ?? ''}>
-          <div className="flex items-center justify-between">
-            <div className="text-[10px] text-muted-foreground uppercase tracking-wider flex items-center gap-1">
-              <ArrowLeftRight className="w-3 h-3" /> Change at {minuteLabel({ minute: changeMinute, plus })} · Subs left: {subsLeft}
-            </div>
-            <button
-              onClick={closeSheet}
-              aria-label="Close"
-              className="min-w-[44px] min-h-[44px] -mr-2 -mt-2 inline-flex items-center justify-center text-muted-foreground hover:text-foreground"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
-          <div className="flex items-center gap-2 rounded-lg border border-primary/50 bg-primary/10 px-2 py-1.5">
-            <span className="w-9 shrink-0 text-[10px] font-bold text-muted-foreground bg-secondary rounded px-1 py-0.5 text-center">
-              {picked.position}
-            </span>
-            <span className="flex-1 min-w-0">
-              <span className="block text-xs text-foreground truncate">{picked.name}</span>
-              <span className="block text-[9px] text-muted-foreground">
-                {picked.rating} rated {'·'} <span className={fitnessTone(picked.fitness)}>{Math.round(picked.fitness)} fit</span>
-              </span>
-            </span>
-          </div>
-
-          <div className="text-[9px] text-muted-foreground uppercase tracking-wider mt-2 mb-1 flex items-center gap-1">
-            <Gauge className="w-3 h-3" /> Shape from here
-          </div>
-          <div className="grid grid-cols-3 gap-1.5">
-            {MENTALITIES.map(m => (
-              <button
-                key={m.id}
-                data-cm-live-shape={m.id}
-                onClick={() => doShape(m.id)}
-                className={cn(
-                  'min-h-[44px] rounded-lg border px-1 text-center transition-colors',
-                  mentality === m.id ? 'border-primary bg-primary/10' : 'border-border hover:border-primary/40',
-                )}
-              >
-                <span className="block text-sm leading-none">{m.emoji}</span>
-                <span className={cn('block text-[10px] font-bold mt-0.5', mentality === m.id ? 'text-primary' : 'text-foreground')}>{m.label}</span>
-              </button>
-            ))}
-          </div>
-
-          <div className="text-[9px] text-muted-foreground uppercase tracking-wider mt-2 mb-1">Bring on for {lastName(picked.name)}</div>
-          {subsLeft === 0 ? (
-            <p className="text-[10px] text-yellow-400">You have used all three. Nobody else is coming off.</p>
-          ) : bench.length === 0 ? (
-            <p className="text-[10px] text-muted-foreground">Nobody fit is left on the bench.</p>
-          ) : (
-            <div className="space-y-0.5 max-h-56 overflow-y-auto">
-              {bench.map(b => (
+      ) : (
+        <div data-cm-live-stagebox="1" className="cm-stagebox bg-background text-foreground">
+          <div className="cm-stage">
+            <div className="cm-stage-main">
+              {/* The strip: Back, the help, both clubs and the score, the clock. Two rows on a phone. */}
+              <div data-cm-live-strip="1" className="cm-strip">
                 <button
-                  key={b.id}
-                  data-cm-live-bench={b.id}
-                  onClick={() => doSub(b.id)}
-                  className="w-full min-h-[44px] flex items-center gap-2 rounded-lg border border-border hover:border-primary/50 px-2 py-1.5 text-left transition-colors"
+                  type="button"
+                  onClick={leaveStage}
+                  aria-label="Back to the club page"
+                  className="w-11 h-11 shrink-0 rounded-lg border border-border bg-card flex items-center justify-center text-foreground hover:border-primary/60 transition-colors"
                 >
-                  <span className="w-9 shrink-0 text-[10px] font-bold text-muted-foreground bg-secondary rounded px-1 py-0.5 text-center">
-                    {b.position}
-                  </span>
-                  <span className="flex-1 min-w-0">
-                    <span className="block text-xs text-foreground truncate">{b.name}</span>
-                    <span className="block text-[9px] text-muted-foreground">
-                      {b.rating} rated {'·'} <span className={fitnessTone(b.fitness)}>{Math.round(b.fitness)} fit</span>
-                    </span>
-                  </span>
+                  <ArrowLeft className="w-4 h-4" />
                 </button>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* stamina drawer */}
-      {showSquad && (
-        <div className="bg-card border border-border rounded-xl p-3">
-          <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5">On the pitch · fitness</div>
-          <div className="space-y-1">
-            {onPitchPlayers.map(p => (
-              <div key={p.id} className="flex items-center gap-2 text-[10px]">
-                <span className="w-7 shrink-0 text-muted-foreground">{p.position}</span>
-                <span className="text-foreground truncate flex-1">{p.name}</span>
-                <div className="w-20 h-1.5 rounded-full bg-secondary overflow-hidden shrink-0">
-                  <div
-                    className={cn('h-full rounded-full', p.fitness >= 70 ? 'bg-emerald-500' : p.fitness >= 45 ? 'bg-yellow-500' : 'bg-red-500')}
-                    style={{ width: `${p.fitness}%` }}
-                  />
+                <button
+                  type="button"
+                  onClick={() => togglePanel('help')}
+                  aria-label="How watching a match works"
+                  aria-expanded={sidePanel === 'help'}
+                  className={cn(
+                    'w-11 h-11 shrink-0 rounded-lg border bg-card text-sm font-bold transition-colors',
+                    sidePanel === 'help' ? 'border-primary text-primary' : 'border-border text-foreground hover:border-primary/60',
+                  )}
+                >
+                  ?
+                </button>
+                <div className="cm-strip-score">
+                  <div className="flex-1 min-w-0 text-right text-sm font-bold text-primary truncate">{career.clubName}</div>
+                  <div data-cm-live-score className="px-3 py-0.5 rounded-xl bg-secondary font-display text-xl font-bold text-foreground shrink-0 tabular-nums">
+                    {scoreDigits}
+                  </div>
+                  <div className="flex-1 min-w-0 text-left text-sm font-bold text-foreground truncate">{opponent}</div>
                 </div>
-                <span className="w-6 text-right tabular-nums text-muted-foreground shrink-0">{Math.round(p.fitness)}</span>
+                <div className="cm-strip-comp text-[11px] text-muted-foreground uppercase tracking-widest truncate">{compLabel}</div>
+                <div className={cn(
+                  'shrink-0 text-[11px] font-bold px-2 py-1 rounded-full tabular-nums',
+                  stage === 'done' || finished ? 'bg-secondary text-muted-foreground' : 'bg-red-500/15 text-red-400',
+                )}>
+                  {/* Round 472: the whistle went after the board went up, so the
+                      badge says when. The number is the report's own. */}
+                  {badge}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => togglePanel('stats')}
+                  aria-expanded={sidePanel === 'stats'}
+                  className={cn(
+                    'cm-strip-stats h-11 min-w-[44px] shrink-0 rounded-lg border bg-card px-2 text-[11px] font-bold transition-colors',
+                    sidePanel === 'stats' ? 'border-primary text-primary' : 'border-border text-foreground hover:border-primary/60',
+                  )}
+                >
+                  Stats
+                </button>
+                {/* Round 781: the tie on a second leg, so the night's score is never read alone. */}
+                {legCtx && (
+                  <div className="cm-strip-leg text-center text-[11px] text-muted-foreground tabular-nums" data-cm-live-agg={`${legCtx.aggMine}-${legCtx.aggTheirs}`}>
+                    First leg {legCtx.leg1Mine}-{legCtx.leg1Theirs} {legCtx.leg1Home ? 'at home' : 'away'} · Agg {legCtx.aggMine - (waitingSide === 'me' ? 1 : 0)}-{legCtx.aggTheirs - (waitingSide === 'opp' ? 1 : 0)}
+                  </div>
+                )}
               </div>
-            ))}
+
+              {/* The pitch: the shared surface (grass, markings, nets, ball), with this screen's own dots on it.
+                  It takes every pixel the rows around it leave. */}
+              <div className="cm-pitchbox">
+                <PitchSurface frame={motion} className="cm-stage-pitch" style={{ aspectRatio: 'auto' }}>
+                  {/* their dots: numbers, and names when the engine has an eleven for them */}
+                  {motion.theirs.map(d => {
+                    const m = manOf.get(d.key);
+                    if (!m) return null;
+                    const up = above.has(d.key);
+                    return (
+                      <div
+                        key={d.key}
+                        data-cm-dot-opp={m.number}
+                        className={cn('absolute flex items-center pointer-events-none', up ? 'flex-col-reverse' : 'flex-col')}
+                        style={{ left: `${d.x}%`, top: `${d.y}%`, transform: `translate(-50%, ${up ? -35 : -24}px)` }}
+                      >
+                        <LivePitchPlayer color="#d6e6ed" keeper={d.keeper} pose={motion.poses[d.key]} />
+                        <span className={cn('text-[9px] text-white/80 leading-none max-w-[52px] truncate tabular-nums', up ? 'mb-0.5' : 'mt-0.5')}>
+                          {m.number}{m.label ? ` ${m.label}` : ''}{m.gen ? '*' : ''}
+                        </span>
+                      </div>
+                    );
+                  })}
+
+                  {/* my dots: a tap area a thumb can hit around a dot that stays small */}
+                  {motion.mine.map(d => {
+                    const m = manOf.get(d.key);
+                    if (!m) return null;
+                    const captain = !!m.id && m.id === captainId;
+                    const up = above.has(d.key);
+                    return (
+                      <button
+                        key={d.key}
+                        type="button"
+                        data-cm-dot={m.id ?? ''}
+                        data-cm-captain={captain ? '1' : undefined}
+                        aria-label={`${m.label}, number ${m.number}${captain ? ', captain' : ''}. Tap to bring somebody on or change the shape.`}
+                        disabled={!canChange || !m.id}
+                        onClick={() => { if (m.id) openSheet(m.id); }}
+                        className={cn(
+                          'absolute flex items-center w-9 min-h-[28px] bg-transparent border-0 p-0 rounded-md',
+                          up ? 'flex-col-reverse' : 'flex-col',
+                          canChange ? 'cursor-pointer' : 'cursor-default',
+                        )}
+                        style={{ left: `${d.x}%`, top: `${d.y}%`, transform: `translate(-50%, ${up ? -35 : -24}px)` }}
+                      >
+                        <LivePitchPlayer color={clubColor} keeper={d.keeper} pose={motion.poses[d.key]} selected={picking === m.id} />
+                        <span className={cn('text-[9px] text-white/90 leading-none max-w-[52px] truncate tabular-nums', up ? 'mb-0.5' : 'mt-0.5')}>
+                          {m.number} {m.label}
+                          {captain && (
+                            <span className="ml-0.5 inline-block px-[2px] rounded-sm bg-yellow-400 text-black font-black leading-[9px] align-middle">C</span>
+                          )}
+                        </span>
+                      </button>
+                    );
+                  })}
+
+                  {/* event banner */}
+                  {banner && (
+                    <div className={cn(
+                      'absolute left-1/2 top-3 -translate-x-1/2 px-3 py-1.5 rounded-full text-[11px] font-bold shadow-lg animate-in fade-in slide-in-from-top-2 pointer-events-none text-center max-w-[92%]',
+                      banner.tone === 'me' ? 'bg-emerald-500 text-black' : banner.tone === 'opp' ? 'bg-red-500 text-black' : 'bg-background/90 text-foreground border border-border',
+                    )}>
+                      <div className="truncate">
+                        {banner.segs.map((sg, i) => (
+                          <span key={i}>{sg.t}{sg.gen && <MadeUpTag className="ml-1" />}</span>
+                        ))}
+                      </div>
+                      <div className={cn('text-[11px] font-normal leading-tight truncate', banner.tone === 'none' ? 'text-muted-foreground' : 'text-black/70')}>{banner.club}</div>
+                    </div>
+                  )}
+
+                  {/* Round 1101: the scorer card. Facts only: who, when, and his count. A tap carries on. */}
+                  {cardUp && gm && (
+                    <button
+                      type="button"
+                      data-cm-goal-card={gm.side}
+                      onClick={skipGoal}
+                      className={cn(
+                        'cm-rise absolute inset-x-[7%] top-[16%] z-20 mx-auto max-w-[320px] rounded-2xl border-0 px-3 py-2 text-center shadow-xl',
+                        gm.side === 'me' ? 'bg-emerald-500 text-black' : 'bg-red-500 text-black',
+                      )}
+                    >
+                      <div className="truncate text-sm font-bold">
+                        {gm.segs.map((sg, i) => (
+                          <span key={i}>{sg.t}{sg.gen && <MadeUpTag className="ml-1" />}</span>
+                        ))}
+                      </div>
+                      <div className="truncate text-[11px] leading-tight text-black/75">
+                        {gm.club}{gm.nth >= 2 ? ` · ${ordinal(gm.nth)} of the match` : ''}{gm.season !== null ? ` · ${gm.season} this season` : ''}
+                      </div>
+                      <span className="sr-only">Tap to carry on</span>
+                    </button>
+                  )}
+
+                  {stage === 'done' && (
+                    <div className="absolute inset-0 bg-black/45 flex items-center justify-center pointer-events-none">
+                      <div className="text-center">
+                        <div className="text-white font-display font-bold text-2xl">FULL TIME</div>
+                        {report?.decidedBy === 'pens' && (
+                          <div className="text-white/90 text-xs mt-1">
+                            {/* Round 782: the count, when the kicks were played one by one. */}
+                            Decided on penalties{report.shootout ? `, ${report.shootout.mine}-${report.shootout.theirs}` : ''}
+                          </div>
+                        )}
+                        {report?.decidedBy === 'aet' && (
+                          <div className="text-white/90 text-xs mt-1">Decided in extra time</div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </PitchSurface>
+
+                {/* Somebody down and not yet replaced: said over a corner of the pitch, clear of the goal,
+                    so the change is one tap away without leaving it. */}
+                {injuredWaiting.length > 0 && (
+                  <div className="absolute left-1.5 bottom-1.5 z-20 flex flex-col gap-1 max-w-[36%]">
+                    {injuredWaiting.map(p => (
+                      subsLeft > 0 ? (
+                        <button
+                          key={p.id}
+                          onClick={() => openSheet(p.id)}
+                          className="min-h-[44px] rounded-xl border border-yellow-500/60 bg-background/90 px-2 py-1 text-[11px] leading-tight font-bold text-yellow-400 text-left"
+                        >
+                          🩹 {p.name} is down. Tap to bring somebody on.
+                        </button>
+                      ) : (
+                        <p key={p.id} className="rounded-xl border border-yellow-500/40 bg-background/90 px-2 py-1 text-[11px] leading-tight text-yellow-400">🩹 {p.name} is down and you have no changes left.</p>
+                      )
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Round 1101: on a phone the full stats are a panel, so the three numbers that tell the match
+                  stay in view the whole time, off the same count the panel reads. */}
+              <div data-cm-live-statline="1" className="cm-statline text-[11px] text-muted-foreground tabular-nums">
+                <span>Poss <b className="text-foreground">{poss === null ? '-' : `${poss}%`}</b> {poss === null ? '-' : `${100 - poss}%`}</span>
+                <span>Shots <b className="text-foreground">{stats ? `${stats.shots} (${stats.onTarget})` : '-'}</b> {stats ? `${stats.oppShots} (${stats.oppOnTarget})` : '-'}</span>
+                <span>xG <b className="text-foreground">{stats ? stats.xg.toFixed(2) : '-'}</b> {stats ? stats.oppXg.toFixed(2) : '-'}</span>
+              </div>
+
+              {/* The small stuff: chances, saves, corners, throw ins, fouls, at their minutes. */}
+              <div className="cm-eventline text-center text-[11px] text-muted-foreground truncate" data-cm-live-event="1">
+                {running && !finished && eventLine ? eventLine.map((sg, i) => (
+                  <span key={i}>{sg.t}{sg.gen && <MadeUpTag className="ml-1" />}</span>
+                )) : ''}
+              </div>
+
+              {/* controls: equal cells, a thumb wide each */}
+              <div data-cm-live-controls="1" className="cm-controls">
+                <button
+                  onClick={() => setPaused(p => !p)}
+                  disabled={stage === 'done' || finished || sheetOpen}
+                  aria-label={paused ? 'Resume' : 'Pause'}
+                  className="rounded-lg border border-border bg-card text-foreground hover:border-primary/60 transition-colors disabled:opacity-40 inline-flex items-center justify-center"
+                >
+                  {paused ? <Play className="w-4 h-4" /> : <Pause className="w-4 h-4" />}
+                </button>
+                {SPEEDS.map(s => (
+                  <button
+                    key={s}
+                    onClick={() => setSpeed(s)}
+                    className={cn(
+                      'rounded-lg border text-[11px] font-bold transition-colors',
+                      speed === s ? 'border-primary bg-primary/10 text-primary' : 'border-border bg-card text-foreground hover:border-primary/50',
+                    )}
+                  >
+                    {s}x
+                  </button>
+                ))}
+                <button
+                  onClick={() => togglePanel('squad')}
+                  aria-label="Squad and stamina"
+                  aria-expanded={sidePanel === 'squad'}
+                  className={cn(
+                    'rounded-lg border transition-colors inline-flex items-center justify-center',
+                    sidePanel === 'squad' ? 'border-primary bg-primary/10 text-primary' : 'border-border bg-card text-foreground hover:border-primary/60',
+                  )}
+                >
+                  <Users className="w-4 h-4" />
+                </button>
+                {stage === 'done' ? (
+                  <button
+                    onClick={onExit}
+                    className="rounded-lg bg-primary text-primary-foreground text-[11px] leading-tight font-bold hover:opacity-90 transition-opacity"
+                  >
+                    Full report
+                  </button>
+                ) : finished ? null : (
+                  <button
+                    onClick={() => setClock(stageStop)}
+                    className="rounded-lg border border-border bg-card text-[11px] leading-tight font-bold text-foreground hover:border-primary/60 transition-colors inline-flex flex-col items-center justify-center"
+                  >
+                    <FastForward className="w-3.5 h-3.5" /> Skip
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* The side: beside the pitch on a wide screen, a sheet over its foot on a phone. One panel at a time. */}
+            <div data-cm-live-side={sidePanel ?? 'none'} className="cm-stage-side">
+              {(sidePanel === 'stats' || sidePanel === 'squad' || sidePanel === 'kicks') && (
+                <div className="flex items-center justify-between gap-2">
+                  <h3 className="text-sm font-bold text-foreground">
+                    {sidePanel === 'stats' ? 'Match stats' : sidePanel === 'squad' ? 'On the pitch' : 'The shootout'}
+                  </h3>
+                  <button type="button" onClick={() => setPanel(null)} aria-label="Close the panel" className="w-11 h-11 shrink-0 rounded-lg border border-border bg-background flex items-center justify-center text-foreground">
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
+
+              {/* The match line by line, newest first: a wide screen has the room for it. */}
+              <div data-cm-live-log="1" className="cm-side-log bg-card border border-border rounded-xl p-2.5">
+                <div className="text-[11px] text-muted-foreground uppercase tracking-wider mb-1">As it happens</div>
+                {log.length === 0 ? (
+                  <p className="text-xs text-muted-foreground">Nothing to report yet.</p>
+                ) : (
+                  <ul className="space-y-1">
+                    {log.map((line, i) => (
+                      <li key={`${line.key}:${i}`} className="flex items-baseline gap-2 text-xs">
+                        <span className="w-11 shrink-0 text-muted-foreground tabular-nums">{line.at}</span>
+                        <span className="min-w-0 flex-1 text-foreground">
+                          {line.segs.map((sg, j) => (
+                            <span key={j}>{sg.t}{sg.gen && <MadeUpTag className="ml-1" />}</span>
+                          ))}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+
+              {/* the live stats, the report's own numbers counted up to this minute.
+                  Round 472: with the other club's name on it rather than "Them". */}
+              <LiveStats stats={stats} counts={counts} clubName={career.clubName} opponent={opponent} />
+
+              {/* Round 782: at the whistle, the shootout kick by kick when the manager had set an order. */}
+              {sidePanel === 'kicks' && report?.shootout && (
+                <ShootoutKicks shootout={report.shootout} clubName={career.clubName} opponent={opponent} />
+              )}
+
+              {/* Round 1101: how watching a match works, only while it is asked for. */}
+              {sidePanel === 'help' && <LiveMatchHelp onClose={() => setPanel(null)} />}
+
+              {/* the change sheet: a sub or a shape, at this minute */}
+              {sheetOpen && picked && (
+                <div ref={sheetRef} className="bg-card border border-border rounded-xl p-3" data-cm-live-sheet={picking ?? ''}>
+                  <div className="flex items-center justify-between">
+                    <div className="text-[11px] text-muted-foreground uppercase tracking-wider flex items-center gap-1">
+                      <ArrowLeftRight className="w-3 h-3" /> Change at {minuteLabel({ minute: changeMinute, plus })} · Subs left: {subsLeft}
+                    </div>
+                    <button
+                      onClick={closeSheet}
+                      aria-label="Close"
+                      className="min-w-[44px] min-h-[44px] -mr-2 -mt-2 inline-flex items-center justify-center text-muted-foreground hover:text-foreground"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                  <div className="flex items-center gap-2 rounded-lg border border-primary/50 bg-primary/10 px-2 py-1.5">
+                    <span className="w-9 shrink-0 text-[11px] font-bold text-muted-foreground bg-secondary rounded px-1 py-0.5 text-center">
+                      {picked.position}
+                    </span>
+                    <span className="flex-1 min-w-0">
+                      <span className="block text-xs text-foreground truncate">{picked.name}</span>
+                      <span className="block text-[11px] text-muted-foreground">
+                        {picked.rating} rated {'·'} <span className={fitnessTone(picked.fitness)}>{Math.round(picked.fitness)} fit</span>
+                      </span>
+                    </span>
+                  </div>
+
+                  <div className="text-[11px] text-muted-foreground uppercase tracking-wider mt-2 mb-1 flex items-center gap-1">
+                    <Gauge className="w-3 h-3" /> Shape from here
+                  </div>
+                  <div className="grid grid-cols-3 gap-1.5">
+                    {MENTALITIES.map(m => (
+                      <button
+                        key={m.id}
+                        data-cm-live-shape={m.id}
+                        onClick={() => doShape(m.id)}
+                        className={cn(
+                          'min-h-[44px] rounded-lg border px-1 text-center transition-colors',
+                          mentality === m.id ? 'border-primary bg-primary/10' : 'border-border hover:border-primary/40',
+                        )}
+                      >
+                        <span className="block text-sm leading-none">{m.emoji}</span>
+                        <span className={cn('block text-[11px] font-bold mt-0.5', mentality === m.id ? 'text-primary' : 'text-foreground')}>{m.label}</span>
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="text-[11px] text-muted-foreground uppercase tracking-wider mt-2 mb-1">Bring on for {lastName(picked.name)}</div>
+                  {subsLeft === 0 ? (
+                    <p className="text-[11px] text-yellow-400">You have used all three. Nobody else is coming off.</p>
+                  ) : bench.length === 0 ? (
+                    <p className="text-[11px] text-muted-foreground">Nobody fit is left on the bench.</p>
+                  ) : (
+                    <div className="space-y-0.5 max-h-56 overflow-y-auto">
+                      {bench.map(b => (
+                        <button
+                          key={b.id}
+                          data-cm-live-bench={b.id}
+                          onClick={() => doSub(b.id)}
+                          className="w-full min-h-[44px] flex items-center gap-2 rounded-lg border border-border hover:border-primary/50 px-2 py-1.5 text-left transition-colors"
+                        >
+                          <span className="w-9 shrink-0 text-[11px] font-bold text-muted-foreground bg-secondary rounded px-1 py-0.5 text-center">
+                            {b.position}
+                          </span>
+                          <span className="flex-1 min-w-0">
+                            <span className="block text-xs text-foreground truncate">{b.name}</span>
+                            <span className="block text-[11px] text-muted-foreground">
+                              {b.rating} rated {'·'} <span className={fitnessTone(b.fitness)}>{Math.round(b.fitness)} fit</span>
+                            </span>
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* the squad panel: who is out there and how much they have left */}
+              {sidePanel === 'squad' && (
+                <div className="bg-card border border-border rounded-xl p-3">
+                  <div className="text-[11px] text-muted-foreground uppercase tracking-wider mb-1.5">On the pitch · fitness</div>
+                  <div className="space-y-1">
+                    {onPitchPlayers.map(p => (
+                      <div key={p.id} className="flex items-center gap-2 text-[11px]">
+                        <span className="w-7 shrink-0 text-muted-foreground">{p.position}</span>
+                        <span className="text-foreground truncate flex-1">{p.name}</span>
+                        <div className="w-20 h-1.5 rounded-full bg-secondary overflow-hidden shrink-0">
+                          <div
+                            className={cn('h-full rounded-full', p.fitness >= 70 ? 'bg-emerald-500' : p.fitness >= 45 ? 'bg-yellow-500' : 'bg-red-500')}
+                            style={{ width: `${p.fitness}%` }}
+                          />
+                        </div>
+                        <span className="w-6 text-right tabular-nums text-muted-foreground shrink-0">{Math.round(p.fitness)}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <p className="text-[11px] text-muted-foreground mt-1.5">Tap a player on the pitch to make a change at any minute.</p>
+                  {/* The asterisk on a dot is the ratings sheet's MADE UP, at dot size. */}
+                  {men.theirs.some(d => d.gen) && (
+                    <p className="text-[11px] text-muted-foreground mt-1 flex items-center gap-1">
+                      * on a dot is <MadeUpTag />
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
-          <p className="text-[9px] text-muted-foreground mt-1.5">Tap a player on the pitch to make a change at any minute.</p>
         </div>
       )}
     </div>

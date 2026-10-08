@@ -16,6 +16,9 @@
  *      the change sheet and each panel has been opened.
  *   5. THE RELOAD. A match left in the middle of a half comes back at its minute, give or take one:
  *      by a reload, by closing the page, and by the tab going hidden.
+ *   6. BACK. The stage's Back button folds the match to a small card in the page and pauses it (the
+ *      clock is read again 2.6 seconds later), the page is free to scroll again, and the card's one
+ *      button puts the stage back with the clock running.
  *
  * NEGATIVE CONTROL. LIVE_FIT_CONTROL=bar pushes the control row 200 px down with a style tag (after
  * asserting the selector matches exactly one node). Section 3 must go red; 1, 2 and 4 must stay green.
@@ -31,7 +34,17 @@
  *   LIVE_FIT_REPORT=1 node scripts/playLiveMatchFit.mjs
  *   LIVE_FIT_CONTROL=bar node scripts/playLiveMatchFit.mjs
  */
-/* RECORDED BEFORE MATCH MODE: see LABELS_BEFORE below (filled in when the measuring pass ran). */
+/* RECORDED BEFORE MATCH MODE, with LIVE_FIT_REPORT=1 on the build of 6b1caa20 (the viewer still a card in
+   the page, under the navbar and the page's own heading), on a GitHub runner's Chromium:
+     320 by 568    scoreboard 157 to 286, pitch 296 to 680 (288 by 384), control row 813.5 to 857.5,
+                   text nodes under 12 px 92 (smallest 7), controls under 44 px 6
+     390 by 844    scoreboard 157 to 286, pitch 296 to 773.3 (358 by 477.3), control row 906.8 to 950.8,
+                   text nodes under 12 px 87, controls under 44 px 2
+     1280 by 900   scoreboard 173 to 302, pitch 312 to 909.3 (448 by 597.3), control row 1042.8 to 1086.8,
+                   text nodes under 12 px 88, controls under 44 px 2
+     name labels at 390 wide: 1.63 overlapping pairs a frame, over 24 frames of 22 labels (LABELS_BEFORE)
+   So the controls sat under the fold at every size, which is what section 3 now forbids. Section 4 was red
+   there too: window.scrollY read 507, 0, 896 and 280 as the panels opened. */
 import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -124,6 +137,10 @@ async function takeJob(page) {
 
 /** From the club page into the live viewer of the next match (or back into the one in flight). */
 async function startLive(page) {
+  /* After a reload the page opens on the resume screen: back into the career first. */
+  const resume = page.getByRole('button', { name: /Resume Career/i }).first();
+  if (await resume.count().catch(() => 0)) { await resume.click({ timeout: 4000 }).catch(() => {}); await page.waitForTimeout(700); }
+  if (await page.locator('[data-cm-live-stage]').count().catch(() => 0)) return true;
   await page.getByRole('tab', { name: /^Home$/i }).first().click({ timeout: 4000 }).catch(() => {});
   await page.waitForTimeout(400);
   for (let i = 0; i < 8; i++) {
@@ -401,7 +418,46 @@ function judgeFit(view, m) {
 
 /* The mean number of overlapping name labels a frame at 390 wide, measured with LIVE_FIT_REPORT=1 on the
    build of the commit named here, BEFORE the full screen match mode. With match mode the mean must be lower. */
-const LABELS_BEFORE = { commit: 'TO_RECORD', mean: NaN };
+const LABELS_BEFORE = { commit: '6b1caa20', mean: 1.63 };
+
+/** Section 6: Back folds the match away to a card in the page and pauses it; the card's button puts it back. */
+async function judgeBack(page) {
+  /* With at least seven minutes of the period left, so the clock has room to be seen running on. */
+  for (let i = 0; i < 6; i++) {
+    if (!(await runningMatch(page))) { fail('no running match to fold away'); return; }
+    const stage = await stageOf(page);
+    const minute = await minuteOf(page);
+    if ((stage === 'first' && minute <= 38) || (stage === 'second' && minute <= 83)) break;
+    await tap(page, /skip/i, 'skip on to a fresh period');
+    await page.waitForTimeout(700);
+  }
+  const back = page.getByRole('button', { name: 'Back to the club page' }).first();
+  if (!(await back.count().catch(() => 0))) { fail('there is no Back button on the stage'); return; }
+  const before = await minuteOf(page);
+  await back.click({ timeout: 3000 }).catch(() => {});
+  await page.waitForTimeout(300);
+  const folded = await page.evaluate(() => ({
+    stage: document.querySelectorAll('[data-cm-live-stagebox]').length,
+    card: document.querySelectorAll('[data-cm-live-compact]').length,
+    text: (document.querySelector('[data-cm-live-compact]')?.textContent ?? '').replace(/\s+/g, ' ').trim(),
+    lock: document.body.style.overflow,
+  }));
+  await page.waitForTimeout(2600);
+  const held = await minuteOf(page);
+  if (folded.stage !== 0 || folded.card !== 1) fail(`after Back there are ${folded.stage} stage boxes and ${folded.card} compact cards`);
+  else if (!/Paused at \d+/.test(folded.text) || !/Back to the match/.test(folded.text)) fail(`the compact card reads "${folded.text}"`);
+  else if (folded.lock === 'hidden') fail('the page is still locked against scrolling with the stage folded away');
+  else if (held !== before && held !== before + 1) fail(`the clock ran on from ${before}' to ${held}' while the match was folded away`);
+  else ok(`Back folds the match to a card reading "${folded.text.slice(0, 70)}", and the clock held at ${held}' for 2.6 seconds`);
+  await page.getByRole('button', { name: 'Back to the match' }).first().click({ timeout: 3000 }).catch(() => {});
+  await page.waitForTimeout(300);
+  const again = await page.evaluate(() => ({ stage: document.querySelectorAll('[data-cm-live-stagebox]').length, card: document.querySelectorAll('[data-cm-live-compact]').length }));
+  let moved = held;
+  for (let i = 0; i < 40 && moved <= held; i++) { await page.waitForTimeout(150); moved = await minuteOf(page); }
+  if (again.stage !== 1 || again.card !== 0) fail(`after Back to the match there are ${again.stage} stage boxes and ${again.card} compact cards`);
+  else if (!(moved > held)) fail(`the match did not run on after Back to the match (still ${moved}')`);
+  else ok(`Back to the match puts the stage back and the clock runs on (${held}' to ${moved}')`);
+}
 
 async function runningMatch(page) {
   for (let i = 0; i < 10; i++) {
@@ -427,6 +483,8 @@ try {
 
   section = 1;
   console.log('1) The goal in order');
+  /* The page settles its own reveal as the match opens; the reading is taken after that. */
+  await page.waitForTimeout(1500);
   const yBefore = await page.evaluate(() => window.scrollY);
   const watched = await watchAGoal(page, { tapCard: true });
   let frames = [];
@@ -466,6 +524,11 @@ try {
   }
   await page.setViewportSize({ width: 390, height: 844 });
   await page.waitForTimeout(400);
+
+  section = 6;
+  console.log('6) Back folds the match away');
+  if (REPORT) console.log('  (not in the measuring pass: the build before match mode has no Back)');
+  else await judgeBack(page);
 
   section = 5;
   console.log('5) The reload');
@@ -569,5 +632,5 @@ if (CONTROL === 'bar') {
 console.log(failures
   ? `playLiveMatchFit: ${failures} failure${failures === 1 ? '' : 's'}.`
   : REPORT ? 'playLiveMatchFit: measuring pass done, sections 1, 2, 4 and 5 green, section 3 printed and not asserted.'
-    : 'playLiveMatchFit: all green. The goal in order, reduced motion, the fit at four sizes, nothing moves the page, the reload.');
+    : 'playLiveMatchFit: all green. The goal in order, reduced motion, the fit at four sizes, nothing moves the page, the reload, Back.');
 process.exit(failures ? 1 : 0);
