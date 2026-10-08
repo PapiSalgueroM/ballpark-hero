@@ -1,0 +1,3 @@
+#!serial
+diag: cp .rc/x/zzLiveSimDiag.test.tsx src/test/zzLiveSimDiag.test.tsx && node_modules/.bin/vitest run src/test/zzLiveSimDiag.test.tsx --testTimeout=600000 --hookTimeout=300000; E=$?; rm -f src/test/zzLiveSimDiag.test.tsx; exit $E
+ladder: cp .rc/x/digest-base.json scripts/data/cmLeagueRulesDigest.json && node .rc/x/ladder1052.mjs $RC_OUT

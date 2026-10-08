@@ -1,0 +1,2 @@
+diag exit=0 8s |    Duration  7.60s (transform 899ms, setup 32ms, collect 1.20s, tests 5.83s, environment 188ms, prepare 77ms)
+ladder exit=1 47s |    + Fakel Voronezh: "Dynamo Makhachkala"
