@@ -1,0 +1,15 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/soccerClubSquad.test.ts --testTimeout=300000 --hookTimeout=120000
+simCareerSquad: node scripts/simCareerSquad.mjs
+mut-keeps: bash .rc/x/rvMut.sh keeps
+walk2: node .rc/x/rvWalk2.mjs
+play: ENGINES=chromium REQUIRE_PAGE=1 PORT=4810 SHOTS=$RC_OUT/shots node scripts/playCareerSquad.mjs
+play-noscroll: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=noscroll PORT=4900 SHOTS=/tmp/shots-noscroll node scripts/playCareerSquad.mjs
+probe2: mkdir -p .tmp-fx && cp .rc/x/rvProbe2.mjs .tmp-fx/rvProbe2.mjs && node .tmp-fx/rvProbe2.mjs
+simClubSquads: node scripts/simClubSquads.mjs
+simSoccerOfferReview: node scripts/simSoccerOfferReview.mjs
+mut-under: bash .rc/x/rvMut.sh under
+mut-frozen: bash .rc/x/rvMut.sh frozen
+mut-carry: bash .rc/x/rvMut.sh carry
