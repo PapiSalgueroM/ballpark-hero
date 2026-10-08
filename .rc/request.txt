@@ -1,0 +1,40 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+gathered: node scripts/simClubManagerGathered.mjs
+g-unlisted: GATHERED_CONTROL=unlisted node scripts/simClubManagerGathered.mjs
+g-samehost: GATHERED_CONTROL=samehost node scripts/simClubManagerGathered.mjs
+g-nojoin: GATHERED_CONTROL=nojoin node scripts/simClubManagerGathered.mjs
+g-genlist: GATHERED_CONTROL=genlist node scripts/simClubManagerGathered.mjs
+g-invented: GATHERED_CONTROL=invented node scripts/simClubManagerGathered.mjs
+g-twice: GATHERED_CONTROL=twice node scripts/simClubManagerGathered.mjs
+inventedNames: node scripts/simInventedNames.mjs
+ru-0: CM_NEW_PARTS=ADH CM_NEW_ROWS=russia node scripts/simClubManagerNewLeagues.mjs
+ru-1: SIM_SEED=1 CM_NEW_PARTS=ADH CM_NEW_ROWS=russia node scripts/simClubManagerNewLeagues.mjs
+ru-2: SIM_SEED=2 CM_NEW_PARTS=ADH CM_NEW_ROWS=russia node scripts/simClubManagerNewLeagues.mjs
+ru-3: SIM_SEED=3 CM_NEW_PARTS=ADH CM_NEW_ROWS=russia node scripts/simClubManagerNewLeagues.mjs
+ru-4: SIM_SEED=4 CM_NEW_PARTS=ADH CM_NEW_ROWS=russia node scripts/simClubManagerNewLeagues.mjs
+ru-5: SIM_SEED=5 CM_NEW_PARTS=ADH CM_NEW_ROWS=russia node scripts/simClubManagerNewLeagues.mjs
+n-rulabel: CM_NEW_PARTS=H CM_NEW_CONTROL=rulabel node scripts/simClubManagerNewLeagues.mjs
+n-rumen: CM_NEW_PARTS=H CM_NEW_CONTROL=rumen node scripts/simClubManagerNewLeagues.mjs
+dod: node scripts/simCmDataOnDemand.mjs
+dod-eager: CM_DATA_CONTROL=eager node scripts/simCmDataOnDemand.mjs
+size-0: node scripts/simClubManagerSaveSize.mjs
+size-1: SIM_SEED=1 node scripts/simClubManagerSaveSize.mjs
+size-2: SIM_SEED=2 node scripts/simClubManagerSaveSize.mjs
+size-3: SIM_SEED=3 node scripts/simClubManagerSaveSize.mjs
+size-4: SIM_SEED=4 node scripts/simClubManagerSaveSize.mjs
+size-5: SIM_SEED=5 node scripts/simClubManagerSaveSize.mjs
+size-uncapped: SAVE_SIZE_CONTROL=uncapped node scripts/simClubManagerSaveSize.mjs
+slots-0: node scripts/simClubManagerSlots.mjs
+slots-1: SIM_SEED=1 node scripts/simClubManagerSlots.mjs
+slots-2: SIM_SEED=2 node scripts/simClubManagerSlots.mjs
+slots-3: SIM_SEED=3 node scripts/simClubManagerSlots.mjs
+slots-4: SIM_SEED=4 node scripts/simClubManagerSlots.mjs
+slots-5: SIM_SEED=5 node scripts/simClubManagerSlots.mjs
+slots-dupe: SLOTS_CONTROL=dupe node scripts/simClubManagerSlots.mjs
+simClubManager: node scripts/simClubManager.mjs
+simCmInternationals: node scripts/simCmInternationals.mjs
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+simJobMarket: node scripts/simJobMarket.mjs
+simCareerDerbies: node scripts/simCareerDerbies.mjs
+livesim: node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx --testTimeout=300000 --hookTimeout=120000
+identity: node_modules/.bin/vitest run src/test/cmWorldIdentity1052.test.ts --testTimeout=300000 --hookTimeout=300000
