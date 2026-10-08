@@ -1041,7 +1041,11 @@ if (CONTROL === 'swap') {
   /* Round 1040: Serie B's two pairs share Cremonese, so a club already
      swapped is not swapped back by the second pair. */
   const done = new Set();
-  for (const [a, b] of NEW_LEAGUES.flatMap(r => r.pairs)) {
+  /* Round 1052: the Russian pairs have a control of their own (ruswap). This one refuses a pair whose
+     strong club does not carry the bigger roster, and Zenit ships 20 men to Fakel Voronezh's 21 (a
+     gathered squad is as long as two lists agree it is), so with the Russian pairs in it the control
+     refused to run at all (remote check r1052-g2). */
+  for (const [a, b] of NEW_LEAGUES.filter(r => r.id !== 'russia').flatMap(r => r.pairs)) {
     if (done.has(a) || done.has(b)) continue;
     if (!(cm.CM_ROSTERS[a]?.length > (cm.CM_ROSTERS[b]?.length ?? 0))) { console.error(`control swap: ${a} does not carry a bigger roster than ${b}; refusing to run`); process.exit(1); }
     [cm.CM_ROSTERS[a], cm.CM_ROSTERS[b]] = [cm.CM_ROSTERS[b] ?? [], cm.CM_ROSTERS[a]];
