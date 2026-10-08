@@ -1,0 +1,10 @@
+PROBE_PICK tag=main width=390 boxAfterPick="" listAfterPick=none expanded=false lockButton=true lockCovered=false searchesAfterPick=0 lockTapLanded=false
+PROBE_PICK tag=main width=1280 boxAfterPick="Qzxalpha Fixture" listAfterPick="Qzxalpha FixtureCentre-Back · Fixture Rovers · Fixtureland" expanded=true lockButton=true lockCovered=true searchesAfterPick=2 lockTapLanded=false
+PROBE_BUSY tag=main width=390 validatorCalls=1 boxWhileChecking="Qzxalpha Fixture" disabled=true listWhileChecking="Qzxalpha FixtureCentre-Back · Fixture Rovers · Fixtureland" searchesAfterPick=2
+PROBE_BUSY tag=main width=1280 validatorCalls=1 boxWhileChecking="Qzxalpha Fixture" disabled=true listWhileChecking="Qzxalpha FixtureCentre-Back · Fixture Rovers · Fixtureland" searchesAfterPick=2
+PROBE_TOUCHSCROLL tag=main trial=1 rows=8 listScrolls=true (471 in 286) fingerStartedOn="Qzxalpha FixturecCentre-" boxAfter="Qzxalpha Fixturec" rowPicked=true listStillOpen=true scrolledBy=0
+PROBE_TOUCHSCROLL tag=main trial=2 rows=8 listScrolls=true (471 in 286) fingerStartedOn="Qzxalpha FixturecCentre-" boxAfter="Qzxalpha Fixturec" rowPicked=true listStillOpen=true scrolledBy=0
+PROBE_TOUCHSCROLL tag=main trial=3 rows=8 listScrolls=true (471 in 286) fingerStartedOn="Qzxalpha FixturecCentre-" boxAfter="Qzxalpha Fixturec" rowPicked=true listStillOpen=true scrolledBy=0
+PROBE_TOUCHSCROLL tag=main trial=4 rows=8 listScrolls=true (471 in 286) fingerStartedOn="Qzxalpha FixturecCentre-" boxAfter="Qzxalpha Fixturec" rowPicked=true listStillOpen=true scrolledBy=0
+PROBE_TOUCHSCROLL tag=main trial=5 rows=8 listScrolls=true (471 in 286) fingerStartedOn="Qzxalpha FixturecCentre-" boxAfter="Qzxalpha Fixturec" rowPicked=true listStillOpen=true scrolledBy=0
+PROBE_TOUCHSCROLL_TOTAL tag=main a finger that started a scroll on a row picked that row 5 times of 5
