@@ -1,0 +1,19 @@
+# Round 1105 review (runner lens), request 3: mutations, one at a time, each restored. A gate that stays 0 under a mutation did not see it.
+#!playwright
+#!serial
+M1: bash .rc/x/rvmutrun.sh M1 vt page shipped
+M2: bash .rc/x/rvmutrun.sh M2 vt page
+M4: bash .rc/x/rvmutrun.sh M4 vt page
+M5: bash .rc/x/rvmutrun.sh M5 vt page
+M6: bash .rc/x/rvmutrun.sh M6 vt page
+M7: bash .rc/x/rvmutrun.sh M7 vt page shipped
+M8: bash .rc/x/rvmutrun.sh M8 vt page shipped
+M10: bash .rc/x/rvmutrun.sh M10 vt page shipped
+M11: bash .rc/x/rvmutrun.sh M11 vt page shipped
+M12: bash .rc/x/rvmutrun.sh M12 vt page shipped walk
+M13: bash .rc/x/rvmutrun.sh M13 vt page shipped walk
+M14: bash .rc/x/rvmutrun.sh M14 shipped compact tables
+M17: bash .rc/x/rvmutrun.sh M17 vt page
+M19: bash .rc/x/rvmutrun.sh M19 vt page
+M21: bash .rc/x/rvmutrun.sh M21 vt page
+clean: git status --porcelain --untracked-files=no | wc -l
