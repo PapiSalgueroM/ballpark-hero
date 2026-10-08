@@ -1,0 +1,1 @@
+skip-nfl exit=3 2s | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [anchors])
