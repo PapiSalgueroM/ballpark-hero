@@ -1,0 +1,45 @@
+#!serve
+#!playwright
+# Round 1104 fixer FINAL B: the long harnesses, the static rule fences and the neighbouring walks, on the merged head
+simCareerHall: node scripts/simCareerHall.mjs
+simSportEras: node scripts/simSportEras.mjs
+simDepthChart: node scripts/simDepthChart.mjs
+simFreeAgency: node scripts/simFreeAgency.mjs
+simExtension: node scripts/simExtension.mjs
+simUsCareerSummer: node scripts/simUsCareerSummer.mjs
+simCareerFacts: node scripts/simCareerFacts.mjs
+simCareerInbox: node scripts/simCareerInbox.mjs
+simCareerInboxBeats: node scripts/simCareerInboxBeats.mjs
+simCareerPress: node scripts/simCareerPress.mjs
+simCareerRivalryEvents: node scripts/simCareerRivalryEvents.mjs
+simHomeFront: node scripts/simHomeFront.mjs
+simMoneyAppFeedback: node scripts/simMoneyAppFeedback.mjs
+simSeasonReveal: node scripts/simSeasonReveal.mjs
+simUsCoachCareer: node scripts/simUsCoachCareer.mjs
+simUsCoaching: node scripts/simUsCoaching.mjs
+simMoney: node scripts/simMoney.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simSingleFooter: node scripts/simSingleFooter.mjs
+simCompletionOnce: node scripts/simCompletionOnce.mjs
+simNoDoubleRecord: node scripts/simNoDoubleRecord.mjs
+simDailyPuzzleContract: node scripts/simDailyPuzzleContract.mjs
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simFetchRetry: node scripts/simFetchRetry.mjs
+simGoogleOnlyReturn: node scripts/simGoogleOnlyReturn.mjs
+simNavbarStatsReads: node scripts/simNavbarStatsReads.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+playDepthChart: ENGINES=chromium node scripts/playDepthChart.mjs
+playFreeAgency: ENGINES=chromium node scripts/playFreeAgency.mjs
+playExtension: ENGINES=chromium node scripts/playExtension.mjs
+playReducedMotion: ENGINES=chromium node scripts/playReducedMotion.mjs
+playSeasonReveal: ENGINES=chromium node scripts/playSeasonReveal.mjs
+playSessionMarks: ENGINES=chromium node scripts/playSessionMarks.mjs
+playUsSeasonCentre: ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+playCareerHallLine: ENGINES=chromium node scripts/playCareerHallLine.mjs
+vitest-board: node_modules/.bin/vitest run src/test/usBoardFixture.test.tsx src/test/careerDecisionOutcome.test.tsx --testTimeout=300000 --hookTimeout=120000
