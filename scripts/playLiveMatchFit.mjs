@@ -254,7 +254,24 @@ async function watchAGoal(page, { tapCard, onTick }) {
 const inside = (inner, outer) => inner[0] >= outer[0] - 1 && inner[1] >= outer[1] - 1 && inner[2] <= outer[2] + 1 && inner[3] <= outer[3] + 1;
 
 /** Sections 1 and 4 read one watched goal: the order of things, and that the page never moved. */
+/** What the page drew around the goal, as runs of frames that read the same: "motion/phase score card xN". */
+function timeline(samples) {
+  const runs = [];
+  for (const s of samples) {
+    const label = s.tapped ? 'TAP' : `${s.motion}/${s.phase} ${s.score}${s.card ? ' card' : ''} ${s.minute}'`;
+    const last = runs[runs.length - 1];
+    if (last && last.label === label && !s.tapped) last.n++;
+    else runs.push({ label, n: 1 });
+  }
+  return runs.map(r => (r.label === 'TAP' ? 'TAP' : `${r.label} x${r.n}`)).join(' | ');
+}
+
 function judgeGoal(watched, { reduced }) {
+  const before = failures;
+  try { return judgeGoalFrames(watched, { reduced }); }
+  finally { if (failures > before || V) console.log('      what was drawn: ' + timeline(watched.samples).slice(0, 2400)); }
+}
+function judgeGoalFrames(watched, { reduced }) {
   const frames = watched.samples.filter(s => !s.tapped && s.score !== null);
   if (frames.length < 30) { fail(`only ${frames.length} frames were sampled around the goal`); return; }
   const first = frames[0].score;
