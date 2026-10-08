@@ -1,0 +1,16 @@
+MUTATED nattest: src/test/usCareerHallBoard.test.tsx
+      Tests  12 passed | 75 skipped (87)
+MUTATED stampnotseason: src/components/us-career/UsCareerBoard.tsx
+   × nfl: the retirement talk on the board > a farewell season carries its banner, is played, and ends the career after it 150ms
+     → RUNNER PROBE: a career that a played season ends is stamped: expected undefined to be 2 // Object.is equality
+   × nba: the retirement talk on the board > a farewell season carries its banner, is played, and ends the career after it 22ms
+     → RUNNER PROBE: a career that a played season ends is stamped: expected undefined to be 2 // Object.is equality
+   × mlb: the retirement talk on the board > a farewell season carries its banner, is played, and ends the career after it 25ms
+     → RUNNER PROBE: a career that a played season ends is stamped: expected undefined to be 2 // Object.is equality
+   × nhl: the retirement talk on the board > a farewell season carries its banner, is played, and ends the career after it 35ms
+     → RUNNER PROBE: a career that a played season ends is stamped: expected undefined to be 2 // Object.is equality
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/test/usCareerHallBoard.test.tsx > nfl: the retirement talk on the board > a farewell season carries its banner, is played, and ends the career after it
+ FAIL  src/test/usCareerHallBoard.test.tsx > nba: the retirement talk on the board > a farewell season carries its banner, is played, and ends the career after it
+ FAIL  src/test/usCareerHallBoard.test.tsx > mlb: the retirement talk on the board > a farewell season carries its banner, is played, and ends the career after it
+NATURAL: branch code exit=0 ( Tests 12 passed | 75 skipped (87)) want 0; stamp off the season end sites exit=1 (⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯ Tests 4 fai) want 1; 0 files left changed

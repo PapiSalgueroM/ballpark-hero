@@ -1,0 +1,2 @@
+nat-farewell exit=0 8s | NATURAL: branch code exit=0 ( Tests 12 passed | 75 skipped (87)) want 0; stamp off the season end sites exit=1 (⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+nat-clean exit=0 0s | 0
