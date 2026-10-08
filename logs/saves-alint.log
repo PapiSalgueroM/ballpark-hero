@@ -1,0 +1,20 @@
+base origin/release-al-int: 241 clubs; branch: 460 clubs
+1. 1216 playing saves built by the base engine (69 leagues)
+2. repairCareer: 1216 of 1216 saves serialise the same on the branch; the load guard refuses 0
+3. 9407 saved playing rows read on both trees; rows the branch reads differently (8 kinds):
+     449 x 2026+ | games: 38 -> 34 | Eredivisie   e.g. Spain.3.0 Ajax 2026 saved finish -
+     418 x 2026+ | games: 38 -> 34 | Primeira Liga   e.g. Germany.8.0 Benfica 2026 saved finish -
+     377 x 2026+ | games: 38 -> 34 | Saudi Pro League   e.g. England.6.2 Al Hilal 2035 saved finish -
+     338 x 2026+ | games: 38 -> 34 | Super Lig   e.g. Spain.27.1 Fenerbahce 2033 saved finish 1/null
+     240 x 2026+ | games: 38 -> 34 | Belgian Pro League   e.g. England.17.2 Anderlecht 2037 saved finish -
+     162 x 2026+ | games: 38 -> 46 | Championship   e.g. England.1.0 Portsmouth 2027 saved finish -
+      47 x 2026+ | league: 2. Bundesliga -> - | 2. Bundesliga   e.g. Germany.0.0 Hertha Berlin 2027 saved finish -
+      47 x 2026+ | games: 38 -> 34 | 2. Bundesliga   e.g. Germany.0.0 Hertha Berlin 2027 saved finish -
+FINDING a saved row prints another finish or league on the branch: 47 x 2026+ | league: 2. Bundesliga -> - | 2. Bundesliga (Germany.0.0 Hertha Berlin 2027 saved finish -)
+4. 1216 of 1216 saves played three more seasons on the branch (0 threw); 3134 new rows, 2068 in a league sized today, 0 of those with no finish, 0 outside 1..size
+   new rows by league (rows, with a finish, mean finish share): Premier League 440/440/0.27; Championship 46/46/0.42; La Liga 207/207/0.28; Ligue 1 142/142/0.38; Brasileirao 227/227/0.19; Serie A 173/173/0.42; Bundesliga 176/176/0.42; Primeira Liga 176/176/0.18; Super Lig 108/108/0.20; Saudi Pro League 132/132/0.21; Eredivisie 175/175/0.18; 2. Bundesliga 11/11/0.57; Belgian Pro League 55/55/0.21
+5. 380 dugout saves built by the base (two seasons each), three more on the branch: 0 threw, 0 rows below their own table; saved rows whose words changed:
+     16 x MLS | orderNote: "The order only: we don't know how many clubs the MLS has." -> "The order only: MLS plays in two conferences, so no points here."
+      9 x Scottish Premiership | orderNote: "The order only: we don't know how many clubs the Scottish Premiership has." -> "The order only: the Scottish Premiership splits in two late in the season, so no points here."
+6. absolute band: 300000 random inputs (149933 in the five big leagues in any year, 150067 in any league before 2026 with a real club of that league in an engine shaped key): 0 differ
+rvsaves origin/release-al-int: 1 findings
