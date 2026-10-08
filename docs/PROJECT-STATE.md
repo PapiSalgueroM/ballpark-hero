@@ -1,4 +1,20 @@
 Codex CLAIMS1096, 2026-10-08: Soccer Career create-crash diagnosis.
+Preparation2 at00993d51/run37731629083 reproduced the route crash under
+effective detached text replacement. All4 synthetic cases threw the same
+SelectValue NotFoundError after Brazil selection. All8 unchanged English and
+Portuguese locale cases created, advanced and restored their careers cleanly.
+Artifact11530152404 and receipt a3efa6c4 retain exact source/served bytes,
+actual error stacks, screenshots and storage. The reporting visitor's exact
+translation setup is unknown; this is a demonstrated matching crash class.
+The proposed repair wraps only the nationality, position and era placeholders
+in their own spans. Engine, save handling and shared select code are unchanged.
+The next16-case proof keeps public AK's four intended placeholder failures
+as failed observations and requires exact errors, effective mutations and no
+career save. All built candidate paths and unmutated baselines must finish.
+Focused position/era controls cover the other two placeholders. Existing save
+regressions and all20 built readers run after the native cases. Acceptance is
+pending; no publication or merge is claimed.
+
 First capturee168b866/run37730510180 passed type/build/source holds, but
 all12 cases stopped at the nationality selector before generating or creating.
 The option also contains a hidden flag fallback, so exact text did not match.

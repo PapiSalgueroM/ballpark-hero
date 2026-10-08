@@ -77,9 +77,9 @@ async function capture(page, row, stage) {
   return state;
 }
 
-async function mutateText(page, row, stage) {
-  const mutation = await page.evaluate(() => {
-    const root = document.getElementById('dukb-main');
+async function mutateText(page, row, stage, focus = null) {
+  const mutation = await page.evaluate(focus => {
+    const root = focus ? document.querySelectorAll('#dukb-main [role="combobox"]')[focus.index] : document.getElementById('dukb-main');
     if (!root) return { count: 0, reason: 'No live game main' };
     const before = root.textContent;
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
@@ -96,11 +96,12 @@ async function mutateText(page, row, stage) {
       inner.textContent = original; outer.appendChild(inner); parent.replaceChild(outer, node);
       return { parent: parent.tagName, original, detached: !node.isConnected, replacementConnected: outer.isConnected };
     });
-    return { count: changed.length, visibleTextHeld: root.textContent === before, changed };
-  });
+    return { count: changed.length, visibleTextHeld: root.textContent === before, scope: focus?.field ?? 'main', changed };
+  }, focus);
   row.mutations.push({ stage, ...mutation }); write('report.json', report);
   assert(mutation.count > 0, `${stage}: replacement must change actual text nodes`);
   assert(mutation.visibleTextHeld && mutation.changed.every(item => item.detached && item.replacementConnected), `${stage}: effective detached-node replacement, labels held`);
+  if (focus) assert(mutation.count === 1 && mutation.changed[0].original === focus.placeholder, `${stage}: exactly the intended placeholder changed`);
 }
 
 async function choose(page, index, label) {
@@ -123,16 +124,19 @@ async function runCase(target, spec, mode) {
   const page = await context.newPage();
   page.setDefaultTimeout(12000);
   const jobs = [];
-  page.on('console', message => jobs.push(remember((async () => {
+  page.on('console', message => {
+    const observedStage = row.stage;
+    jobs.push(remember((async () => {
     const args = await Promise.all(message.args().map(async handle => {
       try { return await handle.evaluate(value => value instanceof Error || value instanceof DOMException
         ? { name: value.name, message: value.message, stack: value.stack }
         : typeof value === 'object' && value !== null ? JSON.parse(JSON.stringify(value)) : String(value)); }
       catch (error) { return { unavailable: String(error) }; }
     }));
-    row.console.push({ type: message.type(), text: message.text(), location: message.location(), args });
-  })().catch(error => { row.console.push({ captureError: String(error) }); }))));
-  page.on('pageerror', error => row.pageErrors.push(terminalError(error)));
+    row.console.push({ stage: observedStage, type: message.type(), text: message.text(), location: message.location(), args });
+  })().catch(error => { row.console.push({ stage: observedStage, captureError: String(error) }); }))));
+  });
+  page.on('pageerror', error => row.pageErrors.push({ stage: row.stage, ...terminalError(error) }));
   page.on('requestfailed', request => row.requestFailures.push({ url: request.url(), method: request.method(), error: request.failure() }));
   page.on('response', response => jobs.push(remember((async () => {
     const request = response.request(), url = new URL(response.url());
@@ -166,7 +170,7 @@ async function runCase(target, spec, mode) {
     if (!localStorage.getItem('cookie-consent')) localStorage.setItem('cookie-consent', 'essential');
   });
   const step = async (name, action) => { row.stage = name; await action(); return capture(page, row, name); };
-  const replace = async stage => { if (mode.synthetic) await mutateText(page, row, stage); };
+  const replace = async stage => { if (mode.synthetic && !mode.focus) await mutateText(page, row, stage); };
   try {
     const response = await page.goto(`${target.base}/soccer-career`, { waitUntil: 'domcontentloaded', timeout: 45000 });
     row.navigation.push({ url: response.url(), status: response.status(), deployment: await response.headerValue('x-deployment-id') });
@@ -179,7 +183,18 @@ async function runCase(target, spec, mode) {
     await replace('before-selects');
     await step('selects', async () => {
       await page.locator('#pname').fill('Create Diagnosis');
-      await choose(page, 0, 'Brazil'); await choose(page, 1, spec.positionLabel); await choose(page, 2, spec.eraLabel);
+      const fields = [
+        { field: 'nationality', index: 0, label: 'Brazil', placeholder: 'Choose nationality' },
+        { field: 'position', index: 1, label: spec.positionLabel, placeholder: 'Choose position' },
+        { field: 'era', index: 2, label: spec.eraLabel, placeholder: 'Choose era' },
+      ];
+      for (const field of fields) {
+        row.stage = `select-${field.field}`;
+        if (mode.focus === field.field) await mutateText(page, row, `before-select-${field.field}`, field);
+        await choose(page, field.index, field.label);
+        await page.waitForFunction(({ index, label }) => document.querySelectorAll('#dukb-main [role="combobox"]')[index]?.textContent?.includes(label), field);
+      }
+      row.stage = 'selects';
     });
     await step('appearance', async () => {
       await page.getByRole('button', { name: /Hair$/ }).tap();
@@ -235,10 +250,37 @@ async function runCase(target, spec, mode) {
     if ((row.boundaryErrors.length || row.pageErrors.length) && row.status === 'completed') row.status = 'failed';
     row.outcome = row.boundaryErrors.length ? 'observed-route-error' : row.pageErrors.length ? 'observed-page-error'
       : row.status === 'completed' ? 'completed-ui-path' : 'incomplete-ui-path';
+    const originalControl = target.id === 'published' && mode.synthetic;
+    row.verification = { expected: originalControl ? 'original AK SelectValue removeChild failure' : 'complete creator, season advance and reload', passed: false };
+    try {
+      if (target.id === 'published') assert(row.publishedIdentity && row.publishedIdentity.matchesKnownAKEntry && row.publishedIdentity.matchesKnownAKDeployment && row.publishedIdentity.matchesKnownAKCareer, 'Public original must be the known AK deployment and chunks');
+      if (originalControl) {
+        const field = mode.focus ?? 'nationality', stage = `select-${field}`;
+        const mutation = row.mutations.find(item => item.stage === (mode.focus ? `before-select-${field}` : 'before-selects'));
+        assert(mutation?.visibleTextHeld && mutation.changed.some(item => item.original === `Choose ${field}` && item.detached && item.replacementConnected), 'The intended placeholder was effectively detached');
+        if (mode.focus) assert(mutation.scope === field && mutation.count === 1, 'Focused control changed only its intended placeholder');
+        assert.equal(row.boundaryErrors.length, 1, 'Exactly the original caught route error');
+        const boundary = row.boundaryErrors[0], error = boundary.args[1], components = boundary.args[2];
+        assert.equal(boundary.stage, stage, 'Original fails at the intended field selection');
+        assert.equal(error?.name, 'NotFoundError');
+        assert.equal(error?.message, "Failed to execute 'removeChild' on 'Node': The node to be removed is not a child of this node.");
+        assert(typeof error.stack === 'string' && error.stack.includes('index-VAwtKqwh.js:41:26080'), 'Measured React removeChild stack retained');
+        assert(typeof components === 'string' && /^\s*at span\b/.test(components) && components.includes('select-Cj6y0hg2.js:1:3331'), 'Measured SelectValue component stack retained');
+        assert.equal(row.pageErrors.length, 0, 'No additional uncaught error');
+        assert.equal(row.status, 'failed', 'Original observed failure remains failed');
+        assert(row.steps.some(item => item.boundary) && row.steps.every(item => !item.savePresent), 'Boundary appeared before any career save');
+        row.verification.reason = `Expected original ${field} placeholder failure, with exact error and effective detached-node control`;
+      } else {
+        assert.equal(row.status, 'completed', 'Every candidate and unmutated baseline completes');
+        assert.deepEqual(row.steps.map(item => item.stage), ['fresh', 'selects', 'appearance', 'generate', 'reroll', 'begin', 'advance', 'reload']);
+        assert.equal(row.boundaryErrors.length, 0); assert.equal(row.pageErrors.length, 0);
+      }
+      row.verification.passed = true;
+    } catch (error) { row.verification.error = terminalError(error); }
     row.finished = new Date().toISOString(); write(`${row.id}/result.json`, row); write('report.json', report);
     await context.close();
     console.log(JSON.stringify({ id: row.id, status: row.status, lastStage: row.stage, steps: row.steps.length,
-      mutations: row.mutations.reduce((sum, item) => sum + item.count, 0), boundaryErrors: row.boundaryErrors.length, pageErrors: row.pageErrors.length }));
+      mutations: row.mutations.reduce((sum, item) => sum + item.count, 0), boundaryErrors: row.boundaryErrors.length, pageErrors: row.pageErrors.length, verification: row.verification }));
   }
 }
 
@@ -262,15 +304,20 @@ try {
     { id: 'brazil-gk-1990', position: 'GK', positionLabel: 'Goalkeeper (GK)', era: '1990-94', eraLabel: 'Early 90s (1990 start)', year: 1990 },
   ];
   const modes = [{ id: 'english', locale: 'en-US', synthetic: false }, { id: 'portuguese-locale', locale: 'pt-BR', synthetic: false },
-    { id: 'synthetic-text-replacement', locale: 'pt-BR', synthetic: true }];
-  report.plannedCases = targets.length * specs.length * modes.length;
-  for (const target of targets) for (const spec of specs) for (const mode of modes) {
+    { id: 'synthetic-text-replacement', locale: 'pt-BR', synthetic: true },
+    { id: 'position-placeholder-control', locale: 'pt-BR', synthetic: true, focus: 'position' },
+    { id: 'era-placeholder-control', locale: 'pt-BR', synthetic: true, focus: 'era' }];
+  const plan = targets.flatMap(target => specs.flatMap((spec, index) => modes.filter(mode => !mode.focus || index === 0).map(mode => ({ target, spec, mode }))));
+  report.plannedCases = plan.length;
+  for (const { target, spec, mode } of plan) {
     try { await runCase(target, spec, mode); }
     catch (error) {
       const id = `${target.id}-${spec.id}-${mode.id}`;
       const row = report.cases.find(item => item.id === id) ?? { id, target: target.id, spec, mode };
       if (!report.cases.includes(row)) report.cases.push(row);
-      row.status = 'failed'; row.infrastructureError = terminalError(error); write('report.json', report);
+      row.status = 'failed'; row.infrastructureError = terminalError(error);
+      row.verification = { ...row.verification, passed: false, infrastructureError: row.infrastructureError };
+      write('report.json', report);
     }
   }
   assert.equal(report.cases.length, report.plannedCases, 'All finite scenarios ran');
@@ -282,7 +329,10 @@ try {
   report.finished = new Date().toISOString();
   report.completed = report.cases.filter(item => item.status === 'completed').length;
   report.failed = report.cases.filter(item => item.status !== 'completed').length;
+  report.verification = { passed: report.cases.filter(item => item.verification?.passed).length,
+    failed: report.cases.filter(item => !item.verification?.passed).length,
+    expectedOriginalFailures: report.cases.filter(item => item.target === 'published' && item.mode.synthetic).map(item => ({ id: item.id, observedStatus: item.status, stage: item.stage, verification: item.verification })) };
   write('server.log', serverLog); write('report.json', report);
-  console.log(`Soccer create diagnosis: ${report.completed}/${report.plannedCases ?? 0} complete; ${report.failed} failed. No product fix claimed.`);
-  if (report.infrastructureError || report.failed || !report.plannedCases || report.cases.length !== report.plannedCases) process.exitCode = 1;
+  console.log(`Soccer create verification: ${report.verification.passed}/${report.plannedCases ?? 0} contracts passed; ${report.completed} UI paths complete; ${report.failed} observed failures. Reporter cause remains unproved.`);
+  if (!built || report.infrastructureError || report.verification.failed || report.plannedCases !== 16 || report.cases.length !== 16 || report.verification.expectedOriginalFailures.length !== 4) process.exitCode = 1;
 }

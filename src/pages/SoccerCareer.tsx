@@ -2022,7 +2022,7 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
               off the top of the screen and cut off the first nations. Flag
               sits to the RIGHT of the name, exactly as he asked. */}
           <Select value={nationality} onValueChange={setNationality}>
-            <SelectTrigger className="bg-muted/30"><SelectValue placeholder="Choose nationality" /></SelectTrigger>
+            <SelectTrigger className="bg-muted/30"><SelectValue placeholder={<span>Choose nationality</span>} /></SelectTrigger>
             <SelectContent position="popper" className="max-h-72">
               {/* Round 453: over a hundred nations is a long scroll, so they
                   sit under their confederation, the way qualifying groups them. */}
@@ -2042,14 +2042,14 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
         <div className="space-y-1.5">
           <Label>Position</Label>
           <Select value={position} onValueChange={handlePositionChange}>
-            <SelectTrigger className="bg-muted/30"><SelectValue placeholder="Choose position" /></SelectTrigger>
+            <SelectTrigger className="bg-muted/30"><SelectValue placeholder={<span>Choose position</span>} /></SelectTrigger>
             <SelectContent>{POSITIONS.map(p => <SelectItem key={p.value} value={p.value}>{p.label}</SelectItem>)}</SelectContent>
           </Select>
         </div>
         <div className="space-y-1.5">
           <Label>Starting Era</Label>
           <Select value={era} onValueChange={setEra}>
-            <SelectTrigger className="bg-muted/30"><SelectValue placeholder="Choose era" /></SelectTrigger>
+            <SelectTrigger className="bg-muted/30"><SelectValue placeholder={<span>Choose era</span>} /></SelectTrigger>
             <SelectContent>{ERAS.map(e => <SelectItem key={e.value} value={e.value}>{e.label}</SelectItem>)}</SelectContent>
           </Select>
         </div>

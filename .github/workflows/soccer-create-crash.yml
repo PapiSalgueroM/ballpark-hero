@@ -14,13 +14,15 @@ concurrency:
 jobs:
   diagnose:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     defaults:
       run:
         shell: bash
     env:
       ENGINES: chromium
       TZ: UTC
+      SIM_NETWORK: offline
+      SEO_SPLIT_BASE_REF: HEAD
     steps:
       - uses: actions/checkout@v4
         with:
@@ -36,7 +38,7 @@ jobs:
           python-version: '3.12'
       - name: Hold exact source and install remote browser
         run: |
-          mkdir -p soccer-create-crash-artifacts/dependencies
+          mkdir -p soccer-create-crash-artifacts/dependencies soccer-create-crash-artifacts/regressions
           git rev-parse HEAD > soccer-create-crash-artifacts/source-head.txt
           git rev-parse 'HEAD^{tree}' > soccer-create-crash-artifacts/source-tree.txt
           git ls-tree -r HEAD > soccer-create-crash-artifacts/source-git-manifest.txt
@@ -75,6 +77,21 @@ jobs:
         env:
           CREATE_CRASH_BUILT_READY: ${{ steps.build.outcome == 'success' }}
         run: timeout --signal=TERM --kill-after=15s 20m node scripts/qa/soccerCreateCrash1096.mjs 2>&1 | tee soccer-create-crash-artifacts/diagnostic.log
+      - name: Existing Soccer Career save and creation regression
+        id: saves
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        continue-on-error: true
+        run: timeout --signal=TERM --kill-after=15s 5m node_modules/.bin/vitest run src/test/soccerCareerSaveRecovery.test.tsx 2>&1 | tee soccer-create-crash-artifacts/regressions/save-recovery.log
+      - name: All twenty built page and source readers
+        id: readers
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        continue-on-error: true
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings simSeoMetaSplit simHomeCopy simHarnessAnchors; do
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" ONLY="$harness" timeout --signal=TERM --kill-after=15s 3m node scripts/runAllSims.mjs --browser 2>&1 | tee "soccer-create-crash-artifacts/regressions/$harness.log" || failed=1
+          done
+          exit "$failed"
       - name: Source and lockfile remain held
         if: ${{ !cancelled() }}
         run: |
@@ -96,3 +113,5 @@ jobs:
           test '${{ steps.types.outcome }}' = success
           test '${{ steps.build.outcome }}' = success
           test '${{ steps.diagnostic.outcome }}' = success
+          test '${{ steps.saves.outcome }}' = success
+          test '${{ steps.readers.outcome }}' = success
