@@ -1,0 +1,6 @@
+S-phone: the build screen shows 1 stale text(s) after four stepper presses: screen "(78% match)" vs React "(54% match)"
+S-phone: to-centre-1: the save never got older (age 17 to 17) in 1 presses
+S-phone: to-centre-2: the save never got older (age 17 to 17) in 1 presses
+S-desktop: the build screen shows 1 stale text(s) after four stepper presses: screen "(78% match)" vs React "(54% match)"
+S-desktop: to-centre-1: the save never got older (age 17 to 17) in 1 presses
+S-desktop: to-centre-2: the save never got older (age 17 to 17) in 1 presses

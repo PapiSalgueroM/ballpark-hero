@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walk2: RV_ONLY=S node .rc/x/review-walk.mjs

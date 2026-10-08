@@ -1,0 +1,89 @@
+
+=== S-phone
+   guard line: [dukb] Skipped removing a node this page no longer owns. A page translator moved it, carry
+   box 0 reads on screen: "Choose nationality Brazil" after picking Brazil
+   box 0 reads on screen: "Choose nationality Argentina" after picking Argentina
+   box 1 reads on screen: "Choose positionStriker (ST)" after picking Striker
+   box 1 reads on screen: "Choose positionStriker (ST)Striker (ST)Goalkeeper (GK)" after picking Goalkeeper
+   box 2 reads on screen: "Choose eraCurrent era (2025 start)" after picking Current era
+   after 2 rerolls, stale on screen: none
+   build before: {"screen":"Skip to main content DOUKNOWBALL Back Track stats ← Back 🎮 Build Your Player STARTING OVERALL 48 ROOM TO GROW 36 -5 -1 +1 +5 Scouts have you at a 84 ceiling, so there are 36 points left in you. Start low and the climb is the game. POINTS TO SPEND 0 Reflexes Shot Reflexes 50 -5 -1 +1 +5 Shot Stopping One On Ones 35 -5 -1 +1 +5 Positioning Angles 50 -5 -1 +1 +5 Aerial Command Claiming Crosses 56 -5 -1 +1 +5 Distributi","react":"Skip to main contentLiveLive scores temporarily unavailableDoUKnowBallBackSign up to track your statsTrack stats← Back🎮 Build Your PlayerStarting overall48Room to grow36-5-1+1+5Scouts have you at a 84 ceiling, so there are 36 points left in you. Start low and the climb is the game.Points to spend0ReflexesShot Reflexes 50-5-1+1+5Shot StoppingOne On Ones 35-5-1+1+5PositioningAngles 50-5-1+1+5Aerial CommandClaiming Cro"}
+   Pace -5: pressed
+   second +5: pressed
+   first -1: pressed
+   second +1: pressed
+   build after: {"screen":"Skip to main content DOUKNOWBALL Back Track stats ← Back 🎮 Build Your Player STARTING OVERALL 47 ROOM TO GROW 37 -5 -1 +1 +5 Scouts have you at a 84 ceiling, so there are 37 points left in you. Start low and the climb is the game. POINTS TO SPEND 0 Reflexes Shot Reflexes 44 -5 -1 +1 +5 Shot Stopping One On Ones 41 -5 -1 +1 +5 Positioning Angles 50 -5 -1 +1 +5 Aerial Command Claiming Crosses 56 -5 -1 +1 +5 Distributi","react":"Skip to main contentLiveLive scores temporarily unavailableDoUKnowBallBackSign up to track your statsTrack stats← Back🎮 Build Your PlayerStarting overall47Room to grow37-5-1+1+5Scouts have you at a 84 ceiling, so there are 37 points left in you. Start low and the climb is the game.Points to spend0ReflexesShot Reflexes 44-5-1+1+5Shot StoppingOne On Ones 41-5-1+1+5PositioningAngles 50-5-1+1+5Aerial CommandClaiming Cro"}
+   build steppers, stale on screen (1): screen "(78% match)" vs React "(54% match)"
+   !! S-phone: the build screen shows 1 stale text(s) after four stepper presses: screen "(78% match)" vs React "(54% match)"
+   after Begin Career: broke=false h1="Rui Revisor" create=false save=Rui Revisor/Argentina/age 16/youth agesOnScreen=[16,17,30] stale=0 swapped=1234 scrollW=390/390
+   to-centre-0 end: broke=false h1="Rui Revisor" create=false save=Rui Revisor/Argentina/age 17/contract_offer agesOnScreen=[16,17,30] stale=2 swapped=1351 scrollW=390/390
+   to-centre-0 stale now: screen "16" vs React "17" | screen "📋 Joined Universidad de Chile" vs React "📈 Stats improved during youth"
+   to-centre-1 end: broke=false h1="Rui Revisor" create=false save=Rui Revisor/Argentina/age 17/contract_offer agesOnScreen=[16,17,30] stale=2 swapped=1365 scrollW=390/390
+   to-centre-1 stale now: screen "16" vs React "17" | screen "📋 Joined Universidad de Chile" vs React "📈 Stats improved during youth"
+   !! S-phone: to-centre-1: the save never got older (age 17 to 17) in 1 presses
+   to-centre-2 end: broke=false h1="Rui Revisor" create=false save=Rui Revisor/Argentina/age 17/playing agesOnScreen=[16,17,30] stale=2 swapped=1431 scrollW=390/390
+   to-centre-2 stale now: screen "16" vs React "17" | screen "📋 Joined Universidad de Chile" vs React "📩 Professional contract offer"
+   !! S-phone: to-centre-2: the save never got older (age 17 to 17) in 1 presses
+   Week by week pressed after 3 career press(es)
+   Season Centre: {"screen":"📺 Season Centre Universidad de Chile · 2027/28 ? Back to the papers Universidad de Chile 2027/28 · Primera Division Results only: the game does not have a verified table for this league that season. 🎯 3 moments are yours to play this season: league games 5, 6 and 36. FIRST FIVE 1 Home another club","react":"@keyframes cmRise { 0% { opacity: 0; transform: translateY(7px); } 100% { opacity: 1; transform: translateY(0); } } .cm-rise { opacity: 0; animation: cmRise 0.45s ease-out forwards; } @keyframes cmSlam { 0% { opacity: 0; transform: scale(1.6); } 60% { opacity: 1; transform: scale(0.94); } 100% { opa"}
+   centre press 1 [?]: broke=false stale=2
+   centre press 2 [▶ Kick off]: broke=false stale=2
+   centre press 3 [🗓 Fixtures]: broke=false stale=2
+   centre press 4 [← Back]: broke=false stale=2
+   centre press 5 [⏸ Pause]: broke=false stale=2
+   centre press 6 [▶ Resume]: broke=false stale=2
+   centre press 7 [⏭ Sim the rest]: broke=false stale=3
+   centre press 8 [Got it]: broke=false stale=3
+   centre press 9 [?]: broke=false stale=3
+   centre press 10 [🗓 Fixtures]: broke=false stale=3
+   Season Centre, stale on screen (2): screen "16" vs React "18" | screen "📋 Joined Universidad de Chile You" vs React "🏆 Won Player of the Month (Februa"
+   Season Centre now: {"screen":"📺 Season Centre Universidad de Chile · 2027/28 ? Back to the papers ← Back 1 H another club L 0-1 2 A another club L 1-2 3 H another club W 2-0 4 A another club L 1-2 5 H another club 🎯 L 0-2 6 A another club 🎯 W 2-1 7 H another club L 0-1 8 A another club W 1-0 9 H another club D 1-1 10 A another club D 1-1 11 H another club L 1-5 12 A another club L 1-3 13 H another club W 2-1 14 A another cl","react":"@keyframes cmRise { 0% { opacity: 0; transform: translateY(7px); } 100% { opacity: 1; transform: translateY(0); } } .cm-rise { opacity: 0; animation: cmRise 0.45s ease-out forwards; } @keyframes cmSlam { 0% { opacity: 0; transform: scale(1.6); } 60% { opacity: 1; transform: scale(0.94); } 100% { opacity: 1; transform: scale(1); } } .cm-slam { opacity: 0; animation: cmSlam 0.4s cubic-bezier(0.2, 0."}
+
+=== S-desktop
+   guard line: [dukb] Skipped removing a node this page no longer owns. A page translator moved it, carry
+   box 0 reads on screen: "Choose nationality Brazil" after picking Brazil
+   box 0 reads on screen: "Choose nationality Argentina" after picking Argentina
+   box 1 reads on screen: "Choose positionStriker (ST)" after picking Striker
+   box 1 reads on screen: "Choose positionStriker (ST)Striker (ST)Goalkeeper (GK)" after picking Goalkeeper
+   box 2 reads on screen: "Choose eraCurrent era (2025 start)" after picking Current era
+   after 2 rerolls, stale on screen: none
+   build before: {"screen":"Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats ← Back 🎮 Build Your Player STARTING OVERALL 52 ROOM TO GROW 29 -5 -1 +1 +5 Scouts have you at a 81 ceiling, so there are 29 points left in you. Start low and the climb is the game. POINTS TO SPEND 0 Reflexes Shot Reflexes 54 -5 -1 +1 +5 Shot Stopping One On Ones 39 -5 -1 +1 +5 Positioning Angles 54 -5 -1 +1 +5 ","react":"Skip to main contentLiveLive scores temporarily unavailableDoUKnowBallBackSign up to track your statsTrack stats← Back🎮 Build Your PlayerStarting overall52Room to grow29-5-1+1+5Scouts have you at a 81 ceiling, so there are 29 points left in you. Start low and the climb is the game.Points to spend0ReflexesShot Reflexes 54-5-1+1+5Shot StoppingOne On Ones 39-5-1+1+5PositioningAngles 54-5-1+1+5Aerial CommandClaiming Cro"}
+   Pace -5: pressed
+   second +5: pressed
+   first -1: pressed
+   second +1: pressed
+   build after: {"screen":"Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats ← Back 🎮 Build Your Player STARTING OVERALL 51 ROOM TO GROW 30 -5 -1 +1 +5 Scouts have you at a 81 ceiling, so there are 30 points left in you. Start low and the climb is the game. POINTS TO SPEND 0 Reflexes Shot Reflexes 48 -5 -1 +1 +5 Shot Stopping One On Ones 45 -5 -1 +1 +5 Positioning Angles 54 -5 -1 +1 +5 ","react":"Skip to main contentLiveLive scores temporarily unavailableDoUKnowBallBackSign up to track your statsTrack stats← Back🎮 Build Your PlayerStarting overall51Room to grow30-5-1+1+5Scouts have you at a 81 ceiling, so there are 30 points left in you. Start low and the climb is the game.Points to spend0ReflexesShot Reflexes 48-5-1+1+5Shot StoppingOne On Ones 45-5-1+1+5PositioningAngles 54-5-1+1+5Aerial CommandClaiming Cro"}
+   build steppers, stale on screen (1): screen "(78% match)" vs React "(54% match)"
+   !! S-desktop: the build screen shows 1 stale text(s) after four stepper presses: screen "(78% match)" vs React "(54% match)"
+   after Begin Career: broke=false h1="Rui Revisor" create=false save=Rui Revisor/Argentina/age 16/youth agesOnScreen=[16,17,30] stale=0 swapped=1236 scrollW=1280/1280
+   to-centre-0 end: broke=false h1="Rui Revisor" create=false save=Rui Revisor/Argentina/age 17/contract_offer agesOnScreen=[16,17,30] stale=2 swapped=1351 scrollW=1280/1280
+   to-centre-0 stale now: screen "16" vs React "17" | screen "📋 Joined Werder Bremen Youth " vs React "📈 Stats improved during youth"
+   to-centre-1 end: broke=false h1="Rui Revisor" create=false save=Rui Revisor/Argentina/age 17/contract_offer agesOnScreen=[16,17,30] stale=2 swapped=1365 scrollW=1280/1280
+   to-centre-1 stale now: screen "16" vs React "17" | screen "📋 Joined Werder Bremen Youth " vs React "📈 Stats improved during youth"
+   !! S-desktop: to-centre-1: the save never got older (age 17 to 17) in 1 presses
+   to-centre-2 end: broke=false h1="Rui Revisor" create=false save=Rui Revisor/Argentina/age 17/playing agesOnScreen=[16,17,30] stale=2 swapped=1431 scrollW=1280/1280
+   to-centre-2 stale now: screen "16" vs React "17" | screen "📋 Joined Werder Bremen Youth " vs React "📩 Professional contract offer"
+   !! S-desktop: to-centre-2: the save never got older (age 17 to 17) in 1 presses
+   Week by week pressed after 3 career press(es)
+   Season Centre: {"screen":"📺 Season Centre Werder Bremen · 2027/28 ? Back to the papers 1 H another club 2 A Bayern Munich 3 H another club 4 A another club 5 H Frankfurt 6 A another club 🎯 7 H Leipzig 8 A another club 9 H another club 10 A Leverkusen 🎯 11 H another club 🎯 12 A another club 13 H Stuttgart 14 A another clu","react":"@keyframes cmRise { 0% { opacity: 0; transform: translateY(7px); } 100% { opacity: 1; transform: translateY(0); } } .cm-rise { opacity: 0; animation: cmRise 0.45s ease-out forwards; } @keyframes cmSlam { 0% { opacity: 0; transform: scale(1.6); } 60% { opacity: 1; transform: scale(0.94); } 100% { opa"}
+   centre press 1 [?]: broke=false stale=2
+   centre press 2 [▶ Kick off]: broke=false stale=2
+   centre press 3 [⏸ Pause]: broke=false stale=2
+   centre press 4 [▶ Resume]: broke=false stale=2
+   centre press 5 [⏭ Sim the rest]: broke=false stale=39
+   centre press 6 [Got it]: broke=false stale=39
+   centre press 7 [?]: broke=false stale=39
+   centre press 8 [Got it]: broke=false stale=39
+   centre press 9 [?]: broke=false stale=39
+   centre press 10 [Got it]: broke=false stale=39
+   Season Centre, stale on screen (39): screen "16" vs React "18" | screen "📋 Joined Werder Bremen Youth Acad" vs React "⚽ Solid season at Werder Bremen" | screen "0" vs React "65" | screen "0" vs React "29" | screen "0" vs React "60" | screen "0" vs React "21" | screen "0" vs React "45" | screen "0" vs React "33" | screen "0" vs React "59" | screen "0" vs React "39"
+   Season Centre now: {"screen":"📺 Season Centre Werder Bremen · 2027/28 ? Back to the papers 1 H another club W 1-0 2 A Bayern Munich L 0-2 3 H another club L 0-1 4 A another club W 3-1 5 H Frankfurt D 0-0 6 A another club 🎯 L 0-2 7 H Leipzig D 1-1 8 A another club L 0-2 9 H another club D 1-1 10 A Leverkusen 🎯 D 0-0 11 H another club 🎯 L 1-2 12 A another club D 3-3 13 H Stuttgart L 0-2 14 A another club W 1-0 15 H Dortmund ","react":"@keyframes cmRise { 0% { opacity: 0; transform: translateY(7px); } 100% { opacity: 1; transform: translateY(0); } } .cm-rise { opacity: 0; animation: cmRise 0.45s ease-out forwards; } @keyframes cmSlam { 0% { opacity: 0; transform: scale(1.6); } 60% { opacity: 1; transform: scale(0.94); } 100% { opacity: 1; transform: scale(1); } } .cm-slam { opacity: 0; animation: cmSlam 0.4s cubic-bezier(0.2, 0."}
+
+REVIEW WALK: 6 thing(s) noted
+  - S-phone: the build screen shows 1 stale text(s) after four stepper presses: screen "(78% match)" vs React "(54% match)"
+  - S-phone: to-centre-1: the save never got older (age 17 to 17) in 1 presses
+  - S-phone: to-centre-2: the save never got older (age 17 to 17) in 1 presses
+  - S-desktop: the build screen shows 1 stale text(s) after four stepper presses: screen "(78% match)" vs React "(54% match)"
+  - S-desktop: to-centre-1: the save never got older (age 17 to 17) in 1 presses
+  - S-desktop: to-centre-2: the save never got older (age 17 to 17) in 1 presses
+review-walk done, 6 noted
