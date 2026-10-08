@@ -1,3 +1,24 @@
+## Codex 1097 source registration accepted, final delivered-source proof next, October 8, 2026
+
+Run37753634318 atd0042cdb, treeead9f9df passed proper app types, pure12/12
+and7 effective controls, build, native19/19 and6 effective controls, closing.
+Full byte a1ee7076 and independent native8e825ed8/pure20241ca2 audits bind
+all3657 source paths, seven actual builds and actual served core scripts.
+Consolidated independent receipt6384ff95 accepts those finite scopes and the
+actual generated searchKeywords SHA256
+77cc24ceefdea5928a7fd18a542b24a950701dda3d96db4a5a13516fbf8a1089.
+The delivered file reproduces source406bf90456929961 from17 captured guide
+files,134 entries and1225 keywords. No manual generation. Guide and search
+readers passed. Reader20/25 remains strict RED overall: simHubs, simIndexing,
+simPrerender, simSitemap and simSeoTitles need integrated static refresh.
+Artifact11539502313 SHA256
+633f9cf932c43136ad89e5a6800fbda5ccca35acf3473d7a9d683c94439f0dc7.
+Final exact delivered-source capture still required before the held draft PR.
+Cap100 remains UNAPPLIED; F verifies/applies it and owns main/publication.
+No READY or live claim. Limits remain finite three-width guest mocked
+transport,128 daily pure deals and one actual random Unlimited journey.
+No local runtime or production probe. Prior strict reds remain retained.
+
 ## Codex 1097 guide freeze accepted, final normal proof next, October 8, 2026
 
 Exact freeze run37752018548 atfcc8fb53, treed6f2023f passed all five gates.
