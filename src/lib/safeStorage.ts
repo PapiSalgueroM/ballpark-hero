@@ -156,7 +156,7 @@ export const sessionStorageIsMemory: boolean = session.trouble !== null;
  * kept. Twenty nine call sites wrote with no guard at all, most of them a
  * "rules seen" flag set in a mount effect, and with storage full that one line
  * threw and the whole route fell to "This page broke" (measured on /footle
- * and /build-your-xi, the same shape on a dozen more). It writes to the
+ * and /build-your-xi, and on eleven more routes with the same line). It writes to the
  * browser's storage exactly as before, which in the blocked case is the stand
  * in above. It does NOT go through the full case's stand in: every reader of
  * those keys still reads the browser's own storage, and a write they could

@@ -13,10 +13,13 @@
  * the home page, and never renders under the prerenderer.
  */
 import './dailyReload/mocks';
-import { act, cleanup, render, renderHook, screen, waitFor } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, renderHook, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import type { ReactNode } from 'react';
 import { MemoryRouter } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import { useChampOrNot } from '@/hooks/useChampOrNot';
+import ChampOrNot from '@/pages/ChampOrNot';
 import type { CompetitionDef, ChampRow } from '@/lib/champOrNot';
 import { getTodayET } from '@/lib/dateUtils';
 import { resetMocks } from './dailyReload/mocks';
@@ -25,6 +28,16 @@ vi.mock('@/lib/champOrNot', async importOriginal => ({
   ...(await importOriginal<typeof import('@/lib/champOrNot')>()),
   fetchCompetitionRows: async (comp: CompetitionDef) => fixtureRows(comp),
 }));
+
+/* The page's furniture is not what is being tested: the same stand ins the
+   page's own reveal test uses. The hook, the page and the daily save are real. */
+vi.mock('@/components/game/GameShell', () => ({ GameShell: ({ children, headerExtra }: { children: ReactNode; headerExtra: ReactNode }) => <main>{headerExtra}{children}</main> }));
+vi.mock('@/components/game/RulesGate', () => ({ RulesGate: () => <button>Help fixture</button> }));
+vi.mock('@/components/game/GameNav', () => ({ GameNav: () => null }));
+vi.mock('@/components/game/ReportQuestion', () => ({ default: () => null }));
+vi.mock('@/components/ads/AdBanner', () => ({ default: () => null }));
+vi.mock('@/components/seo/GameSeoContent', () => ({ default: () => null }));
+vi.mock('@/components/game/ShareButtons', () => ({ default: () => null }));
 
 /* Fictional rows: this test is about storage, not about who won what. */
 function fixtureRows(comp: CompetitionDef): ChampRow[] {
@@ -77,6 +90,16 @@ describe('a game under blocked storage', () => {
     act(() => view.result.current.answer(view.result.current.current!.isTrue));
     const kept = seam.safeLocalStorage.getItem(`champ-or-not-daily-${getTodayET()}`);
     expect(JSON.parse(kept as string)).toEqual({ answers: [true] });
+  });
+
+  it('the page itself mounts, and its first press is kept for the visit', async () => {
+    blockStorage();
+    const seam = await bootSeam();
+    const view = render(<HelmetProvider><MemoryRouter><ChampOrNot /></MemoryRouter></HelmetProvider>);
+    await waitFor(() => expect(view.getByRole('button', { name: '🏆 CHAMP' })).toBeEnabled());
+    fireEvent.click(view.getByRole('button', { name: '🏆 CHAMP' }));
+    const kept = JSON.parse(seam.safeLocalStorage.getItem(`champ-or-not-daily-${getTodayET()}`) as string) as { answers: boolean[] };
+    expect(kept.answers).toHaveLength(1);
   });
 
   it('control: with nothing standing in, the same hook throws on its first render', () => {
