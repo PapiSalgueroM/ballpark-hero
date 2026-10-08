@@ -10,7 +10,7 @@ import { pitchBeatAt, pitchPlan, pitchScene, pitchSceneKey } from '@/components/
 import type { PitchBeat, PitchPlaced, PitchPlan } from '@/components/pitch-motion/scene';
 const motionPath = process.env.LIVE_MOTION_COMPONENT;
 /* Round 1101: the part lives in src/components/pitch-motion now, and `between` is exported there. */
-const { actionFrame, between } = motionPath ? await import(/* @vite-ignore */ motionPath) : await import('@/components/pitch-motion/motion');
+const { actionFrame, between, useLiveSimMotion } = motionPath ? await import(/* @vite-ignore */ motionPath) : await import('@/components/pitch-motion/motion');
 
 const viewerPath = process.env.LIVE_MOTION_VIEWER;
 const { LiveSimScreen, stagePitchInput, goalCardCount, labelsAbove } = viewerPath ? await import(/* @vite-ignore */ viewerPath) : await import('@/components/club-manager/LiveSimScreen');
@@ -1007,6 +1007,10 @@ describe('The goal sequence', () => {
       const last = chances[chances.length - 1];
       /* The last chance of the half is a goal, inside the forty five, and nothing is struck with the last kick. */
       if (!last || last.kind !== 'goal' || clockPos(last) > 45 || chances.some(e => clockPos(e) === 45 + board)) continue;
+      /* A board of at least a minute. Skip fires that goal late, at the end of the board, and an action left
+         alive would still be inside its 1.05 at the 46th minute only then: with no board it is over 0.05 into
+         the second half and this test could not see it (the skipmoment control stayed green on such a half). */
+      if (board < 1) continue;
       const next = startSecondHalf(structuredClone(drawn))!;
       /* And nothing real happens in the first two minutes of the second half, so what is on screen there is the restart. */
       if (liveFeed(next.live!).some(e => e.minute >= 46 && e.minute <= 47 && e.kind !== 'halftime')) continue;
@@ -1014,6 +1018,7 @@ describe('The goal sequence', () => {
       second = next;
     }
     expect(first, 'no seed ended a first half on a goal as its last chance').not.toBeNull();
+    console.log(`[1101 skip] the half found: board ${boardAt(first!, 45)}, its last chance a goal at ${clockPos(liveFeed(first!.live!).filter(e => e.minute <= 45 && e.kind === 'goal').slice(-1)[0])}`);
     first!.live!.minute = 1;
     const callbacks = { onSub: vi.fn(), onShape: vi.fn(), onTalk: vi.fn(), onSecondHalf: vi.fn(), onExit: vi.fn(), onStartSecondHalf: vi.fn(), onStartExtraTime: vi.fn(), onChange: vi.fn(), onMark: vi.fn() };
     function Page() {
@@ -1143,4 +1148,35 @@ describe('Match mode', () => {
     /* And the full stats are in the markup the whole time, panel or no panel. */
     expect(mounted.container.querySelectorAll('[data-cm-live-stats]').length).toBe(1);
   }, 60000);
+});
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * Round 1101: the part itself drops an action when the line up under it changes. The viewer no longer
+ * needs this to show the right man (it joins the frame to its own eleven by key, which the substitution
+ * test above proves), so the old `lineup` control, which takes this guard out of the hook, turned nothing
+ * red any more. A binder that draws straight off the frame (PitchMotion, the Season Centre's mini pitch)
+ * does need it, so it is proven here on the hook, and `lineup` has a test to turn red again.
+ * ───────────────────────────────────────────────────────────────────────────── */
+describe('The part and a change of line up', () => {
+  it('the part drops an action when the line up under it changes', async () => {
+    type Five = typeof scene;
+    /* One object for the whole test: the hook starts an action whenever its event changes identity. */
+    const goal = { event: { minute: 10, side: 'me' as const, kind: 'goal' as const, text: 'Home striker' }, key: 'probe', at: 10 };
+    function Probe({ on, clock }: { on: Five; clock: number }) {
+      const frame = useLiveSimMotion(on, goal, clock, true, false);
+      return <div data-probe={frame.action} data-names={frame.mine.map((p: { name?: string }) => p.name).join(',')} />;
+    }
+    const mounted = render(<Probe on={scene} clock={10.3} />);
+    await step(32);
+    const probe = () => mounted.container.querySelector('[data-probe]')!;
+    /* The strike is playing, on the eleven it started with. */
+    expect(probe().getAttribute('data-probe')).toBe('goal');
+    expect(probe().getAttribute('data-names')).toBe('Home keeper,Home striker');
+    /* The striker is replaced under the action: same slot, another man. */
+    const changed: Five = { ...scene, mine: scene.mine.map(p => (p.key === 'm9' ? { ...p, name: 'Home sub' } : p)) };
+    mounted.rerender(<Probe on={changed} clock={10.35} />);
+    await step(32);
+    expect(probe().getAttribute('data-probe')).toBe('pass');
+    expect(probe().getAttribute('data-names')).toBe('Home keeper,Home sub');
+  });
 });

@@ -1290,7 +1290,7 @@ export function LiveSimScreen({
               <div data-cm-live-statline="1" className="cm-statline text-[11px] text-muted-foreground tabular-nums">
                 {/* Its name, for a screen reader: the full stats, where the words are printed, are a panel away on a phone. */}
                 <span className="sr-only">Balance of play: </span>
-                <span>Poss<b className="text-foreground">{poss === null ? '-' : `${poss}%`}</b> {poss === null ? '-' : `${100 - poss}%`}</span>
+                <span>Poss <b className="text-foreground">{poss === null ? '-' : `${poss}%`}</b> {poss === null ? '-' : `${100 - poss}%`}</span>
                 <span>Shots <b className="text-foreground">{stats ? `${stats.shots} (${stats.onTarget})` : '-'}</b> {stats ? `${stats.oppShots} (${stats.oppOnTarget})` : '-'}</span>
                 <span>xG <b className="text-foreground">{stats ? stats.xg.toFixed(2) : '-'}</b> {stats ? stats.oppXg.toFixed(2) : '-'}</span>
               </div>
