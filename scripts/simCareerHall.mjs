@@ -1440,7 +1440,8 @@ for (const a of ANCHORS.anchors) {
   if (!BALLOTS.includes(a.hall?.ballot) || !['main', 'committee'].includes(a.hall?.route)) shapeMiss.push(`${a.id}: ballot or route`);
   if (!(a.seasons > 0) || !(a.lastSeason > 1900) || !a.pos || !a.family) shapeMiss.push(`${a.id}: seasons, last season, position or family`);
   for (const [k, v] of Object.entries(a.totals ?? {})) if (v === null ? !a.nulls?.[k] : !(typeof v === 'number' && v >= 0)) shapeMiss.push(`${a.id}: total ${k}`);
-  for (const k of AWARD_KEYS) if (!(Number.isInteger(a.awards?.[k]) && a.awards[k] >= 0)) shapeMiss.push(`${a.id}: award ${k}`);
+  // Each anchor carries its own sport's award counts (the file holds every sport; this run reads one).
+  for (const k of LEGACY_INPUT[a.sport]?.awards ?? ['no such sport']) if (!(Number.isInteger(a.awards?.[k]) && a.awards[k] >= 0)) shapeMiss.push(`${a.id}: award ${k}`);
 }
 const builtSports = ANCHORS.selection?.sportsBuilt ?? [];
 const anchorsBuilt = builtSports.includes(SPORT);
