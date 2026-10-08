@@ -1,0 +1,5 @@
+engine for saves: the BASE tree at /home/runner/work/ballpark-hero/ballpark-hero/.rvbase
+byte equal, base engine against head engine: signing save true (6943 chars), won save true (54205 chars, seed 1)
+saves made: signing, won, wonEarly, wonOnCard, quiet, extension, signingLong; missing: loan
+facts: {"signingClub":"Liverpool","won":{"seed":1,"name":"Copa América","year":2028,"nation":"Brazil","rank":20},"wonEarlyPhase":"newspaper","quiet":"World Cup 2014, Round of 16, seed 1","extension":"seed 1, Liverpool, wage 106958","longClub":"River Plate Asuncion"}
+loan window at 390, before any press: page 23 px wider than its window (widest so far 23), 0 scene(s) on the page, 1 element(s) past the right edge: ["button.inline-flex.items-center.justify-center right 413 \"Request transfer 📤\""]
