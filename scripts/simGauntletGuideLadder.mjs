@@ -27,12 +27,18 @@
         can read the same way; their example numbers are not checked here and that is said, not hidden.)
 
    MEASURED 2026-10-08 on the round's own branch (r1130-fo-one-rating): soccer 70 76 81 85 89, MLB 74 81 87 92 97,
-   NBA 85 89 93 97 101 and NHL 77 84 89 94 98 agree with their guides. The NFL ladder is 79 83 88 92 97 and on
-   that branch its guide printed 78, 85, 90, 95, 99, "78 up to 99" and a 97 rated quarterback card beside an 88,
-   an 82, a 76 and a 68 (the pool's quarterbacks run 65 to 93 and none is a 68). So THIS FENCE WAS RED ON THAT
-   BRANCH, 3 of 17 checks, ON PURPOSE: src/data/gameContent/football.ts belonged to another round that week, the
-   sentences were owed, and a release must not go out with the two screens disagreeing. With the owed sentences
-   (the branch r1130-guide-owed, one commit on top of that one) it is green, 17 of 17.
+   NBA 85 89 93 97 101 and NHL 77 84 89 94 98 agree with their guides. The NFL ladder is 79 83 88 92 97. When
+   this fence was written the NFL guide still printed 78, 85, 90, 95, 99, "78 up to 99" and a 97 rated
+   quarterback card beside an 88, an 82, a 76 and a 68 (the pool's quarterbacks run 65 to 93 and none is a 68),
+   so it went red, 3 of 17 checks, on exactly the three NFL sections. That was the fence doing its job: the
+   guide sentences were written apart from the round at first, and a release could not go out with the two
+   screens disagreeing. The round's closing pass folded the sentences into the same branch, and on that head
+   it is green, 17 of 17, with each control firing once and nothing red without it.
+
+   WHEN IT GOES RED. A ladder moved or somebody retyped a number. Decide which side is right (the config's
+   ladder is measured by scripts/simGauntletEngine.mjs, so it is usually the guide that is stale), fix the
+   sentence, then rerun node scripts/genSearchKeywords.mjs and, for a guide whose sentences are frozen,
+   node scripts/simGuideHeadings.mjs --refresh /route. Never ship one without the other.
 
    CONTROLS, SIM_GAUNTLET_GUIDE_CONTROL=<name>. Each patches a loaded text, first asserts its anchor is there
    exactly once, and the run exits 0 only when the game it names went red in exactly the section it names
@@ -131,12 +137,11 @@ const plainText = rel => { if (!loaded.has(rel)) loaded.set(rel, read(rel)); ret
 const plain = measure(plainText);
 if (plain.checks < GAMES.length * 3) { console.error(`FAIL: only ${plain.checks} checks ran over ${GAMES.length} games, so nothing was measured`); process.exit(1); }
 
-const OWED = 'The sentences are owed to src/data/gameContent/football.ts (another round\'s file): merge the branch r1130-guide-owed, or write them and rerun node scripts/genSearchKeywords.mjs.';
+const REPAIR = 'Fix the guide sentence (or the ladder, if the guide is the one that is right), then rerun node scripts/genSearchKeywords.mjs and, for a frozen guide, node scripts/simGuideHeadings.mjs --refresh /route.';
 if (!CONTROL) {
   for (const line of plain.lines) console.log(line);
   if (plain.fails.length) {
-    const nflOnly = plain.fails.every(f => f.route === NFL);
-    console.error(`simGauntletGuideLadder: RED, ${plain.fails.length} of ${plain.checks} checks failed. A guide prints numbers its own board contradicts.${nflOnly ? ' ' + OWED : ''}`);
+    console.error(`simGauntletGuideLadder: RED, ${plain.fails.length} of ${plain.checks} checks failed. A guide prints numbers its own board contradicts. ${REPAIR}`);
     process.exit(1);
   }
   console.log(`simGauntletGuideLadder: green, ${plain.checks} checks. Five ladders, five guides, and the NFL example names cards the pool holds.`);
