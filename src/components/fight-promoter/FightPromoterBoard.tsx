@@ -15,6 +15,7 @@ import {
   type PromoterState, type ShowResult, type Booking,
 } from '@/lib/fightPromoter';
 import { HowToPlayPopover } from '@/components/game/HowToPlayPopover';
+import BoxingShowForecast from '@/components/fight-promoter/BoxingShowForecast';
 
 /* Round 955: the new ending, written down where the player can reopen it,
    because the page's guide lives in a file another lane is editing. */
@@ -322,13 +323,8 @@ export default function FightPromoterBoard() {
           })}
         </div>
         {card.length > 0 && (
-          <div className="mt-2 border-t pt-2 text-xs text-muted-foreground">
-            <p>Projected house {projected.toLocaleString()} of {venue.capacity.toLocaleString()}</p>
-            <p>
-              Gate {projectedGate.toFixed(3)}m, purses from {projectedPurses.toFixed(3)}m, room {venue.rent.toFixed(3)}m.
-              The men take the greater of their guarantee or 58% of the door.
-            </p>
-          </div>
+          <BoxingShowForecast attendance={projected} capacity={venue.capacity} gate={projectedGate}
+            guaranteedPurses={projectedPurses} rent={venue.rent} money={st.money} />
         )}
         <button
           disabled={!card.length}

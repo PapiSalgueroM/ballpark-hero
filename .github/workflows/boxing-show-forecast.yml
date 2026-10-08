@@ -1,0 +1,135 @@
+name: Boxing show cash forecast
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - codex/boxing-cash-forecast-1086
+  pull_request:
+    paths:
+      - .github/workflows/boxing-show-forecast.yml
+      - src/components/fight-promoter/BoxingShowForecast.tsx
+      - src/components/fight-promoter/FightPromoterBoard.tsx
+      - src/test/boxingShowForecast.test.tsx
+      - scripts/simBoxingShowForecast.mjs
+      - scripts/playBoxingShowForecast1086.mjs
+
+permissions:
+  contents: read
+concurrency:
+  group: boxing-cash-forecast-1086-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+      VITEST_MAX_FORKS: 1
+      VITEST_MIN_FORKS: 1
+      SEO_SPLIT_BASE_REF: HEAD
+      SIM_OFFLINE_RECEIPT: boxing-show-forecast-artifacts/transport.log
+      BOXING_SHOW_FORECAST_ARTIFACTS: boxing-show-forecast-artifacts/outcomes
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Prepare remote verification
+        run: |
+          mkdir -p boxing-show-forecast-artifacts
+          git rev-parse HEAD > boxing-show-forecast-artifacts/source-head.txt
+          git rev-parse 'HEAD^{tree}' > boxing-show-forecast-artifacts/source-tree.txt
+          sha256sum package.json package-lock.json > boxing-show-forecast-artifacts/dependencies-before.txt
+          npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const lock = JSON.parse(fs.readFileSync('package-lock.json'));
+          const rows = Object.entries(lock.packages).filter(([p]) => p.startsWith('node_modules/') && fs.existsSync(p + '/package.json')).map(([p, e]) => {
+            const version = JSON.parse(fs.readFileSync(p + '/package.json')).version;
+            assert.equal(version, e.version); return { path: p, version };
+          });
+          assert(rows.length > 0);
+          fs.writeFileSync('boxing-show-forecast-artifacts/installed-before.json', JSON.stringify(rows, null, 2));
+          NODE
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+      - name: Actual app types and build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee boxing-show-forecast-artifacts/types.log
+          npm run build 2>&1 | tee boxing-show-forecast-artifacts/build.log
+      - name: Cache actual template fonts
+        id: assets
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: node scripts/playBoxingShowForecast1086.mjs --prefetch-fonts-only 2>&1 | tee boxing-show-forecast-artifacts/fonts.log
+      - name: Actual outcomes and effective copied faults
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.assets.outcome == 'success' }}
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simBoxingShowForecast.mjs 2>&1 | tee boxing-show-forecast-artifacts/outcomes.log
+      - name: Native built-route cash and unchanged complete show receipts
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.assets.outcome == 'success' }}
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playBoxingShowForecast1086.mjs 2>&1 | tee boxing-show-forecast-artifacts/native.log
+      - name: Preserve new outcome evidence before original checks
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: boxing-cash-new-${{ github.run_id }}-${{ github.run_attempt }}
+          path: boxing-show-forecast-artifacts/
+          retention-days: 3
+          if-no-files-found: error
+      - name: Original relevant gameplay and score checks
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simFightPromoter simFightGym simFightCareer simMmaPromotion simMmaBoutRecap simNoDoubleRecord simScoringCoverage simScoreShown simInventedNames; do
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "boxing-show-forecast-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: All built readers and source anchors
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings simSeoMetaSplit simHomeCopy simHarnessAnchors; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "boxing-show-forecast-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Preserve engines data fixtures dependencies and source
+        if: ${{ !cancelled() }}
+        run: |
+          git diff --exit-code 5b70b05f6df7b15f64b8c5ddf1f4b7d0c7cd4c7f HEAD -- src/lib src/data src/hooks src/integrations src/types scripts/fixtures package.json package-lock.json
+          git diff --exit-code HEAD -- src scripts .github/workflows/boxing-show-forecast.yml
+          sha256sum package.json package-lock.json > boxing-show-forecast-artifacts/dependencies-after.txt
+          cmp boxing-show-forecast-artifacts/dependencies-before.txt boxing-show-forecast-artifacts/dependencies-after.txt
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const before = JSON.parse(fs.readFileSync('boxing-show-forecast-artifacts/installed-before.json'));
+          const after = before.map(row => ({ path: row.path, version: JSON.parse(fs.readFileSync(row.path + '/package.json')).version }));
+          assert.deepEqual(after, before);
+          fs.writeFileSync('boxing-show-forecast-artifacts/installed-after.json', JSON.stringify(after, null, 2));
+          NODE
+          if test -f boxing-show-forecast-artifacts/transport.log; then test ! -s boxing-show-forecast-artifacts/transport.log; fi
+      - name: Preserve verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: boxing-cash-forecast-1086-${{ github.run_id }}-${{ github.run_attempt }}
+          path: boxing-show-forecast-artifacts/
+          retention-days: 3
+          if-no-files-found: error
