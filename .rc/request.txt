@@ -1,0 +1,7 @@
+#!serial
+oddsize: node .rc/x/rvmut.mjs oddsize
+halfwide: node .rc/x/rvmut.mjs halfwide
+placescale: node .rc/x/rvmut.mjs placescale
+belgium16: node .rc/x/rvmut.mjs belgium16
+champ22: node .rc/x/rvmut.mjs champ22
+absdrop: node .rc/x/rvmut.mjs absdrop
