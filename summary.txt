@@ -1,0 +1,4 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+weight-head exit=0 24s | WEIGHT head /stadium-tycoon bytes=298084 kb=291 files=23 second=298084
+weight-pre1083 exit=0 51s | WEIGHT pre1083 /stadium-tycoon bytes=296745 kb=290 files=23 second=296745
+weight-base exit=0 51s | WEIGHT base /stadium-tycoon bytes=296373 kb=289 files=23 second=296373

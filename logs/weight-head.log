@@ -1,0 +1,7 @@
+  FAIL: /club-manager: 705K of gzipped JavaScript against a budget of 702K
+  FAIL: /stadium-tycoon: 291K of gzipped JavaScript against a budget of 287K
+  FAIL: /nfl-my-career: 455K of gzipped JavaScript against a budget of 454K
+  FAIL: /soccer-grid: 308K of gzipped JavaScript against a budget of 307K
+   /stadium-tycoon     291K gz over  23 files (budget 287K)
+sweepWeight: 4 failures
+WEIGHT head /stadium-tycoon bytes=298084 kb=291 files=23 second=298084
