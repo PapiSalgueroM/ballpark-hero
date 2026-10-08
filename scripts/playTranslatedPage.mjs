@@ -220,6 +220,71 @@
  *                dialogs only: its puzzle comes from the database, which no
  *                walk here may reach.
  *
+ * MEASURED FOR ROUND 1141, 2026-10-08, on a GitHub runner, with both layers in
+ * the build and the translator answering late the way the real one does (the
+ * Round 1140 numbers above are from before any of this and stay as its record;
+ * the Bank walk added four walks, so the counts are not comparable line by line):
+ *   plain        exit 0. 399 checks, 0 failed, 40 walks. No stale text at any
+ *                look on any page (up to 1,058 elements with words of their
+ *                own judged at one look). 64 calls named a moved node, 9 on
+ *                each create walk and 7 on each Bank walk, and layer two put
+ *                every one through: layer one had to fall back, and printed
+ *                its line, on 0 of 40 page loads. Layer two saw 27,241 text
+ *                nodes taken, put 44 removals and 20 inserts through and
+ *                handed 1,619 strings back fresh. All three boxes readable in
+ *                4 of 4. The age line was right at 13 of 13 looks, 12 of them
+ *                after a birthday. The Bank's statement after the five moves:
+ *                +$200k, -$200k, +$50k, +$50k, -$100k.
+ *   nolive       exit 1, red on purpose. 399 checks, 74 failed and every one
+ *                its own: asked directly on 40 of 40 pages (the copy stayed,
+ *                the element landed at the end, the page still showed the copy
+ *                of 16); stale text in 22 of 40 walks, 52 different, 6 on
+ *                screen at once at most (three runs gave 52, 54 and 57); a
+ *                placeholder beside its pick in 4 of 4 create walks; the age
+ *                line behind the save in 4 of 4; The Bank reading "-$100k+" in
+ *                4 of 4. No boundary and no NotFoundError in 40 walks.
+ *   notranslate  exit 0. 222 checks, 0 failed, 20 walks: every count of layer
+ *                two at 0 on every page, and the judge of check 10 silent.
+ *   noguard      exit 1, red on purpose. 183 checks, 36 failed, as before.
+ *   deeper, once (PAGE_PRESSES=24 CAREER_PRESSES=30 MODES=keep): exit 0, 201
+ *                checks, 0 failed, 20 walks, the career to age 20: the age
+ *                line right at 31 of 31 looks, 2,227 strings handed back, 38
+ *                moved node calls, 0 fallbacks.
+ *   before the fourth rule (a string rewritten under the translator), the
+ *                plain run was RED, 12 of 399: the roll on the create screen
+ *                read 56, 53 or 65 when React held 60, and the title of the
+ *                guide under four games kept its first words. With SIM_LATE=0
+ *                the same build was green, which is how the cause was told
+ *                apart: the translator's own delay, not the guard.
+ *   the real translator, not this copy: src/lib/translateGuard.ts was bundled
+ *                as it ships and loaded into a plain page under Google's
+ *                translator, in Portuguese, Japanese and German, and the page
+ *                made React's calls. Every outcome was right in all three:
+ *                "Age 16" rewritten to 17 read "17 anos"; the number removed
+ *                from "Striker · Age 16 · England" left "Atacante · Idade ·
+ *                Inglaterra"; a word inserted before "3" gave "Você só tem 3
+ *                gols nesta temporada."; forty rewrites 50 ms apart ended on
+ *                "Minuto 41"; a hundred left exactly two nodes; The Bank's
+ *                line read "+ US$ 50 mil"; a string rewritten 5 ms after it
+ *                appeared showed its SECOND words; a roll of forty ticks ended
+ *                on its last value. One rewrite caused exactly two swaps, one
+ *                for each string of the pair, at 1.5 s and still two at 6 s.
+ *   COST         three runs of each build, the middle one, untranslated, given
+ *                as both layers / layer one only / no guard, on two machines.
+ *                The create walk and 30 presses: script 0.92 / 0.93 / 0.92 s,
+ *                tasks 3.02 / 2.92 / 2.99 s. The create walk and 12 presses:
+ *                script 0.51 / 0.48 / 0.54 s. Then 25 s of a season lived week
+ *                by week at 3x, five matches started in every run: script
+ *                0.31 / 0.28 / 0.29 s, tasks 1.77 / 1.57 / 1.64 s, and the
+ *                three runs of one build differ by more than the builds do.
+ *                The calls themselves: 100,000 rewrites 91 / 86 / 85 ms and
+ *                60 / 49 / 51 ms (60 to 110 billionths of a second each);
+ *                20,000 inserts and removals of an element 81 / 65 / 60 and
+ *                59 / 51 / 61 ms; 20,000 of a text node 84 / 56 / 56 and
+ *                48 / 40 / 41 ms (1.4 millionths of a second a pair at most).
+ *                Nothing a person could see, and on the real page nothing the
+ *                numbers can tell from noise.
+ *
  * Run: npm run build, then ENGINES=chromium node scripts/playTranslatedPage.mjs
  * (Chromium only: it is where page translation lives). BASE names the server,
  * default http://localhost:4173; when nothing answers there and dist/ exists
@@ -230,7 +295,9 @@
  * time), each with its own context and its own seeded dice, and every wait is
  * for something on the page (the translator has caught up, the button is
  * back), so a slow machine is a slow run and not a red one. PAGE_PRESSES and
- * CAREER_PRESSES deepen a walk. Every request that is not the local server is
+ * CAREER_PRESSES deepen a walk. ONLY=/nba-my-career#bank walks The Bank alone.
+ * SIM_READ, SIM_DELAY and SIM_LATE set how the translator reads and answers.
+ * COST=1 (with COST_REPS, COST_WEEK_MS) measures and checks nothing. Every request that is not the local server is
  * aborted (the database host by its own rule, on every page) except the flag
  * images, which are answered with one local pixel.
  *
