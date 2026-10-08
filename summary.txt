@@ -1,0 +1,11 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+nav2 exit=0 42s | nav2 done
+nav3 exit=0 27s | nav3 done
+inbox exit=0 11s | playInboxCard: owned temporary files, headless browser and localhost server cleaned.
+world1077 exit=0 25s | PASS manager world native:3 profiles,9 effective DOM faults,actual modern/edited/historical worlds,unchanged saved tables and sources.
+plans1079 exit=0 69s | PASS manager match plans native: 3 actual hook journeys, 12 effective restored DOM faults, independent engine previews and kickoff, reload and club isolation.
+tsc exit=0 50s | 
+vitest-round exit=0 2s |    Duration  1.78s (transform 371ms, setup 186ms, collect 785ms, tests 755ms, environment 1.44s, prepare 479ms)
+simStorageWrites exit=0 1s | simStorageWrites: all green
+ssw-probe exit=1 1s | simStorageWrites (control probe): 1 failed
+play-main exit=0 259s | playStorageBlocked: 826 checks, 0 failed

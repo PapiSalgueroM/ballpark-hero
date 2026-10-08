@@ -1,0 +1,13 @@
+#!serve
+#!playwright
+#!serial
+nav2: node .rc/x/nav2.mjs
+nav3: node .rc/x/nav3.mjs
+inbox: node scripts/playInboxCard.mjs
+world1077: node scripts/qa/managerWorldBrowser1077.mjs --prefetch-fonts-only && X=$(command -v xvfb-run >/dev/null && echo "xvfb-run -a"); NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" $X node scripts/qa/managerWorldBrowser1077.mjs
+plans1079: node scripts/qa/managerMatchPlans1079.mjs --prefetch-fonts-only && X=$(command -v xvfb-run >/dev/null && echo "xvfb-run -a"); NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" $X node scripts/qa/managerMatchPlans1079.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-round: node_modules/.bin/vitest run src/test/safeStorage.test.ts src/test/supabaseClientBlockedStorage.test.ts src/test/guestHandleVisit.test.tsx src/test/storageBlockedBoot.test.tsx --testTimeout=300000 --hookTimeout=120000
+simStorageWrites: node scripts/simStorageWrites.mjs
+ssw-probe: SIM_STORAGE_WRITES_CONTROL=probe node scripts/simStorageWrites.mjs
+play-main: PLAY_STORAGE_NATIVE=require node scripts/playStorageBlocked.mjs
