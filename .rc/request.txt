@@ -1,0 +1,15 @@
+ladder: node .rc/x/ladder1052.mjs $RC_OUT
+size-0: node scripts/simClubManagerSaveSize.mjs
+size-1: SIM_SEED=1 node scripts/simClubManagerSaveSize.mjs
+size-2: SIM_SEED=2 node scripts/simClubManagerSaveSize.mjs
+size-3: SIM_SEED=3 node scripts/simClubManagerSaveSize.mjs
+size-4: SIM_SEED=4 node scripts/simClubManagerSaveSize.mjs
+size-5: SIM_SEED=5 node scripts/simClubManagerSaveSize.mjs
+size-uncapped: SAVE_SIZE_CONTROL=uncapped node scripts/simClubManagerSaveSize.mjs
+slots-0: node scripts/simClubManagerSlots.mjs
+slots-1: SIM_SEED=1 node scripts/simClubManagerSlots.mjs
+slots-2: SIM_SEED=2 node scripts/simClubManagerSlots.mjs
+slots-3: SIM_SEED=3 node scripts/simClubManagerSlots.mjs
+slots-4: SIM_SEED=4 node scripts/simClubManagerSlots.mjs
+slots-5: SIM_SEED=5 node scripts/simClubManagerSlots.mjs
+slots-dupe: SLOTS_CONTROL=dupe node scripts/simClubManagerSlots.mjs
