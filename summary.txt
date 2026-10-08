@@ -1,0 +1,8 @@
+envprobe exit=0 0s | CI=undefined GA=undefined
+homefront exit=0 1s | simHomeFront: green. The home front shows real games, real saves and a sport you can tell apart without colour.
+reveal exit=0 9s | simRevealMoments: green. No counting number, a reduced motion rule beside every keyframe, one pace for every stagger, every fact and number on the cards is the fixture's 
+boxing exit=0 68s | Boxing show forecast: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/boxing-show-forecast-artifacts/outcomes
+tsc exit=0 72s | 
+homesearch exit=0 73s | Home search recovery: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/home-search-recovery-artifacts/outcomes
+salereview exit=0 56s | Tycoon sale review: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/tycoon-sale-review-artifacts/outcomes
+uscareer exit=0 91s | US career save retry: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/us-career-save-recovery-artifacts/outcomes

@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+envprobe: env -u CI -u GITHUB_ACTIONS node -e "console.log('CI=' + process.env.CI + ' GA=' + process.env.GITHUB_ACTIONS)"
+reveal: node scripts/simRevealMoments.mjs
+homefront: node scripts/simHomeFront.mjs
+boxing: env -u CI -u GITHUB_ACTIONS node scripts/simBoxingShowForecast.mjs
+homesearch: env -u CI -u GITHUB_ACTIONS node scripts/simHomeSearchRecovery.mjs
+salereview: env -u CI -u GITHUB_ACTIONS node scripts/simTycoonSaleReview.mjs
+uscareer: env -u CI -u GITHUB_ACTIONS node scripts/simUsCareerSaveRetry.mjs
