@@ -1,0 +1,10 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fit-a exit=0 112s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+fit-b exit=0 94s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+fit-c exit=0 101s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+fit-silentlist exit=1 91s | playLiveMatchFit: control silentlist turned section 7 red on the line it must (the list never said this goal, 2 GOAL! rewritten) and left the rest green.
+fit-bar exit=1 50s | playLiveMatchFit: control bar turned section 3 red and left sections 1, 2 and 4 green, as it must.
+c.reduced exit=0 37s | playReducedMotion: green. Motion stops for a visitor who asked for less, content stays visible, every Round 530 route lands its reveals on the final frame, and everyone e
+sog.cmchunks exit=0 3s | cmLiveChunks: 0 failed
+help2 exit=0 21s |    ? panel text there: ng the same seven replays the same cup. Opposition ratings climb 79, 83, 88, 92, 97. A bargain offense usually falls in the first round, an elite o
+simDailySaveHardening exit=1 58s | simDailySaveHardening: 2 failure(s)

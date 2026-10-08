@@ -1,0 +1,20 @@
+figure file in: PitchSurface-Bd-eWl9P.js (3562 gz)
+match viewer in: LiveSimScreen-ChKjhCsP.js (16848 gz)
+little pitch in: MiniPitch-DpN9SO_E.js (2013 gz)
+pitch css in: PitchSurface-BrcOvsZb.css (935 gz)
+ok   one chunk holds the figure, one the match viewer, one stylesheet holds the pitch rules
+the match viewer's static imports: index-CMwCmFpR.js clubManager-C16sAMn2.js HalftimeScreen-DTjNRvOp.js SquadScreen-CW3Er8w_.js ShootoutKicks-4g_Cdchz.js useRevealScroll-8FEAD1DK.js PitchSurface-Bd-eWl9P.js CelebrationStyles-NbUsSST1.js keyedRng-BKZQ2UGv.js clubManagerClock-C1EiWjUJ.js arrow-left-Bk2_cesH.js users-BosUIkis.js fast-forward-C07SPml3.js arrow-left-right-EcwaCE8f.js nameFold-Cxobkrgg.js soccerInternational-FiWGI8ks.js soccerCareerAppearance-BF4Z2JDW.js soccerBoots-BK_dXNrV.js soccerBootIds-BWkyFIXk.js managerOffers-Mi85K8qd.js squadShape-DzJQ1wtR.js positionFit-BbUnYZIs.js players-BvqkSYM9.js clubRivalries-DuNC-DyB.js gmStaff-CQgWbtVe.js gmDealTable-DYyD4N4_.js TeamTalkRow-BBE5BNSj.js FlagImg-Bz_Lhlzl.js arrow-up-CiVpv2so.js arrow-down-Bt6pcUgE.js chevron-down-HtWWtG-o.js
+ok   the match viewer imports the chunk that holds the figure (or holds it itself)
+the little pitch's static imports: index-CMwCmFpR.js PitchSurface-Bd-eWl9P.js
+ok   the little pitch imports the chunk that holds the figure
+ok   the figure is not inside the match viewer chunk (the little pitch would pull the whole viewer)
+ok   neither the figure chunk nor the little pitch holds a line of Club Manager's engine
+asks for the match viewer: ClubManager-B2huP0Q7.js
+ok   something asks for the match viewer
+ok   ClubManager-B2huP0Q7.js lists the figure chunk and the pitch stylesheet with the viewer, so a live match gets both
+ok   Club Manager's first screen asks for neither the viewer nor the figure
+the viewer chunk, imported in the page, exports: function function function function function function
+ok   the viewer chunk loads in a browser and brings the figure chunk, both answered 200
+ok   no page error ()
+a live match asks for: LiveSimScreen-ChKjhCsP.js 200, PitchSurface-Bd-eWl9P.js 200 and the stylesheet PitchSurface-BrcOvsZb.css
+cmLiveChunks: 0 failed
