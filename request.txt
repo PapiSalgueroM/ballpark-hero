@@ -1,0 +1,20 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+box-and-cg-tests: node_modules/.bin/vitest run src/test/playerAutocompleteInteraction.test.tsx src/test/playerAutocompleteEmptyText.test.tsx src/test/playerSearchFailure.test.tsx src/test/playerAutocompleteStale.test.tsx src/test/collegeGridFailClosed.test.tsx src/test/collegeGridOffline.test.tsx src/test/collegeGridSearchMemory.test.ts --testTimeout=300000 --hookTimeout=120000
+aci: node scripts/simPlayerAutocompleteInteraction.mjs
+aci-notag: AUTOCOMPLETE_INTERACTION_CONTROL=notag node scripts/simPlayerAutocompleteInteraction.mjs
+aci-pickreopens: AUTOCOMPLETE_INTERACTION_CONTROL=pickreopens node scripts/simPlayerAutocompleteInteraction.mjs
+aci-stickypick: AUTOCOMPLETE_INTERACTION_CONTROL=stickypick node scripts/simPlayerAutocompleteInteraction.mjs
+aci-deafreturn: AUTOCOMPLETE_INTERACTION_CONTROL=deafreturn node scripts/simPlayerAutocompleteInteraction.mjs
+aci-tapthrough: AUTOCOMPLETE_INTERACTION_CONTROL=tapthrough node scripts/simPlayerAutocompleteInteraction.mjs
+aci-greedyswallow: AUTOCOMPLETE_INTERACTION_CONTROL=greedyswallow node scripts/simPlayerAutocompleteInteraction.mjs
+psf: node scripts/simPlayerSearchFailure.mjs
+psf-abort-anchor-doubled-by-1105: PLAYER_SEARCH_FAILURE_CONTROL=abort node scripts/simPlayerSearchFailure.mjs
+lvc: node scripts/simLineupValidatorClient.mjs
+qh: node scripts/simQuotaHonesty.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+remedy-copy: REMEDY_COPY_ONLY=1 node .rc/x/remedy.mjs
+remedy-vitest: NO_DOUBLE_SWAP="{\"@/components/game/PlayerAutocomplete\":\"$(cat .sim-control/remedy-copy.txt)\"}" node_modules/.bin/vitest run src/test/playerAutocompleteInteraction.test.tsx src/test/playerAutocompleteEmptyText.test.tsx src/test/playerSearchFailure.test.tsx src/test/playerAutocompleteStale.test.tsx src/test/collegeGridFailClosed.test.tsx src/test/collegeGridOffline.test.tsx --testTimeout=300000 --hookTimeout=120000
+remedy-sweep2138: STALE_SWEEP_SEED=2138 NO_DOUBLE_SWAP="{\"@/components/game/PlayerAutocomplete\":\"$(cat .sim-control/remedy-copy.txt)\"}" node_modules/.bin/vitest run src/test/playerAutocompleteStale.test.tsx --testTimeout=300000
+remedy-sweep3138: STALE_SWEEP_SEED=3138 NO_DOUBLE_SWAP="{\"@/components/game/PlayerAutocomplete\":\"$(cat .sim-control/remedy-copy.txt)\"}" node_modules/.bin/vitest run src/test/playerAutocompleteStale.test.tsx --testTimeout=300000
+vitest-whole: node_modules/.bin/vitest run --reporter=dot --testTimeout=300000 --hookTimeout=120000
