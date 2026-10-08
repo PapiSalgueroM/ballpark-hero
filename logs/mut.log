@@ -1,0 +1,146 @@
+MUT none-box: exit=0 signal=null tests=67/67 failed=0
+MUT none-hook: exit=0 signal=null tests=58/58 failed=0
+MUT MA-tag-drops-options: exit=1 signal=null tests=65/67 failed=2
+      - playerAutocompleteStale > drops the list when the search options change under the same text
+      - playerAutocompleteStale > a pick does not bring the list back under the picked name
+MUT MB-leave-no-id-bump: exit=1 signal=null tests=65/67 failed=2
+      - playerAutocompleteStale > drops a search still in flight when the player leaves the box
+      - playerAutocompleteStale > Escape leaves the box while a search is in flight
+MUT MB2-leave-no-abort-no-bump: exit=1 signal=null tests=65/67 failed=2
+      - playerAutocompleteStale > drops a search still in flight when the player leaves the box
+      - playerAutocompleteStale > Escape leaves the box while a search is in flight
+MUT MB3-leave-keeps-debounce-timer: exit=1 signal=null tests=65/67 failed=2
+      - playerAutocompleteStale > drops a search still in flight when the player leaves the box
+      - playerAutocompleteStale > Escape leaves the box while a search is in flight
+MUT MC-reopen-no-refresh: exit=1 signal=null tests=60/67 failed=7
+      - playerAutocompleteStale > drops the list when the player leaves the box and searches again on return
+      - playerAutocompleteStale > never shows Finding players with nothing in flight
+      - playerAutocompleteStale > searches at exactly the fewest letters the page asks for
+      - playerAutocompleteStale > drops a search still in flight when the player leaves the box
+      - playerAutocompleteStale > drops a search still in flight when a name is picked
+      - playerAutocompleteStale > Escape leaves the box while a search is in flight
+      - playerAutocompleteStale > a pick does not bring the list back under the picked name
+MUT MD-catch-no-tag: exit=1 signal=null tests=66/67 failed=1
+      - playerAutocompleteEmptyText > does not fire on a failed search, resolved or thrown, and keeps the failure text
+MUT MJ-enter-on-held-key: exit=1 signal=null tests=66/67 failed=1
+      - playerAutocompleteStale > Enter picks the only name showing when the page asks for a pick from the list
+MUT MJ2-enter-while-loading: exit=0 signal=null tests=67/67 failed=0
+MUT MK-minchars-off-by-one: exit=1 signal=null tests=65/67 failed=2
+      - playerAutocompleteStale > searches at exactly the fewest letters the page asks for
+      - playerAutocompleteStale > Escape leaves the box while a search is in flight
+MUT MM-blur-negation: exit=1 signal=null tests=66/67 failed=1
+      - playerAutocompleteStale > drops the list when the player leaves the box and searches again on return
+MUT MN-outside-tap-only-hides: exit=1 signal=null tests=64/67 failed=3
+      - playerAutocompleteStale > drops the list when the player leaves the box and searches again on return
+      - playerAutocompleteStale > searches at exactly the fewest letters the page asks for
+      - playerAutocompleteStale > drops a search still in flight when the player leaves the box
+MUT MU-commit-keeps-list: exit=1 signal=null tests=66/67 failed=1
+      - playerAutocompleteStale > drops a search still in flight when a name is picked
+MUT ME-ask-ignores-status: exit=1 signal=null tests=57/58 failed=1
+      - lineupValidatorClient > an HTTP 500 is not counted
+MUT MG-wait-ten-times-longer: exit=1 signal=null tests=57/58 failed=1
+      - lineupValidatorClient > waits fifteen seconds for an answer and no longer
+MUT MO-caller-signal-not-heard: exit=1 signal=null tests=54/58 failed=4
+      - lineupValidatorClient > hears the caller give up at once, after it asked or before
+      - lineupValidatorClient > a reroll cancels the check in flight
+      - lineupValidatorClient > giving up drops an answer that was already on its way
+      - lineupValidatorClient > leaving the page cancels the check in flight
+MUT MV-unverified-read-after-valid: exit=1 signal=null tests=55/58 failed=3
+      - lineupValidatorClient > reads both flags at once
+      - lineupValidatorClient > says valid for the boolean true on an ok response and for nothing else
+      - lineupValidatorClient > a 200 with both flags is not counted
+MUT MF-club-substring-match: exit=1 signal=null tests=55/58 failed=3
+      - lineupValidatorClient > the door stays shut for a side whose name only starts with the slot club
+      - lineupValidatorClient > the door stays shut for a second side of the club under its longer stored name
+      - lineupValidatorClient > the door stays shut for a split season whose nearest club is a near miss
+MUT MR-no-cancel-on-unmount: exit=1 signal=null tests=57/58 failed=1
+      - lineupValidatorClient > leaving the page cancels the check in flight
+MUT MS-new-formation-no-cancel: exit=1 signal=null tests=57/58 failed=1
+      - lineupValidatorClient > giving up drops an answer that was already on its way
+MUT MT-reset-no-cancel: exit=1 signal=null tests=57/58 failed=1
+      - lineupValidatorClient > giving up drops an answer that was already on its way
+MUT MQ-no-giveup-after-answer: exit=1 signal=null tests=57/58 failed=1
+      - lineupValidatorClient > giving up drops an answer that was already on its way
+MUT MW-door-ignores-position: exit=1 signal=null tests=56/58 failed=2
+      - lineupValidatorClient > the door stays shut for a row with a position spelling the map does not know
+      - lineupValidatorClient > a club pick whose row has no known position goes to the validator
+MUT MX-exhausted-line-says-saved: exit=1 signal=null tests=57/58 failed=1
+      - lineupValidatorClient > an allowance answer blocks only that pick
+MUT MY-refusal-on-unverified: exit=1 signal=null tests=48/58 failed=10
+      - lineupValidatorClient > an HTTP 429 with an error body is not counted
+      - lineupValidatorClient > an HTTP 500 is not counted
+      - lineupValidatorClient > a 200 that is not JSON is not counted
+      - lineupValidatorClient > a 200 with an empty object is not counted
+      - lineupValidatorClient > a 200 with valid as a string is not counted
+      - lineupValidatorClient > a 200 with both flags is not counted
+      - lineupValidatorClient > a 200 unverified answer is not counted
+      - lineupValidatorClient > a rejected fetch is not counted
+      - lineupValidatorClient > an allowance answer blocks only that pick
+      - lineupValidatorClient > a check that never answers is given up and cancelled
+MUT MZ-rawname-ignored: exit=1 signal=null tests=57/58 failed=1
+      - lineupValidatorClient > a club pick on file at the club lands with no request to the validator
+MUT MN1-door-open-for-nation: exit=0 signal=null tests=58/58 failed=0
+MUT MN2-door-label-fallback: exit=1 signal=null tests=57/58 failed=1
+      - lineupValidatorClient > the door stays shut for a club label with no stored names
+MUT MN3-enter-during-composition: exit=1 signal=null tests=66/67 failed=1
+      - playerAutocompleteStale > Enter picks the only name showing when the page asks for a pick from the list
+MUT MN4-commit-leaves-search-in-flight: exit=1 signal=null tests=66/67 failed=1
+      - playerAutocompleteStale > drops a search still in flight when a name is picked
+MUT MN5-no-giveup-after-history: exit=1 signal=null tests=57/58 failed=1
+      - lineupValidatorClient > a pick given up while its history is read is dropped
+MUT MN6-cancel-does-not-abort: exit=1 signal=null tests=55/58 failed=3
+      - lineupValidatorClient > a reroll cancels the check in flight
+      - lineupValidatorClient > giving up drops an answer that was already on its way
+      - lineupValidatorClient > leaving the page cancels the check in flight
+MUT MN8-every-unverified-says-allowance: exit=1 signal=null tests=54/58 failed=4
+      - lineupValidatorClient > reads both flags at once
+      - lineupValidatorClient > reads a plain unverified answer
+      - lineupValidatorClient > a 200 with both flags is not counted
+      - lineupValidatorClient > a 200 unverified answer is not counted
+MUT MN15-any-blur-leaves: exit=1 signal=null tests=66/67 failed=1
+      - playerAutocompleteStale > drops the list when the player leaves the box and searches again on return
+MUT FX1-leave-no-abort: exit=1 signal=null tests=65/67 failed=2
+      - playerAutocompleteStale > drops a search still in flight when the player leaves the box
+      - playerAutocompleteStale > Escape leaves the box while a search is in flight
+MUT FX2-leave-no-timer-clear: exit=1 signal=null tests=66/67 failed=1
+      - playerAutocompleteStale > drops a search still in flight when the player leaves the box
+MUT FX3-commit-no-abort: exit=1 signal=null tests=66/67 failed=1
+      - playerAutocompleteStale > drops a search still in flight when a name is picked
+MUT FX4-commit-no-bump: exit=1 signal=null tests=66/67 failed=1
+      - playerAutocompleteStale > drops a search still in flight when a name is picked
+MUT FX5-commit-no-timer-clear: exit=1 signal=null tests=66/67 failed=1
+      - playerAutocompleteStale > drops a search still in flight when a name is picked
+MUT FX6-escape-only-with-names: exit=1 signal=null tests=66/67 failed=1
+      - playerAutocompleteStale > Escape leaves the box while a search is in flight
+MUT FX7-effect-minchars-off-by-one: exit=1 signal=null tests=65/67 failed=2
+      - playerAutocompleteStale > searches at exactly the fewest letters the page asks for
+      - playerAutocompleteStale > Escape leaves the box while a search is in flight
+MUT FX8-ask-ignores-early-abort: exit=1 signal=null tests=57/58 failed=1
+      - lineupValidatorClient > hears the caller give up at once, after it asked or before
+MUT FX9-reroll-no-cancel: exit=1 signal=null tests=55/58 failed=3
+      - lineupValidatorClient > a reroll cancels the check in flight
+      - lineupValidatorClient > a pick given up while its history is read is dropped
+      - lineupValidatorClient > giving up drops an answer that was already on its way
+MUT FX10-club-substring-other-way: exit=1 signal=null tests=56/58 failed=2
+      - lineupValidatorClient > the door stays shut for a club name that is only a piece of the stored name
+      - lineupValidatorClient > the door stays shut for a club field that is only the separator
+MUT FX11-escape-when-closed-too: exit=0 signal=null tests=67/67 failed=0
+MUT P1-pick-searches-again: exit=1 signal=null tests=66/67 failed=1
+      - playerAutocompleteStale > a pick does not bring the list back under the picked name
+MUT P2-pick-never-noted: exit=1 signal=null tests=66/67 failed=1
+      - playerAutocompleteStale > a pick does not bring the list back under the picked name
+MUT P3-sticky-pick: exit=1 signal=null tests=66/67 failed=1
+      - playerAutocompleteStale > a pick does not bring the list back under the picked name
+MUT P4-return-keeps-pick: exit=1 signal=null tests=64/67 failed=3
+      - playerAutocompleteStale > never shows Finding players with nothing in flight
+      - playerAutocompleteStale > drops a search still in flight when a name is picked
+      - playerAutocompleteStale > a pick does not bring the list back under the picked name
+MUT P5-pick-is-name-only: exit=1 signal=null tests=66/67 failed=1
+      - playerAutocompleteStale > a pick does not bring the list back under the picked name
+MUT P6-any-query-skipped-after-pick: exit=1 signal=null tests=66/67 failed=1
+      - playerAutocompleteStale > a pick does not bring the list back under the picked name
+MUT P7-skip-also-clears-pick: exit=1 signal=null tests=66/67 failed=1
+      - playerAutocompleteStale > a pick does not bring the list back under the picked name
+MUT P8-pick-noted-from-typed-text: exit=1 signal=null tests=66/67 failed=1
+      - playerAutocompleteStale > a pick does not bring the list back under the picked name
+rv-mut: 54 runs, survived with every test green: MJ2-enter-while-loading, MN1-door-open-for-nation, FX11-escape-when-closed-too
