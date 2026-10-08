@@ -8,11 +8,14 @@ type Props = {
   success: boolean;
   verdict: string;
   points: number;
+  /** Round 1047: shown in place of the points line on a success (a Season
+   *  Centre moment shows its stars). Absent: the points line, as ever. */
+  score?: ReactNode;
   detail?: ReactNode;
   children: ReactNode;
 };
 
-export default function ArcadeShotFeedback({ sport, success, verdict, points, detail, children }: Props) {
+export default function ArcadeShotFeedback({ sport, success, verdict, points, score, detail, children }: Props) {
   return (
     <div data-arcade-feedback data-outcome={success ? 'success' : 'miss'} className={`rounded-2xl border border-border bg-card p-4 text-center ${styles.card} ${success ? styles.success : styles.miss}`}>
       {success && <span aria-hidden="true" className={styles.sweep} />}
@@ -40,7 +43,7 @@ export default function ArcadeShotFeedback({ sport, success, verdict, points, de
           <p className={`font-display font-black ${styles.verdict}`}>{verdict}</p>
         </div>
         {detail}
-        {success && <p className={`font-display font-black ${styles.score}`}>{points} points.</p>}
+        {success && <p className={`font-display font-black ${styles.score}`}>{score ?? <>{points} points.</>}</p>}
       </div>
       <div className={styles.content}>{children}</div>
     </div>
