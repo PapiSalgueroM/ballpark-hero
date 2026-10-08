@@ -82,7 +82,7 @@ const FIXED_BASE = { mlb: { RP: [{ stat: 'saves', per: 8 }, { stat: 'holds', per
 /* The plural noun the ballot card prints for each family. */
 const LABELS = {
   nba: { pts: 'points', reb: 'rebounds', ast: 'assists' },
-  nfl: { passYds: 'passing yards', passTd: 'touchdown passes', rushYds: 'rushing yards', rushTd: 'rushing touchdowns', rec: 'catches', recYds: 'receiving yards', recTd: 'touchdown catches', tackles: 'tackles', sacks: 'sacks', picks: 'interceptions', passDef: 'passes defensed', fgMade: 'field goals' },
+  nfl: { passYds: 'passing yards', passTd: 'touchdown passes', rushYds: 'rushing yards', rushTd: 'rushing touchdowns', rec: 'catches', recYds: 'receiving yards', recTd: 'touchdown catches', tackles: 'tackles', sacks: 'sacks', picks: 'interceptions', passDef: 'passes defended', fgMade: 'field goals' },
   mlb: { hr: 'home runs', rbi: 'RBI', sb: 'steals', wins: 'wins', so: 'strikeouts', saves: 'saves' },
   nhl: { goals: 'goals', assists: 'assists', points: 'points', wins: 'wins' },
 };
