@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+# The gated Release AL head, WITHOUT Round 1104: are the two red walks red there too
+benefits: node scripts/simUsCareerAnnualBenefits.mjs
+hub: ENGINES=chromium node scripts/playCareerHub.mjs
+press1: ENGINES=chromium node scripts/playCareerPress.mjs
+press2: ENGINES=chromium node scripts/playCareerPress.mjs
+press3: ENGINES=chromium node scripts/playCareerPress.mjs
