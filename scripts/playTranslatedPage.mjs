@@ -87,8 +87,10 @@
  *      READ in its box, which is not the same thing: the first line box of
  *      the words has to lie inside everything that clips it. Under Round 1140
  *      the nationality pick failed that and sat on KNOWN_HIDDEN_PICKS, a
- *      ratchet. Round 1141 emptied the list: all three must be readable, and
- *      only the nolive control expects that one hidden again.
+ *      ratchet. Round 1141 emptied the list: all three must be readable. The
+ *      nolive control used to expect that one hidden again; since Round 1096
+ *      gave each placeholder a span of its own (Release AN) the box reads
+ *      right with layer one alone, so the list is empty in every mode.
  *   3. The create flow REACHED the career: the hub's h1 holds the typed name,
  *      the create form is gone and the save in the browser is his.
  *   4. One season forward: the save is a year older and the hub still stands.
@@ -207,10 +209,18 @@
  *                boots: layer one only, which is the build Round 1140 shipped.
  *                The run must go RED for layer two's own reasons while the
  *                page still STANDS: on every create walk stale text (check
- *                10), a placeholder beside its pick (13) and the age line
- *                behind the save (14), and in The Bank a figure with its sign
- *                at the wrong end (16), with no boundary and no NotFoundError
- *                anywhere. Exit 1 is the control firing. Exit 2 means it did
+ *                10) and the age line behind the save (14), and in The Bank
+ *                a figure with its sign at the wrong end (16), with no
+ *                boundary and no NotFoundError anywhere. A placeholder beside
+ *                its pick (13) was the third thing it had to show on the
+ *                create walk until Release AN: Round 1096 gave the three
+ *                placeholders spans of their own, so layer one alone gets
+ *                that right now (measured on the merged tree: 0 of 4 create
+ *                walks, where Round 1141's own tree showed 4 of 4). The count
+ *                is still printed, a 13 that fails still counts as its own,
+ *                and NOTHING here can make check 13 go red any more: its one
+ *                known offender was mended at the source.
+ *                Exit 1 is the control firing. Exit 2 means it did
  *                not fire, or a walk broke, or a check failed that has nothing
  *                to do with layer two, and proves nothing. Checks 18 and 19
  *                are its own too: with layer one alone the undo puts back
@@ -480,9 +490,11 @@ const PICKS = [['nationality', NAT], ['position', POS], ['era', ERA]];
 /* Round 1140 kept the nationality box on this list: with layer one alone it still READS "Choose
    national..." after a pick, because the translator's copy of the placeholder stays in the box.
    Round 1141's layer two removes that copy, the ratchet said "take the name off", and it is off:
-   every pick must be readable. Under the nolive control layer two is switched off and the box is
-   hidden again, which is one of the three things that control has to show. */
-const KNOWN_HIDDEN_PICKS = CONTROL === 'nolive' ? ['nationality'] : [];
+   every pick must be readable. Under the nolive control layer two is switched off and the box was
+   hidden again, until Round 1096 gave the placeholder a span of its own (Release AN): with that the
+   box reads right under layer one alone, the ratchet said "take the name off" a second time (4 of
+   4 create walks on the merged tree), and the list is empty in every mode. */
+const KNOWN_HIDDEN_PICKS = [];
 const BOUNDARY_WORDS = 'This page broke';
 const RETRY_WORDS = 'Try this page again';
 const SWITCH = '__DUKB_NO_TRANSLATE_GUARD__';
@@ -1899,8 +1911,9 @@ if (CONTROL === 'noguard') {
   await stop(1);
 }
 if (CONTROL === 'nolive') {
-  /* The control's own reasons, and nothing else, earn exit 1: the page is WRONG the three ways Round
-     1140 left it, and it still stands. */
+  /* The control's own reasons, and nothing else, earn exit 1: the page is WRONG the ways Round 1140
+     left it, and it still stands. Release AN: a placeholder beside its pick is no longer one of
+     them (Round 1096 mends that at the source, see the header), so it is counted and not required. */
   console.log(`${checksRun} checks, ${failed.length} failed`);
   const withLive = rows.filter(r => r.live);
   if (withLive.length) {
@@ -1929,7 +1942,7 @@ if (CONTROL === 'nolive') {
   if (createRows.length) console.log(`control "nolive": on the create walk, stale text in ${stale.length} of ${createRows.length}, a placeholder beside its pick in ${beside.length}, the age line behind the save in ${frozen.length}.`);
   if (bankRows.length) console.log(`control "nolive": in The Bank a figure with its sign in the wrong place or old words in ${sign.length} of ${bankRows.length} walk(s)${sign.length ? ', for example ' + JSON.stringify(sign[0].bank.wrong[0]) : ''}.`);
   const fired = createRows.length + bankRows.length > 0
-    && stale.length === createRows.length && beside.length === createRows.length && frozen.length === createRows.length
+    && stale.length === createRows.length && frozen.length === createRows.length
     && sign.length === bankRows.length;
   if (!fired) {
     console.error('control "nolive": with layer two off the page was NOT wrong in every way this control was written against. THE CONTROL DID NOT FIRE.');
