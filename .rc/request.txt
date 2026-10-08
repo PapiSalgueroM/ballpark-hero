@@ -1,0 +1,17 @@
+# Round 1104, the wider harnesses and vitests on head 1edd3c61 (never run on the branch since the steps landed)
+realism: node scripts/simCareerRealism.mjs
+nflcareer: node scripts/simNflCareer.mjs
+recorded: node scripts/simCareerRecordedStats.mjs
+boardparity: node scripts/simUsBoardParity.mjs
+hall: node scripts/simCareerHall.mjs
+money: node scripts/simMoney.mjs
+moneyret: node scripts/simCareerMoneyAfterRetirement.mjs
+awards: node scripts/simAwards.mjs
+summer: node scripts/simUsCareerSummer.mjs
+deckc: node scripts/simUsCareerDeckC.mjs
+eras: node scripts/simSportEras.mjs
+depth: node scripts/simDepthChart.mjs
+fa: node scripts/simFreeAgency.mjs
+ext: node scripts/simExtension.mjs
+vitest-a: node_modules/.bin/vitest run src/test/careerHallV1Replay.test.ts src/test/usCareerEraCards.test.ts src/test/usCareerEraLifeMoney.test.ts src/test/usCareerShopCap.test.ts src/test/careerHall.test.tsx src/test/careerSeasonReview.test.tsx src/test/moneyAppFeedback.test.tsx src/test/myCareerRestore.test.tsx src/test/noDoubleRecord.test.tsx src/test/rivalryChoiceBoard.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-b: node_modules/.bin/vitest run src/test/usBoardFixture.test.tsx src/test/usCareerActionConfirm.test.tsx src/test/usCareerHallBoard.test.tsx src/test/usCareerPractice.test.tsx src/test/usCareerProspect.test.tsx src/test/usCareerReveals.test.tsx src/test/usCareerStatLines.test.tsx src/test/usCareerSummer.test.tsx src/test/careerPreDraft.test.tsx src/test/careerRecordedStats.test.tsx --testTimeout=300000 --hookTimeout=120000
