@@ -43,8 +43,9 @@ import type { PitchRole } from '@/components/season-centre/MiniPitch';
 
 /* Round 1046: the little pitch is its own chunk, asked for when the first match kicks off */
 const MiniPitch = lazy(() => import('@/components/season-centre/MiniPitch'));
-/** The pitch's box: a fixed shape (the scoring third of a pitch), worn by the loading fallback too, so nothing under it ever moves. */
-const PITCH_BOX = 'relative w-full overflow-hidden rounded-xl aspect-[25/12]';
+/** The pitch's box: a fixed shape (the scoring third of a pitch), worn by the loading fallback too, so nothing under it ever moves.
+ *  `isolate` keeps the ball and the figures inside the box's own layer, under the score that stays at the top of a phone's stage. */
+const PITCH_BOX = 'relative isolate w-full overflow-hidden rounded-xl aspect-[25/12]';
 const roleOf = (position: string): Exclude<PitchRole, null> => (position === 'GK' ? 'GK' : position === 'CB' || position === 'LB' || position === 'RB' ? 'DEF' : 'ATT');
 import type { DerivedGame, DerivedSeason, SeasonEvent } from '@/lib/season/core';
 

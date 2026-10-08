@@ -97,7 +97,8 @@
  * Controls on what is SERVED (same variable): floor (the Kick off buttons'
  * class put back to h-11 flex-1 -> C6 red), lock (the body lock taken out ->
  * C4 red), tableview (the stage no longer brings the table into view -> C1
- * red on the phones). Screenshots go to SHOTS (or RC_OUT, else .tmp-fx/shots).
+ * red on the phones), pitchlayer (the pitch box loses its own layer, so the
+ * ball is drawn over the score that stays on screen -> C1 red at 320). Screenshots go to SHOTS (or RC_OUT, else .tmp-fx/shots).
  *
  * Needs dist built (the stylesheet and the site) and Chromium. Scope with ONLY=B1,B3 (any C runs all of part C).
  * Every page blocks the live database before anything loads.
@@ -126,7 +127,7 @@ const CONTROLS = {
   pitchside: { file: 'src/components/season-centre/MiniPitch.tsx', from: "  const us = !goal || goal.side === 'us';", to: '  const us = true;' },
   nosnap: { file: SHIFT_UI, from: "const reducedNow = () => typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;", to: 'const reducedNow = () => false;' },
 };
-const SERVED_CONTROLS = ['floor', 'lock', 'tableview'];
+const SERVED_CONTROLS = ['floor', 'lock', 'tableview', 'pitchlayer'];
 if (CONTROL && !CONTROLS[CONTROL] && !SERVED_CONTROLS.includes(CONTROL)) throw new Error(`unknown SEASON_MOTION_CONTROL ${CONTROL}`);
 if (CONTROL) console.log(`CONTROL ${CONTROL}: rewritten in the bundled source or in what is served, never a file on disk`);
 
@@ -474,7 +475,7 @@ if (want('B5')) {
   const pitchCss = fs.existsSync(pitchCssFile) ? fs.readFileSync(pitchCssFile, 'utf8') : '';
   fs.rmSync(tmp2, { recursive: true, force: true });
   check(pitchCss.includes('.pm-surface') && pitchCss.includes('.cm-live-net'), 'B5. the bare page carries the pitch part\'s own stylesheet (nets, ball and figures are placed)');
-  const BOX = 'relative w-full overflow-hidden rounded-xl aspect-[25/12]';
+  const BOX = 'relative isolate w-full overflow-hidden rounded-xl aspect-[25/12]';
   const EVENTS = [
     { min: 12, kind: 'goal', side: 'them', pts: 1 },
     { min: 40, kind: 'assist', side: 'us', mine: true },
@@ -638,6 +639,7 @@ if (ONLY.length === 0 || ONLY.some(x => x.startsWith('C'))) {
     ],
     lock: [['.style.overflow="hidden"', '.style.overflow=""', 'centre']],
     tableview: [['.closest("[data-centre-stage]")', '.closest("[data-centre-stage-off]")']],
+    pitchlayer: [['relative isolate w-full overflow-hidden rounded-xl aspect-[25/12]', 'relative w-full overflow-hidden rounded-xl aspect-[25/12]']],
   };
   const rewrites = new Map();
   if (SERVED[CONTROL]) {
@@ -859,6 +861,19 @@ if (ONLY.length === 0 || ONLY.some(x => x.startsWith('C'))) {
       ok: at >= 0 && need.every(r => r.top >= s.top - 0.5 && r.bottom <= s.bottom + 0.5),
       over: Math.round(Math.max(...need.map(r => r.bottom)) - s.bottom), scrolled: Math.round(stage.scrollTop), stage: Math.round(s.height),
       score: !!bug && bug.top >= s.top - 0.5 && bug.bottom <= s.bottom + 0.5,
+      /* nothing of the pitch (the ball, a figure) may be drawn over the score when the stage has moved under it */
+      through: (() => {
+        const bar = stage.querySelector('[data-score-bar]');
+        if (!bar) return -1;
+        const b = bar.getBoundingClientRect();
+        return [...stage.querySelectorAll('[data-mini-pitch] [data-cm-ball], [data-mini-pitch] .pm-figure svg')].filter(el => {
+          const r = el.getBoundingClientRect();
+          const x = r.left + r.width / 2, y = r.top + r.height / 2;
+          if (x < b.left || x > b.right || y < b.top || y > b.bottom) return false;
+          const top = document.elementFromPoint(x, y);
+          return !top || !top.closest('[data-score-bar]');
+        }).length;
+      })(),
     };
   }, MINE);
   const fixtureNames = page => page.evaluate(() => [...document.querySelectorAll('[data-season-centre] [data-fixture-name]')].filter(n => n.getBoundingClientRect().height > 0).map(n => n.getBoundingClientRect().width));
@@ -1005,6 +1020,7 @@ if (ONLY.length === 0 || ONLY.some(x => x.startsWith('C'))) {
         view.scrolled[tag] = Math.max(view.scrolled[tag] ?? 0, v ? v.scrolled : 0);
         if (!v || !v.ok) view.out.push(`${tag} matchday ${md}: ${v ? `his row or a neighbour is ${v.over} px under a ${v.stage} px stage` : 'no table'}`);
         else if (!v.score) view.out.push(`${tag} matchday ${md}: the score left the screen`);
+        else if (v.through !== 0) view.out.push(`${tag} matchday ${md}: ${v.through} parts of the pitch are drawn over the score`);
         if (md === 3) await shot(p, `matchday-full-time-${tag}`);
         const order = await tableNow(p);
         if (order.join() !== compactOf(md).join()) view.out.push(`${tag} matchday ${md}: the compact table is not node's`);
