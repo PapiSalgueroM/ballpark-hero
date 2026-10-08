@@ -1,0 +1,121 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/collegeGridOffline.test.tsx[2m > [22m[2mCollege Grid offline[2m > [22m[2m(4a) a win bot fills 9 of 9 in 9 counted guesses on every board
+[22m[39mCGOFFLINE| win: 75 of 75 boards won in 9 counted guesses, each recorded once at 900; 1350 network calls refused by the stub along the way; key files fetched 2, reads of the key's table 0
+
+[90mstdout[2m | src/test/collegeGridOffline.test.tsx[2m > [22m[2mCollege Grid offline[2m > [22m[2m(4b) a loss bot that submits a definite no each time ends every board lost at 15
+[22m[39mCGOFFLINE| loss: 0 of 75 boards ended lost at 15 counted guesses, each recorded once at 0; 75 still playing after 15 submissions
+CGOFFLINE| control nocount: 3375 no verdicts turned into unknown as the hook saw them
+CGOFFLINE| loss failures: cg611-001: playing, 0 correct, 0 counted, 15 left, recorded [] | cg611-002: playing, 0 correct, 0 counted, 15 left, recorded [] | cg611-003: playing, 0 correct, 0 counted, 15 left, recorded []
+
+ [31m❯[39m src/test/collegeGridOffline.test.tsx [2m([22m[2m2 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 2884[2mms[22m[39m
+   [33m[2m✓[22m[39m College Grid offline[2m > [22m(4a) a win bot fills 9 of 9 in 9 counted guesses on every board [33m 1343[2mms[22m[39m
+[31m   [31m×[31m College Grid offline[2m > [22m(4b) a loss bot that submits a definite no each time ends every board lost at 15[39m[33m 715[2mms[22m[39m
+[31m     → expected [ …(75) ] to deeply equal [][39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/collegeGridOffline.test.tsx[2m > [22mCollege Grid offline[2m > [22m(4b) a loss bot that submits a definite no each time ends every board lost at 15
+[31m[1mAssertionError[22m: expected [ …(75) ] to deeply equal [][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [][39m
+[31m+ [[39m
+[31m+   "cg611-001: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-002: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-003: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-004: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-005: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-006: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-007: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-008: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-009: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-010: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-011: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-012: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-013: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-014: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-015: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-016: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-017: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-018: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-019: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-020: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-021: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-022: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-023: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-024: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-025: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-026: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-027: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-028: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-029: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-030: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-031: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-032: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-033: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-034: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-035: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-036: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-037: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-038: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-039: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-040: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-041: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-042: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-043: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-044: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-045: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-046: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-047: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-048: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-049: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-050: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-051: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-052: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-053: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-054: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-055: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-056: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-057: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-058: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-059: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-060: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-061: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-062: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-063: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-064: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-065: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-066: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-067: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-068: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-069: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-070: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-071: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-072: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-073: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-074: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+   "cg611-075: playing, 0 correct, 0 counted, 15 left, recorded []",[39m
+[31m+ ][39m
+
+[36m [2m❯[22m src/test/collegeGridOffline.test.tsx:[2m276:17[22m[39m
+    [90m274| [39m    if (process.env.CG_OFFLINE_CONTROL === 'nocount') note(`control no…
+    [90m275| [39m    if (bad.length) note(`loss failures: ${bad.slice(0, 3).join(' | ')…
+    [90m276| [39m    [34mexpect[39m(bad)[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m   | [39m                [31m^[39m
+    [90m277| [39m    [34mexpect[39m(lost)[33m.[39m[34mtoBe[39m([34m75[39m)[33m;[39m
+    [90m278| [39m    expect(state.tableReads, 'the page never reads college_grid_player…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m   Start at [22m 08:27:26
+[2m   Duration [22m 4.50s[2m (transform 299ms, setup 66ms, collect 438ms, tests 2.88s, environment 452ms, prepare 327ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridOffline.test.tsx,title=src/test/collegeGridOffline.test.tsx > College Grid offline > (4b) a loss bot that submits a definite no each time ends every board lost at 15,line=276,column=17::AssertionError: expected [ …(75) ] to deeply equal []%0A%0A- Expected%0A+ Received%0A%0A- []%0A+ [%0A+   "cg611-001: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-002: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-003: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-004: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-005: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-006: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-007: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-008: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-009: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-010: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-011: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-012: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-013: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-014: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-015: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-016: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-017: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-018: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-019: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-020: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-021: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-022: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-023: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-024: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-025: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-026: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-027: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-028: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-029: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-030: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-031: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-032: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-033: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-034: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-035: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-036: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-037: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-038: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-039: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-040: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-041: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-042: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-043: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-044: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-045: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-046: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-047: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-048: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-049: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-050: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-051: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-052: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-053: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-054: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-055: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-056: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-057: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-058: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-059: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-060: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-061: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-062: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-063: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-064: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-065: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-066: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-067: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-068: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-069: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-070: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-071: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-072: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-073: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-074: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+   "cg611-075: playing, 0 correct, 0 counted, 15 left, recorded []",%0A+ ]%0A%0A ❯ src/test/collegeGridOffline.test.tsx:276:17%0A%0A

@@ -1,0 +1,31 @@
+vt-round exit=0 12s |    Duration  11.94s (transform 5.06s, setup 1.63s, collect 8.65s, tests 12.57s, environment 5.47s, prepare 1.44s)
+vt-nocount exit=1 5s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridOffline.test.tsx,title=src/test/collegeGridOffline.test.tsx > College Grid offline > (4b) a
+vt-paged exit=1 5s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridFailClosed.test.tsx,title=src/test/collegeGridFailClosed.test.tsx > College Grid fail close
+vt-acceptmissing exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridFailClosed.test.tsx,title=src/test/collegeGridFailClosed.test.tsx > College Grid fail close
+compact-check exit=0 1s | up to date: 35598 rows, stamp cf90e69d60395171, key and both compact files match
+boards-check exit=0 1s | up to date: src/data/collegeGridPuzzles.ts matches the derivation
+vt-shapes exit=1 39s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/dailySaveShapes.test.tsx,title=src/test/dailySaveShapes.test.tsx > a damaged daily save resets itself 
+shipped-auditedback exit=0 3s | control "auditedback": fired in section 1 as expected, the check works (red sections in all: 1, 2, 3, 4, 5)
+shipped-flipflag exit=0 8s | control "flipflag": fired in section 2 as expected, the check works (red sections in all: 2, 3, 4)
+shipped exit=0 22s | simCollegeGridShipped: green. None of the thirteen ships, the two files are the key row for row and verdict for verdict, every board keeps its answers and its floor, the 
+shipped-stale exit=0 6s | control "stale": fired in section 4 as expected, the check works (red sections in all: 2, 3, 4)
+shipped-shiftrow exit=0 9s | control "shiftrow": fired in section 2 and 3 as expected, the check works (red sections in all: 2, 3, 4, 5)
+shipped-fat exit=0 3s | control "fat": fired in section 6 as expected, the check works (red sections in all: 2, 3, 4, 5, 6)
+shipped-unknown-control exit=1 0s | SIM_CGSHIPPED_CONTROL=nosuchcontrol is not a control this harness knows (auditedback, flipflag, shiftrow, stale, fat, noexclude)
+page exit=0 1s | simCollegeGridPage: green. The page judges in memory, charges only a no, offers the key's names from memory, says only what the key holds, drops another board's save, loa
+qa-selftest exit=0 0s | collegeGridKeyVsTable --selftest: green, all 9 planted worlds gave the expected outcome. No request was made.
+key-syntax exit=0 0s | 
+shipped-noexclude exit=0 6s | control "noexclude": fired in section 7 as expected, the check works (red sections in all: 7)
+tables-off exit=0 2s | simCollegeTables: green. Both placeholder copies agree on 48 names, dedupePrograms hides what the cbb migration deletes and writes what it writes, the draft cleaner refus
+norival exit=0 20s | No rival product names found. 0 findings.
+gridengine exit=0 1s | simGridEngine: green. One engine, three configurations, every published board still rebuilds.
+gridrarity exit=0 2s | simGridRarity: green. The crowd is counted before the player joins it, in all three grids.
+quota exit=0 0s | simQuotaHonesty: green. When the allowance is gone, Soccer Grid and Build Your XI say so and stop asking for retries.
+pai exit=0 3s | simPlayerAutocompleteInteraction: eight actual-component pointer, keyboard, disabled, free-text, identity and filter checks passed.
+tsc exit=0 94s | 
+fetchretry exit=0 5s | simFetchRetry: green. A transient page failure costs a retry and the rows come back whole.
+dsh-saves exit=0 9s | simDailySaveHardening: part saves green
+anchors exit=0 42s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+dsh-parity exit=0 18s | simDailySaveHardening: part parity green
+dsh-shapes exit=1 32s | simDailySaveHardening: 2 failure(s)
+dsh-skip exit=0 31s | simDailySaveHardening: part skip green
