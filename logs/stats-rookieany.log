@@ -1,0 +1,28 @@
+   control rookieany: every man ever drafted in the league counts as a rookie, whatever season he debuted
+1) Every game adds up: 2400 box scores, then every club's season
+   2400 box scores, 900 club seasons over 30 closes
+2) The box takes nothing from the league generator: the same seed with and without lines
+   5 seeds played twice, two seasons each
+3) The award rules pick who the lines say: fixtures, then every simulated season against a typed copy of the rules
+   fixtures plus 30 simulated seasons; rookie of the year named in 20; 238 first year lines, 358 marked rookie
+4) The leaders tables are a recount
+5) The lines read like basketball and like this sim
+   club ppg 112.9 to 113.4 (mean 113.25); tenth scorer median 25.81 (24.6 to 26.8)
+   rating vs ppg Spearman 0.877 to 0.959; differential vs winning share 0.893 to 0.981
+   rebounds C 9.26 F 6.47 G 3.51; assists G 4.71 F 2.46 C 1.35
+6) The close happens once and is kept
+7) A save from before the round: no lines this season, lines from the summer
+   vitest skipped under this control: it reads src, which the control never touches
+8) The copy says what the engine does
+   Sixth Man winners, points a game over 30 seasons: 10th percentile 12.2, median 12.8, 90th 13.3; the page promises 13
+   1. every game adds up: 3 checks
+   2. the box takes nothing from the league generator: 20 checks
+   3. the award rules pick who the lines say: 16 checks, 2 FAILED
+   4. the leaders tables are a recount: 1 check
+   5. the lines read like basketball and like this sim: 6 checks
+   6. the close happens once and is kept: 6 checks
+   7. an old save: 5 checks
+   8. the copy says what the engine does: 12 checks
+   red: [3] every simulated season (30) names the man the typed rules name, for all five awards: seed 1 2028: engine {"mvp":"nffhofc1ripakx-41","allLeague":["nffhofc1ripakx-41","nffhofc1ripakx-1","nffhofc1ripakx-51","nffhofc1ripakx-61","nffhofc1ripakx-21"],"roy":"nffhofc1ripakx-452","dpoy":"nffhofc1ripakx-1","sixth":"nffhofc1ripakx-283"} typed {"minGames":64,"mvp":"nffhofc1ripakx-41","allLeague":["nffhofc1ripakx-41","nffhofc1ripakx-1","nffhofc1ripakx-51","nffhofc1ripakx-61","nffhofc1ripakx-21"],"roy":"nffhofc1ripakx-543","dpoy":"nffhofc1ripakx-1","sixth":"nffhofc1ripakx-283"} | seed 2 2028: engine {"mvp":"nffhofc1ripakx-698","allLeague":["nffhofc1ripakx-698","nffhofc1ripakx-738","nffhofc1ripakx-708","nffhofc1ripakx-831","nffhofc1ripakx-718"],"roy":"nffhofc1ripakx-1150","dpoy":"nffhofc1ripakx-698","sixth":"nffhofc1ripakx-938"} typed {"minGames":64,"mvp":"nffhofc1ripakx-698","allLeague":["nffhofc1ripakx-698","nffhofc1ripakx-738","nffhofc1ripakx-708","nffhofc1ripakx-831","nffhofc1ripakx-718"],"roy":"nffhofc1ripakx-1238","dpoy":"nffhofc1ripakx-698","sixth":"nffhofc1ripakx-938"} | seed 3 2028: engine {"mvp":"nffhofc1ripakx-1399","allLeague":["nffhofc1ripakx-1399","nffhofc1ripakx-1439","nffhofc1ripakx-1389","nffhofc1ripakx-1429","nffhofc1ripakx-1599"],"roy":"nffhofc1ripakx-1840","dpoy":"nffhofc1ripakx-1575","sixth":"nffhofc1ripakx-1571"} typed {"minGames":64,"mvp":"nffhofc1ripakx-1399","allLeague":["nffhofc1ripakx-1399","nffhofc1ripakx-1439","nffhofc1ripakx-1389","nffhofc1ripakx-1429","nffhofc1ripakx-1599"],"roy":"nffhofc1ripakx-1928","dpoy":"nffhofc1ripakx-1575","sixth":"nffhofc1ripakx-1571"}
+   red: [3] the rookie mark is exactly the men drafted at the previous close who played: 120 wrong, e.g. seed 1 2028: Dashawn Northcutt is marked rookie but was not drafted at the 2027 close | seed 1 2028: Omari Reeves is marked rookie but was not drafted at the 2027 close | seed 1 2028: Omari Ridgeway is marked rookie but was not drafted at the 2027 close
+control "rookieany": section 3 went red as expected (2 failures) and nothing else moved, the check works. Exiting non zero because the checks did fail.

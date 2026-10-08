@@ -1,0 +1,39 @@
+vitest-new: node_modules/.bin/vitest run src/test/nbaAwardDecisionLift.test.ts src/test/nbaOldSaveLines.test.ts src/test/nbaStatLineColumns.test.ts --testTimeout=300000 --hookTimeout=120000
+vitest-list: node_modules/.bin/vitest run src/test/usCareerStatLines.test.tsx src/test/careerSeasonReview.test.tsx src/test/usCareerReveals.test.tsx src/test/careerHall.test.tsx src/test/usCareerHallBoard.test.tsx src/test/myCareerRestore.test.tsx src/test/noDoubleRecord.test.tsx src/test/usCareerPractice.test.tsx src/test/usCareerProspect.test.tsx src/test/rivalryChoiceBoard.test.tsx src/test/usCareerActionConfirm.test.tsx src/components/nba-front-office/NbaSeasonStats.test.tsx src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx --testTimeout=300000 --hookTimeout=120000
+simNbaCareer: node scripts/simNbaCareer.mjs
+simNbaCareer-tradehome: SIM_NBA_CONTROL=tradehome node scripts/simNbaCareer.mjs
+simNbaSeasonStats: node scripts/simNbaSeasonStats.mjs
+stats-mvpnowin: NBA_STATS_CONTROL=mvpnowin node scripts/simNbaSeasonStats.mjs
+stats-noqualify: NBA_STATS_CONTROL=noqualify node scripts/simNbaSeasonStats.mjs
+stats-sixthstarters: NBA_STATS_CONTROL=sixthstarters node scripts/simNbaSeasonStats.mjs
+stats-doubleclose: NBA_STATS_CONTROL=doubleclose node scripts/simNbaSeasonStats.mjs
+stats-rookieany: NBA_STATS_CONTROL=rookieany node scripts/simNbaSeasonStats.mjs
+simAwards: node scripts/simAwards.mjs
+simCareerParity: node scripts/simCareerParity.mjs
+parity-deadbadge: PARITY_CONTROL=deadbadge node scripts/simCareerParity.mjs
+simCareerRealism: node scripts/simCareerRealism.mjs
+simDepthChart: node scripts/simDepthChart.mjs
+hall-nba: node scripts/simCareerHall.mjs nba
+simUsCareerDeckC: node scripts/simUsCareerDeckC.mjs
+simUsCareerDefects: node scripts/simUsCareerDefects.mjs
+simSeasonReveal: node scripts/simSeasonReveal.mjs
+simCareerPress: node scripts/simCareerPress.mjs
+simCareerInbox: node scripts/simCareerInbox.mjs
+simCareerInboxBeats: node scripts/simCareerInboxBeats.mjs
+simCareerRivalryEvents: node scripts/simCareerRivalryEvents.mjs
+simCareerBanking: node scripts/simCareerBanking.mjs
+simUsCoaching: node scripts/simUsCoaching.mjs
+simUsCoachCareer: node scripts/simUsCoachCareer.mjs
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
+simExtension: node scripts/simExtension.mjs
+simFreeAgency: node scripts/simFreeAgency.mjs
+simHomeFront: node scripts/simHomeFront.mjs
+simSportEras: node scripts/simSportEras.mjs
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
