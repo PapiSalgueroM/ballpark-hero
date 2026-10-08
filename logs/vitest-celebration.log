@@ -1,0 +1,59 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [31m❯[39m src/test/liveSimCelebration.test.tsx [2m([22m[2m17 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 401[2mms[22m[39m
+   [32m✓[39m Committed Club Manager goal celebrations[2m > [22mraises only the scorer and two nearest outfield teammates after net contact[32m 4[2mms[22m[39m
+   [32m✓[39m Committed Club Manager goal celebrations[2m > [22mkeeps original goal, save and miss destinations without mutation or random draws[32m 3[2mms[22m[39m
+   [32m✓[39m Committed Club Manager goal celebrations[2m > [22mdraws raised arms on the actual scorer figure[32m 25[2mms[22m[39m
+   [32m✓[39m Committed Club Manager goal celebrations[2m > [22mfreezes with the viewer clock and expires at the existing action boundary[32m 6[2mms[22m[39m
+   [32m✓[39m Committed Club Manager goal celebrations[2m > [22muses a static raised-arm finish under reduced motion[32m 3[2mms[22m[39m
+   [32m✓[39m The lift keeps every frame[2m > [22mPLAIN: every goal, save and miss frame with no flags is the recorded one[32m 19[2mms[22m[39m
+   [32m✓[39m The lift keeps every frame[2m > [22mFLAGGED: penalty, free kick and both flanks draw the recorded frames[32m 21[2mms[22m[39m
+   [32m✓[39m The lift keeps every frame[2m > [22mFIGURE: the drawn figure is the recorded one in every pose[32m 5[2mms[22m[39m
+   [32m✓[39m The pitch part behind its contract[2m > [22mPitchMotion renders a five a side scene in portrait and in landscape with today's attributes[32m 105[2mms[22m[39m
+   [32m✓[39m The pitch part behind its contract[2m > [22mreducedMotion true shows a goal's last frame at once[32m 34[2mms[22m[39m
+   [32m✓[39m The pitch part behind its contract[2m > [22mPitchMotion tells a binder about each dead ball, once[32m 58[2mms[22m[39m
+   [32m✓[39m The pitch part behind its contract[2m > [22mplaying false freezes the part on the frame it is showing, whatever the clock does[32m 23[2mms[22m[39m
+   [32m✓[39m The pitch part behind its contract[2m > [22ma binder that hands over fresh arrays on every render still gets one unbroken action[32m 65[2mms[22m[39m
+[31m   [31m×[31m The pitch part behind its contract[2m > [22man action that starts with the ball somewhere else brings it to the shooter during his plant[39m[32m 18[2mms[22m[39m
+[31m     → expected { x: 65.0353057126138, …(1) } to deeply equal { x: 65.03530571261382, …(1) }[39m
+   [32m✓[39m The pitch part behind its contract[2m > [22mgoalWindow says windup, net and over at the contract's instants[32m 1[2mms[22m[39m
+   [32m✓[39m Dead balls inside an action[2m > [22ma penalty lines both sides up outside the area[32m 5[2mms[22m[39m
+   [32m✓[39m Dead balls inside an action[2m > [22ma direct free kick stands a wall of three[32m 4[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/liveSimCelebration.test.tsx[2m > [22mThe pitch part behind its contract[2m > [22man action that starts with the ball somewhere else brings it to the shooter during his plant
+[31m[1mAssertionError[22m: expected { x: 65.0353057126138, …(1) } to deeply equal { x: 65.03530571261382, …(1) }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[32m-   "x": 65.03530571261382,[39m
+[32m-   "y": 8.42857142857143,[39m
+[31m+   "x": 65.0353057126138,[39m
+[31m+   "y": 8.428571428571445,[39m
+[2m  }[22m
+
+[36m [2m❯[22m src/test/liveSimCelebration.test.tsx:[2m326:33[22m[39m
+    [90m324| [39m    /* From there on the hook draws the action's own ball, untouched. …
+    [90m325| [39m    [34mrerender[39m({ clock[33m:[39m [34m5.6[39m })[33m;[39m
+    [90m326| [39m    expect(result.current.ball).toEqual(actionFrame(far, shot, .6).bal…
+    [90m   | [39m                                [31m^[39m
+    [90m327| [39m  })[33m;[39m
+    [90m328| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m16 passed[39m[22m[90m (17)[39m
+[2m   Start at [22m 10:05:20
+[2m   Duration [22m 2.15s[2m (transform 479ms, setup 77ms, collect 637ms, tests 401ms, environment 401ms, prepare 360ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/liveSimCelebration.test.tsx,title=src/test/liveSimCelebration.test.tsx > The pitch part behind its contract > an action that starts with the ball somewhere else brings it to the shooter during his plant,line=326,column=33::AssertionError: expected { x: 65.0353057126138, …(1) } to deeply equal { x: 65.03530571261382, …(1) }%0A%0A- Expected%0A+ Received%0A%0A  {%0A-   "x": 65.03530571261382,%0A-   "y": 8.42857142857143,%0A+   "x": 65.0353057126138,%0A+   "y": 8.428571428571445,%0A  }%0A%0A ❯ src/test/liveSimCelebration.test.tsx:326:33%0A%0A

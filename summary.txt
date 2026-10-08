@@ -1,0 +1,3 @@
+vitest-celebration exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/liveSimCelebration.test.tsx,title=src/test/liveSimCelebration.test.tsx > The pitch part behind its con
+vitest-motion exit=1 37s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/liveSimMotion.test.tsx,title=src/test/liveSimMotion.test.tsx > The goal sequence > no frame draws the 
+tsc exit=0 48s | 
