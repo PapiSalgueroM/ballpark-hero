@@ -1,0 +1,52 @@
+{
+  "/build-your-xi": {
+    "main": {
+      "bytes": 370355,
+      "files": 43
+    },
+    "branch": {
+      "bytes": 371261,
+      "files": 43
+    }
+  },
+  "/mlb-grid": {
+    "main": {
+      "bytes": 293521,
+      "files": 32
+    },
+    "branch": {
+      "bytes": 293769,
+      "files": 32
+    }
+  },
+  "/soccer-grid": {
+    "main": {
+      "bytes": 314642,
+      "files": 35
+    },
+    "branch": {
+      "bytes": 314651,
+      "files": 35
+    }
+  },
+  "/football-connect-4": {
+    "main": {
+      "bytes": 314739,
+      "files": 34
+    },
+    "branch": {
+      "bytes": 314980,
+      "files": 34
+    }
+  },
+  "/missing-xi": {
+    "main": {
+      "bytes": 351922,
+      "files": 34
+    },
+    "branch": {
+      "bytes": 352173,
+      "files": 34
+    }
+  }
+}

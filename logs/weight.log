@@ -1,0 +1,16 @@
+WEIGHT main /build-your-xi 361.7K gz over 43 files
+WEIGHT main /mlb-grid 286.6K gz over 32 files
+WEIGHT main /soccer-grid 307.3K gz over 35 files
+WEIGHT main /football-connect-4 307.4K gz over 34 files
+WEIGHT main /missing-xi 343.7K gz over 34 files
+WEIGHT branch /build-your-xi 362.6K gz over 43 files
+WEIGHT branch /mlb-grid 286.9K gz over 32 files
+WEIGHT branch /soccer-grid 307.3K gz over 35 files
+WEIGHT branch /football-connect-4 307.6K gz over 34 files
+WEIGHT branch /missing-xi 343.9K gz over 34 files
+WEIGHT_DELTA /build-your-xi main 361.7K -> branch 362.6K (+906 bytes)
+WEIGHT_DELTA /mlb-grid main 286.6K -> branch 286.9K (+248 bytes)
+WEIGHT_DELTA /soccer-grid main 307.3K -> branch 307.3K (+9 bytes)
+WEIGHT_DELTA /football-connect-4 main 307.4K -> branch 307.6K (+241 bytes)
+WEIGHT_DELTA /missing-xi main 343.7K -> branch 343.9K (+251 bytes)
+weight: measured.

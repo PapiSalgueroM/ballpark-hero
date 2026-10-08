@@ -1,0 +1,5 @@
+build exit=0 18s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+notag exit=0 218s | playAutocompleteRace notag control: green, the race is there. Stale picks: /build-your-xi 34 at 390, 34 at 1280; /football-connect-4 34 at 390, 34 at 1280; /missing-xi 34
+sweepweight exit=0 19s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+mainbuild exit=0 19s | about
+weight exit=0 18s | weight: measured.

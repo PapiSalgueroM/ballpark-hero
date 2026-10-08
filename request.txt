@@ -1,0 +1,8 @@
+#!build
+#!serve
+#!playwright
+#!serial
+notag: AUTOCOMPLETE_RACE_CONTROL=notag node scripts/playAutocompleteRace.mjs
+sweepweight: node scripts/sweepWeight.mjs
+mainbuild: git worktree add /tmp/r1138-main 6f57ce78 && ln -s "$PWD/node_modules" /tmp/r1138-main/node_modules && W="$PWD" && cd /tmp/r1138-main && node node_modules/vite/bin/vite.js build --outDir "$W/.sim-control/race-main-1138/dist" 2>&1 | tail -3 && ls "$W/.sim-control/race-main-1138/dist" | head -3
+weight: node .rc/x/weight.mjs main=.sim-control/race-main-1138/dist branch=dist
