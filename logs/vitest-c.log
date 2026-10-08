@@ -1,0 +1,85 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/usCareerStatLines.test.tsx [2m([22m[2m117 tests[22m[2m)[22m[33m 3351[2mms[22m[39m
+ [32m✓[39m src/test/usCareerActionConfirm.test.tsx [2m([22m[2m18 tests[22m[2m)[22m[33m 5848[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'NFL' preserves live restore and engine state as an independent baseline [33m 970[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'NBA' preserves live restore and engine state as an independent baseline [33m 457[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'NFL' keeps retirement pending until explicit acceptance and records its real legacy once [33m 488[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'NBA' keeps retirement pending until explicit acceptance and records its real legacy once [33m 303[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'MLB' keeps retirement pending until explicit acceptance and records its real legacy once [33m 320[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'NHL' keeps retirement pending until explicit acceptance and records its real legacy once [33m 430[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'NFL' keeps restart pending then deletes only its own career without another completion [33m 484[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'NBA' keeps restart pending then deletes only its own career without another completion [33m 443[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'MLB' keeps restart pending then deletes only its own career without another completion [33m 421[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'NHL' keeps restart pending then deletes only its own career without another completion [33m 440[2mms[22m[39m
+ [32m✓[39m src/test/guessFinishMoment.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[33m 3426[2mms[22m[39m
+   [33m[2m✓[22m[39m a clue guesser ends on the shared result moment[2m > [22mplays a live win with the points the board scored, and keeps the answer line, share and nothing invented [33m 570[2mms[22m[39m
+   [33m[2m✓[22m[39m a clue guesser ends on the shared result moment[2m > [22mwalks every clue: the pill shows exactly the score the board saved [33m 1299[2mms[22m[39m
+   [33m[2m✓[22m[39m a clue guesser ends on the shared result moment[2m > [22mkeeps an old daily settled when it is reopened from the menu after a live unlimited game [33m 431[2mms[22m[39m
+   [33m[2m✓[22m[39m a chain ends on the shared result moment[2m > [22mshows the chain length, the badge the game earned and the reason it gave, and plays only when live [33m 674[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProspect.test.tsx [2m([22m[2m36 tests[22m[2m)[22m[33m 17739[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NFL' quiet legacy restore preserves the existing career unchanged [33m 582[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NBA' quiet legacy restore preserves the existing career unchanged [33m 456[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'MLB' quiet legacy restore preserves the existing career unchanged [33m 303[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NHL' quiet legacy restore preserves the existing career unchanged [33m 464[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NFL' plays every saved prospect stage into the earned career and first season [33m 1260[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NBA' plays every saved prospect stage into the earned career and first season [33m 551[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'MLB' plays every saved prospect stage into the earned career and first season [33m 585[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NHL' plays every saved prospect stage into the earned career and first season [33m 779[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NFL' accepts each same-frame journey action only once [33m 509[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NBA' accepts each same-frame journey action only once [33m 347[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'MLB' accepts each same-frame journey action only once [33m 393[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NHL' accepts each same-frame journey action only once [33m 422[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'MLB' historical completed outcomes survive reload and remain the career archive [33m 335[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NFL' rejects corrupt nested journey saves without changing storage [33m 1594[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NBA' rejects corrupt nested journey saves without changing storage [33m 1381[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'MLB' rejects corrupt nested journey saves without changing storage [33m 1602[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NHL' rejects corrupt nested journey saves without changing storage [33m 1513[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NHL' back before route selection preserves the player and clears only the unfinished save [33m 354[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NFL' rules reopen and showcase approaches pay their displayed stock moves [33m 612[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NBA' rules reopen and showcase approaches pay their displayed stock moves [33m 610[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'MLB' rules reopen and showcase approaches pay their displayed stock moves [33m 639[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NHL' rules reopen and showcase approaches pay their displayed stock moves [33m 593[2mms[22m[39m
+ [32m✓[39m src/test/usCareerReveals.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 991[2mms[22m[39m
+   [33m[2m✓[22m[39m draft day on the four US career hubs[2m > [22mNFL mounts the draft day card with the engine pick and the confetti rule [33m 452[2mms[22m[39m
+ [32m✓[39m src/test/rivalryChoiceBoard.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 614[2mms[22m[39m
+   [33m[2m✓[22m[39m the rival choice card in the My Career boards[2m > [22m'NFL': a pending choice opens on the card, pays what it printed, and Continue goes back to the hub [33m 359[2mms[22m[39m
+ [32m✓[39m src/test/usCareerPractice.test.tsx [2m([22m[2m32 tests[22m[2m)[22m[33m 28815[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NFL' quiet legacy restore preserves the existing career unchanged [33m 661[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NBA' quiet legacy restore preserves the existing career unchanged [33m 354[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'MLB' quiet legacy restore preserves the existing career unchanged [33m 306[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NHL' quiet legacy restore preserves the existing career unchanged [33m 417[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NFL' banks played skill into the real save once and survives reload [33m 1383[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NBA' banks played skill into the real save once and survives reload [33m 794[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'MLB' banks played skill into the real save once and survives reload [33m 935[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NHL' banks played skill into the real save once and survives reload [33m 1227[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NFL' zero and solid scores bank only the rating earned [33m 1501[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NBA' zero and solid scores bank only the rating earned [33m 1424[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'MLB' zero and solid scores bank only the rating earned [33m 1542[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NHL' zero and solid scores bank only the rating earned [33m 1343[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NFL' ceiling pays only the available headroom [33m 812[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NBA' ceiling pays only the available headroom [33m 880[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'MLB' ceiling pays only the available headroom [33m 1095[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NHL' ceiling pays only the available headroom [33m 704[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NFL' old above-ceiling rating is never reduced [33m 731[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NBA' old above-ceiling rating is never reduced [33m 869[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'MLB' old above-ceiling rating is never reduced [33m 782[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NHL' old above-ceiling rating is never reduced [33m 759[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NFL' abort leaves no save changes and rules reopen during play [33m 1672[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NBA' abort leaves no save changes and rules reopen during play [33m 1091[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'MLB' abort leaves no save changes and rules reopen during play [33m 1029[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NHL' abort leaves no save changes and rules reopen during play [33m 956[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NFL' earned rating reaches the next real season and practice renews afterwards [33m 1199[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NBA' earned rating reaches the next real season and practice renews afterwards [33m 1024[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'MLB' earned rating reaches the next real season and practice renews afterwards [33m 1091[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NHL' earned rating reaches the next real season and practice renews afterwards [33m 1284[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m      Tests [22m [1m[32m230 passed[39m[22m[90m (230)[39m
+[2m   Start at [22m 14:53:11
+[2m   Duration [22m 32.71s[2m (transform 3.07s, setup 602ms, collect 13.00s, tests 60.79s, environment 3.88s, prepare 999ms)[22m
+

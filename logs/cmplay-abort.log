@@ -1,0 +1,6 @@
+0) the built files: the 2010-11 nationalities in era2010-YNeWL_4t.js, its squads in clubManagerEra2010-CiScj6R7.js, the pools in SoccerCareer-BCYfo-KU.js
+1) a 2010-11 career, started and saved by the engine in node
+   Barcelona, 27 players, 26 of them with a country in era2010, save 28 KB under 1 key(s)
+3) arm 2 under CONTROL abort: the 2010-11 nationality file (era2010-YNeWL_4t.js) never arrives
+   phone   career did not open, retry notice shown; 0 squad rows, 0 flags on the 26 men who have a country, 0 missing, 0 on men who have none; fetched nationalities yes, squads yes, other seasons 0; 0 page errors
+CONTROL abort FIRED: the career did not open, the retry notice showed, the save is untouched and the flags went red

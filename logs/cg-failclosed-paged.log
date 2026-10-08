@@ -1,0 +1,140 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/collegeGridFailClosed.test.tsx
+[22m[39mCGFAILCLOSED| board cg611-033: yes Jason Witten, no Darrell Green
+
+[90mstdout[2m | src/test/collegeGridFailClosed.test.tsx[2m > [22m[2mdecodeCollegeKey: null on any doubt, never a row from a damaged file[2m > [22m[2mevery one of 44 damaged pairs is null, and none of them throws
+[22m[39mCGFAILCLOSED| decoder: 44 of 44 damaged pairs refused
+
+[90mstdout[2m | src/test/collegeGridFailClosed.test.tsx
+[22m[39mCGFAILCLOSED| control paged: 181 reads of the stubbed table over the run
+
+ [31m❯[39m src/test/collegeGridFailClosed.test.tsx [2m([22m[2m8 tests[22m[2m | [22m[31m5 failed[39m[2m)[22m[33m 2583[2mms[22m[39m
+[31m   [31m×[31m College Grid fail closed (Round 1105)[2m > [22m(a) the door: one fetch per key file and no read of the table[39m[33m 319[2mms[22m[39m
+[31m     → exactly the two key files, once each: expected [] to deeply equal [ …(2) ][39m
+[31m   [31m×[31m College Grid fail closed (Round 1105)[2m > [22m(b) the key never arrives: the board is up at once, and a pick waits and is then unverified[39m[33m 459[2mms[22m[39m
+[31m     → expected true to be false // Object.is equality[39m
+[31m   [31m×[31m College Grid fail closed (Round 1105)[2m > [22m(c) the key fails five ways: unverified each time, the next pick starts a new load, and a good load is judged[39m[32m 157[2mms[22m[39m
+[31m     → fetch throws: no key: expected true to be false // Object.is equality[39m
+[31m   [31m×[31m College Grid fail closed (Round 1105)[2m > [22m(d) the key lands 3 seconds after the pick: that pick is judged on the cell it was made for[39m[32m 197[2mms[22m[39m
+[31m     → the open cell does not move while its pick waits: expected 4 to be +0 // Object.is equality[39m
+[31m   [31m×[31m College Grid fail closed (Round 1105)[2m > [22m(e) the player leaves while a pick waits: the pick is dropped, nothing is written, nothing is said[39m[32m 256[2mms[22m[39m
+[31m     → no guess was written after he left: expected '[["college-grid-daily-2026-10-08","{\…' to be '[]' // Object.is equality[39m
+   [32m✓[39m decodeCollegeKey: null on any doubt, never a row from a damaged file[2m > [22mthe committed pair decodes to one row per player with the nine keys the judge entry reads[32m 35[2mms[22m[39m
+   [33m[2m✓[22m[39m decodeCollegeKey: null on any doubt, never a row from a damaged file[2m > [22mevery one of 44 damaged pairs is null, and none of them throws [33m 700[2mms[22m[39m
+   [32m✓[39m decodeCollegeKey: null on any doubt, never a row from a damaged file[2m > [22mthe last good value on each boundary still decodes: the floor itself, the last school, the last row[32m 34[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 5 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/collegeGridFailClosed.test.tsx[2m > [22mCollege Grid fail closed (Round 1105)[2m > [22m(a) the door: one fetch per key file and no read of the table
+[31m[1mAssertionError[22m: exactly the two key files, once each: expected [] to deeply equal [ …(2) ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [[39m
+[32m-   "/src/data/collegeGrid/collegeGridJudge.json",[39m
+[32m-   "/src/data/collegeGrid/collegeGridSearch.json",[39m
+[32m- ][39m
+[31m+ [][39m
+
+[36m [2m❯[22m src/test/collegeGridFailClosed.test.tsx:[2m240:78[22m[39m
+    [90m238| [39m    [35mawait[39m [34mtick[39m([34m50[39m)[33m;[39m
+    [90m239| [39m    [34mexpect[39m(view[33m.[39mresult[33m.[39mcurrent[33m.[39mkeyReady[33m,[39m [32m'the key landed'[39m)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m240| [39m    expect(net.calls.slice().sort(), 'exactly the two key files, once …
+    [90m   | [39m                                                                             [31m^[39m
+    [90m241| [39m    expect(state.tableReads, 'no read of college_grid_players').toBe(0…
+    [90m242| [39m    /* And a pick is then judged at once: a true answer fills its cell…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/collegeGridFailClosed.test.tsx[2m > [22mCollege Grid fail closed (Round 1105)[2m > [22m(b) the key never arrives: the board is up at once, and a pick waits and is then unverified
+[31m[1mAssertionError[22m: expected true to be false // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- false[39m
+[31m+ true[39m
+
+[36m [2m❯[22m src/test/collegeGridFailClosed.test.tsx:[2m254:26[22m[39m
+    [90m252| [39m    expect(r().isLoading, 'the board does not wait for the key').toBe(…
+    [90m253| [39m    [34mexpect[39m([34mr[39m()[33m.[39mdataError)[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+    [90m254| [39m    [34mexpect[39m([34mr[39m()[33m.[39mkeyReady)[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+    [90m   | [39m                         [31m^[39m
+    [90m255| [39m    expect(r().puzzle.rows.length + r().puzzle.cols.length, 'the six l…
+    [90m256| [39m    expect(r().cells.map((c) => c.status)).toEqual(Array(9).fill('empt…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/collegeGridFailClosed.test.tsx[2m > [22mCollege Grid fail closed (Round 1105)[2m > [22m(c) the key fails five ways: unverified each time, the next pick starts a new load, and a good load is judged
+[31m[1mAssertionError[22m: fetch throws: no key: expected true to be false // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- false[39m
+[31m+ true[39m
+
+[36m [2m❯[22m src/test/collegeGridFailClosed.test.tsx:[2m298:47[22m[39m
+    [90m296| [39m      [35mconst[39m r [33m=[39m () [33m=>[39m view[33m.[39mresult[33m.[39mcurrent[33m;[39m
+    [90m297| [39m      [34mexpect[39m([34mr[39m()[33m.[39misLoading[33m,[39m [32m`[39m[36m${[39mwhat[36m}[39m[32m: the board is up`[39m)[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+    [90m298| [39m      [34mexpect[39m([34mr[39m()[33m.[39mkeyReady[33m,[39m [32m`[39m[36m${[39mwhat[36m}[39m[32m: no key`[39m)[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+    [90m   | [39m                                              [31m^[39m
+    [90m299| [39m      [35mconst[39m before [33m=[39m [34mstorageSnapshot[39m()[33m;[39m
+    [90m300| [39m      [35mconst[39m callsAfterMount [33m=[39m net[33m.[39mcalls[33m.[39mlength[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/collegeGridFailClosed.test.tsx[2m > [22mCollege Grid fail closed (Round 1105)[2m > [22m(d) the key lands 3 seconds after the pick: that pick is judged on the cell it was made for
+[31m[1mAssertionError[22m: the open cell does not move while its pick waits: expected 4 to be +0 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 0[39m
+[31m+ 4[39m
+
+[36m [2m❯[22m src/test/collegeGridFailClosed.test.tsx:[2m340:82[22m[39m
+    [90m338| [39m         the highlight and the prompt stay on the cell the spinner is …
+    [90m339| [39m      [34mact[39m(() [33m=>[39m [34mr[39m()[33m.[39m[34msetActiveCell[39m([34m4[39m))[33m;[39m
+    [90m340| [39m      expect(r().activeCell, 'the open cell does not move while its pi…
+    [90m   | [39m                                                                                 [31m^[39m
+    [90m341| [39m      await act(async () => { await vi.advanceTimersByTimeAsync(2000);…
+    [90m342| [39m      [34mexpect[39m([34mr[39m()[33m.[39mvalidating[33m,[39m [32m'still waiting at 3 seconds'[39m)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/collegeGridFailClosed.test.tsx[2m > [22mCollege Grid fail closed (Round 1105)[2m > [22m(e) the player leaves while a pick waits: the pick is dropped, nothing is written, nothing is said
+[31m[1mAssertionError[22m: no guess was written after he left: expected '[["college-grid-daily-2026-10-08","{\…' to be '[]' // Object.is equality[39m
+
+Expected: [32m"[]"[39m
+Received: [31m"[[7m["college-grid-daily-2026-10-08","{\"v\":1,\"date\":\"2026-10-08\",\"puzzleIndex\":32,\"guesses\":[{\"t\":\"x\",\"board\":\"cg611-033\"}],\"gameStatus\":\"playing\"}"][27m]"[39m
+
+[36m [2m❯[22m src/test/collegeGridFailClosed.test.tsx:[2m372:69[22m[39m
+    [90m370| [39m    [35mawait[39m vi[33m.[39m[34madvanceTimersByTimeAsync[39m([34m3000[39m)[33m;[39m
+    [90m371| [39m    [35mawait[39m done[33m;[39m
+    [90m372| [39m    expect(storageSnapshot(), 'no guess was written after he left').to…
+    [90m   | [39m                                                                    [31m^[39m
+    [90m373| [39m    [34mexpect[39m([34mdailyKeys[39m())[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m374| [39m    [34mexpect[39m(state[33m.[39mtoasts)[33m.[39m[34mtoEqual[39m([])[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m5 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (8)[39m
+[2m   Start at [22m 15:13:06
+[2m   Duration [22m 4.06s[2m (transform 203ms, setup 81ms, collect 300ms, tests 2.58s, environment 519ms, prepare 270ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridFailClosed.test.tsx,title=src/test/collegeGridFailClosed.test.tsx > College Grid fail closed (Round 1105) > (a) the door%3A one fetch per key file and no read of the table,line=240,column=78::AssertionError: exactly the two key files, once each: expected [] to deeply equal [ …(2) ]%0A%0A- Expected%0A+ Received%0A%0A- [%0A-   "/src/data/collegeGrid/collegeGridJudge.json",%0A-   "/src/data/collegeGrid/collegeGridSearch.json",%0A- ]%0A+ []%0A%0A ❯ src/test/collegeGridFailClosed.test.tsx:240:78%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridFailClosed.test.tsx,title=src/test/collegeGridFailClosed.test.tsx > College Grid fail closed (Round 1105) > (b) the key never arrives%3A the board is up at once%2C and a pick waits and is then unverified,line=254,column=26::AssertionError: expected true to be false // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- false%0A+ true%0A%0A ❯ src/test/collegeGridFailClosed.test.tsx:254:26%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridFailClosed.test.tsx,title=src/test/collegeGridFailClosed.test.tsx > College Grid fail closed (Round 1105) > (c) the key fails five ways%3A unverified each time%2C the next pick starts a new load%2C and a good load is judged,line=298,column=47::AssertionError: fetch throws: no key: expected true to be false // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- false%0A+ true%0A%0A ❯ src/test/collegeGridFailClosed.test.tsx:298:47%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridFailClosed.test.tsx,title=src/test/collegeGridFailClosed.test.tsx > College Grid fail closed (Round 1105) > (d) the key lands 3 seconds after the pick%3A that pick is judged on the cell it was made for,line=340,column=82::AssertionError: the open cell does not move while its pick waits: expected 4 to be +0 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 0%0A+ 4%0A%0A ❯ src/test/collegeGridFailClosed.test.tsx:340:82%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridFailClosed.test.tsx,title=src/test/collegeGridFailClosed.test.tsx > College Grid fail closed (Round 1105) > (e) the player leaves while a pick waits%3A the pick is dropped%2C nothing is written%2C nothing is said,line=372,column=69::AssertionError: no guess was written after he left: expected '[["college-grid-daily-2026-10-08","{\…' to be '[]' // Object.is equality%0A%0AExpected: "[]"%0AReceived: "[["college-grid-daily-2026-10-08","{\"v\":1,\"date\":\"2026-10-08\",\"puzzleIndex\":32,\"guesses\":[{\"t\":\"x\",\"board\":\"cg611-033\"}],\"gameStatus\":\"playing\"}"]]"%0A%0A ❯ src/test/collegeGridFailClosed.test.tsx:372:69%0A%0A

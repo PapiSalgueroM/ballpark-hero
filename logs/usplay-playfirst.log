@@ -1,0 +1,17 @@
+SKIPPED nfl: its binding has no Season Center loader
+viewer chunk UsSeasonCentre-CFzU5yL0.js (6.1K raw); the cover lives in usCareerSeasonReview-e-sDzj4G.js
+CONTROL playfirst: the served entry plays the season without waiting for the viewer (usCareerSeasonReview-e-sDzj4G.js)
+ok   [lazy] nba 390x844: the viewer chunk is not requested on load or on the hub (46 chunks)
+ok   [lazy] nba 390x844: no chunk the page loads holds "Tip off"
+ok   [layout] nba 390x844: the entry is at least 44 px tall and fully visible (44 px)
+FAIL [load first] nba 390x844: two frames after the press nothing is played while the viewer loads (curtain true, season on the save true, button loading false)
+FAIL [cover] nba 390x844: on every frame from the press to the viewer the curtain is never on screen without the opaque cover (903 frames in 15015 ms, 903 bare; at the end curtain true, covered false)
+ok   [lazy] nba 390x844: the viewer chunk is requested after the press
+     the first press downloads 12 chunks, 97.2K gz: UsSeasonCentre 2.8K, core 7.2K, leagueCore 0.4K, us 3.5K, SeasonCentre 9.7K, LeagueTableCard 1.0K, VictoryMoment 1.3K, careerMoments 56.6K, clubRivalries 10.1K, dialogA11y 0.1K, ArcadeShotFeedback 0.9K, nba 3.6K
+ok   [same press] nba 390x844: Play and Week by week saved the same bytes
+FAIL [agreement] nba 390x844: the first card offers "Tip off"
+FAIL [clock] nba 390x844: the score bug equals the feed on every sample (0 samples, 0 scores)
+FAIL [errors] the walk threw: Error: page.evaluate: TypeError: Cannot read properties of null (reading 'querySelectorAll')
+supabase requests aborted: 4
+control playfirst: RED AT THE NAMED CHECK (load first); checks red: load first, cover, agreement, clock, errors
+playUsSeasonCentre: 10 checks, 5 failed (control playfirst)

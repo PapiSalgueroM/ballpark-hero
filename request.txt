@@ -1,0 +1,169 @@
+# Release AN fix pass 2, the ONE remote check on the pushed head: the type gate, every harness of this round
+# with and without each control, the fences, and the shootout walk the AM train used (three at a time)
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+squadplay: ENGINES=chromium REQUIRE_PAGE=1 PORT=4810 SHOTS=/tmp/shots-plain node scripts/playCareerSquad.mjs
+squadplay-ellipsis: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=ellipsis PORT=4920 SHOTS=/tmp/shots-ellipsis node scripts/playCareerSquad.mjs
+pill: node scripts/simResultPillComparison.mjs
+pill-bareline: RESULT_PILL_CONTROL=bareline node scripts/simResultPillComparison.mjs
+translated-nospans: PLAY_TRANSLATED_CONTROL=nospans ENGINES=chromium node scripts/playTranslatedPage.mjs
+vitest-whole-diff: node_modules/.bin/vitest run src/test/usSeasonCentreEntry.test.tsx src/test/translateGuard.test.tsx src/lib/soccerClubSquad.test.ts --testTimeout=300000 --hookTimeout=120000
+playStorageBlocked: PLAY_STORAGE_NATIVE=require node scripts/playStorageBlocked.mjs
+playSoccerCareer: ENGINES=chromium node scripts/playSoccerCareer.mjs
+pill-noscore: RESULT_PILL_CONTROL=noscore node scripts/simResultPillComparison.mjs
+pill-cramp: RESULT_PILL_CONTROL=cramp node scripts/simResultPillComparison.mjs
+pill-shift: RESULT_PILL_CONTROL=shift node scripts/simResultPillComparison.mjs
+usplay: PORT=4401 node scripts/playUsSeasonCentre.mjs
+usplay-nohandover: PORT=4402 US_SEASON_PLAY_CONTROL=nohandover node scripts/playUsSeasonCentre.mjs
+usplay-playfirst: PORT=4403 US_SEASON_PLAY_CONTROL=playfirst node scripts/playUsSeasonCentre.mjs
+usplay-cover: PORT=4404 US_SEASON_PLAY_CONTROL=cover node scripts/playUsSeasonCentre.mjs
+usplay-static: PORT=4405 US_SEASON_PLAY_CONTROL=static node scripts/playUsSeasonCentre.mjs
+usplay-write: PORT=4406 US_SEASON_PLAY_CONTROL=write node scripts/playUsSeasonCentre.mjs
+usplay-count: PORT=4407 US_SEASON_PLAY_CONTROL=count node scripts/playUsSeasonCentre.mjs
+squadplay-clip: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=clip PORT=4860 SHOTS=/tmp/shots-clip node scripts/playCareerSquad.mjs
+squadplay-noscroll: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=noscroll PORT=4900 SHOTS=/tmp/shots-noscroll node scripts/playCareerSquad.mjs
+squadplay-label: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=label PORT=4890 SHOTS=/tmp/shots-label node scripts/playCareerSquad.mjs
+playSeasonCentre: PORT=4411 ENGINES=chromium node scripts/playSeasonCentre.mjs
+vitest-a: node_modules/.bin/vitest run src/test/usSeasonCentreEntry.test.tsx src/test/translateGuard.test.tsx src/lib/soccerClubSquad.test.ts src/test/usBoardFixture.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-b: node_modules/.bin/vitest run src/test/usSeasonCentre.test.tsx src/test/resultScorePillComparison.test.tsx src/test/seasonCentreWords.test.tsx src/test/usCareerSummer.test.tsx src/test/usCareerHallBoard.test.tsx src/test/careerDecisionOutcome.test.tsx src/test/careerSeasonReview.test.tsx src/test/myCareerRestore.test.tsx src/test/noDoubleRecord.test.tsx src/test/faceOffDeadline.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-c: node_modules/.bin/vitest run src/test/rivalryChoiceBoard.test.tsx src/test/usCareerActionConfirm.test.tsx src/test/usCareerPractice.test.tsx src/test/usCareerProspect.test.tsx src/test/usCareerReveals.test.tsx src/test/usCareerStatLines.test.tsx src/test/guessFinishMoment.test.tsx --testTimeout=300000 --hookTimeout=120000
+simStartingXi: node scripts/simStartingXi.mjs
+shootout: node scripts/simCmShootoutOrder.mjs
+shootout-ignoreorder: CM_SHOOTOUT_CONTROL=ignoreorder node scripts/simCmShootoutOrder.mjs
+shootout-noskip: CM_SHOOTOUT_CONTROL=noskip node scripts/simCmShootoutOrder.mjs
+shootout-nocap: CM_SHOOTOUT_CONTROL=nocap node scripts/simCmShootoutOrder.mjs
+shootout-unsetpath: CM_SHOOTOUT_CONTROL=unsetpath node scripts/simCmShootoutOrder.mjs
+shootout-ownkeeper: CM_SHOOTOUT_CONTROL=ownkeeper node scripts/simCmShootoutOrder.mjs
+shootout-wrongkeeper: CM_SHOOTOUT_CONTROL=wrongkeeper node scripts/simCmShootoutOrder.mjs
+shootout-nooppkeeper: CM_SHOOTOUT_CONTROL=nooppkeeper node scripts/simCmShootoutOrder.mjs
+shootout-oppworst: CM_SHOOTOUT_CONTROL=oppworst node scripts/simCmShootoutOrder.mjs
+shootout-thinside: CM_SHOOTOUT_CONTROL=thinside node scripts/simCmShootoutOrder.mjs
+shootout-nomakeup: CM_SHOOTOUT_CONTROL=nomakeup node scripts/simCmShootoutOrder.mjs
+shootout-bogus: CM_SHOOTOUT_CONTROL=nosuchcontrol node scripts/simCmShootoutOrder.mjs
+appeal: node scripts/simManagerAppealIsolation.mjs
+careersquad: node scripts/simCareerSquad.mjs
+simClubSquads: node scripts/simClubSquads.mjs
+simSoccerOfferReview: node scripts/simSoccerOfferReview.mjs
+ussc: node scripts/simUsSeasonCentre.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+translated-plain: ENGINES=chromium node scripts/playTranslatedPage.mjs
+translated-nolive: PLAY_TRANSLATED_CONTROL=nolive ENGINES=chromium node scripts/playTranslatedPage.mjs
+translated-notranslate: PLAY_TRANSLATED_CONTROL=notranslate ENGINES=chromium node scripts/playTranslatedPage.mjs
+translated-noguard: PLAY_TRANSLATED_CONTROL=noguard ENGINES=chromium node scripts/playTranslatedPage.mjs
+translated-undocopies: PLAY_TRANSLATED_CONTROL=undocopies ENGINES=chromium node scripts/playTranslatedPage.mjs
+playFlagshipLazy: node scripts/playFlagshipLazy.mjs
+careersquad-quick: node scripts/simCareerSquad.mjs 40
+careersquad-noshift: CAREER_SQUAD_CONTROL=noshift node scripts/simCareerSquad.mjs 40
+playGridCls: ENGINES=chromium node scripts/playGridCls.mjs
+playSeasonMoments: PORT=4412 ENGINES=chromium node scripts/playSeasonMoments.mjs
+playReducedMotion: ENGINES=chromium node scripts/playReducedMotion.mjs
+squadplay-rank: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=rank PORT=4820 SHOTS=/tmp/shots-rank node scripts/playCareerSquad.mjs
+squadplay-write: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=write PORT=4830 SHOTS=/tmp/shots-write node scripts/playCareerSquad.mjs
+squadplay-still: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=still PORT=4840 SHOTS=/tmp/shots-still node scripts/playCareerSquad.mjs
+squadplay-nofill: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=nofill PORT=4850 SHOTS=/tmp/shots-nofill node scripts/playCareerSquad.mjs
+squadplay-shift: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=shift PORT=4870 SHOTS=/tmp/shots-shift node scripts/playCareerSquad.mjs
+squadplay-static: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=static PORT=4880 SHOTS=/tmp/shots-static node scripts/playCareerSquad.mjs
+squadplay-notrap: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=notrap PORT=4910 SHOTS=/tmp/shots-notrap node scripts/playCareerSquad.mjs
+cmplay: node scripts/playCmDataOnDemand.mjs
+cmplay-abort: CM_PLAY_CONTROL=abort node scripts/playCmDataOnDemand.mjs
+sweepWeight: SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs
+sweep-late: SWEEP_OFFLINE=1 SWEEP_WEIGHT_CONTROL=late ENGINES=chromium node scripts/sweepWeight.mjs
+sweep-planted: SWEEP_OFFLINE=1 SWEEP_WEIGHT_CONTROL=planted ENGINES=chromium node scripts/sweepWeight.mjs
+inbox: node scripts/playInboxCard.mjs
+storage-open: PLAY_STORAGE_CONTROL=open node scripts/playStorageBlocked.mjs
+storage-raw: PLAY_STORAGE_NATIVE=require PLAY_STORAGE_CONTROL=raw node scripts/playStorageBlocked.mjs
+simHandleNames: node scripts/simHandleNames.mjs
+ssw-unguard: SIM_STORAGE_WRITES_CONTROL=unguard node scripts/simStorageWrites.mjs
+ssw-order: SIM_STORAGE_WRITES_CONTROL=order node scripts/simStorageWrites.mjs
+ssw-client: SIM_STORAGE_WRITES_CONTROL=client node scripts/simStorageWrites.mjs
+ssw-caller: SIM_STORAGE_WRITES_CONTROL=caller node scripts/simStorageWrites.mjs
+ssw-nocatch: SIM_STORAGE_WRITES_CONTROL=nocatch node scripts/simStorageWrites.mjs
+ssw-probe: SIM_STORAGE_WRITES_CONTROL=probe node scripts/simStorageWrites.mjs
+cmdata: node scripts/simCmDataOnDemand.mjs
+cmdata-nowait: CM_DATA_CONTROL=nowait node scripts/simCmDataOnDemand.mjs
+cmdata-seamalias: CM_DATA_CONTROL=seamalias node scripts/simCmDataOnDemand.mjs
+cmdata-stragglers: CM_DATA_CONTROL=stragglers node scripts/simCmDataOnDemand.mjs
+cmdata-noregister: CM_DATA_CONTROL=noregister node scripts/simCmDataOnDemand.mjs
+cmdata-eager: CM_DATA_CONTROL=eager node scripts/simCmDataOnDemand.mjs
+cmdata-pools: CM_DATA_CONTROL=pools node scripts/simCmDataOnDemand.mjs
+cmdata-eranat: CM_DATA_CONTROL=eranat node scripts/simCmDataOnDemand.mjs
+cmdata-squad: CM_DATA_CONTROL=squad node scripts/simCmDataOnDemand.mjs
+cmdata-reformat: CM_DATA_CONTROL=reformat node scripts/simCmDataOnDemand.mjs
+pools: node scripts/simNationalPools.mjs
+pools-lastyear: POOLS_CONTROL=lastyear node scripts/simNationalPools.mjs
+simNationalities: node scripts/simNationalities.mjs
+simDailyClubPool: node scripts/simDailyClubPool.mjs
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+flagship-static: FLAGSHIP_LAZY_CONTROL=static node scripts/simFlagshipWeight.mjs
+identity-flip: CM_IDENTITY_CONTROL=flip node_modules/.bin/vitest run src/test/cmDataOnDemandIdentity.test.ts --testTimeout=300000 --hookTimeout=120000
+ussc-stream: SEEDSET=0 US_SEASON_CONTROL=stream node scripts/simUsSeasonCentre.mjs
+ussc-record: SEEDSET=0 US_SEASON_CONTROL=record node scripts/simUsSeasonCentre.mjs
+ussc-length: SEEDSET=0 US_SEASON_CONTROL=length node scripts/simUsSeasonCentre.mjs
+ussc-stage: SEEDSET=0 US_SEASON_CONTROL=stage node scripts/simUsSeasonCentre.mjs
+ussc-names: SEEDSET=0 US_SEASON_CONTROL=names node scripts/simUsSeasonCentre.mjs
+ussc-window: SEEDSET=0 US_SEASON_CONTROL=window node scripts/simUsSeasonCentre.mjs
+ussc-formula: SEEDSET=0 US_SEASON_CONTROL=formula node scripts/simUsSeasonCentre.mjs
+ussc-conf: SEEDSET=0 US_SEASON_CONTROL=conf node scripts/simUsSeasonCentre.mjs
+ussc-hot: SEEDSET=0 US_SEASON_CONTROL=hot node scripts/simUsSeasonCentre.mjs
+ussc-static: SEEDSET=0 US_SEASON_CONTROL=static node scripts/simUsSeasonCentre.mjs
+simSeasonMoments: node scripts/simSeasonMoments.mjs
+simSeasonCentreAgreement: node scripts/simSeasonCentreAgreement.mjs
+simSeasonCentreNeutral: node scripts/simSeasonCentreNeutral.mjs
+simSeasonCentreTable: node scripts/simSeasonCentreTable.mjs
+simSeasonLaw: node scripts/simSeasonLaw.mjs
+simCollegeGridPage: node scripts/simCollegeGridPage.mjs
+simGridEngine: node scripts/simGridEngine.mjs
+simGridRarity: node scripts/simGridRarity.mjs
+simQuotaHonesty: node scripts/simQuotaHonesty.mjs
+simPlayerAutocompleteInteraction: node scripts/simPlayerAutocompleteInteraction.mjs
+simFetchRetry: node scripts/simFetchRetry.mjs
+cgshipped: node scripts/simCollegeGridShipped.mjs
+cgshipped-auditedback: SIM_CGSHIPPED_CONTROL=auditedback node scripts/simCollegeGridShipped.mjs
+cgshipped-flipflag: SIM_CGSHIPPED_CONTROL=flipflag node scripts/simCollegeGridShipped.mjs
+cgshipped-shiftrow: SIM_CGSHIPPED_CONTROL=shiftrow node scripts/simCollegeGridShipped.mjs
+cgshipped-stale: SIM_CGSHIPPED_CONTROL=stale node scripts/simCollegeGridShipped.mjs
+cgshipped-fat: SIM_CGSHIPPED_CONTROL=fat node scripts/simCollegeGridShipped.mjs
+cgshipped-noexclude: SIM_CGSHIPPED_CONTROL=noexclude node scripts/simCollegeGridShipped.mjs
+cg-compact-check: node scripts/genCollegeGridData.mjs --compact --check
+cg-boards-check: node scripts/genCollegeGridBoards.mjs --check
+cg-offline-nocount: CG_OFFLINE_CONTROL=nocount node_modules/.bin/vitest run src/test/collegeGridOffline.test.tsx --testTimeout=300000 --hookTimeout=120000
+cg-failclosed-paged: CG_FAILCLOSED_CONTROL=paged node_modules/.bin/vitest run src/test/collegeGridFailClosed.test.tsx --testTimeout=300000 --hookTimeout=120000
+cg-failclosed-acceptmissing: CG_FAILCLOSED_CONTROL=acceptmissing node_modules/.bin/vitest run src/test/collegeGridFailClosed.test.tsx --testTimeout=300000 --hookTimeout=120000
+careersquad-bogus: CAREER_SQUAD_CONTROL=nosuchcontrol node scripts/simCareerSquad.mjs 40
+vitest-diff: node_modules/.bin/vitest run src/lib/frontOfficeRatings.test.ts src/lib/soccerClubSquad.test.ts src/test/cbbProgramFeedback.test.tsx src/test/clubManagerEraNationalities.test.ts src/test/cmDataOnDemandIdentity.test.ts src/test/collegeGridFailClosed.test.tsx src/test/collegeGridOffline.test.tsx src/test/collegeGridSearchMemory.test.ts src/test/constructorFeedback.test.tsx src/test/cookieConsentStorage.test.tsx src/test/f1DriverFeedback.test.tsx src/test/f1DriverHintPoints.test.tsx src/test/freshBuildBlockedStorage.test.ts src/test/gridEngineSource.test.ts src/test/guessFinishMoment.test.tsx src/test/guestHandleVisit.test.tsx src/test/hofOrBustVoteOnce.test.tsx src/test/nascarDriverFeedback.test.tsx src/test/playerSearchLocal.test.ts src/test/resultScorePillComparison.test.tsx src/test/safeStorage.test.ts src/test/seasonCentreWords.test.tsx src/test/seasonCore.test.ts src/test/storageBlockedBoot.test.tsx src/test/supabaseClientBlockedStorage.test.ts src/test/tennisPlayerFeedback.test.tsx src/test/translateGuard.test.tsx src/test/usBoardFixture.test.tsx src/test/usSeason.test.ts src/test/usSeasonCentre.test.tsx src/test/usSeasonCentreEntry.test.tsx --testTimeout=300000 --hookTimeout=120000
+simCompletionOnce: node scripts/simCompletionOnce.mjs
+simNoDoubleRecord: node scripts/simNoDoubleRecord.mjs
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simAdsense: node scripts/simAdsense.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simSingleFooter: node scripts/simSingleFooter.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+shootout-keeperonfull: CM_SHOOTOUT_CONTROL=keeperonfull node scripts/simCmShootoutOrder.mjs
+shootout-s1: SIM_SEED=1 node scripts/simCmShootoutOrder.mjs
+shootout-s2: SIM_SEED=2 node scripts/simCmShootoutOrder.mjs
+shootout-s3: SIM_SEED=3 node scripts/simCmShootoutOrder.mjs
+shootout-s4: SIM_SEED=4 node scripts/simCmShootoutOrder.mjs
+shootout-s5: SIM_SEED=5 node scripts/simCmShootoutOrder.mjs
+vitest-shootout: node_modules/.bin/vitest run src/test/clubManagerShootoutOrder.test.ts src/test/clubManagerShootoutTile.test.tsx src/test/managerMatchPlans.test.tsx --testTimeout=300000 --hookTimeout=120000
+simExtraTime: node scripts/simExtraTime.mjs
+simClubManager: node scripts/simClubManager.mjs
+simClubManagerSave: node scripts/simClubManagerSave.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs
+simLiveMatch: node scripts/simLiveMatch.mjs
+shootwalk: node .rc/x/shootwalk.mjs
