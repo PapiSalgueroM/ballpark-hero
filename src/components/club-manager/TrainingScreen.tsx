@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { Dumbbell, GraduationCap } from 'lucide-react';
 import {
@@ -67,6 +67,7 @@ function PlayerRow({ p, career }: { p: CMPlayer; career: CareerState }) {
  */
 function RetrainCard({ career, onRetrain, onStopRetrain }: { career: CareerState; onRetrain: (id: string, to: Position) => void; onStopRetrain: (id: string) => void }) {
   const [pickId, setPickId] = useState('');
+  const pickRef = useRef<HTMLSelectElement>(null);
   const [refusal, setRefusal] = useState<string | null>(null);
   const targetsRef = useRevealScroll<HTMLDivElement>(`retrain:${pickId}`, { enabled: !!pickId, skipFirst: false });
 
@@ -86,6 +87,7 @@ function RetrainCard({ career, onRetrain, onStopRetrain }: { career: CareerState
     onRetrain(picked.id, to);
     setPickId('');
     setRefusal(null);
+    pickRef.current?.focus({ preventScroll: true });
   };
 
   return (
@@ -129,6 +131,7 @@ function RetrainCard({ career, onRetrain, onStopRetrain }: { career: CareerState
       <div className="mt-2 flex items-center gap-1.5">
         <span className="text-[9px] text-muted-foreground uppercase tracking-wider w-14 shrink-0">Retrain</span>
         <select
+          ref={pickRef}
           data-cm-retrain-pick="1"
           value={pickId}
           onChange={e => { setPickId(e.target.value); setRefusal(null); }}

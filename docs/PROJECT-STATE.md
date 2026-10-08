@@ -1,3 +1,11 @@
+## Round 1160 preparation: retraining picker focus
+
+Only TrainingScreen and this isolated note change. After a valid second-position
+start clears the choice, the mounted Player to retrain picker receives focus
+with preventScroll. Refusal, helper/callback behavior and shared scrolling stay held.
+Remote component baseline/control, proper types/build and all required readers
+are pending. Source preparation is not runtime or live acceptance.
+
 ## Release AL LIVE, 2026-10-08 05:38 EDT: ten Codex rounds, playable moments, and a translated page no longer crashes
 
 Claude lane (session F: session E died when the PC was restarted at 00:03 EDT with this release's gate running).
