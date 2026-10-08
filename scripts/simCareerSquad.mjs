@@ -282,9 +282,10 @@ const REAL = { first: 2015, last: 2025 };
 /* The last season a real squad is shown for, as the readers count seasons. */
 const LAST_REAL_SEASON = REAL.last;
 /* Two summer moves, each read in two sources on 2026-10-07 by the review of
-   this round: Erling Haaland joined Manchester City on 1 July 2022
-   (mancity.com, premierleague.com) and Kylian Mbappe signed for Real Madrid on
-   3 June 2024 (espn.com, skysports.com). The season that starts in that year
+   this round (the club's own announcement and the league's for the first,
+   two national sports desks for the second): Erling Haaland joined Manchester
+   City on 1 July 2022 and Kylian Mbappe signed for Real Madrid on 3 June
+   2024. The season that starts in that year
    is his first at the new club and the old club's first without him. Before
    the review the rows were read with no step, and both men turned up a season
    late at one club and stayed a season too long at the other. */

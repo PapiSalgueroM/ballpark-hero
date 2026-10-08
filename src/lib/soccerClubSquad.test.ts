@@ -575,12 +575,13 @@ describe('odd saves and odd years', () => {
 
 /* ── after review: a season reads its own squad, not last season's ──────── */
 describe('which baked row is a season', () => {
-  /* Two moves everybody can check, each with two sources read on 2026-10-07
-     (the review of this round): Erling Haaland joined Manchester City on 1 July
-     2022 (mancity.com, premierleague.com) and Kylian Mbappe signed for Real
-     Madrid on 3 June 2024 (espn.com, skysports.com). So the season that starts
-     in 2022 is his first at City and his old club's first without him, and the
-     same for 2024 in Madrid and Paris. */
+  /* Two moves everybody can check, each read in two sources on 2026-10-07 by
+     the review of this round (the club's own announcement and the league's
+     for the first, two national sports desks for the second): Erling Haaland
+     joined Manchester City on 1 July 2022 and Kylian Mbappe signed for Real
+     Madrid on 3 June 2024. So the season that starts in 2022 is his first at
+     City and his old club's first without him, and the same for 2024 in
+     Madrid and Paris. */
   const has = (club: string, season: number, name: string) => (seasonSquad(club, season) ?? []).some(m => m.name === name);
   const MOVES: [string, string, string, number][] = [
     ['Erling Haaland', 'Dortmund', 'Man City', 2022],

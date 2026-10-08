@@ -703,6 +703,7 @@ for (const [width, height] of SHORT) {
     let alive = true;
     if (k === 'A') {
       await screenIs(page, 'help');
+      await page.waitForTimeout(500);   // the picture is of the settled screen, not of the sheet arriving
       await shot(page, `short-${k}-first-help-${width}x${height}`);
       alive = await tapOut('first open (help)', true);
     } else await screenIs(page, 'home');
@@ -710,7 +711,7 @@ for (const [width, height] of SHORT) {
       if (await page.locator(`${SHEET} [data-squad-open="${id}"]`).count() === 0) continue;
       await page.click(`${SHEET} [data-squad-open="${id}"]`);
       await screenIs(page, id);
-      if (id === 'place' || id === 'eleven') await shot(page, `short-${k}-${id}-${width}x${height}`);
+      if (id === 'place' || id === 'eleven') { await page.waitForTimeout(700); await shot(page, `short-${k}-${id}-${width}x${height}`); }
       if (!(await tapOut(id, true))) { alive = false; break; }
     }
     if (alive) {
