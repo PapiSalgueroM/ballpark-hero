@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+# Round 1051 SECOND closing check (verifier, session F) on 312ba1b5: findings 2 and 3 reruns, read only
+press-ten: f=0; for i in 1 2 3 4 5 6 7 8 9 10; do node scripts/playCareerPress.mjs > /tmp/p$i.log 2>&1; e=$?; [ $e -ne 0 ] && f=$((f+1)); echo "run $i exit=$e | $(grep 'accountability scrum' /tmp/p$i.log | head -1) | $(tail -1 /tmp/p$i.log)"; done; echo "press ten: $f red of 10"; [ $f -eq 0 ]
+press-noscrum: CAREER_PRESS_CONTROL=noscrum node scripts/playCareerPress.mjs
+sweepWeight: node scripts/sweepWeight.mjs
