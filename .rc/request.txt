@@ -1,0 +1,8 @@
+#!serial
+rankoff: node .rc/x/rvmut.mjs rankoff
+grouplast: node .rc/x/rvmut.mjs grouplast
+nudgeedge: node .rc/x/rvmut.mjs nudgeedge
+yeargate: node .rc/x/rvmut.mjs yeargate
+keystart: node .rc/x/rvmut.mjs keystart
+dugoutflag: node .rc/x/rvmut.mjs dugoutflag
+nohold: node .rc/x/rvmut.mjs nohold
