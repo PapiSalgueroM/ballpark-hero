@@ -159,6 +159,14 @@ describe('Season Centre: the markup this round found', () => {
     const html = renderToStaticMarkup(<MatchClock game={HAND_GAME} clock={CLOCK} usName="Mine" themName="Club 3" speed={1} paused={false} reduced onFullTime={() => {}} />);
     expect(html).toMatchSnapshot('match clock');
   });
+  it('(b) a stage slot is one element between the minute row and the event list, told the minute on screen', () => {
+    const told: unknown[] = [];
+    const clock = (stage?: Parameters<typeof MatchClock>[0]['stage']) =>
+      renderToStaticMarkup(<MatchClock game={HAND_GAME} clock={CLOCK} usName="Mine" themName="Club 3" speed={1} paused={false} reduced onFullTime={() => {}} stage={stage} />);
+    const html = clock(at => { told.push(at); return <i data-probe="">pitch</i>; });
+    expect(html).toBe(clock().replace('<ol ', '<div class="mt-2" data-clock-stage="true"><i data-probe="">pitch</i></div><ol '));
+    expect(told).toEqual([{ shown: 90, paused: false, instant: true }]);
+  });
   it('(c) the Season Centre on its kick off card, no resume', () => {
     const html = renderToStaticMarkup(<SeasonCentre model={slotsModel()} exitLabel="Back to your career" onClose={() => {}} />);
     expect(html).toContain('data-kickoff');

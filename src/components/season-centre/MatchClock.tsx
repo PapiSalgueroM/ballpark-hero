@@ -17,7 +17,7 @@
    carries on when the hold is lifted, with the match as it then stands.
    Under reduced motion and at Results the clock still stops there, so every
    moment is playable. */
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import type { DerivedGame, SeasonEvent } from '@/lib/season/core';
 
 export type ClockSpeed = 1 | 3 | 'results';
@@ -40,6 +40,9 @@ export function scoreAt(events: readonly SeasonEvent[], minute: number): [number
   return [us, them];
 }
 
+/** What a stage slot is told: the whole minute on screen, and whether the clock is paused or showing results at once. */
+export interface ClockStageAt { shown: number; paused: boolean; instant: boolean }
+
 interface Props {
   game: DerivedGame;
   clock: SeasonClock;
@@ -52,9 +55,12 @@ interface Props {
   /** Stop a beat before this minute until it is lifted (null or absent: run to full time). */
   holdAt?: number | null;
   onHold?: () => void;
+  /** Round 1046: something the sport draws between the minute and the event list (soccer: the little pitch),
+   *  told the minute on screen. Absent: the clock's markup is exactly what it was. */
+  stage?: (at: ClockStageAt) => ReactNode;
 }
 
-export function MatchClock({ game, clock, usName, themName, speed, paused, reduced, onFullTime, holdAt, onHold }: Props) {
+export function MatchClock({ game, clock, usName, themName, speed, paused, reduced, onFullTime, holdAt, onHold, stage }: Props) {
   const FULL_TIME = clock.length;
   const instant = reduced || speed === 'results';
   /* the last minute the clock may show for now */
@@ -119,6 +125,7 @@ export function MatchClock({ game, clock, usName, themName, speed, paused, reduc
         <span className="tabular-nums" data-clock-minute>{done ? 'FT' : clock.label(shown)}</span>
         {done && <span className={`${instant ? '' : 'cm-slam'} font-bold text-foreground`} data-full-time>Full time</span>}
       </div>
+      {stage && <div className="mt-2" data-clock-stage>{stage({ shown, paused, instant })}</div>}
       <ol ref={listRef} className="mt-2 h-28 overflow-y-auto space-y-1 text-xs" aria-live="polite" data-clock-events>
         {seen.length === 0 && <li className="text-muted-foreground">Kick off.</li>}
         {seen.map((e, i) => (

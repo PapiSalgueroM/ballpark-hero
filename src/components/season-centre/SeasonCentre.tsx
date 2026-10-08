@@ -15,7 +15,7 @@
    writes nothing; taking it goes through the model's CentreMoments (the
    sport's board, the ledger, the bank). The season on screen is always the
    model's, so a decision shows the moment the model is rebuilt. */
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { soFar, tableAt, type DerivedGame, type DerivedSeason, type SeasonWords } from '@/lib/season/core';
 import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';
 import { RankShiftTable } from '@/components/motion/RankShiftTable';
@@ -26,7 +26,7 @@ import VictoryMoment from '@/components/game/VictoryMoment';
 import { useCareerMoment } from '@/components/soccer-career/careerMoments';
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import { ordinal } from '@/lib/soccerCareerLeague';
-import { MatchClock, scoreAt, type ClockSpeed, type SeasonClock } from './MatchClock';
+import { MatchClock, scoreAt, type ClockSpeed, type ClockStageAt, type SeasonClock } from './MatchClock';
 import { MomentHost, type CentreMoment, type CentreMoments } from './MomentHost';
 import { SeasonCentreHelp, useHelpOnce, type HelpWords } from './SeasonCentreHelp';
 import { useBodyLock } from './useBodyLock';
@@ -92,6 +92,8 @@ export interface CentreSport {
   half: (so: Record<string, number>) => string;
   /** The games not shown one by one, in one line. */
   bucket: (b: { apps: number; line: Record<string, number> }) => string;
+  /** Round 1046: the sport's picture of a game as its clock runs (soccer: a little pitch for the goals). Absent: none. */
+  pitch?: (g: DerivedGame, at: ClockStageAt) => ReactNode;
 }
 
 type Stage = { kind: 'kickoff' } | { kind: 'poster'; md: number } | { kind: 'match'; md: number } | { kind: 'review' };
@@ -460,7 +462,8 @@ export function SeasonCentre({ model, exitLabel, onClose, resume, onProgress }: 
         </div>
         <div className={host ? 'hidden' : undefined}>
           <MatchClock key={`clock-${stage.md}`} game={g} clock={model.sport.clock} usName={model.header.club} themName={model.names[g.opp]} speed={speed} paused={paused} reduced={reduced} onFullTime={onFullTime}
-            holdAt={host ? host.minute : pending ? pending.minute : null} onHold={() => { if (pending) setHosting(momentKeyOf(pending)); }} />
+            holdAt={host ? host.minute : pending ? pending.minute : null} onHold={() => { if (pending) setHosting(momentKeyOf(pending)); }}
+            stage={model.sport.pitch ? at => model.sport.pitch!(g, at) : undefined} />
         </div>
         {host && moments && (
           <MomentHost key={hosting} moment={host} moments={moments} reduced={reduced}
