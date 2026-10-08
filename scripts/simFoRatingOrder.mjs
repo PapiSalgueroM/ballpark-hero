@@ -163,8 +163,8 @@
         122 (main 17), WR 36 of 192, TE 26 of 120, OL 300 of 300, DL 83 of
         236, LB 258 of 258, DB 189 of 321. Ten newly marked, all confirmed
         fullbacks. Active fullbacks in the top two of their club's backs: 0
-        shipped, 5 main. One man labelled FB stays on the normal path (one
-        page could not be read): BUF Brock Lampe, 66.
+        shipped, 5 main. One man labelled FB stays on the normal path (his
+        club's page prints RB, ESPN's FB): BUF Brock Lampe, 66.
      7  seeds 1130000 + 1000 * block + season; per measure main, shipped,
         stretch, tolerance (half of main to stretch), sampling error (main,
         shipped):

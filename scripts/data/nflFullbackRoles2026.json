@@ -3,7 +3,7 @@
  "read": "2026-10-08",
  "recordLabel": "FB",
  "men": [
-  {"key": "BUF|Brock Lampe|RB", "club": {"url": "https://www.buffalobills.com/team/players-roster/", "position": null, "note": "the page did not answer inside five minutes; the league's page (https://www.nfl.com/players/brock-lampe/) prints RB"}, "espn": {"url": "https://www.espn.com/nfl/team/roster/_/name/buf/buffalo-bills", "position": "FB"}, "verdict": "unconfirmed"},
+  {"key": "BUF|Brock Lampe|RB", "club": {"url": "https://www.buffalobills.com/team/players-roster/", "position": "RB", "note": "the page did not answer on the first read; read again the same day, 2026-10-08, it lists him on the practice squad as RB, as the league's page (https://www.nfl.com/players/brock-lampe/) does. ESPN prints FB, so the two pages disagree and he stays on the normal path"}, "espn": {"url": "https://www.espn.com/nfl/team/roster/_/name/buf/buffalo-bills", "position": "FB"}, "verdict": "unconfirmed"},
   {"key": "CLE|Michael Burton|RB", "club": {"url": "https://www.clevelandbrowns.com/team/players-roster/", "position": "FB"}, "espn": {"url": "https://www.espn.com/nfl/team/roster/_/name/cle/cleveland-browns", "position": "FB"}, "verdict": "fullback"},
   {"key": "DAL|Hunter Luepke|RB", "club": {"url": "https://www.dallascowboys.com/team/players-roster/", "position": "FB"}, "espn": {"url": "https://www.espn.com/nfl/team/roster/_/name/dal/dallas-cowboys", "position": "FB"}, "verdict": "fullback"},
   {"key": "DEN|Adam Prentice|RB", "club": {"url": "https://www.denverbroncos.com/team/players-roster/", "position": "FB"}, "espn": {"url": "https://www.espn.com/nfl/team/roster/_/name/den/denver-broncos", "position": "FB"}, "verdict": "fullback"},
