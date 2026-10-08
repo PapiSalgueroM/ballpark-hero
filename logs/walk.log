@@ -1,0 +1,12 @@
+  FAIL: 390x844: step 2: 0 of 16 Russian Premier League clubs have a tile (missing Zenit, Krasnodar, Spartak Moscow, CSKA Moscow, Lokomotiv Moscow)
+  FAIL: 390x844: step 3: no Zenit tile to press
+  FAIL: 390x844: step 3: the hub did not open on Zenit in Season 1 (the page reads: Skip to main content DOUKNOWBALL Back Track stats CLUB MANAGER 27 real league tables and 454 clubs today, squads as of August 2026, after the summer window, plus four real past seasons: 2020-21, 2015-)
+  FAIL: 1280x800: step 2: 0 of 16 Russian Premier League clubs have a tile (missing Zenit, Krasnodar, Spartak Moscow, CSKA Moscow, Lokomotiv Moscow)
+  FAIL: 1280x800: step 3: no Zenit tile to press
+  FAIL: 1280x800: step 3: the hub did not open on Zenit in Season 1 (the page reads: Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats CLUB MANAGER 27 real league tables and 454 clubs today, squads as of August 2026, after the s)
+   390x844 Russia: 1 league(s), 0 club tiles, hub on Zenit
+   390x844 old save: Sevilla
+   1280x800 Russia: 1 league(s), 0 club tiles, hub on Zenit
+   1280x800 old save: Sevilla
+   4 requests to the database host aborted
+playClubManagerNewCountries: 6 failure(s)
