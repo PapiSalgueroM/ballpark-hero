@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+rvwalk: BASE=http://localhost:4173 node .rc/x/rvwalk.mjs
+walk: ENGINES=chromium node scripts/playCareerLeagueWorld.mjs
+walk-odd: ENGINES=chromium PLAY_LEAGUE_WORLD_CONTROL=odd node scripts/playCareerLeagueWorld.mjs
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+sweepWeight: ENGINES=chromium node scripts/sweepWeight.mjs
+playSeasonCentre: ENGINES=chromium node scripts/playSeasonCentre.mjs

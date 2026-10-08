@@ -1,0 +1,193 @@
+READ ere-390 (Twente, seed 2100) kickoff: frame="18 clubs · 34 matchdays · 3 points for a win" why="null"
+READ ere-390 kickoff card: Twente2029/30 · Eredivisie18 clubs · 34 matchdays · 3 points for a win🎯 3 moments are yours to play this season: matchdays 2, 3 and 10.First five1HomeTelstar2AwayFeyenoord3HomePSV4AwayAZ Alkmaar5HomeGroningen▶ Kick off⏭ Straight to the final table
+ok   ere-390: the page did not move when the Season Centre opened (0 then 0)
+READ ere-390 table before a ball: 5 rows: ⭐Twente0000-000 / ·Excelsior0000-000 / ·Heerenveen0000-000 / ·Ajax0000-000 / ·Willem II0000-000
+ok   ere-390: table rows 5 (want a compact window), unnamed 0
+ok   ere-390: the frame line says 18 clubs and 34 matchdays
+ok   ere-390: no sideways scroll on kick off (390)
+ok   ere-390: nothing pokes out of the viewport on kick off 
+READ ere-390 live: 5 table rows, sw 390; bar: ⏸ Pause⏭ Sim the rest1x3xResults
+ok   ere-390: nothing pokes out while a matchday plays 
+READ ere-390 buttons mid season: ? | Back to the papers | 🗓 Fixtures | ⏸ Pause | ⏭ Sim the rest | 1x | 3x | Results
+READ ere-390 review: finish="Finished 2nd of 18 in Eredivisie · 73 pts" champion="Feyenoord won it"
+READ ere-390 review text: Season reviewFinished 2nd of 18 in Eredivisie · 73 ptsFeyenoord won it39Apps4Goals9Assists8.0Avg ratingAll competitions, the same as your season summary.⭐ Best match: Matchday 27, W 3-0 vs Fortuna Sittard, rated 9.4Last five:WWLLLCups and other games: 5 apps, 0 goals, 2 assists
+READ ere-390 final table: 5 rows: 1Feyenoord242870-24+4674 / 2Twente234761-30+3173 / 3Ajax217663-28+3570 / 4PSV216757-29+2869 / 5AZ Alkmaar187954-31+2361
+ok   ere-390: nothing pokes out on the review 
+ok   ere-390: the review prints a position of 18 ("Finished 2nd of 18 in Eredivisie · 73 pts")
+READ ere-390 summary card: Season Summary🇳🇱Twente · 2029/30Finished 2nd of 18 in Eredivisie · Feyenoord won it39Apps4Goals9AssistsAvg Rating: 8.0 · Played at OVR 75🟨 8 🟥 0KNVB Cup: knocked out by Ajax in the semi-final.Continue →
+ok   ere-390: the Season Summary card prints "of 18"
+ok   ere-390: no page error 
+READ ere-390-reduced (Twente, seed 2153) kickoff: frame="18 clubs · 34 matchdays · 3 points for a win" why="null"
+READ ere-390-reduced kickoff card: Twente2029/30 · Eredivisie18 clubs · 34 matchdays · 3 points for a win🎯 3 moments are yours to play this season: matchdays 1, 4 and 20.First five1HomeHeerenveen2AwaySparta Rotterdam3HomeTelstar4AwayFortuna Sittard5HomeAZ Alkmaar▶ Kick off⏭ Straight to the final table
+ok   ere-390-reduced: the page did not move when the Season Centre opened (0 then 0)
+READ ere-390-reduced table before a ball: 5 rows: ⭐Twente0000-000 / ·Cambuur0000-000 / ·Willem II0000-000 / ·NEC Nijmegen0000-000 / ·Ajax0000-000
+ok   ere-390-reduced: table rows 5 (want a compact window), unnamed 0
+ok   ere-390-reduced: the frame line says 18 clubs and 34 matchdays
+ok   ere-390-reduced: no sideways scroll on kick off (390)
+ok   ere-390-reduced: nothing pokes out of the viewport on kick off 
+READ ere-390-reduced live: 5 table rows, sw 390; bar: none
+ok   ere-390-reduced: nothing pokes out while a matchday plays 
+READ ere-390-reduced buttons mid season: ? | Back to the papers | 🎯 Take it yourself | ▶ Let it play
+READ ere-390-reduced review: finish="null" champion="null"
+READ ere-390-reduced review text: null
+READ ere-390-reduced final table: 5 rows: ⭐Twente0000-000 / ·Cambuur0000-000 / ·Willem II0000-000 / ·NEC Nijmegen0000-000 / ·Ajax0000-000
+ok   ere-390-reduced: nothing pokes out on the review 
+ODD  ere-390-reduced: the review prints a position of 18 ("null")
+READ ere-390-reduced summary card: Season Summary🇳🇱Twente · 2029/30Finished 6th of 18 in Eredivisie · Feyenoord won it39Apps4Goals7AssistsAvg Rating: 8.4 · Played at OVR 75🟨 5 🟥 0KNVB Cup: out in the early rounds.Continue →
+ok   ere-390-reduced: the Season Summary card prints "of 18"
+ok   ere-390-reduced: no page error 
+READ ere-1280 (Twente, seed 2206) kickoff: frame="18 clubs · 34 matchdays · 3 points for a win" why="null"
+READ ere-1280 kickoff card: Twente2029/30 · Eredivisie18 clubs · 34 matchdays · 3 points for a win🎯 3 moments are yours to play this season: matchdays 2, 4 and 31.First five1HomeAZ Alkmaar2AwayFeyenoord3HomePEC Zwolle4AwayHeerenveen5HomeGo Ahead Eagles▶ Kick off⏭ Straight to the final table
+ok   ere-1280: the page did not move when the Season Centre opened (0 then 0)
+READ ere-1280 table before a ball: 18 rows: ⭐Twente0000-000 / ·Utrecht0000-000 / ·Telstar0000-000 / ·Willem II0000-000 / ·Ajax0000-000 / ·NEC Nijmegen0000-000 / ·Groningen0000-000 / ·Fortuna Sittard0000-000 / ·Excelsior0000-000 / ·ADO Den Haag0000-000 / ·Cambuur0000-000 / ·PSV0000-000 / ·Sparta Rotterdam0000-000 / ·Go Ahead Eagles0000-000 / ·Heerenveen0000-000 / ·PEC Zwolle0000-000 / ·Feyenoord0000-000 / ·AZ Alkmaar0000-000
+ok   ere-1280: table rows 18 (want 18), unnamed 0
+ok   ere-1280: the frame line says 18 clubs and 34 matchdays
+ok   ere-1280: no sideways scroll on kick off (1280)
+ok   ere-1280: nothing pokes out of the viewport on kick off 
+READ ere-1280 live: 18 table rows, sw 1280; bar: ⏸ Pause⏭ Sim the rest1x3xResults
+ok   ere-1280: nothing pokes out while a matchday plays 
+READ ere-1280 buttons mid season: ? | Back to the papers | 🗓 Fixtures | ⏸ Pause | ⏭ Sim the rest | 1x | 3x | Results
+READ ere-1280 review: finish="Finished 3rd of 18 in Eredivisie · 73 pts" champion="Feyenoord won it"
+READ ere-1280 review text: Season reviewFinished 3rd of 18 in Eredivisie · 73 ptsFeyenoord won it38Apps4Goals6Assists7.8Avg ratingAll competitions, the same as your season summary.⭐ Best match: Matchday 4, W 2-0 vs Heerenveen, rated 9.3Last five:DDDDWCups and other games: 5 apps, 1 goals, 0 assists
+READ ere-1280 final table: 18 rows: 1Feyenoord243774-32+4275 / 2Ajax235671-30+4174 / 3Twente227566-26+4073 / 4PSV207754-32+2267 / 5AZ Alkmaar197854-28+2664 / 6Fortuna Sittard169957-44+1357 / 7ADO Den Haag1681053-45+856 / 8Utrecht1661240-31+954 / 9Willem II1411954-37+1753 / 10NEC Nijmegen1571239-38+152 / 11Go Ahead Eagles1261639-48-942 / 12Telstar1191432-41-942 / 13Heerenveen1042045-64-1934 / 14Sparta Rotterdam891741-66-2533 / 15PEC Zwolle662225-60-3524 / 16Groningen712625-51-2622 / 17Excelsior642437-81-4422 / 18Cambuur372417-69-5216
+ok   ere-1280: nothing pokes out on the review 
+ok   ere-1280: the review prints a position of 18 ("Finished 3rd of 18 in Eredivisie · 73 pts")
+READ ere-1280 summary card: Season Summary🇳🇱Twente · 2029/30Finished 3rd of 18 in Eredivisie · Feyenoord won it38Apps4Goals6AssistsAvg Rating: 7.8 · Played at OVR 75🟨 0 🟥 0KNVB Cup: knocked out by Utrecht in the quarter-final.🚑 Bruised ribs, out 2 weeksContinue →
+ok   ere-1280: the Season Summary card prints "of 18"
+ok   ere-1280: no page error 
+READ ere-1280-reduced (Twente, seed 2259) kickoff: frame="18 clubs · 34 matchdays · 3 points for a win" why="null"
+READ ere-1280-reduced kickoff card: Twente2029/30 · Eredivisie18 clubs · 34 matchdays · 3 points for a win🎯 3 moments are yours to play this season: matchdays 5, 16 and 32.First five1HomeUtrecht2AwayExcelsior3HomeCambuur4AwayGo Ahead Eagles5HomePSV▶ Kick off⏭ Straight to the final table
+ok   ere-1280-reduced: the page did not move when the Season Centre opened (0 then 0)
+READ ere-1280-reduced table before a ball: 18 rows: ⭐Twente0000-000 / ·Fortuna Sittard0000-000 / ·AZ Alkmaar0000-000 / ·ADO Den Haag0000-000 / ·Willem II0000-000 / ·Telstar0000-000 / ·NEC Nijmegen0000-000 / ·Feyenoord0000-000 / ·PEC Zwolle0000-000 / ·Sparta Rotterdam0000-000 / ·Ajax0000-000 / ·Heerenveen0000-000 / ·Groningen0000-000 / ·PSV0000-000 / ·Go Ahead Eagles0000-000 / ·Cambuur0000-000 / ·Excelsior0000-000 / ·Utrecht0000-000
+ok   ere-1280-reduced: table rows 18 (want 18), unnamed 0
+ok   ere-1280-reduced: the frame line says 18 clubs and 34 matchdays
+ok   ere-1280-reduced: no sideways scroll on kick off (1280)
+ok   ere-1280-reduced: nothing pokes out of the viewport on kick off 
+READ ere-1280-reduced live: 18 table rows, sw 1280; bar: ▶ Matchday 2⏩ To the next big game⏭ Sim the rest1x3xResults
+ok   ere-1280-reduced: nothing pokes out while a matchday plays 
+READ ere-1280-reduced buttons mid season: ? | Back to the papers | 🗓 Fixtures | ▶ Matchday 2 | ⏩ To the next big game | ⏭ Sim the rest | 1x | 3x | Results
+READ ere-1280-reduced review: finish="Finished 4th of 18 in Eredivisie · 65 pts" champion="Feyenoord won it"
+READ ere-1280-reduced review text: Season reviewFinished 4th of 18 in Eredivisie · 65 ptsFeyenoord won it36Apps6Goals9Assists8.4Avg ratingAll competitions, the same as your season summary.⭐ Best match: Matchday 29, W 3-1 vs NEC Nijmegen, rated 10.0Last five:WWLWLCups and other games: 3 apps, 1 goals, 0 assists🏆 Cup
+READ ere-1280-reduced final table: 18 rows: 1Feyenoord236571-23+4875 / 2Ajax224858-34+2470 / 3PSV206843-28+1566 / 4Twente198756-31+2565 / 5Fortuna Sittard1612658-25+3360 / 6Go Ahead Eagles1851152-42+1059 / 7AZ Alkmaar1751253-45+856 / 8NEC Nijmegen1671160-50+1055 / 9Cambuur12121045-51-648 / 10Utrecht1261650-49+142 / 11Groningen9141145-42+341 / 12Excelsior1071733-44-1137 / 13ADO Den Haag971833-50-1734 / 14Telstar8101640-62-2234 / 15Willem II8101635-57-2234 / 16PEC Zwolle6101825-53-2828 / 17Heerenveen492125-60-3521 / 18Sparta Rotterdam562332-68-3621
+ok   ere-1280-reduced: nothing pokes out on the review 
+ok   ere-1280-reduced: the review prints a position of 18 ("Finished 4th of 18 in Eredivisie · 65 pts")
+READ ere-1280-reduced summary card: Season Summary🇳🇱Twente · 2029/30Finished 4th of 18 in Eredivisie · Feyenoord won it36Apps6Goals9AssistsAvg Rating: 8.4 · Played at OVR 75🟨 8 🟥 1🏆 KNVB Cup🏆 KNVB Cup winnersThrough the early roundsQuarter-final: beat Ajax 1-0Semi-final: beat ADO Den Haag 2-1Final: beat Groningen 1-0Rounds before the final are shown as one match each. .victory-moment { position: relative; display: flex; align-items: center; justify-content: center; gap: 8px; isolation: isolate; overflow: hidden; border-radius: inherit; } .victory-moment::before { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: linear-gradient(110deg, transparent 25%, currentColor 50%, transparent
+ok   ere-1280-reduced: the Season Summary card prints "of 18"
+ok   ere-1280-reduced: no page error 
+READ cha-390 (Norwich City, seed 3100) kickoff: frame="24 clubs · 46 matchdays · 3 points for a win" why="null"
+READ cha-390 kickoff card: Norwich City2029/30 · Championship24 clubs · 46 matchdays · 3 points for a win🎯 3 moments are yours to play this season: matchdays 21, 23 and 24.First five1HomeStoke City2AwayMiddlesbrough3HomeDerby County4AwayBolton Wanderers5HomeBurnley▶ Kick off⏭ Straight to the final table
+ok   cha-390: the page did not move when the Season Centre opened (0 then 0)
+READ cha-390 table before a ball: 5 rows: ⭐Norwich City0000-000 / ·West Ham0000-000 / ·Wrexham0000-000 / ·Preston North End0000-000 / ·Lincoln City0000-000
+ok   cha-390: table rows 5 (want a compact window), unnamed 0
+ok   cha-390: the frame line says 24 clubs and 46 matchdays
+ok   cha-390: no sideways scroll on kick off (390)
+ok   cha-390: nothing pokes out of the viewport on kick off 
+READ cha-390 live: 5 table rows, sw 390; bar: ⏸ Pause⏭ Sim the rest1x3xResults
+ok   cha-390: nothing pokes out while a matchday plays 
+READ cha-390 buttons mid season: ? | Back to the papers | 🗓 Fixtures | ⏸ Pause | ⏭ Sim the rest | 1x | 3x | Results
+READ cha-390 review: finish="Finished 3rd of 24 in the Championship · 91 pts" champion="null"
+READ cha-390 review text: Season reviewFinished 3rd of 24 in the Championship · 91 pts38Apps6Goals7Assists7.9Avg ratingAll competitions, the same as your season summary.⭐ Best match: Matchday 36, L 2-3 vs Cardiff City, rated 9.1Last five:WDWLWCups and other games: 3 apps, 1 goals, 1 assists
+READ cha-390 final table: 5 rows: 1another club2812693-43+5096 / 2Watford2881082-38+4492 / 3Norwich City2871184-43+4191 / 4Charlton Athletic2515675-45+3090 / 5Wrexham2781184-40+4489
+ok   cha-390: nothing pokes out on the review 
+ok   cha-390: the review prints a position of 24 ("Finished 3rd of 24 in the Championship · 91 pts")
+READ cha-390 summary card: Season SummaryNorwich City · 2029/30Finished 3rd of 24 in the Championship38Apps6Goals7AssistsAvg Rating: 7.9 · Played at OVR 75🟨 0 🟥 0FA Cup: knocked out by Wolves in the semi-final.Continue →
+ok   cha-390: the Season Summary card prints "of 24"
+ok   cha-390: no page error 
+READ cha-1280-reduced (Norwich City, seed 3200) kickoff: frame="24 clubs · 46 matchdays · 3 points for a win" why="null"
+READ cha-1280-reduced kickoff card: Norwich City2029/30 · Championship24 clubs · 46 matchdays · 3 points for a win🎯 3 moments are yours to play this season: matchdays 5, 15 and 44.First five1HomeBristol City2AwayStoke City3HomeSheffield United4AwayWatford5HomeWest Brom▶ Kick off⏭ Straight to the final table
+ok   cha-1280-reduced: the page did not move when the Season Centre opened (0 then 0)
+READ cha-1280-reduced table before a ball: 24 rows: ⭐Norwich City0000-000 / ·Charlton Athletic0000-000 / ·Cardiff City0000-000 / ·Portsmouth0000-000 / ·QPR0000-000 / ·another club0000-000 / ·Blackburn Rovers0000-000 / ·Burnley0000-000 / ·Wolves0000-000 / ·Middlesbrough0000-000 / ·West Ham0000-000 / ·Swansea City0000-000 / ·Millwall0000-000 / ·Derby County0000-000 / ·Wrexham0000-000 / ·Preston North End0000-000 / ·Lincoln City0000-000 / ·Birmingham City0000-000 / ·Bolton Wanderers0000-000 / ·West Brom0000-000 / ·Watford0000-000 / ·Sheffield United0000-000 / ·Stoke City0000-000 / ·Bristol City0000-000
+ODD  cha-1280-reduced: table rows 24 (want 24), unnamed 1
+ok   cha-1280-reduced: the frame line says 24 clubs and 46 matchdays
+ok   cha-1280-reduced: no sideways scroll on kick off (1280)
+ok   cha-1280-reduced: nothing pokes out of the viewport on kick off 
+READ cha-1280-reduced live: 24 table rows, sw 1280; bar: ▶ Matchday 2⏩ To the next big game⏭ Sim the rest1x3xResults
+ok   cha-1280-reduced: nothing pokes out while a matchday plays 
+READ cha-1280-reduced buttons mid season: ? | Back to the papers | 🗓 Fixtures | ▶ Matchday 2 | ⏩ To the next big game | ⏭ Sim the rest | 1x | 3x | Results
+READ cha-1280-reduced review: finish="Finished 6th of 24 in the Championship · 85 pts" champion="null"
+READ cha-1280-reduced review text: Season reviewFinished 6th of 24 in the Championship · 85 pts38Apps8Goals10Assists8.4Avg ratingAll competitions, the same as your season summary.⭐ Best match: Matchday 29, D 1-1 vs Bolton Wanderers, rated 10.0Last five:LDLWDCups and other games: 3 apps, 1 goals, 0 assists
+READ cha-1280-reduced final table: 24 rows: 1another club329592-27+65105 / 2West Ham2812698-38+6096 / 3Wrexham2710980-56+2491 / 4West Brom2512976-48+2887 / 5Bristol City2414884-38+4686 / 6Norwich City25101184-49+3585 / 7Wolves2481481-47+3480 / 8Preston North End20121471-59+1272 / 9Watford20111554-44+1071 / 10Charlton Athletic19111674-71+368 / 11Cardiff City1981963-51+1265 / 12Derby County17131665-62+364 / 13QPR16151544-49-563 / 14Birmingham City16141664-64062 / 15Portsmouth1592254-65-1154 / 16Stoke City14102256-68-1252 / 17Middlesbrough12132155-75-2049 / 18Bolton Wanderers1462643-68-2548 / 19Lincoln City1392443-80-3748 / 20Millwall11112440-79-3944 / 21Burnley9102736-88-5237 / 22Swansea City1063043-77-3436 / 23Blackburn Rovers892941-95-5433 / 24Sheffield United6142643-86-4332
+ok   cha-1280-reduced: nothing pokes out on the review 
+ok   cha-1280-reduced: the review prints a position of 24 ("Finished 6th of 24 in the Championship · 85 pts")
+READ cha-1280-reduced summary card: Season SummaryNorwich City · 2029/30Finished 6th of 24 in the Championship38Apps8Goals10AssistsAvg Rating: 8.4 · Played at OVR 75🟨 7 🟥 0FA Cup: out in the early rounds.Continue →
+ok   cha-1280-reduced: the Season Summary card prints "of 24"
+ok   cha-1280-reduced: no page error 
+READ sco-390 (Hearts, seed 4100) kickoff: frame="null" why="Results only: the game does not have a verified table for this league that season."
+READ sco-390 kickoff card: Hearts2029/30 · Scottish PremiershipResults only: the game does not have a verified table for this league that season.🎯 3 moments are yours to play this season: league games 10, 13 and 24.First five1Homeanother club2Awayanother club3Homeanother club4Awayanother club5Homeanother club▶ Kick off⏭ Straight to the season review
+ok   sco-390: the page did not move when the Season Centre opened (0 then 0)
+READ sco-390 table before a ball: 0 rows: 
+ok   sco-390: Results only (no frame line, no table, a reason: "Results only: the game does not have a verified table for this league that season.")
+ok   sco-390: no sideways scroll on kick off (390)
+ok   sco-390: nothing pokes out of the viewport on kick off 
+READ sco-390 live: 0 table rows, sw 390; bar: ⏸ Pause⏭ Sim the rest1x3xResults
+ok   sco-390: nothing pokes out while a matchday plays 
+READ sco-390 buttons mid season: ? | Back to the papers | 🗓 Fixtures | ⏸ Pause | ⏭ Sim the rest | 1x | 3x | Results
+READ sco-390 review: finish="null" champion="null"
+READ sco-390 review text: Season review35Apps5Goals6Assists7.7Avg ratingAll competitions, the same as your season summary.⭐ Best match: Matchday 13, W 1-0 vs another club, rated 9.0Last five:LLDDLCups and other games: 2 apps, 1 goals, 0 assists
+READ sco-390 final table: 0 rows: 
+ok   sco-390: nothing pokes out on the review 
+READ sco-390 summary card: Season Summary🇬🇧Hearts · 2029/3035Apps5Goals6AssistsAvg Rating: 7.7 · Played at OVR 75🟨 2 🟥 0Scottish Cup: out in the early rounds.Continue →
+ok   sco-390: no page error 
+READ sco-1280-reduced (Hearts, seed 4200) kickoff: frame="null" why="Results only: the game does not have a verified table for this league that season."
+READ sco-1280-reduced kickoff card: Hearts2029/30 · Scottish PremiershipResults only: the game does not have a verified table for this league that season.🎯 3 moments are yours to play this season: league games 7, 15 and 33.First five1Homeanother club2Awayanother club3Homeanother club4Awayanother club5Homeanother club▶ Kick off⏭ Straight to the season review
+ok   sco-1280-reduced: the page did not move when the Season Centre opened (0 then 0)
+READ sco-1280-reduced table before a ball: 0 rows: 
+ok   sco-1280-reduced: Results only (no frame line, no table, a reason: "Results only: the game does not have a verified table for this league that season.")
+ok   sco-1280-reduced: no sideways scroll on kick off (1280)
+ok   sco-1280-reduced: nothing pokes out of the viewport on kick off 
+READ sco-1280-reduced live: 0 table rows, sw 1280; bar: ▶ League game 2⏩ To the next big game⏭ Sim the rest1x3xResults
+ok   sco-1280-reduced: nothing pokes out while a matchday plays 
+READ sco-1280-reduced buttons mid season: ? | Back to the papers | 🗓 Fixtures | ▶ League game 2 | ⏩ To the next big game | ⏭ Sim the rest | 1x | 3x | Results
+READ sco-1280-reduced review: finish="null" champion="null"
+READ sco-1280-reduced review text: Season review38Apps6Goals8Assists8.2Avg ratingAll competitions, the same as your season summary.⭐ Best match: Matchday 32, W 1-0 vs another club, rated 9.5Last five:LLLWDCups and other games: 4 apps, 1 goals, 0 assists
+READ sco-1280-reduced final table: 0 rows: 
+ok   sco-1280-reduced: nothing pokes out on the review 
+READ sco-1280-reduced summary card: Season Summary🇬🇧Hearts · 2029/3038Apps6Goals8AssistsAvg Rating: 8.2 · Played at OVR 75🟨 5 🟥 1Scottish Cup: knocked out by Aberdeen in the quarter-final.Continue →
+ok   sco-1280-reduced: no page error 
+READ her-390 (Hertha Berlin, seed 5100) kickoff: frame="null" why="Results only: the game does not have a verified table for this league that season."
+READ her-390 kickoff card: Hertha Berlin2029/30Results only: the game does not have a verified table for this league that season.Last season: 16th with Hertha Berlin🎯 3 moments are yours to play this season: league games 12, 13 and 19.First five1Homeanother club2Awayanother club3Homeanother club4Awayanother club5Homeanother club▶ Kick off⏭ Straight to th
+ok   her-390: the page did not move when the Season Centre opened (0 then 0)
+READ her-390 table before a ball: 0 rows: 
+ok   her-390: no sideways scroll on kick off (390)
+ok   her-390: nothing pokes out of the viewport on kick off 
+READ her-390 live: 0 table rows, sw 390; bar: ⏸ Pause⏭ Sim the rest1x3xResults
+ok   her-390: nothing pokes out while a matchday plays 
+READ her-390 buttons mid season: ? | Back to the papers | 🗓 Fixtures | ⏸ Pause | ⏭ Sim the rest | 1x | 3x | Results
+READ her-390 review: finish="Finished 12th of 18" champion="null"
+READ her-390 review text: Season reviewFinished 12th of 1838Apps5Goals7Assists8.0Avg ratingAll competitions, the same as your season summary.⭐ Best match: Matchday 10, W 4-2 vs another club, rated 9.3Last five:DWDDLDerbies you played: 1W 1D 0LCups and other games: 4 apps, 2 goals, 1 assists
+READ her-390 final table: 0 rows: 
+ok   her-390: nothing pokes out on the review 
+ok   her-390: the review never names 2. Bundesliga
+READ her-390 summary card: Season Summary🇩🇪Hertha Berlin · 2029/30Finished 12th of 1838Apps5Goals7AssistsAvg Rating: 8.0 · Played at OVR 75🟨 1 🟥 0🔥 Berlin derby vs Union Berlin: W 3-2 (A), D 0-0 (H). No goal for you.DFB-Pokal: out in the early rounds.Continue →
+ok   her-390: the Season Summary card never names 2. Bundesliga
+ok   her-390: no page error 
+READ nan-1280 (Nantes, seed 5200) kickoff: frame="null" why="Results only: the game does not have a verified table for this league that season."
+READ nan-1280 kickoff card: Nantes2029/30Results only: the game does not have a verified table for this league that season.Last season: 14th with Nantes🎯 3 moments are yours to play this season: league games 4, 5 and 19.First five1Homeanother club2Awayanother club3Homeanother club4Awayanother club5Homeanother club▶ Kick off⏭ Straight to the season review
+ok   nan-1280: the page did not move when the Season Centre opened (0 then 0)
+READ nan-1280 table before a ball: 0 rows: 
+ok   nan-1280: no sideways scroll on kick off (1280)
+ok   nan-1280: nothing pokes out of the viewport on kick off 
+READ nan-1280 live: 0 table rows, sw 1280; bar: ⏸ Pause⏭ Sim the rest1x3xResults
+ok   nan-1280: nothing pokes out while a matchday plays 
+READ nan-1280 buttons mid season: ? | Back to the papers | 🗓 Fixtures | ⏸ Pause | ⏭ Sim the rest | 1x | 3x | Results
+READ nan-1280 review: finish="Finished 10th of 18" champion="null"
+READ nan-1280 review text: Season reviewFinished 10th of 1832Apps6Goals8Assists7.8Avg ratingAll competitions, the same as your season summary.⭐ Best match: Matchday 10, D 2-2 vs another club, rated 9.4Last five:WLLLWDerbies you played: 0W 0D 2LCups and other games: 3 apps, 0 goals, 0 assists
+READ nan-1280 final table: 0 rows: 
+ok   nan-1280: nothing pokes out on the review 
+ok   nan-1280: the review never names Ligue 2
+READ nan-1280 summary card: Season Summary🇫🇷Nantes · 2029/30Finished 10th of 1832Apps6Goals8AssistsAvg Rating: 7.8 · Played at OVR 75🟨 5 🟥 0🔥 Breton derby vs Rennes: L 0-1 (A), L 0-2 (H). No goal for you.Coupe de France: knocked out by Troyes in the semi-final.Continue →
+ok   nan-1280: the Season Summary card never names Ligue 2
+ok   nan-1280: no page error 
+READ mgrSco-390 (Hearts) BEFORE advancing (the old save's own last row): null
+ODD  mgrSco-390: no Next Manager Season button (step 0)
+ok   mgrSco-390: no page error 
+READ mgrSco-1280-reduced (Hearts) BEFORE advancing (the old save's own last row): null
+ODD  mgrSco-1280-reduced: no Next Manager Season button (step 0)
+ok   mgrSco-1280-reduced: no page error 
+READ mgrSeg-390-reduced (Girona) BEFORE advancing (the old save's own last row): null
+ODD  mgrSeg-390-reduced: no Next Manager Season button (step 0)
+ok   mgrSeg-390-reduced: no page error 
+READ mgrSeg-1280 (Girona) BEFORE advancing (the old save's own last row): null
+ODD  mgrSeg-1280: no Next Manager Season button (step 0)
+ok   mgrSeg-1280: no page error 
+rvwalk: 6 odd things
