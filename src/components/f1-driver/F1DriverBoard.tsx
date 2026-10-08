@@ -8,6 +8,7 @@ import { ClueFinishMoment, useLiveFinish } from '@/components/guess-finish/Guess
 import { GameNav } from '@/components/game/GameNav';
 import { MAX_CLUES, POINTS_BY_CLUE, type F1DriverState } from '@/types/f1Driver';
 import feedbackStyles from './F1DriverFeedback.module.css';
+import { formatNumber } from '@/lib/formatNumber';
 
 export function F1DriverBoard() {
   const { gameState, startGame, makeGuess, giveUp, revealHint, resetGame, pointsForCurrentClue } = useF1Driver();
@@ -215,7 +216,7 @@ export function F1DriverBoard() {
                   {puzzle.driverName}
                 </p>
                 <p className="text-zinc-400">
-                  Guessed in {revealedClues} clue{revealedClues > 1 ? 's' : ''}: <span className="text-red-400 font-bold">{score} pts</span>
+                  Guessed in {revealedClues} clue{revealedClues > 1 ? 's' : ''}: <span className="text-red-400 font-bold">{formatNumber(score)} pts</span>
                 </p>
               </>
             ) : (

@@ -36,6 +36,12 @@
  * save. The fixture is not re-recorded: this replay is the proof that the
  * knob path is today's game. The summer itself has its own tests
  * (src/test/usCareerSummer.test.tsx, scripts/simUsCareerSummer.mjs).
+ * Round 1048 leaves one element out of the old screen projection and the
+ * click candidates: the hub's Season Center entry ([data-season-centre-entry],
+ * "Week by week" beside the Play button). The replay mounts the bare board, so
+ * the entry IS in the document on the NBA path (and the NFL's once bound) and
+ * is proven inert for every other screen and every save byte. The fixture is
+ * not re-recorded; the entry has its own tests (src/test/usSeasonCentreEntry.test.tsx).
  *
  *   US_BOARD_FIXTURE=record  writes the fixture to US_BOARD_FIXTURE_OUT
  *   US_BOARD_FIXTURE=replay  compares against scripts/data/usBoardFixture.json
@@ -166,7 +172,7 @@ const squash = (s: string) => s.replace(/\s+/g, ' ').trim();
    season button and every existing parent still changes the hash. */
 const legacyScreen = () => {
   const copy = document.body.cloneNode(true) as HTMLElement;
-  copy.querySelectorAll('section[data-career-practice], section[data-career-prospect-entry], [data-career-review-opener]').forEach(el => el.remove());
+  copy.querySelectorAll('section[data-career-practice], section[data-career-prospect-entry], [data-career-review-opener], [data-season-centre-entry]').forEach(el => el.remove());
   copy.querySelectorAll('[data-career-hub-buttons]').forEach(el => el.replaceWith(...el.childNodes));
   for (const attribute of ['data-career-event', 'data-career-decision-event', 'data-career-decision-option']) {
     copy.querySelectorAll(`[${attribute}]`).forEach(el => el.removeAttribute(attribute));
@@ -225,7 +231,7 @@ function fieldHashes(save: Save | null): Record<string, string> {
 /* ------------------------------ the walker ------------------------------ */
 
 const enabledButtons = (root: ParentNode): HTMLButtonElement[] =>
-  [...root.querySelectorAll('button')].filter(b => !b.disabled && !b.closest('section[data-career-practice], section[data-career-prospect-entry], [data-career-review-opener]')) as HTMLButtonElement[];
+  [...root.querySelectorAll('button')].filter(b => !b.disabled && !b.closest('section[data-career-practice], section[data-career-prospect-entry], [data-career-review-opener], [data-season-centre-entry]')) as HTMLButtonElement[];
 const labelOf = (b: Element) => squash(b.textContent ?? '').slice(0, 60) || `(${b.getAttribute('aria-label') ?? 'button'})`;
 const byText = (root: ParentNode, re: RegExp) => enabledButtons(root).find(b => re.test(squash(b.textContent ?? '')));
 

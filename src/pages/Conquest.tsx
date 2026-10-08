@@ -11,6 +11,7 @@ import GameSeoContent from '@/components/seo/GameSeoContent';
 import { ConquestHowToPlay } from '@/components/conquest/ConquestHowToPlay';
 import { HelpCircle } from 'lucide-react';
 import { hasUnfinishedDaily } from '@/lib/conquestDaily';
+import { safeSetItem } from '@/lib/safeStorage';
 
 type ConquestMode = 'select' | 'imperialism' | 'arcade';
 
@@ -28,7 +29,7 @@ const Conquest = () => {
     const seen = localStorage.getItem('conquest-how-to-play-seen');
     if (!seen) {
       setShowHelp(true);
-      localStorage.setItem('conquest-how-to-play-seen', 'true');
+      safeSetItem('conquest-how-to-play-seen', 'true');
     }
   }, [mode]);
 

@@ -15,6 +15,7 @@ import {
   type PromoterState, type ShowResult, type Booking,
 } from '@/lib/fightPromoter';
 import { HowToPlayPopover } from '@/components/game/HowToPlayPopover';
+import BoxingShowForecast from '@/components/fight-promoter/BoxingShowForecast';
 
 /* Round 955: the new ending, written down where the player can reopen it,
    because the page's guide lives in a file another lane is editing. */
@@ -118,6 +119,11 @@ export default function FightPromoterBoard() {
   const inCard = new Set(card.flatMap(b => [b.aId, b.bId]));
   const price = priceK / 1e6;
   const venue = venueById(venueId);
+  /* Release AM: the room stays picked when a bad show drops your name under
+     what it needs, and the engine will not run a show there. So no forecast
+     for it (it would be the one number the engine never pays) and no live
+     button that does nothing: say why and ask for another room. */
+  const roomLocked = venue.needs > st.reputation;
   const plan = { venueId, ticketPrice: price, bookings: card };
   const projected = card.length ? expectedAttendance(st, plan) : 0;
   const projectedGate = Math.round(projected * price * 1000) / 1000;
@@ -321,17 +327,16 @@ export default function FightPromoterBoard() {
             );
           })}
         </div>
-        {card.length > 0 && (
-          <div className="mt-2 border-t pt-2 text-xs text-muted-foreground">
-            <p>Projected house {projected.toLocaleString()} of {venue.capacity.toLocaleString()}</p>
-            <p>
-              Gate {projectedGate.toFixed(3)}m, purses from {projectedPurses.toFixed(3)}m, room {venue.rent.toFixed(3)}m.
-              The men take the greater of their guarantee or 58% of the door.
-            </p>
-          </div>
-        )}
+        {card.length > 0 && (roomLocked ? (
+          <p role="status" data-boxing-room-locked className="mt-2 border-t pt-2 text-xs font-semibold text-destructive">
+            {venue.name} needs a name of {venue.needs} and yours is {st.reputation.toFixed(1)}. Pick a room that will have you to see the cash forecast and put the show on.
+          </p>
+        ) : (
+          <BoxingShowForecast attendance={projected} capacity={venue.capacity} gate={projectedGate}
+            guaranteedPurses={projectedPurses} rent={venue.rent} money={st.money} />
+        ))}
         <button
-          disabled={!card.length}
+          disabled={!card.length || roomLocked}
           onClick={() => {
             const r = runShow(st, plan);
             if (!r) return;

@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { CONSENT_CHANGED_EVENT, loadConsentedScripts } from '@/lib/consentedScripts';
+import { safeLocalStorage } from '@/lib/safeStorage';
 
 export function CookieConsent() {
   const [visible, setVisible] = useState(false);
@@ -9,7 +10,7 @@ export function CookieConsent() {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const consent = localStorage.getItem('cookie-consent');
+    const consent = safeLocalStorage.getItem('cookie-consent');
     if (!consent) setVisible(true);
   }, []);
 
@@ -73,8 +74,14 @@ export function CookieConsent() {
     return () => mo.disconnect();
   }, [visible, helpTarget]);
 
+  /* Round 1142: through the storage seam. In a browser that blocks storage or
+     has filled it, this write used to throw, the banner stayed up for good and
+     Essential only could never be chosen. The seam keeps the answer for the
+     visit instead. The try is for the one case the seam cannot see, storage
+     that filled up after the page loaded: the answer still stands for this
+     page, and the banner still leaves. */
   const saveChoice = (choice: 'accepted' | 'essential') => {
-    localStorage.setItem('cookie-consent', choice);
+    try { safeLocalStorage.setItem('cookie-consent', choice); } catch { /* see above */ }
     window.dispatchEvent(new Event(CONSENT_CHANGED_EVENT));
     setVisible(false);
   };

@@ -681,7 +681,7 @@ console.log('5) THE INVENTED-NAME COLLISION GUARD: the rival can never be a real
     const WBUNDLE = path.join(tmpDir, 'worlds.bundle.mjs');
     fs.writeFileSync(WENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-export { NATIONALITY_BY_WORLD } from '${R}/src/data/playerNationalities.ts';
+export { NATIONALITY_BY_WORLD } from '${R}/src/data/nationalities/allWorlds.ts';
 export { allIntlNames } from '${R}/src/lib/intlNames.ts';
 `);
     execSync(`"${ROOT}/node_modules/.bin/esbuild" "${WENTRY}" --bundle --format=esm --platform=node --outfile="${WBUNDLE}" --log-level=error`, { stdio: 'inherit' });

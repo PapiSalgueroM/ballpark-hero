@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { CookieConsent } from "@/components/CookieConsent";
+import { StorageNotice } from "@/components/StorageNotice";
 import { lazy, Suspense, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigationType } from "react-router-dom";
 import RouteErrorBoundary from "@/components/RouteErrorBoundary";
@@ -317,6 +318,9 @@ const AppContent = () => {
       {/* Round 167: the site's own wire across the top of every screen. */}
       <LiveTicker />
       {shouldShowHeader(pathname) && <Header />}
+      {/* Round 1142: one line, game routes only, and only in a browser that
+          will not keep anything. Renders nothing for everybody else. */}
+      <StorageNotice />
       <Suspense fallback={<RouteLoader />}>
       {/* Round 544: around the routes, inside Suspense. A render throw in one
           game now costs that game and nothing else: the header above and the

@@ -5,6 +5,7 @@ import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { fetchConnectionsPuzzles } from '@/lib/fetchConnectionsPuzzles';
 import { dailyIndex, getTodayET } from '@/lib/dateUtils';
+import { safeSetItem } from '@/lib/safeStorage';
 
 function isValidPuzzle(p: { groups: { players: string[] }[] }): boolean {
   const all = p.groups.flatMap((g) => g.players);
@@ -145,12 +146,12 @@ export function useConnections() {
     if (gameStatus === 'won') {
       setStreak((prev) => {
         const next = prev + 1;
-        localStorage.setItem('connections-streak', String(next));
+        safeSetItem('connections-streak', String(next));
         return next;
       });
     } else {
       setStreak(0);
-      localStorage.setItem('connections-streak', '0');
+      safeSetItem('connections-streak', '0');
     }
   }, [gameStatus, isLoading]);
 

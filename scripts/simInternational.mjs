@@ -41,8 +41,16 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const INTL_OUT = path.join(os.tmpdir(), 'sc-intl.mjs');
 const ENGINE_OUT = path.join(os.tmpdir(), 'sc-intl-engine.mjs');
 
+/* Round 1042: the squad picker (pickSquad, runInternationalSummer) left the engine file for
+   soccerInternationalSquads.ts. One entry that re exports both keeps every name on `intl`, so
+   nothing below had to change. */
+const INTL_ENTRY = path.join(os.tmpdir(), 'sc-intl-both-entry.mjs');
+fs.writeFileSync(INTL_ENTRY, `
+export * from '${ROOT.replaceAll('\\', '/')}/src/lib/soccerInternational.ts';
+export * from '${ROOT.replaceAll('\\', '/')}/src/lib/soccerInternationalSquads.ts';
+`);
 await build({
-  entryPoints: ['src/lib/soccerInternational.ts'],
+  entryPoints: [INTL_ENTRY],
   bundle: true, format: 'esm', platform: 'node', outfile: INTL_OUT,
   logLevel: 'error', alias: { '@': './src' },
 });
@@ -584,6 +592,7 @@ console.log('7) Copy check');
 {
   const files = [
     'src/lib/soccerInternational.ts',
+    'src/lib/soccerInternationalSquads.ts',
     'src/components/soccer-career/InternationalPanel.tsx',
     'scripts/simInternational.mjs',
   ];

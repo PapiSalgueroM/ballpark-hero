@@ -8,6 +8,7 @@ import { ClueFinishMoment, useLiveFinish } from '@/components/guess-finish/Guess
 import { GameNav } from '@/components/game/GameNav';
 import { MAX_CLUES, POINTS_BY_CLUE } from '@/types/tennisPlayer';
 import feedbackStyles from './TennisPlayerFeedback.module.css';
+import { formatNumber } from '@/lib/formatNumber';
 
 const CLUE_LABELS = ['Vibe', 'Nationality & Era', 'Tour', 'Grand Slam Wins', 'Slams Won', 'Famous Moment'];
 
@@ -222,7 +223,7 @@ export function TennisPlayerBoard() {
               <>
                 <p className="text-xl font-bold text-purple-400">{puzzle.player_name}</p>
                 <p className="text-green-400">
-                  Guessed in {revealedClues} clue{revealedClues > 1 ? 's' : ''}: <span className="text-purple-400 font-bold">{score} pts</span>
+                  Guessed in {revealedClues} clue{revealedClues > 1 ? 's' : ''}: <span className="text-purple-400 font-bold">{formatNumber(score)} pts</span>
                 </p>
               </>
             ) : (

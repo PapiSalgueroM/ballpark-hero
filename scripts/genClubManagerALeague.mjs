@@ -139,7 +139,12 @@ for (const n of Object.keys(SUPERSEDES)) if (!seen.has(n) || !bakedClubOf.has(n)
    already there must carry the same nationality, or the flag would be the
    other entry's. */
 const natText = fs.readFileSync(path.join(ROOT, 'src/data/playerNationalities.ts'), 'utf8').split('\r\n').join('\n');
-const nowBlock = natText.slice(natText.indexOf('\nnow: {'), natText.indexOf('\nera2020: {'));
+/* Round 1042: the past worlds left this file for src/data/nationalities/, so the modern block
+   ends on its own closing line, the first one after it starts, not where the next world began. */
+const nowStart = natText.indexOf('\nnow: {');
+const nowEnd = natText.indexOf('\n},', nowStart);
+if (nowStart < 0 || nowEnd < 0) { console.error('FATAL: src/data/playerNationalities.ts has no modern block to read'); process.exit(1); }
+const nowBlock = natText.slice(nowStart, nowEnd);
 for (const m of nowBlock.matchAll(/^  '((?:[^'\\]|\\.)*)': '((?:[^'\\]|\\.)*)',$/gm)) {
   const n = m[1].replace(/\\'/g, "'");
   const nat = m[2].replace(/\\'/g, "'");

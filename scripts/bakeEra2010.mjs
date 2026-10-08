@@ -732,7 +732,7 @@ if (bigFiveArg) {
   /* The market's nationality filter reads one map per world, and it must hold
      exactly this world's names. */
   if (!process.argv.includes('--dry')) {
-    const n = updateNationalityBlock(path.join(ROOT, 'src/data/playerNationalities.ts'), 'era2010', res);
+    const n = updateNationalityBlock(path.join(ROOT, 'src/data/nationalities/era2010.ts'), 'era2010', res);
     console.log(`Nationalities, era2010 block: ${n.added} added, ${n.changed} re-pointed, ${n.dropped} dropped, ${n.total} entries for ${s.players} players.`);
   }
   process.exit(0);

@@ -130,10 +130,11 @@ const LEVEL_CLEANING_START = '    const cleanLevels: Record<string, number> = {}
 const LEVEL_CLEANING_END = '    s.levels = cleanLevels;\n';
 const REF_FIRST_PRESTIGE = `    const now = Date.now();
     const next = prestige(stateRef.current, now);
-    if (next === stateRef.current) return;
+    if (next === stateRef.current) return false;
+    try { localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(next, now)); } catch { return false; }
     stateRef.current = next;
-    try { localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(next, now)); } catch { /* ignore */ }
-    setState(next);`;
+    setState(next);
+    return true;`;
 const UPDATER_PRESTIGE = `    setState(s => {
       const next = prestige(s, Date.now());
       try { localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(next, Date.now())); } catch { /* ignore */ }

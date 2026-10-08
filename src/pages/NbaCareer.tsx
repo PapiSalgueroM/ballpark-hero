@@ -15,6 +15,7 @@ import { HelpCircle, Eye, Trophy } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { NbaCareerHowToPlay } from '@/components/nba-career/NbaCareerHowToPlay';
 import { Skeleton } from '@/components/ui/skeleton';
+import { safeSetItem } from '@/lib/safeStorage';
 
 /**
  * NBA Career Path, direct port of HockeyCareer.tsx (task #25) on the
@@ -44,7 +45,7 @@ const NbaCareer = () => {
 
   useEffect(() => {
     const seen = localStorage.getItem('nbac-rules-seen');
-    if (!seen) { setShowRules(true); localStorage.setItem('nbac-rules-seen', '1'); }
+    if (!seen) { setShowRules(true); safeSetItem('nbac-rules-seen', '1'); }
   }, []);
 
   const handleSubmit = (e: React.FormEvent) => {

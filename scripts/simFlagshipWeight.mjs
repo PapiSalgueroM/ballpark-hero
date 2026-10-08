@@ -28,59 +28,23 @@
  *
  * Run: node scripts/simFlagshipWeight.mjs
  */
-import { readdirSync, readFileSync, existsSync, statSync } from 'node:fs';
+import { readdirSync, readFileSync, existsSync } from 'node:fs';
 import { gzipSync } from 'node:zlib';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { staticClosure as libStaticClosure } from './lib/staticClosure.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 
 /* ── the source side: what does a route pull in before it can render? ──── */
-/* `import type` is erased by the compiler and costs nothing at runtime, so it
-   must NOT be counted. Getting that wrong reports src/integrations/supabase/
-   types.ts, 272 KB, as shipping on every page of the site, which it does not.
-   Dynamic imports are excluded for the same reason: that is the whole point. */
-const STATIC_IMPORT = /(?:^|\n)\s*import\s+(?!type\s)(?:[^'"]*?\sfrom\s+)?['"]([^'"]+)['"]/g;
-const DYNAMIC_IMPORT = /import\s*\(\s*['"]([^'"]+)['"]/g;
-
-function resolveSpec(spec, importer) {
-  let base;
-  if (spec.startsWith('@/')) base = path.join(ROOT, 'src', spec.slice(2));
-  else if (spec.startsWith('.')) base = path.resolve(path.dirname(importer), spec);
-  else return null;
-  for (const ext of ['.ts', '.tsx', '.js', '.jsx', '']) {
-    const c = base + ext;
-    try { if (statSync(c).isFile()) return c; } catch { /* not there */ }
-  }
-  for (const ext of ['.ts', '.tsx']) {
-    const i = path.join(base, 'index' + ext);
-    if (existsSync(i)) return i;
-  }
-  return null;
-}
-
-function staticClosure(entryRel, override = {}) {
-  const entry = path.join(ROOT, entryRel);
-  const seen = new Set([entry]);
-  const queue = [entry];
-  while (queue.length) {
-    const cur = queue.pop();
-    let t;
-    try { t = override[cur] ?? readFileSync(cur, 'utf8'); } catch { continue; }
-    const dyn = new Set();
-    DYNAMIC_IMPORT.lastIndex = 0;
-    for (let m; (m = DYNAMIC_IMPORT.exec(t)) !== null;) dyn.add(m[1]);
-    STATIC_IMPORT.lastIndex = 0;
-    for (let m; (m = STATIC_IMPORT.exec(t)) !== null;) {
-      if (dyn.has(m[1])) continue;
-      const r = resolveSpec(m[1], cur);
-      if (r && !seen.has(r)) { seen.add(r); queue.push(r); }
-    }
-  }
-  return new Set([...seen].map(f => path.relative(ROOT, f).replaceAll('\\', '/')));
-}
+/* Round 1042: the walker itself lives in scripts/lib/staticClosure.mjs, shared with
+   scripts/simCmDataOnDemand.mjs (one walker, not two that drift). It reads the code with its
+   comments gone and counts `export ... from` as an edge; `import type` and import() are still
+   not followed, for the reasons its header gives. This file keeps a two argument function of
+   the same name so every call below reads as it always did. */
+const staticClosure = (entryRel, override = {}) => libStaticClosure(ROOT, entryRel, override);
 
 console.log('1) the flagship carries no other game');
 const flagship = staticClosure('src/pages/SoccerCareer.tsx');

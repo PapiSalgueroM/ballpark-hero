@@ -24,12 +24,12 @@ describe('constructor committed guess feedback', () => {
     fireEvent.click(view.getByRole('button', { name: 'Fixture correct guess' }));
     act(() => vi.advanceTimersByTime(60));
     expect(view.queryByText('Wrong guess! Try again...')).toBeNull();
-    expect(view.getByText('1000 pts')).toBeVisible();
+    expect(view.getByText('1,000 pts')).toBeVisible();
     expect(view.container.querySelector('[data-constructor-feedback="correct"]')).not.toBeNull();
     expect(view.container.querySelector('[data-constructor-result="won"]')).not.toBeNull();
     settle();
     expect(view.container.querySelector('[data-constructor-feedback]')).toBeNull();
-    expect(view.getByText('1000 pts')).toBeVisible();
+    expect(view.getByText('1,000 pts')).toBeVisible();
   });
 
   it('reacts to each actual wrong guess once, retains clue nodes and then reports the correct score', () => {
@@ -72,7 +72,7 @@ describe('constructor committed guess feedback', () => {
     expect(JSON.parse(localStorage.getItem('f1-constructor-daily-2026-09-30')!).gameStatus).toBe('won');
     view.unmount();
     const restored = render(<F1ConstructorBoard />); start(restored, true);
-    expect(restored.getByText('1000 pts')).toBeVisible();
+    expect(restored.getByText('1,000 pts')).toBeVisible();
     expect(restored.container.querySelector('[data-constructor-feedback]')).toBeNull();
     expect(restored.container.querySelector('[data-constructor-result]')).toBeNull();
     settle();

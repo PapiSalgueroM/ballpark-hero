@@ -1,0 +1,298 @@
+name: Soccer career hub grid
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/soccer-hub-grid-1089]
+  pull_request:
+    paths:
+      - src/pages/SoccerCareer.tsx
+      - src/hooks/useRevealScroll.ts
+      - scripts/playSoccerHubGrid1089.mjs
+      - scripts/qa/revealScrollOffline1089.cjs
+      - .github/workflows/soccer-hub-grid.yml
+
+permissions:
+  contents: read
+concurrency:
+  group: soccer-hub-grid-1089-${{ github.event.pull_request.head.sha || github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+      VITEST_MAX_FORKS: 1
+      VITEST_MIN_FORKS: 1
+      SEO_SPLIT_BASE_REF: HEAD
+      SIM_LEAGUE_SEASONS_BASE: 6f57ce7818f152b4efdc75027d267c49927a2d8b
+      SIM_OFFLINE_RECEIPT: soccer-hub-grid-artifacts/transport.log
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Retain exact candidate and install remote dependencies
+        run: |
+          mkdir -p soccer-hub-grid-artifacts/dependencies soccer-hub-grid-artifacts/regressions
+          git rev-parse HEAD > soccer-hub-grid-artifacts/source-head.txt
+          git rev-parse 'HEAD^{tree}' > soccer-hub-grid-artifacts/source-tree.txt
+          printf '%s\n' '${{ github.run_id }}' '${{ github.run_attempt }}' '${{ github.job }}' > soccer-hub-grid-artifacts/run.txt
+          cp package.json package-lock.json soccer-hub-grid-artifacts/dependencies/
+          npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import { createHash } from 'node:crypto';
+          const out = 'soccer-hub-grid-artifacts';
+          const sha = value => createHash('sha256').update(value).digest('hex');
+          const lock = JSON.parse(fs.readFileSync('package-lock.json'));
+          const rows = Object.entries(lock.packages).filter(([p]) => p.startsWith('node_modules/') && fs.existsSync(p + '/package.json')).map(([p, e]) => {
+            const bytes = fs.readFileSync(p + '/package.json'), version = JSON.parse(bytes).version;
+            assert.equal(version, e.version);
+            const hash = sha(bytes); fs.writeFileSync(`${out}/dependencies/${hash}.json`, bytes);
+            return { path: p, version, sha256: hash };
+          });
+          assert(rows.length > 0);
+          fs.writeFileSync(`${out}/installed-before.json`, JSON.stringify(rows, null, 2));
+          fs.writeFileSync(`${out}/node-versions.json`, JSON.stringify(process.versions, null, 2));
+          console.log(`Retained ${rows.length} actual installed package manifests.`);
+          NODE
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import { createRequire } from 'node:module';
+          import path from 'node:path';
+          import { createHash } from 'node:crypto';
+          const require = createRequire(import.meta.url), out = 'soccer-hub-grid-artifacts/dependencies';
+          const rows = [];
+          for (const name of ['playwright', 'playwright-core', 'vite', 'esbuild', 'react', 'react-dom']) {
+            const file = require.resolve(`${name}/package.json`), bytes = fs.readFileSync(file);
+            const hash = createHash('sha256').update(bytes).digest('hex');
+            fs.writeFileSync(`${out}/${name}-package.json`, bytes);
+            rows.push({ name, version: JSON.parse(bytes).version, sha256: hash });
+            if (name === 'playwright-core') fs.copyFileSync(path.join(path.dirname(file), 'browsers.json'), `${out}/browsers.json`);
+          }
+          fs.writeFileSync(`${out}/verification-packages.json`, JSON.stringify(rows, null, 2));
+          NODE
+      - name: Actual app types and production build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee soccer-hub-grid-artifacts/types.log
+          npm run build 2>&1 | tee soccer-hub-grid-artifacts/build.log
+      - name: Generate actual engine fixtures and cache declared presentation assets
+        id: assets
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: node scripts/playSoccerHubGrid1089.mjs --prepare-assets-only 2>&1 | tee soccer-hub-grid-artifacts/preparation.log
+      - name: Actual built route and effective old-page nesting control
+        id: native
+        if: ${{ !cancelled() && steps.assets.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" timeout --signal=TERM --kill-after=15s 12m node scripts/playSoccerHubGrid1089.mjs 2>&1 | tee soccer-hub-grid-artifacts/native.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const r = JSON.parse(fs.readFileSync('soccer-hub-grid-artifacts/native/report.json'));
+          assert.equal(r.complete, true);
+          assert.equal(r.cases.length, 8);
+          assert(r.cases.every(row => row.complete && row.errors.length === 0));
+          assert.equal(r.comparisons.length, 4);
+          assert(r.comparisons.every(row => row.effective && row.baselineEqual && row.failures.length > 0));
+          assert(r.cases.filter(row => row.arm === 'healthy').every(row => row.checks.every(check => check.passed)));
+          assert.deepEqual(r.sourceAfter, r.sourceBefore);
+          assert.deepEqual(r.buildAfter, r.buildBefore);
+          assert.deepEqual(r.cacheAfter, r.cacheBefore);
+          console.log('Four healthy journeys and four copied old-layout journeys proved structure and complete unchanged Continue outcomes.');
+          NODE
+      - name: Preserve early layout and control evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: soccer-hub-grid-new-${{ github.run_id }}-${{ github.run_attempt }}
+          path: soccer-hub-grid-artifacts/
+          retention-days: 5
+          if-no-files-found: error
+      - name: Prepare finite source-backed Reveal reads and actual cached assets
+        id: reveal_assets
+        if: ${{ !cancelled() && steps.assets.outcome == 'success' }}
+        run: node scripts/qa/revealScrollOffline1089.cjs 2>&1 | tee soccer-hub-grid-artifacts/reveal-fixture-preparation.log
+      - name: Direct unchanged Reveal diagnostic with declared local fixtures
+        if: ${{ !cancelled() && steps.reveal_assets.outcome == 'success' }}
+        timeout-minutes: 10
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import { spawn, execFileSync } from 'node:child_process';
+          import { createHash } from 'node:crypto';
+          const out = path.resolve('soccer-hub-grid-artifacts/reveal-diagnostic');
+          fs.mkdirSync(out, { recursive: true });
+          const sha = value => createHash('sha256').update(value).digest('hex');
+          const report = { status: 'running', diagnosticOnly: true, originalRunnerUnchanged: true, fixtureScope: 'Reconstructed existing 2026 baked player display rows, explicit empty live board, rejected completions and actual cached assets', defaultUnfixturedAcceptance: false, command: ['node', 'scripts/simRevealScroll.mjs'], events: [] };
+          const save = () => fs.writeFileSync(path.join(out, 'report.json'), JSON.stringify(report, null, 2));
+          const held = execFileSync('git', ['ls-files', '-z', 'src', 'scripts', '.github/workflows/soccer-hub-grid.yml', 'index.html', 'package.json', 'package-lock.json', 'vite.config.ts']).toString().split('\0').filter(Boolean);
+          const visit = dir => fs.readdirSync(dir, { withFileTypes: true }).flatMap(row => row.isDirectory() ? visit(path.join(dir, row.name)) : [path.join(dir, row.name)]);
+          const corePackage = JSON.parse(fs.readFileSync('node_modules/playwright-core/package.json'));
+          assert.equal(typeof corePackage.exports['./lib/coreBundle'], 'string');
+          const runtime = ['node_modules/playwright/package.json', 'node_modules/playwright-core/package.json', path.join('node_modules/playwright-core', corePackage.exports['./lib/coreBundle'])];
+          const files = [...held, ...visit('dist'), ...runtime];
+          const hashes = () => Object.fromEntries(files.map(file => [file, sha(fs.readFileSync(file))]));
+          report.before = hashes();
+          for (const file of runtime) {
+            const dest = path.join(out, 'runtime', file); fs.mkdirSync(path.dirname(dest), { recursive: true }); fs.copyFileSync(file, dest);
+          }
+          report.runtime = { version: corePackage.version, files: Object.fromEntries(runtime.map(file => [file, report.before[file]])) };
+          const observer = path.join(out, 'observer.cjs');
+          fs.writeFileSync(observer, String.raw`
+          const fs = require('node:fs');
+          const path = require('node:path');
+          const pw = require('playwright-core');
+          const file = path.join(__dirname, 'requests.jsonl');
+          let sequence = 0, nextRequest = 0;
+          const ids = new WeakMap();
+          const record = value => fs.appendFileSync(file, JSON.stringify({ sequence: ++sequence, ...value }) + '\n');
+          const identity = request => {
+            if (!ids.has(request)) ids.set(request, ++nextRequest);
+            const u = new URL(request.url());
+            return { requestId: ids.get(request), method: request.method(), origin: u.origin, pathname: u.pathname, queryKeys: [...new Set(u.searchParams.keys())].sort() };
+          };
+          pw.chromium._playwright._instrumentation.addListener({ runAfterCreateBrowserContext(context) {
+            context.on('request', request => record({ event: 'request', ...identity(request) }));
+            context.on('response', response => record({ event: 'response', ...identity(response.request()), status: response.status() }));
+            context.on('requestfailed', request => {
+              const error = request.failure()?.errorText || '';
+              record({ event: 'requestfailed', ...identity(request), status: 'failed', errorCode: /^net::ERR_[A-Z0-9_]+$/.test(error) ? error : 'request failed' });
+            });
+            context.on('page', page => page.on('websocket', socket => record({ event: 'websocket', origin: new URL(socket.url()).origin })));
+          } });
+          record({ event: 'observer-installed', packageVersion: require('playwright-core/package.json').version });
+          `);
+          const receipt = path.join(out, 'offline-receipt.log');
+          for (const name of ['offline-receipt.log', 'requests.jsonl', 'stdout.log', 'stderr.log', 'server.log']) fs.writeFileSync(path.join(out, name), '');
+          report.observerSha256 = sha(fs.readFileSync(observer));
+          const childEnv = { ...process.env, BASE: 'http://127.0.0.1:4173', SWEEP_BASE: 'http://127.0.0.1:4173', PORT: '4173', SIM_OFFLINE_RECEIPT: receipt, REVEAL_FIXTURE_REPORT: path.join(out, 'fixture'), NODE_OPTIONS: process.env.NODE_OPTIONS + ' --require=' + path.resolve('scripts/qa/revealScrollOffline1089.cjs') + ' --require=' + observer };
+          delete childEnv.ONLY; delete childEnv.BROWSER;
+          report.environment = { BASE: childEnv.BASE, SWEEP_BASE: childEnv.SWEEP_BASE, PORT: childEnv.PORT, SIM_NETWORK: childEnv.SIM_NETWORK, NODE_OPTIONS: childEnv.NODE_OPTIONS };
+          const serverFd = fs.openSync(path.join(out, 'server.log'), 'a');
+          const server = spawn(process.execPath, ['scripts/lib/hostLikeServer.mjs', 'dist', '4173'], { stdio: ['ignore', serverFd, serverFd] });
+          server.on('error', error => { report.events.push({ event: 'server-error', message: error.message }); save(); });
+          server.on('exit', (code, signal) => { report.events.push({ event: 'server-exit', code, signal }); save(); });
+          let stdoutFd, stderrFd;
+          try {
+            const deadline = Date.now() + 30000;
+            let up = false;
+            while (!up && Date.now() < deadline) {
+              try { up = (await fetch(childEnv.BASE + '/')).ok; } catch {}
+              if (!up) await new Promise(resolve => setTimeout(resolve, 400));
+            }
+            assert(up, 'The unchanged local server became ready');
+            assert(!report.events.some(event => event.event === 'server-error' || event.event === 'server-exit'), 'The diagnostic owns its live local server');
+            stdoutFd = fs.openSync(path.join(out, 'stdout.log'), 'a'); stderrFd = fs.openSync(path.join(out, 'stderr.log'), 'a');
+            const child = spawn('timeout', ['--signal=TERM', '--kill-after=15s', '8m', process.execPath, 'scripts/simRevealScroll.mjs'], { env: childEnv, stdio: ['ignore', stdoutFd, stderrFd] });
+            report.process = await new Promise(resolve => {
+              child.on('error', error => resolve({ code: null, signal: null, error: error.message }));
+              child.on('close', (code, signal) => resolve({ code, signal, error: null }));
+            });
+            report.blocks = fs.readFileSync(receipt, 'utf8').split('\n').filter(Boolean);
+            const requests = fs.readFileSync(path.join(out, 'requests.jsonl'), 'utf8').split('\n').filter(Boolean).map(line => JSON.parse(line));
+            report.observations = { installed: requests.filter(row => row.event === 'observer-installed'), requests: requests.filter(row => row.event === 'request').length, responses: requests.filter(row => row.event === 'response').length, failures: requests.filter(row => row.event === 'requestfailed').length, socketOrigins: requests.filter(row => row.event === 'websocket').map(row => row.origin) };
+            report.fixture = JSON.parse(fs.readFileSync(path.join(childEnv.REVEAL_FIXTURE_REPORT, 'report.json')));
+            report.status = report.process.code === 0 && report.process.signal === null && !report.process.error && report.blocks.length === 0 ? 'passed' : 'failed';
+            save();
+            assert(report.observations.installed.length > 0 && report.observations.installed.every(row => row.packageVersion === corePackage.version) && report.observations.requests > 0, 'The passive observer recorded the actual installed browser runtime requests');
+            assert.equal(report.process.error, null, 'The original diagnostic harness started');
+            assert.equal(report.process.signal, null, 'The original diagnostic harness was not signaled');
+            assert.equal(report.process.code, 0, 'The original diagnostic harness exited successfully');
+            assert.equal(report.blocks.length, 0, 'Diagnostic remains red after any offline transport block');
+            assert.equal(report.fixture.status, 'passed');
+            assert.equal(report.fixture.errors.length, 0); assert.equal(report.fixture.sockets.length, 0); assert.equal(report.fixture.realForwardedWrites, 0);
+            assert(report.fixture.surfaces.some(row => row.dart) && report.fixture.surfaces.some(row => row.clue));
+            assert(['/dart-draft', '/clue-auction'].every(route => report.fixture.closingObservations.some(row => row.route === route)), 'Actual closing DOM is retained for both fixture-backed games');
+            assert.deepEqual(report.fixture.sourceAfter, report.fixture.sourceBefore);
+            assert.deepEqual(report.fixture.inputAfter, report.fixture.preparation.inputAfter);
+          } catch (error) { report.status = 'failed'; report.failure = { name: error.name, message: error.message, stack: error.stack }; throw error; }
+          finally {
+            if (stdoutFd !== undefined) fs.closeSync(stdoutFd); if (stderrFd !== undefined) fs.closeSync(stderrFd);
+            server.kill(); fs.closeSync(serverFd);
+            try { report.after = hashes(); assert.deepEqual(report.after, report.before, 'Diagnostic source, installed runtime and built payloads remain exact'); }
+            catch (error) { report.status = 'failed'; report.holdError = error.message; throw error; }
+            finally { save(); }
+          }
+          NODE
+      - name: Original reveal scroll and Soccer Career regressions
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simRevealScroll simSoccerCareer simSoccerCareerUcl simSoccerCareerSaveRecovery simCareerAcademy simCareerAwardsNight simCareerCleanSheets simCareerClubPool simCareerContinental simCareerDerbies simCareerDilemmaReach simCareerDilemmaTruth simCareerDomesticCup simCareerDrills simCareerEngaged simCareerEras simCareerFacts simCareerInbox simCareerInboxBeats simCareerKeepPlaying simCareerLeagueFinish simCareerLeagueSeasons simCareerLife simCareerLifeCooldowns simCareerMoneyAfterRetirement simCareerNoDeadEnd simCareerParity simCareerPositionRatings simCareerRivalryEvents simCareerSeasonRatings simCareerSocialBrands simCareerStory simCareerTraining simSeasonCentreNeutral simSeasonCentreTable simSeasonCentreAgreement; do
+            if [[ "$harness" == simRevealScroll ]]; then
+              REVEAL_FIXTURE_REPORT="$PWD/soccer-hub-grid-artifacts/reveal-runner" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs --require=$PWD/scripts/qa/revealScrollOffline1089.cjs" ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "soccer-hub-grid-artifacts/regressions/$harness.log" || failed=1
+              node --input-type=module <<'NODE' || failed=1
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const r = JSON.parse(fs.readFileSync('soccer-hub-grid-artifacts/reveal-runner/report.json'));
+          assert.equal(r.status, 'passed'); assert.equal(r.errors.length, 0); assert.equal(r.sockets.length, 0); assert.equal(r.realForwardedWrites, 0);
+          assert(r.surfaces.some(row => row.dart) && r.surfaces.some(row => row.clue));
+          assert(['/dart-draft', '/clue-auction'].every(route => r.closingObservations.some(row => row.route === route)), 'Actual closing DOM is retained for both fixture-backed games');
+          assert.deepEqual(r.sourceAfter, r.sourceBefore); assert.deepEqual(r.inputAfter, r.preparation.inputAfter);
+          console.log('The unchanged Reveal harness reached actual Dart and Clue play under the declared finite fixture.');
+          NODE
+            else
+              NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "soccer-hub-grid-artifacts/regressions/$harness.log" || failed=1
+            fi
+          done
+          exit "$failed"
+      - name: All twenty built readers and executable source anchors
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings simSeoMetaSplit simHomeCopy simHarnessAnchors; do
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "soccer-hub-grid-artifacts/regressions/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Original engine data fixtures tests and installed versions held
+        if: ${{ !cancelled() }}
+        run: |
+          git diff --exit-code 6f57ce7818f152b4efdc75027d267c49927a2d8b HEAD -- src/lib src/data src/hooks src/test src/integrations src/types scripts/fixtures package.json package-lock.json
+          git diff --exit-code HEAD -- src scripts .github/workflows/soccer-hub-grid.yml
+          cmp package.json soccer-hub-grid-artifacts/dependencies/package.json
+          cmp package-lock.json soccer-hub-grid-artifacts/dependencies/package-lock.json
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import { createHash } from 'node:crypto';
+          const out = 'soccer-hub-grid-artifacts';
+          const before = JSON.parse(fs.readFileSync(`${out}/installed-before.json`));
+          const after = before.map(row => {
+            const bytes = fs.readFileSync(row.path + '/package.json');
+            return { path: row.path, version: JSON.parse(bytes).version, sha256: createHash('sha256').update(bytes).digest('hex') };
+          });
+          fs.writeFileSync(`${out}/installed-after.json`, JSON.stringify(after, null, 2));
+          assert.deepEqual(after, before);
+          console.log(`Held ${after.length} installed versions and exact package manifest bytes.`);
+          NODE
+      - name: Preserve complete evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: soccer-hub-grid-${{ github.run_id }}-${{ github.run_attempt }}
+          path: soccer-hub-grid-artifacts/
+          retention-days: 5
+          if-no-files-found: error

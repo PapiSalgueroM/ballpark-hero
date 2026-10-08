@@ -24,9 +24,11 @@
  *      right place in his own position queue, ties go to the man already at
  *      the club, the man named as being in front really is the one directly
  *      above him, and the row marked as him is the only one.
- *   6. IT SHOWS NOTHING RATHER THAN GUESSING. A club outside the map, a
- *      season outside the window and a club with no data all return null, and
- *      the card is wired to render nothing in that case.
+ *   6. THE REAL READERS SHOW NOTHING RATHER THAN GUESSING. A club outside the
+ *      map, a season outside the window and a club with no data all return
+ *      null from clubSquad and depthChart. Since Round 1115 the Squad tile
+ *      answers there instead, with a squad that is never called real, and the
+ *      page mounts that tile exactly once.
  *   7. IT CHANGES NOTHING. The same seeded fleet of careers produces byte
  *      identical saves whether or not the depth chart is ever consulted,
  *      because this is a display layer and the appearance model has been
@@ -170,13 +172,20 @@ console.log(`   ${byYear.size} years checked, ${doubles} men in two dressing roo
 /* ── 5: the depth chart arithmetic ────────────────────────────────────── */
 console.log('4) the depth chart, across clubs, positions and ratings');
 const SAMPLE_CLUBS = careerClubs.slice(0, 20);
-const SAMPLE_YEARS = [2018, 2021, 2023, 2026];
+/* Since the review of Round 1115 a depth chart is asked for a SEASON, counted
+   by the year it starts in, and a baked row is keyed by the year its season
+   ends in: the season that starts in 2017 is the row 2018. This harness keeps
+   its own copy of that step (simCareerSquad fences it against two checked
+   summer transfers), so the four seasons below read the same four rows this
+   section always sampled. */
+const ROW_OF = season => season + 1;
+const SAMPLE_YEARS = [2017, 2020, 2022, 2025];
 const SAMPLE_POS = ['GK', 'CB', 'LB', 'CM', 'CAM', 'LW', 'ST'];
 const SAMPLE_OVR = [55, 68, 74, 82, 90, 96];
 let charts = 0, firstChoice = 0, buried = 0;
 for (const club of SAMPLE_CLUBS) {
   for (const year of SAMPLE_YEARS) {
-    const squad = clubSquad(club, year);
+    const squad = clubSquad(club, ROW_OF(year));
     for (const pos of SAMPLE_POS) {
       for (const ovr of SAMPLE_OVR) {
         const chart = depthChart(club, year, pos, ovr, 'Test Player');
@@ -231,24 +240,71 @@ if (firstChoice < 20) fail(`only ${firstChoice} first choice charts, so the top 
 if (buried < 20) fail(`only ${buried} buried charts, so the bottom of the queue is barely tested`);
 
 /* ── 6: it shows nothing rather than guessing ─────────────────────────── */
-console.log('5) no honest answer means no card');
+console.log('5) no honest answer means the real readers say nothing, and the Squad tile never passes a made squad off as real');
+/* Seasons, by the year they start in: the season before the first real one
+   (2014/15, whose row would be 2015) and the one after the last (2026/27,
+   whose row would be 2027) have no row behind them. */
 const NOWHERE = [
   ['Some Invented FC', 2023], ['Wrexham', 2023], ['', 2023],
-  [careerClubs[0], CLUB_SQUAD_YEARS.first - 1],
-  [careerClubs[0], CLUB_SQUAD_YEARS.last + 1],
+  [careerClubs[0], CLUB_SQUAD_YEARS.first - 2],
+  [careerClubs[0], CLUB_SQUAD_YEARS.last],
   [careerClubs[0], 2045],
 ];
 for (const [club, year] of NOWHERE) {
-  if (clubSquad(club, year) !== null) fail(`${JSON.stringify(club)} ${year} returned a squad it should not have`);
+  if (clubSquad(club, ROW_OF(year)) !== null) fail(`${JSON.stringify(club)} ${year} has a baked row it should not have`);
+  if (lib.seasonSquad(club, year) !== null) fail(`${JSON.stringify(club)} ${year} returned a squad it should not have`);
   if (depthChart(club, year, 'ST', 80, 'Test') !== null) fail(`${JSON.stringify(club)} ${year} returned a depth chart`);
 }
-/* and the page must be wired to render nothing on null */
-const page = readFileSync(path.join(ROOT, 'src/pages/SoccerCareer.tsx'), 'utf8');
-if (!page.includes('depthChart(')) fail('the career page never builds a depth chart');
-if (!/chart \? <SquadDepthCard chart=\{chart\} \/> : null/.test(page)) {
-  fail('the career page does not render nothing when there is no chart');
+/* and the two ends of the window DO answer, with the row one year on */
+for (const year of [CLUB_SQUAD_YEARS.first - 1, CLUB_SQUAD_YEARS.last - 1]) {
+  const row = clubSquad(careerClubs[0], ROW_OF(year));
+  if (!row) fail(`${careerClubs[0]} has no baked row for the season that starts in ${year}`);
+  else if (lib.seasonSquad(careerClubs[0], year) !== row || depthChart(careerClubs[0], year, 'ST', 80, 'Test')?.squad !== row) {
+    fail(`${careerClubs[0]}: the season that starts in ${year} does not read the row ${ROW_OF(year)}`);
+  }
 }
-console.log(`   ${NOWHERE.length} unknown club and season pairs, all null, and the page renders nothing on null`);
+/* Round 1115: the living squad answers where the real readers stay silent,
+   and it must never pass itself off as real there. For the same six pairs it
+   is null or not 'real', no invented man carries a real player's name, and a
+   real man appears only if he was in that club's own last baked squad. */
+{
+  const everyRealName = new Set();
+  for (const blob of Object.values(CLUB_SQUADS)) for (const e of blob.split(',')) everyRealName.add(e.split(':')[0]);
+  let living = 0;
+  for (const [club, year] of NOWHERE) {
+    const squad = lib.livingSquad('Test|ST|2020|Test Youth', { club, country: 'England', tier: 2, year });
+    if (!squad) continue;
+    living += 1;
+    if (squad.source === 'real') fail(`${JSON.stringify(club)} ${year}: the living squad calls itself real`);
+    const lastReal = new Set((clubSquad(club, CLUB_SQUAD_YEARS.last) ?? []).map(m => m.name));
+    for (const m of squad.men) {
+      if (m.id !== undefined && everyRealName.has(m.name)) fail(`${JSON.stringify(club)} ${year}: invented man ${m.name} has a real player's name`);
+      if (m.id === undefined && !lastReal.has(m.name)) fail(`${JSON.stringify(club)} ${year}: ${m.name} is shown as a real man but was not in the club's last real squad`);
+    }
+  }
+  if (living < 4) fail(`only ${living} of the six pairs got a living squad, so the check above is close to empty`);
+  console.log(`   ${living} of those pairs get a living squad, none of them passed off as real`);
+}
+/* Round 1115: the old card left the page with the mount of the Squad tile.
+   The page holds the tile exactly once and nothing of the old card, and the
+   tile itself draws nothing when the lib has no view to give it. Both files
+   are read with their comments stripped and their line endings normalised,
+   so prose about the tile can never stand in for the tile. */
+const codeOf = file => readFileSync(path.join(ROOT, file), 'utf8')
+  .replace(/\r\n/g, '\n')
+  .replace(/\/\*[\s\S]*?\*\//g, '')
+  .replace(/^\s*\/\/.*$/gm, '');
+const page = codeOf('src/pages/SoccerCareer.tsx');
+if (!page.includes('depthChart(')) fail('the career page never builds a depth chart');
+const tileMounts = page.split('<SquadTile career={career} />').length - 1;
+if (tileMounts !== 1) fail(`the career page mounts the Squad tile ${tileMounts} times, not once`);
+if (page.includes('SquadDepthCard')) fail('the career page still names the old squad card');
+const tileCode = codeOf('src/components/soccer-career/SquadTile.tsx');
+if (!tileCode.includes('const view = useMemo(() => squadView(career), [career]);')) {
+  fail('the Squad tile does not read its view from squadView(career)');
+}
+if (!tileCode.includes('if (!view) return null;')) fail('the Squad tile does not draw nothing when there is no view');
+console.log(`   ${NOWHERE.length} unknown club and season pairs, all null for the real readers; the page mounts the Squad tile once, and the tile draws nothing with no view`);
 
 /* ── Round 267: the same picture on every offer ───────────────────────── */
 console.log('5b) an offer says where you would slot in at THAT club');
@@ -267,7 +323,7 @@ if (offerCardsWithCareer !== offerCards) {
    squad card, pointed at the OFFERING club rather than the current one */
 let fits = 0;
 for (const club of careerClubs.slice(0, 12)) {
-  for (const year of [2019, 2023, 2026]) {
+  for (const year of [2018, 2022, 2025]) {
     const chart = depthChart(club, year, 'ST', 79, 'Test Player');
     if (!chart) continue;
     fits += 1;

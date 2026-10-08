@@ -105,6 +105,21 @@ export interface FranchiseGridConfig<P extends FranchisePlayer> {
   minPoolSize: number;
   /** The column that identifies a player, loaded only when a caller passes withIds. */
   idColumn?: string;
+  /**
+   * Round 1105. When set, the rows come from files that ship with the site and
+   * NO request goes to the table: table, select, franchiseColumn and
+   * orderColumn are then never read. A grid that leaves it unset makes exactly
+   * the requests it always made.
+   */
+  staticSource?: GridStaticSource;
+}
+
+/** Rows that ship with the site instead of living in a table (Round 1105). */
+export interface GridStaticSource {
+  /** Hashed asset URLs. Import them with ?url in a browser only module, never in a lib a node harness bundles. */
+  urls: string[];
+  /** The parsed files, in the order of urls, to the rows the paged read would have returned; null when their shape is wrong. Pure, never throws. */
+  toRows: (files: unknown[]) => Record<string, unknown>[] | null;
 }
 
 // ---------------------------------------------------------------------------
@@ -152,6 +167,31 @@ export async function fetchFranchiseGridData<P extends FranchisePlayer>(cfg: Fra
   if (opts.withIds && !cfg.idColumn) return null;
   const select = opts.withIds ? `${cfg.idColumn}, ${cfg.select}` : cfg.select;
   try {
+    const rows = cfg.staticSource ? await readStaticRows(cfg.staticSource) : await readPagedRows(cfg, select);
+    if (!rows) return null;
+    /* The static door hands over a whole key in one piece, so its index is
+       built a slice at a time: a tap made while the key lands is answered
+       between two slices instead of after the whole of it. The paged door
+       already ends its task at every page, so it indexes in one go as before. */
+    const data = cfg.staticSource ? await indexFranchiseRowsInSlices(cfg, rows, opts) : indexFranchiseRows(cfg, rows, opts);
+    /* Files that decoded but hold fewer players than the floor are refused AND
+       forgotten, like files toRows refused: kept, every later load would get
+       the same short files back with no request. The engine does it, so no
+       sport has to remember to. */
+    if (!data && cfg.staticSource) forgetStaticJson(cfg.staticSource.urls);
+    return data;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * The paged door: the whole table, 1,000 rows a request. Null when a page
+ * fails three times. Round 1105 lifted this out of fetchFranchiseGridData
+ * unchanged, and src/test/gridEngineSource.test.ts (recorded before the lift)
+ * pins every request it makes.
+ */
+async function readPagedRows<P extends FranchisePlayer>(cfg: FranchiseGridConfig<P>, select: string): Promise<Record<string, unknown>[] | null> {
     // PostgREST caps every select at 1000 rows regardless of .limit(),
     // so page through the table with .range() until a short page arrives.
     const PAGE_SIZE = 1000;
@@ -182,23 +222,173 @@ export async function fetchFranchiseGridData<P extends FranchisePlayer>(cfg: Fra
       rows.push(...(data as unknown as Record<string, unknown>[]));
       if (data.length < PAGE_SIZE) break;
     }
+    return rows;
+}
 
-    const players: P[] = [];
-    const byNormalizedName = new Map<string, P[]>();
-    for (const raw of rows) {
+/**
+ * Rows to the in-memory index a page judges against, in load order. Null under
+ * the config's floor, so a short read is a broken read. Lifted out of
+ * fetchFranchiseGridData unchanged (Round 1105) so both doors index alike.
+ */
+export function indexFranchiseRows<P extends FranchisePlayer>(cfg: FranchiseGridConfig<P>, rows: Record<string, unknown>[], opts: GridFetchOptions = {}): FranchiseGridData<P> | null {
+    const data: FranchiseGridData<P> = { players: [], byNormalizedName: new Map<string, P[]>() };
+    indexRowsInto(cfg, rows, opts, 0, rows.length, data);
+    return data.players.length >= cfg.minPoolSize ? data : null;
+}
+
+/** Rows from..to (to not included) into the index, in order. The one loop both ways of indexing run. */
+function indexRowsInto<P extends FranchisePlayer>(cfg: FranchiseGridConfig<P>, rows: Record<string, unknown>[], opts: GridFetchOptions, from: number, to: number, data: FranchiseGridData<P>): void {
+    for (let i = from; i < to; i += 1) {
+      const raw = rows[i];
       const entry = cfg.toPlayer(raw);
       if (!entry) continue;
       if (opts.withIds && cfg.idColumn && raw[cfg.idColumn] != null) entry.id = String(raw[cfg.idColumn]);
-      players.push(entry);
+      data.players.push(entry);
       const key = normalizeGridName(entry.name);
-      const under = byNormalizedName.get(key);
-      if (under) under.push(entry); else byNormalizedName.set(key, [entry]);
+      const under = data.byNormalizedName.get(key);
+      if (under) under.push(entry); else data.byNormalizedName.set(key, [entry]);
     }
+}
 
-    return players.length >= cfg.minPoolSize ? { players, byNormalizedName } : null;
+/**
+ * How many rows the static door indexes before it ends the task. Measured
+ * 2026-10-08 on a GitHub runner at 4 times CPU throttle, three walks each way,
+ * on the college key's 35,598 rows: with the index built in one task the
+ * longest task while the key landed was 246, 279 and 291 ms; at 6,000 rows to
+ * a task it is 141, 143 and 149 ms.
+ */
+export const STATIC_INDEX_SLICE = 6000;
+
+/** The same index as indexFranchiseRows, row for row, built STATIC_INDEX_SLICE rows to a task. */
+async function indexFranchiseRowsInSlices<P extends FranchisePlayer>(cfg: FranchiseGridConfig<P>, rows: Record<string, unknown>[], opts: GridFetchOptions): Promise<FranchiseGridData<P> | null> {
+    const data: FranchiseGridData<P> = { players: [], byNormalizedName: new Map<string, P[]>() };
+    for (let from = 0; from < rows.length; from += STATIC_INDEX_SLICE) {
+      await nextTask();
+      indexRowsInto(cfg, rows, opts, from, Math.min(rows.length, from + STATIC_INDEX_SLICE), data);
+    }
+    return data.players.length >= cfg.minPoolSize ? data : null;
+}
+
+// ---------------------------------------------------------------------------
+// The static door (Round 1105)
+// ---------------------------------------------------------------------------
+
+/** Round 358's backoff, reused: a second attempt after 400 ms, a third after 800 more. */
+const STATIC_RETRY_MS = [400, 800];
+/** How long one attempt waits for the response HEADERS. */
+const STATIC_HEADERS_MS = 20_000;
+/** How long the body may go without ONE BYTE arriving before the attempt is cut. A body that keeps coming is never cut, however slow. */
+const STATIC_STALL_MS = 20_000;
+
+const staticJson = new Map<string, Promise<unknown | null>>();
+
+/** Ends the current task, so the browser can answer a tap before the next piece of work. */
+const nextTask = () => new Promise<void>((resolve) => { setTimeout(resolve, 0); });
+
+/**
+ * The body of a response, parsed as JSON. Throws when it is not JSON, and when
+ * it stalls: no byte for STATIC_STALL_MS cuts the attempt, because a download
+ * that stopped half way would otherwise hang for the page's life and no pick
+ * could ever be checked without a reload. A slow line is not a stalled one: the
+ * limit is on the gap between bytes, never on the whole body, so a file that
+ * keeps arriving always finishes. Every timer is cleared on every path.
+ */
+async function readJsonBody(res: Response, abort: AbortController): Promise<unknown> {
+  const reader = res.body && typeof res.body.getReader === 'function' ? res.body.getReader() : null;
+  /* No stream to watch (a test double, a very old browser): take the body whole. */
+  if (!reader) return res.json();
+  const decoder = new TextDecoder();
+  let text = '';
+  let stalled = false;
+  for (;;) {
+    const gap = setTimeout(() => {
+      stalled = true;
+      abort.abort();
+      void Promise.resolve(reader.cancel()).catch(() => undefined);
+    }, STATIC_STALL_MS);
+    let chunk: { done: boolean; value?: Uint8Array };
+    try {
+      chunk = await reader.read();
+    } finally {
+      clearTimeout(gap);
+    }
+    if (stalled) throw new Error('the body stalled');
+    if (chunk.done) break;
+    if (chunk.value) text += decoder.decode(chunk.value, { stream: true });
+  }
+  text += decoder.decode();
+  return JSON.parse(text);
+}
+
+async function attemptStaticJson(url: string): Promise<unknown | null> {
+  const abort = new AbortController();
+  /* This timer covers the wait for the headers only. On a slow line the body
+     of a 200 KB file can take longer than any fixed limit, and cutting it on
+     a total would restart the download forever where the old small pages
+     would have finished; readJsonBody watches the gap between bytes instead.
+     It is cleared on every path, so a failed attempt leaves no live timer
+     behind. */
+  const timer = setTimeout(() => abort.abort(), STATIC_HEADERS_MS);
+  let res: Response;
+  try {
+    res = await fetch(url, { signal: abort.signal });
+  } catch {
+    return null;
+  } finally {
+    clearTimeout(timer);
+  }
+  if (!res.ok) return null;
+  try {
+    /* The host answers a missing address with index.html and a 200, so a 200
+       proves nothing: only a body that parses as JSON is an answer. */
+    const body: unknown = await readJsonBody(res, abort);
+    return body === null || body === undefined ? null : body;
   } catch {
     return null;
   }
+}
+
+/**
+ * One request per URL per page life, shared by every caller: the parsed JSON,
+ * or null. Never rejects. One call is up to three attempts. When all three
+ * fail the URL is forgotten, so the next call tries again; and a caller that
+ * refuses the parsed body (wrong shape) forgets it with forgetStaticJson. So:
+ * one request per URL until a caller refuses the parsed body.
+ */
+export function fetchStaticJson(url: string): Promise<unknown | null> {
+  const held = staticJson.get(url);
+  if (held) return held;
+  const load: Promise<unknown | null> = (async () => {
+    for (let attempt = 0; ; attempt++) {
+      const body = await attemptStaticJson(url);
+      if (body !== null) return body;
+      if (attempt >= STATIC_RETRY_MS.length) break;
+      await new Promise((r) => setTimeout(r, STATIC_RETRY_MS[attempt]));
+    }
+    if (staticJson.get(url) === load) staticJson.delete(url);
+    return null;
+  })();
+  staticJson.set(url, load);
+  return load;
+}
+
+/** Drops parsed bodies a caller refused, so the next fetchStaticJson asks the network again. */
+export function forgetStaticJson(urls: string[]): void {
+  for (const url of urls) staticJson.delete(url);
+}
+
+async function readStaticRows(source: GridStaticSource): Promise<Record<string, unknown>[] | null> {
+  const files = await Promise.all(source.urls.map((url) => fetchStaticJson(url)));
+  if (files.some((f) => f === null)) return null;
+  /* The last file's parse and the decode are each a piece of work a slow phone
+     feels, so they do not share a task. */
+  await nextTask();
+  const rows = source.toRows(files);
+  /* A body that parsed but is not the key (a changed stamp, a short column) is
+     refused AND forgotten: kept, every later load would get the same bad files
+     back with no request and the page could never recover without a reload. */
+  if (!rows) forgetStaticJson(source.urls);
+  return rows;
 }
 
 /**

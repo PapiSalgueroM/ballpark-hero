@@ -8,6 +8,7 @@ import { ClueFinishMoment, useLiveFinish } from '@/components/guess-finish/Guess
 import { GameNav } from '@/components/game/GameNav';
 import { MAX_CLUES, POINTS_BY_CLUE, type NascarDriverState } from '@/types/nascarDriver';
 import feedbackStyles from './NascarDriverFeedback.module.css';
+import { formatNumber } from '@/lib/formatNumber';
 
 /* ROUND 374: the hardcoded CLUE_LABELS list that sat here is gone. It named
    the six clue columns the hook used to read off `nascar_drivers`, none of
@@ -225,7 +226,7 @@ export function NascarDriverBoard() {
               <>
                 <p className={`${feedbackStyles.guessName} text-xl font-bold text-red-400`}>{puzzle.driver_name}</p>
                 <p className="text-neutral-400">
-                  Guessed in {revealedClues} clue{revealedClues > 1 ? 's' : ''}: <span className="text-red-400 font-bold">{score} pts</span>
+                  Guessed in {revealedClues} clue{revealedClues > 1 ? 's' : ''}: <span className="text-red-400 font-bold">{formatNumber(score)} pts</span>
                 </p>
               </>
             ) : (

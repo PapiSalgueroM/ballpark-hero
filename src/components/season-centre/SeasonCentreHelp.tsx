@@ -12,15 +12,15 @@ import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 const SEEN_KEY = 'seasonCentre:help';
 
 /** Open by itself once per viewer; [open, setOpen]. */
-export function useHelpOnce(): [boolean, (v: boolean) => void] {
+export function useHelpOnce(key: string = SEEN_KEY): [boolean, (v: boolean) => void] {
   const [open, setOpen] = useState(false);
   useEffect(() => {
     let seen = false;
-    try { seen = localStorage.getItem(SEEN_KEY) === '1'; } catch { seen = false; }
+    try { seen = localStorage.getItem(key) === '1'; } catch { seen = false; }
     if (seen) return;
     setOpen(true);
-    try { localStorage.setItem(SEEN_KEY, '1'); } catch { /* storage refused: show it again next time */ }
-  }, []);
+    try { localStorage.setItem(key, '1'); } catch { /* storage refused: show it again next time */ }
+  }, [key]);
   return [open, setOpen];
 }
 

@@ -11,6 +11,7 @@ import { HelpCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { NflConnectionsHowToPlay } from '@/components/nfl-connections/NflConnectionsHowToPlay';
 import { Skeleton } from '@/components/ui/skeleton';
+import { safeSetItem } from '@/lib/safeStorage';
 
 /**
  * NFL Connections, direct port of NbaConnections.tsx (task #26).
@@ -56,7 +57,7 @@ const NflConnections = () => {
     const seen = localStorage.getItem('nflconn-rules-seen');
     if (!seen) {
       setShowRules(true);
-      localStorage.setItem('nflconn-rules-seen', '1');
+      safeSetItem('nflconn-rules-seen', '1');
     }
   }, []);
 

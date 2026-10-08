@@ -299,7 +299,9 @@ describe('NFL opening rating checkpoint', () => {
     }
     expect(inputs.sourceManifest.checkpoint.version).toBe(FO_OPENING_RATING_BASE);
     expect(inputs.sourceManifest.checkpoint.extraction).toContain('not a raw-CSV refit pipeline');
-    expect(hash(read('scripts/data/nflRosters2026.json'))).toBe(inputs.sourceManifest.retainedOpeningSnapshot.sha256);
+    /* The pin is taken over LF text, which is what the repository stores and a runner checks out,
+       so the owner's CRLF checkout hashes the same (the rule simManagerAppealIsolation's textHash follows). */
+    expect(hash(norm(read('scripts/data/nflRosters2026.json').toString()))).toBe(inputs.sourceManifest.retainedOpeningSnapshot.sha256);
     expect(hash(JSON.stringify(record))).toBe(inputs.sourceManifest.retainedOpeningSnapshot.canonicalJsonSha256);
     /* Round 1130: this line pinned the committed starters file to the 56356be9 bytes, the pin the round exists
        to break (the file carries the opening estimate now). What it really proved lives on: the legacy case
