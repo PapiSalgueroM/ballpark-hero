@@ -1,0 +1,18 @@
+rv-mut loadshield: mutated src/lib/usCareerBank.ts
+ src/lib/usCareerBank.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+bank exit=1 | simUsCareerBank: 4 checks failed (1b:mlb, 1b:nba, 1b:nfl, 1b:nhl)
+  FAIL [1b:nfl]: a played save at -0.4 with 50 in savings reloaded on 0 with 50 in savings; the debt should come out of savings (0 and 49.6)
+  FAIL [1b:nba]: a played save at -0.4 with 50 in savings reloaded on 0 with 50 in savings; the debt should come out of savings (0 and 49.6)
+  FAIL [1b:mlb]: a played save at -0.4 with 50 in savings reloaded on 0 with 50 in savings; the debt should come out of savings (0 and 49.6)
+  FAIL [1b:nhl]: a played save at -0.4 with 50 in savings reloaded on 0 with 50 in savings; the debt should come out of savings (0 and 49.6)
+4) MEASURED, asserted on nothing: what the floor touches at a zero balance with nothing in savings
+banking exit=0 | simCareerBanking: green. Every career banks its pay, scales with it, and a broken save is repaired.
+vround exit=1 | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerBank.test.ts,title=src/test/usCareerBank.test.ts > Round 1104%3A the bank repair on load > NHL%3A a healthy save is the same
+   × Round 1104: the bank repair on load > NFL: a healthy save is the same object, an old save is rebuilt, a played one is stopped at zero 18ms
+   × Round 1104: the bank repair on load > NBA: a healthy save is the same object, an old save is rebuilt, a played one is stopped at zero 6ms
+   × Round 1104: the bank repair on load > MLB: a healthy save is the same object, an old save is rebuilt, a played one is stopped at zero 3ms
+   × Round 1104: the bank repair on load > NHL: a healthy save is the same object, an old save is rebuilt, a played one is stopped at zero 3ms
+ FAIL  src/test/usCareerBank.test.ts > Round 1104: the bank repair on load > NFL: a healthy save is the same object, an old save is rebuilt, a played one is stopped at zero
+ FAIL  src/test/usCareerBank.test.ts > Round 1104: the bank repair on load > NBA: a healthy save is the same object, an old save is rebuilt, a played one is stopped at zero
+MUT loadshield: bank=1 banking=0 vround=1

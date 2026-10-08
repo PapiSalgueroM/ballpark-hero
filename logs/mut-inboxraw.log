@@ -1,0 +1,15 @@
+rv-mut inboxraw: mutated src/lib/usCareerBank.ts
+ src/lib/usCareerBank.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+bank exit=1 | simUsCareerBank: 3 checks failed (2:mlb, 2:nfl, 2:nhl)
+  FAIL [2:nfl]: 1 of 5751 calls left the balance below zero (first: career 3 after inbox: -0.1)
+  FAIL [2:mlb]: 1 of 6642 calls left the balance below zero (first: career 35 after inbox: -0.1)
+  FAIL [2:nhl]: 4 of 7279 calls left the balance below zero (first: career 21 after inbox: -0.1)
+4) MEASURED, asserted on nothing: what the floor touches at a zero balance with nothing in savings
+vround exit=1 | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerBank.test.ts,title=src/test/usCareerBank.test.ts > Round 1104%3A the bank wrapper > savings is not a shield%3A the whole bil
+   × Round 1104: the bank wrapper > savings is not a shield: the whole bill is collected, on every wrapped call 10ms
+ FAIL  src/test/usCareerBank.test.ts > Round 1104: the bank wrapper > savings is not a shield: the whole bill is collected, on every wrapped call
+AssertionError: an inbox answer: the pocket stops at zero: expected -2 to be +0 // Object.is equality
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerBank.test.ts,title=src/test/usCareerBank.test.ts > Round 1104%3A the bank wrapper > savings is not a shield%3A the whole bill is collected%2C on every wrapped call,
+digest exit=0 |    Duration  34.48s (transform 919ms, setup 58ms, collect 1.16s, tests 32.57s, environment 296ms, prepare 153ms)
+MUT inboxraw: bank=1 vround=1 digest=0

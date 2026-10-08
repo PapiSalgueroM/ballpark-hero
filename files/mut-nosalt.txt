@@ -1,0 +1,14 @@
+bank exit=1 | simUsCareerBank: 4 checks failed (3:mlb, 3:nba, 3:nfl, 3:nhl)
+  FAIL [3:nfl]: 667 of 2000 played saves with a negative balance reloaded on something other than 0 (the most: 179.9)
+  FAIL [3:nba]: 667 of 2000 played saves with a negative balance reloaded on something other than 0 (the most: 179.9)
+  FAIL [3:mlb]: 667 of 2000 played saves with a negative balance reloaded on something other than 0 (the most: 179.5)
+  FAIL [3:nhl]: 667 of 2000 played saves with a negative balance reloaded on something other than 0 (the most: 179.9)
+4) MEASURED, asserted on nothing: what the floor touches at a zero balance with nothing in savings
+banking exit=0 | simCareerBanking: green. Every career banks its pay, scales with it, and a broken save is repaired.
+vround exit=1 | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerBank.test.ts,title=src/test/usCareerBank.test.ts > Round 1104%3A the bank repair on load > NHL%3A a healthy save is the same
+   × Round 1104: the bank repair on load > reads the summer marks raw and only by their type 9ms
+   × Round 1104: the bank repair on load > NFL: a healthy save is the same object, an old save is rebuilt, a played one is stopped at zero 7ms
+   × Round 1104: the bank repair on load > NBA: a healthy save is the same object, an old save is rebuilt, a played one is stopped at zero 4ms
+   × Round 1104: the bank repair on load > MLB: a healthy save is the same object, an old save is rebuilt, a played one is stopped at zero 3ms
+   × Round 1104: the bank repair on load > NHL: a healthy save is the same object, an old save is rebuilt, a played one is stopped at zero 3ms
+ FAIL  src/test/usCareerBank.test.ts > Round 1104: the bank repair on load > reads the summer marks raw and only by their type

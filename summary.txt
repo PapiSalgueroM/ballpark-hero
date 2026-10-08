@@ -1,0 +1,5 @@
+mut-loadshield exit=0 38s | MUT loadshield: bank=1 banking=0 vround=1
+mut-rivalraw exit=0 70s | MUT rivalraw: bank=1 vround=1 digest=1
+mut-inboxraw exit=0 70s | MUT inboxraw: bank=1 vround=1 digest=0
+mut-progressraw exit=0 69s | MUT progressraw: bank=1 vround=1 digest=0
+mut-nosalt exit=0 36s | MUT nosalt: bank=1 banking=0 vround=1

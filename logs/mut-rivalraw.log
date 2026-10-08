@@ -1,0 +1,22 @@
+rv-mut rivalraw: mutated src/lib/usCareerBank.ts
+ src/lib/usCareerBank.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+bank exit=1 | simUsCareerBank: 4 checks failed (2:mlb, 2:nba, 2:nfl, 2:nhl)
+  FAIL [2:nfl]: 16 of 5757 calls left the balance below zero (first: career 3 after rival choice: -1)
+  FAIL [2:nba]: 36 of 6687 calls left the balance below zero (first: career 3 after rival choice: -0.3)
+  FAIL [2:mlb]: 51 of 6599 calls left the balance below zero (first: career 3 after rival choice: -0.5)
+  FAIL [2:nhl]: 33 of 7289 calls left the balance below zero (first: career 13 after rival choice: -0.6)
+4) MEASURED, asserted on nothing: what the floor touches at a zero balance with nothing in savings
+vround exit=1 | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerBank.test.ts,title=src/test/usCareerBank.test.ts > Round 1104%3A real careers never show a balance below zero > MLB%3A 6 see
+   × Round 1104: the bank wrapper > savings is not a shield: the whole bill is collected, on every wrapped call 16ms
+   × Round 1104: real careers never show a balance below zero > MLB: 6 seeded careers, 14 seasons, checked after every call 281ms
+ FAIL  src/test/usCareerBank.test.ts > Round 1104: the bank wrapper > savings is not a shield: the whole bill is collected, on every wrapped call
+AssertionError: a rival choice: the pocket stops at zero: expected -2 to be +0 // Object.is equality
+ FAIL  src/test/usCareerBank.test.ts > Round 1104: real careers never show a balance below zero > MLB: 6 seeded careers, 14 seasons, checked after every call
+AssertionError: mlb career 1: calls that left the balance below zero: expected 2 to be +0 // Object.is equality
+digest exit=1 | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerTruthDigest.test.ts,title=src/test/usCareerTruthDigest.test.ts > Round 1104%3A the US career truth digest > every key equals
+   × Round 1104: the US career truth digest > every key equals the committed fixture, or moved only where this step is allowed to move it 32739ms
+ FAIL  src/test/usCareerTruthDigest.test.ts > Round 1104: the US career truth digest > every key equals the committed fixture, or moved only where this step is allowed to move it
+AssertionError: keys that moved against the committed fixture: expected [ 'nfl|y2005|QB', …(23) ] to deeply equal []
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerTruthDigest.test.ts,title=src/test/usCareerTruthDigest.test.ts > Round 1104%3A the US career truth digest > every key equals the committed fixture%2C or moved only 
+MUT rivalraw: bank=1 vround=1 digest=1

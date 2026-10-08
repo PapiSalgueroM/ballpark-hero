@@ -1,0 +1,15 @@
+rv-mut progressraw: mutated src/lib/usCareerBank.ts
+ src/lib/usCareerBank.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+bank exit=1 | simUsCareerBank: 3 checks failed (2:mlb, 2:nfl, 2:nhl)
+  FAIL [2:nfl]: 3 of 5751 calls left the balance below zero (first: career 27 after progress: -0.2)
+  FAIL [2:mlb]: 25 of 6642 calls left the balance below zero (first: career 1 after progress: -0.2)
+  FAIL [2:nhl]: 1 of 7280 calls left the balance below zero (first: career 21 after progress: -0.41)
+4) MEASURED, asserted on nothing: what the floor touches at a zero balance with nothing in savings
+vround exit=1 | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerBank.test.ts,title=src/test/usCareerBank.test.ts > Round 1104%3A the bank wrapper > savings is not a shield%3A the whole bil
+   × Round 1104: the bank wrapper > savings is not a shield: the whole bill is collected, on every wrapped call 11ms
+ FAIL  src/test/usCareerBank.test.ts > Round 1104: the bank wrapper > savings is not a shield: the whole bill is collected, on every wrapped call
+AssertionError: expected 'A year went by.' to contain 'came out of savings'
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerBank.test.ts,title=src/test/usCareerBank.test.ts > Round 1104%3A the bank wrapper > savings is not a shield%3A the whole bill is collected%2C on every wrapped call,
+digest exit=0 |    Duration  34.55s (transform 912ms, setup 52ms, collect 1.13s, tests 32.67s, environment 297ms, prepare 124ms)
+MUT progressraw: bank=1 vround=1 digest=0
