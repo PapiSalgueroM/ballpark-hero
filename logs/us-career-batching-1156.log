@@ -1,0 +1,145 @@
+identity exit=0
+.rc/request.txt: OK
+.rc/run.sh: OK
+.github/workflows/lane-remote-check.yml: OK
+.rc/x/us-career-report-batching-1156.mjs: OK
+scripts/qa/usCareerSaveRecovery1084.mjs: OK
+locked-packages exit=0
+Verified 521 actual installed locked package versions.
+runtime exit=0
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 120 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 120 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 120 MiB
+Chrome Headless Shell 156.0.8078.4 (playwright chromium-headless-shell v1248) downloaded to /home/runner/work/_temp/us-career-report-batching-1156.sZTXJb/chromium-cache/chromium_headless_shell-1248
+Version 1.64.0
+brand-runtime exit=0
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 5.4/5.4 MB 137.9 MB/s eta 0:00:00
+Downloading pillow-12.3.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (6.9 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.9/6.9 MB 165.4 MB/s eta 0:00:00
+Installing collected packages: pillow, fonttools
+Successfully installed fonttools-4.66.1 pillow-12.3.0
+syntax exit=0
+timers exit=0
+Actual candidate timer block: four updates become one latest full report at250ms; error/final saves cancel and flush. Actual parent writes four immediately. All4 copied faults changed their mapped outcomes.
+types exit=0
+build exit=0
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+[32m✓ built in 32.43s[39m
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+build-hold exit=0
+assets exit=0
+US career recovery: cached 9 actual template font assets.
+asset-hold exit=0
+native exit=0
+US career recovery: 12 actual-route latest-write journeys, 4 deletion/replacement cases, 9 effective restored DOM controls, no forwarded writes.
+fixture-hold exit=0
+native-receipt exit=0
+All12 actual latest-write journeys,4 deletion/replacement cases,9 restored DOM faults and4 copied timer controls accepted. Actual served/core/oracle bytes retained.
+reader-simAdsense exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simAdsense.mjs                  0.6s
+
+All 1 harnesses green.
+reader-simBrand exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simBrand.mjs                    0.5s
+
+All 1 harnesses green.
+reader-simHeadTags exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simHeadTags.mjs                 0.4s
+
+All 1 harnesses green.
+reader-simHiddenPages exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simHiddenPages.mjs              0.4s
+
+All 1 harnesses green.
+reader-simHubs exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simHubs.mjs                     0.5s
+
+All 1 harnesses green.
+reader-simIndexNow exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simIndexNow.mjs                 0.4s
+
+All 1 harnesses green.
+reader-simIndexing exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simIndexing.mjs                 0.5s
+
+All 1 harnesses green.
+reader-simInternalLinks exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simInternalLinks.mjs            0.4s
+
+All 1 harnesses green.
+reader-simNoRivalNames exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simNoRivalNames.mjs            11.3s
+
+All 1 harnesses green.
+reader-simPrerender exit=1
+  FAIL: /whats-new drops the entry "Stadium Tycoon: read the deal before you sell up.", which means the extractor is throwing away real content again
+  FAIL: /whats-new drops the entry "Stadium Tycoon: every goal replay flies.", which means the extractor is throwing away real content again
+  FAIL: /whats-new drops 13 entries in total
+
+1 harness not green.
+reader-simPrerenderBoot exit=0
+
+Serving dist on 4173 for 1 browser harnesses
+  PASS  simPrerenderBoot.mjs           13.9s
+
+All 1 harnesses green.
+reader-simRetiredRoutes exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simRetiredRoutes.mjs            0.4s
+
+All 1 harnesses green.
+reader-simSchema exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simSchema.mjs                   0.5s
+
+All 1 harnesses green.
+reader-simSitemap exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simSitemap.mjs                  0.5s
+
+All 1 harnesses green.
+reader-simSnapshotAssets exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simSnapshotAssets.mjs           0.4s
+
+All 1 harnesses green.
+reader-receipts exit=1
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+closing exit=0
+dependency-cache-hold exit=0
+All original app package bytes/links, isolated browser bytes/cache, presentation cache, fixture outputs and the full build path/byte/link set held.
+strict-gates exit=1
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+US career batching1156 strict label: failed=1, complete=1, source=b7a258359b66ffde30793be736d4ef2569c2d148, request=58908d080cd2320b8a9441edb8b1401cbbefa23b.
