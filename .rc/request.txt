@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+rvwalk2: git fetch -q origin release-al-int && mkdir -p .rvbase && git archive FETCH_HEAD | tar -x -C .rvbase && RV_BASE=.rvbase node .rc/x/rvwalk2-full.mjs
