@@ -1,0 +1,14 @@
+== applied m7.freshBuild.ts to src/lib/freshBuild.ts:  1 file changed, 1 insertion(+), 1 deletion(-)
+-    if (sessionStorageIsMemory) return;
++    /* mutation: reload anyway */
+ ✓ src/test/supabaseClientBlockedStorage.test.ts (5 tests) 98ms
+ ✓ src/test/cookieConsentStorage.test.tsx (7 tests) 312ms
+ ✓ src/test/safeStorage.test.ts (23 tests) 44ms
+ ✓ src/test/storageBlockedBoot.test.tsx (11 tests) 307ms
+ ✓ src/test/freshBuildBlockedStorage.test.ts (4 tests) 26ms
+ Test Files  5 passed (5)
+      Tests  50 passed (50)
+   ok   listener registered from watchForNewBuild, event cancelled
+   ok   chunk errors reload once through the shared guard
+restored: 0 changed files left
+MUT m7.freshBuild.ts vitest=0 ssw=0 staleChunk=0 play=skip

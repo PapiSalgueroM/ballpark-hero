@@ -1,0 +1,34 @@
+== applied m6.StorageNotice.tsx to src/components/StorageNotice.tsx:  1 file changed, 1 insertion(+), 1 deletion(-)
+-  if (!isGameRoute(pathname)) return null;
++  /* mutation: every route */
+ ✓ src/test/supabaseClientBlockedStorage.test.ts (5 tests) 135ms
+ ✓ src/test/cookieConsentStorage.test.tsx (7 tests) 376ms
+ ✓ src/test/safeStorage.test.ts (23 tests) 54ms
+   ✓ a game under blocked storage > boots, takes an answer and keeps it for the visit 91ms
+   ✓ a game under blocked storage > the page itself mounts, and its first press is kept for the visit 169ms
+   ✓ a game under blocked storage > control: with nothing standing in, the same hook throws on its first render 19ms
+   ✓ the storage notice > says so on a game route when storage is blocked, and is kept out of saved pages 14ms
+   ✓ the storage notice > says the storage is full when that is the reason 6ms
+   × the storage notice > stays off /, which is not a game 10ms
+   × the storage notice > stays off /soccer, which is not a game 6ms
+   × the storage notice > stays off /whats-new, which is not a game 6ms
+   × the storage notice > stays off /privacy, which is not a game 6ms
+   ✓ the storage notice > never renders under the prerenderer 4ms
+   ✓ the storage notice > renders nothing in a browser that stores normally 5ms
+ ✓ src/test/freshBuildBlockedStorage.test.ts (4 tests) 24ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/test/storageBlockedBoot.test.tsx > the storage notice > stays off /, which is not a game
+ FAIL  src/test/storageBlockedBoot.test.tsx > the storage notice > stays off /soccer, which is not a game
+ FAIL  src/test/storageBlockedBoot.test.tsx > the storage notice > stays off /whats-new, which is not a game
+ FAIL  src/test/storageBlockedBoot.test.tsx > the storage notice > stays off /privacy, which is not a game
+ Test Files  1 failed | 4 passed (5)
+      Tests  4 failed | 46 passed (50)
+   ok   listener registered from watchForNewBuild, event cancelled
+   ok   chunk errors reload once through the shared guard
+  FAIL  / phone BLOCKED: no notice on a page that is not a game
+  FAIL  / desktop BLOCKED: no notice on a page that is not a game
+  FAIL  /whats-new phone BLOCKED: no notice on a page that is not a game
+  FAIL  /whats-new desktop BLOCKED: no notice on a page that is not a game
+playStorageBlocked: 85 checks, 4 failed
+restored: 0 changed files left
+MUT m6.StorageNotice.tsx vitest=1 ssw=0 staleChunk=0 play=1

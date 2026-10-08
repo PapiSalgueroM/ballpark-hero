@@ -1,0 +1,25 @@
+== applied m15.Footle.tsx to src/pages/Footle.tsx:  1 file changed, 1 insertion(+), 1 deletion(-)
+-      safeSetItem('footle-rules-seen', '1');
++      localStorage.setItem('footle-rules-seen', '1');
+ ✓ src/test/safeStorage.test.ts (23 tests) 60ms
+ ✓ src/test/cookieConsentStorage.test.tsx (7 tests) 310ms
+ ✓ src/test/freshBuildBlockedStorage.test.ts (4 tests) 25ms
+ ✓ src/test/storageBlockedBoot.test.tsx (11 tests) 316ms
+ ✓ src/test/supabaseClientBlockedStorage.test.ts (5 tests) 49ms
+ Test Files  5 passed (5)
+      Tests  50 passed (50)
+   FAIL  1 storage write(s) that can throw into a render, an effect or a handler:
+   ok   listener registered from watchForNewBuild, event cancelled
+   ok   chunk errors reload once through the shared guard
+  FAIL  /footle phone FULL: mounted, 4 buttons and 17 links (untouched 11 and 27, floor 35)
+  FAIL  /footle phone FULL: no "This page broke" screen
+  FAIL  /footle phone FULL: no error naming storage: QuotaExceededError: The quota has been exceeded.
+  FAIL  /footle phone FULL: 4 presses went through, 0 changed the page (untouched 1 and 1): Try this page again > Try this page again > Try this page again > Try this page again
+  FAIL  /footle phone FULL: the game sits nullpx lower than untouched (ceiling 30)
+  FAIL  /footle desktop FULL: mounted, 4 buttons and 17 links (untouched 11 and 27, floor 35)
+  FAIL  /footle desktop FULL: no "This page broke" screen
+  FAIL  /footle desktop FULL: no error naming storage: QuotaExceededError: The quota has been exceeded.
+  FAIL  /footle desktop FULL: 4 presses went through, 0 changed the page (untouched 1 and 1): Try this page again > Try this page again > Try this page again > Try this page again
+playStorageBlocked: 38 checks, 9 failed
+restored: 0 changed files left
+MUT m15.Footle.tsx vitest=0 ssw=1 staleChunk=0 play=1

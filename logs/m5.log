@@ -1,0 +1,15 @@
+== applied m5.AdBanner.tsx to src/components/ads/AdBanner.tsx:  1 file changed, 1 insertion(+), 1 deletion(-)
+-    return safeLocalStorage.getItem('cookie-consent');
++    return localStorage.getItem('cookie-consent');
+ ✓ src/test/supabaseClientBlockedStorage.test.ts (5 tests) 135ms
+ ✓ src/test/cookieConsentStorage.test.tsx (7 tests) 313ms
+ ✓ src/test/safeStorage.test.ts (23 tests) 44ms
+ ✓ src/test/storageBlockedBoot.test.tsx (11 tests) 319ms
+ ✓ src/test/freshBuildBlockedStorage.test.ts (4 tests) 22ms
+ Test Files  5 passed (5)
+      Tests  50 passed (50)
+   ok   listener registered from watchForNewBuild, event cancelled
+   ok   chunk errors reload once through the shared guard
+playStorageBlocked: 35 checks, 0 failed
+restored: 0 changed files left
+MUT m5.AdBanner.tsx vitest=0 ssw=0 staleChunk=0 play=0

@@ -1,0 +1,20 @@
+== applied m11.safeStorage.ts to src/lib/safeStorage.ts:  1 file changed, 1 insertion(+), 1 deletion(-)
+-export const sessionStorageIsMemory: boolean = session.trouble !== null;
++export const sessionStorageIsMemory: boolean = false;
+ ✓ src/test/supabaseClientBlockedStorage.test.ts (5 tests) 136ms
+ ✓ src/test/cookieConsentStorage.test.tsx (7 tests) 268ms
+ ✓ src/test/safeStorage.test.ts (23 tests) 42ms
+   ✓ the stale chunk reload > a browser that stores normally: reloads once, and the marker stops the second one 13ms
+   × the stale chunk reload > storage blocked: never reloads, on this page load or the next three 10ms
+   × the stale chunk reload > storage full: never reloads either (the marker cannot be written) 3ms
+   ✓ the stale chunk reload > control: the stand in alone would have let every page load reload again 1ms
+ ✓ src/test/storageBlockedBoot.test.tsx (11 tests) 345ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/test/freshBuildBlockedStorage.test.ts > the stale chunk reload > storage blocked: never reloads, on this page load or the next three
+ FAIL  src/test/freshBuildBlockedStorage.test.ts > the stale chunk reload > storage full: never reloads either (the marker cannot be written)
+ Test Files  1 failed | 4 passed (5)
+      Tests  2 failed | 48 passed (50)
+   ok   listener registered from watchForNewBuild, event cancelled
+   ok   chunk errors reload once through the shared guard
+restored: 0 changed files left
+MUT m11.safeStorage.ts vitest=1 ssw=0 staleChunk=0 play=skip

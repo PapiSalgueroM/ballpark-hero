@@ -1,0 +1,24 @@
+== applied m4.CookieConsent.tsx to src/components/CookieConsent.tsx:  1 file changed, 1 insertion(+), 1 deletion(-)
+-    try { safeLocalStorage.setItem('cookie-consent', choice); } catch { /* see above */ }
++    try { localStorage.setItem('cookie-consent', choice); } catch { /* see above */ }
+ ✓ src/test/safeStorage.test.ts (23 tests) 52ms
+ ✓ src/test/supabaseClientBlockedStorage.test.ts (5 tests) 134ms
+ ✓ src/test/freshBuildBlockedStorage.test.ts (4 tests) 36ms
+ ✓ src/test/storageBlockedBoot.test.tsx (11 tests) 338ms
+   ✓ the cookie banner with storage blocked > Essential only: the banner leaves, the answer holds for the visit, and no analytics load 114ms
+   ✓ the cookie banner with storage blocked > Accept: the banner leaves, the answer holds for the visit, and analytics start 22ms
+   × the cookie banner with storage full > Essential only: the banner leaves, the answer holds for the visit, and no analytics load 22ms
+   × the cookie banner with storage full > Accept: the banner leaves, the answer holds for the visit, and analytics start 21ms
+   ✓ the cookie banner, the cases around those two > storage that fills up after the page loaded: Essential only still dismisses and nothing loads 13ms
+   ✓ the cookie banner, the cases around those two > storage full with an answer already stored: the banner does not ask again 4ms
+   ✓ the cookie banner, the cases around those two > a browser that stores normally: the answer goes to the real storage, exactly as before 12ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/test/cookieConsentStorage.test.tsx > the cookie banner with storage full > Essential only: the banner leaves, the answer holds for the visit, and no analytics load
+ FAIL  src/test/cookieConsentStorage.test.tsx > the cookie banner with storage full > Accept: the banner leaves, the answer holds for the visit, and analytics start
+ Test Files  1 failed | 4 passed (5)
+      Tests  2 failed | 48 passed (50)
+   ok   listener registered from watchForNewBuild, event cancelled
+   ok   chunk errors reload once through the shared guard
+playStorageBlocked: 35 checks, 0 failed
+restored: 0 changed files left
+MUT m4.CookieConsent.tsx vitest=1 ssw=0 staleChunk=0 play=0

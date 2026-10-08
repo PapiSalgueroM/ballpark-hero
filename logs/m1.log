@@ -1,0 +1,48 @@
+== applied m1.safeStorage.ts to src/lib/safeStorage.ts:  1 file changed, 1 insertion(+), 1 deletion(-)
+-    Object.defineProperty(window, name, { configurable: true, enumerable: true, get: () => memory });
++    void memory;
+   ✓ safeStorage: a browser that stores normally > hands back the very same storage objects and reports no trouble 30ms
+   ✓ safeStorage: a browser that stores normally > leaves no probe key behind 21ms
+   × safeStorage: storage blocked > stands in for the visit when the accessor throws, and puts the stand in on window 12ms
+   × safeStorage: storage blocked > stands in when the browser hands back null (a web view with storage turned off) 2ms
+   × safeStorage: storage blocked > stands in when the object is there but every call on it throws 11ms
+   ✓ safeStorage: storage blocked > still works on the seam when window will not take the stand in 2ms
+   ✓ safeStorage: storage full > keeps writes for the visit, still reads what was saved before, and leaves window alone 7ms
+   ✓ safeStorage: storage full > a remove reaches the browser store underneath, so a cleared choice stays cleared after a reload 7ms
+   ✓ safeStorage: the raw switch (the harness control) > hands back the browser storage untouched when storage works 1ms
+   ✓ safeStorage: the raw switch (the harness control) > throws as the module loads when storage is blocked, which is the dead page this round fixes 2ms
+   ✓ safeStorage: the stand in behaves like Storage > getItem, setItem, removeItem, key, length and clear 2ms
+   ✓ safeStorage: the stand in behaves like Storage > stores strings, the way the browser does 7ms
+   ✓ safeStorage: the stand in behaves like Storage > laid over a store that refuses writes: keys from both are listed once, and a refused remove stays removed 2ms
+   ✓ safeStorage: the stand in behaves like Storage > a write goes to the browser store again the moment it takes one 2ms
+   ✓ safeStorage: safeSetItem, the write that cannot take a page down > writes to the browser storage and says so when storage works 4ms
+   ✓ safeStorage: safeSetItem, the write that cannot take a page down > answers false and throws nothing when storage is full, and stores nothing a reader could not read back 1ms
+   × safeStorage: safeSetItem, the write that cannot take a page down > keeps the write for the visit when storage is blocked 2ms
+   ✓ safeStorage: safeSetItem, the write that cannot take a page down > answers false when storage is blocked and window would not take the stand in 1ms
+   ✓ safeStorage: safeSetItem, the write that cannot take a page down > under the raw switch it throws like the unguarded write it replaced 1ms
+   ✓ safeStorage: the Web Locks stand in (a real blocked browser refuses locks too) > runs the callback without a lock when the browser refuses one 2ms
+   ✓ safeStorage: the Web Locks stand in (a real blocked browser refuses locks too) > runs the callback once, and lets its own error through untouched 1ms
+   ✓ safeStorage: the Web Locks stand in (a real blocked browser refuses locks too) > passes any other refusal through 1ms
+   ✓ safeStorage: the Web Locks stand in (a real blocked browser refuses locks too) > leaves locks alone in a browser that stores normally 1ms
+ ✓ src/test/supabaseClientBlockedStorage.test.ts (5 tests) 79ms
+ ✓ src/test/freshBuildBlockedStorage.test.ts (4 tests) 31ms
+   × a game under blocked storage > boots, takes an answer and keeps it for the visit 59ms
+   × a game under blocked storage > the page itself mounts, and its first press is kept for the visit 21ms
+   ✓ a game under blocked storage > control: with nothing standing in, the same hook throws on its first render 7ms
+   ✓ the storage notice > says so on a game route when storage is blocked, and is kept out of saved pages 55ms
+   ✓ the storage notice > says the storage is full when that is the reason 7ms
+grep: write error: Broken pipe
+   ok   listener registered from watchForNewBuild, event cancelled
+   ok   chunk errors reload once through the shared guard
+  FAIL  / phone BLOCKED: mounted, 7 buttons and 18 links (untouched 171 and 329, floor 497)
+  FAIL  / phone BLOCKED: no "This page broke" screen
+  FAIL  / phone BLOCKED: no error naming storage: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  / phone BLOCKED: first game tile at y=null (ceiling 430, untouched 315), none found
+  FAIL  / desktop BLOCKED: mounted, 7 buttons and 18 links (untouched 175 and 329, floor 501)
+  FAIL  / desktop BLOCKED: no "This page broke" screen
+  FAIL  / desktop BLOCKED: no error naming storage: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  cookie banner BLOCKED "Essential only": no uncaught error: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+  FAIL  cookie banner BLOCKED "Accept": no uncaught error: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.
+playStorageBlocked: 63 checks, 9 failed
+restored: 0 changed files left
+MUT m1.safeStorage.ts vitest=1 ssw=0 staleChunk=0 play=1

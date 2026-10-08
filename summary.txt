@@ -1,0 +1,16 @@
+m1 exit=0 64s | MUT m1.safeStorage.ts vitest=1 ssw=0 staleChunk=0 play=1
+m2 exit=0 47s | MUT m2.safeStorage.ts vitest=1 ssw=0 staleChunk=0 play=0
+m3 exit=0 61s | MUT m3.safeStorage.ts vitest=1 ssw=0 staleChunk=0 play=1
+m4 exit=0 46s | MUT m4.CookieConsent.tsx vitest=1 ssw=0 staleChunk=0 play=0
+m5 exit=0 46s | MUT m5.AdBanner.tsx vitest=0 ssw=0 staleChunk=0 play=0
+m6 exit=0 63s | MUT m6.StorageNotice.tsx vitest=1 ssw=0 staleChunk=0 play=1
+m7 exit=0 3s | MUT m7.freshBuild.ts vitest=0 ssw=0 staleChunk=0 play=skip
+m8 exit=0 4s | MUT m8.safeStorage.ts vitest=1 ssw=0 staleChunk=0 play=skip
+m9 exit=0 4s | MUT m9.safeStorage.ts vitest=1 ssw=0 staleChunk=0 play=skip
+m10 exit=0 4s | MUT m10.StorageNotice.tsx vitest=1 ssw=0 staleChunk=0 play=skip
+m11 exit=0 4s | MUT m11.safeStorage.ts vitest=1 ssw=0 staleChunk=0 play=skip
+m12 exit=0 4s | MUT m12.safeStorage.ts vitest=1 ssw=0 staleChunk=0 play=skip
+m13 exit=0 4s | MUT m13.freshBuild.ts vitest=1 ssw=0 staleChunk=0 play=skip
+m14 exit=0 60s | MUT m14.safeStorage.ts vitest=1 ssw=0 staleChunk=0 play=1
+m15 exit=0 51s | MUT m15.Footle.tsx vitest=0 ssw=1 staleChunk=0 play=1
+clean exit=0 0s | tree clean check done

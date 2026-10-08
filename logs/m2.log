@@ -1,0 +1,39 @@
+== applied m2.safeStorage.ts to src/lib/safeStorage.ts:  1 file changed, 1 insertion(+), 1 deletion(-)
+-      return { storage: createMemoryStorage(real), trouble: 'full' };
++      return { storage: real, trouble: 'full' };
+grep:    ✓ safeStorage: a browser that stores normally > hands back the very same storage objects and reports no trouble 46ms
+   ✓ safeStorage: a browser that stores normally > leaves no probe key behind 3ms
+   ✓ safeStorage: storage blocked > stands in for the visit when the accessor throws, and puts the stand in on window 5ms
+   ✓ safeStorage: storage blocked > stands in when the browser hands back null (a web view with storage turned off) 2ms
+   ✓ safeStorage: storage blocked > stands in when the object is there but every call on it throws 4ms
+   ✓ safeStorage: storage blocked > still works on the seam when window will not take the stand in 14ms
+   × safeStorage: storage full > keeps writes for the visit, still reads what was saved before, and leaves window alone 16ms
+   ✓ safeStorage: storage full > a remove reaches the browser store underneath, so a cleared choice stays cleared after a reload 2ms
+   ✓ safeStorage: the raw switch (the harness control) > hands back the browser storage untouched when storage works 1ms
+   ✓ safeStorage: the raw switch (the harness control) > throws as the module loads when storage is blocked, which is the dead page this round fixes 2ms
+   ✓ safeStorage: the stand in behaves like Storage > getItem, setItem, removeItem, key, length and clear 2ms
+   ✓ safeStorage: the stand in behaves like Storage > stores strings, the way the browser does 1ms
+   ✓ safeStorage: the stand in behaves like Storage > laid over a store that refuses writes: keys from both are listed once, and a refused remove stays removed 2ms
+   ✓ safeStorage: the stand in behaves like Storage > a write goes to the browser store again the moment it takes one 2ms
+   ✓ safeStorage: safeSetItem, the write that cannot take a page down > writes to the browser storage and says so when storage works 1ms
+   ✓ safeStorage: safeSetItem, the write that cannot take a page down > answers false and throws nothing when storage is full, and stores nothing a reader could not read back 1ms
+   ✓ safeStorage: safeSetItem, the write that cannot take a page down > keeps the write for the visit when storage is blocked 1ms
+   ✓ safeStorage: safeSetItem, the write that cannot take a page down > answers false when storage is blocked and window would not take the stand in 1ms
+   ✓ safeStorage: safeSetItem, the write that cannot take a page down > under the raw switch it throws like the unguarded write it replaced 1ms
+   ✓ safeStorage: the Web Locks stand in (a real blocked browser refuses locks too) > runs the callback without a lock when the browser refuses one 2ms
+   ✓ safeStorage: the Web Locks stand in (a real blocked browser refuses locks too) > runs the callback once, and lets its own error through untouched 1ms
+   ✓ safeStorage: the Web Locks stand in (a real blocked browser refuses locks too) > passes any other refusal through 1ms
+   ✓ safeStorage: the Web Locks stand in (a real blocked browser refuses locks too) > leaves locks alone in a browser that stores normally 1ms
+   ✓ the cookie banner with storage blocked > Essential only: the banner leaves, the answer holds for the visit, and no analytics load 148ms
+   ✓ the cookie banner with storage blocked > Accept: the banner leaves, the answer holds for the visit, and analytics start 39ms
+   × the cookie banner with storage full > Essential only: the banner leaves, the answer holds for the visit, and no analytics load 51ms
+   × the cookie banner with storage full > Accept: the banner leaves, the answer holds for the visit, and analytics start 28ms
+   ✓ the cookie banner, the cases around those two > storage that fills up after the page loaded: Essential only still dismisses and nothing loads 17ms
+   ✓ the cookie banner, the cases around those two > storage full with an answer already stored: the banner does not ask again 12ms
+   ✓ the cookie banner, the cases around those two > a browser that stores normally: the answer goes to the real storage, exactly as before 18ms
+write error: Broken pipe
+   ok   listener registered from watchForNewBuild, event cancelled
+   ok   chunk errors reload once through the shared guard
+playStorageBlocked: 35 checks, 0 failed
+restored: 0 changed files left
+MUT m2.safeStorage.ts vitest=1 ssw=0 staleChunk=0 play=0

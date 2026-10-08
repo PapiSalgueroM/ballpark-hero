@@ -1,0 +1,26 @@
+== applied m10.StorageNotice.tsx to src/components/StorageNotice.tsx:  1 file changed, 1 insertion(+), 1 deletion(-)
+-  if (typeof window !== 'undefined' && (window as Window & { __DUKB_PRERENDER__?: boolean }).__DUKB_PRERENDER__) return null;
++  /* mutation: renders under the prerenderer */
+ ✓ src/test/safeStorage.test.ts (23 tests) 57ms
+ ✓ src/test/cookieConsentStorage.test.tsx (7 tests) 269ms
+ ✓ src/test/supabaseClientBlockedStorage.test.ts (5 tests) 70ms
+   ✓ a game under blocked storage > boots, takes an answer and keeps it for the visit 82ms
+   ✓ a game under blocked storage > the page itself mounts, and its first press is kept for the visit 171ms
+   ✓ a game under blocked storage > control: with nothing standing in, the same hook throws on its first render 23ms
+   ✓ the storage notice > says so on a game route when storage is blocked, and is kept out of saved pages 21ms
+   ✓ the storage notice > says the storage is full when that is the reason 6ms
+   ✓ the storage notice > stays off /, which is not a game 5ms
+   ✓ the storage notice > stays off /soccer, which is not a game 5ms
+   ✓ the storage notice > stays off /whats-new, which is not a game 5ms
+   ✓ the storage notice > stays off /privacy, which is not a game 4ms
+   × the storage notice > never renders under the prerenderer 10ms
+   ✓ the storage notice > renders nothing in a browser that stores normally 5ms
+ ✓ src/test/freshBuildBlockedStorage.test.ts (4 tests) 23ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/test/storageBlockedBoot.test.tsx > the storage notice > never renders under the prerenderer
+ Test Files  1 failed | 4 passed (5)
+      Tests  1 failed | 49 passed (50)
+   ok   listener registered from watchForNewBuild, event cancelled
+   ok   chunk errors reload once through the shared guard
+restored: 0 changed files left
+MUT m10.StorageNotice.tsx vitest=1 ssw=0 staleChunk=0 play=skip

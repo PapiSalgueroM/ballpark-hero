@@ -1,0 +1,45 @@
+== applied m3.safeStorage.ts to src/lib/safeStorage.ts:  1 file changed, 1 insertion(+), 1 deletion(-)
+-if (local.trouble === 'blocked') standInForLocks();
++/* mutation: no lock stand in */
+   ✓ safeStorage: a browser that stores normally > hands back the very same storage objects and reports no trouble 21ms
+   ✓ safeStorage: a browser that stores normally > leaves no probe key behind 2ms
+   ✓ safeStorage: storage blocked > stands in for the visit when the accessor throws, and puts the stand in on window 4ms
+   ✓ safeStorage: storage blocked > stands in when the browser hands back null (a web view with storage turned off) 1ms
+   ✓ safeStorage: storage blocked > stands in when the object is there but every call on it throws 3ms
+   ✓ safeStorage: storage blocked > still works on the seam when window will not take the stand in 3ms
+   ✓ safeStorage: storage full > keeps writes for the visit, still reads what was saved before, and leaves window alone 2ms
+   ✓ safeStorage: storage full > a remove reaches the browser store underneath, so a cleared choice stays cleared after a reload 1ms
+   ✓ safeStorage: the raw switch (the harness control) > hands back the browser storage untouched when storage works 1ms
+   ✓ safeStorage: the raw switch (the harness control) > throws as the module loads when storage is blocked, which is the dead page this round fixes 2ms
+   ✓ safeStorage: the stand in behaves like Storage > getItem, setItem, removeItem, key, length and clear 2ms
+   ✓ safeStorage: the stand in behaves like Storage > stores strings, the way the browser does 1ms
+   ✓ safeStorage: the stand in behaves like Storage > laid over a store that refuses writes: keys from both are listed once, and a refused remove stays removed 2ms
+   ✓ safeStorage: the stand in behaves like Storage > a write goes to the browser store again the moment it takes one 1ms
+   ✓ safeStorage: safeSetItem, the write that cannot take a page down > writes to the browser storage and says so when storage works 1ms
+   ✓ safeStorage: safeSetItem, the write that cannot take a page down > answers false and throws nothing when storage is full, and stores nothing a reader could not read back 2ms
+   ✓ safeStorage: safeSetItem, the write that cannot take a page down > keeps the write for the visit when storage is blocked 1ms
+   ✓ safeStorage: safeSetItem, the write that cannot take a page down > answers false when storage is blocked and window would not take the stand in 1ms
+   ✓ safeStorage: safeSetItem, the write that cannot take a page down > under the raw switch it throws like the unguarded write it replaced 1ms
+   × safeStorage: the Web Locks stand in (a real blocked browser refuses locks too) > runs the callback without a lock when the browser refuses one 15ms
+   ✓ safeStorage: the Web Locks stand in (a real blocked browser refuses locks too) > runs the callback once, and lets its own error through untouched 1ms
+   ✓ safeStorage: the Web Locks stand in (a real blocked browser refuses locks too) > passes any other refusal through 2ms
+   ✓ safeStorage: the Web Locks stand in (a real blocked browser refuses locks too) > leaves locks alone in a browser that stores normally 1ms
+ ✓ src/test/cookieConsentStorage.test.tsx (7 tests) 282ms
+   ✓ the Supabase client when the browser blocks storage > loads without throwing, with the pinned project URL and public key 39ms
+   ✓ the Supabase client when the browser blocks storage > pins the same two strings in a browser that stores normally, and restores a stored session 8ms
+   ✓ the Supabase client when the browser blocks storage > keeps a signed in player signed in when storage is full (reads still reach the stored session) 6ms
+   ✓ the client file itself > still pins the URL and key as literals and never reads an env var 2ms
+   × the Supabase client when the browser refuses Web Locks as well > still answers getSession, signed out, with nothing thrown 22ms
+ ✓ src/test/storageBlockedBoot.test.tsx (11 tests) 374ms
+grep: write error: Broken pipe
+   ok   listener registered from watchForNewBuild, event cancelled
+   ok   chunk errors reload once through the shared guard
+  FAIL  / phone BLOCKED: 3 uncaught errors (untouched 0): The request was denied.
+  FAIL  / desktop BLOCKED: 3 uncaught errors (untouched 0): The request was denied.
+  FAIL  /soccer-career phone BLOCKED: 3 uncaught errors (untouched 0): The request was denied.
+  FAIL  /soccer-career desktop BLOCKED: 3 uncaught errors (untouched 0): The request was denied.
+  FAIL  cookie banner BLOCKED "Essential only": no uncaught error: The request was denied.
+  FAIL  cookie banner BLOCKED "Accept": no uncaught error: The request was denied.
+playStorageBlocked: 63 checks, 6 failed
+restored: 0 changed files left
+MUT m3.safeStorage.ts vitest=1 ssw=0 staleChunk=0 play=1

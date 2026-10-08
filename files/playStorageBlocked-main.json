@@ -1,0 +1,327 @@
+{
+ "base": "http://localhost:4315",
+ "control": "",
+ "arms": [
+  "full"
+ ],
+ "walked": [
+  {
+   "route": "/footle",
+   "view": "phone",
+   "isGame": true,
+   "mountOnly": false,
+   "open": {
+    "route": "/footle",
+    "view": "phone",
+    "mode": "open",
+    "presses": [
+     {
+      "label": "Let's Play!",
+      "inDialog": true,
+      "changed": true,
+      "threw": false
+     }
+    ],
+    "changed": 1,
+    "first": {
+     "buttons": 11,
+     "links": 27,
+     "inputs": 1,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 0,
+     "firstTile": {
+      "p": "/golf-higher-lower",
+      "top": 4416.25
+     },
+     "banner": true,
+     "realKeys": 2,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "last": {
+     "buttons": 11,
+     "links": 27,
+     "inputs": 1,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 0,
+     "firstTile": {
+      "p": "/golf-higher-lower",
+      "top": 4416.25
+     },
+     "banner": true,
+     "realKeys": 2,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/footle",
+     "view": "phone",
+     "mode": "full",
+     "presses": [
+      {
+       "label": "Try this page again",
+       "inDialog": false,
+       "changed": false,
+       "threw": false
+      },
+      {
+       "label": "Try this page again",
+       "inDialog": false,
+       "changed": false,
+       "threw": false
+      },
+      {
+       "label": "Try this page again",
+       "inDialog": false,
+       "changed": false,
+       "threw": false
+      },
+      {
+       "label": "Try this page again",
+       "inDialog": false,
+       "changed": false,
+       "threw": false
+      }
+     ],
+     "changed": 0,
+     "first": {
+      "buttons": 4,
+      "links": 17,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": true,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "This browser's storage is full, so progress won't be saved."
+      },
+      "mainTop": null,
+      "firstTile": null,
+      "banner": true,
+      "realKeys": 0,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 4,
+      "links": 17,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": true,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "This browser's storage is full, so progress won't be saved."
+      },
+      "mainTop": null,
+      "firstTile": null,
+      "banner": true,
+      "realKeys": 0,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [
+      "QuotaExceededError: The quota has been exceeded.",
+      "A page failed to render: QuotaExceededError: The quota has been exceeded. ",
+      "QuotaExceededError: The quota has been exceeded.",
+      "A page failed to render: QuotaExceededError: The quota has been exceeded. ",
+      "QuotaExceededError: The quota has been exceeded.",
+      "A page failed to render: QuotaExceededError: The quota has been exceeded. ",
+      "QuotaExceededError: The quota has been exceeded.",
+      "A page failed to render: QuotaExceededError: The quota has been exceeded. ",
+      "QuotaExceededError: The quota has been exceeded.",
+      "A page failed to render: QuotaExceededError: The quota has been exceeded. "
+     ],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/footle",
+   "view": "desktop",
+   "isGame": true,
+   "mountOnly": false,
+   "open": {
+    "route": "/footle",
+    "view": "desktop",
+    "mode": "open",
+    "presses": [
+     {
+      "label": "Let's Play!",
+      "inDialog": true,
+      "changed": true,
+      "threw": false
+     }
+    ],
+    "changed": 1,
+    "first": {
+     "buttons": 11,
+     "links": 27,
+     "inputs": 1,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 32,
+     "firstTile": {
+      "p": "/golf-higher-lower",
+      "top": 3301.75
+     },
+     "banner": true,
+     "realKeys": 2,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "last": {
+     "buttons": 11,
+     "links": 27,
+     "inputs": 1,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 32,
+     "firstTile": {
+      "p": "/golf-higher-lower",
+      "top": 3301.75
+     },
+     "banner": true,
+     "realKeys": 2,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/footle",
+     "view": "desktop",
+     "mode": "full",
+     "presses": [
+      {
+       "label": "Try this page again",
+       "inDialog": false,
+       "changed": false,
+       "threw": false
+      },
+      {
+       "label": "Try this page again",
+       "inDialog": false,
+       "changed": false,
+       "threw": false
+      },
+      {
+       "label": "Try this page again",
+       "inDialog": false,
+       "changed": false,
+       "threw": false
+      },
+      {
+       "label": "Try this page again",
+       "inDialog": false,
+       "changed": false,
+       "threw": false
+      }
+     ],
+     "changed": 0,
+     "first": {
+      "buttons": 4,
+      "links": 17,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": true,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "This browser's storage is full, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": null,
+      "firstTile": null,
+      "banner": true,
+      "realKeys": 0,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 4,
+      "links": 17,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": true,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "This browser's storage is full, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": null,
+      "firstTile": null,
+      "banner": true,
+      "realKeys": 0,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [
+      "QuotaExceededError: The quota has been exceeded.",
+      "A page failed to render: QuotaExceededError: The quota has been exceeded. ",
+      "QuotaExceededError: The quota has been exceeded.",
+      "A page failed to render: QuotaExceededError: The quota has been exceeded. ",
+      "QuotaExceededError: The quota has been exceeded.",
+      "A page failed to render: QuotaExceededError: The quota has been exceeded. ",
+      "QuotaExceededError: The quota has been exceeded.",
+      "A page failed to render: QuotaExceededError: The quota has been exceeded. ",
+      "QuotaExceededError: The quota has been exceeded.",
+      "A page failed to render: QuotaExceededError: The quota has been exceeded. "
+     ],
+     "thirdParty": 0
+    }
+   ]
+  }
+ ]
+}

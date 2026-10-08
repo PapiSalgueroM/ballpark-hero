@@ -1,0 +1,19 @@
+== applied m13.freshBuild.ts to src/lib/freshBuild.ts:  1 file changed, 1 insertion(+), 1 deletion(-)
+-  if (sessionStorageIsMemory) return false;
++  /* mutation: stale chunk reload anyway */
+ ✓ src/test/safeStorage.test.ts (23 tests) 48ms
+ ✓ src/test/cookieConsentStorage.test.tsx (7 tests) 247ms
+   ✓ the stale chunk reload > a browser that stores normally: reloads once, and the marker stops the second one 13ms
+   × the stale chunk reload > storage blocked: never reloads, on this page load or the next three 8ms
+   ✓ the stale chunk reload > storage full: never reloads either (the marker cannot be written) 2ms
+   ✓ the stale chunk reload > control: the stand in alone would have let every page load reload again 0ms
+ ✓ src/test/storageBlockedBoot.test.tsx (11 tests) 336ms
+ ✓ src/test/supabaseClientBlockedStorage.test.ts (5 tests) 59ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/test/freshBuildBlockedStorage.test.ts > the stale chunk reload > storage blocked: never reloads, on this page load or the next three
+ Test Files  1 failed | 4 passed (5)
+      Tests  1 failed | 49 passed (50)
+   ok   listener registered from watchForNewBuild, event cancelled
+   ok   chunk errors reload once through the shared guard
+restored: 0 changed files left
+MUT m13.freshBuild.ts vitest=1 ssw=0 staleChunk=0 play=skip

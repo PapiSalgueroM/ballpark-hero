@@ -1,0 +1,37 @@
+== applied m9.safeStorage.ts to src/lib/safeStorage.ts:  1 file changed, 1 insertion(+), 1 deletion(-)
+-        const refused = !entered && !!error && (error as { name?: string }).name === 'SecurityError';
++        const refused = !!error;
+   ✓ safeStorage: a browser that stores normally > hands back the very same storage objects and reports no trouble 19ms
+   ✓ safeStorage: a browser that stores normally > leaves no probe key behind 2ms
+   ✓ safeStorage: storage blocked > stands in for the visit when the accessor throws, and puts the stand in on window 4ms
+   ✓ safeStorage: storage blocked > stands in when the browser hands back null (a web view with storage turned off) 1ms
+   ✓ safeStorage: storage blocked > stands in when the object is there but every call on it throws 3ms
+   ✓ safeStorage: storage blocked > still works on the seam when window will not take the stand in 2ms
+   ✓ safeStorage: storage full > keeps writes for the visit, still reads what was saved before, and leaves window alone 3ms
+   ✓ safeStorage: storage full > a remove reaches the browser store underneath, so a cleared choice stays cleared after a reload 1ms
+   ✓ safeStorage: the raw switch (the harness control) > hands back the browser storage untouched when storage works 1ms
+   ✓ safeStorage: the raw switch (the harness control) > throws as the module loads when storage is blocked, which is the dead page this round fixes 2ms
+   ✓ safeStorage: the stand in behaves like Storage > getItem, setItem, removeItem, key, length and clear 2ms
+   ✓ safeStorage: the stand in behaves like Storage > stores strings, the way the browser does 1ms
+   ✓ safeStorage: the stand in behaves like Storage > laid over a store that refuses writes: keys from both are listed once, and a refused remove stays removed 2ms
+   ✓ safeStorage: the stand in behaves like Storage > a write goes to the browser store again the moment it takes one 1ms
+   ✓ safeStorage: safeSetItem, the write that cannot take a page down > writes to the browser storage and says so when storage works 1ms
+   ✓ safeStorage: safeSetItem, the write that cannot take a page down > answers false and throws nothing when storage is full, and stores nothing a reader could not read back 1ms
+   ✓ safeStorage: safeSetItem, the write that cannot take a page down > keeps the write for the visit when storage is blocked 1ms
+   ✓ safeStorage: safeSetItem, the write that cannot take a page down > answers false when storage is blocked and window would not take the stand in 1ms
+   ✓ safeStorage: safeSetItem, the write that cannot take a page down > under the raw switch it throws like the unguarded write it replaced 1ms
+   ✓ safeStorage: the Web Locks stand in (a real blocked browser refuses locks too) > runs the callback without a lock when the browser refuses one 2ms
+   × safeStorage: the Web Locks stand in (a real blocked browser refuses locks too) > runs the callback once, and lets its own error through untouched 14ms
+   × safeStorage: the Web Locks stand in (a real blocked browser refuses locks too) > passes any other refusal through 5ms
+   ✓ safeStorage: the Web Locks stand in (a real blocked browser refuses locks too) > leaves locks alone in a browser that stores normally 2ms
+ ✓ src/test/cookieConsentStorage.test.tsx (7 tests) 262ms
+ ✓ src/test/supabaseClientBlockedStorage.test.ts (5 tests) 85ms
+ ✓ src/test/storageBlockedBoot.test.tsx (11 tests) 310ms
+ ✓ src/test/freshBuildBlockedStorage.test.ts (4 tests) 23ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/test/safeStorage.test.ts > safeStorage: the Web Locks stand in (a real blocked browser refuses locks too) > runs the callback once, and lets its own error through untouched
+ FAIL  src/test/safeStorage.test.ts > safeStorage: the Web Locks stand in (a real blocked browser refuses locks too) > passes any other refusal through
+   ok   listener registered from watchForNewBuild, event cancelled
+   ok   chunk errors reload once through the shared guard
+restored: 0 changed files left
+MUT m9.safeStorage.ts vitest=1 ssw=0 staleChunk=0 play=skip

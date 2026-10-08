@@ -1,0 +1,18 @@
+#!playwright
+#!serial
+m1: bash .rc/x/mutrun.sh m1.safeStorage.ts src/lib/safeStorage.ts both 4301 /,/soccer-career blocked
+m2: bash .rc/x/mutrun.sh m2.safeStorage.ts src/lib/safeStorage.ts both 4302 / full
+m3: bash .rc/x/mutrun.sh m3.safeStorage.ts src/lib/safeStorage.ts both 4303 /,/soccer-career blocked
+m4: bash .rc/x/mutrun.sh m4.CookieConsent.tsx src/components/CookieConsent.tsx both 4304 / full
+m5: bash .rc/x/mutrun.sh m5.AdBanner.tsx src/components/ads/AdBanner.tsx both 4305 / full
+m6: bash .rc/x/mutrun.sh m6.StorageNotice.tsx src/components/StorageNotice.tsx both 4306 /,/whats-new,/soccer-career blocked
+m7: bash .rc/x/mutrun.sh m7.freshBuild.ts src/lib/freshBuild.ts unit
+m8: bash .rc/x/mutrun.sh m8.safeStorage.ts src/lib/safeStorage.ts unit
+m9: bash .rc/x/mutrun.sh m9.safeStorage.ts src/lib/safeStorage.ts unit
+m10: bash .rc/x/mutrun.sh m10.StorageNotice.tsx src/components/StorageNotice.tsx unit
+m11: bash .rc/x/mutrun.sh m11.safeStorage.ts src/lib/safeStorage.ts unit
+m12: bash .rc/x/mutrun.sh m12.safeStorage.ts src/lib/safeStorage.ts unit
+m13: bash .rc/x/mutrun.sh m13.freshBuild.ts src/lib/freshBuild.ts unit
+m14: bash .rc/x/mutrun.sh m14.safeStorage.ts src/lib/safeStorage.ts both 4314 /footle,/soccer-career full
+m15: bash .rc/x/mutrun.sh m15.Footle.tsx src/pages/Footle.tsx both 4315 /footle full
+clean: git status --short -- src scripts | head; echo "tree clean check done"

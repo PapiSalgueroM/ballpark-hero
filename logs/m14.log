@@ -1,0 +1,43 @@
+== applied m14.safeStorage.ts to src/lib/safeStorage.ts:  1 file changed, 1 insertion(+), 1 deletion(-)
+-export const storageTrouble: StorageTrouble | null = local.trouble;
++export const storageTrouble: StorageTrouble | null = local.trouble === 'full' ? null : local.trouble;
+ ✓ src/test/freshBuildBlockedStorage.test.ts (4 tests) 68ms
+   ✓ the cookie banner with storage blocked > Essential only: the banner leaves, the answer holds for the visit, and no analytics load 117ms
+   ✓ the cookie banner with storage blocked > Accept: the banner leaves, the answer holds for the visit, and analytics start 29ms
+   × the cookie banner with storage full > Essential only: the banner leaves, the answer holds for the visit, and no analytics load 25ms
+   ✓ the cookie banner with storage full > Accept: the banner leaves, the answer holds for the visit, and analytics start 26ms
+   ✓ the cookie banner, the cases around those two > storage that fills up after the page loaded: Essential only still dismisses and nothing loads 17ms
+   ✓ the cookie banner, the cases around those two > storage full with an answer already stored: the banner does not ask again 7ms
+   ✓ the cookie banner, the cases around those two > a browser that stores normally: the answer goes to the real storage, exactly as before 23ms
+ ✓ src/test/supabaseClientBlockedStorage.test.ts (5 tests) 62ms
+   ✓ a game under blocked storage > boots, takes an answer and keeps it for the visit 84ms
+   ✓ a game under blocked storage > the page itself mounts, and its first press is kept for the visit 173ms
+   ✓ a game under blocked storage > control: with nothing standing in, the same hook throws on its first render 17ms
+   ✓ the storage notice > says so on a game route when storage is blocked, and is kept out of saved pages 20ms
+   × the storage notice > says the storage is full when that is the reason 6ms
+   ✓ the storage notice > stays off /, which is not a game 6ms
+   ✓ the storage notice > stays off /soccer, which is not a game 5ms
+   ✓ the storage notice > stays off /whats-new, which is not a game 4ms
+   ✓ the storage notice > stays off /privacy, which is not a game 4ms
+   ✓ the storage notice > never renders under the prerenderer 5ms
+   ✓ the storage notice > renders nothing in a browser that stores normally 4ms
+   ✓ safeStorage: a browser that stores normally > hands back the very same storage objects and reports no trouble 4ms
+   ✓ safeStorage: a browser that stores normally > leaves no probe key behind 2ms
+   ✓ safeStorage: storage blocked > stands in for the visit when the accessor throws, and puts the stand in on window 3ms
+   ✓ safeStorage: storage blocked > stands in when the browser hands back null (a web view with storage turned off) 1ms
+   ✓ safeStorage: storage blocked > stands in when the object is there but every call on it throws 2ms
+   ✓ safeStorage: storage blocked > still works on the seam when window will not take the stand in 2ms
+   × safeStorage: storage full > keeps writes for the visit, still reads what was saved before, and leaves window alone 7ms
+   ✓ safeStorage: storage full > a remove reaches the browser store underneath, so a cleared choice stays cleared after a reload 1ms
+   ✓ safeStorage: the raw switch (the harness control) > hands back the browser storage untouched when storage works 1ms
+   ✓ safeStorage: the raw switch (the harness control) > throws as the module loads when storage is blocked, which is the dead page this round fixes 2ms
+grep: write error: Broken pipe
+   ok   listener registered from watchForNewBuild, event cancelled
+   ok   chunk errors reload once through the shared guard
+  FAIL  /soccer-career phone FULL: the notice is on the page
+  FAIL  /soccer-career desktop FULL: the notice is on the page
+  FAIL  /footle phone FULL: the notice is on the page
+  FAIL  /footle desktop FULL: the notice is on the page
+playStorageBlocked: 58 checks, 4 failed
+restored: 0 changed files left
+MUT m14.safeStorage.ts vitest=1 ssw=0 staleChunk=0 play=1
