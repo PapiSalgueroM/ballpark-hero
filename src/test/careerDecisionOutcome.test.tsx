@@ -146,13 +146,26 @@ describe('ordinary career decision outcomes', () => {
       { key: 'fanbase', label: 'Fanbase', before: String(mounted.before.c.fanbase), after: String(Math.min(100, mounted.before.c.fanbase + 10)), delta: `+${Math.min(100, mounted.before.c.fanbase + 10) - mounted.before.c.fanbase}` },
     ]);
     expect(read('nfl')).toEqual(expected.save); mounted.unmount();
-    for (const [slug, amount] of [['nba', 5], ['nfl', 3], ['mlb', 3], ['nhl', 2]] as const) {
+    /* Round 1104 re-pinned the football row, on purpose. NFL "Brand work" banks its fee now (that round's
+       ruling: the fee only ever reached career earnings while the card called it an endorsement), so in football
+       the outcome carries a Cash row and that row is the truth: the bank moved by the fee. The other three
+       sports' cards still pay career earnings only, and there the fee must still not be called cash. This case
+       went red on Round 1104's first cut and nobody ran it; the fix pass of 2026-10-08 found it. */
+    for (const [slug, amount, banked] of [['nba', 5, false], ['nfl', 3, true], ['mlb', 3, false], ['nhl', 2, false]] as const) {
       mounted = mountEvent(slug); expected = mounted.expected(2);
       const cash = mounted.before.c.netWorth;
       fireEvent.click(option(2));
       expect(rows().find(row => row.key === 'earnings')).toEqual({ key: 'earnings', label: 'Career earnings', before: `$${mounted.before.c.earnings}M`, after: `$${mounted.before.c.earnings + amount}M`, delta: `+$${amount}M` });
-      expect(rows().some(row => row.key === 'netWorth')).toBe(false);
-      expect(read(slug).c.netWorth).toBe(cash); expect(read(slug)).toEqual(expected.save);
+      const cashRow = rows().find(row => row.key === 'netWorth');
+      if (banked) {
+        const after = read(slug).c.netWorth;
+        expect(after).toBe(Math.round(((cash ?? 0) + amount) * 10) / 10);
+        expect(cashRow).toEqual({ key: 'netWorth', label: 'Cash', before: `$${cash}M`, after: `$${after}M`, delta: `+$${amount}M` });
+      } else {
+        expect(cashRow).toBeUndefined();
+        expect(read(slug).c.netWorth).toBe(cash);
+      }
+      expect(read(slug)).toEqual(expected.save);
       mounted.unmount();
     }
   });
