@@ -1,3 +1,10 @@
+## 2026-10-08: Round 1161 Club Manager table keyboard access (source only)
+
+Clickable LeagueTableCard rows use native buttons so Tab, Enter and Space can
+open the same club viewer as pointer clicks. Passive rows remain divs.
+The existing grid, expanded row width, table values, compact/preseason views,
+unnamed labels, callbacks and callers stay held. Only a visible focus ring is
+added. Remote candidate/original proof is pending. F owns integration/publish.
 ## Release AL LIVE, 2026-10-08 05:38 EDT: ten Codex rounds, playable moments, and a translated page no longer crashes
 
 Claude lane (session F: session E died when the PC was restarted at 00:03 EDT with this release's gate running).
