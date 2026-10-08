@@ -1,0 +1,6 @@
+info base saves: soccer 6292 chars, nba 3571 chars
+FAIL [phone] D. the hub of a base save has the Season replays button
+ok   [phone] D. no page or console errors (none)
+FAIL [desk] D. the hub of a base save has the Season replays button
+ok   [desk] D. no page or console errors (none)
+rvWalk2: 4 checks, 2 failed
