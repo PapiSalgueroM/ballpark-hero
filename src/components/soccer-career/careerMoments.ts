@@ -28,8 +28,10 @@ export type { CareerMoment } from "@/components/career-moments/useCareerMoment";
    load. This rule needs no storage at all, so it has neither, and the
    tournament card now follows it too: one rule for every moment on the page. The page reads the
    save once, in the initialiser that restores it, and hands that career to
-   settleLoadedMoments: every moment the save already holds is settled before
-   any card draws. Only a moment that first appears AFTER the load (the state
+   settleLoadedMoments: a moment is settled on load only when the save SITS
+   on its card (Round 1107 made the tournament follow that too; a pending
+   tournament two Continues away from its card has been seen by nobody).
+   Only a moment that first appears AFTER the load (the state
    flipped in this visit, because the player pressed the button that got
    there) is fresh, and the card settles it once it has started playing, so it
    plays on exactly one mount.
@@ -105,9 +107,13 @@ export function signingMomentKey(note: SignedNote): string {
   return `signing|${runTag(note.forCareer)}|${note.kind}|${note.club}|${note.years}|${note.wage}`;
 }
 
-/** Every moment the restored save already holds is settled: it was seen. */
+/** A moment is settled on load only when the restored save SITS on its card:
+    that card was seen. Round 1107 put the tournament on the same rule as the
+    other three: a save that merely holds a pending tournament (it is played
+    inside the season step, two or three Continues before its card) has not
+    shown it to anybody yet. */
 export function settleLoadedMoments(c: CareerState | null): void {
   if (!c) return;
-  const tournament = c.pendingTournament ? tournamentMomentKey(c.pendingTournament) : null;
+  const tournament = c.phase === "world_cup" && c.pendingTournament ? tournamentMomentKey(c.pendingTournament) : null;
   settleMoments([debutMomentKey(c), legacyMomentKey(c), rivalryMomentKey(c), tournament]);
 }

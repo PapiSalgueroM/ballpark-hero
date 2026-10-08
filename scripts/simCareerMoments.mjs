@@ -27,8 +27,10 @@
      S3 flat colour the scene's colour never sits inside a gradient and no
                     repeating pattern exists in the folder.
      S4 bindings    read off the TypeScript tree: SignedSlip.tsx holds exactly
-                    one SigningMoment element, and the hook and the confetti
-                    are each defined once in src, in the kit folder.
+                    one SigningMoment element; InternationalPanel.tsx holds
+                    exactly one TrophyMoment element, in the true branch of a
+                    conditional whose test is isWinner; and the hook and the
+                    confetti are each defined once in src, in the kit folder.
      S5 bind ids    each id the browser walk finds a binding by is written in
                     src exactly once outside src/test.
      S6 seams       careerMoments.ts imports only types (bar react and the
@@ -36,7 +38,7 @@
                     the kit by FILE, never through its index.
 
    SECTION 2, IN CHROMIUM
-     The rig mounts five fixtures, each at 320, 390 and 1280 px, with motion
+     The rig mounts seven fixtures, each at 320, 390 and 1280 px, with motion
      on and with reducedMotion "reduce":
        F1 a signing    art, two lines, a count with a before, #1d4ed8, good
        F2 a trophy     three lines, a count with no before, gold, a button
@@ -48,9 +50,16 @@
                        Its words are the engine's own formatting, read off
                        the page. K1 also wants one avatar whose shirt is the
                        club colour and a scene that carries the same colour.
+       F6card          the REAL won TournamentCard (the World Cup 2030 fixture
+                       of src/test/fixtures/careerMomentFixtures.ts). The scene
+                       is its head, so K1 to K5 read the head; RIG also wants
+                       one Trophy scene, first in the card, with one cup and
+                       no button, bar or confetti of its own. It is embedded,
+                       so it is left out of K7's stand alone heights.
      Tailwind is handed the raw source of everything the rig mounts: the six
-     kit files, SignedSlip.tsx, PlayerAvatar.tsx, VictoryMoment.tsx,
-     Celebration.tsx and CelebrationStyles.tsx.
+     kit files, SignedSlip.tsx, PlayerAvatar.tsx, InternationalPanel.tsx,
+     FlagImg.tsx, the ui button, AwardsNightCard.tsx (the speech choices),
+     VictoryMoment.tsx, Celebration.tsx and CelebrationStyles.tsx.
      RIG  every fixture draws, a first mount in view goes fresh then live,
           and the page reports no error.
      K1 facts       the settled words (style blocks, drawings and the old
@@ -90,7 +99,7 @@
                     width, and the tallest stand alone fixture at 320 px is
                     under K7_BOUND. Measured 2026-10-08 on three runs that
                     agreed to the pixel (GitHub runner, Linux fonts): F1 193,
-                    F2 233, F3 145, F4 441, F5 215. Tallest 441 px, plus 15
+                    F2 233, F3 145, F4 441, F5 215, F6slip 193. Tallest 441 px, plus 15
                     percent, rounded up: 508 px. A Windows run wraps a little
                     differently; the 15 percent is the room for that.
      K8 the button  pressed three times at its own coordinates with the play
@@ -107,6 +116,7 @@
      clock        useCareerMoment.ts reads Date.now()                       S2
      stripe       the bar is painted with a repeating gradient              S3
      unbind       SignedSlip.tsx draws the plain card, not SigningMoment   S4
+     ungated      the tournament card's conditional tests !missed          S4
      dupbind      the slip's bind id is written a second time              S5
      enginevalue  careerMoments.ts imports a VALUE from the soccer engine   S6
      stray        the view prints 9041, which no fixture carries            K1
@@ -120,7 +130,8 @@
      wide         the card gets a 400 px minimum width                      K7
      gated        the button is hidden behind cm-rise-gated and a delay     K8
      savewrite    the hook writes one localStorage key when it settles      K9
-   Steps 4a to 4c measured them on fe4c4de8 plus this file. */
+   Steps 4a to 4c measured the first fourteen on fe4c4de8 plus this file;
+   all seventeen were run again on the commits of steps 5 and 6. */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -144,7 +155,8 @@ const INDEX_CSS = 'src/index.css';
 const SLIP = 'src/components/soccer-career/SignedSlip.tsx';
 const AVATAR = 'src/components/soccer-career/PlayerAvatar.tsx';
 /* The ids the browser walk finds the two bindings by. */
-const BIND_IDS = ['sc-signing'];
+const BIND_IDS = ['sc-signing', 'sc-intl-trophy'];
+const PANEL = 'src/components/soccer-career/InternationalPanel.tsx';
 
 /* Each control and the checks it must turn red. */
 const CONTROLS = {
@@ -153,6 +165,7 @@ const CONTROLS = {
   stripe: ['S3'],
   enginevalue: ['S6'],
   unbind: ['S4'],
+  ungated: ['S4'],
   dupbind: ['S5'],
   stray: ['K1'],
   grow: ['K2'],
@@ -194,7 +207,7 @@ const swapped = new Map();
 const abs = rel => path.join(ROOT, rel);
 const raw = rel => fs.readFileSync(abs(rel), 'utf8');
 const read = rel => swapped.get(rel) ?? raw(rel);
-const SOURCE_CONTROLS = new Set(['import', 'clock', 'stripe', 'enginevalue', 'unbind', 'dupbind']);
+const SOURCE_CONTROLS = new Set(['import', 'clock', 'stripe', 'enginevalue', 'unbind', 'ungated', 'dupbind']);
 const scanRead = rel => (SOURCE_CONTROLS.has(CONTROL) ? read(rel) : raw(rel));
 const bundleRead = rel => (SOURCE_CONTROLS.has(CONTROL) ? raw(rel) : read(rel));
 /** Rewrite `from` (which must be in the file exactly `times` times) in a copy. */
@@ -245,6 +258,7 @@ if (CONTROL === 'clock') mutate(HOOK, 'if (key && live) settled.add(key);', 'if 
 if (CONTROL === 'stripe') mutate(STYLES, 'width: 4px; background-color: var(--cmo-ink); }', 'width: 4px; background: repeating-linear-gradient(45deg, var(--cmo-ink) 0 4px, transparent 4px 8px); }');
 if (CONTROL === 'enginevalue') prepend(SOCCER_KEYS, "import { formatWage } from '@/lib/soccerCareerEngine';");
 if (CONTROL === 'unbind') mutate(SLIP, '<SigningMoment spec=', '<CareerMomentCard spec=');
+if (CONTROL === 'ungated') mutate(PANEL, '{isWinner ? (', '{!missed ? (');
 if (CONTROL === 'dupbind') prepend(SLIP, 'const twin = "sc-signing";');
 if (CONTROL === 'stray') mutate(CARD, '{children}', "{children}<span>{' 9041'}</span>");
 if (CONTROL === 'grow') mutate(STYLES, '@keyframes cmoInk { 0% { transform: scaleX(0); } 100% { transform: scaleX(1); } }', '@keyframes cmoInk { 0% { height: 0px; } 100% { height: 24px; } }');
@@ -364,11 +378,20 @@ function elementsOf(rel, tag) {
      one definition each of the hook and the confetti, both in the kit. */
   const slip = elementsOf(SLIP, 'SigningMoment');
   check('S4', slip.found.length === 1, `${SLIP} holds ${slip.found.length} SigningMoment element(s), expected exactly one: the slip is the signing scene`);
+  const cup = elementsOf(PANEL, 'TrophyMoment');
+  check('S4', cup.found.length === 1, `${PANEL} holds ${cup.found.length} TrophyMoment element(s), expected exactly one: the head of a won tournament card`);
+  for (const node of cup.found) {
+    let gated = false;
+    for (let up = node.parent; up; up = up.parent) {
+      if (ts.isConditionalExpression(up) && up.condition.getText(cup.tree) === 'isWinner' && node.pos >= up.whenTrue.pos && node.end <= up.whenTrue.end) gated = true;
+    }
+    check('S4', gated, `${PANEL}: the TrophyMoment must sit in the true branch of a conditional whose test is isWinner, so no other result lifts the cup`);
+  }
   for (const [name, shape] of [['useCareerMoment', /(?:function\s+useCareerMoment\s*\(|(?:const|let|var)\s+useCareerMoment\s*=)/], ['Confetti', /(?:function\s+Confetti\s*\(|(?:const|let|var)\s+Confetti\s*=)/]]) {
     const defs = srcFiles.filter(rel => shape.test(scanRead(rel)) && shape.test(codeOf(rel)));
     check('S4', defs.length === 1 && defs[0].startsWith(`${KIT}/`), `${name} must be defined exactly once, in ${KIT}; found ${defs.join(', ') || 'no definition'}`);
   }
-  console.log(`   S4 ${slip.found.length} SigningMoment in the slip; ${srcFiles.length} source files read for a second definition of the hook or the confetti`);
+  console.log(`   S4 ${slip.found.length} SigningMoment in the slip, ${cup.found.length} TrophyMoment in the tournament card; ${srcFiles.length} source files read for a second definition of the hook or the confetti`);
 }
 {
   /* S5. Each bind id is in src exactly once outside src/test, raw text and
@@ -406,7 +429,10 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { flushSync } from 'react-dom';
 import { CareerMomentCard, settleMoments, isMomentSettled } from '@/components/career-moments';
+import { MemoryRouter } from 'react-router-dom';
 import { SignedSlip } from '@/components/soccer-career/SignedSlip';
+import { TournamentCard } from '@/components/soccer-career/InternationalPanel';
+import { winnerTournament } from '@/test/fixtures/careerMomentFixtures';
 import { formatWage } from '@/lib/soccerCareerEngine';
 import { localizeMoney } from '@/lib/soccerCurrency';
 import { defaultAppearance } from '@/lib/soccerCareerAppearance';
@@ -414,7 +440,9 @@ import { defaultAppearance } from '@/lib/soccerCareerAppearance';
 const root = createRoot(document.getElementById('root'));
 /* F6's career: a look and one flat club colour, nothing else the slip reads. */
 const CAREER = { playerName: 'Rig Player', nationality: 'Portugal', position: 'ST', seasons: [], appearance: defaultAppearance(), currentClubColor: '#1D4ED8' };
-const real = fx => (fx.real === 'slip' ? <SignedSlip key={fx.mount ?? fx.name} note={{ ...fx.note, forCareer: CAREER }} /> : null);
+const real = fx => (fx.real === 'slip'
+  ? <SignedSlip key={fx.mount ?? fx.name} note={{ ...fx.note, forCareer: CAREER }} />
+  : <MemoryRouter><TournamentCard key={fx.mount ?? fx.name} t={winnerTournament(2030)} onDismiss={() => undefined} onSpeech={() => undefined} /></MemoryRouter>);
 window.rig = {
   done: 0,
   states: [],
@@ -446,7 +474,7 @@ new MutationObserver(() => {
 `;
 /* The files the rig mounts, handed to Tailwind raw so every utility class
    they use exists in the rig's stylesheet. */
-const MOUNTED = [...kitFiles, SLIP, AVATAR, 'src/components/game/VictoryMoment.tsx', 'src/components/club-manager/Celebration.tsx', 'src/components/club-manager/CelebrationStyles.tsx'];
+const MOUNTED = [...kitFiles, SLIP, AVATAR, PANEL, 'src/components/FlagImg.tsx', 'src/components/ui/button.tsx', 'src/components/career/AwardsNightCard.tsx', 'src/components/game/VictoryMoment.tsx', 'src/components/club-manager/Celebration.tsx', 'src/components/club-manager/CelebrationStyles.tsx'];
 const copies = { name: 'control-copies', setup(b) {
   b.onLoad({ filter: /\.(tsx?|css)$/ }, args => {
     const rel = path.relative(ROOT, args.path).split(path.sep).join('/');
@@ -469,7 +497,7 @@ const SERVED = new Map([
   [`${RIG_URL}rig.css`, ['text/css', sheet.css]],
   [`${RIG_URL}rig.js`, ['text/javascript', bundle.outputFiles[0].text]],
 ]);
-console.log(`2) In Chromium: ${FIXTURES.length} fixtures at ${WIDTHS.join(', ')} px, motion on and reduced; bundle ${Math.round(bundle.outputFiles[0].text.length / 1024)}K, stylesheet ${Math.round(sheet.css.length / 1024)}K, Tailwind was handed ${MOUNTED.length} files`);
+console.log(`2) In Chromium: ${FIXTURES.length + 2} fixtures at ${WIDTHS.join(', ')} px, motion on and reduced; bundle ${Math.round(bundle.outputFiles[0].text.length / 1024)}K, stylesheet ${Math.round(sheet.css.length / 1024)}K, Tailwind was handed ${MOUNTED.length} files`);
 
 /* ----- what runs inside the page ----- */
 const SLOW_MS = 10;
@@ -693,6 +721,11 @@ try {
       note: { kind: 'transfer', club: 'Rivertown FC', years: 3, wage: 45000, fee: 12.5, prevWage: 20000 },
       spec: { kind: 'signing', tone: 'good', colour: words.colour, title: '✍️ Signed with Rivertown FC', lines: [`3 years at ${words.wage}`, `${words.fee} fee`], count: { text: words.wage, from: words.before, label: 'your wage' } } });
   }
+  /* F6, the REAL won tournament card (the fixture the vitest files draw). The
+     scene is its head: the generic checks read the head, the card around it
+     is the binder's. */
+  FIXTURES.push({ name: 'F6card', real: 'card', id: 'sc-intl-trophy', art: false, done: false,
+    spec: { kind: 'trophy', tone: 'gold', title: 'World Cup 2030', lines: [] } });
   for (const width of WIDTHS) for (const reducedMotion of ['no-preference', 'reduce']) {
     const { page, trouble } = await openRig(width, reducedMotion);
     const where = `${width}px ${reducedMotion === 'reduce' ? 'reduced' : 'motion'}`;
@@ -715,6 +748,14 @@ try {
         });
         check('K1', worn.scenes === 1 && worn.avatars === 1 && worn.shirt === fx.colour && worn.ink === fx.colour.toLowerCase(), `${at}: the slip must hold one signing scene with one avatar whose shirt is ${fx.colour} and whose colour is ${fx.colour.toLowerCase()}; found ${worn.scenes} scene(s), ${worn.avatars} avatar(s), shirt ${worn.shirt || 'none'}, colour ${worn.ink || 'none'}`);
       }
+      if (fx.real === 'card') {
+        const head = await page.evaluate(() => {
+          const card = document.querySelector('[data-intl-moment]');
+          const scenes = card ? card.querySelectorAll('[data-career-moment="trophy"][data-cmo-bind="sc-intl-trophy"]') : [];
+          return { result: card ? card.getAttribute('data-intl-moment') : 'no card', scenes: scenes.length, first: !!card && card.firstElementChild === scenes[0], cups: scenes[0] ? scenes[0].querySelectorAll('.victory-cup').length : 0, own: scenes[0] ? scenes[0].querySelectorAll('button, .cmo-bar, .animate-confetti-fall').length : -1 };
+        });
+        check('RIG', head.result === 'won' && head.scenes === 1 && head.first && head.cups === 1 && head.own === 0, `${at}: a won card's head must be one Trophy scene, first in the card, with one cup and no button, bar or confetti of its own; found ${JSON.stringify(head)}`);
+      }
       if (reducedMotion === 'reduce') {
         checkReduced(at, fx, await page.evaluate(measureReduced, SLOW_MS));
       } else {
@@ -726,7 +767,7 @@ try {
       checkFacts(at, fx, await page.evaluate(settledText));
       const fit = await page.evaluate(() => ({ wide: document.documentElement.scrollWidth, view: window.innerWidth, height: document.querySelector('[data-career-moment]').offsetHeight }));
       check('K7', fit.wide <= fit.view, `${at}: the page is ${fit.wide} px wide in a ${fit.view} px window, so the scene scrolls sideways`);
-      if (width === 320 && reducedMotion !== 'reduce') heights.push([fx.name, fit.height]);
+      if (width === 320 && reducedMotion !== 'reduce' && fx.real !== 'card') heights.push([fx.name, fit.height]);
       await page.evaluate(() => window.rig.clear());
     }
     await checkSideEffects(page, where);
@@ -831,7 +872,8 @@ try {
   {
     const tallest = heights.reduce((best, h) => (h[1] > best[1] ? h : best), ['none', 0]);
     console.log(`   K7 heights at 320 px, at rest: ${heights.map(h => `${h[0]} ${h[1]}`).join(', ')}; tallest ${tallest[0]} at ${tallest[1]} px, bound ${K7_BOUND} px`);
-    check('K7', heights.length === FIXTURES.length && tallest[1] > 0, `only ${heights.length} of ${FIXTURES.length} fixtures were measured at 320 px`);
+    const standAlone = FIXTURES.filter(f => f.real !== 'card').length;
+    check('K7', heights.length === standAlone && tallest[1] > 0, `only ${heights.length} of ${standAlone} stand alone fixtures were measured at 320 px`);
     check('K7', tallest[1] <= K7_BOUND, `the tallest scene at 320 px is ${tallest[0]} at ${tallest[1]} px, over the bound of ${K7_BOUND} px`);
   }
   if (moved.length) console.log(`   K4 early frames at 390 px: ${moved.filter(m => m.includes(' 390px ')).join(' ; ')}`);

@@ -19,8 +19,10 @@
      4. SignedSlip for its three kinds. Three. RE-RECORDED ON PURPOSE at
         step 5 of the round: the slip became the signing scene, so these
         three hold the scene's markup now, not the old slip's.
-     5. The winner TournamentCard, fresh and settled. Two. Replaced ON
-        PURPOSE at step 6 (the cup replaces the emoji in the head).
+     5. The winner TournamentCard, fresh and settled. Two. RE-RECORDED ON
+        PURPOSE at step 6: the head is the kit's Trophy scene now, so the
+        shared cup stands where the emoji was. The eight of item 1 were
+        rendered again at that step and were byte equal.
 
    "Settled" is settled the way a save sitting ON the card is settled
    (phase world_cup), which means the same thing before and after step 6
@@ -64,8 +66,8 @@ const DIGESTS: Record<string, string> = {
   'card:groupExit:settled': 'bd5630e186c8182a4c108d8aa8947936bf26ff5b470794881f9f6db3218a1f0c',
   'card:notSelected:fresh': '5b1e42a97c963e2507cf63c23339a827d0ef9a10e6a274891ac07b731a41bbab',
   'card:notSelected:settled': '99828ee9bc86e5cfaffffccdfcb4a5c7e4d55e1deed85cf3cf544bd0c3eac501',
-  'card:winner:fresh': 'acba1e84a8ce95881b0bb5c01d15b9780d6c7a74169acc86d15b3ff9894a0a04',
-  'card:winner:settled': '2db2f72ded75a693eee799829f0ccbe406ffcd9839fd745aeb2dae9a5a34baf5',
+  'card:winner:fresh': 'a69bb619c22c564633813afaaae1d865c9ef27c4c087f378672b2dd0d21ba33a',
+  'card:winner:settled': 'cfd51b69c10c153037e8223e30e7a86547dfcd0fdb8cf4f43c741f93157360cf',
   'confetti:gold': 'd3403833fee8df9af309e8ab1060386858a276f8b5fb0d1ce259678f1e6bbee7',
   'confetti:plain': '468f02f1cd47a8022d9d0d85d640a763b15c2d2a1b29d84efe6093577c3274de',
   'slip:extension': '49ec79f9c2db0b308e81358c39faed46900a4fa0a7759e63af8a5d3755d27fa2',
