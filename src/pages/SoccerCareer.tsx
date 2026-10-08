@@ -1,4 +1,4 @@
-import { Component, Fragment, lazy, Suspense, useState, useCallback, useRef, useEffect, useMemo, type ReactNode } from "react";
+import { Component, Fragment, lazy, Suspense, useState, useCallback, useRef, useEffect, useMemo, type ComponentType, type ReactNode } from "react";
 import { formatNumber } from '@/lib/formatNumber';
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import { useGameCompletion } from "@/hooks/useGameCompletion";
@@ -3734,8 +3734,22 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
      watchRow is a season opened from the summary card. Page state only. */
   const [centreFor, setCentreFor] = useState<number | null>(null);
   const [watchRow, setWatchRow] = useState<SeasonRecord | null>(null);
+  /* Round 1046: the list of seasons he can watch again, opened from Latest Events */
+  const [replaysOpen, setReplaysOpen] = useState(false);
   const onWeekByWeek = () => { const at = career.seasons.length; onNextSeason(); setCentreFor(at); };
-  const closeCentre = () => { setCentreFor(null); setWatchRow(null); };
+  /* Round 1046: where he stopped watching a season is kept in this browser only, never in the save. The Resume chip
+     (and the rule for whose season a kept place is) loads only when a place is kept at all: one storage read here. */
+  const [Chip, setChip] = useState<ComponentType<{ career: CareerState; at: number; onOpen: (row: SeasonRecord) => void }> | null>(null);
+  const [chipAt, setChipAt] = useState(0);
+  const peekResume = () => {
+    setChipAt(n => n + 1);
+    try {
+      if (localStorage.getItem("seasonCentre:v1:soccer")) import("@/components/soccer-career/SeasonResumeChip").then(m => setChip(() => m.default), () => undefined);
+    } catch { /* storage refused: no chip */ }
+  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(peekResume, []);
+  const closeCentre = () => { setCentreFor(null); setWatchRow(null); setReplaysOpen(false); peekResume(); };
   useEffect(() => {
     /* a press that opened nothing (a ban year) is forgotten at the next
        season start, and a new career never inherits it */
@@ -4491,13 +4505,16 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           {/* Round 974: the whole career, season by season, one tap away */}
           <div className="flex items-center justify-between gap-2">
             <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Latest Events</span>
-            <div className="flex items-center gap-1">
+            <div className="flex flex-wrap items-center justify-end gap-1">
               <button type="button" onClick={() => setRatingsOpen(true)} data-open-season-ratings
                 className="text-[11px] font-bold text-emerald-400 px-2 py-1 rounded hover:bg-white/5">📈 Ratings</button>
               <button type="button" onClick={() => setStoryOpen(true)} data-open-career-story
                 className="text-[11px] font-bold text-sky-400 px-2 py-1 rounded hover:bg-white/5">📖 Career Story</button>
+              {career.seasons.some(r => r.type === "playing" && r.apps > 0) && <button type="button" onClick={() => setReplaysOpen(true)} data-open-season-replays
+                className="text-[11px] font-bold text-sky-400 px-2 py-1 rounded hover:bg-white/5 min-h-11">📺 Season replays</button>}
             </div>
           </div>
+          {Chip && <Chip career={career} at={chipAt} onOpen={setWatchRow} />}
           <div className="mt-2 space-y-1">
             {career.events.slice(-3).map((e, i) => (
               <div key={i} className="text-xs text-foreground/80 flex items-start gap-2">
@@ -4511,15 +4528,16 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
       {ratingsOpen && <CentreMountBoundary what="season ratings" onClose={() => setRatingsOpen(false)}><Suspense fallback={null}><SeasonRatings career={career} onClose={() => setRatingsOpen(false)} /></Suspense></CentreMountBoundary>}
       {(() => {
         const pressed = centreFor !== null && career.seasons.length === centreFor + 1 ? career.seasons[centreFor] : null;
-        const live = pressed && pressed.type === "playing" && pressed.apps > 0
-          && (career.phase === "newspaper" || career.phase === "season_summary" || career.phase === "rehab_choice") ? pressed : null;
-        const row = watchRow ?? live;
-        if (!row) return null;
+        /* Round 1046: moments are offered only while the season's own screens are up; a way back in later is a way to watch */
+        const offer = career.phase === "newspaper" || career.phase === "season_summary" || career.phase === "rehab_choice";
+        const live = pressed && pressed.type === "playing" && pressed.apps > 0 && offer ? pressed : null;
+        const row = watchRow ?? (replaysOpen ? null : live);
+        if (!row && !replaysOpen) return null;
         return (
           <div data-no-prerender>
             <CentreMountBoundary onClose={closeCentre}>
               <Suspense fallback={<div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80" data-season-centre-loading><div className="rounded-2xl border border-border bg-card px-5 py-4 text-sm">📺 Getting your season ready...</div></div>}>
-                <SoccerSeasonCentre career={career} clubs={clubs} row={row} mode={watchRow ? "watch" : "live"} onClose={closeCentre} onCareer={onCareerPatch} />
+                <SoccerSeasonCentre career={career} clubs={clubs} row={row} mode={watchRow || replaysOpen ? "watch" : "live"} onClose={closeCentre} onCareer={onCareerPatch} offer={offer} />
               </Suspense>
             </CentreMountBoundary>
           </div>

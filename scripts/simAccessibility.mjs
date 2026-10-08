@@ -133,6 +133,8 @@ console.log('7) the hand rolled dialogs behave, the banner takes focus, the tick
     ['src/components/season-centre/SeasonCentre.tsx', 1],
     ['src/components/soccer-career/SoccerSeasonCentre.tsx', 1],
     ['src/components/season-centre/SeasonCentreHelp.tsx', 1],
+    /* Round 1046: the list of seasons to watch again */
+    ['src/components/season-centre/SeasonPicker.tsx', 1],
   ];
   /* Round 1045 review: the count is exact, so a new dialog in a listed file
      has to be listed (an "at least" count let a third one in unchecked), and

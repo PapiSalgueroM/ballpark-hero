@@ -142,7 +142,7 @@ export function MomentHost({ moment, moments, scoreLine, reduced, onDone }: {
     return (
       <div key="spent" className="space-y-3 rounded-2xl border border-border bg-card p-4" data-moment-spent data-moment-mode={moment.mode}>
         <div className="flex items-center gap-2">
-          <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] font-black tracking-wider text-muted-foreground" data-moment-badge>{badge}</span>
+          <span className="rounded bg-muted px-1.5 py-0.5 text-xs font-black tracking-wider text-muted-foreground" data-moment-badge>{badge}</span>
           <span className="text-xs tabular-nums text-muted-foreground">{scoreLine}</span>
         </div>
         <p className="text-base font-black">Your go at this one is used</p>
@@ -172,12 +172,12 @@ export function MomentHost({ moment, moments, scoreLine, reduced, onDone }: {
   return (
     <div key="offer" tabIndex={-1} ref={focusOnMount} className={`${reduced ? '' : 'cm-slam'} space-y-3 rounded-2xl border border-primary/40 bg-card p-4 outline-none`} data-moment-offer data-moment-mode={moment.mode}>
       <div className="flex items-center gap-2">
-        <span className="rounded bg-primary/20 px-1.5 py-0.5 text-[10px] font-black tracking-wider text-primary" data-moment-badge>{badge}</span>
+        <span className="rounded bg-primary/20 px-1.5 py-0.5 text-xs font-black tracking-wider text-primary" data-moment-badge>{badge}</span>
         <span className="text-xs tabular-nums text-muted-foreground">{scoreLine}</span>
       </div>
       <p className="text-base font-black">{moment.line}</p>
       <p className="text-xs text-muted-foreground" data-moment-objective>{moment.objective}</p>
-      <p className="rounded-lg bg-muted/30 p-2 text-[11px] leading-snug text-muted-foreground" data-moment-how><span className="font-bold text-foreground">How it plays: </span>{moment.how}</p>
+      <p className="rounded-lg bg-muted/30 p-2 text-xs leading-snug text-muted-foreground" data-moment-how><span className="font-bold text-foreground">How it plays: </span>{moment.how}</p>
       {step === 'failed' && <p className="text-xs text-amber-400" role="alert">The pitch did not load, so nothing was used. Try again or let it play.</p>}
       {/* stacked on a phone: flex-1 there would shrink each button to its text (a 20 pixel target), so it only applies side by side */}
       <div className="flex flex-col gap-2 sm:flex-row">
