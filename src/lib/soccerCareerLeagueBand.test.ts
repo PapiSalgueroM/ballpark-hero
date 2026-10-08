@@ -2,11 +2,18 @@
    before the round, byte for byte, over a cross recorded on the untouched
    tree (scripts/data/careerLeagueFinish1100.json, written by
    RECORD=main node scripts/simCareerLeagueWorld.mjs; the shape is in its
-   note). Every row of the cross is held here. */
+   note).
+
+   Held for good: every row in one of the five big leagues (any year) and
+   every row before 2026 (any league). The other rows are the ones Round
+   1100 was allowed to change: a league that gained a size from 2026-27 now
+   draws a finish there, banded by the club's place in its own league. They
+   may only change in a league that gained a size, and where nothing gained
+   a size they still answer as main did. */
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { drawLeagueFinish, finishBand } from "./soccerCareerLeague";
+import { drawLeagueFinish, finishBand, leagueSizeFor } from "./soccerCareerLeague";
 
 interface Cross {
   years: number[];
@@ -55,14 +62,33 @@ describe("the league finish against main's recorded answers (Round 1100)", () =>
     expect(cross.pairs.length - sized).toBeGreaterThan(0);
   });
 
-  it("answers every recorded row exactly as main did", () => {
+  const FIVE = new Set(["Premier League", "La Liga", "Serie A", "Bundesliga", "Ligue 1"]);
+  it("answers every held row exactly as main did, and moves only where a league gained a size", () => {
     const bad: string[] = [];
-    let rows = 0;
+    const count = { five: 0, past: 0, free: 0, moved: 0 };
     for (const pair of cross.pairs) {
-      rows += pair[4].length;
-      for (const m of mismatches(pair)) if (bad.length < 8) bad.push(m);
+      const league = cross.leagues[pair[0]][0];
+      const year = cross.years[pair[1]];
+      const five = league !== null && FIVE.has(league);
+      const off = mismatches(pair);
+      if (five || year < 2026) {
+        count[five ? "five" : "past"] += pair[4].length;
+        for (const m of off) if (bad.length < 8) bad.push(m);
+      } else {
+        count.free += pair[4].length;
+        if (off.length) {
+          count.moved += 1;
+          /* recorded with no size, and sized now: nothing else may move */
+          const sizedNow = league !== null && leagueSizeFor(league, year) !== null;
+          if (!(pair[2] === 0 && sizedNow) && bad.length < 8) bad.push(`${league} ${year} moved without gaining a size`);
+        }
+      }
     }
-    expect(rows).toBe(cross.pairs.length * 180);
     expect(bad).toEqual([]);
+    expect(count.five).toBe(5 * cross.years.length * 180);
+    expect(count.past).toBeGreaterThan(80000);
+    expect(count.free).toBeGreaterThan(40000);
+    /* the eight leagues Round 1100 sized, three recorded years each */
+    expect(count.moved).toBeGreaterThanOrEqual(24);
   });
 });

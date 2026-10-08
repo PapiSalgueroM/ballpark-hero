@@ -57,11 +57,26 @@
      settled on points per game (rsssf fran2020.html and statscrew y-2019
      both show 27 and 28 games played).
 
-   Not listed, so results only: every other league (the Primeira Liga, the
-   Eredivisie, the Brasileirao, Liga MX, whose derby cadence of two is an
-   Apertura and a Clausura, never one table, and MLS, conferences and an
-   unbalanced schedule). Seasons after the latest one read keep the format
-   in force today, the way LEAGUE_SIZES keeps the latest size.
+   Round 1100, from 2026-27 only (no earlier season of these leagues is
+   claimed): the Championship (24 clubs, 46 games), the Eredivisie, the
+   Primeira Liga, the Super Lig, the Saudi Pro League, the Belgian Pro
+   League and the 2. Bundesliga (18 and 34 each), and the Brasileirao (20
+   and 38, the calendar year 2026). Each was read from two hosts as one
+   table, every club meeting every other home and away, three points for a
+   win: ESPN's scoreboard feed for every day of the season calendar (every
+   home and away pairing exactly once) and a page that states the format,
+   both in scripts/data/soccerCareerFacts.json leagueWorld with what each
+   said. Belgium is plain from 2026-27 by its own reform: 18 clubs, 34
+   games, no play-offs (bx1.be and sporza.be). A play-off played AFTER the
+   table does not reorder it and does not make a league odd: the
+   Championship's promotion play-offs (third to eighth from 2026-27), the
+   Eredivisie's European play-offs and the 2. Bundesliga's relegation tie.
+
+   Not listed, so results only: every other league. The ones that split
+   their season, play in conferences or play two tournaments a year are in
+   ODD_FORMATS below with their real number of clubs and games, and get no
+   row here. Seasons after the latest one read keep the format in force
+   today, the way LEAGUE_SIZES keeps the latest size.
 
    This file imports nothing. */
 
@@ -75,7 +90,73 @@ export const LEAGUE_FORMAT: Readonly<Record<string, readonly FormatWindow[]>> = 
   "Serie A": [{ from: 1995 }],
   "Bundesliga": [{ from: 1995 }],
   "Ligue 1": [{ from: 1995, to: 2018 }, { from: 2020 }],
+  "Championship": [{ from: 2026 }],
+  "Eredivisie": [{ from: 2026 }],
+  "Primeira Liga": [{ from: 2026 }],
+  "Super Lig": [{ from: 2026 }],
+  "Saudi Pro League": [{ from: 2026 }],
+  "Belgian Pro League": [{ from: 2026 }],
+  "2. Bundesliga": [{ from: 2026 }],
+  "Brasileirao": [{ from: 2026 }],
 };
+
+/* ─── Round 1100: ODD_FORMATS, the leagues that are not one plain table ───
+   A league that splits in two late on, ends in play-off groups, plays every
+   pair four times, plays in conferences or plays two tournaments a year
+   never gets a LEAGUE_SIZES or a LEAGUE_FORMAT row: the Season Centre's
+   table would claim a season that league does not play. Its real number of
+   clubs and games goes here instead, read by nothing that draws a finish or
+   a table. The dugout takes its number of table rows from it (and prints
+   the order only, no points), and Round 1114 reads it to give these leagues
+   their own season shape.
+
+   A row needs the lineup and the format read from two hosts each, in
+   scripts/data/soccerCareerFacts.json leagueWorld, from 2026 only.
+   scripts/simCareerLeagueWorld.mjs section A holds every row to that file
+   and fails a league that has both this and a size.
+
+   Scottish Premiership 2026-27: 12 clubs; 33 games each before the split
+   (every pair three times: ESPN's scoreboard feed, 198 fixtures to 10 April
+   2027), then the top six and the bottom six play on among themselves (Sky
+   Sports, 2026-07-29: "The final pre-split fixtures take place on April
+   10", "Action resumes on April 24, 2027, with the first post-split
+   matches"). The number of games after the split was not read from two
+   hosts, so `after` is null.
+
+   Waiting, no row yet, each one format host short (the lineups are read):
+   MLS, Liga MX, the A-League, the Austrian Bundesliga, the Danish
+   Superliga and Super League Greece (ESPN's fixture feed only), the Swiss
+   Super League and the HNL (no format page read). Their dugout tables stay
+   as on main until a row lands. */
+export interface OddFormat {
+  from: number; to?: number;
+  /** Clubs in the league that season. */
+  clubs: number;
+  /** League games every club plays before the league divides, or in the
+   *  whole regular season (in one of the two tournaments for a
+   *  'two-tournaments' league: see `tournaments`). */
+  games: number;
+  /** Games every club plays after it divides; null when that differs by
+   *  group, is a knockout, or was not read from two hosts. */
+  after: number | null;
+  shape: 'split' | 'groups' | 'four-meetings' | 'finals' | 'conferences' | 'two-tournaments';
+  /** Tournaments in a season, when `games` is the count of one of them. */
+  tournaments?: number;
+  /** Finishes the sentence "The order only: <league> ...". Casual, true, no
+   *  number that can rot. */
+  words: string;
+}
+export const ODD_FORMATS: Readonly<Record<string, readonly OddFormat[]>> = {
+  "Scottish Premiership": [{ from: 2026, clubs: 12, games: 33, after: null, shape: 'split', words: "splits in two late in the season" }],
+};
+
+/** The league's odd format in the season starting in `year`, or null. */
+export function oddFormatFor(league: string, year: number): OddFormat | null {
+  for (const w of ODD_FORMATS[league] ?? []) {
+    if (year >= w.from && (w.to === undefined || year <= w.to)) return w;
+  }
+  return null;
+}
 
 export interface PointsRule { win: number; draw: number; loss: number }
 

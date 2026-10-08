@@ -19,6 +19,7 @@ import { adjustClubsForYear } from "./careerEras";
 import { SC_CLUB_CANON } from "../data/clubRivalries";
 import { CAREER_LEAGUE_SEASONS } from "../data/careerLeagueSeasons";
 import { CAREER_LEAGUE_LADDER } from "../data/soccerCareerClubPool";
+import { ODD_FORMATS, oddFormatFor } from "../data/leagueFormat";
 import type { ClubData } from "./soccerCareerEngine";
 
 /* ─── League sizes, verified ───
@@ -51,9 +52,9 @@ import type { ClubData } from "./soccerCareerEngine";
      fran03.html, fran2023.html, fran2024.html;
      statscrew.com/worldfootball/l-FRALG1/y-1990, 1991, 1996, 1997, 2001, 2002,
      2022, 2023.
-   Championship (Round 1029 fix, the manager's table only, DUGOUT_SIZES
-     below): 24 from 2004/05, the season the second tier took that name, so
-     no size is claimed before it.
+   Championship (Round 1029 fix, the manager's table only until Round 1100
+     moved it into LEAGUE_SIZES): 24 from 2004/05, the season the second
+     tier took that name, so no size is claimed before it.
      statscrew.com/worldfootball/l-ENGCHA/y-2004 ("24 teams competed"),
      y-2023; rsssf.org/engpaul/FLA/2004-05.html and rsssf.org/tablese/
      eng2024.html (24 rows each); espn.com/soccer/standings/_/league/eng.2/
@@ -67,12 +68,31 @@ const LEAGUE_SIZES: Record<string, SizeWindow[]> = {
   "Bundesliga": [{ from: 1990, to: 1990, size: 18 }, { from: 1991, to: 1991, size: 20 }, { from: 1992, size: 18 }],
   "Serie A": [{ from: 1990, to: 2003, size: 18 }, { from: 2004, size: 20 }],
   "Ligue 1": [{ from: 1990, to: 1996, size: 20 }, { from: 1997, to: 2001, size: 18 }, { from: 2002, to: 2022, size: 20 }, { from: 2023, size: 18 }],
-};
-/* The Championship is the dugout's alone: a playing season's finish is drawn
-   from a band set by the club's tier, and every Championship club is tier 4,
-   so the playing finish keeps the top flights only. */
-const DUGOUT_SIZES: Record<string, SizeWindow[]> = {
+  /* Round 1100: the plain leagues of the career club pool, from 2026 only
+     (no history is claimed for them). Each is one table in 2026-27 in which
+     every club meets every other home and away, read from two hosts for its
+     lineup and its size and two for its format; the pages and what each
+     said are in scripts/data/soccerCareerFacts.json leagueWorld, and
+     scripts/simCareerLeagueWorld.mjs section A holds every row here to
+     that file. A playing finish in these leagues is banded by the club's
+     place in its own league (finishBandFor below), never by its tier.
+     The Championship keeps the 2004 window it had as a dugout size: a
+     season before 2026 answers from the league ledgers first, so no playing
+     season before 2026 changes, and the dugout keeps every size it had. */
   "Championship": [{ from: 2004, size: 24 }],
+  "Eredivisie": [{ from: 2026, size: 18 }],
+  "Primeira Liga": [{ from: 2026, size: 18 }],
+  "Super Lig": [{ from: 2026, size: 18 }],
+  "Saudi Pro League": [{ from: 2026, size: 18 }],
+  "Belgian Pro League": [{ from: 2026, size: 18 }],
+  "2. Bundesliga": [{ from: 2026, size: 18 }],
+  "Brasileirao": [{ from: 2026, size: 20 }],
+};
+/* The dugout's alone: second flights whose clubs the career club pool does
+   not carry yet (the generator holds them), so no player can sign there and
+   only a manager's table needs their size. Each moves up into LEAGUE_SIZES,
+   with its format and cadence rows, in the commit that releases its clubs. */
+const DUGOUT_SIZES: Record<string, SizeWindow[]> = {
   /* Round 1040: Club Manager's Serie B is a manager's job now, so a Soccer
      Career dugout can be offered one. Only the 2026-27 season is read (20
      clubs: espn.com/soccer/standings/_/league/ita.2 and Sky Sport Italia's
@@ -86,8 +106,11 @@ const DUGOUT_SIZES: Record<string, SizeWindow[]> = {
   /* And the Segunda División: 22 clubs in 2026-27 (espn.com/soccer/standings/
      _/league/esp.2 and laliga.com's LALIGA HYPERMOTION table, both read
      2026-10-06). Club Manager plays 20 of them, but the dugout's table is
-     the real league's size, the clubs it does not know unnamed. */
-  "Segunda División": [{ from: 2026, size: 22 }],
+     the real league's size, the clubs it does not know unnamed.
+     Round 1100: keyed by the list's own spelling. The row was keyed
+     "Segunda División" and the list spells the league "Segunda Division",
+     so it never matched and a Segunda manager played an unverified 20. */
+  "Segunda Division": [{ from: 2026, size: 22 }],
 };
 
 /** Clubs in that league's top flight in the season starting in `year`, or
@@ -506,8 +529,29 @@ export function finishLeague(club: { name: string; league: string }, year: numbe
   const name = leagueInYear(club, year);
   if (key === null || name === null) return null;
   if (savedSize !== null && savedSize !== leagueSizeFor(key, year)) return null;
+  /* Round 1100: the size test above tells an old label's finish from today's
+     league only while the two leagues differ in size. Once the 2. Bundesliga
+     has a size of its own it is the Bundesliga's 18, so a save signed at
+     Hertha Berlin before Round 1037 (still drawing in the Bundesliga) would
+     print its top flight finish as "of 18 in the 2. Bundesliga". A row does
+     not hold the league it was drawn in, so while the old and the new league
+     of a relabelled club share a size that season, no finish of that club is
+     placed in a league, in any save. */
+  if (year >= LIST_SEASON) {
+    const before = RELABELLED_1037[club.name];
+    const then = before && before !== key ? leagueSizeFor(before, year) : null;
+    if (then !== null && then === leagueSizeFor(key, year)) return null;
+  }
   return { key, name };
 }
+/* The seven hand clubs Round 1037 moved to their 2026-27 league, and the
+   label each carried before it (scripts/simCareerLeagueSeasons.mjs RELEASED,
+   which simCareerLeagueWorld holds this table to). A save signed before
+   that round keeps the old label for good. */
+export const RELABELLED_1037: Readonly<Record<string, string>> = {
+  "West Ham": "Premier League", "Wolves": "Premier League", "Hertha Berlin": "Bundesliga", "Nantes": "Ligue 1",
+  "Girona": "La Liga", "River Plate Asuncion": "Primera Division Paraguay", "Persija Jakarta": "Liga 1 Indonesia",
+};
 
 /* ─── Changing division ───
    The club's tier is its standing, a grade the job market and the board
@@ -623,7 +667,13 @@ export function managerLeagueField(input: ManagerLeagueInput, rng: () => number)
     if (!seen.has(k)) { seen.add(k); names.push(c.name); }
   }
   const verified = league ? leagueSizeFor(league, input.year, true) : null;
-  const size = verified ?? Math.max(MANAGER_FIELD, names.length + 1);
+  /* Round 1100: a league that splits or plays in conferences has no verified
+     size (a size prints points and a record over 2 x (size - 1) games, a
+     season that league does not play), but the dugout's table has that
+     league's real number of rows, so no save holds a 13th place in a league
+     of 12 again. The season still prints the order only. */
+  const oddClubs = league ? oddFormatFor(league, input.year)?.clubs : undefined;
+  const size = verified ?? oddClubs ?? Math.max(MANAGER_FIELD, names.length + 1);
   if (names.length > size - 1) {
     for (let i = names.length - 1; i > 0; i -= 1) {
       const j = Math.floor(rng() * (i + 1));
@@ -694,6 +744,19 @@ export interface DugoutTableWords {
   orderNote: string | null;
 }
 
+/* Round 1100: why a named table carries no points. A league in ODD_FORMATS
+   (looked up at its latest window: a saved row carries no calendar year)
+   gets the true reason, a league in neither ledger the old line, which is
+   still true there. An old save's Scottish row, played on a field of 20,
+   gets the new line too: it is true of the league and the row never
+   printed a number. */
+function orderOnly(league: string | null): string {
+  const odd = league ? ODD_FORMATS[league] : undefined;
+  const latest = odd && odd.length ? odd[odd.length - 1] : null;
+  if (league && latest) return `The order only: ${leagueWithArticle(league)} ${latest.words}, so no points here.`;
+  return `The order only: we don't know how many clubs the ${league ?? "league"} has.`;
+}
+
 /** The words around the dugout's final table, here rather than in the page
  *  so the harness reads exactly what the page prints. A season flagged
  *  lineupUnknown names no league in any of them. */
@@ -722,6 +785,6 @@ export function dugoutTableWords(last: DugoutTableRow): DugoutTableWords {
     named,
     sizeUnknown,
     note: !named && me ? `${why} You finished ${where}` : null,
-    orderNote: named && sizeUnknown ? `The order only: we don't know how many clubs the ${league ?? "league"} has.` : null,
+    orderNote: named && sizeUnknown ? orderOnly(league) : null,
   };
 }

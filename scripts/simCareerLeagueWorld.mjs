@@ -210,10 +210,13 @@ function buildManagerSave(plan) {
 /** What a tree reads from a save: repairCareer's bytes and, per playing row
  *  from 2026, the finish and the Season Centre's mode, reason and games. */
 function readSave(state) {
-  /* null when repairCareer leaves the save's own bytes alone */
+  /* null when repairCareer leaves the save's own bytes alone. Seeded: repairCareer
+     fills a missing primeType off Math.random, and a read must not depend on
+     where the stream happens to stand */
+  const keep = Math.random;
+  seedRandom(0x1100f);
   const fixed = JSON.stringify(engine.repairCareer(clone(state)));
   const repaired = fixed === JSON.stringify(state) ? null : fixed;
-  const keep = Math.random;
   Math.random = () => { throw new Error('Math.random called while reading a save'); };
   try {
     const rows = state.seasons.filter(r => r.type === 'playing' && r.year >= 2026 && r.club !== 'Club').map(r => {
@@ -542,6 +545,138 @@ head('C3', 'BAND: every ladder club, five ratings, 200 engine shaped keys');
   ok(bad === 0, `${bad} bands or draws outside their table`);
   ok(draws > 250000 && groupsSeen > 0, `only ${draws} bands and ${groupsSeen} groups of several`);
   console.log(`  ${draws} bands, every one from the ladder and inside 2 to the league's size; ${groupsSeen} groups the ladder cannot order, each sharing one band at every rating`);
+}
+
+/* ─── A. LEDGERS ─── */
+head('A', 'LEDGERS: every league the pool reads is sized, odd or waiting with its reason');
+{
+  const FMT = mod.format;
+  const DERBY = mod.derby;
+  const ODD = FMT.ODD_FORMATS ?? {};
+  const hosts = list => new Set((list ?? []).map(x => { try { return new URL(x.url).hostname.replace(/^www\./, ''); } catch { return ''; } }));
+  const dated = list => (list ?? []).every(x => /^\d{4}-\d{2}-\d{2}$/.test(x.read ?? '') && typeof x.says === 'string' && x.says.length > 0);
+  const YEARS = [2026, 2030, 2045];
+  const readLabels = [...new Set(POOL_LEAGUES.map(id => POOL_LEAGUE_ROWS.find(r => r.id === id).label))];
+  const status = { sized: [], odd: [], waiting: [] };
+  for (const label of readLabels) {
+    const w = WORLD[label];
+    if (!ok(!!w, `${label}: no leagueWorld row in the facts file`)) continue;
+    const size = LG.leagueSizeFor(label, 2026);
+    const odd = ODD[label];
+    const flat = (LADDER[label] ?? []).flat();
+    /* A5: the ladder is the facts file's lineup, career spelling */
+    ok(flat.length === w.members.length && w.members.every(n => flat.includes(n)), `${label}: its ladder (${flat.length}) is not the facts file's members (${w.members.length})`);
+    ok(!(size !== null && odd), `${label}: both a size row and an odd format row`);
+    if (BIG_FIVE.has(label)) { ok(size === w.size && flat.length === size, `${label}: size ${size}, the facts file ${w.size}, ladder ${flat.length}`); continue; }
+    if (size !== null) {
+      /* A1 */
+      status.sized.push(`${label} ${size}`);
+      ok(YEARS.every(y => LG.leagueSizeFor(label, y) === size), `${label}: its size is not ${size} in every season from 2026`);
+      ok(YEARS.every(y => FMT.leagueFormatFor(label, y) !== null), `${label}: a size but no LEAGUE_FORMAT window over the same seasons`);
+      ok(YEARS.every(y => DERBY.derbyMeetings(label, y) === 2), `${label}: a size but its derby cadence is not two meetings from 2026`);
+      ok(w.shape === 'plain' && w.size === size && w.games === 2 * (size - 1), `${label}: the facts file says ${w.shape}, ${w.size} clubs, ${w.games} games; a size row needs plain, ${size} and ${2 * (size - 1)}`);
+      ok(hosts(w.membership).size >= 2 && dated(w.membership), `${label}: its lineup is not read from two dated hosts`);
+      ok(hosts(w.format).size >= 2 && dated(w.format), `${label}: its format is read from ${hosts(w.format).size} host(s), two wanted for a size row`);
+      /* A4: the ladder is the whole league (pinned: the Segunda's 20 known clubs of 22) */
+      const PINNED_SHORT = { 'Segunda Division': 20 };
+      ok(flat.length === (PINNED_SHORT[label] ?? size), `${label}: ladder of ${flat.length} in a league of ${size}`);
+    } else if (odd) {
+      /* A2 */
+      status.odd.push(`${label} ${odd[odd.length - 1].clubs}`);
+      for (const win of odd) {
+        for (const y of YEARS.filter(v => v >= win.from && (win.to === undefined || v <= win.to))) ok(FMT.leagueFormatFor(label, y) === null && LG.leagueSizeFor(label, y, true) === null, `${label} ${y}: an odd format and a size or a table format in the same season`);
+        ok(w.shape === win.shape && w.size === win.clubs && w.games === win.games, `${label}: the odd row says ${win.shape}, ${win.clubs} clubs, ${win.games} games; the facts file ${w.shape}, ${w.size}, ${w.games}`);
+        ok(hosts(w.membership).size >= 2 && hosts(w.format).size >= 2 && dated(w.format), `${label}: an odd row needs its lineup and its format read from two dated hosts each`);
+        ok(flat.length === win.clubs, `${label}: ladder of ${flat.length} in a league of ${win.clubs}`);
+      }
+    } else {
+      /* A3: not silent. A league with neither row must be one whose format is not yet read from two hosts */
+      status.waiting.push(`${label} (format from ${hosts(w.format).size} host${hosts(w.format).size === 1 ? '' : 's'})`);
+      ok(hosts(w.format).size < 2, `${label}: its format is read from two hosts (${w.shape}) and it has neither a size row nor an odd row`);
+      ok(YEARS.every(y => FMT.leagueFormatFor(label, y) === null), `${label}: a LEAGUE_FORMAT window with no size`);
+    }
+  }
+  for (const label of Object.keys(ODD)) ok(readLabels.includes(label), `${label}: an odd format row for a league the pool does not read`);
+  /* A6: the Championship's window moved out of the dugout's table changes no playing season before 2026 */
+  let ledgerYears = 0;
+  for (let y = 2004; y <= 2025; y += 1) if (ok(LG.ledgerLeague('Championship', y) !== null, `the league ledgers do not hold the Championship in ${y}`)) ledgerYears += 1;
+  /* the held second flights keep a dugout size and nothing else */
+  for (const id of Object.keys(HELD_LEAGUES)) {
+    const label = POOL_LEAGUE_ROWS.find(r => r.id === id).label;
+    ok(LG.leagueSizeFor(label, 2030) === null && FMT.leagueFormatFor(label, 2030) === null, `${label} is held, yet a player gets a size or a table there`);
+    ok(LG.leagueSizeFor(label, 2030, true) === WORLD[label].size, `${label}: the dugout's size ${LG.leagueSizeFor(label, 2030, true)}, the facts file ${WORLD[label].size}`);
+  }
+  ok(status.sized.length >= 8, `only ${status.sized.length} leagues sized`);
+  console.log(`  sized (a finish, a table): ${status.sized.join(', ')}`);
+  console.log(`  odd (their real row count, no table): ${status.odd.join(', ') || 'none yet'}`);
+  console.log(`  waiting, results only as on main: ${status.waiting.join(', ') || 'none'}`);
+  console.log(`  held by the generator: ${Object.keys(HELD_LEAGUES).map(id => POOL_LEAGUE_ROWS.find(r => r.id === id).label).join(', ')}; the ledgers hold the Championship in ${ledgerYears} of 22 seasons from 2004`);
+}
+
+/* ─── E. OLD SAVES ─── */
+head('E', 'OLD SAVES: seven saves recorded on main read the same, and play on');
+{
+  const recorded = readJson(F.saves).saves;
+  const moved = [];
+  for (const save of recorded) {
+    const now = readSave(clone(save.state));
+    /* E1: repairCareer leaves the same bytes */
+    ok(now.repaired === save.main.repaired, `${save.id}: repairCareer no longer serialises this save as main did`);
+    /* E2: every saved row reads the same finish, league and mode; games is the league's real count where it gained a size */
+    ok(now.rows.length === save.main.rows.length, `${save.id}: ${now.rows.length} playing rows read, ${save.main.rows.length} recorded`);
+    save.main.rows.forEach((was, i) => {
+      const is = now.rows[i];
+      if (!is) return;
+      ok(JSON.stringify(is.finish) === JSON.stringify(was.finish) && is.mode === was.mode && is.why === was.why && is.league === was.league, `${save.id} ${was.year}: reads ${JSON.stringify(is)}, main read ${JSON.stringify(was)}`);
+      const size = LG.leagueSizeFor(todayLeague(was.club), was.year);
+      const wantGames = is.mode === 'table' ? 2 * (is.finish.size - 1) : (size !== null ? 2 * (size - 1) : 38);
+      ok(is.games === wantGames, `${save.id} ${was.year}: ${is.games} games shown, ${wantGames} expected (main showed ${was.games})`);
+      if (is.games !== was.games) moved.push(`${save.id} ${was.year} ${was.club}: ${was.games} to ${is.games}`);
+    });
+    /* the dugout rows saved on main print what they printed (the sentence around the table may now be the league's own) */
+    save.main.dugout.forEach((was, i) => {
+      const is = now.dugout[i];
+      ok(!!is && is.leagueSize === was.leagueSize && is.sizeVerified === was.sizeVerified && is.result === was.result && is.header === was.header, `${save.id} dugout season ${i + 1}: reads ${JSON.stringify(is)}, main read ${JSON.stringify(was)}`);
+    });
+    /* E3: three more seasons without a throw */
+    seedRandom(0x1100e + recorded.indexOf(save));
+    let s = clone(save.state);
+    const before = s.seasons.length + (s.managerState?.seasonResults?.length ?? 0);
+    try {
+      if (save.kind === 'manager') { for (let y = 0; y < 3 && !s.managerState.unemployed; y += 1) s = engine.advanceManagerSeason(s, POOL); }
+      else { let guard = 0; while (s.seasons.length < save.state.seasons.length + 3 && !s.retired && guard++ < 200) s = stayStep(s); }
+    } catch (e) { fail(`${save.id}: playing on threw ${String(e.message).slice(0, 120)}`); }
+    const after = s.seasons.length + (s.managerState?.seasonResults?.length ?? 0);
+    ok(after > before, `${save.id}: no season was added by playing on`);
+    const fresh = s.seasons.slice(save.state.seasons.length).filter(r => r.type === 'playing' && r.apps > 0 && !r.injurySevere && r.club === save.club);
+    const league = save.oldLabel ?? todayLeague(save.club);
+    const sized = LG.leagueSizeFor(league, 2030);
+    for (const r of fresh) {
+      const f = LG.readLeagueFinish(r);
+      ok(sized === null ? (f === null || f.finish === 1) : (f !== null && f.size === sized), `${save.id} ${r.year}: a new season in ${league} holds ${JSON.stringify(f)}, a league of ${sized ?? 'no verified size'}`);
+    }
+    if (save.kind === 'manager') {
+      const rows = s.managerState.seasonResults.slice(save.state.managerState.seasonResults.length);
+      const odd = mod.format.oddFormatFor ? mod.format.oddFormatFor(save.league, 2032) : null;
+      const real = LG.leagueSizeFor(save.league, 2032, true);
+      for (const r of rows.filter(x => x.league === save.league)) {
+        if (real !== null) ok(r.sizeVerified === true && r.leagueSize === real, `${save.id}: a new ${save.league} season of ${r.leagueSize} rows, the league's size is ${real}`);
+        else if (odd) ok(r.sizeVerified !== true && r.leagueSize === odd.clubs && !/ of \d| points/.test(r.result), `${save.id}: a new ${save.league} season of ${r.leagueSize} rows printing "${r.result.slice(0, 50)}", the odd ledger says ${odd.clubs} rows and no number`);
+      }
+    }
+  }
+  /* critic 6: a relabelled club whose old and new league share a size places no finish in a league */
+  const her = recorded.find(x => x.id === 'her');
+  ok(her.main.rows.every(r => r.finish && r.league === null && r.mode === 'results'), 'the recorded Hertha Berlin save (label "Bundesliga") did not read as a finish in no league on main');
+  for (const [club, old] of Object.entries(LG.RELABELLED_1037)) {
+    const today = todayLeague(club);
+    ok(today !== '' && today !== old, `${club}: RELABELLED_1037 says it left ${old}, the list has it in ${today || 'no league'}`);
+    const a = LG.leagueSizeFor(old, 2030); const b = LG.leagueSizeFor(today, 2030);
+    const placed = LG.finishLeague({ name: club, league: today }, 2030, b);
+    ok(a !== null && a === b ? placed === null : true, `${club}: ${old} and ${today} are both ${a} clubs in 2030, yet a saved finish is placed in ${today}`);
+  }
+  ok(recorded.length === 7, `${recorded.length} recorded saves, 7 expected`);
+  console.log(`  ${recorded.length} saves: repairCareer byte equal, every saved row reads the finish, league and mode main read; matchdays moved to the league's real count on ${moved.length} rows (${moved.join('; ') || 'none'}); each played three more seasons`);
 }
 
 finish();
