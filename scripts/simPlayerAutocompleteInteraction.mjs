@@ -20,7 +20,7 @@
  *
  * Controls of Round 754, against the 8 interaction tests (unchanged):
  *   pointeronly, unguard, enabledoptions
- * Controls of Round 1138, against the 13 stale list tests. Each swaps in an
+ * Controls of Round 1138, against the 14 stale list tests. Each swaps in an
  * asserted copy of the box with one thing changed, must fail the tests named
  * and must leave the others named green (a control that reddens those is an
  * abort, not a pass):
@@ -56,6 +56,14 @@
  *                 fails 13; keeps 1, 7, 8, 11
  *   deafreturn    coming back to the box after a pick asks for no search
  *                 fails 8, 13; keeps 1, 7
+ * And with test 14 (a finger picks on pointerdown, the list closes, and the
+ * same tap's click landed on what the list had covered: on Missing XI one tap
+ * on a name also pressed Lock in guess, every time, measured in a touch
+ * browser on main and on this branch before the fix):
+ *   tapthrough    the tap's own click is not swallowed
+ *                 fails 14; keeps 1, 7, 13
+ *   greedyswallow the wait does not end with the player's next touch
+ *                 fails 14; keeps 1, 7, 13
  */
 import assert from 'node:assert/strict';
 import { mkdir, mkdtemp, readFile, writeFile, rm, rmdir } from 'node:fs/promises';
@@ -80,6 +88,7 @@ const STALE_TESTS = {
   11: 'drops a search still in flight when a name is picked',
   12: 'Escape leaves the box while a search is in flight',
   13: 'a pick does not bring the list back under the picked name',
+  14: 'the click of the tap that picked a name never reaches what was under the list',
 };
 /* Lowest stale pick count of the three seeds measured on main, and the floor. */
 const MEASURED_ON_MAIN = { 1138: 67, 2138: 72, 3138: 67 };
@@ -122,6 +131,11 @@ const STALE_CONTROLS = {
   pickreopens: { edits: [['    if (justPicked) return;\n', '']], fails: [13], keeps: [1, 7, 8, 11] },
   stickypick: { edits: [['    if (!justPicked) pickedTagRef.current = null;\n', '']], fails: [13], keeps: [1, 7, 8, 11] },
   deafreturn: { edits: [['    pickedTagRef.current = null;\n    setOpen(true);', '    setOpen(true);']], fails: [8, 13], keeps: [1, 7] },
+  tapthrough: {
+    edits: [["                  if (!disabled && (e.pointerType === 'touch' || e.pointerType === 'pen')) swallowTapClick();\n", '']],
+    fails: [14], keeps: [1, 7, 13],
+  },
+  greedyswallow: { edits: [["  document.addEventListener('pointerdown', end, true);\n", '']], fails: [14], keeps: [1, 7, 13] },
 };
 assert.ok(control === '' || INTERACTION_CONTROLS.includes(control) || Object.hasOwn(STALE_CONTROLS, control), 'Unknown autocomplete interaction control');
 const staleSpec = Object.hasOwn(STALE_CONTROLS, control) ? STALE_CONTROLS[control] : null;
@@ -201,7 +215,7 @@ try {
     }
   }
 
-  /* Run 2, Round 1138's thirteen stale list tests: the plain run and its thirteen controls. */
+  /* Run 2, Round 1138's fourteen stale list tests: the plain run and its fifteen controls. */
   if (!control || staleSpec) {
     const { status, output, diagnostic } = runVitest(STALE_FILE, env);
     assert.match(output, /playerAutocompleteStale\.test\.tsx/, 'The stale list tests must run');
@@ -223,14 +237,14 @@ try {
       console.log(`simPlayerAutocompleteInteraction ${control} control: stale list test${staleSpec.fails.length > 1 ? 's' : ''} ${staleSpec.fails.join(', ')} rejected the changed component and test${staleSpec.keeps.length > 1 ? 's' : ''} ${staleSpec.keeps.join(', ')} stayed green.${seen}`);
     } else {
       assert.equal(status, 0, diagnostic);
-      assert.match(output, /Tests\s+13 passed \(13\)/, diagnostic);
+      assert.match(output, /Tests\s+14 passed \(14\)/, diagnostic);
       for (const number of Object.keys(STALE_TESTS)) assert.equal(staleStatus(output, Number(number)), 'passed', `Stale list test ${number} must pass\n${diagnostic}`);
       assert.deepEqual(
         { staleVisible: sweep.staleVisible, stalePicked: sweep.stalePicked, currentPicked: sweep.currentPicked, stuckFinding: sweep.stuckFinding },
         { staleVisible: 0, stalePicked: 0, currentPicked: 200, stuckFinding: 0 },
         'The sweep must offer and pick no stale name, land every current pick and leave no stuck panel',
       );
-      console.log(`simPlayerAutocompleteInteraction: eight actual-component pointer, keyboard, disabled, free-text, identity and filter checks passed; thirteen stale list checks passed, and across 200 seeded timings (seed ${sweep.seed}) the box offered 0 names of the last query, 0 were picked, 200 of 200 current picks landed and 0 panels were left on Finding players.`);
+      console.log(`simPlayerAutocompleteInteraction: eight actual-component pointer, keyboard, disabled, free-text, identity and filter checks passed; fourteen stale list checks passed, and across 200 seeded timings (seed ${sweep.seed}) the box offered 0 names of the last query, 0 were picked, 200 of 200 current picks landed and 0 panels were left on Finding players.`);
     }
   }
 } finally {

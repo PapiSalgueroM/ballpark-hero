@@ -104,6 +104,33 @@ const DEFAULT_DEBOUNCE_MS = 200;
 /** What the list is while the held one belongs to another query. One identity, so nothing re-renders for it. */
 const NO_SUGGESTIONS: PlayerEntity[] = [];
 const MIN_ROW_HEIGHT_PX = 44; // mobile-friendly tap target
+/** Longest a finger's pick waits for that same tap's click, in milliseconds. A tap is over well inside it. */
+const TAP_CLICK_WAIT_MS = 700;
+
+/**
+ * A finger picks a name on pointerdown, which closes the list, and the click
+ * the same tap sends a moment later then lands on whatever sat UNDER the list.
+ * On Missing XI that is the Lock in guess button, so one tap on a name picked
+ * it and locked the guess in (measured in a touch browser: every time). The
+ * tap's own click is swallowed here, once. The wait ends with that click, with
+ * the next touch anywhere (a new tap is the player's own and goes through), or
+ * after TAP_CLICK_WAIT_MS. A mouse never needs it: its click dies with the row.
+ */
+function swallowTapClick() {
+  const end = () => {
+    window.clearTimeout(timer);
+    document.removeEventListener('click', swallow, true);
+    document.removeEventListener('pointerdown', end, true);
+  };
+  const swallow = (event: Event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    end();
+  };
+  const timer = window.setTimeout(end, TAP_CLICK_WAIT_MS);
+  document.addEventListener('click', swallow, true);
+  document.addEventListener('pointerdown', end, true);
+}
 
 // Combining diacritical marks block (U+0300 to U+036F), built from char codes
 // (never literal accented characters) so it cannot be mangled by copy/paste
@@ -566,6 +593,7 @@ export function PlayerAutocomplete({
                   // blur-driven outside-click handler can close the list first.
                   e.preventDefault();
                   commitSelection(entity);
+                  if (!disabled && (e.pointerType === 'touch' || e.pointerType === 'pen')) swallowTapClick();
                 }}
                 onClick={e => {
                   if (e.detail === 0) commitSelection(entity);

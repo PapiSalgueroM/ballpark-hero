@@ -76,6 +76,13 @@ function PageWithBox({ page, onSelect }: { page: Page; onSelect: PlayerAutocompl
   return <PlayerAutocomplete value={text} onChange={setText} onSelect={onSelect} searchOptions={options} localNames={pool} disabled={busy} validateOnly debounceMs={50} />;
 }
 
+/** A pointerdown from a named kind of pointer. The type is set by hand so the test does not lean on what jsdom's own pointer event carries. */
+function pointerDownAs(pointerType: 'touch' | 'pen' | 'mouse', target: HTMLElement) {
+  const event = new Event('pointerdown', { bubbles: true, cancelable: true });
+  Object.defineProperty(event, 'pointerType', { value: pointerType });
+  act(() => { target.dispatchEvent(event); });
+}
+
 function mulberry32(seed: number) {
   let a = seed >>> 0;
   return () => {
@@ -537,5 +544,72 @@ describe('player autocomplete: a list is only on screen for the query that produ
     await advance(200);
     expect(optionsIn(movedView.container)).toHaveLength(1);
     expect(searchPlayers).toHaveBeenCalledTimes(2);
+  });
+
+  /* Test 14, also from the closing fix pass. A finger picks on pointerdown,
+     the list closes, and the click that same tap sends then landed on whatever
+     the list had been covering. Measured in a touch browser on Missing XI: one
+     tap on a name picked it and pressed Lock in guess, every time, on main
+     too. The box swallows that one click and nothing else. */
+  it('the click of the tap that picked a name never reaches what was under the list', async () => {
+    vi.useFakeTimers();
+    slowSearch(() => 50);
+    const under = vi.fn();
+    const draw = async () => {
+      const p = props({ debounceMs: 50 });
+      const view = render(<><PlayerAutocomplete {...p} /><button onClick={under}>Under the list</button></>);
+      await advance(200);
+      return { p, view, button: view.getByText('Under the list') };
+    };
+
+    // A finger's pick (a pen is a finger here): the tap's own click, landing on the button the list covered, is swallowed. Once.
+    let drawn = await draw();
+    for (const kind of ['touch', 'pen'] as const) {
+      under.mockClear();
+      pointerDownAs(kind, optionsIn(drawn.view.container)[0]);
+      expect(drawn.p.onSelect, kind).toHaveBeenCalledExactlyOnceWith(A);
+      expect(fireEvent.click(drawn.button), kind).toBe(false);
+      expect(under, kind).not.toHaveBeenCalled();
+      expect(fireEvent.click(drawn.button), kind).toBe(true);
+      expect(under, kind).toHaveBeenCalledTimes(1);
+      drawn.view.unmount();
+      drawn = await draw();
+    }
+
+    // A box that is busy takes no pick, so it swallows nothing.
+    under.mockClear();
+    drawn.view.rerender(<><PlayerAutocomplete {...drawn.p} disabled /><button onClick={under}>Under the list</button></>);
+    pointerDownAs('touch', optionsIn(drawn.view.container)[0]);
+    expect(drawn.p.onSelect).not.toHaveBeenCalled();
+    expect(fireEvent.click(drawn.button)).toBe(true);
+    expect(under).toHaveBeenCalledTimes(1);
+    drawn.view.unmount();
+
+    // The player's next touch is their own: it ends the wait, and its click goes through.
+    under.mockClear();
+    drawn = await draw();
+    pointerDownAs('touch', optionsIn(drawn.view.container)[0]);
+    pointerDownAs('touch', drawn.button);
+    fireEvent.click(drawn.button);
+    expect(under).toHaveBeenCalledTimes(1);
+    drawn.view.unmount();
+
+    // The browser sent no click for that tap: the wait gives up by itself.
+    under.mockClear();
+    drawn = await draw();
+    pointerDownAs('pen', optionsIn(drawn.view.container)[0]);
+    expect(drawn.p.onSelect).toHaveBeenCalledExactlyOnceWith(A);
+    await advance(1000);
+    fireEvent.click(drawn.button);
+    expect(under).toHaveBeenCalledTimes(1);
+    drawn.view.unmount();
+
+    // A mouse pick swallows nothing: its click dies with the row it was pressed on.
+    under.mockClear();
+    drawn = await draw();
+    pointerDownAs('mouse', optionsIn(drawn.view.container)[0]);
+    expect(drawn.p.onSelect).toHaveBeenCalledExactlyOnceWith(A);
+    expect(fireEvent.click(drawn.button)).toBe(true);
+    expect(under).toHaveBeenCalledTimes(1);
   });
 });
