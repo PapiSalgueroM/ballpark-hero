@@ -68,9 +68,9 @@
      unbind-trophy   "sc-intl-trophy" is served as "...-x"           T: P1
      wrongfact       one digit of the scene's number (S) or of its
                      title (T) is rewritten before P2 reads it        P2
-     vanish          the scene node is taken off the page before P3's
-                     wait (an empty box of its height is left, so
-                     nothing else moves)                              P3
+     vanish          the scene is hidden (display none) before P3's
+                     wait. Hidden, never detached: React owns the node
+                     and would throw on its next render of that card  P3
      replayed        after Back the scene's state is set to live      P4
      savewrite       one second after the scene appears the save is
                      written back with a space on the end             P5
@@ -228,11 +228,10 @@ const instrument = ({ save, saveKey, control }) => {
       if (target.textContent !== before) log.fired += 1;
     }
     if (name === 'vanish') {
-      /* An empty box of the same height is left behind, so nothing else on
-         the page moves and the rest of the walk presses what it always does. */
-      const ghost = document.createElement('div');
-      ghost.style.height = `${el.offsetHeight}px`;
-      el.replaceWith(ghost);
+      /* Hidden, not detached: React still owns this node, and taking a node
+         it owns out of the page makes its next render of that card throw,
+         which would turn the rest of the walk red for the wrong reason. */
+      el.style.display = 'none';
       log.fired += 1;
     }
     if (name === 'replayed') { el.setAttribute('data-cmo-state', 'live'); log.fired += 1; }
