@@ -1,0 +1,5 @@
+# Release AN fix pass 2: simDailySaveHardening alone (it went red on /olympics inside the 165 line request, green in rAN-p1)
+#!build
+#!serial
+dsh-1: node scripts/simDailySaveHardening.mjs
+dsh-2: node scripts/simDailySaveHardening.mjs
