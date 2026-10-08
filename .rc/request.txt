@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/seasonCentreSlots.test.tsx src/test/rankShift.test.ts src/test/seasonResume.test.ts src/test/seasonCore.test.ts --testTimeout=300000 --hookTimeout=120000
+sim: node scripts/simSeasonCentreMotion.mjs
+sim-shift: SEASON_MOTION_SIM_CONTROL=shift node scripts/simSeasonCentreMotion.mjs
+sim-resumetag: SEASON_MOTION_SIM_CONTROL=resumetag node scripts/simSeasonCentreMotion.mjs
+sim-fence: SEASON_MOTION_SIM_CONTROL=fence node scripts/simSeasonCentreMotion.mjs
+flagship: node scripts/simFlagshipWeight.mjs
+lint: node_modules/.bin/eslint src/lib/motion src/components/motion src/lib/season/resume.ts src/components/season-centre src/components/soccer-career/SoccerSeasonCentre.tsx src/test/rankShift.test.ts src/test/seasonCentreSlots.test.tsx src/test/seasonResume.test.ts
