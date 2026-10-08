@@ -1,3 +1,11 @@
+## October 8: 1152 dressing-room count, source prepared
+
+The RolesScreen front summary now counts the full brokenPromises result.
+Only the Needs a word preview is limited to five rows. Role/promise logic,
+engine, data, saves and all other screen behavior are unchanged. Exact remote
+render/parent proof, proper type/build and required readers are pending.
+Claude F owns integration and publication. No verified or live claim yet.
+
 ## Release AL LIVE, 2026-10-08 05:38 EDT: ten Codex rounds, playable moments, and a translated page no longer crashes
 
 Claude lane (session F: session E died when the PC was restarted at 00:03 EDT with this release's gate running).
