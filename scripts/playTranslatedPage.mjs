@@ -218,14 +218,27 @@
  *                that right now (measured on the merged tree: 0 of 4 create
  *                walks, where Round 1141's own tree showed 4 of 4). The count
  *                is still printed, a 13 that fails still counts as its own,
- *                and NOTHING here can make check 13 go red any more: its one
- *                known offender was mended at the source.
+ *                and this control can no longer make check 13 go red: its one
+ *                known offender was mended at the source. The nospans control
+ *                below is what holds check 13 now.
  *                Exit 1 is the control firing. Exit 2 means it did
  *                not fire, or a walk broke, or a check failed that has nothing
  *                to do with layer two, and proves nothing. Checks 18 and 19
  *                are its own too: with layer one alone the undo puts back
  *                copies React removed long ago and nodes holding the words
  *                the translator saved, wrong until React's next write.
+ *   nospans      (Release AN, after review) check 13's own control. The create
+ *                screen is served the way it was before Round 1096: in the
+ *                build's script each of the three placeholders is a bare
+ *                string again, not a span (three edits to what is SERVED,
+ *                nothing on disk), with layer two off as under nolive. Only
+ *                the create page is walked. A placeholder must then stand
+ *                beside its pick, and check 13 must be red, on EVERY create
+ *                walk, while the page stands. Exit 1 is that. Exit 2 means
+ *                the served script did not hold the three placeholders in the
+ *                shape the control rewrites (it changed nothing), layer two
+ *                ran, a walk broke, a check outside its own list failed
+ *                (2, 13 and the nolive list), or 13 stayed green somewhere.
  *   undocopies   (after review) both layers on, and the translator's undo
  *                gives back a COPY of every node it took in place of the node
  *                itself. No translator was seen to do that and no guard can
@@ -443,7 +456,11 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = path.join(ROOT, 'dist');
 const BASE = (env.BASE || env.SWEEP_BASE || 'http://localhost:4173').replace(/\/+$/, '');
 const CONTROL = env.PLAY_TRANSLATED_CONTROL || '';
-const KNOWN_CONTROLS = ['noguard', 'nolive', 'notranslate', 'undocopies'];
+const KNOWN_CONTROLS = ['noguard', 'nolive', 'notranslate', 'undocopies', 'nospans'];
+/* nospans is nolive on a create screen served WITHOUT Round 1096's placeholder spans (see the header) */
+const LAYER_ONE_ONLY = CONTROL === 'nolive' || CONTROL === 'nospans';
+/* the three placeholders as the build holds them since Round 1096: an element of their own, <span>Choose ...</span> */
+const UNSPAN = /[\w$]+\.jsx\("span",\{children:"(Choose (?:nationality|position|era))"\}\)/g;
 if (CONTROL && !KNOWN_CONTROLS.includes(CONTROL)) {
   console.error(`PLAY_TRANSLATED_CONTROL=${CONTROL} is not a control this harness knows (${KNOWN_CONTROLS.join(', ')})`);
   process.exit(2);
@@ -472,7 +489,7 @@ const CREATE_ROUTE = '/soccer-career';
 const BANK_ROUTE = '/nba-my-career#bank';
 const ALL_ROUTES = [CREATE_ROUTE, '/', '/club-manager', '/nba-my-career', BANK_ROUTE, '/nfl-my-career', '/stadium-tycoon', '/college-grid', '/build-your-xi', '/front-office'];
 const ONLY = env.ONLY ? env.ONLY.split(',').map(s => unGitBash(s.trim())).filter(Boolean) : null;
-const ROUTES = ONLY ? ALL_ROUTES.filter(r => ONLY.includes(r)) : ALL_ROUTES;
+const ROUTES = CONTROL === 'nospans' ? [CREATE_ROUTE] : ONLY ? ALL_ROUTES.filter(r => ONLY.includes(r)) : ALL_ROUTES;
 const VIEW_SIZES = { phone: { width: 390, height: 844 }, desktop: { width: 1280, height: 900 } };
 const VIEWS = (env.VIEWS || 'phone,desktop').split(',').map(s => s.trim()).filter(v => VIEW_SIZES[v]);
 /* notranslate has one mode, "off". Everything else runs keep and alter. */
@@ -562,8 +579,8 @@ if (CONTROL === 'noguard' && !switchInBuild) {
 }
 const liveInBuild = entryText.includes(SWITCH_LIVE);
 checkLine(`0. the served entry chunk holds layer two's off switch ${SWITCH_LIVE}`, liveInBuild);
-if (CONTROL === 'nolive' && !liveInBuild) {
-  console.error('control "nolive" cannot run: its switch is not in the served build, so setting it would change nothing. NOT CHECKED.');
+if (LAYER_ONE_ONLY && !liveInBuild) {
+  console.error(`control "${CONTROL}" cannot run: layer two's switch is not in the served build, so setting it would change nothing. NOT CHECKED.`);
   await stop(2);
 }
 
@@ -903,13 +920,13 @@ const LOCAL_HOSTS = new Set(['localhost', '127.0.0.1', new URL(BASE).hostname]);
 browser = await chromium.launch({ args: ['--no-sandbox', '--no-proxy-server'] });
 if (SHOTS) fs.mkdirSync(SHOTS, { recursive: true });
 
-async function openWalk(view, mode, switches = { noguard: CONTROL === 'noguard', nolive: CONTROL === 'nolive' }) {
+async function openWalk(view, mode, switches = { noguard: CONTROL === 'noguard', nolive: LAYER_ONE_ONLY }) {
   const ctx = await browser.newContext({ viewport: VIEW_SIZES[view], locale: 'pt-BR', timezoneId: 'America/Sao_Paulo' });
   await ctx.addInitScript(pageInit, {
     seed: SEED, translate: mode !== 'off', text: mode, simDelay: SIM_DELAY, simStart: SIM_START, simRead: SIM_READ, late: SIM_LATE,
     noguard: !!switches.noguard, nolive: !!switches.nolive, cost: !!switches.cost,
   });
-  const w = { ctx, page: null, blocked: new Set(), dbBlocked: 0, guardLines: 0, notFound: [], consoleErrors: [], pageErrors: [] };
+  const w = { ctx, page: null, blocked: new Set(), dbBlocked: 0, guardLines: 0, notFound: [], consoleErrors: [], pageErrors: [], unspanned: [] };
   /* nothing leaves this machine: flags get one local pixel, everything else that is not the server is aborted */
   await ctx.route('**/*', route => {
     let host = '';
@@ -921,6 +938,15 @@ async function openWalk(view, mode, switches = { noguard: CONTROL === 'noguard',
   });
   /* the database host by its own rule, registered last so it is asked first: production is off limits */
   await ctx.route(/supabase\.co/, route => { w.dbBlocked += 1; return route.abort(); });
+  /* control nospans: the build's own script, served with each of the three placeholders a bare string again,
+     the way the create screen held them before Round 1096. Only this server's own .js is touched. */
+  if (CONTROL === 'nospans') {
+    await ctx.route(url => LOCAL_HOSTS.has(url.hostname) && url.pathname.endsWith('.js'), async route => {
+      const res = await route.fetch();
+      const body = (await res.text()).replace(UNSPAN, (_all, words) => { w.unspanned.push(words); return JSON.stringify(words); });
+      return route.fulfill({ response: res, body });
+    });
+  }
   const page = await ctx.newPage();
   w.page = page;
   page.on('console', m => {
@@ -1558,7 +1584,7 @@ async function runWalk({ mode, view, route }, out) {
     maxLeft: rec.maxLeft,
     undo: rec.undo ? { ...rec.undo, staleAll: undefined, staleList: [...rec.undo.staleAll.values()] } : null,
     bank: rec.bank || null, directLive: rec.directLive || null,
-    pressed: rec.pressed, dbBlocked: W.dbBlocked, blocked: [...W.blocked], retry, direct: rec.direct || null,
+    pressed: rec.pressed, dbBlocked: W.dbBlocked, blocked: [...W.blocked], retry, direct: rec.direct || null, unspanned: [...W.unspanned],
     create: route === CREATE_ROUTE ? { drawn: !!rec.createDrawn, boxes: rec.boxes || {}, reached: !!rec.reached, reachedDetail: rec.reachedDetail || '', seasonAt: rec.seasonAt ?? null, seasonDetail: rec.seasonDetail || '' } : null,
     stepList: rec.steps,
   };
@@ -1908,6 +1934,47 @@ if (CONTROL === 'noguard') {
     }
   }
   console.log(`playTranslatedPage: ${checksRun} checks, ${failed.length} failed (control "noguard", red on purpose)`);
+  await stop(1);
+}
+if (CONTROL === 'nospans') {
+  /* Release AN, after review: check 13 (no box holds its placeholder beside its pick) lost its only
+     control when Round 1096 mended that at the source, because nolive stopped showing the symptom. This
+     control serves the create screen the way it was before Round 1096 (each placeholder a bare string
+     again, three edits to the served script) with layer two off, and the placeholder must then stand
+     beside its pick on EVERY create walk. Exit 1 only for that; anything else is exit 2. */
+  console.log(`${checksRun} checks, ${failed.length} failed`);
+  const createRows = rows.filter(r => r.route === CREATE_ROUTE);
+  const notServed = createRows.filter(r => PICKS.some(([n]) => !r.unspanned.includes(`Choose ${n}`)));
+  if (!createRows.length || notServed.length) {
+    console.error(`control "nospans": ${createRows.length ? `on ${notServed.length} of ${createRows.length} create walk(s) the served script did not hold all three placeholders in the shape this control rewrites (found: ${notServed[0].unspanned.join(', ') || 'none'})` : 'no create walk ran'}. THE CONTROL CHANGED NOTHING, so it proves nothing.`);
+    await stop(2);
+  }
+  const withLive = rows.filter(r => r.live);
+  if (withLive.length) {
+    console.error(`control "nospans": layer two was running on ${withLive.length} page(s), so its switch did nothing and this run proves nothing.`);
+    await stop(2);
+  }
+  const broke = rows.filter(r => r.boundaryAt || r.notFound > 0);
+  if (broke.length) {
+    console.error(`control "nospans": ${broke.length} walk(s) broke (${broke[0].view} ${broke[0].mode}${broke[0].boundaryAt ? ' at "' + broke[0].boundaryAt + '"' : ''}). Layer one is still on and must hold the page up: this is a red of another kind.`);
+    await stop(2);
+  }
+  /* its own: 2 (a pick cannot be read in its box) and 13, and what layer one alone leaves wrong (the nolive list) */
+  const own = /^(2|10|11|13|14|16|18|19)\. /;
+  const other = failed.filter(f => !own.test(f));
+  if (other.length) {
+    console.error(`control "nospans": ${other.length} check(s) failed that have nothing to do with the placeholders or layer two, first: ${other[0].slice(0, 200)}`);
+    await stop(2);
+  }
+  const beside = createRows.filter(r => PICKS.some(([n]) => { const b = r.create.boxes[n]; return b && b.was && b.words && b.words.includes(b.was); }));
+  const thirteen = failed.filter(f => f.startsWith('13. ')).length;
+  console.log(`control "nospans": three placeholders served bare on ${createRows.length} create walk(s); a placeholder beside its pick in ${beside.length} of them, check 13 red ${thirteen} time(s).`);
+  if (beside.length !== createRows.length || thirteen !== createRows.length) {
+    console.error('control "nospans": with the spans gone and layer two off, a placeholder did NOT stand beside its pick on every create walk. THE CONTROL DID NOT FIRE, so check 13 is not proven.');
+    await stop(2);
+  }
+  console.log('control "nospans": the page stood and check 13 went red on every create walk. RED on purpose, the check works.');
+  console.log(`playTranslatedPage: ${checksRun} checks, ${failed.length} failed (control "nospans", red on purpose)`);
   await stop(1);
 }
 if (CONTROL === 'nolive') {
