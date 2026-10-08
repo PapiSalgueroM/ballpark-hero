@@ -1,0 +1,16 @@
+base tree: b00b057d0c324594e089c9b4e65aaa78b6a833d5
+== simFlagshipWeight on the base ==
+   engine loads it dynamically, the page preloads it on both phases, the not-loaded state is honest
+3) the built weight of /soccer-career
+   67 lazy dependencies including the Club Manager chunk (39 are shared chunks the page already has, which is normal)
+   40 chunks, 2448 KB raw (ceiling 2600), 722 KB over the wire
+
+simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+== sweepWeight on the base (its own exit code is not this line's) ==
+sweep exit 1
+2:  FAIL: /club-manager: 705K of gzipped JavaScript against a budget of 702K
+3:  FAIL: /stadium-tycoon: 289K of gzipped JavaScript against a budget of 287K
+4:  FAIL: /soccer-grid: 308K of gzipped JavaScript against a budget of 307K
+7:   /soccer-career      759K gz over  42 files (budget 759K)
+21:sweepWeight: 3 failures
+BASE WEIGHT DONE

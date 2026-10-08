@@ -1,0 +1,14 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/soccerCareerLeague.test.ts [2m([22m[2m34 tests[22m[2m)[22m[32m 79[2mms[22m[39m
+ [32m✓[39m src/lib/soccerCareerContinental.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 245[2mms[22m[39m
+ [32m✓[39m src/lib/soccerCareerAcademy.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 33[2mms[22m[39m
+ [32m✓[39m src/lib/soccerCareerLeagueSeasons.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m src/lib/soccerClubSquad.test.ts [2m([22m[2m23 tests[22m[2m)[22m[33m 457[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m      Tests [22m [1m[32m92 passed[39m[22m[90m (92)[39m
+[2m   Start at [22m 05:19:42
+[2m   Duration [22m 2.99s[2m (transform 1.68s, setup 334ms, collect 2.82s, tests 840ms, environment 2.43s, prepare 639ms)[22m
+
