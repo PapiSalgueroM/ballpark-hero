@@ -1,0 +1,5 @@
+# Release AN review (runner lens): the reviewer's second walk (the first one stopped at the rules screens): squad sheet, Season Center, College Grid search, and storage that refuses every write
+#!serve
+#!playwright
+#!serial
+walk2: node .rc/x/rvwalk2.mjs
