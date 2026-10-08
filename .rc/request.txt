@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+walk-boxing: MODE_SHOT=1 node .rc/x/walk-boxing.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simHomeCopy: node scripts/simHomeCopy.mjs
