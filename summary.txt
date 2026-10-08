@@ -1,0 +1,4 @@
+deckc exit=0 66s | simUsCareerDeckC: all checks passed
+summer6-s0 exit=0 649s | simUsCareerSummer: green. Sections 6 held.
+summer6-s1 exit=1 708s | simUsCareerSummer: 1 failure(s) in sections 6
+summer6-s2 exit=1 678s | simUsCareerSummer: 1 failure(s) in sections 6
