@@ -69,7 +69,7 @@ try {
   const inverse=[
     ["import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@/components/ui/dialog';","import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';"],
     ['SET_PIECE_WINDOW_SEC, type TycoonLeague,','SET_PIECE_WINDOW_SEC,'],
-    ["import { useStadiumTycoon, type LastSeason } from '@/hooks/useStadiumTycoon';","import { useStadiumTycoon } from '@/hooks/useStadiumTycoon';"],
+    ["import type { LastSeason } from '@/hooks/useStadiumTycoon';\n",''],
     [inserted,''],['      {last && <LatestSeasonReview last={last} league={lg} />}\n',oldLast],
   ];
   let restored=current;for(const[from,to]of inverse){assert.equal(restored.split(from).length-1,1);restored=restored.replace(from,to);}assert.equal(restored,old);
@@ -234,7 +234,7 @@ try {
           const control={name:`table-clipping-${width}`,assertion:'Actual table text clipping is rejected',complete:false};report.domControls.push(control);
           const target=page.locator('[data-latest-season-table] tbody th').first();await target.scrollIntoViewIfNeeded();
           control.before={surface:await surface(target,'clip-before',false),snapshot:await snapshot('clip-before'),html:await page.locator('[data-latest-season-review]').evaluate(node=>node.outerHTML)};
-          await target.evaluate(node=>{const container=node.closest('table').parentElement;window.__season.clipRestore={container,style:container.getAttribute('style'),top:container.scrollTop,left:container.scrollLeft};container.style.height='1px';container.style.maxHeight='1px';container.style.overflow='hidden';});
+          await target.evaluate(node=>{const container=node.closest('table').parentElement;window.__season.clipRestore={container,style:container.getAttribute('style'),top:container.scrollTop,left:container.scrollLeft};container.setAttribute('style',(window.__season.clipRestore.style||'')+';height:1px;max-height:1px;overflow:hidden;');});
           try{control.actual=await surface(target,'clip-actual',false);await screenshot('clipping-fault');let error;try{visible(control.actual,control.assertion);}catch(caught){error=caught;control.error={name: caught.name,message:caught.message,stack:caught.stack};}assert(error instanceof assert.AssertionError);assert(error.message.includes(control.assertion));}
           finally{control.restoration=await page.evaluate(()=>{const r=window.__season.clipRestore,originalStyle=r.style;r.container.scrollTop=r.top;r.container.scrollLeft=r.left;if(originalStyle===null)r.container.removeAttribute('style');else r.container.setAttribute('style',originalStyle);const restoredStyle=r.container.getAttribute('style');delete window.__season.clipRestore;return{originalStyle,restoredStyle};});assert.equal(control.restoration.restoredStyle,control.restoration.originalStyle);}
           control.after={surface:await surface(target,'clip-restored',false),snapshot:await snapshot('clip-restored'),html:await page.locator('[data-latest-season-review]').evaluate(node=>node.outerHTML)};

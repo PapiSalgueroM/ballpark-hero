@@ -1,5 +1,19 @@
 ## Latest season review preparation, October 8, 2026
 
+Preparation3 follows completed run37728802183 at1c72c22d. Types/build,
+readers20 and closing holds passed. Native stayed red at the strict style
+attribute restoration: original null, restored empty. Original11/12 passed;
+Rooms remained red because the copied control's exact value-import anchor
+was changed by a type import. No control assertion is waived.
+The value import is now preserved and LastSeason uses a separate type import.
+Worker inverse still reconstructs accepted23a exactly. Clipping is injected
+with one style-attribute write instead of three CSSStyleDeclaration writes;
+exact style, full HTML, geometry and gameplay restoration assertions remain.
+Page2cc2f34e/worker99c34aec are independently bound by peers4f974e75,
+d95999fa andc3f15105. Wrapper/workflow and gameplay behavior are unchanged.
+Early11529610787/full11529259754 are retained. The CSSOM mechanism is not
+established, and this next candidate requires actual remote acceptance.
+
 Preparation2 changes only clipping-control cleanup after completed run37726167854.
 First run104313e7 passed real types/build, readers20 and closing source holds.
 Native failed at320-stress cleanup: complete geometry/state restored, but pane

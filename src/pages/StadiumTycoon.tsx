@@ -42,7 +42,8 @@ import {
   LEGACY_PERKS, perkLevelOf, perkCostOf, canBuyPerk, legacyPointsOf,
   totalPerkLevels, pointsForSale, HYPE_MULT, AWAY_MATCHDAY_SEC, SET_PIECE_WINDOW_SEC, type TycoonLeague,
 } from '@/lib/stadiumTycoon';
-import { useStadiumTycoon, type LastSeason } from '@/hooks/useStadiumTycoon';
+import { useStadiumTycoon } from '@/hooks/useStadiumTycoon';
+import type { LastSeason } from '@/hooks/useStadiumTycoon';
 import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Celebration';
 import VictoryMoment from '@/components/tycoon/TycoonVictoryMoment';
 import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';
