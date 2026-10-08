@@ -1,0 +1,197 @@
+name: Free kick legal range
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - codex/free-kick-range-1091
+  pull_request:
+    paths:
+      - .github/workflows/free-kick-range.yml
+      - src/lib/freeKick.ts
+      - scripts/simFreeKickRange.mjs
+      - scripts/qa/freeKickRange1091.mjs
+
+permissions:
+  contents: read
+concurrency:
+  group: free-kick-range-${{ github.event.pull_request.head.sha || github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      VITEST_MAX_FORKS: 1
+      VITEST_MIN_FORKS: 1
+      SEO_SPLIT_BASE_REF: HEAD
+      TZ: UTC
+      SIM_OFFLINE_RECEIPT: free-kick-range-artifacts/transport.log
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Prepare immutable remote dependencies
+        run: |
+          mkdir -p free-kick-range-artifacts/dependencies free-kick-range-artifacts/regressions
+          git rev-parse HEAD > free-kick-range-artifacts/source-head.txt
+          git rev-parse 'HEAD^{tree}' > free-kick-range-artifacts/source-tree.txt
+          printf '%s\n' '${{ github.run_id }}' '${{ github.run_attempt }}' '${{ github.job }}' > free-kick-range-artifacts/run.txt
+          cp package.json package-lock.json free-kick-range-artifacts/dependencies/
+          npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict'; import { createHash } from 'node:crypto';
+          const hash = b => createHash('sha256').update(b).digest('hex');
+          const lock=JSON.parse(fs.readFileSync('package-lock.json')), rows=[];
+          for(const [path,entry] of Object.entries(lock.packages)) {
+            if(!path.startsWith('node_modules/')||!fs.existsSync(path+'/package.json')) continue;
+            const raw=fs.readFileSync(path+'/package.json'), version=JSON.parse(raw).version;
+            assert.equal(version,entry.version,path); const sha256=hash(raw);
+            fs.writeFileSync('free-kick-range-artifacts/dependencies/'+sha256+'.json',raw);rows.push({path,version,sha256});
+          }
+          assert(rows.length>0);fs.writeFileSync('free-kick-range-artifacts/installed-before.json',JSON.stringify(rows,null,2));
+          NODE
+          npm install --no-save playwright
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict'; import { createHash } from 'node:crypto';
+          const hash=b=>createHash('sha256').update(b).digest('hex'), before=JSON.parse(fs.readFileSync('free-kick-range-artifacts/installed-before.json'));
+          for(const row of before){const raw=fs.readFileSync(row.path+'/package.json');assert.equal(JSON.parse(raw).version,row.version);assert.equal(hash(raw),row.sha256);}
+          const packages=['playwright','playwright-core','vite','esbuild','react','react-dom'];
+          const versions=packages.map(name=>{const raw=fs.readFileSync('node_modules/'+name+'/package.json');fs.writeFileSync('free-kick-range-artifacts/dependencies/'+name+'-package.json',raw);return{name,version:JSON.parse(raw).version,sha256:hash(raw)};});
+          fs.writeFileSync('free-kick-range-artifacts/dependencies/verification-packages.json',JSON.stringify(versions,null,2));
+          fs.writeFileSync('free-kick-range-artifacts/node-versions.json',JSON.stringify(process.versions,null,2));
+          console.log(`Held ${before.length} locked installed versions and manifest hashes.`);
+          NODE
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+      - name: Proper application types and actual build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee free-kick-range-artifacts/types.log
+          npm run build 2>&1 | tee free-kick-range-artifacts/build.log
+      - name: Actual legal setups unchanged baselines and copied faults
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simFreeKickRange.mjs 2>&1 | tee free-kick-range-artifacts/outcomes.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const r=JSON.parse(fs.readFileSync('free-kick-range-artifacts/outcomes/summary.json'));
+          assert.equal(r.status,'passed');assert.equal(r.normal.passed,6);assert.equal(r.normal.failed,0);
+          assert.equal(r.controls.length,12);assert(r.controls.every(c=>c.status==='assertion-failed'&&c.passed===1&&c.failed===1));
+          assert.deepEqual(r.sourceAfter,r.sourceBefore);
+          console.log('Legal generated kick outcomes and held explicit-setup baselines verified. Production cap remains owner-reviewed.');
+          NODE
+      - name: Retain outcome proof before regressions
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: free-kick-range-outcomes-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            free-kick-range-artifacts/outcomes/
+            free-kick-range-artifacts/outcomes.log
+            free-kick-range-artifacts/source-head.txt
+            free-kick-range-artifacts/source-tree.txt
+          retention-days: 7
+          if-no-files-found: error
+      - name: Cache actual template fonts for the finite consumer views
+        id: assets
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: node scripts/qa/freeKickRange1091.mjs --prefetch-assets-only 2>&1 | tee free-kick-range-artifacts/assets.log
+      - name: Actual practice and watched consumers with pinned old controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.assets.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" timeout --signal=TERM --kill-after=15s 15m node scripts/qa/freeKickRange1091.mjs 2>&1 | tee free-kick-range-artifacts/native.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const r=JSON.parse(fs.readFileSync('free-kick-range-artifacts/native/report.json'));
+          assert.equal(r.complete,true);assert.deepEqual(r.errors,[]);
+          assert.equal(r.cases.length,4);assert(r.cases.every(c=>c.complete&&c.errors.length===0&&c.sockets.length===0));
+          assert.equal(r.controls.length,2);assert(r.controls.every(c=>c.complete&&c.effective&&c.failure.name==='AssertionError'&&c.errors.length===0&&c.sockets.length===0));
+          assert.equal(r.visibilityControls.length,2);assert(r.visibilityControls.every(c=>c.complete&&c.failure.name==='AssertionError'));
+          for(const c of r.visibilityControls){assert.deepEqual(c.restored,c.before);const {label:a,...before}=c.stateBefore,{label:b,...after}=c.stateRestored;assert.deepEqual(after,before);}
+          assert.deepEqual(r.sourceAfter,r.sourceBefore);assert.deepEqual(r.buildAfter,r.buildBefore);assert.deepEqual(r.cacheAfter,r.cacheBefore);
+          console.log('Four finite actual consumer journeys, two pinned-old range failures and two restored visibility controls verified.');
+          NODE
+      - name: Retain native consumer proof promptly
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.assets.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: free-kick-range-native-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            free-kick-range-artifacts/native/
+            free-kick-range-artifacts/native.log
+            free-kick-range-artifacts/asset-cache/
+            free-kick-range-artifacts/source-head.txt
+            free-kick-range-artifacts/source-tree.txt
+          retention-days: 7
+          if-no-files-found: error
+      - name: Original skill arcade and watched set-piece regressions
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simFreeKick simFreeKickPractice simFreeKickLab simArcadeShotFeedback simArcadePause simArcadeHoldRelease simSetPiecePresentation simTycoonSetPiece simTycoonSetPiecePage; do
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "free-kick-range-artifacts/regressions/$harness.log" || failed=1
+          done
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_FREE_KICK_CONTROL=nospray node scripts/simFreeKick.mjs 2>&1 | tee free-kick-range-artifacts/regressions/original-nospray-control.log || failed=1
+          exit "$failed"
+      - name: All twenty built readers and source anchors
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings simSeoMetaSplit simHomeCopy simHarnessAnchors; do
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "free-kick-range-artifacts/regressions/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Retain the unchanged presentation harness directly
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" timeout --signal=TERM --kill-after=15s 8m node scripts/simSetPiecePresentation.mjs 2>&1 | tee free-kick-range-artifacts/regressions/original-presentation-direct.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import path from 'node:path'; import os from 'node:os'; import assert from 'node:assert/strict';
+          const log=fs.readFileSync('free-kick-range-artifacts/regressions/original-presentation-direct.log','utf8');
+          const lines=log.split('\n').map(line=>/^simSetPiecePresentation: PASS\. 36 rendered cases\. Evidence: (.+)$/.exec(line)).filter(Boolean);
+          assert.equal(lines.length,1,'Exactly one actual original presentation result');
+          const source=path.resolve(lines[0][1]), base=path.resolve(os.tmpdir());
+          assert.equal(path.dirname(source),base); assert(path.basename(source).startsWith('dukb-setpiece-presentation-'));
+          fs.cpSync(source,'free-kick-range-artifacts/original-presentation-direct',{recursive:true});
+          const r=JSON.parse(fs.readFileSync(path.join(source,'report.json')));
+          assert.equal(r.control,'');assert.equal(r.report.length,36);assert.deepEqual(r.errors,[]);
+          console.log('The actual unchanged presentation output is retained. The original runner gate remains strict.');
+          NODE
+      - name: Original consumers engines data and dependencies held
+        if: ${{ !cancelled() }}
+        run: |
+          git diff --exit-code 8fe82a4dc1346f7d5b8072f387f3acb34bbaa3c8 HEAD -- src/components src/pages src/hooks src/data src/types src/integrations src/lib/arcade.ts src/lib/careerDrills.ts src/lib/stadiumTycoon.ts src/test scripts/fixtures scripts/data scripts/simFreeKick.mjs scripts/simFreeKickPractice.mjs scripts/simFreeKickLab.mjs scripts/simArcadeShotFeedback.mjs scripts/simArcadePause.mjs scripts/simArcadeHoldRelease.mjs scripts/simSetPiecePresentation.mjs scripts/simTycoonSetPiece.mjs scripts/simTycoonSetPiecePage.mjs package.json package-lock.json
+          git diff --exit-code HEAD -- src scripts .github/workflows/free-kick-range.yml
+          cmp package.json free-kick-range-artifacts/dependencies/package.json
+          cmp package-lock.json free-kick-range-artifacts/dependencies/package-lock.json
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict'; import { createHash } from 'node:crypto';
+          const before=JSON.parse(fs.readFileSync('free-kick-range-artifacts/installed-before.json'));
+          const after=before.map(row=>{const raw=fs.readFileSync(row.path+'/package.json');return{path:row.path,version:JSON.parse(raw).version,sha256:createHash('sha256').update(raw).digest('hex')};});
+          fs.writeFileSync('free-kick-range-artifacts/installed-after.json',JSON.stringify(after,null,2));assert.deepEqual(after,before);
+          console.log(`Held ${after.length} installed versions and complete raw dependency manifests.`);
+          NODE
+      - name: Retain complete raw evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: free-kick-range-${{ github.run_id }}-${{ github.run_attempt }}
+          path: free-kick-range-artifacts/
+          retention-days: 7
+          if-no-files-found: error

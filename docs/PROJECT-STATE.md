@@ -1,3 +1,96 @@
+## Round 1091 preparation, 2026-10-07, legal direct-kick range
+
+Preparation 3 at 86aeaeea/run 37712897214 completed red. Types/build, engine
+6/12 and closing holds passed. Native remains 1/4 journeys, 0/2 old controls
+and 2/2 exact-restored DOM controls. Tycoon's result geometry now passes;
+its unchanged strong heading and paragraph render two separating newlines,
+while the QA driver assumed one. The next QA-only correction retains raw
+status text and compares the two actual text leaves exactly to the engine
+heading/verdict, with no whitespace normalization or product change. Every
+physical viewport, clipping, state/save/RNG and restoration check stays strict.
+New runtime remains pending. Full artifact 11522708008 has 773 files, including
+all 131 engine and 46 native early files byte-exact. The direct unchanged
+presentation report has 36 cases, 12 fixtures, 36 PNGs and no errors. Original
+8 PASS/1 EMPTY and readers 17/20 retain the same named AL findings, not waived.
+All 521 installed manifests stayed held. No production cap or release claim.
+
+Preparation 2 at4b52bef6/run37711656871 completed red. Types/build and engine6/12
+passed; actual engine records/copies/bundles are byte-exact to preparation1.
+Native completed practice390 and both DOM clipping controls, then Tycoon390's
+result-section outer border was compared against its own inner content clip.
+The outer box fits390x844 with hit=true and no ancestor clip; its own bordered
+client box created a false1.265625px bottom clipping finding. The next QA-only
+one-anchor correction measures the outer box against parent clips. Glyph ranges
+still include their actual parent/self clips, preserving the clipping controls
+and every viewport/readability/restoration assertion. New runtime is pending.
+Native remains1/4 journeys,0/2 old controls,2/2 DOM controls from this failed run.
+The direct unchanged presentation step passed and retained its actual report,
+fixtures and36 PNGs. Full artifact11522157218 contains771 files; final raw audit
+is pending. Original8 PASS/1 EMPTY and readers17/20 remain red, never waived.
+Closing source/dependency holds passed. No engine, consumer, cap or record change.
+
+Preparation 1 at3b4f96fb/run37709378917 completed red. Proper app types/build,
+six actual engine groups/twelve effective copied faults and closing521 dependency
+holds passed. Independent raw engine audit06b6c979 checks15,914 complete normal
+comparisons, sole mapped failures, exclusive bundles and all2,787 source holds.
+Native completed no journeys or controls: the first clipping control's full HTML
+baseline preceded a screenshot that left two empty style attributes. The next
+QA-only change captures the fault baseline after that healthy screenshot, keeping
+the earlier geometry capture and every strict restoration assertion. Runtime is
+pending. The four authored consumer journeys are not accepted from partial frames.
+
+Eight original regressions passed. The original presentation runner reported EMPTY
+because the harness printed one line, although that line reports36 rendered cases.
+This remains an unaccepted original gate. The next workflow additionally runs the
+unchanged harness directly and retains its actual temporary output/report/PNGs;
+it does not modify or waive the original runner. Readers17/20 passed. Prerender,
+Sitemap and SeoMetaSplit failed the AL snapshot findings also reproduced in the
+1090 job's exact unchanged AL8fe baseline. Release integration remains blocked.
+
+The retained800 diagnostic maxRunScore rows increase by50..53, spanning3390..3497.
+These sampled extrema are descriptive, not a universal threshold or earned score.
+The conservative analytic bound is3546.744 rows exceed historical3424, including
+the first date at3425. The live cap is still unqueried and E-owned;3424 cannot be
+used as a safe universal engine bound. No scoring coefficients or records change.
+
+Unverified preparation on codex/free-kick-range-1091 from Release AL integration
+8fe82a4dc1346f7d5b8072f387f3acb34bbaa3c8. The clean owned managed
+soccer-transfer-review-1082 checkout was reused; accepted1082 remains frozen.
+The only engine change floors generated walled attacking direct kicks at17m.
+The11m penalty, later indices4..9, random draw order, wall and keeper fields,
+explicit shot rules, Tycoon offer indices, saves and original consumers stay held.
+Three old generated setups were12.6/14.1/15.7m. Indirect kicks inside an area
+are a separate restart that this direct-shot game does not model.
+
+Two official rulebook sources were checked on2026-10-07:
+https://theifab.com/laws/latest/the-field-of-play/
+https://theifab.com/laws/latest/the-penalty-kick/
+https://www.thefa.com/football-rules-governance/lawsandrules/laws/football-11-11/law-14---the-penalty-kick
+The penalty area includes its boundary;17m keeps these goal-facing kicks outside.
+No new player, club, score or season data is added. Existing goal dimensions held.
+
+Engine proof passed only for this exact preparation: six outcome groups against the actual
+pinned old engine and twelve uniquely reversible copied faults, complete setup/
+shot/RNG/input comparisons, actual unchanged Tycoon offers, changed low-power
+reach and all800 diagnostic daily cap rows with a conservative analytic bound.
+Four finite actual React consumer journeys remain unaccepted: practice and
+watched Tycoon at390 touch and1280 keyboard, two pinned-old engine controls,
+and two separately labeled restored DOM clipping controls. Selected labels,
+pitches and results retain physical viewport/clipping measurements, actual
+fonts and readable PNGs. Full shot inputs, four-draw streams, results, storage
+and callbacks are held against the pinned old rules at unchanged explicit setups.
+Practice stops after two kicks. Tycoon stages an offer time and match count;
+this is not a full route, match settlement, earned score or campaign proof.
+Remote gates retain proper app types/build, old arcade/set-piece regressions,
+alltwenty built readers and source/dependency holds. Runtime and native acceptance,
+PR and release integration remain pending. No local runtime or production calls.
+
+Release dependency: the historical committed note says Free Kick cap3424;
+that is not current production authority. Distance-based points can change.
+The release owner must check the actual game_score_caps row and handle any
+necessary authoritative adjustment before release. Completed daily records and
+scoring coefficients must not be rewritten to hide that dependency. No live claim.
+
 ## Release AK LIVE, 2026-10-07 15:12 EDT, and the split of work with Codex
 
 Claude lane (session E, a new lead: session D stopped at its weekly limit with AK's gate still running).
