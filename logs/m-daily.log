@@ -1,0 +1,11 @@
+edited src/data/dailyClubPool.json: 16 place(s)
+dailypool: exit 1 | simDailyClubPool: 11 failure(s)
+     FAIL: re-dealt 2026-10-01: hot seat FC Nordsjælland -> Al-Shabab, deadline Bayern Munich -> Manchester United
+     FAIL: re-dealt 2026-10-02: hot seat Lausanne-Sport -> Toulouse, deadline Bayer Leverkusen -> Spartak Moscow
+     FAIL: re-dealt 2026-10-03: hot seat Inter Miami -> Bayer Leverkusen, deadline Everton -> Bahia
+     FAIL: re-dealt 2026-10-04: hot seat Hull City -> Flamengo, deadline Orlando City -> Venezia
+     FAIL: re-dealt 2026-10-05: hot seat Bristol City -> Santos, deadline Porto -> Eintracht Frankfurt
+     FAIL: ... and 3 more days re-dealt
+hotseat: exit 0 | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club Manager.
+deadline: exit 0 | simDeadlineDay: green. The brief is real, the desk pays, the clock binds, the daily is one window a day, the budget holds, a Club Manager save keeps its registrations, rivals close at the stated rate,
+MUT daily: red in [dailypool] green in [hotseat, deadline]

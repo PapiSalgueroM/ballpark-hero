@@ -1,0 +1,7 @@
+edited src/data/clubManagerWorldRosters.ts: 1 place(s)
+clublist: exit 1 | simClubManagerClubList: RED in section 1.
+     FAIL: saved page public/club-manager/index.html: no h3 "Russian Premier League clubs you can manage (16)"
+gathered: exit 0 | simClubManagerGathered: all checks passed (1 gathered league(s), 357 men, 82 addresses, 5 cited facts, the old save)
+aleague: exit 0 | simClubManagerALeague: all checks passed
+vitest-cm: exit 0 |   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+MUT genlist: red in [clublist] green in [gathered, aleague, vitest-cm]

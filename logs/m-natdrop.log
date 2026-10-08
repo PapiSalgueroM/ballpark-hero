@@ -1,0 +1,12 @@
+edited src/data/playerNationalities.ts: 1 place(s)
+gathered: exit 1 |   FAIL [C]: Vladislav Kalinichev: nationalityOf answers null, the research says Russia
+     FAIL [C]: Luiz Henrique: nationalityOf answers null, the research says Brazil
+     FAIL [C]: Maksim Glushenkov: nationalityOf answers null, the research says Russia
+     FAIL [C]: Wendel: nationalityOf answers null, the research says Brazil
+     FAIL [C]: Igor Diveev: nationalityOf answers null, the research says Russia
+     FAIL [C]: Nino: nationalityOf answers null, the research says Brazil
+     FAIL [C]: Aleksandr Sobolev: nationalityOf answers null, the research says Russia
+nationalities: exit 0 | simNationalities: green. Every real player carries his real flag, and no name wears the wrong one.
+internationals: exit 0 | simCmInternationals: all green
+newleagues-russia: exit 0 | simClubManagerNewLeagues: all checks passed
+MUT natdrop: red in [gathered] green in [nationalities, internationals, newleagues-russia]

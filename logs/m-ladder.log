@@ -1,0 +1,9 @@
+edited src/lib/clubManager.ts: 1 place(s)
+newleagues-russia: exit 1 |   FAIL: Fakel Voronezh's board asks Finish mid-table or better (target 12), not to finish 14th or better
+     FAIL: Fakel Voronezh's board asks Finish mid-table or better (target 12), not to finish 14th or better
+simClubManager: exit 0 | ALL CLUB MANAGER SIMS PASSED
+boardasks: exit 0 | simBoardAsks: green. Every ask a board makes can be met, and nobody real is quoted.
+leaguerules: exit 1 | simCmLeagueRules: 2 failure(s)
+     FAIL: pure: now|russia differs in demand, objectives
+     FAIL: russia is a playoffs ladder that relegates or has no playoff rung
+MUT ladder: red in [newleagues-russia, leaguerules] green in [simClubManager, boardasks]

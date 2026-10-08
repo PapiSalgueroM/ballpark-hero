@@ -1,0 +1,5 @@
+edited src/lib/clubManager.ts: 1 place(s)
+newleagues-russia: exit 0 | simClubManagerNewLeagues: all checks passed
+simClubManager: exit 0 | ALL CLUB MANAGER SIMS PASSED
+leaguerules: exit 0 | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+MUT season: red in [] green in [newleagues-russia, simClubManager, leaguerules]

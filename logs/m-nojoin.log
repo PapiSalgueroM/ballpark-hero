@@ -1,0 +1,17 @@
+edited src/data/clubManagerWorldRosters.ts: 1 place(s)
+gathered: exit 0 | simClubManagerGathered: all checks passed (1 gathered league(s), 357 men, 82 addresses, 5 cited facts, the old save)
+newleagues-russia: exit 1 |   FAIL: H1: only 1 Zenit titles in 16 seasons, three are needed to read the season after one
+     FAIL: Fakel Voronezh's board asks Win the Russian Premier League (target 1), not to finish 14th or better
+     FAIL: Zenit beat Fakel Voronezh by 2.0 points a season, the band is 6
+     FAIL: Spartak Moscow beat Dynamo Makhachkala by 2.5 points a season, the band is 6
+     FAIL: the rank correlation is NaN, the band is 0.7
+     FAIL: Zenit has 0 real players, and CM_PARTIAL says false
+     FAIL: Krasnodar has 0 real players, and CM_PARTIAL says false
+simClubManager: exit 1 |   FAIL: Fakel Voronezh: only 0 real players and not flagged partial
+     16 FAILURES
+     FAIL: Zenit: only 0 real players and not flagged partial
+     FAIL: Krasnodar: only 0 real players and not flagged partial
+     FAIL: Spartak Moscow: only 0 real players and not flagged partial
+     FAIL: CSKA Moscow: only 0 real players and not flagged partial
+     FAIL: Lokomotiv Moscow: only 0 real players and not flagged partial
+MUT nojoin: red in [newleagues-russia, simClubManager] green in [gathered]

@@ -1,0 +1,12 @@
+edited scripts/lib/gatheredLeague.mjs: 1 place(s)
+pre: exit 0 | Zenit                   20  XI 75.7  top Luiz Henrique (£18m, 82)
+gathered: exit 1 |   FAIL [B]: Vyacheslav Dorovskikh (Fakel Voronezh) is valued 0.13, the curve says 0.14
+     FAIL [B]: Luiz Henrique (Zenit) is valued 18, the curve says 19.44
+     FAIL [B]: Maksim Glushenkov (Zenit) is rated 79, the curve says 80
+     FAIL [B]: Maksim Glushenkov (Zenit) is valued 11.25, the curve says 12.15
+     FAIL [B]: Wendel (Zenit) is rated 79, the curve says 80
+     FAIL [B]: Wendel (Zenit) is valued 11.25, the curve says 12.15
+     FAIL [B]: Igor Diveev (Zenit) is valued 7.5, the curve says 8.1
+gen-check: exit 0 | src/data/clubManagerRussia2026.ts is a fresh generation from scripts/data/gatheredSquads/russia2026/research.json (sha256 9679dc68b70e837a7d039d345b50c39558d8a92168afb9157ca42fb42f30627b, LF)
+newleagues-russia: exit 0 | simClubManagerNewLeagues: all checks passed
+MUT eurusd: red in [gathered] green in [gen-check, newleagues-russia]

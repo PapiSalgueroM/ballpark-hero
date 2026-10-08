@@ -1,0 +1,7 @@
+edited src/lib/soccerCareerLeague.ts: 1 place(s)
+newleagues-russia: exit 1 |   FAIL: H3: the dugout's table says 18 for Russian Premier League, not 16
+     FAIL: H3: the dugout's table says 18 for Russian Premier League, not 16
+leagueseasons: exit 0 | simCareerLeagueSeasons: all sections green
+league-vitest: exit 0 |    Duration  1.06s (transform 331ms, setup 44ms, collect 403ms, tests 48ms, environment 232ms, prepare 98ms)
+jobmarket: exit 0 | ALL JOB MARKET CHECKS PASSED
+MUT dugout: red in [newleagues-russia] green in [leagueseasons, league-vitest, jobmarket]

@@ -1,0 +1,6 @@
+edited src/data/clubManagerWorldRosters.ts: 1 place(s)
+identity-vitest: exit 0 |    Duration  2.73s (transform 2.65s, setup 37ms, collect 52ms, tests 1.96s, environment 283ms, prepare 165ms)
+gathered: exit 0 | simClubManagerGathered: all checks passed (1 gathered league(s), 357 men, 82 addresses, 5 cited facts, the old save)
+leaguerules: exit 0 | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+simClubManager: exit 0 | ALL CLUB MANAGER SIMS PASSED
+MUT joinorder: red in [] green in [identity-vitest, gathered, leaguerules, simClubManager]

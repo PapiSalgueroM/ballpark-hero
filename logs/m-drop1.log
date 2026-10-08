@@ -1,0 +1,10 @@
+edited src/lib/clubManager.ts: 1 place(s)
+newleagues-russia: exit 1 |   FAIL: Fakel Voronezh's board asks Stay up. Avoid relegation (target 15), not to finish 14th or better
+     FAIL: russia's rules row drops 1, the real league drops 2
+     FAIL: the engine's drop count for russia is 1, not 2
+     FAIL: Fakel Voronezh's board asks Stay up. Avoid relegation (target 15), not to finish 14th or better
+simClubManager: exit 0 | ALL CLUB MANAGER SIMS PASSED
+leaguerules: exit 1 | simCmLeagueRules: 2 failure(s)
+     FAIL: modern: now|russia differs in whole
+     FAIL: pure: now|russia differs in drop, demand, objectives
+MUT drop1: red in [newleagues-russia, leaguerules] green in [simClubManager]
