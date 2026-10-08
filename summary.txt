@@ -1,0 +1,5 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+cmplay-abort exit=1 4s | CONTROL abort FIRED: the career did not open, the retry notice showed, the save is untouched and the flags went red
+playFlagshipLazy exit=0 9s | playFlagshipLazy: green. The dugout costs nothing until you walk into it, and it still works when you do.
+inbox exit=0 12s | playInboxCard: owned temporary files, headless browser and localhost server cleaned.
+cmplay exit=0 30s | playCmDataOnDemand: green. The manager games open without the data they never read, and a past season brings its own.
