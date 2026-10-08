@@ -211,8 +211,8 @@ function served(name, body) {
     edit('"data-squad-rank": view.rank, children: ordinal(view.rank)', '"data-squad-rank": view.rank + 1, children: ordinal(view.rank + 1)');
   }
   if (CONTROL === 'write' && name.endsWith('.js')) {
-    edit('const [screen, setScreen] = useState(initialScreen ?? "home");',
-      `try { const __s = JSON.parse(window.localStorage.getItem("${SAVE_KEY}")); __s.squadSeen = 1; window.localStorage.setItem("${SAVE_KEY}", JSON.stringify(__s)); } catch {} const [screen, setScreen] = useState(initialScreen ?? "home");`);
+    edit('function SquadSheet({ career, view, onClose, initialScreen }) {',
+      `function SquadSheet({ career, view, onClose, initialScreen }) { try { const __s = JSON.parse(window.localStorage.getItem("${SAVE_KEY}")); __s.squadSeen = 1; window.localStorage.setItem("${SAVE_KEY}", JSON.stringify(__s)); } catch {}`);
   }
   if (CONTROL === 'nofill' && name.endsWith('.js')) edit('animationFillMode: "both"', 'animationFillMode: "none"');
   if (CONTROL === 'still' && name.endsWith('.css')) {
@@ -250,8 +250,9 @@ async function open(save, { width = 390, height = 844, reduced = false, helpSeen
   await page.route(/supabase\.co/, r => r.abort());
   const errors = [];
   page.on('pageerror', e => errors.push(String(e)));
-  await page.goto(`${BASE}/`);
-  await page.waitForFunction(() => window.__mounted === true);
+  /* generous: this runs beside builds and type checks on a loaded machine */
+  await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 90000 });
+  await page.waitForFunction(() => window.__mounted === true, null, { timeout: 90000 });
   return { ctx, page, errors };
 }
 const TILE = '[data-squad-tile]';
