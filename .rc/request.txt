@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+walk-ere: PORT=4561 ENGINES=chromium node scripts/playCareerLeagueWorld.mjs
+walk-cha: PORT=4562 ENGINES=chromium PLAY_LEAGUE_WORLD_SAVE=cha node scripts/playCareerLeagueWorld.mjs
+walk-odd: PORT=4563 ENGINES=chromium PLAY_LEAGUE_WORLD_CONTROL=odd node scripts/playCareerLeagueWorld.mjs
+playSeasonCentre: ENGINES=chromium node scripts/playSeasonCentre.mjs
+playSeasonMoments: ENGINES=chromium node scripts/playSeasonMoments.mjs
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+sweepWeight: ENGINES=chromium node scripts/sweepWeight.mjs
