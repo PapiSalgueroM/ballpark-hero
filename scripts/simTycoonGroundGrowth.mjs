@@ -27,7 +27,12 @@ assert.deepEqual(report.oracleInitializationControls.map(row => [row.name, row.a
 assert(report.oracleInitializationControls.every(row => row.complete && row.receipt.complete === false && row.receipt.error.name === 'AssertionError' && row.receipt.error.message.includes(row.assertion) && row.receipt.error.stack.includes('AssertionError')));
 assert(report.cases.every(row => row.complete && row.stages.length === 5));
 assert(report.controls.every(row => row.complete && row.failures.length === 1 && row.failures[0].assertion === row.expectedAssertion));
-assert.equal(report.mounts.count, 44); assert.equal(report.mounts.screenshots, 70);
+assert.equal(report.clockControl.name, 'extra-clock-millisecond'); assert.equal(report.clockControl.complete, true);
+assert.equal(report.clockControl.assertion, 'Declared 128ms clock advance'); assert.equal(report.clockControl.error.name, 'AssertionError');
+assert(report.clockControl.error.message.includes(report.clockControl.assertion) && report.clockControl.error.stack.includes('AssertionError'));
+assert.equal(report.clockControl.clocks.actual.performance, 129); assert.equal(report.clockControl.clocks.baseline.performance, 128);
+assert.equal(report.clockControl.clocks.actual.now - report.clockControl.clocks.baseline.now, 1);
+assert.equal(report.mounts.count, 45); assert.equal(report.mounts.regularCount, 44); assert.equal(report.mounts.setupCount, 1); assert.equal(report.mounts.screenshots, 70);
 assert.deepEqual(report.errors, []); assert.deepEqual(report.sourceAfter, report.sourceBefore);
 assert.deepEqual(report.buildAfter, report.buildBefore); assert.deepEqual(report.cacheAfter, report.cacheBefore);
 console.log('Ground growth: four reduced-motion page journeys passed with paired original pages.');

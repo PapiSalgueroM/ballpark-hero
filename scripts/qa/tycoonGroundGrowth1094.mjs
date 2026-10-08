@@ -159,13 +159,18 @@ const copy=value=>JSON.parse(JSON.stringify(value)); export function useStadiumT
   const assets=new Map(JSON.parse(fs.readFileSync(path.join(CACHE,'manifest.json'),'utf8')).map(asset=>{const body=fs.readFileSync(path.join(CACHE,asset.file));assert.equal(sha(body),asset.sha256);assert.equal(body.length,asset.bytes);return[asset.url,{...asset,body}];}));
   server=createServer((_req,res)=>{res.writeHead(500);res.end('Undeclared request');});await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));const base=`http://127.0.0.1:${server.address().port}`;
   const {chromium}=await import('../lib/playwrightLoader.mjs');browser=await chromium.launch({headless:true});
+  const clockSource='export async function advance(page) { await page.clock.runFor(128); }\n',clockFrom='await page.clock.runFor(128);',clockTo='await page.clock.runFor(129);';
+  const clockCopy=once(clockSource,clockFrom,clockTo),clockFile=path.join(OUT,'clock-host.mjs'),clockFaultFile=path.join(OUT,'clock-host-plus-one.mjs');
+  fs.writeFileSync(clockFile,clockSource);fs.writeFileSync(clockFaultFile,clockCopy);
+  report.clockOperation={normal:{file:path.basename(clockFile),sha256:fileSha(clockFile)},copy:{file:path.basename(clockFaultFile),sha256:fileSha(clockFaultFile)},from:clockFrom,to:clockTo};
+  const clockHost=await import(pathToFileURL(clockFile).href),clockFault=await import(pathToFileURL(clockFaultFile).href);
   const complete=[];
-  async function mount(arm,width,stage,tapReference=null){
-    const id=`${arm}-${width}-${stage}`,fixture=clone(fixtures[stage]);const row={id,arm,width,stage,complete:false,states:[],surfaces:[],inputs:[],requests:[],errors:[],sockets:[],screenshots:[]};complete.push(row);save('mounts.json',complete);report.phase=id;persist();
+  async function mount(arm,width,stage,tapReference=null,clockControl=false){
+    const id=`${clockControl?'clock-control-':''}${arm}-${width}-${stage}`,fixture=clone(fixtures[stage]);const row={id,arm,width,stage,clockControl,complete:false,states:[],surfaces:[],inputs:[],requests:[],errors:[],sockets:[],screenshots:[]};complete.push(row);save('mounts.json',complete);report.phase=id;persist();
     const context=await browser.newContext({viewport:{width,height:width<700?844:900},isMobile:width<700,hasTouch:width<700,deviceScaleFactor:1,reducedMotion:'reduce',colorScheme:'dark',serviceWorkers:'block'});
     const resources=new Map(compiled[arm]);for(const file of css)resources.set(`/assets/${file}`,{body:fs.readFileSync(path.join(ROOT,'dist/assets',file)),type:'text/css'});
     const emittedCss=[...resources.keys()].filter(url=>url.endsWith('.css'));
-    resources.set('/',{body:Buffer.from(`<!doctype html><html class="dark"><head><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="data:,">${fontLinks.map(url=>`<link rel="stylesheet" href="${url}">`).join('')}${emittedCss.map(url=>`<link rel="stylesheet" href="${url}">`).join('')}</head><body><div id="root"></div><script type="module" src="/${arm}.js"></script></body></html>`),type:'text/html'});
+    resources.set('/',{body:Buffer.from(`<!doctype html><html class="dark"><head><script>window.__ground.clockBoot={now:Date.now(),performance:performance.now()};</script><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="data:,">${fontLinks.map(url=>`<link rel="stylesheet" href="${url}">`).join('')}${emittedCss.map(url=>`<link rel="stylesheet" href="${url}">`).join('')}</head><body><div id="root"></div><script type="module" src="/${arm}.js"></script></body></html>`),type:'text/html'});
     save(`${id}-resources.json`,Object.fromEntries([...resources].map(([url,payload])=>[url,{bytes:payload.body.length,sha256:sha(payload.body),type:payload.type}])));
     const pending=new Set();const drain=async()=>{while(pending.size)await Promise.all([...pending]);};
     await context.routeWebSocket('**/*',socket=>{row.sockets.push(socket.url());return socket.close();});
@@ -201,8 +206,10 @@ const copy=value=>JSON.parse(JSON.stringify(value)); export function useStadiumT
     async function press(locator,label){await locator.scrollIntoViewIfNeeded();const box=await locator.boundingBox();assert(box);const before=await snapshot(`${label}-before`);const first=await page.evaluate(()=>window.__ground.events.length);if(width<700)await locator.tap();else await locator.click();await page.waitForFunction(()=>window.__ground.calls.length>0);await drain();const events=await page.evaluate(start=>window.__ground.events.slice(start),first);assert(events.some(event=>event.type==='click'&&event.trusted));row.inputs.push({label,box,events});return before;}
     try{
       await page.clock.pauseAt(NOW);await page.goto(base+'/',{waitUntil:'load'});await page.locator('[data-ground-ready="true"] [data-tycoon-pitch]').waitFor();
+      row.clockBoot=await page.evaluate(()=>window.__ground.clockBoot);assert.deepEqual(row.clockBoot,{now:NOW,performance:0});
       row.fonts=await page.evaluate(async()=>{const rows=[];for(const family of ['Space Grotesk','Inter'])for(const weight of [400,500,600,700]){await document.fonts.load(`${weight} 16px "${family}"`);rows.push({family,weight,loaded:document.fonts.check(`${weight} 16px "${family}"`)});}await document.fonts.ready;return{rows,faces:[...document.fonts].map(face=>({family:face.family,weight:face.weight,status:face.status}))};});assert(row.fonts.rows.every(font=>font.loaded&&row.fonts.faces.some(face=>face.family.replace(/["']/g,'')===font.family&&Number(face.weight)===font.weight&&face.status==='loaded')));
-      await page.clock.runFor(128);const initial=await snapshot('initial');assert.deepEqual(initial.hook.state,T.deserializeTycoon(T.serializeTycoon(fixture,NOW),NOW));
+      row.beforeClockAdvance=await snapshot('before-clock-advance');assert.equal(row.beforeClockAdvance.now,NOW);assert.equal(row.beforeClockAdvance.performance,0);
+      await (clockControl?clockFault:clockHost).advance(page);const initial=await snapshot('initial');assert.equal(initial.now,NOW+128,'Declared 128ms clock advance');assert.equal(initial.performance,128,'Declared 128ms clock advance');assert.deepEqual(initial.hook.state,T.deserializeTycoon(T.serializeTycoon(fixture,NOW),NOW));
       const before=await capture('before');row.before=before.surface;row.initial=initial;
       if(['first','boundary','unrelated'].includes(stage)){
         const track=stage==='unrelated'?'tickets':'stands',label=track==='stands'?'Stands':'Ticket Office',button=page.getByRole('button').filter({has:page.getByText(label,{exact:true})});
@@ -244,8 +251,17 @@ const copy=value=>JSON.parse(JSON.stringify(value)); export function useStadiumT
     const first=complete.find(r=>r.id===`current-${width}-first`),attendance=complete.find(r=>r.id===`current-${width}-attendance`);assert.deepEqual(first.before.rects,attendance.before.rects);assert.notEqual(first.before.crowd.length,attendance.before.crowd.length);row.complete=true;persist();
   }
   for(const fault of faults){const row={name:fault.name,expectedAssertion:fault.assertion,complete:false,failures:[]};report.controls.push(row);persist();const old=complete.find(r=>r.id===`old-390-${fault.stage}`),actual=await mount(fault.name,390,fault.stage);row.baseline=old.id;row.actual=actual.id;stageChecks(actual,old,row);assert.equal(row.failures.length,1);assert.equal(row.failures[0].assertion,fault.assertion);row.complete=true;persist();}
-  assert.equal(complete.length,44);assert(complete.every(row=>row.complete&&row.errors.length===0&&row.sockets.length===0));
-  save('mounts.json',complete);report.mounts={file:'mounts.json',count:complete.length,sha256:fileSha(path.join(OUT,'mounts.json')),screenshots:complete.reduce((sum,row)=>sum+row.screenshots.length,0)};
+  const clockCheck={name:'extra-clock-millisecond',assertion:'Declared 128ms clock advance',complete:false,baseline:'current-320-first'};report.clockControl=clockCheck;let clockError;
+  try{await mount('current',320,'first',null,true);}catch(error){clockError=error;clockCheck.error={name:error.name,message:error.message,stack:error.stack};}
+  assert(clockError instanceof assert.AssertionError);assert(clockError.message.includes(clockCheck.assertion));
+  const clockMount=complete.at(-1),clockBaseline=complete.find(row=>row.id===clockCheck.baseline);assert.equal(clockMount.id,'clock-control-current-320-first');clockCheck.actual=clockMount.id;
+  assert.deepEqual(clockMount.clockBoot,clockBaseline.clockBoot);assert.deepEqual(clockMount.beforeClockAdvance,clockBaseline.beforeClockAdvance);
+  const clockActual=clockMount.states.find(row=>row.label==='initial').value;assert.equal(clockActual.now,NOW+129);assert.equal(clockActual.performance,129);
+  const {now:actualNow,performance:actualPerformance,...actualRest}=clockActual,{now:baselineNow,performance:baselinePerformance,...baselineRest}=clockBaseline.initial;
+  assert.deepEqual(actualRest,baselineRest);clockCheck.clocks={actual:{now:actualNow,performance:actualPerformance},baseline:{now:baselineNow,performance:baselinePerformance}};
+  assert.equal(clockMount.complete,false);assert.deepEqual(clockMount.inputs,[]);assert.deepEqual(clockMount.screenshots,[]);clockCheck.complete=true;
+  const regularMounts=complete.filter(row=>!row.clockControl);assert.equal(regularMounts.length,44);assert(regularMounts.every(row=>row.complete));assert.equal(complete.length,45);assert(complete.every(row=>row.errors.length===0&&row.sockets.length===0));
+  save('mounts.json',complete);report.mounts={file:'mounts.json',count:complete.length,regularCount:regularMounts.length,setupCount:1,sha256:fileSha(path.join(OUT,'mounts.json')),screenshots:complete.reduce((sum,row)=>sum+row.screenshots.length,0)};
   report.complete=true;
 }catch(error){report.complete=false;report.errors.push({name:error.name,message:error.message,stack:error.stack});throw error;}
 finally{

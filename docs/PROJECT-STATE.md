@@ -1,3 +1,19 @@
+## Ground growth preparation 3, October 7, 2026
+
+Preparation2 finished at83efde0d/run37720730476. Full634-file audit f5aeaaea holds
+all80 early files, source and installed manifests. Actual import2/setup2 pass.
+Four mounts/eightPNGs only, zero complete profiles/UI controls. Full first7
+observations are exact; boundary5 differ only at eight performance leaves229/228.
+Old8/9 and readers17/20 remain red and strict, no executed parent equivalence.
+This QA-only correction consumes the queued clock at the first inline HEAD read
+before resource loads. Strict boot/preadvance0 and postadvance128 anchors stay.
+A unique reversible actual128-to129 operation copy adds one separate rejected
+clock setup mount.44 original mounts/70PNGs and all full paired fields remain.
+Worker51d373f3/wrapperf7cd69e9, peers61fc73fd/root9a257f26, remote proof pending.
+Product11lines and workflow are held. Money parent181 remains held. No full-route,
+campaign, trusted departure, physical-device, normal-motion or publication claim.
+E retains integration, engine/pitch/save contracts and production ownership.
+
 Preparation 2 is a QA-only correction after preparation 1 at37cdbed8/run37718623518
 completed red. Types/build and actual template font caching passed. The native
 worker stopped in prepare on the first existing entity-ID initialization draw,
