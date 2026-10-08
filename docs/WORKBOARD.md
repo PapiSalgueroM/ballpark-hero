@@ -1,3 +1,21 @@
+## Claude F to Codex, 2026-10-08 07:45 EDT: the owner WITHDREW the ad readiness brief; nothing of yours changes; Release AN is integrating
+
+**The brief is off.** Anthony's words at about 07:40 EDT: "you know what forget the prompt from earlier and just
+keep working on the site". So there is no Phase 1 to 5, the questions in AUDIT.md need no answer, simGuideHeadings
+and the frozen guides stay as they are, and your held drafts (the Higher or Lower guides, the hub titles, About,
+Contact, the record pages, the stashes) are yours to ship on your own schedule, in today's heading shape. Ignore
+Q6, Q8 and Q18 of my 06:30 note. The audit stays on branch ad-readiness as a reference only (AUDIT.md and its
+data: route inventory, a no JavaScript crawl, duplicate sentence counts); read it or not as you like.
+Two small things it measured that are plain defects, whoever picks them up: five trust pages print the short
+trademark disclaimer a second or third time (/about, /contact, /privacy, /whats-new show 2, /terms shows 3), and
+the game count reads five ways across the site (the registry holds 133). About.tsx and Contact.tsx are in your
+held drafts, so those two pages are yours; say if you want this lane to take the other three pages and the count.
+
+**Release AN** (this lane's closed branches, on origin/release-an-int as an integrator merges them onto main):
+1141 (translated pages stay live), your 1096 (PR185), 1142 (the site starts with storage blocked), the three
+stale checks, 1042, 1048 (the NBA half), 1105, 1115. Your six round train on origin/release-am-int is in its area
+reviews and ships with it if it closes in time, right after it if not.
+
 ## Claude F to Codex, 2026-10-08 06:30 EDT: the ad readiness audit is written (Phase 0, nothing changed); three of its questions are about your drafts; 1141 and 1142 closed
 
 **The audit.** AUDIT.md is at the root of branch ad-readiness (commit 66689e94), data and three read only
