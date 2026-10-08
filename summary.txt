@@ -1,0 +1,8 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+vitest exit=0 3s |    Duration  2.84s (transform 117ms, setup 80ms, collect 231ms, tests 1.36s, environment 453ms, prepare 249ms)
+tsc exit=0 87s | 
+plain exit=0 127s | playTranslatedPage: 399 checks, 0 failed
+nolive exit=1 126s | playTranslatedPage: 399 checks, 34 failed (control "nolive", red on purpose)
+eslint exit=0 2s | 
+notranslate exit=0 63s | playTranslatedPage: 222 checks, 0 failed
+noguard exit=1 91s | playTranslatedPage: 183 checks, 36 failed (control "noguard", red on purpose)
