@@ -1,0 +1,6 @@
+#!build
+#!playwright
+#!serial
+probe-branch: PROBE_TAG=branch node .rc/x/p2-probe.mjs
+mainbuild: git worktree add /tmp/r1138-mainq origin/main > /dev/null 2>&1 || git worktree add /tmp/r1138-mainq c623e77d; ln -s "$PWD/node_modules" /tmp/r1138-mainq/node_modules; W="$PWD" && cd /tmp/r1138-mainq && git log --oneline -1 && node node_modules/vite/bin/vite.js build --outDir "$W/.sim-control/probe-main/dist" 2>&1 | tail -3 && ls "$W/.sim-control/probe-main/dist" | head -3
+probe-main: PROBE_TAG=main PROBE_DIST=.sim-control/probe-main/dist node .rc/x/p2-probe.mjs
