@@ -1,0 +1,17 @@
+  FAIL: 390x844: step 3: the table card draws 0 rows for Russian Premier League, the league has 16 clubs
+  FAIL: 390x844: step 7: the live match at Zenit did not reach FULL TIME in two minutes (the page reads: Skip to main content DOUKNOWBALL Back Track stats MATCH LIVE RUSSIAN PREMIER LEAGUE · ROUND 1 FT 90+8' Zenit 3 - 1 Krasnodar 1 Agkatsev 2 Tormena 3 Olaza 4 Vakh)
+  FAIL: 390x844: step 6: the old save's own table draws 0 rows, La Liga has 20 clubs
+  FAIL: 390x844: step 6: in the old save the Russian Premier League table draws 0 rows, the league has 16 clubs
+  FAIL: 1280x800: step 3: the table card draws 0 rows for Russian Premier League, the league has 16 clubs
+  FAIL: 1280x800: step 7: the live match at Zenit did not reach FULL TIME in two minutes (the page reads: Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats MATCH LIVE RUSSIAN PREMIER LEAGUE · ROUND 1 FT 90+5' )
+  FAIL: 1280x800: step 6: the old save's own table draws 0 rows, La Liga has 20 clubs
+  FAIL: 1280x800: step 6: in the old save the Russian Premier League table draws 0 rows, the league has 16 clubs
+  FAIL: 390x844 reduced motion: step 3: the table card draws 0 rows for Russian Premier League, the league has 16 clubs
+  FAIL: 390x844 reduced motion: step 7: the live match at Zenit did not reach FULL TIME in two minutes (the page reads: Skip to main content DOUKNOWBALL Back Track stats MATCH LIVE RUSSIAN PREMIER LEAGUE · ROUND 1 FT 90+6' Zenit 5 - 0 Akhmat Grozny 1 Ulyanov 17 Melkadze 3 Adamov )
+   390x844 Russia: 1 league(s), 16 club tiles, hub on Zenit, 0 table rows, live match not started
+   390x844 old save, resumed on Sevilla: browser says "27 leagues in this save"; Russian Premier League draws 0 rows under "Russian Premier League"
+   1280x800 Russia: 1 league(s), 16 club tiles, hub on Zenit, 0 table rows, live match not started
+   1280x800 old save, resumed on Sevilla: browser says "27 leagues in this save"; Russian Premier League draws 0 rows under "Russian Premier League"
+   390x844 reduced motion Russia: 1 league(s), 16 club tiles, hub on Zenit, 0 table rows, live match not started
+   8 requests to the database host aborted
+playClubManagerNewCountries: 10 failure(s)
