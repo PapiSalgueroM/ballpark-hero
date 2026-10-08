@@ -633,7 +633,7 @@ interface SeedTally {
   /* R3 */ kickBeats: number; kickSum: Record<Arm, number>; kickCount: Record<Arm, number>; kickOffenders: number;
   /* R4 */ follow: Record<Arm, { withBall: Line; without: Line }>;
   /* R6 */ chances: number; holderOffenders: number; steadyOffenders: number; followOffenders: number; underKickoff: number; lastKick: number;
-  waited: number; lateSum: number; lateOffenders: number; overlapped: number; noLead: number; ledOn: number; followSeen: number;
+  waited: number; lateSum: number; lateOffenders: number; overlapped: number; overlapOffenders: number; noLead: number; ledOn: number; followSeen: number;
   goalsToRestart: number; kickoffSeen: number; kickoffShort: number; beforeLastKick: number;
   /* R7 */ dead: Record<DeadKind, number>; deadOffenders: number; flanked: number; standIns: number; deadExamples: string[];
   /* R8 */ handed: number; kickHandOffenders: number; shareOffenders: number; unevenShares: number; awayHalves: number;
@@ -645,7 +645,7 @@ const tally = (club: string): SeedTally => ({
   kickBeats: 0, kickSum: { new: 0, r504: 0 }, kickCount: { new: 0, r504: 0 }, kickOffenders: 0,
   follow: { new: { withBall: line(), without: line() }, r504: { withBall: line(), without: line() } },
   chances: 0, holderOffenders: 0, steadyOffenders: 0, followOffenders: 0, underKickoff: 0, lastKick: 0,
-  waited: 0, lateSum: 0, lateOffenders: 0, overlapped: 0, noLead: 0, ledOn: 0, followSeen: 0,
+  waited: 0, lateSum: 0, lateOffenders: 0, overlapped: 0, overlapOffenders: 0, noLead: 0, ledOn: 0, followSeen: 0,
   goalsToRestart: 0, kickoffSeen: 0, kickoffShort: 0, beforeLastKick: 0,
   dead: { opening: 0, restart: 0, corner: 0, throwin: 0, freekick: 0, goalkick: 0, keeper: 0 }, deadOffenders: 0, flanked: 0, standIns: 0, deadExamples: [],
   handed: 0, kickHandOffenders: 0, shareOffenders: 0, unevenShares: 0, awayHalves: 0,
@@ -777,7 +777,12 @@ function replayHalf(t: SeedTally, input: PitchInput) {
     if (a.at > place + 1e-9) { t.waited++; t.lateSum += a.at - place; }
     if (a.at > place + PITCH_LATE + 1e-9) t.lateOffenders++;
     /* One action at a time: is this one still playing when the next starts? */
-    if (next && next.at < after - 1e-9) t.overlapped++;
+    if (next && next.at < after - 1e-9) {
+      t.overlapped++;
+      /* Never by more than the tenth of a minute two whole minutes fall short of two actions: a chance two
+         minutes before the last kick is still resolving when that kick's wind up starts. */
+      if (after - next.at > 2 * ACTION_SPAN - 2 + 1e-9) t.overlapOffenders++;
+    }
     /* Did it get its lead in? Not when it had to start straight off the action, or the kick off, before it. */
     const clear = before ? before.at + ACTION_SPAN + (before.event.kind === 'goal' ? PITCH_RESTART : 0) : -Infinity;
     const noLead = a.at - clear < PITCH_SQUEEZE - 1e-9;
@@ -928,12 +933,26 @@ const R3_FLOOR = 45;
  *  The floor is 0.30: 0.114 under the lowest seed, which is eleven spreads, and thirty times the old
  *  picture's highest seed plus two spreads (0.010). */
 const R4_FLOOR = 0.3;
-/** R6, one action at a time. PROVISIONAL until the first measured run: see the numbers printed by R6. */
+/** R6, one action at a time. Measured on the 200 half feeds (2,130 chances, 262 goals with play left after
+ *  them; the per seed counts are printed by R6 and recorded here):
+ *  - still playing when the next one starts: 12 of 2,130 (per seed R6_SEEDS_OVERLAP), every one by a twentieth
+ *    or a tenth of a minute beside the last kick of a period, which is wound up to END on the whistle and can
+ *    not wait. The length is a hard rule (0 offenders); the count may be one chance in 50 (42), 3.5 times
+ *    what was measured.
+ *  - set aside because it had no lead in (it started straight off the action or the kick off before it): 64
+ *    of 2,130. One in 10 (213) keeps the holder rule read on nine chances in ten, 3.3 times the measured.
+ *  - a goal whose kick off is seen for less than a beat: 10 of 262 (9 cut by the next chance, 1 by the last
+ *    kick's wind up; per seed R6_SEEDS_SHORT). These are minutes too full to hold a goal, its kick off and
+ *    the next chance, where the next chance has waited as long as it may. One in 12 (21) is twice the
+ *    measured; before chances took turns it was 42 of 91 with no full kick off, and with the beat of kick
+ *    off taken out again (control restartbeat) it is far over. */
 const R6_OVERLAP_ONE_IN = 50;
-const R6_NO_LEAD_ONE_IN = 20;
-const R6_SHORT_KICKOFF_ONE_IN = 20;
-/** R7. How many of each kind of dead ball the material must hold for the rule to have been read at all. PROVISIONAL. */
-const R7_FLOOR: Record<DeadKind, number> = { opening: 199, restart: 100, corner: 200, throwin: 200, freekick: 200, goalkick: 50, keeper: 50 };
+const R6_NO_LEAD_ONE_IN = 10;
+const R6_SHORT_KICKOFF_ONE_IN = 12;
+/** R7. How many of each kind of dead ball the material must hold for the rule to have been read at all: each
+ *  floor is about half of what the 200 halves hold (opening 200, restart 261, corner 693, throw in 1,144, free
+ *  kick 999, goal kick 931, keeper 475), so a data release can move them and an emptied rule can not pass. */
+const R7_FLOOR: Record<DeadKind, number> = { opening: 199, restart: 130, corner: 350, throwin: 570, freekick: 500, goalkick: 460, keeper: 240 };
 const LONG = 300000;
 
 describe('The pitch part on real feeds', () => {
@@ -962,7 +981,7 @@ describe('The pitch part on real feeds', () => {
     const fresh = sum(m.seeds.map(t => t.sceneOverlaps.new)), old = sum(m.seeds.map(t => t.sceneOverlaps.r504)), tweens = sum(m.seeds.map(t => t.tweenRuns)), acts = sum(m.seeds.map(t => t.actionRuns));
     console.log(`[1101 R2] scenes ${scenes}; overlapping pairs in a scene: new ${fresh}, Round 504 ${old}; pairs overlapping two samples running: in a tween ${tweens}, in an action ${acts}${acts + tweens ? `; first cases: ${m.seeds.flatMap(t => t.examples).slice(0, 6).join(" | ")}` : ""}`);
     /* A sample floor, not a band: 200 halves stage about 20,000 stretches (20,829 before chances waited their
-       turn, 20,370 since), and a data release that moves the number of chances moves this a few percent. */
+       turn, 20,534 since), and a data release that moves the number of chances moves this a few percent. */
     expect(scenes).toBeGreaterThan(15000);
     expect(fresh).toBe(0);
     expect(tweens).toBe(0);
@@ -1009,8 +1028,8 @@ describe('The pitch part on real feeds', () => {
     const total = (pick: (t: SeedTally) => number) => sum(m.seeds.map(pick));
     const chances = total(t => t.chances), waited = total(t => t.waited);
     console.log(`[1101 R6] chances staged ${chances}; holder offenders ${total(t => t.holderOffenders)}, steady offenders ${total(t => t.steadyOffenders)}, follow up offenders ${total(t => t.followOffenders)}; a miss or a save followed by its goal kick or its keeper ${total(t => t.followSeen)}, led straight on to the next chance ${total(t => t.ledOn)}; set aside and counted: no lead in ${total(t => t.noLead)}, started from a kick off picture ${total(t => t.underKickoff)}, the last kick of the period ${total(t => t.lastKick)}`);
-    console.log(`[1101 R6 turns] chances that waited for their turn ${waited} of ${chances}, by ${(total(t => t.lateSum) / Math.max(1, waited)).toFixed(2)} on average, later than ${PITCH_LATE} ${total(t => t.lateOffenders)}; still playing when the next one starts ${total(t => t.overlapped)}`);
-    console.log(`[1101 R6 kick offs] goals with play left after them ${total(t => t.goalsToRestart)}: kick off seen for a beat or more ${total(t => t.kickoffSeen)}, cut under a beat by the next chance ${total(t => t.kickoffShort)}, none because the last kick's wind up came first ${total(t => t.beforeLastKick)}`);
+    console.log(`[1101 R6 turns] chances that waited for their turn ${waited} of ${chances}, by ${(total(t => t.lateSum) / Math.max(1, waited)).toFixed(2)} on average, later than ${PITCH_LATE} ${total(t => t.lateOffenders)}; still playing when the next one starts ${total(t => t.overlapped)} (per seed ${m.seeds.map(t => t.overlapped).join(' ')}), by more than a tenth of a minute ${total(t => t.overlapOffenders)}`);
+    console.log(`[1101 R6 kick offs] goals with play left after them ${total(t => t.goalsToRestart)}: kick off seen for a beat or more ${total(t => t.kickoffSeen)}, cut under a beat by the next chance ${total(t => t.kickoffShort)}, none because the last kick's wind up came first ${total(t => t.beforeLastKick)}; under a beat per seed ${m.seeds.map(t => `${t.kickoffShort + t.beforeLastKick} of ${t.goalsToRestart}`).join(', ')}; no lead in per seed ${m.seeds.map(t => `${t.noLead} of ${t.chances}`).join(', ')}`);
     expect(chances).toBeGreaterThan(1000);
     expect(total(t => t.holderOffenders)).toBe(0);
     expect(total(t => t.steadyOffenders)).toBe(0);
@@ -1019,10 +1038,12 @@ describe('The pitch part on real feeds', () => {
     expect(waited).toBeGreaterThan(100);
     expect(total(t => t.lateOffenders)).toBe(0);
     expect(total(t => t.overlapped) * R6_OVERLAP_ONE_IN).toBeLessThan(chances);
+    expect(total(t => t.overlapOffenders)).toBe(0);
     expect(total(t => t.noLead) * R6_NO_LEAD_ONE_IN).toBeLessThan(chances);
-    /* Every goal gets its kick off. */
+    /* A goal gets its kick off: seen for a beat or more, but for the few minutes too full to hold one. */
     expect(total(t => t.goalsToRestart)).toBeGreaterThan(100);
-    expect(total(t => t.kickoffShort) * R6_SHORT_KICKOFF_ONE_IN).toBeLessThan(total(t => t.goalsToRestart));
+    expect(total(t => t.kickoffSeen + t.kickoffShort + t.beforeLastKick)).toBe(total(t => t.goalsToRestart));
+    expect(total(t => t.kickoffShort + t.beforeLastKick) * R6_SHORT_KICKOFF_ONE_IN).toBeLessThan(total(t => t.goalsToRestart));
   }, LONG);
 
   it('R7: every dead ball is taken by the right side from the right place', () => {

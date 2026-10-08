@@ -8,7 +8,8 @@
  *      the hold.
  *   2. REDUCED MOTION. With the device asking for less motion, nothing under the pitch or the card is
  *      animating at three instants (one of them inside a goal), and the score and the card still arrive.
- *   3. THE FIT, at 320 by 568, 390 by 844, 768 by 1024 and 1280 by 900: the stage is exactly the window,
+ *   3. THE FIT, at 320 by 568, 390 by 844, 768 by 1024, 1280 by 900 and 844 by 390 (a phone on its side,
+ *      where the pitch must be drawn on its side at 4 by 3 and nine tenths of the height): the stage is exactly the window,
  *      its strip starts inside it and its control row ends inside it, the pitch has the share of the
  *      screen the round promised, nothing overflows sideways, every control is 44 px both ways, and a
  *      hit test at the middle of Back, the score and each control lands on that very element.
@@ -19,6 +20,10 @@
  *   6. BACK. The stage's Back button folds the match to a small card in the page and pauses it (the
  *      clock is read again 2.6 seconds later), the page is free to scroll again, and the card's one
  *      button puts the stage back with the clock running.
+ *   7. A WIDE SCREEN. At 1280 by 900, where the match is listed line by line beside the pitch, a goal is
+ *      watched again: the list says GOAL! only once the ball is in (never on a plant or flight frame),
+ *      and neither does the line under the pitch, at any size. Sections 1 and 7 leave two screenshots each
+ *      (the ball on its way, the card up) when LIVE_FIT_SHOTS or RC_OUT names a folder.
  *
  * NEGATIVE CONTROL. LIVE_FIT_CONTROL=bar pushes the control row 200 px down with a style tag (after
  * asserting the selector matches exactly one node). Section 3 must go red; 1, 2 and 4 must stay green.
@@ -182,7 +187,11 @@ async function startSampler(page) {
       const score = document.querySelector('[data-cm-live-score]');
       const card = document.querySelector('[data-cm-goal-card]');
       const root = document.querySelector('[data-cm-live-stage]');
+      const log = document.querySelector('[data-cm-live-log]');
+      const line = document.querySelector('[data-cm-live-event]');
       out.push({
+        told: log && log.getBoundingClientRect().height > 0 ? [...log.querySelectorAll('li')].filter(li => li.textContent.includes('GOAL!')).length : null,
+        line: line ? line.textContent.replace(/\s+/g, ' ').trim() : '',
         t: performance.now(),
         score: score ? score.textContent.replace(/\s+/g, ' ').trim() : null,
         motion: pitch ? pitch.getAttribute('data-cm-motion') : null,
@@ -254,6 +263,22 @@ async function watchAGoal(page, { tapCard, onTick }) {
   return null;
 }
 
+/** Two screenshots of the goal being watched, when a folder was asked for: one with the ball on its way, one
+ *  with the card up. Returned as watchAGoal's onTick. */
+function goalShots(page, prefix) {
+  const done = new Set();
+  return async () => {
+    if (!SHOTS || done.size === 2) return;
+    const now = await page.evaluate(() => {
+      const p = document.querySelector('[data-cm-live-pitch]');
+      return { motion: p ? p.getAttribute('data-cm-motion') : null, phase: p ? p.getAttribute('data-cm-motion-phase') : null, card: !!document.querySelector('[data-cm-goal-card]') };
+    }).catch(() => null);
+    if (!now) return;
+    if (now.motion === 'goal' && (now.phase === 'plant' || now.phase === 'flight') && !done.has('windup')) { done.add('windup'); await shoot(page, prefix + '-goal-windup'); }
+    else if (now.card && !done.has('card')) { done.add('card'); await shoot(page, prefix + '-goal-card'); }
+  };
+}
+
 const inside = (inner, outer) => inner[0] >= outer[0] - 1 && inner[1] >= outer[1] - 1 && inner[2] <= outer[2] + 1 && inner[3] <= outer[3] + 1;
 
 /** Sections 1 and 4 read one watched goal: the order of things, and that the page never moved. */
@@ -269,12 +294,12 @@ function timeline(samples) {
   return runs.map(r => (r.label === 'TAP' ? 'TAP' : `${r.label} x${r.n}`)).join(' | ');
 }
 
-function judgeGoal(watched, { reduced }) {
+function judgeGoal(watched, { reduced, wide = false }) {
   const before = failures;
-  try { return judgeGoalFrames(watched, { reduced }); }
+  try { return judgeGoalFrames(watched, { reduced, wide }); }
   finally { if (failures > before || V) console.log('      what was drawn: ' + timeline(watched.samples).slice(0, 2400)); }
 }
-function judgeGoalFrames(watched, { reduced }) {
+function judgeGoalFrames(watched, { reduced, wide }) {
   const frames = watched.samples.filter(s => !s.tapped && s.score !== null);
   if (frames.length < 30) { fail(`only ${frames.length} frames were sampled around the goal`); return; }
   const first = frames[0].score;
@@ -291,6 +316,24 @@ function judgeGoalFrames(watched, { reduced }) {
     else ok(`the goal in order: ${windup.length} frames of wind up and flight all read ${first}, and the first frame reading ${at.score} is in phase net with the net marked`);
   } else if (at.phase !== 'net') fail(`under reduced motion the frame with the new score reads phase ${at.phase}`);
   else ok(`under reduced motion the score reads ${at.score} on a frame in phase net`);
+  /* Nothing says GOAL before the ball is in: not the line under the pitch, and where the list beside the pitch
+     is on screen (768 wide and up) not the list either. The list must say it in the end. */
+  if (!reduced) {
+    const lineEarly = windup.filter(f => /^GOAL!/.test(f.line || '')).length;
+    if (lineEarly) fail(`the line under the pitch already read GOAL! on ${lineEarly} of ${windup.length} plant and flight frames`);
+    else ok(`the line under the pitch never read GOAL! while the ball was on its way (${windup.length} frames)`);
+    const listed = frames.filter(f => f.told !== null && f.told !== undefined);
+    if (wide && !listed.length) fail('the list beside the pitch was never on screen on a wide window');
+    else if (listed.length) {
+      const start = listed[0].told;
+      const toldEarly = windup.filter(f => f.told !== null && f.told > start).length;
+      const said = listed.findIndex(f => f.told > start);
+      if (toldEarly) fail(`the list beside the pitch said GOAL! on ${toldEarly} of ${windup.length} plant and flight frames, before the ball was in`);
+      else if (said < 0) fail(`the list beside the pitch never said this goal (${start} GOAL! lines all through ${listed.length} frames)`);
+      else if (listed[said].phase !== 'net' && listed[said].motion === 'goal') fail(`the list beside the pitch first said GOAL! on a frame in phase ${listed[said].phase}`);
+      else ok(`the list beside the pitch said GOAL! only once the ball was in (first on a frame reading ${listed[said].motion}/${listed[said].phase}, score ${listed[said].score})`);
+    }
+  }
   const carded = frames.filter(f => f.card);
   if (!carded.length) fail('no scorer card was ever on screen around the goal');
   else {
@@ -390,14 +433,15 @@ function measure(page) {
       controlRects: controls.map(b => ({ name: (b.getAttribute('aria-label') || b.textContent || '').trim().slice(0, 24), width: b.getBoundingClientRect().width, height: b.getBoundingClientRect().height, hit: hit(b) })),
       backHit: hit(back), scoreHit: hit(score), hasBack: !!back,
       small, smallest, under44, labels: labels.length, overlapping,
+      orient: document.querySelector('[data-pm-orient]') ? document.querySelector('[data-pm-orient]').getAttribute('data-pm-orient') : null,
     };
   });
 }
 
 /** The mean number of overlapping name labels a frame, over a couple of seconds of open play. */
-async function labelMean(page) {
+async function labelMean(page, frames = 24) {
   let sum = 0, n = 0, labels = 0;
-  for (let i = 0; i < 24; i++) {
+  for (let i = 0; i < frames; i++) {
     const m = await measure(page);
     if (m.labels) { sum += m.overlapping; labels = m.labels; n++; }
     await page.waitForTimeout(250);
@@ -410,6 +454,8 @@ const VIEWPORTS = [
   { name: '390 by 844', width: 390, height: 844, phone: true },
   { name: '768 by 1024', width: 768, height: 1024, phone: false },
   { name: '1280 by 900', width: 1280, height: 900, phone: false, tall: true },
+  /* A phone on its side: the pitch is drawn on its side at its own 4 by 3, with the phone's rows beside it. */
+  { name: '844 by 390', width: 844, height: 390, phone: false, sideways: true },
 ];
 const round = v => (v === null || v === undefined ? 'none' : Math.round(v * 10) / 10);
 
@@ -430,6 +476,12 @@ function judgeFit(view, m) {
     if (view.phone && share < 0.6) problems.push(`the pitch is ${round(share * 100)} percent of the height`);
     if (view.phone && m.pitch.width < m.window.width * 0.98) problems.push(`the pitch is ${round(m.pitch.width)} wide in a window ${m.window.width} wide`);
     if (view.tall && m.pitch.height < 700) problems.push(`the pitch is ${round(m.pitch.height)} px tall on the desktop`);
+    if (view.sideways) {
+      const shape = m.pitch.width / m.pitch.height;
+      if (m.orient !== 'landscape') problems.push(`the pitch is drawn ${m.orient}, not on its side`);
+      if (shape < 1.25 || shape > 1.4) problems.push(`the pitch is ${round(m.pitch.width)} by ${round(m.pitch.height)}, not 4 by 3 on its side`);
+      if (m.pitch.height < m.window.height * 0.9) problems.push(`the pitch is ${round(m.pitch.height)} px tall in a window ${m.window.height} tall`);
+    } else if (m.orient !== 'portrait') problems.push(`the pitch is drawn ${m.orient} in an upright window`);
     if (m.controls && m.pitch.bottom > m.controls.top + 0.5) problems.push('the pitch runs under the control row');
     if (m.strip && m.pitch.top < m.strip.bottom - 0.5) problems.push('the pitch starts under the strip');
   }
@@ -441,7 +493,7 @@ function judgeFit(view, m) {
   if (covered.length) problems.push(`something is drawn over: ${covered.map(c => c.name).join(', ')}`);
   if (!m.hasBack || !m.backHit) problems.push('Back is missing or covered');
   if (!m.scoreHit) problems.push('the score is covered');
-  if (view.phone && !m.statline) problems.push('the stats line is not on screen on a phone');
+  if ((view.phone || view.sideways) && !m.statline) problems.push('the stats line is not on screen on a phone');
   if (view.phone && m.statline && (m.statline.height < 18 || m.statline.top < (m.pitch?.bottom ?? 0) - 0.5)) problems.push(`the stats line is ${round(m.statline.height)} tall at ${round(m.statline.top)}`);
   if (problems.length) fail(`${view.name}: ${problems.join('; ')}`);
   else ok(`${view.name}: the stage is the window, strip at ${round(m.strip.top)}, pitch ${round(m.pitch.width)} by ${round(m.pitch.height)} (${round(m.pitch.height / m.window.height * 100)} percent of the height), control row ends at ${round(m.controls.bottom)} of ${m.window.height}, ${m.controlRects.length} controls all 44 px and none covered`);
@@ -524,7 +576,7 @@ try {
   /* The page settles its own reveal as the match opens; the reading is taken after that. */
   await page.waitForTimeout(1500);
   const yBefore = await page.evaluate(() => window.scrollY);
-  const watched = await watchAGoal(page, { tapCard: true });
+  const watched = await watchAGoal(page, { tapCard: true, onTick: goalShots(page, 'phone') });
   let frames = [];
   if (!watched) fail('eight halves passed without a goal that could be watched');
   else frames = judgeGoal(watched, { reduced: false }) ?? [];
@@ -546,7 +598,7 @@ try {
     console.log('  Negative control: the control row is pushed 200 px down.');
   }
   for (const view of VIEWPORTS) {
-    if (REPORT && view.width === 768) continue;
+    if (REPORT && (view.width === 768 || view.sideways)) continue;
     await page.setViewportSize({ width: view.width, height: view.height });
     await page.waitForTimeout(600);
     if (!(await withRoom(page, 5))) { fail(`${view.name}: no running match to measure`); continue; }
@@ -554,6 +606,11 @@ try {
     const m = await measure(page);
     judgeFit(view, m);
     await shoot(page, `fit-${view.width}`);
+    if (!REPORT && !CONTROL && view.width !== 390) {
+      /* Printed, not asserted: there is no reading of these sizes from before match mode to hold them to. */
+      const labels = await labelMean(page, 10);
+      console.log(`  [labels ${view.name}] mean overlapping name labels a frame ${labels.mean.toFixed(2)} over ${labels.frames} frames of ${labels.labels} labels`);
+    }
     if (view.width === 390) {
       const labels = await labelMean(page);
       console.log(`  [labels 390] mean overlapping name labels a frame ${labels.mean.toFixed(2)} over ${labels.frames} frames of ${labels.labels} labels; before match mode ${LABELS_BEFORE.mean} at ${LABELS_BEFORE.commit}${Number.isFinite(LABELS_BEFORE.mean) && LABELS_BEFORE.mean > 0 ? `, ratio ${(labels.mean / LABELS_BEFORE.mean).toFixed(2)}` : ''}`);
@@ -656,6 +713,24 @@ try {
   }
   errors.push(...still.errors);
   await calm.close();
+
+  section = 7;
+  console.log('7) A wide screen');
+  if (REPORT || CONTROL) console.log('  (not in the measuring pass or under a control)');
+  else {
+    const desk = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+    const wide = await openPage(desk);
+    await takeJob(wide);
+    if (!(await startLive(wide))) fail('the live viewer never opened at 1280 by 900');
+    else {
+      await wide.waitForTimeout(1200);
+      const seen = await watchAGoal(wide, { tapCard: false, onTick: goalShots(wide, 'wide') });
+      if (!seen) fail('eight halves passed without a goal to watch at 1280 by 900');
+      else judgeGoal(seen, { reduced: false, wide: true });
+    }
+    errors.push(...wide.errors);
+    await desk.close();
+  }
 } catch (e) {
   fail(`the walk stopped: ${e && e.message ? e.message : e}`);
 } finally {
@@ -674,5 +749,5 @@ if (CONTROL === 'bar') {
 console.log(failures
   ? `playLiveMatchFit: ${failures} failure${failures === 1 ? '' : 's'}.`
   : REPORT ? 'playLiveMatchFit: measuring pass done, sections 1, 2, 4 and 5 green, section 3 printed and not asserted.'
-    : 'playLiveMatchFit: all green. The goal in order, reduced motion, the fit at four sizes, nothing moves the page, the reload, Back.');
+    : 'playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.');
 process.exit(failures ? 1 : 0);
