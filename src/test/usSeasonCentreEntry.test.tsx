@@ -24,7 +24,13 @@
    season played and no viewer, which is what a reviewer found where Rounds
    1048 and 1142 met. Every season the host is asked to show is written
    down, so "this tab's season, never the other tab's" is read off the
-   request and not off the screen. */
+   request and not off the screen.
+
+   Release AN, second half (Round 1084 joins): that same press must also SAY
+   the save was refused (the board's notice and one toast) while the viewer
+   opens, and Retry save, once the device takes writes again, must put the
+   season he watched on the save without playing it again. Before the device
+   refuses anything the notice is absent, so the check can fail. */
 import fs from 'node:fs';
 import path from 'node:path';
 import type { ComponentType } from 'react';
@@ -36,9 +42,12 @@ import { act, cleanup, fireEvent, render, waitFor } from '@testing-library/react
 vi.mock('@/lib/completions', () => ({ recordCompletion: vi.fn(), recordActivity: vi.fn(), getCurrentPlayerName: () => 'Tester' }));
 vi.mock('@/lib/badges', () => ({ getNewlyEarnedBadges: () => Promise.resolve([]) }));
 vi.mock('@/contexts/AuthContext', () => ({ useAuth: () => ({ user: null, profile: null, refreshProfile: () => undefined }) }));
-vi.mock('sonner', () => ({ toast: { success: () => undefined } }));
+/* Release AN, second half: the board says a refused save out loud since Round 1084 (toast.error and a notice
+   with Retry save). This mock had no error on it, so the four storage full tests below died inside the board
+   the moment the two rounds met in one tree. The words it is called with are written down. */
+vi.mock('sonner', () => ({ toast: { success: () => undefined, error: (words: string) => { ctl.toasts.push(words); } } }));
 /* The control's switch: the real entry, its press followed by one extra draw when the switch is on. */
-const ctl = vi.hoisted(() => ({ extraDraw: false, playFirst: false, noHandOver: false, opens: [] as { year: number; seasons: number }[] }));
+const ctl = vi.hoisted(() => ({ extraDraw: false, playFirst: false, noHandOver: false, opens: [] as { year: number; seasons: number }[], toasts: [] as string[] }));
 vi.mock('@/components/us-career/season/UsSeasonCentreEntry', async importOriginal => {
   const original = await importOriginal<typeof import('@/components/us-career/season/UsSeasonCentreEntry')>();
   const host = await import('@/components/us-career/season/UsSeasonCentreHost');
@@ -163,6 +172,7 @@ beforeEach(() => {
   ctl.playFirst = false;
   ctl.noHandOver = false;
   ctl.opens.length = 0;
+  ctl.toasts.length = 0;
   vi.useFakeTimers({ toFake: ['Date'] });
   vi.setSystemTime(new Date('2026-10-07T12:00:00Z'));
   localStorage.clear();
@@ -311,11 +321,13 @@ describe.each(BOUND)('$name My Career: watching changes nothing', ({ Board, spor
   /** From here on the browser refuses every write of this career's save, as a full storage does. */
   function refuseTheSave() {
     const real = Storage.prototype.setItem;
-    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, k: string, v: string) {
+    return vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, k: string, v: string) {
       if (k === sport.saveKey) throw new Error('QuotaExceededError');
       real.call(this, k, v);
     });
   }
+  /** Round 1084's notice for a save the device refused, with its Retry save button. */
+  const refusedNotice = () => q('[data-us-career-save-error][data-save-operation="write"]');
 
   it('opens the season he just played when storage is full and the save was refused', async () => {
     seedSave(sport, pos, `full|${sport.slug}`);
@@ -323,7 +335,10 @@ describe.each(BOUND)('$name My Career: watching changes nothing', ({ Board, spor
     await flush();
     const stored = localStorage.getItem(sport.saveKey);
     const year = savedCareer(sport).year;
-    refuseTheSave();
+    /* while the device still takes the save nothing is said */
+    expect(refusedNotice()).toBeNull();
+    expect(ctl.toasts).toEqual([]);
+    const refusing = refuseTheSave();
     await pressWatch();
     /* the save is where it was (no season on it), and the viewer is open on the one season this press played */
     expect(localStorage.getItem(sport.saveKey)).toBe(stored);
@@ -331,11 +346,25 @@ describe.each(BOUND)('$name My Career: watching changes nothing', ({ Board, spor
     await waitFor(() => expect(q('[data-season-centre]')).not.toBeNull(), { timeout: 4000 });
     expect(q('[data-us-centre-cover]')).not.toBeNull();
     expect(ctl.opens).toEqual([{ year, seasons: 1 }]);
+    /* Release AN, second half, where Round 1084 meets this press: the refused save is SAID, once, while the
+       viewer opens over it. Neither round takes the other's promise away. */
+    expect(refusedNotice()).not.toBeNull();
+    expect(ctl.toasts).toHaveLength(1);
     /* closing it leaves the curtain of that same season, as on any other press */
     await click(q('[data-centre-exit]'));
     expect(q('[data-us-centre-cover]')).toBeNull();
     expect(q('[data-season-reveal]')).not.toBeNull();
     expect(localStorage.getItem(sport.saveKey)).toBe(stored);
+    /* the notice is still up beside the curtain, and once the device takes writes again its Retry save puts
+       the season he watched on the save: the same year, one season, nothing played a second time */
+    expect(refusedNotice()).not.toBeNull();
+    refusing.mockRestore();
+    await click([...refusedNotice()!.querySelectorAll('button')].find(b => squash(b.textContent ?? '') === 'Retry save'));
+    expect(refusedNotice()).toBeNull();
+    expect(savedCareer(sport).seasons).toHaveLength(1);
+    expect(savedCareer(sport).seasons[0].year).toBe(year);
+    expect(ctl.opens).toEqual([{ year, seasons: 1 }]);
+    expect(ctl.toasts).toHaveLength(1);
   }, 30000);
 
   it('CONTROL: without the board handing its career over, the same press plays the season and opens nothing', async () => {
