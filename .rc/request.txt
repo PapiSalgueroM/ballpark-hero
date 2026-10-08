@@ -1,0 +1,2 @@
+#!serial
+ticket-1099: bash .rc/x/ticket-help-binding-1099.sh
