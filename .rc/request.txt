@@ -1,0 +1,6 @@
+#!build
+#!playwright
+#!serial
+# Release AM fixer pass 2, closing check on f20b9762: the two native drivers that only start on a GitHub runner.
+goalflight: bash .rc/x/goalflight.sh
+homenative: bash .rc/x/homenative.sh
