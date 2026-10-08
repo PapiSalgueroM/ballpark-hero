@@ -193,7 +193,9 @@ describe("managerLeagueField (Round 1029)", () => {
     expect(f.league).toBe("Austrian Bundesliga");
     expect(f.named).toEqual(["Sturm Graz"]);
     expect(f.sizeVerified).toBe(false);
-    expect(f.size).toBe(MANAGER_FIELD);
+    /* Round 1100: the Austrian Bundesliga is in the odd ledger, so the table
+       has its real 12 rows (it was the default field of 20), still unverified */
+    expect(f.size).toBe(12);
   });
 
   it("matches a league by name across a border", () => {
@@ -365,8 +367,12 @@ describe("dugoutTableWords (Round 1029)", () => {
   it("keeps an old save's table and its order note", () => {
     const old = dugoutTableWords({ leagueSize: 20, table: [{ club: "Ajax", pts: 80, pos: 1 }, me] });
     expect([old.header, old.named, old.sizeUnknown, old.note, old.orderNote]).toEqual(["Final table", true, false, null, null]);
+    /* Round 1100: MLS is in the odd ledger now, so its table says why it has
+       no points; a league in neither ledger keeps the old line, still true */
     const mls = dugoutTableWords({ league: "MLS", leagueSize: 30, knownRivals: 12, table });
-    expect(mls.orderNote).toBe("The order only: we don't know how many clubs the MLS has.");
+    expect(mls.orderNote).toBe("The order only: MLS plays in two conferences, so no points here.");
+    const mx = dugoutTableWords({ league: "Liga MX", leagueSize: 20, knownRivals: 12, table });
+    expect(mx.orderNote).toBe("The order only: we don't know how many clubs the Liga MX has.");
   });
 });
 
