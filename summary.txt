@@ -1,0 +1,7 @@
+build exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+play-main exit=0 192s | playStorageBlocked: 777 checks, 0 failed
+play-raw exit=1 401s | playStorageBlocked (control raw): 737 checks, 237 failed
+play-open exit=0 178s | playStorageBlocked (control open): 682 checks, 0 failed
+native exit=0 79s | nativeBlocked: 12 loads, the real accessor threw SecurityError in 6
+playHomeFold exit=0 30s | playHomeFold: green. The first thing on the page is something to play.
+playTranslatedPage exit=0 104s | playTranslatedPage: 238 checks, 0 failed
