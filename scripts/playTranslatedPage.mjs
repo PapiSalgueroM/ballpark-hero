@@ -1356,12 +1356,51 @@ async function costRun() {
       await cdp.send('Performance.enable');
       await W.page.goto(BASE + CREATE_ROUTE, { waitUntil: 'load', timeout: 45000 });
       await walkCreate(W, rec);
-      const m = (await cdp.send('Performance.getMetrics')).metrics;
-      const get = n => (m.find(x => x.name === n) || { value: 0 }).value;
+      const metrics = async () => {
+        const m = (await cdp.send('Performance.getMetrics')).metrics;
+        const get = n => (m.find(x => x.name === n) || { value: 0 }).value;
+        return { script: get('ScriptDuration'), task: get('TaskDuration') };
+      };
+      const walked = await metrics();
+      /* A season lived week by week: the Season Centre's running clock is the busiest stretch of the
+         page. On to the bar that offers it, then COST_WEEK_MS of it at 3x, pressing whatever starts the
+         next match and letting every moment play itself. Same dice, so the same season in each build. */
+      const extra = {};
+      const seen = () => W.page.evaluate(() => { const b = document.querySelector('[data-week-by-week]'); return !!b && b.getBoundingClientRect().width > 2; }).catch(() => false);
+      for (let i = 1; i <= 14 && !(await seen()); i += 1) {
+        const ok = await step(W, rec, `on to the season bar ${i}`, async () => { const r = await advance(W.page, WALK.actions, WALK.skip, extra); await sleep(W.page, 450); return r; });
+        if (!ok) break;
+      }
+      const week = { found: await seen(), script: 0, task: 0, started: 0 };
+      if (week.found) {
+        const before = await metrics();
+        week.started = await W.page.evaluate(async ms => {
+          document.querySelector('[data-week-by-week]').click();
+          const until = performance.now() + ms;
+          let started = 0;
+          let fast = false;
+          const label = b => (b.innerText || '').replace(/\s+/g, ' ').trim();
+          while (performance.now() < until) {
+            await new Promise(r => setTimeout(r, 400));
+            const buttons = [...document.querySelectorAll('[role="dialog"] button')].filter(b => !b.disabled && b.getBoundingClientRect().width > 2);
+            if (!fast) { const f = buttons.find(b => label(b) === '3x'); if (f) { f.click(); fast = true; } }
+            const let_ = buttons.find(b => /^Let it play/.test(label(b)));
+            if (let_) { let_.click(); continue; }
+            const kick = document.querySelector('[data-kickoff] button');
+            const next = kick || [...document.querySelectorAll('[data-centre-bar] button')].find(b => /^▶/.test(label(b)) && !/Resume/.test(label(b)));
+            if (next && !next.disabled) { next.click(); started += 1; }
+          }
+          return started;
+        }, Number(env.COST_WEEK_MS || 25000)).catch(() => -1);
+        const after = await metrics();
+        week.script = after.script - before.script;
+        week.task = after.task - before.task;
+      }
       const calls = await W.page.evaluate(stress);
       const state = rec.state || {};
       got.get(name).push({
-        script: get('ScriptDuration'), task: get('TaskDuration'), steps: rec.steps.length, age: state.save ? state.save.age : null,
+        script: walked.script, task: walked.task, steps: rec.steps.length, age: state.save ? state.save.age : null,
+        weekScript: week.script, weekTask: week.task, weekStarted: week.found ? week.started : -1,
         guardOn: (rec.first || {}).guardOn === true, live: !!state.live, stuck: rec.stuckAt || rec.boundaryAt || '', ...calls,
       });
       await W.ctx.close();
@@ -1370,11 +1409,11 @@ async function costRun() {
   const mid = a => { const s = a.slice().sort((x, y) => x - y); return s[Math.floor(s.length / 2)]; };
   const f = (n, d = 0) => n.toFixed(d);
   console.log(`\nCOST, ${reps} run(s) of each, the middle one shown (all runs in brackets). The walk: ${CREATE_ROUTE} untranslated, create flow and ${CAREER_PRESSES} career presses, 1280 by 900.`);
-  console.log(`  ${'build'.padEnd(16)}${'script s'.padEnd(26)}${'tasks s'.padEnd(26)}${'100k rewrites ms'.padEnd(24)}${'20k element ms'.padEnd(24)}${'20k text node ms'.padEnd(24)}walk`);
+  console.log(`  ${'build'.padEnd(16)}${'walk script s'.padEnd(26)}${'walk tasks s'.padEnd(26)}${'week by week script s'.padEnd(26)}${'week by week tasks s'.padEnd(26)}${'100k rewrites ms'.padEnd(24)}${'20k element ms'.padEnd(24)}${'20k text node ms'.padEnd(24)}walk`);
   for (const [name] of kinds) {
     const rows = got.get(name);
     const col = (k, d) => `${f(mid(rows.map(r => r[k])), d)} [${rows.map(r => f(r[k], d)).join(' ')}]`;
-    console.log(`  ${name.padEnd(16)}${col('script', 2).padEnd(26)}${col('task', 2).padEnd(26)}${col('writes', 0).padEnd(24)}${col('elements', 0).padEnd(24)}${col('textNodes', 0).padEnd(24)}${rows.map(r => `${r.steps} steps to age ${r.age}${r.stuck ? ' STUCK ' + r.stuck.slice(0, 30) : ''} (guard ${r.guardOn ? 'on' : 'off'}, layer two ${r.live ? 'on' : 'off'})`)[0]}`);
+    console.log(`  ${name.padEnd(16)}${col('script', 2).padEnd(26)}${col('task', 2).padEnd(26)}${col('weekScript', 2).padEnd(26)}${col('weekTask', 2).padEnd(26)}${col('writes', 0).padEnd(24)}${col('elements', 0).padEnd(24)}${col('textNodes', 0).padEnd(24)}${rows.map(r => `${r.steps} steps to age ${r.age}${r.stuck ? ' STUCK ' + r.stuck.slice(0, 30) : ''} (guard ${r.guardOn ? 'on' : 'off'}, layer two ${r.live ? 'on' : 'off'})`)[0]}; matches started week by week: ${rows.map(r => r.weekStarted).join(' ')}`);
   }
   if (OUT_JSON) { try { fs.mkdirSync(path.dirname(OUT_JSON), { recursive: true }); fs.writeFileSync(OUT_JSON, JSON.stringify({ base: BASE, cost: Object.fromEntries(got) }, null, 1)); } catch { /* the numbers are on the screen */ } }
   console.log('playTranslatedPage: cost measured, 0 checks, 0 failed');
