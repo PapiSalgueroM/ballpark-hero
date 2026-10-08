@@ -1,0 +1,2 @@
+vit-board exit=0 16s |    Duration  14.98s (transform 2.11s, setup 114ms, collect 3.70s, tests 12.63s, environment 698ms, prepare 239ms)
+tsc exit=0 37s | 
