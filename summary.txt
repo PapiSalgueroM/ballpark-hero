@@ -1,0 +1,10 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk-expect exit=0 11s | control expect fired: 4 of 4 comparisons went red on exactly the one man
+walk exit=0 11s | playFoOneRating: green. The roster shelf and the draft cards print the committed files' numbers at both sizes.
+simFrontOfficeRoster exit=0 1s | simFrontOfficeRoster: 156 checks passed over 32 teams and 480 players
+simSiteSearch exit=0 2s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simGuideHeadings exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+simPrerender exit=1 1s | simPrerender: 1 failure
+simSnapshotAssets exit=0 0s | simSnapshotAssets: green. Every page knows where its own code is, and finding out costs nobody a round trip.
+tsc exit=0 58s | 
+playFoHub exit=1 49s | playFoHub: 26 failures
