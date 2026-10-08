@@ -1,0 +1,1 @@
+leg1 exit=0 105s | LEG1: green [leaguerules-base, derbies-base, simClubManager-base, savesize-base] red []

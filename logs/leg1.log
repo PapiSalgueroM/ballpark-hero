@@ -1,0 +1,6 @@
+round taken out of the world in /home/runner/work/ballpark-hero/ballpark-hero/.mut/leg1; the merge base's harnesses and digest (5ba57826) put back
+leaguerules-base: exit 0 | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+derbies-base: exit 0 | simCareerDerbies: all 8 sections green
+simClubManager-base: exit 0 | ALL CLUB MANAGER SIMS PASSED
+savesize-base: exit 0 | simClubManagerSaveSize: all sections green
+LEG1: green [leaguerules-base, derbies-base, simClubManager-base, savesize-base] red []
