@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+lockwalk: node .rc/x/walk-boxing-lock.mjs
+weight-head: node scripts/sweepWeight.mjs 2>&1 | tail -30 | cut -c1-220; node .rc/x/weightOne2.mjs http://localhost:4173 dist head .
+weight-no1083: bash .rc/x/weightRevert.sh 4175 no1083
