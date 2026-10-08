@@ -1,0 +1,7 @@
+MUTATED rawtotal: src/lib/careerHallOfFame.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+   × Round 1051: the legacy scorer, the calibration and the words > hallWeighLine: the sentence alone, or the sentence and the standout with its number grouped 10ms
+ FAIL  src/test/careerHall.test.tsx > Round 1051: the legacy scorer, the calibration and the words > hallWeighLine: the sentence alone, or the sentence and the standout with its number grouped
+  FAIL words: 0 misses in the rule, the example or the card []; 390 card lines off
+MUT rawtotal: CAUGHT, 0 files left changed: vit exit=1 (⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ Tests 1 failed | 142 passed (143)); sim-nba exit=3 (simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [words]));

@@ -1,0 +1,5 @@
+MUTATED topignored: src/lib/careerHallOfFame.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+  FAIL standoutcap: 16 careers off the restated score on 2 (one family, capped); the standout paid on 239
+  FAIL anchors: agreement on 2 against 1: raw in or out 9 > 8, exact 6 > 5; books in or out 4 > 3, exact 3 > 2 (must not fall, and must stay within two of the measured {"raw2":{"inOut":9,"exact":6,"n":9},"books2":{"inOut":4,"exact":3,"n":4}})
+MUT topignored: CAUGHT, 0 files left changed: sim-mlb exit=3 (simCareerHall mlb: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [standoutcap,anchors]));

@@ -1,0 +1,6 @@
+MUTATED rampswap: src/lib/careerHallOfFame.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+  FAIL standoutgain: top 5 percent by family: 63 -> 64 of 80 in the Hall, a gain of 1.3 points (needs 8.1); owed to the standout alone 0.4 points (needs 2.9)
+  FAIL standoutcap: 279 careers off the restated score on 2 (one family, capped); the standout paid on 279
+  FAIL words: 2 misses in the rule, the example or the card [LW assists: the example gains 0 on 2 and 0 on 1; RW assists: the example gains 0 on 2 and 0 on 1]; 0 card lines off
+MUT rampswap: CAUGHT, 0 files left changed: sim-nhl exit=3 (simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [standoutgain,standoutcap,words]));

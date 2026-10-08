@@ -1,0 +1,4 @@
+MUTATED v2dropsterm: src/lib/nflMyCareer.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+  FAIL neverbelow: calibration 2 drops or changes [terms of QB] of calibration 1; 247 of 2000 careers score lower, lose a tier or leave the Hall on 2 (1074 moved up)
+MUT v2dropsterm: CAUGHT, 0 files left changed: sim-nfl exit=3 (simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [neverbelow]));

@@ -1,0 +1,18 @@
+MUTATED nopersist: src/components/us-career/UsCareerBoard.tsx
+ 1 file changed, 1 deletion(-)
+   × nfl: the retirement talk on the board > Retire now in the middle of an offseason drops the dealt card unapplied 57ms
+   × nba: the retirement talk on the board > Retire now in the middle of an offseason drops the dealt card unapplied 28ms
+   × mlb: the retirement talk on the board > Retire now in the middle of an offseason drops the dealt card unapplied 36ms
+   × nhl: the retirement talk on the board > Retire now in the middle of an offseason drops the dealt card unapplied 34ms
+   × nfl: the calibration stamp (Round 1051) > an active save retired through the board is saved with hallCal 2 50ms
+   × nba: the calibration stamp (Round 1051) > an active save retired through the board is saved with hallCal 2 32ms
+   × mlb: the calibration stamp (Round 1051) > an active save retired through the board is saved with hallCal 2 25ms
+   × nhl: the calibration stamp (Round 1051) > an active save retired through the board is saved with hallCal 2 23ms
+ FAIL  src/test/usCareerHallBoard.test.tsx > nfl: the retirement talk on the board > Retire now in the middle of an offseason drops the dealt card unapplied
+ FAIL  src/test/usCareerHallBoard.test.tsx > nba: the retirement talk on the board > Retire now in the middle of an offseason drops the dealt card unapplied
+ FAIL  src/test/usCareerHallBoard.test.tsx > mlb: the retirement talk on the board > Retire now in the middle of an offseason drops the dealt card unapplied
+ FAIL  src/test/usCareerHallBoard.test.tsx > nhl: the retirement talk on the board > Retire now in the middle of an offseason drops the dealt card unapplied
+ FAIL  src/test/usCareerHallBoard.test.tsx > nfl: the calibration stamp (Round 1051) > an active save retired through the board is saved with hallCal 2
+ FAIL  src/test/usCareerHallBoard.test.tsx > nba: the calibration stamp (Round 1051) > an active save retired through the board is saved with hallCal 2
+MUT nopersist: CAUGHT, 0 files left changed: vit exit=1 (⎯⎯⎯⎯⎯⎯⎯ Failed Tests 8 ⎯⎯⎯⎯⎯⎯⎯
+ Tests 8 failed | 135 passed (143));

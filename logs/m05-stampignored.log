@@ -1,0 +1,22 @@
+MUTATED stampignored: src/lib/careerHallOfFame.ts
+ 1 file changed, 1 deletion(-)
+   × Round 1051: the legacy scorer, the calibration and the words > hallCalibrationOf: a valid stamp wins; with none a retired career is 1 and a live one is today's 11ms
+   × nfl: the calibration stamp (Round 1051) > an active save retired through the board is saved with hallCal 2 60ms
+   × nfl: the calibration stamp (Round 1051) > a retired save stamped 2 reads calibration 2 on every later load and keeps its stamp 4ms
+   × nba: the calibration stamp (Round 1051) > an active save retired through the board is saved with hallCal 2 24ms
+   × nba: the calibration stamp (Round 1051) > a retired save stamped 2 reads calibration 2 on every later load and keeps its stamp 4ms
+   × mlb: the calibration stamp (Round 1051) > an active save retired through the board is saved with hallCal 2 25ms
+   × mlb: the calibration stamp (Round 1051) > a retired save stamped 2 reads calibration 2 on every later load and keeps its stamp 7ms
+   × nhl: the calibration stamp (Round 1051) > an active save retired through the board is saved with hallCal 2 22ms
+   × nhl: the calibration stamp (Round 1051) > a retired save stamped 2 reads calibration 2 on every later load and keeps its stamp 2ms
+ FAIL  src/test/careerHall.test.tsx > Round 1051: the legacy scorer, the calibration and the words > hallCalibrationOf: a valid stamp wins; with none a retired career is 1 and a live one is today's
+ FAIL  src/test/usCareerHallBoard.test.tsx > nfl: the calibration stamp (Round 1051) > an active save retired through the board is saved with hallCal 2
+ FAIL  src/test/usCareerHallBoard.test.tsx > nba: the calibration stamp (Round 1051) > an active save retired through the board is saved with hallCal 2
+ FAIL  src/test/usCareerHallBoard.test.tsx > mlb: the calibration stamp (Round 1051) > an active save retired through the board is saved with hallCal 2
+ FAIL  src/test/usCareerHallBoard.test.tsx > nhl: the calibration stamp (Round 1051) > an active save retired through the board is saved with hallCal 2
+  FAIL calrule: 392 readings off the calibration rule; 2000 of 2000 engine careers stamped
+  FAIL standoutgain: top 5 percent by family: 129 -> 129 of 180 in the Hall, a gain of 0.0 points (needs 9.7); owed to the standout alone 0.0 points (needs 6.3)
+  FAIL standoutcap: 390 careers off the restated score on 2 (one family, capped); the standout paid on 390
+  FAIL words: 2 misses in the rule, the example or the card [PG ast: the example gains 297 on 2 and 0 on 1; the card does not print the line on calibration 2]; 2000 card lines off
+MUT stampignored: CAUGHT, 0 files left changed: vit exit=1 (⎯⎯⎯⎯⎯⎯⎯ Failed Tests 9 ⎯⎯⎯⎯⎯⎯⎯
+ Tests 9 failed | 134 passed (143)); sim-nba exit=3 (simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [calrule,standoutgain,standoutcap,words]));

@@ -1,0 +1,19 @@
+MUTATED stampone: src/lib/careerHallOfFame.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+   × Round 1051: the legacy scorer, the calibration and the words > stampHallCalibration writes today's calibration on a retired, unstamped career and nothing else 10ms
+   × nfl: the retirement talk on the board > Retire now in the middle of an offseason drops the dealt card unapplied 53ms
+   × nba: the retirement talk on the board > Retire now in the middle of an offseason drops the dealt card unapplied 33ms
+   × mlb: the retirement talk on the board > Retire now in the middle of an offseason drops the dealt card unapplied 30ms
+   × nhl: the retirement talk on the board > Retire now in the middle of an offseason drops the dealt card unapplied 25ms
+   × nfl: the calibration stamp (Round 1051) > an active save retired through the board is saved with hallCal 2 51ms
+   × nba: the calibration stamp (Round 1051) > an active save retired through the board is saved with hallCal 2 31ms
+   × mlb: the calibration stamp (Round 1051) > an active save retired through the board is saved with hallCal 2 24ms
+   × nhl: the calibration stamp (Round 1051) > an active save retired through the board is saved with hallCal 2 22ms
+ FAIL  src/test/careerHall.test.tsx > Round 1051: the legacy scorer, the calibration and the words > stampHallCalibration writes today's calibration on a retired, unstamped career and nothing else
+ FAIL  src/test/usCareerHallBoard.test.tsx > nfl: the retirement talk on the board > Retire now in the middle of an offseason drops the dealt card unapplied
+ FAIL  src/test/usCareerHallBoard.test.tsx > nba: the retirement talk on the board > Retire now in the middle of an offseason drops the dealt card unapplied
+ FAIL  src/test/usCareerHallBoard.test.tsx > mlb: the retirement talk on the board > Retire now in the middle of an offseason drops the dealt card unapplied
+ FAIL  src/test/usCareerHallBoard.test.tsx > nhl: the retirement talk on the board > Retire now in the middle of an offseason drops the dealt card unapplied
+  FAIL calrule: 0 readings off the calibration rule; 0 of 2000 engine careers stamped
+MUT stampone: CAUGHT, 0 files left changed: vit exit=1 (⎯⎯⎯⎯⎯⎯⎯ Failed Tests 9 ⎯⎯⎯⎯⎯⎯⎯
+ Tests 9 failed | 134 passed (143)); sim-nfl exit=3 (simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [calrule]));

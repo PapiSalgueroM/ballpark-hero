@@ -1,0 +1,18 @@
+MUTATED repairwrites1: src/lib/usCareerRetirementFlow.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+   × Round 1051: the recorded saves through the real board > nfl: the board shows each save the verdict, the legacy and the ballot it was told, and writes nothing 166ms
+   × Round 1051: the recorded saves through the real board > nba: the board shows each save the verdict, the legacy and the ballot it was told, and writes nothing 58ms
+   × Round 1051: the recorded saves through the real board > mlb: the board shows each save the verdict, the legacy and the ballot it was told, and writes nothing 37ms
+   × Round 1051: the recorded saves through the real board > nhl: the board shows each save the verdict, the legacy and the ballot it was told, and writes nothing 39ms
+   × nfl: the calibration stamp (Round 1051) > a retired save with no stamp reads calibration 1 and is never stamped: not by the speech, not by a coach career 28ms
+   × nba: the calibration stamp (Round 1051) > a retired save with no stamp reads calibration 1 and is never stamped: not by the speech, not by a coach career 19ms
+   × mlb: the calibration stamp (Round 1051) > a retired save with no stamp reads calibration 1 and is never stamped: not by the speech, not by a coach career 25ms
+   × nhl: the calibration stamp (Round 1051) > a retired save with no stamp reads calibration 1 and is never stamped: not by the speech, not by a coach career 23ms
+ FAIL  src/test/careerHallV1Replay.test.ts > Round 1051: the recorded saves through the real board > nfl: the board shows each save the verdict, the legacy and the ballot it was told, and writes nothi
+ FAIL  src/test/careerHallV1Replay.test.ts > Round 1051: the recorded saves through the real board > nba: the board shows each save the verdict, the legacy and the ballot it was told, and writes nothi
+ FAIL  src/test/careerHallV1Replay.test.ts > Round 1051: the recorded saves through the real board > mlb: the board shows each save the verdict, the legacy and the ballot it was told, and writes nothi
+ FAIL  src/test/careerHallV1Replay.test.ts > Round 1051: the recorded saves through the real board > nhl: the board shows each save the verdict, the legacy and the ballot it was told, and writes nothi
+ FAIL  src/test/usCareerHallBoard.test.tsx > nfl: the calibration stamp (Round 1051) > a retired save with no stamp reads calibration 1 and is never stamped: not by the speech, not by a coach career
+ FAIL  src/test/usCareerHallBoard.test.tsx > nba: the calibration stamp (Round 1051) > a retired save with no stamp reads calibration 1 and is never stamped: not by the speech, not by a coach career
+MUT repairwrites1: CAUGHT, 0 files left changed: vit exit=1 (⎯⎯⎯⎯⎯⎯⎯ Failed Tests 8 ⎯⎯⎯⎯⎯⎯⎯
+ Tests 8 failed | 135 passed (143)); fixture exit=0 ( Tests 4 skipped (4));

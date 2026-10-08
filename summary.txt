@@ -1,0 +1,14 @@
+m00-baseline exit=0 17s | MUT none (baseline), 0 files left changed: vit exit=0 ( Tests 143 passed (143)); fixture exit=0 ( Tests 4 skipped (4));
+m01-nopersist exit=0 14s |  Tests 8 failed | 135 passed (143));
+m02-repairwrites1 exit=0 17s |  Tests 8 failed | 135 passed (143)); fixture exit=0 ( Tests 4 skipped (4));
+m03-repairdrops exit=0 14s |  Tests 4 failed | 139 passed (143));
+m04-stampnohall exit=0 17s |  Tests 4 failed | 139 passed (143)); fixture exit=0 ( Tests 4 skipped (4));
+m05-stampignored exit=0 16s |  Tests 9 failed | 134 passed (143)); sim-nba exit=3 (simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [calrule,standoutgain,standoutcap,words]));
+m06-weighsoncal1 exit=0 16s |  Tests 12 failed | 131 passed (143)); sim-nba exit=3 (simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [v1replay,words]));
+m07-v2dropsterm exit=0 3s | MUT v2dropsterm: CAUGHT, 0 files left changed: sim-nfl exit=3 (simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [neverbelow]));
+m08-topignored exit=0 3s | MUT topignored: CAUGHT, 0 files left changed: sim-mlb exit=3 (simCareerHall mlb: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [standoutcap,anchors]));
+m09-rawtotal exit=0 17s |  Tests 1 failed | 142 passed (143)); sim-nba exit=3 (simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [words]));
+m10-nbaalways2 exit=0 17s |  Tests 2 failed | 141 passed (143)); sim-nba exit=3 (simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [v1replay,v1formula,standoutgain]));
+m11-rampswap exit=0 2s | MUT rampswap: CAUGHT, 0 files left changed: sim-nhl exit=3 (simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [standoutgain,standoutcap,words]));
+m12-stampone exit=0 17s |  Tests 9 failed | 134 passed (143)); sim-nfl exit=3 (simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [calrule]));
+m99-clean exit=0 0s | 0

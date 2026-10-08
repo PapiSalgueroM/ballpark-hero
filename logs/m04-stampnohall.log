@@ -1,0 +1,12 @@
+MUTATED stampnohall: src/components/us-career/UsCareerBoard.tsx
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+   × nfl: the calibration stamp (Round 1051) > with no Hall bound the same retirement writes no hallCal: the save is byte for byte the old one 44ms
+   × nba: the calibration stamp (Round 1051) > with no Hall bound the same retirement writes no hallCal: the save is byte for byte the old one 22ms
+   × mlb: the calibration stamp (Round 1051) > with no Hall bound the same retirement writes no hallCal: the save is byte for byte the old one 22ms
+   × nhl: the calibration stamp (Round 1051) > with no Hall bound the same retirement writes no hallCal: the save is byte for byte the old one 23ms
+ FAIL  src/test/usCareerHallBoard.test.tsx > nfl: the calibration stamp (Round 1051) > with no Hall bound the same retirement writes no hallCal: the save is byte for byte the old one
+ FAIL  src/test/usCareerHallBoard.test.tsx > nba: the calibration stamp (Round 1051) > with no Hall bound the same retirement writes no hallCal: the save is byte for byte the old one
+ FAIL  src/test/usCareerHallBoard.test.tsx > mlb: the calibration stamp (Round 1051) > with no Hall bound the same retirement writes no hallCal: the save is byte for byte the old one
+ FAIL  src/test/usCareerHallBoard.test.tsx > nhl: the calibration stamp (Round 1051) > with no Hall bound the same retirement writes no hallCal: the save is byte for byte the old one
+MUT stampnohall: CAUGHT, 0 files left changed: vit exit=1 (⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+ Tests 4 failed | 139 passed (143)); fixture exit=0 ( Tests 4 skipped (4));

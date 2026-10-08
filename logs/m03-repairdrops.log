@@ -1,0 +1,12 @@
+MUTATED repairdrops: src/lib/usCareerRetirementFlow.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+   × nfl: the calibration stamp (Round 1051) > a retired save stamped 2 reads calibration 2 on every later load and keeps its stamp 27ms
+   × nba: the calibration stamp (Round 1051) > a retired save stamped 2 reads calibration 2 on every later load and keeps its stamp 28ms
+   × mlb: the calibration stamp (Round 1051) > a retired save stamped 2 reads calibration 2 on every later load and keeps its stamp 23ms
+   × nhl: the calibration stamp (Round 1051) > a retired save stamped 2 reads calibration 2 on every later load and keeps its stamp 18ms
+ FAIL  src/test/usCareerHallBoard.test.tsx > nfl: the calibration stamp (Round 1051) > a retired save stamped 2 reads calibration 2 on every later load and keeps its stamp
+ FAIL  src/test/usCareerHallBoard.test.tsx > nba: the calibration stamp (Round 1051) > a retired save stamped 2 reads calibration 2 on every later load and keeps its stamp
+ FAIL  src/test/usCareerHallBoard.test.tsx > mlb: the calibration stamp (Round 1051) > a retired save stamped 2 reads calibration 2 on every later load and keeps its stamp
+ FAIL  src/test/usCareerHallBoard.test.tsx > nhl: the calibration stamp (Round 1051) > a retired save stamped 2 reads calibration 2 on every later load and keeps its stamp
+MUT repairdrops: CAUGHT, 0 files left changed: vit exit=1 (⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+ Tests 4 failed | 139 passed (143));

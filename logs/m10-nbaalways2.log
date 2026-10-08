@@ -1,0 +1,11 @@
+MUTATED nbaalways2: src/lib/nbaMyCareer.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+   × Round 1051: careers retired before the recalibration keep what they were told > nba: legacyOf and hallRecordFor equal the recording, whole objects 26ms
+   × Round 1051: the recorded saves through the real board > nba: the board shows each save the verdict, the legacy and the ballot it was told, and writes nothing 253ms
+ FAIL  src/test/careerHallV1Replay.test.ts > Round 1051: careers retired before the recalibration keep what they were told > nba: legacyOf and hallRecordFor equal the recording, whole objects
+ FAIL  src/test/careerHallV1Replay.test.ts > Round 1051: the recorded saves through the real board > nba: the board shows each save the verdict, the legacy and the ballot it was told, and writes nothi
+  FAIL v1replay: 8 readings of 20 recorded saves differ from the version 1 recording
+  FAIL v1formula: 390 of 2000 engine careers score off the Round 123 formula on calibration 1
+  FAIL standoutgain: top 5 percent by family: 13 -> 13 of 20 in the Hall, a gain of 0.0 points (needs 9.7); owed to the standout alone 14.6 points (needs 6.3)
+MUT nbaalways2: CAUGHT, 0 files left changed: vit exit=1 (⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+ Tests 2 failed | 141 passed (143)); sim-nba exit=3 (simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [v1replay,v1formula,standoutgain]));

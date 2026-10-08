@@ -1,0 +1,20 @@
+MUTATED weighsoncal1: src/lib/careerHallOfFame.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+   × Round 1051: careers retired before the recalibration keep what they were told > nfl: legacyOf and hallRecordFor equal the recording, whole objects 76ms
+   × Round 1051: careers retired before the recalibration keep what they were told > nba: legacyOf and hallRecordFor equal the recording, whole objects 3ms
+   × Round 1051: careers retired before the recalibration keep what they were told > mlb: legacyOf and hallRecordFor equal the recording, whole objects 3ms
+   × Round 1051: careers retired before the recalibration keep what they were told > nhl: legacyOf and hallRecordFor equal the recording, whole objects 2ms
+   × Round 1051: the recorded saves through the real board > nfl: the board shows each save the verdict, the legacy and the ballot it was told, and writes nothing 157ms
+   × Round 1051: the recorded saves through the real board > nba: the board shows each save the verdict, the legacy and the ballot it was told, and writes nothing 53ms
+   × Round 1051: the recorded saves through the real board > mlb: the board shows each save the verdict, the legacy and the ballot it was told, and writes nothing 35ms
+   × Round 1051: the recorded saves through the real board > nhl: the board shows each save the verdict, the legacy and the ballot it was told, and writes nothing 29ms
+   × nfl: the calibration stamp (Round 1051) > a retired save with no stamp reads calibration 1 and is never stamped: not by the speech, not by a coach career 23ms
+   × nba: the calibration stamp (Round 1051) > a retired save with no stamp reads calibration 1 and is never stamped: not by the speech, not by a coach career 13ms
+   × mlb: the calibration stamp (Round 1051) > a retired save with no stamp reads calibration 1 and is never stamped: not by the speech, not by a coach career 19ms
+   × nhl: the calibration stamp (Round 1051) > a retired save with no stamp reads calibration 1 and is never stamped: not by the speech, not by a coach career 19ms
+ FAIL  src/test/careerHallV1Replay.test.ts > Round 1051: careers retired before the recalibration keep what they were told > nfl: legacyOf and hallRecordFor equal the recording, whole objects
+ FAIL  src/test/careerHallV1Replay.test.ts > Round 1051: careers retired before the recalibration keep what they were told > nba: legacyOf and hallRecordFor equal the recording, whole objects
+  FAIL v1replay: 20 readings of 20 recorded saves differ from the version 1 recording
+  FAIL words: 1 misses in the rule, the example or the card [the card prints the line on calibration 1]; 2000 card lines off
+MUT weighsoncal1: CAUGHT, 0 files left changed: vit exit=1 (⎯⎯⎯⎯⎯⎯ Failed Tests 12 ⎯⎯⎯⎯⎯⎯⎯
+ Tests 12 failed | 131 passed (143)); sim-nba exit=3 (simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [v1replay,words]));
