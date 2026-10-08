@@ -1,0 +1,5 @@
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/translateGuard.test.tsx --testTimeout=300000 --hookTimeout=120000
+m5pt: node_modules/.bin/esbuild src/lib/translateGuard.ts --bundle --format=iife --global-name=TG --outfile=$RC_OUT/tg-pt.js && BUNDLE=$RC_OUT/tg-pt.js PAGE=page5.js TL=pt node .rc/x/measure.mjs $RC_OUT/records-5-pt.json
+m5ja: node_modules/.bin/esbuild src/lib/translateGuard.ts --bundle --format=iife --global-name=TG --outfile=$RC_OUT/tg-ja.js && BUNDLE=$RC_OUT/tg-ja.js PAGE=page5.js TL=ja node .rc/x/measure.mjs $RC_OUT/records-5-ja.json
