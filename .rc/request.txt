@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+loaded: bash .rc/x/load.sh
