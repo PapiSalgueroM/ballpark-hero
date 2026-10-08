@@ -60,6 +60,9 @@ const REPORT = process.env.LIVE_FIT_REPORT === '1';
 const CONTROL = process.env.LIVE_FIT_CONTROL || '';
 if (CONTROL && CONTROL !== 'bar') { console.error(`unknown LIVE_FIT_CONTROL ${CONTROL}`); process.exit(2); }
 const V = !!process.env.VERBOSE;
+/* A folder for screenshots of the fit at each size (LIVE_FIT_SHOTS, or a remote check's RC_OUT). Optional. */
+const SHOTS = process.env.LIVE_FIT_SHOTS || process.env.RC_OUT || '';
+const shoot = async (page, name) => { if (SHOTS) await page.screenshot({ path: path.join(SHOTS, name + '.png') }).catch(() => {}); };
 
 let failures = 0;
 const failed = new Set();
@@ -295,7 +298,7 @@ function judgeScroll(frames, extra) {
 /** Opens each panel the viewer has, and the change sheet, and reads scrollY with each one open. */
 async function openEachPanel(page) {
   const out = [];
-  const read = async what => out.push({ what, y: await page.evaluate(() => window.scrollY) });
+  const read = async what => { out.push({ what, y: await page.evaluate(() => window.scrollY) }); await shoot(page, 'panel-' + what.split(' ')[1]); };
   const dot = page.locator('button[data-cm-dot]:not([disabled])').first();
   if (await dot.count().catch(() => 0)) {
     await dot.click({ timeout: 3000, force: true }).catch(() => {});
@@ -512,6 +515,7 @@ try {
     await page.waitForTimeout(400);
     const m = await measure(page);
     judgeFit(view, m);
+    await shoot(page, `fit-${view.width}`);
     if (view.width === 390) {
       const labels = await labelMean(page);
       console.log(`  [labels 390] mean overlapping name labels a frame ${labels.mean.toFixed(2)} over ${labels.frames} frames of ${labels.labels} labels; before match mode ${LABELS_BEFORE.mean} at ${LABELS_BEFORE.commit}${Number.isFinite(LABELS_BEFORE.mean) && LABELS_BEFORE.mean > 0 ? `, ratio ${(labels.mean / LABELS_BEFORE.mean).toFixed(2)}` : ''}`);
