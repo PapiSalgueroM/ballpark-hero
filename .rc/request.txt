@@ -1,0 +1,5 @@
+#!serial
+prep: cp .rc/x/rvProbeBox.test.tsx src/test/rvProbeBox.test.tsx && cp .rc/x/rvProbeHook.test.tsx src/test/rvProbeHook.test.tsx && echo copied
+probe-real: node_modules/.bin/vitest run src/test/rvProbeBox.test.tsx src/test/rvProbeHook.test.tsx --reporter=verbose
+survivors-plain: MUT_PLAIN=1 MUT_TAG=-plain MUT_ONLY=MB-leave-no-id-bump,MB2-leave-no-abort-no-bump,MB3-leave-keeps-debounce-timer,MJ2-enter-while-loading,MK-minchars-off-by-one,MU-commit-keeps-list,MG-wait-ten-times-longer,MO-caller-signal-not-heard,MF-club-substring-match,MR-no-cancel-on-unmount,MS-new-formation-no-cancel,MT-reset-no-cancel,MQ-no-giveup-after-answer node .rc/x/rv-mut.mjs
+probe-under-mutations: MUT_PLAIN=1 MUT_TAG=-probe MUT_BOX_TESTS=src/test/rvProbeBox.test.tsx MUT_HOOK_TESTS=src/test/rvProbeHook.test.tsx MUT_ONLY=none-box,none-hook,MB-leave-no-id-bump,MB2-leave-no-abort-no-bump,MB3-leave-keeps-debounce-timer,MK-minchars-off-by-one,MO-caller-signal-not-heard,MR-no-cancel-on-unmount,MS-new-formation-no-cancel,MT-reset-no-cancel,MQ-no-giveup-after-answer node .rc/x/rv-mut.mjs
