@@ -1,0 +1,5 @@
+#!build
+#!playwright
+#!serial
+victorymoment: node scripts/simVictoryMoment.mjs
+resultmoment: node scripts/simResultMoment.mjs

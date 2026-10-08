@@ -1,0 +1,3 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+victorymoment exit=0 20s | PASS reduce: motion, final facts, first-frame Continue and 320px layout
+resultmoment exit=0 5s | simResultMoment: green. Every live game reaches the shared result moment or is listed with what it draws instead, the pill shows exactly the score it is given, the three 
