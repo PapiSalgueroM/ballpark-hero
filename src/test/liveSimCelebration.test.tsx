@@ -3,6 +3,10 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { actionFrame, LivePitchPlayer, useLiveSimMotion } from '@/components/club-manager/LiveSimMotion';
 import type { MotionEvent } from '@/components/club-manager/LiveSimMotion';
+import { ACTION_SPAN, NET_AT } from '@/components/pitch-motion/contract';
+import type { PitchEvent, PitchFigure } from '@/components/pitch-motion/contract';
+import { goalWindow } from '@/components/pitch-motion/motion';
+import { PitchMotion } from '@/components/pitch-motion/PitchMotion';
 
 // Invented render fixtures. Match outcomes still come from the committed feed.
 const scene = {
@@ -143,5 +147,112 @@ describe('The lift keeps every frame', () => {
     const markup = poses.map(p => renderToStaticMarkup(<LivePitchPlayer color="#85bcf0" keeper={p.keeper} pose={p.pose} selected={p.selected} />));
     expect(new Set(markup).size).toBe(poses.length);
     expect(fnv(markup.join('\n'))).toBe(FIGURE_DIGEST);
+  });
+});
+
+/* Round 1101: the part behind its contract. Invented render fixtures again: one goal of mine at
+   the fifth minute, five a side, and the binder's clock handed in from outside. */
+const FIVE = {
+  mine: [
+    { key: 'm0', line: 'keeper', slot: { x: 50, y: 90 }, name: 'Home keeper' },
+    { key: 'm4', line: 'defence', slot: { x: 30, y: 70 }, name: 'Home far' },
+    { key: 'm7', line: 'midfield', slot: { x: 62, y: 52 }, name: 'Home next' },
+    { key: 'm8', line: 'midfield', slot: { x: 38, y: 48 }, name: 'Home near' },
+    { key: 'm9', line: 'attack', slot: { x: 50, y: 26 }, name: 'Home scorer' },
+  ] satisfies PitchFigure[],
+  theirs: [
+    { key: 'o0', line: 'keeper', slot: { x: 50, y: 90 }, name: 'Away keeper' },
+    { key: 'o4', line: 'defence', slot: { x: 30, y: 70 }, name: 'Away far' },
+    { key: 'o7', line: 'midfield', slot: { x: 62, y: 52 }, name: 'Away next' },
+    { key: 'o8', line: 'midfield', slot: { x: 38, y: 48 }, name: 'Away near' },
+    { key: 'o9', line: 'attack', slot: { x: 50, y: 26 }, name: 'Away scorer' },
+  ] satisfies PitchFigure[],
+  feed: [{ minute: 5, side: 'me', kind: 'goal', text: 'Home scorer' }] satisfies PitchEvent[],
+  span: { from: 0, to: 45 },
+  seed: 1101,
+  colors: { mine: '#85bcf0', theirs: '#d6e6ed' },
+};
+const percent = (value: string) => Number(value.replace('%', ''));
+const spots = (root: Element) => [...root.querySelectorAll<HTMLElement>('.pm-figure')].map(node => ({ left: percent(node.style.left), top: percent(node.style.top), figure: node.innerHTML }));
+
+describe('The pitch part behind its contract', () => {
+  it("PitchMotion renders a five a side scene in portrait and in landscape with today's attributes", () => {
+    const random = vi.spyOn(Math, 'random');
+    const portrait = render(<PitchMotion {...FIVE} clock={5.45} playing />).container;
+    const landscape = render(<PitchMotion {...FIVE} clock={5.45} playing orientation="landscape" />).container;
+    for (const root of [portrait, landscape]) {
+      const pitch = root.querySelector('[data-cm-live-pitch="1"]')!;
+      expect(pitch.getAttribute('data-cm-motion')).toBe('goal');
+      expect(pitch.getAttribute('data-cm-motion-phase')).toBe('flight');
+      expect(pitch.querySelectorAll('[data-cm-ball="1"]')).toHaveLength(1);
+      expect(pitch.querySelectorAll('.cm-pitch-player')).toHaveLength(10);
+      expect(pitch.querySelector('[data-cm-actor-pose="dive"]')).not.toBeNull();
+      expect(pitch.querySelectorAll('[data-cm-net="goal"]')).toHaveLength(0);
+    }
+    expect(portrait.querySelector('[data-cm-live-pitch]')!.getAttribute('data-pm-orient')).toBe('portrait');
+    expect(landscape.querySelector('[data-cm-live-pitch]')!.getAttribute('data-pm-orient')).toBe('landscape');
+    /* Landscape as the contract writes it: a point (x, y) is drawn at left (100 - y)%, top x%, and every
+       figure is drawn upright exactly as in portrait, the diving keeper included. */
+    const up = spots(portrait), across = spots(landscape);
+    expect(up).toHaveLength(10);
+    up.forEach((spot, i) => {
+      expect(across[i].left).toBeCloseTo(100 - spot.top, 6);
+      expect(across[i].top).toBeCloseTo(spot.left, 6);
+      expect(across[i].figure).toBe(spot.figure);
+    });
+    const ball = (root: Element) => root.querySelector<HTMLElement>('[data-cm-ball]')!.style;
+    expect(percent(ball(landscape).left)).toBeCloseTo(100 - percent(ball(portrait).top), 6);
+    expect(percent(ball(landscape).top)).toBeCloseTo(percent(ball(portrait).left), 6);
+    cleanup();
+    /* The ball in the net: the net I attack, top in portrait and right in landscape. */
+    for (const orientation of ['portrait', 'landscape'] as const) {
+      const root = render(<PitchMotion {...FIVE} clock={5.9} playing orientation={orientation} />).container;
+      const nets = root.querySelectorAll<HTMLElement>('[data-cm-net="goal"]');
+      expect(nets).toHaveLength(1);
+      expect(nets[0].className).toContain('cm-live-net--top');
+      expect(nets[0].style.transform.startsWith(orientation === 'portrait' ? 'scaleY(' : 'scaleX(')).toBe(true);
+      cleanup();
+    }
+    expect(random).not.toHaveBeenCalled();
+  });
+
+  it("reducedMotion true shows a goal's last frame at once", () => {
+    const moments: string[] = [];
+    const props = { ...FIVE, playing: true, reducedMotion: true, onMoment: (moment: string) => { moments.push(moment); } };
+    const mounted = render(<PitchMotion {...props} clock={5.02} />);
+    const pitch = mounted.container.querySelector('[data-cm-live-pitch]')!;
+    expect(pitch.getAttribute('data-cm-motion-phase')).toBe('net');
+    expect(pitch.querySelectorAll('[data-cm-net="goal"]')).toHaveLength(1);
+    expect(pitch.querySelectorAll('[data-cm-actor-pose="celebrate"]')).toHaveLength(3);
+    const still = pitch.innerHTML;
+    mounted.rerender(<PitchMotion {...props} clock={5.6} />);
+    expect(pitch.innerHTML).toBe(still);
+    expect(moments).toEqual(['strike', 'net']);
+    /* And false keeps it moving whatever the device prefers. */
+    cleanup();
+    vi.spyOn(window, 'matchMedia').mockImplementation(() => ({ matches: true, addEventListener: vi.fn(), removeEventListener: vi.fn() }) as unknown as MediaQueryList);
+    const moving = render(<PitchMotion {...FIVE} playing reducedMotion={false} clock={5.45} />).container;
+    expect(moving.querySelector('[data-cm-live-pitch]')!.getAttribute('data-cm-motion-phase')).toBe('flight');
+  });
+
+  it("goalWindow says windup, net and over at the contract's instants", () => {
+    const goal = event('me');
+    expect(goalWindow(null, 5.5)).toBeNull();
+    expect(goalWindow(event('me', 'save'), 5.5)).toBeNull();
+    expect(goalWindow(goal, 5)).toBe('windup');
+    expect(goalWindow(goal, 5 + NET_AT - .01)).toBe('windup');
+    expect(goalWindow(goal, 5 + NET_AT)).toBe('net');
+    expect(goalWindow(goal, 5 + ACTION_SPAN)).toBe('net');
+    expect(goalWindow(goal, 5 + ACTION_SPAN + .01)).toBe('over');
+    /* 0 under reduced motion: the last frame shows the instant the line fires. */
+    expect(goalWindow(goal, 5, true)).toBe('net');
+    expect(goalWindow(goal, 4.99, true)).toBe('windup');
+    /* The constants are the lifted body's own instants, not numbers beside it. */
+    expect(actionFrame(scene, goal, NET_AT).phase).toBe('net');
+    expect(actionFrame(scene, goal, NET_AT - .01).phase).toBe('flight');
+    const { result, rerender } = renderHook(({ clock }) => useLiveSimMotion(scene, goal, clock, true), { initialProps: { clock: 5 + ACTION_SPAN } });
+    expect(result.current.action).toBe('goal');
+    rerender({ clock: 5 + ACTION_SPAN + .01 });
+    expect(result.current.action).toBe('pass');
   });
 });

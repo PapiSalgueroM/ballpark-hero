@@ -6,7 +6,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const sourceFile = path.join(root, 'src/components/club-manager/LiveSimMotion.tsx');
+/* Round 1101: the pitch moved to src/components/pitch-motion, and that is the file a control mutates. */
+const sourceFile = path.join(root, 'src/components/pitch-motion/motion.tsx');
 const sourceBytes = await readFile(sourceFile);
 const source = sourceBytes.toString().replace(/\r\n/g, '\n');
 const control = process.env.LIVE_CELEBRATION_CONTROL || '';
@@ -35,8 +36,12 @@ try {
     assert.notEqual(changed, source);
     const copy = path.join(folder, 'LiveSimMotion.tsx');
     owned.push(copy);
-    await writeFile(copy, changed.replace("'./LiveSimMotion.css'", "'@/components/club-manager/LiveSimMotion.css'"));
-    env.NO_DOUBLE_SWAP = JSON.stringify({ '@/components/club-manager/LiveSimMotion': copy });
+    const cssImport = "'./pitchMotion.css'";
+    assert.equal(changed.split(cssImport).length - 1, 1, 'One stylesheet import to re-point');
+    await writeFile(copy, changed.replace(cssImport, "'@/components/pitch-motion/pitchMotion.css'"));
+    /* Both names resolve to the copy: the tests reach the part through Club Manager's re-export and
+       PitchMotion reaches it by its own path, and they must be one module. */
+    env.NO_DOUBLE_SWAP = JSON.stringify({ '@/components/club-manager/LiveSimMotion': copy, '@/components/pitch-motion/motion': copy });
     args.push('--testNamePattern', spec.test + '|' + baseline);
   }
   const run = spawnSync(process.execPath, args, { cwd: root, env, encoding: 'utf8', timeout: 120000, maxBuffer: 4 * 1024 * 1024 });
@@ -47,7 +52,7 @@ try {
   const report = JSON.parse(await readFile(reportPath, 'utf8'));
   assert.equal(Number(report.numUnhandledErrors ?? 0), 0);
   const rows = report.testResults.flatMap(suite => suite.assertionResults);
-  assert.equal(rows.length, 8);
+  assert.equal(rows.length, 11);
   if (control) {
     assert.equal(run.status, 1);
     assert.equal(report.numFailedTests, 1);
@@ -59,8 +64,8 @@ try {
     console.log(`simLiveSimCelebration: ${control} changed source, intended assertion failed, independent destinations stayed green.`);
   } else {
     assert.equal(run.status, 0);
-    assert.equal(report.numPassedTests, 8);
-    console.log('simLiveSimCelebration: 8 outcome checks passed, correct side, net-first, real figure, freeze/expiry, reduced motion and the three recorded digests of the lift.');
+    assert.equal(report.numPassedTests, 11);
+    console.log('simLiveSimCelebration: 11 outcome checks passed, correct side, net-first, real figure, freeze/expiry, reduced motion, the three recorded digests of the lift and the part behind its contract.');
   }
 } finally {
   for (const file of owned) await rm(file, { force: true });

@@ -27,7 +27,9 @@ const env = { ...process.env };
 try {
   if (control) {
     let viewer = (await readFile(path.join(root, 'src/components/club-manager/LiveSimScreen.tsx'), 'utf8')).replaceAll('\r\n', '\n');
-    let motion = (await readFile(path.join(root, 'src/components/club-manager/LiveSimMotion.tsx'), 'utf8')).replaceAll('\r\n', '\n');
+    /* Round 1101: the pitch moved to src/components/pitch-motion. The mutated copy is still written as
+       <folder>/LiveSimMotion.tsx, because the viewer copy imports './LiveSimMotion'. */
+    let motion = (await readFile(path.join(root, 'src/components/pitch-motion/motion.tsx'), 'utf8')).replaceAll('\r\n', '\n');
     const replace = (source, before, after) => { assert.equal(source.split(before).length - 1, 1, 'Control anchor must occur exactly once: ' + before); assert.notEqual(before, after); return source.replace(before, after); };
     if (control === 'trigger') viewer = replace(viewer, 'setMotionEvent({ event: e, key, at: clock })', 'setMotionEvent(null)');
     if (control === 'save') motion = replace(motion, 'const event = action.event;', "const event = action.event.kind === 'save' ? { ...action.event, kind: 'goal' as const } : action.event;");
@@ -48,8 +50,8 @@ try {
     const componentPath = path.join(folder, 'LiveSimMotion.tsx').replaceAll('\\', '/');
     viewer = replace(viewer, "import { LivePitchPlayer, useLiveSimMotion } from '@/components/club-manager/LiveSimMotion';", "import { LivePitchPlayer, useLiveSimMotion } from './LiveSimMotion';");
     viewer = replace(viewer, "import type { MotionEvent } from '@/components/club-manager/LiveSimMotion';", "import type { MotionEvent } from './LiveSimMotion';");
+    motion = replace(motion, "import './pitchMotion.css';", "import '@/components/pitch-motion/pitchMotion.css';");
     await writeFile(componentPath, motion);
-    await writeFile(path.join(folder, 'LiveSimMotion.css'), await readFile(path.join(root, 'src/components/club-manager/LiveSimMotion.css')));
     await writeFile(path.join(folder, 'LiveSimScreen.tsx'), viewer);
     env.LIVE_MOTION_VIEWER = '/@fs/' + path.join(folder, 'LiveSimScreen.tsx').replaceAll('\\', '/');
     env.LIVE_MOTION_COMPONENT = '/@fs/' + componentPath;
@@ -64,7 +66,9 @@ try {
     console.log('Negative control changed temporary source:', control);
   }
   const selected = { trigger: 'actual feed', save: 'committed action|actual feed', pause: 'pause freezes', mutation: 'settled results', lineup: 'substitution during', speed: 'speed changes', reduced: 'reduced motion', terminal: 'terminal goal and save contact', redraw: 'a tactics redraw cancels', whistle: 'the ninetieth minute asks the latest save', banner: 'the extra time banner says what is true', boardgoal: 'a goal in the board is announced with its plus', etclock: 'the extra time clock runs into its own board' };
-  const args = [path.join(root, 'node_modules/vitest/vitest.mjs'), 'run', 'src/test/liveSimMotion.test.tsx', '--reporter=verbose'];
+  /* Round 1101: a test with no timeout of its own gets 60 seconds, not vitest's 5. On a machine with other
+     lanes compiling, three controls went red on 'Test timed out in 5000ms', which is red for the wrong reason. */
+  const args = [path.join(root, 'node_modules/vitest/vitest.mjs'), 'run', 'src/test/liveSimMotion.test.tsx', '--reporter=verbose', '--testTimeout=60000'];
   if (control) args.push('--config', path.join(folder, 'vitest.config.mjs'), '-t', selected[control]);
   const result = spawnSync(process.execPath, args, { cwd: root, env, stdio: 'inherit' });
   if (result.error) throw result.error;
