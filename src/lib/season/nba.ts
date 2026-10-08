@@ -16,7 +16,7 @@ import { shuffled, type DerivedGame, type DerivedSeason, type Rng, type SeasonEv
 import { splitTotal, usHelp, type UsRow, type UsSeasonBind, type UsSeasonCtx } from './us';
 import { NBA_MISSED_PLAYOFFS, NBA_PLAYOFF_RESULTS, nbaEraTeamIds } from '../nbaMyCareer';
 import { NBA_SCORING } from '@/data/usLeagueShape';
-import { usSeasonLabel } from '@/data/usSeasonLengths';
+import { usSeasonHeldLine, usSeasonLabel, usSeasonLength } from '@/data/usSeasonLengths';
 
 const GAMES = 82;
 /** Wins this career's rule gives each result: missed, then the five results in depth order. */
@@ -96,6 +96,14 @@ function totals(row: UsRow): StatTotal[] {
   return out;
 }
 
+/** A night the feed may call a takeover: at least 20 points AND at least 1.3
+ *  times his season average, in a game his team won. This sim's own rule, so
+ *  the words are earned: a bench player's 4 point night and a big night in a
+ *  loss never read as one. */
+export function nbaTakeover(pts: number, ppg: number, won: boolean): boolean {
+  return won && pts >= 20 && pts >= 1.3 * ppg;
+}
+
 /** The board by quarter for every game, and his big nights in the feed. */
 function finish(games: DerivedGame[], row: UsRow, _pos: string, rng: Rng): boolean {
   const ppg = num(row.ppg) ?? Infinity;
@@ -107,7 +115,9 @@ function finish(games: DerivedGame[], row: UsRow, _pos: string, rng: Rng): boole
       if (!q) return false;
       q.forEach((pts, i) => events.push({ min: 12 * (i + 1), kind: 'quarter', side, pts }));
     }
-    if (g.played && (g.line.pts ?? 0) >= ppg) events.push({ min: 12 * (1 + Math.floor(rng() * 4)) - 1, kind: 'hot', side: 'us', mine: true });
+    /* the quarter is drawn for every game, so moving the rule never moves another game's numbers */
+    const quarter = 1 + Math.floor(rng() * 4);
+    if (g.played && nbaTakeover(g.line.pts ?? 0, ppg, g.us > g.them)) events.push({ min: 12 * quarter - 1, kind: 'hot', side: 'us', mine: true });
     g.events = events.sort((a, b) => a.min - b.min || (a.side === b.side ? 0 : a.side === 'us' ? -1 : 1));
   }
   return true;
@@ -133,6 +143,8 @@ export const NBA_SEASON: UsSeasonBind = {
   slug: 'nba',
   league: 'NBA',
   fullSeason: GAMES,
+  realLength: year => usSeasonLength('nba', year),
+  heldLine: year => usSeasonHeldLine('nba', year),
   missed: NBA_MISSED_PLAYOFFS,
   results: NBA_PLAYOFF_RESULTS,
   bands: BANDS,
@@ -176,17 +188,18 @@ export const NBA_SEASON: UsSeasonBind = {
       ? `🏀 ${e.side === 'us' ? us : them} put up ${e.pts ?? 0} in the ${QUARTERS[Math.min(3, Math.max(0, Math.round(e.min / 12) - 1))]}`
       : `🔥 You take over in the ${QUARTERS[Math.min(3, Math.max(0, Math.ceil(e.min / 12) - 1))]}`),
     missed: why => (why === 'injured' ? 'Out: injured' : 'Did not play: rest'),
-    lineOf: g => [`${g.line.pts ?? 0} PTS`, `${g.line.reb ?? 0} REB`, `${g.line.ast ?? 0} AST`],
+    /* the points are the chip, printed first, so the bits are the rest of his line */
+    lineOf: g => [`${g.line.reb ?? 0} REB`, `${g.line.ast ?? 0} AST`],
     markOf: g => (g.line.pts ?? 0) + (g.line.reb ?? 0) + (g.line.ast ?? 0),
     markChip: g => `${g.line.pts ?? 0} PTS`,
     markText: g => `${plural(g.line.pts ?? 0, 'point', 'points')}, ${plural(g.line.reb ?? 0, 'rebound', 'rebounds')}, ${plural(g.line.ast ?? 0, 'assist', 'assists')}`,
     soFar: so => [['Played', String(so.apps)], ['PPG', per(so.pts, so.apps)], ['RPG', per(so.reb, so.apps)], ['APG', per(so.ast, so.apps)]],
-    half: so => `First half: ${so.apps} games, ${per(so.pts, so.apps)} points a game`,
+    half: so => (so.apps ? `First half: ${plural(so.apps, 'game', 'games')}, ${per(so.pts, so.apps)} points a game` : 'First half: you did not play a game.'),
     tileLabels: { 'Points per game': 'PPG', 'Rebounds per game': 'RPG', 'Assists per game': 'APG' },
-    help: named => usHelp({
+    help: (named, opp) => usHelp({
       named, games: GAMES, bands: BANDS,
       examples: [
-        { head: 'A game', body: 'Game 12, at home to the Nuggets. You win 112-104 and put up 31 points, 8 rebounds and 6 assists. Your record goes to 8-4.' },
+        { head: 'A game', body: `Game 12, at home to ${named && opp ? `the ${opp}` : 'another team'}. You win 112-104 and put up 31 points, 8 rebounds and 6 assists. Your record goes to 8-4.` },
         { head: 'Your averages', body: 'Your season card says 25 points a game over 80 games. Add up every game here, divide by 80, and it rounds to 25. Same for rebounds and assists.' },
         { head: 'The playoffs', body: 'Your card says you lost in the conference semis after 11 playoff games. The path shows two rounds that add up to 11: a 4-2 win, then a 1-4 loss.' },
       ],

@@ -23,7 +23,7 @@ interface Props {
   tie?: string;
   /** Slots grouped for a record against each ("Division", "Conference"). */
   groups?: { label: string; slots: number[] }[];
-  /** A short name for the phone's log rows ("OKC"). */
+  /** A short name for the log rows ("OKC"); the sport clock's own when absent. */
   short?: (name: string) => string;
 }
 
@@ -53,7 +53,12 @@ export function RecordPanel({ model, played, compact, reduced = false, tie = 'D'
   const done = s.games.filter(g => g.md <= played);
   const rec = recordOf(done);
   const letter = (r: Res) => (r === 'D' ? tie : r);
-  const nameOf = (g: DerivedGame) => (compact && short ? short(names[g.opp]) : names[g.opp]);
+  /* the sport's short names when it has them ("OKC"), on a phone and on the desktop alike: a row then
+     fits one line whatever the team is called, and reads like the scoreboard above it */
+  const shorten = short ?? model.sport.clock.short;
+  const nameOf = (g: DerivedGame) => (shorten ? shorten(names[g.opp]) : names[g.opp]);
+  /* his line: the sport's chip first when it has one ("31 PTS"), then the bits */
+  const lineOf = (g: DerivedGame) => [...(model.sport.markChip ? [model.sport.markChip(g)] : []), ...model.sport.lineOf(g).bits].join(' ');
   const log = (
     <ol className="space-y-1 text-[11px]" data-game-log>
       {done.length === 0 && <li className="text-muted-foreground">No games yet.</li>}
@@ -65,7 +70,7 @@ export function RecordPanel({ model, played, compact, reduced = false, tie = 'D'
             <span className="text-muted-foreground">{g.home ? 'H' : 'A'}</span>
             <span className={names[g.opp] === words.unnamed ? 'italic text-muted-foreground' : 'font-semibold'}>{nameOf(g)}</span>
             <span className={`rounded px-1 font-bold tabular-nums ${PILL[r]}`}>{letter(r)} {g.us}-{g.them}</span>
-            <span className="tabular-nums">{g.played ? model.sport.lineOf(g).bits.join(' ') : model.sport.missed(g.why)}</span>
+            <span className="tabular-nums">{g.played ? lineOf(g) : model.sport.missed(g.why)}</span>
           </li>
         );
       })}

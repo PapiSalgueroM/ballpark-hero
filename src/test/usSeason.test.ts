@@ -10,7 +10,7 @@ import { NBA_SCORING, US_LEAGUE_SHAPES, nflHosts17, usLeagueShape } from '@/data
 import { keyedRng } from '@/lib/keyedRng';
 import { buildUsSeason, dealUnnamed, splitTotal, usBandOf, usPlayoffPath, type UsRow } from '@/lib/season/us';
 import { deriveSeason, type DerivedGame } from '@/lib/season/core';
-import { NBA_SEASON, nbaDeal, nbaDealProblems } from '@/lib/season/nba';
+import { NBA_SEASON, nbaDeal, nbaDealProblems, nbaTakeover } from '@/lib/season/nba';
 import { NBA_MISSED_PLAYOFFS, NBA_PLAYOFF_RESULTS, nbaEraTeamIds, nbaTeamLabelOf } from '@/lib/nbaMyCareer';
 
 const SPORTS: UsLengthSport[] = ['nba', 'nfl'];
@@ -49,6 +49,11 @@ describe('the season length ledger', () => {
     expect(usSeasonHeldLine('nfl', 2005)).toBe('📺 Week by week starts with the 2021 season: the real 2005 season had 16 games and this career plays 17.');
     expect(usSeasonHeldLine('nfl', 2020)).toContain('starts with the 2021 season');
     expect(usSeasonHeldLine('nfl', 2021)).toBeNull();
+    /* 2022: the Bills at Bengals game was never replayed, so those two teams played 16 (the same case as NBA 2012-13) */
+    expect(usSeasonLength('nfl', 2022)).toBeNull();
+    expect(usSeasonHeldLine('nfl', 2022)).toBe('📺 No week by week this season: the real 2022 season had one game called off for good, so two teams finished on 16 games.');
+    expect(usSeasonHeldLine('nfl', 2023)).toBeNull();
+    expect(usSeasonHeldLine('nfl', 2026)).toBeNull();
     expect(usSeasonHeldLine('nba', 2011)).toBe('📺 No week by week this season: the real 2011-12 season had 66 games and this career plays 82.');
     expect(usSeasonHeldLine('nba', 2019)).toBe('📺 No week by week this season: the real 2019-20 season was cut short and teams finished on different numbers of games.');
     expect(usSeasonHeldLine('nba', 2012)).toContain('2012-13');
@@ -252,6 +257,54 @@ describe('an NBA season, derived from its saved line', () => {
     /* a present day id the 2003-04 list does not hold is still not named in a throwback season */
     expect(built(NBA_ROW({ year: 2026, team: 'OKC' }), old).ctx.shape).toBeNull();
   });
+  it('gives each stat its own number a game, so a big scoring night is not by rule his best rebounding night', () => {
+    const row = NBA_ROW();
+    const b = built(row);
+    const s = deriveSeason(b.sport, row, b.ctx)!;
+    /* a mean's base is mean * (0.55 + 0.9u), u keyed by stat AND game: read u back for rebounds and
+       for assists. One shared number a game (the key without the stat) would make them equal in all 82. */
+    const u = (k: 'reb' | 'ast', g: DerivedGame) => (b.sport.meanBase(k, g) / (k === 'reb' ? 6.4 : 5.1) - 0.55) / 0.9;
+    for (const g of s.games) { expect(u('reb', g)).toBeGreaterThan(-1e-9); expect(u('reb', g)).toBeLessThan(1); }
+    expect(s.games.filter(g => Math.abs(u('reb', g) - u('ast', g)) < 1e-9)).toHaveLength(0);
+  });
+  it('only calls a night a takeover when it was one: 20 or more, 1.3 times his average, in a win', () => {
+    expect(nbaTakeover(4, 4, true)).toBe(false);
+    expect(nbaTakeover(19, 4, true)).toBe(false);
+    expect(nbaTakeover(20, 4, true)).toBe(true);
+    expect(nbaTakeover(32, 25, true)).toBe(false);
+    expect(nbaTakeover(33, 25, true)).toBe(true);
+    expect(nbaTakeover(45, 25, false)).toBe(false);
+    let hot = 0;
+    for (const ppg of [4, 12, 25, 31]) {
+      const row = NBA_ROW({ ppg });
+      const b = built(row);
+      const s = deriveSeason(b.sport, row, b.ctx)!;
+      for (const g of s.games) {
+        const said = g.events.some(e => e.kind === 'hot');
+        expect(said, `ppg ${ppg} game ${g.md}`).toBe(g.played && nbaTakeover(g.line.pts, ppg, g.us > g.them));
+        if (said) hot += 1;
+      }
+    }
+    /* the line is still in the game: these four seasons hold some */
+    expect(hot).toBeGreaterThan(4);
+  });
+  it('names a team of his own season in the worked example, never his own, and nobody when unnamed', () => {
+    const named = NBA_SEASON.view.help(true, 'Utah Jazz').examples[0].body;
+    expect(named).toContain('at home to the Utah Jazz.');
+    const unnamed = NBA_SEASON.view.help(false).examples[0].body;
+    expect(unnamed).toContain('at home to another team.');
+    expect(unnamed).not.toMatch(/Nuggets|Jazz/);
+    expect(NBA_SEASON.view.help(false).intro.join(' ')).not.toContain("is not that season's real league");
+    /* a first half with no game in it says so, with no "0 games, - points" */
+    expect(NBA_SEASON.view.half({ apps: 0 }, 'SG')).toBe('First half: you did not play a game.');
+    expect(NBA_SEASON.view.half({ apps: 1, pts: 12 }, 'SG')).toBe('First half: 1 game, 12.0 points a game');
+    expect(NBA_SEASON.view.half({ apps: 41, pts: 1025 }, 'SG')).toBe('First half: 41 games, 25.0 points a game');
+  });
+  it('prints his points once: the chip is the points, the bits are the rest', () => {
+    const g = { line: { pts: 31, reb: 8, ast: 6 } } as unknown as DerivedGame;
+    expect(NBA_SEASON.view.markChip(g, 'SG')).toBe('31 PTS');
+    expect(NBA_SEASON.view.lineOf(g, 'SG')).toEqual(['8 REB', '6 AST']);
+  });
   it('gives no view to a banned year or a season with no games', () => {
     for (const row of [NBA_ROW({ games: 0, teamResult: 'SUSPENDED' }), NBA_ROW({ games: 0 })]) {
       const b = buildUsSeason(NBA_SEASON, NBA_CAREER, row, nbaTeamLabelOf);
@@ -289,6 +342,31 @@ describe('the NBA playoff path', () => {
         expect(path.steps.every(st => st.score === null)).toBe(true);
       }
     });
+  });
+  it('draws every round before the Finals from his own conference, and only the Finals from the other', () => {
+    const shape = usLeagueShape('nba', 'now', 2026)!;
+    const confOf = (name: string) => shape.divisions.find(d => d.teams.some(id => nbaTeamLabelOf(id) === name))?.conf;
+    let finals = 0; let early = 0;
+    /* a Western team and an Eastern one, every depth, several keys */
+    for (const team of ['DEN', 'BOS']) {
+      const { ctx, key } = built(NBA_ROW({ team }));
+      const mine = confOf(nbaTeamLabelOf(team));
+      expect(mine).toBeDefined();
+      NBA_PLAYOFF_RESULTS.forEach((teamResult, i) => {
+        for (let k = 0; k < 12; k += 1) {
+          const path = usPlayoffPath(NBA_SEASON, NBA_ROW({ team, teamResult, poGames: 5 * Math.min(4, i + 1) }), ctx, `${key}|conf|${k}`)!;
+          path.steps.forEach((st, r) => {
+            const conf = confOf(st.opp);
+            expect(conf, `${st.opp} is a team of the league`).toBeDefined();
+            /* round index 3 is the Finals: the only round against the other conference */
+            expect(conf === mine, `${team} "${teamResult}" round ${r + 1} against ${st.opp}`).toBe(r < 3);
+            if (r < 3) early += 1; else finals += 1;
+          });
+        }
+      });
+    }
+    expect(early).toBeGreaterThan(100);
+    expect(finals).toBe(2 * 2 * 12);
   });
   it('has no path for a missed postseason or a result the engine never wrote', () => {
     const { ctx, key } = built(NBA_ROW());

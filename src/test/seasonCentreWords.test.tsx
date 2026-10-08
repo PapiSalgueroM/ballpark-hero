@@ -12,13 +12,19 @@
    1. RECORD_CENTRE_WORDS=1 writes it, never by default, and only from a tree
       whose src/components/season-centre/* and
       src/components/soccer-career/SoccerSeasonCentre.tsx are byte equal to
-      origin/release-al-int at that moment (git diff --quiet; it refuses
-      otherwise).
+      the base at that moment (git diff --quiet; it refuses otherwise). The
+      base is the branch this round's viewer hunks sit on top of: it was
+      origin/release-al-int while the round was built, and it is origin/main
+      since Release AL put Round 1047's viewer there (the clock gained a
+      wrapper element, so every matchday's markup moved with no field set).
+      A release train whose viewer has moved further names its own ref in
+      RECORD_CENTRE_WORDS_BASE.
    2. After any merge that touches those paths, the recording is made again
-      in a scratch worktree at the new origin/release-al-int holding ONLY this
-      test and its toy fixture, the fixture is copied back and committed alone
-      with the merge named in the message. This round's tree, hunks and all,
-      must then equal it with none of the new fields set.
+      in a scratch worktree at the new base holding ONLY this test's soccer
+      half (the first describe; the US half imports this round's files) and
+      its toy fixture, the fixture is copied back and committed alone with
+      the merge named in the message. This round's tree, hunks and all, must
+      then equal it with none of the new fields set.
    3. A red here after a merge is expected exactly once (rule 2 clears it).
       Re-recording on this round's own tree deletes the proof.
    Rounds 1046 and 1050 keep their own recordings under other names; this
@@ -41,6 +47,7 @@ import type { UsCareerCore } from '@/lib/usCareerSport';
 
 const FIXTURE = path.resolve(process.cwd(), 'src/test/fixtures/seasonCentreWords.recorded.json');
 const BASE_PATHS = ['src/components/season-centre', 'src/components/soccer-career/SoccerSeasonCentre.tsx'];
+const BASE_REF = process.env.RECORD_CENTRE_WORDS_BASE || 'origin/main';
 
 function setWidth(wide: boolean) {
   Object.defineProperty(window, 'matchMedia', {
@@ -102,7 +109,7 @@ describe('Season Centre: soccer markup, recorded on the base (Round 1048)', () =
     expect(Object.keys(now)).toHaveLength(20);
     for (const [k, html] of Object.entries(now)) expect(html.length, k).toBeGreaterThan(400);
     if (process.env.RECORD_CENTRE_WORDS === '1') {
-      execFileSync('git', ['diff', '--quiet', 'origin/release-al-int', '--', ...BASE_PATHS], { cwd: process.cwd() });
+      execFileSync('git', ['diff', '--quiet', BASE_REF, '--', ...BASE_PATHS], { cwd: process.cwd() });
       fs.mkdirSync(path.dirname(FIXTURE), { recursive: true });
       fs.writeFileSync(FIXTURE, JSON.stringify(now, null, 0));
     }
