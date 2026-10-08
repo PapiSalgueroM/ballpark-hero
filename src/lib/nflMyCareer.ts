@@ -17,6 +17,7 @@ import type { CareerDraftEntry, PreDraftState } from './careerPreDraft';
 import type { PlayerAppearance } from './soccerCareerAppearance';
 import { seasonSwing, swingNote, playoffDepthOf, playoffGames, clutchSwing, clutchNote } from './careerVariance';
 import { nflSeasonScore, wonAward } from './careerAwards';
+import { usSeasonLength } from '../data/usSeasonLengths';
 import { draftRival, judgeRivalSeason } from './careerRival';
 import type { CareerRival } from './careerRival';
 import { getNflLifeEventsA } from './nflCareerLifeA';
@@ -433,13 +434,47 @@ export function nflCampBattle(c: CareerState, teamQuality: number, rng: () => nu
   return '🪑 Another camp, another year behind the starter. The gap is closing.';
 }
 
+/* Round 1104: THE RATE the stat curves are written on, not the length of a
+   season. Every production line below is "what a full 17 game year is worth,
+   times games played over 17", so a full 16 game season comes out at 16
+   seventeenths of a full 17 game one, which is exactly what a shorter
+   schedule is. Do not replace this with the season's length: that would hand
+   a 2005 player a 17 game year's numbers in 16 games. */
+const NFL_RATE_GAMES = 17;
+
+/** Round 1104: how many games a club played in the season that starts in
+ *  `year`, off the two sourced ledger (16 from 2005 to 2020, 17 since). A
+ *  year the ledger does not hold plays the modern 17. */
+export function nflSeasonLength(year: number): number {
+  return usSeasonLength('nfl', year) ?? NFL_RATE_GAMES;
+}
+
 function seasonGames(c: CareerState, rng: () => number): { games: number; injuryNote: string | null } {
+  const len = nflSeasonLength(c.year);
   const risk = careerRecoveryRisk('nfl', c.purchased, (1 - c.archetype.durability) * 0.5 + (100 - c.health) / 260 + (c.pos === 'RB' ? 0.07 : 0));
   if (rng() < risk) {
     const missed = 2 + Math.floor(rng() * 9);
-    return { games: Math.max(4, 17 - missed), injuryNote: `Missed ${missed} games hurt.` };
+    return { games: Math.max(4, len - missed), injuryNote: `Missed ${missed} games hurt.` };
   }
-  return { games: 17, injuryNote: null };
+  return { games: len, injuryNote: null };
+}
+
+/* Round 1104: the awards field (careerAwards.ts) was measured on 17 game
+   seasons and scores totals, so a 16 game season judged raw is a seventeenth
+   short of the field before a down is played: measured, All-Pros a career
+   fell to a third in the throwback. The awards therefore read a season on a
+   full schedule PACE: every counting stat times 17 over the season's length.
+   The kicker's long field goal is a distance, not a volume, and is left as it
+   is. This copy is only ever handed to the award score; it is never saved. */
+function nflAwardPaceLine(line: SeasonLine, len: number): SeasonLine {
+  if (len === NFL_RATE_GAMES) return line;
+  const f = NFL_RATE_GAMES / len;
+  const pace: SeasonLine = { ...line };
+  for (const k of ['passYds', 'passTd', 'ints', 'rushYds', 'rushTd', 'rec', 'recYds', 'recTd', 'tackles', 'sacks', 'picks', 'forcedFum', 'passDef', 'fgAtt', 'fgMade'] as const) {
+    const v = line[k];
+    if (typeof v === 'number') pace[k] = v * f;
+  }
+  return pace;
 }
 
 export function simSeason(
@@ -462,7 +497,7 @@ export function simSeason(
     // Round 98: the season itself gets a say, so career years and lost
     // years both exist. Averages out to zero across a career.
     + swing;
-  const g = games / 17;
+  const g = games / NFL_RATE_GAMES;
   const line: SeasonLine = {
     year: c.year, team: c.team, age: c.age, ovr: c.ovr, games,
     awards: [], teamResult: '', salary: c.salary,
@@ -565,7 +600,7 @@ export function simSeason(
     const poG = playoffGames(depth, rng, 'nfl');
     const clutch = clutchSwing(rng);
     const pf = form + clutch - 1;      // January defences are better
-    const per = poG / 17;
+    const per = poG / NFL_RATE_GAMES;
     line.poGames = poG;
     if (c.pos === 'QB') {
       const y = Math.max(0, Math.round((1900 + (pf - 62) * 92) * per));
@@ -603,7 +638,13 @@ export function simSeason(
   // the formula itself into careerAwards.ts, unchanged, because the award
   // model and the harness both have to score a season exactly the way this
   // engine does and two copies of a formula is two formulas.
-  const statScore = nflSeasonScore(c.pos, line);
+  /* Round 1104: scored on a full schedule pace, and the games gates sit two
+     short of the schedule (15 of 17, 14 of 16), so the smallest injury does
+     not shut a 16 game season out of every award. In a 17 game season the
+     pace line is the line itself and the gate is the 15 it always was. */
+  const seasonLen = nflSeasonLength(line.year);
+  const awardGames = seasonLen - 2;
+  const statScore = nflSeasonScore(c.pos, nflAwardPaceLine(line, seasonLen));
   const isDef = DEFENSIVE_POS.includes(c.pos);
   const royLabel = isDef ? 'Defensive Rookie of the Year' : 'Offensive Rookie of the Year';
   /* Round 123: every one of these used to be a threshold on your own numbers
@@ -616,16 +657,16 @@ export function simSeason(
     line.awards.push(royLabel); notes.push(`🏆 ${royLabel}.`);
   }
   // Round 56: defenders chase Defensive Player of the Year instead of MVP.
-  if (isDef && games >= 15 && wonAward(rng, 'nfl', 'nflDpoy', c.pos, statScore)) {
+  if (isDef && games >= awardGames && wonAward(rng, 'nfl', 'nflDpoy', c.pos, statScore)) {
     line.awards.push('Defensive Player of the Year'); c.mvps += 1; notes.push('🛡️ DEFENSIVE PLAYER OF THE YEAR.');
   }
-  if (games >= 15 && wonAward(rng, 'nfl', 'allPro', c.pos, statScore)) {
+  if (games >= awardGames && wonAward(rng, 'nfl', 'allPro', c.pos, statScore)) {
     line.awards.push('All-Pro'); c.allPros += 1; notes.push('⭐ First-team All-Pro.');
   }
   // Kickers and defenders do not win MVP. Neither do most people. That gate
   // lives in the MVP table in careerAwards.ts now, which returns nothing at
   // all for a kicker or a defender.
-  if (games >= 15 && wonAward(rng, 'nfl', 'nflMvp', c.pos, statScore)) {
+  if (games >= awardGames && wonAward(rng, 'nfl', 'nflMvp', c.pos, statScore)) {
     line.awards.push('MVP'); c.mvps += 1; notes.push('👑 LEAGUE MVP.');
   }
 

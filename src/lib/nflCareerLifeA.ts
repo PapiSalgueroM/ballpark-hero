@@ -601,7 +601,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
         },
         {
           label: 'Manage it quietly with the old tricks', effect: 'Play on, wear adds up',
-          apply: (cc) => { hp(cc, -7); mor(cc, 2); return 'Tape, heat, and never once saying the word out loud. You played all 17 and paid for it in a way you will feel for a decade. Health -7, morale +2.'; },
+          apply: (cc) => { hp(cc, -7); mor(cc, 2); return 'Tape, heat, and never once saying the word out loud. You played every game and paid for it in a way you will feel for a decade. Health -7, morale +2.'; },
         },
       ],
     });
@@ -720,7 +720,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
         },
         {
           label: 'Wait one more year', effect: 'Play now, pay later',
-          apply: (cc) => { hp(cc, -7); mor(cc, 5); return 'You played all 17 games on a joint three doctors wanted to open up. Morale +5, health -7, and a decision that is still waiting for you.'; },
+          apply: (cc) => { hp(cc, -7); mor(cc, 5); return 'You played every game on a joint three doctors wanted to open up. Morale +5, health -7, and a decision that is still waiting for you.'; },
         },
       ],
     });
@@ -1044,7 +1044,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
       options: [
         {
           label: 'Take the whole thing on your back', effect: 'Rating and wear',
-          apply: (cc) => { rate(cc, 2); hp(cc, -5); mor(cc, 3); return `You played 17 games like every one was an elimination game. Rating +2 to ${cc.ovr}, health -5, morale +3.`; },
+          apply: (cc) => { rate(cc, 2); hp(cc, -5); mor(cc, 3); return `You played every game like it was an elimination game. Rating +2 to ${cc.ovr}, health -5, morale +3.`; },
         },
         {
           label: 'Tell the room to ignore the owner', effect: 'Leadership, room steadies',

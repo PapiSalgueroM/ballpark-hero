@@ -7,7 +7,7 @@
    there is no cycle. */
 
 import type { CareerState, SeasonLine } from './nflMyCareer';
-import { careerTotals, legacyOf, teamLabelOf } from './nflMyCareer';
+import { careerTotals, legacyOf, nflSeasonLength, teamLabelOf } from './nflMyCareer';
 import { NFL_BADGES, earnedBadges } from './careerBadges';
 import type { BadgeDef, NflBadgeFacts } from './careerBadges';
 import { fanComments, followersFromFanbase, fmtFollowers, nflSeasonHeadlines } from './careerSocial';
@@ -34,9 +34,10 @@ export function nflBadgeFacts(c: CareerState): NflBadgeFacts {
       sacks: Math.round(sacks * 10) / 10, picks, tackles, fgMade,
     },
     /* Round 470: what a full season is, moved onto the facts so the iron man
-       badge reads the same field in all four American careers. 17 is the
-       whole schedule, so this is the Round 469 test unchanged. */
-    fullSeasons: c.seasons.filter(s => s.games >= 17).length,
+       badge reads the same field in all four American careers. Round 1104:
+       the whole schedule is the length of THAT season (16 games before
+       2021, 17 since), so a full 2005 season counts as a full one. */
+    fullSeasons: c.seasons.filter(s => s.games >= nflSeasonLength(s.year)).length,
     wealth: Math.round(((c.netWorth ?? 0) + nflMoneyWealth(c)) * 100) / 100,
     retired: c.retired,
     hof: c.retired && legacyOf(c).hof,
@@ -74,10 +75,10 @@ export function nflHeadlinesFor(c: CareerState, line: SeasonLine): string[] {
     team: teamLabelOf(line.team, c.eraId),
     pos: c.pos,
     line,
-    /* A starter's games are 17 less what injury took, so the gap is the
-       injury. A backup's games are spot duty by design (Round 182), so the
+    /* A starter's games are the season's length (Round 1104: 16 before
+       2021, 17 since) less what injury took, so the gap is the injury. A backup's games are spot duty by design (Round 182), so the
        gap says nothing about his health and is not reported as one. */
-    missed: line.teamResult === 'SUSPENDED' || c.role === 'backup' ? 0 : Math.max(0, 17 - line.games),
+    missed: line.teamResult === 'SUSPENDED' || c.role === 'backup' ? 0 : Math.max(0, nflSeasonLength(line.year) - line.games),
     role: c.role,
   });
 }
