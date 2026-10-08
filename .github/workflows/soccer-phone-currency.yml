@@ -1,0 +1,182 @@
+name: Soccer phone currency
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - codex/soccer-phone-currency-1090
+  pull_request:
+    paths:
+      - .github/workflows/soccer-phone-currency.yml
+      - src/components/soccer-career/PhonePanel.tsx
+      - src/components/soccer-career/MoneyScreens.tsx
+      - src/test/soccerPhoneCurrency.test.tsx
+      - scripts/simSoccerPhoneCurrency.mjs
+      - scripts/qa/soccerPhoneCurrency1090.mjs
+
+permissions:
+  contents: read
+concurrency:
+  group: soccer-phone-currency-${{ github.event.pull_request.head.sha || github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      VITEST_MAX_FORKS: 1
+      VITEST_MIN_FORKS: 1
+      SEO_SPLIT_BASE_REF: HEAD
+      TZ: UTC
+      SIM_OFFLINE_RECEIPT: soccer-phone-currency-artifacts/transport.log
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Prepare immutable remote dependencies
+        run: |
+          mkdir -p soccer-phone-currency-artifacts/dependencies soccer-phone-currency-artifacts/regressions
+          git rev-parse HEAD > soccer-phone-currency-artifacts/source-head.txt
+          git rev-parse 'HEAD^{tree}' > soccer-phone-currency-artifacts/source-tree.txt
+          printf '%s\n' '${{ github.run_id }}' '${{ github.run_attempt }}' '${{ github.job }}' > soccer-phone-currency-artifacts/run.txt
+          cp package.json package-lock.json soccer-phone-currency-artifacts/dependencies/
+          npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict'; import { createHash } from 'node:crypto';
+          const hash = b => createHash('sha256').update(b).digest('hex');
+          const lock=JSON.parse(fs.readFileSync('package-lock.json')), rows=[];
+          for(const [path,entry] of Object.entries(lock.packages)) {
+            if(!path.startsWith('node_modules/')||!fs.existsSync(path+'/package.json')) continue;
+            const raw=fs.readFileSync(path+'/package.json'), version=JSON.parse(raw).version;
+            assert.equal(version,entry.version,path); const sha256=hash(raw);
+            fs.writeFileSync('soccer-phone-currency-artifacts/dependencies/'+sha256+'.json',raw);rows.push({path,version,sha256});
+          }
+          assert(rows.length>0);fs.writeFileSync('soccer-phone-currency-artifacts/installed-before.json',JSON.stringify(rows,null,2));
+          NODE
+          npm install --no-save playwright
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict'; import { createHash } from 'node:crypto';
+          const hash=b=>createHash('sha256').update(b).digest('hex'), before=JSON.parse(fs.readFileSync('soccer-phone-currency-artifacts/installed-before.json'));
+          for(const row of before){const raw=fs.readFileSync(row.path+'/package.json');assert.equal(JSON.parse(raw).version,row.version);assert.equal(hash(raw),row.sha256);}
+          const packages=['playwright','playwright-core','vite','esbuild','react','react-dom'];
+          const versions=packages.map(name=>{const raw=fs.readFileSync('node_modules/'+name+'/package.json');fs.writeFileSync('soccer-phone-currency-artifacts/dependencies/'+name+'-package.json',raw);return{name,version:JSON.parse(raw).version,sha256:hash(raw)};});
+          fs.writeFileSync('soccer-phone-currency-artifacts/dependencies/verification-packages.json',JSON.stringify(versions,null,2));
+          fs.writeFileSync('soccer-phone-currency-artifacts/node-versions.json',JSON.stringify(process.versions,null,2));
+          console.log(`Held ${before.length} locked installed versions and manifest hashes.`);
+          NODE
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+      - name: Proper application types and actual build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee soccer-phone-currency-artifacts/types.log
+          npm run build 2>&1 | tee soccer-phone-currency-artifacts/build.log
+      - name: Actual mounted money displays and copied faults
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerPhoneCurrency.mjs 2>&1 | tee soccer-phone-currency-artifacts/outcomes.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const r=JSON.parse(fs.readFileSync('soccer-phone-currency-artifacts/outcomes/summary.json'));
+          assert.equal(r.status,'passed');assert.equal(r.normal.passed,13);assert.equal(r.normal.failed,0);
+          assert.equal(r.controls.length,37);assert(r.controls.every(c=>c.status==='assertion-failed'&&c.passed===1&&c.failed===1&&c.skipped===11));assert.deepEqual(r.sourceAfter,r.sourceBefore);
+          console.log('Actual mounted display and independent engine baselines held, with mapped copied faults.');
+          NODE
+      - name: Retain mounted proof before browser work
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: soccer-phone-currency-outcomes-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            soccer-phone-currency-artifacts/outcomes/
+            soccer-phone-currency-artifacts/outcomes.log
+            soccer-phone-currency-artifacts/source-head.txt
+            soccer-phone-currency-artifacts/source-tree.txt
+            soccer-phone-currency-artifacts/dependencies/
+          retention-days: 7
+          if-no-files-found: error
+      - name: Cache only actual template fonts
+        id: assets
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: node scripts/qa/soccerPhoneCurrency1090.mjs --prefetch-assets-only 2>&1 | tee soccer-phone-currency-artifacts/assets.log
+      - name: Actual Phone overlay journeys and restored DOM faults
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.assets.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" timeout --signal=TERM --kill-after=15s 15m node scripts/qa/soccerPhoneCurrency1090.mjs 2>&1 | tee soccer-phone-currency-artifacts/native.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const r=JSON.parse(fs.readFileSync('soccer-phone-currency-artifacts/native/report.json'));
+          assert.equal(r.complete,true);assert.equal(r.cases.length,8);assert(r.cases.every(c=>c.complete&&c.errors.length===0&&c.sockets.length===0));
+          assert.equal(r.controls.length,9);assert(r.controls.every(c=>c.proved&&c.failure.name==='AssertionError'));
+          assert.deepEqual(r.sourceAfter,r.sourceBefore);assert.deepEqual(r.buildAfter,r.buildBefore);assert.deepEqual(r.cacheAfter,r.cacheBefore);
+          console.log('Eight actual Phone overlays and nine effective restored DOM controls passed with full read-only state and transport holds.');
+          NODE
+      - name: Retain native proof promptly
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.assets.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: soccer-phone-currency-native-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            soccer-phone-currency-artifacts/native/
+            soccer-phone-currency-artifacts/native.log
+            soccer-phone-currency-artifacts/asset-cache/
+            soccer-phone-currency-artifacts/source-head.txt
+            soccer-phone-currency-artifacts/source-tree.txt
+          retention-days: 7
+          if-no-files-found: error
+      - name: Unchanged currency phone and money regressions
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simSoccerCurrency simMoney simCareerParity simCareerMoneyAfterRetirement simMoneyAppFeedback simPhone simPhone2 simPhonePanelFocus; do
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "soccer-phone-currency-artifacts/regressions/$harness.log" || failed=1
+          done
+          for control in tab return navigation visibility; do
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" PHONE_PANEL_CONTROL="$control" node scripts/simPhonePanelFocus.mjs 2>&1 | tee "soccer-phone-currency-artifacts/regressions/phone-control-$control.log" || failed=1
+          done
+          exit "$failed"
+      - name: All twenty built readers and source anchors
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings simSeoMetaSplit simHomeCopy simHarnessAnchors; do
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "soccer-phone-currency-artifacts/regressions/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Original engines data tests and dependencies held
+        if: ${{ !cancelled() }}
+        run: |
+          git diff --exit-code 8fe82a4dc1346f7d5b8072f387f3acb34bbaa3c8 HEAD -- src/lib src/data src/hooks src/integrations src/types scripts/fixtures package.json package-lock.json scripts/simSoccerCurrency.mjs scripts/simMoney.mjs scripts/simCareerParity.mjs scripts/simCareerMoneyAfterRetirement.mjs scripts/simMoneyAppFeedback.mjs scripts/simPhone.mjs scripts/simPhone2.mjs scripts/simPhonePanelFocus.mjs src/test/phonePanelFocus.test.tsx src/test/moneyAppFeedback.test.tsx
+          git diff --exit-code HEAD -- src scripts .github/workflows/soccer-phone-currency.yml
+          cmp package.json soccer-phone-currency-artifacts/dependencies/package.json
+          cmp package-lock.json soccer-phone-currency-artifacts/dependencies/package-lock.json
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict'; import { createHash } from 'node:crypto';
+          const before=JSON.parse(fs.readFileSync('soccer-phone-currency-artifacts/installed-before.json'));
+          const after=before.map(row=>{const raw=fs.readFileSync(row.path+'/package.json');return{path:row.path,version:JSON.parse(raw).version,sha256:createHash('sha256').update(raw).digest('hex')};});
+          fs.writeFileSync('soccer-phone-currency-artifacts/installed-after.json',JSON.stringify(after,null,2));assert.deepEqual(after,before);
+          console.log(`Held ${after.length} installed versions and complete raw dependency manifests.`);
+          NODE
+      - name: Retain complete raw evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: soccer-phone-currency-${{ github.run_id }}-${{ github.run_attempt }}
+          path: soccer-phone-currency-artifacts/
+          retention-days: 7
+          if-no-files-found: error

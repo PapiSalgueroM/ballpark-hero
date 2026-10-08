@@ -21,9 +21,10 @@
 import { useMemo, useState } from "react";
 import type { CareerState, SpendingCategory } from "@/lib/soccerCareerEngine";
 import { SPENDING_ITEMS, formatNetWorth } from "@/lib/soccerCareerEngine";
+import { getCurrency, localizeMoney } from "@/lib/soccerCurrency";
 import {
   ASSETS, ensureMoney, bankSummary, holdingValue, unrealised, priceRead, lastMove,
-  spendable, fmtM, cardCap, cardStatus, MAX_LEDGER, PAR,
+  spendable, cardCap, cardStatus, MAX_LEDGER, PAR,
   CARD_WIN, CARD_PAYS, CARD_MAX, CARD_SHUT, ARCADE_PRIZE,
 } from "@/lib/soccerMoney";
 import type { MoneyAction } from "@/lib/soccerMoney";
@@ -94,20 +95,21 @@ export function BankScreen({ career, onBack, onMoney }: {
 }) {
   const bank = bankSummary(career);
   const free = spendable(career);
+  const currency = getCurrency();
   return (
     <>
       <AppHeader title="🏦 Bank" backLabel="Home" onBack={onBack} />
       <div className="flex-1 overflow-y-auto p-3 space-y-2.5">
         <div className="rounded-2xl border border-white/10 bg-white/5 p-3 text-center">
           <div className="text-[10px] uppercase tracking-widest text-white/45 font-bold">Everything you have</div>
-          <div className="text-3xl font-black">{fmtM(bank.total)}</div>
-          <div className="text-[10px] text-white/45">wage {`£${career.weeklyWage.toLocaleString()}`} a week</div>
+          <div className="text-3xl font-black">{formatNetWorth(bank.total)}</div>
+          <div className="text-xs text-white/45 break-words">wage {`${currency.symbol}${Math.round(career.weeklyWage * currency.perEur).toLocaleString('en-US')}`} a week</div>
         </div>
 
         <div className="grid grid-cols-3 gap-2 text-center">
-          <div className="rounded-xl bg-white/5 p-2"><div className="text-[13px] font-black">{fmtM(bank.cash)}</div><div className="text-[9px] text-white/45">in the account</div></div>
-          <div className="rounded-xl bg-white/5 p-2"><div className="text-[13px] font-black text-emerald-300">{fmtM(bank.vault)}</div><div className="text-[9px] text-white/45">savings</div></div>
-          <div className="rounded-xl bg-white/5 p-2"><div className="text-[13px] font-black text-sky-300">{fmtM(bank.invested)}</div><div className="text-[9px] text-white/45">invested</div></div>
+          <div className="rounded-xl bg-white/5 p-2"><div className="text-[13px] font-black">{formatNetWorth(bank.cash)}</div><div className="text-[9px] text-white/45">in the account</div></div>
+          <div className="rounded-xl bg-white/5 p-2"><div className="text-[13px] font-black text-emerald-300">{formatNetWorth(bank.vault)}</div><div className="text-[9px] text-white/45">savings</div></div>
+          <div className="rounded-xl bg-white/5 p-2"><div className="text-[13px] font-black text-sky-300">{formatNetWorth(bank.invested)}</div><div className="text-[9px] text-white/45">invested</div></div>
         </div>
 
         <div className="rounded-2xl border border-emerald-500/25 bg-emerald-500/5 p-3 space-y-2">
@@ -140,7 +142,7 @@ export function BankScreen({ career, onBack, onMoney }: {
                 <span className="min-w-0 truncate text-white/70">{e.t}</span>
                 <span className="flex items-center gap-2 shrink-0 pl-2">
                   <span className="text-[9px] text-white/35">{e.y}</span>
-                  <span className={`font-black ${e.a >= 0 ? "text-emerald-400" : "text-white/70"}`}>{e.a >= 0 ? "+" : ""}{fmtM(e.a)}</span>
+                  <span className={`font-black ${e.a >= 0 ? "text-emerald-400" : "text-white/70"}`}>{e.a >= 0 ? "+" : ""}{formatNetWorth(e.a)}</span>
                 </span>
               </div>
             ))
@@ -150,7 +152,7 @@ export function BankScreen({ career, onBack, onMoney }: {
 
         <div className="rounded-xl bg-white/5 p-2.5 flex items-center justify-between text-[10px]">
           <span className="text-white/50">Made on investments</span>
-          <span><span className="text-emerald-400 font-black">{fmtM(bank.won)}</span> <span className="text-white/30">/</span> <span className="text-red-400 font-black">{fmtM(bank.lost)}</span> <span className="text-white/40">lost</span></span>
+          <span><span className="text-emerald-400 font-black">{formatNetWorth(bank.won)}</span> <span className="text-white/30">/</span> <span className="text-red-400 font-black">{formatNetWorth(bank.lost)}</span> <span className="text-white/40">lost</span></span>
         </div>
       </div>
     </>
@@ -171,8 +173,8 @@ export function MarketScreen({ career, onBack, onOpen }: {
       <AppHeader title="📈 Market" backLabel="Home" onBack={onBack} />
       <div className="flex-1 overflow-y-auto p-2.5 space-y-2">
         <div className="flex items-center justify-between px-1">
-          <span className="text-[10px] text-white/45">You have {fmtM(spendable(career))} to put in</span>
-          <span className="text-[10px] text-white/45">holding {fmtM(invested)}</span>
+          <span className="text-[10px] text-white/45">You have {formatNetWorth(spendable(career))} to put in</span>
+          <span className="text-[10px] text-white/45">holding {formatNetWorth(invested)}</span>
         </div>
         {ASSETS.map(a => {
           const read = priceRead(m, a.id);
@@ -200,7 +202,7 @@ export function MarketScreen({ career, onBack, onOpen }: {
                 </span>
               </div>
               {held > 0 && (
-                <div className="text-[10px] text-sky-300 pt-1 pl-8">you hold {fmtM(held)}, {unrealised(m, a.id) >= 0 ? "up" : "down"} {fmtM(Math.abs(unrealised(m, a.id)))}</div>
+                <div className="text-[10px] text-sky-300 pt-1 pl-8">you hold {formatNetWorth(held)}, {unrealised(m, a.id) >= 0 ? "up" : "down"} {formatNetWorth(Math.abs(unrealised(m, a.id)))}</div>
               )}
             </button>
           );
@@ -261,9 +263,9 @@ export function AssetScreen({ career, assetId, onBack, onMoney }: {
         <p className="text-[10px] text-white/50 leading-snug px-1">{def.blurb}</p>
 
         <div className="rounded-2xl border border-white/10 bg-white/5 p-3 space-y-0.5">
-          <Row label="You have to spend" value={fmtM(free)} />
-          <Row label="You are holding" value={fmtM(held)} tone={held > 0 ? "text-sky-300" : "text-white/40"} />
-          {held > 0 && <Row label="Against what you paid" value={`${pnl >= 0 ? "+" : ""}${fmtM(pnl)}`} tone={pnl >= 0 ? "text-emerald-400" : "text-red-400"} />}
+          <Row label="You have to spend" value={formatNetWorth(free)} />
+          <Row label="You are holding" value={formatNetWorth(held)} tone={held > 0 ? "text-sky-300" : "text-white/40"} />
+          {held > 0 && <Row label="Against what you paid" value={`${pnl >= 0 ? "+" : ""}${formatNetWorth(pnl)}`} tone={pnl >= 0 ? "text-emerald-400" : "text-red-400"} />}
         </div>
 
         <div className="space-y-1.5">
@@ -312,7 +314,7 @@ export function ShopScreen({ career, onBack, onOpen }: {
       <AppHeader title="🛒 My Life" backLabel="Home" onBack={onBack} />
       <div className="flex-1 overflow-y-auto p-3 space-y-3">
         <div className="flex items-center justify-between text-[10px] text-white/50 px-0.5">
-          <span>{fmtM(spendable(career))} to spend</span>
+          <span>{formatNetWorth(spendable(career))} to spend</span>
           <span>{owned.length} things owned</span>
         </div>
         <div className="grid grid-cols-2 gap-2.5">
@@ -385,10 +387,10 @@ export function ShopCategoryScreen({ career, cat, onBack, onBuy }: {
                     <span className="text-[11.5px] font-black truncate">{item.name}</span>
                     {isOwned && <span className="text-[8px] px-1 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-black shrink-0">OWNED</span>}
                   </div>
-                  <p className="text-[10px] text-white/50 leading-snug">{item.description}</p>
-                  {item.effect && <p className="text-[10px] text-amber-300/90 leading-snug pt-0.5">⚡ {item.effect}</p>}
+                  <p className="text-[10px] text-white/50 leading-snug">{localizeMoney(item.description)}</p>
+                  {item.effect && <p className="text-[10px] text-amber-300/90 leading-snug pt-0.5">⚡ {localizeMoney(item.effect)}</p>}
                   {!isOwned && lock && <p className="text-[10px] text-red-400/80 pt-0.5">🔒 {lock}</p>}
-                  {item.monthlyCost ? <p className="text-[9px] text-white/35 pt-0.5">then €{(item.monthlyCost * 1000).toFixed(0)}k a year, every year</p> : null}
+                  {item.monthlyCost ? <p className="text-[9px] text-white/35 pt-0.5">then {formatNetWorth(item.monthlyCost)} a year, every year</p> : null}
                 </div>
                 {!isOwned && (
                   <button
@@ -398,7 +400,7 @@ export function ShopCategoryScreen({ career, cat, onBack, onBuy }: {
                       blocked ? "bg-white/5 text-white/25" : "bg-emerald-600 hover:bg-emerald-500 text-black active:scale-95"
                     }`}
                   >
-                    {item.cost > 0 ? (item.cost >= 1 ? `€${item.cost.toFixed(0)}M` : `€${Math.round(item.cost * 1000)}k`) : "Hire"}
+                    {item.cost > 0 ? formatNetWorth(item.cost) : "Hire"}
                   </button>
                 )}
               </div>
@@ -463,7 +465,7 @@ export function ArcadeScreen({ career, onBack, onMoney }: {
             <div className="text-4xl font-black">{right}/3</div>
             <p className="text-[11px] text-white/60 leading-snug">
               {right === 3
-                ? `Three from three. ${fmtM(ARCADE_PRIZE)} in the app and the group chat hears about it.`
+                ? `Three from three. ${formatNetWorth(ARCADE_PRIZE)} in the app and the group chat hears about it.`
                 : right === 2 ? "Two from three. The lads are not impressed." : "You play the sport for a living."}
             </p>
             <button onClick={onBack} className="text-[11px] font-black px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20">Put it away</button>
@@ -542,7 +544,7 @@ export function CardsScreen({ career, onBack, onMoney }: {
         <div className={`rounded-2xl border p-3 text-center ${down ? "border-red-500/30 bg-red-500/5" : "border-white/10 bg-white/5"}`}>
           <div className="text-[10px] uppercase tracking-widest text-white/45 font-bold">Your record on the bus</div>
           <div className={`text-2xl font-black ${down ? "text-red-400" : m.cNet > 0 ? "text-emerald-400" : ""}`}>
-            {m.cNet >= 0 ? "+" : ""}{fmtM(m.cNet)}
+            {m.cNet >= 0 ? "+" : ""}{formatNetWorth(m.cNet)}
           </div>
           <div className="text-[10px] text-white/45">over {m.cPlays} {m.cPlays === 1 ? "sitting" : "sittings"}</div>
         </div>
@@ -553,7 +555,7 @@ export function CardsScreen({ career, onBack, onMoney }: {
               onClick={() => onMoney({ t: "cards", stake: cap })}
               className="w-full rounded-xl border border-amber-500/40 bg-amber-500/15 hover:bg-amber-500/25 px-3 py-2.5 text-[12px] font-black text-amber-200"
             >
-              Sit in for {fmtM(cap)}
+              Sit in for {formatNetWorth(cap)}
             </button>
             <button
               onClick={onBack}
@@ -569,7 +571,7 @@ export function CardsScreen({ career, onBack, onMoney }: {
         )}
 
         <p className="text-[9px] text-white/35 leading-snug text-center px-1">
-          One sitting a season, never more than {fmtM(CARD_MAX)}, and it stops for good if you ever get {fmtM(CARD_SHUT)} down. Nobody is losing a career on this bus.
+          One sitting a season, never more than {formatNetWorth(CARD_MAX)}, and it stops for good if you ever get {formatNetWorth(CARD_SHUT)} down. Nobody is losing a career on this bus.
         </p>
       </div>
     </>

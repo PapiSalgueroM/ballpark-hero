@@ -1,3 +1,30 @@
+## Round 1090 preparation, 2026-10-07, Soccer Phone currency display
+
+Unverified preparation on `codex/soccer-phone-currency-1090`, pinned to Release AL integration
+`8fe82a4dc1346f7d5b8072f387f3acb34bbaa3c8`. The previously accepted 1073 branch remains untouched.
+The owned managed checkout is `career-season-compare-1060/ballpark-hero`, reused cleanly and recorded
+in the root coordination notes. This is not a main, live-site or release acceptance claim.
+
+The two-component correction makes the Phone header and money screens use the existing selected
+currency formatter, gives Bank an exact grouped integer wage, converts existing Shop narrative euro
+amounts and shows the existing dated rate note inside the Phone. Rates, euro-unit balances, market
+indices, percentages, action payloads, engine/data, saves and old tests stay unchanged.
+
+Authored remote proof: 13 actual mounted display/action/baseline cases and 37 separately mapped
+copied-source faults; eight actual Phone overlay journeys covering all existing preferences across
+320/390 touch and 1280 keyboard, plus nine restored DOM faults. The native fixtures are finite display
+states built from the actual engine, with financial boundary fields explicitly staged. They are not a
+full career route, campaign or earned-wealth proof. Native checks retain complete read-only career,
+storage, callback, RNG and clock observations, actual cached fonts, physical clipping/focus/Back/close,
+and both readable viewport and full PNGs. Existing small metadata is outside the new 12px leaf scope.
+
+All execution is remote-only. The new `soccer-phone-currency.yml` gate runs proper app types/build,
+the new suites, unchanged currency/money/parity/Phone regressions, four original Phone focus controls,
+all twenty built readers/source guards and exact source/dependency holds. It uploads mounted and
+native evidence promptly, with a finite native deadline. No authored count is credited as a pass until
+the exact committed candidate runs and its raw artifacts receive independent review. Runtime acceptance,
+PR, release integration and publication remain pending.
+
 ## Release AK LIVE, 2026-10-07 15:12 EDT, and the split of work with Codex
 
 Claude lane (session E, a new lead: session D stopped at its weekly limit with AK's gate still running).

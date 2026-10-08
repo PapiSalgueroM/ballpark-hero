@@ -23,7 +23,8 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import type { CareerState, PhoneMessage } from "@/lib/soccerCareerEngine";
-import { karmaOf } from "@/lib/soccerCareerEngine";
+import { formatNetWorth, karmaOf } from "@/lib/soccerCareerEngine";
+import { rateNote } from "@/lib/soccerCurrency";
 import { karmaTier } from "@/lib/careerEras";
 import {
   CONTACTS, contactAvailable, contactName, contactEmoji,
@@ -63,11 +64,6 @@ type AppId =
   | "market" | "asset" | "shop" | "shopcat" | "arcade" | "cards";
 
 const fmtFollowers = (m: number) => m >= 1 ? `${m.toFixed(1)}M` : `${Math.round(m * 1000)}K`;
-const fmtMoney = (m: number) => {
-  const neg = m < 0; const v = Math.abs(m);
-  const body = v >= 1000 ? `£${(v / 1000).toFixed(2)}bn` : v >= 1 ? `£${v.toFixed(1)}M` : `£${Math.round(v * 1000)}K`;
-  return neg ? `-${body}` : body;
-};
 
 function Meter({ value, color }: { value: number; color: string }) {
   return (
@@ -95,6 +91,7 @@ export default function PhonePanel({ career, onAnswer, onMoney, onBuyItem, onClo
   onBuyItem: (itemId: string) => void;
   onClose: () => void;
 }) {
+  const conversionNote = rateNote();
   const [app, setApp] = useState<AppId>("home");
   const [openThread, setOpenThread] = useState<string | null>(null);
   const [openContact, setOpenContact] = useState<string | null>(null);
@@ -242,8 +239,8 @@ export default function PhonePanel({ career, onAnswer, onMoney, onBuyItem, onClo
               <div className="rounded-2xl bg-white/5 border border-white/10 p-2.5 text-center">
                 <div className="text-xl font-black leading-tight">{career.playerName}</div>
                 <div className="text-[11px] text-white/60">{career.currentClub} · OVR {career.overall}</div>
-                <div className="text-[10px] text-emerald-300 font-bold pt-0.5">
-                  {fmtMoney(career.netWorth + moneyWealth(career))} to your name
+                <div className="text-xs text-emerald-300 font-bold pt-0.5">
+                  {formatNetWorth(career.netWorth + moneyWealth(career))} to your name
                 </div>
               </div>
               <div className="grid grid-cols-4 gap-2">
@@ -542,6 +539,7 @@ export default function PhonePanel({ career, onAnswer, onMoney, onBuyItem, onClo
         {/* home indicator + close */}
         <div className="p-2 flex flex-col items-center gap-1.5 border-t border-white/5 shrink-0">
           <button onClick={onClose} className="min-h-11 text-[10px] font-bold text-white/50 hover:text-white/90 px-3 py-1 rounded-full bg-white/5">Put phone away</button>
+          {conversionNote && <p className="text-xs leading-snug text-white/50 text-center px-2">{conversionNote}</p>}
           <div className="w-24 h-1 rounded-full bg-white/25" />
         </div>
       </div>
