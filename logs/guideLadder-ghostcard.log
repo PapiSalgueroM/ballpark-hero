@@ -1,0 +1,10 @@
+Gauntlet Draft: Soccer (/gauntlet-draft): the ladder is 70, 76, 81, 85, 89; its guide entry is 5193 characters
+Gauntlet Draft: NFL (/nfl-gauntlet-draft): the ladder is 79, 83, 88, 92, 97; its guide entry is 6166 characters
+   FAIL [1] Gauntlet Draft: NFL: the guide prints the climb once, and it is the ladder: the guide says 78, 85, 90, 95, 99, the board plays 79, 83, 88, 92, 97
+   FAIL [2] Gauntlet Draft: NFL: every range the guide prints is the ladder's first and last rating: the guide says 78 up to 99, the board plays 79 up to 97
+   the pool: quarterbacks 65 to 93, backs 63 to 95, receivers 63 to 95, tight ends 70 to 95; the guide names 2 rated cards (99, 97) and 1 slot deal (quarterback: 99, 97, 88, 82, 76, 68)
+   FAIL [3] Gauntlet Draft: NFL: every rated card and every dealt rating the guide names is a number a card at that position carries: no card is rated 99, 97, quarterback 99, quarterback 97, quarterback 68
+Gauntlet Draft: NBA (/nba-gauntlet-draft): the ladder is 85, 89, 93, 97, 101; its guide entry is 5298 characters
+Gauntlet Draft: MLB (/mlb-gauntlet-draft): the ladder is 74, 81, 87, 92, 97; its guide entry is 6239 characters
+Gauntlet Draft: NHL (/nhl-gauntlet-draft): the ladder is 77, 84, 89, 94, 98; its guide entry is 7150 characters
+control ghostcard fired: 1 new failure (/nfl-gauntlet-draft section 3), expected only /nfl-gauntlet-draft section 3; 3 were red without it

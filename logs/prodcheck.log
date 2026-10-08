@@ -1,0 +1,4 @@
+1469 rows for 2163 men: agree 289, disagree 149, one-source 991, settled 40
+the fifteen: 0 disputed; offense 224 of 224 usable
+fields both print differently: {"games":189,"targets":4}; one leaves blank: {}
+up to date: scripts/data/nfl2025Production.json (every agreed list, status and header count re-derived from the rows)
