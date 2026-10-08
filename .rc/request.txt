@@ -1,0 +1,1 @@
+bash .rc/x/cm-bracket-keyboard-1159.sh
