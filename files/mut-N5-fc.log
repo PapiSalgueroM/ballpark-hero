@@ -1,0 +1,14 @@
+CGFAILCLOSED| board cg611-033: yes Jason Witten, no Darrell Green
+CGFAILCLOSED| decoder: 44 of 44 damaged pairs refused
+   × College Grid fail closed (Round 1105) > (c) the key fails five ways: unverified each time, the next pick starts a new load, and a good load is judged 116ms
+     → fetch throws: a definite no costs exactly one: expected 14 to be 13 // Object.is equality
+   × College Grid fail closed (Round 1105) > (d) the key lands 3 seconds after the pick: that pick is judged on the cell it was made for 86ms
+     → the box closes once the pick is judged: expected +0 to be null
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/test/collegeGridFailClosed.test.tsx > College Grid fail closed (Round 1105) > (c) the key fails five ways: unverified each time, the next pick starts a new load, and a good load is judged
+AssertionError: fetch throws: a definite no costs exactly one: expected 14 to be 13 // Object.is equality
+ FAIL  src/test/collegeGridFailClosed.test.tsx > College Grid fail closed (Round 1105) > (d) the key lands 3 seconds after the pick: that pick is judged on the cell it was made for
+AssertionError: the box closes once the pick is judged: expected +0 to be null
+      Tests  2 failed | 6 passed (8)
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridFailClosed.test.tsx,title=src/test/collegeGridFailClosed.test.tsx > College Grid fail closed (Round 1105) > (c) the key fails five ways%3A unverified each time%2C the next pick starts a new load%2C and a good load is judg
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridFailClosed.test.tsx,title=src/test/collegeGridFailClosed.test.tsx > College Grid fail closed (Round 1105) > (d) the key lands 3 seconds after the pick%3A that pick is judged on the cell it was made for,line=344,column=72:

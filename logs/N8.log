@@ -1,0 +1,4 @@
+applied N8 to src/lib/collegeGrid.ts: the floor refuses a key of exactly the floor
+restored src/lib/collegeGrid.ts
+dirty tracked files after restore: 0
+MUT N8: fc=1 every named gate went red

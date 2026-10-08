@@ -1,0 +1,9 @@
+playCollegeGridFirstTap, control paged: section 2 must go red
+
+2) Requests: one per key file, none to the table
+  FAIL: 72 requests to the database host name college_grid_players; the page must never read that table
+   390 by 844: 2 key requests and 72 table reads (main: 36 reads, 72 requests, 9,462,264 bytes decoded); 73 other database requests aborted
+  FAIL: 72 requests to the database host name college_grid_players; the page must never read that table
+   1280 by 900: 2 key requests and 72 table reads (main: 36 reads, 72 requests, 9,462,264 bytes decoded); 73 other database requests aborted
+
+control "paged": fired in section 2 as expected, the check works

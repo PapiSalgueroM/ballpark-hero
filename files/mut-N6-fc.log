@@ -1,0 +1,10 @@
+CGFAILCLOSED| board cg611-033: yes Jason Witten, no Darrell Green
+CGFAILCLOSED| fail closed: 5 of 5 failure worlds left the pick unverified and judged it after the network healed
+CGFAILCLOSED| decoder: 43 of 44 damaged pairs refused
+   × decodeCollegeKey: null on any doubt, never a row from a damaged file > every one of 44 damaged pairs is null, and none of them throws 432ms
+     → expected [ 'a Heisman row equal to the count' ] to deeply equal []
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/test/collegeGridFailClosed.test.tsx > decodeCollegeKey: null on any doubt, never a row from a damaged file > every one of 44 damaged pairs is null, and none of them throws
+AssertionError: expected [ 'a Heisman row equal to the count' ] to deeply equal []
+      Tests  1 failed | 7 passed (8)
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridFailClosed.test.tsx,title=src/test/collegeGridFailClosed.test.tsx > decodeCollegeKey%3A null on any doubt%2C never a row from a damaged file > every one of 44 damaged pairs is null%2C and none of them throws,line=462,colu

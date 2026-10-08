@@ -1,0 +1,4 @@
+applied N1 to src/lib/gridEngine.ts: a pool under the floor is no longer forgotten by the engine
+restored src/lib/gridEngine.ts
+dirty tracked files after restore: 0
+MUT N1: engine=1 every named gate went red
