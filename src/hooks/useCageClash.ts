@@ -34,6 +34,7 @@ export function useCageClash(helpOpen = false) {
     if (fightRef.current?.phase !== 'fight') return;
     pausedRef.current = true;
     setFight(fightRef.current);
+    setPractice(practiceRef.current);
     setPaused(true);
   }, [clearInput]);
   const resume = useCallback(() => {

@@ -4,6 +4,12 @@ import App from "./App.tsx";
 import "./index.css";
 import { watchForNewBuild } from "./lib/freshBuild";
 import { applyTheme, storedTheme } from "./lib/theme";
+import { installTranslateGuard } from "./lib/translateGuard";
+
+// Round 1140: a browser that translates the page swaps text nodes under
+// React, and the next update used to throw and take the whole route down.
+// Installed before the first render so no commit ever runs without it.
+installTranslateGuard();
 
 // Round 90: a cached index.html was pinning returning players to old
 // builds, so shipped fixes looked like they never landed.

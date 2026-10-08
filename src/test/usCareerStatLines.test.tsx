@@ -95,8 +95,8 @@ interface PosRule { own: RegExp; never: RegExp }
 const NFL_RULES: Record<CareerPos, PosRule> = {
   QB: { own: /\d+ yds, \d+ TD, \d+ INT/, never: /\b(rec|rush|catch(es)?|rushing|tackles?|sacks?|FG|field goals?|passe?s? defended|forced fumbles?|DPOYs?)\b/i },
   RB: { own: /\d+ rush yds/, never: /\b(tackles?|sacks?|INT|interceptions?|FG|field goals?|passe?s? defended|forced fumbles?|passing|DPOYs?)\b/i },
-  WR: { own: /\d+ rec, \d+ yds/, never: /\b(rush|rushing|tackles?|sacks?|INT|interceptions?|FG|field goals?|passe?s? defended|forced fumbles?|passing|DPOYs?)\b/i },
-  TE: { own: /\d+ rec, \d+ yds/, never: /\b(rush|rushing|tackles?|sacks?|INT|interceptions?|FG|field goals?|passe?s? defended|forced fumbles?|passing|DPOYs?)\b/i },
+  WR: { own: /\d+ rec, (?:\d+|\d{1,3}(?:,\d{3})+) yds/, never: /\b(rush|rushing|tackles?|sacks?|INT|interceptions?|FG|field goals?|passe?s? defended|forced fumbles?|passing|DPOYs?)\b/i },
+  TE: { own: /\d+ rec, (?:\d+|\d{1,3}(?:,\d{3})+) yds/, never: /\b(rush|rushing|tackles?|sacks?|INT|interceptions?|FG|field goals?|passe?s? defended|forced fumbles?|passing|DPOYs?)\b/i },
   LB: { own: /\d+ tackles?/, never: /\b(rec|yds|yards|TD|touchdowns?|catch(es)?|FG|field goals?|rush|rushing|passing|passe?s? defended|MVPs?)\b/i },
   CB: { own: /\d+ INT/, never: /\b(rec|yds|yards|TD|touchdowns?|catch(es)?|FG|field goals?|rush|rushing|passing|sacks?|forced fumbles?|MVPs?)\b/i },
   EDGE: { own: /[\d.]+ sacks?/, never: /\b(rec|yds|yards|TD|touchdowns?|catch(es)?|FG|field goals?|rush|rushing|passing|INT|interceptions?|passe?s? defended|MVPs?)\b/i },

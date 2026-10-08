@@ -2345,6 +2345,8 @@ export interface CareerState {
    *  shootout is settled the way it always was, in one draw. With an order
    *  set the shootout goes kick by kick, see settleShootout. */
   shootoutOrder?: string[];
+  /** Three club-bound tactics setups. Older saves have none; the match-plan reader validates entries. */
+  matchPlans?: import('@/lib/clubManagerMatchPlans').SavedMatchPlan[];
 }
 
 /* ---------- Round 505: the armband and the set piece takers ---------- */
@@ -14605,8 +14607,8 @@ function drawSegment(
 /**
  * The second half, decided in one place whichever way the match is played:
  * the viewer asks for it when the manager sends them back out, the quick sim
- * and a fast forward ask for it at the whistle. Same function, same draws,
- * same order, so the two ways cannot disagree.
+ * and a fast forward ask for it while coaching. The same function draws
+ * each half, with any legal changes determining the eleven it reads.
  */
 function drawSecondHalf(state: CareerState, entry: CalendarEntry, live: LiveMatch): void {
   const fx = fixtureFor(state, entry)!;
@@ -15586,15 +15588,14 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   /* Round 504: every match is committed half by half now. The first half
      was decided at kick off (and a save paused before those pieces existed
      gets them drawn here, off the eleven that kicked off). The second half
-     was decided when the manager sent them back out, or is decided here
-     for a quick sim and a fast forward, by the same function in the same
-     order, so the two ways cannot disagree (simMatchScreen section 6). The
+     was decided when the manager sent them back out or during quick-sim
+     coaching, or is decided here if it has not been drawn. The
      whistle no longer draws football; it settles what was drawn. */
   ensureFirstHalf(state, entry, live);
   if (!live.h2Drawn) drawSecondHalf(state, entry, live);
   /* Round 670: a level decider plays extra time before anything is settled.
-     The viewer drew it at 90 (startExtraTime); a quick sim, a fast forward
-     and the classic dressing room get it here, by the same function. Its
+     The viewer drew it at 90 (startExtraTime); quick-sim coaching draws it
+     before settling, and the classic dressing room gets it here. Its
      goals are in the h2 lists, so every count below includes them. */
   if (extraTimeDue(state, entry, live)) drawExtraTime(state, entry, live);
   const etPlayed = !!live.et;
@@ -16385,10 +16386,8 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   const applicationLine = tickJobApplication(state);
   if (applicationLine) events.push(applicationLine);
 
-  /* Round 157: halftime substitutions, read off the live match the manager
-     actually paused. On a quick sim or a fast forward nobody was in the
-     dressing room, so the eleven that finished is the eleven that started and
-     this comes back empty, honestly. */
+  /* Substitutions read off the live match, including the legal changes
+     made automatically during a quick sim or fast forward. */
   /* Round 504: at the minute each one was made, on the pitch or in the
      dressing room. A save from before the list existed still reads the
      difference between who started and who finished, at the break. */
@@ -17245,8 +17244,15 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
  * ties after elimination), opens the January window, or plays my next match.
  * Never mutates the input state.
  */
-export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boolean; untilWeek?: number }): PlayResult {
+export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boolean; untilWeek?: number; noCoach?: boolean }): PlayResult {
   const state: CareerState = JSON.parse(JSON.stringify(career));
+  /* Release AL: `noCoach` plays a quick sim the way it was played before
+     Round 1072, with nobody making changes. Manager Hot Seat passes it: its
+     daily deal and every saved run are a seed replayed through this function,
+     so a coach who changes results would hand today's players a different job
+     from the one the morning's players got, and turn a finished run into an
+     unfinished one. */
+  const coached = (s: CareerState): CareerState => (opts?.noCoach ? s : coachQuickMatch(s));
   // Round 95: a save made before the world existed repairs itself here, and
   // a save made after this is a no-op because it is already in step.
   if (!state.world) syncWorld(state, myRoundsPlayed(state, state.week));
@@ -17303,7 +17309,7 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
        quick sim is. */
     if (state.live && state.live.week === state.week) {
       if (!opts?.skipHalftime) return { state, kind: 'halftime', live: state.live };
-      return resumeMatch(state);
+      return resumeMatch(coached(state));
     }
     const entry = state.calendar[state.week];
     if (entry.type === 'window') {
@@ -17378,19 +17384,14 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
        order while the live path drew the first at kick off, so the same
        fixture on the same seed could end 2-1 one way and 0-0 the other and
        the game had two engines wearing one name. Everything kicks off here
-       now; the ONLY thing the interval adds is your say in it. */
+       now; quick sims use the same legal changes to look after the team. */
     const live = kickOff(state, entry);
     if (!opts?.skipHalftime) {
       state.live = live;
       return { state, kind: 'halftime', live };
     }
-    const report = playMyMatch(state, entry, live);
-    state.week = live.week + 1;
-    /* Round 978: the break, if it falls before my next match, happens now,
-       so the note on who went is waiting before the match they come back
-       for and you can rest them. */
-    runIntlBreaks(state);
-    return { state, kind: 'match', report };
+    state.live = live;
+    return resumeMatch(coached(state));
   }
   return { state, kind: 'seasonOver' };
 }
@@ -17721,6 +17722,69 @@ export function setHalftimeMentality(career: CareerState, mentality: Mentality):
   if (career.live) return changeLive(career, 46, { kind: 'shape', mentality }) ?? career;
   const state: CareerState = JSON.parse(JSON.stringify(career));
   state.mentality = mentality;
+  return state;
+}
+
+/** Quick sim coaching uses the real clock and changes, without settling the match. */
+export function coachQuickMatch(career: CareerState): CareerState {
+  if (!career.live) return career;
+  let state: CareerState = JSON.parse(JSON.stringify(career));
+  const entry = state.calendar[state.live!.week];
+  const savedMinute = state.live!.minute ?? 46;
+  // A saved base minute has no board position, so keep that whole board.
+  const savedBoard = savedMinute === 45 ? state.live!.added?.h1 ?? 0
+    : savedMinute === 90 ? state.live!.added?.h2 ?? 0
+      : savedMinute === state.live!.et?.to ? state.live!.added?.et ?? 0 : 0;
+  const handled = new Set<string>();
+  /* Release AL: how a bench man fits the place the man coming off holds.
+     benchFor puts every out of position man in one tier, and a reserve keeper
+     who never plays is the freshest of them, so on the 16 man squads of the
+     second tiers the coach sent the keeper on for a midfielder while fit
+     outfield players sat beside him (51 of 439 changes over 1,326 matches).
+     The coach now crosses the keeper line only when nobody else can come on,
+     and takes a merely tired man off only for somebody who plays there. */
+  const gradeFor = (outId: string): ((p: CMPlayer) => FitGrade) => {
+    const live = state.live!;
+    const slot = liveFormationOf(state, live).slots[live.onPitch.indexOf(outId)] ?? null;
+    const out = state.squad.find(p => p.id === outId);
+    const allowed = slot ? slot.allowed : out ? [out.position] : [];
+    return p => gradeFit(heldPositions(p), allowed);
+  };
+  const injuriesThrough = (to: number) => {
+    while (state.live!.subsUsed < MAX_SUBS) {
+      const live = state.live!;
+      const injury = [...(live.h1Injuries ?? []), ...(live.h2Injuries ?? [])]
+        .map(line => ({ ...line, id: line.id ?? state.squad.find(p => p.name === line.name)?.id }))
+        .sort(clockOrder).find(line => line.id && line.minute <= to && live.onPitch.includes(line.id) && !handled.has(line.id));
+      if (!injury?.id) break;
+      handled.add(injury.id);
+      const bench = benchFor(state, injury.id);
+      const injuredFit = gradeFor(injury.id);
+      const coming = bench.find(p => injuredFit(p) !== 'keeper') ?? bench[0];
+      if (!coming) continue;
+      const minute = Math.max(injury.minute, live.minute ?? 46, live.et && savedMinute === 90 ? 91 : 0);
+      const plus = Math.max(minute === injury.minute ? injury.plus ?? 0 : 0, minute === savedMinute ? savedBoard : 0,
+        ...[...(live.subs ?? []), ...(live.shapeChanges ?? [])].filter(line => line.minute === minute).map(line => line.plus ?? 0));
+      state = changeLive(state, minute, { kind: 'sub', outId: injury.id, inId: coming.id }, plus) ?? state;
+    }
+  };
+  ensureFirstHalf(state, entry, state.live!);
+  injuriesThrough(45);
+  if (!state.live!.h2Drawn) {
+    // Keep one change for a later injury rather than spending all three at the break.
+    for (const out of tiringAtHalftime(state)) {
+      if (state.live!.subsUsed >= MAX_SUBS - 1) break;
+      if (liveGoneIds(state.live!, 46).has(out.id)) continue;
+      const tiredFit = gradeFor(out.id);
+      const coming = benchFor(state, out.id).find(p => (tiredFit(p) === 'natural' || tiredFit(p) === 'family')
+        && (p.fitness > out.fitness || (p.fitness === out.fitness && p.morale > out.morale)));
+      if (coming) state = changeLive(state, Math.max(46, state.live!.minute ?? 46), { kind: 'sub', outId: out.id, inId: coming.id }) ?? state;
+    }
+    drawSecondHalf(state, entry, state.live!);
+  }
+  injuriesThrough(90);
+  if (extraTimeDue(state, entry, state.live!)) drawExtraTime(state, entry, state.live!);
+  if (state.live!.et) injuriesThrough(state.live!.et.to);
   return state;
 }
 

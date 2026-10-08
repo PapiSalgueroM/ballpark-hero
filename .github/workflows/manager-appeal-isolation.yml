@@ -1,0 +1,185 @@
+name: Manager appeal isolation
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - codex/manager-appeal-isolation-1081
+  pull_request:
+    paths:
+      - .github/workflows/manager-appeal-isolation.yml
+      - scripts/simManagerAppealIsolation.mjs
+      - scripts/qa/managerAppealIsolation1081.mjs
+      - scripts/qa/managerAppealCompatibility1081.mjs
+      - scripts/qa/managerAppealAssets1081.mjs
+      - scripts/qa/managerDecisionRegression1081.mjs
+      - scripts/fixtures/managerAppealIsolation1081/**
+      - scripts/simTactics.mjs
+      - src/lib/clubManagerDecisions.ts
+      - src/lib/clubManager.ts
+      - src/lib/clubManagerSlots.ts
+
+permissions:
+  contents: read
+concurrency:
+  group: manager-appeal-isolation-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      SEO_SPLIT_BASE_REF: HEAD
+      TZ: UTC
+      SIM_OFFLINE_RECEIPT: manager-appeal-isolation-artifacts/transport.log
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Prepare remote verification
+        run: |
+          mkdir -p manager-appeal-isolation-artifacts
+          git rev-parse HEAD > manager-appeal-isolation-artifacts/source-head.txt
+          git rev-parse 'HEAD^{tree}' > manager-appeal-isolation-artifacts/source-tree.txt
+          sha256sum package.json package-lock.json > manager-appeal-isolation-artifacts/dependencies-before.txt
+          npm ci
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const lock = JSON.parse(fs.readFileSync('package-lock.json'));
+          const installed = [];
+          for (const [path, entry] of Object.entries(lock.packages)) {
+            const file = path + '/package.json';
+            if (!path.startsWith('node_modules/') || !fs.existsSync(file)) continue;
+            const version = JSON.parse(fs.readFileSync(file)).version;
+            assert.equal(version, entry.version, `Locked installed version: ${path}`);
+            installed.push({ path, version });
+          }
+          assert(installed.length > 0, 'Actual locked installation is captured');
+          fs.writeFileSync('manager-appeal-isolation-artifacts/installed-before.json', JSON.stringify(installed, null, 2));
+          NODE
+          npm install --no-save playwright
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const before = JSON.parse(fs.readFileSync('manager-appeal-isolation-artifacts/installed-before.json'));
+          const after = before.map(entry => ({ path: entry.path,
+            version: JSON.parse(fs.readFileSync(entry.path + '/package.json')).version }));
+          fs.writeFileSync('manager-appeal-isolation-artifacts/installed-after.json', JSON.stringify(after, null, 2));
+          assert.deepEqual(after, before, 'Adding the browser runner preserves every installed locked dependency');
+          console.log(`Held ${after.length} actual installed dependency versions.`);
+          NODE
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+      - name: Actual application type gate and build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee manager-appeal-isolation-artifacts/types.log
+          npm run build 2>&1 | tee manager-appeal-isolation-artifacts/build.log
+      - name: Retain actual paired appeal observations and effective faults
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          node scripts/simManagerAppealIsolation.mjs --characterize > manager-appeal-isolation-artifacts/characterize.stdout.log 2> manager-appeal-isolation-artifacts/characterize.stderr.log
+      - name: Require current gameplay parity and retained historical defect
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          node scripts/simManagerAppealIsolation.mjs --verify-parity > manager-appeal-isolation-artifacts/parity.stdout.log 2> manager-appeal-isolation-artifacts/parity.stderr.log
+          printf '0\n' > manager-appeal-isolation-artifacts/parity-exit.txt
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const root = 'manager-appeal-isolation-artifacts/';
+          const report = JSON.parse(fs.readFileSync(root + 'report.json', 'utf8'));
+          const parity = JSON.parse(fs.readFileSync(root + 'parity-report.json', 'utf8'));
+          const status = Number(fs.readFileSync(root + 'parity-exit.txt', 'utf8').trim());
+          const stderr = fs.readFileSync(root + 'parity.stderr.log', 'utf8');
+          assert.equal(report.integrityPassed, true, 'Characterization integrity must pass');
+          assert.equal(typeof report.productCorrectness, 'boolean');
+          assert(Array.isArray(report.parityFailures));
+          assert.equal(report.productCorrectness, true, 'New appeal cards must pass actual parity');
+          assert.equal(report.parityFailures.length, 0);
+          assert.equal(status, 0);
+          assert.equal(parity.status, 'passed');
+          assert.equal(stderr, '');
+          assert.equal(report.historical.productCorrectness, false);
+          assert.equal(report.historical.expectedDiagnosticRed, true);
+          assert.equal(report.historical.parityFailures.length, 6);
+          assert.equal(report.pairs.length, 24);
+          assert.equal(report.additionalPositions.pairs.length, 3);
+          assert.equal(report.issuedCardCompatibility.cases, 6);
+          assert.equal(report.historical.creationCompatibilityCases, 54);
+          assert.equal(report.compatibility.checks.length, 13);
+          assert.equal(report.compatibility.records, 509);
+          assert.equal(report.compatibility.controls.length, 16);
+          assert.equal(report.controls.length, 4);
+          assert(report.compatibility.checks.every(check => check.status === 'passed'));
+          assert([...report.controls, ...report.compatibility.controls].every(control => control.effective && control.independentBaselinePassed));
+          console.log(JSON.stringify({ integrityPassed: true, productCorrectness: report.productCorrectness,
+            parityFailures: report.parityFailures.length, parityStatus: parity.status }));
+          NODE
+      - name: Cache actual presentation assets
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: node scripts/qa/managerAppealAssets1081.mjs 2>&1 | tee manager-appeal-isolation-artifacts/assets.log
+      - name: Preserve existing manager behavior
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simTactics simTacticsEngine simClubManagerSave simClubManagerSaveSize; do
+            SIM_TACTICS_ASSET_CACHE="$PWD/manager-appeal-isolation-artifacts/font-cache/manifest.json" ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "manager-appeal-isolation-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Preserve original decision assertions and explicit default coverage red
+        id: decisions
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerDecisionRegression1081.mjs 2>&1 | tee manager-appeal-isolation-artifacts/decision-regressions.log
+      - name: Retain direct regression evidence promptly
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: manager-decision-regressions-${{ github.run_id }}-${{ github.run_attempt }}
+          path: manager-appeal-isolation-artifacts/decision-regressions/
+          retention-days: 3
+          if-no-files-found: error
+      - name: All built readers and source anchors
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings simSeoMetaSplit simHomeCopy simHarnessAnchors; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "manager-appeal-isolation-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Hold source, original assertions and protected game rules
+        if: ${{ !cancelled() }}
+        run: |
+          git diff --exit-code HEAD -- src scripts/simManagerAppealIsolation.mjs scripts/simTactics.mjs scripts/qa/managerAppealIsolation1081.mjs scripts/qa/managerAppealCompatibility1081.mjs scripts/qa/managerAppealAssets1081.mjs scripts/qa/managerDecisionRegression1081.mjs scripts/fixtures/managerAppealIsolation1081
+          git diff --exit-code 2fff5e044160b70bd58b64d931793ee4e443cedd HEAD -- src/lib/clubManager.ts src/lib/leagueCore.ts src/lib/positionFit.ts src/lib/clubManagerInternationals.ts src/lib/clubManagerSlots.ts src/lib/clubManagerEras.ts src/lib/clubManagerWorldEdit.ts src/data/clubManagerRosters.ts src/data/clubManagerWorldRosters.ts scripts/simClubManagerDecisions.mjs scripts/simClubManagerSlots.mjs scripts/simClubManagerSave.mjs scripts/simClubManagerSaveSize.mjs
+          sha256sum package.json package-lock.json > manager-appeal-isolation-artifacts/dependencies-after.txt
+          cmp manager-appeal-isolation-artifacts/dependencies-before.txt manager-appeal-isolation-artifacts/dependencies-after.txt
+          if test -f manager-appeal-isolation-artifacts/transport.log; then
+            test ! -s manager-appeal-isolation-artifacts/transport.log
+          fi
+      - name: Preserve verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: manager-appeal-isolation-${{ github.run_id }}-${{ github.run_attempt }}
+          path: manager-appeal-isolation-artifacts/
+          retention-days: 3
+          if-no-files-found: error

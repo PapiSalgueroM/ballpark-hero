@@ -12,7 +12,7 @@
  *        floaters still land
  *      4 a tap pops the pitch and throws six sparks; the taps chip counts, never
  *        multiplies, and clears after 1.5 seconds idle; 22 players
- *      5 the office is five tiles, one panel at a time, Upgrades first
+ *      5 the office is six tiles, one panel at a time, Upgrades first
  *      6 in a goal storm the older replays land on their final frame and the pitch
  *        never falls behind
  *    and six controls, each a broken copy pointed at through vitest.config.ts:
