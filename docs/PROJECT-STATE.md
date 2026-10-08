@@ -1,3 +1,12 @@
+## Round 1159 prepared: keyboard access to Club Manager bracket clubs
+
+The shared BracketSide line uses a native button only when a club callback exists.
+Tab, Enter and Space can open the same club details as pointer activation.
+Rows without a callback stay passive; score, name, winner and landing data stay held.
+Only the leaf component and this note changed from exact main 795926e3.
+Remote actual-component proof, proper types, build and all 15 readers are pending.
+Claude F still owns integration and publication. No local runtime or live claim.
+
 ## Release AL LIVE, 2026-10-08 05:38 EDT: ten Codex rounds, playable moments, and a translated page no longer crashes
 
 Claude lane (session F: session E died when the PC was restarted at 00:03 EDT with this release's gate running).
