@@ -1,0 +1,33 @@
+# Release AN fix pass, request 1: type gate, unit tests and node harnesses on the pushed head (three at a time)
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-a: node_modules/.bin/vitest run src/test/usSeasonCentreEntry.test.tsx src/test/translateGuard.test.tsx src/lib/soccerClubSquad.test.ts src/test/usBoardFixture.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-b: node_modules/.bin/vitest run src/test/usSeasonCentre.test.tsx src/test/resultScorePillComparison.test.tsx src/test/seasonCentreWords.test.tsx src/test/usCareerSummer.test.tsx src/test/usCareerHallBoard.test.tsx src/test/careerDecisionOutcome.test.tsx src/test/careerSeasonReview.test.tsx src/test/myCareerRestore.test.tsx src/test/noDoubleRecord.test.tsx src/test/faceOffDeadline.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-c: node_modules/.bin/vitest run src/test/rivalryChoiceBoard.test.tsx src/test/usCareerActionConfirm.test.tsx src/test/usCareerPractice.test.tsx src/test/usCareerProspect.test.tsx src/test/usCareerReveals.test.tsx src/test/usCareerStatLines.test.tsx src/test/guessFinishMoment.test.tsx --testTimeout=300000 --hookTimeout=120000
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStartingXi: node scripts/simStartingXi.mjs
+shootout: node scripts/simCmShootoutOrder.mjs
+shootout-ignoreorder: CM_SHOOTOUT_CONTROL=ignoreorder node scripts/simCmShootoutOrder.mjs
+shootout-noskip: CM_SHOOTOUT_CONTROL=noskip node scripts/simCmShootoutOrder.mjs
+shootout-nocap: CM_SHOOTOUT_CONTROL=nocap node scripts/simCmShootoutOrder.mjs
+shootout-unsetpath: CM_SHOOTOUT_CONTROL=unsetpath node scripts/simCmShootoutOrder.mjs
+shootout-ownkeeper: CM_SHOOTOUT_CONTROL=ownkeeper node scripts/simCmShootoutOrder.mjs
+shootout-wrongkeeper: CM_SHOOTOUT_CONTROL=wrongkeeper node scripts/simCmShootoutOrder.mjs
+shootout-nooppkeeper: CM_SHOOTOUT_CONTROL=nooppkeeper node scripts/simCmShootoutOrder.mjs
+shootout-oppworst: CM_SHOOTOUT_CONTROL=oppworst node scripts/simCmShootoutOrder.mjs
+shootout-thinside: CM_SHOOTOUT_CONTROL=thinside node scripts/simCmShootoutOrder.mjs
+shootout-nomakeup: CM_SHOOTOUT_CONTROL=nomakeup node scripts/simCmShootoutOrder.mjs
+shootout-bogus: CM_SHOOTOUT_CONTROL=nosuchcontrol node scripts/simCmShootoutOrder.mjs
+appeal: node scripts/simManagerAppealIsolation.mjs
+careersquad: node scripts/simCareerSquad.mjs
+simClubSquads: node scripts/simClubSquads.mjs
+simSoccerOfferReview: node scripts/simSoccerOfferReview.mjs
+ussc: node scripts/simUsSeasonCentre.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
