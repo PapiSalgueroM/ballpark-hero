@@ -1,3 +1,25 @@
+## Round 1092 preparation, 2026-10-07, tycoon money labels
+
+Unverified preparation in the attached tycoon-money-display-1092 checkout,
+branch codex/tycoon-money-display-1092 from AL integration8fe82a4d.
+Academy's fmtCash uses the same dollar symbol as Stadium and groups its existing
+rounded digit strings. Its thresholds, suffix ladder, decimal places and values
+are unchanged. Both actual Academy player-sale floaters now show explicit dollars
+and en-US commas. Stadium groups dollar tokens only when rendering existing
+floaters, preserving the raw hook event text, minute labels and saved records.
+The three product files change fourteen lines in and nine out. No shared strength
+model, pitch, callback, price, save, source data or E-owned engine change.
+
+Compact authored proof will compare actual formatting boundaries and mixed
+floaters, plus the two real mounted Academy sale callbacks against the unchanged
+engine's full economic state and saves. Four cases and three effective copied
+controls are authored, pending execution. A QA-only appended export reaches Stadium's private formatter in a
+whole-file copy; it is not a full page or browser proof. Appropriate original
+tycoon gates, proper app types/build, all twenty built readers and exact source/
+dependency holds remain strict in remote CI. Nothing is credited until executed.
+Prior AL snapshot failures remain release-owner dependencies, not waivers.
+No local runtime, production query, PR, integration or publication acceptance.
+
 ## Release AK LIVE, 2026-10-07 15:12 EDT, and the split of work with Codex
 
 Claude lane (session E, a new lead: session D stopped at its weekly limit with AK's gate still running).

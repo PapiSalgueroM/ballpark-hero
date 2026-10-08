@@ -141,7 +141,7 @@ export function useWonderkidFactory() {
     const kid = s.prospects.find(p => p.id === id);
     const price = sellProspect(s, id);
     if (price !== null && kid) {
-      pushFloater(`💷 ${kid.name} sold for ${price.toLocaleString()}`, 'sale');
+      pushFloater(`💵 ${kid.name} sold for $${price.toLocaleString('en-US')}`, 'sale');
       bump();
     }
   }, [bump, markSessionPlay, pushFloater]);
@@ -177,7 +177,7 @@ export function useWonderkidFactory() {
     const price = sellSenior(next, id);
     if (player && price !== null && commitAcademy(next)) {
       markSessionPlay();
-      pushFloater(`💷 ${player.name} sold for ${price.toLocaleString()}`, 'sale');
+      pushFloater(`💵 ${player.name} sold for $${price.toLocaleString('en-US')}`, 'sale');
     }
   }, [commitAcademy, markSessionPlay, pushFloater]);
 
