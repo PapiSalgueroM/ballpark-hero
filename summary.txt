@@ -1,0 +1,6 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+nav2 exit=0 220s | nav2 done
+base-setup exit=0 30s | base build exit 0 at e87d28be4
+base-simNationalityFlags exit=2 0s | simNationalityFlags: REFUSING TO RUN. src/pages/SportsBingo.tsx does not carry its Round 453 flag (/<FlagImg name=\{p\.nationality\}[^>]*showLabel/), so the rewrite is no
+base-simResultPillComparison exit=1 10s | simResultPillComparison: red. text 2
+base-simPrerender exit=1 0s | simPrerender: 7 failures

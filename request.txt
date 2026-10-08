@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+#!serial
+nav2: node .rc/x/nav2.mjs
+base-setup: git fetch -q origin r1140-translate-guard; git worktree add -f --detach $RUNNER_TEMP/b4 FETCH_HEAD >/dev/null 2>&1; ln -s $PWD/node_modules $RUNNER_TEMP/b4/node_modules; cd $RUNNER_TEMP/b4 && node_modules/.bin/vite build > $RUNNER_TEMP/b4-build.log 2>&1; echo "base build exit $? at $(git rev-parse --short HEAD)"
+base-simNationalityFlags: cd $RUNNER_TEMP/b4 && node scripts/simNationalityFlags.mjs
+base-simResultPillComparison: cd $RUNNER_TEMP/b4 && node scripts/simResultPillComparison.mjs
+base-simPrerender: cd $RUNNER_TEMP/b4 && node scripts/simPrerender.mjs
