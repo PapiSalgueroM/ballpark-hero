@@ -1,3 +1,12 @@
+## October 8: 1150 home search recovery preparing
+
+From main c623e77d, Index now explains a failed lazy search load and offers
+a fresh-document full-search link retaining the typed query. Pending search
+shows a loading status; Clear search restores input focus without scrolling.
+Search engine, ranking, global stale-chunk reload and guest play are held.
+Exact remote paired outcomes, proper types/build and required readers are
+pending. No runtime acceptance or publication claim. Claude F owns release.
+
 ## Release AL LIVE, 2026-10-08 05:38 EDT: ten Codex rounds, playable moments, and a translated page no longer crashes
 
 Claude lane (session F: session E died when the PC was restarted at 00:03 EDT with this release's gate running).
