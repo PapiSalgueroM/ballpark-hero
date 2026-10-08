@@ -1,0 +1,7 @@
+digest exit=1 | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerTruthDigest.test.ts,title=src/test/usCareerTruthDigest.test.ts > Round 1104%3A the US career truth digest > every key equals
+   × Round 1104: the US career truth digest > every key equals the committed fixture, or moved only where this step is allowed to move it 21155ms
+ FAIL  src/test/usCareerTruthDigest.test.ts > Round 1104: the US career truth digest > every key equals the committed fixture, or moved only where this step is allowed to move it
+AssertionError: keys that moved against the committed fixture: expected [ 'nfl|now|TE', 'nfl|y2005|TE' ] to deeply equal []
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerTruthDigest.test.ts,title=src/test/usCareerTruthDigest.test.ts > Round 1104%3A the US career truth digest > every key equals the committed fixture%2C or moved only 
+truth exit=1 |   var NFL_TE_YDS_CAP = 1400;
+simNflTruth: the patch "nocap TE yards" needs its needle exactly once in the bundle and found it 0 times, so it would prove nothing:

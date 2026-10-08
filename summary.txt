@@ -1,0 +1,5 @@
+mut-kickerroad exit=0 21s | MUT kickerroad: truth=1 vround=0 predraft=0 prospect=0
+mut-kickerquick exit=0 36s | MUT kickerquick: truth=1 vround=0 digest=1
+mut-place32 exit=0 36s | MUT place32: truth=0 vround=0 digest=1
+mut-selftrade exit=0 36s | MUT selftrade: truth=0 vround=1 nflcareer=0 digest=0
+mut-digestctl exit=0 23s | MUT digestctl: digest=1 truth=1

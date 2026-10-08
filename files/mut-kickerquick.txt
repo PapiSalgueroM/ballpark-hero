@@ -1,0 +1,12 @@
+truth exit=1 | simNflTruth: 1 section failed (2: 4860)
+  FAIL [2]: now: a kicker was drafted at pick 40, before round four
+  FAIL [2]: now: a kicker was drafted at pick 46, before round four
+  FAIL [2]: now: a kicker was drafted at pick 63, before round four
+  FAIL [2]: now: a kicker was drafted at pick 36, before round four
+5) MEASURED, asserted on nothing
+vround exit=0 |    Duration  7.17s (transform 1.82s, setup 275ms, collect 4.20s, tests 7.63s, environment 2.05s, prepare 559ms)
+digest exit=1 | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerTruthDigest.test.ts,title=src/test/usCareerTruthDigest.test.ts > Round 1104%3A the US career truth digest > every key equals
+   × Round 1104: the US career truth digest > every key equals the committed fixture, or moved only where this step is allowed to move it 21008ms
+ FAIL  src/test/usCareerTruthDigest.test.ts > Round 1104: the US career truth digest > every key equals the committed fixture, or moved only where this step is allowed to move it
+AssertionError: keys that moved against the committed fixture: expected [ 'nfl|now|K', 'nfl|y2005|K' ] to deeply equal []
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerTruthDigest.test.ts,title=src/test/usCareerTruthDigest.test.ts > Round 1104%3A the US career truth digest > every key equals the committed fixture%2C or moved only 

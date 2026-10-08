@@ -1,0 +1,13 @@
+rv-mut kickerroad: mutated src/lib/nflCareerPreDraft.ts
+ src/lib/nflCareerPreDraft.ts | 1 -
+ 1 file changed, 1 deletion(-)
+truth exit=1 | simNflTruth: 1 section failed (2: 4972)
+  FAIL [2]: now: a kicker prospect with stock 57 was drafted at pick 89
+  FAIL [2]: now: a kicker prospect with stock 94 was drafted at pick 4
+  FAIL [2]: now: a kicker prospect with stock 55 was drafted at pick 94
+  FAIL [2]: now: a kicker prospect with stock 92 was drafted at pick 7
+5) MEASURED, asserted on nothing
+vround exit=0 |    Duration  7.24s (transform 2.14s, setup 265ms, collect 4.32s, tests 7.43s, environment 1.85s, prepare 506ms)
+predraft exit=0 | simCareerPreDraft [seed set a]: ALL GREEN
+prospect exit=0 | simUsCareerProspect: 36 actual-board outcomes passed across all four sports
+MUT kickerroad: truth=1 vround=0 predraft=0 prospect=0

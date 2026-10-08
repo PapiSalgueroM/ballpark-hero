@@ -1,0 +1,9 @@
+truth exit=0 | simNflTruth: green. Seasons are their real length, awards survive a 16 game schedule, rookies are paid their slot, kickers go in round four or later, sacks come in halves, and no receiver passes the r
+5) MEASURED, asserted on nothing
+vround exit=1 | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerSmallItems1104.test.ts,title=src/test/usCareerSmallItems1104.test.ts > Round 1104%3A trades > NFL%3A a requested trade never
+   × Round 1104: trades > NFL: a requested trade never lands on the club he is at, in either era 20ms
+ FAIL  src/test/usCareerSmallItems1104.test.ts > Round 1104: trades > NFL: a requested trade never lands on the club he is at, in either era
+AssertionError: expected 'DET' not to be 'DET' // Object.is equality
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerSmallItems1104.test.ts,title=src/test/usCareerSmallItems1104.test.ts > Round 1104%3A trades > NFL%3A a requested trade never lands on the club he is at%2C in either
+nflcareer exit=0 | PASS: no crashes, every position produces stats, shop fully reachable, deck C drawn, every card dealt only where its words hold (its words, odds and money: simUsCareerDeckC), and the six new rivalry b
+digest exit=0 |    Duration  22.40s (transform 701ms, setup 32ms, collect 883ms, tests 21.04s, environment 184ms, prepare 63ms)
