@@ -467,7 +467,8 @@ describe('Round 1107: the won card\'s head is the career moment kit\'s Trophy sc
     const { container, getByText } = mount(winner(2052));
     expect(trophy(container)[0].dataset.cmoState).toBe('live');
     fireEvent.click(getByText('Bracket'));
-    expect(trophy(container).length).toBe(0);
+    /* A tile takes the whole card over: the head is gone while it is open. */
+    expect(container.querySelectorAll('[data-career-moment]').length).toBe(0);
     fireEvent.click(getByText(/Back/));
     expect(trophy(container)[0].dataset.cmoState).toBe('still');
     expect(trophy(container)[0].className).toContain('cmo-still');
