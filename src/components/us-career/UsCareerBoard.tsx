@@ -1391,7 +1391,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
           >
             <Dumbbell className="h-4 w-4" /> Play the {career.year} season
           </button>
-          <p className="mt-2 text-[10px] text-muted-foreground">
+          <p className="mt-2 text-xs text-muted-foreground">
             Career so far: {sport.careerSoFar(career)}
           </p>
           <section data-career-practice aria-label="Season practice" className="mt-4 rounded-xl border border-primary/30 bg-gradient-to-br from-primary/15 via-card to-card p-3 text-left">

@@ -190,6 +190,27 @@
       tree reproduced the committed file exactly (modern 26/0, eras 20/0,
       pure 47/0); with it, now|serieb, now|ligue2 and now|segunda moved and
       nothing else did, so what moved is those men's nationality.
+      Release AL (2026-10-07) merged Codex Rounds 1072 (the quick sim coach
+      makes substitutions) and 1081 (a verdictKey on new youth appeal
+      cards) and re-took modern and eras, after attribution in a throwaway
+      export of the merged tree at 17d3aee9: with the quick sim branch of
+      playNextEntry put back to main's direct settle (no coach, no match
+      parked on state.live) and clubManagerDecisions.ts taken from main
+      5b70b05f, it reproduced the committed file exactly (modern 26/0, eras
+      20/0, pure 47/0). The merged tree itself, written with
+      --part=modern,eras,pure --write from a clean export of that commit,
+      moved all 26 modern and all 20 era saves in table, results, world,
+      whole and wholeNext (cup in 45, europe in 19), because every season
+      here is quick simmed and the coach changes who is on the pitch; day
+      one objectives held in all 46 and pure held 47/0. "start" moved in 22
+      saves that play no match before it is hashed: a generated man's id
+      carries the process wide youthSeq counter, so a later save's day one
+      depends on how many men the earlier saves in the same run generated,
+      and the first save of each part kept its start. The tree written from
+      already carried the release's two own engine fixes on top of 1072
+      (Manager Hot Seat opts out of the coach, and the coach no longer
+      sends the reserve keeper on outfield), so this file is the coach as
+      shipped, not as merged.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,

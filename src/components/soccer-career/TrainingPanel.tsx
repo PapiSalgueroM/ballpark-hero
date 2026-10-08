@@ -22,6 +22,7 @@ import FirstTouchBoard from "./FirstTouchBoard";
 import ThroughBallBoard from "@/components/soccer-career/ThroughBallBoard";
 import { DRILL_META, drillForPosition, drillStatFor, type DrillKind } from "@/lib/careerDrills";
 import feedback from "./TrainingFeedback.module.css";
+import { usePracticeClock } from "@/hooks/usePracticeClock";
 
 /* Round 468: "arcade" is the position drill, played on the shared arcade
    engine in DrillBoard. It sits beside the Round 81 tiles rather than
@@ -58,6 +59,9 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
   const [drill, setDrill] = useState<TrainingDrill>("dribbling");
   const [score, setScore] = useState(0);
   const [banked, setBanked] = useState(false);
+  const [showRules, setShowRules] = useState(false);
+  const legacyPlaying = screen === "dribbling" || screen === "pace" || screen === "shooting" || screen === "passing";
+  const clock = usePracticeClock(legacyPlaying);
 
   // dribbling state
   const [coneIdx, setConeIdx] = useState(0);
@@ -66,13 +70,13 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
   /* Round 159: the stopwatch he asked for. Ticks every 100ms from the first
      cone to the last, on screen the whole run. */
   const [runClock, setRunClock] = useState(0);
-  const runTimer = useRef<ReturnType<typeof setInterval> | null>(null);
+  const runTimer = useRef<number | null>(null);
 
   // pace state
   const [clicks, setClicks] = useState(0);
   const [paceLeft, setPaceLeft] = useState(5.0);
   const [paceRunning, setPaceRunning] = useState(false);
-  const paceTimer = useRef<ReturnType<typeof setInterval> | null>(null);
+  const paceTimer = useRef<number | null>(null);
 
   // shooting state
   const [penNo, setPenNo] = useState(0);
@@ -86,56 +90,56 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
   const [gkTell, setGkTell] = useState<number | null>(null);
   const [gkShot, setGkShot] = useState<number | null>(null);
   const [gkLast, setGkLast] = useState<{ shot: number; dive: number; saved: boolean } | null>(null);
-  const gkTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const gkTimer = useRef<number | null>(null);
 
   // Round 159: passing gates state.
   const [gateNo, setGateNo] = useState(0);
   const [gateHits, setGateHits] = useState(0);
   const [litGate, setLitGate] = useState<number | null>(null);
   const [gateWindow, setGateWindow] = useState(0);
-  const gateTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const gateTimer = useRef<number | null>(null);
 
-  useEffect(() => () => {
-    if (paceTimer.current) clearInterval(paceTimer.current);
-    if (runTimer.current) clearInterval(runTimer.current);
-    if (gkTimer.current) clearTimeout(gkTimer.current);
-    if (gateTimer.current) clearTimeout(gateTimer.current);
-  }, []);
+  const toMenu = () => { clock.reset(); setShowRules(false); setScreen("menu"); };
+  const openBoard = (next: Screen) => { clock.reset(); setShowRules(false); setScreen(next); };
+  const close = () => { clock.clearAll(); onClose(); };
 
   const finish = (d: TrainingDrill, sc: number) => {
+    clock.clearAll();
     setDrill(d);
     setScore(Math.max(0, Math.min(100, Math.round(sc))));
     setScreen("result");
   };
 
   const resetDrills = () => {
+    clock.reset(); setShowRules(false);
     setConeIdx(0); setMistakes(0); dribbleStart.current = null;
     setRunClock(0);
-    if (runTimer.current) { clearInterval(runTimer.current); runTimer.current = null; }
+    if (runTimer.current) { clock.clear(runTimer.current); runTimer.current = null; }
     setClicks(0); setPaceLeft(5.0); setPaceRunning(false);
-    if (paceTimer.current) { clearInterval(paceTimer.current); paceTimer.current = null; }
+    if (paceTimer.current) { clock.clear(paceTimer.current); paceTimer.current = null; }
     setPenNo(0); setGoals(0); setLastPen(null);
     setGkShotNo(0); setGkSaves(0); setGkTell(null); setGkShot(null); setGkLast(null);
-    if (gkTimer.current) { clearTimeout(gkTimer.current); gkTimer.current = null; }
+    if (gkTimer.current) { clock.clear(gkTimer.current); gkTimer.current = null; }
     setGateNo(0); setGateHits(0); setLitGate(null); setGateWindow(0);
-    if (gateTimer.current) { clearTimeout(gateTimer.current); gateTimer.current = null; }
+    if (gateTimer.current) { clock.clear(gateTimer.current); gateTimer.current = null; }
   };
 
   const openDrill = (d: TrainingDrill) => { resetDrills(); setDrill(d); setScreen(d); };
 
   /* ── dribbling handlers ── */
   const clickCone = (i: number) => {
+    if (clock.isPaused()) return;
     if (i !== coneIdx) { setMistakes(m => m + 1); return; }
     if (coneIdx === 0) {
-      dribbleStart.current = Date.now();
+      dribbleStart.current = clock.now();
       // Round 159: the stopwatch starts with the run and ticks on screen.
-      runTimer.current = setInterval(() => {
-        setRunClock(Date.now() - (dribbleStart.current ?? Date.now()));
+      runTimer.current = clock.interval(() => {
+        setRunClock(clock.now() - (dribbleStart.current ?? clock.now()));
       }, 100);
     }
     if (i === CONES.length - 1) {
-      const elapsed = Date.now() - (dribbleStart.current ?? Date.now());
-      if (runTimer.current) { clearInterval(runTimer.current); runTimer.current = null; }
+      const elapsed = clock.now() - (dribbleStart.current ?? clock.now());
+      if (runTimer.current) { clock.clear(runTimer.current); runTimer.current = null; }
       setRunClock(elapsed);
       const sc = 100 - mistakes * 8 - Math.max(0, elapsed - 4000) / 130;
       finish("dribbling", sc);
@@ -146,14 +150,15 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
 
   /* ── pace handlers ── */
   const startPace = () => {
+    if (clock.isPaused()) return;
     setPaceRunning(true);
     setClicks(0);
     setPaceLeft(5.0);
-    const startedAt = Date.now();
-    paceTimer.current = setInterval(() => {
-      const left = 5 - (Date.now() - startedAt) / 1000;
+    const startedAt = clock.now();
+    paceTimer.current = clock.interval(() => {
+      const left = 5 - (clock.now() - startedAt) / 1000;
       if (left <= 0) {
-        if (paceTimer.current) clearInterval(paceTimer.current);
+        if (paceTimer.current) clock.clear(paceTimer.current);
         paceTimer.current = null;
         setPaceLeft(0);
         setPaceRunning(false);
@@ -172,6 +177,7 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
 
   /* ── shooting handlers ── */
   const takePen = (zone: number) => {
+    if (clock.isPaused()) return;
     if (lastPen) return; // wait for the reveal to clear
     const dive = keeperPick();
     let result: string;
@@ -187,7 +193,7 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
     setLastPen({ shot: zone, dive, result });
     const g = goals + (scored ? 1 : 0);
     setGoals(g);
-    setTimeout(() => {
+    clock.timeout(() => {
       setLastPen(null);
       if (penNo === 4) finish("shooting", g * 20);
       else setPenNo(p => p + 1);
@@ -203,19 +209,20 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
     const honest = Math.random() < 0.65;
     const tell = honest ? shot : keeperPick();
     setGkTell(tell);
-    gkTimer.current = setTimeout(() => {
+    gkTimer.current = clock.timeout(() => {
       setGkTell(null);
       setGkShot(shot);
     }, 650);
   };
 
   const gkDive = (zone: number) => {
+    if (clock.isPaused()) return;
     if (gkShot === null || gkLast) return;
     const saved = zone === gkShot;
     const s = gkSaves + (saved ? 1 : 0);
     setGkSaves(s);
     setGkLast({ shot: gkShot, dive: zone, saved });
-    gkTimer.current = setTimeout(() => {
+    gkTimer.current = clock.timeout(() => {
       if (gkShotNo === 4) finish("shooting", s * 20);
       else { setGkShotNo(n => n + 1); gkNextShot(); }
     }, 1100);
@@ -230,7 +237,7 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
     const g = Math.floor(Math.random() * 6);
     setLitGate(g);
     setGateWindow(gateWindowFor(n));
-    gateTimer.current = setTimeout(() => {
+    gateTimer.current = clock.timeout(() => {
       // Too slow: the gate shuts itself and the drill moves on.
       setLitGate(null);
       if (n === GATE_COUNT - 1) finish("passing", (gateHitsRef.current) * 12.5);
@@ -241,8 +248,9 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
   const gateHitsRef = useRef(0);
   const gateNoRef = useRef(0);
   const tapGate = (g: number) => {
+    if (clock.isPaused()) return;
     if (litGate === null) return;
-    if (gateTimer.current) { clearTimeout(gateTimer.current); gateTimer.current = null; }
+    if (gateTimer.current) { clock.clear(gateTimer.current); gateTimer.current = null; }
     const hit = g === litGate;
     if (hit) { gateHitsRef.current += 1; setGateHits(h => h + 1); }
     setLitGate(null);
@@ -252,10 +260,11 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
     } else {
       gateNoRef.current = n + 1;
       setGateNo(n + 1);
-      gateTimer.current = setTimeout(() => lightGate(n + 1), 350);
+      gateTimer.current = clock.timeout(() => lightGate(n + 1), 350);
     }
   };
   const startGates = () => {
+    if (clock.isPaused()) return;
     gateHitsRef.current = 0;
     gateNoRef.current = 0;
     setGateHits(0);
@@ -279,7 +288,7 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
   /* The keeper's first shot arrives shortly after the drill opens. */
   useEffect(() => {
     if (screen === "shooting" && isGK) {
-      gkTimer.current = setTimeout(gkNextShot, 600);
+      gkTimer.current = clock.timeout(gkNextShot, 600);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [screen, isGK]);
@@ -289,13 +298,23 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
     "Rough day. No gains this time";
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/70 backdrop-blur-sm animate-fade-in" onClick={onClose}>
-      <div role="dialog" aria-modal="true" aria-label="Training ground" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={escapeCloses(onClose)} className="w-full max-w-md max-h-[88vh] overflow-y-auto rounded-2xl border border-border bg-card text-foreground shadow-2xl" onClick={e => e.stopPropagation()}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/70 backdrop-blur-sm animate-fade-in" onClick={close}>
+      <div role="dialog" aria-modal="true" aria-label="Training ground" data-soccer-practice-screen={screen} data-soccer-practice-paused={clock.paused} tabIndex={-1} ref={focusDialogOnMount} onKeyDown={escapeCloses(close)} className="w-full max-w-md max-h-[88vh] overflow-y-auto rounded-2xl border border-border bg-card text-foreground shadow-2xl" onClick={e => e.stopPropagation()}>
         <div className="flex items-center justify-between px-4 py-3 border-b border-border sticky top-0 bg-card z-10">
           <h2 className="text-base font-black">🏋️ Training Ground</h2>
-          <button onClick={onClose} className="text-xs font-bold text-muted-foreground hover:text-foreground px-2 py-1 rounded bg-muted/30">Close</button>
+          {(legacyPlaying || screen === "menu" || screen === "result") && <button aria-label="Practice rules" aria-expanded={showRules || screen === "menu"} onClick={() => { if (!showRules) clock.pause(); setShowRules(s => !s); }} className="min-h-11 min-w-11 rounded-lg bg-muted/30 text-sm font-bold">?</button>}
+          <button onClick={close} className="min-h-11 rounded-lg bg-muted/30 px-3 text-xs font-bold">Close</button>
         </div>
 
+        {(showRules || screen === "menu") && <div data-practice-rules className="border-b border-border bg-primary/5 p-4 text-xs leading-relaxed space-y-2">
+          <p>Tap cones in order with as few slips as possible. Sprint Burst gives you five seconds to tap the track. Pick five penalty spots, or watch the tell and dive for five keeper shots. Hit eight passing gates before they close.</p>
+          <p>Pause or opening these rules freezes the drill, including a shot reveal. Leaving the tab pauses it too. Close the rules, then choose Resume practice to carry on. Drills and Close discard the unfinished run.</p>
+          <p>One bank per season: 50 earns +1 to the shown stat next season, 80 earns +2. Example: three goals from five penalties score 60 and earn +1. A score below 50 uses the session without a gain.</p>
+        </div>}
+        {legacyPlaying && <div className="flex items-center justify-between gap-2 border-b border-border px-4 py-2 text-xs">
+          <span role="status">{clock.paused ? "Practice paused. Your time and score are held." : "Pause any time. Drills leaves this run."}</span>
+          <button data-practice-pause disabled={showRules} onClick={() => clock.isPaused() ? clock.resume() : clock.pause()} className="min-h-11 shrink-0 rounded-lg bg-muted/30 px-3 font-bold disabled:opacity-50">{clock.paused ? "Resume practice" : "Pause practice"}</button>
+        </div>}
         {screen === "menu" && (
           <div className="p-4 space-y-3">
             {/* Round 468: the drill your position actually plays, on the arcade
@@ -305,7 +324,7 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
               const k = drillForPosition(career.position);
               const m = DRILL_META[k];
               return (
-                <button onClick={() => setScreen(k === "throughball" ? "throughball" : "arcade")}
+                <button onClick={() => openBoard(k === "throughball" ? "throughball" : "arcade")}
                   className="w-full flex items-center gap-3 rounded-xl border border-emerald-500/40 bg-emerald-500/10 hover:bg-emerald-500/20 p-3.5 text-left transition-colors">
                   <span className="text-3xl">{m.emoji}</span>
                   <span className="flex-1">
@@ -316,7 +335,7 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
                 </button>
               );
             })()}
-            <button onClick={() => setScreen("firsttouch")}
+            <button onClick={() => openBoard("firsttouch")}
               className="w-full flex items-center gap-3 rounded-xl border border-emerald-500/40 bg-emerald-500/10 hover:bg-emerald-500/20 p-3.5 text-left transition-colors">
               <span className="text-3xl">👟</span>
               <span className="flex-1"><span className="block text-sm font-black">First Touch</span><span className="block text-[10px] text-muted-foreground" data-first-touch-trains>Read the gate, time your control. Trains {drillStatFor("firsttouch", career.position).label}. Practice is always open.</span></span>
@@ -354,18 +373,18 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
           </div>
         )}
 
-        {screen === "firsttouch" && <FirstTouchBoard career={career} canBank={available} onBank={onDrill} onBack={() => setScreen("menu")} />}
+        {screen === "firsttouch" && <FirstTouchBoard career={career} canBank={available} onBank={onDrill} onBack={toMenu} />}
 
-        {screen === "throughball" && <ThroughBallBoard career={career} canBank={available} onBank={onDrill} onBack={() => setScreen("menu")} />}
+        {screen === "throughball" && <ThroughBallBoard career={career} canBank={available} onBank={onDrill} onBack={toMenu} />}
 
         {screen === "arcade" && (
-          <DrillBoard career={career} canBank={available} onBank={onDrill} onBack={() => setScreen("menu")} />
+          <DrillBoard career={career} canBank={available} onBank={onDrill} onBack={toMenu} />
         )}
 
         {screen === "dribbling" && (
           <div className="p-4 space-y-3">
             <div className="flex items-center justify-between text-xs font-bold">
-              <button onClick={() => setScreen("menu")} className="text-muted-foreground hover:text-foreground">‹ Drills</button>
+              <button onClick={toMenu} className="min-h-11 min-w-11 text-muted-foreground hover:text-foreground">‹ Drills</button>
               <span>Cone {Math.min(coneIdx + 1, CONES.length)}/{CONES.length}</span>
               {/* Round 159: the stopwatch, live. His words: "there should be a
                   little stop watch going while u playing". */}
@@ -395,7 +414,7 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
         {screen === "pace" && (
           <div className="p-4 space-y-3">
             <div className="flex items-center justify-between text-xs font-bold">
-              <button onClick={() => { if (!paceRunning) setScreen("menu"); }} className="text-muted-foreground hover:text-foreground">‹ Drills</button>
+              <button onClick={toMenu} className="min-h-11 min-w-11 text-muted-foreground hover:text-foreground">‹ Drills</button>
               <span className="tabular-nums">{paceLeft.toFixed(1)}s</span>
               <span className="text-emerald-400 tabular-nums">{clicks} steps</span>
             </div>
@@ -406,7 +425,7 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
                 <div className="text-[11px] text-muted-foreground">Then tap the track as fast as you can</div>
               </button>
             ) : (
-              <button onClick={() => paceRunning && setClicks(c => c + 1)}
+              <button onClick={() => paceRunning && !clock.isPaused() && setClicks(c => c + 1)}
                 className="w-full h-64 rounded-xl bg-gradient-to-b from-sky-900 to-sky-950 border border-border text-center select-none active:scale-[0.99]">
                 <div className="text-5xl mb-2">🏃</div>
                 <div className="text-2xl font-black tabular-nums">{clicks}</div>
@@ -419,7 +438,7 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
         {screen === "shooting" && isGK && (
           <div className="p-4 space-y-3">
             <div className="flex items-center justify-between text-xs font-bold">
-              <button onClick={() => setScreen("menu")} className="text-muted-foreground hover:text-foreground">‹ Drills</button>
+              <button onClick={toMenu} className="min-h-11 min-w-11 text-muted-foreground hover:text-foreground">‹ Drills</button>
               <span>Shot {gkShotNo + 1}/5</span>
               <span className="text-emerald-400">{gkSaves} saved</span>
             </div>
@@ -450,7 +469,7 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
         {screen === "passing" && (
           <div className="p-4 space-y-3">
             <div className="flex items-center justify-between text-xs font-bold">
-              <button onClick={() => setScreen("menu")} className="text-muted-foreground hover:text-foreground">‹ Drills</button>
+              <button onClick={toMenu} className="min-h-11 min-w-11 text-muted-foreground hover:text-foreground">‹ Drills</button>
               <span>Pass {Math.min(gateNo + 1, GATE_COUNT)}/{GATE_COUNT}</span>
               <span className="text-emerald-400">{gateHits} through</span>
             </div>
@@ -484,7 +503,7 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
         {screen === "shooting" && !isGK && (
           <div className="p-4 space-y-3">
             <div className="flex items-center justify-between text-xs font-bold">
-              <button onClick={() => setScreen("menu")} className="text-muted-foreground hover:text-foreground">‹ Drills</button>
+              <button onClick={toMenu} className="min-h-11 min-w-11 text-muted-foreground hover:text-foreground">‹ Drills</button>
               <span>Penalty {penNo + 1}/5</span>
               <span className="text-emerald-400">{goals} scored</span>
             </div>
@@ -525,7 +544,7 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
                 Bank the session
               </button>
             ) : (
-              <button onClick={onClose} data-training-banked className={`w-full h-11 rounded-lg bg-muted/40 hover:bg-muted/60 text-sm font-black ${feedback.banked}`}>
+              <button onClick={close} data-training-banked className={`w-full h-11 rounded-lg bg-muted/40 hover:bg-muted/60 text-sm font-black ${feedback.banked}`}>
                 Back to your career
               </button>
             )}

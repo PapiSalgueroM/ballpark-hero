@@ -24,13 +24,33 @@
  *   npm run build && npx serve -s dist -l 4173
  * Then: node scripts/simTactics.mjs
  * ENGINES=chromium narrows it while iterating.
+ * SIM_TACTICS_ASSET_CACHE accepts a prefetched font/flag manifest for offline runs.
  */
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import { createHash } from 'node:crypto';
 import pw from './lib/playwrightLoader.mjs';
 const { chromium, webkit } = pw;
 
 const BASE = process.env.SWEEP_BASE || 'http://127.0.0.1:4173';
 const ENGINES = { chromium, webkit };
 const wantEngines = (process.env.ENGINES || 'chromium,webkit').split(',').map(s => s.trim()).filter(e => ENGINES[e]);
+const assetCache = new Map();
+const usedAssets = new Set(), uncachedAssets = new Set();
+if (process.env.SIM_TACTICS_ASSET_CACHE) {
+  const manifest = path.resolve(process.env.SIM_TACTICS_ASSET_CACHE);
+  const entries = JSON.parse(fs.readFileSync(manifest, 'utf8'));
+  assert(Array.isArray(entries), 'Tactics asset manifest is an array');
+  for (const entry of entries) {
+    assert(['https://fonts.googleapis.com', 'https://fonts.gstatic.com', 'https://flagcdn.com'].includes(new URL(entry.url).origin), 'Only actual font and flag assets belong in the tactics cache');
+    assert(/^[a-f0-9]{64}$/.test(entry.file) && /^[a-f0-9]{64}$/.test(entry.sha256), 'Tactics cache paths and hashes are valid');
+    assert(!assetCache.has(entry.url), 'Tactics cache URLs are unique');
+    const body = fs.readFileSync(path.join(path.dirname(manifest), entry.file));
+    assert.equal(createHash('sha256').update(body).digest('hex'), entry.sha256, 'Tactics cached asset matches its retained hash');
+    assetCache.set(entry.url, { body, contentType: entry.contentType });
+  }
+}
 
 const fails = [];
 const check = (ok, label, detail) => {
@@ -68,6 +88,19 @@ const launchOrSkip = async (name) => {
 
 /** Walk a fresh save all the way to the tactics pitch. */
 async function openTactics(ctx) {
+  await ctx.route('**/*', route => {
+    const request = route.request(), url = new URL(request.url());
+    if (url.origin === new URL(BASE).origin) return route.continue();
+    if (['GET', 'HEAD'].includes(request.method()) && assetCache.has(url.href)) {
+      usedAssets.add(url.href);
+      return route.fulfill({ status: 200, ...assetCache.get(url.href) });
+    }
+    if (process.env.SIM_NETWORK === 'offline') {
+      if (['image', 'font', 'stylesheet'].includes(request.resourceType())) uncachedAssets.add(`${request.resourceType()}: ${url.origin}${url.pathname}`);
+      return route.abort('blockedbyclient');
+    }
+    return route.continue();
+  });
   const page = await ctx.newPage();
   const errs = [];
   page.on('pageerror', e => errs.push(String(e).split('\n')[0].slice(0, 160)));
@@ -320,6 +353,8 @@ for (const engine of wantEngines) {
 }
 
 console.log('');
+if (assetCache.size) console.log(`TACTICS ASSETS: ${usedAssets.size} verified cached font/flag assets fulfilled locally.`);
+if (uncachedAssets.size) console.log(`TACTICS ASSET LIMIT: ${uncachedAssets.size} uncached external assets were aborted; their appearance is not verified: ${[...uncachedAssets].join(', ')}`);
 if (fails.length) {
   console.log(`${fails.length} TACTICS CHECKS FAILED`);
   for (const f of fails) console.log(`  - ${f}`);

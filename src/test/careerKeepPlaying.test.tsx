@@ -84,6 +84,7 @@ vi.mock('@/components/game/PostGameStats', () => ({ default: () => null }));
 import * as E from '@/lib/soccerCareerEngine';
 import type { CareerState } from '@/lib/soccerCareerEngine';
 import SoccerCareer from '@/pages/SoccerCareer';
+import { signThroughReview } from './signThroughReview';
 
 const SAVE_KEY = 'soccerCareerSave';
 const WANT = 3;
@@ -183,11 +184,12 @@ function walkTo(seed: number, want: (s: CareerState) => boolean, heat: boolean):
 const onConvictionPaper = (s: CareerState) => s.phase === 'newspaper' && !s.pendingSummary && (s.prisonSeasons ?? 0) > 0;
 
 /* the screen of the moment and the buttons a player would press on it */
-const PREFER = ['← Back', 'Stay', 'Sign', 'Continue', 'Next', 'Accept', 'Confirm', 'Done', 'Close'];
+const PREFER = ['← Back', 'Stay', 'Sign', 'Review contract', 'Continue', 'Next', 'Accept', 'Confirm', 'Done', 'Close'];
 const screenCard = (root: HTMLElement) => root.querySelector('div.space-y-3.order-1')?.firstElementChild?.firstElementChild as HTMLElement | null;
 const buttonStarting = (root: HTMLElement, text: string) =>
   Array.from(root.querySelectorAll('button')).find(b => (b.textContent ?? '').trim().includes(text)) as HTMLButtonElement | undefined;
-const press = async (b: HTMLElement) => { await act(async () => { fireEvent.click(b); }); await tick(); };
+/* Round 1082: an offer is signed in the review dialog, not on the card. */
+const press = async (b: HTMLElement) => { await act(async () => { fireEvent.click(b); }); await tick(); await signThroughReview(b, () => tick()); };
 const nextSeasonButton = (root: HTMLElement) => root.querySelector('[data-career-action-bar] button') as HTMLButtonElement | null;
 
 interface Run { seed: number; problems: string[]; skipped: string | null }

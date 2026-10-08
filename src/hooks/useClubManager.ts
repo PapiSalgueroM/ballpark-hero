@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { recordCompletion, recordActivity, recordStreakDay } from '@/lib/completions';
+import { saveMatchPlan as savePlan, applyMatchPlan as applyPlan, deleteMatchPlan as deletePlan } from '@/lib/clubManagerMatchPlans';
 import {
   CareerState, MatchWeekReport, SeasonSummary, MarketPlayer, Mentality,
   FORMATIONS, startCareer, playNextEntry, finishSeason, startNextSeason,
@@ -485,6 +486,27 @@ export function useClubManager() {
   }, []);
 
   /* ---------- tactics ---------- */
+  const saveMatchPlan = useCallback((slot: number, name: string) => {
+    if (phase !== 'hub' || !holdsActiveSlot()) return false;
+    if (!career || savePlan(career, slot, name) === career) return false;
+    setCareer(prev => prev ? savePlan(prev, slot, name) : prev);
+    return true;
+  }, [career, phase, holdsActiveSlot]);
+
+  const applyMatchPlan = useCallback((slot: number) => {
+    if (phase !== 'hub' || !holdsActiveSlot()) return false;
+    if (!career || applyPlan(career, slot) === career) return false;
+    setCareer(prev => prev ? applyPlan(prev, slot) : prev);
+    return true;
+  }, [career, phase, holdsActiveSlot]);
+
+  const deleteMatchPlan = useCallback((slot: number) => {
+    if (phase !== 'hub' || !holdsActiveSlot()) return false;
+    if (!career || deletePlan(career, slot) === career) return false;
+    setCareer(prev => prev ? deletePlan(prev, slot) : prev);
+    return true;
+  }, [career, phase, holdsActiveSlot]);
+
   const setFormationIndex = useCallback((idx: number) => {
     setCareer(prev => {
       if (!prev) return prev;
@@ -1041,6 +1063,7 @@ export function useClubManager() {
     market, nextFx, tableRows, myPosition, facts,
     resume, startNew, chooseClub, confirmClub, confirmCustomClub,
     setFormationIndex, setMentality, setXiSlot, swapXiSlots, autoPick,
+    saveMatchPlan, applyMatchPlan, deleteMatchPlan,
     setSlotDuty, assignSetPiece, autoPickSetPieces, setShootoutOrder: setShootoutOrderIds, retrain, stopRetrain,
     play, quickPlay, continueFromReport, nextSeason,
     buy,
