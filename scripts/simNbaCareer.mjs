@@ -74,6 +74,14 @@
      sameteam     drops the team check from beat 318      -> R1 red
      sameteam320  drops the team check from beat 320      -> R1 red
      beatwords    moves beat 319's morale by -6, words -4 -> R2 red
+     tradehome    lets "Demand a trade" pick his own club -> TR red
+
+   Round 1103 added TR: the "Demand a trade" option on the "The fit is broken"
+   card drew its new club from the whole league, the club he was asking out of
+   included, so about one trade in thirty read "Traded to" the team he was
+   already on. 600 trades off 40 unhappy saves in both eras, none may land at
+   home. Exact, no band. A league of 29 or 30 clubs puts the old code's
+   expected count near 20, so the control cannot pass by luck.
 */
 /* Round 299: seeded stream, see scripts/lib/seedRandom.mjs. First import on purpose. */
 import './lib/seedRandom.mjs';
@@ -84,7 +92,7 @@ import { unlinkSync, readFileSync, writeFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 
 const CONTROL = process.env.SIM_NBA_CONTROL || '';
-const CONTROLS = ['', 'nodeck', 'eraleak', 'eraleaka', 'serviceleak', 'wordsbreak', 'tradepay', 'eraleaktrade', 'chipcap', 'notags', 'sameteam', 'sameteam320', 'beatwords'];
+const CONTROLS = ['', 'nodeck', 'eraleak', 'eraleaka', 'serviceleak', 'wordsbreak', 'tradepay', 'eraleaktrade', 'chipcap', 'notags', 'sameteam', 'sameteam320', 'beatwords', 'tradehome'];
 if (!CONTROLS.includes(CONTROL)) {
   console.error(`unknown SIM_NBA_CONTROL "${CONTROL}", expected one of: ${CONTROLS.slice(1).join(', ')}`);
   process.exit(2);
@@ -125,6 +133,14 @@ if (CONTROL === 'eraleaktrade') {
   if (n !== 1) throw new Error(`control eraleaktrade: expected the trade's team list call once in the bundle, found ${n}`);
   writeFileSync(OUT, src.replace(call, 'teamIds: (c) => nbaEraTeamIds(),'));
 }
+if (CONTROL === 'tradehome') {
+  /* Round 1103: give "Demand a trade" back the whole league, his own club included. */
+  const src = readFileSync(OUT, 'utf8');
+  const call = 'nbaEraTeamIds(cc.eraId).filter((id) => id !== cc.team)';
+  const n = src.split(call).length - 1;
+  if (n !== 1) throw new Error(`control tradehome: expected the trade's own club filter once in the bundle, found ${n}`);
+  writeFileSync(OUT, src.replace(call, 'nbaEraTeamIds(cc.eraId)'));
+}
 if (CONTROL === 'eraleaka' || CONTROL === 'serviceleak') {
   /* Deck A's send down card: drop its era check, or give it back the five
      seasons it had before this round. */
@@ -144,7 +160,7 @@ const {
   NBA_ARCHETYPES, startNbaCareer, simNbaSeason, nbaProgress, drawNbaEvent, nbaShouldRetire,
   nbaLegacyOf, nbaCareerTotals, nbaRollTeamQuality, nbaMarketSalary,
   NBA_SPEND_ITEMS, buyNbaItem, nbaAssignRole, nbaCampBattle,
-  NBA_LIFE_C, buildNbaLifeCCard, nbaEraTeamIds, nbaTeamLabelOf, NBA_RIVALRY_EVENTS, getNbaLifeEventsA,
+  NBA_LIFE_C, buildNbaLifeCCard, nbaEraTeamIds, nbaTeamLabelOf, NBA_RIVALRY_EVENTS, getNbaLifeEventsA, nbaEventDeck,
 } = eng;
 if (!Array.isArray(NBA_RIVALRY_EVENTS) || !nbaEraTeamIds || !nbaTeamLabelOf || !getNbaLifeEventsA) throw new Error('the bundle is missing the rivalry table or the era team helpers');
 unlinkSync(OUT);
@@ -481,6 +497,26 @@ const cMissing = NBA_LIFE_C.filter(d => !cFired.has(d.id)).map(d => d.id);
 console.log('\n=== ROUND 57 NBA MY CAREER PLAYTEST ===');
 if (CONTROL) console.log(`NEGATIVE CONTROL   : ${CONTROL} (this run is expected to FAIL)`);
 console.log(`careers            : ${CAREERS}  (${eraCareers} in the 2003-04 era, ${benchSeasons} second unit seasons)`);
+/* ---- TR (Round 1103): "Demand a trade" never lands on the club he asked out of ---- */
+let tradeDraws = 0, tradeHome = 0;
+for (let i = 0; i < 40; i++) {
+  const pos = POSITIONS[i % POSITIONS.length];
+  const c = startNbaCareer(`Trade ${i}`, pos, NBA_ARCHETYPES[pos][i % NBA_ARCHETYPES[pos].length], Math.random, null, i % 2 ? 'y2004' : undefined);
+  c.morale = 40;                                 // the card's own gate: morale under 55
+  const card = nbaEventDeck(c, Math.random).find(e => e.id === 'unhappy');
+  if (!card) throw new Error('TR: an unhappy save was not offered the "The fit is broken" card');
+  const ask = card.options.find(o => o.label === 'Demand a trade');
+  if (!ask) throw new Error('TR: the card has no "Demand a trade" option');
+  for (let k = 0; k < 15; k++) {
+    const cc = clone(c);
+    const from = cc.team;
+    ask.apply(cc, Math.random);
+    tradeDraws++;
+    if (cc.team === from) tradeHome++;
+    if (!nbaEraTeamIds(cc.eraId).includes(cc.team)) throw new Error(`TR: traded to ${cc.team}, which is not a club of the career's own era`);
+  }
+}
+
 console.log(`crashes            : ${crashes}`);
 console.log(`NaN values         : ${nanHits}`);
 console.log(`empty stat lines   : ${emptyStatLines}  (must be 0, every position needs real stats)`);
@@ -509,8 +545,10 @@ for (const p of POSITIONS) {
   const lines = byPos[p] || [];
   if (!lines.length) { console.log(`  ${p.padEnd(5)} NO SEASONS`); continue; }
   const best = lines.reduce((a, b) => (b.games > a.games ? b : a));
-  console.log(`  ${p.padEnd(3)} ${best.ppg} ppg, ${best.rpg} rpg, ${best.apg} apg`);
+  /* Round 1103: a season on the new line also records minutes, steals and blocks. */
+  console.log(`  ${p.padEnd(3)} ${best.ppg} ppg, ${best.rpg} rpg, ${best.apg} apg, ${best.spg} spg, ${best.bpg} bpg, ${best.mpg} mpg`);
 }
+console.log(`TR demand a trade  : ${tradeDraws} trades off the "The fit is broken" card, ${tradeHome} landed on the club he asked out of (must be 0)`);
 
 const fails = [];
 if (crashes) fails.push(`${crashes} crashes`);
@@ -531,6 +569,8 @@ for (const id of TWO_TEAM_BEATS) {
 }
 if (serviceLeaks.length) fails.push(`C1e: ${serviceLeaks.length} send down cards after three seasons (${serviceLeaks[0]})`);
 if (r2Bad.length) fails.push(`R2: ${r2Bad.length} rivalry beats whose words and effect disagree`);
+if (tradeDraws < 600) fails.push(`TR: only ${tradeDraws} trades were drawn, the check is empty`);
+if (tradeHome > 0) fails.push(`TR: ${tradeHome} of ${tradeDraws} demanded trades landed on the club he asked out of`);
 console.log(fails.length
   ? `\nFAIL: ${fails.join('; ')}`
   : '\nPASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged, rivalry beats honest');

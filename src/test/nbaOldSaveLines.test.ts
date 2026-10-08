@@ -34,7 +34,7 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import {
   NBA_ARCHETYPES, startNbaCareer, nbaRollTeamQuality, nbaAssignRole, nbaCampBattle, simNbaSeason, nbaProgress,
-  drawNbaEvent, nbaShouldRetire, nbaCareerTotals, nbaLegacyOf, type NbaCareerPos, type NbaCareerState,
+  drawNbaEvent, isNbaNewLine, nbaShouldRetire, nbaCareerTotals, nbaLegacyOf, type NbaCareerPos, type NbaCareerState,
 } from '@/lib/nbaMyCareer';
 import { NBA_CAREER_HALL } from '@/lib/nbaCareerHall';
 import { hallRecordFor, stampHallCalibration } from '@/lib/careerHallOfFame';
@@ -198,6 +198,13 @@ describe('Round 1103: an old NBA save reads exactly as it did', () => {
       expect(c.seasons.slice(0, before.length).map(s => nbaStatLine(s))).toEqual(e!.read.lines);
       const added = c.seasons[c.seasons.length - 1];
       expect(added.games).toBeGreaterThan(0);
+      /* The season played after the round is on the new line: minutes, steals and blocks, points to a tenth. */
+      expect(isNbaNewLine(added)).toBe(true);
+      for (const k of ['mpg', 'spg', 'bpg'] as const) expect(typeof added[k], k).toBe('number');
+      expect(Math.abs(added.ppg * 10 - Math.round(added.ppg * 10))).toBeLessThan(1e-9);
+      expect(nbaStatLine(added)).toMatch(/^\d+\.\d ppg, \d+\.\d rpg, \d+\.\d apg$/);
+      /* And the old ones did not gain a key on the way. */
+      for (const s of c.seasons.slice(0, before.length)) expect(isNbaNewLine(s)).toBe(false);
       expect(clone(c)).toEqual(c);
     });
   }

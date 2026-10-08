@@ -10,9 +10,11 @@ import { formatNumber } from './formatNumber';
  */
 
 import { NBA_TEAMS } from '@/data/conquestDataNba';
-import { nbaEraScale } from '@/data/nbaLeagueNorms';
+import { NBA_AWARD_RULES, nbaEraNeutral, nbaEraScale, nbaLeaderBar } from '@/data/nbaLeagueNorms';
+import { usSeasonLength } from '@/data/usSeasonLengths';
+import { nbaQualifiesForStatTitle } from './awardDecision';
 import { seasonSwing, swingNote, playoffDepthOf, playoffGames, clutchSwing, clutchNote } from './careerVariance';
-import { nbaSeasonScore, wonAward } from './careerAwards';
+import { nbaFieldZ, nbaSeasonScore, wonAward } from './careerAwards';
 import { draftRival, judgeRivalSeason } from './careerRival';
 import type { CareerRival } from './careerRival';
 
@@ -537,7 +539,7 @@ export interface NbaLineNumbers { mpg: number; ppg: number; rpg: number; apg: nu
 export const NBA_LINE_DRAWS = 7;
 
 /** What a position passes, steals and blocks, a 36 minute starter of average hands. */
-const NBA_POS_AST: Record<NbaCareerPos, number> = { PG: 1.0, SG: 0.8, SF: 0.75, PF: 0.7, C: 0.8 };
+const NBA_POS_AST: Record<NbaCareerPos, number> = { PG: 1.0, SG: 0.8, SF: 0.85, PF: 0.7, C: 0.8 };
 const NBA_POS_REB: Record<NbaCareerPos, number> = { PG: 1, SG: 1, SF: 0.92, PF: 0.75, C: 1 };
 const NBA_POS_STL: Record<NbaCareerPos, number> = { PG: 1.25, SG: 1.3, SF: 1.2, PF: 1.0, C: 1.2 };
 const NBA_POS_BLK: Record<NbaCareerPos, number> = { PG: 0.3, SG: 0.55, SF: 0.55, PF: 0.8, C: 0.9 };
@@ -584,14 +586,46 @@ export function nbaStatLineFor(input: NbaLineInput, rng: () => number): NbaLineN
   return { mpg: tenth(minutes), ppg: tenth(ppg), rpg: tenth(rpg), apg: tenth(apg), spg: tenth(spg), bpg: tenth(bpg) };
 }
 
+/** Round 1103: the games a club plays in the season that starts in `year`, off the two sourced ledger Round 1048
+ *  keeps (src/data/usSeasonLengths.ts). A season the ledger holds with no single length (2012-13, 2019-20), or
+ *  does not hold at all, plays 82: the engine has to play something, and 82 is what it always played. */
+export function nbaSeasonGames(year: number): number {
+  return usSeasonLength('nba', year) ?? 82;
+}
+
 function gamesFor(c: NbaCareerState, rng: () => number): { games: number; note: string | null } {
+  const L = nbaSeasonGames(c.year);
   const risk = careerRecoveryRisk('nba', c.purchased, (1 - c.archetype.durability) * 0.5 + (100 - c.health) / 240);
   if (rng() < risk) {
+    /* With L at 82 every number here is what the old line returned for the same draws. */
     const missed = 8 + Math.floor(rng() * 35);
-    return { games: Math.max(20, 82 - missed), note: `Missed ${missed} games hurt.` };
+    const lost = Math.round(missed * L / 82);
+    return { games: Math.max(Math.round(20 * L / 82), L - lost), note: `Missed ${lost} games hurt.` };
   }
-  return { games: 78 + Math.floor(rng() * 5), note: null };
+  return { games: L - 4 + Math.floor(rng() * 5), note: null };
 }
+
+/* Round 1103: the three typed gates of the awards block that are not league facts, each re-anchored on the new
+   line at the SAME percentile of qualified seasons (62 games) it sat at on the old one. Measured by
+   scripts/simNbaAwardsSense.mjs on main (6,000 careers a seed, seeds 1 to 5) and again on this line. */
+/** The field of the line before Round 1103, mean and sd of the season score by position, frozen. It is the old
+ *  line as the same fleet lived it (scripts/data/nbaAwardsSenseBaseline.json, the five seed mean of its `field`
+ *  rows: every season of half a schedule or more, bench years included), because the new field is measured on
+ *  that population too and the bridge maps one onto the other. The August 2026 rows that sat in careerAwards.ts
+ *  were measured on starters only and are narrower (46.4/11.4 at PG): bridged through those, my share of the
+ *  head to head years came out at 65 percent against main's 62 to 63. Only the rival bridge in simNbaSeason
+ *  reads this. Round 1112 deletes it. */
+const NBA_RIVAL_SCALE: Record<string, readonly [number, number]> = { PG: [46.3, 15.2], SG: [46.0, 15.1], SF: [47.7, 16.2], PF: [46.1, 14.3], C: [43.2, 13.8] };
+/** The new line's scores lean to the right of the old line's at the same mean and spread, so a plain z bridge
+ *  left my share of the head to head years about a point under main's (61.1 to 61.9 percent on five shrunk
+ *  fleets against 62.3 to 63.0). This many old scale points put it back. Measured, and deleted with the bridge. */
+const NBA_RIVAL_BRIDGE_SHIFT = 0.6;
+/** Defensive Player of the Year: was 11 rebounds a game. */
+const NBA_DPOY_RPG_GATE = 10.4;
+/** Most Improved: was a jump of 6 points a game on last season. */
+const NBA_MIP_JUMP_GATE = 6.5;
+/** Sixth Man: was 14 points a game. */
+const NBA_SIXTH_MAN_PPG_GATE = 9.4;
 
 /** Round 1048: every team result simNbaSeason writes, in playoff depth order. The Season Center reads the
  *  stage by exact equality against this list, never out of a sentence (the Round 103 rule). */
@@ -619,20 +653,28 @@ export function simNbaSeason(
   // only by an all time scorer having a career year.
   /* Round 182: bench minutes are real minutes, about 60 percent of a
      starter's, so the per-game line scales with the role. An absent role
-     is a starter, byte for byte. */
-  const minutesShare = c.role === 'backup' ? 0.55 + rng() * 0.1 : 1;
-  const ppg = Math.min(38, Math.max(4, Math.round((5 + (form - 64) * 0.62) * a.scoring * minutesShare + rng() * 3)));
-  const rpg = Math.min(16, Math.max(1, Math.round(((2 + (form - 64) * 0.2) * a.rebounding * minutesShare + rng() * 2) * 10) / 10));
-  const apg = Math.min(13, Math.max(0.5, Math.round(((1.5 + (form - 64) * 0.22) * a.playmaking * minutesShare + rng() * 2) * 10) / 10));
+     is a starter.
+     Round 1103: the whole line comes from nbaStatLineFor above (minutes by role, production a minute, the
+     league's level that year), and a season now records its minutes, steals and blocks too. */
+  const role: 'starter' | 'backup' = c.role === 'backup' ? 'backup' : 'starter';
+  const seasonsPlayed = c.seasons.length;
+  const L = nbaSeasonGames(c.year);
+  const stat = nbaStatLineFor({ form, pos: c.pos, archetype: a, role, seasonsPlayed, year: c.year }, rng);
+  const { ppg, rpg, apg } = stat;
   if (c.role === 'backup') notes.push('🪑 Second unit season: your numbers come in bench minutes.');
   const line: NbaSeasonLine = {
     year: c.year, team: c.team, age: c.age, ovr: c.ovr, games,
     ppg, rpg, apg, awards: [], teamResult: '', salary: c.salary,
+    mpg: stat.mpg, spg: stat.spg, bpg: stat.bpg,
   };
+  /* The season card's stat line stays three parts (the hub tile has room for three), so the rest is said here. */
+  notes.push(`📊 ${stat.mpg.toFixed(1)} mpg, ${stat.spg.toFixed(1)} spg, ${stat.bpg.toFixed(1)} bpg.`);
   // Round 123: computed up here rather than down with the rest of the awards
   // because Finals MVP is decided inside the playoff block below and it needs
   // the same number everything else is judged on.
-  const statScore = nbaSeasonScore(line);
+  /* Round 1103: every score that judges a season reads the line with the era's level divided out, so a 2004
+     season is measured against 2004's league. The saved and printed line stays raw. */
+  const statScore = nbaSeasonScore(nbaEraNeutral(line, c.year));
 
   const strength = teamQuality + (c.ovr - 78) * 0.5;
   const playoffOdds = Math.max(0.05, Math.min(0.92, (strength - 66) / 28));
@@ -669,10 +711,12 @@ export function simNbaSeason(
     // everyone before the player's own clutch roll is applied.
     const poForm = form + clutch - 1.5;
     line.poGames = poG;
-    line.poPpg = Math.min(42, Math.max(2, Math.round((5 + (poForm - 64) * 0.62) * a.scoring + rng() * 3)));
-    line.poRpg = Math.min(18, Math.max(0.5, Math.round(((2 + (poForm - 64) * 0.2) * a.rebounding + rng() * 2) * 10) / 10));
-    line.poApg = Math.min(14, Math.max(0.3, Math.round(((1.5 + (poForm - 64) * 0.22) * a.playmaking + rng() * 2) * 10) / 10));
-    notes.push(`📊 Playoffs: ${poG} games, ${line.poPpg} ppg, ${line.poRpg} rpg, ${line.poApg} apg.`);
+    /* Round 1103: the same function as the regular season, on the playoff form. */
+    const po = nbaStatLineFor({ form: poForm, pos: c.pos, archetype: a, role, seasonsPlayed, year: c.year, playoffs: true }, rng);
+    line.poPpg = po.ppg;
+    line.poRpg = po.rpg;
+    line.poApg = po.apg;
+    notes.push(`📊 Playoffs: ${poG} games, ${po.ppg.toFixed(1)} ppg, ${po.rpg.toFixed(1)} rpg, ${po.apg.toFixed(1)} apg.`);
     const cn = clutchNote(clutch, depth, 'nba');
     if (cn) notes.push(cn);
   }
@@ -704,24 +748,32 @@ export function simNbaSeason(
   // trophy, which is a different question from whether he beat anybody. The
   // coin flip that used to follow each one is what got replaced.
   const isBig = c.pos === 'C' || c.pos === 'PF';
-  if (a.rebounding >= 1.3 && rpg >= 11 && games >= 62 && wonAward(rng, 'nba', 'nbaDpoy', c.pos, statScore)) {
+  if (a.rebounding >= 1.3 && rpg >= NBA_DPOY_RPG_GATE && games >= 62 && wonAward(rng, 'nba', 'nbaDpoy', c.pos, statScore)) {
     line.awards.push('Defensive Player of the Year'); notes.push('🛡️ DEFENSIVE PLAYER OF THE YEAR.');
   }
   if (games >= 62 && wonAward(rng, 'nba', 'allDefensive', c.pos, statScore)) {
     line.awards.push('All-Defensive Team'); notes.push('🔒 All-Defensive Team.');
   }
-  if (ppg >= 28 && games >= 62 && wonAward(rng, 'nba', 'scoringTitle', c.pos, statScore)) {
+  /* Round 1103: a stat title is a league fact, so its gate is the league's. He has to qualify by the real
+     minimum for that season, and his average has to beat that year's leader: a bar drawn around the ten
+     sourced league leading averages for the era (their mean, give or take 1.73 of their standard deviations,
+     which is a flat draw with their spread). Three draws, always taken, one a title. The draw behind each is
+     the old one. */
+  const uPts = rng(); const uAst = rng(); const uReb = rng();
+  const titleBar = (stat: 'pts' | 'reb' | 'ast', u: number): number => { const b = nbaLeaderBar(stat, c.year); return b.mean + b.sd * (u - 0.5) * 3.46; };
+  const qualifies = (avg: number, needed: number): boolean => nbaQualifiesForStatTitle(games, avg * games, needed, c.year, L, NBA_AWARD_RULES);
+  if (qualifies(ppg, NBA_AWARD_RULES.statTitleTotalsBefore.pts) && ppg >= titleBar('pts', uPts) && wonAward(rng, 'nba', 'scoringTitle', c.pos, statScore)) {
     line.awards.push('Scoring Champion'); notes.push('🔥 Scoring champion.');
   }
-  if (apg >= 10 && games >= 62 && wonAward(rng, 'nba', 'assistsTitle', c.pos, statScore)) {
+  if (qualifies(apg, NBA_AWARD_RULES.statTitleTotalsBefore.ast) && apg >= titleBar('ast', uAst) && wonAward(rng, 'nba', 'assistsTitle', c.pos, statScore)) {
     line.awards.push('Assists Leader'); notes.push('🎯 Led the league in assists.');
   }
-  if (isBig && rpg >= 12.5 && games >= 62 && wonAward(rng, 'nba', 'reboundsTitle', c.pos, statScore)) {
+  if (isBig && qualifies(rpg, NBA_AWARD_RULES.statTitleTotalsBefore.reb) && rpg >= titleBar('reb', uReb) && wonAward(rng, 'nba', 'reboundsTitle', c.pos, statScore)) {
     line.awards.push('Rebounding Champion'); notes.push('🧲 Led the league in rebounds.');
   }
   // Most Improved needs a real jump from last season, not just a good year.
   const prev = c.seasons[c.seasons.length - 1];
-  if (prev && prev.games >= 40 && ppg - prev.ppg >= 6 && games >= 62 && wonAward(rng, 'nba', 'mostImproved', c.pos, statScore)) {
+  if (prev && prev.games >= 40 && ppg - prev.ppg >= NBA_MIP_JUMP_GATE && games >= 62 && wonAward(rng, 'nba', 'mostImproved', c.pos, statScore)) {
     line.awards.push('Most Improved Player'); notes.push('📈 Most Improved Player.');
   }
   // Sixth Man is for solid production on a low usage archetype, and since
@@ -729,7 +781,7 @@ export function simNbaSeason(
   // second-unit season of 14 a night finally has its trophy. The old
   // archetype gate stays so pre-182 saves and harness careers keep their
   // eligibility unchanged.
-  if ((c.role === 'backup' || a.scoring <= 0.9) && ppg >= 14 && games >= 62 && wonAward(rng, 'nba', 'sixthMan', c.pos, statScore)) {
+  if ((c.role === 'backup' || a.scoring <= 0.9) && ppg >= NBA_SIXTH_MAN_PPG_GATE && games >= 62 && wonAward(rng, 'nba', 'sixthMan', c.pos, statScore)) {
     line.awards.push('Sixth Man of the Year'); notes.push('🪑 Sixth Man of the Year.');
   }
   if (c.age >= 22 && c.seasons.length <= 1 && wonAward(rng, 'nba', 'allRookie', c.pos, statScore)) {
@@ -743,7 +795,13 @@ export function simNbaSeason(
   // Round 104: the rival played his season too, on the same scale as mine,
   // so the head to head is an honest comparison rather than a vibe.
   if (c.rival && !c.rival.retired) {
-    for (const n of judgeRivalSeason(c.rival, statScore, c.name, 'nba', rng)) notes.push(n);
+    /* Round 1103: the rival's season is still scored by careerRival.ts's own copy of the OLD line, on the old
+       scale. Until he moves onto nbaStatLineFor (Round 1112, which deletes this bridge and NBA_RIVAL_SCALE),
+       my season is handed over as how far past a normal season for my job I got, on the scale he still lives
+       on: the old field's mean plus my z against the new field, times the old field's sd. */
+    const old = NBA_RIVAL_SCALE[c.pos] ?? NBA_RIVAL_SCALE.PG;
+    const bridged = old[0] + nbaFieldZ(c.pos, statScore) * old[1] + NBA_RIVAL_BRIDGE_SHIFT;
+    for (const n of judgeRivalSeason(c.rival, bridged, c.name, 'nba', rng)) notes.push(n);
   }
   /* Round 525: the rivalry beat, rolled right after the rival's own season,
      the same point in the loop the flagship and the NFL binding roll their
@@ -942,7 +1000,7 @@ function buildNbaDeck(c: NbaCareerState, rng: () => number, stopAtBig: boolean):
       title: 'The fit is broken',
       body: 'Losing, touches down, trade rumors everywhere.',
       options: [
-        { label: 'Demand a trade', effect: 'Fresh start', apply: (cc, r) => { const ids = nbaEraTeamIds(cc.eraId); const nt = ids[Math.floor(r() * ids.length)]; cc.team = nt; cc.morale = 74; cc.fanbase = 38; return `Traded to ${nbaTeamLabelOf(nt, cc.eraId)}. New chapter.`; } },
+        { label: 'Demand a trade', effect: 'Fresh start', apply: (cc, r) => { /* Round 1103: a trade lands somewhere else, never back at the club he asked out of. */ const ids = nbaEraTeamIds(cc.eraId).filter(id => id !== cc.team); const nt = ids[Math.floor(r() * ids.length)]; cc.team = nt; cc.morale = 74; cc.fanbase = 38; return `Traded to ${nbaTeamLabelOf(nt, cc.eraId)}. New chapter.`; } },
         { label: 'Ride it out', effect: 'Respect', apply: (cc) => { cc.morale += 7; cc.fanbase += 4; return 'You stay professional. The league notices.'; } },
       ],
     });
@@ -1061,6 +1119,12 @@ const NBA_LEGACY_V2: LegacyWeights = {
 };
 export const NBA_LEGACY_WEIGHTS: Record<HallCalibration, LegacyWeights> = { 1: NBA_LEGACY_V1, 2: NBA_LEGACY_V2 };
 
+/** Round 1103: what the POINTS of a season on the new line are worth to the legacy score against a season on
+ *  the old one. 1 is no adjustment. The new line scores about a fifth lower than the old on purpose, and the
+ *  Hall of Fame is held, not recalibrated, in this round: this is the one lever, set from the measured Hall
+ *  rate (scripts/simNbaAwardsSense.mjs section H). The legacy recalibration round replaces it. */
+export const NBA_LEGACY_NEW_LINE_SCALE: number = 1.15;
+
 export function nbaLegacyOf(c: NbaCareerState): NbaLegacy {
   const t = nbaCareerTotals(c);
   /* Round 123 recalibration. MVP used to be unreachable here, so mvps * 120
@@ -1069,9 +1133,13 @@ export function nbaLegacyOf(c: NbaCareerState): NbaLegacy {
      what it should be. Measured over 1100 careers after: median score 295,
      Hall of Fame 18.0 percent, GOAT tier 2.4 percent, and a forced 90
      ceiling career gets in 66 percent of the time. */
+  /* Round 1103: only the points of seasons on the new line are scaled, so a career with no new season adds
+     exactly nothing and its score, verdict and ballot are the ones it was told. */
+  const newPts = c.seasons.reduce((n, s) => n + (isNbaNewLine(s) ? s.ppg * s.games : 0), 0);
   const read = legacyRead(NBA_LEGACY_WEIGHTS[hallCalibrationOf(c)], {
     pos: c.pos, seasons: c.seasons.length,
-    awards: { rings: c.rings, mvps: c.mvps, finalsMvps: c.finalsMvps, allNbas: c.allNbas }, totals: { ...t },
+    awards: { rings: c.rings, mvps: c.mvps, finalsMvps: c.finalsMvps, allNbas: c.allNbas },
+    totals: { ...t, pts: t.pts + Math.round(newPts * (NBA_LEGACY_NEW_LINE_SCALE - 1)) },
   });
   const score = read.score;
   const hof = score >= 500;
