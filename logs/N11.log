@@ -1,0 +1,4 @@
+applied N11 to src/lib/gridEngine.ts: each slice of the static index stops one row short
+restored src/lib/gridEngine.ts
+dirty tracked files after restore: 0
+MUT N11: engine=1 every named gate went red

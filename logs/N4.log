@@ -1,0 +1,4 @@
+applied N4 to src/hooks/useCollegeGrid.ts: the open cell moves while a pick waits
+restored src/hooks/useCollegeGrid.ts
+dirty tracked files after restore: 0
+MUT N4: fc=1 every named gate went red

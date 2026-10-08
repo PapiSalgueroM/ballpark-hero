@@ -1,0 +1,16 @@
+playCollegeGridFirstTap, control latecells: section 1 and 7 must go red
+
+1) The board does not wait for the key
+  FAIL: with both key files held back, nine visible empty cells never appeared: the board waits for the key
+   390 by 844: nine empty cells 211 ms after navigation, search box not open, both key files still held
+  FAIL: with both key files held back, nine visible empty cells never appeared: the board waits for the key
+   1280 by 900: nine empty cells 183 ms after navigation, search box not open, both key files still held
+
+7) Geometry: the board holds its ground when the key lands
+  FAIL: the board's rectangle moved when the key landed: no board before, 16,329,358,304.75 after
+  FAIL: with both key files held 1500 ms the page shifted 0.12 at 375 by 812, the ceiling is 0.05
+   390 by 844: board rectangle no board before and after the key landed, no sideways overflow; cumulative layout shift 0.12 at 375 by 812 with both key files held 1500 ms (ceiling 0.05)
+  FAIL: the board's rectangle moved when the key landed: no board before, 384,405,512,422.5 after
+   1280 by 900: board rectangle no board before and after the key landed, no sideways overflow
+
+control "latecells": fired in section 1 and 7 as expected, the check works

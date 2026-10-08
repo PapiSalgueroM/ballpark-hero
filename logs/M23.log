@@ -1,0 +1,4 @@
+applied M23 to src/lib/collegeGrid.ts: a names list that cannot load is handed to the search as an empty list
+restored src/lib/collegeGrid.ts
+dirty tracked files after restore: 0
+MUT M23: search=1 every named gate went red

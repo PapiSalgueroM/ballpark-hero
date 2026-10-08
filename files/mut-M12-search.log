@@ -1,0 +1,30 @@
+   × the College Grid search, from memory (Round 1105) > a surname lists the man, and the check fails when names are found by their first letters only 26ms
+     → SURNAME: "andersen" did not list Morten Andersen
+   × the College Grid search, from memory (Round 1105) > the best match and the longest career come first, and the check fails when the order is turned round 16ms
+     → ORDER: "manning" opens with 
+   × the College Grid search, from memory (Round 1105) > after a failed fetch the next search asks again, and the check fails when a failed list is kept 20ms
+     → RETRY: the healed search settled with null and undefined
+   × the College Grid search, from memory (Round 1105) > a file of the wrong shape is refused and forgotten, 7 ways, and a 200 that is not JSON is a failed fetch 20ms
+     → RETRY: the healed search settled with null and undefined
+   × the College Grid search, from memory (Round 1105) > the box on the page searches the shipped file: one request for it however many searches, and no table read 25ms
+     → expected [] to deeply equal [ 'Peyton Manning', …(2) ]
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/test/collegeGridSearchMemory.test.ts > the College Grid search, from memory (Round 1105) > a surname lists the man, and the check fails when names are found by their first letters only
+Error: SURNAME: "andersen" did not list Morten Andersen
+     50| const fail = (msg: string): never => { throw new Error(msg); };
+ FAIL  src/test/collegeGridSearchMemory.test.ts > the College Grid search, from memory (Round 1105) > the best match and the longest career come first, and the check fails when the order is turned round
+Error: ORDER: "manning" opens with 
+     50| const fail = (msg: string): never => { throw new Error(msg); };
+ FAIL  src/test/collegeGridSearchMemory.test.ts > the College Grid search, from memory (Round 1105) > after a failed fetch the next search asks again, and the check fails when a failed list is kept
+Error: RETRY: the healed search settled with null and undefined
+     50| const fail = (msg: string): never => { throw new Error(msg); };
+ FAIL  src/test/collegeGridSearchMemory.test.ts > the College Grid search, from memory (Round 1105) > a file of the wrong shape is refused and forgotten, 7 ways, and a 200 that is not JSON is a failed fetch
+Error: RETRY: the healed search settled with null and undefined
+     50| const fail = (msg: string): never => { throw new Error(msg); };
+ FAIL  src/test/collegeGridSearchMemory.test.ts > the College Grid search, from memory (Round 1105) > the box on the page searches the shipped file: one request for it however many searches, and no table read
+AssertionError: expected [] to deeply equal [ 'Peyton Manning', …(2) ]
+      Tests  5 failed | 1 passed (6)
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridSearchMemory.test.ts,title=src/test/collegeGridSearchMemory.test.ts > the College Grid search%2C from memory (Round 1105) > a surname lists the man%2C and the check fails when names are found by their first letters only,l
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridSearchMemory.test.ts,title=src/test/collegeGridSearchMemory.test.ts > the College Grid search%2C from memory (Round 1105) > the best match and the longest career come first%2C and the check fails when the order is turned 
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridSearchMemory.test.ts,title=src/test/collegeGridSearchMemory.test.ts > the College Grid search%2C from memory (Round 1105) > after a failed fetch the next search asks again%2C and the check fails when a failed list is kept
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridSearchMemory.test.ts,title=src/test/collegeGridSearchMemory.test.ts > the College Grid search%2C from memory (Round 1105) > a file of the wrong shape is refused and forgotten%2C 7 ways%2C and a 200 that is not JSON is a f

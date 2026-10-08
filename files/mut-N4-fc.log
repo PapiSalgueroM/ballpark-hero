@@ -1,0 +1,10 @@
+CGFAILCLOSED| board cg611-033: yes Jason Witten, no Darrell Green
+CGFAILCLOSED| fail closed: 5 of 5 failure worlds left the pick unverified and judged it after the network healed
+CGFAILCLOSED| decoder: 44 of 44 damaged pairs refused
+   × College Grid fail closed (Round 1105) > (d) the key lands 3 seconds after the pick: that pick is judged on the cell it was made for 8ms
+     → the open cell does not move while its pick waits: expected 4 to be +0 // Object.is equality
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/test/collegeGridFailClosed.test.tsx > College Grid fail closed (Round 1105) > (d) the key lands 3 seconds after the pick: that pick is judged on the cell it was made for
+AssertionError: the open cell does not move while its pick waits: expected 4 to be +0 // Object.is equality
+      Tests  1 failed | 7 passed (8)
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridFailClosed.test.tsx,title=src/test/collegeGridFailClosed.test.tsx > College Grid fail closed (Round 1105) > (d) the key lands 3 seconds after the pick%3A that pick is judged on the cell it was made for,line=340,column=82:
