@@ -1,0 +1,6 @@
+m-etclear exit=0 34s |    Duration  32.51s (transform 2.24s, setup 109ms, collect 2.94s, tests 29.77s, environment 691ms, prepare 345ms)
+m-reducedhold exit=0 32s |    Duration  31.83s (transform 2.28s, setup 103ms, collect 2.98s, tests 29.13s, environment 679ms, prepare 281ms)
+m-flash exit=0 33s |    Duration  33.13s (transform 2.20s, setup 104ms, collect 2.93s, tests 30.44s, environment 671ms, prepare 328ms)
+m-possession exit=0 33s |    Duration  32.51s (transform 1.92s, setup 103ms, collect 2.98s, tests 29.79s, environment 645ms, prepare 295ms)
+m-nth exit=0 32s |    Duration  31.67s (transform 1.72s, setup 98ms, collect 2.49s, tests 29.05s, environment 654ms, prepare 288ms)
+m-cardside exit=0 32s |    Duration  31.69s (transform 2.20s, setup 106ms, collect 2.89s, tests 29.03s, environment 652ms, prepare 146ms)
