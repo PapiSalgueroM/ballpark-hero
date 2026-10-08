@@ -1,3 +1,14 @@
+## Codex 1097 first UI proof red before gameplay, October 8, 2026
+
+Run 37747416709 at 48f884e6 failed types in existing cbbGrid.ts:180 before
+build, native or readers. Remote browser prep re-resolved 172 app packages,
+including locked TypeScript5.8.3 to actual5.9.3, although source/lock bytes
+stayed held. Retaining the red capture and correcting only remote browser
+isolation with app dependency before/after/closing byte holds. No unrelated
+basketball source change. Artifact11536107751 SHA256
+46cf93e9e917c0fed76d3b5229352e646738d4b0dac6656e8f564963657aeab5.
+No UI acceptance, READY or live claim. Cap100 UNAPPLIED; F owns release.
+
 ## Codex 1097 pure proof accepted, page integration in progress, October 8, 2026
 
 Second frozen ac2213f0, tree 43507ac7, run 37743661179 passed every actual

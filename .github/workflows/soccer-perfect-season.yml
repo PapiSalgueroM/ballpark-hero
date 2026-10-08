@@ -67,28 +67,50 @@ jobs:
           set -euo pipefail
           npm ci 2>&1 | tee qa-artifacts/install.log
           node --version > qa-artifacts/node-version.txt
-          npm ls vitest vite esbuild --json > qa-artifacts/installed-versions.json
+          npm ls vitest vite esbuild typescript @supabase/supabase-js @supabase/postgrest-js react-router-dom @radix-ui/react-select react react-dom --json > qa-artifacts/installed-versions.json
+          find node_modules -type f -print0 | sort -z | xargs -0 sha256sum > qa-artifacts/dependencies/app-files-ci.sha256
+          find node_modules -type l -printf '%p\t%l\n' | sort > qa-artifacts/dependencies/app-links-ci.tsv
       - name: Prepare ephemeral remote browser and brand reader
         id: runtime
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         shell: bash
         run: |
           set -euo pipefail
-          npm install --no-save --package-lock=false playwright 2>&1 | tee qa-artifacts/dependencies/playwright-install.log
-          node_modules/.bin/playwright install --with-deps chromium 2>&1 | tee qa-artifacts/dependencies/browser-install.log
+          browser_root=$(mktemp -d "$RUNNER_TEMP/soccer-ps-browser-XXXXXX")
+          printf 'QA_BROWSER_ROOT=%s\n' "$browser_root" >> "$GITHUB_ENV"
+          printf '%s\n' "$browser_root" > qa-artifacts/dependencies/browser-root.txt
+          npm install --prefix "$browser_root" --no-save --package-lock=false playwright@1.64.0 2>&1 | tee qa-artifacts/dependencies/playwright-install.log
+          for name in playwright playwright-core; do
+            test ! -e "node_modules/$name" && test ! -L "node_modules/$name"
+            ln -s "$browser_root/node_modules/$name" "node_modules/$name"
+          done
+          node "$browser_root/node_modules/playwright/cli.js" install --with-deps chromium 2>&1 | tee qa-artifacts/dependencies/browser-install.log
           python -m pip install fonttools pillow 2>&1 | tee qa-artifacts/dependencies/python-install.log
           python -m pip freeze > qa-artifacts/dependencies/python-versions.txt
-          npm ls vitest vite esbuild playwright react react-dom --json > qa-artifacts/dependencies/installed-versions.json
+          find node_modules -type f -print0 | sort -z | xargs -0 sha256sum > qa-artifacts/dependencies/app-files-runtime.sha256
+          find node_modules -type l -printf '%p\t%l\n' | sort > qa-artifacts/dependencies/app-links-runtime.tsv
+          find node_modules -type l ! -path node_modules/playwright ! -path node_modules/playwright-core -printf '%p\t%l\n' | sort > qa-artifacts/dependencies/app-links-runtime-original.tsv
+          cmp qa-artifacts/dependencies/app-files-ci.sha256 qa-artifacts/dependencies/app-files-runtime.sha256
+          cmp qa-artifacts/dependencies/app-links-ci.tsv qa-artifacts/dependencies/app-links-runtime-original.tsv
+          for name in playwright playwright-core; do
+            test "$(readlink "node_modules/$name")" = "$browser_root/node_modules/$name"
+          done
+          find "$browser_root/node_modules" -type f -print0 | sort -z | xargs -0 sha256sum > qa-artifacts/dependencies/browser-files.sha256
+          find "$browser_root/node_modules" -type l -printf '%p\t%l\n' | sort > qa-artifacts/dependencies/browser-links.tsv
+          tar -C "$browser_root" -czf qa-artifacts/dependencies/browser-packages.tar.gz node_modules
+          npm ls vitest vite esbuild playwright react react-dom typescript @supabase/supabase-js @supabase/postgrest-js react-router-dom @radix-ui/react-select --json > qa-artifacts/dependencies/installed-versions.json
           node --input-type=module <<'NODE'
           import fs from 'node:fs'; import { createHash } from 'node:crypto';
           const rows = [];
-          for (const name of ['playwright', 'playwright-core', 'vitest', 'vite', 'esbuild', 'react', 'react-dom', 'typescript']) {
+          const lock = JSON.parse(fs.readFileSync('package-lock.json')).packages;
+          for (const name of ['playwright', 'playwright-core', 'vitest', 'vite', 'esbuild', 'react', 'react-dom', 'typescript', '@supabase/supabase-js', '@supabase/postgrest-js', 'react-router-dom', '@radix-ui/react-select']) {
             const raw = fs.readFileSync('node_modules/' + name + '/package.json');
-            fs.writeFileSync('qa-artifacts/dependencies/' + name + '-package.json', raw);
-            rows.push({ name, version: JSON.parse(raw).version, sha256: createHash('sha256').update(raw).digest('hex') });
+            fs.writeFileSync('qa-artifacts/dependencies/' + name.replaceAll('/', '__') + '-package.json', raw);
+            rows.push({ name, version: JSON.parse(raw).version, expectedVersion: name.startsWith('playwright') ? '1.64.0' : lock['node_modules/' + name].version, sha256: createHash('sha256').update(raw).digest('hex') });
           }
           fs.writeFileSync('qa-artifacts/dependencies/runtime-packages.json', JSON.stringify(rows, null, 2));
           fs.writeFileSync('qa-artifacts/dependencies/node-versions.json', JSON.stringify(process.versions, null, 2));
+          if (rows.some(row => row.version !== row.expectedVersion)) throw new Error('Runtime package version differs from held lock or pinned browser');
           NODE
           sha256sum --quiet -c qa-artifacts/packages.sha256
       - name: Proper application type gate
@@ -159,6 +181,21 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          if [ -f qa-artifacts/dependencies/app-files-ci.sha256 ]; then
+            find node_modules -type f -print0 | sort -z | xargs -0 sha256sum > qa-artifacts/dependencies/app-files-close.sha256
+            find node_modules -type l -printf '%p\t%l\n' | sort > qa-artifacts/dependencies/app-links-close.tsv
+            sha256sum --quiet -c qa-artifacts/dependencies/app-files-ci.sha256
+            links=qa-artifacts/dependencies/app-links-ci.tsv
+            if [ -f qa-artifacts/dependencies/app-links-runtime.tsv ]; then links=qa-artifacts/dependencies/app-links-runtime.tsv; fi
+            while IFS=$'\t' read -r link target; do
+              test -L "$link" && test "$(readlink "$link")" = "$target"
+            done < "$links"
+          fi
+          if [ -f qa-artifacts/dependencies/browser-files.sha256 ]; then
+            sha256sum --quiet -c qa-artifacts/dependencies/browser-files.sha256
+            find "$QA_BROWSER_ROOT/node_modules" -type l -printf '%p\t%l\n' | sort > qa-artifacts/dependencies/browser-links-close.tsv
+            cmp qa-artifacts/dependencies/browser-links.tsv qa-artifacts/dependencies/browser-links-close.tsv
+          fi
           sha256sum --quiet -c qa-artifacts/authored-files.sha256
           sha256sum --quiet -c qa-artifacts/packages.sha256
           cmp package.json qa-artifacts/dependencies/package.json
