@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+#!serial
+play-main: node scripts/playStorageBlocked.mjs
+play-raw: PLAY_STORAGE_CONTROL=raw node scripts/playStorageBlocked.mjs
+play-open: PLAY_STORAGE_CONTROL=open node scripts/playStorageBlocked.mjs
+native: node .rc/x/nativeBlocked.mjs
+playHomeFold: node scripts/playHomeFold.mjs
+playTranslatedPage: node scripts/playTranslatedPage.mjs
