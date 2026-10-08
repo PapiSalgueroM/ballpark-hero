@@ -1,0 +1,88 @@
+#!serve
+#!playwright
+walk-ere: PORT=4561 ENGINES=chromium node scripts/playCareerLeagueWorld.mjs
+walk-cha: PORT=4562 ENGINES=chromium PLAY_LEAGUE_WORLD_SAVE=cha node scripts/playCareerLeagueWorld.mjs
+walk-odd: PORT=4563 ENGINES=chromium PLAY_LEAGUE_WORLD_CONTROL=odd node scripts/playCareerLeagueWorld.mjs
+playSeasonCentre: ENGINES=chromium node scripts/playSeasonCentre.mjs
+playSeasonMoments: ENGINES=chromium node scripts/playSeasonMoments.mjs
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+sweepWeight: ENGINES=chromium node scripts/sweepWeight.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-round: node_modules/.bin/vitest run src/lib/soccerCareerContinental.test.ts src/test/soccerCareerDugoutTable.test.tsx src/lib/soccerCareerLeague.test.ts src/lib/soccerCareerLeagueBand.test.ts src/lib/soccerCareerLeagueSeasons.test.ts --testTimeout=300000 --hookTimeout=120000
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+world0: SEEDSET=0 node scripts/simCareerLeagueWorld.mjs
+world1: SEEDSET=1 node scripts/simCareerLeagueWorld.mjs
+world2: SEEDSET=2 node scripts/simCareerLeagueWorld.mjs
+world-scotrow: SIM_LEAGUE_WORLD_CONTROL=scotrow node scripts/simCareerLeagueWorld.mjs
+world-rankfive: SIM_LEAGUE_WORLD_CONTROL=rankfive node scripts/simCareerLeagueWorld.mjs
+world-flatband: SIM_LEAGUE_WORLD_CONTROL=flatband node scripts/simCareerLeagueWorld.mjs
+world-rewrite: SIM_LEAGUE_WORLD_CONTROL=rewrite node scripts/simCareerLeagueWorld.mjs
+world-nocanon: SIM_LEAGUE_WORLD_CONTROL=nocanon node scripts/simCareerLeagueWorld.mjs
+world-nosize: SIM_LEAGUE_WORLD_CONTROL=nosize node scripts/simCareerLeagueWorld.mjs
+world-nocadence: SIM_LEAGUE_WORLD_CONTROL=nocadence node scripts/simCareerLeagueWorld.mjs
+world-keyshift: SIM_LEAGUE_WORLD_CONTROL=keyshift node scripts/simCareerLeagueWorld.mjs
+world-crownnobody: SIM_LEAGUE_WORLD_CONTROL=crownnobody node scripts/simCareerLeagueWorld.mjs
+world-nudgeedge: SIM_LEAGUE_WORLD_CONTROL=nudgeedge node scripts/simCareerLeagueWorld.mjs
+world-nudgelow: SIM_LEAGUE_WORLD_CONTROL=nudgelow node scripts/simCareerLeagueWorld.mjs
+clubPool: node scripts/simCareerClubPool.mjs
+clubPool-stale: SIM_CLUB_POOL_CONTROL=stale node scripts/simCareerClubPool.mjs
+clubPool-relabel: SIM_CLUB_POOL_CONTROL=relabel node scripts/simCareerClubPool.mjs
+clubPool-tier: SIM_CLUB_POOL_CONTROL=tier node scripts/simCareerClubPool.mjs
+clubPool-uncapped: SIM_CLUB_POOL_CONTROL=uncapped node scripts/simCareerClubPool.mjs
+clubPool-nopool: SIM_CLUB_POOL_CONTROL=nopool node scripts/simCareerClubPool.mjs
+clubPool-picksite: SIM_CLUB_POOL_CONTROL=picksite node scripts/simCareerClubPool.mjs
+clubPool-dropclub: SIM_CLUB_POOL_CONTROL=dropclub node scripts/simCareerClubPool.mjs
+clubPool-reread: SIM_CLUB_POOL_CONTROL=reread node scripts/simCareerClubPool.mjs
+clubPool-nocolor: SIM_CLUB_POOL_CONTROL=nocolor node scripts/simCareerClubPool.mjs
+clubPool-noforest: SIM_CLUB_POOL_CONTROL=noforest node scripts/simCareerClubPool.mjs
+clubPool-forest90s: SIM_CLUB_POOL_CONTROL=forest90s node scripts/simCareerClubPool.mjs
+clubPool-nobragantino: SIM_CLUB_POOL_CONTROL=nobragantino node scripts/simCareerClubPool.mjs
+clubPool-nosince: SIM_CLUB_POOL_CONTROL=nosince node scripts/simCareerClubPool.mjs
+clubPool-colourgone: SIM_CLUB_POOL_CONTROL=colourgone node scripts/simCareerClubPool.mjs
+clubPool-unlisted: SIM_CLUB_POOL_CONTROL=unlisted node scripts/simCareerClubPool.mjs
+clubPool-ingroup: SIM_CLUB_POOL_CONTROL=ingroup node scripts/simCareerClubPool.mjs
+clubPool-academypick: SIM_CLUB_POOL_CONTROL=academypick node scripts/simCareerClubPool.mjs
+clubPool-sinceorder: SIM_CLUB_POOL_CONTROL=sinceorder node scripts/simCareerClubPool.mjs
+clubPool-allranked: SIM_CLUB_POOL_CONTROL=allranked node scripts/simCareerClubPool.mjs
+facts: node scripts/simCareerFacts.mjs
+facts-record: SIM_CAREER_FACTS_CONTROL=record node scripts/simCareerFacts.mjs
+facts-default: SIM_CAREER_FACTS_CONTROL=default node scripts/simCareerFacts.mjs
+facts-equal: SIM_CAREER_FACTS_CONTROL=equal node scripts/simCareerFacts.mjs
+facts-unwired: SIM_CAREER_FACTS_CONTROL=unwired node scripts/simCareerFacts.mjs
+facts-label: SIM_CAREER_FACTS_CONTROL=label node scripts/simCareerFacts.mjs
+facts-relabel: SIM_CAREER_FACTS_CONTROL=relabel node scripts/simCareerFacts.mjs
+facts-early: SIM_CAREER_FACTS_CONTROL=early node scripts/simCareerFacts.mjs
+facts-early2: SIM_CAREER_FACTS_CONTROL=early2 node scripts/simCareerFacts.mjs
+facts-wrongkey: SIM_CAREER_FACTS_CONTROL=wrongkey node scripts/simCareerFacts.mjs
+facts-onesource: SIM_CAREER_FACTS_CONTROL=onesource node scripts/simCareerFacts.mjs
+facts-unverify: SIM_CAREER_FACTS_CONTROL=unverify node scripts/simCareerFacts.mjs
+facts-stale: SIM_CAREER_FACTS_CONTROL=stale node scripts/simCareerFacts.mjs
+facts-onemembership: SIM_CAREER_FACTS_CONTROL=onemembership node scripts/simCareerFacts.mjs
+facts-twodecisions: SIM_CAREER_FACTS_CONTROL=twodecisions node scripts/simCareerFacts.mjs
+facts-greycolour: SIM_CAREER_FACTS_CONTROL=greycolour node scripts/simCareerFacts.mjs
+facts-shapeunread: SIM_CAREER_FACTS_CONTROL=shapeunread node scripts/simCareerFacts.mjs
+facts-pointsunread: SIM_CAREER_FACTS_CONTROL=pointsunread node scripts/simCareerFacts.mjs
+leagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+leagueSeasons-unheld: SIM_LEAGUE_SEASONS_CONTROL=unheld node scripts/simCareerLeagueSeasons.mjs
+leagueSeasons-oldsize: SIM_LEAGUE_SEASONS_CONTROL=oldsize node scripts/simCareerLeagueSeasons.mjs
+leagueSeasonsGen: node scripts/genCareerLeagueSeasons.mjs --check
+leagueFinish: node scripts/simCareerLeagueFinish.mjs
+manager: node scripts/simManagerCareer.mjs
+derbies: node scripts/simCareerDerbies.mjs
+awardsNight: node scripts/simCareerAwardsNight.mjs
+socialBrands: node scripts/simCareerSocialBrands.mjs
+centreTable: node scripts/simSeasonCentreTable.mjs
+centreTable-names: TABLE_CONTROL=names node scripts/simSeasonCentreTable.mjs
+centreTable-cadence: TABLE_CONTROL=cadence node scripts/simSeasonCentreTable.mjs
+centreTable-ledgerorder: TABLE_CONTROL=ledgerorder node scripts/simSeasonCentreTable.mjs
+centreTable-tiebreak: TABLE_CONTROL=tiebreak node scripts/simSeasonCentreTable.mjs
+centreTable-rival: TABLE_CONTROL=rival node scripts/simSeasonCentreTable.mjs
+centreTable-opentitle: TABLE_CONTROL=opentitle node scripts/simSeasonCentreTable.mjs
+agree0: SEEDSET=0 node scripts/simSeasonCentreAgreement.mjs
+agree1: SEEDSET=1 node scripts/simSeasonCentreAgreement.mjs
+agree2: SEEDSET=2 node scripts/simSeasonCentreAgreement.mjs
+agree3: SEEDSET=3 node scripts/simSeasonCentreAgreement.mjs
+agree4: SEEDSET=4 node scripts/simSeasonCentreAgreement.mjs
+neutral: node scripts/simSeasonCentreNeutral.mjs
+moments: node scripts/simSeasonMoments.mjs

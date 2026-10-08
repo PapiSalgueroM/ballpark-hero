@@ -1,0 +1,16 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/soccerCareerLeague.test.ts [2m([22m[2m37 tests[22m[2m)[22m[32m 182[2mms[22m[39m
+ [32m✓[39m src/lib/soccerCareerContinental.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 304[2mms[22m[39m
+ [32m✓[39m src/lib/soccerCareerLeagueSeasons.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 60[2mms[22m[39m
+ [32m✓[39m src/lib/soccerCareerLeagueBand.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 341[2mms[22m[39m
+   [33m[2m✓[22m[39m the league finish against main's recorded answers (Round 1100)[2m > [22manswers every held row exactly as main did, and moves only where a league gained a size [33m 336[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerDugoutTable.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 1405[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the dugout table is his own league (Round 1029)[2m > [22man Arsenal season names Premier League clubs and nobody from abroad [33m 318[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m      Tests [22m [1m[32m69 passed[39m[22m[90m (69)[39m
+[2m   Start at [22m 18:01:07
+[2m   Duration [22m 7.86s[2m (transform 5.33s, setup 569ms, collect 7.63s, tests 2.29s, environment 3.33s, prepare 772ms)[22m
+

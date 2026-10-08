@@ -1,0 +1,266 @@
+
+1. FRESH: the committed pool equals a fresh derive from Club Manager
+  FAIL [1]: src/data/soccerCareerClubPool.ts is stale: rerun node scripts/genCareerClubPool.mjs
+  first difference at line 295
+    derived:   "Championship": [["West Ham"], ["Wolves"], ["Burnley"], ["Southampton"], ["Middlesbrough"], ["Sheffield United"], ["Swansea City"], ["Birmingham City"], ["Norwich City"], ["Stoke City"], ["Watford"], ["Wrexham"], ["Derby County"], ["QPR"], ["West Brom"], ["Bristol City"], ["Millwall"], ["Preston North End"], ["Charlton Athletic"], ["Blackburn Rovers"], ["Portsmouth"], ["Cardiff City"], ["Bolton Wanderers"], ["Lincoln City"]],
+    on disk:   "Championship": [["West Ham"], ["Wolves"], ["Burnley"], ["Southampton"], ["Middlesbrough"], ["Sheffield United"], ["Swansea City"], ["Birmingham City"], ["Norwich City"], ["Stoke City"], ["Watford"], ["Wrexham"], ["Derby County"], ["QPR"], ["West Brom"], ["Bristol City"], ["Millwall"], ["Preston North End"], ["Charlton Athletic"], ["Blackburn Rovers", "Bolton Wanderers", "Cardiff City", "Lincoln City", "Portsmouth"]],
+
+2. MEMBERSHIP: each label carries Club Manager's lineup in the 2026 view
+  22 labels, each carrying Club Manager's lineup and the facts file's members in the 2026 view: Premier League 20, Championship 24, La Liga 20, Brasileirao 20, Serie A 20, Bundesliga 18, Ligue 1 18, Eredivisie 18, Saudi Pro League 18, MLS 30, Primeira Liga 18, Scottish Premiership 12, Super Lig 18, 2. Bundesliga 18, Belgian Pro League 18, Austrian Bundesliga 12, Super League Greece 14, Danish Superliga 12, Swiss Super League 12, HNL 10, Liga MX 18, A-League 12
+  FAIL [2]: Club Manager league russia has no POOL_LEAGUE_ROWS row: give it one (and a leagueWorld row), or hold it with a reason
+  held, none of their clubs generated: Serie B, Ligue 2, Segunda Division
+  a two league fixture (a top flight with a hand club and two thin squads, a second flight) derives rows and ladders from its table rows alone; with no rankable it ranks nobody
+
+3. IDENTITY: names, ids, careerEras strings, colours, countries, labels
+  95 careerEras contender names, 91 of them in the pool, all byte identical
+  540 colours checked (derived and bundled rows), none is the fallback grey
+  1 colour(s) supplied where Club Manager is grey (Macarthur FC), each in the facts file
+  270 generated countries checked, 5 of them not their league's (Cardiff City Wales, Swansea City Wales, Wrexham Wales, CF Montreal Canada, Vaduz Liechtenstein)
+  since: 50 shipped clubs in every list 1980 to 2060, 216 held out of every list before 2026, 0 from a two sourced first season, 4 under a typed row (Red Bull Bragantino 2020, New York City FC 2015, Austin FC 2021, Charlotte FC 2022)
+
+4. TIERS: the rule worked again, hand rows frozen, Forest across eras
+  22 leagues re-derived club by club, 34 generated clubs above tier 4 (POOL_TABLE=1 prints every club with its XI and tier)
+  Forest XI 83.8 vs Aston Villa (t3) 83.7: margin 0.1. At or below 0 Forest drops to tier 3 on the next regenerate.
+  HAND_CLUBS 190 rows, fingerprint e12e673153af2568; Forest t2, t4 in 1993, 1997 and 1999 to 2021, checked every season 1988 to 2060
+
+4L. LADDER: thin squads share one unranked group a tier, ranked clubs stand alone by XI
+  FAIL [4L]: Championship: its ladder is not the rule's
+    first difference at group 20: the ladder has ["Blackburn Rovers"], the rule gives ["Blackburn Rovers","Bolton Wanderers","Cardiff City","Lincoln City","Portsmouth"]
+  FAIL [4L]: Championship: Blackburn Rovers is a thin squad ranked on its own, with 4 more thin squads in tier 4
+  FAIL [4L]: Championship: Portsmouth is a thin squad ranked on its own, with 4 more thin squads in tier 4
+  FAIL [4L]: Championship: Cardiff City is a thin squad ranked on its own, with 4 more thin squads in tier 4
+  FAIL [4L]: Championship: Bolton Wanderers is a thin squad ranked on its own, with 4 more thin squads in tier 4
+  FAIL [4L]: Championship: Lincoln City is a thin squad ranked on its own, with 4 more thin squads in tier 4
+  FAIL [4L]: Brasileirao: its ladder is not the rule's
+    first difference at group 17: the ladder has ["Coritiba"], the rule gives ["Chapecoense","Coritiba","Mirassol","Remo"]
+  FAIL [4L]: Brasileirao: Coritiba is a thin squad ranked on its own, with 3 more thin squads in tier 4
+  FAIL [4L]: Brasileirao: Mirassol is a thin squad ranked on its own, with 3 more thin squads in tier 4
+  FAIL [4L]: Brasileirao: Remo is a thin squad ranked on its own, with 3 more thin squads in tier 4
+  FAIL [4L]: Brasileirao: Chapecoense is a thin squad ranked on its own, with 3 more thin squads in tier 4
+  FAIL [4L]: Ligue 1: its ladder is not the rule's
+    first difference at group 17: the ladder has ["Troyes"], the rule gives ["Le Mans","Troyes"]
+  FAIL [4L]: Ligue 1: Troyes is a thin squad ranked on its own, with 1 more thin squads in tier 4
+  FAIL [4L]: Ligue 1: Le Mans is a thin squad ranked on its own, with 1 more thin squads in tier 4
+  FAIL [4L]: Eredivisie: its ladder is not the rule's
+    first difference at group 8: the ladder has ["NEC Nijmegen"], the rule gives ["ADO Den Haag","Cambuur","Excelsior","Fortuna Sittard","Go Ahead Eagles","Groningen","NEC Nijmegen","PEC Zwolle","Sparta Rotterdam","Telstar","Willem II"]
+  FAIL [4L]: Eredivisie: NEC Nijmegen is a thin squad ranked on its own, with 10 more thin squads in tier 4
+  FAIL [4L]: Eredivisie: Groningen is a thin squad ranked on its own, with 10 more thin squads in tier 4
+  FAIL [4L]: Eredivisie: Sparta Rotterdam is a thin squad ranked on its own, with 10 more thin squads in tier 4
+  FAIL [4L]: Eredivisie: PEC Zwolle is a thin squad ranked on its own, with 10 more thin squads in tier 4
+  FAIL [4L]: Eredivisie: ADO Den Haag is a thin squad ranked on its own, with 10 more thin squads in tier 4
+  FAIL [4L]: Eredivisie: Cambuur is a thin squad ranked on its own, with 10 more thin squads in tier 4
+  FAIL [4L]: Eredivisie: Go Ahead Eagles is a thin squad ranked on its own, with 10 more thin squads in tier 4
+  FAIL [4L]: Eredivisie: Fortuna Sittard is a thin squad ranked on its own, with 10 more thin squads in tier 4
+  FAIL [4L]: Eredivisie: Telstar is a thin squad ranked on its own, with 10 more thin squads in tier 4
+  FAIL [4L]: Eredivisie: Willem II is a thin squad ranked on its own, with 10 more thin squads in tier 4
+  FAIL [4L]: Eredivisie: Excelsior is a thin squad ranked on its own, with 10 more thin squads in tier 4
+  FAIL [4L]: Saudi Pro League: its ladder is not the rule's
+    first difference at group 8: the ladder has ["Al Ettifaq"], the rule gives ["Abha","Al Diriyah","Al Ettifaq","Al Faisaly","Al Fateh","Al Fayha","Al Hazem","Al Khaleej","Al Kholood","Al Riyadh","Al Taawoun"]
+  FAIL [4L]: Saudi Pro League: Al Ettifaq is a thin squad ranked on its own, with 10 more thin squads in tier 4
+  FAIL [4L]: Saudi Pro League: Al Faisaly is a thin squad ranked on its own, with 10 more thin squads in tier 4
+  FAIL [4L]: Saudi Pro League: Al Khaleej is a thin squad ranked on its own, with 10 more thin squads in tier 4
+  FAIL [4L]: Saudi Pro League: Al Taawoun is a thin squad ranked on its own, with 10 more thin squads in tier 4
+  FAIL [4L]: Saudi Pro League: Al Kholood is a thin squad ranked on its own, with 10 more thin squads in tier 4
+  FAIL [4L]: Saudi Pro League: Al Diriyah is a thin squad ranked on its own, with 10 more thin squads in tier 4
+  FAIL [4L]: Saudi Pro League: Al Fateh is a thin squad ranked on its own, with 10 more thin squads in tier 4
+  FAIL [4L]: Saudi Pro League: Abha is a thin squad ranked on its own, with 10 more thin squads in tier 4
+  FAIL [4L]: Saudi Pro League: Al Fayha is a thin squad ranked on its own, with 10 more thin squads in tier 4
+  FAIL [4L]: Saudi Pro League: Al Hazem is a thin squad ranked on its own, with 10 more thin squads in tier 4
+  FAIL [4L]: Saudi Pro League: Al Riyadh is a thin squad ranked on its own, with 10 more thin squads in tier 4
+  FAIL [4L]: MLS: its ladder is not the rule's
+    first difference at group 20: the ladder has ["Nashville SC"], the rule gives ["San Diego FC"]
+  FAIL [4L]: MLS: Nashville SC is a thin squad ranked on its own, with 7 more thin squads in tier 4
+  FAIL [4L]: MLS: FC Cincinnati is a thin squad ranked on its own, with 7 more thin squads in tier 4
+  FAIL [4L]: MLS: CF Montreal is a thin squad ranked on its own, with 7 more thin squads in tier 4
+  FAIL [4L]: MLS: San Jose Earthquakes is a thin squad ranked on its own, with 7 more thin squads in tier 4
+  FAIL [4L]: MLS: FC Dallas is a thin squad ranked on its own, with 7 more thin squads in tier 4
+  FAIL [4L]: MLS: DC United is a thin squad ranked on its own, with 7 more thin squads in tier 4
+  FAIL [4L]: MLS: Real Salt Lake is a thin squad ranked on its own, with 7 more thin squads in tier 4
+  FAIL [4L]: MLS: Sporting Kansas City is a thin squad ranked on its own, with 7 more thin squads in tier 4
+  FAIL [4L]: Primeira Liga: its ladder is not the rule's
+    first difference at group 9: the ladder has ["Gil Vicente"], the rule gives ["Academico de Viseu","Alverca","Arouca","CD Nacional","Casa Pia","Estrela Amadora","Gil Vicente","Maritimo","Moreirense","Santa Clara"]
+  FAIL [4L]: Primeira Liga: Gil Vicente is a thin squad ranked on its own, with 9 more thin squads in tier 4
+  FAIL [4L]: Primeira Liga: Santa Clara is a thin squad ranked on its own, with 9 more thin squads in tier 4
+  FAIL [4L]: Primeira Liga: Moreirense is a thin squad ranked on its own, with 9 more thin squads in tier 4
+  FAIL [4L]: Primeira Liga: Alverca is a thin squad ranked on its own, with 9 more thin squads in tier 4
+  FAIL [4L]: Primeira Liga: Casa Pia is a thin squad ranked on its own, with 9 more thin squads in tier 4
+  FAIL [4L]: Primeira Liga: Maritimo is a thin squad ranked on its own, with 9 more thin squads in tier 4
+  FAIL [4L]: Primeira Liga: Estrela Amadora is a thin squad ranked on its own, with 9 more thin squads in tier 4
+  FAIL [4L]: Primeira Liga: Academico de Viseu is a thin squad ranked on its own, with 9 more thin squads in tier 4
+  FAIL [4L]: Primeira Liga: Arouca is a thin squad ranked on its own, with 9 more thin squads in tier 4
+  FAIL [4L]: Primeira Liga: CD Nacional is a thin squad ranked on its own, with 9 more thin squads in tier 4
+  FAIL [4L]: Scottish Premiership: its ladder is not the rule's
+    first difference at group 3: the ladder has ["St Mirren"], the rule gives ["Aberdeen","Dundee","Dundee United","Falkirk","Hearts","Hibernian","Kilmarnock","Motherwell","St Johnstone","St Mirren"]
+  FAIL [4L]: Scottish Premiership: St Mirren is a thin squad ranked on its own, with 9 more thin squads in tier 4
+  FAIL [4L]: Scottish Premiership: Hibernian is a thin squad ranked on its own, with 9 more thin squads in tier 4
+  FAIL [4L]: Scottish Premiership: Aberdeen is a thin squad ranked on its own, with 9 more thin squads in tier 4
+  FAIL [4L]: Scottish Premiership: Hearts is a thin squad ranked on its own, with 9 more thin squads in tier 4
+  FAIL [4L]: Scottish Premiership: Motherwell is a thin squad ranked on its own, with 9 more thin squads in tier 4
+  FAIL [4L]: Scottish Premiership: Kilmarnock is a thin squad ranked on its own, with 9 more thin squads in tier 4
+  FAIL [4L]: Scottish Premiership: Dundee United is a thin squad ranked on its own, with 9 more thin squads in tier 4
+  FAIL [4L]: Scottish Premiership: Falkirk is a thin squad ranked on its own, with 9 more thin squads in tier 4
+  FAIL [4L]: Scottish Premiership: St Johnstone is a thin squad ranked on its own, with 9 more thin squads in tier 4
+  FAIL [4L]: Scottish Premiership: Dundee is a thin squad ranked on its own, with 9 more thin squads in tier 4
+  FAIL [4L]: Super Lig: its ladder is not the rule's
+    first difference at group 10: the ladder has ["Konyaspor"], the rule gives ["Amedspor","Corum FK","Erzurumspor","Eyupspor","Gaziantep FK","Genclerbirligi","Kasimpasa","Kocaelispor","Konyaspor"]
+  FAIL [4L]: Super Lig: Konyaspor is a thin squad ranked on its own, with 8 more thin squads in tier 4
+  FAIL [4L]: Super Lig: Gaziantep FK is a thin squad ranked on its own, with 8 more thin squads in tier 4
+  FAIL [4L]: Super Lig: Kasimpasa is a thin squad ranked on its own, with 8 more thin squads in tier 4
+  FAIL [4L]: Super Lig: Amedspor is a thin squad ranked on its own, with 8 more thin squads in tier 4
+  FAIL [4L]: Super Lig: Genclerbirligi is a thin squad ranked on its own, with 8 more thin squads in tier 4
+  FAIL [4L]: Super Lig: Corum FK is a thin squad ranked on its own, with 8 more thin squads in tier 4
+  FAIL [4L]: Super Lig: Kocaelispor is a thin squad ranked on its own, with 8 more thin squads in tier 4
+  FAIL [4L]: Super Lig: Eyupspor is a thin squad ranked on its own, with 8 more thin squads in tier 4
+  FAIL [4L]: Super Lig: Erzurumspor is a thin squad ranked on its own, with 8 more thin squads in tier 4
+  FAIL [4L]: 2. Bundesliga: its ladder is not the rule's
+    first difference at group 6: the ladder has ["Kaiserslautern"], the rule gives ["Arminia Bielefeld","Bochum","Braunschweig","Darmstadt","Dynamo Dresden","Energie Cottbus","Greuther Furth","Hannover 96","Hertha Berlin","Kaiserslautern","Karlsruhe","Magdeburg","Osnabruck"]
+  FAIL [4L]: 2. Bundesliga: Kaiserslautern is a thin squad ranked on its own, with 12 more thin squads in tier 4
+  FAIL [4L]: 2. Bundesliga: Magdeburg is a thin squad ranked on its own, with 12 more thin squads in tier 4
+  FAIL [4L]: 2. Bundesliga: Hertha Berlin is a thin squad ranked on its own, with 12 more thin squads in tier 4
+  FAIL [4L]: 2. Bundesliga: Hannover 96 is a thin squad ranked on its own, with 12 more thin squads in tier 4
+  FAIL [4L]: 2. Bundesliga: Darmstadt is a thin squad ranked on its own, with 12 more thin squads in tier 4
+  FAIL [4L]: 2. Bundesliga: Karlsruhe is a thin squad ranked on its own, with 12 more thin squads in tier 4
+  FAIL [4L]: 2. Bundesliga: Bochum is a thin squad ranked on its own, with 12 more thin squads in tier 4
+  FAIL [4L]: 2. Bundesliga: Greuther Furth is a thin squad ranked on its own, with 12 more thin squads in tier 4
+  FAIL [4L]: 2. Bundesliga: Energie Cottbus is a thin squad ranked on its own, with 12 more thin squads in tier 4
+  FAIL [4L]: 2. Bundesliga: Osnabruck is a thin squad ranked on its own, with 12 more thin squads in tier 4
+  FAIL [4L]: 2. Bundesliga: Arminia Bielefeld is a thin squad ranked on its own, with 12 more thin squads in tier 4
+  FAIL [4L]: 2. Bundesliga: Braunschweig is a thin squad ranked on its own, with 12 more thin squads in tier 4
+  FAIL [4L]: 2. Bundesliga: Dynamo Dresden is a thin squad ranked on its own, with 12 more thin squads in tier 4
+  FAIL [4L]: Belgian Pro League: its ladder is not the rule's
+    first difference at group 11: the ladder has ["Standard Liege"], the rule gives ["Beveren","Charleroi","Kortrijk","La Louviere","Lommel","OH Leuven","Standard Liege","Zulte Waregem"]
+  FAIL [4L]: Belgian Pro League: Standard Liege is a thin squad ranked on its own, with 7 more thin squads in tier 4
+  FAIL [4L]: Belgian Pro League: Charleroi is a thin squad ranked on its own, with 7 more thin squads in tier 4
+  FAIL [4L]: Belgian Pro League: La Louviere is a thin squad ranked on its own, with 7 more thin squads in tier 4
+  FAIL [4L]: Belgian Pro League: OH Leuven is a thin squad ranked on its own, with 7 more thin squads in tier 4
+  FAIL [4L]: Belgian Pro League: Zulte Waregem is a thin squad ranked on its own, with 7 more thin squads in tier 4
+  FAIL [4L]: Belgian Pro League: Kortrijk is a thin squad ranked on its own, with 7 more thin squads in tier 4
+  FAIL [4L]: Belgian Pro League: Lommel is a thin squad ranked on its own, with 7 more thin squads in tier 4
+  FAIL [4L]: Belgian Pro League: Beveren is a thin squad ranked on its own, with 7 more thin squads in tier 4
+  FAIL [4L]: Austrian Bundesliga: its ladder is not the rule's
+    first difference at group 4: the ladder has ["LASK"], the rule gives ["Altach","Austria Lustenau","Austria Wien","Grazer AK","Hartberg","LASK","Ried","WSG Tirol","Wolfsberger AC"]
+  FAIL [4L]: Austrian Bundesliga: LASK is a thin squad ranked on its own, with 8 more thin squads in tier 4
+  FAIL [4L]: Austrian Bundesliga: Altach is a thin squad ranked on its own, with 8 more thin squads in tier 4
+  FAIL [4L]: Austrian Bundesliga: Austria Wien is a thin squad ranked on its own, with 8 more thin squads in tier 4
+  FAIL [4L]: Austrian Bundesliga: Hartberg is a thin squad ranked on its own, with 8 more thin squads in tier 4
+  FAIL [4L]: Austrian Bundesliga: Wolfsberger AC is a thin squad ranked on its own, with 8 more thin squads in tier 4
+  FAIL [4L]: Austrian Bundesliga: Ried is a thin squad ranked on its own, with 8 more thin squads in tier 4
+  FAIL [4L]: Austrian Bundesliga: Austria Lustenau is a thin squad ranked on its own, with 8 more thin squads in tier 4
+  FAIL [4L]: Austrian Bundesliga: Grazer AK is a thin squad ranked on its own, with 8 more thin squads in tier 4
+  FAIL [4L]: Austrian Bundesliga: WSG Tirol is a thin squad ranked on its own, with 8 more thin squads in tier 4
+  FAIL [4L]: Super League Greece: its ladder is not the rule's
+    first difference at group 5: the ladder has ["Aris"], the rule gives ["Aris","Asteras Tripolis","Atromitos","Iraklis","Kalamata","Kifisia","Levadiakos","OFI","Panetolikos","Volos"]
+  FAIL [4L]: Super League Greece: Aris is a thin squad ranked on its own, with 9 more thin squads in tier 4
+  FAIL [4L]: Super League Greece: Asteras Tripolis is a thin squad ranked on its own, with 9 more thin squads in tier 4
+  FAIL [4L]: Super League Greece: Atromitos is a thin squad ranked on its own, with 9 more thin squads in tier 4
+  FAIL [4L]: Super League Greece: Kifisia is a thin squad ranked on its own, with 9 more thin squads in tier 4
+  FAIL [4L]: Super League Greece: Volos is a thin squad ranked on its own, with 9 more thin squads in tier 4
+  FAIL [4L]: Super League Greece: OFI is a thin squad ranked on its own, with 9 more thin squads in tier 4
+  FAIL [4L]: Super League Greece: Iraklis is a thin squad ranked on its own, with 9 more thin squads in tier 4
+  FAIL [4L]: Super League Greece: Kalamata is a thin squad ranked on its own, with 9 more thin squads in tier 4
+  FAIL [4L]: Super League Greece: Levadiakos is a thin squad ranked on its own, with 9 more thin squads in tier 4
+  FAIL [4L]: Super League Greece: Panetolikos is a thin squad ranked on its own, with 9 more thin squads in tier 4
+  FAIL [4L]: Danish Superliga: its ladder is not the rule's
+    first difference at group 5: the ladder has ["AGF"], the rule gives ["AC Horsens","AGF","Lyngby","OB","Randers FC","Silkeborg IF","SonderjyskE","Viborg FF"]
+  FAIL [4L]: Danish Superliga: AGF is a thin squad ranked on its own, with 7 more thin squads in tier 4
+  FAIL [4L]: Danish Superliga: Viborg FF is a thin squad ranked on its own, with 7 more thin squads in tier 4
+  FAIL [4L]: Danish Superliga: SonderjyskE is a thin squad ranked on its own, with 7 more thin squads in tier 4
+  FAIL [4L]: Danish Superliga: Randers FC is a thin squad ranked on its own, with 7 more thin squads in tier 4
+  FAIL [4L]: Danish Superliga: Lyngby is a thin squad ranked on its own, with 7 more thin squads in tier 4
+  FAIL [4L]: Danish Superliga: AC Horsens is a thin squad ranked on its own, with 7 more thin squads in tier 4
+  FAIL [4L]: Danish Superliga: Silkeborg IF is a thin squad ranked on its own, with 7 more thin squads in tier 4
+  FAIL [4L]: Danish Superliga: OB is a thin squad ranked on its own, with 7 more thin squads in tier 4
+  FAIL [4L]: Swiss Super League: its ladder is not the rule's
+    first difference at group 3: the ladder has ["Lugano"], the rule gives ["FC Zurich","Grasshopper","Lausanne-Sport","Lugano","Luzern","Servette","Sion","St. Gallen","Thun","Vaduz"]
+  FAIL [4L]: Swiss Super League: Lugano is a thin squad ranked on its own, with 9 more thin squads in tier 4
+  FAIL [4L]: Swiss Super League: Lausanne-Sport is a thin squad ranked on its own, with 9 more thin squads in tier 4
+  FAIL [4L]: Swiss Super League: St. Gallen is a thin squad ranked on its own, with 9 more thin squads in tier 4
+  FAIL [4L]: Swiss Super League: Luzern is a thin squad ranked on its own, with 9 more thin squads in tier 4
+  FAIL [4L]: Swiss Super League: Servette is a thin squad ranked on its own, with 9 more thin squads in tier 4
+  FAIL [4L]: Swiss Super League: Sion is a thin squad ranked on its own, with 9 more thin squads in tier 4
+  FAIL [4L]: Swiss Super League: Grasshopper is a thin squad ranked on its own, with 9 more thin squads in tier 4
+  FAIL [4L]: Swiss Super League: FC Zurich is a thin squad ranked on its own, with 9 more thin squads in tier 4
+  FAIL [4L]: Swiss Super League: Thun is a thin squad ranked on its own, with 9 more thin squads in tier 4
+  FAIL [4L]: Swiss Super League: Vaduz is a thin squad ranked on its own, with 9 more thin squads in tier 4
+  FAIL [4L]: HNL: its ladder is not the rule's
+    first difference at group 3: the ladder has ["Varazdin"], the rule gives ["Gorica","Istra 1961","Lokomotiva Zagreb","Osijek","Rijeka","Rudes","Slaven Belupo","Varazdin"]
+  FAIL [4L]: HNL: Varazdin is a thin squad ranked on its own, with 7 more thin squads in tier 4
+  FAIL [4L]: HNL: Rijeka is a thin squad ranked on its own, with 7 more thin squads in tier 4
+  FAIL [4L]: HNL: Istra 1961 is a thin squad ranked on its own, with 7 more thin squads in tier 4
+  FAIL [4L]: HNL: Lokomotiva Zagreb is a thin squad ranked on its own, with 7 more thin squads in tier 4
+  FAIL [4L]: HNL: Gorica is a thin squad ranked on its own, with 7 more thin squads in tier 4
+  FAIL [4L]: HNL: Osijek is a thin squad ranked on its own, with 7 more thin squads in tier 4
+  FAIL [4L]: HNL: Slaven Belupo is a thin squad ranked on its own, with 7 more thin squads in tier 4
+  FAIL [4L]: HNL: Rudes is a thin squad ranked on its own, with 7 more thin squads in tier 4
+  FAIL [4L]: Liga MX: its ladder is not the rule's
+    first difference at group 13: the ladder has ["Atlas"], the rule gives ["Atlante","Atlas","Puebla","Queretaro","Santos Laguna","Tijuana"]
+  FAIL [4L]: Liga MX: Atlas is a thin squad ranked on its own, with 5 more thin squads in tier 4
+  FAIL [4L]: Liga MX: Tijuana is a thin squad ranked on its own, with 5 more thin squads in tier 4
+  FAIL [4L]: Liga MX: Santos Laguna is a thin squad ranked on its own, with 5 more thin squads in tier 4
+  FAIL [4L]: Liga MX: Queretaro is a thin squad ranked on its own, with 5 more thin squads in tier 4
+  FAIL [4L]: Liga MX: Puebla is a thin squad ranked on its own, with 5 more thin squads in tier 4
+  FAIL [4L]: Liga MX: Atlante is a thin squad ranked on its own, with 5 more thin squads in tier 4
+  22 ladders equal the rule worked from Club Manager's data: 236 clubs ranked on their own, 144 thin squads in 19 shared groups
+  ranked clubs a league: Premier League 20 of 20, Championship 19 of 24, La Liga 19 of 20, Brasileirao 16 of 20, Serie A 20 of 20, Bundesliga 18 of 18, Ligue 1 16 of 18, Eredivisie 7 of 18, Saudi Pro League 7 of 18, MLS 21 of 30, Primeira Liga 8 of 18, Scottish Premiership 2 of 12, Super Lig 9 of 18, 2. Bundesliga 5 of 18, Belgian Pro League 10 of 18, Austrian Bundesliga 3 of 12, Super League Greece 4 of 14, Danish Superliga 4 of 12, Swiss Super League 2 of 12, HNL 2 of 10, Liga MX 12 of 18, A-League 12 of 12
+
+5. WEIGHTS: exact odds from leagueDrawGroups, as rationals
+  HAND_CLUBS tier 1: 18 clubs, 9 league groups (largest 5), every club exactly 1/18; the sampler matched it on a 192 draw grid
+  HAND_CLUBS tier 2: 36 clubs, 19 league groups (largest 3), every club exactly 1/36; the sampler matched it on a 320 draw grid
+  HAND_CLUBS tier 3: 49 clubs, 33 league groups (largest 3), every club exactly 1/49; the sampler matched it on a 340 draw grid
+  HAND_CLUBS tier 4: 87 clubs, 70 league groups (largest 3), every club exactly 1/87; the sampler matched it on a 508 draw grid
+  HAND_CLUBS tier 1+2: 54 clubs, 28 league groups (largest 5), every club exactly 1/54; the sampler matched it on a 512 draw grid
+  HAND_CLUBS tier 2+3: 85 clubs, 52 league groups (largest 3), every club exactly 1/85; the sampler matched it on a 660 draw grid
+  HAND_CLUBS tier 3+4: 136 clubs, 103 league groups (largest 3), every club exactly 1/136; the sampler matched it on a 848 draw grid
+  HAND_CLUBS by season 1980 to 2060: 81 seasons every club exactly 1/n; Premier League tier 3 over the cap in 0 seasons, as pinned
+  pickAcrossLeagues over tier 4: 76 league groups, both Math.random calls on a 5548 draw grid, every club drawn exactly weight/167 x 1/size
+  full pool tier 4: four leagues 20/167 capped; a plain pick would give them 57/323
+  hand tier 4 clubs before: each 1/87; now 1/167 outside the four leagues, Norwich 5/3674, Brentford 5/1336, Betis 5/2171, Cruzeiro 5/2338
+
+6. OFFERS: 6 seeds x 48 careers from 2020 through the real loop
+  seed 65850: 1191 draws (four leagues 285 vs 307.6), 342 where the cap bites (four leagues 47 vs 49.7, ratio 0.946, z -0.42); 1235 offers; distinct generated clubs offered: Premier League 7, Championship 6, La Liga 3, Brasileirao 7; uncovered 0
+    9 careers started at a worldwide academy fallback, uncovered 0
+  seed 73769: 1189 draws (four leagues 272 vs 276.0), 422 where the cap bites (four leagues 45 vs 60.4, ratio 0.745, z -2.15); 1235 offers; distinct generated clubs offered: Premier League 3, Championship 7, La Liga 3, Brasileirao 6; uncovered 0
+    9 careers started at a worldwide academy fallback, uncovered 0
+  seed 81688: 1192 draws (four leagues 293 vs 296.6), 379 where the cap bites (four leagues 51 vs 55.0, ratio 0.928, z -0.58); 1237 offers; distinct generated clubs offered: Premier League 4, Championship 8, La Liga 6, Brasileirao 4; uncovered 0
+    9 careers started at a worldwide academy fallback, uncovered 0
+  seed 89607: 1183 draws (four leagues 283 vs 285.8), 405 where the cap bites (four leagues 48 vs 58.6, ratio 0.820, z -1.50); 1228 offers; distinct generated clubs offered: Premier League 4, Championship 10, La Liga 5, Brasileirao 5; uncovered 0
+    9 careers started at a worldwide academy fallback, uncovered 0
+  seed 97526: 1096 draws (four leagues 265 vs 266.7), 358 where the cap bites (four leagues 50 vs 52.7, ratio 0.948, z -0.41); 1141 offers; distinct generated clubs offered: Premier League 7, Championship 7, La Liga 6, Brasileirao 4; uncovered 0
+    9 careers started at a worldwide academy fallback, uncovered 0
+  seed 105445: 1154 draws (four leagues 292 vs 286.8), 378 where the cap bites (four leagues 59 vs 54.7, ratio 1.079, z 0.63); 1204 offers; distinct generated clubs offered: Premier League 4, Championship 11, La Liga 6, Brasileirao 3; uncovered 0
+    9 careers started at a worldwide academy fallback, uncovered 0
+  over all 6 seeds, where the cap bites: four leagues won 300 against 331.1 expected (ratio 0.906, z -1.85)
+  Premier League: 4.83 distinct generated clubs offered per seed over 6 seeds (floor 2)
+  Championship: 8.17 distinct generated clubs offered per seed over 6 seeds (floor 4)
+  La Liga: 4.83 distinct generated clubs offered per seed over 6 seeds (floor 2.5)
+  Brasileirao: 4.83 distinct generated clubs offered per seed over 6 seeds (floor 2)
+  ratio range 0.745 to 1.079; per league minimum distinct generated clubs: Premier League 3, Championship 6, La Liga 3, Brasileirao 3; 7 s
+  (printed, not gated) market offers from the four leagues 1678/6951; rivals 91/286
+  (printed, not gated) manager and owner clubs are a plain pick over tier 3 and 4: four leagues 66/403 (before this round 16/136)
+  (printed, not gated) a 1995 start: four leagues won 96 of 384 draws (87.3 expected); market offers 93/379; uncovered 0
+  academies, youths rated 40 to 54, 2020 pool:
+    before England: home list 10, tier 3 7/10 (70.0%), generated 0.0%; largest seed deviation 0.0143
+    before Spain: home list 5, tier 3 2/5 (40.0%), generated 0.0%; largest seed deviation 0.0190
+    before Brazil: home list 4, tier 3 2/4 (50.0%), generated 0.0%; largest seed deviation 0.0140
+    before Wales: no home club at tier 3 or 4
+    after  England: home list 35, tier 3 7/35 (20.0%), generated 71.4%; largest seed deviation 0.0230
+    after  Spain: home list 16, tier 3 2/16 (12.5%), generated 68.8%; largest seed deviation 0.0185
+    after  Brazil: home list 16, tier 3 2/16 (12.5%), generated 75.0%; largest seed deviation 0.0160
+    after  Wales: home list 3, tier 3 0/3 (0.0%), generated 100.0%; largest seed deviation 0.0000
+  worldwide academy fallbacks (exact grid):
+    Nigeria 70 on the 2020 pool: 50 candidates, 488 grid draws; four leagues 15/50 capped, 15/50 by a plain pick
+    Nigeria 60 on the 2020 pool: 82 candidates, 688 grid draws; four leagues 17/82 capped, 17/82 by a plain pick
+    Montenegro 47 on the 2020 pool: 191 candidates, 2052 grid draws; four leagues 31/153 capped, 69/191 by a plain pick
+    Montenegro 30 on the 2020 pool: 141 candidates, 1660 grid draws; four leagues 20/103 capped, 58/141 by a plain pick
+    Montenegro 80 on a pool with no elite club: 12 candidates, 104 grid draws; four leagues 5/12 capped, 5/12 by a plain pick
+    Montenegro 30 on a pool with no tier 4 club: 50 candidates, 392 grid draws; four leagues 11/50 capped, 11/50 by a plain pick
+
+7. OLD SAVES: careers signed on the pre-round pool load and play on
+  West Ham: 3 seasons on the new pool, still West Ham|Championship|3
+  Wolves: 3 seasons on the new pool, still Wolves|Championship|3
+  Girona: 3 seasons on the new pool, still Girona|Segunda Division|2
+  Norwich City: 3 seasons on the new pool, still Norwich City|Championship|4
+  Flamengo: 3 seasons on the new pool, still Flamengo|Brasileirao|1
+  Real Madrid: 3 seasons on the new pool, still Real Madrid|La Liga|1
+
+control allranked: section 4L went red as it must (red: 1, 2, 4L)
