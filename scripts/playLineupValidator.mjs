@@ -28,7 +28,7 @@
  *                 src/lib/validatorClient.ts) the validator never answers:
  *                 "took too long" on screen, the box enabled, nothing filled,
  *                 and the page itself gave up on the request.
- *   S6 our own record  on a club slot (the team is rerolled until the search
+ *   S6 our own record  on a club slot (the team is rerolled once, then until the search
  *                 carries a club filter) the row sits at the slot's club and
  *                 its position fits the slot: the slot is filled, under the
  *                 spelling the row stores, with ZERO requests to the validator.
@@ -288,7 +288,12 @@ async function ownRecord(browser, width, pageErrors) {
   const { context, page, stub } = await openGame(browser, width, pageErrors);
   stub.mode = 'exhausted'; // if the validator were asked, the pick could not land
   stub.atSlotClub = true;
-  let rerolls = 0;
+  /* The team is rerolled once before anything is typed, club or not, so the
+     reroll route (the button, the wheel, the slot, the box again) is walked on
+     every run and not only on the day a nation happens to be dealt first. */
+  await page.getByTitle('Reroll: get a different team').click();
+  await openSlot(page);
+  let rerolls = 1;
   for (;;) {
     const before = stub.searches;
     await page.locator(BOX).first().fill(PICK.text);
