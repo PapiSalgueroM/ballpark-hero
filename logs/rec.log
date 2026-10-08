@@ -1,0 +1,18 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/seasonCentreSlots.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 31[2mms[22m[39m
+
+[2m  Snapshots [22m [1m[32m4 written[39m[22m
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m   Start at [22m 11:56:22
+[2m   Duration [22m 1.51s[2m (transform 578ms, setup 55ms, collect 673ms, tests 31ms, environment 335ms, prepare 148ms)[22m
+
+total 48
+drwxr-xr-x 2 runner runner  4096 Oct  8 11:56 .
+drwxr-xr-x 4 runner runner  4096 Oct  8 11:56 ..
+-rw-r--r-- 1 runner runner 39442 Oct  8 11:56 seasonCentreSlots.test.tsx.snap

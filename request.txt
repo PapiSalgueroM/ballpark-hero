@@ -1,0 +1,1 @@
+rec: node_modules/.bin/vitest run src/test/seasonCentreSlots.test.tsx -u --testTimeout=300000 && cp src/test/__snapshots__/seasonCentreSlots.test.tsx.snap $RC_OUT/ && ls -la $RC_OUT
