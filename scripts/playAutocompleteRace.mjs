@@ -183,6 +183,11 @@ async function openPage(browser, width, spec, stub, pageErrors) {
     try {
       localStorage.setItem('cookie-consent', 'essential');
       localStorage.setItem('lineup-rules-seen', '1');
+      /* A first visit opens the rules in a dialog (RulesGate), and a dialog
+         traps focus. Focus leaving the box drops its list since Round 1138, so
+         with the dialog left open no list would ever show and the walk would
+         measure the dialog, not the race. The player has read the rules. */
+      localStorage.setItem(`rules-gate-seen:${location.pathname}`, '1');
     } catch { /* ignored */ }
   });
   const page = await context.newPage();
@@ -311,11 +316,28 @@ async function walk(distDir) {
         const stub = makeStub();
         const counts = { route: spec.route, width, taps: 0, staleVisible: 0, stalePicked: 0, otherOption: 0, positive: false, searches: 0 };
         const session = await openPage(browser, width, spec, stub, pageErrors);
-        await raceTrials(session, stub, rng, counts);
-        counts.positive = await positiveLeg(session, stub, width);
-        if (spec.route === TARGET_ROUTE && TARGET_TRIALS > 0) {
-          await session.load();
-          await targetTrials(session, stub, rng, target, TARGET_TRIALS);
+        try {
+          await raceTrials(session, stub, rng, counts);
+          counts.positive = await positiveLeg(session, stub, width);
+          if (spec.route === TARGET_ROUTE && TARGET_TRIALS > 0) {
+            await session.load();
+            await targetTrials(session, stub, rng, target, TARGET_TRIALS);
+          }
+        } catch (error) {
+          /* A step that never arrived is not a count. Say where the page was, then stop. */
+          const where = await session.page.evaluate(sel => {
+            const box = document.querySelector(sel);
+            const active = document.activeElement;
+            return {
+              box: box ? { value: box.value, disabled: box.disabled } : null,
+              focus: active ? `${active.tagName} ${active.getAttribute('aria-label') || active.getAttribute('role') || ''}`.trim() : null,
+              listbox: document.querySelector('[role="listbox"]')?.textContent?.slice(0, 200) ?? null,
+              dialogs: [...document.querySelectorAll('[role="dialog"]')].map(d => (d.textContent || '').slice(0, 80)),
+            };
+          }, BOX).catch(() => null);
+          console.error(`playAutocompleteRace: ${spec.route} at ${width} stopped after ${counts.taps} taps (${stub.searches} search requests, hold ${stub.held ? 'set' : 'off'}). The page: ${JSON.stringify(where)}`);
+          if (process.env.RC_OUT) await session.page.screenshot({ path: path.join(process.env.RC_OUT, `race-stopped-${spec.route.slice(1)}-${width}.png`) }).catch(() => {});
+          throw error;
         }
         counts.searches = stub.searches;
         await session.context.close();
