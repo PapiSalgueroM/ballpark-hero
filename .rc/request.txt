@@ -1,0 +1,14 @@
+#!serve
+#!playwright
+walk: CAREER_MOMENTS_SHOTS=$RC_OUT/builder node scripts/playCareerMoments.mjs
+rvwalk: git fetch -q origin release-al-int && mkdir -p .rvbase && git archive FETCH_HEAD | tar -x -C .rvbase && RV_BASE=.rvbase node .rc/x/rvwalk-full.mjs
+w-unbind-signing: PORT=4581 PLAY_CAREER_MOMENTS_CONTROL=unbind-signing node scripts/playCareerMoments.mjs
+w-unbind-trophy: PORT=4582 PLAY_CAREER_MOMENTS_CONTROL=unbind-trophy node scripts/playCareerMoments.mjs
+w-wrongfact: PORT=4583 PLAY_CAREER_MOMENTS_CONTROL=wrongfact node scripts/playCareerMoments.mjs
+w-vanish: PORT=4584 PLAY_CAREER_MOMENTS_CONTROL=vanish node scripts/playCareerMoments.mjs
+w-replayed: PORT=4585 PLAY_CAREER_MOMENTS_CONTROL=replayed node scripts/playCareerMoments.mjs
+w-savewrite: PORT=4586 PLAY_CAREER_MOMENTS_CONTROL=savewrite node scripts/playCareerMoments.mjs
+w-jump: PORT=4587 PLAY_CAREER_MOMENTS_CONTROL=jump node scripts/playCareerMoments.mjs
+w-noisy: PORT=4588 PLAY_CAREER_MOMENTS_CONTROL=noisy node scripts/playCareerMoments.mjs
+reduced: node scripts/playReducedMotion.mjs; echo "CLEAN_EXIT=$?"; REDUCED_MOTION_CONTROL=noguard node scripts/playReducedMotion.mjs; echo "NOGUARD_EXIT=$?"; REDUCED_MOTION_CONTROL=noblanket node scripts/playReducedMotion.mjs; echo "NOBLANKET_EXIT=$?"
+playSoccerCareer: node scripts/playSoccerCareer.mjs
