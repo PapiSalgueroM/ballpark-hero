@@ -22,12 +22,36 @@
         of the search box when checkingDown is set.
      4. THE NFL GRID IS NOT IN THIS. useFootballGrid.ts invokes no edge
         function at all (Round 406), so it needs none of the above.
+     5. BUILD YOUR XI BLOCKS THE ONE PICK AND KEEPS THE BOX (Round 1138).
+        Sections 2 and 3 are Soccer Grid's shape: say so, remember it for the
+        session, take the search box away. In Build Your XI that was wrong
+        twice over. One "allowance used up" answer took the box away for the
+        rest of the session, when a club pick from the list needs no
+        validator at all and the allowance can come back (a per minute limit
+        answers the same way), and the line said "Your lineup is saved" when
+        this game saves nothing. So useLineupBuilder.ts left section 2. What
+        this section holds on the hook: it asks through askValidator (the one
+        reader that fails closed, src/lib/validatorClient.ts), it still names
+        the allowance, it never sets checkingDown, it never says the lineup
+        is saved, and it still returns checkingDown (as a constant false)
+        because LineupBuilder.tsx reads it until the Build Your XI screens
+        pass deletes the page's dead branch; that is also why the page stays
+        in section 3. This file only fences the source. The behaviour (an
+        allowance answer, a failed status, a body that is not a verdict, a
+        timeout and a network error each leave one pick uncounted, with the
+        slot open and the box wanted) is proved by
+        scripts/simLineupValidatorClient.mjs.
 
    NEGATIVE CONTROLS (house rule: prove each check can fail):
-     SIM_QUOTA_CONTROL=blind   removes the second 429 branch from the soccer
-                               validator in memory; section 1 must go red.
-     SIM_QUOTA_CONTROL=mute    removes the exhausted branch from the soccer
-                               hook in memory; section 2 must go red.
+     SIM_QUOTA_CONTROL=blind    removes the second 429 branch from the soccer
+                                validator in memory; section 1 must go red.
+     SIM_QUOTA_CONTROL=lenient  removes the name guard from the soccer
+                                validator in memory; section 1 must go red.
+     SIM_QUOTA_CONTROL=mute     removes the exhausted branch from the soccer
+                                hook in memory; section 2 must go red.
+     SIM_QUOTA_CONTROL=wall     plants setCheckingDown(true) on the Build
+                                Your XI hook's unverified branch in memory
+                                (the wall coming back); section 5 must go red.
 
    Run: node scripts/simQuotaHonesty.mjs
 */
@@ -37,7 +61,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_QUOTA_CONTROL || '';
-const failures = { 1: 0, 2: 0, 3: 0, 4: 0 };
+const failures = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
 let section = 1;
 const fail = m => { failures[section] += 1; console.error('  FAIL: ' + m); };
 const abort = m => { console.error(m); process.exit(1); };
@@ -60,8 +84,12 @@ const VALIDATORS = [
    so it has no allowance to run out of (scripts/simCollegeGridPage.mjs fences
    that). Its validator stays in VALIDATORS while v16 is deployed as the
    rollback. */
-const HOOKS = ['src/hooks/useSoccerGrid.ts', 'src/hooks/useLineupBuilder.ts'];
+/* Round 1138: useLineupBuilder.ts left HOOKS for section 5 (see the header).
+   LineupBuilder.tsx stays in PAGES: it still carries both strings until the
+   Build Your XI screens pass deletes its dead allowance branch. */
+const HOOKS = ['src/hooks/useSoccerGrid.ts'];
 const PAGES = ['src/pages/SoccerGrid.tsx', 'src/pages/LineupBuilder.tsx'];
+const LINEUP_HOOK = 'src/hooks/useLineupBuilder.ts';
 
 section = 1;
 console.log('1) The validators say which: exhausted on a second 429, a blip otherwise');
@@ -153,12 +181,30 @@ console.log('4) The NFL grid is not in this: no edge function call at all');
   console.log('   useFootballGrid read');
 }
 
-const own = { blind: 1, lenient: 1, mute: 2 }[CONTROL];
-const total = failures[1] + failures[2] + failures[3] + failures[4];
+section = 5;
+console.log('5) Build Your XI: an allowance answer blocks only that pick');
+{
+  let code = stripComments(read(LINEUP_HOOK));
+  if (CONTROL === 'wall') {
+    const anchor = "else if (answer.why !== 'cancelled') setValidationError(unverifiedLine(answer));";
+    if (code.split(anchor).length - 1 !== 1) abort('control cannot run: the Build Your XI hook has no unverified branch to plant the wall on');
+    code = code.replace(anchor, "else if (answer.why !== 'cancelled') { setCheckingDown(true); setValidationError(unverifiedLine(answer)); }");
+    console.log('   NEGATIVE CONTROL ON: setCheckingDown(true) planted on the unverified branch of the Build Your XI hook, in memory');
+  }
+  if (!/\baskValidator\(/.test(code)) fail(`${LINEUP_HOOK}: the validator is not asked through askValidator, the one reader that fails closed`);
+  if (!/allowance for today/.test(code)) fail(`${LINEUP_HOOK}: the allowance line is missing`);
+  if (/setCheckingDown\(/.test(code)) fail(`${LINEUP_HOOK}: checkingDown is set again, so one allowance answer takes the search box away for the session`);
+  if (/lineup is saved/i.test(code)) fail(`${LINEUP_HOOK}: the hook says the lineup is saved, and this game saves nothing`);
+  if (!/\bcheckingDown: false,/.test(code.slice(code.lastIndexOf('return {')))) fail(`${LINEUP_HOOK}: checkingDown is not returned as a constant false, and the page still reads it`);
+  console.log('   useLineupBuilder read');
+}
+
+const own = { blind: 1, lenient: 1, mute: 2, wall: 5 }[CONTROL];
+const total = failures[1] + failures[2] + failures[3] + failures[4] + failures[5];
 if (CONTROL) {
-  if (!own) abort(`unknown control "${CONTROL}" (blind, lenient, mute)`);
+  if (!own) abort(`unknown control "${CONTROL}" (blind, lenient, mute, wall)`);
   if (failures[own] > 0) { console.log(`\ncontrol "${CONTROL}": ${failures[own]} failure(s) fired in section ${own} as expected, the check works`); process.exit(0); }
   abort(`\ncontrol "${CONTROL}": changed NOTHING in section ${own}, the check is dead`);
 }
 if (total > 0) { console.error(`\nsimQuotaHonesty: ${total} failure(s)`); process.exit(1); }
-console.log('\nsimQuotaHonesty: green. When the allowance is gone, Soccer Grid and Build Your XI say so and stop asking for retries.');
+console.log('\nsimQuotaHonesty: green. When the allowance is gone, Soccer Grid says so and stops asking for retries; Build Your XI blocks the one pick, keeps the search box and never says the lineup is saved.');
