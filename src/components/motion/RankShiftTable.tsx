@@ -31,8 +31,14 @@ const reducedNow = () => typeof window !== 'undefined' && typeof window.matchMed
 
 const rowsOf = (box: HTMLElement) => Array.from(box.querySelectorAll<HTMLElement>('[data-club]'));
 
+/** Every row back at rest, now. Taking the inline styles away is not enough: a transition already running to the
+ *  same end keeps running under the default `transition: all`, and a row measured then is measured in the air. So the
+ *  rows are told `transition: none`, the style is flushed (which ends anything flying), and only then is it cleared. */
 function rest(box: HTMLElement) {
-  for (const row of rowsOf(box)) { row.style.transition = ''; row.style.transform = ''; row.style.opacity = ''; }
+  const rows = rowsOf(box);
+  for (const row of rows) { row.style.transition = 'none'; row.style.transform = ''; row.style.opacity = ''; }
+  void box.offsetHeight;
+  for (const row of rows) row.style.transition = '';
   box.removeAttribute('data-rank-shifting');
 }
 

@@ -219,7 +219,7 @@ const LAYOUTS = [
 const STEPS = [1, 2, 3, 5, 10, 'rest'];
 /* set from the measured share (see the header); a placeholder until the first run */
 const B2_FLOOR = 0.5;
-const stat = { transitions: 0, maxFirst: 0, maxLast: 0, step1: 0, step1Moved: 0, rowsMoved: 0, mounts: 0, mountAnims: 0, pre: 0, preAnims: 0, entered: 0 };
+const stat = { transitions: 0, maxFirst: 0, maxLast: 0, step1: 0, step1Moved: 0, rowsMoved: 0, mounts: 0, mountAnims: 0, pre: 0, preAnims: 0, entered: 0, bySeason: SEASONS.map(() => [0, 0]) };
 const bad = { first: 0, text: 0, order: 0, last: 0, left: 0, box: 0 };
 
 /** One transition from table k to table k2 on a page already holding table k at rest. Returns what the first frame held. */
@@ -267,15 +267,15 @@ if (want('B1') || want('B2') || want('B3')) {
         stat.mounts += 1;
         if (mounted.anims > 0 || mounted.shifting || mounted.rows.some(r => r.style.trim() !== '')) { stat.mountAnims += 1; note('B3', `${L.id} ${S.tag}: mounting at matchday ${k} started ${mounted.anims} transitions`); }
         const first = await transition(page, L, si, k, k2, 'B1');
-        if (step === 1) { stat.step1 += 1; if (first.anims > 0) { stat.step1Moved += 1; stat.rowsMoved += first.anims; } }
+        if (step === 1) { stat.step1 += 1; stat.bySeason[si][0] += 1; if (first.anims > 0) { stat.step1Moved += 1; stat.bySeason[si][1] += 1; stat.rowsMoved += first.anims; } }
       }
       /* B2's sample: every one matchday step of the season, on one phone and one desktop layout */
       if (want('B2') && (L.id === '390 compact' || L.id === '1280 whole')) {
         await page.evaluate(([i, c]) => { __bare.mount(__S[i], 1, c); }, [si, L.compact]);
         for (let k = 1; k < S.M; k += 1) {
           const first = await transition(page, L, si, k, k + 1, 'B1');
-          stat.step1 += 1;
-          if (first.anims > 0) { stat.step1Moved += 1; stat.rowsMoved += first.anims; }
+          stat.step1 += 1; stat.bySeason[si][0] += 1;
+          if (first.anims > 0) { stat.step1Moved += 1; stat.bySeason[si][1] += 1; stat.rowsMoved += first.anims; }
         }
       }
       /* B3: from an order drawn with slide off (before a ball is kicked) to matchday 1 */
@@ -299,6 +299,7 @@ if (want('B1') || want('B2') || want('B3')) {
   }
   if (want('B2')) {
     const share = stat.step1 ? stat.step1Moved / stat.step1 : 0;
+    console.log(`B2) by season: ${stat.bySeason.map(([n, m], i) => `${SEASONS[i].tag} ${m} of ${n} (${(100 * m / Math.max(1, n)).toFixed(1)}%)`).join('; ')}`);
     check(stat.step1 >= 300 && share >= B2_FLOOR, `B2. one matchday steps in which a row carried a transform: ${stat.step1Moved} of ${stat.step1} (${(share * 100).toFixed(1)}%, floor ${(B2_FLOOR * 100).toFixed(0)}%), ${stat.rowsMoved} rows moved`);
   }
   if (want('B3')) {
