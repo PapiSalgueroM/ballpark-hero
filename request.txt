@@ -1,0 +1,5 @@
+#!serial
+#!playwright
+swap: for f in careerLeagueSeasons clubRivalries leagueFormat soccerCareerClubPool; do cp .rc/x/$f.ts src/data/$f.ts; done; for f in careerEras soccerCareerDerby soccerCareerLeague; do cp .rc/x/$f.ts src/lib/$f.ts; done; git status --short | grep -v "^??" | wc -l
+build-base: npm run build
+sweep-base: (node scripts/lib/hostLikeServer.mjs dist 4173 > /dev/null 2>&1 &); sleep 5; ENGINES=chromium BASE=http://localhost:4173 node scripts/sweepWeight.mjs
