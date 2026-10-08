@@ -199,17 +199,17 @@ createRoot(document.getElementById('root')).render(<Host/>);`;
     if(fixture.expected.note&&!controlProfiles.has(profile.width)) {
       controlProfiles.add(profile.width);
       for(const kind of ['wage','note-occlusion','amount-clipping']) {
-        const target=kind==='wage'?wage:kind==='note-occlusion'?dialog.getByText(fixture.expected.note,{exact:true}):total;
+        const target=await (kind==='wage'?wage:kind==='note-occlusion'?dialog.getByText(fixture.expected.note,{exact:true}):total).elementHandle(); assert(target,'Original fault target exists');
         const control={code:fixture.code,width:profile.width,kind,before:await measured(target,`control:${kind}:before`),stateBefore:await snap(),proved:false}; report.controls.push(control); persist();
         try {
-          await target.evaluate((el,kind)=>{window.__fault1090={el,html:el.innerHTML,style:el.getAttribute('style'),overlay:null}; if(kind==='wage')el.textContent='wage WRONG a week'; else if(kind==='amount-clipping')Object.assign(el.style,{width:'1px',overflow:'hidden'});else{const r=el.getBoundingClientRect();const overlay=document.createElement('div');Object.assign(overlay.style,{position:'fixed',left:r.x+'px',top:r.y+'px',width:r.width+'px',height:r.height+'px',background:'#000',zIndex:'2147483647'});document.body.append(overlay);window.__fault1090.overlay=overlay;}},kind);
+          await target.evaluate((el,kind)=>{window.__fault1090={el,children:Array.from(el.childNodes),style:el.getAttribute('style'),overlay:null}; if(kind==='wage')el.textContent='wage WRONG a week'; else if(kind==='amount-clipping')Object.assign(el.style,{width:'1px',overflow:'hidden'});else{const r=el.getBoundingClientRect();const overlay=document.createElement('div');Object.assign(overlay.style,{position:'fixed',left:r.x+'px',top:r.y+'px',width:r.width+'px',height:r.height+'px',background:'#000',zIndex:'2147483647'});document.body.append(overlay);window.__fault1090.overlay=overlay;}},kind);
           control.fault=await measured(target,`control:${kind}:fault`);control.stateFault=await snap();persist(); assert.notDeepEqual(control.fault,control.before,'Fault changes observed geometry/text/hit');
           for(const key of ['career','storage','session','writes','callbacks','rng','now','scrollY'])assert.deepEqual(control.stateFault[key],control.stateBefore[key]);
           try {if(kind==='wage')assert.equal(control.fault.text,`wage ${fixture.expected.wage} a week`,'Bank exact converted integer wage');else readable(control.fault,kind,kind==='note-occlusion'?12:0);}catch(error){control.failure={name:error.name,message:error.message,actual:error.actual,expected:error.expected};}
           assert.equal(control.failure?.name,'AssertionError');assert.match(control.failure.message,kind==='wage'?/Bank exact converted integer wage/:kind==='note-occlusion'?/text is not occluded/:/ancestor clipping/);
           await screenshot(`fault-${kind}`);
         } finally {
-          await page.evaluate(()=>{const f=window.__fault1090;f.overlay?.remove();f.el.innerHTML=f.html;if(f.style===null)f.el.removeAttribute('style');else f.el.setAttribute('style',f.style);delete window.__fault1090;});
+          await page.evaluate(()=>{const f=window.__fault1090;f.overlay?.remove();f.el.replaceChildren(...f.children);if(f.style===null)f.el.removeAttribute('style');else f.el.setAttribute('style',f.style);delete window.__fault1090;});
           control.restored=await measured(target,`control:${kind}:restored`);control.stateRestored=await snap();persist();assert.deepEqual(control.restored,control.before,'Exact original DOM and geometry restored');for(const key of ['career','storage','session','writes','callbacks','rng','now','scrollY'])assert.deepEqual(control.stateRestored[key],control.stateBefore[key]);
         }
         readable(control.restored,kind,kind==='wage'||kind==='note-occlusion'?12:0); control.proved=true; await screenshot(`restored-${kind}`);

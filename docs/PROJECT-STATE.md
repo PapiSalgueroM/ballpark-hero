@@ -1,5 +1,23 @@
 ## Round 1090 preparation, 2026-10-07, Soccer Phone currency display
 
+Preparation 3 at0fdb8c67/run37708609456 completed red. Proper app types/build,
+mounted13 cases/37 effective controls and closing source/dependency holds passed.
+Independent full retention binds every mounted and native early file exactly.
+Native completed EUR320, then the first GBP390 wage fault lost its text locator;
+reparsing innerHTML also merged three original text nodes. No product failure was
+demonstrated. The next QA-only correction retains the original ElementHandle and
+child Node objects, then restores those same nodes. All assertions remain strict.
+Eight journeys/nine controls remain unaccepted until the corrected remote run.
+
+The unchanged AL8fe baseline was actually built in the same remote job with held
+dependencies and exact tracked-source manifests. Its five original checks failed
+the same named findings as the candidate:53.6 KB/61.0 KB save ceilings, nine missing
+What's New entries, four Buzzer/Cage sitemap date/hash findings, and Manager/Tycoon
+JSON-LD mismatches. This establishes inherited failures in these five checks,
+without waiving them or accepting the release. Full artifact11521975501 retains
+the original child logs/process exits, exact source/build archives and raw proof.
+Release ownership must resolve these old gates on the integrated release tree.
+
 Preparation 1 at 04616fa4/run37705722338 failed proper app types with eleven
 TS2339 findings on the new fixture's optional money field. Build and all proof
 suites were skipped. The next candidate adds only the same optional MoneyState
@@ -23,8 +41,11 @@ retains complete source/build bytes and process logs. Candidate original gates r
 
 Unverified preparation on `codex/soccer-phone-currency-1090`, pinned to Release AL integration
 `8fe82a4dc1346f7d5b8072f387f3acb34bbaa3c8`. The previously accepted 1073 branch remains untouched.
-The owned managed checkout is `career-season-compare-1060/ballpark-hero`, reused cleanly and recorded
-in the root coordination notes. This is not a main, live-site or release acceptance claim.
+The owned managed checkout is `soccer-phone-currency-1090/ballpark-hero`.
+The earlier1060 checkout belongs to another task and was restored cleanly to its
+original accepted1073 head2fe8e330; candidate0fdb8c67/treeb3217c46 was moved intact
+to the correctly attached1090 checkout. No remote amendment or restart occurred.
+This is not a main, live-site or release acceptance claim.
 
 The two-component correction makes the Phone header and money screens use the existing selected
 currency formatter, gives Bank an exact grouped integer wage, converts existing Shop narrative euro
