@@ -504,8 +504,10 @@ function seasonGames(c: CareerState, rng: () => number): { games: number; injury
    fell to a third in the throwback. The awards therefore read a season on a
    full schedule PACE: every counting stat times 17 over the season's length.
    The kicker's long field goal is a distance, not a volume, and is left as it
-   is. This copy is only ever handed to the award score; it is never saved. */
-function nflAwardPaceLine(line: SeasonLine, len: number): SeasonLine {
+   is. This copy is only ever handed to the award score; it is never saved.
+   Exported for src/test/nflTruthRules1104.test.ts, which holds it against
+   nflSeasonScore itself, so a stat the score reads cannot be left off it. */
+export function nflAwardPaceLine(line: SeasonLine, len: number): SeasonLine {
   if (len === NFL_RATE_GAMES) return line;
   const f = NFL_RATE_GAMES / len;
   const pace: SeasonLine = { ...line };

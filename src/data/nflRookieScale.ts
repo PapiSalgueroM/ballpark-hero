@@ -19,9 +19,13 @@
    ── 2026 (`now`), all read 2026-10-07 ──
    Round one, all 32 picks, four years each:
    1. CBS Sports, "2026 NFL Draft first-round pick contract tracker" (every
-      pick marked signed). This is `total`. Its figure for the first pick,
-      57,271,500, is also the signed deal as ESPN reported it ("Raiders sign
-      No. 1 pick ... to rookie contract", 23 July 2026: four years, 57.27M).
+      pick marked signed). This is `total`. What it prints is the slot's
+      scale value: its column is headed "Projected rookie contract (4 years)"
+      and it credits Spotrac's scale, so it is the figure a first round pick
+      signs for under the slotted system, not a per player signing report.
+      Its figure for the first pick, 57,271,500, is also the signed deal as
+      ESPN reported it ("Raiders sign No. 1 pick ... to rookie contract", 23
+      July 2026: four years, 57.27M).
    2. Over The Cap, "NFL Draft" slot values. This is `second`: an estimate
       built on the final salary cap, between 1.2 and 1.7 percent above the
       CBS figure on every pick.
@@ -39,14 +43,34 @@
      first Broncos draft pick to agree to terms" (four years, 4.5M, with a
      122,600 signing bonus); Over The Cap 4,502,600 with the same 122,600
      bonus. Verified.
-   - picks 100, 101, 140, 141, 180, 181, 216 and 217: Over The Cap only. The
-     other figures found (DraftKings Network's round by round pieces of 25
-     April 2026, built on a pre draft projection) run 3 to 4 percent lower,
-     and that projection is known to be stale: it had the first pick on
-     54.6M, and he signed for 57.3M. HELD. The game pays the Over The Cap
-     figure for a held 2026 row, because on all five picks where a signed deal
-     was reported (1, 33, 64, 65, 257) that estimate was within 1.7 percent of
-     it, and exact on the last. It is one source and it is marked as one.
+   - WHERE EACH ROUND ENDS (corrected 2026-10-08): round three 65 to 100,
+     round four 101 to 140, round five 141 to 181, round six 182 to 216, round
+     seven 217 to 257. Two sources: NFL.com, "2026 NFL Draft order for all
+     seven rounds"; Pro Football Rumors, "2026 NFL Draft Results" (pick 181 is
+     the last selection under its Round 5 heading, pick 182 the first under
+     Round 6). This file first had round five ending at 180, copied from Over
+     The Cap's page, which labels pick 181 "Round 6": that label is wrong (a
+     compensatory pick makes round five 41 selections long).
+   - picks 100, 101, 140, 141, 181, 182, 216 and 217: Over The Cap only. The
+     other figures found run 3 to 4 percent lower: DraftKings Network's round
+     by round pieces of 25 April 2026, and NFL Trade Rumors on 22 July 2026,
+     as carried by Yardbarker ("projected to sign a four-year, $5.549 million
+     rookie contract" for pick 101, against Over The Cap's 5,707,632: 2.8
+     percent apart, so not agreement by this file's own rule). That
+     projection is known to be stale: it had the first pick on
+     54.6M, and he signed for 57.3M; it had the last pick on 4.18M, and he
+     signed for 4.5M. Looked for again on 2026-10-08 and not found: a report of
+     the signed total for any of the eight (the clubs announced four year
+     deals with no figures). HELD, all eight.
+     THE RULE FOR A HELD 2026 ROW, stated so it is a rule and not a habit: the
+     game pays the Over The Cap figure. Why that one and not a line drawn
+     between the verified picks: on all five picks where a signed deal was
+     reported (1, 33, 64, 65, 257) that estimate was within 1.7 percent of the
+     deal and exact on the last, and a straight line from pick 65 to pick 257
+     would pay round four about 0.3M a year more than either source says. It
+     is one source, it is marked as one, the harness counts it, and no line of
+     the game's copy quotes a held slot. THE LEAD HAS NOT RULED ON THIS YET
+     (the review of 2026-10-08 asked for a second source or a written ruling).
    The 2026 rookie minimum salary, 885,000: DraftKings Network, 25 April 2026,
    "How much money do seventh round picks in the NFL Draft make?"; Legion
    Report, 14 July 2026, "NFL Rookie Contract Scale: What Every 2026 Draft
@@ -126,8 +150,8 @@ export const NFL_ROOKIE_SCALE: { now: NflRookieTable; y2005: NflRookieScale } = 
       { round: 2, firstPick: 33, firstTotal: 13_376_740, lastPick: 64, lastTotal: 7_880_000, years: 4 },
       { round: 3, firstPick: 65, firstTotal: 7_400_000, lastPick: 100, lastTotal: 6_726_012, years: 4, held: 'last' },
       { round: 4, firstPick: 101, firstTotal: 5_707_632, lastPick: 140, lastTotal: 5_182_896, years: 4, held: 'both' },
-      { round: 5, firstPick: 141, firstTotal: 4_955_668, lastPick: 180, lastTotal: 4_766_148, years: 4, held: 'both' },
-      { round: 6, firstPick: 181, firstTotal: 4_724_112, lastPick: 216, lastTotal: 4_590_172, years: 4, held: 'both' },
+      { round: 5, firstPick: 141, firstTotal: 4_955_668, lastPick: 181, lastTotal: 4_724_112, years: 4, held: 'both' },
+      { round: 6, firstPick: 182, firstTotal: 4_714_212, lastPick: 216, lastTotal: 4_590_172, years: 4, held: 'both' },
       { round: 7, firstPick: 217, firstTotal: 4_564_644, lastPick: 257, lastTotal: 4_502_600, years: 4, held: 'first' },
     ],
     undrafted: 885_000,

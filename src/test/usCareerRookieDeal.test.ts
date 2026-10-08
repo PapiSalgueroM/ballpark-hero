@@ -8,7 +8,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { NFL_ROOKIE_SCALE } from '@/data/nflRookieScale';
-import { rookieDeal, NFL_PICKS_A_ROUND, NFL_ROUNDS } from '@/lib/usCareerRookieDeal';
+import { rookieDeal, nflSlot, NFL_PICKS_A_ROUND, NFL_ROUNDS } from '@/lib/usCareerRookieDeal';
 import { nflEraById } from '@/lib/nflMyCareer';
 
 const pay = (era: string, pick: number) => rookieDeal('nfl', era, pick)!.salary;
@@ -34,6 +34,31 @@ describe('Round 1104: the NFL rookie deal', () => {
     expect(pay('now', 64)).toBe(2);
     expect(pay('now', 97)).toBe(1.4);
     expect(pay('now', 224)).toBe(1.1);
+  });
+
+  /* The fix pass of 2026-10-08. At the game's 0.1M rounding the case above cannot see an off by one in the
+     line (dividing a round's place by 32 instead of 31 leaves every end pick on the same tenth), so the line
+     is held to the DOLLAR at both ends of every round, and falling at every pick between. */
+  it('runs the later round line from the first slot to the last slot to the dollar', () => {
+    const table = NFL_ROOKIE_SCALE.now;
+    for (const r of table.laterRounds) {
+      const first = (r.round - 1) * NFL_PICKS_A_ROUND + 1;
+      const last = r.round * NFL_PICKS_A_ROUND;
+      expect(nflSlot(table, first).perYear, `round ${r.round} first`).toBeCloseTo(r.firstTotal / r.years, 6);
+      expect(nflSlot(table, last).perYear, `round ${r.round} last`).toBeCloseTo(r.lastTotal / r.years, 6);
+      for (let p = first + 1; p <= last; p += 1) {
+        expect(nflSlot(table, p).perYear, `pick ${p} under pick ${p - 1}`).toBeLessThan(nflSlot(table, p - 1).perYear);
+      }
+    }
+  });
+
+  /* Where each real round ends, two sourced in the table's header (NFL.com's draft order and Pro Football
+     Rumors' results). Pinned here because the first cut had round five ending at 180: a compensatory pick
+     makes it 181, and the table's one source for the totals labels that pick wrongly. */
+  it('holds the real round ends: 33 to 64, 65 to 100, 101 to 140, 141 to 181, 182 to 216, 217 to 257', () => {
+    expect(NFL_ROOKIE_SCALE.now.laterRounds.map(r => [r.round, r.firstPick, r.lastPick])).toEqual([
+      [2, 33, 64], [3, 65, 100], [4, 101, 140], [5, 141, 181], [6, 182, 216], [7, 217, 257],
+    ]);
   });
 
   it('never pays a later pick more than an earlier one, in either era, down to the minimum', () => {

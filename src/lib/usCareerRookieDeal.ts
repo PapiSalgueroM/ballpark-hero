@@ -33,8 +33,9 @@ export const NFL_PICKS_A_ROUND = 32;
 export const NFL_ROUNDS = 7;
 const NFL_ROOKIE_YEARS = 4;
 
-/** Dollars a year for an NFL slot off one era's own table, and whether it is held. */
-function nflSlot(table: NflRookieTable, pick: number): { perYear: number; held: boolean } {
+/** Dollars a year for an NFL slot off one era's own table, and whether it is held. Exported so a test can hold
+ *  the line to the dollar: at the game's 0.1M rounding an off by one in the round's last pick cannot be seen. */
+export function nflSlot(table: NflRookieTable, pick: number): { perYear: number; held: boolean } {
   if (pick <= 0 || pick > NFL_PICKS_A_ROUND * NFL_ROUNDS) return { perYear: table.undrafted, held: false };
   if (pick <= NFL_PICKS_A_ROUND) {
     const r = table.firstRound.find(x => x.pick === pick);

@@ -41,6 +41,15 @@ import type { UsCareerCore, UsCareerEvent, UsCareerSeason, UsCareerSport } from 
    below reads it. */
 const TAKE_HOME = 0.45;
 
+/** The rule above in a player's words: the one line each of the four US
+ *  career pages adds under its "?" (GameHelp's extraRules). The four guides
+ *  do not carry it yet, and a page's own howToPlay steps only render when a
+ *  game has no guide at all, so without this line no screen states the rule.
+ *  GameHelp skips a line the guide already has word for word, so the day a
+ *  guide gains this sentence it still shows once. It names the forced sale:
+ *  a debt is collected from savings, THEN from holdings, and only then let go. */
+export const US_BANK_HELP_RULE = 'The account cannot go below zero. A bill you cannot cover comes out of savings first, then whatever you hold in the market is sold at a bad price to pay it, and after that the account stops at zero.';
+
 /** A balance is never below zero. */
 export function floorBank(balance: number): number {
   return balance < 0 ? 0 : balance;
