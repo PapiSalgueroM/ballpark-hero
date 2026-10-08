@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+stalechunk: node scripts/simStaleChunk.mjs
+stalechunk-noprerender: SIM_STALE_CHUNK_CONTROL=noprerender node scripts/simStaleChunk.mjs
+stalechunk-nooffline: SIM_STALE_CHUNK_CONTROL=nooffline node scripts/simStaleChunk.mjs
+stalechunk-noguard: SIM_STALE_CHUNK_CONTROL=noguard node scripts/simStaleChunk.mjs
+stalechunk-nolistener: SIM_STALE_CHUNK_CONTROL=nolistener node scripts/simStaleChunk.mjs
+stalechunk-bogus: SIM_STALE_CHUNK_CONTROL=bogusname node scripts/simStaleChunk.mjs
+harnessanchors: node scripts/simHarnessAnchors.mjs
+vitest-us: node_modules/.bin/vitest run src/test/usSeasonCentreEntry.test.tsx src/test/usCareerSaveRetry.test.tsx --testTimeout=300000 --hookTimeout=120000

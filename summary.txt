@@ -1,0 +1,9 @@
+stalechunk-noprerender exit=1 0s | simStaleChunk: control noprerender turned section(s) 2 red and nothing else. The check works.
+stalechunk exit=0 0s | simStaleChunk: green. A tab left open across a deploy reloads once for a missing chunk instead of painting the broken page.
+stalechunk-nooffline exit=1 0s | simStaleChunk: control nooffline turned section(s) 2 red and nothing else. The check works.
+stalechunk-noguard exit=1 1s | simStaleChunk: control noguard turned section(s) 2 red and nothing else. The check works.
+stalechunk-nolistener exit=1 1s | simStaleChunk: control nolistener turned section(s) 1 red and nothing else. The check works.
+stalechunk-bogus exit=2 1s | unknown control bogusname
+vitest-us exit=0 18s |    Duration  16.85s (transform 4.37s, setup 189ms, collect 9.19s, tests 16.24s, environment 1.18s, prepare 485ms)
+harnessanchors exit=0 33s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 53s | 
