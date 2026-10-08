@@ -1,0 +1,83 @@
+simFightGym
+   120 gyms per policy, 160 weeks each
+1) a carefully run gym survives and grows
+   survived 160 weeks: 118 of 120 (98.3%)
+   reputation 64.5, fights 157.7, titles 0.40
+   ok   98.3% of carefully run gyms survive (floor 40%)
+   ok   reputation grows from 8 to 64.5
+2) running men into the ground is not the winning strategy
+   verdict: careful 97.3, grinder 68.1
+   wrecked fighters: careful 0.00, grinder 0.28
+   reputation: careful 63.9, grinder 2.1
+   ok   caring for fighters beats grinding them by 29.3 (margin 5)
+   ok   grinding wrecks 0.28 more fighters per gym
+   paired at the moment of choice, 86 gyms: keeping the hurt man is worth +2.646m over 14 weeks (10.7% of the till)
+   ok   keeping the hurt man pays 2.646m in the short run, and costs 29.3 verdict points in the long run
+3) a gym with a name is shown better fighters
+   prospect rating: reputation 8 gives 43.4, reputation 92 gives 73.2
+   ok   reputation is worth 29.9 rating points on a prospect (margin 8)
+4) nobody fights forever
+   fighters who came and went per gym: 1.20 over 220 weeks
+   ok   1.20 fighters per gym came through and left through the engine alone (floor 0.5)
+   ok   119 of 120 gyms still open at 220 weeks
+5) money is a constraint, not decoration
+   closed inside 160 weeks: careful 3.3%, spend everything and never fight 100.0%
+   median week a reckless gym closed: 3
+   ok   spending without earning closes 96.7 percentage points more gyms (margin 25)
+6) the condition bars on a gym fight tell the truth, for every kind of player
+   [random] 4000 gym bouts, 3016 decisions, 726 stoppages; decision losers on the floor 1 (0.0%), within 4 of it 24 (0.8%), both men on it 0 (0.00%)
+   ok   [random] every one of the 726 stopped men ends on an empty bar
+   ok   [random] nobody on his feet reads empty, on any round of any bout
+   ok   [random] condition never rises, across every round of every bout
+   ok   [random] 0.0% of decision losers end on the floor (ceiling 2%)
+   ok   [random] both men end on the floor in 0.00% of decisions (ceiling 1%)
+   [strong] 4000 gym bouts, 2964 decisions, 868 stoppages; decision losers on the floor 1 (0.0%), within 4 of it 148 (5.0%), both men on it 0 (0.00%)
+   ok   [strong] every one of the 868 stopped men ends on an empty bar
+   ok   [strong] nobody on his feet reads empty, on any round of any bout
+   ok   [strong] condition never rises, across every round of every bout
+   ok   [strong] 0.0% of decision losers end on the floor (ceiling 2%)
+   ok   [strong] both men end on the floor in 0.00% of decisions (ceiling 1%)
+   [stubborn] 4000 gym bouts, 2901 decisions, 872 stoppages; decision losers on the floor 15 (0.5%), within 4 of it 133 (4.6%), both men on it 0 (0.00%)
+   ok   [stubborn] every one of the 872 stopped men ends on an empty bar
+   ok   [stubborn] nobody on his feet reads empty, on any round of any bout
+   ok   [stubborn] condition never rises, across every round of every bout
+   ok   [stubborn] 0.5% of decision losers end on the floor (ceiling 2%)
+   ok   [stubborn] both men end on the floor in 0.00% of decisions (ceiling 1%)
+   [weak] 3187 gym bouts, 2485 decisions, 546 stoppages; decision losers on the floor 0 (0.0%), within 4 of it 18 (0.7%), both men on it 0 (0.00%)
+   ok   [weak] every one of the 546 stopped men ends on an empty bar
+   ok   [weak] nobody on his feet reads empty, on any round of any bout
+   ok   [weak] condition never rises, across every round of every bout
+   ok   [weak] 0.0% of decision losers end on the floor (ceiling 2%)
+   ok   [weak] both men end on the floor in 0.00% of decisions (ceiling 1%)
+7) selling up ends the game with a verdict, and beats going under
+   sold at week 60 or later: 116 of 120; spent out and went under: 120 of 120
+   ok   116 of 120 selling gyms closed with exit sold, so a well run gym reaches its verdict
+   paired over 116 seeds: selling scores 19.1 more, and 0 seeds score no better than going under
+   ok   selling up beats going under by 19.1 verdict points on the same gyms (margin 8)
+   week by week: 0 sales accepted before week 26, 5 of 5 accepted from it
+   ok   no sale before week 26
+   ok   every sale from that week on goes through and closes the gym
+   200 gyms at week 26: wrecked man kept through the sale 0.00 over letting him go first, through going broke 0.00; healthy pair let go first -0.99 over selling with them
+   ok   keeping a wrecked man through the sale buys 0.00, within 0.5
+   ok   keeping a wrecked man through going broke buys 0.00, within 0.5
+   ok   letting the healthy men go before the sale buys -0.99, within 0.5
+   200 gyms: the damaged man priced lower in 200; a man who never fought moved the price in 0 and the verdict in 0
+   200 men worth pricing: going from 10 to 40 damage takes 46.3% off what a buyer pays for him
+   ok   a buyer pays less for a man carrying damage, in every gym
+   ok   30 more damage takes 46.3% off a man's price (floor 33%)
+   ok   a man who never fought adds nothing to the price
+   ok   a man who never fought adds nothing to the verdict
+8) one block per fighter per week, it works on one thing, and the fight reads it
+   60 gyms: first block 60, second block same week 0, other man same week 60, same man next week 60
+   ok   a second block on the same man in the same week is refused every time
+   ok   the limit is per man and per week: the other man and the next week are both open
+   80 blocks: focus area grew 1.65 a block, the other three moved 0 in total
+   ok   a block grows its focus area by 1.65 on average (floor 0.5)
+   ok   the three areas he did not work on do not move
+   300 paired fights: four blocks with conditioning land 0.76 more punches late (untrained land 32.4); wins 204 trained against 202 untrained
+   ok   the camp reaches the fight: 0.76 more punches landed late (margin 0.4)
+   60 trained men fought: camp back to 50 after 60, week's block still counted after 60, second block refused 60, open again next week 60
+   ok   every fight spends the camp, so the next one starts from zero
+   ok   a fight does not hand back the week's block
+   ok   the block opens again the week after
+simFightGym: all sections passed

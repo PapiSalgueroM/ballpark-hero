@@ -1,0 +1,5 @@
+simBoxingShowForecast exit=0 35s | Boxing show forecast: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/boxing-show-forecast-artifacts/outcomes
+simFightPromoter exit=0 1s | simFightPromoter: all sections passed
+simMmaPromotion exit=0 2s | simMmaPromotion normal: intended outcome assertions and independent boxing baseline passed.
+simFightGym exit=0 2s | simFightGym: all sections passed
+simFightCareer exit=0 5s | simFightCareer: all sections passed

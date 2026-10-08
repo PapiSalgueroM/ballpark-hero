@@ -1,0 +1,39 @@
+simMmaPromotion bundled strategies: [{"price":25,"seeds":24,"events":288,"meanProfit":17141.666666666668,"meanQuality":78.97569444444444,"meanFinalCash":249466.66666666666,"meanLegacy":65.75,"rests":96},{"price":50,"seeds":24,"events":288,"meanProfit":35168.229166666664,"meanQuality":78.97569444444444,"meanFinalCash":465785.4166666667,"meanLegacy":65.75,"rests":96},{"price":80,"seeds":24,"events":288,"meanProfit":32054.23611111111,"meanQuality":78.97569444444444,"meanFinalCash":428417.5,"meanLegacy":65.75,"rests":96}]
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/mmaPromotion.test.tsx[2m > [22m[2mMMA promotion outcomes[2m > [22m[2mgives stronger attributes more wins across paired seeds and reaches real submissions
+[22m[39m{"seededBouts":480,"strongWins":238,"weakWins":2,"submissions":105,"decisions":110,"knockouts":25}
+
+ [32m✓[39m src/test/mmaPromotion.test.tsx[2m > [22mMMA promotion outcomes[2m > [22mcreates the same fictional world from the same seed with four contracts per division[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/mmaPromotion.test.tsx[2m > [22mMMA promotion outcomes[2m > [22mrejects self cross division free and recovering fighters without changing the world[32m 1[2mms[22m[39m
+ [32m✓[39m src/test/mmaPromotion.test.tsx[2m > [22mMMA promotion outcomes[2m > [22mrejects empty repeated and oversized cards before any payout[32m 0[2mms[22m[39m
+ [32m✓[39m src/test/mmaPromotion.test.tsx[2m > [22mMMA promotion outcomes[2m > [22mrejects invalid venues prices and unaffordable guarantees[32m 1[2mms[22m[39m
+ [32m✓[39m src/test/mmaPromotion.test.tsx[2m > [22mMMA promotion outcomes[2m > [22mreconciles attendance gate purses rent profit and actual cash in the saved receipt[32m 1[2mms[22m[39m
+ [32m✓[39m src/test/mmaPromotion.test.tsx[2m > [22mMMA promotion outcomes[2m > [22mapplies each actual winner record contract ranking and recovery exactly once[32m 1[2mms[22m[39m
+ [32m✓[39m src/test/mmaPromotion.test.tsx[2m > [22mMMA promotion outcomes[2m > [22mallows eligible title fights and transfers the occupied belt to the actual winner[32m 0[2mms[22m[39m
+ [32m✓[39m src/test/mmaPromotion.test.tsx[2m > [22mMMA promotion outcomes[2m > [22mvacates expired champions and renews eligible contracts for the stated signing bonus[32m 0[2mms[22m[39m
+ [32m✓[39m src/test/mmaPromotion.test.tsx[2m > [22mMMA promotion outcomes[2m > [22mrests a month for overhead and clears recovery without changing records or contracts[32m 1[2mms[22m[39m
+ [32m✓[39m src/test/mmaPromotion.test.tsx[2m > [22mMMA promotion outcomes[2m > [22mloads only structurally valid worlds and receipts without sanitizing forged outcomes[32m 2[2mms[22m[39m
+ [32m✓[39m src/test/mmaPromotion.test.tsx[2m > [22mMMA promotion outcomes[2m > [22mgives stronger attributes more wins across paired seeds and reaches real submissions[32m 22[2mms[22m[39m
+ [32m✓[39m src/test/mmaPromotion.test.tsx[2m > [22mMMA promotion outcomes[2m > [22mscores reputation profitable events and filled belts in bounded legacy units[32m 1[2mms[22m[39m
+ [32m✓[39m src/test/mmaPromotion.test.tsx[2m > [22mMMA promotion outcomes[2m > [22mbooks and removes actual fighters through the card controls before spending cash[32m 137[2mms[22m[39m
+ [32m✓[39m src/test/mmaPromotion.test.tsx[2m > [22mMMA promotion outcomes[2m > [22mruns a mounted event once and reloads its exact financial receipt without another record[32m 45[2mms[22m[39m
+ [32m✓[39m src/test/mmaPromotion.test.tsx[2m > [22mMMA promotion outcomes[2m > [22mopens rules rankings and contracts and returns focus to each dashboard opener[32m 80[2mms[22m[39m
+ [32m✓[39m src/test/mmaPromotion.test.tsx[2m > [22mMMA promotion outcomes[2m > [22mexplains malformed and blocked saves while allowing a fresh playable world[32m 19[2mms[22m[39m
+ [32m✓[39m src/test/mmaPromotion.test.tsx[2m > [22mMMA promotion outcomes[2m > [22mrecords the twelfth event legacy once and never pays again when restored closed[32m 20[2mms[22m[39m
+ [32m✓[39m src/test/mmaPromotion.test.tsx[2m > [22mMMA promotion outcomes[2m > [22mrejects unpaid contracts and free recovery months while replaying real paid actions[32m 1[2mms[22m[39m
+ [32m✓[39m src/test/mmaPromotion.test.tsx[2m > [22mMMA promotion outcomes[2m > [22mends earned MMA progress once preserves a later boxing finish and awards no zero event completion[32m 134[2mms[22m[39m
+ [32m✓[39m src/test/mmaPromotion.test.tsx[2m > [22mMMA promotion outcomes[2m > [22mkeeps boxing save bytes when opening either promotion mode[32m 53[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m20 passed[39m[22m[90m (20)[39m
+[2m   Start at [22m 11:26:35
+[2m   Duration [22m 1.32s[2m (transform 211ms, setup 29ms, collect 389ms, tests 523ms, environment 167ms, prepare 39ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/mma-promotion-artifacts/mounted/normal-report.json
+
+[90mstderr[2m | src/test/mmaPromotion.test.tsx[2m > [22m[2mMMA promotion outcomes[2m > [22m[2mopens rules rankings and contracts and returns focus to each dashboard opener
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+simMmaPromotion normal: intended outcome assertions and independent boxing baseline passed.
