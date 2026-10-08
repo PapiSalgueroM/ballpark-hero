@@ -416,6 +416,12 @@ function scheduleProblems(slug, SB, row, eraId, s, named) {
      first round 46 (41 to 52), semis 49 (45 to 57), conference finals 54 (48 to 61), lost the Finals 56
      (50 to 64), champions 58 (52 to 67): every one inside the middle half of its band, so strengthFor's
      7.9 was kept as designed.
+   MEASURED 2026-10-08 (the fix pass, the five seed sets pooled, the same 4057 seasons):
+     the feed's takeover line   on 6.3% of the games he played, in 2943 of the 4057 seasons. Section 3
+                                restates the rule game by game (a win, 20 or more, 1.3 times his average)
+                                and only asks that the line is in the population at all.
+     named playoff rounds       1786 before the bracket's last round and 145 in it, each checked for its
+                                conference in section 4, which fails when either count is 0.
    A refused season is not a wrong season (the player gets the plain tile), but more than 1 in 100 would
    be a hole a player meets, so that is where the band sits. */
 /* The NFL has no bands yet (its number file is not built). null fails the run on purpose: whoever binds
