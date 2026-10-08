@@ -1,0 +1,4 @@
+# Round 1104 head: the summer balance interval on three seeds, NFL only
+summer6-s0: SIM_SECTIONS=6 SIM_SPORTS=nfl node scripts/simUsCareerSummer.mjs
+summer6-s1: SIM_SEED=1 SIM_SECTIONS=6 SIM_SPORTS=nfl node scripts/simUsCareerSummer.mjs
+summer6-s2: SIM_SEED=2 SIM_SECTIONS=6 SIM_SPORTS=nfl node scripts/simUsCareerSummer.mjs

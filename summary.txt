@@ -1,0 +1,3 @@
+summer6-s0 exit=1 388s | simUsCareerSummer: 1 failure(s) in sections 6
+summer6-s2 exit=1 399s | simUsCareerSummer: 1 failure(s) in sections 6
+summer6-s1 exit=0 422s | simUsCareerSummer: green. Sections 6 held.
