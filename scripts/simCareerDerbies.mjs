@@ -440,9 +440,25 @@ console.log('2) Club Manager reads exactly what it read before the lift');
      snapshots dumped in throwaway copies of --record: origin/main 2fff5e04
      gives the Release AH hash, fcc9f161da14, over 380 clubs; the merged tree
      adds exactly 58 clubs, the three second tiers, and changes and drops none
-     of the 380. RIVALS_HASH did not move. */
+     of the 380. RIVALS_HASH did not move.
+     BOARD_HASH re-taken in Round 1052 (2026-10-08), for the Russian Premier
+     League: the board now covers 454 clubs. Attribution, full snapshots
+     dumped by the --record logic in throwaway copies on a GitHub runner at
+     1fa0a7a7: the tree with the round out of the world gives the Release AI
+     hash, c37dbeb1ca09, over 438 clubs; the tree as it is adds exactly 16
+     clubs, the Russian league, and changes and drops none of the 438. Each
+     new board names its nearestRival pick, none hand mapped. RIVALS_HASH
+     did not move: the round adds no PRIMARY_RIVAL row.
+     Re-taken once more in the same round at 183690a7, after its review
+     found the Russian squads fifty men short (a parser had skipped every
+     man with an icon after his name) and 46 of them joined: the ratings
+     of the sixteen moved, so their nearestRival picks did (Zenit now
+     names Krasnodar, Krasnodar names Spartak Moscow, CSKA Moscow still
+     names Dynamo Moscow). The same two snapshots again: the round out of
+     the world is c37dbeb1ca09 over 438 clubs, the tree adds exactly 16
+     and changes and drops none of the 438. */
   const RIVALS_HASH = '565e14623c2fe3607eec8864303d001fce77c4308c1a408c6c49114ea9b679d6';
-  const BOARD_HASH = 'c37dbeb1ca09ccdfe49770579b3f8cbe0b2bf4ab7a61e72c558092cae0a08230';
+  const BOARD_HASH = '8093c57e74818a8fae9742121e2d4e6e2d650e400f9680cbdc2735360e7595bf';
   const h = sha(sortedJson(data.PRIMARY_RIVAL));
   const snap = boardSnapshot();
   const b = sha(sortedJson(snap));

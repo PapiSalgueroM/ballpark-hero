@@ -333,6 +333,11 @@ const ALSO_REAL_ELSEWHERE = [
      Famalicao squad, probably at Estrela). Still a real man, so listing him
      keeps the set of the guard as it was and no seed re-rolls. */
   'Rafa Soares',
+  /* Round 1052: Ismael Silva, a Brazilian midfielder born 1994-12-01, is in
+     Akhmat Grozny's 2026-27 squad on three lists (the Russian Premier League
+     joined the modern world in that round), and this generator could build
+     his name. simInventedNames found him the moment his squad file existed. */
+  'Ismael Silva',
 ];
 
 /**

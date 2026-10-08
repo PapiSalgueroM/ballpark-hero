@@ -721,11 +721,38 @@ const r1100Out = { name: 'r1100out', setup(b) {
     return { contents: fs.readFileSync(from, 'utf8').split('\r').join(''), loader: 'ts', resolveDir: path.dirname(args.path) };
   });
 } };
+/* Round 1052 added a league to Club Manager's world (the Russian Premier
+   League), and a player's dugout years draw their job offers from every club
+   of that world, so a career whose manager years are drawn after it plays
+   differently from a base without the league. Same arm as Round 1041's: a
+   career that differs from the base is checked once more on this tree with
+   the league taken out in memory (its league row, its rules row and its
+   nation, the three things the round appended to the engine's tables):
+   equal then, the move is that round's and is printed; still different, it
+   fails as before. When the base already holds the league the arm is simply
+   not needed. A later gathered league adds its ids to the two lists. */
+const R1052_LEAGUES = ['russia'];
+const R1052_NATIONS = ['russia'];
+const r1052Out = { name: 'r1052out', setup(b) {
+  b.onLoad({ filter: /[\\/]lib[\\/]clubManager\.ts$/ }, args => {
+    if (!path.resolve(args.path).toLowerCase().startsWith(path.resolve(ROOT, 'src').toLowerCase())) return undefined;
+    let src = fs.readFileSync(args.path, 'utf8').replace(/\r\n/g, '\n');
+    const cut = (start, end, what) => {
+      const a = src.indexOf(start);
+      const z = a < 0 ? -1 : src.indexOf(end, a);
+      if (a < 0 || z < 0 || src.indexOf(start, a + 1) >= 0) { console.error(`Round 1052 arm: ${what} is not in clubManager.ts exactly once`); process.exit(2); }
+      src = src.slice(0, a) + src.slice(z + end.length);
+    };
+    for (const id of R1052_LEAGUES) { cut(`\n  ${id}: {\n`, '\n  },', `the rules row ${id}`); cut(`\n  {\n    id: '${id}',`, '\n  },', `the league row ${id}`); }
+    for (const id of R1052_NATIONS) cut(`\n  { id: '${id}', name: `, ' },', `the nation ${id}`);
+    return { contents: src, loader: 'ts' };
+  });
+} };
 if (baseRoot) {
   const B = await bundle(baseRoot, 'base', [releasePins(true)], false);
   const Bkeep = await bundle(baseRoot, 'basekeep', [releasePins(false)], false);
-  let same = 0; let differ = 0; let pinsMove = 0; let rows = 0; let by1041 = 0; let by1100 = 0;
-  let Mout = null; let Mout1100 = null;
+  let same = 0; let differ = 0; let pinsMove = 0; let rows = 0; let by1041 = 0; let by1100 = 0; let by1052 = 0; let byBoth = 0;
+  let Mout = null; let Mout1100 = null; let Mout1052 = null; let MoutBoth = null;
   for (let i = 0; i < BASELINE_CAREERS; i++) {
     const seed = SEED * 7777 + i * 104729;
     const mine = await replay(M, seed);
@@ -735,6 +762,11 @@ if (baseRoot) {
     if (mine === base) same += 1;
     else if (await replay(Mout ??= await bundle(ROOT, 'tree1041out', [r1041Out]), seed) === base) { same += 1; by1041 += 1; console.log(`  career ${seed}: moved by Round 1041's two truth fixes (equal to the base with them taken out)`); }
     else if (await replay(Mout1100 ??= await bundle(ROOT, 'tree1100out', [r1100Out]), seed) === base) { same += 1; by1100 += 1; }
+    else if (await replay(Mout1052 ??= await bundle(ROOT, 'tree1052out', [r1052Out]), seed) === base) { same += 1; by1052 += 1; console.log(`  career ${seed}: moved by Round 1052's new league in the dugout's job market (equal to the base with the league taken out)`); }
+    /* Release AO: a tree that holds both rounds over a base that holds neither. A career whose playing years met
+       Round 1100's bigger pool AND whose dugout years met Round 1052's league equals the base only with both taken
+       out at once (the two arms read different files: clubManager.ts is not one of Round 1100's seven). */
+    else if (await replay(MoutBoth ??= await bundle(ROOT, 'tree1100and1052out', [r1100Out, r1052Out]), seed) === base) { same += 1; byBoth += 1; console.log(`  career ${seed}: moved by Rounds 1100 and 1052 together (equal to the base only with both taken out)`); }
     else {
       differ += 1;
       const a = JSON.parse(mine); const b = JSON.parse(base);
@@ -744,6 +776,8 @@ if (baseRoot) {
     if (base !== kept) pinsMove += 1;
   }
   console.log(`  ${same} of ${BASELINE_CAREERS} careers from 2025 identical from 2026-27 on (${rows} seasons and dugout rows compared); releasing the seven pins alone moves ${pinsMove} of them (attributed to the release, not the binds); ${by1041} of the identical ones only once Round 1041's two truth fixes are taken out, ${by1100} only once Round 1100's seven files are read from the base (the pool, the rows and the band moved them, on purpose)`);
+  if (by1052) console.log(`  ${by1052} of the identical careers are identical only with Round 1052's league taken out of the dugout's job market`);
+  if (byBoth) console.log(`  ${byBoth} of the identical careers are identical only with Round 1100's seven files read from the base and Round 1052's league taken out, both at once`);
   /* 430, 428 and 431 rows over seeds 1 to 3 */
   ok(rows >= BASELINE_CAREERS * 25, `only ${rows} rows compared over ${BASELINE_CAREERS} careers (floor ${BASELINE_CAREERS * 25})`);
 }
