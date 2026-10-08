@@ -306,7 +306,7 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
               {r.myScorers.length === 0 && <p className="text-[10px] text-muted-foreground">-</p>}
               {r.myScorers.map((sc, i) => (
                 <p key={i} className="text-[11px] text-foreground cm-rise" style={{ animationDelay: revealDelay(i, 0.35, 0.14) }}>
-                  ⚽ {sc.name} {minuteLabel(sc)}
+                  ⚽ {sc.name} {minuteLabel(sc)}{sc.penalty && ' (P)'}
                   {sc.assist && <span className="text-[9px] text-muted-foreground"> · 🅰️ {sc.assist}</span>}
                 </p>
               ))}
@@ -315,7 +315,7 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
               <div className="text-[9px] text-muted-foreground uppercase tracking-wider mb-1 truncate">{opponent}</div>
               {r.oppScorers.length === 0 && <p className="text-[10px] text-muted-foreground">-</p>}
               {r.oppScorers.map((sc, i) => (
-                <p key={i} className="text-[11px] text-muted-foreground cm-rise" style={{ animationDelay: revealDelay(i, 0.45, 0.14) }}>⚽ {sc.name} {minuteLabel(sc)}</p>
+                <p key={i} className="text-[11px] text-muted-foreground cm-rise" style={{ animationDelay: revealDelay(i, 0.45, 0.14) }}>⚽ {sc.name} {minuteLabel(sc)}{sc.penalty && ' (P)'}</p>
               ))}
             </div>
           </div>

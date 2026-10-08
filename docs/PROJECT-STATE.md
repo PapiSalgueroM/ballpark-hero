@@ -1,3 +1,14 @@
+## Round1163: Club Manager penalty scorer markers, pending remote verification
+
+Both scorer lists now append (P) only for the existing recorded penalty flag.
+Match results, added-time labels, assists, engine, data and saves are held.
+Focused actual component proof covers both managed venues, mixed goal kinds,
+older saved reports and shootout distinctions, with three copied controls.
+Type/build and all required built readers run remotely. No live claim yet.
+Quick Sim substitutions already merged in PR163 and published in Release AL.
+Verified real first-season fixture support remains a separate engine/data task.
+Claude F retains integration and publication; root drafts/stashes are protected.
+
 ## Release AN LIVE, 2026-10-08 16:57 EDT: the site opens with storage blocked, translated pages stay live, six Codex rounds, five rounds of this lane
 
 Claude lane (session F). main 7ead9eb4, deployment aa7da32f-e499-418f-bd14-ec0201673437, entry index-D7bFwkA9.js (was
