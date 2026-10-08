@@ -156,7 +156,7 @@ function FixtureList({ model, played, current }: { model: CentreModel; played: n
             {g.fixedKey && <span className="shrink-0 rounded bg-amber-500/20 px-1 text-xs font-bold text-amber-400">{model.sport.fixed.badge}</span>}
             {yours.has(g.md) && <span className="shrink-0 text-xs" title="One of your moments" data-fixture-moment>🎯</span>}
             {g.md === s.games.length && <span className="shrink-0 rounded bg-sky-500/20 px-1 text-xs font-bold text-sky-400">FINAL</span>}
-            {done && <span className={`shrink-0 rounded px-1.5 text-xs font-bold tabular-nums ${PILL[r]}`}>{r} {g.us}-{g.them}</span>}
+            {done && <span className={`ml-auto shrink-0 rounded px-1.5 text-xs font-bold tabular-nums ${PILL[r]}`}>{r} {g.us}-{g.them}</span>}
           </li>
         );
       })}
@@ -184,7 +184,9 @@ function TablePanel({ model, played, compact }: { model: CentreModel; played: nu
   const before = useMemo(() => tableAt(s, Math.max(0, played - 1)), [s, played]);
   /* Round 1046, a phone: the table sits under the match, and on a small screen under the fold of the stage. When a
      new table arrives it must be seen sliding without the player scrolling, so the stage (its own scroll box, never
-     the page) moves just far enough to show the card. Nothing moves when the card is already in view. */
+     the page) moves just far enough to show his row and the rows either side of it. Nothing moves when they are
+     already in view. Places are read from the layout (offsetTop), which a row in mid slide does not change. */
+  const mine = s.labels[0]?.key ?? 'u0';
   const panelRef = useRef<HTMLDivElement | null>(null);
   const shownAt = useRef(played);
   useEffect(() => {
@@ -196,8 +198,11 @@ function TablePanel({ model, played, compact }: { model: CentreModel; played: nu
     if (!panel || !(box instanceof HTMLElement)) return;
     const frame = box.getBoundingClientRect();
     const card = panel.getBoundingClientRect();
-    if (card.bottom > frame.bottom - 4) box.scrollTop += Math.min(card.bottom - frame.bottom + 4, card.top - frame.top - 4);
-  }, [compact, played]);
+    const rows = Array.from(panel.querySelectorAll<HTMLElement>('[data-club]'));
+    const under = rows[Math.min(rows.length - 1, rows.findIndex(r => r.dataset.club === mine) + 1)];
+    const bottom = under ? card.top + (under.offsetTop - panel.offsetTop) + under.offsetHeight : card.bottom;
+    if (bottom > frame.bottom - 4) box.scrollTop += Math.min(bottom - frame.bottom + 4, card.top - frame.top - 4);
+  }, [compact, played, mine]);
   if (s.mode !== 'table') return null;
   const keyOf = (slot: number) => s.labels[slot]?.key ?? `u${slot}`;
   const unnamed = new Set(s.labels.filter(l => !l.named).map(l => l.key));
