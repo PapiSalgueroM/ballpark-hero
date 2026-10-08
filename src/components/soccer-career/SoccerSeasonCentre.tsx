@@ -13,18 +13,25 @@
    season on screen is the plan with the ledger's decisions applied
    (applyDecisions), and the only writes are the ledger entries and the
    bank, through `onCareer`, after he presses "Take it yourself". Without
-   `onCareer`, or on a season that is not the latest, nothing is offered. */
-import { Component, useMemo, type ReactNode } from 'react';
+   `onCareer`, or on a season that is not the latest, nothing is offered.
+
+   Round 1046: it remembers where he stopped. After every matchday watched
+   one small record goes to this browser's localStorage (src/lib/season/
+   resume.ts, never the save), and opening the same season again starts on
+   the kick off card at that matchday. The record carries the season's own
+   key, so a save that no longer holds that season simply ignores it. */
+import { Component, useCallback, useMemo, useState, type ReactNode } from 'react';
 import type { CareerState, ClubData, SeasonRecord } from '@/lib/soccerCareerEngine';
 import { applyDecisions, deriveSeason, planMoments, tableAt } from '@/lib/season/core';
 import { SOCCER, buildSoccerSeasonCtx, soccerSeasonKey, type SoccerSeasonCtx } from '@/lib/season/soccer';
 import { ledgerOf, readSeasonMoments } from '@/lib/season/momentsSave';
+import { clearResume, readResume, writeResume } from '@/lib/season/resume';
 import type { CentreMoments } from '@/components/season-centre/MomentHost';
 import { useSoccerMoments } from './useSoccerMoments';
 import { readSeasonDerbies } from '@/lib/soccerCareerDerby';
 import { leagueWithArticle, ordinal } from '@/lib/soccerCareerLeague';
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
-import { SeasonCentre, type CentreModel, type CentreSport } from '@/components/season-centre/SeasonCentre';
+import { SeasonCentre, type CentreModel, type CentrePlace, type CentreSport } from '@/components/season-centre/SeasonCentre';
 import { minuteLabel } from '@/lib/clubManagerClock';
 import { SOCCER_FULL_TIME } from '@/lib/season/soccerEvents';
 import type { HelpWords } from '@/components/season-centre/SeasonCentreHelp';
@@ -104,6 +111,9 @@ function soccerSport(keepsSheets: boolean): CentreSport {
     bucket: b => `Cups and other games: ${b.apps} apps, ${b.line.goals ?? 0} goals, ${b.line.assists ?? 0} assists`,
   };
 }
+
+/** The game's name in the resume record's storage key (seasonCentre:v1:soccer). */
+const RESUME_GAME = 'soccer';
 
 const RESULTS_WORDS = 'Results only: the game does not have a verified table for this league that season.';
 
@@ -199,8 +209,19 @@ function CentreBody({ career, clubs, row, mode, onClose, onCareer }: SoccerSeaso
   const season = useMemo(() => (plan && offered.length ? applyDecisions(SOCCER, row, ctx, plan, offered, JSON.parse(entriesKey) as number[][]) : plan), [plan, offered, entriesKey, row, ctx]);
   const moments = useSoccerMoments({ career, row, ctx, plan, key, offered, entriesKey, banked: !!ledger?.banked && ledger.key === key, onCareer });
   const model = useMemo(() => (season ? buildModel(row, ctx, season, moments) : null), [season, row, ctx, moments]);
+  /* Round 1046: his place in this season. Read once when the season opens; a
+     table season he did not win replays the same only while the save still
+     holds that year's league (the record says so with `stable`). */
+  const [stored] = useState(() => readResume(RESUME_GAME));
+  const stable = ctx.mode !== 'table' || ctx.finish?.finish === 1;
+  const onProgress = useCallback((at: CentrePlace | null) => {
+    if (!key) return;
+    if (at) writeResume(RESUME_GAME, { key, year: row.year, md: at.md, speed: at.speed, stable });
+    else if (readResume(RESUME_GAME)?.key === key) clearResume(RESUME_GAME);
+  }, [key, row.year, stable]);
   if (!model) return <Tile text="This season cannot be shown match by match." exitLabel={exitLabel} onClose={onClose} />;
-  return <SeasonCentre model={model} exitLabel={exitLabel} onClose={onClose} />;
+  const resume = stored && stored.key === key && stored.year === row.year ? stored : null;
+  return <SeasonCentre model={model} exitLabel={exitLabel} onClose={onClose} resume={resume} onProgress={onProgress} />;
 }
 
 export default function SoccerSeasonCentre(props: SoccerSeasonCentreProps) {

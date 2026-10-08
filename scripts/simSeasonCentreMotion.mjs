@@ -16,8 +16,17 @@
  *     rows sharing a key fails. Printed: seasons, pairs checked, and how many
  *     one matchday steps moved at least one club (a floor, so a probe whose
  *     tables never change cannot pass).
+ *  2. THE RESUME RECORD (src/lib/season/resume.ts), through a storage this
+ *     harness owns: a record round trips; fourteen shapes that are not a
+ *     record, text that is not JSON and a storage that throws on every call
+ *     all read as no record, with no exception; for every played row of
+ *     every probe career a record carrying that row's key (the lazy entry's
+ *     own: soccerSeasonKey) finds exactly that row, no two rows of one
+ *     career share a key, and the same record finds NOTHING in any other
+ *     career that played that year; a record that is not stable finds its
+ *     row only while the save's league year is that row's year.
  *  3. SOURCE FENCES, comments and strings stripped (a guard reads code, never
- *     prose): src/lib/motion/* imports nothing; src/components/motion/*
+ *     prose): src/lib/motion/* and src/lib/season/resume.ts import nothing; src/components/motion/*
  *     imports only react and src/lib/motion; neither folder has "season" or
  *     "soccer" in an import path; and none of the fenced files draws a random
  *     number (`Math.random`, `new Rng(`). The clean run also proves the
@@ -27,8 +36,16 @@
  * Controls (SEASON_MOTION_SIM_CONTROL=), each a rewrite of the BUNDLED copy or
  * of the text the fence reads, never a file on disk, each refusing to run
  * unless its single line needle is there exactly once (CRLF normalised):
- *   shift   rankShift hands back from and to swapped          -> 1 red
- *   fence   a Math.random() call added in RankShiftTable's code -> 3 red
+ *   shift      rankShift hands back from and to swapped            -> 1 red
+ *   resumetag  the record's key is no longer compared              -> 2 red
+ *   fence      a Math.random() call added in RankShiftTable's code -> 3 red
+ *
+ * Measured 2026-10-08 (the probe is seeded, so these repeat): 356 table
+ * seasons, 240044 pairs of tables, 12799 of 12884 one matchday steps moved a
+ * club (99.3 percent; the floor of 90 is there to catch a probe whose tables
+ * stop changing, not to split hairs), 128391 club moves. Control shift: 239947
+ * pairs wrong at item 1 and 0.0 percent moved; control fence: one finding at
+ * item 3; each exit 1.
  *
  * Green is the closing "simSeasonCentreMotion: N checks, 0 failed" line and
  * exit 0.
@@ -42,21 +59,24 @@ const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace
 const CONTROL = process.env.SEASON_MOTION_SIM_CONTROL ?? '';
 const SHIFT_NEEDLE = '  return after.map((club, to) => ({ club, from: was.get(club) ?? -1, to }));';
 const FENCE_NEEDLE = "const EASE = 'cubic-bezier(.2,.8,.2,1)';";
+const RESUME_NEEDLE = "  return rows.findIndex(row => row.year === r.year && row.type === 'playing' && row.apps > 0 && keyOf(row) === r.key && (r.stable || liveYear === row.year));";
 const BUNDLE_CONTROLS = {
   shift: [{ file: 'src/lib/motion/rankShift.ts', from: SHIFT_NEEDLE, to: '  return after.map((club, to) => ({ club, from: to, to: was.get(club) ?? -1 }));' }],
+  resumetag: [{ file: 'src/lib/season/resume.ts', from: RESUME_NEEDLE, to: "  return rows.findIndex(row => row.year === r.year && row.type === 'playing' && row.apps > 0 && (r.stable || liveYear === row.year));" }],
 };
-if (CONTROL && !['shift', 'fence'].includes(CONTROL)) throw new Error(`unknown SEASON_MOTION_SIM_CONTROL ${CONTROL}`);
+if (CONTROL && !['shift', 'resumetag', 'fence'].includes(CONTROL)) throw new Error(`unknown SEASON_MOTION_SIM_CONTROL ${CONTROL}`);
 if (CONTROL) console.log(`CONTROL ${CONTROL}: applied to the bundled copy or the text the fence reads, never a file on disk`);
 
 const read = rel => fs.readFileSync(path.join(ROOT, rel), 'utf8').replace(/\r\n/g, '\n');
 const once = (text, needle, what) => { const n = text.split(needle).length - 1; if (n !== 1) throw new Error(`control refused: ${what} holds its needle ${n} times, not once`); };
 if (CONTROL === 'shift') once(read('src/lib/motion/rankShift.ts'), SHIFT_NEEDLE, 'src/lib/motion/rankShift.ts');
+if (CONTROL === 'resumetag') once(read('src/lib/season/resume.ts'), RESUME_NEEDLE, 'src/lib/season/resume.ts');
 
 const B = await bundleAwardsNight(ROOT, {
   patches: BUNDLE_CONTROLS[CONTROL] ?? [],
-  extra: { season: 'src/lib/season/soccer.ts', core: 'src/lib/season/core.ts', motion: 'src/lib/motion/rankShift.ts' },
+  extra: { season: 'src/lib/season/soccer.ts', core: 'src/lib/season/core.ts', motion: 'src/lib/motion/rankShift.ts', resume: 'src/lib/season/resume.ts' },
 });
-const { soccer, season: S, core: C, motion: MO } = B;
+const { soccer, season: S, core: C, motion: MO, resume: RS } = B;
 const CLUBS = soccer.FALLBACK_CLUBS;
 
 let checks = 0, failed = 0;
@@ -98,8 +118,11 @@ function checkSeason(s, tag) {
 }
 
 const seen = new Set();
+/* every career as its last step left it, for section 2 */
+const careers = new Map();
 probeAwardsNight(B, {
-  onStep: s => {
+  onStep: (s, c) => {
+    careers.set(c, { name: s.playerName, seasons: s.seasons });
     if (!['newspaper', 'season_summary', 'rehab_choice'].includes(s.phase)) return;
     const row = s.seasons[s.seasons.length - 1];
     if (!row || row.type !== 'playing' || !(row.apps > 0)) return;
@@ -114,9 +137,71 @@ probeAwardsNight(B, {
 console.log(`1) every step: ${stats.tables} table seasons, ${stats.pairs} pairs of tables, ${stats.steps1Moved} of ${stats.steps1} one matchday steps moved a club (${stats.clubsMoved} club moves)`);
 check(stats.tables >= 300, `1. the probe reached enough table seasons (${stats.tables}, floor 300)`);
 check(stats.pairs >= 150000, `1. every step of every season was compared (${stats.pairs} pairs, floor 150000)`);
-check(stats.steps1 > 0 && stats.steps1Moved / stats.steps1 >= 0.8, `1. one matchday steps that moved at least one club: ${(100 * stats.steps1Moved / Math.max(1, stats.steps1)).toFixed(1)}% (floor 80%)`);
+check(stats.steps1 > 0 && stats.steps1Moved / stats.steps1 >= 0.9, `1. one matchday steps that moved at least one club: ${(100 * stats.steps1Moved / Math.max(1, stats.steps1)).toFixed(1)}% (floor 90%)`);
 for (const [item, f] of fails) console.log(`FAIL item ${item}: ${f.n} times, first: ${f.first.join(' | ')}`);
 check(!fails.has('1 keys') && !fails.has('1 shift'), `1. every club's from and to are its places in the two tables${fails.size ? ` (${[...fails.entries()].map(([k, f]) => `${k}: ${f.n}`).join(', ')})` : ''}`);
+
+/* ---- 2. the resume record ---- */
+{
+  const real = globalThis.localStorage;
+  const map = new Map();
+  const fake = { getItem: k => (map.has(k) ? map.get(k) : null), setItem: (k, v) => { map.set(k, String(v)); }, removeItem: k => { map.delete(k); } };
+  globalThis.localStorage = fake;
+  const GAME = 'soccer';
+  const SLOT = RS.resumeStorageKey(GAME);
+  const good = { key: 'a|b|2031|34|12|7|7.4|centre', year: 2031, md: 13, speed: 3, stable: false };
+  RS.writeResume(GAME, good);
+  const back = RS.readResume(GAME);
+  check(SLOT === 'seasonCentre:v1:soccer' && JSON.stringify(back) === JSON.stringify(good), '2. a record round trips under seasonCentre:v1:soccer');
+  RS.clearResume(GAME);
+  check(RS.readResume(GAME) === null && !map.has(SLOT), '2. a cleared record is gone');
+  const BAD = [null, 'x', 7, [good], {}, { ...good, key: '' }, { ...good, key: 'k'.repeat(201) }, { ...good, year: '2031' }, { ...good, year: 1899 }, { ...good, md: 0 }, { ...good, md: 2.5 }, { ...good, speed: 2 }, { ...good, stable: 1 }, { key: good.key, year: 2031, md: 13, speed: 3 }];
+  let badRead = 0, threw = 0;
+  for (const b of BAD) {
+    map.set(SLOT, JSON.stringify(b));
+    try { if (RS.readResume(GAME) !== null) badRead += 1; } catch { threw += 1; }
+  }
+  map.set(SLOT, '{not json');
+  try { if (RS.readResume(GAME) !== null) badRead += 1; } catch { threw += 1; }
+  globalThis.localStorage = { getItem: () => { throw new Error('refused'); }, setItem: () => { throw new Error('refused'); }, removeItem: () => { throw new Error('refused'); } };
+  try { if (RS.readResume(GAME) !== null) badRead += 1; RS.writeResume(GAME, good); RS.clearResume(GAME); } catch { threw += 1; }
+  globalThis.localStorage = real;
+  check(badRead === 0 && threw === 0, `2. ${BAD.length} shapes that are not a record, text that is not JSON and a storage that throws: ${badRead} read as a record, ${threw} threw`);
+
+  /* every played row of every career: a record with that row's key finds that row and nothing in another career */
+  const list = [...careers.values()];
+  const played = r => r.type === 'playing' && r.apps > 0;
+  let rows = 0, own = 0, shared = 0, foreign = 0, foreignHit = 0, heldBack = 0, heldBad = 0;
+  for (const A of list) {
+    const keyA = r => S.soccerSeasonKey(A.name, r);
+    const keys = new Set();
+    A.seasons.forEach((row, at) => {
+      if (!played(row)) return;
+      rows += 1;
+      const key = keyA(row);
+      if (keys.has(key)) shared += 1;
+      keys.add(key);
+      const rec = { key, year: row.year, md: 3, speed: 1, stable: true };
+      if (RS.resumeRowIndex(rec, A.seasons, keyA) === at) own += 1;
+      else fail('2 own', `${A.name} ${row.year}: the record does not find its own row`);
+      /* not stable: only while the save's league year is this row's */
+      const loose = { ...rec, stable: false };
+      heldBack += 1;
+      if (RS.resumeRowIndex(loose, A.seasons, keyA, row.year) !== at || RS.resumeRowIndex(loose, A.seasons, keyA, row.year + 1) !== -1 || RS.resumeRowIndex(loose, A.seasons, keyA) !== -1) { heldBad += 1; fail('2 stable', `${A.name} ${row.year}: a record that is not stable is not held to its own year`); }
+      for (const Bc of list) {
+        if (Bc === A || !Bc.seasons.some(r => played(r) && r.year === row.year)) continue;
+        foreign += 1;
+        if (RS.resumeRowIndex(rec, Bc.seasons, r => S.soccerSeasonKey(Bc.name, r)) !== -1) { foreignHit += 1; fail('2 foreign', `${A.name} ${row.year}: the record finds a row in the career of ${Bc.name}`); }
+      }
+    });
+  }
+  console.log(`2) the resume record: ${list.length} careers, ${rows} played rows, ${foreign} checks against another career that played the same year`);
+  check(list.length >= 40 && rows >= 600, `2. the probe gave enough careers and played rows (${list.length} careers, ${rows} rows; floors 40 and 600)`);
+  check(own === rows && shared === 0, `2. every record finds its own row (${own} of ${rows}); rows of one career sharing a key: ${shared}`);
+  check(foreign >= 5000 && foreignHit === 0, `2. a record finds nothing in another career (${foreignHit} of ${foreign} did; floor 5000 checks)`);
+  check(heldBack === rows && heldBad === 0, `2. a record that is not stable is held to the league year of the save (${heldBad} of ${heldBack} were not)`);
+  for (const [item, f] of fails) if (item.startsWith('2 ')) console.log(`FAIL item ${item}: ${f.n} times, first: ${f.first.join(' | ')}`);
+}
 
 /* ---- 3. source fences ---- */
 /** The text with comments gone (`code`) and with string contents blanked too (`bare`). */
@@ -152,8 +237,8 @@ const listDir = rel => fs.readdirSync(path.join(ROOT, rel)).filter(f => /\.(ts|t
 const LIB_MOTION = listDir('src/lib/motion');
 const UI_MOTION = listDir('src/components/motion');
 /* files that may draw nothing at random (the list grows as the round's parts land) */
-const NO_DRAW = [...LIB_MOTION, ...UI_MOTION];
-const IMPORTS_NOTHING = [...LIB_MOTION];
+const NO_DRAW = [...LIB_MOTION, ...UI_MOTION, 'src/lib/season/resume.ts'];
+const IMPORTS_NOTHING = [...LIB_MOTION, 'src/lib/season/resume.ts'];
 
 function fenceFindings(textOf) {
   const out = [];

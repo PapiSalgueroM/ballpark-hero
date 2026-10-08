@@ -7,7 +7,8 @@
          the props the Season Centre passes it;
      (b) the match clock with no stage slot, on one hand built game at full
          time;
-     (c) the Season Centre opened with no resume, on its kick off card.
+     (c) the Season Centre opened with no resume, on its kick off card (a
+         phone's screen, so the compact table is on it too).
    The table card's two strings are never recorded again in this round: the
    wrapper that slides the rows adds one element around the card and nothing
    inside it. (b) and (c) are recorded again exactly once, by the commit that
@@ -20,10 +21,11 @@ import { RankShiftTable } from '@/components/motion/RankShiftTable';
 import { MatchClock, type SeasonClock } from '@/components/season-centre/MatchClock';
 import { SeasonCentre, type CentreModel, type CentreSport } from '@/components/season-centre/SeasonCentre';
 import {
-  deriveSeason, ownRowRounds, roundRobinRounds,
+  deriveSeason, ownRowRounds, roundRobinRounds, tableAt,
   type DerivedGame, type FixedGame, type Frame, type SeasonSport, type StatTotal, type TeamTarget,
 } from '@/lib/season/core';
 import { LAW, goalLambda, poissonDraw } from '@/lib/season/law';
+import { ordinal } from '@/lib/soccerCareerLeague';
 import { soccerEventDisagreements, soccerEvents } from '@/lib/season/soccerEvents';
 
 interface ToyRow { mode: 'table' | 'results'; teams: number; finish?: number; apps: number; played: number; goals: number; assists: number; rating: number; yellow?: number; red?: number; fixed?: FixedGame[]; seed?: string }
@@ -127,6 +129,20 @@ const tableCard = (compact: boolean) => (
     footnote="Clubs level on points are split by goal difference, then goals scored: this game's rule." />
 );
 
+/** The markup with the one wrapper element taken away again (its children stay where they were). */
+function unwrapped(html: string, open: string): string {
+  const at = html.indexOf(open);
+  if (at < 0 || html.indexOf(open, at + 1) >= 0) throw new Error('the wrapper is not in the markup exactly once');
+  const tags = /<div\b|<\/div>/g;
+  tags.lastIndex = at + open.length;
+  let depth = 1;
+  for (let m = tags.exec(html); m; m = tags.exec(html)) {
+    depth += m[0] === '</div>' ? -1 : 1;
+    if (depth === 0) return html.slice(0, at) + html.slice(at + open.length, m.index) + html.slice(m.index + m[0].length);
+  }
+  throw new Error('the wrapper never closes');
+}
+
 describe('Season Centre: the markup this round found', () => {
   it('(a) the table card, whole and compact', () => {
     expect(renderToStaticMarkup(tableCard(false))).toMatchSnapshot('table card, whole');
@@ -146,6 +162,39 @@ describe('Season Centre: the markup this round found', () => {
   it('(c) the Season Centre on its kick off card, no resume', () => {
     const html = renderToStaticMarkup(<SeasonCentre model={slotsModel()} exitLabel="Back to your career" onClose={() => {}} />);
     expect(html).toContain('data-kickoff');
-    expect(html).toMatchSnapshot('kick off');
+    /* on a phone the kick off screen also holds the compact table, so the round's one new element is on it: taken away, the screen is the recorded one */
+    expect(unwrapped(html, '<div data-rank-shift="">')).toMatchSnapshot('kick off');
+  });
+});
+
+describe('Season Centre: opened where he stopped (Round 1046)', () => {
+  const model = slotsModel();
+  const M = model.season.games.length;
+  const open = (resume?: { md: number; speed: 1 | 3 | 'results' } | null) =>
+    renderToStaticMarkup(<SeasonCentre model={model} exitLabel="Back to your career" onClose={() => {}} resume={resume} />);
+  it('starts the kick off card at his matchday, with his place and the next five', () => {
+    const html = open({ md: 7, speed: 3 });
+    const place = tableAt(model.season, 7).findIndex(r => r.slot === 0) + 1;
+    expect(html).toContain(`7 of ${M} played · you are ${ordinal(place)}`);
+    expect(html).toContain('Next five');
+    expect(html).not.toContain('First five');
+    expect(html).toContain('▶ Matchday 8');
+    expect(html).not.toContain('▶ Kick off');
+    expect(html).toContain('data-kickoff-restart');
+    expect(html).toContain('After matchday 7');
+  });
+  it('lists the five games after his matchday, not the first five', () => {
+    const html = open({ md: 7, speed: 1 });
+    const card = html.slice(html.indexOf('data-kickoff='), html.indexOf('data-kickoff-restart'));
+    const listed = [...card.matchAll(/<span class="w-6 tabular-nums text-muted-foreground">(\d+)<\/span>/g)].map(m => Number(m[1]));
+    expect(listed).toEqual([8, 9, 10, 11, 12]);
+  });
+  it('is the fresh card when the place does not fit this season', () => {
+    const fresh = open();
+    for (const md of [0, -1, M, M + 5, 2.5, Number.NaN]) expect(open({ md, speed: 1 }), `md ${md}`).toBe(fresh);
+    expect(open(null)).toBe(fresh);
+  });
+  it('takes the last matchday but one, and no further', () => {
+    expect(open({ md: M - 1, speed: 1 })).toContain(`▶ Matchday ${M}`);
   });
 });

@@ -205,8 +205,13 @@ function TablePanel({ model, played, compact }: { model: CentreModel; played: nu
   );
 }
 
-function KickOff({ model, onKick, onStraight }: { model: CentreModel; onKick: () => void; onStraight: () => void }) {
+/** The kick off card. `from` is how many rounds he has already watched (a resume); 0 is the card a fresh open draws. */
+function KickOff({ model, from, roundWord, onKick, onStraight, onRestart }: { model: CentreModel; from: number; roundWord: string; onKick: () => void; onStraight: () => void; onRestart: () => void }) {
   const { season: s, header, names, occasion } = model;
+  const M = s.games.length;
+  const place = from > 0 && s.mode === 'table' ? tableAt(s, from).findIndex(r => r.slot === 0) + 1 : 0;
+  /* his moments already behind the place he resumes at: only a start from the top plays them */
+  const behind = from > 0 ? (model.moments?.list ?? []).filter(m => !m.taken && m.md <= from).length : 0;
   return (
     <div className="cm-rise space-y-3" data-kickoff>
       <div>
@@ -218,11 +223,13 @@ function KickOff({ model, onKick, onStraight }: { model: CentreModel; onKick: ()
         {model.resultsWhy && <div className="mt-1 text-xs text-muted-foreground" data-results-why>{model.resultsWhy}</div>}
         {model.lastSeason && <div className="mt-1 text-xs text-muted-foreground">{model.lastSeason}</div>}
         {model.moments?.kickoff && <div className="mt-1 text-xs font-semibold text-primary" data-kickoff-moments>🎯 {model.moments.kickoff}</div>}
+        {from > 0 && <div className="mt-1 text-xs font-semibold" data-kickoff-resumed>{from} of {M} played{place > 0 ? ` · you are ${ordinal(place)}` : ''}</div>}
+        {behind > 0 && <div className="mt-1 text-xs text-muted-foreground" data-kickoff-behind>🎯 {behind} of your moments {behind === 1 ? 'is' : 'are'} before {roundWord.toLowerCase()} {from + 1}. ↺ From the start plays {behind === 1 ? 'it' : 'them'}.</div>}
       </div>
       <div>
-        <div className="mb-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">First five</div>
+        <div className="mb-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{from > 0 ? 'Next five' : 'First five'}</div>
         <ul className="space-y-1">
-          {s.games.slice(0, 5).map(g => (
+          {s.games.slice(from, from + 5).map(g => (
             <li key={g.md} className="flex items-center gap-2 text-xs">
               <span className="w-6 tabular-nums text-muted-foreground">{g.md}</span>
               <span className="w-10 text-muted-foreground">{g.home ? 'Home' : 'Away'}</span>
@@ -233,11 +240,12 @@ function KickOff({ model, onKick, onStraight }: { model: CentreModel; onKick: ()
         </ul>
       </div>
       <div className="flex flex-col gap-2 sm:flex-row">
-        <button type="button" onClick={onKick} className="h-11 flex-1 rounded-lg bg-emerald-600 text-sm font-bold text-black hover:bg-emerald-500">▶ Kick off</button>
+        <button type="button" onClick={onKick} className="h-11 flex-1 rounded-lg bg-emerald-600 text-sm font-bold text-black hover:bg-emerald-500">{from > 0 ? `▶ ${roundWord} ${from + 1}` : '▶ Kick off'}</button>
         <button type="button" onClick={onStraight} className="h-11 flex-1 rounded-lg border border-border text-sm font-semibold hover:bg-muted/40">
           {s.mode === 'table' ? '⏭ Straight to the final table' : '⏭ Straight to the season review'}
         </button>
       </div>
+      {from > 0 && <button type="button" onClick={onRestart} className="h-11 w-full rounded-lg text-xs font-semibold text-muted-foreground hover:bg-muted/40" data-kickoff-restart>↺ From the start</button>}
     </div>
   );
 }
@@ -353,14 +361,28 @@ function Review({ model, reduced }: { model: CentreModel; reduced: boolean }) {
   );
 }
 
-export function SeasonCentre({ model, exitLabel, onClose }: { model: CentreModel; exitLabel: string; onClose: () => void }) {
+/** A place in a season: rounds fully watched, and the clock speed he had. */
+export interface CentrePlace { md: number; speed: ClockSpeed }
+
+interface SeasonCentreProps {
+  model: CentreModel;
+  exitLabel: string;
+  onClose: () => void;
+  /** Round 1046: open with `md` rounds already watched (1 to the last but one; anything else is ignored). */
+  resume?: CentrePlace | null;
+  /** Round 1046: told where he is after every round, and null when nothing is left to resume. */
+  onProgress?: (at: CentrePlace | null) => void;
+}
+
+export function SeasonCentre({ model, exitLabel, onClose, resume, onProgress }: SeasonCentreProps) {
   const s = model.season;
   const M = s.games.length;
+  const start = resume && Number.isInteger(resume.md) && resume.md >= 1 && resume.md <= M - 1 ? resume : null;
   const reduced = useReducedMotion();
   const wide = useWide();
   const [stage, setStage] = useState<Stage>({ kind: 'kickoff' });
-  const [played, setPlayed] = useState(0);
-  const [speed, setSpeed] = useState<ClockSpeed>(1);
+  const [played, setPlayed] = useState(() => start?.md ?? 0);
+  const [speed, setSpeed] = useState<ClockSpeed>(() => start?.speed ?? 1);
   const [paused, setPaused] = useState(false);
   const [ft, setFt] = useState(false);
   const [fixturesOpen, setFixturesOpen] = useState(false);
@@ -402,6 +424,15 @@ export function SeasonCentre({ model, exitLabel, onClose }: { model: CentreModel
   bankRef.current = moments?.bank;
   useEffect(() => { if (stage.kind === 'review') bankRef.current?.(true); }, [stage.kind]);
   const leave = useCallback(() => { bankRef.current?.(false); onClose(); }, [onClose]);
+  /* Round 1046: his place. A resume that does not fit this season is dropped once; after that every round watched is told, and the review (or a start from the top) says there is nothing left to come back to */
+  const progressRef = useRef(onProgress);
+  progressRef.current = onProgress;
+  const misfit = !!resume && !start;
+  useEffect(() => { if (misfit) progressRef.current?.(null); }, [misfit]);
+  useEffect(() => {
+    if (stage.kind === 'review') progressRef.current?.(null);
+    else if (played >= 1 && played <= M - 1) progressRef.current?.({ md: played, speed });
+  }, [played, speed, stage.kind, M]);
   const current = stage.kind === 'match' || stage.kind === 'poster' ? stage.md : null;
   const onFullTime = useCallback(() => { if (current !== null) { setPlayed(p => Math.max(p, current)); setFt(true); } }, [current]);
   /* the next big game from the very next matchday on; when that next one is
@@ -422,7 +453,7 @@ export function SeasonCentre({ model, exitLabel, onClose }: { model: CentreModel
   const fixturesShown = fixturesOpen && hosting === null;
 
   const stageBody = (() => {
-    if (stage.kind === 'kickoff') return <KickOff model={model} onKick={() => go(1)} onStraight={toEnd} />;
+    if (stage.kind === 'kickoff') return <KickOff model={model} from={played} roundWord={roundWord} onKick={() => go(played + 1)} onStraight={toEnd} onRestart={() => { setPlayed(0); progressRef.current?.(null); }} />;
     if (stage.kind === 'review') return <Review model={model} reduced={reduced} />;
     if (stage.kind === 'poster') return <Poster key={`p${stage.md}`} model={model} md={stage.md} reduced={reduced} />;
     const g = s.games[stage.md - 1];
