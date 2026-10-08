@@ -67,10 +67,20 @@
  *     Default keys: active Barcelona 109,938, Everton parked 169,315, Lincoln
  *     City parked 164,721, index 31. The dupe control adds a lean 57,768 copy
  *     of Barcelona, a fifth key, total 501,773.
- *   BUDGET 470,000 sits 25,008 over the largest healthy total and 31,773
+ *   BUDGET 470,000 sat 25,008 over the largest healthy total and 31,773
  *   under what the dupe control leaves, against a spread of 2,934 between
  *   healthy streams. For scale, simClubManagerSaveSize
  *   works against a 5 MB origin quota, and three careers take under a fifth of it.
+ *   Round 1052 moved BUDGET to 495,000 (a GitHub runner, 2026-10-08). Every
+ *   one of the three careers carries the world, and the world had grown since
+ *   the numbers above were taken: on that round's base (5ba57826, 26 leagues)
+ *   the default stream already stood at 464,279. With the Russian Premier
+ *   League as league 27 (1fa0a7a7), default stream and SIM_SEED 1 to 5:
+ *   469,468 / 470,019 / 466,396 / 467,431 / 469,767 / 468,078, so SIM_SEED 1
+ *   went over the old 470,000 by 19 characters on a healthy engine. The dupe
+ *   control on that tree leaves 528,801 across five keys and fired through
+ *   the budget check. 495,000 sits 24,981 over the largest healthy total and
+ *   33,801 under the control's, the margins the old number was set with.
  *   section 4 (2026-10-03, default, SIM_SEED 1, 2): the lived in save stands
  *     at season 5, week 19 with 190 / 196 / 191 h2h rows (115,179 / 116,726 /
  *     115,876 characters); the park cuts 1 / 2 / 2 of them, so the lean cut
@@ -100,7 +110,7 @@ const BUNDLE = `${TMP}/bundle.mjs`;
 
 const SWITCHES = Number(process.env.SLOTS_SWITCHES || 20);
 const BUDGET_SEASON = Number(process.env.SLOTS_BUDGET_SEASON || 15);
-const BUDGET = 470_000; // measured healthy 442,058 to 444,992; actual duplicated career control 501,773
+const BUDGET = 495_000; // Round 1052, 27 leagues: measured healthy 466,396 to 470,019; actual duplicated career control 528,801 (was 470,000: healthy 442,058 to 444,992, control 501,773)
 const SAVE_KEY = 'dukb-club-manager-save';
 /* SIM_SEED re-roots every career's stream, to measure the fences on fresh
    samples on purpose. The default is the stream the fences are judged on. */

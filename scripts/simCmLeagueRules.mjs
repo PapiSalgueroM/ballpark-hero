@@ -211,6 +211,31 @@
       (Manager Hot Seat opts out of the coach, and the coach no longer
       sends the reserve keeper on outfield), so this file is the coach as
       shipped, not as merged.
+      Round 1052 (2026-10-08) re-took modern, eras and pure for the Russian
+      Premier League, league 27 in nation 21, after a ladder of throwaway
+      copies of src taken with this harness's root override on a GitHub
+      runner at 1fa0a7a7 (the Round 1035 ladder, one leg longer because the
+      round also edited two name banks). Leg 1, the whole round out of the
+      world (the league row, its rules row, its nation and both spreads of
+      the join) with the two bank edits undone: the committed file byte for
+      byte (modern 26/0, eras 20/0, pure 47/0), so everything else of the
+      round is inert. Leg 1b, the two bank edits back in (no scout may be
+      named Stefan Kovac, the era filler may not build Ismael Silva, both
+      real men of the new league): now|premier, now|mlsEast and now|superlig
+      move in modern and era2005|seriea2005 in eras, pure 0. Leg 2, the join
+      back in with the rows still out: 21 more modern saves move and no era
+      save, pure 0; that is the real name sets (357 new real names a made
+      up player may no longer roll) and the call up bars, which read every
+      squad of the world (16 nations' bars moved or appeared: Russia 68 to
+      72, and Albania, Angola, Armenia, Bolivia, Burkina Faso, Costa Rica,
+      Iran, Kazakhstan, Peru, Romania, Slovenia and Uzbekistan down as
+      their short lists grew, Belarus, Tajikistan and Turkmenistan new).
+      Leg 3, the rows in: all 26 older modern saves have moved and
+      now|russia is added (the world every save simulates gained a league),
+      6 era saves move (the bidding war rival and the headline buyers read
+      every modern league with no era gate, a gap older than this round),
+      and pure adds now|russia and moves the views, which list the leagues
+      and nations; no league's own pure key moved.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,
@@ -507,8 +532,9 @@ async function partModern() {
      tree on purpose (see that commit for the attribution of every moved hash).
      Round 883: 22 with Liga MX, rewritten the same way and attributed in its commit.
      Round 1035: 23 with the A-League Men, rewritten the same way and
-     attributed in its commit. Round 1040: 24 with Serie B, 25 with Ligue 2 and 26 with the Segunda División, the same way. */
-  if (saves.length !== 26) fail(`the game has ${saves.length} modern leagues where this round found 26 (a league added later regenerates the baseline on purpose)`);
+     attributed in its commit. Round 1040: 24 with Serie B, 25 with Ligue 2 and 26 with the Segunda División, the same way.
+     Round 1052: 27 with the Russian Premier League, the same way (the ladder is in this file's header). */
+  if (saves.length !== 27) fail(`the game has ${saves.length} modern leagues where this round found 27 (a league added later regenerates the baseline on purpose)`);
   const got = await digestSaves(saves, mod);
   if (WRITE) written.modern = got; else compare('modern', got, baseline.parts.modern);
 }
