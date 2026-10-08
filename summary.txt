@@ -1,0 +1,3 @@
+money exit=1 38s | 1 FAILURES
+vitest-b exit=0 41s |    Duration  40.07s (transform 5.95s, setup 889ms, collect 18.50s, tests 75.13s, environment 5.80s, prepare 1.43s)
+deckc-record exit=0 58s | simUsCareerDeckC: all checks passed
