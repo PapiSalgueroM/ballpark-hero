@@ -178,3 +178,117 @@ describe('the paged door, recorded on main before Round 1105 touched the engine'
     }
   });
 });
+
+/* ------------------------------------------------------------------------- */
+/* Added WITH the lift (Round 1105): the static door.                         */
+/* ------------------------------------------------------------------------- */
+
+import { fetchStaticJson, forgetStaticJson, type GridStaticSource } from '@/lib/gridEngine';
+
+type Reply = { ok: boolean; json: () => Promise<unknown> };
+const okJson = (body: unknown): Reply => ({ ok: true, json: async () => body });
+/** What the live host sends for a missing file: index.html with a 200. */
+const htmlWith200 = (): Reply => ({ ok: true, json: async () => { throw new SyntaxError('Unexpected token < in JSON'); } });
+
+let urlSeq = 0;
+/** A fresh pair of URLs per test: the engine holds one promise per URL for the page's life. */
+const freshUrls = () => { urlSeq += 1; return [`/assets/probeA-${urlSeq}.json`, `/assets/probeB-${urlSeq}.json`]; };
+
+const staticRows = () => table().map((r) => ({ player_name: r.player_name, teams: r.teams, n: r.n }));
+const staticCfg = (urls: string[], toRows: GridStaticSource['toRows']): FranchiseGridConfig<Probe> => ({ ...CFG, staticSource: { urls, toRows } });
+/** files[0] carries the rows, files[1] a stamp that has to match. */
+const pairToRows: GridStaticSource['toRows'] = (files) => {
+  const [a, b] = files as [{ stamp: string; rows: Record<string, unknown>[] }, { stamp: string }];
+  return a?.stamp && a.stamp === b?.stamp && Array.isArray(a.rows) ? a.rows : null;
+};
+
+describe('the static door (Round 1105)', () => {
+  it('fetches each URL once, makes no table request, and indexes the same way the paged door does', async () => {
+    const urls = freshUrls();
+    const seen: string[] = [];
+    vi.stubGlobal('fetch', vi.fn(async (url: string) => { seen.push(url); return okJson(url === urls[0] ? { stamp: 's1', rows: staticRows() } : { stamp: 's1' }); }));
+    const data = await settle(fetchFranchiseGridData(staticCfg(urls, pairToRows)));
+    expect(seen.slice().sort()).toEqual(urls.slice().sort());
+    expect(stub.calls, 'no request to the table').toEqual([]);
+    expect(data!.players.map((p) => p.n)).toEqual(Array.from({ length: TABLE_ROWS }, (_, i) => i));
+    expect(data!.byNormalizedName.get('probe namesake')?.map((p) => p.n)).toEqual(SHARED);
+    /* A second load in the same page life costs no request at all. */
+    const again = await settle(fetchFranchiseGridData(staticCfg(urls, pairToRows)));
+    expect(again!.players.length).toBe(TABLE_ROWS);
+    expect(seen.length).toBe(2);
+  });
+
+  it('two callers share one in flight request', async () => {
+    const [url] = freshUrls();
+    let release: (r: Reply) => void = () => {};
+    const fetchMock = vi.fn(() => new Promise<Reply>((r) => { release = r; }));
+    vi.stubGlobal('fetch', fetchMock);
+    const first = fetchStaticJson(url);
+    const second = fetchStaticJson(url);
+    expect(second, 'the very same promise').toBe(first);
+    release(okJson({ hello: 1 }));
+    expect(await settle(first)).toEqual({ hello: 1 });
+    expect(await settle(second)).toEqual({ hello: 1 });
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('a URL that fails three attempts is null, is not asked again until the next call, and is then retried', async () => {
+    const [url] = freshUrls();
+    let healthy = false;
+    const fetchMock = vi.fn(async () => { if (!healthy) throw new TypeError('Failed to fetch'); return okJson({ ok: 1 }); });
+    vi.stubGlobal('fetch', fetchMock);
+    expect(await settle(fetchStaticJson(url))).toBeNull();
+    expect(fetchMock, 'the first attempt and two more (400 ms, 800 ms)').toHaveBeenCalledTimes(3);
+    await vi.advanceTimersByTimeAsync(60_000);
+    expect(fetchMock, 'nothing retries on its own').toHaveBeenCalledTimes(3);
+    healthy = true;
+    expect(await settle(fetchStaticJson(url))).toEqual({ ok: 1 });
+    expect(fetchMock).toHaveBeenCalledTimes(4);
+    expect(vi.getTimerCount(), 'no timer is left alive').toBe(0);
+  });
+
+  it('a 200 with an HTML body, a 404 and a body of null are all failures: null', async () => {
+    for (const reply of [htmlWith200(), { ok: false, json: async () => ({}) }, okJson(null)]) {
+      const urls = freshUrls();
+      const fetchMock = vi.fn(async () => reply);
+      vi.stubGlobal('fetch', fetchMock);
+      expect(await settle(fetchFranchiseGridData(staticCfg(urls, pairToRows)))).toBeNull();
+      expect(fetchMock, 'three attempts per URL').toHaveBeenCalledTimes(6);
+      expect(stub.calls, 'and never a fall back to the table').toEqual([]);
+    }
+  });
+
+  it('a body that parses but is refused by toRows is null, and the next call asks for each URL exactly once more', async () => {
+    const urls = freshUrls();
+    let stampB = 'OTHER';
+    const fetchMock = vi.fn(async (url: string) => okJson(url === urls[0] ? { stamp: 's1', rows: staticRows() } : { stamp: stampB }));
+    vi.stubGlobal('fetch', fetchMock);
+    expect(await settle(fetchFranchiseGridData(staticCfg(urls, pairToRows))), 'the stamps differ').toBeNull();
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    stampB = 's1';
+    const data = await settle(fetchFranchiseGridData(staticCfg(urls, pairToRows)));
+    expect(fetchMock, 'one new request per URL, no more').toHaveBeenCalledTimes(4);
+    expect(data!.players.length).toBe(TABLE_ROWS);
+    expect(stub.calls).toEqual([]);
+  });
+
+  it('a static pool under the floor is null, and forgetStaticJson makes the next call ask again', async () => {
+    const urls = freshUrls();
+    const fetchMock = vi.fn(async (url: string) => okJson(url === urls[0] ? { stamp: 's1', rows: staticRows().slice(0, 1999) } : { stamp: 's1' }));
+    vi.stubGlobal('fetch', fetchMock);
+    expect(await settle(fetchFranchiseGridData(staticCfg(urls, pairToRows)))).toBeNull();
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    forgetStaticJson(urls);
+    await settle(fetchFranchiseGridData(staticCfg(urls, pairToRows)));
+    expect(fetchMock).toHaveBeenCalledTimes(4);
+  });
+
+  it('withIds with no id column is still refused before anything is fetched', async () => {
+    const urls = freshUrls();
+    const fetchMock = vi.fn(async () => okJson({}));
+    vi.stubGlobal('fetch', fetchMock);
+    const { idColumn: _dropped, ...noId } = staticCfg(urls, pairToRows);
+    expect(await settle(fetchFranchiseGridData(noId as FranchiseGridConfig<Probe>, { withIds: true }))).toBeNull();
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+});
