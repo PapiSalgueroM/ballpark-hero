@@ -58,7 +58,7 @@ const NEW = ['block', 'kickoff', 'overlap', 'mouth', 'draw', 'approach', 'lag', 
 assert.ok(['', ...OLD, ...NEW].includes(control), 'Unknown live motion control');
 assert.ok(['', 'bundle'].includes(only), 'Unknown LIVE_MOTION_ONLY');
 /* Minified bytes and gzip bytes of the part alone, and the ceiling: each plus a fifth. */
-const BUNDLE_MEASURED = { min: 17943, gzip: 7623 };
+const BUNDLE_MEASURED = { min: 18141, gzip: 7675 };
 const BUNDLE_CEILING = { min: Math.ceil(BUNDLE_MEASURED.min * 1.2), gzip: Math.ceil(BUNDLE_MEASURED.gzip * 1.2) };
 const PART = path.join(root, 'src/components/pitch-motion');
 const lf = async file => (await readFile(file, 'utf8')).replaceAll('\r\n', '\n');

@@ -4,7 +4,7 @@ import type { PitchMoment, PitchMotionProps } from '@/components/pitch-motion/co
 import { LivePitchPlayer, useLiveSimMotion } from '@/components/pitch-motion/motion';
 import type { MotionEvent } from '@/components/pitch-motion/motion';
 import { PitchSurface, pitchSpot } from '@/components/pitch-motion/PitchSurface';
-import { pitchPlan, pitchScene, pitchSceneKey } from '@/components/pitch-motion/scene';
+import { pitchBeatAt, pitchPlan, pitchScene, pitchSceneKey } from '@/components/pitch-motion/scene';
 import type { PitchStagedAction } from '@/components/pitch-motion/scene';
 
 /**
@@ -45,6 +45,15 @@ export function PitchMotion({
   useEffect(() => {
     if (clock < lastClock.current - 1e-6) fired.current.clear();
     lastClock.current = clock;
+    if (onMoment) {
+      /* A dead ball of the plan (a kick off, a corner, a throw in, a free kick) is a moment too, told when the
+         clock comes into it. It is staged by the plan, not played off a line, so there is no event to hand over. */
+      const beat = pitchBeatAt(plan, clock);
+      if (beat.dead && (beat.state === 'kickoff' || beat.state === 'corner' || beat.state === 'throwin' || beat.state === 'freekick')) {
+        const key = `${beat.id}:${beat.state}`;
+        if (!fired.current.has(key)) { fired.current.add(key); onMoment(beat.state, null); }
+      }
+    }
     if (!onMoment || !action || frame.action === 'pass') return;
     const mark = (moment: PitchMoment) => {
       const key = `${action.key}:${moment}`;

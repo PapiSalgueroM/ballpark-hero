@@ -237,6 +237,23 @@ describe('The pitch part behind its contract', () => {
     expect(moving.querySelector('[data-cm-live-pitch]')!.getAttribute('data-cm-motion-phase')).toBe('flight');
   });
 
+  it('PitchMotion tells a binder about each dead ball, once', () => {
+    const moments: string[] = [];
+    const feed = [
+      { minute: 2, side: 'me', kind: 'corner', text: 'Home next', flank: 'left' },
+      { minute: 4, side: 'opp', kind: 'throwin', text: '' },
+      { minute: 6, side: 'opp', kind: 'foul', text: 'Away near' },
+    ] satisfies PitchEvent[];
+    const props = {
+      ...FIVE, feed, span: { from: 0, to: 8 }, kickoffs: [{ at: 0, side: 'me' as const }], playing: true, reducedMotion: true,
+      onMoment: (moment: string, line: PitchEvent | null) => { moments.push(`${moment}:${line === null ? 'no line' : line.kind}`); },
+    };
+    const mounted = render(<PitchMotion {...props} clock={0.05} />);
+    /* Twice inside each dead ball, and open play between them: each is told once, in order, and nothing else is. */
+    for (const clock of [0.2, 1.2, 2.05, 2.2, 3, 4.1, 4.3, 5, 6.1, 6.2, 7]) mounted.rerender(<PitchMotion {...props} clock={clock} />);
+    expect(moments).toEqual(['kickoff:no line', 'corner:no line', 'throwin:no line', 'freekick:no line']);
+  });
+
   it("goalWindow says windup, net and over at the contract's instants", () => {
     const goal = event('me');
     expect(goalWindow(null, 5.5)).toBeNull();
