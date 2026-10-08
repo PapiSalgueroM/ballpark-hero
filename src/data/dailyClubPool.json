@@ -244,6 +244,22 @@
     {"club":"Reims","leagueId":"ligue2","leagueName":"Ligue 2","from":"2026-11-06"},
     {"club":"Girona","leagueId":"segunda","leagueName":"Segunda División","from":"2026-11-06"},
     {"club":"Mallorca","leagueId":"segunda","leagueName":"Segunda División","from":"2026-11-06"},
-    {"club":"Lausanne-Sport","leagueId":"switzerland","until":"2026-11-06"}
+    {"club":"Lausanne-Sport","leagueId":"switzerland","until":"2026-11-06"},
+    {"club":"Zenit","leagueId":"russia","leagueName":"Russian Premier League","from":"2026-11-07"},
+    {"club":"Spartak Moscow","leagueId":"russia","leagueName":"Russian Premier League","from":"2026-11-07"},
+    {"club":"Krasnodar","leagueId":"russia","leagueName":"Russian Premier League","from":"2026-11-07"},
+    {"club":"Dynamo Moscow","leagueId":"russia","leagueName":"Russian Premier League","from":"2026-11-07"},
+    {"club":"CSKA Moscow","leagueId":"russia","leagueName":"Russian Premier League","from":"2026-11-07"},
+    {"club":"Lokomotiv Moscow","leagueId":"russia","leagueName":"Russian Premier League","from":"2026-11-07"},
+    {"club":"Rubin Kazan","leagueId":"russia","leagueName":"Russian Premier League","from":"2026-11-07"},
+    {"club":"Rostov","leagueId":"russia","leagueName":"Russian Premier League","from":"2026-11-07"},
+    {"club":"Baltika","leagueId":"russia","leagueName":"Russian Premier League","from":"2026-11-07"},
+    {"club":"Akhmat Grozny","leagueId":"russia","leagueName":"Russian Premier League","from":"2026-11-07"},
+    {"club":"Akron Tolyatti","leagueId":"russia","leagueName":"Russian Premier League","from":"2026-11-07"},
+    {"club":"Krylia Sovetov","leagueId":"russia","leagueName":"Russian Premier League","from":"2026-11-07"},
+    {"club":"Rodina Moscow","leagueId":"russia","leagueName":"Russian Premier League","from":"2026-11-07"},
+    {"club":"Orenburg","leagueId":"russia","leagueName":"Russian Premier League","from":"2026-11-07"},
+    {"club":"Dynamo Makhachkala","leagueId":"russia","leagueName":"Russian Premier League","from":"2026-11-07"},
+    {"club":"Fakel Voronezh","leagueId":"russia","leagueName":"Russian Premier League","from":"2026-11-07"}
   ]
 }
