@@ -1,0 +1,7 @@
+simStaleChunk exit=0 0s | simStaleChunk: green. A tab left open across a deploy reloads once for a missing chunk instead of painting the broken page.
+simAccessibility exit=0 0s | simAccessibility: all green
+simHomeCopy exit=0 1s | simHomeCopy: green. The one page a crawler reads first says only true things.
+simGuideHeadings exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+simInventedNames exit=0 10s | simInventedNames: green. Every invented man on this site is invented all the way down.
+vitest-boundary exit=0 13s |    Duration  12.19s (transform 4.36s, setup 311ms, collect 7.58s, tests 12.25s, environment 1.87s, prepare 723ms)
+simNoInventedQuotes exit=0 20s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
