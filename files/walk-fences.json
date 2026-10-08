@@ -1,0 +1,781 @@
+{
+  "base": "http://localhost:4173",
+  "runs": [
+    {
+      "name": "home",
+      "view": 390,
+      "audits": [
+        {
+          "url": "/",
+          "scrollY": 0,
+          "dashes": [],
+          "dashCount": 0,
+          "footers": 1,
+          "disclaimer": true,
+          "uefa": true,
+          "reportBug": true,
+          "helpControls": 2,
+          "overflowX": 0,
+          "imgHosts": [],
+          "scopeFound": null,
+          "scopeText": null,
+          "small": [],
+          "cut": [],
+          "robots": null,
+          "textLength": 22395,
+          "tag": "home before search"
+        },
+        {
+          "url": "/",
+          "scrollY": 0,
+          "dashes": [],
+          "dashCount": 0,
+          "footers": 1,
+          "disclaimer": true,
+          "uefa": true,
+          "reportBug": true,
+          "helpControls": 0,
+          "overflowX": 0,
+          "imgHosts": [],
+          "scopeFound": true,
+          "scopeText": "Search could not load Your games are still here. Go back to browse, or reload to try search again. If you are offline, reconnect before reloading. Back to games Reload page",
+          "small": [],
+          "cut": [],
+          "robots": null,
+          "textLength": 6865,
+          "tag": "search could not load"
+        }
+      ],
+      "notes": [
+        "attempt 1: notice on screen 1, box holds \"messi\"",
+        "Back to games: {\"y\":0,\"value\":\"\",\"focused\":true,\"notice\":false} (scrollY before 0)"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "hosts": {
+        "fonts.googleapis.com": 2,
+        "flawuiqbvjobmkfkauhw.supabase.co": 5
+      }
+    },
+    {
+      "name": "home",
+      "view": 1280,
+      "audits": [
+        {
+          "url": "/",
+          "scrollY": 0,
+          "dashes": [],
+          "dashCount": 0,
+          "footers": 1,
+          "disclaimer": true,
+          "uefa": true,
+          "reportBug": true,
+          "helpControls": 2,
+          "overflowX": 0,
+          "imgHosts": [],
+          "scopeFound": null,
+          "scopeText": null,
+          "small": [],
+          "cut": [],
+          "robots": null,
+          "textLength": 22670,
+          "tag": "home before search"
+        },
+        {
+          "url": "/",
+          "scrollY": 0,
+          "dashes": [],
+          "dashCount": 0,
+          "footers": 1,
+          "disclaimer": true,
+          "uefa": true,
+          "reportBug": true,
+          "helpControls": 0,
+          "overflowX": 0,
+          "imgHosts": [],
+          "scopeFound": true,
+          "scopeText": "Search could not load Your games are still here. Go back to browse, or reload to try search again. If you are offline, reconnect before reloading. Back to games Reload page",
+          "small": [],
+          "cut": [],
+          "robots": null,
+          "textLength": 6865,
+          "tag": "search could not load"
+        }
+      ],
+      "notes": [
+        "attempt 1: notice on screen 1, box holds \"messi\"",
+        "Back to games: {\"y\":0,\"value\":\"\",\"focused\":true,\"notice\":false} (scrollY before 0)"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "hosts": {
+        "fonts.googleapis.com": 2,
+        "flawuiqbvjobmkfkauhw.supabase.co": 7
+      }
+    },
+    {
+      "name": "boxing",
+      "view": 390,
+      "audits": [
+        {
+          "url": "/fight-promoter",
+          "scrollY": 0,
+          "dashes": [],
+          "dashCount": 0,
+          "footers": 1,
+          "disclaimer": true,
+          "uefa": true,
+          "reportBug": true,
+          "helpControls": 1,
+          "overflowX": 0,
+          "imgHosts": [],
+          "scopeFound": null,
+          "scopeText": null,
+          "small": [],
+          "cut": [],
+          "robots": null,
+          "textLength": 10826,
+          "tag": "mode choice"
+        },
+        {
+          "url": "/fight-promoter",
+          "scrollY": 171,
+          "dashes": [],
+          "dashCount": 0,
+          "footers": 1,
+          "disclaimer": true,
+          "uefa": true,
+          "reportBug": true,
+          "helpControls": 2,
+          "overflowX": 0,
+          "imgHosts": [],
+          "scopeFound": true,
+          "scopeText": "Show cash forecast ? Attendance 70 of 1,200 Gate 0.015m Fighter pay 0.014m Room hire 0.006m Show result Loss 0.005m Cash afterward 0.115m Fighter pay is the larger of 0.014m in guarantees or 0.009m from 58% of the gate.",
+          "small": [],
+          "cut": [],
+          "robots": null,
+          "textLength": 12133,
+          "tag": "show cash forecast"
+        },
+        {
+          "url": "/fight-promoter",
+          "scrollY": 171,
+          "dashes": [],
+          "dashCount": 0,
+          "footers": 1,
+          "disclaimer": true,
+          "uefa": true,
+          "reportBug": true,
+          "helpControls": 2,
+          "overflowX": 0,
+          "imgHosts": [],
+          "scopeFound": true,
+          "scopeText": "How show cash works Check the current card before you put the show on. All money figures are in millions. Your card, venue and ticket price set attendance and the gate. Fighters take the larger of their combined guarantees or 58% of the gate. Room hire is paid as well. For this card: 0.015m gate, less 0.014m fighter pay and 0.006m room hire, gives a loss 0.005m. Your cash goes from 0.120m to 0.115m. A cash balance below 0 ends the promotion. Exactly 0 keeps it open, with no cash buffer. A loss does not end it if you can still cover it. These figures follow your current choices. Fight results and reputation are decided when the show runs. Opening or closing this help does not run a show. Back to card Close",
+          "small": [],
+          "cut": [
+            {
+              "t": "Close",
+              "clipped": 43
+            }
+          ],
+          "robots": null,
+          "textLength": 12854,
+          "tag": "show cash help open"
+        }
+      ],
+      "notes": [
+        "start: Book your first room",
+        "bout try 0: Cristian Ubaldi draw 11 Featherweight · Out-Boxer · 7-0 · rating 45 v Andre Nakamura appeal 24 rating 54 against his 45 · nobody could split",
+        "help closed: {\"y\":171,\"dialog\":false,\"focus\":\"Show cash rules\"}"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "hosts": {
+        "fonts.googleapis.com": 1,
+        "flawuiqbvjobmkfkauhw.supabase.co": 1
+      }
+    },
+    {
+      "name": "boxing",
+      "view": 1280,
+      "audits": [
+        {
+          "url": "/fight-promoter",
+          "scrollY": 0,
+          "dashes": [],
+          "dashCount": 0,
+          "footers": 1,
+          "disclaimer": true,
+          "uefa": true,
+          "reportBug": true,
+          "helpControls": 1,
+          "overflowX": 0,
+          "imgHosts": [],
+          "scopeFound": null,
+          "scopeText": null,
+          "small": [],
+          "cut": [],
+          "robots": null,
+          "textLength": 10883,
+          "tag": "mode choice"
+        },
+        {
+          "url": "/fight-promoter",
+          "scrollY": 4,
+          "dashes": [],
+          "dashCount": 0,
+          "footers": 1,
+          "disclaimer": true,
+          "uefa": true,
+          "reportBug": true,
+          "helpControls": 2,
+          "overflowX": 0,
+          "imgHosts": [],
+          "scopeFound": true,
+          "scopeText": "Show cash forecast ? Attendance 70 of 1,200 Gate 0.015m Fighter pay 0.014m Room hire 0.006m Show result Loss 0.005m Cash afterward 0.115m Fighter pay is the larger of 0.014m in guarantees or 0.009m from 58% of the gate.",
+          "small": [],
+          "cut": [],
+          "robots": null,
+          "textLength": 12190,
+          "tag": "show cash forecast"
+        },
+        {
+          "url": "/fight-promoter",
+          "scrollY": 4,
+          "dashes": [],
+          "dashCount": 0,
+          "footers": 1,
+          "disclaimer": true,
+          "uefa": true,
+          "reportBug": true,
+          "helpControls": 2,
+          "overflowX": 0,
+          "imgHosts": [],
+          "scopeFound": true,
+          "scopeText": "How show cash works Check the current card before you put the show on. All money figures are in millions. Your card, venue and ticket price set attendance and the gate. Fighters take the larger of their combined guarantees or 58% of the gate. Room hire is paid as well. For this card: 0.015m gate, less 0.014m fighter pay and 0.006m room hire, gives a loss 0.005m. Your cash goes from 0.120m to 0.115m. A cash balance below 0 ends the promotion. Exactly 0 keeps it open, with no cash buffer. A loss does not end it if you can still cover it. These figures follow your current choices. Fight results and reputation are decided when the show runs. Opening or closing this help does not run a show. Back to card Close",
+          "small": [],
+          "cut": [
+            {
+              "t": "Close",
+              "clipped": 43
+            }
+          ],
+          "robots": null,
+          "textLength": 12911,
+          "tag": "show cash help open"
+        }
+      ],
+      "notes": [
+        "start: Book your first room",
+        "bout try 0: Cristian Ubaldi draw 11 Featherweight · Out-Boxer · 7-0 · rating 45 v Andre Nakamura appeal 24 rating 54 against his 45 · nobody could split",
+        "help closed: {\"y\":4,\"dialog\":false,\"focus\":\"Show cash rules\"}"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "hosts": {
+        "fonts.googleapis.com": 1,
+        "flawuiqbvjobmkfkauhw.supabase.co": 1
+      }
+    },
+    {
+      "name": "tycoon",
+      "view": 390,
+      "audits": [
+        {
+          "url": "/stadium-tycoon",
+          "scrollY": 0,
+          "dashes": [],
+          "dashCount": 0,
+          "footers": 1,
+          "disclaimer": true,
+          "uefa": true,
+          "reportBug": true,
+          "helpControls": 0,
+          "overflowX": 0,
+          "imgHosts": [],
+          "scopeFound": null,
+          "scopeText": null,
+          "small": [],
+          "cut": [],
+          "robots": null,
+          "textLength": 15913,
+          "tag": "ground with a sale ready"
+        },
+        {
+          "url": "/stadium-tycoon",
+          "scrollY": 0,
+          "dashes": [],
+          "dashCount": 0,
+          "footers": 1,
+          "disclaimer": true,
+          "uefa": true,
+          "reportBug": true,
+          "helpControls": 0,
+          "overflowX": 0,
+          "imgHosts": [],
+          "scopeFound": true,
+          "scopeText": "⭐ Sell up: +1 star, +2 legacy points",
+          "small": [],
+          "cut": [],
+          "robots": null,
+          "textLength": 15898,
+          "tag": "sell up button in view"
+        },
+        {
+          "url": "/stadium-tycoon",
+          "scrollY": 0,
+          "dashes": [],
+          "dashCount": 0,
+          "footers": 1,
+          "disclaimer": true,
+          "uefa": true,
+          "reportBug": true,
+          "helpControls": 1,
+          "overflowX": 0,
+          "imgHosts": [],
+          "scopeFound": true,
+          "scopeText": "Sell up review Restart this ground with permanent rewards. The match keeps running while you decide. Legacy points earned +2 New ground cash $40 Reputation multiplier x1.00 to x1.50 This ground resets Current cash becomes $40. This ground's earnings reset to 0. Fans return to 90. Ground upgrades and staff start at level 0. You restart in Muddy Meadows League. The current match, table, win streak and temporary boosts reset. Ticket offer returns to Standard. You keep Your club name, reputation, legacy points and perks, badges, league titles and career records. Your Academy players, first team, gems and gear stay as they are. Back ? Sell and restart Close",
+          "small": [],
+          "cut": [
+            {
+              "t": "Close",
+              "clipped": 43
+            }
+          ],
+          "robots": null,
+          "textLength": 16569,
+          "tag": "sale review open"
+        },
+        {
+          "url": "/stadium-tycoon",
+          "scrollY": 0,
+          "dashes": [],
+          "dashCount": 0,
+          "footers": 1,
+          "disclaimer": true,
+          "uefa": true,
+          "reportBug": true,
+          "helpControls": 1,
+          "overflowX": 0,
+          "imgHosts": [],
+          "scopeFound": true,
+          "scopeText": "Sell up review Restart this ground with permanent rewards. The match keeps running while you decide. Selling up trades this ground's progress for one reputation star and legacy points. Your reputation multiplier is permanent, but today's income also depends on the ground, crowd and staff you are resetting. Example: selling now adds 2 legacy points, taking your balance from 0 to 2. Your new ground opens with $40. Rolling Investment is already included. These terms follow the live game. A promotion while this is open can increase the legacy points. Back leaves the sale untouched. Only Sell and restart sells the ground. Back to sale review ? Close",
+          "small": [],
+          "cut": [
+            {
+              "t": "Close",
+              "clipped": 43
+            }
+          ],
+          "robots": null,
+          "textLength": 16556,
+          "tag": "sale help open"
+        }
+      ],
+      "notes": [
+        "intro: null | away: null"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "hosts": {
+        "fonts.googleapis.com": 1,
+        "flawuiqbvjobmkfkauhw.supabase.co": 1
+      }
+    },
+    {
+      "name": "tycoon",
+      "view": 1280,
+      "audits": [
+        {
+          "url": "/stadium-tycoon",
+          "scrollY": 0,
+          "dashes": [],
+          "dashCount": 0,
+          "footers": 1,
+          "disclaimer": true,
+          "uefa": true,
+          "reportBug": true,
+          "helpControls": 0,
+          "overflowX": 0,
+          "imgHosts": [],
+          "scopeFound": null,
+          "scopeText": null,
+          "small": [],
+          "cut": [],
+          "robots": null,
+          "textLength": 15970,
+          "tag": "ground with a sale ready"
+        },
+        {
+          "url": "/stadium-tycoon",
+          "scrollY": 0,
+          "dashes": [],
+          "dashCount": 0,
+          "footers": 1,
+          "disclaimer": true,
+          "uefa": true,
+          "reportBug": true,
+          "helpControls": 0,
+          "overflowX": 0,
+          "imgHosts": [],
+          "scopeFound": true,
+          "scopeText": "⭐ Sell up: +1 star, +2 legacy points",
+          "small": [],
+          "cut": [],
+          "robots": null,
+          "textLength": 15955,
+          "tag": "sell up button in view"
+        },
+        {
+          "url": "/stadium-tycoon",
+          "scrollY": 0,
+          "dashes": [],
+          "dashCount": 0,
+          "footers": 1,
+          "disclaimer": true,
+          "uefa": true,
+          "reportBug": true,
+          "helpControls": 1,
+          "overflowX": 0,
+          "imgHosts": [],
+          "scopeFound": true,
+          "scopeText": "Sell up review Restart this ground with permanent rewards. The match keeps running while you decide. Legacy points earned +2 New ground cash $40 Reputation multiplier x1.00 to x1.50 This ground resets Current cash becomes $40. This ground's earnings reset to 0. Fans return to 90. Ground upgrades and staff start at level 0. You restart in Muddy Meadows League. The current match, table, win streak and temporary boosts reset. Ticket offer returns to Standard. You keep Your club name, reputation, legacy points and perks, badges, league titles and career records. Your Academy players, first team, gems and gear stay as they are. Back ? Sell and restart Close",
+          "small": [],
+          "cut": [
+            {
+              "t": "Close",
+              "clipped": 43
+            }
+          ],
+          "robots": null,
+          "textLength": 16626,
+          "tag": "sale review open"
+        },
+        {
+          "url": "/stadium-tycoon",
+          "scrollY": 0,
+          "dashes": [],
+          "dashCount": 0,
+          "footers": 1,
+          "disclaimer": true,
+          "uefa": true,
+          "reportBug": true,
+          "helpControls": 1,
+          "overflowX": 0,
+          "imgHosts": [],
+          "scopeFound": true,
+          "scopeText": "Sell up review Restart this ground with permanent rewards. The match keeps running while you decide. Selling up trades this ground's progress for one reputation star and legacy points. Your reputation multiplier is permanent, but today's income also depends on the ground, crowd and staff you are resetting. Example: selling now adds 2 legacy points, taking your balance from 0 to 2. Your new ground opens with $40. Rolling Investment is already included. These terms follow the live game. A promotion while this is open can increase the legacy points. Back leaves the sale untouched. Only Sell and restart sells the ground. Back to sale review ? Close",
+          "small": [],
+          "cut": [
+            {
+              "t": "Close",
+              "clipped": 43
+            }
+          ],
+          "robots": null,
+          "textLength": 16613,
+          "tag": "sale help open"
+        }
+      ],
+      "notes": [
+        "intro: null | away: null"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "hosts": {
+        "fonts.googleapis.com": 1,
+        "flawuiqbvjobmkfkauhw.supabase.co": 1
+      }
+    },
+    {
+      "name": "uscareer",
+      "view": 390,
+      "audits": [
+        {
+          "url": "/nfl-my-career",
+          "scrollY": 0,
+          "dashes": [],
+          "dashCount": 0,
+          "footers": 1,
+          "disclaimer": true,
+          "uefa": true,
+          "reportBug": true,
+          "helpControls": 1,
+          "overflowX": 0,
+          "imgHosts": [],
+          "scopeFound": null,
+          "scopeText": null,
+          "small": [],
+          "cut": [],
+          "robots": null,
+          "textLength": 25080,
+          "tag": "create your player"
+        },
+        {
+          "url": "/nfl-my-career",
+          "scrollY": 0,
+          "dashes": [],
+          "dashCount": 0,
+          "footers": 1,
+          "disclaimer": true,
+          "uefa": true,
+          "reportBug": true,
+          "helpControls": 1,
+          "overflowX": 0,
+          "imgHosts": [],
+          "scopeFound": true,
+          "scopeText": "Your latest progress has not been saved. Keep this tab open and try again. Retry save",
+          "small": [],
+          "cut": [],
+          "robots": null,
+          "textLength": 25028,
+          "tag": "save refused, as the page stands"
+        },
+        {
+          "url": "/nfl-my-career",
+          "scrollY": 0,
+          "dashes": [],
+          "dashCount": 0,
+          "footers": 1,
+          "disclaimer": true,
+          "uefa": true,
+          "reportBug": true,
+          "helpControls": 1,
+          "overflowX": 0,
+          "imgHosts": [],
+          "scopeFound": true,
+          "scopeText": "Your latest progress has not been saved. Keep this tab open and try again. Retry save",
+          "small": [],
+          "cut": [],
+          "robots": null,
+          "textLength": 24949,
+          "tag": "save refused, top of page, toast gone"
+        }
+      ],
+      "notes": [
+        "create: Enter the draft",
+        "toasts still up after 5s: [] | on disk while refused: nothing",
+        "after Retry save: {\"notice\":false,\"saved\":1499,\"y\":0}"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "hosts": {
+        "fonts.googleapis.com": 1,
+        "flawuiqbvjobmkfkauhw.supabase.co": 1
+      }
+    },
+    {
+      "name": "uscareer",
+      "view": 1280,
+      "audits": [
+        {
+          "url": "/nfl-my-career",
+          "scrollY": 0,
+          "dashes": [],
+          "dashCount": 0,
+          "footers": 1,
+          "disclaimer": true,
+          "uefa": true,
+          "reportBug": true,
+          "helpControls": 1,
+          "overflowX": 0,
+          "imgHosts": [],
+          "scopeFound": null,
+          "scopeText": null,
+          "small": [],
+          "cut": [],
+          "robots": null,
+          "textLength": 25137,
+          "tag": "create your player"
+        },
+        {
+          "url": "/nfl-my-career",
+          "scrollY": 0,
+          "dashes": [],
+          "dashCount": 0,
+          "footers": 1,
+          "disclaimer": true,
+          "uefa": true,
+          "reportBug": true,
+          "helpControls": 1,
+          "overflowX": 0,
+          "imgHosts": [],
+          "scopeFound": true,
+          "scopeText": "Your latest progress has not been saved. Keep this tab open and try again. Retry save",
+          "small": [],
+          "cut": [],
+          "robots": null,
+          "textLength": 25103,
+          "tag": "save refused, as the page stands"
+        },
+        {
+          "url": "/nfl-my-career",
+          "scrollY": 0,
+          "dashes": [],
+          "dashCount": 0,
+          "footers": 1,
+          "disclaimer": true,
+          "uefa": true,
+          "reportBug": true,
+          "helpControls": 1,
+          "overflowX": 0,
+          "imgHosts": [],
+          "scopeFound": true,
+          "scopeText": "Your latest progress has not been saved. Keep this tab open and try again. Retry save",
+          "small": [],
+          "cut": [],
+          "robots": null,
+          "textLength": 25024,
+          "tag": "save refused, top of page, toast gone"
+        }
+      ],
+      "notes": [
+        "create: Enter the draft",
+        "toasts still up after 5s: [] | on disk while refused: nothing",
+        "after Retry save: {\"notice\":false,\"saved\":1441,\"y\":0}"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "hosts": {
+        "fonts.googleapis.com": 1,
+        "flawuiqbvjobmkfkauhw.supabase.co": 1
+      }
+    },
+    {
+      "name": "hub",
+      "view": 390,
+      "audits": [
+        {
+          "url": "/soccer-career",
+          "scrollY": 0,
+          "dashes": [],
+          "dashCount": 0,
+          "footers": 1,
+          "disclaimer": true,
+          "uefa": true,
+          "reportBug": true,
+          "helpControls": 1,
+          "overflowX": 0,
+          "imgHosts": [],
+          "scopeFound": null,
+          "scopeText": null,
+          "small": [],
+          "cut": [],
+          "robots": null,
+          "textLength": 18381,
+          "tag": "career hub"
+        }
+      ],
+      "notes": [
+        "hub grid: {\"grid\":true,\"kids\":2,\"rail\":{\"x\":12,\"y\":3576,\"w\":366,\"h\":323},\"listInsideRail\":true,\"right\":[{\"x\":12,\"y\":311,\"w\":366,\"h\":3253}],\"seasonsListed\":6}"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "hosts": {
+        "fonts.googleapis.com": 1,
+        "flawuiqbvjobmkfkauhw.supabase.co": 1
+      }
+    },
+    {
+      "name": "hub",
+      "view": 1280,
+      "audits": [
+        {
+          "url": "/soccer-career",
+          "scrollY": 0,
+          "dashes": [],
+          "dashCount": 0,
+          "footers": 1,
+          "disclaimer": true,
+          "uefa": true,
+          "reportBug": true,
+          "helpControls": 1,
+          "overflowX": 0,
+          "imgHosts": [],
+          "scopeFound": null,
+          "scopeText": null,
+          "small": [],
+          "cut": [],
+          "robots": null,
+          "textLength": 18455,
+          "tag": "career hub"
+        }
+      ],
+      "notes": [
+        "hub grid: {\"grid\":true,\"kids\":2,\"rail\":{\"x\":144,\"y\":263,\"w\":260,\"h\":2912},\"listInsideRail\":true,\"right\":[{\"x\":416,\"y\":263,\"w\":720,\"h\":2912}],\"seasonsListed\":6}"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "hosts": {
+        "fonts.googleapis.com": 1,
+        "flawuiqbvjobmkfkauhw.supabase.co": 1
+      }
+    }
+  ],
+  "problems": [
+    {
+      "tag": "home@390 search could not load",
+      "what": "no how to play or help control on screen"
+    },
+    {
+      "tag": "home@1280 search could not load",
+      "what": "no how to play or help control on screen"
+    },
+    {
+      "tag": "boxing@390 show cash help open",
+      "what": "1 element(s) cut off or outside the screen in the new surface",
+      "extra": "[{\"t\":\"Close\",\"clipped\":43}]"
+    },
+    {
+      "tag": "boxing@1280 show cash help open",
+      "what": "1 element(s) cut off or outside the screen in the new surface",
+      "extra": "[{\"t\":\"Close\",\"clipped\":43}]"
+    },
+    {
+      "tag": "tycoon@390 ground with a sale ready",
+      "what": "no how to play or help control on screen"
+    },
+    {
+      "tag": "tycoon@390 sell up button in view",
+      "what": "no how to play or help control on screen"
+    },
+    {
+      "tag": "tycoon@390 sale review open",
+      "what": "1 element(s) cut off or outside the screen in the new surface",
+      "extra": "[{\"t\":\"Close\",\"clipped\":43}]"
+    },
+    {
+      "tag": "tycoon@390 sale help open",
+      "what": "1 element(s) cut off or outside the screen in the new surface",
+      "extra": "[{\"t\":\"Close\",\"clipped\":43}]"
+    },
+    {
+      "tag": "tycoon@390",
+      "what": "the walk itself stopped",
+      "extra": "page.evaluate: Execution context was destroyed, most likely because of a navigation.\n    at clickBtn (/home/runner/work/ballpark-hero/ballpark-hero/.rc/x/walk.mjs:42:37)\n    at SCENARIOS.tycoon (/home/runner/work/ballpark-hero/ballpark-hero/.rc/x/walk.mjs:218:9)\n    at async file:///home/runner/work/ballpark-hero/ballpark-hero/.rc/x/walk.mjs:336:11"
+    },
+    {
+      "tag": "tycoon@1280 ground with a sale ready",
+      "what": "no how to play or help control on screen"
+    },
+    {
+      "tag": "tycoon@1280 sell up button in view",
+      "what": "no how to play or help control on screen"
+    },
+    {
+      "tag": "tycoon@1280 sale review open",
+      "what": "1 element(s) cut off or outside the screen in the new surface",
+      "extra": "[{\"t\":\"Close\",\"clipped\":43}]"
+    },
+    {
+      "tag": "tycoon@1280 sale help open",
+      "what": "1 element(s) cut off or outside the screen in the new surface",
+      "extra": "[{\"t\":\"Close\",\"clipped\":43}]"
+    },
+    {
+      "tag": "tycoon@1280",
+      "what": "the walk itself stopped",
+      "extra": "page.evaluate: Execution context was destroyed, most likely because of a navigation.\n    at clickBtn (/home/runner/work/ballpark-hero/ballpark-hero/.rc/x/walk.mjs:42:37)\n    at SCENARIOS.tycoon (/home/runner/work/ballpark-hero/ballpark-hero/.rc/x/walk.mjs:218:9)\n    at async file:///home/runner/work/ballpark-hero/ballpark-hero/.rc/x/walk.mjs:336:11"
+    }
+  ]
+}

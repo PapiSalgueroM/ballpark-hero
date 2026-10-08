@@ -1,0 +1,65 @@
+== home at 390x844
+  audit home@390 home before search: dashes 0, footers 1, help 2, overflowX 0, small 0, cut 0, scrollY 0
+  PROBLEM home@390 search could not load: no how to play or help control on screen
+  audit home@390 search could not load: dashes 0, footers 1, help 0, overflowX 0, small 0, cut 0, scrollY 0
+== home at 1280x900
+  audit home@1280 home before search: dashes 0, footers 1, help 2, overflowX 0, small 0, cut 0, scrollY 0
+  PROBLEM home@1280 search could not load: no how to play or help control on screen
+  audit home@1280 search could not load: dashes 0, footers 1, help 0, overflowX 0, small 0, cut 0, scrollY 0
+== boxing at 390x844
+  audit boxing@390 mode choice: dashes 0, footers 1, help 1, overflowX 0, small 0, cut 0, scrollY 0
+  audit boxing@390 show cash forecast: dashes 0, footers 1, help 2, overflowX 0, small 0, cut 0, scrollY 171
+  PROBLEM boxing@390 show cash help open: 1 element(s) cut off or outside the screen in the new surface | [{"t":"Close","clipped":43}]
+  audit boxing@390 show cash help open: dashes 0, footers 1, help 2, overflowX 0, small 0, cut 1, scrollY 171
+== boxing at 1280x900
+  audit boxing@1280 mode choice: dashes 0, footers 1, help 1, overflowX 0, small 0, cut 0, scrollY 0
+  audit boxing@1280 show cash forecast: dashes 0, footers 1, help 2, overflowX 0, small 0, cut 0, scrollY 4
+  PROBLEM boxing@1280 show cash help open: 1 element(s) cut off or outside the screen in the new surface | [{"t":"Close","clipped":43}]
+  audit boxing@1280 show cash help open: dashes 0, footers 1, help 2, overflowX 0, small 0, cut 1, scrollY 4
+== tycoon at 390x844
+  PROBLEM tycoon@390 ground with a sale ready: no how to play or help control on screen
+  audit tycoon@390 ground with a sale ready: dashes 0, footers 1, help 0, overflowX 0, small 0, cut 0, scrollY 0
+  PROBLEM tycoon@390 sell up button in view: no how to play or help control on screen
+  audit tycoon@390 sell up button in view: dashes 0, footers 1, help 0, overflowX 0, small 0, cut 0, scrollY 0
+  PROBLEM tycoon@390 sale review open: 1 element(s) cut off or outside the screen in the new surface | [{"t":"Close","clipped":43}]
+  audit tycoon@390 sale review open: dashes 0, footers 1, help 1, overflowX 0, small 0, cut 1, scrollY 0
+  PROBLEM tycoon@390 sale help open: 1 element(s) cut off or outside the screen in the new surface | [{"t":"Close","clipped":43}]
+  audit tycoon@390 sale help open: dashes 0, footers 1, help 1, overflowX 0, small 0, cut 1, scrollY 0
+  PROBLEM tycoon@390: the walk itself stopped | page.evaluate: Execution context was destroyed, most likely because of a navigation.
+    at clickBtn (/home/runner/work/ballpark-hero/ballpark-hero/.rc/x/walk.mjs:42:37)
+    at SCENARIOS.tycoon (/home
+== tycoon at 1280x900
+  PROBLEM tycoon@1280 ground with a sale ready: no how to play or help control on screen
+  audit tycoon@1280 ground with a sale ready: dashes 0, footers 1, help 0, overflowX 0, small 0, cut 0, scrollY 0
+  PROBLEM tycoon@1280 sell up button in view: no how to play or help control on screen
+  audit tycoon@1280 sell up button in view: dashes 0, footers 1, help 0, overflowX 0, small 0, cut 0, scrollY 0
+  PROBLEM tycoon@1280 sale review open: 1 element(s) cut off or outside the screen in the new surface | [{"t":"Close","clipped":43}]
+  audit tycoon@1280 sale review open: dashes 0, footers 1, help 1, overflowX 0, small 0, cut 1, scrollY 0
+  PROBLEM tycoon@1280 sale help open: 1 element(s) cut off or outside the screen in the new surface | [{"t":"Close","clipped":43}]
+  audit tycoon@1280 sale help open: dashes 0, footers 1, help 1, overflowX 0, small 0, cut 1, scrollY 0
+  PROBLEM tycoon@1280: the walk itself stopped | page.evaluate: Execution context was destroyed, most likely because of a navigation.
+    at clickBtn (/home/runner/work/ballpark-hero/ballpark-hero/.rc/x/walk.mjs:42:37)
+    at SCENARIOS.tycoon (/home
+== uscareer at 390x844
+  audit uscareer@390 create your player: dashes 0, footers 1, help 1, overflowX 0, small 0, cut 0, scrollY 0
+  audit uscareer@390 save refused, as the page stands: dashes 0, footers 1, help 1, overflowX 0, small 0, cut 0, scrollY 0
+  audit uscareer@390 save refused, top of page, toast gone: dashes 0, footers 1, help 1, overflowX 0, small 0, cut 0, scrollY 0
+== uscareer at 1280x900
+  audit uscareer@1280 create your player: dashes 0, footers 1, help 1, overflowX 0, small 0, cut 0, scrollY 0
+  audit uscareer@1280 save refused, as the page stands: dashes 0, footers 1, help 1, overflowX 0, small 0, cut 0, scrollY 0
+  audit uscareer@1280 save refused, top of page, toast gone: dashes 0, footers 1, help 1, overflowX 0, small 0, cut 0, scrollY 0
+== hub at 390x844
+  audit hub@390 career hub: dashes 0, footers 1, help 1, overflowX 0, small 0, cut 0, scrollY 0
+== hub at 1280x900
+  audit hub@1280 career hub: dashes 0, footers 1, help 1, overflowX 0, small 0, cut 0, scrollY 0
+walk-fences: 10 runs, 14 problem(s), 0 page error(s)
+  home@390: hosts tried {"fonts.googleapis.com":2,"flawuiqbvjobmkfkauhw.supabase.co":5}; page errors 0; console errors 0
+  home@1280: hosts tried {"fonts.googleapis.com":2,"flawuiqbvjobmkfkauhw.supabase.co":7}; page errors 0; console errors 0
+  boxing@390: hosts tried {"fonts.googleapis.com":1,"flawuiqbvjobmkfkauhw.supabase.co":1}; page errors 0; console errors 0
+  boxing@1280: hosts tried {"fonts.googleapis.com":1,"flawuiqbvjobmkfkauhw.supabase.co":1}; page errors 0; console errors 0
+  tycoon@390: hosts tried {"fonts.googleapis.com":1,"flawuiqbvjobmkfkauhw.supabase.co":1}; page errors 0; console errors 0
+  tycoon@1280: hosts tried {"fonts.googleapis.com":1,"flawuiqbvjobmkfkauhw.supabase.co":1}; page errors 0; console errors 0
+  uscareer@390: hosts tried {"fonts.googleapis.com":1,"flawuiqbvjobmkfkauhw.supabase.co":1}; page errors 0; console errors 0
+  uscareer@1280: hosts tried {"fonts.googleapis.com":1,"flawuiqbvjobmkfkauhw.supabase.co":1}; page errors 0; console errors 0
+  hub@390: hosts tried {"fonts.googleapis.com":1,"flawuiqbvjobmkfkauhw.supabase.co":1}; page errors 0; console errors 0
+  hub@1280: hosts tried {"fonts.googleapis.com":1,"flawuiqbvjobmkfkauhw.supabase.co":1}; page errors 0; console errors 0
