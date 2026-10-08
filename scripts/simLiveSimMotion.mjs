@@ -53,6 +53,10 @@
  *   scorelead    the score waits on the plan's instant, not the action's own start  no frame draws the new score (it led the net by a frame)
  *   samecommit   an action always starts from the frame on screen, old eleven or not  a chance whose line fires in the very commit
  *   crowd        a man in a crowd keeps his name                                   level neighbours take a row each, and a wall shows numbers
+ * The closing check's controls (2026-10-08): the kick off after a goal was a beat long whenever a chance followed within two minutes.
+ *   kickoffcut   the next shooter's lead comes before the kick off again           R9 (a goal gets its kick off)
+ *   kickoffwait  a chance no longer waits for the whole kick off                   R9 (a goal gets its kick off)
+ * restartbeat takes out both lengths of a kick off now (the beat and the whole of it), which is what its line above says.
  * cmimport now trips the import specifier scan as well as the marker check, and is accepted only on both.
  * And one old control has a new test to turn red: lineup takes the hook's own guard out (an action is dropped
  * when the line up under it changes). The viewer joins the frame to its eleven by key now, so its substitution
@@ -81,7 +85,7 @@ const OLD = ['trigger', 'save', 'pause', 'mutation', 'lineup', 'speed', 'reduced
 const NEW = ['block', 'kickoff', 'overlap', 'mouth', 'draw', 'approach', 'lag', 'hold', 'skipmoment', 'back', 'onepanel', 'labels', 'stalejoin', 'takenback', 'cmimport'];
 /* The review of 2026-10-08: six swapped argument mutations of the dead ball rules and six of the viewer left every test green.
    Each of these has a test that reads it now. */
-const REVIEW = ['scorelead', 'samecommit', 'crowd', 'turns', 'restartbeat', 'kickoffside', 'throwside', 'foulside', 'cornerflank', 'goalkickside', 'secondkick', 'possession', 'etclear', 'reducedhold', 'flash', 'lastkick', 'dropped', 'logearly', 'nth', 'cardside', 'bigpart'];
+const REVIEW = ['scorelead', 'samecommit', 'crowd', 'turns', 'restartbeat', 'kickoffside', 'throwside', 'foulside', 'cornerflank', 'goalkickside', 'secondkick', 'possession', 'etclear', 'reducedhold', 'flash', 'lastkick', 'dropped', 'logearly', 'nth', 'cardside', 'bigpart', 'kickoffcut', 'kickoffwait'];
 assert.ok(['', ...OLD, ...NEW, ...REVIEW].includes(control), 'Unknown live motion control');
 assert.ok(['', 'bundle'].includes(only), 'Unknown LIVE_MOTION_ONLY');
 /* Minified bytes and gzip bytes of the part alone, and the ceiling: each plus a fifth. */
@@ -146,8 +150,13 @@ try {
     if (control === 'samecommit') motion = replace(motion, 'setAction({ event, scene: fits ? shown : { ...between(shown, scene, 0), ball: shown.ball } });', 'setAction({ event, scene: shown }); void fits;');
     if (control === 'crowd') viewer = replace(viewer, 'if (wall || crowd) short.add(a.key);', 'if (wall) short.add(a.key); void crowd;');
     if (control === 'turns') scene = replace(scene, '    c.at = held(c, wanted);', '    c.floor = c.place; void wanted;');
-    if (control === 'restartbeat') scene = replace(scene, "=> (c.event.kind === 'goal' ? PITCH_RESTART : 0);", '=> (c.event ? 0 : 0);');
-    if (control === 'kickoffside') scene = replace(scene, 'kickoff(after, defending, 4.5, n, `g${a.order}`);', 'kickoff(after, side, 4.5, n, `g${a.order}`);');
+    if (control === 'restartbeat') {
+      scene = replace(scene, "=> (c.event.kind === 'goal' ? PITCH_RESTART : 0);", '=> (c.event ? 0 : 0);');
+      scene = replace(scene, "=> (c.event.kind === 'goal' ? PITCH_KICKOFF : 0);", '=> (c.event ? 0 : 0);');
+    }
+    if (control === 'kickoffcut') scene = replace(scene, 'Math.max(room - whole(before), Math.min(PITCH_SQUEEZE, room - restart(before)))', 'room - restart(before)');
+    if (control === 'kickoffwait') scene = replace(scene, 'before.at + ACTION_SPAN + whole(before) + PITCH_SQUEEZE', 'before.at + ACTION_SPAN + restart(before) + PITCH_SQUEEZE');
+    if (control === 'kickoffside') scene = replace(scene, 'kickoff(after, defending, n, `g${a.order}`);', 'kickoff(after, side, n, `g${a.order}`);');
     if (control === 'throwside') scene = replace(scene, '      const side = present(event.side);\n      const spot = (before: PitchPoint)', '      const side = present(other(event.side));\n      const spot = (before: PitchPoint)');
     if (control === 'foulside') scene = replace(scene, "so the free kick is the other side's. */\n      const side = present(other(event.side));", "so the free kick is the other side's. */\n      const side = present(event.side);");
     if (control === 'cornerflank') scene = replace(scene, "(event.flank ? (event.flank === 'left' ? 2.5 : 97.5)", "(event.flank ? (event.flank === 'left' ? 97.5 : 2.5)");
@@ -197,6 +206,7 @@ try {
     lag: 'the score waits for the ball', hold: 'the score waits for the ball', skipmoment: 'after Skip the second half opens',
     back: 'Back folds the match', onepanel: 'one panel at a time', labels: 'a name goes above its figure',
     turns: 'R6: a chance starts with the ball', restartbeat: 'R6: a chance starts with the ball',
+    kickoffcut: 'R9: a goal gets its kick off', kickoffwait: 'R9: a goal gets its kick off',
     crowd: 'level neighbours take a row each', scorelead: 'no frame draws the new score', samecommit: 'a chance whose line fires in the very commit',
     kickoffside: 'R7: every dead ball', throwside: 'R7: every dead ball', foulside: 'R7: every dead ball', cornerflank: 'R7: every dead ball', goalkickside: 'R7: every dead ball',
     secondkick: 'R8: the pitch is handed', possession: 'R8: the pitch is handed',

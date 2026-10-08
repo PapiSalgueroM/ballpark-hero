@@ -20,10 +20,12 @@ import { keyedRng } from '@/lib/keyedRng';
  *  ONE ACTION AT A TIME. Lines sit on whole minutes and an action lasts a little longer than one, so a
  *  chance in the minute after another used to start under it: the ball jumped from the net to the next
  *  shooter and a goal never got its kick off. Such a chance now WAITS, inside its own minute: until the
- *  action before it is over, until the kick off after a goal has been seen for a beat, and until its own
- *  shooter has had the ball for a beat. When a minute is too full for all three, the shooter's beat on the
- *  ball is given up first and a goal's kick off last. `actions[n].at` is when it really starts, and a
- *  binder that announces a chance itself (Club Manager's viewer) announces it then.
+ *  action before it is over, until the kick off after a goal has been seen (both sides back in their own
+ *  halves, the ball on the spot), and until its own shooter has had the ball for a quarter of a minute.
+ *  When a minute is too full for all three, the kick off is cut from its two beats toward one first, then
+ *  the shooter's time on the ball is given up, and the last beat of a goal's kick off goes last.
+ *  `actions[n].at` is when it really starts, and a binder that announces a chance itself (Club Manager's
+ *  viewer) announces it then.
  *
  *  THE SHAPE places each side as ONE block around the ball, in its own frame (own goal at y 100), and
  *  mirrors the other side. */
@@ -71,7 +73,13 @@ export const PITCH_LEAD = BEAT_SPAN;
 /** The least of that lead a chance is given when it has had to wait for the action before it: long enough
  *  for both sides to be all but in place around him (the hook's walk between two pictures lasts 0.3). */
 export const PITCH_SQUEEZE = 0.25;
-/** How long a kick off is seen, at the least, before the next chance is led in. */
+/** A whole kick off: two beats. */
+export const PITCH_KICKOFF = 2 * BEAT_SPAN;
+/** The least of a kick off that the next chance's shooter is never led in over: a beat. The kick off after
+ *  a goal is seen for more whenever the minute has room: whole when the next chance is two minutes away or
+ *  more, and for 0.6 when it is in the very next minute (1 + PITCH_LATE - ACTION_SPAN - PITCH_SQUEEZE: both
+ *  sides walk back to their own halves, which is the hook's 0.3 walk between two pictures, and that picture
+ *  is held for as long again). Only a third chance in three minutes brings it down to this beat. */
 export const PITCH_RESTART = BEAT_SPAN;
 /** The longest a chance waits for its turn after its own place: the clock still reads its minute when it starts. */
 export const PITCH_LATE = 0.9;
@@ -140,17 +148,19 @@ export function pitchPlan(input: PitchInput): PitchPlan {
   };
 
   const layers: Layer[] = [];
-  /* A kick off is two beats long. Its FIRST beat is the part nothing may be drawn over (`firm` is the priority
-     of that beat): a kick off must be seen. Its second gives way to a chance's shooter being led in. */
-  const kickoff = (at: number, side: PitchSide, firm: number, order: number, id: string) => {
+  /* A kick off is two beats long, and a kick off must be seen. A period's own kick off keeps its first beat
+     above everything (`firm`): a chance of that first minute is led in after it. The kick off after a goal has
+     no such layer: how much of it the next chance's shooter may be led in over is decided in ONE place, where
+     that shooter's stretch is given its start (`led`, below). */
+  const kickoff = (at: number, side: PitchSide, order: number, id: string, firm = 0) => {
     const kicker = present(side);
-    for (const [beats, priority] of [[2, 3], [PITCH_RESTART / BEAT_SPAN, firm]] as const) layers.push({
-      start: at, end: at + beats * BEAT_SPAN, priority, order, state: 'kickoff', via: 'restart', side: kicker,
+    for (const [span, priority] of [[PITCH_KICKOFF, 3], [firm, 5]] as const) if (span > 0) layers.push({
+      start: at, end: at + span, priority, order, state: 'kickoff', via: 'restart', side: kicker,
       carrier: mostAdvanced(lists[kicker])?.key ?? null, dead: true, id, anchor: { x: 50, y: 50 },
     });
   };
   const opening = input.kickoffs ?? [];
-  opening.forEach((k, n) => kickoff(k.at, k.side, 5, n, `k${n}`));
+  opening.forEach((k, n) => kickoff(k.at, k.side, n, `k${n}`, PITCH_RESTART));
 
   /* ---- the chances: which are staged, and when each action starts ---- */
   const chances = input.feed.map((event, order) => ({ event, order, place: placeOf(event) }))
@@ -168,10 +178,14 @@ export function pitchPlan(input: PitchInput): PitchPlan {
      off before it waits for its turn. It never waits more than PITCH_LATE, and never so long that it would
      still be playing at the last kick's wind up or more than today's 0.05 past the whistle (`held`).
      Forward, each chance gets two instants: `floor`, the soonest it can start with everything before it
-     over (that action, and a beat of kick off if it was a goal) and no lead in at all, and `at`, which adds
-     PITCH_SQUEEZE with its own shooter on the ball. */
+     over (that action, and a beat of kick off if it was a goal) and no lead in at all, and `at`, which is
+     what it wants: the WHOLE kick off after a goal seen first, and then PITCH_SQUEEZE with its own shooter
+     on the ball. A chance two minutes after a goal waits a twentieth of a minute for that. A chance in the
+     very next minute waits as long as it may, and where its stretch starts (`led`, below) shares out what
+     that leaves. */
   const ceiling = last ? to - 2 * ACTION_SPAN : to - 1;
   const restart = (c: { event: PitchEvent }) => (c.event.kind === 'goal' ? PITCH_RESTART : 0);
+  const whole = (c: { event: PitchEvent }) => (c.event.kind === 'goal' ? PITCH_KICKOFF : 0);
   const held = (c: { place: number }, wanted: number) => Math.max(c.place, Math.min(wanted, c.place + PITCH_LATE, Math.max(c.place, ceiling)));
   queue.forEach((c, n) => {
     let floor = c.place;
@@ -179,14 +193,14 @@ export function pitchPlan(input: PitchInput): PitchPlan {
     /* The period's own kick off is seen for a beat before a chance of its first minute is led in. */
     for (const k of opening) if (k.at <= c.place + EPS) { floor = Math.max(floor, k.at + PITCH_RESTART); wanted = Math.max(wanted, k.at + PITCH_RESTART + PITCH_SQUEEZE); }
     const before = queue[n - 1];
-    if (before) { floor = Math.max(floor, before.floor + ACTION_SPAN + restart(before)); wanted = Math.max(wanted, before.at + ACTION_SPAN + restart(before) + PITCH_SQUEEZE); }
+    if (before) { floor = Math.max(floor, before.floor + ACTION_SPAN + restart(before)); wanted = Math.max(wanted, before.at + ACTION_SPAN + whole(before) + PITCH_SQUEEZE); }
     c.floor = held(c, floor);
     c.at = held(c, wanted);
   });
   /* And back, twice. First the lead in gives way: when the chance after this one could not wait as long,
-     this one starts sooner (never before its floor), so that it and the kick off after its goal are over
-     when the next one starts, the last kick's wind up included. A goal keeps its kick off before a
-     shooter keeps his beat on the ball. */
+     this one starts sooner (never before its floor), so that it and a beat of the kick off after its goal
+     are over when the next one starts, the last kick's wind up included. A goal keeps that beat of kick
+     off before a shooter keeps his time on the ball. */
   const windup = last ? to - ACTION_SPAN : Infinity;
   for (let n = queue.length - 1; n >= 0; n--) {
     const room = (n + 1 < queue.length ? queue[n + 1].at : windup) - ACTION_SPAN - restart(queue[n]);
@@ -219,9 +233,17 @@ export function pitchPlan(input: PitchInput): PitchPlan {
       ? { x: 50, y: 12 }
       : { x: clamp((shooter?.slot.x ?? 50) + (rng() * 2 - 1) * 6, 25, 75), y: a.event.freeKick ? 30 : 22 + rng() * 8 };
     /* The shooter is led in for PITCH_LEAD, but never under the action before his (the picture under an action
-       does not change while it plays) nor under the beat of kick off after a goal. Nothing at all is drawn
+       does not change while it plays), and after a goal the kick off comes first. `room` is what lies between
+       the end of that action and this one's start. With room for it, the kick off is seen whole and the lead
+       is what is left. With less (a chance in the very next minute), the lead keeps PITCH_SQUEEZE and the
+       kick off has the rest, 0.6 as a rule and never under PITCH_RESTART while there is any lead at all. With
+       less than that beat the kick off has it all. A shot out of a kick off picture with nobody led in is the
+       worst of these to watch, which is why the lead is not the first thing to go. Nothing at all is drawn
        over the last kick's wind up: it is the only stretch above a kick off. */
-    const lead = Math.min(a.at, Math.max(a.at - PITCH_LEAD, n > 0 ? actions[n - 1].at + ACTION_SPAN + restart(actions[n - 1]) : -Infinity));
+    const before = n > 0 ? actions[n - 1] : null;
+    const room = before ? a.at - before.at - ACTION_SPAN : Infinity;
+    const led = before ? Math.max(0, Math.min(PITCH_LEAD, Math.max(room - whole(before), Math.min(PITCH_SQUEEZE, room - restart(before))))) : PITCH_LEAD;
+    const lead = a.at - led;
     layers.push({
       start: lead, end: a.at + ACTION_SPAN, priority: a.last ? 6 : 4, order: n, state: set ? 'freekick' : 'open', via: 'carrier', side,
       carrier: shooter?.key ?? null, dead: set, id: `c${a.order}`, anchor: turn(side, shot),
@@ -230,8 +252,8 @@ export function pitchPlan(input: PitchInput): PitchPlan {
     if (after >= to - EPS) return;
     const defending = present(other(side));
     if (a.event.kind === 'goal') {
-      /* The side that conceded kicks off, and the next chance's shooter is not led in over its first beat. */
-      kickoff(after, defending, 4.5, n, `g${a.order}`);
+      /* The side that conceded kicks off. */
+      kickoff(after, defending, n, `g${a.order}`);
     } else if (a.event.kind === 'shot') {
       const wide = a.event.flank === 'left' ? 44 : a.event.flank === 'right' ? 56 : a.event.minute % 2 < 1 ? 44 : 56;
       layers.push({

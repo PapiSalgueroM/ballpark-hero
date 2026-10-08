@@ -6,7 +6,7 @@ import type { CareerState, LiveFeedEvent } from '@/lib/clubManager';
 import { ACTION_SPAN, BEAT_SPAN, GOAL_MOUTH } from '@/components/pitch-motion/contract';
 import type { PitchFigure, PitchInput } from '@/components/pitch-motion/contract';
 import type { MotionScene } from '@/components/pitch-motion/motion';
-import { pitchBeatAt, pitchPlan, pitchScene, pitchSceneKey, PITCH_LATE, PITCH_LEAD, PITCH_RESTART, PITCH_SQUEEZE } from '@/components/pitch-motion/scene';
+import { pitchBeatAt, pitchPlan, pitchScene, pitchSceneKey, PITCH_KICKOFF, PITCH_LATE, PITCH_LEAD, PITCH_RESTART, PITCH_SQUEEZE } from '@/components/pitch-motion/scene';
 import type { PitchBeat, PitchPlaced, PitchPlan } from '@/components/pitch-motion/scene';
 const motionPath = process.env.LIVE_MOTION_COMPONENT;
 /* Round 1101: the part lives in src/components/pitch-motion now, and `between` is exported there. */
@@ -635,7 +635,7 @@ interface SeedTally {
   /* R4 */ follow: Record<Arm, { withBall: Line; without: Line }>;
   /* R6 */ chances: number; holderOffenders: number; steadyOffenders: number; followOffenders: number; underKickoff: number; lastKick: number;
   waited: number; lateSum: number; lateOffenders: number; overlapped: number; overlapOffenders: number; noLead: number; ledOn: number; followSeen: number;
-  goalsToRestart: number; kickoffSeen: number; kickoffShort: number; beforeLastKick: number;
+  goalsToRestart: number; kickoffWhole: number; kickoffHeld: number; kickoffSeen: number; kickoffShort: number; beforeLastKick: number; kickoffSum: number;
   /* R7 */ dead: Record<DeadKind, number>; deadOffenders: number; flanked: number; standIns: number; deadExamples: string[];
   /* R8 */ handed: number; kickHandOffenders: number; shareOffenders: number; unevenShares: number; awayHalves: number;
 }
@@ -647,7 +647,7 @@ const tally = (club: string): SeedTally => ({
   follow: { new: { withBall: line(), without: line() }, r504: { withBall: line(), without: line() } },
   chances: 0, holderOffenders: 0, steadyOffenders: 0, followOffenders: 0, underKickoff: 0, lastKick: 0,
   waited: 0, lateSum: 0, lateOffenders: 0, overlapped: 0, overlapOffenders: 0, noLead: 0, ledOn: 0, followSeen: 0,
-  goalsToRestart: 0, kickoffSeen: 0, kickoffShort: 0, beforeLastKick: 0,
+  goalsToRestart: 0, kickoffWhole: 0, kickoffHeld: 0, kickoffSeen: 0, kickoffShort: 0, beforeLastKick: 0, kickoffSum: 0,
   dead: { opening: 0, restart: 0, corner: 0, throwin: 0, freekick: 0, goalkick: 0, keeper: 0 }, deadOffenders: 0, flanked: 0, standIns: 0, deadExamples: [],
   handed: 0, kickHandOffenders: 0, shareOffenders: 0, unevenShares: 0, awayHalves: 0,
 });
@@ -799,13 +799,18 @@ function replayHalf(t: SeedTally, input: PitchInput) {
     }
     if (after >= to - 1e-9) t.lastKick++;
     else if (a.event.kind === 'goal') {
-      /* A goal is followed by its kick off, on screen from the instant the action ends for at least a beat
-         before the next action starts. The one case that cannot be: the last kick's wind up comes first. */
+      /* A goal is followed by its kick off, on screen from the instant the action ends until the next chance's
+         shooter is led in (or the next action starts). Four lengths are told apart: whole (both beats), held
+         (KICKOFF_HELD or more: both sides are back and the picture has stood as long again), a beat or more,
+         and under a beat. The one case that cannot be: the last kick's wind up comes first. */
       t.goalsToRestart++;
       const entry = pitchBeatAt(plan, after + 1e-6);
       const seen = entry.state === 'kickoff' && Math.abs(entry.start - after) < 1e-6 ? Math.min(entry.end, next ? Math.max(next.at, after) : entry.end) - after : 0;
       const nextIsLastKick = !!next && next.at < next.event.minute + (next.event.plus ?? 0) - 1e-9;
-      if (seen >= PITCH_RESTART - 1e-6) t.kickoffSeen++;
+      t.kickoffSum += Math.min(seen, PITCH_KICKOFF);
+      if (seen >= PITCH_KICKOFF - 1e-6) t.kickoffWhole++;
+      else if (seen >= KICKOFF_HELD - 1e-6) t.kickoffHeld++;
+      else if (seen >= PITCH_RESTART - 1e-6) t.kickoffSeen++;
       else if (nextIsLastKick) t.beforeLastKick++;
       else t.kickoffShort++;
     } else {
@@ -947,10 +952,21 @@ const R4_FLOOR = 0.3;
  *    kick's wind up; per seed 2 of 43, 1 of 52, 3 of 55, 1 of 56, 3 of 56). These are minutes too full to hold a goal, its kick off and
  *    the next chance, where the next chance has waited as long as it may. One in 12 (21) is twice the
  *    measured; before chances took turns it was 42 of 91 with no full kick off, and with the beat of kick
- *    off taken out again (control restartbeat) it is far over. */
+ *    off taken out again (control restartbeat) it is far over.
+ *  The closing check of 2026-10-08 read those kick offs with the review's own measure (a kick off under 0.6 of
+ *  the clock is short) and found that a beat was all most of them had: 42 of 91 short. Since then a chance
+ *  waits for the WHOLE kick off when its minute has room (two minutes after a goal it starts a twentieth
+ *  late), and a chance in the very next minute leaves it KICKOFF_HELD. R6 now tells four lengths apart and
+ *  holds two shares, MEASURED_KICKOFFS below. */
 const R6_OVERLAP_ONE_IN = 50;
 const R6_NO_LEAD_ONE_IN = 10;
 const R6_SHORT_KICKOFF_ONE_IN = 12;
+/** The review's line between a short kick off and a full one: both sides have walked back to their own halves
+ *  (the hook's walk lasts 0.3) and that picture has stood for as long again. */
+const KICKOFF_HELD = 0.6;
+/** MEASURED_KICKOFFS, on the 200 half feeds: PLACEHOLDER_KICKOFFS. */
+const R6_HELD_KICKOFF_SHARE = 0.5;
+const R6_WHOLE_KICKOFF_SHARE = 0.4;
 /** R7. How many of each kind of dead ball the material must hold for the rule to have been read at all: each
  *  floor is about half of what the 200 halves hold (opening 200, restart 261, corner 693, throw in 1,144, free
  *  kick 999, goal kick 931, keeper 475), so a data release can move them and an emptied rule can not pass. */
@@ -1031,7 +1047,8 @@ describe('The pitch part on real feeds', () => {
     const chances = total(t => t.chances), waited = total(t => t.waited);
     console.log(`[1101 R6] chances staged ${chances}; holder offenders ${total(t => t.holderOffenders)}, steady offenders ${total(t => t.steadyOffenders)}, follow up offenders ${total(t => t.followOffenders)}; a miss or a save followed by its goal kick or its keeper ${total(t => t.followSeen)}, led straight on to the next chance ${total(t => t.ledOn)}; set aside and counted: no lead in ${total(t => t.noLead)}, started from a kick off picture ${total(t => t.underKickoff)}, the last kick of the period ${total(t => t.lastKick)}`);
     console.log(`[1101 R6 turns] chances that waited for their turn ${waited} of ${chances}, by ${(total(t => t.lateSum) / Math.max(1, waited)).toFixed(2)} on average, later than ${PITCH_LATE} ${total(t => t.lateOffenders)}; still playing when the next one starts ${total(t => t.overlapped)} (per seed ${m.seeds.map(t => t.overlapped).join(' ')}), by more than a tenth of a minute ${total(t => t.overlapOffenders)}`);
-    console.log(`[1101 R6 kick offs] goals with play left after them ${total(t => t.goalsToRestart)}: kick off seen for a beat or more ${total(t => t.kickoffSeen)}, cut under a beat by the next chance ${total(t => t.kickoffShort)}, none because the last kick's wind up came first ${total(t => t.beforeLastKick)}; under a beat per seed ${m.seeds.map(t => `${t.kickoffShort + t.beforeLastKick} of ${t.goalsToRestart}`).join(', ')}; no lead in per seed ${m.seeds.map(t => `${t.noLead} of ${t.chances}`).join(', ')}`);
+    const restarts = total(t => t.goalsToRestart), whole = total(t => t.kickoffWhole), heldOrMore = whole + total(t => t.kickoffHeld);
+    console.log(`[1101 R6 kick offs] goals with play left after them ${restarts}: kick off seen whole (${PITCH_KICKOFF} or more) ${whole}, for ${KICKOFF_HELD} or more ${total(t => t.kickoffHeld)}, for a beat or more ${total(t => t.kickoffSeen)}, cut under a beat by the next chance ${total(t => t.kickoffShort)}, none because the last kick's wind up came first ${total(t => t.beforeLastKick)}; on average ${(total(t => t.kickoffSum) / Math.max(1, restarts)).toFixed(3)} of the clock; ${KICKOFF_HELD} or more per seed ${m.seeds.map(t => `${t.kickoffWhole + t.kickoffHeld} of ${t.goalsToRestart}`).join(', ')}; whole per seed ${m.seeds.map(t => `${t.kickoffWhole} of ${t.goalsToRestart}`).join(', ')}; under a beat per seed ${m.seeds.map(t => `${t.kickoffShort + t.beforeLastKick} of ${t.goalsToRestart}`).join(', ')}; no lead in per seed ${m.seeds.map(t => `${t.noLead} of ${t.chances}`).join(', ')}`);
     expect(chances).toBeGreaterThan(1000);
     expect(total(t => t.holderOffenders)).toBe(0);
     expect(total(t => t.steadyOffenders)).toBe(0);
@@ -1044,8 +1061,11 @@ describe('The pitch part on real feeds', () => {
     expect(total(t => t.noLead) * R6_NO_LEAD_ONE_IN).toBeLessThan(chances);
     /* A goal gets its kick off: seen for a beat or more, but for the few minutes too full to hold one. */
     expect(total(t => t.goalsToRestart)).toBeGreaterThan(100);
-    expect(total(t => t.kickoffSeen + t.kickoffShort + t.beforeLastKick)).toBe(total(t => t.goalsToRestart));
-    expect(total(t => t.kickoffShort + t.beforeLastKick) * R6_SHORT_KICKOFF_ONE_IN).toBeLessThan(total(t => t.goalsToRestart));
+    expect(heldOrMore + total(t => t.kickoffSeen + t.kickoffShort + t.beforeLastKick)).toBe(restarts);
+    expect(total(t => t.kickoffShort + t.beforeLastKick) * R6_SHORT_KICKOFF_ONE_IN).toBeLessThan(restarts);
+    /* And it is a kick off that can be read: held or whole for nearly all of them, whole for most. */
+    expect(heldOrMore).toBeGreaterThanOrEqual(R6_HELD_KICKOFF_SHARE * restarts);
+    expect(whole).toBeGreaterThanOrEqual(R6_WHOLE_KICKOFF_SHARE * restarts);
   }, LONG);
 
   it('R7: every dead ball is taken by the right side from the right place', () => {
@@ -1075,6 +1095,74 @@ describe('The pitch part on real feeds', () => {
     expect(total(t => t.kickHandOffenders)).toBe(0);
     expect(total(t => t.shareOffenders)).toBe(0);
   }, LONG);
+
+  /* R9, the closing check of 2026-10-08. The kick off after a goal on feeds made by hand, each instant the
+     rule's own arithmetic and no statistic: how long the kick off is on, when the next chance starts and how
+     long its shooter has had the ball by then. */
+  it('R9: a goal gets its kick off before the next chance is led in', () => {
+    const eleven = (tag: string): PitchFigure[] => [
+      { key: `${tag}k`, line: 'keeper', slot: { x: 50, y: 90 } },
+      ...[20, 40, 60, 80].map((x, i): PitchFigure => ({ key: `${tag}d${i}`, line: 'defence', slot: { x, y: 72 } })),
+      ...[25, 50, 75].map((x, i): PitchFigure => ({ key: `${tag}m${i}`, line: 'midfield', slot: { x, y: 50 } })),
+      ...[25, 50, 75].map((x, i): PitchFigure => ({ key: `${tag}a${i}`, line: 'attack', slot: { x, y: 26 }, name: `${tag} forward ${i}` })),
+    ];
+    const line = (minute: number, kind: 'goal' | 'save' | 'shot', by: 'me' | 'opp'): PitchInput['feed'][number] => ({ minute, side: by, kind, text: `${by === 'me' ? 'm' : 't'} forward 1` });
+    const read = (feed: PitchInput['feed']) => {
+      const plan = pitchPlan({ mine: eleven('m'), theirs: eleven('t'), feed, span: { from: 0, to: 45 }, kickoffs: [{ at: 0, side: 'me' }], possession: 0.5, seed: 7 });
+      expect(plan.actions.length).toBe(feed.length);
+      return plan.actions.map((a, n) => {
+        const after = a.at + ACTION_SPAN;
+        const next = plan.actions[n + 1];
+        const entry = pitchBeatAt(plan, after + 1e-6);
+        /* The kick off: from the instant the action ends until the next shooter's stretch starts. */
+        const kickoff = entry.state === 'kickoff' && Math.abs(entry.start - after) < 1e-6 ? Math.min(entry.end, next ? Math.max(next.at, after) : entry.end) - after : 0;
+        /* The lead in: how long the stretch that carries this action has been on when it starts. */
+        const own = pitchBeatAt(plan, a.at + 1e-6);
+        return { at: a.at, late: a.at - a.event.minute, kickoff, led: own.via === 'carrier' ? a.at - own.start : 0, kicking: entry.side, over: !next || next.at >= after - 1e-9 };
+      });
+    };
+    const near = (value: number, wanted: number) => expect(Math.abs(value - wanted), `${value} against ${wanted}`).toBeLessThan(1e-5);
+    /* Nothing near it: the whole kick off, taken by the side that conceded. */
+    const alone = read([line(10, 'goal', 'me')]);
+    near(alone[0].at, 10);
+    expect(alone[0].kickoff).toBeGreaterThanOrEqual(PITCH_KICKOFF - 1e-6);
+    expect(alone[0].kicking).toBe('opp');
+    /* A chance three minutes on is on time and has its full lead. */
+    const three = read([line(10, 'goal', 'me'), line(13, 'save', 'opp')]);
+    near(three[1].at, 13);
+    near(three[1].led, PITCH_LEAD);
+    expect(three[0].kickoff).toBeGreaterThanOrEqual(PITCH_KICKOFF - 1e-6);
+    /* Two minutes on: it waits a twentieth of a minute, so that the kick off is whole and its shooter still
+       has the ball for PITCH_SQUEEZE. */
+    const two = read([line(10, 'goal', 'me'), line(12, 'save', 'opp')]);
+    near(two[1].at, 10 + ACTION_SPAN + PITCH_KICKOFF + PITCH_SQUEEZE);
+    near(two[0].kickoff, PITCH_KICKOFF);
+    near(two[1].led, PITCH_SQUEEZE);
+    /* In the very next minute: it waits as long as it may, the shooter keeps PITCH_SQUEEZE and the kick off
+       has the rest, which is KICKOFF_HELD. */
+    const one = read([line(10, 'goal', 'me'), line(11, 'save', 'opp')]);
+    near(one[1].at, 11 + PITCH_LATE);
+    near(one[1].led, PITCH_SQUEEZE);
+    near(one[0].kickoff, 1 + PITCH_LATE - ACTION_SPAN - PITCH_SQUEEZE);
+    expect(one[0].kickoff).toBeGreaterThanOrEqual(KICKOFF_HELD - 1e-6);
+    /* Two goals in two minutes: the second has its own whole kick off. */
+    const twoGoals = read([line(10, 'goal', 'me'), line(11, 'goal', 'opp')]);
+    expect(twoGoals[0].kickoff).toBeGreaterThanOrEqual(KICKOFF_HELD - 1e-6);
+    expect(twoGoals[1].kickoff).toBeGreaterThanOrEqual(PITCH_KICKOFF - 1e-6);
+    expect(twoGoals[1].kicking).toBe('me');
+    /* Minutes too full: a goal and two chances, then three goals, in three minutes. Nothing plays under
+       anything else, and a goal that is not the last of them still has its beat of kick off. */
+    const full = read([line(10, 'goal', 'me'), line(11, 'save', 'opp'), line(12, 'save', 'me')]);
+    expect(full.every(a => a.over)).toBe(true);
+    expect(full[0].kickoff).toBeGreaterThanOrEqual(PITCH_RESTART - 1e-6);
+    near(full[1].led, PITCH_SQUEEZE);
+    const fuller = read([line(10, 'goal', 'me'), line(11, 'goal', 'opp'), line(12, 'shot', 'me')]);
+    expect(fuller.every(a => a.over)).toBe(true);
+    expect(fuller[0].kickoff).toBeGreaterThanOrEqual(PITCH_RESTART - 1e-6);
+    expect(fuller[1].kickoff).toBeGreaterThanOrEqual(PITCH_RESTART - 1e-6);
+    /* And every one of them still starts inside its own minute. */
+    for (const plan of [alone, three, two, one, twoGoals, full, fuller]) for (const a of plan) { expect(a.late).toBeGreaterThanOrEqual(-1e-9); expect(a.late).toBeLessThanOrEqual(PITCH_LATE + 1e-9); }
+  });
 });
 
 /* ─────────────────────────────────────────────────────────────────────────────────────────────
