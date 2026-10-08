@@ -52,7 +52,8 @@
       entry a row of scripts/lib/gatheredLeagues.mjs, in the table's order,
       each with its own file's label, player count and read dates; the read
       dates are the first and last day the research's squad lists were read;
-      and both printed clauses name the league. (Added after the review: with
+      and all three printed clauses (the date line, the count under the
+      picker, the month on the line over it) name the league. (Added after the review: with
       the Russian entry deleted from that list every harness stayed green,
       and with the squads cut out of the join this one did.)
    G. OLD SAVE (hard). scripts/data/cmOldSave1052Fixture.json, one real save
@@ -149,7 +150,7 @@ async function bundleEngine() {
   const out = path.join(TMP, 'engine.mjs');
   fs.writeFileSync(entry, [
     `export * from '${ROOT_FWD}/src/lib/clubManager.ts';`,
-    `export { CM_WORLD_ROSTERS, CM_WORLD_PARTIAL, CM_GENERATED_LEAGUES, generatedLeagueDateClauses, generatedLeagueCountClauses } from '${ROOT_FWD}/src/data/clubManagerWorldRosters.ts';`,
+    `export { CM_WORLD_ROSTERS, CM_WORLD_PARTIAL, CM_GENERATED_LEAGUES, generatedLeagueDateClauses, generatedLeagueCountClauses, generatedLeagueMonthClause } from '${ROOT_FWD}/src/data/clubManagerWorldRosters.ts';`,
     `export { CM_ALEAGUE_META } from '${ROOT_FWD}/src/data/clubManagerALeague2026.ts';`,
     `export { nationalityOf } from '${ROOT_FWD}/src/data/playerNationalities.ts';`,
     `export { FLAG_CODES } from '${ROOT_FWD}/src/components/FlagImg.tsx';`,
@@ -405,6 +406,7 @@ section = 'E';
     const reads = L.research.clubs.flatMap(c => c.sources.map(s => s.read)).sort();
     if (meta.read !== reads[0] || meta.readTo !== reads[reads.length - 1]) fail(`${L.row.label}: the file's read dates (${meta.read}, ${meta.readTo}) are not the first and last day its squad lists were read (${reads[0]}, ${reads[reads.length - 1]})`);
     if (!cm.generatedLeagueDateClauses().some(s => s.startsWith(`${L.row.label} squads as of `))) fail(`the picker's date line has no clause for ${L.row.label}`);
+    if (!cm.generatedLeagueMonthClause().includes(`the ${L.row.label}`)) fail(`the line over the picker does not say when ${L.row.label}'s squads were read`);
     if (!cm.generatedLeagueCountClauses().some(s => s.startsWith(`the ${L.row.label}'s ${men}, read `))) fail(`the count under the picker does not give ${L.row.label}'s ${men}`);
   });
   console.log(`E) ${joined} generated clubs are in the joined world with their own men; CM_GENERATED_LEAGUES: ${genList.map(g => `${g.label} ${g.players}`).join(', ')}`);

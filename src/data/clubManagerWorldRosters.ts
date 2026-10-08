@@ -59,6 +59,23 @@ export function generatedLeagueDateClauses(): string[] {
   return CM_GENERATED_LEAGUES.map(g => `${g.label} squads as of ${readWhen(g)}`);
 }
 
+const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+/** "the A-League Men and the Russian Premier League in October 2026", for the
+ *  line over the picker, which dates the baked squads by their month: the
+ *  generated leagues grouped by the month their squads were last read in,
+ *  from their own files and never the clock. Empty when there is none. */
+export function generatedLeagueMonthClause(): string {
+  const byMonth = new Map<string, string[]>();
+  for (const g of CM_GENERATED_LEAGUES) {
+    const [year, month] = g.readTo.split('-').map(Number);
+    const when = `${MONTH_NAMES[month - 1]} ${year}`;
+    byMonth.set(when, [...(byMonth.get(when) ?? []), `the ${g.label}`]);
+  }
+  const listOf = (names: string[]) => (names.length < 3 ? names.join(' and ') : `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`);
+  return [...byMonth].map(([when, names]) => `${listOf(names)} in ${when}`).join(', ');
+}
+
 /** "the A-League Men's 310, read 2026-10-06", one a generated league, for the count under the picker. */
 export function generatedLeagueCountClauses(): string[] {
   return CM_GENERATED_LEAGUES.map(g => `the ${g.label}'s ${g.players}, read ${readWhen(g)}`);

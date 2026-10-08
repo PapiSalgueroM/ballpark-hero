@@ -18,7 +18,7 @@ import {
   nationOfferFor, SHOOTOUT_MAX_ORDER, shootoutOrderOf, cupSatOutBy,
 } from '@/lib/clubManager';
 // Round 1035: the A-League Men's squads come from their own generated file.
-import { generatedLeagueCountClauses } from '@/data/clubManagerWorldRosters';
+import { generatedLeagueCountClauses, generatedLeagueMonthClause } from '@/data/clubManagerWorldRosters';
 import { FACILITY_IDS, facilitiesOf } from '@/lib/clubManagerFacilities';
 import { projectFinances } from '@/lib/clubManagerFinances';
 import { fanMeter } from '@/lib/clubManagerMeters';
@@ -410,7 +410,7 @@ const ClubManager = () => {
         <header className="text-center mb-6">
           <h1 className="text-4xl md:text-6xl font-bold tracking-[0.1em] text-primary font-display mb-1">CLUB MANAGER</h1>
           <p className="text-muted-foreground text-sm md:text-base max-w-xl mx-auto">
-            {REAL_LEAGUES.length} real league tables and {REAL_LEAGUES.reduce((s, l) => s + l.clubs.length, 0)} clubs today, squads as of {CM_ROSTER_META.asOf}, plus four real past seasons: 2020-21, 2015-16, 2010-11 and 2005-06. Pick when you start, then your nation, your league, your club.
+            {REAL_LEAGUES.length} real league tables and {REAL_LEAGUES.reduce((s, l) => s + l.clubs.length, 0)} clubs today, squads as of {CM_ROSTER_META.asOf}{generatedLeagueMonthClause() ? ` (${generatedLeagueMonthClause()})` : ''}, plus four real past seasons: 2020-21, 2015-16, 2010-11 and 2005-06. Pick when you start, then your nation, your league, your club.
           </p>
         </header>
 
