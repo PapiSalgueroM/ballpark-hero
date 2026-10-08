@@ -1,0 +1,62 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [31m❯[39m src/test/seasonCentreWords.test.tsx [2m([22m[2m3 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 535[2mms[22m[39m
+[31m   [31m×[31m Season Centre: soccer markup, recorded on the base (Round 1048)[2m > [22mprints the soccer shaped season exactly as the base viewer did, with no new field set[39m[33m 319[2mms[22m[39m
+[31m     → screens whose soccer markup moved: expected [ 'table|desktop|help', …(19) ] to deeply equal [][39m
+   [32m✓[39m Season Centre: a sport that brings its own words (Round 1048)[2m > [22mprints the US words, the record panel and the playoff path on the true layout (desktop)[32m 139[2mms[22m[39m
+   [32m✓[39m Season Centre: a sport that brings its own words (Round 1048)[2m > [22mprints the US words, the record panel and the playoff path on the false layout (phone)[32m 76[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/seasonCentreWords.test.tsx[2m > [22mSeason Centre: soccer markup, recorded on the base (Round 1048)[2m > [22mprints the soccer shaped season exactly as the base viewer did, with no new field set
+[31m[1mAssertionError[22m: screens whose soccer markup moved: expected [ 'table|desktop|help', …(19) ] to deeply equal [][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [][39m
+[31m+ [[39m
+[31m+   "table|desktop|help",[39m
+[31m+   "table|desktop|kickoff",[39m
+[31m+   "table|desktop|matchday",[39m
+[31m+   "table|desktop|poster",[39m
+[31m+   "table|desktop|review",[39m
+[31m+   "table|phone|help",[39m
+[31m+   "table|phone|kickoff",[39m
+[31m+   "table|phone|matchday",[39m
+[31m+   "table|phone|poster",[39m
+[31m+   "table|phone|review",[39m
+[31m+   "results|desktop|help",[39m
+[31m+   "results|desktop|kickoff",[39m
+[31m+   "results|desktop|matchday",[39m
+[31m+   "results|desktop|poster",[39m
+[31m+   "results|desktop|review",[39m
+[31m+   "results|phone|help",[39m
+[31m+   "results|phone|kickoff",[39m
+[31m+   "results|phone|matchday",[39m
+[31m+   "results|phone|poster",[39m
+[31m+   "results|phone|review",[39m
+[31m+ ][39m
+
+[36m [2m❯[22m src/test/seasonCentreWords.test.tsx:[2m119:56[22m[39m
+    [90m117| [39m    expect(Object.keys(now).sort()).toEqual(Object.keys(recorded).sort…
+    [90m118| [39m    const moved = Object.keys(recorded).filter(k => now[k] !== recorde…
+    [90m119| [39m    [34mexpect[39m(moved[33m,[39m [32m'screens whose soccer markup moved'[39m)[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m   | [39m                                                       [31m^[39m
+    [90m120| [39m  })[33m;[39m
+    [90m121| [39m})[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (3)[39m
+[2m   Start at [22m 17:18:13
+[2m   Duration [22m 3.49s[2m (transform 1.32s, setup 57ms, collect 1.80s, tests 535ms, environment 390ms, prepare 287ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/seasonCentreWords.test.tsx,title=src/test/seasonCentreWords.test.tsx > Season Centre%3A soccer markup%2C recorded on the base (Round 1048) > prints the soccer shaped season exactly as the base viewer did%2C with no new field set,line=119,column=56::AssertionError: screens whose soccer markup moved: expected [ 'table|desktop|help', …(19) ] to deeply equal []%0A%0A- Expected%0A+ Received%0A%0A- []%0A+ [%0A+   "table|desktop|help",%0A+   "table|desktop|kickoff",%0A+   "table|desktop|matchday",%0A+   "table|desktop|poster",%0A+   "table|desktop|review",%0A+   "table|phone|help",%0A+   "table|phone|kickoff",%0A+   "table|phone|matchday",%0A+   "table|phone|poster",%0A+   "table|phone|review",%0A+   "results|desktop|help",%0A+   "results|desktop|kickoff",%0A+   "results|desktop|matchday",%0A+   "results|desktop|poster",%0A+   "results|desktop|review",%0A+   "results|phone|help",%0A+   "results|phone|kickoff",%0A+   "results|phone|matchday",%0A+   "results|phone|poster",%0A+   "results|phone|review",%0A+ ]%0A%0A ❯ src/test/seasonCentreWords.test.tsx:119:56%0A%0A

@@ -1,0 +1,3 @@
+vitest-words-old-recording exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/seasonCentreWords.test.tsx,title=src/test/seasonCentreWords.test.tsx > Season Centre%3A soccer markup%
+vitest-centre exit=1 35s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/seasonCentreSlots.test.tsx,title=src/test/seasonCentreSlots.test.tsx > Season Centre%3A the markup thi
+tsc exit=0 43s | 
