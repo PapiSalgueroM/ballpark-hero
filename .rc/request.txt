@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+rvwalk2: BASE=http://localhost:4173 node .rc/x/rvwalk2.mjs
