@@ -961,8 +961,8 @@ const R4_FLOOR = 0.3;
  *    or a tenth of a minute beside the last kick of a period, which is wound up to END on the whistle and can
  *    not wait. The length is a hard rule (0 offenders); the count may be one chance in 50 (42), 3.5 times
  *    what was measured.
- *  - set aside because it had no lead in (it started straight off the action or the kick off before it): 64
- *    of 2,130 (per seed 11 of 394, 15 of 420, 18 of 433, 6 of 434, 14 of 449). One in 10 (213) keeps the holder
+ *  - set aside because it had no lead in (it started straight off the action or the kick off before it): 65
+ *    of 2,130 (per seed 11 of 394, 15 of 420, 18 of 433, 6 of 434, 15 of 449). One in 10 (213) keeps the holder
  *    rule read on nine chances in ten, 3.3 times the measured.
  *  - a goal whose kick off is seen for less than a beat: 10 of 262 (9 cut by the next chance, 1 by the last
  *    kick's wind up; per seed 2 of 43, 1 of 52, 3 of 55, 1 of 56, 3 of 56). These are minutes too full to hold a goal, its kick off and
@@ -973,18 +973,28 @@ const R4_FLOOR = 0.3;
  *  the clock is short) and found that a beat was all most of them had: 42 of 91 short. Since then the kick
  *  off comes before the next shooter's lead: a chance in the very next minute waits as long as it may and
  *  leaves it PITCH_HELD (which is KICKOFF_HELD), a chance two minutes on leaves it 0.70, and anything later
- *  leaves it whole. R6 now tells four lengths apart, holds two shares (MEASURED_KICKOFFS below), and asks
- *  every kick off under KICKOFF_HELD for its reason. */
+ *  leaves it whole. R6 now tells four lengths apart, holds the share that is KICKOFF_HELD or more, and asks
+ *  every shorter one for its reason. Measured on the 200 half feeds, 262 goals with play left after them:
+ *  - whole (0.76 or more) 143, KICKOFF_HELD or more but not whole 80, a beat or more 29, under a beat 9, none
+ *    because the last kick's wind up came first 1; 0.662 of the clock on average.
+ *  - KICKOFF_HELD or more: 223 of 262, 85.1 percent (per seed 35 of 43, 45 of 52, 44 of 55, 52 of 56, 47 of
+ *    56). With the kick off taken out of the turns again (control restartbeat) the same material gives 143
+ *    of 262, 54.6 percent. The floor is 75 percent: ten points (26 goals) under the measured share, which is
+ *    more than four times the 2.2 points a share counted on 262 goals moves by chance, and twenty points
+ *    over what the rule gives when it is broken.
+ *  - under KICKOFF_HELD: 39 (per seed 8 7 11 4 9). The goal itself had to wait 31, the next chance was
+ *    squeezed from behind 6, the period was ending 2, none of these 0. That last count is a hard rule. The
+ *    material must hold 19 of them (half the measured) for the rule to have been read at all.
+ *  The whole kick offs are counted and printed, not held to a share: with the kick off taken out of the
+ *  turns that count hardly moves (139 against 143), so a bound on it would guard nothing. */
 const R6_OVERLAP_ONE_IN = 50;
 const R6_NO_LEAD_ONE_IN = 10;
 const R6_SHORT_KICKOFF_ONE_IN = 12;
 /** The review's line between a short kick off and a full one: both sides have walked back to their own halves
  *  (the hook's walk lasts 0.3) and that picture has stood for as long again. */
 const KICKOFF_HELD = 0.6;
-/** MEASURED_KICKOFFS, on the 200 half feeds: PLACEHOLDER_KICKOFFS. */
-const R6_UNDER_HELD_FLOOR = 1;
-const R6_HELD_KICKOFF_SHARE = 0.5;
-const R6_WHOLE_KICKOFF_SHARE = 0.4;
+const R6_HELD_KICKOFF_SHARE = 0.75;
+const R6_UNDER_HELD_FLOOR = 19;
 /** R7. How many of each kind of dead ball the material must hold for the rule to have been read at all: each
  *  floor is about half of what the 200 halves hold (opening 200, restart 261, corner 693, throw in 1,144, free
  *  kick 999, goal kick 931, keeper 475), so a data release can move them and an emptied rule can not pass. */
@@ -1081,9 +1091,10 @@ describe('The pitch part on real feeds', () => {
     expect(total(t => t.goalsToRestart)).toBeGreaterThan(100);
     expect(heldOrMore + total(t => t.kickoffSeen + t.kickoffShort + t.beforeLastKick)).toBe(restarts);
     expect(total(t => t.kickoffShort + t.beforeLastKick) * R6_SHORT_KICKOFF_ONE_IN).toBeLessThan(restarts);
-    /* And it is a kick off that can be read: held or whole for nearly all of them, whole for most. */
-    expect(heldOrMore).toBeGreaterThanOrEqual(R6_HELD_KICKOFF_SHARE * restarts);
-    expect(whole).toBeGreaterThanOrEqual(R6_WHOLE_KICKOFF_SHARE * restarts);
+    /* And it is a kick off that can be read: on for KICKOFF_HELD or more after most goals. A soft
+       assertion, so that a run in which it fails still reads the rule below it (control kickoffturn turns
+       both red, and its log shows both). */
+    expect.soft(heldOrMore).toBeGreaterThanOrEqual(R6_HELD_KICKOFF_SHARE * restarts);
     /* And a shorter one always has its reason: the minutes around that goal were too full. */
     console.log(`[1101 R6 short kick offs] under ${KICKOFF_HELD}: ${total(t => t.underHeld)} of ${restarts} (per seed ${m.seeds.map(t => t.underHeld).join(' ')}); the goal itself had to wait ${total(t => t.goalWaited)}, the next chance was squeezed from behind ${total(t => t.nextSqueezed)}, the period was ending ${total(t => t.periodEnd)}, none of these ${total(t => t.underHeldOffenders)}${m.seeds.flatMap(t => t.underHeldExamples).map(example => ` | ${example}`).slice(0, 5).join('')}`);
     expect(total(t => t.underHeld)).toBeGreaterThanOrEqual(R6_UNDER_HELD_FLOOR);
