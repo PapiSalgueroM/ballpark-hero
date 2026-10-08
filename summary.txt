@@ -1,0 +1,2 @@
+clubPool-na exit=1 0s | 0
+shootout exit=1 14s | simCmShootoutOrder: 3 FAILURE(S)

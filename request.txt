@@ -1,0 +1,2 @@
+shootout: node scripts/simCmShootoutOrder.mjs
+clubPool-na: ls scripts/simCareerClubPool.mjs && grep -c POOL_LEAGUE_ROWS scripts/lib/careerClubPool.mjs
