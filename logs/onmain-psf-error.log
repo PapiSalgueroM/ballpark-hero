@@ -1,0 +1,12 @@
+    '    \x1B[90m   | \x1B[39m                           \x1B[31m^\x1B[39m\n' +
+    '    \x1B[90m 74| \x1B[39m    }\n' +
+    "    \x1B[90m 75| \x1B[39m    setup({ direct: { fail: true }, fallback: { rows } }, 'fixture fic…\n" +
+    '\n' +
+    '\x1B[31m\x1B[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\x1B[22m\x1B[39m\n' +
+    '\n',
+  expected: /Tests\s+1 failed.*1 passed.*9 skipped/,
+  operator: 'match',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

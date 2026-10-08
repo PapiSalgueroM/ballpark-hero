@@ -1,0 +1,26 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/playerSearchFailure.test.tsx[2m > [22mtruthful player-search failures[2m > [22mreports each failed empty request leg including a skipped long-query fallback[32m 13[2mms[22m[39m
+ [32m✓[39m src/test/playerSearchFailure.test.tsx[2m > [22mtruthful player-search failures[2m > [22mkeeps useful partial request results in the exact original ranking[32m 4[2mms[22m[39m
+ [32m✓[39m src/test/playerSearchFailure.test.tsx[2m > [22mtruthful player-search failures[2m > [22mshows a generic retry message for an actual failed empty lookup[32m 47[2mms[22m[39m
+ [32m✓[39m src/test/playerSearchFailure.test.tsx[2m > [22mtruthful player-search failures[2m > [22mkeeps a successful empty lookup as no players found[32m 10[2mms[22m[39m
+ [32m✓[39m src/test/playerSearchFailure.test.tsx[2m > [22mtruthful player-search failures[2m > [22mclears failed search feedback on typing and successful results[32m 70[2mms[22m[39m
+ [32m✓[39m src/test/playerSearchFailure.test.tsx[2m > [22mtruthful player-search failures[2m > [22mkeeps useful local matches selectable during remote failure[32m 15[2mms[22m[39m
+ [32m✓[39m src/test/playerSearchFailure.test.tsx[2m > [22mtruthful player-search failures[2m > [22mignores an old failure after a newer request succeeds[32m 65[2mms[22m[39m
+ [32m✓[39m src/test/playerSearchFailure.test.tsx[2m > [22mtruthful player-search failures[2m > [22mkeeps a cleared in-flight search quiet without stale failure feedback[32m 55[2mms[22m[39m
+ [32m✓[39m src/test/playerSearchFailure.test.tsx[2m > [22mtruthful player-search failures[2m > [22msuppresses an intentionally aborted request even when its transport resolves an error[32m 52[2mms[22m[39m
+ [32m✓[39m src/test/playerSearchFailure.test.tsx[2m > [22mtruthful player-search failures[2m > [22mpreserves enabled free-text submission after a failed lookup[32m 8[2mms[22m[39m
+ [32m✓[39m src/test/playerSearchFailure.test.tsx[2m > [22mtruthful player-search failures[2m > [22mholds the independent original ranking filters exact selection and quiet storage[32m 15[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m11 passed[39m[22m[90m (11)[39m
+[2m   Start at [22m 05:58:27
+[2m   Duration [22m 888ms[2m (transform 62ms, setup 26ms, collect 170ms, tests 355ms, environment 148ms, prepare 70ms)[22m
+
+
+simPlayerSearchFailure: eleven actual helper and component outcomes passed.
+simPlayerSearchFailure: empty direct/fallback/both failures and the skipped long-query fallback are distinguished from successful empty search.
+simPlayerSearchFailure: useful partial/local matches, exact original ranking/filters and native selection callbacks are retained.
+simPlayerSearchFailure: success clearing, stale/cleared requests, explicit abort and free-text paths exercised without RNG/storage or outward writes.
+simPlayerSearchFailure: original source/client/folding bytes held; only owned copied controls change, native pixels remain separate.

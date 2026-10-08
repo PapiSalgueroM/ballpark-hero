@@ -1,0 +1,133 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/playerAutocompleteInteraction.test.tsx > player autocomplete interactions > selects on pointerdown before blur and ignores the later pointer click 50ms
+ ✓ src/test/playerAutocompleteInteraction.test.tsx > player autocomplete interactions > selects exactly once from a native keyboard or assistive click 14ms
+ ✓ src/test/playerAutocompleteInteraction.test.tsx > player autocomplete interactions > keeps ArrowDown and Enter selection on the focused input 14ms
+ ✓ src/test/playerAutocompleteInteraction.test.tsx > player autocomplete interactions > keeps ArrowUp and highlighted Tab selection with input focus 10ms
+ × src/test/playerAutocompleteInteraction.test.tsx > player autocomplete interactions > disables existing options and rejects stale pointer and keyboard activation 21ms
+   → expected "spy" to not be called at all, but actually been called 1 times
+
+Received: 
+
+  1st spy call:
+
+    Array [
+      "Fixture Orion",
+    ]
+
+
+Number of calls: 1
+
+ × src/test/playerAutocompleteInteraction.test.tsx > player autocomplete interactions > rejects a stale highlighted input event after disabling 9ms
+   → expected "spy" to not be called at all, but actually been called 1 times
+
+Received: 
+
+  1st spy call:
+
+    Array [
+      "Fixture Orion",
+    ]
+
+
+Number of calls: 1
+
+ × src/test/playerAutocompleteInteraction.test.tsx > player autocomplete interactions > rejects disabled free text while preserving the enabled submit behavior 3ms
+   → expected "spy" to not be called at all, but actually been called 1 times
+
+Received: 
+
+  1st spy call:
+
+    Array [
+      "Fi",
+    ]
+
+
+Number of calls: 1
+
+ ✓ src/test/playerAutocompleteInteraction.test.tsx > player autocomplete interactions > preserves namesake identities, disambiguators and the caller search filters 14ms
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 5 passed (8)
+   Start at  05:57:43
+   Duration  719ms (transform 63ms, setup 26ms, collect 169ms, tests 135ms, environment 153ms, prepare 40ms)
+
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/playerAutocompleteInteraction.test.tsx > player autocomplete interactions > disables existing options and rejects stale pointer and keyboard activation
+AssertionError: expected "spy" to not be called at all, but actually been called 1 times
+
+Received: 
+
+  1st spy call:
+
+    Array [
+      "Fixture Orion",
+    ]
+
+
+Number of calls: 1
+
+ ❯ src/test/playerAutocompleteInteraction.test.tsx:88:37
+     86|     fireEvent.pointerDown(option);
+     87|     fireEvent.click(option, { detail: 0 });
+     88|     expect(view.props.onChange).not.toHaveBeenCalled();
+       |                                     ^
+     89|     expect(view.props.onSelect).not.toHaveBeenCalled();
+     90|     view.rerender(<PlayerAutocomplete {...view.props} />);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  src/test/playerAutocompleteInteraction.test.tsx > player autocomplete interactions > rejects a stale highlighted input event after disabling
+AssertionError: expected "spy" to not be called at all, but actually been called 1 times
+
+Received: 
+
+  1st spy call:
+
+    Array [
+      "Fixture Orion",
+    ]
+
+
+Number of calls: 1
+
+ ❯ src/test/playerAutocompleteInteraction.test.tsx:101:37
+     99|     fireEvent.keyDown(view.input, { key: 'Enter' });
+    100|     fireEvent.keyDown(view.input, { key: 'Tab' });
+    101|     expect(view.props.onChange).not.toHaveBeenCalled();
+       |                                     ^
+    102|     expect(view.props.onSelect).not.toHaveBeenCalled();
+    103|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  src/test/playerAutocompleteInteraction.test.tsx > player autocomplete interactions > rejects disabled free text while preserving the enabled submit behavior
+AssertionError: expected "spy" to not be called at all, but actually been called 1 times
+
+Received: 
+
+  1st spy call:
+
+    Array [
+      "Fi",
+    ]
+
+
+Number of calls: 1
+
+ ❯ src/test/playerAutocompleteInteraction.test.tsx:109:24
+    107|     const view = await draw({ value: 'Fi', validateOnly: false, onSubm…
+    108|     fireEvent.keyDown(view.input, { key: 'Enter' });
+    109|     expect(submit).not.toHaveBeenCalled();
+       |                        ^
+    110|     view.rerender(<PlayerAutocomplete {...view.props} disabled={false}…
+    111|     fireEvent.keyDown(view.input, { key: 'Enter' });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+simPlayerAutocompleteInteraction unguard control: actual interaction checks rejected the changed component.

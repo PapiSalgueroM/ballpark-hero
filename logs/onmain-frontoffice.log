@@ -1,0 +1,30 @@
+   [32m✓[39m NFL opening rating checkpoint[2m > [22mcarries original player evidence through real trades cuts and practice promotion[32m 4[2mms[22m[39m
+   [32m✓[39m NFL opening rating checkpoint[2m > [22mplays four actual seasons playoffs drafts and summers with bounded saves and a nonnegative normal cap[32m 267[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL opening rating checkpoint[2m > [22mrefuses stale identity or source records before the real generator CLI writes outputs [33m 2141[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/frontOfficeRatings.test.ts[2m > [22mNFL opening rating checkpoint[2m > [22mkeeps source-stat observations and fitted models outside the browser data with a dated manifest
+[31m[1mAssertionError[22m: expected 'e3d221a9eb40873a8b9920efacb73250d8483…' to be 'cd0befccedbba0b74d06620ad47feb0f28cc2…' // Object.is equality[39m
+
+Expected: [32m"cd0befccedbba0b74d06620ad47feb0f28cc2f08cc240200c4b8133f8970581f"[39m
+Received: [31m"e3d221a9eb40873a8b9920efacb73250d8483f7e0f34d06204a061c2d8e9de8d"[39m
+
+[36m [2m❯[22m src/lib/frontOfficeRatings.test.ts:[2m216:60[22m[39m
+    [90m214| [39m    expect(inputs.sourceManifest.checkpoint.version).toBe(FO_OPENING_R…
+    [90m215| [39m    expect(inputs.sourceManifest.checkpoint.extraction).toContain('not…
+    [90m216| [39m    expect(hash(read('scripts/data/nflRosters2026.json'))).toBe(inputs…
+    [90m   | [39m                                                           [31m^[39m
+    [90m217| [39m    expect(hash(JSON.stringify(record))).toBe(inputs.sourceManifest.re…
+    [90m218| [39m    expect(hash(norm(read('src/data/frontOfficePlayers.ts').toString()…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m13 passed[39m[22m[90m (14)[39m
+[2m   Start at [22m 05:59:01
+[2m   Duration [22m 4.39s[2m (transform 425ms, setup 26ms, collect 481ms, tests 3.50s, environment 150ms, prepare 64ms)[22m
+
+
+::error file=/tmp/r1138-mainb/src/lib/frontOfficeRatings.test.ts,title=src/lib/frontOfficeRatings.test.ts > NFL opening rating checkpoint > keeps source-stat observations and fitted models outside the browser data with a dated manifest,line=216,column=60::AssertionError: expected 'e3d221a9eb40873a8b9920efacb73250d8483…' to be 'cd0befccedbba0b74d06620ad47feb0f28cc2…' // Object.is equality%0A%0AExpected: "cd0befccedbba0b74d06620ad47feb0f28cc2f08cc240200c4b8133f8970581f"%0AReceived: "e3d221a9eb40873a8b9920efacb73250d8483f7e0f34d06204a061c2d8e9de8d"%0A%0A ❯ src/lib/frontOfficeRatings.test.ts:216:60%0A%0A
