@@ -26,12 +26,13 @@
         card at that position really carries. (The other four pools are not single committed files this fence
         can read the same way; their example numbers are not checked here and that is said, not hidden.)
 
-   MEASURED 2026-10-08 on this round's branch: soccer 70 76 81 85 89, MLB 74 81 87 92 97, NBA 85 89 93 97 101 and
-   NHL 77 84 89 94 98 agree with their guides. The NFL ladder is 79 83 88 92 97 and its guide still prints 78,
-   85, 90, 95, 99, "78 up to 99" and a 97 rated quarterback card (the pool's quarterbacks run 65 to 93). So THIS
-   FENCE IS RED ON THE ROUND'S OWN BRANCH, ON PURPOSE: src/data/gameContent/football.ts belongs to another round
-   this week, the sentences are owed, and a release must not go out with the two screens disagreeing. It goes
-   green when the owed sentences land (they are ready on the branch r1130-guide-owed).
+   MEASURED 2026-10-08 on the round's own branch (r1130-fo-one-rating): soccer 70 76 81 85 89, MLB 74 81 87 92 97,
+   NBA 85 89 93 97 101 and NHL 77 84 89 94 98 agree with their guides. The NFL ladder is 79 83 88 92 97 and on
+   that branch its guide printed 78, 85, 90, 95, 99, "78 up to 99" and a 97 rated quarterback card beside an 88,
+   an 82, a 76 and a 68 (the pool's quarterbacks run 65 to 93 and none is a 68). So THIS FENCE WAS RED ON THAT
+   BRANCH, 3 of 17 checks, ON PURPOSE: src/data/gameContent/football.ts belonged to another round that week, the
+   sentences were owed, and a release must not go out with the two screens disagreeing. With the owed sentences
+   (the branch r1130-guide-owed, one commit on top of that one) it is green, 17 of 17.
 
    CONTROLS, SIM_GAUNTLET_GUIDE_CONTROL=<name>. Each patches a loaded text, first asserts its anchor is there
    exactly once, and the run exits 0 only when the game it names went red in exactly the section it names
