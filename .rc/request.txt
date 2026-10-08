@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+deep-plain: VERBOSE=1 PAGE_PRESSES=24 CAREER_PRESSES=30 MODES=keep OUT_JSON=$RC_OUT/deep-plain.json SHOTS=$RC_OUT/deep-plain ENGINES=chromium node scripts/playTranslatedPage.mjs
+deep-noguard: VERBOSE=1 PAGE_PRESSES=24 CAREER_PRESSES=30 MODES=keep OUT_JSON=$RC_OUT/deep-noguard.json SHOTS=$RC_OUT/deep-noguard PLAY_TRANSLATED_CONTROL=noguard ENGINES=chromium node scripts/playTranslatedPage.mjs
