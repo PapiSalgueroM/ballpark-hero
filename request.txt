@@ -1,0 +1,7 @@
+# 1104 fixer probe: simCareerHall nfl marks on Round 1051 head 46229f9c alone, six seeds, no board
+hall-nfl-base: SIM_SKIP_BOARD=1 SIM_SEED=base node scripts/simCareerHall.mjs nfl
+hall-nfl-1: SIM_SKIP_BOARD=1 SIM_SEED=1 node scripts/simCareerHall.mjs nfl
+hall-nfl-2: SIM_SKIP_BOARD=1 SIM_SEED=2 node scripts/simCareerHall.mjs nfl
+hall-nfl-3: SIM_SKIP_BOARD=1 SIM_SEED=3 node scripts/simCareerHall.mjs nfl
+hall-nfl-4: SIM_SKIP_BOARD=1 SIM_SEED=4 node scripts/simCareerHall.mjs nfl
+hall-nfl-5: SIM_SKIP_BOARD=1 SIM_SEED=5 node scripts/simCareerHall.mjs nfl

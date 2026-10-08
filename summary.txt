@@ -1,0 +1,6 @@
+hall-nfl-base exit=3 6s | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+hall-nfl-1 exit=3 6s | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+hall-nfl-2 exit=3 6s | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+hall-nfl-4 exit=3 6s | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+hall-nfl-3 exit=3 6s | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+hall-nfl-5 exit=3 6s | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
