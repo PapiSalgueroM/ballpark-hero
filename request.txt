@@ -1,0 +1,5 @@
+# Round 1105 review (runner lens), request 5: leaving the grid inside the app while a pick waits, and the waiting state with reduced motion
+#!serve
+#!playwright
+#!serial
+rvwalk3: node .rc/x/rvwalk1105c.mjs

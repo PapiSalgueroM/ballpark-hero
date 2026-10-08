@@ -1,0 +1,14 @@
+RV| S6b: waiting: input {"disabled":true,"value":"","focused":false}
+RV| S6b: after the home link the address is http://localhost:4173/; grid cells on the page: 9
+RV| ok: S6b: nothing is said on the page he went to, 9 s after the pick and after the key landed (toasts [])
+RV| ok: S6b: nothing was written for the pick he walked away from ([])
+RV| ok: S6b: back on the grid the board is untouched (left 15, empty,empty,empty,empty,empty,empty,empty,empty,empty)
+RV| S6b: errors []
+RV| scenario S6b took 11497 ms
+RV| S7-reduce: spinners while the pick waits: [{"visible":true,"animation":"spin","duration":"1e-06s","running":0}]
+RV| ok: S7-reduce: the waiting pick is judged when the key lands (correct,empty,empty,empty,empty,empty,empty,empty,empty)
+RV| scenario S7-reduce took 1856 ms
+RV| S7-no-preference: spinners while the pick waits: [{"visible":true,"animation":"spin","duration":"1s","running":1}]
+RV| ok: S7-no-preference: the waiting pick is judged when the key lands (correct,empty,empty,empty,empty,empty,empty,empty,empty)
+RV| scenario S7-no-preference took 1782 ms
+RVWALK3 DONE: 0 findings, 13 notes
