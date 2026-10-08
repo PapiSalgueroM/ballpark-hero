@@ -1,0 +1,13 @@
+/soccer-career total=777811 bytes (759.58K, rounds to 760K) over 43 files
+/club-manager total=722117 bytes (705.19K, rounds to 705K) over 37 files
+chunk SoccerSeasonCentre-DDarmHiU.js gz=17676 bytes
+chunk MiniPitch-D_FXXmmr.js gz=1740 bytes
+chunk LiveSimScreen-Bs3WFWOR.js gz=16856 bytes
+chunk LiveSimScreen-CutcJFZR.css gz=1154 bytes
+chunk SoccerCareer-CA8ozUi6.js gz=344414 bytes
+weightBytes done
+pitch part in PitchSurface-oNy8_cjF.js gz=3562 bytes; imported by: ClubManager-DKH2guIt.js, LiveSimScreen-Bs3WFWOR.js, MiniPitch-D_FXXmmr.js, SoccerSeasonCentre-DDarmHiU.js
+pitch css in LiveSimScreen-CutcJFZR.css gz=1154 bytes
+pitch css in PitchSurface-BrcOvsZb.css gz=935 bytes
+chunk MiniPitch-D_FXXmmr.js gz=1740 bytes
+weightBytes done (2)
