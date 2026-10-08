@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+#!serial
+probe: node .rc/x/double2.mjs
