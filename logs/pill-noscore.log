@@ -1,0 +1,141 @@
+bundled the sixteen pages (3.5 MB of script, 1694 bytes of module CSS)
+1) 34 finished states on a 390 by 844 phone, each game at its widest score and its narrowest
+  FAIL [text] /nba-higher-lower all ten right: the pill reads null, the hook reports "325"
+  FAIL [fit] /nba-higher-lower all ten right: the score runs to undefined lines
+  FAIL [fit] /nba-higher-lower all ten right: the score spills out of its pill
+   /nba-higher-lower all ten right                      pill null          91px wide, slack 112.5px, win
+  FAIL [text] /nba-higher-lower none right: the pill reads null, the hook reports "0"
+  FAIL [fit] /nba-higher-lower none right: the score runs to undefined lines
+  FAIL [fit] /nba-higher-lower none right: the score spills out of its pill
+   /nba-higher-lower none right                         pill null          91px wide, slack 112.5px, loss
+  FAIL [text] /nfl-higher-lower all ten right: the pill reads null, the hook reports "325"
+  FAIL [fit] /nfl-higher-lower all ten right: the score runs to undefined lines
+  FAIL [fit] /nfl-higher-lower all ten right: the score spills out of its pill
+   /nfl-higher-lower all ten right                      pill null          91px wide, slack 112.5px, win
+  FAIL [text] /nfl-higher-lower none right: the pill reads null, the hook reports "0"
+  FAIL [fit] /nfl-higher-lower none right: the score runs to undefined lines
+  FAIL [fit] /nfl-higher-lower none right: the score spills out of its pill
+   /nfl-higher-lower none right                         pill null          91px wide, slack 112.5px, loss
+  FAIL [text] /mlb-higher-lower all ten right: the pill reads null, the hook reports "325"
+  FAIL [fit] /mlb-higher-lower all ten right: the score runs to undefined lines
+  FAIL [fit] /mlb-higher-lower all ten right: the score spills out of its pill
+   /mlb-higher-lower all ten right                      pill null          91px wide, slack 112.5px, win
+  FAIL [text] /mlb-higher-lower none right: the pill reads null, the hook reports "0"
+  FAIL [fit] /mlb-higher-lower none right: the score runs to undefined lines
+  FAIL [fit] /mlb-higher-lower none right: the score spills out of its pill
+   /mlb-higher-lower none right                         pill null          91px wide, slack 112.5px, loss
+  FAIL [text] /hockey-higher-lower all ten right: the pill reads null, the hook reports "325"
+  FAIL [fit] /hockey-higher-lower all ten right: the score runs to undefined lines
+  FAIL [fit] /hockey-higher-lower all ten right: the score spills out of its pill
+   /hockey-higher-lower all ten right                   pill null          91px wide, slack 112.5px, win
+  FAIL [text] /hockey-higher-lower none right: the pill reads null, the hook reports "0"
+  FAIL [fit] /hockey-higher-lower none right: the score runs to undefined lines
+  FAIL [fit] /hockey-higher-lower none right: the score spills out of its pill
+   /hockey-higher-lower none right                      pill null          91px wide, slack 112.5px, loss
+  FAIL [text] /cfb-higher-lower all ten right: the pill reads null, the hook reports "325"
+  FAIL [fit] /cfb-higher-lower all ten right: the score runs to undefined lines
+  FAIL [fit] /cfb-higher-lower all ten right: the score spills out of its pill
+   /cfb-higher-lower all ten right                      pill null          91px wide, slack 112.5px, win
+  FAIL [text] /cfb-higher-lower none right: the pill reads null, the hook reports "0"
+  FAIL [fit] /cfb-higher-lower none right: the score runs to undefined lines
+  FAIL [fit] /cfb-higher-lower none right: the score spills out of its pill
+   /cfb-higher-lower none right                         pill null          91px wide, slack 112.5px, loss
+  FAIL [text] /f1-higher-lower all ten right: the pill reads null, the hook reports "325"
+  FAIL [fit] /f1-higher-lower all ten right: the score runs to undefined lines
+  FAIL [fit] /f1-higher-lower all ten right: the score spills out of its pill
+   /f1-higher-lower all ten right                       pill null          91px wide, slack 112.5px, win
+  FAIL [text] /f1-higher-lower none right: the pill reads null, the hook reports "0"
+  FAIL [fit] /f1-higher-lower none right: the score runs to undefined lines
+  FAIL [fit] /f1-higher-lower none right: the score spills out of its pill
+   /f1-higher-lower none right                          pill null          91px wide, slack 112.5px, loss
+  FAIL [text] /tennis-higher-lower all ten right: the pill reads null, the hook reports "325"
+  FAIL [fit] /tennis-higher-lower all ten right: the score runs to undefined lines
+  FAIL [fit] /tennis-higher-lower all ten right: the score spills out of its pill
+   /tennis-higher-lower all ten right                   pill null          91px wide, slack 112.5px, win
+  FAIL [text] /tennis-higher-lower none right: the pill reads null, the hook reports "0"
+  FAIL [fit] /tennis-higher-lower none right: the score runs to undefined lines
+  FAIL [fit] /tennis-higher-lower none right: the score spills out of its pill
+   /tennis-higher-lower none right                      pill null          91px wide, slack 112.5px, loss
+  FAIL [text] /golf-higher-lower all ten right: the pill reads null, the hook reports "325"
+  FAIL [fit] /golf-higher-lower all ten right: the score runs to undefined lines
+  FAIL [fit] /golf-higher-lower all ten right: the score spills out of its pill
+   /golf-higher-lower all ten right                     pill null          91px wide, slack 112.5px, win
+  FAIL [text] /golf-higher-lower none right: the pill reads null, the hook reports "0"
+  FAIL [fit] /golf-higher-lower none right: the score runs to undefined lines
+  FAIL [fit] /golf-higher-lower none right: the score spills out of its pill
+   /golf-higher-lower none right                        pill null          91px wide, slack 112.5px, loss
+  FAIL [text] /afl-higher-lower all ten right: the pill reads null, the hook reports "325"
+  FAIL [fit] /afl-higher-lower all ten right: the score runs to undefined lines
+  FAIL [fit] /afl-higher-lower all ten right: the score spills out of its pill
+   /afl-higher-lower all ten right                      pill null          91px wide, slack 112.5px, win
+  FAIL [text] /afl-higher-lower none right: the pill reads null, the hook reports "0"
+  FAIL [fit] /afl-higher-lower none right: the score runs to undefined lines
+  FAIL [fit] /afl-higher-lower none right: the score spills out of its pill
+   /afl-higher-lower none right                         pill null          88px wide, slack 114.0px, loss
+  FAIL [text] /higher-lower a three figure streak: the pill reads null, the hook reports "143"
+  FAIL [fit] /higher-lower a three figure streak: the score runs to undefined lines
+  FAIL [fit] /higher-lower a three figure streak: the score spills out of its pill
+   /higher-lower a three figure streak                  pill null          91px wide, slack 112.5px, loss
+  FAIL [text] /higher-lower out on the first pick: the pill reads null, the hook reports "0"
+  FAIL [fit] /higher-lower out on the first pick: the score runs to undefined lines
+  FAIL [fit] /higher-lower out on the first pick: the score spills out of its pill
+   /higher-lower out on the first pick                  pill null          91px wide, slack 112.5px, loss
+  FAIL [text] /face-off a duel tied to the last extra round: the pill reads null, the hook reports "2,600 to 2,600"
+  FAIL [fit] /face-off a duel tied to the last extra round: the score runs to undefined lines
+  FAIL [fit] /face-off a duel tied to the last extra round: the score spills out of its pill
+   /face-off a duel tied to the last extra round        pill null          91px wide, slack 112.5px, close
+  FAIL [text] /face-off a full speed win over The Legend: the pill reads null, the hook reports "2,000 to 1,800"
+  FAIL [fit] /face-off a full speed win over The Legend: the score runs to undefined lines
+  FAIL [fit] /face-off a full speed win over The Legend: the score spills out of its pill
+   /face-off a full speed win over The Legend           pill null          91px wide, slack 112.5px, win
+  FAIL [text] /face-off shut out by The Rookie: the pill reads null, the hook reports "0 to 1,900"
+  FAIL [fit] /face-off shut out by The Rookie: the score runs to undefined lines
+  FAIL [fit] /face-off shut out by The Rookie: the score spills out of its pill
+   /face-off shut out by The Rookie                     pill null          91px wide, slack 112.5px, loss
+  FAIL [text] /champ-or-not 10 right: the pill reads null, the hook reports "10/10"
+  FAIL [fit] /champ-or-not 10 right: the score runs to undefined lines
+  FAIL [fit] /champ-or-not 10 right: the score spills out of its pill
+   /champ-or-not 10 right                               pill null          91px wide, slack 112.5px, win
+  FAIL [text] /whod-they-beat 10 right: the pill reads null, the hook reports "10/10"
+  FAIL [fit] /whod-they-beat 10 right: the score runs to undefined lines
+  FAIL [fit] /whod-they-beat 10 right: the score spills out of its pill
+   /whod-they-beat 10 right                             pill null          91px wide, slack 112.5px, win
+  FAIL [text] /champ-or-not 0 right: the pill reads null, the hook reports "0/10"
+  FAIL [fit] /champ-or-not 0 right: the score runs to undefined lines
+  FAIL [fit] /champ-or-not 0 right: the score spills out of its pill
+   /champ-or-not 0 right                                pill null          88px wide, slack 114.0px, loss
+  FAIL [text] /whod-they-beat 0 right: the pill reads null, the hook reports "0/10"
+  FAIL [fit] /whod-they-beat 0 right: the score runs to undefined lines
+  FAIL [fit] /whod-they-beat 0 right: the score spills out of its pill
+   /whod-they-beat 0 right                              pill null          88px wide, slack 114.0px, loss
+  FAIL [text] /silverware-sort every rung right: the pill reads null, the hook reports "15/15"
+  FAIL [fit] /silverware-sort every rung right: the score runs to undefined lines
+  FAIL [fit] /silverware-sort every rung right: the score spills out of its pill
+   /silverware-sort every rung right                    pill null          91px wide, slack 112.5px, win
+  FAIL [text] /silverware-sort one rung right: the pill reads null, the hook reports "1/15"
+  FAIL [fit] /silverware-sort one rung right: the score runs to undefined lines
+  FAIL [fit] /silverware-sort one rung right: the score spills out of its pill
+   /silverware-sort one rung right                      pill null          88px wide, slack 114.0px, loss
+  FAIL [text] /rank-em 5 in place: the pill reads null, the hook reports "1,000"
+  FAIL [fit] /rank-em 5 in place: the score runs to undefined lines
+  FAIL [fit] /rank-em 5 in place: the score spills out of its pill
+   /rank-em 5 in place                                  pill null          91px wide, slack 112.5px, win
+  FAIL [text] /rank-em 3 in place: the pill reads null, the hook reports "600"
+  FAIL [fit] /rank-em 3 in place: the score runs to undefined lines
+  FAIL [fit] /rank-em 3 in place: the score spills out of its pill
+   /rank-em 3 in place                                  pill null          91px wide, slack 112.5px, loss
+  FAIL [text] /rank-em 0 in place: the pill reads null, the hook reports "0"
+  FAIL [fit] /rank-em 0 in place: the score runs to undefined lines
+  FAIL [fit] /rank-em 0 in place: the score spills out of its pill
+   /rank-em 0 in place                                  pill null          91px wide, slack 112.5px, loss
+  FAIL [text] /hof-or-bust the right call, no hints: the pill reads null, the hook reports "1,000"
+  FAIL [fit] /hof-or-bust the right call, no hints: the score runs to undefined lines
+  FAIL [fit] /hof-or-bust the right call, no hints: the score spills out of its pill
+   /hof-or-bust the right call, no hints                pill null          91px wide, slack 112.5px, close
+  FAIL [text] /hof-or-bust the wrong call: the pill reads null, the hook reports "0"
+  FAIL [fit] /hof-or-bust the wrong call: the score runs to undefined lines
+  FAIL [fit] /hof-or-bust the wrong call: the score spills out of its pill
+   /hof-or-bust the wrong call                          pill null          91px wide, slack 112.5px, close
+   narrowest slack beside a pill: 112.5px, at /nba-higher-lower all ten right (325)
+
+simResultPillComparison: control noscore turned [text] red, as it must (34 findings).

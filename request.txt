@@ -1,0 +1,10 @@
+#!playwright
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-d3: node_modules/.bin/vitest run src/test/cbbProgramFeedback.test.tsx src/test/clueGameHintPoints.test.tsx src/test/constructorFeedback.test.tsx src/test/dailySaveParity.test.tsx src/test/dailySaveShapes.test.tsx src/test/f1DriverFeedback.test.tsx src/test/f1DriverHintPoints.test.tsx src/test/guessFinishClueBoards.test.tsx src/test/guessFinishMoment.test.tsx src/test/nascarDriverFeedback.test.tsx src/test/noDoubleRecord.test.tsx src/test/numberFormatting.test.tsx src/test/rankEmCircuit.test.tsx src/test/rankEmOrder.test.tsx src/test/resultScorePillComparison.test.tsx src/test/tennisPlayerFeedback.test.tsx src/test/dailyReload.test.tsx src/test/faceOffDeadline.test.tsx src/test/hofOrBustVoteOnce.test.tsx --testTimeout=300000 --hookTimeout=120000
+simResultPillComparison: node scripts/simResultPillComparison.mjs
+pill-noscore: RESULT_PILL_CONTROL=noscore node scripts/simResultPillComparison.mjs
+pill-cramp: RESULT_PILL_CONTROL=cramp node scripts/simResultPillComparison.mjs
+pill-shift: RESULT_PILL_CONTROL=shift node scripts/simResultPillComparison.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
