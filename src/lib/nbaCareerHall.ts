@@ -20,7 +20,10 @@ import { HALL_CALIBRATION, hallVoterRulesFor, usCareerHall, type HallVoterWords 
    and section 19 of scripts/simCareerHall.mjs holds it against the engine. */
 export const NBA_HALL_WORDS: HallVoterWords = {
   weighs: "The voters weigh the hardware first: rings, MVPs, Finals MVPs, All-NBA years.",
-  reads: { pts: "points" },
+  // Round 1103: the table's second term (newLinePts, the points of seasons on the newer stat line, see
+  // NBA_LEGACY_NEW_LINE_SCALE in nbaMyCareer.ts) is points too, so it carries the same noun and the card says
+  // it once. Without a noun here the card printed the table's own key.
+  reads: { pts: "points", newLinePts: "points" },
   hardware: "rings, MVPs, Finals MVPs, All-NBA years",
   families: "points, rebounds or assists",
   example: { positions: ["PG"], stat: "ast", one: "point guard", who: "point guards", family: "assists" },

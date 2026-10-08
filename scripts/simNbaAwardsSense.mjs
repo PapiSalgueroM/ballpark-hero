@@ -119,17 +119,17 @@
    file), refuses when its anchor is not there exactly once or the swap changed nothing, and must turn its own
    section red. A control that moves the line itself drags what reads the line with it, so each lists what
    may follow. A control run exits 1 when it fired as designed and 3 when it did not.
-     oldassists       the old assists expression                       A1, A3 red (may: A2, E, R, H, B4, B6)
+     oldassists       the old assists expression                       A1, A3 red (may: A2, E, R, H, B2, B4, B6)
      stalefield       the PG row of the season score's field one sd stale   E red (may: R, H, B6)
      staleawardfield  the PG row of NBA_FIELD's MVP score one sd stale   E red (may: H, B4, B6)
      nobridge         the raw score handed to the rival                R red
      noscale          the legacy constant back to 1                    H red (refuses when it is 1)
      nomvpworth       an MVP worth nothing to the legacy score         H red
-     independent      MVP with no First Team gate and no playoff gate  B1 red (may: B3, B6, H)
+     independent      MVP with no First Team gate and no playoff gate  B1 red (may: B3, B4, B6, H)
      rookieage        the rookie test back to 22 or older, two seasons   B2 red (may: B6)
      bar62            62 games in every era                            B3 red, both halves (may: B6, H)
      scorersdefend    the defensive awards read the MVP score          B5 red (may: B6)
-     oldgrades        the All-NBA and MVP grades back to 0.15 and none   B6 red (may: H, B4)
+     oldgrades        the All-NBA and MVP grades back to 0.15 and none   B6 red (may: H, B3, B4)
      privatecopy      Front Office adding its own sum again            D red
      weightdrift      the career's win weight at 19                    D red (may: E, B6, H)
      barfrom          the games rule starting a season late            B3 red (the drawn check)
@@ -148,6 +148,10 @@
    Measured 2026-10-08 on 94286364: 124 checks, 0 failed at full size, the shrunk plain run green on seeds 1,2
    and on 3,4, and all fifteen controls fired as designed, each red in its own section and nowhere it may not be
    (the eleven that move a band at full size, privatecopy, weightdrift and example on a quick run of exact checks).
+   After the fix pass of 2026-10-08 (the review's findings), on 51ef4ad5: 139 checks, 0 failed at full size. Of
+   the twenty four controls twenty one fired as designed; oldassists, independent and oldgrades went red in
+   their own sections and in one more each (B2, B4 and B3, three checks the fix pass added or that their own
+   swap starves), which their lists now name with the reason beside each control below.
 
    KNOBS for a builder, none of which may record: SENSE_TRY_SCALE=1.2 (the legacy constant at another value),
    SENSE_FIELD_POP=starters (the field measured on starter seasons only). */
@@ -218,10 +222,12 @@ const CONTROLS = {
   /* C: one NFL All-Pro grade moved by a hundredth. Judged under SENSE_PROVE_OTHERS=1. */
   othersport: { file: 'src/lib/careerAwards.ts', find: "  QB: { pool: 32, slots: 1, grade: 0.25 },\n  RB:", put: "  QB: { pool: 32, slots: 1, grade: 0.26 },\n  RB:", needs: 'C' },
   /* A: the old assists expression back (a flat rate by rating, plus up to two for everybody). It moves the
-     line itself, so the field, the rival, the awards and the Hall may follow it red: `may` lists them. */
+     line itself, so the field, the rival, the awards and the Hall may follow it red: `may` lists them. B2 is
+     among them since 2026-10-08: more assists is more production, more rookies clear a field measured without
+     it, and the All-Rookie share leaves its band (33.6 percent of first seasons at full size). */
   oldassists: { file: 'src/lib/nbaMyCareer.ts',
     find: '  const apg = clampTo((0.045 + d * 0.0052) * a.playmaking * NBA_POS_AST[input.pos] * minutes * era.ast * (0.92 + u5 * 0.16), 0.3, po ? 14 : 13);',
-    put: '  const apg = clampTo((1.5 + d * 0.22) * a.playmaking * (bench ? 0.6 : 1) + u5 * 2, 0.3, po ? 14 : 13);', needs: 'A1,A3', may: 'A2,E,R,H,B4,B6' },
+    put: '  const apg = clampTo((1.5 + d * 0.22) * a.playmaking * (bench ? 0.6 : 1) + u5 * 2, 0.3, po ? 14 : 13);', needs: 'A1,A3', may: 'A2,E,R,H,B2,B4,B6' },
   /* E: the PG row of the season score's field one standard deviation stale. Finals MVP and the bridge read it. */
   stalefield: { file: 'src/lib/careerAwards.ts', find: FIELD_PG_ROW, put: FIELD_PG_STALE, needs: 'E', may: 'R,H,B6' },
   /* E: the PG row of the MVP score's field (NBA_FIELD) one standard deviation stale. The league's awards read it. */
@@ -233,8 +239,9 @@ const CONTROLS = {
   /* H: an MVP worth nothing to the legacy score of a career retiring today. */
   nomvpworth: { file: 'src/lib/nbaMyCareer.ts', find: 'const NBA_LEGACY_V2: LegacyWeights = {\n  awards: { rings: 95, mvps: 155, finalsMvps: 90, allNbas: 48 },', put: 'const NBA_LEGACY_V2: LegacyWeights = {\n  awards: { rings: 95, mvps: 0, finalsMvps: 90, allNbas: 48 },', needs: 'H' },
   /* B1: MVP decided on its own again, with no First Team gate and no playoff gate. It then also ignores the
-     games tests the First Team carried, and there are more of them, so B3, B6 and the Hall may follow. */
-  independent: { file: 'src/lib/nbaCareerAwards.ts', find: '  const mvp = out.allNbaTeam === 1 && x.madePlayoffs && zMvp > bar(150, 1, G_MVP, g1);', put: '  const mvp = zMvp > bar(150, 1, G_MVP, g1);', needs: 'B1', may: 'B3,B6,H' },
+     games tests the First Team carried, and there are more of them, so B3, B6 and the Hall may follow. And B4
+     since 2026-10-08: an MVP off the First Team is not held to start the All-Star Game (27 to 41 a seed). */
+  independent: { file: 'src/lib/nbaCareerAwards.ts', find: '  const mvp = out.allNbaTeam === 1 && x.madePlayoffs && zMvp > bar(150, 1, G_MVP, g1);', put: '  const mvp = zMvp > bar(150, 1, G_MVP, g1);', needs: 'B1', may: 'B3,B4,B6,H' },
   /* B2: the rookie test back to what the old block asked (22 or older, a first or second season). */
   rookieage: { file: 'src/lib/nbaMyCareer.ts', find: "    bench: c.role === 'backup', rookie: c.seasons.length === 0,", put: "    bench: c.role === 'backup', rookie: c.age >= 22 && c.seasons.length <= 1,", needs: 'B2', may: 'B6' },
   /* B3: the old block's 62 games in every era, in place of the real rule. Both halves must go red. */
@@ -273,8 +280,9 @@ const CONTROLS = {
 /* Controls that swap more than one line of one file (each anchor exactly once, the edit must change the text). */
 const MULTI = {
   /* B6: the All-NBA and MVP grades back to what careerAwards.ts carried before Round 1103 (0.15 and none). Fewer
-     of both follow, so the Hall and the All-Star ratio may too. */
-  oldgrades: { file: 'src/lib/nbaCareerAwards.ts', needs: 'B6', may: 'H,B4', swaps: [
+     of both follow, so the Hall and the All-Star ratio may too, and B3's floor of rule awards won under 65 games
+     before the rule (1,678 in the run at full size against a floor of 1,750: fewer awards, fewer of those). */
+  oldgrades: { file: 'src/lib/nbaCareerAwards.ts', needs: 'B6', may: 'H,B3,B4', swaps: [
     [/^const G_ALL_NBA = [-0-9.]+;$/m, 'const G_ALL_NBA = 0.15;'],
     [/^const G_MVP = [-0-9.]+;$/m, 'const G_MVP = 0;'],
   ] },

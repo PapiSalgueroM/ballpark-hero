@@ -34,10 +34,11 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import {
   NBA_ARCHETYPES, startNbaCareer, nbaRollTeamQuality, nbaAssignRole, nbaCampBattle, simNbaSeason, nbaProgress,
-  drawNbaEvent, isNbaNewLine, nbaSeasonGames, nbaShouldRetire, nbaCareerTotals, nbaLegacyOf, type NbaCareerPos, type NbaCareerState,
+  drawNbaEvent, isNbaNewLine, nbaSeasonGames, nbaShouldRetire, nbaCareerTotals, nbaLegacyOf, NBA_LEGACY_WEIGHTS,
+  type NbaCareerPos, type NbaCareerState, type NbaLegacy,
 } from '@/lib/nbaMyCareer';
-import { NBA_CAREER_HALL } from '@/lib/nbaCareerHall';
-import { hallRecordFor, stampHallCalibration } from '@/lib/careerHallOfFame';
+import { NBA_CAREER_HALL, NBA_HALL_WORDS } from '@/lib/nbaCareerHall';
+import { HALL_CALIBRATION, hallRecordFor, hallWeighLine, stampHallCalibration } from '@/lib/careerHallOfFame';
 import { nbaEarnedBadges } from '@/lib/nbaCareerLoop';
 import { nbaStatLine } from '@/lib/usCareerStatLine';
 
@@ -164,9 +165,24 @@ describe('Round 1103: an old NBA save reads exactly as it did', () => {
     for (const e of fx.entries) for (const s of e.save.seasons) expect((s as { mpg?: number }).mpg, `${e.key} ${s.year}`).toBeUndefined();
   });
 
+  /* The ballot card's sentence (hall.weighs) is Round 1051's copy, and that round rewrote it on 2026-10-08, after
+     this fixture was frozen: the card now names only what the table reads, and a standout only when it was worth
+     saying. The fixture is never re-recorded, so the sentence is set aside from the exact comparison and held to
+     the one thing in it that belongs to the save: it must be the sentence the card's own function gives the
+     standout this legacy was paid the day it was frozen (or none). Everything else on the record, the score and
+     the outcome included, is compared exactly, as before. */
+  const apart = (r: SaveRead): { read: SaveRead; weighs: string | undefined } => {
+    const { weighs, ...hall } = r.hall as SaveRead['hall'] & { weighs?: string };
+    return { read: { ...r, hall } as SaveRead, weighs };
+  };
+
   for (const e of fx.entries) {
     it(`${e.key}: every line, the totals, the legacy, the ballot and the badges are what they were`, () => {
-      expect(readSave(clone(e.save))).toEqual(e.read);
+      const got = apart(readSave(clone(e.save)));
+      const was = apart(e.read);
+      expect(got.read).toEqual(was.read);
+      const paid = (e.read.legacy as NbaLegacy).standout ?? null;
+      expect(got.weighs).toBe(was.weighs === undefined ? undefined : hallWeighLine(NBA_HALL_WORDS, NBA_LEGACY_WEIGHTS[HALL_CALIBRATION], e.save.pos, paid));
     });
   }
 
@@ -175,7 +191,16 @@ describe('Round 1103: an old NBA save reads exactly as it did', () => {
     expect(e).toBeTruthy();
     const moved = clone(e!.save);
     moved.seasons[2].ppg += 1;
-    expect(readSave(moved)).not.toEqual(e!.read);
+    expect(apart(readSave(moved)).read).not.toEqual(apart(e!.read).read);
+  });
+
+  /* Round 1103 put a second term in the calibration 2 table (the points of seasons on the new line). The card
+     names what the table reads, so that term needs a noun, and it is the same noun: the card says "points" once
+     and never prints a key of the table (it read "points and newLinePts" on the first merge of the two rounds). */
+  it('the ballot card names points once for every position and prints no key of the table', () => {
+    for (const pos of POS) {
+      expect(hallWeighLine(NBA_HALL_WORDS, NBA_LEGACY_WEIGHTS[HALL_CALIBRATION], pos, null)).toBe(`${NBA_HALL_WORDS.weighs} Then your seasons and points.`);
+    }
   });
 
   for (const key of ['board:mid', 'open:2', 'open:8', 'open:11']) {
