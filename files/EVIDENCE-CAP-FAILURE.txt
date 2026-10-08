@@ -1,0 +1,1 @@
+EVIDENCE CAP FAILURE: pack_exit=0 bytes=32855181 limit=24000000; full payload retained only at runner path /home/runner/work/_temp/offer-1098.ng9Zom/soccer-offer-1098-evidence.tar.gz, no truncated evidence accepted.
