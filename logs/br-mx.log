@@ -1,0 +1,27 @@
+THIN facts
+   THIN (one 2026-27 source, marked in the ligue1 row): Ligue 1's 2026-27 drop of two and the barrage
+   THIN (one 2026-27 source, marked in the serieb row): Serie B's 2026-27 promotion playoff rung (third to eighth)
+   THIN (one 2026-27 source, marked in the ligue2 row): Ligue 2's 2026-27 drop of two
+   THIN (one 2026-27 source, marked in the russia row): the Russian Premier League's 2026-27 order for clubs level on points (head to head first)
+A) brasileirao: the rows
+   20 clubs, drop 4, cup Copa do Brasil; weakest Remo (62) is asked: Stay up. Avoid relegation (16)
+B) brasileirao: 6 seeded seasons
+   6 seasons ended, 0 sacked, 24 cup weeks scheduled, 6 cup finals won, cup named on 6 saves, 0 clubs moved in the summers, 272 headlines read
+C) brasileirao: strength orders the table
+   Flamengo 67.3 pts (rated 79) against Remo 20.8 (rated 62): gap 46.5
+   Palmeiras 75.2 pts (rated 79) against Chapecoense 23.3 (rated 66): gap 51.8
+   rank correlation, preview rating against mean points, 14 clubs: 0.945
+D) brasileirao: no invented men
+   274 real men and 93 flagged pads on day one, 4 partial clubs
+A) ligamx: the rows
+   18 clubs, drop 0, cup null; weakest Puebla (61) is asked: Finish mid-table or better (14)
+   every board of 18 asks one of: Win the Liga MX | Make the Liguilla | Finish mid-table or better
+B) ligamx: 6 seeded seasons
+   6 seasons ended, 2 sacked, 0 cup weeks scheduled, 0 cup finals won, cup named on 8 saves, 0 clubs moved in the summers, 254 headlines read
+C) ligamx: strength orders the table
+   América 65.0 pts (rated 74) against Necaxa 49.0 (rated 69): gap 16.0
+   Guadalajara 56.0 pts (rated 74) against FC Juárez 48.0 (rated 68): gap 8.0
+   rank correlation, preview rating against mean points, 12 clubs: 0.944
+D) ligamx: no invented men
+   167 real men and 132 flagged pads on day one, 6 partial clubs
+simClubManagerNewLeagues: all checks passed

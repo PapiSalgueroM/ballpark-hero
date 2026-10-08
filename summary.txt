@@ -1,0 +1,11 @@
+ru-1 exit=0 4s | simClubManagerNewLeagues: all checks passed
+ru-0 exit=0 4s | simClubManagerNewLeagues: all checks passed
+ru-2 exit=0 5s | simClubManagerNewLeagues: all checks passed
+ru-3 exit=0 4s | simClubManagerNewLeagues: all checks passed
+ru-4 exit=0 4s | simClubManagerNewLeagues: all checks passed
+ru-5 exit=0 4s | simClubManagerNewLeagues: all checks passed
+c-rudrop exit=1 4s | simClubManagerNewLeagues: 3 failure(s) under control rudrop
+c-rueuro exit=1 4s | simClubManagerNewLeagues: 1 failure(s) under control rueuro
+c-ruflavour exit=1 4s | simClubManagerNewLeagues: 7 failure(s) under control ruflavour
+c-ruswap exit=1 7s | simClubManagerNewLeagues: 3 failure(s) under control ruswap
+br-mx exit=0 4s | simClubManagerNewLeagues: all checks passed
