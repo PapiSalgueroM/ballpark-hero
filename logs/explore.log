@@ -1,0 +1,42 @@
+
+== loaded | dialog=true tiles=false | ["NBA My Career","Create Your Look","NBA My Career: Basketball Career S"]
+   Let's Play! | Close
+dialog button: true
+
+== after dialog 0 | dialog=false tiles=false | ["NBA My Career","Create Your Look","NBA My Career: Basketball Career S"]
+   Back | Track stats | How to play | 🏀 2026 The league as it is today. | ⏪ 2003-04 throwback The 29 team le | PG | SG | SF | PF | C | 🎲 Surprise me | 🧑 Skin | 💇 Hair | 🧔 Beard | 👟 Sneakers | 💍 Extras | 🎉 Celebration | Porcelain | Ivory | Fair | Sand | Olive | Honey | Tan | Chestnut | Brown | Cocoa | Deep | Ebony | Point God The offense runs through | Scoring Lead A point guard who hun | The Pest Picks pockets, gets under | Play your road to the draft | Enter the draft
+draft: true
+
+== after the draft | dialog=false tiles=true | ["NBA My Career","NBA My Career: Basketball Career S","How to play NBA My Career, a free "]
+   Back | Track stats | How to play | Play the 2026 season | Start practice | 📊 MY PLAYER OVR 71 The fans down  | 💰 THE BANK $0.3M $2.5M a year, 4  | 📜 CAREER LOG No seasons yet Play  | 🏆 TROPHY CASE Empty Nothing in it | 📰 NEWS 3 headlines 🎓 With pick 4 | 📱 INBOX 2 unread Somebody is wait
+bank tile: true
+
+== in the bank, round 0 | dialog=false tiles=false | ["NBA My Career","NBA My Career: Basketball Career S","How to play NBA My Career, a free "]
+   Back | Track stats | How to play | Hub | 🏦 Account | 📈 Market | 🃏 Cards | 🛒 Shop | Save 25% | Save half | Save it all | (off)Take out half | (off)Take it all out
+   statement: $0k | $0k
+Save half: true
+
+== after Save half | dialog=false tiles=false | ["NBA My Career","NBA My Career: Basketball Career S","How to play NBA My Career, a free "]
+   Back | Track stats | How to play | Hub | 🏦 Account | 📈 Market | 🃏 Cards | 🛒 Shop | (off)Save 25% | Save half | Save it all | Take out half | Take it all out
+   statement: -$100k | $0k | $0k
+Take out half: true
+
+== after Take out half | dialog=false tiles=false | ["NBA My Career","NBA My Career: Basketball Career S","How to play NBA My Career, a free "]
+   Back | Track stats | How to play | Hub | 🏦 Account | 📈 Market | 🃏 Cards | 🛒 Shop | (off)Save 25% | Save half | Save it all | Take out half | Take it all out
+   statement: +$50k | -$100k | $0k | $0k
+Save 25%: false
+
+== after Save 25% | dialog=false tiles=false | ["NBA My Career","NBA My Career: Basketball Career S","How to play NBA My Career, a free "]
+   Back | Track stats | How to play | Hub | 🏦 Account | 📈 Market | 🃏 Cards | 🛒 Shop | (off)Save 25% | Save half | Save it all | Take out half | Take it all out
+   statement: +$50k | -$100k | $0k | $0k
+Take it all out: true
+
+== after Take it all out | dialog=false tiles=false | ["NBA My Career","NBA My Career: Basketball Career S","How to play NBA My Career, a free "]
+   Back | Track stats | How to play | Hub | 🏦 Account | 📈 Market | 🃏 Cards | 🛒 Shop | Save 25% | Save half | Save it all | (off)Take out half | (off)Take it all out
+   statement: +$50k | +$50k | -$100k | $0k | $0k
+
+rows html:
+<div class="flex items-center justify-between border-b border-border/50 py-1 text-[11px] last:border-0 _latest_aifvq_9"><span class="min-w-0 truncate text-foreground/80">Out of savings</span><span class="flex shrink-0 items-center gap-2 pl-2"><span class="text-[9px] text-muted-foreground">2026</span><span class="font-black text-emerald-500">+$50k</span></span></div>
+<div class="flex items-center justify-between border-b border-border/50 py-1 text-[11px] last:border-0"><span class="min-w-0 truncate text-foreground/80">Out of savings</span><span class="flex shrink-0 items-center gap-2 pl-2"><span class="text-[9px] text-muted-foreground">2026</span><span class="font-black text-emerald-500">+$50k</span></span></div>
+<div class="flex items-center justify-between border-b border-border/50 py-1 text-[11px] last:border-0"><span class="min-w-0 truncate text-foreground/80">Into savings</span><span class="flex shrink-0 items-center gap-2 pl-2"><span class="text-[9px] text-muted-foreground">2026</span><span class="font-black text-foreground/70">-$100k</span></span></div>
+explore done

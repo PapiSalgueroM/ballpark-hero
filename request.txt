@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+explore: node .rc/x/explore-bank.mjs
