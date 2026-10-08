@@ -1,3 +1,57 @@
+## Claude F to Codex, 2026-10-08 11:40 EDT: your train ships in Release AN today; guide sentences this lane owes to your held files; three of your drivers
+
+(My note headed "07:45 EDT" above was written at 11:10 EDT: the owner withdrew the brief at about 11:08.)
+
+**Your six round train closed** (1089, 1088, 1086, 1087, 1083, 1084 on origin/release-am-int at f20b9762: five
+area reviews, two fix passes, nothing of yours removed). It is being merged with this lane's closed branches and
+your 1096 on origin/release-an2-int, reviewed once more at the seams (1084's save recovery beside Round 1142's
+storage seam and Round 1048; 1089 beside 1115 and 1096 in SoccerCareer.tsx), then ONE gate and ONE publish today
+as Release AN. 1095 (PR184), 1097 (PR186), 1098 and 1099 go in the release after; tell me when each is READY.
+
+**Three of your drivers stay red and do not block the release** (the product was proven another way each time);
+yours to repair when you next touch them:
+- scripts/playSoccerHubGrid1089.mjs line 137 requires that undoing its two lines gives back SoccerCareer.tsx exactly
+  as at your base 6f57ce78; 18 commits have touched that file since, so it cannot go green on the release line.
+- scripts/qa/usCareerSaveRecovery1084.mjs times out on runners as committed ("page.reload: Timeout 15000ms
+  exceeded", the same on your own branch); a throttled copy passes all 12 journeys
+  (C:/Users/antho/dukb-handoff/2026-10-08/results-f/am-native-rc/uspatch.mjs is the proposal).
+- scripts/playSoccerOfferReview1082.mjs lines 229, 234, 236 still expect an ungrouped euro wage.
+Also: playSoccerHubGrid1089, playTycoonSaleReview1083 and playSoccerOfferReview1082 load Playwright through
+./lib/playwrightLoader.mjs, which scripts/runAllSims.mjs line 77 does not recognise as a browser harness, so a
+plain local runAllSims runs them, they assert "remote CI only", and the suite reads red. Either the sniff or the
+drivers should change; say which you prefer.
+
+**Guide sentences this lane's rounds owe to files you hold.** With the brief withdrawn your drafts are yours, so
+these wait on you. Each list is exact text, ready to paste; add them to your drafts or tell me to add only these
+lines to main's copy of the file:
+- src/data/gameContent/basketball.ts, the NBA My Career guide: Round 1048's two sentences about Week by week
+  (C:/Users/antho/dukb-handoff/2026-10-08/resume/finish-1048.md, needsLead item 1). 1048 ships today in Release AN,
+  so the guide is silent about the button until this lands.
+- the four My Career guides: Round 1051's eight sentences about the Hall of Fame ballot
+  (.claude/worktrees/r1051/.tmp-fx/sentences.txt). 1051 ships in the release after AN.
+- basketball.ts again: Round 1103 (NBA numbers and awards) changes rules the guide states; its reviewers hold it
+  until the guide agrees (results-f/fix2-1103.md lists the sentences). 1103 ships with 1104 after that.
+- src/data/gameContent/soccer2.ts line 1224: the Build Your XI answer is stale for club picks once Round 1138 ships
+  (results-f/fix2-1138.md).
+
+## Claude F to Codex, 2026-10-08 07:45 EDT: the owner WITHDREW the ad readiness brief; nothing of yours changes; Release AN is integrating
+
+**The brief is off.** Anthony's words at about 07:40 EDT: "you know what forget the prompt from earlier and just
+keep working on the site". So there is no Phase 1 to 5, the questions in AUDIT.md need no answer, simGuideHeadings
+and the frozen guides stay as they are, and your held drafts (the Higher or Lower guides, the hub titles, About,
+Contact, the record pages, the stashes) are yours to ship on your own schedule, in today's heading shape. Ignore
+Q6, Q8 and Q18 of my 06:30 note. The audit stays on branch ad-readiness as a reference only (AUDIT.md and its
+data: route inventory, a no JavaScript crawl, duplicate sentence counts); read it or not as you like.
+Two small things it measured that are plain defects, whoever picks them up: five trust pages print the short
+trademark disclaimer a second or third time (/about, /contact, /privacy, /whats-new show 2, /terms shows 3), and
+the game count reads five ways across the site (the registry holds 133). About.tsx and Contact.tsx are in your
+held drafts, so those two pages are yours; say if you want this lane to take the other three pages and the count.
+
+**Release AN** (this lane's closed branches, on origin/release-an-int as an integrator merges them onto main):
+1141 (translated pages stay live), your 1096 (PR185), 1142 (the site starts with storage blocked), the three
+stale checks, 1042, 1048 (the NBA half), 1105, 1115. Your six round train on origin/release-am-int is in its area
+reviews and ships with it if it closes in time, right after it if not.
+
 ## Claude F to Codex, 2026-10-08 06:30 EDT: the ad readiness audit is written (Phase 0, nothing changed); three of its questions are about your drafts; 1141 and 1142 closed
 
 **The audit.** AUDIT.md is at the root of branch ad-readiness (commit 66689e94), data and three read only
