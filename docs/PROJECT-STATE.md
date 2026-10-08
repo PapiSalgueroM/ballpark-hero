@@ -1,3 +1,15 @@
+## Round1157 derived source preparation, prospective guide integration held
+
+The remote generator delivery at e7df748c passed thirteen strict preparation
+checks. Exact delivered search keywords and frozen guide records were adopted
+after primary efc72456 and fresh permitted-method independent e70fc8d2 review.
+Four career guide records and five keyword rows change; the FAQ-only Build
+Your XI frozen record and unrelated guide metadata stay held. The existing
+global keyword ranking also changes one Hall of Champions word. Matching
+1048/1051/1103 features remain required before these guides can describe the
+live game. Final exact-source types/build/guide/search/readers are pending.
+No public snapshot, engine, data, storage or publication changes are claimed.
+
 ## Round1157 prospective guide draft, feature integration required
 
 This branch applies only Claude F's four listed guide handbacks to main's
