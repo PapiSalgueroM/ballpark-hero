@@ -1,0 +1,6 @@
+build exit=0 23s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+tsc exit=0 42s | 
+play-main exit=0 202s | playStorageBlocked: 794 checks, 0 failed
+simHarnessAnchors exit=0 23s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoRivalNames exit=0 8s | No rival product names found. 0 findings.
+simStorageWrites exit=0 0s | simStorageWrites: all green
