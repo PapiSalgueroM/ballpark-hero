@@ -1,0 +1,4 @@
+# AN2 seam 3c: the squad walk once more with its screenshots sent back, to look at the hub (1089 grid fix beside the 1115 Squad tile) at 390 and 1280
+#!serve
+#!playwright
+squadshots: ENGINES=chromium REQUIRE_PAGE=1 PORT=4810 SHOTS="$RC_OUT/squad" node scripts/playCareerSquad.mjs
