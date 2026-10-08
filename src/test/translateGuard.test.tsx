@@ -35,7 +35,7 @@
  *     calls and shows the frozen number and the stale word again.
  */
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
-import { Component, useState, type ReactNode } from 'react';
+import { Component, Fragment, useState, type ReactNode } from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { installTranslateGuard } from '@/lib/translateGuard';
 
@@ -214,6 +214,18 @@ function Roll() {
     <div>
       <button onClick={() => setN(v => v + 1)}>roll</button>
       <div data-testid="roll">{n}</div>
+    </div>
+  );
+}
+
+/** A keyed list of plain strings that changes order: React moves the text nodes it holds. */
+function Order() {
+  const [flipped, setFlipped] = useState(false);
+  const keys = flipped ? ['b', 'a'] : ['a', 'b'];
+  return (
+    <div>
+      <button onClick={() => setFlipped(true)}>flip</button>
+      <p data-testid="order">{keys.map(k => <Fragment key={k}>{k === 'a' ? 'Alpha ' : 'Bravo '}</Fragment>)}</p>
     </div>
   );
 }
@@ -759,6 +771,86 @@ describe('layer two: a string rewritten while the translator was working on it',
 });
 
 /**
+ * A bare string React MOVES. A keyed list of plain strings that changes order is redrawn by putting the very
+ * text node React holds in again, with insertBefore or with appendChild. That node is off the page (the
+ * translator took it), so before this the words showed twice: the copy where the string used to be, and
+ * React's own node, in the first language for good, where it went.
+ */
+describe('layer two: a string React moves shows once, where React put it', () => {
+  const trio = () => {
+    const p = document.body.appendChild(document.createElement('p'));
+    const alpha = p.appendChild(document.createTextNode('Alpha'));
+    p.appendChild(document.createElement('br'));
+    const bravo = p.appendChild(document.createTextNode('Bravo'));
+    return { p, alpha, bravo };
+  };
+
+  it('put in again in front of another translated string', async () => {
+    const { p, alpha, bravo } = trio();
+    translateReal(p);
+    await settle();
+    expect(p.textContent).toBe('pt:Alphapt:Bravo');
+    p.insertBefore(bravo, alpha);
+    await settle();
+    expect(p.textContent).toBe('BravoAlpha');
+    expect(fontsIn(p)).toBe(0);
+    expect(Array.from(p.childNodes).map(n => n.nodeName)).toEqual(['#text', '#text', 'BR']);
+    // React's own node is not what is on the page: the translator would never take that one again
+    expect(bravo.isConnected).toBe(false);
+    translateReal(p);
+    expect(p.textContent).toBe('pt:BravoAlpha');
+    // and both still follow React
+    bravo.nodeValue = 'Charlie';
+    expect(p.textContent).toBe('CharlieAlpha');
+    p.remove();
+  });
+
+  it('appended at the end, and appended into another element', async () => {
+    const { p, alpha, bravo } = trio();
+    const q = document.body.appendChild(document.createElement('p'));
+    translateReal(p);
+    await settle();
+    p.appendChild(alpha);
+    await settle();
+    expect(p.textContent).toBe('BravoAlpha');
+    expect(Array.from(p.childNodes).map(n => n.nodeName)).toEqual(['BR', '#text', '#text']);
+    translateReal(p);
+    await settle();
+    q.appendChild(bravo);
+    await settle();
+    expect(p.textContent).toBe('Alpha');
+    expect(q.textContent).toBe('Bravo');
+    expect(fontsIn(p) + fontsIn(q)).toBe(0);
+    translateReal(document.body);
+    expect(p.textContent).toBe('pt:Alpha');
+    expect(q.textContent).toBe('pt:Bravo');
+    alpha.nodeValue = 'Alpha again';
+    bravo.nodeValue = 'Bravo again';
+    expect(p.textContent + q.textContent).toBe('Alpha againBravo again');
+    p.remove();
+    q.remove();
+  });
+
+  it('a keyed list of plain strings React puts in a new order', async () => {
+    const { container } = render(<Boundary><Order /></Boundary>);
+    const order = screen.getByTestId('order');
+    translateReal(container);
+    await settle();
+    expect(order.textContent).toBe('pt:Alpha Bravo ');
+    act(() => {
+      fireEvent.click(screen.getByRole('button'));
+    });
+    await settle();
+    expect(screen.queryByRole('alert')).toBeNull();
+    expect(order.textContent).toBe('Bravo Alpha ');
+    expect(fontsIn(order)).toBe(0);
+    expect(order.childNodes.length).toBe(2);
+    translateReal(container);
+    expect(order.textContent).toBe('pt:Bravo Alpha ');
+  });
+});
+
+/**
  * The translator undoes itself. Found by review on the real translator, on the built site: after "show
  * original" every string layer two had refreshed was cut off from React for good (the header read Age 19
  * with the save at 20), where layer one alone healed. The map pointed at a wrapper that was gone, and the
@@ -836,6 +928,45 @@ describe('layer two: the translator undoes itself (show original)', () => {
     await settle();
     expect(p.textContent).toBe('Age 18');
     expect(p.childNodes.length).toBe(2);
+    p.remove();
+  });
+
+  it('whatever words the translator kept for a node it gives back, the page ends on React\'s', async () => {
+    const { p, number } = pair();
+    translateReal(p);
+    await settle();
+    number.nodeValue = '17';
+    translateReal(p);
+    await settle();
+    for (const entry of ledger) entry.words = entry.words.replace('17', '16'); // it kept an older copy
+    undoTranslation(p);
+    expect(p.textContent).toBe('Age 16'); // what the translator put back
+    await settle();
+    expect(p.textContent).toBe('Age 17'); // what React holds
+    expect(p.childNodes.length).toBe(2);
+    number.nodeValue = '18';
+    expect(p.textContent).toBe('Age 18');
+    p.remove();
+  });
+
+  it('a stand in that something newer has replaced is nobody\'s, even if it turns up on the page again', async () => {
+    const { p, number } = pair();
+    translateReal(p);
+    await settle();
+    number.nodeValue = '17';
+    const old = p.lastChild as Text; // the stand in for the number, saying 17
+    await settle();
+    number.nodeValue = '18'; // and a newer one takes its place
+    await settle();
+    expect(old.isConnected).toBe(false);
+    // no translator was seen to do this, but nothing may come of it if one does
+    p.appendChild(old);
+    await settle();
+    translateReal(p);
+    await settle();
+    number.nodeValue = '19';
+    // the string still follows React, and the stray keeps the words it came with
+    expect(p.textContent).toBe('Age 1917');
     p.remove();
   });
 

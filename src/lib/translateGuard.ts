@@ -188,17 +188,14 @@ function makeLive(win: GuardWindow, native: Natives): Live | null {
         if (!wrapper && record.previousSibling && arrived.has(record.previousSibling)) wrapper = record.previousSibling;
         if (!wrapper && record.nextSibling && arrived.has(record.nextSibling)) wrapper = record.nextSibling;
         if (!wrapper || owner.has(wrapper) || wrapper.parentNode !== record.target) continue;
-        // A stand in of ours was taken: the entry belongs to the node React holds. One the translator
-        // gave back and takes again in the same batch has no owner on record, only who it was made for.
-        let mine = owner.get(text);
-        if (!mine) {
-          const first = behind.get(text);
-          const now = first && shown.get(first);
-          if (first && !(now && now.isConnected)) {
-            mine = first;
-            if (now) owner.delete(now);
-          } else mine = text;
-        }
+        // A stand in of ours was taken: the entry belongs to the node React holds. What stood for that
+        // node until now is this stand in itself, or, when the translator gave the stand in back and
+        // takes it again in one batch, a wrapper that is gone. Only a stand in that something newer on
+        // the page has replaced is nobody's any more.
+        const first = behind.get(text);
+        const now = first && shown.get(first);
+        const mine = first && !(now && now !== text && now.isConnected) ? first : text;
+        if (now && mine === first) owner.delete(now);
         owner.delete(text);
         shown.set(mine, wrapper);
         owner.set(wrapper, mine);
@@ -285,12 +282,24 @@ function makeLive(win: GuardWindow, native: Natives): Live | null {
       return text.nodeValue === first.nodeValue ? null : parent;
     }
     const copy = shown.get(text);
-    if (!copy || copy.isConnected) return null;
-    // React's own node is back where its wrapper stood. It is React's again, and nothing stands for it.
+    if (!copy) return null;
     shown.delete(text);
     owner.delete(copy);
-    stats.returned += 1;
-    return null;
+    const from = copy.parentNode;
+    if (!from || !copy.isConnected) {
+      // React's own node is back where its wrapper stood. It is React's again, and nothing stands for it.
+      stats.returned += 1;
+      return null;
+    }
+    // React's own node is on the page AND so is its copy: React MOVED the string (a bare string that changed
+    // place among keyed neighbours is put in again with the very node React holds). The copy stayed where
+    // the string used to be, so the words showed twice, once of them in the first language for good,
+    // because the translator never takes a node twice. The copy goes, and the node stands for itself for a
+    // moment, which makes the one rule below put a fresh stand in exactly where React placed it.
+    native.removeChild.call(from, copy);
+    owner.set(text, text);
+    if (from !== parent) refresh(from);
+    return parent;
   };
 
   return {
