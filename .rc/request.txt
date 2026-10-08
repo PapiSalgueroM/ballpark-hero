@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+play: ENGINES=chromium node scripts/playSeasonCentreMotion.mjs
+play-pitchlayer: SEASON_MOTION_CONTROL=pitchlayer ONLY=C PORT=4564 SHOTS=/tmp/noshots4 ENGINES=chromium node scripts/playSeasonCentreMotion.mjs
+weight: node .rc/x/weightBytes.mjs
+sweep: ENGINES=chromium node scripts/sweepWeight.mjs
+vitest-round: node_modules/.bin/vitest run src/test/seasonCentreSlots.test.tsx src/test/miniPitchScene.test.ts --testTimeout=300000
