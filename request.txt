@@ -1,0 +1,31 @@
+#!build
+#!playwright
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/playerAutocompleteStale.test.tsx src/test/lineupValidatorClient.test.tsx src/test/playerAutocompleteInteraction.test.tsx src/test/playerAutocompleteEmptyText.test.tsx src/test/playerSearchFailure.test.tsx src/test/lineupBuilderHistoryRead.test.tsx --testTimeout=300000 --hookTimeout=120000
+aci: node scripts/simPlayerAutocompleteInteraction.mjs
+aci-minchars: AUTOCOMPLETE_INTERACTION_CONTROL=minchars node scripts/simPlayerAutocompleteInteraction.mjs
+aci-leaveflight: AUTOCOMPLETE_INTERACTION_CONTROL=leaveflight node scripts/simPlayerAutocompleteInteraction.mjs
+aci-pickflight: AUTOCOMPLETE_INTERACTION_CONTROL=pickflight node scripts/simPlayerAutocompleteInteraction.mjs
+aci-lateescape: AUTOCOMPLETE_INTERACTION_CONTROL=lateescape node scripts/simPlayerAutocompleteInteraction.mjs
+aci-keeplist: AUTOCOMPLETE_INTERACTION_CONTROL=keeplist node scripts/simPlayerAutocompleteInteraction.mjs
+lvc: node scripts/simLineupValidatorClient.mjs
+lvc-longwait: LINEUP_VALIDATOR_CONTROL=longwait node scripts/simLineupValidatorClient.mjs
+lvc-deafcaller: LINEUP_VALIDATOR_CONTROL=deafcaller node scripts/simLineupValidatorClient.mjs
+lvc-looseclub: LINEUP_VALIDATOR_CONTROL=looseclub node scripts/simLineupValidatorClient.mjs
+lvc-keepflight: LINEUP_VALIDATOR_CONTROL=keepflight node scripts/simLineupValidatorClient.mjs
+lvc-nogiveup: LINEUP_VALIDATOR_CONTROL=nogiveup node scripts/simLineupValidatorClient.mjs
+lvc-localall: LINEUP_VALIDATOR_CONTROL=localall node scripts/simLineupValidatorClient.mjs
+psf: node scripts/simPlayerSearchFailure.mjs
+psf-error: PLAYER_SEARCH_FAILURE_CONTROL=error node scripts/simPlayerSearchFailure.mjs
+psf-partial: PLAYER_SEARCH_FAILURE_CONTROL=partial node scripts/simPlayerSearchFailure.mjs
+psf-message: PLAYER_SEARCH_FAILURE_CONTROL=message node scripts/simPlayerSearchFailure.mjs
+psf-local: PLAYER_SEARCH_FAILURE_CONTROL=local node scripts/simPlayerSearchFailure.mjs
+psf-stale: PLAYER_SEARCH_FAILURE_CONTROL=stale node scripts/simPlayerSearchFailure.mjs
+psf-cleanup: PLAYER_SEARCH_FAILURE_CONTROL=cleanup node scripts/simPlayerSearchFailure.mjs
+psf-abort: PLAYER_SEARCH_FAILURE_CONTROL=abort node scripts/simPlayerSearchFailure.mjs
+qh: node scripts/simQuotaHonesty.mjs
+measure-on-fixed-must-exit-1: RACE_EXPECT=stale RACE_WIDTHS=390 node scripts/playAutocompleteRace.mjs
+mainbuild: git worktree add /tmp/r1138-main 6f57ce78 && ln -s "$PWD/node_modules" /tmp/r1138-main/node_modules && W="$PWD" && cd /tmp/r1138-main && node node_modules/vite/bin/vite.js build --outDir "$W/.sim-control/race-main-1138/dist" 2>&1 | tail -3 && ls "$W/.sim-control/race-main-1138/dist" | head -3
+measure-main-390: RACE_EXPECT=stale RACE_WIDTHS=390 RACE_DIST=.sim-control/race-main-1138/dist node scripts/playAutocompleteRace.mjs
+mut: MUT_TAG=-fx MUT_ONLY=none-box,none-hook,MB-leave-no-id-bump,MB2-leave-no-abort-no-bump,MB3-leave-keeps-debounce-timer,MK-minchars-off-by-one,MN4-commit-leaves-search-in-flight,MG-wait-ten-times-longer,MO-caller-signal-not-heard,MF-club-substring-match,MR-no-cancel-on-unmount,MS-new-formation-no-cancel,MT-reset-no-cancel,MQ-no-giveup-after-answer,FX1-leave-no-abort,FX2-leave-no-timer-clear,FX3-commit-no-abort,FX4-commit-no-bump,FX5-commit-no-timer-clear,FX6-escape-only-with-names,FX7-effect-minchars-off-by-one,FX8-ask-ignores-early-abort,FX9-reroll-no-cancel,FX10-club-substring-other-way node .rc/x/fx-mut.mjs

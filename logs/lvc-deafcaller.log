@@ -1,0 +1,355 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads an HTTP 429 with an error body 1ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads a failed response that claims valid 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads null 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads an array 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads a string 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads an empty object 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads an error body with a 200 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads valid as the string true 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads valid as the number 1 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads both flags at once 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads an allowance answer 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads a plain unverified answer 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads a refusal with a reason 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads a refusal with an object for a reason 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads valid 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > reads valid with a stored name 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A: reading a validator answer > says valid for the boolean true on an ok response and for nothing else 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part A, asking: one wait, and a caller who can give up > waits fifteen seconds for an answer and no longer 4ms
+ × src/test/lineupValidatorClient.test.tsx > part A, asking: one wait, and a caller who can give up > hears the caller give up at once, after it asked or before 8ms
+   → expected undefined to deeply equal { kind: 'unverified', …(2) }
+ ✓ src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door opens for a club row at the slot club 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door opens for the club under its second stored name 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door opens for a split season that includes the club 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for a row at another club 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for a nation slot whatever the row says 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for a row with no club 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for a row with no position 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for a row with a position spelling the map does not know 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for a club label with no stored names 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for no row at all 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for a side whose name only starts with the slot club 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for a second side of the club under its longer stored name 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for a club name that is only a piece of the stored name 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for a split season whose nearest club is a near miss 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part B: the door for a club pick our own row settles > the door stays shut for a club field that is only the separator 0ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part C: the hook > a club pick on file at the club lands with no request to the validator 16ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part C: the hook > a club pick whose row is at another club goes to the validator 2ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part C: the hook > a club pick whose row has no known position goes to the validator 4ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part C: the hook > a nation pick always goes to the validator 2ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part C: the hook > an HTTP 429 with an error body is not counted 2ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part C: the hook > an HTTP 500 is not counted 2ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part C: the hook > a 200 that is not JSON is not counted 2ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part C: the hook > a 200 with an empty object is not counted 2ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part C: the hook > a 200 with valid as a string is not counted 1ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part C: the hook > a 200 with both flags is not counted 1ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part C: the hook > a 200 unverified answer is not counted 1ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part C: the hook > a rejected fetch is not counted 1ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part C: the hook > an allowance answer blocks only that pick 3ms
+ ✓ src/test/lineupValidatorClient.test.tsx > part C: the hook > a check that never answers is given up and cancelled 2ms
+ × src/test/lineupValidatorClient.test.tsx > part C: the hook > a reroll cancels the check in flight 5003ms
+   → Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ × src/test/lineupValidatorClient.test.tsx > part C: the hook > a real refusal reads as a refusal 2ms
+   → Cannot read properties of null (reading 'selectFormation')
+ × src/test/lineupValidatorClient.test.tsx > part C: the hook > a valid answer is accepted 1ms
+   → Cannot read properties of null (reading 'selectFormation')
+ × src/test/lineupValidatorClient.test.tsx > part C: the hook > a club row the position gate refuses is still refused 1ms
+   → Cannot read properties of null (reading 'selectFormation')
+ × src/test/lineupValidatorClient.test.tsx > part C: the hook > a pick given up while its history is read is dropped 1ms
+   → Cannot read properties of null (reading 'selectFormation')
+ × src/test/lineupValidatorClient.test.tsx > part C: the hook > giving up drops an answer that was already on its way 1ms
+   → Cannot read properties of null (reading 'selectFormation')
+ × src/test/lineupValidatorClient.test.tsx > part C: the hook > leaving the page cancels the check in flight 1ms
+   → Cannot read properties of null (reading 'selectFormation')
+
+ Test Files  1 failed (1)
+      Tests  8 failed | 47 passed (55)
+   Start at  11:14:12
+   Duration  6.14s (transform 235ms, setup 49ms, collect 352ms, tests 5.07s, environment 297ms, prepare 104ms)
+
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 8 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/lineupValidatorClient.test.tsx > part A, asking: one wait, and a caller who can give up > hears the caller give up at once, after it asked or before
+AssertionError: expected undefined to deeply equal { kind: 'unverified', …(2) }
+
+- Expected: 
+{
+  "exhausted": false,
+  "kind": "unverified",
+  "why": "cancelled",
+}
+
++ Received: 
+undefined
+
+ ❯ src/test/lineupValidatorClient.test.tsx:104:17
+    102|     caller.abort();
+    103|     await vi.advanceTimersByTimeAsync(1);
+    104|     expect(got).toEqual(unverified('cancelled'));
+       |                 ^
+    105| 
+    106|     // A caller that had already given up: the question ends the same …
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/8]⎯
+
+ FAIL  src/test/lineupValidatorClient.test.tsx > part C: the hook > a reroll cancels the check in flight
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/test/lineupValidatorClient.test.tsx:311:3
+    309|   });
+    310| 
+    311|   it('a reroll cancels the check in flight', async () => {
+       |   ^
+    312|     const { validatorCalls } = stubFetch((init) => never(init));
+    313|     const game = start([BRAZIL], SLOT.RB);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/8]⎯
+
+ FAIL  src/test/lineupValidatorClient.test.tsx > part C: the hook > a real refusal reads as a refusal
+TypeError: Cannot read properties of null (reading 'selectFormation')
+ ❯ src/test/lineupValidatorClient.test.tsx:171:33
+    169|   dealt.teams = Array.from({ length: 11 }, (_unused, i) => teams[Math.…
+    170|   const hook = renderHook(() => useLineupBuilder());
+    171|   act(() => hook.result.current.selectFormation('4-3-3'));
+       |                                 ^
+    172|   act(() => hook.result.current.selectPosition(slot));
+    173|   return hook;
+ ❯ node_modules/@testing-library/react/dist/act-compat.js:47:24
+ ❯ act node_modules/react/cjs/react.development.js:2512:16
+ ❯ Proxy.act node_modules/@testing-library/react/dist/act-compat.js:46:25
+ ❯ mount src/test/lineupValidatorClient.test.tsx:171:3
+ ❯ start src/test/lineupValidatorClient.test.tsx:176:10
+ ❯ src/test/lineupValidatorClient.test.tsx:340:18
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/8]⎯
+
+ FAIL  src/test/lineupValidatorClient.test.tsx > part C: the hook > a valid answer is accepted
+TypeError: Cannot read properties of null (reading 'selectFormation')
+ ❯ src/test/lineupValidatorClient.test.tsx:171:33
+    169|   dealt.teams = Array.from({ length: 11 }, (_unused, i) => teams[Math.…
+    170|   const hook = renderHook(() => useLineupBuilder());
+    171|   act(() => hook.result.current.selectFormation('4-3-3'));
+       |                                 ^
+    172|   act(() => hook.result.current.selectPosition(slot));
+    173|   return hook;
+ ❯ node_modules/@testing-library/react/dist/act-compat.js:47:24
+ ❯ act node_modules/react/cjs/react.development.js:2512:16
+ ❯ Proxy.act node_modules/@testing-library/react/dist/act-compat.js:46:25
+ ❯ mount src/test/lineupValidatorClient.test.tsx:171:3
+ ❯ start src/test/lineupValidatorClient.test.tsx:176:10
+ ❯ src/test/lineupValidatorClient.test.tsx:354:18
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/8]⎯
+
+ FAIL  src/test/lineupValidatorClient.test.tsx > part C: the hook > a club row the position gate refuses is still refused
+TypeError: Cannot read properties of null (reading 'selectFormation')
+ ❯ src/test/lineupValidatorClient.test.tsx:171:33
+    169|   dealt.teams = Array.from({ length: 11 }, (_unused, i) => teams[Math.…
+    170|   const hook = renderHook(() => useLineupBuilder());
+    171|   act(() => hook.result.current.selectFormation('4-3-3'));
+       |                                 ^
+    172|   act(() => hook.result.current.selectPosition(slot));
+    173|   return hook;
+ ❯ node_modules/@testing-library/react/dist/act-compat.js:47:24
+ ❯ act node_modules/react/cjs/react.development.js:2512:16
+ ❯ Proxy.act node_modules/@testing-library/react/dist/act-compat.js:46:25
+ ❯ mount src/test/lineupValidatorClient.test.tsx:171:3
+ ❯ start src/test/lineupValidatorClient.test.tsx:176:10
+ ❯ src/test/lineupValidatorClient.test.tsx:366:18
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/8]⎯
+
+ FAIL  src/test/lineupValidatorClient.test.tsx > part C: the hook > a pick given up while its history is read is dropped
+TypeError: Cannot read properties of null (reading 'selectFormation')
+ ❯ src/test/lineupValidatorClient.test.tsx:171:33
+    169|   dealt.teams = Array.from({ length: 11 }, (_unused, i) => teams[Math.…
+    170|   const hook = renderHook(() => useLineupBuilder());
+    171|   act(() => hook.result.current.selectFormation('4-3-3'));
+       |                                 ^
+    172|   act(() => hook.result.current.selectPosition(slot));
+    173|   return hook;
+ ❯ node_modules/@testing-library/react/dist/act-compat.js:47:24
+ ❯ act node_modules/react/cjs/react.development.js:2512:16
+ ❯ Proxy.act node_modules/@testing-library/react/dist/act-compat.js:46:25
+ ❯ mount src/test/lineupValidatorClient.test.tsx:171:3
+ ❯ start src/test/lineupValidatorClient.test.tsx:176:10
+ ❯ src/test/lineupValidatorClient.test.tsx:378:18
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/8]⎯
+
+ FAIL  src/test/lineupValidatorClient.test.tsx > part C: the hook > giving up drops an answer that was already on its way
+TypeError: Cannot read properties of null (reading 'selectFormation')
+ ❯ src/test/lineupValidatorClient.test.tsx:171:33
+    169|   dealt.teams = Array.from({ length: 11 }, (_unused, i) => teams[Math.…
+    170|   const hook = renderHook(() => useLineupBuilder());
+    171|   act(() => hook.result.current.selectFormation('4-3-3'));
+       |                                 ^
+    172|   act(() => hook.result.current.selectPosition(slot));
+    173|   return hook;
+ ❯ node_modules/@testing-library/react/dist/act-compat.js:47:24
+ ❯ act node_modules/react/cjs/react.development.js:2512:16
+ ❯ Proxy.act node_modules/@testing-library/react/dist/act-compat.js:46:25
+ ❯ mount src/test/lineupValidatorClient.test.tsx:171:3
+ ❯ start src/test/lineupValidatorClient.test.tsx:176:10
+ ❯ src/test/lineupValidatorClient.test.tsx:413:20
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/8]⎯
+
+ FAIL  src/test/lineupValidatorClient.test.tsx > part C: the hook > leaving the page cancels the check in flight
+TypeError: Cannot read properties of null (reading 'selectFormation')
+ ❯ src/test/lineupValidatorClient.test.tsx:171:33
+    169|   dealt.teams = Array.from({ length: 11 }, (_unused, i) => teams[Math.…
+    170|   const hook = renderHook(() => useLineupBuilder());
+    171|   act(() => hook.result.current.selectFormation('4-3-3'));
+       |                                 ^
+    172|   act(() => hook.result.current.selectPosition(slot));
+    173|   return hook;
+ ❯ node_modules/@testing-library/react/dist/act-compat.js:47:24
+ ❯ act node_modules/react/cjs/react.development.js:2512:16
+ ❯ Proxy.act node_modules/@testing-library/react/dist/act-compat.js:46:25
+ ❯ mount src/test/lineupValidatorClient.test.tsx:171:3
+ ❯ src/test/lineupValidatorClient.test.tsx:432:18
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/8]⎯
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: CONTROL ABORTED, not a pass: under deafcaller "a valid answer is accepted" must stay green
+  309|   });
+    310| 
+    311|   it('a reroll cancels the check in flight', async () => {
+       |   ^
+    312|     const { validatorCalls } = stubFetch((init) => never(init));
+    313|     const game = start([BRAZIL], SLOT.RB);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/8]⎯
+
+ FAIL  src/test/lineupValidatorClient.test.tsx > part C: the hook > a real refusal reads as a refusal
+TypeError: Cannot read properties of null (reading 'selectFormation')
+ ❯ src/test/lineupValidatorClient.test.tsx:171:33
+    169|   dealt.teams = Array.from({ length: 11 }, (_unused, i) => teams[Math.…
+    170|   const hook = renderHook(() => useLineupBuilder());
+    171|   act(() => hook.result.current.selectFormation('4-3-3'));
+       |                                 ^
+    172|   act(() => hook.result.current.selectPosition(slot));
+    173|   return hook;
+ ❯ node_modules/@testing-library/react/dist/act-compat.js:47:24
+ ❯ act node_modules/react/cjs/react.development.js:2512:16
+ ❯ Proxy.act node_modules/@testing-library/react/dist/act-compat.js:46:25
+ ❯ mount src/test/lineupValidatorClient.test.tsx:171:3
+ ❯ start src/test/lineupValidatorClient.test.tsx:176:10
+ ❯ src/test/lineupValidatorClient.test.tsx:340:18
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/8]⎯
+
+ FAIL  src/test/lineupValidatorClient.test.tsx > part C: the hook > a valid answer is accepted
+TypeError: Cannot read properties of null (reading 'selectFormation')
+ ❯ src/test/lineupValidatorClient.test.tsx:171:33
+    169|   dealt.teams = Array.from({ length: 11 }, (_unused, i) => teams[Math.…
+    170|   const hook = renderHook(() => useLineupBuilder());
+    171|   act(() => hook.result.current.selectFormation('4-3-3'));
+       |                                 ^
+    172|   act(() => hook.result.current.selectPosition(slot));
+    173|   return hook;
+ ❯ node_modules/@testing-library/react/dist/act-compat.js:47:24
+ ❯ act node_modules/react/cjs/react.development.js:2512:16
+ ❯ Proxy.act node_modules/@testing-library/react/dist/act-compat.js:46:25
+ ❯ mount src/test/lineupValidatorClient.test.tsx:171:3
+ ❯ start src/test/lineupValidatorClient.test.tsx:176:10
+ ❯ src/test/lineupValidatorClient.test.tsx:354:18
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/8]⎯
+
+ FAIL  src/test/lineupValidatorClient.test.tsx > part C: the hook > a club row the position gate refuses is still refused
+TypeError: Cannot read properties of null (reading 'selectFormation')
+ ❯ src/test/lineupValidatorClient.test.tsx:171:33
+    169|   dealt.teams = Array.from({ length: 11 }, (_unused, i) => teams[Math.…
+    170|   const hook = renderHook(() => useLineupBuilder());
+    171|   act(() => hook.result.current.selectFormation('4-3-3'));
+       |                                 ^
+    172|   act(() => hook.result.current.selectPosition(slot));
+    173|   return hook;
+ ❯ node_modules/@testing-library/react/dist/act-compat.js:47:24
+ ❯ act node_modules/react/cjs/react.development.js:2512:16
+ ❯ Proxy.act node_modules/@testing-library/react/dist/act-compat.js:46:25
+ ❯ mount src/test/lineupValidatorClient.test.tsx:171:3
+ ❯ start src/test/lineupValidatorClient.test.tsx:176:10
+ ❯ src/test/lineupValidatorClient.test.tsx:366:18
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/8]⎯
+
+ FAIL  src/test/lineupValidatorClient.test.tsx > part C: the hook > a pick given up while its history is read is dropped
+TypeError: Cannot read properties of null (reading 'selectFormation')
+ ❯ src/test/lineupValidatorClient.test.tsx:171:33
+    169|   dealt.teams = Array.from({ length: 11 }, (_unused, i) => teams[Math.…
+    170|   const hook = renderHook(() => useLineupBuilder());
+    171|   act(() => hook.result.current.selectFormation('4-3-3'));
+       |                                 ^
+    172|   act(() => hook.result.current.selectPosition(slot));
+    173|   return hook;
+ ❯ node_modules/@testing-library/react/dist/act-compat.js:47:24
+ ❯ act node_modules/react/cjs/react.development.js:2512:16
+ ❯ Proxy.act node_modules/@testing-library/react/dist/act-compat.js:46:25
+ ❯ mount src/test/lineupValidatorClient.test.tsx:171:3
+ ❯ start src/test/lineupValidatorClient.test.tsx:176:10
+ ❯ src/test/lineupValidatorClient.test.tsx:378:18
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/8]⎯
+
+ FAIL  src/test/lineupValidatorClient.test.tsx > part C: the hook > giving up drops an answer that was already on its way
+TypeError: Cannot read properties of null (reading 'selectFormation')
+ ❯ src/test/lineupValidatorClient.test.tsx:171:33
+    169|   dealt.teams = Array.from({ length: 11 }, (_unused, i) => teams[Math.…
+    170|   const hook = renderHook(() => useLineupBuilder());
+    171|   act(() => hook.result.current.selectFormation('4-3-3'));
+       |                                 ^
+    172|   act(() => hook.result.current.selectPosition(slot));
+    173|   return hook;
+ ❯ node_modules/@testing-library/react/dist/act-compat.js:47:24
+ ❯ act node_modules/react/cjs/react.development.js:2512:16
+ ❯ Proxy.act node_modules/@testing-library/react/dist/act-compat.js:46:25
+ ❯ mount src/test/lineupValidatorClient.test.tsx:171:3
+ ❯ start src/test/lineupValidatorClient.test.tsx:176:10
+ ❯ src/test/lineupValidatorClient.test.tsx:413:20
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/8]⎯
+
+ FAIL  src/test/lineupValidatorClient.test.tsx > part C: the hook > leaving the page cancels the check in flight
+TypeError: Cannot read properties of null (reading 'selectFormation')
+ ❯ src/test/lineupValidatorClient.test.tsx:171:33
+    169|   dealt.teams = Array.from({ length: 11 }, (_unused, i) => teams[Math.…
+    170|   const hook = renderHook(() => useLineupBuilder());
+    171|   act(() => hook.result.current.selectFormation('4-3-3'));
+       |                                 ^
+    172|   act(() => hook.result.current.selectPosition(slot));
+    173|   return hook;
+ ❯ node_modules/@testing-library/react/dist/act-compat.js:47:24
+ ❯ act node_modules/react/cjs/react.development.js:2512:16
+ ❯ Proxy.act node_modules/@testing-library/react/dist/act-compat.js:46:25
+ ❯ mount src/test/lineupValidatorClient.test.tsx:171:3
+ ❯ src/test/lineupValidatorClient.test.tsx:432:18
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/8]⎯
+
+
+
+'failed' !== 'passed'
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simLineupValidatorClient.mjs:227:14 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'failed',
+  expected: 'passed',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

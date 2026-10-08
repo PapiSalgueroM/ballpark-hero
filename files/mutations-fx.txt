@@ -1,0 +1,59 @@
+none-box: exit=0 signal=null tests=66/66 failed=0
+none-hook: exit=0 signal=null tests=58/58 failed=0
+MB-leave-no-id-bump: exit=1 signal=null tests=64/66 failed=2
+      - playerAutocompleteStale > drops a search still in flight when the player leaves the box
+      - playerAutocompleteStale > Escape leaves the box while a search is in flight
+MB2-leave-no-abort-no-bump: exit=1 signal=null tests=64/66 failed=2
+      - playerAutocompleteStale > drops a search still in flight when the player leaves the box
+      - playerAutocompleteStale > Escape leaves the box while a search is in flight
+MB3-leave-keeps-debounce-timer: exit=1 signal=null tests=64/66 failed=2
+      - playerAutocompleteStale > drops a search still in flight when the player leaves the box
+      - playerAutocompleteStale > Escape leaves the box while a search is in flight
+MK-minchars-off-by-one: exit=1 signal=null tests=64/66 failed=2
+      - playerAutocompleteStale > searches at exactly the fewest letters the page asks for
+      - playerAutocompleteStale > Escape leaves the box while a search is in flight
+MG-wait-ten-times-longer: exit=1 signal=null tests=57/58 failed=1
+      - lineupValidatorClient > waits fifteen seconds for an answer and no longer
+MO-caller-signal-not-heard: exit=1 signal=null tests=55/58 failed=3
+      - lineupValidatorClient > hears the caller give up at once, after it asked or before
+      - lineupValidatorClient > giving up drops an answer that was already on its way
+      - lineupValidatorClient > leaving the page cancels the check in flight
+MF-club-substring-match: exit=1 signal=null tests=55/58 failed=3
+      - lineupValidatorClient > the door stays shut for a side whose name only starts with the slot club
+      - lineupValidatorClient > the door stays shut for a second side of the club under its longer stored name
+      - lineupValidatorClient > the door stays shut for a split season whose nearest club is a near miss
+MR-no-cancel-on-unmount: exit=1 signal=null tests=57/58 failed=1
+      - lineupValidatorClient > leaving the page cancels the check in flight
+MS-new-formation-no-cancel: exit=1 signal=null tests=57/58 failed=1
+      - lineupValidatorClient > giving up drops an answer that was already on its way
+MT-reset-no-cancel: exit=1 signal=null tests=57/58 failed=1
+      - lineupValidatorClient > giving up drops an answer that was already on its way
+MQ-no-giveup-after-answer: exit=1 signal=null tests=57/58 failed=1
+      - lineupValidatorClient > giving up drops an answer that was already on its way
+MN4-commit-leaves-search-in-flight: exit=1 signal=null tests=65/66 failed=1
+      - playerAutocompleteStale > drops a search still in flight when a name is picked
+FX1-leave-no-abort: exit=1 signal=null tests=64/66 failed=2
+      - playerAutocompleteStale > drops a search still in flight when the player leaves the box
+      - playerAutocompleteStale > Escape leaves the box while a search is in flight
+FX2-leave-no-timer-clear: exit=1 signal=null tests=65/66 failed=1
+      - playerAutocompleteStale > drops a search still in flight when the player leaves the box
+FX3-commit-no-abort: exit=1 signal=null tests=65/66 failed=1
+      - playerAutocompleteStale > drops a search still in flight when a name is picked
+FX4-commit-no-bump: exit=1 signal=null tests=65/66 failed=1
+      - playerAutocompleteStale > drops a search still in flight when a name is picked
+FX5-commit-no-timer-clear: exit=1 signal=null tests=65/66 failed=1
+      - playerAutocompleteStale > drops a search still in flight when a name is picked
+FX6-escape-only-with-names: exit=1 signal=null tests=65/66 failed=1
+      - playerAutocompleteStale > Escape leaves the box while a search is in flight
+FX7-effect-minchars-off-by-one: exit=1 signal=null tests=64/66 failed=2
+      - playerAutocompleteStale > searches at exactly the fewest letters the page asks for
+      - playerAutocompleteStale > Escape leaves the box while a search is in flight
+FX8-ask-ignores-early-abort: exit=1 signal=null tests=57/58 failed=1
+      - lineupValidatorClient > hears the caller give up at once, after it asked or before
+FX9-reroll-no-cancel: exit=1 signal=null tests=55/58 failed=3
+      - lineupValidatorClient > a reroll cancels the check in flight
+      - lineupValidatorClient > a pick given up while its history is read is dropped
+      - lineupValidatorClient > giving up drops an answer that was already on its way
+FX10-club-substring-other-way: exit=1 signal=null tests=56/58 failed=2
+      - lineupValidatorClient > the door stays shut for a club name that is only a piece of the stored name
+      - lineupValidatorClient > the door stays shut for a club field that is only the separator
