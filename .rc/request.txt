@@ -1,0 +1,18 @@
+#!serial
+#!playwright
+basecard: git show origin/release-al-int:src/components/career/AwardsNightCard.tsx > src/components/career/AwardsNightCard.tsx; git diff --stat -- src/components/career/AwardsNightCard.tsx | tail -1; node_modules/.bin/vitest run src/test/awardsNightSound.test.tsx -t "draws what it drew before the sound bind" --testTimeout=300000 2>&1 | grep -E "Tests|✓|×|passed|failed" | tail -6; git checkout -- src/components/career/AwardsNightCard.tsx; git status --porcelain --untracked-files=no | head -3; echo basecard-done
+m1: node .rc/x/rvmut.mjs m1
+m2: node .rc/x/rvmut.mjs m2
+m4: node .rc/x/rvmut.mjs m4
+m5: node .rc/x/rvmut.mjs m5
+m6: node .rc/x/rvmut.mjs m6
+m7: node .rc/x/rvmut.mjs m7
+m8: node .rc/x/rvmut.mjs m8
+m11: node .rc/x/rvmut.mjs m11
+m12: node .rc/x/rvmut.mjs m12
+m13: node .rc/x/rvmut.mjs m13
+m18: node .rc/x/rvmut.mjs m18
+m19: node .rc/x/rvmut.mjs m19
+m23: node .rc/x/rvmut.mjs m23
+m24: node .rc/x/rvmut.mjs m24
+m25: node .rc/x/rvmut.mjs m25
