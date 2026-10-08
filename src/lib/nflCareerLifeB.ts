@@ -115,7 +115,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
     });
   }
 
-  if (yrs >= 2 && c.age >= 25 && flag(c, 'b_partnerCity') === 0) {
+  if (yrs >= 2 && c.age >= 25 && c.contractYears > 0 && flag(c, 'b_partnerCity') === 0) {
     deck.push({
       id: 'lifeB_partnerCity',
       category: 'family', cooldown: CD.once,
@@ -182,7 +182,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
     });
   }
 
-  if (yrs >= 3 && flag(c, 'b_parentHome') === 0) {
+  if (yrs >= 3 && c.contractYears > 0 && flag(c, 'b_parentHome') === 0) {
     deck.push({
       id: 'lifeB_parentCloser',
       category: 'family', cooldown: CD.once,
@@ -321,8 +321,8 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
     deck.push({
       id: 'lifeB_franchiseRecord',
       category: 'legacy', cooldown: CD.once,
-      title: '218 yards from the franchise record',
-      body: `The ${teamLabelOf(c.team)} record is right there, and the seed is already locked. Week 18 means nothing to anybody except you.`,
+      title: 'One good day from the franchise record',
+      body: `The ${teamLabelOf(c.team)} record is right there with one game left in the regular season, and that game means nothing to anybody except you.`,
       options: [
         {
           label: 'Play the whole game and take it', effect: 'Record, real risk',
@@ -333,7 +333,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
           },
         },
         {
-          label: 'Sit. January is the point.', effect: 'Rest for the run',
+          label: 'Sit. The body is the point.', effect: 'Rest',
           apply: (cc) => {
             setFlag(cc, 'b_record', 2); bumpHealth(cc, 6); bumpMorale(cc, 4); bumpFan(cc, -5);
             return 'You wore a hoodie and held a clipboard. Health +6, morale +4, fanbase -5, and talk radio called you soft for one week.';
@@ -493,7 +493,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
           label: 'Full farewell tour', effect: 'Next season is your last',
           apply: (cc) => {
             setFlag(cc, 'b_tour', 1); announceFarewell(cc); earn(cc, 1); bumpFan(cc, 16); bumpMorale(cc, 8);
-            return 'You told everyone next season is the last one. Seventeen weeks of gifts, tributes and one team with a canoe are coming. 1M in tour merch, fanbase +16, morale +8.';
+            return 'You told everyone next season is the last one. A whole season of gifts, tributes and one team with a canoe is coming. 1M in tour merch, fanbase +16, morale +8.';
           },
         },
         {
@@ -776,7 +776,8 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
     });
   }
 
-  if (yrs >= 2 && nw >= 1 && flag(c, 'b_tech') === 0) {
+  /* Round 1104: dealt only when the bank covers the 1.5M check (it was dealt at 1M). */
+  if (yrs >= 2 && nw >= 1.5 && flag(c, 'b_tech') === 0) {
     deck.push({
       id: 'lifeB_techPitch',
       category: 'business', cooldown: CD.once,
@@ -1346,7 +1347,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
           label: 'Commit fully to the taquito', effect: 'Ritual over nutrition',
           apply: (cc) => {
             setFlag(cc, 'b_ritual', 1); bumpMorale(cc, 10); bumpFan(cc, 8); bumpHealth(cc, -4);
-            return 'Seventeen weeks, seventeen taquitos, one very concerned team doctor. Morale +10, fanbase +8, health -4.';
+            return 'A taquito a week all season, and one very concerned team doctor. Morale +10, fanbase +8, health -4.';
           },
         },
         {

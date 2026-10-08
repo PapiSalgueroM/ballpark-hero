@@ -291,10 +291,10 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   /* ========== 2. LEGACY AND RECORDS ========== */
 
   if (yrs >= 4 && c.ovr >= 76 && ((isSp && teamK >= 600) || (!isSp && teamHr >= 110)) && flag(c, 'b_record') === 0) {
-    const recTitle = isSp ? 'Nine strikeouts from the franchise record' : 'Two homers from the franchise record';
+    const recTitle = isSp ? 'One good start from the franchise record' : 'One good series from the franchise record';
     const recBody = isSp
-      ? `The ${mlbTeamLabelOf(c.team)} strikeout record is one start away and the division is already clinched. Game 162 means nothing to anybody in the building except you.`
-      : `The ${mlbTeamLabelOf(c.team)} home run record is two swings away and the seed is already locked. The last series means nothing to anybody in the building except you.`;
+      ? `The ${mlbTeamLabelOf(c.team)} strikeout record is one start away, and it is the last start of the regular season with nothing riding on it. It means nothing to anybody in the building except you.`
+      : `The ${mlbTeamLabelOf(c.team)} home run record is a couple of swings away, and it is the last series of the regular season with nothing riding on it. It means nothing to anybody in the building except you.`;
     deck.push({
       id: 'mlbB_franchiseRecord',
       category: 'legacy', cooldown: 99,
@@ -310,7 +310,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
           },
         },
         {
-          label: 'Sit it out, October is the point', effect: 'Rest for the run',
+          label: 'Sit it out, the body is the point', effect: 'Rest',
           apply: (cc) => {
             setFlag(cc, 'b_record', 2); bumpHealth(cc, 6); bumpMorale(cc, 4); bumpFan(cc, -5);
             return 'You wore a hoodie and charted pitches. Health +6, morale +4, fanbase -5, and one radio host called you soft for a week.';

@@ -1034,17 +1034,20 @@ function buildNflDeck(c: CareerState, rng: () => number, stopAtBig: boolean): { 
     options: [
       { label: 'Skill work', effect: 'Push your ceiling', apply: (cc, r) => { if (cc.age >= 30) { cc.health = Math.min(100, cc.health + 4); return 'At this age the gains are in maintenance. Health +4.'; } const up = 1 + Math.floor(r() * 2); cc.ovr = Math.min(cc.pot + 1, cc.ovr + up); return `Rating +${up}.`; } },
       { label: 'Body work', effect: 'Durability and recovery', apply: (cc) => { cc.health = Math.min(100, cc.health + 10); return 'Health +10. You feel five years younger.'; } },
-      { label: 'Brand work', effect: 'Fame and endorsements', apply: (cc) => { cc.fanbase = Math.min(100, cc.fanbase + 12); cc.earnings += 3; return 'Fanbase +12 and a 3M endorsement.'; } },
+      { label: 'Brand work', effect: 'Fame and endorsements', apply: (cc) => { /* Round 1104: the fee reaches the bank (it only ever reached career earnings) and is paid in the era's money. */ const fee = Math.round(3 * nflEraById(cc.eraId).moneyScale * 10) / 10; const bank = cc.netWorth ?? Math.round(cc.earnings * TAKE_HOME * 10) / 10; cc.fanbase = Math.min(100, cc.fanbase + 12); cc.earnings += fee; cc.netWorth = Math.round((bank + fee) * 10) / 10; return `Fanbase +12 and a ${fee}M endorsement, banked.`; } },
     ],
   });
 
-  if (c.morale < 55) {
+  /* Round 1104: a man with no contract cannot be traded (the free agency
+     window opens next), and a trade never lands on the club he is at: 609 of
+     20,000 requests did. Still one draw. */
+  if (c.morale < 55 && c.contractYears > 0) {
     deck.push({
       id: 'frustration',
       title: 'Frustration boils',
       body: `Losing wears on you. Reporters smell it. What is the move?`,
       options: [
-        { label: 'Request a trade', effect: 'Fresh start, fans burn the jersey', apply: (cc, r) => { const pool = nflEraById(cc.eraId).teams; const nt = pool[Math.floor(r() * pool.length)].abbr; cc.team = nt; cc.morale = 72; cc.fanbase = 35; return `Traded to ${teamLabelOf(nt, cc.eraId)}.`; } },
+        { label: 'Request a trade', effect: 'Fresh start, fans burn the jersey', apply: (cc, r) => { const pool = nflEraById(cc.eraId).teams.filter(t => t.abbr !== cc.team); const nt = pool[Math.floor(r() * pool.length)].abbr; cc.team = nt; cc.morale = 72; cc.fanbase = 35; return `Traded to ${teamLabelOf(nt, cc.eraId)}.`; } },
         { label: 'Say the right things', effect: 'Stability', apply: (cc) => { cc.morale += 6; cc.fanbase += 5; return 'You take the high road. The locker room notices.'; } },
       ],
     });

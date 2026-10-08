@@ -777,7 +777,7 @@ function buildNhlDeck(c: NhlCareerState, rng: () => number, stopAtBig: boolean):
       title: 'It is not working here',
       body: 'The system, the minutes, the losing. Your agent is on the phone.',
       options: [
-        { label: 'Request a trade', effect: 'Fresh sheet of ice', apply: (cc, r) => { const pool = nhlEraTeamIds(cc.eraId); const nt = pool[Math.floor(r() * pool.length)]; cc.team = nt; cc.morale = 74; cc.fanbase = 38; return `Traded to ${nhlTeamLabelOf(nt, cc.eraId)}.`; } },
+        { label: 'Request a trade', effect: 'Fresh sheet of ice', apply: (cc, r) => { /* Round 1104: never a trade to the club he is already at. */ const pool = nhlEraTeamIds(cc.eraId).filter(id => id !== cc.team); const nt = pool[Math.floor(r() * pool.length)]; cc.team = nt; cc.morale = 74; cc.fanbase = 38; return `Traded to ${nhlTeamLabelOf(nt, cc.eraId)}.`; } },
         { label: 'Say nothing, work', effect: 'Room respect', apply: (cc) => { cc.morale += 7; cc.fanbase += 4; return 'Heads down. The room respects it.'; } },
       ],
     });

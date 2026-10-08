@@ -328,8 +328,8 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
     deck.push({
       id: 'nbaB_franchiseRecord',
       category: 'legacy', cooldown: 99,
-      title: '38 points from the franchise record',
-      body: `The ${nbaTeamLabelOf(c.team)} all time scoring record is one good night away, and the seed is already locked. Game 82 means nothing to anybody in the building except you.`,
+      title: 'One good night from the franchise record',
+      body: `The ${nbaTeamLabelOf(c.team)} all time scoring record is one good night away, and it is the last game of the regular season with nothing riding on it. It means nothing to anybody in the building except you.`,
       options: [
         {
           label: 'Play all 48 if that is what it takes', effect: 'Record, real risk',
@@ -340,7 +340,7 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
           },
         },
         {
-          label: 'Sit. April is the only point.', effect: 'Rest for the run',
+          label: 'Sit. The body is the point.', effect: 'Rest',
           apply: (cc) => {
             setFlag(cc, 'nb_record', 2); bumpHealth(cc, 7); bumpMorale(cc, 4); bumpFan(cc, -5);
             return 'You wore a very expensive sweater and held a towel. Health +7, morale +4, fanbase -5, and one radio host called you allergic to history.';
@@ -724,12 +724,15 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
     });
   }
 
-  if (yrs >= 3 && c.ovr >= 80 && flag(c, 'nb_snub') === 0) {
+  /* Round 1104: not dealt to a man who was honoured last season (it reached a
+     four time MVP), and the body reads his own scoring instead of a line
+     nothing computed. */
+  if (yrs >= 3 && c.ovr >= 80 && last.awards.length === 0 && flag(c, 'nb_snub') === 0) {
     deck.push({
       id: 'nbaB_allStarSnub',
       category: 'rivalry', cooldown: 99, story: 'allStarSnub',
       title: 'Left off the All Star team',
-      body: '24 and 7 on a winning team, and the coaches took a guy averaging 19 because his team had a better February. One coach said the vote was really hard, on camera, badly.',
+      body: `${last.ppg} points a night, and the coaches took a guy scoring less because his team had a better February. One coach said the vote was really hard, on camera, badly.`,
       options: [
         {
           label: 'Say nothing, drop 41 on him in March', effect: 'Fuel for the year',
@@ -792,7 +795,8 @@ export function getNbaLifeEventsB(c: NbaCareerState, rng: () => number): NbaCare
     });
   }
 
-  if (yrs >= 2 && nw >= 1 && flag(c, 'nb_tech') === 0) {
+  /* Round 1104: dealt only when the bank covers the 2M check (it was dealt at 1M). */
+  if (yrs >= 2 && nw >= 2 && flag(c, 'nb_tech') === 0) {
     deck.push({
       id: 'nbaB_techPitch',
       category: 'business', cooldown: 99,

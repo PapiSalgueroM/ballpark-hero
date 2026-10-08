@@ -291,13 +291,13 @@ export function getNhlLifeEventsB(c: NhlCareerState, rng: () => number): NhlCare
     deck.push({
       id: 'nhlB_franchiseRecordChase',
       category: 'legacy', cooldown: 99,
-      title: `Nine ${cat} from the franchise record`,
-      body: `You are nine ${cat} from the all time franchise record and the guy who holds it does color on the broadcast. He mentions it every single night.`,
+      title: `Closing in on the franchise ${cat} record`,
+      body: `You are closing in on the all time franchise record for ${cat} and the guy who holds it does color on the broadcast. He mentions it every single night.`,
       options: [
         {
           label: 'Chase it, play every night',
           effect: 'Ride the wave',
-          apply: (cc) => { hp(cc, -6); fans(cc, 12); mood(cc, 5); flag(cc, 'recordChase'); return `You played 82 and got it in March. Health -6 to ${cc.health}, fanbase +12, morale +5.`; },
+          apply: (cc) => { hp(cc, -6); fans(cc, 12); mood(cc, 5); flag(cc, 'recordChase'); return `You played every night and got it in March. Health -6 to ${cc.health}, fanbase +12, morale +5.`; },
         },
         {
           label: 'Say the team comes first',
@@ -703,7 +703,8 @@ export function getNhlLifeEventsB(c: NhlCareerState, rng: () => number): NhlCare
     });
   }
 
-  if (c.age >= 25) {
+  /* Round 1104: dealt only when the bank covers the 500k check (it had no bank gate). */
+  if (c.age >= 25 && net >= 0.5) {
     deck.push({
       id: 'nhlB_techPitch',
       category: 'business', cooldown: 99,
