@@ -1,0 +1,7 @@
+#!serial
+#!build
+#!playwright
+m1: node .rc/x/rvMut.mjs m1
+m2: node .rc/x/rvMut.mjs m2
+m3: node .rc/x/rvMut.mjs m3
+m4: node .rc/x/rvMut.mjs m4
