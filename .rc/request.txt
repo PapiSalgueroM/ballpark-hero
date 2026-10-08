@@ -1,0 +1,12 @@
+# AN2 runner review, request W: the reviewer's own walk of the seams on the served build, plus three lines that need a browser
+#!serve
+#!playwright
+walk-us: node .rc/x/rv-walk.mjs us
+walk-soccer: node .rc/x/rv-walk.mjs soccer
+walk-home: node .rc/x/rv-walk.mjs home
+simResultMoment: node scripts/simResultMoment.mjs
+pill: node scripts/simResultPillComparison.mjs
+pill-bareline: RESULT_PILL_CONTROL=bareline node scripts/simResultPillComparison.mjs
+usplay: PORT=4401 node scripts/playUsSeasonCentre.mjs
+usplay-write: PORT=4406 US_SEASON_PLAY_CONTROL=write node scripts/playUsSeasonCentre.mjs
+usplay-nohandover: PORT=4402 US_SEASON_PLAY_CONTROL=nohandover node scripts/playUsSeasonCentre.mjs
