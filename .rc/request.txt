@@ -1,0 +1,17 @@
+# Release AN fix pass 2, the serial part: the College Grid walk (one fixed port, so one at a time) with its seven
+# controls, then the four mutations of the first fix pass (each edits a source file in place and puts it back)
+#!build
+#!playwright
+#!serial
+cgwalk: node scripts/playCollegeGridFirstTap.mjs
+cgwalk-nosurname: CGFIRST_CONTROL=nosurname node scripts/playCollegeGridFirstTap.mjs
+cgwalk-latecells: CGFIRST_CONTROL=latecells node scripts/playCollegeGridFirstTap.mjs
+cgwalk-paged: CGFIRST_CONTROL=paged node scripts/playCollegeGridFirstTap.mjs
+cgwalk-slow: CGFIRST_CONTROL=slow node scripts/playCollegeGridFirstTap.mjs
+cgwalk-nolist: CGFIRST_CONTROL=nolist node scripts/playCollegeGridFirstTap.mjs
+cgwalk-nojudge: CGFIRST_CONTROL=nojudge node scripts/playCollegeGridFirstTap.mjs
+cgwalk-accepted: CGFIRST_CONTROL=accepted node scripts/playCollegeGridFirstTap.mjs
+mut-flatwaits: node .rc/x/fxmut.mjs flatwaits
+mut-norecord: node .rc/x/fxmut.mjs norecord
+mut-shoot10: node .rc/x/fxmut.mjs shoot10
+mut-nocap: node .rc/x/fxmut.mjs nocap
