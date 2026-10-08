@@ -134,6 +134,22 @@ export const SC_CLUB_CANON: Record<string, string> = {
      way round; simCareerDerbies section 1 holds the two maps together). */
   'Deportivo': 'Deportivo La Coruña',
   'Atletico Mineiro': 'Atlético Mineiro',
+  /* Round 1100's clubs: the career names an accent fold alone cannot match
+     to Club Manager's spelling (scripts/simCareerLeagueWorld.mjs section B4
+     prints any row this list is missing). The eleven Saudi clubs the pool
+     now carries in the hand rows' style, the Rhine derby's Koln, Red Bull
+     Salzburg, and four names whose letters an NFD fold leaves alone.
+     CD Nacional has NO row on purpose: Club Manager's Nacional is the
+     Madeira club and the list's "Nacional" is the Uruguayan one, so the two
+     must never share a key. */
+  'Koln': 'Köln',
+  'Red Bull Salzburg': 'RB Salzburg',
+  'Al Diriyah': 'Al-Diriyah', 'Al Ettifaq': 'Al-Ettifaq', 'Al Faisaly': 'Al-Faisaly', 'Al Fateh': 'Al-Fateh',
+  'Al Fayha': 'Al-Fayha', 'Al Hazem': 'Al-Hazem', 'Al Khaleej': 'Al-Khaleej', 'Al Kholood': 'Al-Kholood',
+  'Al Qadsiah': 'Al-Qadsiah', 'Al Riyadh': 'Al-Riyadh', 'Al Taawoun': 'Al-Taawoun',
+  'Kasimpasa': 'Kasımpaşa',
+  'DC United': 'D.C. United',
+  'Brondby IF': 'Brøndby IF', 'FC Nordsjaelland': 'FC Nordsjælland', 'SonderjyskE': 'SønderjyskE',
 };
 
 /* Sourced pairs, all read on 2026-10-05. A pair whose clubs are not both in

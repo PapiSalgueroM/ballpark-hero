@@ -114,6 +114,16 @@
  * season with no cup, Toronto FC never the U.S. Open Cup's): 25 careers and
  * 13 nights. The whole round: 41 of 48 careers and 73 nights, the union.
  *
+ * Round 1100 (every league a real league) re-recorded the fixture, on
+ * purpose, from its branch commit on a CI runner (twice, identical; the
+ * fixture's recordedFrom is that commit). Round 1100: the career club pool
+ * grew from 241 to 460 clubs, so the clubs a career is offered change, and
+ * eight plain leagues got a size, a format and a derby cadence, so their
+ * seasons hold a league position. Attribution: the same tree with the seven
+ * source files that round changed read from Release AL's gated tree (the
+ * pool, the ledger names, the rivalry spellings, the format, cadence and
+ * size rows, the era table) replays the old fixture whole, 170 checks of 170.
+ *
  * Negative controls (SIM_AWARDS_NIGHT_CONTROL), each must turn its section red:
  *   reorderdraw   the era star loop draws assists before goals   -> section 1
  *   winnernottop  the night is no longer re-ranked after a rule  -> section 2
