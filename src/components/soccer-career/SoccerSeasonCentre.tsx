@@ -98,8 +98,9 @@ function eventWords(e: SeasonEvent, us: string, them: string): string {
   return '🔁 You come off';
 }
 
-function soccerSport(keepsSheets: boolean, color: string, role: Exclude<PitchRole, null>): CentreSport {
+function soccerSport(keepsSheets: boolean, color: string, role: Exclude<PitchRole, null>, ratingRange: [number, number] | null): CentreSport {
   return {
+    form: ratingRange ? { head: 'Your season, game by game', label: 'Your match rating in each league game', range: ratingRange } : undefined,
     /* the minutes he was on the pitch are the events file's own window (pitchWindow in soccerEvents.ts) */
     pitch: (g, at) => (
       <Suspense fallback={<div aria-hidden="true"><div className={PITCH_BOX} /><div className="h-5" /></div>}>
@@ -121,6 +122,7 @@ function soccerSport(keepsSheets: boolean, color: string, role: Exclude<PitchRol
       return { bits, alarm: g.events.some(e => e.kind === 'injury') ? '🚑 Injured' : null };
     },
     markOf: g => g.line.rating ?? 0,
+    markWord: 'Rating',
     soFar: so => [
       ['Played', String(so.apps)],
       ['Goals', String(so.goals ?? 0)],
@@ -153,6 +155,9 @@ function buildModel(row: SeasonRecord, ctx: SoccerSeasonCtx, s: DerivedSeason, m
   if (ctx.goldenBoot) notes.push(`👟 League Golden Boot: ${row.goals} goals in all competitions.`);
   if (ctx.keepsSheets && ctx.position !== 'GK') notes.push(`🧤 ${row.cleanSheets} clean sheets in all competitions.`);
   const last = ctx.lastSeason;
+  /* the match rating's own lowest and highest value: the two numbers the season was derived with, not a copy of them */
+  const rating = SOCCER.totals(row, ctx).find(t => t.key === 'rating');
+  const ratingRange: [number, number] | null = rating && rating.kind === 'mean' ? [rating.min, rating.max] : null;
   return {
     season: s,
     words: SOCCER.words,
@@ -173,7 +178,7 @@ function buildModel(row: SeasonRecord, ctx: SoccerSeasonCtx, s: DerivedSeason, m
       finishLine, championLine: ctx.champion ? `${ctx.champion} won it` : null,
       trophies, title: !!row.leagueTitle && !row.injurySevere, notes,
     },
-    sport: soccerSport(ctx.keepsSheets, color, roleOf(ctx.position)),
+    sport: soccerSport(ctx.keepsSheets, color, roleOf(ctx.position), ratingRange),
     help: HELP,
     momentKey: `centre|${s.key}`,
     moments,
@@ -204,8 +209,8 @@ export function Tile({ text, exitLabel, onClose, onRetry }: { text: string; exit
         <div className="text-sm font-bold">📺 Season Centre</div>
         <p className="text-sm text-muted-foreground">{text}</p>
         <div className="flex gap-2">
-          {onRetry && <button type="button" onClick={onRetry} className="h-10 flex-1 rounded-lg border border-border text-sm font-semibold">↻ Retry</button>}
-          <button type="button" onClick={onClose} className="h-10 flex-1 rounded-lg bg-primary text-sm font-bold text-primary-foreground">{exitLabel}</button>
+          {onRetry && <button type="button" onClick={onRetry} className="h-11 flex-1 rounded-lg border border-border text-sm font-semibold">↻ Retry</button>}
+          <button type="button" onClick={onClose} className="h-11 flex-1 rounded-lg bg-primary text-sm font-bold text-primary-foreground">{exitLabel}</button>
         </div>
       </div>
     </div>
