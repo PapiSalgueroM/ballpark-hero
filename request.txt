@@ -1,0 +1,2 @@
+# Round 1051 fixer 2: the summer harness section 6 on calibration 2 (stamped scratch copy), on abc797de
+summer-cal2: cp .rc/x/zzSummerCal2Scratch.mjs scripts/zzSummerCal2Scratch.mjs && TMPDIR=$(mktemp -d) node scripts/zzSummerCal2Scratch.mjs
