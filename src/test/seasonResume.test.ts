@@ -9,7 +9,9 @@ import { clearResume, writeResume } from '@/components/season-centre/resumeStore
 const GOOD: SeasonResume = { key: 'Ada|Arsenal|2031|34|12|7|7.4|centre', year: 2031, md: 13, speed: 3, stable: false };
 
 interface Row { club: string; year: number; type: string; apps: number; goals: number; assists: number; rating: number }
-const keyOf = (name: string) => (r: Row) => `${name}|${r.club}|${r.year}|${r.apps}|${r.goals}|${r.assists}|${r.rating}|centre`;
+const tpl = (name: string, r: Row) => `${name}|${r.club}|${r.year}|${r.apps}|${r.goals}|${r.assists}|${r.rating}|centre`;
+/* the game says which seasons can be shown at all: null for a year he did not play (soccer's own rule) */
+const keyOf = (name: string) => (r: Row) => (r.type === 'playing' && r.apps > 0 ? tpl(name, r) : null);
 const ROWS: Row[] = [
   { club: 'Lyon', year: 2029, type: 'playing', apps: 30, goals: 9, assists: 4, rating: 7.1 },
   { club: 'Arsenal', year: 2030, type: 'playing', apps: 0, goals: 0, assists: 0, rating: 0 },
@@ -38,7 +40,7 @@ describe('the resume record', () => {
   it('accepts every speed and both answers for stable', () => {
     for (const speed of [1, 3, 'results'] as const) for (const stable of [true, false]) expect(asResume({ ...GOOD, speed, stable })).toEqual({ ...GOOD, speed, stable });
   });
-  it('writes the five fields and nothing else', () => {
+  it('writes the fields of a record and nothing else', () => {
     writeResume('soccer', { ...GOOD, extra: 1, tag: 'abc' } as SeasonResume);
     expect(localStorage.getItem('seasonCentre:v1:soccer')).toBe(JSON.stringify(GOOD));
     expect(asResume({ ...GOOD, extra: 1 })).toMatchObject(GOOD);
@@ -71,15 +73,35 @@ describe('the resume record', () => {
   it('prints the season and the NEXT round', () => {
     expect(resumeLabel(GOOD, '2031/32', 'matchday')).toBe('Resume 2031/32, matchday 14');
   });
+  it('names the round in the word the viewer used for that season, when the record holds it', () => {
+    expect(resumeLabel({ ...GOOD, round: 'League game' }, '2017/18', 'matchday')).toBe('Resume 2017/18, league game 14');
+    expect(resumeLabel({ ...GOOD, round: 'Matchday' }, '2031/32', 'week')).toBe('Resume 2031/32, matchday 14');
+  });
+  it('keeps the word with the place, and a record without one is still a record', () => {
+    writeResume('soccer', { ...GOOD, round: 'League game' });
+    expect(readResume('soccer')).toEqual({ ...GOOD, round: 'League game' });
+    expect(JSON.parse(localStorage.getItem(resumeStorageKey('soccer'))!)).toEqual({ ...GOOD, round: 'League game' });
+    writeResume('soccer', GOOD);
+    expect(readResume('soccer')).toEqual(GOOD);
+    expect(Object.keys(JSON.parse(localStorage.getItem(resumeStorageKey('soccer'))!))).toEqual(['key', 'year', 'md', 'speed', 'stable']);
+    for (const round of ['', 7, null, {}, 'x'.repeat(41)]) expect(asResume({ ...GOOD, round }), JSON.stringify(round)).toBeNull();
+  });
 });
 
 describe('which season a record belongs to', () => {
   const stable = { ...GOOD, stable: true };
-  it('finds its own row, and only a played season', () => {
+  it('finds its own row, and only a season the game can show', () => {
     expect(resumeRowIndex(stable, ROWS, keyOf('Ada'))).toBe(2);
     expect(resumeRowIndex(null, ROWS, keyOf('Ada'))).toBe(-1);
-    expect(resumeRowIndex({ ...stable, year: 2030, key: keyOf('Ada')(ROWS[1]) }, ROWS, keyOf('Ada'))).toBe(-1);
-    expect(resumeRowIndex({ ...stable, year: 2032, key: keyOf('Ada')(ROWS[3]) }, ROWS, keyOf('Ada'))).toBe(-1);
+    expect(resumeRowIndex({ ...stable, year: 2030, key: tpl('Ada', ROWS[1]) }, ROWS, keyOf('Ada'))).toBe(-1);
+    expect(resumeRowIndex({ ...stable, year: 2032, key: tpl('Ada', ROWS[3]) }, ROWS, keyOf('Ada'))).toBe(-1);
+  });
+  it('knows no sport: any row with a year will do, and the game keys it', () => {
+    /* a US season line has games, not apps, and no type */
+    const weeks = [{ year: 2030, team: 'Jets', games: 17 }, { year: 2031, team: 'Jets', games: 0 }, { year: 2032, team: 'Bills', games: 16 }];
+    const key = (r: { year: number; team: string; games: number }) => (r.games > 0 ? `Ada|${r.team}|${r.year}|${r.games}` : null);
+    expect(resumeRowIndex({ ...stable, year: 2032, key: 'Ada|Bills|2032|16' }, weeks, key)).toBe(2);
+    expect(resumeRowIndex({ ...stable, year: 2031, key: 'Ada|Jets|2031|0' }, weeks, key)).toBe(-1);
   });
   it('moves off the row when any field of the key moves', () => {
     for (const change of [{ club: 'Spurs' }, { apps: 33 }, { goals: 13 }, { assists: 8 }, { rating: 7.5 }]) {

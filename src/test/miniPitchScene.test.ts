@@ -4,7 +4,7 @@
    the pitch, and that no figure is ever cut by the box. */
 import { describe, expect, it } from 'vitest';
 import { ACTION_SPAN } from '@/components/pitch-motion';
-import { PITCH_WINDOW, goalEvent, goalFrame, goalScene, goalsOf, type PitchFig, type PitchGoal } from '@/components/season-centre/MiniPitch';
+import { PITCH_WINDOW, SHIRTS_APART, goalEvent, goalFrame, goalScene, goalsOf, themColor, type PitchFig, type PitchGoal } from '@/components/season-centre/MiniPitch';
 import type { SeasonEvent } from '@/lib/season/core';
 
 const goal = (o: Partial<PitchGoal> = {}): PitchGoal => ({ key: '7|40|us|0', min: 40, side: 'us', mine: false, assist: false, ...o });
@@ -142,5 +142,31 @@ describe('a goal, frame by frame', () => {
     }
     /* the tightest figure still has room (measured 3.6 px on the 320 phone: the keeper's head at the top) */
     expect(worst).toBeGreaterThanOrEqual(1);
+  });
+});
+
+describe('the two sides can be told apart', () => {
+  const rgb = (h: string) => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+  const apart = (a: string, b: string) => Math.hypot(...rgb(a).map((v, i) => v - rgb(b)[i]));
+  const PALE = '#d6e6ed';
+  it('gives the other side the pale shirt against a club in a colour', () => {
+    for (const us of ['#EF0107', '#034694', '#10B981', '#000000', '#FFE667', '#6CABDD', '#75AADB']) expect(themColor(us), us).toBe(PALE);
+  });
+  it('gives the other side a dark shirt against a club in white or close to it', () => {
+    for (const us of ['#FFFFFF', '#ffffff', '#fff', '#F5F5F5', '#F2F2F2', '#d8d8d8', '#d9d9d9', PALE, '#8AC3EE']) {
+      const them = themColor(us);
+      expect(them, us).not.toBe(PALE);
+      expect(apart(them, us.length === 4 ? '#ffffff' : us), us).toBeGreaterThan(200);
+    }
+  });
+  it('never leaves the two shirts closer than the line it draws', () => {
+    /* every grey from black to white, and the pale colour moved a step at a time in each channel */
+    for (let v = 0; v <= 255; v += 1) {
+      const hex = (n: number) => Math.max(0, Math.min(255, n)).toString(16).padStart(2, '0');
+      for (const us of [`#${hex(v)}${hex(v)}${hex(v)}`, `#${hex(v)}e6ed`, `#d6${hex(v)}ed`, `#d6e6${hex(v)}`]) expect(apart(themColor(us), us), us).toBeGreaterThanOrEqual(SHIRTS_APART);
+    }
+  });
+  it('keeps the pale shirt for a colour it cannot read', () => {
+    for (const us of ['', 'red', 'bg-emerald-600', '#12345', 'rgb(255,255,255)']) expect(themColor(us), us).toBe(PALE);
   });
 });

@@ -12,7 +12,12 @@
    so it stays a few hundred bytes. That is why the season's key is one
    template line here and not an import: scripts/simSeasonCentreMotion.mjs
    reads the line out of this file and holds it to soccerSeasonKey on every
-   season of the probe careers. */
+   season of the probe careers.
+
+   The round is named in the word the Season Centre itself used for that
+   season (the record keeps it: "matchday" where there is a table, "league
+   game" where there are results only), so the chip and the button it leads
+   to never say two things. */
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import type { CareerState, SeasonRecord } from '@/lib/soccerCareerEngine';
@@ -29,7 +34,8 @@ export default function SeasonResumeChip({ career, at, onOpen }: Props) {
   const [resume, setResume] = useState(() => readResume('soccer'));
   useEffect(() => { setResume(readResume('soccer')); }, [at]);
   const row = career.seasons[resumeRowIndex(resume, career.seasons, r => `${career.playerName}|${r.club}|${r.year}|${r.apps}|${r.goals}|${r.assists}|${r.rating}|centre`, career.phone?.world?.year)];
-  if (!resume || !row) return null;
+  /* a year he did not play has no season to open (the Season Centre's own key is null for it) */
+  if (!resume || !row || row.type !== 'playing' || !(row.apps > 0)) return null;
   return (
     <div className="mt-2">
       <Button onClick={() => onOpen(row)} variant="outline" className="w-full h-11 text-sm font-bold" data-season-resume>

@@ -13,8 +13,16 @@
    wrapper that slides the rows adds one element around the card and nothing
    inside it. (b) and (c) are recorded again exactly once, by the commit that
    fixes the phone's tap targets and text sizes, and that commit says which
-   classes moved. */
-import { describe, expect, it } from 'vitest';
+   classes moved.
+
+   After the round's review (b) and (c) were recorded once more, for two
+   reasons the commit names: the phone's event list became exactly three rows
+   tall (h-16 to h-14), and (c) no longer holds the celebration kit's
+   stylesheet. That stylesheet is Club Manager's shared file; with it in the
+   string, an edit to a keyframe there turned this test red for somebody who
+   had never opened the Season Centre. The string now holds the element and
+   not its text. */
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';
 import { RankShiftTable } from '@/components/motion/RankShiftTable';
@@ -144,6 +152,21 @@ function unwrapped(html: string, open: string): string {
   throw new Error('the wrapper never closes');
 }
 
+/* These tests draw the Season Centre to a string, and React 18's server renderer says "useLayoutEffect does nothing on
+   the server" for every layout effect it meets (the sliding table has one, which only ever runs in a browser). That
+   one known line is dropped here so it cannot bury a real error; everything else is printed as it comes. */
+const realError = console.error;
+beforeAll(() => {
+  vi.spyOn(console, 'error').mockImplementation((...args: unknown[]) => {
+    if (typeof args[0] === 'string' && args[0].includes('useLayoutEffect does nothing on the server')) return;
+    realError(...args);
+  });
+});
+afterAll(() => { vi.restoreAllMocks(); });
+
+/** A style element without its text: the string says the stylesheet is there, not what another game's file holds. */
+const styleless = (html: string) => html.replace(/<style[^>]*>[\s\S]*?<\/style>/g, '<style></style>');
+
 describe('Season Centre: the markup this round found', () => {
   it('(a) the table card, whole and compact', () => {
     expect(renderToStaticMarkup(tableCard(false))).toMatchSnapshot('table card, whole');
@@ -172,7 +195,8 @@ describe('Season Centre: the markup this round found', () => {
     const html = renderToStaticMarkup(<SeasonCentre model={slotsModel()} exitLabel="Back to your career" onClose={() => {}} />);
     expect(html).toContain('data-kickoff');
     /* on a phone the kick off screen also holds the compact table, so the round's one new element is on it: taken away, the screen is the recorded one */
-    expect(unwrapped(html, '<div data-rank-shift="">')).toMatchSnapshot('kick off');
+    expect(html).toContain('@keyframes');
+    expect(styleless(unwrapped(html, '<div data-rank-shift="">'))).toMatchSnapshot('kick off');
   });
 });
 

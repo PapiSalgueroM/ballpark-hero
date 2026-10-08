@@ -130,7 +130,8 @@ export function MatchClock({ game, clock, usName, themName, speed, paused, reduc
         {done && <span className={`${instant ? '' : 'cm-slam'} font-bold text-foreground`} data-full-time>Full time</span>}
       </div>
       {stage && <div className="mt-2" data-clock-stage>{stage({ shown, paused, instant })}</div>}
-      <ol ref={listRef} className="mt-2 h-16 overflow-y-auto space-y-1 text-xs md:h-28" aria-live="polite" data-clock-events>
+      {/* on a phone the list is exactly three rows tall (16 px lines, 4 px apart), so the oldest row on show is never cut in half */}
+      <ol ref={listRef} className="mt-2 h-14 overflow-y-auto space-y-1 text-xs md:h-28" aria-live="polite" data-clock-events>
         {seen.length === 0 && <li className="text-muted-foreground">Kick off.</li>}
         {seen.map((e, i) => (
           <li key={`${i}-${e.min}-${e.kind}`} className={`${instant ? '' : 'cm-tick-in'} flex gap-2`}>

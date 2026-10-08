@@ -416,8 +416,9 @@ function Review({ model, reduced }: { model: CentreModel; reduced: boolean }) {
   );
 }
 
-/** A place in a season: rounds fully watched, and the clock speed he had. */
-export interface CentrePlace { md: number; speed: ClockSpeed }
+/** A place in a season: rounds fully watched, and the clock speed he had. When the viewer tells a place it also tells
+ *  its own word for a round of this season ("Matchday", "League game"), so whatever leads back here can say the same. */
+export interface CentrePlace { md: number; speed: ClockSpeed; round?: string }
 
 interface SeasonCentreProps {
   model: CentreModel;
@@ -475,11 +476,12 @@ export function SeasonCentre({ model, exitLabel, onClose, resume, onProgress }: 
   const progressRef = useRef(onProgress);
   progressRef.current = onProgress;
   const misfit = !!resume && !start;
+  const roundWord = s.mode === 'table' ? model.words.round : 'League game';
   useEffect(() => { if (misfit) progressRef.current?.(null); }, [misfit]);
   useEffect(() => {
     if (stage.kind === 'review') progressRef.current?.(null);
-    else if (played >= 1 && played <= M - 1) progressRef.current?.({ md: played, speed });
-  }, [played, speed, stage.kind, M]);
+    else if (played >= 1 && played <= M - 1) progressRef.current?.({ md: played, speed, round: roundWord });
+  }, [played, speed, stage.kind, M, roundWord]);
   const current = stage.kind === 'match' || stage.kind === 'poster' ? stage.md : null;
   /* Round 1046: every new screen of the stage starts at its top (the table may have pulled the stage down at full time) */
   const stageRef = useRef<HTMLElement | null>(null);
@@ -491,7 +493,6 @@ export function SeasonCentre({ model, exitLabel, onClose, resume, onProgress }: 
   let nextBig: number | null = null;
   for (let md = played + 1; md <= M && nextBig === null; md += 1) if (postersFor(s, md).length || openMoment(md)) nextBig = md;
   if (nextBig !== null && nextBig <= played + 1) nextBig = null;
-  const roundWord = s.mode === 'table' ? model.words.round : 'League game';
   const so = soFar(s, played);
   const soTiles = model.sport.soFar(so);
   const btn = 'h-11 shrink-0 whitespace-nowrap rounded-lg px-3 text-xs font-bold';

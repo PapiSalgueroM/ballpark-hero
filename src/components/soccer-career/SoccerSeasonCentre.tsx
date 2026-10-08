@@ -46,6 +46,17 @@ const MiniPitch = lazy(() => import('@/components/season-centre/MiniPitch'));
 /** The pitch's box: a fixed shape (the scoring third of a pitch), worn by the loading fallback too, so nothing under it ever moves.
  *  `isolate` keeps the ball and the figures inside the box's own layer, under the score that stays at the top of a phone's stage. */
 const PITCH_BOX = 'relative isolate w-full overflow-hidden rounded-xl aspect-[25/12]';
+/** The pitch's place with nothing drawn in it: the box and the line under it, the same size as the pitch itself. */
+const PITCH_EMPTY = <div aria-hidden="true" data-pitch-empty><div className={PITCH_BOX} /><div className="h-5" /></div>;
+/* The little pitch is a picture beside the match, never the match. If its file does not arrive (a weak signal, or a
+   new build published while he watches) or it fails to draw, its place stays empty and the season carries on: the
+   score, the events and the table need none of it. Without this the whole Season Centre fell to its error tile, whose
+   Retry cannot help, because a browser keeps a file that failed as failed until the page is loaded again. */
+class PitchBoundary extends Component<{ children: ReactNode }, { gone: boolean }> {
+  state = { gone: false };
+  static getDerivedStateFromError() { return { gone: true }; }
+  render() { return this.state.gone ? PITCH_EMPTY : this.props.children; }
+}
 const roleOf = (position: string): Exclude<PitchRole, null> => (position === 'GK' ? 'GK' : position === 'CB' || position === 'LB' || position === 'RB' ? 'DEF' : 'ATT');
 import type { DerivedGame, DerivedSeason, SeasonEvent } from '@/lib/season/core';
 
@@ -68,7 +79,7 @@ const HELP: HelpWords = {
   intro: [
     'Your season was played the moment you pressed Next Season. This is that same season, match by match: the final table and your season totals are settled, and nothing here can change them.',
     "When a season shows a table, who was in the league, how many clubs it had and how many points a win was worth are real (from 2026-27 on, the league is your career's own world). Every score, every other club's result and every minute are your career's own.",
-    'When the table changes, each club slides from where it was to where it is now. The little pitch shows who scored and when, with a ring on you when the goal, the assist or the goal against was yours; how the move looked is the game\'s own drawing.',
+    'When the table changes, each club slides from where it was to where it is now. The little pitch shows who scored and when. The ring is you, whenever you are in the move: scoring it, setting it up, or up there with the attack if you play in midfield or up front, and at the back when one goes in past you as a keeper or a defender. ⚽ Yours or 🅰️ Your assist under the pitch tells you when the goal or the assist was yours. How the move looked is the game\'s own drawing.',
   ],
   controls: '▶ plays the next matchday. ⏩ jumps to the next big game (a derby, halfway, the title or the final day). ⏭ goes straight to the end. 1x and 3x set the clock, Results shows each match at full time. After a jump the table slides from the last matchday you saw; the ▲ and ▼ beside your place always compare with the matchday before. Close it whenever you like: the 📺 Resume chip on your career page takes you back to the same matchday. 📺 Season replays, next to Ratings, opens the season you just played, every season you won the league and every results only season; any other season with a table is locked, because the game did not keep who won the league that year.',
   moments: [
@@ -76,7 +87,7 @@ const HELP: HelpWords = {
     'YOUR CALL: what you do is what happened in that match. Score a chance that was missed and the goal is yours; miss one that went in and it is gone. The return game against the same club takes the other side of it, so the final table and your season totals end exactly where your season summary has them.',
     'RECREATE: the record stands whatever you do. You play a goal, an assist or a clean sheet again, for stars only.',
     'A make earns one to three stars for how well you struck it. The stars bank once a season, at the season review: 60% of the stars on offer is +1 to the stat your position trains, 85% is +2, never past your ceiling (your training drill and your moments share that room), and it arrives with next season\'s growth. Step out before the review and your moments stay open while your season summary is up. Press Continue on the summary and the stars you have bank as they stand, with any moment you left counting as no stars. After the bank the season\'s moments are closed.',
-    'Coming back to a season from your career page is for watching: no moment is offered there. A moment you played is shown as you played it while that season is still the last one you played a moment in; after that the season replays as your record has it.',
+    'Once you have pressed Continue on the summary, coming back to a season from your career page is for watching: no moment is offered then. A moment you played is shown as you played it while that season is still the last one you played a moment in; after that the season replays as your record has it.',
   ],
   examples: [
     { head: 'A YOUR CALL', body: 'Matchday 9, 1-1 in the 82nd minute, and on your season this chance was missed. You take it and score: the match ends 2-1 and you climb the table that week. In the return game on matchday 28, a 2-1 win on your season, your goal there is not scored and it ends 1-1. You gain two points on matchday 9 and give two back on matchday 28, they lose one and get it back: the final table and your goals for the season end exactly where they were.' },
@@ -109,10 +120,12 @@ function soccerSport(keepsSheets: boolean, color: string, role: Exclude<PitchRol
     form: ratingRange ? { head: 'Your season, game by game', label: 'Your match rating in each league game', range: ratingRange } : undefined,
     /* the minutes he was on the pitch are the events file's own window (pitchWindow in soccerEvents.ts) */
     pitch: (g, at) => (
-      <Suspense fallback={<div aria-hidden="true"><div className={PITCH_BOX} /><div className="h-5" /></div>}>
-        <MiniPitch md={g.md} events={g.events} shown={at.shown} paused={at.paused} instant={at.instant} usColor={color}
-          role={g.played ? role : null} onFrom={g.onAt ?? 1} onTo={g.offAt ? g.offAt - 1 : SOCCER_FULL_TIME} boxClass={PITCH_BOX} />
-      </Suspense>
+      <PitchBoundary>
+        <Suspense fallback={PITCH_EMPTY}>
+          <MiniPitch md={g.md} events={g.events} shown={at.shown} paused={at.paused} instant={at.instant} usColor={color}
+            role={g.played ? role : null} onFrom={g.onAt ?? 1} onTo={g.offAt ? g.offAt - 1 : SOCCER_FULL_TIME} boxClass={PITCH_BOX} />
+        </Suspense>
+      </PitchBoundary>
     ),
     clock: { length: SOCCER_FULL_TIME, label: minute => minuteLabel({ minute }), words: eventWords },
     fixed: { badge: 'DERBY', poster: 'Derby day', recordSoFar: 'Your derby record so far', recordPlayed: 'Derbies you played' },
@@ -290,7 +303,7 @@ function CentreBody({ career, clubs, row, mode, onClose, onCareer, offer }: Socc
   const stable = seasonStable(ctx.mode, ctx.finish?.finish);
   const onProgress = useCallback((at: CentrePlace | null) => {
     if (!key) return;
-    if (at) writeResume(RESUME_GAME, { key, year: row.year, md: at.md, speed: at.speed, stable });
+    if (at) writeResume(RESUME_GAME, { key, year: row.year, md: at.md, speed: at.speed, stable, round: at.round });
     else if (readResume(RESUME_GAME)?.key === key) clearResume(RESUME_GAME);
   }, [key, row.year, stable]);
   if (!model) return <Tile text="This season cannot be shown match by match." exitLabel={exitLabel} onClose={onClose} />;

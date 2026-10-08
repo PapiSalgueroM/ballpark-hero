@@ -5,8 +5,8 @@
 import { resumeStorageKey, type SeasonResume } from '@/lib/season/resume';
 
 export function writeResume(game: string, r: SeasonResume): void {
-  const { key, year, md, speed, stable } = r;
-  try { localStorage.setItem(resumeStorageKey(game), JSON.stringify({ key, year, md, speed, stable })); } catch { /* no place kept */ }
+  const { key, year, md, speed, stable, round } = r;
+  try { localStorage.setItem(resumeStorageKey(game), JSON.stringify({ key, year, md, speed, stable, round })); } catch { /* no place kept */ }
 }
 
 export function clearResume(game: string): void {

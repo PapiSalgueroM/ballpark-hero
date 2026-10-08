@@ -119,15 +119,34 @@ export interface MiniPitchProps {
   boxClass: string;
 }
 
+/* The other side's flat colour. His club wears its own; when that is white or close to it (Santos, FC Copenhagen,
+   Derby County and a dozen more of the career's clubs) the usual pale shirt would make two sides nobody can tell
+   apart, so the other side goes dark instead. Still two flat colours and nobody's kit. */
 const THEM = '#d6e6ed';
+const THEM_DARK = '#1f2a44';
+const rgbOf = (hex: string): [number, number, number] | null => {
+  const h = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(hex.trim())?.[1];
+  if (!h) return null;
+  const six = h.length === 3 ? h.replace(/./g, c => c + c) : h;
+  return [parseInt(six.slice(0, 2), 16), parseInt(six.slice(2, 4), 16), parseInt(six.slice(4, 6), 16)];
+};
+/** How far apart two colours must be (straight distance in RGB) to be told apart as shirts on the grass. */
+export const SHIRTS_APART = 90;
+/** The other side's colour for a club in `usColor`: the pale one, or the dark one when his club is itself pale. */
+export function themColor(usColor: string): string {
+  const us = rgbOf(usColor);
+  const pale = rgbOf(THEM)!;
+  return us && Math.hypot(us[0] - pale[0], us[1] - pale[1], us[2] - pale[2]) < SHIRTS_APART ? THEM_DARK : THEM;
+}
 
 /** The grass, the nets, the ball and the figures: exactly the piece the shared part draws. */
 function Surface({ frame, usColor, top }: { frame: MotionFrame<PitchFig>; usColor: string; top: boolean }) {
+  const them = themColor(usColor);
   return (
     <PitchSurface frame={frame} style={{ position: 'absolute', left: 0, width: '100%', top: top ? 0 : undefined, bottom: top ? undefined : 0 }}>
       {frame.theirs.map(p => (
         <div key={p.key} className="pm-figure" data-pm-figure="opp" data-pitch-ring={p.ring ? '' : undefined} style={pitchSpot(p)}>
-          <LivePitchPlayer color={THEM} keeper={p.keeper} pose={frame.poses[p.key]} selected={p.ring} />
+          <LivePitchPlayer color={them} keeper={p.keeper} pose={frame.poses[p.key]} selected={p.ring} />
         </div>
       ))}
       {frame.mine.map(p => (
@@ -143,8 +162,8 @@ function MiniPitch({ md, events, shown, paused, instant, usColor, role, onFrom, 
   const goals = useMemo(() => goalsOf(md, events), [md, events]);
   /* what was on screen at the last commit: a goal plays only when the clock crosses its minute after that */
   const last = useRef({ shown, events });
-  /* the goal being played: `t` seconds in; `next` is a goal that arrived while this one was in the air */
-  const [play, setPlay] = useState<{ goal: PitchGoal; t: number; next: PitchGoal | null } | null>(null);
+  /* the goal being played: `t` seconds in; `next` holds the goals that arrived while it was in the air, in order */
+  const [play, setPlay] = useState<{ goal: PitchGoal; t: number; next: PitchGoal[] } | null>(null);
   const current = goals.filter(g => g.min <= shown).pop() ?? null;
 
   /* a layout effect, so the frame a goal arrives on is its first frame: an effect after paint would show the goal landed for one frame first */
@@ -153,13 +172,17 @@ function MiniPitch({ md, events, shown, paused, instant, usColor, role, onFrom, 
     last.current = { shown, events };
     /* a new events array (a moment changed the match) is the match as it now stands, not goals arriving */
     if (was.events !== events || instant) { setPlay(null); return; }
-    const arrived = goals.filter(g => g.min > was.shown && g.min <= shown).pop();
-    if (!arrived) return;
-    /* a goal landing while another is in the air: that one goes to its last frame now, and this one starts on the next frame */
-    setPlay(p => (p && p.t < ACTION_SPAN ? { goal: p.goal, t: ACTION_SPAN, next: arrived } : { goal: arrived, t: 0, next: null }));
+    /* every goal the clock just crossed, in order: on a slow frame at 3x that can be two */
+    const arrived = goals.filter(g => g.min > was.shown && g.min <= shown);
+    if (arrived.length === 0) return;
+    /* Every one of them is seen landing, and the last one is played. A goal in the air goes to its last frame now and
+       the new ones wait behind it; with nothing in the air, the earlier ones are each drawn landed for a frame first. */
+    setPlay(p => (p && (p.t < ACTION_SPAN || p.next.length > 0)
+      ? { goal: p.goal, t: ACTION_SPAN, next: [...p.next, ...arrived] }
+      : { goal: arrived[0], t: arrived.length > 1 ? ACTION_SPAN : 0, next: arrived.slice(1) }));
   }, [shown, events, goals, instant]);
 
-  const moving = !!play && (play.t < ACTION_SPAN || !!play.next);
+  const moving = !!play && (play.t < ACTION_SPAN || play.next.length > 0);
   useEffect(() => {
     if (!moving || paused) return;
     let raf = 0;
@@ -167,7 +190,13 @@ function MiniPitch({ md, events, shown, paused, instant, usColor, role, onFrom, 
     const tick = (now: number) => {
       const dt = Math.min(100, now - before) / 1000;
       before = now;
-      if (!document.hidden) setPlay(p => (!p ? p : p.t >= ACTION_SPAN ? (p.next ? { goal: p.next, t: 0, next: null } : p) : { goal: p.goal, t: p.t + dt, next: p.next }));
+      if (!document.hidden) setPlay(p => {
+        if (!p) return p;
+        if (p.t < ACTION_SPAN) return { goal: p.goal, t: p.t + dt, next: p.next };
+        if (p.next.length === 0) return p;
+        /* the next one in line: played if it is the last, drawn landed for this frame if another waits behind it */
+        return { goal: p.next[0], t: p.next.length > 1 ? ACTION_SPAN : 0, next: p.next.slice(1) };
+      });
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
