@@ -1,0 +1,11 @@
+#!build
+#!playwright
+seam: PORT=4601 SHOTS=$RC_OUT node scripts/playUsCareerSaveSeam.mjs
+seam-hidden: PORT=4602 US_SAVE_SEAM_CONTROL=hidden node scripts/playUsCareerSaveSeam.mjs
+seam-keeptoast: PORT=4603 US_SAVE_SEAM_CONTROL=keeptoast node scripts/playUsCareerSaveSeam.mjs
+seam-raw: PORT=4604 US_SAVE_SEAM_CONTROL=raw node scripts/playUsCareerSaveSeam.mjs
+seam-open: PORT=4605 US_SAVE_SEAM_CONTROL=open node scripts/playUsCareerSaveSeam.mjs
+seam-bogus: PORT=4606 US_SAVE_SEAM_CONTROL=bogus node scripts/playUsCareerSaveSeam.mjs
+needle: grep -o "could not be saved. Stay on this page and use Retry save.\{0,80\}" dist/assets/*.js | cut -c1-260
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json

@@ -1,0 +1,36 @@
+CONTROL keeptoast: the served board never takes its toast back (usCareerSeasonReview-Ck-uJozK.js)
+ok   [full] nba full: the line says full, the Retry notice is up for a write and nothing reached the store (line full 0..28, Retry notice write 225..342 seen, save toasts 1, refused writes 5, on the browser's store: nothing)
+ok   [full] nba full: the Retry notice is in view on the first screen with nothing over it (line full 0..28, Retry notice write 225..342 seen, save toasts 1, refused writes 5, on the browser's store: nothing)
+ok   [full] nba full: the refused save is said in exactly one toast (1 of 1 on screen)
+ok   [full] nba full: the line and the Retry notice do not overlap (line full 0..28, Retry notice write 225..342 seen, save toasts 1, refused writes 5, on the browser's store: nothing)
+ok   [retry] nba full: once the browser takes writes again Retry save puts the prospect on the store and the notice goes (line full 0..28, Retry notice none, save toasts 1, refused writes 5, on the browser's store: prospect)
+FAIL [toast] nba full: the toast that said the save had failed is gone with the notice (Retry pressed 908 ms after the refusal)
+note nba full: after a Retry that worked the line at the top still says "Storage is full, so progress won't save." (known: Round 1142 never takes a refusal back within a visit)
+ok   [errors] nba full: no page error and no sideways scroll at 390
+ok   [full] nfl full: the line says full, the Retry notice is up for a write and nothing reached the store (line full 0..28, Retry notice write 225..342 seen, save toasts 1, refused writes 5, on the browser's store: nothing)
+ok   [full] nfl full: the Retry notice is in view on the first screen with nothing over it (line full 0..28, Retry notice write 225..342 seen, save toasts 1, refused writes 5, on the browser's store: nothing)
+ok   [full] nfl full: the refused save is said in exactly one toast (1 of 1 on screen)
+ok   [full] nfl full: the line and the Retry notice do not overlap (line full 0..28, Retry notice write 225..342 seen, save toasts 1, refused writes 5, on the browser's store: nothing)
+ok   [retry] nfl full: once the browser takes writes again Retry save puts the prospect on the store and the notice goes (line full 0..28, Retry notice none, save toasts 1, refused writes 5, on the browser's store: prospect)
+FAIL [toast] nfl full: the toast that said the save had failed is gone with the notice (Retry pressed 906 ms after the refusal)
+note nfl full: after a Retry that worked the line at the top still says "Storage is full, so progress won't save." (known: Round 1142 never takes a refusal back within a visit)
+ok   [errors] nfl full: no page error and no sideways scroll at 390
+ok   [full] mlb full: the line says full, the Retry notice is up for a write and nothing reached the store (line full 0..28, Retry notice write 225..342 seen, save toasts 1, refused writes 5, on the browser's store: nothing)
+ok   [full] mlb full: the Retry notice is in view on the first screen with nothing over it (line full 0..28, Retry notice write 225..342 seen, save toasts 1, refused writes 5, on the browser's store: nothing)
+ok   [full] mlb full: the refused save is said in exactly one toast (1 of 1 on screen)
+ok   [full] mlb full: the line and the Retry notice do not overlap (line full 0..28, Retry notice write 225..342 seen, save toasts 1, refused writes 5, on the browser's store: nothing)
+ok   [retry] mlb full: once the browser takes writes again Retry save puts the prospect on the store and the notice goes (line full 0..28, Retry notice none, save toasts 1, refused writes 5, on the browser's store: prospect)
+FAIL [toast] mlb full: the toast that said the save had failed is gone with the notice (Retry pressed 906 ms after the refusal)
+note mlb full: after a Retry that worked the line at the top still says "Storage is full, so progress won't save." (known: Round 1142 never takes a refusal back within a visit)
+ok   [errors] mlb full: no page error and no sideways scroll at 390
+ok   [full] nhl full: the line says full, the Retry notice is up for a write and nothing reached the store (line full 0..28, Retry notice write 225..342 seen, save toasts 1, refused writes 5, on the browser's store: nothing)
+ok   [full] nhl full: the Retry notice is in view on the first screen with nothing over it (line full 0..28, Retry notice write 225..342 seen, save toasts 1, refused writes 5, on the browser's store: nothing)
+ok   [full] nhl full: the refused save is said in exactly one toast (1 of 1 on screen)
+ok   [full] nhl full: the line and the Retry notice do not overlap (line full 0..28, Retry notice write 225..342 seen, save toasts 1, refused writes 5, on the browser's store: nothing)
+ok   [retry] nhl full: once the browser takes writes again Retry save puts the prospect on the store and the notice goes (line full 0..28, Retry notice none, save toasts 1, refused writes 5, on the browser's store: prospect)
+FAIL [toast] nhl full: the toast that said the save had failed is gone with the notice (Retry pressed 906 ms after the refusal)
+note nhl full: after a Retry that worked the line at the top still says "Storage is full, so progress won't save." (known: Round 1142 never takes a refusal back within a visit)
+ok   [errors] nhl full: no page error and no sideways scroll at 390
+requests to supabase.co aborted: 4
+control keeptoast: RED AT THE NAMED CHECK (toast); checks red: toast
+playUsCareerSaveSeam: 4 journeys, 28 checks, 4 failed (control keeptoast)
