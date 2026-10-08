@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simClubManagerGathered: node scripts/simClubManagerGathered.mjs
+g-onehost: GATHERED_CONTROL=onehost node scripts/simClubManagerGathered.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs
