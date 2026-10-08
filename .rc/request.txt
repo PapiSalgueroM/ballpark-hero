@@ -1,0 +1,9 @@
+#!build
+#!playwright
+#!serial
+# Release AM fixer pass 2, closing check on f20b9762: Codex's own native drivers for the three rounds whose
+# product files the first fixer pass edited after the reviewers had finished (1083 money grouping, 1084 notice
+# copy, 1086 help wording and the locked room).
+sale1083: bash .rc/x/native.sh tycoon-sale-review-artifacts scripts/playTycoonSaleReview1083.mjs --prefetch-fonts-only xvfb
+uscareer1084: bash .rc/x/native.sh us-career-save-recovery-artifacts scripts/qa/usCareerSaveRecovery1084.mjs --prefetch-fonts-only xvfb
+boxing1086: bash .rc/x/native.sh boxing-show-forecast-artifacts scripts/playBoxingShowForecast1086.mjs --prefetch-fonts-only plain
