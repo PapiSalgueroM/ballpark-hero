@@ -1,0 +1,7 @@
+MUT m18: switching off forgets to bump the generation (src/lib/sound.ts)
+  simSound exit=0 | simSound: 158 checks, 0 failed
+  vitest exit=0 | Tests  25 passed (25)
+  build exit=0 | - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+  playSoundGate exit=0 | playSoundGate: 146 checks, 0 failed
+  restored src/lib/sound.ts
+MUT m18 (switching off forgets to bump the generation): SURVIVED simSound, vitest and playSoundGate

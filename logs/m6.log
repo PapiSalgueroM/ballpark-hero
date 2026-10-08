@@ -1,0 +1,8 @@
+MUT m6: stopAll() with no scope leaves scoped sources sounding (src/lib/soundKit.ts)
+  simSound exit=0 | simSound: 158 checks, 0 failed
+  vitest exit=0 | Tests  25 passed (25)
+  build exit=0 | - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+  playSoundGate exit=1 | playSoundGate: 146 checks, 1 failed
+     FAIL hidden: 0 stops for 12 starts (every source cancelled, nothing had sounded)
+  restored src/lib/soundKit.ts
+MUT m6 (stopAll() with no scope leaves scoped sources sounding): KILLED by playSoundGate

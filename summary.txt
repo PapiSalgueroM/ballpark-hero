@@ -1,0 +1,5 @@
+m6 exit=0 184s | MUT m6 (stopAll() with no scope leaves scoped sources sounding): KILLED by playSoundGate
+m8 exit=0 184s | MUT m8 (a hidden tab suspends without stopping what is scheduled): KILLED by playSoundGate
+m7 exit=0 5s | MUT m7 (a scoped hush no longer cancels an ask still waiting on the kit or the context): KILLED by simSound
+m18 exit=0 183s | MUT m18 (switching off forgets to bump the generation): SURVIVED simSound, vitest and playSoundGate
+m23 exit=0 183s | MUT m23 (a moment is scheduled on a context that is not running): SURVIVED simSound, vitest and playSoundGate

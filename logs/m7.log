@@ -1,0 +1,6 @@
+MUT m7: a scoped hush no longer cancels an ask still waiting on the kit or the context (src/lib/sound.ts)
+  simSound exit=1 | simSound: 158 checks, 1 failed
+     FAIL k. two scopes each waiting on a tap, one hushed in the same tick: 2 start (the other's)
+  vitest exit=0 | Tests  25 passed (25)
+  restored src/lib/sound.ts
+MUT m7 (a scoped hush no longer cancels an ask still waiting on the kit or the context): KILLED by simSound
