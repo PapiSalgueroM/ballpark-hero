@@ -1,0 +1,15 @@
+CONTROL count: rewritten in the bundled source or in what is served, never a file on disk
+tables from node: 429 table seasons in the probe, five used: Probe 0 2001 AC Milan (34); Probe 9 2006 Atletico Madrid (38); Probe 14 2032 Man United (38); Probe 26 2011 Man City (38); Probe 33 2009 Fiorentina (38)
+B1) 520 transitions over 4 layouts and 5 seasons; largest deviation at the first frame 232.000 px, at the last 0.000 px; 434 rows entered a compact window
+   B1: 320 compact Probe 0 2001 AC Milan 4>5: AC Milan starts 14.50 px from where it was
+   B1: 320 compact Probe 0 2001 AC Milan 4>5: u6 starts 14.50 px from where it was
+   B1: 320 compact Probe 0 2001 AC Milan 9>10: Inter Milan starts 14.50 px from where it was
+   B1: 320 compact Probe 0 2001 AC Milan 9>10: u8 starts 29.00 px from where it was
+ok   B1. enough transitions were measured (520, floor 400)
+FAIL B1. every row starts within 1 px of where it truly was (4139 did not)
+ok   B1. every row reads as the new table's row from the first frame (0 texts, 0 orders wrong)
+ok   B1. every row ends within 1 px of its place in the still card (0 did not)
+ok   B1. nothing is left on a row after a flight (0 leftovers)
+ok   B1. the box is the same size at the first frame, the last frame and still (0 differed)
+FAIL B1. the largest deviation seen is at most half a pixel, so the 1 px bound is not a rounding accident (232.000 and 0.000)
+playSeasonCentreMotion: 7 checks, 2 failed (control count) (only B1)
