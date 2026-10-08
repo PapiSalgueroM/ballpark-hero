@@ -1,0 +1,19 @@
+A) the fixture is whole
+   recorded from 198e730d8f034c91c7bb8ee58ecc44e20622a25b (not main: src differs from 5b70b05f6df7b15f64b8c5ddf1f4b7d0c7cd4c7f)
+   nfl: 451 clicks, 24 seasons, 15 fixed saves, 685 screen steps
+   nba: 523 clicks, 24 seasons, 15 fixed saves, 705 screen steps
+   mlb: 449 clicks, 24 seasons, 15 fixed saves, 688 screen steps
+   nhl: 415 clicks, 24 seasons, 15 fixed saves, 688 screen steps
+B) the replay: every click, every save, every screen
+   Vitest exit 1, passed [nfl, mlb, nhl], failed [nba]
+   nba click path step 12 (after "hub: 🏆Trophy CaseEmptyNothing in it. Go and win something"): the screen reads "Hub🏆 Trophy Case0 ringsNothing on the shelf yet. Every award you win lands here with the year on it.🎖️ Badges0 of 23🔒NBA championA ring. ", fixture "Hub🏆 Trophy Case0 ringsNothing on the shelf yet. Every award you win lands here with the year on it.🎖️ Badges0 of 21🔒NBA championA rin
+   nba click path step 20 (after "hub: Play the 2026 season"): the save differs first in c.ovr, c.morale, c.seasons, c.rival, c.headlines, c.pendingRivalryEvent; the screen reads "The 2026 seasonGolden State Warriors · age 21 · SGLost in the first round6.9 ppg, 1.5 rpg, 1.0 apg🪑 Still the second unit. The minutes will", fixture "The 2026 seasonGolden State Warriors · age 21 · SGLost the NBA Finals13
+   nba click path step 21 (after "curtain: Continue"): the save differs; the screen reads "🪞 Rivalry💰The Bigger NumberRhys Vasquez signs an extension, and every comment section has already decided it is bigger than yours.Morale -", fixture "Trey Buckets · SGGolden State Warriors2027 · age 22OVR 74$2.5M x3🪑 Second unitThe role questionA beat reporter asks it, politely, the way t"
+  FAIL: the replay exited 1
+  FAIL: the replay passed [nfl, mlb, nhl], not all four sports
+  FAIL: 49 steps differ from the fixture
+
+  If your round meant to change what a US career does, re-record from your tree
+  (node scripts/recordUsBoardFixture.mjs), commit the fixture with the change and say so in the
+  commit. If it did not, the red is a real change: read the first differing step above.
+simUsBoardParity: 3 failures
