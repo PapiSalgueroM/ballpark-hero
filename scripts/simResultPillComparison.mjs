@@ -13,7 +13,8 @@
  * drawn at its WIDEST reachable score and its narrowest (34 cases).
  *
  * WHAT IT CHECKS, each a named check a control proves can fail:
- *   text   the pill reads exactly the score the hook reports
+ *   text   the pill reads exactly the score the hook reports (since Round 1085
+ *          with thousands grouped: 1000 points read "1,000")
  *   fit    the score sits on ONE line inside the pill, the pill keeps its fixed
  *          80px height and stays inside the moment, and the page never scrolls
  *          sideways

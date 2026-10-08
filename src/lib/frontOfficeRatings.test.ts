@@ -213,7 +213,9 @@ describe('NFL opening rating checkpoint', () => {
     }
     expect(inputs.sourceManifest.checkpoint.version).toBe(FO_OPENING_RATING_VERSION);
     expect(inputs.sourceManifest.checkpoint.extraction).toContain('not a raw-CSV refit pipeline');
-    expect(hash(read('scripts/data/nflRosters2026.json'))).toBe(inputs.sourceManifest.retainedOpeningSnapshot.sha256);
+    /* The pin is taken over LF text, which is what the repository stores and a runner checks out,
+       so the owner's CRLF checkout hashes the same (the rule simManagerAppealIsolation's textHash follows). */
+    expect(hash(norm(read('scripts/data/nflRosters2026.json').toString()))).toBe(inputs.sourceManifest.retainedOpeningSnapshot.sha256);
     expect(hash(JSON.stringify(record))).toBe(inputs.sourceManifest.retainedOpeningSnapshot.canonicalJsonSha256);
     expect(hash(norm(read('src/data/frontOfficePlayers.ts').toString()))).toBe(hash(norm(readFileSync(path.join(folder, 'frontOfficePlayers.ts')).toString())));
     const browserDepth = read('src/data/frontOfficeDepth.ts');

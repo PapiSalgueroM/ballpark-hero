@@ -10,6 +10,7 @@
  * one) and its narrowest, so the pill is measured at both ends.
  */
 import { higherLowerScore } from '@/lib/higherLowerScore';
+import { formatNumber } from '@/lib/formatNumber';
 import { loadSave, totals, outcome, pointsFor, rivalFor, ROUNDS, MAX_EXTRA, type RoundResult } from '@/lib/faceOff';
 import { getDailyRankRound, RANK_POINTS_PER_SLOT } from '@/lib/orderTheList';
 import { BOARD_SIZE } from '@/lib/silverwareSort';
@@ -22,7 +23,9 @@ export interface PillCase {
   what: string;
   /** the hook key the page reads (see the stub in the harness) and its fixture */
   fix: Record<string, unknown>;
-  /** the score the hook reports, which the pill must read exactly */
+  /** the text the pill must read exactly: the score the hook reports, with
+   *  thousands grouped the way the shared moment prints a plain number since
+   *  Round 1085 (1000 points read "1,000"; a scoreline or a fraction is as is) */
   expect: string;
 }
 
@@ -136,9 +139,10 @@ export function pillCases(): PillCase[] {
   out.push({ route: '/silverware-sort', what: 'every rung right', fix: { silver: silver([5, 5, 5]) }, expect: '15/15' });
   out.push({ route: '/silverware-sort', what: 'one rung right', fix: { silver: silver([1, 0, 0]) }, expect: '1/15' });
   for (const right of [5, 3, 0] as const) {
-    out.push({ route: '/rank-em', what: `${right} in place`, fix: { rankDaily: rankDaily(right) }, expect: String(right * RANK_POINTS_PER_SLOT) });
+    out.push({ route: '/rank-em', what: `${right} in place`, fix: { rankDaily: rankDaily(right) }, expect: formatNumber(right * RANK_POINTS_PER_SLOT) });
   }
-  out.push({ route: '/hof-or-bust', what: 'the right call, no hints', fix: { hof: hof('hof', 0, 1000) }, expect: '1000' });
+  /* Written out, not formatted, so one case holds the grouped text on its own. */
+  out.push({ route: '/hof-or-bust', what: 'the right call, no hints', fix: { hof: hof('hof', 0, 1000) }, expect: '1,000' });
   out.push({ route: '/hof-or-bust', what: 'the wrong call', fix: { hof: hof('bust', 2, 0) }, expect: '0' });
   return out;
 }
