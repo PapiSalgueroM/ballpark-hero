@@ -1,3 +1,14 @@
+## Round 1099 preparation: distinct ticket facts in the actual rules modal, October 8
+
+Fresh main cd496098 is the base. One added test mounts Stadium Tycoon's
+actual rules modal with a test-owned Premium growth value, making its gate,
+demand and growth facts distinct. A copied source control swaps the gate and
+growth references and must fail only that outcome, while the independent
+purchase baseline passes. All 20 existing outcomes remain strict, with 21
+now required. Product source and the actual policy table are unchanged.
+Remote type/build, outcome/control and reader checks are pending. The
+existing remote checker kit is being used. No local execution or READY claim.
+
 ## Release AL LIVE, 2026-10-08 05:38 EDT: ten Codex rounds, playable moments, and a translated page no longer crashes
 
 Claude lane (session F: session E died when the PC was restarted at 00:03 EDT with this release's gate running).
