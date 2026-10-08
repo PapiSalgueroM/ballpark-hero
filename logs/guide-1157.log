@@ -1,0 +1,28 @@
+identity exit=0
+
+Written by John Gilmore and Jay Fenlason.
+xz (XZ Utils) 5.4.5
+liblzma 5.4.5
+locked-packages exit=0
+Verified 521 actual installed locked package versions.
+type-before exit=0
+keywords exit=0
+searchKeywords.json: 133 of 133 games covered, 1215 keywords, 10969 bytes
+  filters: tf >= 2, df <= 33 of 133 guides, max 12 per game
+  guide source hash 84c5ab61f28da89d
+refresh-1 exit=0
+simGuideHeadings: refreshed /nba-my-career from its actual guide (howToPlay 19, rules 14, example 4, tips 3)
+refresh-2 exit=0
+simGuideHeadings: refreshed /nfl-my-career from its actual guide (howToPlay 17, rules 15, example 4, tips 4)
+refresh-3 exit=0
+simGuideHeadings: refreshed /mlb-my-career from its actual guide (howToPlay 15, rules 14, example 4, tips 3)
+refresh-4 exit=0
+simGuideHeadings: refreshed /nhl-my-career from its actual guide (howToPlay 16, rules 14, example 4, tips 4)
+refresh-5 exit=0
+simGuideHeadings: refreshed /build-your-xi from its actual guide (howToPlay 5, rules 8, example 2, tips 4)
+type-after exit=0
+generator-receipts.mjs: OK
+derived-receipts exit=0
+Guide generator receipt1157: PASS, actual two outputs, five refreshed routes, all other frozen records held and two effective copied-output controls.
+closing exit=0
+Guide generator1157 strict label: failed=0, complete=1, source=bdcb30031521d3fd78e6cd50fe826a8f73a3ce20, request=335872c27091ab8ee5bde0948b18f1becd85d8ce. Generator delivery only.
