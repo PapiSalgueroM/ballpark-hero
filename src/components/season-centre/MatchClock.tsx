@@ -115,12 +115,15 @@ export function MatchClock({ game, clock, usName, themName, speed, paused, reduc
   const ag = game.home ? them : us;
   return (
     <div data-match-clock data-minute={shown} data-score={`${us}-${them}`} data-held={held ? 'true' : undefined}>
+      {/* Round 1046: on a phone the score stays at the top of the stage when the stage moves down to show the table */}
+      <div className="sticky top-0 z-10 bg-background md:static" data-score-bar>
       <div className="flex items-center justify-between gap-2 rounded-xl bg-muted/30 px-3 py-2">
         <span className="min-w-0 flex-1 truncate text-sm font-bold">{homeName}</span>
         <span key={`${hg}-${ag}`} className={`${shown > 0 && !instant ? 'cm-slam' : ''} shrink-0 text-xl font-black tabular-nums`} data-score-bug>
           {hg}-{ag}
         </span>
         <span className="min-w-0 flex-1 truncate text-right text-sm font-bold">{awayName}</span>
+      </div>
       </div>
       <div className="mt-1 flex items-center justify-between text-xs text-muted-foreground">
         <span className="tabular-nums" data-clock-minute>{done ? 'FT' : clock.label(shown)}</span>

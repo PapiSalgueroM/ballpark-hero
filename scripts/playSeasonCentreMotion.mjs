@@ -281,8 +281,10 @@ const STEPS = [1, 2, 3, 5, 10, 'rest'];
    row (416 of 454 together). The floor is the lowest season less ten points: it is there to catch a table that
    has stopped sliding, and a compact window of five rows really does sit still about one week in ten. */
 const B2_FLOOR = 0.75;
-/* C1: how many of the nine advances from matchday 2 to 10 must slide on the built site (set from the measured count, see the header) */
-const C1_FLOOR = 5;
+/* C1: how many of the nine advances from matchday 2 to 10 must slide on the built site. Measured 2026-10-08: 9 of 9 on the
+   save the harness makes (it is seeded, so that repeats); part B's seasons slide on 85 to 97 percent of steps, so 6 of
+   9 is a floor a healthy table clears with room and a table that has stopped sliding cannot. */
+const C1_FLOOR = 6;
 const stat = { transitions: 0, maxFirst: 0, maxLast: 0, step1: 0, step1Moved: 0, rowsMoved: 0, mounts: 0, mountAnims: 0, pre: 0, preAnims: 0, entered: 0, bySeason: SEASONS.map(() => [0, 0]) };
 const bad = { first: 0, text: 0, order: 0, last: 0, left: 0, box: 0 };
 
@@ -634,13 +636,13 @@ if (ONLY.length === 0 || ONLY.some(x => x.startsWith('C'))) {
       ['className:"h-11 shrink-0 sm:flex-1 rounded-lg bg-emerald-600 text-sm font-bold text-black hover:bg-emerald-500"', 'className:"h-11 flex-1 rounded-lg bg-emerald-600 text-sm font-bold text-black hover:bg-emerald-500"'],
       ['className:"h-11 shrink-0 sm:flex-1 rounded-lg border border-border text-sm font-semibold hover:bg-muted/40"', 'className:"h-11 flex-1 rounded-lg border border-border text-sm font-semibold hover:bg-muted/40"'],
     ],
-    lock: [['.style.overflow="hidden"', '.style.overflow=""']],
+    lock: [['.style.overflow="hidden"', '.style.overflow=""', 'centre']],
     tableview: [['.closest("[data-centre-stage]")', '.closest("[data-centre-stage-off]")']],
   };
   const rewrites = new Map();
   if (SERVED[CONTROL]) {
-    for (const [from, to] of SERVED[CONTROL]) {
-      const holders = chunkWith(from);
+    for (const [from, to, where] of SERVED[CONTROL]) {
+      const holders = where === 'centre' ? [CENTRE_CHUNK].filter(c => jsText[c].includes(from)) : chunkWith(from);
       if (holders.length !== 1 || jsText[holders[0]].split(from).length !== 2) throw new Error(`control refused: ${JSON.stringify(from.slice(0, 60))} is not in the served site exactly once`);
       rewrites.set(holders[0], (rewrites.get(holders[0]) ?? jsText[holders[0]]).replace(from, to));
     }
@@ -843,14 +845,22 @@ if (ONLY.length === 0 || ONLY.some(x => x.startsWith('C'))) {
     await page.click(`[data-replay-row="${HUB.last.at}"]`);
     await page.waitForSelector('[data-kickoff]', { timeout: 30000 });
   };
-  /* the table card against the stage's own box (a phone): whole inside it, with no scroll by the player */
-  const tableInView = page => page.evaluate(() => {
+  /* a phone, at full time: his row and the rows either side of it inside the stage's own box, and the score still on screen, with no scroll by the player */
+  const tableInView = page => page.evaluate(mine => {
     const stage = document.querySelector('[data-centre-stage]');
     const card = stage.querySelector('[data-centre-table]');
     if (!card) return null;
-    const s = stage.getBoundingClientRect(), c = card.getBoundingClientRect();
-    return { ok: c.top >= s.top - 0.5 && c.bottom <= s.bottom + 0.5, over: Math.round(c.bottom - s.bottom), scrolled: Math.round(stage.scrollTop), stage: Math.round(s.height) };
-  });
+    const s = stage.getBoundingClientRect();
+    const rows = [...card.querySelectorAll('[data-club]')];
+    const at = rows.findIndex(r => r.dataset.club === mine);
+    const need = rows.slice(Math.max(0, at - 1), at + 2).map(r => r.getBoundingClientRect());
+    const bug = stage.querySelector('[data-score-bug]')?.getBoundingClientRect();
+    return {
+      ok: at >= 0 && need.every(r => r.top >= s.top - 0.5 && r.bottom <= s.bottom + 0.5),
+      over: Math.round(Math.max(...need.map(r => r.bottom)) - s.bottom), scrolled: Math.round(stage.scrollTop), stage: Math.round(s.height),
+      score: !!bug && bug.top >= s.top - 0.5 && bug.bottom <= s.bottom + 0.5,
+    };
+  }, MINE);
   const fixtureNames = page => page.evaluate(() => [...document.querySelectorAll('[data-season-centre] [data-fixture-name]')].filter(n => n.getBoundingClientRect().height > 0).map(n => n.getBoundingClientRect().width));
   const errorsSeen = [];
   const geometry = page => page.evaluate(() => `${window.scrollY}|${document.documentElement.scrollWidth}`);
@@ -955,6 +965,7 @@ if (ONLY.length === 0 || ONLY.some(x => x.startsWith('C'))) {
       await p.click('[data-open-season-replays]');
       await p.waitForSelector('[data-season-picker]', { timeout: 30000 });
       await floorsAt(p, `picker ${tag}`);
+      await walkerAt(p, `picker ${tag}`);
       if (vw === 390) await shot(p, 'picker-390');
       /* the list scrolls inside its tile; the page behind does not, over the list or over the tile's title */
       const scroll = await (async () => {
@@ -992,7 +1003,9 @@ if (ONLY.length === 0 || ONLY.some(x => x.startsWith('C'))) {
         const v = await tableInView(p);
         view.n += 1;
         view.scrolled[tag] = Math.max(view.scrolled[tag] ?? 0, v ? v.scrolled : 0);
-        if (!v || !v.ok) view.out.push(`${tag} matchday ${md}: ${v ? `${v.over} px under a ${v.stage} px stage` : 'no table'}`);
+        if (!v || !v.ok) view.out.push(`${tag} matchday ${md}: ${v ? `his row or a neighbour is ${v.over} px under a ${v.stage} px stage` : 'no table'}`);
+        else if (!v.score) view.out.push(`${tag} matchday ${md}: the score left the screen`);
+        if (md === 3) await shot(p, `matchday-full-time-${tag}`);
         const order = await tableNow(p);
         if (order.join() !== compactOf(md).join()) view.out.push(`${tag} matchday ${md}: the compact table is not node's`);
         if (md === 1) await floorsAt(p, `matchday ${tag}`);
@@ -1014,7 +1027,7 @@ if (ONLY.length === 0 || ONLY.some(x => x.startsWith('C'))) {
       const again = await p.waitForSelector('[data-season-resume]', { timeout: 30000 }).then(() => true).catch(() => false);
       check(again, `C3. ${tag}: the chip is still there after a reload`);
       await walkerAt(p, `hub with the chip ${tag}`);
-      if (vw === 390) await shot(p, 'hub-chip-390');
+      if (vw === 390) { await p.evaluate(() => document.querySelector('[data-season-resume]').scrollIntoView({ block: 'center' })); await shot(p, 'hub-chip-390'); }
       const hubWide = await p.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1);
       check(hubWide, `C6. ${tag}: the hub with the chip and three small buttons does not scroll sideways`);
       await p.click('[data-season-resume]');
@@ -1040,7 +1053,7 @@ if (ONLY.length === 0 || ONLY.some(x => x.startsWith('C'))) {
       await floorsAt(p, `review ${tag}`);
       const strip = await p.evaluate(() => ({ bars: document.querySelectorAll('[data-review-form] [data-form-bar]').length, h: document.querySelector('[data-review-form]')?.getBoundingClientRect().height ?? 0 }));
       check(strip.bars === M && Math.abs(strip.h - 56) < 1, `C6. ${tag}: the review's strip has a bar for each of the ${M} league games in a strip 56 px tall (${strip.bars}, ${strip.h})`);
-      if (vw === 390) await shot(p, 'review-390');
+      if (vw === 390) { await p.waitForTimeout(2500); await shot(p, 'review-390'); await p.evaluate(() => document.querySelector('[data-review-form]').scrollIntoView({ block: 'center' })); await shot(p, 'review-strip-390'); }
       check((await stored(p)) === null, `C3. ${tag}: reaching the review clears the kept place`);
       await p.click('[data-centre-exit]');
       await p.waitForSelector('[data-season-centre]', { state: 'detached', timeout: 30000 });
@@ -1074,16 +1087,25 @@ if (ONLY.length === 0 || ONLY.some(x => x.startsWith('C'))) {
       await P.ctx.close();
     }
     for (const o of view.out.slice(0, 6)) console.log(`   C1: ${o}`);
-    check(view.n === 6 && view.out.length === 0, `C1. on a phone the compact table is node's and whole inside the stage at every full time, with no scroll by the player (${view.out.length} of ${view.n} were not; the stage moved itself by up to ${JSON.stringify(view.scrolled)} px)`);
+    check(view.n === 6 && view.out.length === 0, `C1. on a phone the compact table is node's, his row and the rows either side are inside the stage at every full time with no scroll by the player, and the score is still on screen (${view.out.length} of ${view.n} were not; the stage moved itself by up to ${JSON.stringify(view.scrolled)} px)`);
 
     /* ---------- reduced motion: nothing slides, every goal is drawn landed ---------- */
     const R = await openSite(HUB.save, { width: 1280, height: 900, reduced: true });
     await openLatest(R.page);
     await watchers(R.page);
     await clickText(R.page, '▶ Kick off');
-    for (let md = 1; md <= Math.max(6, HUB.goalMd); md += 1) { await fullTime(R.page, md); if (md < Math.max(6, HUB.goalMd)) await playTo(R.page, md + 1); }
+    const stillPitch = { landed: 0, moving: 0 };
+    for (let md = 1; md <= Math.max(6, HUB.goalMd); md += 1) {
+      await fullTime(R.page, md);
+      const now = await R.page.evaluate(() => { const b = document.querySelector('[data-mini-pitch]'); return b ? { phase: b.dataset.pitchPhase, live: b.hasAttribute('data-pitch-live') } : null; });
+      if (now && now.phase === 'net' && !now.live) stillPitch.landed += 1;
+      if (now && (now.live || now.phase === 'plant' || now.phase === 'flight')) stillPitch.moving += 1;
+      if (md < Math.max(6, HUB.goalMd)) await playTo(R.page, md + 1);
+    }
     await R.page.waitForTimeout(300);
-    const quietLog = await R.page.evaluate(() => ({ shifts: window.__shifts, moving: window.__pitchLog.filter(e => e.phase === 'plant' || e.phase === 'flight').length, landed: window.__pitchLog.filter(e => e.phase === 'net').length }));
+    const quietLog = await R.page.evaluate(() => ({ shifts: window.__shifts, moving: window.__pitchLog.filter(e => e.phase === 'plant' || e.phase === 'flight').length }));
+    quietLog.moving += stillPitch.moving;
+    quietLog.landed = stillPitch.landed;
     check(quietLog.shifts === 0 && quietLog.moving === 0 && quietLog.landed >= 1, `C1. under reduced motion the table never slides (${quietLog.shifts}) and every goal is drawn landed (${quietLog.landed} landed, ${quietLog.moving} played)`);
     errorsSeen.push(...R.errors);
     await R.ctx.close();
