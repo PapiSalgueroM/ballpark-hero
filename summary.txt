@@ -1,0 +1,9 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+benefits exit=0 4s | Career yearly support: fictional offline engine fixtures only, no native UI, full career completion or historical-data validation claim.
+digest exit=0 32s |    Duration  31.21s (transform 1.29s, setup 74ms, collect 1.69s, tests 28.51s, environment 407ms, prepare 166ms)
+hub exit=1 39s | Node.js v24.21.0
+tsc exit=0 46s | 
+press2 exit=0 16s | ALL CAREER PRESS WALK CHECKS PASSED
+press3 exit=0 15s | ALL CAREER PRESS WALK CHECKS PASSED
+truth exit=0 6s | simNflTruth: green. Seasons are their real length, awards survive a 16 game schedule, rookies are paid their slot, kickers go in round four or later, sacks come in halves
+press1 exit=1 86s | playCareerPress: 1 failure
