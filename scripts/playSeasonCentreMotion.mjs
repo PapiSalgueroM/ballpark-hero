@@ -870,8 +870,12 @@ if (ONLY.length === 0 || ONLY.some(x => x.startsWith('C'))) {
           const r = el.getBoundingClientRect();
           const x = r.left + r.width / 2, y = r.top + r.height / 2;
           if (x < b.left || x > b.right || y < b.top || y > b.bottom) return false;
+          /* the pitch's parts ignore the pointer, so a hit test walks past them: let this one be hit for the test, and see whether it comes out on top of the bar */
+          const was = el.style.pointerEvents;
+          el.style.pointerEvents = 'auto';
           const top = document.elementFromPoint(x, y);
-          return !top || !top.closest('[data-score-bar]');
+          el.style.pointerEvents = was;
+          return !!top && (top === el || el.contains(top));
         }).length;
       })(),
     };
