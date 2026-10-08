@@ -1,0 +1,17 @@
+build exit=0 20s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+vitest-round exit=0 12s |    Duration  12.04s (transform 3.39s, setup 393ms, collect 7.35s, tests 12.24s, environment 2.88s, prepare 679ms)
+truth exit=0 7s | simNflTruth: green. Seasons are their real length, awards survive a 16 game schedule, rookies are paid their slot, kickers go in round four or later, sacks come in halves
+truth-oldpay exit=0 6s | simNflTruth control oldpay: green. Section 2 went red (35720 findings) and nothing else did, so this harness works.
+truth-swap exit=0 7s | simNflTruth control swap: green. Section 2 went red (2 findings) and nothing else did, so this harness works.
+digest exit=0 34s |    Duration  34.22s (transform 1.35s, setup 55ms, collect 1.88s, tests 31.26s, environment 433ms, prepare 229ms)
+simNoRivalNames exit=0 11s | No rival product names found. 0 findings.
+tsc exit=0 52s | 
+vitest-new exit=0 4s |    Duration  3.30s (transform 1.54s, setup 145ms, collect 3.84s, tests 1.77s, environment 916ms, prepare 252ms)
+simHarnessAnchors exit=0 25s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+walk-seventeen exit=0 85s | playNflTruth control seventeen: all 4 guarded checks fired (mutations landed: {"ledger2005":16})
+walk1 exit=0 84s | playNflTruth: green. A kicker goes late and is paid his slot, throwback seasons are 16 games, the bank stops at zero on load, and sacks come in halves.
+walk2 exit=0 85s | playNflTruth: green. A kicker goes late and is paid his slot, throwback seasons are 16 games, the bank stops at zero on load, and sacks come in halves.
+walk3 exit=0 88s | playNflTruth: green. A kicker goes late and is paid his slot, throwback seasons are 16 games, the bank stops at zero on load, and sacks come in halves.
+walk4 exit=0 87s | playNflTruth: green. A kicker goes late and is paid his slot, throwback seasons are 16 games, the bank stops at zero on load, and sacks come in halves.
+walk5 exit=0 85s | playNflTruth: green. A kicker goes late and is paid his slot, throwback seasons are 16 games, the bank stops at zero on load, and sacks come in halves.
+walk6 exit=0 83s | playNflTruth: green. A kicker goes late and is paid his slot, throwback seasons are 16 games, the bank stops at zero on load, and sacks come in halves.

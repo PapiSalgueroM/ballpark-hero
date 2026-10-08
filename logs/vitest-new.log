@@ -1,0 +1,79 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/nflTruthRules1104.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 264[2mms[22m[39m
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mopens each opted-in career guide and remembers only its dismissal
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mNFL My Career shows slot pay, the kicker rule, the 16 game throwback and the bank, once each
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mthe NBA, MLB and NHL pages show the bank line once
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mopens each opted-in career guide and remembers only its dismissal
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mthe NBA, MLB and NHL pages show the bank line once
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mopens each opted-in career guide and remembers only its dismissal
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/usCareerHelpRules1104.test.tsx[2m > [22m[2mRound 1104: the changed rules are on the "?" screen[2m > [22m[2mthe NBA, MLB and NHL pages show the bank line once
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/usCareerHelpRules1104.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 440[2mms[22m[39m
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mopens each opted-in career guide and remembers only its dismissal
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mreturns quietly and reopens the guide without changing career progress
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mreturns quietly and reopens the guide without changing career progress
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2misolates route receipts and ignores a late guide from the previous route
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2misolates route receipts and ignores a late guide from the previous route
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mwaits for usable instructions without recording an unseen guide
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mkeeps blocked-storage guides dismissible and reopenable without changing saves
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mkeeps blocked-storage guides dismissible and reopenable without changing saves
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mkeeps blocked-storage guides dismissible and reopenable without changing saves
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mreuses real instructions for saved season reviews and actual decision results
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mreuses real instructions for saved season reviews and actual decision results
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mreuses real instructions for saved season reviews and actual decision results
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mreuses real instructions for saved season reviews and actual decision results
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/careerEntryGuide.test.tsx[2m > [22m[2mcareer entry guides[2m > [22m[2mleaves default GameHelp manual and independent career bytes unchanged
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/careerEntryGuide.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 1069[2mms[22m[39m
+   [33m[2m✓[22m[39m career entry guides[2m > [22mopens each opted-in career guide and remembers only its dismissal [33m 542[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m17 passed[39m[22m[90m (17)[39m
+[2m   Start at [22m 11:22:47
+[2m   Duration [22m 3.30s[2m (transform 1.54s, setup 145ms, collect 3.84s, tests 1.77s, environment 916ms, prepare 252ms)[22m
+

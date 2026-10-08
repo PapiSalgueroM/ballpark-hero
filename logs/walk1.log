@@ -1,0 +1,47 @@
+1) a 2005 throwback kicker, quick start, at 390 by 844
+  PASS  the save is a throwback kicker (K, y2005, pick 132, $0.4M a year)
+  PASS  no kicker goes before round four: pick 132
+  PASS  the draft card names the pick the save holds (pick 132)
+  PASS  the hub's contract chip reads $0.4M x4
+  PASS  a late pick is paid slot money in 2005 dollars: $0.4M a year
+  PASS  no sideways scroll on the hub at 390 wide
+  PASS  three seasons or more were played (3 presses, 3 season lines: 2005, 2006, 2007)
+  PASS  no throwback season is longer than 16 games (16, 16, 16)
+  PASS  every throwback season the engine did not call hurt is exactly 16 games, and there is one (16, 16, 16)
+1) a 2005 throwback kicker, quick start, at 1280 by 900
+  PASS  the save is a throwback kicker (K, y2005, pick 130, $0.4M a year)
+  PASS  no kicker goes before round four: pick 130
+  PASS  the draft card names the pick the save holds (pick 130)
+  PASS  the hub's contract chip reads $0.4M x4
+  PASS  a late pick is paid slot money in 2005 dollars: $0.4M a year
+  PASS  no sideways scroll on the hub at 1280 wide
+  PASS  three seasons or more were played (3 presses, 3 season lines: 2005, 2006, 2007)
+  PASS  no throwback season is longer than 16 games (16, 16, 16)
+  PASS  every throwback season the engine did not call hurt is exactly 16 games, and there is one (16, 16, 16)
+2) the bank on load, at 390 by 844
+  PASS  a played save at -0.4M opens on a Bank tile of $0M (it reads $0M)
+  PASS  opening it again changes nothing (it reads $0M)
+  PASS  the same save with no summer marker is rebuilt the Round 422 way, $4.2M (it reads $4.2M)
+  PASS  no sideways scroll on the hub at 390 wide
+2) the bank on load, at 1280 by 900
+  PASS  a played save at -0.4M opens on a Bank tile of $0M (it reads $0M)
+  PASS  opening it again changes nothing (it reads $0M)
+  PASS  the same save with no summer marker is rebuilt the Round 422 way, $4.2M (it reads $4.2M)
+  PASS  no sideways scroll on the hub at 1280 wide
+3) an edge rusher today, at 390 by 844
+  PASS  three seasons or more were played (3 presses, 3 season lines)
+  PASS  no season today is longer than 17 games (17, 17, 17)
+  PASS  every season today the engine did not call hurt or a bench year is exactly 17 games, and there is one (17, 17, 17)
+  PASS  every sack total is a whole or a half (21.5, 21, 19)
+  PASS  and at least one season had a sack, so the check read something
+3) an edge rusher today, at 1280 by 900
+  PASS  three seasons or more were played (3 presses, 3 season lines)
+  PASS  no season today is longer than 17 games (17, 17, 17)
+  PASS  every season today the engine did not call hurt or a bench year is exactly 17 games, and there is one (17, 17, 17)
+  PASS  every sack total is a whole or a half (19, 19, 18)
+  PASS  and at least one season had a sack, so the check read something
+4) the page itself
+  PASS  no page errors on the walk (clean; 0 blocked request errors set aside)
+
+
+playNflTruth: green. A kicker goes late and is paid his slot, throwback seasons are 16 games, the bank stops at zero on load, and sacks come in halves.
