@@ -1,0 +1,15 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/clubManagerShootoutOrder.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerShootoutTile.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 409[2mms[22m[39m
+[90mstderr[2m | src/test/managerMatchPlans.test.tsx[2m > [22m[2mClub Manager saved match plans[2m > [22m[2mshows the worked example and current assignments then restores focus when the plan tile closes
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/managerMatchPlans.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 1070[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m28 passed[39m[22m[90m (28)[39m
+[2m   Start at [22m 11:37:36
+[2m   Duration [22m 3.90s[2m (transform 1.63s, setup 207ms, collect 5.53s, tests 1.50s, environment 1.17s, prepare 347ms)[22m
+

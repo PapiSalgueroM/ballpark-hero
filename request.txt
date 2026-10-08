@@ -1,0 +1,27 @@
+sco-s0: CM_SHOOTOUT_ARTIFACTS=$TMP/art node scripts/simCmShootoutOrder.mjs
+sco-s1: SIM_SEED=1 CM_SHOOTOUT_ARTIFACTS=$TMP/art node scripts/simCmShootoutOrder.mjs
+sco-s2: SIM_SEED=2 CM_SHOOTOUT_ARTIFACTS=$TMP/art node scripts/simCmShootoutOrder.mjs
+sco-s3: SIM_SEED=3 CM_SHOOTOUT_ARTIFACTS=$TMP/art node scripts/simCmShootoutOrder.mjs
+sco-s4: SIM_SEED=4 CM_SHOOTOUT_ARTIFACTS=$TMP/art node scripts/simCmShootoutOrder.mjs
+sco-s5: SIM_SEED=5 CM_SHOOTOUT_ARTIFACTS=$TMP/art node scripts/simCmShootoutOrder.mjs
+ctl-ignoreorder: CM_SHOOTOUT_CONTROL=ignoreorder CM_SHOOTOUT_ARTIFACTS=$TMP/art node scripts/simCmShootoutOrder.mjs
+ctl-noskip: CM_SHOOTOUT_CONTROL=noskip CM_SHOOTOUT_ARTIFACTS=$TMP/art node scripts/simCmShootoutOrder.mjs
+ctl-nocap: CM_SHOOTOUT_CONTROL=nocap CM_SHOOTOUT_ARTIFACTS=$TMP/art node scripts/simCmShootoutOrder.mjs
+ctl-unsetpath: CM_SHOOTOUT_CONTROL=unsetpath CM_SHOOTOUT_ARTIFACTS=$TMP/art node scripts/simCmShootoutOrder.mjs
+ctl-ownkeeper: CM_SHOOTOUT_CONTROL=ownkeeper CM_SHOOTOUT_ARTIFACTS=$TMP/art node scripts/simCmShootoutOrder.mjs
+ctl-wrongkeeper: CM_SHOOTOUT_CONTROL=wrongkeeper CM_SHOOTOUT_ARTIFACTS=$TMP/art node scripts/simCmShootoutOrder.mjs
+ctl-nooppkeeper: CM_SHOOTOUT_CONTROL=nooppkeeper CM_SHOOTOUT_ARTIFACTS=$TMP/art node scripts/simCmShootoutOrder.mjs
+ctl-oppworst: CM_SHOOTOUT_CONTROL=oppworst CM_SHOOTOUT_ARTIFACTS=$TMP/art node scripts/simCmShootoutOrder.mjs
+ctl-thinside: CM_SHOOTOUT_CONTROL=thinside CM_SHOOTOUT_ARTIFACTS=$TMP/art node scripts/simCmShootoutOrder.mjs
+ctl-nomakeup: CM_SHOOTOUT_CONTROL=nomakeup CM_SHOOTOUT_ARTIFACTS=$TMP/art node scripts/simCmShootoutOrder.mjs
+simExtraTime: node scripts/simExtraTime.mjs
+simClubManager: node scripts/simClubManager.mjs
+simClubManagerSave: node scripts/simClubManagerSave.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs
+simLiveMatch: node scripts/simLiveMatch.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+vitest: node_modules/.bin/vitest run src/test/clubManagerShootoutOrder.test.ts src/test/clubManagerShootoutTile.test.tsx src/test/managerMatchPlans.test.tsx --testTimeout=300000 --hookTimeout=120000
