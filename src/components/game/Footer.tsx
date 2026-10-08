@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { ReportSiteIssue } from '@/components/game/ReportSiteIssue';
 import { ThemeToggle } from '@/components/layout/ThemeToggle';
 import { HUB_NAV } from '@/lib/sportHubNav';
+import { safeLocalStorage } from '@/lib/safeStorage';
 
 /* Round 285: every visitor gets a way back to the cookie banner. Consent that
    can be given in one click and withdrawn only by finding the browser's site
@@ -11,7 +12,7 @@ import { HUB_NAV } from '@/lib/sportHubNav';
    index.html only loads the ad script when the stored answer is 'accepted', so
    a reload with no answer is a page with no advertising code on it. */
 function resetCookieChoice() {
-  try { localStorage.removeItem('cookie-consent'); } catch { /* storage blocked: nothing was stored */ }
+  try { safeLocalStorage.removeItem('cookie-consent'); } catch { /* nothing was stored */ }
   window.location.reload();
 }
 
