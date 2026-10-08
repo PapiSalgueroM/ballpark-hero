@@ -98,7 +98,7 @@
    budget, table and calendar as the file holds them, 26 leagues before its
    summer and 27 after, and a second summer ran. Plain run green, exit 0.
    Each control exit 1 with failures in its own section and no other:
-   invented A 1, onehost A 1, wiki A 1, stale A 1, unlisted A 1, offcurve
+   invented A 1, onehost A 3, wiki A 1, stale A 1, unlisted A 1, offcurve
    B 1, samehost C 1, noflag C 2, twice C 2, keeper C 1, trap D 3, nojoin
    E 1, genlist E 2, oldsave G 1. A control that fires nothing, or
    anything outside its section, exits 3 and says so.
