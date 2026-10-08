@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/soccerCareerLeagueBand.test.ts src/lib/soccerCareerLeague.test.ts src/lib/soccerCareerLeagueSeasons.test.ts --testTimeout=300000 --hookTimeout=120000
+simCareerFacts: node scripts/simCareerFacts.mjs
+ctl-facts: SIM_CAREER_FACTS_CONTROL=onemembership node scripts/simCareerFacts.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+world0: node scripts/simCareerLeagueWorld.mjs
+simCareerClubPool: node scripts/simCareerClubPool.mjs
+simManagerCareer: node scripts/simManagerCareer.mjs
