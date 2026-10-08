@@ -1,0 +1,151 @@
+
+##### 390 by 844, reduced motion off
+      QB: Fernando Mendoza 82e, Kirk Cousins 71, Aidan O'Connell 69
+PASS  390-motion fresh QB: every row prints a number (3 rows)
+      QB rows in rating order: true; rows past the right edge: 0; clipped rows: 0
+      RB: Ashton Jeanty 79, Mike Washington Jr. 70e, Dylan Laube 68, Connor Heyward 63e
+PASS  390-motion fresh RB: every row prints a number (4 rows)
+      RB rows in rating order: true; rows past the right edge: 0; clipped rows: 0
+PASS  390-motion fresh RB: Jeanty 79 leads, Heyward 63e under him (row 4 of 4)
+      legend: OVR is a simulation estimate. Opening evidence: 2023 to 2025. e: limited evidence. Later changes come from this save; contracts are fictional.
+      WR: Tre Tucker 80, Jalen Nailor 78, Cody White 72, Dareke Young 71, Jack Bech 70, Malik Benson 69e
+PASS  390-motion fresh WR: every row prints a number (6 rows)
+      WR rows in rating order: true; rows past the right edge: 0; clipped rows: 0
+      TE: Brock Bowers 91, Michael Mayer 70, Ian Thomas 69
+PASS  390-motion fresh TE: every row prints a number (3 rows)
+      TE rows in rating order: true; rows past the right edge: 0; clipped rows: 0
+PASS  390-motion fresh franchise: no horizontal overflow
+      a fresh save holds Jeanty as {"ovr":79,"lineage":{"modelVersion":"nfl-v2.3-2026-10-08","originKey":"LV|Ashton Jeanty|RB","openingOvr":79,"basis":"production","partial":false}}
+PASS  390-motion a franchise started today saves the new model version (nfl-v2.3-2026-10-08)
+PASS  390-motion old save: no unusable save notice
+      old save RB shelf: Connor Heyward 77, Mike Washington Jr. 70e, Dylan Laube 68, Ashton Jeanty 65
+PASS  390-motion old save: the running backs print the SAVED numbers (Ashton Jeanty 65, Connor Heyward 77, Dylan Laube 68, Mike Washington Jr. 70)
+PASS  390-motion old save: after opening it the stored Jeanty is still 65 with lineage {"modelVersion":"nfl-v2.2-2026-10-02","originKey":"LV|Ashton Jeanty|RB","openingOvr":65,"basis":"production","partial":false} (now 65)
+FAIL  390-motion: the how to play line with the worked example is on /front-office
+      help buttons found on /front-office: 1
+      what's new entry: null
+FAIL  390-motion: the What's New entry is on the page
+PASS  390-motion whats-new: no horizontal overflow
+      setup copy: Then your offense runs the gauntlet: five knockout rounds against opposition rated 79 up to 97. A level game goes to overtime, and another if it is still level.
+      pick 1: 91 QB Matthew Stafford [Los Angeles Rams] | 88 QB Dak Prescott [Dallas Cowboys] | 82 QB Sam Darnold [Seattle Seahawks] | 79 QB Kyler Murray [Minnesota Vikings] | 73 QB Bryce Young [Carolina Panthers]
+      pick 2: 95 RB Derrick Henry [Baltimore Ravens] | 85 RB Bucky Irving [Tampa Bay Buccaneers] | 81 RB Samaje Perine [Cincinnati Bengals] | 76 RB Woody Marks [Houston Texans] | 67 RB Kaleb Johnson [Green Bay Packers]
+      pick 3: 94 RB De'Von Achane [Miami Dolphins] | 85 RB David Montgomery [Houston Texans] | 84 RB Kenneth Walker III [Kansas City Chiefs] | 79 RB Ashton Jeanty [Las Vegas Raiders] | 69 RB Jaylen Wright [Miami Dolphins]
+      pick 4: 95 WR Jaxon Smith-Njigba [Seattle Seahawks] | 89 WR Jaylen Waddle [Denver Broncos] | 83 WR Rome Odunze [Chicago Bears] | 77 WR Jerry Jeudy [Cleveland Browns] | 70 WR Jack Bech [Las Vegas Raiders]
+      pick 5: 94 WR Nico Collins [Houston Texans] | 87 WR Justin Jefferson [Minnesota Vikings] | 83 WR Chris Godwin Jr. [Tampa Bay Buccaneers] | 77 WR Darnell Mooney [New York Giants] | 70 WR Malik Washington [Miami Dolphins]
+      pick 6: 95 WR Amon-Ra St. Brown [Detroit Lions] | 89 WR Stefon Diggs [Washington Commanders] | 79 WR Ryan Flournoy [Dallas Cowboys] | 77 WR Isaac TeSlaa [Detroit Lions] | 69 WR Adonai Mitchell [New York Jets]
+      pick 7: 93 TE George Kittle [San Francisco 49ers] | 87 TE Travis Kelce [Kansas City Chiefs] | 87 TE Dallas Goedert [Philadelphia Eagles] | 79 TE Pat Freiermuth [Pittsburgh Steelers] | 75 TE Mike Gesicki [Cincinnati Bengals]
+      card classes over 35 cards: {"other":23,"border-zinc-500/50":6,"border-amber-400/60":6}
+      result: null
+      match lines: The Qualifier · they rate 79 || 45 - 3 v Ironbrook Marauders || The Last Sixteen · they rate 83 || 31 - 10 v Port Callahan Voyagers
+PASS  390-motion gauntlet: no horizontal overflow
+PASS  390-motion: no uncaught page error (none)
+      console errors: 0; other hosts asked for and cut: flawuiqbvjobmkfkauhw.supabase.co, fonts.googleapis.com
+
+##### 390 by 844, reduced motion ON
+      QB: Fernando Mendoza 82e, Kirk Cousins 71, Aidan O'Connell 69
+PASS  390-rm fresh QB: every row prints a number (3 rows)
+      QB rows in rating order: true; rows past the right edge: 0; clipped rows: 0
+      RB: Ashton Jeanty 79, Mike Washington Jr. 70e, Dylan Laube 68, Connor Heyward 63e
+PASS  390-rm fresh RB: every row prints a number (4 rows)
+      RB rows in rating order: true; rows past the right edge: 0; clipped rows: 0
+PASS  390-rm fresh RB: Jeanty 79 leads, Heyward 63e under him (row 4 of 4)
+      legend: OVR is a simulation estimate. Opening evidence: 2023 to 2025. e: limited evidence. Later changes come from this save; contracts are fictional.
+      WR: Tre Tucker 80, Jalen Nailor 78, Cody White 72, Dareke Young 71, Jack Bech 70, Malik Benson 69e
+PASS  390-rm fresh WR: every row prints a number (6 rows)
+      WR rows in rating order: true; rows past the right edge: 0; clipped rows: 0
+      TE: Brock Bowers 91, Michael Mayer 70, Ian Thomas 69
+PASS  390-rm fresh TE: every row prints a number (3 rows)
+      TE rows in rating order: true; rows past the right edge: 0; clipped rows: 0
+PASS  390-rm fresh franchise: no horizontal overflow
+      a fresh save holds Jeanty as {"ovr":79,"lineage":{"modelVersion":"nfl-v2.3-2026-10-08","originKey":"LV|Ashton Jeanty|RB","openingOvr":79,"basis":"production","partial":false}}
+PASS  390-rm a franchise started today saves the new model version (nfl-v2.3-2026-10-08)
+      setup copy: Then your offense runs the gauntlet: five knockout rounds against opposition rated 79 up to 97. A level game goes to overtime, and another if it is still level.
+      pick 1: 91 QB Matthew Stafford [Los Angeles Rams] | 85 QB Joe Burrow [Cincinnati Bengals] | 80 QB Jayden Daniels [Washington Commanders] | 79 QB C.J. Stroud [Houston Texans] | 71 QB Cam Ward [Tennessee Titans]
+      pick 2: 94 RB James Cook [Buffalo Bills] | 86 RB Javonte Williams [Dallas Cowboys] | 84 RB Kenneth Walker III [Kansas City Chiefs] | 76 RB Brian Robinson [Atlanta Falcons] | 63 RB Connor Heyward [Las Vegas Raiders]
+      pick 3: 92 RB Kyren Williams [Los Angeles Rams] | 89 RB Saquon Barkley [Philadelphia Eagles] | 83 RB Aaron Jones [Minnesota Vikings] | 79 RB Chris Rodriguez Jr. [Jacksonville Jaguars] | 72 RB Braelon Allen [New York Jets]
+      pick 4: 94 WR George Pickens [Dallas Cowboys] | 87 WR Tetairoa McMillan [Carolina Panthers] | 83 WR Khalil Shakir [Buffalo Bills] | 76 WR Matthew Golden [Green Bay Packers] | 69 WR Jahdae Walker [Chicago Bears]
+      pick 5: 91 WR Zay Flowers [Baltimore Ravens] | 89 WR Jaylen Waddle [Denver Broncos] | 84 WR Jakobi Meyers [Jacksonville Jaguars] | 76 WR Andrei Iosivas [Cincinnati Bengals] | 74 WR Luke McCaffrey [Washington Commanders]
+      pick 6: 95 WR Ja'Marr Chase [Cincinnati Bengals] | 83 WR Rome Odunze [Chicago Bears] | 83 WR Chris Godwin Jr. [Tampa Bay Buccaneers] | 76 WR Cooper Kupp [Seattle Seahawks] | 73 WR Elic Ayomanor [Tennessee Titans]
+      pick 7: 91 TE Tucker Kraft [Green Bay Packers] | 89 TE Sam LaPorta [Detroit Lions] | 87 TE Dallas Goedert [Philadelphia Eagles] | 80 TE Harold Fannin Jr. [Cleveland Browns] | 75 TE Cade Otton [Tampa Bay Buccaneers]
+      card classes over 35 cards: {"other":26,"border-zinc-500/50":6,"border-amber-400/60":3}
+      result: null
+      match lines: The Qualifier · they rate 79 || 24 - 3 v Ironbrook Marauders || The Last Sixteen · they rate 83 || 31 - 10 v Port Callahan Voyagers
+PASS  390-rm gauntlet: no horizontal overflow
+PASS  390-rm: no uncaught page error (none)
+      console errors: 0; other hosts asked for and cut: flawuiqbvjobmkfkauhw.supabase.co, fonts.googleapis.com
+
+##### 1280 by 900, reduced motion off
+      QB: Fernando Mendoza 82e, Kirk Cousins 71, Aidan O'Connell 69
+PASS  1280-motion fresh QB: every row prints a number (3 rows)
+      QB rows in rating order: true; rows past the right edge: 0; clipped rows: 0
+      RB: Ashton Jeanty 79, Mike Washington Jr. 70e, Dylan Laube 68, Connor Heyward 63e
+PASS  1280-motion fresh RB: every row prints a number (4 rows)
+      RB rows in rating order: true; rows past the right edge: 0; clipped rows: 0
+PASS  1280-motion fresh RB: Jeanty 79 leads, Heyward 63e under him (row 4 of 4)
+      legend: OVR is a simulation estimate. Opening evidence: 2023 to 2025. e: limited evidence. Later changes come from this save; contracts are fictional.
+      WR: Tre Tucker 80, Jalen Nailor 78, Cody White 72, Dareke Young 71, Jack Bech 70, Malik Benson 69e
+PASS  1280-motion fresh WR: every row prints a number (6 rows)
+      WR rows in rating order: true; rows past the right edge: 0; clipped rows: 0
+      TE: Brock Bowers 91, Michael Mayer 70, Ian Thomas 69
+PASS  1280-motion fresh TE: every row prints a number (3 rows)
+      TE rows in rating order: true; rows past the right edge: 0; clipped rows: 0
+PASS  1280-motion fresh franchise: no horizontal overflow
+      a fresh save holds Jeanty as {"ovr":79,"lineage":{"modelVersion":"nfl-v2.3-2026-10-08","originKey":"LV|Ashton Jeanty|RB","openingOvr":79,"basis":"production","partial":false}}
+PASS  1280-motion a franchise started today saves the new model version (nfl-v2.3-2026-10-08)
+PASS  1280-motion old save: no unusable save notice
+      old save RB shelf: Connor Heyward 77, Mike Washington Jr. 70e, Dylan Laube 68, Ashton Jeanty 65
+PASS  1280-motion old save: the running backs print the SAVED numbers (Ashton Jeanty 65, Connor Heyward 77, Dylan Laube 68, Mike Washington Jr. 70)
+PASS  1280-motion old save: after opening it the stored Jeanty is still 65 with lineage {"modelVersion":"nfl-v2.2-2026-10-02","originKey":"LV|Ashton Jeanty|RB","openingOvr":65,"basis":"production","partial":false} (now 65)
+FAIL  1280-motion: the how to play line with the worked example is on /front-office
+      help buttons found on /front-office: 1
+      what's new entry: null
+FAIL  1280-motion: the What's New entry is on the page
+PASS  1280-motion whats-new: no horizontal overflow
+      setup copy: Then your offense runs the gauntlet: five knockout rounds against opposition rated 79 up to 97. A level game goes to overtime, and another if it is still level.
+      pick 1: 93 QB Josh Allen [Buffalo Bills] | 86 QB Lamar Jackson [Baltimore Ravens] | 82 QB Caleb Williams [Chicago Bears] | 79 QB Jaxson Dart [New York Giants] | 72 QB Michael Penix Jr. [Atlanta Falcons]
+      pick 2: 95 RB Derrick Henry [Baltimore Ravens] | 86 RB TreVeyon Henderson [New England Patriots] | 82 RB J.K. Dobbins [Denver Broncos] | 79 RB Kyle Monangai [Chicago Bears] | 63 RB Kyle Juszczyk [San Francisco 49ers]
+      pick 3: 94 RB Jahmyr Gibbs [Detroit Lions] | 84 RB Kenneth Walker III [Kansas City Chiefs] | 80 RB Blake Corum [Los Angeles Rams] | 76 RB Woody Marks [Houston Texans] | 73 RB Emari Demercado [Dallas Cowboys]
+      pick 4: 91 WR Drake London [Atlanta Falcons] | 87 WR Michael Wilson [Arizona Cardinals] | 84 WR Keenan Allen [Indianapolis Colts] | 78 WR Devaughn Vele [New Orleans Saints] | 73 WR Elic Ayomanor [Tennessee Titans]
+      pick 5: 94 WR George Pickens [Dallas Cowboys] | 90 WR DeVonta Smith [Philadelphia Eagles] | 81 WR Jordan Addison [Minnesota Vikings] | 77 WR Jerry Jeudy [Cleveland Browns] | 73 WR Calvin Austin III [New York Giants]
+      pick 6: 92 WR Jameson Williams [Detroit Lions] | 87 WR DK Metcalf [Pittsburgh Steelers] | 82 WR Wan'Dale Robinson [Tennessee Titans] | 76 WR Rashod Bateman [Baltimore Ravens] | 63 WR Mason Tipton [New Orleans Saints]
+      pick 7: 95 TE Trey McBride [Arizona Cardinals] | 88 TE Colston Loveland [Chicago Bears] | 80 TE Jake Ferguson [Dallas Cowboys] | 80 TE Oronde Gadsden II [Los Angeles Chargers] | 73 TE Mason Taylor [New York Jets]
+      card classes over 35 cards: {"border-amber-400/60":5,"other":23,"border-zinc-500/50":7}
+      result: null
+      match lines: The Qualifier · they rate 79 || 31 - 3 v Ironbrook Marauders || The Last Sixteen · they rate 83 || 24 - 3 v Port Callahan Voyagers
+PASS  1280-motion gauntlet: no horizontal overflow
+PASS  1280-motion: no uncaught page error (none)
+      console errors: 0; other hosts asked for and cut: flawuiqbvjobmkfkauhw.supabase.co, fonts.googleapis.com
+
+##### 1280 by 900, reduced motion ON
+      QB: Fernando Mendoza 82e, Kirk Cousins 71, Aidan O'Connell 69
+PASS  1280-rm fresh QB: every row prints a number (3 rows)
+      QB rows in rating order: true; rows past the right edge: 0; clipped rows: 0
+      RB: Ashton Jeanty 79, Mike Washington Jr. 70e, Dylan Laube 68, Connor Heyward 63e
+PASS  1280-rm fresh RB: every row prints a number (4 rows)
+      RB rows in rating order: true; rows past the right edge: 0; clipped rows: 0
+PASS  1280-rm fresh RB: Jeanty 79 leads, Heyward 63e under him (row 4 of 4)
+      legend: OVR is a simulation estimate. Opening evidence: 2023 to 2025. e: limited evidence. Later changes come from this save; contracts are fictional.
+      WR: Tre Tucker 80, Jalen Nailor 78, Cody White 72, Dareke Young 71, Jack Bech 70, Malik Benson 69e
+PASS  1280-rm fresh WR: every row prints a number (6 rows)
+      WR rows in rating order: true; rows past the right edge: 0; clipped rows: 0
+      TE: Brock Bowers 91, Michael Mayer 70, Ian Thomas 69
+PASS  1280-rm fresh TE: every row prints a number (3 rows)
+      TE rows in rating order: true; rows past the right edge: 0; clipped rows: 0
+PASS  1280-rm fresh franchise: no horizontal overflow
+      a fresh save holds Jeanty as {"ovr":79,"lineage":{"modelVersion":"nfl-v2.3-2026-10-08","originKey":"LV|Ashton Jeanty|RB","openingOvr":79,"basis":"production","partial":false}}
+PASS  1280-rm a franchise started today saves the new model version (nfl-v2.3-2026-10-08)
+      setup copy: Then your offense runs the gauntlet: five knockout rounds against opposition rated 79 up to 97. A level game goes to overtime, and another if it is still level.
+      pick 1: 93 QB Josh Allen [Buffalo Bills] | 86 QB Lamar Jackson [Baltimore Ravens] | 86 QB Trevor Lawrence [Jacksonville Jaguars] | 75 QB Tyler Shough [New Orleans Saints] | 74 QB Geno Smith [New York Jets]
+      pick 2: 94 RB Jahmyr Gibbs [Detroit Lions] | 86 RB Javonte Williams [Dallas Cowboys] | 82 RB Ty Johnson [Buffalo Bills] | 81 RB Tony Pollard [Tennessee Titans] | 68 RB DJ Giddens [Indianapolis Colts]
+      pick 3: 94 RB De'Von Achane [Miami Dolphins] | 86 RB TreVeyon Henderson [New England Patriots] | 81 RB Tyrone Tracy Jr. [New York Giants] | 77 RB Emanuel Wilson [Seattle Seahawks] | 72 RB Braelon Allen [New York Jets]
+      pick 4: 95 WR Amon-Ra St. Brown [Detroit Lions] | 88 WR Terry McLaurin [Washington Commanders] | 84 WR DJ Moore [Buffalo Bills] | 77 WR Jerry Jeudy [Cleveland Browns] | 73 WR Tory Horton [Seattle Seahawks]
+      pick 5: 92 WR Jameson Williams [Detroit Lions] | 87 WR Justin Jefferson [Minnesota Vikings] | 84 WR Kayshon Boutte [Houston Texans] | 77 WR Jalen McMillan [Tampa Bay Buccaneers] | 73 WR Olamide Zaccheaus [Atlanta Falcons]
+      pick 6: 91 WR Alec Pierce [Indianapolis Colts] | 89 WR Courtland Sutton [Denver Broncos] | 82 WR Ricky Pearsall [San Francisco 49ers] | 79 WR Ryan Flournoy [Dallas Cowboys] | 73 WR Jalen Tolbert [Miami Dolphins]
+      pick 7: 91 TE Tucker Kraft [Green Bay Packers] | 88 TE Colston Loveland [Chicago Bears] | 80 TE Harold Fannin Jr. [Cleveland Browns] | 80 TE AJ Barner [Seattle Seahawks] | 74 TE Greg Dulcich [Miami Dolphins]
+      card classes over 35 cards: {"border-amber-400/60":4,"other":24,"border-zinc-500/50":7}
+      result: null
+      match lines: The Qualifier · they rate 79 || 24 - 3 v Ironbrook Marauders || The Last Sixteen · they rate 83 || 17 - 10 v Port Callahan Voyagers
+PASS  1280-rm gauntlet: no horizontal overflow
+PASS  1280-rm: no uncaught page error (none)
+      console errors: 0; other hosts asked for and cut: flawuiqbvjobmkfkauhw.supabase.co, fonts.googleapis.com
+rvwWalk: 4 FAILURE(S)

@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+saves: node .rc/x/rvwSaves.mjs
+walk: node .rc/x/rvwWalk.mjs
+builderwalk: ENGINES=chromium node scripts/playFoOneRating.mjs
