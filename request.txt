@@ -1,0 +1,46 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/soccerCareerLeagueBand.test.ts src/lib/soccerCareerLeague.test.ts src/lib/soccerCareerLeagueSeasons.test.ts --testTimeout=300000 --hookTimeout=120000
+world0: node scripts/simCareerLeagueWorld.mjs
+world1: SEEDSET=1 node scripts/simCareerLeagueWorld.mjs
+ctl-scotrow: WORLD=0 SIM_LEAGUE_WORLD_CONTROL=scotrow node scripts/simCareerLeagueWorld.mjs
+ctl-rankfive: SIM_LEAGUE_WORLD_CONTROL=rankfive node scripts/simCareerLeagueWorld.mjs
+ctl-flatband: SIM_LEAGUE_WORLD_CONTROL=flatband node scripts/simCareerLeagueWorld.mjs
+ctl-rewrite: SIM_LEAGUE_WORLD_CONTROL=rewrite node scripts/simCareerLeagueWorld.mjs
+ctl-nocanon: SIM_LEAGUE_WORLD_CONTROL=nocanon node scripts/simCareerLeagueWorld.mjs
+ctl-nosize: CAREERS=60 SIM_LEAGUE_WORLD_CONTROL=nosize node scripts/simCareerLeagueWorld.mjs
+ctl-nocadence: CAREERS=60 SIM_LEAGUE_WORLD_CONTROL=nocadence node scripts/simCareerLeagueWorld.mjs
+ctl-keyshift: CAREERS=60 SIM_LEAGUE_WORLD_CONTROL=keyshift node scripts/simCareerLeagueWorld.mjs
+ctl-bogus: SIM_LEAGUE_WORLD_CONTROL=nosuchcontrol node scripts/simCareerLeagueWorld.mjs
+simCareerClubPool: node scripts/simCareerClubPool.mjs
+pool-nosince: SIM_CLUB_POOL_CONTROL=nosince node scripts/simCareerClubPool.mjs
+pool-colourgone: SIM_CLUB_POOL_CONTROL=colourgone node scripts/simCareerClubPool.mjs
+pool-unlisted: SIM_CLUB_POOL_CONTROL=unlisted node scripts/simCareerClubPool.mjs
+pool-nocolor: SIM_CLUB_POOL_CONTROL=nocolor node scripts/simCareerClubPool.mjs
+pool-nobragantino: SIM_CLUB_POOL_CONTROL=nobragantino node scripts/simCareerClubPool.mjs
+pool-stale: SIM_CLUB_POOL_CONTROL=stale node scripts/simCareerClubPool.mjs
+pool-tier: SIM_CLUB_POOL_CONTROL=tier node scripts/simCareerClubPool.mjs
+pool-reread: SIM_CLUB_POOL_CONTROL=reread node scripts/simCareerClubPool.mjs
+pool-uncapped: SIM_CLUB_POOL_CONTROL=uncapped node scripts/simCareerClubPool.mjs
+simCareerFacts: node scripts/simCareerFacts.mjs
+facts-onemembership: SIM_CAREER_FACTS_CONTROL=onemembership node scripts/simCareerFacts.mjs
+facts-twodecisions: SIM_CAREER_FACTS_CONTROL=twodecisions node scripts/simCareerFacts.mjs
+facts-greycolour: SIM_CAREER_FACTS_CONTROL=greycolour node scripts/simCareerFacts.mjs
+simManagerCareer: node scripts/simManagerCareer.mjs
+simCareerDerbies: node scripts/simCareerDerbies.mjs
+simCareerLeagueFinish: node scripts/simCareerLeagueFinish.mjs
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+simCareerAwardsNight: node scripts/simCareerAwardsNight.mjs
+simCareerSocialBrands: node scripts/simCareerSocialBrands.mjs
+simSeasonCentreTable: node scripts/simSeasonCentreTable.mjs
+simSeasonCentreNeutral: node scripts/simSeasonCentreNeutral.mjs
+agree0: SEEDSET=0 node scripts/simSeasonCentreAgreement.mjs
+agree3: SEEDSET=3 node scripts/simSeasonCentreAgreement.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simCareerEras: node scripts/simCareerEras.mjs
+simCareerContinental: node scripts/simCareerContinental.mjs
+poolFresh: node scripts/genCareerClubPool.mjs && git diff --exit-code --stat -- src/data/soccerCareerClubPool.ts && echo the pool file equals a fresh derive
+genLeagueSeasons: node scripts/genCareerLeagueSeasons.mjs --check
+dashes: if grep -rnP "[\x{2013}\x{2014}]" src/lib/soccerCareerLeague.ts src/data/leagueFormat.ts src/data/leagueOddFormats.ts src/data/soccerCareerClubPool.ts src/lib/soccerCareerDerby.ts src/data/clubRivalries.ts src/lib/careerEras.ts scripts/simCareerLeagueWorld.mjs scripts/playCareerLeagueWorld.mjs scripts/lib/careerClubPool.mjs scripts/lib/careerStep.mjs scripts/genCareerClubPool.mjs scripts/data/soccerCareerFacts.json | head -20 | grep . ; then echo DASHES FOUND; exit 1; else echo no dashes in the round files; fi

@@ -1,0 +1,15 @@
+1) eight contiguous windows, 1990 to 2029
+   8 windows, 1990 to 2029, contiguous
+2) every window carries the full league set, minus the two pinned founding exemptions
+   12 canonical leagues, exemptions pinned: MLS before 1996, K League 1 before 2010
+3) era league keys match FALLBACK_CLUBS labels byte for byte
+   12 era league keys, all present among 84 club labels, no near duplicates
+4) the creation picker reaches every window
+   8 picker rows reach all 8 windows, 2005/2010/2015 starts present
+5) the owner named leagues have playable depth, and 1990 has no MLS
+   six named leagues at 3+ clubs, MLS empty in 1990 and 30 strong in 2026
+6) every era star is pinned to the season by season ledger
+   164 star lines, 164 ledger rows, every club derived from its seasons (17 corrected from the old table), 3 current stars agree with the 2026 overlay
+   teeth: exemptions pinned by exact window list, picker parsed from page source, labels byte compared
+
+simCareerEras: all green

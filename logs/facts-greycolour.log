@@ -1,0 +1,21 @@
+
+1. RECORDS: INT_SCORING_RECORDS equals the verified file, both ways
+  18 engine rows, 18 verified rows, 1 held (Senegal)
+
+2. PICKER: every nation on the creation screen, the award only on a verified row
+  134 nations on the picker: 18 can win it on a verified record, 116 cannot win it at all
+
+3. WIRING: the season calls the award, nothing else grants it, no fallback number
+  1 call from the season, after the summer tournament, 1 grant, inside awardAllTimeTopScorer, no fallback
+
+4. LABELS: every HAND_CLUBS league label verified, pinned or listed as unverified
+  188 labels verified across 82 evidence groups (all 2026-27 or 2026), 0 pinned to their old label (ratchet 0), 2 unverified (ratchet 2)
+
+5. PLAYED: seeded careers, the award the season his goals pass HIS nation's record
+  48 careers (seed 1), 1115 full seasons, 47 awards, every one the season his goals passed his own record (24 while abroad, 31 ina tournament season)
+
+6. LEAGUE WORLD: the pool generator and the facts file say the same thing
+  FAIL [6]: colour of Macarthur FC: needs the colour in words and a hex that is not the fallback grey
+  25 leagues, 438 member names, each lineup read from two hosts; 11 with a format read from two hosts; 1 colour(s) in words; 51 shipped, 275 held before 2026, 0 with a first season
+
+control greycolour: section 6 went red as it must (red: 6)
