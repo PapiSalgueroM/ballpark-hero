@@ -1,0 +1,38 @@
+simNflTruth: seed 3, 300 careers a position and seed
+1) seasons are as long as they really were
+   throwback through 2020: 36351 seasons, 0 over 16 games; 22763 healthy starter seasons, 0 not exactly 16
+   throwback from 2021: 1042 healthy starter seasons (0 careers built from 2019 to reach them), 0 not exactly 17
+   2026 careers: 5839 healthy starter seasons, 0 not exactly 17
+1b) a 16 game schedule does not cost a throwback career its awards (five seeds, by position)
+   QB   All-Pros a career 0.090 -> 0.092 (sd 0.019); MVP or DPOY 0.018 -> 0.015; Hall percent 27.1 -> 23.7 (sd 2.7)
+   RB   All-Pros a career 0.089 -> 0.091 (sd 0.021); MVP or DPOY 0.009 -> 0.010; Hall percent 2.5 -> 2.1 (sd 0.6)
+   WR   All-Pros a career 0.127 -> 0.129 (sd 0.023); MVP or DPOY 0.002 -> 0.002; Hall percent 6.0 -> 6.0 (sd 1.3)
+   TE   All-Pros a career 0.064 -> 0.068 (sd 0.021); MVP or DPOY 0.000 -> 0.000; Hall percent 6.2 -> 5.9 (sd 1.5)
+   LB   All-Pros a career 0.084 -> 0.092 (sd 0.017); MVP or DPOY 0.010 -> 0.011; Hall percent 5.7 -> 5.3 (sd 1.1)
+   CB   All-Pros a career 0.092 -> 0.093 (sd 0.027); MVP or DPOY 0.007 -> 0.009; Hall percent 4.7 -> 4.3 (sd 1.1)
+   EDGE All-Pros a career 0.213 -> 0.209 (sd 0.030); MVP or DPOY 0.053 -> 0.051; Hall percent 11.4 -> 11.1 (sd 2.5)
+   K    All-Pros a career 0.225 -> 0.225 (sd 0.023); MVP or DPOY 0.000 -> 0.000; Hall percent 5.0 -> 4.5 (sd 1.3)
+2) rookie pay is the draft slot, and no kicker goes before round four
+   table now (2026): 32 first round rows, 32 two sourced within 2 percent; later rounds 2, 3 held last, 4 held both, 5 held both, 6 held both, 7 held first
+   table y2005: HELD as a whole, paid the now slot times 0.32
+   held values in the tables: 9
+   now: pick 1 14.3M a year, pick 32 4.2M, pick 33 3.3M, pick 97 1.4M, pick 224 1.1M, undrafted 0.9M; 0 rises
+   y2005: pick 1 4.6M a year, pick 32 1.3M, pick 33 1.1M, pick 97 0.5M, pick 224 0.4M, undrafted 0.3M; 0 rises
+   now: 20000 quick starts, 0 not paid their slot; 2500 kickers, 0 before pick 97 (earliest 97); pick 1 is paid 14.3M a year (the old formula paid pick 1 32.8M)
+   y2005: 20000 quick starts, 0 not paid their slot; 2500 kickers, 0 before pick 97 (earliest 97); pick 1 is paid 4.6M a year (the old formula paid pick 1 10.5M)
+   now road to the draft: 4000 kicker prospects, 3030 drafted, 970 undrafted, 0 before pick 97, the busiest pick holds 66
+   y2005 road to the draft: 4000 kicker prospects, 3037 drafted, 963 undrafted, 0 before pick 97, the busiest pick holds 71
+3) sacks come in halves
+   19587 LB and EDGE season lines, 0 not in halves; the engine as found: 15619 of 19587 (79.7 percent)
+4) no receiver passes the record book
+   WR at 99: 3798 healthy seasons, 0 over the cap; the engine as found passed a record (1,964 yards or 149 catches) in 317 of 3798 (8.3 percent)
+   TE at 99: 3697 healthy seasons, 0 over the cap; the engine as found passed the record (1,416 yards) in 24 of 3697 (0.6 percent)
+5) MEASURED, asserted on nothing
+   for a later round (not fixed here): a 95 rated linebacker averages 183 tackles a full season; a 95 rated tight end 1015 yards
+   a 95 rated starter's mean full season today (Round 1104 did not ship the means by rating band): QB 5263 pass yards and 42.2 touchdowns; RB 1964 rush yards; EDGE 19.5 sacks; WR 1534 yards
+   for Round 1123, open market pay at 75/85/95 in now (M a year): QB 21/50.4/79.9, RB 9.9/23.9/37.8, WR 12.7/30.5/48.4, TE 10.5/25.2/39.9, LB 11.1/26.6/42.1, CB 13.3/31.9/50.5, EDGE 16/38.5/61, K 3.9/9.3/14.7
+   for Round 1123, open market pay at 75/85/95 in y2005 (M a year): QB 6.7/16.1/25.6, RB 3.2/7.6/12.1, WR 4.1/9.8/15.5, TE 3.4/8.1/12.8, LB 3.5/8.5/13.5, CB 4.2/10.2/16.1, EDGE 5.1/12.3/19.5, K 1.2/3/4.7
+   for Round 1112, the head to head share of decided years in the throwback, 17 game arm -> now (the rival keeps a 17 game line against a 16 game player): QB 42.0 -> 34.5, RB 25.7 -> 20.6, WR 32.1 -> 25.9, TE 20.9 -> 15.8, LB 0.4 -> 0.1, CB 0.0 -> 0.0, EDGE 0.7 -> 0.3, K 12.6 -> 6.6
+   for Round 1051's owner, the Hall percent by position in the throwback, 17 game arm -> now: QB 27.1 -> 23.7, RB 2.5 -> 2.1, WR 6.0 -> 6.0, TE 6.2 -> 5.9, LB 5.7 -> 5.3, CB 4.7 -> 4.3, EDGE 11.4 -> 11.1, K 5.0 -> 4.5
+
+simNflTruth: green. Seasons are their real length, awards survive a 16 game schedule, rookies are paid their slot, kickers go in round four or later, sacks come in halves, and no receiver passes the record book.

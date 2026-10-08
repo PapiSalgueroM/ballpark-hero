@@ -1,0 +1,41 @@
+#!serve
+#!playwright
+# Round 1104 adversarial review (runner lens), request 1: harness honesty on b39e1d71
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+digest: node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts --testTimeout=1800000 --hookTimeout=120000
+vitest-round: node_modules/.bin/vitest run src/test/usCareerBank.test.ts src/test/usCareerRookieDeal.test.ts src/test/usCareerSmallItems1104.test.ts src/test/usFranchiseYears.test.ts src/test/usSeason.test.ts src/test/usCareerProspect.test.tsx src/test/careerPreDraft.test.tsx --testTimeout=300000 --hookTimeout=120000
+truth: node scripts/simNflTruth.mjs
+truth-seed3: SIM_SEED=3 node scripts/simNflTruth.mjs
+truth-seventeen: TRUTH_CONTROL=seventeen node scripts/simNflTruth.mjs
+truth-nopace: TRUTH_CONTROL=nopace node scripts/simNflTruth.mjs
+truth-oldpay: TRUTH_CONTROL=oldpay node scripts/simNflTruth.mjs
+truth-kicker: TRUTH_CONTROL=kicker node scripts/simNflTruth.mjs
+truth-swap: TRUTH_CONTROL=swap node scripts/simNflTruth.mjs
+truth-tenths: TRUTH_CONTROL=tenths node scripts/simNflTruth.mjs
+truth-nocap: TRUTH_CONTROL=nocap node scripts/simNflTruth.mjs
+bank: node scripts/simUsCareerBank.mjs
+bank-seed4: SIM_SEED=4 node scripts/simUsCareerBank.mjs
+bank-nfl: BANK_CONTROL=nfl node scripts/simUsCareerBank.mjs
+bank-nba: BANK_CONTROL=nba node scripts/simUsCareerBank.mjs
+bank-mlb: BANK_CONTROL=mlb node scripts/simUsCareerBank.mjs
+bank-nhl: BANK_CONTROL=nhl node scripts/simUsCareerBank.mjs
+bank-refill: BANK_CONTROL=refill node scripts/simUsCareerBank.mjs
+bank-nocover: BANK_CONTROL=nocover node scripts/simUsCareerBank.mjs
+banking: node scripts/simCareerBanking.mjs
+banking-nobank: BANKING_CONTROL=nobank node scripts/simCareerBanking.mjs
+parity: node scripts/simCareerParity.mjs
+boardparity: node scripts/simUsBoardParity.mjs
+boardparity-era: US_BOARD_PARITY_CONTROL=era node scripts/simUsBoardParity.mjs
+boardparity-fixture: US_BOARD_PARITY_CONTROL=fixture node scripts/simUsBoardParity.mjs
+deckc: node scripts/simUsCareerDeckC.mjs
+norival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+quotes: node scripts/simNoInventedQuotes.mjs
+conduct: node scripts/simNoInventedConduct.mjs
+names: node scripts/simInventedNames.mjs
+headings: node scripts/simGuideHeadings.mjs
+sitesearch: node scripts/simSiteSearch.mjs
+nflcareer: node scripts/simNflCareer.mjs
+realism: node scripts/simCareerRealism.mjs
+walk: ENGINES=chromium node scripts/playNflTruth.mjs
+walk-seventeen: NFL_TRUTH_WALK_CONTROL=seventeen ENGINES=chromium node scripts/playNflTruth.mjs
