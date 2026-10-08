@@ -30,15 +30,17 @@
            is PRINTED, not judged: one cell of thirty outside (PF rebounds). What is judged for 2003 is the
            unit check: one input drawn 2,000 times at each year gives the two league rows' ratio within 2
            percent.
-       A2  the p99 starter season (never the max) is at or under the league leaders' mean plus one sd:
-           points 33.2 to 33.6 against 34.5, rebounds 13.6 to 13.8 against 15.4, assists 9.6 to 9.8 against 11.4.
+       A2  the p99 starter season (never the max), as the mean over the run's seeds, is at or under the league
+           leaders' mean plus one sd: points 33.2 to 33.5 against 34.5, rebounds 13.5 to 13.7 against 15.4,
+           assists 9.6 to 9.8 against 11.4.
        A3  rookies rated 75 to 79 average 7.9 to 8.1 points (band 7.5 to 11.5). SG and SF starter seasons at 8
            assists: 1.0 to 1.3 percent (band under 2; main 18.5 to 19.2; the brief asked for under 1, which
            would leave the triple double badge to one elite career in thirty). Bench seasons score 46 percent
            of starters' on every seed (band 36 to 56; the brief's 50 to 72 was the old line's, whose flat
            bonus of up to three points paid a bench man the same as a starter). Both the scoring and the
-           assists title in one season: 42 in 30,000 careers (band under 1 in 500; main 1 in 13). Triple
-           double seasons in thirty elite careers a seed: 5, 4, 6, 6, 2 (band an average of 2 a seed).
+           assists title in one season: 42 in 30,000 careers, and 8 in one fleet of 3,000 (band under 1 in
+           250 careers, twice the measured rate and more; main 1 in 13). Triple double seasons in thirty
+           elite careers a seed: 5, 4, 6, 6, 2 (band an average of 2 a seed).
        A4  mean points rise with every rating band at every position (bands of 200 seasons or more).
        A5  nbaStatLineFor draws exactly NBA_LINE_DRAWS times and is pure.
    E   The field in careerAwards.ts is what the fleet lives. Each seed's measured mean within 0.08 of the
@@ -50,7 +52,9 @@
        where Round 1103 shipped it and main's is printed: one grade an award cannot hold both.
    C   The NFL, MLB and NHL careers hash equal to the baseline (under SENSE_PROVE_OTHERS=1 only).
    R, H and B6a compare the mean over the run's seeds with the mean over main's, within three standard errors
-   (heldAt below says why a seed by seed band was thrown away).
+   (heldAt below says why a seed by seed band was thrown away). An award count's error is worked out from how
+   unevenly the award falls over careers, measured in the run: the sd of MVPs a career is 0.82 where Poisson
+   would say 0.56 (All-NBA 2.31 against 1.41, All-Defensive 1.90 against 1.16, Finals MVP 0.46 against 0.39).
 
    NEGATIVE CONTROLS, SIM_NBA_SENSE_CONTROL=<name>. Each swaps one line of SOURCE in memory (a plugin, never a
    file), refuses when its anchor is not there exactly once or the swap changed nothing, and must turn its own
@@ -63,8 +67,9 @@
      nomvpworth  an MVP worth nothing to the legacy score        H red
      oldgrades   four grades back to what they were              B6a red (may: H)
      othersport  one NFL All-Pro grade moved by a hundredth      C red (needs SENSE_PROVE_OTHERS=1)
-   A control is run shrunk and judged: SENSE_JUDGE=1 SENSE_CAREERS=1500 SENSE_SEEDS=1,2, after the plain run
-   at that size is green.
+   A control is run at full size where a full run is cheap (about a minute on a CI runner), or shrunk and
+   judged, SENSE_JUDGE=1 SENSE_CAREERS=1500 SENSE_SEEDS=1,2, after the plain run at that size is green. On
+   2026-10-08 all seven fired as designed at both sizes, each red in its own section and nowhere it may not be.
 
    KNOBS for a builder, none of which may record: SENSE_TRY_SCALE=1.2 (the legacy constant at another value),
    SENSE_FIELD_POP=starters (the field measured on starter seasons only). */
@@ -91,7 +96,7 @@ const norm = s => s.replace(/\r\n/g, '\n');
 const ELITE_TD_FLOOR = 2;
 /* Careers that win an MVP and an All-NBA at least once, percent, as Round 1103 shipped: its five full size
    seeds (6,000 careers each), read on the tree of the pass A gate. */
-const SPREAD_1103 = { everMvp: [18.43, 17.5, 18.03, 19.15, 18.27], everAllNba: [63.23, 64.2, 63.28, 63.13, 63.77] };
+const SPREAD_1103 = { everMvp: [19.05, 18.17, 18.63, 17.98, 18.3], everAllNba: [64.77, 64.1, 63.63, 63.63, 64.02] };
 const E_MEAN_TOL = 0.08;
 const E_SD_TOL = 0.06;
 
@@ -546,7 +551,8 @@ function heldAt(section, main, mainCareers, now, label, kind, whose, careerSd = 
   /* 'share' is a percent of careers; 'share-years' a percent of head to head years (several a career, and a
      career's years lean the same way, so four independent years a career is the floor used); else a count a
      career, whose floor is the larger of Poisson's and the sd over careers this run measured (`careerSd`: an
-     MVP winner tends to win several, so the count is wider than Poisson; the check prints the sd it used). */
+     MVP winner tends to win several, so the count is wider than Poisson: 0.82 against 0.56 measured over 30,000
+     careers; the check prints the sd it used). */
   const floorSd = c => (kind === 'share' ? Math.sqrt(Math.max(1e-9, m0 * (100 - m0)) / c) : kind === 'share-years' ? Math.sqrt(Math.max(1e-9, m0 * (100 - m0)) / (c * 4)) : Math.max(Math.sqrt(Math.max(1e-9, m0)), careerSd) / Math.sqrt(c));
   const sample = Math.sqrt((sdOf(main) ** 2 * main.length + sdOf(now) ** 2 * now.length) / Math.max(1, main.length + now.length - 2));
   const se = Math.sqrt(Math.max(sample, floorSd(base.careers)) ** 2 / main.length + Math.max(sample, floorSd(CAREERS)) ** 2 / now.length);
@@ -706,7 +712,7 @@ if (HAS_LINE) {
   banded('A3', aStats.every(a => a.bench.ratio >= 0.36 && a.bench.ratio <= 0.56), `bench seasons score ${aStats.map(a => (a.bench.ratio * 100).toFixed(0)).join(', ')} percent of starters' (36 to 56): ${aStats.map(a => f1(a.bench.ppg)).join(', ')} points in ${aStats.map(a => f1(a.bench.mpg)).join(', ')} minutes`);
   exact('A3', aStats.every(a => a.decimals.oneDecimal && a.decimals.nonZero >= 10), `every new season's points have one decimal, and ${aStats.map(a => a.decimals.nonZero.toFixed(0)).join(', ')} percent of them a non zero one (at least 10)`);
   /* A count this small is judged on the run's total, never seed by seed. */
-  if (live) { const both = per.reduce((t, m) => t + m.bothTitles, 0); const all = per.reduce((t, m) => t + m.careers, 0); banded('A3', both * 500 < all, `seasons holding both the scoring and the assists title: ${per.map(m => m.bothTitles).join(', ')}, ${both} in ${all} careers (under 1 in 500 careers; main ${base.nba ? base.nba.seeds.map(s => s.m.bothTitles).join(', ') : '?'}, 1 in 13)`); }
+  if (live) { const both = per.reduce((t, m) => t + m.bothTitles, 0); const all = per.reduce((t, m) => t + m.careers, 0); banded('A3', both * 250 < all, `seasons holding both the scoring and the assists title: ${per.map(m => m.bothTitles).join(', ')}, ${both} in ${all} careers (under 1 in 250 careers; main ${base.nba ? base.nba.seeds.map(s => s.m.bothTitles).join(', ') : '?'}, 1 in 13)`); }
   console.log(`  note [A3] 30 points a game: ${aStats.map(a => a.thirty.toFixed(2)).join(', ')} percent of starter seasons; 10 assists: ${aStats.map(a => a.tenAst.toFixed(2)).join(', ')}; triple double seasons in the fleet: ${aStats.map(a => a.tripleDouble).join(', ')}`);
   /* The triple double badge has one man who can reach it on this line, a Point Forward at the very top. Seen
      here, in the elite sweep scripts/simCareerParity.mjs runs for its badge check (rating 93, ceiling 99, a 90
