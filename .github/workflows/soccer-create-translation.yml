@@ -1,0 +1,159 @@
+name: Soccer Career translated creator proof
+
+on:
+  push:
+    branches:
+      - codex/soccer-create-translation-1096
+
+permissions:
+  contents: read
+concurrency:
+  group: soccer-create-translation-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: bash
+    env:
+      ENGINES: chromium
+      TZ: UTC
+      SIM_NETWORK: offline
+      SEO_SPLIT_BASE_REF: HEAD
+      QA_PARENT_ROOT: ${{ runner.temp }}/soccer-create-translation-parent
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Hold actual candidate and guard-only parent sources
+        run: |
+          mkdir -p soccer-create-translation-artifacts/dependencies soccer-create-translation-artifacts/regressions
+          git rev-parse HEAD > soccer-create-translation-artifacts/source-head.txt
+          git rev-parse 'HEAD^{tree}' > soccer-create-translation-artifacts/source-tree.txt
+          git ls-tree -r HEAD > soccer-create-translation-artifacts/source-git-manifest.txt
+          git archive HEAD | gzip > soccer-create-translation-artifacts/source.tar.gz
+          parent=0f0f8426caa83d342f1f6d75f6c7d276584c2643
+          git merge-base --is-ancestor "$parent" HEAD
+          git rev-parse "$parent" > soccer-create-translation-artifacts/parent-head.txt
+          git rev-parse "$parent^{tree}" > soccer-create-translation-artifacts/parent-tree.txt
+          git ls-tree -r "$parent" > soccer-create-translation-artifacts/parent-git-manifest.txt
+          git archive "$parent" | gzip > soccer-create-translation-artifacts/parent-source.tar.gz
+          mkdir -p "$QA_PARENT_ROOT"
+          tar -xzf soccer-create-translation-artifacts/parent-source.tar.gz -C "$QA_PARENT_ROOT"
+          cmp "$QA_PARENT_ROOT/package.json" package.json
+          cmp "$QA_PARENT_ROOT/package-lock.json" package-lock.json
+          cmp "$QA_PARENT_ROOT/src/lib/translateGuard.ts" src/lib/translateGuard.ts
+          cmp "$QA_PARENT_ROOT/scripts/playTranslatedPage.mjs" scripts/playTranslatedPage.mjs
+          printf '%s\n' '${{ github.run_id }}' '${{ github.run_attempt }}' '${{ github.job }}' > soccer-create-translation-artifacts/run.txt
+          cp package.json package-lock.json soccer-create-translation-artifacts/dependencies/
+          sha256sum package.json package-lock.json > soccer-create-translation-artifacts/dependencies/lock-before.sha256
+      - name: Parse preparation before browser work
+        id: parse
+        continue-on-error: true
+        run: node --check scripts/qa/soccerCreateTranslation1096.mjs 2>&1 | tee soccer-create-translation-artifacts/parse.log
+      - name: Install held dependencies and remote browser
+        run: |
+          npm ci 2>&1 | tee soccer-create-translation-artifacts/dependencies/npm-ci.log
+          npm install --no-save playwright 2>&1 | tee soccer-create-translation-artifacts/dependencies/playwright-install.log
+          npx playwright install --with-deps chromium 2>&1 | tee soccer-create-translation-artifacts/dependencies/browser-install.log
+          python -m pip install fonttools pillow 2>&1 | tee soccer-create-translation-artifacts/dependencies/python-install.log
+          ln -s "$PWD/node_modules" "$QA_PARENT_ROOT/node_modules"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import { createHash } from 'node:crypto';
+          const rows=[];
+          for(const name of ['playwright','playwright-core','react','react-dom','esbuild','vite']) {
+            const raw=fs.readFileSync('node_modules/'+name+'/package.json');
+            fs.writeFileSync('soccer-create-translation-artifacts/dependencies/'+name+'-package.json',raw);
+            rows.push({name,version:JSON.parse(raw).version,sha256:createHash('sha256').update(raw).digest('hex')});
+          }
+          fs.writeFileSync('soccer-create-translation-artifacts/dependencies/runtime-packages.json',JSON.stringify(rows,null,2));
+          fs.writeFileSync('soccer-create-translation-artifacts/dependencies/node-versions.json',JSON.stringify(process.versions,null,2));
+          NODE
+      - name: Proper application type gates for both sources
+        id: types
+        continue-on-error: true
+        run: |
+          failed=0
+          node_modules/.bin/tsc --noEmit -p "$QA_PARENT_ROOT/tsconfig.app.json" 2>&1 | tee soccer-create-translation-artifacts/parent-types.log || failed=1
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee soccer-create-translation-artifacts/types.log || failed=1
+          exit "$failed"
+      - name: Build actual guard-only parent
+        id: parentbuild
+        continue-on-error: true
+        run: |
+          failed=0
+          (cd "$QA_PARENT_ROOT" && npm run build) 2>&1 | tee soccer-create-translation-artifacts/parent-build.log || failed=1
+          if [ -d "$QA_PARENT_ROOT/dist" ]; then tar -czf soccer-create-translation-artifacts/parent-build.tar.gz -C "$QA_PARENT_ROOT" dist; fi
+          exit "$failed"
+      - name: Build held candidate
+        id: build
+        continue-on-error: true
+        run: |
+          failed=0
+          npm run build 2>&1 | tee soccer-create-translation-artifacts/build.log || failed=1
+          if [ -d dist ]; then tar -czf soccer-create-translation-artifacts/build.tar.gz dist; fi
+          exit "$failed"
+      - name: Finite parent and candidate native contracts
+        id: native
+        if: ${{ !cancelled() && steps.parse.outcome == 'success' && steps.types.outcome == 'success' && steps.parentbuild.outcome == 'success' && steps.build.outcome == 'success' }}
+        continue-on-error: true
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" timeout --signal=TERM --kill-after=15s 18m node scripts/qa/soccerCreateTranslation1096.mjs 2>&1 | tee soccer-create-translation-artifacts/native.log
+      - name: Existing Soccer Career save and creation regression
+        id: saves
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        continue-on-error: true
+        run: timeout --signal=TERM --kill-after=15s 5m node_modules/.bin/vitest run src/test/soccerCareerSaveRecovery.test.tsx 2>&1 | tee soccer-create-translation-artifacts/regressions/save-recovery.log
+      - name: All twenty built page and source readers
+        id: readers
+        timeout-minutes: 15
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        continue-on-error: true
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings simSeoMetaSplit simHomeCopy simHarnessAnchors; do
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" ONLY="$harness" timeout --signal=TERM --kill-after=15s 3m node scripts/runAllSims.mjs --browser 2>&1 | tee "soccer-create-translation-artifacts/regressions/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Source, shared translator and lockfile remain held
+        id: held
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        run: |
+          git diff --exit-code HEAD -- src scripts .github/workflows package.json package-lock.json
+          git diff --exit-code 0f0f8426caa83d342f1f6d75f6c7d276584c2643 HEAD -- src/lib/translateGuard.ts scripts/playTranslatedPage.mjs src/main.tsx
+          cmp package.json soccer-create-translation-artifacts/dependencies/package.json
+          cmp package-lock.json soccer-create-translation-artifacts/dependencies/package-lock.json
+          sha256sum --check soccer-create-translation-artifacts/dependencies/lock-before.sha256
+          cmp "$QA_PARENT_ROOT/src/lib/translateGuard.ts" src/lib/translateGuard.ts
+          cmp "$QA_PARENT_ROOT/scripts/playTranslatedPage.mjs" scripts/playTranslatedPage.mjs
+      - name: Retain complete proof on success or failure
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: soccer-create-translation-${{ github.run_id }}-${{ github.run_attempt }}
+          path: soccer-create-translation-artifacts/
+          retention-days: 7
+          if-no-files-found: error
+      - name: Require every finite gate
+        if: ${{ always() }}
+        run: |
+          test '${{ steps.parse.outcome }}' = success
+          test '${{ steps.types.outcome }}' = success
+          test '${{ steps.parentbuild.outcome }}' = success
+          test '${{ steps.build.outcome }}' = success
+          test '${{ steps.native.outcome }}' = success
+          test '${{ steps.saves.outcome }}' = success
+          test '${{ steps.readers.outcome }}' = success
+          test '${{ steps.held.outcome }}' = success

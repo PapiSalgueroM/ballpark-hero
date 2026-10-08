@@ -246,9 +246,9 @@ export function FlagFromEmoji({ emoji, size = 20 }: { emoji: string; size?: numb
 export function TextWithFlags({ text, size = 16 }: { text: string; size?: number }) {
   const value = text ?? '';
   const segments = splitFlagSegments(value);
-  if (!segments.some(seg => 'flag' in seg)) return <>{value}</>;
+  if (!segments.some(seg => 'flag' in seg)) return <span key={value}>{value}</span>;
   return (
-    <>
+    <span key={value}>
       {segments.map((seg, i) =>
         'flag' in seg ? (
           <FlagFromEmoji key={i} emoji={seg.flag} size={size} />
@@ -256,6 +256,6 @@ export function TextWithFlags({ text, size = 16 }: { text: string; size?: number
           <span key={i}>{seg.text}</span>
         ),
       )}
-    </>
+    </span>
   );
 }
