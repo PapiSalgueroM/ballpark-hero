@@ -145,6 +145,10 @@
  *     leaves alone).
  *   CM_SHOOTOUT_CONTROL=nomakeup     shootoutRosterSide stops making a thin
  *     roster up. Sections 7a and 7b must go red.
+ *   CM_SHOOTOUT_CONTROL=keeperonfull shootoutRosterSide gives a made up
+ *     keeper to any side without one, a full roster included (Release AM,
+ *     a mutation the review found alive). Section 7a must go red, on its
+ *     keeperless thirteen and nothing else.
  *
  * MEASURED, 2026-10-01, on the default seed and SIM_SEED=1 to 5 (six runs,
  * section 2 is 4000 paired shootouts an arm, 7 to 9 seconds a run):
@@ -222,7 +226,9 @@
  *   nobody twice inside eleven, all marked     all of them in every run             0 of 27 (thinside, nomakeup) all
  *   their kicks by generated men               112 of 141, 134 of 171, 157 of 194,  0 of 142 (thinside)          more than 0
  *                                              176 of 219, 137 of 169, 146 of 185
- *   shootoutRosterSide checks wrong (7a)       0 of 10                              8 (nomakeup), 0 (thinside)   0
+ *   shootoutRosterSide checks wrong (7a)       0 of 11                              8 (nomakeup), 0 (thinside)   0
+ *     (eleven checks since Release AM added the keeperless thirteen; measured on a GitHub runner, 2026-10-08:
+ *      0 wrong as committed, 8 under nomakeup as before, 1 under keeperonfull, 21 seconds a run)
  *
  * Measured once and not asserted, because it is a design fact rather than
  * a check: on the same shootouts (1500 seeds of that cup match, the order
@@ -261,7 +267,7 @@ const BUNDLE = `${TMP}/${TAG}.bundle.mjs`;
 const FIXTURE = `${ROOT}/scripts/data/cmShootoutUnset782.json`;
 
 const CONTROL = process.env.CM_SHOOTOUT_CONTROL || '';
-const KNOWN = ['ignoreorder', 'noskip', 'nocap', 'unsetpath', 'ownkeeper', 'wrongkeeper', 'nooppkeeper', 'oppworst', 'thinside', 'nomakeup'];
+const KNOWN = ['ignoreorder', 'noskip', 'nocap', 'unsetpath', 'ownkeeper', 'wrongkeeper', 'nooppkeeper', 'oppworst', 'thinside', 'nomakeup', 'keeperonfull'];
 if (CONTROL && !KNOWN.includes(CONTROL)) {
   console.error(`CM_SHOOTOUT_CONTROL=${CONTROL} is not a control this harness knows (${KNOWN.join(', ')})`);
   process.exit(2); /* 2, like a runtime error below: a control that never ran must not read as one that fired (1) */
@@ -346,6 +352,11 @@ if (CONTROL) {
       '  if (!side.length) return side;\n',
       '  if (side.length) return side;\n',
       'shootoutRosterSide (a thin roster made up to eleven)');
+  } else if (CONTROL === 'keeperonfull') {
+    engine = swap(engine,
+      "  if (side.length < SHOOTOUT_MAX_ORDER && !side.some(p => p.p === 'GK')) side.push(",
+      "  if (!side.some(p => p.p === 'GK')) side.push(",
+      'shootoutRosterSide (a keeper only for a side short of eleven)');
   }
   const copy = `${TMP}/${TAG}.control.engine.ts`;
   fs.writeFileSync(copy, engine);
@@ -1003,8 +1014,17 @@ section = 7;
   const full = Array.from({ length: 14 }, (_, i) => man(`F${i}`, i === 3 ? 'GK' : 'CM', 60 + ((i * 7) % 14)));
   const fullSide = shootoutRosterSide(full, S);
   check(JSON.stringify(fullSide) === JSON.stringify([...full].sort((a, b) => b.r - a.r).slice(0, 11)), 'a full roster is not simply its best eleven by rating, as it was before');
+  /* Release AM: a full roster with no keeper in it gets nobody added either.
+     The fourteen above has its keeper inside its best eleven, so dropping
+     the "fewer than eleven" test from the keeper line gave a keeperless
+     thirteen a twelfth, made up man and nothing here went red (control
+     keeperonfull). Thirteen ratings, all different, so the order is one. */
+  const keeperless = Array.from({ length: 13 }, (_, i) => man(`N${i}`, 'CM', 58 + ((i * 5) % 13)));
+  const keeperlessSide = shootoutRosterSide(keeperless, S);
+  check(JSON.stringify(keeperlessSide) === JSON.stringify([...keeperless].sort((a, b) => b.r - a.r).slice(0, 11)),
+    `a full roster with no keeper became ${keeperlessSide.length} men with ${madeUp(keeperlessSide).length} generated, not simply its best eleven`);
   check(shootoutRosterSide([], S).length === 0, 'a roster with nobody did not stay empty for shootoutSides to make up');
-  console.log(`   shootoutRosterSide: two names, five without a keeper, ten, a full fourteen and nobody: ${wrong} wrong`);
+  console.log(`   shootoutRosterSide: two names, five without a keeper, ten, a full fourteen, a keeperless thirteen and nobody: ${wrong} wrong`);
 
   /* b) Through the whole match. The first career from BASE_SEED on whose
      first cup tie is against a side with names but no eleven (today that is
