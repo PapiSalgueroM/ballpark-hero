@@ -58,6 +58,7 @@
  */
 import fs from 'node:fs';
 import os from 'node:os';
+import http from 'node:http';
 import zlib from 'node:zlib';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
@@ -160,6 +161,19 @@ if (CONTROL && !['static', 'write', 'count', 'cover', 'playfirst'].includes(CONT
 
 const server = spawn(process.execPath, [path.join(ROOT, 'scripts/lib/hostLikeServer.mjs'), DIST, String(PORT)], { stdio: 'ignore' });
 await new Promise(r => setTimeout(r, 1200));
+{
+  /* The port must be serving THIS build. When another run's server already holds it, ours never binds and
+     the browser would be handed a different tree's chunks (seen 2026-10-08: every check then died on a
+     chunk name this dist does not have). The viewer chunk's bytes are the proof. */
+  const probe = await new Promise(res => {
+    http.get(`${BASE}/assets/${VIEWER}`, r => { const parts = []; r.on('data', c => parts.push(c)); r.on('end', () => res(Buffer.concat(parts))); }).on('error', () => res(null));
+  });
+  if (!probe || Buffer.compare(probe, fs.readFileSync(path.join(DIST, 'assets', VIEWER))) !== 0) {
+    console.error(`playUsSeasonCentre: port ${PORT} is not serving ${DIST} (another server holds the port?). Set PORT to a free one.`);
+    try { server.kill(); } catch { /* gone */ }
+    process.exit(1);
+  }
+}
 const browser = await pw.chromium.launch({ args: ['--no-sandbox', '--no-proxy-server'] });
 let aborted = 0;
 const stop = code => { try { server.kill(); } catch { /* gone */ } process.exit(code); };
