@@ -1,0 +1,14 @@
+tsc exit=0 100s | 
+vitest-own exit=0 4s |    Duration  3.40s (transform 1.43s, setup 375ms, collect 3.68s, tests 910ms, environment 2.34s, prepare 1.09s)
+anchors exit=0 44s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+sense-full exit=1 156s | simNbaAwardsSense: 134 checks, 2 failed (full size), 155s
+c-barfrom exit=1 7s | simNbaAwardsSense: 42 checks, 1 failed (quick run, bands not judged, control barfrom), 7s
+c-titlebar exit=1 6s | simNbaAwardsSense: 42 checks, 1 failed (quick run, bands not judged, control titlebar), 5s
+c-fanvoteera exit=1 7s | simNbaAwardsSense: 42 checks, 1 failed (quick run, bands not judged, control fanvoteera), 7s
+c-shortseason exit=1 6s | simNbaAwardsSense: 42 checks, 1 failed (quick run, bands not judged, control shortseason), 5s
+c-bar62data exit=1 106s | simNbaAwardsSense: 131 checks, 5 failed (full size, control bar62data), 105s
+c-rookieflood exit=3 126s | simNbaAwardsSense: 131 checks, 3 failed (full size, control rookieflood), 126s
+simNbaCareer exit=0 15s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged, rivalry beats honest
+simAwards exit=0 5s | PASS: ALL AWARD SCARCITY CHECKS PASSED
+c-weightdrift exit=1 85s | simNbaAwardsSense: 131 checks, 7 failed (full size, control weightdrift), 85s
+marks exit=0 382s | marks.sh done

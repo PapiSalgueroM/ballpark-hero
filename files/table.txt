@@ -1,0 +1,39 @@
+table rewritten
+    PG: {
+      terms: [{ stat: 'pts', per: 430 }],
+      standout: [
+        { stat: 'pts', from: 31000, to: 38700, label: 'points' },
+        { stat: 'ast', from: 10700, to: 13700, label: 'assists' },
+      ],
+    },
+    SG: {
+      terms: [{ stat: 'pts', per: 430 }],
+      standout: [
+        { stat: 'pts', from: 32500, to: 39900, label: 'points' },
+        { stat: 'reb', from: 7850, to: 9610, label: 'rebounds' },
+        { stat: 'ast', from: 5420, to: 6470, label: 'assists' },
+      ],
+    },
+    SF: {
+      terms: [{ stat: 'pts', per: 430 }],
+      standout: [
+        { stat: 'pts', from: 31800, to: 39900, label: 'points' },
+        { stat: 'reb', from: 10400, to: 11800, label: 'rebounds' },
+        { stat: 'ast', from: 8270, to: 10300, label: 'assists' },
+      ],
+    },
+    PF: {
+      terms: [{ stat: 'pts', per: 430 }],
+      standout: [
+        { stat: 'pts', from: 28700, to: 34100, label: 'points' },
+        { stat: 'reb', from: 11000, to: 13400, label: 'rebounds' },
+      ],
+    },
+    C: {
+      terms: [{ stat: 'pts', per: 430 }],
+      standout: [
+        { stat: 'pts', from: 26700, to: 32200, label: 'points' },
+        { stat: 'reb', from: 15600, to: 18400, label: 'rebounds' },
+      ],
+    },
+
