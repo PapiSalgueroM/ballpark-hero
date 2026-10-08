@@ -1,0 +1,2 @@
+rec: node_modules/.bin/vitest run src/test/seasonCentreSlots.test.tsx -u --testTimeout=300000; cp src/test/__snapshots__/seasonCentreSlots.test.tsx.snap $RC_OUT/; git diff --stat -- src/test/__snapshots__
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
