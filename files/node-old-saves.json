@@ -1,0 +1,303 @@
+{
+ "soccerOutcome": {
+  "youth#0": {
+   "err": null,
+   "steps": 196,
+   "retired": true,
+   "seasons": 22,
+   "leagues": []
+  },
+  "contract_offer#0": {
+   "err": null,
+   "steps": 218,
+   "retired": true,
+   "seasons": 23,
+   "leagues": []
+  },
+  "playing#0": {
+   "err": null,
+   "steps": 194,
+   "retired": true,
+   "seasons": 22,
+   "leagues": []
+  },
+  "newspaper#0": {
+   "err": null,
+   "steps": 195,
+   "retired": true,
+   "seasons": 22,
+   "leagues": []
+  },
+  "season_summary#0": {
+   "err": null,
+   "steps": 214,
+   "retired": true,
+   "seasons": 24,
+   "leagues": []
+  },
+  "ballon_dor#0": {
+   "err": null,
+   "steps": 199,
+   "retired": true,
+   "seasons": 22,
+   "leagues": []
+  },
+  "international_debut#0": {
+   "err": null,
+   "steps": 206,
+   "retired": true,
+   "seasons": 22,
+   "leagues": []
+  },
+  "world_cup#0": {
+   "err": null,
+   "steps": 191,
+   "retired": true,
+   "seasons": 22,
+   "leagues": []
+  },
+  "social_media_action#0": {
+   "err": null,
+   "steps": 204,
+   "retired": true,
+   "seasons": 22,
+   "leagues": []
+  },
+  "random_events#0": {
+   "err": null,
+   "steps": 212,
+   "retired": true,
+   "seasons": 25,
+   "leagues": []
+  },
+  "transfer_window#0": {
+   "err": null,
+   "steps": 181,
+   "retired": true,
+   "seasons": 21,
+   "leagues": []
+  },
+  "moral_dilemma#0": {
+   "err": null,
+   "steps": 164,
+   "retired": true,
+   "seasons": 22,
+   "leagues": []
+  },
+  "rivalry_event#0": {
+   "err": null,
+   "steps": 135,
+   "retired": true,
+   "seasons": 22,
+   "leagues": []
+  },
+  "rehab_choice#0": {
+   "err": null,
+   "steps": 58,
+   "retired": true,
+   "seasons": 21,
+   "leagues": []
+  },
+  "retirement_suggestion#0": {
+   "err": null,
+   "steps": 1,
+   "retired": true,
+   "seasons": 22,
+   "leagues": []
+  },
+  "youth#1": {
+   "err": null,
+   "steps": 203,
+   "retired": true,
+   "seasons": 22,
+   "leagues": []
+  },
+  "contract_offer#1": {
+   "err": null,
+   "steps": 195,
+   "retired": true,
+   "seasons": 22,
+   "leagues": []
+  },
+  "playing#1": {
+   "err": null,
+   "steps": 207,
+   "retired": true,
+   "seasons": 22,
+   "leagues": []
+  },
+  "newspaper#1": {
+   "err": null,
+   "steps": 200,
+   "retired": true,
+   "seasons": 23,
+   "leagues": []
+  },
+  "season_summary#1": {
+   "err": null,
+   "steps": 173,
+   "retired": true,
+   "seasons": 21,
+   "leagues": []
+  },
+  "ballon_dor#1": {
+   "err": null,
+   "steps": 203,
+   "retired": true,
+   "seasons": 22,
+   "leagues": []
+  },
+  "international_debut#1": {
+   "err": null,
+   "steps": 202,
+   "retired": true,
+   "seasons": 23,
+   "leagues": []
+  },
+  "world_cup#1": {
+   "err": null,
+   "steps": 196,
+   "retired": true,
+   "seasons": 23,
+   "leagues": []
+  },
+  "social_media_action#1": {
+   "err": null,
+   "steps": 200,
+   "retired": true,
+   "seasons": 23,
+   "leagues": []
+  },
+  "random_events#1": {
+   "err": null,
+   "steps": 176,
+   "retired": true,
+   "seasons": 21,
+   "leagues": []
+  },
+  "transfer_window#1": {
+   "err": null,
+   "steps": 167,
+   "retired": true,
+   "seasons": 22,
+   "leagues": []
+  },
+  "rivalry_event#1": {
+   "err": null,
+   "steps": 164,
+   "retired": true,
+   "seasons": 21,
+   "leagues": []
+  },
+  "moral_dilemma#1": {
+   "err": null,
+   "steps": 138,
+   "retired": true,
+   "seasons": 22,
+   "leagues": []
+  },
+  "retirement_suggestion#1": {
+   "err": null,
+   "steps": 1,
+   "retired": true,
+   "seasons": 22,
+   "leagues": []
+  }
+ },
+ "cmOutcome": {
+  "Real Madrid": {
+   "onNew": {
+    "played": 18,
+    "kinds": {
+     "match": 18,
+     "window": 1
+    },
+    "err": null,
+    "lastKind": "window",
+    "week": 28,
+    "digest": "{\"w\":28,\"pts\":[[\"Real Madrid\",38],[\"Deportivo La Coruña\",21],[\"Racing Santander\",5],[\"Atlético Madrid\",44],[\"Real Betis\",37],[\"Osasuna\",24],[\"Getafe\",16],[\"Levante\",24],[\"Sevilla\",29],[\"Elche\",25],[\"Celta Vigo\",33],[\"Valencia\",23],[\"Real Sociedad\",26],[\"Barcelona\",55],[\"Villarreal\",28],[\"Málaga\",10],[\"Rayo Vallecano\",23],[\"Espanyol\",24],[\"Athletic Club\",35],[\"Alavés\",22]]}"
+   },
+   "onOld": {
+    "played": 18,
+    "kinds": {
+     "match": 18,
+     "window": 1
+    },
+    "err": null,
+    "lastKind": "window",
+    "week": 28,
+    "digest": "{\"w\":28,\"pts\":[[\"Real Madrid\",38],[\"Deportivo La Coruña\",21],[\"Racing Santander\",5],[\"Atlético Madrid\",44],[\"Real Betis\",37],[\"Osasuna\",24],[\"Getafe\",16],[\"Levante\",24],[\"Sevilla\",29],[\"Elche\",25],[\"Celta Vigo\",33],[\"Valencia\",23],[\"Real Sociedad\",26],[\"Barcelona\",55],[\"Villarreal\",28],[\"Málaga\",10],[\"Rayo Vallecano\",23],[\"Espanyol\",24],[\"Athletic Club\",35],[\"Alavés\",22]]}"
+   }
+  },
+  "Arsenal": {
+   "onNew": {
+    "played": 18,
+    "kinds": {
+     "match": 18,
+     "window": 1
+    },
+    "err": null,
+    "lastKind": "window",
+    "week": 28,
+    "digest": "{\"w\":28,\"pts\":[[\"Chelsea\",39],[\"Sunderland\",38],[\"Newcastle\",20],[\"Brighton\",37],[\"Tottenham\",20],[\"Everton\",24],[\"Leeds United\",29],[\"Fulham\",20],[\"Brentford\",26],[\"Aston Villa\",27],[\"Bournemouth\",32],[\"Hull City\",17],[\"Liverpool\",30],[\"Crystal Palace\",25],[\"Manchester United\",26],[\"Nottingham Forest\",28],[\"Arsenal\",19],[\"Ipswich Town\",25],[\"Coventry City\",22],[\"Manchester City\",24]]}"
+   },
+   "onOld": {
+    "played": 18,
+    "kinds": {
+     "match": 18,
+     "window": 1
+    },
+    "err": null,
+    "lastKind": "window",
+    "week": 28,
+    "digest": "{\"w\":28,\"pts\":[[\"Chelsea\",39],[\"Sunderland\",38],[\"Newcastle\",20],[\"Brighton\",37],[\"Tottenham\",20],[\"Everton\",24],[\"Leeds United\",29],[\"Fulham\",20],[\"Brentford\",26],[\"Aston Villa\",27],[\"Bournemouth\",32],[\"Hull City\",17],[\"Liverpool\",30],[\"Crystal Palace\",25],[\"Manchester United\",26],[\"Nottingham Forest\",28],[\"Arsenal\",19],[\"Ipswich Town\",25],[\"Coventry City\",22],[\"Manchester City\",24]]}"
+   }
+  },
+  "Boca Juniors": {
+   "onNew": {
+    "played": 0,
+    "kinds": {
+     "seasonOver": 1
+    },
+    "err": null,
+    "lastKind": "seasonOver",
+    "week": 54,
+    "digest": "{\"w\":54,\"pts\":[[\"Manchester City\",62],[\"Bournemouth\",60],[\"Manchester United\",44],[\"Everton\",43],[\"Brentford\",62],[\"Fulham\",42],[\"Hull City\",42],[\"Brighton\",56],[\"Nottingham Forest\",46],[\"Ipswich Town\",50],[\"Sunderland\",29],[\"Chelsea\",68],[\"Coventry City\",53],[\"Tottenham\",56],[\"Arsenal\",64],[\"Crystal Palace\",60],[\"Newcastle\",43],[\"Aston Villa\",35],[\"Leeds United\",48],[\"Liverpool\",75]]}"
+   },
+   "onOld": {
+    "played": 0,
+    "kinds": {
+     "seasonOver": 1
+    },
+    "err": null,
+    "lastKind": "seasonOver",
+    "week": 54,
+    "digest": "{\"w\":54,\"pts\":[[\"Manchester City\",62],[\"Bournemouth\",60],[\"Manchester United\",44],[\"Everton\",43],[\"Brentford\",62],[\"Fulham\",42],[\"Hull City\",42],[\"Brighton\",56],[\"Nottingham Forest\",46],[\"Ipswich Town\",50],[\"Sunderland\",29],[\"Chelsea\",68],[\"Coventry City\",53],[\"Tottenham\",56],[\"Arsenal\",64],[\"Crystal Palace\",60],[\"Newcastle\",43],[\"Aston Villa\",35],[\"Leeds United\",48],[\"Liverpool\",75]]}"
+   }
+  },
+  "Celtic": {
+   "onNew": {
+    "played": 10,
+    "kinds": {
+     "match": 10,
+     "window": 1
+    },
+    "err": null,
+    "lastKind": "window",
+    "week": 20,
+    "digest": "{\"w\":20,\"pts\":[[\"Motherwell\",8],[\"Kilmarnock\",11],[\"Dundee\",10],[\"Rangers\",27],[\"Celtic\",25],[\"Aberdeen\",13],[\"Hearts\",13],[\"Dundee United\",16],[\"Falkirk\",11],[\"Hibernian\",15],[\"St Johnstone\",19],[\"St Mirren\",13]]}"
+   },
+   "onOld": {
+    "played": 10,
+    "kinds": {
+     "match": 10,
+     "window": 1
+    },
+    "err": null,
+    "lastKind": "window",
+    "week": 20,
+    "digest": "{\"w\":20,\"pts\":[[\"Motherwell\",8],[\"Kilmarnock\",11],[\"Dundee\",10],[\"Rangers\",27],[\"Celtic\",25],[\"Aberdeen\",13],[\"Hearts\",13],[\"Dundee United\",16],[\"Falkirk\",11],[\"Hibernian\",15],[\"St Johnstone\",19],[\"St Mirren\",13]]}"
+   }
+  }
+ }
+}

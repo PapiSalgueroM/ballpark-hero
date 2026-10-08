@@ -1,0 +1,50 @@
+info base tree d61f2ce52626cdba0f59abe2f2a146d1b7acbab9 extracted; branch head 069de54ba4395018b23fe705de8d110097d85d63 (request commit's parent)
+info bundled soccer, Club Manager and the NBA binding from both trees
+info base engine made 29 soccer saves: youth#0 contract_offer#0 playing#0 newspaper#0 season_summary#0 ballon_dor#0 international_debut#0 world_cup#0 social_media_action#0 random_events#0 transfer_window#0 moral_dilemma#0 rivalry_event#0 rehab_choice#0 retirement_suggestion#0 youth#1 contract_offer#1 playing#1 newspaper#1 season_summary#1 ballon_dor#1 international_debut#1 world_cup#1 social_media_action#1 random_events#1 transfer_window#1 rivalry_event#1 moral_dilemma#1 retirement_suggestion#1
+ok   soccer old save youth#0: the branch engine plays it on to retirement (196 steps, 22 seasons)
+ok   soccer old save contract_offer#0: the branch engine plays it on to retirement (218 steps, 23 seasons)
+ok   soccer old save playing#0: the branch engine plays it on to retirement (194 steps, 22 seasons)
+ok   soccer old save newspaper#0: the branch engine plays it on to retirement (195 steps, 22 seasons)
+ok   soccer old save season_summary#0: the branch engine plays it on to retirement (214 steps, 24 seasons)
+ok   soccer old save ballon_dor#0: the branch engine plays it on to retirement (199 steps, 22 seasons)
+ok   soccer old save international_debut#0: the branch engine plays it on to retirement (206 steps, 22 seasons)
+ok   soccer old save world_cup#0: the branch engine plays it on to retirement (191 steps, 22 seasons)
+ok   soccer old save social_media_action#0: the branch engine plays it on to retirement (204 steps, 22 seasons)
+ok   soccer old save random_events#0: the branch engine plays it on to retirement (212 steps, 25 seasons)
+ok   soccer old save transfer_window#0: the branch engine plays it on to retirement (181 steps, 21 seasons)
+ok   soccer old save moral_dilemma#0: the branch engine plays it on to retirement (164 steps, 22 seasons)
+ok   soccer old save rivalry_event#0: the branch engine plays it on to retirement (135 steps, 22 seasons)
+ok   soccer old save rehab_choice#0: the branch engine plays it on to retirement (58 steps, 21 seasons)
+ok   soccer old save retirement_suggestion#0: the branch engine plays it on to retirement (1 steps, 22 seasons)
+ok   soccer old save youth#1: the branch engine plays it on to retirement (203 steps, 22 seasons)
+ok   soccer old save contract_offer#1: the branch engine plays it on to retirement (195 steps, 22 seasons)
+ok   soccer old save playing#1: the branch engine plays it on to retirement (207 steps, 22 seasons)
+ok   soccer old save newspaper#1: the branch engine plays it on to retirement (200 steps, 23 seasons)
+ok   soccer old save season_summary#1: the branch engine plays it on to retirement (173 steps, 21 seasons)
+ok   soccer old save ballon_dor#1: the branch engine plays it on to retirement (203 steps, 22 seasons)
+ok   soccer old save international_debut#1: the branch engine plays it on to retirement (202 steps, 23 seasons)
+ok   soccer old save world_cup#1: the branch engine plays it on to retirement (196 steps, 23 seasons)
+ok   soccer old save social_media_action#1: the branch engine plays it on to retirement (200 steps, 23 seasons)
+ok   soccer old save random_events#1: the branch engine plays it on to retirement (176 steps, 21 seasons)
+ok   soccer old save transfer_window#1: the branch engine plays it on to retirement (167 steps, 22 seasons)
+ok   soccer old save rivalry_event#1: the branch engine plays it on to retirement (164 steps, 21 seasons)
+ok   soccer old save moral_dilemma#1: the branch engine plays it on to retirement (138 steps, 22 seasons)
+ok   soccer old save retirement_suggestion#1: the branch engine plays it on to retirement (1 steps, 22 seasons)
+ok   Club Manager old save (Real Madrid): the branch loads it
+ok   Club Manager old save (Real Madrid): loads to the same state the base loads (95640 chars)
+ok   Club Manager old save (Real Madrid): the branch plays on 18 matches, stops on "window" at week 28
+info Club Manager old save (Real Madrid): same seed, base plays 18 (stops "window" week 28); table digest equal: true
+ok   Club Manager old save (Arsenal): the branch loads it
+ok   Club Manager old save (Arsenal): loads to the same state the base loads (95254 chars)
+ok   Club Manager old save (Arsenal): the branch plays on 18 matches, stops on "window" at week 28
+info Club Manager old save (Arsenal): same seed, base plays 18 (stops "window" week 28); table digest equal: true
+ok   Club Manager old save (Boca Juniors): the branch loads it
+ok   Club Manager old save (Boca Juniors): loads to the same state the base loads (98343 chars)
+ok   Club Manager old save (Boca Juniors): the branch plays on 0 matches, stops on "seasonOver" at week 54
+info Club Manager old save (Boca Juniors): same seed, base plays 0 (stops "seasonOver" week 54); table digest equal: true
+ok   Club Manager old save (Celtic): the branch loads it
+ok   Club Manager old save (Celtic): loads to the same state the base loads (92978 chars)
+ok   Club Manager old save (Celtic): the branch plays on 10 matches, stops on "window" at week 20
+info Club Manager old save (Celtic): same seed, base plays 10 (stops "window" week 20); table digest equal: true
+info base NBA save made under nba-my-career-save-v1 (3571 chars)
+rvWalk: 41 checks, 0 failed (node only)
