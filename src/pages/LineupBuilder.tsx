@@ -139,6 +139,7 @@ const LineupBuilder = () => {
     if (isValidating) return;
     const raw = typeof entity.meta.position === 'string' ? entity.meta.position : undefined;
     await submitPlayer(entity.name, {
+      rawName: entity.rawName,
       rawPosition: raw,
       position: (raw ? normalizePosition(raw.trim()) : null) ?? undefined,
       club: entity.meta.club,

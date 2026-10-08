@@ -55,7 +55,8 @@ describe('Build Your XI: the history read for a next door pick', () => {
       pending[0].resolve({ ok: true, json: async () => [] });
       await done;
     });
-    expect(calls.some((u) => u.includes('validate-player'))).toBe(true);
+    // Round 1138: his row is at the slot's club, so the browser settles the pick and the validator is not asked.
+    expect(calls.some((u) => u.includes('validate-player'))).toBe(false);
     expect(result.current.filledSlots.get(1)?.playerName).toBe('Trent Alexander-Arnold');
     expect(result.current.filledSlots.get(1)?.pick?.played).toBeUndefined();
     expect(result.current.isValidating).toBe(false);
@@ -74,7 +75,8 @@ describe('Build Your XI: the history read for a next door pick', () => {
       await done;
     });
     expect(calls.filter((u) => u.includes('player_verified_positions')).length).toBe(1);
-    expect(calls.some((u) => u.includes('validate-player'))).toBe(true);
+    // Round 1138: settled by the row at the slot's club, as above, so no validator call.
+    expect(calls.some((u) => u.includes('validate-player'))).toBe(false);
     expect(result.current.filledSlots.get(1)?.playerName).toBe('Trent Alexander-Arnold');
     expect(result.current.isValidating).toBe(false);
   });

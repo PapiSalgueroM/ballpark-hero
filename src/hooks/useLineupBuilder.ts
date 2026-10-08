@@ -1,6 +1,8 @@
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { localEvaluateSoccerXI } from '@/lib/localLineupEval';
-import { getRandomTeamAssignments, clubs as ALL_CLUBS, nations as ALL_NATIONS } from '@/data/lineupTeams';
+import { getRandomTeamAssignments, clubs as ALL_CLUBS, nations as ALL_NATIONS, CLUB_TABLE_NAMES } from '@/data/lineupTeams';
+import { askValidator, type ValidatorAnswer } from '@/lib/validatorClient';
+import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from '@/integrations/supabase/client';
 import type { Formation, FilledSlot, GamePhase, AIVerdict, PickMeta, TeamAssignment } from '@/types/lineupBuilder';
 import { FORMATIONS } from '@/types/lineupBuilder';
 import { checkLineupPick, gradeFit, SLOT_ALLOWED_BY_ROLE } from '@/lib/positionFit';
@@ -67,6 +69,46 @@ async function verifiedSecondaries(name: string, primary: Position | null): Prom
 }
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 
+/* ROUND 1138: a club slot pick that our own row settles, with no request.
+
+   The row the scoped list returned is AT this club (the list is filtered to
+   the club's stored names, and one row is one man in one season), and the
+   browser's position rule above has really ruled on it. Such a pick used to
+   cost one edge call and, for half the position and slot pairs, a wait on a
+   language model that could run past thirty seconds.
+
+   Never true for a nation. Never true without a position the browser knows:
+   checkLineupPick answers ok WITHOUT judging when the row has no position or
+   a spelling the map does not hold, and that pick must go to the validator as
+   it always has. Never true for a club label with no stored names, which is
+   how the validator's own records pass reads the same table (an unknown club
+   matches nothing there). A season at two clubs is stored "A / B", and the
+   validator splits it the same way.
+
+   What this gives up, said plainly: a club pick from the list is now settled
+   by the browser's fit rule alone (the game's declared rule since Round 442),
+   so the validator's own position map and any refusal it once stored for a
+   club pick no longer bind. A nation pick is still judged by the validator. */
+export function clubPickVerifies(team: TeamAssignment, slotRole: Position, pick: PickMeta | undefined): boolean {
+  if (team.isNation || !pick?.club || !pick.rawPosition) return false;
+  if (!SLOT_ALLOWED_BY_ROLE[slotRole]) return false;
+  if (!normalizePosition(pick.rawPosition.trim())) return false;
+  const stored = CLUB_TABLE_NAMES[team.name];
+  if (!stored) return false;
+  return pick.club.split(' / ').map((part) => part.trim()).some((part) => stored.includes(part));
+}
+
+/* The one line a pick that could not be checked shows. Nothing here says
+   "saved" (this game saves nothing) and nothing says "hasn't played for":
+   that line is for a refusal the validator really made. */
+function unverifiedLine(answer: Extract<ValidatorAnswer, { kind: 'unverified' }>): string {
+  if (answer.exhausted) {
+    return 'Answer checking has used up its allowance for today, so this pick was not counted. Try another player or reroll the team.';
+  }
+  if (answer.why === 'timeout') return 'That check took too long, so this pick was not counted. Try again or pick someone else.';
+  return answer.reason || "Couldn't verify that answer. Try again in a second.";
+}
+
 export function useLineupBuilder() {
   const [formation, setFormation] = useState<Formation | null>(null);
   const [phase, setPhase] = useState<GamePhase>('formation');
@@ -77,10 +119,25 @@ export function useLineupBuilder() {
   const [isEvaluating, setIsEvaluating] = useState(false);
   const [isValidating, setIsValidating] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
-  /* Round 413: remembered for the session once the day allowance is spent. */
-  const [checkingDown, setCheckingDown] = useState(false);
   const [isSpinning, setIsSpinning] = useState(false);
   const [spinTeamIndex, setSpinTeamIndex] = useState(0);
+  /* Round 1138: the validator call in flight, so a reroll, a new formation, a
+     reset, leaving the page or a Cancel button can give up on it. A cancelled
+     call ends as unverified: nothing filled, no message, not busy. pickRun
+     counts the times the player gave up, so a pick that was still reading the
+     position history when he did (no validator call yet to abort) is dropped
+     too, instead of landing under the team he just rerolled away. Giving up
+     clears the busy flag here and now, and a pick that was given up never
+     touches the game's state again, so it cannot clear the flag of the pick
+     that follows it. */
+  const validatorCall = useRef<AbortController | null>(null);
+  const pickRun = useRef(0);
+  const cancelValidation = useCallback(() => {
+    pickRun.current += 1;
+    validatorCall.current?.abort();
+    setIsValidating(false);
+  }, []);
+  useEffect(() => cancelValidation, [cancelValidation]);
 
   const positions = useMemo(() => (formation ? FORMATIONS[formation] : []), [formation]);
 
@@ -88,6 +145,7 @@ export function useLineupBuilder() {
   const currentTeam = useMemo(() => teamAssignments[filledCount] ?? null, [teamAssignments, filledCount]);
 
   const selectFormation = useCallback((f: Formation) => {
+    cancelValidation();
     setFormation(f);
     setTeamAssignments(getRandomTeamAssignments(11));
     setPhase('building');
@@ -95,7 +153,7 @@ export function useLineupBuilder() {
     setFilledSlots(new Map());
     setVerdict(null);
     setValidationError(null);
-  }, []);
+  }, [cancelValidation]);
 
   const selectPosition = useCallback((index: number) => {
     if (filledSlots.has(index)) return;
@@ -113,6 +171,7 @@ export function useLineupBuilder() {
   }, []);
 
   const rerollTeam = useCallback(() => {
+    cancelValidation();
     setTeamAssignments((prev) => {
       const usedNames = new Set(prev.filter((_, i) => i !== filledCount).map((t) => t.name));
       const all = [
@@ -129,11 +188,12 @@ export function useLineupBuilder() {
     setSelectedPositionIndex(null);
     setValidationError(null);
     startSpin();
-  }, [filledCount, startSpin]);
+  }, [filledCount, startSpin, cancelValidation]);
 
   const submitPlayer = useCallback(
     async (inputName: string, pickMeta?: PickMeta) => {
       let playerName = inputName;
+      const run = pickRun.current; // Round 1138: which pick this is, see cancelValidation
       if (selectedPositionIndex === null || !currentTeam) return;
       const position = positions[selectedPositionIndex];
       if (!position) return;
@@ -193,79 +253,60 @@ export function useLineupBuilder() {
           );
         }
       }
+      /* Round 1138: a pick the player gave up on while the history was read (a
+         reroll, a new formation, a reset). Nothing is said, filled or asked. */
+      if (run !== pickRun.current) return;
       if (!positionCheck.ok) {
         setValidationError(positionCheck.reason ?? 'That player does not fit this position.');
         return;
       }
 
-      setIsValidating(true);
+      /* ROUND 1138: the validator's client. The July 2026 rule is the whole of
+         it: a check that cannot be made is a pick that was not counted, never
+         an accept. The old branch read `valid` by truthiness off whatever came
+         back, had no time limit, and on a spent allowance took the search box
+         away for the session and said the lineup was saved, which nothing is.
+         Now an exhausted allowance, a body that is not a verdict, a failed
+         status, a timeout and a network error each leave this ONE pick
+         uncounted: no slot filled, the same team, the same slot still open,
+         the box still there, and the line clears on the next pick or reroll. */
+      const typed = playerName.trim();
       setValidationError(null);
-
-      try {
-        const resp = await fetch(
-          `${"https://flawuiqbvjobmkfkauhw.supabase.co"}/functions/v1/validate-player`,
+      if (clubPickVerifies(currentTeam, position.role, pickMeta)) {
+        // Our own record settles it: no request, no model, nothing to wait for.
+        playerName = pickMeta?.rawName?.trim() || typed;
+      } else {
+        setIsValidating(true);
+        const call = new AbortController();
+        validatorCall.current = call;
+        const answer = await askValidator(
+          `${SUPABASE_URL}/functions/v1/validate-player`,
           {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZsYXd1aXFidmpvYm1rZmthdWh3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4NTUwNzYsImV4cCI6MjA5MTQzMTA3Nn0.L8xWIXikPIaXC0XOL-FLOuPQb6idws2NdliARxBgk_Y"}`,
-            },
+            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}` },
             body: JSON.stringify({
-              playerName: playerName.trim(),
+              playerName: typed,
               teamName: currentTeam.name,
               isNation: currentTeam.isNation,
               /* Round 315: the slot's role rides along, so the validator can
                  refuse a keeper at CM (the owner's ter Stegen report). */
               position: position.role,
             }),
-          }
+          },
+          { signal: call.signal },
         );
-
-        if (!resp.ok) {
-          // A rate limit or server error body has no verdict in it. Without
-          // this guard the code below read `valid` off an error object and
-          // told the player his TRUE answer was wrong ("hasn't played for"),
-          // when the honest message is that nothing was checked at all.
-          setValidationError("Couldn't verify that answer. Try again in a second.");
+        if (validatorCall.current === call) validatorCall.current = null;
+        /* The player gave up on this pick while it was checked (that is what
+           aborts the call), or in the same instant the answer landed: giving
+           up wins. Nothing is filled, no line is shown, and the busy flag was
+           already cleared by the cancel. */
+        if (run !== pickRun.current) return;
+        if (answer.kind !== 'valid') {
           setIsValidating(false);
+          if (answer.kind === 'refused') setValidationError(answer.reason || `${typed} hasn't played for ${currentTeam.name}`);
+          else if (answer.why !== 'cancelled') setValidationError(unverifiedLine(answer));
           return;
         }
-
-        const result = await resp.json();
-
-        /* Round 413: a refusal now says which it was. Answer checking runs on
-           a free daily allowance, and once it is spent every guess came back
-           "try again in a second" until midnight, so a player kept retrying a
-           wall. The validator returns exhausted on a spent allowance; that
-           message is the honest one and it is remembered for the session, so
-           the page stops inviting a retry that cannot succeed. Either way
-           nothing unverified is accepted and no answer is marked wrong. */
-        if (result.unverified) {
-          if (result.exhausted) {
-            setCheckingDown(true);
-            setValidationError('Answer checking has used up its allowance for today. Your lineup is saved; come back tomorrow.');
-          } else {
-            setValidationError(result.reason || "Couldn't verify that answer. Try again in a second.");
-          }
-          setIsValidating(false);
-          return;
-        }
-
-        if (!result.valid) {
-          setValidationError(result.reason || `${playerName} hasn't played for ${currentTeam.name}`);
-          setIsValidating(false);
-          return;
-        }
-
-        if (result.fullName && typeof result.fullName === 'string') {
-          playerName = result.fullName;
-        }
-      } catch {
-        // FAIL CLOSED (July 2026 P1 rule: never accept-on-error). A network
-        // or quota failure is a free retry, not a free pass.
-        setValidationError("Couldn't verify that answer. Try again in a second.");
-        setIsValidating(false);
-        return;
+        if (answer.fullName) playerName = answer.fullName;
       }
 
       const slot: FilledSlot = {
@@ -353,6 +394,7 @@ export function useLineupBuilder() {
   }, [filledSlotsArray, formation]);
 
   const resetGame = useCallback(() => {
+    cancelValidation();
     setFormation(null);
     setPhase('formation');
     setSelectedPositionIndex(null);
@@ -361,15 +403,21 @@ export function useLineupBuilder() {
     setVerdict(null);
     setValidationError(null);
     setIsSpinning(false);
-  }, []);
+  }, [cancelValidation]);
 
   useGameCompletion('build-your-xi', phase === 'result', verdict ? 500 : 0);
 
   return {
     formation, phase, selectedPositionIndex, currentTeam, positions,
     filledSlots, filledSlotsArray, filledCount, verdict, isEvaluating,
-    isValidating, validationError, checkingDown, isSpinning, spinTeamIndex, setSpinTeamIndex,
+    isValidating, validationError, isSpinning, spinTeamIndex, setSpinTeamIndex,
+    /* Round 1138: never true any more. An allowance answer blocks the one
+       pick and keeps the search box, so nothing sets this. The key stays
+       because src/pages/LineupBuilder.tsx still reads it (the allowance
+       paragraph and the condition on the box); the Build Your XI screens pass
+       deletes both of those and then this line. */
+    checkingDown: false,
     selectFormation, selectPosition, submitPlayer, evaluateTeam, resetGame,
-    startSpin, finishSpin, rerollTeam, teamAssignments,
+    startSpin, finishSpin, rerollTeam, teamAssignments, cancelValidation,
   };
 }
