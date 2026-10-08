@@ -1,0 +1,26 @@
+CONTROL count: rewritten in the bundled source, never a file on disk
+tables from node: 356 table seasons in the probe, five used: Probe 0 2001 AC Milan (34); Probe 9 2013 Atletico Madrid (38); Probe 16 2006 Chelsea (38); Probe 33 1997 Fiorentina (34); Probe 38 2034 Real Madrid (38)
+B1) 874 transitions over 4 layouts and 5 seasons; largest deviation at the first frame 246.500 px, at the last 0.000 px; 583 rows entered a compact window
+   B1: 320 compact Probe 0 2001 AC Milan 4>5: AC Milan starts 14.50 px from where it was
+   B1: 320 compact Probe 0 2001 AC Milan 4>5: Juventus starts 14.50 px from where it was
+   B1: 320 compact Probe 0 2001 AC Milan 9>10: Inter Milan starts 14.50 px from where it was
+   B1: 320 compact Probe 0 2001 AC Milan 9>10: Roma starts 29.00 px from where it was
+ok   B1. enough transitions were measured (874, floor 400)
+FAIL B1. every row starts within 1 px of where it truly was (5936 did not)
+ok   B1. every row reads as the new table's row from the first frame (0 texts, 0 orders wrong)
+ok   B1. every row ends within 1 px of its place in the still card (0 did not)
+ok   B1. nothing is left on a row after a flight (0 leftovers)
+ok   B1. the box is the same size at the first frame, the last frame and still (0 differed)
+FAIL B1. the largest deviation seen is at most half a pixel, so the 1 px bound is not a rounding accident (246.500 and 0.000)
+ok   B2. one matchday steps in which a row carried a transform: 416 of 454 (91.6%, floor 50%), 2946 rows moved
+ok   B3. a first mount plays nothing (0 of 520 mounts moved)
+ok   B3. pre season to matchday 1 does not slide (0 of 20 did)
+   B1i: 390 compact Probe 0 2001 AC Milan from 2: AC Milan starts the second flight 14.50 px from its place in table 3
+   B1i: 390 compact Probe 0 2001 AC Milan from 2: u16 starts the second flight 14.50 px from its place in table 3
+   B1i: 390 compact Probe 0 2001 AC Milan from 2: Roma starts the second flight 4.11 px from its place in table 3
+   B1i: 390 compact Probe 0 2001 AC Milan from 2: Juventus starts the second flight 10.28 px from its place in table 3
+ok   B1i. a flight was in the air when the second table landed in 38 of 40 cases (floor half)
+FAIL B1i. the second flight starts at the first table's true places and ends at the second's, nothing left (337 bad starts, 0 bad ends, 0 leftovers; largest start deviation 101.500 px)
+ok   B4. under reduced motion no step slides (0 of 50 did)
+ok   B4. and every row is at its new place in the same frame (0 were not)
+playSeasonCentreMotion: 14 checks, 3 failed (control count)

@@ -1,0 +1,5 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+play-count exit=1 52s | playSeasonCentreMotion: 14 checks, 3 failed (control count)
+play exit=1 52s | playSeasonCentreMotion: 14 checks, 1 failed
+play-firstmount exit=1 53s | playSeasonCentreMotion: 14 checks, 4 failed (control firstmount)
+play-nosnap exit=1 42s | playSeasonCentreMotion: 14 checks, 2 failed (control nosnap)
