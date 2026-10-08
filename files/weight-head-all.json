@@ -1,0 +1,1321 @@
+{
+ "label": "head-all",
+ "routes": {
+  "/": {
+   "bytes": 241072,
+   "kb": 235,
+   "files": 3,
+   "secondRunBytes": 241072,
+   "chunks": [
+    {
+     "name": "index",
+     "gz": 234715
+    },
+    {
+     "name": "HomeAbout",
+     "gz": 3712
+    },
+    {
+     "name": "HomeArt",
+     "gz": 2645
+    }
+   ]
+  },
+  "/club-manager": {
+   "bytes": 722300,
+   "kb": 705,
+   "files": 37,
+   "secondRunBytes": 722300,
+   "chunks": [
+    {
+     "name": "clubManager",
+     "gz": 299213
+    },
+    {
+     "name": "index",
+     "gz": 234715
+    },
+    {
+     "name": "soccerInternational",
+     "gz": 76395
+    },
+    {
+     "name": "ClubManager",
+     "gz": 24179
+    },
+    {
+     "name": "footleEnrichment",
+     "gz": 19605
+    },
+    {
+     "name": "managerOffers",
+     "gz": 13218
+    },
+    {
+     "name": "clubManagement",
+     "gz": 8434
+    },
+    {
+     "name": "squadDeal",
+     "gz": 8381
+    },
+    {
+     "name": "intlNames",
+     "gz": 6113
+    },
+    {
+     "name": "gmStaff",
+     "gz": 3898
+    },
+    {
+     "name": "GameNavbar",
+     "gz": 3794
+    },
+    {
+     "name": "FlagImg",
+     "gz": 2976
+    },
+    {
+     "name": "soccerCareerAppearance",
+     "gz": 2562
+    },
+    {
+     "name": "GameSeoContent",
+     "gz": 2285
+    },
+    {
+     "name": "GameNav",
+     "gz": 1722
+    },
+    {
+     "name": "guideShape",
+     "gz": 1688
+    },
+    {
+     "name": "tabs",
+     "gz": 1347
+    },
+    {
+     "name": "ReportQuestion",
+     "gz": 1325
+    },
+    {
+     "name": "AdBanner",
+     "gz": 1082
+    },
+    {
+     "name": "clubManagerMeters",
+     "gz": 1002
+    },
+    {
+     "name": "soccerBoots",
+     "gz": 993
+    },
+    {
+     "name": "useRevealScroll",
+     "gz": 797
+    },
+    {
+     "name": "GameHelp",
+     "gz": 787
+    },
+    {
+     "name": "HowToPlayPopover",
+     "gz": 767
+    },
+    {
+     "name": "GameShell",
+     "gz": 686
+    },
+    {
+     "name": "positionFit",
+     "gz": 674
+    },
+    {
+     "name": "seoMetaPart12",
+     "gz": 671
+    },
+    {
+     "name": "gmDealTable",
+     "gz": 436
+    },
+    {
+     "name": "star",
+     "gz": 402
+    },
+    {
+     "name": "medal",
+     "gz": 388
+    },
+    {
+     "name": "circle-help",
+     "gz": 303
+    },
+    {
+     "name": "flag",
+     "gz": 303
+    },
+    {
+     "name": "briefcase",
+     "gz": 297
+    },
+    {
+     "name": "arrow-left",
+     "gz": 265
+    },
+    {
+     "name": "nameFold",
+     "gz": 235
+    },
+    {
+     "name": "soccerBootIds",
+     "gz": 200
+    },
+    {
+     "name": "clubManagerClock",
+     "gz": 162
+    }
+   ]
+  },
+  "/soccer-career": {
+   "bytes": 777447,
+   "kb": 759,
+   "files": 42,
+   "secondRunBytes": 777447,
+   "chunks": [
+    {
+     "name": "SoccerCareer",
+     "gz": 343896
+    },
+    {
+     "name": "index",
+     "gz": 234715
+    },
+    {
+     "name": "soccerInternational",
+     "gz": 76395
+    },
+    {
+     "name": "soccer2",
+     "gz": 36567
+    },
+    {
+     "name": "AppearanceBuilder",
+     "gz": 14386
+    },
+    {
+     "name": "managerOffers",
+     "gz": 13218
+    },
+    {
+     "name": "select",
+     "gz": 7409
+    },
+    {
+     "name": "intlNames",
+     "gz": 6113
+    },
+    {
+     "name": "ShareButtons",
+     "gz": 4534
+    },
+    {
+     "name": "PlayerAvatar",
+     "gz": 3923
+    },
+    {
+     "name": "GameNavbar",
+     "gz": 3794
+    },
+    {
+     "name": "uclFormatHistory",
+     "gz": 3465
+    },
+    {
+     "name": "FlagImg",
+     "gz": 2976
+    },
+    {
+     "name": "soccerCareerAppearance",
+     "gz": 2562
+    },
+    {
+     "name": "careerRivalryChoices",
+     "gz": 2532
+    },
+    {
+     "name": "badges",
+     "gz": 2291
+    },
+    {
+     "name": "GameSeoContent",
+     "gz": 2285
+    },
+    {
+     "name": "guideShape",
+     "gz": 1688
+    },
+    {
+     "name": "VictoryMoment",
+     "gz": 1296
+    },
+    {
+     "name": "careerAwardsNight",
+     "gz": 1266
+    },
+    {
+     "name": "freeKick",
+     "gz": 1104
+    },
+    {
+     "name": "CareerFx",
+     "gz": 1025
+    },
+    {
+     "name": "soccerBoots",
+     "gz": 993
+    },
+    {
+     "name": "seoMetaPart30",
+     "gz": 960
+    },
+    {
+     "name": "Celebration",
+     "gz": 820
+    },
+    {
+     "name": "useRevealScroll",
+     "gz": 797
+    },
+    {
+     "name": "GameHelp",
+     "gz": 787
+    },
+    {
+     "name": "HowToPlayPopover",
+     "gz": 767
+    },
+    {
+     "name": "CelebrationStyles",
+     "gz": 725
+    },
+    {
+     "name": "confederationGroups",
+     "gz": 703
+    },
+    {
+     "name": "useGameCompletion",
+     "gz": 497
+    },
+    {
+     "name": "star",
+     "gz": 402
+    },
+    {
+     "name": "medal",
+     "gz": 388
+    },
+    {
+     "name": "arcade",
+     "gz": 315
+    },
+    {
+     "name": "copy",
+     "gz": 310
+    },
+    {
+     "name": "circle-help",
+     "gz": 303
+    },
+    {
+     "name": "arrow-left",
+     "gz": 265
+    },
+    {
+     "name": "chevron-up",
+     "gz": 245
+    },
+    {
+     "name": "chevron-down",
+     "gz": 244
+    },
+    {
+     "name": "soccerBootIds",
+     "gz": 200
+    },
+    {
+     "name": "formatNumber",
+     "gz": 154
+    },
+    {
+     "name": "dialogA11y",
+     "gz": 132
+    }
+   ]
+  },
+  "/stadium-tycoon": {
+   "bytes": 298456,
+   "kb": 291,
+   "files": 23,
+   "secondRunBytes": 298456,
+   "chunks": [
+    {
+     "name": "index",
+     "gz": 234715
+    },
+    {
+     "name": "StadiumTycoon",
+     "gz": 20760
+    },
+    {
+     "name": "stadiumTycoon",
+     "gz": 10255
+    },
+    {
+     "name": "useTycoonRewards",
+     "gz": 7634
+    },
+    {
+     "name": "intlNames",
+     "gz": 6113
+    },
+    {
+     "name": "stadiumManagement",
+     "gz": 5384
+    },
+    {
+     "name": "GameNavbar",
+     "gz": 3794
+    },
+    {
+     "name": "GameSeoContent",
+     "gz": 2285
+    },
+    {
+     "name": "guideShape",
+     "gz": 1688
+    },
+    {
+     "name": "LeagueTableCard",
+     "gz": 1015
+    },
+    {
+     "name": "Celebration",
+     "gz": 820
+    },
+    {
+     "name": "CelebrationStyles",
+     "gz": 725
+    },
+    {
+     "name": "seoMetaPart16",
+     "gz": 445
+    },
+    {
+     "name": "leagueCore",
+     "gz": 429
+    },
+    {
+     "name": "star",
+     "gz": 402
+    },
+    {
+     "name": "medal",
+     "gz": 388
+    },
+    {
+     "name": "entityIds",
+     "gz": 335
+    },
+    {
+     "name": "circle-help",
+     "gz": 303
+    },
+    {
+     "name": "arrow-left",
+     "gz": 265
+    },
+    {
+     "name": "useOwnedTimeouts",
+     "gz": 215
+    },
+    {
+     "name": "soccerBootIds",
+     "gz": 200
+    },
+    {
+     "name": "formatNumber",
+     "gz": 154
+    },
+    {
+     "name": "dialogA11y",
+     "gz": 132
+    }
+   ]
+  },
+  "/wonderkid-factory": {
+   "bytes": 272599,
+   "kb": 266,
+   "files": 19,
+   "secondRunBytes": 272599,
+   "chunks": [
+    {
+     "name": "index",
+     "gz": 234715
+    },
+    {
+     "name": "AcademyPanel",
+     "gz": 7740
+    },
+    {
+     "name": "useTycoonRewards",
+     "gz": 7634
+    },
+    {
+     "name": "intlNames",
+     "gz": 6113
+    },
+    {
+     "name": "GameNavbar",
+     "gz": 3794
+    },
+    {
+     "name": "academyManagement",
+     "gz": 3513
+    },
+    {
+     "name": "GameSeoContent",
+     "gz": 2285
+    },
+    {
+     "name": "guideShape",
+     "gz": 1688
+    },
+    {
+     "name": "WonderkidFactory",
+     "gz": 939
+    },
+    {
+     "name": "useRevealScroll",
+     "gz": 797
+    },
+    {
+     "name": "seoMetaPart28",
+     "gz": 672
+    },
+    {
+     "name": "HubTiles",
+     "gz": 601
+    },
+    {
+     "name": "star",
+     "gz": 402
+    },
+    {
+     "name": "medal",
+     "gz": 388
+    },
+    {
+     "name": "entityIds",
+     "gz": 335
+    },
+    {
+     "name": "circle-help",
+     "gz": 303
+    },
+    {
+     "name": "arrow-left",
+     "gz": 265
+    },
+    {
+     "name": "useOwnedTimeouts",
+     "gz": 215
+    },
+    {
+     "name": "soccerBootIds",
+     "gz": 200
+    }
+   ]
+  },
+  "/minefield": {
+   "bytes": 291007,
+   "kb": 284,
+   "files": 20,
+   "secondRunBytes": 291007,
+   "chunks": [
+    {
+     "name": "index",
+     "gz": 234715
+    },
+    {
+     "name": "world",
+     "gz": 27220
+    },
+    {
+     "name": "Minefield",
+     "gz": 9312
+    },
+    {
+     "name": "ShareButtons",
+     "gz": 4534
+    },
+    {
+     "name": "GameNavbar",
+     "gz": 3794
+    },
+    {
+     "name": "badges",
+     "gz": 2291
+    },
+    {
+     "name": "GameSeoContent",
+     "gz": 2285
+    },
+    {
+     "name": "guideShape",
+     "gz": 1688
+    },
+    {
+     "name": "GameHelp",
+     "gz": 787
+    },
+    {
+     "name": "HowToPlayPopover",
+     "gz": 767
+    },
+    {
+     "name": "seoMetaPart15",
+     "gz": 531
+    },
+    {
+     "name": "useGameCompletion",
+     "gz": 497
+    },
+    {
+     "name": "star",
+     "gz": 402
+    },
+    {
+     "name": "medal",
+     "gz": 388
+    },
+    {
+     "name": "dailyRecord",
+     "gz": 338
+    },
+    {
+     "name": "copy",
+     "gz": 310
+    },
+    {
+     "name": "circle-help",
+     "gz": 303
+    },
+    {
+     "name": "infinity",
+     "gz": 294
+    },
+    {
+     "name": "rotate-ccw",
+     "gz": 286
+    },
+    {
+     "name": "arrow-left",
+     "gz": 265
+    }
+   ]
+  },
+  "/footle": {
+   "bytes": 347858,
+   "kb": 340,
+   "files": 38,
+   "secondRunBytes": 347858,
+   "chunks": [
+    {
+     "name": "index",
+     "gz": 234715
+    },
+    {
+     "name": "soccer2",
+     "gz": 36567
+    },
+    {
+     "name": "footleEnrichment",
+     "gz": 19605
+    },
+    {
+     "name": "Footle",
+     "gz": 17124
+    },
+    {
+     "name": "ShareButtons",
+     "gz": 4534
+    },
+    {
+     "name": "GameNavbar",
+     "gz": 3794
+    },
+    {
+     "name": "playerSearch",
+     "gz": 2782
+    },
+    {
+     "name": "badges",
+     "gz": 2291
+    },
+    {
+     "name": "GameSeoContent",
+     "gz": 2285
+    },
+    {
+     "name": "dealPlayers",
+     "gz": 1881
+    },
+    {
+     "name": "GameNav",
+     "gz": 1722
+    },
+    {
+     "name": "guideShape",
+     "gz": 1688
+    },
+    {
+     "name": "dailySaveShapes",
+     "gz": 1458
+    },
+    {
+     "name": "ResultMoment",
+     "gz": 1414
+    },
+    {
+     "name": "useDailyPuzzle",
+     "gz": 1375
+    },
+    {
+     "name": "ReportQuestion",
+     "gz": 1325
+    },
+    {
+     "name": "PostGameStats",
+     "gz": 1176
+    },
+    {
+     "name": "ResultScreen",
+     "gz": 1147
+    },
+    {
+     "name": "AdBanner",
+     "gz": 1082
+    },
+    {
+     "name": "seoMetaPart09",
+     "gz": 1046
+    },
+    {
+     "name": "Celebration",
+     "gz": 820
+    },
+    {
+     "name": "useRevealScroll",
+     "gz": 797
+    },
+    {
+     "name": "GameHelp",
+     "gz": 787
+    },
+    {
+     "name": "HowToPlayPopover",
+     "gz": 767
+    },
+    {
+     "name": "CelebrationStyles",
+     "gz": 725
+    },
+    {
+     "name": "smartSearch",
+     "gz": 712
+    },
+    {
+     "name": "GameShell",
+     "gz": 686
+    },
+    {
+     "name": "GiveUpButton",
+     "gz": 543
+    },
+    {
+     "name": "useGameCompletion",
+     "gz": 497
+    },
+    {
+     "name": "star",
+     "gz": 402
+    },
+    {
+     "name": "medal",
+     "gz": 388
+    },
+    {
+     "name": "copy",
+     "gz": 310
+    },
+    {
+     "name": "circle-help",
+     "gz": 303
+    },
+    {
+     "name": "flag",
+     "gz": 303
+    },
+    {
+     "name": "arrow-left",
+     "gz": 265
+    },
+    {
+     "name": "nameFold",
+     "gz": 235
+    },
+    {
+     "name": "formatNumber",
+     "gz": 154
+    },
+    {
+     "name": "ensureAnswerInOptions",
+     "gz": 153
+    }
+   ]
+  },
+  "/nfl-my-career": {
+   "bytes": 466333,
+   "kb": 455,
+   "files": 46,
+   "secondRunBytes": 466333,
+   "chunks": [
+    {
+     "name": "index",
+     "gz": 234715
+    },
+    {
+     "name": "usCareerSeasonReview",
+     "gz": 131597
+    },
+    {
+     "name": "football",
+     "gz": 22333
+    },
+    {
+     "name": "AppearanceBuilder",
+     "gz": 14386
+    },
+    {
+     "name": "conquestDataNba",
+     "gz": 8519
+    },
+    {
+     "name": "NflMyCareer",
+     "gz": 5651
+    },
+    {
+     "name": "usStatesPaths",
+     "gz": 5350
+    },
+    {
+     "name": "ShareButtons",
+     "gz": 4534
+    },
+    {
+     "name": "PlayerAvatar",
+     "gz": 3923
+    },
+    {
+     "name": "GameNavbar",
+     "gz": 3794
+    },
+    {
+     "name": "soccerCareerAppearance",
+     "gz": 2562
+    },
+    {
+     "name": "careerRivalryChoices",
+     "gz": 2532
+    },
+    {
+     "name": "badges",
+     "gz": 2291
+    },
+    {
+     "name": "GameSeoContent",
+     "gz": 2285
+    },
+    {
+     "name": "usCareerFreeAgency",
+     "gz": 1914
+    },
+    {
+     "name": "GameNav",
+     "gz": 1722
+    },
+    {
+     "name": "guideShape",
+     "gz": 1688
+    },
+    {
+     "name": "conquestMapGeometry",
+     "gz": 1421
+    },
+    {
+     "name": "conquestDataNhl",
+     "gz": 1259
+    },
+    {
+     "name": "conquestDataMlb",
+     "gz": 1223
+    },
+    {
+     "name": "CareerFx",
+     "gz": 1025
+    },
+    {
+     "name": "soccerBoots",
+     "gz": 993
+    },
+    {
+     "name": "Celebration",
+     "gz": 820
+    },
+    {
+     "name": "useRevealScroll",
+     "gz": 797
+    },
+    {
+     "name": "GameHelp",
+     "gz": 787
+    },
+    {
+     "name": "HowToPlayPopover",
+     "gz": 767
+    },
+    {
+     "name": "CelebrationStyles",
+     "gz": 725
+    },
+    {
+     "name": "HubTiles",
+     "gz": 601
+    },
+    {
+     "name": "usCareerReveal",
+     "gz": 584
+    },
+    {
+     "name": "useGameCompletion",
+     "gz": 497
+    },
+    {
+     "name": "seoMetaPart00",
+     "gz": 457
+    },
+    {
+     "name": "star",
+     "gz": 402
+    },
+    {
+     "name": "dumbbell",
+     "gz": 393
+    },
+    {
+     "name": "handshake",
+     "gz": 389
+    },
+    {
+     "name": "medal",
+     "gz": 388
+    },
+    {
+     "name": "crown",
+     "gz": 361
+    },
+    {
+     "name": "clipboard-list",
+     "gz": 359
+    },
+    {
+     "name": "copy",
+     "gz": 310
+    },
+    {
+     "name": "circle-help",
+     "gz": 303
+    },
+    {
+     "name": "briefcase",
+     "gz": 297
+    },
+    {
+     "name": "rotate-ccw",
+     "gz": 286
+    },
+    {
+     "name": "trending-up",
+     "gz": 284
+    },
+    {
+     "name": "arrow-left",
+     "gz": 265
+    },
+    {
+     "name": "soccerBootIds",
+     "gz": 200
+    },
+    {
+     "name": "careerHeadroom",
+     "gz": 190
+    },
+    {
+     "name": "formatNumber",
+     "gz": 154
+    }
+   ]
+  },
+  "/front-office": {
+   "bytes": 362005,
+   "kb": 354,
+   "files": 34,
+   "secondRunBytes": 362005,
+   "chunks": [
+    {
+     "name": "index",
+     "gz": 234715
+    },
+    {
+     "name": "GmTradeBuilder",
+     "gz": 35033
+    },
+    {
+     "name": "FrontOffice",
+     "gz": 29135
+    },
+    {
+     "name": "football",
+     "gz": 22333
+    },
+    {
+     "name": "frontOfficePlayers",
+     "gz": 7864
+    },
+    {
+     "name": "ShareButtons",
+     "gz": 4534
+    },
+    {
+     "name": "gmStaff",
+     "gz": 3898
+    },
+    {
+     "name": "GameNavbar",
+     "gz": 3794
+    },
+    {
+     "name": "badges",
+     "gz": 2291
+    },
+    {
+     "name": "GameSeoContent",
+     "gz": 2285
+    },
+    {
+     "name": "GameNav",
+     "gz": 1722
+    },
+    {
+     "name": "guideShape",
+     "gz": 1688
+    },
+    {
+     "name": "DraftNightCard",
+     "gz": 1665
+    },
+    {
+     "name": "frontOfficeSave",
+     "gz": 1065
+    },
+    {
+     "name": "Celebration",
+     "gz": 820
+    },
+    {
+     "name": "useRevealScroll",
+     "gz": 797
+    },
+    {
+     "name": "GameHelp",
+     "gz": 787
+    },
+    {
+     "name": "HowToPlayPopover",
+     "gz": 767
+    },
+    {
+     "name": "CelebrationStyles",
+     "gz": 725
+    },
+    {
+     "name": "seoMetaPart28",
+     "gz": 672
+    },
+    {
+     "name": "HubTiles",
+     "gz": 601
+    },
+    {
+     "name": "usCareerReveal",
+     "gz": 584
+    },
+    {
+     "name": "useGameCompletion",
+     "gz": 497
+    },
+    {
+     "name": "gmDealTable",
+     "gz": 436
+    },
+    {
+     "name": "star",
+     "gz": 402
+    },
+    {
+     "name": "medal",
+     "gz": 388
+    },
+    {
+     "name": "crown",
+     "gz": 361
+    },
+    {
+     "name": "shield-half",
+     "gz": 350
+    },
+    {
+     "name": "entityIds",
+     "gz": 335
+    },
+    {
+     "name": "copy",
+     "gz": 310
+    },
+    {
+     "name": "circle-help",
+     "gz": 303
+    },
+    {
+     "name": "briefcase",
+     "gz": 297
+    },
+    {
+     "name": "rotate-ccw",
+     "gz": 286
+    },
+    {
+     "name": "arrow-left",
+     "gz": 265
+    }
+   ]
+  },
+  "/soccer-grid": {
+   "bytes": 315671,
+   "kb": 308,
+   "files": 36,
+   "secondRunBytes": 315671,
+   "chunks": [
+    {
+     "name": "index",
+     "gz": 234715
+    },
+    {
+     "name": "soccer2",
+     "gz": 36567
+    },
+    {
+     "name": "SoccerGrid",
+     "gz": 8714
+    },
+    {
+     "name": "ShareButtons",
+     "gz": 4534
+    },
+    {
+     "name": "GameNavbar",
+     "gz": 3794
+    },
+    {
+     "name": "FlagImg",
+     "gz": 2976
+    },
+    {
+     "name": "badges",
+     "gz": 2291
+    },
+    {
+     "name": "GameSeoContent",
+     "gz": 2285
+    },
+    {
+     "name": "GameNav",
+     "gz": 1722
+    },
+    {
+     "name": "guideShape",
+     "gz": 1688
+    },
+    {
+     "name": "ResultMoment",
+     "gz": 1414
+    },
+    {
+     "name": "useDailyPuzzle",
+     "gz": 1375
+    },
+    {
+     "name": "ReportQuestion",
+     "gz": 1325
+    },
+    {
+     "name": "ResultScreen",
+     "gz": 1147
+    },
+    {
+     "name": "AdBanner",
+     "gz": 1082
+    },
+    {
+     "name": "Celebration",
+     "gz": 820
+    },
+    {
+     "name": "GameHelp",
+     "gz": 787
+    },
+    {
+     "name": "HowToPlayPopover",
+     "gz": 767
+    },
+    {
+     "name": "CelebrationStyles",
+     "gz": 725
+    },
+    {
+     "name": "smartSearch",
+     "gz": 712
+    },
+    {
+     "name": "GameShell",
+     "gz": 686
+    },
+    {
+     "name": "GridBoardSkeleton",
+     "gz": 603
+    },
+    {
+     "name": "fetchCareerPlayers",
+     "gz": 565
+    },
+    {
+     "name": "seoMetaPart04",
+     "gz": 551
+    },
+    {
+     "name": "useGameCompletion",
+     "gz": 497
+    },
+    {
+     "name": "fetchAllRows",
+     "gz": 418
+    },
+    {
+     "name": "star",
+     "gz": 402
+    },
+    {
+     "name": "medal",
+     "gz": 388
+    },
+    {
+     "name": "copy",
+     "gz": 310
+    },
+    {
+     "name": "circle-help",
+     "gz": 303
+    },
+    {
+     "name": "flag",
+     "gz": 303
+    },
+    {
+     "name": "shareGrids",
+     "gz": 286
+    },
+    {
+     "name": "clock",
+     "gz": 273
+    },
+    {
+     "name": "arrow-left",
+     "gz": 265
+    },
+    {
+     "name": "GridCellLayout.module",
+     "gz": 227
+    },
+    {
+     "name": "formatNumber",
+     "gz": 154
+    }
+   ]
+  },
+  "/leaderboard": {
+   "bytes": 249321,
+   "kb": 243,
+   "files": 9,
+   "secondRunBytes": 249321,
+   "chunks": [
+    {
+     "name": "index",
+     "gz": 234715
+    },
+    {
+     "name": "select",
+     "gz": 7409
+    },
+    {
+     "name": "Leaderboard",
+     "gz": 4297
+    },
+    {
+     "name": "tabs",
+     "gz": 1347
+    },
+    {
+     "name": "medal",
+     "gz": 388
+    },
+    {
+     "name": "card",
+     "gz": 373
+    },
+    {
+     "name": "calendar",
+     "gz": 303
+    },
+    {
+     "name": "chevron-up",
+     "gz": 245
+    },
+    {
+     "name": "chevron-down",
+     "gz": 244
+    }
+   ]
+  }
+ }
+}

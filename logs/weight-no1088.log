@@ -1,0 +1,19 @@
+restored from 1e966da6:
+M  src/pages/Index.tsx
+  FAIL: /stadium-tycoon: 291K of gzipped JavaScript against a budget of 290K
+   /                   235K gz over   3 files (budget 235K)
+   /club-manager       705K gz over  37 files (budget 705K)
+   /soccer-career      759K gz over  42 files (budget 759K)
+   /stadium-tycoon     291K gz over  23 files (budget 290K)
+   /wonderkid-factory  266K gz over  19 files (budget 266K)
+   /minefield          284K gz over  20 files (budget 284K)
+   /footle             339K gz over  38 files (budget 339K)
+   /nfl-my-career      455K gz over  46 files (budget 455K)
+   /front-office       353K gz over  34 files (budget 353K)
+   /soccer-grid        308K gz over  36 files (budget 308K)
+   /leaderboard        243K gz over   9 files (budget 266K)
+sweepWeight: 1 failure
+WEIGHT no1088 / bytes=240766 kb=235 files=3 second=240766 pageChunk=none entry=234413 exactK=235.12
+WEIGHT no1088 /footle bytes=347538 kb=339 files=38 second=347538 pageChunk=none entry=234413 exactK=339.39
+WEIGHT no1088 /front-office bytes=361681 kb=353 files=34 second=361681 pageChunk=none entry=234413 exactK=353.20
+WEIGHT no1088 /stadium-tycoon bytes=298143 kb=291 files=23 second=298143 pageChunk=20757 entry=234413 exactK=291.16
