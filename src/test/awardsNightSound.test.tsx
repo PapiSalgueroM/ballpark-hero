@@ -8,14 +8,28 @@
  * fixture of the real Soccer Career card; this is the same promise on the
  * shared contract, where a second sport will bind next.
  *
+ * Part two, with the bind: the switch is mocked, so these read what the card
+ * ASKS for (which moment, how far ahead, in whose scope) and when it hushes.
+ * The delays come from the card's own pace: a name every 0.22 s from 0.6 s,
+ * the headline 0.75 s plus a step per name, and the slam lands 0.24 s in.
+ *
  * No real person, club or competition is named: the award and every name on
  * the list are generated.
  */
 import { createHash } from 'node:crypto';
-import { describe, expect, it } from 'vitest';
+import { StrictMode } from 'react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { render } from '@testing-library/react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { AwardsNightCard } from '@/components/career/AwardsNightCard';
 import type { AwardsCandidate, AwardsDef, AwardsNight, AwardsNightCopy } from '@/lib/careerAwardsNight';
+
+/** every call the card makes on the switch, in order: 'tap@0.600', 'hush' */
+const heard = vi.hoisted(() => ({ calls: [] as string[], scopes: [] as unknown[], hushed: [] as unknown[] }));
+vi.mock('@/lib/sound', () => ({
+  sound: (moment: string, opts?: { delay?: number; scope?: object }) => { heard.calls.push(`${moment}@${(opts?.delay ?? 0).toFixed(3)}`); heard.scopes.push(opts?.scope); },
+  hush: (scope?: object) => { heard.calls.push('hush'); heard.hushed.push(scope); },
+}));
 
 const AWARD: AwardsDef = {
   id: 'synthetic', name: 'Synthetic Cup', emoji: '\u{1F3C6}', shortlistSize: 5, widerSize: 20, podiumSize: 3, rivals: 'generated',
@@ -86,5 +100,86 @@ describe('Round 1132: the awards night card draws what it drew before the sound 
   });
   it('he is not nominated', () => {
     expect(sha(renderToStaticMarkup(<Card night={OUT} />))).toBe('c47c9ca4437e5fa829e03b404d455dc7c7bb042c89a6895829f6a08b838805ce');
+  });
+});
+
+const TICKS = ['tap@0.600', 'tap@0.820', 'tap@1.040', 'tap@1.260', 'tap@1.480'];
+const reset = () => { heard.calls.length = 0; heard.scopes.length = 0; heard.hushed.length = 0; };
+const stillWorld = (still: boolean) => {
+  window.matchMedia = ((query: string) => ({
+    matches: still, media: query, onchange: null,
+    addListener: () => {}, removeListener: () => {}, addEventListener: () => {}, removeEventListener: () => {}, dispatchEvent: () => false,
+  })) as unknown as typeof window.matchMedia;
+};
+
+describe('Round 1132: what the awards night asks the sound switch for', () => {
+  afterEach(() => { reset(); stillWorld(false); });
+
+  it('he wins a list of five: a tick per name, then the winner at 2.09 s, in one scope, and nothing else', () => {
+    reset();
+    render(<Card night={WIN} speechOpen />);
+    expect(heard.calls).toEqual([...TICKS, 'awardWin@2.090']);
+    expect(heard.scopes[0]).toBeTypeOf('object');
+    expect(new Set(heard.scopes).size).toBe(1);
+  });
+
+  it('giving the speech re-renders the card and plays nothing again', () => {
+    reset();
+    const view = render(<Card night={WIN} speechOpen />);
+    view.rerender(<Card night={{ ...WIN, speech: { id: 'thanks', line: 'He thanked the dressing room.', moved: '+2 morale' } }} />);
+    view.rerender(<Card night={{ ...WIN, speech: { id: 'thanks', line: 'He thanked the dressing room.', moved: '+2 morale' } }} />);
+    expect(heard.calls).toEqual([...TICKS, 'awardWin@2.090']);
+  });
+
+  it('next season is a new plan: this scope is hushed once, then the night plays again', () => {
+    reset();
+    const view = render(<Card night={WIN} />);
+    view.rerender(<Card night={{ ...WIN, year: WIN.year + 1 }} />);
+    expect(heard.calls).toEqual([...TICKS, 'awardWin@2.090', 'hush', ...TICKS, 'awardWin@2.090']);
+    expect(heard.hushed).toEqual([heard.scopes[0]]);
+  });
+
+  it('another award of the same year, place and length is a new plan too', () => {
+    reset();
+    const view = render(<Card night={WIN} />);
+    view.rerender(<Card night={WIN} award={{ ...AWARD, id: 'synthetic-two' }} />);
+    expect(heard.calls).toEqual([...TICKS, 'awardWin@2.090', 'hush', ...TICKS, 'awardWin@2.090']);
+  });
+
+  it('leaving the screen hushes this card alone', () => {
+    reset();
+    const view = render(<Card night={WIN} />);
+    view.unmount();
+    expect(heard.calls).toEqual([...TICKS, 'awardWin@2.090', 'hush']);
+    expect(heard.hushed[0]).toBe(heard.scopes[0]);
+    expect(heard.hushed[0]).toBeTypeOf('object');
+  });
+
+  it('second place gets the sting and no crowd; off the podium and off the ballot get the ticks alone', () => {
+    reset();
+    render(<Card night={SECOND} />);
+    expect(heard.calls).toEqual([...TICKS, 'award@2.090']);
+    reset();
+    render(<Card night={FOURTH} />);
+    expect(heard.calls).toEqual(TICKS);
+    reset();
+    render(<Card night={OUT} />);
+    expect(heard.calls).toEqual(TICKS);
+  });
+
+  it('reduced motion shows the card at once, so it gets the result alone, at once', () => {
+    reset();
+    stillWorld(true);
+    render(<Card night={WIN} />);
+    expect(heard.calls).toEqual(['awardWin@0.000']);
+    reset();
+    render(<Card night={OUT} />);
+    expect(heard.calls).toEqual([]);
+  });
+
+  it('strict mode mounts twice: the plan, a hush, then the plan again, in that order', () => {
+    reset();
+    render(<StrictMode><Card night={WIN} /></StrictMode>);
+    expect(heard.calls).toEqual([...TICKS, 'awardWin@2.090', 'hush', ...TICKS, 'awardWin@2.090']);
   });
 });
