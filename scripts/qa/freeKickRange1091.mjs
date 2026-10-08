@@ -260,9 +260,9 @@ createRoot(document.getElementById('root')).render(<AuthProvider><Host/></AuthPr
       row.setupLabel = kind === 'practice' ? await page.locator('svg[role="img"]').getAttribute('aria-label') : await page.locator('[data-tycoon-set-piece] h2 + p').innerText();
       const selectedSetup = setup.runs[0].kicks[kind === 'practice' ? 1 : fixture.offer.kickIndex];
       const label = kind === 'practice' ? page.getByText(selectedSetup.label, { exact: true }) : page.locator('[data-tycoon-set-piece] h2 + p');
-      const healthySurface = await expose(label, 'setup-label', true);
+      await expose(label, 'setup-label', true);
       if (arm === 'current' && touch) {
-        const control = { id: `${id}-clip`, complete: false, before: healthySurface, stateBefore: await snapshot('before-label-clip') }; report.visibilityControls.push(control); persist();
+        const control = { id: `${id}-clip`, complete: false, before: await readSurface(label, true), stateBefore: await snapshot('before-label-clip') }; report.visibilityControls.push(control); persist();
         const originalStyle = await label.getAttribute('style');
         try {
           await label.evaluate(node => { node.style.display = 'block'; node.style.width = '1px'; node.style.maxWidth = '1px'; node.style.overflow = 'hidden'; });

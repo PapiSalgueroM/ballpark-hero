@@ -1,5 +1,29 @@
 ## Round 1091 preparation, 2026-10-07, legal direct-kick range
 
+Preparation 1 at3b4f96fb/run37709378917 completed red. Proper app types/build,
+six actual engine groups/twelve effective copied faults and closing521 dependency
+holds passed. Independent raw engine audit06b6c979 checks15,914 complete normal
+comparisons, sole mapped failures, exclusive bundles and all2,787 source holds.
+Native completed no journeys or controls: the first clipping control's full HTML
+baseline preceded a screenshot that left two empty style attributes. The next
+QA-only change captures the fault baseline after that healthy screenshot, keeping
+the earlier geometry capture and every strict restoration assertion. Runtime is
+pending. The four authored consumer journeys are not accepted from partial frames.
+
+Eight original regressions passed. The original presentation runner reported EMPTY
+because the harness printed one line, although that line reports36 rendered cases.
+This remains an unaccepted original gate. The next workflow additionally runs the
+unchanged harness directly and retains its actual temporary output/report/PNGs;
+it does not modify or waive the original runner. Readers17/20 passed. Prerender,
+Sitemap and SeoMetaSplit failed the AL snapshot findings also reproduced in the
+1090 job's exact unchanged AL8fe baseline. Release integration remains blocked.
+
+The retained800 diagnostic maxRunScore rows increase by50..53, spanning3390..3497.
+These sampled extrema are descriptive, not a universal threshold or earned score.
+The conservative analytic bound is3546.744 rows exceed historical3424, including
+the first date at3425. The live cap is still unqueried and E-owned;3424 cannot be
+used as a safe universal engine bound. No scoring coefficients or records change.
+
 Unverified preparation on codex/free-kick-range-1091 from Release AL integration
 8fe82a4dc1346f7d5b8072f387f3acb34bbaa3c8. The clean owned managed
 soccer-transfer-review-1082 checkout was reused; accepted1082 remains frozen.
@@ -16,11 +40,11 @@ https://www.thefa.com/football-rules-governance/lawsandrules/laws/football-11-11
 The penalty area includes its boundary;17m keeps these goal-facing kicks outside.
 No new player, club, score or season data is added. Existing goal dimensions held.
 
-Authored proof remains unexecuted: six engine outcome groups against the actual
+Engine proof passed only for this exact preparation: six outcome groups against the actual
 pinned old engine and twelve uniquely reversible copied faults, complete setup/
 shot/RNG/input comparisons, actual unchanged Tycoon offers, changed low-power
 reach and all800 diagnostic daily cap rows with a conservative analytic bound.
-Four finite actual React consumer journeys are also authored: practice and
+Four finite actual React consumer journeys remain unaccepted: practice and
 watched Tycoon at390 touch and1280 keyboard, two pinned-old engine controls,
 and two separately labeled restored DOM clipping controls. Selected labels,
 pitches and results retain physical viewport/clipping measurements, actual

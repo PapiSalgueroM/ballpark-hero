@@ -157,6 +157,22 @@ jobs:
             NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "free-kick-range-artifacts/regressions/$harness.log" || failed=1
           done
           exit "$failed"
+      - name: Retain the unchanged presentation harness directly
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" timeout --signal=TERM --kill-after=15s 8m node scripts/simSetPiecePresentation.mjs 2>&1 | tee free-kick-range-artifacts/regressions/original-presentation-direct.log
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import path from 'node:path'; import os from 'node:os'; import assert from 'node:assert/strict';
+          const log=fs.readFileSync('free-kick-range-artifacts/regressions/original-presentation-direct.log','utf8');
+          const lines=log.split('\n').map(line=>/^simSetPiecePresentation: PASS\. 36 rendered cases\. Evidence: (.+)$/.exec(line)).filter(Boolean);
+          assert.equal(lines.length,1,'Exactly one actual original presentation result');
+          const source=path.resolve(lines[0][1]), base=path.resolve(os.tmpdir());
+          assert.equal(path.dirname(source),base); assert(path.basename(source).startsWith('dukb-setpiece-presentation-'));
+          fs.cpSync(source,'free-kick-range-artifacts/original-presentation-direct',{recursive:true});
+          const r=JSON.parse(fs.readFileSync(path.join(source,'report.json')));
+          assert.equal(r.control,'');assert.equal(r.report.length,36);assert.deepEqual(r.errors,[]);
+          console.log('The actual unchanged presentation output is retained. The original runner gate remains strict.');
+          NODE
       - name: Original consumers engines data and dependencies held
         if: ${{ !cancelled() }}
         run: |
