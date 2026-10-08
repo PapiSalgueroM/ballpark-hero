@@ -1,0 +1,8 @@
+ok   1. pool shape: one row per record row, unique ids, names and surnames, no dashes
+ok   2. every shown line equals the record
+ok   3. the record holds together: two hosts, both sides equal, every text rebuilt from its evidence
+ok   4. teammates agree on every World Series title
+ok   5. every active player is on the club the 2026 rosters list him under, and no retired one is on them
+ok   6. the read is still current: today is on or before rereadBy, and every active line is dated to the read
+60 players (26 active), 717 shown lines checked against 60 record rows
+simMlbCareerPathFacts: all 6 sections green
