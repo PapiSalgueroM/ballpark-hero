@@ -1,0 +1,24 @@
+#!build
+#!playwright
+an.tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+an.vitest-us: node_modules/.bin/vitest run src/test/usSeasonCentreEntry.test.tsx src/test/usCareerSaveRetry.test.tsx --testTimeout=300000 --hookTimeout=120000
+an.stale: node scripts/simStaleChunk.mjs
+an.stale-noprerender: SIM_STALE_CHUNK_CONTROL=noprerender node scripts/simStaleChunk.mjs
+an.stale-nooffline: SIM_STALE_CHUNK_CONTROL=nooffline node scripts/simStaleChunk.mjs
+an.stale-noguard: SIM_STALE_CHUNK_CONTROL=noguard node scripts/simStaleChunk.mjs
+an.stale-nolistener: SIM_STALE_CHUNK_CONTROL=nolistener node scripts/simStaleChunk.mjs
+an.stale-bogus: SIM_STALE_CHUNK_CONTROL=bogus node scripts/simStaleChunk.mjs
+an.squadplay: ENGINES=chromium REQUIRE_PAGE=1 PORT=4810 SHOTS=$RC_OUT/shots-plain node scripts/playCareerSquad.mjs
+an.squadplay-timeline: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=timeline PORT=4820 SHOTS=/tmp/shots-timeline node scripts/playCareerSquad.mjs
+an.saveretry: node scripts/simUsCareerSaveRetry.mjs
+an.seam: PORT=4601 SHOTS=$RC_OUT node scripts/playUsCareerSaveSeam.mjs
+an.seam-hidden: PORT=4602 US_SAVE_SEAM_CONTROL=hidden node scripts/playUsCareerSaveSeam.mjs
+an.seam-keeptoast: PORT=4603 US_SAVE_SEAM_CONTROL=keeptoast node scripts/playUsCareerSaveSeam.mjs
+an.seam-raw: PORT=4604 US_SAVE_SEAM_CONTROL=raw node scripts/playUsCareerSaveSeam.mjs
+an.seam-open: PORT=4605 US_SAVE_SEAM_CONTROL=open node scripts/playUsCareerSaveSeam.mjs
+an.seam-bogus: PORT=4606 US_SAVE_SEAM_CONTROL=bogus node scripts/playUsCareerSaveSeam.mjs
+an.needle: grep -o "could not be saved. Stay on this page and use Retry save.\{0,80\}" dist/assets/*.js | cut -c1-260
+sweep: ENGINES=chromium node scripts/sweepWeight.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simResultPillComparison: node scripts/simResultPillComparison.mjs
+simMobileChrome: node scripts/simMobileChrome.mjs
