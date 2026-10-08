@@ -1,0 +1,8 @@
+1) No page downloads data it never reads (the static import closure of every page)
+   169 pages walked; 3 hold the Club Manager engine, 1 the national team pools, 3 today's nationalities, 16 the squad shape, 13 Squad Deal's loader
+2) A past world answers nobody before its season is asked for, and everybody after
+   CONTROL eager: nationalityOf no longer answers null for a past world that has not arrived (in the bundle)
+  FAIL: 1109 of 6910 past names had a country before their season was asked for, 23 of them a DIFFERENT country from their own world's (era2020 Aaron Ramsey: England; era2020 Aaron Wan-Bissaka: DR Congo; era2020 Aarón Escandell: Spain; era2020 Aarón Martín: Spain; era2020 Abdou Diallo: Senegal): a past world must answer nobody until it has arrived
+   4 past worlds, the same list three ways; before any gate 5801 of 6910 past names answer nobody; at the moment each gate opens 6910 of 6910 answer their own world; after the gates 11299 of 11299 names answer their own world
+   (1101 of those past names are also in today's maps, 23 of them with a different country there: that is what the null protects)
+CONTROL eager DID NOT FIRE as predicted: 1109 answered early (expected 1101), 23 wrong (expected 23)

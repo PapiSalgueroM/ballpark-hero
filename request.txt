@@ -1,0 +1,87 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerInternationals.test.ts src/lib/clubManagerSlots.test.ts src/lib/gmStaff.test.ts src/test/academyFilters.test.tsx src/test/calendarCurrentDate.test.tsx src/test/clubManagerBracketMoment.test.tsx src/test/clubManagerDealMoment.test.tsx src/test/clubManagerDecisions.test.tsx src/test/clubManagerDeskCues.test.tsx src/test/clubManagerEraLoad.test.tsx src/test/clubManagerEraNationalities.test.ts src/test/clubManagerJobHunt.test.ts src/test/clubManagerManagerFace.test.tsx src/test/clubManagerSave.test.tsx src/test/clubManagerShootoutOrder.test.ts src/test/clubManagerShootoutTile.test.tsx src/test/clubManagerSlots.test.tsx src/test/clubManagerWorldEditor.test.tsx src/test/clubManagerWorldEditorPage.test.tsx src/test/contractPreview.test.tsx src/test/facilitiesPreview.test.tsx src/test/inboxCard.test.tsx src/test/liveSimMotion.test.tsx src/test/managerHotSeatCarryOn.test.ts src/test/managerHotSeatCarryOnCard.test.tsx src/test/managerMatchPlans.test.tsx src/test/managerWorldBrowser.test.tsx src/test/numberFormatting.test.tsx src/test/staffScreen.test.tsx  src/lib/soccerCareerLeague.test.ts src/test/cmWorldIdentity1052.test.ts --testTimeout=300000 --hookTimeout=120000
+identity-control: CM_WORLD_IDENTITY_CONTROL=rating node_modules/.bin/vitest run src/test/cmWorldIdentity1052.test.ts
+simClubManagerNewLeagues: node scripts/simClubManagerNewLeagues.mjs
+simClubManagerGathered: node scripts/simClubManagerGathered.mjs
+simClubManager: node scripts/simClubManager.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simClubManagerClubList: node scripts/simClubManagerClubList.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simCareerDerbies: node scripts/simCareerDerbies.mjs
+simDailyClubPool: node scripts/simDailyClubPool.mjs
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+simCmDataOnDemand: node scripts/simCmDataOnDemand.mjs
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs
+simCmInternationals: node scripts/simCmInternationals.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStartingXi: node scripts/simStartingXi.mjs
+simJobMarket: node scripts/simJobMarket.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs
+simBoardAsks: node scripts/simBoardAsks.mjs
+simNationalities: node scripts/simNationalities.mjs
+simFreeAgents: node scripts/simFreeAgents.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simCareerClubPool: node scripts/simCareerClubPool.mjs
+simManagerCareer: node scripts/simManagerCareer.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+gen-check: node scripts/genClubManagerGathered.mjs russia2026 --check
+aleague-identical: node scripts/genClubManagerALeague.mjs && git diff --ignore-cr-at-eol --exit-code --stat -- src/data/clubManagerALeague2026.ts && echo ALEAGUE-FILE-IDENTICAL
+g-invented: GATHERED_CONTROL=invented node scripts/simClubManagerGathered.mjs
+g-onehost: GATHERED_CONTROL=onehost node scripts/simClubManagerGathered.mjs
+g-wiki: GATHERED_CONTROL=wiki node scripts/simClubManagerGathered.mjs
+g-stale: GATHERED_CONTROL=stale node scripts/simClubManagerGathered.mjs
+g-offcurve: GATHERED_CONTROL=offcurve node scripts/simClubManagerGathered.mjs
+g-noflag: GATHERED_CONTROL=noflag node scripts/simClubManagerGathered.mjs
+g-twice: GATHERED_CONTROL=twice node scripts/simClubManagerGathered.mjs
+g-keeper: GATHERED_CONTROL=keeper node scripts/simClubManagerGathered.mjs
+g-trap: GATHERED_CONTROL=trap node scripts/simClubManagerGathered.mjs
+g-oldsave: GATHERED_CONTROL=oldsave node scripts/simClubManagerGathered.mjs
+n-rudrop: CM_NEW_CONTROL=rudrop node scripts/simClubManagerNewLeagues.mjs
+n-rueuro: CM_NEW_CONTROL=rueuro node scripts/simClubManagerNewLeagues.mjs
+n-ruswap: CM_NEW_CONTROL=ruswap node scripts/simClubManagerNewLeagues.mjs
+n-ruflavour: CM_NEW_CONTROL=ruflavour node scripts/simClubManagerNewLeagues.mjs
+n-dropcount: CM_NEW_CONTROL=dropcount node scripts/simClubManagerNewLeagues.mjs
+n-nocup: CM_NEW_CONTROL=nocup node scripts/simClubManagerNewLeagues.mjs
+n-swap: CM_NEW_CONTROL=swap node scripts/simClubManagerNewLeagues.mjs
+n-invented: CM_NEW_CONTROL=invented node scripts/simClubManagerNewLeagues.mjs
+n-cupon: CM_NEW_CONTROL=cupon node scripts/simClubManagerNewLeagues.mjs
+n-dropcount2: CM_NEW_CONTROL=dropcount2 node scripts/simClubManagerNewLeagues.mjs
+n-alpartial: CM_NEW_CONTROL=alpartial node scripts/simClubManagerNewLeagues.mjs
+n-nopyramid: CM_NEW_CONTROL=nopyramid node scripts/simClubManagerNewLeagues.mjs
+n-emptypair: CM_NEW_CONTROL=emptypair node scripts/simClubManagerNewLeagues.mjs
+n-crowd: CM_NEW_CONTROL=crowd node scripts/simClubManagerNewLeagues.mjs
+n-cupold: CM_NEW_CONTROL=cupold node scripts/simClubManagerNewLeagues.mjs
+n-ligue1drop3: CM_NEW_CONTROL=ligue1drop3 node scripts/simClubManagerNewLeagues.mjs
+n-reserve: CM_NEW_CONTROL=reserve node scripts/simClubManagerNewLeagues.mjs
+n-nohistleague: CM_NEW_CONTROL=nohistleague node scripts/simClubManagerNewLeagues.mjs
+n-article: CM_NEW_CONTROL=article node scripts/simClubManagerNewLeagues.mjs
+n-thin: CM_NEW_CONTROL=thin node scripts/simClubManagerNewLeagues.mjs
+ru-seed1: SIM_SEED=1 CM_NEW_ROWS=russia node scripts/simClubManagerNewLeagues.mjs
+ruswap-seed1: SIM_SEED=1 CM_NEW_ROWS=russia CM_NEW_CONTROL=ruswap node scripts/simClubManagerNewLeagues.mjs
+ru-seed2: SIM_SEED=2 CM_NEW_ROWS=russia node scripts/simClubManagerNewLeagues.mjs
+ruswap-seed2: SIM_SEED=2 CM_NEW_ROWS=russia CM_NEW_CONTROL=ruswap node scripts/simClubManagerNewLeagues.mjs
+ru-seed3: SIM_SEED=3 CM_NEW_ROWS=russia node scripts/simClubManagerNewLeagues.mjs
+ruswap-seed3: SIM_SEED=3 CM_NEW_ROWS=russia CM_NEW_CONTROL=ruswap node scripts/simClubManagerNewLeagues.mjs
+ru-seed4: SIM_SEED=4 CM_NEW_ROWS=russia node scripts/simClubManagerNewLeagues.mjs
+ruswap-seed4: SIM_SEED=4 CM_NEW_ROWS=russia CM_NEW_CONTROL=ruswap node scripts/simClubManagerNewLeagues.mjs
+ru-seed5: SIM_SEED=5 CM_NEW_ROWS=russia node scripts/simClubManagerNewLeagues.mjs
+ruswap-seed5: SIM_SEED=5 CM_NEW_ROWS=russia CM_NEW_CONTROL=ruswap node scripts/simClubManagerNewLeagues.mjs
+cl-dropleague: CM_CLUBLIST_CONTROL=dropleague node scripts/simClubManagerClubList.mjs
+cl-dropclub: CM_CLUBLIST_CONTROL=dropclub node scripts/simClubManagerClubList.mjs
+cl-unmark: CM_CLUBLIST_CONTROL=unmark node scripts/simClubManagerClubList.mjs
+cl-clockdate: CM_CLUBLIST_CONTROL=clockdate node scripts/simClubManagerClubList.mjs
+cl-eraclub: CM_CLUBLIST_CONTROL=eraclub node scripts/simClubManagerClubList.mjs
+cl-unwired: CM_CLUBLIST_CONTROL=unwired node scripts/simClubManagerClubList.mjs
+slots-dupe: SLOTS_CONTROL=dupe node scripts/simClubManagerSlots.mjs
+size-uncapped: SAVE_SIZE_CONTROL=uncapped node scripts/simClubManagerSaveSize.mjs
+dod-pools: CM_DATA_CONTROL=pools node scripts/simCmDataOnDemand.mjs
+dod-eranat: CM_DATA_CONTROL=eranat node scripts/simCmDataOnDemand.mjs
+dod-squad: CM_DATA_CONTROL=squad node scripts/simCmDataOnDemand.mjs
+dod-eager: CM_DATA_CONTROL=eager node scripts/simCmDataOnDemand.mjs
+dod-seamalias: CM_DATA_CONTROL=seamalias node scripts/simCmDataOnDemand.mjs

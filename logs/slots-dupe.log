@@ -1,0 +1,23 @@
+NEGATIVE CONTROL ON: SLOTS_CONTROL=dupe, the slots module is a rewritten copy
+1) Three careers, 20 switches round robin with a season after each (7, 7, 6 seasons), every season equal to the same career played alone
+   slots after creation: Everton | Lincoln City | Barcelona; manager in slot 2: Harness Manager
+   Everton (today)                      alone: #2 64pts 0T, #19 37pts 0T, #21 35pts 0T, #19 44pts 0T, #24 20pts 0T, #21 38pts 0T, #23 24pts 0T
+                                        slots: #2 64pts 0T, #19 37pts 0T, #21 35pts 0T, #19 44pts 0T, #24 20pts 0T, #21 38pts 0T, #23 24pts 0T
+   Lincoln City (today, named manager)  alone: #24 14pts 0T, #23 26pts 0T, #24 16pts 0T, #23 22pts 0T, #23 26pts 0T, #24 9pts 0T, #24 4pts 0T
+                                        slots: #24 14pts 0T, #23 26pts 0T, #24 16pts 0T, #23 22pts 0T, #23 26pts 0T, #24 9pts 0T, #24 4pts 0T
+   Barcelona (2010-11 era)              alone: #1 85pts 1T, #2 85pts 0T, #2 74pts 1T, #19 30pts 0T, #19 33pts 0T, #20 17pts 0T
+                                        slots: #1 85pts 1T, #2 85pts 0T, #2 74pts 1T, #19 30pts 0T, #19 33pts 0T, #20 17pts 0T
+   20 of 20 season digests identical to the career played alone; board nudges 230; alone arm 15 s, total 27 s
+2) The three careers played on, switching, to season 15 each: everything on the device under 495000 characters
+   seasons played: 15, 15, 15; keys: dukb-cm-slot-1 181673, dukb-cm-slot-2 177555, dukb-club-manager-save 110209, dukb-cm-slot-3 59333, dukb-cm-slots 31
+   total 528801 characters across 5 keys (budget 495000)
+  FAIL: 5 Club Manager keys on the device, not three saves and an index
+  FAIL: three season 15 careers take 528801 characters, over the 495000 budget
+3) A store that refuses: every refused swap answers false and moves nothing
+  FAIL: slot 3 to 1: the incoming career was refused and the store changed (now Everton s15 | Lincoln City s15 | Barcelona s15, was Everton s15 | Lincoln City s15 | Barcelona s15)
+   6 refused swaps from slot 3; holdings unchanged: Everton s15 | Lincoln City s15 | Barcelona s15
+4) An old save, from before slots: slot 1, and reading writes nothing
+   old save (season 5, week 19, 187 h2h rows, 129001 chars) in slot 1, 1 key on the device, bytes untouched: true
+   through slot 2 and back: equal but h2h true, h2h 187 -> 186 rows, last six per opponent kept true
+
+CONTROL FIRED: SLOTS_CONTROL=dupe turned section 2 red through its budget check (red sections: 2, 3), as it must
