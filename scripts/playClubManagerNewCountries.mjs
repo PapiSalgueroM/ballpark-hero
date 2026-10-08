@@ -113,8 +113,9 @@ for (const [w, h] of VIEWPORTS) {
       if (!l.europe && /Champions League/i.test(ltText)) fail(`${tag}: step 2: the ${l.name} tile talks of the Champions League and the league hands out no European places`);
     }
     await overflow(page, 'the league step');
-    const back = page.locator('button:visible').filter({ hasText: /back/i }).first();
-    if (!(await back.count())) fail(`${tag}: step 2: no back button on the league step`);
+    /* the picker's own way back from the league step (the navbar's Back leaves the page) */
+    const back = page.locator('button:visible').filter({ hasText: /^\s*All nations\s*$/ }).first();
+    if (!(await back.count())) fail(`${tag}: step 2: no "All nations" back button on the league step`);
     else {
       await back.click({ timeout: 5000 });
       if (!(await tile(page, new RegExp(esc(c.name))).waitFor({ timeout: 8000 }).then(() => true).catch(() => false))) fail(`${tag}: step 2: the back button did not return to the nations`);
@@ -138,9 +139,7 @@ for (const [w, h] of VIEWPORTS) {
     if (!/Season 1/i.test(hub) || !hub.includes(club)) fail(`${tag}: step 3: the hub did not open on ${club} in Season 1 (the page reads: ${hub.slice(0, 200)})`);
     await overflow(page, `the ${club} hub`);
     /* 5. the ? button */
-    const help = page.locator('button:visible').filter({ hasText: /^\s*\?\s*$|how to play/i }).first();
-    const helpAria = page.locator('button:visible[aria-label*="ow to play" i], button:visible[aria-label*="help" i], button:visible[title*="ow to play" i]').first();
-    const opener = (await help.count()) ? help : helpAria;
+    const opener = page.locator('button:visible[aria-label="How to play"]').first();
     if (!(await opener.count())) fail(`${tag}: step 5: no ? button on the hub`);
     else {
       await opener.click({ timeout: 5000 });
