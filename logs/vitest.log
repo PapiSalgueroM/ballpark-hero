@@ -1,0 +1,11 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/translateGuard.test.tsx [2m([22m[2m53 tests[22m[2m)[22m[33m 2347[2mms[22m[39m
+   [33m[2m✓[22m[39m layer two: a string React rewrites in place shows its new words[2m > [22ma hundred updates leave exactly the nodes it started with [33m 329[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m53 passed[39m[22m[90m (53)[39m
+[2m   Start at [22m 09:31:06
+[2m   Duration [22m 3.56s[2m (transform 149ms, setup 55ms, collect 202ms, tests 2.35s, environment 334ms, prepare 227ms)[22m
+
