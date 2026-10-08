@@ -1,0 +1,11 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+walk: ENGINES=chromium node scripts/playFoOneRating.mjs
+walk-expect: FO_WALK_CONTROL=expect ENGINES=chromium node scripts/playFoOneRating.mjs
+playFoHub: ENGINES=chromium node scripts/playFoHub.mjs
+simFrontOfficeRoster: node scripts/simFrontOfficeRoster.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simPrerender: node scripts/simPrerender.mjs
+simSnapshotAssets: node scripts/simSnapshotAssets.mjs
