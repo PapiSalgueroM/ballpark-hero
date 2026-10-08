@@ -108,7 +108,7 @@ test:{environment:'jsdom',globals:true,setupFiles:[${JSON.stringify(unix(path.jo
   const args = ['node_modules/vitest/vitest.mjs', 'run', '--config', configPath, '--reporter=json', `--outputFile.json=${reportPath}`, '--reporter=default'];
   if (fault) args.push('-t', `^(${escape(BASELINE)}|${escape(fault[4])})$`);
   const child = spawnSync(process.execPath, args, { cwd: root, encoding: 'utf8', timeout: 180000, maxBuffer: 64 * 1024 * 1024,
-    env: { ...process.env, CI: '1', FORCE_COLOR: '0', NO_COLOR: '1' } });
+    env: { ...process.env, CI: '1', FORCE_COLOR: '0', NO_COLOR: '1', HOME_SEARCH_RECOVERY_BOUNDARY: '1' } });
   save(path.join(dir, 'stdout.log'), child.stdout || ''); save(path.join(dir, 'stderr.log'), child.stderr || '');
   save(path.join(dir, 'process.json'), { args, aliases, status: child.status, signal: child.signal, error: child.error?.message ?? null });
   assert(!child.error && child.signal === null, `${name}: process must finish normally`);
