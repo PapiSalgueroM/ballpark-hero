@@ -74,6 +74,7 @@ export const engine = await import('${ROOT_URL}/src/lib/soccerCareerEngine.ts');
 export const intl = await import('${ROOT_URL}/src/lib/intlNames.ts');
 export const phone = await import('${ROOT_URL}/src/lib/soccerPhone.ts');
 export const international = await import('${ROOT_URL}/src/lib/soccerInternational.ts');
+export const internationalSquads = await import('${ROOT_URL}/src/lib/soccerInternationalSquads.ts');
 export const tile = await import('${ROOT_URL}/src/components/soccer-career/SquadTile.tsx');
 export const sheetUi = await import('${ROOT_URL}/src/components/soccer-career/SquadSheet.tsx');
 import React from '${NM}/react/index.js';
@@ -564,7 +565,9 @@ function sec2(mods) {
   }
   say(`   squad level by tier, from the engine's own projection: ${got.join(', ')}`);
   seedRandom(7);
-  const xi = international.xiMen(international.pickSquad('England', null, 2040).xi);
+  /* Release AN: Round 1042 moved pickSquad out of soccerInternational.ts into soccerInternationalSquads.ts
+     (the squad picker left with the national team pools); xiMen stayed where it was. */
+  const xi = international.xiMen(mods.internationalSquads.pickSquad('England', null, 2040).xi);
   Math.random = realRandom;
   const lines = { GK: 0, DEF: 0, MID: 0, ATT: 0 };
   for (const m of xi) lines[lib.groupOf(m.slot)] += 1;
