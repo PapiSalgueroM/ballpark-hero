@@ -1,0 +1,23 @@
+ddc2c0425242f956fc0d4e8c3e8f1900908dca1a
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/tmp/rvbase[39m
+
+[90mstdout[2m | src/test/rvBaseSave.test.tsx[2m > [22m[2mmain writes saves the branch must load[2m > [22m[2min progress: three yes and two no
+[22m[39mRVSAVE| inprogress: board cg611-033, {"correct":3,"guessesLeft":10,"status":"playing","names":["David Martin (Tennessee)",null,null,null,"Sam Bradford",null,null,null,"Bryant Westbrook"]}, keys college-grid-daily-2026-10-08
+
+[90mstdout[2m | src/test/rvBaseSave.test.tsx[2m > [22m[2mmain writes saves the branch must load[2m > [22m[2mwon
+[22m[39mRVSAVE| won: board cg611-033, {"correct":9,"guessesLeft":6,"status":"complete","names":["David Martin (Tennessee)","Jeff Francis","Peyton Manning","Stephen Alexander","Sam Bradford","Troy Aikman","Keith Cash","Chris Simms","Bryant Westbrook"]}, keys college-grid-daily-2026-10-08
+
+[90mstdout[2m | src/test/rvBaseSave.test.tsx[2m > [22m[2mmain writes saves the branch must load[2m > [22m[2mlost
+[22m[39mRVSAVE| lost: board cg611-033, {"correct":0,"guessesLeft":0,"status":"complete","names":[null,null,null,null,null,null,null,null,null]}, keys college-grid-daily-2026-10-08
+
+[90mstdout[2m | src/test/rvBaseSave.test.tsx
+[22m[39mRVSAVE| wrote 3 saves to /home/runner/work/_temp/rc-out/files/base-saves.json; key pages read 108
+
+ [32m✓[39m src/test/rvBaseSave.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 949[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m   Start at [22m 06:37:51
+[2m   Duration [22m 1.82s[2m (transform 148ms, setup 38ms, collect 228ms, tests 949ms, environment 235ms, prepare 56ms)[22m
+

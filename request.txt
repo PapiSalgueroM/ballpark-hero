@@ -1,0 +1,18 @@
+# Round 1105 review (runner lens), request 2: the builder's walk and its controls, the recorded step 1 tests, main's saves loaded on the branch, and the review walk
+#!serve
+#!playwright
+#!serial
+walk: node scripts/playCollegeGridFirstTap.mjs
+walk-latecells: CGFIRST_CONTROL=latecells node scripts/playCollegeGridFirstTap.mjs
+walk-paged: CGFIRST_CONTROL=paged node scripts/playCollegeGridFirstTap.mjs
+walk-slow: CGFIRST_CONTROL=slow node scripts/playCollegeGridFirstTap.mjs
+walk-nolist: CGFIRST_CONTROL=nolist node scripts/playCollegeGridFirstTap.mjs
+walk-nojudge: CGFIRST_CONTROL=nojudge node scripts/playCollegeGridFirstTap.mjs
+walk-accepted: CGFIRST_CONTROL=accepted node scripts/playCollegeGridFirstTap.mjs
+walk-bogus: CGFIRST_CONTROL=nosuchcontrol node scripts/playCollegeGridFirstTap.mjs
+rec-engine: cp .rc/x/rvRecEngine.test.ts src/test/rvRecEngine.test.ts && node_modules/.bin/vitest run src/test/rvRecEngine.test.ts --testTimeout=300000 --hookTimeout=120000
+rec-search: cp .rc/x/rvRecSearch.test.ts src/test/rvRecSearch.test.ts && node_modules/.bin/vitest run src/test/rvRecSearch.test.ts --testTimeout=300000 --hookTimeout=120000
+basesave: git fetch -q --depth=1 origin main && git log -1 --format=%H FETCH_HEAD && mkdir -p /tmp/rvbase && git archive FETCH_HEAD | tar -x -C /tmp/rvbase && ln -s "$PWD/node_modules" /tmp/rvbase/node_modules && cp .rc/x/rvBaseSave.test.tsx /tmp/rvbase/src/test/ && cd /tmp/rvbase && RV_SAVE_OUT="$RC_OUT/base-saves.json" node_modules/.bin/vitest run src/test/rvBaseSave.test.tsx --testTimeout=300000 --hookTimeout=120000
+branchload: cp .rc/x/rvBranchLoad.test.tsx src/test/rvBranchLoad.test.tsx && RV_SAVE_IN="$RC_OUT/base-saves.json" node_modules/.bin/vitest run src/test/rvBranchLoad.test.tsx --testTimeout=300000 --hookTimeout=120000
+rvwalk: RV_SAVES="$RC_OUT/base-saves.json" node .rc/x/rvwalk1105.mjs
+assets: ls -l dist/assets | grep -i -E 'collegeGrid(Search|Judge)|CollegeGrid-'; for f in dist/assets/collegeGridSearch-*.json dist/assets/collegeGridJudge-*.json dist/assets/CollegeGrid-*.js; do echo "$f raw=$(stat -c %s $f) gzip9=$(gzip -9 -c $f | wc -c)"; done; echo "copies outside assets: $(find dist -iname 'collegeGrid*.json' -not -path 'dist/assets/*' | wc -l)"

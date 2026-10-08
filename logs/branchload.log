@@ -1,0 +1,22 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/rvBranchLoad.test.tsx[2m > [22m[2msaves written by main's code load on the branch[2m > [22m[2minprogress: restored exactly, and not one saved byte moves on load
+[22m[39mRVLOAD| inprogress: board cg611-033, correct 3, left 10, status playing; top keys v,date,puzzleIndex,guesses,gameStatus
+
+[90mstdout[2m | src/test/rvBranchLoad.test.tsx[2m > [22m[2msaves written by main's code load on the branch[2m > [22m[2minprogress: restored exactly, and not one saved byte moves on load
+[22m[39mRVLOAD| inprogress: +1 no ('Omar Ellison) +1 yes (Bobby Scott) on cell 1; action shapes ok:t,cellIndex,playerName,rarity,board | x:t,board
+
+[90mstdout[2m | src/test/rvBranchLoad.test.tsx[2m > [22m[2msaves written by main's code load on the branch[2m > [22m[2mwon: restored exactly, and not one saved byte moves on load
+[22m[39mRVLOAD| won: board cg611-033, correct 9, left 6, status complete; top keys v,date,puzzleIndex,guesses,gameStatus
+
+[90mstdout[2m | src/test/rvBranchLoad.test.tsx[2m > [22m[2msaves written by main's code load on the branch[2m > [22m[2mlost: restored exactly, and not one saved byte moves on load
+[22m[39mRVLOAD| lost: board cg611-033, correct 0, left 0, status complete; top keys v,date,puzzleIndex,guesses,gameStatus
+
+ [32m✓[39m src/test/rvBranchLoad.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 684[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m   Start at [22m 06:37:54
+[2m   Duration [22m 1.53s[2m (transform 148ms, setup 38ms, collect 232ms, tests 684ms, environment 226ms, prepare 140ms)[22m
+

@@ -1,0 +1,15 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=0 31s | playCollegeGridFirstTap: green. The board is up before the key, the key is two requests and never the table, the search and the judge read memory with the network gone, a
+walk-latecells exit=0 34s | control "latecells": fired in section 1 and 7 as expected, the check works
+walk-paged exit=0 3s | control "paged": fired in section 2 as expected, the check works
+walk-slow exit=0 24s | control "slow": fired in section 3 as expected, the check works
+walk-nolist exit=0 47s | control "nolist": fired in section 4 as expected, the check works
+walk-nojudge exit=0 31s | control "nojudge": fired in section 5 as expected, the check works
+walk-accepted exit=0 26s | control "accepted": fired in section 6 as expected, the check works
+walk-bogus exit=1 0s | CGFIRST_CONTROL=nosuchcontrol is not a control this walk knows (latecells, paged, slow, nolist, nojudge, accepted)
+rec-engine exit=0 1s |    Duration  765ms (transform 95ms, setup 40ms, collect 99ms, tests 41ms, environment 244ms, prepare 125ms)
+rec-search exit=0 1s |    Duration  683ms (transform 81ms, setup 41ms, collect 80ms, tests 5ms, environment 252ms, prepare 58ms)
+basesave exit=0 3s |    Duration  1.82s (transform 148ms, setup 38ms, collect 228ms, tests 949ms, environment 235ms, prepare 56ms)
+branchload exit=0 2s |    Duration  1.53s (transform 148ms, setup 38ms, collect 232ms, tests 684ms, environment 226ms, prepare 140ms)
+rvwalk exit=0 115s | RVWALK DONE: 1 findings, 173 notes
+assets exit=0 0s | copies outside assets: 0
