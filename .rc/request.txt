@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+#!serial
+fit-d: node scripts/playLiveMatchFit.mjs
+fit-e: node scripts/playLiveMatchFit.mjs
+fit-f: node scripts/playLiveMatchFit.mjs
+fit-g: node scripts/playLiveMatchFit.mjs
+fit-h: node scripts/playLiveMatchFit.mjs
+fit-silentlist: LIVE_FIT_CONTROL=silentlist node scripts/playLiveMatchFit.mjs
