@@ -1,0 +1,12 @@
+── NBA ──
+   8 players shopped, 32 offers, 32 executed clean, 65ms total (the oracle took 74ms more and agreed on 8 of 8)
+── MLB ──
+   8 players shopped, 32 offers, 32 executed clean, 179ms total (the oracle took 250ms more and agreed on 8 of 8)
+── NHL ──
+   8 players shopped, 32 offers, 32 executed clean, 70ms total (the oracle took 88ms more and agreed on 8 of 8)
+── NFL ──
+   8 players shopped, 32 offers, 32 executed clean, 100ms total (the oracle took 114ms more and agreed on 8 of 8)
+── NFL full rosters ──
+   8 players shopped, 32 offers, 32 executed clean, 135ms total (the oracle took 2282ms more and agreed on 8 of 8)
+
+ALL TRADE FINDER CHECKS PASSED

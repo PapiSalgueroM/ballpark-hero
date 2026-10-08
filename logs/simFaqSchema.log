@@ -1,0 +1,15 @@
+1) no shipped document carries two blocks of the same @type
+   177 documents with structured data, 133 FAQPage blocks, 0 duplicated types, 0 placeholders
+2) no JSON-LD block is inserted and then replaced
+   /front-office        3 head states, settled on: BreadcrumbList, FAQPage, Game, Organization, WebApplication, WebSite
+   /nhl-front-office    3 head states, settled on: BreadcrumbList, FAQPage, Game, Organization, WebApplication, WebSite
+   /gauntlet-draft      3 head states, settled on: BreadcrumbList, FAQPage, Game, Organization, WebApplication, WebSite
+   /nhl-connect-4       3 head states, settled on: BreadcrumbList, FAQPage, Game, Organization, WebApplication, WebSite
+   /ufc                 3 head states, settled on: BreadcrumbList, FAQPage, Game, Organization, WebApplication, WebSite
+   /footle              4 head states, settled on: BreadcrumbList, FAQPage, Game, Organization, WebApplication, WebSite
+   /soccer-career       4 head states, settled on: BreadcrumbList, FAQPage, Game, Organization, WebApplication, WebSite
+   /soccer              2 head states, settled on: CollectionPage, Organization, WebApplication, WebSite
+   /nba-grid/archive    2 head states, settled on: CollectionPage, Organization, WebApplication, WebSite
+   /records             2 head states, settled on: CollectionPage, Organization, WebApplication, WebSite
+
+simFaqSchema: green. One block per type per page, written once and never rewritten.

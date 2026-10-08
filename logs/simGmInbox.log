@@ -1,0 +1,29 @@
+simGmInbox: 7 packs, nfl 10, nba 8, mlb 8, nhl 8, college 8, gym 6, afl 6 events, seed 1
+1) Legal: every pack is narrated and every voice is a role
+   ok 2236 real names harvested from 8 roster files
+   scanned 389 strings across 7 packs, 0 findings
+   ok no quote, no real name, no placeholder, every voice a role
+2) Every option moves exactly what its card says, once
+   108 options answered on a fresh desk, 0 findings
+   ok every option moved exactly its declared effects, its card said exactly that, and moved once
+3) The rules hold over 1000 seasons a pack
+   18890 events dealt, 0 rule breaks
+   ok every delivery was on its beat with every condition true, no one shot twice, no repeat inside a cooldown, caps held
+3b) The caps at their edges: 20 silent and 20 stubborn desks a pack, ten seasons each
+   silent desks at the open cap of 3: nfl 20, nba 20, mlb 20, nhl 20, college 20, gym 20, afl 20 of 20
+   stubborn desks at the kept cap of 8: nfl 20, nba 20, mlb 20, nhl 20, college 20, gym 20, afl 20 of 20
+   ok never past 3 open or 8 kept, and no open message ever dropped
+4) Each pack deals a measured number of events a season
+   ok nfl: 2.86 a season (band 2.61 to 3.01), 2.0% of seasons with none
+   ok nba: 2.33 a season (band 2.08 to 2.52), 4.4% of seasons with none
+   ok mlb: 2.53 a season (band 2.38 to 2.75), 3.9% of seasons with none
+   ok nhl: 2.76 a season (band 2.58 to 3), 2.1% of seasons with none
+   ok college: 3.33 a season (band 3.14 to 3.51), 0.4% of seasons with none
+   ok gym: 2.84 a season (band 2.62 to 2.99), 0.3% of seasons with none
+   ok afl: 2.25 a season (band 2.03 to 2.4), 3.7% of seasons with none
+5) Every event arrives in a ten season run
+   the rarest event, nba_trade_demand, arrived in 47% of ten season runs
+6) Same seed, same deck
+   ok same seed, same 28 events; another seed, another deck
+
+simGmInbox: green.

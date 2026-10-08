@@ -1,0 +1,85 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+suite: sed -i 's/\r*$/\r/' scripts/data/nflRosters2026.json && node_modules/.bin/vitest run src/lib/frontOfficeRatings.test.ts --reporter=verbose
+gencheck: node scripts/genFrontOfficeRoster.mjs --check
+prodcheck: node scripts/fetchNfl2025Production.mjs --check
+simNflOpeningRatings: sed -i 's/\r*$/\r/' scripts/data/nflRosters2026.json && node scripts/simNflOpeningRatings.mjs
+ratings-clamp: sed -i 's/\r*$/\r/' scripts/data/nflRosters2026.json && NFL_OPENING_RATINGS_CONTROL=clamp node scripts/simNflOpeningRatings.mjs
+ratings-datedRole: sed -i 's/\r*$/\r/' scripts/data/nflRosters2026.json && NFL_OPENING_RATINGS_CONTROL=datedRole node scripts/simNflOpeningRatings.mjs
+ratings-opportunity: sed -i 's/\r*$/\r/' scripts/data/nflRosters2026.json && NFL_OPENING_RATINGS_CONTROL=opportunity node scripts/simNflOpeningRatings.mjs
+ratings-missing: sed -i 's/\r*$/\r/' scripts/data/nflRosters2026.json && NFL_OPENING_RATINGS_CONTROL=missing node scripts/simNflOpeningRatings.mjs
+ratings-partial: sed -i 's/\r*$/\r/' scripts/data/nflRosters2026.json && NFL_OPENING_RATINGS_CONTROL=partial node scripts/simNflOpeningRatings.mjs
+ratings-budget: sed -i 's/\r*$/\r/' scripts/data/nflRosters2026.json && NFL_OPENING_RATINGS_CONTROL=budget node scripts/simNflOpeningRatings.mjs
+ratings-seedrows: sed -i 's/\r*$/\r/' scripts/data/nflRosters2026.json && NFL_OPENING_RATINGS_CONTROL=seedrows node scripts/simNflOpeningRatings.mjs
+ratings-evidence: sed -i 's/\r*$/\r/' scripts/data/nflRosters2026.json && NFL_OPENING_RATINGS_CONTROL=evidence node scripts/simNflOpeningRatings.mjs
+ratings-compact: sed -i 's/\r*$/\r/' scripts/data/nflRosters2026.json && NFL_OPENING_RATINGS_CONTROL=compact node scripts/simNflOpeningRatings.mjs
+ratings-cut: sed -i 's/\r*$/\r/' scripts/data/nflRosters2026.json && NFL_OPENING_RATINGS_CONTROL=cut node scripts/simNflOpeningRatings.mjs
+ratings-refusal: sed -i 's/\r*$/\r/' scripts/data/nflRosters2026.json && NFL_OPENING_RATINGS_CONTROL=refusal node scripts/simNflOpeningRatings.mjs
+simFrontOfficeRoster: node scripts/simFrontOfficeRoster.mjs
+roster-offenceonly: SIM_FO_CONTROL=offenceonly node scripts/simFrontOfficeRoster.mjs
+roster-flat: SIM_FO_CONTROL=flat node scripts/simFrontOfficeRoster.mjs
+roster-production: SIM_FO_CONTROL=production node scripts/simFrontOfficeRoster.mjs
+roster-seasontotals: SIM_FO_CONTROL=seasontotals node scripts/simFrontOfficeRoster.mjs
+roster-staleheader: SIM_FO_CONTROL=staleheader node scripts/simFrontOfficeRoster.mjs
+roster-staleseason: SIM_FO_CONTROL=staleseason node scripts/simFrontOfficeRoster.mjs
+roster-ratingwindow: SIM_FO_CONTROL=ratingwindow node scripts/simFrontOfficeRoster.mjs
+roster-flatpedigree: SIM_FO_CONTROL=flatpedigree node scripts/simFrontOfficeRoster.mjs
+roster-evenblend: SIM_FO_CONTROL=evenblend node scripts/simFrontOfficeRoster.mjs
+roster-openjoin: SIM_FO_CONTROL=openjoin node scripts/simFrontOfficeRoster.mjs
+roster-straybucket: SIM_FO_CONTROL=straybucket node scripts/simFrontOfficeRoster.mjs
+roster-offencecycle: SIM_FO_CONTROL=offencecycle node scripts/simFrontOfficeRoster.mjs
+roster-unitdefence: SIM_FO_CONTROL=unitdefence node scripts/simFrontOfficeRoster.mjs
+roster-meandefence: SIM_FO_CONTROL=meandefence node scripts/simFrontOfficeRoster.mjs
+roster-shortseason: SIM_FO_CONTROL=shortseason node scripts/simFrontOfficeRoster.mjs
+simFoRatingOrder: node scripts/simFoRatingOrder.mjs
+order-override: SIM_FO_ORDER_CONTROL=override node scripts/simFoRatingOrder.mjs
+order-onesource: SIM_FO_ORDER_CONTROL=onesource node scripts/simFoRatingOrder.mjs
+order-looseread: SIM_FO_ORDER_CONTROL=looseread node scripts/simFoRatingOrder.mjs
+order-nolayer: SIM_FO_ORDER_CONTROL=nolayer node scripts/simFoRatingOrder.mjs
+order-swaprows: SIM_FO_ORDER_CONTROL=swaprows node scripts/simFoRatingOrder.mjs
+order-unmark: SIM_FO_ORDER_CONTROL=unmark node scripts/simFoRatingOrder.mjs
+order-norole: SIM_FO_ORDER_CONTROL=norole node scripts/simFoRatingOrder.mjs
+order-stretch: SIM_FO_ORDER_CONTROL=stretch node scripts/simFoRatingOrder.mjs
+order-shuffle: SIM_FO_ORDER_CONTROL=shuffle node scripts/simFoRatingOrder.mjs
+order-cutback: SIM_FO_ORDER_CONTROL=cutback node scripts/simFoRatingOrder.mjs
+order-lift: SIM_FO_ORDER_CONTROL=lift node scripts/simFoRatingOrder.mjs
+order-gain: SIM_FO_ORDER_CONTROL=gain node scripts/simFoRatingOrder.mjs
+order-noeff: SIM_FO_ORDER_CONTROL=noeff node scripts/simFoRatingOrder.mjs
+order-noprod: SIM_FO_ORDER_CONTROL=noprod node scripts/simFoRatingOrder.mjs
+vitest-fo: node_modules/.bin/vitest run src/components/front-office src/components/front-office-shared src/test/frontOfficeSaveRecovery.test.tsx --testTimeout=300000 --hookTimeout=120000
+simNflFullRosters: node scripts/simNflFullRosters.mjs
+simNflRatingEvidence: node scripts/simNflRatingEvidence.mjs
+simFrontOfficeCuts: node scripts/simFrontOfficeCuts.mjs
+simGmFarm: node scripts/simGmFarm.mjs
+simGmInbox: node scripts/simGmInbox.mjs
+simGmLineup: node scripts/simGmLineup.mjs
+simNflDraftCapital: node scripts/simNflDraftCapital.mjs
+simNflGmDesk: node scripts/simNflGmDesk.mjs
+simTradeFinder: node scripts/simTradeFinder.mjs
+simFrontOfficeSaveRecovery: node scripts/simFrontOfficeSaveRecovery.mjs
+simFrontOfficeSchedule: node scripts/simFrontOfficeSchedule.mjs
+simNflTagDepth: node scripts/simNflTagDepth.mjs
+simNflPracticePromotion: node scripts/simNflPracticePromotion.mjs
+simGauntletEngine: node scripts/simGauntletEngine.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simCareerInbox: node scripts/simCareerInbox.mjs
+guideLadder: node scripts/simGauntletGuideLadder.mjs
+guideLadder-staleclimb: SIM_GAUNTLET_GUIDE_CONTROL=staleclimb node scripts/simGauntletGuideLadder.mjs
+guideLadder-stalerange: SIM_GAUNTLET_GUIDE_CONTROL=stalerange node scripts/simGauntletGuideLadder.mjs
+guideLadder-ghostcard: SIM_GAUNTLET_GUIDE_CONTROL=ghostcard node scripts/simGauntletGuideLadder.mjs
+walk: ENGINES=chromium node scripts/playFoOneRating.mjs
+walk-expect: FO_WALK_CONTROL=expect ENGINES=chromium node scripts/playFoOneRating.mjs
+walk-norule: FO_WALK_CONTROL=norule ENGINES=chromium node scripts/playFoOneRating.mjs
+gauntlet-flatdeal: SIM_GAUNTLET_ENGINE_CONTROL=flatdeal node scripts/simGauntletEngine.mjs
+gmdesk-nodefault: SIM_NFL_GM_DESK_CONTROL=nodefault node scripts/simNflGmDesk.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simPrerender-expect-red: node scripts/simPrerender.mjs
+simSnapshotAssets: node scripts/simSnapshotAssets.mjs
+simFaqSchema: node scripts/simFaqSchema.mjs
+help: node .rc/x/rvwHelp.mjs
+help2: node .rc/x/vfyHelp.mjs
