@@ -112,7 +112,11 @@
  * it serves dist/ itself through scripts/lib/hostLikeServer.mjs. ONLY=/route
  * (comma separated, MSYS_NO_PATHCONV=1 under Git Bash), VIEWS=phone,desktop
  * and MODES=keep,alter scope a run, VERBOSE=1 prints every step, SHOTS names a
- * folder for screenshots. Every request that is not the local server is
+ * folder for screenshots. Three walks run side by side (JOBS=1 for one at a
+ * time), each with its own context and its own seeded dice, and every wait is
+ * for something on the page (the translator has caught up, the button is
+ * back), so a slow machine is a slow run and not a red one. PAGE_PRESSES and
+ * CAREER_PRESSES deepen a walk. Every request that is not the local server is
  * aborted (the database host by its own rule, on every page) except the flag
  * images, which are answered with one local pixel.
  *
@@ -177,13 +181,13 @@ const GUARD_LINE = 'a node this page no longer owns';
 
 const failed = [];
 let checksRun = 0;
-const say = m => { if (V) console.log('        ' + m); };
-function check(name, ok, detail) {
+/* Walks run side by side, so each one keeps its own lines and prints them together when it ends. */
+function checkLine(name, ok, detail, out = console.log) {
   checksRun += 1;
   const line = `${name}${detail ? ': ' + detail : ''}`;
-  if (ok) { console.log(`  PASS  ${line}`); return true; }
+  if (ok) { out(`  PASS  ${line}`); return true; }
   failed.push(line);
-  console.log(`  FAIL  ${line}`);
+  out(`  FAIL  ${line}`);
   return false;
 }
 
@@ -228,8 +232,8 @@ const ENTRY = (entryTag.match(/\bsrc="([^"]+\.js)"/) || [])[1] || '';
 let entryText = '';
 if (ENTRY) { try { entryText = await served(ENTRY); } catch (e) { console.log(`  the entry ${ENTRY} could not be fetched: ${String(e).slice(0, 80)}`); } }
 const switchInBuild = entryText.includes(SWITCH);
-check(`0. the served entry chunk (${ENTRY || 'none named in index.html'}) holds the guard's off switch ${SWITCH}`, switchInBuild);
-check('0. the served entry chunk holds the guard\'s console line', entryText.includes(GUARD_LINE));
+checkLine(`0. the served entry chunk (${ENTRY || 'none named in index.html'}) holds the guard's off switch ${SWITCH}`, switchInBuild);
+checkLine('0. the served entry chunk holds the guard\'s console line', entryText.includes(GUARD_LINE));
 if (CONTROL === 'noguard' && !switchInBuild) {
   console.error('control "noguard" cannot run: its switch is not in the served build, so setting it would change nothing. NOT CHECKED.');
   await stop(2);
@@ -290,7 +294,7 @@ function pageInit(cfg) {
     return s;
   }
   const taken = new WeakSet();
-  const w = { origText, moved: [], simCount: 0, simStarted: false, counting: false };
+  const w = { origText, moved: [], simCount: 0, sweeps: 0, simStarted: false, counting: false };
   window.__walk = w;
 
   /* THE RECORDER. It changes nothing: it counts a call that names a node its parent no longer owns,
@@ -361,6 +365,7 @@ function pageInit(cfg) {
   }
   function sweep() {
     layRecorder();
+    w.sweeps += 1;
     if (!cfg.translate || !document.body) return;
     const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
     const todo = [];
@@ -368,6 +373,7 @@ function pageInit(cfg) {
     for (const n of todo) if (n.isConnected) swap(n);
   }
   let timer = null;
+  w.busy = () => timer !== null; // a change has been seen and its sweep has not run yet
   function schedule() {
     if (timer !== null) return;
     timer = setTimeout(() => { timer = null; sweep(); }, cfg.simDelay);
@@ -427,7 +433,17 @@ async function openWalk(view, mode) {
 }
 
 const sleep = (page, ms) => page.waitForTimeout(ms);
-const settle = (page, mode) => sleep(page, 380 + (mode === 'off' ? 0 : SIM_DELAY));
+/* After a press: a beat for React, then until the translator has caught up with what the press drew
+   (nothing waiting to be swept, or two sweeps gone by on a page that never sits still). A slow
+   machine makes this a slower walk, never a look at a page the translator has not reached yet. */
+async function settle(page) {
+  const before = await page.evaluate(() => (window.__walk ? window.__walk.sweeps : 0)).catch(() => 0);
+  await sleep(page, 380);
+  await page.waitForFunction(k => !window.__walk || !window.__walk.busy || !window.__walk.busy() || window.__walk.sweeps >= k + 2, before, { timeout: 4000 }).catch(() => {});
+  await sleep(page, 40);
+}
+/* The translator has started on this document (or, with it off, the recorder is down). */
+const started = page => page.waitForFunction(() => !!window.__walk && window.__walk.simStarted, null, { timeout: 20000 }).catch(() => {});
 
 /* What the page looks like right now. The boundary is matched as the element RouteErrorBoundary
    draws: its h1, in a box that also holds its retry button and its link home. */
@@ -657,8 +673,8 @@ async function advance(page, actions, skipSrc, counts) {
  * One walk. Every step is followed by a look at the page; the walk stops
  * at the boundary, or where it could not find what it came to press.
  * ------------------------------------------------------------------ */
-function newRecord(route, view, mode, pass) {
-  return { route, view, mode, pass, steps: [], boundaryAt: null, stuckAt: null, pressed: [], state: null, first: null, maxStale: 0, staleSample: [] };
+function newRecord(route, view, mode, pass, out) {
+  return { route, view, mode, pass, out, steps: [], boundaryAt: null, stuckAt: null, pressed: [], state: null, first: null, maxStale: 0, staleSample: [] };
 }
 let shotCount = 0;
 async function shot(page, rec, name) {
@@ -685,7 +701,7 @@ async function step(W, rec, name, fn) {
   const did = action && (action.label || action.why) ? String(action.label || action.why) : '';
   if (action && action.ok && action.label) rec.pressed.push(action.label);
   rec.steps.push({ name, ok: !(action && action.ok === false), did: did.slice(0, 70), by: (action && action.by) || '', boundary: !!(state && state.boundary), moved: state ? state.moved : null, stale: state ? state.stale : null, phase: state && state.save ? state.save.phase : '', age: state && state.save ? state.save.age : null });
-  say(`${state && state.boundary ? 'XX' : action && action.ok === false ? '??' : 'ok'} ${name}${did ? ' [' + did.slice(0, 40) + ']' : ''}${state ? ` moved=${state.moved} stale=${state.stale} fonts=${state.fonts}${state.save ? ` ${state.save.phase} ${state.save.age}` : ''}` : ' (no look at the page)'}`);
+  if (V) rec.out(`        ${state && state.boundary ? 'XX' : action && action.ok === false ? '??' : 'ok'} ${name}${did ? ' [' + did.slice(0, 40) + ']' : ''}${state ? ` moved=${state.moved} stale=${state.stale} fonts=${state.fonts}${state.save ? ` ${state.save.phase} ${state.save.age}` : ''}` : ' (no look at the page)'}`);
   if (state && state.boundary) { rec.boundaryAt = name; await shot(W.page, rec, 'BOUNDARY'); return false; }
   if (action && action.ok === false) { rec.stuckAt = `${name}: ${action.why}`; return false; }
   return true;
@@ -696,7 +712,8 @@ async function walkCreate(W, rec) {
   const mode = rec.mode;
   await step(W, rec, 'the create screen draws', async () => {
     await page.waitForSelector('#pname', { timeout: 30000 });
-    await sleep(page, 700 + SIM_START + SIM_DELAY);
+    await started(page);
+    await sleep(page, 500);
     return { ok: true };
   });
   rec.createDrawn = !!(rec.first && rec.first.creation);
@@ -756,7 +773,8 @@ async function walkPage(W, rec) {
       const root = document.getElementById('root');
       return !!root && [...root.querySelectorAll('button,a[href]')].some(b => { const r = b.getBoundingClientRect(); return r.width > 2 && r.height > 2; });
     }, null, { timeout: 30000 });
-    await sleep(page, 900 + SIM_START + SIM_DELAY);
+    await started(page);
+    await sleep(page, 700);
     return { ok: true };
   });
   const counts = {};
@@ -774,7 +792,7 @@ async function retryAfterBoundary(W, rec) {
   const loaded = page.waitForEvent('load', { timeout: 20000 }).then(() => true).catch(() => false);
   const r = await press(page, 'button', RETRY_WORDS, 'exact');
   const reloaded = r.ok ? await loaded : false;
-  const again = newRecord(rec.route, rec.view, rec.mode, 'retry');
+  const again = newRecord(rec.route, rec.view, rec.mode, 'retry', rec.out);
   if (reloaded) await walkCreate(W, again);
   return { pressed: r.ok, reloaded, boundaryAt: again.boundaryAt, stuckAt: again.stuckAt, reached: !!again.reached };
 }
@@ -782,71 +800,94 @@ async function retryAfterBoundary(W, rec) {
 /* ------------------------------------------------------------------ *
  * The walks, and the checks on each.
  * ------------------------------------------------------------------ */
-const rows = [];
-for (const mode of MODES) {
-  for (const view of VIEWS) {
-    for (const route of ROUTES) {
-      const tag = `${route} ${view} ${mode}`;
-      console.log(`\n${tag}`);
-      const W = await openWalk(view, mode);
-      const rec = newRecord(route, view, mode, '');
-      let retry = null;
-      try {
-        await W.page.goto(BASE + route, { waitUntil: 'load', timeout: 45000 });
-        if (route === CREATE_ROUTE) await walkCreate(W, rec); else await walkPage(W, rec);
-        rec.movedList = await W.page.evaluate(() => (window.__walk ? window.__walk.moved.slice(0, 60) : [])).catch(() => []);
-        rec.direct = await probeGuard(W.page); // after the count is read: the recorder would count these two
-        if (route === CREATE_ROUTE && rec.boundaryAt) retry = await retryAfterBoundary(W, rec);
-      } catch (e) {
-        if (!rec.stuckAt && !rec.boundaryAt) rec.stuckAt = 'the walk threw: ' + String(e).split('\n')[0].slice(0, 140);
-      }
-      if (rec.stuckAt) { await shot(W.page, rec, 'STUCK'); console.log(`        stuck at ${rec.stuckAt}`); }
-      const last = rec.state || {};
-      const first = rec.first || {};
-      const row = {
-        route, view, mode, steps: rec.steps.length, boundaryAt: rec.boundaryAt, stuckAt: rec.stuckAt,
-        notFound: W.notFound.length, notFoundSample: W.notFound[0] || '',
-        guardLines: W.guardLines, guardOn: first.guardOn === true,
-        moved: (rec.movedList || []).length, movedByTranslator: (rec.movedList || []).filter(m => m.byTranslator).length, movedList: rec.movedList || [],
-        swapped: last.swapped || 0, maxStale: rec.maxStale, staleSample: rec.staleSample,
-        pressed: rec.pressed, dbBlocked: W.dbBlocked, blocked: [...W.blocked], retry, direct: rec.direct || null,
-        create: route === CREATE_ROUTE ? { drawn: !!rec.createDrawn, boxes: rec.boxes || {}, reached: !!rec.reached, reachedDetail: rec.reachedDetail || '', seasonAt: rec.seasonAt ?? null, seasonDetail: rec.seasonDetail || '' } : null,
-        stepList: rec.steps,
-      };
-      rows.push(row);
-      await W.ctx.close();
+async function runWalk({ mode, view, route }, out) {
+  const tag = `${route} ${view} ${mode}`;
+  const check = (name, ok, detail) => checkLine(name, ok, detail, out);
+  out(`\n${tag}`);
+  const W = await openWalk(view, mode);
+  const rec = newRecord(route, view, mode, '', out);
+  let retry = null;
+  try {
+    await W.page.goto(BASE + route, { waitUntil: 'load', timeout: 45000 });
+    if (route === CREATE_ROUTE) await walkCreate(W, rec); else await walkPage(W, rec);
+    rec.movedList = await W.page.evaluate(() => (window.__walk ? window.__walk.moved.slice(0, 60) : [])).catch(() => []);
+    /* Both counts are closed BEFORE the direct question: the recorder would count its two calls, and
+       the guard prints its once a page line for them on a page that never needed it. */
+    rec.guardLines = W.guardLines;
+    rec.direct = await probeGuard(W.page);
+    if (route === CREATE_ROUTE && rec.boundaryAt) retry = await retryAfterBoundary(W, rec);
+  } catch (e) {
+    if (!rec.stuckAt && !rec.boundaryAt) rec.stuckAt = 'the walk threw: ' + String(e).split('\n')[0].slice(0, 140);
+  }
+  if (rec.stuckAt) { await shot(W.page, rec, 'STUCK'); out(`        stuck at ${rec.stuckAt}`); }
+  const last = rec.state || {};
+  const first = rec.first || {};
+  const row = {
+    route, view, mode, steps: rec.steps.length, boundaryAt: rec.boundaryAt, stuckAt: rec.stuckAt,
+    notFound: W.notFound.length, notFoundSample: W.notFound[0] || '',
+    guardLines: rec.guardLines ?? W.guardLines, guardOn: first.guardOn === true,
+    moved: (rec.movedList || []).length, movedByTranslator: (rec.movedList || []).filter(m => m.byTranslator).length, movedList: rec.movedList || [],
+    swapped: last.swapped || 0, maxStale: rec.maxStale, staleSample: rec.staleSample,
+    pressed: rec.pressed, dbBlocked: W.dbBlocked, blocked: [...W.blocked], retry, direct: rec.direct || null,
+    create: route === CREATE_ROUTE ? { drawn: !!rec.createDrawn, boxes: rec.boxes || {}, reached: !!rec.reached, reachedDetail: rec.reachedDetail || '', seasonAt: rec.seasonAt ?? null, seasonDetail: rec.seasonDetail || '' } : null,
+    stepList: rec.steps,
+  };
+  await W.ctx.close();
 
-      if (mode === 'off') check(`1. ${tag}: the translator is off`, last.fonts === 0 && last.marked === false && first.counting === true, `${last.fonts} font element(s)`);
-      else check(`1. ${tag}: the translator ran`, row.swapped > 0 && last.lang === 'pt' && last.marked === true, `${row.swapped} text node(s) swapped, lang="${last.lang || ''}"`);
-      if (CONTROL !== 'noguard') {
-        check(`1. ${tag}: the guard is installed on the page`, row.guardOn);
-        const d = rec.direct || {};
-        check(`8. ${tag}: asked directly, removing a moved node is quiet and inserting before one appends`, d.remove === 'quiet' && d.insert === 'quiet', `removeChild ${d.remove || 'not asked'}, insertBefore ${d.insert || 'not asked'}`);
-      }
-      if (route === CREATE_ROUTE) {
-        const gone = rec.boundaryAt ? `the boundary took the page at "${rec.boundaryAt}"` : rec.stuckAt ? `stuck at ${rec.stuckAt}` : '';
-        const boxes = rec.boxes || {};
-        const names = PICKS.map(p => p[0]);
-        const held = names.filter(n => boxes[n] && boxes[n].has);
-        const readable = names.filter(n => boxes[n] && boxes[n].visible);
-        const hiddenToday = mode === 'off' ? [] : KNOWN_HIDDEN_PICKS;
-        const expected = names.filter(n => !hiddenToday.includes(n));
-        const better = hiddenToday.filter(n => readable.includes(n));
-        check(`2. ${tag}: the create screen drew`, !!rec.createDrawn, rec.createDrawn ? '' : gone);
-        check(`2. ${tag}: all three picks registered, ${NAT} among them`, held.length === 3, gone || names.map(n => `${n} box "${boxes[n] ? boxes[n].shown : 'not there'}"`).join(', '));
-        check(`2. ${tag}: each pick can be READ in its box${hiddenToday.length ? `, bar the known hidden one (${hiddenToday.join(', ')})` : ''}`,
-          held.length === 3 && readable.length === expected.length && expected.every(n => readable.includes(n)),
-          better.length ? `${better.join(', ')} can be read now: take it off KNOWN_HIDDEN_PICKS in this file and correct its header` : gone || `readable: ${readable.join(', ') || 'none'}; hidden: ${names.filter(n => !readable.includes(n)).join(', ') || 'none'}`);
-        check(`3. ${tag}: the create flow reached the career`, !!rec.reached, rec.reachedDetail || gone);
-        check(`4. ${tag}: one season forward and the hub still stands`, rec.seasonAt !== undefined && rec.hubStands === true, rec.seasonDetail || (rec.reached ? `the save never got a year older in ${CAREER_PRESSES} presses` : 'the career was never reached'));
-      }
-      check(`5. ${tag}: the walk pressed at least two controls`, rec.pressed.length >= 2, `${rec.pressed.length}${rec.pressed.length ? ': ' + rec.pressed.slice(0, 9).map(p => p.slice(0, 22)).join(' > ') : ''}`);
-      check(`6. ${tag}: the route error boundary never appeared`, !rec.boundaryAt, rec.boundaryAt ? `it took the page at "${rec.boundaryAt}"` : '');
-      check(`7. ${tag}: no NotFoundError`, row.notFound === 0, row.notFoundSample.slice(0, 150));
-      if (retry) console.log(`        ${RETRY_WORDS}: ${!retry.pressed ? 'the button could not be pressed' : !retry.reloaded ? 'pressed, but the page did not reload' : retry.boundaryAt ? `reloaded, translated again, and broke again at "${retry.boundaryAt}"` : `reloaded and did not break again (${retry.reached ? 'reached the career' : 'stuck at ' + retry.stuckAt})`}`);
+  if (mode === 'off') check(`1. ${tag}: the translator is off`, last.fonts === 0 && last.marked === false && first.counting === true, `${last.fonts} font element(s)`);
+  else check(`1. ${tag}: the translator ran`, row.swapped > 0 && last.lang === 'pt' && last.marked === true, `${row.swapped} text node(s) swapped, lang="${last.lang || ''}"`);
+  if (CONTROL !== 'noguard') {
+    check(`1. ${tag}: the guard is installed on the page`, row.guardOn);
+    const d = rec.direct || {};
+    check(`8. ${tag}: asked directly, removing a moved node is quiet and inserting before one appends`, d.remove === 'quiet' && d.insert === 'quiet', `removeChild ${d.remove || 'not asked'}, insertBefore ${d.insert || 'not asked'}`);
+  }
+  if (route === CREATE_ROUTE) {
+    const gone = rec.boundaryAt ? `the boundary took the page at "${rec.boundaryAt}"` : rec.stuckAt ? `stuck at ${rec.stuckAt}` : '';
+    const boxes = rec.boxes || {};
+    const names = PICKS.map(p => p[0]);
+    const held = names.filter(n => boxes[n] && boxes[n].has);
+    const readable = names.filter(n => boxes[n] && boxes[n].visible);
+    const hiddenToday = mode === 'off' ? [] : KNOWN_HIDDEN_PICKS;
+    const expected = names.filter(n => !hiddenToday.includes(n));
+    const better = hiddenToday.filter(n => readable.includes(n));
+    check(`2. ${tag}: the create screen drew`, !!rec.createDrawn, rec.createDrawn ? '' : gone);
+    check(`2. ${tag}: all three picks registered, ${NAT} among them`, held.length === 3, gone || names.map(n => `${n} box "${boxes[n] ? boxes[n].shown : 'not there'}"`).join(', '));
+    check(`2. ${tag}: each pick can be READ in its box${hiddenToday.length ? `, bar the known hidden one (${hiddenToday.join(', ')})` : ''}`,
+      held.length === 3 && readable.length === expected.length && expected.every(n => readable.includes(n)),
+      better.length ? `${better.join(', ')} can be read now: take it off KNOWN_HIDDEN_PICKS in this file and correct its header` : gone || `readable: ${readable.join(', ') || 'none'}; hidden: ${names.filter(n => !readable.includes(n)).join(', ') || 'none'}`);
+    check(`3. ${tag}: the create flow reached the career`, !!rec.reached, rec.reachedDetail || gone);
+    check(`4. ${tag}: one season forward and the hub still stands`, rec.seasonAt !== undefined && rec.hubStands === true, rec.seasonDetail || (rec.reached ? `the save never got a year older in ${CAREER_PRESSES} presses` : 'the career was never reached'));
+  }
+  check(`5. ${tag}: the walk pressed at least two controls`, rec.pressed.length >= 2, `${rec.pressed.length}${rec.pressed.length ? ': ' + rec.pressed.slice(0, 9).map(p => p.slice(0, 22)).join(' > ') : ''}`);
+  check(`6. ${tag}: the route error boundary never appeared`, !rec.boundaryAt, rec.boundaryAt ? `it took the page at "${rec.boundaryAt}"` : '');
+  check(`7. ${tag}: no NotFoundError`, row.notFound === 0, row.notFoundSample.slice(0, 150));
+  if (retry) out(`        ${RETRY_WORDS}: ${!retry.pressed ? 'the button could not be pressed' : !retry.reloaded ? 'pressed, but the page did not reload' : retry.boundaryAt ? `reloaded, translated again, and broke again at "${retry.boundaryAt}"` : `reloaded and did not break again (${retry.reached ? 'reached the career' : 'stuck at ' + retry.stuckAt})`}`);
+  return row;
+}
+
+/* JOBS walks at a time (three by default), each in its own context with its own seeded dice, so the
+   order they finish in changes nothing but the order of the lines. The tables below are in the
+   fixed order of the list. */
+const todo = [];
+for (const mode of MODES) for (const view of VIEWS) for (const route of ROUTES) todo.push({ mode, view, route });
+const JOBS = Math.max(1, Math.min(Number(env.JOBS || 3) || 1, todo.length));
+const done = new Array(todo.length).fill(null);
+let nextJob = 0;
+async function worker() {
+  for (;;) {
+    const i = nextJob;
+    nextJob += 1;
+    if (i >= todo.length) return;
+    const lines = [];
+    const out = l => lines.push(l);
+    try { done[i] = await runWalk(todo[i], out); } catch (e) {
+      checkLine(`${todo[i].route} ${todo[i].view} ${todo[i].mode}: the walk ran`, false, String(e).split('\n')[0].slice(0, 160), out);
     }
+    console.log(lines.join('\n'));
   }
 }
+await Promise.all(Array.from({ length: JOBS }, () => worker()));
+const rows = done.filter(Boolean);
 
 /* ------------------------------------------------------------------ *
  * The record: what every walk needed, page by page.
@@ -890,7 +931,7 @@ console.log(`\nnothing left this machine: ${dbBlocked} request(s) to the databas
 const guardPages = rows.filter(r => r.guardLines > 0).length;
 const movedAll = rows.reduce((a, r) => a + r.moved, 0);
 if (CONTROL === 'notranslate') {
-  check('8. with the translator off the guard printed nothing and no call named a moved node', guardPages === 0 && movedAll === 0, `${guardPages} of ${rows.length} page(s) printed the guard's line, ${movedAll} moved node(s)`);
+  checkLine('9. with the translator off the guard printed nothing and no call named a moved node', guardPages === 0 && movedAll === 0, `${guardPages} of ${rows.length} page(s) printed the guard's line, ${movedAll} moved node(s)`);
 } else if (CONTROL !== 'noguard') {
   console.log(`THE GUARD WAS NEEDED on ${guardPages} of ${rows.length} page load(s): ${movedAll} call(s) in all named a node its parent no longer owned.`);
 }
