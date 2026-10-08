@@ -263,12 +263,6 @@ function makeLive(win: GuardWindow, native: Natives): Live | null {
   const flush = () => take(observer.takeRecords());
 
   /**
-   * THE ONE RULE. Every translated string directly inside `parent` goes back to the translator as a brand new
-   * text node holding React's current words. Never React's own node (the translator would not look at it
-   * again) and never a write into a stand in (the translator may be working on it): a stand in whose words
-   * are out of date is replaced like any wrapper.
-   */
-  /**
    * WHAT THE TRANSLATOR STILL OWES. A stand in is only worth anything if the translator takes it, and it
    * does not always look. Measured on the real one: while it works through a whole page (the first
    * translation, or "translate" pressed again) it takes no notice of text that arrives, so a stand in
@@ -319,6 +313,12 @@ function makeLive(win: GuardWindow, native: Natives): Live | null {
     arm();
   };
 
+  /**
+   * THE ONE RULE. Every translated string directly inside `parent` goes back to the translator as a brand new
+   * text node holding React's current words. Never React's own node (the translator would not look at it
+   * again) and never a write into a stand in (the translator may be working on it): a stand in whose words
+   * are out of date is replaced like any wrapper.
+   */
   const refresh = (parent: Node) => {
     let made = false;
     let child = parent.firstChild;
