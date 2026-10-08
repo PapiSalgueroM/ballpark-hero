@@ -1,0 +1,211 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+stdout | src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > never offers the last query under new text, across 200 seeded timings
+STALE_SWEEP seed=1138 trials=200 staleVisible=67 stalePicked=67 currentPicked=133 stuckFinding=0
+
+ × src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > never offers the last query under new text, across 200 seeded timings 449ms
+   → expected { staleVisible: 67, …(2) } to deeply equal { staleVisible: +0, …(2) }
+ × src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > drops the list in the same render the text changes 31ms
+   → expected [ …(1) ] to have a length of +0 but got 1
+ × src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > drops the list when the search options change under the same text 15ms
+   → expected [ …(1) ] to have a length of +0 but got 1
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > drops the list when the player leaves the box and searches again on return 46ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > Enter picks the only name showing when the page asks for a pick from the list 17ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > Enter still sends the typed text on a free text page with one name showing 6ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > offers a settled list for the text in the box exactly as before 6ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > never shows Finding players with nothing in flight 29ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > searches at exactly the fewest letters the page asks for 8ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > drops a search still in flight when the player leaves the box 7ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > drops a search still in flight when a name is picked 7ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > Escape leaves the box while a search is in flight 14ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > a pick does not bring the list back under the picked name 13ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > the click of the tap that picked a name never reaches what was under the list 12ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > never shows Finding players for a source that answers in the same tick 9ms
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 12 passed (15)
+   Start at  21:36:03
+   Duration  1.29s (transform 92ms, setup 26ms, collect 216ms, tests 671ms, environment 152ms, prepare 68ms)
+
+
+stderr | src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > drops the list in the same render the text changes
+Warning: An update to PlayerAutocomplete inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at PlayerAutocomplete (/home/runner/work/ballpark-hero/ballpark-hero/.sim-control/autocomplete-interaction-TnKKub/PlayerAutocomplete.tsx:135:31)
+Warning: An update to PlayerAutocomplete inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at PlayerAutocomplete (/home/runner/work/ballpark-hero/ballpark-hero/.sim-control/autocomplete-interaction-TnKKub/PlayerAutocomplete.tsx:135:31)
+Warning: An update to PlayerAutocomplete inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at PlayerAutocomplete (/home/runner/work/ballpark-hero/ballpark-hero/.sim-control/autocomplete-interaction-TnKKub/PlayerAutocomplete.tsx:135:31)
+Warning: An update to PlayerAutocomplete inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at PlayerAutocomplete (/home/runner/work/ballpark-hero/ballpark-hero/.sim-control/autocomplete-interaction-TnKKub/PlayerAutocomplete.tsx:135:31)
+Warning: An update to PlayerAutocomplete inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at PlayerAutocomplete (/home/runner/work/ballpark-hero/ballpark-hero/.sim-control/autocomplete-interaction-TnKKub/PlayerAutocomplete.tsx:135:31)
+
+stderr | src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > drops the list when the search options change under the same text
+Warning: An update to PlayerAutocomplete inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at PlayerAutocomplete (/home/runner/work/ballpark-hero/ballpark-hero/.sim-control/autocomplete-interaction-TnKKub/PlayerAutocomplete.tsx:135:31)
+Warning: An update to PlayerAutocomplete inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at PlayerAutocomplete (/home/runner/work/ballpark-hero/ballpark-hero/.sim-control/autocomplete-interaction-TnKKub/PlayerAutocomplete.tsx:135:31)
+Warning: An update to PlayerAutocomplete inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at PlayerAutocomplete (/home/runner/work/ballpark-hero/ballpark-hero/.sim-control/autocomplete-interaction-TnKKub/PlayerAutocomplete.tsx:135:31)
+Warning: An update to PlayerAutocomplete inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at PlayerAutocomplete (/home/runner/work/ballpark-hero/ballpark-hero/.sim-control/autocomplete-interaction-TnKKub/PlayerAutocomplete.tsx:135:31)
+Warning: An update to PlayerAutocomplete inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at PlayerAutocomplete (/home/runner/work/ballpark-hero/ballpark-hero/.sim-control/autocomplete-interaction-TnKKub/PlayerAutocomplete.tsx:135:31)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > never offers the last query under new text, across 200 seeded timings
+AssertionError: expected { staleVisible: 67, …(2) } to deeply equal { staleVisible: +0, …(2) }
+
+- Expected
++ Received
+
+  {
+-   "stalePicked": 0,
+-   "staleVisible": 0,
++   "stalePicked": 67,
++   "staleVisible": 67,
+    "stuckFinding": 0,
+  }
+
+ ❯ src/test/playerAutocompleteStale.test.tsx:152:57
+    150|     }
+    151|     console.log(`STALE_SWEEP seed=${seed} trials=${TRIALS} staleVisibl…
+    152|     expect({ staleVisible, stalePicked, stuckFinding }).toEqual({ stal…
+       |                                                         ^
+    153|     expect(currentPicked).toBe(TRIALS);
+    154|   }, 120_000);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > drops the list in the same render the text changes
+AssertionError: expected [ …(1) ] to have a length of +0 but got 1
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ src/test/playerAutocompleteStale.test.tsx:161:43
+    159|     expect((await view.findAllByRole('option')).map(o => o.textContent…
+    160|     view.rerender(<PlayerAutocomplete {...p} value="Bravo" />);
+    161|     expect(view.queryAllByRole('option')).toHaveLength(0);
+       |                                           ^
+    162|     expect(view.getByText(FINDING)).toBeVisible();
+    163|     expect(view.queryByText('No players found')).toBeNull();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > drops the list when the search options change under the same text
+AssertionError: expected [ …(1) ] to have a length of +0 but got 1
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ src/test/playerAutocompleteStale.test.tsx:173:43
+    171|     const scoped = { ...searchOptions, source: { ...searchOptions.sour…
+    172|     view.rerender(<PlayerAutocomplete {...p} searchOptions={scoped} />…
+    173|     expect(view.queryAllByRole('option')).toHaveLength(0);
+       |                                           ^
+    174|     expect(view.getByText(FINDING)).toBeVisible();
+    175|     expect(view.queryByText('No players found')).toBeNull();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+simPlayerAutocompleteInteraction notag control: stale list tests 1, 2, 3 rejected the changed component and test 7 stayed green. The sweep (seed 1138) was offered 67 stale names and picked 67, floor 34.
