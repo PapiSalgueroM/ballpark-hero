@@ -1,0 +1,20 @@
+base commit c2a96ebc29b066defe36bcda91c37ac704180a1d (Release AL integration: simCmShootoutOrder's header states the run times that we)
+base /nfl-my-career 465221 bytes gz (454K) over 46 files, 0 unreadable 
+   top: index:234053 usCareerSeasonReview:131136 football:22333 AppearanceBuilder:14388 conquestDataNba:8519 NflMyCareer:5651
+base /nba-my-career 547828 bytes gz (535K) over 46 files, 0 unreadable 
+   top: index:234053 usCareerSeasonReview:131136 NbaMyCareer:81832 basketball:28746 AppearanceBuilder:14388 conquestDataNba:8519
+base /mlb-my-career 536777 bytes gz (524K) over 46 files, 0 unreadable 
+   top: index:234053 usCareerSeasonReview:131136 MlbMyCareer:80309 baseball:19129 AppearanceBuilder:14388 conquestDataNba:8519
+base /nhl-my-career 540209 bytes gz (528K) over 46 files, 0 unreadable 
+   top: index:234053 usCareerSeasonReview:131136 NhlMyCareer:81617 hockey:21221 AppearanceBuilder:14388 conquestDataNba:8519
+WEIGHT base: /nfl-my-career 465221, /nba-my-career 547828, /mlb-my-career 536777, /nhl-my-career 540209
+head /nfl-my-career 467582 bytes gz (457K) over 46 files, 0 unreadable 
+   top: index:234421 usCareerSeasonReview:132748 football:22333 AppearanceBuilder:14389 conquestDataNba:8519 NflMyCareer:6030
+head /nba-my-career 550273 bytes gz (537K) over 46 files, 0 unreadable 
+   top: index:234421 usCareerSeasonReview:132748 NbaMyCareer:82295 basketball:28746 AppearanceBuilder:14389 conquestDataNba:8519
+head /mlb-my-career 539429 bytes gz (527K) over 46 files, 0 unreadable 
+   top: index:234421 usCareerSeasonReview:132748 MlbMyCareer:80979 baseball:19129 AppearanceBuilder:14389 conquestDataNba:8519
+head /nhl-my-career 542647 bytes gz (530K) over 46 files, 0 unreadable 
+   top: index:234421 usCareerSeasonReview:132748 NhlMyCareer:82073 hockey:21221 AppearanceBuilder:14389 conquestDataNba:8519
+WEIGHT head: /nfl-my-career 467582, /nba-my-career 550273, /mlb-my-career 539429, /nhl-my-career 542647
+exit base=0 head=0 | WEIGHT base: /nfl-my-career 465221, /nba-my-career 547828, /mlb-my-career 536777, /nhl-my-career 540209 || WEIGHT head: /nfl-my-career 467582, /nba-my-career 550273, /mlb-my-career 539429, /nhl-my-career 542647

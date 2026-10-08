@@ -1,0 +1,32 @@
+
+=== ROUND 56 NFL MY CAREER PLAYTEST ===
+careers            : 400
+crashes            : 0
+NaN values         : 0
+empty stat lines   : 0  (must be 0, every position needs real stats)
+avg peak OVR       : 81.5  (min 73, median 81, max 93)
+peak 95+ rate      : 0%  (should be rare)
+suspensions served : 8
+distinct events    : 156
+  lifeA fired      : 44/45
+  lifeB fired      : 45/45
+  lifeC fired      : 36/36
+  lifeC share      : 10% of offseason draws came from deck C
+  backup seasons   : 30% of seasons were played as the backup
+  corruption fired : 22
+shop items usable  : 43/43
+words vs effects   : deck C is checked in scripts/simUsCareerDeckC.mjs since Round 988
+who gets dealt what: 8582 checks on both sides of every rule line, 0 failed
+rivalry beat words : 48 applies over beats 218, 219, 220, 221, 222, 223, 0 disagreements
+
+sample stat lines by position:
+  QB    4276 pass yds, 26 TD, 13 INT
+  RB    1049 rush yds, 6 TD, 38 rec, 314 yds
+  WR    76 rec, 1043 yds
+  TE    46 rec, 475 yds
+  LB    128 tkl, 2.2 sacks, 1 INT
+  CB    42 tkl, 1 INT, 12 PD
+  EDGE  35 tkl, 1.6 sacks, 3 PD
+  K     21/27 FG, long 61
+
+PASS: no crashes, every position produces stats, shop fully reachable, deck C drawn, every card dealt only where its words hold (its words, odds and money: simUsCareerDeckC), and the six new rivalry beats doing what they say
