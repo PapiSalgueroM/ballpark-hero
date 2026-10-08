@@ -39,7 +39,9 @@ import {
  * in the same render the text or the options change, and leaving the box
  * (a tap outside, Escape, focus moving away, a pick) drops it, so coming back
  * searches again. Where the page asks for a pick from the list, Enter picks
- * the name when exactly one is showing.
+ * the name when exactly one is showing. A pick does not search for the picked
+ * name: on a page that keeps that name in the box the list stays shut until
+ * the player comes back to the box or types something else.
  */
 
 export interface PlayerAutocompleteProps {
