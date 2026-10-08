@@ -1,0 +1,12 @@
+#!serial
+#!playwright
+m1: node .rc/x/rvmut2.mjs m1
+m2: node .rc/x/rvmut2.mjs m2
+m4: node .rc/x/rvmut2.mjs m4
+m5: node .rc/x/rvmut2.mjs m5
+m11: node .rc/x/rvmut2.mjs m11
+m12: node .rc/x/rvmut2.mjs m12
+m13: node .rc/x/rvmut2.mjs m13
+m19: node .rc/x/rvmut2.mjs m19
+m24: node .rc/x/rvmut2.mjs m24
+m25: node .rc/x/rvmut2.mjs m25
