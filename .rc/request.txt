@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+hallline-nba: ENGINES=chromium ONLY_SPORTS=nba SHOTS=$RC_OUT node scripts/playCareerHallLine.mjs
+walk: ENGINES=chromium node scripts/playNbaNumbers.mjs
+walk-oldrow: ENGINES=chromium PLAY_NBA_NUMBERS_CONTROL=oldrow node scripts/playNbaNumbers.mjs
+walk-wide: ENGINES=chromium PLAY_NBA_NUMBERS_CONTROL=wide node scripts/playNbaNumbers.mjs
