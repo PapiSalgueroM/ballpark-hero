@@ -259,3 +259,52 @@ describe('safeStorage: safeSetItem, the write that cannot take a page down', () 
     expect(() => seam.safeSetItem('footle-rules-seen', '1')).toThrow(/quota/i);
   });
 });
+
+describe('safeStorage: the Web Locks stand in (a real blocked browser refuses locks too)', () => {
+  const nav = window.navigator as Navigator & { locks?: unknown };
+  let hadLocks: PropertyDescriptor | undefined;
+  const refuse = () => Promise.reject(new DOMException('The request was denied.', 'SecurityError'));
+  function giveLocks(request: (...args: unknown[]) => Promise<unknown>) {
+    Object.defineProperty(nav, 'locks', { configurable: true, value: { request } });
+  }
+  type Locks = { request: (name: string, ...rest: unknown[]) => Promise<unknown> };
+  const locks = () => (nav as unknown as { locks: Locks }).locks;
+
+  beforeEach(() => { hadLocks = Object.getOwnPropertyDescriptor(nav, 'locks'); });
+  afterEach(() => {
+    if (hadLocks) Object.defineProperty(nav, 'locks', hadLocks); else delete (nav as unknown as Record<string, unknown>).locks;
+  });
+
+  it('runs the callback without a lock when the browser refuses one', async () => {
+    blockAccessors();
+    giveLocks(refuse);
+    await load();
+    await expect(locks().request('lock:session', async () => 'read the session')).resolves.toBe('read the session');
+    await expect(locks().request('lock:session', { mode: 'exclusive' }, async (lock: unknown) => (lock ? 'held' : 'not held'))).resolves.toBe('held');
+  });
+
+  it('runs the callback once, and lets its own error through untouched', async () => {
+    blockAccessors();
+    /* a browser that grants the lock, with a callback that fails for its own reasons */
+    giveLocks(async (...args: unknown[]) => (args[args.length - 1] as (l: unknown) => unknown)({ name: 'x', mode: 'exclusive' }));
+    await load();
+    let runs = 0;
+    const failing = async () => { runs += 1; throw new DOMException('not yours to swallow', 'SecurityError'); };
+    await expect(locks().request('lock:session', failing)).rejects.toThrow('not yours to swallow');
+    expect(runs).toBe(1);
+  });
+
+  it('passes any other refusal through', async () => {
+    blockAccessors();
+    giveLocks(() => Promise.reject(new DOMException('aborted', 'AbortError')));
+    await load();
+    await expect(locks().request('lock:session', async () => 'never')).rejects.toThrow('aborted');
+  });
+
+  it('leaves locks alone in a browser that stores normally', async () => {
+    giveLocks(refuse);
+    const before = locks().request;
+    await load();
+    expect(locks().request).toBe(before);
+  });
+});

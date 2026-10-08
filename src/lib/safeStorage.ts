@@ -17,7 +17,9 @@
  *            lives for the visit, and it is also put on window in place of the
  *            accessor that throws, so the several hundred call sites that say
  *            localStorage.getItem keep working without a try block each.
- *            Nothing is kept past the visit.
+ *            Nothing is kept past the visit. The Web Locks API is refused
+ *            in the same browsers, so that gets a stand in too (see
+ *            standInForLocks below).
  *   full     reads work, writes throw. The seam is a store for the visit laid
  *            over the browser's own, so whatever is already saved can still be
  *            read. It is NOT put on window: a game that guards its own save
@@ -124,6 +126,42 @@ function resolve(name: StorageName): Resolved {
   return { storage: memory, trouble: 'blocked' };
 }
 
+/**
+ * A browser that blocks site data refuses the Web Locks API as well. Measured
+ * in a real Chromium with the cookie setting on block: every call of
+ * navigator.locks.request rejects with "SecurityError: The request was
+ * denied." before its callback runs. The auth client takes a lock around
+ * every session read, so each page load threw three uncaught errors and the
+ * sign in state never finished loading (the home page was two buttons short).
+ *
+ * A lock keeps two tabs off the same stored session. Under blocked storage
+ * each tab has its own stand in and nothing is shared, so there is nothing to
+ * guard: when the browser refuses the lock before the callback has run, the
+ * callback runs without one. Any other failure, and any error the callback
+ * itself throws, passes straight through. Installed only in the blocked case.
+ */
+function standInForLocks(): void {
+  try {
+    const locks = window.navigator?.locks;
+    if (!locks || typeof locks.request !== 'function') return;
+    const native = (locks.request as unknown as (...args: unknown[]) => Promise<unknown>).bind(locks);
+    const request = (...args: unknown[]): Promise<unknown> => {
+      const callback = args[args.length - 1] as ((lock: unknown) => unknown) | undefined;
+      if (typeof callback !== 'function') return native(...args);
+      let entered = false;
+      const watched = (lock: unknown) => { entered = true; return callback(lock); };
+      let asked: Promise<unknown>;
+      try { asked = Promise.resolve(native(...args.slice(0, -1), watched)); } catch (error) { asked = Promise.reject(error); }
+      return asked.catch((error: unknown) => {
+        const refused = !entered && !!error && (error as { name?: string }).name === 'SecurityError';
+        if (!refused) throw error;
+        return callback({ name: String(args[0]), mode: 'exclusive' });
+      });
+    };
+    Object.defineProperty(locks, 'request', { configurable: true, writable: true, value: request });
+  } catch { /* the browser's own stays in place */ }
+}
+
 function rawRequested(): boolean {
   try { return window.__DUKB_RAW_STORAGE__ === true; } catch { return false; }
 }
@@ -134,6 +172,7 @@ function rawRequested(): boolean {
 const raw = rawRequested();
 const local: Resolved = raw ? { storage: window.localStorage, trouble: null } : resolve('localStorage');
 const session: Resolved = raw ? { storage: window.sessionStorage, trouble: null } : resolve('sessionStorage');
+if (local.trouble === 'blocked') standInForLocks();
 
 /** localStorage, or a stand in for the visit when this browser will not keep anything. */
 export const safeLocalStorage: Storage = local.storage;

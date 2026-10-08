@@ -106,3 +106,28 @@ describe('the client file itself', () => {
     expect(code).not.toMatch(/storage:\s*(window\.)?localStorage\b/);
   });
 });
+
+describe('the Supabase client when the browser refuses Web Locks as well', () => {
+  /* What a real Chromium does with site data blocked: storage throws, and
+     every navigator.locks.request rejects before its callback runs. The auth
+     client locks around each session read, so before the stand in each page
+     load threw three uncaught "The request was denied." errors. If the stand
+     in stops working this test fails on the rejection, loudly. */
+  const nav = window.navigator as Navigator & { locks?: unknown };
+  let hadLocks: PropertyDescriptor | undefined;
+  beforeEach(() => { hadLocks = Object.getOwnPropertyDescriptor(nav, 'locks'); });
+  afterEach(() => {
+    if (hadLocks) Object.defineProperty(nav, 'locks', hadLocks); else delete (nav as unknown as Record<string, unknown>).locks;
+  });
+
+  it('still answers getSession, signed out, with nothing thrown', async () => {
+    for (const name of NAMES) Object.defineProperty(window, name, { configurable: true, get: denied });
+    const refused = vi.fn(() => Promise.reject(new DOMException('The request was denied.', 'SecurityError')));
+    Object.defineProperty(nav, 'locks', { configurable: true, value: { request: refused } });
+    const mod = await loadClient();
+    await expect(mod.supabase.auth.getSession()).resolves.toMatchObject({ data: { session: null }, error: null });
+    /* the client really did go through the lock, and the browser really did refuse it */
+    expect(refused).toHaveBeenCalled();
+    expect(fetch).not.toHaveBeenCalled();
+  });
+});

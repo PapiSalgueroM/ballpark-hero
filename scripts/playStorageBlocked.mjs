@@ -29,6 +29,20 @@
  * banner leaves, stays gone after moving to another page in the same visit,
  * and analytics requests appear after Accept and only after Accept.
  *
+ * And the NATIVE arm, which simulates nothing: a real Chromium profile with
+ * the cookie content setting on block, the "block all cookies" a person can
+ * choose in the browser's own settings. Four routes on a phone. It is here
+ * because the simulated arm only breaks what somebody thought to break, and
+ * the first native run proved the point: the real browser also refuses the
+ * Web Locks API ("The request was denied."), the auth client locks around
+ * every session read, and each page threw three uncaught errors with the
+ * home page two buttons short, all of it green in the simulated arm. The
+ * seam now stands in for a refused lock, and the simulated BLOCKED arm
+ * refuses locks the same way so the check runs wherever this harness does.
+ * PLAY_STORAGE_NATIVE=require fails the run when the arm cannot measure
+ * (the headless shell build ignores the setting; the full Chromium build
+ * takes it); the default says so in the log and carries on; off skips it.
+ *
  * MEASURED on the built site, on a Linux runner, 2026-10-08.
  *   Before the fix (the raw control, which is the app as it was): BLOCKED
  *   mounted on 0 of 41 route and screen pairs, 0 buttons, only the 68 links
@@ -73,6 +87,7 @@
  *      ONLY=/soccer-career,/ scopes it; MODES=blocked scopes the arms.
  */
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import pw from './lib/playwrightLoader.mjs';
 
@@ -84,6 +99,9 @@ const ARMS = (process.env.MODES ?? 'blocked,full').split(',').map(s => s.trim())
 const JOBS = Math.max(1, Number(process.env.PLAY_STORAGE_JOBS ?? 3));
 const OUT = process.env.PLAY_STORAGE_OUT ?? process.env.RC_OUT ?? '';
 const RAW_SWITCH = '__DUKB_RAW_STORAGE__';
+/** require: the NATIVE arm must measure. try (the default): it measures where the
+ *  browser takes the setting and says so where it does not. off: skipped. */
+const NATIVE = process.env.PLAY_STORAGE_NATIVE ?? 'try';
 
 if (!['', 'raw', 'open'].includes(CONTROL)) {
   console.error(`unknown PLAY_STORAGE_CONTROL=${CONTROL} (raw or open)`);
@@ -104,6 +122,8 @@ const MOUNT_ROUTES = [
   '/hockey-higher-lower', '/soccer-grid', '/conquest', '/conquest-nba', '/world-cup-bracket', '/nfl-connections',
   '/nba-career', '/hof-or-bust', '/score-predictor',
 ];
+/** Walked in the NATIVE arm, on a phone. */
+const NATIVE_ROUTES = ['/', '/soccer-career', '/club-manager', '/footle'];
 /** Not games: the notice must stay off these. */
 const PLAIN_ROUTES = ['/', '/soccer', '/whats-new'];
 const VIEWS = [
@@ -155,6 +175,13 @@ function breakStorage({ mode, raw, rawSwitch }) {
          than a real browser would give it */
       const own = Object.getOwnPropertyDescriptor(window, name);
       Object.defineProperty(window, name, { configurable: own ? own.configurable : true, enumerable: true, get: boom });
+    }
+    /* and what the NATIVE arm measured a real blocked Chromium doing to the
+       Web Locks API: every request refused before its callback runs */
+    if (window.LockManager && window.LockManager.prototype) {
+      window.LockManager.prototype.request = function request() {
+        return Promise.reject(new DOMException('The request was denied.', 'SecurityError'));
+      };
     }
   } else if (mode === 'full') {
     Storage.prototype.setItem = function setItem() {
@@ -414,6 +441,81 @@ async function bannerCheck(browser, { mode, raw, choice }) {
   await ctx.close();
 }
 
+/** Runs before the page's code in the NATIVE arm: what does this browser's own accessor do? */
+function nativeProbe({ raw, rawSwitch }) {
+  let local = 'no throw';
+  try { void window.localStorage; } catch (e) { local = `${e.name}: ${e.message}`; }
+  Object.defineProperty(window, '__harnessNativeProbe', { value: local, enumerable: false, configurable: true });
+  if (raw) window[rawSwitch] = true;
+}
+
+/**
+ * The NATIVE arm: no simulated getter. A real Chromium profile with the
+ * cookie content setting on block, which is the "block all cookies" a person
+ * can pick in the browser's own settings. It is the arm that found the Web
+ * Locks refusal the simulated one did not have. Returns false when this
+ * machine's browser will not take the setting (the accessor does not throw).
+ */
+async function nativeArm(baselines) {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'dukb-storage-native-'));
+  fs.mkdirSync(path.join(dir, 'Default'), { recursive: true });
+  fs.writeFileSync(path.join(dir, 'Default', 'Preferences'), JSON.stringify({ profile: { default_content_setting_values: { cookies: 2 } } }));
+  let ctx;
+  try {
+    ctx = await chromium.launchPersistentContext(dir, { headless: true, channel: 'chromium', viewport: { width: VIEWS[0].width, height: VIEWS[0].height } });
+  } catch (e) {
+    console.log(`  the full Chromium build would not start here: ${String(e && e.message ? e.message : e).split('\n')[0].slice(0, 120)}`);
+    return false;
+  }
+  await ctx.addInitScript(nativeProbe, { raw: CONTROL === 'raw', rawSwitch: RAW_SWITCH });
+  const origin = new URL(BASE).origin;
+  let measured = false;
+  for (const route of NATIVE_ROUTES.filter(r => !ONLY || ONLY.includes(r))) {
+    const page = await ctx.newPage();
+    const errors = [];
+    page.on('pageerror', e => errors.push(String(e && e.message ? e.message : e).split('\n')[0].slice(0, 160)));
+    await page.route('**/*', r => {
+      let same = true;
+      try { same = new URL(r.request().url()).origin === origin; } catch { same = true; }
+      return same ? r.continue() : r.abort();
+    });
+    const name = `${route} phone NATIVE`;
+    try {
+      await page.goto(BASE + route, { waitUntil: 'load', timeout: 45000 });
+      await settle(page);
+      await page.waitForTimeout(1500);
+      const s = await page.evaluate(readState);
+      const probe = await page.evaluate(() => window.__harnessNativeProbe);
+      if (!/SecurityError/.test(probe)) {
+        console.log(`  ${name}: this browser's accessor did not throw (${probe}), so the setting was not taken`);
+        await page.close();
+        continue;
+      }
+      measured = true;
+      const base = baselines.get(route);
+      const want = base ? interactive(base) - COUNT_MARGIN : 1;
+      say(!s.snapshot && !s.bootCover && s.buttons > 0 && interactive(s) >= want,
+        `${name}: mounted, ${s.buttons} buttons and ${s.links} links${base ? ` (untouched ${base.buttons} and ${base.links}, floor ${want})` : ''}; the browser said "${probe.slice(0, 60)}"`);
+      say(!s.boundary, `${name}: no "This page broke" screen`);
+      say(errors.length === 0, `${name}: ${errors.length} uncaught errors${errors.length ? ': ' + errors[0] : ''}`);
+      if (GAME_ROUTES.includes(route)) say(!!s.notice && s.notice.kind === 'blocked', `${name}: the notice is on the page`);
+      else say(!s.notice, `${name}: no notice on a page that is not a game`);
+      if (route === '/') {
+        const banner = page.locator('[role="region"][aria-label="Cookie choices"]');
+        const up = await banner.count();
+        if (up === 1) await banner.getByRole('button', { name: 'Essential only', exact: true }).click({ timeout: 5000 });
+        await page.waitForTimeout(600);
+        say(up === 1 && (await banner.count()) === 0 && errors.length === 0, `${name}: the cookie banner came up and "Essential only" dismissed it`);
+      }
+    } catch (e) {
+      say(false, `${name}: ${String(e && e.message ? e.message : e).split('\n')[0].slice(0, 160)}`);
+    }
+    await page.close().catch(() => {});
+  }
+  await ctx.close().catch(() => {});
+  return measured;
+}
+
 /** The raw control only means something if the build under test carries the switch. */
 async function builtEntryWithSwitch() {
   const html = await (await fetch(BASE + '/')).text();
@@ -481,6 +583,14 @@ for (const arm of ARMS) {
   if (CONTROL === 'open') break;
 }
 await browser.close();
+
+if (CONTROL !== 'open' && NATIVE !== 'off' && ARMS.includes('blocked')) {
+  console.log('\nNATIVE: a real Chromium profile with the cookie setting on block');
+  const baselines = new Map(walked.filter(w => w.view === 'phone' && w.open.first).map(w => [w.route, w.open.first]));
+  const measured = await nativeArm(baselines);
+  if (!measured && NATIVE === 'require') say(false, 'NATIVE: PLAY_STORAGE_NATIVE=require, and no route could be measured in a really blocked browser');
+  else if (!measured) console.log('  NOT MEASURED HERE: the simulated BLOCKED arm above is all this run has. Set PLAY_STORAGE_NATIVE=require where the full Chromium build is installed.');
+}
 
 const native = walked.map(w => w.open.first && w.open.first.native).find(Boolean);
 console.log(`\nthe browser's own localStorage accessor: ${native ? `own property of window ${native.own}, configurable ${native.configurable}` : 'not read'}`);
