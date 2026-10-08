@@ -226,7 +226,9 @@
  *   nobody twice inside eleven, all marked     all of them in every run             0 of 27 (thinside, nomakeup) all
  *   their kicks by generated men               112 of 141, 134 of 171, 157 of 194,  0 of 142 (thinside)          more than 0
  *                                              176 of 219, 137 of 169, 146 of 185
- *   shootoutRosterSide checks wrong (7a)       0 of 10                              8 (nomakeup), 0 (thinside)   0
+ *   shootoutRosterSide checks wrong (7a)       0 of 11                              8 (nomakeup), 0 (thinside)   0
+ *     (eleven checks since Release AM added the keeperless thirteen; measured on a GitHub runner, 2026-10-08:
+ *      0 wrong as committed, 8 under nomakeup as before, 1 under keeperonfull, 21 seconds a run)
  *
  * Measured once and not asserted, because it is a design fact rather than
  * a check: on the same shootouts (1500 seeds of that cup match, the order
