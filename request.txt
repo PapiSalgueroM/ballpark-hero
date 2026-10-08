@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+play-main: PLAY_STORAGE_NATIVE=require node scripts/playStorageBlocked.mjs
+play-raw: PLAY_STORAGE_NATIVE=require PLAY_STORAGE_CONTROL=raw node scripts/playStorageBlocked.mjs
+play-open: PLAY_STORAGE_CONTROL=open node scripts/playStorageBlocked.mjs

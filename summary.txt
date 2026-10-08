@@ -1,0 +1,4 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+play-main exit=0 260s | playStorageBlocked: 826 checks, 0 failed
+play-raw exit=1 627s | playStorageBlocked (control raw): 786 checks, 266 failed
+play-open exit=0 233s | playStorageBlocked (control open): 743 checks, 0 failed
