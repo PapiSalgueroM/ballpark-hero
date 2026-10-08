@@ -1,0 +1,104 @@
+rvmut: nohandover applied to src/lib/translateGuard.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/translateGuard.test.tsx [2m([22m[2m53 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 1795[2mms[22m[39m
+   [32m✓[39m before the guard: the crash is real here[2m > [22mremoveChild throws for a node that is not a child[32m 2[2mms[22m[39m
+   [32m✓[39m before the guard: the crash is real here[2m > [22minsertBefore throws when the reference node is gone[32m 1[2mms[22m[39m
+   [32m✓[39m before the guard: the crash is real here[2m > [22ma React update over translated text lands in the error boundary[32m 44[2mms[22m[39m
+   [32m✓[39m before the guard: the crash is real here[2m > [22mso does a new element that goes before a translated string[32m 7[2mms[22m[39m
+   [32m✓[39m with the guard[2m > [22minstalls once and says so[32m 1[2mms[22m[39m
+   [32m✓[39m with the guard[2m > [22mremoving a node that is not a child is a no-op[32m 1[2mms[22m[39m
+   [32m✓[39m with the guard[2m > [22minserting before a gone reference appends, so the new node still arrives[32m 0[2mms[22m[39m
+   [32m✓[39m with the guard[2m > [22ma placeholder gives way to a value on a translated page[32m 5[2mms[22m[39m
+   [32m✓[39m with the guard[2m > [22ma new element still shows up when the string it goes before was translated[32m 5[2mms[22m[39m
+   [32m✓[39m with the guard[2m > [22man untranslated page behaves exactly as before[32m 4[2mms[22m[39m
+   [32m✓[39m with the guard[2m > [22mthe off switch leaves a window alone[32m 0[2mms[22m[39m
+   [32m✓[39m layer two: a string React removes takes its translated copy with it[2m > [22ma placeholder gives way to a value and none of the old words stay behind[32m 4[2mms[22m[39m
+   [32m✓[39m layer two: a string React removes takes its translated copy with it[2m > [22mwhen one piece of a sentence leaves, the rest goes back to the translator whole[32m 4[2mms[22m[39m
+   [32m✓[39m layer two: a string React removes takes its translated copy with it[2m > [22ma node nobody translated is still left to layer one[32m 2[2mms[22m[39m
+   [32m✓[39m layer two: a string React removes takes its translated copy with it[2m > [22man ordinary removal beside a <font> that was already there is not read as a swap[32m 2[2mms[22m[39m
+   [32m✓[39m layer two: a string React removes takes its translated copy with it[2m > [22ma wrapper that already stands for one string is not claimed by the next string leaving in the same batch[32m 3[2mms[22m[39m
+   [32m✓[39m layer two: a new node lands before the string it precedes[2m > [22man element goes in front of a translated string, not at the end[32m 4[2mms[22m[39m
+   [32m✓[39m layer two: a new node lands before the string it precedes[2m > [22ma sign goes in front of a translated figure[32m 4[2mms[22m[39m
+   [32m✓[39m layer two: a new node lands before the string it precedes[2m > [22ma reference nobody translated still falls back to the end[32m 0[2mms[22m[39m
+   [32m✓[39m layer two: a string React rewrites in place shows its new words[2m > [22ma number beside a label shows the new number, and the label is still there[32m 7[2mms[22m[39m
+   [32m✓[39m layer two: a string React rewrites in place shows its new words[2m > [22ma hundred updates leave exactly the nodes it started with[32m 214[2mms[22m[39m
+   [32m✓[39m layer two: a string React rewrites in place shows its new words[2m > [22ma translator still working on older words cannot bring them back[32m 6[2mms[22m[39m
+   [32m✓[39m layer two: a string React rewrites in place shows its new words[2m > [22ma sign that arrives and a figure that changes in the same commit both show[32m 3[2mms[22m[39m
+   [32m✓[39m layer two: a string React rewrites in place shows its new words[2m > [22mone commit that rewrites three strings of a line makes its stand ins once, not three times[32m 1[2mms[22m[39m
+   [32m✓[39m layer two: a string React rewrites in place shows its new words[2m > [22mhiding a string and showing it again works off the page too[32m 0[2mms[22m[39m
+   [32m✓[39m layer two: a string React rewrites in place shows its new words[2m > [22mwriting the same words again leaves the translation alone[32m 1[2mms[22m[39m
+   [32m✓[39m layer two: a string React rewrites in place shows its new words[2m > [22man untranslated page triggers nothing at all[32m 10[2mms[22m[39m
+   [32m✓[39m layer two: a string rewritten while the translator was working on it[2m > [22mis not left showing its first words[32m 4[2mms[22m[39m
+   [32m✓[39m layer two: a string rewritten while the translator was working on it[2m > [22ma figure that is its element's only child and keeps ticking ends on its last value[32m 12[2mms[22m[39m
+   [32m✓[39m layer two: a string rewritten while the translator was working on it[2m > [22ma writer that comes round with the same words for a stand in is not handed a new node again[32m 4[2mms[22m[39m
+   [32m✓[39m layer two: a string rewritten while the translator was working on it[2m > [22ma string that was never rewritten is left alone when it is taken[32m 2[2mms[22m[39m
+[31m   [31m×[31m layer two: a stand in the translator did not take is handed over again[2m > [22monce the translator listens again the string ends up translated, and that is the end of it[39m[32m 10[2mms[22m[39m
+[31m     → expected Text{ …(1) } not to be Text{ …(1) } // Object.is equality[39m
+[31m   [31m×[31m layer two: a stand in the translator did not take is handed over again[2m > [22ma translator that never comes back is asked three more times and then left in peace[39m[32m 11[2mms[22m[39m
+[31m     → expected 1 to be 4 // Object.is equality[39m
+   [32m✓[39m layer two: a stand in the translator did not take is handed over again[2m > [22ma line that keeps changing is never interrupted[32m 3[2mms[22m[39m
+   [32m✓[39m layer two: a stand in the translator did not take is handed over again[2m > [22mafter the translator has undone itself nothing is handed over again[32m 2[2mms[22m[39m
+   [32m✓[39m layer two: a string React moves shows once, where React put it[2m > [22mput in again in front of another translated string[32m 3[2mms[22m[39m
+   [32m✓[39m layer two: a string React moves shows once, where React put it[2m > [22mappended at the end, and appended into another element[32m 5[2mms[22m[39m
+   [32m✓[39m layer two: a string React moves shows once, where React put it[2m > [22ma keyed list of plain strings React puts in a new order[32m 7[2mms[22m[39m
+   [32m✓[39m layer two: the translator undoes itself (show original)[2m > [22ma number layer two had refreshed still follows React afterwards (replace, saved words by data)[32m 9[2mms[22m[39m
+   [32m✓[39m layer two: the translator undoes itself (show original)[2m > [22ma number layer two had refreshed still follows React afterwards (replace, saved words by nodeValue)[32m 9[2mms[22m[39m
+   [32m✓[39m layer two: the translator undoes itself (show original)[2m > [22ma number layer two had refreshed still follows React afterwards (replace, saved words by none)[32m 8[2mms[22m[39m
+   [32m✓[39m layer two: the translator undoes itself (show original)[2m > [22ma number layer two had refreshed still follows React afterwards (two steps, saved words by data)[32m 8[2mms[22m[39m
+   [32m✓[39m layer two: the translator undoes itself (show original)[2m > [22ma number layer two had refreshed still follows React afterwards (two steps, saved words by nodeValue)[32m 8[2mms[22m[39m
+   [32m✓[39m layer two: the translator undoes itself (show original)[2m > [22ma number layer two had refreshed still follows React afterwards (two steps, saved words by none)[32m 9[2mms[22m[39m
+   [32m✓[39m layer two: the translator undoes itself (show original)[2m > [22ma string React removes afterwards leaves the page, and a new node lands in front of the one it precedes[32m 4[2mms[22m[39m
+   [32m✓[39m layer two: the translator undoes itself (show original)[2m > [22mReact writing in the same turn as the undo is not lost[32m 5[2mms[22m[39m
+   [32m✓[39m layer two: the translator undoes itself (show original)[2m > [22mwhatever words the translator kept for a node it gives back, the page ends on React's[32m 4[2mms[22m[39m
+   [32m✓[39m layer two: the translator undoes itself (show original)[2m > [22ma stand in that something newer has replaced is nobody's, even if it turns up on the page again[32m 6[2mms[22m[39m
+   [32m✓[39m layer two: the translator undoes itself (show original)[2m > [22ma string nobody rewrote goes back to React as it was, and React writes it in place again[32m 3[2mms[22m[39m
+   [32m✓[39m layer two: the translator undoes itself (show original)[2m > [22mtranslated again after the undo, the page still follows React[32m 5[2mms[22m[39m
+   [32m✓[39m layer two: the translator undoes itself (show original)[2m > [22man undo and a new translation in one go, before the observer has its turn, loses nothing either[32m 8[2mms[22m[39m
+   [32m✓[39m layer two: the translator undoes itself (show original)[2m > [22ma hundred rounds of translate, rewrite and undo leave exactly the nodes it started with[32m 97[2mms[22m[39m
+   [32m✓[39m the control: layer one alone leaves the stale word and the frozen number[2m > [22mthe same calls, with and without layer two[32m 10[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/translateGuard.test.tsx[2m > [22mlayer two: a stand in the translator did not take is handed over again[2m > [22monce the translator listens again the string ends up translated, and that is the end of it
+[31m[1mAssertionError[22m: expected Text{ …(1) } not to be Text{ …(1) } // Object.is equality[39m
+[36m [2m❯[22m src/test/translateGuard.test.tsx:[2m824:24[22m[39m
+    [90m822| [39m    [35mawait[39m [34mlater[39m([34m20[39m)[33m;[39m
+    [90m823| [39m    [35mconst[39m second [33m=[39m p[33m.[39mfirstChild [35mas[39m [33mText[39m[33m;[39m
+    [90m824| [39m    expect(second).not.toBe(first); // handed over again: a new node, …
+    [90m   | [39m                       [31m^[39m
+    [90m825| [39m    [34mexpect[39m(second[33m.[39mnodeValue)[33m.[39m[34mtoBe[39m([32m'Balance: 200'[39m)[33m;[39m
+    [90m826| [39m    [34mtranslateReal[39m(p)[33m;[39m [90m// this time the translator is listening[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/translateGuard.test.tsx[2m > [22mlayer two: a stand in the translator did not take is handed over again[2m > [22ma translator that never comes back is asked three more times and then left in peace
+[31m[1mAssertionError[22m: expected 1 to be 4 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 4[39m
+[31m+ 1[39m
+
+[36m [2m❯[22m src/test/translateGuard.test.tsx:[2m847:23[22m[39m
+    [90m845| [39m      [34mexpect[39m(p[33m.[39mchildNodes[33m.[39mlength)[33m.[39m[34mtoBe[39m([34m1[39m)[33m;[39m
+    [90m846| [39m    }
+    [90m847| [39m    [34mexpect[39m(seen[33m.[39msize)[33m.[39m[34mtoBe[39m([34m4[39m)[33m;[39m [90m// the first stand in and three more[39m
+    [90m   | [39m                      [31m^[39m
+    [90m848| [39m    [34mexpect[39m([34mstats[39m()[33m.[39mrestored)[33m.[39m[34mtoBe[39m(before[33m.[39mrestored [33m+[39m [34m3[39m)[33m;[39m
+    [90m849| [39m    p[33m.[39m[34mremove[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m51 passed[39m[22m[90m (53)[39m
+[2m   Start at [22m 12:43:54
+[2m   Duration [22m 2.35s[2m (transform 71ms, setup 29ms, collect 115ms, tests 1.80s, environment 166ms, prepare 54ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/translateGuard.test.tsx,title=src/test/translateGuard.test.tsx > layer two%3A a stand in the translator did not take is handed over again > once the translator listens again the string ends up translated%2C and that is the end of it,line=824,column=24::AssertionError: expected Text{ …(1) } not to be Text{ …(1) } // Object.is equality%0A ❯ src/test/translateGuard.test.tsx:824:24%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/translateGuard.test.tsx,title=src/test/translateGuard.test.tsx > layer two%3A a stand in the translator did not take is handed over again > a translator that never comes back is asked three more times and then left in peace,line=847,column=23::AssertionError: expected 1 to be 4 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 4%0A+ 1%0A%0A ❯ src/test/translateGuard.test.tsx:847:23%0A%0A

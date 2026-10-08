@@ -1,0 +1,80 @@
+rvmut: keptstale applied to src/lib/safeStorage.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/safeStorage.test.ts [2m([22m[2m27 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 74[2mms[22m[39m
+   [32m✓[39m safeStorage: a browser that stores normally[2m > [22mpasses every call straight through to the browser storage and reports no trouble[32m 13[2mms[22m[39m
+   [32m✓[39m safeStorage: a browser that stores normally[2m > [22mwrites and removes NOTHING as it loads[32m 2[2mms[22m[39m
+   [32m✓[39m safeStorage: a browser that stores normally[2m > [22mthe write probe is one write and one remove of its own key, once a visit, only when asked[32m 2[2mms[22m[39m
+   [32m✓[39m safeStorage: storage blocked[2m > [22mstands in for the visit when the accessor throws, and puts the stand in on window[32m 2[2mms[22m[39m
+   [32m✓[39m safeStorage: storage blocked[2m > [22mstands in when the browser hands back null (a web view with storage turned off)[32m 1[2mms[22m[39m
+   [32m✓[39m safeStorage: storage blocked[2m > [22mstands in when the object is there but every call on it throws[32m 1[2mms[22m[39m
+   [32m✓[39m safeStorage: storage blocked[2m > [22mstill works on the seam when window will not take the stand in[32m 1[2mms[22m[39m
+   [32m✓[39m safeStorage: storage full[2m > [22mkeeps writes for the visit, still reads what was saved before, and leaves window alone[32m 1[2mms[22m[39m
+   [32m✓[39m safeStorage: storage full[2m > [22mlearns it is full from the first write the browser refuses, with no probe at all[32m 1[2mms[22m[39m
+   [32m✓[39m safeStorage: storage full[2m > [22mlearns it is full from a refused safeSetItem too[32m 1[2mms[22m[39m
+   [32m✓[39m safeStorage: storage full[2m > [22ma session store that refuses a write says nothing about saves[32m 1[2mms[22m[39m
+   [32m✓[39m safeStorage: storage full[2m > [22ma remove reaches the browser store underneath, so a cleared choice stays cleared after a reload[32m 1[2mms[22m[39m
+   [32m✓[39m safeStorage: the raw switch (the harness control)[2m > [22mhands back the browser storage untouched when storage works[32m 1[2mms[22m[39m
+   [32m✓[39m safeStorage: the raw switch (the harness control)[2m > [22mthrows as the module loads when storage is blocked, which is the dead page this round fixes[32m 1[2mms[22m[39m
+   [32m✓[39m safeStorage: the stand in behaves like Storage[2m > [22mgetItem, setItem, removeItem, key, length and clear[32m 1[2mms[22m[39m
+   [32m✓[39m safeStorage: the stand in behaves like Storage[2m > [22mstores strings, the way the browser does[32m 1[2mms[22m[39m
+   [32m✓[39m safeStorage: the stand in behaves like Storage[2m > [22mlaid over a store that refuses writes: keys from both are listed once, and a refused remove stays removed[32m 2[2mms[22m[39m
+[31m   [31m×[31m safeStorage: the stand in behaves like Storage[2m > [22ma write goes to the browser store again the moment it takes one[39m[32m 28[2mms[22m[39m
+[31m     → expected 'memory' to be 'real' // Object.is equality[39m
+   [32m✓[39m safeStorage: safeSetItem, the write that cannot take a page down[2m > [22mwrites to the browser storage and says so when storage works[32m 6[2mms[22m[39m
+   [32m✓[39m safeStorage: safeSetItem, the write that cannot take a page down[2m > [22manswers false and throws nothing when storage is full, and stores nothing a reader could not read back[32m 2[2mms[22m[39m
+   [32m✓[39m safeStorage: safeSetItem, the write that cannot take a page down[2m > [22mkeeps the write for the visit when storage is blocked[32m 1[2mms[22m[39m
+   [32m✓[39m safeStorage: safeSetItem, the write that cannot take a page down[2m > [22manswers false when storage is blocked and window would not take the stand in[32m 1[2mms[22m[39m
+   [32m✓[39m safeStorage: safeSetItem, the write that cannot take a page down[2m > [22munder the raw switch it throws like the unguarded write it replaced[32m 1[2mms[22m[39m
+   [32m✓[39m safeStorage: the Web Locks stand in (a real blocked browser refuses locks too)[2m > [22mruns the callback without a lock when the browser refuses one[32m 1[2mms[22m[39m
+   [32m✓[39m safeStorage: the Web Locks stand in (a real blocked browser refuses locks too)[2m > [22mruns the callback once, and lets its own error through untouched[32m 1[2mms[22m[39m
+   [32m✓[39m safeStorage: the Web Locks stand in (a real blocked browser refuses locks too)[2m > [22mpasses any other refusal through[32m 1[2mms[22m[39m
+   [32m✓[39m safeStorage: the Web Locks stand in (a real blocked browser refuses locks too)[2m > [22mleaves locks alone in a browser that stores normally[32m 1[2mms[22m[39m
+ [32m✓[39m src/test/freshBuildBlockedStorage.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 104[2mms[22m[39m
+[90mstderr[2m | src/test/supabaseClientBlockedStorage.test.ts[2m > [22m[2mthe Supabase client when the browser blocks storage[2m > [22m[2mpins the same two strings in a browser that stores normally, and restores a stored session
+[22m[39mGoTrueClient@sb-flawuiqbvjobmkfkauhw-auth-token:1 (2.95.3) 2026-10-08T12:44:01.504Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+
+[90mstderr[2m | src/test/supabaseClientBlockedStorage.test.ts[2m > [22m[2mthe Supabase client when the browser blocks storage[2m > [22m[2mimporting the client in a browser that stores normally writes nothing but the auth client's own probe
+[22m[39mGoTrueClient@sb-flawuiqbvjobmkfkauhw-auth-token:2 (2.95.3) 2026-10-08T12:44:01.513Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+
+[90mstderr[2m | src/test/supabaseClientBlockedStorage.test.ts[2m > [22m[2mthe Supabase client when the browser blocks storage[2m > [22m[2mkeeps a signed in player signed in when storage is full (reads still reach the stored session)
+[22m[39mGoTrueClient@sb-flawuiqbvjobmkfkauhw-auth-token:3 (2.95.3) 2026-10-08T12:44:01.518Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+
+[90mstderr[2m | src/test/supabaseClientBlockedStorage.test.ts[2m > [22m[2mthe Supabase client when the browser refuses Web Locks as well[2m > [22m[2mstill answers getSession, signed out, with nothing thrown
+[22m[39mGoTrueClient@sb-flawuiqbvjobmkfkauhw-auth-token:4 (2.95.3) 2026-10-08T12:44:01.525Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+
+ [32m✓[39m src/test/supabaseClientBlockedStorage.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 67[2mms[22m[39m
+[90mstderr[2m | src/test/storageBlockedBoot.test.tsx[2m > [22m[2mthe storage notice[2m > [22m[2mstorage full: the line is there on the first render of a game page, and the home page asks nothing
+[22m[39mWarning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+
+ [32m✓[39m src/test/storageBlockedBoot.test.tsx [2m([22m[2m20 tests[22m[2m)[22m[32m 292[2mms[22m[39m
+ [32m✓[39m src/test/cookieConsentStorage.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[32m 217[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/safeStorage.test.ts[2m > [22msafeStorage: the stand in behaves like Storage[2m > [22ma write goes to the browser store again the moment it takes one
+[31m[1mAssertionError[22m: expected 'memory' to be 'real' // Object.is equality[39m
+
+Expected: [32m"real"[39m
+Received: [31m"memory"[39m
+
+[36m [2m❯[22m src/test/safeStorage.test.ts:[2m290:28[22m[39m
+    [90m288| [39m    s[33m.[39m[34msetItem[39m([32m'k'[39m[33m,[39m [32m'real'[39m)[33m;[39m
+    [90m289| [39m    [34mexpect[39m(under[33m.[39m[34mgetItem[39m([32m'k'[39m))[33m.[39m[34mtoBe[39m([32m'real'[39m)[33m;[39m
+    [90m290| [39m    [34mexpect[39m(s[33m.[39m[34mgetItem[39m([32m'k'[39m))[33m.[39m[34mtoBe[39m([32m'real'[39m)[33m;[39m
+    [90m   | [39m                           [31m^[39m
+    [90m291| [39m    [34mexpect[39m(s[33m.[39mlength)[33m.[39m[34mtoBe[39m([34m1[39m)[33m;[39m
+    [90m292| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m4 passed[39m[22m[90m (5)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m70 passed[39m[22m[90m (71)[39m
+[2m   Start at [22m 12:44:00
+[2m   Duration [22m 1.56s[2m (transform 337ms, setup 189ms, collect 789ms, tests 754ms, environment 1.33s, prepare 407ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/safeStorage.test.ts,title=src/test/safeStorage.test.ts > safeStorage%3A the stand in behaves like Storage > a write goes to the browser store again the moment it takes one,line=290,column=28::AssertionError: expected 'memory' to be 'real' // Object.is equality%0A%0AExpected: "real"%0AReceived: "memory"%0A%0A ❯ src/test/safeStorage.test.ts:290:28%0A%0A

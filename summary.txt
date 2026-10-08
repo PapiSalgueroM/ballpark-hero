@@ -1,0 +1,20 @@
+tsc exit=0 35s | 
+base-vitest exit=0 25s |    Duration  24.13s (transform 5.18s, setup 666ms, collect 9.78s, tests 30.18s, environment 3.76s, prepare 959ms)
+base-shootout exit=0 10s | simCmShootoutOrder: all sections passed
+base-cgshipped exit=0 10s | simCollegeGridShipped: green. None of the thirteen ships, the two files are the key row for row and verdict for verdict, every board keeps its answers and its floor, the 
+base-ussc exit=0 1s | simUsSeasonCentre: 45 checks, 0 failed
+mut-shoot10 exit=1 6s | Node.js v24.21.0
+mut-shootmark exit=1 9s | simCmShootoutOrder: 33 FAILURE(S)
+mut-nohandover exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/translateGuard.test.tsx,title=src/test/translateGuard.test.tsx > layer two%3A a stand in the translato
+mut-flatwaits exit=0 2s |    Duration  2.37s (transform 74ms, setup 29ms, collect 113ms, tests 1.80s, environment 168ms, prepare 43ms)
+mut-keptstale exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/safeStorage.test.ts,title=src/test/safeStorage.test.ts > safeStorage%3A the stand in behaves like Stor
+mut-rankbare exit=0 24s |    Duration  23.84s (transform 4.83s, setup 191ms, collect 9.13s, tests 22.93s, environment 1.29s, prepare 353ms)
+mut-rankbare-sim exit=0 80s | Number formatting: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/number-formatting-artifacts/outcomes
+mut-facebare exit=0 4s |    Duration  3.43s (transform 2.80s, setup 110ms, collect 4.63s, tests 900ms, environment 754ms, prepare 258ms)
+mut-facepill exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/resultScorePillComparison.test.tsx,title=src/test/resultScorePillComparison.test.tsx > Face Off reveal
+mut-hofbare exit=0 4s |    Duration  3.43s (transform 2.80s, setup 160ms, collect 5.00s, tests 1.74s, environment 963ms, prepare 204ms)
+mut-cgpick0 exit=1 9s | simCollegeGridShipped: red, 5 failures above in section 2, 3, 5, 8.
+mut-cgpick0-vitest exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridOffline.test.tsx,title=src/test/collegeGridOffline.test.tsx > College Grid offline > (4b) a
+mut-nbastages exit=1 2s | simUsSeasonCentre: 45 checks, 3 failed
+mut-nbastages-vitest exit=0 4s |    Duration  3.68s (transform 1.97s, setup 150ms, collect 3.35s, tests 1.82s, environment 838ms, prepare 260ms)
+tree-clean exit=0 0s | 

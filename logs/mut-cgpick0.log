@@ -1,0 +1,29 @@
+rvmut: cgpick0 applied to src/lib/collegeGrid.ts
+simCollegeGridShipped: committed files only, no request
+
+1) None of the thirteen ships
+   35,598 key rows and 35,598 search names read; 13 names read out of the migration's DELETE statement; 1,163 distinct schools in the key (1,165 before the thirteen left, measured 2026-10-07)
+
+2) The compact files are the key
+  FAIL: 8829 decoded rows differ from the key in a judged column (first: Adam Vinatieri: a judged column differs from the key)
+  FAIL: 26487 verdicts differ between the files and the key (first: Adam Vinatieri: a judged column differs from the key)
+
+3) Recorded before: nothing moved for anyone who stayed
+  FAIL: the shipped files judge differently from the untouched lib over the untouched key: {"yes":71404,"no":299385,"unknown":1658297} now, {"yes":44917,"no":312741,"unknown":1671428} recorded
+
+4) Not stale: both files are what the generator renders
+   both files byte equal to renderCompact(committed key): 35,598 rows, stamp cf90e69d60395171
+
+5) Every board keeps its answers
+  FAIL: 87 of 675 cells hold different answers from the recorded ones with the audited names left out (first: cg611-002 Michigan x Top 10 Pick: 51 answers now, 23 recorded)
+
+6) The budget
+   search 599,136 raw, 205,231 gzip; judge 542,050 raw, 133,308 gzip; pair 1,141,186 raw, 338,539 gzip in 2 requests (ceilings 1,313,000 and 390,000). Before: 36 table reads decoding 9,462,264 bytes (the key file is 6,233,432 raw, 1,241,950 gzip). CPU for parse, decode and index of 35,598 rows: median 99.5 ms of 7 [44, 89, 95, 166, 165, 99, 161], ceiling 1150 ms (measured medians: 312, 344, 374, 375, 407, 438, 469)
+
+7) The source stage drops the audited row and keeps another name at the same pick
+   5 draft rows and 2 careers in, 4 entries out (Probe Opener, Probe Passer, Probe Realpick, Probe Runner); 1 audited row left out at 1977 pick 320
+
+8) The door and fail closed, through the real hook
+  FAIL: fail closed: "the committed pair decodes to one row per player with the nine keys the judge en" is failed
+
+simCollegeGridShipped: red, 5 failures above in section 2, 3, 5, 8.

@@ -1,0 +1,118 @@
+rvmut: cgpick0 applied to src/lib/collegeGrid.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/gridEngineSource.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 130[2mms[22m[39m
+[90mstdout[2m | src/test/collegeGridFailClosed.test.tsx
+[22m[39mCGFAILCLOSED| board cg611-033: yes Jason Witten, no Darrell Green
+
+[90mstdout[2m | src/test/collegeGridSearchMemory.test.ts[2m > [22m[2mthe College Grid search, from memory (Round 1105)[2m > [22m[2ma surname lists the man, and the check fails when names are found by their first letters only
+[22m[39mCGSEARCH| surname: 74 sampled names each listed by their second word
+
+[90mstdout[2m | src/test/collegeGridFailClosed.test.tsx[2m > [22m[2mCollege Grid fail closed (Round 1105)[2m > [22m[2m(c) the key fails five ways: unverified each time, the next pick starts a new load, and a good load is judged
+[22m[39mCGFAILCLOSED| fail closed: 5 of 5 failure worlds left the pick unverified and judged it after the network healed
+
+[90mstdout[2m | src/test/collegeGridSearchMemory.test.ts[2m > [22m[2mthe College Grid search, from memory (Round 1105)[2m > [22m[2ma file of the wrong shape is refused and forgotten, 7 ways, and a 200 that is not JSON is a failed fetch
+[22m[39mCGSEARCH| 7 wrong shapes, an HTML body and a 404 each failed the search and were asked for again
+
+ [32m✓[39m src/test/collegeGridSearchMemory.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 685[2mms[22m[39m
+   [33m[2m✓[22m[39m the College Grid search, from memory (Round 1105)[2m > [22ma file of the wrong shape is refused and forgotten, 7 ways, and a 200 that is not JSON is a failed fetch [33m 355[2mms[22m[39m
+[90mstdout[2m | src/test/collegeGridOffline.test.tsx[2m > [22m[2mCollege Grid offline[2m > [22m[2m(4a) a win bot fills 9 of 9 in 9 counted guesses on every board
+[22m[39mCGOFFLINE| win: 75 of 75 boards won in 9 counted guesses, each recorded once at 900; 1350 network calls refused by the stub along the way; key files fetched 2, reads of the key's table 0
+
+[90mstdout[2m | src/test/collegeGridFailClosed.test.tsx[2m > [22m[2mdecodeCollegeKey: null on any doubt, never a row from a damaged file[2m > [22m[2mevery one of 44 damaged pairs is null, and none of them throws
+[22m[39mCGFAILCLOSED| decoder: 44 of 44 damaged pairs refused
+
+ [31m❯[39m src/test/collegeGridFailClosed.test.tsx [2m([22m[2m8 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 1843[2mms[22m[39m
+   [32m✓[39m College Grid fail closed (Round 1105)[2m > [22m(a) the door: one fetch per key file and no read of the table[32m 153[2mms[22m[39m
+   [32m✓[39m College Grid fail closed (Round 1105)[2m > [22m(b) the key never arrives: the board is up at once, and a pick waits and is then unverified[32m 6[2mms[22m[39m
+   [33m[2m✓[22m[39m College Grid fail closed (Round 1105)[2m > [22m(c) the key fails five ways: unverified each time, the next pick starts a new load, and a good load is judged [33m 724[2mms[22m[39m
+   [32m✓[39m College Grid fail closed (Round 1105)[2m > [22m(d) the key lands 3 seconds after the pick: that pick is judged on the cell it was made for[32m 199[2mms[22m[39m
+   [32m✓[39m College Grid fail closed (Round 1105)[2m > [22m(e) the player leaves while a pick waits: the pick is dropped, nothing is written, nothing is said[32m 137[2mms[22m[39m
+[31m   [31m×[31m decodeCollegeKey: null on any doubt, never a row from a damaged file[2m > [22mthe committed pair decodes to one row per player with the nine keys the judge entry reads[39m[32m 16[2mms[22m[39m
+[31m     → a stored pick of 0 reads back as no pick: expected undefined to be truthy[39m
+   [33m[2m✓[22m[39m decodeCollegeKey: null on any doubt, never a row from a damaged file[2m > [22mevery one of 44 damaged pairs is null, and none of them throws [33m 316[2mms[22m[39m
+   [32m✓[39m decodeCollegeKey: null on any doubt, never a row from a damaged file[2m > [22mthe last good value on each boundary still decodes: the floor itself, the last school, the last row[32m 10[2mms[22m[39m
+[90mstdout[2m | src/test/collegeGridOffline.test.tsx[2m > [22m[2mCollege Grid offline[2m > [22m[2m(4b) a loss bot that submits a definite no each time ends every board lost at 15
+[22m[39mCGOFFLINE| loss: 52 of 75 boards ended lost at 15 counted guesses, each recorded once at 0; 23 still playing after 15 submissions
+CGOFFLINE| loss failures: cg611-002: playing, 0 correct, 13 counted, 2 left, recorded [] | cg611-009: playing, 0 correct, 11 counted, 4 left, recorded [] | cg611-014: playing, 0 correct, 13 counted, 2 left, recorded []
+
+ [31m❯[39m src/test/collegeGridOffline.test.tsx [2m([22m[2m2 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 1994[2mms[22m[39m
+   [33m[2m✓[22m[39m College Grid offline[2m > [22m(4a) a win bot fills 9 of 9 in 9 counted guesses on every board [33m 1039[2mms[22m[39m
+[31m   [31m×[31m College Grid offline[2m > [22m(4b) a loss bot that submits a definite no each time ends every board lost at 15[39m[33m 478[2mms[22m[39m
+[31m     → expected [ …(23) ] to deeply equal [][39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/collegeGridFailClosed.test.tsx[2m > [22mdecodeCollegeKey: null on any doubt, never a row from a damaged file[2m > [22mthe committed pair decodes to one row per player with the nine keys the judge entry reads
+[31m[1mAssertionError[22m: a stored pick of 0 reads back as no pick: expected undefined to be truthy[39m
+
+[32m- Expected:[39m 
+true
+
+[31m+ Received:[39m 
+undefined
+
+[36m [2m❯[22m src/test/collegeGridFailClosed.test.tsx:[2m392:64[22m[39m
+    [90m390| [39m    [34mexpect[39m(rows[33m![39m[firstWinner[[34m0[39m]][33m.[39mheisman_year)[33m.[39m[34mtoBe[39m(firstWinner[[34m1[39m])[33m;[39m
+    [90m391| [39m    [35mconst[39m noPick [33m=[39m rows[33m![39m[33m.[39m[34mfind[39m((r) [33m=>[39m r[33m.[39mbest_pick [33m===[39m [35mnull[39m)[33m;[39m
+    [90m392| [39m    expect(noPick, 'a stored pick of 0 reads back as no pick').toBeTru…
+    [90m   | [39m                                                               [31m^[39m
+    [90m393| [39m  })[33m;[39m
+    [90m394| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/collegeGridOffline.test.tsx[2m > [22mCollege Grid offline[2m > [22m(4b) a loss bot that submits a definite no each time ends every board lost at 15
+[31m[1mAssertionError[22m: expected [ …(23) ] to deeply equal [][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [][39m
+[31m+ [[39m
+[31m+   "cg611-002: playing, 0 correct, 13 counted, 2 left, recorded []",[39m
+[31m+   "cg611-009: playing, 0 correct, 11 counted, 4 left, recorded []",[39m
+[31m+   "cg611-014: playing, 0 correct, 13 counted, 2 left, recorded []",[39m
+[31m+   "cg611-016: playing, 0 correct, 13 counted, 2 left, recorded []",[39m
+[31m+   "cg611-017: playing, 0 correct, 11 counted, 4 left, recorded []",[39m
+[31m+   "cg611-019: playing, 0 correct, 13 counted, 2 left, recorded []",[39m
+[31m+   "cg611-020: playing, 0 correct, 13 counted, 2 left, recorded []",[39m
+[31m+   "cg611-022: playing, 0 correct, 13 counted, 2 left, recorded []",[39m
+[31m+   "cg611-026: playing, 0 correct, 13 counted, 2 left, recorded []",[39m
+[31m+   "cg611-031: playing, 0 correct, 11 counted, 4 left, recorded []",[39m
+[31m+   "cg611-033: playing, 0 correct, 13 counted, 2 left, recorded []",[39m
+[31m+   "cg611-034: playing, 0 correct, 11 counted, 4 left, recorded []",[39m
+[31m+   "cg611-038: playing, 0 correct, 13 counted, 2 left, recorded []",[39m
+[31m+   "cg611-046: playing, 0 correct, 13 counted, 2 left, recorded []",[39m
+[31m+   "cg611-050: playing, 0 correct, 13 counted, 2 left, recorded []",[39m
+[31m+   "cg611-051: playing, 0 correct, 13 counted, 2 left, recorded []",[39m
+[31m+   "cg611-053: playing, 0 correct, 13 counted, 2 left, recorded []",[39m
+[31m+   "cg611-055: playing, 0 correct, 11 counted, 4 left, recorded []",[39m
+[31m+   "cg611-059: playing, 0 correct, 13 counted, 2 left, recorded []",[39m
+[31m+   "cg611-062: playing, 0 correct, 11 counted, 4 left, recorded []",[39m
+[31m+   "cg611-065: playing, 0 correct, 13 counted, 2 left, recorded []",[39m
+[31m+   "cg611-067: playing, 0 correct, 13 counted, 2 left, recorded []",[39m
+[31m+   "cg611-071: playing, 0 correct, 13 counted, 2 left, recorded []",[39m
+[31m+ ][39m
+
+[36m [2m❯[22m src/test/collegeGridOffline.test.tsx:[2m276:17[22m[39m
+    [90m274| [39m    if (process.env.CG_OFFLINE_CONTROL === 'nocount') note(`control no…
+    [90m275| [39m    if (bad.length) note(`loss failures: ${bad.slice(0, 3).join(' | ')…
+    [90m276| [39m    [34mexpect[39m(bad)[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m   | [39m                [31m^[39m
+    [90m277| [39m    [34mexpect[39m(lost)[33m.[39m[34mtoBe[39m([34m75[39m)[33m;[39m
+    [90m278| [39m    expect(state.tableReads, 'the page never reads college_grid_player…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m32 passed[39m[22m[90m (34)[39m
+[2m   Start at [22m 12:46:09
+[2m   Duration [22m 2.80s[2m (transform 274ms, setup 139ms, collect 663ms, tests 4.65s, environment 1.09s, prepare 224ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridFailClosed.test.tsx,title=src/test/collegeGridFailClosed.test.tsx > decodeCollegeKey%3A null on any doubt%2C never a row from a damaged file > the committed pair decodes to one row per player with the nine keys the judge entry reads,line=392,column=64::AssertionError: a stored pick of 0 reads back as no pick: expected undefined to be truthy%0A%0A- Expected: %0Atrue%0A%0A+ Received: %0Aundefined%0A%0A ❯ src/test/collegeGridFailClosed.test.tsx:392:64%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridOffline.test.tsx,title=src/test/collegeGridOffline.test.tsx > College Grid offline > (4b) a loss bot that submits a definite no each time ends every board lost at 15,line=276,column=17::AssertionError: expected [ …(23) ] to deeply equal []%0A%0A- Expected%0A+ Received%0A%0A- []%0A+ [%0A+   "cg611-002: playing, 0 correct, 13 counted, 2 left, recorded []",%0A+   "cg611-009: playing, 0 correct, 11 counted, 4 left, recorded []",%0A+   "cg611-014: playing, 0 correct, 13 counted, 2 left, recorded []",%0A+   "cg611-016: playing, 0 correct, 13 counted, 2 left, recorded []",%0A+   "cg611-017: playing, 0 correct, 11 counted, 4 left, recorded []",%0A+   "cg611-019: playing, 0 correct, 13 counted, 2 left, recorded []",%0A+   "cg611-020: playing, 0 correct, 13 counted, 2 left, recorded []",%0A+   "cg611-022: playing, 0 correct, 13 counted, 2 left, recorded []",%0A+   "cg611-026: playing, 0 correct, 13 counted, 2 left, recorded []",%0A+   "cg611-031: playing, 0 correct, 11 counted, 4 left, recorded []",%0A+   "cg611-033: playing, 0 correct, 13 counted, 2 left, recorded []",%0A+   "cg611-034: playing, 0 correct, 11 counted, 4 left, recorded []",%0A+   "cg611-038: playing, 0 correct, 13 counted, 2 left, recorded []",%0A+   "cg611-046: playing, 0 correct, 13 counted, 2 left, recorded []",%0A+   "cg611-050: playing, 0 correct, 13 counted, 2 left, recorded []",%0A+   "cg611-051: playing, 0 correct, 13 counted, 2 left, recorded []",%0A+   "cg611-053: playing, 0 correct, 13 counted, 2 left, recorded []",%0A+   "cg611-055: playing, 0 correct, 11 counted, 4 left, recorded []",%0A+   "cg611-059: playing, 0 correct, 13 counted, 2 left, recorded []",%0A+   "cg611-062: playing, 0 correct, 11 counted, 4 left, recorded []",%0A+   "cg611-065: playing, 0 correct, 13 counted, 2 left, recorded []",%0A+   "cg611-067: playing, 0 correct, 13 counted, 2 left, recorded []",%0A+   "cg611-071: playing, 0 correct, 13 counted, 2 left, recorded []",%0A+ ]%0A%0A ❯ src/test/collegeGridOffline.test.tsx:276:17%0A%0A

@@ -1,0 +1,77 @@
+rvmut: nbastages applied to src/lib/nbaMyCareer.ts
+SKIPPED nfl: no number file yet
+bundled in 44 ms; sports nba; 40 careers a sport and a seed set; seed sets 0
+played 48 careers twice in 1766 ms; 894 seasons observed
+
+===== NBA: 894 seasons (146 targeted), 894 played =====
+ok   1 nba every team result is the engine's missed word or one of its five (894 checked)
+ok   1 nba games played sit in the engine's ranges (894 checked)
+     by result: missed 413, 231 / 55 / 122 / 32 / 41 (depth 0 to title)
+ok   1 nba every playoff depth and a title are in the population
+ok   1 nba an injury season is in the population (64)
+ok   1 nba a backup season is in the population (215)
+ok   1 nba every position is in the population
+ok   1 nba both eras are in the population
+ok   2 nba the hub's held line is there exactly when the binding holds the season (894 checked)
+ok   2 nba no held season yields a derived season (93 checked)
+     2011: 20 seasons (20 organic, 0 targeted), 20 held
+ok   2 nba 2011 is in the population and every one is held
+     2012: 20 seasons (20 organic, 0 targeted), 20 held
+ok   2 nba 2012 is in the population and every one is held
+     2019: 27 seasons (19 organic, 8 targeted), 27 held
+ok   2 nba 2019 is in the population and every one is held
+     2020: 26 seasons (18 organic, 8 targeted), 26 held
+ok   2 nba 2020 is in the population and every one is held
+ok   2 nba the targeted careers reach held seasons (16)
+     open 801, derived 801, refused 0 (0.0%) {}
+ok   3 nba enough open seasons to mean anything (801)
+ok   7 nba has measured bands (five seed sets, written above REFUSED_MAX)
+ok   3 nba seasons that cannot be laid out stay under 1.0% (0.0%)
+FAIL 3 nba the season shown is the season saved (independent checker): 45 of 801; 2039 SG: wins 45 outside 48 to 61 for "Lost the Conference Finals" || 2027 PF: wins 45 outside 48 to 61 for "Lost the Conference Finals" || 2034 C: wins 45 outside 48 to 61 for "Lost the Conference Finals"
+     takeover lines: 3914 in 62786 games he played (6.2%), in 584 of 801 seasons
+ok   3 nba the feed's takeover line is in the population (3914)
+FAIL 4 nba the playoff path follows the saved result, the playoff games and the bracket's conferences: 161 of 801; 2031 "Lost in the conference semis": rounds 3 != 2 || 2033 "Lost the Conference Finals": rounds 2 != 3 || 2043 "Lost the Conference Finals": rounds 2 != 3
+ok   4 nba named playoff rounds were checked for their conference (354 before the last round, 32 in it)
+     paths shown: 435; playoff seasons 435
+ok   5 nba the schedule follows the formula and every name is the game's own (801 checked)
+     named 358, unnamed 443 (organic unnamed 313, targeted unnamed 130)
+ok   5 nba named and unnamed seasons are both in the population
+ok   5 nba the ledger's ids for era now are exactly the game's list (30 against 30)
+ok   5 nba a throwback season never names an opponent (443 checked)
+ok   6 nba deriving twice, from a JSON round trip, gives the same season, path and totals (801 checked)
+     repairs: none in 87.8%, median 0, p90 1; attempts after the first in 0.0%
+       seed set 0: 801 derived, no repair 87.8%, refused 0.0%
+ok   7 nba at least 80% of seasons need no repair (87.8%)
+     wins for "Missed the playoffs": n 366, median 30, p10 22, p90 37 (band 17 to 40, middle half 22.75 to 34.25)
+ok   7 nba the median record for "Missed the playoffs" sits in the middle half of its band
+     wins for "Lost in the first round": n 208, median 46, p10 41, p90 52 (band 41 to 52, middle half 43.75 to 49.25)
+ok   7 nba the median record for "Lost in the first round" sits in the middle half of its band
+     wins for "Lost in the conference semis": n 49, median 52, p10 48, p90 60 (band 45 to 57, middle half 48 to 54)
+ok   7 nba the median record for "Lost in the conference semis" sits in the middle half of its band
+     wins for "Lost the Conference Finals": n 112, median 50, p10 45, p90 56 (band 48 to 61, middle half 51.25 to 57.75)
+FAIL 7 nba the median record for "Lost the Conference Finals" sits in the middle half of its band
+     wins for "Lost the NBA Finals": n 27, median 55, p10 50, p90 61 (band 50 to 64, middle half 53.5 to 60.5)
+ok   7 nba the median record for "Lost the NBA Finals" sits in the middle half of its band
+     wins for "WON THE NBA FINALS": n 39, median 56, p10 52, p90 64 (band 52 to 67, middle half 55.75 to 63.25)
+ok   7 nba the median record for "WON THE NBA FINALS" sits in the middle half of its band
+     points a team game, era now: 115.73 over 29356 games (league mean 115.6)
+ok   7 nba points a team game in era now within 1 of the league mean (115.73 against 115.6)
+     points a team game, era y2004: 93.64 over 36326 games (league mean 93.4)
+ok   7 nba points a team game in era y2004 within 1 of the league mean (93.64 against 93.4)
+     his share of his team's points: median 0.161, p99 0.442 over 62786 games
+ok   7 nba his share of his team's points at the 99th percentile stays under 0.5 (0.442)
+
+===== 6: nothing moves =====
+ok   6 Math.random is never drawn while a season is derived (trap 0)
+ok   6 every career saved the same bytes with and without the viewer (912 season hashes, 0 differ)
+
+===== 8: lazy by source =====
+ok   8 the static closure of the two routes was walked (121 files)
+ok   8 the walk reaches src/components/us-career/season/UsSeasonCentreHost.tsx
+ok   8 no eager file of the two routes statically imports the season modules, the viewer or the league shape (121 checked)
+ok   8 a planted static import of the viewer in UsSeasonCentreHost.tsx is named (10 files)
+ok   8 the same text in a comment is spared
+ok   8 src/lib/season/us.ts holds no Math.random and no new Rng(
+ok   8 src/lib/season/nba.ts holds no Math.random and no new Rng(
+
+simUsSeasonCentre: 45 checks, 3 failed
