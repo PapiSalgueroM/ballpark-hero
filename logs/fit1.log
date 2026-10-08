@@ -1,0 +1,41 @@
+In the job at Crystal Palace.
+1) The goal in order
+      a goal is coming at 23, the clock is at 2
+  FAIL: the score changed before the ball was in: 1 of 46 plant and flight frames already read the new score
+  ok    the line under the pitch never read GOAL! while the ball was on its way (46 frames)
+  ok    the scorer card was inside the pitch on all 29 frames it was up
+  ok    a tap on the card ended the hold (27 frames after it, none with the card)
+      what was drawn: pass/pass 0 - 0 21' x50 | save/plant 0 - 0 22' x16 | save/flight 0 - 0 22' x30 | save/caught 0 - 0 22' x14 | save/caught 0 - 0 23' x4 | pass/pass 0 - 0 23' x14 | goal/plant 0 - 0 23' x16 | goal/flight 0 - 0 23' x26 | goal/flight 0 - 0 24' x3 | goal/flight 1 - 0 24' x1 | goal/net 1 - 0 card 24' x26 | TAP | goal/net 1 - 0 card 24' x3 | pass/pass 1 - 0 24' x38 | pass/pass 1 - 0 25' x4
+4) Nothing moves the page
+  ok    window.scrollY stayed at 0 through 245 frames before, during and after a goal
+  ok    window.scrollY stayed at 0 with the change sheet, the squad panel, the help panel, the stats panel open
+3) The fit
+  ok    320 by 568: the stage is the window, strip at 0, pitch 320 by 392 (69 percent of the height), control row ends at 568 of 568, 7 controls all 44 px and none covered
+  [labels 320 by 568] mean overlapping name labels a frame 2.90 over 10 frames of 22 labels
+  ok    390 by 844: the stage is the window, strip at 0, pitch 390 by 668 (79.1 percent of the height), control row ends at 844 of 844, 7 controls all 44 px and none covered
+  [labels 390] mean overlapping name labels a frame 0.71 over 24 frames of 22 labels; before match mode 1.63 at 6b1caa20, ratio 0.43
+  ok    name labels overlap 0.71 a frame, fewer than the 1.63 before match mode
+  ok    768 by 1024: the stage is the window, strip at 12, pitch 372 by 651 (63.6 percent of the height), control row ends at 1012 of 1024, 7 controls all 44 px and none covered
+  [labels 768 by 1024] mean overlapping name labels a frame 0.10 over 10 frames of 22 labels
+  ok    1280 by 900: the stage is the window, strip at 12, pitch 541.5 by 722 (80.2 percent of the height), control row ends at 888 of 900, 7 controls all 44 px and none covered
+  [labels 1280 by 900] mean overlapping name labels a frame 0.10 over 10 frames of 22 labels
+  FAIL: 844 by 390: the pitch runs under the control row; the pitch starts under the strip
+  [labels 844 by 390] mean overlapping name labels a frame 1.10 over 10 frames of 22 labels
+6) Back folds the match away
+  ok    Back folds the match to a card reading "Premier League · Round 1Crystal Palace2 - 0BrentfordPaused at 50'Back ", and the clock held at 50' for 2.6 seconds
+  ok    Back to the match puts the stage back and the clock runs on (50' to 51')
+5) The reload
+  ok    reload: left at 66', the save holds 66, the match came back at 66'
+  ok    close: left at 68', the save holds 68, the match came back at 68'
+  ok    hidden tab: the clock read 70' and the save holds 70
+2) Reduced motion
+      a goal is coming at 38, the clock is at 0
+  ok    under reduced motion the score reads 0 - 1 on a frame in phase net
+  ok    the scorer card was inside the pitch on all 155 frames it was up
+      what was drawn: pass/pass 0 - 0 36' x2 | save/caught 0 - 0 36' x42 | save/caught 0 - 0 37' x22 | pass/pass 0 - 0 37' x38 | goal/net 0 - 1 card 38' x151 | goal/net 0 - 1 card 39' x4 | pass/pass 0 - 1 39' x56 | shot/wide 0 - 1 40' x1
+  ok    nothing under the pitch or the card was animating in open play, inside a goal, after the goal
+7) A wide screen
+      a goal is coming at 45+4, the clock is at 2
+  FAIL: the score never changed from 2 - 1 in 842 frames around a goal at 45'
+      what was drawn: null/null 2 - 1 0' x842
+playLiveMatchFit: 3 failures.

@@ -1,0 +1,30 @@
+In the job at Crystal Palace.
+1) The goal in order
+  FAIL: the score changed before the ball was in: 1 of 46 plant and flight frames already read the new score
+  ok    the line under the pitch never read GOAL! while the ball was on its way (46 frames)
+  ok    the scorer card was inside the pitch on all 30 frames it was up
+  ok    a tap on the card ended the hold (26 frames after it, none with the card)
+      what was drawn: pass/pass 0 - 0 74' x45 | save/plant 0 - 0 75' x16 | save/flight 0 - 0 75' x30 | save/caught 0 - 0 75' x14 | save/caught 0 - 0 76' x4 | pass/pass 0 - 0 76' x14 | goal/plant 0 - 0 76' x16 | goal/flight 0 - 0 76' x26 | goal/flight 0 - 0 77' x3 | goal/flight 1 - 0 77' x1 | goal/net 1 - 0 card 77' x26 | TAP | goal/net 1 - 0 card 77' x4 | pass/pass 1 - 0 77' x30 | shot/plant 1 - 0 77' x9 | shot/plant 1 - 0 78' x2
+4) Nothing moves the page
+  ok    window.scrollY stayed at 975 through 240 frames before, during and after a goal
+  ok    window.scrollY stayed at 975 with the change sheet, the squad panel, the help panel, the stats panel open
+3) The fit
+  Negative control: the control row is pushed 200 px down.
+  FAIL: 320 by 568: the control row ends at 768, under a window 568 tall; something is drawn over: Pause, 0.5x, 1x, 2x, 4x, Squad and stamina, Skip
+  FAIL: 390 by 844: the control row ends at 1044, under a window 844 tall; something is drawn over: Pause, 0.5x, 1x, 2x, 4x, Squad and stamina, Skip
+  [labels 390] mean overlapping name labels a frame 0.92 over 24 frames of 22 labels; before match mode 1.63 at 6b1caa20, ratio 0.56
+  FAIL: 768 by 1024: the control row ends at 1212, under a window 1024 tall; something is drawn over: Pause, 0.5x, 1x, 2x, 4x, Squad and stamina, Skip
+  FAIL: 1280 by 900: the control row ends at 1088, under a window 900 tall; something is drawn over: Pause, 0.5x, 1x, 2x, 4x, Squad and stamina, Skip
+  FAIL: 844 by 390: the control row ends at 590, under a window 390 tall; the pitch starts under the strip; something is drawn over: Pause, 0.5x, 1x, 2x, 4x, Squad and stamina, Skip
+6) Back folds the match away
+  ok    Back folds the match to a card reading "Premier League · Round 2Crystal Palace0 - 0BournemouthPaused at 4'Back", and the clock held at 4' for 2.6 seconds
+  ok    Back to the match puts the stage back and the clock runs on (4' to 5')
+5) The reload
+  (skipped under a control)
+2) Reduced motion
+  ok    under reduced motion the score reads 1 - 0 on a frame in phase net
+  ok    the scorer card was inside the pitch on all 155 frames it was up
+  ok    nothing under the pitch or the card was animating in open play, inside a goal, after the goal
+7) A wide screen
+  (not in the measuring pass or under a control)
+playLiveMatchFit: control bar did NOT behave: red sections 1, 3.
