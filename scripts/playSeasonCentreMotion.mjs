@@ -34,12 +34,28 @@
  *  B4 Reduced motion snaps: every step leaves no transition and every row
  *     at its new top in the same frame.
  *
+ *  B5 The little pitch plays the goal that happened. A second bare page mounts
+ *     the real src/components/season-centre/MiniPitch.tsx (with the shared
+ *     pitch part's own stylesheet, which esbuild writes beside the bundle) on
+ *     a scripted list of goals and steps the minute: before a goal it is idle;
+ *     a goal runs plant, flight, net (read from a MutationObserver's log,
+ *     waited on by attribute with a long limit, never by wall time); the net
+ *     that takes it is the top one exactly when his club scored; one figure
+ *     wears the ring exactly when he was in it, and the words under the pitch
+ *     say Yours only on his goal or assist; a second goal landing while the
+ *     first is in the air sends the first to its last frame before it
+ *     starts, so each reaches the net once; a pause holds the ball still; a
+ *     goal already past at mount and every goal at Results speed are drawn
+ *     landed with nothing played; no figure is cut by the box at either end
+ *     on a 320 or a 390 phone; and the box and what is under it never move.
+ *
  * Controls (SEASON_MOTION_CONTROL=), each a rewrite of the source text inside
  * esbuild's onLoad (never a file on disk), each refusing to run unless its
  * single line needle is there exactly once:
  *   count       a row starts from half its true distance       -> B1 red
  *   firstmount  the wrapper mounts holding a made up order     -> B3 red
  *   nosnap      the reduced motion read is forced to false     -> B4 red
+ *   pitchside   every goal is laid out at his club's attacking end -> B5 red
  *
  * Needs dist built (the stylesheet) and Chromium. Scope with ONLY=B1,B3.
  * Every page blocks the live database before anything loads.
@@ -65,6 +81,7 @@ const SHIFT_UI = 'src/components/motion/RankShiftTable.tsx';
 const CONTROLS = {
   count: { file: SHIFT_UI, from: '        if (Math.abs(was - top) >= 1) plan.push({ row, dy: was - top, fade: false });', to: '        if (Math.abs(was - top) >= 1) plan.push({ row, dy: (was - top) / 2, fade: false });' },
   firstmount: { file: SHIFT_UI, from: '  const held = useRef<Held | null>(null);', to: '  const held = useRef<Held | null>({ order: order.slice().reverse(), tops: new Map(order.map((k, i) => [k, (order.length - 1 - i) * 28])), slide: true, width: Number.NaN });' },
+  pitchside: { file: 'src/components/season-centre/MiniPitch.tsx', from: "  const us = !goal || goal.side === 'us';", to: '  const us = true;' },
   nosnap: { file: SHIFT_UI, from: "const reducedNow = () => typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;", to: 'const reducedNow = () => false;' },
 };
 if (CONTROL && !CONTROLS[CONTROL]) throw new Error(`unknown SEASON_MOTION_CONTROL ${CONTROL}`);
@@ -151,7 +168,7 @@ await build({
   bundle: true, format: 'iife', platform: 'browser', jsx: 'automatic', outfile: BARE, logLevel: 'error',
   alias: { '@': path.join(ROOT, 'src') }, define: { 'process.env.NODE_ENV': '"production"' }, plugins: [controlPlugin],
 });
-if (CONTROL && !applied.has(CONTROL)) throw new Error(`control refused: ${CONTROLS[CONTROL].file} was never loaded into the bundle`);
+if (CONTROL && CONTROLS[CONTROL].file === SHIFT_UI && !applied.has(CONTROL)) throw new Error(`control refused: ${CONTROLS[CONTROL].file} was never loaded into the bundle`);
 const bareJs = fs.readFileSync(BARE, 'utf8');
 fs.rmSync(tmp, { recursive: true, force: true });
 
@@ -217,8 +234,10 @@ const LAYOUTS = [
   { id: '1280 whole', w: 1280, h: 900, wrap: 364, compact: false },
 ];
 const STEPS = [1, 2, 3, 5, 10, 'rest'];
-/* set from the measured share (see the header); a placeholder until the first run */
-const B2_FLOOR = 0.5;
+/* measured 2026-10-08 over the five seasons: 87.2, 95.7, 93.6, 96.5 and 85.1 percent of one matchday steps moved a
+   row (416 of 454 together). The floor is the lowest season less ten points: it is there to catch a table that
+   has stopped sliding, and a compact window of five rows really does sit still about one week in ten. */
+const B2_FLOOR = 0.75;
 const stat = { transitions: 0, maxFirst: 0, maxLast: 0, step1: 0, step1Moved: 0, rowsMoved: 0, mounts: 0, mountAnims: 0, pre: 0, preAnims: 0, entered: 0, bySeason: SEASONS.map(() => [0, 0]) };
 const bad = { first: 0, text: 0, order: 0, last: 0, left: 0, box: 0 };
 
@@ -379,6 +398,170 @@ if (want('B4')) {
   for (const n of notes.filter(x => x.startsWith('B4'))) console.log(`   ${n}`);
   check(snap.n >= 40 && snap.anims === 0, `B4. under reduced motion no step slides (${snap.anims} of ${snap.n} did)`);
   check(snap.off === 0, `B4. and every row is at its new place in the same frame (${snap.off} were not)`);
+}
+
+/* B5: the little pitch plays the goal that happened */
+if (want('B5')) {
+  const tmp2 = fs.mkdtempSync(path.join(os.tmpdir(), 'dukb-season-pitch-'));
+  const PITCH_JS = path.join(tmp2, 'pitch.js');
+  await build({
+    stdin: { contents: `
+      import React from 'react';
+      import { createRoot } from 'react-dom/client';
+      import { flushSync } from 'react-dom';
+      import MiniPitch from './src/components/season-centre/MiniPitch';
+      let root = null, props = null;
+      const draw = () => flushSync(() => root.render(React.createElement(MiniPitch, props)));
+      window.__pitch = {
+        mount(p) { if (root) root.unmount(); root = createRoot(document.getElementById('pitch')); props = p; draw(); },
+        set(patch) { props = { ...props, ...patch }; draw(); },
+      };
+    `, resolveDir: ROOT, loader: 'tsx' },
+    bundle: true, format: 'iife', platform: 'browser', jsx: 'automatic', outfile: PITCH_JS, logLevel: 'error',
+    alias: { '@': path.join(ROOT, 'src') }, define: { 'process.env.NODE_ENV': '"production"' }, plugins: [controlPlugin],
+  });
+  if (CONTROL === 'pitchside' && !applied.has(CONTROL)) throw new Error('control refused: MiniPitch.tsx was never loaded into the bundle');
+  const pitchJs = fs.readFileSync(PITCH_JS, 'utf8');
+  /* the pitch's look is the shared part's own stylesheet, which esbuild writes beside the bundle; the page carries it with the shipped one */
+  const pitchCssFile = PITCH_JS.replace(/\.js$/, '.css');
+  const pitchCss = fs.existsSync(pitchCssFile) ? fs.readFileSync(pitchCssFile, 'utf8') : '';
+  fs.rmSync(tmp2, { recursive: true, force: true });
+  check(pitchCss.includes('.pm-surface') && pitchCss.includes('.cm-live-net'), 'B5. the bare page carries the pitch part\'s own stylesheet (nets, ball and figures are placed)');
+  const BOX = 'relative w-full overflow-hidden rounded-xl aspect-[25/12]';
+  const EVENTS = [
+    { min: 12, kind: 'goal', side: 'them', pts: 1 },
+    { min: 40, kind: 'assist', side: 'us', mine: true },
+    { min: 40, kind: 'goal', side: 'us', pts: 1 },
+    { min: 67, kind: 'goal', side: 'us', mine: true, pts: 1 },
+    { min: 69, kind: 'goal', side: 'us', pts: 1 },
+    { min: 88, kind: 'goal', side: 'them', pts: 1 },
+  ];
+  const html2 = `<!doctype html><html class="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><style>${css}</style><style>${pitchCss}</style></head>
+<body class="bg-background text-foreground"><div id="wrap"><div id="pitch"></div><div id="under" style="height:20px">under</div></div></body></html>`;
+  const READ = `
+    window.__log = [];
+    window.__watch = () => {
+      const box = document.querySelector('[data-mini-pitch]');
+      window.__log = [];
+      if (window.__obs) window.__obs.disconnect();
+      window.__obs = new MutationObserver(() => { const last = __log[__log.length - 1]; const now = (box.dataset.pitchGoal || '') + ':' + box.dataset.pitchPhase; if (last !== now) __log.push(now); });
+      window.__obs.observe(box, { attributes: true, attributeFilter: ['data-pitch-phase', 'data-pitch-goal'] });
+    };
+    window.__see = () => {
+      const box = document.querySelector('[data-mini-pitch]');
+      const b = box.getBoundingClientRect();
+      const figs = [...box.querySelectorAll('.pm-figure svg')].map(s => s.getBoundingClientRect());
+      const cut = figs.filter(r => r.top < b.top - 0.5 || r.bottom > b.bottom + 0.5 || r.left < b.left - 0.5 || r.right > b.right + 0.5).length;
+      const ball = box.querySelector('[data-cm-ball]').getBoundingClientRect();
+      const under = document.getElementById('under').getBoundingClientRect();
+      return {
+        phase: box.dataset.pitchPhase, side: box.dataset.pitchSide, goal: box.dataset.pitchGoal || '',
+        rect: [b.left, b.top, b.width, b.height].map(v => Math.round(v * 100) / 100).join(','), under: Math.round(under.top * 100) / 100,
+        topNet: box.querySelector('.cm-live-net--top').getAttribute('data-cm-net') === 'goal', bottomNet: box.querySelector('.cm-live-net--bottom').getAttribute('data-cm-net') === 'goal',
+        rings: [...box.querySelectorAll('[data-pitch-ring]')].map(f => f.getAttribute('data-pm-figure')), figures: figs.length, cut,
+        ballIn: ball.top >= b.top - 0.5 && ball.bottom <= b.bottom + 0.5,
+        yours: document.querySelector('[data-pitch-yours]').textContent, log: window.__log.slice(),
+      };
+    };
+  `;
+  const netOf = (key, limit = 30000) => `(() => { const b = document.querySelector('[data-mini-pitch]'); return b && b.dataset.pitchGoal === ${JSON.stringify(key)} && b.dataset.pitchPhase === 'net'; })()`;
+  const p5 = { n: 0, bad: [] };
+  const hold = (ok, msg) => { p5.n += 1; if (!ok) p5.bad.push(msg); };
+  for (const [vw, wrap] of [[320, 296], [390, 366]]) {
+    const ctx = await browser.newContext({ viewport: { width: vw, height: 800 } });
+    const page = await ctx.newPage();
+    await page.route(/supabase\.co/, r => r.abort());
+    const errors = [];
+    page.on('pageerror', e => errors.push(String(e).slice(0, 160)));
+    await page.setContent(html2, { waitUntil: 'load' });
+    await page.addScriptTag({ content: pitchJs });
+    await page.addScriptTag({ content: READ });
+    await page.evaluate(w => { document.getElementById('wrap').style.width = `${w}px`; }, wrap);
+    const base = { md: 1, events: EVENTS, shown: 0, paused: false, instant: false, usColor: '#ef4444', role: 'ATT', onFrom: 1, onTo: 90, boxClass: BOX };
+    const mount = p => page.evaluate(q => { __pitch.mount(q); __watch(); return __see(); }, p);
+    const set = patch => page.evaluate(q => { __pitch.set(q); return __see(); }, patch);
+    const see = () => page.evaluate(() => __see());
+    const landed = async key => { await page.waitForFunction(netOf(key), null, { timeout: 30000 }); return see(); };
+    const tag = `${vw}`;
+
+    const start = await mount(base);
+    hold(start.phase === 'idle' && start.rings.length === 0 && start.yours === '' && start.figures === 7 && start.cut === 0, `${tag}: before a goal the pitch is not idle with seven whole figures (${JSON.stringify({ phase: start.phase, figures: start.figures, cut: start.cut })})`);
+    const rect0 = start.rect, under0 = start.under;
+    const quiet = await set({ shown: 11 });
+    hold(quiet.phase === 'idle' && quiet.log.length === 0, `${tag}: minutes with no goal moved the pitch`);
+
+    /* a goal against, he is an attacker: the bottom net, nobody ringed */
+    await set({ shown: 12 });
+    const against = await landed('1|12|them|0');
+    hold(against.side === 'them' && against.bottomNet && !against.topNet, `${tag}: a goal against is not in the bottom net`);
+    hold(against.rings.length === 0 && against.yours === '', `${tag}: a goal against rings an attacker or says Yours`);
+    hold(against.log.join(' ') === '1|12|them|0:plant 1|12|them|0:flight 1|12|them|0:net', `${tag}: the goal against did not run plant, flight, net (${against.log.join(' ')})`);
+    hold(against.cut === 0 && against.ballIn, `${tag}: at the bottom end ${against.cut} figures are cut by the box, ball inside ${against.ballIn}`);
+
+    /* his assist: the top net, one ring on his side, the words */
+    await page.evaluate(() => __watch());
+    await set({ shown: 40 });
+    const assist = await landed('1|40|us|0');
+    hold(assist.side === 'us' && assist.topNet && !assist.bottomNet, `${tag}: his club's goal is not in the top net`);
+    hold(assist.rings.join() === 'me' && assist.yours === '🅰️ Your assist', `${tag}: his assist is not one ring and the assist words (${assist.rings.join()} / ${assist.yours})`);
+    hold(assist.cut === 0 && assist.ballIn, `${tag}: at the top end ${assist.cut} figures are cut by the box`);
+
+    /* his goal, and a second goal two minutes later while the first is still in the air */
+    await page.evaluate(() => __watch());
+    const kicked = await set({ shown: 67 });
+    hold(kicked.yours === '⚽ Yours' && kicked.rings.join() === 'me', `${tag}: his goal does not say Yours with one ring (${kicked.yours})`);
+    await page.waitForFunction(() => document.querySelector('[data-mini-pitch]').dataset.pitchPhase !== 'idle', null, { timeout: 30000 });
+    await set({ shown: 69 });
+    const second = await landed('1|69|us|0');
+    const nets = k => second.log.filter(x => x === `${k}:net`).length;
+    hold(nets('1|67|us|0') === 1 && nets('1|69|us|0') === 1, `${tag}: two goals two minutes apart did not each reach the net once (${second.log.join(' ')})`);
+    hold(second.log.indexOf('1|67|us|0:net') < second.log.indexOf('1|69|us|0:plant'), `${tag}: the second goal started before the first had landed (${second.log.join(' ')})`);
+    hold(second.yours === '' && second.rings.join() === 'me', `${tag}: a team mate's goal says Yours, or the attacker is not in the picture (${second.yours} / ${second.rings.join()})`);
+
+    /* paused in the air: nothing moves until it is lifted */
+    await page.evaluate(() => __watch());
+    await set({ shown: 88 });
+    await page.waitForFunction(() => document.querySelector('[data-mini-pitch]').dataset.pitchPhase === 'flight', null, { timeout: 30000 });
+    const ballAt = () => page.evaluate(() => { const r = document.querySelector('[data-cm-ball]').getBoundingClientRect(); return `${r.left.toFixed(2)},${r.top.toFixed(2)}`; });
+    await set({ paused: true });
+    const p1 = await ballAt();
+    await page.waitForTimeout(300);
+    const p2 = await ballAt();
+    hold(p1 === p2, `${tag}: the ball moved while the clock was paused (${p1} to ${p2})`);
+    await set({ paused: false });
+    const late = await landed('1|88|them|0');
+    hold(late.bottomNet && late.rings.length === 0, `${tag}: the last goal did not land in the bottom net after the pause`);
+    hold([against, assist, second, late].every(s => s.rect === rect0 && s.under === under0), `${tag}: the box or what is under it moved (${[against, assist, second, late].map(s => s.rect).join(' / ')} from ${rect0})`);
+
+    /* a goal already on the board at mount is drawn landed, with nothing played */
+    const resumed = await mount({ ...base, shown: 70 });
+    await page.waitForTimeout(150);
+    const after = await see();
+    hold(resumed.phase === 'net' && resumed.goal === '1|69|us|0' && after.log.length === 0, `${tag}: a goal already past at mount was played (${resumed.phase}, log ${after.log.join(' ')})`);
+    /* Results speed and reduced motion: every goal lands at once */
+    const inst = await mount({ ...base, instant: true, shown: 0 });
+    const hit = await set({ shown: 12 });
+    await page.waitForTimeout(150);
+    const hitLog = (await see()).log;
+    hold(inst.phase === 'idle' && hit.phase === 'net' && hit.bottomNet && !hitLog.some(x => x.endsWith(':plant') || x.endsWith(':flight')), `${tag}: at Results speed a goal did not land at once (${hit.phase}, log ${hitLog.join(' ')})`);
+    /* a keeper: beaten, he wears the ring; a defender likewise; neither on his club's goal */
+    await mount({ ...base, role: 'GK', shown: 11 });
+    await set({ shown: 12 });
+    const keeper = await landed('1|12|them|0');
+    hold(keeper.rings.join() === 'me' && keeper.yours === '', `${tag}: a keeper beaten is not the one ring (${keeper.rings.join()})`);
+    await set({ shown: 40 });
+    const keeperUp = await landed('1|40|us|0');
+    hold(keeperUp.rings.join() === 'me' && keeperUp.yours === '🅰️ Your assist', `${tag}: a keeper's assist is not ringed`);
+    /* he did not play: nobody is ringed on anything */
+    await mount({ ...base, role: null, shown: 66 });
+    await set({ shown: 67 });
+    const absent = await landed('1|67|us|0');
+    hold(absent.rings.length === 0 && absent.yours === '', `${tag}: a game he missed rings somebody`);
+    if (errors.length) hold(false, `${tag}: page error ${errors[0]}`);
+    await ctx.close();
+  }
+  for (const b of p5.bad.slice(0, 8)) console.log(`   B5: ${b}`);
+  check(p5.n >= 30 && p5.bad.length === 0, `B5. the pitch plays the goal that happened: side, net, ring, words, order, pause, a goal already past, Results speed (${p5.bad.length} of ${p5.n} held checks failed)`);
 }
 
 await browser.close();

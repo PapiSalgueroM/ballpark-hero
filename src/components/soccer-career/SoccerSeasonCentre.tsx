@@ -20,7 +20,7 @@
    resume.ts, never the save), and opening the same season again starts on
    the kick off card at that matchday. The record carries the season's own
    key, so a save that no longer holds that season simply ignores it. */
-import { Component, useCallback, useMemo, useState, type ReactNode } from 'react';
+import { Component, Suspense, lazy, useCallback, useMemo, useState, type ReactNode } from 'react';
 import type { CareerState, ClubData, SeasonRecord } from '@/lib/soccerCareerEngine';
 import { applyDecisions, deriveSeason, planMoments, tableAt } from '@/lib/season/core';
 import { SOCCER, buildSoccerSeasonCtx, soccerSeasonKey, type SoccerSeasonCtx } from '@/lib/season/soccer';
@@ -37,6 +37,13 @@ import { minuteLabel } from '@/lib/clubManagerClock';
 import { SOCCER_FULL_TIME } from '@/lib/season/soccerEvents';
 import type { HelpWords } from '@/components/season-centre/SeasonCentreHelp';
 import { SeasonPicker, type PickerRow } from '@/components/season-centre/SeasonPicker';
+import type { PitchRole } from '@/components/season-centre/MiniPitch';
+
+/* Round 1046: the little pitch is its own chunk, asked for when the first match kicks off */
+const MiniPitch = lazy(() => import('@/components/season-centre/MiniPitch'));
+/** The pitch's box: a fixed shape (the scoring third of a pitch), worn by the loading fallback too, so nothing under it ever moves. */
+const PITCH_BOX = 'relative w-full overflow-hidden rounded-xl aspect-[25/12]';
+const roleOf = (position: string): Exclude<PitchRole, null> => (position === 'GK' ? 'GK' : position === 'CB' || position === 'LB' || position === 'RB' ? 'DEF' : 'ATT');
 import type { DerivedGame, DerivedSeason, SeasonEvent } from '@/lib/season/core';
 
 export interface SoccerSeasonCentreProps {
@@ -91,8 +98,15 @@ function eventWords(e: SeasonEvent, us: string, them: string): string {
   return '🔁 You come off';
 }
 
-function soccerSport(keepsSheets: boolean): CentreSport {
+function soccerSport(keepsSheets: boolean, color: string, role: Exclude<PitchRole, null>): CentreSport {
   return {
+    /* the minutes he was on the pitch are the events file's own window (pitchWindow in soccerEvents.ts) */
+    pitch: (g, at) => (
+      <Suspense fallback={<div aria-hidden="true"><div className={PITCH_BOX} /><div className="h-5" /></div>}>
+        <MiniPitch md={g.md} events={g.events} shown={at.shown} paused={at.paused} instant={at.instant} usColor={color}
+          role={g.played ? role : null} onFrom={g.onAt ?? 1} onTo={g.offAt ? g.offAt - 1 : SOCCER_FULL_TIME} boxClass={PITCH_BOX} />
+      </Suspense>
+    ),
     clock: { length: SOCCER_FULL_TIME, label: minute => minuteLabel({ minute }), words: eventWords },
     fixed: { badge: 'DERBY', poster: 'Derby day', recordSoFar: 'Your derby record so far', recordPlayed: 'Derbies you played' },
     missed: why => (why === 'injured' ? 'Not in the squad: injured' : why === 'suspended' ? 'Suspended' : 'Not in the matchday squad'),
@@ -123,7 +137,7 @@ const RESUME_GAME = 'soccer';
 
 const RESULTS_WORDS = 'Results only: the game does not have a verified table for this league that season.';
 
-function buildModel(row: SeasonRecord, ctx: SoccerSeasonCtx, s: DerivedSeason, moments: CentreMoments | null): CentreModel {
+function buildModel(row: SeasonRecord, ctx: SoccerSeasonCtx, s: DerivedSeason, moments: CentreMoments | null, color: string): CentreModel {
   const occasion: Record<string, string> = {};
   for (const d of readSeasonDerbies(row)) occasion[d.rival] = d.name;
   const finish = ctx.finish;
@@ -159,7 +173,7 @@ function buildModel(row: SeasonRecord, ctx: SoccerSeasonCtx, s: DerivedSeason, m
       finishLine, championLine: ctx.champion ? `${ctx.champion} won it` : null,
       trophies, title: !!row.leagueTitle && !row.injurySevere, notes,
     },
-    sport: soccerSport(ctx.keepsSheets),
+    sport: soccerSport(ctx.keepsSheets, color, roleOf(ctx.position)),
     help: HELP,
     momentKey: `centre|${s.key}`,
     moments,
@@ -255,7 +269,9 @@ function CentreBody({ career, clubs, row, mode, onClose, onCareer, offer }: Socc
   const entriesKey = JSON.stringify(ledgerOf(ledger, key ?? ''));
   const season = useMemo(() => (plan && offered.length ? applyDecisions(SOCCER, row, ctx, plan, offered, JSON.parse(entriesKey) as number[][]) : plan), [plan, offered, entriesKey, row, ctx]);
   const moments = useSoccerMoments({ career, row, ctx, plan, key, offered, entriesKey, banked: !!ledger?.banked && ledger.key === key, onCareer: canPlay ? onCareer : undefined });
-  const model = useMemo(() => (season ? buildModel(row, ctx, season, moments) : null), [season, row, ctx, moments]);
+  /* his club's flat colour, the one the career already wears; the other side is always the same pale one */
+  const color = clubs.find(c => c.name === row.club)?.color ?? '#10B981';
+  const model = useMemo(() => (season ? buildModel(row, ctx, season, moments, color) : null), [season, row, ctx, moments, color]);
   /* Round 1046: his place in this season. Read once when the season opens; a
      table season he did not win replays the same only while the save still
      holds that year's league (the record says so with `stable`). */

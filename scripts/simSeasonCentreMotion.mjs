@@ -256,9 +256,11 @@ const listDir = rel => fs.readdirSync(path.join(ROOT, rel)).filter(f => /\.(ts|t
 const LIB_MOTION = listDir('src/lib/motion');
 const UI_MOTION = listDir('src/components/motion');
 /* files that may draw nothing at random (the list grows as the round's parts land) */
-const NO_DRAW = [...LIB_MOTION, ...UI_MOTION, 'src/lib/season/resume.ts', 'src/components/season-centre/resumeStore.ts', 'src/components/season-centre/SeasonPicker.tsx', 'src/components/season-centre/useBodyLock.ts'];
+const NO_DRAW = [...LIB_MOTION, ...UI_MOTION, 'src/lib/season/resume.ts', 'src/components/season-centre/resumeStore.ts', 'src/components/season-centre/SeasonPicker.tsx', 'src/components/season-centre/useBodyLock.ts', 'src/components/season-centre/MiniPitch.tsx'];
 const IMPORTS_NOTHING = [...LIB_MOTION, 'src/lib/season/resume.ts'];
 
+const MINI_PITCH = 'src/components/season-centre/MiniPitch.tsx';
+const CENTRE_FILES = [...listDir('src/components/season-centre'), 'src/components/soccer-career/SoccerSeasonCentre.tsx'];
 function fenceFindings(textOf) {
   const out = [];
   for (const f of IMPORTS_NOTHING) for (const im of importsOf(strip(textOf(f)).code)) out.push(`${f} imports ${im.spec}: it must import nothing`);
@@ -272,6 +274,11 @@ function fenceFindings(textOf) {
     const { bare } = strip(textOf(f));
     if (/Math\s*\.\s*random/.test(bare)) out.push(`${f} calls Math.random`);
     if (/new\s+Rng\s*\(/.test(bare)) out.push(`${f} makes an Rng`);
+  }
+  /* the pitch part has one way into the Season Centre, MiniPitch.tsx, and nothing of Club Manager's rides along with it */
+  for (const f of CENTRE_FILES) for (const im of importsOf(strip(textOf(f)).code)) {
+    if (im.spec.startsWith('@/components/pitch-motion') && f !== MINI_PITCH) out.push(`${f} imports the pitch part (${im.spec}): MiniPitch.tsx is the one file that may`);
+    if (/clubManager|club-manager\/LiveSim/.test(im.spec) && !im.typeOnly && f === MINI_PITCH) out.push(`${f} imports ${im.spec} for more than its types`);
   }
   return out;
 }

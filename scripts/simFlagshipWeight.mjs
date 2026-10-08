@@ -127,7 +127,7 @@ const MUST_BE_LAZY = [
   'src/lib/season/', 'src/components/season-centre/', 'src/components/soccer-career/SoccerSeasonCentre.tsx', 'src/data/leagueFormat.ts',
   'src/components/soccer-career/TrainingPanel.tsx', 'src/components/soccer-career/DrillBoard.tsx', 'src/components/soccer-career/ThroughBallBoard.tsx',
   'src/components/soccer-career/FirstTouchBoard.tsx', 'src/components/soccer-career/SoccerMomentBoard.tsx', 'src/components/soccer-career/useSoccerMoments.tsx',
-  'src/lib/motion/', 'src/components/motion/',
+  'src/lib/motion/', 'src/components/motion/', 'src/components/pitch-motion/',
 ];
 const MAY_BE_EAGER = ['src/lib/season/momentsSave.ts', 'src/lib/season/resume.ts'];
 for (const rel of MAY_BE_EAGER) {
