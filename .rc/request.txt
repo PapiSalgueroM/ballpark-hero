@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+walk: ENGINES=chromium node scripts/playCareerLeagueWorld.mjs
+walk-odd: ENGINES=chromium PLAY_LEAGUE_WORLD_CONTROL=odd node scripts/playCareerLeagueWorld.mjs
+sweepWeight: ENGINES=chromium node scripts/sweepWeight.mjs
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+playSeasonMoments: ENGINES=chromium node scripts/playSeasonMoments.mjs
