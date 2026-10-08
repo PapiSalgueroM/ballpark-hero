@@ -131,7 +131,7 @@ function usModel(): CentreModel {
 }
 
 describe('Season Centre: a sport that brings its own words (Round 1048)', () => {
-  it.each([[true, 'desktop'], [false, 'phone']] as const)('prints the US words, the record panel and the playoff path on the %s layout (%s)', (wide) => {
+  it.each([[true, 'desktop'], [false, 'phone']] as const)('prints the US words, the record panel and the playoff path on the %s layout (%s)', (wide, _layout) => {
     const screens = walk(usModel(), wide, 'Tip off');
     /* the help sheet and its own key */
     expect(screens.help).toContain('How the Season Center works');
