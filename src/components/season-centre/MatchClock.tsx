@@ -10,7 +10,8 @@
    before, and never counts through numbers). A hidden tab pauses the clock
    and it picks up where it was; reduced motion paints full time on the first
    frame. The event list has a fixed height and scrolls inside itself, so
-   nothing below it moves while the match plays.
+   nothing below it moves while the match plays (three lines on a phone since
+   Round 1046, so the table under it stays near the fold; seven from md up).
 
    Round 1047: `holdAt` stops the clock a beat before that minute (one of
    his moments is about to happen) and `onHold` says so once; the clock
@@ -121,12 +122,12 @@ export function MatchClock({ game, clock, usName, themName, speed, paused, reduc
         </span>
         <span className="min-w-0 flex-1 truncate text-right text-sm font-bold">{awayName}</span>
       </div>
-      <div className="mt-1 flex items-center justify-between text-[11px] text-muted-foreground">
+      <div className="mt-1 flex items-center justify-between text-xs text-muted-foreground">
         <span className="tabular-nums" data-clock-minute>{done ? 'FT' : clock.label(shown)}</span>
         {done && <span className={`${instant ? '' : 'cm-slam'} font-bold text-foreground`} data-full-time>Full time</span>}
       </div>
       {stage && <div className="mt-2" data-clock-stage>{stage({ shown, paused, instant })}</div>}
-      <ol ref={listRef} className="mt-2 h-28 overflow-y-auto space-y-1 text-xs" aria-live="polite" data-clock-events>
+      <ol ref={listRef} className="mt-2 h-16 overflow-y-auto space-y-1 text-xs md:h-28" aria-live="polite" data-clock-events>
         {seen.length === 0 && <li className="text-muted-foreground">Kick off.</li>}
         {seen.map((e, i) => (
           <li key={`${i}-${e.min}-${e.kind}`} className={`${instant ? '' : 'cm-tick-in'} flex gap-2`}>

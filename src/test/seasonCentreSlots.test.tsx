@@ -19,7 +19,8 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';
 import { RankShiftTable } from '@/components/motion/RankShiftTable';
 import { MatchClock, type SeasonClock } from '@/components/season-centre/MatchClock';
-import { SeasonCentre, type CentreModel, type CentreSport } from '@/components/season-centre/SeasonCentre';
+import { FormStrip, SeasonCentre, type CentreModel, type CentreSport } from '@/components/season-centre/SeasonCentre';
+import type { CentreMoment } from '@/components/season-centre/MomentHost';
 import {
   deriveSeason, ownRowRounds, roundRobinRounds, tableAt,
   type DerivedGame, type FixedGame, type Frame, type SeasonSport, type StatTotal, type TeamTarget,
@@ -204,5 +205,64 @@ describe('Season Centre: opened where he stopped (Round 1046)', () => {
   });
   it('takes the last matchday but one, and no further', () => {
     expect(open({ md: M - 1, speed: 1 })).toContain(`▶ Matchday ${M}`);
+  });
+});
+
+describe('Season Centre: a resume past one of his moments says so (Round 1046)', () => {
+  const moment = (md: number, taken: boolean): CentreMoment => ({ md, id: md, minute: 60, mode: 'call', line: 'x', objective: 'y', how: 'z', taken: taken ? { stars: 2, made: true } : null });
+  const withMoments = (list: CentreMoment[]): CentreModel => ({
+    ...slotsModel(),
+    moments: { list, preload: () => Promise.resolve(), use: () => {}, board: () => null, settle: () => ({ made: false, stars: 0, verdict: '', after: '', turned: false }) as never, bank: () => {}, feedback: 'goal', kickoff: 'Your moments this season', review: [] },
+  });
+  const open = (model: CentreModel, md: number) => renderToStaticMarkup(<SeasonCentre model={model} exitLabel="Back" onClose={() => {}} resume={md ? { md, speed: 1 } : null} />);
+  it('counts the untaken moments at or before his matchday, and only those', () => {
+    const model = withMoments([moment(3, false), moment(7, false), moment(9, false)]);
+    expect(open(model, 7)).toContain('🎯 2 of your moments are before matchday 8. ↺ From the start plays them.');
+    expect(open(model, 5)).toContain('🎯 1 of your moments is before matchday 6. ↺ From the start plays it.');
+    expect(open(model, 2)).not.toContain('data-kickoff-behind');
+  });
+  it('says nothing for a moment he already took, on a fresh open, or with no moments', () => {
+    expect(open(withMoments([moment(3, true)]), 7)).not.toContain('data-kickoff-behind');
+    expect(open(withMoments([moment(3, false)]), 0)).not.toContain('data-kickoff-behind');
+    expect(renderToStaticMarkup(<SeasonCentre model={slotsModel()} exitLabel="Back" onClose={() => {}} resume={{ md: 7, speed: 1 }} />)).not.toContain('data-kickoff-behind');
+  });
+});
+
+describe('Season Centre: the review strip of his season (Round 1046)', () => {
+  const base = slotsModel();
+  const marks = [3, 10, 0, 6.5];
+  const games = base.season.games.slice(0, 4).map((g, i) => ({
+    ...g, played: i !== 2, fixedKey: i === 3 ? 'rival' : undefined, us: [0, 3, 1, 1][i], them: [2, 0, 1, 1][i], line: { ...g.line, rating: marks[i] },
+  }));
+  const model: CentreModel = { ...base, season: { ...base.season, games }, sport: { ...SPORT, form: { head: 'Your season, game by game', label: 'Your mark in each game', range: [3, 10] } } };
+  const html = renderToStaticMarkup(<FormStrip model={model} reduced />);
+  const bars = [...html.matchAll(/<span[^>]*data-form-bar="(\d+)"[^>]*>/g)].map(m => m[0]);
+  it('is one labelled picture with a bar a game', () => {
+    expect(html).toContain('role="img"');
+    expect(html).toContain('aria-label="Your mark in each game"');
+    expect(html).toContain('Your season, game by game');
+    expect(bars).toHaveLength(4);
+  });
+  it('draws the lowest mark flat, the highest full, and one in the middle half way, each in the colour of its result', () => {
+    expect(bars[0]).toContain('height:0.0%');
+    expect(bars[0]).toContain('bg-red-500/70');
+    expect(bars[1]).toContain('height:100.0%');
+    expect(bars[1]).toContain('bg-emerald-500/70');
+    expect(bars[3]).toContain('height:50.0%');
+    expect(bars[3]).toContain('bg-muted-foreground/50');
+  });
+  it('marks a game he missed with a dot and no bar, and a fixed game with an amber top', () => {
+    expect(bars[2]).toContain('data-form-missed');
+    expect(bars[2]).not.toContain('height:');
+    expect(bars[3]).toContain('border-amber-400');
+    expect(bars[1]).not.toContain('border-amber-400');
+  });
+  it('arrives whole: one rise on the strip, none on a bar, and nothing at all under reduced motion', () => {
+    const moving = renderToStaticMarkup(<FormStrip model={model} reduced={false} />);
+    expect(moving.match(/cm-rise/g)).toHaveLength(1);
+    expect(html).not.toContain('cm-rise');
+  });
+  it('is not drawn for a sport that gives no range', () => {
+    expect(renderToStaticMarkup(<FormStrip model={base} reduced />)).toBe('');
   });
 });
