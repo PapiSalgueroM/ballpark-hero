@@ -284,6 +284,8 @@ function measure(f) {
   }
   m.scoreP50 = r1(pctl(f.careers.map(c => c.score), 0.5)); m.scoreP90 = r1(pctl(f.careers.map(c => c.score), 0.9));
   m.perCareer = Object.fromEntries(AWARDS.map(a => [a, per(a)]));
+  /* How unevenly an award falls: the sd of its count over careers (most win none, a few win several). */
+  m.sdCareer = Object.fromEntries(AWARDS.map(a => { const cnt = new Array(n).fill(0); for (const s of S) if (has(s.line, a)) cnt[s.i] += 1; return [a, r3(sdOf(cnt))]; }));
   m.everMvp = r2(share(f.careers.filter(c => c.mvps > 0).length, n));
   m.everAllNba = r2(share(f.careers.filter(c => c.allNbas > 0).length, n));
   const mvp = S.filter(s => has(s.line, 'MVP'));
@@ -533,17 +535,19 @@ const get = (o, key) => key.split('.').reduce((x, k) => (x == null ? x : x[k]), 
  *  2 of one unchanged tree came out at 31.2 and 29.2). A mean of five is the stronger signal, and its error is
  *  known. The seed to seed sd used is the larger of what the ten seeds show and the floor a count of that size
  *  has by arithmetic: a share is binomial, an award count a career is at least Poisson. */
-function heldAtMain(section, base, per, key, label, kind) {
-  heldAt(section, base.seeds.map(s => get(s.m, key)), base.careers, per.map(m => get(m, key)), label, kind, "main's");
+function heldAtMain(section, base, per, key, label, kind, careerSd) {
+  heldAt(section, base.seeds.map(s => get(s.m, key)), base.careers, per.map(m => get(m, key)), label, kind, "main's", careerSd);
 }
 /** The same test against any five recorded seeds (main's, or the ones a round shipped). */
-function heldAt(section, main, mainCareers, now, label, kind, whose) {
+function heldAt(section, main, mainCareers, now, label, kind, whose, careerSd = 0) {
   const base = { careers: mainCareers };
   const n = Math.min(CAREERS, base.careers);
   const m0 = mean(main); const m1 = mean(now);
   /* 'share' is a percent of careers; 'share-years' a percent of head to head years (several a career, and a
-     career's years lean the same way, so four independent years a career is the floor used); else a count. */
-  const floorSd = c => (kind === 'share' ? Math.sqrt(Math.max(1e-9, m0 * (100 - m0)) / c) : kind === 'share-years' ? Math.sqrt(Math.max(1e-9, m0 * (100 - m0)) / (c * 4)) : Math.sqrt(Math.max(1e-9, m0) / c));
+     career's years lean the same way, so four independent years a career is the floor used); else a count a
+     career, whose floor is the larger of Poisson's and the sd over careers this run measured (`careerSd`: an
+     MVP winner tends to win several, so the count is wider than Poisson; the check prints the sd it used). */
+  const floorSd = c => (kind === 'share' ? Math.sqrt(Math.max(1e-9, m0 * (100 - m0)) / c) : kind === 'share-years' ? Math.sqrt(Math.max(1e-9, m0 * (100 - m0)) / (c * 4)) : Math.max(Math.sqrt(Math.max(1e-9, m0)), careerSd) / Math.sqrt(c));
   const sample = Math.sqrt((sdOf(main) ** 2 * main.length + sdOf(now) ** 2 * now.length) / Math.max(1, main.length + now.length - 2));
   const se = Math.sqrt(Math.max(sample, floorSd(base.careers)) ** 2 / main.length + Math.max(sample, floorSd(CAREERS)) ** 2 / now.length);
   const tol = 3 * se;
@@ -692,7 +696,9 @@ if (HAS_LINE) {
   for (const k of ['pts', 'reb', 'ast']) {
     const bar = N.nbaLeaderBar(k, 2026);
     const v = aStats.map(a => a.p99[k]);
-    banded('A2', v.every(x => x <= bar.mean + bar.sd), `the p99 starter season in ${k}: ${v.map(f1).join(', ')} at or under the league leaders' mean plus one sd (${f1(bar.mean)} + ${f1(bar.sd)})`);
+    /* Judged on the mean over the run's seeds: a p99 is carried by a few dozen elite careers, so one seed of a
+       shrunk fleet moves it by a point (32.6 to 34.5 on four fleets of 1,500) where five full seeds agree to 0.3. */
+    banded('A2', mean(v) <= bar.mean + bar.sd, `the p99 starter season in ${k}: ${v.map(f1).join(', ')}, mean ${mean(v).toFixed(2)}, at or under the league leaders' mean plus one sd (${f1(bar.mean)} + ${f1(bar.sd)})`);
   }
   /* A3: the promises. */
   banded('A3', aStats.every(a => a.rookies.ppg >= 7.5 && a.rookies.ppg <= 11.5), `rookies rated 75 to 79 average ${aStats.map(a => f1(a.rookies.ppg)).join(', ')} points (7.5 to 11.5); starters ${aStats.map(a => f1(a.rookies.starters)).join(', ')}, bench ${aStats.map(a => f1(a.rookies.bench)).join(', ')}; ${aStats.map(a => a.rookies.n).join(', ')} seasons`);
@@ -736,8 +742,9 @@ else {
   heldAtMain('H', base.nba, per, 'inducted', 'Hall of Fame inducted, percent', 'share');
   heldAtMain('H', base.nba, per, 'firstBallot', 'first ballot, percent', 'share');
   /* B6a, the award rates the old grades were set for, held where main had them. */
-  for (const [key, label] of [['perCareer.MVP', 'MVPs a career'], ['perCareer.All-NBA', 'All-NBA a career'], ['perCareer.All-Defensive Team', 'All-Defensive a career'], ['perCareer.Finals MVP', 'Finals MVPs a career']]) {
-    heldAtMain('B6a', base.nba, per, key, label, 'count');
+  for (const [award, label] of [['MVP', 'MVPs a career'], ['All-NBA', 'All-NBA a career'], ['All-Defensive Team', 'All-Defensive a career'], ['Finals MVP', 'Finals MVPs a career']]) {
+    const careerSd = mean(per.map(m => m.sdCareer[award]));
+    heldAtMain('B6a', base.nba, per, `perCareer.${award}`, `${label} (sd over careers ${r3(careerSd)})`, 'count', careerSd);
   }
   /* How the awards are SPREAD over careers is not main's on this line, and one grade an award cannot make it so
      (see the header). The two shares are held where Round 1103 shipped them, and main's are printed beside. */
