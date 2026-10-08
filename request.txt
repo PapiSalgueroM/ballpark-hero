@@ -1,0 +1,2 @@
+#!serial
+m5world: node .rc/x/rvMut.mjs m5 && { node scripts/simCareerLeagueWorld.mjs > world.log 2>&1; a=$?; grep -n -i "FAIL\|red\|russia" world.log | head -12; git checkout -q -- src scripts; echo "m5world simCareerLeagueWorld=$a"; }

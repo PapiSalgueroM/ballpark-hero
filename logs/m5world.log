@@ -1,0 +1,14 @@
+rvMut m5: applied to src/lib/soccerCareerLeague.ts
+19:  FAIL [A]: Russian Premier League: the dugout's size 18, the facts file 16
+20:  sized (a finish, a table): Championship 24, Brasileirao 20, Eredivisie 18, Saudi Pro League 18, Primeira Liga 18, Super Lig 18, 2. Bundesliga 18, Belgian Pro League 18
+23:  held by the generator: Serie B, Ligue 2, Segunda Division, Russian Premier League; the ledgers hold the Championship in 22 of 22 seasons from 2004
+29:  Championship: 19 of 24 ordered, rho 1.000 to 1.000; tier 4 17, rho 1.000 to 1.000
+30:  Brasileirao: 16 of 20 ordered, rho 1.000 to 1.000; tier 4 10, rho 1.000 to 1.000
+31:  Eredivisie: 7 of 18 ordered, rho 1.000 to 1.000; tier 4 3 (too few to measure)
+32:  Saudi Pro League: 7 of 18 ordered, rho 1.000 to 1.000; tier 4 1 (too few to measure)
+33:  Primeira Liga: 8 of 18 ordered, rho 1.000 to 1.000; tier 4 5, rho 1.000 to 1.000
+34:  Super Lig: 9 of 18 ordered, rho 1.000 to 1.000; tier 4 0 (too few to measure)
+35:  2. Bundesliga: 5 of 18 ordered, rho 1.000 to 1.000; tier 4 5, rho 1.000 to 1.000
+36:  Belgian Pro League: 10 of 18 ordered, rho 1.000 to 1.000; tier 4 0 (too few to measure)
+37:  8 leagues measured over three key sets: lowest 1.000, highest 1.000 (floor 0.97); tier 4 alone in 4: lowest 1.000, highest 1.000 (floor 0.97)
+m5world simCareerLeagueWorld=1
