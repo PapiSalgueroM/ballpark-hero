@@ -1,0 +1,21 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/soccerCareerLeagueBand.test.ts src/lib/soccerCareerLeague.test.ts src/lib/soccerCareerLeagueSeasons.test.ts --testTimeout=300000 --hookTimeout=120000
+simCareerLeagueWorld: node scripts/simCareerLeagueWorld.mjs
+simCareerClubPool: node scripts/simCareerClubPool.mjs
+simCareerFacts: node scripts/simCareerFacts.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simManagerCareer: node scripts/simManagerCareer.mjs
+simCareerDerbies: node scripts/simCareerDerbies.mjs
+simCareerLeagueFinish: node scripts/simCareerLeagueFinish.mjs
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+simCareerAwardsNight: node scripts/simCareerAwardsNight.mjs
+simCareerSocialBrands: node scripts/simCareerSocialBrands.mjs
+simSeasonCentreTable: node scripts/simSeasonCentreTable.mjs
+simSeasonCentreNeutral: node scripts/simSeasonCentreNeutral.mjs
+simSeasonMoments: node scripts/simSeasonMoments.mjs
+agree0: SEEDSET=0 node scripts/simSeasonCentreAgreement.mjs
+agree1: SEEDSET=1 node scripts/simSeasonCentreAgreement.mjs
+agree2: SEEDSET=2 node scripts/simSeasonCentreAgreement.mjs
+agree3: SEEDSET=3 node scripts/simSeasonCentreAgreement.mjs
+agree4: SEEDSET=4 node scripts/simSeasonCentreAgreement.mjs

@@ -1,0 +1,27 @@
+bundled in 470 ms; 460 clubs (190 hand rows)
+
+B1. POOL: the rows main shipped are still the first rows, in order
+  51 of 51 recorded rows found in place (id, name, country, league); the pool has 270 generated rows
+
+B4. POOL: the dugout's key finds every pool club under Club Manager's spelling
+  380 Club Manager clubs of 23 leagues, 380 matched by the key (1 pinned apart: Nacional and CD Nacional)
+
+C1. BAND: main's recorded cross, the five big leagues and every season before 2026 byte for byte
+  held: 8100 rows in the five big leagues, 87480 rows before 2026 outside them; free to move: 43740 rows, 2184 moved over 24 pairs that gained a size
+
+C2. BAND: the worked examples, exact, and every ladder club banded at its own place
+  8 worked bands and 7 seed keys exact; 284 clubs of 17 ladder leagues each banded at their own place
+
+C3. BAND: every ladder club, five ratings, 200 engine shaped keys
+  284000 bands, every one from the ladder and inside 2 to the league's size; 16 groups the ladder cannot order, each sharing one band at every rating
+
+A. LEDGERS: every league the pool reads is sized, odd or waiting with its reason
+  sized (a finish, a table): Championship 24, Brasileirao 20, Eredivisie 18, Saudi Pro League 18, Primeira Liga 18, Super Lig 18, 2. Bundesliga 18, Belgian Pro League 18
+  odd (their real row count, no table): Scottish Premiership 12
+  waiting, results only as on main: MLS (format from 1 host), Austrian Bundesliga (format from 1 host), Super League Greece (format from 1 host), Danish Superliga (format from 1 host), Swiss Super League (format from 0 hosts), HNL (format from 0 hosts), Liga MX (format from 1 host), A-League (format from 1 host)
+  held by the generator: Serie B, Ligue 2, Segunda Division; the ledgers hold the Championship in 22 of 22 seasons from 2004
+
+E. OLD SAVES: seven saves recorded on main read the same, and play on
+  7 saves: repairCareer byte equal, every saved row reads the finish, league and mode main read; matchdays moved to the league's real count on 6 rows (ere 2027 Twente: 38 to 34; ere 2028 Twente: 38 to 34; cha 2027 Norwich City: 38 to 46; cha 2028 Norwich City: 38 to 46; her 2027 Hertha Berlin: 38 to 34; her 2028 Hertha Berlin: 38 to 34); each played three more seasons
+
+simCareerLeagueWorld: all sections green (1.8 s)
