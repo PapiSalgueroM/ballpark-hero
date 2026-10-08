@@ -96,3 +96,64 @@ describe('a source in a table, recorded on main before Round 1105 added the loca
     expect(fetchSpy).not.toHaveBeenCalled();
   });
 });
+
+/* ------------------------------------------------------------------------- */
+/* Added WITH the seam (Round 1105): a source held in memory.                 */
+/* ------------------------------------------------------------------------- */
+
+const POOL = ['Brady Quinn', 'Tom Brady', 'Aaron Brady', 'Kyle Brady', 'Bradyn Smith', 'Jeff Hornbrady', 'Joe Montana'];
+/** Prominence falls with position in the list, the way the College Grid key file is ordered. */
+const poolRows = (q: string) => POOL
+  .map((name, i) => ({ display_name: name, rank: POOL.length - i }))
+  .filter((r) => r.display_name.toLowerCase().includes(q));
+
+const memory = (local: PlayerSourceConfig['local']): PlayerSourceConfig => ({ table: '(memory)', nameColumn: 'display_name', prominenceColumn: 'rank', local });
+
+describe('a source held in memory (Round 1105)', () => {
+  it('asks the local rows with the normalized query and makes no request of any kind', async () => {
+    const local = vi.fn(async (q: string) => poolRows(q));
+    const out = await searchPlayers({ source: memory(local), query: '  BRÁDY ' });
+    expect(local).toHaveBeenCalledTimes(1);
+    expect(local).toHaveBeenCalledWith('brady');
+    expect(stub.queries, 'no supabase query').toEqual([]);
+    expect(fetchSpy, 'no fetch').not.toHaveBeenCalled();
+    expect(out.error).toBeNull();
+    /* Exact prefix (Brady Quinn, Bradyn Smith by rank), then word prefix by rank, then contains. */
+    expect(out.results.map((r) => r.name)).toEqual(['Brady Quinn', 'Bradyn Smith', 'Tom Brady', 'Aaron Brady', 'Kyle Brady', 'Jeff Hornbrady']);
+    expect(out.results.map((r) => r.matchRank)).toEqual([0, 0, 1, 1, 1, 2]);
+  });
+
+  it('honours exclude and limit', async () => {
+    const source = memory(async (q) => poolRows(q));
+    const limited = await searchPlayers({ source, query: 'brady', limit: 3 });
+    expect(limited.results.map((r) => r.name)).toEqual(['Brady Quinn', 'Bradyn Smith', 'Tom Brady']);
+    const excluded = await searchPlayers({ source, query: 'brady', exclude: new Set(['brady quinn', 'tom brady']) });
+    expect(excluded.results.map((r) => r.name)).toEqual(['Bradyn Smith', 'Aaron Brady', 'Kyle Brady', 'Jeff Hornbrady']);
+  });
+
+  it('under three letters the local rows are never asked', async () => {
+    const local = vi.fn(async () => poolRows('br'));
+    expect(await searchPlayers({ source: memory(local), query: 'br' })).toEqual({ results: [], error: null });
+    expect(local).not.toHaveBeenCalled();
+  });
+
+  it('rows that cannot be had are an error, never "nobody by that name"', async () => {
+    const missing = await searchPlayers({ source: memory(async () => null), query: 'brady' });
+    expect(missing).toEqual({ results: [], error: 'Could not load players' });
+    const thrown = await searchPlayers({ source: memory(async () => { throw new Error('boom'); }), query: 'brady' });
+    expect(thrown).toEqual({ results: [], error: 'Could not load players' });
+    expect(stub.queries, 'and never a fall back to the table').toEqual([]);
+  });
+
+  it('a match of nobody is an empty list with no error', async () => {
+    expect(await searchPlayers({ source: memory(async (q) => poolRows(q)), query: 'zzzz' })).toEqual({ results: [], error: null });
+  });
+
+  it('an aborted search settles empty with no error, whatever the rows did', async () => {
+    const abort = new AbortController();
+    const source = memory(async (q) => { abort.abort(); return poolRows(q); });
+    expect(await searchPlayers({ source, query: 'brady', signal: abort.signal })).toEqual({ results: [], error: null });
+    const gone = new AbortController();
+    expect(await searchPlayers({ source: memory(async () => { gone.abort(); return null; }), query: 'brady', signal: gone.signal })).toEqual({ results: [], error: null });
+  });
+});
