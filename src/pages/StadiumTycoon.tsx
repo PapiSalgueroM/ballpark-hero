@@ -801,6 +801,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
                     ) : (
                       <button
                         onClick={() => g.doLegacyPerk(p.id)}
+                        aria-label={`Buy ${p.name}, level ${lvl + 1}, ${cost} pt${cost === 1 ? '' : 's'}`}
                         disabled={!ok}
                         className={cn('shrink-0 min-h-[30px] rounded-full px-2.5 py-1 text-[9px] font-bold transition-all active:scale-95',
                           ok ? 'bg-gold text-black hover:opacity-90' : 'bg-secondary text-muted-foreground')}

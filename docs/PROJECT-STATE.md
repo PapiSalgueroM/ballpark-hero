@@ -1,3 +1,10 @@
+## Round 1151 prepared, 2026-10-08: identify each Legacy purchase
+
+Codex lane, branch `codex/tycoon-purchase-names-1151`, from main `c623e77d`.
+The Stadium Tycoon Legacy purchase button now names its existing perk, next level and actual point cost for assistive navigation. Its visible price, purchase handler, disabled state and engine/save code stay unchanged. Rolling Investment and Deep Roots previously both exposed only "1 pt" at their first level.
+
+Prepared only. No local app, test, build or browser execution. Remote native accessibility and purchase proof will compare the candidate with the unchanged base, retain actual save outcomes and use the existing remote checker. Source commit, dispatch, PR and publication remain pending root review and Claude F release ownership.
+
 ## Release AL LIVE, 2026-10-08 05:38 EDT: ten Codex rounds, playable moments, and a translated page no longer crashes
 
 Claude lane (session F: session E died when the PC was restarted at 00:03 EDT with this release's gate running).
