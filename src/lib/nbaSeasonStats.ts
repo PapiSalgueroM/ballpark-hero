@@ -39,7 +39,10 @@
  *     half the games they played.
  * Ties go to more games, then to the id, so a season always names the same
  * man. No qualified man, no award, and the screen says so.
+ * Round 1103: the three scores (MVP, production, defence) live in
+ * awardDecision.ts and are shared with NBA My Career. Who qualifies stays here.
  */
+import { nbaDefenseValue, nbaMvpValue, nbaProduction } from './awardDecision';
 import type { NbaGmPlayer, NbaGmTeam, NbaLeague } from './nbaFrontOffice';
 import { NBA_ROTATION_MINUTES, nbaRotation as teamRotation, nbaRotationSlots } from './nbaRotation';
 import {
@@ -201,10 +204,10 @@ function winShare(league: Pick<NbaLeague, 'teams'>, abbr: string): number {
 
 /** The MVP score, the rule above. Exported so the harness can rank by it. */
 export function nbaMvpScore(league: Pick<NbaLeague, 'teams'>, p: FoStatLine): number {
-  return foPerGame(p, 'pts') + foPerGame(p, 'reb') + foPerGame(p, 'ast') + NBA_MVP_WIN_WEIGHT * winShare(league, p.team);
+  return nbaMvpValue(nbaProduction(foPerGame(p, 'pts'), foPerGame(p, 'reb'), foPerGame(p, 'ast')), winShare(league, p.team), NBA_MVP_WIN_WEIGHT);
 }
-export const nbaProductionScore = (p: FoStatLine): number => foPerGame(p, 'pts') + foPerGame(p, 'reb') + foPerGame(p, 'ast');
-export const nbaDefenseScore = (p: FoStatLine): number => foPerGame(p, 'stl') + foPerGame(p, 'blk') + foPerGame(p, 'reb') / 2;
+export const nbaProductionScore = (p: FoStatLine): number => nbaProduction(foPerGame(p, 'pts'), foPerGame(p, 'reb'), foPerGame(p, 'ast'));
+export const nbaDefenseScore = (p: FoStatLine): number => nbaDefenseValue(foPerGame(p, 'stl'), foPerGame(p, 'blk'), foPerGame(p, 'reb'));
 
 /**
  * The season's awards from its lines, by the rules in the header, or null

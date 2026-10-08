@@ -177,6 +177,8 @@ export const NBA_BADGES: BadgeDef<NbaBadgeFacts>[] = [
   { id: 'scoring_title', emoji: '🔥', label: 'Scoring champion', blurb: 'Led the league in scoring across a season.', test: f => tookAward(f.seasons, 'Scoring Champion') },
   { id: 'all_nba_3', emoji: '⭐', label: 'Three All-NBAs', blurb: 'All-NBA three times.', test: f => f.allNbas >= 3 },
   { id: 'all_nba_10', emoji: '🌟', label: 'Ten All-NBAs', blurb: 'Ten All-NBA selections.', test: f => f.allNbas >= 10 },
+  { id: 'all_star', emoji: '✨', label: 'All-Star', blurb: 'Picked for the All-Star Game.', test: f => tookAward(f.seasons, 'All-Star') },
+  { id: 'all_star_10', emoji: '🎇', label: 'Ten time All-Star', blurb: 'Ten All-Star selections.', test: f => f.seasons.filter(s => s.awards.includes('All-Star')).length >= 10 },
   { id: 'ppg_30', emoji: '💥', label: 'A 30 point season', blurb: 'Thirty a night across a whole season. The record average is 50.4.', test: f => f.seasons.some(s => s.ppg >= 30 && s.games >= 58) },
   { id: 'triple_double', emoji: '📊', label: 'Triple double season', blurb: 'Points, rebounds and assists all in double figures for a season.', test: f => f.seasons.some(s => s.ppg >= 10 && s.rpg >= 10 && s.apg >= 10 && s.games >= 58) },
   { id: 'pts_20k', emoji: '🎯', label: '20,000 points', blurb: 'Twenty thousand career points.', test: f => f.totals.pts >= 20000 },

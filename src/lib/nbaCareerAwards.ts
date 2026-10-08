@@ -1,0 +1,202 @@
+/* nbaCareerAwards.ts (Round 1103). One season's NBA awards in NBA My Career, decided together.
+
+   Before this file the season's awards were twelve separate draws on one number, each blind to the others
+   and to how the club did. So an MVP could miss the playoffs (one in four did), or be left off All-NBA, or
+   be Most Improved the same night; no Rookie of the Year ever made All-Rookie; scorers took All-Defensive.
+
+   Now there is one pass. It knows the club's record, it draws ONE league a family of awards (so the awards in
+   a family are judged against the same year), and it writes the gates out:
+     All-Star, All-NBA and MVP share the year's league. MVP needs the All-NBA First Team and a playoff club.
+     All-Defensive and Defensive Player share the year's defenders, and read a defence score.
+     All-Rookie and Rookie of the Year share the rookie class. The Rookie of the Year is on the first team.
+     Most Improved never goes to a man who has been All-NBA, or to that season's MVP.
+   The gates carry the nesting, not the shared draw: the bar a draw sets grows steeper as the field per slot
+   shrinks, so in a rare year the first team's bar can dip under the second's. Never delete a gate.
+
+   The scores are the ones NBA Front Office ranks its league by (awardDecision.ts). Every z reads the line with
+   the era's level divided out (a 2004 season is judged against 2004's league); only the three stat titles
+   compare the raw average, against that era's own league leaders.
+
+   Only nbaMyCareer.ts imports this file. careerAwards.ts serves four sports and stays free of the NBA norms. */
+import { NBA_AWARD_RULES, nbaEraNeutral, nbaLeaderBar } from '@/data/nbaLeagueNorms';
+import { nbaAwardGamesBar, nbaDefenseValue, nbaMvpValue, nbaProduction, nbaQualifiesForStatTitle } from './awardDecision';
+import { bestOfNAt, gumbel } from './careerAwards';
+
+/** What the MVP score adds per unit of the club's winning share. NBA Front Office declares the same number
+ *  (NBA_MVP_WIN_WEIGHT in nbaSeasonStats.ts). It is a second declaration on purpose: importing that file would
+ *  pull its rotation and box score code into the career's chunk, and its constant is a harness anchor. Section
+ *  D of scripts/simNbaAwardsSense.mjs fails when the two differ. */
+export const NBA_CAREER_MVP_WIN_WEIGHT = 20;
+
+type Row = readonly [mean: number, sd: number];
+/** What a season is judged against: mean and sd of each score over the simNbaAwardsSense fleet (every season
+ *  of half a schedule or more, bench years included, on the era neutral line). `bench` is the points of bench
+ *  seasons, `jump` this season's production minus last season's (last season of 40 games or more), `fans` the
+ *  fanbase at tip off. Measured 2026-10-08, 6,000 careers a seed, seeds 1 to 5; section E of the harness fails
+ *  when the fleet drifts off these rows. */
+type FieldByPos = Record<string, Row>;
+export const NBA_FIELD: { mvp: FieldByPos; defense: FieldByPos; production: FieldByPos; bench: Row; jump: Row; fans: Row } = {
+  mvp: { PG: [32.91, 11.12], SG: [31.93, 10.9], SF: [33.51, 11.41], PF: [31.88, 10.43], C: [32.81, 10.82] },
+  defense: { PG: [3.01, 1.08], SG: [3.32, 1.28], SF: [4.09, 1.35], PF: [4.08, 1.43], C: [5.61, 2.08] },
+  production: { PG: [22.97, 10.27], SG: [22.06, 9.9], SF: [23.8, 10.44], PF: [22.09, 9.49], C: [23.2, 9.96] },
+  bench: [7.71, 3.31],
+  jump: [-0.01, 7.06],
+  fans: [61.82, 24.56],
+};
+
+/** How hard each award is. Pools and slots are real counts (150 starters, 24 All-Stars, 15 All-NBA, 10
+ *  All-Defensive, 45 rookies who play, 10 All-Rookie, about 60 sixth men). The grade is the one number tuned,
+ *  each only to put its own rate where the harness holds it (section B). */
+const G_ALL_STAR = -0.19;
+const G_ALL_NBA = -0.14;
+const G_MVP = -0.33;
+const G_ALL_DEF = 0.2;
+const G_DPOY = 0.22;
+const G_ROOKIE = -2.37;
+const G_SIXTH = -0.63;
+const G_MIP = -0.18;
+/** Defensive Player goes to big men far more often than to wings and guards. An estimate, and named as one. */
+const DPOY_POS_EXTRA: Record<string, number> = { C: 0, PF: 0, SF: 0.3, SG: 0.6, PG: 0.6 };
+/** The grades as the pass applies them, for the harness that fits and fences them. */
+export const NBA_AWARD_GRADES = { allStar: G_ALL_STAR, allNba: G_ALL_NBA, mvp: G_MVP, allDef: G_ALL_DEF, dpoy: G_DPOY, rookie: G_ROOKIE, sixth: G_SIXTH, mip: G_MIP } as const;
+
+export interface NbaAwardInput {
+  pos: string;
+  /** NBA_ARCH_DEFENSE[archetype.id].rep: negative means voters rate his defence. */
+  defenceRep: number;
+  bench: boolean;
+  rookie: boolean;
+  year: number;
+  seasonLength: number;
+  games: number;
+  /** The raw saved averages. The pass divides the era's level out itself. */
+  ppg: number; rpg: number; apg: number; spg: number; bpg: number;
+  /** The club's wins over its games, 0 to 1. */
+  winShare: number;
+  madePlayoffs: boolean;
+  /** 0 to 100 at tip off: the fan vote. */
+  fanbase: number;
+  /** Last season's raw line and ITS year (a suspended year can sit between two seasons). */
+  prev: { year: number; games: number; ppg: number; rpg: number; apg: number } | null;
+  /** Any All-NBA selection before this season. */
+  everAllNba: boolean;
+}
+export interface NbaAwardResult {
+  awards: string[];
+  allStar?: 'starter' | 'reserve';
+  allNbaTeam?: 1 | 2 | 3;
+  allDefensiveTeam?: 1 | 2;
+  allRookieTeam?: 1 | 2;
+}
+/** Always exactly nine draws, in this order, used or not: the league, its defenders, the rookie class, the
+ *  benches, the improvers (a gumbel each), then the scoring, rebounding and assists leaders' bars and the fan
+ *  vote's wobble (a flat draw each). */
+export const NBA_AWARD_DRAWS = 9;
+
+const zOf = (x: number, row: Row): number => (row[1] > 0 ? (x - row[0]) / row[1] : 0);
+/** The bar `slots` picks out of `pool` set this year, in standard deviations, at the family's draw `g`. */
+const bar = (pool: number, slots: number, grade: number, g: number): number => bestOfNAt(Math.max(1.2, pool / Math.max(1, slots)), g) + grade;
+
+/** What the pass reads off a season before any draw: the scores on the era neutral line and the two games
+ *  tests. Exported so the harness measures NBA_FIELD on exactly the numbers the awards are decided on. */
+export interface NbaAwardValues {
+  mvp: number; defense: number; production: number; benchPts: number;
+  /** This season's production minus last season's, or null when there is no last season of 40 games. */
+  jump: number | null;
+  /** The game's own floor for every award here, in every era: nobody is honoured for 30 games. */
+  half: boolean;
+  /** The real games rule: 65 of 82 from 2023-24 for the five awards it names, nothing before. */
+  overBar: boolean;
+}
+export function nbaAwardValues(x: NbaAwardInput): NbaAwardValues {
+  const now = nbaEraNeutral({ ppg: x.ppg, rpg: x.rpg, apg: x.apg, spg: x.spg, bpg: x.bpg }, x.year);
+  const production = nbaProduction(now.ppg, now.rpg, now.apg);
+  let jump: number | null = null;
+  if (x.prev && x.prev.games >= 40) {
+    const was = nbaEraNeutral({ ppg: x.prev.ppg, rpg: x.prev.rpg, apg: x.prev.apg }, x.prev.year);
+    jump = production - nbaProduction(was.ppg, was.rpg, was.apg);
+  }
+  return {
+    mvp: nbaMvpValue(production, x.winShare, NBA_CAREER_MVP_WIN_WEIGHT),
+    defense: nbaDefenseValue(now.spg ?? 0, now.bpg ?? 0, now.rpg),
+    production, benchPts: now.ppg, jump,
+    half: x.games * 2 >= x.seasonLength,
+    overBar: x.games >= nbaAwardGamesBar(x.year, x.seasonLength, NBA_AWARD_RULES),
+  };
+}
+
+export function decideNbaAwards(rng: () => number, x: NbaAwardInput): NbaAwardResult {
+  const g1 = gumbel(rng); const g2 = gumbel(rng); const g3 = gumbel(rng); const g4 = gumbel(rng); const g5 = gumbel(rng);
+  const u6 = rng(); const u7 = rng(); const u8 = rng(); const u9 = rng();
+  const R = NBA_AWARD_RULES;
+  const v = nbaAwardValues(x);
+  const fieldRow = (t: Record<string, Row>): Row => t[x.pos] ?? t.PG;
+  const zMvp = zOf(v.mvp, fieldRow(NBA_FIELD.mvp));
+  const zDef = zOf(v.defense, fieldRow(NBA_FIELD.defense)) - x.defenceRep;
+  const zProd = zOf(v.production, fieldRow(NBA_FIELD.production));
+  const zBench = zOf(v.benchPts, NBA_FIELD.bench);
+  const zFans = zOf(x.fanbase, NBA_FIELD.fans) + (u9 - 0.5);
+  const { half, overBar } = v;
+  const out: NbaAwardResult = { awards: [] };
+
+  /* The year's league: All-NBA first, then MVP, then the All-Star Game. Teams in order, first to third. */
+  if (half && overBar) {
+    if (zMvp > bar(150, 5, G_ALL_NBA, g1)) out.allNbaTeam = 1;
+    else if (zMvp > bar(150, 10, G_ALL_NBA, g1)) out.allNbaTeam = 2;
+    else if (zMvp > bar(150, R.allNbaPicks, G_ALL_NBA, g1)) out.allNbaTeam = 3;
+  }
+  const mvp = out.allNbaTeam === 1 && x.madePlayoffs && zMvp > bar(150, 1, G_MVP, g1);
+  if (half) {
+    /* Starters by the weighted vote (the fans alone before the weights came in), reserves on the season. */
+    const fanShare = x.year >= R.allStarFanShareFrom ? R.allStarFanShare : 1;
+    if (fanShare * zFans + (1 - fanShare) * zMvp > bar(150, R.allStarStarters, G_ALL_STAR, g1)) out.allStar = 'starter';
+    else if (zMvp > bar(150, R.allStarPicks, G_ALL_STAR, g1) || out.allNbaTeam) out.allStar = 'reserve';
+  }
+
+  /* The year's defenders. */
+  if (half && overBar) {
+    if (zDef > bar(150, 5, G_ALL_DEF, g2)) out.allDefensiveTeam = 1;
+    else if (zDef > bar(150, R.allDefensivePicks, G_ALL_DEF, g2)) out.allDefensiveTeam = 2;
+  }
+  const dpoy = out.allDefensiveTeam !== undefined && zDef > bar(150, 1, G_DPOY + (DPOY_POS_EXTRA[x.pos] ?? 0.6), g2);
+
+  /* The rookie class: a first season only. */
+  if (x.rookie && half) {
+    if (zProd > bar(45, 5, G_ROOKIE, g3)) out.allRookieTeam = 1;
+    else if (zProd > bar(45, R.allRookiePicks, G_ROOKIE, g3)) out.allRookieTeam = 2;
+  }
+  const roy = out.allRookieTeam === 1 && zProd > bar(45, 1, G_ROOKIE, g3);
+
+  /* The benches. The real award carries no games rule. */
+  const sixth = x.bench && half && zBench > bar(60, 1, G_SIXTH, g4);
+
+  /* The improvers: a real jump on a real last season, by a man the league did not already know. */
+  const mip = v.jump !== null && half && overBar && !x.everAllNba && !mvp
+    && zOf(v.jump, NBA_FIELD.jump) > bar(150, 1, G_MIP, g5);
+
+  /* The three stat titles: he qualifies by that season's real minimum, and his RAW average beats a bar drawn
+     around that era's league leaders (their mean, give or take 1.73 of their standard deviations). */
+  const title = (stat: 'pts' | 'reb' | 'ast', avg: number, u: number): boolean => {
+    const b = nbaLeaderBar(stat, x.year);
+    return half && nbaQualifiesForStatTitle(x.games, avg * x.games, R.statTitleTotalsBefore[stat], x.year, x.seasonLength, R)
+      && avg >= b.mean + b.sd * (u - 0.5) * 3.46;
+  };
+  const scoring = title('pts', x.ppg, u6);
+  const rebounding = title('reb', x.rpg, u7);
+  const assists = title('ast', x.apg, u8);
+
+  /* The saved strings, in the order the season card has always listed them, All-Star first. */
+  if (out.allStar) out.awards.push('All-Star');
+  if (roy) out.awards.push('Rookie of the Year');
+  if (out.allNbaTeam) out.awards.push('All-NBA');
+  if (mvp) out.awards.push('MVP');
+  if (dpoy) out.awards.push('Defensive Player of the Year');
+  if (out.allDefensiveTeam) out.awards.push('All-Defensive Team');
+  if (scoring) out.awards.push('Scoring Champion');
+  if (assists) out.awards.push('Assists Leader');
+  if (rebounding) out.awards.push('Rebounding Champion');
+  if (mip) out.awards.push('Most Improved Player');
+  if (sixth) out.awards.push('Sixth Man of the Year');
+  if (out.allRookieTeam) out.awards.push('All-Rookie Team');
+  return out;
+}

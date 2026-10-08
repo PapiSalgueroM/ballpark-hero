@@ -10,11 +10,11 @@ import { formatNumber } from './formatNumber';
  */
 
 import { NBA_TEAMS } from '@/data/conquestDataNba';
-import { NBA_AWARD_RULES, nbaEraNeutral, nbaEraScale, nbaLeaderBar } from '@/data/nbaLeagueNorms';
+import { nbaEraNeutral, nbaEraScale } from '@/data/nbaLeagueNorms';
 import { usSeasonLength } from '@/data/usSeasonLengths';
-import { nbaQualifiesForStatTitle } from './awardDecision';
 import { seasonSwing, swingNote, playoffDepthOf, playoffGames, clutchSwing, clutchNote } from './careerVariance';
 import { nbaFieldZ, nbaSeasonScore, wonAward } from './careerAwards';
+import { decideNbaAwards } from './nbaCareerAwards';
 import { draftRival, judgeRivalSeason } from './careerRival';
 import type { CareerRival } from './careerRival';
 
@@ -127,6 +127,15 @@ export interface NbaSeasonLine {
   /** Round 1103: minutes, steals and blocks a game. An absent key is a season saved before Round 1103, whose
    *  whole number points and three part line stay exactly as saved. */
   mpg?: number; spg?: number; bpg?: number;
+  /** Round 1103: the club's record that season, the one the awards were decided on. Absent on a season saved
+   *  before the round. The key is `clubWins`, not `wins`: other sports' lines use `wins` for a man's own stat. */
+  clubWins?: number; clubLosses?: number;
+  /** Round 1103: which team an honour was, where the saved award string does not say. Absent when he was not
+   *  picked, and on every season saved before the round. */
+  allStar?: 'starter' | 'reserve';
+  allNbaTeam?: 1 | 2 | 3;
+  allDefensiveTeam?: 1 | 2;
+  allRookieTeam?: 1 | 2;
 }
 
 /** Round 1103: the one test of "a season on the new line" (minutes were never recorded before it). */
@@ -151,6 +160,8 @@ export interface NbaCareerState {
   mvps: number;
   allNbas: number;
   finalsMvps: number;
+  /** Round 1103: All-Star selections. Absent on a career with no season played since the round. */
+  allStars?: number;
   retired: boolean;
   /** Zero records an undrafted camp signing. */
   draftPick: number;
@@ -631,9 +642,6 @@ function gamesFor(c: NbaCareerState, rng: () => number): { games: number; note: 
   return { games: L - 4 + Math.floor(rng() * 5), note: null };
 }
 
-/* Round 1103: the three typed gates of the awards block that are not league facts, each re-anchored on the new
-   line at the SAME percentile of qualified seasons (62 games) it sat at on the old one. Measured by
-   scripts/simNbaAwardsSense.mjs on main (6,000 careers a seed, seeds 1 to 5) and again on this line. */
 /** The field of the line before Round 1103, mean and sd of the season score by position, frozen. It is the old
  *  line as the same fleet lived it (scripts/data/nbaAwardsSenseBaseline.json, the five seed mean of its `field`
  *  rows: every season of half a schedule or more, bench years included), because the new field is measured on
@@ -646,22 +654,25 @@ const NBA_RIVAL_SCALE: Record<string, readonly [number, number]> = { PG: [46.3, 
  *  left my share of the head to head years about a point under main's (61.1 to 61.9 percent on five shrunk
  *  fleets against 62.3 to 63.0). This many old scale points put it back. Measured, and deleted with the bridge. */
 const NBA_RIVAL_BRIDGE_SHIFT = 0.4;
-/** Defensive Player of the Year: was 11 rebounds a game. */
-const NBA_DPOY_RPG_GATE = 10.4;
-/** Most Improved: was a jump of 6 points a game on last season. */
-const NBA_MIP_JUMP_GATE = 6.5;
-/** Sixth Man: was 14 points a game. */
-const NBA_SIXTH_MAN_PPG_GATE = 9.4;
 
 /** Round 1048: every team result simNbaSeason writes, in playoff depth order. The Season Center reads the
  *  stage by exact equality against this list, never out of a sentence (the Round 103 rule). */
 export const NBA_MISSED_PLAYOFFS = 'Missed the playoffs';
 export const NBA_PLAYOFF_RESULTS = ['Lost in the first round', 'Lost in the conference semis', 'Lost the Conference Finals', 'Lost the NBA Finals', 'WON THE NBA FINALS'] as const;
+/** Round 1103: the wins a result implies, of 82 (the game's own rule, the same numbers the Season Center's
+ *  bands carry in src/lib/season/nba.ts). simNbaSeason draws the club's record inside its result's band. */
+export const NBA_RECORD_BANDS: Record<string, readonly [number, number]> = {
+  'Missed the playoffs': [17, 40], 'Lost in the first round': [41, 52], 'Lost in the conference semis': [45, 57],
+  'Lost the Conference Finals': [48, 61], 'Lost the NBA Finals': [50, 64], 'WON THE NBA FINALS': [52, 67],
+};
 
 export function simNbaSeason(
   c: NbaCareerState, teamQuality: number, rng: () => number,
 ): { line: NbaSeasonLine; notes: string[] } {
   const notes: string[] = [];
+  /* Round 1103: the All-Star vote is in February, so it reads the fanbase he tipped off with, before a title's
+     bump lands. */
+  const fansAtTipOff = c.fanbase;
   const { games, note } = gamesFor(c, rng);
   if (note) { notes.push(`🚑 ${note}`); c.health -= 7; }
   const swing = seasonSwing(rng, c.age);
@@ -727,6 +738,14 @@ export function simNbaSeason(
     }
   }
   line.teamResult = result;
+  /* Round 1103: the club's record, one draw inside the band its result implies, higher for a stronger club.
+     Saved, because the MVP is decided on it; the Season Center shows this record when the key is there. */
+  {
+    const [lo, hi] = NBA_RECORD_BANDS[result] ?? NBA_RECORD_BANDS[NBA_MISSED_PLAYOFFS];
+    const t = clampTo(0.5 + (strength - 78) / 36 + (rng() - 0.5) * 0.6, 0, 1);
+    line.clubWins = Math.round((lo + Math.round((hi - lo) * t)) * L / 82);
+    line.clubLosses = L - line.clubWins;
+  }
 
   // Round 103: the postseason is its own performance, not a sentence.
   const depth = playoffDepthOf(poStage >= 0, poStage);
@@ -747,72 +766,44 @@ export function simNbaSeason(
     if (cn) notes.push(cn);
   }
 
-  /* Round 123: MVP used to be gated on an overall of 92, and across 300 full
-     careers the highest peak the engine ever produced was 91, so it fired
-     exactly zero times. Not rarely. Never. All-NBA was a bare threshold, so
-     once you cleared it you cleared it every year forever. Both are now a
-     draw against the rest of the league: fifteen players are All-NBA out of
-     roughly a hundred and fifty starters, one man is MVP. See
-     careerAwards.ts. */
-  if (c.seasons.length === 0 && wonAward(rng, 'nba', 'nbaRoy', c.pos, statScore)) {
-    line.awards.push('Rookie of the Year'); notes.push('🏆 Rookie of the Year.');
-  }
-  if (games >= 62 && wonAward(rng, 'nba', 'allNba', c.pos, statScore)) {
-    line.awards.push('All-NBA'); c.allNbas += 1; notes.push('⭐ All-NBA.');
-  }
-  if (games >= 62 && wonAward(rng, 'nba', 'nbaMvp', c.pos, statScore)) {
-    line.awards.push('MVP'); c.mvps += 1; notes.push('👑 LEAGUE MVP.');
-  }
-
-  // ── Round 57: the rest of the trophy case ──
-  // The old code only had Rookie of the Year, All-NBA, MVP and Finals MVP, so a
-  // rim protecting center or a bench scorer could put together a great career
-  // and never win anything. Every archetype now has something to chase.
-  //
-  // Round 123: the archetype and stat gates below are kept exactly as they
-  // were, because they are about WHO is even in the running for a given
-  // trophy, which is a different question from whether he beat anybody. The
-  // coin flip that used to follow each one is what got replaced.
-  const isBig = c.pos === 'C' || c.pos === 'PF';
-  if (a.rebounding >= 1.3 && rpg >= NBA_DPOY_RPG_GATE && games >= 62 && wonAward(rng, 'nba', 'nbaDpoy', c.pos, statScore)) {
-    line.awards.push('Defensive Player of the Year'); notes.push('🛡️ DEFENSIVE PLAYER OF THE YEAR.');
-  }
-  if (games >= 62 && wonAward(rng, 'nba', 'allDefensive', c.pos, statScore)) {
-    line.awards.push('All-Defensive Team'); notes.push('🔒 All-Defensive Team.');
-  }
-  /* Round 1103: a stat title is a league fact, so its gate is the league's. He has to qualify by the real
-     minimum for that season, and his average has to beat that year's leader: a bar drawn around the ten
-     sourced league leading averages for the era (their mean, give or take 1.73 of their standard deviations,
-     which is a flat draw with their spread). Three draws, always taken, one a title. The draw behind each is
-     the old one. */
-  const uPts = rng(); const uAst = rng(); const uReb = rng();
-  const titleBar = (stat: 'pts' | 'reb' | 'ast', u: number): number => { const b = nbaLeaderBar(stat, c.year); return b.mean + b.sd * (u - 0.5) * 3.46; };
-  const qualifies = (avg: number, needed: number): boolean => nbaQualifiesForStatTitle(games, avg * games, needed, c.year, L, NBA_AWARD_RULES);
-  if (qualifies(ppg, NBA_AWARD_RULES.statTitleTotalsBefore.pts) && ppg >= titleBar('pts', uPts) && wonAward(rng, 'nba', 'scoringTitle', c.pos, statScore)) {
-    line.awards.push('Scoring Champion'); notes.push('🔥 Scoring champion.');
-  }
-  if (qualifies(apg, NBA_AWARD_RULES.statTitleTotalsBefore.ast) && apg >= titleBar('ast', uAst) && wonAward(rng, 'nba', 'assistsTitle', c.pos, statScore)) {
-    line.awards.push('Assists Leader'); notes.push('🎯 Led the league in assists.');
-  }
-  if (isBig && qualifies(rpg, NBA_AWARD_RULES.statTitleTotalsBefore.reb) && rpg >= titleBar('reb', uReb) && wonAward(rng, 'nba', 'reboundsTitle', c.pos, statScore)) {
-    line.awards.push('Rebounding Champion'); notes.push('🧲 Led the league in rebounds.');
-  }
-  // Most Improved needs a real jump from last season, not just a good year.
+  /* Round 123: an award is a draw against the rest of the league, never a bare threshold (MVP used to be
+     gated on an overall of 92 the engine never reached, so it fired exactly zero times, and All-NBA was a
+     threshold you cleared every year forever). See careerAwards.ts.
+     Round 1103: the season's awards are decided TOGETHER, in one pass that knows the club's record
+     (nbaCareerAwards.ts). MVP needs the All-NBA First Team and a playoff club, the defensive awards read a
+     defence score, All-Rookie is for a first season, the Rookie of the Year is on its first team, and the
+     real games rule applies from 2023-24. Finals MVP stays above, inside the title it belongs to. */
   const prev = c.seasons[c.seasons.length - 1];
-  if (prev && prev.games >= 40 && ppg - prev.ppg >= NBA_MIP_JUMP_GATE && games >= 62 && wonAward(rng, 'nba', 'mostImproved', c.pos, statScore)) {
-    line.awards.push('Most Improved Player'); notes.push('📈 Most Improved Player.');
-  }
-  // Sixth Man is for solid production on a low usage archetype, and since
-  // Round 182 for ACTUAL bench players, which is what the award is: a real
-  // second-unit season of 14 a night finally has its trophy. The old
-  // archetype gate stays so pre-182 saves and harness careers keep their
-  // eligibility unchanged.
-  if ((c.role === 'backup' || a.scoring <= 0.9) && ppg >= NBA_SIXTH_MAN_PPG_GATE && games >= 62 && wonAward(rng, 'nba', 'sixthMan', c.pos, statScore)) {
-    line.awards.push('Sixth Man of the Year'); notes.push('🪑 Sixth Man of the Year.');
-  }
-  if (c.age >= 22 && c.seasons.length <= 1 && wonAward(rng, 'nba', 'allRookie', c.pos, statScore)) {
-    line.awards.push('All-Rookie Team'); notes.push('🌱 All-Rookie Team.');
-  }
+  const won = decideNbaAwards(rng, {
+    pos: c.pos, defenceRep: (NBA_ARCH_DEFENSE[a.id] ?? NBA_DEFENSE_UNKNOWN).rep,
+    bench: c.role === 'backup', rookie: c.seasons.length === 0,
+    year: c.year, seasonLength: L, games,
+    ppg, rpg, apg, spg: stat.spg, bpg: stat.bpg,
+    winShare: (line.clubWins ?? 0) / L, madePlayoffs: result !== NBA_MISSED_PLAYOFFS,
+    fanbase: fansAtTipOff,
+    prev: prev && prev.teamResult !== 'SUSPENDED' ? { year: prev.year, games: prev.games, ppg: prev.ppg, rpg: prev.rpg, apg: prev.apg } : null,
+    everAllNba: c.allNbas > 0,
+  });
+  for (const award of won.awards) line.awards.push(award);
+  if (won.allStar) { line.allStar = won.allStar; c.allStars = (c.allStars ?? 0) + 1; }
+  if (won.allNbaTeam) { line.allNbaTeam = won.allNbaTeam; c.allNbas += 1; }
+  if (won.allDefensiveTeam) line.allDefensiveTeam = won.allDefensiveTeam;
+  if (won.allRookieTeam) line.allRookieTeam = won.allRookieTeam;
+  const has = (award: string): boolean => won.awards.includes(award);
+  const TEAM = ['', 'First', 'Second', 'Third'];
+  /* The notes keep their emoji: the season curtain tones a line by the first one. */
+  if (won.allStar) notes.push(won.allStar === 'starter' ? '⭐ All-Star starter.' : '⭐ All-Star reserve.');
+  if (has('Rookie of the Year')) notes.push('🏆 Rookie of the Year.');
+  if (won.allNbaTeam) notes.push(`⭐ All-NBA ${TEAM[won.allNbaTeam]} Team.`);
+  if (has('MVP')) { c.mvps += 1; notes.push('👑 LEAGUE MVP.'); }
+  if (has('Defensive Player of the Year')) notes.push('🛡️ DEFENSIVE PLAYER OF THE YEAR.');
+  if (won.allDefensiveTeam) notes.push(`🔒 All-Defensive ${TEAM[won.allDefensiveTeam]} Team.`);
+  if (has('Scoring Champion')) notes.push('🔥 Scoring champion.');
+  if (has('Assists Leader')) notes.push('🎯 Led the league in assists.');
+  if (has('Rebounding Champion')) notes.push('🧲 Led the league in rebounds.');
+  if (has('Most Improved Player')) notes.push('📈 Most Improved Player.');
+  if (has('Sixth Man of the Year')) notes.push('🪑 Sixth Man of the Year.');
+  if (won.allRookieTeam) notes.push(`🌱 All-Rookie ${TEAM[won.allRookieTeam]} Team.`);
 
   c.earnings += c.salary;
   // Round 98: tell the player when the season itself was the story.
@@ -1161,8 +1152,11 @@ export function nbaLegacyOf(c: NbaCareerState): NbaLegacy {
      ceiling career gets in 66 percent of the time. */
   /* Round 1103: only the points of seasons on the new line are scaled, so a career with no new season adds
      exactly nothing and its score, verdict and ballot are the ones it was told. */
-  const newPts = c.seasons.reduce((n, s) => n + (isNbaNewLine(s) ? s.ppg * s.games : 0), 0);
-  const read = legacyRead(NBA_LEGACY_WEIGHTS[hallCalibrationOf(c)], {
+  const cal = hallCalibrationOf(c);
+  /* Calibration 1 is the Round 123 formula to the last bit: a career read on it retired before the new line
+     existed, so it has no season to scale, and the constant is never applied to it. */
+  const newPts = cal === 1 ? 0 : c.seasons.reduce((n, s) => n + (isNbaNewLine(s) ? s.ppg * s.games : 0), 0);
+  const read = legacyRead(NBA_LEGACY_WEIGHTS[cal], {
     pos: c.pos, seasons: c.seasons.length,
     awards: { rings: c.rings, mvps: c.mvps, finalsMvps: c.finalsMvps, allNbas: c.allNbas },
     totals: { ...t, pts: t.pts + Math.round(newPts * (NBA_LEGACY_NEW_LINE_SCALE - 1)) },
@@ -1176,7 +1170,7 @@ export function nbaLegacyOf(c: NbaCareerState): NbaLegacy {
     : score >= 170 ? 'A long, real NBA career'
     : 'Ten-day contracts and what-ifs';
   const bullets = [
-    `${c.seasons.length} seasons, ${c.rings} ring${c.rings === 1 ? '' : 's'}, ${c.mvps} MVP${c.mvps === 1 ? '' : 's'}, ${c.finalsMvps} Finals MVP${c.finalsMvps === 1 ? '' : 's'}, ${c.allNbas} All-NBA`,
+    `${c.seasons.length} seasons, ${c.rings} ring${c.rings === 1 ? '' : 's'}, ${c.mvps} MVP${c.mvps === 1 ? '' : 's'}, ${c.finalsMvps} Finals MVP${c.finalsMvps === 1 ? '' : 's'}, ${c.allNbas} All-NBA${(c.allStars ?? 0) > 0 ? `, ${c.allStars} All-Star` : ''}`,
     `${t.pts.toLocaleString()} points, ${t.reb.toLocaleString()} rebounds, ${t.ast.toLocaleString()} assists in ${formatNumber(t.games)} games`,
     `${Math.round(c.earnings)}M career earnings, ${c.draftPick > 0 ? `drafted pick ${c.draftPick}` : 'undrafted signing'}`,
   ];

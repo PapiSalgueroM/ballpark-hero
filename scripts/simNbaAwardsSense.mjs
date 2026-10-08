@@ -99,6 +99,10 @@ const ELITE_TD_FLOOR = 2;
 const SPREAD_1103 = { everMvp: [19.05, 18.17, 18.63, 17.98, 18.3], everAllNba: [64.77, 64.1, 63.63, 63.63, 64.02] };
 const E_MEAN_TOL = 0.08;
 const E_SD_TOL = 0.06;
+/* B3: seasons under 65 games before 2023-24 holding an award the games rule names, in a full size run. */
+const UNDER65_FLOOR = 1;
+/* B5: how many times the scorers' All-Defensive rate the defenders' must be. */
+const B5_FACTOR = 3;
 
 /* ------------------------------------------------------------------ */
 /* Controls: one line of SOURCE swapped in memory, never a file        */
@@ -112,6 +116,9 @@ const FIELD_PG_ROW = pgRow ? pgRow[0] : 'the PG row of LEAGUE.nba is not in care
 const FIELD_PG_STALE = pgRow ? `    PG: { mean: ${(Number(pgRow[1]) + Number(pgRow[2])).toFixed(1)}, sd: ${pgRow[2]} },` : '';
 const scaleLine = srcOf('src/lib/nbaMyCareer.ts').match(/^export const NBA_LEGACY_NEW_LINE_SCALE: number = [0-9.]+;$/m);
 const LEGACY_SCALE_LINE = scaleLine ? scaleLine[0] : 'the legacy scale constant is not in nbaMyCareer.ts';
+const awardMvpRow = srcOf('src/lib/nbaCareerAwards.ts').match(/^ {2}mvp: \{ PG: \[([-0-9.]+), ([0-9.]+)\], (.*)$/m);
+const AWARD_FIELD_ROW = awardMvpRow ? awardMvpRow[0] : 'the mvp row of NBA_FIELD is not in nbaCareerAwards.ts';
+const AWARD_FIELD_STALE = awardMvpRow ? `  mvp: { PG: [${(Number(awardMvpRow[1]) + Number(awardMvpRow[2])).toFixed(2)}, ${awardMvpRow[2]}], ${awardMvpRow[3]}` : '';
 const CONTROLS = {
   /* C: one NFL All-Pro grade moved by a hundredth. Judged under SENSE_PROVE_OTHERS=1. */
   othersport: { file: 'src/lib/careerAwards.ts', find: "  QB: { pool: 32, slots: 1, grade: 0.25 },\n  RB:", put: "  QB: { pool: 32, slots: 1, grade: 0.26 },\n  RB:", needs: 'C' },
@@ -119,24 +126,38 @@ const CONTROLS = {
      line itself, so the field, the rival, the awards and the Hall may follow it red: `may` lists them. */
   oldassists: { file: 'src/lib/nbaMyCareer.ts',
     find: '  const apg = clampTo((0.045 + d * 0.0052) * a.playmaking * NBA_POS_AST[input.pos] * minutes * era.ast * (0.92 + u5 * 0.16), 0.3, po ? 14 : 13);',
-    put: '  const apg = clampTo((1.5 + d * 0.22) * a.playmaking * (bench ? 0.6 : 1) + u5 * 2, 0.3, po ? 14 : 13);', needs: 'A1,A3', may: 'A2,E,R,H,B6a' },
-  /* E: the PG row of the field one standard deviation stale. The awards and the bridge read it, so they may follow. */
-  stalefield: { file: 'src/lib/careerAwards.ts', find: FIELD_PG_ROW, put: FIELD_PG_STALE, needs: 'E', may: 'R,H,B6a' },
+    put: '  const apg = clampTo((1.5 + d * 0.22) * a.playmaking * (bench ? 0.6 : 1) + u5 * 2, 0.3, po ? 14 : 13);', needs: 'A1,A3', may: 'A2,E,R,H,B4,B6' },
+  /* E: the PG row of the season score's field one standard deviation stale. Finals MVP and the bridge read it. */
+  stalefield: { file: 'src/lib/careerAwards.ts', find: FIELD_PG_ROW, put: FIELD_PG_STALE, needs: 'E', may: 'R,H,B6' },
+  /* E: the PG row of the MVP score's field (NBA_FIELD) one standard deviation stale. The league's awards read it. */
+  staleawardfield: { file: 'src/lib/nbaCareerAwards.ts', find: AWARD_FIELD_ROW, put: AWARD_FIELD_STALE, needs: 'E', may: 'H,B4,B6' },
   /* R: the raw season score handed to the rival, no bridge. */
   nobridge: { file: 'src/lib/nbaMyCareer.ts', find: "    for (const n of judgeRivalSeason(c.rival, bridged, c.name, 'nba', rng)) notes.push(n);", put: "    for (const n of judgeRivalSeason(c.rival, statScore, c.name, 'nba', rng)) notes.push(n);", needs: 'R' },
   /* H: the legacy constant back to 1. Refuses when it already is 1 (then nomvpworth is the control H has). */
   noscale: { file: 'src/lib/nbaMyCareer.ts', find: LEGACY_SCALE_LINE, put: 'export const NBA_LEGACY_NEW_LINE_SCALE: number = 1;', needs: 'H' },
   /* H: an MVP worth nothing to the legacy score of a career retiring today. */
   nomvpworth: { file: 'src/lib/nbaMyCareer.ts', find: 'const NBA_LEGACY_V2: LegacyWeights = {\n  awards: { rings: 95, mvps: 155, finalsMvps: 90, allNbas: 48 },', put: 'const NBA_LEGACY_V2: LegacyWeights = {\n  awards: { rings: 95, mvps: 0, finalsMvps: 90, allNbas: 48 },', needs: 'H' },
+  /* B1: MVP decided on its own again, with no First Team gate and no playoff gate. It then also ignores the
+     games tests the First Team carried, and there are more of them, so B3, B6 and the Hall may follow. */
+  independent: { file: 'src/lib/nbaCareerAwards.ts', find: '  const mvp = out.allNbaTeam === 1 && x.madePlayoffs && zMvp > bar(150, 1, G_MVP, g1);', put: '  const mvp = zMvp > bar(150, 1, G_MVP, g1);', needs: 'B1', may: 'B3,B6,H' },
+  /* B2: the rookie test back to what the old block asked (22 or older, a first or second season). */
+  rookieage: { file: 'src/lib/nbaMyCareer.ts', find: "    bench: c.role === 'backup', rookie: c.seasons.length === 0,", put: "    bench: c.role === 'backup', rookie: c.age >= 22 && c.seasons.length <= 1,", needs: 'B2', may: 'B6' },
+  /* B3: the old block's 62 games in every era, in place of the real rule. Both halves must go red. */
+  bar62: { file: 'src/lib/nbaCareerAwards.ts', find: '    overBar: x.games >= nbaAwardGamesBar(x.year, x.seasonLength, NBA_AWARD_RULES),', put: '    overBar: x.games >= 62,', needs: 'B3', may: 'B6,H' },
+  /* B5: the defensive awards read the MVP score again, the way one season score used to decide everything. */
+  scorersdefend: { file: 'src/lib/nbaCareerAwards.ts', find: '  const zDef = zOf(v.defense, fieldRow(NBA_FIELD.defense)) - x.defenceRep;', put: '  const zDef = zMvp;', needs: 'B5', may: 'B6' },
+  /* D: NBA Front Office adding its own sum again instead of calling the shared score. */
+  privatecopy: { file: 'src/lib/nbaSeasonStats.ts', find: "  return nbaMvpValue(nbaProduction(foPerGame(p, 'pts'), foPerGame(p, 'reb'), foPerGame(p, 'ast')), winShare(league, p.team), NBA_MVP_WIN_WEIGHT);", put: "  return foPerGame(p, 'pts') + foPerGame(p, 'reb') + foPerGame(p, 'ast') + NBA_MVP_WIN_WEIGHT * winShare(league, p.team);", needs: 'D' },
+  /* D: the career's win weight drifting off NBA Front Office's. */
+  weightdrift: { file: 'src/lib/nbaCareerAwards.ts', find: 'export const NBA_CAREER_MVP_WIN_WEIGHT = 20;', put: 'export const NBA_CAREER_MVP_WIN_WEIGHT = 19;', needs: 'D', may: 'E,B6' },
 };
-/* Controls that swap more than one line of one file (each anchor exactly once, each swap must change the text). */
+/* Controls that swap more than one line of one file (each anchor exactly once, the edit must change the text). */
 const MULTI = {
-  /* B6a: the four grades back to what they were before Round 1103. The Hall counts awards, so it may follow. */
-  oldgrades: { file: 'src/lib/careerAwards.ts', needs: 'B6a', may: 'H', swaps: [
-    [/^const NBA_ALL_NBA: FieldConfig = \{ pool: 150, slots: 15, grade: [-0-9.]+ \};$/m, 'const NBA_ALL_NBA: FieldConfig = { pool: 150, slots: 15, grade: 0.15 };'],
-    [/^const NBA_MVP: FieldConfig = \{ pool: 150, slots: 1, grade: [-0-9.]+ \};$/m, 'const NBA_MVP: FieldConfig = { pool: 150, slots: 1 };'],
-    [/^const NBA_FINALS_MVP: FieldConfig = \{ pool: 7, slots: 1, grade: [-0-9.]+ \};$/m, 'const NBA_FINALS_MVP: FieldConfig = { pool: 7, slots: 1, grade: 0.3 };'],
-    [/^const NBA_ALL_DEF: FieldConfig = \{ pool: 150, slots: 10, grade: [-0-9.]+ \};$/m, 'const NBA_ALL_DEF: FieldConfig = { pool: 150, slots: 10, grade: 0.2 };'],
+  /* B6: the All-NBA and MVP grades back to what careerAwards.ts carried before Round 1103 (0.15 and none). Fewer
+     of both follow, so the Hall and the All-Star ratio may too. */
+  oldgrades: { file: 'src/lib/nbaCareerAwards.ts', needs: 'B6', may: 'H,B4', swaps: [
+    [/^const G_ALL_NBA = [-0-9.]+;$/m, 'const G_ALL_NBA = 0.15;'],
+    [/^const G_MVP = [-0-9.]+;$/m, 'const G_MVP = 0;'],
   ] },
 };
 for (const [k, v] of Object.entries(MULTI)) CONTROLS[k] = v;
@@ -153,34 +174,45 @@ if (TRY_SCALE) {
   if (!(Number(TRY_SCALE) > 0)) { console.error('SENSE_TRY_SCALE needs a number'); process.exit(2); }
   edits.push({ label: `try scale ${TRY_SCALE}`, file: 'src/lib/nbaMyCareer.ts', swaps: [[LEGACY_SCALE_LINE, `export const NBA_LEGACY_NEW_LINE_SCALE: number = ${Number(TRY_SCALE)};`]], sameOk: true });
 }
-let swapped = 0;
-const swapPlugin = {
-  name: 'sense-control',
-  setup(b) {
-    if (!edits.length) return;
-    b.onLoad({ filter: /[.]ts$/ }, args => {
-      const mine = edits.filter(e => args.path.replace(/\\/g, '/').endsWith(e.file));
-      if (!mine.length) return undefined;
-      const src = norm(readFileSync(args.path, 'utf8'));
-      let out = src;
-      for (const e of mine) {
-        const was = out;
-        for (const [find, put] of e.swaps) {
-          const hits = typeof find === 'string' ? out.split(find).length - 1 : (out.match(new RegExp(find.source, 'gm')) ?? []).length;
-          if (hits !== 1) { console.error(`${e.label}: anchor ${String(find).slice(0, 70)} found ${hits} times in ${e.file}, expected exactly 1. Refusing to run.`); process.exit(2); }
-          out = out.replace(find, put);
-        }
-        if (out === was && !e.sameOk) { console.error(`${e.label}: the swap changed nothing. Refusing to run.`); process.exit(2); }
-        swapped++;
-      }
-      return { contents: out, loader: 'ts' };
-    });
-  },
-};
-
-const OUT = path.join(os.tmpdir(), `nba-sense-${process.pid}.mjs`);
+/** One file's source with a list of edits applied: each anchor exactly once, each edit must change the text. */
+function editedSource(list, file, src, onApplied = () => {}) {
+  let out = src;
+  for (const e of list.filter(x => file.replace(/\\/g, '/').endsWith(x.file))) {
+    const was = out;
+    for (const [find, put] of e.swaps) {
+      const hits = typeof find === 'string' ? out.split(find).length - 1 : (out.match(new RegExp(find.source, 'gm')) ?? []).length;
+      if (hits !== 1) { console.error(`${e.label}: anchor ${String(find).slice(0, 70)} found ${hits} times in ${e.file}, expected exactly 1. Refusing to run.`); process.exit(2); }
+      out = out.replace(find, put);
+    }
+    if (out === was && !e.sameOk) { console.error(`${e.label}: the swap changed nothing. Refusing to run.`); process.exit(2); }
+    onApplied(e);
+  }
+  return out;
+}
+/** A source file as this run's control sees it (what a source check must read, never the bare file). */
+const underControl = rel => editedSource(edits, rel, srcOf(rel));
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-await build({
+/** The engine bundled with a list of source edits swapped in memory (a plugin, never a file). */
+async function bundleWith(list, tag) {
+  let applied = 0;
+  const plugin = {
+    name: 'sense-control',
+    setup(b) {
+      if (!list.length) return;
+      b.onLoad({ filter: /[.]ts$/ }, args => {
+        if (!list.some(e => args.path.replace(/\\/g, '/').endsWith(e.file))) return undefined;
+        return { contents: editedSource(list, args.path, norm(readFileSync(args.path, 'utf8')), () => { applied++; }), loader: 'ts' };
+      });
+    },
+  };
+  const out = path.join(os.tmpdir(), `nba-sense-${process.pid}-${tag}.mjs`);
+  await build({ ...BUNDLE, outfile: out, plugins: [plugin] });
+  if (applied !== list.length) { console.error(`${list.map(e => e.label).join(', ')}: ${applied} of ${list.length} swaps were applied (a file was never bundled). Refusing to run.`); process.exit(2); }
+  const mod = await import(pathToFileURL(out).href);
+  try { unlinkSync(out); } catch { /* another run may have cleaned it */ }
+  return mod;
+}
+const BUNDLE = {
   stdin: {
     contents: [
       "export * as nba from './src/lib/nbaMyCareer.ts';",
@@ -194,15 +226,16 @@ await build({
       "export * as loop from './src/lib/nbaCareerLoop.ts';",
       "export * as norms from './src/data/nbaLeagueNorms.ts';",
       "export { seasonSwing } from './src/lib/careerVariance.ts';",
+      "export * as nbaAwards from './src/lib/nbaCareerAwards.ts';",
+      "export * as decision from './src/lib/awardDecision.ts';",
+      "export { NBA_BADGES } from './src/lib/careerBadges.ts';",
     ].join('\n'),
     resolveDir: ROOT, loader: 'ts',
   },
-  bundle: true, format: 'esm', platform: 'node', outfile: OUT, logLevel: 'error',
-  alias: { '@': path.join(ROOT, 'src') }, plugins: [swapPlugin],
-});
-if (swapped !== edits.length) { console.error(`${edits.map(e => e.label).join(', ')}: ${swapped} of ${edits.length} swaps were applied (a file was never bundled). Refusing to run.`); process.exit(2); }
-const E = await import(pathToFileURL(OUT).href);
-try { unlinkSync(OUT); } catch { /* another run may have cleaned it */ }
+  bundle: true, format: 'esm', platform: 'node', logLevel: 'error',
+  alias: { '@': path.join(ROOT, 'src') },
+};
+const E = await bundleWith(edits, 'run');
 const { nba, nfl, mlb, nhl } = E;
 
 function mulberry32(a) {
@@ -229,7 +262,8 @@ const ARCH_IDS = POS.flatMap(p => nba.NBA_ARCHETYPES[p].map(a => a.id));
 /* ------------------------------------------------------------------ */
 /** Plays `careers` NBA careers on one seed, the board's own order. Every season is kept with what the engine
  *  knew going in (rating, morale, club, role, seasons played), so a section can replay it through a function. */
-function playFleet(seed, careers) {
+function playFleet(seed, careers, M = E) {
+  const nba = M.nba;
   const rnd = mulberry32(seed);
   Math.random = rnd;
   const seasons = [];
@@ -262,7 +296,7 @@ function playFleet(seed, careers) {
     }
     /* Read while the career is still open: a career retiring today is told on today's calibration (Round 1051). */
     const leg = nba.nbaLegacyOf(c);
-    const hall = E.hallRecordFor(E.NBA_CAREER_HALL, c);
+    const hall = M.hallRecordFor(M.NBA_CAREER_HALL, c);
     const tot = nba.nbaCareerTotals(c);
     out.push({ i, pos, arch: arch.id, era, seasons: c.seasons.length, mvps: c.mvps, allNbas: c.allNbas, allStars: c.allStars ?? 0, rings: c.rings, finalsMvps: c.finalsMvps,
       score: leg.score, inducted: hall.outcome === 'inducted', firstBallot: !!hall.firstBallot, my: c.rival?.myYears ?? 0, his: c.rival?.hisYears ?? 0, pts: tot.pts });
@@ -338,7 +372,88 @@ function measure(f) {
   m.wing8ast = r3(share(wings.filter(s => s.line.apg >= 8).length, wings.length));
   /* The field as the fleet lives it: mean and sd of the season score by position, half a schedule or more. */
   m.field = Object.fromEntries(POS.map(p => { const v = S.filter(s => s.pos === p && s.line.games >= 41).map(s => E.awards.nbaSeasonScore(s.line)); return [p, [r2(mean(v)), r2(sdOf(v))]]; }));
+  /* Section B's counts: do the awards agree with each other, the club and the rules. Plain counts, so a check
+     on them can be exact. They read the optional keys the one pass writes; on main every one of them is absent. */
+  const any = (s, list) => list.some(a => has(s.line, a));
+  const count = fn => S.filter(fn).length;
+  const len = s => nba.nbaSeasonGames ? nba.nbaSeasonGames(s.line.year) : 82;
+  const barOf = s => (E.decision && E.norms ? E.decision.nbaAwardGamesBar(s.line.year, len(s), E.norms.NBA_AWARD_RULES) : 0);
+  m.b = {
+    mvp: mvp.length,
+    mvpMissed: mvp.filter(s => s.line.teamResult === nba.NBA_MISSED_PLAYOFFS).length,
+    mvpOffFirst: mvp.filter(s => s.line.allNbaTeam !== 1).length,
+    mvpAndMip: mvp.filter(s => has(s.line, 'Most Improved Player')).length,
+    mip: count(s => has(s.line, 'Most Improved Player')),
+    mipAfterAllNba: count(s => has(s.line, 'Most Improved Player') && s.everAllNba),
+    roy: roy.length,
+    royOffFirst: roy.filter(s => s.line.allRookieTeam !== 1).length,
+    allRookieFirstSeason: count(s => s.n === 0 && has(s.line, 'All-Rookie Team')),
+    allRookieLater: count(s => s.n !== 0 && has(s.line, 'All-Rookie Team')),
+    barAwardsFrom2023: count(s => s.line.year >= 2023 && any(s, BAR_AWARDS)),
+    underBarFrom2023: count(s => s.line.year >= 2023 && any(s, BAR_AWARDS) && s.line.games < barOf(s)),
+    under65Before2023: count(s => s.line.year < 2023 && any(s, BAR_AWARDS) && s.line.games < 65),
+    sixth: count(s => has(s.line, 'Sixth Man of the Year')),
+    sixthStarter: count(s => has(s.line, 'Sixth Man of the Year') && s.role !== 'backup'),
+    underHalf: count(s => any(s, HALF_AWARDS) && s.line.games * 2 < len(s)),
+    allNbaNoAllStar: count(s => has(s.line, 'All-NBA') && !has(s.line, 'All-Star')),
+    /* The saved string and the optional key that names the team must tell the same story. */
+    keyMismatch: count(s => has(s.line, 'All-NBA') !== (s.line.allNbaTeam != null) || has(s.line, 'All-Star') !== (s.line.allStar != null)
+      || has(s.line, 'All-Defensive Team') !== (s.line.allDefensiveTeam != null) || has(s.line, 'All-Rookie Team') !== (s.line.allRookieTeam != null)),
+    dpoyOffTeam: count(s => has(s.line, 'Defensive Player of the Year') && s.line.allDefensiveTeam == null),
+    starters: count(s => s.line.allStar === 'starter'),
+    noRecord: count(s => s.line.games > 0 && !(s.line.clubWins >= 0 && s.line.clubWins + s.line.clubLosses === len(s))),
+  };
   return m;
+}
+/* The five awards the real games rule names, and everything the game's own half season floor covers (a Finals
+   MVP is left out on purpose: a man hurt in March can own the Finals). */
+const BAR_AWARDS = ['All-NBA', 'MVP', 'Defensive Player of the Year', 'All-Defensive Team', 'Most Improved Player'];
+const HALF_AWARDS = ['All-Star', 'Rookie of the Year', 'All-NBA', 'MVP', 'Defensive Player of the Year', 'All-Defensive Team', 'Scoring Champion', 'Assists Leader', 'Rebounding Champion', 'Most Improved Player', 'Sixth Man of the Year', 'All-Rookie Team'];
+
+/** The input the engine hands decideNbaAwards for a recorded season, rebuilt from what the fleet kept. Used to
+ *  MEASURE (the field, the fit), never to decide. */
+function inputOf(s) {
+  const L = nba.nbaSeasonGames(s.line.year);
+  const prev = s.prev && s.prev.teamResult !== 'SUSPENDED' ? { year: s.prev.year, games: s.prev.games, ppg: s.prev.ppg, rpg: s.prev.rpg, apg: s.prev.apg } : null;
+  return { pos: s.pos, defenceRep: (nba.NBA_ARCH_DEFENSE[s.arch] ?? { rep: 0 }).rep, bench: s.role === 'backup', rookie: s.n === 0,
+    year: s.line.year, seasonLength: L, games: s.line.games, ppg: s.line.ppg, rpg: s.line.rpg, apg: s.line.apg, spg: s.line.spg ?? 0, bpg: s.line.bpg ?? 0,
+    winShare: (s.line.clubWins ?? 0) / L, madePlayoffs: s.line.teamResult !== nba.NBA_MISSED_PLAYOFFS, fanbase: s.fan, prev, everAllNba: s.everAllNba };
+}
+const HAS_PASS = () => typeof E.nbaAwards?.decideNbaAwards === 'function';
+/** NBA_FIELD as the fleet lives it: mean and sd of each score the one pass reads, half a season or more. */
+function awardFieldOf(f) {
+  const rows = f.seasons.filter(s => s.line.games > 0).map(s => { const x = inputOf(s); return { pos: s.pos, x, v: E.nbaAwards.nbaAwardValues(x) }; }).filter(r => r.v.half);
+  const ms = v => ({ mean: mean(v), sd: sdOf(v), n: v.length });
+  const byPos = key => Object.fromEntries(POS.map(p => [p, ms(rows.filter(r => r.pos === p).map(r => r.v[key]))]));
+  return { rows, mvp: byPos('mvp'), defense: byPos('defense'), production: byPos('production'),
+    bench: ms(rows.filter(r => r.x.bench).map(r => r.v.benchPts)), jump: ms(rows.filter(r => r.v.jump !== null).map(r => r.v.jump)), fans: ms(rows.map(r => r.x.fanbase)) };
+}
+/** Each award's expected rate a career as a function of its grade, worked out exactly from every season's z
+ *  against THIS fleet's own field (the chance a z beats a bar is exp(-exp(-t)) with t the bar's own scale; two
+ *  bars on the same draw are the smaller t when both must hold and the larger when either may). */
+function awardFit(f) {
+  const R = E.norms.NBA_AWARD_RULES;
+  const fld = awardFieldOf(f);
+  const t = (z, n, g) => { const L = Math.log(Math.max(2, n)); const root = Math.sqrt(2 * L); const loc = root - (Math.log(L) + Math.log(4 * Math.PI)) / (2 * root); return (z - g - loc) * root; };
+  const P = x => Math.exp(-Math.exp(-x));
+  const z = (val, row) => (val - row.mean) / row.sd;
+  const rows = fld.rows.map(r => ({ x: r.x, v: r.v, zMvp: z(r.v.mvp, fld.mvp[r.pos]), zDef: z(r.v.defense, fld.defense[r.pos]) - r.x.defenceRep, zProd: z(r.v.production, fld.production[r.pos]), zFans: z(r.x.fanbase, fld.fans), zBench: z(r.v.benchPts, fld.bench), zJump: r.v.jump === null ? null : z(r.v.jump, fld.jump),
+    posExtra: { C: 0, PF: 0, SF: 0.3 }[r.pos] ?? 0.6 }));
+  const n = f.careers.length;
+  const sum = fn => g => rows.reduce((a, r) => a + fn(r, g), 0) / n;
+  const allNbaT = (r, gA) => (r.v.overBar ? Math.max(t(r.zMvp, 30, gA), t(r.zMvp, 15, gA), t(r.zMvp, 10, gA)) : -Infinity);
+  return {
+    field: fld,
+    allNba: sum((r, g) => P(allNbaT(r, g))),
+    mvp: gA => sum((r, g) => (r.v.overBar && r.x.madePlayoffs ? P(Math.min(t(r.zMvp, 30, gA), t(r.zMvp, 150, g))) : 0)),
+    allDef: sum((r, g) => (r.v.overBar ? P(Math.max(t(r.zDef, 30, g), t(r.zDef, 15, g))) : 0)),
+    roy: sum((r, g) => (r.x.rookie ? P(Math.min(t(r.zProd, 9, g), t(r.zProd, 45, g))) : 0)),
+    allRookie: sum((r, g) => (r.x.rookie ? P(Math.max(t(r.zProd, 9, g), t(r.zProd, 4.5, g))) : 0)),
+    dpoy: gD => sum((r, g) => (r.v.overBar ? P(Math.min(Math.max(t(r.zDef, 30, gD), t(r.zDef, 15, gD)), t(r.zDef, 150, g + r.posExtra))) : 0)),
+    sixth: sum((r, g) => (r.x.bench ? P(t(r.zBench, 60, g)) : 0)),
+    mip: sum((r, g) => (r.zJump !== null && r.v.overBar && !r.x.everAllNba ? P(t(r.zJump, 150, g)) : 0)),
+    allStar: gA => sum((r, g) => { const share = r.x.year >= R.allStarFanShareFrom ? R.allStarFanShare : 1; let a = 0; for (const w of [-0.4, -0.2, 0, 0.2, 0.4]) a += P(Math.max(t(share * (r.zFans + w) + (1 - share) * r.zMvp, 15, g), t(r.zMvp, 6.25, g), allNbaT(r, gA))); return a / 5; }),
+  };
 }
 
 const neutralScore = s => E.awards.nbaSeasonScore(E.norms ? E.norms.nbaEraNeutral(s.line, s.line.year) : s.line);
@@ -570,6 +685,7 @@ const aStats = [];
 const fields = [];
 const anchors = [];
 const fits = [];
+const passFits = [];
 const preBase = readBaseline();
 const meanOfSeeds = key => (preBase.nba ? mean(preBase.nba.seeds.map(s => get(s.m, key))) : null);
 const mainGates = preBase.nba ? { rpg11: meanOfSeeds('gates.rpg11'), jump6: meanOfSeeds('gates.jump6'), ppg14: meanOfSeeds('gates.ppg14') } : null;
@@ -582,6 +698,7 @@ for (const seed of SEEDS) {
   fields.push(fieldOf(f));
   if (mainGates) anchors.push(reanchor(f, mainGates));
   fits.push(gradeFit(f));
+  if (HAS_PASS()) passFits.push(awardFit(f));
   console.log(`  seed ${seed}: ${m.seasons} seasons, Hall ${m.inducted}% (first ballot ${m.firstBallot}%), MVPs ${m.perCareer.MVP} a career, All-NBA ${m.perCareer['All-NBA']}, my share ${m.myShare}%, ${((Date.now() - t0) / 1000).toFixed(0)}s`);
 }
 const others = {};
@@ -635,11 +752,45 @@ for (const p of POS) console.log(`    ${p}: { mean: ${fieldMean[p].mean.toFixed(
 if (anchors.length) console.log(`The gates at main's percentile: rebounds for Defensive Player ${anchors.map(a => a.rpg11.toFixed(1)).join(', ')} (was 11, ${mainGates.rpg11.toFixed(2)}% pass); the jump for Most Improved ${anchors.map(a => a.jump6.toFixed(1)).join(', ')} (was 6, ${mainGates.jump6.toFixed(2)}%); points for Sixth Man ${anchors.map(a => a.ppg14.toFixed(1)).join(', ')} (was 14, ${mainGates.ppg14.toFixed(2)}%)`);
 if (preBase.nba) {
   console.log('The grade that holds main\'s rate on this fleet\'s own field (worked out from every season\'s z, not drawn):');
-  for (const a of ['MVP', 'All-NBA', 'All-Defensive Team', 'Finals MVP', 'Rookie of the Year', 'Defensive Player of the Year']) {
+  /* Since the one pass (nbaCareerAwards.ts) only Finals MVP is still decided on the season score alone. */
+  for (const a of (HAS_PASS() ? ['Finals MVP'] : ['MVP', 'All-NBA', 'All-Defensive Team', 'Finals MVP', 'Rookie of the Year', 'Defensive Player of the Year'])) {
     const target = meanOfSeeds(`perCareer.${a}`);
     const g = solveGrade(fits.map(x => x[a]), target);
     const ever = a === 'MVP' ? `; careers with one at that grade ${mean(fits.map(x => x.everMvp(g))).toFixed(2)} percent (main ${meanOfSeeds('everMvp').toFixed(2)})` : a === 'All-NBA' ? `; careers with one at that grade ${mean(fits.map(x => x.everAllNba(g))).toFixed(2)} percent (main ${meanOfSeeds('everAllNba').toFixed(2)})` : '';
     console.log(`    ${a.padEnd(20)} main ${target.toFixed(3)} a career, grade ${g.toFixed(2)}${ever}`);
+  }
+}
+/* What a builder pastes into nbaCareerAwards.ts: NBA_FIELD as this fleet lives it, and the grades that put each
+   award on its target on those rows. */
+const awardFieldMean = passFits.length ? (() => {
+  const rowOf = pick => ({ mean: mean(passFits.map(x => pick(x.field).mean)), sd: mean(passFits.map(x => pick(x.field).sd)) });
+  const byPos = key => Object.fromEntries(POS.map(p => [p, rowOf(fl => fl[key][p])]));
+  return { mvp: byPos('mvp'), defense: byPos('defense'), production: byPos('production'), bench: rowOf(fl => fl.bench), jump: rowOf(fl => fl.jump), fans: rowOf(fl => fl.fans) };
+})() : null;
+if (awardFieldMean) {
+  const pr = r => `[${r.mean.toFixed(2)}, ${r.sd.toFixed(2)}]`;
+  console.log(`\nNBA_FIELD, measured on the simNbaAwardsSense fleet (${SEEDS.length} seed mean, era neutral, half a season or more):`);
+  for (const key of ['mvp', 'defense', 'production']) console.log(`  ${key}: { ${POS.map(p => `${p}: ${pr(awardFieldMean[key][p])}`).join(', ')} },`);
+  for (const key of ['bench', 'jump', 'fans']) console.log(`  ${key}: ${pr(awardFieldMean[key])},`);
+  if (preBase.nba) {
+    const G = E.nbaAwards.NBA_AWARD_GRADES;
+    const tAllNba = meanOfSeeds('perCareer.All-NBA'); const tMvp = meanOfSeeds('perCareer.MVP'); const tDef = meanOfSeeds('perCareer.All-Defensive Team'); const tRoy = meanOfSeeds('perCareer.Rookie of the Year');
+    const gA = solveGrade(passFits.map(x => x.allNba), tAllNba);
+    const gM = solveGrade(passFits.map(x => x.mvp(gA)), tMvp);
+    const gD = solveGrade(passFits.map(x => x.allDef), tDef);
+    const gS = solveGrade(passFits.map(x => x.allStar(gA)), 1.6 * tAllNba);
+    const gR = solveGrade(passFits.map(x => x.roy), 2 * tRoy);
+    console.log('The grade that puts each award on its target, on this fleet\'s own field (worked out, not drawn; committed grade in brackets):');
+    console.log(`    All-NBA        main ${tAllNba.toFixed(3)} a career: ${gA.toFixed(2)} [${G.allNba}]`);
+    console.log(`    MVP            main ${tMvp.toFixed(3)} a career, at that All-NBA grade: ${gM.toFixed(2)} [${G.mvp}]`);
+    console.log(`    All-Defensive  main ${tDef.toFixed(3)} a career: ${gD.toFixed(2)} [${G.allDef}]`);
+    console.log(`    All-Star       1.6 times main's All-NBA (24 picks against 15), ${(1.6 * tAllNba).toFixed(3)} a career: ${gS.toFixed(2)} [${G.allStar}]`);
+    console.log(`    Rookies        twice main's Rookie of the Year, ${(2 * tRoy).toFixed(3)} a career: ${gR.toFixed(2)} [${G.rookie}]; All-Rookie at that grade ${mean(passFits.map(x => x.allRookie(gR))).toFixed(3)} a career`);
+    const tDpoy = meanOfSeeds('perCareer.Defensive Player of the Year'); const tSixth = meanOfSeeds('perCareer.Sixth Man of the Year'); const tMip = meanOfSeeds('perCareer.Most Improved Player');
+    console.log(`    Defensive Player  main ${tDpoy.toFixed(3)} a career, at that All-Defensive grade: ${solveGrade(passFits.map(x => x.dpoy(gD)), tDpoy).toFixed(2)} [${G.dpoy}]`);
+    console.log(`    Sixth Man      main ${tSixth.toFixed(3)} a career: ${solveGrade(passFits.map(x => x.sixth), tSixth).toFixed(2)} [${G.sixth}]`);
+    console.log(`    Most Improved  main ${tMip.toFixed(3)} a career: ${solveGrade(passFits.map(x => x.mip), tMip).toFixed(2)} [${G.mip}]`);
+    console.log(`    at the committed grades the fit expects: All-NBA ${mean(passFits.map(x => x.allNba(G.allNba))).toFixed(3)}, MVP ${mean(passFits.map(x => x.mvp(G.allNba)(G.mvp))).toFixed(3)}, All-Defensive ${mean(passFits.map(x => x.allDef(G.allDef))).toFixed(3)}, All-Star ${mean(passFits.map(x => x.allStar(G.allNba)(G.allStar))).toFixed(3)}, Rookie of the Year ${mean(passFits.map(x => x.roy(G.rookie))).toFixed(3)}`);
   }
 }
 
@@ -740,6 +891,8 @@ if (HAS_LINE) {
   }
 }
 
+/* The award rates held at main's: section B6a while the old block decided them, B6 since the one pass. */
+const B6 = HAS_PASS() ? 'B6' : 'B6a';
 if (!base.nba) exact('baseline', false, 'scripts/data/nbaAwardsSenseBaseline.json has no nba key: record it once with --record-nba-baseline');
 else {
   /* R, the rival: my share of the head to head years stays where main had it. */
@@ -750,13 +903,92 @@ else {
   /* B6a, the award rates the old grades were set for, held where main had them. */
   for (const [award, label] of [['MVP', 'MVPs a career'], ['All-NBA', 'All-NBA a career'], ['All-Defensive Team', 'All-Defensive a career'], ['Finals MVP', 'Finals MVPs a career']]) {
     const careerSd = mean(per.map(m => m.sdCareer[award]));
-    heldAtMain('B6a', base.nba, per, `perCareer.${award}`, `${label} (sd over careers ${r3(careerSd)})`, 'count', careerSd);
+    heldAtMain(B6, base.nba, per, `perCareer.${award}`, `${label} (sd over careers ${r3(careerSd)})`, 'count', careerSd);
   }
   /* How the awards are SPREAD over careers is not main's on this line, and one grade an award cannot make it so
      (see the header). The two shares are held where Round 1103 shipped them, and main's are printed beside. */
   for (const [key, label] of [['everMvp', 'careers with an MVP, percent'], ['everAllNba', 'careers with an All-NBA, percent']]) {
-    heldAt('B6a', SPREAD_1103[key], 6000, per.map(m => m[key]), `${label} (main ${base.nba.seeds.map(s => s.m[key]).join(', ')}: the same awards a career, spread over more careers)`, 'share', 'what Round 1103 shipped,');
+    heldAt(B6, SPREAD_1103[key], 6000, per.map(m => m[key]), `${label} (main ${base.nba.seeds.map(s => s.m[key]).join(', ')}: the same awards a career, spread over more careers)`, 'share', 'what Round 1103 shipped,');
   }
+}
+
+/* B, the awards make sense together (the one pass, nbaCareerAwards.ts). */
+if (HAS_PASS()) {
+  const tot = key => per.reduce((t, m) => t + m.b[key], 0);
+  const list = key => per.map(m => m.b[key]).join(', ');
+  const perCareerOf = a => mean(per.map(m => m.perCareer[a]));
+  const mainOf = a => (base.nba ? mean(base.nba.seeds.map(s => s.m.perCareer[a])) : 0);
+  /* A check whose population is under its floor is empty, and an empty check fails (the floor is stated for a
+     full size run and shrinks with the run). */
+  const sizeShare = Math.min(1, (CAREERS * SEEDS.length) / 30000);
+  const floor = (section, key, min, what) => { const need = Math.ceil(min * sizeShare); banded(section, tot(key) >= need, `${what}: ${tot(key)} in the run (at least ${need}, or the checks on them are empty)`); };
+  exact('B0', tot('keyMismatch') === 0 && tot('dpoyOffTeam') === 0 && tot('noRecord') === 0, `every award string agrees with the key that names its team (${tot('keyMismatch')} seasons off), every Defensive Player is on an All-Defensive team (${tot('dpoyOffTeam')} off), every season has a club record that adds up to its length (${tot('noRecord')} without)`);
+  floor('B1', 'mvp', 300, 'MVP seasons'); floor('B1', 'mip', 100, 'Most Improved seasons');
+  exact('B1', tot('mvpMissed') === 0, `MVP seasons on a club that missed the playoffs: ${list('mvpMissed')} of ${list('mvp')} (main: one in four)`);
+  exact('B1', tot('mvpOffFirst') === 0, `MVP seasons off the All-NBA First Team: ${list('mvpOffFirst')} (main: one in eleven not All-NBA at all)`);
+  exact('B1', tot('mvpAndMip') === 0, `MVP and Most Improved in one season: ${list('mvpAndMip')} (main: one MVP season in four)`);
+  exact('B1', tot('mipAfterAllNba') === 0, `Most Improved after an earlier All-NBA: ${list('mipAfterAllNba')} of ${list('mip')}`);
+  floor('B2', 'roy', 60, 'Rookie of the Year seasons');
+  exact('B2', tot('royOffFirst') === 0, `Rookie of the Year seasons off the All-Rookie First Team: ${list('royOffFirst')} of ${list('roy')} (main: every one)`);
+  exact('B2', tot('allRookieLater') === 0, `All-Rookie outside a first season: ${list('allRookieLater')}`);
+  banded('B2', tot('allRookieFirstSeason') > 0, `All-Rookie selections in first seasons: ${list('allRookieFirstSeason')} (main: none)`);
+  floor('B3', 'barAwardsFrom2023', 2000, 'seasons from 2023-24 with an award the games rule names');
+  exact('B3', tot('underBarFrom2023') === 0, `from 2023-24, seasons under the games bar holding an award the rule names: ${list('underBarFrom2023')} of ${list('barAwardsFrom2023')}`);
+  banded('B3', tot('under65Before2023') >= Math.ceil(UNDER65_FLOOR * sizeShare), `before 2023-24 the rule did not exist: ${list('under65Before2023')} seasons under 65 games hold one of those awards (at least ${Math.ceil(UNDER65_FLOOR * sizeShare)} in the run, so "none before" is seen to fire)`);
+  floor('B3', 'sixth', 100, 'Sixth Man seasons');
+  exact('B3', tot('sixthStarter') === 0, `Sixth Man seasons by a starter: ${list('sixthStarter')} of ${list('sixth')}`);
+  exact('B3', tot('underHalf') === 0, `seasons under half a schedule holding any award but a Finals MVP: ${list('underHalf')}`);
+  exact('B4', tot('allNbaNoAllStar') === 0, `All-NBA seasons without an All-Star selection: ${list('allNbaNoAllStar')}`);
+  { const ratio = per.map(m => m.perCareer['All-Star'] / Math.max(1e-9, m.perCareer['All-NBA']));
+    banded('B4', mean(ratio) >= 1.25 && mean(ratio) <= 2.4, `All-Star selections a career over All-NBA: ${ratio.map(r => r.toFixed(2)).join(', ')}, mean ${mean(ratio).toFixed(2)} (1.25 to 2.4; 24 picks against 15 is 1.6); ${per.map(m => m.perCareer['All-Star']).join(', ')} All-Star a career, ${list('starters')} of them starters`); }
+  { const DEFENDERS = ['pest', 'twoway', 'threed', 'anchor']; const SCORERS = ['scoringpg', 'bucket', 'sniper', 'alpha', 'stretch4', 'stretch'];
+    const byArch = a => mean(per.map(m => m.allDefByArch[a]));
+    const low = DEFENDERS.reduce((x, a) => (byArch(a) < byArch(x) ? a : x)); const high = SCORERS.reduce((x, a) => (byArch(a) > byArch(x) ? a : x));
+    const factor = mean(DEFENDERS.map(byArch)) / Math.max(1e-9, mean(SCORERS.map(byArch)));
+    banded('B5', byArch(low) > byArch(high), `All-Defensive a career: every defender above every scorer (the lowest defender, ${low}, ${byArch(low).toFixed(2)}; the highest scorer, ${high}, ${byArch(high).toFixed(2)})`);
+    banded('B5', factor >= B5_FACTOR, `the defenders' mean is ${factor.toFixed(1)} times the scorers' (at least ${B5_FACTOR}; main: a tenth of it, the wrong way round): ${[...DEFENDERS, ...SCORERS].map(a => `${a} ${byArch(a).toFixed(2)}`).join(', ')}`); }
+  if (base.nba) {
+    const roy = perCareerOf('Rookie of the Year'); const royMain = mainOf('Rookie of the Year');
+    banded(B6, roy >= royMain && roy <= 3 * royMain, `Rookie of the Year a career: ${per.map(m => m.perCareer['Rookie of the Year']).join(', ')}, mean ${roy.toFixed(3)} (between main's ${royMain.toFixed(3)} and three times it)`);
+    for (const a of ['Scoring Champion', 'Assists Leader', 'Rebounding Champion', 'Sixth Man of the Year', 'Most Improved Player', 'Defensive Player of the Year', 'All-Rookie Team']) {
+      banded(B6, perCareerOf(a) > 0, `${a} a career: ${per.map(m => m.perCareer[a]).join(', ')} (main ${mainOf(a).toFixed(3)}; it moves by design, judged as above zero)`);
+    }
+  }
+  { const A = E.nbaAwards;
+    const counted = x => { let n = 0; const r = mulberry32(3); A.decideNbaAwards(() => { n++; return r(); }, x); return n; };
+    const one = { pos: 'SF', defenceRep: 0, bench: false, rookie: false, year: 2026, seasonLength: 82, games: 78, ppg: 24, rpg: 6, apg: 5, spg: 1.1, bpg: 0.6, winShare: 0.6, madePlayoffs: true, fanbase: 60, prev: { year: 2025, games: 75, ppg: 20, rpg: 5, apg: 4 }, everAllNba: false };
+    const cases = [{ ...one, rookie: true, prev: null }, { ...one, bench: true }, { ...one, games: 30 }, { ...one, year: 2010 }];
+    exact('B7', cases.every(c => counted(c) === A.NBA_AWARD_DRAWS), `decideNbaAwards draws exactly ${A.NBA_AWARD_DRAWS} times for a rookie, a bench player, a short season and a season before 2023 (${cases.map(counted).join(', ')})`);
+    const frozen = JSON.stringify(one);
+    exact('B7', JSON.stringify(A.decideNbaAwards(mulberry32(11), one)) === JSON.stringify(A.decideNbaAwards(mulberry32(11), one)) && JSON.stringify(one) === frozen, 'the same input and seed give the same awards, and the input is left untouched'); }
+  /* E again, for the table the one pass reads. */
+  { const C = E.nbaAwards.NBA_FIELD;
+    const cmp = (label, row, pick) => { const meanOff = passFits.map(x => Math.abs(pick(x.field).mean - row[0]) / row[1]); const sdOff = passFits.map(x => Math.abs(pick(x.field).sd / row[1] - 1));
+      banded('E', meanOff.every(v => v <= E_MEAN_TOL) && sdOff.every(v => v <= E_SD_TOL), `NBA_FIELD ${label}: committed ${row[0]}/${row[1]} against the fleet ${passFits.map(x => `${pick(x.field).mean.toFixed(2)}/${pick(x.field).sd.toFixed(2)}`).join(' ')} (mean off by at most ${Math.max(...meanOff).toFixed(3)} sd, limit ${E_MEAN_TOL}; sd off by at most ${(Math.max(...sdOff) * 100).toFixed(1)} percent, limit ${E_SD_TOL * 100})`); };
+    for (const key of ['mvp', 'defense', 'production']) for (const p of POS) cmp(`${key} ${p}`, C[key][p], fl => fl[key][p]);
+    for (const key of ['bench', 'jump', 'fans']) cmp(key, C[key], fl => fl[key]); }
+}
+
+/* D, one function: NBA Front Office and NBA My Career score an award through the same code. */
+if (HAS_PASS()) {
+  const strip = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+  const foSrc = strip(underControl('src/lib/nbaSeasonStats.ts')); const careerSrc = strip(underControl('src/lib/nbaCareerAwards.ts'));
+  const imports = s => /import \{[^}]*\} from '\.\/awardDecision';/.test(s);
+  exact('D', imports(foSrc) && imports(careerSrc), 'nbaSeasonStats.ts and nbaCareerAwards.ts both import from ./awardDecision (comments stripped)');
+  exact('D', !foSrc.includes("foPerGame(p, 'pts') + foPerGame(p, 'reb')"), 'nbaSeasonStats.ts no longer adds points and rebounds a game itself');
+  exact('D', E.nbaAwards.NBA_CAREER_MVP_WIN_WEIGHT === E.fo.NBA_MVP_WIN_WEIGHT, `the career's MVP win weight (${E.nbaAwards.NBA_CAREER_MVP_WIN_WEIGHT}) is NBA Front Office's (${E.fo.NBA_MVP_WIN_WEIGHT})`);
+  /* Behaviour: with the shared MVP score cut down to the production alone (one line of awardDecision.ts swapped
+     in a second bundle), BOTH games must change: Front Office's ranking of a hand built pair where the best
+     producer plays for the worst club, and the career's MVP count over one small fleet. */
+  const P = await bundleWith([...edits, { label: 'D probe', file: 'src/lib/awardDecision.ts', swaps: [['  return production + winWeight * winShare;', '  return production;']] }], 'probe');
+  const lg = { teams: { BAD: { wins: 10, losses: 72 }, TOP: { wins: 70, losses: 12 } } };
+  const man = (id, team, pts, reb, ast) => ({ id, name: id, team, pos: 'SF', g: 80, gs: 80, tot: { pts: pts * 80, reb: reb * 80, ast: ast * 80, stl: 80, blk: 40 } });
+  const producer = man('producer', 'BAD', 30, 8, 7); const winner = man('winner', 'TOP', 26, 6, 6);
+  const foNow = E.fo.nbaMvpScore(lg, winner) > E.fo.nbaMvpScore(lg, producer); const foProbe = P.fo.nbaMvpScore(lg, winner) > P.fo.nbaMvpScore(lg, producer);
+  exact('D', foNow && !foProbe, `NBA Front Office ranks the winner over the better producer on the worst club (${foNow}), and stops when the shared score loses its winning term (${!foProbe})`);
+  const mvpsOf = M => playFleet(1, 400, M).careers.reduce((t, c) => t + c.mvps, 0);
+  const mine = mvpsOf(E); const probed = mvpsOf(P);
+  exact('D', mine !== probed, `the career's MVPs over 400 careers change with the same swap (${mine} against ${probed})`);
 }
 
 /* C, the other sports did not move. A proof for one round, judged only when asked. */

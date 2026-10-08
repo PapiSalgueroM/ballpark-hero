@@ -245,7 +245,7 @@ export interface FieldConfig {
 }
 
 /** A standard Gumbel draw, G = -ln(-ln u). Mean is Euler's constant, 0.5772. */
-function gumbel(rng: () => number): number {
+export function gumbel(rng: () => number): number {
   const u = Math.min(1 - 1e-12, Math.max(1e-12, rng()));
   return -Math.log(-Math.log(u));
 }
@@ -269,11 +269,16 @@ function gumbel(rng: () => number): number {
  * Kareem Abdul-Jabbar holds the record at six, in twenty seasons.
  */
 function bestOfN(n: number, rng: () => number): number {
+  return bestOfNAt(n, gumbel(rng));
+}
+/** Round 1103: the same bar with the draw passed in, so awards that share one league (All-Star, All-NBA and
+ *  MVP in NBA My Career) can be decided against the SAME year instead of a fresh one each. `g` is a gumbel draw. */
+export function bestOfNAt(n: number, g: number): number {
   const nn = Math.max(2, n);
   const L = Math.log(nn);
   const root = Math.sqrt(2 * L);
   const loc = root - (Math.log(L) + Math.log(4 * Math.PI)) / (2 * root);
-  return loc + gumbel(rng) / root;
+  return loc + g / root;
 }
 
 /**
