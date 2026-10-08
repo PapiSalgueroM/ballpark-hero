@@ -115,26 +115,28 @@ console.log(`   ${flagship.size} modules, ${(srcBytes / 1024).toFixed(0)} KB of 
    the engine's repair line calls. It must import nothing, and that is
    checked here with comments stripped.
 
-   Round 1046: the sliding table (src/lib/motion, src/components/motion) is
-   the Season Centre's and joined the lazy list. A second season file is
-   allowed in the first download: resume.ts, the record of where a viewer
-   stopped watching, which the page reads to draw its Resume chip. It must
-   import nothing either, and the check now runs over both files.
-   FLAGSHIP_LAZY_CONTROL=eagerimport hands that check a resume.ts with one
-   import line added (in memory) and must go red. */
+   Round 1046: the sliding table (src/lib/motion, src/components/motion),
+   the shared pitch part and the Resume chip are the Season Centre's and
+   joined the lazy list. The chip is asked for with a plain import() only
+   when this browser keeps a place (one storage read on the page), so the
+   record's reader, src/lib/season/resume.ts, stays out of the first
+   download with the rest of src/lib/season. The imports nothing check on
+   the one eager season file gained a control of its own:
+   FLAGSHIP_LAZY_CONTROL=eagerimport hands it that file with one import
+   line added (in memory) and must go red. */
 console.log('1b) the Season Centre and the training ground are not in the first download');
 const MUST_BE_LAZY = [
   'src/lib/season/', 'src/components/season-centre/', 'src/components/soccer-career/SoccerSeasonCentre.tsx', 'src/data/leagueFormat.ts',
   'src/components/soccer-career/TrainingPanel.tsx', 'src/components/soccer-career/DrillBoard.tsx', 'src/components/soccer-career/ThroughBallBoard.tsx',
   'src/components/soccer-career/FirstTouchBoard.tsx', 'src/components/soccer-career/SoccerMomentBoard.tsx', 'src/components/soccer-career/useSoccerMoments.tsx',
-  'src/lib/motion/', 'src/components/motion/', 'src/components/pitch-motion/',
+  'src/lib/motion/', 'src/components/motion/', 'src/components/pitch-motion/', 'src/components/soccer-career/SeasonResumeChip.tsx',
 ];
-const MAY_BE_EAGER = ['src/lib/season/momentsSave.ts', 'src/lib/season/resume.ts'];
+const MAY_BE_EAGER = ['src/lib/season/momentsSave.ts'];
 for (const rel of MAY_BE_EAGER) {
   let text = readFileSync(path.join(ROOT, rel), 'utf8');
-  if (process.env.FLAGSHIP_LAZY_CONTROL === 'eagerimport' && rel === 'src/lib/season/resume.ts') {
+  if (process.env.FLAGSHIP_LAZY_CONTROL === 'eagerimport') {
     text = `import { SOCCER } from './soccer';\n${text}`;
-    console.log('   CONTROL eagerimport: resume.ts read with one import line added');
+    console.log(`   CONTROL eagerimport: ${rel} read with one import line added`);
   }
   const code = text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/[^\n]*/g, '');
   if (/^\s*import\s/m.test(code) || /\bimport\(/.test(code) || /\brequire\(/.test(code)) fail(`${rel} imports something: it is a season file in the first download and must import nothing`);
@@ -160,6 +162,7 @@ const eager = [...lazyClosure].filter(f => !MAY_BE_EAGER.includes(f) && MUST_BE_
 if (eager.length) fail(`/soccer-career statically imports the Season Centre or the training ground (${eager.join(', ')}), so every player downloads it before the first screen`);
 const pageSrc = readFileSync(path.join(ROOT, 'src/pages/SoccerCareer.tsx'), 'utf8');
 if (!pageSrc.includes('lazy(() => import("@/components/soccer-career/SoccerSeasonCentre"))')) fail('SoccerCareer.tsx no longer loads SoccerSeasonCentre with lazy(), so nothing opens the Season Centre');
+if (!pageSrc.includes('import("@/components/soccer-career/SeasonResumeChip")')) fail('SoccerCareer.tsx no longer asks for SeasonResumeChip with import(), so nothing shows the Resume chip');
 if (!pageSrc.includes('lazy(() => import("@/components/soccer-career/TrainingPanel"))')) fail('SoccerCareer.tsx no longer loads TrainingPanel with lazy(), so nothing opens the training ground');
 console.log(`   ${MUST_BE_LAZY.length} paths that must stay lazy, ${eager.length} in the static closure`);
 

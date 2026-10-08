@@ -206,9 +206,9 @@ check(!fails.has('1 keys') && !fails.has('1 shift'), `1. every club's from and t
   check(own === rows && shared === 0, `2. every record finds its own row (${own} of ${rows}); rows of one career sharing a key: ${shared}`);
   check(foreign >= 5000 && foreignHit === 0, `2. a record finds nothing in another career (${foreignHit} of ${foreign} did; floor 5000 checks)`);
   check(heldBack === rows && heldBad === 0, `2. a record that is not stable is held to the league year of the save (${heldBad} of ${heldBack} were not)`);
-  /* the career page may not import the season code, so its Resume chip builds the season's key with one template
-     line of its own. Read that line out of the page and hold it to soccerSeasonKey on every played row. */
-  const pageLines = read('src/pages/SoccerCareer.tsx').split('\n').filter(l => l.includes('resumeRowIndex(resume, career.seasons, r => `'));
+  /* the Resume chip may not import the season code (it must stay a few hundred bytes), so it builds the season's key
+     with one template line of its own. Read that line out of its file and hold it to soccerSeasonKey on every played row. */
+  const pageLines = read('src/components/soccer-career/SeasonResumeChip.tsx').split('\n').filter(l => l.includes('resumeRowIndex(resume, career.seasons, r => `'));
   const tplMatch = pageLines.length === 1 ? /r => `([^`]+)`, career/.exec(pageLines[0]) : null;
   check(!!tplMatch, `2. the career page holds its key template on one line (${pageLines.length} lines found)`);
   if (tplMatch) {
@@ -252,14 +252,17 @@ function importsOf(code) {
   for (const m of code.matchAll(/\brequire\s*\(\s*['"]([^'"]+)['"]/g)) out.push({ spec: m[1], typeOnly: false });
   return out;
 }
+const CHIP = 'src/components/soccer-career/SeasonResumeChip.tsx';
 const listDir = rel => fs.readdirSync(path.join(ROOT, rel)).filter(f => /\.(ts|tsx)$/.test(f)).map(f => `${rel}/${f}`);
 const LIB_MOTION = listDir('src/lib/motion');
 const UI_MOTION = listDir('src/components/motion');
 /* files that may draw nothing at random (the list grows as the round's parts land) */
-const NO_DRAW = [...LIB_MOTION, ...UI_MOTION, 'src/lib/season/resume.ts', 'src/components/season-centre/resumeStore.ts', 'src/components/season-centre/SeasonPicker.tsx', 'src/components/season-centre/useBodyLock.ts', 'src/components/season-centre/MiniPitch.tsx'];
+const NO_DRAW = [...LIB_MOTION, ...UI_MOTION, 'src/lib/season/resume.ts', 'src/components/season-centre/resumeStore.ts', 'src/components/season-centre/SeasonPicker.tsx', 'src/components/season-centre/useBodyLock.ts', 'src/components/season-centre/MiniPitch.tsx', CHIP];
 const IMPORTS_NOTHING = [...LIB_MOTION, 'src/lib/season/resume.ts'];
 
 const MINI_PITCH = 'src/components/season-centre/MiniPitch.tsx';
+/* the chip is loaded on the career page for anybody with a place kept: it may carry the record's reader and nothing else of the Season Centre */
+const CHIP_MAY_IMPORT = ['react', '@/components/ui/button', '@/lib/season/resume'];
 const CENTRE_FILES = [...listDir('src/components/season-centre'), 'src/components/soccer-career/SoccerSeasonCentre.tsx'];
 function fenceFindings(textOf) {
   const out = [];
@@ -280,6 +283,7 @@ function fenceFindings(textOf) {
     if (im.spec.startsWith('@/components/pitch-motion') && f !== MINI_PITCH) out.push(`${f} imports the pitch part (${im.spec}): MiniPitch.tsx is the one file that may`);
     if (/clubManager|club-manager\/LiveSim/.test(im.spec) && !im.typeOnly && f === MINI_PITCH) out.push(`${f} imports ${im.spec} for more than its types`);
   }
+  for (const im of importsOf(strip(textOf(CHIP)).code)) if (!im.typeOnly && !CHIP_MAY_IMPORT.includes(im.spec)) out.push(`${CHIP} imports ${im.spec}: it may carry react, the button and the record's reader only`);
   return out;
 }
 

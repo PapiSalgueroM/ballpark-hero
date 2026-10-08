@@ -1,4 +1,4 @@
-import { Component, Fragment, lazy, Suspense, useState, useCallback, useRef, useEffect, useMemo, type ReactNode } from "react";
+import { Component, Fragment, lazy, Suspense, useState, useCallback, useRef, useEffect, useMemo, type ComponentType, type ReactNode } from "react";
 import { formatNumber } from '@/lib/formatNumber';
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import { useGameCompletion } from "@/hooks/useGameCompletion";
@@ -112,7 +112,6 @@ import { beatStyle, debutMomentKey, legacyMomentKey, rivalryMomentKey, settleLoa
 import { isSoccerCareerSave } from '@/lib/soccerCareerSave';
 import { reloadToRetryChunk } from '@/lib/freshBuild';
 import { readSeasonMoments } from '@/lib/season/momentsSave';
-import { readResume, resumeLabel, resumeRowIndex, type SeasonResume } from '@/lib/season/resume';
 /* Round 1045: the Season Centre loads only when a person presses for it, and
    the Ratings dialog when it is opened (step 7 of the round: the weight it
    adds is paid here, never by a budget). */
@@ -3803,10 +3802,19 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   /* Round 1046: the list of seasons he can watch again, opened from Latest Events */
   const [replaysOpen, setReplaysOpen] = useState(false);
   const onWeekByWeek = () => { const at = career.seasons.length; onNextSeason(); setCentreFor(at); };
-  /* Round 1046: where he stopped watching a season (this browser only, never the save), for the Resume chip */
-  const [resume, setResume] = useState<SeasonResume | null>(null);
-  useEffect(() => { setResume(readResume("soccer")); }, []);
-  const closeCentre = () => { setCentreFor(null); setWatchRow(null); setReplaysOpen(false); setResume(readResume("soccer")); };
+  /* Round 1046: where he stopped watching a season is kept in this browser only, never in the save. The Resume chip
+     (and the rule for whose season a kept place is) loads only when a place is kept at all: one storage read here. */
+  const [Chip, setChip] = useState<ComponentType<{ career: CareerState; at: number; onOpen: (row: SeasonRecord) => void }> | null>(null);
+  const [chipAt, setChipAt] = useState(0);
+  const peekResume = () => {
+    setChipAt(n => n + 1);
+    try {
+      if (localStorage.getItem("seasonCentre:v1:soccer")) import("@/components/soccer-career/SeasonResumeChip").then(m => setChip(() => m.default), () => undefined);
+    } catch { /* storage refused: no chip */ }
+  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(peekResume, []);
+  const closeCentre = () => { setCentreFor(null); setWatchRow(null); setReplaysOpen(false); peekResume(); };
   useEffect(() => {
     /* a press that opened nothing (a ban year) is forgotten at the next
        season start, and a new career never inherits it */
@@ -4574,11 +4582,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
                 className="text-[11px] font-bold text-sky-400 px-2 py-1 rounded hover:bg-white/5 min-h-11">📺 Season replays</button>}
             </div>
           </div>
-          {(() => {
-            /* the season the record belongs to, by the Season Centre's own key for it */
-            const row = career.seasons[resumeRowIndex(resume, career.seasons, r => `${career.playerName}|${r.club}|${r.year}|${r.apps}|${r.goals}|${r.assists}|${r.rating}|centre`, career.phone?.world?.year)];
-            return row && resume && <div className="mt-2"><Button onClick={() => setWatchRow(row)} variant="outline" className="w-full h-11 text-sm font-bold" data-season-resume>📺 {resumeLabel(resume, `${row.year}/${String(row.year + 1).slice(-2)}`, "matchday")}</Button></div>;
-          })()}
+          {Chip && <Chip career={career} at={chipAt} onOpen={setWatchRow} />}
           <div className="mt-2 space-y-1">
             {career.events.slice(-3).map((e, i) => (
               <div key={i} className="text-xs text-foreground/80 flex items-start gap-2">
