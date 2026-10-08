@@ -1,0 +1,5 @@
+#!serial
+#!playwright
+now: npm run build > /dev/null 2>&1; (node scripts/lib/hostLikeServer.mjs dist 4201 > /dev/null 2>&1 &) ; sleep 4; TAG=now BASE=http://localhost:4201 node .rc/x/weightList.mjs
+step3: git checkout -q aadebb79 -- src; npm run build > /dev/null 2>&1; (node scripts/lib/hostLikeServer.mjs dist 4202 > /dev/null 2>&1 &) ; sleep 4; TAG=step3 BASE=http://localhost:4202 node .rc/x/weightList.mjs
+merge: git checkout -q 0b1b827e -- src; npm run build > /dev/null 2>&1; (node scripts/lib/hostLikeServer.mjs dist 4203 > /dev/null 2>&1 &) ; sleep 4; TAG=merge BASE=http://localhost:4203 node .rc/x/weightList.mjs

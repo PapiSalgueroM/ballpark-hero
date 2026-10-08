@@ -1,0 +1,3 @@
+now exit=0 35s | now total=777807 files=43
+step3 exit=0 35s | step3 total=777643 files=42
+merge exit=0 35s | merge total=777828 files=43
