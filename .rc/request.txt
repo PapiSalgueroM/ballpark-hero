@@ -1,0 +1,21 @@
+# Release AN fix pass, request 2: the browser harnesses the fixes touch, on a served build (three at a time)
+#!serve
+#!playwright
+pill: RESULT_PILL_SHOTS=$RC_OUT/pill node scripts/simResultPillComparison.mjs
+pill-bareline: RESULT_PILL_CONTROL=bareline node scripts/simResultPillComparison.mjs
+pill-noscore: RESULT_PILL_CONTROL=noscore node scripts/simResultPillComparison.mjs
+pill-cramp: RESULT_PILL_CONTROL=cramp node scripts/simResultPillComparison.mjs
+pill-shift: RESULT_PILL_CONTROL=shift node scripts/simResultPillComparison.mjs
+usplay: PORT=4401 node scripts/playUsSeasonCentre.mjs
+usplay-nohandover: PORT=4402 US_SEASON_PLAY_CONTROL=nohandover node scripts/playUsSeasonCentre.mjs
+usplay-playfirst: PORT=4403 US_SEASON_PLAY_CONTROL=playfirst node scripts/playUsSeasonCentre.mjs
+usplay-cover: PORT=4404 US_SEASON_PLAY_CONTROL=cover node scripts/playUsSeasonCentre.mjs
+usplay-static: PORT=4405 US_SEASON_PLAY_CONTROL=static node scripts/playUsSeasonCentre.mjs
+usplay-write: PORT=4406 US_SEASON_PLAY_CONTROL=write node scripts/playUsSeasonCentre.mjs
+usplay-count: PORT=4407 US_SEASON_PLAY_CONTROL=count node scripts/playUsSeasonCentre.mjs
+squadplay: ENGINES=chromium REQUIRE_PAGE=1 PORT=4810 SHOTS=$RC_OUT/squad node scripts/playCareerSquad.mjs
+squadplay-ellipsis: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=ellipsis PORT=4920 SHOTS=/tmp/shots-ellipsis node scripts/playCareerSquad.mjs
+squadplay-clip: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=clip PORT=4860 SHOTS=/tmp/shots-clip node scripts/playCareerSquad.mjs
+squadplay-noscroll: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=noscroll PORT=4900 SHOTS=/tmp/shots-noscroll node scripts/playCareerSquad.mjs
+squadplay-label: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=label PORT=4890 SHOTS=/tmp/shots-label node scripts/playCareerSquad.mjs
+playSeasonCentre: PORT=4411 ENGINES=chromium node scripts/playSeasonCentre.mjs
