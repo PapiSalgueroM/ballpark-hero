@@ -90,7 +90,7 @@ const era2005 = await import('${ROOT.replaceAll('\\', '/')}/src/data/clubManager
 const era2010 = await import('${ROOT.replaceAll('\\', '/')}/src/data/clubManagerEra2010.ts');
 const era2015 = await import('${ROOT.replaceAll('\\', '/')}/src/data/clubManagerEra2015.ts');
 const modern = await import('${ROOT.replaceAll('\\', '/')}/src/data/clubManagerRosters.ts');
-const nat = await import('${ROOT.replaceAll('\\', '/')}/src/data/playerNationalities.ts');
+const nat = await import('${ROOT.replaceAll('\\', '/')}/src/data/nationalities/allWorlds.ts');
 export { engine, eras, era2005, era2010, era2015, modern, nat };
 `);
 execSync(
@@ -585,7 +585,9 @@ console.log('5) The bake file tells the truth about itself');
      a break here would land on a fence that is already red. Every man in the
      world has exactly one line, and no line names a man who is not here. */
   {
-    let natBlock = NAT.NATIONALITY_BY_WORLD?.era2005 ?? {};
+    /* Round 1042: read from allWorlds, with no fallback: a missing or empty 2005 block has to
+       fail here, never pass as a world with nobody in it. */
+    let natBlock = NAT.NATIONALITY_BY_WORLD.era2005;
     if (CONTROL === 'nonat') {
       if (!natBlock['Patrick Vieira'] || natBlock['Tore André Flo']) controlRefuse('Vieira has no era2005 line, or Flo already has one');
       natBlock = { ...natBlock, 'Tore André Flo': 'Norway' };

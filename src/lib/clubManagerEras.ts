@@ -47,6 +47,7 @@ import { CM_ROSTER_META } from '@/data/clubManagerRosters';
 import type { BakedPlayer } from '@/data/clubManagerRosters';
 // Round 1035: the modern squads, baked plus the A-League Men, joined once.
 import { CM_WORLD_ROSTERS as CM_ROSTERS } from '@/data/clubManagerWorldRosters';
+import { loadNationalityWorld, registerNationalityWorld } from '@/data/playerNationalities';
 /* Round 832: the three era bakes are no longer imported here. Each one is its
    own chunk, fetched when its era is picked or an era save is opened (see
    ensureEraRosters below), so the page stops carrying all three past worlds
@@ -525,6 +526,9 @@ function generateFor(club: string, slot: ProjectedPlayer, year: number, idx: num
    and this table is what makes an era id historic, so an era exists from the
    first line of code whether or not its squads have arrived yet. A new era is
    one more row here pointing at its own bake file. */
+/* Round 1042: an era's nationalities arrive in the same promise (ensureEraRosters below). Where
+   every piece of Club Manager's data lives and what loads when: the top of
+   src/data/playerNationalities.ts. Read it before adding a league or a season. */
 interface EraBake { rosters: Record<string, BakedPlayer[]>; partial: string[]; players: number }
 const ERA_BAKES: Record<string, () => Promise<EraBake>> = {
   era2010: () => import('@/data/clubManagerEra2010').then(m => ({ rosters: m.ERA2010_ROSTERS, partial: m.ERA2010_PARTIAL, players: m.ERA2010_META.players })),
@@ -566,7 +570,10 @@ export function ensureEraRosters(id: string | undefined): Promise<void> {
   const eraId = id!;
   const inFlight = ERA_LOADING.get(eraId);
   if (inFlight) return inFlight;
-  const p = ERA_BAKES[eraId]().then(bake => {
+  const p = Promise.all([ERA_BAKES[eraId](), loadNationalityWorld(eraId)]).then(([bake, nationalities]) => {
+    /* Round 1042: the era's nationalities arrive with its squads and are registered FIRST, so
+       nothing can read a loaded era without them (nationBars caches a world's call up bars). */
+    registerNationalityWorld(eraId, nationalities);
     HISTORIC_ROSTERS[eraId] = bake.rosters;
     HISTORIC_PARTIAL[eraId] = bake.partial;
     ERA_PLAYERS[eraId] = bake.players;
