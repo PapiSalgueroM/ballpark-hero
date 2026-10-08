@@ -1,0 +1,1 @@
+m5all exit=0 574s | m5all vitestAll=0 simCareerLeagueWorld=1 simCmLeagueRules=0 simCareerClubPool=0 simCmDataOnDemand=0

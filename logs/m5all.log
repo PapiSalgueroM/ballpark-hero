@@ -1,0 +1,10 @@
+rvMut m5: applied to src/lib/soccerCareerLeague.ts
+ [32m✓[39m src/data/gameRegistry.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m src/test/example.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 2[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m350 passed[39m[22m[2m | [22m[33m2 skipped[39m[90m (352)[39m
+[2m      Tests [22m [1m[32m4930 passed[39m[22m[2m | [22m[33m55 skipped[39m[90m (4985)[39m
+[2m   Start at [22m 20:19:37
+[2m   Duration [22m 451.83s[2m (transform 30.43s, setup 20.38s, collect 131.88s, tests 950.75s, environment 150.25s, prepare 31.26s)[22m
+
+m5all vitestAll=0 simCareerLeagueWorld=1 simCmLeagueRules=0 simCareerClubPool=0 simCmDataOnDemand=0
