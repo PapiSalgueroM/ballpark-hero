@@ -26,6 +26,8 @@ import {
 import {
   runHallBallot, firstBallotChance, laterCallChance, mostSeasonsTeam, jerseyFor, hallRecordFor,
   sanitizeHallSpeech, type HallRecord, type UsHallSport,
+  legacyRead, hallCalibrationOf, sanitizeHallCal, stampHallCalibration, hallWeighLine, hallVoterRules, hallVoterRulesFor,
+  HALL_CALIBRATION, LEGACY_GAME_RULES, type LegacyWeights,
 } from '@/lib/careerHallOfFame';
 import { HALL_SPEECHES, HALL_SPEECH_METERS, speechPromise, giveHallSpeech } from '@/lib/careerHallSpeech';
 import { describeSteps, measureMoves, applyMeterSteps } from '@/lib/careerAwardsNight';
@@ -362,4 +364,118 @@ describe('the two cards say what they do', () => {
     expect(mlb.queryByText('Your induction speech')).toBeNull();
     cleanup();
   }, 30000);
+});
+
+/* Round 1051: one scorer for the four sports, a table per calibration. */
+describe('Round 1051: the legacy scorer, the calibration and the words', () => {
+  const W: LegacyWeights = {
+    awards: { rings: 10, mvps: 100 },
+    season: 5,
+    positions: {
+      A: { terms: [{ stat: 'x', per: 3 }, { stat: 'y', per: 7 }], standout: [{ stat: 'x', from: 100, to: 200, label: 'xs' }, { stat: 'y', from: 10, to: 20, label: 'ys' }, { stat: 'z', from: 10, to: 20, label: 'zs', top: 150 }] },
+      '*': { terms: [{ stat: 'y', per: 2 }] },
+    },
+  };
+  const facts = (pos: string, totals: Record<string, number>, awards: Record<string, number> = {}) => ({ pos, seasons: 4, awards, totals });
+
+  it('adds awards, seasons and the terms in the table order, and rounds once', () => {
+    const r = legacyRead(W, facts('A', { x: 10, y: 5 }, { rings: 2, mvps: 1 }));
+    expect(r.score).toBe(Math.round(2 * 10 + 1 * 100 + 4 * 5 + (0 + 10 / 3 + 5 / 7)));
+    expect(r.standout).toBeNull();
+  });
+
+  it('a position with no entry reads the star entry, and a missing stat or award reads zero', () => {
+    expect(legacyRead(W, facts('B', { y: 9 })).score).toBe(Math.round(20 + 4.5));
+    expect(legacyRead(W, facts('B', {})).score).toBe(20);
+    expect(legacyRead(W, facts('A', {}, { rings: 1 })).score).toBe(30);
+  });
+
+  it('the standout: nothing at or under from, the top at to, a straight line between, capped', () => {
+    const top = LEGACY_GAME_RULES.standoutTop, cap = LEGACY_GAME_RULES.standoutCap;
+    const credit = (x: number) => legacyRead(W, facts('A', { x })).standout?.credit ?? 0;
+    expect(credit(100)).toBe(0);
+    expect(credit(99)).toBe(0);
+    expect(credit(150)).toBeCloseTo(top / 2, 9);
+    expect(credit(200)).toBeCloseTo(top, 9);
+    expect(credit(100000)).toBeCloseTo(top * cap, 9);
+    expect(legacyRead(W, facts('A', { x: 200 })).score).toBe(Math.round(20 + 200 / 3 + top));
+  });
+
+  it('only the single largest credit counts, a tie goes to the earlier family, and a family can carry its own smaller top', () => {
+    const both = legacyRead(W, facts('A', { x: 150, y: 20 }));
+    expect(both.standout).toEqual({ stat: 'y', label: 'ys', total: 20, credit: LEGACY_GAME_RULES.standoutTop });
+    expect(both.score).toBe(Math.round(20 + 150 / 3 + 20 / 7 + LEGACY_GAME_RULES.standoutTop));
+    const tie = legacyRead(W, facts('A', { x: 200, y: 20 }));
+    expect(tie.standout?.stat).toBe('x');
+    const own = legacyRead(W, facts('A', { z: 20 }));
+    expect(own.standout).toEqual({ stat: 'z', label: 'zs', total: 20, credit: 150 });
+  });
+
+  it('hallCalibrationOf: a valid stamp wins; with none a retired career is 1 and a live one is today\'s', () => {
+    expect(HALL_CALIBRATION).toBe(2);
+    expect(hallCalibrationOf({ retired: true })).toBe(1);
+    expect(hallCalibrationOf({ retired: false })).toBe(2);
+    expect(hallCalibrationOf({})).toBe(2);
+    expect(hallCalibrationOf({ retired: true, hallCal: 2 })).toBe(2);
+    expect(hallCalibrationOf({ retired: false, hallCal: 1 })).toBe(1);
+    expect(hallCalibrationOf({ retired: true, hallCal: 7 })).toBe(1);
+    expect(hallCalibrationOf({ retired: false, hallCal: 'x' })).toBe(2);
+  });
+
+  it('sanitizeHallCal takes exactly the whole numbers 1 and 2', () => {
+    expect(sanitizeHallCal(1)).toBe(1);
+    expect(sanitizeHallCal(2)).toBe(2);
+    for (const junk of [3, 0, -1, '2', 1.5, null, undefined, {}, [], true, Number.NaN]) expect(sanitizeHallCal(junk), String(junk)).toBeUndefined();
+  });
+
+  it('stampHallCalibration writes today\'s calibration on a retired, unstamped career and nothing else', () => {
+    const live: { retired?: boolean; hallCal?: 1 | 2 } = { retired: false };
+    stampHallCalibration(live);
+    expect('hallCal' in live).toBe(false);
+    const done: { retired?: boolean; hallCal?: 1 | 2 } = { retired: true };
+    stampHallCalibration(done);
+    expect(done.hallCal).toBe(2);
+    const old: { retired?: boolean; hallCal?: 1 | 2 } = { retired: true, hallCal: 1 };
+    stampHallCalibration(old);
+    expect(old.hallCal).toBe(1);
+  });
+
+  it('hallWeighLine: the hardware, then what the table reads for the position, and the standout only when it is worth saying', () => {
+    const words = { weighs: 'The voters weigh things.', reads: { pts: 'points', reb: 'rebounds', ast: 'assists' }, readsBy: { R: 'Then your seasons. Nothing else.' },
+      hardware: 'h', families: 'f', example: { positions: ['A'], stat: 'ast', one: 'a', who: 'as', family: 'assists' } };
+    const table = { awards: {}, season: 1, positions: {
+      A: { terms: [{ stat: 'pts', per: 1 }] }, B: { terms: [{ stat: 'pts', per: 1 }, { stat: 'reb', per: 1 }, { stat: 'ast', per: 1 }] },
+      K: { terms: [] }, R: { terms: [{ stat: 'pts', per: 1 }] }, '*': { terms: [{ stat: 'reb', per: 1 }, { stat: 'ast', per: 1 }] },
+    } };
+    // No standout: the position's own terms, named from the table, and nothing a position is not read on.
+    expect(hallWeighLine(words, table, 'A', null)).toBe('The voters weigh things. Then your seasons and points.');
+    expect(hallWeighLine(words, table, 'B', null)).toBe('The voters weigh things. Then your seasons, points, rebounds and assists.');
+    expect(hallWeighLine(words, table, 'K', null)).toBe('The voters weigh things. Then your seasons.');
+    expect(hallWeighLine(words, table, 'nobody', null)).toBe('The voters weigh things. Then your seasons, rebounds and assists.');
+    expect(hallWeighLine(words, table, 'R', null)).toBe('The voters weigh things. Then your seasons. Nothing else.');
+    // A standout worth saying, with its number grouped.
+    const st = { stat: 'ast', label: 'assists', total: 16634, credit: 120 };
+    expect(hallWeighLine(words, table, 'A', st)).toBe("The voters weigh things. Then your seasons and your numbers, and your 16,634 assists sat near the top of this game's books.");
+    expect(hallWeighLine(words, table, 'K', st)).toBe("The voters weigh things. Then your seasons, and your 16,634 assists sat near the top of this game's books.");
+    // The floor: a push that rounds to under standoutSaid points is not "counted" in words (0.1 of a point was, before).
+    const said = LEGACY_GAME_RULES.standoutSaid;
+    expect(said).toBeGreaterThan(0);
+    for (const credit of [0.1, 1, said - 0.6]) expect(hallWeighLine(words, table, 'A', { ...st, credit })).toBe('The voters weigh things. Then your seasons and points.');
+    for (const credit of [said - 0.5, said, 300, 390]) expect(hallWeighLine(words, table, 'A', { ...st, credit })).toContain('sat near the top of this game\'s books');
+  });
+
+  it('hallVoterRules: two lines, the numbers written in from the rules, the example family\'s own top when it has one', () => {
+    const nouns = { hardware: 'rings', families: 'points or assists', one: 'point guard', who: 'point guards', family: 'assists' };
+    const rules = hallVoterRules(nouns);
+    expect(rules).toHaveLength(2);
+    expect(rules[0]).toContain(`up to ${Math.round(LEGACY_GAME_RULES.standoutTop * LEGACY_GAME_RULES.standoutCap)} legacy points`);
+    expect(rules[0]).toContain('(rings)');
+    expect(rules[1]).toContain(`at least ${LEGACY_GAME_RULES.standoutTop} legacy points more`);
+    expect(rules[1]).toContain('more assists than 99 of 100 point guards');
+    expect(hallVoterRules({ ...nouns, top: 150 })[1]).toContain('at least 150 legacy points more');
+    const words = { weighs: 's', reads: {}, hardware: 'rings', families: 'f', example: { positions: ['A'], stat: 'z', one: 'a', who: 'as', family: 'zs' } };
+    expect(hallVoterRulesFor(words, W)[1]).toContain('at least 150 legacy points more');
+    expect(hallVoterRulesFor({ ...words, example: { ...words.example, stat: 'x' } }, W)[1]).toContain(`at least ${LEGACY_GAME_RULES.standoutTop} legacy points more`);
+    expect(rules.join(' ')).not.toMatch(/[\u2013\u2014]/);
+  });
 });

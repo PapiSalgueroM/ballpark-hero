@@ -47,6 +47,7 @@ import { countOf, nhlMajorAward } from './usCareerStatLine';
 import { raiseWithinPotential, ratingRaiseNote } from './careerHeadroom';
 import { applyUsCareerAnnualBenefits } from './usCareerAnnualBenefits';
 import { careerRecoveryRisk } from './usCareerRecovery';
+import { hallCalibrationOf, legacyRead, type HallCalibration, type LegacyRead, type LegacyWeights } from './careerHallOfFame';
 /* Round 422: the share of gross pay that actually reaches the bank, after tax,
    agent and living. It was already the number this file used to turn career
    earnings into net worth; it is named here so the yearly banking and the
@@ -806,7 +807,7 @@ export function nhlShouldRetire(c: NhlCareerState): boolean {
   return c.ovr <= 63 || c.age >= (c.pos === 'G' ? 41 : 40) || c.seasons.length >= 22;
 }
 
-export interface NhlLegacy { score: number; verdict: string; hof: boolean; bullets: string[] }
+export interface NhlLegacy { score: number; verdict: string; hof: boolean; bullets: string[]; standout?: LegacyRead['standout'] }
 
 export function nhlCareerTotals(c: NhlCareerState) {
   let goals = 0, assists = 0, points = 0, wins = 0, games = 0;
@@ -815,6 +816,74 @@ export function nhlCareerTotals(c: NhlCareerState) {
   }
   return { goals, assists, points, wins, games };
 }
+
+/* Round 1051: the legacy score reads a table per calibration through the one
+   scorer (legacyRead, careerHallOfFame.ts). Calibration 1 is the Round 123
+   formula below to the last bit; a career is read on the calibration it
+   retired on (hallCalibrationOf). */
+const NHL_LEGACY_V1: LegacyWeights = {
+  awards: { cups: 85, harts: 160, connSmythes: 85, allStars: 45 },
+  season: 7,
+  positions: {
+    G: { terms: [{ stat: 'wins', per: 6.5 }] },
+    '*': { terms: [{ stat: 'points', per: 18 }] },
+  },
+};
+/* Calibration 2 (Round 1051). It contains calibration 1 unchanged (the same
+   awards, the same season weight, each position's old terms first and in
+   order) and only adds, so no career scores lower on it. What it adds:
+   a base where calibration 1 read nothing, and the standout: a career total
+   near the top of this game's books for the position, in any family on the
+   list, earns credit of its own (legacyRead; only the best family counts).
+   Every from and to mark, the list itself (the half rule) and the measured
+   base terms come from scripts/data/careerHallMarks.json, which
+   scripts/genCareerHallMarks.mjs derives from measured careers; section 17 of
+   scripts/simCareerHall.mjs fails if this table and that ledger disagree. */
+const NHL_LEGACY_V2: LegacyWeights = {
+  awards: { cups: 85, harts: 160, connSmythes: 85, allStars: 45 },
+  season: 7,
+  positions: {
+    C: {
+      terms: [{ stat: 'points', per: 18 }],
+      standout: [
+        { stat: 'goals', from: 923, to: 1110, label: 'goals' },
+        { stat: 'assists', from: 991, to: 1130, label: 'assists' },
+        { stat: 'points', from: 1810, to: 2110, label: 'points' },
+      ],
+    },
+    LW: {
+      terms: [{ stat: 'points', per: 18 }],
+      standout: [
+        { stat: 'goals', from: 872, to: 1040, label: 'goals' },
+        { stat: 'assists', from: 940, to: 1100, label: 'assists' },
+        { stat: 'points', from: 1730, to: 1970, label: 'points' },
+      ],
+    },
+    RW: {
+      terms: [{ stat: 'points', per: 18 }],
+      standout: [
+        { stat: 'goals', from: 840, to: 979, label: 'goals' },
+        { stat: 'assists', from: 935, to: 1060, label: 'assists' },
+        { stat: 'points', from: 1760, to: 2020, label: 'points' },
+      ],
+    },
+    D: {
+      terms: [{ stat: 'points', per: 18 }],
+      standout: [
+        { stat: 'assists', from: 1100, to: 1240, label: 'assists' },
+        { stat: 'points', from: 1450, to: 1640, label: 'points' },
+      ],
+    },
+    G: {
+      terms: [{ stat: 'wins', per: 6.5 }],
+      standout: [
+        { stat: 'wins', from: 721, to: 794, label: 'wins' },
+      ],
+    },
+    '*': { terms: [{ stat: 'points', per: 18 }] },
+  },
+};
+export const NHL_LEGACY_WEIGHTS: Record<HallCalibration, LegacyWeights> = { 1: NHL_LEGACY_V1, 2: NHL_LEGACY_V2 };
 
 export function nhlLegacyOf(c: NhlCareerState): NhlLegacy {
   const t = nhlCareerTotals(c);
@@ -830,9 +899,11 @@ export function nhlLegacyOf(c: NhlCareerState): NhlLegacy {
      percent, Rushmore tier 2.5 percent, forced 90 ceiling career gets in 70
      percent of the time. The bottom tier moved from 170 to 230 for the same
      reason as baseball: at 170 nobody could reach it and the line was dead. */
-  let score = c.cups * 85 + c.harts * 160 + c.connSmythes * 85 + c.allStars * 45 + c.seasons.length * 7;
-  score += c.pos === 'G' ? t.wins / 6.5 : t.points / 18;
-  score = Math.round(score);
+  const read = legacyRead(NHL_LEGACY_WEIGHTS[hallCalibrationOf(c)], {
+    pos: c.pos, seasons: c.seasons.length,
+    awards: { cups: c.cups, harts: c.harts, connSmythes: c.connSmythes, allStars: c.allStars }, totals: { ...t },
+  });
+  const score = read.score;
   const hof = score >= 500;
   const verdict = score >= 900 ? 'Rushmore of the sport, the debate is over'
     : score >= 500 ? 'Hockey Hall of Famer'
@@ -846,7 +917,7 @@ export function nhlLegacyOf(c: NhlCareerState): NhlLegacy {
     c.pos === 'G' ? `${formatNumber(t.wins)} wins in ${formatNumber(t.games)} games` : `${formatNumber(t.goals)} goals, ${formatNumber(t.assists)} assists, ${formatNumber(t.points)} points in ${formatNumber(t.games)} games`,
     `${Math.round(c.earnings)}M career earnings, ${c.draftPick > 0 ? `drafted pick ${c.draftPick}` : 'undrafted signing'}`,
   ];
-  return { score, verdict, hof, bullets };
+  return read.standout ? { score, verdict, hof, bullets, standout: read.standout } : { score, verdict, hof, bullets };
 }
 
 /* ─── Round 59: the money ─── */

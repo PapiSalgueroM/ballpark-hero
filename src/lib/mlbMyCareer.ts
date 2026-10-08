@@ -46,6 +46,7 @@ import { countOf, mlbCareerStatBullet, mlbMajorAward, type MlbCareerSums } from 
 import { raiseWithinPotential, ratingRaiseNote } from './careerHeadroom';
 import { applyUsCareerAnnualBenefits } from './usCareerAnnualBenefits';
 import { careerRecoveryRisk } from './usCareerRecovery';
+import { hallCalibrationOf, legacyRead, type HallCalibration, type LegacyRead, type LegacyWeights } from './careerHallOfFame';
 /* Round 422: the share of gross pay that actually reaches the bank, after tax,
    agent and living. It was already the number this file used to turn career
    earnings into net worth; it is named here so the yearly banking and the
@@ -871,7 +872,7 @@ export function mlbShouldRetire(c: MlbCareerState): boolean {
   return c.ovr <= 62 || c.age >= 42 || c.seasons.length >= 21;
 }
 
-export interface MlbLegacy { score: number; verdict: string; hof: boolean; bullets: string[] }
+export interface MlbLegacy { score: number; verdict: string; hof: boolean; bullets: string[]; standout?: LegacyRead['standout'] }
 
 export function mlbCareerTotals(c: MlbCareerState): MlbCareerSums & { games: number } {
   /* Round 833: saves and holds join the sums, so a reliever's career reads
@@ -883,6 +884,116 @@ export function mlbCareerTotals(c: MlbCareerState): MlbCareerSums & { games: num
   }
   return { hr, rbi, sb, wins, so, games, saves, holds };
 }
+
+/* Round 1051: the legacy score reads a table per calibration through the one
+   scorer (legacyRead, careerHallOfFame.ts). Calibration 1 is the Round 123
+   formula below to the last bit; a career is read on the calibration it
+   retired on (hallCalibrationOf). */
+const MLB_LEGACY_V1: LegacyWeights = {
+  awards: { rings: 85, mvpCys: 220, allStars: 70 },
+  season: 9,
+  positions: {
+    SP: { terms: [{ stat: 'wins', per: 2 }, { stat: 'so', per: 70 }] },
+    // Every hitter, and on calibration 1 the reliever too.
+    '*': { terms: [{ stat: 'hr', per: 4 }, { stat: 'rbi', per: 60 }] },
+  },
+};
+/* Calibration 2 (Round 1051). It contains calibration 1 unchanged (the same
+   awards, the same season weight, each position's old terms first and in
+   order) and only adds, so no career scores lower on it. What it adds:
+   a base where calibration 1 read nothing, and the standout: a career total
+   near the top of this game's books for the position, in any family on the
+   list, earns credit of its own (legacyRead; only the best family counts).
+   Every from and to mark, the list itself (the half rule) and the measured
+   base terms come from scripts/data/careerHallMarks.json, which
+   scripts/genCareerHallMarks.mjs derives from measured careers; section 17 of
+   scripts/simCareerHall.mjs fails if this table and that ledger disagree. */
+const MLB_LEGACY_V2: LegacyWeights = {
+  awards: { rings: 85, mvpCys: 220, allStars: 70 },
+  season: 9,
+  positions: {
+    SP: {
+      terms: [{ stat: 'wins', per: 2 }, { stat: 'so', per: 70 }],
+      standout: [
+        { stat: 'wins', from: 294, to: 330, label: 'wins' },
+        { stat: 'so', from: 3700, to: 4120, label: 'strikeouts' },
+      ],
+    },
+    /* The reliever is read as calibration 1 read him. A base (saves, holds,
+       strikeouts) and a saves standout were built and then taken out by the
+       real anchors: a real career the writers dropped on its one ballot went
+       in with either (scripts/data/careerHallAnchors.json, decisions). */
+    RP: { terms: [{ stat: 'hr', per: 4 }, { stat: 'rbi', per: 60 }] },
+    C: {
+      terms: [{ stat: 'hr', per: 4 }, { stat: 'rbi', per: 60 }],
+      standout: [
+        { stat: 'hr', from: 361, to: 435, label: 'home runs' },
+        { stat: 'rbi', from: 1350, to: 1560, label: 'RBI' },
+      ],
+    },
+    '1B': {
+      terms: [{ stat: 'hr', per: 4 }, { stat: 'rbi', per: 60 }],
+      standout: [
+        { stat: 'hr', from: 602, to: 699, label: 'home runs' },
+        { stat: 'rbi', from: 1880, to: 2070, label: 'RBI' },
+      ],
+    },
+    '2B': {
+      terms: [{ stat: 'hr', per: 4 }, { stat: 'rbi', per: 60 }],
+      standout: [
+        { stat: 'rbi', from: 1380, to: 1560, label: 'RBI' },
+      ],
+    },
+    '3B': {
+      terms: [{ stat: 'hr', per: 4 }, { stat: 'rbi', per: 60 }],
+      standout: [
+        { stat: 'hr', from: 549, to: 619, label: 'home runs' },
+        { stat: 'rbi', from: 1760, to: 1950, label: 'RBI' },
+      ],
+    },
+    SS: {
+      terms: [{ stat: 'hr', per: 4 }, { stat: 'rbi', per: 60 }],
+      standout: [
+        { stat: 'hr', from: 440, to: 503, label: 'home runs' },
+        { stat: 'rbi', from: 1550, to: 1710, label: 'RBI' },
+        { stat: 'sb', from: 812, to: 932, label: 'steals' },
+      ],
+    },
+    LF: {
+      terms: [{ stat: 'hr', per: 4 }, { stat: 'rbi', per: 60 }],
+      standout: [
+        { stat: 'hr', from: 529, to: 607, label: 'home runs' },
+        { stat: 'rbi', from: 1740, to: 1920, label: 'RBI' },
+        // Half the push here: the real anchors again (a real career the writers dropped went in with the full one).
+        { stat: 'sb', from: 654, to: 745, label: 'steals', top: 150 },
+      ],
+    },
+    CF: {
+      terms: [{ stat: 'hr', per: 4 }, { stat: 'rbi', per: 60 }],
+      standout: [
+        { stat: 'hr', from: 434, to: 504, label: 'home runs' },
+        { stat: 'rbi', from: 1540, to: 1720, label: 'RBI' },
+        { stat: 'sb', from: 900, to: 1070, label: 'steals' },
+      ],
+    },
+    RF: {
+      terms: [{ stat: 'hr', per: 4 }, { stat: 'rbi', per: 60 }],
+      standout: [
+        { stat: 'hr', from: 553, to: 626, label: 'home runs' },
+        { stat: 'rbi', from: 1760, to: 1960, label: 'RBI' },
+      ],
+    },
+    DH: {
+      terms: [{ stat: 'hr', per: 4 }, { stat: 'rbi', per: 60 }],
+      standout: [
+        { stat: 'hr', from: 705, to: 786, label: 'home runs' },
+        { stat: 'rbi', from: 2080, to: 2290, label: 'RBI' },
+      ],
+    },
+    '*': { terms: [{ stat: 'hr', per: 4 }, { stat: 'rbi', per: 60 }] },
+  },
+};
+export const MLB_LEGACY_WEIGHTS: Record<HallCalibration, LegacyWeights> = { 1: MLB_LEGACY_V1, 2: MLB_LEGACY_V2 };
 
 export function mlbLegacyOf(c: MlbCareerState): MlbLegacy {
   const t = mlbCareerTotals(c);
@@ -902,9 +1013,11 @@ export function mlbLegacyOf(c: MlbCareerState): MlbLegacy {
      percent, inner circle 1.3 percent. The bottom tier moved from 170 to 230
      because at 170 it had become unreachable: nobody who plays nineteen years
      scores under 170 and the line was dead. */
-  let score = c.rings * 85 + c.mvpCys * 220 + c.allStars * 70 + c.seasons.length * 9;
-  score += c.pos === 'SP' ? t.wins * 0.5 + t.so / 70 : t.hr * 0.25 + t.rbi / 60;
-  score = Math.round(score);
+  const read = legacyRead(MLB_LEGACY_WEIGHTS[hallCalibrationOf(c)], {
+    pos: c.pos, seasons: c.seasons.length,
+    awards: { rings: c.rings, mvpCys: c.mvpCys, allStars: c.allStars }, totals: { ...t },
+  });
+  const score = read.score;
   const hof = score >= 500;
   const verdict = score >= 900 ? 'Cooperstown first ballot, inner circle'
     : score >= 500 ? 'Hall of Famer'
@@ -920,7 +1033,7 @@ export function mlbLegacyOf(c: MlbCareerState): MlbLegacy {
     mlbCareerStatBullet(t, c.pos),
     `${Math.round(c.earnings)}M career earnings, ${c.draftPick > 0 ? `drafted pick ${c.draftPick}` : 'undrafted signing'}`,
   ];
-  return { score, verdict, hof, bullets };
+  return read.standout ? { score, verdict, hof, bullets, standout: read.standout } : { score, verdict, hof, bullets };
 }
 
 /* ─── Round 58: the money ─── */

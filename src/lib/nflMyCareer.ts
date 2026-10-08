@@ -50,6 +50,7 @@ import { countOf, nflCareerStatBullet, nflMajorAward, type NflCareerSums } from 
 import { raiseWithinPotential, ratingRaiseNote } from './careerHeadroom';
 import { applyUsCareerAnnualBenefits } from './usCareerAnnualBenefits';
 import { careerRecoveryRisk } from './usCareerRecovery';
+import { hallCalibrationOf, legacyRead, type HallCalibration, type LegacyRead, type LegacyWeights } from './careerHallOfFame';
 
 export type CareerPos = 'QB' | 'RB' | 'WR' | 'TE' | 'LB' | 'CB' | 'EDGE' | 'K';
 
@@ -1040,7 +1041,102 @@ export interface Legacy {
   verdict: string;
   hof: boolean;
   bullets: string[];
+  standout?: LegacyRead['standout'];
 }
+
+/* Round 1051: the legacy score reads a table per calibration through the one
+   scorer (legacyRead, careerHallOfFame.ts). Calibration 1 is the Round 123
+   formula below to the last bit; a career is read on the calibration it
+   retired on (hallCalibrationOf). */
+const NFL_LEGACY_V1: LegacyWeights = {
+  awards: { rings: 80, mvps: 230, allPros: 150 },
+  season: 11,
+  positions: {
+    QB: { terms: [{ stat: 'passYds', per: 800 }, { stat: 'passTd', per: 2 }] },
+    RB: { terms: [{ stat: 'rushYds', per: 120 }] },
+    WR: { terms: [{ stat: 'recYds', per: 140 }] },
+    '*': { terms: [] },
+  },
+};
+/* Calibration 2 (Round 1051). It contains calibration 1 unchanged (the same
+   awards, the same season weight, each position's old terms first and in
+   order) and only adds, so no career scores lower on it. What it adds:
+   a base where calibration 1 read nothing, and the standout: a career total
+   near the top of this game's books for the position, in any family on the
+   list, earns credit of its own (legacyRead; only the best family counts).
+   Every from and to mark, the list itself (the half rule) and the measured
+   base terms come from scripts/data/careerHallMarks.json, which
+   scripts/genCareerHallMarks.mjs derives from measured careers; section 17 of
+   scripts/simCareerHall.mjs fails if this table and that ledger disagree.
+   Two families the marks would give are not here, because real careers said
+   no (section 18 of the harness; each decision is recorded with its counts in
+   scripts/data/careerHallAnchors.json): a receiver's touchdown catches and a
+   kicker's field goals. With the push, whole and then halved, the engine sent
+   a real long wait straight in on the first ballot and inducted real kickers
+   the Hall never called. So a kicker is read on his hardware and his seasons,
+   exactly as calibration 1 read him. Three more decisions the same day, by
+   the same file's moved past rule: an edge rusher's sacks carry no standout
+   (two real sack leaders who waited years went straight in on the first
+   ballot with it, whole and halved; the base alone reads them as the real
+   Hall did), and a receiver's catches and receiving yards pay half (top 150),
+   which reads a real long wait as a wait. */
+const NFL_LEGACY_V2: LegacyWeights = {
+  awards: { rings: 80, mvps: 230, allPros: 150 },
+  season: 11,
+  positions: {
+    QB: {
+      terms: [{ stat: 'passYds', per: 800 }, { stat: 'passTd', per: 2 }],
+      standout: [
+        { stat: 'passYds', from: 72800, to: 80100, label: 'passing yards' },
+        { stat: 'passTd', from: 525, to: 580, label: 'touchdown passes' },
+      ],
+    },
+    RB: {
+      terms: [{ stat: 'rushYds', per: 120 }],
+      standout: [
+        { stat: 'rushYds', from: 14800, to: 17300, label: 'rushing yards' },
+        { stat: 'rushTd', from: 122, to: 145, label: 'rushing touchdowns' },
+      ],
+    },
+    WR: {
+      terms: [{ stat: 'recYds', per: 140 }],
+      standout: [
+        { stat: 'rec', from: 1470, to: 1660, label: 'catches', top: 150 },
+        { stat: 'recYds', from: 18500, to: 21000, label: 'receiving yards', top: 150 },
+      ],
+    },
+    TE: {
+      terms: [{ stat: 'recYds', per: 180 }, { stat: 'rec', per: 34 }, { stat: 'recTd', per: 4.9 }],
+      standout: [
+        { stat: 'rec', from: 1170, to: 1310, label: 'catches' },
+        { stat: 'recYds', from: 12600, to: 14100, label: 'receiving yards' },
+        { stat: 'recTd', from: 169, to: 188, label: 'touchdown catches' },
+      ],
+    },
+    LB: {
+      terms: [{ stat: 'tackles', per: 34 }, { stat: 'sacks', per: 2.6 }, { stat: 'picks', per: 1.3 }, { stat: 'forcedFum', per: 1.3 }],
+      standout: [
+        { stat: 'tackles', from: 2310, to: 2610, label: 'tackles' },
+        { stat: 'picks', from: 28, to: 34, label: 'interceptions' },
+      ],
+    },
+    CB: {
+      terms: [{ stat: 'picks', per: 0.75 }, { stat: 'passDef', per: 8.2 }, { stat: 'tackles', per: 33 }],
+      standout: [
+        { stat: 'picks', from: 48, to: 59, label: 'interceptions' },
+        { stat: 'passDef', from: 341, to: 394, label: 'passes defended' },
+      ],
+    },
+    EDGE: {
+      terms: [{ stat: 'sacks', per: 2.5 }, { stat: 'tackles', per: 41 }, { stat: 'forcedFum', per: 1.3 }],
+    },
+    K: {
+      terms: [],
+    },
+    '*': { terms: [] },
+  },
+};
+export const NFL_LEGACY_WEIGHTS: Record<HallCalibration, LegacyWeights> = { 1: NFL_LEGACY_V1, 2: NFL_LEGACY_V2 };
 
 export function legacyOf(c: CareerState): Legacy {
   const totals = careerTotals(c);
@@ -1055,11 +1151,11 @@ export function legacyOf(c: CareerState): Legacy {
      score 266, Hall of Fame 11.9 percent, inner circle 1.4 percent, and a
      forced elite career (90 ceiling) goes in at 70 percent. A great career
      still comes out great, which was the thing to protect. */
-  let score = c.rings * 80 + c.mvps * 230 + c.allPros * 150 + c.seasons.length * 11;
-  if (c.pos === 'QB') score += totals.passYds / 800 + totals.passTd * 0.5;
-  if (c.pos === 'RB') score += totals.rushYds / 120;
-  if (c.pos === 'WR') score += totals.recYds / 140;
-  score = Math.round(score);
+  const read = legacyRead(NFL_LEGACY_WEIGHTS[hallCalibrationOf(c)], {
+    pos: c.pos, seasons: c.seasons.length,
+    awards: { rings: c.rings, mvps: c.mvps, allPros: c.allPros }, totals: { ...totals },
+  });
+  const score = read.score;
   const hof = score >= 520;
   const verdict = score >= 900 ? 'Inner-circle, first-ballot immortal'
     : score >= 520 ? 'Hall of Famer'
@@ -1076,7 +1172,7 @@ export function legacyOf(c: CareerState): Legacy {
     nflCareerStatBullet(totals, c.pos),
     `${Math.round(c.earnings)}M career earnings, ${c.draftPick > 0 ? `drafted pick ${c.draftPick}` : 'undrafted signing'}`,
   ];
-  return { score, verdict, hof, bullets };
+  return read.standout ? { score, verdict, hof, bullets, standout: read.standout } : { score, verdict, hof, bullets };
 }
 
 export function careerTotals(c: CareerState): NflCareerSums {

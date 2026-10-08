@@ -151,6 +151,8 @@ export function HallOfFameCard({ record, rules, speech, onSpeech, onDismiss, fol
             </p>
           </div>
         )}
+        {/* Round 1051: what the voters weighed, for a career retired on calibration 2. */}
+        {record.weighs && <p data-hall-weighs className="text-center text-xs text-muted-foreground">{record.weighs}</p>}
       </div>
       {asking ? (
         <div className="cm-rise-gated space-y-1.5" style={{ animationDelay: after }}>

@@ -16,7 +16,7 @@
 
 import { answerRetirement, careerEndsAfter, retirementTalk, sanitizeRetirement } from './careerRetirement';
 import type { RetirementChoiceId, RetirementTalk } from './careerRetirement';
-import { sanitizeHallSpeech, sanitizeNumberRetired } from './careerHallOfFame';
+import { sanitizeHallCal, sanitizeHallSpeech, sanitizeNumberRetired, stampHallCalibration } from './careerHallOfFame';
 import type { UsHallSport } from './careerHallOfFame';
 import type { UsCareerCore } from './usCareerSport';
 
@@ -74,6 +74,43 @@ export function repairHallOnLoad(c: UsCareerCore): void {
     const n = sanitizeNumberRetired(c.numberRetiredBy);
     if (n) c.numberRetiredBy = n; else delete c.numberRetiredBy;
   }
+  /* Round 1051: the calibration stamp is only checked, never written here. A
+     retired save with no stamp stays the bytes it is and reads calibration 1. */
+  if (c.hallCal !== undefined) {
+    const v = sanitizeHallCal(c.hallCal);
+    if (v) c.hallCal = v; else delete c.hallCal;
+  }
+}
+
+/** Round 1051: stamps the legacy calibration on the write that retires a
+ *  career. The board calls it at the top of every save; it does nothing
+ *  unless the career is retired and unstamped, and then it asks the save on
+ *  disk: if that one is already retired this is an old retired save being
+ *  written again (the speech, a coach career) and it keeps no stamp, so it
+ *  goes on reading calibration 1. Otherwise this write is the retirement and
+ *  it stamps today's calibration. An unreadable or missing save counts as
+ *  not retired yet.
+ *  Two tabs on one save, both ways. (1) The same career was retired a moment
+ *  ago in another tab, so the save on disk is retired AND stamped while this
+ *  tab still holds it live: this tab's retirement keeps the stamp that tab
+ *  wrote (the review of 2026-10-08 measured the write taking it away, and the
+ *  career then read calibration 1 on every later load). (2) Known and
+ *  accepted: an old retired save whose storage is wiped or replaced in
+ *  another tab while its board is open is written fresh with a stamp on its
+ *  next save, because the disk no longer says it was retired. Mutates c. */
+export function stampOnRetirement(c: UsCareerCore, saveKey: string): void {
+  if (!c.retired || c.hallCal !== undefined) return;
+  type OnDisk = { retired?: unknown; hallCal?: unknown; name?: unknown; pos?: unknown; draftPick?: unknown };
+  let disk: OnDisk | null = null;
+  try {
+    const raw = localStorage.getItem(saveKey);
+    if (raw) disk = (JSON.parse(raw) as { c?: OnDisk } | null)?.c ?? null;
+  } catch { /* unreadable: not retired yet */ }
+  if (disk?.retired !== true) { stampHallCalibration(c); return; }
+  // Retired on disk already. With no stamp there it is an old retired save being written again: no stamp.
+  // With one, and the same man, it is this career retired in another tab: keep what it was told.
+  const told = sanitizeHallCal(disk.hallCal);
+  if (told && disk.name === c.name && disk.pos === c.pos && disk.draftPick === c.draftPick) c.hallCal = told;
 }
 
 /** True when this offseason has the talk: it is pending now, or he already

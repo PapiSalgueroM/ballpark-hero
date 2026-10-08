@@ -3,8 +3,31 @@
    real rule below is sourced in docs/audits/US-HALL-RULES-2026-10.md and
    scripts/simCareerHall.mjs holds these numbers to that file's table. */
 
-import { nbaLegacyOf, nbaShouldRetire, nbaTeamLabelOf, type NbaCareerState } from "./nbaMyCareer";
-import { usCareerHall } from "./careerHallOfFame";
+import { nbaLegacyOf, NBA_LEGACY_WEIGHTS, nbaShouldRetire, nbaTeamLabelOf, type NbaCareerState } from "./nbaMyCareer";
+import { HALL_CALIBRATION, hallVoterRulesFor, usCareerHall, type HallVoterWords } from "./careerHallOfFame";
+
+/* Round 1051: what the voters weigh, in words. The card prints the hardware
+   sentence and then names what the table reads for the position, from the
+   table itself (points for everyone here; rebounds and assists only count
+   as a standout, and the card says so only when one did). The "?" builds its
+   rule and its worked example from the rest. The hardware is named trophy by
+   trophy in this sport because the counts are exactly these four: mvps moves
+   on the MVP alone (nbaMyCareer.ts, where the award is drawn), and a
+   Defensive Player of the Year goes on the season line and into no count
+   the legacy reads, so the card does not promise it. The other three sports
+   say "the major awards" because there one count holds a different trophy by
+   position. The example names a standout family of the calibration 2 table,
+   and section 19 of scripts/simCareerHall.mjs holds it against the engine. */
+export const NBA_HALL_WORDS: HallVoterWords = {
+  weighs: "The voters weigh the hardware first: rings, MVPs, Finals MVPs, All-NBA years.",
+  reads: { pts: "points" },
+  hardware: "rings, MVPs, Finals MVPs, All-NBA years",
+  families: "points, rebounds or assists",
+  example: { positions: ["PG"], stat: "ast", one: "point guard", who: "point guards", family: "assists" },
+};
+
+/** The two lines the page's "?" adds, built from the words above and the table careers retire on today. */
+export const nbaHallHelpRules = (): string[] => hallVoterRulesFor(NBA_HALL_WORDS, NBA_LEGACY_WEIGHTS[HALL_CALIBRATION]);
 
 export const NBA_CAREER_HALL = usCareerHall<NbaCareerState>({
   rules: {
@@ -29,6 +52,8 @@ export const NBA_CAREER_HALL = usCareerHall<NbaCareerState>({
   // Game tuning. The hard stop (nbaShouldRetire) is untouched.
   retirement: { minAge: 31, dropFromPeak: 8, floor: 72 },
   legacy: nbaLegacyOf,
+  words: NBA_HALL_WORDS,
+  weights: NBA_LEGACY_WEIGHTS,
   shouldRetire: nbaShouldRetire,
   teamLabel: nbaTeamLabelOf,
   deckJerseyFlag: "nb_jersey",

@@ -32,7 +32,7 @@ import type { UsSport } from '@/lib/usCareerToCoach';
 import type { TrainingBank, TrainingSport } from '@/lib/careerTraining';
 import type { CareerReviewStats } from '@/lib/usCareerSeasonReview';
 import type { RetirementBlock } from '@/lib/careerRetirement';
-import type { HallSpeechBlock, NumberRetiredBy, UsHallSport } from '@/lib/careerHallOfFame';
+import type { HallCalibration, HallSpeechBlock, LegacyRead, NumberRetiredBy, UsHallSport } from '@/lib/careerHallOfFame';
 import type { UsSeasonBind } from '@/lib/season/us';
 
 export interface UsCareerPracticeResult extends TrainingBank {
@@ -106,6 +106,10 @@ export interface UsCareerCore {
   hallSpeech?: HallSpeechBlock;
   /** Round 1039: the club that retired the number on a deck card. Optional. */
   numberRetiredBy?: NumberRetiredBy;
+  /** Round 1051: the legacy calibration this career retired on, stamped once
+   *  at retirement (src/lib/careerHallOfFame.ts). Optional: a retired save
+   *  with none retired before the round and is read on calibration 1. */
+  hallCal?: HallCalibration;
 }
 
 /** Round 1038: one offseason's cards, as ids, and how many are answered. */
@@ -133,7 +137,7 @@ export interface UsSummerKnob {
 
 export interface UsCareerArchetype { id: string; label: string; desc: string }
 export interface UsCareerEra { id: string; label: string; blurb: string }
-export interface UsCareerLegacy { score: number; verdict: string; hof: boolean; bullets: string[] }
+export interface UsCareerLegacy { score: number; verdict: string; hof: boolean; bullets: string[]; standout?: LegacyRead['standout'] }
 
 /** One crossroads card. `apply` writes the choice onto the career and returns the feed line. */
 export interface UsCareerEvent<C> {

@@ -36,8 +36,8 @@ import { MLB_CAREER_SPORT } from '@/lib/mlbCareerSport';
 import { NHL_CAREER_SPORT } from '@/lib/nhlCareerSport';
 import { defaultAppearance } from '@/lib/soccerCareerAppearance';
 import { dealSummer, laterAnswerMovesRating, movesRating, seekSummerCard, summerCardAt, summerSeason } from '@/lib/usCareerSummer';
-import { pendingTalk, RETIREMENT_CARD_IDS, talkDeckFilter } from '@/lib/usCareerRetirementFlow';
-import { hallRecordFor, runHallBallot, type HallRecord } from '@/lib/careerHallOfFame';
+import { pendingTalk, repairHallOnLoad, RETIREMENT_CARD_IDS, stampOnRetirement, talkDeckFilter } from '@/lib/usCareerRetirementFlow';
+import { HALL_CALIBRATION, hallCalibrationOf, hallRecordFor, runHallBallot, type HallRecord } from '@/lib/careerHallOfFame';
 import { HallOfFameCard } from '@/components/career/HallOfFameCard';
 import type { UsCareerCore, UsCareerSport } from '@/lib/usCareerSport';
 
@@ -188,6 +188,13 @@ describe.each(SPORTS)('%s: the retirement talk on the board', (_slug, getSport) 
     expect(after.c.retired).toBe(true);
     expect(lastYear(after.c)).toBe(lastYear(c) + 1);
     expect(document.body.textContent).toContain('Farewell season');
+    /* Round 1051, review of 2026-10-08: a career a PLAYED season ends (the
+       farewell here; the hard stop and a banned year end through the same two
+       season end saves) is stamped like one the player ends by hand. Before
+       this line a refactor that moved the stamp out of persist and into the
+       two pressed handlers passed every test (mutation stampnotseason). */
+    expect(after.c.hallCal).toBe(HALL_CALIBRATION);
+    expect(hallCalibrationOf(after.c)).toBe(HALL_CALIBRATION);
   });
 
   it('a farewell season on the last year of the deal opens no extension talk (review fix)', async () => {
@@ -249,7 +256,9 @@ describe.each(SPORTS)('%s: the retirement talk on the board', (_slug, getSport) 
     fireEvent.click(button('Retire now')!);
     const after = read(sport).c as UsCareerCore & Record<string, unknown>;
     const before = copy(c) as UsCareerCore & Record<string, unknown>;
-    for (const k of ['retired', 'retirement', 'summer']) { delete after[k]; delete before[k]; }
+    // Round 1051: the save that retires a career also stamps its legacy calibration.
+    expect(after.hallCal).toBe(2);
+    for (const k of ['retired', 'retirement', 'summer', 'hallCal']) { delete after[k]; delete before[k]; }
     expect(after, 'nothing but the end and the dropped summer changed').toEqual(before);
   });
 });
@@ -321,6 +330,205 @@ describe.each(SPORTS)('%s: the Hall of Fame on the retirement screen', (_slug, g
     expect(after.numberRetiredBy).toBeUndefined();
     expect(after.name).toBe(c.name);
     expect(after.seasons).toEqual(c.seasons);
+  });
+});
+
+/* Round 1051: the calibration stamp. One optional save key, hallCal, written
+   only by the save that retires a career with the Hall bound, and only as
+   today's calibration. A retired save with no stamp retired before the round:
+   it reads calibration 1 and is never stamped afterwards, whatever is saved
+   on top of it. Controls, each run once by hand and noted in the round's
+   commit: the stamp line deleted from persist turns the first case red; a
+   stampOnRetirement that ignores the disk turns the third case red. */
+/** An active career six seasons in (so the hub has 'Hang them up now'),
+ *  outside the talk rule and the hard stop. Built as an old save would be. */
+function activeCareer(sport: UsCareerSport, seed: number): { c: UsCareerCore; tq: number } {
+  for (let s = seed; s < seed + 300; s += 1) {
+    const rng = mulberry32(s);
+    const pos = sport.create.defaultPos;
+    const c = sport.startCareer(`Stamp ${sport.label} ${s}`, pos, sport.create.archetypes[pos][0], rng, defaultAppearance(), 'now');
+    let tq = sport.rollTeamQuality(null, rng);
+    sport.assignRole(c, tq, rng);
+    for (let y = 0; y < 6; y += 1) {
+      sport.campBattle(c, tq, rng);
+      sport.simSeason(c, tq, rng);
+      sport.progress(c, rng);
+      tq = sport.rollTeamQuality(tq, rng);
+    }
+    c.pendingRivalryEvent = null;
+    c.pendingRivalryChoice = null;
+    c.suspendedSeasons = 0;
+    c.contractYears = 3;
+    if (c.retired || sport.shouldRetire(c) || pendingTalk(c, sport.hall)) continue;
+    return { c, tq };
+  }
+  throw new Error(`${sport.label}: no active career outside the talk rule in 300 seeds`);
+}
+
+describe.each(SPORTS)('%s: the calibration stamp (Round 1051)', (_slug, getSport) => {
+  const hangUp = async () => {
+    await waitFor(() => expect(button('Hang them up now')).toBeTruthy());
+    fireEvent.click(button('Hang them up now')!);
+    await waitFor(() => expect(button('Retire this player')).toBeTruthy());
+    fireEvent.click(button('Retire this player')!);
+  };
+
+  it('an active save retired through the board is saved with hallCal 2', async () => {
+    const sport = getSport();
+    const { c, tq } = activeCareer(sport, 71);
+    expect((c as UsCareerCore).hallCal).toBeUndefined();
+    save(sport, c, tq, 'season');
+    mount(sport);
+    await hangUp();
+    await waitFor(() => expect(read(sport).phase).toBe('retired'));
+    const after = read(sport).c as UsCareerCore;
+    expect(after.retired).toBe(true);
+    expect(after.hallCal).toBe(HALL_CALIBRATION);
+    expect(HALL_CALIBRATION).toBe(2);
+    expect(hallCalibrationOf(after)).toBe(2);
+    // The retired screen reads the stamped career: its legacy is the saved one's.
+    await waitFor(() => expect(document.body.textContent).toContain(`${c.name} retires`));
+    expect(document.body.textContent).toContain(sport.legacyOf(after).verdict);
+    // The ballot card says what the voters weighed: the record's own line, which opens with the sport's sentence.
+    const line = await waitFor(() => { const el = document.querySelector('[data-hall-weighs]'); expect(el).toBeTruthy(); return el!; }, { timeout: 12000 });
+    const rec = hallRecordFor(sport.hall!, after);
+    expect(line.textContent).toBe(rec.weighs);
+    expect(rec.weighs!.startsWith('The voters weigh the hardware first: ')).toBe(true);
+    // A reload keeps the stamp and writes nothing.
+    const bytes = localStorage.getItem(sport.saveKey);
+    cleanup();
+    mount(sport);
+    await waitFor(() => expect(document.body.textContent).toContain(`${c.name} retires`));
+    expect(localStorage.getItem(sport.saveKey)).toBe(bytes);
+  }, 20000);
+
+  it('with no Hall bound the same retirement writes no hallCal: the save is byte for byte the old one', async () => {
+    const sport = { ...getSport(), hall: undefined };
+    const { c, tq } = activeCareer(sport, 71);
+    save(sport, c, tq, 'season');
+    mount(sport);
+    await hangUp();
+    await waitFor(() => expect(read(sport).phase).toBe('retired'));
+    const expected = copy(c);
+    expected.retired = true;
+    expect(localStorage.getItem(sport.saveKey)).toBe(JSON.stringify({ c: expected, phase: 'retired', teamQuality: tq, coach: null }));
+    expect('hallCal' in read(sport).c).toBe(false);
+  }, 20000);
+
+  it('a retired save with no stamp reads calibration 1 and is never stamped: not by the speech, not by a coach career', async () => {
+    const sport = getSport();
+    const c = retiredCareer(sport, 200, true);
+    expect(hallCalibrationOf(c)).toBe(1);
+    save(sport, c, null, 'retired');
+    mount(sport);
+    await waitFor(() => expect(document.body.textContent).toContain('Your induction speech'));
+    expect(document.querySelector('[data-hall-weighs]'), 'a calibration 1 card prints no voters line').toBeNull();
+    expect('weighs' in hallRecordFor(sport.hall!, c)).toBe(false);
+    fireEvent.click(button('Keep it short')!);
+    await waitFor(() => expect(read(sport).c.hallSpeech?.speechId).toBe('short'));
+    expect('hallCal' in read(sport).c, 'the speech writes no stamp on an old retired save').toBe(false);
+    fireEvent.click(button('Go after a coaching job')!);
+    await waitFor(() => expect(read(sport).phase).toBe('coach'));
+    expect('hallCal' in read(sport).c, 'a coach career begun writes no stamp').toBe(false);
+    await waitFor(() => expect(button('Back to the playing career')).toBeTruthy());
+    fireEvent.click(button('Back to the playing career')!);
+    await waitFor(() => expect(read(sport).phase).toBe('retired'));
+    const after = read(sport).c as UsCareerCore;
+    expect('hallCal' in after, 'a coach career left writes no stamp').toBe(false);
+    expect(hallCalibrationOf(after)).toBe(1);
+    expect(sport.legacyOf(after)).toEqual(sport.legacyOf(c));
+  }, 30000);
+
+  it('a junk stamp is dropped on load and the save reads calibration 1', async () => {
+    const sport = getSport();
+    const c = retiredCareer(sport, 200, true);
+    (c as unknown as { hallCal: unknown }).hallCal = 7;
+    const loaded = copy(c) as UsCareerCore;
+    repairHallOnLoad(loaded);
+    expect('hallCal' in loaded).toBe(false);
+    expect(hallCalibrationOf(c)).toBe(1);
+    save(sport, c, null, 'retired');
+    mount(sport);
+    await waitFor(() => expect(document.body.textContent).toContain('Your induction speech'));
+    fireEvent.click(button('Keep it short')!);
+    await waitFor(() => expect(read(sport).c.hallSpeech?.speechId).toBe('short'));
+    expect('hallCal' in read(sport).c, 'the next save no longer carries the junk stamp, and no new one').toBe(false);
+  }, 20000);
+
+  it('a retired save stamped 2 reads calibration 2 on every later load and keeps its stamp', async () => {
+    const sport = getSport();
+    const c = retiredCareer(sport, 200, true);
+    c.hallCal = 2;
+    expect(hallCalibrationOf(c)).toBe(2);
+    save(sport, c, null, 'retired');
+    mount(sport);
+    await waitFor(() => expect(document.body.textContent).toContain(sport.hall!.rules.hallName));
+    const first = hallRecordFor(sport.hall!, c);
+    if (first.outcome === 'inducted') {
+      await waitFor(() => expect(document.body.textContent).toContain('Your induction speech'));
+      fireEvent.click(button('Keep it short')!);
+      await waitFor(() => expect(read(sport).c.hallSpeech?.speechId).toBe('short'));
+    }
+    expect(read(sport).c.hallCal).toBe(2);
+    cleanup();
+    mount(sport);
+    await waitFor(() => expect(document.body.textContent).toContain(sport.hall!.rules.hallName));
+    await waitFor(() => expect(document.querySelector('[data-hall-weighs]')).toBeTruthy(), { timeout: 12000 });
+    expect(read(sport).c.hallCal).toBe(2);
+    expect(hallCalibrationOf(read(sport).c)).toBe(2);
+  }, 20000);
+
+  /* Review of 2026-10-08, measured on basketball: tab A retires him (the save
+     is stamped), tab B still holds him live and retires him too. The second
+     write used to carry no stamp, because the disk already said retired, and
+     the career read calibration 1 on every later load. */
+  it('two tabs: retired a moment ago in another tab, this tab\'s retirement keeps the stamp that tab wrote', async () => {
+    const sport = getSport();
+    const { c, tq } = activeCareer(sport, 71);
+    save(sport, c, tq, 'season');
+    mount(sport);
+    await waitFor(() => expect(button('Hang them up now')).toBeTruthy());
+    const other = copy(c);
+    other.retired = true;
+    other.hallCal = HALL_CALIBRATION;
+    localStorage.setItem(sport.saveKey, JSON.stringify({ c: other, phase: 'retired', teamQuality: tq, coach: null, otherTab: true }));
+    await hangUp();
+    await waitFor(() => expect('otherTab' in read(sport), 'this tab has written its own save').toBe(false));
+    const after = read(sport).c as UsCareerCore;
+    expect(after.retired).toBe(true);
+    expect(after.hallCal).toBe(HALL_CALIBRATION);
+    expect(hallCalibrationOf(after)).toBe(HALL_CALIBRATION);
+  }, 20000);
+
+  it('the stamp reads the disk: a live save stamps, the same man retired there hands his stamp on, anyone else\'s is left alone', () => {
+    const sport = getSport();
+    const { c, tq } = activeCareer(sport, 71);
+    const retiring = (): UsCareerCore => { const r = copy(c); r.retired = true; return r; };
+    // The disk holds him live: this write is the retirement.
+    save(sport, c, tq, 'season');
+    const a = retiring();
+    stampOnRetirement(a, sport.saveKey);
+    expect(a.hallCal).toBe(HALL_CALIBRATION);
+    // The disk holds him retired with no stamp: an old retired save written again.
+    save(sport, retiring(), tq, 'retired');
+    const b = retiring();
+    stampOnRetirement(b, sport.saveKey);
+    expect('hallCal' in b).toBe(false);
+    // The disk holds him retired and stamped: the other tab's stamp is kept.
+    const stamped = retiring();
+    stamped.hallCal = HALL_CALIBRATION;
+    save(sport, stamped, tq, 'retired');
+    const d = retiring();
+    stampOnRetirement(d, sport.saveKey);
+    expect(d.hallCal).toBe(HALL_CALIBRATION);
+    // The disk holds ANOTHER man retired and stamped: an old retired save takes nothing from him.
+    const stranger = retiring();
+    stranger.name = `${c.name} the Second`;
+    stranger.hallCal = HALL_CALIBRATION;
+    save(sport, stranger, tq, 'retired');
+    const e = retiring();
+    stampOnRetirement(e, sport.saveKey);
+    expect('hallCal' in e).toBe(false);
   });
 });
 

@@ -3,8 +3,38 @@
    real rule below is sourced in docs/audits/US-HALL-RULES-2026-10.md and
    scripts/simCareerHall.mjs holds these numbers to that file's table. */
 
-import { legacyOf, shouldRetire, teamLabelOf, type CareerState } from "./nflMyCareer";
-import { usCareerHall } from "./careerHallOfFame";
+import { legacyOf, NFL_LEGACY_WEIGHTS, shouldRetire, teamLabelOf, type CareerState } from "./nflMyCareer";
+import { HALL_CALIBRATION, hallVoterRulesFor, usCareerHall, type HallVoterWords } from "./careerHallOfFame";
+
+/* Round 1051: what the voters weigh, in words. The card prints the hardware
+   sentence and then names what the table reads for the position, from the
+   table itself (reads is the noun for each stat a term can read). The kicker
+   gets his own second sentence: the real anchors took his field goals out of
+   the table (real kickers near the top of the real list were never called),
+   so he is told "your seasons" and that his field goals do not move the
+   voters, and the "?" says a kicker gets no push. An edge rusher gets none
+   either (the anchors took his sacks push out too: two real sack leaders
+   who waited years went straight in with it), but his sacks still count
+   through his base, so his card names them like any other number. The "?"
+   builds its rule and its worked example from the rest. "The major awards" on purpose:
+   the engine counts a different trophy by position under one name, and a
+   sentence that names none cannot mislabel one. The example names a standout
+   family of the calibration 2 table, and section 19 of
+   scripts/simCareerHall.mjs holds it against the engine. */
+export const NFL_HALL_WORDS: HallVoterWords = {
+  weighs: "The voters weigh the hardware first: rings, the major awards, All-Pro years.",
+  reads: {
+    passYds: "passing yards", passTd: "touchdown passes", rushYds: "rushing yards", recYds: "receiving yards", rec: "catches",
+    recTd: "touchdown catches", tackles: "tackles", sacks: "sacks", picks: "interceptions", forcedFum: "forced fumbles", passDef: "passes defended",
+  },
+  readsBy: { K: "Then your seasons. A kicker's field goals do not move them." },
+  hardware: "rings, the major awards, All-Pro years",
+  families: "passing yards for a quarterback, catches for a receiver, interceptions for a corner, tackles for a linebacker, though a kicker and an edge rusher get none",
+  example: { positions: ["CB"], stat: "picks", one: "corner", who: "corners", family: "interceptions" },
+};
+
+/** The two lines the page's "?" adds, built from the words above and the table careers retire on today. */
+export const nflHallHelpRules = (): string[] => hallVoterRulesFor(NFL_HALL_WORDS, NFL_LEGACY_WEIGHTS[HALL_CALIBRATION]);
 
 export const NFL_CAREER_HALL = usCareerHall<CareerState>({
   rules: {
@@ -27,6 +57,8 @@ export const NFL_CAREER_HALL = usCareerHall<CareerState>({
   // Game tuning. The hard stop (shouldRetire) is untouched.
   retirement: { minAge: 30, dropFromPeak: 8, floor: 70 },
   legacy: legacyOf,
+  words: NFL_HALL_WORDS,
+  weights: NFL_LEGACY_WEIGHTS,
   shouldRetire,
   teamLabel: teamLabelOf,
   deckJerseyFlag: "b_jersey",
