@@ -1,0 +1,23 @@
+#!build
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-round: node_modules/.bin/vitest run src/test/safeStorage.test.ts src/test/supabaseClientBlockedStorage.test.ts src/test/cookieConsentStorage.test.tsx src/test/storageBlockedBoot.test.tsx src/test/dailySaveParity.test.tsx src/test/footleClueDesk.test.tsx src/test/footlePractice.test.tsx src/test/footleResultCurrency.test.tsx src/test/footleUnlimitedSession.test.tsx src/test/helpConsentFocus.test.tsx src/test/rulesGateConsentFocus.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000
+simStorageWrites: node scripts/simStorageWrites.mjs
+simStorageWrites-unguard: SIM_STORAGE_WRITES_CONTROL=unguard node scripts/simStorageWrites.mjs
+simStorageWrites-order: SIM_STORAGE_WRITES_CONTROL=order node scripts/simStorageWrites.mjs
+simStorageWrites-client: SIM_STORAGE_WRITES_CONTROL=client node scripts/simStorageWrites.mjs
+simStorageWrites-caller: SIM_STORAGE_WRITES_CONTROL=caller node scripts/simStorageWrites.mjs
+simCompletionOnce: node scripts/simCompletionOnce.mjs
+simNoDoubleRecord: node scripts/simNoDoubleRecord.mjs
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simAdsense: node scripts/simAdsense.mjs
+simDaily: node scripts/simDaily.mjs
+simResultPillComparison: node scripts/simResultPillComparison.mjs
+simWc2026Results: node scripts/simWc2026Results.mjs
+simHelpConsentFocus: node scripts/simHelpConsentFocus.mjs
+simRulesGateConsentFocus: node scripts/simRulesGateConsentFocus.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simAccessibility: node scripts/simAccessibility.mjs

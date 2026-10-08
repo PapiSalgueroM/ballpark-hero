@@ -1,0 +1,23 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+vitest-round exit=0 18s |    Duration  17.63s (transform 6.92s, setup 1.33s, collect 15.58s, tests 18.58s, environment 8.53s, prepare 2.32s)
+simStorageWrites exit=0 2s | simStorageWrites: all green
+simStorageWrites-unguard exit=1 2s | simStorageWrites (control unguard): 1 failed
+simStorageWrites-order exit=1 2s | simStorageWrites (control order): 1 failed
+simStorageWrites-client exit=1 2s | simStorageWrites (control client): 1 failed
+simStorageWrites-caller exit=1 2s | simStorageWrites (control caller): 1 failed
+simCompletionOnce exit=0 7s | simCompletionOnce: all green
+simNoDoubleRecord exit=0 43s | simNoDoubleRecord: all green (67 rows and checks, each recorded once across the finish, the toggles, the coaching, the reveals and the reloads; 115 recorders read)
+tsc exit=0 128s | 
+simNoRivalNames exit=0 22s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 61s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simLiveScores exit=0 1s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simAdsense exit=0 1s | simAdsense: green. Verification, ads.txt, the policy pages and the ad component are all review ready.
+simDaily exit=0 3s | simDaily: green. Every daily game is a different game tomorrow.
+simResultPillComparison exit=1 1s | Node.js v24.21.0
+simWc2026Results exit=0 2s | simWc2026Results: all green
+simHelpConsentFocus exit=0 5s | simHelpConsentFocus: real source held, disposable copies cleaned, no vendor requests.
+simRulesGateConsentFocus exit=0 5s | simRulesGateConsentFocus: source held, owned copies cleaned, no backend or vendor requests.
+simLegalPages exit=0 1s | simLegalPages: all green
+simAccessibility exit=0 1s | simAccessibility: all green
+simDailySaveHardening exit=0 147s | simDailySaveHardening: part all green
+vitest-all exit=1 503s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/guessFinishMoment.test.tsx,title=src/test/guessFinishMoment.test.tsx > a clue guesser ends on the shar

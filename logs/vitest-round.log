@@ -1,0 +1,93 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/footleUnlimitedSession.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[33m 2450[2mms[22m[39m
+   [33m[2m✓[22m[39m Footle Unlimited session outcomes[2m > [22mrestores exact unfinished clues after the fetched pool changes [33m 839[2mms[22m[39m
+   [33m[2m✓[22m[39m Footle Unlimited session outcomes[2m > [22mreveals a given-up answer before advancing without touching protected records [33m 391[2mms[22m[39m
+[90mstderr[2m | src/test/footlePractice.test.tsx[2m > [22m[2mFootle practice mounted outcomes[2m > [22m[2mshows worked rules and derives examples from a loaded non-answer player
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/footlePractice.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 3618[2mms[22m[39m
+   [33m[2m✓[22m[39m Footle practice mounted outcomes[2m > [22mfinishes five puzzles with the exact receipt and untouched daily record [33m 2329[2mms[22m[39m
+ [32m✓[39m src/test/dailySaveParity.test.tsx [2m([22m[2m40 tests[22m[2m | [22m[33m39 skipped[39m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m src/test/safeStorage.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 58[2mms[22m[39m
+[90mstderr[2m | src/test/helpConsentFocus.test.tsx[2m > [22m[2mpending cookie choices belong to the open help focus scope[2m > [22m[2mEssential only receives focus inside initial rules and keeps its original consent behavior
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/helpConsentFocus.test.tsx[2m > [22m[2mpending cookie choices belong to the open help focus scope[2m > [22m[2mAccept receives focus inside initial rules and keeps its original consent behavior
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/helpConsentFocus.test.tsx[2m > [22m[2mpending cookie choices belong to the open help focus scope[2m > [22m[2mkeeps its single pending banner reachable when initial help is dismissed
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/helpConsentFocus.test.tsx[2m > [22m[2mpending cookie choices belong to the open help focus scope[2m > [22m[2mreuses the banner and its choices when help is reopened without a decision
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/helpConsentFocus.test.tsx[2m > [22m[2mpending cookie choices belong to the open help focus scope[2m > [22m[2mhonors storage choices and restores pending choices within the same open rules
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/helpConsentFocus.test.tsx[2m > [22m[2mpending cookie choices belong to the open help focus scope[2m > [22m[2mpreserves the normal modal trap and manual opener once consent is answered
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/rulesGateConsentFocus.test.tsx[2m > [22m[2mRulesGate shares one pending cookie region and restores its help control[2m > [22m[2mEssential only is reachable within first-entry rules and preserves its consent gate
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/helpConsentFocus.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 2025[2mms[22m[39m
+   [33m[2m✓[22m[39m pending cookie choices belong to the open help focus scope[2m > [22mEssential only receives focus inside initial rules and keeps its original consent behavior [33m 814[2mms[22m[39m
+   [33m[2m✓[22m[39m pending cookie choices belong to the open help focus scope[2m > [22mAccept receives focus inside initial rules and keeps its original consent behavior [33m 341[2mms[22m[39m
+[90mstderr[2m | src/test/rulesGateConsentFocus.test.tsx[2m > [22m[2mRulesGate shares one pending cookie region and restores its help control[2m > [22m[2mAccept is reachable within first-entry rules and preserves its consent gate
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/rulesGateConsentFocus.test.tsx[2m > [22m[2mRulesGate shares one pending cookie region and restores its help control[2m > [22m[2mrestores one bottom banner when rules close without a cookie decision
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/rulesGateConsentFocus.test.tsx[2m > [22m[2mRulesGate shares one pending cookie region and restores its help control[2m > [22m[2mputs newly pending storage choices back into the same open rules
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/rulesGateConsentFocus.test.tsx[2m > [22m[2mRulesGate shares one pending cookie region and restores its help control[2m > [22m[2mreturns to the exact manually opened help control after Escape
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/rulesGateConsentFocus.test.tsx[2m > [22m[2mRulesGate shares one pending cookie region and restores its help control[2m > [22m[2mreturns to the exact manually opened help control after Close
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/rulesGateConsentFocus.test.tsx[2m > [22m[2mRulesGate shares one pending cookie region and restores its help control[2m > [22m[2mreturns to the exact manually opened help control after Let's Play!
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/rulesGateConsentFocus.test.tsx[2m > [22m[2mRulesGate shares one pending cookie region and restores its help control[2m > [22m[2mretains the normal modal trap while answered consent keeps its banner absent
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/rulesGateConsentFocus.test.tsx[2m > [22m[2mRulesGate shares one pending cookie region and restores its help control[2m > [22m[2mpreserves first-entry instructions and the existing seen-per-route behavior
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/rulesGateConsentFocus.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 1634[2mms[22m[39m
+   [33m[2m✓[22m[39m RulesGate shares one pending cookie region and restores its help control[2m > [22mEssential only is reachable within first-entry rules and preserves its consent gate [33m 628[2mms[22m[39m
+ [32m✓[39m src/test/storageBlockedBoot.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[33m 478[2mms[22m[39m
+[90mstderr[2m | src/test/footleClueDesk.test.tsx[2m > [22m[2mFootle clue desk outcomes[2m > [22m[2mreopens clue instructions and restores the help trigger without changing reviewed clues
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/footleClueDesk.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 6231[2mms[22m[39m
+   [33m[2m✓[22m[39m Footle clue desk outcomes[2m > [22mrenders all eight actual clues with honest unknown zero and opposite directions [33m 1162[2mms[22m[39m
+   [33m[2m✓[22m[39m Footle clue desk outcomes[2m > [22mrevisits revealed guesses selects the next actual guess and returns focus to search [33m 803[2mms[22m[39m
+   [33m[2m✓[22m[39m Footle clue desk outcomes[2m > [22mresets selected history when mode and puzzle change with equal guess counts [33m 1319[2mms[22m[39m
+   [33m[2m✓[22m[39m Footle clue desk outcomes[2m > [22mreviews every finished round from frozen clues after reload without saved record writes [33m 1882[2mms[22m[39m
+   [33m[2m✓[22m[39m Footle clue desk outcomes[2m > [22mshows a zero-guess miss honestly and exits review without carrying it into a new run [33m 450[2mms[22m[39m
+   [33m[2m✓[22m[39m Footle clue desk outcomes[2m > [22mreopens clue instructions and restores the help trigger without changing reviewed clues [33m 422[2mms[22m[39m
+[90mstderr[2m | src/test/supabaseClientBlockedStorage.test.ts[2m > [22m[2mthe Supabase client when the browser blocks storage[2m > [22m[2mpins the same two strings in a browser that stores normally, and restores a stored session
+[22m[39mGoTrueClient@sb-flawuiqbvjobmkfkauhw-auth-token:1 (2.95.3) 2026-10-08T06:33:44.856Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+
+[90mstderr[2m | src/test/supabaseClientBlockedStorage.test.ts[2m > [22m[2mthe Supabase client when the browser blocks storage[2m > [22m[2mkeeps a signed in player signed in when storage is full (reads still reach the stored session)
+[22m[39mGoTrueClient@sb-flawuiqbvjobmkfkauhw-auth-token:2 (2.95.3) 2026-10-08T06:33:44.877Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+
+ [32m✓[39m src/test/supabaseClientBlockedStorage.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 127[2mms[22m[39m
+ [32m✓[39m src/test/footleResultCurrency.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 1503[2mms[22m[39m
+   [33m[2m✓[22m[39m Footle result currency follows the stored USD value[2m > [22mdaily won result retains $216M and matches its guess tiles [33m 743[2mms[22m[39m
+ [32m✓[39m src/test/cookieConsentStorage.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 442[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m11 passed[39m[22m[90m (11)[39m
+[2m      Tests [22m [1m[32m89 passed[39m[22m[2m | [22m[33m39 skipped[39m[90m (128)[39m
+[2m   Start at [22m 06:33:28
+[2m   Duration [22m 17.63s[2m (transform 6.92s, setup 1.33s, collect 15.58s, tests 18.58s, environment 8.53s, prepare 2.32s)[22m
+
