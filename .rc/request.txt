@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walk3b: PRESSES=10 AFTER=24 VARIANTS=phone-motion,desktop-reduce,phone-nolive node .rc/x/rv-walk3.mjs
