@@ -749,7 +749,7 @@ export function progress(c: CareerState, rng: () => number): string[] {
 /* Round 422: the share of gross pay that actually reaches the bank, after
    tax, agent and living. It was already the number this file used to turn
    career earnings into net worth; it is named here so the yearly banking and
-   the repair below cannot drift apart from it. */
+   the old save rebuild (src/lib/usCareerBank.ts keeps the same 0.45) cannot drift apart from it. */
 const TAKE_HOME = 0.45;
 
 /* ─── Round 56: the money ─── */
@@ -1185,24 +1185,6 @@ export function careerTotals(c: CareerState): NflCareerSums {
   return t;
 }
 
-/* Round 422: a balance the old bug drove below zero is an ARTEFACT, not a
-   choice the player made, and it can be repaired safely because of one fact:
-   buying is refused when `item.cost > net`, so spending can never take anyone
-   negative. Only upkeep charged against income that was never banked could,
-   and that is precisely the bug. So a negative balance is always the defect and
-   never a real debt, which is what makes rebuilding it honest rather than a
-   guess.
-   It is rebuilt from what the save actually records: take home pay on career
-   earnings, minus the one time cost of everything still on the receipt. Past
-   upkeep is deliberately NOT re-deducted, because it was charged against a
-   balance that had no income in it, so charging it again would keep part of the
-   bug. Runs on load, once, and does nothing to a healthy save. */
-export function repairNetWorth<T extends { netWorth?: number; earnings: number; purchased?: string[] }>(
-  c: T,
-  costOf: (id: string) => number,
-): T {
-  if ((c.netWorth ?? 0) >= 0) return c;
-  const spent = (c.purchased ?? []).reduce((sum, id) => sum + costOf(id), 0);
-  const rebuilt = Math.max(0, Math.round((c.earnings * TAKE_HOME - spent) * 10) / 10);
-  return { ...c, netWorth: rebuilt };
-}
+/* Round 1104: the bank repair that ran on load lived here, one copy in each of
+   the four engines. It is one function now, repairBankOnLoad in
+   src/lib/usCareerBank.ts, bound in this sport's binding. */

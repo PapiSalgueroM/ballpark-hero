@@ -10,7 +10,7 @@ import { mlbPreDraftDescriptor } from '@/lib/mlbCareerPreDraft';
 import {
   MLB_ARCHETYPES, MLB_ERAS, startMlbCareer, simMlbSeason, mlbProgress, drawMlbEvent,
   mlbEventDeck,
-  MLB_SPEND_ITEMS, buyMlbItem, getMlbSpendItem, repairNetWorth,
+  MLB_SPEND_ITEMS, buyMlbItem, getMlbSpendItem,
   mlbShouldRetire, mlbLegacyOf, mlbCareerTotals, mlbRollTeamQuality, mlbTeamLabelOf,
   buildMlbFaWindow, mlbFaPushArgs, buildMlbExtension, mlbExtPushArgs,
   mlbAssignRole, mlbCampBattle,
@@ -24,6 +24,7 @@ import { MLB_BADGES } from '@/lib/careerBadges';
 import { mlbUnreadInboxCount, answerMlbInboxMessage, mlbDraftNightInbox, MLB_CALENDAR } from '@/lib/mlbCareerInbox';
 import { dismissMlbRivalryEvent, resolveMlbRivalryChoice } from '@/lib/mlbCareerRivalryEvents';
 import type { UsCareerSport } from '@/lib/usCareerSport';
+import { repairBankOnLoad, withBankFloor } from '@/lib/usCareerBank';
 import { MLB_CAREER_HALL } from '@/lib/mlbCareerHall';
 import { mlbSeasonReview } from '@/lib/usCareerSeasonReview';
 
@@ -32,7 +33,9 @@ import { mlbSeasonReview } from '@/lib/usCareerSeasonReview';
    key in src is declared; the value is the one the old board used. */
 const SAVE_KEY = 'mlb-my-career-save-v1';
 
-export const MLB_CAREER_SPORT: UsCareerSport<MlbCareerState, MlbSeasonLine> = {
+/* Round 1104: built through withBankFloor, the one bank rule the four US
+   careers share (src/lib/usCareerBank.ts). */
+export const MLB_CAREER_SPORT: UsCareerSport<MlbCareerState, MlbSeasonLine> = withBankFloor({
   slug: 'mlb',
   label: 'MLB',
   saveKey: SAVE_KEY,
@@ -93,7 +96,7 @@ export const MLB_CAREER_SPORT: UsCareerSport<MlbCareerState, MlbSeasonLine> = {
   moneyWealth: mlbMoneyWealth,
   shopItems: MLB_SPEND_ITEMS,
   buyItem: buyMlbItem,
-  repairNetWorth: c => repairNetWorth(c, id => getMlbSpendItem(id)?.cost ?? 0),
+  repairNetWorth: c => repairBankOnLoad(c, id => getMlbSpendItem(id)?.cost ?? 0, MLB_MONEY),
   heatLabel: mlbHeatLabel,
   heatTitle: "Commissioner's office",
 
@@ -128,4 +131,4 @@ export const MLB_CAREER_SPORT: UsCareerSport<MlbCareerState, MlbSeasonLine> = {
   retirementAvatar: false,
   /* Round 1039: the retirement talk, the farewell season and the Hall. */
   hall: MLB_CAREER_HALL,
-};
+});

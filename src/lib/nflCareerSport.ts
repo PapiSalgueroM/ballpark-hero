@@ -10,7 +10,7 @@ import { nflPreDraftDescriptor } from '@/lib/nflCareerPreDraft';
 import {
   NFL_ERAS, ARCHETYPES, startCareer, simSeason, progress, drawEvent, nflEventDeck,
   shouldRetire, legacyOf, careerTotals, rollTeamQuality, teamLabelOf,
-  NFL_SPEND_ITEMS, buyNflItem, getNflSpendItem, repairNetWorth,
+  NFL_SPEND_ITEMS, buyNflItem, getNflSpendItem,
   buildNflFaWindow, nflFaPushArgs, buildNflExtension, nflExtPushArgs,
   nflAssignRole, nflCampBattle,
   type CareerPos, type CareerState, type SeasonLine,
@@ -23,6 +23,7 @@ import { NFL_BADGES } from '@/lib/careerBadges';
 import { nflUnreadInboxCount, answerNflInboxMessage, nflDraftNightInbox, NFL_CALENDAR } from '@/lib/nflCareerInbox';
 import { dismissNflRivalryEvent, resolveNflRivalryChoice } from '@/lib/nflCareerRivalryEvents';
 import type { UsCareerSport } from '@/lib/usCareerSport';
+import { repairBankOnLoad, withBankFloor } from '@/lib/usCareerBank';
 import { NFL_CAREER_HALL } from '@/lib/nflCareerHall';
 import { nflSeasonReview } from '@/lib/usCareerSeasonReview';
 
@@ -31,7 +32,9 @@ import { nflSeasonReview } from '@/lib/usCareerSeasonReview';
    key in src is declared; the value is the one the old board used. */
 const SAVE_KEY = 'nfl-my-career-save-v1';
 
-export const NFL_CAREER_SPORT: UsCareerSport<CareerState, SeasonLine> = {
+/* Round 1104: built through withBankFloor, the one bank rule the four US
+   careers share (src/lib/usCareerBank.ts). */
+export const NFL_CAREER_SPORT: UsCareerSport<CareerState, SeasonLine> = withBankFloor({
   slug: 'nfl',
   label: 'NFL',
   saveKey: SAVE_KEY,
@@ -94,7 +97,7 @@ export const NFL_CAREER_SPORT: UsCareerSport<CareerState, SeasonLine> = {
   moneyWealth: nflMoneyWealth,
   shopItems: NFL_SPEND_ITEMS,
   buyItem: buyNflItem,
-  repairNetWorth: c => repairNetWorth(c, id => getNflSpendItem(id)?.cost ?? 0),
+  repairNetWorth: c => repairBankOnLoad(c, id => getNflSpendItem(id)?.cost ?? 0, NFL_MONEY),
   heatLabel: nflHeatLabel,
   heatTitle: 'League security',
 
@@ -127,4 +130,4 @@ export const NFL_CAREER_SPORT: UsCareerSport<CareerState, SeasonLine> = {
   retirementAvatar: true,
   /* Round 1039: the retirement talk, the farewell season and the Hall. */
   hall: NFL_CAREER_HALL,
-};
+});
