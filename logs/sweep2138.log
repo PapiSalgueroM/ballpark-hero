@@ -1,0 +1,14 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/playerAutocompleteStale.test.tsx[2m > [22m[2mplayer autocomplete: a list is only on screen for the query that produced it[2m > [22m[2mnever offers the last query under new text, across 200 seeded timings
+[22m[39mSTALE_SWEEP seed=2138 trials=200 staleVisible=0 stalePicked=0 currentPicked=200 stuckFinding=0
+
+ [32m✓[39m src/test/playerAutocompleteStale.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 660[2mms[22m[39m
+   [33m[2m✓[22m[39m player autocomplete: a list is only on screen for the query that produced it[2m > [22mnever offers the last query under new text, across 200 seeded timings [33m 461[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m13 passed[39m[22m[90m (13)[39m
+[2m   Start at [22m 12:29:00
+[2m   Duration [22m 1.26s[2m (transform 85ms, setup 26ms, collect 196ms, tests 660ms, environment 147ms, prepare 81ms)[22m
+

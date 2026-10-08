@@ -1,0 +1,33 @@
+=== Missing XI pitch layout (Round 444) ===
+lineups 207, formations 21, aspect 0.68, bubble 26px, band 7.151%, side gap 1.408%
+
+[1] MEASURED: no two name bubbles intersect
+  320px wide -> pitch 284.0x419.5, overlapping pairs 0, tightest clearance 4.00px (cl-2011-final-barca: RB x CB)
+  390px wide -> pitch 354.0x522.5, overlapping pairs 0, tightest clearance 4.99px (cl-2012-final-chelsea: CDM x CDM)
+  430px wide -> pitch 394.0x581.3, overlapping pairs 0, tightest clearance 5.55px (cl-2017-final-real: ST x ST)
+
+[2] MEASURED: every bubble is still drawn, and inside the pitch
+  narrowest bubble 35.8px (cl-2012-semi-chelsea CM Frank Lampard at 320px), floor is 34px; bubbles crossing the pitch edge 0
+
+[2b] MEASURED: the vertical nudge is small and keeps the formation in order
+  3 of 2277 bubbles moved at all, largest 2.36% (9.9px at 320) on cl-2023-final-inter CM Marcelo Brozovic, order swaps 0
+
+[3] MEASURED: the two lines of text fit inside the fixed bubble height
+  name 10px (md 11px) at 1.15, position 9px at 1.15 -> 21.85px phone / 23.00px desktop inside 24px of content box
+
+[4] SOURCE CHECK (not a measurement): Rarity Round says the goal before the guess
+  objective on the page itself at char 13104, guess input at char 13501
+  the "?" carries the same objectiveLine call
+  the header line above the toggle names both modes
+  Rarity Round: best rank of 50 is 45 (obscure end), copy asks for the obscure end
+  Crowd Says: best rank of 50 is 1 (famous end), copy asks for the famous end
+
+[5] SOURCE CHECK (not a measurement): Career Ladder renders club flags as images
+  the stint row renders flagForClub through FlagFromEmoji
+  79 distinct flags in the club tables, 79 resolve to a flagcdn code
+  120 of 121 real club strings get a flag, 120 of those render as an image
+
+[6] SOURCE CHECK (not a measurement): the page uses these exact numbers
+  7 layout pins present, border 2px, clearance 4px, narrowest supported screen 320px
+
+simMissingXiLayout: all sections green

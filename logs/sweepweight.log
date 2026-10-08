@@ -1,0 +1,18 @@
+1) Every page is inside its download budget
+  FAIL: /: would not load (Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4173/)
+  FAIL: /club-manager: would not load (Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4173/club-mana)
+  FAIL: /soccer-career: would not load (Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4173/soccer-ca)
+  FAIL: /stadium-tycoon: would not load (Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4173/stadium-t)
+  FAIL: /wonderkid-factory: would not load (Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4173/wonderkid)
+  FAIL: /minefield: would not load (Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4173/minefield)
+  FAIL: /footle: would not load (Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4173/footle)
+  FAIL: /nfl-my-career: would not load (Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4173/nfl-my-ca)
+  FAIL: /front-office: would not load (Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4173/front-off)
+  FAIL: /soccer-grid: would not load (Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4173/soccer-gr)
+  FAIL: /leaderboard: would not load (Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4173/leaderboa)
+2) The two things Round 210 moved off the critical path stay off it
+   the screenshot library and the merged guide map are both off the critical path
+3) Every guide is still reachable, one sport at a time
+   132 guides across 13 sport files, every one of them routed
+
+sweepWeight: 11 failures

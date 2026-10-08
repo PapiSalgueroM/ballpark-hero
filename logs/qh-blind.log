@@ -1,0 +1,14 @@
+1) The validators say which: exhausted on a second 429, a blip otherwise
+   NEGATIVE CONTROL ON: the soccer validator no longer reads the 429 body, in memory
+  FAIL: supabase/functions/soccer-grid-validate/index.ts: nothing reads the 429 body to tell a per-minute limit from a spent day
+   3 validators read
+2) The hooks listen: data.exhausted sets checkingDown and shows the allowance message
+   1 hooks read
+3) The pages stop inviting: the notice replaces the search box
+   2 pages read
+4) The NFL grid is not in this: no edge function call at all
+   useFootballGrid read
+5) Build Your XI: an allowance answer blocks only that pick
+   useLineupBuilder read
+
+control "blind": 1 failure(s) fired in section 1 as expected, the check works
