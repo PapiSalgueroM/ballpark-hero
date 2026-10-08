@@ -177,6 +177,10 @@ function start(teams: TeamAssignment[], slot: number) {
 }
 
 type Game = ReturnType<typeof useLineupBuilder>;
+/** Waits for a pick to end, but only for a moment. A build that leaves a cancelled check hanging must fail the
+    assertions that follow; if the test waited on it for ever, the runner's time limit would end the test inside
+    an open act() and every test after it in this file would fail with it. */
+const ended = (done: Promise<void> | undefined) => Promise.race([done, new Promise<void>((resolve) => { setTimeout(resolve, 250); })]);
 /** "Burn nothing": what must be true after every answer that could not be checked. */
 function nothingCounted(game: Game, team: TeamAssignment, slot: number) {
   expect(game.filledSlots.size).toBe(0);
@@ -315,7 +319,7 @@ describe('part C: the hook', () => {
     act(() => { done = game.current.submitPlayer(TYPED, ON_FILE); });
     await waitFor(() => expect(validatorCalls()).toHaveLength(1));
     expect(game.current.isValidating).toBe(true);
-    await act(async () => { game.current.rerollTeam(); await done; });
+    await act(async () => { game.current.rerollTeam(); await ended(done); });
     expect(validatorCalls()[0].signal?.aborted).toBe(true);
     expect(game.current.filledSlots.size).toBe(0);
     expect(game.current.validationError).toBeNull();
@@ -325,7 +329,7 @@ describe('part C: the hook', () => {
     const again = start([BRAZIL], SLOT.RB);
     act(() => { done = again.current.submitPlayer(TYPED, ON_FILE); });
     await waitFor(() => expect(validatorCalls()).toHaveLength(2));
-    await act(async () => { again.current.cancelValidation(); await done; });
+    await act(async () => { again.current.cancelValidation(); await ended(done); });
     expect(validatorCalls()[1].signal?.aborted).toBe(true);
     expect(again.current.filledSlots.size).toBe(0);
     expect(again.current.validationError).toBeNull();

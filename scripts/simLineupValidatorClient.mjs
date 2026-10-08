@@ -172,8 +172,9 @@ const CONTROLS = {
     edits: [['.some((part) => stored.includes(part));', '.some((part) => stored.some((name) => name.includes(part) || part.includes(name)));']],
     fails: DOOR_NEAR_MISS, keeps: [...KEEP, 'the door stays shut for a row at another club', C[18]],
   },
-  /* Test 15 asks with a request that only dies when it is aborted, so under this control it runs into the
-     runner's own time limit: that is its red, and it costs the run about five seconds. */
+  /* Test 15 asks with a request that only dies when it is aborted. It waits a moment for the cancelled check and
+     no longer (the test file's `ended`), so under this control and under deafcaller it fails on what it asserts
+     instead of hanging: a test the runner times out inside an open act() takes every later test down with it. */
   keepflight: {
     target: HOOK,
     edits: [['  useEffect(() => cancelValidation, [cancelValidation]);\n', ''], ['    cancelValidation();\n', '', 3]],
