@@ -1,0 +1,6 @@
+vround exit=1 | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerSmallItems1104.test.ts,title=src/test/usCareerSmallItems1104.test.ts > Round 1104%3A the NBA snub card > reads his own scori
+   × Round 1104: the NBA snub card > reads his own scoring and is not dealt to a man honoured last season 13ms
+ FAIL  src/test/usCareerSmallItems1104.test.ts > Round 1104: the NBA snub card > reads his own scoring and is not dealt to a man honoured last season
+AssertionError: expected { id: 'nbaB_allStarSnub', …(6) } to be undefined
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerSmallItems1104.test.ts,title=src/test/usCareerSmallItems1104.test.ts > Round 1104%3A the NBA snub card > reads his own scoring and is not dealt to a man honoured la
+nbacareer exit=0 | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged, rivalry beats honest

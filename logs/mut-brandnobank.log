@@ -1,0 +1,9 @@
+rv-mut2 brandnobank: mutated src/lib/nflMyCareer.ts
+ src/lib/nflMyCareer.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+vround exit=1 | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerSmallItems1104.test.ts,title=src/test/usCareerSmallItems1104.test.ts > Round 1104%3A Brand work pays the bank > banks the fe
+   × Round 1104: Brand work pays the bank > banks the fee in the era money and says what it paid 15ms
+ FAIL  src/test/usCareerSmallItems1104.test.ts > Round 1104: Brand work pays the bank > banks the fee in the era money and says what it paid
+AssertionError: expected 2 to be 5 // Object.is equality
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerSmallItems1104.test.ts,title=src/test/usCareerSmallItems1104.test.ts > Round 1104%3A Brand work pays the bank > banks the fee in the era money and says what it paid
+MUT brandnobank: vround=1

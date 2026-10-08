@@ -1,0 +1,12 @@
+rv-mut2 foundergate: mutated src/lib/nflCareerLifeB.ts
+ src/lib/nflCareerLifeB.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+vround exit=1 | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerSmallItems1104.test.ts,title=src/test/usCareerSmallItems1104.test.ts > Round 1104%3A the founder is dealt only to a bank tha
+   × Round 1104: the founder is dealt only to a bank that covers his check > NFL: dealt at 1.5M, not a dime under 11ms
+ FAIL  src/test/usCareerSmallItems1104.test.ts > Round 1104: the founder is dealt only to a bank that covers his check > NFL: dealt at 1.5M, not a dime under
+AssertionError: held out a dime short: expected { id: 'lifeB_techPitch', …(5) } to be undefined
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerSmallItems1104.test.ts,title=src/test/usCareerSmallItems1104.test.ts > Round 1104%3A the founder is dealt only to a bank that covers his check > NFL%3A dealt at 1.5
+bank exit=0 | simUsCareerBank: green. No call leaves a bank below zero in any of the four careers, savings pay a bill before anything is written off, and a reload never adds money.
+4) MEASURED, asserted on nothing: what the floor touches at a zero balance with nothing in savings
+deckc exit=0 | simUsCareerDeckC: all checks passed
+MUT foundergate: vround=1 bank=0 deckc=0

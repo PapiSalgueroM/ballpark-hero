@@ -1,0 +1,7 @@
+mut-scale05 exit=0 20s | MUT scale05: truth=0 vround=1
+mut-pick1row exit=0 12s | MUT pick1row: truth=1 vround=1
+mut-round2last exit=0 20s | MUT round2last: truth=0 vround=1
+mut-foundergate exit=0 80s | MUT foundergate: vround=1 bank=0 deckc=0
+mut-brandnobank exit=0 11s | MUT brandnobank: vround=1
+mut-snubgate exit=0 24s | MUT snubgate: vround=1 nbacareer=0
+mut-nocontractgate exit=0 11s | MUT nocontractgate: vround=1

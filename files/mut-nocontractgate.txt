@@ -1,0 +1,5 @@
+vround exit=1 | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerSmallItems1104.test.ts,title=src/test/usCareerSmallItems1104.test.ts > Round 1104%3A trades > NFL%3A a man with no contract 
+   × Round 1104: trades > NFL: a man with no contract is not dealt a trade card 18ms
+ FAIL  src/test/usCareerSmallItems1104.test.ts > Round 1104: trades > NFL: a man with no contract is not dealt a trade card
+AssertionError: expected [ 'training', 'frustration', …(69) ] to not include 'frustration'
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerSmallItems1104.test.ts,title=src/test/usCareerSmallItems1104.test.ts > Round 1104%3A trades > NFL%3A a man with no contract is not dealt a trade card,line=63,column

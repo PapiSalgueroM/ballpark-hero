@@ -1,0 +1,9 @@
+#!serial
+# Round 1104 review: mutations E
+mut-scale05: bash .rc/x/rv-mutrun2.sh scale05 truth vround
+mut-pick1row: bash .rc/x/rv-mutrun2.sh pick1row truth vround
+mut-round2last: bash .rc/x/rv-mutrun2.sh round2last truth vround
+mut-foundergate: bash .rc/x/rv-mutrun2.sh foundergate vround bank deckc
+mut-brandnobank: bash .rc/x/rv-mutrun2.sh brandnobank vround
+mut-snubgate: bash .rc/x/rv-mutrun2.sh snubgate vround nbacareer
+mut-nocontractgate: bash .rc/x/rv-mutrun2.sh nocontractgate vround

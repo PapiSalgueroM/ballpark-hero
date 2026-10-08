@@ -1,0 +1,7 @@
+truth exit=0 | simNflTruth: green. Seasons are their real length, awards survive a 16 game schedule, rookies are paid their slot, kickers go in round four or later, sacks come in halves, and no receiver passes the r
+5) MEASURED, asserted on nothing
+vround exit=1 | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerRookieDeal.test.ts,title=src/test/usCareerRookieDeal.test.ts > Round 1104%3A the NFL rookie deal > pays later rounds by plac
+   × Round 1104: the NFL rookie deal > pays later rounds by place in the round, from the real round first pick to its last 11ms
+ FAIL  src/test/usCareerRookieDeal.test.ts > Round 1104: the NFL rookie deal > pays later rounds by place in the round, from the real round first pick to its last
+AssertionError: expected 3.2 to be 2 // Object.is equality
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerRookieDeal.test.ts,title=src/test/usCareerRookieDeal.test.ts > Round 1104%3A the NFL rookie deal > pays later rounds by place in the round%2C from the real round fi

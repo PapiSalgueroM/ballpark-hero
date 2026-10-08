@@ -1,0 +1,13 @@
+rv-mut2 pick1row: mutated src/data/nflRookieScale.ts
+ src/data/nflRookieScale.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+truth exit=1 |   row(1, 57271500, 58191906)
+simNflTruth: the patch "swap row 1" needs its needle exactly once in the bundle and found it 0 times, so it would prove nothing:
+vround exit=1 | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerRookieDeal.test.ts,title=src/test/usCareerRookieDeal.test.ts > Round 1104%3A the NFL rookie deal > pays a held era the named
+   × Round 1104: the NFL rookie deal > pays round one off the slot row: the total over its years, to 0.1M 15ms
+   × Round 1104: the NFL rookie deal > signs every NFL rookie for four seasons and says which slots are held 3ms
+   × Round 1104: the NFL rookie deal > pays a held era the named era slot times its scale, and the scale is the 2005 era money scale 1ms
+ FAIL  src/test/usCareerRookieDeal.test.ts > Round 1104: the NFL rookie deal > pays round one off the slot row: the total over its years, to 0.1M
+AssertionError: expected 16.8 to be 14.3 // Object.is equality
+ FAIL  src/test/usCareerRookieDeal.test.ts > Round 1104: the NFL rookie deal > signs every NFL rookie for four seasons and says which slots are held
+MUT pick1row: truth=1 vround=1
