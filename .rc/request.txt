@@ -1,0 +1,2 @@
+#!serial
+vitest-whole: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000
