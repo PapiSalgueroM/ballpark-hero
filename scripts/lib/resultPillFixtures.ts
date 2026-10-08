@@ -27,6 +27,12 @@ export interface PillCase {
    *  thousands grouped the way the shared moment prints a plain number since
    *  Round 1085 (1000 points read "1,000"; a scoreline or a fraction is as is) */
   expect: string;
+  /** Release AN: where the same card prints that score a second time, what
+   *  those places must read, built from the same values through the same
+   *  helper. `row`: the stat row cell labelled Score, exactly. `line`: what
+   *  the stat line under the pill starts with. `grid`: text the emoji block
+   *  holds. Only the three pages that repeat a score that can reach 1,000. */
+  under?: { row?: string; line?: string; grid?: string };
 }
 
 const noop = () => undefined;
@@ -131,7 +137,10 @@ export function pillCases(): PillCase[] {
     ['a duel tied to the last extra round', faceOff('versus', 'pro', DUEL_MAX)],
     [`a full speed win over ${rivalFor('legend').label}`, faceOff('unlimited', 'legend', LEGEND_CLOSE)],
     [`shut out by ${rivalFor('rookie').label}`, faceOff('unlimited', 'rookie', ROOKIE_ROUT)],
-  ] as const) out.push({ route: '/face-off', what, fix: { faceOff: f }, expect: `${formatNumber(f.totals.you)} to ${formatNumber(f.totals.rival)}` });
+  ] as const) {
+    const line = `${formatNumber(f.totals.you)} to ${formatNumber(f.totals.rival)}`;
+    out.push({ route: '/face-off', what, fix: { faceOff: f }, expect: line, under: { line: `${line}, `, grid: `: ${line}\n` } });
+  }
   for (const right of [10, 0]) {
     out.push({ route: '/champ-or-not', what: `${right} right`, fix: { champ: champ(right) }, expect: `${right}/10` });
     out.push({ route: '/whod-they-beat', what: `${right} right`, fix: { whod: whod(right) }, expect: `${right}/10` });
@@ -139,10 +148,11 @@ export function pillCases(): PillCase[] {
   out.push({ route: '/silverware-sort', what: 'every rung right', fix: { silver: silver([5, 5, 5]) }, expect: '15/15' });
   out.push({ route: '/silverware-sort', what: 'one rung right', fix: { silver: silver([1, 0, 0]) }, expect: '1/15' });
   for (const right of [5, 3, 0] as const) {
-    out.push({ route: '/rank-em', what: `${right} in place`, fix: { rankDaily: rankDaily(right) }, expect: formatNumber(right * RANK_POINTS_PER_SLOT) });
+    const points = formatNumber(right * RANK_POINTS_PER_SLOT);
+    out.push({ route: '/rank-em', what: `${right} in place`, fix: { rankDaily: rankDaily(right) }, expect: points, under: { row: points } });
   }
   /* Written out, not formatted, so one case holds the grouped text on its own. */
-  out.push({ route: '/hof-or-bust', what: 'the right call, no hints', fix: { hof: hof('hof', 0, 1000) }, expect: '1,000' });
-  out.push({ route: '/hof-or-bust', what: 'the wrong call', fix: { hof: hof('bust', 2, 0) }, expect: '0' });
+  out.push({ route: '/hof-or-bust', what: 'the right call, no hints', fix: { hof: hof('hof', 0, 1000) }, expect: '1,000', under: { row: '1,000 pts' } });
+  out.push({ route: '/hof-or-bust', what: 'the wrong call', fix: { hof: hof('bust', 2, 0) }, expect: '0', under: { row: '0 pts' } });
   return out;
 }

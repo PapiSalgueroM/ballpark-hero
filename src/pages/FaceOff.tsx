@@ -298,8 +298,8 @@ const FaceOff = () => {
                 { label: 'streak', value: g.save.streak },
               ]}
               emojiGrid={versus
-                ? `⚡ Face Off, two players: ${g.totals.you} to ${g.totals.rival}\n🟢 ${g.results.map(r => (r.pick === null ? '⏱️' : r.youCorrect ? '✅' : '❌')).join('')}\n🔵 ${g.results.map(r => (r.rivalPick === null ? '⏱️' : r.rivalCorrect ? '✅' : '❌')).join('')}`
-                : `⚡ Face Off v ${rival.label}: ${g.totals.you} to ${g.totals.rival}\n${g.results.map(r => (r.pick === null ? '⏱️' : r.youCorrect ? '✅' : '❌')).join('')}`}
+                ? `⚡ Face Off, two players: ${formatNumber(g.totals.you)} to ${formatNumber(g.totals.rival)}\n🟢 ${g.results.map(r => (r.pick === null ? '⏱️' : r.youCorrect ? '✅' : '❌')).join('')}\n🔵 ${g.results.map(r => (r.rivalPick === null ? '⏱️' : r.rivalCorrect ? '✅' : '❌')).join('')}`
+                : `⚡ Face Off v ${rival.label}: ${formatNumber(g.totals.you)} to ${formatNumber(g.totals.rival)}\n${g.results.map(r => (r.pick === null ? '⏱️' : r.youCorrect ? '✅' : '❌')).join('')}`}
               share={{
                 score: versus ? `a two player Face Off, ${g.totals.you} to ${g.totals.rival}` : `${g.totals.you} to ${g.totals.rival} against ${rival.label} on Face Off`,
                 gameName: 'Face Off',
