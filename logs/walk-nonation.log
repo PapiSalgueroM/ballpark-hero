@@ -1,0 +1,6 @@
+  FAIL: 390x844: step 1: no nation tile for Atlantis (the page reads: Skip to main content DOUKNOWBALL Back Track stats CLUB MANAGER 27 real league tables and 454 clubs today, squads as of August 2026, after the summer window (the)
+  FAIL: 1280x800: step 1: no nation tile for Atlantis (the page reads: Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats CLUB MANAGER 27 real league tables and 454 clubs toda)
+  FAIL: 390x844 reduced motion: step 1: no nation tile for Atlantis (the page reads: Skip to main content DOUKNOWBALL Back Track stats CLUB MANAGER 27 real league tables and 454 clubs today, squads as of August 2026, after the summer window (the)
+
+   3 requests to the database host aborted
+playClubManagerNewCountries: 3 failure(s) under control nonation

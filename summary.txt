@@ -1,0 +1,6 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk-noresume exit=1 7s | playClubManagerNewCountries: 2 failure(s) under control noresume
+walk-nonation exit=1 29s | playClubManagerNewCountries: 3 failure(s) under control nonation
+weight exit=1 26s | sweepWeight: 5 failures
+walk exit=0 55s | playClubManagerNewCountries: green. Russia can be picked, started, played live and found in an old save's world (3 runs: 390x844, 1280x800, 390x844 reduced motion).
+playCM exit=0 268s | Played Club Manager through its own screens. 0 findings.
