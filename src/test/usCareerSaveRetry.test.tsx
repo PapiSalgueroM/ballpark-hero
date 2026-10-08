@@ -22,7 +22,7 @@ const spies = vi.hoisted(() => ({ error: vi.fn(), completion: vi.fn(), activity:
 vi.mock('@/lib/completions', () => ({ recordCompletion: spies.completion, recordActivity: spies.activity, getCurrentPlayerName: () => 'Save fixture' }));
 vi.mock('@/lib/badges', () => ({ getNewlyEarnedBadges: () => Promise.resolve([]) }));
 vi.mock('@/contexts/AuthContext', () => ({ useAuth: () => ({ user: null, profile: null, refreshProfile: () => undefined }) }));
-vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: spies.error } }));
+vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: spies.error, dismiss: vi.fn() } }));
 
 interface SportCase { label: string; Board: ComponentType; sport: UsCareerSport; burst: RegExp; drill: string }
 const SPORTS: SportCase[] = [

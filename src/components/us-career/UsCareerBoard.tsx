@@ -107,7 +107,14 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   const [saveFailure, setSaveFailure] = useState<'write' | 'remove' | null>(null);
   const saveFailed = saveFailure !== null;
   useEffect(() => {
-    if (saveFailed) toast.error('Your latest changes could not be saved. Stay on this page and use Retry save.');
+    if (!saveFailed) return;
+    const said = toast.error('Your latest changes could not be saved. Stay on this page and use Retry save.');
+    /* Release AN: the words are taken back the moment they stop being true.
+       A Retry save that worked left them on screen for the rest of their few
+       seconds, saying the changes could not be saved, and they followed the
+       player to Home and back, where nothing is pending and there is no Retry
+       button to use. */
+    return () => { toast.dismiss(said); };
   }, [saveFailed]);
   const [phase, setPhase] = useState<Phase>('create');
   const [prospect, setProspect] = useState<UsCareerProspect | null>(null);

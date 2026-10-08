@@ -44,10 +44,16 @@ vi.mock('@/lib/badges', () => ({ getNewlyEarnedBadges: () => Promise.resolve([])
 vi.mock('@/contexts/AuthContext', () => ({ useAuth: () => ({ user: null, profile: null, refreshProfile: () => undefined }) }));
 /* Release AN, second half: the board says a refused save out loud since Round 1084 (toast.error and a notice
    with Retry save). This mock had no error on it, so the four storage full tests below died inside the board
-   the moment the two rounds met in one tree. The words it is called with are written down. */
-vi.mock('sonner', () => ({ toast: { success: () => undefined, error: (words: string) => { ctl.toasts.push(words); } } }));
+   the moment the two rounds met in one tree. The words it is called with are written down.
+   Release AN fix: error hands back the toast's number (its place in that list, from 1) and dismiss writes
+   down the number it was given, so a test can say WHICH words were taken back and when. */
+vi.mock('sonner', () => ({ toast: {
+  success: () => undefined,
+  error: (words: string) => ctl.toasts.push(words),
+  dismiss: (id?: number) => { ctl.dismissed.push(id ?? -1); },
+} }));
 /* The control's switch: the real entry, its press followed by one extra draw when the switch is on. */
-const ctl = vi.hoisted(() => ({ extraDraw: false, playFirst: false, noHandOver: false, opens: [] as { year: number; seasons: number }[], toasts: [] as string[] }));
+const ctl = vi.hoisted(() => ({ extraDraw: false, playFirst: false, noHandOver: false, opens: [] as { year: number; seasons: number }[], toasts: [] as string[], dismissed: [] as number[] }));
 vi.mock('@/components/us-career/season/UsSeasonCentreEntry', async importOriginal => {
   const original = await importOriginal<typeof import('@/components/us-career/season/UsSeasonCentreEntry')>();
   const host = await import('@/components/us-career/season/UsSeasonCentreHost');
@@ -173,6 +179,7 @@ beforeEach(() => {
   ctl.noHandOver = false;
   ctl.opens.length = 0;
   ctl.toasts.length = 0;
+  ctl.dismissed.length = 0;
   vi.useFakeTimers({ toFake: ['Date'] });
   vi.setSystemTime(new Date('2026-10-07T12:00:00Z'));
   localStorage.clear();
@@ -350,13 +357,20 @@ describe.each(BOUND)('$name My Career: watching changes nothing', ({ Board, spor
        viewer opens over it. Neither round takes the other's promise away. */
     expect(refusedNotice()).not.toBeNull();
     expect(ctl.toasts).toHaveLength(1);
+    /* and the words stay up for as long as the save is still refused */
+    expect(ctl.dismissed).toEqual([]);
     /* closing it leaves the curtain of that same season, as on any other press */
     await click(q('[data-centre-exit]'));
     expect(q('[data-us-centre-cover]')).toBeNull();
     expect(q('[data-season-reveal]')).not.toBeNull();
     expect(localStorage.getItem(sport.saveKey)).toBe(stored);
     /* the notice is still up beside the curtain, and once the device takes writes again its Retry save puts
-       the season he watched on the save: the same year, one season, nothing played a second time */
+       the season he watched on the save: the same year, one season, nothing played a second time.
+       DO NOT TRIM the next line: it is the only check anywhere that holds the notice on the season curtain,
+       the screen a refused Play lands on. A review took withSaveStatus off the curtain's return in
+       UsCareerBoard.tsx: the save retry tests and simUsCareerSaveRetry (all 23 controls) stayed green and
+       this test alone went red. */
+    expect(q('[data-season-reveal]')).not.toBeNull();
     expect(refusedNotice()).not.toBeNull();
     refusing.mockRestore();
     await click([...refusedNotice()!.querySelectorAll('button')].find(b => squash(b.textContent ?? '') === 'Retry save'));
@@ -365,6 +379,10 @@ describe.each(BOUND)('$name My Career: watching changes nothing', ({ Board, spor
     expect(savedCareer(sport).seasons[0].year).toBe(year);
     expect(ctl.opens).toEqual([{ year, seasons: 1 }]);
     expect(ctl.toasts).toHaveLength(1);
+    /* Release AN fix: the save went through, so the toast that said it had not is taken back there and then
+       (it used to stay up for the rest of its few seconds, beside a notice that had just gone), and it is
+       that one toast, by its number, never a blanket dismiss */
+    expect(ctl.dismissed).toEqual([1]);
   }, 30000);
 
   it('CONTROL: without the board handing its career over, the same press plays the season and opens nothing', async () => {
@@ -412,6 +430,12 @@ describe.each(BOUND)('$name My Career: watching changes nothing', ({ Board, spor
     await waitFor(() => expect(q('[data-season-centre]')).not.toBeNull(), { timeout: 4000 });
     expect(ctl.opens).toEqual([{ year, seasons: 1 }]);
     expect(ctl.opens.some(o => o.year === year + 3)).toBe(false);
+    /* Release AN fix: he leaves with the save still refused. The toast told him to use Retry save, and there
+       is no Retry save where he is going, so it leaves with the page (it used to follow him to Home and back) */
+    expect(ctl.toasts).toHaveLength(1);
+    expect(ctl.dismissed).toEqual([]);
+    cleanup();
+    expect(ctl.dismissed).toEqual([1]);
   }, 30000);
 
   it('CONTROL: before the hand over, that press with another tab\'s line on the save opened nothing at all', async () => {
