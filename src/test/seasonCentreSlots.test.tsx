@@ -114,7 +114,10 @@ function slotsModel(): CentreModel {
     derbyBefore: { w: 0, d: 0, l: 0 },
     review: { tiles: [['Apps', '20'], ['Goals', '7'], ['Assists', '3'], ['Avg rating', '7.1']], finishLine: 'Finished 4th of 10', championLine: null, trophies: [], title: false, notes: [] },
     sport: SPORT,
-    help: { title: 'How it works', intro: ['One.'], controls: 'Two.', examples: [{ head: 'A', body: 'B' }], footnote: 'C' },
+    /* Release AO: since Round 1048 the ? button's label is the model's help title, where Round 1046 found a literal.
+       Soccer's real title IS that literal (SoccerSeasonCentre.tsx), so the toy wears it and the recorded string holds
+       unchanged; the help sheet itself is not on the recorded screen. */
+    help: { title: 'How the Season Centre works', intro: ['One.'], controls: 'Two.', examples: [{ head: 'A', body: 'B' }], footnote: 'C' },
     momentKey: `centre|${season.key}`,
     moments: null,
   };
