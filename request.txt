@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+legacy: ENGINES=chromium node scripts/playLegacy.mjs
+sessionmarks: ENGINES=chromium node scripts/playSessionMarks.mjs
+reducedmotion: ENGINES=chromium node scripts/playReducedMotion.mjs
+firstteamfit: node scripts/playFirstTeamFit.mjs
