@@ -212,12 +212,22 @@ export function derive(row) {
   const headline = HEADLINE[row.shelf];
   const agreed = row.a && row.b ? fieldsFor(row.shelf).filter(f => row.a[f] !== null && row.a[f] !== undefined && row.a[f] === row.b[f]) : [];
   let status = !row.a || !row.b ? 'one-source' : headline.every(f => agreed.includes(f)) ? 'agree' : 'disagree';
-  if (status === 'disagree' && row.settledBy) {
-    const v = row.settledBy.values ?? {};
-    const matches = side => headline.every(f => Number.isFinite(v[f]) && v[f] === side[f]);
-    if (matches(row.a) || matches(row.b)) status = 'settled';
-  }
+  if (status === 'disagree' && settledSide(row, agreed)) status = 'settled';
   return { agreed, status };
+}
+
+/** Which publisher a third source sided with on a disputed row, or null. It must print every headline
+    field the two dispute and agree with ONE of them on all of those, and nothing it prints may contradict
+    that publisher anywhere else on the headline list. A field it leaves blank (a league page prints no
+    rushing line for a receiver who never carried) is covered only when the two publishers already agree
+    on it: a blank is never read as a zero. */
+export function settledSide(row, agreed = derive({ ...row, settledBy: undefined }).agreed) {
+  const v = row.settledBy?.values;
+  if (!v || !row.a || !row.b) return null;
+  for (const side of [row.a, row.b]) {
+    if (HEADLINE[row.shelf].every(f => (Number.isFinite(v[f]) ? v[f] === side[f] : agreed.includes(f)))) return side;
+  }
+  return null;
 }
 
 /** The numbers a rating or a printed stat may read off a row, or null when the row may feed nothing.
@@ -226,8 +236,10 @@ export function derive(row) {
 export function usable(row) {
   if (row.status === 'agree') return Object.fromEntries(row.agreed.map(f => [f, row.a[f]]));
   if (row.status === 'settled') {
+    const side = settledSide(row, row.agreed);
+    if (!side) return null;
     const out = Object.fromEntries(row.agreed.map(f => [f, row.a[f]]));
-    for (const f of HEADLINE[row.shelf]) out[f] = row.settledBy.values[f];
+    for (const f of HEADLINE[row.shelf]) out[f] = side[f];
     return out;
   }
   return null;
