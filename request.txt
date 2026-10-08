@@ -1,0 +1,12 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-motion: node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-celeb: node_modules/.bin/vitest run src/test/liveSimCelebration.test.tsx --testTimeout=300000 --hookTimeout=120000
+simLiveSimMotion: node scripts/simLiveSimMotion.mjs
+simLiveSimCelebration: node scripts/simLiveSimCelebration.mjs
+m-logearly: LIVE_MOTION_CONTROL=logearly node scripts/simLiveSimMotion.mjs
+m-lastkick: LIVE_MOTION_CONTROL=lastkick node scripts/simLiveSimMotion.mjs
+m-turns: LIVE_MOTION_CONTROL=turns node scripts/simLiveSimMotion.mjs
+m-restartbeat: LIVE_MOTION_CONTROL=restartbeat node scripts/simLiveSimMotion.mjs
+m-kickoffside: LIVE_MOTION_CONTROL=kickoffside node scripts/simLiveSimMotion.mjs
+c-freeze: LIVE_CELEBRATION_CONTROL=freeze node scripts/simLiveSimCelebration.mjs
+c-ballstep: LIVE_CELEBRATION_CONTROL=ballstep node scripts/simLiveSimCelebration.mjs

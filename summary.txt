@@ -1,0 +1,12 @@
+vitest-celeb exit=0 4s |    Duration  2.91s (transform 622ms, setup 81ms, collect 835ms, tests 531ms, environment 540ms, prepare 367ms)
+simLiveSimMotion exit=0 66s | simLiveSimMotion: green. 53 tests passed (the viewer on real feeds, the pitch part's six rules on 200 half feeds, the goal sequence, match mode), and the part alone is 19
+vitest-motion exit=0 71s |    Duration  69.74s (transform 3.05s, setup 96ms, collect 3.97s, tests 64.21s, environment 501ms, prepare 255ms)
+simLiveSimCelebration exit=0 3s | simLiveSimCelebration: 17 outcome checks passed, correct side, net-first, real figure, freeze/expiry, reduced motion, the three recorded digests of the lift, the part beh
+m-logearly exit=1 6s | simLiveSimMotion: control logearly turned "nothing says GOAL before the ball is in" red on an assertion (1 failed), as it must.
+m-lastkick exit=1 12s | simLiveSimMotion: control lastkick turned "a goal with the last kick of a period takes nothing off" red on an assertion (1 failed), as it must.
+m-turns exit=1 9s | simLiveSimMotion: control turns turned "R6: a chance starts with the ball" red on an assertion (1 failed), as it must.
+tsc exit=0 89s | 
+c-freeze exit=0 2s | simLiveSimCelebration: freeze changed source, intended assertion failed, independent destinations stayed green.
+c-ballstep exit=0 2s | simLiveSimCelebration: ballstep changed source, intended assertion failed, independent destinations stayed green.
+m-restartbeat exit=1 9s | simLiveSimMotion: control restartbeat turned "R6: a chance starts with the ball" red on an assertion (1 failed), as it must.
+m-kickoffside exit=1 9s | simLiveSimMotion: control kickoffside turned "R7: every dead ball" red on an assertion (1 failed), as it must.
