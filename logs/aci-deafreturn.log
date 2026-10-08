@@ -1,0 +1,241 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+stdout | src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > never offers the last query under new text, across 200 seeded timings
+STALE_SWEEP seed=1138 trials=200 staleVisible=0 stalePicked=0 currentPicked=200 stuckFinding=0
+
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > never offers the last query under new text, across 200 seeded timings 837ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > drops the list in the same render the text changes 60ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > drops the list when the search options change under the same text 21ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > drops the list when the player leaves the box and searches again on return 97ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > Enter picks the only name showing when the page asks for a pick from the list 35ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > Enter still sends the typed text on a free text page with one name showing 12ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > offers a settled list for the text in the box exactly as before 11ms
+ × src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > never shows Finding players with nothing in flight 1018ms
+   → a pick, then focus: expected "spy" to be called 2 times, but got 1 times
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"relative w-full"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"relative"[39m
+        [36m>[39m
+          [36m<input[39m
+            [33maria-autocomplete[39m=[32m"list"[39m
+            [33maria-controls[39m=[32m":r6j:"[39m
+            [33maria-expanded[39m=[32m"true"[39m
+            [33maria-label[39m=[32m"Enter player name..."[39m
+            [33mautocapitalize[39m=[32m"off"[39m
+            [33mautocomplete[39m=[32m"off"[39m
+            [33mautocorrect[39m=[32m"off"[39m
+            [33mclass[39m=[32m"w-full rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground text-center placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"[39m
+            [33mplaceholder[39m=[32m"Enter player name..."[39m
+            [33mrole[39m=[32m"combobox"[39m
+            [33mspellcheck[39m=[32m"false"[39m
+            [33mtype[39m=[32m"text"[39m
+            [33mvalue[39m=[32m"Alpha Stone"[39m
+          [36m/>[39m
+          [36m<svg[39m
+            [33mclass[39m=[32m"lucide lucide-loader-circle absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 animate-spin text-muted-foreground"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"24"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"2"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"24"[39m
+            [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+          [36m>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M21 12a9 9 0 1 1-6.219-8.56"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"absolute z-20 mt-1.5 w-full rounded-xl border border-border bg-card shadow-lg overflow-hidden max-h-72 overflow-y-auto"[39m
+          [33mid[39m=[32m":r6j:"[39m
+          [33mrole[39m=[32m"listbox"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"flex items-center justify-center gap-2 px-4 text-xs text-muted-foreground"[39m
+            [33mstyle[39m=[32m"min-height: 44px;"[39m
+          [36m>[39m
+            [36m<svg[39m
+              [33mclass[39m=[32m"lucide lucide-loader-circle w-3.5 h-3.5 animate-spin"[39m
+              [33mfill[39m=[32m"none"[39m
+              [33mheight[39m=[32m"24"[39m
+              [33mstroke[39m=[32m"currentColor"[39m
+              [33mstroke-linecap[39m=[32m"round"[39m
+              [33mstroke-linejoin[39m=[32m"round"[39m
+              [33mstroke-width[39m=[32m"2"[39m
+              [33mviewBox[39m=[32m"0 0 24 24"[39m
+              [33mwidth[39m=[32m"24"[39m
+              [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+            [36m>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M21 12a9 9 0 1 1-6.219-8.56"[39m
+              [36m/>[39m
+            [36m</svg>[39m
+            [0mFinding players...[0m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</body>[39m
+[36m</html>[39m
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > searches at exactly the fewest letters the page asks for 16ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > drops a search still in flight when the player leaves the box 14ms
+ × src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > drops a search still in flight when a name is picked 11ms
+   → expected [] to have a length of 1 but got +0
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > Escape leaves the box while a search is in flight 17ms
+ × src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > a pick does not bring the list back under the picked name 9ms
+   → expected [] to deeply equal [ StringContaining "Alpha Stone" ]
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > the click of the tap that picked a name never reaches what was under the list 22ms
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 11 passed (14)
+   Start at  12:46:25
+   Duration  3.31s (transform 157ms, setup 57ms, collect 363ms, tests 2.18s, environment 305ms, prepare 134ms)
+
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > never shows Finding players with nothing in flight
+AssertionError: a pick, then focus: expected "spy" to be called 2 times, but got 1 times
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"relative w-full"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"relative"[39m
+        [36m>[39m
+          [36m<input[39m
+            [33maria-autocomplete[39m=[32m"list"[39m
+            [33maria-controls[39m=[32m":r6j:"[39m
+            [33maria-expanded[39m=[32m"true"[39m
+            [33maria-label[39m=[32m"Enter player name..."[39m
+            [33mautocapitalize[39m=[32m"off"[39m
+            [33mautocomplete[39m=[32m"off"[39m
+            [33mautocorrect[39m=[32m"off"[39m
+            [33mclass[39m=[32m"w-full rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground text-center placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"[39m
+            [33mplaceholder[39m=[32m"Enter player name..."[39m
+            [33mrole[39m=[32m"combobox"[39m
+            [33mspellcheck[39m=[32m"false"[39m
+            [33mtype[39m=[32m"text"[39m
+            [33mvalue[39m=[32m"Alpha Stone"[39m
+          [36m/>[39m
+          [36m<svg[39m
+            [33mclass[39m=[32m"lucide lucide-loader-circle absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 animate-spin text-muted-foreground"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"24"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"2"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"24"[39m
+            [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+          [36m>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M21 12a9 9 0 1 1-6.219-8.56"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"absolute z-20 mt-1.5 w-full rounded-xl border border-border bg-card shadow-lg overflow-hidden max-h-72 overflow-y-auto"[39m
+          [33mid[39m=[32m":r6j:"[39m
+          [33mrole[39m=[32m"listbox"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"flex items-center justify-center gap-2 px-4 text-xs text-muted-foreground"[39m
+            [33mstyle[39m=[32m"min-height: 44px;"[39m
+          [36m>[39m
+            [36m<svg[39m
+              [33mclass[39m=[32m"lucide lucide-loader-circle w-3.5 h-3.5 animate-spin"[39m
+              [33mfill[39m=[32m"none"[39m
+              [33mheight[39m=[32m"24"[39m
+              [33mstroke[39m=[32m"currentColor"[39m
+              [33mstroke-linecap[39m=[32m"round"[39m
+              [33mstroke-linejoin[39m=[32m"round"[39m
+              [33mstroke-width[39m=[32m"2"[39m
+              [33mviewBox[39m=[32m"0 0 24 24"[39m
+              [33mwidth[39m=[32m"24"[39m
+              [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+            [36m>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M21 12a9 9 0 1 1-6.219-8.56"[39m
+              [36m/>[39m
+            [36m</svg>[39m
+            [0mFinding players...[0m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</body>[39m
+[36m</html>[39m
+ ❯ src/test/playerAutocompleteStale.test.tsx:296:59
+    294|       expect(view.queryByRole('listbox'), way.name).toBeNull();
+    295|       way.back(input);
+    296|       await waitFor(() => expect(searchPlayers, way.name).toHaveBeenCa…
+       |                                                           ^
+    297|       expect((await view.findAllByRole('option')).map(o => o.textConte…
+    298|       expect(view.queryByText(FINDING), way.name).toBeNull();
+ ❯ runWithExpensiveErrorDiagnosticsDisabled node_modules/@testing-library/dom/dist/config.js:47:12
+ ❯ checkCallback node_modules/@testing-library/dom/dist/wait-for.js:124:77
+ ❯ Timeout.checkRealTimersCallback node_modules/@testing-library/dom/dist/wait-for.js:118:16
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > drops a search still in flight when a name is picked
+AssertionError: expected [] to have a length of 1 but got +0
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ src/test/playerAutocompleteStale.test.tsx:404:39
+    402|     expect(view.queryByText(FINDING)).not.toBeNull();
+    403|     await advance(400);
+    404|     expect(optionsIn(view.container)).toHaveLength(1);
+       |                                       ^
+    405|     expect(signals).toHaveLength(3);
+    406|     view.unmount();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > a pick does not bring the list back under the picked name
+AssertionError: expected [] to deeply equal [ StringContaining "Alpha Stone" ]
+
+- Expected
++ Received
+
+- [
+-   StringContaining "Alpha Stone",
+- ]
++ []
+
+ ❯ src/test/playerAutocompleteStale.test.tsx:497:63
+    495|     expect(view.queryByText(FINDING)).not.toBeNull();
+    496|     await advance(200);
+    497|     expect(optionsIn(view.container).map(o => o.textContent)).toEqual(…
+       |                                                               ^
+    498|     expect(searchPlayers).toHaveBeenCalledTimes(2);
+    499|     expect(lastQuery()).toBe(A.name);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+simPlayerAutocompleteInteraction deafreturn control: stale list tests 8, 13 rejected the changed component and tests 1, 7 stayed green.
