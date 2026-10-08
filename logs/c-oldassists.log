@@ -1,0 +1,244 @@
+simNbaAwardsSense: 6000 careers a seed, seeds 1, 2, 3, 4, 5, control oldassists
+  seed 1: 114568 seasons, Hall 54.63% (first ballot 50.78%), MVPs 0.56 a career, All-NBA 2.842, my share 74.05%, 19s
+  seed 2: 114406 seasons, Hall 55% (first ballot 50.15%), MVPs 0.557 a career, All-NBA 2.831, my share 73.87%, 32s
+  seed 3: 114441 seasons, Hall 54.82% (first ballot 50.38%), MVPs 0.562 a career, All-NBA 2.844, my share 73.64%, 46s
+  seed 4: 114486 seasons, Hall 54.43% (first ballot 49.85%), MVPs 0.578 a career, All-NBA 2.838, my share 73.42%, 59s
+  seed 5: 114670 seasons, Hall 55.32% (first ballot 50.27%), MVPs 0.543 a career, All-NBA 2.844, my share 74.51%, 72s
+
+The numbers (this tree, seed by seed, then main):
+  Hall of Fame inducted, percent               54.63, 55, 54.82, 54.43, 55.32   | main 31.7, 31.88, 31.78, 31.75, 31.55
+  first ballot, percent                        50.78, 50.15, 50.38, 49.85, 50.27   | main 27.03, 27.93, 27.83, 27.57, 27.45
+  inducted, modern careers                     54.56, 55.11, 54.96, 54.27, 55.11   | main 31.56, 31.42, 31.93, 32.02, 31.09
+  inducted, 2003-04 careers                    54.87, 54.67, 54.4, 54.93, 55.93   | main 32.13, 33.27, 31.33, 30.93, 32.93
+  legacy score p50                             559, 561, 562, 551, 559   | main 363, 367, 367, 366, 365
+  legacy score p90                             1306, 1313, 1331, 1318, 1300   | main 917, 940, 928, 938, 918
+  All-Star a career                            4.202, 4.199, 4.198, 4.225, 4.226   | main 0, 0, 0, 0, 0
+  Rookie of the Year a career                  0.107, 0.11, 0.101, 0.102, 0.099   | main 0.026, 0.02, 0.018, 0.019, 0.025
+  All-NBA a career                             2.842, 2.831, 2.844, 2.838, 2.844   | main 1.972, 2.006, 1.981, 1.987, 1.986
+  MVP a career                                 0.56, 0.557, 0.562, 0.578, 0.543   | main 0.316, 0.323, 0.31, 0.313, 0.311
+  Finals MVP a career                          0.199, 0.213, 0.217, 0.212, 0.203   | main 0.14, 0.159, 0.153, 0.15, 0.156
+  Defensive Player of the Year a career        0.075, 0.078, 0.079, 0.08, 0.088   | main 0.076, 0.079, 0.077, 0.081, 0.081
+  All-Defensive Team a career                  1.35, 1.357, 1.353, 1.363, 1.377   | main 1.342, 1.383, 1.357, 1.337, 1.361
+  Scoring Champion a career                    0.173, 0.158, 0.157, 0.167, 0.162   | main 0.472, 0.485, 0.464, 0.453, 0.468
+  Assists Leader a career                      0.582, 0.587, 0.588, 0.577, 0.567   | main 0.126, 0.128, 0.118, 0.119, 0.123
+  Rebounding Champion a career                 0.097, 0.111, 0.104, 0.104, 0.107   | main 0.095, 0.095, 0.101, 0.105, 0.099
+  Most Improved Player a career                0.195, 0.191, 0.185, 0.186, 0.191   | main 0.191, 0.192, 0.192, 0.193, 0.196
+  Sixth Man of the Year a career               0.337, 0.337, 0.329, 0.348, 0.337   | main 0.316, 0.329, 0.338, 0.328, 0.359
+  All-Rookie Team a career                     0.335, 0.346, 0.338, 0.335, 0.329   | main 0.089, 0.093, 0.098, 0.089, 0.091
+  careers with an MVP, percent                 26.7, 26.98, 27.03, 27.55, 26.58   | main 16.22, 16.85, 16.27, 16.75, 16.68
+  careers with an All-NBA, percent             73.17, 73.85, 73.6, 73.33, 74.27   | main 59.07, 58.88, 58.6, 58.68, 58.93
+  MVP seasons that missed the playoffs, percent 0, 0, 0, 0, 0   | main 28.35, 25.94, 26.68, 26.82, 27.28
+  MVP seasons not All-NBA, percent             0, 0, 0, 0, 0   | main 8.66, 9.2, 8.34, 7.82, 8.36
+  MVP and Most Improved together, percent      0, 0, 0, 0, 0   | main 24.97, 24.08, 23.4, 25.39, 23.9
+  Rookie of the Year seasons                   642, 662, 608, 610, 594   | main 153, 118, 108, 114, 152
+  of them on All-Rookie                        642, 662, 608, 610, 594   | main 0, 0, 0, 0, 0
+  All-Rookie in a first season                 2007, 2078, 2026, 2007, 1972   | main 0, 0, 0, 0, 0
+  my share of the head to head years           74.05, 73.87, 73.64, 73.42, 74.51   | main 62.33, 63.02, 62.3, 62.52, 62.8
+  verdict disagrees with the printed lines     31.63, 31.5, 31.77, 31.43, 31.7   | main 0, 0, 0, 0, 0
+  starter points / bench points / rookie starters 16.3, 16.3, 16.3, 16.3, 16.3   | main 19.7, 19.7, 19.7, 19.7, 19.7
+    bench                                      7.5, 7.5, 7.4, 7.5, 7.5   | main 10.6, 10.6, 10.6, 10.6, 10.6
+    rookie starters                            7.9, 7.9, 7.9, 7.9, 7.8   | main 13.9, 13.8, 13.7, 13.8, 13.8
+  triple double seasons                        81, 93, 58, 84, 75   | main 216, 208, 219, 200, 225
+  seasons at 16 points or more, percent        37.72, 37.95, 37.89, 37.58, 38.23   | main 59.83, 59.93, 59.83, 59.83, 60
+  careers past 12,000 points, percent          94.35, 94.73, 94.25, 94.6, 95.1   | main 99.58, 99.72, 99.73, 99.5, 99.62
+  careers past 25,000 points, percent          25.73, 25.18, 25.52, 24.97, 25.75   | main 54.25, 53.87, 54.33, 54.08, 54.05
+  scoring and assists title together           128, 142, 120, 127, 123   | main 497, 474, 420, 462, 458
+  SG and SF starter seasons at 8 assists, percent 18.494, 18.466, 18.53, 19.089, 18.453   | main 19.17, 18.676, 18.945, 18.904, 18.513
+  gate ppg28, percent of qualified seasons     3.346, 3.262, 3.193, 3.29, 3.275   | main 6.788, 7.112, 6.71, 6.698, 6.787
+  gate apg10, percent of qualified seasons     5.165, 5.264, 5.298, 5.249, 5.131   | main 5.228, 5.227, 5.193, 5.148, 5.397
+  gate rpg11, percent of qualified seasons     3.556, 3.655, 3.621, 3.578, 3.615   | main 4.702, 4.787, 4.81, 4.821, 4.795
+  gate rpg125big, percent of qualified seasons 3.898, 4.222, 4.163, 4.018, 4.219   | main 3.517, 3.596, 3.68, 3.695, 3.659
+  gate jump6, percent of qualified seasons     10.069, 10.09, 9.9, 10.092, 10.178   | main 8.439, 8.316, 8.208, 8.313, 8.427
+  gate ppg14, percent of qualified seasons     47.565, 47.753, 47.455, 47.564, 48.155   | main 70.328, 70.324, 70.116, 70.208, 70.252
+  healthy starters rated 80-83: PG 15.4/3.8/8.3 | 15.5/3.8/8.4 | 15.5/3.8/8.3 | 15.5/3.8/8.3 | 15.6/3.8/8.4   SG 16.6/4.3/5.4 | 16.8/4.4/5.5 | 16.7/4.3/5.5 | 16.8/4.3/5.5 | 16.7/4.3/5.5   SF 15.5/5.7/6.7 | 15.6/5.7/6.8 | 15.6/5.8/6.7 | 15.5/5.7/6.7 | 15.4/5.7/6.8   PF 15.2/6.1/5.5 | 15.3/6.2/5.5 | 15.2/6.1/5.5 | 15.2/6.1/5.5 | 15.2/6.1/5.5   C 14.7/9/4.5 | 14.6/9/4.5 | 14.5/9/4.5 | 14.6/9/4.5 | 14.6/9/4.5
+  healthy starters rated 88-91: PG 24.1/5/10.2 | 23.9/5/10.1 | 24.2/5/10.2 | 23.7/5/10 | 24.1/5/10   SG 25.6/5.7/7 | 25.7/5.7/7 | 25.6/5.8/7 | 25.7/5.8/7.1 | 25.3/5.7/7   SF 24.2/7.6/8.7 | 24.1/7.6/8.7 | 24/7.6/8.8 | 24/7.6/8.7 | 23.9/7.5/8.6   PF 22.8/8.2/6.6 | 22.9/8.4/6.5 | 22.7/8.3/6.6 | 22.9/8.4/6.5 | 22.7/8.3/6.4   C 21.8/12.1/5.4 | 22/12.2/5.4 | 22/12.2/5.5 | 21.9/12.1/5.5 | 21.9/12.2/5.4
+  All-Defensive a career by archetype (seed 1): pointgod 0.158, scoringpg 0.008, pest 4.42, bucket 0.003, sniper 0.003, twoway 5.2, alpha 0.025, threed 2.925, pointforward 0.523, stretch4 0.063, bruiser 1.38, swiss 0.603, paintbeast 1.463, stretch 0.008, anchor 3.475
+  my share by archetype (seed 1): pointgod 74.4, scoringpg 78.4, pest 71.5, bucket 81.3, sniper 71.7, twoway 75, alpha 83.5, threed 66.5, pointforward 82.8, stretch4 75.3, bruiser 74.1, swiss 79.1, paintbeast 68.4, stretch 68.2, anchor 60.4
+  the field as the fleet lives it (mean, sd): PG 40/16.34 | 40.16/16.15 | 39.95/16.4 | 39.86/16.13 | 40.17/16.16   SG 38.6/16.06 | 38.33/16.01 | 38.26/15.93 | 38.39/16.19 | 38.55/15.95   SF 41.23/17.26 | 41.41/17.26 | 41.14/17.22 | 41.12/17.31 | 41.47/17.06   PF 38.22/15.34 | 38.29/15.32 | 38.51/15.49 | 38.05/15.46 | 38.1/15.24   C 38.58/15.53 | 38.56/15.73 | 38.56/15.75 | 38.81/15.68 | 38.93/15.75
+
+The field, measured on the simNbaAwardsSense fleet (5 seed mean, era neutral, half a schedule or more):
+    PG: { mean: 41.1, sd: 16.6 },   // seeds: 41.1/16.7 41.3/16.5 41.0/16.7 41.0/16.5 41.3/16.5
+    SG: { mean: 39.4, sd: 16.4 },   // seeds: 39.6/16.4 39.4/16.4 39.3/16.3 39.4/16.5 39.6/16.3
+    SF: { mean: 42.3, sd: 17.5 },   // seeds: 42.2/17.5 42.4/17.6 42.2/17.5 42.2/17.7 42.5/17.4
+    PF: { mean: 39.2, sd: 15.7 },   // seeds: 39.2/15.7 39.3/15.6 39.5/15.8 39.0/15.8 39.1/15.6
+    C: { mean: 39.6, sd: 16.0 },   // seeds: 39.5/15.8 39.5/16.1 39.5/16.1 39.7/16.0 39.8/16.0
+The gates at main's percentile: rebounds for Defensive Player 10.3, 10.4, 10.4, 10.4, 10.3 (was 11, 4.78% pass); the jump for Most Improved 6.5, 6.6, 6.5, 6.5, 6.5 (was 6, 8.34%); points for Sixth Man 9.5, 9.5, 9.4, 9.4, 9.6 (was 14, 70.25%)
+The grade that holds main's rate on this fleet's own field (worked out from every season's z, not drawn):
+    Finals MVP           main 0.152 a career, grade 0.02
+
+NBA_FIELD, measured on the simNbaAwardsSense fleet (5 seed mean, era neutral, half a season or more):
+  mvp: { PG: [35.48, 11.27], SG: [34.65, 11.25], SF: [36.61, 11.95], PF: [34.67, 10.87], C: [35.24, 11.17] },
+  defense: { PG: [3.02, 1.07], SG: [3.34, 1.28], SF: [4.09, 1.38], PF: [4.06, 1.42], C: [5.60, 2.07] },
+  production: { PG: [25.65, 10.38], SG: [24.82, 10.30], SF: [26.70, 11.06], PF: [24.87, 9.95], C: [25.48, 10.29] },
+  bench: [7.71, 3.31],
+  jump: [-0.04, 7.34],
+  fans: [61.78, 24.43],
+The grade that puts each award on its target, on this fleet's own field (worked out, not drawn; committed grade in brackets):
+    All-NBA        main 1.986 a career: -0.14 [-0.13]
+    MVP            main 0.315 a career, at that All-NBA grade: -0.37 [-0.33]
+    All-Defensive  main 1.356 a career: 0.20 [0.2]
+    All-Star       1.6 times main's All-NBA (24 picks against 15), 3.178 a career: -0.18 [-0.18]
+    All-Rookie     the real class, 10 picks of 45 rookies who play, 0.222 a career: -1.77 [-1.8]
+    Rookie of the Year  twice main's, 0.043 a career, at that All-Rookie grade: -2.30 [-2.39]; on one grade for the whole class All-Rookie would be 0.477 a career
+    Defensive Player  main 0.079 a career, at that All-Defensive grade: 0.24 [0.24]
+    Sixth Man      main 0.334 a career: -0.64 [-0.64]
+    Most Improved  main 0.193 a career: -0.20 [-0.17]
+    at the committed grades the fit expects: All-NBA 1.971, MVP 0.286, All-Defensive 1.350, All-Star 3.177, Rookie of the Year 0.055, All-Rookie 0.236
+
+Sections:
+  FAIL [E] PG: the committed field 36.8/16.4 against the fleet 41.1/16.7 41.3/16.5 41.0/16.7 41.0/16.5 41.3/16.5 (mean off by at most 0.273 sd, limit 0.08; sd off by at most 2.1 percent, limit 6)
+  FAIL [E] SG: the committed field 34.9/15.6 against the fleet 39.6/16.4 39.4/16.4 39.3/16.3 39.4/16.5 39.6/16.3 (mean off by at most 0.302 sd, limit 0.08; sd off by at most 5.9 percent, limit 6)
+  FAIL [E] SF: the committed field 37.4/16.8 against the fleet 42.2/17.5 42.4/17.6 42.2/17.5 42.2/17.7 42.5/17.4 (mean off by at most 0.305 sd, limit 0.08; sd off by at most 5.2 percent, limit 6)
+  FAIL [E] PF: the committed field 34.3/14.9 against the fleet 39.2/15.7 39.3/15.6 39.5/15.8 39.0/15.8 39.1/15.6 (mean off by at most 0.347 sd, limit 0.08; sd off by at most 5.9 percent, limit 6)
+  FAIL [E] C: the committed field 35.7/15.5 against the fleet 39.5/15.8 39.5/16.1 39.5/16.1 39.7/16.0 39.8/16.0 (mean off by at most 0.267 sd, limit 0.08; sd off by at most 3.7 percent, limit 6)
+  A reads the lines the engine saved; healthy starters of modern careers: 62714, 62499, 62729, 61960, 63476
+  ok   [A1] PG mpg: median 31.3, 31.3, 31.3, 31.3, 31.3 inside the real starters' 23.9 to 37.9 (p25 28.5, p75 33.2, partial key, 15 percent of the median wider); 47 percent of the band from the nearer edge
+  ok   [A1] PG pts: median 16.3, 16.3, 16.3, 16.2, 16.3 inside the real starters' 11.7 to 26.2 (p25 14.3, p75 23.6, partial key, 15 percent of the median wider); 32 percent of the band from the nearer edge
+  ok   [A1] PG reb: median 3.9, 3.9, 3.9, 3.9, 3.9 inside the real starters' 2.7 to 5.2 (p25 3.3, p75 4.6, partial key, 15 percent of the median wider); 48 percent of the band from the nearer edge
+  FAIL [A1] PG ast: median 8.3, 8.3, 8.3, 8.2, 8.2 inside the real starters' 4.3 to 8.0 (p25 5.2, p75 7.1, partial key, 15 percent of the median wider); -7 percent of the band from the nearer edge
+  ok   [A1] PG stl: median 1.3, 1.3, 1.3, 1.3, 1.3 inside the real starters' 0.8 to 1.6 (p25 1, p75 1.4, partial key, 15 percent of the median wider); 36 percent of the band from the nearer edge
+  ok   [A1] PG blk: median 0.2, 0.2, 0.2, 0.2, 0.2 inside the real starters' 0.2 to 0.5 (p25 0.2, p75 0.5, partial key, 15 percent of the median wider); 12 percent of the band from the nearer edge
+  ok   [A1] SG mpg: median 31.3, 31.3, 31.2, 31.5, 31.3 inside the real starters' 22.1 to 37.8 (p25 26.5, p75 33.4, partial key, 15 percent of the median wider); 41 percent of the band from the nearer edge
+  ok   [A1] SG pts: median 17.8, 17.7, 17.6, 18.0, 17.6 inside the real starters' 9.9 to 21.1 (p25 11.8, p75 19.2, partial key, 15 percent of the median wider); 30 percent of the band from the nearer edge
+  ok   [A1] SG reb: median 4.4, 4.4, 4.4, 4.4, 4.4 inside the real starters' 2.6 to 5.3 (p25 3.2, p75 4.7, partial key, 15 percent of the median wider); 33 percent of the band from the nearer edge
+  FAIL [A1] SG ast: median 5.6, 5.6, 5.6, 5.6, 5.5 inside the real starters' 1.7 to 4.2 (p25 2.1, p75 3.8, partial key, 15 percent of the median wider); -54 percent of the band from the nearer edge
+  ok   [A1] SG stl: median 1.1, 1.1, 1.1, 1.1, 1.1 inside the real starters' 0.5 to 1.5 (p25 0.7, p75 1.3, partial key, 15 percent of the median wider); 39 percent of the band from the nearer edge
+  ok   [A1] SG blk: median 0.4, 0.4, 0.3, 0.4, 0.3 inside the real starters' 0.2 to 0.6 (p25 0.3, p75 0.5, partial key, 15 percent of the median wider); 37 percent of the band from the nearer edge
+  ok   [A1] SF mpg: median 31.6, 31.6, 31.6, 31.5, 31.5 inside the real starters' 23.9 to 37.2 (p25 28.4, p75 32.7, partial key, 15 percent of the median wider); 42 percent of the band from the nearer edge
+  ok   [A1] SF pts: median 16.9, 16.9, 16.9, 16.8, 16.7 inside the real starters' 9.0 to 23.3 (p25 11.3, p75 21, partial key, 15 percent of the median wider); 45 percent of the band from the nearer edge
+  ok   [A1] SF reb: median 6.0, 6.0, 6.0, 6.0, 5.9 inside the real starters' 3.1 to 6.6 (p25 3.9, p75 5.8, partial key, 15 percent of the median wider); 17 percent of the band from the nearer edge
+  FAIL [A1] SF ast: median 6.8, 6.7, 6.7, 6.7, 6.7 inside the real starters' 1.5 to 4.8 (p25 2, p75 4.3, partial key, 15 percent of the median wider); -60 percent of the band from the nearer edge
+  ok   [A1] SF stl: median 1.1, 1.1, 1.1, 1.1, 1.1 inside the real starters' 0.7 to 1.3 (p25 0.8, p75 1.2, partial key, 15 percent of the median wider); 36 percent of the band from the nearer edge
+  ok   [A1] SF blk: median 0.4, 0.4, 0.4, 0.4, 0.4 inside the real starters' 0.2 to 0.8 (p25 0.3, p75 0.7, partial key, 15 percent of the median wider); 32 percent of the band from the nearer edge
+  ok   [A1] PF mpg: median 31.3, 31.3, 31.4, 31.4, 31.3 inside the real starters' 22.6 to 37.6 (p25 27.1, p75 33.1, partial key, 15 percent of the median wider); 42 percent of the band from the nearer edge
+  ok   [A1] PF pts: median 16.0, 16.2, 16.3, 16.1, 16.2 inside the real starters' 9.8 to 20.4 (p25 12, p75 18.2, partial key, 15 percent of the median wider); 40 percent of the band from the nearer edge
+  ok   [A1] PF reb: median 6.2, 6.2, 6.3, 6.3, 6.3 inside the real starters' 3.6 to 7.6 (p25 4.4, p75 6.8, partial key, 15 percent of the median wider); 33 percent of the band from the nearer edge
+  FAIL [A1] PF ast: median 5.3, 5.4, 5.4, 5.4, 5.4 inside the real starters' 1.4 to 3.8 (p25 1.8, p75 3.4, partial key, 15 percent of the median wider); -68 percent of the band from the nearer edge
+  ok   [A1] PF stl: median 0.7, 0.7, 0.7, 0.7, 0.7 inside the real starters' 0.6 to 1.2 (p25 0.7, p75 1.1, partial key, 15 percent of the median wider); 20 percent of the band from the nearer edge
+  ok   [A1] PF blk: median 0.7, 0.7, 0.7, 0.7, 0.7 inside the real starters' 0.3 to 0.9 (p25 0.4, p75 0.8, partial key, 15 percent of the median wider); 32 percent of the band from the nearer edge
+  ok   [A1] C mpg: median 31.1, 31.1, 31.1, 31.1, 31.1 inside the real starters' 20.9 to 34.2 (p25 25, p75 30.1, partial key, 15 percent of the median wider); 23 percent of the band from the nearer edge
+  ok   [A1] C pts: median 15.0, 15.1, 15.0, 15.1, 15.0 inside the real starters' 9.1 to 18.1 (p25 10.9, p75 16.3, partial key, 15 percent of the median wider); 34 percent of the band from the nearer edge
+  ok   [A1] C reb: median 9.0, 9.0, 9.0, 9.0, 9.0 inside the real starters' 5.9 to 11.2 (p25 7.1, p75 10, partial key, 15 percent of the median wider); 42 percent of the band from the nearer edge
+  FAIL [A1] C ast: median 4.5, 4.5, 4.5, 4.5, 4.5 inside the real starters' 1.4 to 3.4 (p25 1.7, p75 3.1, partial key, 15 percent of the median wider); -55 percent of the band from the nearer edge
+  ok   [A1] C stl: median 0.8, 0.8, 0.8, 0.8, 0.8 inside the real starters' 0.6 to 1.1 (p25 0.7, p75 1, partial key, 15 percent of the median wider); 41 percent of the band from the nearer edge
+  ok   [A1] C blk: median 1.0, 1.0, 1.0, 1.0, 1.0 inside the real starters' 0.6 to 1.4 (p25 0.7, p75 1.3, partial key, 15 percent of the median wider); 50 percent of the band from the nearer edge
+  note [A1 2003, printed] PG: mpg 31.3 in 25.2..41.7 (37% in); pts 13.2 in 8.4..19.0 (45% in); reb 3.7 in 2.4..4.6 (41% in); ast 8.3 in 4.2..7.7 (OUT); stl 1.2 in 0.9..1.8 (33% in); blk 0.2 in 0.1..0.3 (50% in)
+  note [A1 2003, printed] SG: mpg 31.3 in 27.4..43.8 (24% in); pts 14.3 in 11.0..23.5 (26% in); reb 4.2 in 2.9..5.7 (47% in); ast 5.6 in 1.9..5.3 (OUT); stl 1.0 in 0.9..1.7 (12% in); blk 0.4 in 0.1..0.6 (38% in)
+  note [A1 2003, printed] SF: mpg 31.6 in 23.9..41.8 (43% in); pts 13.6 in 8.1..19.9 (47% in); reb 5.7 in 3.2..6.6 (25% in); ast 6.7 in 1.5..3.3 (OUT); stl 1.0 in 0.8..1.3 (42% in); blk 0.5 in 0.2..0.5 (12% in)
+  note [A1 2003, printed] PF: mpg 31.3 in 26.6..41.7 (31% in); pts 13.1 in 9.5..19.6 (35% in); reb 6.0 in 6.0..11.3 (OUT); ast 5.4 in 1.2..3.5 (OUT); stl 0.7 in 0.7..1.2 (6% in); blk 0.7 in 0.4..1.8 (20% in)
+  note [A1 2003, printed] C: mpg 31.1 in 20.8..36.6 (35% in); pts 12.2 in 5.4..12.3 (2% in); reb 8.6 in 5.1..9.7 (23% in); ast 4.5 in 0.7..1.9 (OUT); stl 0.7 in 0.4..0.9 (40% in); blk 1.1 in 0.7..2.2 (27% in)
+  note [A1 2003, printed] 6 of 30 cells outside the 2003-04 quartiles (not judged: the lead sets how many may miss)
+  FAIL [A1] the 2003 line over the 2026 line is the league rows' ratio within 2 percent: ppg 0.810 against 0.808, rpg 0.963 against 0.963, apg 0.999 against 0.798, spg 0.938 against 0.940, bpg 1.075 against 1.063
+  ok   [A2] the p99 starter season in pts: 33.4, 33.2, 33.3, 33.4, 33.1, mean 33.28, at or under the league leaders' mean plus one sd (32.8 + 1.7)
+  ok   [A2] the p99 starter season in reb: 13.6, 13.7, 13.6, 13.6, 13.6, mean 13.62, at or under the league leaders' mean plus one sd (14.3 + 1.1)
+  FAIL [A2] the p99 starter season in ast: 12.6, 12.5, 12.6, 12.6, 12.5, mean 12.56, at or under the league leaders' mean plus one sd (10.9 + 0.5)
+  ok   [A3] rookies rated 75 to 79 average 8.0, 8.0, 7.9, 8.0, 7.9 points (7.5 to 11.5); starters 9.4, 9.3, 9.4, 9.4, 9.4, bench 5.8, 5.8, 5.8, 5.9, 5.7; 1661, 1626, 1634, 1680, 1631 seasons
+  FAIL [A3] SG and SF starter seasons at 8 assists or more: 18.37, 18.42, 18.57, 18.90, 18.19 percent of theirs (under 2; main about 19)
+  ok   [A3] bench seasons score 46, 46, 46, 46, 46 percent of starters' (36 to 56): 7.8, 7.7, 7.7, 7.8, 7.7 points in 17.3, 17.2, 17.2, 17.3, 17.3 minutes
+  ok   [A3] every new season's points have one decimal, and 90, 90, 90, 90, 90 percent of them a non zero one (at least 10)
+  FAIL [A3] seasons holding both the scoring and the assists title: 128, 142, 120, 127, 123, 640 in 30000 careers (under 1 in 250 careers; main 497, 474, 420, 462, 458, 1 in 13)
+  note [A3] 30 points a game: 3.01, 2.87, 2.80, 2.93, 2.89 percent of starter seasons; 10 assists: 6.80, 6.99, 7.08, 6.96, 6.68; triple double seasons in the fleet: 69, 79, 47, 63, 61
+  ok   [A3] triple double seasons in thirty elite careers a seed: 26, 17, 24, 21, 19, 107 in all (at least 2 a seed on average, so the badge stays reachable)
+  note [A] medians, every role, half a season or more (points/rebounds/assists): PG 13.7/3.4/7.4  SG 15.1/3.9/5  SF 14.4/5.4/6  PF 13.6/5.5/4.8  C 12.6/7.8/4
+  ok   [A4] PG: mean points rise with every rating band (seed 1: 72-75 9.3/2.7/6.1 in 26.6, 76-79 12.3/3.2/7.2 in 28.9, 80-83 15.9/3.8/8.3 in 31.0, 84-87 20.3/4.4/9.3 in 32.9, 88-91 24.9/5.0/10.2 in 34.6)
+  ok   [A4] SG: mean points rise with every rating band (seed 1: 72-75 9.9/3.0/4.0 in 26.6, 76-79 13.2/3.7/4.7 in 28.8, 80-83 17.2/4.3/5.4 in 31.0, 84-87 21.7/5.1/6.3 in 32.9, 88-91 26.2/5.7/7.0 in 34.5, 92-95 31.1/6.2/7.6 in 36.0)
+  ok   [A4] SF: mean points rise with every rating band (seed 1: 72-75 9.2/4.0/4.9 in 26.5, 76-79 12.3/4.8/5.8 in 28.8, 80-83 16.0/5.8/6.7 in 31.1, 84-87 20.0/6.7/7.7 in 32.9, 88-91 24.7/7.6/8.7 in 34.6, 92-95 28.4/8.3/9.4 in 35.9)
+  ok   [A4] PF: mean points rise with every rating band (seed 1: 72-75 9.2/4.3/4.2 in 26.6, 76-79 12.0/5.2/4.8 in 28.8, 80-83 15.5/6.1/5.5 in 31.0, 84-87 19.6/7.3/6.1 in 32.9, 88-91 23.4/8.2/6.6 in 34.5)
+  ok   [A4] C: mean points rise with every rating band (seed 1: 72-75 8.8/6.2/3.5 in 26.6, 76-79 11.6/7.6/4.0 in 28.9, 80-83 15.2/9.1/4.5 in 31.1, 84-87 18.7/10.5/5.0 in 32.8, 88-91 22.4/12.2/5.4 in 34.5)
+  ok   [A5] nbaStatLineFor draws exactly 7 times for a starter, a backup, a rookie and a playoff line (7, 7, 7, 7)
+  ok   [A5] the same input and seed give the same line, and the input is left untouched
+  FAIL [R] my share of the head to head years, percent: mean 73.898 (74.05, 73.87, 73.64, 73.42, 74.51) against main's 62.594 (62.33, 63.02, 62.3, 62.52, 62.8), 11.304 apart, allowed 0.59 (a fixed width)
+  FAIL [H] Hall of Fame inducted, percent: mean 54.84 (54.63, 55, 54.82, 54.43, 55.32) against main's 31.732 (31.7, 31.88, 31.78, 31.75, 31.55), 23.108 apart, allowed 1.14 (a fixed width)
+  FAIL [H] first ballot, percent: mean 50.286 (50.78, 50.15, 50.38, 49.85, 50.27) against main's 27.562 (27.03, 27.93, 27.83, 27.57, 27.45), 22.724 apart, allowed 1.09 (a fixed width)
+  ok   [H] old line careers stamped on calibration 2 in the frozen fixture: 10 (floor 8); read differently today: 0 (none); 2 of them were paid a standout the day they were recorded
+  ok   [H] a point guard's points mark: 37400 to 45300 with no game on the new line (Round 1051's 37400 to 45300), 34200 to 42000 at half and half (the midpoint), 31000 to 38700 with every game on it (the ledger's table itself)
+  ok   [H] a centre's assists, which only the old line's books list: the full push at 7490 to 8930 with no game on the new line, a push of at most 150 at half and half (must be 150), and no such family with every game on it
+  FAIL [B6] MVPs a career (sd over careers 1.205): mean 0.56 (0.56, 0.557, 0.562, 0.578, 0.543) against main's 0.315 (0.316, 0.323, 0.31, 0.313, 0.311), 0.245 apart, allowed 0.02 (a fixed width)
+  FAIL [B6] All-NBA a career (sd over careers 2.839): mean 2.84 (2.842, 2.831, 2.844, 2.838, 2.844) against main's 1.986 (1.972, 2.006, 1.981, 1.987, 1.986), 0.853 apart, allowed 0.058 (a fixed width)
+  ok   [B6] All-Defensive a career (sd over careers 2.45): mean 1.36 (1.35, 1.357, 1.353, 1.363, 1.377) against main's 1.356 (1.342, 1.383, 1.357, 1.337, 1.361), 0.004 apart, allowed 0.06 (a fixed width)
+  FAIL [B6] Finals MVPs a career (sd over careers 0.534): mean 0.209 (0.199, 0.213, 0.217, 0.212, 0.203) against main's 0.152 (0.14, 0.159, 0.153, 0.15, 0.156), 0.057 apart, allowed 0.011 (a fixed width)
+  FAIL [B6] careers with an MVP, percent, a fence at this round's own rate: mean 26.968 (26.7, 26.98, 27.03, 27.55, 26.58) against what Round 1103 shipped, 17.442 (17.18, 17.07, 17.73, 17.7, 17.53), 9.526 apart, allowed 0.93 (a fixed width)
+  note [B6] NOT held at main's: careers with an MVP, percent is 26.97 here against main's 16.55 (16.22, 16.85, 16.27, 16.75, 16.68), 10.41 points more careers for the same awards a career. The brief's critic asked for main's band; one grade an award cannot give it, and the lead rules on it.
+  FAIL [B6] careers with an All-NBA, percent, a fence at this round's own rate: mean 73.644 (73.17, 73.85, 73.6, 73.33, 74.27) against what Round 1103 shipped, 61.94 (61.7, 60.98, 62.35, 62.47, 62.2), 11.704 apart, allowed 1.19 (a fixed width)
+  note [B6] NOT held at main's: careers with an All-NBA, percent is 73.64 here against main's 58.83 (59.07, 58.88, 58.6, 58.68, 58.93), 14.81 points more careers for the same awards a career. The brief's critic asked for main's band; one grade an award cannot give it, and the lead rules on it.
+  ok   [B0] every award string agrees with the key that names its team (0 seasons off), every Defensive Player is on an All-Defensive team (0 off), every season has a club record that adds up to its length (0 without)
+  ok   [B1] MVP seasons: 16798 in the run (at least 300, or the checks on them are empty)
+  ok   [B1] Most Improved seasons: 5693 in the run (at least 100, or the checks on them are empty)
+  ok   [B1] MVP seasons on a club that missed the playoffs: 0, 0, 0, 0, 0 of 3361, 3339, 3371, 3467, 3260 (main: one in four)
+  ok   [B1] MVP seasons off the All-NBA First Team: 0, 0, 0, 0, 0 (main: one in eleven not All-NBA at all)
+  ok   [B1] MVP and Most Improved in one season: 0, 0, 0, 0, 0 (main: one MVP season in four)
+  ok   [B1] Most Improved after an earlier All-NBA: 0, 0, 0, 0, 0 of 1172, 1148, 1109, 1117, 1147
+  ok   [B2] Rookie of the Year seasons: 3116 in the run (at least 60, or the checks on them are empty)
+  ok   [B2] Rookie of the Year seasons off the All-Rookie First Team: 0, 0, 0, 0, 0 of 642, 662, 608, 610, 594 (main: every one)
+  ok   [B2] All-Rookie outside a first season: 0, 0, 0, 0, 0
+  ok   [B2] All-Rookie selections in first seasons: 2007, 2078, 2026, 2007, 1972 (main: none)
+  FAIL [B2] first seasons on an All-Rookie team: 33.5, 34.6, 33.8, 33.5, 32.9 percent, 33.6 over the run (18 to 26; the real class is 10 of 45, 22 percent; one grade for the class gave 51)
+  note [B2] First Team: 975, 1032, 926, 934, 899 seasons, median 9.4, 9.1, 9.4, 9.2, 9.4 points, 12.2, 10.4, 9.7, 11.7, 9.9 percent bench men. Second Team: 1032, 1046, 1100, 1073, 1073, median 6.3, 6.3, 6.3, 6.2, 6.4 points, 40.3, 43.5, 45.1, 43.2, 42.1 percent bench men. On a team under 6 points a game: 523, 542, 559, 572, 533
+  ok   [B3] seasons from 2023-24 with an award the games rule names: 80015 in the run (at least 2000, or the checks on them are empty)
+  ok   [B3] from 2023-24, seasons under the games bar holding an award the rule names: 0, 0, 0, 0, 0 of 16058, 15991, 16019, 15928, 16019
+  ok   [B3] before 2023-24 the rule did not exist: 594, 561, 583, 606, 604 seasons under 65 games hold one of those awards (at least 1750 in the run, so "none before" is seen to fire)
+  ok   [B3] Sixth Man seasons: 10128 in the run (at least 100, or the checks on them are empty)
+  ok   [B3] Sixth Man seasons by a starter: 0, 0, 0, 0, 0 of 2024, 2021, 1975, 2086, 2022
+  ok   [B3] seasons under half a schedule holding any award but a Finals MVP: 0, 0, 0, 0, 0
+  ok   [B3] drawn, the 2023-24 season itself: 64 games hold a rule award in 0 of 300 draws (must be 0), 65 games in 300 (at least 290)
+  ok   [B3] drawn, the season before the rule: 64 games hold a rule award in 300 of 300 draws (at least 290: no games rule yet), 40 of 82 games in 0 (must be 0: the game's own half season floor)
+  ok   [B8] Scoring Champion: an average just under its own league leaders' lowest bar (29.90) wins in 0 of 300 draws (must be 0), one just over their highest (35.74) in 300 (must be 300)
+  ok   [B8] Rebounding Champion: an average just under its own league leaders' lowest bar (12.32) wins in 0 of 300 draws (must be 0), one just over their highest (16.22) in 300 (must be 300)
+  ok   [B8] Assists Leader: an average just under its own league leaders' lowest bar (10.02) wins in 0 of 300 draws (must be 0), one just over their highest (11.74) in 300 (must be 300)
+  ok   [B8] a fan favourite (fanbase 100) on a 6 point season starts the All-Star Game in 145 of 300 draws in 2015-16, when the fans picked alone (at least 60), and in 0 in 2016-17, the first weighted vote (must be 0)
+  ok   [B8] the 66 game 2011-12 season asks for its own real minimum, 56 games or 1127 points, 644 rebounds, 321 assists (the rules hold 56, 1127, 644, 321)
+  ok   [B8] a full season before 2013-14 asks for 70 games or the total (1,400 points), from 2013-14 for 58 of 82 with no way in on totals, and the 72 game 2020-21 season for 51
+  ok   [B8] 2011-12, 34.1 points a game over 40 of 66 games (1364 points, over the 1127 the season asked for): Scoring Champion in 300 of 300 draws (must be 300)
+  ok   [B4] All-NBA seasons without an All-Star selection: 0, 0, 0, 0, 0
+  ok   [B4] All-NBA First Team seasons that did not start the All-Star Game: 0, 0, 0, 0, 0 of 8147, 8041, 8158, 8192, 8113; MVP seasons that did not: 0, 0, 0, 0, 0 (before the gate the League MVP read "All-Star reserve" in 43 percent of MVP seasons); starters are 42 percent of All-Stars (the real game starts 10 of 24, 42 percent)
+  ok   [B4] All-Star starters who spent the season on their own club's bench (and were not on the All-NBA First Team): 0, 0, 0, 0, 0 (must be 0; before the gate one starter in 30); bench men picked for the game at all: 346, 339, 358, 397, 360 (must be above zero: the gate is on the vote, not on the selection)
+  ok   [B4] All-Star selections a career over All-NBA: 1.48, 1.48, 1.48, 1.49, 1.49, mean 1.48 (1.25 to 2.4; 24 picks against 15 is 1.6); 4.202, 4.199, 4.198, 4.225, 4.226 All-Star a career, 10734, 10605, 10739, 10777, 10692 of them starters
+  ok   [B5] All-Defensive a career: every defender above every scorer (the lowest defender, threed, 2.93; the highest scorer, stretch4, 0.06)
+  ok   [B5] the defenders' mean is 214.1 times the scorers' (at least 3; main: a tenth of it, the wrong way round): pest 4.50, twoway 5.33, threed 2.93, anchor 3.37, scoringpg 0.01, bucket 0.01, sniper 0.00, alpha 0.03, stretch4 0.06, stretch 0.00
+  FAIL [B6] Rookie of the Year a career: 0.107, 0.11, 0.101, 0.102, 0.099, mean 0.104 (between main's 0.022 and three times it)
+  ok   [B6] Scoring Champion a career: 0.173, 0.158, 0.157, 0.167, 0.162 (main 0.468; it moves by design, judged as above zero)
+  ok   [B6] Assists Leader a career: 0.582, 0.587, 0.588, 0.577, 0.567 (main 0.123; it moves by design, judged as above zero)
+  ok   [B6] Rebounding Champion a career: 0.097, 0.111, 0.104, 0.104, 0.107 (main 0.099; it moves by design, judged as above zero)
+  ok   [B6] Sixth Man of the Year a career: 0.337, 0.337, 0.329, 0.348, 0.337 (main 0.334; it moves by design, judged as above zero)
+  ok   [B6] Most Improved Player a career: 0.195, 0.191, 0.185, 0.186, 0.191 (main 0.193; it moves by design, judged as above zero)
+  ok   [B6] Defensive Player of the Year a career: 0.075, 0.078, 0.079, 0.08, 0.088 (main 0.079; it moves by design, judged as above zero)
+  ok   [B6] All-Rookie Team a career: 0.335, 0.346, 0.338, 0.335, 0.329 (main 0.092; it moves by design, judged as above zero)
+  ok   [B7] decideNbaAwards draws exactly 9 times for a rookie, a bench player, a short season and a season before 2023 (9, 9, 9, 9)
+  ok   [B7] the same input and seed give the same awards, and the input is left untouched
+  FAIL [E] NBA_FIELD mvp PG: committed 32.92/11.23 against the fleet 35.51/11.36 35.52/11.19 35.49/11.37 35.36/11.19 35.55/11.26 (mean off by at most 0.234 sd, limit 0.08; sd off by at most 1.2 percent, limit 6)
+  FAIL [E] NBA_FIELD mvp SG: committed 31.95/10.85 against the fleet 34.66/11.24 34.68/11.25 34.47/11.22 34.81/11.34 34.64/11.19 (mean off by at most 0.264 sd, limit 0.08; sd off by at most 4.5 percent, limit 6)
+  FAIL [E] NBA_FIELD mvp SF: committed 33.67/11.54 against the fleet 36.55/11.95 36.68/11.93 36.61/11.94 36.56/12.01 36.66/11.91 (mean off by at most 0.261 sd, limit 0.08; sd off by at most 4.1 percent, limit 6)
+  FAIL [E] NBA_FIELD mvp PF: committed 31.75/10.35 against the fleet 34.66/10.82 34.65/10.86 34.83/10.97 34.58/10.91 34.64/10.80 (mean off by at most 0.297 sd, limit 0.08; sd off by at most 6.0 percent, limit 6)
+  FAIL [E] NBA_FIELD mvp C: committed 32.93/10.95 against the fleet 35.13/11.07 35.20/11.22 35.13/11.18 35.34/11.15 35.39/11.21 (mean off by at most 0.225 sd, limit 0.08; sd off by at most 2.5 percent, limit 6)
+  ok   [E] NBA_FIELD defense PG: committed 3.02/1.06 against the fleet 3.02/1.07 3.03/1.06 3.01/1.07 3.02/1.07 3.04/1.07 (mean off by at most 0.017 sd, limit 0.08; sd off by at most 1.2 percent, limit 6)
+  ok   [E] NBA_FIELD defense SG: committed 3.34/1.28 against the fleet 3.35/1.26 3.33/1.28 3.33/1.28 3.33/1.30 3.35/1.27 (mean off by at most 0.009 sd, limit 0.08; sd off by at most 1.5 percent, limit 6)
+  ok   [E] NBA_FIELD defense SF: committed 4.08/1.38 against the fleet 4.08/1.38 4.10/1.37 4.07/1.39 4.07/1.39 4.11/1.37 (mean off by at most 0.021 sd, limit 0.08; sd off by at most 0.7 percent, limit 6)
+  ok   [E] NBA_FIELD defense PF: committed 4.05/1.41 against the fleet 4.06/1.42 4.07/1.41 4.09/1.43 4.05/1.43 4.05/1.41 (mean off by at most 0.025 sd, limit 0.08; sd off by at most 1.7 percent, limit 6)
+  ok   [E] NBA_FIELD defense C: committed 5.59/2.08 against the fleet 5.59/2.06 5.59/2.10 5.58/2.08 5.62/2.06 5.63/2.07 (mean off by at most 0.020 sd, limit 0.08; sd off by at most 1.1 percent, limit 6)
+  FAIL [E] NBA_FIELD production PG: committed 23.1/10.29 against the fleet 25.64/10.48 25.73/10.32 25.59/10.45 25.54/10.31 25.74/10.33 (mean off by at most 0.256 sd, limit 0.08; sd off by at most 1.8 percent, limit 6)
+  FAIL [E] NBA_FIELD production SG: committed 22.15/9.87 against the fleet 24.92/10.30 24.76/10.30 24.72/10.24 24.79/10.40 24.90/10.26 (mean off by at most 0.281 sd, limit 0.08; sd off by at most 5.3 percent, limit 6)
+  FAIL [E] NBA_FIELD production SF: committed 23.8/10.59 against the fleet 26.66/11.05 26.78/11.07 26.60/11.05 26.61/11.13 26.84/10.98 (mean off by at most 0.287 sd, limit 0.08; sd off by at most 5.1 percent, limit 6)
+  FAIL [E] NBA_FIELD production PF: committed 21.9/9.39 against the fleet 24.87/9.96 24.91/9.90 25.05/10.02 24.75/10.01 24.79/9.88 (mean off by at most 0.335 sd, limit 0.08; sd off by at most 6.7 percent, limit 6)
+  FAIL [E] NBA_FIELD production C: committed 23.15/10.01 against the fleet 25.42/10.18 25.41/10.34 25.39/10.33 25.56/10.27 25.64/10.32 (mean off by at most 0.249 sd, limit 0.08; sd off by at most 3.3 percent, limit 6)
+  ok   [E] NBA_FIELD bench: committed 7.71/3.3 against the fleet 7.74/3.31 7.69/3.32 7.66/3.27 7.73/3.31 7.72/3.34 (mean off by at most 0.014 sd, limit 0.08; sd off by at most 1.2 percent, limit 6)
+  ok   [E] NBA_FIELD jump: committed -0.01/7.09 against the fleet -0.04/7.34 -0.05/7.34 -0.04/7.33 -0.04/7.33 -0.03/7.34 (mean off by at most 0.005 sd, limit 0.08; sd off by at most 3.6 percent, limit 6)
+  ok   [E] NBA_FIELD fans: committed 61.81/24.35 against the fleet 61.88/24.43 61.96/24.55 61.74/24.42 61.71/24.37 61.60/24.36 (mean off by at most 0.009 sd, limit 0.08; sd off by at most 0.8 percent, limit 6)
+  ok   [D] nbaSeasonStats.ts and nbaCareerAwards.ts both import from ./awardDecision (comments stripped)
+  ok   [D] nbaSeasonStats.ts no longer adds points and rebounds a game itself
+  ok   [D] the career's MVP win weight (20) is NBA Front Office's (20)
+  ok   [D] NBA Front Office ranks the winner over the better producer on the worst club (true), and stops when the shared score loses its winning term (true)
+  ok   [D] the career's MVPs over 400 careers change with the same swap (248 against 5)
+  ok   [F] the worked example recomputed through the shared score: production 38.8 (printed 38.8), winning share 0.659 (printed .659), weight 20, total 52.0 (printed 52.0)
+  ok   [F] the example's 54-28 club is a playoff club by the engine's record bands (41 to 67 wins) and its 34-48 club is not (17 to 40)
+  ok   [F] the help says 65 games from the 2023-24 season, 24 All-Star picks and the fans alone before 2016-17; the real rules are 65, 24 and 2016-17 (the rule table holds 65 from 2023, 24 and 2016)
+  ok   [F] the page says the Trophy Case holds 23 badges; NBA_BADGES has 23
+  ok   [F] the page hands the award rules to its "?"
+  ok   [F] no em or en dash in the help rules
+  note [F] the guide for /nba-my-career still says, and its owner owes the change: "62 games", "21 of them", "Each of the 21 badges"
+  note [C] other sports: not judged in a plain run (SENSE_PROVE_OTHERS=1 judges the hashes)
+  note [C, printed for the legacy recalibration round] NFL: 9 seasons won MVP over 2500 careers; 1 of them (11.1 percent) on a club that missed the playoffs, 2 (22.2 percent) without that season's All-Pro
+  note [C, printed for the legacy recalibration round] MLB: 42 seasons won MVP or Cy Young over 2500 careers; 21 of them (50.0 percent) on a club that missed the playoffs, 3 (7.1 percent) without that season's All-Star
+  note [C, printed for the legacy recalibration round] NHL: 169 seasons won Hart or Norris or Vezina over 2500 careers; 47 of them (27.8 percent) on a club that missed the playoffs, 23 (13.6 percent) without that season's All-Star
+
+control oldassists: DID NOT FIRE AS DESIGNED, wanted red in A1, A3 (and at most A2, E, R, H, B4, B6), got E, A1, A2, A3, R, H, B6, B2
+simNbaAwardsSense: 136 checks, 34 failed (full size, control oldassists), 122s
