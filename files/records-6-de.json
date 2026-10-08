@@ -1,0 +1,364 @@
+{
+ "target": "de",
+ "phases": {
+  "before": {
+   "lines": {
+    "pre1": "en: Balance: 200",
+    "pre2": "en: Your club has won 21 trophies this decade",
+    "pre3": "en: Welcome back to the training ground",
+    "never": "en: The window closes in August",
+    "tick1": "en: next find in ~20s",
+    "m0": "en: Money in the bank: 1",
+    "m1": "en: Fans in the ground: 1",
+    "m2": "en: Tickets sold today: 1",
+    "m3": "en: Shirts sold today: 1",
+    "m4": "en: Beds in the hotel: 1",
+    "m5": "en: Staff on the payroll: 1",
+    "m6": "en: Seats in the stand: 1",
+    "m7": "en: Pies sold today: 1",
+    "after": "empty: "
+   },
+   "stats": {
+    "swaps": 0,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 0,
+    "returned": 0
+   }
+  },
+  "translated": {
+   "lines": {
+    "pre1": "pt: Kontostand: 200",
+    "pre2": "pt: Ihr Verein hat in diesem Jahrzehnt 21 Trophäen gewonnen.",
+    "pre3": "pt: Willkommen zurück auf dem Trainingsgelände",
+    "never": "pt: Das Zeitfenster schließt im August.",
+    "tick1": "pt: nächste Suche in ca. 20 Sekunden",
+    "m0": "pt: Geld auf dem Konto: 1",
+    "m1": "pt: Fans im Stadion: 1",
+    "m2": "pt: Heute verkaufte Tickets: 1",
+    "m3": "pt: Heute verkaufte Hemden: 1",
+    "m4": "pt: Betten im Hotel: 1",
+    "m5": "pt: Mitarbeiter auf der Gehaltsliste: 1",
+    "m6": "pt: Sitzplätze auf der Tribüne: 1",
+    "m7": "pt: Heute verkaufte Kuchen: 1",
+    "after": "empty: "
+   },
+   "stats": {
+    "swaps": 32,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 12,
+    "returned": 0
+   }
+  },
+  "translated+5s": {
+   "lines": {
+    "pre1": "pt: Kontostand: 200",
+    "pre2": "pt: Ihr Verein hat in diesem Jahrzehnt 21 Trophäen gewonnen.",
+    "pre3": "pt: Willkommen zurück auf dem Trainingsgelände",
+    "never": "pt: Das Zeitfenster schließt im August.",
+    "tick1": "pt: nächste Suche in ca. 20 Sekunden",
+    "m0": "pt: Geld auf dem Konto: 1",
+    "m1": "pt: Fans im Stadion: 1",
+    "m2": "pt: Heute verkaufte Tickets: 1",
+    "m3": "pt: Heute verkaufte Hemden: 1",
+    "m4": "pt: Betten im Hotel: 1",
+    "m5": "pt: Mitarbeiter auf der Gehaltsliste: 1",
+    "m6": "pt: Sitzplätze auf der Tribüne: 1",
+    "m7": "pt: Heute verkaufte Kuchen: 1",
+    "after": "empty: "
+   },
+   "stats": {
+    "swaps": 32,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 12,
+    "returned": 0
+   }
+  },
+  "later": {
+   "lines": {
+    "pre1": "pt: Kontostand: 200",
+    "pre2": "pt: Ihr Verein hat in diesem Jahrzehnt 21 Trophäen gewonnen.",
+    "pre3": "pt: Willkommen zurück auf dem Trainingsgelände",
+    "never": "pt: Das Zeitfenster schließt im August.",
+    "tick1": "pt: nächste Suche in ca. 20 Sekunden",
+    "m0": "pt: Geld auf dem Konto: 1",
+    "m1": "pt: Fans im Stadion: 1",
+    "m2": "pt: Heute verkaufte Tickets: 1",
+    "m3": "pt: Heute verkaufte Hemden: 1",
+    "m4": "pt: Betten im Hotel: 1",
+    "m5": "pt: Mitarbeiter auf der Gehaltsliste: 1",
+    "m6": "pt: Sitzplätze auf der Tribüne: 1",
+    "m7": "pt: Heute verkaufte Kuchen: 1",
+    "after": "pt: Anstoß ist um 3 Uhr."
+   },
+   "stats": {
+    "swaps": 34,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 12,
+    "returned": 0
+   }
+  },
+  "tick1-rest": {
+   "lines": {
+    "pre1": "pt: Kontostand: 200",
+    "pre2": "pt: Ihr Verein hat in diesem Jahrzehnt 21 Trophäen gewonnen.",
+    "pre3": "pt: Willkommen zurück auf dem Trainingsgelände",
+    "never": "pt: Das Zeitfenster schließt im August.",
+    "tick1": "pt: nächste Suche in ca. 8 Sekunden",
+    "m0": "pt: Geld auf dem Konto: 1",
+    "m1": "pt: Fans im Stadion: 1",
+    "m2": "pt: Heute verkaufte Tickets: 1",
+    "m3": "pt: Heute verkaufte Hemden: 1",
+    "m4": "pt: Betten im Hotel: 1",
+    "m5": "pt: Mitarbeiter auf der Gehaltsliste: 1",
+    "m6": "pt: Sitzplätze auf der Tribüne: 1",
+    "m7": "pt: Heute verkaufte Kuchen: 1",
+    "after": "pt: Anstoß ist um 3 Uhr."
+   },
+   "stats": {
+    "swaps": 70,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 48,
+    "returned": 0
+   }
+  },
+  "after": {
+   "lines": {
+    "pre1": "pt: Kontostand: 200",
+    "pre2": "pt: Ihr Verein hat in diesem Jahrzehnt 21 Trophäen gewonnen.",
+    "pre3": "pt: Willkommen zurück auf dem Trainingsgelände",
+    "never": "pt: Das Zeitfenster schließt im August.",
+    "tick1": "pt: nächste Suche in ca. 8 Sekunden",
+    "m0": "pt: Geld auf dem Konto: 24",
+    "m1": "pt: Fans im Stadion: 36",
+    "m2": "pt: Heute wurden 48 Tickets verkauft.",
+    "m3": "pt: Heute verkaufte Hemden: 60",
+    "m4": "pt: Betten im Hotel: 72",
+    "m5": "pt: Mitarbeiter auf der Gehaltsliste: 84",
+    "m6": "pt: Sitzplätze auf der Tribüne: 96",
+    "m7": "pt: Heute verkaufte Kuchen: 108",
+    "after": "pt: Anstoß ist um 3 Uhr."
+   },
+   "stats": {
+    "swaps": 262,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 240,
+    "returned": 0
+   }
+  }
+ },
+ "timings": {},
+ "translated": true,
+ "hosts": {
+  "allowed": [
+   "127.0.0.1",
+   "translate.google.com",
+   "www.gstatic.com",
+   "translate.googleapis.com",
+   "translate-pa.googleapis.com"
+  ],
+  "blocked": [
+   "fonts.gstatic.com",
+   "www.google.com"
+  ]
+ },
+ "run": {
+  "installed": true,
+  "lines": {
+   "translated": {
+    "pre1": "pt: Kontostand: 200",
+    "pre2": "pt: Ihr Verein hat in diesem Jahrzehnt 21 Trophäen gewonnen.",
+    "pre3": "pt: Willkommen zurück auf dem Trainingsgelände",
+    "never": "pt: Das Zeitfenster schließt im August.",
+    "tick1": "pt: nächste Suche in ca. 20 Sekunden",
+    "m0": "pt: Geld auf dem Konto: 1",
+    "m1": "pt: Fans im Stadion: 1",
+    "m2": "pt: Heute verkaufte Tickets: 1",
+    "m3": "pt: Heute verkaufte Hemden: 1",
+    "m4": "pt: Betten im Hotel: 1",
+    "m5": "pt: Mitarbeiter auf der Gehaltsliste: 1",
+    "m6": "pt: Sitzplätze auf der Tribüne: 1",
+    "m7": "pt: Heute verkaufte Kuchen: 1",
+    "after": "empty: "
+   },
+   "translated+5s": {
+    "pre1": "pt: Kontostand: 200",
+    "pre2": "pt: Ihr Verein hat in diesem Jahrzehnt 21 Trophäen gewonnen.",
+    "pre3": "pt: Willkommen zurück auf dem Trainingsgelände",
+    "never": "pt: Das Zeitfenster schließt im August.",
+    "tick1": "pt: nächste Suche in ca. 20 Sekunden",
+    "m0": "pt: Geld auf dem Konto: 1",
+    "m1": "pt: Fans im Stadion: 1",
+    "m2": "pt: Heute verkaufte Tickets: 1",
+    "m3": "pt: Heute verkaufte Hemden: 1",
+    "m4": "pt: Betten im Hotel: 1",
+    "m5": "pt: Mitarbeiter auf der Gehaltsliste: 1",
+    "m6": "pt: Sitzplätze auf der Tribüne: 1",
+    "m7": "pt: Heute verkaufte Kuchen: 1",
+    "after": "empty: "
+   },
+   "later": {
+    "pre1": "pt: Kontostand: 200",
+    "pre2": "pt: Ihr Verein hat in diesem Jahrzehnt 21 Trophäen gewonnen.",
+    "pre3": "pt: Willkommen zurück auf dem Trainingsgelände",
+    "never": "pt: Das Zeitfenster schließt im August.",
+    "tick1": "pt: nächste Suche in ca. 20 Sekunden",
+    "m0": "pt: Geld auf dem Konto: 1",
+    "m1": "pt: Fans im Stadion: 1",
+    "m2": "pt: Heute verkaufte Tickets: 1",
+    "m3": "pt: Heute verkaufte Hemden: 1",
+    "m4": "pt: Betten im Hotel: 1",
+    "m5": "pt: Mitarbeiter auf der Gehaltsliste: 1",
+    "m6": "pt: Sitzplätze auf der Tribüne: 1",
+    "m7": "pt: Heute verkaufte Kuchen: 1",
+    "after": "pt: Anstoß ist um 3 Uhr."
+   },
+   "tick1-rest": {
+    "pre1": "pt: Kontostand: 200",
+    "pre2": "pt: Ihr Verein hat in diesem Jahrzehnt 21 Trophäen gewonnen.",
+    "pre3": "pt: Willkommen zurück auf dem Trainingsgelände",
+    "never": "pt: Das Zeitfenster schließt im August.",
+    "tick1": "pt: nächste Suche in ca. 8 Sekunden",
+    "m0": "pt: Geld auf dem Konto: 1",
+    "m1": "pt: Fans im Stadion: 1",
+    "m2": "pt: Heute verkaufte Tickets: 1",
+    "m3": "pt: Heute verkaufte Hemden: 1",
+    "m4": "pt: Betten im Hotel: 1",
+    "m5": "pt: Mitarbeiter auf der Gehaltsliste: 1",
+    "m6": "pt: Sitzplätze auf der Tribüne: 1",
+    "m7": "pt: Heute verkaufte Kuchen: 1",
+    "after": "pt: Anstoß ist um 3 Uhr."
+   },
+   "after": {
+    "pre1": "pt: Kontostand: 200",
+    "pre2": "pt: Ihr Verein hat in diesem Jahrzehnt 21 Trophäen gewonnen.",
+    "pre3": "pt: Willkommen zurück auf dem Trainingsgelände",
+    "never": "pt: Das Zeitfenster schließt im August.",
+    "tick1": "pt: nächste Suche in ca. 8 Sekunden",
+    "m0": "pt: Geld auf dem Konto: 24",
+    "m1": "pt: Fans im Stadion: 36",
+    "m2": "pt: Heute wurden 48 Tickets verkauft.",
+    "m3": "pt: Heute verkaufte Hemden: 60",
+    "m4": "pt: Betten im Hotel: 72",
+    "m5": "pt: Mitarbeiter auf der Gehaltsliste: 84",
+    "m6": "pt: Sitzplätze auf der Tribüne: 96",
+    "m7": "pt: Heute verkaufte Kuchen: 108",
+    "after": "pt: Anstoß ist um 3 Uhr."
+   }
+  },
+  "stats": {
+   "translated": {
+    "swaps": 32,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 12,
+    "returned": 0
+   },
+   "translated+5s": {
+    "swaps": 32,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 12,
+    "returned": 0
+   },
+   "later": {
+    "swaps": 34,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 12,
+    "returned": 0
+   },
+   "tick1-rest": {
+    "swaps": 70,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 48,
+    "returned": 0
+   },
+   "after": {
+    "swaps": 262,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 240,
+    "returned": 0
+   }
+  },
+  "share": {
+   "one": {
+    "count": {
+     "tick1": {
+      "pt": 120,
+      "en": 0,
+      "mixed": 0,
+      "empty": 0
+     }
+    },
+    "requests": 13,
+    "restored": 36,
+    "swaps": 36
+   },
+   "eight": {
+    "count": {
+     "m0": {
+      "pt": 120,
+      "en": 0,
+      "mixed": 0,
+      "empty": 0
+     },
+     "m1": {
+      "pt": 120,
+      "en": 0,
+      "mixed": 0,
+      "empty": 0
+     },
+     "m2": {
+      "pt": 120,
+      "en": 0,
+      "mixed": 0,
+      "empty": 0
+     },
+     "m3": {
+      "pt": 120,
+      "en": 0,
+      "mixed": 0,
+      "empty": 0
+     },
+     "m4": {
+      "pt": 120,
+      "en": 0,
+      "mixed": 0,
+      "empty": 0
+     },
+     "m5": {
+      "pt": 120,
+      "en": 0,
+      "mixed": 0,
+      "empty": 0
+     },
+     "m6": {
+      "pt": 120,
+      "en": 0,
+      "mixed": 0,
+      "empty": 0
+     },
+     "m7": {
+      "pt": 120,
+      "en": 0,
+      "mixed": 0,
+      "empty": 0
+     }
+    },
+    "requests": 13,
+    "restored": 192,
+    "swaps": 192
+   }
+  }
+ },
+ "records": [],
+ "errors": []
+}

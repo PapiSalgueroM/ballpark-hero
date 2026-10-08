@@ -1,0 +1,4 @@
+m5pt exit=0 28s | measure done
+m6pt exit=0 45s | measure done
+m6de exit=0 45s | measure done
+m4pt exit=0 58s | measure done
