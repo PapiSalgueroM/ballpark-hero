@@ -319,6 +319,80 @@ async function section3(fresh) {
   }
 }
 
+/* ---------- 4. no audio file, no audio element, one home for the audio graph ----------
+   Source text with comments stripped (prose about a rule is where its words are guaranteed to appear) and test
+   files left out. Every rule matches a SHAPE, never a bare word: a guide may say a phone vibrates. First run
+   2026-10-08 on origin/release-al-int at e7f435e0 plus the kit and the switch alone: 1,381 files read, every
+   shape rule green, so the base held none of these shapes before this round. */
+const AUDIO_EXT = 'mp3|ogg|oga|wav|m4a|aac|flac|opus|weba|mid|midi';
+const KIT_FILE = 'src/lib/soundKit.ts', SWITCH_FILE = 'src/lib/sound.ts', HOOK_FILE = 'src/hooks/useSoundPlan.ts';
+function walk(rel, out = []) {
+  const abs = path.join(ROOT, rel);
+  if (!fs.existsSync(abs)) return out;
+  for (const e of fs.readdirSync(abs, { withFileTypes: true })) {
+    const child = `${rel}/${e.name}`;
+    if (e.isDirectory()) walk(child, out);
+    else out.push(child);
+  }
+  return out;
+}
+const isTest = rel => /\.test\.tsx?$/.test(rel) || rel.startsWith('src/test/');
+/** the files a rule reads, as code: [relative path, text with comments stripped]; a control's patch lands here */
+let scanPatch = null;
+function scannedCode() {
+  const files = [...walk('src').filter(f => /\.(tsx?|jsx?|mjs|cjs|css|html|json)$/.test(f) && !isTest(f)), 'index.html'];
+  return files.map(rel => {
+    let text = readSrc(rel);
+    if (scanPatch && scanPatch.file === rel) text += `\n${scanPatch.add}\n`;
+    return [rel, code(text)];
+  });
+}
+/** the files where a shape is found, as "file (n)" */
+function found(files, re, except = []) {
+  const hits = [];
+  for (const [rel, text] of files) {
+    if (except.includes(rel)) continue;
+    const n = (text.match(re) ?? []).length;
+    if (n) hits.push(`${rel} (${n})`);
+  }
+  return hits;
+}
+const none = hits => (hits.length ? `FOUND in ${hits.slice(0, 4).join(', ')}${hits.length > 4 ? ` and ${hits.length - 4} more` : ''}` : 'none');
+async function section4() {
+  head('4) No audio file, no audio element, one home for the audio graph');
+  const extRe = new RegExp(`\\.(${AUDIO_EXT})$`, 'i');
+  const all = [...walk('src'), ...walk('public')];
+  const audioFiles = all.filter(f => extRe.test(f));
+  check('4.files', all.length > 1000 && !audioFiles.length, `${all.length} files under src and public, audio files among them: ${audioFiles.length ? audioFiles.slice(0, 4).join(', ') : 'none'}`);
+  const files = scannedCode();
+  check('4.read', files.length > 1000, `${files.length} source files read as code (tests left out, comments stripped)`);
+  check('4.element', !found(files, /<audio[\s>/]|new\s+Audio\s*\(|HTMLAudioElement/g).length,
+    `an audio element, new Audio( or HTMLAudioElement: ${none(found(files, /<audio[\s>/]|new\s+Audio\s*\(|HTMLAudioElement/g))}`);
+  const pathRe = new RegExp(`['"\`][^'"\`\\n]*\\.(${AUDIO_EXT})(\\?[^'"\`\\n]*)?['"\`]`, 'gi');
+  check('4.path', !found(files, pathRe).length, `a quoted path ending in an audio extension: ${none(found(files, pathRe))}`);
+  for (const [id, label, re] of [
+    ['context', 'AudioContext', /AudioContext/g],
+    ['source', 'createBufferSource', /createBufferSource/g],
+    ['oscillator', 'createOscillator', /createOscillator/g],
+    ['vibrate', 'navigator.vibrate or .vibrate(', /navigator\s*\??\.\s*vibrate|\.vibrate\s*\(/g],
+  ]) check(`4.graph.${id}`, !found(files, re, [KIT_FILE]).length, `${label} outside ${KIT_FILE}: ${none(found(files, re, [KIT_FILE]))}`);
+  const kitText = files.find(([rel]) => rel === KIT_FILE)?.[1] ?? '', switchText = files.find(([rel]) => rel === SWITCH_FILE)?.[1] ?? '';
+  check('4.home', kitText.includes("'dukb-synth-kit-1'") && /AudioContext/.test(kitText),
+    `the kit lives at ${KIT_FILE} (the build names its chunk after the file, and freshBuild's guard matches that name)`);
+  const staticRe = /(from|import)\s*['"][^'"\n]*soundKit(\.ts)?['"]/g;
+  check('4.static', !found(files, staticRe).length, `a static import of the kit: ${none(found(files, staticRe))}`);
+  const dynRe = /(?<!typeof\s)import\s*\(\s*['"][^'"\n]*soundKit(\.ts)?['"]\s*\)/g;
+  const dyn = found(files, dynRe);
+  check('4.dynamic', dyn.length === 1 && dyn[0] === `${SWITCH_FILE} (1)`, `the one dynamic import of the kit is in ${SWITCH_FILE}: ${dyn.join(', ') || 'none found'}`);
+  const mark = found(files, /['"`]dukb-synth-kit-1['"`]/g), key = found(files, /['"`]dukb-sound['"`]/g);
+  check('4.mark', mark.length === 1 && mark[0] === `${KIT_FILE} (1)`, `the quoted kit mark is in ${KIT_FILE} alone, once: ${mark.join(', ') || 'none found'}`);
+  check('4.key', key.length === 1 && key[0] === `${SWITCH_FILE} (1)`, `the quoted storage key is in ${SWITCH_FILE} alone, once: ${key.join(', ') || 'none found'}`);
+  const own = files.filter(([rel]) => [KIT_FILE, SWITCH_FILE, HOOK_FILE].includes(rel));
+  check('4.random', own.length >= 2 && !found(own, /Math\s*\.\s*random/g).length, `Math.random in ${own.map(([rel]) => rel.split('/').pop()).join(', ')}: ${none(found(own, /Math\s*\.\s*random/g))}`);
+  check('4.react', switchText.length > 0 && !/^\s*import\s/m.test(switchText) && !/['"]react['"]/.test(switchText),
+    `${SWITCH_FILE} has no import statement at all (it reaches the kit's type through typeof import), so no React`);
+}
+
 /* ---------- negative controls ----------
    A control plants one fault, runs the sections it is aimed at, and FIRES only when a check it names went red.
    `text` replaces one exact string of the bundle (the needle must be there exactly once, and the text must
@@ -350,11 +424,18 @@ const CONTROLS = {
     if (lib.kit.CUES.ghost) throw new Error('a cue named ghost exists');
     lib.kit.MOMENTS.tap.steps.push({ cue: 'ghost' });
   } },
+  audiotag: { sections: [section4], red: /^4\.(element|path)$/, scan: { file: 'src/components/career/AwardsNightCard.tsx', add: "const w = new Audio('/whistle.mp3');" } },
+  secondhome: { sections: [section4], red: /^4\.graph\.context$/, scan: { file: SWITCH_FILE, add: 'const c = new AudioContext();' } },
+  staticimport: { sections: [section4], red: /^4\.static$/, scan: { file: SWITCH_FILE, add: "import { play } from './soundKit';" } },
 };
-let scanPatch = null;
 async function runControl(name) {
   const c = CONTROLS[name];
   let text = BASE_TEXT;
+  if (c.scan) {
+    /* a patch that lands on no file, or adds what the file already says, would change nothing */
+    if (!fs.existsSync(path.join(ROOT, c.scan.file))) { console.log(`control ${name}: CANNOT BE PLANTED, ${c.scan.file} is not there`); return false; }
+    if (readSrc(c.scan.file).includes(c.scan.add)) { console.log(`control ${name}: CANNOT BE PLANTED, ${c.scan.file} already holds that line`); return false; }
+  }
   if (c.text) {
     const hits = text.split(c.text[0]).length - 1;
     if (hits !== 1) { console.log(`control ${name}: CANNOT BE PLANTED, its needle appears ${hits} times in the bundle`); return false; }
@@ -397,7 +478,7 @@ async function writeWavs(fresh) {
 }
 
 /* ---------- main ---------- */
-const SECTIONS = [section1, section2, section3];
+const SECTIONS = [section1, section2, section3, section4];
 if (process.env.SIM_SOUND_MEASURE) {
   /* For whoever adds a cue or retunes one: the numbers a band or a floor is set from. */
   const { kit } = await loaderFor(BASE_TEXT)();
