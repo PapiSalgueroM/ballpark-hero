@@ -1,0 +1,37 @@
+1) Every page fits the phone it is being played on
+  PASS  /: nothing hangs off the side (0px of horizontal overflow)
+  PASS  /: the page is being served a touch device
+  PASS  /club-manager: nothing hangs off the side (0px of horizontal overflow)
+  PASS  /club-manager: the page is being served a touch device
+  PASS  /stadium-tycoon: nothing hangs off the side (0px of horizontal overflow)
+  PASS  /stadium-tycoon: the page is being served a touch device
+  PASS  /soccer-career: nothing hangs off the side (0px of horizontal overflow)
+  PASS  /soccer-career: the page is being served a touch device
+  PASS  /minefield: nothing hangs off the side (0px of horizontal overflow)
+  PASS  /minefield: the page is being served a touch device
+  PASS  /footle: nothing hangs off the side (0px of horizontal overflow)
+  PASS  /footle: the page is being served a touch device
+  PASS  /soccer-grid: nothing hangs off the side (0px of horizontal overflow)
+  PASS  /soccer-grid: the page is being served a touch device
+  PASS  /leaderboard: nothing hangs off the side (0px of horizontal overflow)
+  PASS  /leaderboard: the page is being served a touch device
+  PASS  /whats-new: nothing hangs off the side (0px of horizontal overflow)
+  PASS  /whats-new: the page is being served a touch device
+  PASS  /privacy: nothing hangs off the side (0px of horizontal overflow)
+  PASS  /privacy: the page is being served a touch device
+2) The daily board actually builds on a phone
+  PASS  no Invalid Date or NaN on the daily intro
+  PASS  no Invalid Date or NaN once the board is dealt
+  PASS  the board dealt its tiles (23 controls on screen)
+3) Tap targets are big enough for a thumb
+  FAIL  every control in the page is thumb sized (66: Soccer Career (17px), Club Manager (17px), NBA My Career (17px), NFL My Career (17px))
+4) The header survives its widest guest row (streak flame showing)
+  PASS  320px: the planted 365 day streak is showing on the header
+  PASS  320px: nothing scrolls sideways with the flame up (0px overflow)
+  PASS  320px: the full wordmark is on screen, not ellipsized
+  PASS  390px: the planted 365 day streak is showing on the header
+  PASS  390px: nothing scrolls sideways with the flame up (0px overflow)
+  PASS  390px: the full wordmark is on screen, not ellipsized
+  PASS  no real page errors across 10 pages (clean)
+
+playIphone: 1 failure

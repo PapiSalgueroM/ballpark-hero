@@ -1,0 +1,62 @@
+cues by length: whistle 18522, net 13230, crowd 61740, tick 2205, sting 39690, thud 9702
+saves after 3 seeded careers: out (a list of 10, 2012, placed 22); win (a list of 10, 2018, placed 1); podium (a list of 10, 2018, placed 3)
+CONTROL slowkit: the wait taken off a delay, one hit in soundKit-C0VU1hwD.js
+this Chromium, a context made after a tap: running at first, resume resolved in 0 ms, then running, its clock at 0.31 s after 0.3 s
+switches mounted: footer yes, header yes
+
+3) Awards night out loud, once
+   ok   win at 390: clicked through from / without leaving the document, the night on screen (10 names)
+   ok   win at 390: 10 ticks, 1 sting, 1 crowd, 0 other (wanted 10, 1, 1, 0): tick tick tick tick tick tick tick tick tick tick sting crowd
+   ok   win at 390: the first tick lands 637 ms after the rows appear (the row's own delay is 600 ms, within 120)
+   ok   win at 390: a tick every 220.0 ms across the countdown (the rows: 220, within 10)
+   ok   win at 390: 0 ticks more than 50 ms off their own slot
+   ok   win at 390: the sting starts 2590 ms after the first tick, as the headline lands (wanted 2590 ms)
+   ok   win at 390: the crowd swells 300 ms after the sting (300 ms)
+   ok   win at 390: buzz [[30,40,30]] (wanted [[30,40,30]])
+   ok   win at 390: 2 s later, 0 new starts
+   ok   win at 390: he gave a speech and the card shows it
+   ok   win at 390: the speech re-rendered the card and brought 0 new starts
+   ok   win at 390: 1 context throughout
+   ok   win at 390: no page error
+   ok   win at 1280: clicked through from / without leaving the document, the night on screen (10 names)
+   ok   win at 1280: 10 ticks, 1 sting, 1 crowd, 0 other (wanted 10, 1, 1, 0): tick tick tick tick tick tick tick tick tick tick sting crowd
+   ok   win at 1280: the first tick lands 632 ms after the rows appear (the row's own delay is 600 ms, within 120)
+   ok   win at 1280: a tick every 220.0 ms across the countdown (the rows: 220, within 10)
+   ok   win at 1280: 0 ticks more than 50 ms off their own slot
+   ok   win at 1280: the sting starts 2590 ms after the first tick, as the headline lands (wanted 2590 ms)
+   ok   win at 1280: the crowd swells 300 ms after the sting (300 ms)
+   ok   win at 1280: buzz [[30,40,30]] (wanted [[30,40,30]])
+   ok   win at 1280: 2 s later, 0 new starts
+   ok   win at 1280: he gave a speech and the card shows it
+   ok   win at 1280: the speech re-rendered the card and brought 0 new starts
+   ok   win at 1280: 1 context throughout
+   ok   win at 1280: no page error
+   ok   podium at 1280: clicked through from / without leaving the document, the night on screen (10 names)
+   ok   podium at 1280: 10 ticks, 1 sting, 0 crowd, 0 other (wanted 10, 1, 0, 0): tick tick tick tick tick tick tick tick tick tick sting
+   ok   podium at 1280: the first tick lands 652 ms after the rows appear (the row's own delay is 600 ms, within 120)
+   ok   podium at 1280: a tick every 220.0 ms across the countdown (the rows: 220, within 10)
+   ok   podium at 1280: 0 ticks more than 50 ms off their own slot
+   ok   podium at 1280: the sting starts 2590 ms after the first tick, as the headline lands (wanted 2590 ms)
+   ok   podium at 1280: buzz [] (wanted [])
+   ok   podium at 1280: 2 s later, 0 new starts
+   ok   podium at 1280: no page error
+   ok   out at 1280: clicked through from / without leaving the document, the night on screen (10 names)
+   ok   out at 1280: 10 ticks, 0 sting, 0 crowd, 0 other (wanted 10, 0, 0, 0): tick tick tick tick tick tick tick tick tick tick
+   ok   out at 1280: the first tick lands 639 ms after the rows appear (the row's own delay is 600 ms, within 120)
+   ok   out at 1280: a tick every 220.0 ms across the countdown (the rows: 220, within 10)
+   ok   out at 1280: 0 ticks more than 50 ms off their own slot
+   ok   out at 1280: buzz [] (wanted [])
+   ok   out at 1280: 2 s later, 0 new starts
+   ok   out at 1280: no page error
+   ok   win at 1280, a cold kit (held 300 ms past the card): clicked through from / without leaving the document, the night on screen (10 names)
+   ok   win at 1280, a cold kit (held 300 ms past the card): 10 ticks, 1 sting, 1 crowd, 0 other (wanted 10, 1, 1, 0): tick tick tick tick tick tick tick tick tick tick sting crowd
+   FAIL win at 1280, a cold kit (held 300 ms past the card): the first tick lands 914 ms after the rows appear (the row's own delay is 600 ms, within 120)
+   ok   win at 1280, a cold kit (held 300 ms past the card): a tick every 222.3 ms across the countdown (the rows: 220, within 10)
+   ok   win at 1280, a cold kit (held 300 ms past the card): 0 ticks more than 50 ms off their own slot
+   ok   win at 1280, a cold kit (held 300 ms past the card): the sting starts 2610 ms after the first tick, as the headline lands (wanted 2590 ms)
+   ok   win at 1280, a cold kit (held 300 ms past the card): the crowd swells 300 ms after the sting (300 ms)
+   ok   win at 1280, a cold kit (held 300 ms past the card): buzz [[30,40,30]] (wanted [[30,40,30]])
+   ok   win at 1280, a cold kit (held 300 ms past the card): no page error
+   first tick, measured this run: 637 ms, 632 ms, 652 ms, 639 ms, 914 ms (its row: 600 ms)
+
+playSoundGate control slowkit: fired, 1 aimed checks red in section 3

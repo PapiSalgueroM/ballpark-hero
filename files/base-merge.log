@@ -1,0 +1,8 @@
+Trying simple merge with origin/release-al-int
+Simple merge did not work, trying automatic merge.
+Auto-merging src/pages/WhatsNew.tsx
+ERROR: content conflict in src/pages/WhatsNew.tsx
+fatal: merge program failed
+Automated merge did not work.
+Should not be doing an octopus.
+Merge with strategy octopus failed.

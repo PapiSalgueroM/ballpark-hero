@@ -1,0 +1,59 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/clubManagerJobHunt.test.ts [2m([22m[2m27 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m src/test/awardsNightSound.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[32m 236[2mms[22m[39m
+ [32m✓[39m src/components/auth/googlePaused.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 828[2mms[22m[39m
+ [32m✓[39m src/test/soundToggle.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 410[2mms[22m[39m
+[90mstderr[2m | src/test/clubManagerEraLoad.test.tsx[2m > [22m[2mClub Manager: an era save waits for its era[2m > [22m[2ma 2010-11 save resumes once its squads arrive, exactly as saved
+[22m[39mGoTrueClient@sb-flawuiqbvjobmkfkauhw-auth-token:1 (2.95.3) 2026-10-08T06:28:33.628Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+
+[90mstdout[2m | src/test/clubManagerEraLoad.test.tsx[2m > [22m[2mClub Manager: an era save waits for its era[2m > [22m[2ma 2010-11 save resumes once its squads arrive, exactly as saved
+[22m[39m  2010-11 Barcelona resumed with 27 players
+
+[90mstderr[2m | src/test/clubManagerEraLoad.test.tsx[2m > [22m[2mClub Manager: an era save waits for its era[2m > [22m[2mwith the 2005-06 squads unreachable the boot holds, keeps the save, and the retry resumes it
+[22m[39mGoTrueClient@sb-flawuiqbvjobmkfkauhw-auth-token:2 (2.95.3) 2026-10-08T06:28:33.819Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+
+[90mstderr[2m | src/test/clubManagerEraLoad.test.tsx[2m > [22m[2mClub Manager: an era save waits for its era[2m > [22m[2mwith the 2005-06 squads unreachable the boot holds, keeps the save, and the retry resumes it
+[22m[39mGoTrueClient@sb-flawuiqbvjobmkfkauhw-auth-token:3 (2.95.3) 2026-10-08T06:28:34.123Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+
+[90mstdout[2m | src/test/clubManagerEraLoad.test.tsx[2m > [22m[2mClub Manager: an era save waits for its era[2m > [22m[2mwith the 2005-06 squads unreachable the boot holds, keeps the save, and the retry resumes it
+[22m[39m  offline: the boot holds on the retry notice and the save is untouched
+
+[90mstdout[2m | src/test/clubManagerEraLoad.test.tsx[2m > [22m[2mClub Manager: an era save waits for its era[2m > [22m[2mwith the 2005-06 squads unreachable the boot holds, keeps the save, and the retry resumes it
+[22m[39m  back online: the retry fetched the squads and the career resumed
+
+[90mstderr[2m | src/test/clubManagerEraLoad.test.tsx[2m > [22m[2mClub Manager: an era save waits for its era[2m > [22m[2ma retry that fails again reloads the page, the first failure does not
+[22m[39mGoTrueClient@sb-flawuiqbvjobmkfkauhw-auth-token:4 (2.95.3) 2026-10-08T06:28:34.305Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+
+[90mstderr[2m | src/test/clubManagerEraLoad.test.tsx[2m > [22m[2mClub Manager: an era save waits for its era[2m > [22m[2ma retry that fails again reloads the page, the first failure does not
+[22m[39mGoTrueClient@sb-flawuiqbvjobmkfkauhw-auth-token:5 (2.95.3) 2026-10-08T06:28:34.501Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+
+[90mstderr[2m | src/test/clubManagerEraLoad.test.tsx[2m > [22m[2mClub Manager: an era save waits for its era[2m > [22m[2mthe engine refuses a past season before its squads arrive, and plays the real one after
+[22m[39mGoTrueClient@sb-flawuiqbvjobmkfkauhw-auth-token:6 (2.95.3) 2026-10-08T06:28:34.615Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+
+[90mstderr[2m | src/test/clubManagerEraLoad.test.tsx[2m > [22m[2mClub Manager: an era save waits for its era[2m > [22m[2ma modern save opens on the same pass and fetches no era
+[22m[39mGoTrueClient@sb-flawuiqbvjobmkfkauhw-auth-token:7 (2.95.3) 2026-10-08T06:28:34.716Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+
+[90mstderr[2m | src/test/clubManagerEraLoad.test.tsx[2m > [22m[2mClub Manager: an era save waits for its era[2m > [22m[2ma modern save opens on the same pass and fetches no era
+[22m[39mGoTrueClient@sb-flawuiqbvjobmkfkauhw-auth-token:8 (2.95.3) 2026-10-08T06:28:34.845Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+
+ [32m✓[39m src/test/clubManagerEraLoad.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 4344[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: an era save waits for its era[2m > [22ma 2010-11 save resumes once its squads arrive, exactly as saved [33m 3222[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: an era save waits for its era[2m > [22mwith the 2005-06 squads unreachable the boot holds, keeps the save, and the retry resumes it [33m 472[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: an era save waits for its era[2m > [22ma retry that fails again reloads the page, the first failure does not [33m 322[2mms[22m[39m
+ [32m✓[39m src/test/authModalFocus.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 1029[2mms[22m[39m
+ [32m✓[39m src/test/appearanceSportCopy.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[33m 3894[2mms[22m[39m
+   [33m[2m✓[22m[39m sport copy on the actual appearance editor[2m > [22momitting sport retains every soccer label, flavor and goal line [33m 600[2mms[22m[39m
+   [33m[2m✓[22m[39m sport copy on the actual appearance editor[2m > [22m'NFL' keeps every saved option while showing its own sport context [33m 543[2mms[22m[39m
+   [33m[2m✓[22m[39m sport copy on the actual appearance editor[2m > [22m'NBA' keeps every saved option while showing its own sport context [33m 579[2mms[22m[39m
+   [33m[2m✓[22m[39m sport copy on the actual appearance editor[2m > [22m'MLB' keeps every saved option while showing its own sport context [33m 606[2mms[22m[39m
+   [33m[2m✓[22m[39m sport copy on the actual appearance editor[2m > [22m'NHL' keeps every saved option while showing its own sport context [33m 460[2mms[22m[39m
+   [33m[2m✓[22m[39m sport copy on the actual appearance editor[2m > [22mchanging tabs or sport preserves the selected saved appearance without a write [33m 970[2mms[22m[39m
+ [32m✓[39m src/test/freshBuildOptionalChunk.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m8 passed[39m[22m[90m (8)[39m
+[2m      Tests [22m [1m[32m84 passed[39m[22m[90m (84)[39m
+[2m   Start at [22m 06:28:28
+[2m   Duration [22m 6.99s[2m (transform 3.02s, setup 1.21s, collect 2.39s, tests 10.77s, environment 3.14s, prepare 950ms)[22m
+

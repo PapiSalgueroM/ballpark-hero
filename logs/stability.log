@@ -1,0 +1,3 @@
+rendering 1 route(s) 5 times each at the same clock
+   1 route(s) rendered 5 times, 0 unstable, 0 unreachable
+playRenderStability: green. All 1 route(s) said the same thing 5 times, so the clock samples downstream mean what they claim.

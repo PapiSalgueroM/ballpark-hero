@@ -1,0 +1,6 @@
+the base would not merge
+ERROR: content conflict in src/pages/WhatsNew.tsx
+fatal: merge program failed
+Automated merge did not work.
+Should not be doing an octopus.
+Merge with strategy octopus failed.
