@@ -1,0 +1,38 @@
+careers 3000, seed 2, seasons 57255
+
+[1] Hall ballot line: careers with a standout 416, with a POINTS standout 179, of them printing a total that is not the career's points 0
+
+[2] All-Star starters before 2016-17 (fans alone): n 867, ppg p05 13, p25 18.6, median 22.4; bench 0; under 10 ppg 13 (1.5%); under 14 ppg 8.0%
+    All-Star starters from 2016-17 (weighted): n 2914, ppg p05 18.3, p25 23, median 26.4; bench 0; under 10 ppg 1 (0.0%); under 14 ppg 0.5%
+    e.g. 2006 PF bruiser starter fan 88 6.6 ppg, 4.8 rpg, 0.9 apg mpg 27.4 All-Star
+    e.g. 2007 PF swiss starter fan 81 6.4 ppg, 3.3 rpg, 1.4 apg mpg 25.5 All-Star
+    e.g. 2009 PF swiss starter fan 89 7.5 ppg, 4.1 rpg, 1.7 apg mpg 28.1 All-Star
+    reserves: n 5749, ppg p05 15.5, median 21.7
+[3] Scoring Champion 2020 on: n 419, lowest 30.1, p10 31.3, median 34; real leaders of that era's ten seasons 30.4 to 36.1; winners under the lowest real leader 1.7%
+[3] Scoring Champion to 2008: n 1, lowest 32.2, p10 32.2, median 32.2; real leaders of that era's ten seasons 26.8 to 32.1; winners under the lowest real leader 0.0%
+[3] Rebounding Champion 2020 on: n 233, lowest 12.6, p10 13.1, median 14.6; real leaders of that era's ten seasons 12.3 to 16; winners under the lowest real leader 0.0%
+[3] Rebounding Champion to 2008: n 1, lowest 15.7, p10 15.7, median 15.7; real leaders of that era's ten seasons 13 to 16.8; winners under the lowest real leader 0.0%
+[3] Assists Leader 2020 on: n 134, lowest 10.3, p10 10.6, median 11.5; real leaders of that era's ten seasons 10.2 to 11.7; winners under the lowest real leader 0.0%
+[3] Assists Leader to 2008: n 0, lowest undefined, p10 NaN, median NaN; real leaders of that era's ten seasons 8.9 to 12.3; winners under the lowest real leader n/a
+
+[4] MVP seasons 929: ppg p05 23.6, median 30.1; club wins p05 47, median 57; bench 0; by pos PG 183 SG 228 SF 178 PF 154 C 186
+    DPOY 245: by pos PG 28 SG 68 SF 27 PF 19 C 103; lowest spg+bpg 1.6
+    Sixth Man 972: ppg p05 11.5, median 14.1
+    Rookie of the Year 119: ppg lowest 6.4, median 12.5; bench 1
+    All-Rookie 626 of 3000 rookie seasons (20.9%): ppg lowest 2.4, p10 5, median 8.1; bench 148
+[7] All-Rookie team 1: n 240 (8.0% of rookie seasons); ppg lowest 5.1, p10 7.6, p25 8.5, median 10.5; points+rebounds+assists p10 12.5, median 17.2; under 8 ppg 15.8%; bench 5.4%; mpg median 25.4
+[7] All-Rookie team 2: n 386 (12.9% of rookie seasons); ppg lowest 2.4, p10 4.6, p25 5.6, median 7; points+rebounds+assists p10 8, median 12; under 8 ppg 68.1%; bench 35.0%; mpg median 22.8
+    rookie starters on a team 34.6% of 1382; rookie bench men on a team 9.1% of 1618; all rookies ppg median 5.5
+    Rookie of the Year: n 119; ppg lowest 6.4, p10 9.2, p25 10.6, median 12.5; under 10.2 ppg 19.3%
+    All-Star STARTERS who came off the bench all season: 0 of 3781; their ppg median NaN, mpg median NaN
+    DPOY by position: PG 28 SG 68 SF 27 PF 19 C 103 of 245; by archetype twoway 68 bruiser 18 threed 27 anchor 88 pest 28 paintbeast 15 swiss 1
+
+[5] club records outside their result's band: 0 of 57255; short seasons (not 82): 1390
+    lengths {"2011:66":750,"2020:72":640}
+    seasons with more games than the season has: 0
+
+[6] sample season notes
+    2033 SG sniper starter g 79 31.1 ppg, 6.2 rpg, 4.0 apg | 52-30 Lost in the first round | 📊 36.2 mpg, 1.0 spg, 0.3 bpg. ~ 📊 Playoffs: 6 games, 28.9 ppg, 6.4 rpg, 4.0 apg. ~ ⭐ All-Star starter. ~ ⭐ All-NBA First Team. ~ 👑 LEAGUE MVP. ~ 🔥 Scoring champion. ~ 🪞 Marcus Castellanos went 20 ppg, 6.9 rpg, 6.8 apg. You had the better year. Head to head 7-1.
+    2026 PG pointgod starter g 82 7.6 ppg, 2.7 rpg, 4.1 apg | 44-38 Lost in the first round | 📊 25.3 mpg, 0.8 spg, 0.1 bpg. ~ 📊 Playoffs: 6 games, 7.3 ppg, 2.2 rpg, 3.7 apg. ~ 🌱 All-Rookie First Team. ~ 🪞 Beau Petrenko went 14 ppg, 4.2 rpg, 3.9 apg. Nothing in it again. You lead the head to head 0-1.
+    2011 PF stretch4 starter g 64 19.2 ppg, 7.6 rpg, 2.7 apg | 50-16 WON THE NBA FINALS | 📊 33.7 mpg, 0.8 spg, 0.7 bpg. ~ 💍 A RING. ~ 📊 Playoffs: 28 games, 12.3 ppg, 5.3 rpg, 1.8 apg. ~ 😬 You disappeared when it mattered. The talk shows had a field day. ~ ⭐ All-Star starter. ~ ⭐ All-NBA First Team. ~ 🪞 Elias Marchetti went 18 ppg, 6.4 rpg, 6.2 apg. You had the better year. Head to head 5-4.
+    2033 SG sniper starter g 79 31.1 ppg, 6.2 rpg, 4.0 apg | 52-30 Lost in the first round | 📊 36.2 mpg, 1.0 spg, 0.3 bpg. ~ 📊 Playoffs: 6 games, 28.9 ppg, 6.4 rpg, 4.0 apg. ~ ⭐ All-Star starter. ~ ⭐ All-NBA First Team. ~ 👑 LEAGUE MVP. ~ 🔥 Scoring champion. ~ 🪞 Marcus Castellanos went 20 ppg, 6.9 rpg, 6.8 apg. You had the better year. Head to head 7-1.

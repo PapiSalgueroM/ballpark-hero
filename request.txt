@@ -1,0 +1,19 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+hall-nba: node scripts/simCareerHall.mjs nba
+sense-full: SENSE_PROVE_OTHERS=1 node scripts/simNbaAwardsSense.mjs
+vitest-own: node_modules/.bin/vitest run src/test/nbaAwardDecisionLift.test.ts src/test/nbaOldSaveLines.test.ts src/test/nbaStatLineColumns.test.ts --testTimeout=300000 --hookTimeout=120000
+probe1: node .rc/x/rv-probe1.mjs 3000 2
+probe2: node .rc/x/rv-probe2.mjs 3000 3
+probe3: node .rc/x/rv-probe3.mjs 1500 4
+c-barfrom-full: SIM_NBA_SENSE_CONTROL=barfrom node scripts/simNbaAwardsSense.mjs
+c-bar62data: SIM_NBA_SENSE_CONTROL=bar62data node scripts/simNbaAwardsSense.mjs
+c-rookieflood: SIM_NBA_SENSE_CONTROL=rookieflood node scripts/simNbaAwardsSense.mjs
+c-shortseason: SIM_NBA_SENSE_CONTROL=shortseason SENSE_CAREERS=400 SENSE_SEEDS=1 node scripts/simNbaAwardsSense.mjs
+c-titlebar: SIM_NBA_SENSE_CONTROL=titlebar SENSE_CAREERS=400 SENSE_SEEDS=1 node scripts/simNbaAwardsSense.mjs
+c-fanvoteera: SIM_NBA_SENSE_CONTROL=fanvoteera SENSE_CAREERS=400 SENSE_SEEDS=1 node scripts/simNbaAwardsSense.mjs
+c-weightdrift: SIM_NBA_SENSE_CONTROL=weightdrift node scripts/simNbaAwardsSense.mjs
+c-firstteamreserve: SIM_NBA_SENSE_CONTROL=firstteamreserve node scripts/simNbaAwardsSense.mjs
+c-benchstarter: SIM_NBA_SENSE_CONTROL=benchstarter node scripts/simNbaAwardsSense.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
+simUsCoachPoaching: node scripts/simUsCoachPoaching.mjs
