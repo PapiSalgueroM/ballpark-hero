@@ -1,0 +1,9 @@
+world0: node scripts/simCareerLeagueWorld.mjs
+ctl-nosize: CAREERS=60 SIM_LEAGUE_WORLD_CONTROL=nosize node scripts/simCareerLeagueWorld.mjs
+ctl-nocadence: CAREERS=60 SIM_LEAGUE_WORLD_CONTROL=nocadence node scripts/simCareerLeagueWorld.mjs
+ls-main: node scripts/simCareerLeagueSeasons.mjs
+ls-algate: git fetch -q origin release-al-gate:refs/remotes/origin/release-al-gate; SIM_LEAGUE_SEASONS_BASE=origin/release-al-gate node scripts/simCareerLeagueSeasons.mjs
+simManagerCareer: node scripts/simManagerCareer.mjs
+simCareerLeagueFinish: node scripts/simCareerLeagueFinish.mjs
+rec-awards: S=$(git rev-parse HEAD^); node scripts/recordCareerAwardsNightFixture.mjs --out $RC_OUT/careerAwardsNightFixture.json --from $S && node scripts/recordCareerAwardsNightFixture.mjs --out $TMPDIR/again.json --from $S && cmp $RC_OUT/careerAwardsNightFixture.json $TMPDIR/again.json && echo recorded twice identical from $S
+rec-brand: S=$(git rev-parse HEAD^); mkdir -p $TMPDIR/t && cp -r src scripts package.json tsconfig*.json $TMPDIR/t/ 2>/dev/null; node scripts/recordSoccerBrandFixture835.mjs . $S && cp scripts/data/soccerBrandFixture835.json $RC_OUT/soccerBrandFixture835.json && node scripts/recordSoccerBrandFixture835.mjs . $S && cmp scripts/data/soccerBrandFixture835.json $RC_OUT/soccerBrandFixture835.json && echo recorded twice identical from $S

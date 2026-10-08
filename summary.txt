@@ -1,0 +1,9 @@
+ctl-nocadence exit=0 24s | simCareerLeagueWorld control nocadence: section A and D2 went red as it must (4 failures)
+ctl-nosize exit=0 26s | simCareerLeagueWorld control nosize: section A and D2 went red as it must (7 failures)
+ls-main exit=0 16s | simCareerLeagueSeasons: all sections green
+ls-algate exit=0 19s | simCareerLeagueSeasons: all sections green
+simManagerCareer exit=0 13s | ALL MANAGER CAREER CHECKS PASSED
+simCareerLeagueFinish exit=0 10s | simCareerLeagueFinish: green. 756 careers, 6048 seasons, 4840 in a verified league; finish and title agree, the ladder holds, main's stream is untouched and the elite boo
+rec-awards exit=0 16s | recorded twice identical from 9899d95144731339848abdfba3285dbe4ac8939d
+rec-brand exit=0 19s | recorded twice identical from 9899d95144731339848abdfba3285dbe4ac8939d
+world0 exit=0 99s | simCareerLeagueWorld: all sections green (98.3 s)
