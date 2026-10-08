@@ -17,7 +17,7 @@ import type { CareerDraftEntry, PreDraftState } from './careerPreDraft';
 import type { PlayerAppearance } from './soccerCareerAppearance';
 import { seasonSwing, swingNote, playoffDepthOf, playoffGames, clutchSwing, clutchNote } from './careerVariance';
 import { nflSeasonScore, wonAward } from './careerAwards';
-import { usSeasonLength } from '../data/usSeasonLengths';
+import { usSeasonLength } from '@/data/usSeasonLengths';
 import { rookieDeal } from './usCareerRookieDeal';
 import { draftRival, judgeRivalSeason } from './careerRival';
 import type { CareerRival } from './careerRival';
