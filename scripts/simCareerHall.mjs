@@ -439,6 +439,10 @@ const CONTROLS = {
   examplelie: { file: 'careerHallOfFame.ts', from: 'const top = n.top ?? LEGACY_GAME_RULES.standoutTop;', to: 'const top = 250;' },
   // The card's line switched off.
   nocardline: { file: 'HallOfFameCard.tsx', from: '{record.weighs && <p data-hall-weighs', to: '{false && <p data-hall-weighs' },
+  // The card's floor dropped: any standout is said, a push of a point included.
+  clausealways: { file: 'careerHallOfFame.ts', from: 'Math.round(standout.credit) >= LEGACY_GAME_RULES.standoutSaid ? standout : null;', to: 'standout.credit >= 0 ? standout : null;' },
+  // The card's second sentence typed by hand again instead of read off the table (every position told the whole stat sheet counts).
+  wholesheet: { file: 'careerHallOfFame.ts', from: 'return `${words.weighs} Then your seasons${list}.`;', to: 'return `${words.weighs} Then your seasons and the whole stat sheet.`;' },
   // Section 18. The standout three times its size, an explicit top included: real never and later anchors go in or go first on 2.
   standoutbig: { file: 'careerHallOfFame.ts', from: 'const credit = (s.top ?? LEGACY_GAME_RULES.standoutTop) * share;', to: 'const credit = (s.top ?? LEGACY_GAME_RULES.standoutTop) * 3 * share;' },
   // Section 18, the other side of the band: the push switched off, so an anchor who is in on the push alone falls out (the same edit as nostandout, aimed at the anchors).
@@ -1407,19 +1411,55 @@ for (const pos of WORDS.example.positions) {
   exampleSeen.push(`${pos} ${s.stat} ${typical.t[s.stat]} to ${s.to}: +${gain2} on 2, +${gain1} on 1`);
   if (!(gain2 >= push) || !(gain1 < push)) wordMiss.push(`${pos} ${s.stat}: the example gains ${gain2} on 2 and ${gain1} on 1`);
 }
-// The card's line, on every engine career, both calibrations.
-let lineMiss = 0, linesWithStandout = 0;
+// The card's line, on every engine career, both calibrations, restated here from the table. A standout is
+// said only from standoutSaid whole points up (a push of a point or two was called "a real push" before
+// the review of 2026-10-08). With none said, the second sentence names the position's own terms and no
+// other stat the sport's words can name, so the card cannot promise a stat the voters never see.
+const SAID = eng.LEGACY_GAME_RULES.standoutSaid;
+const readNouns = Object.values(WORDS.reads);
+let lineMiss = 0, linesWithStandout = 0, quietStandouts = 0;
 for (const k of careers) {
   const r1 = eng.hallRecordFor(HALL, { ...k.c, retired: true, hallCal: 1 });
   const r2 = eng.hallRecordFor(HALL, { ...k.c, retired: true, hallCal: eng.HALL_CALIBRATION });
   const st = scoreOn(k.c, eng.HALL_CALIBRATION).standout ?? null;
   if ('weighs' in r1) lineMiss += 1;
-  if (typeof r2.weighs !== 'string' || !r2.weighs.startsWith(WORDS.weighs)) { lineMiss += 1; continue; }
-  if (st) {
+  if (typeof r2.weighs !== 'string' || !r2.weighs.startsWith(`${WORDS.weighs} Then your seasons`)) { lineMiss += 1; continue; }
+  if (st && Math.round(st.credit) >= SAID) {
     linesWithStandout += 1;
-    if (!r2.weighs.includes(`Your ${eng.formatNumber(st.total)} ${st.label} sat near the top of this game's books`)) lineMiss += 1;
-  } else if (r2.weighs !== WORDS.weighs) lineMiss += 1;
+    if (!r2.weighs.endsWith(`and your ${eng.formatNumber(st.total)} ${st.label} sat near the top of this game's books.`)) lineMiss += 1;
+    continue;
+  }
+  if (st) quietStandouts += 1;
+  const second = r2.weighs.slice(WORDS.weighs.length + 1);
+  const own = WORDS.readsBy?.[k.pos];
+  const terms = (W2.positions[k.pos] ?? W2.positions['*']).terms.map(t => WORDS.reads[t.stat]);
+  if (second.includes('sat near the top')) lineMiss += 1;
+  else if (own ? second !== own : !terms.length ? second !== 'Then your seasons.' : (terms.some(n => !n || !second.includes(n)) || readNouns.some(n => !terms.includes(n) && second.includes(n)))) lineMiss += 1;
 }
+// The floor itself, exact, on a made up standout a point under it and one on it (so the check does not wait for a career that happens to sit there).
+{
+  const exPos = WORDS.example.positions[0];
+  const exS = (W2.positions[exPos]?.standout ?? []).find(x => x.stat === WORDS.example.stat);
+  if (!exS || !(SAID > 0)) wordMiss.push('no example family or no floor to try the card on');
+  else {
+    const under = { stat: exS.stat, label: exS.label, total: exS.from + 1, credit: SAID - 0.6 };
+    if (eng.hallWeighLine(WORDS, W2, exPos, under).includes('sat near the top')) wordMiss.push(`a standout worth under ${SAID} points is said on the card`);
+    if (!eng.hallWeighLine(WORDS, W2, exPos, { ...under, credit: SAID }).includes('sat near the top')) wordMiss.push(`a standout worth ${SAID} points is not said on the card`);
+  }
+}
+// The longest line the table can print, in characters. The phone budget is four lines of small text at 390
+// wide: the review of 2026-10-08 saw 219 characters run to five lines and 135 to three, and the browser walk
+// (scripts/playCareerHallLine.mjs) counts the lines on the real card. This is the cheap tripwire beside it.
+const LINE_BUDGET = 200;
+let longestLine = '';
+for (const [pos, p] of Object.entries(W2.positions)) {
+  if (pos === '*') continue;
+  for (const s of [null, ...(p.standout ?? [])]) {
+    const line = eng.hallWeighLine(WORDS, W2, pos, s && { stat: s.stat, label: s.label, total: Math.round(s.from + (s.to - s.from) * CAP), credit: TOP });
+    if (line.length > longestLine.length) longestLine = line;
+  }
+}
+if (longestLine.length > LINE_BUDGET) wordMiss.push(`the longest card line is ${longestLine.length} characters (budget ${LINE_BUDGET})`);
 // And on the card itself: the line is there for calibration 2, absent for 1 and on the folded card.
 const sampleC = careers.find(k => scoreOn(k.c, eng.HALL_CALIBRATION).standout)?.c ?? careers[0]?.c;
 const markupOf = (rec, folded = false) => eng.renderToStaticMarkup(eng.createElement(eng.HallOfFameCard, { record: rec, rules, folded, onSpeech() {}, onDismiss() {} }));
@@ -1430,7 +1470,7 @@ if (sampleC) {
   if (markupOf(rec1).includes('data-hall-weighs')) wordMiss.push('the card prints the line on calibration 1');
   if (markupOf(rec2, true).includes('data-hall-weighs')) wordMiss.push('the folded card prints the line');
 } else wordMiss.push('no career to render');
-console.log(`  19 (c) words: example ${exampleSeen.join('; ')}; card lines off ${lineMiss} of ${2 * careers.length} records (${linesWithStandout} name a standout); misses [${wordMiss.join('; ')}]`);
+console.log(`  19 (c) words: example ${exampleSeen.join('; ')}; card lines off ${lineMiss} of ${2 * careers.length} records (${linesWithStandout} name a standout, ${quietStandouts} had one worth under ${SAID} points and stay quiet); longest line the table can print ${longestLine.length} characters (budget ${LINE_BUDGET}); misses [${wordMiss.join('; ')}]`);
 /* 18. The real anchors (scripts/data/careerHallAnchors.json): real career
    shapes, two sourced, and the ballot the real Hall gave them. Each is scored
    through the one scorer (legacyRead on the sport's table, the same sum
@@ -1650,7 +1690,7 @@ if (CONTROL) {
   const WANT = { everyonein: 'iff', bindhof: 'iff', outcomeswap: 'outcome', nominationgone: 'outcome', oldcurve: 'outcome', waitoff: 'table', shownraw: 'sides', flatfirst: 'rises', nopromise: 'promise', mathrandom: 'keyed', sharesides: 'sides', notalk: 'talk', farewelloff: 'answers', retireoff: 'answers', jerseyfirst: 'jersey', jerseyraw: 'jersey', talkdraws: 'identity', deckfarewelloff: 'ends', twice: 'once', seekexclude: 'seek', jerseyignore: 'deckJersey', eraunguarded: 'era',
     // Round 1051. An array wants every one of its checks red.
     v1drift: ['v1replay', 'v1formula'], calflip: ['v1replay', 'calrule'],
-    examplelie: 'words', nocardline: 'words', standoutbig: 'anchors', standoutgone: 'anchors', anchorwiki: 'anchorshape', plantbase: 'base',
+    examplelie: 'words', nocardline: 'words', clausealways: 'words', wholesheet: 'words', standoutbig: 'anchors', standoutgone: 'anchors', anchorwiki: 'anchorshape', plantbase: 'base',
     below: 'neverbelow', markdrift: 'marks', todrift: 'marks', noramp: 'halfrule', catchersteals: 'halfrule', nobase: 'base',
     // An object also names checks that must stay green: the standout switched off moves the outcome, never the marks.
     nostandout: { red: ['standoutgain'], green: ['marks'] } }[CONTROL];
