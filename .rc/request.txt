@@ -1,0 +1,4 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/careerMilestones.test.ts src/test/careerMomentKit.test.tsx src/test/careerMomentKitLift.test.tsx src/test/tournamentCardMoment.test.tsx src/test/soccerCareerDebutLegacy.test.tsx src/test/careerAwardsNightCard.test.tsx src/test/usCareerReveals.test.tsx src/test/momentHost.test.tsx --testTimeout=300000 --hookTimeout=120000
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
