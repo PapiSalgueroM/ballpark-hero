@@ -82,6 +82,25 @@
      no slot's pay by more than 0.1M a year. THE LEAD HAS NOT RULED ON THIS
      YET (the review of 2026-10-08 asked for a second source or a written
      ruling; one of the eight ends it named has its second source now).
+     HOW FAR OUT A HELD END CAN BE, worked out 2026-10-08 from the figures
+     already cited above, for that ruling. A deal in rounds four to seven is
+     four minimum salaries and a signing bonus, and both signed deals reported
+     with their bonus leave exactly 4,380,000 of salary (pick 140: 5,169,036
+     less 789,036; pick 257: 4,502,600 less 122,600). So on picks 141, 181,
+     182, 216 and 217 the only estimated part of the held total is the bonus,
+     575,668 down to 184,644. Over The Cap's bonus was 1.8 percent over the
+     signed one on pick 140 and exact on pick 257; were it 12 percent out
+     (the size of the gap on pick 101, the widest found), those five totals
+     would move by 0.5 to 1.4 percent, inside this file's own 2 percent.
+     Picks 100 and 101 are the two with more room. Pick 101 is the 2.8
+     percent above. Pick 100 has one other print (found 2026-10-08):
+     Crescent City Sports, 4 June 2026, "Compensation for top CFB players is
+     through the roof" ("the 100th overall pick will receive $1,199,932", a
+     first year figure). If each later year steps up by the 25 percent the
+     rules allow, that is 6,599,626 over four years, 1.9 percent under Over
+     The Cap. It was NOT taken as a second source: the total is worked out
+     here, not printed there, and the same table is 3.3 percent under the
+     signed deal on pick 33.
    The 2026 rookie minimum salary, 885,000: DraftKings Network, 25 April 2026,
    "How much money do seventh round picks in the NFL Draft make?"; Legion
    Report, 14 July 2026, "NFL Rookie Contract Scale: What Every 2026 Draft
