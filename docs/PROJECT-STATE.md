@@ -1,3 +1,6 @@
+## Round 1155 preparation, 2026-10-08: current-page Soccer Hub control
+
+Codex owns only the stale whole-page equality in `scripts/playSoccerHubGrid1089.mjs` on incoming Release AN base `783049d4`. The copied two-line nesting control now has unique executable anchors and an exact forward round trip to the current page. Historical `6f57ce78` remains hash provenance. The eight native cases, four layout comparisons, Continue/save/RNG checks and actual copied Vite build are unchanged. Remote types, build, fifteen dist/public readers, full native outcomes and closing byte holds are pending. No product, engine, data or save change. This is validation of Claude's incoming train, not a main or published-site claim.
 ## Release AL LIVE, 2026-10-08 05:38 EDT: ten Codex rounds, playable moments, and a translated page no longer crashes
 
 Claude lane (session F: session E died when the PC was restarted at 00:03 EDT with this release's gate running).
