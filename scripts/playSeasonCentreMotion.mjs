@@ -1300,7 +1300,9 @@ if (ONLY.length === 0 || ONLY.some(x => x.startsWith('C'))) {
       const atReview = await stored(op);
       await op.click('[data-centre-exit]');
       await op.waitForSelector('[data-season-centre]', { state: 'detached', timeout: 30000 });
-      const chipLast = await op.waitForSelector('[data-season-resume]', { timeout: 15000 }).then(() => true).catch(() => false);
+      /* the chip reads the record again a beat after the Centre closes: give it that beat, then look (never wait FOR it, a chip about to go would still be found) */
+      await op.waitForTimeout(500);
+      const chipLast = (await op.$('[data-season-resume]')) !== null;
       check(chipFirst && whileOpen === kept && atReview === kept && chipLast, `C3. a place kept in ${LABEL} is still there, word for word, after another season (row ${other}) was opened and sent straight to its review (chip before ${chipFirst}; kept while open ${whileOpen === kept}; kept at the review ${atReview === kept}; chip after ${chipLast})`);
       errorsSeen.push(...O.errors);
       await O.ctx.close();

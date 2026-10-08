@@ -476,12 +476,7 @@ export function SeasonCentre({ model, exitLabel, onClose, resume, onProgress }: 
   const progressRef = useRef(onProgress);
   progressRef.current = onProgress;
   const misfit = !!resume && !start;
-  const roundWord = s.mode === 'table' ? model.words.round : 'League game';
   useEffect(() => { if (misfit) progressRef.current?.(null); }, [misfit]);
-  useEffect(() => {
-    if (stage.kind === 'review') progressRef.current?.(null);
-    else if (played >= 1 && played <= M - 1) progressRef.current?.({ md: played, speed, round: roundWord });
-  }, [played, speed, stage.kind, M, roundWord]);
   const current = stage.kind === 'match' || stage.kind === 'poster' ? stage.md : null;
   /* Round 1046: every new screen of the stage starts at its top (the table may have pulled the stage down at full time) */
   const stageRef = useRef<HTMLElement | null>(null);
@@ -493,8 +488,15 @@ export function SeasonCentre({ model, exitLabel, onClose, resume, onProgress }: 
   let nextBig: number | null = null;
   for (let md = played + 1; md <= M && nextBig === null; md += 1) if (postersFor(s, md).length || openMoment(md)) nextBig = md;
   if (nextBig !== null && nextBig <= played + 1) nextBig = null;
+  const roundWord = s.mode === 'table' ? model.words.round : 'League game';
   const so = soFar(s, played);
   const soTiles = model.sport.soFar(so);
+  /* his place, told after every round with the viewer's own word for a round (so the Resume chip says what the button
+     here says); the review says there is nothing left to come back to. It sits below roundWord because it tells it. */
+  useEffect(() => {
+    if (stage.kind === 'review') progressRef.current?.(null);
+    else if (played >= 1 && played <= M - 1) progressRef.current?.({ md: played, speed, round: roundWord });
+  }, [played, speed, stage.kind, M, roundWord]);
   const btn = 'h-11 shrink-0 whitespace-nowrap rounded-lg px-3 text-xs font-bold';
 
   /* Round 1047: on a phone the fixtures take the stage's place, which unmounts
