@@ -1,0 +1,14 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+vitest exit=0 5s |    Duration  3.94s (transform 1.51s, setup 68ms, collect 2.00s, tests 948ms, environment 392ms, prepare 160ms)
+tsc exit=0 70s | 
+mut-keeps exit=0 68s | MUT keeps vitest=1 simCareerSquad=1 simClubSquads=0
+walk2 exit=0 31s | RVWALK2 DONE
+simCareerSquad exit=0 178s | simCareerSquad: 2203 checks, 0 failed
+probe2 exit=0 1s | PROBE2 DONE
+simClubSquads exit=0 1s | simClubSquads: green. The squad is the real one, you are in the right place in it, and the game never noticed.
+simSoccerOfferReview exit=0 13s | Soccer offer review: passed.
+play exit=0 130s | playCareerSquad: 164 checks, 0 failed
+play-noscroll exit=1 105s | playCareerSquad (control noscroll, 35 edits served): 164 checks, 7 failed
+mut-under exit=0 65s | MUT under vitest=1 simCareerSquad=1 simClubSquads=0
+mut-frozen exit=0 66s | MUT frozen vitest=1 simCareerSquad=1 simClubSquads=0
+mut-carry exit=0 65s | MUT carry vitest=1 simCareerSquad=1 simClubSquads=0

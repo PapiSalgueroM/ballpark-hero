@@ -1,0 +1,22 @@
+mutation under applied to src/lib/soccerClubSquadSheet.ts: "if (row.ovr < centre - 5) {" -> "if (row.ovr <= centre - 5) {"
+ src/lib/soccerClubSquadSheet.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- vitest
+   × the sheet does not argue with itself > draws the "under the level" line exactly at the band's edge: five under has none, six under has it 7ms
+     → expected [ Array(1) ] to deeply equal []
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/lib/soccerClubSquad.test.ts > the sheet does not argue with itself > draws the "under the level" line exactly at the band's edge: five under has none, six under has it
+AssertionError: expected [ Array(1) ] to deeply equal []
+ Test Files  1 failed (1)
+      Tests  1 failed | 33 passed (34)
+::error file=/tmp/mut-under/src/lib/soccerClubSquad.test.ts,title=src/lib/soccerClubSquad.test.ts > the sheet does not argue with itself > draws the "under the level" line exactly at the band's edge%3A five under has non
+--- simCareerSquad
+   FAIL [10] 905 rows draw the "under the level" line on the wrong side of five under
+FAILED [10] 905 rows draw the "under the level" line on the wrong side of five under
+simCareerSquad: 2179 checks, 1 failed
+FAILED [10] 905 rows draw the "under the level" line on the wrong side of five under
+simCareerSquad: 2179 checks, 1 failed
+--- simClubSquads
+
+simClubSquads: green. The squad is the real one, you are in the right place in it, and the game never noticed.
+MUT under vitest=1 simCareerSquad=1 simClubSquads=0

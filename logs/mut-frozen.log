@@ -1,0 +1,26 @@
+mutation frozen applied to src/lib/soccerClubSquad.ts: "if (frozen) expected = Math.min(8, Math.round(expected * 0.25));" -> ""
+ src/lib/soccerClubSquad.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- vitest
+   × the living squad > reads trust from the band, the phone and the freeze 17ms
+     → expected { pct: 66, expected: 25, …(5) } to match object { expected: 6, frozen: true, …(2) }
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/lib/soccerClubSquad.test.ts > the living squad > reads trust from the band, the phone and the freeze
+AssertionError: expected { pct: 66, expected: 25, …(5) } to match object { expected: 6, frozen: true, …(2) }
+-   "expected": 6,
++   "expected": 25,
+    343|     expect(managerTrust(cold, at)).toMatchObject({ expected: 22, pct: …
+    345|     expect(frozen).toMatchObject({ expected: 6, frozen: true, inPlans:…
+ Test Files  1 failed (1)
+      Tests  1 failed | 33 passed (34)
+::error file=/tmp/mut-frozen/src/lib/soccerClubSquad.test.ts,title=src/lib/soccerClubSquad.test.ts > the living squad > reads trust from the band%2C the phone and the freeze,line=345,column=20::AssertionError: expected {
+--- simCareerSquad
+   FAIL [9] 3301 frozen out saves read as if the club still planned to play him
+FAILED [9] 3301 frozen out saves read as if the club still planned to play him
+simCareerSquad: 2179 checks, 1 failed
+FAILED [9] 3301 frozen out saves read as if the club still planned to play him
+simCareerSquad: 2179 checks, 1 failed
+--- simClubSquads
+
+simClubSquads: green. The squad is the real one, you are in the right place in it, and the game never noticed.
+MUT frozen vitest=1 simCareerSquad=1 simClubSquads=0

@@ -1,0 +1,22 @@
+mutation keeps applied to src/lib/soccerClubSquad.ts: "chart.men[ELEVEN_SHAPE[chart.group] - 1] ?? null," -> "chart.men[ELEVEN_SHAPE[chart.group]] ?? null,"
+ src/lib/soccerClubSquad.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- vitest
+   × the living squad > names the right man as the last one in ahead of him: never himself, always the lowest of his line in the eleven 17ms
+     → expected [ { id: '19:18', …(7) }, …(2) ] to include { id: '21:20', …(7) }
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/lib/soccerClubSquad.test.ts > the living squad > names the right man as the last one in ahead of him: never himself, always the lowest of his line in the eleven
+AssertionError: expected [ { id: '19:18', …(7) }, …(2) ] to include { id: '21:20', …(7) }
+ Test Files  1 failed (1)
+      Tests  1 failed | 33 passed (34)
+::error file=/tmp/mut-keeps/src/lib/soccerClubSquad.test.ts,title=src/lib/soccerClubSquad.test.ts > the living squad > names the right man as the last one in ahead of him%3A never himself%2C always the lowest of his line
+--- simCareerSquad
+   FAIL [4] 7458 seasons name the wrong man (or the player himself) as the last one in ahead of him
+FAILED [4] 7458 seasons name the wrong man (or the player himself) as the last one in ahead of him
+simCareerSquad: 2179 checks, 1 failed
+FAILED [4] 7458 seasons name the wrong man (or the player himself) as the last one in ahead of him
+simCareerSquad: 2179 checks, 1 failed
+--- simClubSquads
+
+simClubSquads: green. The squad is the real one, you are in the right place in it, and the game never noticed.
+MUT keeps vitest=1 simCareerSquad=1 simClubSquads=0
