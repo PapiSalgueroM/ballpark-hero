@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+norival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+weight: node scripts/sweepWeight.mjs
+shootout: node scripts/simCmShootoutOrder.mjs
+reveal: node scripts/simRevealMoments.mjs
+ticket: node scripts/simTycoonTicketPolicy.mjs
