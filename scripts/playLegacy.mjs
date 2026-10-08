@@ -120,6 +120,7 @@ console.log('3) The sell-up button quotes its legacy, and selling banks it');
   const sellText = await sell.innerText();
   say(/\+1 legacy point/.test(sellText), `a bottom-league sale quotes +1 legacy point (${sellText.trim().slice(0, 60)})`);
   await sell.click();
+  await page.getByRole('button', { name: 'Sell and restart', exact: true }).click();
   await page.waitForTimeout(800);
   await legacyTile(page).click();
   await page.waitForTimeout(500);

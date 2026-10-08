@@ -46,7 +46,7 @@ const controls = {
   unmount: [component, '          event.preventDefault();', '          event.preventDefault();\n          if (!triggerRef.current?.isConnected) onConfirm();', [titles.unmount]],
   retireWiring: [sharedBoard, '<USCareerActionConfirm action="retire" sport={sport.label} onConfirm={retireNow}>', '<USCareerActionConfirm action="retire" sport={sport.label} onConfirm={reset}>', sports.map(retirementTitle)],
   restartWiring: [sharedBoard, '<USCareerActionConfirm action="restart" sport={sport.label} onConfirm={reset}>', '<USCareerActionConfirm action="restart" sport={sport.label} onConfirm={retireNow}>', sports.map(restartTitle)],
-  ownKey: [sharedBoard, 'const reset = () => {\n    localStorage.removeItem(sport.saveKey);', 'const reset = () => {\n    localStorage.clear();', sports.map(restartTitle)],
+  ownKey: [sharedBoard, 'const reset = () => {\n    saveValue(null);', 'const reset = () => {\n    localStorage.clear();', sports.map(restartTitle)],
   legacy: [sharedBoard, 'useGameCompletion(sport.gameSlug, done, career ? sport.legacyOf(career).score : 0);', 'useGameCompletion(sport.gameSlug, done, career ? sport.legacyOf(career).score + 1 : 0);', sports.map(retirementTitle)],
 };
 const control = process.env.US_CAREER_ACTION_CONTROL || '';

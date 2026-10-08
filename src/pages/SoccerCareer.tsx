@@ -3930,11 +3930,12 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
 
       {/* Main panels */}
       <div className="grid grid-cols-1 md:grid-cols-[260px_1fr] gap-3">
-        {/* LEFT, Timeline */}
-        <div className="bg-card border border-border rounded-xl overflow-hidden order-2 md:order-1">
+        {/* LEFT, Timeline. md:self-start (Release AM): the card ends where its
+            list ends, where it used to stretch the full height of the hub beside
+            it and stand mostly empty. */}
+        <div className="bg-card border border-border rounded-xl overflow-hidden order-2 md:order-1 md:self-start">
           <div className="px-3 py-2 border-b border-border bg-muted/20">
             <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Career Timeline</span>
-          </div>
           </div>
 
           <div ref={timelineRef} className="max-h-[280px] md:max-h-[480px] overflow-y-auto p-2 space-y-0.5 scrollbar-thin">
@@ -4480,6 +4481,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           {career.retired && career.rivalrySummary && (
             <RivalrySummaryCard summary={career.rivalrySummary} career={career} />
           )}
+          </div>
         </div>
       </div>
 
