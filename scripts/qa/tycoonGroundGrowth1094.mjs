@@ -93,11 +93,50 @@ try {
   for (const [name, text] of arms) fs.writeFileSync(path.join(copyDir, `${name}.tsx`), text);
   save('source-relation.json', { parent, originalRaw:fileSha(path.join(ROOT,PAGE)), currentNormalized:sha(current), oldNormalized:sha(old), memo, svg, faults: faults.map(fault => ({...fault, copiedSha256:sha(arms.find(([name])=>name===fault.name)[1])})) });
   const oracle = await build({ absWorkingDir:ROOT, stdin:{contents:`export * as T from './src/lib/stadiumTycoon'; export * as R from './src/lib/tycoonRewards'; export * as W from './src/lib/wonderkidFactory';`,resolveDir:ROOT}, outfile:path.join(OUT,'oracle.mjs'),bundle:true,write:false,platform:'node',format:'esm',metafile:true,alias:{'@':path.join(ROOT,'src')},logLevel:'silent' });
-  bundleReceipt(oracle,'oracle');
+  const oracleInputs=bundleReceipt(oracle,'oracle'), oracleFile=path.join(OUT,'oracle.mjs');
+  const epochFile='src/lib/entityIds.ts', epochSource='const EPOCH = `${Math.floor(Math.random() * 0x100000000).toString(36)}${Math.floor(Math.random() * 0x100000000).toString(36)}`;';
+  assert.equal(oracleInputs[epochFile],report.sourceBefore[epochFile]);
+  assert.equal(read(path.join(ROOT,epochFile)).split('\n').filter(line=>line===epochSource).length,1);
+  const epochEmitted=epochSource.replace('const EPOCH','var EPOCH').replaceAll('0x100000000','4294967296'), oracleCode=read(oracleFile), oracleLines=oracleCode.split('\n');
+  const epochIndexes=oracleLines.flatMap((line,index)=>line===epochEmitted?[index]:[]); assert.equal(epochIndexes.length,1);
+  const epochLine=epochIndexes[0]+1; assert.equal(oracleLines[epochLine-2],`// ${epochFile}`);
+  const epochColumns=[...epochEmitted.matchAll(/Math\.random\(\)/g)].map(match=>match.index+'Math.'.length+1); assert.equal(epochColumns.length,2);
+  const countMessage='Only two entity-ID epoch initialization draws', callerMessage='Initialization draw must originate at the exact emitted epoch call';
+  const initReceipt=file=>({complete:false,seed:1094,state:1094,draws:[],source:{path:epochFile,sha256:oracleInputs[epochFile],line:epochSource},emitted:{path:path.basename(file),sha256:fileSha(file),line:epochLine,expectedCode:epochEmitted,actualCode:read(file).split('\n')[epochLine-1],columns:epochColumns}});
+  async function importOracle(file,receipt){
+    const url=pathToFileURL(file).href;
+    // Only the two source-bound entity-ID epoch calls may draw while this module initializes.
+    Math.random=()=>{
+      const stack=new Error('Oracle initialization draw').stack,caller=stack.split('\n')[2]?.trim(),index=receipt.draws.length,stateBefore=receipt.state;
+      receipt.state=(Math.imul(receipt.state,1664525)+1013904223)>>>0;
+      const value=receipt.state/0x100000000,expectedCaller=`at ${url}:${epochLine}:${epochColumns[index]}`;
+      receipt.draws.push({index,stateBefore,stateAfter:receipt.state,value,caller,expectedCaller,stack});
+      assert(index<2,countMessage); assert.equal(caller,expectedCaller,callerMessage); return value;
+    };
+    try { const module=await import(url); assert.equal(receipt.draws.length,2,'Exactly two entity-ID epoch initialization draws'); receipt.complete=true; return module; }
+    catch(error){receipt.error={name:error.name,message:error.message,stack:error.stack};throw error;}
+    finally { Math.random=()=>{throw new Error('Pure fixture operation consumed ambient RNG');}; save(`${path.basename(file,'.mjs')}-initialization.json`,receipt); }
+  }
+  report.oracleInitialization=initReceipt(oracleFile); report.oracleInitializationControls=[];
   const realRandom=Math.random, RealDate=Date; let T,R,W,fixtures,seedSaves;
   try {
-    Math.random=()=>{throw new Error('Pure fixture import consumed ambient RNG');}; globalThis.Date=class extends RealDate{constructor(...args){super(...(args.length?args:[NOW]));}static now(){return NOW;}};
-    ({T,R,W}=await import(pathToFileURL(path.join(OUT,'oracle.mjs')).href));
+    globalThis.Date=class extends RealDate{constructor(...args){super(...(args.length?args:[NOW]));}static now(){return NOW;}};
+    ({T,R,W}=await importOracle(oracleFile,report.oracleInitialization));
+    const importFaults=[
+      {name:'extra-draw',assertion:countMessage,to:epochEmitted.slice(0,-1)+' + Math.random();',draws:3},
+      {name:'wrong-caller',assertion:callerMessage,to:epochEmitted.replace('Math.random()','(() => Math.random())()'),draws:1},
+    ];
+    for(const fault of importFaults){
+      const file=path.join(OUT,`oracle-init-${fault.name}.mjs`),copied=once(oracleCode,epochEmitted,fault.to);fs.writeFileSync(file,copied);
+      const row={name:fault.name,complete:false,assertion:fault.assertion,from:epochEmitted,to:fault.to,originalSha256:fileSha(oracleFile),copiedSha256:fileSha(file),receipt:initReceipt(file)};
+      report.oracleInitializationControls.push(row); let error;
+      try{await importOracle(file,row.receipt);}catch(caught){error=caught;}
+      assert(error instanceof assert.AssertionError);assert(error.message.includes(fault.assertion));assert.equal(row.receipt.complete,false);assert.equal(row.receipt.draws.length,fault.draws);
+      const stateDraws=receipt=>receipt.draws.map(({index,stateBefore,stateAfter,value})=>({index,stateBefore,stateAfter,value}));
+      assert.deepEqual(stateDraws(row.receipt).slice(0,Math.min(fault.draws,2)),stateDraws(report.oracleInitialization).slice(0,Math.min(fault.draws,2)));
+      if(fault.name==='wrong-caller')assert.notEqual(row.receipt.draws[0].caller,row.receipt.draws[0].expectedCaller);
+      row.complete=true;save(`oracle-init-${fault.name}-control.json`,row);
+    }
     const fresh=T.newTycoon(NOW), boundary={...clone(fresh),levels:{...fresh.levels,stands:17},money:1e9}, max={...clone(fresh),levels:{...fresh.levels,stands:200},money:1e9};
     fixtures={first:fresh,boundary,max,attendance:{...clone(fresh),fanbase:110},unrelated:{...clone(fresh),money:100}};
     assert.equal(T.capacity(fresh),120); assert.equal(T.attendance(fresh),90); assert.equal(T.capacity(T.buy(fresh,'stands')),160); assert.equal(T.attendance(T.buy(fresh,'stands')),90);

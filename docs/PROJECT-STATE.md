@@ -1,3 +1,17 @@
+Preparation 2 is a QA-only correction after preparation 1 at37cdbed8/run37718623518
+completed red. Types/build and actual template font caching passed. The native
+worker stopped in prepare on the first existing entity-ID initialization draw,
+before any fixture, browser, case or control. Its source initializer has two
+expected calls; this failed run observed only the first denial. Old aggregate
+and reader gates also remain red and strict, with no baseline waiver claimed.
+
+The corrected import phase seeds and records only those two exact source-bound
+callers. Effective extra-draw and wrong-caller oracle copies must fail their
+mapped checks, separate from four existing UI controls. The throwing ambient
+RNG guard resumes before every actual fixture operation. All old/current page
+paths, full state/save/callback/browser RNG/clock, geometry and pixel assertions
+stay intact. Four widths, 44 mounts and 70 screenshots remain pending remote
+requirements. Product, workflow, fixtures and engine source are unchanged.
 ## Codex Round 1094 preparation, 2026-10-07, visible ground growth
 
 The first Stands purchase raises actual capacity from 120 to 160 while initial

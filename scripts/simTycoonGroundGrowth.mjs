@@ -15,6 +15,16 @@ fs.writeFileSync(path.join(out, 'native-process.json'), JSON.stringify({ status:
 assert.equal(run.error, undefined); assert.equal(run.signal, null); assert.equal(run.status, 0, run.stderr);
 const report = JSON.parse(fs.readFileSync(path.join(out, 'native/report.json'), 'utf8'));
 assert.equal(report.complete, true); assert.equal(report.cases.length, 4); assert.equal(report.controls.length, 4);
+const initialization = report.oracleInitialization;
+assert.equal(initialization.complete, true); assert.equal(initialization.draws.length, 2);
+assert(initialization.draws.every(draw => draw.caller === draw.expectedCaller));
+assert.equal(initialization.emitted.actualCode, initialization.emitted.expectedCode);
+assert.equal(initialization.source.sha256, report.sourceBefore[initialization.source.path]);
+assert.deepEqual(report.oracleInitializationControls.map(row => [row.name, row.assertion, row.receipt.draws.length]), [
+  ['extra-draw', 'Only two entity-ID epoch initialization draws', 3],
+  ['wrong-caller', 'Initialization draw must originate at the exact emitted epoch call', 1],
+]);
+assert(report.oracleInitializationControls.every(row => row.complete && row.receipt.complete === false && row.receipt.error.name === 'AssertionError' && row.receipt.error.message.includes(row.assertion) && row.receipt.error.stack.includes('AssertionError')));
 assert(report.cases.every(row => row.complete && row.stages.length === 5));
 assert(report.controls.every(row => row.complete && row.failures.length === 1 && row.failures[0].assertion === row.expectedAssertion));
 assert.equal(report.mounts.count, 44); assert.equal(report.mounts.screenshots, 70);
