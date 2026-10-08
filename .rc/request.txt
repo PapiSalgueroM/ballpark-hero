@@ -1,0 +1,7 @@
+#!serial
+rec-a: CM_WORLD_IDENTITY_RECORD=1 CM_WORLD_IDENTITY_BASE=5ba578262a84df7ace8a12a58e2c439302b1373d node_modules/.bin/vitest run src/test/cmWorldIdentity1052.test.ts --testTimeout=300000 --hookTimeout=300000 && cp src/test/fixtures/cmWorldIdentity1052.json $RC_OUT/cmWorldIdentity1052.a.json
+rec-b: CM_WORLD_IDENTITY_RECORD=1 CM_WORLD_IDENTITY_BASE=5ba578262a84df7ace8a12a58e2c439302b1373d node_modules/.bin/vitest run src/test/cmWorldIdentity1052.test.ts --testTimeout=300000 --hookTimeout=300000 && cp src/test/fixtures/cmWorldIdentity1052.json $RC_OUT/cmWorldIdentity1052.b.json && cmp $RC_OUT/cmWorldIdentity1052.a.json $RC_OUT/cmWorldIdentity1052.b.json && echo TWO-RECORDINGS-IDENTICAL
+plain: node_modules/.bin/vitest run src/test/cmWorldIdentity1052.test.ts --testTimeout=300000 --hookTimeout=300000
+control-rating: CM_WORLD_IDENTITY_CONTROL=rating node_modules/.bin/vitest run src/test/cmWorldIdentity1052.test.ts --testTimeout=300000 --hookTimeout=300000
+oldsave: node .rc/x/recordBase1052.mjs $RC_OUT save
+oldsave-b: node .rc/x/recordBase1052.mjs $RC_OUT/second save && cmp $RC_OUT/cmOldSave1052Fixture.json $RC_OUT/second/cmOldSave1052Fixture.json && echo TWO-SAVES-IDENTICAL
