@@ -1,0 +1,7 @@
+#!serial
+# Round 1104 review (runner lens): mutations C, pay, kickers, trade, digest control
+mut-kickerroad: bash .rc/x/rv-mutrun.sh kickerroad truth vround predraft prospect
+mut-kickerquick: bash .rc/x/rv-mutrun.sh kickerquick truth vround digest
+mut-place32: bash .rc/x/rv-mutrun.sh place32 truth vround digest
+mut-selftrade: bash .rc/x/rv-mutrun.sh selftrade truth vround nflcareer digest
+mut-digestctl: bash .rc/x/rv-mutrun.sh digestctl digest truth
