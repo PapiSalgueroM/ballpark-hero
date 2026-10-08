@@ -50,6 +50,9 @@ const CARD = `${KIT}/CareerMomentCard.tsx`;
 const STYLES = `${KIT}/CareerMomentStyles.tsx`;
 const SOCCER_KEYS = 'src/components/soccer-career/careerMoments.ts';
 const SOCCER_FX = 'src/components/soccer-career/CareerFx.tsx';
+const VICTORY = 'src/components/game/VictoryMoment.tsx';
+const CELEBRATION_STYLES = 'src/components/club-manager/CelebrationStyles.tsx';
+const INDEX_CSS = 'src/index.css';
 
 /* Each control and the checks it must turn red. */
 const CONTROLS = {
@@ -57,6 +60,11 @@ const CONTROLS = {
   clock: ['S2'],
   stripe: ['S3'],
   enginevalue: ['S6'],
+  stray: ['K1'],
+  grow: ['K2'],
+  third: ['K3'],
+  frozen: ['K4'],
+  motion: ['K5'],
 };
 const CONTROL = process.env.CAREER_MOMENTS_CONTROL || '';
 if (CONTROL && !CONTROLS[CONTROL]) {
@@ -132,6 +140,21 @@ if (CONTROL === 'import') prepend(CARD, "import { formatWage } from '@/lib/socce
 if (CONTROL === 'clock') mutate(HOOK, 'if (key && live) settled.add(key);', 'if (key && live && Date.now() > 0) settled.add(key);');
 if (CONTROL === 'stripe') mutate(STYLES, 'width: 4px; background-color: var(--cmo-ink); }', 'width: 4px; background: repeating-linear-gradient(45deg, var(--cmo-ink) 0 4px, transparent 4px 8px); }');
 if (CONTROL === 'enginevalue') prepend(SOCCER_KEYS, "import { formatWage } from '@/lib/soccerCareerEngine';");
+if (CONTROL === 'stray') mutate(CARD, '{children}', "{children}<span>{' 9041'}</span>");
+if (CONTROL === 'grow') mutate(STYLES, '@keyframes cmoInk { 0% { transform: scaleX(0); } 100% { transform: scaleX(1); } }', '@keyframes cmoInk { 0% { height: 0px; } 100% { height: 24px; } }');
+if (CONTROL === 'third') mutate(CARD, 'className="cmo-num-old" style={at(beats.count ?? 0)}>{from}</span>', 'className="cmo-num-old" style={at(beats.count ?? 0)}>{from}0</span>');
+if (CONTROL === 'frozen') {
+  mutate(CELEBRATION_STYLES, 'animation: cmSlam 0.4s', 'animation: cmSlam 0s');
+  mutate(VICTORY, 'animation: victory-lift 900ms', 'animation: victory-lift 0ms');
+}
+if (CONTROL === 'motion') {
+  /* Every reduced motion rule the rig could lean on is made unmatchable: the
+     kit's, the cup's, the celebration layer's and the site's blanket rule. */
+  for (const rel of [STYLES, VICTORY, CELEBRATION_STYLES, INDEX_CSS]) {
+    const rule = 'prefers-reduced-motion: reduce';
+    mutate(rel, rule, 'prefers-reduced-motion: no-such-preference', Math.max(1, read(rel).split(rule).length - 1));
+  }
+}
 if (CONTROL) console.log(`CONTROL ${CONTROL} ON: ${[...swapped.keys()].join(', ')} read from a rewritten copy; expected red: ${CONTROLS[CONTROL].join(', ')}`);
 
 /* ---------- 1. Source ---------- */
@@ -276,13 +299,180 @@ const configOut = await build({ entryPoints: [abs('tailwind.config.ts')], write:
 const configModule = { exports: {} };
 new Function('module', 'exports', 'require', configOut.outputFiles[0].text)(configModule, configModule.exports, createRequire(import.meta.url));
 const sheet = await postcss([tailwind({ ...configModule.exports.default, content: [{ raw: ENTRY + MOUNTED.map(read).join('\n'), extension: 'tsx' }] })])
-  .process(read('src/index.css'), { from: abs('src/index.css') });
+  .process(read(INDEX_CSS), { from: abs(INDEX_CSS) });
 const SERVED = new Map([
   [RIG_URL, ['text/html', '<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="/rig.css"><style>.rig-art { display: block; width: 56px; height: 56px; border-radius: 9999px; background: #64748b; }</style></head><body><div id="root"></div><script src="/rig.js"></script></body></html>']],
   [`${RIG_URL}rig.css`, ['text/css', sheet.css]],
   [`${RIG_URL}rig.js`, ['text/javascript', bundle.outputFiles[0].text]],
 ]);
 console.log(`2) In Chromium: ${FIXTURES.length} fixtures at ${WIDTHS.join(', ')} px, motion on and reduced; bundle ${Math.round(bundle.outputFiles[0].text.length / 1024)}K, stylesheet ${Math.round(sheet.css.length / 1024)}K, Tailwind was handed ${MOUNTED.length} files`);
+
+/* ----- what runs inside the page ----- */
+const SLOW_MS = 10;
+const POINTS = [0, 0.25, 0.5, 0.75, 1];
+/* Pause every animation and walk the play by hand: 0, 25, 50, 75 and 100
+   percent of the longest end time (the confetti's fall is decoration with
+   its own clock and is left out of that length, though it is moved too).
+   At each point: the card's and the button's LAYOUT box (a quiet card's one
+   rise is a 7 px transform on the card itself, which moves no neighbour, so
+   the layout box is the measure of "nothing on the page moved"), the card's
+   drawn size, the page's size, and every layer of the number. Then the early
+   frame of the title and of the cup, each at its own delay plus a tenth of
+   its own duration. */
+const samplePlay = () => {
+  const card = document.querySelector('[data-career-moment]');
+  const button = card.querySelector('[data-cmo-done]');
+  const all = document.getAnimations();
+  const isConfetti = a => !!(a.effect && a.effect.target && a.effect.target.classList && a.effect.target.classList.contains('animate-confetti-fall'));
+  let end = 0;
+  for (const a of all) {
+    a.pause();
+    if (!isConfetti(a)) end = Math.max(end, Number(a.effect.getComputedTiming().endTime) || 0);
+  }
+  const layout = el => {
+    let x = 0, y = 0;
+    for (let n = el; n; n = n.offsetParent) { x += n.offsetLeft; y += n.offsetTop; }
+    return [x, y, el.offsetWidth, el.offsetHeight].join(',');
+  };
+  const points = [];
+  for (const pct of [0, 0.25, 0.5, 0.75, 1]) {
+    for (const a of all) a.currentTime = pct * end;
+    const r = card.getBoundingClientRect();
+    points.push({
+      pct,
+      card: layout(card),
+      size: `${Math.round(r.width * 100) / 100},${Math.round(r.height * 100) / 100}`,
+      button: button ? layout(button) : 'none',
+      page: `${document.documentElement.scrollWidth},${document.documentElement.scrollHeight}`,
+      layers: [...card.querySelectorAll('[data-cmo-number] *')].map(el => {
+        const s = getComputedStyle(el);
+        return { text: el.textContent, final: el.hasAttribute('data-cmo-number-final'), shown: s.display !== 'none' && s.visibility !== 'hidden' && Number(s.opacity) > 0.01 };
+      }),
+    });
+  }
+  /* The early frame of one element's own animation. */
+  const early = el => {
+    if (!el) return null;
+    const own = all.filter(a => a.effect && a.effect.target === el && !a.effect.pseudoElement);
+    if (own.length === 0) return { name: 'none', transform: getComputedStyle(el).transform, at: 0, duration: 0 };
+    const t = own[0].effect.getComputedTiming();
+    const at = Number(t.delay) + Number(t.duration) * 0.1;
+    own[0].currentTime = at;
+    const out = { name: own[0].animationName, transform: getComputedStyle(el).transform, at, duration: Number(t.duration) };
+    own[0].currentTime = end;
+    return out;
+  };
+  const title = early(card.querySelector('h3'));
+  const cup = early(card.querySelector('.victory-cup'));
+  for (const a of all) a.currentTime = end;
+  const names = [card, ...card.querySelectorAll('*')]
+    .filter(el => !el.classList.contains('animate-confetti-fall') && getComputedStyle(el).animationName !== 'none')
+    .map(el => `${el === card ? 'card' : el.tagName.toLowerCase()}:${getComputedStyle(el).animationName}`);
+  return { end, animations: all.length, points, title, cup, names };
+};
+/* Under reduced motion: playReducedMotion's own measure, on the card. */
+const measureReduced = slowMs => {
+  const card = document.querySelector('[data-career-moment]');
+  const ms = v => Math.max(0, ...String(v).split(',').map(x => { x = x.trim(); return x.endsWith('ms') ? parseFloat(x) : parseFloat(x) * 1000; }).filter(n => Number.isFinite(n)));
+  const slow = [];
+  for (const el of [card, ...card.querySelectorAll('*')]) {
+    const s = getComputedStyle(el);
+    const t = ms(s.transitionDuration);
+    const a = s.animationName !== 'none' ? ms(s.animationDuration) : 0;
+    if (t > slowMs || a > slowMs) slow.push(`${el.tagName.toLowerCase()}.${String(el.getAttribute('class') || '').split(' ')[0]} t=${t} a=${a}`);
+  }
+  const quietOnes = [...card.querySelectorAll('.cmo-num-old, .cmo-ring')].map(el => {
+    const s = getComputedStyle(el);
+    return { cls: String(el.getAttribute('class')), name: s.animationName, display: s.display };
+  });
+  return {
+    slow,
+    beats: [...card.querySelectorAll('[data-cmo-beat]')].map(el => ({ beat: el.getAttribute('data-cmo-beat'), opacity: getComputedStyle(el).opacity })),
+    confetti: document.querySelectorAll('.animate-confetti-fall').length,
+    quietOnes,
+  };
+};
+/* The settled words: a clone with every style block, every drawing and the
+   old number layer taken out (a style block's CSS is full of digits and is
+   not printed text). */
+const settledText = () => {
+  const copy = document.querySelector('[data-career-moment]').cloneNode(true);
+  copy.querySelectorAll('style, svg, [data-cmo-number-old]').forEach(n => n.remove());
+  return [...copy.querySelectorAll('*')].reduce((text, el) => {
+    for (const n of el.childNodes) if (n.nodeType === 3 && n.textContent.trim()) text.push(n.textContent.trim());
+    return text;
+  }, []).join(' | ');
+};
+
+/* ----- what the harness makes of it ----- */
+const digitRuns = s => String(s).match(/\d+/g) || [];
+/* K1. The facts: the title, each line and the count's text, in that order,
+   and no digit run the fixture does not carry. */
+function checkFacts(at, fx, text) {
+  const { spec } = fx;
+  const facts = [spec.title, ...(spec.lines ?? []).slice(0, 3), ...(spec.count ? [spec.count.text] : [])];
+  let cursor = 0;
+  for (const fact of facts) {
+    const found = text.indexOf(fact, cursor);
+    check('K1', found >= 0, `${at}: "${fact}" is missing or out of order in the settled text: ${text.slice(0, 160)}`);
+    if (found >= 0) cursor = found + fact.length;
+  }
+  const allowed = new Set(digitRuns(JSON.stringify([spec, fx.ticks ?? []])));
+  for (const run of digitRuns(text)) check('K1', allowed.has(run), `${at}: the scene prints ${run}, a number its fixture never carried`);
+}
+/* K2. Stationary: nothing the play does changes a layout box or the page. */
+function checkStationary(at, play) {
+  check('K2', play.end > 300 && play.animations > 0, `${at}: the play is ${play.end} ms long over ${play.animations} animation(s), so nothing was sampled`);
+  for (const key of ['card', 'size', 'button', 'page']) {
+    const seen = [...new Set(play.points.map(p => p[key]))];
+    check('K2', seen.length === 1, `${at}: the ${key} box changes during the play: ${play.points.map(p => `${p.pct * 100}%=${p[key]}`).join(' ')}`);
+  }
+}
+/* K3. The number never lies: whatever is visible is the value before or the
+   value now, and at the end only the value now. */
+function checkNumber(at, fx, play) {
+  const { count } = fx.spec;
+  if (!count) return;
+  const truths = new Set([count.text, ...(count.from ? [count.from] : [])]);
+  for (const p of play.points) {
+    const shown = p.layers.filter(l => l.shown);
+    for (const l of shown) check('K3', truths.has(l.text), `${at}: at ${p.pct * 100}% the number shows "${l.text}", which is neither ${[...truths].join(' nor ')}`);
+    const final = p.layers.filter(l => l.final);
+    check('K3', final.length === 1 && final[0].text === count.text, `${at}: at ${p.pct * 100}% the final number layer reads ${final.map(l => l.text).join(',') || 'nothing'}, expected ${count.text}`);
+    if (p.pct === 1) check('K3', shown.length === 1 && shown[0].text === count.text, `${at}: at rest the number shows ${shown.map(l => l.text).join(' and ') || 'nothing'}, expected only ${count.text}`);
+    if (p.pct === 0 && count.from && fx.spec.tone !== 'quiet') check('K3', shown.length === 1 && shown[0].text === count.from, `${at}: on the first frame the number shows ${shown.map(l => l.text).join(' and ') || 'nothing'}, expected the value before, ${count.from}`);
+  }
+}
+/* K4. It really moves. An early frame of the title (and of the cup) is a
+   matrix at least 0.02 away from standing still; a quiet card moves once, as
+   a whole. */
+const offIdentity = transform => {
+  const m = /^matrix\(([^)]+)\)$/.exec(String(transform));
+  if (!m) return 0;
+  const n = m[1].split(',').map(Number);
+  return Math.max(...[1, 0, 0, 1, 0, 0].map((id, i) => Math.abs(n[i] - id)));
+};
+function checkMoves(at, fx, play) {
+  if (fx.spec.tone === 'quiet') {
+    check('K4', play.names.join(' ') === 'card:cmRise', `${at}: a quiet card has one animation, cmRise on the card itself; found ${play.names.join(' ') || 'none'}`);
+    return;
+  }
+  check('K4', !!play.title && offIdentity(play.title.transform) > 0.02, `${at}: the title is standing still a tenth of the way into its slam (${play.title ? `${play.title.name} at ${play.title.at} ms: ${play.title.transform}` : 'no h3'})`);
+  if (fx.spec.kind === 'trophy') check('K4', !!play.cup && offIdentity(play.cup.transform) > 0.02, `${at}: the cup is standing still a tenth of the way into its lift (${play.cup ? `${play.cup.name} at ${play.cup.at} ms: ${play.cup.transform}` : 'no cup'})`);
+  moved.push(`${at} title ${play.title?.transform}${play.cup ? ` cup ${play.cup.transform}` : ''}`);
+}
+const moved = [];
+/* K5. Reduced motion: nothing longer than SLOW_MS, every beat visible, no
+   confetti, and the old number and the ring gone, animation and all. */
+function checkReduced(at, fx, got) {
+  check('K5', got.slow.length === 0, `${at}: ${got.slow.length} element(s) still move for more than ${SLOW_MS} ms under reduce (${got.slow.slice(0, 3).join('; ')})`);
+  for (const b of got.beats) check('K5', Number(b.opacity) === 1, `${at}: the ${b.beat} beat has opacity ${b.opacity} under reduce`);
+  check('K5', got.beats.length >= 1, `${at}: no beat was found to measure`);
+  check('K5', got.confetti === 0, `${at}: ${got.confetti} confetti piece(s) fall under reduce`);
+  for (const q of got.quietOnes) check('K5', q.name === 'none' && q.display === 'none', `${at}: .${q.cls} is ${q.display} with animation ${q.name} under reduce; it must be gone, animation and all`);
+  const expectHidden = (fx.spec.count?.from && fx.spec.tone !== 'quiet' ? 1 : 0) + (fx.spec.kind === 'award' && fx.spec.tone !== 'quiet' ? 1 : 0);
+  check('K5', got.quietOnes.length === expectHidden, `${at}: ${got.quietOnes.length} old number or ring layer(s) in the markup, expected ${expectHidden}, so the rule above measured the wrong thing`);
+}
 
 const browser = await chromium.launch({ args: ['--no-sandbox'] });
 /** A page of the rig. Every request but the rig's own three is refused. */
@@ -320,6 +510,15 @@ try {
       });
       check('RIG', drawn.kind === fx.spec.kind && drawn.title === fx.spec.title, `${at}: the scene drew as ${drawn.kind} "${drawn.title}", expected ${fx.spec.kind} "${fx.spec.title}"`);
       check('RIG', drawn.state === 'live' && drawn.states.join('>') === 'fresh>live', `${at}: a first mount in view must go fresh then live, saw ${drawn.states.join('>') || 'nothing'} and ended ${drawn.state}`);
+      if (reducedMotion === 'reduce') {
+        checkReduced(at, fx, await page.evaluate(measureReduced, SLOW_MS));
+      } else {
+        const play = await page.evaluate(samplePlay);
+        checkStationary(at, play);
+        checkNumber(at, fx, play);
+        checkMoves(at, fx, play);
+      }
+      checkFacts(at, fx, await page.evaluate(settledText));
       await page.evaluate(() => window.rig.clear());
     }
     check('RIG', trouble.length === 0, `${where}: the rig page reported ${trouble.length} error(s): ${trouble.slice(0, 2).join(' | ')}`);
