@@ -64,6 +64,17 @@
  *                 fails 14; keeps 1, 7, 13
  *   greedyswallow the wait does not end with the player's next touch
  *                 fails 14; keeps 1, 7, 13
+ * Added at the close of Release AO, with test 15. A box with no debounce
+ * (College Grid's board, which answers from memory) blinked "Finding players"
+ * on most keys because its search went out through a zero timer; the remedy
+ * calls that search at once and commits its answer inside flushSync. The
+ * release's review took the remedy out and every committed check stayed green
+ * (in a browser the row came back in 23 of 501 frames). Test 15 types ten keys
+ * with the clock frozen and asks that the row is on the page after none:
+ *   zerotimer     the remedy taken out whole, as the review did: the search of
+ *                 a box with no debounce goes back on the timer and its answer
+ *                 is committed outside flushSync
+ *                 fails 15; keeps 1, 7, 8
  */
 import assert from 'node:assert/strict';
 import { mkdir, mkdtemp, readFile, writeFile, rm, rmdir } from 'node:fs/promises';
@@ -89,6 +100,7 @@ const STALE_TESTS = {
   12: 'Escape leaves the box while a search is in flight',
   13: 'a pick does not bring the list back under the picked name',
   14: 'the click of the tap that picked a name never reaches what was under the list',
+  15: 'never shows Finding players for a source that answers in the same tick',
 };
 /* Lowest stale pick count of the three seeds measured on main, and the floor. */
 const MEASURED_ON_MAIN = { 1138: 67, 2138: 72, 3138: 67 };
@@ -136,6 +148,13 @@ const STALE_CONTROLS = {
     fails: [14], keeps: [1, 7, 13],
   },
   greedyswallow: { edits: [["  document.addEventListener('pointerdown', end, true);\n", '']], fails: [14], keeps: [1, 7, 13] },
+  zerotimer: {
+    edits: [
+      ['          if (debounceMs <= 0) flushSync(commit); else commit();', '          commit();'],
+      ['    if (debounceMs <= 0) runSearch(); else debounceRef.current = window.setTimeout(runSearch, debounceMs);', '    debounceRef.current = window.setTimeout(runSearch, debounceMs);'],
+    ],
+    fails: [15], keeps: [1, 7, 8],
+  },
 };
 assert.ok(control === '' || INTERACTION_CONTROLS.includes(control) || Object.hasOwn(STALE_CONTROLS, control), 'Unknown autocomplete interaction control');
 const staleSpec = Object.hasOwn(STALE_CONTROLS, control) ? STALE_CONTROLS[control] : null;
@@ -215,7 +234,7 @@ try {
     }
   }
 
-  /* Run 2, Round 1138's fourteen stale list tests: the plain run and its fifteen controls. */
+  /* Run 2, Round 1138's stale list tests, fifteen with the one Release AO's close added: the plain run and its sixteen controls. */
   if (!control || staleSpec) {
     const { status, output, diagnostic } = runVitest(STALE_FILE, env);
     assert.match(output, /playerAutocompleteStale\.test\.tsx/, 'The stale list tests must run');
@@ -237,14 +256,14 @@ try {
       console.log(`simPlayerAutocompleteInteraction ${control} control: stale list test${staleSpec.fails.length > 1 ? 's' : ''} ${staleSpec.fails.join(', ')} rejected the changed component and test${staleSpec.keeps.length > 1 ? 's' : ''} ${staleSpec.keeps.join(', ')} stayed green.${seen}`);
     } else {
       assert.equal(status, 0, diagnostic);
-      assert.match(output, /Tests\s+14 passed \(14\)/, diagnostic);
+      assert.match(output, /Tests\s+15 passed \(15\)/, diagnostic);
       for (const number of Object.keys(STALE_TESTS)) assert.equal(staleStatus(output, Number(number)), 'passed', `Stale list test ${number} must pass\n${diagnostic}`);
       assert.deepEqual(
         { staleVisible: sweep.staleVisible, stalePicked: sweep.stalePicked, currentPicked: sweep.currentPicked, stuckFinding: sweep.stuckFinding },
         { staleVisible: 0, stalePicked: 0, currentPicked: 200, stuckFinding: 0 },
         'The sweep must offer and pick no stale name, land every current pick and leave no stuck panel',
       );
-      console.log(`simPlayerAutocompleteInteraction: eight actual-component pointer, keyboard, disabled, free-text, identity and filter checks passed; fourteen stale list checks passed, and across 200 seeded timings (seed ${sweep.seed}) the box offered 0 names of the last query, 0 were picked, 200 of 200 current picks landed and 0 panels were left on Finding players.`);
+      console.log(`simPlayerAutocompleteInteraction: eight actual-component pointer, keyboard, disabled, free-text, identity and filter checks passed; fifteen stale list checks passed (a box with no debounce never left Finding players up for a source that answers at once), and across 200 seeded timings (seed ${sweep.seed}) the box offered 0 names of the last query, 0 were picked, 200 of 200 current picks landed and 0 panels were left on Finding players.`);
     }
   }
 } finally {

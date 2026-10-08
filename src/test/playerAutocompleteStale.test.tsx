@@ -612,4 +612,39 @@ describe('player autocomplete: a list is only on screen for the query that produ
     expect(fireEvent.click(drawn.button)).toBe(true);
     expect(under).toHaveBeenCalledTimes(1);
   });
+
+  /* Test 15, the close of Release AO. College Grid's board answers from memory,
+     so its box has no debounce, and "Finding players..." still blinked on most
+     keys: the search went out through a zero timer, a timer is a later task,
+     and the browser painted the waiting row in between (measured in a browser
+     by the release's review: 23 of 501 frames with the timer, 0 of 508
+     without). The box now calls a search with no debounce at once. Nothing
+     committed went red with the timer put back, so this is that check: the
+     clock is fake and is never moved, so after a key only what needs no timer
+     can have happened, which is all a source that answers in the same tick
+     needs. The row must be gone and the answer on the page after every key.
+     What it cannot see: the box also commits that answer inside flushSync,
+     and under act a commit made without it lands in the same flush. */
+  it('never shows Finding players for a source that answers in the same tick', async () => {
+    vi.useFakeTimers();
+    function Box() {
+      const [text, setText] = useState('');
+      return <PlayerAutocomplete value={text} onChange={setText} onSelect={vi.fn()} searchOptions={searchOptions} validateOnly debounceMs={0} />;
+    }
+    const view = render(<Box />);
+    const input = view.getByRole('combobox');
+    const keys = ['A', 'Al', 'Alp', 'Alph', 'Alpha', 'Alph', 'Br', 'Bra', 'Brav', 'Bravo'];
+    const findingAfter: string[] = [];
+    const offered: Record<string, string[]> = {};
+    for (const text of keys) {
+      await act(async () => { fireEvent.change(input, { target: { value: text } }); });
+      if (view.queryByText(FINDING) !== null) findingAfter.push(text);
+      offered[text] = optionsIn(view.container).map(o => o.textContent ?? '');
+    }
+    expect(findingAfter, 'keys after which the waiting row was on the page with no timer run').toEqual([]);
+    // And the row is gone because the answer came, not because the panel never opened.
+    const want = Object.fromEntries(keys.map(text => [text, fixtureFor(text).length && text.length >= 3 ? [expect.stringContaining(fixtureFor(text)[0].name)] : []]));
+    expect(offered).toEqual(want);
+    expect(searchPlayers).toHaveBeenCalledTimes(keys.filter(text => text.length >= 3).length);
+  });
 });
