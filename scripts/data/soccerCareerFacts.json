@@ -3180,7 +3180,8 @@
       ],
       "size": 12,
       "games": null,
-      "shape": "split",
+      "shape": null,
+      "shapeUnread": "no format page has been read for this league yet, so its shape is not stated here until one is",
       "points": [
         3,
         1,
@@ -3217,12 +3218,10 @@
       ],
       "size": 10,
       "games": null,
-      "shape": "four-meetings",
-      "points": [
-        3,
-        1,
-        0
-      ],
+      "shape": null,
+      "shapeUnread": "no format page has been read for this league yet, so its shape is not stated here until one is",
+      "points": null,
+      "pointsUnread": "neither lineup page states the points rule and no format page has been read",
       "membership": [
         {
           "url": "https://hnl.hr/",
@@ -3371,11 +3370,8 @@
       "size": 12,
       "games": 26,
       "shape": "finals",
-      "points": [
-        3,
-        1,
-        0
-      ],
+      "points": null,
+      "pointsUnread": "both tables were read before the season's first round (it opens on 2026-10-16), so no row showed a points total, and the fixture feed states no points rule",
       "membership": [
         {
           "url": "https://site.api.espn.com/apis/v2/sports/soccer/aus.1/standings?season=2026",

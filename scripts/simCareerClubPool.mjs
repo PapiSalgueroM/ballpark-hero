@@ -76,6 +76,17 @@
                   Macarthur FC: its POOL_COLORS row must go            -> 3
      unlisted     (Round 1100) Club Manager's Belgian league changes its
                   id, so the table reads a league that is not there    -> 2
+     sinceorder   (Round 1100 review) the generated first seasons spread
+                  after the typed rows, so New York City FC, Austin FC
+                  and Charlotte FC lose their typed seasons to 2026    -> 3
+     allranked    (Round 1100 review) the derive ranks every club by its
+                  XI, thin squads by their padded eleven              -> 4L
+
+   Round 1100 review: section 4L works the ladder's SHAPE again from Club
+   Manager's data (ranked clubs alone by XI, a tier's thin squads in one
+   shared group), section 2's fixture carries two thin squads in one tier
+   and proves a derive with no rankable ranks nobody. Before it, a generator
+   that ranked every club and a pool regenerated from it passed every gate.
 
    Round 1100: the career club pool grew from 241 to 460 clubs. The
    generator reads every current Club Manager league through ONE table
@@ -153,6 +164,15 @@ const CONTROLS = {
   nobragantino: ['3', 'lib/careerEras.ts', swap('"Red Bull Bragantino": 2020,', '')],
   /* Round 1100 */
   nosince: ['3', 'lib/careerEras.ts', swap('  ...CAREER_POOL_SINCE,\n', '')],
+  /* review fix: the generated since rows spread AFTER every typed row, so the
+     generated 2026 wins over New York City FC 2015, Austin FC 2021 and
+     Charlotte FC 2022 (section 3 holds each typed club to its typed season) */
+  sinceorder: ['3', 'lib/careerEras.ts', s => swap('  "Red Bull Bragantino": 2020,\n};', '  "Red Bull Bragantino": 2020,\n  ...CAREER_POOL_SINCE,\n};')(swap('  ...CAREER_POOL_SINCE,\n', '')(s))],
+  /* review fix (critic 2): the generator ranks every club by its XI, thin
+     squads included. No file is patched: the derive under test is handed a
+     rankable that says yes to everybody, the mutation a review ran through
+     the generator and a regenerated pool with every gate green. */
+  allranked: ['4L', null, null],
   colourgone: ['3', 'lib/clubManager.ts', swap(`'Coventry City': '#66b2e8', `, `'Coventry City': '#66b2e8', 'Macarthur FC': '#123456', `)],
   unlisted: ['2', 'lib/clubManager.ts', swap(`    id: 'proleague', name: 'Belgian Pro League',`, `    id: 'proleague2', name: 'Belgian Pro League',`)],
   ingroup: ['5', 'lib/soccerCareerEngine.ts', swap('return chosen.clubs[Math.floor(Math.random() * chosen.clubs.length)];', 'return chosen.clubs[Math.floor(Math.random() * chosen.weight)];')],
@@ -183,7 +203,7 @@ export function pickAcrossLeagues(candidates: ClubData[]): ClubData {
 };
 const transforms = {};
 const addT = (file, f) => { const b = transforms[file]; transforms[file] = b ? s => f(b(s)) : f; };
-if (CONTROL) addT(CONTROLS[CONTROL][1], CONTROLS[CONTROL][2]);
+if (CONTROL && CONTROLS[CONTROL][1]) addT(CONTROLS[CONTROL][1], CONTROLS[CONTROL][2]);
 const stubTransforms = { ...transforms };
 addT('lib/soccerCareerEngine.ts', recordDraws);
 
@@ -207,7 +227,14 @@ catch (e) { fail(`bundling with the pool stubbed failed: ${e.message.split('\n')
 const inputs = poolInputs(stubMod);
 const FACTS = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts', 'data', 'soccerCareerFacts.json'), 'utf8'));
 let derived;
-try { derived = deriveCareerClubPool({ ...inputs, since: sinceInput(ROOT) }); }
+try {
+  derived = deriveCareerClubPool({ ...inputs, since: sinceInput(ROOT) });
+  if (CONTROL === 'allranked') {
+    const all = deriveCareerClubPool({ ...inputs, rankable: () => true, since: sinceInput(ROOT) });
+    if (JSON.stringify(all.ladder) === JSON.stringify(derived.ladder)) { console.error('control allranked: no ladder holds a thin squad, so ranking everybody changes nothing'); process.exit(2); }
+    derived = all;
+  }
+}
 catch (e) {
   /* the generator refuses a grey colour, an undecided club, a name it would
      take for another league's hand club, and a league Club Manager lacks */
@@ -285,18 +312,29 @@ ok(GENERATED.length > 0, `the engine appends generated rows (${GENERATED.length}
    with a hand club in it and one a second flight. */
 {
   const rows = [{ id: 'fixA', label: 'Fixture League', country: 'Freedonia', top: true }, { id: 'fixB', label: 'Fixture Second', country: 'Freedonia', top: false }];
-  const fx = deriveCareerClubPool({
-    realLeagues: [{ id: 'fixA', clubs: ['Hand United', 'Strong Town', 'Weak Town', 'Thin Town'] }, { id: 'fixB', clubs: ['Lower City', 'Lower Rovers'] }],
-    xiOf: n => ({ 'Hand United': 75, 'Strong Town': 80, 'Weak Town': 70, 'Thin Town': 60, 'Lower City': 72, 'Lower Rovers': 66 })[n],
-    colorOf: () => '#123456', partial: ['Thin Town'], rankable: n => n !== 'Thin Town', fold: s => s,
+  /* review fix (critic 2): TWO thin squads in one tier, the weaker XI first
+     by name. With one thin club a shared group of one reads exactly like a
+     ranked place, and a generator that ranked everybody passed this fixture. */
+  const THIN = ['Thin Town', 'Thin Rovers'];
+  const fixture = {
+    realLeagues: [{ id: 'fixA', clubs: ['Hand United', 'Strong Town', 'Weak Town', 'Thin Town', 'Thin Rovers'] }, { id: 'fixB', clubs: ['Lower City', 'Lower Rovers'] }],
+    xiOf: n => ({ 'Hand United': 75, 'Strong Town': 80, 'Weak Town': 70, 'Thin Town': 60, 'Thin Rovers': 62, 'Lower City': 72, 'Lower Rovers': 66 })[n],
+    colorOf: () => '#123456', partial: THIN, fold: s => s,
     handClubs: [{ id: 'h1', name: 'Hand United', country: 'Freedonia', tier: 2, color: '#000000', league: 'Fixture League' }],
     leagueRows: rows, held: {},
-  });
+  };
+  const fx = deriveCareerClubPool({ ...fixture, rankable: n => !THIN.includes(n) });
   const got = JSON.stringify([fx.rows.map(r => `${r.name}:${r.tier}:${r.league}:${r.country}`), fx.ladder]);
-  const wantFx = JSON.stringify([['Strong Town:2:Fixture League:Freedonia', 'Weak Town:2:Fixture League:Freedonia', 'Thin Town:4:Fixture League:Freedonia', 'Lower City:4:Fixture Second:Freedonia', 'Lower Rovers:4:Fixture Second:Freedonia'],
-    { 'Fixture League': [['Strong Town'], ['Hand United'], ['Weak Town'], ['Thin Town']], 'Fixture Second': [['Lower City'], ['Lower Rovers']] }]);
+  const wantFx = JSON.stringify([['Strong Town:2:Fixture League:Freedonia', 'Weak Town:2:Fixture League:Freedonia', 'Thin Town:4:Fixture League:Freedonia', 'Thin Rovers:4:Fixture League:Freedonia', 'Lower City:4:Fixture Second:Freedonia', 'Lower Rovers:4:Fixture Second:Freedonia'],
+    { 'Fixture League': [['Strong Town'], ['Hand United'], ['Weak Town'], ['Thin Rovers', 'Thin Town']], 'Fixture Second': [['Lower City'], ['Lower Rovers']] }]);
   ok(got === wantFx, `a two league fixture derives ${got}, ${wantFx} expected`);
-  console.log('  a two league fixture (a top flight with a hand club, a second flight) derives rows and ladders from its table rows alone');
+  /* and a caller that says nothing about the squads ranks NOBODY (it used to
+     rank everybody): every tier is one shared group, which is what the game
+     knows when nobody has told it whose XI is a full one */
+  const silent = JSON.stringify(deriveCareerClubPool(fixture).ladder);
+  const wantSilent = JSON.stringify({ 'Fixture League': [['Hand United', 'Strong Town', 'Weak Town'], ['Thin Rovers', 'Thin Town']], 'Fixture Second': [['Lower City', 'Lower Rovers']] });
+  ok(silent === wantSilent, `with no rankable the fixture's ladder is ${silent}, ${wantSilent} expected`);
+  console.log('  a two league fixture (a top flight with a hand club and two thin squads, a second flight) derives rows and ladders from its table rows alone; with no rankable it ranks nobody');
 }
 
 /* ─── 3. IDENTITY ─── */
@@ -463,6 +501,56 @@ for (let y = 1988; y <= 2060; y++) {
   if (forestTier(y) !== want) { forestBad += 1; fail(`Forest in ${y}-${String((y + 1) % 100).padStart(2, '0')}: tier ${forestTier(y)}, ${want} expected (${FOREST_OUT.has(y) ? 'outside the top flight' : 'top flight, the generated tier'})`); }
 }
 console.log(`  HAND_CLUBS ${HAND.length} rows, fingerprint ${handPrint}; Forest t${forestBase}, t4 in 1993, 1997 and 1999 to 2021, checked every season 1988 to 2060${forestBad ? ` (${forestBad} wrong)` : ''}`);
+
+/* ─── 4L. LADDER (review fix, critic 2) ───
+   The ladder's SHAPE, worked again here from Club Manager's own data and
+   never read off the generator. Inside a tier the clubs with a full baked XI
+   are single places, strongest first, then the name. The tier's thin squads
+   (CM_PARTIAL, or an XI that is a prior or the 65 default: mostly a count of
+   how many of the club's players the dataset holds) are ONE group after
+   them, in name order, an order that means nothing: the finish band gives
+   every club of the group the same places. A generator that ranked thin
+   clubs by their padded eleven, and a pool regenerated from it, passed every
+   gate of the round until this section (control allranked). The counts
+   printed are today's bake: Round 1102 re-bakes the rosters and they move,
+   the rule does not. */
+head('4L', 'LADDER: thin squads share one unranked group a tier, ranked clubs stand alone by XI');
+{
+  const plain = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
+  const isThin = n => partialSet.has(n) || stubMod.cm.bakedXIAvg(n) == null;
+  const tally = { leagues: 0, single: 0, shared: 0, groups: 0 };
+  const perLeague = [];
+  for (const label of READ_LABELS) {
+    const members = idsOf(label).flatMap(id => cm.REAL_LEAGUES.find(l => l.id === id).clubs)
+      .map(n => ({ name: cmName(n), xi: inputs.xiOf(n), thin: isThin(n), tier: POOL.find(c => c.name === cmName(n))?.tier }));
+    const wantGroups = [];
+    let single = 0;
+    for (const tier of [...new Set(members.map(m => m.tier))].sort((a, b) => a - b)) {
+      const inTier = members.filter(m => m.tier === tier);
+      for (const m of inTier.filter(x => !x.thin).sort((a, b) => b.xi - a.xi || plain(a.name, b.name))) { wantGroups.push([m.name]); single += 1; }
+      const rest = inTier.filter(x => x.thin).map(x => x.name).sort(plain);
+      if (rest.length) { wantGroups.push(rest); tally.shared += rest.length; tally.groups += 1; }
+    }
+    const got = derived.ladder[label] ?? [];
+    if (!ok(JSON.stringify(got) === JSON.stringify(wantGroups), `${label}: its ladder is not the rule's`)) {
+      const at = wantGroups.findIndex((g, i) => JSON.stringify(g) !== JSON.stringify(got[i]));
+      console.error(`    first difference at group ${at + 1}: the ladder has ${JSON.stringify(got[at])}, the rule gives ${JSON.stringify(wantGroups[at])}`);
+    }
+    /* said twice on purpose, in the form the review asked for: a thin club
+       never holds a place of its own while another thin club shares its tier */
+    for (const g of got) {
+      if (g.length !== 1) continue;
+      const m = members.find(x => x.name === g[0]);
+      const peers = members.filter(x => x.thin && x.tier === m?.tier).length;
+      ok(!(m?.thin && peers > 1), `${label}: ${g[0]} is a thin squad ranked on its own, with ${peers - 1} more thin squads in tier ${m?.tier}`);
+    }
+    tally.leagues += 1; tally.single += single;
+    perLeague.push(`${label} ${single} of ${members.length}`);
+  }
+  ok(tally.shared > 0 && tally.groups > 0 && tally.single > 0, `the ladder rule met ${tally.single} ranked clubs and ${tally.shared} thin squads in ${tally.groups} shared groups: one of them is none, so half the rule was never tested`);
+  console.log(`  ${tally.leagues} ladders equal the rule worked from Club Manager's data: ${tally.single} clubs ranked on their own, ${tally.shared} thin squads in ${tally.groups} shared groups`);
+  console.log(`  ranked clubs a league: ${perLeague.join(', ')}`);
+}
 
 /* ─── 5. WEIGHTS ─── */
 head('5', 'WEIGHTS: exact odds from leagueDrawGroups, as rationals');

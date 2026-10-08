@@ -14,7 +14,18 @@
  *      of 18" in a title season; at least one of the four seasons walked
  *      must be an ordinary finish);
  *   5. the Season Summary card prints the same position "of 18";
- *   6. no sideways scroll, before and after, and no page error.
+ *   6. no sideways scroll, before and after, and no page error;
+ *   7. (review fix) on the FINAL table no row reads "another club", 1st
+ *      place least of all;
+ *   8. (review fix) on a desktop the last row of the table can be brought
+ *      whole into view inside its column (a 24 club table is taller than the
+ *      window: the column scrolls, nothing is lost under the bottom bar).
+ *
+ * PLAY_LEAGUE_WORLD_SAVE=cha walks the recorded Norwich City save instead:
+ * the Championship, 24 clubs and 46 matchdays, one of the four leagues the
+ * phone's world runs no title race for. Before the review fix its table read
+ * "another club" in 1st place every season he did not win it and left a real
+ * club off; the Eredivisie, which the world does crown, could not show that.
  * At 390 by 844 and 1280 by 900, with motion on and reduced. The live database
  * is unreachable (every request to supabase.co is aborted).
  *
@@ -50,11 +61,14 @@ const failedIds = [];
 const check = (ok, id, label) => { checks += 1; if (ok) console.log(`ok   ${id} ${label}`); else { failed += 1; failedIds.push(id); console.log(`FAIL ${id} ${label}`); } return ok; };
 
 const saves = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/careerLeagueWorldSaves1100.json'), 'utf8')).saves;
-const want = CONTROL === 'odd' ? 'sco' : 'ere';
+const SAVE_ID = process.env.PLAY_LEAGUE_WORLD_SAVE || 'ere';
+const SHAPES = { ere: [18, 34], cha: [24, 46] };
+if (!SHAPES[SAVE_ID]) throw new Error(`unknown PLAY_LEAGUE_WORLD_SAVE ${SAVE_ID} (${Object.keys(SHAPES).join(', ')})`);
+const want = CONTROL === 'odd' ? 'sco' : SAVE_ID;
 const save = saves.find(s => s.id === want);
 if (!save || save.kind !== 'player') { console.log(`the recorded saves hold no player save "${want}"`); process.exit(2); }
 const SAVE = JSON.stringify(save.state);
-const SIZE = 18, MATCHDAYS = 34;
+const [SIZE, MATCHDAYS] = SHAPES[SAVE_ID];
 console.log(`save "${want}": ${save.club}, ${save.state.seasons.length} seasons, phase ${save.state.phase}${CONTROL ? ' (CONTROL odd: the table checks must fail)' : ''}`);
 
 let server = null;
@@ -139,6 +153,23 @@ async function walk(width, height, reduced, first) {
     check(!!pos && Number(pos[pos.length - 1]) === SIZE, '4', `${tag} the season review prints a position of ${SIZE} ("${finish ?? 'nothing'}")`);
     if (pos && pos.length === 3) ORDINALS.push(`${pos[0]} at ${width}`);
     await page.screenshot({ path: path.join(SHOTS, `league-world-${want}-${width}${reduced ? '-reduced' : ''}-review.png`) });
+    /* 7 and 8: the final table as it stands at the review */
+    const fin = await page.evaluate(() => {
+      const rows = [...document.querySelectorAll('[data-centre-table] [data-club]')];
+      const last = rows[rows.length - 1];
+      let fit = null;
+      if (last) {
+        last.scrollIntoView({ block: 'end' });
+        const r = last.getBoundingClientRect();
+        const col = last.closest('aside');
+        const c = col ? col.getBoundingClientRect() : null;
+        fit = { top: Math.round(r.top), bottom: Math.round(r.bottom), colTop: c ? Math.round(c.top) : null, colBottom: c ? Math.round(c.bottom) : null, scrolls: col ? col.scrollHeight > col.clientHeight : null };
+      }
+      return { n: rows.length, first: rows[0] ? rows[0].getAttribute('data-club') ?? rows[0].textContent.trim() : null, unnamed: rows.filter(r => /another club/.test(r.textContent)).length, fit };
+    });
+    check((whole ? fin.n === SIZE : fin.n >= 3) && fin.unnamed === 0 && !!fin.first && !/another club/.test(fin.first), '7', `${tag} the final table names every row it shows, 1st place included (${fin.n} rows, ${fin.unnamed} unnamed, top row ${fin.first ?? 'none'})`);
+    if (whole) check(!!fin.fit && fin.fit.colBottom !== null && fin.fit.top >= fin.fit.colTop - 1 && fin.fit.bottom <= fin.fit.colBottom + 1, '8', `${tag} the last row of the table comes whole into view inside its column (row ${fin.fit ? `${fin.fit.top} to ${fin.fit.bottom}` : 'missing'}, column ${fin.fit ? `${fin.fit.colTop} to ${fin.fit.colBottom}` : 'missing'}${fin.fit && fin.fit.scrolls ? ', the column scrolls' : ''})`);
+    await page.screenshot({ path: path.join(SHOTS, `league-world-${want}-${width}${reduced ? '-reduced' : ''}-final-table.png`) });
     await page.click('[data-centre-exit]').catch(() => {});
     await page.waitForTimeout(700);
     const y2 = await page.evaluate(() => window.scrollY);
@@ -175,6 +206,7 @@ try {
 }
 await browser.close();
 if (CONTROL === 'odd') {
+  /* 7 fails there too (no table at all); it is not part of the control's proof */
   const table = ['2', '3', '4'];
   const fired = table.every(id => failedIds.filter(x => x === id).length === 4);
   console.log(fired

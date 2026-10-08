@@ -75,7 +75,10 @@
      onemembership the Eredivisie keeps one membership source        -> 6
      twodecisions  a held club is also listed as shipped             -> 6
      greycolour    Macarthur FC's colour becomes the fallback grey   -> 6
-   (the last six rewrite the loaded file in memory, never on disk)
+     shapeunread   a league with no format page read states a shape  -> 6
+     pointsunread  a league no page note gives a points rule for
+                   states one                                        -> 6
+   (the last eight rewrite the loaded file in memory, never on disk)
 
    6. LEAGUE WORLD (Round 1100): every league the career club pool is
                 generated from has a leagueWorld row (members in the
@@ -175,6 +178,16 @@ const CONTROLS = {
     const c = f.clubColours && f.clubColours.clubs && f.clubColours.clubs['Macarthur FC'];
     if (!(c && c.hex)) { console.error('control greycolour: Macarthur FC has no colour to grey out'); process.exit(2); }
     c.hex = '#8899aa';
+  }],
+  shapeunread: ['6', s => s, f => {
+    const w = f.leagueWorld && Object.values(f.leagueWorld).find(x => x && Array.isArray(x.format) && x.format.length === 0 && x.shape === null);
+    if (!w) { console.error('control shapeunread: no league without a format page to give a shape to'); process.exit(2); }
+    w.shape = 'split';
+  }],
+  pointsunread: ['6', s => s, f => {
+    const w = f.leagueWorld && Object.values(f.leagueWorld).find(x => x && x.points === null);
+    if (!w) { console.error('control pointsunread: no league without a stated points rule to give one to'); process.exit(2); }
+    w.points = [3, 1, 0];
   }],
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown control ${CONTROL} (${Object.keys(CONTROLS).join(', ')})`); process.exit(2); }
@@ -484,7 +497,9 @@ function leagueWorldSection() {
   const world = facts.leagueWorld || {};
   const labels = Object.keys(world).filter(k => k !== 'about');
   const SHAPES = new Set(['plain', 'split', 'groups', 'four-meetings', 'finals', 'conferences', 'two-tournaments']);
-  let named = 0; let twoFormats = 0;
+  let named = 0; let twoFormats = 0; let shapeUnread = 0; let pointsUnread = 0;
+  /* how a page note states three points for a win */
+  const POINTS_NOTE = /Pts = 3W \+ D|three points|3 points/i;
   for (const label of labels) {
     const w = world[label];
     ok(CURRENT_SEASONS.includes(w.season), `${label}: season "${w.season}" is not the current one`);
@@ -496,12 +511,24 @@ function leagueWorldSection() {
     ok(Number.isInteger(w.size) && w.size === members.length + unnamed.length, `${label}: size ${w.size}, ${members.length} members and ${unnamed.length} unnamed`);
     if (unnamed.length) ok(typeof w.unnamedWhy === 'string' && w.unnamedWhy.length > 10, `${label}: unnamed clubs with no reason`);
     if (w.evidence !== null && evidence[w.evidence]) for (const n of evidence[w.evidence].clubs) ok(members.includes(n), `${label}: hand club ${n} is not among its members`);
-    ok(SHAPES.has(w.shape), `${label}: shape "${w.shape}"`);
-    ok(Array.isArray(w.points) && w.points.join() === '3,1,0', `${label}: points ${JSON.stringify(w.points)}`);
+    const format = Array.isArray(w.format) ? w.format : [];
+    /* review fix: a shape and a points rule are statements about the real
+       league, so each needs a page behind it. With no format page read the
+       shape is null and says why; the points rule is stated only where a
+       page's own note carries it (a table whose Pts = 3W + D, or a format
+       page that says three points), and is null with its reason otherwise.
+       Two rows stated a shape off no page at all, two a points rule. */
+    if (format.length === 0) { ok(w.shape === null && typeof w.shapeUnread === 'string' && w.shapeUnread.length > 10, `${label}: no format page is read, yet its shape reads "${w.shape}" (null and a shapeUnread reason wanted)`); shapeUnread += 1; }
+    else ok(SHAPES.has(w.shape), `${label}: shape "${w.shape}"`);
+    const saysPoints = [...(Array.isArray(w.membership) ? w.membership : []), ...format].some(x => POINTS_NOTE.test(x.says || ''));
+    if (saysPoints) ok(Array.isArray(w.points) && w.points.join() === '3,1,0', `${label}: points ${JSON.stringify(w.points)}`);
+    else { ok(w.points === null && typeof w.pointsUnread === 'string' && w.pointsUnread.length > 10, `${label}: no page note states its points rule, yet points read ${JSON.stringify(w.points)} (null and a pointsUnread reason wanted)`); pointsUnread += 1; }
     if (w.shape === 'plain') ok(w.games === 2 * (w.size - 1), `${label}: plain with ${w.games} games for ${w.size} clubs`);
     else ok(w.games === null || (Number.isInteger(w.games) && w.games > 0), `${label}: games ${w.games}`);
+    /* a league that draws a table (plain, its format read from two hosts)
+       always states both: nothing a player sees rests on an unread rule */
+    if (w.shape === 'plain' && new Set(format.map(x => hostOf(x.url))).size >= 2) ok(saysPoints, `${label}: plain and two format hosts, yet no page note states its points rule`);
     twoSources(w.membership, `${label} membership`);
-    const format = Array.isArray(w.format) ? w.format : [];
     ok(format.every(x => hostOf(x.url) && !/wiki/.test(hostOf(x.url)) && DATE.test(x.read || '') && typeof x.says === 'string' && x.says.length > 0), `${label}: a format source has no host, date or note, or is a wiki`);
     if (new Set(format.map(x => hostOf(x.url))).size >= 2) twoFormats += 1;
   }
@@ -525,7 +552,7 @@ function leagueWorldSection() {
     if (s.year > 1990) twoSources(s.sources, `since of ${club}`);
     else ok(Array.isArray(s.sources) && s.sources.length >= 1 && s.sources.every(x => hostOf(x.url) && DATE.test(x.read || '') && x.says), `since of ${club}: needs a source line`);
   }
-  console.log(`  ${labels.length} leagues, ${named} member names, each lineup read from two hosts; ${twoFormats} with a format read from two hosts; ${Object.keys(colours).length} colour(s) in words; ${(since.shipped || []).length} shipped, ${heldNames.length} held before ${since.heldBefore}, ${Object.keys(since.since || {}).length} with a first season`);
+  console.log(`  ${labels.length} leagues, ${named} member names, each lineup read from two hosts; ${twoFormats} with a format read from two hosts, ${shapeUnread} with no format page and so no shape stated, ${pointsUnread} with no points rule stated; ${Object.keys(colours).length} colour(s) in words; ${(since.shipped || []).length} shipped, ${heldNames.length} held before ${since.heldBefore}, ${Object.keys(since.since || {}).length} with a first season`);
   return { world, labels, colours, since, heldNames };
 }
 console.log(`  ${played} careers (seed ${SEED}), ${fullSeasons} full seasons, ${granted} awards, every one the season his goals passed his own record (${abroadGrants} while abroad, ${summerGrants} ina tournament season)`);

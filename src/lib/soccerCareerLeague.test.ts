@@ -412,6 +412,15 @@ describe("the leagues that are not one plain table (Round 1100)", () => {
     expect(ladderBand(17, 18, 18, 7.0)).toEqual([14, 18]);
     expect(ladderBand(20, 20, 22, 7.0)).toEqual([19, 22]);
     expect(ladderBand(8, 18, 18, 7.0, 18)).toEqual([5, 18]);
+    /* the nudge's two edges on the ladder's own copy of it (review fix): a
+       7.5 is a great season, a 6.3 is not a poor one, and the tenth either
+       side of each says which way the edge faces */
+    expect(ladderBand(4, 18, 18, 7.5)).toEqual([2, 5]);
+    expect(ladderBand(4, 18, 18, 7.4)).toEqual([2, 7]);
+    expect(ladderBand(4, 18, 18, 6.3)).toEqual([2, 7]);
+    expect(ladderBand(4, 18, 18, 6.2)).toEqual([3, 9]);
+    expect(ladderBand(12, 24, 24, 7.5)).toEqual([6, 14]);
+    expect(ladderBand(12, 24, 24, 6.3)).toEqual([8, 16]);
     expect(seedKeyClub("Any Name|Twente|2027|30|7|4|7.1")).toBe("Twente");
     expect(seedKeyClub("A|B|Twente|2027|30|7|4|7.1")).toBe("Twente");
     expect(seedKeyClub("a|b|c|d|e|f|g")).toBeNull();

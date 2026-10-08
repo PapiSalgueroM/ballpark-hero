@@ -58,7 +58,8 @@ const HELP: HelpWords = {
     { head: 'A RECREATE', body: 'Derby day, and on the record you scored in the 74th minute. You play it again on the Wall Shot: through the gap and into the top corner is three stars, a miss is none. Either way the derby ends as it did. Three moments worth 3, 2 and 1 stars are 6 of 9, which is 67%: +1 next season.' },
     { head: 'A matchday', body: 'Matchday 12: you win 2-1 at home and score in the 67th minute, rated 7.6. The table moves you from 6th to 4th (▲2).' },
     { head: 'An injury', body: 'Out for five weeks with a hamstring in a 38 game season: five weeks out of a 46 week year is four matchdays, so the club plays matchdays 14 to 17 without you. Your games played do not move. The table does.' },
-    { head: 'Results only', body: 'A season the game has no verified table for (before 1995-96, a league outside the big five, or a season cut short) shows your league games with no table. If your season summary has a finish, the review still prints it.' },
+    { head: 'A whole league', body: 'Sign for Twente in 2027 and Week by week is the whole Eredivisie: 18 clubs, 34 matchdays, every club named. Sign for Hearts and you get your games with no table, because the Scottish Premiership splits in two late in the season and the game will not draw a table it cannot stand behind.' },
+    { head: 'Results only', body: 'A season the game has no verified table for (before 1995-96, a league that is not one plain home and away table, a league the game does not know whole, or a season cut short) shows your league games with no table. If your season summary has a finish, the review still prints it.' },
   ],
   footnote: 'Cup ties and European nights count in your totals as "Cups and other games" but are not shown match by match yet. Clubs level on points are split by goal difference, then goals scored: this game\'s rule.',
 };

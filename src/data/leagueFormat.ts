@@ -72,11 +72,14 @@
    Championship's promotion play-offs (third to eighth from 2026-27), the
    Eredivisie's European play-offs and the 2. Bundesliga's relegation tie.
 
-   Not listed, so results only: every other league. The ones that split
-   their season, play in conferences or play two tournaments a year are in
-   ODD_FORMATS below with their real number of clubs and games, and get no
-   row here. Seasons after the latest one read keep the format in force
-   today, the way LEAGUE_SIZES keeps the latest size.
+   Not listed, so results only: every other league. A league that splits
+   its season or plays in conferences gets no row here; the ones whose
+   format is read from two hosts (the Scottish Premiership, MLS and the
+   Austrian Bundesliga today) carry their real number of clubs and games in
+   ODD_FORMATS, which lives in src/data/leagueOddFormats.ts. Liga MX (two
+   tournaments a year) and five more wait there for a second format page.
+   Seasons after the latest one read keep the format in force today, the
+   way LEAGUE_SIZES keeps the latest size.
 
    This file imports nothing. */
 

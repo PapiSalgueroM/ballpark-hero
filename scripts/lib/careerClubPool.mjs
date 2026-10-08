@@ -139,7 +139,10 @@ export const slugOf =name => name.toLowerCase().replace(/[^a-z0-9]+/g, '-').repl
    what it always did: leagueRows and held (the table above), rankable(cmName)
    (true when the club's XI is a full baked one: not CM_PARTIAL and not a
    prior or the 65 default), cmCountryOf(id, cmName) (Club Manager's own
-   clubCountry row), and since (soccerCareerFacts.json clubSince).
+   clubCountry row), and since (soccerCareerFacts.json clubSince). rankable
+   fails closed: a caller that leaves it out ranks nobody, so every tier of
+   its ladder is one shared group (the default once ranked everybody, thin
+   squads by their padded eleven; simCareerClubPool sections 2 and 4L).
 
    It also returns two ledgers the generated file carries.
    ladder: for every label read, the whole league as the career knows it
@@ -153,7 +156,7 @@ export const slugOf =name => name.toLowerCase().replace(/[^a-z0-9]+/g, '-').repl
    poolSince: generated club to the first season the game offers it, for
    every club whose decision is "held" (the facts file's heldBefore) or a
    first season after 1990. A club with no decision is an error. */
-export function deriveCareerClubPool({ realLeagues, xiOf, colorOf, partial, handClubs, fold, leagueRows = POOL_LEAGUE_ROWS, held = HELD_LEAGUES, rankable = () => true, cmCountryOf = () => undefined, since = null }) {
+export function deriveCareerClubPool({ realLeagues, xiOf, colorOf, partial, handClubs, fold, leagueRows = POOL_LEAGUE_ROWS, held = HELD_LEAGUES, rankable = () => false, cmCountryOf = () => undefined, since = null }) {
   const handByName = new Map(handClubs.map(c => [c.name, c]));
   const partialSet = new Set(partial);
   const rows = [];

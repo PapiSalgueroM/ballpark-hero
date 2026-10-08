@@ -52,6 +52,7 @@ const EXTRA = {
   odd: 'data/leagueOddFormats.ts',
   derby: 'lib/soccerCareerDerby.ts',
   season: 'lib/season/soccer.ts',
+  core: 'lib/season/core.ts',
   rivalries: 'data/clubRivalries.ts',
   pool: 'data/soccerCareerClubPool.ts',
 };
@@ -66,6 +67,15 @@ const swap = (from, to) => s => {
   if (!s.includes(from)) { console.error(`control ${CONTROL}: its anchor is gone: ${from.slice(0, 70)}`); process.exit(2); }
   return s.replace(from, to);
 };
+/* the same line stands twice in soccerCareerLeague.ts (finishBand, then
+   ladderBand): `swapLast` rewrites the LADDER's copy and dies unless there
+   are exactly two */
+const swapLast = (from, to) => s => {
+  const parts = s.split(from);
+  if (parts.length !== 3) { console.error(`control ${CONTROL}: ${parts.length - 1} copies of its anchor, 2 wanted: ${from.slice(0, 70)}`); process.exit(2); }
+  return `${parts[0]}${from}${parts[1]}${to}${parts[2]}`;
+};
+const NUDGE = '  const nudge = rating >= 7.5 ? -at(0.1) : rating < 6.3 ? at(0.1) : 0;\n';
 const ERE_SIZE = '  "Eredivisie": [{ from: 2026, size: 18 }],\n';
 const CONTROLS = {
   nosize: { file: 'lib/soccerCareerLeague.ts', red: ['A', 'D2'], world: true, edit: swap(ERE_SIZE, '') },
@@ -76,6 +86,13 @@ const CONTROLS = {
   keyshift: { file: 'lib/soccerCareerEngine.ts', red: ['B6'], world: true, edit: swap('seedKey: `${state.playerName}|${state.currentClub}|${seasonYear}|', 'seedKey: `${state.currentClub}|${state.playerName}|${seasonYear}|') },
   rewrite: { file: 'lib/soccerCareerEngine.ts', red: ['E'], edit: swap('export function repairCareer<T extends CareerState>(state: T): T {\n  if (!state || typeof state !== "object") return state;\n', 'export function repairCareer<T extends CareerState>(state: T): T {\n  if (!state || typeof state !== "object") return state;\n  for (const r of ((state as CareerState).seasons ?? [])) if (r.type === "playing" && r.year >= 2026 && r.leagueFinish === undefined) (r as { leagueFinish?: number }).leagueFinish = 5;\n') },
   nocanon: { file: 'data/clubRivalries.ts', red: ['B4'], edit: swap("  'Kasimpasa': 'Kasımpaşa',\n", '') },
+  /* the review's finding: the top place of a table is left to the world's
+     champion alone, so a league the world crowns nobody in reads "another
+     club" in 1st and loses one of its clubs. D1 reads the page's own labels. */
+  crownnobody: { file: 'lib/season/soccer.ts', red: ['D1'], world: true, edit: swap("    else if (s.champion && ctx.titleOpen && ctx.mode === 'table') open.push(s);\n", '') },
+  /* the ladder band's own nudge, one edge each (C2's worked 7.5 and 6.3) */
+  nudgeedge: { file: 'lib/soccerCareerLeague.ts', red: ['C2'], edit: swapLast(NUDGE, '  const nudge = rating > 7.5 ? -at(0.1) : rating < 6.3 ? at(0.1) : 0;\n') },
+  nudgelow: { file: 'lib/soccerCareerLeague.ts', red: ['C2'], edit: swapLast(NUDGE, '  const nudge = rating >= 7.5 ? -at(0.1) : rating <= 6.3 ? at(0.1) : 0;\n') },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown SIM_LEAGUE_WORLD_CONTROL ${CONTROL} (${Object.keys(CONTROLS).join(', ')})`); process.exit(2); }
 /* B6 (critic 3): every input the ENGINE hands drawLeagueFinish is recorded
@@ -95,7 +112,7 @@ if (CONTROL && !RECORD) {
 }
 const t0 = Date.now();
 const mod = await bundleCareerSources({ root: ROOT, tmpDir, extra: EXTRA, transforms });
-const { engine, league: LG, season: SE } = mod;
+const { engine, league: LG, season: SE, core: SC } = mod;
 const POOL = engine.FALLBACK_CLUBS;
 const HAND = engine.HAND_CLUBS;
 const inputs = poolInputs(mod);
@@ -290,6 +307,27 @@ function measureSeason(career, row) {
     const names = new Set([...ctx.rivals, ...ctx.named, ...(ctx.champion ? [ctx.champion] : [])]);
     names.delete(row.club);
     return { finish, table, named: table ? Math.min(size, 1 + names.size) / size : 0, namedRows: table ? Math.min(size, 1 + names.size) : 0, size, ctx };
+  } finally { Math.random = keep; }
+}
+/* D1 (review fix): the table as the PAGE draws it. measureSeason counts the
+   names a season could print; four leagues passed that at 18 of 18 while
+   their drawn table read "another club" in 1st place and left a real club
+   off, because the top place was the world's champion or nobody. This derives
+   the season exactly as the Season Centre does (deriveSeason, then the final
+   standings) and hands back its labels and the row on top. Up to D1_DRAWN
+   tables a league are drawn, the first ones the careers reach. */
+const D1_DRAWN = Number(process.env.D1_DRAWN || 300);
+/* fewest tables a league must have had drawn at 300 careers: TO SET from the
+   three seed sets (placeholder until measured) */
+const D1_DRAWN_FLOOR = 1;
+function drawnTable(row, ctx) {
+  const keep = Math.random;
+  Math.random = () => { throw new Error('Math.random called while drawing a season'); };
+  try {
+    const d = SC.deriveSeason(SE.SOCCER, row, ctx);
+    if (!d || d.mode !== 'table') return null;
+    const final = SC.tableAt(d, d.rounds.length);
+    return { labels: d.labels, top: d.labels[final[0].slot] };
   } finally { Math.random = keep; }
 }
 function playWorld(seedset, careers, onSeason, nations = NATIONS) {
@@ -535,6 +573,14 @@ head('C2', 'BAND: the worked examples, exact, and every ladder club banded at it
     [[4, 18, 18, 7.0], [2, 7]], [[4, 18, 18, 7.6], [2, 5]], [[4, 18, 18, 6.0], [3, 9]],
     [[17, 18, 18, 7.0], [14, 18]], [[20, 20, 22, 7.0], [19, 22]], [[8, 18, 18, 7.0, 18], [5, 18]],
     [[1, 18, 18, 7.0], [2, 4]], [[1, 1, 1, 7.0], [1, 1]],
+    /* review fix: the nudge's two edges on the LADDER's own copy of it.
+       Ratings are one decimal and both values are common: a 7.5 is a great
+       season (a tenth of the table up), a 6.3 is not a poor one (the band of
+       a 7.0), and the tenth on either side says which way each edge faces.
+       The absolute band's copy is held by the recorded cross; this one was
+       only ever worked at 7.0, 7.6 and 6.0 (controls nudgeedge, nudgelow). */
+    [[4, 18, 18, 7.5], [2, 5]], [[4, 18, 18, 7.4], [2, 7]], [[4, 18, 18, 6.3], [2, 7]], [[4, 18, 18, 6.2], [3, 9]],
+    [[12, 24, 24, 7.5], [6, 14]], [[12, 24, 24, 6.3], [8, 16]], [[12, 24, 24, 6.2], [10, 18]],
   ];
   for (const [args, want] of WORKED) {
     const got = LG.ladderBand(...args);
@@ -636,6 +682,10 @@ head('A', 'LEDGERS: every league the pool reads is sized, odd or waiting with it
       for (const win of odd) {
         for (const y of YEARS.filter(v => v >= win.from && (win.to === undefined || v <= win.to))) ok(FMT.leagueFormatFor(label, y) === null && LG.leagueSizeFor(label, y, true) === null, `${label} ${y}: an odd format and a size or a table format in the same season`);
         ok(w.shape === win.shape && w.size === win.clubs && w.games === win.games, `${label}: the odd row says ${win.shape}, ${win.clubs} clubs, ${win.games} games; the facts file ${w.shape}, ${w.size}, ${w.games}`);
+        /* brief A2 (review fix): the games after the league divides too. The
+           facts file states none today (no row's count was read from two
+           hosts), so a number typed into a row with no fact behind it is red */
+        ok(win.after === (w.after ?? null), `${label}: the odd row says ${win.after} games after it divides, the facts file ${w.after ?? 'states none'}`);
         ok(hosts(w.membership).size >= 2 && hosts(w.format).size >= 2 && dated(w.format), `${label}: an odd row needs its lineup and its format read from two dated hosts each`);
         ok(flat.length === win.clubs, `${label}: ladder of ${flat.length} in a league of ${win.clubs}`);
       }
@@ -813,7 +863,7 @@ if (RUN_WORLD) {
   const ODD = mod.odd.ODD_FORMATS;
   const base = readJson(F.baseline);
   const shape = { five: tally(), plain: tally(), odd: tally(), waiting: tally(), other: tally() };
-  const d1 = { sized: 0, tables: 0, bad: [] };
+  const d1 = { sized: 0, tables: 0, bad: [], drawn: {} };
   const b6 = { seen: 0, ladder: 0, bad: [], fallback: new Map() };
   const spread = { five: { n: 0, sum: 0, top: 0 }, plain: { n: 0, sum: 0, top: 0 } };
   const tierOf = new Map(POOL.map(c => [c.name, c.tier]));
@@ -832,8 +882,28 @@ if (RUN_WORLD) {
       else if (m.ctx.games !== 2 * (size - 1)) d1.bad.push(`${row.club} ${row.year} (${L}): ${m.ctx.games} matchdays, ${2 * (size - 1)} wanted`);
       if (m.table && LADDER[L] && !BIG_FIVE.has(L)) {
         d1.tables += 1;
-        const want = Math.min(size, LADDER[L].flat().length);
+        const clubsOf = LADDER[L].flat();
+        const want = Math.min(size, clubsOf.length);
         if (m.namedRows !== want) d1.bad.push(`${row.club} ${row.year} (${L}): its table names ${m.namedRows} rows, ${want} wanted`);
+        /* the page's own labels (review fix): the count above is the names
+           the season COULD print; this is the table as it is drawn */
+        const seen = (d1.drawn[L] ??= { all: 0, n: 0, open: 0, none: 0 });
+        seen.all += 1;
+        if (seen.n + seen.none < D1_DRAWN) {
+          const t = drawnTable(row, m.ctx);
+          if (!t) seen.none += 1;
+          else {
+            seen.n += 1;
+            if (!row.leagueTitle) seen.open += 1;
+            const shown = new Set(t.labels.filter(l => l.named).map(l => l.name));
+            const unnamed = t.labels.length - shown.size;
+            const missing = clubsOf.filter(n => !shown.has(n));
+            if (t.labels.length !== size) d1.bad.push(`${row.club} ${row.year} (${L}): the drawn table has ${t.labels.length} rows, ${size} wanted`);
+            else if (!t.top.named) d1.bad.push(`${row.club} ${row.year} (${L}): 1st place on the drawn table reads "${t.top.name}"`);
+            else if (unnamed !== size - want) d1.bad.push(`${row.club} ${row.year} (${L}): the drawn table leaves ${unnamed} rows unnamed, ${size - want} allowed`);
+            else if (clubsOf.length === size && missing.length) d1.bad.push(`${row.club} ${row.year} (${L}): ${missing.join(', ')} left off the drawn table`);
+          }
+        }
       }
       if (f && f.finish > 1 && tierOf.get(row.club) === 4 && generated.has(row.club)) {
         const s = spread[BIG_FIVE.has(L) ? 'five' : 'plain'];
@@ -858,7 +928,18 @@ if (RUN_WORLD) {
   for (const b of d1.bad.slice(0, 8)) fail(b);
   ok(d1.bad.length === 0, `${d1.bad.length} seasons in a sized league broke a rule`);
   ok(d1.sized > 1000 * (CAREERS / 300) && d1.tables > 200 * (CAREERS / 300), `only ${d1.sized} seasons in a sized league and ${d1.tables} tables outside the five`);
-  console.log(`  seed set ${SEEDSET}, ${CAREERS} careers x ${NATIONS.length} nations in ${secs} s: ${run.overall.seasons} seasons, ${d1.sized} in a sized league (a finish from 1 to the size, 2 x (size - 1) matchdays), ${d1.tables} tables in a ladder league outside the five, every row named`);
+  /* every sized ladder league outside the five must have had tables DRAWN,
+     seasons he did not win among them (those are the ones whose top place
+     is somebody else's), or the label checks above passed on nothing */
+  const sizedLadder = Object.keys(LADDER).filter(l => !BIG_FIVE.has(l) && LG.leagueSizeFor(l, 2027) !== null);
+  const drawnAll = Object.values(d1.drawn).reduce((a, t) => a + t.n, 0);
+  const blank = { all: 0, n: 0, open: 0, none: 0 };
+  for (const l of sizedLadder) {
+    const t = d1.drawn[l] ?? blank;
+    ok(t.n >= D1_DRAWN_FLOOR * (CAREERS / 300) && t.open >= D1_DRAWN_FLOOR * 0.5 * (CAREERS / 300), `${l}: only ${t.n} tables drawn, ${t.open} of them seasons he did not win`);
+  }
+  console.log(`  seed set ${SEEDSET}, ${CAREERS} careers x ${NATIONS.length} nations in ${secs} s: ${run.overall.seasons} seasons, ${d1.sized} in a sized league (a finish from 1 to the size, 2 x (size - 1) matchdays), ${d1.tables} tables in a ladder league outside the five whose names cover every row`);
+  console.log(`  drawn as the page draws them (up to ${D1_DRAWN} a league): ${drawnAll} tables, every row named, 1st place named, no club of the league left off: ${sizedLadder.map(l => { const t = d1.drawn[l] ?? blank; return `${l} ${t.n} of ${t.all} (${t.open} not his title${t.none ? `, ${t.none} the Season Centre could not derive` : ''})`; }).join('; ')}`);
 
   head('D2', "WORLD: more seasons end with a league position and a real table than on main");
   const was = base.world[SEEDSET] ? shares(base.world[SEEDSET].overall) : null;

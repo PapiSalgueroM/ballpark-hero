@@ -32,7 +32,13 @@
    clubs in two conferences, 34 games each (ESPN's scoreboard feed, 2026-02-21
    to 2026-11-08; the league's own schedule release, 2025-11-20: "each team
    play 34 games", conference opponents twice, six cross conference games).
-   Nothing is claimed about a later season's calendar.
+   Nothing is claimed about a later season's calendar. The row has no end
+   for the reason no size or format row has one: from 2026-27 on a career
+   plays the list's own season carried forward, the game's world and not a
+   forecast. So `games` and "two conferences" are the 2026 season's and
+   say nothing of the real MLS of 2027 or later: a reader that wants a
+   later real season (Round 1114) must source that season and close this
+   window with `to` first.
 
    Austrian Bundesliga 2026-27: 12 clubs; 22 games each (every pair twice:
    ESPN's scoreboard feed, 132 fixtures to 27 February 2027), then a

@@ -233,8 +233,17 @@ function checkSeason(career, row, ctx, s, tag) {
     const champ = cardChampion(career, row);
     const top = s.labels[t[0].slot];
     if (at !== 0) {
-      if (champ && top.name !== champ) fail('2 position', `${tag}: 1st is ${top.name}, the card names ${champ}`);
-      if (!champ && top.named) fail('2 position', `${tag}: 1st is named ${top.name}, the card names nobody`);
+      /* Round 1100 (review fix): the same three cases simSeasonCentreTable
+         item 2 states. The card's champion when it names one; nobody when
+         the world crowned a club the card cannot name or this season's
+         world is not held; and a named club that is not his where the world
+         holds the season and runs no title race in the league, because no
+         page of the game names a champion there. */
+      const w = career.phone?.world;
+      const openTitle = !!w && w.year === row.year && !!ctx.league?.key && !w.leagues?.[ctx.league.key];
+      if (champ) { if (top.name !== champ) fail('2 position', `${tag}: 1st is ${top.name}, the card names ${champ}`); }
+      else if (openTitle) { stats.openTitles = (stats.openTitles ?? 0) + 1; if (!top.named || top.name === row.club) fail('2 position', `${tag}: no title race in the ${row.year} ${ctx.league.key}, yet 1st reads ${top.name}`); }
+      else if (top.named) fail('2 position', `${tag}: 1st is named ${top.name}, the card names nobody`);
     }
     for (const r of t) if (r.pts !== 3 * r.w + r.d || r.p !== M) fail('3 points', `${tag}: slot ${r.slot} ${r.pts} pts from ${r.w}-${r.d}-${r.l} in ${r.p}`);
     const pairs = new Set();
@@ -473,6 +482,7 @@ console.log(`seasons ${stats.seasons}; gate ${JSON.stringify(stats.gate)}`);
 console.log(`derived: table ${stats.ok.table}, results ${stats.ok.results}; null ${nulls} (injured ${stats.nul.injured ?? 0} of ${stats.injuredN}, uninjured ${stats.nul.clean ?? 0} of ${stats.cleanN}) ${JSON.stringify(stats.why)}`);
 console.log(`attempts ${JSON.stringify(stats.attempts)}; repairs ${JSON.stringify(stats.repairs)}`);
 console.log(`determinism ${stats.determinism} of ${stats.determinism + stats.determinismBad}; key reconstruction ${stats.keyOk} of ${stats.keyN}`);
+console.log(`tables in a league the world runs no title race for, 1st place a named club that is not his: ${stats.openTitles ?? 0}`);
 const yieldT = gated ? stats.ok.table / gated : 1;
 const nullRate = stats.seasons ? nulls / stats.seasons : 0;
 check(stats.seasons > 0 && stats.ok.table > 0 && stats.ok.results > 0, `the population has both modes (${stats.ok.table} table, ${stats.ok.results} results)`);
