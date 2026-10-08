@@ -14,8 +14,8 @@ import { isFrontOfficeSave } from '@/lib/frontOfficeSave';
 import { leagueNames } from '@/lib/foNames';
 import { FO_DEPTH, FO_OPENING_RATING_BASE, FO_OPENING_RATING_VERSION, FO_OPENING_RATING_WINDOW } from '@/data/frontOfficeDepth';
 import { FO_TEAMS } from '@/data/frontOfficePlayers';
-import { buildFullRatings, openingRatingEvidence } from '../../scripts/lib/nflFoRatingModel.mjs';
-import { bakeFromRecord, readTeamMeta } from '../../scripts/genFrontOfficeRoster.mjs';
+import { buildFullRatings, openingRatingEvidence, OFFENSE_LAYER } from '../../scripts/lib/nflFoRatingModel.mjs';
+import { bakeFromRecord, readTeamMeta, readOffenseLayer } from '../../scripts/genFrontOfficeRoster.mjs';
 
 const root = process.cwd();
 const norm = (text: string) => text.replace(/\r\n/g, '\n');
@@ -28,6 +28,11 @@ const spot = JSON.parse(read('scripts/data/nflRosterSpotCheck.json').toString())
 const coreText = norm(read('src/data/frontOfficePlayers.ts').toString());
 const meta = readTeamMeta(coreText);
 const tupleHash = '731a2a67a5eb80099f4552f7ca0d45bfb8aee0c25c0abf7943dd53d09f065fd9';
+/* Round 1130, recorded 2026-10-08: the same 2,163 tuples with the offense layer (model nfl-v2.3-2026-10-08).
+   423 men carry another number than on v2.2, every one a quarterback, back, receiver or tight end. */
+const tupleHashV23 = 'b51b9d300a4433703f44bd8623b2976c2e3a0a8f13564058d5676cc790b15d9b';
+/** The layer with what it reads from the two committed files (the production lines and the fullback ledger). */
+const offenseLayer = () => readOffenseLayer(inputs);
 const partialHash = 'a706820eff365bab02e8339d0ef259113a4823c1cf03745e3a89402aa53a5fd6';
 const compact = (e: any) => ({ modelVersion: e.modelVersion, originKey: e.originKey, openingOvr: e.openingOvr, basis: e.basis, partial: e.partial });
 function build(options: object) {
@@ -162,6 +167,20 @@ describe('NFL opening rating checkpoint', () => {
     expect(rated).toHaveLength(2163); expect(new Set(rated.map(p => p.key)).size).toBe(2163);
     expect(hash(JSON.stringify(rated.map(p => [p.key, p.ovr, p.salary, p.years]).sort()))).toBe(tupleHash);
     expect(buildFullRatings({ ...inputs, records: [...inputs.records].reverse() }).map(p => [p.key, p.ovr, p.salary, p.years]).sort()).toEqual(rated.map(p => [p.key, p.ovr, p.salary, p.years]).sort());
+    /* Round 1130: the same three promises for the layer arm, and the layer moves no lineman and no defender. */
+    const layer = offenseLayer(), layered = buildFullRatings(inputs, layer);
+    expect(layered).toHaveLength(2163); expect(new Set(layered.map(p => p.key)).size).toBe(2163);
+    expect(hash(JSON.stringify(layered.map(p => [p.key, p.ovr, p.salary, p.years]).sort()))).toBe(tupleHashV23);
+    expect(buildFullRatings({ ...inputs, records: [...inputs.records].reverse() }, layer).map(p => [p.key, p.ovr, p.salary, p.years]).sort()).toEqual(layered.map(p => [p.key, p.ovr, p.salary, p.years]).sort());
+    const frozen = new Map(rated.map(p => [p.key, p]));
+    let held = 0, moved = 0;
+    for (const p of layered) {
+      const was: any = frozen.get(p.key);
+      if (['OL', 'DL', 'LB', 'DB'].includes(p.pos)) { expect([p.ovr, p.years], p.key).toEqual([was.ovr, was.years]); held++; }
+      else if (p.ovr !== was.ovr) moved++;
+    }
+    expect(held).toBeGreaterThan(1500); expect(moved).toBe(423);
+    console.log('NFL_LAYER_MOVES', JSON.stringify({ linemenAndDefendersHeld: held, offenseMenMoved: moved }));
   });
 
   it('retains dated-role partial labels and their concrete limitation reasons', () => {
@@ -176,11 +195,27 @@ describe('NFL opening rating checkpoint', () => {
       if (r.evidence.currentRole && !r.evidence.datedRoles.includes(r.evidence.currentRole)) { mismatches++; expect(e.partialReasons).toContain('current-role-unmeasured'); if (e.partialReasons.length === 1) onlyMismatch++; }
     }
     expect(mismatches).toBe(406); expect(onlyMismatch).toBe(42);
+    /* Round 1130, the layer arm: the mark only ever goes ON, and only for a fullback two publishers confirm.
+       1,323 marked on v2.2, 1,334 with the layer: eleven of the fifteen confirmed fullbacks were not marked
+       before (the other four held no opportunities and were). */
+    const layer = offenseLayer(), layered = buildFullRatings(inputs, layer);
+    const before = new Set(rated.filter(p => p.evidence.partial).map(p => p.key)), after = new Set(layered.filter(p => p.evidence.partial).map(p => p.key));
+    expect(after.size).toBe(1334); expect(layer.fullbacks.size).toBe(15);
+    expect([...before].filter(key => !after.has(key))).toEqual([]);
+    const gained = [...after].filter(key => !before.has(key));
+    expect(gained).toHaveLength(11); expect(gained.every(key => layer.fullbacks.has(key))).toBe(true);
+    for (let i = 0; i < layered.length; i++) {
+      const r = layered[i], e = openingRatingEvidence(inputs.records[i], r, layer.version, inputs.openingWindow);
+      expect(e.partial).toBe(r.evidence.partial); expect(e.modelVersion).toBe(OFFENSE_LAYER.version);
+      if (layer.fullbacks.has(r.key)) { expect(r.ovr).toBe(OFFENSE_LAYER.fullbackOvr); expect(e.partial).toBe(true); expect(e.partialReasons).toEqual(['fullback-role-unmeasured']); expect(['unmeasured-prior', 'draft-prior']).toContain(e.basis); }
+      else expect(e.partialReasons).not.toContain('fullback-role-unmeasured');
+    }
   });
 
   it('initializes every candidate tuple while retaining32 exact untrimmed budgets membership and terms', () => {
     const a = seeded(889), b = seeded(889), old = baseline.engine.initLeague(a.draw, { depth: baseline.FO_DEPTH }), lg = engine.initLeague(b.draw, { depth: FO_DEPTH });
-    const wanted = new Map(buildFullRatings(inputs).map(p => [p.key, p]));
+    /* Round 1130: the league a board deals is the layer arm, model nfl-v2.3 */
+    const wanted = new Map(buildFullRatings(inputs, offenseLayer()).map(p => [p.key, p]));
     expect(everyone(lg)).toHaveLength(2163); expect(lg.schedule).toEqual(old.schedule); expect(b.count()).toBe(a.count());
     expect(canonical(lg.freeAgents)).toEqual(canonical(old.freeAgents));
     const heldTerms = (p: any) => { const { id, ovr, salary, pot, openingRatingEvidence, ...held } = p; return held; };
@@ -213,7 +248,7 @@ describe('NFL opening rating checkpoint', () => {
     const raw = JSON.stringify(lg); expect(Buffer.byteLength(raw)).toBeLessThanOrEqual(700 * 1024);
     const restored = JSON.parse(raw); expect(engine.ensureFoLeagueIds(restored)).toBe(0); expect(JSON.stringify(restored)).toBe(raw);
     const p = everyone(restored)[0], opening = clone(p.openingRatingEvidence); p.ovr += 1;
-    expect(p.openingRatingEvidence).toEqual(opening); expect(FO_OPENING_RATING_VERSION).toBe(inputs.version); expect(FO_OPENING_RATING_BASE).toBe(inputs.version);
+    expect(p.openingRatingEvidence).toEqual(opening); expect(FO_OPENING_RATING_VERSION).toBe(OFFENSE_LAYER.version); expect(OFFENSE_LAYER.base).toBe(inputs.version); expect(FO_OPENING_RATING_BASE).toBe(inputs.version);
     expect(FO_OPENING_RATING_WINDOW).toEqual(inputs.openingWindow);
     console.log('NFL_RATING_SAVE_SIZE', JSON.stringify({ rawBytes: Buffer.byteLength(raw), gzipBytes: gzipSync(raw).length, players: everyone(lg).length }));
   });

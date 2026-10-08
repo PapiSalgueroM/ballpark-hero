@@ -81,6 +81,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { fetchSeasonStats, STATS_RELEASE_URL } from './lib/nflverseStats.mjs';
+import { OFFENSE_FIELDS, HEADLINE, OFFENSE_SHELVES, fieldsFor, derive, settledSide, usable, workloadOf } from './lib/nflProduction.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const PRODUCTION = path.join(ROOT, 'scripts', 'data', 'nfl2025Production.json');
@@ -115,17 +116,11 @@ export const FIELDS = {
   recYds:  { a: 'receiving_yards',  b: ['receiving', 'receivingYards'] },
   recTd:   { a: 'receiving_tds',    b: ['receiving', 'receivingTouchdowns'] },
 };
-export const OFFENSE_FIELDS = Object.keys(FIELDS);
-/** The fields that must ALL agree before a row may feed a rating or a printed stat. */
-export const HEADLINE = {
-  QB: ['games', 'passAtt', 'passYds', 'passTd', 'passInt', 'rushYds', 'rushTd'],
-  RB: ['games', 'rushAtt', 'rushYds', 'rushTd', 'rec', 'recYds', 'recTd'],
-  WR: ['games', 'rec', 'recYds', 'recTd', 'rushYds', 'rushTd'],
-  TE: ['games', 'rec', 'recYds', 'recTd', 'rushYds', 'rushTd'],
-  OL: ['games'],
-  DL: ['games'], LB: ['games'], DB: ['games'],
-};
-export const OFFENSE_SHELVES = ['QB', 'RB', 'WR', 'TE'];
+/* The rules of a row (headline fields, agreed, settled, usable) live in
+   scripts/lib/nflProduction.mjs, so the generator and the harness read the
+   same ones; they are re-exported here for the callers that had them. */
+export { OFFENSE_FIELDS, HEADLINE, OFFENSE_SHELVES, fieldsFor, derive, settledSide, usable, workloadOf };
+if (Object.keys(FIELDS).join() !== OFFENSE_FIELDS.join()) throw new Error('the publishers\' column map and the row rules name different fields');
 
 /* ------------------------------------------------------------- source B */
 const bPageFile = (category, page) => path.join(CACHE_B, `${category.replace(':', '-')}-p${String(page).padStart(2, '0')}.json`);
@@ -219,56 +214,6 @@ function aFields(row, columns) {
 /* ------------------------------------------------------------- the verdict
    Everything below is pure: the harness (scripts/simFoRatingOrder.mjs), the
    generator and --check all call these on the committed rows. */
-
-/** Which fields a row carries for its shelf: the whole offense line for the four skill shelves, games for the rest. */
-export const fieldsFor = shelf => (OFFENSE_SHELVES.includes(shelf) ? OFFENSE_FIELDS : ['games']);
-
-/** `agreed` and `status` from the row's own `a`, `b` and `settledBy`, and nothing else. */
-export function derive(row) {
-  const headline = HEADLINE[row.shelf];
-  const agreed = row.a && row.b ? fieldsFor(row.shelf).filter(f => row.a[f] !== null && row.a[f] !== undefined && row.a[f] === row.b[f]) : [];
-  let status = !row.a || !row.b ? 'one-source' : headline.every(f => agreed.includes(f)) ? 'agree' : 'disagree';
-  if (status === 'disagree' && settledSide(row, agreed)) status = 'settled';
-  return { agreed, status };
-}
-
-/** Which publisher a third source sided with on a disputed row, or null. It must print every headline
-    field the two dispute and agree with ONE of them on all of those, and nothing it prints may contradict
-    that publisher anywhere else on the headline list. A field it leaves blank (a league page prints no
-    rushing line for a receiver who never carried) is covered only when the two publishers already agree
-    on it: a blank is never read as a zero. */
-export function settledSide(row, agreed = derive({ ...row, settledBy: undefined }).agreed) {
-  const v = row.settledBy?.values;
-  if (!v || !row.a || !row.b) return null;
-  for (const side of [row.a, row.b]) {
-    if (HEADLINE[row.shelf].every(f => (Number.isFinite(v[f]) ? v[f] === side[f] : agreed.includes(f)))) return side;
-  }
-  return null;
-}
-
-/** The numbers a rating or a printed stat may read off a row, or null when the row may feed nothing.
-    An agreed row gives its agreed fields; a settled row gives the third source's headline fields plus
-    whatever else the two publishers agree on. A field outside that set is simply absent. */
-export function usable(row) {
-  if (row.status === 'agree') return Object.fromEntries(row.agreed.map(f => [f, row.a[f]]));
-  if (row.status === 'settled') {
-    const side = settledSide(row, row.agreed);
-    if (!side) return null;
-    const out = Object.fromEntries(row.agreed.map(f => [f, row.a[f]]));
-    for (const f of HEADLINE[row.shelf]) out[f] = side[f];
-    return out;
-  }
-  return null;
-}
-
-/** The headline opportunity count both publishers print: pass attempts, carries plus catches, catches. */
-export function workloadOf(shelf, u) {
-  if (!u) return null;
-  if (shelf === 'QB') return u.passAtt ?? null;
-  if (shelf === 'RB') return u.rushAtt == null || u.rec == null ? null : u.rushAtt + u.rec;
-  if (shelf === 'WR' || shelf === 'TE') return u.rec ?? null;
-  return null;
-}
 
 /** Header counts, re-derivable from the rows and the pool alone. */
 export function countRows(rows, pool) {

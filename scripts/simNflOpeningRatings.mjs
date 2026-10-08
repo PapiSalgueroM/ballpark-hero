@@ -9,7 +9,7 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const test = 'src/lib/frontOfficeRatings.test.ts';
 const model = 'scripts/lib/nflFoRatingModel.mjs', generator = 'scripts/genFrontOfficeRoster.mjs', engine = 'src/lib/frontOffice.ts';
-const files = [test, model, generator, engine, 'src/data/frontOfficeDepth.ts', 'src/data/frontOfficePlayers.ts', 'src/lib/frontOfficeCuts.ts', 'src/lib/frontOfficeSave.ts', 'src/lib/foNames.ts', 'src/lib/entityIds.ts', 'scripts/data/nflFoRatingInputs2026.json', 'scripts/data/nflRosters2026.json', 'scripts/data/nflRosterSpotCheck.json', 'scripts/data/nflRosters2026LeftOut.json', 'scripts/data/nfl2025Production.json'];
+const files = [test, model, generator, engine, 'src/data/frontOfficeDepth.ts', 'src/data/frontOfficePlayers.ts', 'src/lib/frontOfficeCuts.ts', 'src/lib/frontOfficeSave.ts', 'src/lib/foNames.ts', 'src/lib/entityIds.ts', 'scripts/data/nflFoRatingInputs2026.json', 'scripts/data/nflRosters2026.json', 'scripts/data/nflRosterSpotCheck.json', 'scripts/data/nflRosters2026LeftOut.json', 'scripts/data/nfl2025Production.json', 'scripts/data/nflFullbackRoles2026.json', 'scripts/lib/nflProduction.mjs'];
 const holdSource = bytes => ({ bytes, source: bytes.toString('utf8').replaceAll('\r\n', '\n') });
 const held = await Promise.all(files.map(async file => [file, holdSource(await readFile(path.join(root, file)))]));
 const sourceOf = file => held.find(([name]) => name === file)[1].source;

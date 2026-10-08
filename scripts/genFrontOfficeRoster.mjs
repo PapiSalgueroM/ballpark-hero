@@ -168,7 +168,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { fetchSeasonRoster, RELEASE_URL } from './lib/nflverseRosters.mjs';
 import { fetchSeasonStats, STATS_RELEASE_URL } from './lib/nflverseStats.mjs';
-import { buildFullRatings, openingRatingEvidence } from './lib/nflFoRatingModel.mjs';
+import { buildFullRatings, openingRatingEvidence, OFFENSE_LAYER, OFFENSE_POSITIONS } from './lib/nflFoRatingModel.mjs';
+import { derive as deriveProductionRow, productionMap } from './lib/nflProduction.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.join(ROOT, 'src', 'data', 'frontOfficePlayers.ts');
@@ -178,6 +179,9 @@ export const RECORD = path.join(ROOT, 'scripts', 'data', 'nflRosters2026.json');
 export const LEFT_OUT = path.join(ROOT, 'scripts', 'data', 'nflRosters2026LeftOut.json');
 /** Round 828 review: the second source spot check, whose heldOut list the bake obeys. */
 export const SPOT_CHECK = path.join(ROOT, 'scripts', 'data', 'nflRosterSpotCheck.json');
+/** Round 1130: the two sourced 2025 regular season lines, and the two sourced fullback ledger. */
+export const PRODUCTION = path.join(ROOT, 'scripts', 'data', 'nfl2025Production.json');
+export const FULLBACK_ROLES = path.join(ROOT, 'scripts', 'data', 'nflFullbackRoles2026.json');
 export const ROSTER_SEASON = 2026;
 export const STATS_SEASON = 2025;
 /** On the roster: active, or held on a reserve list. Cut and practice squad are not. */
@@ -770,6 +774,11 @@ export function renderDepthFile(depth, sources) {
     lines.push('// Round 1130: one number per man. The fifteen in frontOfficePlayers.ts carry the same');
     lines.push('// estimate on their own rows; this file holds no second number for them, only their');
     lines.push('// lineage in ratingEvidence. Contract years and roster identities are unchanged.');
+    if (sources.layerRead) {
+      lines.push(`// Model ${sources.ratingVersion}: the checkpoint plus the offense layer (workload, and ${STATS_SEASON}`);
+      lines.push(`// production a game off two publishers, read ${sources.layerRead.production}); a fullback two more`);
+      lines.push(`// publishers confirm (read ${sources.layerRead.roles}) reads one flat number with the mark.`);
+    }
     lines.push('// Complete source provenance and the fitted-checkpoint limitation live in');
     lines.push('// scripts/data/nflFoRatingInputs2026.json. One source lineage remains one.');
     lines.push('// noSeason retains the older 2025 games marker; it is not the new rating basis.');
@@ -877,9 +886,16 @@ export function renderFile(teams, sources) {
     lines.push('// on draft position and years played alone. Row order inside a position is');
     lines.push('// that rule\'s pick order, not a ranking by the number on the row.');
     lines.push(`// THE NUMBER ON EACH ROW is the full roster opening estimate, model ${sources.ratingVersion ?? sources.ratingInputs.version}:`);
-    for (const line of sources.ratingLines ?? [
-      '// the frozen 2023 to 2025 regular season checkpoint, scripts/data/nflFoRatingInputs2026.json.',
-    ]) lines.push(line);
+    lines.push('// the frozen 2023 to 2025 regular season checkpoint, scripts/data/nflFoRatingInputs2026.json.');
+    if (sources.layerRead) {
+      lines.push('// On top of it, for quarterbacks, backs, receivers and tight ends, the offense layer:');
+      lines.push('// how much of the work a man carried (the checkpoint\'s own opportunity counts) and what');
+      lines.push(`// he produced a game in the ${STATS_SEASON} regular season, read off two publishers`);
+      lines.push(`// (scripts/data/nfl2025Production.json, read ${sources.layerRead.production}). A fullback two more`);
+      lines.push(`// publishers confirm (scripts/data/nflFullbackRoles2026.json, read ${sources.layerRead.roles}) is not`);
+      lines.push('// rated as a ball carrier: one flat number, marked. Linemen and defenders are the');
+      lines.push('// checkpoint\'s numbers unchanged.');
+    }
     lines.push('// It is a simulation grade, not a historical statistic or an official rating, and');
     lines.push('// it is the one number every game on the site prints for the man. Limited evidence');
     lines.push('// is marked per player in frontOfficeDepth.ts. See the generator for every rule.');
@@ -1042,9 +1058,48 @@ export function spotCheckRefusal(spot, rec) {
   return null;
 }
 
+/* ROUND 1130: THE OFFENSE LAYER'S INPUTS, read from two committed files and
+   nothing else. It fails closed: a missing file, a ledger that does not cover
+   exactly the men the record labels FB, or too few agreed lines among the
+   fifteen stops the bake, the same rule as the stats join above (a feed whose
+   column has gone must never rate the league on something else and say
+   nothing). A stored status is never trusted: every row is re-derived from its
+   own two lines before it may feed a rating. */
+export function readOffenseLayer(checkpoint) {
+  const rel = f => path.relative(ROOT, f);
+  if (!fs.existsSync(PRODUCTION)) throw new Error(`${rel(PRODUCTION)} is missing, so the offense layer has no 2025 production to read: run node scripts/fetchNfl2025Production.mjs --pull`);
+  if (!fs.existsSync(FULLBACK_ROLES)) throw new Error(`${rel(FULLBACK_ROLES)} is missing, so no fullback can be told from a running back on two sources`);
+  const file = JSON.parse(fs.readFileSync(PRODUCTION, 'utf8'));
+  if (file.season !== STATS_SEASON || file.seasonType !== 'regular' || !Array.isArray(file.rows)) throw new Error(`${rel(PRODUCTION)} is not the ${STATS_SEASON} regular season file`);
+  const production = productionMap(file.rows.map(r => ({ ...r, ...deriveProductionRow(r) })));
+  const roles = JSON.parse(fs.readFileSync(FULLBACK_ROLES, 'utf8'));
+  const labelled = checkpoint.records.filter(r => r.sourceIdentity.depthChartPosition === roles.recordLabel).map(r => r.key).sort();
+  const listed = roles.men.map(m => m.key).sort();
+  if (labelled.join('\n') !== listed.join('\n')) {
+    const missing = labelled.filter(k => !listed.includes(k)), extra = listed.filter(k => !labelled.includes(k));
+    throw new Error(`${rel(FULLBACK_ROLES)} does not cover exactly the men the record labels ${roles.recordLabel}: no row for ${missing.join(', ') || 'nobody'}; a row for ${extra.join(', ') || 'nobody'} whom the record does not label so. Read the club's roster page and ESPN's for each and fix the ledger.`);
+  }
+  const fullbacks = new Set(roles.men.filter(m => m.verdict === 'fullback' && m.club?.position === 'FB' && m.espn?.position === 'FB').map(m => m.key));
+  const claimed = roles.men.filter(m => m.verdict === 'fullback' && !fullbacks.has(m.key));
+  if (claimed.length) throw new Error(`${rel(FULLBACK_ROLES)} calls ${claimed.map(m => m.key).join(', ')} a fullback without both pages printing FB`);
+  const fifteen = checkpoint.records.filter(r => r.tier === 'core' && OFFENSE_POSITIONS.includes(r.seed.pos) && !fullbacks.has(r.key));
+  const withLine = fifteen.filter(r => production.has(r.key)).length;
+  if (withLine * 2 < fifteen.length) {
+    throw new Error(`only ${withLine} of the ${fifteen.length} quarterbacks, backs, receivers and tight ends among the fifteen hold an agreed ${STATS_SEASON} line in ${rel(PRODUCTION)}. That is what a renamed field looks like, and baking on it would rate the offense on workload alone and say nothing. Rerun node scripts/fetchNfl2025Production.mjs --check and fix the file.`);
+  }
+  const productionRead = [file.sourceA?.read, file.sourceB?.read].filter(Boolean).sort().pop();
+  if (!productionRead || !roles.read) throw new Error('the production file or the fullback ledger carries no read date');
+  return {
+    ...OFFENSE_LAYER, production, fullbacks,
+    read: { production: productionRead, roles: roles.read },
+    unconfirmedFullbacks: roles.men.filter(m => !fullbacks.has(m.key)).map(m => m.key),
+    fifteenWithLine: withLine, fifteenOffense: fifteen.length,
+  };
+}
+
 /** The whole bake from a record, as strings, so --check and the fence can compare without writing. */
-export function bakeFromRecord(rec, teamMeta, heldOut = [], { legacyDepth = false, ratingModel = 'v2.2' } = {}) {
-  if (!['v2.2'].includes(ratingModel)) throw new Error(`unknown ratingModel ${ratingModel}`);
+export function bakeFromRecord(rec, teamMeta, heldOut = [], { legacyDepth = false, ratingModel = 'v2.3', layer: givenLayer = null } = {}) {
+  if (!['v2.3', 'v2.2'].includes(ratingModel)) throw new Error(`unknown ratingModel ${ratingModel}`);
   const { roster: all, stats } = recordRows(rec);
   /* Round 828 review: a man both other sources contradict (scripts/data/
      nflRosterSpotCheck.json, heldOut) is held out of the bake with the reason,
@@ -1094,9 +1149,16 @@ export function bakeFromRecord(rec, teamMeta, heldOut = [], { legacyDepth = fals
      new league different ceilings. */
   let finalTeams = teams;
   let ratingVersion = null;
+  let layer = null;
+  let rated = null;
   if (ratingInputs) {
-    ratingVersion = ratingInputs.version;
-    const rated = new Map(buildFullRatings(ratingInputs).map(p => [p.key, p]));
+    /* ORDER OF REFUSAL: the production file and the fullback ledger are opened
+       only here, after the checkpoint has been found to fit the record. A
+       stale record is refused before anything else is read. `givenLayer` is
+       for the harness, which hands the layer in with one thing changed. */
+    layer = ratingModel === 'v2.3' ? (givenLayer ?? readOffenseLayer(ratingInputs)) : null;
+    ratingVersion = layer ? layer.version : ratingInputs.version;
+    rated = new Map(buildFullRatings(ratingInputs, layer).map(p => [p.key, p]));
     const records = new Map(ratingInputs.records.map(p => [p.key, p]));
     const one = (abbr, p) => {
       const next = rated.get(`${abbr}|${p.name}|${p.pos}`);
@@ -1115,8 +1177,11 @@ export function bakeFromRecord(rec, teamMeta, heldOut = [], { legacyDepth = fals
     });
   }
   const heldCounts = buildDepth.lastHeld;
-  const text = renderFile(finalTeams, { read: rec.read, week: rec.week, rosterRows: rec.rosterRowsInRelease, statRows: rec.statRowsInRelease, ratingInputs, ratingVersion });
-  const depthText = renderDepthFile(depth, { read: rec.read, rosterRows: rec.rosterRowsInRelease, week: rec.week, held: heldCounts, ratingInputs, ratingVersion });
+  /* Stamps: the record's read date and the production file's, never the day of
+     the bake, so the same inputs always bake the same bytes. */
+  const layerRead = layer?.read ?? null;
+  const text = renderFile(finalTeams, { read: rec.read, week: rec.week, rosterRows: rec.rosterRowsInRelease, statRows: rec.statRowsInRelease, ratingInputs, ratingVersion, layerRead });
+  const depthText = renderDepthFile(depth, { read: rec.read, rosterRows: rec.rosterRowsInRelease, week: rec.week, held: heldCounts, ratingInputs, ratingVersion, layerRead });
   const leftOut = leftOutList(rec, teams, depth, teamMeta, held);
   const byReason = {};
   for (const m of leftOut) {
@@ -1131,7 +1196,7 @@ export function bakeFromRecord(rec, teamMeta, heldOut = [], { legacyDepth = fals
     byReason,
     leftOut,
   }, null, 1)}\n`;
-  return { teams: finalTeams, seedTeams: teams, depth, held: heldCounts, join, text, depthText, leftOut, leftJson, ratingProblem, ratingVersion };
+  return { teams: finalTeams, seedTeams: teams, depth, held: heldCounts, join, text, depthText, leftOut, leftJson, ratingProblem, ratingVersion, layer, rated };
 }
 
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
