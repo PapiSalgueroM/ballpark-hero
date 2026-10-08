@@ -63,6 +63,20 @@
  *   Chromium's own window.localStorage is an own, configurable accessor on
  *   window, which is what lets the seam put its stand in there; the BLOCKED
  *   arm replaces it like for like and prints what it found.
+ *   NATIVE, the real blocked profile: the browser's own accessor throws
+ *   "SecurityError: Failed to read the 'localStorage' property from
+ *   'Window': Access is denied for this document." Under the raw control 0
+ *   buttons on all four routes. With the seam but before the lock stand in:
+ *   mounted, 3 uncaught "The request was denied." on every route, and the
+ *   home page at 169 buttons against 171 untouched. Now: 171, 29, 12 and 11
+ *   buttons on /, /soccer-career, /club-manager and /footle, the same as
+ *   untouched, 0 uncaught errors, the notice on the three game routes.
+ *   The presses, identical in every arm: four on /soccer-career (nationality,
+ *   position, era, surprise me), /club-manager, /nfl-my-career, /front-office
+ *   and /build-your-xi, four with three that change the page on
+ *   /nba-my-career, four with two on /stadium-tycoon, two with one on
+ *   /free-kick, and one on /footle and /college-grid, whose next move is
+ *   typing a name.
  *
  * CONTROLS.
  *   PLAY_STORAGE_CONTROL=raw   sets window.__DUKB_RAW_STORAGE__ before the app
@@ -283,7 +297,7 @@ function pressNext(n) {
   const visible = el => { const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0; };
   const label = el => ((el.innerText || el.getAttribute('aria-label') || el.title || '').replace(/\s+/g, ' ').trim()).slice(0, 40);
   const CHROME = '[data-site-chrome], header, nav, footer, [role="region"][aria-label="Cookie choices"], section[aria-label="Live scores ticker"]';
-  const AVOID = /sign ?(in|up)|log ?(in|out)|share|report|delete|reset|clear|erase|theme|install|export|import|leaderboard|copy|sound|mute|feedback|account|light mode|dark mode|how to|rules|help|give up|quit|skip|hint|reveal|settings|^back|^home|menu|pause/i;
+  const AVOID = /sign ?(in|up)|log ?(in|out)|share|report|delete|reset|clear|erase|theme|install|export|import|leaderboard|copy|sound|mute|feedback|account|light mode|dark mode|how to|rules|help|give up|abandon|quit|skip|hint|reveal|settings|^back|^home|menu|pause/i;
   const GO = /play|start|begin|got it|let'?s|continue|new |create|next|kick|sim|roll|deal|spin|pick|choose|select|confirm|advance|ready|go\b|ok\b|done/i;
   const dialogs = [...document.querySelectorAll('[role="dialog"], [role="alertdialog"]')].filter(visible);
   const scope = dialogs.length ? dialogs[dialogs.length - 1] : document.getElementById('root');
