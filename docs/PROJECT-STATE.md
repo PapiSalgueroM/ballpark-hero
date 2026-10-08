@@ -1,3 +1,35 @@
+First guard-based run 37736618248 at e934461a was rejected before any runner
+started: GitHub's retained annotation names runner.temp in job-level env as
+an unrecognized context. There were zero jobs and no runtime artifacts.
+Preparation moves only the temporary parent path into the first shell step,
+using RUNNER_TEMP and GITHUB_ENV. Worker, product and assertions stay held.
+Workflow d11f9707 requires a fresh accepted remote run; no product result exists.
+1096 proof is frozen for remote verification: eight parent/candidate journeys
+at 390/1280 with translator off/altered, two guard-disabled candidate creator
+journeys through Begin, and two actual TextWithFlags fixtures covering three
+translated transitions each. Real checked-option reopening replaces the native
+select assumption. Current trigger labels and persisted Brazil/GK/1990 values
+stay strict. Worker 9e73b139 and workflow f62bec2b passed independent static
+and manual delimiter review. Runtime acceptance is pending. Existing save and
+all twenty readers remain required. Whole-site weight verification is F-owned
+because the existing sweepWeight runner has no route filter.
+Codex 1096 creator translation repair, 2026-10-08, verification pending.
+Built on Claude F's guard and browser harness at 0f0f8426 (guard f71bc28d).
+F owns that app-wide safety net and publication. This lane owns only creator
+text structure: three select placeholders, position/era item labels, and
+TextWithFlags output. Each now has an owned element; changing event text
+replaces its outer span so translated words can update without stale text.
+No engine, saved data, shared select or translate-guard source is changed.
+Remote proof will compare the actual guard-only parent, check visible labels,
+walk build/create/advance/reload, and verify translated flag/plain updates.
+The previous AK diagnostic established a matching removeChild crash class.
+English and Portuguese locale baselines completed normally. The visitor's
+exact setup is unknown. Its candidate run 37733160118 stopped at script parse
+time before any browser case; save tests39/39 and all twenty readers passed.
+The script's one-character correction is preserved on old branch 9eb589ce.
+No merge, READY claim or publication of this structural repair is made yet.
+Soccer Perfect Season is recorded after the reported career bug, with its
+verified-player-pool requirement still open. Production DB probes stay barred.
 ## Release AK LIVE, 2026-10-07 15:12 EDT, and the split of work with Codex
 
 Claude lane (session E, a new lead: session D stopped at its weekly limit with AK's gate still running).
