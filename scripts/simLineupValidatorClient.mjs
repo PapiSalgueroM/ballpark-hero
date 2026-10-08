@@ -102,7 +102,9 @@ const CONTROLS = {
   },
   truthy: {
     target: LIB,
-    edits: [['  if (answer.unverified === true) {', "  if (answer.valid) return { kind: 'valid' };\n  if (answer.unverified === true) {"]],
+    /* Rule 4 as it would read by truthiness, placed above rule 3. It keeps the stored name, so the valid rows
+       and test 17 stay green and only the three bodies that are not the boolean true change sides. */
+    edits: [['  if (answer.unverified === true) {', "  if (answer.valid) {\n    const fullName = text(answer.fullName);\n    return { kind: 'valid', ...(fullName ? { fullName } : {}) };\n  }\n  if (answer.unverified === true) {"]],
     fails: ['reads valid as the string true', 'reads valid as the number 1', 'reads both flags at once', C[9], C[10]], keeps: KEEP,
   },
   notimeout: {
