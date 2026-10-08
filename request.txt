@@ -1,0 +1,24 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+suite: sed -i 's/\r*$/\r/' scripts/data/nflRosters2026.json && node_modules/.bin/vitest run src/lib/frontOfficeRatings.test.ts --reporter=verbose
+gencheck: node scripts/genFrontOfficeRoster.mjs --check
+prodcheck: node scripts/fetchNfl2025Production.mjs --check
+simFoRatingOrder: node scripts/simFoRatingOrder.mjs
+order-override: SIM_FO_ORDER_CONTROL=override node scripts/simFoRatingOrder.mjs
+order-onesource: SIM_FO_ORDER_CONTROL=onesource node scripts/simFoRatingOrder.mjs
+order-looseread: SIM_FO_ORDER_CONTROL=looseread node scripts/simFoRatingOrder.mjs
+order-nolayer: SIM_FO_ORDER_CONTROL=nolayer node scripts/simFoRatingOrder.mjs
+order-swaprows: SIM_FO_ORDER_CONTROL=swaprows node scripts/simFoRatingOrder.mjs
+order-unmark: SIM_FO_ORDER_CONTROL=unmark node scripts/simFoRatingOrder.mjs
+order-norole: SIM_FO_ORDER_CONTROL=norole node scripts/simFoRatingOrder.mjs
+order-stretch: SIM_FO_ORDER_CONTROL=stretch node scripts/simFoRatingOrder.mjs
+order-shuffle: SIM_FO_ORDER_CONTROL=shuffle node scripts/simFoRatingOrder.mjs
+order-cutback: SIM_FO_ORDER_CONTROL=cutback node scripts/simFoRatingOrder.mjs
+order-lift: SIM_FO_ORDER_CONTROL=lift node scripts/simFoRatingOrder.mjs
+order-gain: SIM_FO_ORDER_CONTROL=gain node scripts/simFoRatingOrder.mjs
+order-noeff: SIM_FO_ORDER_CONTROL=noeff node scripts/simFoRatingOrder.mjs
+walk: ENGINES=chromium node scripts/playFoOneRating.mjs
+walk-expect: FO_WALK_CONTROL=expect ENGINES=chromium node scripts/playFoOneRating.mjs
+walk-norule: FO_WALK_CONTROL=norule ENGINES=chromium node scripts/playFoOneRating.mjs
+simFrontOfficeRoster: node scripts/simFrontOfficeRoster.mjs
