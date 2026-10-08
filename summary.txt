@@ -1,0 +1,5 @@
+shapes-c exit=1 32s | simDailySaveHardening: 2 failure(s)
+shapes-b exit=1 32s | simDailySaveHardening: 2 failure(s)
+shapes-a exit=1 32s | simDailySaveHardening: 2 failure(s)
+anchors exit=0 35s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 63s | 

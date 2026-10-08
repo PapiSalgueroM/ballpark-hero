@@ -1,0 +1,6 @@
+# dsh-shapes three at once (parallel load), to see whether /nba-career is a load flake
+shapes-a: R848_PART=shapes node scripts/simDailySaveHardening.mjs
+shapes-b: R848_PART=shapes node scripts/simDailySaveHardening.mjs
+shapes-c: R848_PART=shapes node scripts/simDailySaveHardening.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+anchors: node scripts/simHarnessAnchors.mjs
