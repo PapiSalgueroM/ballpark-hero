@@ -36,15 +36,15 @@ const titles = {
 const ratingCases = [titles.checkpoint, titles.partial, titles.init, titles.generation];
 const allModelCases = [...ratingCases, titles.coverage, titles.missing, titles.bounded];
 const controls = {
-  clamp: [model, 'clip(84+12*score/evidence,55,98)', '(84+12*score/evidence)', [titles.checkpoint, titles.init, titles.generation, titles.bounded]],
-  datedRole: [model, 'models.defense[`${row.season}|${row.role}`]', 'models.defense[`${row.season}|${currentRole(record.sourceIdentity.depthChartPosition)}`]', [...ratingCases, titles.bounded, titles.oneNumber]],
-  opportunity: [model, 'accumulated.units+=weightedExposure/f.typicalExposure;', 'accumulated.units+=row.baseExposure*recency[row.season]/f.typicalExposure;', [titles.checkpoint, titles.init, titles.generation, titles.coverage, titles.bounded]],
-  missing: [model, 'const m=row.features[key],f=model.features[key];if(!m||!f)continue;', 'const m=row.features[key]??{value:0,exposure:row.baseExposure},f=model.features[key];if(!m||!f)continue;', [titles.checkpoint, titles.init, titles.generation, titles.missing]],
-  partial: [model, '||!role||!datedRoles.includes(role);', ';', [titles.partial, titles.generation, titles.bounded]],
-  budget: [model, 'surplus=totalTenths-floorTenths;', 'surplus=totalTenths-floorTenths+10;', [...allModelCases, titles.oneNumber]],
+  clamp: [model, 'clip(84+12*score/evidence,55,98)', '(84+12*score/evidence)', [titles.checkpoint, titles.init, titles.generation, titles.bounded, titles.board]],
+  datedRole: [model, 'models.defense[`${row.season}|${row.role}`]', 'models.defense[`${row.season}|${currentRole(record.sourceIdentity.depthChartPosition)}`]', [...ratingCases, titles.bounded, titles.oneNumber, titles.board]],
+  opportunity: [model, 'accumulated.units+=weightedExposure/f.typicalExposure;', 'accumulated.units+=row.baseExposure*recency[row.season]/f.typicalExposure;', [titles.checkpoint, titles.init, titles.generation, titles.coverage, titles.bounded, titles.board]],
+  missing: [model, 'const m=row.features[key],f=model.features[key];if(!m||!f)continue;', 'const m=row.features[key]??{value:0,exposure:row.baseExposure},f=model.features[key];if(!m||!f)continue;', [titles.checkpoint, titles.init, titles.generation, titles.missing, titles.board]],
+  partial: [model, '||!role||!datedRoles.includes(role);', ';', [titles.partial, titles.generation, titles.bounded, titles.board]],
+  budget: [model, 'surplus=totalTenths-floorTenths;', 'surplus=totalTenths-floorTenths+10;', [...allModelCases, titles.oneNumber, titles.board]],
   /* Round 1130: the engine line this control bound (the fullOpening override) is gone with the override. What it
      guarded is now a generator step: the starters rows carry the opening estimate, not the selection seed. */
-  seedrows: [generator, 'finalTeams = teams.map(t => ({ ...t, players: t.players.map(p => one(t.abbr, p)) }));', 'finalTeams = teams;', [titles.generation, titles.oneNumber]],
+  seedrows: [generator, 'finalTeams = teams.map(t => ({ ...t, players: t.players.map(p => one(t.abbr, p)) }));', 'finalTeams = teams;', [titles.generation, titles.oneNumber, titles.board]],
   evidence: [engine, 'p.openingRatingEvidence = { modelVersion, originKey, openingOvr, basis, partial };', 'void evidence;', [titles.evidence, titles.moves, titles.board]],
   compact: [engine, 'p.openingRatingEvidence = { modelVersion, originKey, openingOvr, basis, partial };', 'p.openingRatingEvidence = evidence;', [titles.evidence, titles.campaign, titles.board]],
   cut: [engine, 'if (fa) clearTag(fa);', 'if (fa) { clearTag(fa); delete fa.openingRatingEvidence; }', [titles.moves]],
