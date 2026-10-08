@@ -45,7 +45,12 @@ const ONLY_CONTROL = process.env.CAREER_SQUAD_CONTROL || '';
 let checks = 0;
 let failed = 0;
 const failures = [];
+/* While a control is being judged, failures land in the sink (by section)
+   and nothing is printed or counted. */
+let sink = null;
+const say = (...a) => { if (!sink) console.log(...a); };
 function check(section, ok, what) {
+  if (sink) { if (!ok) sink.add(section); return ok; }
   checks += 1;
   if (ok) return true;
   failed += 1;
@@ -68,6 +73,11 @@ export const engine = await import('${ROOT_URL}/src/lib/soccerCareerEngine.ts');
 export const intl = await import('${ROOT_URL}/src/lib/intlNames.ts');
 export const phone = await import('${ROOT_URL}/src/lib/soccerPhone.ts');
 export const international = await import('${ROOT_URL}/src/lib/soccerInternational.ts');
+export const tile = await import('${ROOT_URL}/src/components/soccer-career/SquadTile.tsx');
+export const sheetUi = await import('${ROOT_URL}/src/components/soccer-career/SquadSheet.tsx');
+import React from '${NM}/react/index.js';
+import { renderToStaticMarkup } from '${NM}/react-dom/server.node.js';
+export const render = (Component, props) => renderToStaticMarkup(React.createElement(Component, props));
 `);
 const built = await build({
   entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', jsx: 'automatic', write: false,
@@ -302,7 +312,7 @@ function scan(mods, R) {
     const xi = [...v.eleven.GK, ...v.eleven.DEF, ...v.eleven.MID, ...v.eleven.ATT];
     const all = [...xi, ...v.bench];
     const men = all.filter(m => !m.me);
-    if (v.eleven.GK.length !== gen.ELEVEN_SHAPE.GK || v.eleven.DEF.length !== 4 || v.eleven.MID.length !== 3 || v.eleven.ATT.length !== 3) { C.shapeBad += 1; note('shape', `${v.club} ${v.year}`); }
+    if (v.eleven.GK.length !== 1 || v.eleven.DEF.length !== 4 || v.eleven.MID.length !== 3 || v.eleven.ATT.length !== 3) { C.shapeBad += 1; note('shape', `${v.club} ${v.year}`); }
     if (all.filter(m => m.me).length !== 1) C.onceBad += 1;
     if (new Set(men.map(m => m.name)).size !== men.length) { C.twice += 1; note('twice', `${v.club} ${v.year}`); }
     /* 5: real, by role or invented, and never one passed off as another */
@@ -395,24 +405,24 @@ const FLOORS = {
   age30Min: null,                         // rows played at 30 or over
 };
 /* FLOORS-END */
-const floor = (name, value, ok, text) => {
-  if (QUICK || FLOORS[name] === null) { console.log(`   (not asserted) ${text}`); return; }
-  check(name, ok(FLOORS[name], value), `${text}, the line is ${FLOORS[name]}`);
+const floor = (section, name, value, ok, text) => {
+  if (QUICK || FLOORS[name] === null) { say(`   (not asserted) ${text}`); return; }
+  check(section, ok(FLOORS[name], value), `${text}, the line is ${FLOORS[name]}`);
 };
 
 function sec1(mods) {
-  console.log('1. Names');
+  say('1. Names');
   const { intl, gen, engine } = mods;
   const real = realNameSet(mods);
   const pool = intl.allIntlNames();
   const shared = pool.filter(n => real.has(n));
-  console.log(`   ${pool.length} names the generator can show against ${real.size} real names: ${shared.length} shared`);
+  say(`   ${pool.length} names the generator can show against ${real.size} real names: ${shared.length} shared`);
   check('1', pool.length >= 4000 && real.size >= 2000, 'the name pool or the real name set is smaller than it has ever been');
   check('1', shared.length === 0, `invented names that belong to real players: ${shared.slice(0, 5).join(', ')}`);
   check('1', new Set(pool).size === pool.length, 'the name pool holds the same name twice, so two families could put one name in a squad');
   const countries = [...new Set(engine.FALLBACK_CLUBS.map(c => c.country))];
   const lost = countries.filter(c => gen.familyIdFor(c) === null);
-  console.log(`   ${countries.length} club countries, ${countries.filter(c => gen.FAMILY_ALIAS[c]).length} by alias, ${lost.length} with no name family`);
+  say(`   ${countries.length} club countries, ${countries.filter(c => gen.FAMILY_ALIAS[c]).length} by alias, ${lost.length} with no name family`);
   check('1', countries.length >= 50, 'fewer than 50 club countries were read');
   check('1', lost.length === 0, `club countries with no name family (add a FAMILY_ALIAS line): ${lost.join(', ')}`);
   const foreign = gen.FOREIGN_NATIONS.filter(n => !intl.NATION_FAMILY[n]);
@@ -420,7 +430,7 @@ function sec1(mods) {
 }
 
 function sec2(mods) {
-  console.log('2. The two copies');
+  say('2. The two copies');
   const { gen, engine, international, lib } = mods;
   const got = [];
   for (const tier of [1, 2, 3, 4, 5]) {
@@ -429,20 +439,20 @@ function sec2(mods) {
     got.push(r + 5);
     check('2', gen.squadCentre(tier) === r + 5, `tier ${tier}: the squad level here is ${gen.squadCentre(tier)} and the engine's is ${r + 5}`);
   }
-  console.log(`   squad level by tier, from the engine's own projection: ${got.join(', ')}`);
+  say(`   squad level by tier, from the engine's own projection: ${got.join(', ')}`);
   seedRandom(7);
   const xi = international.xiMen(international.pickSquad('England', null, 2040).xi);
   Math.random = realRandom;
   const lines = { GK: 0, DEF: 0, MID: 0, ATT: 0 };
   for (const m of xi) lines[lib.groupOf(m.slot)] += 1;
-  console.log(`   the national eleven: ${JSON.stringify(lines)}`);
+  say(`   the national eleven: ${JSON.stringify(lines)}`);
   check('2', xi.length === 11, `the national eleven has ${xi.length} men`);
   for (const g of Object.keys(lines)) check('2', gen.ELEVEN_SHAPE[g] === lines[g], `the ${g} line is ${gen.ELEVEN_SHAPE[g]} here and ${lines[g]} on the national sheet`);
   check('2', mods.data.CLUB_SQUAD_YEARS.first === WINDOW.first && mods.data.CLUB_SQUAD_YEARS.last === WINDOW.last, 'the baked window moved: this harness holds 2016 to 2026');
 }
 
 function sec3(R, S) {
-  console.log('3. The fleet');
+  say('3. The fleet');
   for (let e = 0; e < ERAS.length; e += 1) {
     const n = { real: 0, roles: 0, invented: 0, mixed: 0, none: 0 };
     R.seasons.forEach((rec, i) => {
@@ -451,22 +461,22 @@ function sec3(R, S) {
       if (!s) n.none += 1; else if (s.source === 'invented' && s.carried > 0) n.mixed += 1; else n[s.source] += 1;
     });
     const total = n.real + n.roles + n.invented + n.mixed + n.none;
-    console.log(`   ${ERAS[e][0].padEnd(8)} ${String(total).padStart(5)} pro seasons: real ${n.real}, by role ${n.roles}, invented ${n.invented}, invented with real men still there ${n.mixed}, none ${n.none}`);
+    say(`   ${ERAS[e][0].padEnd(8)} ${String(total).padStart(5)} pro seasons: real ${n.real}, by role ${n.roles}, invented ${n.invented}, invented with real men still there ${n.mixed}, none ${n.none}`);
     check('3', total >= SIZE * 4, `era ${ERAS[e][0]} recorded only ${total} pro seasons`);
   }
   const ended = Object.entries(R.unknown);
-  console.log(`   ${R.careers} careers, ${R.seasons.length} seasons, recording ${(R.bytes / 1e6).toFixed(1)} MB, slim save proven on ${R.proven}; careers ended on an unknown phase: ${ended.length ? ended.map(([k, v]) => `${k} ${v}`).join(', ') : 'none'}`);
+  say(`   ${R.careers} careers, ${R.seasons.length} seasons, recording ${(R.bytes / 1e6).toFixed(1)} MB, slim save proven on ${R.proven}; careers ended on an unknown phase: ${ended.length ? ended.map(([k, v]) => `${k} ${v}`).join(', ') : 'none'}`);
   check('3', R.bytes / 1e6 < 300, `the recording is ${(R.bytes / 1e6).toFixed(0)} MB`);
   check('3', R.proven >= Math.min(300, R.seasons.length), `the slim save was proven on only ${R.proven} seasons`);
   const old = R.seasons.filter(r => r.after && r.age >= 30).length;
   const bands = [[16, 21], [22, 25], [26, 29], [30, 33], [34, 40]].map(([a, b]) => `${a} to ${b}: ${R.seasons.filter(r => r.after && r.age >= a && r.age <= b).length}`);
-  console.log(`   played rows by age going in: ${bands.join(', ')}`);
-  floor('age30Min', old, (line, v) => v >= line, `${old} rows played at 30 or over`);
+  say(`   played rows by age going in: ${bands.join(', ')}`);
+  floor('3', 'age30Min', old, (line, v) => v >= line, `${old} rows played at 30 or over`);
 }
 
 function sec4(C) {
-  console.log('4. Shape');
-  console.log(`   ${C.seasons} seasons, ${C.noView} with no view, ${C.squads} squads that are not real; bad shape ${C.shapeBad}, not once ${C.onceBad}, wrong size ${C.sizeBad}, a name twice ${C.twice}, rating out of range ${C.ratingBad}, age out of range ${C.ageBad}`);
+  say('4. Shape');
+  say(`   ${C.seasons} seasons, ${C.noView} with no view, ${C.squads} squads that are not real; bad shape ${C.shapeBad}, not once ${C.onceBad}, wrong size ${C.sizeBad}, a name twice ${C.twice}, rating out of range ${C.ratingBad}, age out of range ${C.ageBad}`);
   check('4', C.seasons >= SIZE * 30, `only ${C.seasons} seasons were read`);
   check('4', C.noView === 0, `${C.noView} pro seasons had no squad to show`);
   check('4', C.shapeBad === 0, `${C.shapeBad} elevens are not 1, 4, 3 and 3`);
@@ -477,8 +487,8 @@ function sec4(C) {
 }
 
 function sec5(C) {
-  console.log('5. Real, by role or invented, never one passed off as another');
-  console.log(`   ${C.realChecked} real squads, ${C.realExact} exactly the baked one; wrong source ${C.srcBad}; a role sheet with a name on it ${C.rolesNamed}; an invented man with a real name ${C.inventedReal}; a real man who was not in the club's last real squad ${C.carriedStranger}; ${C.familyChecked} invented men checked against their name family, ${C.familyBad} outside it`);
+  say('5. Real, by role or invented, never one passed off as another');
+  say(`   ${C.realChecked} real squads, ${C.realExact} exactly the baked one; wrong source ${C.srcBad}; a role sheet with a name on it ${C.rolesNamed}; an invented man with a real name ${C.inventedReal}; a real man who was not in the club's last real squad ${C.carriedStranger}; ${C.familyChecked} invented men checked against their name family, ${C.familyBad} outside it`);
   check('5', C.realChecked >= 50 && C.familyChecked >= 1000, 'too few real squads or invented men were read to mean anything');
   check('5', C.realExact === C.realChecked, `${C.realChecked - C.realExact} real squads are not exactly the baked squad`);
   check('5', C.srcBad === 0, `${C.srcBad} squads carry the wrong source`);
@@ -506,14 +516,14 @@ function clubYears(mods, R, limit) {
 }
 
 async function sec6(mods, R, C, text) {
-  console.log('6. The same every time, and keyed to the save');
+  say('6. The same every time, and keyed to the save');
   const other = await load(text);
   const asked = clubYears(mods, R, 2500);
   let differ = 0;
   for (const q of asked) {
     if (JSON.stringify(mods.lib.livingSquad(q.key, q.at)) !== JSON.stringify(other.lib.livingSquad(q.key, q.at))) differ += 1;
   }
-  console.log(`   6a ${asked.length} club years asked of two separately loaded copies: ${differ} differ`);
+  say(`   6a ${asked.length} club years asked of two separately loaded copies: ${differ} differ`);
   check('6a', asked.length >= Math.min(2000, SIZE * 40), `only ${asked.length} club years were asked`);
   check('6a', differ === 0, `${differ} squads differ between two copies of the same code`);
   let round = 0; let roundBad = 0;
@@ -522,9 +532,9 @@ async function sec6(mods, R, C, text) {
     round += 1;
     if (JSON.stringify(mods.lib.squadView(s)) !== JSON.stringify(mods.lib.squadView(JSON.parse(JSON.stringify(s))))) roundBad += 1;
   }
-  console.log(`   6b ${round} saves through JSON and back: ${roundBad} read differently`);
+  say(`   6b ${round} saves through JSON and back: ${roundBad} read differently`);
   check('6b', round >= 100 && roundBad === 0, `${roundBad} of ${round} saves read differently after a JSON round trip`);
-  console.log(`   6c Math.random drawn ${C.randomDraws} times inside the readers over ${C.seasons} seasons`);
+  say(`   6c Math.random drawn ${C.randomDraws} times inside the readers over ${C.seasons} seasons`);
   check('6c', C.randomDraws === 0, `the readers drew from Math.random ${C.randomDraws} times`);
   let pairs = 0; let same = 0;
   for (const q of asked) {
@@ -535,7 +545,7 @@ async function sec6(mods, R, C, text) {
     if (a === b) same += 1;
     if (pairs >= 800) break;
   }
-  console.log(`   6d ${pairs} pairs of different saves at the same club and season: ${same} got the same squad`);
+  say(`   6d ${pairs} pairs of different saves at the same club and season: ${same} got the same squad`);
   check('6d', pairs >= Math.min(500, SIZE * 10), `only ${pairs} pairs were compared`);
   check('6d', same === 0, `${same} pairs of different saves share a squad`);
   /* 6e: the nation on the save is not part of the key */
@@ -545,23 +555,23 @@ async function sec6(mods, R, C, text) {
     swapped += 1;
     if (JSON.stringify(mods.lib.squadView(s)) !== JSON.stringify(mods.lib.squadView({ ...s, nationality: s.nationality === 'Ghana' ? 'Peru' : 'Ghana' }))) moved += 1;
   }
-  console.log(`   6e ${swapped} saves with the nation swapped: ${moved} read differently`);
+  say(`   6e ${swapped} saves with the nation swapped: ${moved} read differently`);
   check('6e', swapped >= 100 && moved === 0, `${moved} of ${swapped} saves got a new squad when only the nation changed`);
 }
 
 function sec7(C) {
-  console.log('7. Ageing and turnover');
+  say('7. Ageing and turnover');
   const m = mean(C.arrivals);
-  console.log(`   ${C.pairs} summers at one club, ${C.carriedOver} men carried over, ${C.brokeMan} broke "same man, one year older", ${C.arrivedBad} arrivals dated wrong; arrivals a summer ${f1(m)} over ${C.arrivals.length} summers (${C.noArrival} with none)`);
+  say(`   ${C.pairs} summers at one club, ${C.carriedOver} men carried over, ${C.brokeMan} broke "same man, one year older", ${C.arrivedBad} arrivals dated wrong; arrivals a summer ${f1(m)} over ${C.arrivals.length} summers (${C.noArrival} with none)`);
   check('7', C.pairs >= SIZE * 10 && C.carriedOver >= SIZE * 150, `too few summers (${C.pairs}) or men (${C.carriedOver}) to mean anything`);
   check('7', C.brokeMan === 0, `${C.brokeMan} men changed name, nation, position or did not age one year`);
   check('7', C.arrivedBad === 0, `${C.arrivedBad} new men are not dated to the summer they arrived`);
-  floor('arrivalsMin', m, (line, v) => v >= line, `mean arrivals a summer ${f1(m)}`);
-  floor('arrivalsMax', m, (line, v) => v <= line, `mean arrivals a summer ${f1(m)}`);
+  floor('7', 'arrivalsMin', m, (line, v) => v >= line, `mean arrivals a summer ${f1(m)}`);
+  floor('7', 'arrivalsMax', m, (line, v) => v <= line, `mean arrivals a summer ${f1(m)}`);
   const share = C.moves ? C.sameSlotName / C.moves : NaN;
-  console.log(`   ${C.moves} moves between two invented squads: ${C.sameSlotName} (${f1(share * 100)}%) meet a man with the same name in the same slot, ${C.anyShared} share any name`);
+  say(`   ${C.moves} moves between two invented squads: ${C.sameSlotName} (${f1(share * 100)}%) meet a man with the same name in the same slot, ${C.anyShared} share any name`);
   if (!QUICK) check('7', C.moves >= 200, `only ${C.moves} moves between invented squads`);
-  floor('sameSlotMax', share, (line, v) => v <= line, `share of moves meeting a namesake in the same slot ${f1(share * 100)}%`);
+  floor('7', 'sameSlotMax', share, (line, v) => v <= line, `share of moves meeting a namesake in the same slot ${f1(share * 100)}%`);
 }
 
 const armOf = s => (s.source === 'real' ? 'real' : s.source === 'invented' && s.carried > 0 ? 'mixed' : 'made');
@@ -572,68 +582,68 @@ function rows(R, S, keep) {
 }
 
 function sec8(R, S) {
-  console.log('8. Rank tracks the games the engine hands out');
+  say('8. Rank tracks the games the engine hands out');
   for (let e = 0; e < ERAS.length; e += 1) {
     const first = rows(R, S, (s, rec) => rec.era === e && armOf(s) === 'made' && s.rank === 1);
     const third = rows(R, S, (s, rec) => rec.era === e && armOf(s) === 'made' && s.rank === 3);
     const gap = mean(first.map(r => r.apps)) - mean(third.map(r => r.apps));
-    console.log(`   ${ERAS[e][0].padEnd(8)} ranked 1st ${f1(mean(first.map(r => r.apps)))} (n ${first.length}), 3rd ${f1(mean(third.map(r => r.apps)))} (n ${third.length}), gap ${f1(gap)}`);
+    say(`   ${ERAS[e][0].padEnd(8)} ranked 1st ${f1(mean(first.map(r => r.apps)))} (n ${first.length}), 3rd ${f1(mean(third.map(r => r.apps)))} (n ${third.length}), gap ${f1(gap)}`);
     if (!QUICK) check('8', first.length >= 100 && third.length >= 100, `era ${ERAS[e][0]}: a bucket under 100 (${first.length}, ${third.length})`);
-    floor('gap13', gap, (line, v) => v >= line, `era ${ERAS[e][0]} gap 1st minus 3rd ${f1(gap)}`);
+    floor('8', 'gap13', gap, (line, v) => v >= line, `era ${ERAS[e][0]} gap 1st minus 3rd ${f1(gap)}`);
   }
   const inXi = rows(R, S, s => armOf(s) === 'made' && s.inXi);
   const out = rows(R, S, s => armOf(s) === 'made' && !s.inXi);
   const gapBench = mean(inXi.map(r => r.apps)) - mean(out.map(r => r.apps));
-  console.log(`   pooled, squads the game made: in the eleven on rating ${f1(mean(inXi.map(r => r.apps)))} (n ${inXi.length}), outside it ${f1(mean(out.map(r => r.apps)))} (n ${out.length}), gap ${f1(gapBench)}`);
+  say(`   pooled, squads the game made: in the eleven on rating ${f1(mean(inXi.map(r => r.apps)))} (n ${inXi.length}), outside it ${f1(mean(out.map(r => r.apps)))} (n ${out.length}), gap ${f1(gapBench)}`);
   if (!QUICK) check('8', inXi.length >= 100 && out.length >= 100, `a pooled bucket under 100 (${inXi.length}, ${out.length})`);
-  floor('gapBench', gapBench, (line, v) => v >= line, `pooled gap, eleven minus the rest ${f1(gapBench)}`);
+  floor('8', 'gapBench', gapBench, (line, v) => v >= line, `pooled gap, eleven minus the rest ${f1(gapBench)}`);
   const r1 = rows(R, S, s => armOf(s) === 'real' && s.rank === 1);
   const r3 = rows(R, S, s => armOf(s) === 'real' && s.rank === 3);
   const gapReal = mean(r1.map(r => r.apps)) - mean(r3.map(r => r.apps));
-  console.log(`   real squads, pooled: ranked 1st ${f1(mean(r1.map(r => r.apps)))} (n ${r1.length}), 3rd ${f1(mean(r3.map(r => r.apps)))} (n ${r3.length}), gap ${f1(gapReal)}`);
+  say(`   real squads, pooled: ranked 1st ${f1(mean(r1.map(r => r.apps)))} (n ${r1.length}), 3rd ${f1(mean(r3.map(r => r.apps)))} (n ${r3.length}), gap ${f1(gapReal)}`);
   if (!QUICK) check('8', r1.length >= 200 && r3.length >= 200, `a real squad bucket under 200 (${r1.length}, ${r3.length})`);
-  floor('gap13Real', gapReal, (line, v) => v >= line, `real squads gap 1st minus 3rd ${f1(gapReal)}`);
+  floor('8', 'gap13Real', gapReal, (line, v) => v >= line, `real squads gap 1st minus 3rd ${f1(gapReal)}`);
 }
 
 function sec8b(R, S) {
-  console.log('8b. Two pictures: where rating puts him, and the plan');
+  say('8b. Two pictures: where rating puts him, and the plan');
   for (const arm of ['made', 'mixed', 'real']) {
     const all = rows(R, S, s => armOf(s) === arm && !s.frozen);
     const off = all.filter(r => r.s.inXi !== r.s.inPlans);
     const benchPlan = all.filter(r => !r.s.inXi && r.s.inPlans).length;
     const share = all.length ? off.length / all.length : NaN;
-    console.log(`   ${arm.padEnd(5)} ${all.length} seasons, the two disagree in ${off.length} (${f1(share * 100)}%); outside the eleven on rating but in the plans ${benchPlan}`);
+    say(`   ${arm.padEnd(5)} ${all.length} seasons, the two disagree in ${off.length} (${f1(share * 100)}%); outside the eleven on rating but in the plans ${benchPlan}`);
     if (arm === 'made') {
       if (!QUICK) check('8b', all.length >= 300, `only ${all.length} seasons in squads the game made`);
-      floor('disagreeMax', share, (line, v) => v <= line, `rating and plan disagree in ${f1(share * 100)}% of the seasons in squads the game made`);
+      floor('8b', 'disagreeMax', share, (line, v) => v <= line, `rating and plan disagree in ${f1(share * 100)}% of the seasons in squads the game made`);
     }
   }
 }
 
 function sec9(R, S) {
-  console.log('9. Trust is the engine\'s own expectation');
+  say('9. Trust is the engine\'s own expectation');
   const all = rows(R, S, () => true);
   const off = mean(all.map(r => r.apps - r.s.expected));
-  console.log(`   ${all.length} played seasons: league games minus the plan, mean ${f1(off)}`);
+  say(`   ${all.length} played seasons: league games minus the plan, mean ${f1(off)}`);
   check('9', all.length >= SIZE * 20, `only ${all.length} played seasons`);
-  floor('trustTol', off, (line, v) => Math.abs(v) <= line, `mean of league games minus the plan ${f1(off)}`);
+  floor('9', 'trustTol', off, (line, v) => Math.abs(v) <= line, `mean of league games minus the plan ${f1(off)}`);
   const labels = [...new Set(all.map(r => r.s.label))].sort();
   for (const label of labels) {
     const mine = all.filter(r => r.s.label === label);
     const m = mean(mine.map(r => r.apps - r.s.expected));
     const asserted = mine.length >= 200;
-    console.log(`   ${label.padEnd(30)} n ${String(mine.length).padStart(6)}  mean ${f1(m)}${asserted ? '' : '  (printed only: under 200)'}`);
-    if (asserted) floor('labelTol', m, (line, v) => Math.abs(v) <= line, `"${label}": league games minus the plan ${f1(m)}`);
+    say(`   ${label.padEnd(30)} n ${String(mine.length).padStart(6)}  mean ${f1(m)}${asserted ? '' : '  (printed only: under 200)'}`);
+    if (asserted) floor('9', 'labelTol', m, (line, v) => Math.abs(v) <= line, `"${label}": league games minus the plan ${f1(m)}`);
   }
   const swings = {};
   for (const r of all) swings[r.s.swing] = (swings[r.s.swing] || 0) + 1;
-  console.log(`   dressing room swings the fleet saw: ${JSON.stringify(swings)}`);
+  say(`   dressing room swings the fleet saw: ${JSON.stringify(swings)}`);
 }
 
 const UNDER = 'rating points under the level that squad expects';
 const FALLBACK = 'Nothing in your record explains it beyond selection';
 function sec10(R, S) {
-  console.log('10. The reasons for a thin season');
+  say('10. The reasons for a thin season');
   const seen = S.filter(s => s && s.last).map(s => s.last);
   const thin = seen.filter(l => l.thin);
   const none = thin.filter(l => l.lines.length === 0).length;
@@ -642,27 +652,27 @@ function sec10(R, S) {
   const without = seen.filter(l => !l.lines.some(x => x.includes(UNDER)));
   const gap = mean(without.map(l => l.leagueApps)) - mean(withLine.map(l => l.leagueApps));
   const shirtFull = seen.filter(l => !l.thin && l.lines.some(x => x.includes('last one in ahead of you'))).length;
-  console.log(`   ${seen.length} last seasons read, ${thin.length} under 20 league games: ${none} with no line, ${only} (${f1(100 * only / Math.max(1, thin.length))}%) with only the fallback`);
-  console.log(`   "under the level" line: ${f1(mean(withLine.map(l => l.leagueApps)))} league games with it (n ${withLine.length}), ${f1(mean(without.map(l => l.leagueApps)))} without (n ${without.length}), gap ${f1(gap)}`);
+  say(`   ${seen.length} last seasons read, ${thin.length} under 20 league games: ${none} with no line, ${only} (${f1(100 * only / Math.max(1, thin.length))}%) with only the fallback`);
+  say(`   "under the level" line: ${f1(mean(withLine.map(l => l.leagueApps)))} league games with it (n ${withLine.length}), ${f1(mean(without.map(l => l.leagueApps)))} without (n ${without.length}), gap ${f1(gap)}`);
   check('10', thin.length >= SIZE * 4, `only ${thin.length} thin seasons were read`);
   check('10', none === 0, `${none} thin seasons got no line at all`);
   check('10', shirtFull === 0, `${shirtFull} seasons of 20 or more league games print the "last one in" line`);
-  floor('fallbackMax', only / Math.max(1, thin.length), (line, v) => v <= line, `share of thin seasons with only the fallback ${f1(100 * only / Math.max(1, thin.length))}%`);
-  floor('underGap', gap, (line, v) => v >= line, `seasons with the "under the level" line play ${f1(gap)} fewer league games`);
+  floor('10', 'fallbackMax', only / Math.max(1, thin.length), (line, v) => v <= line, `share of thin seasons with only the fallback ${f1(100 * only / Math.max(1, thin.length))}%`);
+  floor('10', 'underGap', gap, (line, v) => v >= line, `seasons with the "under the level" line play ${f1(gap)} fewer league games`);
 }
 
 function sec11(R) {
-  console.log('11. Offers');
+  say('11. Offers');
   const bad = R.offers.filter(o => !o || !(o[0] >= 1 && o[0] <= o[1])).length;
   const by = {};
   for (const o of R.offers) if (o) by[o[2]] = (by[o[2]] || 0) + 1;
-  console.log(`   ${R.offers.length} offers shown to the fleet, ${bad} without a rank inside the group: ${JSON.stringify(by)}`);
+  say(`   ${R.offers.length} offers shown to the fleet, ${bad} without a rank inside the group: ${JSON.stringify(by)}`);
   check('11', R.offers.length >= SIZE * 20, `only ${R.offers.length} offers were seen`);
   check('11', bad === 0, `${bad} offers did not resolve to a rank from 1 to the group size`);
 }
 
 function sec12(mods) {
-  console.log('12. It changes nothing');
+  say('12. It changes nothing');
   const size = Math.min(60, SIZE);
   const play = consult => {
     const saves = [];
@@ -685,10 +695,159 @@ function sec12(mods) {
   let drift = 0;
   for (let i = 0; i < plain.saves.length; i += 1) if (plain.saves[i] !== consulted.saves[i]) drift += 1;
   const deep = plain.lens.filter(n => n > 4).length;
-  console.log(`   ${plain.saves.length} careers played twice from one seed, ${deep} past four seasons: ${drift} final saves differ`);
+  say(`   ${plain.saves.length} careers played twice from one seed, ${deep} past four seasons: ${drift} final saves differ`);
   check('12', plain.saves.length === size * ERAS.length && consulted.saves.length === plain.saves.length, 'the two fleets are not the same size');
   check('12', deep >= Math.floor(plain.saves.length / 3), `only ${deep} careers ran past four seasons`);
   check('12', drift === 0, `${drift} careers saved differently once the squad was consulted`);
+}
+
+/* ── 13: the screens ────────────────────────────────────────────────────── */
+const SCREENS = ['home', 'eleven', 'bench', 'place', 'last', 'help', 'examples'];
+const unescape = t => t.replaceAll('&#x27;', "'").replaceAll('&quot;', '"').replaceAll('&amp;', '&').replaceAll('&lt;', '<').replaceAll('&gt;', '>');
+const textOf = html => unescape(html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' '));
+/** The text of every element carrying a data attribute, e.g. data-squad-headline. */
+function texts(html, attr) {
+  const out = [];
+  const re = new RegExp(`<[a-z0-9]+[^>]*\\s${attr}(?:="[^"]*")?[^>]*>(.*?)</`, 'g');
+  let m;
+  while ((m = re.exec(html))) out.push(textOf(m[1]));
+  return out;
+}
+const RATING_WORDS = /last one in|last of the|in line|inside the eleven|are in it|is above you/;
+
+function sec13(mods, R, S) {
+  say('13. The screens');
+  const { lib, sheet, tile, sheetUi, render, engine, intl } = mods;
+  const firstOf = keep => { const i = S.findIndex((s, k) => s && keep(s, R.seasons[k])); return i < 0 ? null : rebuild(R.seasons[i], R); };
+  const saves = {
+    invented: firstOf(s => s.source === 'invented' && s.carried === 0 && s.last),
+    real: firstOf(s => s.source === 'real' && s.last),
+    roles: firstOf(s => s.source === 'roles' && s.last),
+    mixed: firstOf(s => s.source === 'invented' && s.carried > 0),
+  };
+  const youth = engine.initCareer('Squad Youth', 'England', 'ST', '2025', stats(55), 55, 2025, engine.FALLBACK_CLUBS, null);
+  check('13', render(tile.SquadTile, { career: youth }) === '', 'an academy save renders a tile');
+  const pool = intl.allIntlNames();
+  const real = realNameSet(mods);
+  for (const [kind, save] of Object.entries(saves)) {
+    if (!check('13', !!save, `the fleet has no ${kind} season to render`)) continue;
+    const view = lib.squadView(save);
+    const html = render(tile.SquadTile, { career: save });
+    check('13', html.includes(`data-squad-rank="${view.rank}"`) && html.includes(`data-squad-trust="${view.trust.pct}"`) && html.includes('data-squad-tile'),
+      `${kind}: the tile does not print the rank ${view.rank} and trust ${view.trust.pct} the lib gives`);
+    check('13', !/text-\[(?:9|10|11)px\]/.test(html), `${kind}: the tile has text under 12 px`);
+    let all = '';
+    for (const screen of SCREENS) {
+      const out = render(sheetUi.default, { career: save, view, onClose: () => {}, initialScreen: screen });
+      all += out;
+      const wanted = screen === 'last' && !sheet.lastSeason(save) ? 'help' : screen;
+      check('13', out.includes(`data-squad-screen="${wanted}"`) && out.includes(`data-squad-source="${view.source}"`), `${kind}: the ${screen} screen did not render with its source chip`);
+      check('13', !/text-\[(?:9|10|11)px\]/.test(out), `${kind}: the ${screen} screen has text under 12 px`);
+      if (screen === 'eleven') check('13', (out.match(/data-squad-man=/g) || []).length === 11 && (out.match(/data-squad-man="me"/g) || []).length === (view.inElevenOnRating ? 1 : 0), `${kind}: the eleven is not 11 cells with him in it exactly when his rank says so`);
+      if (screen === 'bench') check('13', (out.match(/data-squad-man=/g) || []).length === view.bench.length, `${kind}: the bench does not list its ${view.bench.length} men`);
+    }
+    const txt = textOf(all);
+    if (kind === 'real') {
+      check('13', !all.includes('data-squad-age') && !all.includes('data-squad-new') && !all.includes('data-squad-arrival') && !all.includes('flagcdn'), 'a real squad prints an age, a NEW chip, a flag or an arrival line');
+      check('13', all.includes('REAL SQUAD'), 'a real squad is not labelled REAL SQUAD');
+    }
+    if (kind === 'roles') {
+      const named = pool.filter(n => txt.includes(n)).length + [...real].filter(n => n.length > 5 && txt.includes(n)).length;
+      check('13', named === 0, `a sheet by role prints ${named} names`);
+      check('13', all.includes('ROLES ONLY') && all.includes('data-squad-age') && txt.includes('no checked squad list'), 'a sheet by role does not say so, or prints no ages');
+    }
+    if (kind === 'invented') check('13', all.includes('INVENTED TEAMMATES') && all.includes('data-squad-age'), 'an invented squad is not labelled, or prints no ages');
+    if (kind === 'mixed') check('13', txt.includes('of the real 2026 squad are still here'), 'a squad that carries real men on does not say so');
+    const help = sheet.squadHelp();
+    for (const line of [...help.rules, ...help.examples]) check('13', txt.includes(line), `${kind}: the help does not print "${line.slice(0, 50)}..."`);
+  }
+  /* Two pictures, named every time: no sentence about the eleven or the last
+     shirt without the words "our ratings", over 300 seasons an arm. */
+  const seen = { made: 0, mixed: 0, real: 0 };
+  let sentences = 0; let bare = 0;
+  for (let i = 0; i < R.seasons.length; i += 1) {
+    const s = S[i];
+    if (!s) continue;
+    const arm = armOf(s);
+    if (seen[arm] >= 300) continue;
+    seen[arm] += 1;
+    const save = rebuild(R.seasons[i], R);
+    const view = lib.squadView(save);
+    let html = '';
+    for (const screen of ['home', 'eleven', 'last']) html += render(sheetUi.default, { career: save, view, onClose: () => {}, initialScreen: screen });
+    for (const attr of ['data-squad-headline', 'data-squad-xi-line', 'data-squad-reason']) {
+      for (const t of texts(html, attr)) {
+        if (!RATING_WORDS.test(t)) continue;
+        sentences += 1;
+        if (!/our ratings/i.test(t)) { bare += 1; if (bare <= 3) say(`   bare: ${t}`); }
+      }
+    }
+  }
+  say(`   rendered ${seen.made} + ${seen.mixed} + ${seen.real} seasons (made, mixed, real): ${sentences} sentences about the eleven or the last shirt, ${bare} without "our ratings"`);
+  if (!QUICK) check('13', seen.made >= 300 && seen.real >= 300, `fewer than 300 seasons rendered in an arm (${JSON.stringify(seen)})`);
+  check('13', sentences >= seen.made + seen.real, `only ${sentences} rating sentences were found, so the search is missing them`);
+  check('13', bare === 0, `${bare} sentences about the eleven or the last shirt do not say "our ratings"`);
+}
+
+/* ── 14: negative controls ──────────────────────────────────────────────── */
+/* Each patches the BUNDLE text, never a source file, on ONE line that must be
+   found exactly once, reads the same recording again and must turn its own
+   section red. `floors: true` marks a control judged on a measured line, which
+   the quick loop cannot run. */
+const CONTROLS = [
+  { name: 'widen', red: ['5'], what: 'the last baked squad is served for every later year',
+    needle: 'if (year < CLUB_SQUAD_YEARS.first || year > CLUB_SQUAD_YEARS.last) return null;',
+    swap: 'if (year > CLUB_SQUAD_YEARS.last) year = CLUB_SQUAD_YEARS.last; if (year < CLUB_SQUAD_YEARS.first) return null;' },
+  { name: 'names', red: ['5'], what: 'a real past season with no checked squad gets invented names',
+    needle: 'men: genClubSquad({ ...q, named: false }) };', swap: 'men: genClubSquad({ ...q, named: true }) };' },
+  { name: 'unkey', red: ['6a', '6c'], what: 'the generator draws from Math.random',
+    needle: 'stream = (key) => keyedRng(`squad|${key}`);', swap: 'stream = (key) => Math.random;' },
+  { name: 'shared', red: ['6d'], what: 'the squad is keyed to the club only',
+    needle: 'const seed = `${q.saveKey}|${q.club}`;', swap: 'const seed = `${q.club}`;' },
+  { name: 'nation', red: ['6e'], what: 'the nation is back in the key',
+    needle: 'return [c.playerName, c.position, first?.year, first?.club].join("|");',
+    swap: 'return [c.playerName, c.nationality, c.position, first?.year, first?.club].join("|");' },
+  { name: 'noage', red: ['7'], what: 'nobody gets older',
+    needle: 'const age = arrival + (y - start);', swap: 'const age = arrival;' },
+  { name: 'nokeeper', red: ['4'], what: 'the eleven has no keeper',
+    needle: 'ELEVEN_SHAPE = { GK: 1, DEF: 4, MID: 3, ATT: 3 };', swap: 'ELEVEN_SHAPE = { GK: 0, DEF: 4, MID: 3, ATT: 3 };' },
+  { name: 'invert', red: ['8'], floors: true, what: 'men rated at or below him count as ahead',
+    needle: 'const ahead = rivals.filter((m) => m.ovr >= me.ovr).length;', swap: 'const ahead = rivals.filter((m) => m.ovr <= me.ovr).length;' },
+  { name: 'jitter', red: ['8b'], floors: true, what: 'the last starter is rated like any other starter',
+    needle: 'const fitted = LAST_STARTER_SLOTS.includes(i) ? centre - LAST_STARTER_UNDER :', swap: 'const fitted = false ? centre - LAST_STARTER_UNDER :' },
+  { name: 'noswing', red: ['9'], floors: true, what: 'trust ignores the dressing room',
+    needle: 'const swing = phoneAppsSwing(c);', swap: 'const swing = 0;' },
+  { name: 'bare', red: ['13'], what: 'the headline drops the words "on our ratings"',
+    needle: 'const place = `On our ratings you are ${ordinal(view.rank)} of ${view.groupSize} ${label}`;',
+    swap: 'const place = `You are ${ordinal(view.rank)} of ${view.groupSize} ${label}`;' },
+];
+
+async function sec14(R, text) {
+  console.log('14. Negative controls');
+  for (const c of CONTROLS) {
+    if (ONLY_CONTROL && ONLY_CONTROL !== c.name) continue;
+    const found = text.split(c.needle).length - 1;
+    if (found !== 1) {
+      console.log(`control cannot run: ${c.name}: its needle is in the bundle ${found} times, not once`);
+      check('14', false, `control ${c.name} cannot run`);
+      continue;
+    }
+    if (c.floors && (QUICK || Object.values(FLOORS).some(v => v === null))) {
+      console.log(`   ${c.name.padEnd(9)} skipped: it is judged on a measured line, and the lines are not asserted in this run`);
+      continue;
+    }
+    const patched = text.replace(c.needle, c.swap);
+    const mods = await load(patched);
+    sink = new Set();
+    const { S, C } = scan(mods, R);
+    sec2(mods); sec4(C); sec5(C); await sec6(mods, R, C, patched); sec7(C); sec8(R, S); sec8b(R, S); sec9(R, S); sec10(R, S);
+    if (c.red.includes('13')) sec13(mods, R, S);
+    const red = [...sink];
+    sink = null;
+    const hit = c.red.every(sec => red.includes(sec));
+    console.log(`   ${c.name.padEnd(9)} ${c.what}: red in ${red.length ? red.join(', ') : 'nothing'} (must be red in ${c.red.join(' and ')})`);
+    check('14', hit, `control ${c.name} did not turn section ${c.red.join(' and ')} red`);
+  }
 }
 
 /* ── run ────────────────────────────────────────────────────────────────── */
@@ -711,7 +870,8 @@ sec9(R, S);
 sec10(R, S);
 sec11(R);
 sec12(MAIN);
-/* SECTIONS-13-14 */
+sec13(MAIN, R, S);
+if (process.env.CAREER_SQUAD_NO_CONTROLS !== '1') await sec14(R, BUNDLE);
 console.log(`   (${((Date.now() - t0) / 1000).toFixed(0)} s, work folder ${WORK})`);
 if (failed) for (const f of failures.slice(0, 20)) console.log(`FAILED ${f}`);
 console.log(QUICK
