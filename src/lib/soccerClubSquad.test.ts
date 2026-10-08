@@ -331,3 +331,65 @@ describe('the living squad', () => {
     expect(JSON.stringify(help)).not.toMatch(/4-3-3/);
   });
 });
+
+/* ── Round 1115: the saves nobody planned for ───────────────────────────── */
+describe('odd saves and odd years', () => {
+  it('keeps the men when a club changes tier, and moves their ratings with the level', () => {
+    const low = genClubSquad({ ...Q, tier: 2 });
+    const high = new Map(genClubSquad({ ...Q, tier: 1 }).map(m => [m.id, m]));
+    for (const m of low) {
+      const up = high.get(m.id);
+      expect([up?.name, up?.age, up?.pos]).toEqual([m.name, m.age, m.pos]);
+      expect((up?.ovr ?? 0) - m.ovr).toBeGreaterThanOrEqual(0);
+    }
+    expect(high.get('6:' + low.find(m => m.id?.startsWith('6:'))?.id?.split(':')[1])?.ovr).toBe(74);
+  });
+
+  it('answers at the edges of time without hanging', () => {
+    for (const year of [1900, 1960, 1961, 2100, 2399, 2400, 999999999]) {
+      const men = genClubSquad({ ...Q, year });
+      expect(men.length).toBe(22);
+      expect(new Set(men.map(m => m.name)).size).toBe(22);
+    }
+    expect(genClubSquad({ ...Q, year: 1900 })).toEqual(genClubSquad({ ...Q, year: 1960 }));
+  });
+
+  it('survives a save with one row, an unknown position, a hand edited first row and bad numbers', () => {
+    const base = save('Leeds', 'England', 2, 70, 2030);
+    const oneRow = { ...base, seasons: [base.seasons[0]] };
+    expect(squadView(oneRow)?.year).toBe(base.seasons[0].year + 1);
+    expect(squadView({ ...base, position: 'SW' })?.group).toBe('MID');
+    const edited = { ...base, seasons: [{ ...base.seasons[0], year: undefined as unknown as number, club: undefined as unknown as string }, ...base.seasons.slice(1)] };
+    expect(squadView(edited)?.rank).toBeGreaterThanOrEqual(1);
+    const empty = { ...base, seasons: [] };
+    expect(squadView(empty)?.source).toBe('roles');
+    expect(lastSeason(empty)).toBeNull();
+    expect(squadView({ ...base, currentClubTier: Number.NaN })).toBeNull();
+    expect(squadView({ ...base, currentClub: '' })).toBeNull();
+    const noRating = squadView({ ...base, overall: Number.NaN });
+    expect(noRating?.rank).toBe(1);
+    expect(noRating?.trust.pct).toBeGreaterThanOrEqual(0);
+  });
+
+  it('treats a renamed club as a new dressing room, the way the engine counts his seasons there', () => {
+    const base = save('Leeds', 'England', 2, 70, 2030, [{ year: 2029, ovr: 69 }, { year: 2030, ovr: 70 }]);
+    const renamed = { ...base, currentClub: 'Leeds City' };
+    const at = squadNow(renamed);
+    if (!at) throw new Error('no club');
+    expect(squadView(renamed)?.club).toBe('Leeds City');
+    expect(lastSeason(renamed)?.club).toBe('Leeds');
+    expect(managerTrust(renamed, at).band).toEqual(managerTrust(base, squadNow(base) ?? at).band);
+  });
+
+  it('never calls a career in a real past season by an invented name, in any year before 2027', () => {
+    const pool = new Set(allIntlNames());
+    for (let year = 1989; year <= 2025; year += 1) {
+      const v = squadView(save('Wrexham', 'Wales', 3, 60, year));
+      expect(v?.source).toBe('roles');
+      for (const m of [...(v?.bench ?? []), ...Object.values(v?.eleven ?? {}).flat()]) {
+        if (!m.me) expect(pool.has(m.name)).toBe(false);
+      }
+    }
+    expect(squadView(save('Wrexham', 'Wales', 3, 60, 2026))?.source).toBe('invented');
+  });
+});

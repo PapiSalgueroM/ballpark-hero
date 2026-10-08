@@ -242,6 +242,28 @@ for (const [club, year] of NOWHERE) {
   if (clubSquad(club, year) !== null) fail(`${JSON.stringify(club)} ${year} returned a squad it should not have`);
   if (depthChart(club, year, 'ST', 80, 'Test') !== null) fail(`${JSON.stringify(club)} ${year} returned a depth chart`);
 }
+/* Round 1115: the living squad answers where the real readers stay silent,
+   and it must never pass itself off as real there. For the same six pairs it
+   is null or not 'real', no invented man carries a real player's name, and a
+   real man appears only if he was in that club's own last baked squad. */
+{
+  const everyRealName = new Set();
+  for (const blob of Object.values(CLUB_SQUADS)) for (const e of blob.split(',')) everyRealName.add(e.split(':')[0]);
+  let living = 0;
+  for (const [club, year] of NOWHERE) {
+    const squad = lib.livingSquad('Test|ST|2020|Test Youth', { club, country: 'England', tier: 2, year });
+    if (!squad) continue;
+    living += 1;
+    if (squad.source === 'real') fail(`${JSON.stringify(club)} ${year}: the living squad calls itself real`);
+    const lastReal = new Set((clubSquad(club, CLUB_SQUAD_YEARS.last) ?? []).map(m => m.name));
+    for (const m of squad.men) {
+      if (m.id !== undefined && everyRealName.has(m.name)) fail(`${JSON.stringify(club)} ${year}: invented man ${m.name} has a real player's name`);
+      if (m.id === undefined && !lastReal.has(m.name)) fail(`${JSON.stringify(club)} ${year}: ${m.name} is shown as a real man but was not in the club's last real squad`);
+    }
+  }
+  if (living < 4) fail(`only ${living} of the six pairs got a living squad, so the check above is close to empty`);
+  console.log(`   ${living} of those pairs get a living squad, none of them passed off as real`);
+}
 /* and the page must be wired to render nothing on null */
 const page = readFileSync(path.join(ROOT, 'src/pages/SoccerCareer.tsx'), 'utf8');
 if (!page.includes('depthChart(')) fail('the career page never builds a depth chart');
