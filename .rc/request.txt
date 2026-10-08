@@ -1,0 +1,31 @@
+# AN2 step 2: the type gate, vitest on every test that differs from main, and seams 3a (storage, static) and 3d (Club Manager pins)
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-diff: node_modules/.bin/vitest run src/lib/frontOfficeRatings.test.ts src/lib/soccerClubSquad.test.ts src/test/boxingShowForecast.test.tsx src/test/cbbProgramFeedback.test.tsx src/test/clubManagerEraNationalities.test.ts src/test/cmDataOnDemandIdentity.test.ts src/test/collegeGridFailClosed.test.tsx src/test/collegeGridOffline.test.tsx src/test/collegeGridSearchMemory.test.ts src/test/constructorFeedback.test.tsx src/test/cookieConsentStorage.test.tsx src/test/f1DriverFeedback.test.tsx src/test/f1DriverHintPoints.test.tsx src/test/freshBuildBlockedStorage.test.ts src/test/gridEngineSource.test.ts src/test/guessFinishMoment.test.tsx src/test/guestHandleVisit.test.tsx src/test/hofOrBustVoteOnce.test.tsx src/test/homeSearchRecovery.test.tsx src/test/nascarDriverFeedback.test.tsx src/test/playerSearchLocal.test.ts src/test/resultScorePillComparison.test.tsx src/test/safeStorage.test.ts src/test/seasonCentreWords.test.tsx src/test/seasonCore.test.ts src/test/storageBlockedBoot.test.tsx src/test/supabaseClientBlockedStorage.test.ts src/test/tennisPlayerFeedback.test.tsx src/test/translateGuard.test.tsx src/test/tycoonSaleReview.test.tsx src/test/tycoonSetPiecePage.test.tsx src/test/usBoardFixture.test.tsx src/test/usCareerSaveRetry.test.tsx src/test/usSeason.test.ts src/test/usSeasonCentre.test.tsx src/test/usSeasonCentreEntry.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-train: node_modules/.bin/vitest run src/test/tycoonLoads.test.tsx src/test/clubManagerShootoutTile.test.tsx src/test/mmaPromotion.test.tsx src/test/numberFormatting.test.tsx src/test/tycoonHelp.test.tsx src/test/clubManagerEraLoad.test.tsx --testTimeout=300000 --hookTimeout=120000
+ssw: node scripts/simStorageWrites.mjs
+ssw-unguard: SIM_STORAGE_WRITES_CONTROL=unguard node scripts/simStorageWrites.mjs
+ssw-order: SIM_STORAGE_WRITES_CONTROL=order node scripts/simStorageWrites.mjs
+ssw-client: SIM_STORAGE_WRITES_CONTROL=client node scripts/simStorageWrites.mjs
+ssw-caller: SIM_STORAGE_WRITES_CONTROL=caller node scripts/simStorageWrites.mjs
+ssw-nocatch: SIM_STORAGE_WRITES_CONTROL=nocatch node scripts/simStorageWrites.mjs
+ssw-probe: SIM_STORAGE_WRITES_CONTROL=probe node scripts/simStorageWrites.mjs
+appeal: node scripts/simManagerAppealIsolation.mjs
+rules: node scripts/simCmLeagueRules.mjs
+shootout: node scripts/simCmShootoutOrder.mjs
+shootout-s1: SIM_SEED=1 node scripts/simCmShootoutOrder.mjs
+shootout-s2: SIM_SEED=2 node scripts/simCmShootoutOrder.mjs
+shootout-s3: SIM_SEED=3 node scripts/simCmShootoutOrder.mjs
+shootout-s4: SIM_SEED=4 node scripts/simCmShootoutOrder.mjs
+shootout-s5: SIM_SEED=5 node scripts/simCmShootoutOrder.mjs
+shootout-ignoreorder: CM_SHOOTOUT_CONTROL=ignoreorder node scripts/simCmShootoutOrder.mjs
+shootout-noskip: CM_SHOOTOUT_CONTROL=noskip node scripts/simCmShootoutOrder.mjs
+shootout-nocap: CM_SHOOTOUT_CONTROL=nocap node scripts/simCmShootoutOrder.mjs
+shootout-unsetpath: CM_SHOOTOUT_CONTROL=unsetpath node scripts/simCmShootoutOrder.mjs
+shootout-ownkeeper: CM_SHOOTOUT_CONTROL=ownkeeper node scripts/simCmShootoutOrder.mjs
+shootout-wrongkeeper: CM_SHOOTOUT_CONTROL=wrongkeeper node scripts/simCmShootoutOrder.mjs
+shootout-nooppkeeper: CM_SHOOTOUT_CONTROL=nooppkeeper node scripts/simCmShootoutOrder.mjs
+shootout-oppworst: CM_SHOOTOUT_CONTROL=oppworst node scripts/simCmShootoutOrder.mjs
+shootout-thinside: CM_SHOOTOUT_CONTROL=thinside node scripts/simCmShootoutOrder.mjs
+shootout-nomakeup: CM_SHOOTOUT_CONTROL=nomakeup node scripts/simCmShootoutOrder.mjs
+shootout-keeperonfull: CM_SHOOTOUT_CONTROL=keeperonfull node scripts/simCmShootoutOrder.mjs
+shootout-bogus: CM_SHOOTOUT_CONTROL=nosuchcontrol node scripts/simCmShootoutOrder.mjs
