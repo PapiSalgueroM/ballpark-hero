@@ -1,0 +1,6 @@
+simInventedNames: node scripts/simInventedNames.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+gen-check: node scripts/genClubManagerGathered.mjs russia2026 --check
+identity: node_modules/.bin/vitest run src/test/cmWorldIdentity1052.test.ts src/test/cmDataOnDemandIdentity.test.ts --testTimeout=300000 --hookTimeout=300000
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json

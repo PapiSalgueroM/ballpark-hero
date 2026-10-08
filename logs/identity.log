@@ -1,0 +1,25 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/cmWorldIdentity1052.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 2941[2mms[22m[39m
+[90mstdout[2m | src/test/cmDataOnDemandIdentity.test.ts[2m > [22m[2mRound 1042 identity: the dailies deal the same club, seed and run[2m > [22m[2mA. Manager Hot Seat, then Deadline Day, on every date
+[22m[39m  A: 35 dates, 70 runs, first Monterrey, last Rio Ave
+
+[90mstdout[2m | src/test/cmDataOnDemandIdentity.test.ts[2m > [22m[2mRound 1042 identity: the squad picker picks the same squads[2m > [22m[2mB. pickSquad and runInternationalSummer over 140 seeded cases
+[22m[39m  B: 140 cases, 58 sheets carried a real pool man
+
+[90mstdout[2m | src/test/cmDataOnDemandIdentity.test.ts[2m > [22m[2mRound 1042 identity: every name of every world wears the same flag[2m > [22m[2mC. the five worlds, read through nationalityOf
+[22m[39m  C: now 4389, era2020 1774, era2015 1658, era2010 1751, era2005 1727
+
+[90mstdout[2m | src/test/cmDataOnDemandIdentity.test.ts[2m > [22m[2mRound 1042 identity: the squad shape is the same shape[2m > [22m[2mD. formations, slot rules, position names and the rating curve
+[22m[39m  D: 9 formations, ladder 58 58 61 65 68 62 62 64 ...
+
+ [32m✓[39m src/test/cmDataOnDemandIdentity.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 8348[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1042 identity: the dailies deal the same club, seed and run[2m > [22mA. Manager Hot Seat, then Deadline Day, on every date [33m 7762[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1042 identity: the squad picker picks the same squads[2m > [22mB. pickSquad and runInternationalSummer over 140 seeded cases [33m 310[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m10 passed[39m[22m[90m (10)[39m
+[2m   Start at [22m 12:29:13
+[2m   Duration [22m 9.91s[2m (transform 5.16s, setup 170ms, collect 370ms, tests 11.29s, environment 1.11s, prepare 564ms)[22m
+
