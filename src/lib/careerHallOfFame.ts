@@ -262,7 +262,7 @@ export function hallVoterRules(n: { hardware: string; families: string; one: str
   const top = n.top ?? LEGACY_GAME_RULES.standoutTop;
   const cap = Math.round(LEGACY_GAME_RULES.standoutTop * LEGACY_GAME_RULES.standoutCap);
   return [
-    `Hall of Fame voters weigh the hardware first (${n.hardware}), then your seasons and your whole stat sheet, and a career total near the top of this game's books in a stat your position really piles up (${n.families}) earns a push of its own, up to ${cap} legacy points.`,
+    `Hall of Fame voters weigh the hardware first (${n.hardware}), then your seasons and your numbers, and a career total near the top of this game's books in a stat your position really piles up (${n.families}) earns a push of its own, up to ${cap} legacy points.`,
     `Example: take a ${n.one} with ordinary numbers and one with the same hardware and more ${n.family} than 99 of 100 ${n.who} this game has seen. The second scores at least ${top} legacy points more, which can be the whole gap between a long wait and the Hall. A career you already retired keeps the ballot it was told.`,
   ];
 }

@@ -1413,9 +1413,10 @@ const ANCHOR_FILE = process.env.SIM_ANCHOR_FILE || path.join(ROOT, 'scripts/data
 let anchorText = readFileSync(path.join(ROOT, 'scripts/data/careerHallAnchors.json'), 'utf8');
 if (CONTROL === 'anchorwiki') {
   // The control: one source host swapped for a wiki, in memory. It must change a byte or it proves nothing.
-  const HOST = 'https://www.baseball-reference.com/players/';
+  // An anchor's own source (the first swap tried here hit a skipped name's link, which the shape check did not read, and the control did not fire).
+  const HOST = 'https://www.baseball-reference.com/players/r/riverma01.shtml';
   if (!anchorText.includes(HOST)) { console.error('control anchorwiki: its string is not in the ledger, refusing to run'); process.exit(2); }
-  const swapped = anchorText.replace(HOST, 'https://en.wikipedia.org/wiki/');
+  const swapped = anchorText.replace(HOST, 'https://en.wikipedia.org/wiki/riverma01');
   if (swapped === anchorText) { console.error('control anchorwiki: the swap changed nothing, refusing to run'); process.exit(2); }
   anchorText = swapped;
   controlFired = true;
@@ -1428,6 +1429,8 @@ const BALLOTS = ['first', 'later', 'never'];
 const shapeMiss = [];
 if (!ANCHORS.selection?.writtenBeforeScoring || !(ANCHORS.selection?.rule?.length >= 5)) shapeMiss.push('the selection rule is missing');
 if (!/^\d{4}-\d{2}-\d{2}$/.test(ANCHORS.read ?? '')) shapeMiss.push('no read date');
+// The family lists and the skipped names cite pages too: no wiki there either.
+for (const s of [...(ANCHORS.lists ?? []), ...(ANCHORS.skipped ?? []).filter(k => k.url)]) if (isWiki(s.url)) shapeMiss.push(`${s.family} ${s.player ?? 'list'}: a wiki source (${hostOf(s.url)})`);
 for (const a of ANCHORS.anchors) {
   for (const group of ['line', 'awards', 'hall']) {
     const list = a.sources?.[group] ?? [];
