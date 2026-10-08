@@ -1,0 +1,51 @@
+open 1 loaded: {"mark":"doc-1791446923115","path":"/hof-or-bust","voted":false,"voteButtons":["Hall of Fame","Bust"],"windowKeys":[],"realKeys":[],"notice":null} posts []
+open 2 voted: {"mark":"doc-1791446923115","path":"/hof-or-bust","voted":true,"voteButtons":[],"windowKeys":["dukb-streaks-v1","hof-or-bust-daily-2026-10-08","dukb-local-completions"],"realKeys":["dukb-streaks-v1","hof-or-bust-daily-2026-10-08","dukb-local-completions"],"notice":null} posts ["hof_votes","game_completions"]
+open 3 away (router push): {"mark":"doc-1791446923115","path":"/whats-new","voted":false,"voteButtons":[],"windowKeys":["dukb-streaks-v1","hof-or-bust-daily-2026-10-08","dukb-local-completions"],"realKeys":["dukb-streaks-v1","hof-or-bust-daily-2026-10-08","dukb-local-completions"],"notice":null} posts ["hof_votes","game_completions"]
+open 4 back (router push): {"mark":"doc-1791446923115","path":"/hof-or-bust","voted":true,"voteButtons":[],"windowKeys":["dukb-streaks-v1","hof-or-bust-daily-2026-10-08","dukb-local-completions"],"realKeys":["dukb-streaks-v1","hof-or-bust-daily-2026-10-08","dukb-local-completions"],"notice":null} posts ["hof_votes","game_completions"]
+open 6 after a reload: {"mark":null,"path":"/hof-or-bust","voted":true,"voteButtons":[],"windowKeys":["dukb-streaks-v1","hof-or-bust-daily-2026-10-08","dukb-local-completions"],"realKeys":["dukb-streaks-v1","hof-or-bust-daily-2026-10-08","dukb-local-completions"],"notice":null} posts ["hof_votes","game_completions"]
+open RESULT: posts ["hof_votes","game_completions"] errors []
+blocked 1 loaded: {"mark":"doc-1791446929353","path":"/hof-or-bust","voted":false,"voteButtons":["Hall of Fame","Bust"],"windowKeys":[],"realKeys":[],"notice":"This browser blocks storage, so progress won't be saved."} posts []
+blocked 2 voted: {"mark":"doc-1791446929353","path":"/hof-or-bust","voted":true,"voteButtons":[],"windowKeys":["hof-or-bust-daily-2026-10-08","dukb-streaks-v1","dukb-local-completions"],"realKeys":[],"notice":"This browser blocks storage, so progress won't be saved."} posts ["hof_votes","game_completions"]
+blocked 3 away (router push): {"mark":"doc-1791446929353","path":"/whats-new","voted":false,"voteButtons":[],"windowKeys":["hof-or-bust-daily-2026-10-08","dukb-streaks-v1","dukb-local-completions"],"realKeys":[],"notice":null} posts ["hof_votes","game_completions"]
+blocked 4 back (router push): {"mark":"doc-1791446929353","path":"/hof-or-bust","voted":true,"voteButtons":[],"windowKeys":["hof-or-bust-daily-2026-10-08","dukb-streaks-v1","dukb-local-completions"],"realKeys":[],"notice":"This browser blocks storage, so progress won't be saved."} posts ["hof_votes","game_completions"]
+blocked 6 after a reload: {"mark":null,"path":"/hof-or-bust","voted":false,"voteButtons":["Hall of Fame","Bust"],"windowKeys":[],"realKeys":[],"notice":"This browser blocks storage, so progress won't be saved."} posts ["hof_votes","game_completions"]
+blocked 7 voted again after the reload: {"mark":null,"path":"/hof-or-bust","voted":true,"voteButtons":[],"windowKeys":["hof-or-bust-daily-2026-10-08","dukb-streaks-v1","dukb-local-completions"],"realKeys":[],"notice":"This browser blocks storage, so progress won't be saved."} posts ["hof_votes","game_completions","hof_votes","game_completions"]
+blocked RESULT: posts ["hof_votes","game_completions","hof_votes","game_completions"] errors []
+full 1 loaded: {"mark":"doc-1791446936338","path":"/hof-or-bust","voted":false,"voteButtons":["Hall of Fame","Bust"],"windowKeys":[],"realKeys":[],"notice":"This browser's storage is full, so progress won't be saved."} posts []
+full 2 voted: {"mark":"doc-1791446936338","path":"/hof-or-bust","voted":true,"voteButtons":[],"windowKeys":[],"realKeys":[],"notice":"This browser's storage is full, so progress won't be saved."} posts ["hof_votes","game_completions"]
+full 3 away (router push): {"mark":"doc-1791446936338","path":"/whats-new","voted":true,"voteButtons":[],"windowKeys":[],"realKeys":[],"notice":"This browser's storage is full, so progress won't be saved."} posts ["hof_votes","game_completions"]
+full 4 back (router push): {"mark":"doc-1791446936338","path":"/hof-or-bust","voted":true,"voteButtons":[],"windowKeys":[],"realKeys":[],"notice":"This browser's storage is full, so progress won't be saved."} posts ["hof_votes","game_completions"]
+full 6 after a reload: {"mark":null,"path":"/hof-or-bust","voted":false,"voteButtons":["Hall of Fame","Bust"],"windowKeys":[],"realKeys":[],"notice":"This browser's storage is full, so progress won't be saved."} posts ["hof_votes","game_completions"]
+full 7 voted again after the reload: {"mark":null,"path":"/hof-or-bust","voted":true,"voteButtons":[],"windowKeys":[],"realKeys":[],"notice":"This browser's storage is full, so progress won't be saved."} posts ["hof_votes","game_completions","hof_votes","game_completions"]
+full RESULT: posts ["hof_votes","game_completions","hof_votes","game_completions"] errors []
+WIDTH 320 open /soccer-career: {"noticeH":0,"lines":0,"mainTop":89,"h1Top":105,"overflowX":0}
+WIDTH 320 open /footle: {"noticeH":0,"lines":0,"mainTop":0,"h1Top":113,"overflowX":0}
+WIDTH 320 blocked /soccer-career: {"noticeH":48,"lines":2,"mainTop":137,"h1Top":153,"overflowX":0}
+WIDTH 320 blocked /footle: {"noticeH":48,"lines":2,"mainTop":48,"h1Top":161,"overflowX":0}
+WIDTH 320 full /soccer-career: {"noticeH":48,"lines":2,"mainTop":137,"h1Top":153,"overflowX":0}
+WIDTH 320 full /footle: {"noticeH":48,"lines":2,"mainTop":48,"h1Top":161,"overflowX":0}
+WIDTH 344 open /soccer-career: {"noticeH":0,"lines":0,"mainTop":89,"h1Top":105,"overflowX":0}
+WIDTH 344 open /footle: {"noticeH":0,"lines":0,"mainTop":0,"h1Top":113,"overflowX":0}
+WIDTH 344 blocked /soccer-career: {"noticeH":48,"lines":2,"mainTop":137,"h1Top":153,"overflowX":0}
+WIDTH 344 blocked /footle: {"noticeH":48,"lines":2,"mainTop":48,"h1Top":161,"overflowX":0}
+WIDTH 344 full /soccer-career: {"noticeH":48,"lines":2,"mainTop":137,"h1Top":153,"overflowX":0}
+WIDTH 344 full /footle: {"noticeH":48,"lines":2,"mainTop":48,"h1Top":161,"overflowX":0}
+WIDTH 360 open /soccer-career: {"noticeH":0,"lines":0,"mainTop":89,"h1Top":105,"overflowX":0}
+WIDTH 360 open /footle: {"noticeH":0,"lines":0,"mainTop":0,"h1Top":113,"overflowX":0}
+WIDTH 360 blocked /soccer-career: {"noticeH":48,"lines":2,"mainTop":137,"h1Top":153,"overflowX":0}
+WIDTH 360 blocked /footle: {"noticeH":48,"lines":2,"mainTop":48,"h1Top":161,"overflowX":0}
+WIDTH 360 full /soccer-career: {"noticeH":48,"lines":2,"mainTop":137,"h1Top":153,"overflowX":0}
+WIDTH 360 full /footle: {"noticeH":48,"lines":2,"mainTop":48,"h1Top":161,"overflowX":0}
+WIDTH 375 open /soccer-career: {"noticeH":0,"lines":0,"mainTop":89,"h1Top":105,"overflowX":0}
+WIDTH 375 open /footle: {"noticeH":0,"lines":0,"mainTop":0,"h1Top":113,"overflowX":0}
+WIDTH 375 blocked /soccer-career: {"noticeH":28,"lines":1,"mainTop":117,"h1Top":133,"overflowX":0}
+WIDTH 375 blocked /footle: {"noticeH":28,"lines":1,"mainTop":28,"h1Top":141,"overflowX":0}
+WIDTH 375 full /soccer-career: {"noticeH":28,"lines":1,"mainTop":117,"h1Top":133,"overflowX":0}
+WIDTH 375 full /footle: {"noticeH":28,"lines":1,"mainTop":28,"h1Top":141,"overflowX":0}
+WIDTH 390 open /soccer-career: {"noticeH":0,"lines":0,"mainTop":89,"h1Top":105,"overflowX":0}
+WIDTH 390 open /footle: {"noticeH":0,"lines":0,"mainTop":0,"h1Top":113,"overflowX":0}
+WIDTH 390 blocked /soccer-career: {"noticeH":28,"lines":1,"mainTop":117,"h1Top":133,"overflowX":0}
+WIDTH 390 blocked /footle: {"noticeH":28,"lines":1,"mainTop":28,"h1Top":141,"overflowX":0}
+WIDTH 390 full /soccer-career: {"noticeH":28,"lines":1,"mainTop":117,"h1Top":133,"overflowX":0}
+WIDTH 390 full /footle: {"noticeH":28,"lines":1,"mainTop":28,"h1Top":141,"overflowX":0}
+double2 done
