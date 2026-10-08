@@ -1,0 +1,4 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+quicksubs exit=0 11s | playCmQuickSubs: 3 viewports, 2 actual saved fixtures, 6 settled reports, 3 effective controls, zero external forwarding; source held.
+offerreview exit=1 4s | Node.js v24.21.0
+offerreview-grouped exit=0 65s | Soccer offer review: 9 actual-route journeys, 12 effective restored DOM controls, no forwarded writes.
