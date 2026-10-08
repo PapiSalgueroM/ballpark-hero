@@ -23,7 +23,6 @@ jobs:
       TZ: UTC
       SIM_NETWORK: offline
       SEO_SPLIT_BASE_REF: HEAD
-      QA_PARENT_ROOT: ${{ runner.temp }}/soccer-create-translation-parent
     steps:
       - uses: actions/checkout@v4
         with:
@@ -39,6 +38,8 @@ jobs:
           python-version: '3.12'
       - name: Hold actual candidate and guard-only parent sources
         run: |
+          QA_PARENT_ROOT="$RUNNER_TEMP/soccer-create-translation-parent"
+          printf 'QA_PARENT_ROOT=%s\n' "$QA_PARENT_ROOT" >> "$GITHUB_ENV"
           mkdir -p soccer-create-translation-artifacts/dependencies soccer-create-translation-artifacts/regressions
           git rev-parse HEAD > soccer-create-translation-artifacts/source-head.txt
           git rev-parse 'HEAD^{tree}' > soccer-create-translation-artifacts/source-tree.txt

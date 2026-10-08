@@ -1,3 +1,9 @@
+First guard-based run 37736618248 at e934461a was rejected before any runner
+started: GitHub's retained annotation names runner.temp in job-level env as
+an unrecognized context. There were zero jobs and no runtime artifacts.
+Preparation moves only the temporary parent path into the first shell step,
+using RUNNER_TEMP and GITHUB_ENV. Worker, product and assertions stay held.
+Workflow d11f9707 requires a fresh accepted remote run; no product result exists.
 1096 proof is frozen for remote verification: eight parent/candidate journeys
 at 390/1280 with translator off/altered, two guard-disabled candidate creator
 journeys through Begin, and two actual TextWithFlags fixtures covering three
