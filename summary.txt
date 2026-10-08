@@ -1,0 +1,2 @@
+vitest-whole exit=1 414s |    Duration  414.01s (transform 26.99s, setup 18.62s, collect 124.71s, tests 877.09s, environment 133.12s, prepare 27.16s)
+vitest-whole-on-main exit=1 411s |    Duration  409.24s (transform 24.43s, setup 18.39s, collect 113.96s, tests 869.39s, environment 134.95s, prepare 27.96s)
