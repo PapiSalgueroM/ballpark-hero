@@ -1,0 +1,4 @@
+# AN2 runner review, request M9: Round 1089's two line fix undone, the build made from that, then (a) the reviewer's own measurement and (b) the gate's squad walk. Which of them sees the old nesting?
+#!playwright
+#!serial
+m9: node .rc/x/rv-mut.mjs m9a m9b && npm run build > /tmp/m9-build.log 2>&1; echo "build exit=$?"; (node scripts/lib/hostLikeServer.mjs dist 4199 > /tmp/m9-server.log 2>&1 &) ; sleep 4; mkdir -p $RC_OUT/m9; BASE=http://localhost:4199 RC_OUT=$RC_OUT/m9 node .rc/x/rv-walk.mjs soccer; w=$?; ENGINES=chromium REQUIRE_PAGE=1 PORT=4810 SHOTS=/tmp/shots-m9 node scripts/playCareerSquad.mjs > /tmp/m9-squad.log 2>&1; s=$?; tail -3 /tmp/m9-squad.log; git checkout -- src; echo "m9 (1089 undone): reviewer soccer walk exit=$w (1 means it sees the old nesting), playCareerSquad exit=$s (0 means the squad walk does not see it)"; exit 0

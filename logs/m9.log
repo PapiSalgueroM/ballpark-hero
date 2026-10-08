@@ -1,0 +1,15 @@
+MUTATION m9a applied to src/pages/SoccerCareer.tsx
+MUTATION m9b applied to src/pages/SoccerCareer.tsx
+build exit=0
+soccer hub 1280: {"gridKids":2,"listInCard":false,"rows":1,"card":{"t":263,"b":306,"l":416,"r":1136},"list":{"t":263,"b":337,"l":144,"r":404},"grid":{"t":263,"b":337,"l":144,"r":1136},"right":{"t":263,"b":337,"l":144,"r":404},"sideways":false,"vw":1280}
+PROBLEM soccer hub 1280: the season list is outside the Career Timeline card
+PROBLEM soccer hub 1280: the timeline card ends -31px below its list
+PROBLEM soccer hub 1280: the timeline card is not to the left of the hub
+soccer hub 390: {"gridKids":2,"listInCard":false,"rows":1,"card":{"t":407,"b":450,"l":12,"r":378},"list":{"t":321,"b":395,"l":12,"r":378},"grid":{"t":321,"b":450,"l":12,"r":378},"right":{"t":321,"b":395,"l":12,"r":378},"sideways":false,"vw":390}
+PROBLEM soccer hub 390: the season list is outside the Career Timeline card
+PROBLEM soccer hub 390: the timeline card ends 55px below its list
+rv-walk (soccer): 5 problem(s)
+ok   7. page, save A at 1280: the sheet covers the screen and its panel sits inside it, and the page stayed at 288 (sheet 0,0 1280x800, panel 416,185 to 864,616, screen 1280x800; now 288)
+   screenshots in /tmp/shots-m9, work folder /home/runner/work/_temp/t-m9/careersquadplay-yjUFII
+playCareerSquad: 164 checks, 0 failed
+m9 (1089 undone): reviewer soccer walk exit=1 (1 means it sees the old nesting), playCareerSquad exit=0 (0 means the squad walk does not see it)
