@@ -1,0 +1,19 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/tycoonGear.test.tsx[2m > [22mtitle boots through the real hooks and page[2m > [22m1 saves the played division and completed stadium before its single title unlock[32m 56[2mms[22m[39m
+ [32m✓[39m src/test/tycoonGear.test.tsx[2m > [22mtitle boots through the real hooks and page[2m > [22m2 a refused stadium save cannot grant title gear[32m 25[2mms[22m[39m
+ [32m✓[39m src/test/tycoonGear.test.tsx[2m > [22mtitle boots through the real hooks and page[2m > [22m3 a refused title ledger write keeps only visit gems and reports the missing gear[32m 22[2mms[22m[39m
+ [32m✓[39m src/test/tycoonGear.test.tsx[2m > [22mtitle boots through the real hooks and page[2m > [22m4 reassignment saves once before showing either wearer and survives reload[32m 9[2mms[22m[39m
+ [32m✓[39m src/test/tycoonGear.test.tsx[2m > [22mtitle boots through the real hooks and page[2m > [22m5 a failed upgrade changes no rating or kit and retries exactly once[32m 5[2mms[22m[39m
+ [32m✓[39m src/test/tycoonGear.test.tsx[2m > [22mtitle boots through the real hooks and page[2m > [22m6 the cold real page uses saved gear for the first away result and watched minute[33m 979[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m   Start at [22m 18:10:30
+[2m   Duration [22m 2.62s[2m (transform 832ms, setup 89ms, collect 567ms, tests 1.10s, environment 423ms, prepare 74ms)[22m
+
+JSON report written to /home/runner/work/_temp/t-p2.tycoon-gearpage/tycoon-gear-page-tNOsQU/report.json
+
+Tycoon gear page: 6/6 actual hook/page cases passed
+Artifacts: /home/runner/work/_temp/t-p2.tycoon-gearpage/tycoon-gear-page-tNOsQU

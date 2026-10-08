@@ -1,0 +1,111 @@
+#!build
+p1.tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+p1.vitest-diff: node_modules/.bin/vitest run src/lib/frontOfficeRatings.test.ts src/lib/soccerClubSquad.test.ts src/test/boxingShowForecast.test.tsx src/test/cbbProgramFeedback.test.tsx src/test/clubManagerEraNationalities.test.ts src/test/cmDataOnDemandIdentity.test.ts src/test/collegeGridFailClosed.test.tsx src/test/collegeGridOffline.test.tsx src/test/collegeGridSearchMemory.test.ts src/test/constructorFeedback.test.tsx src/test/cookieConsentStorage.test.tsx src/test/f1DriverFeedback.test.tsx src/test/f1DriverHintPoints.test.tsx src/test/freshBuildBlockedStorage.test.ts src/test/gridEngineSource.test.ts src/test/guessFinishMoment.test.tsx src/test/guestHandleVisit.test.tsx src/test/hofOrBustVoteOnce.test.tsx src/test/homeSearchRecovery.test.tsx src/test/nascarDriverFeedback.test.tsx src/test/playerSearchLocal.test.ts src/test/resultScorePillComparison.test.tsx src/test/safeStorage.test.ts src/test/seasonCentreWords.test.tsx src/test/seasonCore.test.ts src/test/storageBlockedBoot.test.tsx src/test/supabaseClientBlockedStorage.test.ts src/test/tennisPlayerFeedback.test.tsx src/test/translateGuard.test.tsx src/test/tycoonSaleReview.test.tsx src/test/tycoonSetPiecePage.test.tsx src/test/usBoardFixture.test.tsx src/test/usCareerSaveRetry.test.tsx src/test/usSeason.test.ts src/test/usSeasonCentre.test.tsx src/test/usSeasonCentreEntry.test.tsx --testTimeout=300000 --hookTimeout=120000
+p1.vitest-train: node_modules/.bin/vitest run src/test/tycoonLoads.test.tsx src/test/clubManagerShootoutTile.test.tsx src/test/mmaPromotion.test.tsx src/test/numberFormatting.test.tsx src/test/tycoonHelp.test.tsx src/test/clubManagerEraLoad.test.tsx --testTimeout=300000 --hookTimeout=120000
+p1.ssw: node scripts/simStorageWrites.mjs
+p1.ssw-unguard: SIM_STORAGE_WRITES_CONTROL=unguard node scripts/simStorageWrites.mjs
+p1.ssw-order: SIM_STORAGE_WRITES_CONTROL=order node scripts/simStorageWrites.mjs
+p1.ssw-client: SIM_STORAGE_WRITES_CONTROL=client node scripts/simStorageWrites.mjs
+p1.ssw-caller: SIM_STORAGE_WRITES_CONTROL=caller node scripts/simStorageWrites.mjs
+p1.ssw-nocatch: SIM_STORAGE_WRITES_CONTROL=nocatch node scripts/simStorageWrites.mjs
+p1.ssw-probe: SIM_STORAGE_WRITES_CONTROL=probe node scripts/simStorageWrites.mjs
+p1.appeal: node scripts/simManagerAppealIsolation.mjs
+p1.rules: node scripts/simCmLeagueRules.mjs
+p1.shootout: node scripts/simCmShootoutOrder.mjs
+p1.shootout-s1: SIM_SEED=1 node scripts/simCmShootoutOrder.mjs
+p1.shootout-s2: SIM_SEED=2 node scripts/simCmShootoutOrder.mjs
+p1.shootout-s3: SIM_SEED=3 node scripts/simCmShootoutOrder.mjs
+p1.shootout-s4: SIM_SEED=4 node scripts/simCmShootoutOrder.mjs
+p1.shootout-s5: SIM_SEED=5 node scripts/simCmShootoutOrder.mjs
+p1.shootout-ignoreorder: CM_SHOOTOUT_CONTROL=ignoreorder node scripts/simCmShootoutOrder.mjs
+p1.shootout-noskip: CM_SHOOTOUT_CONTROL=noskip node scripts/simCmShootoutOrder.mjs
+p1.shootout-nocap: CM_SHOOTOUT_CONTROL=nocap node scripts/simCmShootoutOrder.mjs
+p1.shootout-unsetpath: CM_SHOOTOUT_CONTROL=unsetpath node scripts/simCmShootoutOrder.mjs
+p1.shootout-ownkeeper: CM_SHOOTOUT_CONTROL=ownkeeper node scripts/simCmShootoutOrder.mjs
+p1.shootout-wrongkeeper: CM_SHOOTOUT_CONTROL=wrongkeeper node scripts/simCmShootoutOrder.mjs
+p1.shootout-nooppkeeper: CM_SHOOTOUT_CONTROL=nooppkeeper node scripts/simCmShootoutOrder.mjs
+p1.shootout-oppworst: CM_SHOOTOUT_CONTROL=oppworst node scripts/simCmShootoutOrder.mjs
+p1.shootout-thinside: CM_SHOOTOUT_CONTROL=thinside node scripts/simCmShootoutOrder.mjs
+p1.shootout-nomakeup: CM_SHOOTOUT_CONTROL=nomakeup node scripts/simCmShootoutOrder.mjs
+p1.shootout-keeperonfull: CM_SHOOTOUT_CONTROL=keeperonfull node scripts/simCmShootoutOrder.mjs
+p1.shootout-bogus: CM_SHOOTOUT_CONTROL=nosuchcontrol node scripts/simCmShootoutOrder.mjs
+p1.simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+p1.simCompletionSlugs: node scripts/simCompletionSlugs.mjs
+p1.simDailyPuzzleContract: node scripts/simDailyPuzzleContract.mjs
+p1.simFetchRetry: node scripts/simFetchRetry.mjs
+p1.simGoogleOnlyReturn: node scripts/simGoogleOnlyReturn.mjs
+p1.simReportRelay: node scripts/simReportRelay.mjs
+p1.simNavbarStatsReads: node scripts/simNavbarStatsReads.mjs
+p1.simScoringCoverage: node scripts/simScoringCoverage.mjs
+p1.simMissingElevenSources: node scripts/simMissingElevenSources.mjs
+p1.simNbaLuxuryTax: node scripts/simNbaLuxuryTax.mjs
+p1.simNbaSeasonStats: node scripts/simNbaSeasonStats.mjs
+p1.simPerfectSeasonOdds: node scripts/simPerfectSeasonOdds.mjs
+p1.dsh-shapes-1: R848_PART=shapes node scripts/simDailySaveHardening.mjs
+p2.uscareer-retry: env -u CI -u GITHUB_ACTIONS node scripts/simUsCareerSaveRetry.mjs
+p2.uscareer-retry-ci: node scripts/simUsCareerSaveRetry.mjs
+p2.uscareer-confirm: node scripts/simUsCareerActionConfirm.mjs
+p2.uscareer-practice: node scripts/simUsCareerPractice.mjs
+p2.uscareer-prospect: node scripts/simUsCareerProspect.mjs
+p2.uscareer-recovery: node scripts/simUsCareerRecovery.mjs
+p2.uscareer-summer: node scripts/simUsCareerSummer.mjs
+p2.uscareer-deckc: node scripts/simUsCareerDeckC.mjs
+p2.uscareer-defects: node scripts/simUsCareerDefects.mjs
+p2.uscareer-benefits: node scripts/simUsCareerAnnualBenefits.mjs
+p2.uscareer-weight: node scripts/simUsCareerWeight.mjs
+p2.usboardparity: node scripts/simUsBoardParity.mjs
+p2.usboardparity-label: US_BOARD_PARITY_CONTROL=label node scripts/simUsBoardParity.mjs
+p2.usboardparity-fixture: US_BOARD_PARITY_CONTROL=fixture node scripts/simUsBoardParity.mjs
+p2.ussc: node scripts/simUsSeasonCentre.mjs
+p2.ussc-static: SEEDSET=0 US_SEASON_CONTROL=static node scripts/simUsSeasonCentre.mjs
+p2.nfl: node scripts/simNflCareer.mjs
+p2.nba: node scripts/simNbaCareer.mjs
+p2.mlb: node scripts/simMlbCareer.mjs
+p2.nhl: node scripts/simNhlCareer.mjs
+p2.nfl-facts: node scripts/simNflCareerPathFacts.mjs
+p2.nba-facts: node scripts/simNbaCareerPathFacts.mjs
+p2.mlb-facts: node scripts/simMlbCareerPathFacts.mjs
+p2.nhl-facts: node scripts/simNhlCareerPathFacts.mjs
+p2.nodouble: node scripts/simNoDoubleRecord.mjs
+p2.completion: node scripts/simCompletionOnce.mjs
+p2.tycoon: node scripts/simStadiumTycoon.mjs
+p2.tycoon-away: node scripts/simTycoonAway.mjs
+p2.tycoon-awaydays: node scripts/simTycoonAwayMatchdays.mjs
+p2.tycoon-clock: node scripts/simTycoonClock.mjs
+p2.tycoon-gear: node scripts/simTycoonGear.mjs
+p2.tycoon-gearpage: node scripts/simTycoonGearPage.mjs
+p2.tycoon-help: node scripts/simTycoonHelp.mjs
+p2.tycoon-league: node scripts/simTycoonLeague.mjs
+p2.tycoon-loads: node scripts/simTycoonLoads.mjs
+p2.tycoon-packpace: node scripts/simTycoonPackPace.mjs
+p2.tycoon-packs: node scripts/simTycoonPacks.mjs
+p2.tycoon-pitch: node scripts/simTycoonPitch.mjs
+p2.tycoon-pitchrunner: node scripts/simTycoonPitchRunner.mjs
+p2.tycoon-rooms: node scripts/simTycoonRooms.mjs
+p2.tycoon-sale: env -u CI -u GITHUB_ACTIONS node scripts/simTycoonSaleReview.mjs
+p2.tycoon-sale-ci: node scripts/simTycoonSaleReview.mjs
+p2.tycoon-setpiece: node scripts/simTycoonSetPiece.mjs
+p2.tycoon-setpiecepage: node scripts/simTycoonSetPiecePage.mjs
+p2.tycoon-ticket: node scripts/simTycoonTicketPolicy.mjs
+p2.numfmt: node scripts/simNumberFormatting.mjs
+p2.sessionmarks: node scripts/simSessionMarks.mjs
+p2.homefront: node scripts/simHomeFront.mjs
+p2.homesearch: env -u CI -u GITHUB_ACTIONS node scripts/simHomeSearchRecovery.mjs
+p2.stalechunk: node scripts/simStaleChunk.mjs
+p2.stalechunk-nooffline: SIM_STALE_CHUNK_CONTROL=nooffline node scripts/simStaleChunk.mjs
+p2.boxing: env -u CI -u GITHUB_ACTIONS node scripts/simBoxingShowForecast.mjs
+p2.promoter: node scripts/simFightPromoter.mjs
+p2.simNoRivalNames: node scripts/simNoRivalNames.mjs
+p2.simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+p2.simInventedNames: node scripts/simInventedNames.mjs
+p2.simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+p2.simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+p2.simLiveScores: node scripts/simLiveScores.mjs
+p2.simAdsense: node scripts/simAdsense.mjs
+p2.simLegalPages: node scripts/simLegalPages.mjs
+p2.simSingleFooter: node scripts/simSingleFooter.mjs
+p2.simAccessibility: node scripts/simAccessibility.mjs
+p2.simRevealMoments: node scripts/simRevealMoments.mjs
+p2.simSiteSearch: node scripts/simSiteSearch.mjs
+p2.simGuideHeadings: node scripts/simGuideHeadings.mjs
+p2.simHomeCopy: node scripts/simHomeCopy.mjs

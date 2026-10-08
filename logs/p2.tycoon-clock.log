@@ -1,0 +1,13 @@
+   driving tick() at the hook's real cadence, dt = 0.2s
+1) the clock moves at all
+   60s of play -> minute 42
+2) the clock moves at the rate the game claims
+   140s of play -> 100 match minutes (about 100 expected)
+3) a match finishes and the next one starts
+   400s of play -> match #3, 9 goals, 2 wins
+4) goals are actually scored, which is the whole game
+   9 goal event(s) emitted for the UI to react to
+5) no play time is lost: banked seconds carry across ticks
+   200s -> 142 match minutes accounted for across 1 finished match(es)
+
+simTycoonClock: green. The match is played, goals are scored, and no play time is dropped.
