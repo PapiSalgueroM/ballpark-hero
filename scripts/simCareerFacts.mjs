@@ -72,7 +72,19 @@
      onesource  the file keeps one source for Spain's record         -> 1
      unverify   the file moves Norwich City to the unverified list   -> 4
      stale      the file dates the Premier League evidence 2024-25   -> 4
-   (the last three rewrite the loaded file in memory, never on disk)
+     onemembership the Eredivisie keeps one membership source        -> 6
+     twodecisions  a held club is also listed as shipped             -> 6
+     greycolour    Macarthur FC's colour becomes the fallback grey   -> 6
+   (the last six rewrite the loaded file in memory, never on disk)
+
+   6. LEAGUE WORLD (Round 1100): every league the career club pool is
+                generated from has a leagueWorld row (members in the
+                career's spelling, size, shape, games, points, a membership
+                read from two hosts, dated format pages), every colour the
+                generator supplies is a colour in words from two sources,
+                and every generated club has exactly one clubSince decision.
+                scripts/simCareerClubPool.mjs and simCareerLeagueWorld.mjs
+                hold the generator and the ledgers to these rows.
 
    Run: node scripts/simCareerFacts.mjs
    No network and no database: the engine is bundled from this tree. */
@@ -148,6 +160,21 @@ const CONTROLS = {
     const ev = f.leagueEvidence['Premier League 2026-27'];
     if (!(ev && ev.season === '2026-27')) { console.error('control stale: no Premier League 2026-27 evidence to date back'); process.exit(2); }
     ev.season = '2024-25';
+  }],
+  onemembership: ['6', s => s, f => {
+    const w = f.leagueWorld && f.leagueWorld.Eredivisie;
+    if (!(w && w.membership.length === 2)) { console.error('control onemembership: the Eredivisie has no two membership sources to cut'); process.exit(2); }
+    w.membership = w.membership.slice(0, 1);
+  }],
+  twodecisions: ['6', s => s, f => {
+    const held = f.clubSince && f.clubSince.held && f.clubSince.held.Eredivisie;
+    if (!(held && held.length && f.clubSince.shipped)) { console.error('control twodecisions: no held Eredivisie club to list twice'); process.exit(2); }
+    f.clubSince.shipped = [...f.clubSince.shipped, held[0]];
+  }],
+  greycolour: ['6', s => s, f => {
+    const c = f.clubColours && f.clubColours.clubs && f.clubColours.clubs['Macarthur FC'];
+    if (!(c && c.hex)) { console.error('control greycolour: Macarthur FC has no colour to grey out'); process.exit(2); }
+    c.hex = '#8899aa';
   }],
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown control ${CONTROL} (${Object.keys(CONTROLS).join(', ')})`); process.exit(2); }
@@ -445,6 +472,64 @@ ok(stuck === 0, `${stuck} careers did not reach retirement in 900 steps`);
 ok(fullSeasons >= PLAY_FLOOR.seasons, `only ${fullSeasons} full seasons played, ${PLAY_FLOOR.seasons} expected at least`);
 ok(granted >= PLAY_FLOOR.granted, `only ${granted} careers won the award, ${PLAY_FLOOR.granted} expected at least, so the checks above saw too little`);
 ok(abroadGrants >= PLAY_FLOOR.abroad, `only ${abroadGrants} awards went to a man playing abroad, ${PLAY_FLOOR.abroad} expected at least (the wrong key check needs them)`);
-console.log(`  ${played} careers (seed ${SEED}), ${fullSeasons} full seasons, ${granted} awards, every one the season his goals passed his own record (${abroadGrants} while abroad, ${summerGrants} in a tournament season)`);
+/* ─── 6. LEAGUE WORLD (Round 1100) ───
+   The leagues the career club pool is generated from. Every league label of
+   the generator's table has one row in leagueWorld with its whole lineup,
+   size, shape and games, a membership read from two hosts and its format
+   pages; a league the generator holds out gives its reason there; a colour
+   the generator supplies is backed by a colour in words from two sources;
+   and every generated club has one decision in clubSince. */
+function leagueWorldSection() {
+  head('6', 'LEAGUE WORLD: the pool generator and the facts file say the same thing');
+  const world = facts.leagueWorld || {};
+  const labels = Object.keys(world).filter(k => k !== 'about');
+  const SHAPES = new Set(['plain', 'split', 'groups', 'four-meetings', 'finals', 'conferences', 'two-tournaments']);
+  let named = 0; let twoFormats = 0;
+  for (const label of labels) {
+    const w = world[label];
+    ok(CURRENT_SEASONS.includes(w.season), `${label}: season "${w.season}" is not the current one`);
+    if (w.evidence !== null) ok(evidence[w.evidence] && evidence[w.evidence].league === label, `${label}: its evidence group "${w.evidence}" is not a ${label} group`);
+    const members = Array.isArray(w.members) ? w.members : [];
+    ok(members.length > 0 && new Set(members).size === members.length && members.every(n => typeof n === 'string' && /^[ -~]+$/.test(n)), `${label}: members must be distinct ASCII names`);
+    named += members.length;
+    const unnamed = Array.isArray(w.unnamed) ? w.unnamed : [];
+    ok(Number.isInteger(w.size) && w.size === members.length + unnamed.length, `${label}: size ${w.size}, ${members.length} members and ${unnamed.length} unnamed`);
+    if (unnamed.length) ok(typeof w.unnamedWhy === 'string' && w.unnamedWhy.length > 10, `${label}: unnamed clubs with no reason`);
+    if (w.evidence !== null && evidence[w.evidence]) for (const n of evidence[w.evidence].clubs) ok(members.includes(n), `${label}: hand club ${n} is not among its members`);
+    ok(SHAPES.has(w.shape), `${label}: shape "${w.shape}"`);
+    ok(Array.isArray(w.points) && w.points.join() === '3,1,0', `${label}: points ${JSON.stringify(w.points)}`);
+    if (w.shape === 'plain') ok(w.games === 2 * (w.size - 1), `${label}: plain with ${w.games} games for ${w.size} clubs`);
+    else ok(w.games === null || (Number.isInteger(w.games) && w.games > 0), `${label}: games ${w.games}`);
+    twoSources(w.membership, `${label} membership`);
+    const format = Array.isArray(w.format) ? w.format : [];
+    ok(format.every(x => hostOf(x.url) && !/wiki/.test(hostOf(x.url)) && DATE.test(x.read || '') && typeof x.says === 'string' && x.says.length > 0), `${label}: a format source has no host, date or note, or is a wiki`);
+    if (new Set(format.map(x => hostOf(x.url))).size >= 2) twoFormats += 1;
+  }
+  ok(labels.length >= 25, `only ${labels.length} leagues in leagueWorld, 25 expected at least`);
+  /* colours */
+  const colours = (facts.clubColours && facts.clubColours.clubs) || {};
+  for (const [club, c] of Object.entries(colours)) {
+    ok(typeof c.colour === 'string' && c.colour.length > 2 && /^#[0-9a-fA-F]{6}$/.test(c.hex || '') && c.hex.toLowerCase() !== '#8899aa', `colour of ${club}: needs the colour in words and a hex that is not the fallback grey`);
+    twoSources(c.sources, `colour of ${club}`);
+  }
+  /* since: one decision a club, held clubs only under a league that has them */
+  const since = facts.clubSince || {};
+  const heldLists = since.held || {};
+  const heldNames = Object.values(heldLists).flat();
+  const decided = [...(since.shipped || []), ...heldNames, ...Object.keys(since.since || {})];
+  ok(new Set(decided).size === decided.length, 'clubSince: a club has two decisions');
+  ok(since.heldBefore === 2026, `clubSince: heldBefore is ${since.heldBefore}, 2026 (the season the list describes) expected`);
+  for (const [label, names] of Object.entries(heldLists)) for (const n of names) ok(!!world[label] && world[label].members.includes(n), `clubSince holds ${n} under ${label}, which does not list it`);
+  for (const [club, s] of Object.entries(since.since || {})) {
+    ok(Number.isInteger(s.year) && s.year >= 1850 && s.year <= 2026, `since of ${club}: year ${s.year}`);
+    if (s.year > 1990) twoSources(s.sources, `since of ${club}`);
+    else ok(Array.isArray(s.sources) && s.sources.length >= 1 && s.sources.every(x => hostOf(x.url) && DATE.test(x.read || '') && x.says), `since of ${club}: needs a source line`);
+  }
+  console.log(`  ${labels.length} leagues, ${named} member names, each lineup read from two hosts; ${twoFormats} with a format read from two hosts; ${Object.keys(colours).length} colour(s) in words; ${(since.shipped || []).length} shipped, ${heldNames.length} held before ${since.heldBefore}, ${Object.keys(since.since || {}).length} with a first season`);
+  return { world, labels, colours, since, heldNames };
+}
+console.log(`  ${played} careers (seed ${SEED}), ${fullSeasons} full seasons, ${granted} awards, every one the season his goals passed his own record (${abroadGrants} while abroad, ${summerGrants} ina tournament season)`);
 
+const LW = leagueWorldSection();
+void LW;
 finish();
