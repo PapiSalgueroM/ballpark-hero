@@ -1,0 +1,3 @@
+build exit=0 27s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk-noline exit=0 37s | playCareerHallLine: 4 routes, 4 walks, 28 checks, control noline, the control fired on every guarded check
+walk exit=0 90s | playCareerHallLine: 4 routes, 36 walks, 380 checks, all checks passed

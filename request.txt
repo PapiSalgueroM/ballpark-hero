@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+walk: SHOTS=$RC_OUT node scripts/playCareerHallLine.mjs
+walk-noline: PLAY_CONTROL=noline SHOTS=$RC_OUT node scripts/playCareerHallLine.mjs
