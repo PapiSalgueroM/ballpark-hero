@@ -1,0 +1,254 @@
+{
+ "name": "phone-ticking-nolive",
+ "view": "phone",
+ "motion": "no-preference",
+ "translate": true,
+ "nolive": true,
+ "steps": [
+  {
+   "name": "the page draws",
+   "ok": true,
+   "did": "",
+   "pend": 457,
+   "structure": 0,
+   "raw": 0,
+   "digits": 0,
+   "back": 0,
+   "fonts": 0,
+   "judged": 261,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": null,
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "translated",
+   "ok": true,
+   "did": "",
+   "pend": 198,
+   "structure": 0,
+   "raw": 0,
+   "digits": 2,
+   "back": 0,
+   "fonts": 506,
+   "judged": 261,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": null,
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "tycoon press 1",
+   "ok": true,
+   "did": "Fechar as regras",
+   "pend": 114,
+   "structure": 0,
+   "raw": 0,
+   "digits": 2,
+   "back": 0,
+   "fonts": 332,
+   "judged": 242,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": null,
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "tycoon press 2",
+   "ok": true,
+   "did": "🏟️ Stadium",
+   "pend": 114,
+   "structure": 0,
+   "raw": 0,
+   "digits": 2,
+   "back": 0,
+   "fonts": 332,
+   "judged": 242,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": null,
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "tycoon press 3",
+   "ok": true,
+   "did": "🎓 Academy",
+   "pend": 95,
+   "structure": 0,
+   "raw": 0,
+   "digits": 3,
+   "back": 0,
+   "fonts": 314,
+   "judged": 215,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": null,
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "ticking at the end",
+   "ok": true,
+   "did": "",
+   "pend": 95,
+   "structure": 0,
+   "raw": 0,
+   "digits": 3,
+   "back": 0,
+   "fonts": 314,
+   "judged": 215,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": null,
+   "backs": 0,
+   "jerr": ""
+  }
+ ],
+ "boxes": {},
+ "stop": "",
+ "ageLooks": 0,
+ "ageWrong": [],
+ "worst": {
+  "structure": 0,
+  "raw": 0,
+  "digits": 3
+ },
+ "all": {
+  "structure": [],
+  "raw": [],
+  "digits": [
+   {
+    "at": "div.relative>div.absolute>span.text-white/90",
+    "react": "6 ' ",
+    "screen": "2  ' ",
+    "step": "translated",
+    "phase": "translated"
+   },
+   {
+    "at": "div#dukb-main.min-h-screen>div.max-w-2xl>div.text-xs",
+    "react": "lifetime  $40  ·  0  wins ·  0  goals ·  0  taps · match # 1  · milestones  0 / 10  · badges  0 / 47 ",
+    "screen": "Total de gastos:  $12  ·  0  vitórias ·  0  gols ·  0  toques · partida nº  1  · marcos  : 0  /  10  · emblemas  : 0  / ",
+    "step": "translated",
+    "phase": "translated"
+   },
+   {
+    "at": "div.relative>div.absolute>span.text-white/90",
+    "react": "11 ' ",
+    "screen": "2  ' ",
+    "step": "tycoon press 1",
+    "phase": "translated"
+   },
+   {
+    "at": "div#dukb-main.min-h-screen>div.max-w-2xl>div.text-xs",
+    "react": "lifetime  $73  ·  0  wins ·  0  goals ·  0  taps · match # 1  · milestones  0 / 10  · badges  0 / 47 ",
+    "screen": "Total de gastos:  $12  ·  0  vitórias ·  0  gols ·  0  toques · partida nº  1  · marcos  : 0  /  10  · emblemas  : 0  / ",
+    "step": "tycoon press 1",
+    "phase": "translated"
+   },
+   {
+    "at": "div.relative>div.absolute>span.text-white/90",
+    "react": "13 ' ",
+    "screen": "2  ' ",
+    "step": "tycoon press 2",
+    "phase": "translated"
+   },
+   {
+    "at": "div#dukb-main.min-h-screen>div.max-w-2xl>div.text-xs",
+    "react": "lifetime  $82  ·  0  wins ·  0  goals ·  0  taps · match # 1  · milestones  0 / 10  · badges  0 / 47 ",
+    "screen": "Total de gastos:  $12  ·  0  vitórias ·  0  gols ·  0  toques · partida nº  1  · marcos  : 0  /  10  · emblemas  : 0  / ",
+    "step": "tycoon press 2",
+    "phase": "translated"
+   },
+   {
+    "at": "div.flex>div.text-right>div.text-[11px]",
+    "react": "next find in ~ 29 s ",
+    "screen": "Próxima descoberta em aproximadamente  30  segundos. ",
+    "step": "tycoon press 3",
+    "phase": "translated"
+   },
+   {
+    "at": "div>div.relative>div.h-24",
+    "react": "the beds are empty. The scouts are out looking, the first kid arrives in about  29 s. ",
+    "screen": "As camas estão vazias. Os escoteiros estão procurando, a primeira criança chega em cerca de  30  segundos. ",
+    "step": "tycoon press 3",
+    "phase": "translated"
+   },
+   {
+    "at": "article.mt-10>div.space-y-3>p",
+    "react": "And it goes deep. Your ground plays in a league with a real table, and winning it climbs a ladder of ten divisions that ",
+    "screen": "E a coisa vai fundo. Seu estádio joga em uma liga com uma tabela real, e vencer garante a subida em uma escada de dez di",
+    "step": "tycoon press 3",
+    "phase": "translated"
+   },
+   {
+    "at": "div.flex>div.text-right>div.text-[11px]",
+    "react": "next find in ~ 7 s ",
+    "screen": "Próxima descoberta em aproximadamente  30  segundos. ",
+    "step": "ticking at the end",
+    "phase": "translated"
+   },
+   {
+    "at": "div>div.relative>div.h-24",
+    "react": "the beds are empty. The scouts are out looking, the first kid arrives in about  7 s. ",
+    "screen": "As camas estão vazias. Os escoteiros estão procurando, a primeira criança chega em cerca de  30  segundos. ",
+    "step": "ticking at the end",
+    "phase": "translated"
+   }
+  ]
+ },
+ "translated": true,
+ "ticking": {
+  "found": "0 / 3 bedsnext find in ~30s",
+  "requests": 2,
+  "bad": 0,
+  "sample": {
+   "n": 399,
+   "english": 0,
+   "flips": 0,
+   "texts": [
+    "0 / 3 camas Próxima descoberta em aproximadamente ",
+    "0 / 3 camas Próxima descoberta em aproximadamente ",
+    "0 / 3 camas Próxima descoberta em aproximadamente ",
+    "0 / 3 camas Próxima descoberta em aproximadamente ",
+    "0 / 3 camas Próxima descoberta em aproximadamente ",
+    "0 / 3 camas Próxima descoberta em aproximadamente ",
+    "0 / 3 camas Próxima descoberta em aproximadamente ",
+    "0 / 3 camas Próxima descoberta em aproximadamente ",
+    "0 / 3 camas Próxima descoberta em aproximadamente "
+   ],
+   "gone": 0,
+   "reactChanges": 1
+  }
+ },
+ "end": {
+  "age": null,
+  "phase": "",
+  "stats": null,
+  "fonts": 314,
+  "h1": [
+   "MAGNATA DOS ESTÁDIOS"
+  ]
+ },
+ "net": {
+  "db": 1,
+  "blocked": [
+   "fonts.googleapis.com",
+   "fonts.gstatic.com",
+   "www.google.com"
+  ]
+ },
+ "errors": [],
+ "notFound": 0,
+ "guardLines": 0,
+ "seconds": 43
+}

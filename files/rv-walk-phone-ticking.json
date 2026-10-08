@@ -1,0 +1,233 @@
+{
+ "name": "phone-ticking",
+ "view": "phone",
+ "motion": "no-preference",
+ "translate": true,
+ "nolive": false,
+ "steps": [
+  {
+   "name": "the page draws",
+   "ok": true,
+   "did": "",
+   "pend": 457,
+   "structure": 0,
+   "raw": 0,
+   "digits": 0,
+   "back": 0,
+   "fonts": 0,
+   "judged": 261,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": {
+    "swaps": 0,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 0
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "translated",
+   "ok": true,
+   "did": "",
+   "pend": 218,
+   "structure": 0,
+   "raw": 0,
+   "digits": 1,
+   "back": 0,
+   "fonts": 510,
+   "judged": 261,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": {
+    "swaps": 860,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 790
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "tycoon press 1",
+   "ok": true,
+   "did": "Fechar as regras",
+   "pend": 132,
+   "structure": 0,
+   "raw": 0,
+   "digits": 0,
+   "back": 0,
+   "fonts": 296,
+   "judged": 242,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": {
+    "swaps": 1301,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 1291
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "tycoon press 2",
+   "ok": true,
+   "did": "🏟️ Stadium",
+   "pend": 132,
+   "structure": 0,
+   "raw": 0,
+   "digits": 1,
+   "back": 0,
+   "fonts": 293,
+   "judged": 242,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": {
+    "swaps": 1915,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 1986
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "tycoon press 3",
+   "ok": true,
+   "did": "🎓 Academy",
+   "pend": 96,
+   "structure": 0,
+   "raw": 0,
+   "digits": 1,
+   "back": 0,
+   "fonts": 312,
+   "judged": 215,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": {
+    "swaps": 2085,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 2047
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "ticking at the end",
+   "ok": true,
+   "did": "",
+   "pend": 96,
+   "structure": 0,
+   "raw": 0,
+   "digits": 1,
+   "back": 0,
+   "fonts": 330,
+   "judged": 221,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": {
+    "swaps": 2241,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 2191
+   },
+   "backs": 0,
+   "jerr": ""
+  }
+ ],
+ "boxes": {},
+ "stop": "",
+ "ageLooks": 0,
+ "ageWrong": [],
+ "worst": {
+  "structure": 0,
+  "raw": 0,
+  "digits": 1
+ },
+ "all": {
+  "structure": [],
+  "raw": [],
+  "digits": [
+   {
+    "at": "div.max-w-2xl>div.mb-3>div.text-[10px]",
+    "react": "next star at $4.00M lifetime earnings ($54 so far) ",
+    "screen": "próxima estrela com ganhos totais de US$ 4 milhões (US$ 54 até agora) ",
+    "step": "translated",
+    "phase": "translated"
+   },
+   {
+    "at": "div.text-right>div.text-sm>span.text-[10px]",
+    "react": "/  120  seats ",
+    "screen": "   ",
+    "step": "tycoon press 2",
+    "phase": "translated"
+   },
+   {
+    "at": "article.mt-10>div.space-y-3>p",
+    "react": "And it goes deep. Your ground plays in a league with a real table, and winning it climbs a ladder of ten divisions that ",
+    "screen": "E a coisa vai fundo. Seu estádio joga em uma liga com uma tabela real, e vencer garante a subida em uma escada de dez di",
+    "step": "tycoon press 3",
+    "phase": "translated"
+   }
+  ]
+ },
+ "translated": true,
+ "ticking": {
+  "found": "0 / 3 bedsnext find in ~23s",
+  "requests": 26,
+  "bad": 0,
+  "sample": {
+   "n": 399,
+   "english": 0,
+   "flips": 0,
+   "texts": [
+    "0 / 3 camas next find in ~20s",
+    "0 / 3 camas next find in ~18s",
+    "0 / 3 camas next find in ~16s",
+    "0 / 3 camas next find in ~14s",
+    "0 / 3 camas next find in ~12s",
+    "0 / 3 camas next find in ~10s",
+    "0 / 3 camas next find in ~8s",
+    "0 / 3 camas next find in ~6s",
+    "0 / 3 camas next find in ~4s"
+   ],
+   "gone": 0,
+   "reactChanges": 21
+  }
+ },
+ "end": {
+  "age": null,
+  "phase": "",
+  "stats": {
+   "swaps": 2241,
+   "removed": 0,
+   "inserted": 0,
+   "restored": 2191
+  },
+  "fonts": 330,
+  "h1": [
+   "MAGNATA DOS ESTÁDIOS"
+  ]
+ },
+ "net": {
+  "db": 1,
+  "blocked": [
+   "fonts.googleapis.com",
+   "fonts.gstatic.com",
+   "www.google.com"
+  ]
+ },
+ "errors": [],
+ "notFound": 0,
+ "guardLines": 0,
+ "seconds": 58
+}
