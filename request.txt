@@ -1,0 +1,2 @@
+#!build
+weights: for f in dist/assets/*.js; do if grep -q -e "Jacoby Brissett" -e "nfl-v2.3-2026-10-08" "$f"; then echo "$(basename $f) raw $(wc -c < $f) gzip $(gzip -9 -c $f | wc -c)"; fi; done | tee $RC_OUT/weights.txt
