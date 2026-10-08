@@ -29,6 +29,7 @@ import { act, cleanup, render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { higherLowerScore } from '@/lib/higherLowerScore';
+import { formatNumber } from '@/lib/formatNumber';
 import { loadSave, totals, outcome, pointsFor, type RoundResult } from '@/lib/faceOff';
 import { higherLowerPlayers, hlNoteFor } from '@/data/higherLowerPlayers';
 import { BOARD_SIZE } from '@/lib/silverwareSort';
@@ -332,7 +333,9 @@ describe("Rank 'Em reveals the points it hands the recorder", () => {
       expect(rec).toBeDefined();
       expect(rec!.score).toBe((kind === 'win' ? 5 : 3) * RANK_POINTS_PER_SLOT);
       expect(stateOf(container)).toBe(kind);
-      expect(pill(container)).toBe(String(rec!.score));
+      /* Round 1085: the pill groups thousands, so a daily win's 1000 recorded
+         points read 1,000. The recorded number itself is checked above. */
+      expect(pill(container)).toBe(formatNumber(rec!.score as number));
       expect(firstH2(container)).toBe(`${kind === 'win' ? 5 : 3} / 5 correct`);
     });
   }

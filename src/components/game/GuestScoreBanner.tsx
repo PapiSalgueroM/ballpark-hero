@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { AuthModal } from '@/components/auth/AuthModal';
 import { useAuth } from '@/contexts/AuthContext';
 import { Flame } from 'lucide-react';
+import { formatNumber } from '@/lib/formatNumber';
 
 interface GuestScoreBannerProps {
   score: number;
@@ -21,7 +22,7 @@ export function GuestScoreBanner({ score }: GuestScoreBannerProps) {
     <>
       <div className="mt-4 p-4 rounded-xl border border-primary/20 bg-primary/5 text-center">
         <p className="text-lg font-medium mb-2">
-          You scored <span className="text-primary font-bold">{score}</span>! 🎉
+          You scored <span className="text-primary font-bold">{formatNumber(score)}</span>! 🎉
         </p>
         <p className="text-sm text-muted-foreground mb-3">
           Create a free account to save your score and track your streak <Flame className="inline w-4 h-4 text-orange-500" />

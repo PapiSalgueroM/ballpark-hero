@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { peekCurrentPlayerName } from '@/lib/completions';
+import { formatNumber } from '@/lib/formatNumber';
 import {
   DAILY_STANDING_RPC,
   bucketEdges,
@@ -99,7 +100,7 @@ const PostGameStats = ({ gameSlug, userScore, isVisible, buckets }: PostGameStat
               />
               {standing.counts[i] > 0 && (
                 <span className="absolute right-1.5 top-0 h-full flex items-center text-[10px] text-muted-foreground">
-                  {standing.counts[i]}
+                  {formatNumber(standing.counts[i])}
                 </span>
               )}
             </div>
@@ -107,9 +108,9 @@ const PostGameStats = ({ gameSlug, userScore, isVisible, buckets }: PostGameStat
         ))}
       </div>
       <div className="flex items-center justify-center gap-4 mt-3 text-xs text-muted-foreground">
-        <span>You <span className="font-semibold text-foreground">{Math.round(userScore)}</span></span>
-        <span>Median <span className="font-semibold text-foreground">{Math.round(standing.median)}</span></span>
-        <span>Top <span className="font-semibold text-foreground">{standing.top}</span></span>
+        <span>You <span className="font-semibold text-foreground">{formatNumber(Math.round(userScore))}</span></span>
+        <span>Median <span className="font-semibold text-foreground">{formatNumber(Math.round(standing.median))}</span></span>
+        <span>Top <span className="font-semibold text-foreground">{formatNumber(standing.top)}</span></span>
       </div>
     </div>
   );

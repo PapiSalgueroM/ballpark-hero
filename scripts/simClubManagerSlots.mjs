@@ -50,20 +50,26 @@
  *                             old save no longer reads as slot 1. Section 4.
  *   SLOTS_CONTROL=leanmore    the park drops the season history too, so the
  *                             old save comes back changed. Section 4.
+ *   SLOTS_CONTROL=decisioncontent the park changes a decision's words.
+ *                                Section 4 must read that roundtrip difference.
  *
  * MEASURED on the healthy engine, six streams (the default and SIM_SEED 1 to
- * 5), 2026-10-02:
+ * 5), 2026-10-06, Round 1072 automatic Quick Sim coaching:
  *   section 1: 20 of 20 season digests identical on every stream.
  *   section 2: everything Club Manager keeps on the device with three careers
  *     at the final whistle of season 15 (one active and full, two parked and
- *     lean): 413,738 / 416,441 / 414,717 / 416,960 / 416,606 / 415,901
- *     characters. Default stream by key: active (Barcelona, the 2010-11 world
- *     is two leagues) 90,724, Everton parked 163,966, Lincoln City parked
- *     159,017, index 31. Under the dupe control the same stream holds a fifth
- *     key, a lean 52,023 copy of the smallest career, total 465,761.
- *   BUDGET 440,000 sits 23,000 over the largest healthy total and 25,000
- *   under what the dupe control leaves (a lean copy of the smallest career),
- *   against a spread of 3,222 between streams. For scale, simClubManagerSaveSize
+ *     lean): 444,005 / 444,634 / 442,415 / 444,992 / 442,545 / 442,058
+ *     characters. Exact pre-1072 main on the same harness: 439,821 / 439,872 /
+ *     440,871 / 440,150 / 439,884 / 438,756, so the old 440,000 fence already
+ *     failed on two streams after earlier engine growth. Coaching changes
+ *     existing squad and career outcomes, with four saved keys in both arms;
+ *     existing optional live:null adds only 36 characters across the careers.
+ *     Default keys: active Barcelona 109,938, Everton parked 169,315, Lincoln
+ *     City parked 164,721, index 31. The dupe control adds a lean 57,768 copy
+ *     of Barcelona, a fifth key, total 501,773.
+ *   BUDGET 470,000 sits 25,008 over the largest healthy total and 31,773
+ *   under what the dupe control leaves, against a spread of 2,934 between
+ *   healthy streams. For scale, simClubManagerSaveSize
  *   works against a 5 MB origin quota, and three careers take under a fifth of it.
  *   section 4 (2026-10-03, default, SIM_SEED 1, 2): the lived in save stands
  *     at season 5, week 19 with 190 / 196 / 191 h2h rows (115,179 / 116,726 /
@@ -79,7 +85,8 @@
  * Run: node scripts/simClubManagerSlots.mjs
  */
 import './lib/seedRandom.mjs';
-import { execSync } from 'node:child_process';
+import { execSync, spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -93,18 +100,71 @@ const BUNDLE = `${TMP}/bundle.mjs`;
 
 const SWITCHES = Number(process.env.SLOTS_SWITCHES || 20);
 const BUDGET_SEASON = Number(process.env.SLOTS_BUDGET_SEASON || 15);
-const BUDGET = 440_000; // healthy 413,738 to 416,960 over six streams; one duplicated career (the dupe control) 465,761
+const BUDGET = 470_000; // measured healthy 442,058 to 444,992; actual duplicated career control 501,773
 const SAVE_KEY = 'dukb-club-manager-save';
 /* SIM_SEED re-roots every career's stream, to measure the fences on fresh
    samples on purpose. The default is the stream the fences are judged on. */
 const BASE_SEED = ((Number(process.env.SIM_SEED) || 0) * 15485863 + 0x2f6b9) >>> 0;
 
 const CONTROL = process.env.SLOTS_CONTROL || '';
-const OWN = { nopark: 1, dupe: 2, norollback: 3, oldversion: 4, leanmore: 4 };
+const OWN = { nopark: 1, dupe: 2, norollback: 3, oldversion: 4, leanmore: 4, decisioncontent: 4 };
 if (CONTROL && !(CONTROL in OWN)) {
   console.error(`SLOTS_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(OWN).join(', ')})`);
   process.exit(1);
 }
+const evidenceDir = process.env.CM_SLOTS_ARTIFACTS || path.join(ROOT, 'cm-slots-artifacts');
+fs.mkdirSync(evidenceDir, { recursive: true });
+const sha = value => createHash('sha256').update(value).digest('hex');
+const sourceHashes = [];
+for (const file of ['src/lib/clubManager.ts', 'src/lib/clubManagerSlots.ts']) {
+  const bytes = fs.readFileSync(path.join(ROOT, file));
+  sourceHashes.push({ file, before: sha(bytes) });
+}
+const heldSources = () => {
+  const sources = [];
+  for (const { file, before } of sourceHashes) {
+    const bytes = fs.readFileSync(path.join(ROOT, file));
+    const after = sha(bytes);
+    sources.push({ file, before, after, held: before === after });
+  }
+  return sources;
+};
+if (CONTROL === 'decisioncontent' && process.env.CM_SLOTS_EVIDENCE_CHILD !== '1') {
+  const runs = [];
+  for (const name of ['', CONTROL]) {
+    const childDir = path.join(evidenceDir, name || 'baseline');
+    const run = spawnSync(process.execPath, [fileURLToPath(import.meta.url)], { cwd: ROOT,
+      env: { ...process.env, SLOTS_CONTROL: name, CM_SLOTS_EVIDENCE_CHILD: '1', CM_SLOTS_ARTIFACTS: childDir },
+      encoding: 'utf8', timeout: 240000, maxBuffer: 16 * 1024 * 1024, windowsHide: true,
+    });
+    fs.writeFileSync(path.join(evidenceDir, `${name || 'baseline'}-runner.log`), `${run.stdout || ''}\n${run.stderr || ''}`);
+    let report = null;
+    try { report = JSON.parse(fs.readFileSync(path.join(childDir, `${name || 'normal'}-report.json`), 'utf8')); } catch { /* missing evidence receives no credit */ }
+    runs.push({ name: name || 'baseline', exit: run.status, error: run.error?.message ?? null, signal: run.signal, report });
+  }
+  const [baseline, fault] = runs;
+  const validRun = run => !run.error && !run.signal && Array.isArray(run.report?.runtimeErrors) && run.report.runtimeErrors.length === 0
+    && Array.isArray(run.report.sources) && run.report.sources.length === 2 && run.report.sources.every(row => row.held);
+  const receipt = fault.report?.mutation;
+  const sources = heldSources();
+  const passed = validRun(baseline) && baseline.exit === 0 && baseline.report.red.length === 0
+    && validRun(fault) && fault.exit === 1 && JSON.stringify(fault.report.red) === '[4]'
+    && fault.report.tags['4']?.includes('roundtrip') && receipt?.anchorCount === 1
+    && receipt.original !== receipt.changed && sources.every(row => row.held);
+  fs.writeFileSync(path.join(evidenceDir, 'decisioncontent-control.json'), JSON.stringify({ passed, sources, runs }, null, 2));
+  fs.rmSync(TMP, { recursive: true, force: true });
+  if (!passed) {
+    console.error('CONTROL DID NOT FIRE: decisioncontent requires its sole roundtrip failure, a fresh green normal baseline, zero runtime errors and held source bytes');
+    process.exit(2);
+  }
+  console.log('CONTROL FIRED: SLOTS_CONTROL=decisioncontent changed only decision roundtrip; fresh normal baseline green, executable receipt verified and source bytes held');
+  process.exit(1);
+}
+const runtimeErrors = [];
+const captureRuntime = error => { runtimeErrors.push({ name: error?.name, message: String(error?.message ?? error) }); process.exitCode = 2; };
+process.on('uncaughtExceptionMonitor', captureRuntime);
+process.on('unhandledRejection', captureRuntime);
+let mutation = null;
 const abort = m => { console.error(m); process.exit(1); };
 const readLF = f => fs.readFileSync(f, 'utf8').split('\r\n').join('\n');
 const swap = (src, from, to, where) => {
@@ -154,15 +214,26 @@ const SLOT_SWAPS = {
     '  if (outgoing) return JSON.stringify({ ...leanCareer(outgoing), history: [] });\n',
     'the lean park of the career in memory',
   ],
+  decisioncontent: [
+    '  if (outgoing) return JSON.stringify(leanCareer(outgoing));\n',
+    "  if (outgoing) return JSON.stringify({ ...leanCareer(outgoing), decisions: outgoing.decisions?.map((d, i) => i === 0 ? { ...d, text: 'Wrong decision!!' + d.text.slice(16) } : d) });\n",
+    'the preserved content of a parked decision',
+  ],
 };
 if (CONTROL) {
   let src = readLF(`${ROOT}/src/lib/clubManagerSlots.ts`);
+  const original = src;
   const [from, to, where] = SLOT_SWAPS[CONTROL];
   src = swap(src, from, to, `clubManagerSlots.ts (${where})`);
   src = swap(src, "from './clubManager';", `from '${ROOT_URL}/src/lib/clubManager.ts';`, 'the engine import');
   src = swap(src, "from './clubManagerEras';", `from '${ROOT_URL}/src/lib/clubManagerEras.ts';`, 'the eras import');
   slotsPath = `${TMP}/clubManagerSlots.control.ts`;
   fs.writeFileSync(slotsPath, src);
+  if (CONTROL === 'decisioncontent') {
+    mutation = { file: 'src/lib/clubManagerSlots.ts', anchor: from, replacement: to,
+      anchorCount: original.split(from).length - 1, original: sha(original), changed: sha(src) };
+    fs.writeFileSync(path.join(evidenceDir, 'decisioncontent-copied-source.ts'), src);
+  }
   console.log(`NEGATIVE CONTROL ON: SLOTS_CONTROL=${CONTROL}, the slots module is a rewritten copy`);
 }
 
@@ -255,13 +326,14 @@ function playOne(s) {
     and the clock never repeats, so the same career run twice carries
     different labels on the same messages and players. Renaming keeps every
     message, player and reference; it drops only the label's number. */
-const GENERATED_ID = /"(?:youth|sc|pr|pq|msg)-[a-z0-9-]+"/g;
+const GENERATED_ID = /"(desk-\d+-\d+-appeal-)?((?:youth|sc|pr|pq|msg)-[a-z0-9-]+)"/g;
 const digest = s => {
   const { h2h, ...rest } = s;
   const seen = new Map();
-  return JSON.stringify(rest).replace(GENERATED_ID, m => {
-    if (!seen.has(m)) seen.set(m, `"#id${seen.size}"`);
-    return seen.get(m);
+  // Appeals embed the player's id; retain their kind, season and week.
+  return JSON.stringify(rest).replace(GENERATED_ID, (_m, prefix, id) => {
+    if (!seen.has(id)) seen.set(id, `#id${seen.size}`);
+    return JSON.stringify((prefix ?? '') + seen.get(id));
   });
 };
 function diffKeys(a, b) {
@@ -382,7 +454,8 @@ for (let i = 0; i < 3; i++) {
   console.log(`   ${CAREERS[i].label.padEnd(36)} alone: ${a.map(x => x.line).join(', ')}`);
   console.log(`   ${''.padEnd(36)} slots: ${b.map(x => x.line).join(', ')}`);
   if (firstBad !== null) {
-    fail(`${CAREERS[i].label}: season ${firstBad + 1} differs from the career played alone, in ${diffKeys(a[firstBad].d, b[firstBad].d).slice(0, 12).join(', ')}`);
+    const changed = diffKeys(a[firstBad].d, b[firstBad].d);
+    fail(`${CAREERS[i].label}: season ${firstBad + 1} differs from the career played alone, in ${changed.slice(0, 12).join(', ')}`, changed.includes('decisions') ? 'decision' : 'check');
     console.error(`        first difference ${firstPath(JSON.parse(a[firstBad].d), JSON.parse(b[firstBad].d))}`);
   }
 }
@@ -409,6 +482,17 @@ const bytesOf = k => k.length + store.get(k).length;
 const total = cmKeys.reduce((a, k) => a + bytesOf(k), 0);
 console.log(`   seasons played: ${played.join(', ')}; keys: ${cmKeys.map(k => `${k} ${bytesOf(k)}`).join(', ')}`);
 console.log(`   total ${total} characters across ${cmKeys.length} keys (budget ${BUDGET})`);
+fs.writeFileSync(path.join(evidenceDir, `${CONTROL || 'normal'}-sizes.json`), JSON.stringify({ arm: process.env.CM_SLOTS_ARM || 'current-source',
+  control: CONTROL || 'normal', engineHash: sourceHashes[0].before, seed: BASE_SEED, total, budget: BUDGET,
+  slots: cmKeys.map(key => {
+    const value = JSON.parse(store.get(key));
+    return { key, chars: bytesOf(key), club: value.clubName ?? null, season: value.season ?? null,
+      squad: { total: value.squad?.length ?? 0, youth: value.squad?.filter(p => p.isYouth).length ?? 0, loans: value.squad?.filter(p => p.onLoan).length ?? 0 },
+      arrays: Object.fromEntries(Object.entries(value).filter(([, v]) => Array.isArray(v)).map(([k, v]) => [k, v.length])),
+      fields: Object.fromEntries(Object.entries(value).map(([k, v]) => [k, JSON.stringify(v).length])),
+    };
+  }),
+}, null, 2));
 if (played.some(n => n < BUDGET_SEASON)) fail(`the careers reached only ${played.join(", ")} seasons, short of ${BUDGET_SEASON}`);
 if (cmKeys.filter(k => k !== SLOTS_INDEX_KEY).length !== 3) fail(`${cmKeys.length} Club Manager keys on the device, not three saves and an index`);
 if (total > BUDGET) fail(`three season ${BUDGET_SEASON} careers take ${total} characters, over the ${BUDGET} budget`, 'budget');
@@ -507,11 +591,21 @@ else {
 /* ================================================================== */
 fs.rmSync(TMP, { recursive: true, force: true });
 const red = Object.entries(failures).filter(([, n]) => n > 0).map(([k]) => Number(k));
+await new Promise(resolve => setImmediate(resolve));
+const sources = heldSources();
+fs.writeFileSync(path.join(evidenceDir, `${CONTROL || 'normal'}-report.json`), JSON.stringify({ red,
+  failures, tags: Object.fromEntries(Object.entries(tags).map(([key, value]) => [key, [...value]])),
+  runtimeErrors, sources, mutation,
+}, null, 2));
+if (runtimeErrors.length || sources.some(row => !row.held)) {
+  console.error('simClubManagerSlots: runtime errors or changed original source bytes receive no control credit');
+  process.exit(2);
+}
 if (CONTROL) {
   const own = OWN[CONTROL];
   /* The check each control is there to prove, not a neighbour of it: the
      byte fence itself for dupe, a moved store for norollback. */
-  const needTag = { dupe: 'budget', norollback: 'moved', oldversion: 'slot1', leanmore: 'roundtrip' }[CONTROL];
+  const needTag = { dupe: 'budget', norollback: 'moved', oldversion: 'slot1', leanmore: 'roundtrip', decisioncontent: 'roundtrip' }[CONTROL];
   const firedOwn = red.includes(own) && (!needTag || tags[own]?.has(needTag));
   if (firedOwn) {
     console.log(`\nCONTROL FIRED: SLOTS_CONTROL=${CONTROL} turned section ${own} red${needTag ? ` through its ${needTag} check` : ''} (red sections: ${red.join(', ')}), as it must`);

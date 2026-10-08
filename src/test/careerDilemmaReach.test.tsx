@@ -83,6 +83,7 @@ vi.mock('@/components/game/PostGameStats', () => ({ default: () => null }));
 import * as E from '@/lib/soccerCareerEngine';
 import type { CareerState } from '@/lib/soccerCareerEngine';
 import SoccerCareer from '@/pages/SoccerCareer';
+import { signThroughReview } from './signThroughReview';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const SAVE_KEY = 'soccerCareerSave';
@@ -161,7 +162,7 @@ function makeSave(seed: number, startAge: number): CareerState | null {
    a card's own tiles come before its answers (a won tournament draws its
    tiles, then the speeches, and a tile opens a sub screen whose way out is
    Back). */
-const PREFER = ['← Back', '💪 Not Done Yet', 'Stay', 'Sign', 'Continue', 'Next', 'Accept', 'Confirm', 'Done', 'Close'];
+const PREFER = ['← Back', '💪 Not Done Yet', 'Stay', 'Sign', 'Review contract', 'Continue', 'Next', 'Accept', 'Confirm', 'Done', 'Close'];
 const screenCard = (root: HTMLElement) => root.querySelector('div.space-y-3.order-1')?.firstElementChild?.firstElementChild as HTMLElement | null;
 const dilemmaCard = (root: HTMLElement) => {
   const tag = Array.from(root.querySelectorAll('span')).find(s => (s.textContent ?? '').includes('MORAL DILEMMA'));
@@ -249,6 +250,8 @@ async function playOne(seed: number, startAge: number) {
       endedBy = `steps (phase ${s.phase} at ${s.age}, pressing "${(target.textContent ?? '').trim().slice(0, 40)}")`;
       await act(async () => { fireEvent.click(target!); });
       await tick();
+      /* Round 1082: an offer is signed in the review dialog, not on the card. */
+      await signThroughReview(target!, () => tick());
     }
     return { offers, shows, kept, seasonsClosed, closedAt, endedBy, startPhase: start.phase };
   } finally {

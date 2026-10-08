@@ -69,6 +69,24 @@
  * your last" where it said "Leave whole": NFL fixed save "mid" step 53 and
  * MLB fixed save "suspended" step 41. NBA and NHL do not move at all: their
  * recorded careers never draw a reconciled card. Still 1,864,921 bytes.
+ * Release AL (2026-10-07) re-recorded it on purpose for Codex Round 1085,
+ * grouped thousands, which changes what the boards print and nothing they
+ * do. Proof first: the release tree at 35caba22 with four files taken back
+ * from main 5b70b05f (src/lib/usCareerStatLine.ts and
+ * src/components/us-career/UsCareerBoard.tsx, which carry 1085's change, and
+ * src/lib/nbaMyCareer.ts and src/lib/nhlMyCareer.ts, which carry the
+ * release's own follow up) replayed the 1039 fixture green in all four
+ * sports. Then recorded from the release tree at 198e730d. Against the
+ * 1039 fixture 1,130 fields differ and every one is a screen: 1,021 markup
+ * hashes (NFL 334, NBA 241, MLB 214, NHL 232), 98 text excerpts and 11
+ * Career Log labels, the last two in the NFL only. Zero save hashes, save
+ * fields, click paths, lengths, coverage, fixed saves or first paint
+ * hashes moved. The words are season lines of a thousand or more ("71 rec,
+ * 1006 yds, 7 TD" is now "1,006 yds"); the markup is the hub's Career so
+ * far line going from 10px to 12px text in every sport, plus the NBA and
+ * NHL retirement cards, where the release grouped the totals 1085 left
+ * bare (games in the NBA line, all four numbers in the NHL one): 12 screens
+ * each. 1,864,932 bytes.
  * Recorded twice from the same tree, the fixture came out byte for byte the
  * same (cmp exit 0), which is what makes a red replay mean something. There is no
  * band here on purpose: the check is byte equality, and a path either

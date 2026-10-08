@@ -185,6 +185,10 @@ try {
       await activate(rules, touch);
       assert.match(await dialog.locator('[data-practice-rules]').innerText(), /Banking uses this season's session/);
       await activate(rules, touch);
+      assert.equal(await dialog.getAttribute('data-practice-paused'), 'true', 'Closing rules resumed practice without an explicit action');
+      const resume = dialog.getByRole('button', { name: 'Resume practice', exact: true });
+      await tapSize(resume); await activate(resume, touch);
+      assert.equal(await dialog.getAttribute('data-practice-paused'), 'false', 'Explicit resume did not release the practice pause');
       const startDrill = dialog.getByRole('button', { name: /Tap to start/ });
       await tapSize(startDrill); await layout(page, dialog); await shot('drill');
       await activate(startDrill, touch);

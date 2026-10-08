@@ -5,6 +5,7 @@ import { CAGE_DRILLS, canCagePracticeAction, nextCageDrill, type CageDrill } fro
 import { CAGE_CIRCUIT_STYLES, isCageCircuitComplete } from '@/lib/cageCircuit';
 import { CageClashCanvas } from './CageClashCanvas';
 import { CageFightStats } from './CageFightStats';
+import { CagePracticeFeedback } from './CagePracticeFeedback';
 
 const button = 'min-h-11 rounded-lg border border-border bg-background px-2 text-xs font-bold transition-colors hover:bg-muted active:bg-amber-400/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500 disabled:cursor-not-allowed disabled:opacity-40';
 const actions: { action: CageAction; key: string }[] = [{ action: 'jab', key: 'J' }, { action: 'power', key: 'K' }, { action: 'kick', key: 'L' }, { action: 'grapple', key: 'U' }, { action: 'submit', key: 'I' }, { action: 'escape', key: 'O' }];
@@ -116,7 +117,7 @@ export function CageClashBoard({ onHelp, helpOpen }: { onHelp: () => void; helpO
       <button type="button" data-cage-start className="min-h-11 w-full rounded-lg bg-amber-400 text-sm font-black text-slate-950 hover:bg-amber-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500" onClick={() => { if (mode === 'practice') game.startPractice(drill, style); else if (mode === 'circuit') game.startCircuit(style); else game.start(style, opponent); focusArena(); }}>{mode === 'practice' ? 'Start drill' : mode === 'circuit' ? 'Start circuit' : 'Fight'}</button>
     </> : <>
       <div className="flex items-center justify-between gap-2 text-[10px] font-bold"><span data-cage-status>{position}</span><span className="text-muted-foreground" aria-label="Submission progress">Sub: you {Math.round(fight.player.submission)}% · CPU {Math.round(fight.cpu.submission)}%</span></div>
-      <p role="status" aria-live="polite" className="min-h-4 text-[11px] font-medium">{practice ? practice.drill === 'striking' ? `Shots ${Math.min(3, fight.player.hits)}/3 · Gas ${Math.floor(fight.player.stamina)}/100. ${fight.player.hits >= 3 ? 'Release every control to reach 90 gas.' : lesson.objective}` : lesson.objective : fight.message || tip}</p>
+      {practice ? <CagePracticeFeedback practice={practice} /> : <p role="status" aria-live="polite" className="min-h-4 text-[11px] font-medium">{fight.message || tip}</p>}
       {fight.phase === 'fight' && !practice?.complete && <div className="space-y-1.5">
         <div className="grid grid-cols-3 gap-1.5">
           <button type="button" {...controlProps('left')} disabled={!running || fight.position !== 'standing'} className={button} aria-label="Move left">◀ <span className="ml-1">Move</span><span className="ml-1 text-[9px] text-muted-foreground">A</span></button>

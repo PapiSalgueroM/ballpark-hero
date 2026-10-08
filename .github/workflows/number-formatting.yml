@@ -1,0 +1,306 @@
+name: Large number display
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - codex/number-formatting-1085
+  pull_request:
+    paths:
+      - .github/workflows/number-formatting.yml
+      - src/lib/formatNumber.ts
+      - src/lib/usCareerStatLine.ts
+      - src/lib/usCareerSeasonReview.ts
+      - src/components/game/ResultMoment.tsx
+      - src/components/game/GuestScoreBanner.tsx
+      - src/components/game/PostGameStats.tsx
+      - src/components/us-career/CareerSeasonReview.tsx
+      - src/components/us-career/CareerSeasonComparison.tsx
+      - src/components/us-career/UsCareerBoard.tsx
+      - src/components/club-manager/ClubManagerCareerPanel.tsx
+      - src/pages/SoccerCareer.tsx
+      - src/pages/StadiumTycoon.tsx
+      - src/pages/Profile.tsx
+      - src/pages/Leaderboard.tsx
+      - src/test/numberFormatting.test.tsx
+      - src/test/careerSeasonReview.test.tsx
+      - src/test/usCareerStatLines.test.tsx
+      - scripts/simNumberFormatting.mjs
+      - scripts/simResultMoment.mjs
+      - scripts/qa/numberFormatting1085.mjs
+      - scripts/qa/numberFormatting1085Parity.mjs
+      - scripts/qa/numberFormatting1085-expectations.json
+
+permissions:
+  contents: read
+concurrency:
+  group: number-formatting-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      VITEST_MAX_FORKS: 1
+      VITEST_MIN_FORKS: 1
+      SEO_SPLIT_BASE_REF: HEAD
+      TZ: UTC
+      SIM_OFFLINE_RECEIPT: number-formatting-artifacts/transport.log
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Prepare remote verification
+        run: |
+          mkdir -p number-formatting-artifacts
+          git rev-parse HEAD > number-formatting-artifacts/source-head.txt
+          git rev-parse 'HEAD^{tree}' > number-formatting-artifacts/source-tree.txt
+          sha256sum package.json package-lock.json > number-formatting-artifacts/dependencies-before.txt
+          npm ci
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const lock = JSON.parse(fs.readFileSync('package-lock.json'));
+          const installed = [];
+          for (const [path, entry] of Object.entries(lock.packages)) {
+            const file = path + '/package.json';
+            if (!path.startsWith('node_modules/') || !fs.existsSync(file)) continue;
+            const version = JSON.parse(fs.readFileSync(file)).version;
+            assert.equal(version, entry.version, `Locked installed version: ${path}`);
+            installed.push({ path, version });
+          }
+          assert(installed.length > 0);
+          fs.writeFileSync('number-formatting-artifacts/installed-before.json', JSON.stringify(installed, null, 2));
+          NODE
+          npm install --no-save playwright
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const before = JSON.parse(fs.readFileSync('number-formatting-artifacts/installed-before.json'));
+          const after = before.map(entry => ({ path: entry.path, version: JSON.parse(fs.readFileSync(entry.path + '/package.json')).version }));
+          fs.writeFileSync('number-formatting-artifacts/installed-after.json', JSON.stringify(after, null, 2));
+          assert.deepEqual(after, before);
+          console.log(`Held ${after.length} actual installed dependency versions.`);
+          NODE
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+      - name: Actual application type gate and build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee number-formatting-artifacts/types.log
+          npm run build 2>&1 | tee number-formatting-artifacts/build.log
+      - name: Actual display outcomes and effective copied faults
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" NUMBER_FORMATTING_CONTROL=all node scripts/simNumberFormatting.mjs 2>&1 | tee number-formatting-artifacts/outcomes.log
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const report = JSON.parse(fs.readFileSync('number-formatting-artifacts/outcomes/summary.json'));
+          assert.equal(report.status, 'passed');
+          assert.equal(report.normal.passed, 13); assert.equal(report.normal.failed, 0);
+          assert(report.normal.records > 0); assert.equal(report.controls.length, 28);
+          assert(report.controls.every(row => row.status === 'assertion-failed' && row.passed === 1 && row.failed === 1));
+          assert.deepEqual(report.sourceAfter, report.sourceBefore);
+          console.log('Accepted13 actual display/baseline cases and28 effective copied faults.');
+          NODE
+      - name: Retain mounted outcome evidence promptly
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: number-formatting-outcomes-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            number-formatting-artifacts/outcomes/
+            number-formatting-artifacts/outcomes.log
+            number-formatting-artifacts/source-head.txt
+            number-formatting-artifacts/source-tree.txt
+          retention-days: 3
+          if-no-files-found: error
+      - name: Cache actual template font dependencies
+        id: assets
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: node scripts/qa/numberFormatting1085.mjs --prefetch-fonts-only 2>&1 | tee number-formatting-artifacts/assets.log
+      - name: Actual route numbers and preserved precision
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.assets.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" xvfb-run -a node scripts/qa/numberFormatting1085.mjs 2>&1 | tee number-formatting-artifacts/native.log
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const report = JSON.parse(fs.readFileSync('number-formatting-artifacts/native/report.json'));
+          assert.equal(report.complete, true);
+          assert.equal(report.cases.length, 6);
+          assert(report.cases.every(row => row.complete));
+          assert.equal(report.controls.length, 9);
+          assert.equal(report.forwardedWrites, 0);
+          assert.deepEqual(report.sourceAfter, report.sourceBefore);
+          assert.deepEqual(report.buildAfter, report.buildBefore);
+          assert.equal(report.assetManifestAfter, report.assetManifestBefore);
+          assert.deepEqual(report.assetPayloadAfter, report.assetPayloadBefore);
+          console.log('Accepted6 actual routes and9 effective restored DOM display controls.');
+          NODE
+      - name: Retain native evidence promptly
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.assets.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: number-formatting-native-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            number-formatting-artifacts/native/
+            number-formatting-artifacts/native.log
+            number-formatting-artifacts/font-cache/manifest.json
+            number-formatting-artifacts/source-head.txt
+            number-formatting-artifacts/source-tree.txt
+          retention-days: 3
+          if-no-files-found: error
+      - name: Preserve existing stat lines and career reviews
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/usCareerStatLines.test.tsx src/test/careerSeasonReview.test.tsx --maxWorkers=1 --no-file-parallelism --reporter=default --reporter=json --outputFile.json=number-formatting-artifacts/original-display-tests.json 2>&1 | tee number-formatting-artifacts/original-display-tests.log
+      - name: Classify unchanged historical replay without hiding its red
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/numberFormatting1085Parity.mjs 2>&1 | tee number-formatting-artifacts/parity.log
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const read = file => JSON.parse(fs.readFileSync('number-formatting-artifacts/parity/' + file));
+          const report = read('summary.json');
+          const sports = ['mlb', 'nba', 'nfl', 'nhl'];
+          assert.equal(report.status, 'raw replay red; nonpresentation held; exact old presentation reference passed');
+          assert.equal(report.base, 'bde6b1c3797fd728dbd583a28623c34fe8452917');
+          assert.deepEqual(report.original, { exit: 1, classification: 'original default replay remains red' });
+          assert.deepEqual(report.runs.map(row => row.name).sort(), ['current-raw', 'fixture-save-control', 'old-presentation-reference']);
+          const current = report.runs.find(row => row.name === 'current-raw');
+          const reference = report.runs.find(row => row.name === 'old-presentation-reference');
+          const control = report.runs.find(row => row.name === 'fixture-save-control');
+          assert.equal(current.exit, 1); assert.deepEqual(current.passed, []); assert.deepEqual([...current.failed].sort(), sports);
+          assert.equal(reference.exit, 0); assert.deepEqual([...reference.passed].sort(), sports); assert.deepEqual(reference.failed, []);
+          assert.equal(control.exit, 1); assert.deepEqual(control.failed, ['mlb']); assert.deepEqual([...control.passed].sort(), ['nba', 'nfl', 'nhl']);
+          assert(current.observations > 0); assert.equal(current.observations, reference.observations); assert.equal(control.observations, reference.observations);
+          const comparison = read('current-comparison.json');
+          assert.deepEqual(comparison.nonpresentation, []);
+          assert(sports.every(sport => comparison.presentation.some(row => row.sport === sport)));
+          assert.equal(report.presentationFieldDifferences, comparison.presentation.length);
+          assert.equal(report.presentationSteps, read('presentation-leaves.json').length); assert(report.presentationSteps > 0);
+          const actions = comparison.presentation.filter(row => row.field === 'a'), targets = read('action-label-differences.json');
+          assert.equal(actions.length, 11); assert.deepEqual(report.actionLabelDifferences, actions); assert.deepEqual(targets.labels, actions);
+          assert.equal(report.actionTargetCount, 11); assert.equal(targets.targets.length, 11); assert.equal(report.actionTargetIdentityHeld, true);
+          assert.deepEqual(read('reference-comparison.json'), { nonpresentation: [], presentation: [] });
+          const changed = read('control-comparison.json'), rejection = read('control-rejection.json');
+          assert.deepEqual(changed.presentation, []); assert.equal(changed.nonpresentation.length, 1);
+          assert.equal(changed.nonpresentation[0].sport, 'mlb'); assert.equal(changed.nonpresentation[0].field, 's');
+          assert.equal(rejection.name, 'AssertionError'); assert(rejection.message.startsWith('Historical replay changed nonpresentation fields'));
+          assert.deepEqual(rejection.actual, changed.nonpresentation); assert.deepEqual(rejection.expected, []);
+          assert.equal(report.control, 'one effective saved-hash corruption rejected, unchanged reference passed');
+          assert(Object.keys(report.sourceBefore).length > 0); assert.deepEqual(report.sourceAfter, report.sourceBefore);
+          assert.deepEqual(read('source-before.json'), report.sourceBefore); assert.deepEqual(read('source-after.json'), report.sourceAfter);
+          console.log('Historical replay remains red for all four sports; the exact old presentation reference passes four and the saved-hash control is rejected.');
+          NODE
+      - name: Retain historical replay evidence promptly
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: number-formatting-parity-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            number-formatting-artifacts/parity/
+            number-formatting-artifacts/parity.log
+            number-formatting-artifacts/source-head.txt
+            number-formatting-artifacts/source-tree.txt
+          retention-days: 3
+          if-no-files-found: error
+      - name: Preserve existing relevant behavior
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simUsCareerDefects simCareerSeasonReview simResultMoment simSoccerCareer simStadiumTycoon simTycoonClock simTycoonLeague simClubManager; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "number-formatting-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Prove the original clipped score control
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" RESULT_MOMENT_CONTROL=clipped node scripts/simResultMoment.mjs 2>&1 | tee number-formatting-artifacts/original-clipped-control.log
+          grep -F 'CONTROL clipped: mutated ResultMoment.tsx' number-formatting-artifacts/original-clipped-control.log
+          grep -F 'FAIL [score]' number-formatting-artifacts/original-clipped-control.log
+          grep -F 'simResultMoment control clipped: green. It turned score red' number-formatting-artifacts/original-clipped-control.log
+      - name: All source and built readers
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings simSeoMetaSplit simHomeCopy simHarnessAnchors; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "number-formatting-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Hold original data engines fixtures dependencies and display expectations
+        if: ${{ !cancelled() }}
+        run: |
+          git diff --exit-code HEAD -- src scripts .github/workflows/number-formatting.yml
+          git diff --exit-code bde6b1c3797fd728dbd583a28623c34fe8452917 HEAD -- src/lib ':!src/lib/formatNumber.ts' ':!src/lib/usCareerStatLine.ts' ':!src/lib/usCareerSeasonReview.ts' src/data src/integrations src/types src/hooks scripts/fixtures scripts/data package.json package-lock.json
+          git diff --exit-code bde6b1c3797fd728dbd583a28623c34fe8452917 HEAD -- src/test ':!src/test/numberFormatting.test.tsx' ':!src/test/usCareerStatLines.test.tsx' ':!src/test/careerSeasonReview.test.tsx'
+          git diff --exit-code bde6b1c3797fd728dbd583a28623c34fe8452917 HEAD -- scripts ':!scripts/simNumberFormatting.mjs' ':!scripts/simResultMoment.mjs' ':!scripts/qa/numberFormatting1085.mjs' ':!scripts/qa/numberFormatting1085Parity.mjs' ':!scripts/qa/numberFormatting1085-expectations.json'
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import { createHash } from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+          const base = 'bde6b1c3797fd728dbd583a28623c34fe8452917';
+          const sha = value => createHash('sha256').update(value).digest('hex');
+          const original = file => execFileSync('git', ['show', base + ':' + file], { encoding: 'utf8' }).replaceAll('\r\n', '\n');
+          const manifest = JSON.parse(fs.readFileSync('scripts/qa/numberFormatting1085-expectations.json'));
+          assert.equal(manifest.baseCommit, base); assert.equal(manifest.version, 1); assert.equal(manifest.files.length, 3);
+          assert.deepEqual(manifest.files.map(row => row.file).sort(), ['scripts/simResultMoment.mjs', 'src/test/careerSeasonReview.test.tsx', 'src/test/usCareerStatLines.test.tsx']);
+          for (const row of manifest.files) {
+            let expected = original(row.file);
+            assert.equal(expected, row.originalSource); assert.equal(sha(expected), row.originalSha256);
+            for (const edit of row.edits) {
+              assert.equal(expected.split(edit.from).length - 1, edit.count, 'Exact original display anchor count');
+              assert.notEqual(edit.from, edit.to); expected = expected.split(edit.from).join(edit.to);
+            }
+            assert.equal(sha(expected), row.expectedSha256);
+            assert.equal(fs.readFileSync(row.file, 'utf8').replaceAll('\r\n', '\n'), expected, 'Only declared display expectations or the clipped-control anchor change; original fixtures and substantive assertions hold');
+          }
+          const statFile = 'src/lib/usCareerStatLine.ts';
+          const countOf = text => text.match(/^export function countOf\(n: number, one: string, many: string\): string \{\n[^\n]+\n\}/m)?.[0];
+          const before = countOf(original(statFile)); assert(before);
+          assert.equal(countOf(fs.readFileSync(statFile, 'utf8').replaceAll('\r\n', '\n')), before, 'Saved postseason countOf remains byte-identical');
+          const boardFile = 'src/components/us-career/UsCareerBoard.tsx';
+          const boardBefore = original(boardFile);
+          const oldSummary = '<p className="mt-2 text-[10px] text-muted-foreground">\n            Career so far: {sport.careerSoFar(career)}';
+          const newSummary = '<p className="mt-2 text-xs text-muted-foreground">\n            Career so far: {sport.careerSoFar(career)}';
+          assert.equal(boardBefore.split(oldSummary).length - 1, 1);
+          assert.equal(fs.readFileSync(boardFile, 'utf8').replaceAll('\r\n', '\n'), boardBefore.replace(oldSummary, newSummary), 'Only career summary text size changes; all gameplay and save handlers hold');
+          NODE
+          sha256sum package.json package-lock.json > number-formatting-artifacts/dependencies-after.txt
+          cmp number-formatting-artifacts/dependencies-before.txt number-formatting-artifacts/dependencies-after.txt
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const before = JSON.parse(fs.readFileSync('number-formatting-artifacts/installed-before.json'));
+          const final = before.map(entry => ({ path: entry.path, version: JSON.parse(fs.readFileSync(entry.path + '/package.json')).version }));
+          fs.writeFileSync('number-formatting-artifacts/installed-final.json', JSON.stringify(final, null, 2));
+          assert.deepEqual(final, before, 'All runners preserve actual locked installed versions');
+          NODE
+          if test -f number-formatting-artifacts/transport.log; then test ! -s number-formatting-artifacts/transport.log; fi
+      - name: Preserve verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: number-formatting-${{ github.run_id }}-${{ github.run_attempt }}
+          path: number-formatting-artifacts/
+          retention-days: 3
+          if-no-files-found: error

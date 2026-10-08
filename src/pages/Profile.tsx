@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { formatNumber } from '@/lib/formatNumber';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -621,9 +622,9 @@ export default function Profile() {
                   <div style={{ fontSize: 13, color: '#94a3b8', marginBottom: 12 }}>@{viewingProfile.username}</div>
                 )}
                 <div style={{ display: 'flex', gap: 24, fontSize: 14, marginBottom: 16 }}>
-                  <span>🔥 {currentStreak} streak</span>
-                  <span>🎮 {totalGames} games</span>
-                  <span>⭐ {totalPoints.toLocaleString()} pts</span>
+                  <span>🔥 {formatNumber(currentStreak)} streak</span>
+                  <span>🎮 {formatNumber(totalGames)} games</span>
+                  <span>⭐ {totalPoints.toLocaleString('en-US')} pts</span>
                   <span>🏅 {earnedCount}/{badges.length} badges</span>
                 </div>
               </div>
@@ -701,11 +702,11 @@ export default function Profile() {
               // Owner Aug 2026: own profile shows games played TODAY (other
               // profiles keep lifetime, it's all the DB knows about them).
               isOwnProfile
-                ? { icon: <Gamepad2 className="w-5 h-5 text-primary" />, value: gamesToday, label: 'Games Today' }
-                : { icon: <Gamepad2 className="w-5 h-5 text-primary" />, value: totalGames, label: 'Games Played' },
-              { icon: <Trophy className="w-5 h-5 text-yellow-500" />, value: totalPoints.toLocaleString(), label: 'Total Points' },
-              { icon: <Flame className="w-5 h-5 text-orange-500" />, value: currentStreak, label: 'Streak 🔥' },
-              { icon: <TrendingUp className="w-5 h-5 text-amber-500" />, value: longestStreak, label: 'Best Streak' },
+                ? { icon: <Gamepad2 className="w-5 h-5 text-primary" />, value: formatNumber(gamesToday), label: 'Games Today' }
+                : { icon: <Gamepad2 className="w-5 h-5 text-primary" />, value: formatNumber(totalGames), label: 'Games Played' },
+              { icon: <Trophy className="w-5 h-5 text-yellow-500" />, value: totalPoints.toLocaleString('en-US'), label: 'Total Points' },
+              { icon: <Flame className="w-5 h-5 text-orange-500" />, value: formatNumber(currentStreak), label: 'Streak 🔥' },
+              { icon: <TrendingUp className="w-5 h-5 text-amber-500" />, value: formatNumber(longestStreak), label: 'Best Streak' },
               // Round 75: only show a favourite sport when a real one wins;
               // no more "Fav Sport: General".
               ...(favouriteSportEntry

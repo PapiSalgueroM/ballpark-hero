@@ -223,7 +223,7 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
     <div className="max-w-md mx-auto space-y-4">
       <CelebrationStyles />
       <div className={cn(
-        'relative bg-surface-1 border border-border rounded-2xl p-5 text-center animate-in fade-in zoom-in-95 duration-300',
+        'relative overflow-hidden bg-surface-1 border border-border rounded-2xl p-5 text-center animate-in fade-in zoom-in-95 duration-300',
         verdict && r.won && 'cm-win-pulse',
         verdict && !r.won && !r.drawn && 'cm-loss-shake',
       )}>
