@@ -1,0 +1,4 @@
+#!serial
+retry-latest: CI=1 US_CAREER_SAVE_RETRY_CONTROL=latest US_CAREER_SAVE_RETRY_ARTIFACTS=rc-art/latest node scripts/simUsCareerSaveRetry.mjs
+retry-lost: CI=1 US_CAREER_SAVE_RETRY_CONTROL=lost US_CAREER_SAVE_RETRY_ARTIFACTS=rc-art/lost node scripts/simUsCareerSaveRetry.mjs
+retry-replay: CI=1 US_CAREER_SAVE_RETRY_CONTROL=replay US_CAREER_SAVE_RETRY_ARTIFACTS=rc-art/replay node scripts/simUsCareerSaveRetry.mjs
