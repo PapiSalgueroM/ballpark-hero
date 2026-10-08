@@ -350,8 +350,9 @@
  *                the age line was right at 8 of 8, 3 of them after a birthday
  *                that came after the undo. Asked directly (17): right on 40
  *                of 40 pages. 68 calls named a moved node, 0 fallbacks.
- *   nolive       exit 1, red on purpose. 447 checks, 78 failed, every one its
- *                own (10, 11, 13, 14, 16, 18, 19). After the undo: up to 6
+ *   nolive       exit 1, red on purpose. 447 checks, 78 failed (79 in the next
+ *                run: how many walks show stale text moves by one), every one
+ *                its own (10, 11, 13, 14, 16, 18, 19). After the undo: up to 6
  *                stale texts at once and the age line wrong at 5 of 8 looks.
  *                The judge's new branch (a copy left in an element whose own
  *                strings have all gone) fired in 4 of 4 create walks here and
