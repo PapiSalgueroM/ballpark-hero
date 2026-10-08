@@ -1,0 +1,91 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/gridEngineSource.test.ts [2m([22m[2m18 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 201[2mms[22m[39m
+   [32m✓[39m the paged door, recorded on main before Round 1105 touched the engine[2m > [22masks for the table in three pages of 1,000, filtered and ordered the way it always has[32m 15[2mms[22m[39m
+   [32m✓[39m the paged door, recorded on main before Round 1105 touched the engine[2m > [22mhands back every player in load order, and every namesake under one key in load order[32m 25[2mms[22m[39m
+   [32m✓[39m the paged door, recorded on main before Round 1105 touched the engine[2m > [22mwithIds puts the id column first in the select and copies it onto each player[32m 18[2mms[22m[39m
+   [32m✓[39m the paged door, recorded on main before Round 1105 touched the engine[2m > [22mwithIds with no id column is refused before any request is made[32m 1[2mms[22m[39m
+   [32m✓[39m the paged door, recorded on main before Round 1105 touched the engine[2m > [22ma page that errors twice and then answers costs three calls for that range and loses nothing[32m 9[2mms[22m[39m
+   [32m✓[39m the paged door, recorded on main before Round 1105 touched the engine[2m > [22ma page that errors three times is a failed read: null, and the read stops there[32m 1[2mms[22m[39m
+   [32m✓[39m the paged door, recorded on main before Round 1105 touched the engine[2m > [22ma pool under the floor is a broken read: null[32m 9[2mms[22m[39m
+   [32m✓[39m the paged door, recorded on main before Round 1105 touched the engine[2m > [22mthe engine source still carries the four strings scripts/simMlbGridPool.mjs needs, comments stripped[32m 1[2mms[22m[39m
+   [32m✓[39m the static door (Round 1105)[2m > [22mfetches each URL once, makes no table request, and indexes the same way the paged door does[32m 25[2mms[22m[39m
+   [32m✓[39m the static door (Round 1105)[2m > [22mtwo callers share one in flight request[32m 2[2mms[22m[39m
+   [32m✓[39m the static door (Round 1105)[2m > [22ma URL that fails three attempts is null, is not asked again until the next call, and is then retried[32m 2[2mms[22m[39m
+   [32m✓[39m the static door (Round 1105)[2m > [22ma 200 with an HTML body, a 404 and a body of null are all failures: null[32m 3[2mms[22m[39m
+   [32m✓[39m the static door (Round 1105)[2m > [22ma body that parses but is refused by toRows is null, and the next call asks for each URL exactly once more[32m 8[2mms[22m[39m
+   [32m✓[39m the static door (Round 1105)[2m > [22ma static pool under the floor is null and the engine forgets it itself: the next call asks for each URL once more[32m 17[2mms[22m[39m
+   [32m✓[39m the static door (Round 1105)[2m > [22ma body that stalls after the headers is cut after 20 seconds without a byte, and the next call starts over[32m 5[2mms[22m[39m
+   [32m✓[39m the static door (Round 1105)[2m > [22ma slow body that keeps arriving is never cut, however long the whole of it takes[32m 2[2mms[22m[39m
+[31m   [31m×[31m the static door (Round 1105)[2m > [22mthe static door indexes one slice of rows to a task, and the index is row for row the one built in one go[39m[32m 56[2mms[22m[39m
+[31m     → two whole slices and the rest, each in a task of its own: expected [ 6000, 6345 ] to deeply equal [ 6000, 6000, 345 ][39m
+   [32m✓[39m the static door (Round 1105)[2m > [22mwithIds with no id column is still refused before anything is fetched[32m 1[2mms[22m[39m
+[90mstdout[2m | src/test/collegeGridFailClosed.test.tsx
+[22m[39mCGFAILCLOSED| board cg611-033: yes Jason Witten, no Darrell Green
+
+[90mstdout[2m | src/test/collegeGridFailClosed.test.tsx[2m > [22m[2mCollege Grid fail closed (Round 1105)[2m > [22m[2m(c) the key fails five ways: unverified each time, the next pick starts a new load, and a good load is judged
+[22m[39mCGFAILCLOSED| fail closed: 5 of 5 failure worlds left the pick unverified and judged it after the network healed
+
+[90mstdout[2m | src/test/collegeGridFailClosed.test.tsx[2m > [22m[2mdecodeCollegeKey: null on any doubt, never a row from a damaged file[2m > [22m[2mevery one of 44 damaged pairs is null, and none of them throws
+[22m[39mCGFAILCLOSED| decoder: 44 of 44 damaged pairs refused
+
+ [32m✓[39m src/test/collegeGridFailClosed.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 2506[2mms[22m[39m
+   [33m[2m✓[22m[39m College Grid fail closed (Round 1105)[2m > [22m(c) the key fails five ways: unverified each time, the next pick starts a new load, and a good load is judged [33m 794[2mms[22m[39m
+   [33m[2m✓[22m[39m College Grid fail closed (Round 1105)[2m > [22m(d) the key lands 3 seconds after the pick: that pick is judged on the cell it was made for [33m 306[2mms[22m[39m
+   [33m[2m✓[22m[39m decodeCollegeKey: null on any doubt, never a row from a damaged file[2m > [22mevery one of 44 damaged pairs is null, and none of them throws [33m 680[2mms[22m[39m
+ [32m✓[39m src/test/dailySaveParity.test.tsx [2m([22m[2m40 tests[22m[2m | [22m[33m39 skipped[39m[2m)[22m[32m 5[2mms[22m[39m
+[90mstdout[2m | src/test/collegeGridOffline.test.tsx[2m > [22m[2mCollege Grid offline[2m > [22m[2m(4a) a win bot fills 9 of 9 in 9 counted guesses on every board
+[22m[39mCGOFFLINE| win: 75 of 75 boards won in 9 counted guesses, each recorded once at 900; 1350 network calls refused by the stub along the way; key files fetched 2, reads of the key's table 0
+
+[90mstdout[2m | src/test/collegeGridSearchMemory.test.ts[2m > [22m[2mthe College Grid search, from memory (Round 1105)[2m > [22m[2ma surname lists the man, and the check fails when names are found by their first letters only
+[22m[39mCGSEARCH| surname: 74 sampled names each listed by their second word
+
+[90mstdout[2m | src/test/collegeGridOffline.test.tsx[2m > [22m[2mCollege Grid offline[2m > [22m[2m(4b) a loss bot that submits a definite no each time ends every board lost at 15
+[22m[39mCGOFFLINE| loss: 75 of 75 boards ended lost at 15 counted guesses, each recorded once at 0; 0 still playing after 15 submissions
+
+ [32m✓[39m src/test/collegeGridOffline.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 2708[2mms[22m[39m
+   [33m[2m✓[22m[39m College Grid offline[2m > [22m(4a) a win bot fills 9 of 9 in 9 counted guesses on every board [33m 1133[2mms[22m[39m
+   [33m[2m✓[22m[39m College Grid offline[2m > [22m(4b) a loss bot that submits a definite no each time ends every board lost at 15 [33m 924[2mms[22m[39m
+[90mstdout[2m | src/test/collegeGridSearchMemory.test.ts[2m > [22m[2mthe College Grid search, from memory (Round 1105)[2m > [22m[2ma file of the wrong shape is refused and forgotten, 7 ways, and a 200 that is not JSON is a failed fetch
+[22m[39mCGSEARCH| 7 wrong shapes, an HTML body and a 404 each failed the search and were asked for again
+
+ [32m✓[39m src/test/playerSearchFailure.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[33m 593[2mms[22m[39m
+ [32m✓[39m src/test/collegeGridSearchMemory.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 944[2mms[22m[39m
+   [33m[2m✓[22m[39m the College Grid search, from memory (Round 1105)[2m > [22ma file of the wrong shape is refused and forgotten, 7 ways, and a 200 that is not JSON is a failed fetch [33m 494[2mms[22m[39m
+ [32m✓[39m src/test/playerSearchLocal.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/test/gridNamesakes.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 97[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/gridEngineSource.test.ts[2m > [22mthe static door (Round 1105)[2m > [22mthe static door indexes one slice of rows to a task, and the index is row for row the one built in one go
+[31m[1mAssertionError[22m: two whole slices and the rest, each in a task of its own: expected [ 6000, 6345 ] to deeply equal [ 6000, 6000, 345 ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  [[22m
+[2m    6000,[22m
+[32m-   6000,[39m
+[32m-   345,[39m
+[31m+   6345,[39m
+[2m  ][22m
+
+[36m [2m❯[22m src/test/gridEngineSource.test.ts:[2m388:81[22m[39m
+    [90m386| [39m    }
+    [90m387| [39m    [34mexpect[39m(done[33m,[39m [32m'the load finished'[39m)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m388| [39m    expect(perTask, 'two whole slices and the rest, each in a task of …
+    [90m   | [39m                                                                                [31m^[39m
+    [90m389| [39m    [35mconst[39m data [33m=[39m [35mawait[39m load[33m;[39m
+    [90m390| [39m    [35mconst[39m whole [33m=[39m [34mindexFranchiseRows[39m(cfg[33m,[39m big)[33m![39m[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m7 passed[39m[22m[90m (8)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m56 passed[39m[22m[2m | [22m[33m39 skipped[39m[90m (96)[39m
+[2m   Start at [22m 08:43:19
+[2m   Duration [22m 6.44s[2m (transform 2.69s, setup 826ms, collect 4.60s, tests 7.06s, environment 3.25s, prepare 906ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/gridEngineSource.test.ts,title=src/test/gridEngineSource.test.ts > the static door (Round 1105) > the static door indexes one slice of rows to a task%2C and the index is row for row the one built in one go,line=388,column=81::AssertionError: two whole slices and the rest, each in a task of its own: expected [ 6000, 6345 ] to deeply equal [ 6000, 6000, 345 ]%0A%0A- Expected%0A+ Received%0A%0A  [%0A    6000,%0A-   6000,%0A-   345,%0A+   6345,%0A  ]%0A%0A ❯ src/test/gridEngineSource.test.ts:388:81%0A%0A

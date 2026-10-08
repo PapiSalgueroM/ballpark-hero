@@ -1,0 +1,12 @@
+# Round 1105 fixes: the static index in slices. The type gate, the engine tests, the walk three times for the longest task, two mutations
+#!build
+#!playwright
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vt-round: node_modules/.bin/vitest run src/test/collegeGridSearchMemory.test.ts src/test/gridEngineSource.test.ts src/test/playerSearchLocal.test.ts src/test/gridNamesakes.test.ts src/test/playerSearchFailure.test.tsx src/test/collegeGridFailClosed.test.tsx src/test/collegeGridOffline.test.tsx src/test/dailySaveParity.test.tsx --testTimeout=300000 --hookTimeout=120000
+walk: node scripts/playCollegeGridFirstTap.mjs
+walk-2: node scripts/playCollegeGridFirstTap.mjs
+walk-3: node scripts/playCollegeGridFirstTap.mjs
+N10: bash .rc/x/fxmutrun.sh N10 engine
+N11: bash .rc/x/fxmutrun.sh N11 engine
+clean: git status --porcelain --untracked-files=no | wc -l

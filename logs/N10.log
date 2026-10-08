@@ -1,0 +1,4 @@
+applied N10 to src/lib/gridEngine.ts: the static index no longer ends the task between slices
+restored src/lib/gridEngine.ts
+dirty tracked files after restore: 0
+MUT N10: engine=1 every named gate went red

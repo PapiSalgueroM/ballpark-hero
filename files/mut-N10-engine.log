@@ -1,0 +1,8 @@
+   ✓ the paged door, recorded on main before Round 1105 touched the engine > asks for the table in three pages of 1,000, filtered and ordered the way it always has 13ms
+   × the static door (Round 1105) > the static door indexes one slice of rows to a task, and the index is row for row the one built in one go 38ms
+     → two whole slices and the rest, each in a task of its own: expected [ 12345 ] to deeply equal [ 6000, 6000, 345 ]
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/test/gridEngineSource.test.ts > the static door (Round 1105) > the static door indexes one slice of rows to a task, and the index is row for row the one built in one go
+AssertionError: two whole slices and the rest, each in a task of its own: expected [ 12345 ] to deeply equal [ 6000, 6000, 345 ]
+      Tests  1 failed | 17 passed (18)
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/gridEngineSource.test.ts,title=src/test/gridEngineSource.test.ts > the static door (Round 1105) > the static door indexes one slice of rows to a task%2C and the index is row for row the one built in one go,line=388,column=81::Assert
