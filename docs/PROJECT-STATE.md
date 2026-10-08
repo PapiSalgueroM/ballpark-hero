@@ -1,5 +1,20 @@
 ## Round 1091 preparation, 2026-10-07, legal direct-kick range
 
+Preparation 2 at4b52bef6/run37711656871 completed red. Types/build and engine6/12
+passed; actual engine records/copies/bundles are byte-exact to preparation1.
+Native completed practice390 and both DOM clipping controls, then Tycoon390's
+result-section outer border was compared against its own inner content clip.
+The outer box fits390x844 with hit=true and no ancestor clip; its own bordered
+client box created a false1.265625px bottom clipping finding. The next QA-only
+one-anchor correction measures the outer box against parent clips. Glyph ranges
+still include their actual parent/self clips, preserving the clipping controls
+and every viewport/readability/restoration assertion. New runtime is pending.
+Native remains1/4 journeys,0/2 old controls,2/2 DOM controls from this failed run.
+The direct unchanged presentation step passed and retained its actual report,
+fixtures and36 PNGs. Full artifact11522157218 contains771 files; final raw audit
+is pending. Original8 PASS/1 EMPTY and readers17/20 remain red, never waived.
+Closing source/dependency holds passed. No engine, consumer, cap or record change.
+
 Preparation 1 at3b4f96fb/run37709378917 completed red. Proper app types/build,
 six actual engine groups/twelve effective copied faults and closing521 dependency
 holds passed. Independent raw engine audit06b6c979 checks15,914 complete normal

@@ -224,7 +224,7 @@ createRoot(document.getElementById('root')).render(<AuthProvider><Host/></AuthPr
           for (const value of range.getClientRects()) glyphs.push({ text: text.textContent, rect: rect(value), clips: clips(parent), font: parseFloat(getComputedStyle(parent).fontSize) });
         }
       }
-      return { box: rect(box), clips: clips(node), glyphs, hit: Boolean(hit && (hit === node || node.contains(hit))), viewport: args.viewport,
+      return { box: rect(box), clips: clips(node.parentElement), glyphs, hit: Boolean(hit && (hit === node || node.contains(hit))), viewport: args.viewport,
         scroll: { x: scrollX, y: scrollY }, html: node.outerHTML, fullComponentHtml: document.querySelector('main').outerHTML };
     }, { textOnly, viewport: page.viewportSize() });
     const checkSurface = geometry => {
