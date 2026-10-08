@@ -1,0 +1,7 @@
+0) every useDailyPuzzle consumer is mounted by one of the two tests
+   39 consumers: 36 routes in the shapes test, 3 unrouted (useFootballDraft.ts, useGuessTransferValue.ts, useWorldCup.ts) in the hardening test; 19 hand in their own check
+shapes) every route with a daily consumer under every damaged form
+  FAIL: /olympics: guesses null: drew a different page from a fresh daily, first at 2159: "<div class="relative mx-auto px-4 py-6 md:py-10 max-w-2xl"><button type="button" aria-label="How to play" class="absolut"; guesses an object: drew a different page from a fresh daily, first at 2159: "<div class="relative mx-auto
+  FAIL: a damaged daily save resets itself > /olympics failed
+   35 of 36 routes: nothing thrown on any damaged form, and the audit's and the brief's forms draw exactly a fresh daily
+simDailySaveHardening: 2 failure(s)
