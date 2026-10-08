@@ -89,7 +89,10 @@ export function deriveCareerClubPool({ realLeagues, xiOf, colorOf, partial, hand
    clubManager.ts and is exported in memory here, the same way
    simCmLeagueRules exposes its private helpers. */
 let bundleSeq = 0;
-export async function bundleCareerSources({ root, tmpDir, stubPool = false, transforms = {} }) {
+export async function bundleCareerSources({ root, tmpDir, stubPool = false, transforms = {}, extra = {} }) {
+  /* extra (Round 1100): more entry modules, name to path under src, each
+     exported as a namespace beside the six below, so a harness that needs the
+     league, format or season modules shares this one bundle helper. */
   bundleSeq += 1;
   const fwd = root.replaceAll('\\', '/');
   const entry = path.join(tmpDir, `pool-entry${bundleSeq}.mjs`);
@@ -101,6 +104,7 @@ export async function bundleCareerSources({ root, tmpDir, stubPool = false, tran
     `export * as eras from '${fwd}/src/lib/careerEras.ts';`,
     `export * as save from '${fwd}/src/lib/soccerCareerSave.ts';`,
     `export { foldSpecialLatin } from '${fwd}/src/lib/nameFold.ts';`,
+    ...Object.entries(extra).map(([name, rel]) => `export * as ${name} from '${fwd}/src/${rel}';`),
   ].join('\n'));
   const srcDir = path.resolve(root, 'src');
   const allTransforms = {
