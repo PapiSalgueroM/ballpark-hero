@@ -1,0 +1,6 @@
+dshA-branch exit=1 21s | simDailySaveHardening: 2 failure(s)
+dshA2-branch exit=0 21s | simDailySaveHardening: part shapes green
+swap exit=0 1s | 11
+dshB-mainsrc exit=1 21s | simDailySaveHardening: 2 failure(s)
+dshB2-mainsrc exit=0 22s | simDailySaveHardening: part shapes green
+cpu exit=0 0s | model name	: AMD EPYC 7763 64-Core Processor
