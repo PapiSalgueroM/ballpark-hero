@@ -1,0 +1,246 @@
+{
+ "baseSha": "c2a96ebc29b066defe36bcda91c37ac704180a1d",
+ "n": 96,
+ "sports": {
+  "nfl": {
+   "saves": 127,
+   "negSaves": 39,
+   "negNoMarker": 0,
+   "healthySameObject": 88,
+   "healthyChanged": 0,
+   "seasonsRewrittenOnLoad": 0,
+   "fieldsChangedOnLoad": {},
+   "totalsOff": 1,
+   "loadThrows": [],
+   "playThrows": [],
+   "belowZeroAfterLoad": 0,
+   "firstBelow": null,
+   "oldLinesRewrittenByPlay": 0,
+   "longThrowback": 0,
+   "mixedSeasons": 127,
+   "legacyThrows": [],
+   "baseThrows": [],
+   "savedGames17in2005": 248,
+   "tenthSacksKept": 131,
+   "negLoadedSample": [
+    [
+     -0.7,
+     0,
+     -0.7,
+     0
+    ],
+    [
+     -1.4,
+     0,
+     -1.4,
+     0
+    ],
+    [
+     -0.4,
+     0,
+     -0.4,
+     0
+    ],
+    [
+     -0.3,
+     0,
+     1.9,
+     1.9
+    ],
+    [
+     -0.7,
+     0,
+     0.41,
+     0.41
+    ],
+    [
+     -0.6,
+     0,
+     3.45,
+     3.44
+    ]
+   ],
+   "negLoadedNonZero": 0
+  },
+  "nba": {
+   "saves": 125,
+   "negSaves": 32,
+   "negNoMarker": 0,
+   "healthySameObject": 93,
+   "healthyChanged": 0,
+   "seasonsRewrittenOnLoad": 0,
+   "fieldsChangedOnLoad": {},
+   "totalsOff": 0,
+   "loadThrows": [],
+   "playThrows": [],
+   "belowZeroAfterLoad": 0,
+   "firstBelow": null,
+   "oldLinesRewrittenByPlay": 0,
+   "longThrowback": 0,
+   "mixedSeasons": 0,
+   "legacyThrows": [],
+   "baseThrows": [],
+   "savedGames17in2005": 0,
+   "tenthSacksKept": 0,
+   "negLoadedSample": [
+    [
+     -0.4,
+     0,
+     1.18,
+     1.18
+    ],
+    [
+     -0.9,
+     0,
+     0.37,
+     0.37
+    ],
+    [
+     -0.3,
+     0,
+     -0.3,
+     0
+    ],
+    [
+     -0.5,
+     0,
+     -0.03,
+     0
+    ],
+    [
+     -0.3,
+     0,
+     0.51,
+     0.51
+    ],
+    [
+     -0.3,
+     0,
+     -0.3,
+     0
+    ]
+   ],
+   "negLoadedNonZero": 0
+  },
+  "mlb": {
+   "saves": 138,
+   "negSaves": 54,
+   "negNoMarker": 0,
+   "healthySameObject": 84,
+   "healthyChanged": 0,
+   "seasonsRewrittenOnLoad": 0,
+   "fieldsChangedOnLoad": {},
+   "totalsOff": 0,
+   "loadThrows": [],
+   "playThrows": [],
+   "belowZeroAfterLoad": 0,
+   "firstBelow": null,
+   "oldLinesRewrittenByPlay": 0,
+   "longThrowback": 0,
+   "mixedSeasons": 0,
+   "legacyThrows": [],
+   "baseThrows": [],
+   "savedGames17in2005": 0,
+   "tenthSacksKept": 0,
+   "negLoadedSample": [
+    [
+     -0.2,
+     0,
+     0.96,
+     0.96
+    ],
+    [
+     -1.3,
+     0,
+     -0.73,
+     0
+    ],
+    [
+     -0.1,
+     0,
+     0.26,
+     0.26
+    ],
+    [
+     -0.16,
+     0,
+     -0.16,
+     0
+    ],
+    [
+     -0.5,
+     0,
+     -0.5,
+     0
+    ],
+    [
+     -0.5,
+     0,
+     0.14,
+     0.14
+    ]
+   ],
+   "negLoadedNonZero": 0
+  },
+  "nhl": {
+   "saves": 114,
+   "negSaves": 24,
+   "negNoMarker": 0,
+   "healthySameObject": 90,
+   "healthyChanged": 0,
+   "seasonsRewrittenOnLoad": 0,
+   "fieldsChangedOnLoad": {},
+   "totalsOff": 0,
+   "loadThrows": [],
+   "playThrows": [],
+   "belowZeroAfterLoad": 0,
+   "firstBelow": null,
+   "oldLinesRewrittenByPlay": 0,
+   "longThrowback": 0,
+   "mixedSeasons": 0,
+   "legacyThrows": [],
+   "baseThrows": [],
+   "savedGames17in2005": 0,
+   "tenthSacksKept": 0,
+   "negLoadedSample": [
+    [
+     -0.06,
+     0,
+     -0.06,
+     0
+    ],
+    [
+     -0.7,
+     0,
+     -0.06,
+     0
+    ],
+    [
+     -0.1,
+     0,
+     -0.1,
+     0
+    ],
+    [
+     -0.6,
+     0,
+     2.42,
+     2.41
+    ],
+    [
+     -0.1,
+     0,
+     7.78,
+     7.78
+    ],
+    [
+     -0.5,
+     0,
+     1.81,
+     1.81
+    ]
+   ],
+   "negLoadedNonZero": 0
+  }
+ }
+}
