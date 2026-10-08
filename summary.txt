@@ -1,0 +1,31 @@
+boards-check exit=0 1s | up to date: src/data/collegeGridPuzzles.ts matches the derivation
+compact-check exit=0 1s | up to date: 35598 rows, stamp cf90e69d60395171, key and both compact files match
+shipped-auditedback exit=0 2s | control "auditedback": fired in section 1 as expected, the check works (red sections in all: 1, 2, 3, 4, 5)
+shipped-flipflag exit=0 8s | control "flipflag": fired in section 2 as expected, the check works (red sections in all: 2, 3, 4)
+shipped-shiftrow exit=0 8s | control "shiftrow": fired in section 2 and 3 as expected, the check works (red sections in all: 2, 3, 4, 5)
+shipped exit=0 21s | simCollegeGridShipped: green. None of the thirteen ships, the two files are the key row for row and verdict for verdict, every board keeps its answers and its floor, the 
+shipped-fat exit=0 2s | control "fat": fired in section 6 as expected, the check works (red sections in all: 2, 3, 4, 5, 6)
+shipped-stale exit=0 6s | control "stale": fired in section 4 as expected, the check works (red sections in all: 2, 3, 4)
+shipped-bogus exit=1 0s | SIM_CGSHIPPED_CONTROL=nosuchcontrol is not a control this harness knows (auditedback, flipflag, shiftrow, stale, fat, noexclude)
+page exit=0 1s | simCollegeGridPage: green. The page judges in memory, charges only a no, offers the key's names from memory, says only what the key holds, drops another board's save, loa
+qa-selftest exit=0 0s | collegeGridKeyVsTable --selftest: green, all 9 planted worlds gave the expected outcome. No request was made.
+key-syntax exit=0 0s | 
+gridcls-syntax exit=0 0s | 
+shipped-noexclude exit=0 6s | control "noexclude": fired in section 7 as expected, the check works (red sections in all: 7)
+tables-off exit=0 2s | simCollegeTables: green. Both placeholder copies agree on 48 names, dedupePrograms hides what the cbb migration deletes and writes what it writes, the draft cleaner refus
+norival exit=0 19s | No rival product names found. 0 findings.
+gridengine exit=0 0s | simGridEngine: green. One engine, three configurations, every published board still rebuilds.
+fetchretry exit=0 4s | simFetchRetry: green. A transient page failure costs a retry and the rows come back whole.
+schemanames exit=1 1s | SUPABASE UNREACHABLE. NOTHING WAS CHECKED.
+inventednames exit=0 7s | simInventedNames: green. Every invented man on this site is invented all the way down.
+livescores exit=0 0s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+sitesearch exit=0 2s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+dailycontract exit=0 0s | simDailyPuzzleContract: green. Every caller honours the contract the selection memo depends on.
+anchors exit=0 42s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 79s | 
+vt-round exit=0 10s |    Duration  9.30s (transform 4.75s, setup 737ms, collect 8.34s, tests 9.82s, environment 4.22s, prepare 1.60s)
+offline-nocount exit=1 6s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridOffline.test.tsx,title=src/test/collegeGridOffline.test.tsx > College Grid offline > (4b) a
+fc-paged exit=1 6s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridFailClosed.test.tsx,title=src/test/collegeGridFailClosed.test.tsx > College Grid fail close
+dashes exit=0 0s | dash lines above: done
+fc-acceptmissing exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridFailClosed.test.tsx,title=src/test/collegeGridFailClosed.test.tsx > College Grid fail close
+fc-bogus exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/hooks/useCollegeGrid.ts,title=src/test/collegeGridFailClosed.test.tsx,line=9,column=31::Error: [vitest] The

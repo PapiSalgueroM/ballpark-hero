@@ -1,0 +1,32 @@
+# Round 1105 review (runner lens), request 1: type gate, the round's harnesses, every control, rule fences
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+compact-check: node scripts/genCollegeGridData.mjs --compact --check
+boards-check: node scripts/genCollegeGridBoards.mjs --check
+shipped: node scripts/simCollegeGridShipped.mjs
+shipped-auditedback: SIM_CGSHIPPED_CONTROL=auditedback node scripts/simCollegeGridShipped.mjs
+shipped-flipflag: SIM_CGSHIPPED_CONTROL=flipflag node scripts/simCollegeGridShipped.mjs
+shipped-shiftrow: SIM_CGSHIPPED_CONTROL=shiftrow node scripts/simCollegeGridShipped.mjs
+shipped-stale: SIM_CGSHIPPED_CONTROL=stale node scripts/simCollegeGridShipped.mjs
+shipped-fat: SIM_CGSHIPPED_CONTROL=fat node scripts/simCollegeGridShipped.mjs
+shipped-noexclude: SIM_CGSHIPPED_CONTROL=noexclude node scripts/simCollegeGridShipped.mjs
+shipped-bogus: SIM_CGSHIPPED_CONTROL=nosuchcontrol node scripts/simCollegeGridShipped.mjs
+page: node scripts/simCollegeGridPage.mjs
+qa-selftest: node scripts/qa/collegeGridKeyVsTable.mjs --selftest
+key-syntax: node --check scripts/simCollegeGridKey.mjs
+gridcls-syntax: node --check scripts/playGridCls.mjs
+tables-off: SIM_COLLEGE_TABLES_LIVE=off node scripts/simCollegeTables.mjs
+norival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+gridengine: node scripts/simGridEngine.mjs
+fetchretry: node scripts/simFetchRetry.mjs
+schemanames: node scripts/simSchemaNames.mjs
+inventednames: node scripts/simInventedNames.mjs
+livescores: node scripts/simLiveScores.mjs
+sitesearch: node scripts/simSiteSearch.mjs
+dailycontract: node scripts/simDailyPuzzleContract.mjs
+vt-round: node_modules/.bin/vitest run src/test/gridEngineSource.test.ts src/test/playerSearchLocal.test.ts src/test/collegeGridFailClosed.test.tsx src/test/collegeGridOffline.test.tsx src/test/gridNamesakes.test.ts src/test/playerSearchFailure.test.tsx src/test/dailySaveParity.test.tsx --testTimeout=300000 --hookTimeout=120000
+offline-nocount: CG_OFFLINE_CONTROL=nocount node_modules/.bin/vitest run src/test/collegeGridOffline.test.tsx --testTimeout=300000 --hookTimeout=120000
+fc-paged: CG_FAILCLOSED_CONTROL=paged node_modules/.bin/vitest run src/test/collegeGridFailClosed.test.tsx --testTimeout=300000 --hookTimeout=120000
+fc-acceptmissing: CG_FAILCLOSED_CONTROL=acceptmissing node_modules/.bin/vitest run src/test/collegeGridFailClosed.test.tsx --testTimeout=300000 --hookTimeout=120000
+fc-bogus: CG_FAILCLOSED_CONTROL=nosuchcontrol node_modules/.bin/vitest run src/test/collegeGridFailClosed.test.tsx --testTimeout=300000 --hookTimeout=120000
+dashes: git diff origin/main...HEAD -- src scripts ':!scripts/data' | grep -n -P '^\+.*[\x{2013}\x{2014}]' | head -20; echo "dash lines above: done"
