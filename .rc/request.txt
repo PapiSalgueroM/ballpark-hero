@@ -1,0 +1,7 @@
+#!serial
+#!build
+#!playwright
+probe: node .rc/x/rvProbeReplay.mjs
+m5: node .rc/x/rvMut.mjs m5
+m6: node .rc/x/rvMut.mjs m6
+m7: node .rc/x/rvMut.mjs m7
