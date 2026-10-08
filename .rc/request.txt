@@ -1,0 +1,5 @@
+# Round 1104 bounded closing check (verifier, session F) on head 20f4aabe: the two majors' own commands, rerun
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+truth: node scripts/simNflTruth.mjs
+hall: node scripts/simCareerHall.mjs
+vitest-rookie: node_modules/.bin/vitest run src/test/usCareerRookieDeal.test.ts --testTimeout=300000 --hookTimeout=120000
