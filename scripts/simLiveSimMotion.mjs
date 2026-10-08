@@ -56,6 +56,7 @@
  * The closing check's controls (2026-10-08): the kick off after a goal was a beat long whenever a chance followed within two minutes.
  *   kickoffcut   the next shooter's lead comes before the kick off again           R9 (a goal gets its kick off)
  *   kickoffwait  a chance waits for a beat of kick off only, as it did             R9 (a goal gets its kick off)
+ *   kickoffturn  the same change as kickoffcut, read on the 200 half feeds         R6 (the share of kick offs held, and the reason rule: its log must show both)
  * restartbeat takes out both lengths of a kick off now (the beat and the whole of it), which is what its line above says.
  * cmimport now trips the import specifier scan as well as the marker check, and is accepted only on both.
  * And one old control has a new test to turn red: lineup takes the hook's own guard out (an action is dropped
@@ -85,7 +86,7 @@ const OLD = ['trigger', 'save', 'pause', 'mutation', 'lineup', 'speed', 'reduced
 const NEW = ['block', 'kickoff', 'overlap', 'mouth', 'draw', 'approach', 'lag', 'hold', 'skipmoment', 'back', 'onepanel', 'labels', 'stalejoin', 'takenback', 'cmimport'];
 /* The review of 2026-10-08: six swapped argument mutations of the dead ball rules and six of the viewer left every test green.
    Each of these has a test that reads it now. */
-const REVIEW = ['scorelead', 'samecommit', 'crowd', 'turns', 'restartbeat', 'kickoffside', 'throwside', 'foulside', 'cornerflank', 'goalkickside', 'secondkick', 'possession', 'etclear', 'reducedhold', 'flash', 'lastkick', 'dropped', 'logearly', 'nth', 'cardside', 'bigpart', 'kickoffcut', 'kickoffwait'];
+const REVIEW = ['scorelead', 'samecommit', 'crowd', 'turns', 'restartbeat', 'kickoffside', 'throwside', 'foulside', 'cornerflank', 'goalkickside', 'secondkick', 'possession', 'etclear', 'reducedhold', 'flash', 'lastkick', 'dropped', 'logearly', 'nth', 'cardside', 'bigpart', 'kickoffcut', 'kickoffwait', 'kickoffturn'];
 assert.ok(['', ...OLD, ...NEW, ...REVIEW].includes(control), 'Unknown live motion control');
 assert.ok(['', 'bundle'].includes(only), 'Unknown LIVE_MOTION_ONLY');
 /* Minified bytes and gzip bytes of the part alone, and the ceiling: each plus a fifth. */
@@ -154,7 +155,7 @@ try {
       scene = replace(scene, "=> (c.event.kind === 'goal' ? PITCH_RESTART : 0);", '=> (c.event ? 0 : 0);');
       scene = replace(scene, "=> (c.event.kind === 'goal' ? PITCH_KICKOFF : 0);", '=> (c.event ? 0 : 0);');
     }
-    if (control === 'kickoffcut') scene = replace(scene, 'Math.max(room - whole(before), Math.min(PITCH_SQUEEZE, room - restart(before)))', 'room - restart(before)');
+    if (control === 'kickoffcut' || control === 'kickoffturn') scene = replace(scene, 'Math.max(room - whole(before), Math.min(PITCH_SQUEEZE, room - restart(before)))', 'room - restart(before)');
     if (control === 'kickoffwait') scene = replace(scene, 'before.at + ACTION_SPAN + waitedFor(before) + PITCH_SQUEEZE', 'before.at + ACTION_SPAN + restart(before) + PITCH_SQUEEZE');
     if (control === 'kickoffside') scene = replace(scene, 'kickoff(after, defending, n, `g${a.order}`);', 'kickoff(after, side, n, `g${a.order}`);');
     if (control === 'throwside') scene = replace(scene, '      const side = present(event.side);\n      const spot = (before: PitchPoint)', '      const side = present(other(event.side));\n      const spot = (before: PitchPoint)');
@@ -206,7 +207,7 @@ try {
     lag: 'the score waits for the ball', hold: 'the score waits for the ball', skipmoment: 'after Skip the second half opens',
     back: 'Back folds the match', onepanel: 'one panel at a time', labels: 'a name goes above its figure',
     turns: 'R6: a chance starts with the ball', restartbeat: 'R6: a chance starts with the ball',
-    kickoffcut: 'R9: a goal gets its kick off', kickoffwait: 'R9: a goal gets its kick off',
+    kickoffcut: 'R9: a goal gets its kick off', kickoffwait: 'R9: a goal gets its kick off', kickoffturn: 'R6: a chance starts with the ball',
     crowd: 'level neighbours take a row each', scorelead: 'no frame draws the new score', samecommit: 'a chance whose line fires in the very commit',
     kickoffside: 'R7: every dead ball', throwside: 'R7: every dead ball', foulside: 'R7: every dead ball', cornerflank: 'R7: every dead ball', goalkickside: 'R7: every dead ball',
     secondkick: 'R8: the pitch is handed', possession: 'R8: the pitch is handed',
@@ -307,7 +308,7 @@ try {
     } else {
       summary = only === 'bundle'
         ? `simLiveSimMotion: the bundle section alone is green. The part is ${min} bytes minified, ${gzip} gzipped, and carries nothing of Club Manager.`
-        : `simLiveSimMotion: green. ${passed} tests passed (the viewer on real feeds, the pitch part's six rules on 200 half feeds, the goal sequence, match mode), and the part alone is ${min} bytes minified, ${gzip} gzipped, with nothing of Club Manager in it.`;
+        : `simLiveSimMotion: green. ${passed} tests passed (the viewer on real feeds, the pitch part's rules on 200 half feeds and on feeds made by hand, the goal sequence, match mode), and the part alone is ${min} bytes minified, ${gzip} gzipped, with nothing of Club Manager in it.`;
     }
   }
   console.log(summary);
