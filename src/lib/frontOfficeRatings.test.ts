@@ -56,6 +56,26 @@ function canonical(value: any) {
   return JSON.parse(JSON.stringify(value, (_key, v) => typeof v === 'string' && ids.has(v) ? ids.get(v) : v));
 }
 const everyone = (lg: engine.LeagueState) => Object.values(lg.teams).flatMap(t => [...t.players, ...(t.practice ?? [])]);
+/* Round 1130, recorded on origin/main at 6f57ce78 BEFORE the opening files were unified: the league the board
+   deals (depth passed, the GM on Kansas City) for three seeds. Unifying the files must not move one byte of it. */
+const boardLeagueDigests = [
+  'a68d25af1fdd8cd4a2904cc13bab51ec89225f0955c7a54e631f73b71d7b4c17',
+  'd45c32c5a14b6353330426e3df369ef42a4033b77b59a1c09b475b5e0d7367ff',
+  '4823ec09ec20e5b1ade41182e3e3f8e989b9b4994b9a60ce921dc8a6c6f33cf0',
+];
+/** A physical old tree, built the way the 56356be9 baseline below is: the engine and both data files as that commit held them. */
+function physical(commit: string) {
+  const dir = path.join(folder, 'physical-' + commit); mkdirSync(dir);
+  for (const file of ['src/lib/frontOffice.ts', 'src/data/frontOfficePlayers.ts', 'src/data/frontOfficeDepth.ts']) {
+    const shown = spawnSync('git', ['show', commit + ':' + file], { cwd: root, maxBuffer: 16 * 1024 * 1024 });
+    if (shown.status !== 0) throw new Error('Cannot read the physical ' + commit + ' tree: ' + shown.stderr.toString());
+    writeFileSync(path.join(dir, path.basename(file)), file.includes('/lib/') ? norm(shown.stdout.toString()).replace(/(from\s+['"])\.\/([^'"]+)(['"])/g, '$1@/lib/$2$3') : shown.stdout.toString());
+  }
+  const output = path.join(dir, 'physical.cjs');
+  const result = build({ stdin: { contents: "export * as engine from './frontOffice.ts'; export {FO_DEPTH} from './frontOfficeDepth.ts';", resolveDir: dir }, outfile: output, bundle: true, platform: 'node', format: 'cjs', metafile: true, logLevel: 'silent', alias: { '@/data/frontOfficePlayers': path.join(dir, 'frontOfficePlayers.ts'), '@/data/frontOfficeDepth': path.join(dir, 'frontOfficeDepth.ts'), '@': path.join(root, 'src') } });
+  expect(Object.keys(result.metafile!.inputs).some(file => /supabase|fetchPlayers|useAuth/.test(file))).toBe(false);
+  return createRequire(import.meta.url)(output);
+}
 let baseline: any;
 let folder: string;
 const heldBaseline: [string, Buffer][] = [];
@@ -309,4 +329,26 @@ describe('NFL opening rating checkpoint', () => {
       for (const [file, bytes] of outputs) expect(readFileSync(path.join(project, file))).toEqual(bytes);
     } finally { removeOwnedTemp(project, 'dukb-rating889-cli-'); }
   }, 20000);
+
+  it('deals the same board league for a seed as the tree recorded before the opening files were unified', () => {
+    const digests = [1130, 1131, 1132].map(seed => hash(JSON.stringify(canonical(engine.initLeague(seeded(seed).draw, { depth: FO_DEPTH, userTeam: 'KC' })))));
+    console.log('NFL_BOARD_LEAGUE_DIGESTS', JSON.stringify(digests));
+    expect(digests).toEqual(boardLeagueDigests);
+  }, 60000);
+
+  it('loads a Release AK franchise unchanged and plays its next week exactly as Release AK would', () => {
+    const ak = physical('0c66a559');
+    const a = seeded(1130), b = seeded(1130);
+    const old = ak.engine.initLeague(a.draw, { depth: ak.FO_DEPTH, userTeam: 'LV' }), twin = ak.engine.initLeague(b.draw, { depth: ak.FO_DEPTH, userTeam: 'LV' });
+    const save = { league: old, myTeam: 'LV', phase: 'hub', titles: 0, seasonsPlayed: 0, draftClass: null, picksLeft: 0 };
+    const raw = JSON.stringify(save), loaded = JSON.parse(raw);
+    expect(isFrontOfficeSave(loaded, 'NFL', 17)).toBe(true);
+    expect(engine.ensureFoLeagueIds(loaded.league, loaded.draftClass)).toBe(0); expect(JSON.stringify(loaded)).toBe(raw);
+    const terms = (lg: any) => everyone(lg).map((p: any) => [p.name, p.pos, p.ovr, p.salary, p.pot, p.years, p.openingRatingEvidence ?? null]);
+    expect(terms(loaded.league)).toEqual(terms(old)); expect(terms(loaded.league).length).toBeGreaterThan(2100);
+    expect(everyone(loaded.league).every((p: any) => p.openingRatingEvidence?.modelVersion === 'nfl-v2.2-2026-10-02' && p.openingRatingEvidence.openingOvr === p.ovr)).toBe(true);
+    engine.injuryPass(loaded.league.teams, a.draw); ak.engine.injuryPass(twin.teams, b.draw);
+    for (let g = 0; g < 16; g++) expect(engine.simGame(loaded.league.schedule[0][g], loaded.league.teams, a.draw)).toEqual(ak.engine.simGame(twin.schedule[0][g], twin.teams, b.draw));
+    expect(canonical(loaded.league)).toEqual(canonical(twin)); expect(a.count()).toBe(b.count());
+  }, 60000);
 });
