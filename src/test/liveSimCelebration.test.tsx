@@ -323,7 +323,8 @@ describe('The pitch part behind its contract', () => {
     expect(result.current.ball.y).toBeCloseTo(struck.y, 6);
     /* From there on the hook draws the action's own ball, untouched. */
     rerender({ clock: 5.6 });
-    expect(result.current.ball).toEqual(actionFrame(far, shot, .6).ball);
+    /* (5.6 less 5 is not .6 to the last bit, so the frame is asked for at the hook's own elapsed.) */
+    expect(result.current.ball).toEqual(actionFrame(far, shot, 5.6 - 5).ball);
   });
 
   it("goalWindow says windup, net and over at the contract's instants", () => {

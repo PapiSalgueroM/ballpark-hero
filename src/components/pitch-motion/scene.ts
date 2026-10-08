@@ -21,8 +21,9 @@ import { keyedRng } from '@/lib/keyedRng';
  *  chance in the minute after another used to start under it: the ball jumped from the net to the next
  *  shooter and a goal never got its kick off. Such a chance now WAITS, inside its own minute: until the
  *  action before it is over, until the kick off after a goal has been seen for a beat, and until its own
- *  shooter has had the ball for a beat. `actions[n].at` is when it really starts, and a binder that
- *  announces a chance itself (Club Manager's viewer) announces it then.
+ *  shooter has had the ball for a beat. When a minute is too full for all three, the shooter's beat on the
+ *  ball is given up first and a goal's kick off last. `actions[n].at` is when it really starts, and a
+ *  binder that announces a chance itself (Club Manager's viewer) announces it then.
  *
  *  THE SHAPE places each side as ONE block around the ball, in its own frame (own goal at y 100), and
  *  mirrors the other side. */
@@ -162,25 +163,37 @@ export function pitchPlan(input: PitchInput): PitchPlan {
     /* Of two at one place the later line of the feed is the one played. */
     picked.set(c.place, { event: c.event, order: c.order, place: c.place, at: c.place });
   }
-  const queue = [...picked.values()].sort((a, b) => a.place - b.place);
-  /* ONE ACTION AT A TIME (the header says why). Forward: a chance that comes too soon after the action or the
-     kick off before it waits for its turn, until `full`: that action over, a beat of kick off if it was a
-     goal, and PITCH_SQUEEZE with its own shooter on the ball. It never waits more than PITCH_LATE, and never
-     so long that it would still be playing at the last kick's wind up or more than today's 0.05 past the
-     whistle; when the whole wait does not fit it takes what does. */
+  const queue = [...picked.values()].sort((a, b) => a.place - b.place).map(c => ({ ...c, floor: c.place }));
+  /* ONE ACTION AT A TIME (the header says why). A chance that comes too soon after the action or the kick
+     off before it waits for its turn. It never waits more than PITCH_LATE, and never so long that it would
+     still be playing at the last kick's wind up or more than today's 0.05 past the whistle (`held`).
+     Forward, each chance gets two instants: `floor`, the soonest it can start with everything before it
+     over (that action, and a beat of kick off if it was a goal) and no lead in at all, and `at`, which adds
+     PITCH_SQUEEZE with its own shooter on the ball. */
   const ceiling = last ? to - 2 * ACTION_SPAN : to - 1;
-  const wait = (c: { place: number; at: number }, full: number) => {
-    if (c.place >= full - EPS) return;
-    const limit = Math.min(c.place + PITCH_LATE, Math.max(c.place, ceiling));
-    c.at = Math.max(c.at, c.place, Math.min(full, limit));
-  };
+  const restart = (c: { event: PitchEvent }) => (c.event.kind === 'goal' ? PITCH_RESTART : 0);
+  const held = (c: { place: number }, wanted: number) => Math.max(c.place, Math.min(wanted, c.place + PITCH_LATE, Math.max(c.place, ceiling)));
   queue.forEach((c, n) => {
+    let floor = c.place;
+    let wanted = c.place;
     /* The period's own kick off is seen for a beat before a chance of its first minute is led in. */
-    for (const k of opening) if (k.at <= c.place + EPS) wait(c, k.at + PITCH_RESTART + PITCH_SQUEEZE);
+    for (const k of opening) if (k.at <= c.place + EPS) { floor = Math.max(floor, k.at + PITCH_RESTART); wanted = Math.max(wanted, k.at + PITCH_RESTART + PITCH_SQUEEZE); }
     const before = queue[n - 1];
-    if (before) wait(c, before.at + ACTION_SPAN + (before.event.kind === 'goal' ? PITCH_RESTART : 0) + PITCH_SQUEEZE);
+    if (before) { floor = Math.max(floor, before.floor + ACTION_SPAN + restart(before)); wanted = Math.max(wanted, before.at + ACTION_SPAN + restart(before) + PITCH_SQUEEZE); }
+    c.floor = held(c, floor);
+    c.at = held(c, wanted);
   });
-  /* And back: no wait may push an action into the one after it, which could not wait as long. */
+  /* And back, twice. First the lead in gives way: when the chance after this one could not wait as long,
+     this one starts sooner (never before its floor), so that it and the kick off after its goal are over
+     when the next one starts, the last kick's wind up included. A goal keeps its kick off before a
+     shooter keeps his beat on the ball. */
+  const windup = last ? to - ACTION_SPAN : Infinity;
+  for (let n = queue.length - 1; n >= 0; n--) {
+    const room = (n + 1 < queue.length ? queue[n + 1].at : windup) - ACTION_SPAN - restart(queue[n]);
+    if (queue[n].at > room + EPS) queue[n].at = Math.max(queue[n].floor, room);
+  }
+  /* Then, where even that does not fit (three goals in three minutes), the kick off gives way: no wait may
+     push an action into the one after it. */
   for (let n = queue.length - 2; n >= 0; n--) {
     if (queue[n].at + ACTION_SPAN > queue[n + 1].at + EPS) queue[n].at = Math.max(queue[n].place, queue[n + 1].at - ACTION_SPAN);
   }
@@ -205,10 +218,10 @@ export function pitchPlan(input: PitchInput): PitchPlan {
     const shot = a.event.penalty
       ? { x: 50, y: 12 }
       : { x: clamp((shooter?.slot.x ?? 50) + (rng() * 2 - 1) * 6, 25, 75), y: a.event.freeKick ? 30 : 22 + rng() * 8 };
-    /* The shooter is led in for PITCH_LEAD, but never under the action before his: the picture under an action
-       does not change while it plays. Nothing at all is drawn over the last kick's wind up: it is the only
-       stretch above a kick off. */
-    const lead = Math.min(a.at, Math.max(a.at - PITCH_LEAD, n > 0 ? actions[n - 1].at + ACTION_SPAN : -Infinity));
+    /* The shooter is led in for PITCH_LEAD, but never under the action before his (the picture under an action
+       does not change while it plays) nor under the beat of kick off after a goal. Nothing at all is drawn
+       over the last kick's wind up: it is the only stretch above a kick off. */
+    const lead = Math.min(a.at, Math.max(a.at - PITCH_LEAD, n > 0 ? actions[n - 1].at + ACTION_SPAN + restart(actions[n - 1]) : -Infinity));
     layers.push({
       start: lead, end: a.at + ACTION_SPAN, priority: a.last ? 6 : 4, order: n, state: set ? 'freekick' : 'open', via: 'carrier', side,
       carrier: shooter?.key ?? null, dead: set, id: `c${a.order}`, anchor: turn(side, shot),

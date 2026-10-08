@@ -139,8 +139,8 @@ try {
     if (control === 'labels') viewer = replace(viewer, 'const LABEL_BELOW = 6;', 'const LABEL_BELOW = -1;');
     if (control === 'takenback') motion = replace(motion, 'action.event === event && ', '');
     /* ---- the review of 2026-10-08 ---- */
-    if (control === 'turns') scene = replace(scene, '    c.at = Math.max(c.at, c.place, Math.min(full, limit));', '    void limit;');
-    if (control === 'restartbeat') scene = replace(scene, "(before.event.kind === 'goal' ? PITCH_RESTART : 0)", '0');
+    if (control === 'turns') scene = replace(scene, '    c.at = held(c, wanted);', '    c.floor = c.place; void wanted;');
+    if (control === 'restartbeat') scene = replace(scene, "=> (c.event.kind === 'goal' ? PITCH_RESTART : 0);", '=> (c.event ? 0 : 0);');
     if (control === 'kickoffside') scene = replace(scene, 'kickoff(after, defending, 4.5, n, `g${a.order}`);', 'kickoff(after, side, 4.5, n, `g${a.order}`);');
     if (control === 'throwside') scene = replace(scene, '      const side = present(event.side);\n      const spot = (before: PitchPoint)', '      const side = present(other(event.side));\n      const spot = (before: PitchPoint)');
     if (control === 'foulside') scene = replace(scene, "so the free kick is the other side's. */\n      const side = present(other(event.side));", "so the free kick is the other side's. */\n      const side = present(event.side);");

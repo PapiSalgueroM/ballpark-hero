@@ -635,7 +635,7 @@ interface SeedTally {
   /* R6 */ chances: number; holderOffenders: number; steadyOffenders: number; followOffenders: number; underKickoff: number; lastKick: number;
   waited: number; lateSum: number; lateOffenders: number; overlapped: number; noLead: number; ledOn: number; followSeen: number;
   goalsToRestart: number; kickoffSeen: number; kickoffShort: number; beforeLastKick: number;
-  /* R7 */ dead: Record<DeadKind, number>; deadOffenders: number; flanked: number; deadExamples: string[];
+  /* R7 */ dead: Record<DeadKind, number>; deadOffenders: number; flanked: number; standIns: number; deadExamples: string[];
   /* R8 */ handed: number; kickHandOffenders: number; shareOffenders: number; unevenShares: number; awayHalves: number;
 }
 type DeadKind = 'opening' | 'restart' | 'corner' | 'throwin' | 'freekick' | 'goalkick' | 'keeper';
@@ -647,7 +647,7 @@ const tally = (club: string): SeedTally => ({
   chances: 0, holderOffenders: 0, steadyOffenders: 0, followOffenders: 0, underKickoff: 0, lastKick: 0,
   waited: 0, lateSum: 0, lateOffenders: 0, overlapped: 0, noLead: 0, ledOn: 0, followSeen: 0,
   goalsToRestart: 0, kickoffSeen: 0, kickoffShort: 0, beforeLastKick: 0,
-  dead: { opening: 0, restart: 0, corner: 0, throwin: 0, freekick: 0, goalkick: 0, keeper: 0 }, deadOffenders: 0, flanked: 0, deadExamples: [],
+  dead: { opening: 0, restart: 0, corner: 0, throwin: 0, freekick: 0, goalkick: 0, keeper: 0 }, deadOffenders: 0, flanked: 0, standIns: 0, deadExamples: [],
   handed: 0, kickHandOffenders: 0, shareOffenders: 0, unevenShares: 0, awayHalves: 0,
 });
 type Sides = { mine: PitchPlaced[]; theirs: PitchPlaced[] };
@@ -685,6 +685,13 @@ function deadBall(t: SeedTally, input: PitchInput, beat: PitchBeat, scene: Motio
   let kind: DeadKind | null = null;
   let wanted: string | null = null;
   let spot = true;
+  /* The keeper has it. A side can be without a keeper on the pitch at all (the engine took him off and nobody
+     went in goal: four dead balls in the material): then a man of that side stands in, and that is counted. */
+  const inGoal = (side: string) => {
+    if ((side === 'me' ? scene.mine : scene.theirs).some(p => p.keeper)) return !!holder?.keeper;
+    t.standIns++;
+    return !!holder;
+  };
   if (tag === 'k' && beat.state === 'kickoff') { kind = 'opening'; wanted = input.kickoffs?.[index]?.side ?? null; spot = centre; }
   else if (tag === 'g' && beat.state === 'kickoff' && source?.kind === 'goal') { kind = 'restart'; wanted = flip(source.side); spot = centre; }
   else if (tag === 'f' && beat.state === 'corner' && source?.kind === 'corner') {
@@ -694,8 +701,8 @@ function deadBall(t: SeedTally, input: PitchInput, beat: PitchBeat, scene: Motio
     if (source.flank) { t.flanked++; spot = spot && scene.ball.x === (source.flank === 'left' ? 2.5 : 97.5); }
   } else if (tag === 't' && beat.state === 'throwin' && source?.kind === 'throwin') { kind = 'throwin'; wanted = source.side; spot = scene.ball.x === 2 || scene.ball.x === 98; }
   else if (tag === 'x' && beat.state === 'freekick' && source?.kind === 'foul') { kind = 'freekick'; wanted = flip(source.side); }
-  else if (tag === 'q' && beat.state === 'goalkick' && source?.kind === 'shot') { kind = 'goalkick'; wanted = flip(source.side); spot = !!holder?.keeper && (wanted === 'me' ? scene.ball.y > 90 : scene.ball.y < 10); }
-  else if (tag === 'h' && beat.state === 'keeper' && source?.kind === 'save') { kind = 'keeper'; wanted = flip(source.side); spot = !!holder?.keeper && (wanted === 'me' ? scene.ball.y > 80 : scene.ball.y < 20); }
+  else if (tag === 'q' && beat.state === 'goalkick' && source?.kind === 'shot') { kind = 'goalkick'; wanted = flip(source.side); spot = inGoal(wanted) && (wanted === 'me' ? scene.ball.y > 90 : scene.ball.y < 10); }
+  else if (tag === 'h' && beat.state === 'keeper' && source?.kind === 'save') { kind = 'keeper'; wanted = flip(source.side); spot = inGoal(wanted) && (wanted === 'me' ? scene.ball.y > 80 : scene.ball.y < 20); }
   const bad = !kind || beat.side !== wanted || holderSide !== wanted || !spot;
   if (kind) t.dead[kind]++;
   if (!bad) return;
@@ -1023,11 +1030,13 @@ describe('The pitch part on real feeds', () => {
     const kinds: DeadKind[] = ['opening', 'restart', 'corner', 'throwin', 'freekick', 'goalkick', 'keeper'];
     const count = (kind: DeadKind) => sum(m.seeds.map(t => t.dead[kind]));
     const offenders = sum(m.seeds.map(t => t.deadOffenders)), flanked = sum(m.seeds.map(t => t.flanked));
-    console.log(`[1101 R7] dead balls read against their own line of the feed: ${kinds.map(kind => `${kind} ${count(kind)}`).join(', ')}; corners whose line names a flank ${flanked}; offenders ${offenders}${offenders ? `; first cases: ${m.seeds.flatMap(t => t.deadExamples).slice(0, 4).join(' | ')}` : ''}`);
+    console.log(`[1101 R7] dead balls read against their own line of the feed: ${kinds.map(kind => `${kind} ${count(kind)}`).join(', ')}; corners whose line names a flank ${flanked}; taken by a stand in because that side has no keeper on ${sum(m.seeds.map(t => t.standIns))}; offenders ${offenders}${offenders ? `; first cases: ${m.seeds.flatMap(t => t.deadExamples).slice(0, 4).join(' | ')}` : ''}`);
     /* Nothing passes on an empty sample: every kind of dead ball is in the material, many times over. */
     expect(count('opening')).toBe(200);
     for (const kind of kinds) expect(count(kind), kind).toBeGreaterThan(R7_FLOOR[kind]);
     expect(flanked).toBeGreaterThan(R7_FLOOR.corner / 2);
+    /* A stand in is the rare case, never the rule: the keeper rule above is read on all the rest. */
+    expect(sum(m.seeds.map(t => t.standIns)) * 20).toBeLessThan(count('goalkick') + count('keeper'));
     expect(offenders).toBe(0);
   }, LONG);
 
@@ -1207,15 +1216,23 @@ describe('The goal sequence', () => {
     const was = score.querySelector(`[data-cm-score-of="${side}"]`)!.textContent!;
     /* Every digit React puts into the score, commit by commit: a frame that drew the new score and was
        corrected by an effect in the same tick leaves no trace in the page afterwards, only here. */
-    const observer = new MutationObserver(() => {});
-    observer.observe(score, { childList: true, subtree: true, characterData: true });
     const drawn: string[] = [];
-    const read = () => {
-      for (const record of observer.takeRecords()) {
-        for (const node of record.addedNodes) if (node instanceof HTMLElement && node.getAttribute('data-cm-score-of') === side) drawn.push(node.textContent ?? '');
-        if (record.type === 'characterData' && record.target.parentElement?.getAttribute('data-cm-score-of') === side) drawn.push(record.target.textContent ?? '');
+    const digit = (node: Node | null) => (node instanceof Element && node.getAttribute('data-cm-score-of') === side ? node : null);
+    /* The records are taken in the observer's own callback as well as on each read: a callback that drops
+       them leaves takeRecords empty, and then this test can see nothing at all (it once did exactly that). */
+    const collect = (records: MutationRecord[]) => {
+      for (const record of records) {
+        /* A new digit is a new element (it is keyed on its value); a changed text node inside one counts too. */
+        for (const node of record.addedNodes) {
+          const own = digit(node) ?? digit(node.parentElement);
+          if (own) drawn.push(own.textContent ?? '');
+        }
+        if (record.type === 'characterData' && digit(record.target.parentElement)) drawn.push(record.target.textContent ?? '');
       }
     };
+    const observer = new MutationObserver(collect);
+    observer.observe(score, { childList: true, subtree: true, characterData: true });
+    const read = () => collect(observer.takeRecords());
     /* Frame by frame, from before the line fires (200 ms in) to just short of the net (956 ms in). */
     for (let ms = 0; ms < 928; ms += 16) { await step(16); read(); }
     expect(mounted.container.querySelector('[data-cm-live-pitch]')!.getAttribute('data-cm-motion-phase')).toBe('flight');
