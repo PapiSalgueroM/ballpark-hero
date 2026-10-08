@@ -1,0 +1,3 @@
+m4de exit=0 59s | measure done
+m4ja exit=0 59s | measure done
+m4pt exit=0 59s | measure done

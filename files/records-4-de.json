@@ -1,0 +1,2159 @@
+{
+ "target": "de",
+ "phases": {
+  "before": {
+   "texts": {
+    "ageA": {
+     "id": 0,
+     "v": "Age ",
+     "connected": true,
+     "parent": "p"
+    },
+    "ageB": {
+     "id": 0,
+     "v": "16",
+     "connected": true,
+     "parent": "p"
+    },
+    "hA": {
+     "id": 0,
+     "v": "Striker",
+     "connected": true,
+     "parent": "p"
+    },
+    "hB": {
+     "id": 0,
+     "v": " · Age ",
+     "connected": true,
+     "parent": "p"
+    },
+    "hC": {
+     "id": 0,
+     "v": "16",
+     "connected": true,
+     "parent": "p"
+    },
+    "hD": {
+     "id": 0,
+     "v": " · ",
+     "connected": true,
+     "parent": "p"
+    },
+    "hE": {
+     "id": 0,
+     "v": "England",
+     "connected": true,
+     "parent": "p"
+    },
+    "rA": {
+     "id": 0,
+     "v": "Striker",
+     "connected": true,
+     "parent": "p"
+    },
+    "rB": {
+     "id": 0,
+     "v": " · Age ",
+     "connected": true,
+     "parent": "p"
+    },
+    "rC": {
+     "id": 0,
+     "v": "16",
+     "connected": true,
+     "parent": "p"
+    },
+    "rD": {
+     "id": 0,
+     "v": " · ",
+     "connected": true,
+     "parent": "p"
+    },
+    "rE": {
+     "id": 0,
+     "v": "England",
+     "connected": true,
+     "parent": "p"
+    },
+    "iA": {
+     "id": 0,
+     "v": "You have ",
+     "connected": true,
+     "parent": "p"
+    },
+    "iB": {
+     "id": 0,
+     "v": "3",
+     "connected": true,
+     "parent": "p"
+    },
+    "iC": {
+     "id": 0,
+     "v": " goals this season",
+     "connected": true,
+     "parent": "p"
+    },
+    "tickA": {
+     "id": 0,
+     "v": "Minute ",
+     "connected": true,
+     "parent": "p"
+    },
+    "tickB": {
+     "id": 0,
+     "v": "1",
+     "connected": true,
+     "parent": "p"
+    },
+    "hundA": {
+     "id": 0,
+     "v": "Followers: ",
+     "connected": true,
+     "parent": "p"
+    },
+    "hundB": {
+     "id": 0,
+     "v": "1",
+     "connected": true,
+     "parent": "p"
+    },
+    "bankA": {
+     "id": 0,
+     "v": "-$100k",
+     "connected": true,
+     "parent": "p"
+    },
+    "phA": {
+     "id": 0,
+     "v": "Choose position",
+     "connected": true,
+     "parent": "p"
+    }
+   },
+   "html": {
+    "age": "Age 16",
+    "head": "Striker · Age 16 · England",
+    "rmv": "Striker · Age 16 · England",
+    "insb": "You have 3 goals this season",
+    "tick": "Minute 1",
+    "hund": "Followers: 1",
+    "bank": "-$100k",
+    "ph": "Choose position",
+    "fresh": "",
+    "roll": "",
+    "after": ""
+   },
+   "kids": {
+    "age": 2,
+    "head": 5,
+    "rmv": 5,
+    "insb": 3,
+    "tick": 2,
+    "hund": 2,
+    "bank": 1,
+    "ph": 1,
+    "fresh": 0,
+    "roll": 0,
+    "after": 0
+   },
+   "stats": {
+    "swaps": 0,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 0
+   }
+  },
+  "translated": {
+   "texts": {
+    "ageA": {
+     "id": 0,
+     "v": "Age ",
+     "connected": false,
+     "parent": null
+    },
+    "ageB": {
+     "id": 0,
+     "v": "16",
+     "connected": false,
+     "parent": null
+    },
+    "hA": {
+     "id": 0,
+     "v": "Striker",
+     "connected": false,
+     "parent": null
+    },
+    "hB": {
+     "id": 0,
+     "v": " · Age ",
+     "connected": false,
+     "parent": null
+    },
+    "hC": {
+     "id": 0,
+     "v": "16",
+     "connected": false,
+     "parent": null
+    },
+    "hD": {
+     "id": 0,
+     "v": " · ",
+     "connected": false,
+     "parent": null
+    },
+    "hE": {
+     "id": 0,
+     "v": "England",
+     "connected": false,
+     "parent": null
+    },
+    "rA": {
+     "id": 0,
+     "v": "Striker",
+     "connected": false,
+     "parent": null
+    },
+    "rB": {
+     "id": 0,
+     "v": " · Age ",
+     "connected": false,
+     "parent": null
+    },
+    "rC": {
+     "id": 0,
+     "v": "16",
+     "connected": false,
+     "parent": null
+    },
+    "rD": {
+     "id": 0,
+     "v": " · ",
+     "connected": false,
+     "parent": null
+    },
+    "rE": {
+     "id": 0,
+     "v": "England",
+     "connected": false,
+     "parent": null
+    },
+    "iA": {
+     "id": 0,
+     "v": "You have ",
+     "connected": false,
+     "parent": null
+    },
+    "iB": {
+     "id": 0,
+     "v": "3",
+     "connected": false,
+     "parent": null
+    },
+    "iC": {
+     "id": 0,
+     "v": " goals this season",
+     "connected": false,
+     "parent": null
+    },
+    "tickA": {
+     "id": 0,
+     "v": "Minute ",
+     "connected": false,
+     "parent": null
+    },
+    "tickB": {
+     "id": 0,
+     "v": "1",
+     "connected": false,
+     "parent": null
+    },
+    "hundA": {
+     "id": 0,
+     "v": "Followers: ",
+     "connected": false,
+     "parent": null
+    },
+    "hundB": {
+     "id": 0,
+     "v": "1",
+     "connected": false,
+     "parent": null
+    },
+    "bankA": {
+     "id": 0,
+     "v": "-$100k",
+     "connected": false,
+     "parent": null
+    },
+    "phA": {
+     "id": 0,
+     "v": "Choose position",
+     "connected": false,
+     "parent": null
+    }
+   },
+   "html": {
+    "age": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Alter </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">16</font></font>",
+    "head": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Stürmer · </font><font dir=\"auto\" style=\"vertical-align: inherit;\">16 </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Jahre </font><font dir=\"auto\" style=\"vertical-align: inherit;\">· </font><font dir=\"auto\" style=\"vertical-align: inherit;\">England</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "rmv": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Stürmer · </font><font dir=\"auto\" style=\"vertical-align: inherit;\">16 </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Jahre </font><font dir=\"auto\" style=\"vertical-align: inherit;\">· </font><font dir=\"auto\" style=\"vertical-align: inherit;\">England</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "insb": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Du hast </font><font dir=\"auto\" style=\"vertical-align: inherit;\">in dieser Saison </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">3 Tore erzielt.</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "tick": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Minute </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">1</font></font>",
+    "hund": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Follower: </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">1</font></font>",
+    "bank": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">-100.000 $</font></font>",
+    "ph": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Position auswählen</font></font>",
+    "fresh": "",
+    "roll": "",
+    "after": ""
+   },
+   "kids": {
+    "age": 2,
+    "head": 5,
+    "rmv": 5,
+    "insb": 3,
+    "tick": 2,
+    "hund": 2,
+    "bank": 1,
+    "ph": 1,
+    "fresh": 0,
+    "roll": 0,
+    "after": 0
+   },
+   "stats": {
+    "swaps": 21,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 0
+   }
+  },
+  "age": {
+   "texts": {
+    "ageA": {
+     "id": 0,
+     "v": "Age ",
+     "connected": false,
+     "parent": null
+    },
+    "ageB": {
+     "id": 0,
+     "v": "17",
+     "connected": false,
+     "parent": null
+    },
+    "hA": {
+     "id": 0,
+     "v": "Striker",
+     "connected": false,
+     "parent": null
+    },
+    "hB": {
+     "id": 0,
+     "v": " · Age ",
+     "connected": false,
+     "parent": null
+    },
+    "hC": {
+     "id": 0,
+     "v": "16",
+     "connected": false,
+     "parent": null
+    },
+    "hD": {
+     "id": 0,
+     "v": " · ",
+     "connected": false,
+     "parent": null
+    },
+    "hE": {
+     "id": 0,
+     "v": "England",
+     "connected": false,
+     "parent": null
+    },
+    "rA": {
+     "id": 0,
+     "v": "Striker",
+     "connected": false,
+     "parent": null
+    },
+    "rB": {
+     "id": 0,
+     "v": " · Age ",
+     "connected": false,
+     "parent": null
+    },
+    "rC": {
+     "id": 0,
+     "v": "16",
+     "connected": false,
+     "parent": null
+    },
+    "rD": {
+     "id": 0,
+     "v": " · ",
+     "connected": false,
+     "parent": null
+    },
+    "rE": {
+     "id": 0,
+     "v": "England",
+     "connected": false,
+     "parent": null
+    },
+    "iA": {
+     "id": 0,
+     "v": "You have ",
+     "connected": false,
+     "parent": null
+    },
+    "iB": {
+     "id": 0,
+     "v": "3",
+     "connected": false,
+     "parent": null
+    },
+    "iC": {
+     "id": 0,
+     "v": " goals this season",
+     "connected": false,
+     "parent": null
+    },
+    "tickA": {
+     "id": 0,
+     "v": "Minute ",
+     "connected": false,
+     "parent": null
+    },
+    "tickB": {
+     "id": 0,
+     "v": "1",
+     "connected": false,
+     "parent": null
+    },
+    "hundA": {
+     "id": 0,
+     "v": "Followers: ",
+     "connected": false,
+     "parent": null
+    },
+    "hundB": {
+     "id": 0,
+     "v": "1",
+     "connected": false,
+     "parent": null
+    },
+    "bankA": {
+     "id": 0,
+     "v": "-$100k",
+     "connected": false,
+     "parent": null
+    },
+    "phA": {
+     "id": 0,
+     "v": "Choose position",
+     "connected": false,
+     "parent": null
+    }
+   },
+   "html": {
+    "age": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Alter </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">17</font></font>",
+    "head": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Stürmer · </font><font dir=\"auto\" style=\"vertical-align: inherit;\">16 </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Jahre </font><font dir=\"auto\" style=\"vertical-align: inherit;\">· </font><font dir=\"auto\" style=\"vertical-align: inherit;\">England</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "rmv": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Stürmer · </font><font dir=\"auto\" style=\"vertical-align: inherit;\">16 </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Jahre </font><font dir=\"auto\" style=\"vertical-align: inherit;\">· </font><font dir=\"auto\" style=\"vertical-align: inherit;\">England</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "insb": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Du hast </font><font dir=\"auto\" style=\"vertical-align: inherit;\">in dieser Saison </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">3 Tore erzielt.</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "tick": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Minute </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">1</font></font>",
+    "hund": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Follower: </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">1</font></font>",
+    "bank": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">-100.000 $</font></font>",
+    "ph": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Position auswählen</font></font>",
+    "fresh": "",
+    "roll": "",
+    "after": ""
+   },
+   "kids": {
+    "age": 2,
+    "head": 5,
+    "rmv": 5,
+    "insb": 3,
+    "tick": 2,
+    "hund": 2,
+    "bank": 1,
+    "ph": 1,
+    "fresh": 0,
+    "roll": 0,
+    "after": 0
+   },
+   "stats": {
+    "swaps": 23,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 2
+   }
+  },
+  "head": {
+   "texts": {
+    "ageA": {
+     "id": 0,
+     "v": "Age ",
+     "connected": false,
+     "parent": null
+    },
+    "ageB": {
+     "id": 0,
+     "v": "17",
+     "connected": false,
+     "parent": null
+    },
+    "hA": {
+     "id": 0,
+     "v": "Striker",
+     "connected": false,
+     "parent": null
+    },
+    "hB": {
+     "id": 0,
+     "v": " · Age ",
+     "connected": false,
+     "parent": null
+    },
+    "hC": {
+     "id": 0,
+     "v": "17",
+     "connected": false,
+     "parent": null
+    },
+    "hD": {
+     "id": 0,
+     "v": " · ",
+     "connected": false,
+     "parent": null
+    },
+    "hE": {
+     "id": 0,
+     "v": "England",
+     "connected": false,
+     "parent": null
+    },
+    "rA": {
+     "id": 0,
+     "v": "Striker",
+     "connected": false,
+     "parent": null
+    },
+    "rB": {
+     "id": 0,
+     "v": " · Age ",
+     "connected": false,
+     "parent": null
+    },
+    "rC": {
+     "id": 0,
+     "v": "16",
+     "connected": false,
+     "parent": null
+    },
+    "rD": {
+     "id": 0,
+     "v": " · ",
+     "connected": false,
+     "parent": null
+    },
+    "rE": {
+     "id": 0,
+     "v": "England",
+     "connected": false,
+     "parent": null
+    },
+    "iA": {
+     "id": 0,
+     "v": "You have ",
+     "connected": false,
+     "parent": null
+    },
+    "iB": {
+     "id": 0,
+     "v": "3",
+     "connected": false,
+     "parent": null
+    },
+    "iC": {
+     "id": 0,
+     "v": " goals this season",
+     "connected": false,
+     "parent": null
+    },
+    "tickA": {
+     "id": 0,
+     "v": "Minute ",
+     "connected": false,
+     "parent": null
+    },
+    "tickB": {
+     "id": 0,
+     "v": "1",
+     "connected": false,
+     "parent": null
+    },
+    "hundA": {
+     "id": 0,
+     "v": "Followers: ",
+     "connected": false,
+     "parent": null
+    },
+    "hundB": {
+     "id": 0,
+     "v": "1",
+     "connected": false,
+     "parent": null
+    },
+    "bankA": {
+     "id": 0,
+     "v": "-$100k",
+     "connected": false,
+     "parent": null
+    },
+    "phA": {
+     "id": 0,
+     "v": "Choose position",
+     "connected": false,
+     "parent": null
+    }
+   },
+   "html": {
+    "age": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Alter </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">17</font></font>",
+    "head": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Stürmer · </font><font dir=\"auto\" style=\"vertical-align: inherit;\">17 </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Jahre </font><font dir=\"auto\" style=\"vertical-align: inherit;\">· </font><font dir=\"auto\" style=\"vertical-align: inherit;\">England</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "rmv": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Stürmer · </font><font dir=\"auto\" style=\"vertical-align: inherit;\">16 </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Jahre </font><font dir=\"auto\" style=\"vertical-align: inherit;\">· </font><font dir=\"auto\" style=\"vertical-align: inherit;\">England</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "insb": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Du hast </font><font dir=\"auto\" style=\"vertical-align: inherit;\">in dieser Saison </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">3 Tore erzielt.</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "tick": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Minute </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">1</font></font>",
+    "hund": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Follower: </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">1</font></font>",
+    "bank": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">-100.000 $</font></font>",
+    "ph": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Position auswählen</font></font>",
+    "fresh": "",
+    "roll": "",
+    "after": ""
+   },
+   "kids": {
+    "age": 2,
+    "head": 5,
+    "rmv": 5,
+    "insb": 3,
+    "tick": 2,
+    "hund": 2,
+    "bank": 1,
+    "ph": 1,
+    "fresh": 0,
+    "roll": 0,
+    "after": 0
+   },
+   "stats": {
+    "swaps": 28,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 7
+   }
+  },
+  "rmv": {
+   "texts": {
+    "ageA": {
+     "id": 0,
+     "v": "Age ",
+     "connected": false,
+     "parent": null
+    },
+    "ageB": {
+     "id": 0,
+     "v": "17",
+     "connected": false,
+     "parent": null
+    },
+    "hA": {
+     "id": 0,
+     "v": "Striker",
+     "connected": false,
+     "parent": null
+    },
+    "hB": {
+     "id": 0,
+     "v": " · Age ",
+     "connected": false,
+     "parent": null
+    },
+    "hC": {
+     "id": 0,
+     "v": "17",
+     "connected": false,
+     "parent": null
+    },
+    "hD": {
+     "id": 0,
+     "v": " · ",
+     "connected": false,
+     "parent": null
+    },
+    "hE": {
+     "id": 0,
+     "v": "England",
+     "connected": false,
+     "parent": null
+    },
+    "rA": {
+     "id": 0,
+     "v": "Striker",
+     "connected": false,
+     "parent": null
+    },
+    "rB": {
+     "id": 0,
+     "v": " · Age ",
+     "connected": false,
+     "parent": null
+    },
+    "rC": {
+     "id": 0,
+     "v": "16",
+     "connected": false,
+     "parent": null
+    },
+    "rD": {
+     "id": 0,
+     "v": " · ",
+     "connected": false,
+     "parent": null
+    },
+    "rE": {
+     "id": 0,
+     "v": "England",
+     "connected": false,
+     "parent": null
+    },
+    "iA": {
+     "id": 0,
+     "v": "You have ",
+     "connected": false,
+     "parent": null
+    },
+    "iB": {
+     "id": 0,
+     "v": "3",
+     "connected": false,
+     "parent": null
+    },
+    "iC": {
+     "id": 0,
+     "v": " goals this season",
+     "connected": false,
+     "parent": null
+    },
+    "tickA": {
+     "id": 0,
+     "v": "Minute ",
+     "connected": false,
+     "parent": null
+    },
+    "tickB": {
+     "id": 0,
+     "v": "1",
+     "connected": false,
+     "parent": null
+    },
+    "hundA": {
+     "id": 0,
+     "v": "Followers: ",
+     "connected": false,
+     "parent": null
+    },
+    "hundB": {
+     "id": 0,
+     "v": "1",
+     "connected": false,
+     "parent": null
+    },
+    "bankA": {
+     "id": 0,
+     "v": "-$100k",
+     "connected": false,
+     "parent": null
+    },
+    "phA": {
+     "id": 0,
+     "v": "Choose position",
+     "connected": false,
+     "parent": null
+    }
+   },
+   "html": {
+    "age": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Alter </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">17</font></font>",
+    "head": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Stürmer · </font><font dir=\"auto\" style=\"vertical-align: inherit;\">17 </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Jahre </font><font dir=\"auto\" style=\"vertical-align: inherit;\">· </font><font dir=\"auto\" style=\"vertical-align: inherit;\">England</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "rmv": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Stürmer </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">· Alter </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">· </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">England</font></font>",
+    "insb": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Du hast </font><font dir=\"auto\" style=\"vertical-align: inherit;\">in dieser Saison </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">3 Tore erzielt.</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "tick": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Minute </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">1</font></font>",
+    "hund": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Follower: </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">1</font></font>",
+    "bank": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">-100.000 $</font></font>",
+    "ph": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Position auswählen</font></font>",
+    "fresh": "",
+    "roll": "",
+    "after": ""
+   },
+   "kids": {
+    "age": 2,
+    "head": 5,
+    "rmv": 4,
+    "insb": 3,
+    "tick": 2,
+    "hund": 2,
+    "bank": 1,
+    "ph": 1,
+    "fresh": 0,
+    "roll": 0,
+    "after": 0
+   },
+   "stats": {
+    "swaps": 32,
+    "removed": 1,
+    "inserted": 0,
+    "restored": 11
+   }
+  },
+  "insb": {
+   "texts": {
+    "ageA": {
+     "id": 0,
+     "v": "Age ",
+     "connected": false,
+     "parent": null
+    },
+    "ageB": {
+     "id": 0,
+     "v": "17",
+     "connected": false,
+     "parent": null
+    },
+    "hA": {
+     "id": 0,
+     "v": "Striker",
+     "connected": false,
+     "parent": null
+    },
+    "hB": {
+     "id": 0,
+     "v": " · Age ",
+     "connected": false,
+     "parent": null
+    },
+    "hC": {
+     "id": 0,
+     "v": "17",
+     "connected": false,
+     "parent": null
+    },
+    "hD": {
+     "id": 0,
+     "v": " · ",
+     "connected": false,
+     "parent": null
+    },
+    "hE": {
+     "id": 0,
+     "v": "England",
+     "connected": false,
+     "parent": null
+    },
+    "rA": {
+     "id": 0,
+     "v": "Striker",
+     "connected": false,
+     "parent": null
+    },
+    "rB": {
+     "id": 0,
+     "v": " · Age ",
+     "connected": false,
+     "parent": null
+    },
+    "rC": {
+     "id": 0,
+     "v": "16",
+     "connected": false,
+     "parent": null
+    },
+    "rD": {
+     "id": 0,
+     "v": " · ",
+     "connected": false,
+     "parent": null
+    },
+    "rE": {
+     "id": 0,
+     "v": "England",
+     "connected": false,
+     "parent": null
+    },
+    "iA": {
+     "id": 0,
+     "v": "You have ",
+     "connected": false,
+     "parent": null
+    },
+    "iB": {
+     "id": 0,
+     "v": "3",
+     "connected": false,
+     "parent": null
+    },
+    "iC": {
+     "id": 0,
+     "v": " goals this season",
+     "connected": false,
+     "parent": null
+    },
+    "tickA": {
+     "id": 0,
+     "v": "Minute ",
+     "connected": false,
+     "parent": null
+    },
+    "tickB": {
+     "id": 0,
+     "v": "1",
+     "connected": false,
+     "parent": null
+    },
+    "hundA": {
+     "id": 0,
+     "v": "Followers: ",
+     "connected": false,
+     "parent": null
+    },
+    "hundB": {
+     "id": 0,
+     "v": "1",
+     "connected": false,
+     "parent": null
+    },
+    "bankA": {
+     "id": 0,
+     "v": "-$100k",
+     "connected": false,
+     "parent": null
+    },
+    "phA": {
+     "id": 0,
+     "v": "Choose position",
+     "connected": false,
+     "parent": null
+    }
+   },
+   "html": {
+    "age": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Alter </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">17</font></font>",
+    "head": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Stürmer · </font><font dir=\"auto\" style=\"vertical-align: inherit;\">17 </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Jahre </font><font dir=\"auto\" style=\"vertical-align: inherit;\">· </font><font dir=\"auto\" style=\"vertical-align: inherit;\">England</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "rmv": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Stürmer </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">· Alter </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">· </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">England</font></font>",
+    "insb": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Du hast </font><font dir=\"auto\" style=\"vertical-align: inherit;\">in dieser Saison </font></font><b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">erst</font></font></b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\"> 3 Tore erzielt.</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "tick": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Minute </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">1</font></font>",
+    "hund": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Follower: </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">1</font></font>",
+    "bank": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">-100.000 $</font></font>",
+    "ph": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Position auswählen</font></font>",
+    "fresh": "",
+    "roll": "",
+    "after": ""
+   },
+   "kids": {
+    "age": 2,
+    "head": 5,
+    "rmv": 4,
+    "insb": 4,
+    "tick": 2,
+    "hund": 2,
+    "bank": 1,
+    "ph": 1,
+    "fresh": 0,
+    "roll": 0,
+    "after": 0
+   },
+   "stats": {
+    "swaps": 36,
+    "removed": 1,
+    "inserted": 1,
+    "restored": 14
+   }
+  },
+  "tick": {
+   "texts": {
+    "ageA": {
+     "id": 0,
+     "v": "Age ",
+     "connected": false,
+     "parent": null
+    },
+    "ageB": {
+     "id": 0,
+     "v": "17",
+     "connected": false,
+     "parent": null
+    },
+    "hA": {
+     "id": 0,
+     "v": "Striker",
+     "connected": false,
+     "parent": null
+    },
+    "hB": {
+     "id": 0,
+     "v": " · Age ",
+     "connected": false,
+     "parent": null
+    },
+    "hC": {
+     "id": 0,
+     "v": "17",
+     "connected": false,
+     "parent": null
+    },
+    "hD": {
+     "id": 0,
+     "v": " · ",
+     "connected": false,
+     "parent": null
+    },
+    "hE": {
+     "id": 0,
+     "v": "England",
+     "connected": false,
+     "parent": null
+    },
+    "rA": {
+     "id": 0,
+     "v": "Striker",
+     "connected": false,
+     "parent": null
+    },
+    "rB": {
+     "id": 0,
+     "v": " · Age ",
+     "connected": false,
+     "parent": null
+    },
+    "rC": {
+     "id": 0,
+     "v": "16",
+     "connected": false,
+     "parent": null
+    },
+    "rD": {
+     "id": 0,
+     "v": " · ",
+     "connected": false,
+     "parent": null
+    },
+    "rE": {
+     "id": 0,
+     "v": "England",
+     "connected": false,
+     "parent": null
+    },
+    "iA": {
+     "id": 0,
+     "v": "You have ",
+     "connected": false,
+     "parent": null
+    },
+    "iB": {
+     "id": 0,
+     "v": "3",
+     "connected": false,
+     "parent": null
+    },
+    "iC": {
+     "id": 0,
+     "v": " goals this season",
+     "connected": false,
+     "parent": null
+    },
+    "tickA": {
+     "id": 0,
+     "v": "Minute ",
+     "connected": false,
+     "parent": null
+    },
+    "tickB": {
+     "id": 0,
+     "v": "41",
+     "connected": false,
+     "parent": null
+    },
+    "hundA": {
+     "id": 0,
+     "v": "Followers: ",
+     "connected": false,
+     "parent": null
+    },
+    "hundB": {
+     "id": 0,
+     "v": "1",
+     "connected": false,
+     "parent": null
+    },
+    "bankA": {
+     "id": 0,
+     "v": "-$100k",
+     "connected": false,
+     "parent": null
+    },
+    "phA": {
+     "id": 0,
+     "v": "Choose position",
+     "connected": false,
+     "parent": null
+    }
+   },
+   "html": {
+    "age": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Alter </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">17</font></font>",
+    "head": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Stürmer · </font><font dir=\"auto\" style=\"vertical-align: inherit;\">17 </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Jahre </font><font dir=\"auto\" style=\"vertical-align: inherit;\">· </font><font dir=\"auto\" style=\"vertical-align: inherit;\">England</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "rmv": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Stürmer </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">· Alter </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">· </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">England</font></font>",
+    "insb": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Du hast </font><font dir=\"auto\" style=\"vertical-align: inherit;\">in dieser Saison </font></font><b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">erst</font></font></b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\"> 3 Tore erzielt.</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "tick": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Minute </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">41</font></font>",
+    "hund": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Follower: </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">1</font></font>",
+    "bank": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">-100.000 $</font></font>",
+    "ph": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Position auswählen</font></font>",
+    "fresh": "",
+    "roll": "",
+    "after": ""
+   },
+   "kids": {
+    "age": 2,
+    "head": 5,
+    "rmv": 4,
+    "insb": 4,
+    "tick": 2,
+    "hund": 2,
+    "bank": 1,
+    "ph": 1,
+    "fresh": 0,
+    "roll": 0,
+    "after": 0
+   },
+   "stats": {
+    "swaps": 38,
+    "removed": 1,
+    "inserted": 1,
+    "restored": 94
+   }
+  },
+  "hund": {
+   "texts": {
+    "ageA": {
+     "id": 0,
+     "v": "Age ",
+     "connected": false,
+     "parent": null
+    },
+    "ageB": {
+     "id": 0,
+     "v": "17",
+     "connected": false,
+     "parent": null
+    },
+    "hA": {
+     "id": 0,
+     "v": "Striker",
+     "connected": false,
+     "parent": null
+    },
+    "hB": {
+     "id": 0,
+     "v": " · Age ",
+     "connected": false,
+     "parent": null
+    },
+    "hC": {
+     "id": 0,
+     "v": "17",
+     "connected": false,
+     "parent": null
+    },
+    "hD": {
+     "id": 0,
+     "v": " · ",
+     "connected": false,
+     "parent": null
+    },
+    "hE": {
+     "id": 0,
+     "v": "England",
+     "connected": false,
+     "parent": null
+    },
+    "rA": {
+     "id": 0,
+     "v": "Striker",
+     "connected": false,
+     "parent": null
+    },
+    "rB": {
+     "id": 0,
+     "v": " · Age ",
+     "connected": false,
+     "parent": null
+    },
+    "rC": {
+     "id": 0,
+     "v": "16",
+     "connected": false,
+     "parent": null
+    },
+    "rD": {
+     "id": 0,
+     "v": " · ",
+     "connected": false,
+     "parent": null
+    },
+    "rE": {
+     "id": 0,
+     "v": "England",
+     "connected": false,
+     "parent": null
+    },
+    "iA": {
+     "id": 0,
+     "v": "You have ",
+     "connected": false,
+     "parent": null
+    },
+    "iB": {
+     "id": 0,
+     "v": "3",
+     "connected": false,
+     "parent": null
+    },
+    "iC": {
+     "id": 0,
+     "v": " goals this season",
+     "connected": false,
+     "parent": null
+    },
+    "tickA": {
+     "id": 0,
+     "v": "Minute ",
+     "connected": false,
+     "parent": null
+    },
+    "tickB": {
+     "id": 0,
+     "v": "41",
+     "connected": false,
+     "parent": null
+    },
+    "hundA": {
+     "id": 0,
+     "v": "Followers: ",
+     "connected": false,
+     "parent": null
+    },
+    "hundB": {
+     "id": 0,
+     "v": "101",
+     "connected": false,
+     "parent": null
+    },
+    "bankA": {
+     "id": 0,
+     "v": "-$100k",
+     "connected": false,
+     "parent": null
+    },
+    "phA": {
+     "id": 0,
+     "v": "Choose position",
+     "connected": false,
+     "parent": null
+    }
+   },
+   "html": {
+    "age": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Alter </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">17</font></font>",
+    "head": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Stürmer · </font><font dir=\"auto\" style=\"vertical-align: inherit;\">17 </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Jahre </font><font dir=\"auto\" style=\"vertical-align: inherit;\">· </font><font dir=\"auto\" style=\"vertical-align: inherit;\">England</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "rmv": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Stürmer </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">· Alter </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">· </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">England</font></font>",
+    "insb": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Du hast </font><font dir=\"auto\" style=\"vertical-align: inherit;\">in dieser Saison </font></font><b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">erst</font></font></b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\"> 3 Tore erzielt.</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "tick": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Minute </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">41</font></font>",
+    "hund": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Follower: </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">101</font></font>",
+    "bank": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">-100.000 $</font></font>",
+    "ph": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Position auswählen</font></font>",
+    "fresh": "",
+    "roll": "",
+    "after": ""
+   },
+   "kids": {
+    "age": 2,
+    "head": 5,
+    "rmv": 4,
+    "insb": 4,
+    "tick": 2,
+    "hund": 2,
+    "bank": 1,
+    "ph": 1,
+    "fresh": 0,
+    "roll": 0,
+    "after": 0
+   },
+   "stats": {
+    "swaps": 58,
+    "removed": 1,
+    "inserted": 1,
+    "restored": 294
+   }
+  },
+  "bank": {
+   "texts": {
+    "ageA": {
+     "id": 0,
+     "v": "Age ",
+     "connected": false,
+     "parent": null
+    },
+    "ageB": {
+     "id": 0,
+     "v": "17",
+     "connected": false,
+     "parent": null
+    },
+    "hA": {
+     "id": 0,
+     "v": "Striker",
+     "connected": false,
+     "parent": null
+    },
+    "hB": {
+     "id": 0,
+     "v": " · Age ",
+     "connected": false,
+     "parent": null
+    },
+    "hC": {
+     "id": 0,
+     "v": "17",
+     "connected": false,
+     "parent": null
+    },
+    "hD": {
+     "id": 0,
+     "v": " · ",
+     "connected": false,
+     "parent": null
+    },
+    "hE": {
+     "id": 0,
+     "v": "England",
+     "connected": false,
+     "parent": null
+    },
+    "rA": {
+     "id": 0,
+     "v": "Striker",
+     "connected": false,
+     "parent": null
+    },
+    "rB": {
+     "id": 0,
+     "v": " · Age ",
+     "connected": false,
+     "parent": null
+    },
+    "rC": {
+     "id": 0,
+     "v": "16",
+     "connected": false,
+     "parent": null
+    },
+    "rD": {
+     "id": 0,
+     "v": " · ",
+     "connected": false,
+     "parent": null
+    },
+    "rE": {
+     "id": 0,
+     "v": "England",
+     "connected": false,
+     "parent": null
+    },
+    "iA": {
+     "id": 0,
+     "v": "You have ",
+     "connected": false,
+     "parent": null
+    },
+    "iB": {
+     "id": 0,
+     "v": "3",
+     "connected": false,
+     "parent": null
+    },
+    "iC": {
+     "id": 0,
+     "v": " goals this season",
+     "connected": false,
+     "parent": null
+    },
+    "tickA": {
+     "id": 0,
+     "v": "Minute ",
+     "connected": false,
+     "parent": null
+    },
+    "tickB": {
+     "id": 0,
+     "v": "41",
+     "connected": false,
+     "parent": null
+    },
+    "hundA": {
+     "id": 0,
+     "v": "Followers: ",
+     "connected": false,
+     "parent": null
+    },
+    "hundB": {
+     "id": 0,
+     "v": "101",
+     "connected": false,
+     "parent": null
+    },
+    "bankA": {
+     "id": 0,
+     "v": "$50k",
+     "connected": false,
+     "parent": null
+    },
+    "phA": {
+     "id": 0,
+     "v": "Choose position",
+     "connected": false,
+     "parent": null
+    }
+   },
+   "html": {
+    "age": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Alter </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">17</font></font>",
+    "head": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Stürmer · </font><font dir=\"auto\" style=\"vertical-align: inherit;\">17 </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Jahre </font><font dir=\"auto\" style=\"vertical-align: inherit;\">· </font><font dir=\"auto\" style=\"vertical-align: inherit;\">England</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "rmv": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Stürmer </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">· Alter </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">· </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">England</font></font>",
+    "insb": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Du hast </font><font dir=\"auto\" style=\"vertical-align: inherit;\">in dieser Saison </font></font><b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">erst</font></font></b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\"> 3 Tore erzielt.</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "tick": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Minute </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">41</font></font>",
+    "hund": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Follower: </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">101</font></font>",
+    "bank": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">+ </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">50.000 $</font></font>",
+    "ph": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Position auswählen</font></font>",
+    "fresh": "",
+    "roll": "",
+    "after": ""
+   },
+   "kids": {
+    "age": 2,
+    "head": 5,
+    "rmv": 4,
+    "insb": 4,
+    "tick": 2,
+    "hund": 2,
+    "bank": 2,
+    "ph": 1,
+    "fresh": 0,
+    "roll": 0,
+    "after": 0
+   },
+   "stats": {
+    "swaps": 60,
+    "removed": 1,
+    "inserted": 2,
+    "restored": 296
+   }
+  },
+  "ph": {
+   "texts": {
+    "ageA": {
+     "id": 0,
+     "v": "Age ",
+     "connected": false,
+     "parent": null
+    },
+    "ageB": {
+     "id": 0,
+     "v": "17",
+     "connected": false,
+     "parent": null
+    },
+    "hA": {
+     "id": 0,
+     "v": "Striker",
+     "connected": false,
+     "parent": null
+    },
+    "hB": {
+     "id": 0,
+     "v": " · Age ",
+     "connected": false,
+     "parent": null
+    },
+    "hC": {
+     "id": 0,
+     "v": "17",
+     "connected": false,
+     "parent": null
+    },
+    "hD": {
+     "id": 0,
+     "v": " · ",
+     "connected": false,
+     "parent": null
+    },
+    "hE": {
+     "id": 0,
+     "v": "England",
+     "connected": false,
+     "parent": null
+    },
+    "rA": {
+     "id": 0,
+     "v": "Striker",
+     "connected": false,
+     "parent": null
+    },
+    "rB": {
+     "id": 0,
+     "v": " · Age ",
+     "connected": false,
+     "parent": null
+    },
+    "rC": {
+     "id": 0,
+     "v": "16",
+     "connected": false,
+     "parent": null
+    },
+    "rD": {
+     "id": 0,
+     "v": " · ",
+     "connected": false,
+     "parent": null
+    },
+    "rE": {
+     "id": 0,
+     "v": "England",
+     "connected": false,
+     "parent": null
+    },
+    "iA": {
+     "id": 0,
+     "v": "You have ",
+     "connected": false,
+     "parent": null
+    },
+    "iB": {
+     "id": 0,
+     "v": "3",
+     "connected": false,
+     "parent": null
+    },
+    "iC": {
+     "id": 0,
+     "v": " goals this season",
+     "connected": false,
+     "parent": null
+    },
+    "tickA": {
+     "id": 0,
+     "v": "Minute ",
+     "connected": false,
+     "parent": null
+    },
+    "tickB": {
+     "id": 0,
+     "v": "41",
+     "connected": false,
+     "parent": null
+    },
+    "hundA": {
+     "id": 0,
+     "v": "Followers: ",
+     "connected": false,
+     "parent": null
+    },
+    "hundB": {
+     "id": 0,
+     "v": "101",
+     "connected": false,
+     "parent": null
+    },
+    "bankA": {
+     "id": 0,
+     "v": "$50k",
+     "connected": false,
+     "parent": null
+    },
+    "phA": {
+     "id": 0,
+     "v": "Choose position",
+     "connected": false,
+     "parent": null
+    }
+   },
+   "html": {
+    "age": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Alter </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">17</font></font>",
+    "head": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Stürmer · </font><font dir=\"auto\" style=\"vertical-align: inherit;\">17 </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Jahre </font><font dir=\"auto\" style=\"vertical-align: inherit;\">· </font><font dir=\"auto\" style=\"vertical-align: inherit;\">England</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "rmv": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Stürmer </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">· Alter </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">· </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">England</font></font>",
+    "insb": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Du hast </font><font dir=\"auto\" style=\"vertical-align: inherit;\">in dieser Saison </font></font><b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">erst</font></font></b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\"> 3 Tore erzielt.</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "tick": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Minute </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">41</font></font>",
+    "hund": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Follower: </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">101</font></font>",
+    "bank": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">+ </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">50.000 $</font></font>",
+    "ph": "<b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Stürmer (ST)</font></font></b>",
+    "fresh": "",
+    "roll": "",
+    "after": ""
+   },
+   "kids": {
+    "age": 2,
+    "head": 5,
+    "rmv": 4,
+    "insb": 4,
+    "tick": 2,
+    "hund": 2,
+    "bank": 2,
+    "ph": 1,
+    "fresh": 0,
+    "roll": 0,
+    "after": 0
+   },
+   "stats": {
+    "swaps": 61,
+    "removed": 2,
+    "inserted": 2,
+    "restored": 296
+   }
+  },
+  "fresh": {
+   "texts": {
+    "ageA": {
+     "id": 0,
+     "v": "Age ",
+     "connected": false,
+     "parent": null
+    },
+    "ageB": {
+     "id": 0,
+     "v": "17",
+     "connected": false,
+     "parent": null
+    },
+    "hA": {
+     "id": 0,
+     "v": "Striker",
+     "connected": false,
+     "parent": null
+    },
+    "hB": {
+     "id": 0,
+     "v": " · Age ",
+     "connected": false,
+     "parent": null
+    },
+    "hC": {
+     "id": 0,
+     "v": "17",
+     "connected": false,
+     "parent": null
+    },
+    "hD": {
+     "id": 0,
+     "v": " · ",
+     "connected": false,
+     "parent": null
+    },
+    "hE": {
+     "id": 0,
+     "v": "England",
+     "connected": false,
+     "parent": null
+    },
+    "rA": {
+     "id": 0,
+     "v": "Striker",
+     "connected": false,
+     "parent": null
+    },
+    "rB": {
+     "id": 0,
+     "v": " · Age ",
+     "connected": false,
+     "parent": null
+    },
+    "rC": {
+     "id": 0,
+     "v": "16",
+     "connected": false,
+     "parent": null
+    },
+    "rD": {
+     "id": 0,
+     "v": " · ",
+     "connected": false,
+     "parent": null
+    },
+    "rE": {
+     "id": 0,
+     "v": "England",
+     "connected": false,
+     "parent": null
+    },
+    "iA": {
+     "id": 0,
+     "v": "You have ",
+     "connected": false,
+     "parent": null
+    },
+    "iB": {
+     "id": 0,
+     "v": "3",
+     "connected": false,
+     "parent": null
+    },
+    "iC": {
+     "id": 0,
+     "v": " goals this season",
+     "connected": false,
+     "parent": null
+    },
+    "tickA": {
+     "id": 0,
+     "v": "Minute ",
+     "connected": false,
+     "parent": null
+    },
+    "tickB": {
+     "id": 0,
+     "v": "41",
+     "connected": false,
+     "parent": null
+    },
+    "hundA": {
+     "id": 0,
+     "v": "Followers: ",
+     "connected": false,
+     "parent": null
+    },
+    "hundB": {
+     "id": 0,
+     "v": "101",
+     "connected": false,
+     "parent": null
+    },
+    "bankA": {
+     "id": 0,
+     "v": "$50k",
+     "connected": false,
+     "parent": null
+    },
+    "phA": {
+     "id": 0,
+     "v": "Choose position",
+     "connected": false,
+     "parent": null
+    },
+    "fresh": {
+     "id": 0,
+     "v": "Second words here",
+     "connected": false,
+     "parent": null
+    }
+   },
+   "html": {
+    "age": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Alter </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">17</font></font>",
+    "head": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Stürmer · </font><font dir=\"auto\" style=\"vertical-align: inherit;\">17 </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Jahre </font><font dir=\"auto\" style=\"vertical-align: inherit;\">· </font><font dir=\"auto\" style=\"vertical-align: inherit;\">England</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "rmv": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Stürmer </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">· Alter </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">· </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">England</font></font>",
+    "insb": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Du hast </font><font dir=\"auto\" style=\"vertical-align: inherit;\">in dieser Saison </font></font><b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">erst</font></font></b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\"> 3 Tore erzielt.</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "tick": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Minute </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">41</font></font>",
+    "hund": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Follower: </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">101</font></font>",
+    "bank": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">+ </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">50.000 $</font></font>",
+    "ph": "<b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Stürmer (ST)</font></font></b>",
+    "fresh": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Zweite Worte hier</font></font>",
+    "roll": "",
+    "after": ""
+   },
+   "kids": {
+    "age": 2,
+    "head": 5,
+    "rmv": 4,
+    "insb": 4,
+    "tick": 2,
+    "hund": 2,
+    "bank": 2,
+    "ph": 1,
+    "fresh": 1,
+    "roll": 0,
+    "after": 0
+   },
+   "stats": {
+    "swaps": 63,
+    "removed": 2,
+    "inserted": 2,
+    "restored": 297
+   }
+  },
+  "roll": {
+   "texts": {
+    "ageA": {
+     "id": 0,
+     "v": "Age ",
+     "connected": false,
+     "parent": null
+    },
+    "ageB": {
+     "id": 0,
+     "v": "17",
+     "connected": false,
+     "parent": null
+    },
+    "hA": {
+     "id": 0,
+     "v": "Striker",
+     "connected": false,
+     "parent": null
+    },
+    "hB": {
+     "id": 0,
+     "v": " · Age ",
+     "connected": false,
+     "parent": null
+    },
+    "hC": {
+     "id": 0,
+     "v": "17",
+     "connected": false,
+     "parent": null
+    },
+    "hD": {
+     "id": 0,
+     "v": " · ",
+     "connected": false,
+     "parent": null
+    },
+    "hE": {
+     "id": 0,
+     "v": "England",
+     "connected": false,
+     "parent": null
+    },
+    "rA": {
+     "id": 0,
+     "v": "Striker",
+     "connected": false,
+     "parent": null
+    },
+    "rB": {
+     "id": 0,
+     "v": " · Age ",
+     "connected": false,
+     "parent": null
+    },
+    "rC": {
+     "id": 0,
+     "v": "16",
+     "connected": false,
+     "parent": null
+    },
+    "rD": {
+     "id": 0,
+     "v": " · ",
+     "connected": false,
+     "parent": null
+    },
+    "rE": {
+     "id": 0,
+     "v": "England",
+     "connected": false,
+     "parent": null
+    },
+    "iA": {
+     "id": 0,
+     "v": "You have ",
+     "connected": false,
+     "parent": null
+    },
+    "iB": {
+     "id": 0,
+     "v": "3",
+     "connected": false,
+     "parent": null
+    },
+    "iC": {
+     "id": 0,
+     "v": " goals this season",
+     "connected": false,
+     "parent": null
+    },
+    "tickA": {
+     "id": 0,
+     "v": "Minute ",
+     "connected": false,
+     "parent": null
+    },
+    "tickB": {
+     "id": 0,
+     "v": "41",
+     "connected": false,
+     "parent": null
+    },
+    "hundA": {
+     "id": 0,
+     "v": "Followers: ",
+     "connected": false,
+     "parent": null
+    },
+    "hundB": {
+     "id": 0,
+     "v": "101",
+     "connected": false,
+     "parent": null
+    },
+    "bankA": {
+     "id": 0,
+     "v": "$50k",
+     "connected": false,
+     "parent": null
+    },
+    "phA": {
+     "id": 0,
+     "v": "Choose position",
+     "connected": false,
+     "parent": null
+    },
+    "fresh": {
+     "id": 0,
+     "v": "Second words here",
+     "connected": false,
+     "parent": null
+    }
+   },
+   "html": {
+    "age": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Alter </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">17</font></font>",
+    "head": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Stürmer · </font><font dir=\"auto\" style=\"vertical-align: inherit;\">17 </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Jahre </font><font dir=\"auto\" style=\"vertical-align: inherit;\">· </font><font dir=\"auto\" style=\"vertical-align: inherit;\">England</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "rmv": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Stürmer </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">· Alter </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">· </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">England</font></font>",
+    "insb": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Du hast </font><font dir=\"auto\" style=\"vertical-align: inherit;\">in dieser Saison </font></font><b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">erst</font></font></b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\"> 3 Tore erzielt.</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "tick": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Minute </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">41</font></font>",
+    "hund": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Follower: </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">101</font></font>",
+    "bank": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">+ </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">50.000 $</font></font>",
+    "ph": "<b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Stürmer (ST)</font></font></b>",
+    "fresh": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Zweite Worte hier</font></font>",
+    "roll": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">90</font></font>",
+    "after": ""
+   },
+   "kids": {
+    "age": 2,
+    "head": 5,
+    "rmv": 4,
+    "insb": 4,
+    "tick": 2,
+    "hund": 2,
+    "bank": 2,
+    "ph": 1,
+    "fresh": 1,
+    "roll": 1,
+    "after": 0
+   },
+   "stats": {
+    "swaps": 99,
+    "removed": 2,
+    "inserted": 2,
+    "restored": 309
+   }
+  },
+  "after": {
+   "texts": {
+    "ageA": {
+     "id": 0,
+     "v": "Age ",
+     "connected": false,
+     "parent": null
+    },
+    "ageB": {
+     "id": 0,
+     "v": "17",
+     "connected": false,
+     "parent": null
+    },
+    "hA": {
+     "id": 0,
+     "v": "Striker",
+     "connected": false,
+     "parent": null
+    },
+    "hB": {
+     "id": 0,
+     "v": " · Age ",
+     "connected": false,
+     "parent": null
+    },
+    "hC": {
+     "id": 0,
+     "v": "17",
+     "connected": false,
+     "parent": null
+    },
+    "hD": {
+     "id": 0,
+     "v": " · ",
+     "connected": false,
+     "parent": null
+    },
+    "hE": {
+     "id": 0,
+     "v": "England",
+     "connected": false,
+     "parent": null
+    },
+    "rA": {
+     "id": 0,
+     "v": "Striker",
+     "connected": false,
+     "parent": null
+    },
+    "rB": {
+     "id": 0,
+     "v": " · Age ",
+     "connected": false,
+     "parent": null
+    },
+    "rC": {
+     "id": 0,
+     "v": "16",
+     "connected": false,
+     "parent": null
+    },
+    "rD": {
+     "id": 0,
+     "v": " · ",
+     "connected": false,
+     "parent": null
+    },
+    "rE": {
+     "id": 0,
+     "v": "England",
+     "connected": false,
+     "parent": null
+    },
+    "iA": {
+     "id": 0,
+     "v": "You have ",
+     "connected": false,
+     "parent": null
+    },
+    "iB": {
+     "id": 0,
+     "v": "3",
+     "connected": false,
+     "parent": null
+    },
+    "iC": {
+     "id": 0,
+     "v": " goals this season",
+     "connected": false,
+     "parent": null
+    },
+    "tickA": {
+     "id": 0,
+     "v": "Minute ",
+     "connected": false,
+     "parent": null
+    },
+    "tickB": {
+     "id": 0,
+     "v": "41",
+     "connected": false,
+     "parent": null
+    },
+    "hundA": {
+     "id": 0,
+     "v": "Followers: ",
+     "connected": false,
+     "parent": null
+    },
+    "hundB": {
+     "id": 0,
+     "v": "101",
+     "connected": false,
+     "parent": null
+    },
+    "bankA": {
+     "id": 0,
+     "v": "$50k",
+     "connected": false,
+     "parent": null
+    },
+    "phA": {
+     "id": 0,
+     "v": "Choose position",
+     "connected": false,
+     "parent": null
+    },
+    "fresh": {
+     "id": 0,
+     "v": "Second words here",
+     "connected": false,
+     "parent": null
+    },
+    "after": {
+     "id": 0,
+     "v": "One last new sentence",
+     "connected": false,
+     "parent": null
+    }
+   },
+   "html": {
+    "age": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Alter </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">17</font></font>",
+    "head": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Stürmer · </font><font dir=\"auto\" style=\"vertical-align: inherit;\">17 </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Jahre </font><font dir=\"auto\" style=\"vertical-align: inherit;\">· </font><font dir=\"auto\" style=\"vertical-align: inherit;\">England</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "rmv": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Stürmer </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">· Alter </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">· </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">England</font></font>",
+    "insb": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Du hast </font><font dir=\"auto\" style=\"vertical-align: inherit;\">in dieser Saison </font></font><b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">erst</font></font></b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\"> 3 Tore erzielt.</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "tick": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Minute </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">41</font></font>",
+    "hund": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Follower: </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">101</font></font>",
+    "bank": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">+ </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">50.000 $</font></font>",
+    "ph": "<b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Stürmer (ST)</font></font></b>",
+    "fresh": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Zweite Worte hier</font></font>",
+    "roll": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">90</font></font>",
+    "after": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Ein letzter neuer Satz</font></font>"
+   },
+   "kids": {
+    "age": 2,
+    "head": 5,
+    "rmv": 4,
+    "insb": 4,
+    "tick": 2,
+    "hund": 2,
+    "bank": 2,
+    "ph": 1,
+    "fresh": 1,
+    "roll": 1,
+    "after": 1
+   },
+   "stats": {
+    "swaps": 100,
+    "removed": 2,
+    "inserted": 2,
+    "restored": 309
+   }
+  }
+ },
+ "timings": {},
+ "translated": true,
+ "hosts": {
+  "allowed": [
+   "127.0.0.1",
+   "translate.google.com",
+   "www.gstatic.com",
+   "translate.googleapis.com",
+   "translate-pa.googleapis.com"
+  ],
+  "blocked": [
+   "fonts.gstatic.com",
+   "www.google.com"
+  ]
+ },
+ "run": {
+  "installed": true,
+  "swapsAfter": {
+   "age1500": 2,
+   "age6000": 2
+  }
+ },
+ "records": [],
+ "errors": []
+}

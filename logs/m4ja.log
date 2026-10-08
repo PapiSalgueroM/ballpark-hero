@@ -1,0 +1,8 @@
+
+  ../../_temp/rc-out/files/tg-ja.js  7.7kb
+
+⚡ Done in 5ms
+run: {"installed":true,"swapsAfter":{"age1500":2,"age6000":2}}
+final stats {"swaps":112,"removed":2,"inserted":2,"restored":304}; page errors 0: 
+RESULT measure2: wrote /home/runner/work/_temp/rc-out/files/records-4-ja.json
+measure done
