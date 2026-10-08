@@ -1,0 +1,7 @@
+rec: bash .rc/x/rec.sh
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-own: node_modules/.bin/vitest run src/test/nbaAwardDecisionLift.test.ts src/test/nbaOldSaveLines.test.ts src/test/nbaStatLineColumns.test.ts --testTimeout=300000 --hookTimeout=120000
+hall-nfl: SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nfl
+hall-mlb: SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs mlb
+hall-nhl: SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nhl
+anchors: node scripts/simHarnessAnchors.mjs
