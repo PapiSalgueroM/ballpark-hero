@@ -11,14 +11,24 @@
      1. JUDGED IN MEMORY. src/hooks/useCollegeGrid.ts imports @/lib/collegeGrid,
         calls judgeCollegeCell and fetchCollegeGridData, and carries no
         functions.invoke(, no exhausted and no checkingDown. The page carries
-        no checkingDown either.
+        no checkingDown either. Round 1105: the key comes through the static
+        door. The hook calls fetchCollegeGridData(COLLEGE_KEY_URLS), the lib's
+        fetchCollegeGridData hands the engine a staticSource decoded by
+        decodeCollegeKey, and neither src/lib/collegeGrid.ts nor
+        src/lib/gridEngine.ts carries a ?url import (node harnesses bundle
+        both with esbuild).
      2. ONLY A NO COSTS A GUESS. In submitGuess, the not-found and duplicate
         branches and the unknown branch all return without calling
         addDailyGuess; every addDailyGuess call sits after the unknown branch;
-        the no branch adds { t: 'x' }; the catch adds only on a yes.
+        the no branch adds { t: 'x' }; the catch adds only on a yes. Round
+        1105: a pick made while the key is missing is unverified. After the
+        awaited key load a null key returns before the verdict, tells the
+        player, and holds no addDailyGuess.
      3. THE KEY'S NAMES. src/components/college-grid/CollegeGridSearch.tsx
         searches COLLEGE_GRID_PLAYER_SOURCE with validateOnly and never
-        imports the hand typed nflCareerPlayers list.
+        imports the hand typed nflCareerPlayers list. Round 1105: the source
+        comes from @/lib/collegeGridKey, and collegeSearchSource in the lib
+        defines local rows and no ilikeLimit, so a search makes no request.
      4. THE COPY ONLY ASKS WHAT THE POOL OFFERS. The '/college-grid' guide
         entry, the page, the how to play dialog and the hook's messages name
         no retired label, no 2000 to 2026 pool and no "any name you can
@@ -42,19 +52,27 @@
         and its claim is tested on every player in the key the toast can show
         for (heismanOpen). A winner's surname at one of his schools opens the
         label too, so "shares his name" is false for DaShaun White.
+     8. THE BOARD DOES NOT WAIT FOR THE KEY (Round 1105). The hook's
+        const isLoading statement names dailyLoading and staleLog and neither
+        gridData nor keyReady. The nine labels are in the bundle, so holding
+        the board for the key buys nothing.
 
    NEGATIVE CONTROLS. Every one runs on EVERY invocation, in memory, and each
    refuses to run unless its target text appears exactly once:
      invoke         plants a functions.invoke of college-grid-validate in the hook   section 1
+     pagedread      removes the staticSource line from fetchCollegeGridData          section 1
      chargeunknown  plants an addDailyGuess x in the unknown branch                  section 2
      notfound       removes the unknown-name early return                            section 2
      duplicate      removes the already-used player's early return                   section 2
+     acceptmissing  plants an addDailyGuess ok in the missing key branch             section 2
      typedlist      plants the nflCareerPlayers import in the search box             section 3
+     remotesearch   plants the old remote source back in collegeSearchSource         section 3
      copy           plants "SEC Conference" into the guide intro                     section 4
      undealt        plants a criterion no board deals into the guide intro           section 4
      noboardid      removes the board id comparison from the hook                    section 5
      oldseenkey     sets the rules flag back to 'cg-rules-seen'                      section 6
      heismanname    sets the Heisman sentence back to "shares his name"              section 7
+     gateboard      plants || !gridData on the isLoading line                        section 8
    SIM_CGPAGE_CONTROL=<name> runs just that control and exits 0 only if it fired.
 
    Run: node scripts/simCollegeGridPage.mjs
@@ -72,8 +90,10 @@ const PAGE = 'src/pages/CollegeGrid.tsx';
 const DIALOG = 'src/components/college-grid/CollegeGridHowToPlay.tsx';
 const SEARCH = 'src/components/college-grid/CollegeGridSearch.tsx';
 const GUIDE = 'src/data/gameContent/college.ts';
+const LIB = 'src/lib/collegeGrid.ts';
+const ENGINE = 'src/lib/gridEngine.ts';
 
-const CONTROLS = { invoke: 1, chargeunknown: 2, notfound: 2, duplicate: 2, typedlist: 3, copy: 4, undealt: 4, noboardid: 5, oldseenkey: 6, heismanname: 7 };
+const CONTROLS = { invoke: 1, pagedread: 1, chargeunknown: 2, notfound: 2, duplicate: 2, acceptmissing: 2, typedlist: 3, remotesearch: 3, copy: 4, undealt: 4, noboardid: 5, oldseenkey: 6, heismanname: 7, gateboard: 8 };
 const ONLY = process.env.SIM_CGPAGE_CONTROL || '';
 if (ONLY && !CONTROLS[ONLY]) {
   console.error(`SIM_CGPAGE_CONTROL=${ONLY} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
@@ -120,6 +140,8 @@ const source = {
   dialog: stripComments(read(DIALOG)),
   search: stripComments(read(SEARCH)),
   guide: guideEntry(read(GUIDE)),
+  lib: stripComments(read(LIB)),
+  engine: stripComments(read(ENGINE)),
 };
 if (!source.guide) abort(`${GUIDE} has no '/college-grid' entry; NOTHING WAS CHECKED`);
 
@@ -127,17 +149,32 @@ if (!source.guide) abort(`${GUIDE} has no '/college-grid' entry; NOTHING WAS CHE
 // The sections, each a function of the source it reads so a control can feed it a planted copy
 // ---------------------------------------------------------------------------
 
-function sectionOne(hook, page) {
+function sectionOne(hook, page, lib, engine) {
   const out = [];
   if (!/from '@\/lib\/collegeGrid'/.test(hook)) out.push('the hook does not import @/lib/collegeGrid');
   if (!/judgeCollegeCell\(/.test(hook)) out.push('the hook does not judge with judgeCollegeCell');
-  if (!/fetchCollegeGridData\(\)/.test(hook)) out.push('the hook does not fetch the key');
+  /* Round 1105: the key comes through the static door, by the two addresses
+     src/lib/collegeGridKey.ts hands over, and never out of the table. */
+  if (!/fetchCollegeGridData\(COLLEGE_KEY_URLS\)/.test(hook)) out.push('the hook does not load the key through its two shipped files (fetchCollegeGridData(COLLEGE_KEY_URLS))');
+  const loadAt = lib.indexOf('export async function fetchCollegeGridData(urls: { search: string; judge: string })');
+  const load = loadAt >= 0 ? blockFrom(lib, lib.indexOf(')', loadAt)) : null;
+  if (!load) out.push('fetchCollegeGridData in the lib no longer takes the two addresses');
+  else {
+    if (!/fetchFranchiseGridData\(/.test(load.body)) out.push('fetchCollegeGridData no longer goes through the shared grid engine');
+    if (!/\bstaticSource: \{ urls: \[urls\.search, urls\.judge\], toRows: decodeCollegeKey \}/.test(load.body)) out.push('the config fetchCollegeGridData hands the engine names no staticSource, so the key would be paged out of the table again');
+    if (/markCollegeNamesakes\(/.test(load.body)) out.push('fetchCollegeGridData marks namesakes itself; the flags ride in the judge file');
+  }
+  if (/\?url\b/.test(lib)) out.push(`${LIB} carries a ?url import; node harnesses bundle it with esbuild, which would read the file itself`);
+  if (/\?url\b/.test(engine)) out.push(`${ENGINE} carries a ?url import; node harnesses bundle it with esbuild, which would read the file itself`);
   if (/functions\.invoke\(/.test(hook)) out.push('the hook invokes an edge function; the page must judge in memory');
   if (/exhausted/i.test(hook)) out.push('the hook still reads an exhausted flag');
   if (/checkingDown/.test(hook)) out.push('the hook still carries checkingDown');
   if (/checkingDown/.test(page)) out.push('the page still carries checkingDown');
   return out;
 }
+
+const KEY_BRANCH_GONE = 'submitGuess no longer returns on a missing key after awaiting the key load (if (!data) after await Promise.race)';
+const KEY_BRANCH_CHARGES = 'the missing key branch calls addDailyGuess: a pick nobody checked is put on the guess log (accept on error)';
 
 function sectionTwo(hook) {
   const out = [];
@@ -152,6 +189,17 @@ function sectionTwo(hook) {
   if (!/if \(!player\) \{[^}]*return;/.test(before)) out.push('a name the key does not carry no longer returns before judging');
   if (!/already on your board[\s\S]*?return;/.test(before)) out.push('a player already on the board no longer returns before judging');
   if (/addDailyGuess\(/.test(before)) out.push('a guess is added before the verdict (the not-found or duplicate branch charges)');
+  /* Round 1105: a pick made while the key is missing. After the awaited key
+     load, a null key returns before the verdict and adds nothing. */
+  const raceAt = before.indexOf('await Promise.race(');
+  const missingAt = raceAt >= 0 ? before.indexOf('if (!data) {', raceAt) : -1;
+  const missing = missingAt >= 0 ? blockFrom(before, missingAt) : null;
+  if (!missing) out.push(KEY_BRANCH_GONE);
+  else {
+    if (!/return;/.test(missing.body)) out.push('the missing key branch does not return, so a pick nobody checked falls through to the judge');
+    if (/addDailyGuess\(/.test(missing.body)) out.push(KEY_BRANCH_CHARGES);
+    if (!/toast\(KEY_UNVERIFIED\)/.test(missing.body)) out.push('the missing key branch no longer tells the player the pick was not checked');
+  }
   const unknownAt = body.indexOf("if (verdict === 'unknown')");
   const unknown = unknownAt >= 0 ? blockFrom(body, unknownAt) : null;
   if (!unknown) out.push("no if (verdict === 'unknown') branch in submitGuess");
@@ -178,8 +226,17 @@ function sectionTwo(hook) {
   return out;
 }
 
-function sectionThree(search) {
+function sectionThree(search, lib) {
   const out = [];
+  if (!/import \{[^}]*\bCOLLEGE_GRID_PLAYER_SOURCE\b[^}]*\} from '@\/lib\/collegeGridKey';/.test(search)) out.push('the search box does not take COLLEGE_GRID_PLAYER_SOURCE from @/lib/collegeGridKey');
+  /* Round 1105: the names are held in memory, so a search makes no request. */
+  const sourceAt = lib.indexOf('export function collegeSearchSource(');
+  const src = sourceAt >= 0 ? blockFrom(lib, lib.indexOf(')', sourceAt)) : null;
+  if (!src) out.push('the lib has no collegeSearchSource');
+  else {
+    if (!/\blocal: async \(/.test(src.body)) out.push('collegeSearchSource defines no local rows, so every search would go to the table');
+    if (/\bilikeLimit\b/.test(src.body)) out.push('collegeSearchSource carries ilikeLimit, the mark of a source searched in the table');
+  }
   if (!/source: COLLEGE_GRID_PLAYER_SOURCE/.test(search)) out.push('the search box does not search COLLEGE_GRID_PLAYER_SOURCE');
   if (!/\bvalidateOnly\b/.test(search)) out.push('the search box lets free text through (validateOnly is gone)');
   if (/nflCareerPlayers/.test(search)) out.push('the search box imports the hand typed nflCareerPlayers list again');
@@ -353,6 +410,18 @@ function sectionFive(hook) {
   return out;
 }
 
+/* Round 1105: the board does not wait for the key. */
+function sectionEight(hook) {
+  const out = [];
+  const m = hook.match(/const isLoading = ([^;]+);/);
+  if (!m) return ['the hook has no const isLoading statement'];
+  if (!/\bdailyLoading\b/.test(m[1])) out.push('isLoading no longer names dailyLoading');
+  if (!/\bstaleLog\b/.test(m[1])) out.push('isLoading no longer names staleLog');
+  if (/\bgridData\b/.test(m[1])) out.push('isLoading names gridData: the board waits for the key again');
+  if (/\bkeyReady\b/.test(m[1])) out.push('isLoading names keyReady: the board waits for the key again');
+  return out;
+}
+
 // ---------------------------------------------------------------------------
 
 judge = await loadJudge();
@@ -363,15 +432,16 @@ const report = (n, title, out, extra) => {
 };
 
 if (!ONLY) {
-  report(1, 'Judged in memory: the hook imports the lib, judges locally, and never invokes the validator', sectionOne(source.hook, source.page), 'hook and page read as code');
+  report(1, 'Judged in memory: the hook imports the lib, judges locally, and never invokes the validator', sectionOne(source.hook, source.page, source.lib, source.engine), 'hook, page, lib and engine read as code; the key comes through the static door');
   report(2, 'Only a no costs a guess', sectionTwo(source.hook), 'submitGuess read branch by branch');
-  report(3, "The key's names: COLLEGE_GRID_PLAYER_SOURCE with validateOnly, no typed list", sectionThree(source.search), 'search box read as code');
+  report(3, "The key's names: COLLEGE_GRID_PLAYER_SOURCE with validateOnly, no typed list", sectionThree(source.search, source.lib), 'search box and its source read as code; the names are held in memory');
   const four = sectionFour(source);
   report(4, 'The copy only asks what the pool offers', four.out, `${four.parsed} example claims parsed from the page and ${PROSE_CLAIMS.length} prose claims, ${four.judged} judged against the ${judge.size} row key; ${PROSE_FACTS.length} stated facts read; ${four.named} criteria named in the copy, each checked against the labels the ${judge.boards} boards deal`);
   report(5, 'A save from another board is not shown', sectionFive(source.hook), 'action shapes, guesses and the stale log read');
   report(6, 'Returning players see the rewritten rules once', sectionSix(source.page), `the rules flag is not '${OLD_RULES_SEEN_KEY}' and storage is read inside a try`);
   const seven = sectionSeven(source.hook);
   report(7, 'The Heisman unknown toast only says what is true', Array.isArray(seven) ? seven : seven.out, Array.isArray(seven) ? '' : `"${seven.sentence}" checked against all ${seven.open} players it can show for`);
+  report(8, 'The board does not wait for the key', sectionEight(source.hook), 'the isLoading statement read');
 }
 
 const fired = [];
@@ -385,7 +455,12 @@ if (want('invoke')) {
   console.log('\ninvoke) a functions.invoke of college-grid-validate planted in the hook');
   const hook = mustReplace(source.hook, 'const verdict = judgeCollegeCell(player, rowAttr, colAttr);',
     "const verdict = judgeCollegeCell(player, rowAttr, colAttr);\n      const { data } = await supabase.functions.invoke('college-grid-validate', { body: { playerName } });", HOOK);
-  grade('invoke', sectionOne(hook, source.page));
+  grade('invoke', sectionOne(hook, source.page, source.lib, source.engine));
+}
+if (want('pagedread')) {
+  console.log('\npagedread) the staticSource line removed from fetchCollegeGridData, so the engine would page the table');
+  const lib = mustReplace(source.lib, '    staticSource: { urls: [urls.search, urls.judge], toRows: decodeCollegeKey },\n', '', LIB);
+  grade('pagedread', sectionOne(source.hook, source.page, lib, source.engine));
 }
 if (want('chargeunknown')) {
   console.log('\nchargeunknown) an addDailyGuess x planted in the unknown branch');
@@ -403,11 +478,24 @@ for (const [name, anchor, expected] of [
   if (out.length !== 1 || out[0] !== expected) abort(`control ${name} did not fail only its intended early-return assertion`);
   grade(name, out);
 }
+if (want('acceptmissing')) {
+  console.log('\nacceptmissing) an addDailyGuess of an ok action planted in the missing key branch');
+  const hook = mustReplace(source.hook, 'toast(KEY_UNVERIFIED);', "addDailyGuess({ t: 'ok', cellIndex: capturedCell, playerName, rarity: 50, board });\n          toast(KEY_UNVERIFIED);", HOOK);
+  const out = sectionTwo(hook);
+  if (!out.includes(KEY_BRANCH_CHARGES)) abort('control acceptmissing did not trip the missing key branch assertion itself');
+  grade('acceptmissing', out);
+}
 if (want('typedlist')) {
   console.log('\ntypedlist) the nflCareerPlayers import planted in the search box');
-  const search = mustReplace(source.search, "import { COLLEGE_GRID_PLAYER_SOURCE } from '@/lib/collegeGrid';",
-    "import { COLLEGE_GRID_PLAYER_SOURCE } from '@/lib/collegeGrid';\nimport { nflCareerPlayers } from '@/data/nflCareerPlayers';", SEARCH);
-  grade('typedlist', sectionThree(search));
+  const search = mustReplace(source.search, "import { COLLEGE_GRID_PLAYER_SOURCE, warmCollegeSearch } from '@/lib/collegeGridKey';",
+    "import { COLLEGE_GRID_PLAYER_SOURCE, warmCollegeSearch } from '@/lib/collegeGridKey';\nimport { nflCareerPlayers } from '@/data/nflCareerPlayers';", SEARCH);
+  grade('typedlist', sectionThree(search, source.lib));
+}
+if (want('remotesearch')) {
+  console.log('\nremotesearch) the old remote source planted back in collegeSearchSource');
+  const lib = mustReplace(source.lib, "    table: '(memory)',\n    nameColumn: 'display_name',\n    prominenceColumn: 'rank',\n    local: async (",
+    "    table: 'college_grid_players',\n    nameColumn: 'display_name',\n    prominenceColumn: 'seasons',\n    ilikeLimit: 200,\n    prominenceLimit: 1000,\n    unused: async (", LIB);
+  grade('remotesearch', sectionThree(source.search, lib));
 }
 if (want('copy')) {
   console.log('\ncopy) "SEC Conference" planted into the guide intro');
@@ -442,6 +530,11 @@ if (want('noboardid')) {
   const hook = mustReplace(source.hook, 'dailyActions.some((a) => a.board !== puzzle.id)', 'false', HOOK);
   grade('noboardid', sectionFive(hook));
 }
+if (want('gateboard')) {
+  console.log('\ngateboard) || !gridData planted on the isLoading line, so the board waits for the key');
+  const hook = mustReplace(source.hook, 'const isLoading = dailyLoading || staleLog;', 'const isLoading = dailyLoading || staleLog || !gridData;', HOOK);
+  grade('gateboard', sectionEight(hook));
+}
 
 console.log('');
 if (ONLY) {
@@ -453,4 +546,4 @@ if (failures > 0) {
   console.error(`simCollegeGridPage: red, ${failures} failure${failures === 1 ? '' : 's'} above.`);
   process.exit(1);
 }
-console.log(`simCollegeGridPage: green. The page judges in memory, charges only a no, offers the key's names, says only what the key holds, and drops another board's save; all ${fired.length} controls fired.`);
+console.log(`simCollegeGridPage: green. The page judges in memory, charges only a no, offers the key's names from memory, says only what the key holds, drops another board's save, loads the key through the static door and shows the board without it; all ${fired.length} of ${Object.keys(CONTROLS).length} controls fired.`);

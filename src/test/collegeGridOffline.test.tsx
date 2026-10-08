@@ -20,12 +20,15 @@
  *        times. The board must end lost at 15 counted guesses and record a
  *        finish worth 0.
  *
- * THE NETWORK IS STUBBED TO THROW. The supabase client serves one table,
- * college_grid_players, straight out of scripts/data/collegeGridPlayers.json
- * (the file the table is loaded from), and throws on every other table, on
- * functions.invoke and on fetch. So the rarity count and the selection
- * insert both throw on every correct pick, and a board still has to finish.
- * The suite asserts the stub was actually hit.
+ * THE NETWORK IS STUBBED TO THROW. Since Round 1105 the page does not read
+ * the table at all: the key ships with the site as two compact files and the
+ * hook fetches those. So global fetch serves exactly those two addresses out
+ * of the committed files in src/data/collegeGrid/ (counted), and throws on
+ * anything else; the supabase client throws on EVERY table, the key's own
+ * table included (counted apart, and the count must end at zero), and on
+ * functions.invoke and rpc. The rarity count and the selection insert both
+ * throw on every correct pick, and a board still has to finish. The suite
+ * asserts the stub was actually hit.
  *
  * NEGATIVE CONTROL: CG_OFFLINE_CONTROL=nocount wraps judgeCollegeCell as the
  * hook sees it so every verdict that is not yes comes back unknown, the world
@@ -42,11 +45,16 @@ const state = vi.hoisted(() => ({
   rows: [] as Record<string, unknown>[],
   boards: [] as unknown[],
   networkThrows: 0,
-  keyPages: 0,
+  /** Reads of college_grid_players the page tried to make. Round 1105: none. */
+  tableReads: 0,
+  /** Fetches of the two key files that ship with the site. */
+  keyFetches: 0,
   flipped: 0,
 }));
 
 const KEY_FILE = path.resolve(process.cwd(), 'scripts/data/collegeGridPlayers.json');
+const SEARCH_FILE = path.resolve(process.cwd(), 'src/data/collegeGrid/collegeGridSearch.json');
+const JUDGE_FILE = path.resolve(process.cwd(), 'src/data/collegeGrid/collegeGridJudge.json');
 const TABLE_COLUMNS = ['id', 'display_name', 'name_norm', 'colleges', 'colleges_agreed', 'groups', 'best_pick', 'first_round', 'undrafted', 'heisman_year', 'first_season', 'seasons', 'dup'];
 
 /** The key as the table holds it: the committed file's rows, table columns only, ordered on id. */
@@ -65,17 +73,8 @@ vi.mock('@/integrations/supabase/client', () => {
     throw new Error(`network stubbed to throw: ${what}`);
   };
   const from = (table: string) => {
-    if (table !== 'college_grid_players') return refuse(table);
-    const q = {
-      select: () => q,
-      not: () => q,
-      order: () => q,
-      range: async (lo: number, hi: number) => {
-        state.keyPages += 1;
-        return { data: state.rows.slice(lo, hi + 1), error: null };
-      },
-    };
-    return q;
+    if (table === 'college_grid_players') state.tableReads += 1;
+    return refuse(table);
   };
   return {
     SUPABASE_URL: 'https://offline.invalid',
@@ -90,10 +89,10 @@ vi.mock('@/lib/collegeGrid', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@/lib/collegeGrid')>();
   const control = process.env.CG_OFFLINE_CONTROL || '';
   if (control && control !== 'nocount') throw new Error(`CG_OFFLINE_CONTROL=${control} is not a control this suite knows (nocount)`);
-  /* The key is paged through the stub once and the result reused, so 150
-     boards do not index 35,000 rows 150 times. */
+  /* The key is decoded through the real door once and the result reused, so
+     150 boards do not index 35,000 rows 150 times. */
   let cached: ReturnType<typeof actual.fetchCollegeGridData> | null = null;
-  const fetchCollegeGridData = () => (cached ??= actual.fetchCollegeGridData());
+  const fetchCollegeGridData: typeof actual.fetchCollegeGridData = (urls) => (cached ??= actual.fetchCollegeGridData(urls));
   const judgeCollegeCell: typeof actual.judgeCollegeCell = control === 'nocount'
     ? (entry, row, col) => {
       const v = actual.judgeCollegeCell(entry, row, col);
@@ -113,6 +112,9 @@ vi.mock('@/lib/badges', () => ({ getNewlyEarnedBadges: async () => [] }));
 
 import { useCollegeGrid } from '@/hooks/useCollegeGrid';
 import { recordCompletion } from '@/lib/completions';
+/* The same two addresses the page asks for (src/lib/collegeGridKey.ts). */
+import searchUrl from '@/data/collegeGrid/collegeGridSearch.json?url';
+import judgeUrl from '@/data/collegeGrid/collegeGridJudge.json?url';
 
 const note = (msg: string) => console.log('CGOFFLINE| ' + msg);
 const GUESS_LIMIT = 15;
@@ -131,9 +133,17 @@ beforeAll(async () => {
   entries = real.indexCollegeEntries(state.rows);
   bySchool = new Map();
   for (const e of entries) for (const c of e.colleges) bySchool.set(c, [...(bySchool.get(c) ?? []), e]);
-  vi.stubGlobal('fetch', () => {
-    state.networkThrows += 1;
-    throw new Error('network stubbed to throw: fetch');
+  expect(searchUrl, 'the two key files have two different addresses').not.toBe(judgeUrl);
+  const shipped = new Map([[searchUrl, SEARCH_FILE], [judgeUrl, JUDGE_FILE]]);
+  vi.stubGlobal('fetch', async (url: unknown) => {
+    const file = shipped.get(String(url));
+    if (!file) {
+      state.networkThrows += 1;
+      throw new Error(`network stubbed to throw: fetch ${String(url)}`);
+    }
+    state.keyFetches += 1;
+    const text = fs.readFileSync(file, 'utf8');
+    return { ok: true, json: async () => JSON.parse(text) };
   });
 }, 120_000);
 
@@ -188,7 +198,10 @@ async function play(board: GridPuzzle, moves: { cell: number; name: string }[]) 
   vi.mocked(recordCompletion).mockClear();
   const { result, unmount } = renderHook(() => useCollegeGrid());
   await waitFor(() => expect(result.current.isLoading).toBe(false), { timeout: 60_000 });
-  if (result.current.dataError) throw new Error('the key did not load through the stub');
+  if (result.current.dataError) throw new Error('the hook reported a data error');
+  /* Round 1105: the board no longer waits for the key, so the bot does: every
+     pick below must be judged at once, with no wait inside submitGuess. */
+  await waitFor(() => expect(result.current.keyReady).toBe(true), { timeout: 60_000 });
   if (result.current.puzzle.id !== board.id) throw new Error(`the hook served ${result.current.puzzle.id}, not ${board.id}`);
   // Keep the real key load asynchronous, then own the wrong-answer flash timers.
   vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
@@ -233,9 +246,11 @@ describe('College Grid offline', () => {
       else bad.push(`${board.id}: ${r.status}, ${r.correct} correct, ${r.counted} counted, ${r.left} left, recorded ${JSON.stringify(r.recorded)}`);
     }
     const refused = state.networkThrows - throwsBefore;
-    note(`win: ${won} of ${boards.length} boards won in 9 counted guesses, each recorded once at 900; ${refused} network calls refused by the stub along the way; key pages served ${state.keyPages}`);
+    note(`win: ${won} of ${boards.length} boards won in 9 counted guesses, each recorded once at 900; ${refused} network calls refused by the stub along the way; key files fetched ${state.keyFetches}, reads of the key's table ${state.tableReads}`);
     if (bad.length) note(`win failures: ${bad.slice(0, 3).join(' | ')}`);
     expect(refused).toBeGreaterThan(0);
+    expect(state.keyFetches, 'one fetch per key file for the whole run').toBe(2);
+    expect(state.tableReads, 'the page never reads college_grid_players').toBe(0);
     expect(bad).toEqual([]);
     expect(won).toBe(75);
   }, 900_000);
@@ -260,5 +275,6 @@ describe('College Grid offline', () => {
     if (bad.length) note(`loss failures: ${bad.slice(0, 3).join(' | ')}`);
     expect(bad).toEqual([]);
     expect(lost).toBe(75);
+    expect(state.tableReads, 'the page never reads college_grid_players').toBe(0);
   }, 900_000);
 });
