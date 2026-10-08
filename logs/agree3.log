@@ -1,0 +1,47 @@
+bundled in 1069 ms; 120 careers, seed set 3
+played 120 careers in 14140 ms
+ok   T1 old save, no leagueApps, no finish: results mode, attempt 0, 0 repairs
+ok   T2 keeper, clean sheets equal apps: table mode, attempt 0, 7 repairs
+ok   T3 defender with derby shutouts: table mode, attempt 0, 0 repairs
+ok   T4 severe injury, both derbies played: results mode, attempt 0, 0 repairs
+ok   T5 on loan: table mode, attempt 0, 7 repairs
+ok   T6 red card in his last league game: table mode, attempt 0, 5 repairs
+ok   T7 38 league apps in an 18 club league: table mode, attempt 0, 0 repairs
+ok   T8 a 1992/93 Serie A row: results mode, attempt 0, 0 repairs
+ok   T9 starter, 36 league apps, 10 week injury: table mode, attempt 0, 4 repairs
+ok   T10 injured results mode row: results mode, attempt 0, 0 repairs
+ok   T11 Ligue 1 2019-20 champions (abandoned): results mode, attempt 0, 0 repairs
+ok   T12 Golden Boot season: table mode, attempt 0, 2 repairs
+ok   T13 a title with no verified size: results mode, attempt 0, 0 repairs
+seasons 2126; gate {"format":53,"table":1269,"nofinish":601,"severe":60,"nosize":143}
+derived: table 1266, results 857; null 3 (injured 1 of 462, uninjured 2 of 1664) {"table:availability":3}
+attempts {"0":2113,"1":7,"2":2,"3-9":1}; repairs {"0":1128,"1-5":484,"6-15":392,"16-40":119}
+determinism 2123 of 2123; key reconstruction 820 of 820
+tables in a league the world runs no title race for, 1st place a named club that is not his: 49
+ok   the population has both modes (1266 table, 857 results)
+ok   null rate 0.14% at most 0.6%
+ok   table yield 99.76% of 1269 gated seasons, at least 99.2%
+ok   determinism on 2123 seasons
+ok   key reconstruction on 820 finishes
+ok   realism gpg: derived 2.627 against unconditioned 2.617 (gap 0.009, band 0.05) over 960 tables
+ok   realism home: derived 0.443 against unconditioned 0.444 (gap -0.001, band 0.015) over 960 tables
+ok   realism draw: derived 0.228 against unconditioned 0.228 (gap 0.000, band 0.015) over 960 tables
+ok   realism champPpg: derived 2.223 against unconditioned 2.247 (gap -0.024, band 0.08) over 960 tables
+finish fifth 1 (not champions): points a game p1 1.74 p50 2.02 p99 2.37 over 268
+finish fifth 2 (not champions): points a game p1 1.45 p50 1.74 p99 2.00 over 227
+finish fifth 3 (not champions): points a game p1 1.13 p50 1.45 p99 1.76 over 180
+finish fifth 4 (not champions): points a game p1 0.84 p50 1.16 p99 1.38 over 80
+finish fifth 5 (not champions): points a game p1 0.61 p50 0.89 p99 1.08 over 24
+finish fifth 1: goal difference a game, table p1 0.42 p50 0.97 p99 1.50 over 268; results only mean 0.85 over 5, 5 inside
+finish fifth 2: goal difference a game, table p1 -0.03 p50 0.53 p99 1.05 over 227; results only mean 0.51 over 11, 10 inside
+   outside: c71 2019 Monaco 7 of 20 GD 46
+finish fifth 3: goal difference a game, table p1 -0.37 p50 0.16 p99 0.68 over 180; results only mean 0.14 over 12, 10 inside
+   outside: c35 1994 Athletic Bilbao 11 of 20 GD -20
+   outside: c55 1993 Inter Milan 8 of 18 GD 29
+finish fifth 4: goal difference a game, table p1 -0.97 p50 -0.24 p99 0.15 over 80; results only mean -0.29 over 7, 7 inside
+finish fifth 5: goal difference a game, table p1 -1.18 p50 -0.71 p99 -0.34 over 24; results only mean -0.88 over 6, 5 inside
+   outside: c0 1994 Chelsea 21 of 22 GD -55
+ok   results only seasons with a saved finish: 41, 37 inside their fifth's table goal difference band
+champions' points a game in table mode: p2 1.97 p50 2.21 p98 2.50 over 1266; results title band 1.9 to 2.65
+ok   independent checker: every derived season agrees with its row
+simSeasonCentreAgreement: 24 checks, 0 failed
