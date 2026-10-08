@@ -1,0 +1,129 @@
+WALK phone-motion: 50 steps in 98s, stop="", translated=true, reached=true, age 16 -> 19 -> 19
+  worst at one look: structure 2, raw 0, digits 2; different in all: structure 4, raw 0, digits 2
+  age line: 40 looks, 0 wrong
+  boxes: {"nationality":{"react":"Brazil🇧🇷","shown":"Brasil"},"position":{"react":"Striker (ST)","shown":"Striker (ST)"},"era":{"react":"Current era (2025 start)","shown":"Current era (2025 start)"}}
+  restore: {"how":"banner button :1.restore","fontsBefore":544,"backsBefore":0,"ms":849,"fontsAfter":0,"backsAfter":552,"lang":"en","cls":""}
+  after show original, at the top: {"header":{"react":19,"shown":"ST · Age 19 · Brazil"},"save":{"phase":"random_events","age":19,"name":"Joao Teste","nat":"Brazil"},"raw":0,"digits":0,"samples":{"structure":[],"raw":[],"digits":[]}}
+  layer two stats at the end: {"swaps":1485,"removed":10,"inserted":0,"restored":84}; guard lines 0; NotFoundError 0; errors []
+  net: db aborted 4, other hosts aborted ["fonts.googleapis.com","fonts.gstatic.com","www.google.com"]; last step {"n":"original press 24","pend":0,"fonts":0,"judged":319}
+    structure [translated @ choose position Striker] div.space-y-1.5>button.flex>span: React  | screen "Striker (ST)"
+    structure [translated @ choose era Current era] div.space-y-1.5>button.flex>span: React  | screen "F:Atacante (ST)"
+    structure [translated @ choose era Current era] div.space-y-1.5>button.flex>span: React  | screen "Current era (2025 start)"
+    structure [translated @ Generate Starting Potential] div.space-y-1.5>button.flex>span: React  | screen "F:Era atual (início em 2025)"
+    digits [translated @ translated] div>ol.list-decimal>li: React Roll your starting potential, somewhere in the mid 50s to high 60s, and reroll as many times as you like. Rerolls are fr | screen Role seu potencial inicial, que geralmente fica entre 55 e 60, e role novamente quantas vezes quiser. As rolagens adicio
+    digits [translated @ career press 7] div.flex-1>div.flex>span.text-[9px]: React + 1.0M  followers  | screen +  1 milhão de  seguidores 
+WALK desktop-reduce: 50 steps in 98s, stop="", translated=true, reached=true, age 16 -> 19 -> 19
+  worst at one look: structure 2, raw 0, digits 3; different in all: structure 2, raw 0, digits 3
+  age line: 40 looks, 0 wrong
+  boxes: {"nationality":{"react":"Brazil🇧🇷","shown":"Brasil"},"position":{"react":"Striker (ST)","shown":"Atacante (ST)"},"era":{"react":"Current era (2025 start)","shown":"Era atual (início em 2025)"}}
+  restore: {"how":"banner button :1.restore","fontsBefore":582,"backsBefore":0,"ms":873,"fontsAfter":0,"backsAfter":590,"lang":"en","cls":""}
+  after show original, at the top: {"header":{"react":19,"shown":"ST · Age 19 · Brazil"},"save":{"phase":"random_events","age":19,"name":"Joao Teste","nat":"Brazil"},"raw":0,"digits":0,"samples":{"structure":[],"raw":[],"digits":[]}}
+  layer two stats at the end: {"swaps":1507,"removed":10,"inserted":0,"restored":76}; guard lines 0; NotFoundError 0; errors []
+  net: db aborted 4, other hosts aborted ["fonts.googleapis.com","fonts.gstatic.com","www.google.com"]; last step {"n":"original press 24","pend":0,"fonts":0,"judged":319}
+    structure [translated @ choose position Striker] div.space-y-1.5>button.flex>span: React  | screen "F:Atacante (ST)"
+    structure [translated @ choose era Current era] div.space-y-1.5>button.flex>span: React  | screen "F:Era atual (início em 2025)"
+    digits [translated @ translated] div>ol.list-decimal>li: React Roll your starting potential, somewhere in the mid 50s to high 60s, and reroll as many times as you like. Rerolls are fr | screen Role seu potencial inicial, que geralmente fica entre 55 e 60, e role novamente quantas vezes quiser. As rolagens adicio
+    digits [translated @ Customize your build] div>ul.list-disc>li: React Retirement is suggested from age 30 once you drop 10 off your peak or hit 75 overall, forced below 50 overall at 33 or o | screen A aposentadoria é sugerida a partir dos 30 anos, quando você perde 10 pontos em relação ao seu pico de desempenho ou ati
+    digits [translated @ career press 7] div.flex-1>div.flex>span.text-[9px]: React + 1.0M  followers  | screen +  1 milhão de  seguidores 
+WALK phone-nolive: 50 steps in 99s, stop="", translated=true, reached=true, age 16 -> 19 -> 19
+  worst at one look: structure 3, raw 5, digits 5; different in all: structure 28, raw 5, digits 18
+  age line: 40 looks, 39 wrong first {"step":"career press 1","shown":"ST · 16 anos · Brasil","save":17,"restored":false}
+  boxes: {"nationality":{"react":"Choose nationalityBrazil🇧🇷","shown":"Escolha a nacionalidade Brazil"},"position":{"react":"Choose positionStriker (ST)","shown":"Escolha a posiçãoStriker (ST)"},"era":{"react":"Choose eraCurrent era (2025 start)","shown":"Escolha a eraCurrent era (2025 start)"}}
+  restore: {"how":"banner button :1.restore","fontsBefore":548,"backsBefore":0,"ms":838,"fontsAfter":0,"backsAfter":556,"lang":"en","cls":""}
+  after show original, at the top: {"header":{"react":16,"shown":"ST · Age 16 · Brazil"},"save":{"phase":"random_events","age":19,"name":"Joao Teste","nat":"Brazil"},"raw":4,"digits":2,"samples":{"structure":[{"at":"div.mt-2>div.text-xs>span","react":"\"🧢 Signed with Cousin Ricky. What could go wrong\"","screen":"\"📋 Joined Botafogo Youth Academy aged 16\" \"🧢 Signed with Cousin Ricky. What could go wrong\""},{"at":"div.mt-2>div.text-xs>span","react":"\"🏃 Beat the mascot in the halftime race. Order restored\"","screen":"\"📩 Professional contract offers received!\" \"🏃 Beat the mascot in the halftime race. Order restored\""}],"raw":[{"at":"div.flex>div.min-w-0>p.text-xs","react":"19","screen":"16"},{"at":"div>div.bg-card>p.text-[11px]","react":"3","screen":"2"},{"at":"div>div.bg-card>p.text-[11px]","react":"1","screen":"0"},{"at":"div>div.bg-card>p.text-[11px]","react":"2","screen":"0"}],"digits":[{"at":"div.flex>div
+  layer two stats at the end: null; guard lines 1; NotFoundError 0; errors []
+  net: db aborted 4, other hosts aborted ["fonts.googleapis.com","fonts.gstatic.com","www.google.com"]; last step {"n":"original press 24","pend":0,"fonts":0,"judged":319}
+    structure [translated @ choose nationality Brazil] div.space-y-1.5>button.flex>span: React  | screen "F:Escolha a nacionalidade" <span>
+    structure [translated @ choose position Striker] div.space-y-1.5>button.flex>span: React  | screen "F:Escolha a posição" "Striker (ST)"
+    structure [translated @ choose era Current era] div.space-y-1.5>button.flex>span: React  | screen "F:Escolha a posição" "F:Atacante (ST)"
+    structure [translated @ choose era Current era] div.space-y-1.5>button.flex>span: React  | screen "F:Escolha a era" "Current era (2025 start)"
+    structure [translated @ Generate Starting Potential] div.space-y-1.5>button.flex>span: React  | screen "F:Escolha a era" "F:Era atual (início em 2025)"
+    structure [translated @ Lock in build] div.space-y-1.5>button.flex>span: React  | screen "F:Atacante (ST)"
+    raw [after show original @ just after show original] div.flex>div.min-w-0>p.text-xs: React 19 | screen 16
+    raw [after show original @ just after show original] div>div.bg-card>p.text-[11px]: React 3 | screen 2
+    raw [after show original @ just after show original] div>div.bg-card>p.text-[11px]: React 1 | screen 0
+    raw [after show original @ just after show original] div>div.bg-card>p.text-[11px]: React 2 | screen 0
+    raw [after show original @ just after show original] div.mt-2>div.text-xs>span: React 🌍 Colombia won the Copa América. | screen 🏠 One of our own! The Botafogo academy kid signs a first-team deal. The ultras 
+    digits [translated @ translated] div>ol.list-decimal>li: React Roll your starting potential, somewhere in the mid 50s to high 60s, and reroll as many times as you like. Rerolls are fr | screen Role seu potencial inicial, que geralmente fica entre 55 e 60, e role novamente quantas vezes quiser. As rolagens adicio
+    digits [translated @ career press 1] div.flex>div.min-w-0>p.text-xs: React ST  · Age  17  ·   | screen ST  ·  16 anos  · 
+    digits [translated @ career press 1] div.mt-2>div.text-xs>span: React 📈 Stats improved during youth development (OVR 60)  | screen 📋 Ingressou na Academia Juvenil do Botafogo aos 16 anos 
+    digits [translated @ career press 3] div.mt-2>div.text-xs>span: React 📩 Professional contract offers received!  | screen 📋 Ingressou na Academia Juvenil do Botafogo aos 16 anos 
+    digits [translated @ career press 4] div.flex>div.min-w-0>p.text-xs: React ST  · Age  18  ·   | screen ST  ·  16 anos  · 
+    digits [translated @ career press 4] div.mt-2>div.text-xs>span: React 🚑 Injury: Dead leg, out 4 weeks, missed matches  | screen 📋 Ingressou na Academia Juvenil do Botafogo aos 16 anos 
+WALK desktop-centre: 25 steps in 106s, stop="", translated=true, reached=true, age 16 -> 18 -> 18
+  worst at one look: structure 2, raw 0, digits 2; different in all: structure 2, raw 0, digits 2
+  age line: 15 looks, 0 wrong
+  boxes: {"nationality":{"react":"Brazil🇧🇷","shown":"Brasil"},"position":{"react":"Striker (ST)","shown":"Atacante (ST)"},"era":{"react":"Current era (2025 start)","shown":"Era atual (início em 2025)"}}
+  restore: null
+  centre: {"found":true,"requests":5,"bad":0,"sample":{"n":307,"withRaw":307,"rawSum":5404,"wrapSum":0,"maxRaw":96,"minRaw":1,"started":16,"fast":true,"hist":{"1":2,"9":8,"13":8,"14":8,"15":24,"16":4,"17":4,"18":247,"80":1,"96":1}},"rest":{"raw":0,"digits":2,"structure":0,"pend":153,"rawNow":["\n      @keyframes cmRise { 0% { opacity:","League game","Away","another club","Botafogo","⚽ Goal, another club","⚽ Goal, another club","⚽ Goal, Botafogo","🅰️ You set it up","⚽ Goal, another club"]}}
+    look 1: raw 0 digits 2 structure 0 english now ["\n      @keyframes cmRise { 0% { opacity:","League game","Away","another club","Botafogo","FT"]
+    look 2: raw 0 digits 2 structure 0 english now ["\n      @keyframes cmRise { 0% { opacity:","League game","Home"," · Classico Vovo","Botafogo","Fluminense"]
+    look 3: raw 0 digits 2 structure 0 english now ["\n      @keyframes cmRise { 0% { opacity:","League game","Away","another club","Botafogo","⚽ Goal, another club"]
+    look 4: raw 0 digits 2 structure 0 english now ["\n      @keyframes cmRise { 0% { opacity:","League game","Away","another club","Botafogo","⚽ Goal, another club"]
+    look 5: raw 0 digits 2 structure 0 english now ["\n      @keyframes cmRise { 0% { opacity:","League game","Away","another club","Botafogo","⚽ Goal, another club"]
+    look 6: raw 0 digits 2 structure 0 english now ["\n      @keyframes cmRise { 0% { opacity:","League game","Away","another club","Botafogo","⚽ Goal, another club"]
+    look 7: raw 0 digits 2 structure 0 english now ["\n      @keyframes cmRise { 0% { opacity:","League game","Away","another club","Botafogo","⚽ Goal, another club"]
+    look 8: raw 0 digits 2 structure 0 english now ["\n      @keyframes cmRise { 0% { opacity:","League game","Away","another club","Botafogo","⚽ Goal, another club"]
+    look 9: raw 0 digits 2 structure 0 english now ["\n      @keyframes cmRise { 0% { opacity:","League game","Away","another club","Botafogo","⚽ Goal, another club"]
+    look 10: raw 0 digits 2 structure 0 english now ["\n      @keyframes cmRise { 0% { opacity:","League game","Away","another club","Botafogo","⚽ Goal, another club"]
+  layer two stats at the end: {"swaps":1255,"removed":8,"inserted":0,"restored":36}; guard lines 0; NotFoundError 0; errors []
+  net: db aborted 3, other hosts aborted ["fonts.googleapis.com","fonts.gstatic.com","www.google.com"]; last step {"n":"centre at rest","pend":153,"fonts":752,"judged":456}
+    structure [translated @ choose position Striker] div.space-y-1.5>button.flex>span: React  | screen "F:Atacante (ST)"
+    structure [translated @ choose era Current era] div.space-y-1.5>button.flex>span: React  | screen "F:Era atual (início em 2025)"
+    digits [translated @ translated] div>ol.list-decimal>li: React Roll your starting potential, somewhere in the mid 50s to high 60s, and reroll as many times as you like. Rerolls are fr | screen Role seu potencial inicial, que geralmente fica entre 55 e 60, e role novamente quantas vezes quiser. As rolagens adicio
+    digits [translated @ Customize your build] div>ul.list-disc>li: React Retirement is suggested from age 30 once you drop 10 off your peak or hit 75 overall, forced below 50 overall at 33 or o | screen A aposentadoria é sugerida a partir dos 30 anos, quando você perde 10 pontos em relação ao seu pico de desempenho ou ati
+WALK phone-centre: 25 steps in 107s, stop="", translated=true, reached=true, age 16 -> 18 -> 18
+  worst at one look: structure 2, raw 0, digits 2; different in all: structure 4, raw 0, digits 2
+  age line: 15 looks, 0 wrong
+  boxes: {"nationality":{"react":"Brazil🇧🇷","shown":"Brasil"},"position":{"react":"Striker (ST)","shown":"Striker (ST)"},"era":{"react":"Current era (2025 start)","shown":"Current era (2025 start)"}}
+  restore: null
+  centre: {"found":true,"requests":4,"bad":0,"sample":{"n":307,"withRaw":307,"rawSum":4010,"wrapSum":0,"maxRaw":90,"minRaw":1,"started":1,"fast":true,"hist":{"1":2,"9":15,"13":288,"39":1,"90":1}},"rest":{"raw":0,"digits":1,"structure":0,"pend":109,"rawNow":["\n      @keyframes cmRise { 0% { opacity:","League game","Home","Athletico Paranaense","another club","⚽ Goal, Athletico Paranaense","YOUR CALL","The ball breaks to you on the edge of th","What you do here is what happened in thi","How it plays: "]}}
+    look 1: raw 0 digits 1 structure 0 english now ["\n      @keyframes cmRise { 0% { opacity:","League game","Home","Athletico Paranaense","another club","⚽ Goal, Athletico Paranaense"]
+    look 2: raw 0 digits 1 structure 0 english now ["\n      @keyframes cmRise { 0% { opacity:","League game","Home","Athletico Paranaense","another club","⚽ Goal, Athletico Paranaense"]
+    look 3: raw 0 digits 1 structure 0 english now ["\n      @keyframes cmRise { 0% { opacity:","League game","Home","Athletico Paranaense","another club","⚽ Goal, Athletico Paranaense"]
+    look 4: raw 0 digits 1 structure 0 english now ["\n      @keyframes cmRise { 0% { opacity:","League game","Home","Athletico Paranaense","another club","⚽ Goal, Athletico Paranaense"]
+    look 5: raw 0 digits 1 structure 0 english now ["\n      @keyframes cmRise { 0% { opacity:","League game","Home","Athletico Paranaense","another club","⚽ Goal, Athletico Paranaense"]
+    look 6: raw 0 digits 1 structure 0 english now ["\n      @keyframes cmRise { 0% { opacity:","League game","Home","Athletico Paranaense","another club","⚽ Goal, Athletico Paranaense"]
+    look 7: raw 0 digits 1 structure 0 english now ["\n      @keyframes cmRise { 0% { opacity:","League game","Home","Athletico Paranaense","another club","⚽ Goal, Athletico Paranaense"]
+    look 8: raw 0 digits 1 structure 0 english now ["\n      @keyframes cmRise { 0% { opacity:","League game","Home","Athletico Paranaense","another club","⚽ Goal, Athletico Paranaense"]
+    look 9: raw 0 digits 1 structure 0 english now ["\n      @keyframes cmRise { 0% { opacity:","League game","Home","Athletico Paranaense","another club","⚽ Goal, Athletico Paranaense"]
+    look 10: raw 0 digits 1 structure 0 english now ["\n      @keyframes cmRise { 0% { opacity:","League game","Home","Athletico Paranaense","another club","⚽ Goal, Athletico Paranaense"]
+  layer two stats at the end: {"swaps":1212,"removed":8,"inserted":0,"restored":21}; guard lines 0; NotFoundError 0; errors []
+  net: db aborted 3, other hosts aborted ["fonts.googleapis.com","fonts.gstatic.com","www.google.com"]; last step {"n":"centre at rest","pend":109,"fonts":674,"judged":427}
+    structure [translated @ choose position Striker] div.space-y-1.5>button.flex>span: React  | screen "Striker (ST)"
+    structure [translated @ choose era Current era] div.space-y-1.5>button.flex>span: React  | screen "F:Atacante (ST)"
+    structure [translated @ choose era Current era] div.space-y-1.5>button.flex>span: React  | screen "Current era (2025 start)"
+    structure [translated @ Generate Starting Potential] div.space-y-1.5>button.flex>span: React  | screen "F:Era atual (início em 2025)"
+    digits [translated @ translated] div>ol.list-decimal>li: React Roll your starting potential, somewhere in the mid 50s to high 60s, and reroll as many times as you like. Rerolls are fr | screen Role seu potencial inicial, que geralmente fica entre 55 e 60, e role novamente quantas vezes quiser. As rolagens adicio
+    digits [translated @ on to the season bar 1] div.bg-card>div.flex>span: React 💰  €2k/wk  | screen 💰  €2.000/semana 
+WALK phone-centre-nolive: 25 steps in 106s, stop="", translated=true, reached=true, age 16 -> 18 -> 18
+  worst at one look: structure 3, raw 0, digits 4; different in all: structure 8, raw 0, digits 7
+  age line: 15 looks, 14 wrong first {"step":"on to the season bar 1","shown":"ST · 16 anos · Brasil","save":17,"restored":false}
+  boxes: {"nationality":{"react":"Choose nationalityBrazil🇧🇷","shown":"Escolha a nacionalidade Brazil"},"position":{"react":"Choose positionStriker (ST)","shown":"Escolha a posiçãoStriker (ST)"},"era":{"react":"Choose eraCurrent era (2025 start)","shown":"Escolha a eraCurrent era (2025 start)"}}
+  restore: null
+  centre: {"found":true,"requests":4,"bad":0,"sample":{"n":306,"withRaw":306,"rawSum":3959,"wrapSum":0,"maxRaw":90,"minRaw":1,"started":1,"fast":true,"hist":{"1":3,"9":15,"13":287,"90":1}},"rest":{"raw":0,"digits":3,"structure":0,"pend":109,"rawNow":["\n      @keyframes cmRise { 0% { opacity:","League game","Home","Athletico Paranaense","another club","⚽ Goal, Athletico Paranaense","YOUR CALL","The ball breaks to you on the edge of th","What you do here is what happened in thi","How it plays: "]}}
+    look 1: raw 0 digits 3 structure 0 english now ["\n      @keyframes cmRise { 0% { opacity:","League game","Home","Athletico Paranaense","another club","⚽ Goal, Athletico Paranaense"]
+    look 2: raw 0 digits 3 structure 0 english now ["\n      @keyframes cmRise { 0% { opacity:","League game","Home","Athletico Paranaense","another club","⚽ Goal, Athletico Paranaense"]
+    look 3: raw 0 digits 3 structure 0 english now ["\n      @keyframes cmRise { 0% { opacity:","League game","Home","Athletico Paranaense","another club","⚽ Goal, Athletico Paranaense"]
+    look 4: raw 0 digits 3 structure 0 english now ["\n      @keyframes cmRise { 0% { opacity:","League game","Home","Athletico Paranaense","another club","⚽ Goal, Athletico Paranaense"]
+    look 5: raw 0 digits 3 structure 0 english now ["\n      @keyframes cmRise { 0% { opacity:","League game","Home","Athletico Paranaense","another club","⚽ Goal, Athletico Paranaense"]
+    look 6: raw 0 digits 3 structure 0 english now ["\n      @keyframes cmRise { 0% { opacity:","League game","Home","Athletico Paranaense","another club","⚽ Goal, Athletico Paranaense"]
+    look 7: raw 0 digits 3 structure 0 english now ["\n      @keyframes cmRise { 0% { opacity:","League game","Home","Athletico Paranaense","another club","⚽ Goal, Athletico Paranaense"]
+    look 8: raw 0 digits 3 structure 0 english now ["\n      @keyframes cmRise { 0% { opacity:","League game","Home","Athletico Paranaense","another club","⚽ Goal, Athletico Paranaense"]
+    look 9: raw 0 digits 3 structure 0 english now ["\n      @keyframes cmRise { 0% { opacity:","League game","Home","Athletico Paranaense","another club","⚽ Goal, Athletico Paranaense"]
+    look 10: raw 0 digits 3 structure 0 english now ["\n      @keyframes cmRise { 0% { opacity:","League game","Home","Athletico Paranaense","another club","⚽ Goal, Athletico Paranaense"]
+  layer two stats at the end: null; guard lines 1; NotFoundError 0; errors []
+  net: db aborted 3, other hosts aborted ["fonts.googleapis.com","fonts.gstatic.com","www.google.com"]; last step {"n":"centre at rest","pend":109,"fonts":674,"judged":427}
+    structure [translated @ choose nationality Brazil] div.space-y-1.5>button.flex>span: React  | screen "F:Escolha a nacionalidade" <span>
+    structure [translated @ choose position Striker] div.space-y-1.5>button.flex>span: React  | screen "F:Escolha a posição" "Striker (ST)"
+    structure [translated @ choose era Current era] div.space-y-1.5>button.flex>span: React  | screen "F:Escolha a posição" "F:Atacante (ST)"
+    structure [translated @ choose era Current era] div.space-y-1.5>button.flex>span: React  | screen "F:Escolha a era" "Current era (2025 start)"
+    structure [translated @ Generate Starting Potential] div.space-y-1.5>button.flex>span: React  | screen "F:Escolha a era" "F:Era atual (início em 2025)"
+    structure [translated @ Lock in build] div.space-y-1.5>button.flex>span: React  | screen "F:Atacante (ST)"
+    digits [translated @ translated] div>ol.list-decimal>li: React Roll your starting potential, somewhere in the mid 50s to high 60s, and reroll as many times as you like. Rerolls are fr | screen Role seu potencial inicial, que geralmente fica entre 55 e 60, e role novamente quantas vezes quiser. As rolagens adicio
+    digits [translated @ on to the season bar 1] div.flex>div.min-w-0>p.text-xs: React ST  · Age  17  ·   | screen ST  ·  16 anos  · 
+    digits [translated @ on to the season bar 1] div.bg-card>div.flex>span: React 💰  €2k/wk  | screen 💰  €2.000/semana 
+    digits [translated @ on to the season bar 1] div.mt-2>div.text-xs>span: React 📈 Stats improved during youth development (OVR 52)  | screen 📋 Ingressou na Academia de Jovens do Athletico Paranaense aos 16 anos. 
+    digits [translated @ on to the season bar 3] div.mt-2>div.text-xs>span: React 📩 Professional contract offers received!  | screen 📋 Ingressou na Academia de Jovens do Athletico Paranaense aos 16 anos. 
+    digits [translated @ centre look 1] div.flex>div.min-w-0>p.text-xs: React ST  · Age  18  ·   | screen ST  ·  16 anos  · 
+rv-walk: 6 walk(s) done, 0 stopped early
