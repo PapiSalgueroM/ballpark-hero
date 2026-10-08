@@ -1,0 +1,8 @@
+# AN2 fixer FINAL b (serial): the daily save fence alone (finding 6), then the blocked storage walk and its two controls
+#!serve
+#!playwright
+#!serial
+dsh-alone: node scripts/simDailySaveHardening.mjs
+storage-main: PLAY_STORAGE_NATIVE=require node scripts/playStorageBlocked.mjs
+storage-open: PLAY_STORAGE_CONTROL=open node scripts/playStorageBlocked.mjs
+storage-raw: PLAY_STORAGE_NATIVE=require PLAY_STORAGE_CONTROL=raw node scripts/playStorageBlocked.mjs

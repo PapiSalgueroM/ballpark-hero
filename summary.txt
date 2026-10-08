@@ -1,0 +1,5 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+dsh-alone exit=1 54s | simDailySaveHardening: 2 failure(s)
+storage-main exit=0 271s | playStorageBlocked: 826 checks, 0 failed
+storage-open exit=0 244s | playStorageBlocked (control open): 743 checks, 0 failed
+storage-raw exit=1 630s | playStorageBlocked (control raw): 786 checks, 266 failed
