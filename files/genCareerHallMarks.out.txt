@@ -1,0 +1,157 @@
+
+== nfl: 12000 careers pooled (2000, 2000, 2000, 2000, 2000, 2000)
+  QB: n 1500, median seasons 17, Hall on 1 58.8%, median score 561
+     passYds: median 63442, from 72800, to 80100 (ramp floor); ramp 1.70 seasons, to over median 1.26
+     passTd: median 438, from 525, to 580; ramp 1.78 seasons, to over median 1.32
+     standout: [{ stat: 'passYds', from: 72800, to: 80100, label: 'passing yards' }, { stat: 'passTd', from: 525, to: 580, label: 'touchdown passes' }]
+  RB: n 1500, median seasons 11, Hall on 1 11.1%, median score 244
+     rushYds: median 11735, from 14800, to 17300; ramp 1.86 seasons, to over median 1.47
+     rushTd: median 96, from 122, to 145; ramp 2.07 seasons, to over median 1.51
+     standout: [{ stat: 'rushYds', from: 14800, to: 17300, label: 'rushing yards' }, { stat: 'rushTd', from: 122, to: 145, label: 'rushing touchdowns' }]
+  WR: n 1500, median seasons 15, Hall on 1 23.5%, median score 347
+     rec: median 1167, from 1470, to 1660; ramp 1.94 seasons, to over median 1.42
+     recYds: median 14603, from 18500, to 21000; ramp 2.03 seasons, to over median 1.44
+     recTd: median 121, from 154, to 179; ramp 2.44 seasons, to over median 1.48
+     standout: [{ stat: 'rec', from: 1470, to: 1660, label: 'catches' }, { stat: 'recYds', from: 18500, to: 21000, label: 'receiving yards' }, { stat: 'recTd', from: 154, to: 179, label: 'touchdown catches' }]
+  TE: n 1500, median seasons 16, Hall on 1 9.8%, median score 234
+     rec: median 943, from 1170, to 1310; ramp 1.91 seasons, to over median 1.39
+     recYds: median 10165, from 12600, to 14100; ramp 1.90 seasons, to over median 1.39
+     recTd: median 135, from 169, to 188; ramp 1.80 seasons, to over median 1.39
+     standout: [{ stat: 'rec', from: 1170, to: 1310, label: 'catches' }, { stat: 'recYds', from: 12600, to: 14100, label: 'receiving yards' }, { stat: 'recTd', from: 169, to: 188, label: 'touchdown catches' }]
+     base terms: [{ stat: 'recYds', per: 180 }, { stat: 'rec', per: 34 }, { stat: 'recTd', per: 4.9 }]  (medians recYds 10165, rec 943, recTd 135)
+  LB: n 1500, median seasons 15, Hall on 1 13.9%, median score 234
+     tackles: median 1860, from 2310, to 2610; ramp 1.95 seasons, to over median 1.40
+     picks: median 21, from 28, to 34; ramp 3.21 seasons, to over median 1.62
+     standout: [{ stat: 'tackles', from: 2310, to: 2610, label: 'tackles' }, { stat: 'picks', from: 28, to: 34, label: 'interceptions' }]
+     base terms: [{ stat: 'tackles', per: 34 }, { stat: 'sacks', per: 2.6 }, { stat: 'picks', per: 1.3 }, { stat: 'forcedFum', per: 1.3 }]  (medians tackles 1860, sacks 56.6, picks 21, forcedFum 22)
+  CB: n 1500, median seasons 14, Hall on 1 6.9%, median score 198
+     picks: median 37, from 48, to 59; ramp 3.21 seasons, to over median 1.59
+     passDef: median 272, from 341, to 394; ramp 2.18 seasons, to over median 1.45
+     standout: [{ stat: 'picks', from: 48, to: 59, label: 'interceptions' }, { stat: 'passDef', from: 341, to: 394, label: 'passes defended' }]
+     base terms: [{ stat: 'picks', per: 0.75 }, { stat: 'passDef', per: 8.2 }, { stat: 'tackles', per: 33 }]  (medians picks 37, passDef 272, tackles 911)
+  EDGE: n 1500, median seasons 16, Hall on 1 28.9%, median score 304
+     sacks: median 164.3, from 213, to 250; ramp 2.78 seasons, to over median 1.52
+     standout: [{ stat: 'sacks', from: 213, to: 250, label: 'sacks' }]
+     base terms: [{ stat: 'sacks', per: 2.5 }, { stat: 'tackles', per: 41 }, { stat: 'forcedFum', per: 1.3 }]  (medians sacks 164.3, tackles 902, forcedFum 28)
+  K: n 1500, median seasons 18, Hall on 1 11.7%, median score 278
+     fgMade: median 483, from 512, to 564 (ramp floor); ramp 1.83 seasons, to over median 1.17
+     standout: [{ stat: 'fgMade', from: 512, to: 564, label: 'field goals' }]
+  bands at 2000 careers: a cell's share at or over from 6.4 to 15.2 percent over 78 cell runs (band 4.2 to 17.4); pooled from 9.85 9.75 10.52 10.34 10.46 9.82 (band 9.37 to 10.91); pooled to 0.98 0.83 1.14 1.11 0.46 1.11 (band 0.12 to 1.48)
+  outcome: Hall share on 1 21.1 20.4 20.1 19.6 21.4 20.8; on 2 25.7 25.2 26.0 25.9 26.8 26.1 (ceiling 28.3); newly in 92 95 118 125 106 106; pooled top 5 percent gain 35.9 43.6 34.6 40.6 33.6 34.3 points (floor 16.8); owed to the standout alone 11.8 14.8 14.8 19.5 15.4 13.0 (floor 5.9)
+  points paid: median 293 302 293 314 303 309 -> 348 355 358 370 359 364; mean 382.4 383.8 385.2 389.6 388.2 388.3 -> 449.2 449.5 452.8 457 454.9 455.7
+  base credit, median TE: 111.4 110.6 110.5 112.4 113.3 111.7 (band 109.1655 to 114.6959)
+  base credit, median LB: 108.2 107.9 108.8 110.8 109.8 108.8 (band 106.4344 to 112.2805)
+  base credit, median CB: 107.8 107.5 110.6 110 110.4 111.9 (band 105.3263 to 114.1053)
+  base credit, median EDGE: 109.8 109.3 107.1 110.2 108.5 110 (band 105.5505 to 111.8161)
+  within five percent of the half mark: CB tackles 1150 vs 1155 (off)
+
+== nba: 12000 careers pooled (2000, 2000, 2000, 2000, 2000, 2000)
+  PG: n 2400, median seasons 18, Hall on 1 32.5%, median score 354
+     pts: median 26115, from 37400, to 45300; ramp 3.80 seasons, to over median 1.73
+     ast: median 11301, from 14800, to 17800; ramp 3.65 seasons, to over median 1.58
+     standout: [{ stat: 'pts', from: 37400, to: 45300, label: 'points' }, { stat: 'ast', from: 14800, to: 17800, label: 'assists' }]
+  SG: n 2400, median seasons 18, Hall on 1 31.7%, median score 350
+     pts: median 29682, from 38800, to 47100; ramp 3.85 seasons, to over median 1.59
+     reb: median 6666, from 8560, to 10000; ramp 3.03 seasons, to over median 1.50
+     ast: median 7585, from 9790, to 11300; ramp 2.78 seasons, to over median 1.49
+     standout: [{ stat: 'pts', from: 38800, to: 47100, label: 'points' }, { stat: 'reb', from: 8560, to: 10000, label: 'rebounds' }, { stat: 'ast', from: 9790, to: 11300, label: 'assists' }]
+  SF: n 2400, median seasons 18, Hall on 1 31%, median score 362
+     pts: median 27548, from 37100, to 45300; ramp 3.98 seasons, to over median 1.64
+     reb: median 9489, from 11500, to 12900; ramp 2.19 seasons, to over median 1.36
+     ast: median 9630, from 13500, to 16000; ramp 3.33 seasons, to over median 1.66
+     standout: [{ stat: 'pts', from: 37100, to: 45300, label: 'points' }, { stat: 'reb', from: 11500, to: 12900, label: 'rebounds' }, { stat: 'ast', from: 13500, to: 16000, label: 'assists' }]
+  PF: n 2400, median seasons 18, Hall on 1 31.2%, median score 365
+     pts: median 25756, from 31800, to 36400; ramp 2.60 seasons, to over median 1.41
+     reb: median 11403, from 14400, to 17200; ramp 3.50 seasons, to over median 1.51
+     ast: median 7287, from 10100, to 12300; ramp 3.92 seasons, to over median 1.69
+     standout: [{ stat: 'pts', from: 31800, to: 36400, label: 'points' }, { stat: 'reb', from: 14400, to: 17200, label: 'rebounds' }, { stat: 'ast', from: 10100, to: 12300, label: 'assists' }]
+  C: n 2400, median seasons 17, Hall on 1 29%, median score 330
+     pts: median 22911, from 29800, to 35200; ramp 3.08 seasons, to over median 1.54
+     reb: median 11774, from 15200, to 17800; ramp 2.91 seasons, to over median 1.51
+     ast: median 5837, from 7490, to 8930; ramp 3.27 seasons, to over median 1.53
+     standout: [{ stat: 'pts', from: 29800, to: 35200, label: 'points' }, { stat: 'reb', from: 15200, to: 17800, label: 'rebounds' }, { stat: 'ast', from: 7490, to: 8930, label: 'assists' }]
+  bands at 2000 careers: a cell's share at or over from 6.3 to 14.5 percent over 84 cell runs (band 4.2 to 16.6); pooled from 9.91 9.41 9.77 10.16 10.41 9.75 (band 8.91 to 10.91); pooled to 1.14 1.02 0.82 1.05 1.04 0.64 (band 0.39 to 1.39)
+  outcome: Hall share on 1 30.6 30.3 30.8 30.6 32.5 31.7; on 2 32.9 32.3 33.3 33.1 34.9 33.9 (ceiling 37.6); newly in 46 39 50 50 49 44; pooled top 5 percent gain 21.7 19.4 28.7 26.4 22.5 23.1 points (floor 9.7); owed to the standout alone 14.6 12.5 17.9 15.0 14.6 14.6 (floor 6.3)
+  points paid: median 350 348 351 350 356 362 -> 358 356 359 360 368 367; mean 467.7 451.8 466.8 459 471 462.7 -> 495.8 478.4 494.6 489 500.8 489.6
+  within five percent of the half mark: PG reb 7420 vs 7600 (off); C ast 7490 vs 7400 (on)
+
+== mlb: 16500 careers pooled (2750, 2750, 2750, 2750, 2750, 2750)
+  SP: n 1500, median seasons 18, Hall on 1 40.6%, median score 446
+     wins: median 253, from 294, to 330; ramp 2.20 seasons, to over median 1.30
+     so: median 3168, from 3700, to 4120; ramp 2.04 seasons, to over median 1.30
+     standout: [{ stat: 'wins', from: 294, to: 330, label: 'wins' }, { stat: 'so', from: 3700, to: 4120, label: 'strikeouts' }]
+  RP: n 1500, median seasons 19, Hall on 1 24.3%, median score 259
+     saves: median 62, from 809, to 966; ramp 3.69 seasons, to over median 15.58
+     standout: [{ stat: 'saves', from: 809, to: 966, label: 'saves' }]
+     base terms: [{ stat: 'saves', per: 8 }, { stat: 'holds', per: 12 }, { stat: 'so', per: 40 }]  (medians saves 62, holds 451, so 1485)
+  C: n 1500, median seasons 17, Hall on 1 29.5%, median score 374
+     hr: median 287, from 361, to 435; ramp 3.48 seasons, to over median 1.52
+     rbi: median 1116, from 1350, to 1560; ramp 2.64 seasons, to over median 1.40
+     standout: [{ stat: 'hr', from: 361, to: 435, label: 'home runs' }, { stat: 'rbi', from: 1350, to: 1560, label: 'RBI' }]
+  1B: n 1500, median seasons 18, Hall on 1 45.5%, median score 475
+     hr: median 491, from 602, to 699; ramp 2.90 seasons, to over median 1.42
+     rbi: median 1580, from 1880, to 2070 (ramp floor); ramp 1.82 seasons, to over median 1.31
+     standout: [{ stat: 'hr', from: 602, to: 699, label: 'home runs' }, { stat: 'rbi', from: 1880, to: 2070, label: 'RBI' }]
+  2B: n 1500, median seasons 17, Hall on 1 33.7%, median score 397
+     rbi: median 1148, from 1380, to 1560; ramp 2.22 seasons, to over median 1.36
+     standout: [{ stat: 'rbi', from: 1380, to: 1560, label: 'RBI' }]
+  3B: n 1500, median seasons 18, Hall on 1 40.7%, median score 441
+     hr: median 445, from 549, to 619; ramp 2.30 seasons, to over median 1.39
+     rbi: median 1478, from 1760, to 1950; ramp 1.94 seasons, to over median 1.32
+     standout: [{ stat: 'hr', from: 549, to: 619, label: 'home runs' }, { stat: 'rbi', from: 1760, to: 1950, label: 'RBI' }]
+  SS: n 1500, median seasons 18, Hall on 1 33.4%, median score 404
+     hr: median 356, from 440, to 503; ramp 2.58 seasons, to over median 1.41
+     rbi: median 1307, from 1550, to 1710; ramp 1.86 seasons, to over median 1.31
+     sb: median 111, from 812, to 932; ramp 2.66 seasons, to over median 8.40
+     standout: [{ stat: 'hr', from: 440, to: 503, label: 'home runs' }, { stat: 'rbi', from: 1550, to: 1710, label: 'RBI' }, { stat: 'sb', from: 812, to: 932, label: 'steals' }]
+  LF: n 1500, median seasons 18, Hall on 1 41.5%, median score 451
+     hr: median 436, from 529, to 607; ramp 2.65 seasons, to over median 1.39
+     rbi: median 1474, from 1740, to 1920 (ramp floor); ramp 1.86 seasons, to over median 1.30
+     sb: median 89, from 654, to 745; ramp 2.50 seasons, to over median 8.37
+     standout: [{ stat: 'hr', from: 529, to: 607, label: 'home runs' }, { stat: 'rbi', from: 1740, to: 1920, label: 'RBI' }, { stat: 'sb', from: 654, to: 745, label: 'steals' }]
+  CF: n 1500, median seasons 18, Hall on 1 32.8%, median score 397
+     hr: median 349, from 434, to 504; ramp 2.90 seasons, to over median 1.44
+     rbi: median 1276, from 1540, to 1720; ramp 2.10 seasons, to over median 1.35
+     sb: median 123, from 900, to 1070; ramp 3.40 seasons, to over median 8.70
+     standout: [{ stat: 'hr', from: 434, to: 504, label: 'home runs' }, { stat: 'rbi', from: 1540, to: 1720, label: 'RBI' }, { stat: 'sb', from: 900, to: 1070, label: 'steals' }]
+  RF: n 1500, median seasons 18, Hall on 1 44.5%, median score 463
+     hr: median 450, from 553, to 626; ramp 2.38 seasons, to over median 1.39
+     rbi: median 1493, from 1760, to 1960; ramp 2.05 seasons, to over median 1.31
+     standout: [{ stat: 'hr', from: 553, to: 626, label: 'home runs' }, { stat: 'rbi', from: 1760, to: 1960, label: 'RBI' }]
+  DH: n 1500, median seasons 20, Hall on 1 53.7%, median score 513
+     hr: median 591, from 705, to 786; ramp 2.30 seasons, to over median 1.33
+     rbi: median 1844, from 2080, to 2290 (ramp floor); ramp 2.02 seasons, to over median 1.24
+     standout: [{ stat: 'hr', from: 705, to: 786, label: 'home runs' }, { stat: 'rbi', from: 2080, to: 2290, label: 'RBI' }]
+  bands at 2000 careers: a cell's share at or over from 5.0 to 17.0 percent over 132 cell runs (band 2.0 to 20.1); pooled from 9.60 10.22 11.63 10.83 9.70 10.05 (band 8.59 to 12.64); pooled to 0.83 0.90 1.10 1.35 0.78 1.07 (band 0.49 to 1.64)
+  outcome: Hall share on 1 36.4 38.0 39.2 38.8 40.5 37.5; on 2 37.4 39.3 39.9 40.1 41.3 38.5 (ceiling 45.3); newly in 21 27 14 25 18 19; pooled top 5 percent gain 28.0 23.3 15.0 21.7 18.0 20.0 points (floor 7.5); owed to the standout alone 10.0 8.6 3.6 8.2 5.9 5.5 (floor 1.8)
+  points paid: median 425 424 431 430 434 420 -> 429 428 434 435 436 424; mean 499.9 502.3 511.7 508.3 504.9 498.2 -> 516.4 519.2 531.2 528.6 521.8 515.3
+  within five percent of the half mark: C hr 361 vs 352.5 (on); 2B hr 351 vs 352.5 (off); RP so 1760 vs 1850 (off)
+
+== nhl: 12000 careers pooled (2000, 2000, 2000, 2000, 2000, 2000)
+  C: n 2400, median seasons 20, Hall on 1 27.2%, median score 342
+     goals: median 590, from 923, to 1110; ramp 4.05 seasons, to over median 1.88
+     assists: median 816, from 991, to 1130; ramp 2.81 seasons, to over median 1.38
+     points: median 1439, from 1810, to 2110; ramp 3.31 seasons, to over median 1.47
+     standout: [{ stat: 'goals', from: 923, to: 1110, label: 'goals' }, { stat: 'assists', from: 991, to: 1130, label: 'assists' }, { stat: 'points', from: 1810, to: 2110, label: 'points' }]
+  LW: n 2400, median seasons 20, Hall on 1 31.3%, median score 362
+     goals: median 627, from 872, to 1040; ramp 3.85 seasons, to over median 1.66
+     assists: median 767, from 940, to 1100; ramp 3.40 seasons, to over median 1.43
+     points: median 1411, from 1730, to 1970; ramp 2.77 seasons, to over median 1.40
+     standout: [{ stat: 'goals', from: 872, to: 1040, label: 'goals' }, { stat: 'assists', from: 940, to: 1100, label: 'assists' }, { stat: 'points', from: 1730, to: 1970, label: 'points' }]
+  RW: n 2400, median seasons 20, Hall on 1 28.9%, median score 361
+     goals: median 669, from 840, to 979; ramp 3.31 seasons, to over median 1.46
+     assists: median 773, from 935, to 1060; ramp 2.67 seasons, to over median 1.37
+     points: median 1446, from 1760, to 2020; ramp 2.95 seasons, to over median 1.40
+     standout: [{ stat: 'goals', from: 840, to: 979, label: 'goals' }, { stat: 'assists', from: 935, to: 1060, label: 'assists' }, { stat: 'points', from: 1760, to: 2020, label: 'points' }]
+  D: n 2400, median seasons 20, Hall on 1 25.9%, median score 344
+     assists: median 924, from 1100, to 1240; ramp 2.55 seasons, to over median 1.34
+     points: median 1188, from 1450, to 1640; ramp 2.62 seasons, to over median 1.38
+     standout: [{ stat: 'assists', from: 1100, to: 1240, label: 'assists' }, { stat: 'points', from: 1450, to: 1640, label: 'points' }]
+  G: n 2400, median seasons 22, Hall on 1 39.3%, median score 421
+     wins: median 658, from 721, to 794 (ramp floor); ramp 2.23 seasons, to over median 1.21
+     standout: [{ stat: 'wins', from: 721, to: 794, label: 'wins' }]
+  bands at 2000 careers: a cell's share at or over from 7.5 to 13.0 percent over 72 cell runs (band 6.1 to 14.4); pooled from 9.67 11.06 9.42 9.69 10.73 10.19 (band 8.59 to 11.89); pooled to 0.81 1.33 0.67 0.85 0.63 0.98 (band 0.27 to 1.69)
+  outcome: Hall share on 1 29.6 31.8 30.7 29.3 31.7 29.9; on 2 30.7 33.1 31.6 30.3 32.9 31.1 (ceiling 35.9); newly in 21 27 19 19 24 22; pooled top 5 percent gain 16.3 16.3 25.0 22.5 35.0 20.0 points (floor 8.1); owed to the standout alone 6.3 7.5 5.8 7.1 7.9 6.3 (floor 2.9)
+  points paid: median 368 372 359 356 363 367 -> 369 375 361 360 364 369; mean 446.6 462.3 444.4 448 454.4 450.8 -> 465.1 484.2 461.5 466.5 473.5 470.1
+
+genCareerHallMarks: wrote ../../_temp/rc-out/files/careerHallMarks.pair.json
