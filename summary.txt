@@ -1,0 +1,4 @@
+genPool exit=0 1s | genPool gen=0 poolFileChanged=0
+genKeywords exit=0 0s | genKeywords gen=0 keywordsChanged=0
+genDailyCheck exit=0 0s | 0 lines to append, counting from 2026-11-07: 0 joining, 0 leaving
+genSeasonsCheck exit=0 0s | careerLeagueSeasons.ts is current
