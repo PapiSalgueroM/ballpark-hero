@@ -1,0 +1,10 @@
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simClubManagerGathered: node scripts/simClubManagerGathered.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simClubManager: node scripts/simClubManager.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs

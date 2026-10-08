@@ -1,0 +1,10 @@
+simGuideHeadings exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+simSiteSearch exit=0 2s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simClubManagerALeague exit=0 7s | simClubManagerALeague: all checks passed
+simLegalPages exit=0 0s | simLegalPages: all green
+simClubManagerGathered exit=0 1s | simClubManagerGathered: all checks passed (1 gathered league(s), 357 men, 82 addresses, 5 cited facts, the old save)
+simNoRivalNames exit=0 13s | No rival product names found. 0 findings.
+simInventedNames exit=0 7s | simInventedNames: green. Every invented man on this site is invented all the way down.
+simNoInventedQuotes exit=0 22s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simClubManager exit=0 21s | ALL CLUB MANAGER SIMS PASSED
+simCmLeagueRules exit=0 35s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
