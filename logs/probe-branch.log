@@ -1,0 +1,14 @@
+PROBE_TAPTHROUGH tag=branch route=/missing-xi width=390 oneTapOnTheSuggestion clicksThePageGot=["BUTTON \"Lock in guess\""] guessLockedInByThatTap=false
+PROBE_PICK tag=branch width=390 boxAfterPick="Qzxalpha Fixture" listAfterPick=none expanded=false lockButton=true lockCovered=false searchesAfterPick=0 lockTapLanded=true
+PROBE_TAPTHROUGH tag=branch route=/missing-xi width=1280 oneTapOnTheSuggestion clicksThePageGot=[] guessLockedInByThatTap=false
+PROBE_PICK tag=branch width=1280 boxAfterPick="Qzxalpha Fixture" listAfterPick=none expanded=false lockButton=true lockCovered=false searchesAfterPick=0 lockTapLanded=true
+PROBE_BUSY tag=branch width=390 validatorCalls=1 boxWhileChecking="Qzxalpha Fixture" disabled=true listWhileChecking=none searchesAfterPick=0
+PROBE_BUSY tag=branch width=1280 validatorCalls=1 boxWhileChecking="Qzxalpha Fixture" disabled=true listWhileChecking=none searchesAfterPick=0
+PROBE_TAPTHROUGH tag=branch route=/build-your-xi width=390 underTheFirstSuggestion="nothing tappable" clicksThePageGot=["P \"Tap a position to fill it\""] validatorCalls=1
+PROBE_TAPTHROUGH tag=branch route=/football-connect-4 width=390 underTheFirstSuggestion="nothing tappable" clicksThePageGot=["DIV \"SOCCER CONNECT 4Two players,\""] validatorCalls=1
+PROBE_TOUCHSCROLL tag=branch trial=1 rows=8 listScrolls=true (471 in 286) fingerStartedOn="Qzxalpha FixturecCentre-" boxAfter="Qzxalpha Fixturec" rowPicked=true listStillOpen=false scrolledBy=null
+PROBE_TOUCHSCROLL tag=branch trial=2 rows=8 listScrolls=true (471 in 286) fingerStartedOn="Qzxalpha FixturecCentre-" boxAfter="Qzxalpha Fixturec" rowPicked=true listStillOpen=false scrolledBy=null
+PROBE_TOUCHSCROLL tag=branch trial=3 rows=8 listScrolls=true (471 in 286) fingerStartedOn="Qzxalpha FixturecCentre-" boxAfter="Qzxalpha Fixturec" rowPicked=true listStillOpen=false scrolledBy=null
+PROBE_TOUCHSCROLL tag=branch trial=4 rows=8 listScrolls=true (471 in 286) fingerStartedOn="Qzxalpha FixturecCentre-" boxAfter="Qzxalpha Fixturec" rowPicked=true listStillOpen=false scrolledBy=null
+PROBE_TOUCHSCROLL tag=branch trial=5 rows=8 listScrolls=true (471 in 286) fingerStartedOn="Qzxalpha FixturecCentre-" boxAfter="Qzxalpha Fixturec" rowPicked=true listStillOpen=false scrolledBy=null
+PROBE_TOUCHSCROLL_TOTAL tag=branch a finger that started a scroll on a row picked that row 5 times of 5
