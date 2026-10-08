@@ -1,0 +1,14 @@
+cues by length: whistle 18522, net 13230, crowd 61740, tick 2205, sting 39690, thud 9702
+saves after 3 seeded careers: out (a list of 10, 2012, placed 22); win (a list of 10, 2018, placed 1); podium (a list of 10, 2018, placed 3)
+CONTROL reloadkit: the stale chunk guard's name for the kit, one hit in index-CMwCmFpR.js
+this Chromium, a context made after a tap: running at first, resume resolved in 0 ms, then running, its clock at 0.31 s after 0.3 s
+switches mounted: footer yes, header yes
+
+10) A kit that will not load never reloads the page
+   ok   the kit chunk was asked for and refused (4 requests); the footer switch pressed off and on again
+   FAIL the document loaded 2 time(s) (a reload would be a second)
+   FAIL the stale chunk guard's once flag is set (1)
+   ok   silence, and no audio graph: contexts 0, starts 0
+   ok   the night drew and the page threw nothing
+
+playSoundGate control reloadkit: fired, 2 aimed checks red in section 10

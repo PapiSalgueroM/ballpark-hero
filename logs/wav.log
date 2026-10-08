@@ -1,0 +1,20 @@
+
+WAV files, as the master gain would play them:
+   wrote /home/runner/work/_temp/rc-out/files/wav/cue-whistle.wav
+   wrote /home/runner/work/_temp/rc-out/files/wav/cue-net.wav
+   wrote /home/runner/work/_temp/rc-out/files/wav/cue-crowd.wav
+   wrote /home/runner/work/_temp/rc-out/files/wav/cue-tick.wav
+   wrote /home/runner/work/_temp/rc-out/files/wav/cue-sting.wav
+   wrote /home/runner/work/_temp/rc-out/files/wav/cue-thud.wav
+   wrote /home/runner/work/_temp/rc-out/files/wav/moment-tap.wav
+   wrote /home/runner/work/_temp/rc-out/files/wav/moment-kickoff.wav
+   wrote /home/runner/work/_temp/rc-out/files/wav/moment-halftime.wav
+   wrote /home/runner/work/_temp/rc-out/files/wav/moment-fulltime.wav
+   wrote /home/runner/work/_temp/rc-out/files/wav/moment-goal.wav
+   wrote /home/runner/work/_temp/rc-out/files/wav/moment-goalAgainst.wav
+   wrote /home/runner/work/_temp/rc-out/files/wav/moment-made.wav
+   wrote /home/runner/work/_temp/rc-out/files/wav/moment-missed.wav
+   wrote /home/runner/work/_temp/rc-out/files/wav/moment-award.wav
+   wrote /home/runner/work/_temp/rc-out/files/wav/moment-awardWin.wav
+
+simSound: 158 checks, 0 failed

@@ -1,0 +1,16 @@
+cues by length: whistle 18522, net 13230, crowd 61740, tick 2205, sting 39690, thud 9702
+saves after 3 seeded careers: out (a list of 10, 2012, placed 22); win (a list of 10, 2018, placed 1); podium (a list of 10, 2018, placed 3)
+CONTROL nohide: the hidden tab test, one hit in index-CMwCmFpR.js
+this Chromium, a context made after a tap: running at first, resume resolved in 0 ms, then running, its clock at 0.31 s after 0.3 s
+switches mounted: footer yes, header yes
+
+5) A hidden tab is silent
+   ok   the night was scheduled (12 starts) and the tab hid 67 ms later, before the first tick was due
+   ok   hidden: 12 stops for 12 starts (every source cancelled, nothing had sounded)
+   ok   hidden: the context was put to rest (1 suspend)
+   ok   still hidden: he went back and forward, and the night mounted again
+   FAIL still hidden: the night that mounted again brought 12 new starts
+   ok   visible again: the context was woken (1 resume)
+   ok   visible again: 0 starts 1.5 s later (nothing he missed is played late)
+
+playSoundGate control nohide: fired, 1 aimed checks red in section 5

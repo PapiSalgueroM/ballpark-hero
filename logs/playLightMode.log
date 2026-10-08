@@ -1,0 +1,8 @@
+1) the default is dark, exactly as before this round
+   fresh visit: no .light class, body luminance 0.004
+2) the footer toggle works and the choice is kept
+   toggled light, survived a reload, toggled back dark
+3) light mode is readable on every swept route
+   1710 text nodes sampled across 10 routes in light mode, 3 Trending tags among them
+
+playLightMode: green. Dark by default, light by choice, readable either way.

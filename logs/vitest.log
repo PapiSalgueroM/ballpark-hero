@@ -1,0 +1,40 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/clubManagerJobHunt.test.ts [2m([22m[2m27 tests[22m[2m)[22m[32m 53[2mms[22m[39m
+ [32m✓[39m src/test/awardsNightSound.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[33m 324[2mms[22m[39m
+ [32m✓[39m src/components/auth/googlePaused.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 1536[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 610: Google players can get back in while Google is paused[2m > [22m1 the sign in modal tells a Google player how to get back in, on Log In only [33m 372[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 610: Google players can get back in while Google is paused[2m > [22m2 a wrong password, or signing up again, points a Google player at Forgot password [33m 387[2mms[22m[39m
+ [32m✓[39m src/test/soundToggle.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 501[2mms[22m[39m
+[90mstdout[2m | src/test/clubManagerEraLoad.test.tsx[2m > [22m[2mClub Manager: an era save waits for its era[2m > [22m[2ma 2010-11 save resumes once its squads arrive, exactly as saved
+[22m[39m  2010-11 Barcelona resumed with 27 players
+
+[90mstdout[2m | src/test/clubManagerEraLoad.test.tsx[2m > [22m[2mClub Manager: an era save waits for its era[2m > [22m[2mwith the 2005-06 squads unreachable the boot holds, keeps the save, and the retry resumes it
+[22m[39m  offline: the boot holds on the retry notice and the save is untouched
+
+[90mstdout[2m | src/test/clubManagerEraLoad.test.tsx[2m > [22m[2mClub Manager: an era save waits for its era[2m > [22m[2mwith the 2005-06 squads unreachable the boot holds, keeps the save, and the retry resumes it
+[22m[39m  back online: the retry fetched the squads and the career resumed
+
+ [32m✓[39m src/test/clubManagerEraLoad.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 5624[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: an era save waits for its era[2m > [22ma 2010-11 save resumes once its squads arrive, exactly as saved [33m 3860[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: an era save waits for its era[2m > [22mwith the 2005-06 squads unreachable the boot holds, keeps the save, and the retry resumes it [33m 672[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: an era save waits for its era[2m > [22ma retry that fails again reloads the page, the first failure does not [33m 347[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: an era save waits for its era[2m > [22ma modern save opens on the same pass and fetches no era [33m 488[2mms[22m[39m
+ [32m✓[39m src/test/freshBuildOptionalChunk.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m src/test/authModalFocus.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 2115[2mms[22m[39m
+   [33m[2m✓[22m[39m account dialog returns to its exact opener[2m > [22mLog In returns focus after Escape [33m 517[2mms[22m[39m
+   [33m[2m✓[22m[39m account dialog returns to its exact opener[2m > [22muses the latest opener after a login, signup and login sequence [33m 399[2mms[22m[39m
+ [32m✓[39m src/test/appearanceSportCopy.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[33m 6576[2mms[22m[39m
+   [33m[2m✓[22m[39m sport copy on the actual appearance editor[2m > [22momitting sport retains every soccer label, flavor and goal line [33m 927[2mms[22m[39m
+   [33m[2m✓[22m[39m sport copy on the actual appearance editor[2m > [22m'NFL' keeps every saved option while showing its own sport context [33m 774[2mms[22m[39m
+   [33m[2m✓[22m[39m sport copy on the actual appearance editor[2m > [22m'NBA' keeps every saved option while showing its own sport context [33m 968[2mms[22m[39m
+   [33m[2m✓[22m[39m sport copy on the actual appearance editor[2m > [22m'MLB' keeps every saved option while showing its own sport context [33m 1119[2mms[22m[39m
+   [33m[2m✓[22m[39m sport copy on the actual appearance editor[2m > [22m'NHL' keeps every saved option while showing its own sport context [33m 1360[2mms[22m[39m
+   [33m[2m✓[22m[39m sport copy on the actual appearance editor[2m > [22mchanging tabs or sport preserves the selected saved appearance without a write [33m 1301[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m8 passed[39m[22m[90m (8)[39m
+[2m      Tests [22m [1m[32m84 passed[39m[22m[90m (84)[39m
+[2m   Start at [22m 18:00:38
+[2m   Duration [22m 11.19s[2m (transform 4.18s, setup 1.56s, collect 3.73s, tests 16.75s, environment 4.76s, prepare 1.35s)[22m
+

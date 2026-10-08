@@ -1,0 +1,175 @@
+
+0) The built chunks
+   ok   the kit is one chunk, soundKit-DjPs-Vy6.js: 5318 bytes, 2424 gzipped (named soundKit-, at most 3,000 gzipped)
+   ok   the switch lives in index-CMwCmFpR.js
+   ok   dist/index.html does not name the kit chunk
+   ok   no chunk imports the kit statically
+   ok   the one dynamic import of the kit is in the switch's chunk (index-CMwCmFpR.js)
+   ok   no audio file anywhere in dist
+cues by length: whistle 18522, net 13230, crowd 61740, tick 2205, sting 39690, thud 9702
+saves after 3 seeded careers: out (a list of 10, 2012, placed 22); win (a list of 10, 2018, placed 1); podium (a list of 10, 2018, placed 3)
+this Chromium, a context made after a tap: running at first, resume resolved in 0 ms, then running, its clock at 0.31 s after 0.3 s
+switches mounted: footer yes, header yes
+
+1) Off by default
+   ok   / at 390: contexts 0, starts 0, buzzes 0, the kit chunk requested 0 times (tapped: true)
+   ok   /club-manager at 390: contexts 0, starts 0, buzzes 0, the kit chunk requested 0 times (tapped: true)
+   ok   /soccer-career at 390: the winner's night was on screen (10 names) and a speech was given
+   ok   /soccer-career at 390, the whole night and a speech: contexts 0, starts 0, buzzes 0, the kit chunk requested 0 times (tapped: true)
+   ok   /soccer-career at 390: no page error
+   ok   / at 1280: contexts 0, starts 0, buzzes 0, the kit chunk requested 0 times (tapped: true)
+   ok   /club-manager at 1280: contexts 0, starts 0, buzzes 0, the kit chunk requested 0 times (tapped: true)
+   ok   /soccer-career at 1280: the winner's night was on screen (10 names) and a speech was given
+   ok   /soccer-career at 1280, the whole night and a speech: contexts 0, starts 0, buzzes 0, the kit chunk requested 0 times (tapped: true)
+   ok   /soccer-career at 1280: no page error
+
+2) The switch
+   ok   at 390: it reads "Sound: off", pressed false, contexts 0, the kit chunk requested 0 times
+   ok   at 390, a press: "Sound: on", pressed true, stored on
+   ok   at 390, a press: the kit chunk requested 1 time, 1 context, 1 start (tick): one tick says it worked
+   ok   at 390, a second press: "Sound: off", stored off, 0 new starts, 1 suspend
+   ok   at 390, a third press: "Sound: on", still 1 context, 1 more tick, the kit chunk still requested once
+   ok   at 390: the page did not move under any press (scrollY 11679, 11679, 11679, 11679)
+   ok   at 390, a reload: it still reads "Sound: on"
+   ok   at 390, a reload: contexts 0, starts 0 before any tap (untouched: true)
+   ok   at 390, a reload: the kit chunk asked for once more (1), ready for his first tap
+   ok   at 390: no page error
+   ok   at 1280: it reads "Sound: off", pressed false, contexts 0, the kit chunk requested 0 times
+   ok   at 1280, a press: "Sound: on", pressed true, stored on
+   ok   at 1280, a press: the kit chunk requested 1 time, 1 context, 1 start (tick): one tick says it worked
+   ok   at 1280, a second press: "Sound: off", stored off, 0 new starts, 1 suspend
+   ok   at 1280, a third press: "Sound: on", still 1 context, 1 more tick, the kit chunk still requested once
+   ok   at 1280: the page did not move under any press (scrollY 8104, 8104, 8104, 8104)
+   ok   at 1280, a reload: it still reads "Sound: on"
+   ok   at 1280, a reload: contexts 0, starts 0 before any tap (untouched: true)
+   ok   at 1280, a reload: the kit chunk asked for once more (1), ready for his first tap
+   ok   at 1280: no page error
+
+8) The footer row and the header hold their shape
+   ok   / at 320: the page is no wider than the screen (320 of 320)
+   ok   / at 320: the switch sits inside the footer's link row and on no neighbour
+   ok   / at 320: its words sit on one line, off and on (1, 1)
+   ok   / at 320: one width (80 px, then 80) and one footer height (438.5 px, then 438.5) whichever it says
+   ok   /soccer-career at 320: the page is no wider than the screen (320 of 320)
+   ok   /soccer-career at 320: the switch sits inside the footer's link row and on no neighbour
+   ok   /soccer-career at 320: its words sit on one line, off and on (1, 1)
+   ok   /soccer-career at 320: one width (80 px, then 80) and one footer height (438.5 px, then 438.5) whichever it says
+   ok   / at 390: the page is no wider than the screen (390 of 390)
+   ok   / at 390: the switch sits inside the footer's link row and on no neighbour
+   ok   / at 390: its words sit on one line, off and on (1, 1)
+   ok   / at 390: one width (80 px, then 80) and one footer height (351.5 px, then 351.5) whichever it says
+   ok   /soccer-career at 390: the page is no wider than the screen (390 of 390)
+   ok   /soccer-career at 390: the switch sits inside the footer's link row and on no neighbour
+   ok   /soccer-career at 390: its words sit on one line, off and on (1, 1)
+   ok   /soccer-career at 390: one width (80 px, then 80) and one footer height (351.5 px, then 351.5) whichever it says
+   ok   / at 1280: the page is no wider than the screen (1280 of 1280)
+   ok   / at 1280: the switch sits inside the footer's link row and on no neighbour
+   ok   / at 1280: its words sit on one line, off and on (1, 1)
+   ok   / at 1280: one width (80 px, then 80) and one footer height (264.5 px, then 264.5) whichever it says
+   ok   /soccer-career at 1280: the page is no wider than the screen (1280 of 1280)
+   ok   /soccer-career at 1280: the switch sits inside the footer's link row and on no neighbour
+   ok   /soccer-career at 1280: its words sit on one line, off and on (1, 1)
+   ok   /soccer-career at 1280: one width (80 px, then 80) and one footer height (264.5 px, then 264.5) whichever it says
+   ok   the home page at 320: no wider than the screen (320 of 320)
+   ok   the home page at 320: the header's switch is not shown (a phone has no room for it, the footer has one)
+   ok   the home page at 390: no wider than the screen (390 of 390)
+   ok   the home page at 390: the header's switch is not shown (a phone has no room for it, the footer has one)
+   ok   the home page at 640: no wider than the screen (640 of 640)
+   ok   the home page at 640: the header's switch is a 44 by 44 px target inside the bar, on no neighbour
+   ok   the home page at 1280: no wider than the screen (1280 of 1280)
+   ok   the home page at 1280: the header's switch is a 44 by 44 px target inside the bar, on no neighbour
+   ok   the bar is one height with and without the switch (57 px at 320, 57 px at 390, 57 px at 640, 57 px at 1280)
+
+3) Awards night out loud, once
+   ok   win at 390: clicked through from / without leaving the document, the night on screen (10 names)
+   ok   win at 390: 10 ticks, 1 sting, 1 crowd, 0 other (wanted 10, 1, 1, 0): tick tick tick tick tick tick tick tick tick tick sting crowd
+   ok   win at 390: the first tick lands 623 ms after the rows appear (the row's own delay is 600 ms, within 120)
+   ok   win at 390: a tick every 219.7 ms across the countdown (the rows: 220, within 10)
+   ok   win at 390: 0 ticks more than 50 ms off their own slot
+   ok   win at 390: the sting starts 2587 ms after the first tick, as the headline lands (wanted 2590 ms)
+   ok   win at 390: the crowd swells 300 ms after the sting (300 ms)
+   ok   win at 390: buzz [[30,40,30]] (wanted [[30,40,30]])
+   ok   win at 390: 2 s later, 0 new starts
+   ok   win at 390: he gave a speech and the card shows it
+   ok   win at 390: the speech re-rendered the card and brought 0 new starts
+   ok   win at 390: 1 context throughout
+   ok   win at 390: no page error
+   ok   win at 1280: clicked through from / without leaving the document, the night on screen (10 names)
+   ok   win at 1280: 10 ticks, 1 sting, 1 crowd, 0 other (wanted 10, 1, 1, 0): tick tick tick tick tick tick tick tick tick tick sting crowd
+   ok   win at 1280: the first tick lands 635 ms after the rows appear (the row's own delay is 600 ms, within 120)
+   ok   win at 1280: a tick every 219.6 ms across the countdown (the rows: 220, within 10)
+   ok   win at 1280: 0 ticks more than 50 ms off their own slot
+   ok   win at 1280: the sting starts 2586 ms after the first tick, as the headline lands (wanted 2590 ms)
+   ok   win at 1280: the crowd swells 300 ms after the sting (300 ms)
+   ok   win at 1280: buzz [[30,40,30]] (wanted [[30,40,30]])
+   ok   win at 1280: 2 s later, 0 new starts
+   ok   win at 1280: he gave a speech and the card shows it
+   ok   win at 1280: the speech re-rendered the card and brought 0 new starts
+   ok   win at 1280: 1 context throughout
+   ok   win at 1280: no page error
+   ok   podium at 1280: clicked through from / without leaving the document, the night on screen (10 names)
+   ok   podium at 1280: 10 ticks, 1 sting, 0 crowd, 0 other (wanted 10, 1, 0, 0): tick tick tick tick tick tick tick tick tick tick sting
+   ok   podium at 1280: the first tick lands 629 ms after the rows appear (the row's own delay is 600 ms, within 120)
+   ok   podium at 1280: a tick every 219.5 ms across the countdown (the rows: 220, within 10)
+   ok   podium at 1280: 0 ticks more than 50 ms off their own slot
+   ok   podium at 1280: the sting starts 2585 ms after the first tick, as the headline lands (wanted 2590 ms)
+   ok   podium at 1280: buzz [] (wanted [])
+   ok   podium at 1280: 2 s later, 0 new starts
+   ok   podium at 1280: no page error
+   ok   out at 1280: clicked through from / without leaving the document, the night on screen (10 names)
+   ok   out at 1280: 10 ticks, 0 sting, 0 crowd, 0 other (wanted 10, 0, 0, 0): tick tick tick tick tick tick tick tick tick tick
+   ok   out at 1280: the first tick lands 626 ms after the rows appear (the row's own delay is 600 ms, within 120)
+   ok   out at 1280: a tick every 219.5 ms across the countdown (the rows: 220, within 10)
+   ok   out at 1280: 0 ticks more than 50 ms off their own slot
+   ok   out at 1280: buzz [] (wanted [])
+   ok   out at 1280: 2 s later, 0 new starts
+   ok   out at 1280: no page error
+   ok   win at 1280, a cold kit (held 300 ms past the card): clicked through from / without leaving the document, the night on screen (10 names)
+   ok   win at 1280, a cold kit (held 300 ms past the card): 10 ticks, 1 sting, 1 crowd, 0 other (wanted 10, 1, 1, 0): tick tick tick tick tick tick tick tick tick tick sting crowd
+   ok   win at 1280, a cold kit (held 300 ms past the card): the first tick lands 614 ms after the rows appear (the row's own delay is 600 ms, within 120)
+   ok   win at 1280, a cold kit (held 300 ms past the card): a tick every 221.9 ms across the countdown (the rows: 220, within 10)
+   ok   win at 1280, a cold kit (held 300 ms past the card): 0 ticks more than 50 ms off their own slot
+   ok   win at 1280, a cold kit (held 300 ms past the card): the sting starts 2607 ms after the first tick, as the headline lands (wanted 2590 ms)
+   ok   win at 1280, a cold kit (held 300 ms past the card): the crowd swells 300 ms after the sting (300 ms)
+   ok   win at 1280, a cold kit (held 300 ms past the card): buzz [[30,40,30]] (wanted [[30,40,30]])
+   ok   win at 1280, a cold kit (held 300 ms past the card): no page error
+   first tick, measured this run: 623 ms, 635 ms, 629 ms, 626 ms, 614 ms (its row: 600 ms)
+
+4) Never before a tap
+   ok   the page was never tapped: 112 activation samples, all false
+   ok   the winner's night was on screen the whole time (10 rows)
+   ok   contexts made with no tap: 0
+   ok   starts with no tap: 0
+   ok   then one real click on empty space: 0 starts 1.5 s later (the countdown he missed is not played late)
+
+5) A hidden tab is silent
+   ok   the night was scheduled (12 starts) and the tab hid 70 ms later, before the first tick was due
+   ok   hidden: 12 stops for 12 starts (every source cancelled, nothing had sounded)
+   ok   hidden: the context was put to rest (1 suspend)
+   ok   still hidden: he went back and forward, and the night mounted again
+   ok   still hidden: the night that mounted again brought 0 new starts
+   ok   visible again: the context was woken (1 resume)
+   ok   visible again: 0 starts 1.5 s later (nothing he missed is played late)
+
+6) The prerenderer constructs nothing
+   ok   under the prerender flag the night still draws (10 names)
+   ok   choice on, the prerender flag: contexts 0, starts 0, the kit chunk requested 0 times
+
+7) Reduced motion: silent until he turns it on, then the result alone
+   ok   choice absent: contexts 0, starts 0, the kit chunk requested 0 times
+   ok   choice on: 2 starts (sting, crowd), no tick
+   ok   choice on: the sting starts at once (-38 ms ahead)
+   ok   choice on: the crowd 300 ms after it (300 ms)
+   ok   choice on: the phone does not shake (buzz [])
+
+10) A kit that will not load never reloads the page
+   ok   the kit chunk was asked for and refused (3 requests); the footer switch pressed off and on again
+   ok   the document loaded 1 time(s) (a reload would be a second)
+   ok   the stale chunk guard's once flag is not set
+   ok   silence, and no audio graph: contexts 0, starts 0
+   ok   the night drew and the page threw nothing
+
+9) No audio file
+   ok   no media request and none for an audio file in any context of this run
+
+playSoundGate: 146 checks, 0 failed

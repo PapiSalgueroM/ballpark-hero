@@ -1,0 +1,28 @@
+control silent: fired, 2 aimed checks red
+control nan: fired, 1 aimed checks red
+control long: fired, 1 aimed checks red
+control random: fired, 1 aimed checks red
+control swap: fired, 1 aimed checks red
+control flatcrowd: fired, 3 aimed checks red
+control subthud: fired, 1 aimed checks red
+control hot: fired, 8 aimed checks red
+control ghoststep: fired, 1 aimed checks red
+control audiotag: fired, 2 aimed checks red
+control secondhome: fired, 1 aimed checks red
+control staticimport: fired, 1 aimed checks red
+control eager: fired, 1 aimed checks red
+control nogate: fired, 8 aimed checks red
+control nohide: fired, 1 aimed checks red
+control noprerender: fired, 1 aimed checks red
+control nowait: fired, 1 aimed checks red
+control late: fired, 1 aimed checks red
+control nohush: fired, 1 aimed checks red
+control twocontexts: fired, 1 aimed checks red
+control buzzstill: fired, 1 aimed checks red
+control keepplaying: fired, 1 aimed checks red
+control coldlate: fired, 2 aimed checks red
+control noprime: fired, 1 aimed checks red
+control globalhush: fired, 1 aimed checks red
+control leak: fired, 2 aimed checks red
+
+simSound controls: 26 of 26 fired
