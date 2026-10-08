@@ -1,0 +1,15 @@
+rvmutate m5: src/components/soccer-career/InternationalPanel.tsx mutated
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/tournamentCardMoment.test.tsx[2m > [22mRound 926: the moment plays once[2m > [22mopening a tile and coming Back does not replay it
+[41m[1m FAIL [22m[49m src/test/tournamentCardMoment.test.tsx[2m > [22mRound 1107: the won card's head is the career moment kit's Trophy scene[2m > [22mstill after a tile and Back, after a second mount, and after a reload on the card
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m7 passed[39m[22m[90m (8)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m95 passed[39m[22m[90m (97)[39m
+VITEST_EXIT=1
+simCareerMoments: 1077 checks, 0 failed
+SIM_EXIT=0
+BUILD_EXIT=0
+FAIL T390:P4 once: after the Your Games tile and Back the scene is live with 0 confetti piece(s) on the page
+FAIL T1280:P4 once: after the Your Games tile and Back the scene is live with 0 confetti piece(s) on the page
+playCareerMoments: 34 checks, 2 failed
+WALK_EXIT=1
+RESTORED dirty=0

@@ -1,0 +1,17 @@
+rvmutate m4: src/components/soccer-career/SignedSlip.tsx mutated
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/careerMomentKit.test.tsx[2m > [22mRound 1107: the signing scene (SignedSlip binds the kit)[2m > [22mthe wage before shows only when it is a real wage that prints differently
+[41m[1m FAIL [22m[49m src/test/careerMomentKit.test.tsx[2m > [22mRound 1107: the signing scene (SignedSlip binds the kit)[2m > [22mthe slip is the scene: one signing card under data-signed-slip, no avatar for a bare career
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m7 passed[39m[22m[90m (8)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m95 passed[39m[22m[90m (97)[39m
+VITEST_EXIT=1
+  FAIL K3: F6slip 320px motion: at 0% the final number layer reads €20k/wk, expected €45k/wk
+  FAIL K3: F6slip 320px motion: on the first frame the number shows €45k/wk, expected the value before, €20k/wk
+  FAIL K3: F6slip 320px motion: at 25% the final number layer reads €20k/wk, expected €45k/wk
+  FAIL K3: F6slip 320px motion: at 50% the final number layer reads €20k/wk, expected €45k/wk
+  FAIL K3: F6slip 320px motion: at 75% the final number layer reads €20k/wk, expected €45k/wk
+  FAIL K3: F6slip 320px motion: at 100% the final number layer reads €20k/wk, expected €45k/wk
+  FAIL K3: F6slip 320px motion: at rest the number shows €20k/wk, expected only €45k/wk
+  FAIL K1: F6slip 320px motion: "€45k/wk" is missing or out of order in the settled text: ✍️ Signed with Rivertown FC | 3 years at €45k/wk | €12.5M fee | €20k/wk | your wage
+SIM_EXIT=1
+RESTORED dirty=0

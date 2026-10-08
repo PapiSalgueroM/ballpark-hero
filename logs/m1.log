@@ -1,0 +1,15 @@
+rvmutate m1: src/components/soccer-career/careerMoments.ts mutated
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/tournamentCardMoment.test.tsx[2m > [22mRound 1107: a tournament is settled on load only when the save sits on its card[2m > [22ma save loaded on the season summary that reaches the won card in this visit PLAYS
+[41m[1m FAIL [22m[49m src/test/tournamentCardMoment.test.tsx[2m > [22mRound 1107: a tournament is settled on load only when the save sits on its card[2m > [22mevery phase but the card's own leaves the tournament to play
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m7 passed[39m[22m[90m (8)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m95 passed[39m[22m[90m (97)[39m
+VITEST_EXIT=1
+simCareerMoments: 1077 checks, 0 failed
+SIM_EXIT=0
+BUILD_EXIT=0
+FAIL T390:P1 the scene is on the page as [data-intl-moment] [data-career-moment="trophy"][data-cmo-bind="sc-intl-trophy"] and went still; 1 cup(s), its lift undefined long and not found ? frame(s) after it went live
+FAIL T1280:P1 the scene is on the page as [data-intl-moment] [data-career-moment="trophy"][data-cmo-bind="sc-intl-trophy"] and went still; 1 cup(s), its lift undefined long and not found ? frame(s) after it went live
+playCareerMoments: 20 checks, 2 failed
+WALK_EXIT=1
+RESTORED dirty=0

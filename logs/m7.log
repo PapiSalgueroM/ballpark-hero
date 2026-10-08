@@ -1,0 +1,30 @@
+rvmutate m7: src/components/career-moments/useCareerMoment.ts mutated
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 14 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/careerMomentKit.test.tsx[2m > [22mRound 1107: the card with the once per key rule[2m > [22mplays on the first mount of a key and sits still on the second
+[41m[1m FAIL [22m[49m src/test/careerMomentKit.test.tsx[2m > [22mRound 1107: the signing scene (SignedSlip binds the kit)[2m > [22mplays once per deal: a second mount of the same note is still, a new deal plays
+[41m[1m FAIL [22m[49m src/test/soccerCareerDebutLegacy.test.tsx[2m > [22mRound 985: the international debut is a moment[2m > [22mplays once: a second mount is still
+[41m[1m FAIL [22m[49m src/test/soccerCareerDebutLegacy.test.tsx[2m > [22mRound 985: the international debut is a moment[2m > [22ma restart with the same name, nation, position, academy and start year still gets its own debut
+[41m[1m FAIL [22m[49m src/test/soccerCareerDebutLegacy.test.tsx[2m > [22mRound 985: the legacy card is a moment[2m > [22mgold confetti for GOAT and LEGEND only, and never on a card drawn still
+[41m[1m FAIL [22m[49m src/test/soccerCareerDebutLegacy.test.tsx[2m > [22mRound 985: the rivalry verdict rises[2m > [22mrises the verdict on the first mount only, and not on a restored save
+[41m[1m FAIL [22m[49m src/test/soccerCareerDebutLegacy.test.tsx[2m > [22mRound 985: a moment waits until its card is seen[2m > [22mthe legacy card holds its beats and its confetti below the fold, settles nothing, and plays once in view
+[41m[1m FAIL [22m[49m src/test/soccerCareerDebutLegacy.test.tsx[2m > [22mRound 985: a moment waits until its card is seen[2m > [22mthe rivalry verdict waits the same way
+[41m[1m FAIL [22m[49m src/test/tournamentCardMoment.test.tsx[2m > [22mRound 926: the moment plays once[2m > [22ma second mount of the same card does not replay it, a different tournament does
+[41m[1m FAIL [22m[49m src/test/tournamentCardMoment.test.tsx[2m > [22mRound 926: the moment plays once[2m > [22mneeds no storage: a storage that throws on every call changes nothing, and nothing is written
+[41m[1m FAIL [22m[49m src/test/tournamentCardMoment.test.tsx[2m > [22mRound 926: the moment does not move the card[2m > [22mthe confetti layer is the last child, so the space-y gap cannot push the headline down
+[41m[1m FAIL [22m[49m src/test/tournamentCardMoment.test.tsx[2m > [22mRound 926: the quiet card also plays once[2m > [22mBack, a second mount, a reload and a new tab leave a group exit quiet
+[41m[1m FAIL [22m[49m src/test/tournamentCardMoment.test.tsx[2m > [22mRound 1107: the won card's head is the career moment kit's Trophy scene[2m > [22mstill after a tile and Back, after a second mount, and after a reload on the card
+[41m[1m FAIL [22m[49m src/test/tournamentCardMoment.test.tsx[2m > [22mRound 1107: a tournament is settled on load only when the save sits on its card[2m > [22ma save loaded on the season summary that reaches the won card in this visit PLAYS
+[2m Test Files [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m5 passed[39m[22m[90m (8)[39m
+[2m      Tests [22m [1m[31m14 failed[39m[22m[2m | [22m[1m[32m83 passed[39m[22m[90m (97)[39m
+VITEST_EXIT=1
+  FAIL K6a: a second mount of the same key must be still and stay still; saw fresh>live
+  FAIL K6a: a still card must hold nothing longer than 10 ms, no old number and no confetti, with its cup drawn; saw 60 slow, 1 old, 50 confetti, 1 cup
+  FAIL K6c: scrolled into view it must go live and be settled; it is live and settled is false
+simCareerMoments: 1077 checks, 3 failed
+SIM_EXIT=1
+BUILD_EXIT=0
+FAIL S390:P4 once: after the attributes screen and Back the scene is live with 0 confetti piece(s) on the page
+FAIL S1280:P4 once: after the attributes screen and Back the scene is live with 0 confetti piece(s) on the page
+playCareerMoments: 34 checks, 2 failed
+WALK_EXIT=1
+RESTORED dirty=0

@@ -1,0 +1,9 @@
+m1 exit=0 128s | RESTORED dirty=0
+m2 exit=0 101s | RESTORED dirty=0
+m3 exit=0 17s | RESTORED dirty=0
+m4 exit=0 17s | RESTORED dirty=0
+m5 exit=0 100s | RESTORED dirty=0
+m6 exit=0 17s | RESTORED dirty=0
+m7 exit=0 101s | RESTORED dirty=0
+m8 exit=0 100s | RESTORED dirty=0
+z-clean exit=0 8s | simCareerMoments: 1077 checks, 0 failed

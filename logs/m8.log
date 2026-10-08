@@ -1,0 +1,14 @@
+rvmutate m8: src/components/soccer-career/careerMoments.ts mutated
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 3 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/careerMomentKit.test.tsx[2m > [22mRound 1107: the signing scene (SignedSlip binds the kit)[2m > [22ma transfer keeps the slip's two strings, shows the wage as its number and has no fee line of its own
+[41m[1m FAIL [22m[49m src/test/careerMomentKit.test.tsx[2m > [22mRound 1107: the signing scene (SignedSlip binds the kit)[2m > [22ma different deal is a different key, the same deal the same one
+[41m[1m FAIL [22m[49m src/test/careerMomentKit.test.tsx[2m > [22mRound 1107: the signing scene (SignedSlip binds the kit)[2m > [22mplays once per deal: a second mount of the same note is still, a new deal plays
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m7 passed[39m[22m[90m (8)[39m
+[2m      Tests [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m94 passed[39m[22m[90m (97)[39m
+VITEST_EXIT=1
+simCareerMoments: 1077 checks, 0 failed
+SIM_EXIT=0
+BUILD_EXIT=0
+playCareerMoments: 34 checks, 0 failed
+WALK_EXIT=0
+RESTORED dirty=0
