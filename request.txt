@@ -1,0 +1,11 @@
+# Release AN proof, part 5 (serial): two reruns the earlier requests got wrong (no browser, wrong port), then main itself for the reds that are said to be main's
+#!serve
+#!playwright
+#!serial
+simResultMoment: node scripts/simResultMoment.mjs
+playFlagshipLazy: node scripts/playFlagshipLazy.mjs
+simStartingXi: node scripts/simStartingXi.mjs
+main-prep: git fetch -q origin main && git worktree add -q --detach "$RUNNER_TEMP/main" FETCH_HEAD && cd "$RUNNER_TEMP/main" && ln -s "$GITHUB_WORKSPACE/node_modules" node_modules && npm run build 2>&1 | tail -2 && (nohup node scripts/lib/hostLikeServer.mjs dist 4199 > /dev/null 2>&1 &) && sleep 4 && git rev-parse --short HEAD && curl -s -o /dev/null -w "main served: %{http_code}\n" http://localhost:4199/
+main-simStartingXi: cd "$RUNNER_TEMP/main" && node scripts/simStartingXi.mjs
+main-sweepWeight: cd "$RUNNER_TEMP/main" && BASE=http://localhost:4199 SWEEP_BASE=http://localhost:4199 ENGINES=chromium node scripts/sweepWeight.mjs
+main-playSoccerCareer: cd "$RUNNER_TEMP/main" && SWEEP_BASE=http://localhost:4199 ENGINES=chromium node scripts/playSoccerCareer.mjs

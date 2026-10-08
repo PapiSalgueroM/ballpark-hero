@@ -1,0 +1,8 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simResultMoment exit=0 4s | simResultMoment: green. Every live game reaches the shared result moment or is listed with what it draws instead, the pill shows exactly the score it is given, the three 
+playFlagshipLazy exit=0 7s | playFlagshipLazy: green. The dugout costs nothing until you walk into it, and it still works when you do.
+simStartingXi exit=1 0s | simStartingXi: 1 failure
+main-prep exit=0 28s | main served: 200
+main-simStartingXi exit=1 0s | simStartingXi: 1 failure
+main-sweepWeight exit=0 20s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+main-playSoccerCareer exit=1 77s |   - 6. no console or page errors across the walk: Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to 
