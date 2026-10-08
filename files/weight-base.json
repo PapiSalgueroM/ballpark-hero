@@ -1,0 +1,70 @@
+[
+ {
+  "label": "base",
+  "route": "/nfl-my-career",
+  "bytes": 465254,
+  "kb": 454,
+  "files": 46,
+  "missing": 0,
+  "err": "",
+  "top": [
+   "index:234073",
+   "usCareerSeasonReview:131141",
+   "football:22333",
+   "AppearanceBuilder:14389",
+   "conquestDataNba:8519",
+   "NflMyCareer:5645"
+  ]
+ },
+ {
+  "label": "base",
+  "route": "/nba-my-career",
+  "bytes": 547858,
+  "kb": 535,
+  "files": 46,
+  "missing": 0,
+  "err": "",
+  "top": [
+   "index:234073",
+   "usCareerSeasonReview:131141",
+   "NbaMyCareer:81823",
+   "basketball:28746",
+   "AppearanceBuilder:14389",
+   "conquestDataNba:8519"
+  ]
+ },
+ {
+  "label": "base",
+  "route": "/mlb-my-career",
+  "bytes": 536812,
+  "kb": 524,
+  "files": 46,
+  "missing": 0,
+  "err": "",
+  "top": [
+   "index:234073",
+   "usCareerSeasonReview:131141",
+   "MlbMyCareer:80305",
+   "baseball:19129",
+   "AppearanceBuilder:14389",
+   "conquestDataNba:8519"
+  ]
+ },
+ {
+  "label": "base",
+  "route": "/nhl-my-career",
+  "bytes": 540242,
+  "kb": 528,
+  "files": 46,
+  "missing": 0,
+  "err": "",
+  "top": [
+   "index:234073",
+   "usCareerSeasonReview:131141",
+   "NhlMyCareer:81611",
+   "hockey:21221",
+   "AppearanceBuilder:14389",
+   "conquestDataNba:8519"
+  ]
+ }
+]
