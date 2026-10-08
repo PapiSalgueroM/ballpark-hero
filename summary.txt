@@ -1,0 +1,6 @@
+shapes-1 exit=1 30s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/dailySaveShapes.test.tsx,title=src/test/dailySaveShapes.test.tsx > a damaged daily save resets itself 
+shapes-3 exit=1 31s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/dailySaveShapes.test.tsx,title=src/test/dailySaveShapes.test.tsx > a damaged daily save resets itself 
+shapes-2 exit=1 31s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/dailySaveShapes.test.tsx,title=src/test/dailySaveShapes.test.tsx > a damaged daily save resets itself 
+shapes-5 exit=1 30s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/dailySaveShapes.test.tsx,title=src/test/dailySaveShapes.test.tsx > a damaged daily save resets itself 
+shapes-6 exit=1 30s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/dailySaveShapes.test.tsx,title=src/test/dailySaveShapes.test.tsx > a damaged daily save resets itself 
+shapes-4 exit=0 31s |    Duration  29.79s (transform 4.32s, setup 86ms, collect 490ms, tests 27.74s, environment 465ms, prepare 249ms)
