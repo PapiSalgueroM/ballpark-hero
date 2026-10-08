@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+guideLadder: node scripts/simGauntletGuideLadder.mjs
+guideLadder-ghostcard: SIM_GAUNTLET_GUIDE_CONTROL=ghostcard node scripts/simGauntletGuideLadder.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simFaqSchema: node scripts/simFaqSchema.mjs
+help: node .rc/x/rvwHelp.mjs
+help2: node .rc/x/vfyHelp.mjs
