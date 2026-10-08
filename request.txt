@@ -1,0 +1,2 @@
+# AN2 final proof: the whole vitest suite on origin/main on the same runner, the baseline for any red of the head
+main-vitest-all: git fetch -q origin main && git worktree add -q --detach "$RUNNER_TEMP/main" FETCH_HEAD && ln -s "$GITHUB_WORKSPACE/node_modules" "$RUNNER_TEMP/main/node_modules" && cd "$RUNNER_TEMP/main" && git rev-parse --short HEAD && node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000

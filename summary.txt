@@ -1,0 +1,1 @@
+main-vitest-all exit=1 346s | ::error file=/home/runner/work/_temp/main/src/test/guessFinishMoment.test.tsx,title=src/test/guessFinishMoment.test.tsx > a clue guesser ends on the shared result moment 
