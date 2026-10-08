@@ -1,0 +1,6 @@
+simCareerLeagueSeasons exit=0 25s | simCareerLeagueSeasons: all sections green
+simCareerLeagueSeasons-seed2 exit=0 18s | simCareerLeagueSeasons: all sections green
+vitest-e exit=0 74s |    Duration  73.53s (transform 10.62s, setup 968ms, collect 15.99s, tests 70.37s, environment 4.56s, prepare 1.24s)
+simCmLeagueRules exit=0 47s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+tsc exit=0 93s | 
+simCareerLeagueWorld exit=0 82s | simCareerLeagueWorld: all sections green (81.8 s)
