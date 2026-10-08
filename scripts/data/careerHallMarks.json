@@ -16,11 +16,11 @@
   },
   "nfl": {
    "ints": "interceptions thrown are a quarterback losing the ball, not production",
-   "forcedFum": "forced fumbles: no real Hall case has ever rested on them",
+   "forcedFum": "forced fumbles: left out by hand in the design, with holds; a game rule, not a measured one and not a claim about any real Hall",
    "fgAtt": "field goal attempts count the misses too"
   },
   "mlb": {
-   "holds": "holds: setup men went from 5 percent in to 95 on holds alone in the design sample, and no real Hall has worked that way",
+   "holds": "holds: setup men went from 5 percent in to 95 on holds alone in the design sample, so they are left out by hand; a game rule, not a claim about any real Hall",
    "games": "games played is longevity, which the season weight already pays"
   },
   "nhl": {

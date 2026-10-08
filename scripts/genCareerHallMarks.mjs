@@ -8,8 +8,18 @@
    scripts/data/careerHallMarks.json, which section 17 of that harness holds
    the tables in the four *MyCareer.ts files to.
 
-   HOW TO RE-DERIVE (a round that moves an engine's stats turns section 17 red
-   on purpose; this is the way back to green):
+   WHICH TABLE THE MARKS GO INTO. Before the release that first ships
+   calibration 2 they go into the version 2 tables (and the recording is
+   made again: SIM_RECORD_V2=1 node scripts/simCareerHall.mjs <sport>).
+   AFTER THAT RELEASE CALIBRATION 2 IS NEVER EDITED: every career retired on
+   it keeps the ballot it was told, and section 15 (d) of the harness holds
+   the four tables to scripts/data/careerHallV2.json. A later round that
+   moves an engine's stats turns section 17 red on purpose, and its way back
+   to green is a NEW calibration: a version 3 table beside version 2 in the
+   four *MyCareer.ts files, HALL_CALIBRATION 3 in careerHallOfFame.ts, the
+   marks below derived for it, and its own recording.
+
+   HOW TO DERIVE:
      1. Six measuring runs a sport, the board skipped, one row file each:
           SIM_SKIP_BOARD=1 SIM_DUMP_ROWS=<dir>/rows-<sport>-base.json node scripts/simCareerHall.mjs <sport> <careers>
           SIM_SKIP_BOARD=1 SIM_SEED=1 SIM_DUMP_ROWS=<dir>/rows-<sport>-1.json ...   (SIM_SEED 1 to 5)
@@ -18,7 +28,8 @@
         ends on BOARD SECTIONS SKIPPED and exit 3: that is expected.
      2. node scripts/genCareerHallMarks.mjs <dir>
         writes the ledger and prints, per sport, the standout entries to paste
-        into the version 2 table.
+        into the table of the calibration being built (see above: never a
+        calibration that has shipped).
      3. With the tables pasted, do step 1 and step 2 once more. The careers are
         the same (the legacy draws nothing), so the marks come out the same,
         and the rows now carry the score on calibration 2: the second pass
@@ -105,11 +116,11 @@ const EXCLUDED = {
   },
   nfl: {
     ints: 'interceptions thrown are a quarterback losing the ball, not production',
-    forcedFum: 'forced fumbles: no real Hall case has ever rested on them',
+    forcedFum: 'forced fumbles: left out by hand in the design, with holds; a game rule, not a measured one and not a claim about any real Hall',
     fgAtt: 'field goal attempts count the misses too',
   },
   mlb: {
-    holds: 'holds: setup men went from 5 percent in to 95 on holds alone in the design sample, and no real Hall has worked that way',
+    holds: 'holds: setup men went from 5 percent in to 95 on holds alone in the design sample, so they are left out by hand; a game rule, not a claim about any real Hall',
     games: 'games played is longevity, which the season weight already pays',
   },
   nhl: { games: 'games played is longevity, which the season weight already pays' },
