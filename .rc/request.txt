@@ -1,0 +1,15 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+sense-full: SENSE_PROVE_OTHERS=1 node scripts/simNbaAwardsSense.mjs
+sense-plain: SENSE_JUDGE=1 SENSE_CAREERS=1500 SENSE_SEEDS=1,2 SENSE_OTHERS=20 node scripts/simNbaAwardsSense.mjs
+vitest-new: node_modules/.bin/vitest run src/test/nbaAwardDecisionLift.test.ts src/test/nbaOldSaveLines.test.ts src/test/nbaStatLineColumns.test.ts --testTimeout=300000 --hookTimeout=120000
+vitest-list: node_modules/.bin/vitest run src/test/usCareerStatLines.test.tsx src/test/careerSeasonReview.test.tsx src/test/usCareerReveals.test.tsx src/test/careerHall.test.tsx src/test/usCareerHallBoard.test.tsx src/test/myCareerRestore.test.tsx src/test/noDoubleRecord.test.tsx src/test/usCareerPractice.test.tsx src/test/usCareerProspect.test.tsx src/test/rivalryChoiceBoard.test.tsx src/test/usCareerActionConfirm.test.tsx src/components/nba-front-office/NbaSeasonStats.test.tsx src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx --testTimeout=300000 --hookTimeout=120000
+simNbaCareer: node scripts/simNbaCareer.mjs
+simNbaSeasonStats: node scripts/simNbaSeasonStats.mjs
+simUsCareerDeckC: node scripts/simUsCareerDeckC.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simAwards: node scripts/simAwards.mjs
+simCareerParity: node scripts/simCareerParity.mjs
+simCareerRealism: node scripts/simCareerRealism.mjs
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
