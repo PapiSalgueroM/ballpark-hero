@@ -64,10 +64,10 @@ const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace
 const CONTROL = process.env.SEASON_MOTION_SIM_CONTROL ?? '';
 const SHIFT_NEEDLE = '  return after.map((club, to) => ({ club, from: was.get(club) ?? -1, to }));';
 const FENCE_NEEDLE = "const EASE = 'cubic-bezier(.2,.8,.2,1)';";
-const RESUME_NEEDLE = "  return rows.findIndex(row => row.year === r.year && row.type === 'playing' && row.apps > 0 && keyOf(row) === r.key && (r.stable || liveYear === row.year));";
+const RESUME_NEEDLE = '  return rows.findIndex(row => row.year === r.year && keyOf(row) === r.key && (r.stable || liveYear === row.year));';
 const BUNDLE_CONTROLS = {
   shift: [{ file: 'src/lib/motion/rankShift.ts', from: SHIFT_NEEDLE, to: '  return after.map((club, to) => ({ club, from: to, to: was.get(club) ?? -1 }));' }],
-  resumetag: [{ file: 'src/lib/season/resume.ts', from: RESUME_NEEDLE, to: "  return rows.findIndex(row => row.year === r.year && row.type === 'playing' && row.apps > 0 && (r.stable || liveYear === row.year));" }],
+  resumetag: [{ file: 'src/lib/season/resume.ts', from: RESUME_NEEDLE, to: '  return rows.findIndex(row => row.year === r.year && (r.stable || liveYear === row.year));' }],
 };
 const PAGEKEY_NEEDLE = '|${r.assists}';
 if (CONTROL && !['shift', 'resumetag', 'pagekey', 'fence'].includes(CONTROL)) throw new Error(`unknown SEASON_MOTION_SIM_CONTROL ${CONTROL}`);
