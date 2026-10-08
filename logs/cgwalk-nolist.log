@@ -1,0 +1,9 @@
+playCollegeGridFirstTap, control nolist: section 4 must go red
+
+4) Search from memory, offline
+  FAIL: typing "Darrell Gr" offline did not list Darrell Green; the list showed: Could not load players. Try searching again.
+  FAIL: typing the surname "morocco" offline did not list Zippy Morocco; the list showed: Could not load players. Try searching again.
+  FAIL: 9 requests left the page for a search; a search must read memory
+   390 by 844, offline: "Darrell Gr" listed Darrell Green and the surname "morocco" alone did NOT list Zippy Morocco, with 9 requests. Longest task at 4 times throttle: 122 ms while the key landed, 0 ms on the first search
+
+control "nolist": fired in section 4 as expected, the check works

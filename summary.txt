@@ -1,0 +1,10 @@
+build exit=0 22s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+cgwalk exit=0 31s | playCollegeGridFirstTap: green. The board is up before the key, the key is two requests and never the table, the search and the judge read memory with the network gone, a
+cgwalk-nosurname exit=0 13s | control "nosurname": fired in section 4 as expected, the check works
+cgwalk-latecells exit=0 34s | control "latecells": fired in section 1 and 7 as expected, the check works
+cgwalk-paged exit=0 3s | control "paged": fired in section 2 as expected, the check works
+cgwalk-slow exit=0 23s | control "slow": fired in section 3 as expected, the check works
+cgwalk-nolist exit=0 55s | control "nolist": fired in section 4 as expected, the check works
+cgwalk-nojudge exit=0 30s | control "nojudge": fired in section 5 as expected, the check works
+cgwalk-accepted exit=0 26s | control "accepted": fired in section 6 as expected, the check works
+playGridCls exit=0 30s | playGridCls: green. The boards hold their ground; the network only fills them in.
