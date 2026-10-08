@@ -1,3 +1,23 @@
+## Codex Round 1093 preparation, 2026-10-07
+
+The watched Stadium Tycoon hook already settles draw results and their rewards, but its
+presentation event branch had no draw message. This round adds FULL TIME DRAW in the
+existing neutral tap floater style at fixed coordinates. It adds no payout or confetti
+and makes no change to the match engine, random draws, saves, data or shared pitch.
+
+Prepared from release-al-int 8fe82a4dc1346f7d5b8072f387f3acb34bbaa3c8 on
+codex/tycoon-draw-result-1093 in the clean attached former Round 1083 checkout.
+The accepted Round 1083 branch remains held at 23a540a8dfa5b3335821b94f9ab05134272f85ab.
+
+Verification is pending. The focused harness will mount the actual current and pinned
+original hooks, stage a late match, then compare full settled state, rewards, storage,
+random draws and callbacks. A copied missing-message control must fail the draw display
+check while retaining settlement parity. These staged hook cases do not claim native
+page play, a complete match or a whole campaign. Original tycoon gates and all twenty
+built readers remain strict. Runtime, install, build and browser work run remotely only.
+Claude E owns integration, baseline release failures and publication. Nothing is live
+from this preparation note. Final exact-head receipts stay outside accepted source.
+
 ## Release AK LIVE, 2026-10-07 15:12 EDT, and the split of work with Codex
 
 Claude lane (session E, a new lead: session D stopped at its weekly limit with AK's gate still running).
