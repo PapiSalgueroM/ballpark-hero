@@ -1,0 +1,66 @@
+SKIPPED nfl: its binding has no Season Center loader
+viewer chunk UsSeasonCentre-CYVCQdFO.js (6.1K raw); the cover lives in usCareerSeasonReview-5OcBuTsE.js
+CONTROL static: the page imports the viewer chunk as it loads
+FAIL [lazy] nba 390x844: the viewer chunk is not requested on load or on the hub (57 chunks)
+ok   [lazy] nba 390x844: no chunk the page loads holds "Tip off"
+ok   [layout] nba 390x844: the entry is at least 44 px tall and fully visible (44 px)
+FAIL [load first] nba 390x844: two frames after the press nothing is played while the viewer loads (curtain true, season on the save true, button loading false)
+FAIL [cover] nba 390x844: on every frame from the press to the viewer the curtain is never on screen without the opaque cover (2 frames in 48 ms, 0 bare; at the end curtain true, covered true)
+ok   [lazy] nba 390x844: the viewer chunk is requested after the press
+     the first press downloads 1 chunks, 3.6K gz: nba 3.6K
+ok   [same press] nba 390x844: Play and Week by week saved the same bytes
+ok   [agreement] nba 390x844: the first card offers "Tip off"
+ok   [clock] nba 390x844: the score bug equals the feed on every sample (168 samples, 5 scores)
+ok   [agreement] nba 390x844: the scoreboard shows the game's own ids, none cut off (LAL v NOP)
+ok   [agreement] nba 390x844: the feed's time column fits and never overlaps its words (8 lines, 0 bad)
+ok   [agreement] nba 390x844: the record 2-5 equals the game log's 2 W and 5 L over 7 games
+ok   [layout] nba 390x844: no game log row wraps (0 of 7)
+ok   [layout] nba 390x844: the game log opens and Back returns with nothing moved
+ok   [layout] nba 390x844: no sideways scroll, the bar inside the viewport, one column
+ok   [layout] nba 390x844: no game log row wraps over the whole season (0 of 82)
+ok   [agreement] nba 390x844: no game log row prints his points twice (0 of 82)
+ok   [same press] nba 390x844: after watching to the review and closing, the save is still the bytes Play saved
+ok   [same press] nba 390x844: the curtain is on screen as Play shows it, focus on Continue, scrollY 0 against 0 (overlay false, curtain true, same words true, focus true on BUTTON "Continue")
+ok   [agreement] nba 390x844: the review's tiles are the curtain's numbers (Games 82, PPG 8, RPG 1.6, APG 1.4)
+ok   [errors] nba 390x844: no page error and no console error
+ok   [motion] nba 390x844: reduced motion shows the game at once with nothing animating (0 and 0 animations, 8 lines)
+ok   [errors] nba 390x844: reduced motion, no page error and no console error
+ok   [held] nba 390x844: the held year 2011 shows its line and no button ("📺 No week by week this season: the real 2011-12 season had 66 games a")
+ok   [full storage] nba 390x844: with storage full the press played its season in memory: 2 write(s) refused, the curtain is there and the save is untouched (curtain true, save unchanged true)
+ok   [full storage] nba 390x844: with storage full the press still opens the season it played, under the cover (viewer true, cover true)
+ok   [load first] nba 390x844: a viewer chunk that is gone reloads the page with no season played (page loads 2, save untouched true, hub true, entry true, curtain false, failed tile false)
+     the gone chunk was asked for 3 time(s) on that press before the page reloaded (1: the preload and the import are one fetch; 2: the import asked again)
+     the generator had been drawn 7 times at the press on a first visit, 4 on a page loaded twice, 4 after the stale chunk reload
+ok   [load first] nba 390x844: after that reload the next press opens the viewer on the season Play saves on a page loaded twice (viewer true, same bytes true, same as a first visit false)
+ok   [errors] nba 390x844: the stale chunk walk, no page error and no console error
+ok   [load first] nba 390x844: with the reload spent the tile says it could not be loaded and no season is played (tile true, save untouched true, curtain false, page loads 1)
+ok   [load first] nba 390x844: Back closes the tile on the hub with the focus on Week by week (tile false, hub true, focus true)
+ok   [load first] nba 390x844: a second press with the chunk still gone shows the tile again and plays nothing (tile true, save untouched true, viewer false, page loads 1)
+     the viewer chunk was asked for 4 time(s) over two presses before the Reload (1: this browser keeps a failed import failed; 2 or 3: it asks again), 5 with the press after it
+ok   [load first] nba 390x844: Reload gets a new page with no season played, and its next press opens the viewer on the season Play saves on a page loaded twice (page loads 2, save untouched true, viewer true, same bytes true)
+ok   [errors] nba 390x844: the spent reload walk, no page error and no console error
+FAIL [lazy] nba 1280x800: the viewer chunk is not requested on load or on the hub (57 chunks)
+ok   [lazy] nba 1280x800: no chunk the page loads holds "Tip off"
+ok   [layout] nba 1280x800: the entry is at least 44 px tall and fully visible (44 px)
+FAIL [load first] nba 1280x800: two frames after the press nothing is played while the viewer loads (curtain true, season on the save true, button loading false)
+FAIL [cover] nba 1280x800: on every frame from the press to the viewer the curtain is never on screen without the opaque cover (3 frames in 61 ms, 0 bare; at the end curtain true, covered true)
+ok   [lazy] nba 1280x800: the viewer chunk is requested after the press
+     the first press downloads 1 chunks, 3.6K gz: nba 3.6K
+ok   [same press] nba 1280x800: Play and Week by week saved the same bytes
+ok   [agreement] nba 1280x800: the first card offers "Tip off"
+ok   [clock] nba 1280x800: the score bug equals the feed on every sample (168 samples, 5 scores)
+ok   [agreement] nba 1280x800: the scoreboard shows the game's own ids, none cut off (LAL v NOP)
+ok   [agreement] nba 1280x800: the feed's time column fits and never overlaps its words (8 lines, 0 bad)
+ok   [agreement] nba 1280x800: the record 2-5 equals the game log's 2 W and 5 L over 7 games
+ok   [layout] nba 1280x800: no game log row wraps (0 of 7)
+ok   [layout] nba 1280x800: three columns and the page behind locked
+ok   [layout] nba 1280x800: no name in the Schedule column is cut off (82 rows)
+ok   [layout] nba 1280x800: no game log row wraps over the whole season (0 of 82)
+ok   [agreement] nba 1280x800: no game log row prints his points twice (0 of 82)
+ok   [same press] nba 1280x800: after watching to the review and closing, the save is still the bytes Play saved
+ok   [same press] nba 1280x800: the curtain is on screen as Play shows it, focus on Continue, scrollY 0 against 0 (overlay false, curtain true, same words true, focus true on BUTTON "Continue")
+ok   [agreement] nba 1280x800: the review's tiles are the curtain's numbers (Games 82, PPG 8, RPG 1.6, APG 1.4)
+ok   [errors] nba 1280x800: no page error and no console error
+supabase requests aborted: 22
+control static: RED AT THE NAMED CHECK (lazy); checks red: lazy, load first, cover
+playUsSeasonCentre: 55 checks, 6 failed (control static)
