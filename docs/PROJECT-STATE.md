@@ -1,3 +1,22 @@
+## Codex 1097 pure baseline measured, second strict gate pending, October 8, 2026
+
+First frozen head 42c1dd74, tree 2d226a6b, run 37742438175 completed RED.
+Actual engine baseline passed 12/12. All six copied controls had exactly one
+intended assertion failure, one independent ledger pass and ten skipped tests.
+The wrapper expected "pending" instead of Vitest's actual "skipped" status,
+so adapter and final gates failed. This result remains retained and unwaived.
+All source holds, install, syntax and proper app types passed. All 3,653 source
+files match the frozen Git tree and runner manifest. The 128 raw paired deal
+ledgers, costs, reserves, strengths, odds and means were independently audited.
+Full artifact
+11534054457 SHA256 31bd57222c291ade24e484aaddc5fe6fb20b3e45a7152d2cfc894e42a88aedf3.
+The 128 paired daily deals measured mean points gap 56.734375 and mean wins
+gap 22.6640625 at alpha 5. Permanent default points margin 40 leaves measured
+headroom 16.734375. Correct the wrapper's actual skip label and rebind source
+for a second strict pure gate before UI. A seventh effective margin control
+must preserve a positive advantage while failing specifically below 40.
+No READY or live claim.
+
 ## Codex 1097 preparation, October 8, 2026
 
 Soccer Perfect Season is being built from main ddc2c042 in an isolated branch.

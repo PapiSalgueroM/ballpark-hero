@@ -4,7 +4,7 @@ import { teamOverall, type DraftablePlayer, type SeasonSlot } from '@/lib/perfec
 export const SOCCER_PS_VERSION = 'soccer-ps-v1';
 export const SOCCER_PS_BUDGET = 55;
 export const SOCCER_PS_GAMES = 38;
-// Provisional game odds, not a model of real soccer results.
+// Game odds, measured against 128 paired drafts, not real soccer results.
 export const SOCCER_PS_ALPHA = 5;
 export const SOCCER_PS_SLOTS: readonly SeasonSlot[] = Object.freeze([
   { key: 'GK', label: 'Goalkeeper', weight: 2 },

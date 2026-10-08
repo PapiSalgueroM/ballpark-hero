@@ -10,6 +10,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const evidence = path.resolve(root, process.env.QA_OUT || '.sim-control/soccer-perfect-season-evidence', 'soccer-perfect-season');
 const testFile = 'src/test/soccerPerfectSeason.test.ts', engineFile = 'src/lib/soccerPerfectSeason.ts';
 const total = 12, baseline = 'keeps an independent win and loss points ledger';
+const requiredMeanPointsGap = 40;
 const controls = {
   reserve: { test: 'reserves a basic card for every remaining slot on every reachable draft', from: '+ 3 * remainingSlots', to: '+ 0 * remainingSlots' },
   ceiling: { test: 'matches an exhaustive affordable ceiling and keeps its legal witness', from: 'const weightedStrength = state.weightedStrength + card.rating * SOCCER_PS_SLOTS[slot].weight;', to: 'const weightedStrength = state.weightedStrength + card.rating;' },
@@ -17,6 +18,7 @@ const controls = {
   perfect: { test: 'requires 38 wins for perfect and no losses for unbeaten', from: 'perfect: games.length === SOCCER_PS_GAMES && wins === SOCCER_PS_GAMES', to: 'perfect: games.length === SOCCER_PS_GAMES && losses === 0' },
   version: { test: 'changes actual deal and season streams across dates modes and versions', from: 'return Math.floor(keyedRng(`${version}|soccer-perfect-season|daily|${date}`)() * 2 ** 32);', to: 'return Math.floor(keyedRng(`${SOCCER_PS_VERSION}|soccer-perfect-season|daily|${date}`)() * 2 ** 32);' },
   advantage: { test: 'measures paired strongest versus cheapest daily outcomes', from: 'const win = Math.min(1, Math.max(0, weightedStrength / bestStrength) ** SOCCER_PS_ALPHA);', to: 'const win = 1;' },
+  margin: { test: 'measures paired strongest versus cheapest daily outcomes', from: 'const win = Math.min(1, Math.max(0, weightedStrength / bestStrength) ** SOCCER_PS_ALPHA);', to: 'const win = weightedStrength === bestStrength ? 1 : 0.9;' },
 };
 const requested = process.env.SOCCER_SEASON_CONTROL || '';
 assert.ok(requested === '' || requested === 'all' || Object.hasOwn(controls, requested), 'Known Soccer Perfect Season control');
@@ -34,10 +36,10 @@ for (const file of heldFiles) {
 }
 const source = held.get(engineFile).toString('utf8').replace(/\r\n/g, '\n');
 const summary = { run: process.env.GITHUB_RUN_ID || null, attempt: process.env.GITHUB_RUN_ATTEMPT || null,
-  head: process.env.GITHUB_SHA || null, totalTests: total, baseline, cases: [],
+  head: process.env.GITHUB_SHA || null, totalTests: total, baseline, requiredMeanPointsGap, cases: [],
   sourceBefore: Object.fromEntries([...held].map(([file, bytes]) => [file, hash(bytes)])),
   sourceAfter: null, status: 'running', limits: ['Pure finite engine evidence; no UI, browser, database or production claim.',
-    'Alpha5 is a provisional game rule. A first direction measurement does not accept a fixed margin.',
+    'Alpha5 is a fictional game rule, not calibrated real soccer. The permanent mean points margin is 40.',
     'Each copied source control runs its intended outcome test plus the unrelated win/loss ledger.'] };
 const saveSummary = () => writeFile(path.join(evidence, 'summary.json'), JSON.stringify(summary, null, 2) + '\n');
 
@@ -67,7 +69,7 @@ async function runCase(name) {
         originalSha256: hash(held.get(engineFile)), normalizedSha256: hash(source), copiedSha256: hash(changed), copy: path.relative(evidence, copy).replaceAll('\\', '/') };
       await writeFile(path.join(folder, 'mutation.json'), JSON.stringify(row.mutation, null, 2) + '\n');
     }
-    await writeFile(path.join(folder, 'invocation.json'), JSON.stringify({ executable: process.execPath, args, alias: env.NO_DOUBLE_SWAP || null, measuredMargin: env.SOCCER_SEASON_MIN_POINTS_GAP ?? null }, null, 2) + '\n');
+    await writeFile(path.join(folder, 'invocation.json'), JSON.stringify({ executable: process.execPath, args, alias: env.NO_DOUBLE_SWAP || null, measuredMargin: requiredMeanPointsGap }, null, 2) + '\n');
     const child = spawnSync(process.execPath, args, { cwd: root, env, encoding: 'utf8', timeout: 120000, maxBuffer: 16 * 1024 * 1024 });
     const stdout = child.stdout || '', stderr = child.stderr || '', output = stdout + '\n' + stderr;
     row.process = { status: child.status, signal: child.signal, error: child.error ? asError(child.error) : null };
@@ -95,7 +97,8 @@ async function runCase(name) {
       const measurement = JSON.parse(await readFile(path.join(folder, 'measurement.json'), 'utf8'));
       assert.equal(measurement.seedCount, 128, 'All measured daily seeds present');
       assert.equal(measurement.pairs.length, 128, 'All paired raw outcomes retained');
-      assert.ok(measurement.meanPointsGap > 0 && measurement.meanWinsGap > 0, 'Positive measured baseline direction');
+      assert.equal(measurement.requiredMeanPointsGap, requiredMeanPointsGap, 'Permanent margin is retained on every normal run');
+      assert.ok(measurement.meanPointsGap > requiredMeanPointsGap && measurement.meanWinsGap > 0, 'Measured baseline clears the permanent points margin');
       row.measurement = { seedCount: measurement.seedCount, alpha: measurement.alpha, meanPointsGap: measurement.meanPointsGap, meanWinsGap: measurement.meanWinsGap, requiredMeanPointsGap: measurement.requiredMeanPointsGap, acceptance: measurement.acceptance };
     } else {
       assert.equal(child.status, 1, `${name}: only an actual assertion failure earns control credit`);
@@ -104,7 +107,7 @@ async function runCase(name) {
       assert.deepEqual(failed.map(test => test.title), [spec.test], `${name}: exactly the intended assertion fails`);
       assert.match(failed[0].failureMessages.join('\n'), /AssertionError:|Error: expect\(/, `${name}: real outcome assertion, not a crash`);
       assert.equal(assertions.find(test => test.title === baseline)?.status, 'passed', `${name}: unaffected independent ledger passes`);
-      assert.ok(assertions.every(test => test.title === spec.test || test.title === baseline || test.status === 'pending'), `${name}: unrelated cases are explicitly skipped`);
+      assert.ok(assertions.every(test => test.title === spec.test || test.title === baseline || test.status === 'skipped'), `${name}: unrelated cases are explicitly skipped`);
       row.failure = { title: failed[0].title, messages: failed[0].failureMessages };
       if (name === 'reserve') assert.ok(outcomes.reserveEnumeration.mismatches.some(item => item.expected === false && item.actual === true), 'Reserve control actually permits a pick that cannot fill the XI');
       if (name === 'ceiling') assert.notEqual(outcomes.exhaustiveCeilings[0].best.weightedStrength, outcomes.exhaustiveCeilings[0].oracle.bestStrength, 'Ceiling control actually disagrees with independent exhaustive outcomes');
@@ -114,8 +117,18 @@ async function runCase(name) {
       if (name === 'advantage') {
         const measurement = JSON.parse(await readFile(path.join(folder, 'measurement.json'), 'utf8'));
         assert.equal(measurement.pairs.length, 128, 'Flattened strength control retains all measured pairs');
+        assert.equal(measurement.requiredMeanPointsGap, requiredMeanPointsGap, 'Strength control retains the permanent margin');
         assert.equal(measurement.meanPointsGap, 0, 'Flattened strength actually removes paired points advantage');
-        row.measurement = { seedCount: measurement.seedCount, meanPointsGap: measurement.meanPointsGap, meanWinsGap: measurement.meanWinsGap };
+        row.measurement = { seedCount: measurement.seedCount, meanPointsGap: measurement.meanPointsGap, meanWinsGap: measurement.meanWinsGap, requiredMeanPointsGap };
+      }
+      if (name === 'margin') {
+        const measurement = JSON.parse(await readFile(path.join(folder, 'measurement.json'), 'utf8'));
+        assert.equal(measurement.pairs.length, 128, 'Margin control retains all measured pairs');
+        assert.equal(measurement.requiredMeanPointsGap, requiredMeanPointsGap, 'Margin control executes the permanent threshold');
+        assert.ok(measurement.meanPointsGap > 0 && measurement.meanPointsGap < requiredMeanPointsGap && measurement.meanWinsGap > 0, 'Margin control preserves direction but falls below 40');
+        assert.ok(measurement.pairs.every(pair => pair.strongest.wins === 38 && pair.strongest.points === 114 && pair.cheapestSpent === 33 && pair.cheapOdds.win < pair.strongOdds.win), 'Margin control preserves every earlier paired assertion');
+        assert.match(failed[0].failureMessages.join('\n'), /expected [0-9.]+ to be greater than 40/, 'Only the new permanent margin assertion earns this control credit');
+        row.measurement = { seedCount: measurement.seedCount, meanPointsGap: measurement.meanPointsGap, meanWinsGap: measurement.meanWinsGap, requiredMeanPointsGap };
       }
     }
     row.status = 'accepted';
@@ -148,5 +161,5 @@ try {
 }
 console.log(`simSoccerPerfectSeason: ${summary.cases.length} exact baseline/control receipts accepted.`);
 console.log('simSoccerPerfectSeason: exhaustive legal draft, independent affordable ceiling, 38-game witness, W/D/L and score outcomes bound.');
-console.log('simSoccerPerfectSeason: pinned save/day/version isolation and raw paired daily headroom retained; alpha5 remains a provisional game rule.');
+console.log('simSoccerPerfectSeason: pinned save/day/version isolation and raw paired daily headroom retained against the permanent 40 point margin.');
 console.log(`simSoccerPerfectSeason: source bytes held and all raw reports/copies retained at ${evidence}.`);

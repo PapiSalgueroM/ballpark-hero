@@ -12,6 +12,8 @@ import {
 const weights = [2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1];
 const dates = Array.from({ length: 128 }, (_, i) => new Date(Date.UTC(2026, 0, 1 + i)).toISOString().slice(0, 10));
 const cheapest = Array(11).fill(0);
+// First remote 128-day mean gap was 56.734375 points, leaving 16.734375 above this gate.
+const requiredMeanPointsGap = 40;
 const observations: Record<string, unknown> = {};
 function retain(name: string, value: unknown) {
   observations[name] = value;
@@ -241,24 +243,19 @@ describe('Soccer Perfect Season pure outcomes', () => {
     });
     const meanPointsGap = pairs.reduce((sum, pair) => sum + pair.pointsGap, 0) / pairs.length;
     const meanWinsGap = pairs.reduce((sum, pair) => sum + pair.winsGap, 0) / pairs.length;
-    const marginText = process.env.SOCCER_SEASON_MIN_POINTS_GAP;
-    const margin = marginText === undefined ? null : Number(marginText);
     const measurement = { version: SOCCER_PS_VERSION, alpha: SOCCER_PS_ALPHA, seedCount: pairs.length,
-      acceptance: margin === null ? 'Direction only; alpha and fixed margin remain provisional' : 'Fixed margin supplied after remote headroom measurement',
-      meanPointsGap, meanWinsGap, requiredMeanPointsGap: margin, pairs };
+      acceptance: 'Permanent mean points margin set below measured paired daily headroom',
+      meanPointsGap, meanWinsGap, requiredMeanPointsGap, pairs };
     if (process.env.SOCCER_SEASON_MEASURE_OUT) {
       const file = process.env.SOCCER_SEASON_MEASURE_OUT;
       mkdirSync(path.dirname(file), { recursive: true });
       writeFileSync(file, JSON.stringify(measurement, null, 2) + '\n');
     }
-    console.log('SOCCER_SEASON_MEASUREMENT: ' + JSON.stringify({ seedCount: pairs.length, meanPointsGap, meanWinsGap, requiredMeanPointsGap: margin, alpha: SOCCER_PS_ALPHA }));
+    console.log('SOCCER_SEASON_MEASUREMENT: ' + JSON.stringify({ seedCount: pairs.length, meanPointsGap, meanWinsGap, requiredMeanPointsGap, alpha: SOCCER_PS_ALPHA }));
     expect(pairs.every(pair => pair.strongest.wins === 38 && pair.strongest.points === 114 && pair.cheapestSpent === 33)).toBe(true);
     expect(pairs.every(pair => pair.cheapOdds.win < pair.strongOdds.win)).toBe(true);
     expect(meanPointsGap).toBeGreaterThan(0);
     expect(meanWinsGap).toBeGreaterThan(0);
-    if (margin !== null) {
-      expect(Number.isFinite(margin) && margin > 0).toBe(true);
-      expect(meanPointsGap).toBeGreaterThan(margin);
-    }
+    expect(meanPointsGap).toBeGreaterThan(requiredMeanPointsGap);
   });
 });
