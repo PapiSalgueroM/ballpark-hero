@@ -19,7 +19,10 @@
  *      hurt nor a bench year is exactly 17 games. Then the reader itself is
  *      proved: one season doctored to be hurt for certain must be told as
  *      hurt and set aside.
- *   4  No sideways scroll on the hub at either width, and no page error.
+ *   4  The guide a first visit opens states the four changed rules (slot
+ *      pay, the kicker's round, the 16 game throwback, the bank), read in
+ *      the dialog of the built page at both widths.
+ *   5  No sideways scroll on the hub at either width, and no page error.
  *
  * Assertions read the save the board wrote (the engine's own words) and the
  * text a person sees, never a number this file computed for itself.
@@ -34,7 +37,8 @@
  *
  * NEGATIVE CONTROL: NFL_TRUTH_WALK_CONTROL=seventeen rewrites the season
  * length ledger in the served code so 2005 to 2020 read 17 games again. The
- * two schedule checks of section 1 must then fail and nothing else may, and
+ * two schedule checks of section 1 and the guide's schedule line of section 4
+ * must then fail and nothing else may, and
  * the run refuses to count if the rewrite matched nothing.
  */
 import pw from './lib/playwrightLoader.mjs';
@@ -54,7 +58,7 @@ const errors = [];
 const browser = await chromium.launch();
 
 /** A clean visitor at one width: nothing saved, the database host blocked, the rules gate already seen. */
-async function open(width, height) {
+async function open(width, height, { firstVisit = false } = {}) {
   const context = await browser.newContext({ viewport: { width, height } });
   await context.route(/supabase\.co/, r => r.abort());
   if (CONTROL) {
@@ -64,7 +68,7 @@ async function open(width, height) {
   }
   const page = await context.newPage();
   page.on('pageerror', e => errors.push(String(e)));
-  await page.addInitScript(() => localStorage.setItem('rules-gate-seen:/nfl-my-career', '1'));
+  if (!firstVisit) await page.addInitScript(() => localStorage.setItem('rules-gate-seen:/nfl-my-career', '1'));
   return { context, page };
 }
 
@@ -303,12 +307,32 @@ for (const [w, h] of WIDTHS) {
   await context.close();
 }
 
-console.log('4) the page itself');
+for (const [w, h] of WIDTHS) {
+  console.log(`4) the guide a first visit opens states the changed rules, at ${w} by ${h}`);
+  /* The round first wrote these rules into the page's own steps, which render nowhere while the game has a
+     guide. They reach the ? through GameHelp's extraRules now, and this reads them where a person does: in
+     the dialog the built page opens on a first visit. The schedule line is built from the season ledger, so
+     under the control (the ledger rewritten to 17) it must stop saying 16. */
+  const { context, page } = await open(w, h, { firstVisit: true });
+  await page.goto(`${BASE}/nfl-my-career`, { waitUntil: 'networkidle' });
+  const dialog = page.getByRole('dialog', { name: 'How to play' });
+  await dialog.first().waitFor({ state: 'visible', timeout: 20000 }).catch(() => {});
+  const text = (await dialog.count()) ? ((await dialog.first().textContent()) ?? '') : '';
+  say(text.includes('The rules'), `the guide opened on a first visit (${text.length} characters)`);
+  say(/is paid by his draft slot: in \d{4} money the first pick makes \$[0-9.]+M a year and the last pick about \$[0-9.]+M/.test(text), 'it says a rookie is paid by his draft slot, with the first and the last pick');
+  say(text.includes('In this game a kicker goes in round four or later.'), 'it says a kicker goes in round four or later');
+  say(text.includes('Throwback seasons are 16 games'), 'it says throwback seasons are 16 games', true);
+  say(text.includes('The account cannot go below zero.') && text.includes('sold at a bad price'), 'it says the account stops at zero, after savings and a forced sale');
+  say(await noSideScroll(page), `no sideways scroll with the guide open at ${w} wide`);
+  await context.close();
+}
+
+console.log('5) the page itself');
 /* The blocked database host can surface as a failed fetch; that one is the walk's own doing. */
 const real = errors.filter(e => !/Failed to fetch|NetworkError|Load failed/i.test(e));
 say(real.length === 0, `no page errors on the walk (${real.length ? real[0] : 'clean'}; ${errors.length - real.length} blocked request errors set aside)`);
 
 await browser.close();
-const code = verdict('playNflTruth', CONTROL ? proof : null, { minGuarded: 4 });
+const code = verdict('playNflTruth', CONTROL ? proof : null, { minGuarded: 6 });
 if (code || CONTROL) process.exit(code);
 console.log('\nplayNflTruth: green. A kicker goes late and is paid his slot, throwback seasons are 16 games, the bank stops at zero on load, and sacks come in halves.');
