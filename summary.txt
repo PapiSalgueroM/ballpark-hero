@@ -1,0 +1,6 @@
+probe2 exit=0 9s |    Duration  8.89s (transform 2.28s, setup 71ms, collect 2.95s, tests 4.73s, environment 403ms, prepare 260ms)
+m-restartbeat exit=1 7s | simLiveSimMotion: control restartbeat turned "R6: a chance starts with the ball" red on an assertion (1 failed), as it must.
+m-kickoffcut exit=1 4s | simLiveSimMotion: control kickoffcut turned "R9: a goal gets its kick off" red on an assertion (1 failed), as it must.
+m-kickoffwait exit=1 4s | simLiveSimMotion: control kickoffwait turned "R9: a goal gets its kick off" red on an assertion (1 failed), as it must.
+vitest-motion exit=0 41s |    Duration  41.03s (transform 2.32s, setup 72ms, collect 2.98s, tests 36.92s, environment 368ms, prepare 161ms)
+tsc exit=0 53s | 
