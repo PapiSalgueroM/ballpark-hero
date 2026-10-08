@@ -1,0 +1,7 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+sim exit=0 16s | simSeasonCentreMotion: 17 checks, 0 failed
+vitest-round exit=0 64s |    Duration  62.68s (transform 6.65s, setup 767ms, collect 10.46s, tests 56.90s, environment 4.44s, prepare 1.48s)
+simNoRivalNames exit=0 13s | No rival product names found. 0 findings.
+tsc exit=0 79s | 
+simHarnessAnchors exit=0 31s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+play exit=0 143s | playSeasonCentreMotion: 77 checks, 0 failed
