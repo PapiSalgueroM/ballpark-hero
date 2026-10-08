@@ -1,0 +1,11 @@
+playTranslatedPage: http://localhost:4173, 10 page(s), views phone and desktop, text keep and alter
+  PASS  0. the served entry chunk (/assets/index-BZ6fKzym.js) holds the guard's off switch __DUKB_NO_TRANSLATE_GUARD__
+  PASS  0. the served entry chunk holds the guard's console line
+  PASS  0. the served entry chunk holds layer two's off switch __DUKB_NO_TRANSLATE_LIVE__
+
+COST, 3 run(s) of each, the middle one shown (all runs in brackets). The walk: /soccer-career untranslated, create flow and 30 career presses, 1280 by 900.
+  build           script s                  tasks s                   100k rewrites ms        20k element ms          20k text node ms        walk
+  both layers     0.92 [0.92 0.92 0.96]     3.02 [3.02 2.94 3.09]     91 [91 87 94]           81 [77 94 81]           84 [84 75 85]           40 steps to age 20 (guard on, layer two on)
+  layer one only  0.93 [0.92 0.93 0.93]     2.92 [2.92 2.89 3.05]     86 [85 86 88]           65 [65 65 66]           56 [56 71 56]           40 steps to age 20 (guard on, layer two off)
+  no guard        0.92 [0.93 0.92 0.92]     2.99 [3.05 2.99 2.96]     85 [81 88 85]           60 [58 69 60]           56 [56 59 53]           40 steps to age 20 (guard off, layer two off)
+playTranslatedPage: cost measured, 0 checks, 0 failed

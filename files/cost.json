@@ -1,0 +1,119 @@
+{
+ "base": "http://localhost:4173",
+ "cost": {
+  "both layers": [
+   {
+    "script": 0.921712,
+    "task": 3.015854,
+    "steps": 40,
+    "age": 20,
+    "guardOn": true,
+    "live": true,
+    "stuck": "",
+    "writes": 91.09999999997672,
+    "elements": 76.5,
+    "textNodes": 83.90000000002328
+   },
+   {
+    "script": 0.923344,
+    "task": 2.940628,
+    "steps": 40,
+    "age": 20,
+    "guardOn": true,
+    "live": true,
+    "stuck": "",
+    "writes": 86.70000000001164,
+    "elements": 93.70000000001164,
+    "textNodes": 75
+   },
+   {
+    "script": 0.958028,
+    "task": 3.090306,
+    "steps": 40,
+    "age": 20,
+    "guardOn": true,
+    "live": true,
+    "stuck": "",
+    "writes": 94.20000000006985,
+    "elements": 80.59999999997672,
+    "textNodes": 85.19999999995343
+   }
+  ],
+  "layer one only": [
+   {
+    "script": 0.91843,
+    "task": 2.920765,
+    "steps": 40,
+    "age": 20,
+    "guardOn": true,
+    "live": false,
+    "stuck": "",
+    "writes": 85.19999999995343,
+    "elements": 64.60000000003492,
+    "textNodes": 55.59999999997672
+   },
+   {
+    "script": 0.932598,
+    "task": 2.891701,
+    "steps": 40,
+    "age": 20,
+    "guardOn": true,
+    "live": false,
+    "stuck": "",
+    "writes": 85.79999999998836,
+    "elements": 64.79999999998836,
+    "textNodes": 71.20000000001164
+   },
+   {
+    "script": 0.934879,
+    "task": 3.051562,
+    "steps": 40,
+    "age": 20,
+    "guardOn": true,
+    "live": false,
+    "stuck": "",
+    "writes": 88.09999999997672,
+    "elements": 66.20000000006985,
+    "textNodes": 56.09999999997672
+   }
+  ],
+  "no guard": [
+   {
+    "script": 0.931438,
+    "task": 3.047893,
+    "steps": 40,
+    "age": 20,
+    "guardOn": false,
+    "live": false,
+    "stuck": "",
+    "writes": 81,
+    "elements": 58.29999999998836,
+    "textNodes": 55.899999999965075
+   },
+   {
+    "script": 0.917282,
+    "task": 2.986835,
+    "steps": 40,
+    "age": 20,
+    "guardOn": false,
+    "live": false,
+    "stuck": "",
+    "writes": 87.70000000001164,
+    "elements": 69.39999999996508,
+    "textNodes": 59.20000000001164
+   },
+   {
+    "script": 0.915323,
+    "task": 2.955514,
+    "steps": 40,
+    "age": 20,
+    "guardOn": false,
+    "live": false,
+    "stuck": "",
+    "writes": 84.90000000002328,
+    "elements": 60.199999999953434,
+    "textNodes": 53
+   }
+  ]
+ }
+}
