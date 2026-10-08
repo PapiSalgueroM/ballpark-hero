@@ -1,0 +1,40 @@
+#!serve
+#!playwright
+# Round 1051 fixer 2, closing gates on abc797de (both bases merged, up to date)
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vit-hall: node_modules/.bin/vitest run src/test/careerHall.test.tsx src/test/careerHallV1Replay.test.ts src/test/usCareerHallBoard.test.tsx src/test/usCareerActionConfirm.test.tsx --testTimeout=300000 --hookTimeout=120000
+vit-unchanged: node_modules/.bin/vitest run src/test/usCareerProspect.test.tsx src/test/usCareerStatLines.test.tsx src/test/careerSeasonReview.test.tsx src/test/usCareerSummer.test.tsx src/test/noDoubleRecord.test.tsx src/test/usBoardFixture.test.tsx --testTimeout=300000 --hookTimeout=120000
+full-nfl: TMPDIR=$(mktemp -d) node scripts/simCareerHall.mjs nfl
+full-nba: TMPDIR=$(mktemp -d) node scripts/simCareerHall.mjs nba
+full-mlb: TMPDIR=$(mktemp -d) node scripts/simCareerHall.mjs mlb
+full-nhl: TMPDIR=$(mktemp -d) node scripts/simCareerHall.mjs nhl
+ctl-nfl: bash .rc/x/rc-controls2.sh nfl
+ctl-nba: bash .rc/x/rc-controls2.sh nba
+ctl-mlb: bash .rc/x/rc-controls2.sh mlb
+ctl-nhl: bash .rc/x/rc-controls2.sh nhl
+board-nostamp: TMPDIR=$(mktemp -d) SIM_CONTROL=nostamp node scripts/simCareerHall.mjs nba
+board-talkdraws: TMPDIR=$(mktemp -d) SIM_CONTROL=talkdraws node scripts/simCareerHall.mjs nba
+board-deckfarewelloff: TMPDIR=$(mktemp -d) SIM_CONTROL=deckfarewelloff node scripts/simCareerHall.mjs nba
+board-twice: TMPDIR=$(mktemp -d) SIM_CONTROL=twice node scripts/simCareerHall.mjs nba
+board-seekexclude: TMPDIR=$(mktemp -d) SIM_CONTROL=seekexclude node scripts/simCareerHall.mjs nba
+board-jerseyignore: TMPDIR=$(mktemp -d) SIM_CONTROL=jerseyignore node scripts/simCareerHall.mjs nba
+board-eraunguarded: TMPDIR=$(mktemp -d) SIM_CONTROL=eraunguarded node scripts/simCareerHall.mjs nba
+walk: SHOTS=$RC_OUT node scripts/playCareerHallLine.mjs
+walk-noline: PLAY_CONTROL=noline SHOTS=$RC_OUT node scripts/playCareerHallLine.mjs
+weight: bash .rc/x/weight.sh
+sweepWeight: node scripts/sweepWeight.mjs
+press: node scripts/playCareerPress.mjs
+pressProbe: node .rc/x/pressProbe.mjs
+parity: node scripts/simUsBoardParity.mjs
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
+simUsCareerDeckC: node scripts/simUsCareerDeckC.mjs
+simUsCareerActionConfirm: node scripts/simUsCareerActionConfirm.mjs
+simNflCareer: node scripts/simNflCareer.mjs
+simNbaCareer: node scripts/simNbaCareer.mjs
+simMlbCareer: node scripts/simMlbCareer.mjs
+simNhlCareer: node scripts/simNhlCareer.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simInventedNames: node scripts/simInventedNames.mjs

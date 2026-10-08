@@ -1,0 +1,43 @@
+
+/nfl-my-career
+  saves: standout RB, 11 seasons, retired through the hub, 1470 then 1640, line of 183 characters; plain QB, 10 seasons, 265; old nfl-engine-8
+  CAUGHT  nfl standout 390 reduced: the line is in the card and fully shown
+  CAUGHT  nfl standout 390 reduced: the save is retired and stamped hallCal 2 (it reads undefined)
+  CAUGHT  nfl standout 390 reduced: the line is the engine's own for this career (page "", engine "The voters weigh the hardware first: rings, the major awards, All-Pro years. Then your seasons and your numbers, and your 135 rushing touchdowns sat near the top of this game's books.")
+  CAUGHT  nfl standout 390 reduced: the legacy pill is the calibration 2 score (pill 1470, engine 1640, calibration 1 1470)
+  PASS  nfl standout 390 reduced: the settled page is not wider than the viewport (390 of 390; widest frame while landing 390)
+  PASS  nfl standout 390 reduced: the card's first button is inside the viewport and can be pressed
+  PASS  nfl standout 390 reduced: no page error
+
+/nba-my-career
+  saves: standout PF, 17 seasons, retired through the hub, 882 then 1022, line of 177 characters; plain PG, 10 seasons, 107; old nba-engine-9
+  CAUGHT  nba standout 390 reduced: the line is in the card and fully shown
+  CAUGHT  nba standout 390 reduced: the save is retired and stamped hallCal 2 (it reads undefined)
+  CAUGHT  nba standout 390 reduced: the line is the engine's own for this career (page "", engine "The voters weigh the hardware first: rings, MVPs, Finals MVPs, All-NBA years. Then your seasons and your numbers, and your 15,699 rebounds sat near the top of this game's books.")
+  CAUGHT  nba standout 390 reduced: the legacy pill is the calibration 2 score (pill 882, engine 1022, calibration 1 882)
+  PASS  nba standout 390 reduced: the settled page is not wider than the viewport (390 of 390; widest frame while landing 390)
+  PASS  nba standout 390 reduced: the card's first button is inside the viewport and can be pressed
+  PASS  nba standout 390 reduced: no page error
+
+/mlb-my-career
+  saves: standout 1B, 19 seasons, retired through the hub, 861 then 904, line of 175 characters; plain SP, 10 seasons, 340; old mlb-engine-0
+  CAUGHT  mlb standout 390 reduced: the line is in the card and fully shown
+  CAUGHT  mlb standout 390 reduced: the save is retired and stamped hallCal 2 (it reads undefined)
+  CAUGHT  mlb standout 390 reduced: the line is the engine's own for this career (page "", engine "The voters weigh the hardware first: rings, the major awards, All-Star years. Then your seasons and your numbers, and your 616 home runs sat near the top of this game's books.")
+  CAUGHT  mlb standout 390 reduced: the legacy pill is the calibration 2 score (pill 861, engine 904, calibration 1 861)
+  PASS  mlb standout 390 reduced: the settled page is not wider than the viewport (390 of 390; widest frame while landing 390)
+  PASS  mlb standout 390 reduced: the card's first button is inside the viewport and can be pressed
+  PASS  mlb standout 390 reduced: no page error
+
+/nhl-my-career
+  saves: standout D, 18 seasons, retired through the hub, 1299 then 1362, line of 173 characters; plain C, 10 seasons, 159; old nhl-engine-0
+  CAUGHT  nhl standout 390 reduced: the line is in the card and fully shown
+  CAUGHT  nhl standout 390 reduced: the save is retired and stamped hallCal 2 (it reads undefined)
+  CAUGHT  nhl standout 390 reduced: the line is the engine's own for this career (page "", engine "The voters weigh the hardware first: Cups, the major awards, All-Star years. Then your seasons and your numbers, and your 1,490 points sat near the top of this game's books.")
+  CAUGHT  nhl standout 390 reduced: the legacy pill is the calibration 2 score (pill 1299, engine 1362, calibration 1 1299)
+  PASS  nhl standout 390 reduced: the settled page is not wider than the viewport (390 of 390; widest frame while landing 390)
+  PASS  nhl standout 390 reduced: the card's first button is inside the viewport and can be pressed
+  PASS  nhl standout 390 reduced: no page error
+
+playCareerHallLine control noline: all 16 guarded checks fired (mutations landed: {"seededRetired":4})
+playCareerHallLine: 4 routes, 4 walks, 28 checks, control noline, the control fired on every guarded check
