@@ -22,6 +22,7 @@ import { ordinal } from '@/lib/soccerCareerLeague';
 import { escapeCloses, focusDialogOnMount } from '@/lib/dialogA11y';
 
 const loadSheet = () => import('./SquadSheet');
+const FirstSheet = lazy(loadSheet);
 
 const TILE_SOURCE: Record<SquadSource, string> = {
   real: 'Real squad',
@@ -91,9 +92,10 @@ export function SquadTile({ career }: { career: CareerState }) {
   const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState(false);
   const [attempt, setAttempt] = useState(0);
+  /* A retry needs a new lazy component: React keeps a failed one failed. */
+  const [Again, setAgain] = useState<typeof FirstSheet | null>(null);
   const tile = useRef<HTMLButtonElement | null>(null);
-  /* A new lazy component for every attempt: React keeps a failed one failed. */
-  const Sheet = useMemo(() => lazy(loadSheet), [attempt]);
+  const Sheet = Again ?? FirstSheet;
 
   if (!view) return null;
 
@@ -138,7 +140,7 @@ export function SquadTile({ career }: { career: CareerState }) {
       {open && (
         <SheetBoundary
           key={attempt}
-          onRetry={() => setAttempt(n => n + 1)}
+          onRetry={() => { setAgain(() => lazy(loadSheet)); setAttempt(n => n + 1); }}
           onClose={close}
         >
           <Suspense fallback={<Loading onChange={setBusy} />}>

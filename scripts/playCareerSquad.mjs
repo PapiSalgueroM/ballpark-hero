@@ -537,7 +537,122 @@ if (!mounted) {
   if (process.env.REQUIRE_PAGE === '1') check(false, 'page: the built Soccer Career chunk does not hold the Squad tile, and REQUIRE_PAGE=1 says it must');
   else console.log('note page mode not run: the tile is not mounted on /soccer-career in this build (sections 1 and 9 are page checks)');
 }
-/* PAGE-MODE */
+if (mounted) {
+  const { spawn } = await import('node:child_process');
+  const PORT2 = PORT + 1;
+  const BASE2 = `http://127.0.0.1:${PORT2}`;
+  const host = spawn(process.execPath, [path.join(ROOT, 'scripts/lib/hostLikeServer.mjs'), DIST, String(PORT2)], { stdio: 'ignore' });
+  await new Promise(done => setTimeout(done, 1500));
+  try {
+    const sheetChunks = fs.readdirSync(ASSETS).filter(f => f.endsWith('.js') && fs.readFileSync(path.join(ASSETS, f), 'utf8').includes('data-squad-xi'));
+    if (!check(sheetChunks.length === 1, `page: the sheet is one chunk of its own (${sheetChunks.join(', ') || 'none'})`)) throw new Error('no single sheet chunk');
+    const SHEET_CHUNK = sheetChunks[0];
+    let chunkText = fs.readFileSync(path.join(ASSETS, SHEET_CHUNK), 'utf8');
+    if (CONTROL === 'label') {
+      for (const needle of ['← Back to your career', '\\u2190 Back to your career']) {
+        const n = chunkText.split(needle).length - 1;
+        if (n) { controlEdits += n; chunkText = chunkText.split(needle).join('Close'); }
+      }
+    }
+    /* the walker's own rule, read from its file's TEXT (the file runs on import) */
+    const src = fs.readFileSync(path.join(ROOT, 'scripts/playSoccerCareer.mjs'), 'utf8').replace(/\r\n/g, '\n');
+    const at = src.indexOf('const ACTIONS = [');
+    const end = src.indexOf('];', at);
+    const body = src.slice(at, end).replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/[^\n]*/g, '');
+    const actions = [...body.matchAll(/'([^']+)'/g)].map(m => m[1]);
+    const skipLine = src.split('\n').find(l => l.startsWith('const SKIP = /')) || '';
+    const skip = skipLine.slice(skipLine.indexOf('/') + 1, skipLine.lastIndexOf('/'));
+    check(at >= 0 && actions.includes('Next Season') && actions.includes('Close') && skip.includes('Retire'), `9. parsed the walker's ACTIONS (${actions.length} entries) and SKIP from its text`);
+
+    const openPage = async (save, { width = 390, height = 844 } = {}) => {
+      const ctx = await browser.newContext({ viewport: { width, height } });
+      await ctx.addInitScript(([key, value, extra]) => {
+        try {
+          if (!window.sessionStorage.getItem('__seeded')) {
+            window.sessionStorage.setItem('__seeded', '1');
+            window.localStorage.setItem('cookie-consent', 'essential');
+            window.localStorage.setItem(key, value);
+            window.localStorage.setItem('soccerSquad:help', '1');
+          }
+        } catch { /* private mode */ }
+        if (extra) document.addEventListener('DOMContentLoaded', () => { import(extra).catch(() => {}); });
+      }, [SAVE_KEY, JSON.stringify(save), CONTROL === 'static' ? `/assets/${SHEET_CHUNK}` : '']);
+      await ctx.route(/supabase\.co/, r => r.abort());
+      await ctx.route(`**/assets/${SHEET_CHUNK}`, r => r.fulfill({ status: 200, contentType: 'application/javascript', body: chunkText }));
+      const page = await ctx.newPage();
+      const js = [];
+      page.on('request', r => { const u = r.url(); if (u.includes('/assets/') && u.endsWith('.js')) js.push(u.split('/').pop()); });
+      await page.goto(`${BASE2}/soccer-career`, { waitUntil: 'domcontentloaded', timeout: 60000 });
+      await page.waitForSelector(TILE, { timeout: 30000 });
+      return { ctx, page, js };
+    };
+    if (CONTROL === 'static') controlEdits += 1;
+    const walkerPick = page => page.evaluate(([acts, skipSrc]) => {
+      const skipRe = new RegExp(skipSrc);
+      const usable = [...document.querySelectorAll('button')].filter(b => !b.disabled && b.textContent.trim() && !skipRe.test(b.textContent.trim()));
+      let pick = null;
+      for (const a of acts) { pick = usable.find(b => b.textContent.trim().startsWith(a)); if (pick) break; }
+      if (!pick) pick = usable[0] ?? null;
+      const ours = [...document.querySelectorAll('[data-squad-tile], [data-squad-sheet] button')].map(b => b.textContent.trim());
+      return {
+        pick: pick ? pick.textContent.trim().slice(0, 40) : null,
+        inside: !!pick && (!!pick.closest('[data-squad-sheet]') || pick.hasAttribute('data-squad-tile')),
+        clash: ours.filter(l => acts.some(a => l.startsWith(a))),
+      };
+    }, [actions, skip]);
+
+    for (const k of ['A', 'B']) {
+      const { ctx, page, js } = await openPage(SAVES[k]);
+      const v = VIEW[k];
+      await page.waitForTimeout(1500);
+      if (k === 'A') check(!js.includes(SHEET_CHUNK), `1. no sheet chunk on a fresh hub (${js.length} scripts loaded)`);
+      const got = await page.evaluate(sel => {
+        const t = document.querySelector(sel);
+        return { rank: t.querySelector('[data-squad-rank]')?.getAttribute('data-squad-rank'), trust: t.querySelector('[data-squad-trust]')?.getAttribute('data-squad-trust'), n: document.querySelectorAll(sel).length };
+      }, TILE);
+      check(got.n === 1 && got.rank === String(v.rank) && got.trust === String(v.trust.pct), `2. page, save ${k}: one tile on the hub, printing rank ${v.rank} and trust ${v.trust.pct} (${JSON.stringify(got)})`);
+      let inside = 0; const clashes = new Set(); let screens = 0;
+      const look = async () => { const r = await walkerPick(page); screens += 1; if (r.inside) inside += 1; r.clash.forEach(c => clashes.add(c)); return r; };
+      const hub = await look();
+      await page.evaluate(() => window.scrollTo(0, 200));
+      const y0 = await page.evaluate(() => window.scrollY);
+      const before = await page.evaluate(key => window.localStorage.getItem(key), SAVE_KEY);
+      await page.click(TILE);
+      await screenIs(page, 'home');
+      if (k === 'A') check(js.filter(n => n === SHEET_CHUNK).length === 1, `1. one request for the sheet chunk after the press (${js.filter(n => n === SHEET_CHUNK).length})`);
+      await look();
+      await shot(page, `page-${k}-home-390`);
+      for (const id of SCREENS) {
+        if (await page.locator(`${SHEET} [data-squad-open="${id}"]`).count() === 0) continue;
+        await page.click(`${SHEET} [data-squad-open="${id}"]`);
+        await screenIs(page, id);
+        await look();
+        await backHome(page);
+      }
+      await page.click(`${SHEET} button[aria-label="How the squad works"]`);
+      await screenIs(page, 'help');
+      await look();
+      await page.click(`${SHEET} button:has-text("Worked examples")`);
+      await screenIs(page, 'examples');
+      await look();
+      await page.keyboard.press('Escape');
+      await screenIs(page, 'home');
+      await page.keyboard.press('Escape');
+      await page.waitForSelector(SHEET, { state: 'detached', timeout: 8000 });
+      const y1 = await page.evaluate(() => window.scrollY);
+      const after = await page.evaluate(key => window.localStorage.getItem(key), SAVE_KEY);
+      check(inside === 0, `9. page, save ${k}: the walker's pick never landed inside the tile or the sheet over ${screens} screens (on the hub it presses "${hub.pick}")`);
+      check(clashes.size === 0, `9. page, save ${k}: no label in the tile or the sheet starts with a walker ACTIONS entry (${[...clashes].join(', ') || 'none'})`);
+      check(y1 === y0, `7. page, save ${k}: the career page did not move across open, every screen and close (${y0} then ${y1})`);
+      check(before === after, `6. page, save ${k}: the save string is byte identical after the sheet has been through every screen`);
+      await ctx.close();
+    }
+  } catch (e) {
+    check(false, `page mode stopped: ${String(e).slice(0, 200)}`);
+  } finally {
+    try { host.kill(); } catch { /* gone */ }
+  }
+}
 
 await browser.close();
 server.close();
