@@ -1,0 +1,243 @@
+{
+  "cases": {
+    "belowZero-390": {
+      "venuesAtStart": [
+        {
+          "t": "The Leisure Centre 1,200 · 0.006m · cannot afford",
+          "disabled": true,
+          "selected": true
+        },
+        {
+          "t": "Town Hall 3,000 · 0.018m · needs 12",
+          "disabled": true,
+          "selected": false
+        },
+        {
+          "t": "The Ballroom 6,000 · 0.050m · needs 26",
+          "disabled": true,
+          "selected": false
+        },
+        {
+          "t": "City Arena 16,000 · 0.170m · needs 45",
+          "disabled": true,
+          "selected": false
+        },
+        {
+          "t": "The Dome 42,000 · 0.620m · needs 68",
+          "disabled": true,
+          "selected": false
+        },
+        {
+          "t": "National Stadium 78,000 · 1.450m · needs 86",
+          "disabled": true,
+          "selected": false
+        }
+      ],
+      "bout": "Ugo Delgado appeal 16 rating 48 against his 52 · nobody could split them · purse 0.004m",
+      "forecast": {
+        "attendance": {
+          "v": 8,
+          "t": "8 of 1,200"
+        },
+        "gate": {
+          "v": 0.005,
+          "t": "0.005m"
+        },
+        "purses": {
+          "v": 0.004,
+          "t": "0.004m"
+        },
+        "rent": {
+          "v": 0.006,
+          "t": "0.006m"
+        },
+        "profit": {
+          "v": -0.005,
+          "t": "Loss 0.005m"
+        },
+        "cashAfter": {
+          "v": -0.001,
+          "t": "-0.001m"
+        },
+        "status": [
+          "This show would leave you below 0 and end the promotion."
+        ],
+        "text": "Show cash forecast ? Attendance 8 of 1,200 Gate 0.005m Fighter pay 0.004m Room hire 0.006m Show result Loss 0.005m Cash afterward -0.001m Fighter pay is the larger of 0.004m in guarantees or 0.003m from 58% of the gate. This show would leave you below 0 and end the promotion."
+      },
+      "runDisabled": false,
+      "result": {
+        "attendance": 8,
+        "profit": -0.005,
+        "headerMoney": -0.001,
+        "closedButton": true,
+        "planNext": false
+      },
+      "saved": {
+        "money": -0.001,
+        "closed": true,
+        "exit": "broke",
+        "show": 2
+      },
+      "verdict": "Fight Promoter Your organization. Your roster. Your fight night. Change sport Edge Under Show 2 -0.001m name 8 of 100 Out of the business HOW YOU ARE REMEMBERED A Man With a Ring 0 out of 100 The money ran out after 1 shows. Going under costs 12 points. 1 show, 0 of them in profit. Average house 8. Name 8 out of 100, -0.001m in the bank. 🎟️ Fight Promoter Oct 8, 2026 RESULT A Man With a Ring, 0/1",
+      "errors": []
+    },
+    "belowZero-1280": {
+      "venuesAtStart": [
+        {
+          "t": "The Leisure Centre 1,200 · 0.006m · cannot afford",
+          "disabled": true,
+          "selected": true
+        },
+        {
+          "t": "Town Hall 3,000 · 0.018m · needs 12",
+          "disabled": true,
+          "selected": false
+        },
+        {
+          "t": "The Ballroom 6,000 · 0.050m · needs 26",
+          "disabled": true,
+          "selected": false
+        },
+        {
+          "t": "City Arena 16,000 · 0.170m · needs 45",
+          "disabled": true,
+          "selected": false
+        },
+        {
+          "t": "The Dome 42,000 · 0.620m · needs 68",
+          "disabled": true,
+          "selected": false
+        },
+        {
+          "t": "National Stadium 78,000 · 1.450m · needs 86",
+          "disabled": true,
+          "selected": false
+        }
+      ],
+      "bout": "Ugo Delgado appeal 16 rating 48 against his 52 · nobody could split them · purse 0.004m",
+      "forecast": {
+        "attendance": {
+          "v": 8,
+          "t": "8 of 1,200"
+        },
+        "gate": {
+          "v": 0.005,
+          "t": "0.005m"
+        },
+        "purses": {
+          "v": 0.004,
+          "t": "0.004m"
+        },
+        "rent": {
+          "v": 0.006,
+          "t": "0.006m"
+        },
+        "profit": {
+          "v": -0.005,
+          "t": "Loss 0.005m"
+        },
+        "cashAfter": {
+          "v": -0.001,
+          "t": "-0.001m"
+        },
+        "status": [
+          "This show would leave you below 0 and end the promotion."
+        ],
+        "text": "Show cash forecast ? Attendance 8 of 1,200 Gate 0.005m Fighter pay 0.004m Room hire 0.006m Show result Loss 0.005m Cash afterward -0.001m Fighter pay is the larger of 0.004m in guarantees or 0.003m from 58% of the gate. This show would leave you below 0 and end the promotion."
+      },
+      "runDisabled": false,
+      "result": {
+        "attendance": 8,
+        "profit": -0.005,
+        "headerMoney": -0.001,
+        "closedButton": true,
+        "planNext": false
+      },
+      "saved": {
+        "money": -0.001,
+        "closed": true,
+        "exit": "broke",
+        "show": 2
+      },
+      "verdict": "Fight Promoter Your organization. Your roster. Your fight night. Change sport Edge Under Show 2 -0.001m name 8 of 100 Out of the business HOW YOU ARE REMEMBERED A Man With a Ring 0 out of 100 The money ran out after 1 shows. Going under costs 12 points. 1 show, 0 of them in profit. Average house 8. Name 8 out of 100, -0.001m in the bank. 🎟️ Fight Promoter Oct 8, 2026 RESULT A Man With a Ring, 0/1",
+      "errors": []
+    },
+    "lockedRoom": {
+      "trail": [
+        {
+          "attempt": 0,
+          "rep": 13,
+          "money": 0.49,
+          "closed": false,
+          "bout": "Fabio Zadrozny appeal 21 rating 46 against his 41 · nobody c"
+        },
+        {
+          "attempt": 1,
+          "rep": 15.5,
+          "money": 0.48,
+          "closed": false,
+          "bout": "Fabio Zadrozny appeal 23 rating 46 against his 41 · nobody c"
+        },
+        {
+          "attempt": 2,
+          "rep": 15,
+          "money": 0.47,
+          "closed": false,
+          "bout": "Fabio Zadrozny appeal 23 rating 46 against his 40 · nobody c"
+        },
+        {
+          "attempt": 3,
+          "rep": 17.5,
+          "money": 0.461,
+          "closed": false,
+          "bout": "Fabio Zadrozny appeal 25 rating 46 against his 40 · nobody c"
+        },
+        {
+          "attempt": 4,
+          "rep": 18.5,
+          "money": 0.454,
+          "closed": false,
+          "bout": "Fabio Zadrozny appeal 27 rating 45 against his 40 · nobody c"
+        },
+        {
+          "attempt": 5,
+          "rep": 19.5,
+          "money": 0.448,
+          "closed": false,
+          "bout": "Fabio Zadrozny appeal 29 rating 45 against his 40 · nobody c"
+        },
+        {
+          "attempt": 6,
+          "rep": 22,
+          "money": 0.441,
+          "closed": false,
+          "bout": "Fabio Zadrozny appeal 31 rating 45 against his 40 · nobody c"
+        },
+        {
+          "attempt": 7,
+          "rep": 24.5,
+          "money": 0.436,
+          "closed": false,
+          "bout": "Fabio Zadrozny appeal 31 rating 45 against his 40 · nobody c"
+        },
+        {
+          "attempt": 8,
+          "rep": 22.7,
+          "money": 0.432,
+          "closed": false,
+          "bout": "Fabio Zadrozny appeal 34 rating 44 against his 40 · nobody c"
+        },
+        {
+          "attempt": 9,
+          "rep": 28.4,
+          "money": 0.428,
+          "closed": false,
+          "bout": "Fabio Zadrozny appeal 36 rating 44 against his 40 · nobody c"
+        }
+      ],
+      "outcome": null,
+      "errors": []
+    }
+  },
+  "notes": []
+}

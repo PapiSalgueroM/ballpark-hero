@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walk-boxing-edge: node .rc/x/walk-boxing-edge.mjs
