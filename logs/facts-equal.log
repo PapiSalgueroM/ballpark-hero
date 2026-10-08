@@ -1,0 +1,45 @@
+
+1. RECORDS: INT_SCORING_RECORDS equals the verified file, both ways
+  18 engine rows, 18 verified rows, 1 held (Senegal)
+
+2. PICKER: every nation on the creation screen, the award only on a verified row
+  FAIL [2]: Argentina: 126 goals (record 126) won the award; it has to be passed
+  FAIL [2]: Belgium: 94 goals (record 94) won the award; it has to be passed
+  FAIL [2]: Brazil: 80 goals (record 80) won the award; it has to be passed
+  FAIL [2]: Colombia: 36 goals (record 36) won the award; it has to be passed
+  FAIL [2]: Croatia: 45 goals (record 45) won the award; it has to be passed
+  FAIL [2]: Egypt: 69 goals (record 69) won the award; it has to be passed
+  FAIL [2]: England: 91 goals (record 91) won the award; it has to be passed
+  FAIL [2]: France: 67 goals (record 67) won the award; it has to be passed
+  FAIL [2]: Germany: 71 goals (record 71) won the award; it has to be passed
+  FAIL [2]: Italy: 35 goals (record 35) won the award; it has to be passed
+  FAIL [2]: Japan: 75 goals (record 75) won the award; it has to be passed
+  FAIL [2]: Netherlands: 55 goals (record 55) won the award; it has to be passed
+  FAIL [2]: Nigeria: 37 goals (record 37) won the award; it has to be passed
+  FAIL [2]: Norway: 65 goals (record 65) won the award; it has to be passed
+  FAIL [2]: Portugal: 146 goals (record 146) won the award; it has to be passed
+  FAIL [2]: South Korea: 59 goals (record 59) won the award; it has to be passed
+  FAIL [2]: Spain: 59 goals (record 59) won the award; it has to be passed
+  FAIL [2]: Uruguay: 69 goals (record 69) won the award; it has to be passed
+  134 nations on the picker: 18 can win it on a verified record, 116 cannot win it at all
+
+3. WIRING: the season calls the award, nothing else grants it, no fallback number
+  1 call from the season, after the summer tournament, 1 grant, inside awardAllTimeTopScorer, no fallback
+
+4. LABELS: every HAND_CLUBS league label verified, pinned or listed as unverified
+  188 labels verified across 82 evidence groups (all 2026-27 or 2026), 0 pinned to their old label (ratchet 0), 2 unverified (ratchet 2)
+
+5. PLAYED: seeded careers, the award the season his goals pass HIS nation's record
+  FAIL [5]: Italy seed 115841: the award at 35 goals for Italy, whose record is 35
+  FAIL [5]: Colombia seed 116850: the award at 36 goals for Colombia, whose record is 36
+  FAIL [5]: Spain seed 143634: the award at 59 goals for Spain, whose record is 59
+  FAIL [5]: South Korea seed 105048: the award at 59 goals for South Korea, whose record is 59
+  FAIL [5]: South Korea seed 136724: the award at 59 goals for South Korea, whose record is 59
+  FAIL [5]: Norway seed 121895: the award at 65 goals for Norway, whose record is 65
+  FAIL [5]: Norway seed 137733: the award at 65 goals for Norway, whose record is 65
+  48 careers (seed 1), 1115 full seasons, 47 awards, every one the season his goals passed his own record (24 while abroad, 31 ina tournament season)
+
+6. LEAGUE WORLD: the pool generator and the facts file say the same thing
+  25 leagues, 438 member names, each lineup read from two hosts; 11 with a format read from two hosts, 2 with no format page and so no shape stated, 2 with no points rule stated; 1 colour(s) in words; 51 shipped, 275 held before 2026, 0 with a first season
+
+control equal: section 2 went red as it must (red: 2, 5)
