@@ -1,0 +1,2 @@
+#!playwright
+old: cp .rc/x/translateGuard.old.ts src/lib/translateGuard.ts && node_modules/.bin/vite build > $RC_OUT/build.log 2>&1 && ONLY=/soccer-career ENGINES=chromium node scripts/playTranslatedPage.mjs
