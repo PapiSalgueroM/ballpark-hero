@@ -3,7 +3,8 @@
    exact shape is a record, storage that throws is no record, and a record
    belongs to a season only by that season's own key. */
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { asResume, clearResume, readResume, resumeLabel, resumeRowIndex, resumeStorageKey, writeResume, type SeasonResume } from '@/lib/season/resume';
+import { asResume, readResume, resumeLabel, resumeRowIndex, resumeStorageKey, type SeasonResume } from '@/lib/season/resume';
+import { clearResume, writeResume } from '@/components/season-centre/resumeStore';
 
 const GOOD: SeasonResume = { key: 'Ada|Arsenal|2031|34|12|7|7.4|centre', year: 2031, md: 13, speed: 3, stable: false };
 
@@ -37,8 +38,10 @@ describe('the resume record', () => {
   it('accepts every speed and both answers for stable', () => {
     for (const speed of [1, 3, 'results'] as const) for (const stable of [true, false]) expect(asResume({ ...GOOD, speed, stable })).toEqual({ ...GOOD, speed, stable });
   });
-  it('drops anything the record does not hold', () => {
-    expect(asResume({ ...GOOD, extra: 1, tag: 'abc' })).toEqual(GOOD);
+  it('writes the five fields and nothing else', () => {
+    writeResume('soccer', { ...GOOD, extra: 1, tag: 'abc' } as SeasonResume);
+    expect(localStorage.getItem('seasonCentre:v1:soccer')).toBe(JSON.stringify(GOOD));
+    expect(asResume({ ...GOOD, extra: 1 })).toMatchObject(GOOD);
   });
   const BAD: [string, unknown][] = [
     ['null', null], ['a string', 'x'], ['a number', 7], ['an array', [GOOD]], ['an empty object', {}],

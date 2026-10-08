@@ -25,22 +25,25 @@ import type { CareerState, ClubData, SeasonRecord } from '@/lib/soccerCareerEngi
 import { applyDecisions, deriveSeason, planMoments, tableAt } from '@/lib/season/core';
 import { SOCCER, buildSoccerSeasonCtx, soccerSeasonKey, type SoccerSeasonCtx } from '@/lib/season/soccer';
 import { ledgerOf, readSeasonMoments } from '@/lib/season/momentsSave';
-import { clearResume, readResume, writeResume } from '@/lib/season/resume';
+import { readResume } from '@/lib/season/resume';
+import { clearResume, writeResume } from '@/components/season-centre/resumeStore';
 import type { CentreMoments } from '@/components/season-centre/MomentHost';
 import { useSoccerMoments } from './useSoccerMoments';
 import { readSeasonDerbies } from '@/lib/soccerCareerDerby';
-import { leagueWithArticle, ordinal } from '@/lib/soccerCareerLeague';
+import { leagueWithArticle, ordinal, readLeagueFinish } from '@/lib/soccerCareerLeague';
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import { SeasonCentre, type CentreModel, type CentrePlace, type CentreSport } from '@/components/season-centre/SeasonCentre';
 import { minuteLabel } from '@/lib/clubManagerClock';
 import { SOCCER_FULL_TIME } from '@/lib/season/soccerEvents';
 import type { HelpWords } from '@/components/season-centre/SeasonCentreHelp';
+import { SeasonPicker, type PickerRow } from '@/components/season-centre/SeasonPicker';
 import type { DerivedGame, DerivedSeason, SeasonEvent } from '@/lib/season/core';
 
 export interface SoccerSeasonCentreProps {
   career: CareerState;
   clubs: ClubData[];
-  row: SeasonRecord;
+  /** The season to show. Round 1046: null opens the list of seasons he can watch again. */
+  row: SeasonRecord | null;
   mode: 'live' | 'watch';
   onClose: () => void;
   /** Round 1047: how a moment writes to the save (the ledger, then the bank). Absent: no moments. */
@@ -195,7 +198,46 @@ export function Tile({ text, exitLabel, onClose, onRetry }: { text: string; exit
   );
 }
 
-function CentreBody({ career, clubs, row, mode, onClose, onCareer, offer }: SoccerSeasonCentreProps) {
+/* Round 1046 (critic C1): which seasons can be watched again as they were.
+   The save keeps one year of the league's world (who won it), so a table
+   season he did not win can only be laid out the same while that world is
+   still its year: later the champion's name is gone, the club names and one
+   time in five his own scores would come out different. A results only
+   season and a title season never read the world, so they always replay. */
+/** The season is the same whatever the save does next. */
+export function seasonStable(mode: 'table' | 'results', finish: number | null | undefined): boolean {
+  return mode !== 'table' || finish === 1;
+}
+/** The season can be shown week by week right now. */
+export function seasonReplays(mode: 'table' | 'results', finish: number | null | undefined, worldYear: number | null | undefined, year: number): boolean {
+  return seasonStable(mode, finish) || worldYear === year;
+}
+
+const LOCKED_WORDS = 'The game did not keep who won the league that season, so it cannot be replayed week by week yet.';
+
+/** The list of seasons he has played, newest first; the ones that replay are buttons. */
+function Replays({ career, clubs, onPick, onClose }: { career: CareerState; clubs: ClubData[]; onPick: (row: SeasonRecord) => void; onClose: () => void }) {
+  const rows = useMemo<PickerRow[]>(() => career.seasons
+    .map((row, at) => ({ row, at }))
+    .filter(x => x.row.type === 'playing' && x.row.apps > 0)
+    .reverse()
+    .map(({ row, at }) => {
+      const ctx = buildSoccerSeasonCtx(career, clubs, row);
+      const finish = readLeagueFinish(row);
+      const place = finish ? `${ordinal(finish.finish)}${finish.size ? ` of ${finish.size}` : ''}` : null;
+      const tally = career.position === 'GK' ? `${row.cleanSheets} clean sheets` : `${row.goals} goals`;
+      return {
+        id: String(at),
+        label: `${row.year}/${String(row.year + 1).slice(-2)} · ${row.club}`,
+        sub: [place, `${row.apps} apps`, tally].filter(Boolean).join(' · '),
+        chip: row.leagueTitle ? '🏆' : undefined,
+        locked: seasonReplays(ctx.mode, ctx.finish?.finish, career.phone?.world?.year, row.year) ? undefined : LOCKED_WORDS,
+      };
+    }), [career, clubs]);
+  return <SeasonPicker title="📺 Season replays" rows={rows} exitLabel="Back to your career" onPick={id => onPick(career.seasons[Number(id)])} onClose={onClose} />;
+}
+
+function CentreBody({ career, clubs, row, mode, onClose, onCareer, offer }: SoccerSeasonCentreProps & { row: SeasonRecord }) {
   const exitLabel = exitLabelOf(mode, career.phase);
   /* the season's facts come from fields a moment never writes, so the plan is
      derived once for the row and not again on every ledger entry */
@@ -218,7 +260,7 @@ function CentreBody({ career, clubs, row, mode, onClose, onCareer, offer }: Socc
      table season he did not win replays the same only while the save still
      holds that year's league (the record says so with `stable`). */
   const [stored] = useState(() => readResume(RESUME_GAME));
-  const stable = ctx.mode !== 'table' || ctx.finish?.finish === 1;
+  const stable = seasonStable(ctx.mode, ctx.finish?.finish);
   const onProgress = useCallback((at: CentrePlace | null) => {
     if (!key) return;
     if (at) writeResume(RESUME_GAME, { key, year: row.year, md: at.md, speed: at.speed, stable });
@@ -230,9 +272,14 @@ function CentreBody({ career, clubs, row, mode, onClose, onCareer, offer }: Socc
 }
 
 export default function SoccerSeasonCentre(props: SoccerSeasonCentreProps) {
+  /* Round 1046: with no season handed in, he picks one from the list first */
+  const [picked, setPicked] = useState<SeasonRecord | null>(null);
+  const row = props.row ?? picked;
   return (
     <CentreBoundary onClose={props.onClose} exitLabel={exitLabelOf(props.mode, props.career.phase)}>
-      <CentreBody {...props} />
+      {row
+        ? <CentreBody key={`${row.year}|${row.club}`} {...props} row={row} />
+        : <Replays career={props.career} clubs={props.clubs} onPick={setPicked} onClose={props.onClose} />}
     </CentreBoundary>
   );
 }

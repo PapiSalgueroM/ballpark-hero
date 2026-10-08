@@ -16,7 +16,8 @@
  *     rows sharing a key fails. Printed: seasons, pairs checked, and how many
  *     one matchday steps moved at least one club (a floor, so a probe whose
  *     tables never change cannot pass).
- *  2. THE RESUME RECORD (src/lib/season/resume.ts), through a storage this
+ *  2. THE RESUME RECORD (src/lib/season/resume.ts reads it, the lazy
+ *     src/components/season-centre/resumeStore.ts writes it), through a storage this
  *     harness owns: a record round trips; fourteen shapes that are not a
  *     record, text that is not JSON and a storage that throws on every call
  *     all read as no record, with no exception; for every played row of
@@ -79,9 +80,9 @@ if (CONTROL === 'resumetag') once(read('src/lib/season/resume.ts'), RESUME_NEEDL
 
 const B = await bundleAwardsNight(ROOT, {
   patches: BUNDLE_CONTROLS[CONTROL] ?? [],
-  extra: { season: 'src/lib/season/soccer.ts', core: 'src/lib/season/core.ts', motion: 'src/lib/motion/rankShift.ts', resume: 'src/lib/season/resume.ts' },
+  extra: { season: 'src/lib/season/soccer.ts', core: 'src/lib/season/core.ts', motion: 'src/lib/motion/rankShift.ts', resume: 'src/lib/season/resume.ts', store: 'src/components/season-centre/resumeStore.ts' },
 });
-const { soccer, season: S, core: C, motion: MO, resume: RS } = B;
+const { soccer, season: S, core: C, motion: MO, resume: RS, store: ST } = B;
 const CLUBS = soccer.FALLBACK_CLUBS;
 
 let checks = 0, failed = 0;
@@ -155,10 +156,10 @@ check(!fails.has('1 keys') && !fails.has('1 shift'), `1. every club's from and t
   const GAME = 'soccer';
   const SLOT = RS.resumeStorageKey(GAME);
   const good = { key: 'a|b|2031|34|12|7|7.4|centre', year: 2031, md: 13, speed: 3, stable: false };
-  RS.writeResume(GAME, good);
+  ST.writeResume(GAME, good);
   const back = RS.readResume(GAME);
   check(SLOT === 'seasonCentre:v1:soccer' && JSON.stringify(back) === JSON.stringify(good), '2. a record round trips under seasonCentre:v1:soccer');
-  RS.clearResume(GAME);
+  ST.clearResume(GAME);
   check(RS.readResume(GAME) === null && !map.has(SLOT), '2. a cleared record is gone');
   const BAD = [null, 'x', 7, [good], {}, { ...good, key: '' }, { ...good, key: 'k'.repeat(201) }, { ...good, year: '2031' }, { ...good, year: 1899 }, { ...good, md: 0 }, { ...good, md: 2.5 }, { ...good, speed: 2 }, { ...good, stable: 1 }, { key: good.key, year: 2031, md: 13, speed: 3 }];
   let badRead = 0, threw = 0;
@@ -169,7 +170,7 @@ check(!fails.has('1 keys') && !fails.has('1 shift'), `1. every club's from and t
   map.set(SLOT, '{not json');
   try { if (RS.readResume(GAME) !== null) badRead += 1; } catch { threw += 1; }
   globalThis.localStorage = { getItem: () => { throw new Error('refused'); }, setItem: () => { throw new Error('refused'); }, removeItem: () => { throw new Error('refused'); } };
-  try { if (RS.readResume(GAME) !== null) badRead += 1; RS.writeResume(GAME, good); RS.clearResume(GAME); } catch { threw += 1; }
+  try { if (RS.readResume(GAME) !== null) badRead += 1; ST.writeResume(GAME, good); ST.clearResume(GAME); } catch { threw += 1; }
   globalThis.localStorage = real;
   check(badRead === 0 && threw === 0, `2. ${BAD.length} shapes that are not a record, text that is not JSON and a storage that throws: ${badRead} read as a record, ${threw} threw`);
 
@@ -255,7 +256,7 @@ const listDir = rel => fs.readdirSync(path.join(ROOT, rel)).filter(f => /\.(ts|t
 const LIB_MOTION = listDir('src/lib/motion');
 const UI_MOTION = listDir('src/components/motion');
 /* files that may draw nothing at random (the list grows as the round's parts land) */
-const NO_DRAW = [...LIB_MOTION, ...UI_MOTION, 'src/lib/season/resume.ts'];
+const NO_DRAW = [...LIB_MOTION, ...UI_MOTION, 'src/lib/season/resume.ts', 'src/components/season-centre/resumeStore.ts', 'src/components/season-centre/SeasonPicker.tsx', 'src/components/season-centre/useBodyLock.ts'];
 const IMPORTS_NOTHING = [...LIB_MOTION, 'src/lib/season/resume.ts'];
 
 function fenceFindings(textOf) {

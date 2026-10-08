@@ -1,14 +1,15 @@
 /* Round 1046: where a viewer stopped watching a season, for any game's
    Season Centre. One small record per game in this browser's localStorage:
-   a per viewer convenience, never part of a save. Every read and write is
-   guarded, a record that is not exactly the shape below is no record, and a
-   record is never repaired: it either names a season the save still holds,
-   by the season's own key, or it is ignored.
+   a per viewer convenience, never part of a save. A record that is not
+   exactly the shape below is no record, and a record is never repaired: it
+   either names a season the save still holds, by the season's own key, or
+   it is ignored.
 
-   This file knows no sport: the game passes its name and how it keys a
-   season. It imports nothing, because the career page reads the record in
-   its first download to draw the Resume chip (scripts/simFlagshipWeight.mjs
-   holds it to that). */
+   This file is the READ side and knows no sport: the game passes its name
+   and how it keys a season. It imports nothing and stays small, because the
+   career page reads the record in its first download to draw the Resume
+   chip (scripts/simFlagshipWeight.mjs holds it to that). The write side
+   loads with the Season Centre: src/components/season-centre/resumeStore.ts. */
 
 export type ResumeSpeed = 1 | 3 | 'results';
 
@@ -25,32 +26,18 @@ export interface SeasonResume {
 
 export const resumeStorageKey = (game: string) => `seasonCentre:v1:${game}`;
 
-const whole = (v: unknown, lo: number, hi: number): v is number => typeof v === 'number' && Number.isInteger(v) && v >= lo && v <= hi;
+const whole = (v: unknown, lo: number, hi: number) => Number.isInteger(v) && (v as number) >= lo && (v as number) <= hi;
 
-/** The record in a parsed value, or null when it is anything but exactly that shape. */
+/** The record in a parsed value, or null when it is anything but that shape. */
 export function asResume(v: unknown): SeasonResume | null {
-  if (!v || typeof v !== 'object' || Array.isArray(v)) return null;
-  const r = v as Record<string, unknown>;
-  if (typeof r.key !== 'string' || r.key.length < 1 || r.key.length > 200) return null;
-  if (!whole(r.year, 1900, 2200) || !whole(r.md, 1, 400)) return null;
-  if (r.speed !== 1 && r.speed !== 3 && r.speed !== 'results') return null;
-  if (typeof r.stable !== 'boolean') return null;
-  return { key: r.key, year: r.year, md: r.md, speed: r.speed, stable: r.stable };
+  const r = v as SeasonResume | null;
+  return r && typeof r.key === 'string' && r.key !== '' && r.key.length <= 200 && whole(r.year, 1900, 2200) && whole(r.md, 1, 400)
+    && (r.speed === 1 || r.speed === 3 || r.speed === 'results') && typeof r.stable === 'boolean' ? r : null;
 }
 
 /** Never throws. */
 export function readResume(game: string): SeasonResume | null {
   try { return asResume(JSON.parse(localStorage.getItem(resumeStorageKey(game)) ?? 'null')); } catch { return null; }
-}
-
-/** Never throws; a browser that refuses storage simply keeps no place. */
-export function writeResume(game: string, r: SeasonResume): void {
-  try { localStorage.setItem(resumeStorageKey(game), JSON.stringify(r)); } catch { /* no place kept */ }
-}
-
-/** Never throws. */
-export function clearResume(game: string): void {
-  try { localStorage.removeItem(resumeStorageKey(game)); } catch { /* nothing to clear */ }
 }
 
 /** The index of the season a record belongs to, or -1. The ONE rule the

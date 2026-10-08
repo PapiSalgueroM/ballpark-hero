@@ -4573,7 +4573,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           {(() => {
             /* the season the record belongs to, by the Season Centre's own key for it */
             const row = career.seasons[resumeRowIndex(resume, career.seasons, r => `${career.playerName}|${r.club}|${r.year}|${r.apps}|${r.goals}|${r.assists}|${r.rating}|centre`, career.phone?.world?.year)];
-            return row && resume && <button type="button" onClick={() => setWatchRow(row)} data-season-resume className="mt-2 h-11 w-full rounded-lg border border-border text-xs font-bold">📺 {resumeLabel(resume, `${row.year}/${String(row.year + 1).slice(-2)}`, "matchday")}</button>;
+            return row && resume && <div className="mt-2"><Button onClick={() => setWatchRow(row)} variant="outline" className="w-full h-11 text-sm font-bold" data-season-resume>📺 {resumeLabel(resume, `${row.year}/${String(row.year + 1).slice(-2)}`, "matchday")}</Button></div>;
           })()}
           <div className="mt-2 space-y-1">
             {career.events.slice(-3).map((e, i) => (

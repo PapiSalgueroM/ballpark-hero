@@ -29,6 +29,7 @@ import { ordinal } from '@/lib/soccerCareerLeague';
 import { MatchClock, scoreAt, type ClockSpeed, type SeasonClock } from './MatchClock';
 import { MomentHost, type CentreMoment, type CentreMoments } from './MomentHost';
 import { SeasonCentreHelp, useHelpOnce, type HelpWords } from './SeasonCentreHelp';
+import { useBodyLock } from './useBodyLock';
 
 export interface CentreReview {
   /** The review's tiles, all competitions, labelled in the sport's words
@@ -395,16 +396,8 @@ export function SeasonCentre({ model, exitLabel, onClose, resume, onProgress }: 
   const momentKeyOf = (m: CentreMoment) => `${m.md}|${m.id}`;
   const openMoment = (md: number): CentreMoment | null => (moments?.list ?? []).find(m => m.md === md && !m.taken && !passed.includes(momentKeyOf(m))) ?? null;
 
-  useEffect(() => {
-    /* the scroll lock pads the body by the scrollbar it hides, so the page
-       behind does not shift sideways when the overlay opens or closes */
-    const body = document.body;
-    const prev = { overflow: body.style.overflow, paddingRight: body.style.paddingRight };
-    const bar = window.innerWidth - document.documentElement.clientWidth;
-    if (bar > 0) body.style.paddingRight = `${(parseFloat(window.getComputedStyle(body).paddingRight) || 0) + bar}px`;
-    body.style.overflow = 'hidden';
-    return () => { body.style.overflow = prev.overflow; body.style.paddingRight = prev.paddingRight; };
-  }, []);
+  /* the page behind does not scroll or shift (Round 1046 lifted the lock so the season picker takes the same one) */
+  useBodyLock();
   /* focus goes back to the Season Centre when the help sheet closes, so Escape still leaves it */
   const dialogRef = useRef<HTMLDivElement | null>(null);
   const setDialog = useCallback((el: HTMLDivElement | null) => { dialogRef.current = el; focusDialogOnMount(el); }, []);
