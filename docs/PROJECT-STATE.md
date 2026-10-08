@@ -1,3 +1,15 @@
+Codex CLAIMS1096, 2026-10-08: Soccer Career create-crash diagnosis.
+Owner supplied a Brazilian visitor report: creating a career hits the route
+error boundary and trying again fails. Published AK is confirmed by deployment
+ac2187ef, index-VAwtKqwh and SoccerCareer-CKD9vQWc. Fresh-create source review
+has not established a cause. Twelve finite remote cases compare published and
+built sources, Brazil ST/current and GK/1990, English, Portuguese locale and
+effective detached text replacement. All cases retain actual errors, screenshots,
+storage and delivered source bytes. This is diagnostic preparation, not a fix.
+No product code or user save is changed. All runtime remains remote; production
+DB probes are barred. Claude E retains engine, release and publication ownership.
+The requested Soccer Perfect Season is queued after the reported crash.
+
 ## Release AK LIVE, 2026-10-07 15:12 EDT, and the split of work with Codex
 
 Claude lane (session E, a new lead: session D stopped at its weekly limit with AK's gate still running).

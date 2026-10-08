@@ -1,0 +1,98 @@
+name: Soccer Career create crash diagnosis
+
+on:
+  push:
+    branches:
+      - codex/soccer-create-crash-1096
+
+permissions:
+  contents: read
+concurrency:
+  group: soccer-create-crash-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    env:
+      ENGINES: chromium
+      TZ: UTC
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Hold exact source and install remote browser
+        run: |
+          mkdir -p soccer-create-crash-artifacts/dependencies
+          git rev-parse HEAD > soccer-create-crash-artifacts/source-head.txt
+          git rev-parse 'HEAD^{tree}' > soccer-create-crash-artifacts/source-tree.txt
+          git ls-tree -r HEAD > soccer-create-crash-artifacts/source-git-manifest.txt
+          git archive HEAD | gzip > soccer-create-crash-artifacts/source.tar.gz
+          printf '%s\n' '${{ github.run_id }}' '${{ github.run_attempt }}' '${{ github.job }}' > soccer-create-crash-artifacts/run.txt
+          cp package.json package-lock.json soccer-create-crash-artifacts/dependencies/
+          sha256sum package.json package-lock.json > soccer-create-crash-artifacts/dependencies/lock-before.sha256
+          npm ci
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import { createHash } from 'node:crypto';
+          const rows=[];
+          for(const name of ['playwright','playwright-core','react','react-dom','esbuild','vite']) {
+            const raw=fs.readFileSync('node_modules/'+name+'/package.json');
+            fs.writeFileSync('soccer-create-crash-artifacts/dependencies/'+name+'-package.json',raw);
+            rows.push({name,version:JSON.parse(raw).version,sha256:createHash('sha256').update(raw).digest('hex')});
+          }
+          fs.writeFileSync('soccer-create-crash-artifacts/dependencies/runtime-packages.json',JSON.stringify(rows,null,2));
+          fs.writeFileSync('soccer-create-crash-artifacts/dependencies/node-versions.json',JSON.stringify(process.versions,null,2));
+          NODE
+      - name: Proper application type gate
+        id: types
+        continue-on-error: true
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee soccer-create-crash-artifacts/types.log
+      - name: Build exact source for paired diagnosis
+        id: build
+        continue-on-error: true
+        run: |
+          npm run build 2>&1 | tee soccer-create-crash-artifacts/build.log
+          tar -czf soccer-create-crash-artifacts/build.tar.gz dist
+      - name: Finite real creator and effective detached text cases
+        id: diagnostic
+        if: ${{ !cancelled() }}
+        env:
+          CREATE_CRASH_BUILT_READY: ${{ steps.build.outcome == 'success' }}
+        run: timeout --signal=TERM --kill-after=15s 20m node scripts/qa/soccerCreateCrash1096.mjs 2>&1 | tee soccer-create-crash-artifacts/diagnostic.log
+      - name: Source and lockfile remain held
+        if: ${{ !cancelled() }}
+        run: |
+          git diff --exit-code HEAD -- src scripts .github/workflows package.json package-lock.json
+          cmp package.json soccer-create-crash-artifacts/dependencies/package.json
+          cmp package-lock.json soccer-create-crash-artifacts/dependencies/package-lock.json
+          sha256sum --check soccer-create-crash-artifacts/dependencies/lock-before.sha256
+      - name: Retain full diagnosis even on failure
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: soccer-create-crash-${{ github.run_id }}-${{ github.run_attempt }}
+          path: soccer-create-crash-artifacts/
+          retention-days: 7
+          if-no-files-found: error
+      - name: Retain strict gate outcomes
+        if: ${{ always() }}
+        run: |
+          test '${{ steps.types.outcome }}' = success
+          test '${{ steps.build.outcome }}' = success
+          test '${{ steps.diagnostic.outcome }}' = success
