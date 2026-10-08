@@ -1,0 +1,64 @@
+{
+ "name": "phone-centre-nolive",
+ "view": "phone",
+ "motion": "no-preference",
+ "translate": true,
+ "nolive": true,
+ "steps": [
+  {
+   "name": "create screen draws",
+   "ok": true,
+   "did": "",
+   "pend": 190,
+   "structure": 0,
+   "raw": 0,
+   "digits": 0,
+   "back": 0,
+   "fonts": 0,
+   "judged": 187,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": null,
+   "backs": 0,
+   "jerr": ""
+  }
+ ],
+ "boxes": {},
+ "stop": "COULD NOT TRANSLATE",
+ "ageLooks": 0,
+ "ageWrong": [],
+ "worst": {
+  "structure": 0,
+  "raw": 0,
+  "digits": 0
+ },
+ "all": {
+  "structure": [],
+  "raw": [],
+  "digits": []
+ },
+ "translated": false,
+ "reached": false,
+ "startAge": null,
+ "ageBeforeRestore": null,
+ "end": {
+  "age": null,
+  "phase": "",
+  "stats": null,
+  "fonts": 0,
+  "h1": [
+   "⚽ Soccer Career"
+  ]
+ },
+ "net": {
+  "db": 1,
+  "blocked": [
+   "fonts.googleapis.com"
+  ]
+ },
+ "errors": [],
+ "notFound": 0,
+ "guardLines": 0,
+ "seconds": 48
+}

@@ -1,0 +1,1579 @@
+{
+ "name": "phone-nolive",
+ "view": "phone",
+ "motion": "no-preference",
+ "translate": true,
+ "nolive": true,
+ "steps": [
+  {
+   "name": "create screen draws",
+   "ok": true,
+   "did": "",
+   "pend": 190,
+   "structure": 0,
+   "raw": 0,
+   "digits": 0,
+   "back": 0,
+   "fonts": 0,
+   "judged": 187,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": null,
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "translated",
+   "ok": true,
+   "did": "",
+   "pend": 88,
+   "structure": 0,
+   "raw": 0,
+   "digits": 1,
+   "back": 0,
+   "fonts": 196,
+   "judged": 187,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": null,
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "type the name",
+   "ok": true,
+   "did": "",
+   "pend": 88,
+   "structure": 0,
+   "raw": 0,
+   "digits": 1,
+   "back": 0,
+   "fonts": 196,
+   "judged": 187,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": null,
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "choose nationality Brazil",
+   "ok": true,
+   "did": "Brazil🇧🇷",
+   "pend": 90,
+   "structure": 1,
+   "raw": 0,
+   "digits": 1,
+   "back": 0,
+   "fonts": 196,
+   "judged": 189,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": null,
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "choose position Striker",
+   "ok": true,
+   "did": "Striker (ST)",
+   "pend": 91,
+   "structure": 2,
+   "raw": 0,
+   "digits": 1,
+   "back": 0,
+   "fonts": 196,
+   "judged": 189,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": null,
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "choose era Current era",
+   "ok": true,
+   "did": "Current era (2025 start)",
+   "pend": 94,
+   "structure": 3,
+   "raw": 0,
+   "digits": 1,
+   "back": 0,
+   "fonts": 198,
+   "judged": 192,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": null,
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "Generate Starting Potential",
+   "ok": true,
+   "did": "🎲 Generate Starting Potential",
+   "pend": 90,
+   "structure": 3,
+   "raw": 0,
+   "digits": 1,
+   "back": 0,
+   "fonts": 290,
+   "judged": 225,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": null,
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "Roll again",
+   "ok": true,
+   "did": "🎲 Roll again",
+   "pend": 90,
+   "structure": 3,
+   "raw": 0,
+   "digits": 2,
+   "back": 0,
+   "fonts": 292,
+   "judged": 225,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": null,
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "Customize your build",
+   "ok": true,
+   "did": "🎮 Customize your build",
+   "pend": 88,
+   "structure": 0,
+   "raw": 0,
+   "digits": 1,
+   "back": 0,
+   "fonts": 262,
+   "judged": 217,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": null,
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "Lock in build",
+   "ok": true,
+   "did": "✅ Lock in build",
+   "pend": 88,
+   "structure": 2,
+   "raw": 0,
+   "digits": 1,
+   "back": 0,
+   "fonts": 290,
+   "judged": 224,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": null,
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "Begin Career",
+   "ok": true,
+   "did": "⚽ Begin Career",
+   "pend": 89,
+   "structure": 0,
+   "raw": 0,
+   "digits": 1,
+   "back": 0,
+   "fonts": 420,
+   "judged": 273,
+   "header": {
+    "react": 16,
+    "shown": "ST · 16 anos · Brasil"
+   },
+   "age": 16,
+   "phase": "youth",
+   "stats": null,
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "career press 1",
+   "ok": true,
+   "did": "Next Year",
+   "pend": 89,
+   "structure": 0,
+   "raw": 0,
+   "digits": 3,
+   "back": 0,
+   "fonts": 494,
+   "judged": 308,
+   "header": {
+    "react": 16,
+    "shown": "ST · 16 anos · Brasil"
+   },
+   "age": 17,
+   "phase": "contract_offer",
+   "stats": null,
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "career press 2",
+   "ok": true,
+   "did": "Review contract",
+   "pend": 103,
+   "structure": 0,
+   "raw": 0,
+   "digits": 3,
+   "back": 0,
+   "fonts": 494,
+   "judged": 321,
+   "header": {
+    "react": 16,
+    "shown": "ST · 16 anos · Brasil"
+   },
+   "age": 17,
+   "phase": "contract_offer",
+   "stats": null,
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "career press 3",
+   "ok": true,
+   "did": "Sign contract",
+   "pend": 90,
+   "structure": 1,
+   "raw": 0,
+   "digits": 3,
+   "back": 0,
+   "fonts": 452,
+   "judged": 289,
+   "header": {
+    "react": 16,
+    "shown": "ST · 16 anos · Brasil"
+   },
+   "age": 17,
+   "phase": "playing",
+   "stats": null,
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "career press 4",
+   "ok": true,
+   "did": "Next Season",
+   "pend": 90,
+   "structure": 1,
+   "raw": 0,
+   "digits": 4,
+   "back": 0,
+   "fonts": 456,
+   "judged": 281,
+   "header": {
+    "react": 16,
+    "shown": "ST · 16 anos · Brasil"
+   },
+   "age": 18,
+   "phase": "newspaper",
+   "stats": null,
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "career press 5",
+   "ok": true,
+   "did": "Continue to Season Summary →",
+   "pend": 89,
+   "structure": 1,
+   "raw": 0,
+   "digits": 4,
+   "back": 0,
+   "fonts": 510,
+   "judged": 292,
+   "header": {
+    "react": 16,
+    "shown": "ST · 16 anos · Brasil"
+   },
+   "age": 18,
+   "phase": "season_summary",
+   "stats": null,
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "career press 6",
+   "ok": true,
+   "did": "Continue →",
+   "pend": 89,
+   "structure": 1,
+   "raw": 0,
+   "digits": 4,
+   "back": 0,
+   "fonts": 560,
+   "judged": 332,
+   "header": {
+    "react": 16,
+    "shown": "ST · 16 anos · Brasil"
+   },
+   "age": 18,
+   "phase": "ballon_dor",
+   "stats": null,
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "career press 7",
+   "ok": true,
+   "did": "Continue →",
+   "pend": 89,
+   "structure": 1,
+   "raw": 0,
+   "digits": 5,
+   "back": 0,
+   "fonts": 582,
+   "judged": 311,
+   "header": {
+    "react": 16,
+    "shown": "ST · 16 anos · Brasil"
+   },
+   "age": 18,
+   "phase": "social_media_action",
+   "stats": null,
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "career press 8",
+   "ok": true,
+   "did": "🏋️Post training videoShow off your skills in the ",
+   "pend": 90,
+   "structure": 1,
+   "raw": 0,
+   "digits": 4,
+   "back": 0,
+   "fonts": 446,
+   "judged": 275,
+   "header": {
+    "react": 16,
+    "shown": "ST · 16 anos · Brasil"
+   },
+   "age": 18,
+   "phase": "social_media_action",
+   "stats": null,
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "career press 9",
+   "ok": true,
+   "did": "Continue →",
+   "pend": 90,
+   "structure": 1,
+   "raw": 0,
+   "digits": 4,
+   "back": 0,
+   "fonts": 484,
+   "judged": 290,
+   "header": {
+    "react": 16,
+    "shown": "ST · 16 anos · Brasil"
+   },
+   "age": 18,
+   "phase": "random_events",
+   "stats": null,
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "career press 10",
+   "ok": true,
+   "did": "🎭The ShowmanFame comes easy: followers grow 60% f",
+   "pend": 90,
+   "structure": 1,
+   "raw": 0,
+   "digits": 4,
+   "back": 0,
+   "fonts": 472,
+   "judged": 284,
+   "header": {
+    "react": 16,
+    "shown": "ST · 16 anos · Brasil"
+   },
+   "age": 18,
+   "phase": "random_events",
+   "stats": null,
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "career press 11",
+   "ok": true,
+   "did": "😂Own it: it was funnyFollowers +700k, Morale -5, ",
+   "pend": 91,
+   "structure": 1,
+   "raw": 0,
+   "digits": 4,
+   "back": 0,
+   "fonts": 472,
+   "judged": 285,
+   "header": {
+    "react": 16,
+    "shown": "ST · 16 anos · Brasil"
+   },
+   "age": 18,
+   "phase": "random_events",
+   "stats": null,
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "career press 12",
+   "ok": true,
+   "did": "🥦Full compliance for a seasonPhysical +3 and Pace",
+   "pend": 91,
+   "structure": 2,
+   "raw": 0,
+   "digits": 3,
+   "back": 0,
+   "fonts": 460,
+   "judged": 279,
+   "header": {
+    "react": 16,
+    "shown": "ST · 16 anos · Brasil"
+   },
+   "age": 18,
+   "phase": "random_events",
+   "stats": null,
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "career press 13",
+   "ok": true,
+   "did": "🤝Take them under your wingLegacy +5, Youth player",
+   "pend": 91,
+   "structure": 1,
+   "raw": 0,
+   "digits": 3,
+   "back": 0,
+   "fonts": 526,
+   "judged": 296,
+   "header": {
+    "react": 16,
+    "shown": "ST · 16 anos · Brasil"
+   },
+   "age": 18,
+   "phase": "transfer_window",
+   "stats": null,
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "career press 14",
+   "ok": true,
+   "did": "Request transfer 📤",
+   "pend": 90,
+   "structure": 1,
+   "raw": 0,
+   "digits": 3,
+   "back": 0,
+   "fonts": 558,
+   "judged": 304,
+   "header": {
+    "react": 16,
+    "shown": "ST · 16 anos · Brasil"
+   },
+   "age": 18,
+   "phase": "transfer_window",
+   "stats": null,
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "just after show original",
+   "ok": true,
+   "did": "",
+   "pend": 0,
+   "structure": 1,
+   "raw": 3,
+   "digits": 2,
+   "back": 281,
+   "fonts": 0,
+   "judged": 303,
+   "header": {
+    "react": 16,
+    "shown": "ST · Age 16 · Brazil"
+   },
+   "age": 18,
+   "phase": "transfer_window",
+   "stats": null,
+   "backs": 566,
+   "jerr": ""
+  },
+  {
+   "name": "original press 1",
+   "ok": true,
+   "did": "Review contract",
+   "pend": 0,
+   "structure": 1,
+   "raw": 3,
+   "digits": 2,
+   "back": 281,
+   "fonts": 0,
+   "judged": 319,
+   "header": {
+    "react": 16,
+    "shown": "ST · Age 16 · Brazil"
+   },
+   "age": 18,
+   "phase": "transfer_window",
+   "stats": null,
+   "backs": 566,
+   "jerr": ""
+  },
+  {
+   "name": "original press 2",
+   "ok": true,
+   "did": "Sign contract",
+   "pend": 0,
+   "structure": 1,
+   "raw": 1,
+   "digits": 1,
+   "back": 219,
+   "fonts": 0,
+   "judged": 312,
+   "header": {
+    "react": 16,
+    "shown": "ST · Age 16 · Brazil"
+   },
+   "age": 18,
+   "phase": "playing",
+   "stats": null,
+   "backs": 566,
+   "jerr": ""
+  },
+  {
+   "name": "original press 3",
+   "ok": true,
+   "did": "Next Season",
+   "pend": 0,
+   "structure": 1,
+   "raw": 0,
+   "digits": 0,
+   "back": 196,
+   "fonts": 0,
+   "judged": 320,
+   "header": {
+    "react": 19,
+    "shown": "ST · Age 19 · Brazil"
+   },
+   "age": 19,
+   "phase": "newspaper",
+   "stats": null,
+   "backs": 566,
+   "jerr": ""
+  },
+  {
+   "name": "original press 4",
+   "ok": true,
+   "did": "Continue to Season Summary →",
+   "pend": 0,
+   "structure": 1,
+   "raw": 0,
+   "digits": 0,
+   "back": 196,
+   "fonts": 0,
+   "judged": 330,
+   "header": {
+    "react": 19,
+    "shown": "ST · Age 19 · Brazil"
+   },
+   "age": 19,
+   "phase": "season_summary",
+   "stats": null,
+   "backs": 566,
+   "jerr": ""
+  },
+  {
+   "name": "original press 5",
+   "ok": true,
+   "did": "Continue →",
+   "pend": 0,
+   "structure": 1,
+   "raw": 0,
+   "digits": 0,
+   "back": 196,
+   "fonts": 0,
+   "judged": 371,
+   "header": {
+    "react": 19,
+    "shown": "ST · Age 19 · Brazil"
+   },
+   "age": 19,
+   "phase": "ballon_dor",
+   "stats": null,
+   "backs": 566,
+   "jerr": ""
+  },
+  {
+   "name": "original press 6",
+   "ok": true,
+   "did": "Continue →",
+   "pend": 0,
+   "structure": 1,
+   "raw": 0,
+   "digits": 0,
+   "back": 196,
+   "fonts": 0,
+   "judged": 320,
+   "header": {
+    "react": 19,
+    "shown": "ST · Age 19 · Brazil"
+   },
+   "age": 19,
+   "phase": "rivalry_event",
+   "stats": null,
+   "backs": 566,
+   "jerr": ""
+  },
+  {
+   "name": "original press 7",
+   "ok": true,
+   "did": "Continue →",
+   "pend": 0,
+   "structure": 1,
+   "raw": 0,
+   "digits": 0,
+   "back": 196,
+   "fonts": 0,
+   "judged": 350,
+   "header": {
+    "react": 19,
+    "shown": "ST · Age 19 · Brazil"
+   },
+   "age": 19,
+   "phase": "social_media_action",
+   "stats": null,
+   "backs": 566,
+   "jerr": ""
+  },
+  {
+   "name": "original press 8",
+   "ok": true,
+   "did": "🎬Go viral with celebration clipPost an iconic goa",
+   "pend": 0,
+   "structure": 1,
+   "raw": 0,
+   "digits": 0,
+   "back": 196,
+   "fonts": 0,
+   "judged": 315,
+   "header": {
+    "react": 19,
+    "shown": "ST · Age 19 · Brazil"
+   },
+   "age": 19,
+   "phase": "social_media_action",
+   "stats": null,
+   "backs": 566,
+   "jerr": ""
+  },
+  {
+   "name": "original press 9",
+   "ok": true,
+   "did": "Continue →",
+   "pend": 0,
+   "structure": 1,
+   "raw": 0,
+   "digits": 0,
+   "back": 196,
+   "fonts": 0,
+   "judged": 326,
+   "header": {
+    "react": 19,
+    "shown": "ST · Age 19 · Brazil"
+   },
+   "age": 19,
+   "phase": "random_events",
+   "stats": null,
+   "backs": 566,
+   "jerr": ""
+  },
+  {
+   "name": "original press 10",
+   "ok": true,
+   "did": "🧢Cousin RickyFamily rates: tiny 3% transfer cut, ",
+   "pend": 0,
+   "structure": 1,
+   "raw": 0,
+   "digits": 0,
+   "back": 196,
+   "fonts": 0,
+   "judged": 324,
+   "header": {
+    "react": 19,
+    "shown": "ST · Age 19 · Brazil"
+   },
+   "age": 19,
+   "phase": "random_events",
+   "stats": null,
+   "backs": 566,
+   "jerr": ""
+  },
+  {
+   "name": "original press 11",
+   "ok": true,
+   "did": "🤝Stay humblePopularity +6, board approves",
+   "pend": 0,
+   "structure": 1,
+   "raw": 0,
+   "digits": 0,
+   "back": 196,
+   "fonts": 0,
+   "judged": 321,
+   "header": {
+    "react": 19,
+    "shown": "ST · Age 19 · Brazil"
+   },
+   "age": 19,
+   "phase": "random_events",
+   "stats": null,
+   "backs": 566,
+   "jerr": ""
+  },
+  {
+   "name": "original press 12",
+   "ok": true,
+   "did": "🏥Focus on recoveryPace -2 permanently, miss apps ",
+   "pend": 0,
+   "structure": 1,
+   "raw": 0,
+   "digits": 0,
+   "back": 196,
+   "fonts": 0,
+   "judged": 322,
+   "header": {
+    "react": 19,
+    "shown": "ST · Age 19 · Brazil"
+   },
+   "age": 19,
+   "phase": "transfer_window",
+   "stats": null,
+   "backs": 566,
+   "jerr": ""
+  },
+  {
+   "name": "original press 13",
+   "ok": true,
+   "did": "Request transfer 📤",
+   "pend": 0,
+   "structure": 1,
+   "raw": 0,
+   "digits": 0,
+   "back": 196,
+   "fonts": 0,
+   "judged": 353,
+   "header": {
+    "react": 19,
+    "shown": "ST · Age 19 · Brazil"
+   },
+   "age": 19,
+   "phase": "playing",
+   "stats": null,
+   "backs": 566,
+   "jerr": ""
+  },
+  {
+   "name": "original press 14",
+   "ok": true,
+   "did": "Next Season",
+   "pend": 0,
+   "structure": 1,
+   "raw": 0,
+   "digits": 0,
+   "back": 196,
+   "fonts": 0,
+   "judged": 325,
+   "header": {
+    "react": 20,
+    "shown": "ST · Age 20 · Brazil"
+   },
+   "age": 20,
+   "phase": "newspaper",
+   "stats": null,
+   "backs": 566,
+   "jerr": ""
+  },
+  {
+   "name": "original press 15",
+   "ok": true,
+   "did": "Continue to Season Summary →",
+   "pend": 0,
+   "structure": 1,
+   "raw": 0,
+   "digits": 0,
+   "back": 196,
+   "fonts": 0,
+   "judged": 338,
+   "header": {
+    "react": 20,
+    "shown": "ST · Age 20 · Brazil"
+   },
+   "age": 20,
+   "phase": "season_summary",
+   "stats": null,
+   "backs": 566,
+   "jerr": ""
+  },
+  {
+   "name": "original press 16",
+   "ok": true,
+   "did": "Continue →",
+   "pend": 0,
+   "structure": 1,
+   "raw": 0,
+   "digits": 0,
+   "back": 196,
+   "fonts": 0,
+   "judged": 378,
+   "header": {
+    "react": 20,
+    "shown": "ST · Age 20 · Brazil"
+   },
+   "age": 20,
+   "phase": "ballon_dor",
+   "stats": null,
+   "backs": 566,
+   "jerr": ""
+  },
+  {
+   "name": "original press 17",
+   "ok": true,
+   "did": "Continue →",
+   "pend": 0,
+   "structure": 1,
+   "raw": 0,
+   "digits": 0,
+   "back": 196,
+   "fonts": 0,
+   "judged": 359,
+   "header": {
+    "react": 20,
+    "shown": "ST · Age 20 · Brazil"
+   },
+   "age": 20,
+   "phase": "social_media_action",
+   "stats": null,
+   "backs": 566,
+   "jerr": ""
+  },
+  {
+   "name": "original press 18",
+   "ok": true,
+   "did": "❤️Announce charity workHighlight your philanthropi",
+   "pend": 0,
+   "structure": 1,
+   "raw": 0,
+   "digits": 0,
+   "back": 196,
+   "fonts": 0,
+   "judged": 323,
+   "header": {
+    "react": 20,
+    "shown": "ST · Age 20 · Brazil"
+   },
+   "age": 20,
+   "phase": "social_media_action",
+   "stats": null,
+   "backs": 566,
+   "jerr": ""
+  },
+  {
+   "name": "original press 19",
+   "ok": true,
+   "did": "Continue →",
+   "pend": 0,
+   "structure": 1,
+   "raw": 0,
+   "digits": 0,
+   "back": 196,
+   "fonts": 0,
+   "judged": 331,
+   "header": {
+    "react": 20,
+    "shown": "ST · Age 20 · Brazil"
+   },
+   "age": 20,
+   "phase": "random_events",
+   "stats": null,
+   "backs": 566,
+   "jerr": ""
+  },
+  {
+   "name": "original press 20",
+   "ok": true,
+   "did": "🎤Answer him, on the record, in the mixed zone55%:",
+   "pend": 0,
+   "structure": 1,
+   "raw": 0,
+   "digits": 0,
+   "back": 196,
+   "fonts": 0,
+   "judged": 329,
+   "header": {
+    "react": 20,
+    "shown": "ST · Age 20 · Brazil"
+   },
+   "age": 20,
+   "phase": "random_events",
+   "stats": null,
+   "backs": 566,
+   "jerr": ""
+  },
+  {
+   "name": "original press 21",
+   "ok": true,
+   "did": "💳Refund fans out of pocket-€1.5M, Popularity +6, ",
+   "pend": 0,
+   "structure": 1,
+   "raw": 0,
+   "digits": 0,
+   "back": 196,
+   "fonts": 0,
+   "judged": 332,
+   "header": {
+    "react": 20,
+    "shown": "ST · Age 20 · Brazil"
+   },
+   "age": 20,
+   "phase": "random_events",
+   "stats": null,
+   "backs": 566,
+   "jerr": ""
+  },
+  {
+   "name": "original press 22",
+   "ok": true,
+   "did": "🎯Stay behind for extra rondo work all seasonPassi",
+   "pend": 0,
+   "structure": 1,
+   "raw": 0,
+   "digits": 0,
+   "back": 196,
+   "fonts": 0,
+   "judged": 333,
+   "header": {
+    "react": 20,
+    "shown": "ST · Age 20 · Brazil"
+   },
+   "age": 20,
+   "phase": "random_events",
+   "stats": null,
+   "backs": 566,
+   "jerr": ""
+  },
+  {
+   "name": "original press 23",
+   "ok": true,
+   "did": "🛏️Hire him and follow every single ruleNet worth ",
+   "pend": 0,
+   "structure": 1,
+   "raw": 0,
+   "digits": 0,
+   "back": 196,
+   "fonts": 0,
+   "judged": 349,
+   "header": {
+    "react": 20,
+    "shown": "ST · Age 20 · Brazil"
+   },
+   "age": 20,
+   "phase": "transfer_window",
+   "stats": null,
+   "backs": 566,
+   "jerr": ""
+  },
+  {
+   "name": "original press 24",
+   "ok": true,
+   "did": "Review contract",
+   "pend": 0,
+   "structure": 1,
+   "raw": 0,
+   "digits": 0,
+   "back": 196,
+   "fonts": 0,
+   "judged": 364,
+   "header": {
+    "react": 20,
+    "shown": "ST · Age 20 · Brazil"
+   },
+   "age": 20,
+   "phase": "transfer_window",
+   "stats": null,
+   "backs": 566,
+   "jerr": ""
+  }
+ ],
+ "boxes": {
+  "nationality": {
+   "react": "Choose nationalityBrazil🇧🇷",
+   "shown": "Escolha a nacionalidade Brazil"
+  },
+  "position": {
+   "react": "Choose positionStriker (ST)",
+   "shown": "Escolha a posiçãoStriker (ST)"
+  },
+  "era": {
+   "react": "Choose eraCurrent era (2025 start)",
+   "shown": "Escolha a eraCurrent era (2025 start)"
+  }
+ },
+ "stop": "",
+ "ageLooks": 40,
+ "ageWrong": [
+  {
+   "step": "career press 1",
+   "shown": "ST · 16 anos · Brasil",
+   "save": 17,
+   "restored": false
+  },
+  {
+   "step": "career press 2",
+   "shown": "ST · 16 anos · Brasil",
+   "save": 17,
+   "restored": false
+  },
+  {
+   "step": "career press 3",
+   "shown": "ST · 16 anos · Brasil",
+   "save": 17,
+   "restored": false
+  },
+  {
+   "step": "career press 4",
+   "shown": "ST · 16 anos · Brasil",
+   "save": 18,
+   "restored": false
+  },
+  {
+   "step": "career press 5",
+   "shown": "ST · 16 anos · Brasil",
+   "save": 18,
+   "restored": false
+  },
+  {
+   "step": "career press 6",
+   "shown": "ST · 16 anos · Brasil",
+   "save": 18,
+   "restored": false
+  },
+  {
+   "step": "career press 7",
+   "shown": "ST · 16 anos · Brasil",
+   "save": 18,
+   "restored": false
+  },
+  {
+   "step": "career press 8",
+   "shown": "ST · 16 anos · Brasil",
+   "save": 18,
+   "restored": false
+  },
+  {
+   "step": "career press 9",
+   "shown": "ST · 16 anos · Brasil",
+   "save": 18,
+   "restored": false
+  },
+  {
+   "step": "career press 10",
+   "shown": "ST · 16 anos · Brasil",
+   "save": 18,
+   "restored": false
+  },
+  {
+   "step": "career press 11",
+   "shown": "ST · 16 anos · Brasil",
+   "save": 18,
+   "restored": false
+  },
+  {
+   "step": "career press 12",
+   "shown": "ST · 16 anos · Brasil",
+   "save": 18,
+   "restored": false
+  },
+  {
+   "step": "career press 13",
+   "shown": "ST · 16 anos · Brasil",
+   "save": 18,
+   "restored": false
+  },
+  {
+   "step": "career press 14",
+   "shown": "ST · 16 anos · Brasil",
+   "save": 18,
+   "restored": false
+  },
+  {
+   "step": "just after show original",
+   "shown": "ST · Age 16 · Brazil",
+   "save": 18,
+   "restored": true
+  },
+  {
+   "step": "original press 1",
+   "shown": "ST · Age 16 · Brazil",
+   "save": 18,
+   "restored": true
+  },
+  {
+   "step": "original press 2",
+   "shown": "ST · Age 16 · Brazil",
+   "save": 18,
+   "restored": true
+  }
+ ],
+ "worst": {
+  "structure": 3,
+  "raw": 3,
+  "digits": 5
+ },
+ "all": {
+  "structure": [
+   {
+    "at": "div.space-y-1.5>button.flex>span",
+    "react": "",
+    "screen": "\"F:Escolha a nacionalidade\" <span>",
+    "step": "choose nationality Brazil",
+    "phase": "translated"
+   },
+   {
+    "at": "div.space-y-1.5>button.flex>span",
+    "react": "",
+    "screen": "\"F:Escolha a posição\" \"Striker (ST)\"",
+    "step": "choose position Striker",
+    "phase": "translated"
+   },
+   {
+    "at": "div.space-y-1.5>button.flex>span",
+    "react": "",
+    "screen": "\"F:Escolha a posição\" \"F:Atacante (ST)\"",
+    "step": "choose era Current era",
+    "phase": "translated"
+   },
+   {
+    "at": "div.space-y-1.5>button.flex>span",
+    "react": "",
+    "screen": "\"F:Escolha a era\" \"Current era (2025 start)\"",
+    "step": "choose era Current era",
+    "phase": "translated"
+   },
+   {
+    "at": "div.space-y-1.5>button.flex>span",
+    "react": "",
+    "screen": "\"F:Escolha a era\" \"F:Era atual (início em 2025)\"",
+    "step": "Generate Starting Potential",
+    "phase": "translated"
+   },
+   {
+    "at": "div.space-y-1.5>button.flex>span",
+    "react": "",
+    "screen": "\"F:Atacante (ST)\"",
+    "step": "Lock in build",
+    "phase": "translated"
+   },
+   {
+    "at": "div.space-y-1.5>button.flex>span",
+    "react": "",
+    "screen": "\"F:Era atual (início em 2025)\"",
+    "step": "Lock in build",
+    "phase": "translated"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "<span> <img> <span>",
+    "screen": "\"F:📩 Propostas de contrato profissional recebidas!\" <span> <img> <span>",
+    "step": "career press 3",
+    "phase": "translated"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "\"🔥 Majestoso against Sao Paulo: D 2-2 away, W 2-0 at home (you missed it).\"",
+    "screen": "\"F:📩 Propostas de contrato profissional recebidas!\" \"F:🔥 Majestoso contra São Paulo: Empate 2-2 fora, Vitória 2-0 em casa (você perdeu).\"",
+    "step": "career press 4",
+    "phase": "translated"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "\"🔥 Classico Alvinegro against Santos: W 3-0 away (you missed it), W 3-0 at home.\"",
+    "screen": "\"F:📩 Propostas de contrato profissional recebidas!\" \"F:🔥 Majestoso contra São Paulo: Empate 2-2 fora, Vitória 2-0 em casa (você perdeu).\"",
+    "step": "career press 8",
+    "phase": "translated"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "\"📱 🏋️ Post training video: gained 0.2M followers!\"",
+    "screen": "\"F:📩 Propostas de contrato profissional recebidas!\" \"F:🔥 Majestoso contra São Paulo: Empate 2-2 fora, Vitória 2-0 em casa (você perdeu).\"",
+    "step": "career press 10",
+    "phase": "translated"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "\"🎭 You leaned into it: The Showman is born\"",
+    "screen": "\"F:📩 Propostas de contrato profissional recebidas!\" \"F:🔥 Majestoso contra São Paulo: Empate 2-2 fora, Vitória 2-0 em casa (você perdeu).\"",
+    "step": "career press 11",
+    "phase": "translated"
+   },
+   {
+    "at": "div.rounded-xl>div.text-center>span.text-[10px]",
+    "react": "\"⚡ Positive Event\" \" · \" \"1\" \" event\" \" remaining\"",
+    "screen": "\"F:🏠 Evento de Vida \" \"F:· Restam \" \"F:4 \" \"F:eventos\" \"F:\" \"F:\"",
+    "step": "career press 12",
+    "phase": "translated"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "\"💬 The haircut text leaked. You stood by your rating\"",
+    "screen": "\"F:📩 Propostas de contrato profissional recebidas!\" \"F:🔥 Majestoso contra São Paulo: Empate 2-2 fora, Vitória 2-0 em casa (você perdeu).\"",
+    "step": "career press 12",
+    "phase": "translated"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "\"🥗 Followed the nutrition plan to the gram for a season. Body fat down, joy down, numbers up\"",
+    "screen": "\"F:📩 Propostas de contrato profissional recebidas!\" \"F:🔥 Majestoso contra São Paulo: Empate 2-2 fora, Vitória 2-0 em casa (você perdeu).\"",
+    "step": "career press 13",
+    "phase": "translated"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "\"🥗 Followed the nutrition plan to the gram for a season. Body fat down, joy down, numbers up\"",
+    "screen": "\"📩 Professional contract offers received!\" \"🔥 Majestoso against Sao Paulo: D 2-2 away, W 2-0 at home (you missed it).\"",
+    "step": "just after show original",
+    "phase": "after show original"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "\"👶 Mentored a promising youth player\"",
+    "screen": "\"📩 Professional contract offers received!\" \"👶 Mentored a promising youth player\"",
+    "step": "original press 2",
+    "phase": "after show original"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "\"🏆 Won Player of the Month (March 2028)!\"",
+    "screen": "\"📩 Professional contract offers received!\" \"🏆 Won Player of the Month (March 2028)!\"",
+    "step": "original press 3",
+    "phase": "after show original"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "\"🏆 Brazil won the Copa América without you.\"",
+    "screen": "\"📩 Professional contract offers received!\" \"🏆 Brazil won the Copa América without you.\"",
+    "step": "original press 7",
+    "phase": "after show original"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "\"📱 🎬 Go viral with celebration clip: gained 1.6M followers!\"",
+    "screen": "\"📩 Professional contract offers received!\" \"📱 🎬 Go viral with celebration clip: gained 1.6M followers!\"",
+    "step": "original press 8",
+    "phase": "after show original"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "\"🏪 NEW SPONSORSHIP: Local Brand Deal, €0.5M/year!\"",
+    "screen": "\"📩 Professional contract offers received!\" \"🏪 NEW SPONSORSHIP: Local Brand Deal, €0.5M/year!\"",
+    "step": "original press 10",
+    "phase": "after show original"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "\"🧢 Signed with Cousin Ricky. What could go wrong\"",
+    "screen": "\"📩 Professional contract offers received!\" \"🧢 Signed with Cousin Ricky. What could go wrong\"",
+    "step": "original press 11",
+    "phase": "after show original"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "\"🎤 The humble interview won everyone over\"",
+    "screen": "\"📩 Professional contract offers received!\" \"🎤 The humble interview won everyone over\"",
+    "step": "original press 12",
+    "phase": "after show original"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "\"🏆 Won Player of the Month (November 2029)!\"",
+    "screen": "\"📩 Professional contract offers received!\" \"🏆 Won Player of the Month (November 2029)!\"",
+    "step": "original press 14",
+    "phase": "after show original"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "\"📱 ❤️ Announce charity work: gained 0.2M followers!\"",
+    "screen": "\"📩 Professional contract offers received!\" \"📱 ❤️ Announce charity work: gained 0.2M followers!\"",
+    "step": "original press 18",
+    "phase": "after show original"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "\"✨ Reputation +15\"",
+    "screen": "\"📩 Professional contract offers received!\" \"✨ Reputation +15\"",
+    "step": "original press 20",
+    "phase": "after show original"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "\"🎤 Answered Prudence Marchbank on the record and the room went with you. He will be watching every touch now\"",
+    "screen": "\"📩 Professional contract offers received!\" \"🎤 Answered Prudence Marchbank on the record and the room went with you. He will be watching every touch now\"",
+    "step": "original press 21",
+    "phase": "after show original"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "\"🪙 Personally refunded fans after the crypto collapse\"",
+    "screen": "\"📩 Professional contract offers received!\" \"🪙 Personally refunded fans after the crypto collapse\"",
+    "step": "original press 22",
+    "phase": "after show original"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "\"🔁 Did rondo drills after every session until nobody could nutmeg you again\"",
+    "screen": "\"📩 Professional contract offers received!\" \"🔁 Did rondo drills after every session until nobody could nutmeg you again\"",
+    "step": "original press 23",
+    "phase": "after show original"
+   }
+  ],
+  "raw": [
+   {
+    "at": "div.flex>div.min-w-0>p.text-xs",
+    "react": "18",
+    "screen": "16",
+    "step": "just after show original",
+    "phase": "after show original"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "💬 The haircut text leaked. You stood by your rating",
+    "screen": "📋 Joined Corinthians Youth Academy aged 16",
+    "step": "just after show original",
+    "phase": "after show original"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "👶 Mentored a promising youth player",
+    "screen": "🏠 One of our own! The Corinthians academy kid signs a first-team deal. The ultr",
+    "step": "just after show original",
+    "phase": "after show original"
+   }
+  ],
+  "digits": [
+   {
+    "at": "div>ol.list-decimal>li",
+    "react": "Roll your starting potential, somewhere in the mid 50s to high 60s, and reroll as many times as you like. Rerolls are fr",
+    "screen": "Role seu potencial inicial, que geralmente fica entre 55 e 60, e role novamente quantas vezes quiser. As rolagens adicio",
+    "step": "translated",
+    "phase": "translated"
+   },
+   {
+    "at": "div.bg-card>div.rounded-xl>div.text-6xl",
+    "react": "58 ",
+    "screen": "67 ",
+    "step": "Roll again",
+    "phase": "translated"
+   },
+   {
+    "at": "div.flex>div.min-w-0>p.text-xs",
+    "react": "ST  · Age  17  ·  ",
+    "screen": "ST  ·  16 anos  · ",
+    "step": "career press 1",
+    "phase": "translated"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "📈 Stats improved during youth development (OVR 63) ",
+    "screen": "📋 Ingressou na Academia Juvenil do Corinthians aos 16 anos ",
+    "step": "career press 1",
+    "phase": "translated"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "📩 Professional contract offers received! ",
+    "screen": "📋 Ingressou na Academia Juvenil do Corinthians aos 16 anos ",
+    "step": "career press 3",
+    "phase": "translated"
+   },
+   {
+    "at": "div.flex>div.min-w-0>p.text-xs",
+    "react": "ST  · Age  18  ·  ",
+    "screen": "ST  ·  16 anos  · ",
+    "step": "career press 4",
+    "phase": "translated"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "🔥 Derby Paulista against Palmeiras: L 0-2 away, W 3-0 at home. ",
+    "screen": "📋 Ingressou na Academia Juvenil do Corinthians aos 16 anos ",
+    "step": "career press 4",
+    "phase": "translated"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "🔥 Classico Alvinegro against Santos: W 3-0 away (you missed it), W 3-0 at home. ",
+    "screen": "🏠 Um dos nossos! O jogador da base do Corinthians assina contrato com o time principal. A torcida organizada já tem um ",
+    "step": "career press 4",
+    "phase": "translated"
+   },
+   {
+    "at": "div.flex-1>div.flex>span.text-[9px]",
+    "react": "+ 1.0M  followers ",
+    "screen": "+  1 milhão de  seguidores ",
+    "step": "career press 7",
+    "phase": "translated"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "🔥 Majestoso against Sao Paulo: D 2-2 away, W 2-0 at home (you missed it). ",
+    "screen": "📋 Ingressou na Academia Juvenil do Corinthians aos 16 anos ",
+    "step": "career press 8",
+    "phase": "translated"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "📱 🏋️ Post training video: gained 0.2M followers! ",
+    "screen": "🏠 Um dos nossos! O jogador da base do Corinthians assina contrato com o time principal. A torcida organizada já tem um ",
+    "step": "career press 8",
+    "phase": "translated"
+   },
+   {
+    "at": "div.rounded-xl>div.text-center>span.text-[10px]",
+    "react": "⚠️ Challenge  ·  3  event s  remaining ",
+    "screen": "🏠 Evento de Vida  · Restam  4  eventos   ",
+    "step": "career press 10",
+    "phase": "translated"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "🔥 Classico Alvinegro against Santos: W 3-0 away (you missed it), W 3-0 at home. ",
+    "screen": "📋 Ingressou na Academia Juvenil do Corinthians aos 16 anos ",
+    "step": "career press 10",
+    "phase": "translated"
+   },
+   {
+    "at": "div.rounded-xl>div.text-center>span.text-[10px]",
+    "react": "🏠 Life Event  ·  2  event s  remaining ",
+    "screen": "🏠 Evento de Vida  · Restam  4  eventos   ",
+    "step": "career press 11",
+    "phase": "translated"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "📱 🏋️ Post training video: gained 0.2M followers! ",
+    "screen": "📋 Ingressou na Academia Juvenil do Corinthians aos 16 anos ",
+    "step": "career press 11",
+    "phase": "translated"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "🎭 You leaned into it: The Showman is born ",
+    "screen": "📋 Ingressou na Academia Juvenil do Corinthians aos 16 anos ",
+    "step": "career press 12",
+    "phase": "translated"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "💬 The haircut text leaked. You stood by your rating ",
+    "screen": "📋 Ingressou na Academia Juvenil do Corinthians aos 16 anos ",
+    "step": "career press 13",
+    "phase": "translated"
+   },
+   {
+    "at": "div.flex>div.min-w-0>p.text-xs",
+    "react": "ST  · Age  18  ·  ",
+    "screen": "ST  · Age  16  ·  ",
+    "step": "just after show original",
+    "phase": "after show original"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "💬 The haircut text leaked. You stood by your rating ",
+    "screen": "📋 Joined Corinthians Youth Academy aged 16 ",
+    "step": "just after show original",
+    "phase": "after show original"
+   }
+  ]
+ },
+ "translated": true,
+ "reached": true,
+ "startAge": 16,
+ "ageBeforeRestore": 18,
+ "restore": {
+  "how": "banner button :1.restore",
+  "fontsBefore": 558,
+  "backsBefore": 0,
+  "ms": 882,
+  "fontsAfter": 0,
+  "backsAfter": 566,
+  "lang": "en",
+  "cls": ""
+ },
+ "afterTop": {
+  "header": {
+   "react": 20,
+   "shown": "ST · Age 20 · Brazil"
+  },
+  "save": {
+   "phase": "transfer_window",
+   "age": 20,
+   "name": "Joao Teste",
+   "nat": "Brazil"
+  },
+  "raw": 0,
+  "digits": 0,
+  "samples": {
+   "structure": [
+    {
+     "at": "div.mt-2>div.text-xs>span",
+     "react": "\"🔁 Did rondo drills after every session until nobody could nutmeg you again\"",
+     "screen": "\"📩 Professional contract offers received!\" \"🔁 Did rondo drills after every session until nobody could nutmeg you again\""
+    }
+   ],
+   "raw": [],
+   "digits": []
+  }
+ },
+ "end": {
+  "age": 20,
+  "phase": "transfer_window",
+  "stats": null,
+  "fonts": 0,
+  "h1": [
+   "Joao Teste"
+  ]
+ },
+ "net": {
+  "db": 5,
+  "blocked": [
+   "fonts.googleapis.com",
+   "fonts.gstatic.com",
+   "www.google.com"
+  ]
+ },
+ "errors": [],
+ "notFound": 0,
+ "guardLines": 1,
+ "seconds": 99
+}

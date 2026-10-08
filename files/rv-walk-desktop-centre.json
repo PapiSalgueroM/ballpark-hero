@@ -1,0 +1,899 @@
+{
+ "name": "desktop-centre",
+ "view": "desktop",
+ "motion": "reduce",
+ "translate": true,
+ "nolive": false,
+ "steps": [
+  {
+   "name": "create screen draws",
+   "ok": true,
+   "did": "",
+   "pend": 190,
+   "structure": 0,
+   "raw": 0,
+   "digits": 0,
+   "back": 0,
+   "fonts": 0,
+   "judged": 187,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": {
+    "swaps": 0,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 0
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "translated",
+   "ok": true,
+   "did": "",
+   "pend": 90,
+   "structure": 0,
+   "raw": 0,
+   "digits": 1,
+   "back": 0,
+   "fonts": 192,
+   "judged": 187,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": {
+    "swaps": 101,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 1
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "type the name",
+   "ok": true,
+   "did": "",
+   "pend": 90,
+   "structure": 0,
+   "raw": 0,
+   "digits": 1,
+   "back": 0,
+   "fonts": 192,
+   "judged": 187,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": {
+    "swaps": 101,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 1
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "choose nationality Brazil",
+   "ok": true,
+   "did": "Brazil🇧🇷",
+   "pend": 90,
+   "structure": 0,
+   "raw": 0,
+   "digits": 1,
+   "back": 0,
+   "fonts": 194,
+   "judged": 188,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": {
+    "swaps": 376,
+    "removed": 1,
+    "inserted": 0,
+    "restored": 1
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "choose position Striker",
+   "ok": true,
+   "did": "Striker (ST)",
+   "pend": 90,
+   "structure": 1,
+   "raw": 0,
+   "digits": 1,
+   "back": 0,
+   "fonts": 194,
+   "judged": 188,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": {
+    "swaps": 387,
+    "removed": 2,
+    "inserted": 0,
+    "restored": 1
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "choose era Current era",
+   "ok": true,
+   "did": "Current era (2025 start)",
+   "pend": 89,
+   "structure": 2,
+   "raw": 0,
+   "digits": 1,
+   "back": 0,
+   "fonts": 202,
+   "judged": 191,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": {
+    "swaps": 400,
+    "removed": 3,
+    "inserted": 0,
+    "restored": 1
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "Generate Starting Potential",
+   "ok": true,
+   "did": "🎲 Generate Starting Potential",
+   "pend": 89,
+   "structure": 2,
+   "raw": 0,
+   "digits": 1,
+   "back": 0,
+   "fonts": 286,
+   "judged": 224,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": {
+    "swaps": 460,
+    "removed": 3,
+    "inserted": 0,
+    "restored": 5
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "Roll again",
+   "ok": true,
+   "did": "🎲 Roll again",
+   "pend": 89,
+   "structure": 2,
+   "raw": 0,
+   "digits": 1,
+   "back": 0,
+   "fonts": 288,
+   "judged": 224,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": {
+    "swaps": 516,
+    "removed": 3,
+    "inserted": 0,
+    "restored": 6
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "Customize your build",
+   "ok": true,
+   "did": "🎮 Customize your build",
+   "pend": 69,
+   "structure": 0,
+   "raw": 0,
+   "digits": 2,
+   "back": 0,
+   "fonts": 300,
+   "judged": 217,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": {
+    "swaps": 602,
+    "removed": 5,
+    "inserted": 0,
+    "restored": 6
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "Lock in build",
+   "ok": true,
+   "did": "✅ Lock in build",
+   "pend": 69,
+   "structure": 2,
+   "raw": 0,
+   "digits": 2,
+   "back": 0,
+   "fonts": 328,
+   "judged": 224,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": {
+    "swaps": 682,
+    "removed": 5,
+    "inserted": 0,
+    "restored": 6
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "Begin Career",
+   "ok": true,
+   "did": "⚽ Begin Career",
+   "pend": 70,
+   "structure": 0,
+   "raw": 0,
+   "digits": 2,
+   "back": 0,
+   "fonts": 458,
+   "judged": 273,
+   "header": {
+    "react": 16,
+    "shown": "ST · 16 anos · Brasil"
+   },
+   "age": 16,
+   "phase": "youth",
+   "stats": {
+    "swaps": 827,
+    "removed": 7,
+    "inserted": 0,
+    "restored": 6
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "on to the season bar 1",
+   "ok": true,
+   "did": "Next Year",
+   "pend": 70,
+   "structure": 0,
+   "raw": 0,
+   "digits": 2,
+   "back": 0,
+   "fonts": 534,
+   "judged": 309,
+   "header": {
+    "react": 17,
+    "shown": "ST · 17 anos · Brasil"
+   },
+   "age": 17,
+   "phase": "contract_offer",
+   "stats": {
+    "swaps": 944,
+    "removed": 7,
+    "inserted": 0,
+    "restored": 11
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "on to the season bar 2",
+   "ok": true,
+   "did": "Review contract",
+   "pend": 84,
+   "structure": 0,
+   "raw": 0,
+   "digits": 2,
+   "back": 0,
+   "fonts": 534,
+   "judged": 322,
+   "header": {
+    "react": 17,
+    "shown": "ST · 17 anos · Brasil"
+   },
+   "age": 17,
+   "phase": "contract_offer",
+   "stats": {
+    "swaps": 944,
+    "removed": 7,
+    "inserted": 0,
+    "restored": 11
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "on to the season bar 3",
+   "ok": true,
+   "did": "Sign contract",
+   "pend": 71,
+   "structure": 0,
+   "raw": 0,
+   "digits": 2,
+   "back": 0,
+   "fonts": 488,
+   "judged": 288,
+   "header": {
+    "react": 17,
+    "shown": "ST · 17 anos · Brasil"
+   },
+   "age": 17,
+   "phase": "playing",
+   "stats": {
+    "swaps": 1010,
+    "removed": 8,
+    "inserted": 0,
+    "restored": 12
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "centre look 1",
+   "ok": true,
+   "did": "",
+   "pend": 0,
+   "structure": 0,
+   "raw": 0,
+   "digits": 2,
+   "back": 0,
+   "fonts": 756,
+   "judged": 438,
+   "header": {
+    "react": 18,
+    "shown": "ST · 18 anos · Brasil"
+   },
+   "age": 18,
+   "phase": "newspaper",
+   "stats": {
+    "swaps": 1258,
+    "removed": 8,
+    "inserted": 0,
+    "restored": 19
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "centre look 2",
+   "ok": true,
+   "did": "",
+   "pend": 0,
+   "structure": 0,
+   "raw": 0,
+   "digits": 2,
+   "back": 0,
+   "fonts": 756,
+   "judged": 438,
+   "header": {
+    "react": 18,
+    "shown": "ST · 18 anos · Brasil"
+   },
+   "age": 18,
+   "phase": "newspaper",
+   "stats": {
+    "swaps": 1258,
+    "removed": 8,
+    "inserted": 0,
+    "restored": 19
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "centre look 3",
+   "ok": true,
+   "did": "",
+   "pend": 0,
+   "structure": 0,
+   "raw": 0,
+   "digits": 2,
+   "back": 0,
+   "fonts": 756,
+   "judged": 438,
+   "header": {
+    "react": 18,
+    "shown": "ST · 18 anos · Brasil"
+   },
+   "age": 18,
+   "phase": "newspaper",
+   "stats": {
+    "swaps": 1258,
+    "removed": 8,
+    "inserted": 0,
+    "restored": 19
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "centre look 4",
+   "ok": true,
+   "did": "",
+   "pend": 0,
+   "structure": 0,
+   "raw": 0,
+   "digits": 2,
+   "back": 0,
+   "fonts": 756,
+   "judged": 438,
+   "header": {
+    "react": 18,
+    "shown": "ST · 18 anos · Brasil"
+   },
+   "age": 18,
+   "phase": "newspaper",
+   "stats": {
+    "swaps": 1258,
+    "removed": 8,
+    "inserted": 0,
+    "restored": 19
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "centre look 5",
+   "ok": true,
+   "did": "",
+   "pend": 0,
+   "structure": 0,
+   "raw": 0,
+   "digits": 2,
+   "back": 0,
+   "fonts": 756,
+   "judged": 438,
+   "header": {
+    "react": 18,
+    "shown": "ST · 18 anos · Brasil"
+   },
+   "age": 18,
+   "phase": "newspaper",
+   "stats": {
+    "swaps": 1258,
+    "removed": 8,
+    "inserted": 0,
+    "restored": 19
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "centre look 6",
+   "ok": true,
+   "did": "",
+   "pend": 0,
+   "structure": 0,
+   "raw": 0,
+   "digits": 2,
+   "back": 0,
+   "fonts": 756,
+   "judged": 438,
+   "header": {
+    "react": 18,
+    "shown": "ST · 18 anos · Brasil"
+   },
+   "age": 18,
+   "phase": "newspaper",
+   "stats": {
+    "swaps": 1258,
+    "removed": 8,
+    "inserted": 0,
+    "restored": 19
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "centre look 7",
+   "ok": true,
+   "did": "",
+   "pend": 0,
+   "structure": 0,
+   "raw": 0,
+   "digits": 2,
+   "back": 0,
+   "fonts": 756,
+   "judged": 438,
+   "header": {
+    "react": 18,
+    "shown": "ST · 18 anos · Brasil"
+   },
+   "age": 18,
+   "phase": "newspaper",
+   "stats": {
+    "swaps": 1258,
+    "removed": 8,
+    "inserted": 0,
+    "restored": 19
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "centre look 8",
+   "ok": true,
+   "did": "",
+   "pend": 0,
+   "structure": 0,
+   "raw": 0,
+   "digits": 2,
+   "back": 0,
+   "fonts": 756,
+   "judged": 438,
+   "header": {
+    "react": 18,
+    "shown": "ST · 18 anos · Brasil"
+   },
+   "age": 18,
+   "phase": "newspaper",
+   "stats": {
+    "swaps": 1258,
+    "removed": 8,
+    "inserted": 0,
+    "restored": 19
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "centre look 9",
+   "ok": true,
+   "did": "",
+   "pend": 0,
+   "structure": 0,
+   "raw": 0,
+   "digits": 2,
+   "back": 0,
+   "fonts": 756,
+   "judged": 438,
+   "header": {
+    "react": 18,
+    "shown": "ST · 18 anos · Brasil"
+   },
+   "age": 18,
+   "phase": "newspaper",
+   "stats": {
+    "swaps": 1258,
+    "removed": 8,
+    "inserted": 0,
+    "restored": 19
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "centre look 10",
+   "ok": true,
+   "did": "",
+   "pend": 0,
+   "structure": 0,
+   "raw": 0,
+   "digits": 2,
+   "back": 0,
+   "fonts": 756,
+   "judged": 438,
+   "header": {
+    "react": 18,
+    "shown": "ST · 18 anos · Brasil"
+   },
+   "age": 18,
+   "phase": "newspaper",
+   "stats": {
+    "swaps": 1258,
+    "removed": 8,
+    "inserted": 0,
+    "restored": 19
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "centre at rest",
+   "ok": true,
+   "did": "",
+   "pend": 100,
+   "structure": 0,
+   "raw": 0,
+   "digits": 2,
+   "back": 0,
+   "fonts": 756,
+   "judged": 438,
+   "header": {
+    "react": 18,
+    "shown": "ST · 18 anos · Brasil"
+   },
+   "age": 18,
+   "phase": "newspaper",
+   "stats": {
+    "swaps": 1258,
+    "removed": 8,
+    "inserted": 0,
+    "restored": 19
+   },
+   "backs": 0,
+   "jerr": ""
+  }
+ ],
+ "boxes": {
+  "nationality": {
+   "react": "Brazil🇧🇷",
+   "shown": "Brasil"
+  },
+  "position": {
+   "react": "Striker (ST)",
+   "shown": "Atacante (ST)"
+  },
+  "era": {
+   "react": "Current era (2025 start)",
+   "shown": "Era atual (início em 2025)"
+  }
+ },
+ "stop": "",
+ "ageLooks": 15,
+ "ageWrong": [],
+ "worst": {
+  "structure": 2,
+  "raw": 0,
+  "digits": 2
+ },
+ "all": {
+  "structure": [
+   {
+    "at": "div.space-y-1.5>button.flex>span",
+    "react": "",
+    "screen": "\"F:Atacante (ST)\"",
+    "step": "choose position Striker",
+    "phase": "translated"
+   },
+   {
+    "at": "div.space-y-1.5>button.flex>span",
+    "react": "",
+    "screen": "\"F:Era atual (início em 2025)\"",
+    "step": "choose era Current era",
+    "phase": "translated"
+   }
+  ],
+  "raw": [],
+  "digits": [
+   {
+    "at": "div>ol.list-decimal>li",
+    "react": "Roll your starting potential, somewhere in the mid 50s to high 60s, and reroll as many times as you like. Rerolls are fr",
+    "screen": "Role seu potencial inicial, que geralmente fica entre 55 e 60, e role novamente quantas vezes quiser. As rolagens adicio",
+    "step": "translated",
+    "phase": "translated"
+   },
+   {
+    "at": "div>ul.list-disc>li",
+    "react": "Retirement is suggested from age 30 once you drop 10 off your peak or hit 75 overall, forced below 50 overall at 33 or o",
+    "screen": "A aposentadoria é sugerida a partir dos 30 anos, quando você perde 10 pontos em relação ao seu pico de desempenho ou ati",
+    "step": "Customize your build",
+    "phase": "translated"
+   }
+  ]
+ },
+ "translated": true,
+ "reached": true,
+ "startAge": 16,
+ "centre": {
+  "found": true,
+  "looks": [
+   {
+    "k": 1,
+    "raw": 0,
+    "digits": 2,
+    "structure": 0,
+    "rawNow": [
+     "\n      @keyframes cmRise { 0% { opacity:",
+     "League game",
+     "Home",
+     "Botafogo",
+     "another club",
+     "Kick off."
+    ]
+   },
+   {
+    "k": 2,
+    "raw": 0,
+    "digits": 2,
+    "structure": 0,
+    "rawNow": [
+     "\n      @keyframes cmRise { 0% { opacity:",
+     "League game",
+     "Home",
+     "Botafogo",
+     "another club",
+     "Kick off."
+    ]
+   },
+   {
+    "k": 3,
+    "raw": 0,
+    "digits": 2,
+    "structure": 0,
+    "rawNow": [
+     "\n      @keyframes cmRise { 0% { opacity:",
+     "League game",
+     "Home",
+     "Botafogo",
+     "another club",
+     "Kick off."
+    ]
+   },
+   {
+    "k": 4,
+    "raw": 0,
+    "digits": 2,
+    "structure": 0,
+    "rawNow": [
+     "\n      @keyframes cmRise { 0% { opacity:",
+     "League game",
+     "Home",
+     "Botafogo",
+     "another club",
+     "Kick off."
+    ]
+   },
+   {
+    "k": 5,
+    "raw": 0,
+    "digits": 2,
+    "structure": 0,
+    "rawNow": [
+     "\n      @keyframes cmRise { 0% { opacity:",
+     "League game",
+     "Home",
+     "Botafogo",
+     "another club",
+     "Kick off."
+    ]
+   },
+   {
+    "k": 6,
+    "raw": 0,
+    "digits": 2,
+    "structure": 0,
+    "rawNow": [
+     "\n      @keyframes cmRise { 0% { opacity:",
+     "League game",
+     "Home",
+     "Botafogo",
+     "another club",
+     "Kick off."
+    ]
+   },
+   {
+    "k": 7,
+    "raw": 0,
+    "digits": 2,
+    "structure": 0,
+    "rawNow": [
+     "\n      @keyframes cmRise { 0% { opacity:",
+     "League game",
+     "Home",
+     "Botafogo",
+     "another club",
+     "Kick off."
+    ]
+   },
+   {
+    "k": 8,
+    "raw": 0,
+    "digits": 2,
+    "structure": 0,
+    "rawNow": [
+     "\n      @keyframes cmRise { 0% { opacity:",
+     "League game",
+     "Home",
+     "Botafogo",
+     "another club",
+     "Kick off."
+    ]
+   },
+   {
+    "k": 9,
+    "raw": 0,
+    "digits": 2,
+    "structure": 0,
+    "rawNow": [
+     "\n      @keyframes cmRise { 0% { opacity:",
+     "League game",
+     "Home",
+     "Botafogo",
+     "another club",
+     "Kick off."
+    ]
+   },
+   {
+    "k": 10,
+    "raw": 0,
+    "digits": 2,
+    "structure": 0,
+    "rawNow": [
+     "\n      @keyframes cmRise { 0% { opacity:",
+     "League game",
+     "Home",
+     "Botafogo",
+     "another club",
+     "Kick off."
+    ]
+   }
+  ],
+  "requests": 5,
+  "bad": 0,
+  "sample": {
+   "n": 309,
+   "withRaw": 309,
+   "rawSum": 4420,
+   "wrapSum": 0,
+   "maxRaw": 96,
+   "minRaw": 1,
+   "started": 4,
+   "fast": true,
+   "hist": {
+    "1": 2,
+    "8": 4,
+    "13": 4,
+    "14": 297,
+    "80": 1,
+    "96": 1
+   }
+  },
+  "rest": {
+   "raw": 0,
+   "digits": 2,
+   "structure": 0,
+   "pend": 100,
+   "rawNow": [
+    "\n      @keyframes cmRise { 0% { opacity:",
+    "League game",
+    "Home",
+    "Botafogo",
+    "another club",
+    "Kick off.",
+    "RECREATE",
+    "The ball breaks to you on the edge of th",
+    "On the record you scored here. Do it aga",
+    "How it plays: "
+   ]
+  }
+ },
+ "ageBeforeRestore": 18,
+ "end": {
+  "age": 18,
+  "phase": "newspaper",
+  "stats": {
+   "swaps": 1258,
+   "removed": 8,
+   "inserted": 0,
+   "restored": 19
+  },
+  "fonts": 756,
+  "h1": [
+   "João Teste"
+  ]
+ },
+ "net": {
+  "db": 3,
+  "blocked": [
+   "fonts.googleapis.com",
+   "fonts.gstatic.com",
+   "www.google.com"
+  ]
+ },
+ "errors": [],
+ "notFound": 0,
+ "guardLines": 0,
+ "seconds": 107
+}

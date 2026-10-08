@@ -1,0 +1,1691 @@
+{
+ "name": "phone-motion",
+ "view": "phone",
+ "motion": "no-preference",
+ "translate": true,
+ "nolive": false,
+ "steps": [
+  {
+   "name": "create screen draws",
+   "ok": true,
+   "did": "",
+   "pend": 190,
+   "structure": 0,
+   "raw": 0,
+   "digits": 0,
+   "back": 0,
+   "fonts": 0,
+   "judged": 187,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": {
+    "swaps": 0,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 0
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "translated",
+   "ok": true,
+   "did": "",
+   "pend": 89,
+   "structure": 0,
+   "raw": 0,
+   "digits": 1,
+   "back": 0,
+   "fonts": 194,
+   "judged": 187,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": {
+    "swaps": 102,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 1
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "type the name",
+   "ok": true,
+   "did": "",
+   "pend": 89,
+   "structure": 0,
+   "raw": 0,
+   "digits": 1,
+   "back": 0,
+   "fonts": 194,
+   "judged": 187,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": {
+    "swaps": 102,
+    "removed": 0,
+    "inserted": 0,
+    "restored": 1
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "choose nationality Brazil",
+   "ok": true,
+   "did": "Brazil🇧🇷",
+   "pend": 89,
+   "structure": 0,
+   "raw": 0,
+   "digits": 1,
+   "back": 0,
+   "fonts": 196,
+   "judged": 188,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": {
+    "swaps": 377,
+    "removed": 1,
+    "inserted": 0,
+    "restored": 1
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "choose position Striker",
+   "ok": true,
+   "did": "Striker (ST)",
+   "pend": 90,
+   "structure": 1,
+   "raw": 0,
+   "digits": 1,
+   "back": 0,
+   "fonts": 194,
+   "judged": 188,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": {
+    "swaps": 387,
+    "removed": 2,
+    "inserted": 0,
+    "restored": 1
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "choose era Current era",
+   "ok": true,
+   "did": "Current era (2025 start)",
+   "pend": 93,
+   "structure": 2,
+   "raw": 0,
+   "digits": 1,
+   "back": 0,
+   "fonts": 194,
+   "judged": 191,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": {
+    "swaps": 396,
+    "removed": 3,
+    "inserted": 0,
+    "restored": 1
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "Generate Starting Potential",
+   "ok": true,
+   "did": "🎲 Generate Starting Potential",
+   "pend": 88,
+   "structure": 2,
+   "raw": 0,
+   "digits": 1,
+   "back": 0,
+   "fonts": 288,
+   "judged": 224,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": {
+    "swaps": 458,
+    "removed": 3,
+    "inserted": 0,
+    "restored": 11
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "Roll again",
+   "ok": true,
+   "did": "🎲 Roll again",
+   "pend": 88,
+   "structure": 2,
+   "raw": 0,
+   "digits": 1,
+   "back": 0,
+   "fonts": 290,
+   "judged": 224,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": {
+    "swaps": 513,
+    "removed": 3,
+    "inserted": 0,
+    "restored": 13
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "Customize your build",
+   "ok": true,
+   "did": "🎮 Customize your build",
+   "pend": 88,
+   "structure": 0,
+   "raw": 0,
+   "digits": 1,
+   "back": 0,
+   "fonts": 262,
+   "judged": 217,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": {
+    "swaps": 579,
+    "removed": 5,
+    "inserted": 0,
+    "restored": 13
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "Lock in build",
+   "ok": true,
+   "did": "✅ Lock in build",
+   "pend": 88,
+   "structure": 2,
+   "raw": 0,
+   "digits": 1,
+   "back": 0,
+   "fonts": 290,
+   "judged": 224,
+   "header": null,
+   "age": null,
+   "phase": "",
+   "stats": {
+    "swaps": 659,
+    "removed": 5,
+    "inserted": 0,
+    "restored": 13
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "Begin Career",
+   "ok": true,
+   "did": "⚽ Begin Career",
+   "pend": 89,
+   "structure": 0,
+   "raw": 0,
+   "digits": 1,
+   "back": 0,
+   "fonts": 420,
+   "judged": 273,
+   "header": {
+    "react": 16,
+    "shown": "ST · 16 anos · Brasil"
+   },
+   "age": 16,
+   "phase": "youth",
+   "stats": {
+    "swaps": 804,
+    "removed": 7,
+    "inserted": 0,
+    "restored": 13
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "career press 1",
+   "ok": true,
+   "did": "Next Year",
+   "pend": 89,
+   "structure": 0,
+   "raw": 0,
+   "digits": 2,
+   "back": 0,
+   "fonts": 496,
+   "judged": 309,
+   "header": {
+    "react": 17,
+    "shown": "ST · 17 anos · Brasil"
+   },
+   "age": 17,
+   "phase": "contract_offer",
+   "stats": {
+    "swaps": 921,
+    "removed": 7,
+    "inserted": 0,
+    "restored": 18
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "career press 2",
+   "ok": true,
+   "did": "Review contract",
+   "pend": 103,
+   "structure": 0,
+   "raw": 0,
+   "digits": 2,
+   "back": 0,
+   "fonts": 496,
+   "judged": 322,
+   "header": {
+    "react": 17,
+    "shown": "ST · 17 anos · Brasil"
+   },
+   "age": 17,
+   "phase": "contract_offer",
+   "stats": {
+    "swaps": 921,
+    "removed": 7,
+    "inserted": 0,
+    "restored": 18
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "career press 3",
+   "ok": true,
+   "did": "Sign contract",
+   "pend": 90,
+   "structure": 0,
+   "raw": 0,
+   "digits": 1,
+   "back": 0,
+   "fonts": 450,
+   "judged": 288,
+   "header": {
+    "react": 17,
+    "shown": "ST · 17 anos · Brasil"
+   },
+   "age": 17,
+   "phase": "playing",
+   "stats": {
+    "swaps": 987,
+    "removed": 8,
+    "inserted": 0,
+    "restored": 19
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "career press 4",
+   "ok": true,
+   "did": "Next Season",
+   "pend": 90,
+   "structure": 0,
+   "raw": 0,
+   "digits": 1,
+   "back": 0,
+   "fonts": 358,
+   "judged": 258,
+   "header": {
+    "react": 18,
+    "shown": "ST · 18 anos · Brasil"
+   },
+   "age": 18,
+   "phase": "newspaper",
+   "stats": {
+    "swaps": 1026,
+    "removed": 8,
+    "inserted": 0,
+    "restored": 24
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "career press 5",
+   "ok": true,
+   "did": "Continue to Season Summary →",
+   "pend": 89,
+   "structure": 0,
+   "raw": 0,
+   "digits": 1,
+   "back": 0,
+   "fonts": 404,
+   "judged": 269,
+   "header": {
+    "react": 18,
+    "shown": "ST · 18 anos · Brasil"
+   },
+   "age": 18,
+   "phase": "season_summary",
+   "stats": {
+    "swaps": 1055,
+    "removed": 8,
+    "inserted": 0,
+    "restored": 24
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "career press 6",
+   "ok": true,
+   "did": "Continue →",
+   "pend": 89,
+   "structure": 0,
+   "raw": 0,
+   "digits": 1,
+   "back": 0,
+   "fonts": 468,
+   "judged": 312,
+   "header": {
+    "react": 18,
+    "shown": "ST · 18 anos · Brasil"
+   },
+   "age": 18,
+   "phase": "ballon_dor",
+   "stats": {
+    "swaps": 1116,
+    "removed": 8,
+    "inserted": 0,
+    "restored": 24
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "career press 7",
+   "ok": true,
+   "did": "Continue →",
+   "pend": 89,
+   "structure": 0,
+   "raw": 0,
+   "digits": 2,
+   "back": 0,
+   "fonts": 492,
+   "judged": 292,
+   "header": {
+    "react": 18,
+    "shown": "ST · 18 anos · Brasil"
+   },
+   "age": 18,
+   "phase": "social_media_action",
+   "stats": {
+    "swaps": 1189,
+    "removed": 8,
+    "inserted": 0,
+    "restored": 24
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "career press 8",
+   "ok": true,
+   "did": "🏋️Post training videoShow off your skills in the ",
+   "pend": 90,
+   "structure": 0,
+   "raw": 0,
+   "digits": 1,
+   "back": 0,
+   "fonts": 360,
+   "judged": 258,
+   "header": {
+    "react": 18,
+    "shown": "ST · 18 anos · Brasil"
+   },
+   "age": 18,
+   "phase": "social_media_action",
+   "stats": {
+    "swaps": 1195,
+    "removed": 8,
+    "inserted": 0,
+    "restored": 24
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "career press 9",
+   "ok": true,
+   "did": "Continue →",
+   "pend": 90,
+   "structure": 0,
+   "raw": 0,
+   "digits": 1,
+   "back": 0,
+   "fonts": 398,
+   "judged": 273,
+   "header": {
+    "react": 18,
+    "shown": "ST · 18 anos · Brasil"
+   },
+   "age": 18,
+   "phase": "random_events",
+   "stats": {
+    "swaps": 1219,
+    "removed": 8,
+    "inserted": 0,
+    "restored": 24
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "career press 10",
+   "ok": true,
+   "did": "🎭The ShowmanFame comes easy: followers grow 60% f",
+   "pend": 90,
+   "structure": 0,
+   "raw": 0,
+   "digits": 1,
+   "back": 0,
+   "fonts": 390,
+   "judged": 269,
+   "header": {
+    "react": 18,
+    "shown": "ST · 18 anos · Brasil"
+   },
+   "age": 18,
+   "phase": "random_events",
+   "stats": {
+    "swaps": 1239,
+    "removed": 8,
+    "inserted": 0,
+    "restored": 31
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "career press 11",
+   "ok": true,
+   "did": "😔Apologize publiclyPopularity -3, Manager relatio",
+   "pend": 91,
+   "structure": 0,
+   "raw": 0,
+   "digits": 1,
+   "back": 0,
+   "fonts": 388,
+   "judged": 270,
+   "header": {
+    "react": 18,
+    "shown": "ST · 18 anos · Brasil"
+   },
+   "age": 18,
+   "phase": "random_events",
+   "stats": {
+    "swaps": 1259,
+    "removed": 9,
+    "inserted": 0,
+    "restored": 41
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "career press 12",
+   "ok": true,
+   "did": "💳Pay for coaches and refund every ticket: €40kNet",
+   "pend": 91,
+   "structure": 0,
+   "raw": 0,
+   "digits": 1,
+   "back": 0,
+   "fonts": 396,
+   "judged": 267,
+   "header": {
+    "react": 18,
+    "shown": "ST · 18 anos · Brasil"
+   },
+   "age": 18,
+   "phase": "transfer_window",
+   "stats": {
+    "swaps": 1284,
+    "removed": 9,
+    "inserted": 0,
+    "restored": 44
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "career press 13",
+   "ok": true,
+   "did": "Request transfer 📤",
+   "pend": 91,
+   "structure": 0,
+   "raw": 0,
+   "digits": 1,
+   "back": 0,
+   "fonts": 474,
+   "judged": 294,
+   "header": {
+    "react": 18,
+    "shown": "ST · 18 anos · Brasil"
+   },
+   "age": 18,
+   "phase": "playing",
+   "stats": {
+    "swaps": 1344,
+    "removed": 9,
+    "inserted": 0,
+    "restored": 44
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "career press 14",
+   "ok": true,
+   "did": "Next Season",
+   "pend": 90,
+   "structure": 0,
+   "raw": 0,
+   "digits": 1,
+   "back": 0,
+   "fonts": 498,
+   "judged": 314,
+   "header": {
+    "react": 19,
+    "shown": "ST · 19 anos · Brasil"
+   },
+   "age": 19,
+   "phase": "newspaper",
+   "stats": {
+    "swaps": 1437,
+    "removed": 10,
+    "inserted": 0,
+    "restored": 50
+   },
+   "backs": 0,
+   "jerr": ""
+  },
+  {
+   "name": "just after show original",
+   "ok": true,
+   "did": "",
+   "pend": 0,
+   "structure": 0,
+   "raw": 0,
+   "digits": 0,
+   "back": 253,
+   "fonts": 0,
+   "judged": 313,
+   "header": {
+    "react": 19,
+    "shown": "ST · Age 19 · Brazil"
+   },
+   "age": 19,
+   "phase": "newspaper",
+   "stats": {
+    "swaps": 1437,
+    "removed": 10,
+    "inserted": 0,
+    "restored": 50
+   },
+   "backs": 506,
+   "jerr": ""
+  },
+  {
+   "name": "original press 1",
+   "ok": true,
+   "did": "Continue to Season Summary →",
+   "pend": 0,
+   "structure": 0,
+   "raw": 0,
+   "digits": 0,
+   "back": 247,
+   "fonts": 0,
+   "judged": 325,
+   "header": {
+    "react": 19,
+    "shown": "ST · Age 19 · Brazil"
+   },
+   "age": 19,
+   "phase": "season_summary",
+   "stats": {
+    "swaps": 1437,
+    "removed": 10,
+    "inserted": 0,
+    "restored": 50
+   },
+   "backs": 506,
+   "jerr": ""
+  },
+  {
+   "name": "original press 2",
+   "ok": true,
+   "did": "Continue →",
+   "pend": 0,
+   "structure": 0,
+   "raw": 0,
+   "digits": 0,
+   "back": 247,
+   "fonts": 0,
+   "judged": 368,
+   "header": {
+    "react": 19,
+    "shown": "ST · Age 19 · Brazil"
+   },
+   "age": 19,
+   "phase": "ballon_dor",
+   "stats": {
+    "swaps": 1437,
+    "removed": 10,
+    "inserted": 0,
+    "restored": 50
+   },
+   "backs": 506,
+   "jerr": ""
+  },
+  {
+   "name": "original press 3",
+   "ok": true,
+   "did": "Continue →",
+   "pend": 0,
+   "structure": 0,
+   "raw": 0,
+   "digits": 0,
+   "back": 247,
+   "fonts": 0,
+   "judged": 318,
+   "header": {
+    "react": 19,
+    "shown": "ST · Age 19 · Brazil"
+   },
+   "age": 19,
+   "phase": "rivalry_event",
+   "stats": {
+    "swaps": 1437,
+    "removed": 10,
+    "inserted": 0,
+    "restored": 50
+   },
+   "backs": 506,
+   "jerr": ""
+  },
+  {
+   "name": "original press 4",
+   "ok": true,
+   "did": "Continue →",
+   "pend": 0,
+   "structure": 0,
+   "raw": 2,
+   "digits": 1,
+   "back": 245,
+   "fonts": 0,
+   "judged": 347,
+   "header": {
+    "react": 19,
+    "shown": "ST · Age 19 · Brazil"
+   },
+   "age": 19,
+   "phase": "social_media_action",
+   "stats": {
+    "swaps": 1437,
+    "removed": 10,
+    "inserted": 0,
+    "restored": 50
+   },
+   "backs": 506,
+   "jerr": ""
+  },
+  {
+   "name": "original press 5",
+   "ok": true,
+   "did": "🎬Go viral with celebration clipPost an iconic goa",
+   "pend": 0,
+   "structure": 0,
+   "raw": 2,
+   "digits": 2,
+   "back": 245,
+   "fonts": 0,
+   "judged": 312,
+   "header": {
+    "react": 19,
+    "shown": "ST · Age 19 · Brazil"
+   },
+   "age": 19,
+   "phase": "social_media_action",
+   "stats": {
+    "swaps": 1437,
+    "removed": 10,
+    "inserted": 0,
+    "restored": 50
+   },
+   "backs": 506,
+   "jerr": ""
+  },
+  {
+   "name": "original press 6",
+   "ok": true,
+   "did": "Continue →",
+   "pend": 0,
+   "structure": 0,
+   "raw": 2,
+   "digits": 2,
+   "back": 245,
+   "fonts": 0,
+   "judged": 323,
+   "header": {
+    "react": 19,
+    "shown": "ST · Age 19 · Brazil"
+   },
+   "age": 19,
+   "phase": "random_events",
+   "stats": {
+    "swaps": 1437,
+    "removed": 10,
+    "inserted": 0,
+    "restored": 50
+   },
+   "backs": 506,
+   "jerr": ""
+  },
+  {
+   "name": "original press 7",
+   "ok": true,
+   "did": "🧢Cousin RickyFamily rates: tiny 3% transfer cut, ",
+   "pend": 0,
+   "structure": 0,
+   "raw": 2,
+   "digits": 1,
+   "back": 245,
+   "fonts": 0,
+   "judged": 321,
+   "header": {
+    "react": 19,
+    "shown": "ST · Age 19 · Brazil"
+   },
+   "age": 19,
+   "phase": "random_events",
+   "stats": {
+    "swaps": 1437,
+    "removed": 10,
+    "inserted": 0,
+    "restored": 50
+   },
+   "backs": 506,
+   "jerr": ""
+  },
+  {
+   "name": "original press 8",
+   "ok": true,
+   "did": "🪂Put it in the air and bully themPhysical +2 next",
+   "pend": 0,
+   "structure": 0,
+   "raw": 2,
+   "digits": 1,
+   "back": 245,
+   "fonts": 0,
+   "judged": 321,
+   "header": {
+    "react": 19,
+    "shown": "ST · Age 19 · Brazil"
+   },
+   "age": 19,
+   "phase": "random_events",
+   "stats": {
+    "swaps": 1437,
+    "removed": 10,
+    "inserted": 0,
+    "restored": 50
+   },
+   "backs": 506,
+   "jerr": ""
+  },
+  {
+   "name": "original press 9",
+   "ok": true,
+   "did": "🎯Stay behind for extra rondo work all seasonPassi",
+   "pend": 0,
+   "structure": 0,
+   "raw": 2,
+   "digits": 1,
+   "back": 245,
+   "fonts": 0,
+   "judged": 319,
+   "header": {
+    "react": 19,
+    "shown": "ST · Age 19 · Brazil"
+   },
+   "age": 19,
+   "phase": "random_events",
+   "stats": {
+    "swaps": 1437,
+    "removed": 10,
+    "inserted": 0,
+    "restored": 50
+   },
+   "backs": 506,
+   "jerr": ""
+  },
+  {
+   "name": "original press 10",
+   "ok": true,
+   "did": "🦝Officially adopt it as club mascotMorale +6, Gaf",
+   "pend": 0,
+   "structure": 0,
+   "raw": 2,
+   "digits": 1,
+   "back": 245,
+   "fonts": 0,
+   "judged": 322,
+   "header": {
+    "react": 19,
+    "shown": "ST · Age 19 · Brazil"
+   },
+   "age": 19,
+   "phase": "random_events",
+   "stats": {
+    "swaps": 1437,
+    "removed": 10,
+    "inserted": 0,
+    "restored": 50
+   },
+   "backs": 506,
+   "jerr": ""
+  },
+  {
+   "name": "original press 11",
+   "ok": true,
+   "did": "🧍Walk to the away end at full time and take itPop",
+   "pend": 0,
+   "structure": 0,
+   "raw": 2,
+   "digits": 1,
+   "back": 245,
+   "fonts": 0,
+   "judged": 328,
+   "header": {
+    "react": 19,
+    "shown": "ST · Age 19 · Brazil"
+   },
+   "age": 19,
+   "phase": "transfer_window",
+   "stats": {
+    "swaps": 1437,
+    "removed": 10,
+    "inserted": 0,
+    "restored": 50
+   },
+   "backs": 506,
+   "jerr": ""
+  },
+  {
+   "name": "original press 12",
+   "ok": true,
+   "did": "Review contract",
+   "pend": 0,
+   "structure": 0,
+   "raw": 2,
+   "digits": 1,
+   "back": 245,
+   "fonts": 0,
+   "judged": 343,
+   "header": {
+    "react": 19,
+    "shown": "ST · Age 19 · Brazil"
+   },
+   "age": 19,
+   "phase": "transfer_window",
+   "stats": {
+    "swaps": 1437,
+    "removed": 10,
+    "inserted": 0,
+    "restored": 50
+   },
+   "backs": 506,
+   "jerr": ""
+  },
+  {
+   "name": "original press 13",
+   "ok": true,
+   "did": "Sign contract",
+   "pend": 0,
+   "structure": 1,
+   "raw": 1,
+   "digits": 1,
+   "back": 244,
+   "fonts": 0,
+   "judged": 352,
+   "header": {
+    "react": 19,
+    "shown": "ST · Age 19 · Brazil"
+   },
+   "age": 19,
+   "phase": "playing",
+   "stats": {
+    "swaps": 1437,
+    "removed": 10,
+    "inserted": 0,
+    "restored": 50
+   },
+   "backs": 506,
+   "jerr": ""
+  },
+  {
+   "name": "original press 14",
+   "ok": true,
+   "did": "Next Season",
+   "pend": 0,
+   "structure": 0,
+   "raw": 1,
+   "digits": 1,
+   "back": 241,
+   "fonts": 0,
+   "judged": 320,
+   "header": {
+    "react": 19,
+    "shown": "ST · Age 19 · Brazil"
+   },
+   "age": 20,
+   "phase": "newspaper",
+   "stats": {
+    "swaps": 1437,
+    "removed": 10,
+    "inserted": 0,
+    "restored": 50
+   },
+   "backs": 506,
+   "jerr": ""
+  },
+  {
+   "name": "original press 15",
+   "ok": true,
+   "did": "Continue to Season Summary →",
+   "pend": 0,
+   "structure": 0,
+   "raw": 1,
+   "digits": 1,
+   "back": 241,
+   "fonts": 0,
+   "judged": 327,
+   "header": {
+    "react": 19,
+    "shown": "ST · Age 19 · Brazil"
+   },
+   "age": 20,
+   "phase": "season_summary",
+   "stats": {
+    "swaps": 1437,
+    "removed": 10,
+    "inserted": 0,
+    "restored": 50
+   },
+   "backs": 506,
+   "jerr": ""
+  },
+  {
+   "name": "original press 16",
+   "ok": true,
+   "did": "Continue →",
+   "pend": 0,
+   "structure": 0,
+   "raw": 1,
+   "digits": 1,
+   "back": 241,
+   "fonts": 0,
+   "judged": 371,
+   "header": {
+    "react": 19,
+    "shown": "ST · Age 19 · Brazil"
+   },
+   "age": 20,
+   "phase": "ballon_dor",
+   "stats": {
+    "swaps": 1437,
+    "removed": 10,
+    "inserted": 0,
+    "restored": 50
+   },
+   "backs": 506,
+   "jerr": ""
+  },
+  {
+   "name": "original press 17",
+   "ok": true,
+   "did": "Continue →",
+   "pend": 0,
+   "structure": 0,
+   "raw": 1,
+   "digits": 1,
+   "back": 241,
+   "fonts": 0,
+   "judged": 320,
+   "header": {
+    "react": 19,
+    "shown": "ST · Age 19 · Brazil"
+   },
+   "age": 20,
+   "phase": "rivalry_event",
+   "stats": {
+    "swaps": 1437,
+    "removed": 10,
+    "inserted": 0,
+    "restored": 50
+   },
+   "backs": 506,
+   "jerr": ""
+  },
+  {
+   "name": "original press 18",
+   "ok": true,
+   "did": "Continue →",
+   "pend": 0,
+   "structure": 0,
+   "raw": 1,
+   "digits": 1,
+   "back": 241,
+   "fonts": 0,
+   "judged": 353,
+   "header": {
+    "react": 19,
+    "shown": "ST · Age 19 · Brazil"
+   },
+   "age": 20,
+   "phase": "social_media_action",
+   "stats": {
+    "swaps": 1437,
+    "removed": 10,
+    "inserted": 0,
+    "restored": 50
+   },
+   "backs": 506,
+   "jerr": ""
+  },
+  {
+   "name": "original press 19",
+   "ok": true,
+   "did": "❤️Announce charity workHighlight your philanthropi",
+   "pend": 0,
+   "structure": 0,
+   "raw": 1,
+   "digits": 1,
+   "back": 241,
+   "fonts": 0,
+   "judged": 319,
+   "header": {
+    "react": 19,
+    "shown": "ST · Age 19 · Brazil"
+   },
+   "age": 20,
+   "phase": "social_media_action",
+   "stats": {
+    "swaps": 1437,
+    "removed": 10,
+    "inserted": 0,
+    "restored": 50
+   },
+   "backs": 506,
+   "jerr": ""
+  },
+  {
+   "name": "original press 20",
+   "ok": true,
+   "did": "Continue →",
+   "pend": 0,
+   "structure": 0,
+   "raw": 1,
+   "digits": 1,
+   "back": 241,
+   "fonts": 0,
+   "judged": 327,
+   "header": {
+    "react": 19,
+    "shown": "ST · Age 19 · Brazil"
+   },
+   "age": 20,
+   "phase": "random_events",
+   "stats": {
+    "swaps": 1437,
+    "removed": 10,
+    "inserted": 0,
+    "restored": 50
+   },
+   "backs": 506,
+   "jerr": ""
+  },
+  {
+   "name": "original press 21",
+   "ok": true,
+   "did": "🎤Answer him, on the record, in the mixed zone55%:",
+   "pend": 0,
+   "structure": 0,
+   "raw": 1,
+   "digits": 1,
+   "back": 241,
+   "fonts": 0,
+   "judged": 328,
+   "header": {
+    "react": 19,
+    "shown": "ST · Age 19 · Brazil"
+   },
+   "age": 20,
+   "phase": "random_events",
+   "stats": {
+    "swaps": 1437,
+    "removed": 10,
+    "inserted": 0,
+    "restored": 50
+   },
+   "backs": 506,
+   "jerr": ""
+  },
+  {
+   "name": "original press 22",
+   "ok": true,
+   "did": "🫱Apologise in front of the whole squadMorale +5, ",
+   "pend": 0,
+   "structure": 0,
+   "raw": 1,
+   "digits": 1,
+   "back": 241,
+   "fonts": 0,
+   "judged": 328,
+   "header": {
+    "react": 19,
+    "shown": "ST · Age 19 · Brazil"
+   },
+   "age": 20,
+   "phase": "random_events",
+   "stats": {
+    "swaps": 1437,
+    "removed": 10,
+    "inserted": 0,
+    "restored": 50
+   },
+   "backs": 506,
+   "jerr": ""
+  },
+  {
+   "name": "original press 23",
+   "ok": true,
+   "did": "🏗️Fund the ward's family room: €500kNet worth -€5",
+   "pend": 0,
+   "structure": 0,
+   "raw": 1,
+   "digits": 1,
+   "back": 241,
+   "fonts": 0,
+   "judged": 329,
+   "header": {
+    "react": 19,
+    "shown": "ST · Age 19 · Brazil"
+   },
+   "age": 20,
+   "phase": "random_events",
+   "stats": {
+    "swaps": 1437,
+    "removed": 10,
+    "inserted": 0,
+    "restored": 50
+   },
+   "backs": 506,
+   "jerr": ""
+  },
+  {
+   "name": "original press 24",
+   "ok": true,
+   "did": "🤠Ride Terry onto the pitchNet worth +€0.8M, Follo",
+   "pend": 0,
+   "structure": 0,
+   "raw": 1,
+   "digits": 1,
+   "back": 241,
+   "fonts": 0,
+   "judged": 326,
+   "header": {
+    "react": 19,
+    "shown": "ST · Age 19 · Brazil"
+   },
+   "age": 20,
+   "phase": "transfer_window",
+   "stats": {
+    "swaps": 1437,
+    "removed": 10,
+    "inserted": 0,
+    "restored": 50
+   },
+   "backs": 506,
+   "jerr": ""
+  }
+ ],
+ "boxes": {
+  "nationality": {
+   "react": "Brazil🇧🇷",
+   "shown": "Brasil"
+  },
+  "position": {
+   "react": "Striker (ST)",
+   "shown": "Striker (ST)"
+  },
+  "era": {
+   "react": "Current era (2025 start)",
+   "shown": "Current era (2025 start)"
+  }
+ },
+ "stop": "",
+ "ageLooks": 40,
+ "ageWrong": [
+  {
+   "step": "original press 14",
+   "shown": "ST · Age 19 · Brazil",
+   "save": 20,
+   "restored": true
+  },
+  {
+   "step": "original press 15",
+   "shown": "ST · Age 19 · Brazil",
+   "save": 20,
+   "restored": true
+  },
+  {
+   "step": "original press 16",
+   "shown": "ST · Age 19 · Brazil",
+   "save": 20,
+   "restored": true
+  },
+  {
+   "step": "original press 17",
+   "shown": "ST · Age 19 · Brazil",
+   "save": 20,
+   "restored": true
+  },
+  {
+   "step": "original press 18",
+   "shown": "ST · Age 19 · Brazil",
+   "save": 20,
+   "restored": true
+  },
+  {
+   "step": "original press 19",
+   "shown": "ST · Age 19 · Brazil",
+   "save": 20,
+   "restored": true
+  },
+  {
+   "step": "original press 20",
+   "shown": "ST · Age 19 · Brazil",
+   "save": 20,
+   "restored": true
+  },
+  {
+   "step": "original press 21",
+   "shown": "ST · Age 19 · Brazil",
+   "save": 20,
+   "restored": true
+  },
+  {
+   "step": "original press 22",
+   "shown": "ST · Age 19 · Brazil",
+   "save": 20,
+   "restored": true
+  },
+  {
+   "step": "original press 23",
+   "shown": "ST · Age 19 · Brazil",
+   "save": 20,
+   "restored": true
+  },
+  {
+   "step": "original press 24",
+   "shown": "ST · Age 19 · Brazil",
+   "save": 20,
+   "restored": true
+  }
+ ],
+ "worst": {
+  "structure": 2,
+  "raw": 2,
+  "digits": 2
+ },
+ "all": {
+  "structure": [
+   {
+    "at": "div.space-y-1.5>button.flex>span",
+    "react": "",
+    "screen": "\"Striker (ST)\"",
+    "step": "choose position Striker",
+    "phase": "translated"
+   },
+   {
+    "at": "div.space-y-1.5>button.flex>span",
+    "react": "",
+    "screen": "\"F:Atacante (ST)\"",
+    "step": "choose era Current era",
+    "phase": "translated"
+   },
+   {
+    "at": "div.space-y-1.5>button.flex>span",
+    "react": "",
+    "screen": "\"Current era (2025 start)\"",
+    "step": "choose era Current era",
+    "phase": "translated"
+   },
+   {
+    "at": "div.space-y-1.5>button.flex>span",
+    "react": "",
+    "screen": "\"F:Era atual (início em 2025)\"",
+    "step": "Generate Starting Potential",
+    "phase": "translated"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "<span> <img> <span>",
+    "screen": "\"🌍 Colombia won the Copa América.\" <span> <img> <span>",
+    "step": "original press 13",
+    "phase": "after show original"
+   }
+  ],
+  "raw": [
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "🌍 Colombia won the Copa América.",
+    "screen": "🏆 Won Player of the Month (October 2028)!",
+    "step": "original press 4",
+    "phase": "after show original"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "🤝 Rival Shows Respect",
+    "screen": "🌍 Colombia won the Copa América.",
+    "step": "original press 4",
+    "phase": "after show original"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "📱 🎬 Go viral with celebration clip: gained 0.7M followers!",
+    "screen": "🏆 Won Player of the Month (October 2028)!",
+    "step": "original press 5",
+    "phase": "after show original"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "🏪 NEW SPONSORSHIP: Local Brand Deal, €0.5M/year!",
+    "screen": "🌍 Colombia won the Copa América.",
+    "step": "original press 5",
+    "phase": "after show original"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "🏪 NEW SPONSORSHIP: Local Brand Deal, €0.5M/year!",
+    "screen": "🏆 Won Player of the Month (October 2028)!",
+    "step": "original press 7",
+    "phase": "after show original"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "🧢 Signed with Cousin Ricky. What could go wrong",
+    "screen": "🌍 Colombia won the Copa América.",
+    "step": "original press 7",
+    "phase": "after show original"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "🧢 Signed with Cousin Ricky. What could go wrong",
+    "screen": "🏆 Won Player of the Month (October 2028)!",
+    "step": "original press 8",
+    "phase": "after show original"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "🏖️ Won a cup tie on a sand pitch by putting every ball in the sky. Ugly, effect",
+    "screen": "🌍 Colombia won the Copa América.",
+    "step": "original press 8",
+    "phase": "after show original"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "🏖️ Won a cup tie on a sand pitch by putting every ball in the sky. Ugly, effect",
+    "screen": "🏆 Won Player of the Month (October 2028)!",
+    "step": "original press 9",
+    "phase": "after show original"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "🔁 Did rondo drills after every session until nobody could nutmeg you again",
+    "screen": "🌍 Colombia won the Copa América.",
+    "step": "original press 9",
+    "phase": "after show original"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "🔁 Did rondo drills after every session until nobody could nutmeg you again",
+    "screen": "🏆 Won Player of the Month (October 2028)!",
+    "step": "original press 10",
+    "phase": "after show original"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "🦝 Gaffer Two is now official staff. Attendance: perfect",
+    "screen": "🌍 Colombia won the Copa América.",
+    "step": "original press 10",
+    "phase": "after show original"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "🦝 Gaffer Two is now official staff. Attendance: perfect",
+    "screen": "🏆 Won Player of the Month (October 2028)!",
+    "step": "original press 11",
+    "phase": "after show original"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "🧍 Stood in front of the banner for ninety seconds and took every word. They san",
+    "screen": "🌍 Colombia won the Copa América.",
+    "step": "original press 11",
+    "phase": "after show original"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "🧍 Stood in front of the banner for ninety seconds and took every word. They san",
+    "screen": "🏆 Won Player of the Month (October 2028)!",
+    "step": "original press 13",
+    "phase": "after show original"
+   },
+   {
+    "at": "div.flex>div.min-w-0>p.text-xs",
+    "react": "20",
+    "screen": "19",
+    "step": "original press 14",
+    "phase": "after show original"
+   }
+  ],
+  "digits": [
+   {
+    "at": "div>ol.list-decimal>li",
+    "react": "Roll your starting potential, somewhere in the mid 50s to high 60s, and reroll as many times as you like. Rerolls are fr",
+    "screen": "Role seu potencial inicial, que geralmente fica entre 55 e 60, e role novamente quantas vezes quiser. As rolagens adicio",
+    "step": "translated",
+    "phase": "translated"
+   },
+   {
+    "at": "div.bg-card>div.flex>span",
+    "react": "💰  €2k/wk ",
+    "screen": "💰  €2.000/semana ",
+    "step": "career press 1",
+    "phase": "translated"
+   },
+   {
+    "at": "div.flex-1>div.flex>span.text-[9px]",
+    "react": "+ 1.0M  followers ",
+    "screen": "+  1 milhão de  seguidores ",
+    "step": "career press 7",
+    "phase": "translated"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "🌍 Colombia won the Copa América. ",
+    "screen": "🏆 Won Player of the Month (October 2028)! ",
+    "step": "original press 4",
+    "phase": "after show original"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "📱 🎬 Go viral with celebration clip: gained 0.7M followers! ",
+    "screen": "🏆 Won Player of the Month (October 2028)! ",
+    "step": "original press 5",
+    "phase": "after show original"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "🏪 NEW SPONSORSHIP: Local Brand Deal, €0.5M/year! ",
+    "screen": "🌍 Colombia won the Copa América. ",
+    "step": "original press 5",
+    "phase": "after show original"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "🏪 NEW SPONSORSHIP: Local Brand Deal, €0.5M/year! ",
+    "screen": "🏆 Won Player of the Month (October 2028)! ",
+    "step": "original press 7",
+    "phase": "after show original"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "🧢 Signed with Cousin Ricky. What could go wrong ",
+    "screen": "🏆 Won Player of the Month (October 2028)! ",
+    "step": "original press 8",
+    "phase": "after show original"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "🏖️ Won a cup tie on a sand pitch by putting every ball in the sky. Ugly, effective, unforgettable ",
+    "screen": "🏆 Won Player of the Month (October 2028)! ",
+    "step": "original press 9",
+    "phase": "after show original"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "🔁 Did rondo drills after every session until nobody could nutmeg you again ",
+    "screen": "🏆 Won Player of the Month (October 2028)! ",
+    "step": "original press 10",
+    "phase": "after show original"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "🦝 Gaffer Two is now official staff. Attendance: perfect ",
+    "screen": "🏆 Won Player of the Month (October 2028)! ",
+    "step": "original press 11",
+    "phase": "after show original"
+   },
+   {
+    "at": "div.mt-2>div.text-xs>span",
+    "react": "🧍 Stood in front of the banner for ninety seconds and took every word. They sang your name in May ",
+    "screen": "🏆 Won Player of the Month (October 2028)! ",
+    "step": "original press 13",
+    "phase": "after show original"
+   },
+   {
+    "at": "div.flex>div.min-w-0>p.text-xs",
+    "react": "ST  · Age  20  ·  ",
+    "screen": "ST  · Age  19  ·  ",
+    "step": "original press 14",
+    "phase": "after show original"
+   }
+  ]
+ },
+ "translated": true,
+ "reached": true,
+ "startAge": 16,
+ "ageBeforeRestore": 19,
+ "restore": {
+  "how": "banner button :1.restore",
+  "fontsBefore": 498,
+  "backsBefore": 0,
+  "ms": 881,
+  "fontsAfter": 0,
+  "backsAfter": 506,
+  "lang": "en",
+  "cls": ""
+ },
+ "staleBox": {
+  "x": 76,
+  "y": 149.75,
+  "width": 302,
+  "height": 16.5
+ },
+ "afterTop": {
+  "header": {
+   "react": 19,
+   "shown": "ST · Age 19 · Brazil"
+  },
+  "save": {
+   "phase": "transfer_window",
+   "age": 20,
+   "name": "Joao Teste",
+   "nat": "Brazil"
+  },
+  "raw": 1,
+  "digits": 1,
+  "samples": {
+   "structure": [],
+   "raw": [
+    {
+     "at": "div.flex>div.min-w-0>p.text-xs",
+     "react": "20",
+     "screen": "19"
+    }
+   ],
+   "digits": [
+    {
+     "at": "div.flex>div.min-w-0>p.text-xs",
+     "react": "ST  · Age  20  ·  ",
+     "screen": "ST  · Age  19  ·  "
+    }
+   ]
+  }
+ },
+ "end": {
+  "age": 20,
+  "phase": "transfer_window",
+  "stats": {
+   "swaps": 1437,
+   "removed": 10,
+   "inserted": 0,
+   "restored": 50
+  },
+  "fonts": 0,
+  "h1": [
+   "Joao Teste"
+  ]
+ },
+ "net": {
+  "db": 5,
+  "blocked": [
+   "fonts.googleapis.com",
+   "fonts.gstatic.com",
+   "www.google.com"
+  ]
+ },
+ "errors": [],
+ "notFound": 0,
+ "guardLines": 1,
+ "seconds": 99
+}
