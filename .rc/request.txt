@@ -1,0 +1,5 @@
+#!playwright
+#!serial
+merge: git fetch -q origin main && echo "src/pages/WhatsNew.tsx merge=union" >> .git/info/attributes && git -c user.name=rv -c user.email=rv@example.invalid merge --no-edit FETCH_HEAD 2>&1 | tail -4; echo "MERGE_EXIT=${PIPESTATUS[0]}"; git status --short | head -8; git log --oneline -1; grep -c "signing day is a scene" src/pages/WhatsNew.tsx; grep -c "Translated pages stopped crashing" src/pages/WhatsNew.tsx; grep -c "<<<<<<<|>>>>>>>" src/pages/WhatsNew.tsx
+build2: npm run build
+translated: node scripts/playTranslatedPage.mjs
