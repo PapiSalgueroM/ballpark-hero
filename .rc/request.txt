@@ -1,0 +1,12 @@
+#!serve
+#!playwright
+#!serial
+fit-a: node scripts/playLiveMatchFit.mjs
+fit-b: node scripts/playLiveMatchFit.mjs
+fit-c: node scripts/playLiveMatchFit.mjs
+fit-silentlist: LIVE_FIT_CONTROL=silentlist node scripts/playLiveMatchFit.mjs
+fit-bar: LIVE_FIT_CONTROL=bar node scripts/playLiveMatchFit.mjs
+c.reduced: node scripts/playReducedMotion.mjs
+sog.cmchunks: node .rc/x/cmLiveChunks.mjs
+help2: node .rc/x/vfyHelp.mjs
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
