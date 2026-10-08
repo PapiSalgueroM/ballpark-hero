@@ -10,7 +10,13 @@
    before, and never counts through numbers). A hidden tab pauses the clock
    and it picks up where it was; reduced motion paints full time on the first
    frame. The event list has a fixed height and scrolls inside itself, so
-   nothing below it moves while the match plays. */
+   nothing below it moves while the match plays.
+
+   Round 1047: `holdAt` stops the clock a beat before that minute (one of
+   his moments is about to happen) and `onHold` says so once; the clock
+   carries on when the hold is lifted, with the match as it then stands.
+   Under reduced motion and at Results the clock still stops there, so every
+   moment is playable. */
 import { useEffect, useRef, useState } from 'react';
 import type { DerivedGame, SeasonEvent } from '@/lib/season/core';
 
@@ -43,19 +49,26 @@ interface Props {
   paused: boolean;
   reduced: boolean;
   onFullTime: () => void;
+  /** Stop a beat before this minute until it is lifted (null or absent: run to full time). */
+  holdAt?: number | null;
+  onHold?: () => void;
 }
 
-export function MatchClock({ game, clock, usName, themName, speed, paused, reduced, onFullTime }: Props) {
+export function MatchClock({ game, clock, usName, themName, speed, paused, reduced, onFullTime, holdAt, onHold }: Props) {
   const FULL_TIME = clock.length;
   const instant = reduced || speed === 'results';
-  const [minute, setMinute] = useState(() => (instant ? FULL_TIME : 0));
+  /* the last minute the clock may show for now */
+  const limit = holdAt != null ? Math.max(0, Math.min(FULL_TIME, holdAt - 1)) : FULL_TIME;
+  const [minute, setMinute] = useState(() => (instant ? limit : 0));
   const done = minute >= FULL_TIME;
+  const held = !done && holdAt != null && minute >= limit;
+  const heldFor = useRef<number | null>(null);
   const listRef = useRef<HTMLOListElement | null>(null);
   const told = useRef(false);
 
   useEffect(() => {
-    if (done) return;
-    if (instant) { setMinute(FULL_TIME); return; }
+    if (done || held) return;
+    if (instant) { setMinute(limit); return; }
     if (paused) return;
     let raf = 0;
     let last = performance.now();
@@ -66,16 +79,19 @@ export function MatchClock({ game, clock, usName, themName, speed, paused, reduc
     const tick = (now: number) => {
       const dt = Math.min(250, now - last);
       last = now;
-      if (!hidden) setMinute(m => Math.min(FULL_TIME, m + dt * perMs));
+      if (!hidden) setMinute(m => Math.min(limit, m + dt * perMs));
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
     return () => { cancelAnimationFrame(raf); document.removeEventListener('visibilitychange', onVis); };
-  }, [done, instant, paused, speed, FULL_TIME]);
+  }, [done, held, limit, instant, paused, speed, FULL_TIME]);
 
   useEffect(() => {
     if (done && !told.current) { told.current = true; onFullTime(); }
   }, [done, onFullTime]);
+  useEffect(() => {
+    if (held && holdAt != null && heldFor.current !== holdAt) { heldFor.current = holdAt; onHold?.(); }
+  }, [held, holdAt, onHold]);
 
   const shown = Math.floor(minute);
   const seen = game.events.filter(e => e.min <= shown);
@@ -91,7 +107,7 @@ export function MatchClock({ game, clock, usName, themName, speed, paused, reduc
   const hg = game.home ? us : them;
   const ag = game.home ? them : us;
   return (
-    <div data-match-clock data-minute={shown} data-score={`${us}-${them}`}>
+    <div data-match-clock data-minute={shown} data-score={`${us}-${them}`} data-held={held ? 'true' : undefined}>
       <div className="flex items-center justify-between gap-2 rounded-xl bg-muted/30 px-3 py-2">
         <span className="min-w-0 flex-1 truncate text-sm font-bold">{homeName}</span>
         <span key={`${hg}-${ag}`} className={`${shown > 0 && !instant ? 'cm-slam' : ''} shrink-0 text-xl font-black tabular-nums`} data-score-bug>
