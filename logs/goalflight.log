@@ -1,0 +1,5 @@
+Goal flight: prefetched 9 actual template font assets.
+simTycoonGoalFlight: FAIL, 0/4 effective copied controls; historical expected failure=false.
+Normal component case inventory: 8; completed subprocess receipts: 1.
+Original-source holds: 11; hold error retained: false.
+Scope: finite component proof; headed browser requires xvfb and prefetched actual font cache. Evidence: /home/runner/work/ballpark-hero/ballpark-hero/tycoon-goal-flight-artifacts

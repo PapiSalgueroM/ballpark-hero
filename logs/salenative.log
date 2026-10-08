@@ -1,0 +1,20 @@
+Prepared 9 actual sale-review font dependencies.
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: The single paused clock command starts both monotonic clocks at zero
+
+154 !== 0
+
+    at openPage (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playTycoonSaleReview1083.mjs:277:10)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playTycoonSaleReview1083.mjs:284:22 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 154,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

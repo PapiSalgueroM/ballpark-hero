@@ -1,0 +1,48 @@
+{
+  "complete": false,
+  "normalCases": 8,
+  "controls": [],
+  "runs": [
+    {
+      "arm": "normal",
+      "status": 1,
+      "signal": null,
+      "error": null,
+      "stdoutHash": "b3f2ce7e954be6a3aa3c2f42505625f10570eaa61f1f2b35c02c712bc65d01a4",
+      "stderrHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "reportHash": "ee3be12427eab01e381d4d795508ece01b8d5ea0fc9f7a2b973a24663ee0537c"
+    }
+  ],
+  "sourceBefore": {
+    "src/components/tycoon/TycoonPitch.tsx": "a07fd3ae089b0561cf4ab36fb88952f71b47763c9e37b4ed9caef757826b1f07",
+    "scripts/qa/tycoonGoalFlight1087.mjs": "4289786dce76b71406b945e60f50517a9e624f236dc539fcc9edfb36346c40e7",
+    "scripts/simTycoonGoalFlight.mjs": "77fc185fd1f6dabe0edcf949c915c04b0addfd1a9b303b070bd97dd4c96e60a0",
+    "scripts/simTycoonPitch.mjs": "1dc0b43332e0c2356dc36a619beabcb73985ccb9f111a835c4fd3be76e104090",
+    "scripts/simTycoonPitchRunner.mjs": "91227a72a214d86bc41960d330840e9f2ba00b576f41b83129e7463a0bc44dcb",
+    "src/test/tycoonPitch.test.tsx": "1b051066144da4e7c5b2f60138349f87bbfdd3a7c43e2aea15bf9879eed21274",
+    "src/lib/stadiumTycoon.ts": "812d7dee058f6afec4842b4c63df603dd72090756c4a09eb2106945eaf352c03",
+    "src/lib/leagueCore.ts": "9c37a88f13585def063097e69db2cdc94a90aab24b470f3b564bda9c1f7d57f9",
+    "src/hooks/useStadiumTycoon.ts": "54bc0428de91f60fefcfeba7e748b252a47cff9ab43e34dcd4de908b22bfe0c8",
+    "package.json": "9adfa72b65f9c08b94e3dfccf4fe8f7fc5ea571f18e6cc9f9686d83d69d283fc",
+    "package-lock.json": "ebb4fa47b6fa258ac5a4458160c37299caecba098b71ce60b4c0b2a65a26e953"
+  },
+  "scope": "Finite actual React component and unchanged-engine fixtures. The pinned old component remains a deliberately failing historical physical-flight reference.",
+  "error": {
+    "name": "AssertionError",
+    "message": "normal completes every declared scenario\n\nfalse !== true\n",
+    "stack": "AssertionError [ERR_ASSERTION]: normal completes every declared scenario\n\nfalse !== true\n\n    at run (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simTycoonGoalFlight.mjs:35:10)\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simTycoonGoalFlight.mjs:46:18"
+  },
+  "sourceAfter": {
+    "src/components/tycoon/TycoonPitch.tsx": "a07fd3ae089b0561cf4ab36fb88952f71b47763c9e37b4ed9caef757826b1f07",
+    "scripts/qa/tycoonGoalFlight1087.mjs": "4289786dce76b71406b945e60f50517a9e624f236dc539fcc9edfb36346c40e7",
+    "scripts/simTycoonGoalFlight.mjs": "77fc185fd1f6dabe0edcf949c915c04b0addfd1a9b303b070bd97dd4c96e60a0",
+    "scripts/simTycoonPitch.mjs": "1dc0b43332e0c2356dc36a619beabcb73985ccb9f111a835c4fd3be76e104090",
+    "scripts/simTycoonPitchRunner.mjs": "91227a72a214d86bc41960d330840e9f2ba00b576f41b83129e7463a0bc44dcb",
+    "src/test/tycoonPitch.test.tsx": "1b051066144da4e7c5b2f60138349f87bbfdd3a7c43e2aea15bf9879eed21274",
+    "src/lib/stadiumTycoon.ts": "812d7dee058f6afec4842b4c63df603dd72090756c4a09eb2106945eaf352c03",
+    "src/lib/leagueCore.ts": "9c37a88f13585def063097e69db2cdc94a90aab24b470f3b564bda9c1f7d57f9",
+    "src/hooks/useStadiumTycoon.ts": "54bc0428de91f60fefcfeba7e748b252a47cff9ab43e34dcd4de908b22bfe0c8",
+    "package.json": "9adfa72b65f9c08b94e3dfccf4fe8f7fc5ea571f18e6cc9f9686d83d69d283fc",
+    "package-lock.json": "ebb4fa47b6fa258ac5a4458160c37299caecba098b71ce60b4c0b2a65a26e953"
+  }
+}

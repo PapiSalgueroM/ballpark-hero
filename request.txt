@@ -1,0 +1,19 @@
+#!serve
+#!playwright
+goalflight: node scripts/qa/tycoonGoalFlight1087.mjs --prefetch-fonts-only && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" xvfb-run -a node scripts/simTycoonGoalFlight.mjs; rc=$?; mkdir -p "$RC_OUT/goalflight"; cp tycoon-goal-flight-artifacts/summary.json "$RC_OUT/goalflight/" 2>/dev/null; exit $rc
+salenative: node scripts/playTycoonSaleReview1083.mjs --prefetch-fonts-only && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" xvfb-run -a node scripts/playTycoonSaleReview1083.mjs
+rooms: node scripts/simTycoonRooms.mjs
+helpgate: git show origin/release-al-gate:scripts/simTycoonHelp.mjs > scripts/simTycoonHelpGate.mjs && node scripts/simTycoonHelpGate.mjs
+salereview: node scripts/simTycoonSaleReview.mjs
+ticket: node scripts/simTycoonTicketPolicy.mjs
+stadium: node scripts/simStadiumTycoon.mjs
+away: node scripts/simTycoonAway.mjs
+awaymd: node scripts/simTycoonAwayMatchdays.mjs
+clock: node scripts/simTycoonClock.mjs
+gear: node scripts/simTycoonGear.mjs
+league: node scripts/simTycoonLeague.mjs
+packpace: node scripts/simTycoonPackPace.mjs
+packs: node scripts/simTycoonPacks.mjs
+setpiece: node scripts/simTycoonSetPiece.mjs
+gearfit: node scripts/playTycoonGearFit.mjs
+setpiecefit: BASE=http://127.0.0.1:4173 node scripts/playTycoonSetPieceFit.mjs

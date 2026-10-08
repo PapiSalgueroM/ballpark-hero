@@ -1,0 +1,28 @@
+PASS deterministic offers and away exclusion: 10,000 unchanged repeat offers; 3,334 penalties; all 61 minutes and five free-kick indices; zero away offers
+PASS offer window and expired match guards: exact window boundaries; an opened kick can finish before full time; stale match and ground tokens rejected
+PASS one goal and normal bonus in 10,000 matches: 10000 single normal bonuses; 40,000 duplicate awards rejected; no mutation before save acceptance
+PASS reload, malformed latches and prestige: absent fields stay absent; failed, closed and paid shots survive reload and prestige; 16 malformed latches fail closed
+PASS ignored offers preserve frozen watched and away histories: 12 committed pre-round watched and away histories are byte identical, including rolls and money
+MEASUREMENT {"calibration":[{"matches":2000,"seedStart":1,"ignoredWins":928,"kickerWins":1173,"uplift":0.1225,"goals":2000},{"matches":2000,"seedStart":2001,"ignoredWins":941,"kickerWins":1161,"uplift":0.11,"goals":2000}],"holdout":{"matches":2000,"seedStart":4001,"ignoredWins":967,"kickerWins":1180,"uplift":0.1065,"goals":2000}}
+PASS perfect-kicker measured win uplift: two 2,000-match calibration batches and one independent 2,000-match holdout; frozen uplift band 5.8125..17.4375 percentage points
+PASS board import graph has no daily or completion dependency: 7 actual source modules traversed, including the shot engine
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/tycoonSetPieceBoard.test.tsx[2m > [22mone watched-match kick[2m > [22muses the selected shot once, with no daily record or completion[32m 247[2mms[22m[39m
+ [32m✓[39m src/test/tycoonSetPieceBoard.test.tsx[2m > [22mone watched-match kick[2m > [22mretries only the committed shot after a failed save[32m 119[2mms[22m[39m
+ [32m✓[39m src/test/tycoonSetPieceBoard.test.tsx[2m > [22mone watched-match kick[2m > [22mcannot shoot after full time, and clearly labels a late rejected result[32m 80[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m   Start at [22m 11:14:45
+[2m   Duration [22m 2.17s[2m (transform 374ms, setup 72ms, collect 585ms, tests 447ms, environment 437ms, prepare 99ms)[22m
+
+JSON report written to /home/runner/work/_temp/t-setpiece/tycoon-set-piece-jRimwL/board-report.json
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+PASS board runtime has no daily, completion or storage side effect: 3 real board tests passed; selected aim, no records, same-shot save retry and expiry
+Tycoon set pieces: 8/8 selected sections pass
