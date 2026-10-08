@@ -1,0 +1,11 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/soccerClubSquad.test.ts [2m([22m[2m34 tests[22m[2m)[22m[33m 1374[2mms[22m[39m
+   [33m[2m✓[22m[39m the living squad[2m > [22mnames the right man as the last one in ahead of him: never himself, always the lowest of his line in the eleven [33m 445[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m34 passed[39m[22m[90m (34)[39m
+[2m   Start at [22m 08:25:50
+[2m   Duration [22m 4.92s[2m (transform 1.80s, setup 109ms, collect 2.17s, tests 1.37s, environment 558ms, prepare 206ms)[22m
+

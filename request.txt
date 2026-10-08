@@ -1,0 +1,10 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/soccerClubSquad.test.ts --testTimeout=300000 --hookTimeout=120000
+quick: node scripts/simCareerSquad.mjs 40
+seed1: SEED=1 CAREER_SQUAD_NO_CONTROLS=1 node scripts/simCareerSquad.mjs
+seed2: SEED=2 CAREER_SQUAD_NO_CONTROLS=1 node scripts/simCareerSquad.mjs
+seed3: SEED=3 CAREER_SQUAD_NO_CONTROLS=1 node scripts/simCareerSquad.mjs
+seed4: SEED=4 CAREER_SQUAD_NO_CONTROLS=1 node scripts/simCareerSquad.mjs
+seed5: SEED=5 CAREER_SQUAD_NO_CONTROLS=1 node scripts/simCareerSquad.mjs
+simClubSquads: node scripts/simClubSquads.mjs
+simSoccerOfferReview: node scripts/simSoccerOfferReview.mjs

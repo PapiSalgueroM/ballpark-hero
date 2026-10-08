@@ -1,0 +1,10 @@
+vitest exit=0 5s |    Duration  4.92s (transform 1.80s, setup 109ms, collect 2.17s, tests 1.37s, environment 558ms, prepare 206ms)
+quick exit=1 69s | Node.js v24.21.0
+tsc exit=0 83s | 
+seed1 exit=0 79s | simCareerSquad: 2178 checks, 0 failed
+seed2 exit=0 76s | simCareerSquad: 2181 checks, 0 failed
+seed3 exit=0 79s | simCareerSquad: 2177 checks, 0 failed
+simClubSquads exit=0 2s | simClubSquads: green. The squad is the real one, you are in the right place in it, and the game never noticed.
+seed4 exit=0 81s | simCareerSquad: 2178 checks, 0 failed
+simSoccerOfferReview exit=0 10s | Soccer offer review: passed.
+seed5 exit=0 61s | simCareerSquad: 2177 checks, 0 failed
