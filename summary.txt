@@ -1,0 +1,1 @@
+vitest-all exit=0 284s |    Duration  282.58s (transform 21.44s, setup 11.30s, collect 88.14s, tests 584.71s, environment 90.88s, prepare 19.50s)
