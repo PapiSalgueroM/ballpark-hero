@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+# Round 1104 review (runner lens): walk 2, and the two fences that needed Chromium
+rvwalk2: node .rc/x/rv-walk2.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simResultMoment: node scripts/simResultMoment.mjs
