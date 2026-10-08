@@ -1,0 +1,7 @@
+# Round 1105, merged tree: the whole vitest run, then the three vitest controls that must each FAIL (exit 1)
+#!serial
+vitest-whole: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000
+offline-nocount: CG_OFFLINE_CONTROL=nocount node_modules/.bin/vitest run src/test/collegeGridOffline.test.tsx --testTimeout=300000 --hookTimeout=120000
+fc-paged: CG_FAILCLOSED_CONTROL=paged node_modules/.bin/vitest run src/test/collegeGridFailClosed.test.tsx --testTimeout=300000 --hookTimeout=120000
+fc-acceptmissing: CG_FAILCLOSED_CONTROL=acceptmissing node_modules/.bin/vitest run src/test/collegeGridFailClosed.test.tsx --testTimeout=300000 --hookTimeout=120000
+round-files: node_modules/.bin/vitest run src/test/gridEngineSource.test.ts src/test/playerSearchLocal.test.ts src/test/collegeGridFailClosed.test.tsx src/test/collegeGridOffline.test.tsx src/test/gridNamesakes.test.ts src/test/playerSearchFailure.test.tsx src/test/dailySaveParity.test.tsx src/test/dailySaveShapes.test.tsx --testTimeout=300000 --hookTimeout=120000
