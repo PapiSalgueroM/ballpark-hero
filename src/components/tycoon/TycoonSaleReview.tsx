@@ -6,6 +6,13 @@ import {
   repMult, startingMoneyOf, TICKET_POLICIES,
 } from '@/lib/stadiumTycoon';
 import type { TycoonState } from '@/lib/stadiumTycoon';
+import { formatNumber } from '@/lib/formatNumber';
+
+/* Release AM: the page groups its money since Round 1085 ($2,540), and the
+   engine's own fmtMoney does not under 10,000 ($2540), so the review said one
+   and the new ground's header said the other a second later. Same grouping
+   here as the page's own wrapper. */
+const money = (n: number) => fmtMoney(n).replace(/^\$(-?\d+(?:\.\d+)?)([KMBTQ]?)$/, (_text,amount: string, unit: string) => `$${formatNumber(amount)}${unit}`);
 
 export default function TycoonSaleReview({ state, onSell }: {
   state: TycoonState; onSell: () => boolean;
@@ -47,17 +54,17 @@ export default function TycoonSaleReview({ state, onSell }: {
         <div className="min-h-0 space-y-3 overflow-y-auto text-xs leading-relaxed">
           {help ? <div data-sale-help className="space-y-3">
             <p>Selling up trades this ground's progress for one reputation star and legacy points. Your reputation multiplier is permanent, but today's income also depends on the ground, crowd and staff you are resetting.</p>
-            <p>Example: selling now adds {award} legacy point{award === 1 ? '' : 's'}, taking your balance from {currentPoints} to {currentPoints + award}. Your new ground opens with {fmtMoney(startingCash)}. Rolling Investment is already included.</p>
+            <p>Example: selling now adds {award} legacy point{award === 1 ? '' : 's'}, taking your balance from {currentPoints} to {currentPoints + award}. Your new ground opens with {money(startingCash)}. Rolling Investment is already included.</p>
             <p>These terms follow the live game. A promotion while this is open can increase the legacy points. Back leaves the sale untouched. Only Sell and restart sells the ground.</p>
           </div> : <>
             <dl className="grid grid-cols-2 gap-3 rounded-lg border border-border p-3">
               <div><dt className="text-muted-foreground">Legacy points earned</dt><dd data-sale-award={award} className="font-bold text-sm">+{award}</dd></div>
-              <div><dt className="text-muted-foreground">New ground cash</dt><dd data-sale-starting-cash={startingCash} className="font-bold text-sm">{fmtMoney(startingCash)}</dd></div>
+              <div><dt className="text-muted-foreground">New ground cash</dt><dd data-sale-starting-cash={startingCash} className="font-bold text-sm">{money(startingCash)}</dd></div>
               <div className="col-span-2"><dt className="text-muted-foreground">Reputation multiplier</dt><dd className="font-bold text-sm"><span data-sale-rep-current={currentRep}>x{currentRep.toFixed(2)}</span> to <span data-sale-rep-next={nextRep}>x{nextRep.toFixed(2)}</span></dd></div>
             </dl>
             <div data-sale-resets className="space-y-1 rounded-lg bg-muted/40 p-3">
               <p className="font-semibold">This ground resets</p>
-              <p>Current cash becomes {fmtMoney(startingCash)}. This ground's earnings reset to 0. Fans return to {fresh.fanbase}. Ground upgrades and staff start at level 0.</p>
+              <p>Current cash becomes {money(startingCash)}. This ground's earnings reset to 0. Fans return to {fresh.fanbase}. Ground upgrades and staff start at level 0.</p>
               <p>You restart in {DIVISIONS[0].name}. The current match, table, win streak and temporary boosts reset.</p>
               <p>Ticket offer returns to {TICKET_POLICIES.find(policy => policy.id === 'standard')!.label}.</p>
             </div>
