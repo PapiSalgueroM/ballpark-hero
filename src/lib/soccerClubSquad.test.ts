@@ -10,7 +10,11 @@
  */
 import { describe, expect, it } from 'vitest';
 import { CLUB_DATA_NAME, CLUB_SQUADS } from '@/data/clubSquads';
-import { clubSquad, depthChart } from '@/lib/soccerClubSquad';
+import { clubSquad, depthChart, managerTrust, squadNow, squadSaveKey, squadView } from '@/lib/soccerClubSquad';
+import { lastSeason, offerFit, squadHelp, squadHelpExamples, trustLines } from '@/lib/soccerClubSquadSheet';
+import { FALLBACK_CLUBS, initCareer } from '@/lib/soccerCareerEngine';
+import type { CareerState, SeasonRecord } from '@/lib/soccerCareerEngine';
+import { phoneAppsSwing } from '@/lib/soccerPhone';
 import { allIntlNames } from '@/lib/intlNames';
 import {
   genClubSquad, squadCentre, SQUAD_SLOTS, LAST_STARTER_SLOTS, FOREIGN_NATIONS, familyIdFor, CARRY_SEASONS,
@@ -199,5 +203,131 @@ describe('the invented squad', () => {
     expect(before).toBe(0);
     /* inside the real window the base is ignored: the caller shows the real squad itself */
     expect(genClubSquad({ ...q, year: 2026 }).every(m => m.id)).toBe(true);
+  });
+});
+
+/* ── Round 1115 step 3: the living squad, trust, the reasons, the help ──── */
+const STATS = { pace: 60, shooting: 60, passing: 60, dribbling: 60, defending: 60, physical: 60, reflexes: 60 };
+
+/** A save built by the real engine, then moved to a club and a season. */
+function save(club: string, country: string, tier: number, overall: number, lastYear: number, rows: Partial<SeasonRecord>[] = []): CareerState {
+  const s = initCareer('Test Player', 'England', 'ST', '2020s', STATS, overall, 2025, FALLBACK_CLUBS, null);
+  const youth = s.seasons[0];
+  const played = rows.map(r => ({ ...youth, type: 'playing' as const, club, clubCountry: country, clubTier: tier, apps: 30, leagueApps: 26, rating: 6.9, ...r }));
+  const filler = played.length ? [] : [{ ...youth, year: lastYear, type: 'playing' as const, club: 'Somewhere Else', clubTier: 3, apps: 30, leagueApps: 26, rating: 6.9 }];
+  return { ...s, phase: 'playing', currentClub: club, currentClubCountry: country, currentClubTier: tier, overall, seasons: [youth, ...filler, ...played] };
+}
+
+describe('the living squad', () => {
+  it('has three sources and says which', () => {
+    const real = squadView(save('Real Madrid', 'Spain', 1, 84, 2023));
+    expect(real?.source).toBe('real');
+    expect(real?.year).toBe(2024);
+    expect(real?.queue.filter(m => !m.me).every(m => m.age === undefined && m.id === undefined)).toBe(true);
+    expect(real?.arrivals).toEqual([]);
+
+    const later = squadView(save('Real Madrid', 'Spain', 1, 84, 2027));
+    expect(later?.source).toBe('invented');
+    expect(later?.carried).toBeGreaterThan(0);
+
+    const roles = squadView(save('Leeds', 'England', 2, 70, 2004));
+    expect(roles?.source).toBe('roles');
+    const pool = new Set(allIntlNames());
+    for (const m of [...(roles?.bench ?? []), ...Object.values(roles?.eleven ?? {}).flat()]) {
+      if (m.me) continue;
+      expect(m.role).toBe(m.name);
+      expect(pool.has(m.name)).toBe(false);
+    }
+
+    const invented = squadView(save('Leeds', 'England', 2, 70, 2030));
+    expect(invented?.source).toBe('invented');
+    expect(invented?.carried).toBe(0);
+    expect(invented?.bench.length).toBe(23 - 11);
+  });
+
+  it('puts him exactly once across the eleven and the bench, in lines of 1, 4, 3 and 3', () => {
+    for (const ovr of [50, 66, 67, 72, 80, 93]) {
+      const v = squadView(save('Leeds', 'England', 2, ovr, 2030));
+      if (!v) throw new Error('no view');
+      const xi = Object.values(v.eleven).flat();
+      expect([v.eleven.GK.length, v.eleven.DEF.length, v.eleven.MID.length, v.eleven.ATT.length]).toEqual([1, 4, 3, 3]);
+      expect([...xi, ...v.bench].filter(m => m.me).length).toBe(1);
+      expect(xi.some(m => m.me)).toBe(v.inElevenOnRating);
+      expect(v.keepsMeOut === null).toBe(v.inElevenOnRating);
+      expect(v.rank).toBeGreaterThanOrEqual(1);
+      expect(v.rank).toBeLessThanOrEqual(v.groupSize);
+    }
+  });
+
+  it('agrees with the plan at the line by construction: 67 is in both pictures, 66 in neither', () => {
+    const inside = squadView(save('Leeds', 'England', 2, 67, 2030));
+    const outside = squadView(save('Leeds', 'England', 2, 66, 2030));
+    expect([inside?.inElevenOnRating, inside?.trust.inPlans]).toEqual([true, true]);
+    expect([outside?.inElevenOnRating, outside?.trust.inPlans]).toEqual([false, false]);
+  });
+
+  it('does not change when the nation on the save does', () => {
+    const a = save('Leeds', 'England', 2, 70, 2030);
+    const b = { ...a, nationality: 'Ghana' };
+    expect(squadSaveKey(b)).toBe(squadSaveKey(a));
+    expect(squadView(b)).toEqual(squadView(a));
+  });
+
+  it('shows nothing in the academy or after retiring, but still answers a caller with its own club', () => {
+    const youth = initCareer('Test Player', 'England', 'ST', '2020s', STATS, 55, 2025, FALLBACK_CLUBS, null);
+    expect(squadNow(youth)).toBeNull();
+    expect(squadView(youth)).toBeNull();
+    expect(squadView({ ...save('Leeds', 'England', 2, 70, 2030), retired: true })).toBeNull();
+    const fit = offerFit(youth, { club: { name: 'Leeds', country: 'England', tier: 2 } });
+    expect(fit?.club).toBe('Leeds');
+    expect(fit?.rank).toBeGreaterThanOrEqual(1);
+  });
+
+  it('reads trust from the band, the phone and the freeze', () => {
+    const base = save('Leeds', 'England', 2, 74, 2030);
+    const at = squadNow(base);
+    if (!at) throw new Error('no club');
+    const warm = { ...base, phone: { threads: [{ rel: 90 }] } } as unknown as CareerState;
+    const cold = { ...base, phone: { threads: [{ rel: 10 }] } } as unknown as CareerState;
+    expect(phoneAppsSwing(warm)).toBe(3);
+    expect(phoneAppsSwing(cold)).toBe(-3);
+    expect(managerTrust(base, at)).toMatchObject({ expected: 25, pct: 66, swing: 0, inPlans: true, label: 'Starter most weeks' });
+    expect(managerTrust(warm, at)).toMatchObject({ expected: 28, pct: 74, swing: 3, label: 'Nailed on starter' });
+    expect(managerTrust(cold, at)).toMatchObject({ expected: 22, pct: 58, swing: -3, label: 'Starter most weeks' });
+    const frozen = managerTrust({ ...base, frozenOut: 1 }, at);
+    expect(frozen).toMatchObject({ expected: 6, frozen: true, inPlans: false, label: 'Frozen out' });
+    expect(trustLines({ ...base, frozenOut: 1 }, at, frozen)[0]).toContain('8 league games at most');
+    expect(trustLines(warm, at, managerTrust(warm, at))).toEqual([
+      'The plan is about 23 to 33 league games if you stay fit.',
+      'You are 2 above the level this squad expects (72).',
+      'The dressing room has your back: about 3 more league games.',
+    ]);
+  });
+
+  it('explains a thin season from the saved row', () => {
+    const thin = save('Leeds', 'England', 2, 62, 2030, [{ year: 2030, ovr: 62, leagueApps: 11, apps: 17 }]);
+    const last = lastSeason(thin);
+    expect(last).toMatchObject({ club: 'Leeds', year: 2030, leagueApps: 11, apps: 17, thin: true, loan: false });
+    expect(last?.lines).toContain('Going into that season you were 10 rating points under the level that squad expects.');
+    expect(last?.lines.some(l => l.startsWith('On our ratings you went into the season'))).toBe(true);
+    const old = save('Leeds', 'England', 2, 62, 2030, [{ year: 2030, ovr: undefined, leagueApps: 11, apps: 17 }]);
+    expect(lastSeason(old)?.lines).toEqual(['This season was saved before the game kept the numbers that explain it.']);
+    const full = save('Leeds', 'England', 2, 62, 2030, [{ year: 2030, ovr: 62, leagueApps: 24, apps: 30 }]);
+    expect(lastSeason(full)?.lines.some(l => l.includes('last one in'))).toBe(false);
+    expect(lastSeason(initCareer('Test Player', 'England', 'ST', '2020s', STATS, 55, 2025, FALLBACK_CLUBS, null))).toBeNull();
+  });
+
+  it('computes the numbers in the help, and the help prints them', () => {
+    const n = squadHelpExamples();
+    expect(n).toMatchObject({
+      atOrAbove: 2, rank: 3, groupSize: 6, centre: 72, above: 2, band: { min: 20, max: 30 }, mid: 25, pct: 66,
+      pctWithSwing: 71, under: 10, thinBand: { min: 8, max: 18 }, thinRank: 6,
+    });
+    const help = squadHelp();
+    expect(help.rules.length).toBe(5);
+    expect(help.examples[0]).toContain('you are 3rd of 6 forwards');
+    expect(help.examples[1]).toContain('20 to 30 league games, and 25 of 38 is trust 66%');
+    expect(help.examples[2]).toContain('8 to 18 league games');
+    expect(JSON.stringify(help)).not.toMatch(/4-3-3/);
   });
 });

@@ -17,14 +17,31 @@
  * the card says which club and which season it is describing so nobody has to
  * guess.
  *
- * WHAT IT WILL NOT DO. It shows nothing at all rather than guessing: a club
- * outside the hand written map in clubSquads.ts, a season outside the baked
- * window, or a club whose data that year could not field a team all produce
- * null, and the card simply does not render. No generated teammates stand in
- * for real ones here, because unlike a national squad in 2045 there is no
- * honest way to invent the squad of a real club in a real season.
+ * REAL OR NOT, NEVER PASSED OFF. `clubSquad` and `depthChart` answer with
+ * the real squad or with null, exactly as they always have: a club outside
+ * the hand written map in clubSquads.ts, a season outside the baked window,
+ * or a club whose data that year could not field a team all produce null,
+ * and the lines that read them (the offer fit, the club's verdict) stay real
+ * only.
+ *
+ * Round 1115 adds a second reader beside them, the LIVING squad, for the
+ * Squad tile. It has three sources and the screen always says which:
+ *   real      the baked squad, exactly as above, where one exists;
+ *   roles     a real past season with no checked squad list: the squad is
+ *             drawn by role only (position, age, rating), with NO names,
+ *             because an invented name is never attached to a real club in
+ *             a real past season;
+ *   invented  from the summer after the baked window the world is the
+ *             game's own: the club's last real squad carries on, each man
+ *             until he leaves, and the men who replace them are invented
+ *             and named from the fenced name families.
+ * Still display only: nothing below is read by the simulation.
  */
 import { CLUB_SQUADS, CLUB_DATA_NAME, CLUB_SQUAD_YEARS } from '@/data/clubSquads';
+import type { CareerState } from './soccerCareerEngine';
+import { projectLeagueApps } from './soccerCareerEngine';
+import { phoneAppsSwing } from './soccerPhone';
+import { genClubSquad, ELEVEN_SHAPE } from './soccerClubSquadGen';
 
 export type SquadGroup = 'GK' | 'DEF' | 'MID' | 'ATT';
 
@@ -147,3 +164,166 @@ export const GROUP_LABEL: Record<SquadGroup, string> = {
   MID: 'midfielders',
   ATT: 'forwards',
 };
+
+/* ─── Round 1115: the living squad ──────────────────────────────────────── */
+
+export type SquadSource = 'real' | 'invented' | 'roles';
+
+export interface SquadAt { club: string; country: string; tier: number; year: number }
+
+export interface LivingSquad {
+  club: string;
+  year: number;
+  source: SquadSource;
+  /** Best first, the player not in it. */
+  men: SquadMan[];
+}
+
+/** The manager's plan for his league games, read from the engine's own inputs. */
+export interface Trust {
+  /** Planned league games as a share of the 38. */
+  pct: number;
+  expected: number;
+  band: { min: number; max: number };
+  swing: number;
+  frozen: boolean;
+  /** The engine's own line between a starter and cover: a plan of 20 or more. */
+  inPlans: boolean;
+  label: string;
+}
+
+export interface SquadView {
+  club: string;
+  year: number;
+  source: SquadSource;
+  /** How many men of the club's last real squad are still here (invented squads only). */
+  carried: number;
+  group: SquadGroup;
+  /** His own line, best first, with him in it. */
+  queue: SquadMan[];
+  rank: number;
+  groupSize: number;
+  /** Where RATING alone puts him. Who actually plays is the plan: trust.inPlans. */
+  inElevenOnRating: boolean;
+  aheadOfMe: SquadMan | null;
+  /** The last man of his line inside the eleven on rating, when he is outside it. */
+  keepsMeOut: SquadMan | null;
+  eleven: Record<SquadGroup, SquadMan[]>;
+  bench: SquadMan[];
+  /** Men in HIS line who arrived this summer. Never a real man. */
+  arrivals: SquadMan[];
+  trust: Trust;
+}
+
+/**
+ * What the invented men are keyed to: facts every save has always held and
+ * nothing rewrites. Not the nation: one life event changes it mid career,
+ * and that summer every teammate at every club would have been replaced.
+ */
+export function squadSaveKey(c: CareerState): string {
+  const first = c.seasons[0];
+  return [c.playerName, c.position, first?.year, first?.club].join('|');
+}
+
+/** His club and the season he is about to play, or null when there is no
+ *  squad to show: retired, or still in the academy he started at. */
+export function squadNow(c: CareerState): SquadAt | null {
+  if (c.retired) return null;
+  const first = c.seasons[0];
+  if (first && first.type === 'youth' && c.currentClub === first.club) return null;
+  const last = c.seasons[c.seasons.length - 1];
+  return {
+    club: c.currentClub, country: c.currentClubCountry, tier: c.currentClubTier,
+    year: (last?.year ?? 0) + 1,
+  };
+}
+
+export function livingSquad(saveKey: string, at: SquadAt): LivingSquad | null {
+  if (!at.club || !Number.isFinite(at.year) || !Number.isFinite(at.tier)) return null;
+  const real = clubSquad(at.club, at.year);
+  if (real) return { club: at.club, year: at.year, source: 'real', men: real };
+  const q = { saveKey, club: at.club, country: at.country ?? '', tier: at.tier, year: at.year };
+  if (at.year > CLUB_SQUAD_YEARS.last) {
+    const last = clubSquad(at.club, CLUB_SQUAD_YEARS.last);
+    const base = last ? { men: last, year: CLUB_SQUAD_YEARS.last } : null;
+    return { club: at.club, year: at.year, source: 'invented', men: genClubSquad({ ...q, base }) };
+  }
+  return { club: at.club, year: at.year, source: 'roles', men: genClubSquad({ ...q, named: false }) };
+}
+
+const clampN = (n: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, n));
+
+/**
+ * The engine's own plan, without the dice: the band calcAppearances draws
+ * from, the dressing room swing it adds, and the freeze it applies. Trust
+ * reads the phone as it stands on the hub; the engine reads it after that
+ * summer's texts arrive, which is why every sentence built on this says
+ * "about".
+ */
+export function managerTrust(c: CareerState, at: SquadAt, myOverall: number = c.overall): Trust {
+  const seasonsAtClub = c.seasons.filter(s => s.club === at.club && s.type === 'playing').length;
+  const band = projectLeagueApps(myOverall, at.tier, at.club, seasonsAtClub);
+  const swing = phoneAppsSwing(c);
+  const frozen = at.club === c.currentClub && (c.frozenOut ?? 0) > 0;
+  let expected = clampN((band.min + band.max) / 2 + swing, 0, 38);
+  if (frozen) expected = Math.min(8, Math.round(expected * 0.25));
+  const pct = Math.round((expected / 38) * 100);
+  const label = frozen ? 'Frozen out'
+    : pct >= 85 ? 'First name on the team sheet'
+      : pct >= 70 ? 'Nailed on starter'
+        : pct >= 55 ? 'Starter most weeks'
+          : pct >= 38 ? 'In and out of the side'
+            : 'Squad player';
+  return { pct, expected, band, swing, frozen, inPlans: !frozen && band.min >= 20, label };
+}
+
+/* Left, centre, right inside a line, the way a team sheet reads. */
+const SIDE: Record<string, number> = { LB: 0, LM: 0, LW: 0, RB: 2, RM: 2, RW: 2 };
+const bySide = (men: SquadMan[]) => men
+  .map((m, i) => ({ m, i }))
+  .sort((a, b) => (SIDE[a.m.pos] ?? 1) - (SIDE[b.m.pos] ?? 1) || a.i - b.i)
+  .map(x => x.m);
+
+const GROUPS: SquadGroup[] = ['GK', 'DEF', 'MID', 'ATT'];
+
+/**
+ * His place in the squad for a season: by default the one he is about to
+ * play. A caller that passes its own `at` (an offer, a past season) gets
+ * that club and season instead.
+ */
+export function squadView(c: CareerState, at: SquadAt | null = squadNow(c), myOverall: number = c.overall): SquadView | null {
+  if (!at) return null;
+  const squad = livingSquad(squadSaveKey(c), at);
+  if (!squad) return null;
+  const chart = chartFrom(squad.men, at.club, at.year, c.position, myOverall, c.playerName);
+  if (!chart) return null;
+  const me = chart.men[chart.ahead];
+  const eleven = { GK: [], DEF: [], MID: [], ATT: [] } as Record<SquadGroup, SquadMan[]>;
+  const picked = new Set<SquadMan>();
+  for (const g of GROUPS) {
+    const line = g === chart.group ? chart.men : squad.men.filter(m => m.group === g);
+    eleven[g] = bySide(line.slice(0, ELEVEN_SHAPE[g]));
+    for (const m of eleven[g]) picked.add(m);
+  }
+  const everyone = [...squad.men];
+  everyone.splice(squad.men.filter(m => m.ovr >= me.ovr).length, 0, me);
+  const rank = chart.ahead + 1;
+  const inElevenOnRating = rank <= ELEVEN_SHAPE[chart.group];
+  return {
+    club: at.club,
+    year: at.year,
+    source: squad.source,
+    carried: squad.source === 'invented' ? squad.men.filter(m => !m.id).length : 0,
+    group: chart.group,
+    queue: chart.men,
+    rank,
+    groupSize: chart.men.length,
+    inElevenOnRating,
+    aheadOfMe: chart.aheadOfMe,
+    keepsMeOut: inElevenOnRating ? null : chart.men[ELEVEN_SHAPE[chart.group] - 1] ?? null,
+    eleven,
+    bench: everyone.filter(m => !picked.has(m)),
+    arrivals: squad.men.filter(m => m.group === chart.group && m.id !== undefined && m.since === at.year),
+    trust: managerTrust(c, at, myOverall),
+  };
+}
