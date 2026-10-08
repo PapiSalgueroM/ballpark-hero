@@ -1,0 +1,51 @@
+#!serve
+#!playwright
+f2final.tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+f2final.vit-hall: node_modules/.bin/vitest run src/test/careerHall.test.tsx src/test/careerHallV1Replay.test.ts src/test/usCareerHallBoard.test.tsx src/test/usCareerActionConfirm.test.tsx --testTimeout=300000 --hookTimeout=120000
+f2final.vit-unchanged: node_modules/.bin/vitest run src/test/usCareerProspect.test.tsx src/test/usCareerStatLines.test.tsx src/test/careerSeasonReview.test.tsx src/test/usCareerSummer.test.tsx src/test/noDoubleRecord.test.tsx src/test/usBoardFixture.test.tsx --testTimeout=300000 --hookTimeout=120000
+f2final.full-nfl: TMPDIR=$(mktemp -d) node scripts/simCareerHall.mjs nfl
+f2final.full-nba: TMPDIR=$(mktemp -d) node scripts/simCareerHall.mjs nba
+f2final.full-mlb: TMPDIR=$(mktemp -d) node scripts/simCareerHall.mjs mlb
+f2final.full-nhl: TMPDIR=$(mktemp -d) node scripts/simCareerHall.mjs nhl
+f2final.ctl-nfl: bash .rc/x/rc-controls2.sh nfl
+f2final.ctl-nba: bash .rc/x/rc-controls2.sh nba
+f2final.ctl-mlb: bash .rc/x/rc-controls2.sh mlb
+f2final.ctl-nhl: bash .rc/x/rc-controls2.sh nhl
+f2final.board-nostamp: TMPDIR=$(mktemp -d) SIM_CONTROL=nostamp node scripts/simCareerHall.mjs nba
+f2final.board-talkdraws: TMPDIR=$(mktemp -d) SIM_CONTROL=talkdraws node scripts/simCareerHall.mjs nba
+f2final.board-deckfarewelloff: TMPDIR=$(mktemp -d) SIM_CONTROL=deckfarewelloff node scripts/simCareerHall.mjs nba
+f2final.board-twice: TMPDIR=$(mktemp -d) SIM_CONTROL=twice node scripts/simCareerHall.mjs nba
+f2final.board-seekexclude: TMPDIR=$(mktemp -d) SIM_CONTROL=seekexclude node scripts/simCareerHall.mjs nba
+f2final.board-jerseyignore: TMPDIR=$(mktemp -d) SIM_CONTROL=jerseyignore node scripts/simCareerHall.mjs nba
+f2final.board-eraunguarded: TMPDIR=$(mktemp -d) SIM_CONTROL=eraunguarded node scripts/simCareerHall.mjs nba
+f2final.walk: SHOTS=$RC_OUT node scripts/playCareerHallLine.mjs
+f2final.walk-noline: PLAY_CONTROL=noline SHOTS=$RC_OUT node scripts/playCareerHallLine.mjs
+f2final.weight: bash .rc/x/weight.sh
+f2final.sweepWeight: node scripts/sweepWeight.mjs
+f2final.press: node scripts/playCareerPress.mjs
+f2final.press-noscrum: CAREER_PRESS_CONTROL=noscrum node scripts/playCareerPress.mjs
+f2final.parity: node scripts/simUsBoardParity.mjs
+f2final.simUsCareerWeight: node scripts/simUsCareerWeight.mjs
+f2final.simUsCareerDeckC: node scripts/simUsCareerDeckC.mjs
+f2final.simUsCareerActionConfirm: node scripts/simUsCareerActionConfirm.mjs
+f2final.simNflCareer: node scripts/simNflCareer.mjs
+f2final.simNbaCareer: node scripts/simNbaCareer.mjs
+f2final.simMlbCareer: node scripts/simMlbCareer.mjs
+f2final.simNhlCareer: node scripts/simNhlCareer.mjs
+f2final.simNoRivalNames: node scripts/simNoRivalNames.mjs
+f2final.simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+f2final.simSiteSearch: node scripts/simSiteSearch.mjs
+f2final.simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+f2final.simInventedNames: node scripts/simInventedNames.mjs
+v2a.big-nfl: TMPDIR=$(mktemp -d) SIM_SKIP_BOARD=1 SIM_CONTROL=standoutbig node scripts/simCareerHall.mjs nfl
+v2a.big-nba: TMPDIR=$(mktemp -d) SIM_SKIP_BOARD=1 SIM_CONTROL=standoutbig node scripts/simCareerHall.mjs nba
+v2a.big-mlb: TMPDIR=$(mktemp -d) SIM_SKIP_BOARD=1 SIM_CONTROL=standoutbig node scripts/simCareerHall.mjs mlb
+v2a.big-nhl: TMPDIR=$(mktemp -d) SIM_SKIP_BOARD=1 SIM_CONTROL=standoutbig node scripts/simCareerHall.mjs nhl
+v2a.base-nfl: TMPDIR=$(mktemp -d) SIM_SKIP_BOARD=1 SIM_CONTROL=basebig node scripts/simCareerHall.mjs nfl
+v2a.base-nba: TMPDIR=$(mktemp -d) SIM_SKIP_BOARD=1 SIM_CONTROL=basebig node scripts/simCareerHall.mjs nba
+v2a.base-mlb: TMPDIR=$(mktemp -d) SIM_SKIP_BOARD=1 SIM_CONTROL=basebig node scripts/simCareerHall.mjs mlb
+v2a.base-nhl: TMPDIR=$(mktemp -d) SIM_SKIP_BOARD=1 SIM_CONTROL=basebig node scripts/simCareerHall.mjs nhl
+v2a.gone-nfl: TMPDIR=$(mktemp -d) SIM_SKIP_BOARD=1 SIM_CONTROL=standoutgone node scripts/simCareerHall.mjs nfl
+v2a.gone-nhl: TMPDIR=$(mktemp -d) SIM_SKIP_BOARD=1 SIM_CONTROL=standoutgone node scripts/simCareerHall.mjs nhl
+v2a.back-nfl: TMPDIR=$(mktemp -d) SIM_SKIP_BOARD=1 SIM_CONTROL=decisionback node scripts/simCareerHall.mjs nfl
+v2a.back-mlb: TMPDIR=$(mktemp -d) SIM_SKIP_BOARD=1 SIM_CONTROL=decisionback node scripts/simCareerHall.mjs mlb
