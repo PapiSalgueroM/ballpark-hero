@@ -1,0 +1,8 @@
+Gauntlet Draft: Soccer (/gauntlet-draft): the ladder is 70, 76, 81, 85, 89; its guide entry is 5193 characters
+   FAIL [1] Gauntlet Draft: Soccer: the guide prints the climb once, and it is the ladder: the guide says 70, 76, 81, 85, 90, the board plays 70, 76, 81, 85, 89
+Gauntlet Draft: NFL (/nfl-gauntlet-draft): the ladder is 79, 83, 88, 92, 97; its guide entry is 6222 characters
+   the pool: quarterbacks 65 to 93, backs 63 to 95, receivers 63 to 95, tight ends 70 to 95; the guide names 0 rated cards (none) and 1 slot deal (quarterback: 93, 88, 82, 76, 71)
+Gauntlet Draft: NBA (/nba-gauntlet-draft): the ladder is 85, 89, 93, 97, 101; its guide entry is 5298 characters
+Gauntlet Draft: MLB (/mlb-gauntlet-draft): the ladder is 74, 81, 87, 92, 97; its guide entry is 6239 characters
+Gauntlet Draft: NHL (/nhl-gauntlet-draft): the ladder is 77, 84, 89, 94, 98; its guide entry is 7150 characters
+control staleclimb fired: 1 new failure (/gauntlet-draft section 1), expected only /gauntlet-draft section 1; 0 were red without it
