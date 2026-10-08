@@ -54,8 +54,46 @@ const EXTRA = {
   rivalries: 'data/clubRivalries.ts',
   pool: 'data/soccerCareerClubPool.ts',
 };
+/* ─── Negative controls and the tap ───
+   SIM_LEAGUE_WORLD_CONTROL=<name>: each is a transform of one source file in
+   the bundle (the tree is never edited), first asserts its anchor exists
+   (exit 2 when it does not: the control is dead), names the section that
+   must go red, and the run exits 0 only if that section did. `world` says
+   whether the control needs the careers of section D to be seen. */
+const CONTROL = process.env.SIM_LEAGUE_WORLD_CONTROL || '';
+const swap = (from, to) => s => {
+  if (!s.includes(from)) { console.error(`control ${CONTROL}: its anchor is gone: ${from.slice(0, 70)}`); process.exit(2); }
+  return s.replace(from, to);
+};
+const ERE_SIZE = '  "Eredivisie": [{ from: 2026, size: 18 }],\n';
+const CONTROLS = {
+  nosize: { file: 'lib/soccerCareerLeague.ts', red: ['A', 'D2'], world: true, edit: swap(ERE_SIZE, '') },
+  nocadence: { file: 'lib/soccerCareerDerby.ts', red: ['A', 'D2'], world: true, edit: swap('  "Eredivisie": [{ from: 2026, meetings: 2 }],\n', '') },
+  scotrow: { file: 'lib/soccerCareerLeague.ts', red: ['A'], edit: swap(ERE_SIZE, `${ERE_SIZE}  "Scottish Premiership": [{ from: 2026, size: 12 }],\n`) },
+  rankfive: { file: 'lib/soccerCareerLeague.ts', red: ['C1'], edit: swap('const ABSOLUTE_BAND = new Set(["Premier League", "La Liga", "Serie A", "Bundesliga", "Ligue 1"]);', 'const ABSOLUTE_BAND = new Set<string>([]);') },
+  flatband: { file: 'lib/soccerCareerLeague.ts', red: ['C4'], edit: swap('  if (groups && club !== null) {\n', '  if (groups && club !== null && input.year < 0) {\n') },
+  keyshift: { file: 'lib/soccerCareerEngine.ts', red: ['B6'], world: true, edit: swap('seedKey: `${state.playerName}|${state.currentClub}|${seasonYear}|', 'seedKey: `${state.currentClub}|${state.playerName}|${seasonYear}|') },
+  rewrite: { file: 'lib/soccerCareerEngine.ts', red: ['E'], edit: swap('export function repairCareer<T extends CareerState>(state: T): T {\n  if (!state || typeof state !== "object") return state;\n', 'export function repairCareer<T extends CareerState>(state: T): T {\n  if (!state || typeof state !== "object") return state;\n  for (const r of ((state as CareerState).seasons ?? [])) if (r.type === "playing" && r.year >= 2026 && r.leagueFinish === undefined) (r as { leagueFinish?: number }).leagueFinish = 5;\n') },
+  nocanon: { file: 'data/clubRivalries.ts', red: ['B4'], edit: swap("  'Kasimpasa': 'Kasımpaşa',\n", '') },
+};
+if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown SIM_LEAGUE_WORLD_CONTROL ${CONTROL} (${Object.keys(CONTROLS).join(', ')})`); process.exit(2); }
+/* B6 (critic 3): every input the ENGINE hands drawLeagueFinish is recorded
+   while a tap array is set, so the seed key contract is read off the engine's
+   own calls and never off a key this harness built */
+const TAP_ANCHOR = 'export function drawLeagueFinish(input: LeagueFinishInput): LeagueFinish {\n';
+const tapLeague = s => {
+  if (!s.includes(TAP_ANCHOR)) { console.error('soccerCareerLeague.ts has no drawLeagueFinish to tap'); process.exit(2); }
+  return s.replace(TAP_ANCHOR, `${TAP_ANCHOR}  { const tap = (globalThis as { __leagueFinishTap?: LeagueFinishInput[] }).__leagueFinishTap; if (tap) tap.push(input); }\n`);
+};
+const transforms = { 'lib/soccerCareerLeague.ts': tapLeague };
+if (CONTROL && !RECORD) {
+  const c = CONTROLS[CONTROL];
+  const prior = transforms[c.file];
+  transforms[c.file] = prior ? s => prior(c.edit(s)) : c.edit;
+  console.log(`CONTROL ${CONTROL}: ${c.file} patched in the bundle only; section ${c.red.join(' or ')} must go red`);
+}
 const t0 = Date.now();
-const mod = await bundleCareerSources({ root: ROOT, tmpDir, extra: EXTRA });
+const mod = await bundleCareerSources({ root: ROOT, tmpDir, extra: EXTRA, transforms });
 const { engine, league: LG, season: SE } = mod;
 const POOL = engine.FALLBACK_CLUBS;
 const HAND = engine.HAND_CLUBS;
@@ -262,12 +300,15 @@ function playWorld(seedset, careers, onSeason, nations = NATIONS) {
       let s = engine.initCareer(`World ${seedset}.${ni}.${c}`, nat, POSITIONS[c % POSITIONS.length], '2025', abil(ovr), ovr, 2025, POOL, null);
       let rows = s.seasons.length;
       let guard = 0;
+      const tap = globalThis.__leagueFinishTap;
       while (!s.retired && guard++ < 140) {
+        if (tap) tap.length = 0;
         s = careerStep(engine, s, POOL);
         if (s.seasons.length > rows) {
           rows = s.seasons.length;
           const row = s.seasons[rows - 1];
-          if (row.type === 'playing' && row.year >= 2026 && row.apps > 0 && !row.injurySevere) onSeason(s, row, nat);
+          /* the one finish the engine drew in this step is this row's (B6) */
+          if (row.type === 'playing' && row.year >= 2026 && row.apps > 0 && !row.injurySevere) onSeason(s, row, nat, tap && tap.length === 1 ? tap[0] : null);
         }
       }
     }
@@ -280,12 +321,12 @@ const pct = v => `${(v * 100).toFixed(1)}%`;
 /** One seed set's world: overall, per nation and per league tallies. */
 function worldRun(seedset, careers, nations, onEach) {
   const out = { careers, overall: tally(), nations: {}, leagues: {} };
-  playWorld(seedset, careers, (career, row, nat) => {
+  playWorld(seedset, careers, (career, row, nat, input) => {
     const m = measureSeason(career, row);
     addSeason(out.overall, m);
     addSeason(out.nations[nat] ??= tally(), m);
     addSeason(out.leagues[todayLeague(row.club) || '(none)'] ??= tally(), m);
-    if (onEach) onEach(career, row, m);
+    if (onEach) onEach(career, row, m, input);
   }, nations);
   return out;
 }
@@ -392,6 +433,14 @@ const ok = (cond, m) => { if (!cond) fail(m); return cond; };
 const head = (id, title) => { section = id; console.log(`\n${id}. ${title}`); };
 function finish() {
   console.log('');
+  if (CONTROL) {
+    const want = CONTROLS[CONTROL].red;
+    const fired = want.every(s => red.has(s));
+    console.log(fired
+      ? `simCareerLeagueWorld control ${CONTROL}: section ${want.join(' and ')} went red as it must (${failures} failures)`
+      : `simCareerLeagueWorld control ${CONTROL}: DID NOT FIRE. Section ${want.filter(s => !red.has(s)).join(' and ')} stayed green (red: ${[...red].sort().join(', ') || 'none'})`);
+    process.exit(fired ? 0 : 1);
+  }
   console.log(failures ? `simCareerLeagueWorld: ${failures} failure(s) in section(s) ${[...red].sort().join(', ')}` : `simCareerLeagueWorld: all sections green (${((Date.now() - t0) / 1000).toFixed(1)} s)`);
   process.exit(failures ? 1 : 0);
 }
@@ -677,6 +726,184 @@ head('E', 'OLD SAVES: seven saves recorded on main read the same, and play on');
   }
   ok(recorded.length === 7, `${recorded.length} recorded saves, 7 expected`);
   console.log(`  ${recorded.length} saves: repairCareer byte equal, every saved row reads the finish, league and mode main read; matchdays moved to the league's real count on ${moved.length} rows (${moved.join('; ') || 'none'}); each played three more seasons`);
+}
+
+/* ─── C4. BAND: the outcome, not the mechanism ───
+   Per sized ladder league: 400 engine shaped keys a club on a 7.0 season,
+   the mean finish of each club, and Spearman's rank correlation between the
+   ladder's place and that mean. Over the clubs the ladder can ORDER only
+   (critic 2: a group of several has no place of its own), and again over the
+   tier 4 clubs among them, the group the absolute band flattened into one
+   bottom third. Three key sets. A league that can order fewer than four
+   clubs (or fewer than four tier 4 clubs) is printed and not measured.
+   MEASURED on the merged tree, three key sets: see C4_FLOOR below. */
+const C4_FLOOR = { all: 0.9, tier4: 0.9 };
+head('C4', 'BAND: a higher place on the ladder finishes higher, tier 4 clubs included');
+{
+  const tierOf = new Map(POOL.map(c => [c.name, c.tier]));
+  const ranks = xs => { const o = xs.map((v, i) => [v, i]).sort((a, b) => a[0] - b[0]); const r = new Array(xs.length); for (let i = 0; i < o.length;) { let j = i; while (j + 1 < o.length && o[j + 1][0] === o[i][0]) j += 1; for (let k = i; k <= j; k += 1) r[o[k][1]] = (i + j) / 2 + 1; i = j + 1; } return r; };
+  const pearson = (a, b) => { const n = a.length; const ma = a.reduce((s, v) => s + v, 0) / n; const mb = b.reduce((s, v) => s + v, 0) / n; let sab = 0; let saa = 0; let sbb = 0; for (let i = 0; i < n; i += 1) { sab += (a[i] - ma) * (b[i] - mb); saa += (a[i] - ma) ** 2; sbb += (b[i] - mb) ** 2; } return saa && sbb ? sab / Math.sqrt(saa * sbb) : 0; };
+  const spearman = (a, b) => pearson(ranks(a), ranks(b));
+  const low = { all: 1, tier4: 1 }; const high = { all: -1, tier4: -1 };
+  let measured = 0; let measured4 = 0;
+  const lines = [];
+  for (const [label, groups] of Object.entries(LADDER)) {
+    if (BIG_FIVE.has(label) || LG.leagueSizeFor(label, 2027) === null) continue;
+    const ordered = [];
+    let before = 0;
+    for (const g of groups) { if (g.length === 1) ordered.push({ club: g[0], rank: before + 1 }); before += g.length; }
+    const four = ordered.filter(c => tierOf.get(c.club) === 4);
+    const rho = { all: [], tier4: [] };
+    for (const ks of [0, 1, 2]) {
+      const mean = new Map();
+      for (const c of ordered) {
+        let sum = 0;
+        for (let k = 0; k < 400; k += 1) {
+          const year = 2026 + (k % 20);
+          sum += LG.drawLeagueFinish({ league: label, year, tier: tierOf.get(c.club), elite: false, rating: 7, leagueTitle: false, seedKey: `Band ${ks}.${k}|${c.club}|${year}|${10 + (k % 29)}|${k % 31}|${k % 17}|7` }).leagueFinish;
+        }
+        mean.set(c.club, sum / 400);
+      }
+      if (ordered.length >= 4) rho.all.push(spearman(ordered.map(c => c.rank), ordered.map(c => mean.get(c.club))));
+      if (four.length >= 4) rho.tier4.push(spearman(four.map(c => c.rank), four.map(c => mean.get(c.club))));
+    }
+    for (const k of ['all', 'tier4']) for (const v of rho[k]) { low[k] = Math.min(low[k], v); high[k] = Math.max(high[k], v); }
+    if (rho.all.length) measured += 1;
+    if (rho.tier4.length) measured4 += 1;
+    lines.push(`${label}: ${ordered.length} of ${before} ordered${rho.all.length ? `, rho ${Math.min(...rho.all).toFixed(3)} to ${Math.max(...rho.all).toFixed(3)}` : ' (too few to measure)'}; tier 4 ${four.length}${rho.tier4.length ? `, rho ${Math.min(...rho.tier4).toFixed(3)} to ${Math.max(...rho.tier4).toFixed(3)}` : ' (too few to measure)'}`);
+  }
+  for (const l of lines) console.log(`  ${l}`);
+  ok(measured >= 4, `only ${measured} leagues could be measured`);
+  ok(measured4 >= 1, 'no league has four tier 4 clubs the ladder can order, so the flattened group is not measured');
+  ok(low.all >= C4_FLOOR.all, `the lowest correlation over a league's ordered clubs is ${low.all.toFixed(3)}, floor ${C4_FLOOR.all}`);
+  if (measured4) ok(low.tier4 >= C4_FLOOR.tier4, `the lowest correlation over a league's tier 4 clubs is ${low.tier4.toFixed(3)}, floor ${C4_FLOOR.tier4}`);
+  console.log(`  ${measured} leagues measured over three key sets: lowest ${low.all.toFixed(3)}, highest ${high.all.toFixed(3)} (floor ${C4_FLOOR.all}); tier 4 alone in ${measured4}: lowest ${low.tier4.toFixed(3)}, highest ${high.tier4.toFixed(3)} (floor ${C4_FLOOR.tier4})`);
+}
+
+/* ─── D. WORLD, and B6 read off the same careers ───
+   CAREERS careers a nation (300 unless CAREERS says otherwise), one seed set
+   a run (SEEDSET 0, 1 or 2), against what main played on the same seeds
+   (careerLeagueWorldBaseline1100.json). WORLD=0 skips it; a control that
+   does not need the careers skips it too.
+   FLOORS: see WORLD_FLOOR below, the lowest of three seed sets minus the
+   larger of two points and their spread. */
+const WORLD_FLOOR = { finish: 0, table: 0, named: 0 };
+const NATION_FLOOR = { Netherlands: 0, Portugal: 0, Turkey: 0, Belgium: 0, Brazil: 0, 'Saudi Arabia': 0 };
+const RUN_WORLD = process.env.WORLD !== '0' && (!CONTROL || CONTROLS[CONTROL].world === true);
+if (RUN_WORLD) {
+  const ODD = mod.format.ODD_FORMATS ?? {};
+  const base = readJson(F.baseline);
+  const shape = { five: tally(), plain: tally(), odd: tally(), waiting: tally(), other: tally() };
+  const d1 = { sized: 0, tables: 0, bad: [] };
+  const b6 = { seen: 0, ladder: 0, bad: [], fallback: new Map() };
+  const spread = { five: { n: 0, sum: 0, top: 0 }, plain: { n: 0, sum: 0, top: 0 } };
+  const tierOf = new Map(POOL.map(c => [c.name, c.tier]));
+  const generated = new Set(GENERATED.map(c => c.name));
+  globalThis.__leagueFinishTap = [];
+  const tw = Date.now();
+  const run = worldRun(SEEDSET, CAREERS, NATIONS, (career, row, m, input) => {
+    const L = todayLeague(row.club);
+    const size = L ? LG.leagueSizeFor(L, row.year) : null;
+    addSeason(shape[BIG_FIVE.has(L) ? 'five' : size !== null ? 'plain' : ODD[L] ? 'odd' : LADDER[L] ? 'waiting' : 'other'], m);
+    /* D1 */
+    if (size !== null) {
+      d1.sized += 1;
+      const f = m.finish;
+      if (!(f && f.size === size && f.finish >= 1 && f.finish <= size)) d1.bad.push(`${row.club} ${row.year} (${L}, ${size} clubs) holds ${JSON.stringify(f)}`);
+      else if (m.ctx.games !== 2 * (size - 1)) d1.bad.push(`${row.club} ${row.year} (${L}): ${m.ctx.games} matchdays, ${2 * (size - 1)} wanted`);
+      if (m.table && LADDER[L] && !BIG_FIVE.has(L)) {
+        d1.tables += 1;
+        const want = Math.min(size, LADDER[L].flat().length);
+        if (m.namedRows !== want) d1.bad.push(`${row.club} ${row.year} (${L}): its table names ${m.namedRows} rows, ${want} wanted`);
+      }
+      if (f && f.finish > 1 && tierOf.get(row.club) === 4 && generated.has(row.club)) {
+        const s = spread[BIG_FIVE.has(L) ? 'five' : 'plain'];
+        s.n += 1; s.sum += f.finish / size; if (f.finish <= size / 2) s.top += 1;
+      }
+    }
+    /* B6: what the engine handed drawLeagueFinish for this very row */
+    if (input && input.year >= 2026 && input.league !== null && LADDER[input.league] && !BIG_FIVE.has(input.league)) {
+      b6.seen += 1;
+      const by = LG.finishBandFor(input, LG.leagueSizeFor(input.league, input.year) ?? WORLD[input.league].size).by;
+      const placed = LADDER[input.league].some(g => g.includes(row.club));
+      if (LG.seedKeyClub(input.seedKey) !== row.club) b6.bad.push(`${row.club} ${row.year}: the engine's key ${JSON.stringify(input.seedKey)} parses to ${JSON.stringify(LG.seedKeyClub(input.seedKey))}`);
+      else if (by === 'ladder') b6.ladder += 1;
+      else if (!placed) b6.fallback.set(`${input.league}: ${row.club}`, (b6.fallback.get(`${input.league}: ${row.club}`) ?? 0) + 1);
+      else b6.bad.push(`${row.club} ${row.year}: on the ${input.league} ladder, yet banded by the tier`);
+    }
+  });
+  globalThis.__leagueFinishTap = undefined;
+  const secs = ((Date.now() - tw) / 1000).toFixed(0);
+
+  head('D1', 'WORLD: a season in a sized league always has its finish, its matchdays and a whole table');
+  for (const b of d1.bad.slice(0, 8)) fail(b);
+  ok(d1.bad.length === 0, `${d1.bad.length} seasons in a sized league broke a rule`);
+  ok(d1.sized > 1000 * (CAREERS / 300) && d1.tables > 200 * (CAREERS / 300), `only ${d1.sized} seasons in a sized league and ${d1.tables} tables outside the five`);
+  console.log(`  seed set ${SEEDSET}, ${CAREERS} careers x ${NATIONS.length} nations in ${secs} s: ${run.overall.seasons} seasons, ${d1.sized} in a sized league (a finish from 1 to the size, 2 x (size - 1) matchdays), ${d1.tables} tables in a ladder league outside the five, every row named`);
+
+  head('D2', "WORLD: more seasons end with a league position and a real table than on main");
+  const was = base.world[SEEDSET] ? shares(base.world[SEEDSET].overall) : null;
+  const now = shares(run.overall);
+  if (ok(!!was, `main recorded no seed set ${SEEDSET}`)) {
+    for (const [k, word] of [['finishShare', 'finish'], ['tableShare', 'table'], ['namedShare', 'named']]) {
+      ok(now[k] > was[k], `${word}: ${pct(now[k])} on the branch does not beat main's ${pct(was[k])}`);
+      ok(now[k] >= WORLD_FLOOR[word], `${word}: ${pct(now[k])}, floor ${pct(WORLD_FLOOR[word])}`);
+    }
+    console.log(`  seasons holding a league position: main ${pct(was.finishShare)}, now ${pct(now.finishShare)}; with a table in Week by week: main ${pct(was.tableShare)}, now ${pct(now.tableShare)}; share of table rows carrying a name: main ${pct(was.namedShare)}, now ${pct(now.namedShare)}`);
+    for (const nat of Object.keys(NATION_FLOOR)) {
+      const t = run.nations[nat]; const m = base.world[SEEDSET].nations[nat];
+      if (!t || t.seasons < 1000 * (CAREERS / 300)) { console.log(`  ${nat}: ${t ? t.seasons : 0} seasons, too few for a floor`); continue; }
+      const s = shares(t); const sm = shares(m);
+      ok(s.finishShare > sm.finishShare && s.tableShare > sm.tableShare, `${nat}: finish ${pct(s.finishShare)} and table ${pct(s.tableShare)} do not beat main's ${pct(sm.finishShare)} and ${pct(sm.tableShare)}`);
+      ok(s.tableShare >= NATION_FLOOR[nat], `${nat}: table share ${pct(s.tableShare)}, floor ${pct(NATION_FLOOR[nat])}`);
+      console.log(`  ${nat}: ${t.seasons} seasons; position main ${pct(sm.finishShare)}, now ${pct(s.finishShare)}; table main ${pct(sm.tableShare)}, now ${pct(s.tableShare)} (floor ${pct(NATION_FLOOR[nat])})`);
+    }
+  }
+  console.log(`  where the seasons are: ${Object.entries(shape).map(([k, t]) => `${{ five: 'big five', plain: 'plain and sized', odd: 'odd ledger', waiting: 'a pool league waiting for its format', other: 'not a Club Manager league' }[k]} ${t.seasons} (${pct(t.seasons / run.overall.seasons)}; position ${pct(shares(t).finishShare)}, table ${pct(shares(t).tableShare)})`).join('; ')}`);
+  console.log(`  critic 12, printed and not asserted: a tier 4 pool club's finish as a share of the table, titles apart: in the five (the tier's band) mean ${spread.five.n ? (spread.five.sum / spread.five.n).toFixed(3) : 'none'} over ${spread.five.n}, ${spread.five.n ? pct(spread.five.top / spread.five.n) : 'none'} in the top half; in a ladder league mean ${spread.plain.n ? (spread.plain.sum / spread.plain.n).toFixed(3) : 'none'} over ${spread.plain.n}, ${spread.plain.n ? pct(spread.plain.top / spread.plain.n) : 'none'} in the top half`);
+
+  head('B6', "POOL: the engine's own seed key carries the club, and every ladder club is banded by its ladder");
+  for (const b of b6.bad.slice(0, 6)) fail(b);
+  ok(b6.bad.length === 0, `${b6.bad.length} engine calls whose key does not carry the row's club, or a ladder club banded by its tier`);
+  ok(b6.seen > 1000 * (CAREERS / 300) && b6.ladder > 0, `only ${b6.seen} engine calls seen in a ladder league outside the five`);
+  console.log(`  ${b6.seen} finishes the engine drew from 2026 in a ladder league outside the five: ${b6.ladder} banded by the ladder; ${[...b6.fallback.values()].reduce((a, b) => a + b, 0)} by the tier for a club the list does not place in that league${b6.fallback.size ? ` (${[...b6.fallback].slice(0, 8).map(([k, v]) => `${k} x${v}`).join(', ')})` : ''}`);
+}
+
+/* ─── D3. The dugout ───
+   The same 480 dugout careers main's rates were recorded on (hand clubs
+   only, so both trees start at the same clubs). Exact: a row in a sized
+   league is verified at that size and prints " of N"; a row in an odd league
+   has the ledger's number of rows, no verified size, no position out of N
+   and no points, and the words around its table are the league's own
+   sentence. The title, top two, bottom three and sack rates by table size
+   are PRINTED beside main's, never asserted: no rule changed, the tables
+   got their real size (critic 17: read the 10 and 12 row leagues here). */
+if (!CONTROL) {
+  head('D3', 'DUGOUT: a sized league prints its position, an odd league its real number of rows and no number');
+  const ODD = mod.format.ODD_FORMATS ?? {};
+  const seen = { sized: 0, odd: 0, other: 0 };
+  const rates = dugoutRates(row => {
+    if (!row.league) { seen.other += 1; return; }
+    const size = LG.leagueSizeFor(row.league, 2032, true);
+    const odd = mod.format.oddFormatFor(row.league, 2032);
+    if (size !== null) {
+      seen.sized += 1;
+      ok(row.sizeVerified === true && row.leagueSize === size && row.result.includes(` of ${size}`), `${row.league}: a dugout season of ${row.leagueSize} rows${row.sizeVerified ? ' (verified)' : ''} printing "${row.result.slice(0, 60)}", the league has ${size}`);
+    } else if (odd) {
+      seen.odd += 1;
+      const w = LG.dugoutTableWords(row);
+      ok(row.sizeVerified !== true && row.leagueSize === odd.clubs && !/ of \d| points/.test(row.result), `${row.league}: a dugout season of ${row.leagueSize} rows printing "${row.result.slice(0, 60)}", the odd ledger says ${odd.clubs} rows and no number`);
+      ok(typeof w.orderNote === 'string' && w.orderNote.includes(odd.words) && !/we don't know how many/.test(w.orderNote), `${row.league}: the words around its table are "${w.orderNote}"`);
+    } else seen.other += 1;
+  });
+  ok(seen.sized > 500 && seen.odd > 20, `only ${seen.sized} seasons in a sized league and ${seen.odd} in an odd one`);
+  console.log(`  ${seen.sized} dugout seasons in a sized league, ${seen.odd} in an odd league (${Object.keys(ODD).join(', ')}), ${seen.other} elsewhere`);
+  const main = readJson(F.baseline).dugout.bySize;
+  const rate = (t, k) => (t && t.seasons ? `${((t[k] / t.seasons) * 100).toFixed(1)}%` : 'none');
+  for (const n of [...new Set([...Object.keys(main), ...Object.keys(rates.bySize)])].map(Number).sort((a, b) => a - b)) {
+    const a = main[n]; const b = rates.bySize[n];
+    console.log(`  a table of ${n}: main ${a ? a.seasons : 0} seasons (title ${rate(a, 'title')}, top two ${rate(a, 'topTwo')}, bottom three ${rate(a, 'bottomThree')}, sacked ${rate(a, 'sack')}); now ${b ? b.seasons : 0} (title ${rate(b, 'title')}, top two ${rate(b, 'topTwo')}, bottom three ${rate(b, 'bottomThree')}, sacked ${rate(b, 'sack')})`);
+  }
 }
 
 finish();

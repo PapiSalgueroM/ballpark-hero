@@ -52,6 +52,10 @@
    from 51 to 48 pairs only through the three labels the round released
    (proven with the labels put back: 51 and the old 13).
 
+   Round 1100 (the career club pool grew from 241 to 460 clubs): the drift
+   fence reads 56 active pairs and 8 dormant, six woken by the pool and two
+   by the Championship's cadence row; the reasons sit beside the pin.
+
    BANDS: see the BANDS block below, measured over seed offsets 0 to 3.
 
    Negative controls (SIM_DERBY_CONTROL; each asserts its anchor appears exactly
@@ -582,7 +586,16 @@ console.log('3) the right derbies, the verified number of meetings, and nothing 
      Wolves, Barcelona and Girona, West Ham and Tottenham sleep from then on.
      Attribution: the same tree with those three labels put back reads 51
      and the old 13 at 2026, and nothing else moved. */
-  const ACTIVE_2020 = 48;
+  /* Round 1100 moved it from 48 to 56, on purpose, in two steps that were
+     read apart. The career club pool grew from 241 to 460 clubs (every Club
+     Manager league, whole), which put both clubs of six pairs in one league
+     of the list: Dortmund and Schalke, Koln and Gladbach, Werder Bremen and
+     Hamburg (Bundesliga), Roma and Lazio (Serie A), Lille and Lens (Ligue 1),
+     Guadalajara and Atlas (Liga MX). The tree with the pool alone read 54.
+     Then the Championship got its cadence row (one table, 46 games, two
+     meetings), which woke the two sourced pairs the table already held:
+     West Ham and Millwall, Wolves and West Brom. No pair was added. */
+  const ACTIVE_2020 = 56;
   /* Recorded 2026-10-05 from the round's tree: 40 active and 24 dormant
      before the merge, 51 and 13 after Round 1013 (merged from main) added
      Sunderland, Leeds, Espanyol, Deportivo, Levante, Fluminense, Vasco da
@@ -591,10 +604,10 @@ console.log('3) the right derbies, the verified number of meetings, and nothing 
      club, or plays in another league in the game, or the league has no
      verified cadence (Argentina). */
   const DORMANT_2020 = [
-    'Boca Juniors and River Plate', 'Borussia Dortmund and Schalke 04', 'Guadalajara and Atlas', 'Hertha BSC and Union Berlin',
-    'Köln and Gladbach', 'Lille and Lens', 'Nantes and Rennes', 'Norwich City and Ipswich Town',
-    'Roma and Lazio', 'Stuttgart and Karlsruhe', 'Werder Bremen and Hamburg', 'West Ham and Millwall',
-    'Wolves and West Brom', 'Aston Villa and Wolves', 'Barcelona and Girona', 'West Ham and Tottenham',
+    'Boca Juniors and River Plate', 'Hertha BSC and Union Berlin',
+    'Nantes and Rennes', 'Norwich City and Ipswich Town',
+    'Stuttgart and Karlsruhe',
+    'Aston Villa and Wolves', 'Barcelona and Girona', 'West Ham and Tottenham',
   ];
   const world2020 = eras.adjustClubsForYear(clubs, REF_YEAR);
   const status = { active: [], dormant: [] };

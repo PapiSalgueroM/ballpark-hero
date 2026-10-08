@@ -18,8 +18,11 @@
  *     league that season (the career's own list of that league from 2026-27);
  *     no name twice; the 1st place carries a name other than his only when the
  *     card names that champion, and then it is that club.
- *  3. The gate: no table before 1995-96, outside the five leagues of
- *     src/data/leagueFormat.ts, in a season whose derby cadence is not two,
+ *  3. The gate: no table before 1995-96, outside the leagues of
+ *     src/data/leagueFormat.ts (the five big leagues, and from 2026-27 the
+ *     eight plain leagues Round 1100 gave a size, a format and a cadence row,
+ *     typed again below so the list is this harness's own statement), in a
+ *     season whose derby cadence is not two,
  *     or in the abandoned 2019-20 Ligue 1 (a targeted row); and none with a
  *     derby rival the ledgers put outside that league that season (critic
  *     C5; the engine never detects such a derby, so a targeted row, Newcastle
@@ -87,6 +90,9 @@ const fail = (item, msg) => { failed += 1; if (!fails.has(item)) fails.set(item,
 const check = (ok, label) => { checks += 1; if (ok) console.log(`ok   ${label}`); else { failed += 1; console.log(`FAIL ${label}`); } };
 
 const FIVE = new Set(['Premier League', 'La Liga', 'Serie A', 'Bundesliga', 'Ligue 1']);
+/* Round 1100: the plain leagues that have a table from 2026-27. Typed here, not read from the ledger
+   under test; a league that gains its three rows later is added here in the same commit. */
+const PLAIN_2026 = new Set(['Championship', 'Brasileirao', 'Eredivisie', 'Saudi Pro League', 'Primeira Liga', 'Super Lig', '2. Bundesliga', 'Belgian Pro League']);
 function cardChampion(career, row) {
   const finish = LG.readLeagueFinish(row);
   const today = CLUBS.find(c => c.name === row.club)?.league ?? '';
@@ -106,7 +112,7 @@ function replay(rounds, teams, upto) {
   return t;
 }
 
-const stats = { tables: 0, results: 0, ordered: 0, orderN: 0, named: 0, unnamed: 0, level: 0, levelSplit: 0 };
+const stats = { tables: 0, results: 0, plain: 0, ordered: 0, orderN: 0, named: 0, unnamed: 0, level: 0, levelSplit: 0 };
 /* the footnote's order, from the replay's own numbers: points, then goal
    difference, then goals scored (a full tie may sit either way) */
 const before = (a, b) => a.pts - b.pts || (a.gf - a.ga) - (b.gf - b.ga) || a.gf - b.gf;
@@ -119,7 +125,8 @@ function checkTable(career, row, ctx, s, tag) {
   const key = ctx.league?.key;
   /* 3 the gate */
   if (row.year < 1995) fail('3 gate', `${tag}: a table in ${row.year}`);
-  if (!FIVE.has(key)) fail('3 gate', `${tag}: a table in ${key}`);
+  if (!FIVE.has(key) && !(row.year >= 2026 && PLAIN_2026.has(key))) fail('3 gate', `${tag}: a table in ${key} in ${row.year}`);
+  if (!FIVE.has(key)) stats.plain += 1;
   if (DB.derbyMeetings(key, row.year) !== 2) fail('3 gate', `${tag}: a table where the cadence is ${DB.derbyMeetings(key, row.year)}`);
   for (const r of DB.readSeasonDerbies(row).map(d => d.rival)) if (!LG.namedInLeague(r, key, row.year)) fail('3 gate', `${tag}: a table with ${r} as a derby rival, not in the ${row.year} ${key}`);
   if (key === 'Ligue 1' && row.year === 2019) fail('3 gate', `${tag}: a table for the abandoned 2019-20 Ligue 1 (${s.games.length} matchdays)`);
@@ -211,7 +218,7 @@ for (const [id, row, mode, why] of TARGETED) {
   if (d) checkTable(career, row, ctx, d, id);
 }
 
-console.log(`tables ${stats.tables}, results ${stats.results}; places named ${stats.named}, unnamed ${stats.unnamed}`);
+console.log(`tables ${stats.tables} (${stats.plain} of them in a plain league outside the five, from 2026-27), results ${stats.results}; places named ${stats.named}, unnamed ${stats.unnamed}`);
 check(stats.tables >= 300, `the probe reached enough tables (${stats.tables}, floor 300)`);
 check(stats.levelSplit >= 50, `1b. final tables hold ${stats.level} neighbours level on points, ${stats.levelSplit} of them where goal difference and goals scored disagree (floor 50), so the order check has cases to see`);
 for (const [item, msgs] of fails) console.log(`FAIL item ${item}: ${msgs.join(' | ')}`);
