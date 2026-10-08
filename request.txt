@@ -1,0 +1,3 @@
+simGauntletEngine: node scripts/simGauntletEngine.mjs
+simFrontOfficeRoster: node scripts/simFrontOfficeRoster.mjs
+simNflFullRosters: node scripts/simNflFullRosters.mjs

@@ -1,0 +1,54 @@
+1) the soccer regression: golden reference vs the live, post-refactor game
+   300 drafts and 150 gauntlet runs, byte identical to the pre-refactor algorithm on every one
+2) the deal law, NBA, 300 seeded drafts
+   NBA: 300 drafts, 5 slots exactly as the sport lines up, every card plays a position its slot takes, all 13 slot and position pairings dealt (the rarest 356 times), nobody dealt twice, mean spread 11.6 rating points
+2) the deal law, NFL, 300 seeded drafts
+   NFL: 300 drafts, 7 slots exactly as the sport lines up, every card plays a position its slot takes, all 4 slot and position pairings dealt (the rarest 1500 times), nobody dealt twice, mean spread 26.5 rating points
+2) the deal law, MLB, 300 seeded drafts
+   MLB: 300 drafts, 11 slots exactly as the sport lines up, every card plays a position its slot takes, all 22 slot and position pairings dealt (the rarest 99 times), nobody dealt twice, mean spread 17.7 rating points
+2) the deal law, NHL, 300 seeded drafts
+   NHL: 300 drafts, 11 slots exactly as the sport lines up, every card plays a position its slot takes, all 5 slot and position pairings dealt (the rarest 1500 times), nobody dealt twice, mean spread 16.4 rating points
+3) determinism, NBA
+   NBA: drafted twice byte identical, ran twice byte identical, 365 dailies gave 365 distinct drafts, every date dealt the same draft twice and none repeated the day before
+3) determinism, NFL
+   NFL: drafted twice byte identical, ran twice byte identical, 365 dailies gave 365 distinct drafts, every date dealt the same draft twice and none repeated the day before
+3) determinism, MLB
+   MLB: drafted twice byte identical, ran twice byte identical, 365 dailies gave 365 distinct drafts, every date dealt the same draft twice and none repeated the day before
+3) determinism, NHL
+   NHL: drafted twice byte identical, ran twice byte identical, 365 dailies gave 365 distinct drafts, every date dealt the same draft twice and none repeated the day before
+4) the cup rewards the draft, NBA, 300 drafts
+   NBA: best-card squads 3.28 rounds and 28 trophies; worst-card squads 0.93 and 0, over 300 drafts
+4) the cup rewards the draft, NFL, 300 drafts
+   NFL: best-card squads 3.39 rounds and 36 trophies; worst-card squads 0.02 and 0, over 300 drafts
+4) the cup rewards the draft, MLB, 300 drafts
+   MLB: best-card squads 3.85 rounds and 74 trophies; worst-card squads 0.86 and 0, over 300 drafts
+4) the cup rewards the draft, NHL, 300 drafts
+   NHL: best-card squads 3.60 rounds and 54 trophies; worst-card squads 0.69 and 0, over 300 drafts
+5) the daily lock, NBA: the saved run comes back, nothing else does
+   NBA: round trip byte identical, another date null, a tampered run refused, 9 broken records refused without throwing
+5) the daily lock, NFL: the saved run comes back, nothing else does
+   NFL: round trip byte identical, another date null, a tampered run refused, 9 broken records refused without throwing
+5) the daily lock, MLB: the saved run comes back, nothing else does
+   MLB: round trip byte identical, another date null, a tampered run refused, 9 broken records refused without throwing
+5) the daily lock, NHL: the saved run comes back, nothing else does
+   NHL: round trip byte identical, another date null, a tampered run refused, 9 broken records refused without throwing
+6) the scoreboard says what happened, every sport
+   NBA: scoreline strictly increasing over 0..12, 889 rendered matches agree with their result, 95 reached the decider, none shown level
+   NFL: scoreline strictly increasing over 0..12, 728 rendered matches agree with their result, 81 reached the decider, none shown level
+   MLB: scoreline strictly increasing over 0..12, 978 rendered matches agree with their result, 89 reached the decider, none shown level
+   NHL: scoreline strictly increasing over 0..12, 951 rendered matches agree with their result, 92 reached the decider, none shown level
+7) the pool is the source: every card is a real row, nothing added, nothing re-rated
+   NFL: 224 cards, each one a row of 480 source rows (224 eligible) on name, position, rating and club
+   MLB: 390 cards, each one a row of 390 source rows (390 eligible) on name, position, rating and club
+   NHL: 412 cards, each one a row of 416 source rows (412 eligible) on name, position, rating and club
+8) one save shape: every sport writes the same daily record
+   Soccer, NBA, NFL, MLB, NHL: one key each under {gameId}-daily-{date}, 17 field paths, identical in every sport
+9) how each match was settled: the record, the words, the save, and not one result moved
+   Soccer 600 runs, 1961 regulation, 108 extra, 227 decider, 4 bad records refused
+   NBA 600 runs, 1800 regulation, 107 extra, 195 decider, 4 bad records refused
+   NFL 600 runs, 1709 regulation, 102 extra, 194 decider, 4 bad records refused
+   MLB 600 runs, 2114 regulation, 96 extra, 194 decider, 4 bad records refused
+   NHL 600 runs, 1921 regulation, 102 extra, 224 decider, 4 bad records refused
+   every result as it was, every label the way the score came about, in each sport's own words, on every screen, and a daily from before the round loads
+
+simGauntletEngine: green. Soccer plays exactly as it did, and NBA, NFL, MLB and NHL are the same game wearing their own pool, ladder and scoreboard, with every derived pool card a real source row, one save shape across all five, and every result saying how it was settled.

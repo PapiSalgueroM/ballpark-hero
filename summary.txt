@@ -1,0 +1,3 @@
+simFrontOfficeRoster exit=0 1s | simFrontOfficeRoster: 152 checks passed over 32 teams and 480 players
+simGauntletEngine exit=0 3s | simGauntletEngine: green. Soccer plays exactly as it did, and NBA, NFL, MLB and NHL are the same game wearing their own pool, ladder and scoreboard, with every derived po
+simNflFullRosters exit=0 9s | simNflFullRosters: 91 checks passed over 8 sections

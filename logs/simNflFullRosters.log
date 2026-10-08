@@ -1,0 +1,34 @@
+1) the data: real, current, second sourced, and agreeing with the engine
+   active roster per club 50 to 54, 1638 in all; practice squad 15 to 18, 525 in all
+   the record (read 2026-10-01, week 4): 1683 of 1683 bench and practice squad men found on their club with their status
+   a fresh bake of the record: 3 of 3 committed files match it byte for byte; 360 men left out with a reason
+   second source (2026-10-01): 28 of 30 men settled by both sources, 2 split: PHI Zach Ertz (club practice, ESPN roster); SF Brandin Cooks (club roster, ESPN practice)
+   spot check (2026-10-01): 60 men over 6 clubs, 59 settled on the list by both sources, 1 split (CLE Jaleel McLaughlin); held out by the second source: MIA James Ester
+Sections2 to6: explicit original-scale mechanics fixture; new-rating acceptance is separate.
+2) the bench sits under the starters
+3) every group can field its starters
+4) the bench moves no result
+   192 clubs compared fit and with 3363 bench men hurt; 1632 games replayed
+5) what does move, measured
+   over 40 seeded seasons: a backup started in 4962 of 21760 club weeks (22.8 percent)
+   mean wins per club, full league against fifteen man league: rank correlation 0.963, mean gap 0.42 wins
+   spread of wins inside a season (sd): full 2.81, fifteen man 2.90
+6) ten franchises, five seasons each
+   trade finder: 36 of 36 probes found the same offers with the cheap copy
+   50 seasons: 50 cuts (50 with the rule's dead money), 50 signings refused at 53, 50 signings after making room, 50 tags, 1050 draftees
+   offseasons: 4509 called up off the practice squad, 6564 depth men invented, 40 released in the cut to 53 (0 of them draftees); biggest practice squad 18; biggest save 297K; highest payroll 90.6 percent of the cap
+   real men still on the active rosters after five seasons: 64, 65, 63, 64, 63, 63, 65, 64, 64, 65 percent by franchise
+   the GM owed a cut before 7 of 50 seasons and made 13 cuts himself to get to 53
+7) an old save loads and plays as it did
+   162 league states compared over three seeds and three seasons each
+8) the board on a full roster, under vitest
+   vitest exit 0, 6 passed (6)
+   1. the data: real, current, second sourced, and agreeing with the engine: 22 checks
+   2. the bench sits under the starters: 4 checks
+   3. every group can field its starters: 4 checks
+   4. the bench moves no result: 21 checks
+   5. what does move, measured: 3 checks
+   6. ten franchises, five seasons each: 26 checks
+   7. an old save loads and plays as it did: 8 checks
+   8. the board on a full roster, under vitest: 3 checks
+simNflFullRosters: 91 checks passed over 8 sections
