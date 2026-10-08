@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+#!serial
+cost: COST=1 CAREER_PRESSES=12 COST_REPS=3 OUT_JSON=$RC_OUT/cost.json ENGINES=chromium node scripts/playTranslatedPage.mjs
