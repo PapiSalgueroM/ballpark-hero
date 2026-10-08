@@ -1,0 +1,20 @@
+vitest-round exit=0 9s |    Duration  7.66s (transform 4.99s, setup 711ms, collect 7.81s, tests 2.26s, environment 3.49s, prepare 1.14s)
+tsc exit=0 79s | 
+world0 exit=0 110s | simCareerLeagueWorld: all sections green (109.5 s)
+world1 exit=0 113s | simCareerLeagueWorld: all sections green (113.3 s)
+clubPool exit=0 8s | simCareerClubPool: all sections green
+clubPool-allranked exit=0 8s | control allranked: section 4L went red as it must (red: 1, 4L)
+clubPool-sinceorder exit=0 8s | control sinceorder: section 3 went red as it must (red: 3)
+facts exit=0 3s | simCareerFacts: all sections green
+centreTable exit=0 10s | simSeasonCentreTable: 6 checks, 0 failed
+centreTable-opentitle exit=1 10s | simSeasonCentreTable: 6 checks, 4 failed (control opentitle)
+agree0 exit=0 12s | simSeasonCentreAgreement: 24 checks, 0 failed
+world2 exit=0 112s | simCareerLeagueWorld: all sections green (111.7 s)
+agree1 exit=0 14s | simSeasonCentreAgreement: 24 checks, 0 failed
+agree2 exit=0 13s | simSeasonCentreAgreement: 24 checks, 0 failed
+agree3 exit=0 15s | simSeasonCentreAgreement: 24 checks, 0 failed
+agree4 exit=0 13s | simSeasonCentreAgreement: 24 checks, 0 failed
+world-crownnobody exit=0 113s | simCareerLeagueWorld control crownnobody: section D1 went red as it must (9 failures)
+moments exit=0 17s | simSeasonMoments: 54 checks, 0 failed
+neutral exit=0 24s | simSeasonCentreNeutral: 24 checks, 0 failed
+vitest-full exit=1 424s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/guessFinishMoment.test.tsx,title=src/test/guessFinishMoment.test.tsx > a clue guesser ends on the shar
