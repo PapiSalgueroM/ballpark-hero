@@ -1,0 +1,99 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/lib/frontOfficeRatings.test.ts[2m > [22mNFL opening rating checkpoint[2m > [22mpreserves the physical56356be9 no-depth league and draw sequence as an independent baseline[32m 138[2mms[22m[39m
+ [32m✓[39m src/lib/frontOfficeRatings.test.ts[2m > [22mNFL opening rating checkpoint[2m > [22mkeeps explicit legacy depth and saved old grades unchanged as an independent baseline[32m 270[2mms[22m[39m
+ [32m✓[39m src/lib/frontOfficeRatings.test.ts[2m > [22mNFL opening rating checkpoint[2m > [22mreproduces all2163 frozen candidate grades fictional prices and years without named overrides[32m 104[2mms[22m[39m
+ [32m✓[39m src/lib/frontOfficeRatings.test.ts[2m > [22mNFL opening rating checkpoint[2m > [22mretains dated-role partial labels and their concrete limitation reasons[32m 114[2mms[22m[39m
+ [32m✓[39m src/test/guessFinishMoment.test.tsx[2m > [22ma clue guesser ends on the shared result moment[2m > [22mplays a live win with the points the board scored, and keeps the answer line, share and nothing invented[33m 305[2mms[22m[39m
+ [32m✓[39m src/test/guessFinishMoment.test.tsx[2m > [22ma clue guesser ends on the shared result moment[2m > [22mwalks every clue: the pill shows exactly the score the board saved[33m 579[2mms[22m[39m
+ [32m✓[39m src/test/guessFinishMoment.test.tsx[2m > [22ma clue guesser ends on the shared result moment[2m > [22mplays a live loss quietly: the loss state, zero points, no confetti[32m 74[2mms[22m[39m
+ [32m✓[39m src/lib/frontOfficeRatings.test.ts[2m > [22mNFL opening rating checkpoint[2m > [22minitializes every candidate tuple while retaining32 exact untrimmed budgets membership and terms[32m 190[2mms[22m[39m
+ [32m✓[39m src/test/resultScorePillComparison.test.tsx[2m > [22mthe Higher or Lower sport pages reveal the points the hook totals[2m > [22m/nba-higher-lower: a win reveals its total on the pill[32m 149[2mms[22m[39m
+ [32m✓[39m src/test/resultScorePillComparison.test.tsx[2m > [22mthe Higher or Lower sport pages reveal the points the hook totals[2m > [22m/nba-higher-lower: a loss reveals its total on the pill[32m 54[2mms[22m[39m
+ [32m✓[39m src/test/guessFinishMoment.test.tsx[2m > [22ma clue guesser ends on the shared result moment[2m > [22mshows a reloaded daily settled, with the same facts and no confetti[32m 82[2mms[22m[39m
+ [32m✓[39m src/lib/frontOfficeRatings.test.ts[2m > [22mNFL opening rating checkpoint[2m > [22mrebakes the committed depth core and left-out files exactly without writing them[32m 221[2mms[22m[39m
+ [32m✓[39m src/test/resultScorePillComparison.test.tsx[2m > [22mthe Higher or Lower sport pages reveal the points the hook totals[2m > [22m/nfl-higher-lower: a win reveals its total on the pill[32m 42[2mms[22m[39m
+ [32m✓[39m src/test/resultScorePillComparison.test.tsx[2m > [22mthe Higher or Lower sport pages reveal the points the hook totals[2m > [22m/nfl-higher-lower: a loss reveals its total on the pill[32m 34[2mms[22m[39m
+ [32m✓[39m src/test/resultScorePillComparison.test.tsx[2m > [22mthe Higher or Lower sport pages reveal the points the hook totals[2m > [22m/mlb-higher-lower: a win reveals its total on the pill[32m 61[2mms[22m[39m
+ [32m✓[39m src/test/resultScorePillComparison.test.tsx[2m > [22mthe Higher or Lower sport pages reveal the points the hook totals[2m > [22m/mlb-higher-lower: a loss reveals its total on the pill[32m 46[2mms[22m[39m
+[90mstdout[2m | src/lib/frontOfficeRatings.test.ts[2m > [22m[2mNFL opening rating checkpoint[2m > [22m[2msaves only five original lineage fields below700KiB and reloads them without rerating
+[22m[39mNFL_RATING_SAVE_SIZE {"rawBytes":635403,"gzipBytes":66963,"players":2163}
+
+ [32m✓[39m src/lib/frontOfficeRatings.test.ts[2m > [22mNFL opening rating checkpoint[2m > [22msaves only five original lineage fields below700KiB and reloads them without rerating[32m 254[2mms[22m[39m
+ [32m✓[39m src/test/resultScorePillComparison.test.tsx[2m > [22mthe Higher or Lower sport pages reveal the points the hook totals[2m > [22m/hockey-higher-lower: a win reveals its total on the pill[32m 149[2mms[22m[39m
+ [32m✓[39m src/test/resultScorePillComparison.test.tsx[2m > [22mthe Higher or Lower sport pages reveal the points the hook totals[2m > [22m/hockey-higher-lower: a loss reveals its total on the pill[32m 62[2mms[22m[39m
+ [32m✓[39m src/test/guessFinishMoment.test.tsx[2m > [22ma clue guesser ends on the shared result moment[2m > [22mkeeps an old daily settled when it is reopened from the menu after a live unlimited game[32m 196[2mms[22m[39m
+ [32m✓[39m src/test/guessFinishMoment.test.tsx[2m > [22museLiveFinish plays only a finish it watched[2m > [22mforgets the game at the menu, so a live finish reopened under the same key stays settled[32m 4[2mms[22m[39m
+ [32m✓[39m src/test/guessFinishMoment.test.tsx[2m > [22museLiveFinish plays only a finish it watched[2m > [22mkeeps Round 951 dailies on their rule when no key is given[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/guessFinishMoment.test.tsx[2m > [22museLiveFinish plays only a finish it watched[2m > [22mkeeps a different game that arrives already finished settled[32m 1[2mms[22m[39m
+ [32m✓[39m src/test/guessFinishMoment.test.tsx[2m > [22ma chain ends on the shared result moment[2m > [22mcalls every chain that added a link close, badge or not, at every length from 0 to 25[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/guessFinishMoment.test.tsx[2m > [22ma chain ends on the shared result moment[2m > [22mshows the chain length, the badge the game earned and the reason it gave, and plays only when live[33m 370[2mms[22m[39m
+ [32m✓[39m src/test/resultScorePillComparison.test.tsx[2m > [22mthe Higher or Lower sport pages reveal the points the hook totals[2m > [22m/cfb-higher-lower: a win reveals its total on the pill[32m 32[2mms[22m[39m
+ [32m✓[39m src/test/resultScorePillComparison.test.tsx[2m > [22mthe Higher or Lower sport pages reveal the points the hook totals[2m > [22m/cfb-higher-lower: a loss reveals its total on the pill[32m 24[2mms[22m[39m
+ [32m✓[39m src/test/resultScorePillComparison.test.tsx[2m > [22mthe Higher or Lower sport pages reveal the points the hook totals[2m > [22m/f1-higher-lower: a win reveals its total on the pill[32m 26[2mms[22m[39m
+ [32m✓[39m src/test/resultScorePillComparison.test.tsx[2m > [22mthe Higher or Lower sport pages reveal the points the hook totals[2m > [22m/f1-higher-lower: a loss reveals its total on the pill[32m 25[2mms[22m[39m
+ [32m✓[39m src/test/resultScorePillComparison.test.tsx[2m > [22mthe Higher or Lower sport pages reveal the points the hook totals[2m > [22m/tennis-higher-lower: a win reveals its total on the pill[32m 24[2mms[22m[39m
+ [32m✓[39m src/test/resultScorePillComparison.test.tsx[2m > [22mthe Higher or Lower sport pages reveal the points the hook totals[2m > [22m/tennis-higher-lower: a loss reveals its total on the pill[32m 24[2mms[22m[39m
+ [32m✓[39m src/test/resultScorePillComparison.test.tsx[2m > [22mthe Higher or Lower sport pages reveal the points the hook totals[2m > [22m/golf-higher-lower: a win reveals its total on the pill[32m 26[2mms[22m[39m
+ [32m✓[39m src/test/resultScorePillComparison.test.tsx[2m > [22mthe Higher or Lower sport pages reveal the points the hook totals[2m > [22m/golf-higher-lower: a loss reveals its total on the pill[32m 24[2mms[22m[39m
+[90mstderr[2m | src/test/resultScorePillComparison.test.tsx[2m > [22m[2mFace Off reveals the scoreline the hook totals[2m > [22m[2m/face-off: a win against The Pro reveals the totals on the pill
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/resultScorePillComparison.test.tsx[2m > [22mthe Higher or Lower sport pages reveal the points the hook totals[2m > [22m/afl-higher-lower: a win reveals its total on the pill[32m 27[2mms[22m[39m
+ [32m✓[39m src/test/resultScorePillComparison.test.tsx[2m > [22mthe Higher or Lower sport pages reveal the points the hook totals[2m > [22m/afl-higher-lower: a loss reveals its total on the pill[32m 22[2mms[22m[39m
+ [32m✓[39m src/test/resultScorePillComparison.test.tsx[2m > [22mthe Higher or Lower sport pages reveal the points the hook totals[2m > [22mthe fixtures are two different scores, so a pill stuck on one number cannot pass both[32m 1[2mms[22m[39m
+ [32m✓[39m src/test/resultScorePillComparison.test.tsx[2m > [22msoccer Higher or Lower reveals the final streak[2m > [22m/higher-lower: a new best of 7 reveals 7 on the pill[32m 25[2mms[22m[39m
+ [32m✓[39m src/test/resultScorePillComparison.test.tsx[2m > [22msoccer Higher or Lower reveals the final streak[2m > [22m/higher-lower: a first pick miss reveals 0 on the pill[32m 29[2mms[22m[39m
+[90mstderr[2m | src/test/resultScorePillComparison.test.tsx[2m > [22m[2mFace Off reveals the scoreline the hook totals[2m > [22m[2m/face-off: a loss against The Pro reveals the totals on the pill
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/resultScorePillComparison.test.tsx[2m > [22m[2mChamp or Not and Who'd They Beat reveal the right answers out of ten[2m > [22m[2m/champ-or-not: a win reveals score/total on the pill
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/resultScorePillComparison.test.tsx[2m > [22m[2mChamp or Not and Who'd They Beat reveal the right answers out of ten[2m > [22m[2m/whod-they-beat: a win reveals score/total on the pill
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/resultScorePillComparison.test.tsx[2m > [22mFace Off reveals the scoreline the hook totals[2m > [22m/face-off: a win against The Pro reveals the totals on the pill[32m 34[2mms[22m[39m
+ [32m✓[39m src/test/resultScorePillComparison.test.tsx[2m > [22mFace Off reveals the scoreline the hook totals[2m > [22m/face-off: a loss against The Pro reveals the totals on the pill[32m 31[2mms[22m[39m
+ [32m✓[39m src/test/resultScorePillComparison.test.tsx[2m > [22mChamp or Not and Who'd They Beat reveal the right answers out of ten[2m > [22m/champ-or-not: a win reveals score/total on the pill[32m 34[2mms[22m[39m
+[90mstderr[2m | src/test/resultScorePillComparison.test.tsx[2m > [22m[2mChamp or Not and Who'd They Beat reveal the right answers out of ten[2m > [22m[2m/champ-or-not: a loss reveals score/total on the pill
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/resultScorePillComparison.test.tsx[2m > [22m[2mChamp or Not and Who'd They Beat reveal the right answers out of ten[2m > [22m[2m/whod-they-beat: a loss reveals score/total on the pill
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/resultScorePillComparison.test.tsx[2m > [22m[2mSilverware Sort reveals the rungs right out of the most there were[2m > [22m[2m/silverware-sort: a win reveals score/maxScore on the pill
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/resultScorePillComparison.test.tsx[2m > [22mChamp or Not and Who'd They Beat reveal the right answers out of ten[2m > [22m/whod-they-beat: a win reveals score/total on the pill[32m 36[2mms[22m[39m
+ [32m✓[39m src/test/resultScorePillComparison.test.tsx[2m > [22mChamp or Not and Who'd They Beat reveal the right answers out of ten[2m > [22m/champ-or-not: a loss reveals score/total on the pill[32m 35[2mms[22m[39m
+ [32m✓[39m src/test/resultScorePillComparison.test.tsx[2m > [22mChamp or Not and Who'd They Beat reveal the right answers out of ten[2m > [22m/whod-they-beat: a loss reveals score/total on the pill[32m 32[2mms[22m[39m
+[90mstderr[2m | src/test/resultScorePillComparison.test.tsx[2m > [22m[2mSilverware Sort reveals the rungs right out of the most there were[2m > [22m[2m/silverware-sort: a loss reveals score/maxScore on the pill
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/lib/frontOfficeRatings.test.ts[2m > [22mNFL opening rating checkpoint[2m > [22mshrinks coverage on targets rather than unrelated defensive snaps[32m 1[2mms[22m[39m
+ [32m✓[39m src/lib/frontOfficeRatings.test.ts[2m > [22mNFL opening rating checkpoint[2m > [22mkeeps missing defensive features absent instead of granting zero-valued evidence[32m 2[2mms[22m[39m
+ [32m✓[39m src/lib/frontOfficeRatings.test.ts[2m > [22mNFL opening rating checkpoint[2m > [22mbounds the measured target before small-sample blending and requires dated normalizers[32m 11[2mms[22m[39m
+ [32m✓[39m src/lib/frontOfficeRatings.test.ts[2m > [22mNFL opening rating checkpoint[2m > [22mkeeps source-stat observations and fitted models outside the browser data with a dated manifest[33m 617[2mms[22m[39m
+ [32m✓[39m src/test/resultScorePillComparison.test.tsx[2m > [22mSilverware Sort reveals the rungs right out of the most there were[2m > [22m/silverware-sort: a win reveals score/maxScore on the pill[32m 49[2mms[22m[39m
+ [32m✓[39m src/test/resultScorePillComparison.test.tsx[2m > [22mSilverware Sort reveals the rungs right out of the most there were[2m > [22m/silverware-sort: a loss reveals score/maxScore on the pill[32m 25[2mms[22m[39m
+ [32m✓[39m src/test/resultScorePillComparison.test.tsx[2m > [22mRank 'Em reveals the points it hands the recorder[2m > [22m/rank-em: a daily win reveals the recorded points on the pill[32m 34[2mms[22m[39m
+ [32m✓[39m src/test/resultScorePillComparison.test.tsx[2m > [22mRank 'Em reveals the points it hands the recorder[2m > [22m/rank-em: a daily loss reveals the recorded points on the pill[32m 30[2mms[22m[39m
+ [32m✓[39m src/test/resultScorePillComparison.test.tsx[2m > [22mHall of Fame or Bust reveals the points the vote earned[2m > [22m/hof-or-bust: the right call with one hint reveals 900 on the pill[32m 14[2mms[22m[39m
+ [32m✓[39m src/test/resultScorePillComparison.test.tsx[2m > [22mHall of Fame or Bust reveals the points the vote earned[2m > [22m/hof-or-bust: the wrong call reveals 0 on the pill[32m 17[2mms[22m[39m
+[90mstdout[2m | src/lib/frontOfficeRatings.test.ts[2m > [22m[2mNFL opening rating checkpoint[2m > [22m[2mplays four actual seasons playoffs drafts and summers with bounded saves and a nonnegative normal cap
+[22m[39mNFL_RATING_CAMPAIGN {"games":1088,"playoffs":52,"drafted":84,"saves":24,"maxSave":641401,"finalSeason":2030,"scope":"One seeded normal simulation; salary-matching trades are separately known to permit negative cap."}
+
+ [32m✓[39m src/lib/frontOfficeRatings.test.ts[2m > [22mNFL opening rating checkpoint[2m > [22mcarries original player evidence through real trades cuts and practice promotion[32m 8[2mms[22m[39m
+ [32m✓[39m src/lib/frontOfficeRatings.test.ts[2m > [22mNFL opening rating checkpoint[2m > [22mplays four actual seasons playoffs drafts and summers with bounded saves and a nonnegative normal cap[33m 499[2mms[22m[39m
+ [32m✓[39m src/lib/frontOfficeRatings.test.ts[2m > [22mNFL opening rating checkpoint[2m > [22mrefuses stale identity or source records before the real generator CLI writes outputs[33m 4554[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m57 passed[39m[22m[90m (57)[39m
+[2m   Start at [22m 11:10:20
+[2m   Duration [22m 10.65s[2m (transform 2.08s, setup 235ms, collect 4.34s, tests 11.64s, environment 1.34s, prepare 501ms)[22m
+

@@ -1,0 +1,8 @@
+snapshot keys      filename, sha256, retrievalDateAsRecorded, rosterSeason, week, sourceUrls, validationStatus, canonicalJsonSha256
+pinned sha256      e3d221a9eb40873a8b9920efacb73250d8483f7e0f34d06204a061c2d8e9de8d
+pinned canonical   be77b36d360d8a1b8d04243fcb2cac6ecd9395297375be7e03f4d7710245a50f
+working raw bytes  e3d221a9eb40873a8b9920efacb73250d8483f7e0f34d06204a061c2d8e9de8d bytes 444224 CR count 0 LF count 4235
+LF text            e3d221a9eb40873a8b9920efacb73250d8483f7e0f34d06204a061c2d8e9de8d chars 444222
+CRLF text          cd0befccedbba0b74d06620ad47feb0f28cc2f08cc240200c4b8133f8970581f
+git blob (HEAD)    e3d221a9eb40873a8b9920efacb73250d8483f7e0f34d06204a061c2d8e9de8d bytes 444224 has CR false
+canonical JSON     be77b36d360d8a1b8d04243fcb2cac6ecd9395297375be7e03f4d7710245a50f

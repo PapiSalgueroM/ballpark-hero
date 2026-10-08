@@ -1,0 +1,5 @@
+CONTROL wrong value: the hof hook reports 1001, the case expects the pill to read "1,000"
+  harness said:  FAIL [text] /hof-or-bust the right call, no hints: the pill reads "1,001", the hook reports "1,000"
+  harness said: simResultPillComparison: red. text 1
+  harness exit 1, findings 1, fixture file restored true
+CONTROL OK: the wrong value turned the text check red, on that case only

@@ -1,0 +1,9 @@
+tsc exit=0 54s | 
+vitest exit=0 11s |    Duration  10.65s (transform 2.08s, setup 235ms, collect 4.34s, tests 11.64s, environment 1.34s, prepare 501ms)
+pin-eol exit=0 0s | canonical JSON     be77b36d360d8a1b8d04243fcb2cac6ecd9395297375be7e03f4d7710245a50f
+simResultPillComparison exit=0 12s | simResultPillComparison: green. 34 finished states on a 390 wide phone: every pill reads the hook's score, on one line inside its fixed pill, nothing scrolls sideways, an
+simResultMoment exit=0 4s | simResultMoment: green. Every live game reaches the shared result moment or is listed with what it draws instead, the pill shows exactly the score it is given, the three 
+simNumberFormatting exit=0 121s | Number formatting: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/number-formatting-artifacts/outcomes
+simHarnessAnchors exit=0 29s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoRivalNames exit=0 11s | No rival product names found. 0 findings.
+pill-wrong-value-control exit=0 12s | CONTROL OK: the wrong value turned the text check red, on that case only
