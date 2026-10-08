@@ -1,0 +1,6 @@
+build exit=0 20s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+tsc exit=0 35s | 
+vitest exit=0 2s |    Duration  1.31s (transform 212ms, setup 138ms, collect 412ms, tests 424ms, environment 1.04s, prepare 320ms)
+play-main exit=0 172s | playStorageBlocked: 777 checks, 0 failed
+play-raw exit=1 387s | playStorageBlocked (control raw): 737 checks, 237 failed
+play-open exit=0 160s | playStorageBlocked (control open): 682 checks, 0 failed
