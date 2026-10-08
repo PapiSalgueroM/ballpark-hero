@@ -1,0 +1,48 @@
+info base saves: soccer 6292 chars, nba 3571 chars
+ok   [phone] A. closed at "Matchday 3 of 38": a Resume chip shows on the first screen after closing: "📺 Resume 2012/13, matchday 4"
+ok   [phone] A. the chip is a 340 by 44 target and nothing covers it (hit test true,true,true)
+ok   [phone] A. the chip reopens the centre on a card that says "3 of 38 played · you are 2nd" (closed at "Matchday 3 of 38"), buttons: ▶ Matchday 4 | ⏭ Straight to the final table | ↺ From the start
+ok   [phone] A. the resume button plays the next one: "Matchday 4 of 38"
+ok   [phone] A. no page or console errors (none)
+ok   [desk] A. closed at "null": a Resume chip shows on the first screen after closing: "📺 Resume 2012/13, matchday 3"
+ok   [desk] A. the chip is a 966 by 44 target and nothing covers it (hit test true,true,true)
+FAIL [desk] A. the chip reopens the centre on a card that says "2 of 38 played · you are 9th" (closed at "null"), buttons: ▶ Matchday 3 | ⏭ Straight to the final table | ↺ From the start
+FAIL [desk] A. the resume button plays the next one: "null"
+ok   [desk] A. no page or console errors (none)
+ok   [phone-mo] B. the hub has a Week by week button
+ok   [phone-mo] B. the Season Center opens on the base save
+ok   [phone-mo] B. the start button reads Tip off
+ok   [phone-mo] B. game one: no sideways scroll
+info [phone-mo] B. phone order: record panel 293, list button 443 ("🗓 Schedule"), so far tiles 499
+ok   [phone-mo] B. on a phone the record panel sits above the list button
+ok   [phone-mo] B. phone list: no sideways scroll
+info [phone-mo] B. the bar's next button read "▶ Game 3"
+ok   [phone-mo] B. walked every game to the review
+ok   [phone-mo] B. the review prints no undefined or NaN
+ok   [phone-mo] B. no page or console errors (none)
+ok   [desk-mo] B. the hub has a Week by week button
+ok   [desk-mo] B. the Season Center opens on the base save
+ok   [desk-mo] B. the start button reads Tip off
+ok   [desk-mo] B. game one: no sideways scroll
+info [desk-mo] B. the bar's next button read "▶ Game 4"
+ok   [desk-mo] B. walked every game to the review
+ok   [desk-mo] B. the review prints no undefined or NaN
+ok   [desk-mo] B. no page or console errors (none)
+ok   [phone-rm] B. the hub has a Week by week button
+ok   [phone-rm] B. the Season Center opens on the base save
+ok   [phone-rm] B. the start button reads Tip off
+ok   [phone-rm] B. game one: no sideways scroll
+info [phone-rm] B. phone order: record panel 293, list button 443 ("🗓 Schedule"), so far tiles 499
+ok   [phone-rm] B. on a phone the record panel sits above the list button
+ok   [phone-rm] B. phone list: no sideways scroll
+info [phone-rm] B. the bar's next button read "▶ Game 3"
+ok   [phone-rm] B. walked every game to the review
+ok   [phone-rm] B. the review prints no undefined or NaN
+ok   [phone-rm] B. no page or console errors (none)
+info [phone] C. home: header icon {"w":0,"h":0,"top":0,"left":0,"shown":false,"pressed":"false"}, footer text {"w":80,"h":16,"top":23506,"left":135,"shown":true,"pressed":"false"}, AudioContext made before the switch: 0
+ok   [phone] C. home: nothing made before he switches it on
+info [phone] C. home at 390: header switch shown: false; the footer's is 80 by 16
+info [desk] C. home: header icon {"w":44,"h":44,"top":38,"left":990,"shown":true,"pressed":"false"}, footer text {"w":80,"h":16,"top":10382,"left":1133,"shown":true,"pressed":"false"}, AudioContext made before the switch: 0
+ok   [desk] C. home: nothing made before he switches it on
+ok   [desk] C. home: the header switch is shown and at least 44 by 44
+rvWalk2: 38 checks, 2 failed

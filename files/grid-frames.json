@@ -1,0 +1,22 @@
+[
+ {
+  "label": "branch (remedy in)",
+  "cpu": 1,
+  "error": "no search box after pressing a cell"
+ },
+ {
+  "label": "branch (remedy in)",
+  "cpu": 4,
+  "error": "no search box after pressing a cell"
+ },
+ {
+  "label": "mutant m7 (remedy out)",
+  "cpu": 1,
+  "error": "no search box after pressing a cell"
+ },
+ {
+  "label": "mutant m7 (remedy out)",
+  "cpu": 4,
+  "error": "no search box after pressing a cell"
+ }
+]
