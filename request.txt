@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walk2: node .rc/x/walk2b.mjs $RC_OUT $RC_OUT/walk2-report.json

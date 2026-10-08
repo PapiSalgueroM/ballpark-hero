@@ -1,0 +1,74 @@
+--- legend phone recover
+ok   p390leg legend: the seeded veteran opens on the retirement talk | Skip to main content DOUKNOWBALL Back Track stats NBA My Career Draft night to jersey retirement. Every summer bends the career. 🕰️ Is it time? You're 18 points off your best (90), and you're 35. Peo
+ok   p390leg legend: a refused farewell answer shows the notice and leaves the disk alone | {"op":"write","text":"Your latest progress has not been saved. Keep this tab open and try again.","notice":[16,197,374,314],"button":[29,257,125,301],"para":[29,210,361,249],"header":null,"hitButton":"notice","hitParaTop":"notice","hitParaBottom":"notice","scrollY":0,"docWidth":390,"vw":390}
+ok   p390leg legend: the hub carries the farewell banner while unsaved
+ok   p390leg legend: Retry writes the farewell answer byte for byte
+ok   p390leg legend: a reload keeps the farewell and does not ask the talk again
+note p390leg legend farewell season trail | ["reveal","rivalry-option","rivalry-outcome","retired"]
+ok   p390leg legend: the farewell season ends the career | reveal,rivalry-option,rivalry-outcome,retired
+note p390leg legend hall card while the retirement is unsaved | "🏛️ NAISMITH MEMORIAL BASKETBALL HALL OF FAME Eligible from the Class of 2031. 2031: elected First ballot. Class of 2031. 👕 Charlotte Hornets retired your number after 12 seasons there. Eligible after 2 seasons away from the game. Needs 75 percent of the vote. YOUR INDUCTION SPEECH 🙌 Thank the fans Crowd +12 🤝 Thank the locker room Old room +12 📖 Tell the whole story, bad years too 50 percent
+FAIL p390leg legend: the Hall card is on the retirement screen | 🏛️ NAISMITH MEMORIAL BASKETBALL HALL OF FAME Eligible from the Class of 2031. 2031: elected First ballot. Class of 2031. 👕 Charlotte Hornets retired your number after 12 seasons there. Eligible afte
+ok   p390leg legend: the disk still holds the farewell hub while the retirement is refused, and the notice says so
+note p390leg legend completions after retiring | [{"game":"nba-my-career","player_name":"HumbleGrinder-65"},{"game":"nba-my-career","player_name":"HumbleGrinder-65"},{"game":"nba-my-career","score":1622,"player_name":"HumbleGrinder-65"}]
+note p390leg legend speech asked | 1
+ok   p390leg legend: Retry writes the retired save byte for byte the latest refused write
+note p390leg legend recovered save | {"seasons":13,"retirement":{"farewellYear":2027},"hallSpeech":{"crowd":62,"line":"You gave the longest stretch to the people in the seats, the ones who drove in for every home game. The crowd stood for it.","speechId":"fans"}}
+ok   p390leg legend: after the reload the Hall card reads the same (same ballots, same speech, not asked again) | 🏛️ NAISMITH MEMORIAL BASKETBALL HALL OF FAME Eligible from the Class of 2031. 2031: elected First ballot. Class of 2031. 👕 Charlotte Hornets retired your number after 12 seasons there. Eligible after 2 seasons away from the game. Needs 75 percent of the vote. You gave the longest stretch to the pe
+ok   p390leg legend: the reload posts no completion | 3 then 3
+ok   p390leg legend: opening the recovered retired save writes nothing
+--- legend desktop no retry
+ok   d1280leg legend: the seeded veteran opens on the retirement talk | Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats NBA My Career Draft night to jersey retirement. Every summer bends the career. 🕰️ Is it time
+ok   d1280leg legend: a refused farewell answer shows the notice and leaves the disk alone | {"op":"write","text":"Your latest progress has not been saved. Keep this tab open and try again.","notice":[320,177,960,275],"button":[333,218,429,262],"para":[333,190,947,210],"header":null,"hitButton":"notice","hitParaTop":"notice","hitParaBottom":"notice","scrollY":0,"docWidth":1280,"vw":1280}
+ok   d1280leg legend: the hub carries the farewell banner while unsaved
+ok   d1280leg legend: Retry writes the farewell answer byte for byte
+ok   d1280leg legend: a reload keeps the farewell and does not ask the talk again
+note d1280leg legend farewell season trail | ["reveal","retired"]
+ok   d1280leg legend: the farewell season ends the career | reveal,retired
+note d1280leg legend hall card while the retirement is unsaved | "🏛️ NAISMITH MEMORIAL BASKETBALL HALL OF FAME Eligible from the Class of 2031. 2031: elected First ballot. Class of 2031. 👕 New Orleans Pelicans retired your number after 13 seasons there. Eligible after 2 seasons away from the game. Needs 75 percent of the vote. YOUR INDUCTION SPEECH 🙌 Thank the fans Crowd +12 🤝 Thank the locker room Old room +12 📖 Tell the whole story, bad years too 50 perc
+FAIL d1280leg legend: the Hall card is on the retirement screen | 🏛️ NAISMITH MEMORIAL BASKETBALL HALL OF FAME Eligible from the Class of 2031. 2031: elected First ballot. Class of 2031. 👕 New Orleans Pelicans retired your number after 13 seasons there. Eligible a
+ok   d1280leg legend: the disk still holds the farewell hub while the retirement is refused, and the notice says so
+note d1280leg legend completions after retiring | [{"game":"nba-my-career","player_name":"ElectricGlueguy-81"},{"game":"nba-my-career","player_name":"ElectricGlueguy-81"},{"game":"nba-my-career","score":1622,"player_name":"ElectricGlueguy-81"}]
+note d1280leg legend speech asked | 1
+note d1280leg legend reload WITHOUT retry | {"hub":true,"farewell":true,"retiredScreen":true,"notice":false,"diskIsFarewellHub":true}
+note d1280leg legend second finish after an unrecovered retirement | {"trail":["reveal","retired"],"posts":[{"game":"nba-my-career","player_name":"ElectricGlueguy-81"},{"game":"nba-my-career","player_name":"ElectricGlueguy-81"},{"game":"nba-my-career","score":1622,"player_name":"ElectricGlueguy-81"},{"game":"nba-my-career","player_name":"ElectricGlueguy-81"},{"game":"nba-my-career","score":1622,"player_name":"ElectricGlueguy-81"}],"postsAtFirstRetire":3,"postsNow":
+--- landing nfl phone
+note p390land nfl landing after a clean quick create | {"top":-563,"bottom":-519,"vh":844,"scrollY":1098,"inView":false}
+ok   p390land nfl: a clean create shows no save notice
+--- landing nfl desktop
+note d1280land nfl landing after a clean quick create | {"top":-531,"bottom":-487,"vh":900,"scrollY":971,"inView":false}
+ok   d1280land nfl: a clean create shows no save notice
+--- old nfl phone
+note p390old2 nfl old save: optional fields stripped | ["netWorth","dirtyMoney","heat","suspendedSeasons","purchased","lifeFlags","appearance","yearlyCosts","rival","role","money","headlines","phoneInbox","phoneUsedIds","karma","pendingRivalryEvent","lastRivalryEventId","eventLastFired","summerSalt"]
+ok   p390old2 nfl: an old active save opens on its hub | Skip to main content DOUKNOWBALL Back Track stats NFL My Career Draft night to retirement speech. Every choice bends the career. Old Save · QB Arizona Cardinals
+ok   p390old2 nfl: the old save plays its next season and saves it | reveal,decision-option,decision-continue,decision-option,decision-continue,decision-option,decision-continue,hub seasons 2
+ok   p390old2 nfl: an old retired save opens on the retirement screen | Skip to main content DOUKNOWBALL Back Track stats NFL My Career Draft night to retirement speech. Every choice bends the career. Old Save retires A cup of coffe
+ok   p390old2 nfl: opening an old retired save posts no completion | 2 then 2
+ok   p390old2 nfl: opening an old retired save writes nothing
+note p390old2 nfl old retired hall card | "🗳️ PRO FOOTBALL HALL OF FAME Eligible from the Class of 2033. Never made the ballot. Eligible after 5 seasons away from the game. Needs 80 percent of the vote. Continue →"
+ok   p390old2 nfl: no page error while the old saves load | []
+--- old nfl desktop
+note d1280old2 nfl old save: optional fields stripped | ["netWorth","dirtyMoney","heat","suspendedSeasons","purchased","lifeFlags","appearance","yearlyCosts","rival","role","money","headlines","phoneInbox","phoneUsedIds","karma","eventLastFired","summerSalt"]
+ok   d1280old2 nfl: an old active save opens on its hub | Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats NFL My Career Draft night to retirement speech. Every
+ok   d1280old2 nfl: the old save plays its next season and saves it | reveal,decision-option,decision-continue,decision-option,decision-continue,decision-option,decision-continue,hub seasons 2
+ok   d1280old2 nfl: an old retired save opens on the retirement screen | Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats NFL My Career Draft night to retirement speech. Every
+ok   d1280old2 nfl: opening an old retired save posts no completion | 2 then 2
+ok   d1280old2 nfl: opening an old retired save writes nothing
+note d1280old2 nfl old retired hall card | "🗳️ PRO FOOTBALL HALL OF FAME Eligible from the Class of 2033. Never made the ballot. Eligible after 5 seasons away from the game. Needs 80 percent of the vote. Continue →"
+ok   d1280old2 nfl: no page error while the old saves load | []
+--- home and back nhl
+ok   p390tab nhl: the played season shows the write notice | {"op":"write","text":"Your latest progress has not been saved. Keep this tab open and try again.","notice":[16,62,374,179],"button":[29,122,125,166],"para":[29,75,361,114],"header":null,"hitButton":"notice","hitParaTop":"notice","hitParaBottom":"notice","scrollY":135,"docWidth":390,"vw":390}
+note p390tab nhl notice words | "Your latest progress has not been saved. Keep this tab open and try again."
+note p390tab nhl after Home and Back in the same tab | {"seasonsOnDisk":0,"diskUnchanged":true,"notice":false,"hub":" / Tab Probe · C / San Jose Sharks / 2026 · age 18 / OVR 71 / $0.9M x3 / 🪑 Fourth line"}
+--- summer mlb recover
+note p390sum mlb first summer card | {"step":"1","id":"mlbC_rookie_per_diem"}
+ok   p390sum mlb: a refused summer answer shows the notice and leaves the disk on the card
+note p390sum mlb after reload (with Retry) | {"step":"2","id":"mlbC_of_wall","hub":false}
+ok   p390sum mlb: after Retry and a reload the answered card is not dealt again | {"first":{"step":"1","id":"mlbC_rookie_per_diem"},"second":{"step":"2","id":"mlbC_of_wall","hub":false}}
+note p390sum mlb refused write was the latest | {"len":3434}
+--- summer nfl no retry
+note d1280sum nfl first summer card | {"step":"1","id":"lifeA_scheme_misfit"}
+ok   d1280sum nfl: a refused summer answer shows the notice and leaves the disk on the card
+note d1280sum nfl after reload (without Retry) | {"step":"1","id":"lifeA_scheme_misfit","hub":false}
+ok   d1280sum nfl: without Retry the reload opens on the same card, unanswered | {"first":{"step":"1","id":"lifeA_scheme_misfit"},"second":{"step":"1","id":"lifeA_scheme_misfit","hub":false}}
+note d1280sum nfl refused write was the latest | {"len":3266}
+US careers walk 2: 37 of 39 checks passed, 0 page errors, 25 screenshots.
