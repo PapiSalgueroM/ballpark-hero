@@ -1,0 +1,27 @@
+MUT none-box: exit=0 signal=null tests=5/5 failed=0
+MUT none-hook: exit=0 signal=null tests=5/5 failed=0
+MUT MB-leave-no-id-bump: exit=1 signal=null tests=4/5 failed=1
+      - rvProbeBox > P1 leaving with a search in flight whose source ignores the abort: nothing fetched before leaving comes back
+MUT MB2-leave-no-abort-no-bump: exit=1 signal=null tests=3/5 failed=2
+      - rvProbeBox > P1 leaving with a search in flight whose source ignores the abort: nothing fetched before leaving comes back
+      - rvProbeBox > P2 leaving with a search in flight that honours the abort: no empty row flashes on return
+MUT MB3-leave-keeps-debounce-timer: exit=1 signal=null tests=3/5 failed=2
+      - rvProbeBox > P1 leaving with a search in flight whose source ignores the abort: nothing fetched before leaving comes back
+      - rvProbeBox > P2 leaving with a search in flight that honours the abort: no empty row flashes on return
+MUT MK-minchars-off-by-one: exit=1 signal=null tests=3/5 failed=2
+      - rvProbeBox > P3 exactly minChars letters: the list shows, drops on leaving and returns on coming back
+      - rvProbeBox > P4 exactly minChars letters with no match says No players found
+MUT MO-caller-signal-not-heard: exit=1 signal=null tests=2/5 failed=3
+      - rvProbeHook > H1 a reset, then a new game: the late valid answer fills nothing
+      - rvProbeHook > H2 a new formation chosen while the check is out: the late valid answer fills nothing
+      - rvProbeHook > H4 leaving the page aborts the check in flight
+MUT MR-no-cancel-on-unmount: exit=1 signal=null tests=4/5 failed=1
+      - rvProbeHook > H4 leaving the page aborts the check in flight
+MUT MS-new-formation-no-cancel: exit=1 signal=null tests=4/5 failed=1
+      - rvProbeHook > H2 a new formation chosen while the check is out: the late valid answer fills nothing
+MUT MT-reset-no-cancel: exit=0 signal=null tests=5/5 failed=0
+MUT MQ-no-giveup-after-answer: exit=1 signal=null tests=2/5 failed=3
+      - rvProbeHook > H1 a reset, then a new game: the late valid answer fills nothing
+      - rvProbeHook > H2 a new formation chosen while the check is out: the late valid answer fills nothing
+      - rvProbeHook > H3 a reroll: the late valid answer fills nothing under the new team
+rv-mut: 11 runs, survived with every test green: MT-reset-no-cancel

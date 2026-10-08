@@ -1,0 +1,19 @@
+MUT MB-leave-no-id-bump: exit=0 signal=null tests=62/62 failed=0
+MUT MB2-leave-no-abort-no-bump: exit=0 signal=null tests=62/62 failed=0
+MUT MB3-leave-keeps-debounce-timer: exit=0 signal=null tests=62/62 failed=0
+MUT MJ2-enter-while-loading: exit=0 signal=null tests=62/62 failed=0
+MUT MK-minchars-off-by-one: exit=0 signal=null tests=62/62 failed=0
+MUT MU-commit-keeps-list: exit=0 signal=null tests=62/62 failed=0
+MUT MG-wait-ten-times-longer: exit=0 signal=null tests=49/49 failed=0
+MUT MO-caller-signal-not-heard: exit=1 signal=null tests=44/49 failed=5
+      - lineupValidatorClient > a reroll cancels the check in flight
+      - lineupValidatorClient > a real refusal reads as a refusal
+      - lineupValidatorClient > a valid answer is accepted
+      - lineupValidatorClient > a club row the position gate refuses is still refused
+      - lineupValidatorClient > a pick given up while its history is read is dropped
+MUT MF-club-substring-match: exit=0 signal=null tests=49/49 failed=0
+MUT MR-no-cancel-on-unmount: exit=0 signal=null tests=49/49 failed=0
+MUT MS-new-formation-no-cancel: exit=0 signal=null tests=49/49 failed=0
+MUT MT-reset-no-cancel: exit=0 signal=null tests=49/49 failed=0
+MUT MQ-no-giveup-after-answer: exit=0 signal=null tests=49/49 failed=0
+rv-mut: 13 runs, survived with every test green: MB-leave-no-id-bump, MB2-leave-no-abort-no-bump, MB3-leave-keeps-debounce-timer, MJ2-enter-while-loading, MK-minchars-off-by-one, MU-commit-keeps-list, MG-wait-ten-times-longer, MF-club-substring-match, MR-no-cancel-on-unmount, MS-new-formation-no-cancel, MT-reset-no-cancel, MQ-no-giveup-after-answer

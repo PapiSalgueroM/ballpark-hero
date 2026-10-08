@@ -1,0 +1,4 @@
+prep exit=0 0s | copied
+probe-real exit=0 1s |    Duration  790ms (transform 200ms, setup 60ms, collect 462ms, tests 107ms, environment 385ms, prepare 188ms)
+survivors-plain exit=0 39s | rv-mut: 13 runs, survived with every test green: MB-leave-no-id-bump, MB2-leave-no-abort-no-bump, MB3-leave-keeps-debounce-timer, MJ2-enter-while-loading, MK-minchars-off
+probe-under-mutations exit=0 9s | rv-mut: 11 runs, survived with every test green: MT-reset-no-cancel

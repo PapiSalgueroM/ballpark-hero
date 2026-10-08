@@ -1,0 +1,19 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/rvProbeHook.test.tsx[2m > [22mreviewer probe: giving up on a pick whose answer is already on its way[2m > [22mH1 a reset, then a new game: the late valid answer fills nothing[32m 16[2mms[22m[39m
+ [32m✓[39m src/test/rvProbeHook.test.tsx[2m > [22mreviewer probe: giving up on a pick whose answer is already on its way[2m > [22mH2 a new formation chosen while the check is out: the late valid answer fills nothing[32m 4[2mms[22m[39m
+ [32m✓[39m src/test/rvProbeHook.test.tsx[2m > [22mreviewer probe: giving up on a pick whose answer is already on its way[2m > [22mH3 a reroll: the late valid answer fills nothing under the new team[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/rvProbeHook.test.tsx[2m > [22mreviewer probe: giving up on a pick whose answer is already on its way[2m > [22mH4 leaving the page aborts the check in flight[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/rvProbeHook.test.tsx[2m > [22mreviewer probe: giving up on a pick whose answer is already on its way[2m > [22mH5 the same pick sent twice in one tick fills one slot once[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/rvProbeBox.test.tsx[2m > [22mreviewer probe: the search box[2m > [22mP1 leaving with a search in flight whose source ignores the abort: nothing fetched before leaving comes back[32m 46[2mms[22m[39m
+ [32m✓[39m src/test/rvProbeBox.test.tsx[2m > [22mreviewer probe: the search box[2m > [22mP2 leaving with a search in flight that honours the abort: no empty row flashes on return[32m 9[2mms[22m[39m
+ [32m✓[39m src/test/rvProbeBox.test.tsx[2m > [22mreviewer probe: the search box[2m > [22mP3 exactly minChars letters: the list shows, drops on leaving and returns on coming back[32m 10[2mms[22m[39m
+ [32m✓[39m src/test/rvProbeBox.test.tsx[2m > [22mreviewer probe: the search box[2m > [22mP4 exactly minChars letters with no match says No players found[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/rvProbeBox.test.tsx[2m > [22mreviewer probe: the search box[2m > [22mP5 Escape with a search in flight, then typing on: the new text gets its own list and nothing older[32m 9[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m10 passed[39m[22m[90m (10)[39m
+[2m   Start at [22m 07:20:31
+[2m   Duration [22m 790ms[2m (transform 200ms, setup 60ms, collect 462ms, tests 107ms, environment 385ms, prepare 188ms)[22m
+
