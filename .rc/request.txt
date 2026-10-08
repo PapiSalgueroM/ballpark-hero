@@ -1,0 +1,2 @@
+summer-cal1: TMPDIR=$(mktemp -d) node scripts/simUsCareerSummer.mjs
+summer-cal2: cp .rc/x/zzSummerCal2Scratch.mjs scripts/zzSummerCal2Scratch.mjs && TMPDIR=$(mktemp -d) node scripts/zzSummerCal2Scratch.mjs
