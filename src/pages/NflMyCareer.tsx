@@ -30,11 +30,11 @@ const NflMyCareer = () => {
             title="NFL My Career: the Player Life Sim"
             description="Build a fictional prospect and live a full NFL career inside the real league. Your position and archetype drive realistic season stat lines, your choices drive everything else: training focus, holdouts, trade requests, surgeries, hometown discounts or max-money moves. Chase rings, MVPs and All-Pro nods, fight the aging curve, and retire to a legacy verdict that tells you if Canton calls."
             howToPlay={[
-              'Create your player: name, one of 8 positions (QB, RB, WR, TE, LB, CB, EDGE, K) and an archetype, then get drafted by a real team.',
-              'Pick your league first: today\'s NFL, or the 2005 throwback with the Raiders in Oakland, the Chargers in San Diego and the Rams in St. Louis.',
+              'Create your player: name, one of 8 positions (QB, RB, WR, TE, LB, CB, EDGE, K) and an archetype, then get drafted by a real team. A rookie signs for four years and is paid by his draft slot: the first pick makes 14.3M a year in 2026 money, the last pick about 1.1M. In this game a kicker goes in round four or later.',
+              'Pick your league first: today\'s NFL, or the 2005 throwback with the Raiders in Oakland, the Chargers in San Diego and the Rams in St. Louis. Throwback seasons are 16 games, the way the league played them until 2021, and contracts pay 2005 money.',
               'Play each season for a realistic stat line driven by your rating, your health and your team.',
               'Between seasons, up to three decisions land, one card at a time: contracts, trade requests, surgeries, podcasts, training focus. A card you just saw rests for a while (press moments follow your season, so those can come right back).',
-              'Open the Bank when you like: savings that pays 2.5% a season, a market of five moving prices, a statement, the locker room card school and the shop.',
+              'Open the Bank when you like: savings that pays 2.5% a season, a market of five moving prices, a statement, the locker room card school and the shop. The account cannot go below zero: a bill you cannot cover comes out of savings first, and after that a card takes what is there.',
               'The News box carries the paper, your SocialGram and your draft class rival\'s card. The Trophy Case holds 25 badges, lit off the facts of your career.',
               'Running backs fall off a cliff early, field surgeons age like wine. Plan the career, not the season.',
               'From 30, a falling rating brings the retirement talk: stop, one more year, or a farewell season. Then the legacy verdict (cup of coffee to first-ballot immortal) and the Hall of Fame ballot, year by year.',
@@ -44,6 +44,7 @@ const NflMyCareer = () => {
               'A bellcow back with three straight All-Pros and nothing left at 30',
               'Taking the hometown discount and finally winning it all at 34',
               'Requesting a trade out of a 3-win rebuild and landing on a contender',
+              'Drafted 35th in the 2005 throwback: a four year rookie deal on 2005 money and sixteen game seasons',
             ]}
           />
           <GameNav />
