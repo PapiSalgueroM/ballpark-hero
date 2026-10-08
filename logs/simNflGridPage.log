@@ -1,0 +1,12 @@
+1) Judged in memory: the hook imports the lib, matches locally, never invokes an edge function
+   hook read as code
+2) The key's names: the search box offers NFL_GRID_PLAYER_SOURCE with validateOnly
+   search box read as code
+3) The copy asks only what the pool offers
+   page and copy read
+4) The static pool is gone and nothing imports it
+   no importer left
+5) The board is the engine's: today's board rebuilt through the hook equals the lib's
+   4 days rebuilt
+
+simNflGridPage: green. The money page judges in memory, offers the key's names, and asks only what it can answer.

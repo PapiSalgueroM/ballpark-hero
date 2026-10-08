@@ -1,0 +1,15 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+guideLadder: node scripts/simGauntletGuideLadder.mjs
+guideLadder-staleclimb: SIM_GAUNTLET_GUIDE_CONTROL=staleclimb node scripts/simGauntletGuideLadder.mjs
+guideLadder-stalerange: SIM_GAUNTLET_GUIDE_CONTROL=stalerange node scripts/simGauntletGuideLadder.mjs
+guideLadder-ghostcard: SIM_GAUNTLET_GUIDE_CONTROL=ghostcard node scripts/simGauntletGuideLadder.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simFrontOfficeRoster: node scripts/simFrontOfficeRoster.mjs
+simFaqSchema: node scripts/simFaqSchema.mjs
+simNflGridPage: node scripts/simNflGridPage.mjs
+simPerfectSeasonOdds: node scripts/simPerfectSeasonOdds.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simGauntletEngine: node scripts/simGauntletEngine.mjs
