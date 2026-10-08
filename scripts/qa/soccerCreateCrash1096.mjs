@@ -105,9 +105,10 @@ async function mutateText(page, row, stage) {
 
 async function choose(page, index, label) {
   await page.locator('#dukb-main [role="combobox"]').nth(index).tap();
-  // Nationality flag alt text repeats the name, so select by exact item text.
-  const exact = page.getByRole('option').filter({ hasText: new RegExp(`^${label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`) });
+  // The flag repeats the accessible name and its hidden fallback adds raw text.
+  const exact = page.getByRole('option', { name: new RegExp(`^${label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?:\\s|$)`) });
   await exact.waitFor({ state: 'visible' });
+  assert.equal(await exact.count(), 1, `One option matches ${label}`);
   await exact.tap();
   await page.getByRole('listbox').waitFor({ state: 'hidden' });
 }
@@ -124,7 +125,7 @@ async function runCase(target, spec, mode) {
   const jobs = [];
   page.on('console', message => jobs.push(remember((async () => {
     const args = await Promise.all(message.args().map(async handle => {
-      try { return await handle.evaluate(value => value instanceof Error
+      try { return await handle.evaluate(value => value instanceof Error || value instanceof DOMException
         ? { name: value.name, message: value.message, stack: value.stack }
         : typeof value === 'object' && value !== null ? JSON.parse(JSON.stringify(value)) : String(value)); }
       catch (error) { return { unavailable: String(error) }; }
@@ -174,7 +175,7 @@ async function runCase(target, spec, mode) {
     assert(!Object.hasOwn(fresh.localStorage, SAVE), 'Fresh guest has no career save');
     if (target.id === 'published') row.publishedIdentity = { entry: fresh.entry,
       matchesKnownAKEntry: path.posix.basename(fresh.entry ?? '') === EXPECTED_ENTRY,
-      matchesKnownAKDeployment: row.navigation[0].deployment === EXPECTED_DEPLOYMENT };
+      matchesKnownAKDeployment: (row.navigation[0].deployment ?? '').split('.').includes(EXPECTED_DEPLOYMENT) };
     await replace('before-selects');
     await step('selects', async () => {
       await page.locator('#pname').fill('Create Diagnosis');

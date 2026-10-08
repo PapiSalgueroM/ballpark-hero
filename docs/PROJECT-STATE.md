@@ -1,4 +1,13 @@
 Codex CLAIMS1096, 2026-10-08: Soccer Career create-crash diagnosis.
+First capturee168b866/run37730510180 passed type/build/source holds, but
+all12 cases stopped at the nationality selector before generating or creating.
+The option also contains a hidden flag fallback, so exact text did not match.
+No product error or career save was observed. Actual delivered AK entry/chunk
+bytes and deployment UUID were verified. Artifact11529628482 is retained.
+Preparation2 repairs only the selector, captures caught DOMException details,
+and compares the UUID segment of the measured signed deployment header.
+No product code is changed. The reported crash remains unconfirmed.
+
 Owner supplied a Brazilian visitor report: creating a career hits the route
 error boundary and trying again fails. Published AK is confirmed by deployment
 ac2187ef, index-VAwtKqwh and SoccerCareer-CKD9vQWc. Fresh-create source review
