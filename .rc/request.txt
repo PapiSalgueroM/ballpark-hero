@@ -1,0 +1,2 @@
+#!serial
+mutate: MUT_FAST=1 MUT_ONLY=M0,M1,M5,M9,M10,M11 node .rc/x/rvwMutate.mjs
