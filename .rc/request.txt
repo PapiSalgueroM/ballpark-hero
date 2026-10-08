@@ -1,0 +1,17 @@
+# Release AN fix pass, request 4: the final head. Type gate, the fences, and what changed after request 1 to 3
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+squadplay: ENGINES=chromium REQUIRE_PAGE=1 PORT=4810 SHOTS=/tmp/shots-plain node scripts/playCareerSquad.mjs
+squadplay-ellipsis: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=ellipsis PORT=4920 SHOTS=/tmp/shots-ellipsis node scripts/playCareerSquad.mjs
+pill: node scripts/simResultPillComparison.mjs
+pill-bareline: RESULT_PILL_CONTROL=bareline node scripts/simResultPillComparison.mjs
+translated-nospans: PLAY_TRANSLATED_CONTROL=nospans ENGINES=chromium node scripts/playTranslatedPage.mjs
+vitest-whole-diff: node_modules/.bin/vitest run src/test/usSeasonCentreEntry.test.tsx src/test/translateGuard.test.tsx src/lib/soccerClubSquad.test.ts --testTimeout=300000 --hookTimeout=120000
+playStorageBlocked: PLAY_STORAGE_NATIVE=require node scripts/playStorageBlocked.mjs
+playSoccerCareer: ENGINES=chromium node scripts/playSoccerCareer.mjs
