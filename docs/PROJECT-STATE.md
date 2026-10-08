@@ -1,5 +1,11 @@
 ## Round 1090 preparation, 2026-10-07, Soccer Phone currency display
 
+Preparation 1 at 04616fa4/run37705722338 failed proper app types with eleven
+TS2339 findings on the new fixture's optional money field. Build and all proof
+suites were skipped. The next candidate adds only the same optional MoneyState
+intersection already used by the actual engine to the cloned test fixture.
+No runtime statement, assertion, product component or engine changed.
+
 Unverified preparation on `codex/soccer-phone-currency-1090`, pinned to Release AL integration
 `8fe82a4dc1346f7d5b8072f387f3acb34bbaa3c8`. The previously accepted 1073 branch remains untouched.
 The owned managed checkout is `career-season-compare-1060/ballpark-hero`, reused cleanly and recorded

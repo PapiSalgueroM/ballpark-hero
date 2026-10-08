@@ -50,7 +50,7 @@ function fixture(netWorth = 36.27, rich = true) {
   const source = E.initCareer('Phone Currency Fixture', 'England', 'ST', '2020-24',
     { pace: 68, shooting: 68, passing: 68, dribbling: 68, defending: 45, physical: 68, reflexes: 30 },
     65, 2022, E.FALLBACK_CLUBS, null, 82);
-  const career = clone(source);
+  const career: CareerState & { money?: M.MoneyState } = clone(source);
   // Financial coverage is explicitly staged on an actual engine-created career.
   career.netWorth = netWorth; career.weeklyWage = 12345; career.popularity = 100;
   career.corruptionHeat = 1; career.dirtyMoney = 10;
