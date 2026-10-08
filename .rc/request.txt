@@ -1,0 +1,36 @@
+# Release AN proof, part 3b: the other browser walks, three at a time
+#!serve
+#!playwright
+playSoccerCareer: ENGINES=chromium node scripts/playSoccerCareer.mjs
+playSeasonCentre: PORT=4411 ENGINES=chromium node scripts/playSeasonCentre.mjs
+playSeasonMoments: PORT=4412 ENGINES=chromium node scripts/playSeasonMoments.mjs
+playReducedMotion: ENGINES=chromium node scripts/playReducedMotion.mjs
+usplay: PORT=4401 node scripts/playUsSeasonCentre.mjs
+usplay-playfirst: PORT=4402 US_SEASON_PLAY_CONTROL=playfirst node scripts/playUsSeasonCentre.mjs
+usplay-cover: PORT=4403 US_SEASON_PLAY_CONTROL=cover node scripts/playUsSeasonCentre.mjs
+usplay-static: PORT=4404 US_SEASON_PLAY_CONTROL=static node scripts/playUsSeasonCentre.mjs
+usplay-write: PORT=4405 US_SEASON_PLAY_CONTROL=write node scripts/playUsSeasonCentre.mjs
+usplay-count: PORT=4406 US_SEASON_PLAY_CONTROL=count node scripts/playUsSeasonCentre.mjs
+squadplay: ENGINES=chromium REQUIRE_PAGE=1 PORT=4810 SHOTS=/tmp/shots-plain node scripts/playCareerSquad.mjs
+squadplay-rank: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=rank PORT=4820 SHOTS=/tmp/shots-rank node scripts/playCareerSquad.mjs
+squadplay-write: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=write PORT=4830 SHOTS=/tmp/shots-write node scripts/playCareerSquad.mjs
+squadplay-still: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=still PORT=4840 SHOTS=/tmp/shots-still node scripts/playCareerSquad.mjs
+squadplay-nofill: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=nofill PORT=4850 SHOTS=/tmp/shots-nofill node scripts/playCareerSquad.mjs
+squadplay-clip: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=clip PORT=4860 SHOTS=/tmp/shots-clip node scripts/playCareerSquad.mjs
+squadplay-shift: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=shift PORT=4870 SHOTS=/tmp/shots-shift node scripts/playCareerSquad.mjs
+squadplay-static: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=static PORT=4880 SHOTS=/tmp/shots-static node scripts/playCareerSquad.mjs
+squadplay-label: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=label PORT=4890 SHOTS=/tmp/shots-label node scripts/playCareerSquad.mjs
+squadplay-noscroll: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=noscroll PORT=4900 SHOTS=/tmp/shots-noscroll node scripts/playCareerSquad.mjs
+squadplay-notrap: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=notrap PORT=4910 SHOTS=/tmp/shots-notrap node scripts/playCareerSquad.mjs
+squadplay-ellipsis: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=ellipsis PORT=4920 SHOTS=/tmp/shots-ellipsis node scripts/playCareerSquad.mjs
+cmplay: node scripts/playCmDataOnDemand.mjs
+cmplay-abort: CM_PLAY_CONTROL=abort node scripts/playCmDataOnDemand.mjs
+playFlagshipLazy: PORT=4431 node scripts/playFlagshipLazy.mjs
+sweepWeight: SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs
+sweep-late: SWEEP_OFFLINE=1 SWEEP_WEIGHT_CONTROL=late ENGINES=chromium node scripts/sweepWeight.mjs
+sweep-planted: SWEEP_OFFLINE=1 SWEEP_WEIGHT_CONTROL=planted ENGINES=chromium node scripts/sweepWeight.mjs
+pill: node scripts/simResultPillComparison.mjs
+pill-noscore: RESULT_PILL_CONTROL=noscore node scripts/simResultPillComparison.mjs
+pill-cramp: RESULT_PILL_CONTROL=cramp node scripts/simResultPillComparison.mjs
+pill-shift: RESULT_PILL_CONTROL=shift node scripts/simResultPillComparison.mjs
+inbox: node scripts/playInboxCard.mjs
