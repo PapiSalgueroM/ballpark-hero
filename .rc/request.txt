@@ -1,0 +1,16 @@
+#!serial
+# Round 1051 reviewer (runner lens): one mutation a line on the throwaway checkout, judged by the round's own tests and harness, restored after each
+m00-baseline: bash .rc/x/rmutrun.sh none vit fix
+m01-nopersist: bash .rc/x/rmutrun.sh nopersist vit
+m02-repairwrites1: bash .rc/x/rmutrun.sh repairwrites1 vit fix
+m03-repairdrops: bash .rc/x/rmutrun.sh repairdrops vit
+m04-stampnohall: bash .rc/x/rmutrun.sh stampnohall vit fix
+m05-stampignored: bash .rc/x/rmutrun.sh stampignored vit nba
+m06-weighsoncal1: bash .rc/x/rmutrun.sh weighsoncal1 vit nba
+m07-v2dropsterm: bash .rc/x/rmutrun.sh v2dropsterm nfl
+m08-topignored: bash .rc/x/rmutrun.sh topignored mlb
+m09-rawtotal: bash .rc/x/rmutrun.sh rawtotal vit nba
+m10-nbaalways2: bash .rc/x/rmutrun.sh nbaalways2 vit nba
+m11-rampswap: bash .rc/x/rmutrun.sh rampswap nhl
+m12-stampone: bash .rc/x/rmutrun.sh stampone vit nfl
+m99-clean: git status --porcelain --untracked-files=no | wc -l
