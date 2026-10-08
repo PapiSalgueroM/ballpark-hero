@@ -9,10 +9,19 @@ import { build } from 'esbuild';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const engine = 'src/lib/usCoachCareer.ts', test = 'src/lib/usCoachPoaching.test.ts';
-const files = [engine, test, 'src/lib/usCareerToCoach.ts', 'src/lib/nbaMyCareer.ts', 'scripts/simUsCoachCareer.mjs'];
+/* Round 1103: the four six season scouts each coaching career starts from are a recording, not a fresh run of
+   the NBA player engine. They were played on a seeded stream the coach engine then carries on down, so every
+   pinned [seed, year] below rode on every draw the PLAYER engine takes, and a round that moved the NBA stat
+   line turned this proof about coaches red. The recording (scripts/recordUsCoachPoachingScouts.mjs, made on
+   main before that round) holds each scout and the draws he used; the stream is wound on by that many, and
+   every coaching season is still played here on the real engine. No pin and no assertion changed.
+   scripts/simUsCoachCareer.mjs is where a scout made by today's player engine starts a coaching career. */
+const scoutsFile = 'src/test/fixtures/usCoachPoachingScouts888.json';
+const files = [engine, test, 'src/lib/usCareerToCoach.ts', 'src/lib/nbaMyCareer.ts', 'scripts/simUsCoachCareer.mjs', scoutsFile];
 const holdSource = bytes => ({ bytes, source: bytes.toString('utf8').replaceAll('\r\n', '\n') });
 const held = await Promise.all(files.map(async file => [file, holdSource(await readFile(path.join(root, file)))]));
 const source = held.find(([file]) => file === engine)[1].source;
+const scouts = JSON.parse(held.find(([file]) => file === scoutsFile)[1].source).scouts;
 const departure = '  const departure: CoachDeparture = exit.stay ? s.profile.departure : exit.departure;';
 const oldDeparture = "  const departure: CoachDeparture = poachedTo !== null ? 'poached'\n    : exit.stay ? s.profile.departure\n    : exit.departure;";
 const credit = "      s.profile = { ...s.profile, departure: 'poached' };";
@@ -48,11 +57,11 @@ try {
   const write = async (name, value) => { const file = path.join(folder, name); owned.push(file); await writeFile(file, value); return file; };
   const originalFile = await write('original.ts', resolveCopies(original));
   const subjectFile = await write('subject.ts', resolveCopies(subject));
-  const entry = await write('entry.mjs', `export * as original from './original.ts'; export * as subject from './subject.ts'; export * as nba from '${root.replaceAll('\\', '/')}/src/lib/nbaMyCareer.ts';`);
+  const entry = await write('entry.mjs', `export * as original from './original.ts'; export * as subject from './subject.ts';`);
   const bundle = path.join(folder, 'bundle.mjs'); owned.push(bundle);
   const built = await build({ entryPoints: [entry], bundle: true, format: 'esm', platform: 'node', outfile: bundle, alias: { '@': path.join(root, 'src') }, logLevel: 'error', metafile: true });
   assert.ok(!Object.keys(built.metafile.inputs).some(file => file.includes('supabase')), 'Pure engine baseline has no database client');
-  const { original: reference, subject: actual, nba } = await import(pathToFileURL(bundle).href);
+  const { original: reference, subject: actual } = await import(pathToFileURL(bundle).href);
   const clone = value => JSON.parse(JSON.stringify(value));
   const rows = [];
   function seedRandom(seed) {
@@ -60,9 +69,10 @@ try {
     return { tape, draw: () => { s = (s + 0x6d2b79f5) >>> 0; let t = Math.imul(s ^ (s >>> 15), s | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); const value = ((t ^ (t >>> 14)) >>> 0) / 4294967296; tape.push(value); return value; } };
   }
   for (let seed = 1; seed <= 4; seed++) {
-    const r = seedRandom(seed), player = nba.startNbaCareer('Fictional supported coach scout', 'PG', nba.NBA_ARCHETYPES.PG[0], r.draw);
-    nba.nbaAssignRole(player, 80, r.draw);
-    for (let i = 0; i < 6; i++) { nba.simNbaSeason(player, 80, r.draw); nba.nbaProgress(player, r.draw); }
+    const r = seedRandom(seed), scout = scouts[seed];
+    assert.ok(scout && scout.draws > 0 && scout.player.seasons.length === 6 && scout.player.name === 'Fictional supported coach scout', 'Recorded six season scout exists');
+    for (let i = 0; i < scout.draws; i++) r.draw();
+    const player = clone(scout.player);
     player.retired = true; let state = reference.startCoachCareer('nba', player, player.year, r.draw);
     for (let i = 0; i < 40 && state.year <= 2063; i++) {
       if (state.unemployed) { state = state.offers.length ? reference.acceptCoachOffer(state, 0) : reference.sitOutCoachSeason(state, r.draw).state; continue; }
