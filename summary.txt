@@ -1,0 +1,4 @@
+vitest exit=0 4s |    Duration  3.80s (transform 1.25s, setup 402ms, collect 1.69s, tests 656ms, environment 3.05s, prepare 1.01s)
+rec exit=0 4s |  1 file changed, 2 insertions(+), 27 deletions(-)
+sim exit=0 10s | simSeasonCentreMotion: 17 checks, 0 failed
+tsc exit=0 60s | 
