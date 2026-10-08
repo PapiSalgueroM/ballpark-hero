@@ -1,0 +1,4 @@
+applied M21 to src/hooks/useCollegeGrid.ts: the hook reads the key through state only: a pick made before the key landed is unverified at once (no wait)
+restored src/hooks/useCollegeGrid.ts
+dirty tracked files after restore: 0
+MUT M21: vt=1 page=0

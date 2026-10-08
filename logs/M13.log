@@ -1,0 +1,4 @@
+applied M13 to src/lib/collegeGrid.ts: the memory search ranks the least prominent player first
+restored src/lib/collegeGrid.ts
+dirty tracked files after restore: 0
+MUT M13: vt=0 page=0 shipped=0 walk=0

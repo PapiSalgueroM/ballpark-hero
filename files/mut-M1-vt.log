@@ -1,0 +1,24 @@
+ ✓ src/test/gridEngineSource.test.ts (15 tests) 121ms
+CGFAILCLOSED| board cg611-033: yes Jason Witten, no Darrell Green
+ ✓ src/test/playerSearchLocal.test.ts (8 tests) 13ms
+CGFAILCLOSED| decoder: 41 of 41 damaged pairs refused
+   ✓ College Grid fail closed (Round 1105) > (a) the door: one fetch per key file and no read of the table 193ms
+   × College Grid fail closed (Round 1105) > (b) the key never arrives: the board is up at once, and a pick waits and is then unverified 15ms
+     → no guess was spent: expected 14 to be 15 // Object.is equality
+   × College Grid fail closed (Round 1105) > (c) the key fails five ways: unverified each time, the next pick starts a new load, and a good load is judged 7ms
+     → no guess was spent: expected 14 to be 15 // Object.is equality
+   ✓ College Grid fail closed (Round 1105) > (d) the key lands 3 seconds after the pick: that pick is judged on the cell it was made for  300ms
+   ✓ College Grid fail closed (Round 1105) > (e) the player leaves while a pick waits: the pick is dropped, nothing is written, nothing is said 134ms
+   ✓ decodeCollegeKey: null on any doubt, never a row from a damaged file > the committed pair decodes to one row per player with the nine keys the judge entry reads 35ms
+   ✓ decodeCollegeKey: null on any doubt, never a row from a damaged file > every one of 41 damaged pairs is null, and none of them throws  427ms
+ ✓ src/test/collegeGridOffline.test.tsx (2 tests) 2413ms
+   ✓ College Grid offline > (4a) a win bot fills 9 of 9 in 9 counted guesses on every board  1029ms
+   ✓ College Grid offline > (4b) a loss bot that submits a definite no each time ends every board lost at 15  699ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/test/collegeGridFailClosed.test.tsx > College Grid fail closed (Round 1105) > (b) the key never arrives: the board is up at once, and a pick waits and is then unverified
+AssertionError: no guess was spent: expected 14 to be 15 // Object.is equality
+ FAIL  src/test/collegeGridFailClosed.test.tsx > College Grid fail closed (Round 1105) > (c) the key fails five ways: unverified each time, the next pick starts a new load, and a good load is judged
+AssertionError: no guess was spent: expected 14 to be 15 // Object.is equality
+      Tests  2 failed | 30 passed (32)
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridFailClosed.test.tsx,title=src/test/collegeGridFailClosed.test.tsx > College Grid fail closed (Round 1105) > (b) the key never arrives%3A the board is up at once%2C and a pick waits and is then unverified,line=181,column=4
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridFailClosed.test.tsx,title=src/test/collegeGridFailClosed.test.tsx > College Grid fail closed (Round 1105) > (c) the key fails five ways%3A unverified each time%2C the next pick starts a new load%2C and a good load is judg

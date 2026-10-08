@@ -1,0 +1,4 @@
+applied M14 to scripts/genCollegeGridData.mjs: the audited drop matches year and pick only, so a real pick at the same slot is dropped too
+restored scripts/genCollegeGridData.mjs
+dirty tracked files after restore: 0
+MUT M14: shipped=1 compact=0 tables=0

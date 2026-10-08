@@ -1,0 +1,19 @@
+   ok: 5 files, one DO block each; 15 record pins (3 parsed, 12 on derived rounds, every one read back), 13 read backs, 12 compared
+controls (each applied to a copy of its inputs; the section it targets must go red)
+   fired: placeholder -> app copy keeps "_ Johnston", expected refused (ncaa_player_stats 21867)
+   fired: archive -> the grid archive's malformedName would print "_ Johnston", a placeholder (ncaa_player_stats 21867)
+   fired: twin -> dedupePrograms hides 2 rows (996c65ec, aa3cc051), the SQL deletes 3 (996c65ec, 58952bad, aa3cc051)
+   fired: names -> Seattle (c8187d90) ends with ["Seattle","Redhawks","SU","Seattle U","Seattle University"], the SQL leaves ["Seattle","Redhawks","SU","Seattle University"]
+   fired: generic -> two programs in one city with a generic mascot hint were folded into one (generic-2)
+   fired: cleaner -> "Selection moved down 12 spots" is kept, expected refused (no position and no college)
+   fired: constants -> nfl: 28015 - 1000 - 71 - 13 is not 26932
+   fired: pins -> nfl: the block reads back 1976 pick 472 as round 17, the record pins round 16
+   fired: unread -> nfl: the record pins 1976 pick 404 at round 15 and the block never reads it back
+   fired: keyguard -> 2 cfb rows joined the career, expected 1: the "_ Probe Passer" placeholder must join nobody
+   fired: searchcall -> the College Basketball Grid search for "johnston" offers ["_ Johnston","Probe Johnston"], expected ["Probe Johnston"]
+   fired: offered -> the hook offers 8 programs (La Salle, Temple, Loyola (LA), Loyola Marymount, Loyola–Chicago, Seattle University, Seattle, Loyola Chicago), the cbb migration leaves 5 (La Salle, Temple, Loyola Marymount, Seattle, Loyola Chicago)
+   fired: pool -> 2026-10-03: the daily deals Seattle (c8187d90); slot 3 of the 8 rows is Loyola Marymount (5a1ce2ab), so the day's program is Loyola Marymount (5a1ce2ab)
+   fired: slot -> 2026-10-02: the daily deals Loyola (LA) (58952bad); slot 2 of the 8 rows is Loyola (LA) (58952bad), so the day's program is Loyola Marymount (5a1ce2ab)
+   fired: dailytwin -> cbb_daily names Loyola–Chicago (996c65ec) and the hook deals Loyola–Chicago (996c65ec), expected the kept Loyola Chicago (fc98aa58)
+   fired: early -> a Daily click before the programs load deals Loyola–Chicago (996c65ec) for a cbb_daily row naming Loyola–Chicago (996c65ec), expected the kept Loyola Chicago (fc98aa58)
+simCollegeTables: green. Both placeholder copies agree on 48 names, dedupePrograms hides what the cbb migration deletes and writes what it writes, the draft cleaner refuses the three placeholder shapes, the five migrations are one block each with constants that add up, the key builder skips a placeh

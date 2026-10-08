@@ -1,0 +1,16 @@
+M1 exit=0 17s | MUT M1: vt=1 page=1 shipped=1
+M2 exit=0 123s | MUT M2: vt=1 page=0
+M4 exit=0 5s | MUT M4: vt=1 page=0
+M5 exit=0 5s | MUT M5: vt=1 page=0
+M6 exit=0 5s | MUT M6: vt=1 page=0
+M7 exit=0 18s | MUT M7: vt=1 page=0 shipped=1
+M8 exit=0 18s | MUT M8: vt=0 page=0 shipped=0
+M10 exit=0 18s | MUT M10: vt=1 page=0 shipped=1
+M11 exit=0 18s | MUT M11: vt=1 page=0 shipped=1
+M12 exit=0 77s | MUT M12: vt=0 page=0 shipped=0 walk=0
+M13 exit=0 75s | MUT M13: vt=0 page=0 shipped=0 walk=0
+M14 exit=0 15s | MUT M14: shipped=1 compact=0 tables=0
+M17 exit=0 5s | MUT M17: vt=1 page=0
+M19 exit=0 5s | MUT M19: vt=1 page=0
+M21 exit=0 5s | MUT M21: vt=1 page=0
+clean exit=0 0s | 0

@@ -1,0 +1,4 @@
+applied M17 to src/lib/playerSearch.ts: a names list that cannot load is reported as an empty result, not an error
+restored src/lib/playerSearch.ts
+dirty tracked files after restore: 0
+MUT M17: vt=1 page=0

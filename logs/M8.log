@@ -1,0 +1,4 @@
+applied M8 to src/lib/collegeGrid.ts: school index check off by one (index equal to the list length passes)
+restored src/lib/collegeGrid.ts
+dirty tracked files after restore: 0
+MUT M8: vt=0 page=0 shipped=0

@@ -1,0 +1,4 @@
+applied M7 to src/lib/collegeGrid.ts: the decoder no longer compares the two stamps
+restored src/lib/collegeGrid.ts
+dirty tracked files after restore: 0
+MUT M7: vt=1 page=0 shipped=1

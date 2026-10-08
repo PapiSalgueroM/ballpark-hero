@@ -1,0 +1,24 @@
+ ✓ src/test/gridEngineSource.test.ts (15 tests) 126ms
+CGFAILCLOSED| board cg611-033: yes Jason Witten, no Darrell Green
+   ✓ a source in a table, recorded on main before Round 1105 added the local seam > a five letter query sends exactly the ilike leg and the prominence leg 6ms
+   ✓ a source in a table, recorded on main before Round 1105 added the local seam > under three letters nothing is sent at all 1ms
+   ✓ a source held in memory (Round 1105) > asks the local rows with the normalized query and makes no request of any kind 2ms
+   ✓ a source held in memory (Round 1105) > honours exclude and limit 1ms
+   ✓ a source held in memory (Round 1105) > under three letters the local rows are never asked 0ms
+   × a source held in memory (Round 1105) > rows that cannot be had are an error, never "nobody by that name" 12ms
+     → expected { results: [], error: null } to deeply equal { results: [], …(1) }
+   ✓ a source held in memory (Round 1105) > a match of nobody is an empty list with no error 0ms
+   ✓ a source held in memory (Round 1105) > an aborted search settles empty with no error, whatever the rows did 1ms
+CGFAILCLOSED| fail closed: 5 of 5 failure worlds left the pick unverified and judged it after the network healed
+CGFAILCLOSED| decoder: 41 of 41 damaged pairs refused
+ ✓ src/test/collegeGridFailClosed.test.tsx (7 tests) 2172ms
+   ✓ College Grid fail closed (Round 1105) > (c) the key fails five ways: unverified each time, the next pick starts a new load, and a good load is judged  789ms
+   ✓ decodeCollegeKey: null on any doubt, never a row from a damaged file > every one of 41 damaged pairs is null, and none of them throws  460ms
+ ✓ src/test/collegeGridOffline.test.tsx (2 tests) 2498ms
+   ✓ College Grid offline > (4a) a win bot fills 9 of 9 in 9 counted guesses on every board  1051ms
+   ✓ College Grid offline > (4b) a loss bot that submits a definite no each time ends every board lost at 15  783ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/test/playerSearchLocal.test.ts > a source held in memory (Round 1105) > rows that cannot be had are an error, never "nobody by that name"
+AssertionError: expected { results: [], error: null } to deeply equal { results: [], …(1) }
+      Tests  1 failed | 31 passed (32)
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/playerSearchLocal.test.ts,title=src/test/playerSearchLocal.test.ts > a source held in memory (Round 1105) > rows that cannot be had are an error%2C never "nobody by that name",line=142,column=21::AssertionError: expected { results: 

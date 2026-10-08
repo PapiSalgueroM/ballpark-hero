@@ -1,0 +1,8 @@
+  FAIL: a guess is added before the verdict (the not-found or duplicate branch charges)
+  FAIL: the missing key branch calls addDailyGuess: a pick nobody checked is put on the guess log (accept on error)
+  FAIL: the missing key branch no longer tells the player the pick was not checked
+  FAIL: an addDailyGuess call sits before the end of the unknown branch
+  FAIL: submitGuess adds a miss in 2 places; only the no branch may
+   fired: the hook invokes an edge function; the page must judge in memory
+   fired: the config fetchCollegeGridData hands the engine names no staticSource, so the key would be paged out of the table again
+   fired: a guess is added before the verdict (the not-found or duplicate branch charges)
