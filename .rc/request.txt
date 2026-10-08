@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+#!serial
+walk-b: WALK_PART=native,full node .rc/x/walk.mjs
