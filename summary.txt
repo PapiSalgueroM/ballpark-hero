@@ -1,0 +1,10 @@
+simNoRivalNames exit=0 15s | No rival product names found. 0 findings.
+simClubManagerGathered exit=0 2s | simClubManagerGathered: all checks passed (1 gathered league(s), 403 men, 1436 printed squad entries accounted for, 83 addresses, 5 cited facts, the old save)
+simHarnessAnchors exit=0 33s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simCareerDerbies exit=0 12s | simCareerDerbies: all 8 sections green
+simInventedNames exit=0 6s | simInventedNames: green. Every invented man on this site is invented all the way down.
+simCmLeagueRules exit=0 37s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+tsc exit=0 68s | 
+gen-check exit=0 1s | src/data/clubManagerRussia2026.ts is a fresh generation from scripts/data/gatheredSquads/russia2026/research.json (sha256 7a717c7194828d81caf8e24585a41f59c3b3f539a0d0e4f7
+era-lines exit=0 16s |    bidding war rival pool: 135 clubs, 5 Russian (Zenit, Krasnodar, Spartak Moscow, CSKA Moscow, Dynamo Moscow)
+livesim exit=0 27s |    Duration  25.71s (transform 3.47s, setup 124ms, collect 2.73s, tests 24.27s, environment 827ms, prepare 342ms)
