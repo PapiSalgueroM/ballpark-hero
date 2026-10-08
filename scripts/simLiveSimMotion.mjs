@@ -50,6 +50,9 @@
  *   nth          a scorer's later goals are counted on his first card              a scorer card counts his goals
  *   cardside     an opponent who shares a name gets my player's season count       a scorer card counts his goals
  *   bigpart      the part's barrel carries six kilobytes more                      the bundle section (its size ceiling)
+ *   scorelead    the score waits on the plan's instant, not the action's own start  no frame draws the new score (it led the net by a frame)
+ *   samecommit   an action always starts from the frame on screen, old eleven or not  a chance whose line fires in the very commit
+ *   crowd        a man in a crowd keeps his name                                   level neighbours take a row each, and a wall shows numbers
  * cmimport now trips the import specifier scan as well as the marker check, and is accepted only on both.
  * And one old control has a new test to turn red: lineup takes the hook's own guard out (an action is dropped
  * when the line up under it changes). The viewer joins the frame to its eleven by key now, so its substitution
@@ -78,7 +81,7 @@ const OLD = ['trigger', 'save', 'pause', 'mutation', 'lineup', 'speed', 'reduced
 const NEW = ['block', 'kickoff', 'overlap', 'mouth', 'draw', 'approach', 'lag', 'hold', 'skipmoment', 'back', 'onepanel', 'labels', 'stalejoin', 'takenback', 'cmimport'];
 /* The review of 2026-10-08: six swapped argument mutations of the dead ball rules and six of the viewer left every test green.
    Each of these has a test that reads it now. */
-const REVIEW = ['turns', 'restartbeat', 'kickoffside', 'throwside', 'foulside', 'cornerflank', 'goalkickside', 'secondkick', 'possession', 'etclear', 'reducedhold', 'flash', 'lastkick', 'dropped', 'logearly', 'nth', 'cardside', 'bigpart'];
+const REVIEW = ['scorelead', 'samecommit', 'crowd', 'turns', 'restartbeat', 'kickoffside', 'throwside', 'foulside', 'cornerflank', 'goalkickside', 'secondkick', 'possession', 'etclear', 'reducedhold', 'flash', 'lastkick', 'dropped', 'logearly', 'nth', 'cardside', 'bigpart'];
 assert.ok(['', ...OLD, ...NEW, ...REVIEW].includes(control), 'Unknown live motion control');
 assert.ok(['', 'bundle'].includes(only), 'Unknown LIVE_MOTION_ONLY');
 /* Minified bytes and gzip bytes of the part alone, and the ceiling: each plus a fifth. */
@@ -139,6 +142,9 @@ try {
     if (control === 'labels') viewer = replace(viewer, 'const LABEL_BELOW = 6;', 'const LABEL_BELOW = -1;');
     if (control === 'takenback') motion = replace(motion, 'action.event === event && ', '');
     /* ---- the review of 2026-10-08 ---- */
+    if (control === 'scorelead') viewer = replace(viewer, 'const struck = liveAction?.event === e ? liveAction.at : firesAt(e);', 'const struck = firesAt(e);');
+    if (control === 'samecommit') motion = replace(motion, 'setAction({ event, scene: fits ? shown : { ...between(shown, scene, 0), ball: shown.ball } });', 'setAction({ event, scene: shown }); void fits;');
+    if (control === 'crowd') viewer = replace(viewer, 'if (wall || crowd) short.add(a.key);', 'if (wall) short.add(a.key); void crowd;');
     if (control === 'turns') scene = replace(scene, '    c.at = held(c, wanted);', '    c.floor = c.place; void wanted;');
     if (control === 'restartbeat') scene = replace(scene, "=> (c.event.kind === 'goal' ? PITCH_RESTART : 0);", '=> (c.event ? 0 : 0);');
     if (control === 'kickoffside') scene = replace(scene, 'kickoff(after, defending, 4.5, n, `g${a.order}`);', 'kickoff(after, side, 4.5, n, `g${a.order}`);');
@@ -191,6 +197,7 @@ try {
     lag: 'the score waits for the ball', hold: 'the score waits for the ball', skipmoment: 'after Skip the second half opens',
     back: 'Back folds the match', onepanel: 'one panel at a time', labels: 'a name goes above its figure',
     turns: 'R6: a chance starts with the ball', restartbeat: 'R6: a chance starts with the ball',
+    crowd: 'level neighbours take a row each', scorelead: 'no frame draws the new score', samecommit: 'a chance whose line fires in the very commit',
     kickoffside: 'R7: every dead ball', throwside: 'R7: every dead ball', foulside: 'R7: every dead ball', cornerflank: 'R7: every dead ball', goalkickside: 'R7: every dead ball',
     secondkick: 'R8: the pitch is handed', possession: 'R8: the pitch is handed',
     etclear: 'a line fired late by Skip is not played again', reducedhold: 'under reduced motion the card is held', flash: 'no frame draws the new score',

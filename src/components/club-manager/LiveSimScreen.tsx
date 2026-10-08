@@ -281,12 +281,17 @@ export function labelsAbove(figures: { key: string; x: number; y: number }[]): S
 }
 /** Round 1101: who shows his number without his name for now. Three or more men level and shoulder to
  *  shoulder (a free kick's wall) have no room for three names in any two rows, so each shows his number
- *  until they break. A pure function of the frame. */
+ *  until they break. So does a man in a crowd: with three or more others inside the room his own name and
+ *  the next one would need (a corner coming in, a scramble in the area) the names print through each other
+ *  whichever row each takes, worst on a 320 px phone. A pure function of the frame. */
 const LABEL_WALL = 8;
+const LABEL_CROWD = 3;
 export function labelsShort(figures: { key: string; x: number; y: number }[]): Set<string> {
   const short = new Set<string>();
   for (const a of figures) {
-    if (figures.filter(b => b !== a && Math.abs(b.x - a.x) < LABEL_WALL && Math.abs(b.y - a.y) <= LABEL_LEVEL).length >= 2) short.add(a.key);
+    const wall = figures.filter(b => b !== a && Math.abs(b.x - a.x) < LABEL_WALL && Math.abs(b.y - a.y) <= LABEL_LEVEL).length >= 2;
+    const crowd = figures.filter(b => b !== a && Math.abs(b.x - a.x) < LABEL_ACROSS && Math.abs(b.y - a.y) <= LABEL_BELOW).length >= LABEL_CROWD;
+    if (wall || crowd) short.add(a.key);
   }
   return short;
 }
@@ -958,7 +963,11 @@ export function LiveSimScreen({
     const lo = stage === 'first' ? 0 : stage === 'extra' ? 91 : 46;
     for (const e of feed) {
       if (e.kind !== 'goal' || e.side === 'none' || e.minute < lo || e.minute > stageEnd || placeOf(e) > clock || !playsOut(e)) continue;
-      if (clock >= firesAt(e) + (reducedMotion ? 0 : NET_AT) || droppedKey === lineKey(e)) continue;
+      /* The pitch counts the action from the tick its line fired on, a hair after the instant the plan gave
+         it. Once that action is the one playing, the wait is read off its own start, so the new score and the
+         ball in the net are the same frame (read off the plan alone the score led the net by one frame). */
+      const struck = liveAction?.event === e ? liveAction.at : firesAt(e);
+      if (clock >= struck + (reducedMotion ? 0 : NET_AT) || droppedKey === lineKey(e)) continue;
       waiting[e.side]++;
     }
   }

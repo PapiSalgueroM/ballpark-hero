@@ -1256,13 +1256,23 @@ describe('The goal sequence', () => {
     const observer = new MutationObserver(collect);
     observer.observe(score, { childList: true, subtree: true, characterData: true });
     const read = () => collect(observer.takeRecords());
+    const phase = () => mounted.container.querySelector('[data-cm-live-pitch]')!.getAttribute('data-cm-motion-phase');
     /* Frame by frame, from before the line fires (200 ms in) to just short of the net (956 ms in). */
     for (let ms = 0; ms < 928; ms += 16) { await step(16); read(); }
-    expect(mounted.container.querySelector('[data-cm-live-pitch]')!.getAttribute('data-cm-motion-phase')).toBe('flight');
+    expect(phase()).toBe('flight');
     expect(drawn.filter(text => text !== was)).toEqual([]);
-    /* And once it is in, the new digit is drawn. */
-    for (let ms = 0; ms < 160; ms += 16) { await step(16); read(); }
+    /* And once it is in, the new digit is drawn: on the very frame the pitch first reads net, not the frame
+       before it. (The wait was once read off the plan's instant alone while the pitch counted from the tick the
+       line fired on, and the score led the ball by one frame: a real browser saw it, this loop did not.) */
+    const landedOn: (string | null)[] = [];
+    for (let ms = 0; ms < 160; ms += 16) {
+      const before = drawn.length;
+      await step(16);
+      read();
+      if (drawn.slice(before).some(text => text !== was)) landedOn.push(phase());
+    }
     expect(drawn).toContain(String(Number(was) + 1));
+    expect(landedOn).toEqual(['net']);
     observer.disconnect();
   }, 60000);
 
@@ -1541,6 +1551,13 @@ describe('Match mode', () => {
     const pair = [{ key: 'm4', x: 50, y: 60 }, { key: 'o9', x: 56, y: 61.5 }];
     expect(labelsShort(pair).size).toBe(0);
     expect(labelsAbove(pair).size).toBe(1);
+    /* A crowd: five men in the area as a corner comes in, none of them level with two others. The four in
+       the thick of it show numbers; the man at its edge, with only two of them near him, keeps his name. */
+    const crowd = [{ key: 'm9', x: 46, y: 10 }, { key: 'o4', x: 50, y: 12 }, { key: 'o5', x: 54, y: 9 }, { key: 'm10', x: 51, y: 15.5 }, { key: 'o6', x: 62, y: 14 }];
+    expect([...labelsShort(crowd)].sort()).toEqual(['m10', 'm9', 'o4', 'o5']);
+    /* Three men spread over a line keep their names: near each other, but not a crowd and not a wall. */
+    const line = [{ key: 'o2', x: 30, y: 30 }, { key: 'o3', x: 41, y: 33 }, { key: 'o4', x: 52, y: 30 }];
+    expect(labelsShort(line).size).toBe(0);
   });
 
   it('at full time the folded card offers the report as well as the way back', async () => {
@@ -1615,6 +1632,35 @@ describe('The part and a change of line up', () => {
     await step(32);
     expect(probe().getAttribute('data-probe')).toBe('pass');
     expect(probe().getAttribute('data-names')).toBe('Home keeper,Home sub');
+  });
+
+  /* The browser walk found this one on a wide screen: a goal whose score changed with nothing drawn, no
+     strike, no card. A substitution, a red card and an injury sit on the same whole minute as a chance can,
+     so the line up changes in the very commit the chance's line fires in. The frame the action is started
+     from still held the old eleven then, and the guard above refused the action for good. */
+  it('a chance whose line fires in the very commit the line up changes is still played, by the new eleven', async () => {
+    type Five = typeof scene;
+    const save = { event: { minute: 10, side: 'opp' as const, kind: 'save' as const, text: 'Away striker' }, key: 'probe-same-commit', at: 10 };
+    function Probe({ on, action, clock }: { on: Five; action: typeof save | null; clock: number }) {
+      const frame = useLiveSimMotion(on, action, clock, true, false);
+      return <div data-probe={frame.action} data-names={frame.mine.map((p: { name?: string }) => p.name).join(',')} />;
+    }
+    const mounted = render(<Probe on={scene} action={null} clock={9.9} />);
+    await step(32);
+    const probe = () => mounted.container.querySelector('[data-probe]')!;
+    expect(probe().getAttribute('data-probe')).toBe('pass');
+    /* One commit: my striker goes off for another man in the same slot, and the chance of that minute fires. */
+    const changed: Five = { ...scene, mine: scene.mine.map(p => (p.key === 'm9' ? { ...p, name: 'Home sub' } : p)) };
+    mounted.rerender(<Probe on={changed} action={save} clock={10} />);
+    await step(32);
+    mounted.rerender(<Probe on={changed} action={save} clock={10.3} />);
+    await step(32);
+    expect(probe().getAttribute('data-probe')).toBe('save');
+    expect(probe().getAttribute('data-names')).toBe('Home keeper,Home sub');
+    /* And it is over at its own time, like any other. */
+    mounted.rerender(<Probe on={changed} action={save} clock={10 + ACTION_SPAN + .01} />);
+    await step(32);
+    expect(probe().getAttribute('data-probe')).toBe('pass');
   });
 });
 

@@ -151,7 +151,19 @@ export function useLiveSimMotion<T extends MotionPlayer>(scene: MotionScene<T>, 
   const clockRef = useRef(clock);
   useEffect(() => { clockRef.current = clock; });
   useEffect(() => { setTravel({ from: current.current, to: scene, at: clockRef.current }); }, [scene]);
-  useEffect(() => { if (event) setAction({ event, scene: current.current }); }, [event]);
+  /* Round 1101: an action starts from the frame on screen. When the line up changed in the very commit its
+     line fired in (a substitution, a red card or an injury in the minute of the chance), that frame still
+     holds the eleven from before, and the guard below would refuse the action for good: the chance was never
+     played. It then starts from the same frame with the new eleven in it (each man who stayed where he is
+     standing, a new man on his own spot). */
+  useEffect(() => {
+    if (!event) return;
+    const shown = current.current;
+    const fits = samePlayers(shown.mine, scene.mine) && samePlayers(shown.theirs, scene.theirs);
+    setAction({ event, scene: fits ? shown : { ...between(shown, scene, 0), ball: shown.ball } });
+    // Only a new event starts an action; the scene is read as it stands on that commit.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [event]);
   useEffect(() => {
     const media = window.matchMedia('(prefers-reduced-motion: reduce)');
     const changed = () => setReduced(media.matches);

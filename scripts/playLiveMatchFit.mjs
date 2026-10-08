@@ -192,6 +192,7 @@ async function startSampler(page) {
       out.push({
         told: log && log.getBoundingClientRect().height > 0 ? [...log.querySelectorAll('li')].filter(li => li.textContent.includes('GOAL!')).length : null,
         line: line ? line.textContent.replace(/\s+/g, ' ').trim() : '',
+        men: pitch ? [...pitch.querySelectorAll('[data-cm-dot], [data-cm-dot-opp]')].map(el => el.textContent.trim()).join('|') : '',
         t: performance.now(),
         score: score ? score.textContent.replace(/\s+/g, ' ').trim() : null,
         motion: pitch ? pitch.getAttribute('data-cm-motion') : null,
@@ -227,11 +228,13 @@ async function watchAGoal(page, { tapCard, onTick }) {
     }
     if (stage === null) { if (!(await startLive(page))) return null; continue; }
     const now = await minuteOf(page);
-    const { goals } = await goalsOfHalf(page);
+    const { goals, cap } = await goalsOfHalf(page);
     /* One goal on its own: no other within four minutes either side (a goal two minutes later plays out
        inside the window sampled here, with its own wind up reading the score the first one left, and one a
        minute before is still on screen when the sampling starts). */
-    const target = goals.find(g => g.place >= now + 2 && !goals.some(o => o !== g && Math.abs(o.place - g.place) < 4));
+    /* And never one in the board: the minute this walk reads off the page stops at 45 and at 90, so it would
+       wait for a 47th minute that never comes and sample the dressing room instead (it did, once). */
+    const target = goals.find(g => !g.plus && g.place >= now + 2 && g.place <= cap - 2 && !goals.some(o => o !== g && Math.abs(o.place - g.place) < 4));
     if (!target) { await tap(page, /skip/i, 'skip a half with no goal to watch'); await page.waitForTimeout(700); continue; }
     say(`a goal is coming at ${target.minute}${target.plus ? '+' + target.plus : ''}, the clock is at ${now}`);
     await speedTo(page, '4x');
@@ -258,7 +261,8 @@ async function watchAGoal(page, { tapCard, onTick }) {
       if (last && last.minute !== null && last.minute >= target.place + 2) break;
     }
     await stopSampler(page);
-    return { target, samples, tapped };
+    const list = await page.evaluate(() => [...document.querySelectorAll('[data-cm-live-log] li')].map(li => li.textContent.replace(/\s+/g, ' ').trim())).catch(() => []);
+    return { target, samples, tapped, list };
   }
   return null;
 }
@@ -286,7 +290,9 @@ const inside = (inner, outer) => inner[0] >= outer[0] - 1 && inner[1] >= outer[1
 function timeline(samples) {
   const runs = [];
   for (const s of samples) {
-    const label = s.tapped ? 'TAP' : `${s.motion}/${s.phase} ${s.score}${s.card ? ' card' : ''} ${s.minute}'`;
+    /* e and three digits: a mark of the 22 names on the grass, so a change of line up shows as a new run. */
+    const mark = s.men ? ' e' + String([...s.men].reduce((sum, ch) => (sum * 31 + ch.charCodeAt(0)) % 997, 7)).padStart(3, '0') : '';
+    const label = s.tapped ? 'TAP' : `${s.motion}/${s.phase} ${s.score}${s.card ? ' card' : ''} ${s.minute}'${mark}`;
     const last = runs[runs.length - 1];
     if (last && last.label === label && !s.tapped) last.n++;
     else runs.push({ label, n: 1 });
@@ -297,7 +303,12 @@ function timeline(samples) {
 function judgeGoal(watched, { reduced, wide = false }) {
   const before = failures;
   try { return judgeGoalFrames(watched, { reduced, wide }); }
-  finally { if (failures > before || V) console.log('      what was drawn: ' + timeline(watched.samples).slice(0, 2400)); }
+  finally {
+    if (failures > before || V) {
+      console.log('      what was drawn: ' + timeline(watched.samples).slice(0, 2400));
+      console.log(`      the goal watched: ${watched.target.minute}' ${watched.target.name ?? ''}; the list at the end: ${(watched.list ?? []).join(' / ') || 'not on screen'}`);
+    }
+  }
 }
 function judgeGoalFrames(watched, { reduced, wide }) {
   const frames = watched.samples.filter(s => !s.tapped && s.score !== null);
@@ -482,8 +493,13 @@ function judgeFit(view, m) {
       if (shape < 1.25 || shape > 1.4) problems.push(`the pitch is ${round(m.pitch.width)} by ${round(m.pitch.height)}, not 4 by 3 on its side`);
       if (m.pitch.height < m.window.height * 0.9) problems.push(`the pitch is ${round(m.pitch.height)} px tall in a window ${m.window.height} tall`);
     } else if (m.orient !== 'portrait') problems.push(`the pitch is drawn ${m.orient} in an upright window`);
-    if (m.controls && m.pitch.bottom > m.controls.top + 0.5) problems.push('the pitch runs under the control row');
-    if (m.strip && m.pitch.top < m.strip.bottom - 0.5) problems.push('the pitch starts under the strip');
+    if (view.sideways) {
+      if (m.strip && m.pitch.right > m.strip.left + 0.5) problems.push('the pitch runs under the strip beside it');
+      if (m.controls && m.pitch.right > m.controls.left + 0.5) problems.push('the pitch runs under the controls beside it');
+    } else {
+      if (m.controls && m.pitch.bottom > m.controls.top + 0.5) problems.push('the pitch runs under the control row');
+      if (m.strip && m.pitch.top < m.strip.bottom - 0.5) problems.push('the pitch starts under the strip');
+    }
   }
   if (m.doc.width > m.window.width + 1) problems.push(`the document is ${m.doc.width} wide in a window ${m.window.width} wide`);
   const thin = m.controlRects.filter(c => c.width < 43.5 || c.height < 43.5);
