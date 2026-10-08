@@ -1,0 +1,4 @@
+run: {"swapsAfter":{"one1500":2,"one6000":2,"hund":112},"one":"fresh","head":"fresh","rmv":"removed","insb":"inserted","threeFresh":6,"hide1":"fresh","hide2":"fresh","ph":"removed"}
+final stats {"swaps":169,"fresh":422,"unmatched":285}; page errors 0: 
+RESULT measure2: wrote /home/runner/work/_temp/rc-out/files/records-3-ja.json
+measure done
