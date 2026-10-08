@@ -214,7 +214,7 @@ export default function TycoonPitch({
         @keyframes stSpark { 0% { opacity: 1; transform: translate(0, 0); } 100% { opacity: 0; transform: translate(var(--sx), var(--sy)); } }
         .st-spark { opacity: 0; animation: stSpark 450ms ease-out forwards; }
         @media (prefers-reduced-motion: reduce) {
-          .st-drift, .st-ripple, .st-pop-a, .st-pop-b, .st-ball { animation: none; }
+          .st-drift, .st-ripple, .st-pop-a, .st-pop-b, .st-ball, .st-ball-shot { animation: none; }
           .st-spark { animation: none; display: none; }
           .st-team, .st-ball { transition: none; }
         }
