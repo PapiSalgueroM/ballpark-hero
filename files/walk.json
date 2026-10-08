@@ -1,0 +1,1038 @@
+[
+ {
+  "kind": "PASS",
+  "where": "byx-390-mo",
+  "message": "typing opens the panel on Finding players while the search is out",
+  "extra": {
+   "listbox": "Finding players...",
+   "spin": {
+    "name": "spin",
+    "duration": "1s",
+    "count": "infinite"
+   }
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-390-mo",
+  "message": "two names show for \"qzxalp\"",
+  "extra": {
+   "options": [
+    "Qzxalpha FixtureCentre-Back · Fixture Rovers · Fixtureland",
+    "Qzxalpine De SampleCentre-Back · Fixture Rovers · Fixtureland"
+   ],
+   "listboxRect": {
+    "x": 16,
+    "y": 451,
+    "w": 358,
+    "h": 119,
+    "bottom": 570,
+    "right": 374
+   },
+   "innerH": 844
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-390-mo",
+  "message": "no sideways scroll with the list open",
+  "extra": {
+   "docW": 390,
+   "innerW": 390
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-390-mo",
+  "message": "Enter with two names showing picks nothing",
+  "extra": {
+   "value": "qzxalp",
+   "filled": "0/11"
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-390-mo",
+  "message": "the old names are gone the instant the text changes",
+  "extra": {
+   "options": [],
+   "listbox": "Finding players..."
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-390-mo",
+  "message": "still no old name 350 ms later, the panel says Finding players",
+  "extra": {
+   "options": [],
+   "listbox": "Finding players..."
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-390-mo",
+  "message": "Enter picked the only name and the page names the allowance",
+  "extra": {
+   "strip": "Answer checking has used up its allowance for today, so this pick was not counted. Try another player or reroll the team."
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-390-mo",
+  "message": "one request went to the validator",
+  "extra": {
+   "requests": 1
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-390-mo",
+  "message": "the box is still there and enabled, nothing filled",
+  "extra": {
+   "enabled": true,
+   "filled": "0/11",
+   "focused": false,
+   "value": ""
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-390-mo",
+  "message": "nothing says saved, nothing calls it a refusal"
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-390-mo",
+  "message": "the box did not move when the line appeared",
+  "extra": {
+   "before": {
+    "x": 16,
+    "y": 399,
+    "w": 358,
+    "h": 46,
+    "bottom": 445,
+    "right": 374
+   },
+   "after": {
+    "x": 16,
+    "y": 399,
+    "w": 358,
+    "h": 46,
+    "bottom": 445,
+    "right": 374
+   },
+   "scrollBefore": 72,
+   "scrollAfter": 72
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-390-mo",
+  "message": "the line fits the screen",
+  "extra": {
+   "strip": {
+    "x": 16,
+    "y": 457,
+    "w": 358,
+    "h": 76,
+    "bottom": 533,
+    "right": 374
+   },
+   "innerW": 390
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-390-mo",
+  "message": "valid as a string is not counted",
+  "extra": {
+   "strip": "Couldn't verify that answer. Try again in a second."
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-390-mo",
+  "message": "a 500 that claims valid is not counted",
+  "extra": {
+   "strip": "Couldn't verify that answer. Try again in a second."
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-390-mo",
+  "message": "a real refusal reads as the refusal it is",
+  "extra": {
+   "strip": "Qzxalpha Fixture never played there."
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-390-mo",
+  "message": "while the check is out the box is busy and no line shows",
+  "extra": {
+   "enabled": false,
+   "strip": null,
+   "value": "Qzxalpha Fixture",
+   "spin": {
+    "name": "spin",
+    "duration": "1s",
+    "count": "infinite"
+   }
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-390-mo",
+  "message": "the page gives up on the check after about 15 seconds",
+  "extra": {
+   "waitedMs": 15689,
+   "strip": "That check took too long, so this pick was not counted. Try again or pick someone else."
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-390-mo",
+  "message": "the box is back, nothing filled, the request was cancelled",
+  "extra": {
+   "enabled": true,
+   "filled": "0/11",
+   "cancelled": 1
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-390-mo",
+  "message": "after the reroll nothing is filled and no line shows",
+  "extra": {
+   "filled": "0/11"
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-390-mo",
+  "message": "seventeen seconds on, the pick that was given up has printed nothing and the box is live",
+  "extra": {
+   "strip": null,
+   "enabled": true
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-390-mo",
+  "message": "a valid answer fills the slot under the stored name",
+  "extra": {
+   "filled": "1/11",
+   "printsStored": true
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-390-mo",
+  "message": "a club pick on file at the club lands with no request to the validator",
+  "extra": {
+   "filled": "2/11",
+   "requests": 0,
+   "club": "Real Madrid",
+   "tookMs": 323
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-390-mo",
+  "message": "the pitch prints the stored spelling (a lower case particle)",
+  "extra": {
+   "printsStored": true,
+   "printsListed": false
+  }
+ },
+ {
+  "kind": "FAIL",
+  "where": "byx-390-mo",
+  "message": "the walk stopped: locator.waitFor: Timeout 15000ms exceeded."
+ },
+ {
+  "kind": "INFO",
+  "where": "byx-390-mo",
+  "message": "requests",
+  "extra": {
+   "searches": 30,
+   "validator": 7,
+   "blocked": 7
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-1280-rm",
+  "message": "typing opens the panel on Finding players while the search is out",
+  "extra": {
+   "listbox": "Finding players...",
+   "spin": {
+    "name": "spin",
+    "duration": "1e-06s",
+    "count": "1"
+   }
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-1280-rm",
+  "message": "two names show for \"qzxalp\"",
+  "extra": {
+   "options": [
+    "Qzxalpha FixtureCentre-Back · Fixture Rovers · Fixtureland",
+    "Qzxalpine De SampleCentre-Back · Fixture Rovers · Fixtureland"
+   ],
+   "listboxRect": {
+    "x": 384,
+    "y": 479,
+    "w": 512,
+    "h": 119,
+    "bottom": 598,
+    "right": 896
+   },
+   "innerH": 900
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-1280-rm",
+  "message": "no sideways scroll with the list open",
+  "extra": {
+   "docW": 1280,
+   "innerW": 1280
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-1280-rm",
+  "message": "Enter with two names showing picks nothing",
+  "extra": {
+   "value": "qzxalp",
+   "filled": "0/11"
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-1280-rm",
+  "message": "the old names are gone the instant the text changes",
+  "extra": {
+   "options": [],
+   "listbox": "Finding players..."
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-1280-rm",
+  "message": "still no old name 350 ms later, the panel says Finding players",
+  "extra": {
+   "options": [],
+   "listbox": "Finding players..."
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-1280-rm",
+  "message": "Enter picked the only name and the page names the allowance",
+  "extra": {
+   "strip": "Answer checking has used up its allowance for today, so this pick was not counted. Try another player or reroll the team."
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-1280-rm",
+  "message": "one request went to the validator",
+  "extra": {
+   "requests": 1
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-1280-rm",
+  "message": "the box is still there and enabled, nothing filled",
+  "extra": {
+   "enabled": true,
+   "filled": "0/11",
+   "focused": false,
+   "value": ""
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-1280-rm",
+  "message": "nothing says saved, nothing calls it a refusal"
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-1280-rm",
+  "message": "the box did not move when the line appeared",
+  "extra": {
+   "before": {
+    "x": 384,
+    "y": 427,
+    "w": 512,
+    "h": 46,
+    "bottom": 473,
+    "right": 896
+   },
+   "after": {
+    "x": 384,
+    "y": 427,
+    "w": 512,
+    "h": 46,
+    "bottom": 473,
+    "right": 896
+   },
+   "scrollBefore": 84,
+   "scrollAfter": 84
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-1280-rm",
+  "message": "the line fits the screen",
+  "extra": {
+   "strip": {
+    "x": 384,
+    "y": 485,
+    "w": 512,
+    "h": 56,
+    "bottom": 541,
+    "right": 896
+   },
+   "innerW": 1280
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-1280-rm",
+  "message": "valid as a string is not counted",
+  "extra": {
+   "strip": "Couldn't verify that answer. Try again in a second."
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-1280-rm",
+  "message": "a 500 that claims valid is not counted",
+  "extra": {
+   "strip": "Couldn't verify that answer. Try again in a second."
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-1280-rm",
+  "message": "a real refusal reads as the refusal it is",
+  "extra": {
+   "strip": "Qzxalpha Fixture never played there."
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-1280-rm",
+  "message": "while the check is out the box is busy and no line shows",
+  "extra": {
+   "enabled": false,
+   "strip": null,
+   "value": "Qzxalpha Fixture",
+   "spin": {
+    "name": "spin",
+    "duration": "1e-06s",
+    "count": "1"
+   }
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-1280-rm",
+  "message": "the page gives up on the check after about 15 seconds",
+  "extra": {
+   "waitedMs": 15690,
+   "strip": "That check took too long, so this pick was not counted. Try again or pick someone else."
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-1280-rm",
+  "message": "the box is back, nothing filled, the request was cancelled",
+  "extra": {
+   "enabled": true,
+   "filled": "0/11",
+   "cancelled": 1
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-1280-rm",
+  "message": "after the reroll nothing is filled and no line shows",
+  "extra": {
+   "filled": "0/11"
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-1280-rm",
+  "message": "seventeen seconds on, the pick that was given up has printed nothing and the box is live",
+  "extra": {
+   "strip": null,
+   "enabled": true
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-1280-rm",
+  "message": "a valid answer fills the slot under the stored name",
+  "extra": {
+   "filled": "1/11",
+   "printsStored": true
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-1280-rm",
+  "message": "a club pick on file at the club lands with no request to the validator",
+  "extra": {
+   "filled": "2/11",
+   "requests": 0,
+   "club": "Juventus FC",
+   "tookMs": 309
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-1280-rm",
+  "message": "the pitch prints the stored spelling (a lower case particle)",
+  "extra": {
+   "printsStored": true,
+   "printsListed": false
+  }
+ },
+ {
+  "kind": "FAIL",
+  "where": "byx-1280-rm",
+  "message": "the walk stopped: locator.waitFor: Timeout 15000ms exceeded."
+ },
+ {
+  "kind": "INFO",
+  "where": "byx-1280-rm",
+  "message": "requests",
+  "extra": {
+   "searches": 30,
+   "validator": 7,
+   "blocked": 8
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-390-rm",
+  "message": "typing opens the panel on Finding players while the search is out",
+  "extra": {
+   "listbox": "Finding players...",
+   "spin": {
+    "name": "spin",
+    "duration": "1e-06s",
+    "count": "1"
+   }
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-390-rm",
+  "message": "two names show for \"qzxalp\"",
+  "extra": {
+   "options": [
+    "Qzxalpha FixtureCentre-Back · Fixture Rovers · Fixtureland",
+    "Qzxalpine De SampleCentre-Back · Fixture Rovers · Fixtureland"
+   ],
+   "listboxRect": {
+    "x": 16,
+    "y": 451,
+    "w": 358,
+    "h": 119,
+    "bottom": 570,
+    "right": 374
+   },
+   "innerH": 844
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-390-rm",
+  "message": "no sideways scroll with the list open",
+  "extra": {
+   "docW": 390,
+   "innerW": 390
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-390-rm",
+  "message": "Enter with two names showing picks nothing",
+  "extra": {
+   "value": "qzxalp",
+   "filled": "0/11"
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-390-rm",
+  "message": "the old names are gone the instant the text changes",
+  "extra": {
+   "options": [],
+   "listbox": "Finding players..."
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-390-rm",
+  "message": "still no old name 350 ms later, the panel says Finding players",
+  "extra": {
+   "options": [],
+   "listbox": "Finding players..."
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-390-rm",
+  "message": "Enter picked the only name and the page names the allowance",
+  "extra": {
+   "strip": "Answer checking has used up its allowance for today, so this pick was not counted. Try another player or reroll the team."
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-390-rm",
+  "message": "one request went to the validator",
+  "extra": {
+   "requests": 1
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-390-rm",
+  "message": "the box is still there and enabled, nothing filled",
+  "extra": {
+   "enabled": true,
+   "filled": "0/11",
+   "focused": false,
+   "value": ""
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-390-rm",
+  "message": "nothing says saved, nothing calls it a refusal"
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-390-rm",
+  "message": "the box did not move when the line appeared",
+  "extra": {
+   "before": {
+    "x": 16,
+    "y": 399,
+    "w": 358,
+    "h": 46,
+    "bottom": 445,
+    "right": 374
+   },
+   "after": {
+    "x": 16,
+    "y": 399,
+    "w": 358,
+    "h": 46,
+    "bottom": 445,
+    "right": 374
+   },
+   "scrollBefore": 72,
+   "scrollAfter": 72
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-390-rm",
+  "message": "the line fits the screen",
+  "extra": {
+   "strip": {
+    "x": 16,
+    "y": 457,
+    "w": 358,
+    "h": 76,
+    "bottom": 533,
+    "right": 374
+   },
+   "innerW": 390
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-390-rm",
+  "message": "valid as a string is not counted",
+  "extra": {
+   "strip": "Couldn't verify that answer. Try again in a second."
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-390-rm",
+  "message": "a 500 that claims valid is not counted",
+  "extra": {
+   "strip": "Couldn't verify that answer. Try again in a second."
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-390-rm",
+  "message": "a real refusal reads as the refusal it is",
+  "extra": {
+   "strip": "Qzxalpha Fixture never played there."
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-390-rm",
+  "message": "a valid answer fills the slot under the stored name",
+  "extra": {
+   "filled": "1/11",
+   "printsStored": true
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-390-rm",
+  "message": "a club pick on file at the club lands with no request to the validator",
+  "extra": {
+   "filled": "2/11",
+   "requests": 0,
+   "club": "Manchester United",
+   "tookMs": 324
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-390-rm",
+  "message": "the pitch prints the stored spelling (a lower case particle)",
+  "extra": {
+   "printsStored": true,
+   "printsListed": false
+  }
+ },
+ {
+  "kind": "FAIL",
+  "where": "byx-390-rm",
+  "message": "the walk stopped: locator.waitFor: Timeout 15000ms exceeded."
+ },
+ {
+  "kind": "INFO",
+  "where": "byx-390-rm",
+  "message": "requests",
+  "extra": {
+   "searches": 20,
+   "validator": 5,
+   "blocked": 4
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-1280-mo",
+  "message": "typing opens the panel on Finding players while the search is out",
+  "extra": {
+   "listbox": "Finding players...",
+   "spin": {
+    "name": "spin",
+    "duration": "1s",
+    "count": "infinite"
+   }
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-1280-mo",
+  "message": "two names show for \"qzxalp\"",
+  "extra": {
+   "options": [
+    "Qzxalpha FixtureCentre-Back · Fixture Rovers · Fixtureland",
+    "Qzxalpine De SampleCentre-Back · Fixture Rovers · Fixtureland"
+   ],
+   "listboxRect": {
+    "x": 384,
+    "y": 479,
+    "w": 512,
+    "h": 119,
+    "bottom": 598,
+    "right": 896
+   },
+   "innerH": 900
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-1280-mo",
+  "message": "no sideways scroll with the list open",
+  "extra": {
+   "docW": 1280,
+   "innerW": 1280
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-1280-mo",
+  "message": "Enter with two names showing picks nothing",
+  "extra": {
+   "value": "qzxalp",
+   "filled": "0/11"
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-1280-mo",
+  "message": "the old names are gone the instant the text changes",
+  "extra": {
+   "options": [],
+   "listbox": "Finding players..."
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-1280-mo",
+  "message": "still no old name 350 ms later, the panel says Finding players",
+  "extra": {
+   "options": [],
+   "listbox": "Finding players..."
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-1280-mo",
+  "message": "Enter picked the only name and the page names the allowance",
+  "extra": {
+   "strip": "Answer checking has used up its allowance for today, so this pick was not counted. Try another player or reroll the team."
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-1280-mo",
+  "message": "one request went to the validator",
+  "extra": {
+   "requests": 1
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-1280-mo",
+  "message": "the box is still there and enabled, nothing filled",
+  "extra": {
+   "enabled": true,
+   "filled": "0/11",
+   "focused": false,
+   "value": ""
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-1280-mo",
+  "message": "nothing says saved, nothing calls it a refusal"
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-1280-mo",
+  "message": "the box did not move when the line appeared",
+  "extra": {
+   "before": {
+    "x": 384,
+    "y": 427,
+    "w": 512,
+    "h": 46,
+    "bottom": 473,
+    "right": 896
+   },
+   "after": {
+    "x": 384,
+    "y": 427,
+    "w": 512,
+    "h": 46,
+    "bottom": 473,
+    "right": 896
+   },
+   "scrollBefore": 84,
+   "scrollAfter": 84
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-1280-mo",
+  "message": "the line fits the screen",
+  "extra": {
+   "strip": {
+    "x": 384,
+    "y": 485,
+    "w": 512,
+    "h": 56,
+    "bottom": 541,
+    "right": 896
+   },
+   "innerW": 1280
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-1280-mo",
+  "message": "valid as a string is not counted",
+  "extra": {
+   "strip": "Couldn't verify that answer. Try again in a second."
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-1280-mo",
+  "message": "a 500 that claims valid is not counted",
+  "extra": {
+   "strip": "Couldn't verify that answer. Try again in a second."
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-1280-mo",
+  "message": "a real refusal reads as the refusal it is",
+  "extra": {
+   "strip": "Qzxalpha Fixture never played there."
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-1280-mo",
+  "message": "a valid answer fills the slot under the stored name",
+  "extra": {
+   "filled": "1/11",
+   "printsStored": true
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-1280-mo",
+  "message": "a club pick on file at the club lands with no request to the validator",
+  "extra": {
+   "filled": "2/11",
+   "requests": 0,
+   "club": "Olympique Marseille",
+   "tookMs": 309
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "byx-1280-mo",
+  "message": "the pitch prints the stored spelling (a lower case particle)",
+  "extra": {
+   "printsStored": true,
+   "printsListed": false
+  }
+ },
+ {
+  "kind": "FAIL",
+  "where": "byx-1280-mo",
+  "message": "the walk stopped: locator.waitFor: Timeout 15000ms exceeded."
+ },
+ {
+  "kind": "INFO",
+  "where": "byx-1280-mo",
+  "message": "requests",
+  "extra": {
+   "searches": 20,
+   "validator": 5,
+   "blocked": 4
+  }
+ },
+ {
+  "kind": "INFO",
+  "where": "mxi-390-mo",
+  "message": "right after a pick (the name stays in the box)",
+  "extra": {
+   "value": "",
+   "options": [],
+   "listbox": null
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "mxi-390-mo",
+  "message": "a second after the pick the panel is not on Finding players",
+  "extra": {
+   "listbox": null
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "mxi-390-mo",
+  "message": "back in the box with the picked name: the panel settled, it does not hang on Finding players",
+  "extra": {
+   "listbox": null,
+   "options": []
+  }
+ },
+ {
+  "kind": "INFO",
+  "where": "mxi-390-mo",
+  "message": "Lock in guess button",
+  "extra": {
+   "there": 1,
+   "enabled": false
+  }
+ },
+ {
+  "kind": "INFO",
+  "where": "mxi-390-mo",
+  "message": "requests",
+  "extra": {
+   "searches": 2,
+   "blocked": 4
+  }
+ },
+ {
+  "kind": "INFO",
+  "where": "mxi-1280-rm",
+  "message": "right after a pick (the name stays in the box)",
+  "extra": {
+   "value": "Qzxalpha Fixture",
+   "options": [
+    "Qzxalpha FixtureCentre-Back · Fixture Rovers · Fixtureland"
+   ],
+   "listbox": "Qzxalpha FixtureCentre-Back · Fixture Rovers · Fixtureland"
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "mxi-1280-rm",
+  "message": "a second after the pick the panel is not on Finding players",
+  "extra": {
+   "listbox": "Qzxalpha FixtureCentre-Back · Fixture Rovers · Fixtureland"
+  }
+ },
+ {
+  "kind": "PASS",
+  "where": "mxi-1280-rm",
+  "message": "back in the box with the picked name: the panel settled, it does not hang on Finding players",
+  "extra": {
+   "listbox": "Qzxalpha FixtureCentre-Back · Fixture Rovers · Fixtureland",
+   "options": [
+    "Qzxalpha FixtureCentre-Back · Fixture Rovers · Fixtureland"
+   ]
+  }
+ },
+ {
+  "kind": "INFO",
+  "where": "mxi-1280-rm",
+  "message": "Lock in guess button",
+  "extra": {
+   "there": 1,
+   "enabled": true
+  }
+ },
+ {
+  "kind": "INFO",
+  "where": "mxi-1280-rm",
+  "message": "requests",
+  "extra": {
+   "searches": 6,
+   "blocked": 4
+  }
+ }
+]
