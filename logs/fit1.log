@@ -1,0 +1,41 @@
+In the job at Crystal Palace.
+1) The goal in order
+      a goal is coming at 8, the clock is at 2
+  ok    the goal in order: 46 frames of wind up and flight all read 1 - 1, and the first frame reading 2 - 1 is in phase net with the net marked
+  ok    the line under the pitch never read GOAL! while the ball was on its way (46 frames)
+  ok    the scorer card was inside the pitch on all 31 frames it was up
+  ok    a tap on the card ended the hold (46 frames after it, none with the card)
+      what was drawn: pass/pass 1 - 1 6' e136 x54 | pass/pass 1 - 1 7' e136 x50 | pass/pass 1 - 1 7' e805 x2 | pass/pass 1 - 1 7' e136 x8 | goal/plant 1 - 1 8' e136 x16 | goal/flight 1 - 1 8' e136 x30 | goal/net 2 - 1 card 8' e136 x23 | TAP | goal/net 2 - 1 card 8' e136 x8 | pass/pass 2 - 1 9' e136 x2 | pass/pass 2 - 1 9' e805 x3 | pass/pass 2 - 1 9' e136 x42 | pass/pass 2 - 1 9' e957 x1 | pass/pass 2 - 1 9' e136 x9 | save/plant 2 - 1 10' e136 x4
+      the goal watched: 8' Tyrick Mitchell; the list at the end: 10'Booked: Quinten Timber / 10'Save! Giorgi Mamardashvili / 10'Foul by Quinten Timber / 10'Throw in, Crystal Palace / 9'Foul by Honest Ahanor
+4) Nothing moves the page
+  ok    window.scrollY stayed at 0 through 252 frames before, during and after a goal
+  ok    window.scrollY stayed at 0 with the change sheet, the squad panel, the help panel, the stats panel open
+3) The fit
+  ok    320 by 568: the stage is the window, strip at 0, pitch 320 by 392 (69 percent of the height), control row ends at 568 of 568, 7 controls all 44 px and none covered
+  [labels 320 by 568] mean overlapping name labels a frame 2.90 over 10 frames of 22 labels
+  ok    390 by 844: the stage is the window, strip at 0, pitch 390 by 668 (79.1 percent of the height), control row ends at 844 of 844, 7 controls all 44 px and none covered
+  [labels 390] mean overlapping name labels a frame 0.38 over 24 frames of 22 labels; before match mode 1.63 at 6b1caa20, ratio 0.23
+  ok    name labels overlap 0.38 a frame, fewer than the 1.63 before match mode
+  ok    768 by 1024: the stage is the window, strip at 12, pitch 372 by 651 (63.6 percent of the height), control row ends at 1012 of 1024, 7 controls all 44 px and none covered
+  [labels 768 by 1024] mean overlapping name labels a frame 0.80 over 10 frames of 22 labels
+  ok    1280 by 900: the stage is the window, strip at 12, pitch 541.5 by 722 (80.2 percent of the height), control row ends at 888 of 900, 7 controls all 44 px and none covered
+  [labels 1280 by 900] mean overlapping name labels a frame 0.10 over 10 frames of 22 labels
+  ok    844 by 390: the stage is the window, strip at 0, pitch 518 by 388.5 (99.6 percent of the height), control row ends at 390 of 390, 7 controls all 44 px and none covered
+  [labels 844 by 390] mean overlapping name labels a frame 0.70 over 10 frames of 22 labels
+6) Back folds the match away
+  ok    Back folds the match to a card reading "Premier League · Round 1Crystal Palace2 - 1LiverpoolPaused at 34'Back ", and the clock held at 34' for 2.6 seconds
+  ok    Back to the match puts the stage back and the clock runs on (34' to 35')
+5) The reload
+  ok    reload: left at 35', the save holds 35, the match came back at 35'
+  ok    close: left at 37', the save holds 37, the match came back at 37'
+  ok    hidden tab: the clock read 39' and the save holds 39
+2) Reduced motion
+      a goal is coming at 11, the clock is at 0
+  ok    under reduced motion the score reads 1 - 0 on a frame in phase net
+  ok    the scorer card was inside the pitch on all 154 frames it was up
+      what was drawn: pass/pass 0 - 0 9' e811 x21 | pass/pass 0 - 0 9' e961 x23 | shot/wide 0 - 0 10' e811 x60 | shot/wide 0 - 0 11' e811 x4 | pass/pass 0 - 0 11' e811 x14 | goal/net 1 - 0 card 11' e754 x132 | goal/net 1 - 0 card 12' e754 x22 | pass/pass 1 - 0 12' e811 x38 | pass/pass 1 - 0 13' e811 x2
+      the goal watched: 11' Ismaïla Sarr; the list at the end: 12'Foul by Jan Paul van Hecke / 12'Throw in, Tottenham / 11'GOAL! Ismaïla Sarr / 10'Shot: Omar Marmoush / 10'Shot: Micky van de Ven
+  ok    nothing under the pitch or the card was animating in open play, inside a goal, after the goal
+7) A wide screen
+  FAIL: eight halves passed without a goal to watch at 1280 by 900
+playLiveMatchFit: 1 failure.

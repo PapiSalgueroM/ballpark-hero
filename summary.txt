@@ -1,0 +1,6 @@
+build exit=0 27s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fit1 exit=1 86s | playLiveMatchFit: 1 failure.
+fit2 exit=0 94s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+fit-bar exit=1 50s | playLiveMatchFit: control bar turned section 3 red and left sections 1, 2 and 4 green, as it must.
+playClubManager exit=0 294s | Played Club Manager through its own screens. 0 findings.
+simRevealScroll exit=0 203s | Green. 54 presses measured, nothing dragged the page down on content that was already readable, no panel lost its top, and 4 presses proved the feature still does its job
