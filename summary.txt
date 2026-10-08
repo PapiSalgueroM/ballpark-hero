@@ -1,0 +1,17 @@
+tsc exit=0 37s | 
+box-and-cg-tests exit=0 7s |    Duration  7.08s (transform 495ms, setup 205ms, collect 1.69s, tests 10.25s, environment 1.89s, prepare 530ms)
+aci exit=0 3s | simPlayerAutocompleteInteraction: eight actual-component pointer, keyboard, disabled, free-text, identity and filter checks passed; thirteen stale list checks passed, and
+aci-notag exit=0 1s | simPlayerAutocompleteInteraction notag control: stale list tests 1, 2, 3 rejected the changed component and test 7 stayed green. The sweep (seed 1138) was offered 67 stal
+aci-pickreopens exit=0 1s | simPlayerAutocompleteInteraction pickreopens control: stale list test 13 rejected the changed component and tests 1, 7, 8, 11 stayed green.
+aci-stickypick exit=0 1s | simPlayerAutocompleteInteraction stickypick control: stale list test 13 rejected the changed component and tests 1, 7, 8, 11 stayed green.
+aci-deafreturn exit=0 3s | simPlayerAutocompleteInteraction deafreturn control: stale list tests 8, 13 rejected the changed component and tests 1, 7 stayed green.
+psf exit=0 1s | simPlayerSearchFailure: original source/client/folding bytes held; only owned copied controls change, native pixels remain separate.
+psf-abort-anchor-doubled-by-1105 exit=1 0s | Node.js v24.21.0
+lvc exit=0 1s | simLineupValidatorClient: 55 checks passed. Only the boolean true on an ok response reads as valid; an allowance answer, a failed status, a body that is not a verdict, a 
+qh exit=0 0s | simQuotaHonesty: green. When the allowance is gone, Soccer Grid says so and stops asking for retries; Build Your XI blocks the one pick, keeps the search box and never sa
+anchors exit=0 22s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+remedy-copy exit=0 0s | remedy: copy written to .sim-control/remedy-1791462474229/PlayerAutocomplete.tsx
+remedy-vitest exit=0 5s |    Duration  4.55s (transform 509ms, setup 194ms, collect 1.52s, tests 8.59s, environment 1.44s, prepare 293ms)
+remedy-sweep2138 exit=0 2s |    Duration  1.56s (transform 113ms, setup 33ms, collect 261ms, tests 819ms, environment 187ms, prepare 96ms)
+remedy-sweep3138 exit=0 2s |    Duration  1.55s (transform 106ms, setup 30ms, collect 246ms, tests 857ms, environment 169ms, prepare 81ms)
+vitest-whole exit=1 266s |    Duration  265.93s (transform 20.82s, setup 10.50s, collect 84.84s, tests 558.04s, environment 83.53s, prepare 17.59s)
