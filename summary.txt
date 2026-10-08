@@ -1,0 +1,17 @@
+dsh-alone exit=0 38s | simDailySaveHardening: part all green
+base-us exit=0 7s |    Duration  6.12s (transform 1.38s, setup 55ms, collect 2.76s, tests 6.02s, environment 380ms, prepare 172ms)
+m1-swallowed-write exit=1 5s | m1 vitest exit=1
+m2-quiet-reset exit=1 6s | m2 vitest exit=1
+m3-stale-pending exit=1 6s | m3 vitest exit=1
+m8-curtain-no-notice exit=1 7s | m8 vitest exit=1
+m3-sim exit=1 6s | m3 simUsCareerSaveRetry exit=1
+m8-sim exit=0 62s | m8 simUsCareerSaveRetry exit=0
+m4-offline-after-flag-sim exit=1 0s | m4 simStaleChunk exit=1
+m4-offline-after-flag-vitest exit=0 1s | m4 vitest exit=0
+m5-no-1142-standdown-sim exit=0 0s | m5 simStaleChunk exit=0
+m5-no-1142-standdown-vitest exit=1 1s | m5 vitest exit=1
+m6-sale-not-durable-vitest exit=1 3s | m6 vitest exit=1
+m6-sale-not-durable-sim exit=1 3s | m6 simTycoonSaleReview exit=1
+m9-tsc exit=0 32s | m9 tsc exit=0
+clean-after exit=0 0s | tree clean after every mutation
+stalechunk-noprerender exit=2 0s | noprerender: anchor appears 0 times, refusing to run a dead control

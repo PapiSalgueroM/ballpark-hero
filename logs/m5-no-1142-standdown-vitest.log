@@ -1,0 +1,50 @@
+MUTATION m5 applied to src/lib/freshBuild.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/safeStorage.test.ts [2m([22m[2m27 tests[22m[2m)[22m[32m 39[2mms[22m[39m
+ [31m❯[39m src/test/freshBuildBlockedStorage.test.ts [2m([22m[2m7 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 123[2mms[22m[39m
+   [32m✓[39m the stale chunk reload[2m > [22ma browser that stores normally: reloads once, and the marker stops the second one[32m 51[2mms[22m[39m
+[31m   [31m×[31m the stale chunk reload[2m > [22mstorage blocked: never reloads, on this page load or the next three[39m[32m 6[2mms[22m[39m
+[31m     → expected true to be false // Object.is equality[39m
+   [32m✓[39m the stale chunk reload[2m > [22mstorage full: never reloads either (the marker cannot be written)[32m 2[2mms[22m[39m
+   [32m✓[39m the stale chunk reload[2m > [22mcontrol: the stand in alone would have let every page load reload again[32m 0[2mms[22m[39m
+   [32m✓[39m the new build reload on focus[2m > [22ma browser that stores normally: reloads once for the new build, and the marker stops the second one[32m 20[2mms[22m[39m
+   [32m✓[39m the new build reload on focus[2m > [22mstorage blocked: sees the new build and never reloads, on this page load or the next three[32m 34[2mms[22m[39m
+   [32m✓[39m the new build reload on focus[2m > [22mstorage full: the marker is refused, so no reload[32m 9[2mms[22m[39m
+[90mstderr[2m | src/test/storageBlockedBoot.test.tsx[2m > [22m[2mthe storage notice[2m > [22m[2mstorage full: the line is there on the first render of a game page, and the home page asks nothing
+[22m[39mWarning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+
+ [32m✓[39m src/test/storageBlockedBoot.test.tsx [2m([22m[2m20 tests[22m[2m)[22m[32m 213[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/freshBuildBlockedStorage.test.ts[2m > [22mthe stale chunk reload[2m > [22mstorage blocked: never reloads, on this page load or the next three
+[31m[1mAssertionError[22m: expected true to be false // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- false[39m
+[31m+ true[39m
+
+[36m [2m❯[22m src/test/freshBuildBlockedStorage.test.ts:[2m63:52[22m[39m
+    [90m 61| [39m      [35mconst[39m page [33m=[39m [35mawait[39m [34mpageLoad[39m()[33m;[39m
+    [90m 62| [39m      [34mexpect[39m(page[33m.[39mseam[33m.[39msessionStorageIsMemory)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m 63| [39m      [34mexpect[39m(page[33m.[39mfresh[33m.[39m[34mreloadOnceForStaleChunk[39m())[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+    [90m   | [39m                                                   [31m^[39m
+    [90m 64| [39m    }
+    [90m 65| [39m    [34mexpect[39m(reload)[33m.[39mnot[33m.[39m[34mtoHaveBeenCalled[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m53 passed[39m[22m[90m (54)[39m
+[2m   Start at [22m 17:48:40
+[2m   Duration [22m 1.15s[2m (transform 255ms, setup 102ms, collect 494ms, tests 375ms, environment 726ms, prepare 251ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/freshBuildBlockedStorage.test.ts,title=src/test/freshBuildBlockedStorage.test.ts > the stale chunk reload > storage blocked%3A never reloads%2C on this page load or the next three,line=63,column=52::AssertionError: expected true to be false // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- false%0A+ true%0A%0A ❯ src/test/freshBuildBlockedStorage.test.ts:63:52%0A%0A
+m5 vitest exit=1

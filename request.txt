@@ -1,0 +1,19 @@
+# AN2 runner review, request M: one mutation at a time (serial), each restored with git checkout; a line that exits 0 means the tests did NOT see the mutation; exit 3 means the mutation was not applied
+#!serial
+dsh-alone: node scripts/simDailySaveHardening.mjs
+base-us: node_modules/.bin/vitest run src/test/usCareerSaveRetry.test.tsx src/test/usSeasonCentreEntry.test.tsx --testTimeout=300000 --hookTimeout=120000
+m1-swallowed-write: node .rc/x/rv-mut.mjs m1 && node_modules/.bin/vitest run src/test/usCareerSaveRetry.test.tsx src/test/usSeasonCentreEntry.test.tsx --testTimeout=300000 --hookTimeout=120000; rc=$?; git checkout -- src; echo "m1 vitest exit=$rc"; exit $rc
+m2-quiet-reset: node .rc/x/rv-mut.mjs m2 && node_modules/.bin/vitest run src/test/usCareerSaveRetry.test.tsx src/test/usSeasonCentreEntry.test.tsx --testTimeout=300000 --hookTimeout=120000; rc=$?; git checkout -- src; echo "m2 vitest exit=$rc"; exit $rc
+m3-stale-pending: node .rc/x/rv-mut.mjs m3 && node_modules/.bin/vitest run src/test/usCareerSaveRetry.test.tsx src/test/usSeasonCentreEntry.test.tsx --testTimeout=300000 --hookTimeout=120000; rc=$?; git checkout -- src; echo "m3 vitest exit=$rc"; exit $rc
+m8-curtain-no-notice: node .rc/x/rv-mut.mjs m8 && node_modules/.bin/vitest run src/test/usCareerSaveRetry.test.tsx src/test/usSeasonCentreEntry.test.tsx --testTimeout=300000 --hookTimeout=120000; rc=$?; git checkout -- src; echo "m8 vitest exit=$rc"; exit $rc
+m3-sim: node .rc/x/rv-mut.mjs m3 && node scripts/simUsCareerSaveRetry.mjs; rc=$?; git checkout -- src; echo "m3 simUsCareerSaveRetry exit=$rc"; exit $rc
+m8-sim: node .rc/x/rv-mut.mjs m8 && node scripts/simUsCareerSaveRetry.mjs; rc=$?; git checkout -- src; echo "m8 simUsCareerSaveRetry exit=$rc"; exit $rc
+m4-offline-after-flag-sim: node .rc/x/rv-mut.mjs m4 && node scripts/simStaleChunk.mjs; rc=$?; git checkout -- src; echo "m4 simStaleChunk exit=$rc"; exit $rc
+m4-offline-after-flag-vitest: node .rc/x/rv-mut.mjs m4 && node_modules/.bin/vitest run src/test/freshBuildBlockedStorage.test.ts src/test/safeStorage.test.ts src/test/homeSearchRecovery.test.tsx --testTimeout=300000 --hookTimeout=120000; rc=$?; git checkout -- src; echo "m4 vitest exit=$rc"; exit $rc
+m5-no-1142-standdown-sim: node .rc/x/rv-mut.mjs m5 && node scripts/simStaleChunk.mjs; rc=$?; git checkout -- src; echo "m5 simStaleChunk exit=$rc"; exit $rc
+m5-no-1142-standdown-vitest: node .rc/x/rv-mut.mjs m5 && node_modules/.bin/vitest run src/test/freshBuildBlockedStorage.test.ts src/test/safeStorage.test.ts src/test/storageBlockedBoot.test.tsx --testTimeout=300000 --hookTimeout=120000; rc=$?; git checkout -- src; echo "m5 vitest exit=$rc"; exit $rc
+m6-sale-not-durable-vitest: node .rc/x/rv-mut.mjs m6 && node_modules/.bin/vitest run src/test/tycoonSaleReview.test.tsx src/test/tycoonLoads.test.tsx --testTimeout=300000 --hookTimeout=120000; rc=$?; git checkout -- src; echo "m6 vitest exit=$rc"; exit $rc
+m6-sale-not-durable-sim: node .rc/x/rv-mut.mjs m6 && env -u CI -u GITHUB_ACTIONS node scripts/simTycoonSaleReview.mjs; rc=$?; git checkout -- src; echo "m6 simTycoonSaleReview exit=$rc"; exit $rc
+m9-tsc: node .rc/x/rv-mut.mjs m9a m9b && node_modules/.bin/tsc --noEmit -p tsconfig.app.json; rc=$?; git checkout -- src; echo "m9 tsc exit=$rc"; exit $rc
+clean-after: git status --porcelain --untracked-files=no | grep -v "^?? " | head -5; test -z "$(git status --porcelain --untracked-files=no)" && echo "tree clean after every mutation"
+stalechunk-noprerender: SIM_STALE_CHUNK_CONTROL=noprerender node scripts/simStaleChunk.mjs

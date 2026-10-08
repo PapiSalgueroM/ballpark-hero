@@ -1,0 +1,12 @@
+MUTATION m4 applied to src/lib/freshBuild.ts
+1) freshBuild listens for vite:preloadError and cancels it
+   ok   listener registered from watchForNewBuild, event cancelled
+2) the reload happens once per tab, through a sessionStorage flag
+   FAIL the offline stand down comes after the once flag is set, so an offline failure spends the one reload
+3) RouteErrorBoundary reloads once on a chunk load error through the same guard
+   ok   chunk errors reload once through the shared guard
+4) main.tsx still boots the watcher
+   ok   watchForNewBuild() called at boot
+
+simStaleChunk: 1 failure(s) in section(s) 2
+m4 simStaleChunk exit=1
