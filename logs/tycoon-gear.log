@@ -1,0 +1,12 @@
+PASS catalog: 18 ordered unique engine IDs match all visible records
+PASS fees: 11,444,400 geared quotes equal the independent frozen curve; half-point ratings30..99, all legal ceilings, ages18..34, four positions, every boot, ordinary/max-reputation deadline contexts
+PASS edge: 8262 full+.002 steps, 6372 neutral capped/floor steps, 324 fractional threshold crossings; legal five-player maximum.39
+PASS consumers: 3 adjacent levels each prevent a real watched concession and change an actual away result L to D on the same separating rolls
+PASS schedule: all18 BOOTS in order; lower-division repeats and post18 titles pay one kit; legacy Summit progresses; duplicate/malformed/away/non-title receipts neutral; losing title fixture still earns its league reward
+PASS equipment: atomic reassignment/unequip, malformed and locked gear, raw/load duplicate neutrality, invalid levels, sale and retirement preserve the owned pair
+PASS upgrades: one kit per level, max3, locked/no-kit rejection, V1 roundtrip, unchanged fees and pack state
+PASS packs: 150 paired real pack draws have identical kid/tier/seed/debit; packs never grant gear; title does not advance pack generator
+PASS loads and resets: invalid/inherited/duplicate/future receipt fields repaired, prefix ownership enforced, move up/currentV1/Sell up survive, lost ledger clears equipped gear
+PASS durability: failed title exposes gems only, lost reward stays lost across recovery/reload; failed upgrade leaves save/cache unchanged and retries once; ledger reset drops gear; fresh-seed call counts identical
+PASS source writers: 15 executable gear assignments occur only in validated load/title credit/kit upgrade; comments and type declarations cannot satisfy the fence
+simTycoonGear: all sections passed; artifacts /home/runner/work/_temp/t-tycoon-gear/tycoon-gear-EpeDXT

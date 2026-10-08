@@ -1,0 +1,31 @@
+simNflCareerPathFacts: 78 rows in the file, 78 in the record, 37 join the 2026 roster file, 0 thin fact(s)
+ok   1. order and length
+ok   2. every field equals the record
+ok   3. the record holds up
+ok   4. career stat text matches its sources
+ok   5. shape
+ok   6. active players end at their 2026 club
+ok   8. the rules card examples match the record
+ok   9. every value is what its sources showed
+ok   7. control seattle: sections 2, 6 went red (2 finding(s))
+ok   7. control jersey: sections 2 went red (1 finding(s))
+ok   7. control claim: sections 4 went red (4 finding(s))
+ok   7. control onesource: sections 3 went red (7 finding(s))
+ok   7. control roster: sections 6 went red (2 finding(s))
+ok   7. control order: sections 1 went red (17 finding(s))
+ok   7. control example: sections 8 went red (1 finding(s))
+ok   7. control oakland: sections 9 went red (8 finding(s))
+ok   7. control mossorder: sections 9 went red (8 finding(s))
+ok   7. control mossjersey: sections 9 went red (1 finding(s))
+ok   7. control ricejersey: sections 9 went red (1 finding(s))
+ok   7. control riceorder: sections 9 went red (7 finding(s))
+ok   7. control draft: sections 9 went red (5 finding(s))
+ok   7. control draftyear: sections 9 went red (3 finding(s))
+ok   7. control college: sections 9 went red (6 finding(s))
+ok   7. control oneclub: sections 9 went red (1 finding(s))
+ok   7. control borrowed: sections 3 went red (1 finding(s))
+ok   7. control statword: sections 4 went red (1 finding(s))
+ok   7. control probowl: sections 4 went red (2 finding(s))
+ok   7. control shape: sections 5 went red (6 finding(s))
+ok   7. control thin: sections 3 went red (1 finding(s))
+simNflCareerPathFacts: PASS (0 finding(s), 0 control(s) that did not fire)

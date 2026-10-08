@@ -1,0 +1,24 @@
+
+--- 1. the record: two hosts per player, both values per fact, a fact per line ---
+  60 players, 633 facts, read 2026-10-03
+
+--- 2. every line follows from its two source values ---
+  633 lines checked against their two values
+  60 flags match their country
+
+--- 3. the shipped file equals the record, row by row (src/data/hockeyCareerPlayers.ts) ---
+  60 rows in the file, 60 in the record
+
+--- 4. no repeats: names, ids and surnames ---
+  60 different players in 60 rows, 121 accepted guesses, each for one player only
+
+--- 5. no line the record calls false or unsourced ships, no held out player ---
+  18 false or unsourced lines, 2 held out players: none shipped
+
+--- 6. the daily walk: every cycle deals every player once, and the switch to 60 rows ---
+  2026 to 2028: new pool repeats a player in 0 of 18 cycles, the old pool in 28 of 28
+  repeats inside 14 days per year 2026, 2027, 2028: new 6, 11, 7, old 54, 59, 56
+  release 2026-10-03 to 2026-11-02: shortest old to new gap 15 days (guy lafleur, released 2026-10-21); measured 15, band 14
+  RELEASE BY 2026-11-02: a release on 2026-11-03 deals evgeni malkin again 9 days after the old pool did
+
+simNhlCareerPathFacts: all six sections green

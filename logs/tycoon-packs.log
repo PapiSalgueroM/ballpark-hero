@@ -1,0 +1,514 @@
+Round 585: gems and packs
+
+A) the shipped code
+   ok   S1: 3 packs sum to 100; the panel types no percentage and prints pack.odds
+   ok   S2: 200000 draws per pack, worst gap 0.149 points (tolerance 0.3); a one point shift reads 1.03
+   ok   S3: expected ceilings 67.8 < 76.4 < 83.3; mean packs between Stars: Club Pack 6.489 (exact 6.513), Elite Pack 1.954 (exact 1.960)
+   ok   S4: the Club Pack guarantee fired on pack 10, never on 9; Elite Pack guarantee fired on pack 3, never on 2
+   ok   S5: 100,000 action sequences moved earned 0 times; a win, draw and loss pay 3, 1, 0, a title 20 more, second place 6, an away win 1, a replay 0
+   ok   S8: 500 scout finds byte identical to the pre-round baseline
+   ok   S9: a save with a star pack kid loads in the frozen V1 loader (1 kid) and keeps its tier and delivery count today
+   ok   S10: one writer of the ledger key across 1430 source files, no .earned assignment elsewhere, no Math.random in the ledger, no timer or confetti on the panel, none of spin, jackpot, lucky, bet, loot, crate
+   ok   S11: Club Pack: longest 9 without a Star, 92.4% of players waited the full 9; Elite Pack: longest 2 without a Star, 100.0% of players waited the full 2
+   ok   S12: three new ledgers took seeds 248235333, 2108509308, 1399312341, none shared and none the constant 585
+   ok   S13: an undelivered pack refused to be dismissed and a delivered one was; a lost ledger numbered its next pack 5, and it survived a reload
+   ok   S15: p90 longest stretch without an unlock 52.8 minutes over 50 seeds of 40 hours (fence 79); median 50; the stretches ended in a pack
+
+A.page) the real academy page, src/test/tycoonPacks.test.tsx
+   pass  1 every pack prints the published odds, before its button
+   pass  2 a pack costs what its button says, the first Scout Pack is free, and the button waits for a bed and the gems
+   pass  3 the card shows the tier drawn, and the kid in the bed carries it
+   pass  4 a reload in the middle of a reveal shows the same kid, delivered exactly once
+   pass  5 a watched win at the ground earns its gems once, and nothing else earns any
+   pass  6 a kid still waiting for a bed cannot be waved away, and moves in when one frees
+   pass  7 an academy that remembers more packs than a lost ledger still gets the next kid
+   pass  8 away wins earn one gem each, and a watched title adds its twenty
+   pass  9 malformed saved card fields stay safe before and after delivery
+   pass  10 a refused academy write keeps the paid draw through same-visit recovery and reload
+   pass  11 dismissal retains the draw when the latest academy state cannot be saved
+   pass  12 a refused ledger debit cannot deliver a kid or spend gems
+     3 packs print 15 odds exactly as PACKS holds them, each above its button
+     the Club Pack cost its printed price, the first Scout Pack cost nothing and the second its price, and a full academy opens nothing
+     12 Elite Packs: every card showed the tier drawn and every kid carried it (star, phenom, talent)
+     a reload mid-reveal showed Borja Herrezuelo again, in one bed, one pack opened; a draw stranded by a dead tab arrived once over two reloads
+     20 taps and a purchase earned 0 gems; 1 watched win(s) earned 3, keyed on match 1
+     a kid with no bed could not be waved away, moved in when a bed was sold free, and was then welcomed
+     with the ledger lost and the academy at four packs, the next pack carried number 5 and moved in
+     6 away wins earned 6 gems; the watched title match earned 23
+     object-valued saved card fields and inherited nation names render safely and the same repaired kid reaches a bed
+     a paid pack survived refused academy writes, recovered once in the same visit and after reload, with one charge and the original kid
+     Welcome retained the recovery draw after a refused save and dismissed it once the academy was saved
+     a refused ledger debit delivered no kid and spent no gems, then one paid pack opened after storage recovered
+
+B.skew) negative control: the draw uses Star odds three points above the printed ones
+   ok   S1
+   RED  S2: Club Pack star: drew 9.99% against 9%
+   ok   S3
+   ok   S4
+   ok   S5
+   ok   S8
+   ok   S9
+   ok   S10
+   ok   S11
+   ok   S12
+   ok   S13
+   ok   S15
+
+B.nopity) negative control: the guarantee never fires
+   ok   S1
+   ok   S2
+   RED  S3: the Club Pack's measured mean gap is 9.943 against the exact 6.513
+   RED  S4: the Club Pack drew prospect on the 10th pack since the last Star
+   ok   S5
+   ok   S8
+   ok   S9
+   ok   S10
+   RED  S11: a player opened 30 Club Packs in a row without a Star, past the guarantee of 10
+   ok   S12
+   ok   S13
+   ok   S15
+
+B.late) negative control: the guarantee fires one pack late
+   ok   S1
+   ok   S2
+   RED  S3: the Club Pack's measured mean gap is 6.851 against the exact 6.513
+   RED  S4: the Club Pack drew prospect on the 10th pack since the last Star
+   ok   S5
+   ok   S8
+   ok   S9
+   ok   S10
+   RED  S11: a player opened 10 Club Packs in a row without a Star, past the guarantee of 10
+   ok   S12
+   ok   S13
+   ok   S15
+
+B.leak) negative control: opening a pack also earns a gem
+   ok   S1
+   ok   S2
+   ok   S3
+   ok   S4
+   RED  S5: sequence 2 moved earned from 1085 to 1086 without a new result
+   ok   S8
+   ok   S9
+   ok   S10
+   ok   S11
+   ok   S12
+   ok   S13
+   ok   S15
+
+B.reroll) negative control: a stored draw is dropped on load, so a reload loses the kid on the card
+   ok   S1
+   ok   S2
+   ok   S3
+   ok   S4
+   ok   S5
+   ok   S8
+   ok   S9
+   ok   S10
+   ok   S11
+   ok   S12
+   RED  S13: a pack numbered past the packs opened was dropped on load
+   ok   S15
+   ok   passed 1 every pack prints the published odds, before its button
+   ok   passed 2 a pack costs what its button says, the first Scout Pack is free, and the button waits for a bed and the gems
+   ok   passed 3 the card shows the tier drawn, and the kid in the bed carries it
+   ok   failed 4 a reload in the middle of a reveal shows the same kid, delivered exactly once
+         measured: a pack stored but never delivered arrived 0 times over two reloads: expected +0 to be 1 // Object.is equality
+   ok   passed 5 a watched win at the ground earns its gems once, and nothing else earns any
+   ok   failed 6 a kid still waiting for a bed cannot be waved away, and moves in when one frees
+         measured: the card does not say he is waiting for a bed: expected null not to be null
+   ok   passed 7 an academy that remembers more packs than a lost ledger still gets the next kid
+   ok   passed 8 away wins earn one gem each, and a watched title adds its twenty
+   ok   failed 9 malformed saved card fields stay safe before and after delivery
+         measured: malformed saved fields crashed the reveal: expected null not to be null
+   ok   passed 10 a refused academy write keeps the paid draw through same-visit recovery and reload
+   ok   passed 11 dismissal retains the draw when the latest academy state cannot be saved
+   ok   passed 12 a refused ledger debit cannot deliver a kid or spend gems
+
+B.scoutdrift) negative control: the generator draws the position before the nation
+   ok   S1
+   ok   S2
+   ok   S3
+   ok   S4
+   ok   S5
+   RED  S8: scout find 1 differs from the baseline: {"id":1,"name":"Bruno Arrieta","nation":"Colombia","pos":"MF","age":16,"ageClock":8.977288397494704, against {"id":1,"name":"Facundo Vergara","nation":"Uruguay","pos":"MF","age":16,"ageClock":8.977288397494704
+   ok   S9
+   ok   S10
+   ok   S11
+   ok   S12
+   ok   S13
+   ok   S15
+
+B.words) negative control: the panel tells you that you got lucky
+   ok   S1
+   ok   S2
+   ok   S3
+   ok   S4
+   ok   S5
+   ok   S8
+   ok   S9
+   RED  S10: the pack code uses the word "lucky"
+   ok   S11
+   ok   S12
+   ok   S13
+   ok   S15
+
+B.oddsliteral) negative control: the panel types a 9% of its own
+   RED  S1: the Packs panel types 1 percentage(s) of its own (9%), so what it prints is not read from PACKS
+   ok   S2
+   ok   S3
+   ok   S4
+   ok   S5
+   ok   S8
+   ok   S9
+   ok   S10
+   ok   S11
+   ok   S12
+   ok   S13
+   ok   S15
+
+B.earnedleak) negative control: a tycoon file credits the ledger directly
+   ok   S1
+   ok   S2
+   ok   S3
+   ok   S4
+   ok   S5
+   ok   S8
+   ok   S9
+   RED  S10: src/components/tycoon/GemLeak.tsx assigns .earned
+   ok   S11
+   ok   S12
+   ok   S13
+   ok   S15
+
+B.twowriters) negative control: a second file writes the ledger key
+   ok   S1
+   ok   S2
+   ok   S3
+   ok   S4
+   ok   S5
+   ok   S8
+   ok   S9
+   RED  S10: src/components/tycoon/GemCheat.tsx names the ledger key, and only src/lib/tycoonRewards.ts may touch it
+   ok   S11
+   ok   S12
+   ok   S13
+   ok   S15
+
+B.panelodds) negative control: the panel prints each odd one point higher than the table
+   ok   S1
+   ok   S2
+   ok   S3
+   ok   S4
+   ok   S5
+   ok   S8
+   ok   S9
+   ok   S10
+   ok   S11
+   ok   S12
+   ok   S13
+   ok   S15
+   ok   failed 1 every pack prints the published odds, before its button
+         measured: the Scout Pack shows 63% for Grassroots, the table says 62: expected 63 to be 62 // Object.is equality
+   ok   passed 2 a pack costs what its button says, the first Scout Pack is free, and the button waits for a bed and the gems
+   ok   passed 3 the card shows the tier drawn, and the kid in the bed carries it
+   ok   passed 4 a reload in the middle of a reveal shows the same kid, delivered exactly once
+   ok   passed 5 a watched win at the ground earns its gems once, and nothing else earns any
+   ok   passed 6 a kid still waiting for a bed cannot be waved away, and moves in when one frees
+   ok   passed 7 an academy that remembers more packs than a lost ledger still gets the next kid
+   ok   passed 8 away wins earn one gem each, and a watched title adds its twenty
+   ok   passed 9 malformed saved card fields stay safe before and after delivery
+   ok   passed 10 a refused academy write keeps the paid draw through same-visit recovery and reload
+   ok   passed 11 dismissal retains the draw when the latest academy state cannot be saved
+   ok   passed 12 a refused ledger debit cannot deliver a kid or spend gems
+
+B.freeprice) negative control: the first Scout Pack is not free after all
+   ok   S1
+   ok   S2
+   ok   S3
+   ok   S4
+   ok   S5
+   ok   S8
+   ok   S9
+   ok   S10
+   ok   S11
+   ok   S12
+   ok   S13
+   ok   S15
+   ok   passed 1 every pack prints the published odds, before its button
+   ok   failed 2 a pack costs what its button says, the first Scout Pack is free, and the button waits for a bed and the gems
+         measured: the first Scout Pack does not say it is free: expected 'Open for 30 gems' to match /free/i
+   ok   passed 3 the card shows the tier drawn, and the kid in the bed carries it
+   ok   passed 4 a reload in the middle of a reveal shows the same kid, delivered exactly once
+   ok   passed 5 a watched win at the ground earns its gems once, and nothing else earns any
+   ok   passed 6 a kid still waiting for a bed cannot be waved away, and moves in when one frees
+   ok   passed 7 an academy that remembers more packs than a lost ledger still gets the next kid
+   ok   passed 8 away wins earn one gem each, and a watched title adds its twenty
+   ok   passed 9 malformed saved card fields stay safe before and after delivery
+   ok   passed 10 a refused academy write keeps the paid draw through same-visit recovery and reload
+   ok   passed 11 dismissal retains the draw when the latest academy state cannot be saved
+   ok   passed 12 a refused ledger debit cannot deliver a kid or spend gems
+
+B.tiercard) negative control: the card always calls the kid Grassroots
+   ok   S1
+   ok   S2
+   ok   S3
+   ok   S4
+   ok   S5
+   ok   S8
+   ok   S9
+   ok   S10
+   ok   S11
+   ok   S12
+   ok   S13
+   ok   S15
+   ok   passed 1 every pack prints the published odds, before its button
+   ok   passed 2 a pack costs what its button says, the first Scout Pack is free, and the button waits for a bed and the gems
+   ok   failed 3 the card shows the tier drawn, and the kid in the bed carries it
+         measured: the card headline is not the tier drawn: expected 'Grassroots' to be 'Star' // Object.is equality
+   ok   passed 4 a reload in the middle of a reveal shows the same kid, delivered exactly once
+   ok   passed 5 a watched win at the ground earns its gems once, and nothing else earns any
+   ok   passed 6 a kid still waiting for a bed cannot be waved away, and moves in when one frees
+   ok   passed 7 an academy that remembers more packs than a lost ledger still gets the next kid
+   ok   passed 8 away wins earn one gem each, and a watched title adds its twenty
+   ok   passed 9 malformed saved card fields stay safe before and after delivery
+   ok   passed 10 a refused academy write keeps the paid draw through same-visit recovery and reload
+   ok   passed 11 dismissal retains the draw when the latest academy state cannot be saved
+   ok   passed 12 a refused ledger debit cannot deliver a kid or spend gems
+
+B.gemtap) negative control: a tap credits a win to the ledger
+   ok   S1
+   ok   S2
+   ok   S3
+   ok   S4
+   ok   S5
+   ok   S8
+   ok   S9
+   RED  S10: gems are credited from 3 place(s) (src/hooks/useStadiumTycoon.ts), and the only two are the stadium hook's full time and its away settle
+   ok   S11
+   ok   S12
+   ok   S13
+   ok   S15
+   ok   passed 1 every pack prints the published odds, before its button
+   ok   passed 2 a pack costs what its button says, the first Scout Pack is free, and the button waits for a bed and the gems
+   ok   passed 3 the card shows the tier drawn, and the kid in the bed carries it
+   ok   passed 4 a reload in the middle of a reveal shows the same kid, delivered exactly once
+   ok   failed 5 a watched win at the ground earns its gems once, and nothing else earns any
+         measured: taps and a purchase earned gems: expected 3 to be +0 // Object.is equality
+   ok   passed 6 a kid still waiting for a bed cannot be waved away, and moves in when one frees
+   ok   passed 7 an academy that remembers more packs than a lost ledger still gets the next kid
+   ok   passed 8 away wins earn one gem each, and a watched title adds its twenty
+   ok   passed 9 malformed saved card fields stay safe before and after delivery
+   ok   passed 10 a refused academy write keeps the paid draw through same-visit recovery and reload
+   ok   passed 11 dismissal retains the draw when the latest academy state cannot be saved
+   ok   passed 12 a refused ledger debit cannot deliver a kid or spend gems
+
+B.wavedaway) negative control: the card offers Welcome him in before he has a bed
+   ok   S1
+   ok   S2
+   ok   S3
+   ok   S4
+   ok   S5
+   ok   S8
+   ok   S9
+   ok   S10
+   ok   S11
+   ok   S12
+   ok   S13
+   ok   S15
+   ok   passed 1 every pack prints the published odds, before its button
+   ok   passed 2 a pack costs what its button says, the first Scout Pack is free, and the button waits for a bed and the gems
+   ok   passed 3 the card shows the tier drawn, and the kid in the bed carries it
+   ok   passed 4 a reload in the middle of a reveal shows the same kid, delivered exactly once
+   ok   passed 5 a watched win at the ground earns its gems once, and nothing else earns any
+   ok   failed 6 a kid still waiting for a bed cannot be waved away, and moves in when one frees
+         measured: the card does not say he is waiting for a bed: expected null not to be null
+   ok   passed 7 an academy that remembers more packs than a lost ledger still gets the next kid
+   ok   passed 8 away wins earn one gem each, and a watched title adds its twenty
+   ok   passed 9 malformed saved card fields stay safe before and after delivery
+   ok   failed 10 a refused academy write keeps the paid draw through same-visit recovery and reload
+         measured: an unsaved delivery can be welcomed: expected <button type="button" …(1)></button> to be null
+   ok   passed 11 dismissal retains the draw when the latest academy state cannot be saved
+   ok   passed 12 a refused ledger debit cannot deliver a kid or spend gems
+
+B.seqreuse) negative control: a pack ignores the packs the academy already delivered
+   ok   S1
+   ok   S2
+   ok   S3
+   ok   S4
+   ok   S5
+   ok   S8
+   ok   S9
+   ok   S10
+   ok   S11
+   ok   S12
+   RED  S13: a lost ledger's next pack carried number 1 against an academy at 4
+   ok   S15
+   ok   passed 1 every pack prints the published odds, before its button
+   ok   passed 2 a pack costs what its button says, the first Scout Pack is free, and the button waits for a bed and the gems
+   ok   passed 3 the card shows the tier drawn, and the kid in the bed carries it
+   ok   passed 4 a reload in the middle of a reveal shows the same kid, delivered exactly once
+   ok   passed 5 a watched win at the ground earns its gems once, and nothing else earns any
+   ok   passed 6 a kid still waiting for a bed cannot be waved away, and moves in when one frees
+   ok   failed 7 an academy that remembers more packs than a lost ledger still gets the next kid
+         measured: the pack reused a number the academy had already delivered: expected 1 to be 5 // Object.is equality
+   ok   passed 8 away wins earn one gem each, and a watched title adds its twenty
+   ok   passed 9 malformed saved card fields stay safe before and after delivery
+   ok   passed 10 a refused academy write keeps the paid draw through same-visit recovery and reload
+   ok   passed 11 dismissal retains the draw when the latest academy state cannot be saved
+   ok   passed 12 a refused ledger debit cannot deliver a kid or spend gems
+
+B.sameseed) negative control: a new ledger keeps the shared constant seed
+   ok   S1
+   ok   S2
+   ok   S3
+   ok   S4
+   ok   S5
+   ok   S8
+   ok   S9
+   ok   S10
+   ok   S11
+   RED  S12: three new ledgers were seeded 585, 585, 585; the constant is 585
+   ok   S13
+   ok   S15
+
+B.forgetful) negative control: a pack is dismissed whether or not its kid reached a bed
+   ok   S1
+   ok   S2
+   ok   S3
+   ok   S4
+   ok   S5
+   ok   S8
+   ok   S9
+   ok   S10
+   ok   S11
+   ok   S12
+   RED  S13: a pack whose kid had not reached a bed was dismissed
+   ok   S15
+
+B.dear) negative control: every pack costs four times as much
+   ok   S1
+   ok   S2
+   ok   S3
+   ok   S4
+   ok   S5
+   ok   S8
+   ok   S9
+   ok   S10
+   ok   S11
+   ok   S12
+   ok   S13
+   RED  S15: the 90th percentile dry spell is 149.2 minutes, over the fence of 79
+
+B.rawkid) negative control: the reveal receives unvalidated kid fields from storage
+   ok   S1
+   ok   S2
+   ok   S3
+   ok   S4
+   ok   S5
+   ok   S8
+   ok   S9
+   ok   S10
+   ok   S11
+   ok   S12
+   ok   S13
+   ok   S15
+   ok   passed 1 every pack prints the published odds, before its button
+   ok   passed 2 a pack costs what its button says, the first Scout Pack is free, and the button waits for a bed and the gems
+   ok   passed 3 the card shows the tier drawn, and the kid in the bed carries it
+   ok   passed 4 a reload in the middle of a reveal shows the same kid, delivered exactly once
+   ok   passed 5 a watched win at the ground earns its gems once, and nothing else earns any
+   ok   passed 6 a kid still waiting for a bed cannot be waved away, and moves in when one frees
+   ok   passed 7 an academy that remembers more packs than a lost ledger still gets the next kid
+   ok   passed 8 away wins earn one gem each, and a watched title adds its twenty
+   ok   failed 9 malformed saved card fields stay safe before and after delivery
+         measured: Error: Objects are not valid as a React child (found: object with keys {}). If you meant to render a collection of children, use an array instead.
+   ok   passed 10 a refused academy write keeps the paid draw through same-visit recovery and reload
+   ok   passed 11 dismissal retains the draw when the latest academy state cannot be saved
+   ok   passed 12 a refused ledger debit cannot deliver a kid or spend gems
+
+B.unsaveddelivery) negative control: an academy write refusal still counts the kid as delivered
+   ok   S1
+   ok   S2
+   ok   S3
+   ok   S4
+   ok   S5
+   ok   S8
+   ok   S9
+   ok   S10
+   ok   S11
+   ok   S12
+   ok   S13
+   ok   S15
+   ok   passed 1 every pack prints the published odds, before its button
+   ok   passed 2 a pack costs what its button says, the first Scout Pack is free, and the button waits for a bed and the gems
+   ok   passed 3 the card shows the tier drawn, and the kid in the bed carries it
+   ok   passed 4 a reload in the middle of a reveal shows the same kid, delivered exactly once
+   ok   passed 5 a watched win at the ground earns its gems once, and nothing else earns any
+   ok   passed 6 a kid still waiting for a bed cannot be waved away, and moves in when one frees
+   ok   passed 7 an academy that remembers more packs than a lost ledger still gets the next kid
+   ok   passed 8 away wins earn one gem each, and a watched title adds its twenty
+   ok   passed 9 malformed saved card fields stay safe before and after delivery
+   ok   failed 10 a refused academy write keeps the paid draw through same-visit recovery and reload
+         measured: the screen hides the save problem: expected null not to be null
+   ok   passed 11 dismissal retains the draw when the latest academy state cannot be saved
+   ok   passed 12 a refused ledger debit cannot deliver a kid or spend gems
+
+B.unsaveddismiss) negative control: dismissal clears the pending draw despite a refused academy save
+   ok   S1
+   ok   S2
+   ok   S3
+   ok   S4
+   ok   S5
+   ok   S8
+   ok   S9
+   ok   S10
+   ok   S11
+   ok   S12
+   ok   S13
+   ok   S15
+   ok   passed 1 every pack prints the published odds, before its button
+   ok   passed 2 a pack costs what its button says, the first Scout Pack is free, and the button waits for a bed and the gems
+   ok   passed 3 the card shows the tier drawn, and the kid in the bed carries it
+   ok   passed 4 a reload in the middle of a reveal shows the same kid, delivered exactly once
+   ok   passed 5 a watched win at the ground earns its gems once, and nothing else earns any
+   ok   passed 6 a kid still waiting for a bed cannot be waved away, and moves in when one frees
+   ok   passed 7 an academy that remembers more packs than a lost ledger still gets the next kid
+   ok   passed 8 away wins earn one gem each, and a watched title adds its twenty
+   ok   passed 9 malformed saved card fields stay safe before and after delivery
+   ok   passed 10 a refused academy write keeps the paid draw through same-visit recovery and reload
+   ok   failed 11 dismissal retains the draw when the latest academy state cannot be saved
+         measured: a failed academy save cleared the recovery draw: expected undefined to be 1 // Object.is equality
+   ok   passed 12 a refused ledger debit cannot deliver a kid or spend gems
+
+B.unsaveddebit) negative control: opening accepts a ledger write refusal and delivers a kid without a durable debit
+   ok   S1
+   ok   S2
+   ok   S3
+   ok   S4
+   ok   S5
+   ok   S8
+   ok   S9
+   ok   S10
+   ok   S11
+   ok   S12
+   ok   S13
+   ok   S15
+   ok   passed 1 every pack prints the published odds, before its button
+   ok   passed 2 a pack costs what its button says, the first Scout Pack is free, and the button waits for a bed and the gems
+   ok   passed 3 the card shows the tier drawn, and the kid in the bed carries it
+   ok   passed 4 a reload in the middle of a reveal shows the same kid, delivered exactly once
+   ok   passed 5 a watched win at the ground earns its gems once, and nothing else earns any
+   ok   passed 6 a kid still waiting for a bed cannot be waved away, and moves in when one frees
+   ok   passed 7 an academy that remembers more packs than a lost ledger still gets the next kid
+   ok   passed 8 away wins earn one gem each, and a watched title adds its twenty
+   ok   passed 9 malformed saved card fields stay safe before and after delivery
+   ok   passed 10 a refused academy write keeps the paid draw through same-visit recovery and reload
+   ok   passed 11 dismissal retains the draw when the latest academy state cannot be saved
+   ok   failed 12 a refused ledger debit cannot deliver a kid or spend gems
+         measured: a refused debit revealed a kid: expected <div data-pack-reveal="true" …(2)>…(6)</div> to be null
+
+simTycoonPacks: green.
+   The odds printed are the odds drawn, the guarantees keep their word, and only results earn gems.
+   A draw is stored before it is shown and delivered once; scouting did not move; no gambling words or shapes.
+   All 23 controls fired exactly where they should.
