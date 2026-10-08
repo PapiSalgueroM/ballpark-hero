@@ -55,7 +55,7 @@
  *   crowd        a man in a crowd keeps his name                                   level neighbours take a row each, and a wall shows numbers
  * The closing check's controls (2026-10-08): the kick off after a goal was a beat long whenever a chance followed within two minutes.
  *   kickoffcut   the next shooter's lead comes before the kick off again           R9 (a goal gets its kick off)
- *   kickoffwait  a chance no longer waits for the whole kick off                   R9 (a goal gets its kick off)
+ *   kickoffwait  a chance waits for a beat of kick off only, as it did             R9 (a goal gets its kick off)
  * restartbeat takes out both lengths of a kick off now (the beat and the whole of it), which is what its line above says.
  * cmimport now trips the import specifier scan as well as the marker check, and is accepted only on both.
  * And one old control has a new test to turn red: lineup takes the hook's own guard out (an action is dropped
@@ -155,7 +155,7 @@ try {
       scene = replace(scene, "=> (c.event.kind === 'goal' ? PITCH_KICKOFF : 0);", '=> (c.event ? 0 : 0);');
     }
     if (control === 'kickoffcut') scene = replace(scene, 'Math.max(room - whole(before), Math.min(PITCH_SQUEEZE, room - restart(before)))', 'room - restart(before)');
-    if (control === 'kickoffwait') scene = replace(scene, 'before.at + ACTION_SPAN + whole(before) + PITCH_SQUEEZE', 'before.at + ACTION_SPAN + restart(before) + PITCH_SQUEEZE');
+    if (control === 'kickoffwait') scene = replace(scene, 'before.at + ACTION_SPAN + waitedFor(before) + PITCH_SQUEEZE', 'before.at + ACTION_SPAN + restart(before) + PITCH_SQUEEZE');
     if (control === 'kickoffside') scene = replace(scene, 'kickoff(after, defending, n, `g${a.order}`);', 'kickoff(after, side, n, `g${a.order}`);');
     if (control === 'throwside') scene = replace(scene, '      const side = present(event.side);\n      const spot = (before: PitchPoint)', '      const side = present(other(event.side));\n      const spot = (before: PitchPoint)');
     if (control === 'foulside') scene = replace(scene, "so the free kick is the other side's. */\n      const side = present(other(event.side));", "so the free kick is the other side's. */\n      const side = present(event.side);");

@@ -6,7 +6,7 @@ import type { CareerState, LiveFeedEvent } from '@/lib/clubManager';
 import { ACTION_SPAN, BEAT_SPAN, GOAL_MOUTH } from '@/components/pitch-motion/contract';
 import type { PitchFigure, PitchInput } from '@/components/pitch-motion/contract';
 import type { MotionScene } from '@/components/pitch-motion/motion';
-import { pitchBeatAt, pitchPlan, pitchScene, pitchSceneKey, PITCH_KICKOFF, PITCH_LATE, PITCH_LEAD, PITCH_RESTART, PITCH_SQUEEZE } from '@/components/pitch-motion/scene';
+import { pitchBeatAt, pitchPlan, pitchScene, pitchSceneKey, PITCH_HELD, PITCH_KICKOFF, PITCH_LATE, PITCH_LEAD, PITCH_RESTART, PITCH_SQUEEZE } from '@/components/pitch-motion/scene';
 import type { PitchBeat, PitchPlaced, PitchPlan } from '@/components/pitch-motion/scene';
 const motionPath = process.env.LIVE_MOTION_COMPONENT;
 /* Round 1101: the part lives in src/components/pitch-motion now, and `between` is exported there. */
@@ -636,6 +636,7 @@ interface SeedTally {
   /* R6 */ chances: number; holderOffenders: number; steadyOffenders: number; followOffenders: number; underKickoff: number; lastKick: number;
   waited: number; lateSum: number; lateOffenders: number; overlapped: number; overlapOffenders: number; noLead: number; ledOn: number; followSeen: number;
   goalsToRestart: number; kickoffWhole: number; kickoffHeld: number; kickoffSeen: number; kickoffShort: number; beforeLastKick: number; kickoffSum: number;
+  underHeld: number; goalWaited: number; nextSqueezed: number; periodEnd: number; underHeldOffenders: number; underHeldExamples: string[];
   /* R7 */ dead: Record<DeadKind, number>; deadOffenders: number; flanked: number; standIns: number; deadExamples: string[];
   /* R8 */ handed: number; kickHandOffenders: number; shareOffenders: number; unevenShares: number; awayHalves: number;
 }
@@ -648,6 +649,7 @@ const tally = (club: string): SeedTally => ({
   chances: 0, holderOffenders: 0, steadyOffenders: 0, followOffenders: 0, underKickoff: 0, lastKick: 0,
   waited: 0, lateSum: 0, lateOffenders: 0, overlapped: 0, overlapOffenders: 0, noLead: 0, ledOn: 0, followSeen: 0,
   goalsToRestart: 0, kickoffWhole: 0, kickoffHeld: 0, kickoffSeen: 0, kickoffShort: 0, beforeLastKick: 0, kickoffSum: 0,
+  underHeld: 0, goalWaited: 0, nextSqueezed: 0, periodEnd: 0, underHeldOffenders: 0, underHeldExamples: [],
   dead: { opening: 0, restart: 0, corner: 0, throwin: 0, freekick: 0, goalkick: 0, keeper: 0 }, deadOffenders: 0, flanked: 0, standIns: 0, deadExamples: [],
   handed: 0, kickHandOffenders: 0, shareOffenders: 0, unevenShares: 0, awayHalves: 0,
 });
@@ -813,6 +815,20 @@ function replayHalf(t: SeedTally, input: PitchInput) {
       else if (seen >= PITCH_RESTART - 1e-6) t.kickoffSeen++;
       else if (nextIsLastKick) t.beforeLastKick++;
       else t.kickoffShort++;
+      /* WHY a kick off is under KICKOFF_HELD, every time. A goal that started on time, with the next chance
+         free to wait its turn, always has that much. So one of three things is true of every shorter one:
+         the goal itself had to wait (a chance, or the period's kick off, in the minute before it), the next
+         chance was squeezed from behind (the one after it starts the instant it and its beat of kick off are
+         over), or the period is about to end (nothing waits into the last kick's wind up). */
+      if (seen < KICKOFF_HELD - 1e-6) {
+        t.underHeld++;
+        const after2 = plan.actions[n + 2];
+        const waited = a.at > place + 1e-9;
+        const squeezed = !!next && !!after2 && after2.at - next.at <= ACTION_SPAN + (next.event.kind === 'goal' ? PITCH_RESTART : 0) + 1e-6;
+        const ending = to - place < 4;
+        if (waited) t.goalWaited++; else if (squeezed) t.nextSqueezed++; else if (ending) t.periodEnd++;
+        else { t.underHeldOffenders++; if (t.underHeldExamples.length < 3) t.underHeldExamples.push(`goal ${a.event.side} at ${place} (started ${a.at.toFixed(2)}), kick off ${seen.toFixed(2)}, next ${next ? `${next.event.kind} at ${next.at.toFixed(2)}` : 'none'}`); }
+      }
     } else {
       /* A miss is followed by the goal kick and a save by the keeper with the ball, unless the next chance's
          shooter is led in straight away (its stretch starts by the time this action ends). */
@@ -954,10 +970,11 @@ const R4_FLOOR = 0.3;
  *    measured; before chances took turns it was 42 of 91 with no full kick off, and with the beat of kick
  *    off taken out again (control restartbeat) it is far over.
  *  The closing check of 2026-10-08 read those kick offs with the review's own measure (a kick off under 0.6 of
- *  the clock is short) and found that a beat was all most of them had: 42 of 91 short. Since then a chance
- *  waits for the WHOLE kick off when its minute has room (two minutes after a goal it starts a twentieth
- *  late), and a chance in the very next minute leaves it KICKOFF_HELD. R6 now tells four lengths apart and
- *  holds two shares, MEASURED_KICKOFFS below. */
+ *  the clock is short) and found that a beat was all most of them had: 42 of 91 short. Since then the kick
+ *  off comes before the next shooter's lead: a chance in the very next minute waits as long as it may and
+ *  leaves it PITCH_HELD (which is KICKOFF_HELD), a chance two minutes on leaves it 0.70, and anything later
+ *  leaves it whole. R6 now tells four lengths apart, holds two shares (MEASURED_KICKOFFS below), and asks
+ *  every kick off under KICKOFF_HELD for its reason. */
 const R6_OVERLAP_ONE_IN = 50;
 const R6_NO_LEAD_ONE_IN = 10;
 const R6_SHORT_KICKOFF_ONE_IN = 12;
@@ -965,6 +982,7 @@ const R6_SHORT_KICKOFF_ONE_IN = 12;
  *  (the hook's walk lasts 0.3) and that picture has stood for as long again. */
 const KICKOFF_HELD = 0.6;
 /** MEASURED_KICKOFFS, on the 200 half feeds: PLACEHOLDER_KICKOFFS. */
+const R6_UNDER_HELD_FLOOR = 1;
 const R6_HELD_KICKOFF_SHARE = 0.5;
 const R6_WHOLE_KICKOFF_SHARE = 0.4;
 /** R7. How many of each kind of dead ball the material must hold for the rule to have been read at all: each
@@ -1066,6 +1084,10 @@ describe('The pitch part on real feeds', () => {
     /* And it is a kick off that can be read: held or whole for nearly all of them, whole for most. */
     expect(heldOrMore).toBeGreaterThanOrEqual(R6_HELD_KICKOFF_SHARE * restarts);
     expect(whole).toBeGreaterThanOrEqual(R6_WHOLE_KICKOFF_SHARE * restarts);
+    /* And a shorter one always has its reason: the minutes around that goal were too full. */
+    console.log(`[1101 R6 short kick offs] under ${KICKOFF_HELD}: ${total(t => t.underHeld)} of ${restarts} (per seed ${m.seeds.map(t => t.underHeld).join(' ')}); the goal itself had to wait ${total(t => t.goalWaited)}, the next chance was squeezed from behind ${total(t => t.nextSqueezed)}, the period was ending ${total(t => t.periodEnd)}, none of these ${total(t => t.underHeldOffenders)}${m.seeds.flatMap(t => t.underHeldExamples).map(example => ` | ${example}`).slice(0, 5).join('')}`);
+    expect(total(t => t.underHeld)).toBeGreaterThanOrEqual(R6_UNDER_HELD_FLOOR);
+    expect(total(t => t.underHeldOffenders)).toBe(0);
   }, LONG);
 
   it('R7: every dead ball is taken by the right side from the right place', () => {
@@ -1132,18 +1154,21 @@ describe('The pitch part on real feeds', () => {
     near(three[1].at, 13);
     near(three[1].led, PITCH_LEAD);
     expect(three[0].kickoff).toBeGreaterThanOrEqual(PITCH_KICKOFF - 1e-6);
-    /* Two minutes on: it waits a twentieth of a minute, so that the kick off is whole and its shooter still
-       has the ball for PITCH_SQUEEZE. */
+    /* Two minutes on: it is on time, its shooter has the ball for PITCH_SQUEEZE and the kick off has the
+       rest, 0.70 of its 0.76. */
     const two = read([line(10, 'goal', 'me'), line(12, 'save', 'opp')]);
-    near(two[1].at, 10 + ACTION_SPAN + PITCH_KICKOFF + PITCH_SQUEEZE);
-    near(two[0].kickoff, PITCH_KICKOFF);
+    near(two[1].at, 12);
     near(two[1].led, PITCH_SQUEEZE);
+    near(two[0].kickoff, 2 - ACTION_SPAN - PITCH_SQUEEZE);
+    expect(two[0].kickoff).toBeGreaterThanOrEqual(KICKOFF_HELD - 1e-6);
     /* In the very next minute: it waits as long as it may, the shooter keeps PITCH_SQUEEZE and the kick off
        has the rest, which is KICKOFF_HELD. */
     const one = read([line(10, 'goal', 'me'), line(11, 'save', 'opp')]);
     near(one[1].at, 11 + PITCH_LATE);
     near(one[1].led, PITCH_SQUEEZE);
-    near(one[0].kickoff, 1 + PITCH_LATE - ACTION_SPAN - PITCH_SQUEEZE);
+    near(one[0].kickoff, PITCH_HELD);
+    /* And PITCH_HELD is the review's line, not under it. */
+    expect(PITCH_HELD).toBeGreaterThanOrEqual(KICKOFF_HELD - 1e-9);
     expect(one[0].kickoff).toBeGreaterThanOrEqual(KICKOFF_HELD - 1e-6);
     /* Two goals in two minutes: the second has its own whole kick off. */
     const twoGoals = read([line(10, 'goal', 'me'), line(11, 'goal', 'opp')]);
