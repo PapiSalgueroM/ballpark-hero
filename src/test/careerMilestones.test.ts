@@ -11,7 +11,10 @@
    without copying it.
 
    Not vacuous, measured on these seeds (the run prints the line):
-   COUNTS_PLACEHOLDER
+   24 careers, 575 played seasons, 43 rises of 3 or more (7.5 percent of
+   played seasons), 236 falls, 19 club armbands, 22 country armbands, 23
+   first caps, 2537 changed families, and at most 3 seasons in a row with a
+   rise of 3 or more inside one career (2026-10-08).
 
    If a change to the engine starves one of the three counts the test asks
    for (an armband, a rise of OVERALL_JUMP, a fall), change the SEEDS, never
