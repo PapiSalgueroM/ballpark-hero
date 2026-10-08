@@ -1,0 +1,2 @@
+simStartingXi exit=0 0s | simStartingXi: green. He can see the eleven, and not one man on it is somebody real.
+tsc exit=0 43s | 
