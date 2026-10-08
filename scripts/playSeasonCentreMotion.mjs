@@ -57,7 +57,49 @@
  *   nosnap      the reduced motion read is forced to false     -> B4 red
  *   pitchside   every goal is laid out at his club's attacking end -> B5 red
  *
- * Needs dist built (the stylesheet) and Chromium. Scope with ONLY=B1,B3.
+ * PART C: THE BUILT SITE, served the way the live host serves it
+ * (scripts/lib/hostLikeServer.mjs, port 4559), on a save the real engine made
+ * in node: on the hub, twelve or more played seasons, the last one a table
+ * season he did not win, opened from the career page (so no moment is ever
+ * offered and nothing can write the save).
+ *  C1 The bind. Desktop: after each of the first ten matchdays the table at
+ *     rest is node's tableAt; a MutationObserver installed before the first
+ *     press counts how often data-rank-shifting was set (a floor, below);
+ *     opening plays nothing; the page neither scrolls nor changes width.
+ *     Phones (390 by 844 and 320 by 700): the compact table is node's and
+ *     the whole card is inside the stage's own box at every full time with no
+ *     scroll by the player. Reduced motion: the attribute is never set and
+ *     every goal is drawn landed.
+ *  C2 The pitch in a real match, and its chunk. One matchday at 1x that node
+ *     knows holds a goal of his and a goal against: each goal of it reaches
+ *     the right net, his with the ring and the words. The little pitch is
+ *     asked for after Kick off, not on the hub and not on the kick off card,
+ *     and no file asked for from the press on carries a Club Manager marker.
+ *  C3 Resume. Three matchdays watched and closed: the chip, 44 px tall; the
+ *     record kept; still there after a reload; pressed, the Centre opens on
+ *     "3 of M played" with node's table and nothing moving; the review clears
+ *     the record and the chip. A changed key, text that is not JSON and a
+ *     matchday of 0 show no chip. With the save's league year moved on, no
+ *     chip, and that season is locked in the list.
+ *  C4 Replays. The list is exactly the played seasons, newest first, open or
+ *     locked as node's own reading of the rule says; a locked row is not a way
+ *     in; the oldest open one opens to watch; the list scrolls inside its tile
+ *     and the page behind does not.
+ *  C5 The career walker (its ACTIONS and SKIP read from its file's text) never
+ *     presses one of this round's buttons and none of their labels starts
+ *     like an action it presses.
+ *  C6 Floors on the picker, the kick off card, a matchday, the phone fixtures,
+ *     a resumed card, a poster and the review: buttons at least 44 px tall,
+ *     speed buttons 44 px wide, no text under 12 px outside the table card
+ *     (its own count is printed), the header never clipped, no sideways
+ *     scroll, every opponent's name at least 72 px, the review strip whole.
+ *  C7 The save string is byte for byte what it was at the end of every pass.
+ * Controls on what is SERVED (same variable): floor (the Kick off buttons'
+ * class put back to h-11 flex-1 -> C6 red), lock (the body lock taken out ->
+ * C4 red), tableview (the stage no longer brings the table into view -> C1
+ * red on the phones). Screenshots go to SHOTS (or RC_OUT, else .tmp-fx/shots).
+ *
+ * Needs dist built (the stylesheet and the site) and Chromium. Scope with ONLY=B1,B3 (any C runs all of part C).
  * Every page blocks the live database before anything loads.
  * Run: ENGINES=chromium MSYS_NO_PATHCONV=1 node scripts/playSeasonCentreMotion.mjs
  * Green is the closing "playSeasonCentreMotion: N checks, 0 failed" line and
@@ -70,7 +112,7 @@ import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
 import pw from './lib/playwrightLoader.mjs';
 import { bundleAwardsNight } from './lib/careerAwardsNightBundle.mjs';
-import { probeAwardsNight } from './lib/careerAwardsNightProbe.mjs';
+import { probeAwardsNight, mulberry32 } from './lib/careerAwardsNightProbe.mjs';
 
 const { chromium } = pw;
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -84,8 +126,9 @@ const CONTROLS = {
   pitchside: { file: 'src/components/season-centre/MiniPitch.tsx', from: "  const us = !goal || goal.side === 'us';", to: '  const us = true;' },
   nosnap: { file: SHIFT_UI, from: "const reducedNow = () => typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;", to: 'const reducedNow = () => false;' },
 };
-if (CONTROL && !CONTROLS[CONTROL]) throw new Error(`unknown SEASON_MOTION_CONTROL ${CONTROL}`);
-if (CONTROL) console.log(`CONTROL ${CONTROL}: rewritten in the bundled source, never a file on disk`);
+const SERVED_CONTROLS = ['floor', 'lock', 'tableview'];
+if (CONTROL && !CONTROLS[CONTROL] && !SERVED_CONTROLS.includes(CONTROL)) throw new Error(`unknown SEASON_MOTION_CONTROL ${CONTROL}`);
+if (CONTROL) console.log(`CONTROL ${CONTROL}: rewritten in the bundled source or in what is served, never a file on disk`);
 
 let checks = 0, failed = 0;
 const check = (ok, label) => { checks += 1; if (ok) console.log(`ok   ${label}`); else { failed += 1; console.log(`FAIL ${label}`); } };
@@ -168,7 +211,7 @@ await build({
   bundle: true, format: 'iife', platform: 'browser', jsx: 'automatic', outfile: BARE, logLevel: 'error',
   alias: { '@': path.join(ROOT, 'src') }, define: { 'process.env.NODE_ENV': '"production"' }, plugins: [controlPlugin],
 });
-if (CONTROL && CONTROLS[CONTROL].file === SHIFT_UI && !applied.has(CONTROL)) throw new Error(`control refused: ${CONTROLS[CONTROL].file} was never loaded into the bundle`);
+if (CONTROL && CONTROLS[CONTROL]?.file === SHIFT_UI && !applied.has(CONTROL)) throw new Error(`control refused: ${CONTROLS[CONTROL].file} was never loaded into the bundle`);
 const bareJs = fs.readFileSync(BARE, 'utf8');
 fs.rmSync(tmp, { recursive: true, force: true });
 
@@ -238,6 +281,8 @@ const STEPS = [1, 2, 3, 5, 10, 'rest'];
    row (416 of 454 together). The floor is the lowest season less ten points: it is there to catch a table that
    has stopped sliding, and a compact window of five rows really does sit still about one week in ten. */
 const B2_FLOOR = 0.75;
+/* C1: how many of the nine advances from matchday 2 to 10 must slide on the built site (set from the measured count, see the header) */
+const C1_FLOOR = 5;
 const stat = { transitions: 0, maxFirst: 0, maxLast: 0, step1: 0, step1Moved: 0, rowsMoved: 0, mounts: 0, mountAnims: 0, pre: 0, preAnims: 0, entered: 0, bySeason: SEASONS.map(() => [0, 0]) };
 const bad = { first: 0, text: 0, order: 0, last: 0, left: 0, box: 0 };
 
@@ -564,6 +609,495 @@ if (want('B5')) {
   }
   for (const b of p5.bad.slice(0, 8)) console.log(`   B5: ${b}`);
   check(p5.n >= 30 && p5.bad.length === 0, `B5. the pitch plays the goal that happened: side, net, ring, words, order, pause, a goal already past, Results speed (${p5.bad.length} of ${p5.n} held checks failed)`);
+}
+
+/* ======================= PART C: the built site ======================= */
+let server = null;
+if (ONLY.length === 0 || ONLY.some(x => x.startsWith('C'))) {
+  const DIST = path.join(ROOT, 'dist');
+  const PORT = Number(process.env.PORT || 4559);
+  const BASE = `http://127.0.0.1:${PORT}`;
+  const SHOTS = path.resolve(ROOT, process.env.SHOTS || process.env.RC_OUT || '.tmp-fx/shots');
+  const ASSETS = path.join(DIST, 'assets');
+  const jsText = Object.fromEntries(fs.readdirSync(ASSETS).filter(f => f.endsWith('.js')).map(f => [f, fs.readFileSync(path.join(ASSETS, f), 'utf8')]));
+  const chunkWith = needle => Object.keys(jsText).filter(f => jsText[f].includes(needle));
+  const one = (needle, what) => { const c = chunkWith(needle); if (c.length !== 1) throw new Error(`expected one chunk holding ${what}, found ${c.length}`); return c[0]; };
+  const CENTRE_CHUNK = one('Straight to the final table', 'the Season Centre');
+  const PITCH_CHUNK = one('data-mini-pitch', 'the little pitch');
+  const SURFACE_CHUNKS = chunkWith('cm-pitch-player');
+  const CM_MARKERS = ['Sit deep, frustrate them, protect the point', 'oppositionShape'];
+  console.log(`C) chunks: Season Centre ${CENTRE_CHUNK}, little pitch ${PITCH_CHUNK}, pitch part ${SURFACE_CHUNKS.join(' ')}`);
+
+  /* controls on what is SERVED (the built files are never written), each refusing a needle that is not there exactly once */
+  const SERVED = {
+    floor: [
+      ['className:"h-11 shrink-0 sm:flex-1 rounded-lg bg-emerald-600 text-sm font-bold text-black hover:bg-emerald-500"', 'className:"h-11 flex-1 rounded-lg bg-emerald-600 text-sm font-bold text-black hover:bg-emerald-500"'],
+      ['className:"h-11 shrink-0 sm:flex-1 rounded-lg border border-border text-sm font-semibold hover:bg-muted/40"', 'className:"h-11 flex-1 rounded-lg border border-border text-sm font-semibold hover:bg-muted/40"'],
+    ],
+    lock: [['.style.overflow="hidden"', '.style.overflow=""']],
+    tableview: [['.closest("[data-centre-stage]")', '.closest("[data-centre-stage-off]")']],
+  };
+  const rewrites = new Map();
+  if (SERVED[CONTROL]) {
+    for (const [from, to] of SERVED[CONTROL]) {
+      const holders = chunkWith(from);
+      if (holders.length !== 1 || jsText[holders[0]].split(from).length !== 2) throw new Error(`control refused: ${JSON.stringify(from.slice(0, 60))} is not in the served site exactly once`);
+      rewrites.set(holders[0], (rewrites.get(holders[0]) ?? jsText[holders[0]]).replace(from, to));
+    }
+    console.log(`CONTROL ${CONTROL}: ${[...rewrites.keys()].join(', ')} rewritten as served`);
+  }
+
+  /* the walker's own rule, read from its file's text */
+  const walkSrc = fs.readFileSync(path.join(ROOT, 'scripts/playSoccerCareer.mjs'), 'utf8').replace(/\r\n/g, '\n');
+  const actAt = walkSrc.indexOf('const ACTIONS = [');
+  const actBody = walkSrc.slice(actAt, walkSrc.indexOf('];', actAt)).replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/[^\n]*/g, '');
+  const WALK_ACTIONS = [...actBody.matchAll(/'([^']+)'/g)].map(m => m[1]);
+  const skipLine = walkSrc.split('\n').find(l => l.startsWith('const SKIP = /'));
+  if (actAt < 0 || !skipLine || !WALK_ACTIONS.includes('Next Season')) throw new Error('cannot read the walker\'s ACTIONS and SKIP from playSoccerCareer.mjs');
+  const WALK_SKIP = skipLine.slice(skipLine.indexOf('/') + 1, skipLine.lastIndexOf('/'));
+
+  /* ---- a save the game itself would write: on the hub, twelve or more played seasons, the last one a table he did not win ---- */
+  const { soccer, season: S, core: C } = B;
+  const abil = o => ({ pace: o, shooting: o, passing: o, dribbling: o, defending: o, physical: o, reflexes: o });
+  const stepOf = s => {
+    switch (s.phase) {
+      case 'youth': return soccer.advanceYouthYear(s, CLUBS);
+      case 'contract_offer': { const o = s.pendingOffers || []; return o.length ? soccer.acceptOffer(s, o[0]) : { ...s, phase: 'playing' }; }
+      case 'playing': return soccer.advanceProSeason(s, CLUBS);
+      case 'newspaper': return soccer.dismissNewspaper(s);
+      case 'season_summary': return soccer.dismissSummary(s, CLUBS);
+      case 'ballon_dor': return soccer.dismissBallonDor(s, CLUBS);
+      case 'international_debut': return soccer.dismissDebut(s, CLUBS);
+      case 'world_cup': return soccer.dismissWorldCup(s, CLUBS);
+      case 'rivalry_event': return soccer.dismissRivalryEvent(s, CLUBS);
+      case 'social_media_action': return soccer.dismissSocialMediaPhase(s, CLUBS);
+      case 'moral_dilemma': { const n = soccer.applyMoralDilemmaChoice(s, 0); return n.phase === 'moral_dilemma' ? soccer.dismissMoralDilemma(n, CLUBS) : n; }
+      case 'random_events': { const ev = (s.pendingEvents || [])[0]; return ev && ev.choices && ev.choices.length ? soccer.applyEventChoice(s, 0, CLUBS) : { ...s, phase: 'playing', pendingEvents: [] }; }
+      case 'red_card_appeal_result': return soccer.dismissAppealResult(s, CLUBS);
+      case 'rehab_choice': return soccer.applyRehabChoice(s, 0);
+      case 'transfer_window': return soccer.stayAtClub(s);
+      case 'retirement_suggestion': return s.age >= 34 ? soccer.acceptRetirementSuggestion(s) : soccer.declineRetirementSuggestion(s, CLUBS);
+      default: return null;
+    }
+  };
+  const playedRow = r => r.type === 'playing' && r.apps > 0;
+  /* node's own reading of which seasons can be watched again (the rule, written out a second time on purpose) */
+  const facts = save => save.seasons.map((row, at) => {
+    if (!playedRow(row)) return null;
+    const ctx = S.buildSoccerSeasonCtx(save, CLUBS, row);
+    const stable = ctx.mode !== 'table' || (ctx.finish && ctx.finish.finish === 1);
+    return { at, row, ctx, stable: !!stable, open: !!stable || (save.phone && save.phone.world && save.phone.world.year === row.year) };
+  }).filter(Boolean);
+  let HUB = null;
+  for (let c = 0; c < 120 && !HUB; c += 1) {
+    const real = Math.random;
+    Math.random = mulberry32(c * 7919 + 1046);
+    try {
+      let s = soccer.initCareer(`Motion ${c}`, 'England', 'ST', '2010-14', abil(72 + (c % 10)), 72 + (c % 10), 2010, CLUBS, null, 92);
+      for (let g = 0; g < 900 && s && !s.retired && !HUB; g += 1) {
+        if (s.phase === 'playing' && s.seasons.filter(playedRow).length >= 12) {
+          const f = facts(s);
+          const last = f[f.length - 1];
+          if (last && last.at === s.seasons.length - 1 && last.ctx.mode === 'table' && !last.stable && last.open && f.some(x => x.open && x !== last) && f.some(x => !x.open)) {
+            const d = C.deriveSeason(S.SOCCER, last.row, last.ctx);
+            const md = d ? d.games.findIndex((x, i) => i >= 1 && i < 14 && x.events.some(e => e.kind === 'goal' && e.mine) && x.events.some(e => e.kind === 'goal' && e.side === 'them')) + 1 : 0;
+            if (d && d.mode === 'table' && md > 0) HUB = { save: JSON.stringify(s), state: s, facts: f, last, d, goalMd: md };
+          }
+        }
+        s = stepOf(s);
+      }
+    } finally { Math.random = real; }
+  }
+  if (!HUB) throw new Error('the engine gave no hub save with twelve played seasons and a table season he did not win at the end: nothing was checked');
+  const D = HUB.d, M = D.games.length;
+  const keyOfSlot = slot => D.labels[slot]?.key ?? `u${slot}`;
+  const ORDER = Array.from({ length: M + 1 }, (_, k) => C.tableAt(D, k).map(r => keyOfSlot(r.slot)));
+  const MINE = keyOfSlot(0);
+  const compactOf = k => { const at = ORDER[k].indexOf(MINE); const lo = Math.max(0, Math.min(at - 2, ORDER[k].length - 5)); return ORDER[k].slice(lo, lo + 5); };
+  const LABEL = `${HUB.last.row.year}/${String(HUB.last.row.year + 1).slice(-2)}`;
+  const SEASON_KEY = S.soccerSeasonKey(HUB.state.playerName, HUB.last.row);
+  const OPEN_IDS = HUB.facts.filter(x => x.open).map(x => String(x.at)).reverse();
+  const LOCKED_IDS = HUB.facts.filter(x => !x.open).map(x => String(x.at)).reverse();
+  console.log(`C) save: ${HUB.state.playerName}, ${HUB.facts.length} played seasons (${OPEN_IDS.length} replay, ${LOCKED_IDS.length} locked), the last ${LABEL} ${HUB.last.row.club} with ${M} matchdays; his goal and a goal against on matchday ${HUB.goalMd}`);
+  check(OPEN_IDS.length >= 2 && LOCKED_IDS.length >= 1, `C. the save has seasons that replay and seasons that do not (${OPEN_IDS.length} and ${LOCKED_IDS.length}; floors 2 and 1)`);
+
+  /* ---- the served site ---- */
+  const { spawn } = await import('node:child_process');
+  server = spawn(process.execPath, [path.join(ROOT, 'scripts/lib/hostLikeServer.mjs'), DIST, String(PORT)], { stdio: 'ignore' });
+  await new Promise(r => setTimeout(r, 1500));
+  const RESUME_SLOT = 'seasonCentre:v1:soccer';
+  /** A context on a save: the cookie question answered, the help seen, the live database unreachable, extra storage as given. */
+  async function openSite(save, { width = 1280, height = 900, reduced = false, storage = {} } = {}) {
+    const ctx = await browser.newContext({ viewport: { width, height }, reducedMotion: reduced ? 'reduce' : 'no-preference' });
+    await ctx.addInitScript(([v, extra]) => {
+      try {
+        if (!sessionStorage.getItem('motion-harness')) {
+          sessionStorage.setItem('motion-harness', '1');
+          localStorage.setItem('cookie-consent', 'essential');
+          localStorage.setItem('soccerCareerSave', v);
+          localStorage.setItem('seasonCentre:help', '1');
+          for (const [k, val] of Object.entries(extra)) localStorage.setItem(k, val);
+        }
+      } catch { /* private mode */ }
+    }, [save, storage]);
+    await ctx.route('**://*.supabase.co/**', r => r.abort());
+    for (const [file, text] of rewrites) await ctx.route(`**/assets/${file}`, r => r.fulfill({ status: 200, contentType: 'application/javascript', body: text }));
+    const page = await ctx.newPage();
+    const js = [];
+    const errors = [];
+    page.on('request', r => { const u = r.url(); if (u.includes('/assets/') && u.endsWith('.js')) js.push(u.split('/').pop()); });
+    page.on('pageerror', e => errors.push(String(e).slice(0, 160)));
+    await page.goto(`${BASE}/soccer-career`, { waitUntil: 'domcontentloaded', timeout: 60000 });
+    await page.waitForSelector('[data-open-season-ratings]', { timeout: 60000 });
+    await page.waitForTimeout(600);
+    return { ctx, page, js, errors };
+  }
+  const saved = page => page.evaluate(() => localStorage.getItem('soccerCareerSave'));
+  const stored = page => page.evaluate(k => localStorage.getItem(k), RESUME_SLOT);
+  const clickText = async (page, text) => {
+    const ok = await page.evaluate(t => {
+      const b = [...document.querySelectorAll('[data-season-centre] button')].find(x => !x.disabled && x.textContent.trim().startsWith(t));
+      if (!b) return false;
+      b.click();
+      return true;
+    }, text);
+    await page.waitForTimeout(120);
+    return ok;
+  };
+  const shot = async (page, name) => { try { fs.mkdirSync(SHOTS, { recursive: true }); await page.screenshot({ path: path.join(SHOTS, `${name}.png`) }); } catch { /* a screenshot is never a check */ } };
+  /* the walker's pick on this screen: never one of this round's buttons, and none of their labels starts like an action it presses */
+  const walk = { n: 0, onNew: [], clash: new Set() };
+  async function walkerAt(page, where) {
+    const r = await page.evaluate(([actions, skipSrc]) => {
+      const skip = new RegExp(skipSrc);
+      const usable = [...document.querySelectorAll('button')].filter(b => !b.disabled && b.textContent.trim() && !skip.test(b.textContent.trim()));
+      let pick = null;
+      for (const a of actions) { pick = usable.find(b => b.textContent.trim().startsWith(a)); if (pick) break; }
+      if (!pick) pick = usable[0] ?? null;
+      const fresh = '[data-season-centre] button, [data-season-resume], [data-open-season-replays]';
+      const labels = [...document.querySelectorAll(fresh)].map(b => b.textContent.trim());
+      return { pick: pick ? pick.textContent.trim().slice(0, 40) : null, onNew: !!pick && pick.matches(fresh), clash: labels.filter(l => actions.some(a => l.startsWith(a))), labels: labels.length };
+    }, [WALK_ACTIONS, WALK_SKIP]);
+    walk.n += 1;
+    if (r.onNew) walk.onNew.push(`${where}: "${r.pick}"`);
+    for (const c of r.clash) walk.clash.add(c);
+    return r;
+  }
+  /* floors on whatever the Season Centre is showing: tap targets, text sizes, the header, no sideways scroll */
+  const floors = { screens: 0, short: [], small: [], clipped: [], sideways: [], narrow: [], tableText: 0 };
+  async function floorsAt(page, where) {
+    const r = await page.evaluate(() => {
+      const root = document.querySelector('[data-season-centre]');
+      const vis = el => { const b = el.getBoundingClientRect(); return b.width > 0 && b.height > 0; };
+      const short = [...root.querySelectorAll('button')].filter(vis).filter(b => b.getBoundingClientRect().height < 43.5).map(b => `${b.textContent.trim().slice(0, 24)} ${b.getBoundingClientRect().height.toFixed(1)}`);
+      const narrow = [...root.querySelectorAll('[role="group"][aria-label="Clock speed"] button')].filter(vis).filter(b => b.getBoundingClientRect().width < 43.5).map(b => `${b.textContent.trim()} ${b.getBoundingClientRect().width.toFixed(1)}`);
+      const small = [];
+      let tableText = 0;
+      const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+      for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+        const el = n.parentElement;
+        if (!n.textContent.trim() || !el || !vis(el) || el.closest('[aria-hidden="true"]')) continue;
+        const px = parseFloat(getComputedStyle(el).fontSize);
+        if (px < 11.99) { if (el.closest('[data-rank-shift]')) tableText += 1; else small.push(`${n.textContent.trim().slice(0, 20)} ${px}`); }
+      }
+      const head = root.querySelector('[data-centre-header]');
+      return { short, narrow, small, tableText, clipped: head && vis(head) ? head.scrollWidth > head.clientWidth + 1 : false, sideways: document.documentElement.scrollWidth > window.innerWidth + 1 };
+    });
+    floors.screens += 1;
+    floors.tableText = Math.max(floors.tableText, r.tableText);
+    for (const s of r.short) floors.short.push(`${where}: ${s}`);
+    for (const s of r.narrow) floors.narrow.push(`${where}: ${s}`);
+    for (const s of r.small) floors.small.push(`${where}: ${s}`);
+    if (r.clipped) floors.clipped.push(where);
+    if (r.sideways) floors.sideways.push(where);
+  }
+  const ordinalOf = n => `${n}${n % 100 >= 11 && n % 100 <= 13 ? 'th' : ['th', 'st', 'nd', 'rd'][n % 10] ?? 'th'}`;
+  const watchers = page => page.evaluate(() => {
+    window.__shifts = 0;
+    new MutationObserver(rs => { for (const r of rs) if (r.oldValue === null && r.target.hasAttribute('data-rank-shifting')) window.__shifts += 1; })
+      .observe(document.body, { subtree: true, attributes: true, attributeOldValue: true, attributeFilter: ['data-rank-shifting'] });
+    window.__pitchLog = [];
+    new MutationObserver(() => {
+      const b = document.querySelector('[data-mini-pitch]');
+      if (!b) return;
+      const e = { goal: b.dataset.pitchGoal || '', phase: b.dataset.pitchPhase, side: b.dataset.pitchSide, top: !!b.querySelector('.cm-live-net--top[data-cm-net="goal"]'), bottom: !!b.querySelector('.cm-live-net--bottom[data-cm-net="goal"]'), yours: document.querySelector('[data-pitch-yours]')?.textContent || '', rings: b.querySelectorAll('[data-pitch-ring]').length };
+      const last = window.__pitchLog[window.__pitchLog.length - 1];
+      if (!last || last.goal !== e.goal || last.phase !== e.phase) window.__pitchLog.push(e);
+    }).observe(document.body, { subtree: true, attributes: true, attributeFilter: ['data-pitch-phase', 'data-pitch-goal'] });
+  });
+  const shiftsOf = page => page.evaluate(() => window.__shifts);
+  /** Matchday `md` is at full time and the table has come to rest. */
+  const fullTime = (page, md, limit = 60000) => page.waitForFunction(m => {
+    const d = document.querySelector(`[data-matchday="${m}"]`);
+    return !!d && !!d.querySelector('[data-full-time]') && !document.querySelector('[data-rank-shifting]');
+  }, md, { timeout: limit });
+  const tableNow = page => page.evaluate(() => [...document.querySelectorAll('[data-season-centre] [data-rank-shift] [data-club]')].filter(r => r.getBoundingClientRect().height > 0).map(r => r.dataset.club));
+  /** Press on to matchday `md` (through its poster when it has one). */
+  async function playTo(page, md) {
+    await clickText(page, `▶ Matchday ${md}`);
+    if (await page.$('[data-poster]')) await clickText(page, `▶ Matchday ${md}`);
+  }
+  const openLatest = async page => {
+    await page.click('[data-open-season-replays]');
+    await page.waitForSelector('[data-season-picker]', { timeout: 30000 });
+    await page.click(`[data-replay-row="${HUB.last.at}"]`);
+    await page.waitForSelector('[data-kickoff]', { timeout: 30000 });
+  };
+  /* the table card against the stage's own box (a phone): whole inside it, with no scroll by the player */
+  const tableInView = page => page.evaluate(() => {
+    const stage = document.querySelector('[data-centre-stage]');
+    const card = stage.querySelector('[data-centre-table]');
+    if (!card) return null;
+    const s = stage.getBoundingClientRect(), c = card.getBoundingClientRect();
+    return { ok: c.top >= s.top - 0.5 && c.bottom <= s.bottom + 0.5, over: Math.round(c.bottom - s.bottom), scrolled: Math.round(stage.scrollTop), stage: Math.round(s.height) };
+  });
+  const fixtureNames = page => page.evaluate(() => [...document.querySelectorAll('[data-season-centre] [data-fixture-name]')].filter(n => n.getBoundingClientRect().height > 0).map(n => n.getBoundingClientRect().width));
+  const errorsSeen = [];
+  const geometry = page => page.evaluate(() => `${window.scrollY}|${document.documentElement.scrollWidth}`);
+
+  try {
+    /* ---------- desktop 1280 by 900: the hub, the picker, the bind, the pitch in a real match ---------- */
+    const X = await openSite(HUB.save, { width: 1280, height: 900 });
+    const page = X.page;
+    const save0 = await saved(page);
+    const lazyNames = [CENTRE_CHUNK, PITCH_CHUNK, ...SURFACE_CHUNKS];
+    check(lazyNames.every(c => !X.js.includes(c)), 'C2. the hub loads neither the Season Centre, the little pitch nor the pitch part');
+    check((await page.$('[data-open-season-replays]')) !== null && (await page.$('[data-season-resume]')) === null, 'C3. with no place kept the hub shows Season replays and no Resume chip');
+    await walkerAt(page, 'hub');
+    await page.click('[data-open-season-replays]');
+    await page.waitForSelector('[data-season-picker]', { timeout: 30000 });
+    const listed = await page.evaluate(() => [...document.querySelectorAll('[data-picker-list] > li > *')].map(el => (el.hasAttribute('data-replay-row') ? `o${el.getAttribute('data-replay-row')}` : `x${el.getAttribute('data-replay-locked')}`)));
+    const wanted = HUB.facts.slice().reverse().map(x => `${x.open ? 'o' : 'x'}${x.at}`);
+    check(listed.join() === wanted.join(), `C4. the picker lists exactly the played seasons, newest first, open or locked as node says (${listed.length} rows: ${OPEN_IDS.length} open, ${LOCKED_IDS.length} locked)`);
+    await walkerAt(page, 'picker');
+    await floorsAt(page, 'picker 1280');
+    await shot(page, 'picker-1280');
+    await page.click(`[data-replay-locked="${LOCKED_IDS[0]}"]`);
+    await page.waitForTimeout(250);
+    check((await page.$('[data-kickoff]')) === null && (await page.$('[data-season-picker]')) !== null, 'C4. a locked season is not a way in');
+    await page.click(`[data-replay-row="${HUB.last.at}"]`);
+    await page.waitForSelector('[data-kickoff]', { timeout: 30000 });
+    check((await page.$('[data-kickoff-moments]')) === null && (await page.$('[data-fixture-moment]')) === null, 'C4. opened from the career page the latest season offers no moment');
+    check(!X.js.includes(PITCH_CHUNK), 'C2. the kick off card has not asked for the little pitch');
+    await walkerAt(page, 'kick off');
+    await floorsAt(page, 'kick off 1280');
+    await watchers(page);
+    const geo0 = await geometry(page);
+    const before = X.js.length;
+    await clickText(page, '▶ Kick off');
+    await page.waitForSelector('[data-mini-pitch]', { timeout: 30000 });
+    await clickText(page, 'Results');
+    await fullTime(page, 1);
+    const sincePress = X.js.slice(before);
+    check(X.js.includes(PITCH_CHUNK), 'C2. the little pitch is asked for after ▶ Kick off');
+    check(sincePress.every(f => CM_MARKERS.every(m => !(jsText[f] ?? '').includes(m))), `C2. nothing asked for from the press to the first match carries a Club Manager marker (${sincePress.length} files: ${sincePress.join(' ')})`);
+    const names = await fixtureNames(page);
+    const bind = { wrong: [], slid: 0, advances: 0, moved: [] };
+    const upTo = Math.max(10, HUB.goalMd);
+    let goalLog = null;
+    for (let md = 1; md <= upTo; md += 1) {
+      const order = await tableNow(page);
+      if (order.join() !== ORDER[md].join()) bind.wrong.push(md);
+      const seen = await shiftsOf(page);
+      if (md >= 2) { bind.advances += 1; if (seen > bind.last) bind.slid += 1; }
+      bind.last = seen;
+      if ((await geometry(page)) !== geo0) bind.moved.push(md);
+      if (md === 5) await floorsAt(page, 'matchday 1280');
+      if (md === upTo) break;
+      if (md + 1 === HUB.goalMd) await clickText(page, '1x');
+      await playTo(page, md + 1);
+      if (md === 5) {
+        /* the table in mid air, for the eye: held at 180 ms of 450, then let go */
+        await page.waitForSelector('[data-rank-shifting]', { timeout: 3000 }).catch(() => null);
+        await page.evaluate(() => { for (const a of document.getAnimations()) { a.pause(); a.currentTime = 180; } });
+        await shot(page, 'table-mid-slide-1280');
+        await page.evaluate(() => { for (const a of document.getAnimations()) a.finish(); });
+      }
+      await fullTime(page, md + 1, md + 1 === HUB.goalMd ? 120000 : 60000);
+      if (md + 1 === HUB.goalMd) {
+        await page.waitForFunction(() => !document.querySelector('[data-pitch-live]'), null, { timeout: 30000 });
+        goalLog = await page.evaluate(() => window.__pitchLog.slice());
+        await shot(page, 'matchday-pitch-1280');
+        await clickText(page, 'Results');
+      }
+    }
+    check(bind.wrong.length === 0, `C1. after each of the first ${upTo} matchdays the table at rest is node's table (wrong after: ${bind.wrong.join(',') || 'none'})`);
+    check(bind.advances >= 9 && bind.slid >= C1_FLOOR, `C1. the table slid on ${bind.slid} of ${bind.advances} advances (floor ${C1_FLOOR})`);
+    check(bind.moved.length === 0, `C1. the page neither scrolled nor changed width across ${upTo} matchdays (moved at: ${bind.moved.join(',') || 'none'})`);
+    check(names.length === M && Math.min(...names) >= 72, `C6. every opponent's name in the desktop fixtures keeps at least 72 px (narrowest ${Math.min(...names).toFixed(1)} of ${names.length})`);
+    /* the real match: his goal lands in the top net with the ring and the words, the goal against in the bottom net */
+    const G = D.games[HUB.goalMd - 1];
+    const keys = { us: 0, them: 0 };
+    const expectGoals = G.events.filter(e => e.kind === 'goal').map(e => ({ min: e.min, side: e.side, mine: !!e.mine, key: null }));
+    { const n = new Map(); for (const g of expectGoals) { const at = `${g.min}|${g.side}`; const c = n.get(at) ?? 0; n.set(at, c + 1); g.key = `${HUB.goalMd}|${at}|${c}`; keys[g.side] += 1; } }
+    const landedAs = g => (goalLog ?? []).find(e => e.goal === g.key && e.phase === 'net');
+    const badGoals = expectGoals.filter(g => { const e = landedAs(g); return !e || e.side !== g.side || e.top !== (g.side === 'us') || e.bottom !== (g.side === 'them') || (g.mine ? e.yours !== '⚽ Yours' || e.rings !== 1 : e.yours === '⚽ Yours'); });
+    const played = (goalLog ?? []).filter(e => e.phase === 'plant' || e.phase === 'flight').length;
+    check(keys.us >= 1 && keys.them >= 1 && badGoals.length === 0, `C2. matchday ${HUB.goalMd} at 1x: each of its ${expectGoals.length} goals reached the right net, his with the ring and the words (${badGoals.length} did not: ${badGoals.map(g => g.key).join(' ')})`);
+    check(played >= 2, `C2. goals were played, not just drawn landed (${played} plant and flight frames logged)`);
+    await page.click('[data-centre-exit]');
+    await page.waitForSelector('[data-season-resume]', { timeout: 30000 });
+    const chipText = await page.evaluate(() => document.querySelector('[data-season-resume]').textContent.trim());
+    check(chipText === `📺 Resume ${LABEL}, matchday ${upTo + 1}`, `C3. closing after matchday ${upTo} leaves the chip "${chipText}"`);
+    await shot(page, 'hub-chip-1280');
+    check((await saved(page)) === save0, 'C7. the save is byte for byte what it was after a desktop watch');
+    errorsSeen.push(...X.errors);
+    await X.ctx.close();
+
+    /* ---------- phones: resume, replays, the floors, the table in view ---------- */
+    const view = { n: 0, out: [], scrolled: {} };
+    for (const [vw, vh] of [[390, 844], [320, 700]]) {
+      const P = await openSite(HUB.save, { width: vw, height: vh });
+      const p = P.page;
+      const tag = `${vw}`;
+      const saveP = await saved(p);
+      const pageLong = await p.evaluate(() => document.documentElement.scrollHeight > window.innerHeight + 200);
+      await p.click('[data-open-season-replays]');
+      await p.waitForSelector('[data-season-picker]', { timeout: 30000 });
+      await floorsAt(p, `picker ${tag}`);
+      if (vw === 390) await shot(p, 'picker-390');
+      /* the list scrolls inside its tile; the page behind does not, over the list or over the tile's title */
+      const scroll = await (async () => {
+        const y0 = await p.evaluate(() => window.scrollY);
+        const box = await p.evaluate(() => { const l = document.querySelector('[data-picker-list]').getBoundingClientRect(); const d = document.querySelector('[data-season-picker] [role="dialog"]').getBoundingClientRect(); return { lx: l.left + l.width / 2, ly: l.top + l.height / 2, tx: d.left + d.width / 2, ty: d.top + 14, can: document.querySelector('[data-picker-list]').scrollHeight > document.querySelector('[data-picker-list]').clientHeight + 4 }; });
+        await p.mouse.move(box.lx, box.ly);
+        await p.mouse.wheel(0, 3000);
+        await p.waitForTimeout(250);
+        const listTop = await p.evaluate(() => document.querySelector('[data-picker-list]').scrollTop);
+        await p.mouse.move(box.tx, box.ty);
+        await p.mouse.wheel(0, 3000);
+        await p.waitForTimeout(250);
+        return { can: box.can, listTop, moved: (await p.evaluate(() => window.scrollY)) - y0 };
+      })();
+      check(pageLong && scroll.can && scroll.listTop > 0 && scroll.moved === 0, `C4. ${tag}: the picker's list scrolls inside its tile (${scroll.listTop} px) and the page behind does not (${scroll.moved} px)`);
+      /* the oldest season that replays opens to watch, with no moments */
+      const oldest = OPEN_IDS[OPEN_IDS.length - 1];
+      await p.evaluate(id => document.querySelector(`[data-replay-row="${id}"]`).click(), oldest);
+      const oldOpen = await Promise.race([p.waitForSelector('[data-kickoff]', { timeout: 30000 }).then(() => 'centre'), p.waitForSelector('[data-centre-tile]', { timeout: 30000 }).then(() => 'tile')]).catch(() => 'nothing');
+      const exitWord = await p.evaluate(() => document.querySelector('[data-centre-exit]')?.textContent.trim() ?? document.querySelector('[data-centre-tile] button:last-child')?.textContent.trim() ?? '');
+      check(oldOpen !== 'nothing' && exitWord === 'Back to your career' && (await p.$('[data-fixture-moment]')) === null && (await p.$('[data-kickoff-moments]')) === null, `C4. ${tag}: the oldest season that replays opens to watch only (${oldOpen}, "${exitWord}")`);
+      await p.evaluate(() => (document.querySelector('[data-centre-exit]') ?? document.querySelector('[data-centre-tile] button:last-child')).click());
+      await p.waitForSelector('[data-season-centre]', { state: 'detached', timeout: 30000 });
+
+      /* watch three matchdays of the latest season, then leave */
+      await openLatest(p);
+      await floorsAt(p, `kick off ${tag}`);
+      await watchers(p);
+      await clickText(p, '▶ Kick off');
+      await p.waitForSelector('[data-mini-pitch]', { timeout: 30000 });
+      await clickText(p, 'Results');
+      for (let md = 1; md <= 3; md += 1) {
+        await fullTime(p, md);
+        await p.waitForTimeout(80);
+        const v = await tableInView(p);
+        view.n += 1;
+        view.scrolled[tag] = Math.max(view.scrolled[tag] ?? 0, v ? v.scrolled : 0);
+        if (!v || !v.ok) view.out.push(`${tag} matchday ${md}: ${v ? `${v.over} px under a ${v.stage} px stage` : 'no table'}`);
+        const order = await tableNow(p);
+        if (order.join() !== compactOf(md).join()) view.out.push(`${tag} matchday ${md}: the compact table is not node's`);
+        if (md === 1) await floorsAt(p, `matchday ${tag}`);
+        if (md < 3) await playTo(p, md + 1);
+      }
+      await p.click('[data-centre-fixtures]');
+      const names = await fixtureNames(p);
+      check(names.length === M && Math.min(...names) >= 72, `C6. ${tag}: every opponent's name in the phone fixtures keeps at least 72 px (narrowest ${Math.min(...names).toFixed(1)} of ${names.length})`);
+      await floorsAt(p, `fixtures ${tag}`);
+      await clickText(p, '← Back');
+      await p.click('[data-centre-exit]');
+      await p.waitForSelector('[data-season-resume]', { timeout: 30000 });
+      const chip = await p.evaluate(() => { const b = document.querySelector('[data-season-resume]'); return { text: b.textContent.trim(), h: b.getBoundingClientRect().height }; });
+      const rec = JSON.parse((await stored(p)) ?? 'null');
+      check(chip.text === `📺 Resume ${LABEL}, matchday 4` && chip.h >= 43.5, `C3. ${tag}: three matchdays watched leave the chip "${chip.text}", ${chip.h.toFixed(0)} px tall`);
+      check(!!rec && rec.key === SEASON_KEY && rec.year === HUB.last.row.year && rec.md === 3 && rec.speed === 'results' && rec.stable === false && Object.keys(rec).length === 5, `C3. ${tag}: the record kept is this season's key, the year, 3 matchdays, the speed and not stable (${JSON.stringify(rec).slice(0, 120)})`);
+      await p.reload({ waitUntil: 'domcontentloaded' });
+      await p.waitForSelector('[data-open-season-ratings]', { timeout: 60000 });
+      const again = await p.waitForSelector('[data-season-resume]', { timeout: 30000 }).then(() => true).catch(() => false);
+      check(again, `C3. ${tag}: the chip is still there after a reload`);
+      await walkerAt(p, `hub with the chip ${tag}`);
+      if (vw === 390) await shot(p, 'hub-chip-390');
+      const hubWide = await p.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1);
+      check(hubWide, `C6. ${tag}: the hub with the chip and three small buttons does not scroll sideways`);
+      await p.click('[data-season-resume]');
+      await p.waitForSelector('[data-kickoff-resumed]', { timeout: 30000 });
+      await watchers(p);
+      const card = await p.evaluate(() => ({ line: document.querySelector('[data-kickoff-resumed]').textContent.trim(), go: [...document.querySelectorAll('[data-kickoff] button')].map(b => b.textContent.trim()) }));
+      const place = ORDER[3].indexOf(MINE) + 1;
+      check(card.line === `3 of ${M} played · you are ${ordinalOf(place)}` && card.go[0] === '▶ Matchday 4' && card.go.includes('↺ From the start'), `C3. ${tag}: the Centre opens where he stopped ("${card.line}", ${card.go.join(' | ')})`);
+      await p.waitForTimeout(300);
+      const still = (await tableNow(p)).join() === compactOf(3).join() && (await shiftsOf(p)) === 0 && (await p.$('[data-rank-shifting]')) === null;
+      check(still, `C3. ${tag}: the resumed table is node's table after matchday 3, and nothing in it moved`);
+      await walkerAt(p, `resumed kick off ${tag}`);
+      await floorsAt(p, `resumed kick off ${tag}`);
+      if (vw === 390) await shot(p, 'resumed-kick-off-390');
+      /* on to a poster, then the review */
+      await clickText(p, '▶ Matchday 4');
+      if (await p.$('[data-poster]')) { await floorsAt(p, `poster ${tag}`); await clickText(p, '▶ Matchday 4'); }
+      await fullTime(p, 4);
+      if (await clickText(p, '⏩ To the next big game')) { if (await p.$('[data-poster]')) await floorsAt(p, `poster ${tag}`); }
+      await clickText(p, '⏭ Sim the rest');
+      await p.waitForSelector('[data-review]', { timeout: 30000 });
+      await p.waitForTimeout(400);
+      await floorsAt(p, `review ${tag}`);
+      const strip = await p.evaluate(() => ({ bars: document.querySelectorAll('[data-review-form] [data-form-bar]').length, h: document.querySelector('[data-review-form]')?.getBoundingClientRect().height ?? 0 }));
+      check(strip.bars === M && Math.abs(strip.h - 56) < 1, `C6. ${tag}: the review's strip has a bar for each of the ${M} league games in a strip 56 px tall (${strip.bars}, ${strip.h})`);
+      if (vw === 390) await shot(p, 'review-390');
+      check((await stored(p)) === null, `C3. ${tag}: reaching the review clears the kept place`);
+      await p.click('[data-centre-exit]');
+      await p.waitForSelector('[data-season-centre]', { state: 'detached', timeout: 30000 });
+      await p.waitForTimeout(300);
+      check((await p.$('[data-season-resume]')) === null, `C3. ${tag}: and the chip is gone`);
+      check((await saved(p)) === saveP, `C7. ${tag}: the save is byte for byte what it was after a replay, a resume and a review`);
+
+      if (vw === 390) {
+        /* records that are not this season's: a changed key, text that is not JSON; then a save whose league year moved on */
+        const good = { key: SEASON_KEY, year: HUB.last.row.year, md: 3, speed: 1, stable: false };
+        const noChip = async (value, why) => {
+          await p.evaluate(([k, v]) => localStorage.setItem(k, v), [RESUME_SLOT, value]);
+          await p.reload({ waitUntil: 'domcontentloaded' });
+          await p.waitForSelector('[data-open-season-ratings]', { timeout: 60000 });
+          await p.waitForTimeout(1200);
+          return (await p.$('[data-season-resume]')) === null ? null : why;
+        };
+        const shown = [await noChip(JSON.stringify({ ...good, key: `${SEASON_KEY}x` }), 'a changed key'), await noChip('{not json', 'text that is not JSON'), await noChip(JSON.stringify({ ...good, md: 0 }), 'matchday 0')].filter(Boolean);
+        const control = await noChip(JSON.stringify(good), null);
+        check(shown.length === 0 && control === null && (await p.$('[data-season-resume]')) !== null, `C3. a record that is not this season's shows no chip (${shown.join(', ') || 'none did'}), and the true record does`);
+        const moved = JSON.parse(HUB.save);
+        moved.phone.world.year += 1;
+        await p.evaluate(v => localStorage.setItem('soccerCareerSave', v), JSON.stringify(moved));
+        const gone = await noChip(JSON.stringify(good), 'the league year moved on');
+        await p.click('[data-open-season-replays]');
+        await p.waitForSelector('[data-season-picker]', { timeout: 30000 });
+        const locked = (await p.$(`[data-replay-locked="${HUB.last.at}"]`)) !== null && (await p.$(`[data-replay-row="${HUB.last.at}"]`)) === null;
+        check(gone === null && locked, 'C3. once the save\'s league year has moved on, a table season he did not win shows no chip and is locked in the list');
+      }
+      errorsSeen.push(...P.errors);
+      await P.ctx.close();
+    }
+    for (const o of view.out.slice(0, 6)) console.log(`   C1: ${o}`);
+    check(view.n === 6 && view.out.length === 0, `C1. on a phone the compact table is node's and whole inside the stage at every full time, with no scroll by the player (${view.out.length} of ${view.n} were not; the stage moved itself by up to ${JSON.stringify(view.scrolled)} px)`);
+
+    /* ---------- reduced motion: nothing slides, every goal is drawn landed ---------- */
+    const R = await openSite(HUB.save, { width: 1280, height: 900, reduced: true });
+    await openLatest(R.page);
+    await watchers(R.page);
+    await clickText(R.page, '▶ Kick off');
+    for (let md = 1; md <= Math.max(6, HUB.goalMd); md += 1) { await fullTime(R.page, md); if (md < Math.max(6, HUB.goalMd)) await playTo(R.page, md + 1); }
+    await R.page.waitForTimeout(300);
+    const quietLog = await R.page.evaluate(() => ({ shifts: window.__shifts, moving: window.__pitchLog.filter(e => e.phase === 'plant' || e.phase === 'flight').length, landed: window.__pitchLog.filter(e => e.phase === 'net').length }));
+    check(quietLog.shifts === 0 && quietLog.moving === 0 && quietLog.landed >= 1, `C1. under reduced motion the table never slides (${quietLog.shifts}) and every goal is drawn landed (${quietLog.landed} landed, ${quietLog.moving} played)`);
+    errorsSeen.push(...R.errors);
+    await R.ctx.close();
+
+    for (const s of [...floors.short, ...floors.narrow, ...floors.small, ...floors.clipped.map(c => `${c}: header clipped`), ...floors.sideways.map(c => `${c}: sideways scroll`)].slice(0, 10)) console.log(`   C6: ${s}`);
+    check(floors.screens >= 14 && floors.short.length === 0 && floors.narrow.length === 0, `C6. every button of the Season Centre is at least 44 px tall and every speed button 44 px wide, on ${floors.screens} screens (${floors.short.length} short, ${floors.narrow.length} narrow)`);
+    check(floors.small.length === 0, `C6. no text of the Season Centre is under 12 px outside the table card (${floors.small.length}; inside the table card, which is not this round's: ${floors.tableText})`);
+    check(floors.clipped.length === 0 && floors.sideways.length === 0, `C6. the header's club and season are never clipped and nothing scrolls sideways (${floors.clipped.length}, ${floors.sideways.length})`);
+    for (const w of walk.onNew.slice(0, 4)) console.log(`   C5: ${w}`);
+    check(walk.n >= 8 && walk.onNew.length === 0 && walk.clash.size === 0, `C5. on ${walk.n} screens the career walker never presses one of this round's buttons, and none of their labels starts like an action it presses (${walk.onNew.length} picks, ${[...walk.clash].join(' | ') || 'no clash'})`);
+    check(errorsSeen.length === 0, `C. no page error on any screen (${errorsSeen.slice(0, 2).join(' | ') || 'none'})`);
+  } finally {
+    try { server.kill(); } catch { /* gone */ }
+  }
 }
 
 await browser.close();
