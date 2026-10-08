@@ -47,6 +47,7 @@
  */
 import fs from 'node:fs';
 import os from 'node:os';
+import zlib from 'node:zlib';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -255,6 +256,12 @@ async function walk(slug, vp) {
   check('cover', atPress.curtain && atPress.opaque && !atPress.viewer, `${tag}: two frames after the press the curtain is under an opaque cover and the viewer is still loading (curtain ${atPress.curtain}, cover ${atPress.opaque}, viewer ${atPress.viewer})`);
   await p.waitForSelector('[data-season-centre] [data-kickoff], [data-centre-tile]', { timeout: 20000 }).catch(() => {});
   check('lazy', B.js.includes(VIEWER), `${tag}: the viewer chunk is requested after the press`);
+  {
+    /* measured, not asserted: what the first press costs (the lead keeps the budgets) */
+    const after = [...new Set(B.js)].filter(f => !eager.includes(f));
+    const sizes = after.map(f => [f.replace(/-[\w-]{8}\.js$/, ''), zlib.gzipSync(fs.readFileSync(path.join(DIST, 'assets', f))).length]);
+    console.log(`     the first press downloads ${after.length} chunks, ${(sizes.reduce((a, x) => a + x[1], 0) / 1024).toFixed(1)}K gz: ${sizes.map(([f, g]) => `${f} ${(g / 1024).toFixed(1)}K`).join(', ')}`);
+  }
   check('same press', (await savedString(p, save.key)) === afterPlay, `${tag}: Play and Week by week saved the same bytes`);
   const usFull = await p.evaluate(() => document.querySelector('[data-kickoff] .text-lg')?.textContent ?? '');
   check('agreement', await clickText(p, d.start), `${tag}: the first card offers "${d.start}"`);
