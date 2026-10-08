@@ -1,0 +1,13 @@
+== tycoon at 390x844
+  audit tycoon@390 ground with a sale ready: dashes 0, footers 1, help 1, overflowX 0, small 0, cut 0, scrollY 0
+  audit tycoon@390 sell up button in view: dashes 0, footers 1, help 1, overflowX 0, small 0, cut 0, scrollY 0
+  audit tycoon@390 sale review open: dashes 0, footers 1, help 2, overflowX 0, small 0, cut 0, scrollY 0
+  audit tycoon@390 sale help open: dashes 0, footers 1, help 2, overflowX 0, small 0, cut 0, scrollY 0
+== tycoon at 1280x900
+  audit tycoon@1280 ground with a sale ready: dashes 0, footers 1, help 1, overflowX 0, small 0, cut 0, scrollY 0
+  audit tycoon@1280 sell up button in view: dashes 0, footers 1, help 1, overflowX 0, small 0, cut 0, scrollY 0
+  audit tycoon@1280 sale review open: dashes 0, footers 1, help 2, overflowX 0, small 0, cut 0, scrollY 0
+  audit tycoon@1280 sale help open: dashes 0, footers 1, help 2, overflowX 0, small 0, cut 0, scrollY 0
+walk-fences: 2 runs, 0 problem(s), 0 page error(s)
+  tycoon@390: hosts tried {"fonts.googleapis.com":1,"flawuiqbvjobmkfkauhw.supabase.co":1}; page errors 0; console errors 0
+  tycoon@1280: hosts tried {"fonts.googleapis.com":1,"flawuiqbvjobmkfkauhw.supabase.co":1}; page errors 0; console errors 0
