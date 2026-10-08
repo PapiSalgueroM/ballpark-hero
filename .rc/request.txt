@@ -1,0 +1,25 @@
+# Round 1105, merged tree: the type gate, the generators' checks and the offline harnesses with their controls
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+compact-check: node scripts/genCollegeGridData.mjs --compact --check
+boards-check: node scripts/genCollegeGridBoards.mjs --check
+shipped: node scripts/simCollegeGridShipped.mjs
+shipped-auditedback: SIM_CGSHIPPED_CONTROL=auditedback node scripts/simCollegeGridShipped.mjs
+shipped-flipflag: SIM_CGSHIPPED_CONTROL=flipflag node scripts/simCollegeGridShipped.mjs
+shipped-shiftrow: SIM_CGSHIPPED_CONTROL=shiftrow node scripts/simCollegeGridShipped.mjs
+shipped-stale: SIM_CGSHIPPED_CONTROL=stale node scripts/simCollegeGridShipped.mjs
+shipped-fat: SIM_CGSHIPPED_CONTROL=fat node scripts/simCollegeGridShipped.mjs
+shipped-noexclude: SIM_CGSHIPPED_CONTROL=noexclude node scripts/simCollegeGridShipped.mjs
+page: node scripts/simCollegeGridPage.mjs
+qa-selftest: node scripts/qa/collegeGridKeyVsTable.mjs --selftest
+key-syntax: node --check scripts/simCollegeGridKey.mjs
+tables-off: SIM_COLLEGE_TABLES_LIVE=off node scripts/simCollegeTables.mjs
+norival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+gridengine: node scripts/simGridEngine.mjs
+gridrarity: node scripts/simGridRarity.mjs
+quota: node scripts/simQuotaHonesty.mjs
+pai: node scripts/simPlayerAutocompleteInteraction.mjs
+dsh-saves: R848_PART=saves node scripts/simDailySaveHardening.mjs
+dsh-shapes: R848_PART=shapes node scripts/simDailySaveHardening.mjs
+dsh-skip: R848_PART=skip node scripts/simDailySaveHardening.mjs
+dsh-parity: R848_PART=parity node scripts/simDailySaveHardening.mjs
