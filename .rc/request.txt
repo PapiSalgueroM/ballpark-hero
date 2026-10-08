@@ -1,0 +1,4 @@
+#!serial
+# Round 1051 reviewer (runner lens): the stamp on a career that a played season ends, on the real board, with its own control
+nat-farewell: bash .rc/x/natrun.sh
+nat-clean: git status --porcelain --untracked-files=no | wc -l
