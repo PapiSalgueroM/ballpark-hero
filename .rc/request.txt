@@ -1,0 +1,2 @@
+# deck C digest at one step of Round 1104
+deckc: node scripts/simUsCareerDeckC.mjs
