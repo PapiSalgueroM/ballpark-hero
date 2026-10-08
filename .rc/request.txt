@@ -1,0 +1,25 @@
+#!serve
+#!playwright
+# Round 1104 fixer step 4 on a540cf3b: fixed bands on five seed sets, every truth control, the walk six times
+truth-s1: SIM_SEED=1 node scripts/simNflTruth.mjs
+truth-s6: SIM_SEED=6 node scripts/simNflTruth.mjs
+truth-s11: SIM_SEED=11 node scripts/simNflTruth.mjs
+truth-s16: SIM_SEED=16 node scripts/simNflTruth.mjs
+truth-s21: SIM_SEED=21 node scripts/simNflTruth.mjs
+truth-seventeen: TRUTH_CONTROL=seventeen node scripts/simNflTruth.mjs
+truth-nopace: TRUTH_CONTROL=nopace node scripts/simNflTruth.mjs
+truth-oldpay: TRUTH_CONTROL=oldpay node scripts/simNflTruth.mjs
+truth-kicker: TRUTH_CONTROL=kicker node scripts/simNflTruth.mjs
+truth-swap: TRUTH_CONTROL=swap node scripts/simNflTruth.mjs
+truth-tenths: TRUTH_CONTROL=tenths node scripts/simNflTruth.mjs
+truth-nocap: TRUTH_CONTROL=nocap node scripts/simNflTruth.mjs
+bank: node scripts/simUsCareerBank.mjs
+walk1: ENGINES=chromium node scripts/playNflTruth.mjs
+walk2: ENGINES=chromium node scripts/playNflTruth.mjs
+walk3: ENGINES=chromium node scripts/playNflTruth.mjs
+walk4: ENGINES=chromium node scripts/playNflTruth.mjs
+walk5: ENGINES=chromium node scripts/playNflTruth.mjs
+walk6: ENGINES=chromium node scripts/playNflTruth.mjs
+walk-seventeen: NFL_TRUTH_WALK_CONTROL=seventeen ENGINES=chromium node scripts/playNflTruth.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
