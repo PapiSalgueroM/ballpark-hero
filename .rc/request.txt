@@ -1,0 +1,7 @@
+#!build
+#!playwright
+hostile-head: PORT=4911 TAG=head ENGINES=chromium node .rc/x/hostileSaves.mjs
+hostile-base: bash .rc/x/baseHostile.sh
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-lib: node_modules/.bin/vitest run src/lib/soccerClubSquad.test.ts --testTimeout=300000 --hookTimeout=120000
+simClubSquads: node scripts/simClubSquads.mjs
