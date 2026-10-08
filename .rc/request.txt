@@ -1,0 +1,4 @@
+# AN2: the seam probe again, with the rules closed first, so the screens can be looked at
+#!serve
+#!playwright
+seamwalk: node .rc/x/seamwalk.mjs
