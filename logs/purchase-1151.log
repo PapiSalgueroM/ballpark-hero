@@ -1,0 +1,138 @@
+identity exit=0
+.github/workflows/lane-remote-check.yml: OK
+src/pages/StadiumTycoon.tsx: OK
+/usr/bin/xz
+xz (XZ Utils) 5.4.5
+liblzma 5.4.5
+locked-packages exit=0
+Verified 521 actual installed locked package versions.
+runtime exit=0
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 120 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 120 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 120 MiB
+Chrome Headless Shell 156.0.8078.4 (playwright chromium-headless-shell v1248) downloaded to /home/runner/work/_temp/purchase-1151.FKbbzr/pw-browsers/chromium_headless_shell-1248
+Version 1.64.0
+brand-runtime exit=0
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 5.4/5.4 MB 56.9 MB/s eta 0:00:00
+Downloading pillow-12.3.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (6.9 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.9/6.9 MB 116.2 MB/s eta 0:00:00
+Installing collected packages: pillow, fonttools
+Successfully installed fonttools-4.66.1 pillow-12.3.0
+syntax exit=0
+/home/runner/work/_temp/purchase-1151.FKbbzr/evidence/native-worker.mjs: OK
+base-prepare exit=0
+types exit=0
+base-types exit=0
+build exit=0
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+[32m✓ built in 23.41s[39m
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+base-build exit=0
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+[32m✓ built in 23.41s[39m
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+build-hold exit=0
+native exit=0
+Native1151 PASS: six actual candidate cases and two unchanged-base name controls. Enter purchases persist real selected perk and actual next costs.
+reader-simAdsense exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simAdsense.mjs                  0.4s
+
+All 1 harnesses green.
+reader-simBrand exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simBrand.mjs                    0.3s
+
+All 1 harnesses green.
+reader-simHeadTags exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simHeadTags.mjs                 0.3s
+
+All 1 harnesses green.
+reader-simHiddenPages exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simHiddenPages.mjs              0.3s
+
+All 1 harnesses green.
+reader-simHubs exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simHubs.mjs                     0.3s
+
+All 1 harnesses green.
+reader-simIndexNow exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simIndexNow.mjs                 0.3s
+
+All 1 harnesses green.
+reader-simIndexing exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simIndexing.mjs                 0.3s
+
+All 1 harnesses green.
+reader-simInternalLinks exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simInternalLinks.mjs            0.3s
+
+All 1 harnesses green.
+reader-simNoRivalNames exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simNoRivalNames.mjs             8.4s
+
+All 1 harnesses green.
+reader-simPrerender exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simPrerender.mjs                0.6s
+
+All 1 harnesses green.
+reader-simPrerenderBoot exit=0
+
+Serving dist on 4173 for 1 browser harnesses
+  PASS  simPrerenderBoot.mjs           11.7s
+
+All 1 harnesses green.
+reader-simRetiredRoutes exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simRetiredRoutes.mjs            0.3s
+
+All 1 harnesses green.
+reader-simSchema exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simSchema.mjs                   0.3s
+
+All 1 harnesses green.
+reader-simSitemap exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simSitemap.mjs                  0.3s
+
+All 1 harnesses green.
+reader-simSnapshotAssets exit=0
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simSnapshotAssets.mjs           0.3s
+
+All 1 harnesses green.
+reader-receipts exit=0
+All15 actual named dist/public readers printed their passing outcomes.
+closing exit=0
+dependency-cache-hold exit=0
+Every original application package byte is held; only ordinary new cache files are allowed. No presentation cache is used in this lane.
+strict-gates exit=0
+Every actual named preparation/native/base-control/reader/source/dependency/build gate succeeded.
+Legacy purchase1151 strict label: failed=0, complete=1, source=e729073b4cdf133cacd92a821da9c547be0ba91f, request=5828d57f8176390f5f18d14406e9570a06af2cd8.
