@@ -27,8 +27,9 @@
      P1 it mounts and plays. The scene is there under its bind id and goes
         live within 20 seconds (many builders share a machine: a timeout is
         not a red, run it again alone). T also: one cup whose lift is 0.9 s
-        long (a still card reports 0.001 ms) and has really started three
-        frames after the scene went live.
+        long (a still card reports 0.001 ms) and has really started (read
+        on the first frame, from the third to the sixtieth after the scene
+        went live, on which the lift has moved off zero).
      P2 the facts are the save's, the one the page wrote after the press. S:
         the title, the terms line and the scene's number are the save's club,
         years and wage (formatted in node by the same engine), and the scene
@@ -207,11 +208,13 @@ const instrument = ({ save, saveKey, control }) => {
         liveFrames = 0;
       }
       if (log.live && log.live.cup === null) {
+        /* Read once the lift has moved off zero, three frames in at the
+           earliest and sixty at the latest. A fixed frame count read 0 ms on
+           a loaded machine once; a cup that never starts still reads 0 here. */
         liveFrames += 1;
-        if (liveFrames >= 3) {
-          const cup = el.querySelector('.victory-cup');
-          log.live.cup = cup ? cup.getAnimations().map(a => ({ state: a.playState, time: Number(a.currentTime) })) : [];
-        }
+        const cup = el.querySelector('.victory-cup');
+        const now = cup ? cup.getAnimations().map(a => ({ state: a.playState, time: Number(a.currentTime) })) : [];
+        if (liveFrames >= 3 && (!cup || now.some(a => a.time > 0) || liveFrames >= 60)) { log.live.cup = now; log.live.frames = liveFrames; }
       }
     }
     requestAnimationFrame(frame);
@@ -481,7 +484,7 @@ const walkT = {
   p1: (info, live) => {
     const lifting = !!live && live.cupDuration === '0.9s' && Array.isArray(live.cup) && live.cup.length === 1
       && ['running', 'finished'].includes(live.cup[0].state) && live.cup[0].time > 0;
-    return { ok: !!info && info.cups === 1 && lifting, label: `${info?.cups ?? 0} cup(s), its lift ${live?.cupDuration} long and ${live?.cup?.[0] ? `${live.cup[0].state} at ${Math.round(live.cup[0].time)} ms` : 'not found'} three frames in` };
+    return { ok: !!info && info.cups === 1 && lifting, label: `${info?.cups ?? 0} cup(s), its lift ${live?.cupDuration} long and ${live?.cup?.[0] ? `${live.cup[0].state} at ${Math.round(live.cup[0].time)} ms` : 'not found'} ${live?.frames ?? '?'} frame(s) after it went live` };
   },
   p2: (info, saved) => {
     const t = saved.pendingTournament;
