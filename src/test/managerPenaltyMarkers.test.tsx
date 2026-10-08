@@ -24,8 +24,8 @@ describe('Club Manager penalty scorer markers', () => {
     const actual: MatchWeekReport = JSON.parse(saved);
     const next = vi.fn();
     render(<MatchReportCard report={actual} clubName={clubName} onContinue={next} />);
-    expect(screen.getByText("⚽ Our spot taker 45+2' (P)")).toBeInTheDocument();
-    expect(screen.getByText("⚽ Their spot taker 90+3' (P)")).toBeInTheDocument();
+    expect(screen.queryByText("⚽ Our spot taker 45+2' (P)")).not.toBeNull();
+    expect(screen.queryByText("⚽ Their spot taker 90+3' (P)")).not.toBeNull();
     expect(JSON.stringify(actual)).toBe(saved);
     fireEvent.click(screen.getByRole('button', { name: 'Continue' }));
     expect(next).toHaveBeenCalledOnce();
