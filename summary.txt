@@ -1,0 +1,2 @@
+p2.uscareer-retry exit=0 75s | US career save retry: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/us-career-save-recovery-artifacts/outcomes
+p2.uscareer-retry-ci exit=0 76s | US career save retry: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/us-career-save-recovery-artifacts/outcomes

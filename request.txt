@@ -1,0 +1,3 @@
+#!serial
+p2.uscareer-retry: env -u CI -u GITHUB_ACTIONS node scripts/simUsCareerSaveRetry.mjs
+p2.uscareer-retry-ci: node scripts/simUsCareerSaveRetry.mjs
