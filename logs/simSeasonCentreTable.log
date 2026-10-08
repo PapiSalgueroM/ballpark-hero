@@ -1,0 +1,10 @@
+   targeted Ligue 1 2019-20: results (gate format)
+   targeted Premier League 1995-96: table (gate table)
+   targeted La Liga 2005-06: table (gate table)
+   targeted Premier League 2017-18, a derby rival a division down: results (gate rival)
+tables 358, results 526; places named 5157, unnamed 1859
+ok   the probe reached enough tables (358, floor 300)
+ok   1b. final tables hold 747 neighbours level on points, 273 of them where goal difference and goals scored disagree (floor 50), so the order check has cases to see
+ok   replay, naming and the gate on every table
+ok   4. ledger order: 3 of 223 tables (1.3%) finish in the ledger's order, band 5%
+simSeasonCentreTable: 4 checks, 0 failed

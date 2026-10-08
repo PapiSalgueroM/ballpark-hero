@@ -1,0 +1,65 @@
+# Release AN proof, part 2: each branch's own static harnesses with their controls (a control line is read by its exit code and last line)
+simHandleNames: node scripts/simHandleNames.mjs
+ssw-unguard: SIM_STORAGE_WRITES_CONTROL=unguard node scripts/simStorageWrites.mjs
+ssw-order: SIM_STORAGE_WRITES_CONTROL=order node scripts/simStorageWrites.mjs
+ssw-client: SIM_STORAGE_WRITES_CONTROL=client node scripts/simStorageWrites.mjs
+ssw-caller: SIM_STORAGE_WRITES_CONTROL=caller node scripts/simStorageWrites.mjs
+ssw-nocatch: SIM_STORAGE_WRITES_CONTROL=nocatch node scripts/simStorageWrites.mjs
+ssw-probe: SIM_STORAGE_WRITES_CONTROL=probe node scripts/simStorageWrites.mjs
+cmdata: node scripts/simCmDataOnDemand.mjs
+cmdata-nowait: CM_DATA_CONTROL=nowait node scripts/simCmDataOnDemand.mjs
+cmdata-seamalias: CM_DATA_CONTROL=seamalias node scripts/simCmDataOnDemand.mjs
+cmdata-stragglers: CM_DATA_CONTROL=stragglers node scripts/simCmDataOnDemand.mjs
+cmdata-noregister: CM_DATA_CONTROL=noregister node scripts/simCmDataOnDemand.mjs
+cmdata-eager: CM_DATA_CONTROL=eager node scripts/simCmDataOnDemand.mjs
+cmdata-pools: CM_DATA_CONTROL=pools node scripts/simCmDataOnDemand.mjs
+cmdata-eranat: CM_DATA_CONTROL=eranat node scripts/simCmDataOnDemand.mjs
+cmdata-squad: CM_DATA_CONTROL=squad node scripts/simCmDataOnDemand.mjs
+cmdata-reformat: CM_DATA_CONTROL=reformat node scripts/simCmDataOnDemand.mjs
+pools: node scripts/simNationalPools.mjs
+pools-lastyear: POOLS_CONTROL=lastyear node scripts/simNationalPools.mjs
+simNationalities: node scripts/simNationalities.mjs
+simDailyClubPool: node scripts/simDailyClubPool.mjs
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+flagship-static: FLAGSHIP_LAZY_CONTROL=static node scripts/simFlagshipWeight.mjs
+identity-flip: CM_IDENTITY_CONTROL=flip node_modules/.bin/vitest run src/test/cmDataOnDemandIdentity.test.ts --testTimeout=300000 --hookTimeout=120000
+ussc: node scripts/simUsSeasonCentre.mjs
+ussc-stream: SEEDSET=0 US_SEASON_CONTROL=stream node scripts/simUsSeasonCentre.mjs
+ussc-record: SEEDSET=0 US_SEASON_CONTROL=record node scripts/simUsSeasonCentre.mjs
+ussc-length: SEEDSET=0 US_SEASON_CONTROL=length node scripts/simUsSeasonCentre.mjs
+ussc-stage: SEEDSET=0 US_SEASON_CONTROL=stage node scripts/simUsSeasonCentre.mjs
+ussc-names: SEEDSET=0 US_SEASON_CONTROL=names node scripts/simUsSeasonCentre.mjs
+ussc-window: SEEDSET=0 US_SEASON_CONTROL=window node scripts/simUsSeasonCentre.mjs
+ussc-formula: SEEDSET=0 US_SEASON_CONTROL=formula node scripts/simUsSeasonCentre.mjs
+ussc-conf: SEEDSET=0 US_SEASON_CONTROL=conf node scripts/simUsSeasonCentre.mjs
+ussc-hot: SEEDSET=0 US_SEASON_CONTROL=hot node scripts/simUsSeasonCentre.mjs
+ussc-static: SEEDSET=0 US_SEASON_CONTROL=static node scripts/simUsSeasonCentre.mjs
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
+simSeasonMoments: node scripts/simSeasonMoments.mjs
+simSeasonCentreAgreement: node scripts/simSeasonCentreAgreement.mjs
+simSeasonCentreNeutral: node scripts/simSeasonCentreNeutral.mjs
+simSeasonCentreTable: node scripts/simSeasonCentreTable.mjs
+simSeasonLaw: node scripts/simSeasonLaw.mjs
+simCollegeGridPage: node scripts/simCollegeGridPage.mjs
+simGridEngine: node scripts/simGridEngine.mjs
+simGridRarity: node scripts/simGridRarity.mjs
+simQuotaHonesty: node scripts/simQuotaHonesty.mjs
+simPlayerAutocompleteInteraction: node scripts/simPlayerAutocompleteInteraction.mjs
+simFetchRetry: node scripts/simFetchRetry.mjs
+simClubSquads: node scripts/simClubSquads.mjs
+simStartingXi: node scripts/simStartingXi.mjs
+cgshipped: node scripts/simCollegeGridShipped.mjs
+cgshipped-auditedback: SIM_CGSHIPPED_CONTROL=auditedback node scripts/simCollegeGridShipped.mjs
+cgshipped-flipflag: SIM_CGSHIPPED_CONTROL=flipflag node scripts/simCollegeGridShipped.mjs
+cgshipped-shiftrow: SIM_CGSHIPPED_CONTROL=shiftrow node scripts/simCollegeGridShipped.mjs
+cgshipped-stale: SIM_CGSHIPPED_CONTROL=stale node scripts/simCollegeGridShipped.mjs
+cgshipped-fat: SIM_CGSHIPPED_CONTROL=fat node scripts/simCollegeGridShipped.mjs
+cgshipped-noexclude: SIM_CGSHIPPED_CONTROL=noexclude node scripts/simCollegeGridShipped.mjs
+cg-compact-check: node scripts/genCollegeGridData.mjs --compact --check
+cg-boards-check: node scripts/genCollegeGridBoards.mjs --check
+cg-offline-nocount: CG_OFFLINE_CONTROL=nocount node_modules/.bin/vitest run src/test/collegeGridOffline.test.tsx --testTimeout=300000 --hookTimeout=120000
+cg-failclosed-paged: CG_FAILCLOSED_CONTROL=paged node_modules/.bin/vitest run src/test/collegeGridFailClosed.test.tsx --testTimeout=300000 --hookTimeout=120000
+cg-failclosed-acceptmissing: CG_FAILCLOSED_CONTROL=acceptmissing node_modules/.bin/vitest run src/test/collegeGridFailClosed.test.tsx --testTimeout=300000 --hookTimeout=120000
+careersquad: node scripts/simCareerSquad.mjs
+careersquad-noshift: CAREER_SQUAD_CONTROL=noshift node scripts/simCareerSquad.mjs 40
+careersquad-bogus: CAREER_SQUAD_CONTROL=nosuchcontrol node scripts/simCareerSquad.mjs 40

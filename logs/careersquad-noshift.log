@@ -1,0 +1,16 @@
+simCareerSquad: 40 careers an era, seed 1 (QUICK: floors printed, not asserted)
+1. Names
+   4896 names the generator can show against 2819 real names: 0 shared
+   83 club countries, 3 by alias, 0 with no name family
+2. The two copies
+   squad level by tier, from the engine's own projection: 80, 72, 62, 55, 60
+file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCareerSquad.mjs:567
+  const xi = international.xiMen(international.pickSquad('England', null, 2040).xi);
+                                               ^
+
+TypeError: international.pickSquad is not a function
+    at sec2 (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCareerSquad.mjs:567:48)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCareerSquad.mjs:1104:1
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+Node.js v24.21.0

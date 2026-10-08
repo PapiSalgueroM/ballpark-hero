@@ -1,0 +1,9 @@
+1) The formula, through vitest
+   vitest exit 0, 4 passed (4)
+2) The order, as code: each hook measures before it inserts
+   src/hooks/useFootballGrid.ts: measure at 6515, insert at 6611
+   src/hooks/useCollegeGrid.ts: measure at 8901, insert at 8993
+   src/hooks/useSoccerGrid.ts: measure at 8859, insert at 8955
+3) One formula: every fetchRarity returns rarityPercent and does no arithmetic of its own
+
+simGridRarity: green. The crowd is counted before the player joins it, in all three grids.
