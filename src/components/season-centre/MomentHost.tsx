@@ -15,7 +15,7 @@
    kept for a YOUR CALL that won the match. */
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import ArcadeShotFeedback from '@/components/arcade/ArcadeShotFeedback';
-import { ConfettiBurst, confettiSeedOf } from '@/components/club-manager/Celebration';
+import { ConfettiBurst, confettiSeedOf, revealDelay } from '@/components/club-manager/Celebration';
 
 /** One moment as the viewer shows it. */
 export interface CentreMoment {
@@ -75,7 +75,7 @@ export function MomentStars({ stars, reduced }: { stars: number; reduced: boolea
   return (
     <span className="inline-flex gap-1 text-xl" role="img" aria-label={`${stars} of ${STARS_MAX} stars`} data-moment-stars={stars}>
       {Array.from({ length: STARS_MAX }, (_, i) => (
-        <span key={i} className={i < stars ? (reduced ? 'text-amber-400' : 'cm-tick-in text-amber-400') : 'text-muted-foreground/40'} style={i < stars && !reduced ? { animationDelay: `${0.25 + i * 0.3}s` } : undefined}>
+        <span key={i} className={i < stars ? (reduced ? 'text-amber-400' : 'cm-tick-in text-amber-400') : 'text-muted-foreground/40'} style={i < stars && !reduced ? { animationDelay: revealDelay(i, 0.25, 0.3) } : undefined}>
           {i < stars ? '★' : '☆'}
         </span>
       ))}
