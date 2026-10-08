@@ -1,0 +1,87 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/safeStorage.test.ts [2m([22m[2m27 tests[22m[2m)[22m[32m 112[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/lib/frontOfficeRatings.test.ts[2m > [22m[2mNFL opening rating checkpoint[2m > [22m[2msaves only five original lineage fields below700KiB and reloads them without rerating
+[22m[39mNFL_RATING_SAVE_SIZE {"rawBytes":635403,"gzipBytes":66963,"players":2163}
+
+ [32m✓[39m src/test/translateGuard.test.tsx [2m([22m[2m53 tests[22m[2m)[22m[33m 2116[2mms[22m[39m
+   [33m[2m✓[22m[39m layer two: a string React rewrites in place shows its new words[2m > [22ma hundred updates leave exactly the nodes it started with [33m 367[2mms[22m[39m
+ [32m✓[39m src/test/guessFinishMoment.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[33m 1013[2mms[22m[39m
+   [33m[2m✓[22m[39m a clue guesser ends on the shared result moment[2m > [22mwalks every clue: the pill shows exactly the score the board saved [33m 345[2mms[22m[39m
+[90mstdout[2m | src/lib/frontOfficeRatings.test.ts[2m > [22m[2mNFL opening rating checkpoint[2m > [22m[2mplays four actual seasons playoffs drafts and summers with bounded saves and a nonnegative normal cap
+[22m[39mNFL_RATING_CAMPAIGN {"games":1088,"playoffs":52,"drafted":84,"saves":24,"maxSave":641401,"finalSeason":2030,"scope":"One seeded normal simulation; salary-matching trades are separately known to permit negative cap."}
+
+ [32m✓[39m src/test/freshBuildBlockedStorage.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 106[2mms[22m[39m
+[90mstderr[2m | src/test/storageBlockedBoot.test.tsx[2m > [22m[2mthe storage notice[2m > [22m[2mstorage full: the line is there on the first render of a game page, and the home page asks nothing
+[22m[39mWarning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+
+ [32m✓[39m src/test/storageBlockedBoot.test.tsx [2m([22m[2m20 tests[22m[2m)[22m[33m 375[2mms[22m[39m
+[90mstderr[2m | src/test/supabaseClientBlockedStorage.test.ts[2m > [22m[2mthe Supabase client when the browser blocks storage[2m > [22m[2mpins the same two strings in a browser that stores normally, and restores a stored session
+[22m[39mGoTrueClient@sb-flawuiqbvjobmkfkauhw-auth-token:1 (2.95.3) 2026-10-08T11:30:06.318Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+
+[90mstderr[2m | src/test/supabaseClientBlockedStorage.test.ts[2m > [22m[2mthe Supabase client when the browser blocks storage[2m > [22m[2mimporting the client in a browser that stores normally writes nothing but the auth client's own probe
+[22m[39mGoTrueClient@sb-flawuiqbvjobmkfkauhw-auth-token:2 (2.95.3) 2026-10-08T11:30:06.329Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+
+[90mstderr[2m | src/test/supabaseClientBlockedStorage.test.ts[2m > [22m[2mthe Supabase client when the browser blocks storage[2m > [22m[2mkeeps a signed in player signed in when storage is full (reads still reach the stored session)
+[22m[39mGoTrueClient@sb-flawuiqbvjobmkfkauhw-auth-token:3 (2.95.3) 2026-10-08T11:30:06.334Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+
+[90mstderr[2m | src/test/supabaseClientBlockedStorage.test.ts[2m > [22m[2mthe Supabase client when the browser refuses Web Locks as well[2m > [22m[2mstill answers getSession, signed out, with nothing thrown
+[22m[39mGoTrueClient@sb-flawuiqbvjobmkfkauhw-auth-token:4 (2.95.3) 2026-10-08T11:30:06.340Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+
+ [32m✓[39m src/test/supabaseClientBlockedStorage.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 79[2mms[22m[39m
+[90mstderr[2m | src/test/guestHandleVisit.test.tsx[2m > [22m[2mgetGuestHandle when the handle cannot be stored[2m > [22m[2mstorage full with a legacy handle stored: one new handle for the visit, never the legacy one
+[22m[39mGoTrueClient@sb-flawuiqbvjobmkfkauhw-auth-token:1 (2.95.3) 2026-10-08T11:30:07.095Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+
+[90mstderr[2m | src/test/guestHandleVisit.test.tsx[2m > [22m[2mgetGuestHandle when the handle cannot be stored[2m > [22m[2mstorage that cannot be read at all: the same handle every call
+[22m[39mGoTrueClient@sb-flawuiqbvjobmkfkauhw-auth-token:2 (2.95.3) 2026-10-08T11:30:07.104Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+
+ [32m✓[39m src/test/cookieConsentStorage.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[32m 250[2mms[22m[39m
+[90mstderr[2m | src/test/guestHandleVisit.test.tsx[2m > [22m[2mgetGuestHandle when the handle cannot be stored[2m > [22m[2ma handle already stored still wins, full or not
+[22m[39mGoTrueClient@sb-flawuiqbvjobmkfkauhw-auth-token:3 (2.95.3) 2026-10-08T11:30:07.116Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+
+[90mstderr[2m | src/test/guestHandleVisit.test.tsx[2m > [22m[2mgetGuestHandle when the handle cannot be stored[2m > [22m[2mordinary storage is exactly as before: minted once, stored, and a cleared key mints a new one
+[22m[39mGoTrueClient@sb-flawuiqbvjobmkfkauhw-auth-token:4 (2.95.3) 2026-10-08T11:30:07.123Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+
+ [32m✓[39m src/test/guestHandleVisit.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[32m 196[2mms[22m[39m
+[90mstderr[2m | src/test/hofOrBustVoteOnce.test.tsx[2m > [22m[2mthe HoF or Bust community vote[2m > [22m[2ma browser that stores normally: sent once, and a return visit finds the vote and sends nothing
+[22m[39mWarning: An update to TestComponent inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at TestComponent (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/@testing-library/react/dist/pure.js:328:5)
+
+[90mstderr[2m | src/test/hofOrBustVoteOnce.test.tsx[2m > [22m[2mthe HoF or Bust community vote[2m > [22m[2mstorage blocked: kept for the visit, so sent once and not again when the page is opened a second time
+[22m[39mWarning: An update to TestComponent inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at TestComponent (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/@testing-library/react/dist/pure.js:328:5)
+
+ [32m✓[39m src/test/hofOrBustVoteOnce.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 75[2mms[22m[39m
+ [32m✓[39m src/lib/frontOfficeRatings.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 7087[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL opening rating checkpoint[2m > [22mkeeps source-stat observations and fitted models outside the browser data with a dated manifest [33m 475[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL opening rating checkpoint[2m > [22mplays four actual seasons playoffs drafts and summers with bounded saves and a nonnegative normal cap [33m 577[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL opening rating checkpoint[2m > [22mrefuses stale identity or source records before the real generator CLI writes outputs [33m 4125[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m10 passed[39m[22m[90m (10)[39m
+[2m      Tests [22m [1m[32m158 passed[39m[22m[90m (158)[39m
+[2m   Start at [22m 11:30:01
+[2m   Duration [22m 8.60s[2m (transform 1.24s, setup 415ms, collect 2.31s, tests 11.41s, environment 2.99s, prepare 754ms)[22m
+

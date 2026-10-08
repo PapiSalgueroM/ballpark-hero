@@ -1,0 +1,13 @@
+build exit=0 23s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+vitest exit=0 9s |    Duration  8.60s (transform 1.24s, setup 415ms, collect 2.31s, tests 11.41s, environment 2.99s, prepare 754ms)
+simStorageWrites exit=0 1s | simStorageWrites: all green
+ssw-probe exit=1 1s | simStorageWrites (control probe): 1 failed
+simResultPillComparison exit=0 10s | simResultPillComparison: green. 34 finished states on a 390 wide phone: every pill reads the hook's score, on one line inside its fixed pill, nothing scrolls sideways, an
+simResultMoment exit=0 4s | simResultMoment: green. Every live game reaches the shared result moment or is listed with what it draws instead, the pill shows exactly the score it is given, the three 
+simNumberFormatting exit=0 94s | Number formatting: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/number-formatting-artifacts/outcomes
+simNoRivalNames exit=0 9s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 24s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+translated-plain exit=0 124s | playTranslatedPage: 447 checks, 0 failed
+storage-main exit=0 256s | playStorageBlocked: 826 checks, 0 failed
+storage-open exit=0 229s | playStorageBlocked (control open): 743 checks, 0 failed
+storage-raw exit=1 622s | playStorageBlocked (control raw): 786 checks, 266 failed
