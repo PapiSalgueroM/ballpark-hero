@@ -200,6 +200,7 @@ function makeLive(win: GuardWindow, native: Natives): Live | null {
         shown.set(mine, wrapper);
         owner.set(wrapper, mine);
         stats.swaps += 1;
+        quiet = false;
         if (rewritten.has(text)) (late || (late = [])).push(record.target);
       }
     }
@@ -229,7 +230,59 @@ function makeLive(win: GuardWindow, native: Natives): Live | null {
    * again) and never a write into a stand in (the translator may be working on it): a stand in whose words
    * are out of date is replaced like any wrapper.
    */
+  /**
+   * WHAT THE TRANSLATOR STILL OWES. A stand in is only worth anything if the translator takes it, and it
+   * does not always look. Measured on the real one: while it works through a whole page (the first
+   * translation, or "translate" pressed again) it takes no notice of text that arrives, so a stand in
+   * layer two put down in that moment stayed in the first language until something else on the page
+   * changed, which on a quiet screen is the visitor's next press. So an element whose strings were
+   * handed back is looked at again a little later, and if a stand in is still standing there it is
+   * handed over once more, three times at most and each time after a longer wait. Every new hand back
+   * pushes the look further out, so a line that keeps changing is never interrupted, and after the
+   * translator has undone itself nothing is owed at all.
+   */
+  const WAITS = [400, 1200, 3600, 10800];
+  const owed = new Map<Node, { tries: number; at: number }>();
+  let timer = 0;
+  /** The last thing the translator was seen to do was give its nodes back: nobody is there to take a stand in. */
+  let quiet = false;
+  const arm = () => {
+    if (timer || !owed.size) return;
+    let first = Infinity;
+    owed.forEach(debt => { if (debt.at < first) first = debt.at; });
+    timer = win.setTimeout(pay, Math.max(50, first - Date.now()));
+  };
+  const owe = (parent: Node) => {
+    const debt = owed.get(parent);
+    if (debt) debt.at = Date.now() + WAITS[debt.tries];
+    else owed.set(parent, { tries: 0, at: Date.now() + WAITS[0] });
+    arm();
+  };
+  const pay = () => {
+    timer = 0;
+    try {
+      flush();
+      const now = Date.now();
+      owed.forEach((debt, parent) => {
+        let waiting = false;
+        if (!quiet && parent.isConnected) {
+          for (let child = parent.firstChild; child && !waiting; child = child.nextSibling) waiting = child.nodeType === 3 && owner.has(child);
+        }
+        if (!waiting) owed.delete(parent);
+        else if (now >= debt.at) {
+          debt.tries += 1;
+          if (debt.tries >= WAITS.length) owed.delete(parent);
+          else refresh(parent);
+        }
+      });
+    } catch {
+      owed.clear();
+    }
+    arm();
+  };
+
   const refresh = (parent: Node) => {
+    let made = false;
     let child = parent.firstChild;
     while (child) {
       const next = child.nextSibling;
@@ -249,9 +302,11 @@ function makeLive(win: GuardWindow, native: Natives): Live | null {
         }
         young.add(standIn);
         stats.restored += 1;
+        made = true;
       }
       child = next;
     }
+    if (made) owe(parent);
   };
 
   /**
@@ -277,6 +332,7 @@ function makeLive(win: GuardWindow, native: Natives): Live | null {
       shown.set(first, text);
       owner.set(text, first);
       stats.returned += 1;
+      quiet = true;
       // It stands for React's node again. If its words are not React's (a translator may put back the words
       // it saved), the group goes round once more.
       return text.nodeValue === first.nodeValue ? null : parent;
@@ -289,6 +345,7 @@ function makeLive(win: GuardWindow, native: Natives): Live | null {
     if (!from || !copy.isConnected) {
       // React's own node is back where its wrapper stood. It is React's again, and nothing stands for it.
       stats.returned += 1;
+      quiet = true;
       return null;
     }
     // React's own node is on the page AND so is its copy: React MOVED the string (a bare string that changed

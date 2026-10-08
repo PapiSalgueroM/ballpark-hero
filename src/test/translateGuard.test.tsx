@@ -771,6 +771,101 @@ describe('layer two: a string rewritten while the translator was working on it',
 });
 
 /**
+ * A stand in the translator did not take. Measured on the real one (2026-10-08, fix round): while it works
+ * through a whole page it takes no notice of text that arrives, so strings React had rewritten before the
+ * first translation, which rule four hands back the moment they are taken, sat there in the first
+ * language until something else on the page changed. Layer two now looks again and hands them over once
+ * more. These tests own the clock: the waits are 400 ms, 1.2 s and 3.6 s, and it gives up after 10.8 s more.
+ */
+describe('layer two: a stand in the translator did not take is handed over again', () => {
+  const later = (ms: number) => vi.advanceTimersByTimeAsync(ms);
+  /** A string rewritten on the page before any translator, then taken by one that is not looking any more. */
+  const missed = async () => {
+    // whatever earlier tests still owed is settled on the real clock first, so this test starts clean
+    await new Promise<void>(resolve => setTimeout(resolve, 600));
+    const p = document.body.appendChild(document.createElement('p'));
+    const words = p.appendChild(document.createTextNode('Balance: 100'));
+    words.nodeValue = 'Balance: 200';
+    await settle();
+    vi.useFakeTimers();
+    translateReal(p); // the first pass takes it, with the words it read
+    await later(1); // the observer hands it straight back (rule four), and the translator is not looking
+    expect(p.textContent).toBe('Balance: 200');
+    expect(fontsIn(p)).toBe(0);
+    return { p, words };
+  };
+  afterEach(async () => {
+    await vi.advanceTimersByTimeAsync(60000); // nothing may still be owed when the real clock comes back
+    vi.useRealTimers();
+  });
+
+  it('once the translator listens again the string ends up translated, and that is the end of it', async () => {
+    const { p } = await missed();
+    const first = p.firstChild;
+    await later(390);
+    expect(p.firstChild).toBe(first); // not before its time
+    await later(20);
+    const second = p.firstChild as Text;
+    expect(second).not.toBe(first); // handed over again: a new node, the same words
+    expect(second.nodeValue).toBe('Balance: 200');
+    translateReal(p); // this time the translator is listening
+    await later(1);
+    expect(p.textContent).toBe('pt:Balance: 200');
+    const before = stats();
+    const wrapper = p.firstChild;
+    await later(30000);
+    expect(p.firstChild).toBe(wrapper);
+    expect(stats()).toEqual(before);
+    p.remove();
+  });
+
+  it('a translator that never comes back is asked three more times and then left in peace', async () => {
+    const { p } = await missed();
+    const before = stats();
+    const seen = new Set<Node>([p.firstChild as Node]);
+    for (let i = 0; i < 400; i++) {
+      await later(100);
+      seen.add(p.firstChild as Node);
+      expect(p.textContent).toBe('Balance: 200');
+      expect(p.childNodes.length).toBe(1);
+    }
+    expect(seen.size).toBe(4); // the first stand in and three more
+    expect(stats().restored).toBe(before.restored + 3);
+    p.remove();
+  });
+
+  it('a line that keeps changing is never interrupted', async () => {
+    const { p, words } = await missed();
+    const before = stats();
+    for (let i = 1; i <= 20; i++) {
+      await later(300); // faster than the first wait, every time
+      words.nodeValue = `Balance: ${200 + i}`;
+      expect(p.textContent).toBe(`Balance: ${200 + i}`);
+    }
+    // one new stand in for each rewrite and not one more
+    expect(stats().restored).toBe(before.restored + 20);
+    p.remove();
+  });
+
+  it('after the translator has undone itself nothing is handed over again', async () => {
+    const { p, words } = await missed();
+    await later(450); // handed over once more
+    translateReal(p); // taken this time
+    await later(1);
+    undoTranslation(p); // show original
+    await later(1);
+    words.nodeValue = 'Balance: 300'; // React moves on: a stand in that nobody is there to take
+    expect(p.textContent).toBe('Balance: 300');
+    const standIn = p.firstChild;
+    const before = stats();
+    await later(30000);
+    expect(p.firstChild).toBe(standIn);
+    expect(stats()).toEqual(before);
+    p.remove();
+  });
+});
+
+/**
  * A bare string React MOVES. A keyed list of plain strings that changes order is redrawn by putting the very
  * text node React holds in again, with insertBefore or with appendChild. That node is off the page (the
  * translator took it), so before this the words showed twice: the copy where the string used to be, and
