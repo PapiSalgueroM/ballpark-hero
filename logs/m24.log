@@ -1,0 +1,11 @@
+MUT m24: the visit choice wins over a stored off (stored value no longer wins) (src/lib/sound.ts)
+  simSound exit=0 | simSound: 158 checks, 0 failed
+  vitest exit=1 | Tests  2 failed | 23 passed (25)
+     × Round 1132: the sound switch > a switch that is already on arms the kit for his first tap, and plays nothing 15ms
+     × Round 1132: the sound switch > two switches flip together, and another tab can flip both 13ms
+     ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soundToggle.test.tsx,title=src/test/soundToggle.test.tsx > Round 1132%3A the sound switch > a switch that is already on arms the kit for his first tap%2
+     ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soundToggle.test.tsx,title=src/test/soundToggle.test.tsx > Round 1132%3A the sound switch > two switches flip together%2C and another tab can flip both,
+     FAIL  src/test/soundToggle.test.tsx > Round 1132: the sound switch > a switch that is already on arms the kit for his first tap, and plays nothing
+     AssertionError: expected 'Sound: off' to be 'Sound: on' // Object.is equality
+  restored src/lib/sound.ts
+MUT m24 (the visit choice wins over a stored off (stored value no longer wins)): KILLED by vitest

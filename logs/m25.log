@@ -1,0 +1,7 @@
+MUT m25: the gesture listener wakes the audio even when the switch is off (src/lib/soundKit.ts)
+  simSound exit=0 | simSound: 158 checks, 0 failed
+  vitest exit=0 | Tests  25 passed (25)
+  build exit=0 | - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+  playSoundGate exit=0 | playSoundGate: 146 checks, 0 failed
+  restored src/lib/soundKit.ts
+MUT m25 (the gesture listener wakes the audio even when the switch is off): SURVIVED simSound, vitest and playSoundGate

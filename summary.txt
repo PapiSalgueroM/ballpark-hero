@@ -1,0 +1,16 @@
+basecard exit=0 2s | basecard-done
+m1 exit=0 5s | MUT m1 (one tick short (k < n - 1)): KILLED by vitest
+m2 exit=0 5s | MUT m2 (the result lands on the row pace start, 0.6, not the headline 0.75): KILLED by vitest
+m4 exit=0 5s | MUT m4 (the plan key drops the year): KILLED by vitest
+m5 exit=0 5s | MUT m5 (any stored value but off counts as on): KILLED by simSound
+m6 exit=0 183s | MUT m6 (stopAll() with no scope leaves scoped sources sounding): KILLED by playSoundGate
+m7 exit=0 5s | MUT m7 (a scoped hush no longer cancels an ask still waiting on the kit or the context): KILLED by simSound
+m8 exit=0 182s | MUT m8 (a hidden tab suspends without stopping what is scheduled): KILLED by playSoundGate
+m11 exit=0 180s | MUT m11 (the stale test loses its 250 ms of grace (due < 0)): KILLED by playSoundGate
+m12 exit=0 182s | MUT m12 (a delayed buzz waits milliseconds where it meant seconds): SURVIVED simSound, vitest and playSoundGate
+m13 exit=0 182s | MUT m13 (the winner's crowd starts at 0.03 s, not 0.3 s): KILLED by playSoundGate
+m18 exit=0 182s | MUT m18 (switching off forgets to bump the generation): SURVIVED simSound, vitest and playSoundGate
+m19 exit=0 5s | MUT m19 (leaving the screen no longer hushes the plan): KILLED by vitest
+m23 exit=0 182s | MUT m23 (a moment is scheduled on a context that is not running): SURVIVED simSound, vitest and playSoundGate
+m24 exit=0 5s | MUT m24 (the visit choice wins over a stored off (stored value no longer wins)): KILLED by vitest
+m25 exit=0 181s | MUT m25 (the gesture listener wakes the audio even when the switch is off): SURVIVED simSound, vitest and playSoundGate

@@ -1,0 +1,10 @@
+MUT m5: any stored value but off counts as on (src/lib/sound.ts)
+  simSound exit=1 | simSound: 158 checks, 5 failed
+     FAIL d. a stored "ON", a goal: contexts 1, starts 2, buzzes 1, listeners 3
+     FAIL d. a stored "1", a goal: contexts 1, starts 2, buzzes 1, listeners 3
+     FAIL d. a stored "true", a goal: contexts 1, starts 2, buzzes 1, listeners 3
+     FAIL d. a stored " on", a goal: contexts 1, starts 2, buzzes 1, listeners 3
+     FAIL d. a stored "{\"on\":true}", a goal: contexts 1, starts 2, buzzes 1, listeners 3
+  vitest exit=0 | Tests  25 passed (25)
+  restored src/lib/sound.ts
+MUT m5 (any stored value but off counts as on): KILLED by simSound
