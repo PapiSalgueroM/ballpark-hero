@@ -1,0 +1,7 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+play-pitchlayer exit=0 67s | playSeasonCentreMotion: 52 checks, 0 failed (control pitchlayer) (only C)
+weight exit=0 6s | weightBytes done (2)
+tsc exit=0 76s | 
+vitest-round exit=0 3s |    Duration  2.45s (transform 1.01s, setup 137ms, collect 1.51s, tests 251ms, environment 1.40s, prepare 349ms)
+sweep exit=0 20s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+play exit=0 124s | playSeasonCentreMotion: 68 checks, 0 failed
