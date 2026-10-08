@@ -1,0 +1,15 @@
+#!serve
+#!playwright
+weight: node .rc/x/weightBytes.mjs
+sweep: ENGINES=chromium node scripts/sweepWeight.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/seasonCentreSlots.test.tsx src/test/rankShift.test.ts src/test/seasonResume.test.ts src/test/seasonReplays.test.tsx src/test/seasonCore.test.ts --testTimeout=300000 --hookTimeout=120000
+sim: node scripts/simSeasonCentreMotion.mjs
+sim-resumetag: SEASON_MOTION_SIM_CONTROL=resumetag node scripts/simSeasonCentreMotion.mjs
+sim-pagekey: SEASON_MOTION_SIM_CONTROL=pagekey node scripts/simSeasonCentreMotion.mjs
+flagship: node scripts/simFlagshipWeight.mjs
+flagship-eagerimport: FLAGSHIP_LAZY_CONTROL=eagerimport node scripts/simFlagshipWeight.mjs
+a11y: node scripts/simAccessibility.mjs
+playSeasonCentre: ENGINES=chromium PORT=4541 node scripts/playSeasonCentre.mjs
+playSeasonMoments: ENGINES=chromium node scripts/playSeasonMoments.mjs
+lint: node_modules/.bin/eslint src/components/season-centre src/components/soccer-career/SoccerSeasonCentre.tsx src/lib/season/resume.ts src/test/seasonReplays.test.tsx src/test/seasonResume.test.ts

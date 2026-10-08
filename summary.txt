@@ -1,0 +1,14 @@
+build exit=0 27s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+weight exit=0 8s | weightBytes done
+vitest exit=0 6s |    Duration  5.37s (transform 3.04s, setup 1.01s, collect 4.26s, tests 715ms, environment 3.90s, prepare 1.18s)
+sweep exit=0 23s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+sim exit=0 10s | simSeasonCentreMotion: 17 checks, 0 failed
+sim-resumetag exit=1 12s | simSeasonCentreMotion: 17 checks, 1 failed (control resumetag)
+flagship exit=0 0s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+flagship-eagerimport exit=1 0s | simFlagshipWeight: 1 failure
+sim-pagekey exit=1 11s | simSeasonCentreMotion: 17 checks, 1 failed (control pagekey)
+a11y exit=0 0s | simAccessibility: all green
+tsc exit=0 81s | 
+playSeasonMoments exit=0 43s | playSeasonMoments: 117 checks, 0 failed
+lint exit=0 2s | ✖ 5 problems (0 errors, 5 warnings)
+playSeasonCentre exit=0 99s | playSeasonCentre: 40 checks, 0 failed

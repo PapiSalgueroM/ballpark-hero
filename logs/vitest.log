@@ -1,0 +1,277 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/seasonResume.test.ts [2m([22m[2m29 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+ [32m✓[39m src/test/seasonCore.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 157[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstderr[2m | src/test/seasonCentreSlots.test.tsx[2m > [22m[2mSeason Centre: the markup this round found[2m > [22m[2m(a) the sliding wrapper adds one element around the card and nothing inside it
+[22m[39mWarning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at RankShiftTable (/home/runner/work/ballpark-hero/ballpark-hero/src/components/motion/RankShiftTable.tsx:44:27)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at RankShiftTable (/home/runner/work/ballpark-hero/ballpark-hero/src/components/motion/RankShiftTable.tsx:44:27)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at RankShiftTable (/home/runner/work/ballpark-hero/ballpark-hero/src/components/motion/RankShiftTable.tsx:44:27)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at RankShiftTable (/home/runner/work/ballpark-hero/ballpark-hero/src/components/motion/RankShiftTable.tsx:44:27)
+
+[90mstderr[2m | src/test/seasonCentreSlots.test.tsx[2m > [22m[2mSeason Centre: the markup this round found[2m > [22m[2m(c) the Season Centre on its kick off card, no resume
+[22m[39mWarning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at RankShiftTable (/home/runner/work/ballpark-hero/ballpark-hero/src/components/motion/RankShiftTable.tsx:44:27)
+    at div
+    at TablePanel (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:219:23)
+    at div
+    at main
+    at div
+    at div
+    at div
+    at SeasonCentre (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:969:25)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at RankShiftTable (/home/runner/work/ballpark-hero/ballpark-hero/src/components/motion/RankShiftTable.tsx:44:27)
+    at div
+    at TablePanel (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:219:23)
+    at div
+    at main
+    at div
+    at div
+    at div
+    at SeasonCentre (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:969:25)
+
+[90mstderr[2m | src/test/seasonCentreSlots.test.tsx[2m > [22m[2mSeason Centre: opened where he stopped (Round 1046)[2m > [22m[2mstarts the kick off card at his matchday, with his place and the next five
+[22m[39mWarning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at RankShiftTable (/home/runner/work/ballpark-hero/ballpark-hero/src/components/motion/RankShiftTable.tsx:44:27)
+    at div
+    at TablePanel (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:219:23)
+    at div
+    at main
+    at div
+    at div
+    at div
+    at SeasonCentre (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:969:25)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at RankShiftTable (/home/runner/work/ballpark-hero/ballpark-hero/src/components/motion/RankShiftTable.tsx:44:27)
+    at div
+    at TablePanel (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:219:23)
+    at div
+    at main
+    at div
+    at div
+    at div
+    at SeasonCentre (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:969:25)
+
+[90mstderr[2m | src/test/seasonCentreSlots.test.tsx[2m > [22m[2mSeason Centre: opened where he stopped (Round 1046)[2m > [22m[2mlists the five games after his matchday, not the first five
+[22m[39mWarning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at RankShiftTable (/home/runner/work/ballpark-hero/ballpark-hero/src/components/motion/RankShiftTable.tsx:44:27)
+    at div
+    at TablePanel (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:219:23)
+    at div
+    at main
+    at div
+    at div
+    at div
+    at SeasonCentre (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:969:25)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at RankShiftTable (/home/runner/work/ballpark-hero/ballpark-hero/src/components/motion/RankShiftTable.tsx:44:27)
+    at div
+    at TablePanel (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:219:23)
+    at div
+    at main
+    at div
+    at div
+    at div
+    at SeasonCentre (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:969:25)
+
+[90mstderr[2m | src/test/seasonCentreSlots.test.tsx[2m > [22m[2mSeason Centre: opened where he stopped (Round 1046)[2m > [22m[2mis the fresh card when the place does not fit this season
+[22m[39mWarning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at RankShiftTable (/home/runner/work/ballpark-hero/ballpark-hero/src/components/motion/RankShiftTable.tsx:44:27)
+    at div
+    at TablePanel (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:219:23)
+    at div
+    at main
+    at div
+    at div
+    at div
+    at SeasonCentre (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:969:25)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at RankShiftTable (/home/runner/work/ballpark-hero/ballpark-hero/src/components/motion/RankShiftTable.tsx:44:27)
+    at div
+    at TablePanel (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:219:23)
+    at div
+    at main
+    at div
+    at div
+    at div
+    at SeasonCentre (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:969:25)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at RankShiftTable (/home/runner/work/ballpark-hero/ballpark-hero/src/components/motion/RankShiftTable.tsx:44:27)
+    at div
+    at TablePanel (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:219:23)
+    at div
+    at main
+    at div
+    at div
+    at div
+    at SeasonCentre (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:969:25)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at RankShiftTable (/home/runner/work/ballpark-hero/ballpark-hero/src/components/motion/RankShiftTable.tsx:44:27)
+    at div
+    at TablePanel (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:219:23)
+    at div
+    at main
+    at div
+    at div
+    at div
+    at SeasonCentre (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:969:25)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at RankShiftTable (/home/runner/work/ballpark-hero/ballpark-hero/src/components/motion/RankShiftTable.tsx:44:27)
+    at div
+    at TablePanel (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:219:23)
+    at div
+    at main
+    at div
+    at div
+    at div
+    at SeasonCentre (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:969:25)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at RankShiftTable (/home/runner/work/ballpark-hero/ballpark-hero/src/components/motion/RankShiftTable.tsx:44:27)
+    at div
+    at TablePanel (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:219:23)
+    at div
+    at main
+    at div
+    at div
+    at div
+    at SeasonCentre (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:969:25)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at RankShiftTable (/home/runner/work/ballpark-hero/ballpark-hero/src/components/motion/RankShiftTable.tsx:44:27)
+    at div
+    at TablePanel (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:219:23)
+    at div
+    at main
+    at div
+    at div
+    at div
+    at SeasonCentre (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:969:25)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at RankShiftTable (/home/runner/work/ballpark-hero/ballpark-hero/src/components/motion/RankShiftTable.tsx:44:27)
+    at div
+    at TablePanel (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:219:23)
+    at div
+    at main
+    at div
+    at div
+    at div
+    at SeasonCentre (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:969:25)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at RankShiftTable (/home/runner/work/ballpark-hero/ballpark-hero/src/components/motion/RankShiftTable.tsx:44:27)
+    at div
+    at TablePanel (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:219:23)
+    at div
+    at main
+    at div
+    at div
+    at div
+    at SeasonCentre (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:969:25)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at RankShiftTable (/home/runner/work/ballpark-hero/ballpark-hero/src/components/motion/RankShiftTable.tsx:44:27)
+    at div
+    at TablePanel (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:219:23)
+    at div
+    at main
+    at div
+    at div
+    at div
+    at SeasonCentre (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:969:25)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at RankShiftTable (/home/runner/work/ballpark-hero/ballpark-hero/src/components/motion/RankShiftTable.tsx:44:27)
+    at div
+    at TablePanel (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:219:23)
+    at div
+    at main
+    at div
+    at div
+    at div
+    at SeasonCentre (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:969:25)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at RankShiftTable (/home/runner/work/ballpark-hero/ballpark-hero/src/components/motion/RankShiftTable.tsx:44:27)
+    at div
+    at TablePanel (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:219:23)
+    at div
+    at main
+    at div
+    at div
+    at div
+    at SeasonCentre (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:969:25)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at RankShiftTable (/home/runner/work/ballpark-hero/ballpark-hero/src/components/motion/RankShiftTable.tsx:44:27)
+    at div
+    at TablePanel (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:219:23)
+    at div
+    at main
+    at div
+    at div
+    at div
+    at SeasonCentre (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:969:25)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at RankShiftTable (/home/runner/work/ballpark-hero/ballpark-hero/src/components/motion/RankShiftTable.tsx:44:27)
+    at div
+    at TablePanel (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:219:23)
+    at div
+    at main
+    at div
+    at div
+    at div
+    at SeasonCentre (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:969:25)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at RankShiftTable (/home/runner/work/ballpark-hero/ballpark-hero/src/components/motion/RankShiftTable.tsx:44:27)
+    at div
+    at TablePanel (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:219:23)
+    at div
+    at main
+    at div
+    at div
+    at div
+    at SeasonCentre (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:969:25)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at RankShiftTable (/home/runner/work/ballpark-hero/ballpark-hero/src/components/motion/RankShiftTable.tsx:44:27)
+    at div
+    at TablePanel (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:219:23)
+    at div
+    at main
+    at div
+    at div
+    at div
+    at SeasonCentre (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:969:25)
+
+[90mstderr[2m | src/test/seasonCentreSlots.test.tsx[2m > [22m[2mSeason Centre: opened where he stopped (Round 1046)[2m > [22m[2mtakes the last matchday but one, and no further
+[22m[39mWarning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at RankShiftTable (/home/runner/work/ballpark-hero/ballpark-hero/src/components/motion/RankShiftTable.tsx:44:27)
+    at div
+    at TablePanel (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:219:23)
+    at div
+    at main
+    at div
+    at div
+    at div
+    at SeasonCentre (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:969:25)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at RankShiftTable (/home/runner/work/ballpark-hero/ballpark-hero/src/components/motion/RankShiftTable.tsx:44:27)
+    at div
+    at TablePanel (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:219:23)
+    at div
+    at main
+    at div
+    at div
+    at div
+    at SeasonCentre (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:969:25)
+
+ [32m✓[39m src/test/seasonCentreSlots.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[32m 245[2mms[22m[39m
+ [32m✓[39m src/test/rankShift.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 279[2mms[22m[39m
+ [32m✓[39m src/test/seasonReplays.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m      Tests [22m [1m[32m70 passed[39m[22m[90m (70)[39m
+[2m   Start at [22m 12:32:14
+[2m   Duration [22m 5.37s[2m (transform 3.04s, setup 1.01s, collect 4.26s, tests 715ms, environment 3.90s, prepare 1.18s)[22m
+
