@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+weight-all-head: ROUTES=home,club-manager,soccer-career,stadium-tycoon,wonderkid-factory,minefield,footle,nfl-my-career,front-office,soccer-grid,leaderboard node .rc/x/weightOne2.mjs http://localhost:4173 dist head-all .
+weight-no1088: bash .rc/x/weightRevert2.sh 4176 no1088 1e966da6 home,footle,front-office,stadium-tycoon src/pages/Index.tsx
