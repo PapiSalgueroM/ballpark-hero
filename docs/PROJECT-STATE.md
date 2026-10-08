@@ -1,3 +1,61 @@
+## Ground growth preparation 3, October 7, 2026
+
+Preparation2 finished at83efde0d/run37720730476. Full634-file audit f5aeaaea holds
+all80 early files, source and installed manifests. Actual import2/setup2 pass.
+Four mounts/eightPNGs only, zero complete profiles/UI controls. Full first7
+observations are exact; boundary5 differ only at eight performance leaves229/228.
+Old8/9 and readers17/20 remain red and strict, no executed parent equivalence.
+This QA-only correction consumes the queued clock at the first inline HEAD read
+before resource loads. Strict boot/preadvance0 and postadvance128 anchors stay.
+A unique reversible actual128-to129 operation copy adds one separate rejected
+clock setup mount.44 original mounts/70PNGs and all full paired fields remain.
+Worker51d373f3/wrapperf7cd69e9, peers61fc73fd/root9a257f26, remote proof pending.
+Product11lines and workflow are held. Money parent181 remains held. No full-route,
+campaign, trusted departure, physical-device, normal-motion or publication claim.
+E retains integration, engine/pitch/save contracts and production ownership.
+
+Preparation 2 is a QA-only correction after preparation 1 at37cdbed8/run37718623518
+completed red. Types/build and actual template font caching passed. The native
+worker stopped in prepare on the first existing entity-ID initialization draw,
+before any fixture, browser, case or control. Its source initializer has two
+expected calls; this failed run observed only the first denial. Old aggregate
+and reader gates also remain red and strict, with no baseline waiver claimed.
+
+The corrected import phase seeds and records only those two exact source-bound
+callers. Effective extra-draw and wrong-caller oracle copies must fail their
+mapped checks, separate from four existing UI controls. The throwing ambient
+RNG guard resumes before every actual fixture operation. All old/current page
+paths, full state/save/callback/browser RNG/clock, geometry and pixel assertions
+stay intact. Four widths, 44 mounts and 70 screenshots remain pending remote
+requirements. Product, workflow, fixtures and engine source are unchanged.
+## Codex Round 1094 preparation, 2026-10-07, visible ground growth
+
+The first Stands purchase raises actual capacity from 120 to 160 while initial
+attendance stays 90. The old ground only draws attendance dots, so that purchase
+has no visible structure change. Eleven new page lines draw passive abstract
+terrace bays from the existing capacity value behind the unchanged crowd.
+
+The fixed 64px phone and 80px desktop strip, pitch contract, refs, click mapping,
+text, clocks, engine, hooks, save format, rewards and random draws stay untouched.
+The art does not claim a literal seating plan or any new upgrade benefit. Current
+Stands rules are 40 seats per level, maximum 200, giving three initial bays and
+203 at the highest legal capacity. The remote proof must bind those current rules.
+
+Parent is frozen money head 0a02f879cab6c82fcdb14d19d3b134d907b10f85. The clean
+attached former Round 1080 checkout is reused on codex/tycoon-ground-growth-1094,
+with accepted 1080 branch preserved at 4fed0eefb92fc932531f34631dd731dd849337b8.
+This child depends on the held money draft PR181, not a newer integrated release.
+E1139 strength/engine and E1101 shared pitch remain owned by the release lane.
+
+Verification is pending. The remote-only proof mounts the actual page and hook
+against the exact original parent page, performs a trusted Stands purchase,
+checks visible seating geometry and unchanged full transaction/save/RNG/tap
+outcomes, and measures fixed layout at four emulated widths. Copied faults must
+fail the intended actual assertion while retaining a healthy old-page baseline.
+Original nine Tycoon gates and all twenty readers remain strict after a new-test
+failure. No local runtime, install, build, browser or oracle is allowed. No native,
+physical-device, campaign or publication acceptance is claimed by this note.
+
 Preparation 1 at 95804eab/run 37712341472 completed red. Types/build passed.
 The focused worker passed 3/4; its actual computed prospect price was 797,
 so the deliberately greater-than-1,000 fixture assertion stopped before hook
