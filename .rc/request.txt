@@ -1,0 +1,23 @@
+#!build
+# Round 1104 review (runner lens): rule fences not yet run on b39e1d71, and the five harnesses the builder ran only before the merges
+simLiveScores: node scripts/simLiveScores.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simSingleFooter: node scripts/simSingleFooter.mjs
+simCompletionOnce: node scripts/simCompletionOnce.mjs
+simNoDoubleRecord: node scripts/simNoDoubleRecord.mjs
+simDailyPuzzleContract: node scripts/simDailyPuzzleContract.mjs
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simSchemaNames: node scripts/simSchemaNames.mjs
+simFetchRetry: node scripts/simFetchRetry.mjs
+simGoogleOnlyReturn: node scripts/simGoogleOnlyReturn.mjs
+simNavbarStatsReads: node scripts/simNavbarStatsReads.mjs
+simScoringCoverage: node scripts/simScoringCoverage.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simCareerFacts: node scripts/simCareerFacts.mjs
+simSportEras: node scripts/simSportEras.mjs
+simDepthChart: node scripts/simDepthChart.mjs
+simFreeAgency: node scripts/simFreeAgency.mjs
+simExtension: node scripts/simExtension.mjs
+simAwards: node scripts/simAwards.mjs
+simCareerHall: node scripts/simCareerHall.mjs
