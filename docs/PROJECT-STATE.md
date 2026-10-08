@@ -1,3 +1,11 @@
+## October 8: 1153 Club Manager skill button names, source prepared
+
+XpScreen skill purchases now include the existing tree name in their
+accessible label, retaining the visible Spend a point/Full wording. XP rules,
+handler, disabled states, layout, data and saves are unchanged. Exact remote
+component keyboard/held-engine/parent proof, proper type/build and required
+readers are pending. Claude F owns integration and publication.
+
 ## Release AL LIVE, 2026-10-08 05:38 EDT: ten Codex rounds, playable moments, and a translated page no longer crashes
 
 Claude lane (session F: session E died when the PC was restarted at 00:03 EDT with this release's gate running).
