@@ -393,8 +393,11 @@ const NFL_DPOY: Record<string, FieldConfig | null> = {
      Rookie of the Year -1.6 to -2.15 and Defensive Player -0.2 to -0.45 (a rookie's and an anchor's line fell
      furthest against the field, and at the old grades the two awards fired a fifth and a half as often).
    What one grade cannot hold is how the awards are SPREAD: on the new line 18 percent of careers win an MVP
-   against 16.5 and 63 percent an All-NBA against 59, at the same number a career. Section B6a of
-   scripts/simNbaAwardsSense.mjs judges the rates and prints the spread. */
+   against 16.5 and 63 percent an All-NBA against 59, at the same number a career.
+   Later in the same round the career's awards moved into one pass that decides them together
+   (nbaCareerAwards.ts, with its own field and grades). NBA My Career now calls only the Finals MVP config
+   below. The other NBA configs and their union members stay as that pass found them: scripts/simAwards.mjs
+   prints two of their bars, and nothing in the app calls them. */
 const NBA_ALL_NBA: FieldConfig = { pool: 150, slots: 15, grade: -0.15 };
 const NBA_MVP: FieldConfig = { pool: 150, slots: 1, grade: -0.37 };
 const NBA_DPOY: FieldConfig = { pool: 150, slots: 1, grade: -0.45 };

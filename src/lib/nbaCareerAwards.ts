@@ -29,12 +29,12 @@ import { bestOfNAt, gumbel } from './careerAwards';
 export const NBA_CAREER_MVP_WIN_WEIGHT = 20;
 
 type Row = readonly [mean: number, sd: number];
+type FieldByPos = Record<string, Row>;
 /** What a season is judged against: mean and sd of each score over the simNbaAwardsSense fleet (every season
  *  of half a schedule or more, bench years included, on the era neutral line). `bench` is the points of bench
  *  seasons, `jump` this season's production minus last season's (last season of 40 games or more), `fans` the
  *  fanbase at tip off. Measured 2026-10-08, 6,000 careers a seed, seeds 1 to 5; section E of the harness fails
  *  when the fleet drifts off these rows. */
-type FieldByPos = Record<string, Row>;
 export const NBA_FIELD: { mvp: FieldByPos; defense: FieldByPos; production: FieldByPos; bench: Row; jump: Row; fans: Row } = {
   mvp: { PG: [32.92, 11.23], SG: [31.95, 10.85], SF: [33.67, 11.54], PF: [31.75, 10.35], C: [32.93, 10.95] },
   defense: { PG: [3.02, 1.06], SG: [3.34, 1.28], SF: [4.08, 1.38], PF: [4.05, 1.41], C: [5.59, 2.08] },
@@ -46,7 +46,16 @@ export const NBA_FIELD: { mvp: FieldByPos; defense: FieldByPos; production: Fiel
 
 /** How hard each award is. Pools and slots are real counts (150 starters, 24 All-Stars, 15 All-NBA, 10
  *  All-Defensive, 45 rookies who play, 10 All-Rookie, about 60 sixth men). The grade is the one number tuned,
- *  each only to put its own rate where the harness holds it (section B). */
+ *  each only to put its own rate where the harness holds it (section B), worked out from every season of
+ *  30,000 careers and then played. Measured 2026-10-08, awards a career on five full size seeds (main, the
+ *  game before Round 1103, in brackets):
+ *    All-NBA 1.96 to 2.00 (1.97 to 2.01) and MVP 0.30 to 0.32 (0.31 to 0.32), held at main's rate.
+ *    All-Defensive 1.30 to 1.38 (1.34 to 1.38), held; it now goes to defenders, not to whoever scored most.
+ *    All-Star 3.15 to 3.19, set at 1.6 times All-NBA because 24 are picked against 15.
+ *    Rookie of the Year 0.044 to 0.049 (0.018 to 0.026), set at twice main's; All-Rookie follows at 0.51
+ *      (0.09, none of it in a first season: the old gate asked for a 22 year old).
+ *    Defensive Player 0.07 to 0.08 (0.08), Sixth Man 0.32 to 0.35 (0.32 to 0.36) and Most Improved 0.17 to
+ *      0.18 (0.19), each set at main's rate for want of a better one. */
 const G_ALL_STAR = -0.18;
 const G_ALL_NBA = -0.13;
 const G_MVP = -0.33;

@@ -43,33 +43,66 @@
            elite careers a seed: 5, 4, 6, 6, 2 (band an average of 2 a seed).
        A4  mean points rise with every rating band at every position (bands of 200 seasons or more).
        A5  nbaStatLineFor draws exactly NBA_LINE_DRAWS times and is pure.
-   E   The field in careerAwards.ts is what the fleet lives. Each seed's measured mean within 0.08 of the
-       committed row's sd and its sd within 6 percent (measured across five seeds: at most 0.042 and 2.3).
+   E   The two tables the awards are judged against are what the fleet lives: the season score's field in
+       careerAwards.ts (Finals MVP and the rival bridge read it) and NBA_FIELD in nbaCareerAwards.ts (the one
+       pass reads it). Each seed's measured mean within 0.08 of the committed row's sd and its sd within 6
+       percent (measured across five seeds: at most 0.042 and 2.3 on the first, at most 0.033 and 1.6 on the second).
    R   My share of the head to head years is main's (62.3 to 63.0 percent).
    H   The Hall of Fame inducted rate and the first ballot rate are main's (31.6 to 31.9 and 27.0 to 27.9).
-   B6a The four award rates the old block decides on the score alone are main's: MVPs, All-NBA, All-Defensive
-       and Finals MVPs a career. How the awards are SPREAD (careers with an MVP, with an All-NBA) is held
-       where Round 1103 shipped it and main's is printed: one grade an award cannot hold both.
+   B   The season's awards make sense together (the one pass, nbaCareerAwards.ts). Counts, so most are exact.
+       B0  every award string agrees with the key that names its team, every Defensive Player is on an
+           All-Defensive team, every season holds a club record that adds up to its length.
+       B1  no MVP on a club that missed the playoffs (main: one in four), none off the All-NBA First Team,
+           none who is also Most Improved, no Most Improved after an earlier All-NBA.
+       B2  every Rookie of the Year is on the All-Rookie First Team (main: none was on a team at all), and
+           All-Rookie is won in a first season only.
+       B3  from 2023-24 nobody under the games bar holds an award the real rule names; before it such seasons
+           exist (about 2,170 under 65 games in a full size run, band at least 1,750: the old 62 game gate
+           leaves 1,341, so the bar62 control turns both halves red); every Sixth Man is a bench season;
+           nothing but a Finals MVP is won on less than half a season.
+       B4  no All-NBA season without an All-Star selection; All-Star selections a career are 1.59 to 1.63 times
+           All-NBA (band 1.25 to 2.4; 24 picks against 15 is 1.6).
+       B5  All-Defensive goes to defenders: each of pest, twoway, threed and anchor above each of the six
+           scoring archetypes, and their mean at least 3 times the scorers' (measured: pest 4.3, twoway 5.5, threed 3.0 and anchor 3.3 a career against 0.00 to 0.05 for the scorers).
+       B6  held at main's rate: MVPs, All-NBA, All-Defensive and Finals MVPs a career. Rookie of the Year
+           between main's and three times it (0.044 to 0.049 against 0.022). Printed and judged as above zero,
+           because they move by design: the three stat titles, Sixth Man, Most Improved, Defensive Player,
+           All-Rookie. How the awards are SPREAD (careers with an MVP, with an All-NBA) is held where Round
+           1103 shipped it, and main's is printed beside.
+       B7  decideNbaAwards draws exactly NBA_AWARD_DRAWS times and is pure.
+   D   One function scores an award for both games: NBA Front Office and NBA My Career import the same file,
+       Front Office adds no sum of its own, the two win weights are one number, and cutting the winning term
+       out of the shared score (a second bundle) changes BOTH Front Office's ranking and the career's MVPs.
+   F   The words: the worked example in the "?" recomputed through the shared score, its clubs checked against
+       the engine's record bands, the games rule and the All-Star picks against the rule numbers, the badge
+       count on the page against NBA_BADGES.
    C   The NFL, MLB and NHL careers hash equal to the baseline (under SENSE_PROVE_OTHERS=1 only).
-   R, H and B6a compare the mean over the run's seeds with the mean over main's, within three standard errors
+   R, H and B6 compare the mean over the run's seeds with the mean over main's, within three standard errors
    (heldAt below says why a seed by seed band was thrown away). An award count's error is worked out from how
-   unevenly the award falls over careers, measured in the run: the sd of MVPs a career is 0.82 where Poisson
-   would say 0.56 (All-NBA 2.31 against 1.41, All-Defensive 1.90 against 1.16, Finals MVP 0.46 against 0.39).
+   unevenly the award falls over careers, measured in the run: the sd of MVPs a career is 0.82 to 0.86 where
+   Poisson would say 0.56 (All-NBA 2.3 to 2.4 against 1.41, All-Defensive 1.9 to 2.5 against 1.16).
 
    NEGATIVE CONTROLS, SIM_NBA_SENSE_CONTROL=<name>. Each swaps one line of SOURCE in memory (a plugin, never a
    file), refuses when its anchor is not there exactly once or the swap changed nothing, and must turn its own
    section red. A control that moves the line itself drags what reads the line with it, so each lists what
    may follow. A control run exits 1 when it fired as designed and 3 when it did not.
-     oldassists  the old assists expression                      A1, A3 red (may: A2, E, R, H, B6a)
-     stalefield  the PG field row one sd stale                   E red (may: R, H, B6a)
-     nobridge    the raw score handed to the rival               R red
-     noscale     the legacy constant back to 1                   H red (refuses when it is 1)
-     nomvpworth  an MVP worth nothing to the legacy score        H red
-     oldgrades   four grades back to what they were              B6a red (may: H)
-     othersport  one NFL All-Pro grade moved by a hundredth      C red (needs SENSE_PROVE_OTHERS=1)
-   A control is run at full size where a full run is cheap (about a minute on a CI runner), or shrunk and
-   judged, SENSE_JUDGE=1 SENSE_CAREERS=1500 SENSE_SEEDS=1,2, after the plain run at that size is green. On
-   2026-10-08 all seven fired as designed at both sizes, each red in its own section and nowhere it may not be.
+     oldassists       the old assists expression                       A1, A3 red (may: A2, E, R, H, B4, B6)
+     stalefield       the PG row of the season score's field one sd stale   E red (may: R, H, B6)
+     staleawardfield  the PG row of NBA_FIELD's MVP score one sd stale   E red (may: H, B4, B6)
+     nobridge         the raw score handed to the rival                R red
+     noscale          the legacy constant back to 1                    H red (refuses when it is 1)
+     nomvpworth       an MVP worth nothing to the legacy score         H red
+     independent      MVP with no First Team gate and no playoff gate  B1 red (may: B3, B6, H)
+     rookieage        the rookie test back to 22 or older, two seasons   B2 red (may: B6)
+     bar62            62 games in every era                            B3 red, both halves (may: B6, H)
+     scorersdefend    the defensive awards read the MVP score          B5 red (may: B6)
+     oldgrades        the All-NBA and MVP grades back to 0.15 and none   B6 red (may: H, B4)
+     privatecopy      Front Office adding its own sum again            D red
+     weightdrift      the career's win weight at 19                    D red (may: E, B6)
+     example          the worked example's winning club read as its losing one   F red
+     othersport       one NFL All-Pro grade moved by a hundredth       C red (needs SENSE_PROVE_OTHERS=1)
+   A control is run at full size where a full run is cheap (about two minutes on a CI runner), or shrunk and
+   judged, SENSE_JUDGE=1 SENSE_CAREERS=1500 SENSE_SEEDS=1,2, after the plain run at that size is green.
 
    KNOBS for a builder, none of which may record: SENSE_TRY_SCALE=1.2 (the legacy constant at another value),
    SENSE_FIELD_POP=starters (the field measured on starter seasons only). */
@@ -95,8 +128,10 @@ const norm = s => s.replace(/\r\n/g, '\n');
 /* Triple double seasons the elite sweep must still find on every seed (set from five seeds, see the header). */
 const ELITE_TD_FLOOR = 2;
 /* Careers that win an MVP and an All-NBA at least once, percent, as Round 1103 shipped: its five full size
-   seeds (6,000 careers each), read on the tree of the pass A gate. */
-const SPREAD_1103 = { everMvp: [19.05, 18.17, 18.63, 17.98, 18.3], everAllNba: [64.77, 64.1, 63.63, 63.63, 64.02] };
+   seeds (6,000 careers each), read on the tree of the round's last gate. Main has 16.6 and 58.8; with the old
+   block on the new line it was 18.4 and 64.0; the one pass, which ties MVP to the First Team and a playoff
+   club, brought it most of the way back. */
+const SPREAD_1103 = { everMvp: [17.18, 17.07, 17.73, 17.7, 17.53], everAllNba: [61.7, 60.98, 62.35, 62.47, 62.2] };
 const E_MEAN_TOL = 0.08;
 const E_SD_TOL = 0.06;
 /* B3: seasons under 65 games before 2023-24 holding an award the games rule names, in a full size run. */

@@ -5,8 +5,8 @@
    unset), each at 390 by 844 and 1280 by 900, one with reduced motion and one without.
 
      old   A save recorded before the round (src/test/fixtures/nbaOldSaves1103.json, key board:mid) is written
-           into the page's storage. Its last line prints exactly as the fixture recorded it ("23 ppg, 4.4 rpg,
-           5.3 apg", whole number points). One season is played: every old season object in the save is
+           into the page's storage. The Career Log tile prints its last line exactly as the fixture recorded it
+           ("23 ppg, 4.4 rpg, 5.3 apg", whole number points). One season is played: every old season object in the save is
            unchanged, and the new one holds minutes, steals, blocks and the club's record.
      new   A fresh career, three seasons. Every season's card and the hub's "Last season" line print the three
            averages to one decimal, the card says the minutes, steals and blocks in its own note, the Career Log
@@ -72,6 +72,7 @@ async function step(page) {
   const firstIn = async sel => { const b = page.locator(`${sel} button:not([disabled])`); if (!(await b.count())) return false; await b.first().click(); return true; };
   if (await page.locator('[role="alertdialog"]').count()) return lastIn('[role="alertdialog"]');
   if (await page.locator('[data-season-reveal]').count()) return lastIn('[data-season-reveal]');
+  if (await page.locator('[data-decision-continue]').count()) { await page.locator('[data-decision-continue]').first().click(); return true; }
   if (await page.locator('[data-rivalry-event]').count()) return lastIn('[data-rivalry-event]');
   if (await page.locator('[data-rivalry-choice]').count()) return (await page.locator('[data-rivalry-choice] [data-rivalry-outcome]').count()) ? lastIn('[data-rivalry-choice]') : firstIn('[data-rivalry-choice]');
   if (await page.locator('[data-extension-talk]').count()) return firstIn('[data-extension-talk]');
@@ -92,7 +93,9 @@ async function toHub(page, what) {
 }
 const lastSeasonLine = async page => { const m = (await page.locator('main').innerText()).match(/Last season: ([^·\n]+) ·/); return m ? m[1].trim() : null; };
 const logTile = page => page.locator('button:has(div.uppercase)').filter({ hasText: /Career Log/i }).first();
+const tileSub = async page => ((await logTile(page).count()) ? (await logTile(page).locator('div.truncate').last().innerText()).trim() : null);
 async function tileFits(page) {
+  if (!(await logTile(page).count())) return { text: 'no Career Log tile on the screen', cut: true, need: 0, room: 0 };
   const sub = logTile(page).locator('div.truncate').last();
   if (CONTROL === 'wide') await sub.evaluate((el, text) => { el.textContent = text; }, WIDE);
   return sub.evaluate(el => ({ text: el.textContent, cut: el.scrollWidth > el.clientWidth, need: el.scrollWidth, room: el.clientWidth }));
@@ -125,13 +128,13 @@ if (STRETCH === 'all' || STRETCH === 'old') {
     await page.reload({ waitUntil: 'networkidle' }); await page.waitForTimeout(1200);
     await toHub(page, what);
     const want = old.read.lines[old.read.lines.length - 1];
-    say((await lastSeasonLine(page)) === want, `${what}: the last line prints as it was saved, "${want}" (reads "${await lastSeasonLine(page)}")`);
+    say((await tileSub(page)) === want, `${what}: the Career Log tile prints the last line as it was saved, "${want}" (reads "${await tileSub(page)}")`);
     if (CONTROL !== 'oldrow') { await playOne(page, what); await toHub(page, what); }
     const s = await saveOf(page);
     const kept = old.save.seasons.every((x, i) => JSON.stringify(s.c.seasons[i]) === JSON.stringify(x));
     say(kept, `${what}: every season saved before the round is unchanged in the save`);
     const last = s.c.seasons[s.c.seasons.length - 1];
-    say(NEW_LINE.test((await lastSeasonLine(page)) ?? ''), `${what}: the newest row is on the new line (reads "${await lastSeasonLine(page)}")`, 'oldrow');
+    say(NEW_LINE.test((await tileSub(page)) ?? ''), `${what}: the newest row is on the new line (the tile reads "${await tileSub(page)}")`, 'oldrow');
     if (CONTROL !== 'oldrow') say(['mpg', 'spg', 'bpg', 'clubWins', 'clubLosses'].every(k => typeof last[k] === 'number') && s.c.seasons.length === old.save.seasons.length + 1, `${what}: the new season holds minutes, steals, blocks and the club's record (${last.mpg} mpg, ${last.clubWins}-${last.clubLosses})`);
     const fit = await tileFits(page);
     say(!fit.cut, `${what}: the Career Log tile's second line is not cut off ("${fit.text}", needs ${fit.need} of ${fit.room} pixels)`, 'wide');
