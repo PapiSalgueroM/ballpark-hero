@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+seasonCentre: PORT=4541 SHOTS=$RC_OUT node scripts/playSeasonCentre.mjs
+seasonMoments: PORT=4547 SHOTS=$RUNNER_TEMP/sm node scripts/playSeasonMoments.mjs
+careerSquad: PORT=4577 SHOTS=$RUNNER_TEMP/cs node scripts/playCareerSquad.mjs
+soccerCareer: node scripts/playSoccerCareer.mjs
+scMotion: PORT=4559 SHOTS=$RUNNER_TEMP/scm RC_OUT= node scripts/playSeasonCentreMotion.mjs
