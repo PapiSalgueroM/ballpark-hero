@@ -4,6 +4,8 @@ import { MemoryRouter } from 'react-router-dom';
 import { F1DriverBoard } from '@/components/f1-driver/F1DriverBoard';
 import { ChainFinishMoment, chainOutcome, useLiveFinish } from '@/components/guess-finish/GuessFinish';
 import { useFreshFinish } from '@/components/game/RestoredResult';
+import { formatNumber } from '@/lib/formatNumber';
+import { POINTS_BY_CLUE } from '@/types/f1Driver';
 import { getTennisEarnedBadge } from '@/types/tennisChain';
 import { getNascarEarnedBadge } from '@/types/nascarChain';
 import { getEarnedBadge } from '@/types/ufcChain';
@@ -36,6 +38,10 @@ const tick = (ms: number) => act(() => { vi.advanceTimersByTime(ms); });
 const moment = (view: View) => view.container.querySelector<HTMLElement>('[data-result-moment]');
 const finish = (view: View) => view.container.querySelector<HTMLElement>('[data-guess-finish]');
 const pill = (view: View) => view.container.querySelector<HTMLElement>('[data-result-score]')?.textContent;
+/* Round 1085: the pill groups thousands, so 1000 points read "1,000". The number is read back
+   with the grouping taken off, and only from a well formed figure ("1,00" is not a number here),
+   so a test can hold the value and the printed text apart. */
+const numberOf = (text: string | null | undefined) => (/^(\d{1,3}(,\d{3})+|\d+)$/.test(text ?? '') ? Number(text!.replace(/,/g, '')) : NaN);
 const settled = (view: View) => Boolean(finish(view)?.closest('[data-result-settled]'));
 const confetti = (view: View) => view.container.querySelectorAll('.cm-confetti').length;
 
@@ -50,7 +56,9 @@ describe('a clue guesser ends on the shared result moment', () => {
     expect(moment(view)).toHaveAttribute('data-result-moment', 'win');
     expect(finish(view)).toHaveAttribute('data-guess-finish', 'live');
     expect(settled(view)).toBe(false);
-    expect(pill(view)).toBe('1000');
+    expect(POINTS_BY_CLUE[0]).toBe(1000);
+    expect(numberOf(pill(view))).toBe(POINTS_BY_CLUE[0]);
+    expect(pill(view)).toBe('1,000');
     expect(confetti(view)).toBe(28);
     expect(view.getByText('1000 pts')).toBeVisible();
     expect(view.getByText('Fixture Racer')).toBeVisible();
@@ -64,8 +72,13 @@ describe('a clue guesser ends on the shared result moment', () => {
       const view = mount(); click(view, /Unlimited Mode/);
       for (let h = 0; h < hints; h++) click(view, /^💡 Hint/);
       click(view, 'Fixture correct guess');
+      /* One clue shown plus one a hint, so the board scores POINTS_BY_CLUE[hints]. The board's
+         own line and the pill must both carry that number; the pill prints it grouped. */
+      const points = POINTS_BY_CLUE[hints];
       const scoreLine = view.getByText(/ pts$/, { selector: 'span' }).textContent!;
-      expect(pill(view)).toBe(scoreLine.replace(' pts', ''));
+      expect(numberOf(scoreLine.replace(' pts', ''))).toBe(points);
+      expect(numberOf(pill(view))).toBe(points);
+      expect(pill(view)).toBe(formatNumber(points));
       cleanup();
     }
   });
@@ -88,7 +101,8 @@ describe('a clue guesser ends on the shared result moment', () => {
     expect(moment(again)).toHaveAttribute('data-result-moment', 'win');
     expect(finish(again)).toHaveAttribute('data-guess-finish', 'restored');
     expect(settled(again)).toBe(true);
-    expect(pill(again)).toBe('1000');
+    expect(numberOf(pill(again))).toBe(POINTS_BY_CLUE[0]);
+    expect(pill(again)).toBe('1,000');
     expect(confetti(again)).toBe(0);
   });
 
