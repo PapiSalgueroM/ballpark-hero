@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+simRevealScroll: ENGINES=chromium node scripts/simRevealScroll.mjs
+simMobileChrome: ENGINES=chromium node scripts/simMobileChrome.mjs
+vitest-full: node_modules/.bin/vitest run --reporter=dot --testTimeout=300000 --hookTimeout=120000
+vitest-base: B=$TMPDIR/base-alint; git worktree add --detach $B origin/release-al-int > /dev/null 2>&1; ln -s $PWD/node_modules $B/node_modules; cd $B && node_modules/.bin/vitest run --reporter=dot --testTimeout=300000 --hookTimeout=120000
+continental-base: B=$TMPDIR/base-alint2; git worktree add --detach $B origin/release-al-int > /dev/null 2>&1; ln -s $PWD/node_modules $B/node_modules; cd $B && node_modules/.bin/vitest run src/lib/soccerCareerContinental.test.ts --testTimeout=300000

@@ -1,0 +1,6 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simMobileChrome exit=0 208s | GREEN: 34 top bar measurements and 116 scroll stops, no overlaps, nothing off the side of the screen, controls reachable everywhere, footer never covered.
+simRevealScroll exit=0 208s | Green. 54 presses measured, nothing dragged the page down on content that was already readable, no panel lost its top, and 4 presses proved the feature still does its job
+continental-base exit=0 6s |    Duration  4.00s (transform 1.03s, setup 201ms, collect 1.18s, tests 512ms, environment 1.01s, prepare 523ms)
+vitest-full exit=1 628s |    Duration  627.39s (transform 39.51s, setup 30.26s, collect 197.59s, tests 1284.44s, environment 215.17s, prepare 45.87s)
+vitest-base exit=1 615s |    Duration  613.11s (transform 45.29s, setup 22.89s, collect 186.64s, tests 1341.41s, environment 167.54s, prepare 37.10s)
