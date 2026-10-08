@@ -1,0 +1,2 @@
+# Round 1104 closing fixer: the Hall marks derived again on the pair (1104 + 1051 abc797de), read only
+marks-pair: bash .rc/x/marks-pair.sh

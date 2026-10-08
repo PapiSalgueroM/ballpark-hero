@@ -1,0 +1,3188 @@
+{
+ "note": "Round 1051: the measured marks behind the calibration 2 legacy tables. Written by scripts/genCareerHallMarks.mjs from the pooled careers of six measuring runs of scripts/simCareerHall.mjs; never edited by hand.",
+ "rules": {
+  "population": "sections 1 to 8 loop of scripts/simCareerHall.mjs (four answer policies), default seed and SIM_SEED 1 to 5 pooled",
+  "from": "pooled 90th percentile of the position",
+  "to": "the larger of the pooled 99th percentile and from times 1.1",
+  "digits": 3,
+  "rampFloor": 1.1,
+  "half": 0.5,
+  "baseTarget": 110
+ },
+ "excluded": {
+  "nba": {
+   "games": "games played is longevity, which the season weight already pays"
+  },
+  "nfl": {
+   "ints": "interceptions thrown are a quarterback losing the ball, not production",
+   "forcedFum": "forced fumbles: left out by hand in the design, with holds; a game rule, not a measured one and not a claim about any real Hall",
+   "fgAtt": "field goal attempts count the misses too"
+  },
+  "mlb": {
+   "holds": "holds: setup men went from 5 percent in to 95 on holds alone in the design sample, so they are left out by hand; a game rule, not a claim about any real Hall",
+   "games": "games played is longevity, which the season weight already pays"
+  },
+  "nhl": {
+   "games": "games played is longevity, which the season weight already pays"
+  }
+ },
+ "labels": {
+  "nba": {
+   "pts": "points",
+   "reb": "rebounds",
+   "ast": "assists"
+  },
+  "nfl": {
+   "passYds": "passing yards",
+   "passTd": "touchdown passes",
+   "rushYds": "rushing yards",
+   "rushTd": "rushing touchdowns",
+   "rec": "catches",
+   "recYds": "receiving yards",
+   "recTd": "touchdown catches",
+   "tackles": "tackles",
+   "sacks": "sacks",
+   "picks": "interceptions",
+   "passDef": "passes defended",
+   "fgMade": "field goals"
+  },
+  "mlb": {
+   "hr": "home runs",
+   "rbi": "RBI",
+   "sb": "steals",
+   "wins": "wins",
+   "so": "strikeouts",
+   "saves": "saves"
+  },
+  "nhl": {
+   "goals": "goals",
+   "assists": "assists",
+   "points": "points",
+   "wins": "wins"
+  }
+ },
+ "sports": {
+  "nfl": {
+   "careers": 12000,
+   "runs": [
+    2000,
+    2000,
+    2000,
+    2000,
+    2000,
+    2000
+   ],
+   "positions": {
+    "QB": {
+     "n": 1500,
+     "medianSeasons": 17,
+     "hallShare1": 58.6,
+     "medianScore1": 566,
+     "families": {
+      "passYds": {
+       "median": 63511,
+       "p90": 73277,
+       "p99": 78785,
+       "from": 73300,
+       "to": 80700,
+       "floored": true
+      },
+      "passTd": {
+       "median": 438,
+       "p90": 529,
+       "p99": 584,
+       "from": 529,
+       "to": 584,
+       "floored": false
+      },
+      "ints": {
+       "median": 226,
+       "p90": 264,
+       "p99": 289,
+       "from": 264,
+       "to": 291,
+       "floored": true
+      },
+      "rushYds": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "rushTd": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "rec": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "recYds": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "recTd": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "tackles": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "sacks": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "picks": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "passDef": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "forcedFum": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "fgMade": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "fgAtt": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      }
+     }
+    },
+    "RB": {
+     "n": 1500,
+     "medianSeasons": 11,
+     "hallShare1": 11.6,
+     "medianScore1": 243,
+     "families": {
+      "passYds": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "passTd": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "ints": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "rushYds": {
+       "median": 11844,
+       "p90": 14918,
+       "p99": 16873,
+       "from": 14900,
+       "to": 16900,
+       "floored": false
+      },
+      "rushTd": {
+       "median": 97,
+       "p90": 124,
+       "p99": 141,
+       "from": 124,
+       "to": 141,
+       "floored": false
+      },
+      "rec": {
+       "median": 393,
+       "p90": 477,
+       "p99": 531,
+       "from": 477,
+       "to": 531,
+       "floored": false
+      },
+      "recYds": {
+       "median": 3135,
+       "p90": 3805,
+       "p99": 4311,
+       "from": 3810,
+       "to": 4310,
+       "floored": false
+      },
+      "recTd": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "tackles": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "sacks": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "picks": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "passDef": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "forcedFum": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "fgMade": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "fgAtt": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      }
+     }
+    },
+    "WR": {
+     "n": 1500,
+     "medianSeasons": 15,
+     "hallShare1": 23.9,
+     "medianScore1": 349,
+     "families": {
+      "passYds": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "passTd": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "ints": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "rushYds": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "rushTd": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "rec": {
+       "median": 1163,
+       "p90": 1465,
+       "p99": 1655,
+       "from": 1470,
+       "to": 1660,
+       "floored": false
+      },
+      "recYds": {
+       "median": 14532,
+       "p90": 18454,
+       "p99": 20641,
+       "from": 18500,
+       "to": 20600,
+       "floored": false
+      },
+      "recTd": {
+       "median": 120,
+       "p90": 153,
+       "p99": 179,
+       "from": 153,
+       "to": 179,
+       "floored": false
+      },
+      "tackles": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "sacks": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "picks": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "passDef": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "forcedFum": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "fgMade": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "fgAtt": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      }
+     }
+    },
+    "TE": {
+     "n": 1500,
+     "medianSeasons": 16,
+     "hallShare1": 10.1,
+     "medianScore1": 234,
+     "families": {
+      "passYds": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "passTd": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "ints": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "rushYds": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "rushTd": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "rec": {
+       "median": 941,
+       "p90": 1165,
+       "p99": 1311,
+       "from": 1170,
+       "to": 1310,
+       "floored": false
+      },
+      "recYds": {
+       "median": 10115,
+       "p90": 12487,
+       "p99": 14050,
+       "from": 12500,
+       "to": 14100,
+       "floored": false
+      },
+      "recTd": {
+       "median": 136,
+       "p90": 168,
+       "p99": 188,
+       "from": 168,
+       "to": 188,
+       "floored": false
+      },
+      "tackles": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "sacks": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "picks": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "passDef": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "forcedFum": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "fgMade": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "fgAtt": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      }
+     }
+    },
+    "LB": {
+     "n": 1500,
+     "medianSeasons": 15,
+     "hallShare1": 13.3,
+     "medianScore1": 223,
+     "families": {
+      "passYds": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "passTd": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "ints": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "rushYds": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "rushTd": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "rec": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "recYds": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "recTd": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "tackles": {
+       "median": 1871,
+       "p90": 2316,
+       "p99": 2633,
+       "from": 2320,
+       "to": 2630,
+       "floored": false
+      },
+      "sacks": {
+       "median": 57,
+       "p90": 74.5,
+       "p99": 90,
+       "from": 74.5,
+       "to": 90,
+       "floored": false
+      },
+      "picks": {
+       "median": 21,
+       "p90": 28,
+       "p99": 34,
+       "from": 28,
+       "to": 34,
+       "floored": false
+      },
+      "passDef": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "forcedFum": {
+       "median": 22,
+       "p90": 28,
+       "p99": 34,
+       "from": 28,
+       "to": 34,
+       "floored": false
+      },
+      "fgMade": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "fgAtt": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      }
+     }
+    },
+    "CB": {
+     "n": 1500,
+     "medianSeasons": 14,
+     "hallShare1": 7.7,
+     "medianScore1": 198,
+     "families": {
+      "passYds": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "passTd": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "ints": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "rushYds": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "rushTd": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "rec": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "recYds": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "recTd": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "tackles": {
+       "median": 907,
+       "p90": 1161,
+       "p99": 1296,
+       "from": 1160,
+       "to": 1300,
+       "floored": false
+      },
+      "sacks": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "picks": {
+       "median": 36,
+       "p90": 49,
+       "p99": 58,
+       "from": 49,
+       "to": 58,
+       "floored": false
+      },
+      "passDef": {
+       "median": 268,
+       "p90": 348,
+       "p99": 401,
+       "from": 348,
+       "to": 401,
+       "floored": false
+      },
+      "forcedFum": {
+       "median": 14,
+       "p90": 18,
+       "p99": 22,
+       "from": 18,
+       "to": 22,
+       "floored": false
+      },
+      "fgMade": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "fgAtt": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      }
+     }
+    },
+    "EDGE": {
+     "n": 1500,
+     "medianSeasons": 16,
+     "hallShare1": 28.3,
+     "medianScore1": 315,
+     "families": {
+      "passYds": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "passTd": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "ints": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "rushYds": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "rushTd": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "rec": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "recYds": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "recTd": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "tackles": {
+       "median": 901,
+       "p90": 1085,
+       "p99": 1165,
+       "from": 1090,
+       "to": 1200,
+       "floored": true
+      },
+      "sacks": {
+       "median": 165,
+       "p90": 212,
+       "p99": 244.5,
+       "from": 212,
+       "to": 245,
+       "floored": false
+      },
+      "picks": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "passDef": {
+       "median": 30,
+       "p90": 38,
+       "p99": 44,
+       "from": 38,
+       "to": 44,
+       "floored": false
+      },
+      "forcedFum": {
+       "median": 28,
+       "p90": 36,
+       "p99": 42,
+       "from": 36,
+       "to": 42,
+       "floored": false
+      },
+      "fgMade": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "fgAtt": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      }
+     }
+    },
+    "K": {
+     "n": 1500,
+     "medianSeasons": 18,
+     "hallShare1": 10,
+     "medianScore1": 278,
+     "families": {
+      "passYds": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "passTd": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "ints": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "rushYds": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "rushTd": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "rec": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "recYds": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "recTd": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "tackles": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "sacks": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "picks": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "passDef": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "forcedFum": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "fgMade": {
+       "median": 484,
+       "p90": 511,
+       "p99": 530,
+       "from": 511,
+       "to": 563,
+       "floored": true
+      },
+      "fgAtt": {
+       "median": 537,
+       "p90": 557,
+       "p99": 575,
+       "from": 557,
+       "to": 613,
+       "floored": true
+      }
+     }
+    }
+   },
+   "standouts": {
+    "QB": [
+     "passYds",
+     "passTd"
+    ],
+    "RB": [
+     "rushYds",
+     "rushTd"
+    ],
+    "WR": [
+     "rec",
+     "recYds",
+     "recTd"
+    ],
+    "TE": [
+     "rec",
+     "recYds",
+     "recTd"
+    ],
+    "LB": [
+     "tackles",
+     "picks"
+    ],
+    "CB": [
+     "tackles",
+     "picks",
+     "passDef"
+    ],
+    "EDGE": [
+     "sacks"
+    ],
+    "K": [
+     "fgMade"
+    ]
+   },
+   "base": {
+    "TE": [
+     {
+      "stat": "recYds",
+      "share": 0.5,
+      "median": 10115,
+      "per": 180
+     },
+     {
+      "stat": "rec",
+      "share": 0.25,
+      "median": 941,
+      "per": 34
+     },
+     {
+      "stat": "recTd",
+      "share": 0.25,
+      "median": 136,
+      "per": 4.9
+     }
+    ],
+    "LB": [
+     {
+      "stat": "tackles",
+      "share": 0.5,
+      "median": 1871,
+      "per": 34
+     },
+     {
+      "stat": "sacks",
+      "share": 0.2,
+      "median": 57,
+      "per": 2.6
+     },
+     {
+      "stat": "picks",
+      "share": 0.15,
+      "median": 21,
+      "per": 1.3
+     },
+     {
+      "stat": "forcedFum",
+      "share": 0.15,
+      "median": 22,
+      "per": 1.3
+     }
+    ],
+    "CB": [
+     {
+      "stat": "picks",
+      "share": 0.45,
+      "median": 36,
+      "per": 0.73
+     },
+     {
+      "stat": "passDef",
+      "share": 0.3,
+      "median": 268,
+      "per": 8.1
+     },
+     {
+      "stat": "tackles",
+      "share": 0.25,
+      "median": 907,
+      "per": 33
+     }
+    ],
+    "EDGE": [
+     {
+      "stat": "sacks",
+      "share": 0.6,
+      "median": 165,
+      "per": 2.5
+     },
+     {
+      "stat": "tackles",
+      "share": 0.2,
+      "median": 901,
+      "per": 41
+     },
+     {
+      "stat": "forcedFum",
+      "share": 0.2,
+      "median": 28,
+      "per": 1.3
+     }
+    ]
+   },
+   "nearHalf": [
+    {
+     "pos": "CB",
+     "family": "tackles",
+     "from": 1160,
+     "half": 1160,
+     "on": true
+    }
+   ],
+   "bands": {
+    "defaultCareers": 2000,
+    "fromCell": {
+     "lo": 0.018,
+     "hi": 0.174,
+     "measuredLo": 0.044,
+     "measuredHi": 0.148,
+     "cells": 84
+    },
+    "fromPooled": {
+     "lo": 0.0719,
+     "hi": 0.1296,
+     "measured": [
+      0.102,
+      0.1151,
+      0.0863,
+      0.0949,
+      0.0954,
+      0.1106
+     ]
+    },
+    "toPooled": {
+     "lo": 0.0039,
+     "hi": 0.017,
+     "measured": [
+      0.0137,
+      0.0086,
+      0.0071,
+      0.0083,
+      0.008,
+      0.0109
+     ]
+    }
+   },
+   "outcome": {
+    "topShare": 0.05,
+    "covered": 0.9,
+    "pooledGain": {
+     "measured": [
+      0.3846,
+      0.3782,
+      0.3397,
+      0.4336,
+      0.3397,
+      0.359
+     ],
+     "floor": 0.1699
+    },
+    "standoutGain": {
+     "measured": [
+      0.1538,
+      0.2143,
+      0.2253,
+      0.2088,
+      0.1813,
+      0.1868
+     ],
+     "floor": 0.0769
+    },
+    "hallShare1": [
+     0.2045,
+     0.2075,
+     0.2,
+     0.197,
+     0.203,
+     0.2145
+    ],
+    "hallShare2": [
+     0.2535,
+     0.2615,
+     0.2485,
+     0.255,
+     0.257,
+     0.2765
+    ],
+    "hallCeiling": 0.3045,
+    "newlyIn": [
+     98,
+     108,
+     97,
+     116,
+     108,
+     124
+    ],
+    "medianScore1": [
+     304,
+     278,
+     304,
+     294,
+     303,
+     304
+    ],
+    "medianScore2": [
+     358,
+     348,
+     366,
+     358,
+     370,
+     366
+    ],
+    "meanScore1": [
+     384.5,
+     378.7,
+     382.7,
+     381.2,
+     384.5,
+     392.2
+    ],
+    "meanScore2": [
+     453.3,
+     447.6,
+     447.9,
+     447.3,
+     452.3,
+     461.8
+    ],
+    "baseCredit": {
+     "TE": {
+      "lo": 109.6147,
+      "hi": 114.1344,
+      "measured": [
+       111.4,
+       110.7,
+       111.8,
+       111.3,
+       113,
+       111.1
+      ]
+     },
+     "LB": {
+      "lo": 108.0577,
+      "hi": 113.121,
+      "measured": [
+       111.1,
+       110,
+       109.4,
+       110.9,
+       109.3,
+       111.9
+      ]
+     },
+     "CB": {
+      "lo": 105.6613,
+      "hi": 114.1005,
+      "measured": [
+       109,
+       112,
+       110.8,
+       109.8,
+       110.6,
+       107.8
+      ]
+     },
+     "EDGE": {
+      "lo": 104.1467,
+      "hi": 115.015,
+      "measured": [
+       110.9,
+       112.3,
+       111.6,
+       109.6,
+       109.9,
+       106.9
+      ]
+     }
+    }
+   }
+  },
+  "nba": {
+   "careers": 12000,
+   "runs": [
+    2000,
+    2000,
+    2000,
+    2000,
+    2000,
+    2000
+   ],
+   "positions": {
+    "PG": {
+     "n": 2400,
+     "medianSeasons": 18,
+     "hallShare1": 31.8,
+     "medianScore1": 343,
+     "families": {
+      "pts": {
+       "median": 25979,
+       "p90": 37076,
+       "p99": 45027,
+       "from": 37100,
+       "to": 45000,
+       "floored": false
+      },
+      "reb": {
+       "median": 6064,
+       "p90": 7405,
+       "p99": 8395,
+       "from": 7410,
+       "to": 8400,
+       "floored": false
+      },
+      "ast": {
+       "median": 11314,
+       "p90": 14755,
+       "p99": 17622,
+       "from": 14800,
+       "to": 17600,
+       "floored": false
+      },
+      "games": {
+       "median": 1389,
+       "p90": 1609,
+       "p99": 1684,
+       "from": 1610,
+       "to": 1780,
+       "floored": true
+      }
+     }
+    },
+    "SG": {
+     "n": 2400,
+     "medianSeasons": 18,
+     "hallShare1": 32.7,
+     "medianScore1": 357,
+     "families": {
+      "pts": {
+       "median": 29655,
+       "p90": 38678,
+       "p99": 46058,
+       "from": 38700,
+       "to": 46100,
+       "floored": false
+      },
+      "reb": {
+       "median": 6692,
+       "p90": 8486,
+       "p99": 10202,
+       "from": 8490,
+       "to": 10200,
+       "floored": false
+      },
+      "ast": {
+       "median": 7627,
+       "p90": 9701,
+       "p99": 11242,
+       "from": 9700,
+       "to": 11200,
+       "floored": false
+      },
+      "games": {
+       "median": 1386,
+       "p90": 1608,
+       "p99": 1684,
+       "from": 1610,
+       "to": 1780,
+       "floored": true
+      }
+     }
+    },
+    "SF": {
+     "n": 2400,
+     "medianSeasons": 18,
+     "hallShare1": 31.5,
+     "medianScore1": 351,
+     "families": {
+      "pts": {
+       "median": 27453,
+       "p90": 37647,
+       "p99": 45440,
+       "from": 37600,
+       "to": 45400,
+       "floored": false
+      },
+      "reb": {
+       "median": 9482,
+       "p90": 11549,
+       "p99": 13157,
+       "from": 11500,
+       "to": 13200,
+       "floored": false
+      },
+      "ast": {
+       "median": 9603,
+       "p90": 13498,
+       "p99": 16406,
+       "from": 13500,
+       "to": 16400,
+       "floored": false
+      },
+      "games": {
+       "median": 1436,
+       "p90": 1648,
+       "p99": 1687,
+       "from": 1650,
+       "to": 1820,
+       "floored": true
+      }
+     }
+    },
+    "PF": {
+     "n": 2400,
+     "medianSeasons": 18,
+     "hallShare1": 30.2,
+     "medianScore1": 350,
+     "families": {
+      "pts": {
+       "median": 25752,
+       "p90": 31814,
+       "p99": 36143,
+       "from": 31800,
+       "to": 36100,
+       "floored": false
+      },
+      "reb": {
+       "median": 11408,
+       "p90": 14317,
+       "p99": 17091,
+       "from": 14300,
+       "to": 17100,
+       "floored": false
+      },
+      "ast": {
+       "median": 7313,
+       "p90": 10055,
+       "p99": 12251,
+       "from": 10100,
+       "to": 12300,
+       "floored": false
+      },
+      "games": {
+       "median": 1368,
+       "p90": 1601,
+       "p99": 1683,
+       "from": 1600,
+       "to": 1760,
+       "floored": true
+      }
+     }
+    },
+    "C": {
+     "n": 2400,
+     "medianSeasons": 17,
+     "hallShare1": 26.8,
+     "medianScore1": 321,
+     "families": {
+      "pts": {
+       "median": 22893,
+       "p90": 29560,
+       "p99": 35647,
+       "from": 29600,
+       "to": 35600,
+       "floored": false
+      },
+      "reb": {
+       "median": 11793,
+       "p90": 15125,
+       "p99": 18025,
+       "from": 15100,
+       "to": 18000,
+       "floored": false
+      },
+      "ast": {
+       "median": 5837,
+       "p90": 7465,
+       "p99": 8899,
+       "from": 7470,
+       "to": 8900,
+       "floored": false
+      },
+      "games": {
+       "median": 1330,
+       "p90": 1582,
+       "p99": 1681,
+       "from": 1580,
+       "to": 1740,
+       "floored": true
+      }
+     }
+    }
+   },
+   "standouts": {
+    "PG": [
+     "pts",
+     "ast"
+    ],
+    "SG": [
+     "pts",
+     "reb",
+     "ast"
+    ],
+    "SF": [
+     "pts",
+     "reb",
+     "ast"
+    ],
+    "PF": [
+     "pts",
+     "reb",
+     "ast"
+    ],
+    "C": [
+     "pts",
+     "reb",
+     "ast"
+    ]
+   },
+   "base": {},
+   "nearHalf": [
+    {
+     "pos": "PG",
+     "family": "reb",
+     "from": 7410,
+     "half": 7550,
+     "on": false
+    },
+    {
+     "pos": "C",
+     "family": "ast",
+     "from": 7470,
+     "half": 7400,
+     "on": true
+    }
+   ],
+   "bands": {
+    "defaultCareers": 2000,
+    "fromCell": {
+     "lo": 0.0538,
+     "hi": 0.1513,
+     "measuredLo": 0.07,
+     "measuredHi": 0.135,
+     "cells": 84
+    },
+    "fromPooled": {
+     "lo": 0.0878,
+     "hi": 0.1117,
+     "measured": [
+      0.1016,
+      0.0938,
+      0.1057,
+      0.102,
+      0.0959,
+      0.1002
+     ]
+    },
+    "toPooled": {
+     "lo": 0.0044,
+     "hi": 0.0162,
+     "measured": [
+      0.0132,
+      0.0095,
+      0.0111,
+      0.0088,
+      0.0073,
+      0.0089
+     ]
+    }
+   },
+   "outcome": {
+    "topShare": 0.05,
+    "covered": 0.9,
+    "pooledGain": {
+     "measured": [
+      0.2667,
+      0.1938,
+      0.2417,
+      0.2125,
+      0.2429,
+      0.1556
+     ],
+     "floor": 0.0778
+    },
+    "standoutGain": {
+     "measured": [
+      0.1893,
+      0.1321,
+      0.1321,
+      0.1393,
+      0.1393,
+      0.1143
+     ],
+     "floor": 0.0571
+    },
+    "hallShare1": [
+     0.2995,
+     0.313,
+     0.3095,
+     0.3065,
+     0.2875,
+     0.3185
+    ],
+    "hallShare2": [
+     0.324,
+     0.333,
+     0.3295,
+     0.3275,
+     0.3055,
+     0.336
+    ],
+    "hallCeiling": 0.3665,
+    "newlyIn": [
+     49,
+     40,
+     40,
+     42,
+     36,
+     35
+    ],
+    "medianScore1": [
+     338,
+     345,
+     344,
+     341,
+     340,
+     356
+    ],
+    "medianScore2": [
+     349,
+     353,
+     353,
+     351,
+     345,
+     368
+    ],
+    "meanScore1": [
+     457.1,
+     461.4,
+     468.7,
+     465.2,
+     446.6,
+     466
+    ],
+    "meanScore2": [
+     485.9,
+     488.9,
+     498.4,
+     492,
+     472.1,
+     493.6
+    ],
+    "baseCredit": {}
+   }
+  },
+  "mlb": {
+   "careers": 16500,
+   "runs": [
+    2750,
+    2750,
+    2750,
+    2750,
+    2750,
+    2750
+   ],
+   "positions": {
+    "SP": {
+     "n": 1500,
+     "medianSeasons": 18,
+     "hallShare1": 40.6,
+     "medianScore1": 446,
+     "families": {
+      "hr": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "rbi": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "sb": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "wins": {
+       "median": 253,
+       "p90": 294,
+       "p99": 330,
+       "from": 294,
+       "to": 330,
+       "floored": false
+      },
+      "so": {
+       "median": 3168,
+       "p90": 3704,
+       "p99": 4120,
+       "from": 3700,
+       "to": 4120,
+       "floored": false
+      },
+      "games": {
+       "median": 553,
+       "p90": 640,
+       "p99": 672,
+       "from": 640,
+       "to": 704,
+       "floored": true
+      },
+      "saves": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "holds": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      }
+     }
+    },
+    "RP": {
+     "n": 1500,
+     "medianSeasons": 19,
+     "hallShare1": 24.3,
+     "medianScore1": 259,
+     "families": {
+      "hr": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "rbi": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "sb": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "wins": {
+       "median": 57,
+       "p90": 68,
+       "p99": 79,
+       "from": 68,
+       "to": 79,
+       "floored": false
+      },
+      "so": {
+       "median": 1485,
+       "p90": 1757,
+       "p99": 1948,
+       "from": 1760,
+       "to": 1950,
+       "floored": false
+      },
+      "games": {
+       "median": 1184,
+       "p90": 1345,
+       "p99": 1407,
+       "from": 1350,
+       "to": 1490,
+       "floored": true
+      },
+      "saves": {
+       "median": 62,
+       "p90": 809,
+       "p99": 966,
+       "from": 809,
+       "to": 966,
+       "floored": false
+      },
+      "holds": {
+       "median": 451,
+       "p90": 561,
+       "p99": 644,
+       "from": 561,
+       "to": 644,
+       "floored": false
+      }
+     }
+    },
+    "C": {
+     "n": 1500,
+     "medianSeasons": 17,
+     "hallShare1": 29.5,
+     "medianScore1": 374,
+     "families": {
+      "hr": {
+       "median": 287,
+       "p90": 361,
+       "p99": 435,
+       "from": 361,
+       "to": 435,
+       "floored": false
+      },
+      "rbi": {
+       "median": 1116,
+       "p90": 1350,
+       "p99": 1562,
+       "from": 1350,
+       "to": 1560,
+       "floored": false
+      },
+      "sb": {
+       "median": 23,
+       "p90": 30,
+       "p99": 36,
+       "from": 30,
+       "to": 36,
+       "floored": false
+      },
+      "wins": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "so": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "games": {
+       "median": 2500,
+       "p90": 2964,
+       "p99": 3275,
+       "from": 2960,
+       "to": 3280,
+       "floored": false
+      },
+      "saves": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "holds": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      }
+     }
+    },
+    "1B": {
+     "n": 1500,
+     "medianSeasons": 18,
+     "hallShare1": 45.5,
+     "medianScore1": 475,
+     "families": {
+      "hr": {
+       "median": 491,
+       "p90": 602,
+       "p99": 699,
+       "from": 602,
+       "to": 699,
+       "floored": false
+      },
+      "rbi": {
+       "median": 1580,
+       "p90": 1879,
+       "p99": 2059,
+       "from": 1880,
+       "to": 2070,
+       "floored": true
+      },
+      "sb": {
+       "median": 35,
+       "p90": 43,
+       "p99": 50,
+       "from": 43,
+       "to": 50,
+       "floored": false
+      },
+      "wins": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "so": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "games": {
+       "median": 2842,
+       "p90": 3241,
+       "p99": 3339,
+       "from": 3240,
+       "to": 3570,
+       "floored": true
+      },
+      "saves": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "holds": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      }
+     }
+    },
+    "2B": {
+     "n": 1500,
+     "medianSeasons": 17,
+     "hallShare1": 33.7,
+     "medianScore1": 397,
+     "families": {
+      "hr": {
+       "median": 280,
+       "p90": 351,
+       "p99": 411,
+       "from": 351,
+       "to": 411,
+       "floored": false
+      },
+      "rbi": {
+       "median": 1148,
+       "p90": 1380,
+       "p99": 1557,
+       "from": 1380,
+       "to": 1560,
+       "floored": false
+      },
+      "sb": {
+       "median": 92,
+       "p90": 114,
+       "p99": 132,
+       "from": 114,
+       "to": 132,
+       "floored": false
+      },
+      "wins": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "so": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "games": {
+       "median": 2673,
+       "p90": 3103,
+       "p99": 3331,
+       "from": 3100,
+       "to": 3410,
+       "floored": true
+      },
+      "saves": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "holds": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      }
+     }
+    },
+    "3B": {
+     "n": 1500,
+     "medianSeasons": 18,
+     "hallShare1": 40.7,
+     "medianScore1": 441,
+     "families": {
+      "hr": {
+       "median": 445,
+       "p90": 549,
+       "p99": 619,
+       "from": 549,
+       "to": 619,
+       "floored": false
+      },
+      "rbi": {
+       "median": 1478,
+       "p90": 1760,
+       "p99": 1951,
+       "from": 1760,
+       "to": 1950,
+       "floored": false
+      },
+      "sb": {
+       "median": 53,
+       "p90": 65,
+       "p99": 76,
+       "from": 65,
+       "to": 76,
+       "floored": false
+      },
+      "wins": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "so": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "games": {
+       "median": 2793,
+       "p90": 3211,
+       "p99": 3337,
+       "from": 3210,
+       "to": 3540,
+       "floored": true
+      },
+      "saves": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "holds": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      }
+     }
+    },
+    "SS": {
+     "n": 1500,
+     "medianSeasons": 18,
+     "hallShare1": 33.4,
+     "medianScore1": 404,
+     "families": {
+      "hr": {
+       "median": 356,
+       "p90": 440,
+       "p99": 503,
+       "from": 440,
+       "to": 503,
+       "floored": false
+      },
+      "rbi": {
+       "median": 1307,
+       "p90": 1548,
+       "p99": 1714,
+       "from": 1550,
+       "to": 1710,
+       "floored": false
+      },
+      "sb": {
+       "median": 111,
+       "p90": 812,
+       "p99": 932,
+       "from": 812,
+       "to": 932,
+       "floored": false
+      },
+      "wins": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "so": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "games": {
+       "median": 2710,
+       "p90": 3167,
+       "p99": 3337,
+       "from": 3170,
+       "to": 3490,
+       "floored": true
+      },
+      "saves": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "holds": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      }
+     }
+    },
+    "LF": {
+     "n": 1500,
+     "medianSeasons": 18,
+     "hallShare1": 41.5,
+     "medianScore1": 451,
+     "families": {
+      "hr": {
+       "median": 436,
+       "p90": 529,
+       "p99": 607,
+       "from": 529,
+       "to": 607,
+       "floored": false
+      },
+      "rbi": {
+       "median": 1474,
+       "p90": 1736,
+       "p99": 1911,
+       "from": 1740,
+       "to": 1920,
+       "floored": true
+      },
+      "sb": {
+       "median": 89,
+       "p90": 654,
+       "p99": 745,
+       "from": 654,
+       "to": 745,
+       "floored": false
+      },
+      "wins": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "so": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "games": {
+       "median": 2830,
+       "p90": 3233,
+       "p99": 3341,
+       "from": 3230,
+       "to": 3560,
+       "floored": true
+      },
+      "saves": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "holds": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      }
+     }
+    },
+    "CF": {
+     "n": 1500,
+     "medianSeasons": 18,
+     "hallShare1": 32.8,
+     "medianScore1": 397,
+     "families": {
+      "hr": {
+       "median": 349,
+       "p90": 434,
+       "p99": 504,
+       "from": 434,
+       "to": 504,
+       "floored": false
+      },
+      "rbi": {
+       "median": 1276,
+       "p90": 1535,
+       "p99": 1724,
+       "from": 1540,
+       "to": 1720,
+       "floored": false
+      },
+      "sb": {
+       "median": 123,
+       "p90": 900,
+       "p99": 1069,
+       "from": 900,
+       "to": 1070,
+       "floored": false
+      },
+      "wins": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "so": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "games": {
+       "median": 2692,
+       "p90": 3167,
+       "p99": 3333,
+       "from": 3170,
+       "to": 3490,
+       "floored": true
+      },
+      "saves": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "holds": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      }
+     }
+    },
+    "RF": {
+     "n": 1500,
+     "medianSeasons": 18,
+     "hallShare1": 44.5,
+     "medianScore1": 463,
+     "families": {
+      "hr": {
+       "median": 450,
+       "p90": 553,
+       "p99": 626,
+       "from": 553,
+       "to": 626,
+       "floored": false
+      },
+      "rbi": {
+       "median": 1493,
+       "p90": 1760,
+       "p99": 1958,
+       "from": 1760,
+       "to": 1960,
+       "floored": false
+      },
+      "sb": {
+       "median": 73,
+       "p90": 91,
+       "p99": 106,
+       "from": 91,
+       "to": 106,
+       "floored": false
+      },
+      "wins": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "so": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "games": {
+       "median": 2789,
+       "p90": 3186,
+       "p99": 3337,
+       "from": 3190,
+       "to": 3510,
+       "floored": true
+      },
+      "saves": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "holds": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      }
+     }
+    },
+    "DH": {
+     "n": 1500,
+     "medianSeasons": 20,
+     "hallShare1": 53.7,
+     "medianScore1": 513,
+     "families": {
+      "hr": {
+       "median": 591,
+       "p90": 705,
+       "p99": 786,
+       "from": 705,
+       "to": 786,
+       "floored": false
+      },
+      "rbi": {
+       "median": 1844,
+       "p90": 2084,
+       "p99": 2262,
+       "from": 2080,
+       "to": 2290,
+       "floored": true
+      },
+      "sb": {
+       "median": 23,
+       "p90": 28,
+       "p99": 32,
+       "from": 28,
+       "to": 32,
+       "floored": false
+      },
+      "wins": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "so": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "games": {
+       "median": 3160,
+       "p90": 3330,
+       "p99": 3348,
+       "from": 3330,
+       "to": 3670,
+       "floored": true
+      },
+      "saves": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "holds": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      }
+     }
+    }
+   },
+   "standouts": {
+    "C": [
+     "hr",
+     "rbi"
+    ],
+    "1B": [
+     "hr",
+     "rbi"
+    ],
+    "3B": [
+     "hr",
+     "rbi"
+    ],
+    "SS": [
+     "hr",
+     "rbi",
+     "sb"
+    ],
+    "LF": [
+     "hr",
+     "rbi",
+     "sb"
+    ],
+    "CF": [
+     "hr",
+     "rbi",
+     "sb"
+    ],
+    "RF": [
+     "hr",
+     "rbi"
+    ],
+    "DH": [
+     "hr",
+     "rbi"
+    ],
+    "2B": [
+     "rbi"
+    ],
+    "SP": [
+     "wins",
+     "so"
+    ],
+    "RP": [
+     "saves"
+    ]
+   },
+   "base": {
+    "RP": [
+     {
+      "stat": "saves",
+      "per": 8,
+      "fixed": true,
+      "median": 62
+     },
+     {
+      "stat": "holds",
+      "per": 12,
+      "fixed": true,
+      "median": 451
+     },
+     {
+      "stat": "so",
+      "per": 40,
+      "fixed": true,
+      "median": 1485
+     }
+    ]
+   },
+   "nearHalf": [
+    {
+     "pos": "C",
+     "family": "hr",
+     "from": 361,
+     "half": 352.5,
+     "on": true
+    },
+    {
+     "pos": "2B",
+     "family": "hr",
+     "from": 351,
+     "half": 352.5,
+     "on": false
+    },
+    {
+     "pos": "RP",
+     "family": "so",
+     "from": 1760,
+     "half": 1850,
+     "on": false
+    }
+   ],
+   "bands": {
+    "defaultCareers": 2000,
+    "fromCell": {
+     "lo": 0.0196,
+     "hi": 0.2005,
+     "measuredLo": 0.0497,
+     "measuredHi": 0.1703,
+     "cells": 132
+    },
+    "fromPooled": {
+     "lo": 0.0859,
+     "hi": 0.1264,
+     "measured": [
+      0.096,
+      0.1022,
+      0.1163,
+      0.1083,
+      0.097,
+      0.1005
+     ]
+    },
+    "toPooled": {
+     "lo": 0.0049,
+     "hi": 0.0164,
+     "measured": [
+      0.0083,
+      0.009,
+      0.011,
+      0.0135,
+      0.0078,
+      0.0107
+     ]
+    }
+   },
+   "outcome": {
+    "topShare": 0.05,
+    "covered": 0.9,
+    "pooledGain": {
+     "measured": [
+      0.28,
+      0.2333,
+      0.15,
+      0.2167,
+      0.18,
+      0.2
+     ],
+     "floor": 0.075
+    },
+    "standoutGain": {
+     "measured": [
+      0.1,
+      0.0864,
+      0.0364,
+      0.0818,
+      0.0591,
+      0.0545
+     ],
+     "floor": 0.0182
+    },
+    "hallShare1": [
+     0.3635,
+     0.3795,
+     0.392,
+     0.388,
+     0.4045,
+     0.375
+    ],
+    "hallShare2": [
+     0.374,
+     0.393,
+     0.399,
+     0.4005,
+     0.4135,
+     0.3845
+    ],
+    "hallCeiling": 0.453,
+    "newlyIn": [
+     21,
+     27,
+     14,
+     25,
+     18,
+     19
+    ],
+    "medianScore1": [
+     425,
+     424,
+     431,
+     430,
+     434,
+     420
+    ],
+    "medianScore2": [
+     429,
+     428,
+     434,
+     435,
+     436,
+     424
+    ],
+    "meanScore1": [
+     499.9,
+     502.3,
+     511.7,
+     508.3,
+     504.9,
+     498.2
+    ],
+    "meanScore2": [
+     516.4,
+     519.2,
+     531.2,
+     528.6,
+     521.8,
+     515.3
+    ],
+    "baseCredit": {}
+   }
+  },
+  "nhl": {
+   "careers": 12000,
+   "runs": [
+    2000,
+    2000,
+    2000,
+    2000,
+    2000,
+    2000
+   ],
+   "positions": {
+    "C": {
+     "n": 2400,
+     "medianSeasons": 20,
+     "hallShare1": 26.8,
+     "medianScore1": 342,
+     "families": {
+      "goals": {
+       "median": 588,
+       "p90": 922,
+       "p99": 1111,
+       "from": 922,
+       "to": 1110,
+       "floored": false
+      },
+      "assists": {
+       "median": 816,
+       "p90": 988,
+       "p99": 1133,
+       "from": 988,
+       "to": 1130,
+       "floored": false
+      },
+      "points": {
+       "median": 1435,
+       "p90": 1809,
+       "p99": 2104,
+       "from": 1810,
+       "to": 2100,
+       "floored": false
+      },
+      "wins": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "games": {
+       "median": 1536,
+       "p90": 1738,
+       "p99": 1775,
+       "from": 1740,
+       "to": 1920,
+       "floored": true
+      }
+     }
+    },
+    "LW": {
+     "n": 2400,
+     "medianSeasons": 19,
+     "hallShare1": 29.7,
+     "medianScore1": 360,
+     "families": {
+      "goals": {
+       "median": 627,
+       "p90": 869,
+       "p99": 1033,
+       "from": 869,
+       "to": 1030,
+       "floored": false
+      },
+      "assists": {
+       "median": 767,
+       "p90": 939,
+       "p99": 1097,
+       "from": 939,
+       "to": 1100,
+       "floored": false
+      },
+      "points": {
+       "median": 1414,
+       "p90": 1730,
+       "p99": 1965,
+       "from": 1730,
+       "to": 1970,
+       "floored": false
+      },
+      "wins": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "games": {
+       "median": 1497,
+       "p90": 1702,
+       "p99": 1772,
+       "from": 1700,
+       "to": 1870,
+       "floored": true
+      }
+     }
+    },
+    "RW": {
+     "n": 2400,
+     "medianSeasons": 20,
+     "hallShare1": 29.8,
+     "medianScore1": 365,
+     "families": {
+      "goals": {
+       "median": 675,
+       "p90": 843,
+       "p99": 972,
+       "from": 843,
+       "to": 972,
+       "floored": false
+      },
+      "assists": {
+       "median": 777,
+       "p90": 937,
+       "p99": 1060,
+       "from": 937,
+       "to": 1060,
+       "floored": false
+      },
+      "points": {
+       "median": 1453,
+       "p90": 1768,
+       "p99": 1995,
+       "from": 1770,
+       "to": 2000,
+       "floored": false
+      },
+      "wins": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "games": {
+       "median": 1526,
+       "p90": 1714,
+       "p99": 1773,
+       "from": 1710,
+       "to": 1890,
+       "floored": true
+      }
+     }
+    },
+    "D": {
+     "n": 2400,
+     "medianSeasons": 20,
+     "hallShare1": 26.8,
+     "medianScore1": 338,
+     "families": {
+      "goals": {
+       "median": 271,
+       "p90": 348,
+       "p99": 399,
+       "from": 348,
+       "to": 399,
+       "floored": false
+      },
+      "assists": {
+       "median": 919,
+       "p90": 1101,
+       "p99": 1240,
+       "from": 1100,
+       "to": 1240,
+       "floored": false
+      },
+      "points": {
+       "median": 1181,
+       "p90": 1446,
+       "p99": 1626,
+       "from": 1450,
+       "to": 1630,
+       "floored": false
+      },
+      "wins": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "games": {
+       "median": 1574,
+       "p90": 1736,
+       "p99": 1777,
+       "from": 1740,
+       "to": 1920,
+       "floored": true
+      }
+     }
+    },
+    "G": {
+     "n": 2400,
+     "medianSeasons": 22,
+     "hallShare1": 38.3,
+     "medianScore1": 414,
+     "families": {
+      "goals": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "assists": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "points": {
+       "median": 0,
+       "p90": 0,
+       "p99": 0,
+       "from": 0,
+       "to": 0,
+       "floored": false
+      },
+      "wins": {
+       "median": 659,
+       "p90": 721,
+       "p99": 766,
+       "from": 721,
+       "to": 794,
+       "floored": true
+      },
+      "games": {
+       "median": 1305,
+       "p90": 1375,
+       "p99": 1397,
+       "from": 1380,
+       "to": 1520,
+       "floored": true
+      }
+     }
+    }
+   },
+   "standouts": {
+    "C": [
+     "goals",
+     "assists",
+     "points"
+    ],
+    "LW": [
+     "goals",
+     "assists",
+     "points"
+    ],
+    "RW": [
+     "goals",
+     "assists",
+     "points"
+    ],
+    "D": [
+     "assists",
+     "points"
+    ],
+    "G": [
+     "wins"
+    ]
+   },
+   "base": {},
+   "nearHalf": [],
+   "bands": {
+    "defaultCareers": 2000,
+    "fromCell": {
+     "lo": 0.0463,
+     "hi": 0.1588,
+     "measuredLo": 0.065,
+     "measuredHi": 0.14,
+     "cells": 72
+    },
+    "fromPooled": {
+     "lo": 0.086,
+     "hi": 0.1169,
+     "measured": [
+      0.1021,
+      0.1019,
+      0.0938,
+      0.0954,
+      0.1092,
+      0.0973
+     ]
+    },
+    "toPooled": {
+     "lo": 0.0056,
+     "hi": 0.0115,
+     "measured": [
+      0.009,
+      0.0098,
+      0.0071,
+      0.0088,
+      0.01,
+      0.0098
+     ]
+    }
+   },
+   "outcome": {
+    "topShare": 0.05,
+    "covered": 0.9,
+    "pooledGain": {
+     "measured": [
+      0.225,
+      0.2167,
+      0.1333,
+      0.3,
+      0.2333,
+      0.225
+     ],
+     "floor": 0.0667
+    },
+    "standoutGain": {
+     "measured": [
+      0.0667,
+      0.0792,
+      0.0583,
+      0.0958,
+      0.0833,
+      0.0583
+     ],
+     "floor": 0.0292
+    },
+    "hallShare1": [
+     0.2975,
+     0.3025,
+     0.3025,
+     0.2995,
+     0.32,
+     0.294
+    ],
+    "hallShare2": [
+     0.31,
+     0.3185,
+     0.311,
+     0.3145,
+     0.333,
+     0.308
+    ],
+    "hallCeiling": 0.358,
+    "newlyIn": [
+     25,
+     32,
+     17,
+     30,
+     26,
+     28
+    ],
+    "medianScore1": [
+     362,
+     362,
+     361,
+     368,
+     368,
+     356
+    ],
+    "medianScore2": [
+     363,
+     364,
+     363,
+     370,
+     371,
+     358
+    ],
+    "meanScore1": [
+     447.7,
+     444.2,
+     444.6,
+     448.9,
+     455.4,
+     444.6
+    ],
+    "meanScore2": [
+     467.4,
+     464.7,
+     461.5,
+     467,
+     475.8,
+     463.4
+    ],
+    "baseCredit": {}
+   }
+  }
+ }
+}
