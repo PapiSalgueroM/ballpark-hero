@@ -1,0 +1,165 @@
+READ dug-sco-old-390 opens: panel="📋 Manager CareerManaging Hearts (Tier 3) · Season 2" table box="Final table · Scottish PremiershipThe order only: the Scottish Premiership splits in two late in the season, so no points here.another clubanother clubanother clubanother club…HeartsCup run: out in the 3rd round"
+ok   dug-sco-old-390: the dugout renders (Manager Career panel)
+READ dug-sco-old-390 season 1 (Next Manager Season): saved row {"year":3,"league":"Scottish Premiership","leagueSize":12,"result":"Finished in the top half.","pos":3,"rows":5,"knownRivals":11,"club":"Hearts","unemployed":false}
+READ dug-sco-old-390 season 1: results: 
+READ dug-sco-old-390 season 1: table box: Final table · Scottish PremiershipThe order only: the Scottish Premiership splits in two late in the season, so no points here.DundeeSt JohnstoneHeartsHibernianCelticCup run: out in the 4th round
+ok   dug-sco-old-390: season 1 is played on a table of 12 (saved leagueSize 12)
+ok   dug-sco-old-390: season 1 position 3 sits inside 12
+ok   dug-sco-old-390: season 1 prints "The order only: the Scottish Premiership splits in two late in the season, so no points here."
+ok   dug-sco-old-390: season 1 prints no points and no "of N" (result "Finished in the top half.")
+ok   dug-sco-old-390: no sideways scroll (390)
+READ dug-sco-old-390 season 2 (Next Manager Season): saved row {"year":4,"league":"Scottish Premiership","leagueSize":12,"result":"Finished in the bottom three. Sacked on the spot. Nobody has called.","pos":11,"rows":5,"knownRivals":11,"club":"Hearts","unemployed":true}
+READ dug-sco-old-390 season 2: results: 
+READ dug-sco-old-390 season 2: table box: Final table · Scottish PremiershipThe order only: the Scottish Premiership splits in two late in the season, so no points here.AberdeenSt JohnstoneFalkirkCeltic…HeartsCup run: out in the 4th round
+READ dug-sco-old-390 season 2: he has moved or is out of work, nothing asserted
+ok   dug-sco-old-390: no sideways scroll (390)
+ok   dug-sco-old-390: no page error 
+READ dug-sco-old-1280r opens: panel="📋 Manager CareerManaging Hearts (Tier 3) · Season 2" table box="Final table · Scottish PremiershipThe order only: the Scottish Premiership splits in two late in the season, so no points here.another clubanother clubanother clubanother club…HeartsCup run: out in the 3rd round"
+ok   dug-sco-old-1280r: the dugout renders (Manager Career panel)
+READ dug-sco-old-1280r season 1 (Next Manager Season): saved row {"year":3,"league":"Scottish Premiership","leagueSize":12,"result":"CHAMPIONS, top of the table. 🏆 Hearts move up to Tier 2.","pos":1,"rows":5,"knownRivals":11,"club":"Hearts","unemployed":false}
+READ dug-sco-old-1280r season 1: results: 
+READ dug-sco-old-1280r season 1: table box: Final table · Scottish PremiershipThe order only: the Scottish Premiership splits in two late in the season, so no points here.HeartsSt JohnstoneAberdeenDundee UnitedFalkirkCup run: out in the 4th round
+ok   dug-sco-old-1280r: season 1 is played on a table of 12 (saved leagueSize 12)
+ok   dug-sco-old-1280r: season 1 position 1 sits inside 12
+ok   dug-sco-old-1280r: season 1 prints "The order only: the Scottish Premiership splits in two late in the season, so no points here."
+ok   dug-sco-old-1280r: season 1 prints no points and no "of N" (result "CHAMPIONS, top of the table. 🏆 Hearts move up to Tier 2.")
+ok   dug-sco-old-1280r: no sideways scroll (1280)
+READ dug-sco-old-1280r season 2 (Next Manager Season): saved row {"year":4,"league":"Scottish Premiership","leagueSize":12,"result":"Finished second. Hearts move up to Tier 1.","pos":2,"rows":5,"knownRivals":11,"club":"Hearts","unemployed":false}
+READ dug-sco-old-1280r season 2: results: 
+READ dug-sco-old-1280r season 2: table box: Final table · Scottish PremiershipThe order only: the Scottish Premiership splits in two late in the season, so no points here.St MirrenHeartsHibernianDundee UnitedCelticCup run: out in the 4th round
+ok   dug-sco-old-1280r: season 2 is played on a table of 12 (saved leagueSize 12)
+ok   dug-sco-old-1280r: season 2 position 2 sits inside 12
+ok   dug-sco-old-1280r: season 2 prints "The order only: the Scottish Premiership splits in two late in the season, so no points here."
+ok   dug-sco-old-1280r: season 2 prints no points and no "of N" (result "Finished second. Hearts move up to Tier 1.")
+ok   dug-sco-old-1280r: no sideways scroll (1280)
+ok   dug-sco-old-1280r: no page error 
+READ dug-sco-new-390r opens: panel="📋 Manager CareerManaging Hearts (Tier 4) · Season 0" table box="null"
+ok   dug-sco-new-390r: the dugout renders (Manager Career panel)
+READ dug-sco-new-390r season 1 (Next Manager Season): saved row {"year":1,"league":"Scottish Premiership","leagueSize":12,"result":"Finished in the bottom half.","pos":7,"rows":5,"knownRivals":11,"club":"Hearts","unemployed":false}
+READ dug-sco-new-390r season 1: results: 
+READ dug-sco-new-390r season 1: table box: Final table · Scottish PremiershipThe order only: the Scottish Premiership splits in two late in the season, so no points here.MotherwellRangersHibernianKilmarnock…HeartsCup run: out in the 4th round
+ok   dug-sco-new-390r: season 1 is played on a table of 12 (saved leagueSize 12)
+ok   dug-sco-new-390r: season 1 position 7 sits inside 12
+ok   dug-sco-new-390r: season 1 prints "The order only: the Scottish Premiership splits in two late in the season, so no points here."
+ok   dug-sco-new-390r: season 1 prints no points and no "of N" (result "Finished in the bottom half.")
+ok   dug-sco-new-390r: no sideways scroll (390)
+READ dug-sco-new-390r season 2 (Next Manager Season): saved row {"year":2,"league":"Scottish Premiership","leagueSize":12,"result":"Finished in the bottom three.","pos":11,"rows":5,"knownRivals":11,"club":"Hearts","unemployed":false}
+READ dug-sco-new-390r season 2: results: 
+READ dug-sco-new-390r season 2: table box: Final table · Scottish PremiershipThe order only: the Scottish Premiership splits in two late in the season, so no points here.HibernianDundeeFalkirkAberdeen…HeartsCup run: out in the 4th round
+ok   dug-sco-new-390r: season 2 is played on a table of 12 (saved leagueSize 12)
+ok   dug-sco-new-390r: season 2 position 11 sits inside 12
+ok   dug-sco-new-390r: season 2 prints "The order only: the Scottish Premiership splits in two late in the season, so no points here."
+ok   dug-sco-new-390r: season 2 prints no points and no "of N" (result "Finished in the bottom three.")
+ok   dug-sco-new-390r: no sideways scroll (390)
+ok   dug-sco-new-390r: no page error 
+READ dug-mls-390 opens: panel="📋 Manager CareerManaging LA Galaxy (Tier 2) · Season 0" table box="null"
+ok   dug-mls-390: the dugout renders (Manager Career panel)
+READ dug-mls-390 season 1 (Next Manager Season): saved row {"year":1,"league":"MLS","leagueSize":30,"result":"Finished in the bottom three. Sacked on the spot. Nobody has called.","pos":30,"rows":5,"knownRivals":29,"club":"LA Galaxy","unemployed":true}
+READ dug-mls-390 season 1: results: 
+READ dug-mls-390 season 1: table box: Final table · MLSThe order only: MLS plays in two conferences, so no points here.Toronto FCLAFCSan Jose EarthquakesMinnesota United…LA GalaxyCup run: out in the 3rd round
+READ dug-mls-390 season 1: he has moved or is out of work, nothing asserted
+ok   dug-mls-390: no sideways scroll (390)
+READ dug-mls-390 season 2 (Sit Out A Season): saved row {"year":2,"result":"A season out. 1 club interested.","rows":0,"club":"LA Galaxy","unemployed":true}
+READ dug-mls-390 season 2: results: 
+READ dug-mls-390 season 2: table box: null
+READ dug-mls-390 season 2: he has moved or is out of work, nothing asserted
+ok   dug-mls-390: no sideways scroll (390)
+ok   dug-mls-390: no page error 
+READ dug-mls-1280 opens: panel="📋 Manager CareerManaging LA Galaxy (Tier 2) · Season 0" table box="null"
+ok   dug-mls-1280: the dugout renders (Manager Career panel)
+READ dug-mls-1280 season 1 (Next Manager Season): saved row {"year":1,"league":"MLS","leagueSize":30,"result":"Finished in the top half.","pos":9,"rows":5,"knownRivals":29,"club":"LA Galaxy","unemployed":false}
+READ dug-mls-1280 season 1: results: 
+READ dug-mls-1280 season 1: table box: Final table · MLSThe order only: MLS plays in two conferences, so no points here.New York Red BullsOrlando CitySeattle SoundersFC Dallas…LA GalaxyCup run: beaten in the final
+ok   dug-mls-1280: season 1 is played on a table of 30 (saved leagueSize 30)
+ok   dug-mls-1280: season 1 position 9 sits inside 30
+ok   dug-mls-1280: season 1 prints "The order only: MLS plays in two conferences, so no points here."
+ok   dug-mls-1280: season 1 prints no points and no "of N" (result "Finished in the top half.")
+ok   dug-mls-1280: no sideways scroll (1280)
+READ dug-mls-1280 season 2 (Next Manager Season): saved row {"year":2,"league":"MLS","leagueSize":30,"result":"Finished in the bottom half. The board ran out of patience. Sacked. 1 club came in.","pos":19,"rows":5,"knownRivals":29,"club":"LA Galaxy","unemployed":true}
+READ dug-mls-1280 season 2: results: 
+READ dug-mls-1280 season 2: table box: Final table · MLSThe order only: MLS plays in two conferences, so no points here.Atlanta UnitedOrlando CityNew York City FCNew England Revolution…LA GalaxyCup run: out in the 4th round
+READ dug-mls-1280 season 2: he has moved or is out of work, nothing asserted
+ok   dug-mls-1280: no sideways scroll (1280)
+ok   dug-mls-1280: no page error 
+READ dug-aut-390 opens: panel="📋 Manager CareerManaging Red Bull Salzburg (Tier 3) · Season 0" table box="null"
+ok   dug-aut-390: the dugout renders (Manager Career panel)
+READ dug-aut-390 season 1 (Next Manager Season): saved row {"year":1,"league":"Austrian Bundesliga","leagueSize":12,"result":"Finished second. Red Bull Salzburg move up to Tier 2.","pos":2,"rows":5,"knownRivals":11,"club":"Red Bull Salzburg","unemployed":false}
+READ dug-aut-390 season 1: results: 
+READ dug-aut-390 season 1: table box: Final table · Austrian BundesligaThe order only: the Austrian Bundesliga splits in two after the regular season, so no points here.Grazer AKRed Bull SalzburgSturm GrazRapid WienAltachCup run: out in the 3rd round
+ok   dug-aut-390: season 1 is played on a table of 12 (saved leagueSize 12)
+ok   dug-aut-390: season 1 position 2 sits inside 12
+ok   dug-aut-390: season 1 prints "The order only: the Austrian Bundesliga splits in two after the regular season, so no points here."
+ok   dug-aut-390: season 1 prints no points and no "of N" (result "Finished second. Red Bull Salzburg move up to Tier 2.")
+ok   dug-aut-390: no sideways scroll (390)
+READ dug-aut-390 season 2 (Next Manager Season): saved row {"year":2,"league":"Austrian Bundesliga","leagueSize":12,"result":"Finished in the bottom half.","pos":8,"rows":5,"knownRivals":11,"club":"Red Bull Salzburg","unemployed":false}
+READ dug-aut-390 season 2: results: 
+READ dug-aut-390 season 2: table box: Final table · Austrian BundesligaThe order only: the Austrian Bundesliga splits in two after the regular season, so no points here.RiedAltachWSG TirolSturm Graz…Red Bull SalzburgCup run: out in the 3rd round
+ok   dug-aut-390: season 2 is played on a table of 12 (saved leagueSize 12)
+ok   dug-aut-390: season 2 position 8 sits inside 12
+ok   dug-aut-390: season 2 prints "The order only: the Austrian Bundesliga splits in two after the regular season, so no points here."
+ok   dug-aut-390: season 2 prints no points and no "of N" (result "Finished in the bottom half.")
+ok   dug-aut-390: no sideways scroll (390)
+ok   dug-aut-390: no page error 
+READ dug-den-390 opens: panel="📋 Manager CareerManaging FC Copenhagen (Tier 3) · Season 0" table box="null"
+ok   dug-den-390: the dugout renders (Manager Career panel)
+READ dug-den-390 season 1 (Next Manager Season): saved row {"year":1,"league":"Danish Superliga","leagueSize":20,"result":"Finished in the top half.","pos":5,"rows":5,"knownRivals":11,"club":"FC Copenhagen","unemployed":false}
+READ dug-den-390 season 1: results: 
+READ dug-den-390 season 1: table box: Final table · Danish SuperligaThe order only: we don't know how many clubs the Danish Superliga has.FC NordsjaellandAGFRanders FCLyngbyFC CopenhagenCup run: out in the 3rd round
+ok   dug-den-390: no sideways scroll (390)
+READ dug-den-390 season 2 (Next Manager Season): saved row {"year":2,"league":"Danish Superliga","leagueSize":20,"result":"Finished in the bottom half.","pos":13,"rows":5,"knownRivals":11,"club":"FC Copenhagen","unemployed":false}
+READ dug-den-390 season 2: results: 
+READ dug-den-390 season 2: table box: Final table · Danish SuperligaThe order only: we don't know how many clubs the Danish Superliga has.AGFanother clubViborg FFOB…FC CopenhagenCup run: out in the 4th round
+ok   dug-den-390: no sideways scroll (390)
+ok   dug-den-390: no page error 
+READ dug-seg-390 opens: panel="📋 Manager CareerManaging Girona (Tier 1) · Season 2" table box="Final table · Segunda DivisionWe don't know enough Segunda Division clubs by name to draw the table. You finished in the bottom half.Cup run: out in the 4th round"
+ok   dug-seg-390: the dugout renders (Manager Career panel)
+READ dug-seg-390 season 1 (Next Manager Season): saved row {"year":3,"league":"Segunda Division","leagueSize":22,"sizeVerified":true,"result":"Finished 2nd of 22 on 80 points.","pos":2,"rows":5,"knownRivals":0,"club":"Girona","unemployed":false}
+READ dug-seg-390 season 1: results: 
+READ dug-seg-390 season 1: table box: Final table · Segunda Division23W 11D 8LWe don't know enough Segunda Division clubs by name to draw the table. You finished 2nd of 22 on 80 points.Cup run: beaten in the final
+ok   dug-seg-390: season 1 is played on a table of 22 (saved leagueSize 22)
+ok   dug-seg-390: season 1 position 2 sits inside 22
+ok   dug-seg-390: season 1 result says of 22 ("Finished 2nd of 22 on 80 points.")
+ok   dug-seg-390: no sideways scroll (390)
+READ dug-seg-390 season 2 (Next Manager Season): saved row {"year":4,"league":"Segunda Division","leagueSize":22,"sizeVerified":true,"result":"Finished 3rd of 22 on 74 points. Won the cup. 🏆","pos":3,"rows":5,"knownRivals":0,"club":"Girona","unemployed":false}
+READ dug-seg-390 season 2: results: 
+READ dug-seg-390 season 2: table box: Final table · Segunda Division23W 5D 14LWe don't know enough Segunda Division clubs by name to draw the table. You finished 3rd of 22 on 74 points.Cup run: WON the cup
+ok   dug-seg-390: season 2 is played on a table of 22 (saved leagueSize 22)
+ok   dug-seg-390: season 2 position 3 sits inside 22
+ok   dug-seg-390: season 2 result says of 22 ("Finished 3rd of 22 on 74 points. Won the cup. 🏆")
+ok   dug-seg-390: no sideways scroll (390)
+ok   dug-seg-390: no page error 
+READ dug-ere-1280 opens: panel="📋 Manager CareerManaging Ajax (Tier 1) · Season 0" table box="null"
+ok   dug-ere-1280: the dugout renders (Manager Career panel)
+READ dug-ere-1280 season 1 (Next Manager Season): saved row {"year":1,"league":"Eredivisie","leagueSize":18,"sizeVerified":true,"result":"Finished 10th of 18 on 48 points.","pos":10,"rows":5,"knownRivals":17,"club":"Ajax","unemployed":false}
+READ dug-ere-1280 season 1: results: 
+READ dug-ere-1280 season 1: table box: Final table · Eredivisie16W 0D 18L1Sparta Rotterdam64 pts2Willem II64 pts3NEC Nijmegen61 pts4Cambuur58 pts10Ajax48 ptsCup run: out in the 4th round
+ok   dug-ere-1280: season 1 is played on a table of 18 (saved leagueSize 18)
+ok   dug-ere-1280: season 1 position 10 sits inside 18
+ok   dug-ere-1280: season 1 result says of 18 ("Finished 10th of 18 on 48 points.")
+ok   dug-ere-1280: no sideways scroll (1280)
+READ dug-ere-1280 season 2 (Next Manager Season): saved row {"year":2,"league":"Eredivisie","leagueSize":18,"sizeVerified":true,"result":"Finished 5th of 18 on 51 points.","pos":5,"rows":5,"knownRivals":17,"club":"Ajax","unemployed":false}
+READ dug-ere-1280 season 2: results: 
+READ dug-ere-1280 season 2: table box: Final table · Eredivisie16W 3D 15L1Willem II69 pts2Heerenveen64 pts3Feyenoord58 pts4Cambuur57 pts5Ajax51 ptsCup run: out in the 3rd round
+ok   dug-ere-1280: season 2 is played on a table of 18 (saved leagueSize 18)
+ok   dug-ere-1280: season 2 position 5 sits inside 18
+ok   dug-ere-1280: season 2 result says of 18 ("Finished 5th of 18 on 51 points.")
+ok   dug-ere-1280: no sideways scroll (1280)
+ok   dug-ere-1280: no page error 
+READ dug-cha-390 opens: panel="📋 Manager CareerManaging Norwich City (Tier 4) · Season 0" table box="null"
+ok   dug-cha-390: the dugout renders (Manager Career panel)
+READ dug-cha-390 season 1 (Next Manager Season): saved row {"year":1,"league":"Championship","leagueSize":24,"sizeVerified":true,"result":"Finished 5th of 24 on 80 points.","pos":5,"rows":5,"knownRivals":23,"club":"Norwich City","unemployed":false}
+READ dug-cha-390 season 1: results: 
+READ dug-cha-390 season 1: table box: Final table · Championship24W 8D 14L1Stoke City87 pts2Burnley85 pts3Southampton83 pts4West Brom82 pts5Norwich City80 ptsCup run: out in the 4th round
+ok   dug-cha-390: season 1 is played on a table of 24 (saved leagueSize 24)
+ok   dug-cha-390: season 1 position 5 sits inside 24
+ok   dug-cha-390: season 1 result says of 24 ("Finished 5th of 24 on 80 points.")
+ok   dug-cha-390: no sideways scroll (390)
+READ dug-cha-390 season 2 (Next Manager Season): saved row {"year":2,"league":"Championship","leagueSize":24,"sizeVerified":true,"result":"Finished 7th of 24 on 79 points.","pos":7,"rows":5,"knownRivals":23,"club":"Norwich City","unemployed":false}
+READ dug-cha-390 season 2: results: 
+READ dug-cha-390 season 2: table box: Final table · Championship24W 7D 15L1West Ham95 pts2Swansea City91 pts3Birmingham City87 pts4Charlton Athletic84 pts7Norwich City79 ptsCup run: out in the 4th round
+ok   dug-cha-390: season 2 is played on a table of 24 (saved leagueSize 24)
+ok   dug-cha-390: season 2 position 7 sits inside 24
+ok   dug-cha-390: season 2 result says of 24 ("Finished 7th of 24 on 79 points.")
+ok   dug-cha-390: no sideways scroll (390)
+ok   dug-cha-390: no page error 
+rvwalk2: 0 odd things
