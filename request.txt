@@ -1,0 +1,12 @@
+#!serve
+#!playwright
+guideLadder: node scripts/simGauntletGuideLadder.mjs
+guideLadder-staleclimb: SIM_GAUNTLET_GUIDE_CONTROL=staleclimb node scripts/simGauntletGuideLadder.mjs
+guideLadder-stalerange: SIM_GAUNTLET_GUIDE_CONTROL=stalerange node scripts/simGauntletGuideLadder.mjs
+guideLadder-ghostcard: SIM_GAUNTLET_GUIDE_CONTROL=ghostcard node scripts/simGauntletGuideLadder.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simFrontOfficeRoster: node scripts/simFrontOfficeRoster.mjs
+simFaqSchema: node scripts/simFaqSchema.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+walk: ENGINES=chromium node scripts/playFoOneRating.mjs

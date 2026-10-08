@@ -1,0 +1,11 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+guideLadder exit=0 0s | simGauntletGuideLadder: green, 17 checks. Five ladders, five guides, and the NFL example names cards the pool holds.
+guideLadder-stalerange exit=0 0s | control stalerange fired: 1 new failure (/nhl-gauntlet-draft section 2), expected only /nhl-gauntlet-draft section 2; 0 were red without it
+guideLadder-staleclimb exit=0 0s | control staleclimb fired: 1 new failure (/gauntlet-draft section 1), expected only /gauntlet-draft section 1; 0 were red without it
+guideLadder-ghostcard exit=0 0s | control ghostcard fired: 1 new failure (/nfl-gauntlet-draft section 3), expected only /nfl-gauntlet-draft section 3; 0 were red without it
+simGuideHeadings exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+simFrontOfficeRoster exit=0 1s | simFrontOfficeRoster: 158 checks passed over 32 teams and 480 players
+simSiteSearch exit=0 2s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+walk exit=0 11s | playFoOneRating: green. The roster shelf and the draft cards print the committed files' numbers at both sizes, and the ? panel carries the rating rule.
+simHarnessAnchors exit=0 33s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simFaqSchema exit=0 44s | simFaqSchema: green. One block per type per page, written once and never rewritten.
