@@ -16,10 +16,17 @@
  *     list): a named place is his club, a derby rival on the row, the summary
  *     card's champion, or a club the Round 1036 league ledgers put in that
  *     league that season (the career's own list of that league from 2026-27);
- *     no name twice; the 1st place carries a name other than his only when the
- *     card names that champion, and then it is that club.
- *  3. The gate: no table before 1995-96, outside the five leagues of
- *     src/data/leagueFormat.ts, in a season whose derby cadence is not two,
+ *     no name twice; the 1st place carries a name other than his when the
+ *     card names that champion, and then it is that club, or (Round 1100)
+ *     when the world holds the season and runs no title race in the league,
+ *     and then it is a club of the league's own list that is neither his nor
+ *     a derby rival. A champion the world crowned and the card cannot name
+ *     stays "another club".
+ *  3. The gate: no table before 1995-96, outside the leagues of
+ *     src/data/leagueFormat.ts (the five big leagues, and from 2026-27 the
+ *     eight plain leagues Round 1100 gave a size, a format and a cadence row,
+ *     typed again below so the list is this harness's own statement), in a
+ *     season whose derby cadence is not two,
  *     or in the abandoned 2019-20 Ligue 1 (a targeted row); and none with a
  *     derby rival the ledgers put outside that league that season (critic
  *     C5; the engine never detects such a derby, so a targeted row, Newcastle
@@ -39,6 +46,9 @@
  *   ledgerorder  named clubs placed in ledger order           -> 4 red
  *   tiebreak     core.ts sorts goals scored before goal difference -> 1b red
  *   rival        the rival gate line removed                   -> 3 red
+ *   opentitle    (Round 1100 review) the 1st place left to the world's
+ *                champion alone, so a league with no title race reads
+ *                "another club" on top                          -> 2 red
  *
  * Review fixes measured 2026-10-07: 747 final table neighbours level on
  * points, 273 where goal difference and goals scored disagree (floor 50).
@@ -70,6 +80,7 @@ const CONTROLS = {
   ledgerorder: [{ file: 'src/lib/season/soccer.ts', from: '  entries.sort((a, b) => a.at - b.at);', to: '  entries.sort(() => 0);' }],
   tiebreak: [{ file: 'src/lib/season/core.ts', from: '  return rows.sort((x, y) => y.pts - x.pts || (y.gf - y.ga) - (x.gf - x.ga) || y.gf - x.gf || x.slot - y.slot);', to: '  return rows.sort((x, y) => y.pts - x.pts || y.gf - x.gf || (y.gf - y.ga) - (x.gf - x.ga) || x.slot - y.slot);' }],
   rival: [{ file: 'src/lib/season/soccer.ts', from: "  else if (rivals.some(r => !namedInLeague(r, league.key, row.year))) why = 'rival';\n", to: '' }],
+  opentitle: [{ file: 'src/lib/season/soccer.ts', from: "    else if (s.champion && ctx.titleOpen && ctx.mode === 'table') open.push(s);\n", to: '' }],
 };
 if (CONTROL && !CONTROLS[CONTROL]) throw new Error(`unknown TABLE_CONTROL ${CONTROL}`);
 if (CONTROL) console.log(`CONTROL ${CONTROL}: patched in the bundle only`);
@@ -87,6 +98,20 @@ const fail = (item, msg) => { failed += 1; if (!fails.has(item)) fails.set(item,
 const check = (ok, label) => { checks += 1; if (ok) console.log(`ok   ${label}`); else { failed += 1; console.log(`FAIL ${label}`); } };
 
 const FIVE = new Set(['Premier League', 'La Liga', 'Serie A', 'Bundesliga', 'Ligue 1']);
+/* Round 1100: the plain leagues that have a table from 2026-27. Typed here, not read from the ledger
+   under test; a league that gains its three rows later is added here in the same commit. */
+const PLAIN_2026 = new Set(['Championship', 'Brasileirao', 'Eredivisie', 'Saudi Pro League', 'Primeira Liga', 'Super Lig', '2. Bundesliga', 'Belgian Pro League']);
+/* Round 1100 review: floors for the two counts the restated checks rest on.
+   MEASURED 2026-10-08 (the probe is seeded, so both are exact until the
+   pool or the engine moves): 67 tables in a plain league outside the five
+   (66 from the probe's careers, all in leagues the world crowns, and the
+   targeted Championship row), floor about half; 3 tables with nobody
+   crowned, all three targeted rows (the two past seasons carry an empty
+   world, the Championship has no title race), floor all three. The probe's
+   own careers reach no table in the four leagues without a title race:
+   scripts/simCareerLeagueWorld.mjs D1 draws those by the hundred. */
+const PLAIN_FLOOR = 33;
+const OPEN_FLOOR = 3;
 function cardChampion(career, row) {
   const finish = LG.readLeagueFinish(row);
   const today = CLUBS.find(c => c.name === row.club)?.league ?? '';
@@ -106,7 +131,7 @@ function replay(rounds, teams, upto) {
   return t;
 }
 
-const stats = { tables: 0, results: 0, ordered: 0, orderN: 0, named: 0, unnamed: 0, level: 0, levelSplit: 0 };
+const stats = { tables: 0, results: 0, plain: 0, openTitles: 0, ordered: 0, orderN: 0, named: 0, unnamed: 0, level: 0, levelSplit: 0 };
 /* the footnote's order, from the replay's own numbers: points, then goal
    difference, then goals scored (a full tie may sit either way) */
 const before = (a, b) => a.pts - b.pts || (a.gf - a.ga) - (b.gf - b.ga) || a.gf - b.gf;
@@ -119,7 +144,8 @@ function checkTable(career, row, ctx, s, tag) {
   const key = ctx.league?.key;
   /* 3 the gate */
   if (row.year < 1995) fail('3 gate', `${tag}: a table in ${row.year}`);
-  if (!FIVE.has(key)) fail('3 gate', `${tag}: a table in ${key}`);
+  if (!FIVE.has(key) && !(row.year >= 2026 && PLAIN_2026.has(key))) fail('3 gate', `${tag}: a table in ${key} in ${row.year}`);
+  if (!FIVE.has(key)) stats.plain += 1;
   if (DB.derbyMeetings(key, row.year) !== 2) fail('3 gate', `${tag}: a table where the cadence is ${DB.derbyMeetings(key, row.year)}`);
   for (const r of DB.readSeasonDerbies(row).map(d => d.rival)) if (!LG.namedInLeague(r, key, row.year)) fail('3 gate', `${tag}: a table with ${r} as a derby rival, not in the ${row.year} ${key}`);
   if (key === 'Ligue 1' && row.year === 2019) fail('3 gate', `${tag}: a table for the abandoned 2019-20 Ligue 1 (${s.games.length} matchdays)`);
@@ -161,8 +187,24 @@ function checkTable(career, row, ctx, s, tag) {
   const final = C.tableAt(s, M);
   const top = s.labels[final[0].slot];
   if (final[0].slot !== 0) {
-    if (champ && top.name !== champ) fail('2 names', `${tag}: 1st is ${top.name}, the card names ${champ}`);
-    if (!champ && top.named) fail('2 names', `${tag}: 1st is named ${top.name}, the card names nobody`);
+    /* Round 1100 (review fix): who may stand 1st when it is not him. The
+       card's champion when the card names one. Nobody ("another club") when
+       the world crowned a club for this league that the card cannot name, or
+       when this season's world is not held. And where the world holds this
+       season and runs no title race in the league at all (the Championship,
+       the Super Lig, the 2. Bundesliga and the Belgian Pro League among the
+       leagues that draw a table), a club of the league's own list that is
+       neither his nor a derby rival: nothing in the game names a champion
+       there, and "another club" on top of a table whose every club is known
+       left one real club off it. Worked here from the save, not read off
+       the module's own flag. */
+    const w = career.phone?.world;
+    const openTitle = !!w && w.year === row.year && !w.leagues?.[key];
+    if (champ) { if (top.name !== champ) fail('2 names', `${tag}: 1st is ${top.name}, the card names ${champ}`); }
+    else if (openTitle) {
+      stats.openTitles += 1;
+      if (!top.named || !pool.has(top.name) || top.name === row.club || rivals.includes(top.name)) fail('2 names', `${tag}: no title race in the ${row.year} ${key}, yet 1st reads ${top.name}`);
+    } else if (top.named) fail('2 names', `${tag}: 1st is named ${top.name}, the card names nobody`);
   }
   /* 4 ledger order */
   if (ledger) {
@@ -201,6 +243,9 @@ const TARGETED = [
   ['Premier League 1995-96', mkRow({ year: 1995, club: 'Arsenal', clubCountry: 'England', leagueFinish: 5 }), 'table', null],
   ['La Liga 2005-06', mkRow({ year: 2005, club: 'Real Madrid', clubCountry: 'Spain', leagueFinish: 2 }), 'table', null],
   ['Premier League 2017-18, a derby rival a division down', mkRow({ year: 2017, club: 'Newcastle', clubCountry: 'England', clubTier: 3, leagueFinish: 10, derbies: TYNE }), 'results', 'rival'],
+  /* Round 1100 (review fix): a table in a league the world runs no title
+     race for. Its 1st place is one of the Championship's own 24 clubs. */
+  ['Championship 2027-28, no title race', mkRow({ year: 2027, club: 'Norwich City', clubCountry: 'England', clubTier: 4, apps: 42, leagueApps: 38, leagueFinish: 5, leagueSize: 24 }), 'table', null],
 ];
 for (const [id, row, mode, why] of TARGETED) {
   const career = { playerName: `Table ${id}`, position: 'ST', seasons: [row], awards: [], currentLeague: CLUBS.find(c => c.name === row.club)?.league ?? '', phone: { world: { year: row.year, ucl: '', leagues: {} } } };
@@ -211,8 +256,14 @@ for (const [id, row, mode, why] of TARGETED) {
   if (d) checkTable(career, row, ctx, d, id);
 }
 
-console.log(`tables ${stats.tables}, results ${stats.results}; places named ${stats.named}, unnamed ${stats.unnamed}`);
+console.log(`tables ${stats.tables} (${stats.plain} of them in a plain league outside the five, from 2026-27; ${stats.openTitles} with nobody crowned by the world, 1st place one of the league's own clubs), results ${stats.results}; places named ${stats.named}, unnamed ${stats.unnamed}`);
 check(stats.tables >= 300, `the probe reached enough tables (${stats.tables}, floor 300)`);
+/* Round 1100 review: the branch of the gate that lets a plain league draw a
+   table, and the open title rule, must each have been walked. The probe is
+   seeded, so these counts move only with the pool or the engine (PLAIN_FLOOR
+   and OPEN_FLOOR above say what was measured). */
+check(stats.plain >= PLAIN_FLOOR, `3. the probe reached tables in a plain league outside the five (${stats.plain}, floor ${PLAIN_FLOOR})`);
+check(stats.openTitles >= OPEN_FLOOR, `2. tables with nobody crowned by the world (${stats.openTitles}, floor ${OPEN_FLOOR})`);
 check(stats.levelSplit >= 50, `1b. final tables hold ${stats.level} neighbours level on points, ${stats.levelSplit} of them where goal difference and goals scored disagree (floor 50), so the order check has cases to see`);
 for (const [item, msgs] of fails) console.log(`FAIL item ${item}: ${msgs.join(' | ')}`);
 check(fails.size === 0, `replay, naming and the gate on every table${fails.size ? `: ${[...fails.keys()].join(', ')}` : ''}`);

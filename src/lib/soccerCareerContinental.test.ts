@@ -81,13 +81,24 @@ describe('which cup a club plays', () => {
     expect(continentalOpponents(clubs, 'CONCACAF', 2005, 'Monterrey')).toEqual([]);
     expect(continentalOpponents(clubs, 'CONCACAF', 2021, 'Monterrey')).toEqual(['Inter Miami']);
     /* Australian clubs first played the AFC's cup in its 2007 edition (RSSSF
-       ascup06 and ascup07, read 2026-10-03), and season 2006 is the 2006 one. */
+       ascup06 and ascup07, read 2026-10-03), and season 2006 is the 2006 one.
+       Round 1100: the club in this fixture is Melbourne Victory, a club the
+       era filter already lets through in 2006 (its typed first season is
+       2004), so the 2006 line is held by the Australia rule and nothing
+       else. It was Sydney FC, which the round's pool brought in as a 2026-27
+       club: the game holds it out of every earlier season until its first
+       season is two sourced, so it can no longer stand in for 2007. */
     const asia = [
       { id: '6', name: 'Al Hilal', country: 'Saudi Arabia', tier: 2, color: '', league: '' },
-      { id: '7', name: 'Sydney FC', country: 'Australia', tier: 4, color: '', league: '' },
+      { id: '7', name: 'Melbourne Victory', country: 'Australia', tier: 4, color: '', league: '' },
     ];
     expect(continentalOpponents(asia, 'AFC', 2006, 'Al Hilal')).toEqual([]);
-    expect(continentalOpponents(asia, 'AFC', 2007, 'Al Hilal')).toEqual(['Sydney FC']);
+    expect(continentalOpponents(asia, 'AFC', 2007, 'Al Hilal')).toEqual(['Melbourne Victory']);
+    /* and the hold itself: a club the pool brought in for 2026-27 is nobody's
+       opponent before that season, and is one from it */
+    const held = [...asia, { id: '8', name: 'Sydney FC', country: 'Australia', tier: 4, color: '', league: '' }];
+    expect(continentalOpponents(held, 'AFC', 2025, 'Al Hilal')).toEqual(['Melbourne Victory']);
+    expect(continentalOpponents(held, 'AFC', 2026, 'Al Hilal')).toEqual(['Melbourne Victory', 'Sydney FC']);
   });
 });
 

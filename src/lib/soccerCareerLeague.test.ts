@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { CAREER_LEAGUE_SEASONS } from "../data/careerLeagueSeasons";
-import { divisionMove, drawLeagueFinish, dugoutTableWords, eliteInYear, finishBand, finishZone, leagueSizeFor, listLeague, leagueWithArticle, LIST_SEASON, managerLeagueField, MANAGER_FIELD, ordinal, readLeagueFinish } from "./soccerCareerLeague";
+import { divisionMove, drawLeagueFinish, dugoutTableWords, eliteInYear, finishBand, finishBandFor, finishZone, ladderBand, leagueSizeFor, listLeague, leagueWithArticle, LIST_SEASON, managerLeagueField, MANAGER_FIELD, ordinal, readLeagueFinish, seedKeyClub } from "./soccerCareerLeague";
+import { ODD_FORMATS, oddFormatFor } from "../data/leagueOddFormats";
 
 const ELITE = ["Bayern Munich", "PSG", "Man City", "Real Madrid", "Barcelona", "Liverpool"];
 const base = { league: "La Liga", year: 2020, tier: 1, elite: false, rating: 7, leagueTitle: false, seedKey: "k" };
@@ -178,8 +179,10 @@ describe("managerLeagueField (Round 1029)", () => {
   });
 
   it("plays every club it knows of a league without a verified size, plus his own", () => {
-    const big = [...CLUBS, ...Array.from({ length: 22 }, (_, i) => row(`BR ${i}`, "Brasileirao", "Brazil"))];
-    const f = managerLeagueField({ clubs: big, club: "BR 0", year: 2030 }, seq(0.5));
+    /* Round 1100: the Brasileirao has a size from 2026, so the league
+       without one is Argentina's here */
+    const big = [...CLUBS, ...Array.from({ length: 22 }, (_, i) => row(`AR ${i}`, "Liga Profesional", "Argentina"))];
+    const f = managerLeagueField({ clubs: big, club: "AR 0", year: 2030 }, seq(0.5));
     expect(f.sizeVerified).toBe(false);
     expect(f.named).toHaveLength(22);
     expect(f.size).toBe(23);
@@ -190,7 +193,9 @@ describe("managerLeagueField (Round 1029)", () => {
     expect(f.league).toBe("Austrian Bundesliga");
     expect(f.named).toEqual(["Sturm Graz"]);
     expect(f.sizeVerified).toBe(false);
-    expect(f.size).toBe(MANAGER_FIELD);
+    /* Round 1100: the Austrian Bundesliga is in the odd ledger, so the table
+       has its real 12 rows (it was the default field of 20), still unverified */
+    expect(f.size).toBe(12);
   });
 
   it("matches a league by name across a border", () => {
@@ -200,8 +205,25 @@ describe("managerLeagueField (Round 1029)", () => {
     expect([f.size, f.sizeVerified]).toEqual([24, true]);
   });
 
-  it("knows the Championship's size for the dugout only, from 2004", () => {
-    expect(leagueSizeFor("Championship", 2030)).toBeNull();
+  it("knows the Championship's size from 2004, and the held second flights for the dugout only", () => {
+    /* Round 1100: the Championship is a playing size too from 2026-27 (its
+       clubs are banded by their place in the league, not by tier) */
+    expect(leagueSizeFor("Championship", 2030)).toBe(24);
+    expect(leagueSizeFor("Championship", 2026)).toBe(24);
+    for (const [league, size] of [["Serie B", 20], ["Ligue 2", 18], ["Segunda Division", 22]] as const) {
+      expect(leagueSizeFor(league, 2030)).toBeNull();
+      expect(leagueSizeFor(league, 2030, true)).toBe(size);
+      expect(leagueSizeFor(league, 2025, true)).toBeNull();
+    }
+    /* the dead key Round 1100 fixed: the list spells it without the accent */
+    expect(leagueSizeFor("Segunda División", 2030, true)).toBeNull();
+    /* and the plain leagues it sized, from 2026 only */
+    for (const [league, size] of [["Eredivisie", 18], ["Primeira Liga", 18], ["Super Lig", 18], ["Saudi Pro League", 18], ["Belgian Pro League", 18], ["2. Bundesliga", 18], ["Brasileirao", 20]] as const) {
+      expect(leagueSizeFor(league, 2026)).toBe(size);
+      expect(leagueSizeFor(league, 2045)).toBe(size);
+      expect(leagueSizeFor(league, 2025)).toBeNull();
+    }
+    for (const league of ["Scottish Premiership", "MLS", "Liga MX", "Austrian Bundesliga", "HNL", "A-League"]) expect(leagueSizeFor(league, 2030, true)).toBeNull();
     /* Round 1037: the second tier before 2004 answers from the league
        ledgers now (24 clubs every season from 1990-91) */
     expect(leagueSizeFor("Championship", 2003, true)).toBe(24);
@@ -258,9 +280,11 @@ describe("managerLeagueField (Round 1029)", () => {
     /* a past season of a league the ledgers do not hold still draws from the
        rng exactly as a later one does (Round 1029), so the races the table
        settles do not move; a ledger season draws nothing, its field is fixed */
-    const big = Array.from({ length: 30 }, (_, i) => row(`NL ${i}`, "Eredivisie", "Netherlands"));
+    /* Round 1100: a league with no size in either season (the Eredivisie
+       has one from 2026 now) */
+    const big = Array.from({ length: 30 }, (_, i) => row(`AR ${i}`, "Liga Profesional", "Argentina"));
     const calls = (clubs: typeof big, club: string, y: number) => { let n = 0; managerLeagueField({ clubs, club, year: y }, () => { n += 1; return 0.5; }); return n; };
-    expect(calls(big, "NL 0", 2012)).toBe(calls(big, "NL 0", 2030));
+    expect(calls(big, "AR 0", 2012)).toBe(calls(big, "AR 0", 2030));
     const pl = Array.from({ length: 30 }, (_, i) => row(`PL ${i}`, "Premier League", "England"));
     expect(calls(pl, "PL 0", 2030)).toBeGreaterThan(0);
     expect(calls(pl, "PL 0", 2012)).toBe(0);
@@ -343,7 +367,75 @@ describe("dugoutTableWords (Round 1029)", () => {
   it("keeps an old save's table and its order note", () => {
     const old = dugoutTableWords({ leagueSize: 20, table: [{ club: "Ajax", pts: 80, pos: 1 }, me] });
     expect([old.header, old.named, old.sizeUnknown, old.note, old.orderNote]).toEqual(["Final table", true, false, null, null]);
+    /* Round 1100: MLS is in the odd ledger now, so its table says why it has
+       no points; a league in neither ledger keeps the old line, still true */
     const mls = dugoutTableWords({ league: "MLS", leagueSize: 30, knownRivals: 12, table });
-    expect(mls.orderNote).toBe("The order only: we don't know how many clubs the MLS has.");
+    expect(mls.orderNote).toBe("The order only: MLS plays in two conferences, so no points here.");
+    const mx = dugoutTableWords({ league: "Liga MX", leagueSize: 20, knownRivals: 12, table });
+    expect(mx.orderNote).toBe("The order only: we don't know how many clubs the Liga MX has.");
+  });
+});
+
+describe("the leagues that are not one plain table (Round 1100)", () => {
+  const row = (name: string, league: string, country: string) => ({ id: name, name, country, tier: 4, color: "#000000", league });
+  const seq = (v: number) => () => v;
+  const scots = Array.from({ length: 12 }, (_, i) => row(`SC ${i}`, "Scottish Premiership", "Scotland"));
+  it("gives the dugout the league's real number of rows and never a verified size", () => {
+    expect(oddFormatFor("Scottish Premiership", 2030)).toMatchObject({ clubs: 12, games: 33, shape: "split" });
+    expect(oddFormatFor("Scottish Premiership", 2025)).toBeNull();
+    expect(oddFormatFor("MLS", 2030)).toMatchObject({ clubs: 30, games: 34, shape: "conferences" });
+    expect(oddFormatFor("Austrian Bundesliga", 2030)).toMatchObject({ clubs: 12, games: 22, shape: "split" });
+    expect(oddFormatFor("Danish Superliga", 2030)).toBeNull();
+    expect(oddFormatFor("Eredivisie", 2030)).toBeNull();
+    const f = managerLeagueField({ clubs: scots, club: "SC 0", year: 2030 }, seq(0.5));
+    expect([f.league, f.size, f.sizeVerified, f.named.length]).toEqual(["Scottish Premiership", 12, false, 11]);
+    /* a season before the row's window plays the field it always played */
+    expect(managerLeagueField({ clubs: scots, club: "SC 0", year: 2020 }, seq(0.5)).size).toBe(MANAGER_FIELD);
+    /* no league is both odd and sized, in the dugout or out of it */
+    for (const league of Object.keys(ODD_FORMATS)) expect(leagueSizeFor(league, 2030, true)).toBeNull();
+  });
+
+  it("says why a split league's table carries no points, and keeps the old line elsewhere", () => {
+    const table = [{ club: "SC 0", pts: 0, pos: 4, you: true }, { club: "SC 1", pts: 0, pos: 1 }];
+    const odd = dugoutTableWords({ league: "Scottish Premiership", sizeVerified: false, leagueSize: 12, knownRivals: 11, table });
+    expect(odd.orderNote).toBe("The order only: the Scottish Premiership splits in two late in the season, so no points here.");
+    /* an old save's row, played on a field of 20, gets the same true line */
+    expect(dugoutTableWords({ league: "Scottish Premiership", sizeVerified: false, leagueSize: 20, knownRivals: 4, table }).orderNote).toBe(odd.orderNote);
+    expect(dugoutTableWords({ league: "Allsvenskan", sizeVerified: false, leagueSize: 20, knownRivals: 3, table }).orderNote).toBe("The order only: we don't know how many clubs the Allsvenskan has.");
+    expect(dugoutTableWords({ league: "Eredivisie", sizeVerified: true, leagueSize: 18, knownRivals: 17, table }).orderNote).toBeNull();
+  });
+
+  it("bands a club by its place in its own league, and reads the club out of the engine's key", () => {
+    expect(ladderBand(4, 18, 18, 7.0)).toEqual([2, 7]);
+    expect(ladderBand(4, 18, 18, 7.6)).toEqual([2, 5]);
+    expect(ladderBand(4, 18, 18, 6.0)).toEqual([3, 9]);
+    expect(ladderBand(17, 18, 18, 7.0)).toEqual([14, 18]);
+    expect(ladderBand(20, 20, 22, 7.0)).toEqual([19, 22]);
+    expect(ladderBand(8, 18, 18, 7.0, 18)).toEqual([5, 18]);
+    /* the nudge's two edges on the ladder's own copy of it (review fix): a
+       7.5 is a great season, a 6.3 is not a poor one, and the tenth either
+       side of each says which way the edge faces */
+    expect(ladderBand(4, 18, 18, 7.5)).toEqual([2, 5]);
+    expect(ladderBand(4, 18, 18, 7.4)).toEqual([2, 7]);
+    expect(ladderBand(4, 18, 18, 6.3)).toEqual([2, 7]);
+    expect(ladderBand(4, 18, 18, 6.2)).toEqual([3, 9]);
+    expect(ladderBand(12, 24, 24, 7.5)).toEqual([6, 14]);
+    expect(ladderBand(12, 24, 24, 6.3)).toEqual([8, 16]);
+    expect(seedKeyClub("Any Name|Twente|2027|30|7|4|7.1")).toBe("Twente");
+    expect(seedKeyClub("A|B|Twente|2027|30|7|4|7.1")).toBe("Twente");
+    expect(seedKeyClub("a|b|c|d|e|f|g")).toBeNull();
+    expect(seedKeyClub("x")).toBeNull();
+    const key = (club: string) => `Any Name|${club}|2027|30|7|4|7`;
+    const input = { year: 2027, tier: 4, elite: false, rating: 7, leagueTitle: false };
+    /* Ajax is tier 1 and the ladder's first: 2nd to 4th, where its tier 4 neighbours no longer sit */
+    expect(finishBandFor({ ...input, league: "Eredivisie", seedKey: key("Ajax") }, 18)).toEqual({ band: [2, 4], by: "ladder" });
+    /* the five big leagues, a season before 2026-27 and a key with no club keep the tier's band */
+    expect(finishBandFor({ ...input, league: "La Liga", seedKey: key("Getafe") }, 20)).toEqual({ band: finishBand(4, false, 20, 7), by: "absolute" });
+    expect(finishBandFor({ ...input, year: 2025, league: "Eredivisie", seedKey: key("Ajax") }, 18).by).toBe("absolute");
+    expect(finishBandFor({ ...input, league: "Eredivisie", seedKey: "k" }, 18)).toEqual({ band: finishBand(4, false, 18, 7), by: "absolute" });
+    const drawn = drawLeagueFinish({ ...input, league: "Eredivisie", seedKey: key("Ajax") });
+    expect(drawn.leagueSize).toBe(18);
+    expect(drawn.leagueFinish).toBeGreaterThanOrEqual(2);
+    expect(drawn.leagueFinish).toBeLessThanOrEqual(4);
   });
 });

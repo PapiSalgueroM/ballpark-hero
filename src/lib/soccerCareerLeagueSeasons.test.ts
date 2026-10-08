@@ -66,7 +66,8 @@ describe("clubLedgerSeason and ledgerLeague", () => {
   });
   it("size every ledger season from the ledger", () => {
     expect(leagueSizeFor("Championship", 1995)).toBe(24);
-    expect(leagueSizeFor("Championship", 2026)).toBeNull();
+    /* Round 1100: from 2026-27 the Championship's 24 is a playing size too */
+    expect(leagueSizeFor("Championship", 2026)).toBe(24);
     expect(leagueSizeFor("Championship", 2026, true)).toBe(24);
   });
 });

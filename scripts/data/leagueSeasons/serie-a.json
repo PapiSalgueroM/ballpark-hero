@@ -8,6 +8,7 @@
   }
  ],
  "notes": "printed is [RSSSF name, second source name] in the order of each season's sources array. pos is set only when both sources print the club at the same final position; otherwise posBySource gives [RSSSF position, second source position] (relegation play-offs, Calciopoli sanctions in 2005-06, tie-break differences). canon is the Soccer Career spelling from HAND_CLUBS in src/lib/soccerCareerEngine.ts (exact name match only; Lazio Roma and SS Lazio are not Roma, Chievo Verona and Hellas Verona are separate clubs and have canon null). Italy has no club in src/data/soccerCareerClubPool.ts.",
+ "canonRound1100": "Round 1100 (2026-10-08): the career club pool grew to every Club Manager league, whole, so canon now also names the pool clubs of src/data/soccerCareerClubPool.ts. A member was matched the way src/lib/soccerCareerLeague.ts looks a club up (the identity key of the club's own spelling, or of its SC_CLUB_CANON spelling, equals the identity key of a printed name), and the name was then carried to every other season in which this ledger prints the very same string for an unnamed member. Nothing else in the file changed. An older sentence in this file that says a country has no pool club, or that only the hand clubs are named, describes the file before this round. 11 clubs in 193 seasons: Cagliari 29, Como 3, Frosinone 3, Genoa 23, Lazio 36, Lecce 17, Monza 3, Parma 29, Sassuolo 12, Udinese 33, Venezia 5.",
  "seasons": [
   {
    "season": "1990-91",
@@ -43,7 +44,7 @@
       "Genoa",
       "Genoa CFC"
      ],
-     "canon": null,
+     "canon": "Genoa",
      "pos": 4
     },
     {
@@ -59,7 +60,7 @@
       "Parma",
       "Parma AC"
      ],
-     "canon": null,
+     "canon": "Parma",
      "pos": 6
     },
     {
@@ -99,7 +100,7 @@
       "Lazio",
       "Lazio Roma"
      ],
-     "canon": null,
+     "canon": "Lazio",
      "pos": 11
     },
     {
@@ -123,7 +124,7 @@
       "Cagliari",
       "Cagliari Calcio"
      ],
-     "canon": null,
+     "canon": "Cagliari",
      "pos": 14
     },
     {
@@ -131,7 +132,7 @@
       "Lecce",
       "US Lecce"
      ],
-     "canon": null,
+     "canon": "Lecce",
      "pos": 15
     },
     {
@@ -231,7 +232,7 @@
       "Parma",
       "Parma AC"
      ],
-     "canon": null,
+     "canon": "Parma",
      "pos": 7
     },
     {
@@ -255,7 +256,7 @@
       "Lazio",
       "Lazio Roma"
      ],
-     "canon": null,
+     "canon": "Lazio",
      "pos": 10
     },
     {
@@ -279,7 +280,7 @@
       "Cagliari",
       "Cagliari Calcio"
      ],
-     "canon": null,
+     "canon": "Cagliari",
      "pos": 13
     },
     {
@@ -287,7 +288,7 @@
       "Genoa",
       "Genoa CFC"
      ],
-     "canon": null,
+     "canon": "Genoa",
      "pos": 14
     },
     {
@@ -363,7 +364,7 @@
       "Parma",
       "Parma AC"
      ],
-     "canon": null,
+     "canon": "Parma",
      "pos": 3
     },
     {
@@ -379,7 +380,7 @@
       "Lazio",
       "Lazio Roma"
      ],
-     "canon": null,
+     "canon": "Lazio",
      "pos": 5
     },
     {
@@ -387,7 +388,7 @@
       "Cagliari",
       "Cagliari Calcio"
      ],
-     "canon": null,
+     "canon": "Cagliari",
      "pos": 6
     },
     {
@@ -443,7 +444,7 @@
       "Genoa",
       "Genoa CFC"
      ],
-     "canon": null,
+     "canon": "Genoa",
      "pos": 13
     },
     {
@@ -451,7 +452,7 @@
       "Udinese",
       "Udinese Calcio"
      ],
-     "canon": null,
+     "canon": "Udinese",
      "posBySource": [
       14,
       15
@@ -544,7 +545,7 @@
       "Lazio",
       "Lazio Roma"
      ],
-     "canon": null,
+     "canon": "Lazio",
      "pos": 4
     },
     {
@@ -552,7 +553,7 @@
       "Parma",
       "Parma AC"
      ],
-     "canon": null,
+     "canon": "Parma",
      "pos": 5
     },
     {
@@ -600,7 +601,7 @@
       "Genoa",
       "Genoa CFC"
      ],
-     "canon": null,
+     "canon": "Genoa",
      "pos": 11
     },
     {
@@ -608,7 +609,7 @@
       "Cagliari",
       "Cagliari Calcio"
      ],
-     "canon": null,
+     "canon": "Cagliari",
      "pos": 12
     },
     {
@@ -640,7 +641,7 @@
       "UDINESE",
       "Udinese Calcio"
      ],
-     "canon": null,
+     "canon": "Udinese",
      "pos": 16
     },
     {
@@ -656,7 +657,7 @@
       "LECCE",
       "US Lecce"
      ],
-     "canon": null,
+     "canon": "Lecce",
      "pos": 18
     }
    ],
@@ -692,7 +693,7 @@
       "Lazio",
       "Lazio Roma"
      ],
-     "canon": null,
+     "canon": "Lazio",
      "pos": 2
     },
     {
@@ -700,7 +701,7 @@
       "Parma",
       "Parma AC"
      ],
-     "canon": null,
+     "canon": "Parma",
      "pos": 3
     },
     {
@@ -748,7 +749,7 @@
       "Cagliari",
       "Cagliari Calcio"
      ],
-     "canon": null,
+     "canon": "Cagliari",
      "pos": 9
     },
     {
@@ -788,7 +789,7 @@
       "Genoa",
       "Genoa CFC"
      ],
-     "canon": null,
+     "canon": "Genoa",
      "pos": 14
     },
     {
@@ -864,7 +865,7 @@
       "Lazio",
       "Lazio Roma"
      ],
-     "canon": null,
+     "canon": "Lazio",
      "pos": 3
     },
     {
@@ -888,7 +889,7 @@
       "Parma",
       "Parma AC"
      ],
-     "canon": null,
+     "canon": "Parma",
      "pos": 6
     },
     {
@@ -920,7 +921,7 @@
       "Cagliari",
       "Cagliari Calcio"
      ],
-     "canon": null,
+     "canon": "Cagliari",
      "posBySource": [
       10,
       11
@@ -931,7 +932,7 @@
       "Udinese",
       "Udinese Calcio"
      ],
-     "canon": null,
+     "canon": "Udinese",
      "posBySource": [
       11,
       10
@@ -1026,7 +1027,7 @@
       "Parma",
       "Parma AC"
      ],
-     "canon": null,
+     "canon": "Parma",
      "pos": 2
     },
     {
@@ -1042,7 +1043,7 @@
       "Lazio",
       "Lazio Roma"
      ],
-     "canon": null,
+     "canon": "Lazio",
      "pos": 4
     },
     {
@@ -1050,7 +1051,7 @@
       "Udinese",
       "Udinese Calcio"
      ],
-     "canon": null,
+     "canon": "Udinese",
      "pos": 5
     },
     {
@@ -1133,7 +1134,7 @@
       "Cagliari",
       "Cagliari Calcio"
      ],
-     "canon": null,
+     "canon": "Cagliari",
      "posBySource": [
       15,
       14
@@ -1204,7 +1205,7 @@
       "Udinese",
       "Udinese Calcio"
      ],
-     "canon": null,
+     "canon": "Udinese",
      "pos": 3
     },
     {
@@ -1228,7 +1229,7 @@
       "Parma",
       "Parma AC"
      ],
-     "canon": null,
+     "canon": "Parma",
      "pos": 6
     },
     {
@@ -1236,7 +1237,7 @@
       "Lazio",
       "Lazio Roma"
      ],
-     "canon": null,
+     "canon": "Lazio",
      "pos": 7
     },
     {
@@ -1316,7 +1317,7 @@
       "Lecce",
       "US Lecce"
      ],
-     "canon": null,
+     "canon": "Lecce",
      "pos": 17
     },
     {
@@ -1360,7 +1361,7 @@
       "SS Lazio",
       "Lazio Roma"
      ],
-     "canon": null,
+     "canon": "Lazio",
      "pos": 2
     },
     {
@@ -1376,7 +1377,7 @@
       "Parma AC",
       "Parma AC"
      ],
-     "canon": null,
+     "canon": "Parma",
      "pos": 4
     },
     {
@@ -1400,7 +1401,7 @@
       "Udinese Calcio",
       "Udinese Calcio"
      ],
-     "canon": null,
+     "canon": "Udinese",
      "pos": 7
     },
     {
@@ -1432,7 +1433,7 @@
       "AC Venezia",
       "AC Venezia"
      ],
-     "canon": null,
+     "canon": "Venezia",
      "pos": 11
     },
     {
@@ -1440,7 +1441,7 @@
       "Cagliari Calcio",
       "Cagliari Calcio"
      ],
-     "canon": null,
+     "canon": "Cagliari",
      "pos": 12
     },
     {
@@ -1516,7 +1517,7 @@
       "SS Lazio",
       "Lazio Roma"
      ],
-     "canon": null,
+     "canon": "Lazio",
      "pos": 1
     },
     {
@@ -1548,7 +1549,7 @@
       "Parma AC",
       "Parma AC"
      ],
-     "canon": null,
+     "canon": "Parma",
      "pos": 5
     },
     {
@@ -1572,7 +1573,7 @@
       "Udinese Calcio",
       "Udinese Calcio"
      ],
-     "canon": null,
+     "canon": "Udinese",
      "pos": 8
     },
     {
@@ -1612,7 +1613,7 @@
       "US Lecce",
       "US Lecce"
      ],
-     "canon": null,
+     "canon": "Lecce",
      "pos": 13
     },
     {
@@ -1636,7 +1637,7 @@
       "AC Venezia",
       "AC Venezia"
      ],
-     "canon": null,
+     "canon": "Venezia",
      "pos": 16
     },
     {
@@ -1644,7 +1645,7 @@
       "Cagliari Calcio",
       "Cagliari Calcio"
      ],
-     "canon": null,
+     "canon": "Cagliari",
      "pos": 17
     },
     {
@@ -1696,7 +1697,7 @@
       "SS Lazio",
       "Lazio Roma"
      ],
-     "canon": null,
+     "canon": "Lazio",
      "pos": 3
     },
     {
@@ -1704,7 +1705,7 @@
       "Parma AC",
       "Parma AC"
      ],
-     "canon": null,
+     "canon": "Parma",
      "pos": 4
     },
     {
@@ -1768,7 +1769,7 @@
       "Udinese Calcio",
       "Udinese Calcio"
      ],
-     "canon": null,
+     "canon": "Udinese",
      "pos": 12
     },
     {
@@ -1776,7 +1777,7 @@
       "US Lecce",
       "US Lecce"
      ],
-     "canon": null,
+     "canon": "Lecce",
      "pos": 13
     },
     {
@@ -1884,7 +1885,7 @@
       "SS Lazio",
       "Lazio Roma"
      ],
-     "canon": null,
+     "canon": "Lazio",
      "pos": 6
     },
     {
@@ -1916,7 +1917,7 @@
       "Parma AC",
       "Parma AC"
      ],
-     "canon": null,
+     "canon": "Parma",
      "pos": 10
     },
     {
@@ -1948,7 +1949,7 @@
       "Udinese Calcio",
       "Udinese Calcio"
      ],
-     "canon": null,
+     "canon": "Udinese",
      "pos": 14
     },
     {
@@ -1964,7 +1965,7 @@
       "US Lecce",
       "US Lecce"
      ],
-     "canon": null,
+     "canon": "Lecce",
      "pos": 16
     },
     {
@@ -1980,7 +1981,7 @@
       "AC Venezia",
       "AC Venezia"
      ],
-     "canon": null,
+     "canon": "Venezia",
      "pos": 18
     }
    ],
@@ -2032,7 +2033,7 @@
       "SS Lazio",
       "Lazio Roma"
      ],
-     "canon": null,
+     "canon": "Lazio",
      "pos": 4
     },
     {
@@ -2040,7 +2041,7 @@
       "Parma AC",
       "Parma AC"
      ],
-     "canon": null,
+     "canon": "Parma",
      "pos": 5
     },
     {
@@ -2048,7 +2049,7 @@
       "Udinese Calcio",
       "Udinese Calcio"
      ],
-     "canon": null,
+     "canon": "Udinese",
      "pos": 6
     },
     {
@@ -2148,7 +2149,7 @@
       "Como Calcio",
       "Calcio Como"
      ],
-     "canon": null,
+     "canon": "Como",
      "pos": 17
     },
     {
@@ -2216,7 +2217,7 @@
       "Parma AC",
       "Parma AC"
      ],
-     "canon": null,
+     "canon": "Parma",
      "pos": 5
     },
     {
@@ -2224,7 +2225,7 @@
       "SS Lazio",
       "Lazio Roma"
      ],
-     "canon": null,
+     "canon": "Lazio",
      "pos": 6
     },
     {
@@ -2232,7 +2233,7 @@
       "Udinese Calcio",
       "Udinese Calcio"
      ],
-     "canon": null,
+     "canon": "Udinese",
      "pos": 7
     },
     {
@@ -2256,7 +2257,7 @@
       "US Lecce",
       "US Lecce"
      ],
-     "canon": null,
+     "canon": "Lecce",
      "pos": 10
     },
     {
@@ -2372,7 +2373,7 @@
       "Udinese Calcio",
       "Udinese Calcio"
      ],
-     "canon": null,
+     "canon": "Udinese",
      "pos": 4
     },
     {
@@ -2420,7 +2421,7 @@
       "SS Lazio",
       "Lazio Roma"
      ],
-     "canon": null,
+     "canon": "Lazio",
      "pos": 10
     },
     {
@@ -2428,7 +2429,7 @@
       "US Lecce",
       "US Lecce"
      ],
-     "canon": null,
+     "canon": "Lecce",
      "pos": 11
     },
     {
@@ -2436,7 +2437,7 @@
       "Cagliari Calcio",
       "Cagliari Calcio"
      ],
-     "canon": null,
+     "canon": "Cagliari",
      "pos": 12
     },
     {
@@ -2484,7 +2485,7 @@
       "Parma FC",
       "Parma FC"
      ],
-     "canon": null,
+     "canon": "Parma",
      "pos": 18
     },
     {
@@ -2606,7 +2607,7 @@
       "Parma FC",
       "Parma FC"
      ],
-     "canon": null,
+     "canon": "Parma",
      "posBySource": [
       8,
       9
@@ -2639,7 +2640,7 @@
       "Udinese Calcio",
       "Udinese Calcio"
      ],
-     "canon": null,
+     "canon": "Udinese",
      "posBySource": [
       11,
       12
@@ -2672,7 +2673,7 @@
       "Cagliari Calcio",
       "Cagliari Calcio"
      ],
-     "canon": null,
+     "canon": "Cagliari",
      "posBySource": [
       14,
       15
@@ -2694,7 +2695,7 @@
       "SS Lazio",
       "Lazio Roma"
      ],
-     "canon": null,
+     "canon": "Lazio",
      "posBySource": [
       16,
       17
@@ -2716,7 +2717,7 @@
       "US Lecce",
       "US Lecce"
      ],
-     "canon": null,
+     "canon": "Lecce",
      "posBySource": [
       18,
       19
@@ -2787,7 +2788,7 @@
       "SS Lazio",
       "Lazio Roma"
      ],
-     "canon": null,
+     "canon": "Lazio",
      "pos": 3
     },
     {
@@ -2843,7 +2844,7 @@
       "Udinese Calcio",
       "Udinese Calcio"
      ],
-     "canon": null,
+     "canon": "Udinese",
      "pos": 10
     },
     {
@@ -2859,7 +2860,7 @@
       "Parma FC",
       "Parma FC"
      ],
-     "canon": null,
+     "canon": "Parma",
      "pos": 12
     },
     {
@@ -2899,7 +2900,7 @@
       "Cagliari Calcio",
       "Cagliari Calcio"
      ],
-     "canon": null,
+     "canon": "Cagliari",
      "pos": 17
     },
     {
@@ -3000,7 +3001,7 @@
       "Udinese Calcio",
       "Udinese Calcio"
      ],
-     "canon": null,
+     "canon": "Udinese",
      "pos": 7
     },
     {
@@ -3024,7 +3025,7 @@
       "Genoa CFC",
       "Genoa CFC"
      ],
-     "canon": null,
+     "canon": "Genoa",
      "pos": 10
     },
     {
@@ -3040,7 +3041,7 @@
       "SS Lazio",
       "Lazio Roma"
      ],
-     "canon": null,
+     "canon": "Lazio",
      "pos": 12
     },
     {
@@ -3056,7 +3057,7 @@
       "Cagliari Calcio",
       "Cagliari Calcio"
      ],
-     "canon": null,
+     "canon": "Cagliari",
      "pos": 14
     },
     {
@@ -3096,7 +3097,7 @@
       "Parma FC",
       "Parma FC"
      ],
-     "canon": null,
+     "canon": "Parma",
      "pos": 19
     },
     {
@@ -3164,7 +3165,7 @@
       "Genoa CFC",
       "Genoa CFC"
      ],
-     "canon": null,
+     "canon": "Genoa",
      "pos": 5
     },
     {
@@ -3180,7 +3181,7 @@
       "Udinese Calcio",
       "Udinese Calcio"
      ],
-     "canon": null,
+     "canon": "Udinese",
      "pos": 7
     },
     {
@@ -3196,7 +3197,7 @@
       "Cagliari Calcio",
       "Cagliari Calcio"
      ],
-     "canon": null,
+     "canon": "Cagliari",
      "pos": 9
     },
     {
@@ -3204,7 +3205,7 @@
       "SS Lazio",
       "Lazio Roma"
      ],
-     "canon": null,
+     "canon": "Lazio",
      "pos": 10
     },
     {
@@ -3284,7 +3285,7 @@
       "US Lecce",
       "US Lecce"
      ],
-     "canon": null,
+     "canon": "Lecce",
      "pos": 20
     }
    ],
@@ -3368,7 +3369,7 @@
       "Parma FC",
       "Parma FC"
      ],
-     "canon": null,
+     "canon": "Parma",
      "pos": 8
     },
     {
@@ -3376,7 +3377,7 @@
       "Genoa CFC",
       "Genoa CFC"
      ],
-     "canon": null,
+     "canon": "Genoa",
      "pos": 9
     },
     {
@@ -3400,7 +3401,7 @@
       "SS Lazio",
       "Lazio Roma"
      ],
-     "canon": null,
+     "canon": "Lazio",
      "pos": 12
     },
     {
@@ -3416,7 +3417,7 @@
       "Cagliari Calcio",
       "Cagliari Calcio"
      ],
-     "canon": null,
+     "canon": "Cagliari",
      "posBySource": [
       14,
       16
@@ -3427,7 +3428,7 @@
       "Udinese Calcio",
       "Udinese Calcio"
      ],
-     "canon": null,
+     "canon": "Udinese",
      "pos": 15
     },
     {
@@ -3522,7 +3523,7 @@
       "Udinese Calcio",
       "Udinese Calcio"
      ],
-     "canon": null,
+     "canon": "Udinese",
      "pos": 4
     },
     {
@@ -3530,7 +3531,7 @@
       "SS Lazio",
       "Lazio Roma"
      ],
-     "canon": null,
+     "canon": "Lazio",
      "pos": 5
     },
     {
@@ -3570,7 +3571,7 @@
       "Genoa CFC",
       "Genoa CFC"
      ],
-     "canon": null,
+     "canon": "Genoa",
      "pos": 10
     },
     {
@@ -3586,7 +3587,7 @@
       "Parma FC",
       "Parma FC"
      ],
-     "canon": null,
+     "canon": "Parma",
      "pos": 12
     },
     {
@@ -3602,7 +3603,7 @@
       "Cagliari Calcio",
       "Cagliari Calcio"
      ],
-     "canon": null,
+     "canon": "Cagliari",
      "pos": 14
     },
     {
@@ -3626,7 +3627,7 @@
       "US Lecce",
       "US Lecce"
      ],
-     "canon": null,
+     "canon": "Lecce",
      "pos": 17
     },
     {
@@ -3694,7 +3695,7 @@
       "Udinese Calcio",
       "Udinese Calcio"
      ],
-     "canon": null,
+     "canon": "Udinese",
      "pos": 3
     },
     {
@@ -3702,7 +3703,7 @@
       "SS Lazio",
       "Lazio Roma"
      ],
-     "canon": null,
+     "canon": "Lazio",
      "pos": 4
     },
     {
@@ -3734,7 +3735,7 @@
       "Parma FC",
       "Parma FC"
      ],
-     "canon": null,
+     "canon": "Parma",
      "pos": 8
     },
     {
@@ -3790,7 +3791,7 @@
       "Cagliari Calcio",
       "Cagliari Calcio"
      ],
-     "canon": null,
+     "canon": "Cagliari",
      "pos": 15
     },
     {
@@ -3806,7 +3807,7 @@
       "Genoa CFC",
       "Genoa CFC"
      ],
-     "canon": null,
+     "canon": "Genoa",
      "pos": 17
     },
     {
@@ -3814,7 +3815,7 @@
       "US Lecce",
       "US Lecce"
      ],
-     "canon": null,
+     "canon": "Lecce",
      "pos": 18
     },
     {
@@ -3890,7 +3891,7 @@
       "Udinese Calcio",
       "Udinese Calcio"
      ],
-     "canon": null,
+     "canon": "Udinese",
      "pos": 5
     },
     {
@@ -3906,7 +3907,7 @@
       "SS Lazio",
       "Lazio Roma"
      ],
-     "canon": null,
+     "canon": "Lazio",
      "pos": 7
     },
     {
@@ -3930,7 +3931,7 @@
       "Parma FC",
       "Parma FC"
      ],
-     "canon": null,
+     "canon": "Parma",
      "pos": 10
     },
     {
@@ -3938,7 +3939,7 @@
       "Cagliari Calcio",
       "Cagliari Calcio"
      ],
-     "canon": null,
+     "canon": "Cagliari",
      "pos": 11
     },
     {
@@ -3986,7 +3987,7 @@
       "Genoa CFC",
       "Genoa CFC"
      ],
-     "canon": null,
+     "canon": "Genoa",
      "pos": 17
     },
     {
@@ -4078,7 +4079,7 @@
       "Parma FC",
       "Parma FC"
      ],
-     "canon": null,
+     "canon": "Parma",
      "pos": 6
     },
     {
@@ -4102,7 +4103,7 @@
       "SS Lazio",
       "Lazio Roma"
      ],
-     "canon": null,
+     "canon": "Lazio",
      "pos": 9
     },
     {
@@ -4134,7 +4135,7 @@
       "Udinese Calcio",
       "Udinese Calcio"
      ],
-     "canon": null,
+     "canon": "Udinese",
      "pos": 13
     },
     {
@@ -4142,7 +4143,7 @@
       "Genoa CFC",
       "Genoa CFC"
      ],
-     "canon": null,
+     "canon": "Genoa",
      "pos": 14
     },
     {
@@ -4150,7 +4151,7 @@
       "Cagliari Calcio",
       "Cagliari Calcio"
      ],
-     "canon": null,
+     "canon": "Cagliari",
      "pos": 15
     },
     {
@@ -4166,7 +4167,7 @@
       "US Sassuolo",
       "Sassuolo Calcio"
      ],
-     "canon": null,
+     "canon": "Sassuolo",
      "pos": 17
     },
     {
@@ -4234,7 +4235,7 @@
       "SS Lazio",
       "Lazio Roma"
      ],
-     "canon": null,
+     "canon": "Lazio",
      "pos": 3
     },
     {
@@ -4258,7 +4259,7 @@
       "Genoa CFC",
       "Genoa CFC"
      ],
-     "canon": null,
+     "canon": "Genoa",
      "pos": 6
     },
     {
@@ -4306,7 +4307,7 @@
       "US Sassuolo",
       "Sassuolo Calcio"
      ],
-     "canon": null,
+     "canon": "Sassuolo",
      "pos": 12
     },
     {
@@ -4338,7 +4339,7 @@
       "Udinese Calcio",
       "Udinese Calcio"
      ],
-     "canon": null,
+     "canon": "Udinese",
      "pos": 16
     },
     {
@@ -4354,7 +4355,7 @@
       "Cagliari Calcio",
       "Cagliari Calcio"
      ],
-     "canon": null,
+     "canon": "Cagliari",
      "pos": 18
     },
     {
@@ -4370,7 +4371,7 @@
       "Parma FC",
       "Parma FC"
      ],
-     "canon": null,
+     "canon": "Parma",
      "pos": 20
     }
    ],
@@ -4438,7 +4439,7 @@
       "US Sassuolo",
       "Sassuolo Calcio"
      ],
-     "canon": null,
+     "canon": "Sassuolo",
      "pos": 6
     },
     {
@@ -4454,7 +4455,7 @@
       "SS Lazio",
       "Lazio Roma"
      ],
-     "canon": null,
+     "canon": "Lazio",
      "pos": 8
     },
     {
@@ -4478,7 +4479,7 @@
       "Genoa CFC",
       "Genoa CFC"
      ],
-     "canon": null,
+     "canon": "Genoa",
      "pos": 11
     },
     {
@@ -4526,7 +4527,7 @@
       "Udinese Calcio",
       "Udinese Calcio"
      ],
-     "canon": null,
+     "canon": "Udinese",
      "pos": 17
     },
     {
@@ -4542,7 +4543,7 @@
       "Frosinone Calcio",
       "Frosinone Calcio"
      ],
-     "canon": null,
+     "canon": "Frosinone",
      "pos": 19
     },
     {
@@ -4610,7 +4611,7 @@
       "SS Lazio",
       "Lazio Roma"
      ],
-     "canon": null,
+     "canon": "Lazio",
      "pos": 5
     },
     {
@@ -4658,7 +4659,7 @@
       "Cagliari Calcio",
       "Cagliari Calcio"
      ],
-     "canon": null,
+     "canon": "Cagliari",
      "pos": 11
     },
     {
@@ -4666,7 +4667,7 @@
       "US Sassuolo",
       "Sassuolo Calcio"
      ],
-     "canon": null,
+     "canon": "Sassuolo",
      "pos": 12
     },
     {
@@ -4674,7 +4675,7 @@
       "Udinese Calcio",
       "Udinese Calcio"
      ],
-     "canon": null,
+     "canon": "Udinese",
      "pos": 13
     },
     {
@@ -4698,7 +4699,7 @@
       "Genoa CFC",
       "Genoa CFC"
      ],
-     "canon": null,
+     "canon": "Genoa",
      "pos": 16
     },
     {
@@ -4790,7 +4791,7 @@
       "SS Lazio",
       "Lazio Roma"
      ],
-     "canon": null,
+     "canon": "Lazio",
      "pos": 5
     },
     {
@@ -4838,7 +4839,7 @@
       "US Sassuolo",
       "Sassuolo Calcio"
      ],
-     "canon": null,
+     "canon": "Sassuolo",
      "pos": 11
     },
     {
@@ -4846,7 +4847,7 @@
       "Genoa CFC",
       "Genoa CFC"
      ],
-     "canon": null,
+     "canon": "Genoa",
      "pos": 12
     },
     {
@@ -4862,7 +4863,7 @@
       "Udinese Calcio",
       "Udinese Calcio"
      ],
-     "canon": null,
+     "canon": "Udinese",
      "pos": 14
     },
     {
@@ -4878,7 +4879,7 @@
       "Cagliari Calcio",
       "Cagliari Calcio"
      ],
-     "canon": null,
+     "canon": "Cagliari",
      "pos": 16
     },
     {
@@ -4994,7 +4995,7 @@
       "SS Lazio",
       "Lazio Roma"
      ],
-     "canon": null,
+     "canon": "Lazio",
      "pos": 8
     },
     {
@@ -5018,7 +5019,7 @@
       "US Sassuolo",
       "Sassuolo Calcio"
      ],
-     "canon": null,
+     "canon": "Sassuolo",
      "pos": 11
     },
     {
@@ -5026,7 +5027,7 @@
       "Udinese Calcio",
       "Udinese Calcio"
      ],
-     "canon": null,
+     "canon": "Udinese",
      "pos": 12
     },
     {
@@ -5042,7 +5043,7 @@
       "Parma Calcio",
       "Parma Calcio 1913"
      ],
-     "canon": null,
+     "canon": "Parma",
      "pos": 14
     },
     {
@@ -5050,7 +5051,7 @@
       "Cagliari Calcio",
       "Cagliari Calcio"
      ],
-     "canon": null,
+     "canon": "Cagliari",
      "pos": 15
     },
     {
@@ -5066,7 +5067,7 @@
       "Genoa CFC",
       "Genoa CFC"
      ],
-     "canon": null,
+     "canon": "Genoa",
      "pos": 17
     },
     {
@@ -5082,7 +5083,7 @@
       "Frosinone Calcio",
       "Frosinone Calcio"
      ],
-     "canon": null,
+     "canon": "Frosinone",
      "pos": 19
     },
     {
@@ -5142,7 +5143,7 @@
       "SS Lazio",
       "Lazio Roma"
      ],
-     "canon": null,
+     "canon": "Lazio",
      "pos": 4
     },
     {
@@ -5174,7 +5175,7 @@
       "US Sassuolo",
       "Sassuolo Calcio"
      ],
-     "canon": null,
+     "canon": "Sassuolo",
      "pos": 8
     },
     {
@@ -5198,7 +5199,7 @@
       "Parma Calcio",
       "Parma Calcio 1913"
      ],
-     "canon": null,
+     "canon": "Parma",
      "pos": 11
     },
     {
@@ -5214,7 +5215,7 @@
       "Udinese Calcio",
       "Udinese Calcio"
      ],
-     "canon": null,
+     "canon": "Udinese",
      "pos": 13
     },
     {
@@ -5222,7 +5223,7 @@
       "Cagliari Calcio",
       "Cagliari Calcio"
      ],
-     "canon": null,
+     "canon": "Cagliari",
      "pos": 14
     },
     {
@@ -5246,7 +5247,7 @@
       "Genoa CFC",
       "Genoa CFC"
      ],
-     "canon": null,
+     "canon": "Genoa",
      "pos": 17
     },
     {
@@ -5254,7 +5255,7 @@
       "US Lecce",
       "US Lecce"
      ],
-     "canon": null,
+     "canon": "Lecce",
      "pos": 18
     },
     {
@@ -5338,7 +5339,7 @@
       "SS Lazio",
       "Lazio Roma"
      ],
-     "canon": null,
+     "canon": "Lazio",
      "pos": 6
     },
     {
@@ -5354,7 +5355,7 @@
       "US Sassuolo",
       "Sassuolo Calcio"
      ],
-     "canon": null,
+     "canon": "Sassuolo",
      "pos": 8
     },
     {
@@ -5378,7 +5379,7 @@
       "Genoa CFC",
       "Genoa CFC"
      ],
-     "canon": null,
+     "canon": "Genoa",
      "pos": 11
     },
     {
@@ -5402,7 +5403,7 @@
       "Udinese Calcio",
       "Udinese Calcio"
      ],
-     "canon": null,
+     "canon": "Udinese",
      "pos": 14
     },
     {
@@ -5418,7 +5419,7 @@
       "Cagliari Calcio",
       "Cagliari Calcio"
      ],
-     "canon": null,
+     "canon": "Cagliari",
      "pos": 16
     },
     {
@@ -5450,7 +5451,7 @@
       "Parma Calcio",
       "Parma Calcio 1913"
      ],
-     "canon": null,
+     "canon": "Parma",
      "pos": 20
     }
    ],
@@ -5510,7 +5511,7 @@
       "SS Lazio",
       "Lazio Roma"
      ],
-     "canon": null,
+     "canon": "Lazio",
      "pos": 5
     },
     {
@@ -5558,7 +5559,7 @@
       "US Sassuolo",
       "Sassuolo Calcio"
      ],
-     "canon": null,
+     "canon": "Sassuolo",
      "pos": 11
     },
     {
@@ -5566,7 +5567,7 @@
       "Udinese Calcio",
       "Udinese Calcio"
      ],
-     "canon": null,
+     "canon": "Udinese",
      "pos": 12
     },
     {
@@ -5614,7 +5615,7 @@
       "Cagliari Calcio",
       "Cagliari Calcio"
      ],
-     "canon": null,
+     "canon": "Cagliari",
      "pos": 18
     },
     {
@@ -5622,7 +5623,7 @@
       "Genoa CFC",
       "Genoa CFC"
      ],
-     "canon": null,
+     "canon": "Genoa",
      "pos": 19
     },
     {
@@ -5630,7 +5631,7 @@
       "Venezia FC",
       "Venezia FC"
      ],
-     "canon": null,
+     "canon": "Venezia",
      "pos": 20
     }
    ],
@@ -5666,7 +5667,7 @@
       "SS Lazio",
       "Lazio Roma"
      ],
-     "canon": null,
+     "canon": "Lazio",
      "pos": 2
     },
     {
@@ -5738,7 +5739,7 @@
       "AC Monza",
       "AC Monza"
      ],
-     "canon": null,
+     "canon": "Monza",
      "pos": 11
     },
     {
@@ -5746,7 +5747,7 @@
       "Udinese Calcio",
       "Udinese Calcio"
      ],
-     "canon": null,
+     "canon": "Udinese",
      "pos": 12
     },
     {
@@ -5754,7 +5755,7 @@
       "US Sassuolo",
       "Sassuolo Calcio"
      ],
-     "canon": null,
+     "canon": "Sassuolo",
      "pos": 13
     },
     {
@@ -5778,7 +5779,7 @@
       "US Lecce",
       "US Lecce"
      ],
-     "canon": null,
+     "canon": "Lecce",
      "pos": 16
     },
     {
@@ -5892,7 +5893,7 @@
       "SS Lazio",
       "Lazio Roma"
      ],
-     "canon": null,
+     "canon": "Lazio",
      "pos": 7
     },
     {
@@ -5924,7 +5925,7 @@
       "Genoa CFC",
       "Genoa CFC"
      ],
-     "canon": null,
+     "canon": "Genoa",
      "pos": 11
     },
     {
@@ -5932,7 +5933,7 @@
       "AC Monza",
       "AC Monza"
      ],
-     "canon": null,
+     "canon": "Monza",
      "pos": 12
     },
     {
@@ -5948,7 +5949,7 @@
       "US Lecce",
       "US Lecce"
      ],
-     "canon": null,
+     "canon": "Lecce",
      "pos": 14
     },
     {
@@ -5956,7 +5957,7 @@
       "Udinese Calcio",
       "Udinese Calcio"
      ],
-     "canon": null,
+     "canon": "Udinese",
      "pos": 15
     },
     {
@@ -5964,7 +5965,7 @@
       "Cagliari Calcio",
       "Cagliari Calcio"
      ],
-     "canon": null,
+     "canon": "Cagliari",
      "pos": 16
     },
     {
@@ -5980,7 +5981,7 @@
       "Frosinone Calcio",
       "Frosinone Calcio"
      ],
-     "canon": null,
+     "canon": "Frosinone",
      "pos": 18
     },
     {
@@ -5988,7 +5989,7 @@
       "US Sassuolo",
       "Sassuolo Calcio"
      ],
-     "canon": null,
+     "canon": "Sassuolo",
      "pos": 19
     },
     {
@@ -6072,7 +6073,7 @@
       "SS Lazio",
       "Lazio"
      ],
-     "canon": null,
+     "canon": "Lazio",
      "pos": 7
     },
     {
@@ -6096,7 +6097,7 @@
       "Como 1907",
       "Como"
      ],
-     "canon": null,
+     "canon": "Como",
      "pos": 10
     },
     {
@@ -6112,7 +6113,7 @@
       "Udinese Calcio",
       "Udinese"
      ],
-     "canon": null,
+     "canon": "Udinese",
      "pos": 12
     },
     {
@@ -6120,7 +6121,7 @@
       "Genoa CFC",
       "Genoa"
      ],
-     "canon": null,
+     "canon": "Genoa",
      "pos": 13
     },
     {
@@ -6136,7 +6137,7 @@
       "Cagliari Calcio",
       "Cagliari"
      ],
-     "canon": null,
+     "canon": "Cagliari",
      "pos": 15
     },
     {
@@ -6144,7 +6145,7 @@
       "Parma Calcio",
       "Parma"
      ],
-     "canon": null,
+     "canon": "Parma",
      "pos": 16
     },
     {
@@ -6152,7 +6153,7 @@
       "US Lecce",
       "Lecce"
      ],
-     "canon": null,
+     "canon": "Lecce",
      "pos": 17
     },
     {
@@ -6168,7 +6169,7 @@
       "Venezia FC",
       "Venezia"
      ],
-     "canon": null,
+     "canon": "Venezia",
      "pos": 19
     },
     {
@@ -6176,7 +6177,7 @@
       "AC Monza",
       "Monza"
      ],
-     "canon": null,
+     "canon": "Monza",
      "pos": 20
     }
    ],
@@ -6229,7 +6230,7 @@
       "Como 1907",
       "Como"
      ],
-     "canon": null,
+     "canon": "Como",
      "pos": 4
     },
     {
@@ -6269,7 +6270,7 @@
       "SS Lazio",
       "Lazio"
      ],
-     "canon": null,
+     "canon": "Lazio",
      "pos": 9
     },
     {
@@ -6277,7 +6278,7 @@
       "Udinese Calcio",
       "Udinese"
      ],
-     "canon": null,
+     "canon": "Udinese",
      "pos": 10
     },
     {
@@ -6285,7 +6286,7 @@
       "US Sassuolo",
       "Sassuolo"
      ],
-     "canon": null,
+     "canon": "Sassuolo",
      "pos": 11
     },
     {
@@ -6301,7 +6302,7 @@
       "Parma Calcio",
       "Parma"
      ],
-     "canon": null,
+     "canon": "Parma",
      "pos": 13
     },
     {
@@ -6309,7 +6310,7 @@
       "Cagliari Calcio",
       "Cagliari"
      ],
-     "canon": null,
+     "canon": "Cagliari",
      "pos": 14
     },
     {
@@ -6325,7 +6326,7 @@
       "Genoa CFC",
       "Genoa"
      ],
-     "canon": null,
+     "canon": "Genoa",
      "pos": 16
     },
     {
@@ -6333,7 +6334,7 @@
       "US Lecce",
       "Lecce"
      ],
-     "canon": null,
+     "canon": "Lecce",
      "pos": 17
     },
     {

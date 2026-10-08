@@ -10,6 +10,7 @@
    ──────────────────────────────────────────────────────────────────────────── */
 import type { CareerState, RandomEvent, ClubData } from "./soccerCareerEngine";
 import { COOLDOWN, STORY } from "./soccerCareerLife";
+import { CAREER_POOL_SINCE } from "../data/soccerCareerClubPool";
 
 /* ─── tiny local helpers (duplicated on purpose: no runtime import cycle) ─── */
 const rand = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
@@ -469,6 +470,15 @@ export function getEraRivalName(year: number): string {
 
 /* ─── Era-correct transfer market: tier overrides + clubs that did not exist yet ─── */
 const CLUB_FOUNDED_AFTER: Record<string, number> = {
+  /* Round 1100: the generated rows, first so a typed row below always wins.
+     The club pool grew from four Club Manager leagues to all of them, and a
+     club that round brought in is a 2026-27 club as far as the game can
+     prove: it is in no list before the season in CAREER_POOL_SINCE (2026,
+     or the first season two sources give it; scripts/data/
+     soccerCareerFacts.json clubSince holds every decision and
+     scripts/simCareerClubPool.mjs section 3 holds this table to it). So no
+     past career meets nineteen MLS clubs before MLS kicked off. */
+  ...CAREER_POOL_SINCE,
   "Leipzig": 2010, "RB Leipzig": 2010, "Inter Miami": 2020, "LAFC": 2018,
   "Los Angeles FC": 2018, "New York City FC": 2015, "Austin FC": 2021, "Charlotte FC": 2022,
   // Round 54 club expansion: keep the new-world clubs out of eras where they

@@ -48,6 +48,9 @@
                the binds; every season from 2026 and every dugout row from
                2026 must be identical. The pins' own effect is printed (the
                same replay without releasing them in the baseline).
+               Round 1100 moves 2026-27 on purpose (the pool, the rows, the
+               band): a career that differs is replayed with that round's
+               seven source files read from the base, and must then be equal.
    d WIRING    the page prints no raw label where a past season can show:
                the offer, loan, academy, dugout market and club cards and the
                season summary all go through the lookup (read from the page
@@ -70,6 +73,11 @@
      offeryear    nextSeasonYear one season early                     -> b
      selfnamed    his own club left among a past table's rivals       -> b
      phonemine    the phone reads his league from today's label       -> b
+     unheld       (Round 1100 review) Hertha Berlin dropped from
+                  RELABELLED_1037, so its finish is placed in a league
+                  the size of the one it left                         -> a
+   (unheld measured red on 2026-10-08: the table is not the seven released
+   clubs, and a saved Hertha finish is placed in the 2. Bundesliga.)
    Each measured red on 2026-10-06 (seed 1, base origin/release-ah): the
    file differs from the ledgers and the lookup has West Ham in two leagues
    in 2011 (wrongseason); Fiorentina meets Bologna in seasons Bologna was a
@@ -152,6 +160,8 @@ const CONTROLS = {
   jobyear: ['b', 'src/lib/soccerCareerEngine.ts', swap('?? 2024) + (s.managerState?.season ?? 0) + 1;', '?? 2024) + (s.managerState?.season ?? 0);')],
   offeryear: ['b', 'src/lib/soccerCareerEngine.ts', swap('return (s.seasons[s.seasons.length - 1]?.year ?? 0) + 1;', 'return (s.seasons[s.seasons.length - 1]?.year ?? 0);')],
   selfnamed: ['b', 'src/lib/soccerCareerLeague.ts', swap('let named = s.clubs.filter(n => !(member && me.canon === n));', 'let named = [...s.clubs];')],
+  /* Round 1100 review: Hertha Berlin dropped from the table finishLeague reads */
+  unheld: ['a', 'src/lib/soccerCareerLeague.ts', swap('"Hertha Berlin": "Bundesliga", ', '')],
   phonemine: ['b', 'src/lib/soccerPhone.ts', swap('const mine = name === myLeague;', 'const mine = name === s.currentLeague;')],
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
@@ -264,6 +274,18 @@ for (const c of WORLD) {
    so no league is printed beside it; the season's own size prints the
    ledgers' league */
 let guarded = 0;
+const heldSameSize = [];
+/* the seven Round 1022 released, as they stood in the base: id and old label
+   (section c puts them back in the base engine from the same list) */
+const RELEASED = [['fb-43', 'Premier League'], ['fb-66', 'Bundesliga'], ['fb-70', 'Ligue 1'], ['fb-93', 'Primera Division Paraguay'],
+  ['fb-96', 'La Liga'], ['fb-106', 'Premier League'], ['fb-137', 'Liga 1 Indonesia']];
+/* Round 1100 review: the hold below learned each club's old label from
+   RELABELLED_1037, the very table finishLeague reads, so a club dropped from
+   that table fell to the other branch and passed. The old labels are this
+   harness's own list, and the src table must be exactly it. */
+const releasedOld = new Map(RELEASED.map(([id, old]) => [WORLD.find(c => c.id === id)?.name, old]));
+ok(!releasedOld.has(undefined) && JSON.stringify(Object.entries(L.RELABELLED_1037).sort()) === JSON.stringify([...releasedOld].sort()),
+  `RELABELLED_1037 (${Object.keys(L.RELABELLED_1037).join(', ')}) is not the seven released clubs with the labels they left (${[...releasedOld.keys()].join(', ')})`);
 for (const c of WORLD) {
   for (let y = 1990; y < LIST_SEASON; y++) {
     const want = truthOf(c.name, y);
@@ -278,11 +300,23 @@ for (const c of WORLD) {
   const now = L.leagueSizeFor(c.league, 2030);
   if (now) {
     guarded += 1;
-    ok(L.finishLeague(c, 2030, now)?.name === c.league, `${c.name} 2030-31: a finish saved at ${now} prints ${L.finishLeague(c, 2030, now)?.name ?? 'no league'}, the label ${c.league}`);
+    /* Round 1100 sized more leagues, and two of the seven released clubs now
+       sit in a league the same size as the one they left (Hertha Berlin: the
+       Bundesliga and the 2. Bundesliga are both 18). Size alone can no longer
+       tell an old save's finish from a new one there, so finishLeague places
+       NO finish for that club (RELABELLED_1037), in any save. The guard fails
+       when the two sizes are equal and the club is not held, and when they
+       differ and the label is not printed. */
+    const old = releasedOld.get(c.name);
+    const sameSize = old !== undefined && old !== c.league && L.leagueSizeFor(old, 2030) === now;
+    if (sameSize) { heldSameSize.push(c.name); ok(L.finishLeague(c, 2030, now) === null, `${c.name} 2030-31: it left ${old} for ${c.league}, both ${now} clubs, yet a saved finish is placed in ${c.league}`); }
+    else ok(L.finishLeague(c, 2030, now)?.name === c.league, `${c.name} 2030-31: a finish saved at ${now} prints ${L.finishLeague(c, 2030, now)?.name ?? 'no league'}, the label ${c.league}`);
     ok(L.finishLeague(c, 2030, now === 20 ? 24 : 20) === null, `${c.name} 2030-31: a finish saved at another size is printed beside the ${c.league} of ${now}`);
   }
 }
 ok(guarded >= 1000, `only ${guarded} club seasons held the old save guard (floor 1000)`);
+ok(heldSameSize.length >= 1, 'no released club sits in a league the size of the one it left, so the same size hold was not exercised');
+console.log(`  released clubs whose old and new league share a size, so no saved finish is placed for them: ${heldSameSize.join(', ') || 'none'}`);
 /* the job market's clubs: one league a season at most, and the spellings */
 await J.loadManagerMarket?.();
 const market = J.allOfferClubs();
@@ -590,9 +624,6 @@ for (const [k, min] of Object.entries(FLOOR)) ok(cov[k] >= min, `coverage: ${k} 
 /* ─── c. BASELINE ─── */
 head('c', `BASELINE: from 2026-27 on, nothing moves against ${BASE}`);
 const PINS = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts', 'data', 'soccerCareerFacts.json'), 'utf8')).clubLeagues;
-/* the seven Round 1022 released, as they stood in the base: name and old label */
-const RELEASED = [['fb-43', 'Premier League'], ['fb-66', 'Bundesliga'], ['fb-70', 'Ligue 1'], ['fb-93', 'Primera Division Paraguay'],
-  ['fb-96', 'La Liga'], ['fb-106', 'Premier League'], ['fb-137', 'Liga 1 Indonesia']];
 const BASELINE_CAREERS = Number(process.env.SIM_LEAGUE_SEASONS_BASELINE || 12);
 let baseRoot = null;
 try {
@@ -671,11 +702,30 @@ const r1041Out = { name: 'r1041out', setup(b) {
     return { contents: src, loader: 'ts' };
   });
 } };
+/* Round 1100 (every league a real league) moves a career from 2026-27 on
+   purpose: the club pool grew from 241 to 460 clubs, eight plain leagues got a
+   size, a format and a cadence row, the finish outside the five is banded by
+   the club's place in its own league, and the odd ledger gives the dugout a
+   league's real number of rows. All of it lives in seven source files. A
+   career that differs from the base is replayed on this tree with those
+   seven files read from the base instead: equal then, the move is the
+   round's and is printed; still different, it fails as before. Once the base
+   holds the round the two trees agree and the arm is not needed. */
+const R1100_FILES = ['data/careerLeagueSeasons.ts', 'data/clubRivalries.ts', 'data/leagueFormat.ts', 'data/soccerCareerClubPool.ts', 'lib/careerEras.ts', 'lib/soccerCareerDerby.ts', 'lib/soccerCareerLeague.ts'];
+const r1100Out = { name: 'r1100out', setup(b) {
+  b.onLoad({ filter: /\.ts$/ }, args => {
+    const rel = path.relative(path.resolve(ROOT, 'src'), path.resolve(args.path)).split(path.sep).join('/');
+    if (!R1100_FILES.includes(rel)) return undefined;
+    const from = path.join(baseRoot, 'src', rel);
+    if (!fs.existsSync(from)) { console.error(`Round 1100 arm: the base has no src/${rel}`); process.exit(2); }
+    return { contents: fs.readFileSync(from, 'utf8').split('\r').join(''), loader: 'ts', resolveDir: path.dirname(args.path) };
+  });
+} };
 if (baseRoot) {
   const B = await bundle(baseRoot, 'base', [releasePins(true)], false);
   const Bkeep = await bundle(baseRoot, 'basekeep', [releasePins(false)], false);
-  let same = 0; let differ = 0; let pinsMove = 0; let rows = 0; let by1041 = 0;
-  let Mout = null;
+  let same = 0; let differ = 0; let pinsMove = 0; let rows = 0; let by1041 = 0; let by1100 = 0;
+  let Mout = null; let Mout1100 = null;
   for (let i = 0; i < BASELINE_CAREERS; i++) {
     const seed = SEED * 7777 + i * 104729;
     const mine = await replay(M, seed);
@@ -684,6 +734,7 @@ if (baseRoot) {
     rows += JSON.parse(mine).seasons.length + JSON.parse(mine).dug.length;
     if (mine === base) same += 1;
     else if (await replay(Mout ??= await bundle(ROOT, 'tree1041out', [r1041Out]), seed) === base) { same += 1; by1041 += 1; console.log(`  career ${seed}: moved by Round 1041's two truth fixes (equal to the base with them taken out)`); }
+    else if (await replay(Mout1100 ??= await bundle(ROOT, 'tree1100out', [r1100Out]), seed) === base) { same += 1; by1100 += 1; }
     else {
       differ += 1;
       const a = JSON.parse(mine); const b = JSON.parse(base);
@@ -692,7 +743,7 @@ if (baseRoot) {
     }
     if (base !== kept) pinsMove += 1;
   }
-  console.log(`  ${same} of ${BASELINE_CAREERS} careers from 2025 identical from 2026-27 on (${rows} seasons and dugout rows compared); releasing the seven pins alone moves ${pinsMove} of them (attributed to the release, not the binds); ${by1041} of the identical ones only once Round 1041's two truth fixes are taken out`);
+  console.log(`  ${same} of ${BASELINE_CAREERS} careers from 2025 identical from 2026-27 on (${rows} seasons and dugout rows compared); releasing the seven pins alone moves ${pinsMove} of them (attributed to the release, not the binds); ${by1041} of the identical ones only once Round 1041's two truth fixes are taken out, ${by1100} only once Round 1100's seven files are read from the base (the pool, the rows and the band moved them, on purpose)`);
   /* 430, 428 and 431 rows over seeds 1 to 3 */
   ok(rows >= BASELINE_CAREERS * 25, `only ${rows} rows compared over ${BASELINE_CAREERS} careers (floor ${BASELINE_CAREERS * 25})`);
 }
