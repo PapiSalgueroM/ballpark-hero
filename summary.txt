@@ -1,0 +1,23 @@
+build exit=0 20s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+an.stale exit=0 0s | simStaleChunk: green. A tab left open across a deploy reloads once for a missing chunk instead of painting the broken page.
+an.stale-noprerender exit=1 0s | simStaleChunk: control noprerender turned section(s) 2 red and nothing else. The check works.
+an.stale-nooffline exit=1 0s | simStaleChunk: control nooffline turned section(s) 2 red and nothing else. The check works.
+an.stale-noguard exit=1 0s | simStaleChunk: control noguard turned section(s) 2 red and nothing else. The check works.
+an.stale-nolistener exit=1 0s | simStaleChunk: control nolistener turned section(s) 1 red and nothing else. The check works.
+an.stale-bogus exit=2 0s | unknown control bogus
+an.vitest-us exit=0 10s |    Duration  9.83s (transform 2.15s, setup 98ms, collect 4.17s, tests 9.80s, environment 591ms, prepare 270ms)
+an.tsc exit=0 46s | 
+an.saveretry exit=0 80s | US career save retry: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/us-career-save-recovery-artifacts/outcomes
+an.squadplay exit=0 126s | playCareerSquad: 170 checks, 0 failed
+an.squadplay-timeline exit=1 126s | playCareerSquad (control timeline, 3 edits served): 170 checks, 6 failed
+an.seam-hidden exit=1 9s | playUsCareerSaveSeam: 4 journeys, 28 checks, 4 failed (control hidden)
+an.seam exit=0 21s | playUsCareerSaveSeam: 12 journeys, 48 checks, 0 failed
+an.seam-keeptoast exit=1 14s | playUsCareerSaveSeam: 4 journeys, 28 checks, 4 failed (control keeptoast)
+an.seam-bogus exit=2 0s | unknown US_SAVE_SEAM_CONTROL bogus
+an.needle exit=0 0s | dist/assets/usCareerSeasonReview-Ck-uJozK.js:could not be saved. Stay on this page and use Retry save.");return()=>{To.dismiss(f)}},[i]);const[d,h]=x.useState("create"),[
+sweep exit=1 2s | sweepWeight: 19 failures
+simResultMoment exit=0 4s | simResultMoment: green. Every live game reaches the shared result moment or is listed with what it draws instead, the pill shows exactly the score it is given, the three 
+an.seam-open exit=1 14s | playUsCareerSaveSeam: 8 journeys, 40 checks, 28 failed (control open)
+simMobileChrome exit=1 2s |   - the action bar was never seen pinned and reachable more than 3000px down the page, so this run cannot tell the difference between a fixed bar and a deleted one
+simResultPillComparison exit=0 9s | simResultPillComparison: green. 34 finished states on a 390 wide phone: every pill reads the hook's score, on one line inside its fixed pill, nothing scrolls sideways, no
+an.seam-raw exit=1 122s | playUsCareerSaveSeam: 4 journeys, 4 checks, 4 failed (control raw)
