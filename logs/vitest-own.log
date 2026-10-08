@@ -1,0 +1,13 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/nbaStatLineColumns.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 70[2mms[22m[39m
+ [32m✓[39m src/test/nbaOldSaveLines.test.ts [2m([22m[2m37 tests[22m[2m)[22m[32m 105[2mms[22m[39m
+ [32m✓[39m src/test/nbaAwardDecisionLift.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 982[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1103: the award scores lifted out of NBA Front Office[2m > [22mthe same seed plays the same season twice (the hash is not noise) [33m 325[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m49 passed[39m[22m[90m (49)[39m
+[2m   Start at [22m 11:47:32
+[2m   Duration [22m 3.21s[2m (transform 1.42s, setup 363ms, collect 3.17s, tests 1.16s, environment 2.29s, prepare 760ms)[22m
+

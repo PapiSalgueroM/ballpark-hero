@@ -1,0 +1,29 @@
+== before the recording (the committed file, board skipped): expect v2replay red on the table only
+exit 3
+simCareerHall nba: 2000 careers, 0 crashed, seed base
+  15 (d) calibration 2 as recorded: the table and the rules DIFFER FROM the recording; 0 of 20 recorded saves are told something else on 2 (4 of them with a standout)
+  FAIL v2replay: calibration 2 against its recording: the table and the rules differ, 0 of 20 recorded saves told something else (a shipped calibration is never edited: add calibration 3)
+simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [v2replay])
+== recording
+exit 3 (a recording run never ends green)
+simCareerHall nba: 2000 careers, 0 crashed, seed base
+  15 (d) calibration 2 as recorded: the table and the rules equal the recording; 0 of 20 recorded saves are told something else on 2 (4 of them with a standout); RECORDED ON THIS RUN
+simCareerHall nba: CALIBRATION 2 RECORDED INTO scripts/data/careerHallV2.json, NOT A GREEN RUN (nothing red)
+other sports, rules, note: unchanged. nba table changed: true; nba readings: 20, told something else than Round 1051 recorded: 0; with a standout: 4
+46b4068ad103f8f81b63b97b5dc56cbf65b27f8729caf38ac5ca8b35d07f8728  scripts/data/careerHallV2.json
+== the whole harness on the new recording
+simCareerHall nba: 2000 careers, 0 crashed, seed base
+  15 (d) calibration 2 as recorded: the table and the rules equal the recording; 0 of 20 recorded saves are told something else on 2 (4 of them with a standout)
+  ok   v1replay: 0 readings of 20 recorded saves differ from the version 1 recording
+  ok   v2replay: calibration 2 against its recording: the table and the rules equal, 0 of 20 recorded saves told something else (a shipped calibration is never edited: add calibration 3)
+  ok   marks: at or over from: pooled 10.23 percent, 0 cells out of band []; at or over to: pooled 0.92 percent
+  ok   halfrule: 0 cells off the half rule, the ledger's marks or the ramp floor []
+  ok   standoutcap: 0 careers off the restated score on 2 (one family, capped); the standout paid on 346
+  ok   words: 0 misses in the rule, the example or the card []; 0 card lines off
+simCareerHall nba: all 33 checks green
+full run exit 0
+== control v2drift on the new recording (board skipped): must go red on v2replay
+exit 1
+simCareerHall nba: 2000 careers, 0 crashed, seed base, CONTROL v2drift
+  FAIL v2replay: calibration 2 against its recording: the table and the rules differ, 0 of 20 recorded saves told something else (a shipped calibration is never edited: add calibration 3)
+simCareerHall nba CONTROL v2drift: wanted v2replay red, red [v2replay,halfrule], FIRED

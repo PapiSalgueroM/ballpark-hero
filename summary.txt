@@ -1,0 +1,7 @@
+vitest-own exit=0 3s |    Duration  3.21s (transform 1.42s, setup 363ms, collect 3.17s, tests 1.16s, environment 2.29s, prepare 760ms)
+hall-nfl exit=3 8s | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+hall-mlb exit=3 8s | simCareerHall mlb: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+hall-nhl exit=3 5s | simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+anchors exit=0 41s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 83s | 
+rec exit=0 233s | simCareerHall nba CONTROL v2drift: wanted v2replay red, red [v2replay,halfrule], FIRED
