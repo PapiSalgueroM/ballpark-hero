@@ -1,0 +1,69 @@
+# AN2 step 3: seams 3b (US careers, static), 3e (Stadium Tycoon, static), the train's own jsdom harnesses, and the fences
+#!build
+uscareer-retry: env -u CI -u GITHUB_ACTIONS node scripts/simUsCareerSaveRetry.mjs
+uscareer-retry-ci: node scripts/simUsCareerSaveRetry.mjs
+uscareer-confirm: node scripts/simUsCareerActionConfirm.mjs
+uscareer-practice: node scripts/simUsCareerPractice.mjs
+uscareer-prospect: node scripts/simUsCareerProspect.mjs
+uscareer-recovery: node scripts/simUsCareerRecovery.mjs
+uscareer-summer: node scripts/simUsCareerSummer.mjs
+uscareer-deckc: node scripts/simUsCareerDeckC.mjs
+uscareer-defects: node scripts/simUsCareerDefects.mjs
+uscareer-benefits: node scripts/simUsCareerAnnualBenefits.mjs
+uscareer-weight: node scripts/simUsCareerWeight.mjs
+usboardparity: node scripts/simUsBoardParity.mjs
+usboardparity-label: US_BOARD_PARITY_CONTROL=label node scripts/simUsBoardParity.mjs
+usboardparity-fixture: US_BOARD_PARITY_CONTROL=fixture node scripts/simUsBoardParity.mjs
+ussc: node scripts/simUsSeasonCentre.mjs
+ussc-static: SEEDSET=0 US_SEASON_CONTROL=static node scripts/simUsSeasonCentre.mjs
+nfl: node scripts/simNflCareer.mjs
+nba: node scripts/simNbaCareer.mjs
+mlb: node scripts/simMlbCareer.mjs
+nhl: node scripts/simNhlCareer.mjs
+nfl-facts: node scripts/simNflCareerPathFacts.mjs
+nba-facts: node scripts/simNbaCareerPathFacts.mjs
+mlb-facts: node scripts/simMlbCareerPathFacts.mjs
+nhl-facts: node scripts/simNhlCareerPathFacts.mjs
+nodouble: node scripts/simNoDoubleRecord.mjs
+completion: node scripts/simCompletionOnce.mjs
+tycoon: node scripts/simStadiumTycoon.mjs
+tycoon-away: node scripts/simTycoonAway.mjs
+tycoon-awaydays: node scripts/simTycoonAwayMatchdays.mjs
+tycoon-clock: node scripts/simTycoonClock.mjs
+tycoon-gear: node scripts/simTycoonGear.mjs
+tycoon-gearpage: node scripts/simTycoonGearPage.mjs
+tycoon-help: node scripts/simTycoonHelp.mjs
+tycoon-league: node scripts/simTycoonLeague.mjs
+tycoon-loads: node scripts/simTycoonLoads.mjs
+tycoon-packpace: node scripts/simTycoonPackPace.mjs
+tycoon-packs: node scripts/simTycoonPacks.mjs
+tycoon-pitch: node scripts/simTycoonPitch.mjs
+tycoon-pitchrunner: node scripts/simTycoonPitchRunner.mjs
+tycoon-rooms: node scripts/simTycoonRooms.mjs
+tycoon-sale: env -u CI -u GITHUB_ACTIONS node scripts/simTycoonSaleReview.mjs
+tycoon-sale-ci: node scripts/simTycoonSaleReview.mjs
+tycoon-setpiece: node scripts/simTycoonSetPiece.mjs
+tycoon-setpiecepage: node scripts/simTycoonSetPiecePage.mjs
+tycoon-ticket: node scripts/simTycoonTicketPolicy.mjs
+numfmt: node scripts/simNumberFormatting.mjs
+sessionmarks: node scripts/simSessionMarks.mjs
+homefront: node scripts/simHomeFront.mjs
+homesearch: env -u CI -u GITHUB_ACTIONS node scripts/simHomeSearchRecovery.mjs
+stalechunk: node scripts/simStaleChunk.mjs
+stalechunk-nooffline: SIM_STALE_CHUNK_CONTROL=nooffline node scripts/simStaleChunk.mjs
+boxing: env -u CI -u GITHUB_ACTIONS node scripts/simBoxingShowForecast.mjs
+promoter: node scripts/simFightPromoter.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simAdsense: node scripts/simAdsense.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simSingleFooter: node scripts/simSingleFooter.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simHomeCopy: node scripts/simHomeCopy.mjs
