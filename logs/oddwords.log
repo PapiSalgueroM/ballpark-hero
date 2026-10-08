@@ -1,0 +1,25 @@
+MUT oddwords: src/lib/soccerCareerLeague.ts patched (occurrence 0 of 1)
+  vitest exit=1 2s | [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+      [31m   [31m×[31m dugoutTableWords (Round 1029)[2m > [22mkeeps an old save's table and its order note[39m[32m 23[2mms[22m[39m
+      [31m   [31m×[31m the leagues that are not one plain table (Round 1100)[2m > [22msays why a split league's table carries no points, and keeps the old line elsewhere[39m[32m 4[2mms[22m[39m
+      ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/soccerCareerLeague.test.ts,title=src/lib/soccerCareerLeague.test.ts > dugoutTableWords (Round 1029) > keeps an old save's table and its order note,line=373,column=27::AssertionError: expected '
+      ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/soccerCareerLeague.test.ts,title=src/lib/soccerCareerLeague.test.ts > the leagues that are not one plain table (Round 1100) > says why a split league's table carries no points%2C and keeps the 
+      [41m[1m FAIL [22m[49m src/lib/soccerCareerLeague.test.ts[2m > [22mdugoutTableWords (Round 1029)[2m > [22mkeeps an old save's table and its order note
+      [31m[1mAssertionError[22m: expected 'The order only: we don\'t know how ma…' to be 'The order only: MLS plays in two conf…' // Object.is equality[39m
+  world exit=1 75s |   FAIL [D3]: MLS: the words around its table are "The order only: we don't know how many clubs the MLS has."
+      FAIL [D3]: Scottish Premiership: the words around its table are "The order only: we don't know how many clubs the Scottish Premiership has."
+      FAIL [D3]: Scottish Premiership: the words around its table are "The order only: we don't know how many clubs the Scottish Premiership has."
+      FAIL [D3]: Scottish Premiership: the words around its table are "The order only: we don't know how many clubs the Scottish Premiership has."
+      FAIL [D3]: Scottish Premiership: the words around its table are "The order only: we don't know how many clubs the Scottish Premiership has."
+      FAIL [D3]: Scottish Premiership: the words around its table are "The order only: we don't know how many clubs the Scottish Premiership has."
+      FAIL [D3]: Scottish Premiership: the words around its table are "The order only: we don't know how many clubs the Scottish Premiership has."
+  clubPool exit=0 6s | simCareerClubPool: all sections green
+  facts exit=0 2s | simCareerFacts: all sections green
+  leagueFinish exit=0 7s | simCareerLeagueFinish: green. 756 careers, 6048 seasons, 4840 in a verified league; finish and title agree, the ladder holds, main's stream is untouched and the elite boost reads the era.
+  leagueSeasons exit=0 12s | simCareerLeagueSeasons: all sections green
+  manager exit=0 8s | ALL MANAGER CAREER CHECKS PASSED
+  centreTable exit=0 7s | simSeasonCentreTable: 4 checks, 0 failed
+  agree0 exit=0 9s | simSeasonCentreAgreement: 24 checks, 0 failed
+  derbies exit=0 12s | simCareerDerbies: all 8 sections green
+  restored (tree clean)
+MUT oddwords: CAUGHT by vitest, world

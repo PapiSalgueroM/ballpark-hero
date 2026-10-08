@@ -1,0 +1,7 @@
+#!serial
+sinceorder: node .rc/x/rvmut.mjs sinceorder
+oddwords: node .rc/x/rvmut.mjs oddwords
+xiasc: node .rc/x/rvmut.mjs xiasc
+allranked: node .rc/x/rvmut.mjs allranked
+tierflat: node .rc/x/rvmut.mjs tierflat
+nudgelow: node .rc/x/rvmut.mjs nudgelow

@@ -1,0 +1,16 @@
+MUT xiasc: scripts/lib/careerClubPool.mjs patched (occurrence 0 of 1)
+  regen exit=0 | wrote src/data/soccerCareerClubPool.ts: 270 clubs (t1 0, t2 3, t3 31, t4 236); 110 already hand rows; 22 league ladders; 219 clubs not offered in every era
+  pool file after regen: 1 file changed, 21 insertions(+), 21 deletions(-)
+  vitest exit=0 2s | [2m   Duration [22m 1.42s[2m (transform 449ms, setup 179ms, collect 1.01s, tests 300ms, environment 1.31s, prepare 497ms)[22m
+  world exit=0 74s | simCareerLeagueWorld: all sections green (74.0 s)
+  clubPool exit=1 6s |   FAIL [2]: a two league fixture derives [["Strong Town:2:Fixture League:Freedonia","Weak Town:2:Fixture League:Freedonia","Thin Town:4:Fixture League:Freedonia","Lower City:4:Fixture Second:Freedonia","Lower Rovers:4:Fi
+      FAIL [2]: a two league fixture derives [["Strong Town:2:Fixture League:Freedonia","Weak Town:2:Fixture League:Freedonia","Thin Town:4:Fixture League:Freedonia","Lower City:4:Fixture Second:Freedonia","Lower Rovers:4:Fixture Second:Freedonia"],{"Fixture League"
+  facts exit=0 2s | simCareerFacts: all sections green
+  leagueFinish exit=0 7s | simCareerLeagueFinish: green. 756 careers, 6048 seasons, 4840 in a verified league; finish and title agree, the ladder holds, main's stream is untouched and the elite boost reads the era.
+  leagueSeasons exit=0 11s | simCareerLeagueSeasons: all sections green
+  manager exit=0 8s | ALL MANAGER CAREER CHECKS PASSED
+  centreTable exit=0 7s | simSeasonCentreTable: 4 checks, 0 failed
+  agree0 exit=0 9s | simSeasonCentreAgreement: 24 checks, 0 failed
+  derbies exit=0 12s | simCareerDerbies: all 8 sections green
+  restored (tree clean)
+MUT xiasc: CAUGHT by clubPool

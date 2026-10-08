@@ -1,0 +1,22 @@
+MUT tierflat: scripts/lib/careerClubPool.mjs patched (occurrence 0 of 1)
+  regen exit=0 | wrote src/data/soccerCareerClubPool.ts: 270 clubs (t1 60, t2 34, t3 7, t4 169); 110 already hand rows; 22 league ladders; 219 clubs not offered in every era
+  pool file after regen: 1 file changed, 107 insertions(+), 107 deletions(-)
+  vitest exit=0 2s | [2m   Duration [22m 1.50s[2m (transform 466ms, setup 217ms, collect 1.07s, tests 275ms, environment 1.31s, prepare 272ms)[22m
+  world exit=0 74s | simCareerLeagueWorld: all sections green (73.5 s)
+  clubPool exit=1 6s |   FAIL [5]: Hearts: tier 4 share 5/1540, 5/1670 stated
+      FAIL [4]: Bournemouth (XI 83.4, t1) sits above Aston Villa (XI 83.7, t3)
+      FAIL [4]: Bournemouth (XI 83.4, t1) sits above Brentford (XI 83.5, t4)
+      FAIL [4]: Bournemouth (XI 83.4, t1) sits above Crystal Palace (XI 83.6, t4)
+      FAIL [4]: Bournemouth (XI 83.4, t1) sits above Newcastle (XI 84.1, t2)
+      FAIL [4]: Bournemouth (XI 83.4, t1) sits above Tottenham (XI 85.8, t2)
+      FAIL [4]: Bournemouth: tier 1, the rule says 4
+  facts exit=0 2s | simCareerFacts: all sections green
+  leagueFinish exit=1 7s | simCareerLeagueFinish: 1 failure(s) in section(s) 4
+      FAIL: 16 careers moved: the main Math.random stream or something else in the state changed
+  leagueSeasons exit=0 11s | simCareerLeagueSeasons: all sections green
+  manager exit=0 9s | ALL MANAGER CAREER CHECKS PASSED
+  centreTable exit=0 7s | simSeasonCentreTable: 4 checks, 0 failed
+  agree0 exit=0 9s | simSeasonCentreAgreement: 24 checks, 0 failed
+  derbies exit=0 12s | simCareerDerbies: all 8 sections green
+  restored (tree clean)
+MUT tierflat: CAUGHT by clubPool, leagueFinish

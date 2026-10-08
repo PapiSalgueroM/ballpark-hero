@@ -1,0 +1,6 @@
+sinceorder exit=1 139s | MUT sinceorder: SURVIVED every gate
+oddwords exit=0 138s | MUT oddwords: CAUGHT by vitest, world
+xiasc exit=0 139s | MUT xiasc: CAUGHT by clubPool
+allranked exit=1 139s | MUT allranked: SURVIVED every gate
+tierflat exit=0 138s | MUT tierflat: CAUGHT by clubPool, leagueFinish
+nudgelow exit=1 140s | MUT nudgelow: SURVIVED every gate
