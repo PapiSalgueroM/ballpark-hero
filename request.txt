@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+# 1104 fixer: two fences that were red in a crowded run, alone and one at a time
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
