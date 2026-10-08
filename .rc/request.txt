@@ -1,0 +1,6 @@
+# AN2 fixer FINAL d: the two fences that need a browser (my request a had no playwright line, so they died on the import)
+#!serve
+#!playwright
+simResultMoment: node scripts/simResultMoment.mjs
+pill: node scripts/simResultPillComparison.mjs
+pill-bareline: RESULT_PILL_CONTROL=bareline node scripts/simResultPillComparison.mjs
