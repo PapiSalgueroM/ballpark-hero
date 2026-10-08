@@ -121,7 +121,7 @@ export function MatchClock({ game, clock, usName, themName, speed, paused, reduc
         </span>
         <span className="min-w-0 flex-1 truncate text-right text-sm font-bold">{awayName}</span>
       </div>
-      <div className="mt-1 flex items-center justify-between text-[11px] text-muted-foreground">
+      <div className="mt-1 flex items-center justify-between text-xs text-muted-foreground">
         <span className="tabular-nums" data-clock-minute>{done ? 'FT' : clock.label(shown)}</span>
         {done && <span className={`${instant ? '' : 'cm-slam'} font-bold text-foreground`} data-full-time>Full time</span>}
       </div>

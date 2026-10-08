@@ -121,6 +121,7 @@ function soccerSport(keepsSheets: boolean, color: string, role: Exclude<PitchRol
       return { bits, alarm: g.events.some(e => e.kind === 'injury') ? '🚑 Injured' : null };
     },
     markOf: g => g.line.rating ?? 0,
+    markWord: 'Rating',
     soFar: so => [
       ['Played', String(so.apps)],
       ['Goals', String(so.goals ?? 0)],
@@ -204,8 +205,8 @@ export function Tile({ text, exitLabel, onClose, onRetry }: { text: string; exit
         <div className="text-sm font-bold">📺 Season Centre</div>
         <p className="text-sm text-muted-foreground">{text}</p>
         <div className="flex gap-2">
-          {onRetry && <button type="button" onClick={onRetry} className="h-10 flex-1 rounded-lg border border-border text-sm font-semibold">↻ Retry</button>}
-          <button type="button" onClick={onClose} className="h-10 flex-1 rounded-lg bg-primary text-sm font-bold text-primary-foreground">{exitLabel}</button>
+          {onRetry && <button type="button" onClick={onRetry} className="h-11 flex-1 rounded-lg border border-border text-sm font-semibold">↻ Retry</button>}
+          <button type="button" onClick={onClose} className="h-11 flex-1 rounded-lg bg-primary text-sm font-bold text-primary-foreground">{exitLabel}</button>
         </div>
       </div>
     </div>

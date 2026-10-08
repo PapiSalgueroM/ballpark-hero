@@ -86,6 +86,8 @@ export interface CentreSport {
   lineOf: (g: DerivedGame) => { bits: string[]; alarm: string | null };
   /** His mark for one game (soccer's match rating), for "best match". */
   markOf: (g: DerivedGame) => number;
+  /** Round 1046: what that mark is called, printed in front of it on his line (soccer: "Rating"). Absent: the bare number. */
+  markWord?: string;
   /** His league totals so far as labelled tiles. */
   soFar: (so: Record<string, number>) => [string, string][];
   /** The halfway poster's line from his first half totals. */
@@ -144,14 +146,14 @@ function FixtureList({ model, played, current }: { model: CentreModel; played: n
         const r = resultOf(g);
         const on = current === g.md;
         return (
-          <li key={g.md} className={`flex items-center gap-2 rounded-lg px-2 py-1 text-xs ${on ? 'bg-primary/15 ring-1 ring-primary/40' : ''}`} aria-current={on ? 'true' : undefined}>
+          <li key={g.md} className={`flex flex-wrap items-center gap-x-1.5 gap-y-0.5 rounded-lg px-2 py-1 text-xs ${on ? 'bg-primary/15 ring-1 ring-primary/40' : ''}`} aria-current={on ? 'true' : undefined} data-fixture-row={g.md}>
             <span className="w-6 shrink-0 tabular-nums text-muted-foreground">{g.md}</span>
-            <span className="w-4 shrink-0 text-[10px] text-muted-foreground">{g.home ? 'H' : 'A'}</span>
-            <span className={`min-w-0 flex-1 truncate ${done ? '' : 'text-muted-foreground'} ${names[g.opp] === words.unnamed ? 'italic' : ''}`}>{names[g.opp]}</span>
-            {g.fixedKey && <span className="shrink-0 rounded bg-amber-500/20 px-1 text-[9px] font-bold text-amber-400">{model.sport.fixed.badge}</span>}
-            {yours.has(g.md) && <span className="shrink-0 text-[10px]" title="One of your moments" data-fixture-moment>🎯</span>}
-            {g.md === s.games.length && <span className="shrink-0 rounded bg-sky-500/20 px-1 text-[9px] font-bold text-sky-400">FINAL DAY</span>}
-            {done && <span className={`shrink-0 rounded px-1.5 text-[10px] font-bold tabular-nums ${PILL[r]}`}>{r} {g.us}-{g.them}</span>}
+            <span className="w-4 shrink-0 text-xs text-muted-foreground">{g.home ? 'H' : 'A'}</span>
+            <span className={`min-w-[4.5rem] flex-1 truncate ${done ? '' : 'text-muted-foreground'} ${names[g.opp] === words.unnamed ? 'italic' : ''}`} data-fixture-name>{names[g.opp]}</span>
+            {g.fixedKey && <span className="shrink-0 rounded bg-amber-500/20 px-1 text-xs font-bold text-amber-400">{model.sport.fixed.badge}</span>}
+            {yours.has(g.md) && <span className="shrink-0 text-xs" title="One of your moments" data-fixture-moment>🎯</span>}
+            {g.md === s.games.length && <span className="shrink-0 rounded bg-sky-500/20 px-1 text-xs font-bold text-sky-400">FINAL</span>}
+            {done && <span className={`shrink-0 rounded px-1.5 text-xs font-bold tabular-nums ${PILL[r]}`}>{r} {g.us}-{g.them}</span>}
           </li>
         );
       })}
@@ -165,7 +167,8 @@ function HisLine({ g, sport }: { g: DerivedGame; sport: CentreSport }) {
   const { bits, alarm } = sport.lineOf(g);
   return (
     <div className={`flex flex-wrap items-center gap-2 text-xs ${alarm ? 'cm-loss-shake' : ''}`} data-his-line>
-      <span className="rounded-md bg-primary/15 px-2 py-0.5 font-black tabular-nums text-primary">{sport.markOf(g).toFixed(1)}</span>
+      {sport.markWord && <span className="text-muted-foreground">{sport.markWord}</span>}
+      <span className="rounded-md bg-primary/15 px-2 py-0.5 font-black tabular-nums text-primary" data-his-mark>{sport.markOf(g).toFixed(1)}</span>
       {bits.map(b => <span key={b}>{b}</span>)}
       {alarm && <span className="text-red-400">{alarm}</span>}
     </div>
@@ -230,21 +233,21 @@ function KickOff({ model, from, roundWord, onKick, onStraight, onRestart }: { mo
         {behind > 0 && <div className="mt-1 text-xs text-muted-foreground" data-kickoff-behind>🎯 {behind} of your moments {behind === 1 ? 'is' : 'are'} before {roundWord.toLowerCase()} {from + 1}. ↺ From the start plays {behind === 1 ? 'it' : 'them'}.</div>}
       </div>
       <div>
-        <div className="mb-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{from > 0 ? 'Next five' : 'First five'}</div>
+        <div className="mb-1 text-xs font-bold uppercase tracking-wider text-muted-foreground">{from > 0 ? 'Next five' : 'First five'}</div>
         <ul className="space-y-1">
           {s.games.slice(from, from + 5).map(g => (
             <li key={g.md} className="flex items-center gap-2 text-xs">
               <span className="w-6 tabular-nums text-muted-foreground">{g.md}</span>
               <span className="w-10 text-muted-foreground">{g.home ? 'Home' : 'Away'}</span>
               <span className={`min-w-0 flex-1 truncate ${names[g.opp] === model.words.unnamed ? 'italic text-muted-foreground' : ''}`}>{names[g.opp]}</span>
-              {g.fixedKey && <span className="rounded bg-amber-500/20 px-1 text-[9px] font-bold text-amber-400">{model.sport.fixed.badge} · {occasion[g.fixedKey] ?? ''}</span>}
+              {g.fixedKey && <span className="rounded bg-amber-500/20 px-1 text-xs font-bold text-amber-400">{model.sport.fixed.badge} · {occasion[g.fixedKey] ?? ''}</span>}
             </li>
           ))}
         </ul>
       </div>
       <div className="flex flex-col gap-2 sm:flex-row">
-        <button type="button" onClick={onKick} className="h-11 flex-1 rounded-lg bg-emerald-600 text-sm font-bold text-black hover:bg-emerald-500">{from > 0 ? `▶ ${roundWord} ${from + 1}` : '▶ Kick off'}</button>
-        <button type="button" onClick={onStraight} className="h-11 flex-1 rounded-lg border border-border text-sm font-semibold hover:bg-muted/40">
+        <button type="button" onClick={onKick} className="h-11 shrink-0 sm:flex-1 rounded-lg bg-emerald-600 text-sm font-bold text-black hover:bg-emerald-500">{from > 0 ? `▶ ${roundWord} ${from + 1}` : '▶ Kick off'}</button>
+        <button type="button" onClick={onStraight} className="h-11 shrink-0 sm:flex-1 rounded-lg border border-border text-sm font-semibold hover:bg-muted/40">
           {s.mode === 'table' ? '⏭ Straight to the final table' : '⏭ Straight to the season review'}
         </button>
       </div>
@@ -331,11 +334,11 @@ function Review({ model, reduced }: { model: CentreModel; reduced: boolean }) {
         {tiles.map(([label, value], i) => (
           <div key={label} className={`${reduced ? '' : 'cm-rise'} rounded-lg bg-muted/30 p-2 text-center`} style={rise(i + 1)} data-review-tile={label}>
             <div className="text-lg font-black tabular-nums">{value}</div>
-            <div className="text-[10px] text-muted-foreground">{label}</div>
+            <div className="text-xs text-muted-foreground">{label}</div>
           </div>
         ))}
       </div>
-      <div className="text-[11px] text-muted-foreground">All competitions, the same as your season summary.</div>
+      <div className="text-xs text-muted-foreground">All competitions, the same as your season summary.</div>
       {best && (
         <div className={`${reduced ? '' : 'cm-rise'} text-xs`} style={rise(5)}>
           ⭐ Best match: {words.round} {best.md}, {resultOf(best)} {best.us}-{best.them} vs {names[best.opp]}, rated {mark(best).toFixed(1)}
@@ -439,7 +442,7 @@ export function SeasonCentre({ model, exitLabel, onClose, resume, onProgress }: 
   const roundWord = s.mode === 'table' ? model.words.round : 'League game';
   const so = soFar(s, played);
   const soTiles = model.sport.soFar(so);
-  const btn = 'h-10 shrink-0 whitespace-nowrap rounded-lg px-3 text-xs font-bold';
+  const btn = 'h-11 shrink-0 whitespace-nowrap rounded-lg px-3 text-xs font-bold';
 
   /* Round 1047: on a phone the fixtures take the stage's place, which unmounts
      the match and whatever it is hosting. A moment is one go, so while one is
@@ -487,32 +490,33 @@ export function SeasonCentre({ model, exitLabel, onClose, resume, onProgress }: 
         className="relative flex h-full w-full max-w-[1100px] flex-col overflow-hidden bg-background outline-none md:h-[min(860px,calc(100vh-2rem))] md:rounded-2xl md:border md:border-border"
       >
         <CelebrationStyles />
-        <div className="flex items-center gap-2 border-b border-border px-3 py-2">
-          <span className="text-sm font-black">📺 {model.words.title}</span>
-          <span className="min-w-0 flex-1 truncate text-xs text-muted-foreground">{model.header.club} · {model.header.seasonLabel}</span>
-          <button type="button" onClick={() => setHelpOpen(true)} className="h-9 w-9 shrink-0 rounded-lg border border-border text-sm font-bold" aria-label="How the Season Centre works">?</button>
-          <button type="button" onClick={leave} className="h-9 shrink-0 rounded-lg border border-border px-3 text-xs font-semibold" data-centre-exit>{exitLabel}</button>
+        {/* Round 1046: on a phone the club and season get a row of their own, in full; from md up it is one row as before */}
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 border-b border-border px-3 py-2">
+          <span className="min-w-0 flex-1 text-sm font-black md:flex-none">📺 {model.words.title}</span>
+          <span className="order-last w-full text-xs text-muted-foreground md:order-none md:w-auto md:min-w-0 md:flex-1 md:truncate" data-centre-header>{model.header.club} · {model.header.seasonLabel}</span>
+          <button type="button" onClick={() => setHelpOpen(true)} className="h-11 w-11 shrink-0 rounded-lg border border-border text-sm font-bold" aria-label="How the Season Centre works">?</button>
+          <button type="button" onClick={leave} className="h-11 shrink-0 rounded-lg border border-border px-3 text-xs font-semibold" data-centre-exit>{exitLabel}</button>
         </div>
-        <div className="grid min-h-0 flex-1 grid-cols-1 md:grid-cols-[240px_1fr_380px]">
+        <div className="grid min-h-0 flex-1 grid-cols-1 md:grid-cols-[260px_1fr_380px]">
           <aside className="hidden min-h-0 overflow-y-auto border-r border-border p-2 md:block" aria-label="Fixtures">
             <FixtureList model={model} played={played} current={current} />
           </aside>
           <main className="min-h-0 overflow-y-auto p-3 md:p-4" data-centre-stage>
             {fixturesShown ? (
               <div className="space-y-2">
-                <button type="button" onClick={() => setFixturesOpen(false)} className="h-9 rounded-lg border border-border px-3 text-xs font-semibold">← Back</button>
+                <button type="button" onClick={() => setFixturesOpen(false)} className="h-11 rounded-lg border border-border px-3 text-xs font-semibold">← Back</button>
                 <FixtureList model={model} played={played} current={current} />
               </div>
             ) : stageBody}
             {!fixturesShown && (
               <div className="mt-4 space-y-3 md:hidden">
-                {hosting === null && <button type="button" onClick={() => setFixturesOpen(true)} className="h-10 w-full rounded-lg border border-border text-xs font-semibold" data-centre-fixtures>🗓 Fixtures</button>}
+                {hosting === null && <button type="button" onClick={() => setFixturesOpen(true)} className="h-11 w-full rounded-lg border border-border text-xs font-semibold" data-centre-fixtures>🗓 Fixtures</button>}
                 {!wide && <TablePanel model={model} played={played} compact />}
               </div>
             )}
             <div className="mt-3 grid grid-cols-4 gap-2 text-center md:hidden" data-so-far>
               {soTiles.map(([label, value]) => (
-                <div key={label}><div className="text-sm font-black tabular-nums">{value}</div><div className="text-[9px] text-muted-foreground">{label}</div></div>
+                <div key={label}><div className="text-sm font-black tabular-nums">{value}</div><div className="text-xs text-muted-foreground">{label}</div></div>
               ))}
             </div>
           </main>
@@ -540,7 +544,7 @@ export function SeasonCentre({ model, exitLabel, onClose, resume, onProgress }: 
           {stage.kind !== 'review' && (
             <div className="ml-auto flex shrink-0 gap-1" role="group" aria-label="Clock speed">
               {([1, 3, 'results'] as ClockSpeed[]).map(v => (
-                <button key={String(v)} type="button" aria-pressed={speed === v} onClick={() => setSpeed(v)} className={`${btn} px-2 ${speed === v ? 'bg-primary text-primary-foreground' : 'border border-border'}`}>
+                <button key={String(v)} type="button" aria-pressed={speed === v} onClick={() => setSpeed(v)} className={`${btn} min-w-11 px-2 ${speed === v ? 'bg-primary text-primary-foreground' : 'border border-border'}`}>
                   {v === 'results' ? 'Results' : `${v}x`}
                 </button>
               ))}
