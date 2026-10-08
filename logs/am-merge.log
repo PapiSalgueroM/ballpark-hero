@@ -1,0 +1,17 @@
+release-am-int at d0570fc3ae4b34f1aca019126199b1be1ea229a9; merging the round's head 150a5c354e874fe7e4efe8d904071511b291091a
+conflicts: docs/WORKBOARD.md 
+merged tree: 02bd9aa98e674aeb8528d09c310bfd56f68b8d44
+1
+--- tsc
+--- build
+[32m✓ built in 27.59s[39m
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+--- simClubSquads
+simClubSquads: green. The squad is the real one, you are in the right place in it, and the game never noticed.
+--- play
+playCareerSquad: 102 checks, 0 failed
+--- weight
+   40 chunks, 2456 KB raw (ceiling 2600), 725 KB over the wire
+
+simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+AM MERGE tsc=0 build=0 simClubSquads=0 vitest=0 playCareerSquad=0 simFlagshipWeight=0
