@@ -24,9 +24,11 @@
  *      right place in his own position queue, ties go to the man already at
  *      the club, the man named as being in front really is the one directly
  *      above him, and the row marked as him is the only one.
- *   6. IT SHOWS NOTHING RATHER THAN GUESSING. A club outside the map, a
- *      season outside the window and a club with no data all return null, and
- *      the card is wired to render nothing in that case.
+ *   6. THE REAL READERS SHOW NOTHING RATHER THAN GUESSING. A club outside the
+ *      map, a season outside the window and a club with no data all return
+ *      null from clubSquad and depthChart. Since Round 1115 the Squad tile
+ *      answers there instead, with a squad that is never called real, and the
+ *      page mounts that tile exactly once.
  *   7. IT CHANGES NOTHING. The same seeded fleet of careers produces byte
  *      identical saves whether or not the depth chart is ever consulted,
  *      because this is a display layer and the appearance model has been
@@ -231,7 +233,7 @@ if (firstChoice < 20) fail(`only ${firstChoice} first choice charts, so the top 
 if (buried < 20) fail(`only ${buried} buried charts, so the bottom of the queue is barely tested`);
 
 /* ── 6: it shows nothing rather than guessing ─────────────────────────── */
-console.log('5) no honest answer means no card');
+console.log('5) no honest answer means the real readers say nothing, and the Squad tile never passes a made squad off as real');
 const NOWHERE = [
   ['Some Invented FC', 2023], ['Wrexham', 2023], ['', 2023],
   [careerClubs[0], CLUB_SQUAD_YEARS.first - 1],
@@ -264,13 +266,26 @@ for (const [club, year] of NOWHERE) {
   if (living < 4) fail(`only ${living} of the six pairs got a living squad, so the check above is close to empty`);
   console.log(`   ${living} of those pairs get a living squad, none of them passed off as real`);
 }
-/* and the page must be wired to render nothing on null */
-const page = readFileSync(path.join(ROOT, 'src/pages/SoccerCareer.tsx'), 'utf8');
+/* Round 1115: the old card left the page with the mount of the Squad tile.
+   The page holds the tile exactly once and nothing of the old card, and the
+   tile itself draws nothing when the lib has no view to give it. Both files
+   are read with their comments stripped and their line endings normalised,
+   so prose about the tile can never stand in for the tile. */
+const codeOf = file => readFileSync(path.join(ROOT, file), 'utf8')
+  .replace(/\r\n/g, '\n')
+  .replace(/\/\*[\s\S]*?\*\//g, '')
+  .replace(/^\s*\/\/.*$/gm, '');
+const page = codeOf('src/pages/SoccerCareer.tsx');
 if (!page.includes('depthChart(')) fail('the career page never builds a depth chart');
-if (!/chart \? <SquadDepthCard chart=\{chart\} \/> : null/.test(page)) {
-  fail('the career page does not render nothing when there is no chart');
+const tileMounts = page.split('<SquadTile career={career} />').length - 1;
+if (tileMounts !== 1) fail(`the career page mounts the Squad tile ${tileMounts} times, not once`);
+if (page.includes('SquadDepthCard')) fail('the career page still names the old squad card');
+const tileCode = codeOf('src/components/soccer-career/SquadTile.tsx');
+if (!tileCode.includes('const view = useMemo(() => squadView(career), [career]);')) {
+  fail('the Squad tile does not read its view from squadView(career)');
 }
-console.log(`   ${NOWHERE.length} unknown club and season pairs, all null, and the page renders nothing on null`);
+if (!tileCode.includes('if (!view) return null;')) fail('the Squad tile does not draw nothing when there is no view');
+console.log(`   ${NOWHERE.length} unknown club and season pairs, all null for the real readers; the page mounts the Squad tile once, and the tile draws nothing with no view`);
 
 /* ── Round 267: the same picture on every offer ───────────────────────── */
 console.log('5b) an offer says where you would slot in at THAT club');
