@@ -1,0 +1,10 @@
+#!build
+#!playwright
+#!serial
+lv-1: node scripts/playLineupValidator.mjs
+lv-2: node scripts/playLineupValidator.mjs
+lv-3: node scripts/playLineupValidator.mjs
+lv-control: PLAY_LINEUP_CONTROL=accept-on-error node scripts/playLineupValidator.mjs
+norival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json

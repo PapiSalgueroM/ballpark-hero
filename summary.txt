@@ -1,0 +1,8 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+lv-1 exit=0 34s | playLineupValidator: green at 2 widths (390 and 1280). An allowance answer, an HTTP 500, a body that is not JSON, a string for valid and a validator that never answers ea
+lv-2 exit=0 35s | playLineupValidator: green at 2 widths (390 and 1280). An allowance answer, an HTTP 500, a body that is not JSON, a string for valid and a validator that never answers ea
+lv-3 exit=0 42s | playLineupValidator: green at 2 widths (390 and 1280). An allowance answer, an HTTP 500, a body that is not JSON, a string for valid and a validator that never answers ea
+lv-control exit=0 2s | playLineupValidator control: green. Accept on error was planted, the slot filled, and the nothing filled assertion caught it.
+norival exit=0 11s | No rival product names found. 0 findings.
+anchors exit=0 28s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 51s | 
