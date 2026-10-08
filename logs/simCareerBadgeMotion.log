@@ -1,0 +1,20 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/careerBadgeMotion.test.tsx > shared career badge feedback > keeps an empty case quiet with its exact count 73ms
+ ✓ src/test/careerBadgeMotion.test.tsx > shared career badge feedback > keeps all locked cards quiet with their original labels and requirements 25ms
+ ✓ src/test/careerBadgeMotion.test.tsx > shared career badge feedback > binds finite feedback only to the real evaluator earned results 9ms
+ ✓ src/test/careerBadgeMotion.test.tsx > shared career badge feedback > unlocks in place and preserves card and icon identity through cloned props 23ms
+ ✓ src/test/careerBadgeMotion.test.tsx > shared career badge feedback > shows earlier career facts as locked again without replacing badge cards 11ms
+ ✓ src/test/careerBadgeMotion.test.tsx > shared career badge feedback > retains the complete label in DOM and title for earned and locked badges 4ms
+
+ Test Files  1 passed (1)
+      Tests  6 passed (6)
+   Start at  11:48:17
+   Duration  2.01s (transform 476ms, setup 59ms, collect 624ms, tests 149ms, environment 480ms, prepare 188ms)
+
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+simCareerBadgeMotion: six rendered evaluator, locked, earned, unlock, stable-node, previous-career and full-label checks passed.

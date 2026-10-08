@@ -1,0 +1,69 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | .rc/x/cleanVsRecovered2.test.tsx[2m > [22m[2m'NFL': a recovered career against a clean one[2m > [22m[2mtwo seasons and a retirement end on the same bytes, one completion and the same draws
+[22m[39mREVIEW_WARM|{"sport":"NFL","coldEqualsWarm":false,"coldDraws":61,"warmDraws":54,"coldTrail0":9,"warmTrail0":8}
+REVIEW_RECORD|{"sport":"NFL","plan":"clean","len":5368,"completions":[["/nfl-my-career",352,"Reviewer",0]],"draws":54,"trails":[["reveal","decision-option","decision-continue","decision-option","decision-continue","decision-option","decision-continue","hub"],["reveal","rivalry-event","decision-option","decision-continue","decision-option","decision-continue","decision-option","decision-continue","hub"]],"accepted":10}
+
+[90mstdout[2m | .rc/x/cleanVsRecovered2.test.tsx[2m > [22m[2m'NFL': a recovered career against a clean one[2m > [22m[2mtwo seasons and a retirement end on the same bytes, one completion and the same draws
+[22m[39mREVIEW_RECORD|{"sport":"NFL","plan":"refuseAll","same":true,"len":5368,"completions":[["/nfl-my-career",352,"Reviewer",0]],"draws":54,"trails":[["reveal","decision-option","decision-continue","decision-option","decision-continue","decision-option","decision-continue","hub"],["reveal","rivalry-event","decision-option","decision-continue","decision-option","decision-continue","decision-option","decision-continue","hub"]],"accepted":1,"refused":10,"toastErrors":1,"diskWasStale":true}
+
+[90mstdout[2m | .rc/x/cleanVsRecovered2.test.tsx[2m > [22m[2m'NFL': a recovered career against a clean one[2m > [22m[2mtwo seasons and a retirement end on the same bytes, one completion and the same draws
+[22m[39mREVIEW_RECORD|{"sport":"NFL","plan":"refuseSeasonOneThenRetirement","same":true,"len":5368,"completions":[["/nfl-my-career",352,"Reviewer",0]],"draws":54,"trails":[["reveal","decision-option","decision-continue","decision-option","decision-continue","decision-option","decision-continue","hub"],["reveal","rivalry-event","decision-option","decision-continue","decision-option","decision-continue","decision-option","decision-continue","hub"]],"accepted":7,"refused":5,"toastErrors":2,"diskWasStale":true}
+
+[90mstdout[2m | .rc/x/cleanVsRecovered2.test.tsx[2m > [22m[2m'NFL': a recovered career against a clean one[2m > [22m[2mtwo seasons and a retirement end on the same bytes, one completion and the same draws
+[22m[39mREVIEW_RECORD|{"sport":"NFL","plan":"refuseSeasonOneNoRetry","same":true,"len":5368,"completions":[["/nfl-my-career",352,"Reviewer",0]],"draws":54,"trails":[["reveal","decision-option","decision-continue","decision-option","decision-continue","decision-option","decision-continue","hub"],["reveal","rivalry-event","decision-option","decision-continue","decision-option","decision-continue","decision-option","decision-continue","hub"]],"accepted":6,"refused":4,"toastErrors":1,"diskWasStale":false}
+
+[90mstdout[2m | .rc/x/cleanVsRecovered2.test.tsx[2m > [22m[2m'NBA': a recovered career against a clean one[2m > [22m[2mtwo seasons and a retirement end on the same bytes, one completion and the same draws
+[22m[39mREVIEW_WARM|{"sport":"NBA","coldEqualsWarm":true,"coldDraws":56,"warmDraws":56,"coldTrail0":7,"warmTrail0":7}
+REVIEW_RECORD|{"sport":"NBA","plan":"clean","len":4958,"completions":[["/nba-my-career",135,"Reviewer",0]],"draws":56,"trails":[["reveal","rivalry-event","decision-option","decision-continue","decision-option","decision-continue","hub"],["reveal","rivalry-option","rivalry-outcome","decision-option","decision-continue","hub"]],"accepted":8}
+
+[90mstdout[2m | .rc/x/cleanVsRecovered2.test.tsx[2m > [22m[2m'NBA': a recovered career against a clean one[2m > [22m[2mtwo seasons and a retirement end on the same bytes, one completion and the same draws
+[22m[39mREVIEW_RECORD|{"sport":"NBA","plan":"refuseAll","same":true,"len":4958,"completions":[["/nba-my-career",135,"Reviewer",0]],"draws":56,"trails":[["reveal","rivalry-event","decision-option","decision-continue","decision-option","decision-continue","hub"],["reveal","rivalry-option","rivalry-outcome","decision-option","decision-continue","hub"]],"accepted":1,"refused":8,"toastErrors":1,"diskWasStale":true}
+
+[90mstdout[2m | .rc/x/cleanVsRecovered2.test.tsx[2m > [22m[2m'NBA': a recovered career against a clean one[2m > [22m[2mtwo seasons and a retirement end on the same bytes, one completion and the same draws
+[22m[39mREVIEW_RECORD|{"sport":"NBA","plan":"refuseSeasonOneThenRetirement","same":true,"len":4958,"completions":[["/nba-my-career",135,"Reviewer",0]],"draws":56,"trails":[["reveal","rivalry-event","decision-option","decision-continue","decision-option","decision-continue","hub"],["reveal","rivalry-option","rivalry-outcome","decision-option","decision-continue","hub"]],"accepted":5,"refused":5,"toastErrors":2,"diskWasStale":true}
+
+[90mstdout[2m | .rc/x/cleanVsRecovered2.test.tsx[2m > [22m[2m'NBA': a recovered career against a clean one[2m > [22m[2mtwo seasons and a retirement end on the same bytes, one completion and the same draws
+[22m[39mREVIEW_RECORD|{"sport":"NBA","plan":"refuseSeasonOneNoRetry","same":true,"len":4958,"completions":[["/nba-my-career",135,"Reviewer",0]],"draws":56,"trails":[["reveal","rivalry-event","decision-option","decision-continue","decision-option","decision-continue","hub"],["reveal","rivalry-option","rivalry-outcome","decision-option","decision-continue","hub"]],"accepted":4,"refused":4,"toastErrors":1,"diskWasStale":false}
+
+[90mstdout[2m | .rc/x/cleanVsRecovered2.test.tsx[2m > [22m[2m'MLB': a recovered career against a clean one[2m > [22m[2mtwo seasons and a retirement end on the same bytes, one completion and the same draws
+[22m[39mREVIEW_WARM|{"sport":"MLB","coldEqualsWarm":true,"coldDraws":56,"warmDraws":56,"coldTrail0":7,"warmTrail0":7}
+REVIEW_RECORD|{"sport":"MLB","plan":"clean","len":4943,"completions":[["/mlb-my-career",122,"Reviewer",0]],"draws":56,"trails":[["reveal","rivalry-event","decision-option","decision-continue","decision-option","decision-continue","hub"],["reveal","decision-option","decision-continue","hub"]],"accepted":7}
+
+[90mstdout[2m | .rc/x/cleanVsRecovered2.test.tsx[2m > [22m[2m'MLB': a recovered career against a clean one[2m > [22m[2mtwo seasons and a retirement end on the same bytes, one completion and the same draws
+[22m[39mREVIEW_RECORD|{"sport":"MLB","plan":"refuseAll","same":true,"len":4943,"completions":[["/mlb-my-career",122,"Reviewer",0]],"draws":56,"trails":[["reveal","rivalry-event","decision-option","decision-continue","decision-option","decision-continue","hub"],["reveal","decision-option","decision-continue","hub"]],"accepted":1,"refused":7,"toastErrors":1,"diskWasStale":true}
+
+[90mstdout[2m | .rc/x/cleanVsRecovered2.test.tsx[2m > [22m[2m'MLB': a recovered career against a clean one[2m > [22m[2mtwo seasons and a retirement end on the same bytes, one completion and the same draws
+[22m[39mREVIEW_RECORD|{"sport":"MLB","plan":"refuseSeasonOneThenRetirement","same":true,"len":4943,"completions":[["/mlb-my-career",122,"Reviewer",0]],"draws":56,"trails":[["reveal","rivalry-event","decision-option","decision-continue","decision-option","decision-continue","hub"],["reveal","decision-option","decision-continue","hub"]],"accepted":4,"refused":5,"toastErrors":2,"diskWasStale":true}
+
+[90mstdout[2m | .rc/x/cleanVsRecovered2.test.tsx[2m > [22m[2m'MLB': a recovered career against a clean one[2m > [22m[2mtwo seasons and a retirement end on the same bytes, one completion and the same draws
+[22m[39mREVIEW_RECORD|{"sport":"MLB","plan":"refuseSeasonOneNoRetry","same":true,"len":4943,"completions":[["/mlb-my-career",122,"Reviewer",0]],"draws":56,"trails":[["reveal","rivalry-event","decision-option","decision-continue","decision-option","decision-continue","hub"],["reveal","decision-option","decision-continue","hub"]],"accepted":3,"refused":4,"toastErrors":1,"diskWasStale":false}
+
+[90mstdout[2m | .rc/x/cleanVsRecovered2.test.tsx[2m > [22m[2m'NHL': a recovered career against a clean one[2m > [22m[2mtwo seasons and a retirement end on the same bytes, one completion and the same draws
+[22m[39mREVIEW_WARM|{"sport":"NHL","coldEqualsWarm":true,"coldDraws":50,"warmDraws":50,"coldTrail0":9,"warmTrail0":9}
+REVIEW_RECORD|{"sport":"NHL","plan":"clean","len":4993,"completions":[["/nhl-my-career",180,"Reviewer",0]],"draws":50,"trails":[["reveal","rivalry-event","decision-option","decision-continue","decision-option","decision-continue","decision-option","decision-continue","hub"],["reveal","rivalry-event","decision-option","decision-continue","decision-option","decision-continue","hub"]],"accepted":10}
+
+[90mstdout[2m | .rc/x/cleanVsRecovered2.test.tsx[2m > [22m[2m'NHL': a recovered career against a clean one[2m > [22m[2mtwo seasons and a retirement end on the same bytes, one completion and the same draws
+[22m[39mREVIEW_RECORD|{"sport":"NHL","plan":"refuseAll","same":true,"len":4993,"completions":[["/nhl-my-career",180,"Reviewer",0]],"draws":50,"trails":[["reveal","rivalry-event","decision-option","decision-continue","decision-option","decision-continue","decision-option","decision-continue","hub"],["reveal","rivalry-event","decision-option","decision-continue","decision-option","decision-continue","hub"]],"accepted":1,"refused":10,"toastErrors":1,"diskWasStale":true}
+
+[90mstdout[2m | .rc/x/cleanVsRecovered2.test.tsx[2m > [22m[2m'NHL': a recovered career against a clean one[2m > [22m[2mtwo seasons and a retirement end on the same bytes, one completion and the same draws
+[22m[39mREVIEW_RECORD|{"sport":"NHL","plan":"refuseSeasonOneThenRetirement","same":true,"len":4993,"completions":[["/nhl-my-career",180,"Reviewer",0]],"draws":50,"trails":[["reveal","rivalry-event","decision-option","decision-continue","decision-option","decision-continue","decision-option","decision-continue","hub"],["reveal","rivalry-event","decision-option","decision-continue","decision-option","decision-continue","hub"]],"accepted":6,"refused":6,"toastErrors":2,"diskWasStale":true}
+
+[90mstdout[2m | .rc/x/cleanVsRecovered2.test.tsx[2m > [22m[2m'NHL': a recovered career against a clean one[2m > [22m[2mtwo seasons and a retirement end on the same bytes, one completion and the same draws
+[22m[39mREVIEW_RECORD|{"sport":"NHL","plan":"refuseSeasonOneNoRetry","same":true,"len":4993,"completions":[["/nhl-my-career",180,"Reviewer",0]],"draws":50,"trails":[["reveal","rivalry-event","decision-option","decision-continue","decision-option","decision-continue","decision-option","decision-continue","hub"],["reveal","rivalry-event","decision-option","decision-continue","decision-option","decision-continue","hub"]],"accepted":5,"refused":5,"toastErrors":1,"diskWasStale":false}
+
+ [32m✓[39m .rc/x/cleanVsRecovered2.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 6069[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL': a recovered career against a clean one[2m > [22mtwo seasons and a retirement end on the same bytes, one completion and the same draws [33m 2062[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA': a recovered career against a clean one[2m > [22mtwo seasons and a retirement end on the same bytes, one completion and the same draws [33m 1386[2mms[22m[39m
+   [33m[2m✓[22m[39m 'MLB': a recovered career against a clean one[2m > [22mtwo seasons and a retirement end on the same bytes, one completion and the same draws [33m 1219[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NHL': a recovered career against a clean one[2m > [22mtwo seasons and a retirement end on the same bytes, one completion and the same draws [33m 1340[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m   Start at [22m 11:48:17
+[2m   Duration [22m 11.27s[2m (transform 2.71s, setup 87ms, collect 3.71s, tests 6.07s, environment 497ms, prepare 473ms)[22m
+

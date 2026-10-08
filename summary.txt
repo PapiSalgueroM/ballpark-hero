@@ -1,0 +1,10 @@
+simCareerBadgeMotion exit=0 3s | simCareerBadgeMotion: six rendered evaluator, locked, earned, unlock, stable-node, previous-career and full-label checks passed.
+simExtensionResponseMotion exit=0 3s | simExtensionResponseMotion: five actual-card opening, engine-response, exact-terms, one-use-push, callback, stable-node and focus checks passed.
+simFreeAgencyFeedback exit=0 4s | Free-agency feedback: CRLF controls bind, original bytes held and owned copies cleaned. Fictional offers and final-entrance JSDOM fixture do not prove native layout or ca
+cvr2 exit=0 12s |    Duration  11.27s (transform 2.71s, setup 87ms, collect 3.71s, tests 6.07s, environment 497ms, prepare 473ms)
+simNflCareer exit=0 2s | PASS: no crashes, every position produces stats, shop fully reachable, deck C drawn, every card dealt only where its words hold (its words, odds and money: simUsCareerDec
+simMoneyAppFeedback exit=0 4s | MoneyApp feedback: CRLF copied controls bind, original bytes held, owned temporary files cleaned. Native geometry/motion acceptance remains separate.
+simNbaCareer exit=0 21s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged, rivalry beats honest
+simMlbCareer exit=0 24s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, every life card tagged
+simNhlCareer exit=0 17s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged
+simNumberFormatting exit=0 136s | Number formatting: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/number-formatting-artifacts/outcomes
