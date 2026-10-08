@@ -1,0 +1,7 @@
+#!serial
+before-modern: cp src/data/clubManagerRussia2026.ts /tmp/russia-now.ts && cp .rc/x/russia-before.ts src/data/clubManagerRussia2026.ts && node scripts/simCmLeagueRules.mjs --part=modern; rc=$?; cp /tmp/russia-now.ts src/data/clubManagerRussia2026.ts; git diff --stat -- src/data/clubManagerRussia2026.ts | tail -1; exit $rc
+now-modern: node scripts/simCmLeagueRules.mjs --part=modern
+now-eras-pure: node scripts/simCmLeagueRules.mjs --part=eras,pure
+retake: node scripts/simCmLeagueRules.mjs --part=modern --write && cp scripts/data/cmLeagueRulesDigest.json "$RC_OUT/cmLeagueRulesDigest.json" && git diff --stat -- scripts/data/cmLeagueRulesDigest.json | tail -1
+after-all: node scripts/simCmLeagueRules.mjs
+after-modern-again: node scripts/simCmLeagueRules.mjs --part=modern

@@ -1,0 +1,31 @@
+1) digest, every modern league: a seeded season, the summer, and the pyramids twice
+  FAIL: modern: now|premier differs in wholeNext, s2_whole
+  FAIL: modern: now|championship differs in wholeNext, s2_whole
+  FAIL: modern: now|laliga differs in wholeNext, s2_whole
+  FAIL: modern: now|seriea differs in wholeNext, s2_whole
+  FAIL: modern: now|bundesliga differs in wholeNext, s2_whole
+  FAIL: modern: now|ligue1 differs in wholeNext, s2_whole
+  FAIL: modern: now|eredivisie differs in wholeNext
+  FAIL: modern: now|saudi differs in wholeNext
+  FAIL: modern: now|mlsEast differs in wholeNext
+  FAIL: modern: now|mlsWest differs in wholeNext
+  FAIL: modern: now|primeira differs in wholeNext
+  FAIL: modern: now|scottish differs in wholeNext
+  FAIL: modern: now|superlig differs in wholeNext
+  FAIL: modern: now|bundesliga2 differs in wholeNext, s2_whole
+  FAIL: modern: now|proleague differs in wholeNext
+  FAIL: modern: now|austria differs in wholeNext
+  FAIL: modern: now|greece differs in wholeNext
+  FAIL: modern: now|denmark differs in wholeNext
+  FAIL: modern: now|switzerland differs in wholeNext
+  FAIL: modern: now|croatia differs in wholeNext
+  FAIL: modern: now|brasileirao differs in wholeNext
+  FAIL: modern: now|ligamx differs in wholeNext
+  FAIL: modern: now|aleague differs in wholeNext
+  FAIL: modern: now|serieb differs in wholeNext, s2_whole
+  FAIL: modern: now|ligue2 differs in wholeNext, s2_whole
+  FAIL: modern: now|segunda differs in wholeNext, s2_whole
+  FAIL: modern: now|russia differs in wholeNext
+   27 entries compared, 27 differ
+
+simCmLeagueRules: 27 failure(s)

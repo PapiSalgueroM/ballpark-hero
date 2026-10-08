@@ -1,0 +1,6 @@
+before-modern exit=0 12s | simCmLeagueRules: all checks passed (modern)
+now-modern exit=1 12s | simCmLeagueRules: 27 failure(s)
+now-eras-pure exit=0 7s | simCmLeagueRules: all checks passed (eras, pure)
+retake exit=0 12s |  1 file changed, 37 insertions(+), 37 deletions(-)
+after-all exit=0 34s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+after-modern-again exit=0 12s | simCmLeagueRules: all checks passed (modern)
