@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+simStartingXi: node scripts/simStartingXi.mjs
+simNationalityFlags: node scripts/simNationalityFlags.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+playCM: SWEEP_BASE=http://localhost:4173 node scripts/playClubManager.mjs
+weight: BASE=http://localhost:4173 ENGINES=chromium node scripts/sweepWeight.mjs
