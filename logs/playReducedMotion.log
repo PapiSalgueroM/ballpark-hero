@@ -1,0 +1,43 @@
+
+prefers-reduced-motion: no-preference
+   rise      animation=cmRise         opacity=0 display=block
+   slam      animation=cmSlam         opacity=0 display=block
+   glow      animation=cmGoldGlow     opacity=1 display=block
+   confetti  animation=cmConfettiFall opacity=0 display=inline
+
+prefers-reduced-motion: reduce
+   rise      animation=none           opacity=1 display=block
+   slam      animation=none           opacity=1 display=block
+   glow      animation=none           opacity=1 display=block
+   confetti  animation=cmConfettiFall opacity=1 display=none
+
+Round 530 routes under prefers-reduced-motion: reduce, 20 routes served from dist
+   /                   text=22395 keyframeBlocks=3 ours=2 thirdParty=1 unguarded=0 reveal=10 animating=0 invisible=0 slowMotion=0/4664
+   /cfb-dynasty        text=9512 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/453
+   /cbb-dynasty        text=9347 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/439
+   /front-office       text=13615 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/423
+   /nba-front-office   text=13215 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/410
+   /mlb-front-office   text=9470 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/403
+   /nhl-front-office   text=13886 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/422
+   /nfl-my-career      text=25792 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/493
+   /nba-my-career      text=24323 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/484
+   /mlb-my-career      text=24199 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/489
+   /nhl-my-career      text=23405 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/465
+   /club-manager       text=34061 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/469
+   /soccer-career      text=15521 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/370
+   /rebuild            text=16021 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/327
+   /idle-arena         text=11962 keyframeBlocks=3 ours=2 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/366
+   /stadium-tycoon     text=20728 keyframeBlocks=4 ours=3 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/488
+   /wonderkid-factory  text=13513 keyframeBlocks=2 ours=1 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/341
+   /fight-career       text=13495 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/391
+   /fight-gym          text=7470 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/296
+   /fight-promoter     text=10826 keyframeBlocks=1 ours=0 thirdParty=1 unguarded=0 reveal=0 animating=0 invisible=0 slowMotion=0/313
+   Season Centre kick off  text=663 reveal=1 animating=0 invisible=0 slow=0
+   Season Centre matchday  text=505 reveal=1 animating=0 invisible=0 slow=0
+   Season Centre review    text=769 reveal=1 animating=0 invisible=0 slow=0
+   our own keyframe CSS was present and guarded on 4 of 20 routes; the rest had not reached a reveal yet
+   no preference /front-office    elements that move for more than 10ms: 70 of 423
+   no preference /fight-career    elements that move for more than 10ms: 57 of 391
+   no preference /stadium-tycoon  elements that move for more than 10ms: 82 of 488
+
+playReducedMotion: green. Motion stops for a visitor who asked for less, content stays visible, every Round 530 route lands its reveals on the final frame, and everyone else keeps the celebration.
