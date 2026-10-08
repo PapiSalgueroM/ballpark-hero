@@ -35,6 +35,15 @@ export interface SquadMan {
   group: SquadGroup;
   /** True for the one row that is the player himself. */
   me?: boolean;
+  /* Round 1115: invented men only. A real man never has any of these. */
+  /** "<slot>:<run>", the same for as long as he is at the club. */
+  id?: string;
+  age?: number;
+  nation?: string;
+  /** The season start year of the summer he arrived. */
+  since?: number;
+  /** Set on a sheet drawn by role only, where `name` holds the role too. */
+  role?: string;
 }
 
 const GROUP_OF: Record<string, SquadGroup> = {
@@ -102,7 +111,17 @@ export function depthChart(
   club: string, year: number, position: string, myOverall: number, myName: string,
 ): DepthChart | null {
   const squad = clubSquad(club, year);
-  if (!squad) return null;
+  return squad ? chartFrom(squad, club, year, position, myOverall, myName) : null;
+}
+
+/**
+ * Round 1115: the same arithmetic over any squad. This is depthChart's own
+ * body, moved unchanged, with the squad as the one new parameter, so the
+ * living squad below is ranked by exactly the rule the real one always was.
+ */
+export function chartFrom(
+  squad: SquadMan[], club: string, year: number, position: string, myOverall: number, myName: string,
+): DepthChart | null {
   const group = groupOf(position);
   const rivals = squad.filter(m => m.group === group);
   if (!rivals.length) return null;
