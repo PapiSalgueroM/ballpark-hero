@@ -405,6 +405,15 @@ export function PlayerAutocomplete({
   const handleKeyDown = useCallback(
     (e: KeyboardEvent<HTMLInputElement>) => {
       if (disabled) return;
+      /* Escape leaves the box whatever the panel holds: names, the Finding
+         players row or the empty row. It is read before the check below
+         because since Round 1138 the list is empty between keystrokes, and an
+         Escape pressed then was swallowed while the search carried on and
+         opened its names anyway. */
+      if (e.key === 'Escape' && open) {
+        leave();
+        return;
+      }
       if (!open || suggestions.length === 0) {
         if (e.key === 'Enter' && !validateOnly && onSubmitFreeText && value.trim()) {
           onSubmitFreeText(value);
@@ -439,8 +448,6 @@ export function PlayerAutocomplete({
           e.preventDefault();
           commitSelection(suggestions[highlightedIndex]);
         }
-      } else if (e.key === 'Escape') {
-        leave();
       }
     },
     [disabled, open, suggestions, loading, highlightedIndex, validateOnly, onSubmitFreeText, value, commitSelection, leave],

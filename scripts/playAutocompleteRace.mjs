@@ -44,7 +44,9 @@
  *       and no page error fired.
  *   RACE_EXPECT=stale RACE_DIST=<a build of main> node scripts/playAutocompleteRace.mjs
  *       the measurement. Exits 0 only when stale picks are above zero on every
- *       page. RACE_WIDTHS=390 walks the phone width only.
+ *       page AND the target leg saw a list outlive a change of square at
+ *       least once (the only proof that leg can fail). RACE_WIDTHS=390 walks
+ *       the phone width only.
  *   AUTOCOMPLETE_RACE_CONTROL=notag node scripts/playAutocompleteRace.mjs
  *       builds the app with the query tag removed from the box into a new
  *       folder under .sim-control/ and walks that build. Exits 0 only when the
@@ -450,6 +452,12 @@ if (EXPECT === 'stale' || CONTROL === 'notag') {
   }
   for (const cell of cells) check(cell.stalePicked >= floor, `${cell.route} at ${cell.width}: ${cell.stalePicked} stale picks of ${cell.taps} (needs at least ${floor})`);
   for (const cell of cells) check(cell.positive, `${cell.route} at ${cell.width}: a current pick still lands`);
+  /* The measurement must also SEE the other half: a list that outlives a
+     change of square. Nothing else proves the target leg can fail (under
+     notag it reads 0 by design, leaving the box still drops the list), so if
+     the page ever cleared the text on a square change the leg would go blind
+     and every mode would stay green. */
+  if (CONTROL !== 'notag') check(target.targetLooks > 0 && target.targetStale >= 1, `${TARGET_ROUTE}: the list outlived a change of square ${target.targetStale} times of ${target.targetLooks} (the measurement needs at least 1)`);
   const name = CONTROL === 'notag' ? 'playAutocompleteRace notag control' : 'playAutocompleteRace measurement';
   if (failures > 0) {
     console.error(`${name}: RED. The race was not seen everywhere it must be (${perPage}). ${summary}.`);

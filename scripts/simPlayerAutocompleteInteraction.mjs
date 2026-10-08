@@ -20,7 +20,7 @@
  *
  * Controls of Round 754, against the 8 interaction tests (unchanged):
  *   pointeronly, unguard, enabledoptions
- * Controls of Round 1138, against the 8 stale list tests. Each swaps in an
+ * Controls of Round 1138, against the 12 stale list tests. Each swaps in an
  * asserted copy of the box with one thing changed, must fail the tests named
  * and must leave the others named green (a control that reddens those is an
  * abort, not a pass):
@@ -36,6 +36,17 @@
  *                 fails 5; keeps 6, 7
  *   nodropcommit  a pick does not mark the list as dropped
  *                 fails 8; keeps 1, 7
+ * Added after the round's review, whose mutation run left these edits green
+ * and whose reading found Escape swallowed during a search (tests 9 to 12
+ * were written for them):
+ *   minchars      exactly the fewest letters a page asks for is not enough text
+ *                 fails 9; keeps 1, 4, 7
+ *   leaveflight   leaving the box keeps its waiting search, its request and its answer
+ *                 fails 10; keeps 1, 4, 7
+ *   pickflight    a pick keeps the waiting search, the request and the answer
+ *                 fails 11; keeps 1, 7, 8
+ *   lateescape    Escape is only heard while names are showing
+ *                 fails 12; keeps 4, 7, 8
  */
 import assert from 'node:assert/strict';
 import { mkdir, mkdtemp, readFile, writeFile, rm, rmdir } from 'node:fs/promises';
@@ -55,6 +66,10 @@ const STALE_TESTS = {
   6: 'Enter still sends the typed text on a free text page with one name showing',
   7: 'offers a settled list for the text in the box exactly as before',
   8: 'never shows Finding players with nothing in flight',
+  9: 'searches at exactly the fewest letters the page asks for',
+  10: 'drops a search still in flight when the player leaves the box',
+  11: 'drops a search still in flight when a name is picked',
+  12: 'Escape leaves the box while a search is in flight',
 };
 /* Lowest stale pick count of the three seeds measured on main, and the floor. */
 const MEASURED_ON_MAIN = { 1138: 67, 2138: 72, 3138: 67 };
@@ -77,6 +92,22 @@ const STALE_CONTROLS = {
   nodropcommit: {
     edits: [['      droppedRef.current = true;\n      setHighlightedIndex(-1);', '      setHighlightedIndex(-1);']],
     fails: [8], keeps: [1, 7],
+  },
+  minchars: {
+    edits: [['const enoughText = normalizedValue.length >= minChars;', 'const enoughText = normalizedValue.length > minChars;']],
+    fails: [9], keeps: [1, 4, 7],
+  },
+  leaveflight: {
+    edits: [['    if (debounceRef.current) window.clearTimeout(debounceRef.current);\n    abortRef.current?.abort();\n    requestIdRef.current += 1;\n    droppedRef.current = true;', '    droppedRef.current = true;']],
+    fails: [10], keeps: [1, 4, 7],
+  },
+  pickflight: {
+    edits: [['      if (debounceRef.current) window.clearTimeout(debounceRef.current);\n      abortRef.current?.abort();\n      requestIdRef.current += 1;\n      setLoading(false);\n    },', '    },']],
+    fails: [11], keeps: [1, 7, 8],
+  },
+  lateescape: {
+    edits: [["      if (e.key === 'Escape' && open) {", "      if (e.key === 'Escape' && open && suggestions.length > 0) {"]],
+    fails: [12], keeps: [4, 7, 8],
   },
 };
 assert.ok(control === '' || INTERACTION_CONTROLS.includes(control) || Object.hasOwn(STALE_CONTROLS, control), 'Unknown autocomplete interaction control');
@@ -157,7 +188,7 @@ try {
     }
   }
 
-  /* Run 2, Round 1138's eight stale list tests: the plain run and its six controls. */
+  /* Run 2, Round 1138's twelve stale list tests: the plain run and its ten controls. */
   if (!control || staleSpec) {
     const { status, output, diagnostic } = runVitest(STALE_FILE, env);
     assert.match(output, /playerAutocompleteStale\.test\.tsx/, 'The stale list tests must run');
@@ -179,14 +210,14 @@ try {
       console.log(`simPlayerAutocompleteInteraction ${control} control: stale list test${staleSpec.fails.length > 1 ? 's' : ''} ${staleSpec.fails.join(', ')} rejected the changed component and test${staleSpec.keeps.length > 1 ? 's' : ''} ${staleSpec.keeps.join(', ')} stayed green.${seen}`);
     } else {
       assert.equal(status, 0, diagnostic);
-      assert.match(output, /Tests\s+8 passed \(8\)/, diagnostic);
+      assert.match(output, /Tests\s+12 passed \(12\)/, diagnostic);
       for (const number of Object.keys(STALE_TESTS)) assert.equal(staleStatus(output, Number(number)), 'passed', `Stale list test ${number} must pass\n${diagnostic}`);
       assert.deepEqual(
         { staleVisible: sweep.staleVisible, stalePicked: sweep.stalePicked, currentPicked: sweep.currentPicked, stuckFinding: sweep.stuckFinding },
         { staleVisible: 0, stalePicked: 0, currentPicked: 200, stuckFinding: 0 },
         'The sweep must offer and pick no stale name, land every current pick and leave no stuck panel',
       );
-      console.log(`simPlayerAutocompleteInteraction: eight actual-component pointer, keyboard, disabled, free-text, identity and filter checks passed; eight stale list checks passed, and across 200 seeded timings (seed ${sweep.seed}) the box offered 0 names of the last query, 0 were picked, 200 of 200 current picks landed and 0 panels were left on Finding players.`);
+      console.log(`simPlayerAutocompleteInteraction: eight actual-component pointer, keyboard, disabled, free-text, identity and filter checks passed; twelve stale list checks passed, and across 200 seeded timings (seed ${sweep.seed}) the box offered 0 names of the last query, 0 were picked, 200 of 200 current picks landed and 0 panels were left on Finding players.`);
     }
   }
 } finally {

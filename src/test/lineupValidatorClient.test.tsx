@@ -19,7 +19,7 @@ vi.mock('@/data/lineupTeams', async (importOriginal) => {
   return { ...real, getRandomTeamAssignments: () => dealt.teams.map((team) => ({ ...team })) };
 });
 
-import { readValidatorAnswer, VALIDATOR_WAIT_MS, type ValidatorAnswer } from '@/lib/validatorClient';
+import { askValidator, readValidatorAnswer, VALIDATOR_WAIT_MS, type ValidatorAnswer } from '@/lib/validatorClient';
 import { clubPickVerifies, useLineupBuilder } from '@/hooks/useLineupBuilder';
 import type { PickMeta, TeamAssignment } from '@/types/lineupBuilder';
 
@@ -67,6 +67,50 @@ describe('part A: reading a validator answer', () => {
   });
 });
 
+/* Added after the review of Round 1138: its mutation run turned the wait into
+   150 seconds and took away the line that hears the caller, and every test
+   stayed green (the first because the tests read the constant back, the
+   second only went red by running into the runner's own five second limit). */
+describe('part A, asking: one wait, and a caller who can give up', () => {
+  const INIT = { headers: { 'Content-Type': 'application/json' }, body: '{}' };
+  /** A request that settles only when its signal aborts, and at once when it already has: what a real fetch does. */
+  const hung = (_url: string, init: RequestInit = {}) => new Promise<Reply>((_resolve, reject) => {
+    const stop = () => reject(new DOMException('aborted', 'AbortError'));
+    if (init.signal?.aborted) stop();
+    else init.signal?.addEventListener('abort', stop);
+  });
+  beforeEach(() => { vi.useFakeTimers(); vi.stubGlobal('fetch', vi.fn(hung)); });
+  afterEach(() => { vi.unstubAllGlobals(); vi.useRealTimers(); });
+
+  it('waits fifteen seconds for an answer and no longer', async () => {
+    // The number is written out here on purpose: a test that reads the constant back agrees with any value.
+    expect(VALIDATOR_WAIT_MS).toBe(15000);
+    let got: ValidatorAnswer | undefined;
+    void askValidator('http://stub/validate', INIT).then((result) => { got = result; });
+    await vi.advanceTimersByTimeAsync(14_999);
+    expect(got).toBeUndefined();
+    await vi.advanceTimersByTimeAsync(1);
+    expect(got).toEqual(unverified('timeout'));
+  });
+
+  it('hears the caller give up at once, after it asked or before', async () => {
+    const caller = new AbortController();
+    let got: ValidatorAnswer | undefined;
+    void askValidator('http://stub/validate', INIT, { signal: caller.signal }).then((result) => { got = result; });
+    await vi.advanceTimersByTimeAsync(10);
+    expect(got).toBeUndefined();
+    caller.abort();
+    await vi.advanceTimersByTimeAsync(1);
+    expect(got).toEqual(unverified('cancelled'));
+
+    // A caller that had already given up: the question ends the same way, without waiting out the clock.
+    let late: ValidatorAnswer | undefined;
+    void askValidator('http://stub/validate', INIT, { signal: caller.signal }).then((result) => { late = result; });
+    await vi.advanceTimersByTimeAsync(1);
+    expect(late).toEqual(unverified('cancelled'));
+  });
+});
+
 describe('part B: the door for a club pick our own row settles', () => {
   const open: [string, TeamAssignment, PickMeta | undefined][] = [
     ['a club row at the slot club', REAL, ON_FILE],
@@ -81,6 +125,13 @@ describe('part B: the door for a club pick our own row settles', () => {
     ['a row with a position spelling the map does not know', REAL, { rawPosition: 'Sweeper', club: 'Real Madrid' }],
     ['a club label with no stored names', ROVERS, { rawPosition: 'Right-Back', club: 'Fixture Rovers' }],
     ['no row at all', REAL, undefined],
+    /* Near misses, added after the review: the club on the row must BE one of
+       the slot club's stored names, not contain one and not sit inside one. */
+    ['a side whose name only starts with the slot club', REAL, { rawPosition: 'Right-Back', club: 'Real Madrid Castilla' }],
+    ['a second side of the club under its longer stored name', BAYERN, { rawPosition: 'Right-Back', club: 'FC Bayern Munich II' }],
+    ['a club name that is only a piece of the stored name', REAL, { rawPosition: 'Right-Back', club: 'Madrid' }],
+    ['a split season whose nearest club is a near miss', REAL, { rawPosition: 'Right-Back', club: 'Real Madrid Castilla / Liverpool FC' }],
+    ['a club field that is only the separator', REAL, { rawPosition: 'Right-Back', club: ' / ' }],
   ];
   it.each(open)('the door opens for %s', (_name, team, pick) => {
     expect(clubPickVerifies(team, 'RB', pick)).toBe(true);
@@ -114,12 +165,15 @@ function stubFetch(validator: (init: RequestInit, nth: number) => Promise<Reply>
 }
 
 /** A game on the 4-3-3 whose teams, slot by slot, are the ones given, with one slot selected. */
-function start(teams: TeamAssignment[], slot: number) {
+function mount(teams: TeamAssignment[], slot: number) {
   dealt.teams = Array.from({ length: 11 }, (_unused, i) => teams[Math.min(i, teams.length - 1)]);
   const hook = renderHook(() => useLineupBuilder());
   act(() => hook.result.current.selectFormation('4-3-3'));
   act(() => hook.result.current.selectPosition(slot));
-  return hook.result;
+  return hook;
+}
+function start(teams: TeamAssignment[], slot: number) {
+  return mount(teams, slot).result;
 }
 
 type Game = ReturnType<typeof useLineupBuilder>;
@@ -334,5 +388,52 @@ describe('part C: the hook', () => {
     expect(game.current.validationError).toBeNull();
     expect(game.current.isValidating).toBe(false);
     expect(validatorCalls()).toHaveLength(0);
+  });
+
+  /* Tests 20 and 21 were added after the review of Round 1138. Its mutation
+     run took the cancel out of a new formation, a reset and leaving the page,
+     and took out the check that drops an answer landing after the player gave
+     up, and every test stayed green: only a reroll was walked, and only with a
+     request that dies the moment it is aborted. */
+
+  it('giving up drops an answer that was already on its way', async () => {
+    const waysOut: [string, (game: Game) => void][] = [
+      ['a reroll', (game) => game.rerollTeam()],
+      ['a new formation', (game) => game.selectFormation('4-4-2')],
+      ['a reset', (game) => game.resetGame()],
+      ['the cancel the hook hands out', (game) => game.cancelValidation()],
+    ];
+    for (const [name, giveUp] of waysOut) {
+      // A reply already on the wire: the test lets it land, it says yes, and it does not hear the abort.
+      let land: () => void = () => {};
+      const onTheWire = new Promise<Reply>((resolve) => {
+        land = () => resolve({ ok: true, status: 200, json: async () => ({ valid: true, fullName: 'Late Answer' }) });
+      });
+      const { validatorCalls } = stubFetch(() => onTheWire);
+      const game = start([BRAZIL], SLOT.RB);
+      let done: Promise<void> | undefined;
+      act(() => { done = game.current.submitPlayer(TYPED, ON_FILE); });
+      await waitFor(() => expect(validatorCalls(), name).toHaveLength(1));
+      expect(validatorCalls()[0].signal?.aborted, name).toBe(false);
+      act(() => giveUp(game.current));
+      // The request is cancelled there and then, and the player is not left waiting on it.
+      expect(validatorCalls()[0].signal?.aborted, name).toBe(true);
+      expect(game.current.isValidating, name).toBe(false);
+      await act(async () => { land(); await done; });
+      expect(game.current.filledSlots.size, name).toBe(0);
+      expect(game.current.filledCount, name).toBe(0);
+      expect(game.current.validationError, name).toBeNull();
+      expect(game.current.isValidating, name).toBe(false);
+    }
+  });
+
+  it('leaving the page cancels the check in flight', async () => {
+    const { validatorCalls } = stubFetch((init) => never(init));
+    const hook = mount([BRAZIL], SLOT.RB);
+    act(() => { void hook.result.current.submitPlayer(TYPED, ON_FILE); });
+    await waitFor(() => expect(validatorCalls()).toHaveLength(1));
+    expect(validatorCalls()[0].signal?.aborted).toBe(false);
+    hook.unmount();
+    expect(validatorCalls()[0].signal?.aborted).toBe(true);
   });
 });

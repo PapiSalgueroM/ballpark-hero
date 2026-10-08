@@ -27,8 +27,9 @@
         session, take the search box away. In Build Your XI that was wrong
         twice over. One "allowance used up" answer took the box away for the
         rest of the session, when a club pick from the list needs no
-        validator at all and the allowance can come back (a per minute limit
-        answers the same way), and the line said "Your lineup is saved" when
+        validator at all and the allowance can come back (it is a day's
+        allowance; a per minute limit never reaches this branch, the function
+        answers that one as a plain retry), and the line said "Your lineup is saved" when
         this game saves nothing. So useLineupBuilder.ts left section 2. What
         this section holds on the hook: it asks through askValidator (the one
         reader that fails closed, src/lib/validatorClient.ts), it still names

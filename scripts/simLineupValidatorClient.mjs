@@ -44,6 +44,17 @@
  *   nolocal      hook: the door is shut, every club pick waits on the validator
  *   localall     hook: the door lets everything in with no check
  *   nogiveup     hook: a pick the player gave up on is no longer dropped
+ * Added after the round's review, whose mutation run left these edits green
+ * (two asking tests, five near miss rows of the door and tests 20 and 21 were
+ * written for them):
+ *   longwait     lib: the wait is 150 seconds. Test 14 reads the constant back
+ *                and stays green under it, which is why the number is also
+ *                written out in a test of its own
+ *   deafcaller   lib: a caller who gives up is not heard
+ *   looseclub    hook: the door takes a club whose name only contains, or sits
+ *                inside, one of the slot club's stored names
+ *   keepflight   hook: a reroll, a new formation, a reset and leaving the page
+ *                no longer give up on the check in flight
  */
 import assert from 'node:assert/strict';
 import { mkdir, mkdtemp, readFile, writeFile, rm, rmdir } from 'node:fs/promises';
@@ -54,7 +65,7 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const control = process.env.LINEUP_VALIDATOR_CONTROL || '';
 const TEST_FILE = 'src/test/lineupValidatorClient.test.tsx';
-const TOTAL = 46; // 17 in part A, 10 in part B, 19 in part C
+const TOTAL = 55; // 19 in part A (17 reading, 2 asking), 15 in part B, 21 in part C
 
 const LIB = { id: '@/lib/validatorClient', file: 'src/lib/validatorClient.ts', copy: 'validatorClient.ts' };
 const HOOK = { id: '@/hooks/useLineupBuilder', file: 'src/hooks/useLineupBuilder.ts', copy: 'useLineupBuilder.ts' };
@@ -80,11 +91,22 @@ const C = {
   17: 'a valid answer is accepted',
   18: 'a club row the position gate refuses is still refused',
   19: 'a pick given up while its history is read is dropped',
+  20: 'giving up drops an answer that was already on its way',
+  21: 'leaving the page cancels the check in flight',
+};
+const ASK = {
+  wait: 'waits fifteen seconds for an answer and no longer',
+  caller: 'hears the caller give up at once, after it asked or before',
 };
 const DOOR_OPEN = ['a club row at the slot club', 'the club under its second stored name', 'a split season that includes the club'].map(row => `the door opens for ${row}`);
 const DOOR_SHUT = [
   'a row at another club', 'a nation slot whatever the row says', 'a row with no club', 'a row with no position',
   'a row with a position spelling the map does not know', 'a club label with no stored names', 'no row at all',
+].map(row => `the door stays shut for ${row}`);
+const DOOR_NEAR_MISS = [
+  'a side whose name only starts with the slot club', 'a second side of the club under its longer stored name',
+  'a club name that is only a piece of the stored name', 'a split season whose nearest club is a near miss',
+  'a club field that is only the separator',
 ].map(row => `the door stays shut for ${row}`);
 const NOTHING_COUNTED = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14].map(n => C[n]);
 
@@ -128,12 +150,34 @@ const CONTROLS = {
   localall: {
     target: HOOK,
     edits: [['  if (team.isNation || !pick?.club || !pick.rawPosition) return false;', '  return true;']],
-    fails: [C[2], C[3], C[4], ...DOOR_SHUT], keeps: [...DOOR_OPEN, C[1], C[18]],
+    fails: [C[2], C[3], C[4], ...DOOR_SHUT, ...DOOR_NEAR_MISS], keeps: [...DOOR_OPEN, C[1], C[18]],
   },
   nogiveup: {
     target: HOOK,
     edits: [['if (run !== pickRun.current) return;', '', 2]],
-    fails: [C[19]], keeps: [...KEEP, C[15]],
+    fails: [C[19], C[20]], keeps: [...KEEP, C[15]],
+  },
+  longwait: {
+    target: LIB,
+    edits: [['export const VALIDATOR_WAIT_MS = 15000;', 'export const VALIDATOR_WAIT_MS = 150000;']],
+    fails: [ASK.wait], keeps: [...KEEP, C[14]],
+  },
+  deafcaller: {
+    target: LIB,
+    edits: [["  opts.signal?.addEventListener('abort', cancel);\n", '']],
+    fails: [ASK.caller], keeps: KEEP,
+  },
+  looseclub: {
+    target: HOOK,
+    edits: [['.some((part) => stored.includes(part));', '.some((part) => stored.some((name) => name.includes(part) || part.includes(name)));']],
+    fails: DOOR_NEAR_MISS, keeps: [...KEEP, 'the door stays shut for a row at another club', C[18]],
+  },
+  /* Test 15 asks with a request that only dies when it is aborted, so under this control it runs into the
+     runner's own time limit: that is its red, and it costs the run about five seconds. */
+  keepflight: {
+    target: HOOK,
+    edits: [['  useEffect(() => cancelValidation, [cancelValidation]);\n', ''], ['    cancelValidation();\n', '', 3]],
+    fails: [C[15], C[20], C[21]], keeps: KEEP,
   },
 };
 assert.ok(control === '' || Object.hasOwn(CONTROLS, control), `Unknown lineup validator control "${control}" (${Object.keys(CONTROLS).join(', ')})`);
@@ -189,7 +233,7 @@ try {
   } else {
     assert.equal(run.status, 0, diagnostic);
     assert.match(output, new RegExp(`Tests\\s+${TOTAL} passed \\(${TOTAL}\\)`), diagnostic);
-    for (const title of [...Object.values(C), ...DOOR_OPEN, ...DOOR_SHUT]) {
+    for (const title of [...Object.values(C), ...Object.values(ASK), ...DOOR_OPEN, ...DOOR_SHUT, ...DOOR_NEAR_MISS]) {
       assert.equal(statusOf(output, title), 'passed', `"${title}" must pass\n${diagnostic}`);
     }
     console.log(`simLineupValidatorClient: ${TOTAL} checks passed. Only the boolean true on an ok response reads as valid; an allowance answer, a failed status, a body that is not a verdict, a timeout and a network error each leave one pick uncounted with the slot open; a club pick our own row settles asks nobody; a valid answer is still accepted.`);

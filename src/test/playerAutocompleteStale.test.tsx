@@ -40,6 +40,16 @@ function slowSearch(delayFor: (query: string) => number) {
   }));
 }
 
+/** A search whose answer is already on its way: it lands after its delay whatever the abort, and every signal it was handed is kept. */
+function deafSearch(delayMs: number): (AbortSignal | undefined)[] {
+  const signals: (AbortSignal | undefined)[] = [];
+  vi.mocked(searchPlayers).mockImplementation(({ query, signal }) => new Promise(resolve => {
+    signals.push(signal);
+    setTimeout(() => resolve({ results: fixtureFor(query), error: null }), delayMs);
+  }));
+  return signals;
+}
+
 function props(overrides: Partial<PlayerAutocompleteProps> = {}): PlayerAutocompleteProps {
   return { value: 'Alpha', onChange: vi.fn(), onSelect: vi.fn(), searchOptions, validateOnly: true, debounceMs: 0, ...overrides };
 }
@@ -259,5 +269,163 @@ describe('player autocomplete: a list is only on screen for the query that produ
       expect(view.queryByText(FINDING), way.name).toBeNull();
       view.unmount();
     }
+  });
+
+  /* Tests 9 to 12 were added after the review of Round 1138. Its mutation run
+     left five one line edits of the box green (the fewest letters boundary and
+     the flight guards in leave and in a pick), and its reading found Escape
+     swallowed while a search was out. Each test below goes red under the edit
+     it is named for; the harness plants four of them as controls. */
+
+  it('searches at exactly the fewest letters the page asks for', async () => {
+    vi.useFakeTimers();
+    slowSearch(() => 50);
+    // minChars is 3 here. Three letters are enough text: the list shows, drops on leaving and returns.
+    const three = render(<PlayerAutocomplete {...props({ value: 'Alp' })} />);
+    expect(three.queryByText(FINDING)).not.toBeNull();
+    await advance(100);
+    expect(optionsIn(three.container).map(o => o.textContent)).toEqual([expect.stringContaining(A.name)]);
+    fireEvent.pointerDown(document.body);
+    expect(three.queryByRole('listbox')).toBeNull();
+    fireEvent.focus(three.getByRole('combobox'));
+    expect(three.queryByText(FINDING)).not.toBeNull();
+    await advance(100);
+    expect(optionsIn(three.container)).toHaveLength(1);
+    expect(searchPlayers).toHaveBeenCalledTimes(2);
+    three.unmount();
+
+    // Three letters that match nobody say so.
+    const nobody = render(<PlayerAutocomplete {...props({ value: 'Zzz' })} />);
+    await advance(100);
+    expect(nobody.queryByText('No players found')).not.toBeNull();
+    nobody.unmount();
+
+    // Two letters are not: no panel, no search, and coming back to the box opens nothing.
+    vi.mocked(searchPlayers).mockClear();
+    const two = render(<PlayerAutocomplete {...props({ value: 'Al' })} />);
+    await advance(100);
+    fireEvent.focus(two.getByRole('combobox'));
+    await advance(100);
+    expect(two.queryByRole('listbox')).toBeNull();
+    expect(searchPlayers).not.toHaveBeenCalled();
+  });
+
+  it('drops a search still in flight when the player leaves the box', async () => {
+    vi.useFakeTimers();
+    // The answer is already on its way and does not hear the abort, so it lands after the player has left.
+    const signals = deafSearch(300);
+    const deaf = render(<PlayerAutocomplete {...props()} />);
+    await advance(100);
+    expect(signals).toHaveLength(1);
+    expect(deaf.queryByText(FINDING)).not.toBeNull();
+    fireEvent.pointerDown(document.body);
+    expect(signals[0]?.aborted).toBe(true);
+    expect(deaf.queryByRole('listbox')).toBeNull();
+    await advance(400);
+    expect(deaf.queryByRole('listbox')).toBeNull();
+    // Coming back: nothing asked before leaving may show, only the row of the fresh search.
+    fireEvent.focus(deaf.getByRole('combobox'));
+    expect(optionsIn(deaf.container)).toHaveLength(0);
+    expect(deaf.queryByText('No players found')).toBeNull();
+    expect(deaf.queryByText(FINDING)).not.toBeNull();
+    await advance(400);
+    expect(optionsIn(deaf.container).map(o => o.textContent)).toEqual([expect.stringContaining(A.name)]);
+    expect(signals).toHaveLength(2);
+    deaf.unmount();
+
+    // Leaving inside the debounce window: the search for the text the player left is never sent.
+    vi.mocked(searchPlayers).mockClear();
+    slowSearch(() => 50);
+    const early = render(<PlayerAutocomplete {...props({ debounceMs: 200 })} />);
+    await advance(100);
+    fireEvent.pointerDown(document.body);
+    await advance(1000);
+    expect(searchPlayers).not.toHaveBeenCalled();
+    expect(early.queryByRole('listbox')).toBeNull();
+    fireEvent.focus(early.getByRole('combobox'));
+    expect(early.queryByText(FINDING)).not.toBeNull();
+    await advance(300);
+    expect(optionsIn(early.container)).toHaveLength(1);
+    expect(searchPlayers).toHaveBeenCalledTimes(1);
+  });
+
+  it('drops a search still in flight when a name is picked', async () => {
+    vi.useFakeTimers();
+    /* The page keeps the picked name in the box, and its own name pool changes
+       while the list shows: the box searches again under the same text, so the
+       settled list stays up with a second search behind it. */
+    const signals = deafSearch(300);
+    const p = props({ value: A.name, localNames: ['Pool One'] });
+    const view = render(<PlayerAutocomplete {...p} />);
+    await advance(400);
+    expect(optionsIn(view.container)).toHaveLength(1);
+    view.rerender(<PlayerAutocomplete {...p} localNames={['Pool Two']} />);
+    await advance(100);
+    expect(signals).toHaveLength(2);
+    fireEvent.pointerDown(optionsIn(view.container)[0]);
+    expect(p.onSelect).toHaveBeenCalledExactlyOnceWith(A);
+    expect(signals[1]?.aborted).toBe(true);
+    await advance(400);
+    expect(view.queryByRole('listbox')).toBeNull();
+    // Coming back: not the list from before the pick, a fresh search.
+    fireEvent.focus(view.getByRole('combobox'));
+    expect(optionsIn(view.container)).toHaveLength(0);
+    expect(view.queryByText(FINDING)).not.toBeNull();
+    await advance(400);
+    expect(optionsIn(view.container)).toHaveLength(1);
+    expect(signals).toHaveLength(3);
+    view.unmount();
+
+    // The same pick inside the debounce window: the search that was waiting is never sent.
+    vi.mocked(searchPlayers).mockClear();
+    slowSearch(() => 50);
+    const q = props({ value: A.name, localNames: ['Pool One'], debounceMs: 200 });
+    const waiting = render(<PlayerAutocomplete {...q} />);
+    await advance(400);
+    expect(searchPlayers).toHaveBeenCalledTimes(1);
+    waiting.rerender(<PlayerAutocomplete {...q} localNames={['Pool Two']} />);
+    await advance(100);
+    fireEvent.pointerDown(optionsIn(waiting.container)[0]);
+    expect(q.onSelect).toHaveBeenCalledExactlyOnceWith(A);
+    await advance(1000);
+    expect(searchPlayers).toHaveBeenCalledTimes(1);
+    expect(waiting.queryByRole('listbox')).toBeNull();
+  });
+
+  it('Escape leaves the box while a search is in flight', async () => {
+    vi.useFakeTimers();
+    const signals = deafSearch(300);
+    const view = render(<PlayerAutocomplete {...props()} />);
+    const input = view.getByRole('combobox');
+    await advance(100);
+    expect(view.queryByText(FINDING)).not.toBeNull();
+    fireEvent.keyDown(input, { key: 'Escape' });
+    // The panel closes now, not when the names arrive, and the search is given up.
+    expect(view.queryByRole('listbox')).toBeNull();
+    expect(signals[0]?.aborted).toBe(true);
+    await advance(400);
+    expect(view.queryByRole('listbox')).toBeNull();
+    fireEvent.click(input);
+    expect(view.queryByText(FINDING)).not.toBeNull();
+    await advance(400);
+    expect(optionsIn(view.container).map(o => o.textContent)).toEqual([expect.stringContaining(A.name)]);
+    // Escape again with the next search out, then typing on: the new text gets its own list and nothing older.
+    view.rerender(<PlayerAutocomplete {...props({ value: 'Alph' })} />);
+    await advance(100);
+    fireEvent.keyDown(input, { key: 'Escape' });
+    view.rerender(<PlayerAutocomplete {...props({ value: 'Bravo' })} />);
+    await advance(250);
+    expect(optionsIn(view.container)).toHaveLength(0);
+    await advance(400);
+    expect(optionsIn(view.container).map(o => o.textContent)).toEqual([expect.stringContaining(B.name)]);
+    view.unmount();
+
+    // Escape closes the empty row too.
+    slowSearch(() => 0);
+    const nobody = render(<PlayerAutocomplete {...props({ value: 'Zzz' })} />);
+    await advance(50);
+    expect(nobody.queryByText('No players found')).not.toBeNull();
+    fireEvent.keyDown(nobody.getByRole('combobox'), { key: 'Escape' });
+    expect(nobody.queryByRole('listbox')).toBeNull();
   });
 });
