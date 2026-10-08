@@ -1,0 +1,5 @@
+MUTATED rpbase: src/lib/mlbMyCareer.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+  FAIL base: 1 base misses [RP keeps a base the anchors dropped]
+  FAIL anchors: agreement on 2 against 1: raw in or out 9 > 8, exact 6 > 5; books in or out 4 > 4, exact 3 > 3 (must not fall, and must stay within two of the measured {"raw2":{"inOut":9,"exact":6,"n":9},"books2":{"inOut":4,"exact":3,"n":4}})
+MUT rpbase: CAUGHT, 0 files left changed: sim-mlb exit=3 (simCareerHall mlb: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [base,anchors]));

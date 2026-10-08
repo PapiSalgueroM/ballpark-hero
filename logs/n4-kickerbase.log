@@ -1,0 +1,4 @@
+MUTATED kickerbase: src/lib/nflMyCareer.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+  FAIL base: 1 base misses [K has a base the ledger does not]
+MUT kickerbase: CAUGHT, 0 files left changed: sim-nfl exit=3 (simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [base]));

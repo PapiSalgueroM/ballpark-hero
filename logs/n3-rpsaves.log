@@ -1,0 +1,6 @@
+MUTATED rpsaves: src/lib/mlbMyCareer.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+  FAIL marks: at or over from: pooled 10.19 percent, 1 cells out of band [RP saves 23.1]; at or over to: pooled 1.20 percent
+  FAIL halfrule: 2 cells off the half rule, the ledger's marks or the ramp floor [RP saves dropped by the anchors and still on the list (or never due); RP saves off the ledger's marks]
+  FAIL anchors: agreement on 2 against 1: raw in or out 9 > 9, exact 6 > 6; books in or out 8 > 7, exact 5 > 4 (must not fall, and must stay within two of the measured {"raw2":{"inOut":9,"exact":6,"n":9},"books2":{"inOut":4,"exact":3,"n":4}})
+MUT rpsaves: CAUGHT, 0 files left changed: sim-mlb exit=3 (simCareerHall mlb: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [marks,halfrule,anchors]));

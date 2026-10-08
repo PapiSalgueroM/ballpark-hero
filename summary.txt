@@ -1,0 +1,6 @@
+n1-plantbasenba exit=0 2s | MUT plantbasenba: CAUGHT, 0 files left changed: sim-nba exit=3 (simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [base]));
+n2-rpbase exit=0 2s | MUT rpbase: CAUGHT, 0 files left changed: sim-mlb exit=3 (simCareerHall mlb: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [base,anchors]));
+n3-rpsaves exit=0 2s | MUT rpsaves: CAUGHT, 0 files left changed: sim-mlb exit=3 (simCareerHall mlb: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [marks,halfrule,anchors]));
+n4-kickerbase exit=0 2s | MUT kickerbase: CAUGHT, 0 files left changed: sim-nfl exit=3 (simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [base]));
+n5-kickermark exit=0 2s | MUT kickermark: CAUGHT, 0 files left changed: sim-nfl exit=3 (simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [marks,halfrule]));
+n9-clean exit=0 0s | 0

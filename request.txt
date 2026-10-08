@@ -1,0 +1,8 @@
+#!serial
+# Round 1051 reviewer (runner lens), second batch: the table against its ledger, where no control of the harness reaches
+n1-plantbasenba: bash .rc/x/rmutrun.sh plantbasenba nba
+n2-rpbase: bash .rc/x/rmutrun.sh rpbase mlb
+n3-rpsaves: bash .rc/x/rmutrun.sh rpsaves mlb
+n4-kickerbase: bash .rc/x/rmutrun.sh kickerbase nfl
+n5-kickermark: bash .rc/x/rmutrun.sh kickermark nfl
+n9-clean: git status --porcelain --untracked-files=no | wc -l
