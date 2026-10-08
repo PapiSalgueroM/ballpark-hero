@@ -1,0 +1,41 @@
+   parsed 32 teams and 480 players, and the same count from the seed bake
+   the shipped file carries the opening estimate: 446 of 480 rows print a number other than the seed's
+   control offenceonly: removed 192 defenders
+   QB: seed 66 to 97, interquartile range 16; shipped estimate 65 to 93, interquartile range 11
+   RB: seed 66 to 97, interquartile range 16; shipped estimate 63 to 95, interquartile range 10
+   WR: seed 66 to 97, interquartile range 15; shipped estimate 63 to 95, interquartile range 11
+   TE: seed 66 to 97, interquartile range 16; shipped estimate 70 to 95, interquartile range 10
+   OL: seed 80 to 90, interquartile range 5; shipped estimate 74 to 83, interquartile range 3
+   0. the parser read the whole file: 1 check
+   1. the file has a defence: 11 checks, 6 FAILED
+   2. the smell list, every shipped row: 5 checks
+   3. a rating is a spread, not a cluster: 16 checks
+   4. defenders are a real share: 33 checks, 33 FAILED
+   5. a top pick with a quiet season, on the real code: 4 checks
+   6. the header still describes the bake: 6 checks
+   7. the page copy agrees with the generator: 39 checks
+   8. the rules this round got wrong the first time: 16 checks, 2 FAILED
+   9. the defence survives the seasons: 5 checks
+   10. the defence is the defenders: 13 checks
+   11. every club plays seventeen games: 9 checks
+simFrontOfficeRoster: 41 of 158 checks FAILED
+  [1] DL exists in the file: found 0
+  [1] LB exists in the file: found 0
+  [1] DB exists in the file: found 0
+  [1] every team carries a DL: 0 of 32 teams
+  [1] every team carries a LB: 0 of 32 teams
+  [1] every team carries a DB: 0 of 32 teams
+  [4] ARI fields a full defence: 0 defenders, expected 6
+  [4] ATL fields a full defence: 0 defenders, expected 6
+  [4] BAL fields a full defence: 0 defenders, expected 6
+  [4] BUF fields a full defence: 0 defenders, expected 6
+  [4] CAR fields a full defence: 0 defenders, expected 6
+  [4] CHI fields a full defence: 0 defenders, expected 6
+  [4] CIN fields a full defence: 0 defenders, expected 6
+  [4] CLE fields a full defence: 0 defenders, expected 6
+  [4] DAL fields a full defence: 0 defenders, expected 6
+  [4] DEN fields a full defence: 0 defenders, expected 6
+  [4] DET fields a full defence: 0 defenders, expected 6
+  [4] GB fields a full defence: 0 defenders, expected 6
+  [4] HOU fields a full defence: 0 defenders, expected 6
+  [4] IND fields a full defence: 0 defenders, expected 6

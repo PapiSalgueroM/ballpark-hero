@@ -1,0 +1,7 @@
+   record read 2026-10-01, week 4: 2523 roster rows (3018 in the release), 1696 stats rows (2025 in the release)
+   join: 1419 of 1884 roster rows found a stats row (75.3 percent), 1218 of them cleared 4 games
+32 teams, 480 starters: QB 32, RB 64, WR 96, TE 32, OL 64, DL 64, LB 64, DB 64
+active roster per club 50 to 54 (1638 in all), practice squad 15 to 18 (525); held out 103 specialists, 246 reserve list men, 0 duplicates; 360 men in the left out list
+up to date: src/data/frontOfficePlayers.ts
+up to date: src/data/frontOfficeDepth.ts
+up to date: scripts/data/nflRosters2026LeftOut.json
