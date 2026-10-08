@@ -186,7 +186,7 @@ export function TrainingScreen({ career, onSetPlan, onRetrain, onStopRetrain }: 
   const growing = developingPlayers(career).slice(0, 10);
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-2" style={{ overflowAnchor: 'none' }}>
       <div className="bg-card border border-border rounded-xl p-3">
         <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5 flex items-center gap-1">
           <Dumbbell className="w-3 h-3" /> How hard you work them

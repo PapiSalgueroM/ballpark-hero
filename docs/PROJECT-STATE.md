@@ -1,3 +1,15 @@
+## Round 1160 source correction, October 8, verification pending
+
+A fresh source variant keeps the retraining picker focus fix and adds one
+overflow-anchor exclusion on TrainingScreen's own outer container.
+Completed original/candidate diagnostics both showed the last-player window
+moving42px when a learning row was inserted above the picker.
+The change covers the retraining and development cards without reordering
+them or changing helpers, callbacks, rules or the shared reveal hook.
+Fresh remote proof must keep candidate scroll stability strict and measure
+the unchanged focus-only parent as an effective scroll-failure control.
+No READY, whole-route/save/current-main or live credit is claimed yet.
+
 ## Round 1160 preparation: retraining picker focus
 
 Only TrainingScreen and this isolated note change. After a valid second-position
