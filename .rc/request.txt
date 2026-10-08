@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+# Round 1104 fixer: the walk with its guide section, on the last head
+walk1: ENGINES=chromium node scripts/playNflTruth.mjs
+walk2: ENGINES=chromium node scripts/playNflTruth.mjs
+walk3: ENGINES=chromium node scripts/playNflTruth.mjs
+walk4: ENGINES=chromium node scripts/playNflTruth.mjs
+walk-seventeen: NFL_TRUTH_WALK_CONTROL=seventeen ENGINES=chromium node scripts/playNflTruth.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
