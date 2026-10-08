@@ -1,0 +1,1565 @@
+{
+ "base": "http://localhost:4173",
+ "runs": {
+  "A390": {
+   "viewport": {
+    "width": 390,
+    "height": 844
+   },
+   "reduced": false,
+   "steps": {
+    "kickoff": {
+     "window": [
+      390,
+      844
+     ],
+     "docWidth": 390,
+     "docHeight": 19803,
+     "bodyOverflow": "hidden",
+     "scrollY": 0,
+     "stage": [
+      0,
+      0,
+      390,
+      844
+     ],
+     "strip": [
+      0,
+      0,
+      390,
+      82
+     ],
+     "pitch": [
+      0,
+      82,
+      390,
+      750
+     ],
+     "statline": [
+      0,
+      750,
+      390,
+      772
+     ],
+     "eventline": [
+      0,
+      772,
+      390,
+      796
+     ],
+     "controls": [
+      0,
+      796,
+      390,
+      844
+     ],
+     "side": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "controlSizes": [
+      "Pause:54x44",
+      "0.5x:54x44",
+      "1x:54x44",
+      "2x:54x44",
+      "4x:54x44",
+      "Squad and stamina:54x44",
+      "Skip:54x44"
+     ],
+     "smallOutsidePitch": [],
+     "smallInPitch": 44,
+     "clipped": [
+      "Balance of play: (1/83)"
+     ]
+    },
+    "statsPanel": "stats",
+    "helpPanel": "help",
+    "helpText": "Watching the match The half you are watching has already been played by the game. You are seeing it back minute by minute. Every goal, shot, save, corner, throw in, foul and card is the real one, at its real minute. The passing and running in between is drawn to fit them. The score changes when the ball is in the net, not before. Tap one of your players to make a sub or change shape. Everything up to that minute stays. The rest of the half is played again with your change. Pause, pick a speed, or Skip to the whistle. Tap a goal card to move on. Worked example: It is 0-0 at 61'. You tap your striker, bring on fresh legs and go Attacking. The first 61 minutes stay exactly as they were. From 62' the half is played again with your change, and that new half is what you watch next.",
+    "squadPanel": "squad",
+    "afterEscapePanel": "none",
+    "myDots": 11,
+    "sheetOpen": 1,
+    "sheet": {
+     "window": [
+      390,
+      844
+     ],
+     "docWidth": 390,
+     "docHeight": 19803,
+     "bodyOverflow": "hidden",
+     "scrollY": 0,
+     "stage": [
+      0,
+      0,
+      390,
+      844
+     ],
+     "strip": [
+      0,
+      0,
+      390,
+      82
+     ],
+     "pitch": [
+      0,
+      82,
+      390,
+      750
+     ],
+     "statline": [
+      0,
+      750,
+      390,
+      772
+     ],
+     "eventline": [
+      0,
+      772,
+      390,
+      796
+     ],
+     "controls": [
+      0,
+      796,
+      390,
+      844
+     ],
+     "side": [
+      0,
+      342,
+      390,
+      796
+     ],
+     "controlSizes": [
+      "Resume:54x44",
+      "0.5x:54x44",
+      "1x:54x44",
+      "2x:54x44",
+      "4x:54x44",
+      "Squad and stamina:54x44",
+      "Skip:54x44"
+     ],
+     "smallOutsidePitch": [],
+     "smallInPitch": 44,
+     "clipped": [
+      "Balance of play: (1/83)"
+     ]
+    },
+    "subsUsed": [
+     0,
+     1
+    ],
+    "shapeButtons": 3,
+    "sheetAfterEscape": 0,
+    "size-320x568": {
+     "window": [
+      320,
+      568
+     ],
+     "docWidth": 320,
+     "docHeight": 24880,
+     "bodyOverflow": "hidden",
+     "scrollY": 0,
+     "stage": [
+      0,
+      0,
+      320,
+      568
+     ],
+     "strip": [
+      0,
+      0,
+      320,
+      82
+     ],
+     "pitch": [
+      0,
+      82,
+      320,
+      474
+     ],
+     "statline": [
+      0,
+      474,
+      320,
+      496
+     ],
+     "eventline": [
+      0,
+      496,
+      320,
+      520
+     ],
+     "controls": [
+      0,
+      520,
+      320,
+      568
+     ],
+     "side": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "controlSizes": [
+      "Resume:44x44",
+      "0.5x:44x44",
+      "1x:44x44",
+      "2x:44x44",
+      "4x:44x44",
+      "Squad and stamina:44x44",
+      "Skip:44x44"
+     ],
+     "smallOutsidePitch": [],
+     "smallInPitch": 45,
+     "clipped": [
+      "Balance of play: (1/83)"
+     ]
+    },
+    "size-768x1024": {
+     "window": [
+      768,
+      1024
+     ],
+     "docWidth": 768,
+     "docHeight": 11740,
+     "bodyOverflow": "hidden",
+     "scrollY": 0,
+     "stage": [
+      0,
+      0,
+      768,
+      1024
+     ],
+     "strip": [
+      12,
+      12,
+      384,
+      92
+     ],
+     "pitch": [
+      12,
+      184,
+      384,
+      835
+     ],
+     "statline": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "eventline": [
+      12,
+      926,
+      384,
+      950
+     ],
+     "controls": [
+      12,
+      956,
+      384,
+      1012
+     ],
+     "side": [
+      396,
+      12,
+      756,
+      1012
+     ],
+     "controlSizes": [
+      "Resume:48x44",
+      "0.5x:48x44",
+      "1x:48x44",
+      "2x:48x44",
+      "4x:48x44",
+      "Squad and stamina:48x44",
+      "Skip:48x44"
+     ],
+     "smallOutsidePitch": [],
+     "smallInPitch": 45,
+     "clipped": []
+    },
+    "size-844x390-landscape": {
+     "window": [
+      844,
+      390
+     ],
+     "docWidth": 844,
+     "docHeight": 11740,
+     "bodyOverflow": "hidden",
+     "scrollY": 0,
+     "stage": [
+      0,
+      0,
+      844,
+      390
+     ],
+     "strip": [
+      524,
+      0,
+      844,
+      82
+     ],
+     "pitch": [
+      0,
+      1,
+      518,
+      389
+     ],
+     "statline": [
+      524,
+      82,
+      844,
+      104
+     ],
+     "eventline": [
+      524,
+      104,
+      844,
+      128
+     ],
+     "controls": [
+      524,
+      342,
+      844,
+      390
+     ],
+     "side": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "controlSizes": [
+      "Resume:44x44",
+      "0.5x:44x44",
+      "1x:44x44",
+      "2x:44x44",
+      "4x:44x44",
+      "Squad and stamina:44x44",
+      "Skip:44x44"
+     ],
+     "smallOutsidePitch": [],
+     "smallInPitch": 45,
+     "clipped": [
+      "Balance of play: (1/83)"
+     ]
+    },
+    "size-1024x600-short": {
+     "window": [
+      1024,
+      600
+     ],
+     "docWidth": 1024,
+     "docHeight": 11700,
+     "bodyOverflow": "hidden",
+     "scrollY": 0,
+     "stage": [
+      0,
+      0,
+      1024,
+      600
+     ],
+     "strip": [
+      12,
+      12,
+      640,
+      68
+     ],
+     "pitch": [
+      168,
+      74,
+      484,
+      496
+     ],
+     "statline": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "eventline": [
+      12,
+      502,
+      640,
+      526
+     ],
+     "controls": [
+      12,
+      532,
+      640,
+      588
+     ],
+     "side": [
+      652,
+      12,
+      1012,
+      588
+     ],
+     "controlSizes": [
+      "Resume:85x44",
+      "0.5x:85x44",
+      "1x:85x44",
+      "2x:85x44",
+      "4x:85x44",
+      "Squad and stamina:85x44",
+      "Skip:85x44"
+     ],
+     "smallOutsidePitch": [],
+     "smallInPitch": 45,
+     "clipped": []
+    },
+    "pauseAtCard": {
+     "cardStill": 1,
+     "minutes": [
+      9,
+      9
+     ]
+    },
+    "goal1": {
+     "target": {
+      "minute": 9,
+      "plus": 0,
+      "place": 9,
+      "name": "Ismaïla Sarr",
+      "side": "me"
+     },
+     "watchSpeed": "1x",
+     "frames": 595,
+     "scoreSequence": [
+      "0 - 0",
+      "1 - 0"
+     ],
+     "earlyScoreFrames": 0,
+     "cardText": "GOAL! Ismaïla Sarr 9'Crystal Palace · 1 this seasonTap to carry on",
+     "cardFrames": 251,
+     "holdMs": 4130,
+     "phasesShot": [
+      "plant",
+      "flight",
+      "card"
+     ],
+     "scrollYs": [
+      0
+     ],
+     "timeline": [
+      "pass/pass [0 - 0] - net0 x137 (2266ms, min 7)",
+      "goal/plant [0 - 0] - net0 x31 (500ms, min 9)",
+      "goal/flight [0 - 0] - net0 x60 (983ms, min 9)",
+      "goal/net [1 - 0] CARD net1 x251 (4165ms, min 9)",
+      "pass/pass [1 - 0] - net0 x114 (1884ms, min 10)",
+      "save/plant [1 - 0] - net0 x2 (16ms, min 11)"
+     ]
+    },
+    "collapsed": {
+     "compact": 1,
+     "bodyOverflow": "",
+     "scrollYAfterScrollTo400": 400,
+     "docHeight": 19981,
+     "minutes": [
+      11,
+      11
+     ],
+     "text": "PREMIER LEAGUE · ROUND 1 Crystal Palace 1 - 0 Coventry City Paused at 11' Back to the match"
+    },
+    "afterBackToMatch": {
+     "stage": 1,
+     "bodyOverflow": "hidden"
+    },
+    "escapeIsBack": 1,
+    "interval": {
+     "stage": "interval",
+     "stagebox": null,
+     "bodyOverflow": "",
+     "docHeight": 21081,
+     "score": "4 - 1"
+    },
+    "secondHalfStart": {
+     "motion": "pass",
+     "card": 0,
+     "score": "4 - 1"
+    },
+    "goal2": {
+     "target": {
+      "minute": 81,
+      "plus": 0,
+      "place": 81,
+      "name": "Jean-Philippe Mateta",
+      "side": "me"
+     },
+     "watchSpeed": "2x",
+     "frames": 263,
+     "scoreSequence": [
+      "4 - 1",
+      "5 - 1"
+     ],
+     "earlyScoreFrames": 0,
+     "cardText": "GOAL! Jean-Philippe Mateta 81'Crystal Palace · 1 this seasonTap to carry on",
+     "cardFrames": 36,
+     "holdMs": 583,
+     "phasesShot": [
+      "plant",
+      "flight",
+      "card"
+     ],
+     "scrollYs": [
+      977
+     ],
+     "timeline": [
+      "shot/plant [4 - 1] - net0 x10 (150ms, min 79)",
+      "shot/flight [4 - 1] - net0 x30 (483ms, min 79)",
+      "shot/wide [4 - 1] - net0 x18 (283ms, min 79)",
+      "pass/pass [4 - 1] - net0 x14 (217ms, min 80)",
+      "shot/plant [4 - 1] - net0 x16 (249ms, min 80)",
+      "shot/flight [4 - 1] - net0 x30 (483ms, min 80)",
+      "shot/wide [4 - 1] - net0 x18 (283ms, min 81)",
+      "pass/pass [4 - 1] - net0 x14 (217ms, min 81)",
+      "goal/plant [4 - 1] - net0 x16 (250ms, min 81)",
+      "goal/flight [4 - 1] - net0 x30 (483ms, min 81)",
+      "goal/net [5 - 1] CARD net1 x36 (582ms, min 82)",
+      "pass/pass [5 - 1] - net0 x31 (500ms, min 82)"
+     ]
+    },
+    "fullTime": {
+     "window": [
+      390,
+      844
+     ],
+     "docWidth": 390,
+     "docHeight": 19803,
+     "bodyOverflow": "hidden",
+     "scrollY": 101,
+     "stage": [
+      0,
+      0,
+      390,
+      844
+     ],
+     "strip": [
+      0,
+      0,
+      390,
+      82
+     ],
+     "pitch": [
+      0,
+      82,
+      390,
+      750
+     ],
+     "statline": [
+      0,
+      750,
+      390,
+      772
+     ],
+     "eventline": [
+      0,
+      772,
+      390,
+      796
+     ],
+     "controls": [
+      0,
+      796,
+      390,
+      844
+     ],
+     "side": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "controlSizes": [
+      "Pause:54x44",
+      "0.5x:54x44",
+      "1x:54x44",
+      "2x:54x44",
+      "4x:54x44",
+      "Squad and stamina:54x44",
+      "Full report:52x44"
+     ],
+     "smallOutsidePitch": [],
+     "smallInPitch": 43,
+     "clipped": [
+      "Balance of play: (1/83)"
+     ],
+     "stageAttr": "done",
+     "score": "7 - 1",
+     "saveLive": false
+    },
+    "report": {
+     "stagebox": null,
+     "bodyOverflow": "",
+     "docHeight": 22149,
+     "liveStage": 0
+    }
+   },
+   "club": "Crystal Palace",
+   "pageErrors": [
+    "console: Failed to load resource: net::ERR_FAILED",
+    "console: Failed to load resource: net::ERR_FAILED"
+   ]
+  },
+  "B1280": {
+   "viewport": {
+    "width": 1280,
+    "height": 900
+   },
+   "reduced": false,
+   "steps": {
+    "kickoff": {
+     "window": [
+      1280,
+      900
+     ],
+     "docWidth": 1280,
+     "docHeight": 11676,
+     "bodyOverflow": "hidden",
+     "scrollY": 0,
+     "stage": [
+      0,
+      0,
+      1280,
+      900
+     ],
+     "strip": [
+      92,
+      12,
+      816,
+      68
+     ],
+     "pitch": [
+      183,
+      74,
+      725,
+      796
+     ],
+     "statline": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "eventline": [
+      92,
+      802,
+      816,
+      826
+     ],
+     "controls": [
+      92,
+      832,
+      816,
+      888
+     ],
+     "side": [
+      828,
+      12,
+      1188,
+      888
+     ],
+     "controlSizes": [
+      "Pause:98x44",
+      "0.5x:98x44",
+      "1x:98x44",
+      "2x:98x44",
+      "4x:98x44",
+      "Squad and stamina:98x44",
+      "Skip:98x44"
+     ],
+     "smallOutsidePitch": [],
+     "smallInPitch": 44,
+     "clipped": []
+    },
+    "statsPanel": "none",
+    "helpPanel": "help",
+    "helpText": "Watching the match The half you are watching has already been played by the game. You are seeing it back minute by minute. Every goal, shot, save, corner, throw in, foul and card is the real one, at its real minute. The passing and running in between is drawn to fit them. The score changes when the ball is in the net, not before. Tap one of your players to make a sub or change shape. Everything up to that minute stays. The rest of the half is played again with your change. Pause, pick a speed, or Skip to the whistle. Tap a goal card to move on. Worked example: It is 0-0 at 61'. You tap your striker, bring on fresh legs and go Attacking. The first 61 minutes stay exactly as they were. From 62' the half is played again with your change, and that new half is what you watch next.",
+    "squadPanel": "squad",
+    "afterEscapePanel": "none",
+    "myDots": 11,
+    "sheetOpen": 1,
+    "sheet": {
+     "window": [
+      1280,
+      900
+     ],
+     "docWidth": 1280,
+     "docHeight": 11676,
+     "bodyOverflow": "hidden",
+     "scrollY": 0,
+     "stage": [
+      0,
+      0,
+      1280,
+      900
+     ],
+     "strip": [
+      92,
+      12,
+      816,
+      68
+     ],
+     "pitch": [
+      183,
+      74,
+      725,
+      796
+     ],
+     "statline": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "eventline": [
+      92,
+      802,
+      816,
+      826
+     ],
+     "controls": [
+      92,
+      832,
+      816,
+      888
+     ],
+     "side": [
+      828,
+      12,
+      1188,
+      888
+     ],
+     "controlSizes": [
+      "Resume:98x44",
+      "0.5x:98x44",
+      "1x:98x44",
+      "2x:98x44",
+      "4x:98x44",
+      "Squad and stamina:98x44",
+      "Skip:98x44"
+     ],
+     "smallOutsidePitch": [],
+     "smallInPitch": 44,
+     "clipped": []
+    },
+    "subsUsed": [
+     0,
+     1
+    ],
+    "shapeButtons": 3,
+    "sheetAfterEscape": 0,
+    "size-320x568": {
+     "window": [
+      320,
+      568
+     ],
+     "docWidth": 320,
+     "docHeight": 24880,
+     "bodyOverflow": "hidden",
+     "scrollY": 0,
+     "stage": [
+      0,
+      0,
+      320,
+      568
+     ],
+     "strip": [
+      0,
+      0,
+      320,
+      82
+     ],
+     "pitch": [
+      0,
+      82,
+      320,
+      474
+     ],
+     "statline": [
+      0,
+      474,
+      320,
+      496
+     ],
+     "eventline": [
+      0,
+      496,
+      320,
+      520
+     ],
+     "controls": [
+      0,
+      520,
+      320,
+      568
+     ],
+     "side": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "controlSizes": [
+      "Resume:44x44",
+      "0.5x:44x44",
+      "1x:44x44",
+      "2x:44x44",
+      "4x:44x44",
+      "Squad and stamina:44x44",
+      "Skip:44x44"
+     ],
+     "smallOutsidePitch": [],
+     "smallInPitch": 45,
+     "clipped": [
+      "Manchester United (114/130)",
+      "Balance of play: (1/83)"
+     ]
+    },
+    "size-768x1024": {
+     "window": [
+      768,
+      1024
+     ],
+     "docWidth": 768,
+     "docHeight": 11740,
+     "bodyOverflow": "hidden",
+     "scrollY": 0,
+     "stage": [
+      0,
+      0,
+      768,
+      1024
+     ],
+     "strip": [
+      12,
+      12,
+      384,
+      92
+     ],
+     "pitch": [
+      12,
+      184,
+      384,
+      835
+     ],
+     "statline": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "eventline": [
+      12,
+      926,
+      384,
+      950
+     ],
+     "controls": [
+      12,
+      956,
+      384,
+      1012
+     ],
+     "side": [
+      396,
+      12,
+      756,
+      1012
+     ],
+     "controlSizes": [
+      "Resume:48x44",
+      "0.5x:48x44",
+      "1x:48x44",
+      "2x:48x44",
+      "4x:48x44",
+      "Squad and stamina:48x44",
+      "Skip:48x44"
+     ],
+     "smallOutsidePitch": [],
+     "smallInPitch": 45,
+     "clipped": []
+    },
+    "size-844x390-landscape": {
+     "window": [
+      844,
+      390
+     ],
+     "docWidth": 844,
+     "docHeight": 11740,
+     "bodyOverflow": "hidden",
+     "scrollY": 0,
+     "stage": [
+      0,
+      0,
+      844,
+      390
+     ],
+     "strip": [
+      524,
+      0,
+      844,
+      82
+     ],
+     "pitch": [
+      0,
+      1,
+      518,
+      389
+     ],
+     "statline": [
+      524,
+      82,
+      844,
+      104
+     ],
+     "eventline": [
+      524,
+      104,
+      844,
+      128
+     ],
+     "controls": [
+      524,
+      342,
+      844,
+      390
+     ],
+     "side": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "controlSizes": [
+      "Resume:44x44",
+      "0.5x:44x44",
+      "1x:44x44",
+      "2x:44x44",
+      "4x:44x44",
+      "Squad and stamina:44x44",
+      "Skip:44x44"
+     ],
+     "smallOutsidePitch": [],
+     "smallInPitch": 45,
+     "clipped": [
+      "Manchester United (114/130)",
+      "Balance of play: (1/83)"
+     ]
+    },
+    "size-1024x600-short": {
+     "window": [
+      1024,
+      600
+     ],
+     "docWidth": 1024,
+     "docHeight": 11700,
+     "bodyOverflow": "hidden",
+     "scrollY": 0,
+     "stage": [
+      0,
+      0,
+      1024,
+      600
+     ],
+     "strip": [
+      12,
+      12,
+      640,
+      68
+     ],
+     "pitch": [
+      168,
+      74,
+      484,
+      496
+     ],
+     "statline": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "eventline": [
+      12,
+      502,
+      640,
+      526
+     ],
+     "controls": [
+      12,
+      532,
+      640,
+      588
+     ],
+     "side": [
+      652,
+      12,
+      1012,
+      588
+     ],
+     "controlSizes": [
+      "Resume:85x44",
+      "0.5x:85x44",
+      "1x:85x44",
+      "2x:85x44",
+      "4x:85x44",
+      "Squad and stamina:85x44",
+      "Skip:85x44"
+     ],
+     "smallOutsidePitch": [],
+     "smallInPitch": 45,
+     "clipped": [
+      "Manchester United (110/130)"
+     ]
+    },
+    "pauseAtCard": {
+     "cardStill": 1,
+     "minutes": [
+      20,
+      20
+     ]
+    },
+    "goal1": {
+     "target": {
+      "minute": 20,
+      "plus": 0,
+      "place": 20,
+      "name": "Dwight McNeil",
+      "side": "me"
+     },
+     "watchSpeed": "1x",
+     "frames": 678,
+     "scoreSequence": [
+      "0 - 0",
+      "1 - 0"
+     ],
+     "earlyScoreFrames": 0,
+     "cardText": "GOAL! Dwight McNeil 20'Crystal Palace · 1 this seasonTap to carry on",
+     "cardFrames": 251,
+     "holdMs": 4135,
+     "phasesShot": [
+      "plant",
+      "flight",
+      "card"
+     ],
+     "scrollYs": [
+      0
+     ],
+     "timeline": [
+      "pass/pass [0 - 0] - net0 x221 (3667ms, min 18)",
+      "goal/plant [0 - 0] - net0 x31 (500ms, min 20)",
+      "goal/flight [0 - 0] - net0 x60 (984ms, min 20)",
+      "goal/net [1 - 0] CARD net1 x251 (4167ms, min 20)",
+      "pass/pass [1 - 0] - net0 x115 (1901ms, min 21)"
+     ]
+    },
+    "collapsed": {
+     "compact": 1,
+     "bodyOverflow": "",
+     "scrollYAfterScrollTo400": 400,
+     "docHeight": 11854,
+     "minutes": [
+      22,
+      22
+     ],
+     "text": "PREMIER LEAGUE · ROUND 2 Crystal Palace 1 - 0 Bournemouth Paused at 22' Back to the match"
+    },
+    "afterBackToMatch": {
+     "stage": 1,
+     "bodyOverflow": "hidden"
+    },
+    "escapeIsBack": 1,
+    "interval": {
+     "stage": "interval",
+     "stagebox": null,
+     "bodyOverflow": "",
+     "docHeight": 12911,
+     "score": "1 - 1"
+    },
+    "secondHalfStart": {
+     "motion": "pass",
+     "card": 0,
+     "score": "1 - 1"
+    },
+    "goal2": {
+     "target": {
+      "minute": 33,
+      "plus": 0,
+      "place": 33,
+      "name": "Jørgen Strand Larsen",
+      "side": "me"
+     },
+     "watchSpeed": "2x",
+     "frames": 244,
+     "scoreSequence": [
+      "0 - 0",
+      "1 - 0"
+     ],
+     "earlyScoreFrames": 0,
+     "cardText": "GOAL! Jørgen Strand Larsen 33'Crystal Palace · 1 this seasonTap to carry on",
+     "cardFrames": 30,
+     "holdMs": 459,
+     "phasesShot": [
+      "plant",
+      "flight",
+      "card"
+     ],
+     "scrollYs": [
+      0
+     ],
+     "timeline": [
+      "pass/pass [0 - 0] - net0 x110 (1816ms, min 31)",
+      "goal/plant [0 - 0] - net0 x16 (251ms, min 33)",
+      "goal/flight [0 - 0] - net0 x30 (483ms, min 33)",
+      "goal/net [1 - 0] CARD net1 x30 (483ms, min 33)",
+      "pass/pass [1 - 0] - net0 x58 (950ms, min 34)"
+     ]
+    },
+    "fullTime": {
+     "window": [
+      1280,
+      900
+     ],
+     "docWidth": 1280,
+     "docHeight": 11676,
+     "bodyOverflow": "hidden",
+     "scrollY": 113,
+     "stage": [
+      0,
+      0,
+      1280,
+      900
+     ],
+     "strip": [
+      92,
+      12,
+      816,
+      68
+     ],
+     "pitch": [
+      183,
+      74,
+      725,
+      796
+     ],
+     "statline": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "eventline": [
+      92,
+      802,
+      816,
+      826
+     ],
+     "controls": [
+      92,
+      832,
+      816,
+      888
+     ],
+     "side": [
+      828,
+      12,
+      1188,
+      888
+     ],
+     "controlSizes": [
+      "Pause:99x44",
+      "0.5x:99x44",
+      "1x:99x44",
+      "2x:99x44",
+      "4x:99x44",
+      "Squad and stamina:99x44",
+      "Full report:97x44"
+     ],
+     "smallOutsidePitch": [],
+     "smallInPitch": 44,
+     "clipped": [],
+     "stageAttr": "done",
+     "score": "1 - 1",
+     "saveLive": false
+    },
+    "report": {
+     "stagebox": null,
+     "bodyOverflow": "",
+     "docHeight": 13407,
+     "liveStage": 0
+    }
+   },
+   "club": "Crystal Palace",
+   "pageErrors": [
+    "console: Failed to load resource: net::ERR_FAILED",
+    "console: Failed to load resource: net::ERR_FAILED",
+    "console: Failed to load resource: net::ERR_FAILED",
+    "console: Failed to load resource: net::ERR_FAILED"
+   ]
+  },
+  "C390r": {
+   "viewport": {
+    "width": 390,
+    "height": 844
+   },
+   "reduced": true,
+   "steps": {
+    "kickoff": {
+     "window": [
+      390,
+      844
+     ],
+     "docWidth": 390,
+     "docHeight": 19803,
+     "bodyOverflow": "hidden",
+     "scrollY": 0,
+     "stage": [
+      0,
+      0,
+      390,
+      844
+     ],
+     "strip": [
+      0,
+      0,
+      390,
+      82
+     ],
+     "pitch": [
+      0,
+      82,
+      390,
+      750
+     ],
+     "statline": [
+      0,
+      750,
+      390,
+      772
+     ],
+     "eventline": [
+      0,
+      772,
+      390,
+      796
+     ],
+     "controls": [
+      0,
+      796,
+      390,
+      844
+     ],
+     "side": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "controlSizes": [
+      "Pause:54x44",
+      "0.5x:54x44",
+      "1x:54x44",
+      "2x:54x44",
+      "4x:54x44",
+      "Squad and stamina:54x44",
+      "Skip:54x44"
+     ],
+     "smallOutsidePitch": [],
+     "smallInPitch": 44,
+     "clipped": [
+      "Balance of play: (1/83)"
+     ]
+    },
+    "animationsAtCard": [],
+    "goal1": {
+     "target": {
+      "minute": 86,
+      "plus": 0,
+      "place": 86,
+      "name": "Josh King",
+      "side": "opp"
+     },
+     "watchSpeed": "2x",
+     "frames": 328,
+     "scoreSequence": [
+      "0 - 0",
+      "0 - 1"
+     ],
+     "earlyScoreFrames": 0,
+     "cardText": "GOAL! Josh King 86'FulhamTap to carry on",
+     "cardFrames": 155,
+     "holdMs": 2557,
+     "phasesShot": [
+      "card"
+     ],
+     "scrollYs": [
+      975
+     ],
+     "timeline": [
+      "pass/pass [0 - 0] - net0 x115 (1899ms, min 84)",
+      "goal/net [0 - 1] CARD net1 x155 (2567ms, min 86)",
+      "pass/pass [0 - 1] - net0 x58 (950ms, min 87)"
+     ]
+    },
+    "animationsAfterGoal": [],
+    "fullTime": {
+     "window": [
+      390,
+      844
+     ],
+     "docWidth": 390,
+     "docHeight": 19803,
+     "bodyOverflow": "hidden",
+     "scrollY": 101,
+     "stage": [
+      0,
+      0,
+      390,
+      844
+     ],
+     "strip": [
+      0,
+      0,
+      390,
+      82
+     ],
+     "pitch": [
+      0,
+      82,
+      390,
+      750
+     ],
+     "statline": [
+      0,
+      750,
+      390,
+      772
+     ],
+     "eventline": [
+      0,
+      772,
+      390,
+      796
+     ],
+     "controls": [
+      0,
+      796,
+      390,
+      844
+     ],
+     "side": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "controlSizes": [
+      "Pause:54x44",
+      "0.5x:54x44",
+      "1x:54x44",
+      "2x:54x44",
+      "4x:54x44",
+      "Squad and stamina:54x44",
+      "Full report:52x44"
+     ],
+     "smallOutsidePitch": [],
+     "smallInPitch": 44,
+     "clipped": [
+      "Balance of play: (1/83)"
+     ],
+     "stageAttr": "done",
+     "score": "0 - 2",
+     "saveLive": false
+    }
+   },
+   "club": "Crystal Palace",
+   "pageErrors": [
+    "console: Failed to load resource: net::ERR_FAILED",
+    "console: Failed to load resource: net::ERR_FAILED"
+   ]
+  },
+  "D1280r": {
+   "viewport": {
+    "width": 1280,
+    "height": 900
+   },
+   "reduced": true,
+   "steps": {
+    "kickoff": {
+     "window": [
+      1280,
+      900
+     ],
+     "docWidth": 1280,
+     "docHeight": 11676,
+     "bodyOverflow": "hidden",
+     "scrollY": 0,
+     "stage": [
+      0,
+      0,
+      1280,
+      900
+     ],
+     "strip": [
+      92,
+      12,
+      816,
+      68
+     ],
+     "pitch": [
+      183,
+      74,
+      725,
+      796
+     ],
+     "statline": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "eventline": [
+      92,
+      802,
+      816,
+      826
+     ],
+     "controls": [
+      92,
+      832,
+      816,
+      888
+     ],
+     "side": [
+      828,
+      12,
+      1188,
+      888
+     ],
+     "controlSizes": [
+      "Pause:98x44",
+      "0.5x:98x44",
+      "1x:98x44",
+      "2x:98x44",
+      "4x:98x44",
+      "Squad and stamina:98x44",
+      "Skip:98x44"
+     ],
+     "smallOutsidePitch": [],
+     "smallInPitch": 44,
+     "clipped": []
+    },
+    "animationsAtCard": [],
+    "goal1": {
+     "target": {
+      "minute": 11,
+      "plus": 0,
+      "place": 11,
+      "name": "Destiny Udogie",
+      "side": "opp"
+     },
+     "watchSpeed": "2x",
+     "frames": 320,
+     "scoreSequence": [
+      "0 - 0",
+      "0 - 1"
+     ],
+     "earlyScoreFrames": 0,
+     "cardText": "GOAL! Destiny Udogie 11'TottenhamTap to carry on",
+     "cardFrames": 154,
+     "holdMs": 2524,
+     "phasesShot": [
+      "card"
+     ],
+     "scrollYs": [
+      0
+     ],
+     "timeline": [
+      "pass/pass [0 - 0] - net0 x109 (1800ms, min 9)",
+      "goal/net [0 - 1] CARD net1 x154 (2549ms, min 11)",
+      "pass/pass [0 - 1] - net0 x57 (933ms, min 12)"
+     ]
+    },
+    "animationsAfterGoal": [],
+    "fullTime": {
+     "window": [
+      1280,
+      900
+     ],
+     "docWidth": 1280,
+     "docHeight": 11676,
+     "bodyOverflow": "hidden",
+     "scrollY": 113,
+     "stage": [
+      0,
+      0,
+      1280,
+      900
+     ],
+     "strip": [
+      92,
+      12,
+      816,
+      68
+     ],
+     "pitch": [
+      183,
+      74,
+      725,
+      796
+     ],
+     "statline": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "eventline": [
+      92,
+      802,
+      816,
+      826
+     ],
+     "controls": [
+      92,
+      832,
+      816,
+      888
+     ],
+     "side": [
+      828,
+      12,
+      1188,
+      888
+     ],
+     "controlSizes": [
+      "Pause:99x44",
+      "0.5x:99x44",
+      "1x:99x44",
+      "2x:99x44",
+      "4x:99x44",
+      "Squad and stamina:99x44",
+      "Full report:97x44"
+     ],
+     "smallOutsidePitch": [],
+     "smallInPitch": 44,
+     "clipped": [],
+     "stageAttr": "done",
+     "score": "1 - 2",
+     "saveLive": false
+    }
+   },
+   "club": "Crystal Palace",
+   "pageErrors": [
+    "console: Failed to load resource: net::ERR_FAILED",
+    "console: Failed to load resource: net::ERR_FAILED"
+   ]
+  }
+ }
+}
