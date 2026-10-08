@@ -1,0 +1,1 @@
+retrain-1160 exit=0 162s | Club Manager retrain1160 strict label: failed=0, complete=1, source=9942828351c8568424c0a5b23ce4c32312018db3, request=4ade097ad074bc0dd02af3606c7acc40b0ee60e4.
