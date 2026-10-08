@@ -1,0 +1,9 @@
+#!build
+#!playwright
+#!serial
+# Release AM fixer pass 2: the Round 1084 native driver timed out opening a retired NBA career on f20b9762.
+# Same driver three times: the head again with its own report read back, the integrator's head before any
+# fixer commit, and Codex's own branch, all on this runner, one after another.
+us-head: bash .rc/x/usdiag.sh head
+us-d0570: bash .rc/x/usat.sh d0570 d0570fc3ae4b34f1aca019126199b1be1ea229a9
+us-codex: bash .rc/x/usat.sh codex origin/codex/us-career-save-recovery-1084
