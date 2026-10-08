@@ -1,0 +1,33 @@
+save HUB: Walker 0, 13 played seasons, open 9, locked 4, last 2025 Arsenal, 38 matchdays, goal md 2, titles 7
+save SUMMARY: Walker 0 2014 Arsenal phase season_summary
+[p320] hub buttons: ["117,299 73x25","194,299 101x25","179,328 116x44"]
+[p320] hub chip before: null
+[p320] picker: {"open":9,"locked":4,"first":["2025/26 · Arsenal6th of 20 · 41 apps · 19 goals","2023/24 · Arsenal1st of 20 · 51 apps · 45 goals🏆","2022/23 · Arsenal1st of 20 · 43 apps · 23 goals🏆"]}
+[p320] escape closes picker: true
+[p320] kickoff: Arsenal2025/26 · Premier League20 clubs · 38 matchdays · 3 points for a winFirst five1HomeCrystal Palace2AwaySunderland3HomeLiverpool4AwayAston Villa5HomeBrighton▶ Kick off⏭ Straight to the final table
+[p320] order at open equals node table 0: true
+[p320] md1 order: true
+[p320] leftovers after results steps: {"shifting":0,"inline":0}
+[p320] pitch at his goal: {"phase":"flight","side":"us","rings":1,"yours":"⚽ Yours"}
+[p320] md 2 order (page says md 2): true
+[p320] after fast presses at md 9: order ok, leftovers: [true,{"shifting":0,"inline":0}]
+[p320] after fixtures in mid flight at md 10: order ok, leftovers: [true,{"shifting":0,"inline":0}]
+[p320] chip: ["📺 Resume 2025/26, matchday 11","{\"key\":\"Walker 0|Arsenal|2025|41|19|8|7.5|centre\",\"year\":2025,\"md\":10,\"speed\":\"results\",\"stable\":false}","watched 10","25,380 270x44"]
+[p320] resumed card: Arsenal2025/26 · Premier League20 clubs · 38 matchdays · 3 points for a win10 of 38 played · you are 7thNext five11HomeMan United12AwayChelseaDERBY · London derby13HomeNewcastle14AwayMan City15HomeBournemouth▶ Matchday 11⏭ Straight to the final table↺ From the start
+[p320] resumed table: [true,{"shifting":0,"inline":0}]
+[p320] after From the start: ["Arsenal2025/26 · Premier League20 clubs · 38 matchdays · 3 points for a winFirst five1HomeCrystal Palace2AwaySunderland3",null,true]
+[p320] form strip: {"box":"296x56","bars":38,"missed":9,"narrowest":"6.8"}
+[p320] final order: true
+[p320] after review: chip, record, save same: [null,null,true]
+[p320] oldest open season: ["5","Arsenal2015/16 · Premier League20 clubs · 38 matchdays · 3 points for a winLast season: 5th with ArsenalFirst five1HomeMan United2AwayWest Ham3HomeLiverpool4AwayCrystal Palace5HomeChelseaDERBY · London derby▶ Kick off⏭ Straight to the final table"]
+[p320] a place in another season after this replay reached its review (same as written?): true
+[p320] after old replay: save same: true
+[sum390] card: Arsenal2014/15 · Premier League20 clubs · 38 matchdays · 3 points for a winLast season: 7th with Arsenal🎯 3 moments are yours to play this season: matchdays 19, 25 and 34.32 of 38 played · you are 2nd🎯 2 of your moments are before matchday 33. ↺ From the start plays them.Next five33HomeEverton34AwayTottenhamDERBY · North London derby35HomeQPR36AwaySwansea City37HomeCrystal Palace▶ Matchday 33⏭ Straight to the final
+[sum390] moments line, behind line: ["🎯 3 moments are yours to play this season: matchdays 19, 25 and 34.","🎯 2 of your moments are before matchday 33. ↺ From the start plays them."]
+[sum390] a moment was offered after the resume at: 34
+[sum390] reached the review: true
+[sum390] save unchanged after a resumed watch to the review: true
+[sum390] record after: null
+[old390] picker: {"open":8,"locked":5}
+[old390] opened: @keyframes cmRise { 0% { opacity: 0; transform: translateY(7px); } 100% { opacity: 1; transform: translateY(0); } } .cm-rise { opacity: 0; animation: cmRise 0.45s ease-out forwards; } @keyframes cmSla
+page errors: []

@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+walk-a: PASSES=p390,p390r node .rc/x/rvWalk.mjs
+walk-b: PASSES=d1280,d1280r node .rc/x/rvWalk.mjs
+walk-c: PASSES=p320,sum,old node .rc/x/rvWalk.mjs
