@@ -1,3 +1,18 @@
+## Codex 1097 guide freeze accepted, final normal proof next, October 8, 2026
+
+Exact freeze run37752018548 atfcc8fb53, treed6f2023f passed all five gates.
+Artifact11538636947 SHA256
+bc2c8d267909adeaf27c8d84e3c56f79a6d651eef9376402b9c90cc0983ee013.
+Full byte audit17ea1a47 and independent peer1f90da41 accepted the actual
+generated fixture5675dc31. All131 older route records and metadata held.
+Actual delivery is adopted, original section text restored with its existing
+guarantee heading as h4, and converted floor raised to132. Normal build now
+generates search keywords with retained before/after bytes and strict holds.
+Final normal exact-source types/pure/build/native/readers/close remains required.
+Native19/6 acceptance from03654554 holds only for its finite captured scope.
+F owns merged saved pages/hubs/sitemap, cap100 application and publication.
+No READY or live claim, local runtime or production probe.
+
 ## Codex 1097 finite UI accepted, source guide registration next, October 8, 2026
 
 Run37748833696 at03654554: native19/19 and6/6 effective controls passed,

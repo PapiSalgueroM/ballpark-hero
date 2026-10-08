@@ -46,11 +46,13 @@ jobs:
           git ls-tree -r HEAD > qa-artifacts/source-git-manifest.txt
           git archive --format=tar.gz -o qa-artifacts/source.tar.gz HEAD
           git ls-files -z | xargs -0 sha256sum > qa-artifacts/source-files.sha256
-          git ls-files -z -- . ':(exclude)src/data/seoMetaParts/seoMetaPart25.ts' | xargs -0 sha256sum > qa-artifacts/authored-files.sha256
+          git ls-files -z -- . ':(exclude)src/data/seoMetaParts/seoMetaPart25.ts' ':(exclude)src/data/searchKeywords.json' | xargs -0 sha256sum > qa-artifacts/authored-files.sha256
           sha256sum package.json package-lock.json > qa-artifacts/packages.sha256
           cp package.json package-lock.json qa-artifacts/dependencies/
           cp src/data/seoMetaParts/seoMetaPart25.ts qa-artifacts/derived/seoMetaPart25.before.ts
           sha256sum src/data/seoMetaParts/seoMetaPart25.ts > qa-artifacts/derived/before.sha256
+          cp src/data/searchKeywords.json qa-artifacts/derived/searchKeywords.before.json
+          sha256sum src/data/searchKeywords.json > qa-artifacts/derived/search-before.sha256
       - name: Check both worker syntax
         id: parse
         shell: bash
@@ -135,6 +137,11 @@ jobs:
         run: |
           set -euo pipefail
           failed=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT=qa-artifacts/search-offline-blocked.txt timeout --signal=TERM --kill-after=15s 3m node scripts/genSearchKeywords.mjs 2>&1 | tee qa-artifacts/search-keywords.log || failed=1
+          cp src/data/searchKeywords.json qa-artifacts/derived/searchKeywords.after.json
+          sha256sum src/data/searchKeywords.json > qa-artifacts/derived/search-after.sha256
+          git diff HEAD -- src/data/searchKeywords.json > qa-artifacts/derived/searchKeywords.diff
+          test ! -s qa-artifacts/search-offline-blocked.txt || failed=1
           npm run build -- --sourcemap 2>&1 | tee qa-artifacts/build.log || failed=1
           sha256sum src/data/seoMetaParts/seoMetaPart25.ts > qa-artifacts/derived/after.sha256
           cp src/data/seoMetaParts/seoMetaPart25.ts qa-artifacts/derived/seoMetaPart25.after.ts
@@ -146,7 +153,8 @@ jobs:
             find dist -type f -print0 | sort -z | xargs -0 sha256sum > qa-artifacts/dist-files.sha256
           fi
           sha256sum --quiet -c qa-artifacts/authored-files.sha256
-          git diff --exit-code HEAD -- . ':(exclude)src/data/seoMetaParts/seoMetaPart25.ts'
+          sha256sum --quiet -c qa-artifacts/derived/search-after.sha256
+          git diff --exit-code HEAD -- . ':(exclude)src/data/seoMetaParts/seoMetaPart25.ts' ':(exclude)src/data/searchKeywords.json'
           git ls-files --others --exclude-standard -- src scripts .github/workflows public index.html package.json package-lock.json > qa-artifacts/untracked-source-after-build.txt
           test ! -s qa-artifacts/untracked-source-after-build.txt
           node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee qa-artifacts/post-build-types.log || failed=1
@@ -201,13 +209,18 @@ jobs:
           sha256sum --quiet -c qa-artifacts/packages.sha256
           cmp package.json qa-artifacts/dependencies/package.json
           cmp package-lock.json qa-artifacts/dependencies/package-lock.json
-          git diff --exit-code HEAD -- . ':(exclude)src/data/seoMetaParts/seoMetaPart25.ts'
+          git diff --exit-code HEAD -- . ':(exclude)src/data/seoMetaParts/seoMetaPart25.ts' ':(exclude)src/data/searchKeywords.json'
           git ls-files --others --exclude-standard -- src scripts .github/workflows public index.html package.json package-lock.json > qa-artifacts/untracked-source-close.txt
           test ! -s qa-artifacts/untracked-source-close.txt
           if [ -f qa-artifacts/derived/after.sha256 ]; then
             sha256sum --quiet -c qa-artifacts/derived/after.sha256
           else
             sha256sum --quiet -c qa-artifacts/derived/before.sha256
+          fi
+          if [ -f qa-artifacts/derived/search-after.sha256 ]; then
+            sha256sum --quiet -c qa-artifacts/derived/search-after.sha256
+          else
+            sha256sum --quiet -c qa-artifacts/derived/search-before.sha256
           fi
           if [ -f qa-artifacts/dist-files.sha256 ]; then
             find dist -type f -print0 | sort -z | xargs -0 sha256sum > qa-artifacts/dist-files-close.sha256
