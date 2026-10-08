@@ -1,0 +1,73 @@
+playTranslatedPage: http://localhost:4173, 2 page(s), views phone and desktop, text keep and alter, CONTROL=noguard
+  PASS  0. the served entry chunk (/assets/index-B9I8soIb.js) holds the guard's off switch __DUKB_NO_TRANSLATE_GUARD__
+  PASS  0. the served entry chunk holds the guard's console line
+
+/build-your-xi phone keep
+  PASS  1. /build-your-xi phone keep: the translator ran: 282 text node(s) swapped, lang="pt"
+  PASS  5. /build-your-xi phone keep: the walk pressed at least two controls: 8: Got it! > How to play > Let's Play! > 4-3-311 players > GK > LB > CB > RB
+  PASS  6. /build-your-xi phone keep: the route error boundary never appeared
+  PASS  7. /build-your-xi phone keep: no NotFoundError
+
+/club-manager phone keep
+  PASS  1. /club-manager phone keep: the translator ran: 696 text node(s) swapped, lang="pt"
+  PASS  5. /club-manager phone keep: the walk pressed at least two controls: 8: How to play > Let's Play! > 📅2026-27Today. Real s > 📅 Starting 2026-27 > 🏟️2020-21Haaland and  > 🏟️ Starting 2020-21 > 🦊2015-16The Leicester > 🦊 Starting 2015-16
+  PASS  6. /club-manager phone keep: the route error boundary never appeared
+  PASS  7. /club-manager phone keep: no NotFoundError
+
+/club-manager desktop keep
+  PASS  1. /club-manager desktop keep: the translator ran: 714 text node(s) swapped, lang="pt"
+  PASS  5. /club-manager desktop keep: the walk pressed at least two controls: 8: How to play > Let's Play! > 📅2026-27Today. Real s > 📅 Starting 2026-27 > 🏟️2020-21Haaland and  > 🏟️ Starting 2020-21 > 🦊2015-16The Leicester > 🦊 Starting 2015-16
+  PASS  6. /club-manager desktop keep: the route error boundary never appeared
+  PASS  7. /club-manager desktop keep: no NotFoundError
+
+/build-your-xi desktop keep
+  PASS  1. /build-your-xi desktop keep: the translator ran: 282 text node(s) swapped, lang="pt"
+  PASS  5. /build-your-xi desktop keep: the walk pressed at least two controls: 8: Got it! > How to play > Let's Play! > 4-3-311 players > GK > LB > CB > RB
+  PASS  6. /build-your-xi desktop keep: the route error boundary never appeared
+  PASS  7. /build-your-xi desktop keep: no NotFoundError
+
+/club-manager phone alter
+  PASS  1. /club-manager phone alter: the translator ran: 715 text node(s) swapped, lang="pt"
+  PASS  5. /club-manager phone alter: the walk pressed at least two controls: 8: How to play > Let's Play! > 📅2026-27Today. Real s > 📅 Starting 2026-27 > 🏟️2020-21Haaland and  > 🏟️ Starting 2020-21 > 🦊2015-16The Leicester > 🦊 Starting 2015-16
+  PASS  6. /club-manager phone alter: the route error boundary never appeared
+  PASS  7. /club-manager phone alter: no NotFoundError
+
+/build-your-xi phone alter
+  PASS  1. /build-your-xi phone alter: the translator ran: 282 text node(s) swapped, lang="pt"
+  PASS  5. /build-your-xi phone alter: the walk pressed at least two controls: 8: Got it! > How to play > Let's Play! > 4-3-311 players > GK > LB > CB > RB
+  PASS  6. /build-your-xi phone alter: the route error boundary never appeared
+  PASS  7. /build-your-xi phone alter: no NotFoundError
+
+/club-manager desktop alter
+  PASS  1. /club-manager desktop alter: the translator ran: 696 text node(s) swapped, lang="pt"
+  PASS  5. /club-manager desktop alter: the walk pressed at least two controls: 8: How to play > Let's Play! > 📅2026-27Today. Real s > 📅 Starting 2026-27 > 🏟️2020-21Haaland and  > 🏟️ Starting 2020-21 > 🦊2015-16The Leicester > 🦊 Starting 2015-16
+  PASS  6. /club-manager desktop alter: the route error boundary never appeared
+  PASS  7. /club-manager desktop alter: no NotFoundError
+
+/build-your-xi desktop alter
+  PASS  1. /build-your-xi desktop alter: the translator ran: 275 text node(s) swapped, lang="pt"
+  PASS  5. /build-your-xi desktop alter: the walk pressed at least two controls: 8: Got it! > How to play > Let's Play! > 4-3-311 players > GK > LB > CB > RB
+  PASS  6. /build-your-xi desktop alter: the route error boundary never appeared
+  PASS  7. /build-your-xi desktop alter: no NotFoundError
+
+EVERY WALK
+  page             view     text   boundary                          NotFound  guard line  moved nodes  stale text  steps
+  /club-manager    phone    keep   none                              0         0           0            0           9
+  /build-your-xi   phone    keep   none                              0         0           0            0           9
+  /club-manager    desktop  keep   none                              0         0           0            0           9
+  /build-your-xi   desktop  keep   none                              0         0           0            0           9
+  /club-manager    phone    alter  none                              0         0           0            0           9
+  /build-your-xi   phone    alter  none                              0         0           0            0           9
+  /club-manager    desktop  alter  none                              0         0           0            0           9
+  /build-your-xi   desktop  alter  none                              0         0           0            0           9
+
+BY PAGE
+  /club-manager    broke in 0 of 4 walk(s); the guard printed its line in 0; moved nodes per walk 0, 0, 0, 0; stale text at most 0
+  /build-your-xi   broke in 0 of 4 walk(s); the guard printed its line in 0; moved nodes per walk 0, 0, 0, 0; stale text at most 0
+
+nothing left this machine: 8 request(s) to the database host aborted, other hosts aborted [fonts.googleapis.com], 0 screenshot(s) in /home/runner/work/_temp/rc-out/files/translated-noguard
+
+34 checks, 0 failed
+control "noguard": asked directly, removeChild and insertBefore of a moved node both threw NotFoundError on 8 of 8 page(s).
+control "noguard": without the guard 0 of 8 walk(s) ended in the error boundary with a NotFoundError behind it.
+playTranslatedPage: 34 checks, 0 failed (control "noguard", red on purpose)
