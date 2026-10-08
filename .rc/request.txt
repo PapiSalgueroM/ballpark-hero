@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+#!serial
+fit: VERBOSE=1 node scripts/playLiveMatchFit.mjs
+fit-bar: LIVE_FIT_CONTROL=bar node scripts/playLiveMatchFit.mjs
+sweepWeight: node scripts/sweepWeight.mjs
+playClubManager: ENGINES=chromium node scripts/playClubManager.mjs
+simPrerender: node scripts/simPrerender.mjs
+sizes: for f in dist/assets/LiveSimScreen-*.js dist/assets/LiveSimScreen-*.css dist/assets/ClubManager-*.js; do echo "$f raw=$(wc -c < "$f") gzip=$(gzip -c "$f" | wc -c)"; done
