@@ -1,0 +1,6 @@
+#!serial
+simBoxingShowForecast: node scripts/simBoxingShowForecast.mjs
+simFightPromoter: node scripts/simFightPromoter.mjs
+simMmaPromotion: node scripts/simMmaPromotion.mjs
+simFightGym: node scripts/simFightGym.mjs
+simFightCareer: node scripts/simFightCareer.mjs
