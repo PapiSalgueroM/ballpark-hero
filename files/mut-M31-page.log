@@ -1,0 +1,15 @@
+   fired: the hook invokes an edge function; the page must judge in memory
+   fired: the config fetchCollegeGridData hands the engine names no staticSource, so the key would be paged out of the table again
+   fired: the unknown branch calls addDailyGuess, so a guess the records cannot settle is charged
+   fired: a name the key does not carry no longer returns before judging
+   fired: a player already on the board no longer returns before judging
+   fired: a guess is added before the verdict (the not-found or duplicate branch charges)
+   fired: the search box imports the hand typed nflCareerPlayers list again
+   fired: collegeSearchSource defines no local rows, so every search would go to the table
+   fired: the guide entry names a retired label (a conference): " [ "Rows can be the SEC Conference.", "The College Footbal"
+   fired: the guide entry names 1st Overall Pick, which none of the 75 boards deals
+   fired: the rules dialog is marked seen under 'cg-rules-seen', the flag players set on the pre-611 rules, so returning players never see the new ones
+   fired: the toast says "A Heisman winner shares his name." (a winner has his folded name), which is false for 4 of 21 players it can show for: Clint Frank [Yale]; DaSha
+   fired: no restored action is compared with the board id (staleLog)
+   fired: isLoading names gridData: the board waits for the key again
+simCollegeGridPage: green. The page judges in memory, charges only a no, offers the key's names from memory, says only what the key holds, drops another board's save, loads the key through the static door and shows the board without it; all 14 of 14 controls fired.

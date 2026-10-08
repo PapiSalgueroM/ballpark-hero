@@ -1,0 +1,12 @@
+# Round 1105 review (runner lens), request 4: the second review walk (search answers, slow CPU typing, settled toasts, leave during the wait), dailySaveShapes on the head, four more mutations
+#!serve
+#!playwright
+#!serial
+rvwalk2: node .rc/x/rvwalk1105b.mjs
+shapes: node_modules/.bin/vitest run src/test/dailySaveShapes.test.tsx --testTimeout=300000 --hookTimeout=120000
+parity: node_modules/.bin/vitest run src/test/dailySaveParity.test.tsx --testTimeout=300000 --hookTimeout=120000
+M23: bash .rc/x/rvmutrun.sh M23 vt page walk
+M24: bash .rc/x/rvmutrun.sh M24 vt page walk
+M26: bash .rc/x/rvmutrun.sh M26 vt page
+M31: bash .rc/x/rvmutrun.sh M31 vt page shipped
+clean: git status --porcelain --untracked-files=no | wc -l

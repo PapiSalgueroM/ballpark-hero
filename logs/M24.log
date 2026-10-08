@@ -1,0 +1,4 @@
+applied M24 to src/lib/collegeGrid.ts: a failed names load is kept for the page life, so typing again never retries
+restored src/lib/collegeGrid.ts
+dirty tracked files after restore: 0
+MUT M24: vt=0 page=0 walk=0

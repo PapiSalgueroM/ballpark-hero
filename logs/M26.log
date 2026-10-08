@@ -1,0 +1,4 @@
+applied M26 to src/hooks/useCollegeGrid.ts: the hook keeps a failed key load, so the next pick never starts a fresh one
+restored src/hooks/useCollegeGrid.ts
+dirty tracked files after restore: 0
+MUT M26: vt=1 page=0

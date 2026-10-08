@@ -1,0 +1,12 @@
+ ✓ src/test/gridEngineSource.test.ts (15 tests) 101ms
+CGFAILCLOSED| board cg611-033: yes Jason Witten, no Darrell Green
+ ✓ src/test/playerSearchLocal.test.ts (8 tests) 11ms
+CGFAILCLOSED| fail closed: 5 of 5 failure worlds left the pick unverified and judged it after the network healed
+CGFAILCLOSED| decoder: 41 of 41 damaged pairs refused
+ ✓ src/test/collegeGridFailClosed.test.tsx (7 tests) 1711ms
+   ✓ College Grid fail closed (Round 1105) > (c) the key fails five ways: unverified each time, the next pick starts a new load, and a good load is judged  605ms
+   ✓ decodeCollegeKey: null on any doubt, never a row from a damaged file > every one of 41 damaged pairs is null, and none of them throws  371ms
+ ✓ src/test/collegeGridOffline.test.tsx (2 tests) 2042ms
+   ✓ College Grid offline > (4a) a win bot fills 9 of 9 in 9 counted guesses on every board  882ms
+   ✓ College Grid offline > (4b) a loss bot that submits a definite no each time ends every board lost at 15  638ms
+      Tests  32 passed (32)

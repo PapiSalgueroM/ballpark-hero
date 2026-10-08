@@ -1,0 +1,4 @@
+applied M31 to src/lib/collegeGrid.ts: the identity open and Heisman open bits are swapped in the decoder
+restored src/lib/collegeGrid.ts
+dirty tracked files after restore: 0
+MUT M31: vt=0 page=0 shipped=1
