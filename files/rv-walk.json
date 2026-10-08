@@ -1,0 +1,1582 @@
+{
+ "base": "http://localhost:4173",
+ "runs": {
+  "A390": {
+   "viewport": {
+    "width": 390,
+    "height": 844
+   },
+   "reduced": false,
+   "steps": {
+    "kickoff": {
+     "window": [
+      390,
+      844
+     ],
+     "docWidth": 390,
+     "docHeight": 19803,
+     "bodyOverflow": "hidden",
+     "scrollY": 0,
+     "stage": [
+      0,
+      0,
+      390,
+      844
+     ],
+     "strip": [
+      0,
+      0,
+      390,
+      82
+     ],
+     "pitch": [
+      0,
+      82,
+      390,
+      750
+     ],
+     "statline": [
+      0,
+      750,
+      390,
+      772
+     ],
+     "eventline": [
+      0,
+      772,
+      390,
+      796
+     ],
+     "controls": [
+      0,
+      796,
+      390,
+      844
+     ],
+     "side": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "controlSizes": [
+      "Pause:54x44",
+      "0.5x:54x44",
+      "1x:54x44",
+      "2x:54x44",
+      "4x:54x44",
+      "Squad and stamina:54x44",
+      "Skip:54x44"
+     ],
+     "smallOutsidePitch": [],
+     "smallInPitch": 44,
+     "clipped": [
+      "Premier League · Round 1 (179/184)",
+      "Balance of play: (1/83)"
+     ]
+    },
+    "statsPanel": "stats",
+    "helpPanel": "help",
+    "helpText": "Watching the match The half you are watching has already been played by the game. You are seeing it back minute by minute. Every goal, shot, save, corner, throw in, foul and card is the real one, at its real minute. The passing and running in between is drawn to fit them. The score changes when the ball is in the net, not before. Tap one of your players to make a sub or change shape. Everything up to that minute stays. The rest of the half is played again with your change. Pause, pick a speed, or Skip to the whistle. Tap a goal card to move on. Worked example: It is 0-0 at 61'. You tap your striker, bring on fresh legs and go Attacking. The first 61 minutes stay exactly as they were. From 62' the half is played again with your change, and that new half is what you watch next.",
+    "squadPanel": "squad",
+    "afterEscapePanel": "none",
+    "myDots": 11,
+    "sheetOpen": 1,
+    "sheet": {
+     "window": [
+      390,
+      844
+     ],
+     "docWidth": 390,
+     "docHeight": 19803,
+     "bodyOverflow": "hidden",
+     "scrollY": 0,
+     "stage": [
+      0,
+      0,
+      390,
+      844
+     ],
+     "strip": [
+      0,
+      0,
+      390,
+      82
+     ],
+     "pitch": [
+      0,
+      82,
+      390,
+      750
+     ],
+     "statline": [
+      0,
+      750,
+      390,
+      772
+     ],
+     "eventline": [
+      0,
+      772,
+      390,
+      796
+     ],
+     "controls": [
+      0,
+      796,
+      390,
+      844
+     ],
+     "side": [
+      0,
+      342,
+      390,
+      796
+     ],
+     "controlSizes": [
+      "Resume:54x44",
+      "0.5x:54x44",
+      "1x:54x44",
+      "2x:54x44",
+      "4x:54x44",
+      "Squad and stamina:54x44",
+      "Skip:54x44"
+     ],
+     "smallOutsidePitch": [],
+     "smallInPitch": 44,
+     "clipped": [
+      "Premier League · Round 1 (179/184)",
+      "Balance of play: (1/83)"
+     ]
+    },
+    "subsUsed": [
+     0,
+     1
+    ],
+    "shapeButtons": 3,
+    "sheetAfterEscape": 0,
+    "size-320x568": {
+     "window": [
+      320,
+      568
+     ],
+     "docWidth": 320,
+     "docHeight": 24880,
+     "bodyOverflow": "hidden",
+     "scrollY": 0,
+     "stage": [
+      0,
+      0,
+      320,
+      568
+     ],
+     "strip": [
+      0,
+      0,
+      320,
+      82
+     ],
+     "pitch": [
+      0,
+      82,
+      320,
+      474
+     ],
+     "statline": [
+      0,
+      474,
+      320,
+      496
+     ],
+     "eventline": [
+      0,
+      496,
+      320,
+      520
+     ],
+     "controls": [
+      0,
+      520,
+      320,
+      568
+     ],
+     "side": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "controlSizes": [
+      "Resume:44x44",
+      "0.5x:44x44",
+      "1x:44x44",
+      "2x:44x44",
+      "4x:44x44",
+      "Squad and stamina:44x44",
+      "Skip:44x44"
+     ],
+     "smallOutsidePitch": [],
+     "smallInPitch": 45,
+     "clipped": [
+      "Premier League · Round 1 (109/184)",
+      "Balance of play: (1/83)"
+     ]
+    },
+    "size-768x1024": {
+     "window": [
+      768,
+      1024
+     ],
+     "docWidth": 768,
+     "docHeight": 11740,
+     "bodyOverflow": "hidden",
+     "scrollY": 0,
+     "stage": [
+      0,
+      0,
+      768,
+      1024
+     ],
+     "strip": [
+      12,
+      12,
+      384,
+      92
+     ],
+     "pitch": [
+      12,
+      184,
+      384,
+      835
+     ],
+     "statline": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "eventline": [
+      12,
+      926,
+      384,
+      950
+     ],
+     "controls": [
+      12,
+      956,
+      384,
+      1012
+     ],
+     "side": [
+      396,
+      12,
+      756,
+      1012
+     ],
+     "controlSizes": [
+      "Resume:48x44",
+      "0.5x:48x44",
+      "1x:48x44",
+      "2x:48x44",
+      "4x:48x44",
+      "Squad and stamina:48x44",
+      "Skip:48x44"
+     ],
+     "smallOutsidePitch": [],
+     "smallInPitch": 45,
+     "clipped": []
+    },
+    "size-844x390-landscape": {
+     "window": [
+      844,
+      390
+     ],
+     "docWidth": 844,
+     "docHeight": 11740,
+     "bodyOverflow": "hidden",
+     "scrollY": 0,
+     "stage": [
+      0,
+      0,
+      844,
+      390
+     ],
+     "strip": [
+      12,
+      12,
+      460,
+      92
+     ],
+     "pitch": [
+      12,
+      98,
+      460,
+      286
+     ],
+     "statline": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "eventline": [
+      12,
+      292,
+      460,
+      316
+     ],
+     "controls": [
+      12,
+      322,
+      460,
+      378
+     ],
+     "side": [
+      472,
+      12,
+      832,
+      378
+     ],
+     "controlSizes": [
+      "Resume:59x44",
+      "0.5x:59x44",
+      "1x:59x44",
+      "2x:59x44",
+      "4x:59x44",
+      "Squad and stamina:59x44",
+      "Skip:59x44"
+     ],
+     "smallOutsidePitch": [],
+     "smallInPitch": 45,
+     "clipped": []
+    },
+    "size-1024x600-short": {
+     "window": [
+      1024,
+      600
+     ],
+     "docWidth": 1024,
+     "docHeight": 11700,
+     "bodyOverflow": "hidden",
+     "scrollY": 0,
+     "stage": [
+      0,
+      0,
+      1024,
+      600
+     ],
+     "strip": [
+      12,
+      12,
+      640,
+      68
+     ],
+     "pitch": [
+      168,
+      74,
+      484,
+      496
+     ],
+     "statline": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "eventline": [
+      12,
+      502,
+      640,
+      526
+     ],
+     "controls": [
+      12,
+      532,
+      640,
+      588
+     ],
+     "side": [
+      652,
+      12,
+      1012,
+      588
+     ],
+     "controlSizes": [
+      "Resume:85x44",
+      "0.5x:85x44",
+      "1x:85x44",
+      "2x:85x44",
+      "4x:85x44",
+      "Squad and stamina:85x44",
+      "Skip:85x44"
+     ],
+     "smallOutsidePitch": [],
+     "smallInPitch": 45,
+     "clipped": [
+      "Premier League · Round 1 (160/176)"
+     ]
+    },
+    "pauseAtCard": {
+     "cardStill": 1,
+     "minutes": [
+      22,
+      22
+     ]
+    },
+    "goal1": {
+     "target": {
+      "minute": 22,
+      "plus": 0,
+      "place": 22,
+      "name": "Morgan Rogers",
+      "side": "opp"
+     },
+     "watchSpeed": "1x",
+     "frames": 648,
+     "scoreSequence": [
+      "0 - 0",
+      "0 - 1"
+     ],
+     "earlyScoreFrames": 0,
+     "cardText": "GOAL! Morgan Rogers 22'ChelseaTap to carry on",
+     "cardFrames": 222,
+     "holdMs": 3663,
+     "phasesShot": [
+      "plant",
+      "flight",
+      "card"
+     ],
+     "scrollYs": [
+      0
+     ],
+     "timeline": [
+      "shot/plant [0 - 0] - net0 x7 (101ms, min 20)",
+      "shot/flight [0 - 0] - net0 x60 (983ms, min 20)",
+      "shot/wide [0 - 0] - net0 x36 (582ms, min 20)",
+      "pass/pass [0 - 0] - net0 x110 (1816ms, min 21)",
+      "goal/plant [0 - 0] - net0 x31 (501ms, min 22)",
+      "goal/flight [0 - 0] - net0 x60 (984ms, min 22)",
+      "goal/net [0 - 1] CARD net1 x222 (3683ms, min 22)",
+      "shot/plant [0 - 1] - net0 x31 (499ms, min 23)",
+      "shot/flight [0 - 1] - net0 x60 (983ms, min 23)",
+      "shot/wide [0 - 1] - net0 x31 (499ms, min 23)"
+     ]
+    },
+    "collapsed": {
+     "compact": 1,
+     "bodyOverflow": "",
+     "scrollYAfterScrollTo400": 400,
+     "docHeight": 19981,
+     "minutes": [
+      24,
+      24
+     ],
+     "text": "PREMIER LEAGUE · ROUND 1 Crystal Palace 0 - 1 Chelsea Paused at 24' Back to the match"
+    },
+    "afterBackToMatch": {
+     "stage": 1,
+     "bodyOverflow": "hidden"
+    },
+    "escapeIsBack": 1,
+    "interval": {
+     "stage": "interval",
+     "stagebox": null,
+     "bodyOverflow": "",
+     "docHeight": 21080,
+     "score": "2 - 1"
+    },
+    "secondHalfStart": {
+     "motion": "pass",
+     "card": 0,
+     "score": "2 - 1"
+    },
+    "goal2": {
+     "target": {
+      "minute": 10,
+      "plus": 0,
+      "place": 10,
+      "name": "Ismaïla Sarr",
+      "side": "me"
+     },
+     "watchSpeed": "2x",
+     "frames": 256,
+     "scoreSequence": [
+      "0 - 0",
+      "1 - 0"
+     ],
+     "earlyScoreFrames": 0,
+     "cardText": "GOAL! Ismaïla Sarr 10'Crystal Palace · 1 this seasonTap to carry on",
+     "cardFrames": 36,
+     "holdMs": 588,
+     "phasesShot": [
+      "plant",
+      "flight",
+      "card"
+     ],
+     "scrollYs": [
+      0
+     ],
+     "timeline": [
+      "pass/pass [0 - 0] - net0 x116 (1917ms, min 8)",
+      "goal/plant [0 - 0] - net0 x16 (250ms, min 10)",
+      "goal/flight [0 - 0] - net0 x30 (484ms, min 10)",
+      "goal/net [1 - 0] CARD net1 x36 (583ms, min 10)",
+      "pass/pass [1 - 0] - net0 x58 (951ms, min 11)"
+     ]
+    },
+    "fullTime": {
+     "window": [
+      390,
+      844
+     ],
+     "docWidth": 390,
+     "docHeight": 19803,
+     "bodyOverflow": "hidden",
+     "scrollY": 101,
+     "stage": [
+      0,
+      0,
+      390,
+      844
+     ],
+     "strip": [
+      0,
+      0,
+      390,
+      82
+     ],
+     "pitch": [
+      0,
+      82,
+      390,
+      750
+     ],
+     "statline": [
+      0,
+      750,
+      390,
+      772
+     ],
+     "eventline": [
+      0,
+      772,
+      390,
+      796
+     ],
+     "controls": [
+      0,
+      796,
+      390,
+      844
+     ],
+     "side": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "controlSizes": [
+      "Pause:54x44",
+      "0.5x:54x44",
+      "1x:54x44",
+      "2x:54x44",
+      "4x:54x44",
+      "Squad and stamina:54x44",
+      "Full report:52x44"
+     ],
+     "smallOutsidePitch": [],
+     "smallInPitch": 44,
+     "clipped": [
+      "Premier League · Round 2 (169/187)",
+      "Balance of play: (1/83)"
+     ],
+     "stageAttr": "done",
+     "score": "3 - 1",
+     "saveLive": false
+    },
+    "report": {
+     "stagebox": null,
+     "bodyOverflow": "",
+     "docHeight": 21632,
+     "liveStage": 0
+    }
+   },
+   "club": "Crystal Palace",
+   "pageErrors": [
+    "console: Failed to load resource: net::ERR_FAILED",
+    "console: Failed to load resource: net::ERR_FAILED",
+    "console: Failed to load resource: net::ERR_FAILED"
+   ]
+  },
+  "B1280": {
+   "viewport": {
+    "width": 1280,
+    "height": 900
+   },
+   "reduced": false,
+   "steps": {
+    "kickoff": {
+     "window": [
+      1280,
+      900
+     ],
+     "docWidth": 1280,
+     "docHeight": 11676,
+     "bodyOverflow": "hidden",
+     "scrollY": 0,
+     "stage": [
+      0,
+      0,
+      1280,
+      900
+     ],
+     "strip": [
+      92,
+      12,
+      816,
+      68
+     ],
+     "pitch": [
+      183,
+      74,
+      725,
+      796
+     ],
+     "statline": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "eventline": [
+      92,
+      802,
+      816,
+      826
+     ],
+     "controls": [
+      92,
+      832,
+      816,
+      888
+     ],
+     "side": [
+      828,
+      12,
+      1188,
+      888
+     ],
+     "controlSizes": [
+      "Pause:98x44",
+      "0.5x:98x44",
+      "1x:98x44",
+      "2x:98x44",
+      "4x:98x44",
+      "Squad and stamina:98x44",
+      "Skip:98x44"
+     ],
+     "smallOutsidePitch": [],
+     "smallInPitch": 44,
+     "clipped": [
+      "Premier League · Round 1 (160/176)"
+     ]
+    },
+    "statsPanel": "none",
+    "helpPanel": "help",
+    "helpText": "Watching the match The half you are watching has already been played by the game. You are seeing it back minute by minute. Every goal, shot, save, corner, throw in, foul and card is the real one, at its real minute. The passing and running in between is drawn to fit them. The score changes when the ball is in the net, not before. Tap one of your players to make a sub or change shape. Everything up to that minute stays. The rest of the half is played again with your change. Pause, pick a speed, or Skip to the whistle. Tap a goal card to move on. Worked example: It is 0-0 at 61'. You tap your striker, bring on fresh legs and go Attacking. The first 61 minutes stay exactly as they were. From 62' the half is played again with your change, and that new half is what you watch next.",
+    "squadPanel": "squad",
+    "afterEscapePanel": "none",
+    "myDots": 11,
+    "sheetOpen": 1,
+    "sheet": {
+     "window": [
+      1280,
+      900
+     ],
+     "docWidth": 1280,
+     "docHeight": 11676,
+     "bodyOverflow": "hidden",
+     "scrollY": 0,
+     "stage": [
+      0,
+      0,
+      1280,
+      900
+     ],
+     "strip": [
+      92,
+      12,
+      816,
+      68
+     ],
+     "pitch": [
+      183,
+      74,
+      725,
+      796
+     ],
+     "statline": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "eventline": [
+      92,
+      802,
+      816,
+      826
+     ],
+     "controls": [
+      92,
+      832,
+      816,
+      888
+     ],
+     "side": [
+      828,
+      12,
+      1188,
+      888
+     ],
+     "controlSizes": [
+      "Resume:98x44",
+      "0.5x:98x44",
+      "1x:98x44",
+      "2x:98x44",
+      "4x:98x44",
+      "Squad and stamina:98x44",
+      "Skip:98x44"
+     ],
+     "smallOutsidePitch": [],
+     "smallInPitch": 44,
+     "clipped": [
+      "Premier League · Round 1 (160/176)"
+     ]
+    },
+    "subsUsed": [
+     0,
+     1
+    ],
+    "shapeButtons": 3,
+    "sheetAfterEscape": 0,
+    "size-320x568": {
+     "window": [
+      320,
+      568
+     ],
+     "docWidth": 320,
+     "docHeight": 24880,
+     "bodyOverflow": "hidden",
+     "scrollY": 0,
+     "stage": [
+      0,
+      0,
+      320,
+      568
+     ],
+     "strip": [
+      0,
+      0,
+      320,
+      82
+     ],
+     "pitch": [
+      0,
+      82,
+      320,
+      474
+     ],
+     "statline": [
+      0,
+      474,
+      320,
+      496
+     ],
+     "eventline": [
+      0,
+      496,
+      320,
+      520
+     ],
+     "controls": [
+      0,
+      520,
+      320,
+      568
+     ],
+     "side": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "controlSizes": [
+      "Resume:44x44",
+      "0.5x:44x44",
+      "1x:44x44",
+      "2x:44x44",
+      "4x:44x44",
+      "Squad and stamina:44x44",
+      "Skip:44x44"
+     ],
+     "smallOutsidePitch": [],
+     "smallInPitch": 45,
+     "clipped": [
+      "Manchester United (114/130)",
+      "Premier League · Round 1 (109/184)",
+      "Balance of play: (1/83)"
+     ]
+    },
+    "size-768x1024": {
+     "window": [
+      768,
+      1024
+     ],
+     "docWidth": 768,
+     "docHeight": 11740,
+     "bodyOverflow": "hidden",
+     "scrollY": 0,
+     "stage": [
+      0,
+      0,
+      768,
+      1024
+     ],
+     "strip": [
+      12,
+      12,
+      384,
+      92
+     ],
+     "pitch": [
+      12,
+      184,
+      384,
+      835
+     ],
+     "statline": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "eventline": [
+      12,
+      926,
+      384,
+      950
+     ],
+     "controls": [
+      12,
+      956,
+      384,
+      1012
+     ],
+     "side": [
+      396,
+      12,
+      756,
+      1012
+     ],
+     "controlSizes": [
+      "Resume:48x44",
+      "0.5x:48x44",
+      "1x:48x44",
+      "2x:48x44",
+      "4x:48x44",
+      "Squad and stamina:48x44",
+      "Skip:48x44"
+     ],
+     "smallOutsidePitch": [],
+     "smallInPitch": 45,
+     "clipped": []
+    },
+    "size-844x390-landscape": {
+     "window": [
+      844,
+      390
+     ],
+     "docWidth": 844,
+     "docHeight": 11740,
+     "bodyOverflow": "hidden",
+     "scrollY": 0,
+     "stage": [
+      0,
+      0,
+      844,
+      390
+     ],
+     "strip": [
+      12,
+      12,
+      460,
+      92
+     ],
+     "pitch": [
+      12,
+      98,
+      460,
+      286
+     ],
+     "statline": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "eventline": [
+      12,
+      292,
+      460,
+      316
+     ],
+     "controls": [
+      12,
+      322,
+      460,
+      378
+     ],
+     "side": [
+      472,
+      12,
+      832,
+      378
+     ],
+     "controlSizes": [
+      "Resume:59x44",
+      "0.5x:59x44",
+      "1x:59x44",
+      "2x:59x44",
+      "4x:59x44",
+      "Squad and stamina:59x44",
+      "Skip:59x44"
+     ],
+     "smallOutsidePitch": [],
+     "smallInPitch": 45,
+     "clipped": []
+    },
+    "size-1024x600-short": {
+     "window": [
+      1024,
+      600
+     ],
+     "docWidth": 1024,
+     "docHeight": 11700,
+     "bodyOverflow": "hidden",
+     "scrollY": 0,
+     "stage": [
+      0,
+      0,
+      1024,
+      600
+     ],
+     "strip": [
+      12,
+      12,
+      640,
+      68
+     ],
+     "pitch": [
+      168,
+      74,
+      484,
+      496
+     ],
+     "statline": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "eventline": [
+      12,
+      502,
+      640,
+      526
+     ],
+     "controls": [
+      12,
+      532,
+      640,
+      588
+     ],
+     "side": [
+      652,
+      12,
+      1012,
+      588
+     ],
+     "controlSizes": [
+      "Resume:85x44",
+      "0.5x:85x44",
+      "1x:85x44",
+      "2x:85x44",
+      "4x:85x44",
+      "Squad and stamina:85x44",
+      "Skip:85x44"
+     ],
+     "smallOutsidePitch": [],
+     "smallInPitch": 45,
+     "clipped": [
+      "Manchester United (109/130)",
+      "Premier League · Round 1 (160/176)"
+     ]
+    },
+    "pauseAtCard": {
+     "cardStill": 1,
+     "minutes": [
+      27,
+      27
+     ]
+    },
+    "goal1": {
+     "target": {
+      "minute": 27,
+      "plus": 0,
+      "place": 27,
+      "name": "Carlos Baleba",
+      "side": "opp"
+     },
+     "watchSpeed": "1x",
+     "frames": 654,
+     "scoreSequence": [
+      "1 - 0",
+      "1 - 1"
+     ],
+     "earlyScoreFrames": 0,
+     "cardText": "GOAL! Free kick, Carlos Baleba 27'Manchester UnitedTap to carry on",
+     "cardFrames": 226,
+     "holdMs": 3711,
+     "phasesShot": [
+      "plant",
+      "flight",
+      "card"
+     ],
+     "scrollYs": [
+      0
+     ],
+     "timeline": [
+      "save/plant [1 - 0] - net0 x7 (102ms, min 25)",
+      "save/flight [1 - 0] - net0 x60 (983ms, min 25)",
+      "save/caught [1 - 0] - net0 x36 (583ms, min 25)",
+      "pass/pass [1 - 0] - net0 x113 (1867ms, min 26)",
+      "goal/plant [1 - 0] - net0 x31 (500ms, min 27)",
+      "goal/flight [1 - 0] - net0 x60 (983ms, min 27)",
+      "goal/net [1 - 1] CARD net1 x226 (3750ms, min 27)",
+      "shot/plant [1 - 1] - net0 x31 (498ms, min 28)",
+      "shot/flight [1 - 1] - net0 x60 (983ms, min 28)",
+      "shot/wide [1 - 1] - net0 x30 (483ms, min 28)"
+     ]
+    },
+    "collapsed": {
+     "compact": 1,
+     "bodyOverflow": "",
+     "scrollYAfterScrollTo400": 400,
+     "docHeight": 11854,
+     "minutes": [
+      29,
+      29
+     ],
+     "text": "PREMIER LEAGUE · ROUND 1 Crystal Palace 1 - 1 Manchester United Paused at 29' Back to the match"
+    },
+    "afterBackToMatch": {
+     "stage": 1,
+     "bodyOverflow": "hidden"
+    },
+    "escapeIsBack": 1,
+    "interval": {
+     "stage": "interval",
+     "stagebox": null,
+     "bodyOverflow": "",
+     "docHeight": 12912,
+     "score": "2 - 1"
+    },
+    "secondHalfStart": {
+     "motion": "shot",
+     "card": 0,
+     "score": "2 - 1"
+    },
+    "goal2": {
+     "target": {
+      "minute": 53,
+      "plus": 0,
+      "place": 53,
+      "name": "Ismaïla Sarr",
+      "side": "me"
+     },
+     "watchSpeed": "2x",
+     "frames": 246,
+     "scoreSequence": [
+      "2 - 1",
+      "3 - 1"
+     ],
+     "earlyScoreFrames": 0,
+     "cardText": "GOAL! Ismaïla Sarr 53'Crystal Palace · 1 this seasonTap to carry on",
+     "cardFrames": 30,
+     "holdMs": 450,
+     "phasesShot": [
+      "plant",
+      "flight",
+      "card"
+     ],
+     "scrollYs": [
+      923
+     ],
+     "timeline": [
+      "pass/pass [2 - 1] - net0 x113 (1867ms, min 51)",
+      "goal/plant [2 - 1] - net0 x16 (250ms, min 53)",
+      "goal/flight [2 - 1] - net0 x30 (484ms, min 53)",
+      "goal/net [3 - 1] CARD net1 x30 (482ms, min 53)",
+      "pass/pass [3 - 1] - net0 x57 (935ms, min 54)"
+     ]
+    },
+    "fullTime": {
+     "window": [
+      1280,
+      900
+     ],
+     "docWidth": 1280,
+     "docHeight": 11676,
+     "bodyOverflow": "hidden",
+     "scrollY": 113,
+     "stage": [
+      0,
+      0,
+      1280,
+      900
+     ],
+     "strip": [
+      92,
+      12,
+      816,
+      68
+     ],
+     "pitch": [
+      183,
+      74,
+      725,
+      796
+     ],
+     "statline": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "eventline": [
+      92,
+      802,
+      816,
+      826
+     ],
+     "controls": [
+      92,
+      832,
+      816,
+      888
+     ],
+     "side": [
+      828,
+      12,
+      1188,
+      888
+     ],
+     "controlSizes": [
+      "Pause:99x44",
+      "0.5x:99x44",
+      "1x:99x44",
+      "2x:99x44",
+      "4x:99x44",
+      "Squad and stamina:99x44",
+      "Full report:97x44"
+     ],
+     "smallOutsidePitch": [],
+     "smallInPitch": 43,
+     "clipped": [
+      "Premier League · Round 1 (160/176)"
+     ],
+     "stageAttr": "done",
+     "score": "4 - 1",
+     "saveLive": false
+    },
+    "report": {
+     "stagebox": null,
+     "bodyOverflow": "",
+     "docHeight": 13726,
+     "liveStage": 0
+    }
+   },
+   "club": "Crystal Palace",
+   "pageErrors": [
+    "console: Failed to load resource: net::ERR_FAILED",
+    "console: Failed to load resource: net::ERR_FAILED"
+   ]
+  },
+  "C390r": {
+   "viewport": {
+    "width": 390,
+    "height": 844
+   },
+   "reduced": true,
+   "steps": {
+    "kickoff": {
+     "window": [
+      390,
+      844
+     ],
+     "docWidth": 390,
+     "docHeight": 19803,
+     "bodyOverflow": "hidden",
+     "scrollY": 0,
+     "stage": [
+      0,
+      0,
+      390,
+      844
+     ],
+     "strip": [
+      0,
+      0,
+      390,
+      82
+     ],
+     "pitch": [
+      0,
+      82,
+      390,
+      750
+     ],
+     "statline": [
+      0,
+      750,
+      390,
+      772
+     ],
+     "eventline": [
+      0,
+      772,
+      390,
+      796
+     ],
+     "controls": [
+      0,
+      796,
+      390,
+      844
+     ],
+     "side": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "controlSizes": [
+      "Pause:54x44",
+      "0.5x:54x44",
+      "1x:54x44",
+      "2x:54x44",
+      "4x:54x44",
+      "Squad and stamina:54x44",
+      "Skip:54x44"
+     ],
+     "smallOutsidePitch": [],
+     "smallInPitch": 44,
+     "clipped": [
+      "Premier League · Round 1 (179/184)",
+      "Balance of play: (1/83)"
+     ]
+    },
+    "animationsAtCard": [],
+    "goal1": {
+     "target": {
+      "minute": 12,
+      "plus": 0,
+      "place": 12,
+      "name": "Jørgen Strand Larsen",
+      "side": "me"
+     },
+     "watchSpeed": "2x",
+     "frames": 323,
+     "scoreSequence": [
+      "0 - 0",
+      "1 - 0"
+     ],
+     "earlyScoreFrames": 0,
+     "cardText": "GOAL! Jørgen Strand Larsen 12'Crystal Palace · 1 this seasonTap to carry on",
+     "cardFrames": 155,
+     "holdMs": 2568,
+     "phasesShot": [
+      "card"
+     ],
+     "scrollYs": [
+      0
+     ],
+     "timeline": [
+      "pass/pass [0 - 0] - net0 x111 (1833ms, min 10)",
+      "goal/net [1 - 0] CARD net1 x155 (2566ms, min 12)",
+      "pass/pass [1 - 0] - net0 x56 (916ms, min 13)",
+      "save/caught [1 - 0] - net0 x1 (0ms, min 14)"
+     ]
+    },
+    "animationsAfterGoal": [],
+    "fullTime": {
+     "window": [
+      390,
+      844
+     ],
+     "docWidth": 390,
+     "docHeight": 19803,
+     "bodyOverflow": "hidden",
+     "scrollY": 101,
+     "stage": [
+      0,
+      0,
+      390,
+      844
+     ],
+     "strip": [
+      0,
+      0,
+      390,
+      82
+     ],
+     "pitch": [
+      0,
+      82,
+      390,
+      750
+     ],
+     "statline": [
+      0,
+      750,
+      390,
+      772
+     ],
+     "eventline": [
+      0,
+      772,
+      390,
+      796
+     ],
+     "controls": [
+      0,
+      796,
+      390,
+      844
+     ],
+     "side": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "controlSizes": [
+      "Pause:54x44",
+      "0.5x:54x44",
+      "1x:54x44",
+      "2x:54x44",
+      "4x:54x44",
+      "Squad and stamina:54x44",
+      "Full report:52x44"
+     ],
+     "smallOutsidePitch": [],
+     "smallInPitch": 44,
+     "clipped": [
+      "Premier League · Round 1 (169/184)",
+      "Balance of play: (1/83)"
+     ],
+     "stageAttr": "done",
+     "score": "1 - 2",
+     "saveLive": false
+    }
+   },
+   "club": "Crystal Palace",
+   "pageErrors": [
+    "console: Failed to load resource: net::ERR_FAILED",
+    "console: Failed to load resource: net::ERR_FAILED"
+   ]
+  },
+  "D1280r": {
+   "viewport": {
+    "width": 1280,
+    "height": 900
+   },
+   "reduced": true,
+   "steps": {
+    "kickoff": {
+     "window": [
+      1280,
+      900
+     ],
+     "docWidth": 1280,
+     "docHeight": 11676,
+     "bodyOverflow": "hidden",
+     "scrollY": 0,
+     "stage": [
+      0,
+      0,
+      1280,
+      900
+     ],
+     "strip": [
+      92,
+      12,
+      816,
+      68
+     ],
+     "pitch": [
+      183,
+      74,
+      725,
+      796
+     ],
+     "statline": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "eventline": [
+      92,
+      802,
+      816,
+      826
+     ],
+     "controls": [
+      92,
+      832,
+      816,
+      888
+     ],
+     "side": [
+      828,
+      12,
+      1188,
+      888
+     ],
+     "controlSizes": [
+      "Pause:98x44",
+      "0.5x:98x44",
+      "1x:98x44",
+      "2x:98x44",
+      "4x:98x44",
+      "Squad and stamina:98x44",
+      "Skip:98x44"
+     ],
+     "smallOutsidePitch": [],
+     "smallInPitch": 44,
+     "clipped": [
+      "Premier League · Round 1 (160/176)"
+     ]
+    },
+    "animationsAtCard": [],
+    "goal1": {
+     "target": {
+      "minute": 65,
+      "plus": 0,
+      "place": 65,
+      "name": "Ismaïla Sarr",
+      "side": "me"
+     },
+     "watchSpeed": "2x",
+     "frames": 321,
+     "scoreSequence": [
+      "0 - 0",
+      "1 - 0"
+     ],
+     "earlyScoreFrames": 0,
+     "cardText": "GOAL! Ismaïla Sarr 65'Crystal Palace · 1 this seasonTap to carry on",
+     "cardFrames": 151,
+     "holdMs": 2450,
+     "phasesShot": [
+      "card"
+     ],
+     "scrollYs": [
+      922
+     ],
+     "timeline": [
+      "pass/pass [0 - 0] - net0 x108 (1783ms, min 63)",
+      "goal/net [1 - 0] CARD net1 x151 (2499ms, min 65)",
+      "save/caught [1 - 0] - net0 x62 (1016ms, min 66)"
+     ]
+    },
+    "animationsAfterGoal": [],
+    "fullTime": {
+     "window": [
+      1280,
+      900
+     ],
+     "docWidth": 1280,
+     "docHeight": 11676,
+     "bodyOverflow": "hidden",
+     "scrollY": 113,
+     "stage": [
+      0,
+      0,
+      1280,
+      900
+     ],
+     "strip": [
+      92,
+      12,
+      816,
+      68
+     ],
+     "pitch": [
+      183,
+      74,
+      725,
+      796
+     ],
+     "statline": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "eventline": [
+      92,
+      802,
+      816,
+      826
+     ],
+     "controls": [
+      92,
+      832,
+      816,
+      888
+     ],
+     "side": [
+      828,
+      12,
+      1188,
+      888
+     ],
+     "controlSizes": [
+      "Pause:99x44",
+      "0.5x:99x44",
+      "1x:99x44",
+      "2x:99x44",
+      "4x:99x44",
+      "Squad and stamina:99x44",
+      "Full report:97x44"
+     ],
+     "smallOutsidePitch": [],
+     "smallInPitch": 44,
+     "clipped": [
+      "Premier League · Round 1 (160/176)"
+     ],
+     "stageAttr": "done",
+     "score": "1 - 0",
+     "saveLive": false
+    }
+   },
+   "club": "Crystal Palace",
+   "pageErrors": [
+    "console: Failed to load resource: net::ERR_FAILED",
+    "console: Failed to load resource: net::ERR_FAILED"
+   ]
+  }
+ }
+}
