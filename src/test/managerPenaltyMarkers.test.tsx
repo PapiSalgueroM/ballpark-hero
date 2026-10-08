@@ -45,7 +45,7 @@ describe('Club Manager penalty scorer markers', () => {
     expect(open).toHaveTextContent("30'");
     expect(open).toHaveTextContent('Pass maker');
     for (const row of [open, screen.getByText(/⚽ Free kick scorer/), screen.getByText(/⚽ Their open play scorer/)]) {
-      expect(row).not.toHaveTextContent('(P)');
+      expect(row.textContent).not.toContain('(P)');
     }
   });
 
@@ -56,7 +56,7 @@ describe('Club Manager penalty scorer markers', () => {
       oppScorers: [{ name: 'Other legacy scorer', minute: 60 }],
     })} clubName="Home Club" onContinue={() => {}} />);
     expect(screen.getByText('Through on penalties')).toBeInTheDocument();
-    expect(screen.getByText(/⚽ Legacy scorer/)).not.toHaveTextContent('(P)');
-    expect(screen.getByText(/⚽ Other legacy scorer/)).not.toHaveTextContent('(P)');
+    expect(screen.getByText(/⚽ Legacy scorer/).textContent).not.toContain('(P)');
+    expect(screen.getByText(/⚽ Other legacy scorer/).textContent).not.toContain('(P)');
   });
 });
