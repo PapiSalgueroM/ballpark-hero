@@ -1,0 +1,16 @@
+parity: node .rc/x/parity.mjs
+oldsave: node .rc/x/oldsave.mjs
+census: node .rc/x/census.mjs
+digests: node .rc/x/digests.mjs
+mut-none: node .rc/x/mutRun.mjs none
+mut-nokeeper: node .rc/x/mutRun.mjs nokeeper
+mut-unmarked: node .rc/x/mutRun.mjs unmarked
+mut-flatrating: node .rc/x/mutRun.mjs flatrating
+mut-tenonly: node .rc/x/mutRun.mjs tenonly
+mut-samename: node .rc/x/mutRun.mjs samename
+mut-noslice: node .rc/x/mutRun.mjs noslice
+mut-emptymade: node .rc/x/mutRun.mjs emptymade
+mut-nosort: node .rc/x/mutRun.mjs nosort
+mut-keeperrating: node .rc/x/mutRun.mjs keeperrating
+mut-keeperonfull: node .rc/x/mutRun.mjs keeperonfull
+mut-wrongstrength: node .rc/x/mutRun.mjs wrongstrength
