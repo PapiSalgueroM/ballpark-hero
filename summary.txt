@@ -1,0 +1,3 @@
+bogus exit=2 1s | control cannot run: there is no control named "nosuchcontrol" (the controls: widen, names, unkey, shared, nation, noage, nokeeper, invert, jitter, noswing, bare, keeps, l
+quick exit=1 39s | simCareerSquad QUICK: 841 checks, 1 failed, floors not asserted
+full1 exit=0 39s | simCareerSquad: 2175 checks, 0 failed

@@ -1,0 +1,3 @@
+quick: node scripts/simCareerSquad.mjs 40
+full1: CAREER_SQUAD_NO_CONTROLS=1 node scripts/simCareerSquad.mjs
+bogus: CAREER_SQUAD_CONTROL=nosuchcontrol node scripts/simCareerSquad.mjs 40
