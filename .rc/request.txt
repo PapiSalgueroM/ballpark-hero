@@ -1,0 +1,11 @@
+#!playwright
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/guessFinishMoment.test.tsx src/lib/frontOfficeRatings.test.ts src/test/resultScorePillComparison.test.tsx --testTimeout=300000 --reporter=verbose
+pin-eol: node .rc/x/pin-probe.mjs
+simResultPillComparison: node scripts/simResultPillComparison.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+pill-wrong-value-control: node .rc/x/pill-control.mjs

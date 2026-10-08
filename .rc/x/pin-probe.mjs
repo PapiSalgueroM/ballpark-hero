@@ -1,0 +1,21 @@
+import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+
+const sha = v => createHash('sha256').update(v).digest('hex');
+const file = 'scripts/data/nflRosters2026.json';
+const raw = readFileSync(file);
+const text = raw.toString();
+const lf = text.replace(/\r\n/g, '\n');
+const crlf = lf.replace(/\n/g, '\r\n');
+const inputs = JSON.parse(readFileSync('scripts/data/nflFoRatingInputs2026.json', 'utf8'));
+const snap = inputs.sourceManifest.retainedOpeningSnapshot;
+const blob = execFileSync('git', ['cat-file', 'blob', 'HEAD:' + file]);
+console.log('snapshot keys     ', Object.keys(snap).join(', '));
+console.log('pinned sha256     ', snap.sha256);
+console.log('pinned canonical  ', snap.canonicalJsonSha256);
+console.log('working raw bytes ', sha(raw), 'bytes', raw.length, 'CR count', (text.match(/\r/g) || []).length, 'LF count', (text.match(/\n/g) || []).length);
+console.log('LF text           ', sha(lf), 'chars', lf.length);
+console.log('CRLF text         ', sha(crlf));
+console.log('git blob (HEAD)   ', sha(blob), 'bytes', blob.length, 'has CR', blob.includes(13));
+console.log('canonical JSON    ', sha(JSON.stringify(JSON.parse(text))));
