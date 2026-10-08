@@ -1,0 +1,12 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+vitest exit=0 4s |    Duration  3.47s (transform 296ms, setup 197ms, collect 575ms, tests 1.05s, environment 873ms, prepare 404ms)
+tsc exit=0 90s | 
+plain exit=0 128s | playTranslatedPage: 399 checks, 0 failed
+nolive exit=1 127s | playTranslatedPage: 399 checks, 71 failed (control "nolive", red on purpose)
+rivals exit=0 16s | No rival product names found. 0 findings.
+eslint exit=0 2s | 
+stalechunk exit=0 0s | simStaleChunk: green. A tab left open across a deploy reloads once for a missing chunk instead of painting the broken page.
+access exit=0 0s | simAccessibility: all green
+homecopy exit=0 1s | simHomeCopy: green. The one page a crawler reads first says only true things.
+notranslate exit=0 63s | playTranslatedPage: 222 checks, 0 failed
+noguard exit=1 93s | playTranslatedPage: 183 checks, 36 failed (control "noguard", red on purpose)
