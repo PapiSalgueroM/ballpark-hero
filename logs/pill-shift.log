@@ -1,0 +1,175 @@
+bundled the sixteen pages (3.5 MB of script, 1694 bytes of module CSS)
+1) 34 finished states on a 390 by 844 phone, each game at its widest score and its narrowest
+  FAIL [shift] /nba-higher-lower all ten right: cardH moves -32.0px while the reveal plays
+  FAIL [shift] /nba-higher-lower all ten right: momentH moves -32.0px while the reveal plays
+  FAIL [shift] /nba-higher-lower all ten right: afterTop moves -32.0px while the reveal plays
+  FAIL [shift] /nba-higher-lower all ten right: gridTop moves -32.0px while the reveal plays
+   /nba-higher-lower all ten right                      pill 325           121px wide, slack 97.4px, win
+  FAIL [shift] /nba-higher-lower none right: cardH moves -32.0px while the reveal plays
+  FAIL [shift] /nba-higher-lower none right: momentH moves -32.0px while the reveal plays
+  FAIL [shift] /nba-higher-lower none right: afterTop moves -32.0px while the reveal plays
+  FAIL [shift] /nba-higher-lower none right: gridTop moves -32.0px while the reveal plays
+   /nba-higher-lower none right                         pill 0             88px wide, slack 114.0px, loss
+  FAIL [shift] /nfl-higher-lower all ten right: cardH moves -32.0px while the reveal plays
+  FAIL [shift] /nfl-higher-lower all ten right: momentH moves -32.0px while the reveal plays
+  FAIL [shift] /nfl-higher-lower all ten right: afterTop moves -32.0px while the reveal plays
+  FAIL [shift] /nfl-higher-lower all ten right: gridTop moves -32.0px while the reveal plays
+   /nfl-higher-lower all ten right                      pill 325           121px wide, slack 97.4px, win
+  FAIL [shift] /nfl-higher-lower none right: cardH moves -32.0px while the reveal plays
+  FAIL [shift] /nfl-higher-lower none right: momentH moves -32.0px while the reveal plays
+  FAIL [shift] /nfl-higher-lower none right: afterTop moves -32.0px while the reveal plays
+  FAIL [shift] /nfl-higher-lower none right: gridTop moves -32.0px while the reveal plays
+   /nfl-higher-lower none right                         pill 0             88px wide, slack 114.0px, loss
+  FAIL [shift] /mlb-higher-lower all ten right: cardH moves -32.0px while the reveal plays
+  FAIL [shift] /mlb-higher-lower all ten right: momentH moves -32.0px while the reveal plays
+  FAIL [shift] /mlb-higher-lower all ten right: afterTop moves -32.0px while the reveal plays
+  FAIL [shift] /mlb-higher-lower all ten right: gridTop moves -32.0px while the reveal plays
+   /mlb-higher-lower all ten right                      pill 325           121px wide, slack 97.4px, win
+  FAIL [shift] /mlb-higher-lower none right: cardH moves -32.0px while the reveal plays
+  FAIL [shift] /mlb-higher-lower none right: momentH moves -32.0px while the reveal plays
+  FAIL [shift] /mlb-higher-lower none right: afterTop moves -32.0px while the reveal plays
+  FAIL [shift] /mlb-higher-lower none right: gridTop moves -32.0px while the reveal plays
+   /mlb-higher-lower none right                         pill 0             88px wide, slack 114.0px, loss
+  FAIL [shift] /hockey-higher-lower all ten right: cardH moves -32.0px while the reveal plays
+  FAIL [shift] /hockey-higher-lower all ten right: momentH moves -32.0px while the reveal plays
+  FAIL [shift] /hockey-higher-lower all ten right: afterTop moves -32.0px while the reveal plays
+  FAIL [shift] /hockey-higher-lower all ten right: gridTop moves -32.0px while the reveal plays
+   /hockey-higher-lower all ten right                   pill 325           121px wide, slack 97.4px, win
+  FAIL [shift] /hockey-higher-lower none right: cardH moves -32.0px while the reveal plays
+  FAIL [shift] /hockey-higher-lower none right: momentH moves -32.0px while the reveal plays
+  FAIL [shift] /hockey-higher-lower none right: afterTop moves -32.0px while the reveal plays
+  FAIL [shift] /hockey-higher-lower none right: gridTop moves -32.0px while the reveal plays
+   /hockey-higher-lower none right                      pill 0             88px wide, slack 114.0px, loss
+  FAIL [shift] /cfb-higher-lower all ten right: cardH moves -32.0px while the reveal plays
+  FAIL [shift] /cfb-higher-lower all ten right: momentH moves -32.0px while the reveal plays
+  FAIL [shift] /cfb-higher-lower all ten right: afterTop moves -32.0px while the reveal plays
+  FAIL [shift] /cfb-higher-lower all ten right: gridTop moves -32.0px while the reveal plays
+   /cfb-higher-lower all ten right                      pill 325           121px wide, slack 97.4px, win
+  FAIL [shift] /cfb-higher-lower none right: cardH moves -32.0px while the reveal plays
+  FAIL [shift] /cfb-higher-lower none right: momentH moves -32.0px while the reveal plays
+  FAIL [shift] /cfb-higher-lower none right: afterTop moves -32.0px while the reveal plays
+  FAIL [shift] /cfb-higher-lower none right: gridTop moves -32.0px while the reveal plays
+   /cfb-higher-lower none right                         pill 0             88px wide, slack 114.0px, loss
+  FAIL [shift] /f1-higher-lower all ten right: cardH moves -32.0px while the reveal plays
+  FAIL [shift] /f1-higher-lower all ten right: momentH moves -32.0px while the reveal plays
+  FAIL [shift] /f1-higher-lower all ten right: afterTop moves -32.0px while the reveal plays
+  FAIL [shift] /f1-higher-lower all ten right: gridTop moves -32.0px while the reveal plays
+   /f1-higher-lower all ten right                       pill 325           121px wide, slack 97.4px, win
+  FAIL [shift] /f1-higher-lower none right: cardH moves -32.0px while the reveal plays
+  FAIL [shift] /f1-higher-lower none right: momentH moves -32.0px while the reveal plays
+  FAIL [shift] /f1-higher-lower none right: afterTop moves -32.0px while the reveal plays
+  FAIL [shift] /f1-higher-lower none right: gridTop moves -32.0px while the reveal plays
+   /f1-higher-lower none right                          pill 0             88px wide, slack 114.0px, loss
+  FAIL [shift] /tennis-higher-lower all ten right: cardH moves -32.0px while the reveal plays
+  FAIL [shift] /tennis-higher-lower all ten right: momentH moves -32.0px while the reveal plays
+  FAIL [shift] /tennis-higher-lower all ten right: afterTop moves -32.0px while the reveal plays
+  FAIL [shift] /tennis-higher-lower all ten right: gridTop moves -32.0px while the reveal plays
+   /tennis-higher-lower all ten right                   pill 325           121px wide, slack 97.4px, win
+  FAIL [shift] /tennis-higher-lower none right: cardH moves -32.0px while the reveal plays
+  FAIL [shift] /tennis-higher-lower none right: momentH moves -32.0px while the reveal plays
+  FAIL [shift] /tennis-higher-lower none right: afterTop moves -32.0px while the reveal plays
+  FAIL [shift] /tennis-higher-lower none right: gridTop moves -32.0px while the reveal plays
+   /tennis-higher-lower none right                      pill 0             88px wide, slack 114.0px, loss
+  FAIL [shift] /golf-higher-lower all ten right: cardH moves -32.0px while the reveal plays
+  FAIL [shift] /golf-higher-lower all ten right: momentH moves -32.0px while the reveal plays
+  FAIL [shift] /golf-higher-lower all ten right: afterTop moves -32.0px while the reveal plays
+  FAIL [shift] /golf-higher-lower all ten right: gridTop moves -32.0px while the reveal plays
+   /golf-higher-lower all ten right                     pill 325           121px wide, slack 97.4px, win
+  FAIL [shift] /golf-higher-lower none right: cardH moves -32.0px while the reveal plays
+  FAIL [shift] /golf-higher-lower none right: momentH moves -32.0px while the reveal plays
+  FAIL [shift] /golf-higher-lower none right: afterTop moves -32.0px while the reveal plays
+  FAIL [shift] /golf-higher-lower none right: gridTop moves -32.0px while the reveal plays
+   /golf-higher-lower none right                        pill 0             88px wide, slack 114.0px, loss
+  FAIL [shift] /afl-higher-lower all ten right: cardH moves -32.0px while the reveal plays
+  FAIL [shift] /afl-higher-lower all ten right: momentH moves -32.0px while the reveal plays
+  FAIL [shift] /afl-higher-lower all ten right: afterTop moves -32.0px while the reveal plays
+  FAIL [shift] /afl-higher-lower all ten right: gridTop moves -32.0px while the reveal plays
+   /afl-higher-lower all ten right                      pill 325           121px wide, slack 97.4px, win
+  FAIL [shift] /afl-higher-lower none right: cardH moves -32.0px while the reveal plays
+  FAIL [shift] /afl-higher-lower none right: momentH moves -32.0px while the reveal plays
+  FAIL [shift] /afl-higher-lower none right: afterTop moves -32.0px while the reveal plays
+  FAIL [shift] /afl-higher-lower none right: gridTop moves -32.0px while the reveal plays
+   /afl-higher-lower none right                         pill 0             88px wide, slack 114.0px, loss
+  FAIL [shift] /higher-lower a three figure streak: cardH moves -32.0px while the reveal plays
+  FAIL [shift] /higher-lower a three figure streak: momentH moves -32.0px while the reveal plays
+  FAIL [shift] /higher-lower a three figure streak: afterTop moves -32.0px while the reveal plays
+  FAIL [shift] /higher-lower a three figure streak: gridTop moves -32.0px while the reveal plays
+   /higher-lower a three figure streak                  pill 143           121px wide, slack 97.4px, loss
+  FAIL [shift] /higher-lower out on the first pick: cardH moves -32.0px while the reveal plays
+  FAIL [shift] /higher-lower out on the first pick: momentH moves -32.0px while the reveal plays
+  FAIL [shift] /higher-lower out on the first pick: afterTop moves -32.0px while the reveal plays
+  FAIL [shift] /higher-lower out on the first pick: gridTop moves -32.0px while the reveal plays
+   /higher-lower out on the first pick                  pill 0             88px wide, slack 114.0px, loss
+  FAIL [shift] /face-off a duel tied to the last extra round: cardH moves -32.0px while the reveal plays
+  FAIL [shift] /face-off a duel tied to the last extra round: momentH moves -32.0px while the reveal plays
+  FAIL [shift] /face-off a duel tied to the last extra round: afterTop moves -32.0px while the reveal plays
+  FAIL [shift] /face-off a duel tied to the last extra round: gridTop moves -32.0px while the reveal plays
+   /face-off a duel tied to the last extra round        pill 2,600 to 2,600 210px wide, slack 53.1px, close
+  FAIL [shift] /face-off a full speed win over The Legend: cardH moves -32.0px while the reveal plays
+  FAIL [shift] /face-off a full speed win over The Legend: momentH moves -32.0px while the reveal plays
+  FAIL [shift] /face-off a full speed win over The Legend: afterTop moves -32.0px while the reveal plays
+  FAIL [shift] /face-off a full speed win over The Legend: gridTop moves -32.0px while the reveal plays
+   /face-off a full speed win over The Legend           pill 2,000 to 1,800 210px wide, slack 53.1px, win
+  FAIL [shift] /face-off shut out by The Rookie: cardH moves -32.0px while the reveal plays
+  FAIL [shift] /face-off shut out by The Rookie: momentH moves -32.0px while the reveal plays
+  FAIL [shift] /face-off shut out by The Rookie: afterTop moves -32.0px while the reveal plays
+  FAIL [shift] /face-off shut out by The Rookie: gridTop moves -32.0px while the reveal plays
+   /face-off shut out by The Rookie                     pill 0 to 1,900    160px wide, slack 77.8px, loss
+  FAIL [shift] /champ-or-not 10 right: cardH moves -32.0px while the reveal plays
+  FAIL [shift] /champ-or-not 10 right: momentH moves -32.0px while the reveal plays
+  FAIL [shift] /champ-or-not 10 right: afterTop moves -32.0px while the reveal plays
+  FAIL [shift] /champ-or-not 10 right: gridTop moves -32.0px while the reveal plays
+   /champ-or-not 10 right                               pill 10/10         140px wide, slack 87.8px, win
+  FAIL [shift] /whod-they-beat 10 right: cardH moves -32.0px while the reveal plays
+  FAIL [shift] /whod-they-beat 10 right: momentH moves -32.0px while the reveal plays
+  FAIL [shift] /whod-they-beat 10 right: afterTop moves -32.0px while the reveal plays
+  FAIL [shift] /whod-they-beat 10 right: gridTop moves -32.0px while the reveal plays
+   /whod-they-beat 10 right                             pill 10/10         140px wide, slack 87.8px, win
+  FAIL [shift] /champ-or-not 0 right: cardH moves -32.0px while the reveal plays
+  FAIL [shift] /champ-or-not 0 right: momentH moves -32.0px while the reveal plays
+  FAIL [shift] /champ-or-not 0 right: afterTop moves -32.0px while the reveal plays
+  FAIL [shift] /champ-or-not 0 right: gridTop moves -32.0px while the reveal plays
+   /champ-or-not 0 right                                pill 0/10          120px wide, slack 98.2px, loss
+  FAIL [shift] /whod-they-beat 0 right: cardH moves -32.0px while the reveal plays
+  FAIL [shift] /whod-they-beat 0 right: momentH moves -32.0px while the reveal plays
+  FAIL [shift] /whod-they-beat 0 right: afterTop moves -32.0px while the reveal plays
+  FAIL [shift] /whod-they-beat 0 right: gridTop moves -32.0px while the reveal plays
+   /whod-they-beat 0 right                              pill 0/10          120px wide, slack 98.2px, loss
+  FAIL [shift] /silverware-sort every rung right: cardH moves -32.0px while the reveal plays
+  FAIL [shift] /silverware-sort every rung right: momentH moves -32.0px while the reveal plays
+  FAIL [shift] /silverware-sort every rung right: afterTop moves -32.0px while the reveal plays
+  FAIL [shift] /silverware-sort every rung right: gridTop moves -32.0px while the reveal plays
+   /silverware-sort every rung right                    pill 15/15         140px wide, slack 87.8px, win
+  FAIL [shift] /silverware-sort one rung right: cardH moves -32.0px while the reveal plays
+  FAIL [shift] /silverware-sort one rung right: momentH moves -32.0px while the reveal plays
+  FAIL [shift] /silverware-sort one rung right: afterTop moves -32.0px while the reveal plays
+  FAIL [shift] /silverware-sort one rung right: gridTop moves -32.0px while the reveal plays
+   /silverware-sort one rung right                      pill 1/15          120px wide, slack 98.2px, loss
+  FAIL [shift] /rank-em 5 in place: cardH moves -32.0px while the reveal plays
+  FAIL [shift] /rank-em 5 in place: momentH moves -32.0px while the reveal plays
+  FAIL [shift] /rank-em 5 in place: afterTop moves -32.0px while the reveal plays
+  FAIL [shift] /rank-em 5 in place: gridTop moves -32.0px while the reveal plays
+   /rank-em 5 in place                                  pill 1,000         141px wide, slack 87.5px, win
+  FAIL [shift] /rank-em 3 in place: cardH moves -32.0px while the reveal plays
+  FAIL [shift] /rank-em 3 in place: momentH moves -32.0px while the reveal plays
+  FAIL [shift] /rank-em 3 in place: afterTop moves -32.0px while the reveal plays
+  FAIL [shift] /rank-em 3 in place: gridTop moves -32.0px while the reveal plays
+   /rank-em 3 in place                                  pill 600           121px wide, slack 97.4px, loss
+  FAIL [shift] /rank-em 0 in place: cardH moves -32.0px while the reveal plays
+  FAIL [shift] /rank-em 0 in place: momentH moves -32.0px while the reveal plays
+  FAIL [shift] /rank-em 0 in place: afterTop moves -32.0px while the reveal plays
+  FAIL [shift] /rank-em 0 in place: gridTop moves -32.0px while the reveal plays
+   /rank-em 0 in place                                  pill 0             88px wide, slack 114.0px, loss
+  FAIL [shift] /hof-or-bust the right call, no hints: cardH moves -32.0px while the reveal plays
+  FAIL [shift] /hof-or-bust the right call, no hints: momentH moves -32.0px while the reveal plays
+  FAIL [shift] /hof-or-bust the right call, no hints: afterTop moves -32.0px while the reveal plays
+  FAIL [shift] /hof-or-bust the right call, no hints: gridTop moves -32.0px while the reveal plays
+   /hof-or-bust the right call, no hints                pill 1,000         141px wide, slack 87.5px, close
+  FAIL [shift] /hof-or-bust the wrong call: cardH moves -32.0px while the reveal plays
+  FAIL [shift] /hof-or-bust the wrong call: momentH moves -32.0px while the reveal plays
+  FAIL [shift] /hof-or-bust the wrong call: afterTop moves -32.0px while the reveal plays
+  FAIL [shift] /hof-or-bust the wrong call: gridTop moves -32.0px while the reveal plays
+   /hof-or-bust the wrong call                          pill 0             88px wide, slack 114.0px, close
+   narrowest slack beside a pill: 53.1px, at /face-off a duel tied to the last extra round (2,600 to 2,600)
+
+simResultPillComparison: control shift turned [shift] red, as it must (136 findings).

@@ -1,0 +1,34 @@
+1) Every page is inside its download budget
+  FAIL: /: 238K of gzipped JavaScript against a budget of 235K
+  FAIL: /club-manager: 565K of gzipped JavaScript against a budget of 564K
+  FAIL: /soccer-career: 766K of gzipped JavaScript against a budget of 759K
+  FAIL: /stadium-tycoon: 293K of gzipped JavaScript against a budget of 290K
+  FAIL: /wonderkid-factory: 269K of gzipped JavaScript against a budget of 266K
+  FAIL: /minefield: 287K of gzipped JavaScript against a budget of 284K
+  FAIL: /footle: 343K of gzipped JavaScript against a budget of 339K
+  FAIL: /nfl-my-career: 459K of gzipped JavaScript against a budget of 455K
+  FAIL: /front-office: 356K of gzipped JavaScript against a budget of 353K
+  FAIL: /soccer-grid: 311K of gzipped JavaScript against a budget of 308K
+   /                   238K gz over   3 files (budget 235K, 238.0K to the tenth)
+   /club-manager       565K gz over  37 files (budget 564K, 565.0K to the tenth)
+   /soccer-career      766K gz over  44 files (budget 759K, 766.2K to the tenth)
+   /stadium-tycoon     293K gz over  23 files (budget 290K, 292.7K to the tenth)
+   /wonderkid-factory  269K gz over  19 files (budget 266K, 268.8K to the tenth)
+   /minefield          287K gz over  20 files (budget 284K, 286.8K to the tenth)
+   /footle             343K gz over  39 files (budget 339K, 342.8K to the tenth)
+   /nfl-my-career      459K gz over  46 files (budget 455K, 459.3K to the tenth)
+   /front-office       356K gz over  34 files (budget 353K, 356.1K to the tenth)
+   /soccer-grid        311K gz over  36 files (budget 308K, 310.8K to the tenth)
+   /leaderboard        246K gz over   9 files (budget 266K, 246.1K to the tenth)
+   /manager-hot-seat   583K gz over  39 files (budget 584K, 583.5K to the tenth)
+   /deadline-day       594K gz over  43 files (budget 594K, 593.6K to the tenth)
+   /transfer-path      371K gz over  40 files (budget 371K, 370.9K to the tenth)
+2) The two things Round 210 moved off the critical path stay off it
+   the screenshot library and the merged guide map are both off the critical path
+3) Every guide is still reachable, one sport at a time
+   132 guides across 13 sport files, every one of them routed
+4) The data these pages never read is in none of the files they fetch
+  FAIL: /club-manager fetches SoccerCareer-DCeZus-b.js, which holds 40 of the 40 probes for the national team pools: the page downloads data it never reads
+   10 probe sets (400 probes) all found in the build; 4 routes checked, 1 findings; /soccer-career still fetches the pools (SoccerCareer-DCeZus-b.js)
+   NOTE: /club-manager asked for 1 more file (350.8K gz) after section 1 stopped looking, so its figure in section 1 is short by that much on this run (SoccerCareer-DCeZus-b.js). Read for probes here all the same.
+CONTROL late FIRED: SoccerCareer-DCeZus-b.js arrived after the measuring window (section 1 never weighed it) and section 4 still named it for /club-manager, 1 finding and none elsewhere
