@@ -1,0 +1,274 @@
+{
+ "buzz-win-390": {
+  "phaseBefore": "season_summary",
+  "pressed": [
+   "Continue →"
+  ],
+  "errors": [],
+  "there": true,
+  "saved": {
+   "phase": "ballon_dor",
+   "rank": 1,
+   "n": 10
+  },
+  "made": 1,
+  "starts": [
+   "tick@0.597",
+   "tick@0.815",
+   "tick@1.035",
+   "tick@1.255",
+   "tick@1.475",
+   "tick@1.694",
+   "tick@1.914",
+   "tick@2.134",
+   "tick@2.354",
+   "tick@2.574",
+   "sting@3.155",
+   "crowd@3.435"
+  ],
+  "firstStartAfterMountMs": 601,
+  "buzz": [
+   {
+    "p": [
+     30,
+     40,
+     30
+    ],
+    "msAfterMount": 3234,
+    "vis": "visible"
+   }
+  ],
+  "geo": [
+   {
+    "label": "+0",
+    "t": 71,
+    "scrollY": 1029,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 7,
+    "rowsFullyInView": 6,
+    "firstRowTop": -160,
+    "lastRowBottom": 280,
+    "slamTop": -293,
+    "slamBottom": -174
+   },
+   {
+    "label": "+300",
+    "t": 300,
+    "scrollY": 670,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 186,
+    "lastRowBottom": 651,
+    "slamTop": 45,
+    "slamBottom": 171
+   },
+   {
+    "label": "+700",
+    "t": 700,
+    "scrollY": 646,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 198,
+    "lastRowBottom": 686,
+    "slamTop": 51,
+    "slamBottom": 182
+   },
+   {
+    "label": "+1300",
+    "t": 1300,
+    "scrollY": 646,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 198,
+    "lastRowBottom": 686,
+    "slamTop": 50,
+    "slamBottom": 182
+   },
+   {
+    "label": "+2000",
+    "t": 2000,
+    "scrollY": 646,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 198,
+    "lastRowBottom": 686,
+    "slamTop": 50,
+    "slamBottom": 182
+   },
+   {
+    "label": "+2700",
+    "t": 2700,
+    "scrollY": 646,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 198,
+    "lastRowBottom": 686,
+    "slamTop": 50,
+    "slamBottom": 182
+   },
+   {
+    "label": "+3400",
+    "t": 3400,
+    "scrollY": 646,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 198,
+    "lastRowBottom": 686,
+    "slamTop": 50,
+    "slamBottom": 182
+   },
+   {
+    "label": "+4500",
+    "t": 4500,
+    "scrollY": 646,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 198,
+    "lastRowBottom": 686,
+    "slamTop": 50,
+    "slamBottom": 182
+   }
+  ]
+ },
+ "buzz-win-390-rm": {
+  "phaseBefore": "season_summary",
+  "pressed": [
+   "Continue →"
+  ],
+  "errors": [],
+  "there": true,
+  "saved": {
+   "phase": "ballon_dor",
+   "rank": 1,
+   "n": 10
+  },
+  "made": 1,
+  "starts": [
+   "sting@-0.032",
+   "crowd@0.259"
+  ],
+  "firstStartAfterMountMs": -2,
+  "buzz": [],
+  "geo": [
+   {
+    "label": "+0",
+    "t": 62,
+    "scrollY": 646,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 182,
+    "lastRowBottom": 670,
+    "slamTop": 34,
+    "slamBottom": 166
+   },
+   {
+    "label": "+300",
+    "t": 300,
+    "scrollY": 646,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 182,
+    "lastRowBottom": 670,
+    "slamTop": 34,
+    "slamBottom": 166
+   },
+   {
+    "label": "+700",
+    "t": 700,
+    "scrollY": 646,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 182,
+    "lastRowBottom": 670,
+    "slamTop": 34,
+    "slamBottom": 166
+   },
+   {
+    "label": "+1300",
+    "t": 1300,
+    "scrollY": 646,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 182,
+    "lastRowBottom": 670,
+    "slamTop": 34,
+    "slamBottom": 166
+   },
+   {
+    "label": "+2000",
+    "t": 2000,
+    "scrollY": 646,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 182,
+    "lastRowBottom": 670,
+    "slamTop": 34,
+    "slamBottom": 166
+   },
+   {
+    "label": "+2700",
+    "t": 2701,
+    "scrollY": 646,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 182,
+    "lastRowBottom": 670,
+    "slamTop": 34,
+    "slamBottom": 166
+   },
+   {
+    "label": "+3400",
+    "t": 3400,
+    "scrollY": 646,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 182,
+    "lastRowBottom": 670,
+    "slamTop": 34,
+    "slamBottom": 166
+   },
+   {
+    "label": "+4500",
+    "t": 4500,
+    "scrollY": 646,
+    "vh": 844,
+    "rows": 10,
+    "rowsInView": 10,
+    "rowsFullyInView": 10,
+    "firstRowTop": 182,
+    "lastRowBottom": 670,
+    "slamTop": 34,
+    "slamBottom": 166
+   }
+  ]
+ }
+}
