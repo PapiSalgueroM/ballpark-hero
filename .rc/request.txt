@@ -1,0 +1,60 @@
+# AN2 runner review, request A: type gate, seam harnesses, every control its own line
+#!build
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-us: node_modules/.bin/vitest run src/test/usSeasonCentreEntry.test.tsx src/test/usCareerSaveRetry.test.tsx src/test/homeSearchRecovery.test.tsx src/test/tycoonSaleReview.test.tsx src/test/boxingShowForecast.test.tsx src/test/tycoonSetPiecePage.test.tsx --testTimeout=300000 --hookTimeout=120000
+ssw: node scripts/simStorageWrites.mjs
+ssw-unguard: SIM_STORAGE_WRITES_CONTROL=unguard node scripts/simStorageWrites.mjs
+ssw-order: SIM_STORAGE_WRITES_CONTROL=order node scripts/simStorageWrites.mjs
+ssw-client: SIM_STORAGE_WRITES_CONTROL=client node scripts/simStorageWrites.mjs
+ssw-caller: SIM_STORAGE_WRITES_CONTROL=caller node scripts/simStorageWrites.mjs
+ssw-nocatch: SIM_STORAGE_WRITES_CONTROL=nocatch node scripts/simStorageWrites.mjs
+ssw-probe: SIM_STORAGE_WRITES_CONTROL=probe node scripts/simStorageWrites.mjs
+ssw-bogus: SIM_STORAGE_WRITES_CONTROL=nosuchcontrol node scripts/simStorageWrites.mjs
+appeal: node scripts/simManagerAppealIsolation.mjs
+rules: node scripts/simCmLeagueRules.mjs
+shootout: node scripts/simCmShootoutOrder.mjs
+shootout-s3: SIM_SEED=3 node scripts/simCmShootoutOrder.mjs
+shootout-ignoreorder: CM_SHOOTOUT_CONTROL=ignoreorder node scripts/simCmShootoutOrder.mjs
+shootout-noskip: CM_SHOOTOUT_CONTROL=noskip node scripts/simCmShootoutOrder.mjs
+shootout-nocap: CM_SHOOTOUT_CONTROL=nocap node scripts/simCmShootoutOrder.mjs
+shootout-unsetpath: CM_SHOOTOUT_CONTROL=unsetpath node scripts/simCmShootoutOrder.mjs
+shootout-ownkeeper: CM_SHOOTOUT_CONTROL=ownkeeper node scripts/simCmShootoutOrder.mjs
+shootout-wrongkeeper: CM_SHOOTOUT_CONTROL=wrongkeeper node scripts/simCmShootoutOrder.mjs
+shootout-nooppkeeper: CM_SHOOTOUT_CONTROL=nooppkeeper node scripts/simCmShootoutOrder.mjs
+shootout-oppworst: CM_SHOOTOUT_CONTROL=oppworst node scripts/simCmShootoutOrder.mjs
+shootout-thinside: CM_SHOOTOUT_CONTROL=thinside node scripts/simCmShootoutOrder.mjs
+shootout-nomakeup: CM_SHOOTOUT_CONTROL=nomakeup node scripts/simCmShootoutOrder.mjs
+shootout-keeperonfull: CM_SHOOTOUT_CONTROL=keeperonfull node scripts/simCmShootoutOrder.mjs
+shootout-bogus: CM_SHOOTOUT_CONTROL=nosuchcontrol node scripts/simCmShootoutOrder.mjs
+uscareer-retry: env -u CI -u GITHUB_ACTIONS node scripts/simUsCareerSaveRetry.mjs
+uscareer-retry-ci: node scripts/simUsCareerSaveRetry.mjs
+usboardparity: node scripts/simUsBoardParity.mjs
+usboardparity-label: US_BOARD_PARITY_CONTROL=label node scripts/simUsBoardParity.mjs
+usboardparity-fixture: US_BOARD_PARITY_CONTROL=fixture node scripts/simUsBoardParity.mjs
+ussc: node scripts/simUsSeasonCentre.mjs
+ussc-static: SEEDSET=0 US_SEASON_CONTROL=static node scripts/simUsSeasonCentre.mjs
+nodouble: node scripts/simNoDoubleRecord.mjs
+completion: node scripts/simCompletionOnce.mjs
+tycoon-help: node scripts/simTycoonHelp.mjs
+tycoon-sale: env -u CI -u GITHUB_ACTIONS node scripts/simTycoonSaleReview.mjs
+numfmt: node scripts/simNumberFormatting.mjs
+homesearch: env -u CI -u GITHUB_ACTIONS node scripts/simHomeSearchRecovery.mjs
+stalechunk: node scripts/simStaleChunk.mjs
+stalechunk-nooffline: SIM_STALE_CHUNK_CONTROL=nooffline node scripts/simStaleChunk.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simHomeCopy: node scripts/simHomeCopy.mjs
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simAdsense: node scripts/simAdsense.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simSingleFooter: node scripts/simSingleFooter.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+pill: node scripts/simResultPillComparison.mjs
+pill-bareline: RESULT_PILL_CONTROL=bareline node scripts/simResultPillComparison.mjs
