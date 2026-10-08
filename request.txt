@@ -1,0 +1,21 @@
+#!serve
+#!playwright
+weight: node .rc/x/weightBytes.mjs
+sweep: ENGINES=chromium node scripts/sweepWeight.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/seasonCentreSlots.test.tsx src/test/rankShift.test.ts src/test/seasonResume.test.ts src/test/seasonReplays.test.tsx src/test/miniPitchScene.test.ts src/test/seasonCore.test.ts --testTimeout=300000 --hookTimeout=120000
+sim: node scripts/simSeasonCentreMotion.mjs
+sim-pagekey: SEASON_MOTION_SIM_CONTROL=pagekey node scripts/simSeasonCentreMotion.mjs
+sim-fence: SEASON_MOTION_SIM_CONTROL=fence node scripts/simSeasonCentreMotion.mjs
+flagship: node scripts/simFlagshipWeight.mjs
+flagship-eagerimport: FLAGSHIP_LAZY_CONTROL=eagerimport node scripts/simFlagshipWeight.mjs
+play: ENGINES=chromium node scripts/playSeasonCentreMotion.mjs
+play-b5: ONLY=B5 SHOTS=/tmp/noshots ENGINES=chromium node scripts/playSeasonCentreMotion.mjs
+play-pitchside: SEASON_MOTION_CONTROL=pitchside ONLY=B5 ENGINES=chromium node scripts/playSeasonCentreMotion.mjs
+play-floor: SEASON_MOTION_CONTROL=floor ONLY=C PORT=4561 SHOTS=/tmp/noshots1 ENGINES=chromium node scripts/playSeasonCentreMotion.mjs
+play-lock: SEASON_MOTION_CONTROL=lock ONLY=C PORT=4562 SHOTS=/tmp/noshots2 ENGINES=chromium node scripts/playSeasonCentreMotion.mjs
+play-tableview: SEASON_MOTION_CONTROL=tableview ONLY=C PORT=4563 SHOTS=/tmp/noshots3 ENGINES=chromium node scripts/playSeasonCentreMotion.mjs
+playSeasonCentre: ENGINES=chromium node scripts/playSeasonCentre.mjs
+playSeasonMoments: ENGINES=chromium node scripts/playSeasonMoments.mjs
+playReducedMotion: ENGINES=chromium node scripts/playReducedMotion.mjs
+lint: node_modules/.bin/eslint src/components/season-centre src/components/soccer-career/SoccerSeasonCentre.tsx src/components/soccer-career/SeasonResumeChip.tsx src/components/motion src/lib/motion src/lib/season/resume.ts
