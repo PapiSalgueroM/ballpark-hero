@@ -1,0 +1,16 @@
+build exit=0 21s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simLiveScores exit=0 0s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simAdsense exit=1 0s | simAdsense: 5 failures
+simDaily exit=0 1s | simDaily: green. Every daily game is a different game tomorrow.
+simResultPillComparison exit=1 15s | simResultPillComparison: red. text 2
+simWc2026Results exit=0 1s | simWc2026Results: all green
+simHelpConsentFocus exit=0 3s | simHelpConsentFocus: real source held, disposable copies cleaned, no vendor requests.
+simRulesGateConsentFocus exit=0 3s | simRulesGateConsentFocus: source held, owned copies cleaned, no backend or vendor requests.
+simLegalPages exit=0 0s | simLegalPages: all green
+simAccessibility exit=0 0s | simAccessibility: all green
+simStaleChunk exit=0 0s | simStaleChunk: green. A tab left open across a deploy reloads once for a missing chunk instead of painting the broken page.
+simFlagshipWeight exit=0 0s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+playHomeFold exit=0 33s | playHomeFold: green. The first thing on the page is something to play.
+simDailySaveHardening exit=1 88s | simDailySaveHardening: 4 failure(s)
+playTranslatedPage exit=0 114s | playTranslatedPage: 238 checks, 0 failed
+vitest-all exit=1 314s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/guessFinishMoment.test.tsx,title=src/test/guessFinishMoment.test.tsx > a clue guesser ends on the shar
