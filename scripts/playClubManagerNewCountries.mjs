@@ -41,17 +41,23 @@
      noresume  step 6 does not press Resume Career: red at step 6, because
                the slots screen is not the hub.
 
-   MEASURED 2026-10-08 on a GitHub runner at a0b6c5f3, a plain build served
-   like the host: green, exit 0. At 390x844 and at 1280x800: the Russia
-   tile with the engine's 1 league and 16 clubs, the league tile with its
-   16 clubs and the Russian Cup and no Champions League, All nations back
-   to the nations, 16 club tiles, the hub on Zenit in Season 1, the help
-   naming the league, the old save on Sevilla in Season 1; no sideways
-   overflow anywhere; 4 requests to the database host aborted, no console
-   or page error. Control nonation: 2 failures (step 1 at each size), exit 1.
-   NOT in this walk: the table card's sixteen rows and a live match at a
-   Russian club (the league step, the hub and the old save are read; the
-   live match is walked at an English club by playClubManager).
+   MEASURED 2026-10-08 on a GitHub runner at 3d26d7e0, a plain build served
+   like the host: green, exit 0, 55 seconds. At 390x844, at 1280x800 and at
+   390x844 with reduced motion asked for: the Russia tile with the engine's
+   1 league and 16 clubs, the league tile with its 16 clubs and the Russian
+   Cup and no Champions League, All nations back to the nations, 16 club
+   tiles, the hub on Zenit in Season 1 with 16 rows on its table card, the
+   help naming the league, a live match played to full time and the table
+   then reading "Russian Premier League · round 1 of 30" with 16 rows. At
+   the first two: the old save's slots, Resume Career, the hub on Sevilla,
+   the browser saying "27 leagues in this save" and the Russian Premier
+   League drawing 16 rows under "pre-season, alphabetical order" (the save
+   holds no table for the league until its first summer, so the card shows
+   every club on zero while the save is four weeks from its end: no error,
+   and the card's wording is its owner's to change). No sideways overflow
+   anywhere; 8 requests to the database host aborted, no console or page
+   error. Controls: nonation 3 failures (step 1 in each run), noresume 2
+   (step 6 at each size), both exit 1.
 
    Run: SWEEP_BASE=http://localhost:4173 node scripts/playClubManagerNewCountries.mjs */
 import fs from 'node:fs';
