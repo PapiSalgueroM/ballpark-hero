@@ -1,0 +1,56 @@
+nba 390: hub {"notice":null,"line":null,"toasts":0,"viewer":false,"curtain":false,"play":"Play the 2026 season","disk":"0 seasons, year 2026","refused":0}
+nba 390: viewer open with the save refused {"notice":"write {\"t\":197,\"b\":314,\"l\":16,\"r\":374} seen {\"inView\":true,\"onTop\":false,\"topIs\":\"SPAN.min-w-0 flex-1 truncate \"}","line":null,"toasts":1,"viewer":true,"curtain":true,"play":null,"disk":"0 seasons, year 2026","refused":1}
+nba 390: the viewer reads " @keyframes cmRise { 0% { opacity: 0; transform: translateY(7px); } 100% { opacity: 1; transform: translateY(0); } } .cm-rise { opacity: 0; "
+nba 390: after the season, save refused {"notice":"write {\"t\":197,\"b\":314,\"l\":16,\"r\":374} seen {\"inView\":true,\"onTop\":true,\"topIs\":\"DIV.sticky top-0 z-40 mb-3 rounded-xl border\"}","line":null,"toasts":1,"viewer":false,"curtain":true,"play":null,"disk":"0 seasons, year 2026","refused":1}
+nba 390: scrolled to 420: header null notice {"t":0,"b":117,"l":16,"r":374} text point {"inView":true,"onTop":true,"topIs":"DIV.sticky top-0 z-40 mb-3 rounded-xl border"} button {"inView":true,"onTop":true,"topIs":"BUTTON.mt-2 min-h-11 min-w-11 rounded-lg border"}
+nba 390: back to the hub through curtain > continue > card > continue > hub
+nba 390: back to the hub through curtain > card > continue > card > continue > hub
+nba 390: two seasons played, none saved {"notice":"write {\"t\":52,\"b\":169,\"l\":16,\"r\":374} seen {\"inView\":true,\"onTop\":true,\"topIs\":\"DIV.sticky top-0 z-40 mb-3 rounded-xl border\"}","line":null,"toasts":0,"viewer":false,"curtain":false,"play":"Play the 2028 season","disk":"0 seasons, year 2026","refused":6}
+nba 390: after Retry save {"notice":null,"line":null,"toasts":0,"viewer":false,"curtain":false,"play":"Play the 2028 season","disk":"2 seasons, year 2028","refused":6} | the hub says year 2028, seeded year 2026
+nba 390: after a reload {"notice":null,"line":null,"toasts":0,"viewer":false,"curtain":false,"play":"Play the 2028 season","disk":"2 seasons, year 2028","refused":0} | the save is byte for byte the one Retry wrote
+nba 1280 reduced: hub {"notice":null,"line":null,"toasts":0,"viewer":false,"curtain":false,"play":"Play the 2026 season","disk":"0 seasons, year 2026","refused":0}
+nba 1280 reduced: viewer open with the save refused {"notice":"write {\"t\":177,\"b\":275,\"l\":320,\"r\":960} seen {\"inView\":true,\"onTop\":false,\"topIs\":\"SPAN.min-w-0 flex-1 truncate \"}","line":null,"toasts":1,"viewer":true,"curtain":true,"play":null,"disk":"0 seasons, year 2026","refused":1}
+nba 1280 reduced: the viewer reads " @keyframes cmRise { 0% { opacity: 0; transform: translateY(7px); } 100% { opacity: 1; transform: translateY(0); } } .cm-rise { opacity: 0; "
+nba 1280 reduced: after the season, save refused {"notice":"write {\"t\":177,\"b\":275,\"l\":320,\"r\":960} seen {\"inView\":true,\"onTop\":true,\"topIs\":\"DIV.sticky top-0 z-40 mb-3 rounded-xl border\"}","line":null,"toasts":1,"viewer":false,"curtain":true,"play":null,"disk":"0 seasons, year 2026","refused":1}
+nba 1280 reduced: scrolled to 420: header null notice {"t":0,"b":98,"l":320,"r":960} text point {"inView":true,"onTop":true,"topIs":"DIV.sticky top-0 z-40 mb-3 rounded-xl border"} button {"inView":true,"onTop":true,"topIs":"BUTTON.mt-2 min-h-11 min-w-11 rounded-lg border"}
+nba 1280 reduced: back to the hub through curtain > continue > card > continue > hub
+nba 1280 reduced: back to the hub through curtain > card > continue > card > continue > hub
+nba 1280 reduced: two seasons played, none saved {"notice":"write {\"t\":157,\"b\":255,\"l\":320,\"r\":960} seen {\"inView\":true,\"onTop\":true,\"topIs\":\"DIV.sticky top-0 z-40 mb-3 rounded-xl border\"}","line":null,"toasts":0,"viewer":false,"curtain":false,"play":"Play the 2028 season","disk":"0 seasons, year 2026","refused":6}
+nba 1280 reduced: after Retry save {"notice":null,"line":null,"toasts":0,"viewer":false,"curtain":false,"play":"Play the 2028 season","disk":"2 seasons, year 2028","refused":6} | the hub says year 2028, seeded year 2026
+nba 1280 reduced: after a reload {"notice":null,"line":null,"toasts":0,"viewer":false,"curtain":false,"play":"Play the 2028 season","disk":"2 seasons, year 2028","refused":0} | the save is byte for byte the one Retry wrote
+nfl 390 reduced: hub {"notice":null,"line":null,"toasts":0,"viewer":false,"curtain":false,"play":"Play the 2026 season","disk":"0 seasons, year 2026","refused":0}
+PROBLEM nfl 390 reduced the walk threw: Error: no button to play the season
+nfl 1280: hub {"notice":null,"line":null,"toasts":0,"viewer":false,"curtain":false,"play":"Play the 2026 season","disk":"0 seasons, year 2026","refused":0}
+PROBLEM nfl 1280 the walk threw: Error: no button to play the season
+mlb 390: hub {"notice":null,"line":null,"toasts":0,"viewer":false,"curtain":false,"play":"Play the 2026 season","disk":"0 seasons, year 2026","refused":0}
+mlb 390: after the season, save refused {"notice":"write {\"t\":197,\"b\":314,\"l\":16,\"r\":374} seen {\"inView\":true,\"onTop\":true,\"topIs\":\"DIV.sticky top-0 z-40 mb-3 rounded-xl border\"}","line":null,"toasts":1,"viewer":false,"curtain":true,"play":null,"disk":"0 seasons, year 2026","refused":1}
+mlb 390: scrolled to 420: header null notice {"t":0,"b":117,"l":16,"r":374} text point {"inView":true,"onTop":true,"topIs":"DIV.sticky top-0 z-40 mb-3 rounded-xl border"} button {"inView":true,"onTop":true,"topIs":"BUTTON.mt-2 min-h-11 min-w-11 rounded-lg border"}
+mlb 390: back to the hub through curtain > stuck
+mlb 390: NOTE no second season was played (hub false)
+mlb 390: back to the hub through stuck
+mlb 390: two seasons played, none saved {"notice":"write {\"t\":197,\"b\":314,\"l\":16,\"r\":374} seen {\"inView\":true,\"onTop\":true,\"topIs\":\"DIV.sticky top-0 z-40 mb-3 rounded-xl border\"}","line":null,"toasts":1,"viewer":false,"curtain":false,"play":null,"disk":"0 seasons, year 2026","refused":1}
+mlb 390: after Retry save {"notice":null,"line":null,"toasts":1,"viewer":false,"curtain":false,"play":null,"disk":"1 seasons, year 2027","refused":1} | the hub says year null, seeded year 2026
+mlb 390: after a reload {"notice":null,"line":null,"toasts":0,"viewer":false,"curtain":false,"play":null,"disk":"1 seasons, year 2027","refused":0} | the save is byte for byte the one Retry wrote
+nhl 1280 reduced: hub {"notice":null,"line":null,"toasts":0,"viewer":false,"curtain":false,"play":"Play the 2026 season","disk":"0 seasons, year 2026","refused":0}
+nhl 1280 reduced: after the season, save refused {"notice":"write {\"t\":177,\"b\":275,\"l\":320,\"r\":960} seen {\"inView\":true,\"onTop\":true,\"topIs\":\"DIV.sticky top-0 z-40 mb-3 rounded-xl border\"}","line":null,"toasts":1,"viewer":false,"curtain":true,"play":null,"disk":"0 seasons, year 2026","refused":1}
+nhl 1280 reduced: scrolled to 420: header null notice {"t":0,"b":98,"l":320,"r":960} text point {"inView":true,"onTop":true,"topIs":"DIV.sticky top-0 z-40 mb-3 rounded-xl border"} button {"inView":true,"onTop":true,"topIs":"BUTTON.mt-2 min-h-11 min-w-11 rounded-lg border"}
+nhl 1280 reduced: back to the hub through curtain > continue > card > continue > card > continue > card > continue > hub
+nhl 1280 reduced: back to the hub through curtain > continue > card > continue > hub
+nhl 1280 reduced: two seasons played, none saved {"notice":"write {\"t\":177,\"b\":275,\"l\":320,\"r\":960} seen {\"inView\":true,\"onTop\":true,\"topIs\":\"DIV.sticky top-0 z-40 mb-3 rounded-xl border\"}","line":null,"toasts":0,"viewer":false,"curtain":false,"play":"Play the 2028 season","disk":"0 seasons, year 2026","refused":8}
+nhl 1280 reduced: after Retry save {"notice":null,"line":null,"toasts":0,"viewer":false,"curtain":false,"play":"Play the 2028 season","disk":"2 seasons, year 2028","refused":8} | the hub says year 2028, seeded year 2026
+nhl 1280 reduced: after a reload {"notice":null,"line":null,"toasts":0,"viewer":false,"curtain":false,"play":"Play the 2028 season","disk":"2 seasons, year 2028","refused":0} | the save is byte for byte the one Retry wrote
+nba 390 home-and-back: played with the save refused {"notice":"write {\"t\":197,\"b\":314,\"l\":16,\"r\":374} seen {\"inView\":true,\"onTop\":true,\"topIs\":\"DIV.sticky top-0 z-40 mb-3 rounded-xl border\"}","line":null,"toasts":1,"viewer":false,"curtain":true,"play":null,"disk":"1 seasons, year 2027","refused":1}
+nba 390 home-and-back: pressed the header's home link (false): now on /nba-my-career, notice true, toasts 1
+nba 390 home-and-back: back on the board {"notice":null,"line":null,"toasts":0,"viewer":false,"curtain":false,"play":null,"disk":"UNREADABLE seasons, year null","refused":0} | before leaving the hub said "Play the 2027 season", the refused season would have made it 2028
+PROBLEM nba 390 home-and-back the store changed while away (1 to UNREADABLE)
+PROBLEM nba 390 home-and-back the board came back on "null" but the store holds the career of "Play the 2027 season"
+PROBLEM nba 390 home-and-back after coming back a Play did not save (UNREADABLE seasons, notice false)
+nba 390 home-and-back: a Play after coming back saved UNREADABLE seasons
+nba 390 full-from-load: a page that loaded with every write refused: {"notice":null,"line":"full {\"t\":0,\"b\":28,\"l\":0,\"r\":390}","toasts":0,"viewer":false,"curtain":false,"play":"Play the 2027 season","disk":"1 seasons, year 2027","refused":2}
+nba 390 full-from-load: played {"notice":"write {\"t\":225,\"b\":342,\"l\":16,\"r\":374} seen {\"inView\":true,\"onTop\":true,\"topIs\":\"DIV.sticky top-0 z-40 mb-3 rounded-xl border\"}","line":"full {\"t\":0,\"b\":28,\"l\":0,\"r\":390}","toasts":1,"viewer":false,"curtain":true,"play":null,"disk":"1 seasons, year 2027","refused":4} | line "Storage is full, so progress won't save.This browser's storage is full"
+nba 390 full-from-load: after a Retry the store took {"notice":null,"line":"full {\"t\":0,\"b\":28,\"l\":0,\"r\":390}","toasts":1,"viewer":false,"curtain":true,"play":null,"disk":"2 seasons, year 2028","refused":4} | line "Storage is full, so progress won't save.This browser's storage is full" | toasts ["Your latest changes could not be saved. Stay on this page and use Retry save."]
+nba 390 full-from-load: FACT the storage line still says "Storage is full, so progress won't save.This browser's storage is full" although the save is on the store
+mlb 1280 full-from-load: a page that loaded with every write refused: {"notice":null,"line":"full {\"t\":32,\"b\":60,\"l\":256,\"r\":1024}","toasts":0,"viewer":false,"curtain":false,"play":null,"disk":"1 seasons, year 2027","refused":2}
+mlb 1280 full-from-load: played {"notice":null,"line":"full {\"t\":32,\"b\":60,\"l\":256,\"r\":1024}","toasts":0,"viewer":false,"curtain":false,"play":null,"disk":"1 seasons, year 2027","refused":2} | line "Storage is full, so progress won't save.This browser's storage is full"
+mlb 1280 full-from-load: after a Retry the store took {"notice":null,"line":"full {\"t\":32,\"b\":60,\"l\":256,\"r\":1024}","toasts":0,"viewer":false,"curtain":false,"play":null,"disk":"1 seasons, year 2027","refused":2} | line "Storage is full, so progress won't save.This browser's storage is full" | toasts []
+rv-walk (us): 5 problem(s)

@@ -1,0 +1,10 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk-home exit=0 8s | rv-walk (home): 0 problem(s)
+walk-soccer exit=0 11s | rv-walk (soccer): 0 problem(s)
+simResultMoment exit=0 6s | simResultMoment: green. Every live game reaches the shared result moment or is listed with what it draws instead, the pill shows exactly the score it is given, the three 
+pill exit=0 16s | simResultPillComparison: green. 34 finished states on a 390 wide phone: every pill reads the hook's score, on one line inside its fixed pill, nothing scrolls sideways, no
+pill-bareline exit=0 14s | simResultPillComparison: control bareline turned [under] red, as it must (8 findings).
+usplay exit=0 59s | playUsSeasonCentre: 55 checks, 0 failed
+usplay-write exit=1 60s | playUsSeasonCentre: 55 checks, 6 failed (control write)
+usplay-nohandover exit=1 79s | playUsSeasonCentre: 55 checks, 1 failed (control nohandover)
+walk-us exit=1 219s | rv-walk (us): 5 problem(s)
