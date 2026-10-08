@@ -3,6 +3,7 @@ import { getTodayET } from '@/lib/dateUtils';
 import hofPlayers, { type HofPlayer } from '@/data/hofPlayers';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { supabase } from '@/integrations/supabase/client';
+import { safeSetItem } from '@/lib/safeStorage';
 
 function getDateSeed(): number {
   const d = getTodayET();
@@ -53,7 +54,7 @@ function loadDailyState() {
 function saveDailyState(userVote: string, hintsRevealed: number, score: number) {
   const today = getTodayET();
   const key = `${STORAGE_PREFIX}daily-${today}`;
-  localStorage.setItem(key, JSON.stringify({ userVote, hintsRevealed, score }));
+  safeSetItem(key, JSON.stringify({ userVote, hintsRevealed, score }));
 }
 
 export function useHofOrBust(): HofState {

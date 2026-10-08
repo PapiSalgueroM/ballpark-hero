@@ -143,3 +143,28 @@ export const safeSessionStorage: Storage = session.storage;
 export const storageTrouble: StorageTrouble | null = local.trouble;
 /** True when saves made on this visit will not be there on the next one. */
 export const storageIsMemory: boolean = local.trouble !== null;
+
+/**
+ * A write that must not take the page down with it, and says whether it was
+ * kept. Twenty nine call sites wrote with no guard at all, most of them a
+ * "rules seen" flag set in a mount effect, and with storage full that one line
+ * threw and the whole route fell to "This page broke" (measured on /footle
+ * and /build-your-xi, the same shape on a dozen more). It writes to the
+ * browser's storage exactly as before, which in the blocked case is the stand
+ * in above. It does NOT go through the full case's stand in: every reader of
+ * those keys still reads the browser's own storage, and a write they could
+ * not read back would be worse than one that was skipped.
+ */
+export function safeSetItem(key: string, value: string): boolean {
+  /* The control again: the write as it was before this round, guard and all gone. */
+  if (raw) {
+    window.localStorage.setItem(key, value);
+    return true;
+  }
+  try {
+    window.localStorage.setItem(key, value);
+    return true;
+  } catch {
+    return false;
+  }
+}

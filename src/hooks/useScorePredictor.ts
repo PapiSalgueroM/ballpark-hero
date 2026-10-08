@@ -3,6 +3,7 @@ import { getTodayET } from '@/lib/dateUtils';
 import scorePredictorPuzzles, { type ScorePredictorPuzzle } from '@/data/scorePredictorPuzzles';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { restoreDailyGuess, dailyGuessRecord } from '@/lib/scorePredictorSave';
+import { safeSetItem } from '@/lib/safeStorage';
 
 function getDateSeed(): number {
   const d = getTodayET();
@@ -71,7 +72,7 @@ function loadDailyState(puzzle: ScorePredictorPuzzle) {
 function saveDailyState(guessHome: number, guessAway: number, score: number, puzzle: ScorePredictorPuzzle) {
   const today = getTodayET();
   const key = `${STORAGE_PREFIX}daily-${today}`;
-  localStorage.setItem(key, JSON.stringify(dailyGuessRecord({ guessHome, guessAway, score }, puzzle)));
+  safeSetItem(key, JSON.stringify(dailyGuessRecord({ guessHome, guessAway, score }, puzzle)));
 }
 
 export function useScorePredictor(): ScorePredictorState {

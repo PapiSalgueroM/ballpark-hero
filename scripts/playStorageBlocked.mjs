@@ -35,10 +35,12 @@
  * CONTROLS.
  *   PLAY_STORAGE_CONTROL=raw   sets window.__DUKB_RAW_STORAGE__ before the app
  *     boots, which makes src/lib/safeStorage.ts hand back the browser's own
- *     storage untouched. The harness must go RED: BLOCKED does not mount, and
- *     FULL cannot dismiss the banner. It first checks the built entry really
- *     contains that switch, and refuses to run (exit 2) when it does not,
- *     because a control that changes nothing proves nothing.
+ *     storage untouched and write with no guard, the way the app did before
+ *     this round. The harness must go RED: BLOCKED does not mount anywhere,
+ *     and in FULL the pages that write as they mount fall to the error screen
+ *     and no game route carries the notice. It first checks the built entry
+ *     really contains that switch, and refuses to run (exit 2) when it does
+ *     not, because a control that changes nothing proves nothing.
  *   PLAY_STORAGE_CONTROL=open  runs the two broken arms with storage left
  *     alone and the notice expectation flipped: it must stay GREEN, with no
  *     notice anywhere, the same button counts, and the cookie answer in the
@@ -74,6 +76,15 @@ if (!['', 'raw', 'open'].includes(CONTROL)) {
 const GAME_ROUTES = [
   '/soccer-career', '/club-manager', '/nba-my-career', '/nfl-my-career', '/stadium-tycoon',
   '/college-grid', '/front-office', '/build-your-xi', '/footle', '/free-kick',
+];
+/** The pages that fell to the error screen with storage full for the same
+ *  reason /footle and /build-your-xi did (a flag or a save written with no
+ *  guard as the page mounts or on its first answer). Walked on a phone for
+ *  the mount alone, against their own untouched run. */
+const MOUNT_ROUTES = [
+  '/connections', '/ufc', '/football-grid', '/baseball-career', '/baseball-connections', '/hockey-career',
+  '/hockey-higher-lower', '/soccer-grid', '/conquest', '/conquest-nba', '/world-cup-bracket', '/nfl-connections',
+  '/nba-career', '/hof-or-bust', '/score-predictor',
 ];
 /** Not games: the notice must stay off these. */
 const PLAIN_ROUTES = ['/', '/soccer', '/whats-new'];
@@ -296,7 +307,7 @@ function judgeOpen(open) {
 }
 
 /** One broken arm of a route against its untouched run. `expectNotice` is false under the open control. */
-function judgeArm(arm, open, { isGame, expectNotice }) {
+function judgeArm(arm, open, { isGame, expectNotice, mountOnly }) {
   const s = arm.first;
   const base = open.first;
   if (!s || !base) { say(false, `${tag(arm)}: did not load (${arm.crash || open.crash || 'no state'})`); return; }
@@ -313,6 +324,7 @@ function judgeArm(arm, open, { isGame, expectNotice }) {
   if (arm.mode === 'blocked') {
     say(s.realKeys === 0 && (stateNow.realKeys === 0), `${tag(arm)}: nothing reached the browser's real storage (${stateNow.realKeys} keys)`);
   }
+  if (mountOnly) return;
   if (isGame) {
     const pressedOk = arm.presses.filter(p => !p.threw && !p.failed).length;
     const basePressed = open.presses.filter(p => !p.threw && !p.failed).length;
@@ -421,8 +433,11 @@ if (CONTROL === 'raw') {
 const browser = await chromium.launch();
 const raw = CONTROL === 'raw';
 const routes = [...PLAIN_ROUTES, ...GAME_ROUTES].filter(r => !ONLY || ONLY.includes(r));
-const tasks = routes.flatMap(route => VIEWS.map(view => ({ route, view })));
-const walked = await pool(tasks, JOBS, async ({ route, view }) => {
+const tasks = [
+  ...routes.flatMap(route => VIEWS.map(view => ({ route, view }))),
+  ...MOUNT_ROUTES.filter(r => !ONLY || ONLY.includes(r)).map(route => ({ route, view: VIEWS[0], mountOnly: true })),
+];
+const walked = await pool(tasks, JOBS, async ({ route, view, mountOnly = false }) => {
   const isGame = GAME_ROUTES.includes(route);
   const open = await visit(browser, { route, view, mode: 'open', raw: false, walk: isGame });
   const arms = [];
@@ -432,13 +447,13 @@ const walked = await pool(tasks, JOBS, async ({ route, view }) => {
     if (CONTROL === 'open') run.label = `open again (${arm} arm)`;
     arms.push(run);
   }
-  return { route, view: view.name, isGame, open, arms };
+  return { route, view: view.name, isGame, mountOnly, open, arms };
 });
 
 for (const w of walked) {
-  console.log(`\n${w.route} on a ${w.view}`);
+  console.log(`\n${w.route} on a ${w.view}${w.mountOnly ? ' (mount only)' : ''}`);
   judgeOpen(w.open);
-  for (const arm of w.arms) judgeArm(arm, w.open, { isGame: w.isGame, expectNotice: CONTROL !== 'open' });
+  for (const arm of w.arms) judgeArm(arm, w.open, { isGame: w.isGame, expectNotice: CONTROL !== 'open', mountOnly: w.mountOnly });
 }
 
 console.log('\nthe cookie banner');

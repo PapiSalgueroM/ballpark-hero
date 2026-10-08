@@ -218,3 +218,44 @@ describe('safeStorage: the stand in behaves like Storage', () => {
     expect(s.length).toBe(1);
   });
 });
+
+describe('safeStorage: safeSetItem, the write that cannot take a page down', () => {
+  it('writes to the browser storage and says so when storage works', async () => {
+    const seam = await load();
+    expect(seam.safeSetItem('footle-rules-seen', '1')).toBe(true);
+    expect(window.localStorage.getItem('footle-rules-seen')).toBe('1');
+  });
+
+  it('answers false and throws nothing when storage is full, and stores nothing a reader could not read back', async () => {
+    fillStorage();
+    const seam = await load();
+    expect(seam.safeSetItem('footle-rules-seen', '1')).toBe(false);
+    expect(window.localStorage.getItem('footle-rules-seen')).toBeNull();
+    expect(seam.safeLocalStorage.getItem('footle-rules-seen')).toBeNull();
+  });
+
+  it('keeps the write for the visit when storage is blocked', async () => {
+    blockAccessors();
+    const seam = await load();
+    expect(seam.safeSetItem('footle-rules-seen', '1')).toBe(true);
+    expect(localStorage.getItem('footle-rules-seen')).toBe('1');
+  });
+
+  it('answers false when storage is blocked and window would not take the stand in', async () => {
+    const define = Object.defineProperty;
+    blockAccessors();
+    vi.spyOn(Object, 'defineProperty').mockImplementation(((o: object, p: PropertyKey, d: PropertyDescriptor) => {
+      if (o === window && (p === 'localStorage' || p === 'sessionStorage')) throw new TypeError('Cannot redefine property');
+      return define(o, p, d);
+    }) as typeof Object.defineProperty);
+    const seam = await load();
+    expect(seam.safeSetItem('footle-rules-seen', '1')).toBe(false);
+  });
+
+  it('under the raw switch it throws like the unguarded write it replaced', async () => {
+    window.__DUKB_RAW_STORAGE__ = true;
+    fillStorage();
+    const seam = await load();
+    expect(() => seam.safeSetItem('footle-rules-seen', '1')).toThrow(/quota/i);
+  });
+});

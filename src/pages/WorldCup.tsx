@@ -12,6 +12,7 @@ import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { HelpCircle, Lightbulb, Send, Trophy } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { safeSetItem } from '@/lib/safeStorage';
 
 const WorldCup = () => {
   const {
@@ -73,7 +74,7 @@ const WorldCup = () => {
     const seen = localStorage.getItem('wc-rules-seen');
     if (!seen) {
       setShowRules(true);
-      localStorage.setItem('wc-rules-seen', '1');
+      safeSetItem('wc-rules-seen', '1');
     }
   }, []);
 

@@ -1,6 +1,7 @@
 import { Flame, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { getStreakState, getEtDateString } from '@/lib/streaks';
+import { safeSetItem } from '@/lib/safeStorage';
 
 /**
  * "Don't break your streak" nudge on the home page.
@@ -32,7 +33,7 @@ export function StreakReminder() {
 
   const handleDismiss = () => {
     setDismissed(true);
-    localStorage.setItem('streak-reminder-dismissed', getEtDateString());
+    safeSetItem('streak-reminder-dismissed', getEtDateString());
   };
 
   return (
