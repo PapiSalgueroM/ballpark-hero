@@ -37,6 +37,22 @@
      --check   offline, no cache needed: re-derives every row's agreed list and
                status and every header count from the committed rows and
                compares. This is what the harness and the gates run.
+     --settle <reads.json>   offline: attaches hand reads of a third publisher
+               to disputed rows of the committed file as settledBy blocks and
+               rewrites it. The reads file is { source, reads: [{ key, url,
+               read, values, note? }] }, typed by a person off one page at a
+               time (never crawled). A read that sides with neither publisher
+               is kept on the row and the row stays disputed.
+
+   THE GAMES COLUMN IS WHERE THE TWO DIFFER, and it is a difference of
+   definition: A counts the games in which a man recorded a statistic, B the
+   games he played. Every one of the 189 disputes on the day the file was
+   written is that column (B higher by 1 to 15, never lower) and no yardage,
+   attempt, catch or touchdown differs anywhere. Games stays a headline field
+   all the same, because a rating reads production PER GAME: a disputed row
+   feeds nothing until a third publisher is read for it. For the forty
+   disputed men among the clubs' fifteen that was done by hand from the
+   league's own player pages (nfl.com); every one sided with B.
 
    WHAT A ROW HOLDS. key (club|name|shelf, the checkpoint's own key), the two
    ids, the shelf, `a` and `b` (each publisher's line, or null when it prints
@@ -396,6 +412,32 @@ if (isMain) {
     const same = want === text;
     console.log(`${same ? 'up to date' : 'STALE'}: ${path.relative(ROOT, PRODUCTION)} (every agreed list, status and header count re-derived from the rows)`);
     process.exit(same && !stops ? 0 : 1);
+  }
+  if (process.argv.includes('--settle')) {
+    const from = process.argv[process.argv.indexOf('--settle') + 1];
+    if (!from || !fs.existsSync(from)) { console.error('--settle needs the path of a reads file'); process.exit(1); }
+    const reads = JSON.parse(fs.readFileSync(from, 'utf8'));
+    const file = JSON.parse(fold(fs.readFileSync(PRODUCTION, 'utf8')));
+    const byKey = new Map(file.rows.map(r => [r.key, r]));
+    let settled = 0;
+    for (const read of reads.reads) {
+      const row = byKey.get(read.key);
+      if (!row) { console.error(`STOP: ${read.key} is not a row of the file; nothing written`); process.exit(1); }
+      if (derive({ ...row, settledBy: undefined }).status !== 'disagree') { console.error(`STOP: ${read.key} is not a disputed row; nothing written`); process.exit(1); }
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(read.read ?? '') || !/^https:\/\//.test(read.url ?? '')) { console.error(`STOP: the read for ${read.key} has no day or no address; nothing written`); process.exit(1); }
+      row.settledBy = { source: reads.source, url: read.url, read: read.read, values: read.values, ...(read.note ? { note: read.note } : {}) };
+      const side = settledSide(row);
+      if (side) settled += 1;
+      console.log(`   ${read.key}: ${side ? `sides with source ${side === row.a ? 'A' : 'B'} (games ${side.games})` : 'sides with neither publisher on every headline field, the row stays disputed'}`);
+    }
+    const { pool } = readPool();
+    const rows = file.rows.map(r => ({ ...r, ...derive(r) }));
+    const head = { ...file, counts: countRows(rows, pool) };
+    console.log(`${reads.reads.length} reads, ${settled} rows settled`);
+    if (say(head, rows)) { console.error('nothing written'); process.exit(1); }
+    fs.writeFileSync(PRODUCTION, renderProduction(head, rows));
+    console.log(`wrote ${path.relative(ROOT, PRODUCTION)}`);
+    process.exit(0);
   }
   const { head, rows } = await build({ network: process.argv.includes('--pull'), log });
   const stops = say(head, rows);
