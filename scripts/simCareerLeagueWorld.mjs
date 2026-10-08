@@ -736,8 +736,15 @@ head('E', 'OLD SAVES: seven saves recorded on main read the same, and play on');
    tier 4 clubs among them, the group the absolute band flattened into one
    bottom third. Three key sets. A league that can order fewer than four
    clubs (or fewer than four tier 4 clubs) is printed and not measured.
-   MEASURED on the merged tree, three key sets: see C4_FLOOR below. */
-const C4_FLOOR = { all: 0.9, tier4: 0.9 };
+   MEASURED 2026-10-08 on the merged tree, three key sets, eight leagues:
+   1.000 to three places in every league and key set, over the ordered clubs
+   (5 to 19 a league) and over the tier 4 clubs alone (the Championship 17,
+   the Brasileirao 10, the Primeira Liga 5, the 2. Bundesliga 5). The spread
+   is nil, so the floor is not set at the measurement: two neighbours on a
+   24 club ladder can scale to the same place and then only noise orders
+   their means, which may cost a hundredth. 0.97 leaves that room; the flat
+   band (control flatband) reads about 0 on the tier 4 clubs. */
+const C4_FLOOR = { all: 0.97, tier4: 0.97 };
 head('C4', 'BAND: a higher place on the ladder finishes higher, tier 4 clubs included');
 {
   const tierOf = new Map(POOL.map(c => [c.name, c.tier]));
@@ -785,10 +792,21 @@ head('C4', 'BAND: a higher place on the ladder finishes higher, tier 4 clubs inc
    a run (SEEDSET 0, 1 or 2), against what main played on the same seeds
    (careerLeagueWorldBaseline1100.json). WORLD=0 skips it; a control that
    does not need the careers skips it too.
-   FLOORS: see WORLD_FLOOR below, the lowest of three seed sets minus the
-   larger of two points and their spread. */
-const WORLD_FLOOR = { finish: 0, table: 0, named: 0 };
-const NATION_FLOOR = { Netherlands: 0, Portugal: 0, Turkey: 0, Belgium: 0, Brazil: 0, 'Saudi Arabia': 0 };
+   MEASURED 2026-10-08 on the merged tree, 300 careers a nation, seed sets
+   0, 1 and 2 (about 64,700 seasons each, 100 s a set on a CI runner), main
+   beside the branch:
+     a league position   main 41.0, 41.1, 41.2 %   now 68.5, 69.0, 68.6 %
+     a table             main 34.1, 34.4, 34.5 %   now 65.2, 65.7, 65.4 %
+     named table rows    main 24.0, 23.9, 24.1 %   now 65.2, 65.7, 65.4 %
+   Each floor is the lowest of the three minus the larger of two points and
+   their spread. Per nation, the table share of the six whose top flight
+   became plain (3,770 to 3,825 seasons each): Netherlands 77.2, 77.1, 78.4;
+   Portugal 77.6, 82.9, 81.0; Turkey 78.4, 81.7, 77.6; Belgium 73.0, 79.1,
+   78.1; Brazil 77.9, 78.9, 78.1; Saudi Arabia 82.9, 79.9, 80.9 (main: 17.7
+   to 24.5 in all six). Fewer CAREERS means more noise than these floors
+   allow for: they are set for the default 300. */
+const WORLD_FLOOR = { finish: 0.665, table: 0.632, named: 0.632 };
+const NATION_FLOOR = { Netherlands: 0.751, Portugal: 0.723, Turkey: 0.735, Belgium: 0.669, Brazil: 0.759, 'Saudi Arabia': 0.769 };
 const RUN_WORLD = process.env.WORLD !== '0' && (!CONTROL || CONTROLS[CONTROL].world === true);
 if (RUN_WORLD) {
   const ODD = mod.format.ODD_FORMATS ?? {};

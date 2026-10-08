@@ -304,8 +304,26 @@ const DIGEST_SEEDS = 16;
    'f539f12f1794c921', '29e192b38eae5882', 'd763d6e12bcf7689',
    '120dd615a6cd5dc1', '5372f38d44597423', '63a6b8575832dc54',
    'f47e78ff107bf228', 'e3e83a57c9b96439', '8ae2cceb487c0598',
+   '7498856a14c25cc2'].
+   Re-recorded by Round 1100 (2026-10-08, twice, identical), on purpose:
+   Round 1100: the career club pool grew from 241 to 460 clubs (every Club
+   Manager league, whole), so the clubs a career is offered change, and
+   eight plain leagues got a size and a derby cadence, so the Championship's
+   two sourced derbies are played. 12 of the 16 careers move. Attribution,
+   each the committed tree with source files swapped on a CI runner: main's
+   pool file put back (51 generated rows, an empty ladder) gives 12 of the 16
+   old digests; all seven source files the round changed read from Release
+   AL's gated tree (the pool, the ledger names, the rivalry spellings, the
+   format, cadence and size rows, the era table) gives 16 of 16 and the
+   whole harness green. Nothing else in the round moves a digest. The list
+   it replaced (release-al-gate b00b057d):
+   ['c73abbaa2e800104', 'fcb98e5a6f7c482c', 'ee8e07e3bb4c47f8',
+   '4bc40153f6613fc8', 'db3a34cd89e14e3d', 'b829c5dd07cfb3af',
+   'f539f12f1794c921', '26e4c881bf412db7', 'd763d6e12bcf7689',
+   '120dd615a6cd5dc1', '01b2d4b82109c7c6', '63a6b8575832dc54',
+   'f47e78ff107bf228', 'e3e83a57c9b96439', '8ae2cceb487c0598',
    '7498856a14c25cc2']. */
-const BASELINE =['c73abbaa2e800104', 'fcb98e5a6f7c482c', 'ee8e07e3bb4c47f8', '4bc40153f6613fc8', 'db3a34cd89e14e3d', 'b829c5dd07cfb3af', 'f539f12f1794c921', '26e4c881bf412db7', 'd763d6e12bcf7689', '120dd615a6cd5dc1', '01b2d4b82109c7c6', '63a6b8575832dc54', 'f47e78ff107bf228', 'e3e83a57c9b96439', '8ae2cceb487c0598', '7498856a14c25cc2'];
+const BASELINE = ['8cf1c83794b5292c', 'fcb98e5a6f7c482c', '5bf2fb10985c3c57', '777fb5fac5b6035b', 'd22dfbc0a3673f01', 'ef0fa7c25d6b1287', '9e04cfcf7ce6fa60', 'd9879baa033424cf', 'de3f258b856b5094', 'b4a01376c0a3f518', '16493c48f4e1d265', '63a6b8575832dc54', 'f47e78ff107bf228', 'e3e83a57c9b96439', '083646089db0b478', '9b739fcf66c4063e'];
 if (RECORD) {
   const out = [];
   for (let i = 1; i <= DIGEST_SEEDS; i++) out.push(digest(runCareer(i)));

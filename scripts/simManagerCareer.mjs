@@ -589,6 +589,7 @@ for (const seed of SEEDS) {
 }
 console.log(`   ${cover.seasons} seasons: ${cover.home} at a club of the list, ${cover.market} at a market club, ${cover.verified} with a verified size, ${cover.thin} with no rival to name`);
 console.log(`   ${cover.named} named rows checked, ${cover.unnamed} unnamed; wrong league ${bad.league}, himself twice ${bad.self}, "of N" wrong ${bad.ofN}, size wrong ${bad.size}`);
+console.log(`   ${cover.home} seasons at a club of the list, ${cover.market} at a market club outside it`);
 console.log(`   ${cover.accepted} market jobs taken (${cover.relabelled} in a league the list spells another way), ${cover.up} promotions to the Premier League, ${cover.down} relegations to the Championship, ${cover.zones} seasons in a named league of unknown size (${cover.bigUnverified} knowing 20 or more clubs)`);
 console.log(`   table not his league ${bad.table}, known clubs wrong ${bad.known}, a position in a league of unknown size ${bad.zone}, promotion or relegation words wrong ${bad.words}`);
 console.log(`   ${cover.past} seasons before 2026-27 in a league the list knows clubs of, ${cover.early} finishes in the English pair's move zones before 2004/05; a past season naming a rival or misflagged ${bad.past}`);
@@ -609,8 +610,16 @@ for (const f of firstBad.slice(0, 6)) console.log(`     e.g. ${f}`);
    in a league the list knows clubs of and 253 finishes in the English
    pair's move zones before 2004/05 (the quarter of careers that retire in 1996) */
 const PAST_FLOOR = 3000, EARLY_FLOOR = 120;
+/* Round 1100: the career club pool grew from 241 to 460 clubs (every Club
+   Manager league but three held second flights), so a job at a club outside
+   the list is rare now: 101 seasons at a market club where the tree before
+   it read 567 (the same run with main's pool file put back passes the old
+   floor of 250, so the pool moved it and nothing else). About half of 101.
+   When Serie B, Ligue 2 and the Segunda Division are released every job
+   market club is a list club: this floor then reads 0 and the path is gone. */
+const MARKET_FLOOR = 50;
 const PAST_LEDGER_FLOOR = 1900, YEAR_JOBS_FLOOR = 100;
-if (cover.home < 14000 || cover.market < 250 || cover.verified < 4500 || cover.thin < 4000 || cover.named < 30000
+if (cover.home < 14000 || cover.market < MARKET_FLOOR || cover.verified < 4500 || cover.thin < 4000 || cover.named < 30000
   /* Round 1037: bigUnverified (fields of unknown size knowing 20 or more
      clubs) came from the Championship before 2004, which the league ledgers
      now size (24), so the loop reads 0 where its base read 1262; the size
