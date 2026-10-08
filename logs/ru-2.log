@@ -1,0 +1,22 @@
+THIN facts
+   THIN (one 2026-27 source, marked in the ligue1 row): Ligue 1's 2026-27 drop of two and the barrage
+   THIN (one 2026-27 source, marked in the serieb row): Serie B's 2026-27 promotion playoff rung (third to eighth)
+   THIN (one 2026-27 source, marked in the ligue2 row): Ligue 2's 2026-27 drop of two
+A) russia: the rows
+   16 clubs, drop 2, cup Russian Cup; weakest Fakel Voronezh (63) is asked: Stay up. Avoid relegation (14)
+B) russia: 6 seeded seasons
+   6 seasons ended, 0 sacked, 24 cup weeks scheduled, 6 cup finals won, cup named on 6 saves, 0 clubs moved in the summers, 226 headlines read
+C) russia: strength orders the table
+   Zenit 56.7 pts (rated 77) against Fakel Voronezh 25.7 (rated 63): gap 31.0
+   Krasnodar 54.0 pts (rated 75) against Dynamo Makhachkala 33.7 (rated 66): gap 20.3
+   rank correlation, preview rating against mean points, 10 clubs: 0.906
+D) russia: no invented men
+   390 real men and 2 flagged pads on day one, 0 partial clubs
+H) the countries of Round 1052
+   H1: Zenit won the league in 3 of 7 seasons played; 0 of those started the next season in a Champions League group
+   H2: 12 Russian Cup brackets read, each the sixteen Russian clubs
+   H3: a manager's table at Spartak Moscow under "Russian Premier League": 16 places, size verified true, names Zenit
+   H3: 16 Russian clubs on the job market under Russian Premier League; dugout size 16, playing career size null
+   H4: 7 past season Russian clubs read, each at its own season's strength
+   H4: 7 past season Russian sides read, 0 men fielded, 0 of them from today's squads
+simClubManagerNewLeagues: all checks passed

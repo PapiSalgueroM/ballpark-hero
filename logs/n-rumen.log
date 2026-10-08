@@ -1,0 +1,15 @@
+H) the countries of Round 1052
+   H1: Zenit won the league in 3 of 3 seasons played; 0 of those started the next season in a Champions League group
+   H2: 12 Russian Cup brackets read, each the sixteen Russian clubs
+   H3: a manager's table at Spartak Moscow under "Russian Premier League": 16 places, size verified true, names Zenit
+   H3: 16 Russian clubs on the job market under Russian Premier League; dugout size 16, playing career size null
+   H4: 7 past season Russian clubs read, each at its own season's strength
+  FAIL: H4: Rubin Kazan in era2010 would field 27 men of 2026 (Ilya Rozhkov, Veldin Hodza, Jacques Siwe)
+  FAIL: H4: Spartak Moscow in era2010 would field 21 men of 2026 (Esequiel Barco, Manfred Ugalde, Mirlind Daku)
+  FAIL: H4: Zenit in era2015 would field 21 men of 2026 (Luiz Henrique, Maksim Glushenkov, Wendel)
+  FAIL: H4: CSKA Moscow in era2015 would field 25 men of 2026 (Matvey Kislyak, Ivan Oblyakov, Kirill Glebov)
+  FAIL: H4: Lokomotiv Moscow in era2020 would field 27 men of 2026 (Aleksandr Silyanov, César Montes, Sergey Pinyaev)
+  FAIL: H4: Krasnodar in era2020 would field 21 men of 2026 (Stanislav Agkatsev, Jhon Córdoba, Nikita Krivtsov)
+  FAIL: H4: Zenit in era2020 would field 21 men of 2026 (Luiz Henrique, Maksim Glushenkov, Wendel)
+   H4: 7 past season Russian sides read, 163 men fielded, 163 of them from today's squads
+simClubManagerNewLeagues: 7 failure(s) under control rumen

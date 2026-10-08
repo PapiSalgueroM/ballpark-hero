@@ -1,0 +1,20 @@
+1) Three careers, 20 switches round robin with a season after each (7, 7, 6 seasons), every season equal to the same career played alone
+   slots after creation: Everton | Lincoln City | Barcelona; manager in slot 2: Harness Manager
+   Everton (today)                      alone: #19 32pts 0T, #1 112pts 1T, #20 15pts 0T, #13 65pts 0T, #21 36pts 0T, #17 50pts 0T, #23 22pts 0T
+                                        slots: #19 32pts 0T, #1 112pts 1T, #20 15pts 0T, #13 65pts 0T, #21 36pts 0T, #17 50pts 0T, #23 22pts 0T
+   Lincoln City (today, named manager)  alone: #23 32pts 0T, #24 19pts 0T, #23 30pts 0T, #24 17pts 0T, #22 28pts 0T, #24 25pts 0T, #23 30pts 0T
+                                        slots: #23 32pts 0T, #24 19pts 0T, #23 30pts 0T, #24 17pts 0T, #22 28pts 0T, #24 25pts 0T, #23 30pts 0T
+   Barcelona (2010-11 era)              alone: #2 82pts 1T, #3 78pts 0T, #4 64pts 0T, #12 52pts 0T, #20 19pts 0T, #17 31pts 0T
+                                        slots: #2 82pts 1T, #3 78pts 0T, #4 64pts 0T, #12 52pts 0T, #20 19pts 0T, #17 31pts 0T
+   20 of 20 season digests identical to the career played alone; board nudges 188; alone arm 15 s, total 25 s
+2) The three careers played on, switching, to season 15 each: everything on the device under 495000 characters
+   seasons played: 15, 15, 15; keys: dukb-club-manager-save 111002, dukb-cm-slot-1 179472, dukb-cm-slots 31, dukb-cm-slot-2 176231
+   total 466736 characters across 4 keys (budget 495000)
+3) A store that refuses: every refused swap answers false and moves nothing
+   6 refused swaps from slot 3; holdings unchanged: Everton s15 | Lincoln City s15 | Barcelona s15
+4) An old save, from before slots: slot 1, and reading writes nothing
+   old save (season 5, week 19, 191 h2h rows, 127806 chars) in slot 1, 1 key on the device, bytes untouched: true
+  FAIL: the fixture never reaches the lean cut (h2h 191 -> 191)
+   through slot 2 and back: equal but h2h true, h2h 191 -> 191 rows, last six per opponent kept true
+
+simClubManagerSlots: RED, sections 4 (1 failures)

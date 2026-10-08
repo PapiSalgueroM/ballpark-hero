@@ -1,0 +1,10 @@
+H) the countries of Round 1052
+   H1: Zenit won the league in 3 of 3 seasons played; 0 of those started the next season in a Champions League group
+   H2: 12 Russian Cup brackets read, each the sixteen Russian clubs
+  FAIL: H3: a manager's table at Spartak Moscow has 20 places (verified false), the league has 16
+  FAIL: H3: a manager's table at Spartak Moscow names nobody, not Zenit
+   H3: a manager's table at Spartak Moscow under "Russian Premier League": 20 places, size verified false, names nobody
+   H3: 16 Russian clubs on the job market under Russian Premier League; dugout size 16, playing career size null
+   H4: 7 past season Russian clubs read, each at its own season's strength
+   H4: 7 past season Russian sides read, 0 men fielded, 0 of them from today's squads
+simClubManagerNewLeagues: 2 failure(s) under control rulabel
