@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+#!serial
+walk-a: WALK_PART=shots,double,deep node .rc/x/walk.mjs

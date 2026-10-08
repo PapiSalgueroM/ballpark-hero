@@ -1,0 +1,1860 @@
+{
+ "base": "http://localhost:4173",
+ "shots": [
+  {
+   "name": "blocked-390-home",
+   "a": {
+    "buttons": 171,
+    "links": 329,
+    "snapshot": false,
+    "boundary": false,
+    "notice": null,
+    "header": {
+     "x": 0,
+     "y": 32,
+     "w": 390,
+     "h": 57
+    },
+    "banner": true,
+    "dialogs": 0,
+    "overflowX": 0,
+    "text": ""
+   },
+   "b": {
+    "buttons": 171,
+    "links": 329,
+    "snapshot": false,
+    "boundary": false,
+    "notice": null,
+    "header": {
+     "x": 0,
+     "y": 32,
+     "w": 390,
+     "h": 57
+    },
+    "banner": false,
+    "dialogs": 0,
+    "overflowX": 0,
+    "text": ""
+   },
+   "pageErrors": [],
+   "consoleErrors": [],
+   "vendor": 0
+  },
+  {
+   "name": "blocked-390-soccer-career",
+   "a": {
+    "buttons": 29,
+    "links": 23,
+    "snapshot": false,
+    "boundary": false,
+    "notice": {
+     "kind": "blocked",
+     "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 28
+     },
+     "text": "This browser blocks storage, so progress won't be saved.",
+     "color": "rgb(132, 145, 164)",
+     "bg": "rgb(11, 13, 19)",
+     "font": "12px",
+     "scrollW": 390,
+     "clientW": 390
+    },
+    "header": null,
+    "banner": true,
+    "dialogs": 0,
+    "overflowX": 0,
+    "text": ""
+   },
+   "b": {
+    "buttons": 29,
+    "links": 23,
+    "snapshot": false,
+    "boundary": false,
+    "notice": {
+     "kind": "blocked",
+     "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 28
+     },
+     "text": "This browser blocks storage, so progress won't be saved.",
+     "color": "rgb(132, 145, 164)",
+     "bg": "rgb(11, 13, 19)",
+     "font": "12px",
+     "scrollW": 390,
+     "clientW": 390
+    },
+    "header": null,
+    "banner": false,
+    "dialogs": 0,
+    "overflowX": 0,
+    "text": ""
+   },
+   "pageErrors": [],
+   "consoleErrors": [],
+   "vendor": 0
+  },
+  {
+   "name": "blocked-390-club-manager",
+   "a": {
+    "buttons": 12,
+    "links": 28,
+    "snapshot": false,
+    "boundary": false,
+    "notice": {
+     "kind": "blocked",
+     "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 28
+     },
+     "text": "This browser blocks storage, so progress won't be saved.",
+     "color": "rgb(132, 145, 164)",
+     "bg": "rgb(11, 13, 19)",
+     "font": "12px",
+     "scrollW": 390,
+     "clientW": 390
+    },
+    "header": {
+     "x": 16,
+     "y": 141,
+     "w": 358,
+     "h": 184
+    },
+    "banner": true,
+    "dialogs": 0,
+    "overflowX": 0,
+    "text": ""
+   },
+   "b": {
+    "buttons": 12,
+    "links": 28,
+    "snapshot": false,
+    "boundary": false,
+    "notice": {
+     "kind": "blocked",
+     "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 28
+     },
+     "text": "This browser blocks storage, so progress won't be saved.",
+     "color": "rgb(132, 145, 164)",
+     "bg": "rgb(11, 13, 19)",
+     "font": "12px",
+     "scrollW": 390,
+     "clientW": 390
+    },
+    "header": {
+     "x": 16,
+     "y": 141,
+     "w": 358,
+     "h": 184
+    },
+    "banner": false,
+    "dialogs": 0,
+    "overflowX": 0,
+    "text": ""
+   },
+   "pageErrors": [],
+   "consoleErrors": [],
+   "vendor": 0
+  },
+  {
+   "name": "blocked-390-footle",
+   "a": {
+    "buttons": 11,
+    "links": 27,
+    "snapshot": false,
+    "boundary": false,
+    "notice": {
+     "kind": "blocked",
+     "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 28
+     },
+     "text": "This browser blocks storage, so progress won't be saved.",
+     "color": "rgb(132, 145, 164)",
+     "bg": "rgb(11, 13, 19)",
+     "font": "12px",
+     "scrollW": 390,
+     "clientW": 390
+    },
+    "header": {
+     "x": 16,
+     "y": 141,
+     "w": 358,
+     "h": 288
+    },
+    "banner": true,
+    "dialogs": 1,
+    "overflowX": 0,
+    "text": ""
+   },
+   "b": {
+    "buttons": 11,
+    "links": 27,
+    "snapshot": false,
+    "boundary": false,
+    "notice": {
+     "kind": "blocked",
+     "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 28
+     },
+     "text": "This browser blocks storage, so progress won't be saved.",
+     "color": "rgb(132, 145, 164)",
+     "bg": "rgb(11, 13, 19)",
+     "font": "12px",
+     "scrollW": 390,
+     "clientW": 390
+    },
+    "header": {
+     "x": 16,
+     "y": 141,
+     "w": 358,
+     "h": 288
+    },
+    "banner": false,
+    "dialogs": 0,
+    "overflowX": 0,
+    "text": ""
+   },
+   "pageErrors": [],
+   "consoleErrors": [],
+   "vendor": 0
+  },
+  {
+   "name": "blocked-390-stadium-tycoon",
+   "a": {
+    "buttons": 28,
+    "links": 23,
+    "snapshot": false,
+    "boundary": false,
+    "notice": {
+     "kind": "blocked",
+     "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 28
+     },
+     "text": "This browser blocks storage, so progress won't be saved.",
+     "color": "rgb(132, 145, 164)",
+     "bg": "rgb(11, 13, 19)",
+     "font": "12px",
+     "scrollW": 390,
+     "clientW": 390
+    },
+    "header": {
+     "x": 16,
+     "y": 133,
+     "w": 358,
+     "h": 36
+    },
+    "banner": true,
+    "dialogs": 1,
+    "overflowX": 0,
+    "text": ""
+   },
+   "b": {
+    "buttons": 28,
+    "links": 23,
+    "snapshot": false,
+    "boundary": false,
+    "notice": {
+     "kind": "blocked",
+     "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 28
+     },
+     "text": "This browser blocks storage, so progress won't be saved.",
+     "color": "rgb(132, 145, 164)",
+     "bg": "rgb(11, 13, 19)",
+     "font": "12px",
+     "scrollW": 390,
+     "clientW": 390
+    },
+    "header": {
+     "x": 16,
+     "y": 133,
+     "w": 358,
+     "h": 36
+    },
+    "banner": false,
+    "dialogs": 1,
+    "overflowX": 0,
+    "text": ""
+   },
+   "pageErrors": [],
+   "consoleErrors": [],
+   "vendor": 0
+  },
+  {
+   "name": "blocked-390-build-your-xi",
+   "a": {
+    "buttons": 14,
+    "links": 27,
+    "snapshot": false,
+    "boundary": false,
+    "notice": {
+     "kind": "blocked",
+     "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 28
+     },
+     "text": "This browser blocks storage, so progress won't be saved.",
+     "color": "rgb(132, 145, 164)",
+     "bg": "rgb(11, 13, 19)",
+     "font": "12px",
+     "scrollW": 390,
+     "clientW": 390
+    },
+    "header": {
+     "x": 16,
+     "y": 141,
+     "w": 358,
+     "h": 120
+    },
+    "banner": true,
+    "dialogs": 1,
+    "overflowX": 0,
+    "text": ""
+   },
+   "b": {
+    "buttons": 14,
+    "links": 27,
+    "snapshot": false,
+    "boundary": false,
+    "notice": {
+     "kind": "blocked",
+     "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 28
+     },
+     "text": "This browser blocks storage, so progress won't be saved.",
+     "color": "rgb(132, 145, 164)",
+     "bg": "rgb(11, 13, 19)",
+     "font": "12px",
+     "scrollW": 390,
+     "clientW": 390
+    },
+    "header": {
+     "x": 16,
+     "y": 141,
+     "w": 358,
+     "h": 120
+    },
+    "banner": false,
+    "dialogs": 0,
+    "overflowX": 0,
+    "text": ""
+   },
+   "pageErrors": [],
+   "consoleErrors": [],
+   "vendor": 0
+  },
+  {
+   "name": "blocked-1280-home",
+   "a": {
+    "buttons": 175,
+    "links": 329,
+    "snapshot": false,
+    "boundary": false,
+    "notice": null,
+    "header": {
+     "x": 0,
+     "y": 32,
+     "w": 1280,
+     "h": 57
+    },
+    "banner": true,
+    "dialogs": 0,
+    "overflowX": 0,
+    "text": ""
+   },
+   "b": {
+    "buttons": 175,
+    "links": 329,
+    "snapshot": false,
+    "boundary": false,
+    "notice": null,
+    "header": {
+     "x": 0,
+     "y": 32,
+     "w": 1280,
+     "h": 57
+    },
+    "banner": false,
+    "dialogs": 0,
+    "overflowX": 0,
+    "text": ""
+   },
+   "pageErrors": [],
+   "consoleErrors": [],
+   "vendor": 0
+  },
+  {
+   "name": "blocked-1280-soccer-career",
+   "a": {
+    "buttons": 29,
+    "links": 23,
+    "snapshot": false,
+    "boundary": false,
+    "notice": {
+     "kind": "blocked",
+     "rect": {
+      "x": 256,
+      "y": 32,
+      "w": 768,
+      "h": 28
+     },
+     "text": "This browser blocks storage, so progress won't be saved. You can still play everything.",
+     "color": "rgb(132, 145, 164)",
+     "bg": "rgb(11, 13, 19)",
+     "font": "12px",
+     "scrollW": 768,
+     "clientW": 768
+    },
+    "header": null,
+    "banner": true,
+    "dialogs": 0,
+    "overflowX": 0,
+    "text": ""
+   },
+   "b": {
+    "buttons": 29,
+    "links": 23,
+    "snapshot": false,
+    "boundary": false,
+    "notice": {
+     "kind": "blocked",
+     "rect": {
+      "x": 256,
+      "y": 32,
+      "w": 768,
+      "h": 28
+     },
+     "text": "This browser blocks storage, so progress won't be saved. You can still play everything.",
+     "color": "rgb(132, 145, 164)",
+     "bg": "rgb(11, 13, 19)",
+     "font": "12px",
+     "scrollW": 768,
+     "clientW": 768
+    },
+    "header": null,
+    "banner": false,
+    "dialogs": 0,
+    "overflowX": 0,
+    "text": ""
+   },
+   "pageErrors": [],
+   "consoleErrors": [],
+   "vendor": 0
+  },
+  {
+   "name": "blocked-1280-club-manager",
+   "a": {
+    "buttons": 12,
+    "links": 28,
+    "snapshot": false,
+    "boundary": false,
+    "notice": {
+     "kind": "blocked",
+     "rect": {
+      "x": 256,
+      "y": 32,
+      "w": 768,
+      "h": 28
+     },
+     "text": "This browser blocks storage, so progress won't be saved. You can still play everything.",
+     "color": "rgb(132, 145, 164)",
+     "bg": "rgb(11, 13, 19)",
+     "font": "12px",
+     "scrollW": 768,
+     "clientW": 768
+    },
+    "header": {
+     "x": 208,
+     "y": 153,
+     "w": 864,
+     "h": 160
+    },
+    "banner": true,
+    "dialogs": 0,
+    "overflowX": 0,
+    "text": ""
+   },
+   "b": {
+    "buttons": 12,
+    "links": 28,
+    "snapshot": false,
+    "boundary": false,
+    "notice": {
+     "kind": "blocked",
+     "rect": {
+      "x": 256,
+      "y": 32,
+      "w": 768,
+      "h": 28
+     },
+     "text": "This browser blocks storage, so progress won't be saved. You can still play everything.",
+     "color": "rgb(132, 145, 164)",
+     "bg": "rgb(11, 13, 19)",
+     "font": "12px",
+     "scrollW": 768,
+     "clientW": 768
+    },
+    "header": {
+     "x": 208,
+     "y": 153,
+     "w": 864,
+     "h": 160
+    },
+    "banner": false,
+    "dialogs": 0,
+    "overflowX": 0,
+    "text": ""
+   },
+   "pageErrors": [],
+   "consoleErrors": [],
+   "vendor": 0
+  },
+  {
+   "name": "blocked-1280-footle",
+   "a": {
+    "buttons": 11,
+    "links": 27,
+    "snapshot": false,
+    "boundary": false,
+    "notice": {
+     "kind": "blocked",
+     "rect": {
+      "x": 256,
+      "y": 32,
+      "w": 768,
+      "h": 28
+     },
+     "text": "This browser blocks storage, so progress won't be saved. You can still play everything.",
+     "color": "rgb(132, 145, 164)",
+     "bg": "rgb(11, 13, 19)",
+     "font": "12px",
+     "scrollW": 768,
+     "clientW": 768
+    },
+    "header": {
+     "x": 208,
+     "y": 153,
+     "w": 864,
+     "h": 272
+    },
+    "banner": true,
+    "dialogs": 1,
+    "overflowX": 0,
+    "text": ""
+   },
+   "b": {
+    "buttons": 11,
+    "links": 27,
+    "snapshot": false,
+    "boundary": false,
+    "notice": {
+     "kind": "blocked",
+     "rect": {
+      "x": 256,
+      "y": 32,
+      "w": 768,
+      "h": 28
+     },
+     "text": "This browser blocks storage, so progress won't be saved. You can still play everything.",
+     "color": "rgb(132, 145, 164)",
+     "bg": "rgb(11, 13, 19)",
+     "font": "12px",
+     "scrollW": 768,
+     "clientW": 768
+    },
+    "header": {
+     "x": 208,
+     "y": 153,
+     "w": 864,
+     "h": 272
+    },
+    "banner": false,
+    "dialogs": 0,
+    "overflowX": 0,
+    "text": ""
+   },
+   "pageErrors": [],
+   "consoleErrors": [],
+   "vendor": 0
+  },
+  {
+   "name": "blocked-1280-stadium-tycoon",
+   "a": {
+    "buttons": 28,
+    "links": 23,
+    "snapshot": false,
+    "boundary": false,
+    "notice": {
+     "kind": "blocked",
+     "rect": {
+      "x": 256,
+      "y": 32,
+      "w": 768,
+      "h": 28
+     },
+     "text": "This browser blocks storage, so progress won't be saved. You can still play everything.",
+     "color": "rgb(132, 145, 164)",
+     "bg": "rgb(11, 13, 19)",
+     "font": "12px",
+     "scrollW": 768,
+     "clientW": 768
+    },
+    "header": {
+     "x": 320,
+     "y": 145,
+     "w": 640,
+     "h": 48
+    },
+    "banner": true,
+    "dialogs": 1,
+    "overflowX": 0,
+    "text": ""
+   },
+   "b": {
+    "buttons": 28,
+    "links": 23,
+    "snapshot": false,
+    "boundary": false,
+    "notice": {
+     "kind": "blocked",
+     "rect": {
+      "x": 256,
+      "y": 32,
+      "w": 768,
+      "h": 28
+     },
+     "text": "This browser blocks storage, so progress won't be saved. You can still play everything.",
+     "color": "rgb(132, 145, 164)",
+     "bg": "rgb(11, 13, 19)",
+     "font": "12px",
+     "scrollW": 768,
+     "clientW": 768
+    },
+    "header": {
+     "x": 320,
+     "y": 145,
+     "w": 640,
+     "h": 48
+    },
+    "banner": false,
+    "dialogs": 1,
+    "overflowX": 0,
+    "text": ""
+   },
+   "pageErrors": [],
+   "consoleErrors": [],
+   "vendor": 0
+  },
+  {
+   "name": "blocked-1280-build-your-xi",
+   "a": {
+    "buttons": 14,
+    "links": 27,
+    "snapshot": false,
+    "boundary": false,
+    "notice": {
+     "kind": "blocked",
+     "rect": {
+      "x": 256,
+      "y": 32,
+      "w": 768,
+      "h": 28
+     },
+     "text": "This browser blocks storage, so progress won't be saved. You can still play everything.",
+     "color": "rgb(132, 145, 164)",
+     "bg": "rgb(11, 13, 19)",
+     "font": "12px",
+     "scrollW": 768,
+     "clientW": 768
+    },
+    "header": {
+     "x": 208,
+     "y": 153,
+     "w": 864,
+     "h": 152
+    },
+    "banner": true,
+    "dialogs": 1,
+    "overflowX": 0,
+    "text": ""
+   },
+   "b": {
+    "buttons": 14,
+    "links": 27,
+    "snapshot": false,
+    "boundary": false,
+    "notice": {
+     "kind": "blocked",
+     "rect": {
+      "x": 256,
+      "y": 32,
+      "w": 768,
+      "h": 28
+     },
+     "text": "This browser blocks storage, so progress won't be saved. You can still play everything.",
+     "color": "rgb(132, 145, 164)",
+     "bg": "rgb(11, 13, 19)",
+     "font": "12px",
+     "scrollW": 768,
+     "clientW": 768
+    },
+    "header": {
+     "x": 208,
+     "y": 153,
+     "w": 864,
+     "h": 152
+    },
+    "banner": false,
+    "dialogs": 0,
+    "overflowX": 0,
+    "text": ""
+   },
+   "pageErrors": [],
+   "consoleErrors": [],
+   "vendor": 0
+  },
+  {
+   "name": "full-390-home",
+   "a": {
+    "buttons": 171,
+    "links": 329,
+    "snapshot": false,
+    "boundary": false,
+    "notice": null,
+    "header": {
+     "x": 0,
+     "y": 32,
+     "w": 390,
+     "h": 57
+    },
+    "banner": true,
+    "dialogs": 0,
+    "overflowX": 0,
+    "text": ""
+   },
+   "b": {
+    "buttons": 171,
+    "links": 329,
+    "snapshot": false,
+    "boundary": false,
+    "notice": null,
+    "header": {
+     "x": 0,
+     "y": 32,
+     "w": 390,
+     "h": 57
+    },
+    "banner": false,
+    "dialogs": 0,
+    "overflowX": 0,
+    "text": ""
+   },
+   "pageErrors": [],
+   "consoleErrors": [],
+   "vendor": 0
+  },
+  {
+   "name": "full-390-soccer-career",
+   "a": {
+    "buttons": 29,
+    "links": 23,
+    "snapshot": false,
+    "boundary": false,
+    "notice": {
+     "kind": "full",
+     "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 28
+     },
+     "text": "This browser's storage is full, so progress won't be saved.",
+     "color": "rgb(132, 145, 164)",
+     "bg": "rgb(11, 13, 19)",
+     "font": "12px",
+     "scrollW": 390,
+     "clientW": 390
+    },
+    "header": null,
+    "banner": true,
+    "dialogs": 0,
+    "overflowX": 0,
+    "text": ""
+   },
+   "b": {
+    "buttons": 29,
+    "links": 23,
+    "snapshot": false,
+    "boundary": false,
+    "notice": {
+     "kind": "full",
+     "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 28
+     },
+     "text": "This browser's storage is full, so progress won't be saved.",
+     "color": "rgb(132, 145, 164)",
+     "bg": "rgb(11, 13, 19)",
+     "font": "12px",
+     "scrollW": 390,
+     "clientW": 390
+    },
+    "header": null,
+    "banner": false,
+    "dialogs": 0,
+    "overflowX": 0,
+    "text": ""
+   },
+   "pageErrors": [],
+   "consoleErrors": [],
+   "vendor": 0
+  },
+  {
+   "name": "full-390-club-manager",
+   "a": {
+    "buttons": 12,
+    "links": 28,
+    "snapshot": false,
+    "boundary": false,
+    "notice": {
+     "kind": "full",
+     "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 28
+     },
+     "text": "This browser's storage is full, so progress won't be saved.",
+     "color": "rgb(132, 145, 164)",
+     "bg": "rgb(11, 13, 19)",
+     "font": "12px",
+     "scrollW": 390,
+     "clientW": 390
+    },
+    "header": {
+     "x": 16,
+     "y": 141,
+     "w": 358,
+     "h": 184
+    },
+    "banner": true,
+    "dialogs": 0,
+    "overflowX": 0,
+    "text": ""
+   },
+   "b": {
+    "buttons": 12,
+    "links": 28,
+    "snapshot": false,
+    "boundary": false,
+    "notice": {
+     "kind": "full",
+     "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 28
+     },
+     "text": "This browser's storage is full, so progress won't be saved.",
+     "color": "rgb(132, 145, 164)",
+     "bg": "rgb(11, 13, 19)",
+     "font": "12px",
+     "scrollW": 390,
+     "clientW": 390
+    },
+    "header": {
+     "x": 16,
+     "y": 141,
+     "w": 358,
+     "h": 184
+    },
+    "banner": false,
+    "dialogs": 0,
+    "overflowX": 0,
+    "text": ""
+   },
+   "pageErrors": [],
+   "consoleErrors": [],
+   "vendor": 0
+  },
+  {
+   "name": "full-390-footle",
+   "a": {
+    "buttons": 11,
+    "links": 27,
+    "snapshot": false,
+    "boundary": false,
+    "notice": {
+     "kind": "full",
+     "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 28
+     },
+     "text": "This browser's storage is full, so progress won't be saved.",
+     "color": "rgb(132, 145, 164)",
+     "bg": "rgb(11, 13, 19)",
+     "font": "12px",
+     "scrollW": 390,
+     "clientW": 390
+    },
+    "header": {
+     "x": 16,
+     "y": 141,
+     "w": 358,
+     "h": 288
+    },
+    "banner": true,
+    "dialogs": 1,
+    "overflowX": 0,
+    "text": ""
+   },
+   "b": {
+    "buttons": 11,
+    "links": 27,
+    "snapshot": false,
+    "boundary": false,
+    "notice": {
+     "kind": "full",
+     "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 28
+     },
+     "text": "This browser's storage is full, so progress won't be saved.",
+     "color": "rgb(132, 145, 164)",
+     "bg": "rgb(11, 13, 19)",
+     "font": "12px",
+     "scrollW": 390,
+     "clientW": 390
+    },
+    "header": {
+     "x": 16,
+     "y": 141,
+     "w": 358,
+     "h": 288
+    },
+    "banner": false,
+    "dialogs": 0,
+    "overflowX": 0,
+    "text": ""
+   },
+   "pageErrors": [],
+   "consoleErrors": [],
+   "vendor": 0
+  },
+  {
+   "name": "full-390-stadium-tycoon",
+   "a": {
+    "buttons": 28,
+    "links": 23,
+    "snapshot": false,
+    "boundary": false,
+    "notice": {
+     "kind": "full",
+     "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 28
+     },
+     "text": "This browser's storage is full, so progress won't be saved.",
+     "color": "rgb(132, 145, 164)",
+     "bg": "rgb(11, 13, 19)",
+     "font": "12px",
+     "scrollW": 390,
+     "clientW": 390
+    },
+    "header": {
+     "x": 16,
+     "y": 133,
+     "w": 358,
+     "h": 36
+    },
+    "banner": true,
+    "dialogs": 1,
+    "overflowX": 0,
+    "text": ""
+   },
+   "b": {
+    "buttons": 28,
+    "links": 23,
+    "snapshot": false,
+    "boundary": false,
+    "notice": {
+     "kind": "full",
+     "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 28
+     },
+     "text": "This browser's storage is full, so progress won't be saved.",
+     "color": "rgb(132, 145, 164)",
+     "bg": "rgb(11, 13, 19)",
+     "font": "12px",
+     "scrollW": 390,
+     "clientW": 390
+    },
+    "header": {
+     "x": 16,
+     "y": 133,
+     "w": 358,
+     "h": 36
+    },
+    "banner": false,
+    "dialogs": 1,
+    "overflowX": 0,
+    "text": ""
+   },
+   "pageErrors": [],
+   "consoleErrors": [],
+   "vendor": 0
+  },
+  {
+   "name": "full-390-build-your-xi",
+   "a": {
+    "buttons": 14,
+    "links": 27,
+    "snapshot": false,
+    "boundary": false,
+    "notice": {
+     "kind": "full",
+     "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 28
+     },
+     "text": "This browser's storage is full, so progress won't be saved.",
+     "color": "rgb(132, 145, 164)",
+     "bg": "rgb(11, 13, 19)",
+     "font": "12px",
+     "scrollW": 390,
+     "clientW": 390
+    },
+    "header": {
+     "x": 16,
+     "y": 141,
+     "w": 358,
+     "h": 120
+    },
+    "banner": true,
+    "dialogs": 1,
+    "overflowX": 0,
+    "text": ""
+   },
+   "b": {
+    "buttons": 14,
+    "links": 27,
+    "snapshot": false,
+    "boundary": false,
+    "notice": {
+     "kind": "full",
+     "rect": {
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 28
+     },
+     "text": "This browser's storage is full, so progress won't be saved.",
+     "color": "rgb(132, 145, 164)",
+     "bg": "rgb(11, 13, 19)",
+     "font": "12px",
+     "scrollW": 390,
+     "clientW": 390
+    },
+    "header": {
+     "x": 16,
+     "y": 141,
+     "w": 358,
+     "h": 120
+    },
+    "banner": false,
+    "dialogs": 0,
+    "overflowX": 0,
+    "text": ""
+   },
+   "pageErrors": [],
+   "consoleErrors": [],
+   "vendor": 0
+  },
+  {
+   "name": "full-1280-home",
+   "a": {
+    "buttons": 175,
+    "links": 329,
+    "snapshot": false,
+    "boundary": false,
+    "notice": null,
+    "header": {
+     "x": 0,
+     "y": 32,
+     "w": 1280,
+     "h": 57
+    },
+    "banner": true,
+    "dialogs": 0,
+    "overflowX": 0,
+    "text": ""
+   },
+   "b": {
+    "buttons": 175,
+    "links": 329,
+    "snapshot": false,
+    "boundary": false,
+    "notice": null,
+    "header": {
+     "x": 0,
+     "y": 32,
+     "w": 1280,
+     "h": 57
+    },
+    "banner": false,
+    "dialogs": 0,
+    "overflowX": 0,
+    "text": ""
+   },
+   "pageErrors": [],
+   "consoleErrors": [],
+   "vendor": 0
+  },
+  {
+   "name": "full-1280-soccer-career",
+   "a": {
+    "buttons": 29,
+    "links": 23,
+    "snapshot": false,
+    "boundary": false,
+    "notice": {
+     "kind": "full",
+     "rect": {
+      "x": 256,
+      "y": 32,
+      "w": 768,
+      "h": 28
+     },
+     "text": "This browser's storage is full, so progress won't be saved. You can still play everything.",
+     "color": "rgb(132, 145, 164)",
+     "bg": "rgb(11, 13, 19)",
+     "font": "12px",
+     "scrollW": 768,
+     "clientW": 768
+    },
+    "header": null,
+    "banner": true,
+    "dialogs": 0,
+    "overflowX": 0,
+    "text": ""
+   },
+   "b": {
+    "buttons": 29,
+    "links": 23,
+    "snapshot": false,
+    "boundary": false,
+    "notice": {
+     "kind": "full",
+     "rect": {
+      "x": 256,
+      "y": 32,
+      "w": 768,
+      "h": 28
+     },
+     "text": "This browser's storage is full, so progress won't be saved. You can still play everything.",
+     "color": "rgb(132, 145, 164)",
+     "bg": "rgb(11, 13, 19)",
+     "font": "12px",
+     "scrollW": 768,
+     "clientW": 768
+    },
+    "header": null,
+    "banner": false,
+    "dialogs": 0,
+    "overflowX": 0,
+    "text": ""
+   },
+   "pageErrors": [],
+   "consoleErrors": [],
+   "vendor": 0
+  },
+  {
+   "name": "full-1280-club-manager",
+   "a": {
+    "buttons": 12,
+    "links": 28,
+    "snapshot": false,
+    "boundary": false,
+    "notice": {
+     "kind": "full",
+     "rect": {
+      "x": 256,
+      "y": 32,
+      "w": 768,
+      "h": 28
+     },
+     "text": "This browser's storage is full, so progress won't be saved. You can still play everything.",
+     "color": "rgb(132, 145, 164)",
+     "bg": "rgb(11, 13, 19)",
+     "font": "12px",
+     "scrollW": 768,
+     "clientW": 768
+    },
+    "header": {
+     "x": 208,
+     "y": 153,
+     "w": 864,
+     "h": 160
+    },
+    "banner": true,
+    "dialogs": 0,
+    "overflowX": 0,
+    "text": ""
+   },
+   "b": {
+    "buttons": 12,
+    "links": 28,
+    "snapshot": false,
+    "boundary": false,
+    "notice": {
+     "kind": "full",
+     "rect": {
+      "x": 256,
+      "y": 32,
+      "w": 768,
+      "h": 28
+     },
+     "text": "This browser's storage is full, so progress won't be saved. You can still play everything.",
+     "color": "rgb(132, 145, 164)",
+     "bg": "rgb(11, 13, 19)",
+     "font": "12px",
+     "scrollW": 768,
+     "clientW": 768
+    },
+    "header": {
+     "x": 208,
+     "y": 153,
+     "w": 864,
+     "h": 160
+    },
+    "banner": false,
+    "dialogs": 0,
+    "overflowX": 0,
+    "text": ""
+   },
+   "pageErrors": [],
+   "consoleErrors": [],
+   "vendor": 0
+  },
+  {
+   "name": "full-1280-footle",
+   "a": {
+    "buttons": 11,
+    "links": 27,
+    "snapshot": false,
+    "boundary": false,
+    "notice": {
+     "kind": "full",
+     "rect": {
+      "x": 256,
+      "y": 32,
+      "w": 768,
+      "h": 28
+     },
+     "text": "This browser's storage is full, so progress won't be saved. You can still play everything.",
+     "color": "rgb(132, 145, 164)",
+     "bg": "rgb(11, 13, 19)",
+     "font": "12px",
+     "scrollW": 768,
+     "clientW": 768
+    },
+    "header": {
+     "x": 208,
+     "y": 153,
+     "w": 864,
+     "h": 272
+    },
+    "banner": true,
+    "dialogs": 1,
+    "overflowX": 0,
+    "text": ""
+   },
+   "b": {
+    "buttons": 11,
+    "links": 27,
+    "snapshot": false,
+    "boundary": false,
+    "notice": {
+     "kind": "full",
+     "rect": {
+      "x": 256,
+      "y": 32,
+      "w": 768,
+      "h": 28
+     },
+     "text": "This browser's storage is full, so progress won't be saved. You can still play everything.",
+     "color": "rgb(132, 145, 164)",
+     "bg": "rgb(11, 13, 19)",
+     "font": "12px",
+     "scrollW": 768,
+     "clientW": 768
+    },
+    "header": {
+     "x": 208,
+     "y": 153,
+     "w": 864,
+     "h": 272
+    },
+    "banner": false,
+    "dialogs": 0,
+    "overflowX": 0,
+    "text": ""
+   },
+   "pageErrors": [],
+   "consoleErrors": [],
+   "vendor": 0
+  },
+  {
+   "name": "full-1280-stadium-tycoon",
+   "a": {
+    "buttons": 28,
+    "links": 23,
+    "snapshot": false,
+    "boundary": false,
+    "notice": {
+     "kind": "full",
+     "rect": {
+      "x": 256,
+      "y": 32,
+      "w": 768,
+      "h": 28
+     },
+     "text": "This browser's storage is full, so progress won't be saved. You can still play everything.",
+     "color": "rgb(132, 145, 164)",
+     "bg": "rgb(11, 13, 19)",
+     "font": "12px",
+     "scrollW": 768,
+     "clientW": 768
+    },
+    "header": {
+     "x": 320,
+     "y": 145,
+     "w": 640,
+     "h": 48
+    },
+    "banner": true,
+    "dialogs": 1,
+    "overflowX": 0,
+    "text": ""
+   },
+   "b": {
+    "buttons": 28,
+    "links": 23,
+    "snapshot": false,
+    "boundary": false,
+    "notice": {
+     "kind": "full",
+     "rect": {
+      "x": 256,
+      "y": 32,
+      "w": 768,
+      "h": 28
+     },
+     "text": "This browser's storage is full, so progress won't be saved. You can still play everything.",
+     "color": "rgb(132, 145, 164)",
+     "bg": "rgb(11, 13, 19)",
+     "font": "12px",
+     "scrollW": 768,
+     "clientW": 768
+    },
+    "header": {
+     "x": 320,
+     "y": 145,
+     "w": 640,
+     "h": 48
+    },
+    "banner": false,
+    "dialogs": 1,
+    "overflowX": 0,
+    "text": ""
+   },
+   "pageErrors": [],
+   "consoleErrors": [],
+   "vendor": 0
+  },
+  {
+   "name": "full-1280-build-your-xi",
+   "a": {
+    "buttons": 14,
+    "links": 27,
+    "snapshot": false,
+    "boundary": false,
+    "notice": {
+     "kind": "full",
+     "rect": {
+      "x": 256,
+      "y": 32,
+      "w": 768,
+      "h": 28
+     },
+     "text": "This browser's storage is full, so progress won't be saved. You can still play everything.",
+     "color": "rgb(132, 145, 164)",
+     "bg": "rgb(11, 13, 19)",
+     "font": "12px",
+     "scrollW": 768,
+     "clientW": 768
+    },
+    "header": {
+     "x": 208,
+     "y": 153,
+     "w": 864,
+     "h": 152
+    },
+    "banner": true,
+    "dialogs": 1,
+    "overflowX": 0,
+    "text": ""
+   },
+   "b": {
+    "buttons": 14,
+    "links": 27,
+    "snapshot": false,
+    "boundary": false,
+    "notice": {
+     "kind": "full",
+     "rect": {
+      "x": 256,
+      "y": 32,
+      "w": 768,
+      "h": 28
+     },
+     "text": "This browser's storage is full, so progress won't be saved. You can still play everything.",
+     "color": "rgb(132, 145, 164)",
+     "bg": "rgb(11, 13, 19)",
+     "font": "12px",
+     "scrollW": 768,
+     "clientW": 768
+    },
+    "header": {
+     "x": 208,
+     "y": 153,
+     "w": 864,
+     "h": 152
+    },
+    "banner": false,
+    "dialogs": 0,
+    "overflowX": 0,
+    "text": ""
+   },
+   "pageErrors": [],
+   "consoleErrors": [],
+   "vendor": 0
+  }
+ ],
+ "native": [],
+ "full": [],
+ "double": [
+  {
+   "mode": "open",
+   "canVoteFirst": true,
+   "votedShown1": true,
+   "backendAfter1": [
+    "POST rest/v1/hof_votes",
+    "POST rest/v1/game_completions"
+   ],
+   "movedTo": "/whats-new",
+   "backAt": "/hof-or-bust",
+   "votedShownOnReturn": true,
+   "canVoteAgain": false,
+   "backendAfter2": [
+    "POST rest/v1/hof_votes",
+    "POST rest/v1/game_completions"
+   ],
+   "navs": 4,
+   "pageErrors": []
+  },
+  {
+   "mode": "blocked",
+   "canVoteFirst": true,
+   "votedShown1": true,
+   "backendAfter1": [
+    "POST rest/v1/hof_votes",
+    "POST rest/v1/game_completions"
+   ],
+   "movedTo": "/whats-new",
+   "backAt": "/hof-or-bust",
+   "votedShownOnReturn": true,
+   "canVoteAgain": false,
+   "backendAfter2": [
+    "POST rest/v1/hof_votes",
+    "POST rest/v1/game_completions"
+   ],
+   "navs": 4,
+   "pageErrors": []
+  },
+  {
+   "mode": "full",
+   "canVoteFirst": true,
+   "votedShown1": true,
+   "backendAfter1": [
+    "POST rest/v1/hof_votes",
+    "POST rest/v1/game_completions"
+   ],
+   "movedTo": "/whats-new",
+   "backAt": "/hof-or-bust",
+   "votedShownOnReturn": true,
+   "canVoteAgain": false,
+   "backendAfter2": [
+    "POST rest/v1/hof_votes",
+    "POST rest/v1/game_completions"
+   ],
+   "navs": 4,
+   "pageErrors": []
+  }
+ ],
+ "deep": [
+  {
+   "route": "/soccer-career",
+   "view": "390",
+   "presses": [
+    "Choose nationality",
+    "Choose position",
+    "Choose era",
+    "🎲 Surprise me",
+    "🧑 Skin",
+    "💇 Hair",
+    "🧔 Beard",
+    "👟 Boots",
+    "💍 Extras",
+    "🎉 Celebration",
+    "🛝 Knee Slide",
+    "🗿 The Statue"
+   ],
+   "saveWords": [
+    "This browser blocks storage, so progress won't be saved",
+    "Your save lives in your browser, one career at a time, so c"
+   ],
+   "buttons": 36,
+   "boundary": false,
+   "notice": "This browser blocks storage, so progress won't be saved.",
+   "noticeRect": {
+    "x": 0,
+    "y": 0,
+    "w": 390,
+    "h": 28
+   },
+   "overflowX": 0,
+   "navs": 2,
+   "pageErrors": [],
+   "consoleErrors": [],
+   "keysHeld": 2,
+   "navsAfterReload": 1,
+   "keysAfterReload": 1,
+   "bannerAfterReload": true
+  },
+  {
+   "route": "/club-manager",
+   "view": "390",
+   "presses": [
+    "📅 2026-27 Today. Real squads as of Augu",
+    "📅 Starting 2026-27",
+    "📅 2026-27 Today. Real squads as of Augu",
+    "📅 Starting 2026-27",
+    "📅 2026-27 Today. Real squads as of Augu",
+    "📅 Starting 2026-27",
+    "📅 2026-27 Today. Real squads as of Augu",
+    "📅 Starting 2026-27",
+    "📅 2026-27 Today. Real squads as of Augu",
+    "📅 Starting 2026-27",
+    "📅 2026-27 Today. Real squads as of Augu",
+    "📅 Starting 2026-27"
+   ],
+   "saveWords": [
+    "This browser blocks storage, so progress won't be saved",
+    "ng a match you paused only makes changes from the saved clock onward"
+   ],
+   "buttons": 12,
+   "boundary": false,
+   "notice": "This browser blocks storage, so progress won't be saved.",
+   "noticeRect": {
+    "x": 0,
+    "y": 0,
+    "w": 390,
+    "h": 28
+   },
+   "overflowX": 0,
+   "navs": 2,
+   "pageErrors": [],
+   "consoleErrors": [],
+   "keysHeld": 2,
+   "navsAfterReload": 1,
+   "keysAfterReload": 1,
+   "bannerAfterReload": true
+  },
+  {
+   "route": "/nba-my-career",
+   "view": "390",
+   "presses": [
+    "Let's Play!",
+    "The Pest Picks pockets, gets under skin",
+    "Play your road to the draft",
+    "Got it",
+    "1 season One year of college One season ",
+    "Play your first season",
+    "Train all summer Draft stock +1, Rating ",
+    "Go all out Push every drill to the limit",
+    "Draft day",
+    "Start your career",
+    "Play the 2026 season",
+    "Continue"
+   ],
+   "saveWords": [
+    "This browser blocks storage, so progress won't be saved",
+    "Open Career Log and pick a year to review its saved overview, regular season and postseason",
+    "Changes compare with the previous saved season; older missing values say Not recorded",
+    "Is my career saved?"
+   ],
+   "buttons": 9,
+   "boundary": false,
+   "notice": "This browser blocks storage, so progress won't be saved.",
+   "noticeRect": {
+    "x": 0,
+    "y": 0,
+    "w": 390,
+    "h": 28
+   },
+   "overflowX": 0,
+   "navs": 2,
+   "pageErrors": [],
+   "consoleErrors": [],
+   "keysHeld": 5,
+   "navsAfterReload": 1,
+   "keysAfterReload": 1,
+   "bannerAfterReload": true
+  },
+  {
+   "route": "/stadium-tycoon",
+   "view": "390",
+   "presses": [
+    "Let's go",
+    "🏗️ Upgrades 3 ready",
+    "🧑‍🤝‍🧑 Payroll 0 hired",
+    "🏟️ Stadium",
+    "🎓 Academy",
+    "Let's go",
+    "🎪 SHOWCASE DAY READY: press for x3 trai",
+    "⚽ FIRST TEAM 0 / 5 players up to 0.0% fe",
+    "🏆 League",
+    "Northquay Swifts"
+   ],
+   "saveWords": [
+    "This browser blocks storage, so progress won't be saved",
+    "A saved shot result cannot pay twice, and a kick left ope"
+   ],
+   "buttons": 8,
+   "boundary": false,
+   "notice": "This browser blocks storage, so progress won't be saved.",
+   "noticeRect": {
+    "x": 0,
+    "y": 0,
+    "w": 390,
+    "h": 28
+   },
+   "overflowX": 0,
+   "navs": 2,
+   "pageErrors": [],
+   "consoleErrors": [],
+   "keysHeld": 7,
+   "navsAfterReload": 1,
+   "keysAfterReload": 1,
+   "bannerAfterReload": true
+  },
+  {
+   "route": "/soccer-career",
+   "view": "1280",
+   "presses": [
+    "Choose nationality",
+    "Choose position",
+    "Choose era",
+    "🎲 Surprise me",
+    "🧑 Skin",
+    "💇 Hair",
+    "🧔 Beard",
+    "👟 Boots",
+    "💍 Extras",
+    "🎉 Celebration",
+    "🛝 Knee Slide",
+    "🗿 The Statue"
+   ],
+   "saveWords": [
+    "This browser blocks storage, so progress won't be saved",
+    "Your save lives in your browser, one career at a time, so c"
+   ],
+   "buttons": 36,
+   "boundary": false,
+   "notice": "This browser blocks storage, so progress won't be saved. You can still play everything.",
+   "noticeRect": {
+    "x": 256,
+    "y": 32,
+    "w": 768,
+    "h": 28
+   },
+   "overflowX": 0,
+   "navs": 2,
+   "pageErrors": [],
+   "consoleErrors": [],
+   "keysHeld": 2,
+   "navsAfterReload": 1,
+   "keysAfterReload": 1,
+   "bannerAfterReload": true
+  },
+  {
+   "route": "/club-manager",
+   "view": "1280",
+   "presses": [
+    "📅 2026-27 Today. Real squads as of Augu",
+    "📅 Starting 2026-27",
+    "📅 2026-27 Today. Real squads as of Augu",
+    "📅 Starting 2026-27",
+    "📅 2026-27 Today. Real squads as of Augu",
+    "📅 Starting 2026-27",
+    "📅 2026-27 Today. Real squads as of Augu",
+    "📅 Starting 2026-27",
+    "📅 2026-27 Today. Real squads as of Augu",
+    "📅 Starting 2026-27",
+    "📅 2026-27 Today. Real squads as of Augu",
+    "📅 Starting 2026-27"
+   ],
+   "saveWords": [
+    "This browser blocks storage, so progress won't be saved",
+    "ng a match you paused only makes changes from the saved clock onward"
+   ],
+   "buttons": 12,
+   "boundary": false,
+   "notice": "This browser blocks storage, so progress won't be saved. You can still play everything.",
+   "noticeRect": {
+    "x": 256,
+    "y": 32,
+    "w": 768,
+    "h": 28
+   },
+   "overflowX": 0,
+   "navs": 2,
+   "pageErrors": [],
+   "consoleErrors": [],
+   "keysHeld": 2,
+   "navsAfterReload": 1,
+   "keysAfterReload": 1,
+   "bannerAfterReload": true
+  },
+  {
+   "route": "/nba-my-career",
+   "view": "1280",
+   "presses": [
+    "Let's Play!",
+    "The Pest Picks pockets, gets under skin",
+    "Play your road to the draft",
+    "Got it",
+    "1 season One year of college One season ",
+    "Play your first season",
+    "Play through it Draft stock +4, Health -",
+    "Go all out Push every drill to the limit",
+    "Draft day",
+    "Start your career",
+    "Play the 2026 season",
+    "Continue"
+   ],
+   "saveWords": [
+    "This browser blocks storage, so progress won't be saved",
+    "Open Career Log and pick a year to review its saved overview, regular season and postseason",
+    "Changes compare with the previous saved season; older missing values say Not recorded",
+    "Is my career saved?"
+   ],
+   "buttons": 9,
+   "boundary": false,
+   "notice": "This browser blocks storage, so progress won't be saved. You can still play everything.",
+   "noticeRect": {
+    "x": 256,
+    "y": 32,
+    "w": 768,
+    "h": 28
+   },
+   "overflowX": 0,
+   "navs": 2,
+   "pageErrors": [],
+   "consoleErrors": [],
+   "keysHeld": 5,
+   "navsAfterReload": 1,
+   "keysAfterReload": 1,
+   "bannerAfterReload": true
+  },
+  {
+   "route": "/stadium-tycoon",
+   "view": "1280",
+   "presses": [
+    "Let's go",
+    "🏗️ Upgrades 3 ready",
+    "🧑‍🤝‍🧑 Payroll 0 hired",
+    "🏟️ Stadium",
+    "🎓 Academy",
+    "Let's go",
+    "🎪 SHOWCASE DAY READY: press for x3 trai",
+    "⚽ FIRST TEAM 0 / 5 players up to 0.0% fe",
+    "🏆 League",
+    "Northquay Swifts"
+   ],
+   "saveWords": [
+    "This browser blocks storage, so progress won't be saved",
+    "A saved shot result cannot pay twice, and a kick left ope"
+   ],
+   "buttons": 8,
+   "boundary": false,
+   "notice": "This browser blocks storage, so progress won't be saved. You can still play everything.",
+   "noticeRect": {
+    "x": 256,
+    "y": 32,
+    "w": 768,
+    "h": 28
+   },
+   "overflowX": 0,
+   "navs": 2,
+   "pageErrors": [],
+   "consoleErrors": [],
+   "keysHeld": 7,
+   "navsAfterReload": 1,
+   "keysAfterReload": 1,
+   "bannerAfterReload": true
+  }
+ ]
+}
