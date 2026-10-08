@@ -193,8 +193,10 @@
  * penalties in this run (the fixture's first shootout row, seed 782109, is
  * not one on the Eibar tie, and under unsetpath section 5 had stopped going
  * red with section 4).
- * MEASURED on the release tree, default seed and SIM_SEED=1 to 5, about 25
- * seconds a run:
+ * MEASURED on the release tree, default seed and SIM_SEED=1 to 5. A run
+ * plays about 1,500 cup matches now: 63 seconds with five other runs beside
+ * it before section 7 was added, 263 and 279 seconds with section 7 on a
+ * machine twenty agents had left short of memory, so start it detached:
  *   metric                                     fixed                                control                      floor / band
  *   shootouts reached in section 1             26, 23, 22, 25, 23, 21 of 150                                     floor 12
  *   first five kicks in listed order           all of them in every run             0 of 26 (ignoreorder, noskip) all
