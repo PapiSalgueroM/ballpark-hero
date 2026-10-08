@@ -1,0 +1,1026 @@
+{
+ "base": "http://localhost:4173",
+ "runs": [
+  {
+   "tag": "390",
+   "steps": {
+    "firstVisitText": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nNFL My Career\n\nDraft night to retirement speech. Every choice bends the career.\n\nCreate your player\n\nYou are a fictional prospect entering the real league. Position and archetype shape your whole career: growth, injuries, money, legacy. Saves automatically.\n\n🏈 2026\nThe league as it is today. Full money, every current franchise.\n⏪ 2005 throwback\nThe 2005 league: the Raiders in Oakland, the Chargers in San Diego, the Rams in St. Louis. Contracts pay 2005 money, about a third of today.\nQB\nRB\nWR\nTE\nLB\nCB\nEDGE\nK\nCreate Your Look\n🎲 Surprise me\nVortex Strike\n\nCleats in bright red.\n\n🫡 Sideline Salute\nSignature pose: raise a hand toward your sideline.\n\nFictional gear and signature poses, just for your look.\n\n🧑\nSkin\n💇\nHair\n🧔\nBeard\n👟\nCleats\n💍\nExtras\n🎉\nCelebration\nCannon Arm\nBig throws, big turnovers\nField Surgeon\nAccuracy and brains, slower start\nDual Threat\nLegs change everything, hits add up\n\nRoad to the Draft\n\nStart before the spotlight. Choose your route, earn your stock, and make draft day yours.\n\nPlay your road to the draft\n\nOr quick start below with an instant draft result.\n\nEnter the draft\nNFL My Career: Football Career Simulator\n\nBuild a fictional prospect and live a full NFL career inside the real league. Your position and archetype drive realistic season stat lines, your choices drive everything else: training focus, holdouts, trade requests, surgeries, hometown discounts or max-money moves. Chase rings, MVPs and All-Pro nods, fight the aging curve, and retire to a legacy verdict that tells you if Canton calls.\n\nEvery draft night some kid hugs his mom and walks into an unwritten life. Here you get that life: create a fictional prospect, get drafted by a real team, and play a whole career, up to three big calls every offseason.\n\nSeasons produce realistic stat lines from your rating, health, and team. Between them come up to three crossroads, one at a time, drawn from over a hundred of them: contracts, trade requests, surgeries, rookie hazing, a mural in your name, and a podcast invite the front office will hate.\n\nYou build your player's actual face before the draft, and there is a dirty side waiting whenever you want it. Selling the injury report to an offshore book, a bounty pool in the meeting room, a clinic in Arizona running a program the league cannot test for yet. Every dirty choice raises a hidden league security meter, and at the top of it sits an indefinite suspension and a comeback from th",
+    "firstVisitScroll": {
+     "sw": 390,
+     "iw": 390
+    },
+    "kickerStart": {
+     "pos": "K",
+     "era": "y2005",
+     "year": 2005,
+     "team": "SD",
+     "pick": 114,
+     "salary": 0.4,
+     "years": 4,
+     "role": "starter",
+     "ovr": 74,
+     "net": 0.1,
+     "seasons": []
+    },
+    "kickerHubText": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nNFL My Career\n\nDraft night to retirement speech. Every choice bends the career.\n\nToe Review · K\nSan Diego Chargers\n2005 · age 22\nOVR 74\n$0.4M x4\n⭐ Starter\n\nDRAFT DAY\n\nWith pick 114, the San Diego Chargers select Toe Review\n\nLate pick. Everything must be earned.\n\n🎯 Kickers do not sit. The job is yours from day one.\n\nPlay the 2005 season\n\nCareer so far: 0 rings · 0 MVPs · 0 All-Pros · 0 FG made\n\nPractice field\n\nPlay a drill. Earn up to +2 OVR for camp.\n\n74OVR\n\nCeiling 99\n\nStart practice\n\nOne banked session each season. Your ceiling still applies.\n\n📊\nMY PLAYER\nOVR 74\nThe fans down at 35\n💰\nTHE BANK\n$0.1M\n$0.4M a year, 4 years left\n📜\nCAREER LOG\nNo seasons yet\nPlay one and it goes on the books\n🏆\nTROPHY CASE\nEmpty\nNothing in it. Go and win something\n📰\nNEWS\n3 headlines\n🎓 With pick 114, the San Diego Chargers select Toe Review.\n📱\nINBOX\n1 unread\nSomebody is waiting on a reply\nNFL My Career: Football Career Simulator\n\nBuild a fictional prospect and live a full NFL career inside the real league. Your position and archetype drive realistic season stat lines, your choices drive everything else: training focus, holdouts, trade requests, surgeries, hometown discounts or max-money moves. Chase rings, MVPs and All-Pro nods, fight the aging curve, and retire to a legacy verdict that tells you if Canton calls.\n\nEvery draft night some kid hugs his mom and walks into an unwritten life. Here you get that life: create a fictional prospect, get drafted by a real team, and play a whole career, up to three big calls every offseason.\n\nSeasons produce realistic stat lines from your rating, health, and team. Between them come up to three crossroads, one at a time, drawn from over a hundred of them: contracts, trade requests, surgeries, rookie",
+    "kickerHubScroll": {
+     "sw": 390,
+     "iw": 390
+    },
+    "kickerRevealText": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nNFL My Career\n\nDraft night to retirement speech. Every choice bends the career.\n\nTHE 2005 SEASON\n\nSan Diego Chargers · age 22 · K\n\nMissed the playoffs\n\n25 of 34 FG, long of 55\n\n🪞 Dominic Lindqvist went 31 field goals and had the better year of the two of you. Head to head 0-1.\n\nContinue\nNFL My Career: Football Career Simulator\n\nBuild a fictional prospect and live a full NFL career inside the real league. Your position and archetype drive realistic season stat lines, your choices drive everything else: training focus, holdouts, trade requests, surgeries, hometown discounts or max-money moves. Chase rings, MVPs and All-Pro nods, fight the aging curve, and retire to a legacy verdict that tells you if Canton calls.\n\nEvery draft night some kid hugs his mom and walks into an unwritten life. Here you get that life: create a fictional prospect, get drafted by a real team, and play a whole career, up to three big calls every offseason.\n\nSeasons produce realistic stat lines from your rating, health, and team. Between them come up to three crossroads, one at a time, drawn from over a hundred of them: contracts, trade requests, surgeries, rookie hazing, a mural in your name, and a podcast invite the front office will hate.\n\nYou build your player's actual face before the draft, and there is a dirty side waiting whenever you want it. Selling the injury report to an offshore book, a bounty pool in the meeting room, a clinic in Arizona runni",
+    "kickerRevealScroll": {
+     "sw": 390,
+     "iw": 390
+    },
+    "kickerAfter1": {
+     "pos": "K",
+     "era": "y2005",
+     "year": 2006,
+     "team": "SD",
+     "pick": 114,
+     "salary": 0.4,
+     "years": 3,
+     "role": "starter",
+     "ovr": 75,
+     "net": 0.3,
+     "vault": 0,
+     "seasons": [
+      {
+       "y": 2005,
+       "g": 16,
+       "fg": 25,
+       "team": "SD"
+      }
+     ]
+    },
+    "logText": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nNFL My Career\n\nDraft night to retirement speech. Every choice bends the career.\n\nBack to career\nCareer Log\n\nPick a year to review your saved season. No extra season is played.\n\nSeason highs\n2005\nSan Diego Chargers\nNFL My Career: Football Career Simulator\n\nBuild a fictional prospect and live a full NFL career inside the real league. Your position and archetype drive realistic season stat lines, your choices drive everything else: training focus, holdouts, trade requests, surgeries, hometown discounts or max-money moves. Chase rings, MVPs and All-Pro nods, fight the aging curve, and retire to a legacy verdict that tells you if Canton calls.\n\nEvery draft night some kid hugs his mom and walks into an unwritten life. Here you get that life: create a fictional prospect, get drafted by a real team, and play a whole career, up to three big calls every offseason.\n\nSeasons produce realistic stat lines from your rating, health, and team. Between them come up to three crossroads, one at a time, drawn from over a hundred of them: contracts, trade requests, surgeries, rookie hazing, a mural in your name, and a podcast invite the front office will hate.\n\nYou build your player's actual face before the draft, and there is a dirty side waiting whenever you want it. Selling the injury report to an offshore book, a bounty pool in the meeting room, a clinic in Arizona running a program the league cannot test for yet. Every dirty choice raises a hi",
+    "logScroll": {
+     "sw": 390,
+     "iw": 390
+    },
+    "bank": {
+     "before": {
+      "pos": "QB",
+      "year": 2026,
+      "team": "SEA",
+      "pick": 68,
+      "salary": 1.8,
+      "years": 4,
+      "role": "backup",
+      "ovr": 69,
+      "net": 0.1,
+      "seasons": []
+     },
+     "doctor1": {
+      "hadMoney": false
+     },
+     "markerSavings": {
+      "tile": "$0M",
+      "save": {
+       "pos": "QB",
+       "year": 2026,
+       "team": "SEA",
+       "pick": 68,
+       "salary": 1.8,
+       "years": 4,
+       "role": "backup",
+       "ovr": 69,
+       "net": -2.4,
+       "seasons": []
+      }
+     },
+     "screenText": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nNFL My Career\n\nDraft night to retirement speech. Every choice bends the career.\n\nHub\n💰 The Bank\n\nEVERYTHING YOU HAVE\n\n$0k\n\n$1.8M a year, 4 years left on the deal\n\n$0k\nin the account\n$0k\nsavings\n$0k\ninvested\n🏦 Account\n📈 Market\n🃏 Cards\n🛒 Shop\n💵 Savings\npays 2.5% a season, never loses\n\nBoring, safe, and better than leaving it in the account doing nothing.\n\nSave 25%\nSave half\nSave it all\nTake out half\nTake it all out\n📄 Statement\nlast 12 only\n\nNothing yet. Save something or buy something.\n\nOlder lines drop off so your save does not grow forever.\n\nMade on investments\n$0k / $0k lost\nNFL My Career: Football Career Simulator\n\nBuild a fictional prospect and live a full NFL career inside the real league. Your position and archetype drive realistic season stat lines, your choices drive everything else: training focus, holdouts, trade requests, surgeries, hometown discounts or max-money moves. Chase rings, MVPs and All-Pro nods, fight the aging curve, and retire to a legacy verdict that tells you if Canton calls.\n\nEvery draft night some kid hugs his mom and walks into an unwritten life. Here you get that life: create a fictional prospect, get drafted by a real team, and play a whole career, up to three big calls every offseason.\n\nSeasons produce realistic stat lines from your rating, health, and team. Between them come up to three crossroads, one at a time, drawn from over a hundred of them: contracts, trade requests, surgeries, rookie hazing, a mural in your name, and a podcast invite the front office will hate.\n\nYou build your player's actual face before the draft, and there is a dirty side waiting whenever you want it. Selling the injury report to an offshore book, a bounty pool in the meeting room, a clinic in Arizona runn",
+     "screenScroll": {
+      "sw": 390,
+      "iw": 390
+     },
+     "markerEmpty": {
+      "tile": "$0M",
+      "save": {
+       "pos": "QB",
+       "year": 2026,
+       "team": "SEA",
+       "pick": 68,
+       "salary": 1.8,
+       "years": 4,
+       "role": "backup",
+       "ovr": 69,
+       "net": -0.4,
+       "seasons": []
+      }
+     },
+     "noMarker": {
+      "tile": "$4.2M",
+      "save": {
+       "pos": "QB",
+       "year": 2026,
+       "team": "SEA",
+       "pick": 68,
+       "salary": 1.8,
+       "years": 4,
+       "role": "backup",
+       "ovr": 69,
+       "net": -0.4,
+       "seasons": []
+      }
+     }
+    },
+    "edge": [
+     {
+      "drafted": {
+       "pick": 35,
+       "role": "starter",
+       "ovr": 74,
+       "team": "CLE"
+      },
+      "steadied": {
+       "role": "starter",
+       "ovr": 80
+      },
+      "per": [
+       {
+        "role": "starter",
+        "ovr": 81,
+        "year": 2027,
+        "n": 1,
+        "last": {
+         "g": 17,
+         "sk": 9.5
+        }
+       },
+       {
+        "role": "starter",
+        "ovr": 83,
+        "year": 2028,
+        "n": 2,
+        "last": {
+         "g": 17,
+         "sk": 10
+        }
+       },
+       {
+        "role": "starter",
+        "ovr": 84,
+        "year": 2029,
+        "n": 3,
+        "last": {
+         "g": 17,
+         "sk": 11
+        }
+       }
+      ],
+      "final": [
+       {
+        "y": 2026,
+        "g": 17,
+        "sk": 9.5,
+        "team": "CLE"
+       },
+       {
+        "y": 2027,
+        "g": 17,
+        "sk": 10,
+        "team": "CLE"
+       },
+       {
+        "y": 2028,
+        "g": 17,
+        "sk": 11,
+        "team": "CLE"
+       }
+      ]
+     },
+     {
+      "drafted": {
+       "pick": 94,
+       "role": "backup",
+       "ovr": 68,
+       "team": "IND"
+      },
+      "steadied": {
+       "role": "starter",
+       "ovr": 80
+      },
+      "per": [
+       {
+        "role": "starter",
+        "ovr": 83,
+        "year": 2027,
+        "n": 1,
+        "last": {
+         "g": 17,
+         "sk": 12.5
+        }
+       },
+       {
+        "role": "starter",
+        "ovr": 85,
+        "year": 2028,
+        "n": 2,
+        "last": {
+         "g": 17,
+         "sk": 8.5
+        }
+       },
+       {
+        "role": "starter",
+        "ovr": 87,
+        "year": 2029,
+        "n": 3,
+        "last": {
+         "g": 17,
+         "sk": 14.5
+        }
+       }
+      ],
+      "final": [
+       {
+        "y": 2026,
+        "g": 17,
+        "sk": 12.5,
+        "team": "IND"
+       },
+       {
+        "y": 2027,
+        "g": 17,
+        "sk": 8.5,
+        "team": "IND"
+       },
+       {
+        "y": 2028,
+        "g": 17,
+        "sk": 14.5,
+        "team": "IND"
+       }
+      ]
+     },
+     {
+      "drafted": {
+       "pick": 64,
+       "role": "starter",
+       "ovr": 68,
+       "team": "BAL"
+      },
+      "steadied": {
+       "role": "starter",
+       "ovr": 80
+      },
+      "per": [
+       {
+        "role": "starter",
+        "ovr": 81,
+        "year": 2027,
+        "n": 1,
+        "last": {
+         "g": 17,
+         "sk": 10
+        }
+       },
+       {
+        "role": "starter",
+        "ovr": 82,
+        "year": 2028,
+        "n": 2,
+        "last": {
+         "g": 9,
+         "sk": 8
+        }
+       },
+       {
+        "role": "starter",
+        "ovr": 83,
+        "year": 2029,
+        "n": 3,
+        "last": {
+         "g": 17,
+         "sk": 11
+        }
+       }
+      ],
+      "final": [
+       {
+        "y": 2026,
+        "g": 17,
+        "sk": 10,
+        "team": "BAL"
+       },
+       {
+        "y": 2027,
+        "g": 9,
+        "sk": 8,
+        "team": "BAL"
+       },
+       {
+        "y": 2028,
+        "g": 17,
+        "sk": 11,
+        "team": "BAL"
+       }
+      ]
+     },
+     {
+      "drafted": {
+       "pick": 51,
+       "role": "backup",
+       "ovr": 72,
+       "team": "GB"
+      },
+      "steadied": {
+       "role": "starter",
+       "ovr": 80
+      },
+      "per": [
+       {
+        "role": "starter",
+        "ovr": 81,
+        "year": 2027,
+        "n": 1,
+        "last": {
+         "g": 13,
+         "sk": 5
+        }
+       },
+       {
+        "role": "backup",
+        "ovr": 82,
+        "year": 2028,
+        "n": 2,
+        "last": {
+         "g": 8,
+         "sk": 5
+        }
+       },
+       {
+        "role": "backup",
+        "ovr": 83,
+        "year": 2029,
+        "n": 3,
+        "last": {
+         "g": 8,
+         "sk": 5
+        }
+       }
+      ],
+      "final": [
+       {
+        "y": 2026,
+        "g": 13,
+        "sk": 5,
+        "team": "GB"
+       },
+       {
+        "y": 2027,
+        "g": 8,
+        "sk": 5,
+        "team": "GB"
+       },
+       {
+        "y": 2028,
+        "g": 8,
+        "sk": 5,
+        "team": "GB"
+       }
+      ]
+     }
+    ],
+    "edgeRevealText": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nNFL My Career\n\nDraft night to retirement speech. Every choice bends the career.\n\nTHE 2026 SEASON\n\nCleveland Browns · age 22 · EDGE\n\nMissed the playoffs\n\n9.5 sacks, 54 tackles, 2 forced fumbles\n\n🪞 Cruz Kowalski went 114 tackles, 7.2 sacks, 2 INT and had the better year of the two of you. Head to head 0-1.\n\nContinue\nNFL My Career: Football Career Simulator\n\nBuild a fictional prospect and live a full NFL career inside the real league. Your position and archetype drive realistic season stat lines, your choices drive everything else: training focus, holdouts, trade requests, surgeries, hometown discounts or max-money moves. Chase rings, MVPs and All-Pro nods, fight the aging curve, and retire to a legacy verdict that tells you if Canton calls.\n\nEvery draft night some kid hugs his mom and walks into an unwritten life. Here you get that life: create a fictional prospect, get drafted by a real team, and play a whole career, up to three big calls every offseason.\n\nSeasons produce realistic stat lines from your rating, health, and team. Between them come up to three crossroads, one at a time, drawn from over a hundred of them: contracts, trade requests, surgeries, rookie hazing, a mural in your name, and a podcast invite the front office will hate.\n\nYou build your player's actual face before the draft, and there is a dirty side waiting whenever you want it. Selling the injury report to an offshore book, a bounty pool in the meeting roo",
+    "whatsNewScroll": {
+     "sw": 390,
+     "iw": 390
+    }
+   }
+  },
+  {
+   "tag": "390r",
+   "steps": {
+    "kickerStart": {
+     "pos": "K",
+     "era": "y2005",
+     "year": 2005,
+     "team": "KC",
+     "pick": 109,
+     "salary": 0.4,
+     "years": 4,
+     "role": "starter",
+     "ovr": 75,
+     "net": 0.1,
+     "seasons": []
+    },
+    "kickerHubText": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nNFL My Career\n\nDraft night to retirement speech. Every choice bends the career.\n\nToe Review · K\nKansas City Chiefs\n2005 · age 22\nOVR 75\n$0.4M x4\n⭐ Starter\n\nDRAFT DAY\n\nWith pick 109, the Kansas City Chiefs select Toe Review\n\nLate pick. Everything must be earned.\n\n🎯 Kickers do not sit. The job is yours from day one.\n\nPlay the 2005 season\n\nCareer so far: 0 rings · 0 MVPs · 0 All-Pros · 0 FG made\n\nPractice field\n\nPlay a drill. Earn up to +2 OVR for camp.\n\n75OVR\n\nCeiling 96\n\nStart practice\n\nOne banked session each season. Your ceiling still applies.\n\n📊\nMY PLAYER\nOVR 75\nThe fans down at 35\n💰\nTHE BANK\n$0.1M\n$0.4M a year, 4 years left\n📜\nCAREER LOG\nNo seasons yet\nPlay one and it goes on the books\n🏆\nTROPHY CASE\nEmpty\nNothing in it. Go and win something\n📰\nNEWS\n3 headlines\n🎓 With pick 109, the Kansas City Chiefs select Toe Review.\n📱\nINBOX\n1 unread\nSomebody is waiting on a reply\nNFL My Career: Football Career Simulator\n\nBuild a fictional prospect and live a full NFL career inside the real league. Your position and archetype drive realistic season stat lines, your choices drive everything else: training focus, holdouts, trade requests, surgeries, hometown discounts or max-money moves. Chase rings, MVPs and All-Pro nods, fight the aging curve, and retire to a legacy verdict that tells you if Canton calls.\n\nEvery draft night some kid hugs his mom and walks into an unwritten life. Here you get that life: create a fictional prospect, get drafted by a real team, and play a whole career, up to three big calls every offseason.\n\nSeasons produce realistic stat lines from your rating, health, and team. Between them come up to three crossroads, one at a time, drawn from over a hundred of them: contracts, trade requests, surgeries, rookie",
+    "kickerHubScroll": {
+     "sw": 390,
+     "iw": 390
+    },
+    "kickerRevealText": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nNFL My Career\n\nDraft night to retirement speech. Every choice bends the career.\n\nTHE 2005 SEASON\n\nKansas City Chiefs · age 22 · K\n\nLost in the Divisional round\n\n22 of 26 FG, long of 55\n\n📊 Playoffs: 2 games, 3 of 3 on field goals.\n\n🪞 Theo Marchetti went 33 field goals and had the better year of the two of you. Head to head 0-1.\n\nContinue\nNFL My Career: Football Career Simulator\n\nBuild a fictional prospect and live a full NFL career inside the real league. Your position and archetype drive realistic season stat lines, your choices drive everything else: training focus, holdouts, trade requests, surgeries, hometown discounts or max-money moves. Chase rings, MVPs and All-Pro nods, fight the aging curve, and retire to a legacy verdict that tells you if Canton calls.\n\nEvery draft night some kid hugs his mom and walks into an unwritten life. Here you get that life: create a fictional prospect, get drafted by a real team, and play a whole career, up to three big calls every offseason.\n\nSeasons produce realistic stat lines from your rating, health, and team. Between them come up to three crossroads, one at a time, drawn from over a hundred of them: contracts, trade requests, surgeries, rookie hazing, a mural in your name, and a podcast invite the front office will hate.\n\nYou build your player's actual face before the draft, and there is a dirty side waiting whenever you want it. Selling the injury report to an offshore book, a bounty",
+    "kickerRevealScroll": {
+     "sw": 390,
+     "iw": 390
+    },
+    "kickerAfter1": {
+     "pos": "K",
+     "era": "y2005",
+     "year": 2006,
+     "team": "KC",
+     "pick": 109,
+     "salary": 0.4,
+     "years": 3,
+     "role": "starter",
+     "ovr": 77,
+     "net": 0.3,
+     "vault": 0,
+     "seasons": [
+      {
+       "y": 2005,
+       "g": 16,
+       "fg": 22,
+       "team": "KC"
+      }
+     ]
+    },
+    "logText": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nNFL My Career\n\nDraft night to retirement speech. Every choice bends the career.\n\nBack to career\nCareer Log\n\nPick a year to review your saved season. No extra season is played.\n\nSeason highs\n2005\nKansas City Chiefs\nNFL My Career: Football Career Simulator\n\nBuild a fictional prospect and live a full NFL career inside the real league. Your position and archetype drive realistic season stat lines, your choices drive everything else: training focus, holdouts, trade requests, surgeries, hometown discounts or max-money moves. Chase rings, MVPs and All-Pro nods, fight the aging curve, and retire to a legacy verdict that tells you if Canton calls.\n\nEvery draft night some kid hugs his mom and walks into an unwritten life. Here you get that life: create a fictional prospect, get drafted by a real team, and play a whole career, up to three big calls every offseason.\n\nSeasons produce realistic stat lines from your rating, health, and team. Between them come up to three crossroads, one at a time, drawn from over a hundred of them: contracts, trade requests, surgeries, rookie hazing, a mural in your name, and a podcast invite the front office will hate.\n\nYou build your player's actual face before the draft, and there is a dirty side waiting whenever you want it. Selling the injury report to an offshore book, a bounty pool in the meeting room, a clinic in Arizona running a program the league cannot test for yet. Every dirty choice raises a hi",
+    "logScroll": {
+     "sw": 390,
+     "iw": 390
+    },
+    "edge": [
+     {
+      "drafted": {
+       "pick": 65,
+       "role": "starter",
+       "ovr": 70,
+       "team": "ARI"
+      },
+      "steadied": {
+       "role": "starter",
+       "ovr": 80
+      },
+      "per": [
+       {
+        "role": "starter",
+        "ovr": 81,
+        "year": 2027,
+        "n": 1,
+        "last": {
+         "g": 17,
+         "sk": 9.5
+        }
+       },
+       {
+        "role": "starter",
+        "ovr": 82,
+        "year": 2028,
+        "n": 2,
+        "last": {
+         "g": 17,
+         "sk": 19.5
+        }
+       },
+       {
+        "role": "starter",
+        "ovr": 84,
+        "year": 2029,
+        "n": 3,
+        "last": {
+         "g": 13,
+         "sk": 10
+        }
+       }
+      ],
+      "final": [
+       {
+        "y": 2026,
+        "g": 17,
+        "sk": 9.5,
+        "team": "ARI"
+       },
+       {
+        "y": 2027,
+        "g": 17,
+        "sk": 19.5,
+        "team": "ARI"
+       },
+       {
+        "y": 2028,
+        "g": 13,
+        "sk": 10,
+        "team": "ARI"
+       }
+      ]
+     }
+    ],
+    "edgeRevealText": "Skip to main content\nDOUKNOWBALL\nBack\nTrack stats\nNFL My Career\n\nDraft night to retirement speech. Every choice bends the career.\n\nTHE 2026 SEASON\n\nArizona Cardinals · age 22 · EDGE\n\nMissed the playoffs\n\n9.5 sacks, 68 tackles, 2 forced fumbles\n\n🪞 Beau Novak went 125 tackles, 6.8 sacks, 3 INT and had the better year of the two of you. Head to head 0-1.\n\nContinue\nNFL My Career: Football Career Simulator\n\nBuild a fictional prospect and live a full NFL career inside the real league. Your position and archetype drive realistic season stat lines, your choices drive everything else: training focus, holdouts, trade requests, surgeries, hometown discounts or max-money moves. Chase rings, MVPs and All-Pro nods, fight the aging curve, and retire to a legacy verdict that tells you if Canton calls.\n\nEvery draft night some kid hugs his mom and walks into an unwritten life. Here you get that life: create a fictional prospect, get drafted by a real team, and play a whole career, up to three big calls every offseason.\n\nSeasons produce realistic stat lines from your rating, health, and team. Between them come up to three crossroads, one at a time, drawn from over a hundred of them: contracts, trade requests, surgeries, rookie hazing, a mural in your name, and a podcast invite the front office will hate.\n\nYou build your player's actual face before the draft, and there is a dirty side waiting whenever you want it. Selling the injury report to an offshore book, a bounty pool in the meeting room,"
+   }
+  },
+  {
+   "tag": "1280",
+   "steps": {
+    "firstVisitText": "Skip to main content\nLIVE\nLive scores temporarily unavailable\nDOUKNOWBALL\nBack\nSign up to track your stats\nNFL My Career\n\nDraft night to retirement speech. Every choice bends the career.\n\nCreate your player\n\nYou are a fictional prospect entering the real league. Position and archetype shape your whole career: growth, injuries, money, legacy. Saves automatically.\n\n🏈 2026\nThe league as it is today. Full money, every current franchise.\n⏪ 2005 throwback\nThe 2005 league: the Raiders in Oakland, the Chargers in San Diego, the Rams in St. Louis. Contracts pay 2005 money, about a third of today.\nQB\nRB\nWR\nTE\nLB\nCB\nEDGE\nK\nCreate Your Look\n🎲 Surprise me\nVortex Strike\n\nCleats in bright red.\n\n🫡 Sideline Salute\nSignature pose: raise a hand toward your sideline.\n\nFictional gear and signature poses, just for your look.\n\n🧑\nSkin\n💇\nHair\n🧔\nBeard\n👟\nCleats\n💍\nExtras\n🎉\nCelebration\nCannon Arm\nBig throws, big turnovers\nField Surgeon\nAccuracy and brains, slower start\nDual Threat\nLegs change everything, hits add up\n\nRoad to the Draft\n\nStart before the spotlight. Choose your route, earn your stock, and make draft day yours.\n\nPlay your road to the draft\n\nOr quick start below with an instant draft result.\n\nEnter the draft\nNFL My Career: Football Career Simulator\n\nBuild a fictional prospect and live a full NFL career inside the real league. Your position and archetype drive realistic season stat lines, your choices drive everything else: training focus, holdouts, trade requests, surgeries, hometown discounts or max-money moves. Chase rings, MVPs and All-Pro nods, fight the aging curve, and retire to a legacy verdict that tells you if Canton calls.\n\nEvery draft night some kid hugs his mom and walks into an unwritten life. Here you get that life: create a fictional prospect, get drafted by a real team, and play a whole career, up to three big calls every offseason.\n\nSeasons produce realistic stat lines from your rating, health, and team. Between them come up to three crossroads, one at a time, drawn from over a hundred of them: contracts, trade requests, surgeries, rookie hazing, a mural in your name, and a podcast invite the front office will hate.\n\nYou build your player's actual face before the draft, and there is a dirty side waiting whenever you want it. Selling the injury report to an offshore book, a bounty pool in the meeting room, a clinic in Arizona running a program the league cannot test for yet. Every dirty choice raises a hidden league security meter, and at the top o",
+    "firstVisitScroll": {
+     "sw": 1280,
+     "iw": 1280
+    },
+    "kickerStart": {
+     "pos": "K",
+     "era": "y2005",
+     "year": 2005,
+     "team": "DET",
+     "pick": 153,
+     "salary": 0.4,
+     "years": 4,
+     "role": "starter",
+     "ovr": 71,
+     "net": 0.1,
+     "seasons": []
+    },
+    "kickerHubText": "Skip to main content\nLIVE\nLive scores temporarily unavailable\nDOUKNOWBALL\nBack\nSign up to track your stats\nNFL My Career\n\nDraft night to retirement speech. Every choice bends the career.\n\nToe Review · K\nDetroit Lions\n2005 · age 22\nOVR 71\n$0.4M x4\n⭐ Starter\n\nDRAFT DAY\n\nWith pick 153, the Detroit Lions select Toe Review\n\nLate pick. Everything must be earned.\n\n🎯 Kickers do not sit. The job is yours from day one.\n\nPlay the 2005 season\n\nCareer so far: 0 rings · 0 MVPs · 0 All-Pros · 0 FG made\n\nPractice field\n\nPlay a drill. Earn up to +2 OVR for camp.\n\n71OVR\n\nCeiling 86\n\nStart practice\n\nOne banked session each season. Your ceiling still applies.\n\n📊\nMY PLAYER\nOVR 71\nThe fans down at 35\n💰\nTHE BANK\n$0.1M\n$0.4M a year, 4 years left\n📜\nCAREER LOG\nNo seasons yet\nPlay one and it goes on the books\n🏆\nTROPHY CASE\nEmpty\nNothing in it. Go and win something\n📰\nNEWS\n3 headlines\n🎓 With pick 153, the Detroit Lions select Toe Review.\n📱\nINBOX\n1 unread\nSomebody is waiting on a reply\nNFL My Career: Football Career Simulator\n\nBuild a fictional prospect and live a full NFL career inside the real league. Your position and archetype drive realistic season stat lines, your choices drive everything else: training focus, holdouts, trade requests, surgeries, hometown discounts or max-money moves. Chase rings, MVPs and All-Pro nods, fight the aging curve, and retire to a legacy verdict that tells you if Canton calls.\n\nEvery draft night some kid hugs his mom and walks into an unwritten life. Here you get that life: create a fictional prospect, get drafted by a real team, and play a whole career, up to three big calls every offseason.\n\nSeasons produce realistic stat lines from your rating, health, and team. Between them come up to three crossroads, one at a time, drawn from over a hundred of them: co",
+    "kickerHubScroll": {
+     "sw": 1280,
+     "iw": 1280
+    },
+    "kickerRevealText": "Skip to main content\nLIVE\nLive scores temporarily unavailable\nDOUKNOWBALL\nBack\nSign up to track your stats\nNFL My Career\n\nDraft night to retirement speech. Every choice bends the career.\n\nTHE 2005 SEASON\n\nDetroit Lions · age 22 · K\n\nLost in the Wild Card round\n\n22 of 27 FG, long of 61\n\n📊 Playoffs: 1 game, 1 of 1 on field goals.\n\n🪞 Cole Whitaker went 30 field goals and had the better year of the two of you. Head to head 0-1.\n\nContinue\nNFL My Career: Football Career Simulator\n\nBuild a fictional prospect and live a full NFL career inside the real league. Your position and archetype drive realistic season stat lines, your choices drive everything else: training focus, holdouts, trade requests, surgeries, hometown discounts or max-money moves. Chase rings, MVPs and All-Pro nods, fight the aging curve, and retire to a legacy verdict that tells you if Canton calls.\n\nEvery draft night some kid hugs his mom and walks into an unwritten life. Here you get that life: create a fictional prospect, get drafted by a real team, and play a whole career, up to three big calls every offseason.\n\nSeasons produce realistic stat lines from your rating, health, and team. Between them come up to three crossroads, one at a time, drawn from over a hundred of them: contracts, trade requests, surgeries, rookie hazing, a mural in your name, and a podcast invite the front office will hate.\n\nYou build your player's actual face before the draft, and there is a dirty side waiting whenever you want it. Sellin",
+    "kickerRevealScroll": {
+     "sw": 1280,
+     "iw": 1280
+    },
+    "kickerAfter1": {
+     "pos": "K",
+     "era": "y2005",
+     "year": 2006,
+     "team": "DET",
+     "pick": 153,
+     "salary": 0.4,
+     "years": 3,
+     "role": "starter",
+     "ovr": 72,
+     "net": 0.3,
+     "vault": 0,
+     "seasons": [
+      {
+       "y": 2005,
+       "g": 16,
+       "fg": 22,
+       "team": "DET"
+      }
+     ]
+    },
+    "logText": "Skip to main content\nLIVE\nLive scores temporarily unavailable\nDOUKNOWBALL\nBack\nSign up to track your stats\nNFL My Career\n\nDraft night to retirement speech. Every choice bends the career.\n\nBack to career\nCareer Log\n\nPick a year to review your saved season. No extra season is played.\n\nSeason highs\n2005\nDetroit Lions\nNFL My Career: Football Career Simulator\n\nBuild a fictional prospect and live a full NFL career inside the real league. Your position and archetype drive realistic season stat lines, your choices drive everything else: training focus, holdouts, trade requests, surgeries, hometown discounts or max-money moves. Chase rings, MVPs and All-Pro nods, fight the aging curve, and retire to a legacy verdict that tells you if Canton calls.\n\nEvery draft night some kid hugs his mom and walks into an unwritten life. Here you get that life: create a fictional prospect, get drafted by a real team, and play a whole career, up to three big calls every offseason.\n\nSeasons produce realistic stat lines from your rating, health, and team. Between them come up to three crossroads, one at a time, drawn from over a hundred of them: contracts, trade requests, surgeries, rookie hazing, a mural in your name, and a podcast invite the front office will hate.\n\nYou build your player's actual face before the draft, and there is a dirty side waiting whenever you want it. Selling the injury report to an offshore book, a bounty pool in the meeting room, a clinic in Arizona running a program the league",
+    "logScroll": {
+     "sw": 1280,
+     "iw": 1280
+    },
+    "bank": {
+     "before": {
+      "pos": "QB",
+      "year": 2026,
+      "team": "NYJ",
+      "pick": 51,
+      "salary": 2.5,
+      "years": 4,
+      "role": "backup",
+      "ovr": 71,
+      "net": 0.1,
+      "seasons": []
+     },
+     "doctor1": {
+      "hadMoney": false
+     },
+     "markerSavings": {
+      "tile": "$0M",
+      "save": {
+       "pos": "QB",
+       "year": 2026,
+       "team": "NYJ",
+       "pick": 51,
+       "salary": 2.5,
+       "years": 4,
+       "role": "backup",
+       "ovr": 71,
+       "net": -2.4,
+       "seasons": []
+      }
+     },
+     "screenText": "Skip to main content\nLIVE\nLive scores temporarily unavailable\nDOUKNOWBALL\nBack\nSign up to track your stats\nNFL My Career\n\nDraft night to retirement speech. Every choice bends the career.\n\nHub\n💰 The Bank\n\nEVERYTHING YOU HAVE\n\n$0k\n\n$2.5M a year, 4 years left on the deal\n\n$0k\nin the account\n$0k\nsavings\n$0k\ninvested\n🏦 Account\n📈 Market\n🃏 Cards\n🛒 Shop\n💵 Savings\npays 2.5% a season, never loses\n\nBoring, safe, and better than leaving it in the account doing nothing.\n\nSave 25%\nSave half\nSave it all\nTake out half\nTake it all out\n📄 Statement\nlast 12 only\n\nNothing yet. Save something or buy something.\n\nOlder lines drop off so your save does not grow forever.\n\nMade on investments\n$0k / $0k lost\nNFL My Career: Football Career Simulator\n\nBuild a fictional prospect and live a full NFL career inside the real league. Your position and archetype drive realistic season stat lines, your choices drive everything else: training focus, holdouts, trade requests, surgeries, hometown discounts or max-money moves. Chase rings, MVPs and All-Pro nods, fight the aging curve, and retire to a legacy verdict that tells you if Canton calls.\n\nEvery draft night some kid hugs his mom and walks into an unwritten life. Here you get that life: create a fictional prospect, get drafted by a real team, and play a whole career, up to three big calls every offseason.\n\nSeasons produce realistic stat lines from your rating, health, and team. Between them come up to three crossroads, one at a time, drawn from over a hundred of them: contracts, trade requests, surgeries, rookie hazing, a mural in your name, and a podcast invite the front office will hate.\n\nYou build your player's actual face before the draft, and there is a dirty side waiting whenever you want it. Selling the injury report to an offshore book, a ",
+     "screenScroll": {
+      "sw": 1280,
+      "iw": 1280
+     },
+     "markerEmpty": {
+      "tile": "$0M",
+      "save": {
+       "pos": "QB",
+       "year": 2026,
+       "team": "NYJ",
+       "pick": 51,
+       "salary": 2.5,
+       "years": 4,
+       "role": "backup",
+       "ovr": 71,
+       "net": -0.4,
+       "seasons": []
+      }
+     },
+     "noMarker": {
+      "tile": "$4.2M",
+      "save": {
+       "pos": "QB",
+       "year": 2026,
+       "team": "NYJ",
+       "pick": 51,
+       "salary": 2.5,
+       "years": 4,
+       "role": "backup",
+       "ovr": 71,
+       "net": -0.4,
+       "seasons": []
+      }
+     }
+    },
+    "edge": [
+     {
+      "drafted": {
+       "pick": 70,
+       "role": "backup",
+       "ovr": 69,
+       "team": "MIN"
+      },
+      "steadied": {
+       "role": "starter",
+       "ovr": 80
+      },
+      "per": [
+       {
+        "role": "starter",
+        "ovr": 81,
+        "year": 2027,
+        "n": 1,
+        "last": {
+         "g": 17,
+         "sk": 15.5
+        }
+       },
+       {
+        "role": "starter",
+        "ovr": 82,
+        "year": 2028,
+        "n": 2,
+        "last": {
+         "g": 17,
+         "sk": 14.5
+        }
+       },
+       {
+        "role": "starter",
+        "ovr": 84,
+        "year": 2029,
+        "n": 3,
+        "last": {
+         "g": 17,
+         "sk": 16
+        }
+       }
+      ],
+      "final": [
+       {
+        "y": 2026,
+        "g": 17,
+        "sk": 15.5,
+        "team": "MIN"
+       },
+       {
+        "y": 2027,
+        "g": 17,
+        "sk": 14.5,
+        "team": "MIN"
+       },
+       {
+        "y": 2028,
+        "g": 17,
+        "sk": 16,
+        "team": "MIN"
+       }
+      ]
+     },
+     {
+      "drafted": {
+       "pick": 33,
+       "role": "starter",
+       "ovr": 73,
+       "team": "CHI"
+      },
+      "steadied": {
+       "role": "starter",
+       "ovr": 80
+      },
+      "per": [
+       {
+        "role": "starter",
+        "ovr": 82,
+        "year": 2027,
+        "n": 1,
+        "last": {
+         "g": 11,
+         "sk": 7.5
+        }
+       },
+       {
+        "role": "starter",
+        "ovr": 84,
+        "year": 2028,
+        "n": 2,
+        "last": {
+         "g": 17,
+         "sk": 15.5
+        }
+       },
+       {
+        "role": "starter",
+        "ovr": 85,
+        "year": 2029,
+        "n": 3,
+        "last": {
+         "g": 17,
+         "sk": 10.5
+        }
+       }
+      ],
+      "final": [
+       {
+        "y": 2026,
+        "g": 11,
+        "sk": 7.5,
+        "team": "CHI"
+       },
+       {
+        "y": 2027,
+        "g": 17,
+        "sk": 15.5,
+        "team": "CHI"
+       },
+       {
+        "y": 2028,
+        "g": 17,
+        "sk": 10.5,
+        "team": "CHI"
+       }
+      ]
+     },
+     {
+      "drafted": {
+       "pick": 90,
+       "role": "backup",
+       "ovr": 68,
+       "team": "MIN"
+      },
+      "steadied": {
+       "role": "starter",
+       "ovr": 80
+      },
+      "per": [
+       {
+        "role": "starter",
+        "ovr": 81,
+        "year": 2027,
+        "n": 1,
+        "last": {
+         "g": 17,
+         "sk": 7.5
+        }
+       },
+       {
+        "role": "starter",
+        "ovr": 83,
+        "year": 2028,
+        "n": 2,
+        "last": {
+         "g": 17,
+         "sk": 12
+        }
+       },
+       {
+        "role": "starter",
+        "ovr": 85,
+        "year": 2029,
+        "n": 3,
+        "last": {
+         "g": 17,
+         "sk": 9.5
+        }
+       }
+      ],
+      "final": [
+       {
+        "y": 2026,
+        "g": 17,
+        "sk": 7.5,
+        "team": "MIN"
+       },
+       {
+        "y": 2027,
+        "g": 17,
+        "sk": 12,
+        "team": "MIN"
+       },
+       {
+        "y": 2028,
+        "g": 17,
+        "sk": 9.5,
+        "team": "MIN"
+       }
+      ]
+     },
+     {
+      "drafted": {
+       "pick": 82,
+       "role": "backup",
+       "ovr": 69,
+       "team": "CAR"
+      },
+      "steadied": {
+       "role": "starter",
+       "ovr": 80
+      },
+      "per": [
+       {
+        "role": "starter",
+        "ovr": 82,
+        "year": 2027,
+        "n": 1,
+        "last": {
+         "g": 17,
+         "sk": 10.5
+        }
+       },
+       {
+        "role": "starter",
+        "ovr": 84,
+        "year": 2028,
+        "n": 2,
+        "last": {
+         "g": 17,
+         "sk": 13.5
+        }
+       },
+       {
+        "role": "starter",
+        "ovr": 87,
+        "year": 2029,
+        "n": 3,
+        "last": {
+         "g": 17,
+         "sk": 15.5
+        }
+       }
+      ],
+      "final": [
+       {
+        "y": 2026,
+        "g": 17,
+        "sk": 10.5,
+        "team": "CAR"
+       },
+       {
+        "y": 2027,
+        "g": 17,
+        "sk": 13.5,
+        "team": "CAR"
+       },
+       {
+        "y": 2028,
+        "g": 17,
+        "sk": 15.5,
+        "team": "CAR"
+       }
+      ]
+     }
+    ],
+    "edgeRevealText": "Skip to main content\nLIVE\nLive scores temporarily unavailable\nDOUKNOWBALL\nBack\nSign up to track your stats\nNFL My Career\n\nDraft night to retirement speech. Every choice bends the career.\n\nTHE 2026 SEASON\n\nMinnesota Vikings · age 22 · EDGE\n\nLost in the Wild Card round\n\n15.5 sacks, 66 tackles, 2 forced fumbles\n\n📊 Playoffs: 1 game, 9 tackles, 0.5 sacks.\n\n🏆 Defensive Rookie of the Year.\n\n🔥 Every read was right. Career year.\n\n🪞 Quinn Salvatore went 121 tackles, 5.4 sacks, 2 INT. You had the better year. Head to head 1-0.\n\nContinue\nNFL My Career: Football Career Simulator\n\nBuild a fictional prospect and live a full NFL career inside the real league. Your position and archetype drive realistic season stat lines, your choices drive everything else: training focus, holdouts, trade requests, surgeries, hometown discounts or max-money moves. Chase rings, MVPs and All-Pro nods, fight the aging curve, and retire to a legacy verdict that tells you if Canton calls.\n\nEvery draft night some kid hugs his mom and walks into an unwritten life. Here you get that life: create a fictional prospect, get drafted by a real team, and play a whole career, up to three big calls every offseason.\n\nSeasons produce realistic stat lines from your rating, health, and team. Between them come up to three crossroads, one at a time, drawn from over a hundred of them: contracts, trade requests, surgeries, rookie hazing, a mural in your name, and a podcast invite the front office will hate.\n\nYou build your playe",
+    "whatsNewScroll": {
+     "sw": 1280,
+     "iw": 1280
+    }
+   }
+  },
+  {
+   "tag": "1280r",
+   "steps": {
+    "kickerStart": {
+     "pos": "K",
+     "era": "y2005",
+     "year": 2005,
+     "team": "ATL",
+     "pick": 144,
+     "salary": 0.4,
+     "years": 4,
+     "role": "starter",
+     "ovr": 70,
+     "net": 0.1,
+     "seasons": []
+    },
+    "kickerHubText": "Skip to main content\nLIVE\nLive scores temporarily unavailable\nDOUKNOWBALL\nBack\nSign up to track your stats\nNFL My Career\n\nDraft night to retirement speech. Every choice bends the career.\n\nToe Review · K\nAtlanta Falcons\n2005 · age 22\nOVR 70\n$0.4M x4\n⭐ Starter\n\nDRAFT DAY\n\nWith pick 144, the Atlanta Falcons select Toe Review\n\nLate pick. Everything must be earned.\n\n🎯 Kickers do not sit. The job is yours from day one.\n\nPlay the 2005 season\n\nCareer so far: 0 rings · 0 MVPs · 0 All-Pros · 0 FG made\n\nPractice field\n\nPlay a drill. Earn up to +2 OVR for camp.\n\n70OVR\n\nCeiling 88\n\nStart practice\n\nOne banked session each season. Your ceiling still applies.\n\n📊\nMY PLAYER\nOVR 70\nThe fans down at 35\n💰\nTHE BANK\n$0.1M\n$0.4M a year, 4 years left\n📜\nCAREER LOG\nNo seasons yet\nPlay one and it goes on the books\n🏆\nTROPHY CASE\nEmpty\nNothing in it. Go and win something\n📰\nNEWS\n3 headlines\n🎓 With pick 144, the Atlanta Falcons select Toe Review.\n📱\nINBOX\n1 unread\nSomebody is waiting on a reply\nNFL My Career: Football Career Simulator\n\nBuild a fictional prospect and live a full NFL career inside the real league. Your position and archetype drive realistic season stat lines, your choices drive everything else: training focus, holdouts, trade requests, surgeries, hometown discounts or max-money moves. Chase rings, MVPs and All-Pro nods, fight the aging curve, and retire to a legacy verdict that tells you if Canton calls.\n\nEvery draft night some kid hugs his mom and walks into an unwritten life. Here you get that life: create a fictional prospect, get drafted by a real team, and play a whole career, up to three big calls every offseason.\n\nSeasons produce realistic stat lines from your rating, health, and team. Between them come up to three crossroads, one at a time, drawn from over a hundred of th",
+    "kickerHubScroll": {
+     "sw": 1280,
+     "iw": 1280
+    },
+    "kickerRevealText": "Skip to main content\nLIVE\nLive scores temporarily unavailable\nDOUKNOWBALL\nBack\nSign up to track your stats\nNFL My Career\n\nDraft night to retirement speech. Every choice bends the career.\n\nTHE 2005 SEASON\n\nAtlanta Falcons · age 22 · K\n\nMissed the playoffs\n\n23 of 30 FG, long of 55\n\n🪞 Dominic Whitaker went 34 field goals and had the better year of the two of you. Head to head 0-1.\n\nContinue\nNFL My Career: Football Career Simulator\n\nBuild a fictional prospect and live a full NFL career inside the real league. Your position and archetype drive realistic season stat lines, your choices drive everything else: training focus, holdouts, trade requests, surgeries, hometown discounts or max-money moves. Chase rings, MVPs and All-Pro nods, fight the aging curve, and retire to a legacy verdict that tells you if Canton calls.\n\nEvery draft night some kid hugs his mom and walks into an unwritten life. Here you get that life: create a fictional prospect, get drafted by a real team, and play a whole career, up to three big calls every offseason.\n\nSeasons produce realistic stat lines from your rating, health, and team. Between them come up to three crossroads, one at a time, drawn from over a hundred of them: contracts, trade requests, surgeries, rookie hazing, a mural in your name, and a podcast invite the front office will hate.\n\nYou build your player's actual face before the draft, and there is a dirty side waiting whenever you want it. Selling the injury report to an offshore book, a bount",
+    "kickerRevealScroll": {
+     "sw": 1280,
+     "iw": 1280
+    },
+    "kickerAfter1": {
+     "pos": "K",
+     "era": "y2005",
+     "year": 2006,
+     "team": "ATL",
+     "pick": 144,
+     "salary": 0.4,
+     "years": 3,
+     "role": "starter",
+     "ovr": 72,
+     "net": 0.3,
+     "vault": 0,
+     "seasons": [
+      {
+       "y": 2005,
+       "g": 16,
+       "fg": 23,
+       "team": "ATL"
+      }
+     ]
+    },
+    "logText": "Skip to main content\nLIVE\nLive scores temporarily unavailable\nDOUKNOWBALL\nBack\nSign up to track your stats\nNFL My Career\n\nDraft night to retirement speech. Every choice bends the career.\n\nBack to career\nCareer Log\n\nPick a year to review your saved season. No extra season is played.\n\nSeason highs\n2005\nAtlanta Falcons\nNFL My Career: Football Career Simulator\n\nBuild a fictional prospect and live a full NFL career inside the real league. Your position and archetype drive realistic season stat lines, your choices drive everything else: training focus, holdouts, trade requests, surgeries, hometown discounts or max-money moves. Chase rings, MVPs and All-Pro nods, fight the aging curve, and retire to a legacy verdict that tells you if Canton calls.\n\nEvery draft night some kid hugs his mom and walks into an unwritten life. Here you get that life: create a fictional prospect, get drafted by a real team, and play a whole career, up to three big calls every offseason.\n\nSeasons produce realistic stat lines from your rating, health, and team. Between them come up to three crossroads, one at a time, drawn from over a hundred of them: contracts, trade requests, surgeries, rookie hazing, a mural in your name, and a podcast invite the front office will hate.\n\nYou build your player's actual face before the draft, and there is a dirty side waiting whenever you want it. Selling the injury report to an offshore book, a bounty pool in the meeting room, a clinic in Arizona running a program the leag",
+    "logScroll": {
+     "sw": 1280,
+     "iw": 1280
+    },
+    "edge": [
+     {
+      "drafted": {
+       "pick": 69,
+       "role": "backup",
+       "ovr": 69,
+       "team": "JAX"
+      },
+      "steadied": {
+       "role": "starter",
+       "ovr": 80
+      },
+      "per": [
+       {
+        "role": "starter",
+        "ovr": 84,
+        "year": 2027,
+        "n": 1,
+        "last": {
+         "g": 17,
+         "sk": 11.5
+        }
+       },
+       {
+        "role": "starter",
+        "ovr": 85,
+        "year": 2028,
+        "n": 2,
+        "last": {
+         "g": 17,
+         "sk": 7
+        }
+       },
+       {
+        "role": "starter",
+        "ovr": 87,
+        "year": 2029,
+        "n": 3,
+        "last": {
+         "g": 17,
+         "sk": 14.5
+        }
+       }
+      ],
+      "final": [
+       {
+        "y": 2026,
+        "g": 17,
+        "sk": 11.5,
+        "team": "JAX"
+       },
+       {
+        "y": 2027,
+        "g": 17,
+        "sk": 7,
+        "team": "JAX"
+       },
+       {
+        "y": 2028,
+        "g": 17,
+        "sk": 14.5,
+        "team": "JAX"
+       }
+      ]
+     }
+    ],
+    "edgeRevealText": "Skip to main content\nLIVE\nLive scores temporarily unavailable\nDOUKNOWBALL\nBack\nSign up to track your stats\nNFL My Career\n\nDraft night to retirement speech. Every choice bends the career.\n\nTHE 2026 SEASON\n\nJacksonville Jaguars · age 22 · EDGE\n\nMissed the playoffs\n\n11.5 sacks, 60 tackles, 2 forced fumbles\n\n🪞 Rhys Moreau went 120 tackles, 7.6 sacks, 2 INT and had the better year of the two of you. Head to head 0-1.\n\nContinue\nNFL My Career: Football Career Simulator\n\nBuild a fictional prospect and live a full NFL career inside the real league. Your position and archetype drive realistic season stat lines, your choices drive everything else: training focus, holdouts, trade requests, surgeries, hometown discounts or max-money moves. Chase rings, MVPs and All-Pro nods, fight the aging curve, and retire to a legacy verdict that tells you if Canton calls.\n\nEvery draft night some kid hugs his mom and walks into an unwritten life. Here you get that life: create a fictional prospect, get drafted by a real team, and play a whole career, up to three big calls every offseason.\n\nSeasons produce realistic stat lines from your rating, health, and team. Between them come up to three crossroads, one at a time, drawn from over a hundred of them: contracts, trade requests, surgeries, rookie hazing, a mural in your name, and a podcast invite the front office will hate.\n\nYou build your player's actual face before the draft, and there is a dirty side waiting whenever you want it. Selling the injury "
+   }
+  }
+ ],
+ "errors": []
+}

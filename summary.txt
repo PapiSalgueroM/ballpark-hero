@@ -1,0 +1,7 @@
+build exit=0 19s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk1 exit=1 84s | playNflTruth: 1 failure
+walk2 exit=0 85s | playNflTruth: green. A kicker goes late and is paid his slot, throwback seasons are 16 games, the bank stops at zero on load, and sacks come in halves.
+walk3 exit=0 83s | playNflTruth: green. A kicker goes late and is paid his slot, throwback seasons are 16 games, the bank stops at zero on load, and sacks come in halves.
+walk4 exit=0 86s | playNflTruth: green. A kicker goes late and is paid his slot, throwback seasons are 16 games, the bank stops at zero on load, and sacks come in halves.
+walk5 exit=0 86s | playNflTruth: green. A kicker goes late and is paid his slot, throwback seasons are 16 games, the bank stops at zero on load, and sacks come in halves.
+rvwalk exit=0 267s | 1280r edge: [["backup","starter","starter:17","starter:17","starter:17"]]

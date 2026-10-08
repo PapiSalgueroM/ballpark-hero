@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+# Round 1104 review (runner lens): own walk with screenshots, and the builder walk four more times
+rvwalk: node .rc/x/rv-walk.mjs
+walk1: ENGINES=chromium node scripts/playNflTruth.mjs
+walk2: ENGINES=chromium node scripts/playNflTruth.mjs
+walk3: ENGINES=chromium node scripts/playNflTruth.mjs
+walk4: ENGINES=chromium node scripts/playNflTruth.mjs
+walk5: ENGINES=chromium node scripts/playNflTruth.mjs
