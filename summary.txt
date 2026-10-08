@@ -1,0 +1,12 @@
+vitest-celeb exit=0 4s |    Duration  2.86s (transform 591ms, setup 88ms, collect 861ms, tests 589ms, environment 526ms, prepare 139ms)
+vitest-motion exit=0 67s |    Duration  66.01s (transform 3.07s, setup 90ms, collect 4.03s, tests 60.37s, environment 569ms, prepare 366ms)
+simLiveSimCelebration exit=0 3s | simLiveSimCelebration: 17 outcome checks passed, correct side, net-first, real figure, freeze/expiry, reduced motion, the three recorded digests of the lift, the part beh
+m-kickoffcut exit=1 5s | simLiveSimMotion: control kickoffcut turned "R9: a goal gets its kick off" red on an assertion (1 failed), as it must.
+simLiveSimMotion exit=0 73s | simLiveSimMotion: green. 54 tests passed (the viewer on real feeds, the pitch part's rules on 200 half feeds and on feeds made by hand, the goal sequence, match mode), an
+tsc exit=0 83s | 
+m-kickoffwait exit=1 6s | simLiveSimMotion: control kickoffwait turned "R9: a goal gets its kick off" red on an assertion (1 failed), as it must.
+m-kickoffturn exit=1 10s | simLiveSimMotion: control kickoffturn turned "R6: a chance starts with the ball" red on an assertion (1 failed), as it must.
+m-kickoffside exit=1 10s | simLiveSimMotion: control kickoffside turned "R7: every dead ball" red on an assertion (1 failed), as it must.
+m-restartbeat exit=1 10s | simLiveSimMotion: control restartbeat turned "R6: a chance starts with the ball" red on an assertion (1 failed), as it must.
+m-turns exit=1 9s | simLiveSimMotion: control turns turned "R6: a chance starts with the ball" red on an assertion (1 failed), as it must.
+m-approach exit=1 7s | simLiveSimMotion: control approach turned "R6: a chance starts with the ball" red on an assertion (1 failed), as it must.
