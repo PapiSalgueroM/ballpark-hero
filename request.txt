@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+#!serial
+play-main: PLAY_STORAGE_NATIVE=require node scripts/playStorageBlocked.mjs
+play-raw: PLAY_STORAGE_NATIVE=require PLAY_STORAGE_CONTROL=raw node scripts/playStorageBlocked.mjs
+play-open: PLAY_STORAGE_CONTROL=open node scripts/playStorageBlocked.mjs
+play-bogus: PLAY_STORAGE_CONTROL=bogus node scripts/playStorageBlocked.mjs
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+playHomeFold: node scripts/playHomeFold.mjs

@@ -1,0 +1,7 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+play-main exit=0 206s | playStorageBlocked: 794 checks, 0 failed
+play-raw exit=1 470s | playStorageBlocked (control raw): 754 checks, 249 failed
+play-open exit=0 180s | playStorageBlocked (control open): 682 checks, 0 failed
+play-bogus exit=2 1s | unknown PLAY_STORAGE_CONTROL=bogus (raw or open)
+simDailySaveHardening exit=1 56s | simDailySaveHardening: 2 failure(s)
+playHomeFold exit=0 29s | playHomeFold: green. The first thing on the page is something to play.
