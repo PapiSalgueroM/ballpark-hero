@@ -1,0 +1,28 @@
+#!build
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-diff: node_modules/.bin/vitest run src/lib/frontOfficeRatings.test.ts src/lib/soccerClubSquad.test.ts src/test/cbbProgramFeedback.test.tsx src/test/clubManagerEraNationalities.test.ts src/test/cmDataOnDemandIdentity.test.ts src/test/collegeGridFailClosed.test.tsx src/test/collegeGridOffline.test.tsx src/test/collegeGridSearchMemory.test.ts src/test/constructorFeedback.test.tsx src/test/cookieConsentStorage.test.tsx src/test/f1DriverFeedback.test.tsx src/test/f1DriverHintPoints.test.tsx src/test/freshBuildBlockedStorage.test.ts src/test/gridEngineSource.test.ts src/test/guessFinishMoment.test.tsx src/test/guestHandleVisit.test.tsx src/test/hofOrBustVoteOnce.test.tsx src/test/nascarDriverFeedback.test.tsx src/test/playerSearchLocal.test.ts src/test/resultScorePillComparison.test.tsx src/test/safeStorage.test.ts src/test/seasonCentreWords.test.tsx src/test/seasonCore.test.ts src/test/storageBlockedBoot.test.tsx src/test/supabaseClientBlockedStorage.test.ts src/test/tennisPlayerFeedback.test.tsx src/test/translateGuard.test.tsx src/test/usBoardFixture.test.tsx src/test/usSeason.test.ts src/test/usSeasonCentre.test.tsx src/test/usSeasonCentreEntry.test.tsx --testTimeout=300000 --hookTimeout=120000
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simCompletionOnce: node scripts/simCompletionOnce.mjs
+simNoDoubleRecord: node scripts/simNoDoubleRecord.mjs
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simAdsense: node scripts/simAdsense.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simSingleFooter: node scripts/simSingleFooter.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simCmShootoutOrder: node scripts/simCmShootoutOrder.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simSoccerOfferReview: node scripts/simSoccerOfferReview.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
