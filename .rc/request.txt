@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+walk: SWEEP_BASE=http://localhost:4173 node scripts/playClubManagerNewCountries.mjs
+walk-noresume: PLAY_NEWCOUNTRIES_CONTROL=noresume SWEEP_BASE=http://localhost:4173 node scripts/playClubManagerNewCountries.mjs
