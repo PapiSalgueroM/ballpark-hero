@@ -1,0 +1,4 @@
+remedy-copy exit=0 0s | remedy: copy written to .sim-control/remedy-1791440040636/PlayerAutocomplete.tsx
+remedy-vitest exit=0 9s |    Duration  7.97s (transform 675ms, setup 396ms, collect 2.29s, tests 11.65s, environment 2.56s, prepare 741ms)
+remedy-sweep2138 exit=0 3s |    Duration  2.13s (transform 123ms, setup 51ms, collect 322ms, tests 1.06s, environment 296ms, prepare 151ms)
+remedy-sweep3138 exit=0 3s |    Duration  2.11s (transform 121ms, setup 52ms, collect 322ms, tests 1.06s, environment 292ms, prepare 126ms)

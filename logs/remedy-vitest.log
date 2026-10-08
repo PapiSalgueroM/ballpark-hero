@@ -1,0 +1,38 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/collegeGridFailClosed.test.tsx
+[22m[39mCGFAILCLOSED| board cg611-033: yes Jason Witten, no Darrell Green
+
+[90mstdout[2m | src/test/playerAutocompleteStale.test.tsx[2m > [22m[2mplayer autocomplete: a list is only on screen for the query that produced it[2m > [22m[2mnever offers the last query under new text, across 200 seeded timings
+[22m[39mSTALE_SWEEP seed=1138 trials=200 staleVisible=0 stalePicked=0 currentPicked=200 stuckFinding=0
+
+[90mstdout[2m | src/test/collegeGridFailClosed.test.tsx[2m > [22m[2mCollege Grid fail closed (Round 1105)[2m > [22m[2m(c) the key fails five ways: unverified each time, the next pick starts a new load, and a good load is judged
+[22m[39mCGFAILCLOSED| fail closed: 5 of 5 failure worlds left the pick unverified and judged it after the network healed
+
+ [32m✓[39m src/test/playerAutocompleteStale.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 1630[2mms[22m[39m
+   [33m[2m✓[22m[39m player autocomplete: a list is only on screen for the query that produced it[2m > [22mnever offers the last query under new text, across 200 seeded timings [33m 1229[2mms[22m[39m
+[90mstdout[2m | src/test/collegeGridOffline.test.tsx[2m > [22m[2mCollege Grid offline[2m > [22m[2m(4a) a win bot fills 9 of 9 in 9 counted guesses on every board
+[22m[39mCGOFFLINE| win: 75 of 75 boards won in 9 counted guesses, each recorded once at 900; 1350 network calls refused by the stub along the way; key files fetched 2, reads of the key's table 0
+
+[90mstdout[2m | src/test/collegeGridFailClosed.test.tsx[2m > [22m[2mdecodeCollegeKey: null on any doubt, never a row from a damaged file[2m > [22m[2mevery one of 41 damaged pairs is null, and none of them throws
+[22m[39mCGFAILCLOSED| decoder: 41 of 41 damaged pairs refused
+
+ [32m✓[39m src/test/collegeGridFailClosed.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 2657[2mms[22m[39m
+   [33m[2m✓[22m[39m College Grid fail closed (Round 1105)[2m > [22m(c) the key fails five ways: unverified each time, the next pick starts a new load, and a good load is judged [33m 1004[2mms[22m[39m
+   [33m[2m✓[22m[39m decodeCollegeKey: null on any doubt, never a row from a damaged file[2m > [22mevery one of 41 damaged pairs is null, and none of them throws [33m 586[2mms[22m[39m
+[90mstdout[2m | src/test/collegeGridOffline.test.tsx[2m > [22m[2mCollege Grid offline[2m > [22m[2m(4b) a loss bot that submits a definite no each time ends every board lost at 15
+[22m[39mCGOFFLINE| loss: 75 of 75 boards ended lost at 15 counted guesses, each recorded once at 0; 0 still playing after 15 submissions
+
+ [32m✓[39m src/test/collegeGridOffline.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 3022[2mms[22m[39m
+   [33m[2m✓[22m[39m College Grid offline[2m > [22m(4a) a win bot fills 9 of 9 in 9 counted guesses on every board [33m 1373[2mms[22m[39m
+   [33m[2m✓[22m[39m College Grid offline[2m > [22m(4b) a loss bot that submits a definite no each time ends every board lost at 15 [33m 990[2mms[22m[39m
+ [32m✓[39m src/test/playerSearchFailure.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[33m 570[2mms[22m[39m
+ [32m✓[39m src/test/playerAutocompleteInteraction.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[32m 296[2mms[22m[39m
+ [32m✓[39m src/test/playerAutocompleteEmptyText.test.tsx [2m([22m[2m21 tests[22m[2m)[22m[33m 3477[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m      Tests [22m [1m[32m57 passed[39m[22m[90m (57)[39m
+[2m   Start at [22m 06:14:01
+[2m   Duration [22m 7.97s[2m (transform 675ms, setup 396ms, collect 2.29s, tests 11.65s, environment 2.56s, prepare 741ms)[22m
+

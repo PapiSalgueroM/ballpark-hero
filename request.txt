@@ -1,0 +1,5 @@
+#!serial
+remedy-copy: REMEDY_COPY_ONLY=1 node .rc/x/remedy.mjs
+remedy-vitest: NO_DOUBLE_SWAP="{\"@/components/game/PlayerAutocomplete\":\"$(cat .sim-control/remedy-copy.txt)\"}" node_modules/.bin/vitest run src/test/playerAutocompleteInteraction.test.tsx src/test/playerAutocompleteEmptyText.test.tsx src/test/playerSearchFailure.test.tsx src/test/playerAutocompleteStale.test.tsx src/test/collegeGridFailClosed.test.tsx src/test/collegeGridOffline.test.tsx --testTimeout=300000 --hookTimeout=120000
+remedy-sweep2138: STALE_SWEEP_SEED=2138 NO_DOUBLE_SWAP="{\"@/components/game/PlayerAutocomplete\":\"$(cat .sim-control/remedy-copy.txt)\"}" node_modules/.bin/vitest run src/test/playerAutocompleteStale.test.tsx --testTimeout=300000
+remedy-sweep3138: STALE_SWEEP_SEED=3138 NO_DOUBLE_SWAP="{\"@/components/game/PlayerAutocomplete\":\"$(cat .sim-control/remedy-copy.txt)\"}" node_modules/.bin/vitest run src/test/playerAutocompleteStale.test.tsx --testTimeout=300000
