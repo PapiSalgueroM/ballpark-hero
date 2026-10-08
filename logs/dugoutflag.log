@@ -1,0 +1,20 @@
+MUT dugoutflag: src/lib/soccerCareerLeague.ts patched (occurrence 0 of 1)
+  vitest exit=1 2s | [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+      [31m   [31m×[31m managerLeagueField (Round 1029)[2m > [22mknows the Championship's size from 2004, and the held second flights for the dugout only[39m[32m 15[2mms[22m[39m
+      ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/soccerCareerLeague.test.ts,title=src/lib/soccerCareerLeague.test.ts > managerLeagueField (Round 1029) > knows the Championship's size from 2004%2C and the held second flights for the dugout onl
+      [41m[1m FAIL [22m[49m src/lib/soccerCareerLeague.test.ts[2m > [22mmanagerLeagueField (Round 1029)[2m > [22mknows the Championship's size from 2004, and the held second flights for the dugout only
+      [31m[1mAssertionError[22m: expected 20 to be null[39m
+  world exit=1 74s |   FAIL [A]: Segunda Division is held, yet a player gets a size or a table there
+      FAIL [A]: Serie B is held, yet a player gets a size or a table there
+      FAIL [A]: Ligue 2 is held, yet a player gets a size or a table there
+      FAIL [A]: Segunda Division is held, yet a player gets a size or a table there
+  clubPool exit=0 6s | simCareerClubPool: all sections green
+  facts exit=0 2s | simCareerFacts: all sections green
+  leagueFinish exit=0 7s | simCareerLeagueFinish: green. 756 careers, 6048 seasons, 4840 in a verified league; finish and title agree, the ladder holds, main's stream is untouched and the elite boost reads the era.
+  leagueSeasons exit=0 11s | simCareerLeagueSeasons: all sections green
+  manager exit=0 8s | ALL MANAGER CAREER CHECKS PASSED
+  centreTable exit=0 7s | simSeasonCentreTable: 4 checks, 0 failed
+  agree0 exit=0 9s | simSeasonCentreAgreement: 24 checks, 0 failed
+  derbies exit=0 12s | simCareerDerbies: all 8 sections green
+  restored (tree clean)
+MUT dugoutflag: CAUGHT by vitest, world

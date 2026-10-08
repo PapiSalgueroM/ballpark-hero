@@ -1,0 +1,7 @@
+rankoff exit=0 138s | MUT rankoff: CAUGHT by world
+grouplast exit=0 138s | MUT grouplast: CAUGHT by world
+nudgeedge exit=1 137s | MUT nudgeedge: SURVIVED every gate
+yeargate exit=0 137s | MUT yeargate: CAUGHT by world
+keystart exit=0 137s | MUT keystart: CAUGHT by vitest, world
+dugoutflag exit=0 138s | MUT dugoutflag: CAUGHT by vitest, world
+nohold exit=0 136s | MUT nohold: CAUGHT by world, leagueSeasons
