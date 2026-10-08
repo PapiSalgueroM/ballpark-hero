@@ -321,10 +321,33 @@ const NEW_LEAGUES = [
      76, Spartak Moscow 74), weak the two lowest among clubs that are not
      partial (Fakel Voronezh 62, Dynamo Makhachkala 65; no club of the
      league is partial). The managed clubs are the six in the middle by
-     rating. The two bands are PROVISIONAL (1 and 0.4) until the six stream
-     measurement is written here. */
+     rating.
+     MEASURED 2026-10-08 on a GitHub runner at b199f9b5, six seasons a run,
+     SIM_SEED unset and 1 to 5. Zenit over Fakel Voronezh: 33.7, 38.3, 33.2,
+     30.5, 36.7 and 40.5 points a season. Spartak Moscow over Dynamo
+     Makhachkala: 27.5, 13.3, 17.3, 19.8, 17.5 and 25.7. The band is 6: at
+     most half the smallest of those twelve means (13.3), rounded down. The
+     rank correlation over the ten unmanaged clubs: 0.948, 0.886, 0.899,
+     0.911, 0.911 and 0.948; the smallest is over 0.85, so it is banded at
+     the house 0.7. 353 real men and 4 flagged pads take the field on day
+     one, no partial club. The old world still plays the same in a bigger
+     one: on this tree, default stream, brasileirao measured 46.5 and 51.8
+     with rho 0.945, ligamx 16.0 and 8.0 with rho 0.944, both green on their
+     own unchanged bands.
+     Part H on the same six streams: Zenit won the league in 3 of 4, 7, 8, 5,
+     7 and 7 seasons played and none of the 18 title winners started the
+     next season in a Champions League group; 12 Russian Cup brackets a run,
+     each the sixteen Russian clubs; 16 clubs on the job market, dugout size
+     16, playing career size null; 7 past season rows at their own strength.
+     Controls, default stream: rudrop 3 failures (part A: the row, the
+     engine's count, Fakel's ask); rueuro 1 (H1, three title winners in the
+     Champions League); ruflavour 7 (H4, every past season Russian club
+     rated off the 2026 squad: Zenit 2015-16 at 76 where the engine gave
+     83.5); ruswap turned both pairs negative (minus 26.7 and minus 20.3),
+     part C red; under it Zenit carries Fakel's squad and wins no title, so
+     part H is not read. */
   {
-    id: 'russia', size: 16, drop: 2, cup: 'Russian Cup', pairGap: 1, rhoMin: 0.4,
+    id: 'russia', size: 16, drop: 2, cup: 'Russian Cup', pairGap: 6, rhoMin: 0.7,
     pairs: [['Zenit', 'Fakel Voronezh'], ['Spartak Moscow', 'Dynamo Makhachkala']],
     managed: ['Lokomotiv Moscow', 'Rubin Kazan', 'Rostov', 'Baltika', 'Akhmat Grozny', 'Akron Tolyatti'],
   },
@@ -1059,6 +1082,9 @@ if (CONTROL === 'ruswap') {
        never off the 2026 squad that now carries the same club name. */
 async function partCountries(cm) {
   console.log('H) the countries of Round 1052');
+  /* ruswap hands Zenit the weakest squad of the league, so no title is won and H1 has nothing to read:
+     that control is part C's, and this part says so rather than going red beside it. */
+  if (CONTROL === 'ruswap') { console.log('   not read under ruswap (Zenit carries Fakel Voronezh\'s squad)'); return; }
   const ru = cm.REAL_LEAGUES.find(l => l.id === 'russia');
   if (!ru) { fail('H: russia is not in REAL_LEAGUES'); return; }
   /* the parts before this one traded clubs in their summers: the static world is put back first */

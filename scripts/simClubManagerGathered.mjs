@@ -60,7 +60,19 @@
      trap      one engine name replaced by a trap spelling               D
      oldsave   the fixture's club renamed                                G
 
-   MEASURED: see the block at the end of this header, written from the runs.
+   MEASURED 2026-10-08 on a GitHub runner at 1fa0a7a7, one gathered league
+   (russia2026): 16 clubs and 357 men, every research row in the file once;
+   82 addresses in the research, none on a wiki; 5 facts cited by the rules
+   row (4 leaned on with two publishers or more, the tiebreak marked THIN);
+   356 of 357 men with a two host nationality and 3 with no value; no
+   partial club; 454 engine clubs folding to 454 names and 6 spellings in
+   the gathered table; the old save loaded as Sevilla with its squad,
+   budget, table and calendar as the file holds them, 26 leagues before its
+   summer and 27 after, and a second summer ran. Plain run green, exit 0.
+   Each control exit 1 with failures in its own section and no other:
+   invented A 1, onehost A 1, wiki A 1, stale A 1, offcurve B 1, noflag C 2,
+   twice C 2, keeper C 1, trap D 3, oldsave G 1. A control that fires
+   nothing, or anything outside its section, exits 3 and says so.
 
    Run: node scripts/simClubManagerGathered.mjs */
 import fs from 'node:fs';
