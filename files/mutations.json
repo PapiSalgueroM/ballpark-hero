@@ -1,0 +1,223 @@
+[
+ {
+  "name": "M0-none",
+  "regen": true,
+  "rebake": {
+   "exit": 0,
+   "last": "wrote scripts/data/nflRosters2026LeftOut.json"
+  },
+  "dataChanged": 0,
+  "gencheck": 0,
+  "order": {
+   "exit": 0,
+   "last": "simFoRatingOrder: green, 39 checks. One number per man: 2163 men, 0 with two numbers (main: 459).",
+   "fails": []
+  },
+  "measures": [
+   "QB: 33 starters, rank agreement with 2025 production 0.769 shipped, 0.512 main, bar main + 0.12",
+   "RB: 54 starters, rank agreement with 2025 production 0.866 shipped, 0.489 main, bar main + 0.18",
+   "WR: 84 starters, rank agreement with 2025 production 0.830 shipped, 0.378 main, bar main + 0.22",
+   "TE: 35 starters, rank agreement with 2025 production 0.742 shipped, 0.226 main, bar main + 0.25",
+   "QB: of the ten most productive starters a game, among the fifteen highest rated: 9 shipped, 8 main",
+   "RB: of the ten most productive starters a game, among the fifteen highest rated: 9 shipped, 8 main",
+   "WR: of the ten most productive starters a game, among the fifteen highest rated: 8 shipped, 5 main, bar 7",
+   "TE: of the ten most productive starters a game, among the fifteen highest rated: 9 shipped, 6 main, bar 8",
+   "(a) opening club strength, rank agreement between what ships and main over 32 clubs: 0.901, floor 0.34",
+   "(b) mean wins of the clubs in strength ranks 1 to 8: 10.72 shipped (sampling error 0.031), 10.95 main (0.040), bar main plus or minus 0.62",
+   "(b) mean wins of the clubs in strength ranks 9 to 24: 8.59 shipped (sampling error 0.019), 8.57 main (0.035), printed only",
+   "(b) mean wins of the clubs in strength ranks 25 to 32: 6.11 shipped (sampling error 0.028), 5.91 main (0.035), bar main plus or minus 0.57",
+   "(c) the spread of the 32 clubs' mean wins: 1.84 shipped (sampling error 0.016), 1.96 main (0.009), bar main plus or minus 0.47"
+  ],
+  "fifteen": {
+   "QB": "81.28 sd 6.93 n 32",
+   "RB": "80.59 sd 7.90 n 64",
+   "WR": "81.10 sd 7.50 n 96",
+   "TE": "81.91 sd 6.37 n 32"
+  }
+ },
+ {
+  "name": "M1-scale-centre-84-to-87",
+  "regen": true,
+  "rebake": {
+   "exit": 0,
+   "last": "wrote scripts/data/nflRosters2026LeftOut.json"
+  },
+  "dataChanged": 2,
+  "gencheck": 0,
+  "order": {
+   "exit": 0,
+   "last": "simFoRatingOrder: green, 39 checks. One number per man: 2163 men, 0 with two numbers (main: 459).",
+   "fails": []
+  },
+  "measures": [
+   "QB: 33 starters, rank agreement with 2025 production 0.763 shipped, 0.512 main, bar main + 0.12",
+   "RB: 54 starters, rank agreement with 2025 production 0.874 shipped, 0.489 main, bar main + 0.18",
+   "WR: 84 starters, rank agreement with 2025 production 0.851 shipped, 0.378 main, bar main + 0.22",
+   "TE: 35 starters, rank agreement with 2025 production 0.748 shipped, 0.226 main, bar main + 0.25",
+   "QB: of the ten most productive starters a game, among the fifteen highest rated: 9 shipped, 8 main",
+   "RB: of the ten most productive starters a game, among the fifteen highest rated: 9 shipped, 8 main",
+   "WR: of the ten most productive starters a game, among the fifteen highest rated: 8 shipped, 5 main, bar 7",
+   "TE: of the ten most productive starters a game, among the fifteen highest rated: 9 shipped, 6 main, bar 8",
+   "(a) opening club strength, rank agreement between what ships and main over 32 clubs: 0.884, floor 0.34",
+   "(b) mean wins of the clubs in strength ranks 1 to 8: 10.64 shipped (sampling error 0.026), 10.95 main (0.040), bar main plus or minus 0.62",
+   "(b) mean wins of the clubs in strength ranks 9 to 24: 8.66 shipped (sampling error 0.012), 8.57 main (0.035), printed only",
+   "(b) mean wins of the clubs in strength ranks 25 to 32: 6.03 shipped (sampling error 0.019), 5.91 main (0.035), bar main plus or minus 0.57",
+   "(c) the spread of the 32 clubs' mean wins: 1.85 shipped (sampling error 0.015), 1.96 main (0.009), bar main plus or minus 0.47"
+  ],
+  "fifteen": {
+   "QB": "83.38 sd 6.77 n 32",
+   "RB": "82.45 sd 7.89 n 64",
+   "WR": "83.10 sd 7.55 n 96",
+   "TE": "84.03 sd 6.11 n 32"
+  }
+ },
+ {
+  "name": "M5-production-term-dropped",
+  "regen": true,
+  "rebake": {
+   "exit": 0,
+   "last": "wrote scripts/data/nflRosters2026LeftOut.json"
+  },
+  "dataChanged": 2,
+  "gencheck": 0,
+  "order": {
+   "exit": 1,
+   "last": "simFoRatingOrder: RED in section 7 (2 of 39 checks failed)",
+   "fails": [
+    "FAIL [7] (b) mean wins of the clubs in strength ranks 1 to 8 stays within 0.62 of main's: 10.25 against 10.95",
+    "FAIL [7] (b) mean wins of the clubs in strength ranks 25 to 32 stays within 0.57 of main's: 6.54 against 5.91"
+   ]
+  },
+  "measures": [
+   "QB: 33 starters, rank agreement with 2025 production 0.728 shipped, 0.512 main, bar main + 0.12",
+   "RB: 54 starters, rank agreement with 2025 production 0.855 shipped, 0.489 main, bar main + 0.18",
+   "WR: 84 starters, rank agreement with 2025 production 0.865 shipped, 0.378 main, bar main + 0.22",
+   "TE: 35 starters, rank agreement with 2025 production 0.733 shipped, 0.226 main, bar main + 0.25",
+   "QB: of the ten most productive starters a game, among the fifteen highest rated: 8 shipped, 8 main",
+   "RB: of the ten most productive starters a game, among the fifteen highest rated: 9 shipped, 8 main",
+   "WR: of the ten most productive starters a game, among the fifteen highest rated: 7 shipped, 5 main, bar 7",
+   "TE: of the ten most productive starters a game, among the fifteen highest rated: 8 shipped, 6 main, bar 8",
+   "(a) opening club strength, rank agreement between what ships and main over 32 clubs: 0.894, floor 0.34",
+   "(b) mean wins of the clubs in strength ranks 1 to 8: 10.25 shipped (sampling error 0.036), 10.95 main (0.040), bar main plus or minus 0.62",
+   "FAIL [7] (b) mean wins of the clubs in strength ranks 1 to 8 stays within 0.62 of main's: 10.25 against 10.95",
+   "(b) mean wins of the clubs in strength ranks 9 to 24: 8.61 shipped (sampling error 0.018), 8.57 main (0.035), printed only",
+   "(b) mean wins of the clubs in strength ranks 25 to 32: 6.54 shipped (sampling error 0.025), 5.91 main (0.035), bar main plus or minus 0.57",
+   "FAIL [7] (b) mean wins of the clubs in strength ranks 25 to 32 stays within 0.57 of main's: 6.54 against 5.91",
+   "(c) the spread of the 32 clubs' mean wins: 1.55 shipped (sampling error 0.019), 1.96 main (0.009), bar main plus or minus 0.47"
+  ],
+  "fifteen": {
+   "QB": "81.06 sd 5.10 n 32",
+   "RB": "81.05 sd 8.17 n 64",
+   "WR": "81.32 sd 7.29 n 96",
+   "TE": "82.94 sd 5.21 n 32"
+  }
+ },
+ {
+  "name": "M9-carry-all-one",
+  "regen": true,
+  "rebake": {
+   "exit": 0,
+   "last": "wrote scripts/data/nflRosters2026LeftOut.json"
+  },
+  "dataChanged": 2,
+  "gencheck": 0,
+  "order": {
+   "exit": 0,
+   "last": "simFoRatingOrder: green, 39 checks. One number per man: 2163 men, 0 with two numbers (main: 459).",
+   "fails": []
+  },
+  "measures": [
+   "QB: 33 starters, rank agreement with 2025 production 0.734 shipped, 0.512 main, bar main + 0.12",
+   "RB: 54 starters, rank agreement with 2025 production 0.850 shipped, 0.489 main, bar main + 0.18",
+   "WR: 84 starters, rank agreement with 2025 production 0.813 shipped, 0.378 main, bar main + 0.22",
+   "TE: 35 starters, rank agreement with 2025 production 0.708 shipped, 0.226 main, bar main + 0.25",
+   "QB: of the ten most productive starters a game, among the fifteen highest rated: 9 shipped, 8 main",
+   "RB: of the ten most productive starters a game, among the fifteen highest rated: 9 shipped, 8 main",
+   "WR: of the ten most productive starters a game, among the fifteen highest rated: 8 shipped, 5 main, bar 7",
+   "TE: of the ten most productive starters a game, among the fifteen highest rated: 9 shipped, 6 main, bar 8",
+   "(a) opening club strength, rank agreement between what ships and main over 32 clubs: 0.924, floor 0.34",
+   "(b) mean wins of the clubs in strength ranks 1 to 8: 10.70 shipped (sampling error 0.035), 10.95 main (0.040), bar main plus or minus 0.62",
+   "(b) mean wins of the clubs in strength ranks 9 to 24: 8.61 shipped (sampling error 0.024), 8.57 main (0.035), printed only",
+   "(b) mean wins of the clubs in strength ranks 25 to 32: 6.09 shipped (sampling error 0.025), 5.91 main (0.035), bar main plus or minus 0.57",
+   "(c) the spread of the 32 clubs' mean wins: 1.84 shipped (sampling error 0.016), 1.96 main (0.009), bar main plus or minus 0.47"
+  ],
+  "fifteen": {
+   "QB": "81.81 sd 6.90 n 32",
+   "RB": "80.95 sd 7.91 n 64",
+   "WR": "81.57 sd 7.54 n 96",
+   "TE": "82.38 sd 6.36 n 32"
+  }
+ },
+ {
+  "name": "M10-gain-13-to-16",
+  "regen": true,
+  "rebake": {
+   "exit": 0,
+   "last": "wrote scripts/data/nflRosters2026LeftOut.json"
+  },
+  "dataChanged": 2,
+  "gencheck": 0,
+  "order": {
+   "exit": 0,
+   "last": "simFoRatingOrder: green, 39 checks. One number per man: 2163 men, 0 with two numbers (main: 459).",
+   "fails": []
+  },
+  "measures": [
+   "QB: 33 starters, rank agreement with 2025 production 0.758 shipped, 0.512 main, bar main + 0.12",
+   "RB: 54 starters, rank agreement with 2025 production 0.859 shipped, 0.489 main, bar main + 0.18",
+   "WR: 84 starters, rank agreement with 2025 production 0.831 shipped, 0.378 main, bar main + 0.22",
+   "TE: 35 starters, rank agreement with 2025 production 0.735 shipped, 0.226 main, bar main + 0.25",
+   "QB: of the ten most productive starters a game, among the fifteen highest rated: 9 shipped, 8 main",
+   "RB: of the ten most productive starters a game, among the fifteen highest rated: 9 shipped, 8 main",
+   "WR: of the ten most productive starters a game, among the fifteen highest rated: 8 shipped, 5 main, bar 7",
+   "TE: of the ten most productive starters a game, among the fifteen highest rated: 9 shipped, 6 main, bar 8",
+   "(a) opening club strength, rank agreement between what ships and main over 32 clubs: 0.881, floor 0.34",
+   "(b) mean wins of the clubs in strength ranks 1 to 8: 10.93 shipped (sampling error 0.037), 10.95 main (0.040), bar main plus or minus 0.62",
+   "(b) mean wins of the clubs in strength ranks 9 to 24: 8.56 shipped (sampling error 0.031), 8.57 main (0.035), printed only",
+   "(b) mean wins of the clubs in strength ranks 25 to 32: 5.94 shipped (sampling error 0.026), 5.91 main (0.035), bar main plus or minus 0.57",
+   "(c) the spread of the 32 clubs' mean wins: 1.98 shipped (sampling error 0.015), 1.96 main (0.009), bar main plus or minus 0.47"
+  ],
+  "fifteen": {
+   "QB": "81.38 sd 7.94 n 32",
+   "RB": "80.55 sd 8.45 n 64",
+   "WR": "81.14 sd 8.43 n 96",
+   "TE": "81.97 sd 7.22 n 32"
+  }
+ },
+ {
+  "name": "M11-efficiency-weight-zero",
+  "regen": true,
+  "rebake": {
+   "exit": 0,
+   "last": "wrote scripts/data/nflRosters2026LeftOut.json"
+  },
+  "dataChanged": 2,
+  "gencheck": 0,
+  "order": {
+   "exit": 0,
+   "last": "simFoRatingOrder: green, 39 checks. One number per man: 2163 men, 0 with two numbers (main: 459).",
+   "fails": []
+  },
+  "measures": [
+   "QB: 33 starters, rank agreement with 2025 production 0.836 shipped, 0.512 main, bar main + 0.12",
+   "RB: 54 starters, rank agreement with 2025 production 0.931 shipped, 0.489 main, bar main + 0.18",
+   "WR: 84 starters, rank agreement with 2025 production 0.947 shipped, 0.378 main, bar main + 0.22",
+   "TE: 35 starters, rank agreement with 2025 production 0.857 shipped, 0.226 main, bar main + 0.25",
+   "QB: of the ten most productive starters a game, among the fifteen highest rated: 10 shipped, 8 main",
+   "RB: of the ten most productive starters a game, among the fifteen highest rated: 9 shipped, 8 main",
+   "WR: of the ten most productive starters a game, among the fifteen highest rated: 10 shipped, 5 main, bar 7",
+   "TE: of the ten most productive starters a game, among the fifteen highest rated: 10 shipped, 6 main, bar 8",
+   "(a) opening club strength, rank agreement between what ships and main over 32 clubs: 0.664, floor 0.34",
+   "(b) mean wins of the clubs in strength ranks 1 to 8: 10.97 shipped (sampling error 0.046), 10.95 main (0.040), bar main plus or minus 0.62",
+   "(b) mean wins of the clubs in strength ranks 9 to 24: 8.45 shipped (sampling error 0.018), 8.57 main (0.035), printed only",
+   "(b) mean wins of the clubs in strength ranks 25 to 32: 6.14 shipped (sampling error 0.041), 5.91 main (0.035), bar main plus or minus 0.57",
+   "(c) the spread of the 32 clubs' mean wins: 1.95 shipped (sampling error 0.028), 1.96 main (0.009), bar main plus or minus 0.47"
+  ],
+  "fifteen": {
+   "QB": "81.06 sd 8.24 n 32",
+   "RB": "80.30 sd 9.44 n 64",
+   "WR": "80.94 sd 8.98 n 96",
+   "TE": "80.88 sd 7.92 n 32"
+  }
+ }
+]
