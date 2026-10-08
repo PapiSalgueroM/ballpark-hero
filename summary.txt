@@ -1,0 +1,5 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+snapshot-assets exit=0 0s | simSnapshotAssets: green. Every page knows where its own code is, and finding out costs nobody a round trip.
+prerender exit=1 0s | simPrerender: 7 failures
+drift exit=0 3s | playSnapshotDrift: green. Nothing a crawler reads off these pages depends on the day it was written, so a snapshot of any of them is as true next month as it is now.
+stability exit=0 136s | playRenderStability: green. All 1 route(s) said the same thing 5 times, so the clock samples downstream mean what they claim.

@@ -1,0 +1,4 @@
+playSnapshotDrift: 1 routes, 5 days apart
+  PASS  /college-grid: 70 blocks, none of them tied to the day
+
+playSnapshotDrift: green. Nothing a crawler reads off these pages depends on the day it was written, so a snapshot of any of them is as true next month as it is now.

@@ -1,0 +1,8 @@
+# Round 1105, merged tree: the fences that read dist and the saved pages, and the two snapshot walks for /college-grid
+#!serve
+#!playwright
+#!serial
+snapshot-assets: node scripts/simSnapshotAssets.mjs
+prerender: node scripts/simPrerender.mjs
+drift: ONLY=/college-grid node scripts/playSnapshotDrift.mjs
+stability: ONLY=/college-grid node scripts/playRenderStability.mjs
