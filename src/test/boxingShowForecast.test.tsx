@@ -219,7 +219,7 @@ async function help(close: 'Back' | 'Escape') {
   check('help opens with focused heading ' + close, { visible: !!dialog, focused: document.activeElement?.textContent }, { visible: true, focused: 'How show cash works' });
   const r = c.oracle.result.result;
   check('live worked example ' + close, document.querySelector('[data-boxing-cash-example]')?.textContent,
-    `For this card: ${moneyText(r.gate)} gate, less ${moneyText(r.purses)} fighter pay and ${moneyText(r.rent)} room hire, gives a ${r.profit < 0 ? 'loss' : 'profit'} ${moneyText(Math.abs(r.profit))}. Your cash goes from ${moneyText(c.f.state.money)} to ${moneyText(c.oracle.result.state.money)}.`);
+    `For this card: ${moneyText(r.gate)} gate, less ${moneyText(r.purses)} fighter pay and ${moneyText(r.rent)} room hire, gives a ${r.profit < 0 ? 'loss' : 'profit'} of ${moneyText(Math.abs(r.profit))}. Your cash goes from ${moneyText(c.f.state.money)} to ${moneyText(c.oracle.result.state.money)}.`);
   if (close === 'Back') click('Back to card'); else fireEvent.keyDown(document.activeElement!, { key: 'Escape' });
   await act(async () => { vi.advanceTimersByTime(0); });
   check('help closes and restores the actual opener ' + close, { dialog: !!screen.queryByRole('dialog'), focused: document.activeElement === trigger, forecast: readForecast() }, { dialog: false, focused: true, forecast });

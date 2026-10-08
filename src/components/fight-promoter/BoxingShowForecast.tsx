@@ -38,7 +38,7 @@ export default function BoxingShowForecast({ attendance, capacity, gate, guarant
             <DialogDescription className="text-xs">Check the current card before you put the show on. All money figures are in millions.</DialogDescription>
             <div className="space-y-3 text-xs leading-relaxed">
               <p>Your card, venue and ticket price set attendance and the gate. Fighters take the larger of their combined guarantees or 58% of the gate. Room hire is paid as well.</p>
-              <p data-boxing-cash-example className="rounded-md border bg-muted/40 p-3">For this card: {cash(gate)} gate, less {cash(purses)} fighter pay and {cash(rent)} room hire, gives a {result.toLowerCase()}. Your cash goes from {cash(money)} to {cash(cashAfter)}.</p>
+              <p data-boxing-cash-example className="rounded-md border bg-muted/40 p-3">For this card: {cash(gate)} gate, less {cash(purses)} fighter pay and {cash(rent)} room hire, gives a {profit < 0 ? 'loss' : 'profit'} of {cash(Math.abs(profit))}. Your cash goes from {cash(money)} to {cash(cashAfter)}.</p>
               <p>A cash balance below 0 ends the promotion. Exactly 0 keeps it open, with no cash buffer. A loss does not end it if you can still cover it.</p>
               <p>These figures follow your current choices. Fight results and reputation are decided when the show runs. Opening or closing this help does not run a show.</p>
             </div>
