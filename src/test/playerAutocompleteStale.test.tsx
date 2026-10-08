@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { useState } from 'react';
 import { act, cleanup, fireEvent, render, waitFor } from '@testing-library/react';
 import { PlayerAutocomplete, type PlayerAutocompleteProps } from '@/components/game/PlayerAutocomplete';
 import { normalizeName, searchPlayers, type PlayerEntity } from '@/lib/playerSearch';
@@ -52,6 +53,27 @@ function deafSearch(delayMs: number): (AbortSignal | undefined)[] {
 
 function props(overrides: Partial<PlayerAutocompleteProps> = {}): PlayerAutocompleteProps {
   return { value: 'Alpha', onChange: vi.fn(), onSelect: vi.fn(), searchOptions, validateOnly: true, debounceMs: 0, ...overrides };
+}
+
+/** What a test can do to the page below from outside: change its text, make it busy, change what it searches. */
+type Page = {
+  setText?: (text: string) => void;
+  setBusy?: (busy: boolean) => void;
+  setOptions?: (options: PlayerAutocompleteProps['searchOptions']) => void;
+  setPool?: (names: string[]) => void;
+};
+
+/** A page that holds the box's text itself, so a pick leaves the picked name in the box the way a real page does. */
+function PageWithBox({ page, onSelect }: { page: Page; onSelect: PlayerAutocompleteProps['onSelect'] }) {
+  const [text, setText] = useState('Alpha');
+  const [busy, setBusy] = useState(false);
+  const [options, setOptions] = useState<PlayerAutocompleteProps['searchOptions']>(searchOptions);
+  page.setText = setText;
+  page.setBusy = setBusy;
+  const [pool, setPool] = useState<string[] | undefined>(undefined);
+  page.setOptions = setOptions;
+  page.setPool = setPool;
+  return <PlayerAutocomplete value={text} onChange={setText} onSelect={onSelect} searchOptions={options} localNames={pool} disabled={busy} validateOnly debounceMs={50} />;
 }
 
 function mulberry32(seed: number) {
@@ -427,5 +449,93 @@ describe('player autocomplete: a list is only on screen for the query that produ
     expect(nobody.queryByText('No players found')).not.toBeNull();
     fireEvent.keyDown(nobody.getByRole('combobox'), { key: 'Escape' });
     expect(nobody.queryByRole('listbox')).toBeNull();
+  });
+
+  /* Test 13 was added by the closing fix pass. A pick used to search for the
+     picked name straight away, so on a page that keeps the name in the box the
+     list came back over whatever sits under it (Missing XI's Lock in guess
+     button), and on a page that shows the name while it checks the pick the
+     list sat open under a disabled box (Build Your XI). */
+  it('a pick does not bring the list back under the picked name', async () => {
+    vi.useFakeTimers();
+    slowSearch(() => 50);
+    const lastQuery = () => vi.mocked(searchPlayers).mock.calls.at(-1)?.[0].query;
+
+    // Missing XI's shape: the page keeps the picked name in the box.
+    const keeps: Page = {};
+    const onSelect = vi.fn();
+    const view = render(<PageWithBox page={keeps} onSelect={onSelect} />);
+    const input = view.getByRole('combobox') as HTMLInputElement;
+    await advance(200);
+    expect(optionsIn(view.container).map(o => o.textContent)).toEqual([expect.stringContaining(A.name)]);
+    expect(searchPlayers).toHaveBeenCalledTimes(1);
+    fireEvent.pointerDown(optionsIn(view.container)[0]);
+    expect(onSelect).toHaveBeenCalledExactlyOnceWith(A);
+    expect(input.value).toBe(A.name);
+    expect(view.queryByRole('listbox')).toBeNull();
+    await advance(1000);
+    expect(view.queryByRole('listbox')).toBeNull();
+    expect(input.getAttribute('aria-expanded')).toBe('false');
+    expect(searchPlayers).toHaveBeenCalledTimes(1);
+    // The page's own name pool changing under the picked name opens nothing either: the player is not in the box.
+    act(() => keeps.setPool?.(['Pool Two']));
+    await advance(1000);
+    expect(view.queryByRole('listbox')).toBeNull();
+    expect(searchPlayers).toHaveBeenCalledTimes(1);
+
+    // Coming back to the box asks for the picked name's own list.
+    fireEvent.click(input);
+    expect(view.queryByText(FINDING)).not.toBeNull();
+    await advance(200);
+    expect(optionsIn(view.container).map(o => o.textContent)).toEqual([expect.stringContaining(A.name)]);
+    expect(searchPlayers).toHaveBeenCalledTimes(2);
+    expect(lastQuery()).toBe(A.name);
+
+    // Picking again closes it again, and any other text is searched for like always.
+    fireEvent.pointerDown(optionsIn(view.container)[0]);
+    await advance(1000);
+    expect(view.queryByRole('listbox')).toBeNull();
+    expect(searchPlayers).toHaveBeenCalledTimes(2);
+    act(() => keeps.setText?.('Alpha Ston'));
+    expect(view.queryByText(FINDING)).not.toBeNull();
+    await advance(200);
+    expect(optionsIn(view.container)).toHaveLength(1);
+    expect(searchPlayers).toHaveBeenCalledTimes(3);
+    view.unmount();
+
+    // Build Your XI's shape: the box is disabled with the picked name in it while the pick is checked, then cleared.
+    vi.mocked(searchPlayers).mockClear();
+    const checks: Page = {};
+    const busyView = render(<PageWithBox page={checks} onSelect={() => checks.setBusy?.(true)} />);
+    await advance(200);
+    fireEvent.pointerDown(optionsIn(busyView.container)[0]);
+    expect((busyView.getByRole('combobox') as HTMLInputElement).value).toBe(A.name);
+    expect(busyView.getByRole('combobox')).toBeDisabled();
+    await advance(1000);
+    expect(busyView.queryByRole('listbox')).toBeNull();
+    expect(searchPlayers).toHaveBeenCalledTimes(1);
+    act(() => { checks.setBusy?.(false); checks.setText?.(''); });
+    await advance(1000);
+    expect(busyView.queryByRole('listbox')).toBeNull();
+    // The pick is over: the same name put in whole (a paste, a swipe typed word) is searched for.
+    act(() => checks.setText?.(A.name));
+    expect(busyView.queryByText(FINDING)).not.toBeNull();
+    await advance(200);
+    expect(optionsIn(busyView.container).map(o => o.textContent)).toEqual([expect.stringContaining(A.name)]);
+    expect(searchPlayers).toHaveBeenCalledTimes(2);
+    busyView.unmount();
+
+    // A new source under the picked name (the next team, the next category) is a new query and is searched for.
+    vi.mocked(searchPlayers).mockClear();
+    const moves: Page = {};
+    const movedView = render(<PageWithBox page={moves} onSelect={vi.fn()} />);
+    await advance(200);
+    fireEvent.pointerDown(optionsIn(movedView.container)[0]);
+    await advance(1000);
+    expect(searchPlayers).toHaveBeenCalledTimes(1);
+    act(() => moves.setOptions?.({ ...searchOptions, source: { ...searchOptions.source, filters: [{ column: 'club', op: 'eq' as const, value: 'Fixture East' }] } }));
+    await advance(200);
+    expect(optionsIn(movedView.container)).toHaveLength(1);
+    expect(searchPlayers).toHaveBeenCalledTimes(2);
   });
 });

@@ -231,6 +231,13 @@ export function PlayerAutocomplete({
   /* True from the moment the list is dropped (the player left the box, or
      picked a name) until the next search is scheduled. */
   const droppedRef = useRef(false);
+  /* The query of the name just picked (its folded name plus the search
+     options). The search effect does not search for it, so a page that keeps
+     the picked name in the box (Missing XI, over its Lock in guess button), or
+     shows it while it checks the pick (Build Your XI, with the box disabled),
+     does not get the list straight back under that name. It ends when the
+     player comes back to the box or the query becomes anything else. */
+  const pickedTagRef = useRef<string | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const listboxId = useId();
   /* Read through a ref because the search effect's dependencies leave the
@@ -263,6 +270,12 @@ export function PlayerAutocomplete({
     if (debounceRef.current) window.clearTimeout(debounceRef.current);
     setSearchFailed(false);
 
+    /* A pick is over the moment the query is anything but the picked name:
+       cleared text counts, so the same name typed or pasted whole afterwards
+       is searched for like any other. */
+    const justPicked = pickedTagRef.current === tag;
+    if (!justPicked) pickedTagRef.current = null;
+
     const normalized = normalizeName(value);
     if (normalized.length < minChars) {
       setSuggestions([]);
@@ -272,6 +285,11 @@ export function PlayerAutocomplete({
       setHighlightedIndex(-1);
       return;
     }
+
+    /* The name just picked is not searched for by the pick itself: the panel
+       stays shut and the list stays dropped until the player comes back to
+       the box (see reopen) or types something else. */
+    if (justPicked) return;
 
     setLoading(true);
     setOpen(true);
@@ -370,6 +388,7 @@ export function PlayerAutocomplete({
      disabled check of its own. */
   const reopen = () => {
     if (!enoughText) return;
+    pickedTagRef.current = null;
     setOpen(true);
     if (droppedRef.current) {
       droppedRef.current = false;
@@ -385,10 +404,12 @@ export function PlayerAutocomplete({
       setOpen(false);
       setSuggestions([]);
       setHeldTag(null);
+      pickedTagRef.current = normalizeName(entity.name) + '\u0000' + optionsKey;
       /* A pick drops the list too. When the page keeps the picked name in the
-         box the text does not change, so no search would be scheduled, and
-         coming back has to ask for one (the effect sets this back to false
-         the moment it schedules the next search). */
+         box no search is scheduled for it (the text does not change, or it
+         changes to the name just picked, which the effect skips), and coming
+         back has to ask for one (the effect sets this back to false the
+         moment it schedules the next search). */
       droppedRef.current = true;
       setHighlightedIndex(-1);
       /* And nothing still in flight may bring a list back after the pick: a
@@ -399,7 +420,7 @@ export function PlayerAutocomplete({
       requestIdRef.current += 1;
       setLoading(false);
     },
-    [disabled, onChange, onSelect],
+    [disabled, onChange, onSelect, optionsKey],
   );
 
   const handleKeyDown = useCallback(
