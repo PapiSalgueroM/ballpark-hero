@@ -1,0 +1,40 @@
+In the job at Crystal Palace.
+1) The goal in order
+  ok    the goal in order: 46 frames of wind up and flight all read 0 - 1, and the first frame reading 0 - 2 is in phase net with the net marked
+  ok    the line under the pitch never read GOAL! while the ball was on its way (46 frames)
+  ok    the scorer card was inside the pitch on all 29 frames it was up
+  ok    a tap on the card ended the hold (44 frames after it, none with the card)
+4) Nothing moves the page
+  ok    window.scrollY stayed at 975 through 240 frames before, during and after a goal
+  ok    window.scrollY stayed at 975 with the change sheet, the squad panel, the help panel, the stats panel open
+3) The fit
+  ok    320 by 568: the stage is the window, strip at 0, pitch 320 by 392 (69 percent of the height), control row ends at 568 of 568, 7 controls all 44 px and none covered
+  [labels 320 by 568] mean overlapping name labels a frame 2.10 over 10 frames of 22 labels
+  ok    390 by 844: the stage is the window, strip at 0, pitch 390 by 668 (79.1 percent of the height), control row ends at 844 of 844, 7 controls all 44 px and none covered
+  [labels 390] mean overlapping name labels a frame 0.33 over 24 frames of 22 labels; before match mode 1.63 at 6b1caa20, ratio 0.20
+  ok    name labels overlap 0.33 a frame, fewer than the 1.63 before match mode
+  ok    768 by 1024: the stage is the window, strip at 12, pitch 372 by 651 (63.6 percent of the height), control row ends at 1012 of 1024, 7 controls all 44 px and none covered
+  [labels 768 by 1024] mean overlapping name labels a frame 0.70 over 10 frames of 22 labels
+  ok    1280 by 900: the stage is the window, strip at 12, pitch 541.5 by 722 (80.2 percent of the height), control row ends at 888 of 900, 7 controls all 44 px and none covered
+  [labels 1280 by 900] mean overlapping name labels a frame 0.70 over 10 frames of 22 labels
+  ok    844 by 390: the stage is the window, strip at 0, pitch 518 by 388.5 (99.6 percent of the height), control row ends at 390 of 390, 7 controls all 44 px and none covered
+  [labels 844 by 390] mean overlapping name labels a frame 0.70 over 10 frames of 22 labels
+6) Back folds the match away
+  ok    Back folds the match to a card reading "Premier League · Round 2Crystal Palace0 - 0Ipswich TownPaused at 19'Ba", and the clock held at 19' for 2.6 seconds
+  ok    Back to the match puts the stage back and the clock runs on (19' to 20')
+5) The reload
+  ok    reload: left at 20', the save holds 20, the match came back at 20'
+  ok    close: left at 22', the save holds 22, the match came back at 22'
+  ok    hidden tab: the clock read 24' and the save holds 24
+2) Reduced motion
+  ok    under reduced motion the score reads 1 - 0 on a frame in phase net
+  ok    the scorer card was inside the pitch on all 154 frames it was up
+  ok    nothing under the pitch or the card was animating in open play, inside a goal, after the goal
+7) A wide screen
+  ok    the goal in order: 46 frames of wind up and flight all read 0 - 1, and the first frame reading 0 - 2 is in phase net with the net marked
+  ok    the line under the pitch never read GOAL! while the ball was on its way (46 frames)
+  FAIL: the list beside the pitch never said this goal (1 GOAL! lines all through 322 frames)
+  ok    the scorer card was inside the pitch on all 105 frames it was up
+      what was drawn: pass/pass 0 - 1 51' e217 x43 | pass/pass 0 - 1 51' e037 x2 | pass/pass 0 - 1 51' e217 x6 | pass/pass 0 - 1 52' e217 x7 | pass/pass 0 - 1 52' e148 x1 | pass/pass 0 - 1 52' e813 x1 | pass/pass 0 - 1 52' e148 x1 | pass/pass 0 - 1 52' e217 x12 | pass/pass 0 - 1 52' e813 x4 | pass/pass 0 - 1 52' e217 x25 | pass/pass 0 - 1 52' e349 x1 | pass/pass 0 - 1 52' e069 x3 | pass/pass 0 - 1 52' e312 x5 | goal/plant 0 - 1 53' e312 x16 | goal/flight 0 - 1 53' e312 x30 | goal/net 0 - 2 card 53' e312 x85 | goal/net 0 - 2 card 54' e312 x20 | pass/pass 0 - 2 54' e312 x3 | pass/pass 0 - 2 54' e734 x1 | pass/pass 0 - 2 54' e488 x1 | pass/pass 0 - 2 54' e709 x2 | pass/pass 0 - 2 54' e312 x1 | pass/pass 0 - 2 54' e217 x43 | shot/plant 0 - 2 54' e217 x6 | shot/plant 0 - 2 55' e217 x3
+      the goal watched: 53' Jacob Ramsey; the list at the end: 55'Throw in, Newcastle / 54'Shot: Quinten Timber / 54'Foul by Adam Wharton / 54'Foul by Quinten Timber / 53'GOAL! Penalty, Jacob Ramsey
+playLiveMatchFit: 1 failure.
