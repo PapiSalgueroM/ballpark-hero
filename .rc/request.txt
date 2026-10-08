@@ -1,0 +1,9 @@
+#!build
+#!playwright
+play-rank: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=rank PORT=4710 SHOTS=/tmp/shots-rank node scripts/playCareerSquad.mjs
+play-write: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=write PORT=4720 SHOTS=/tmp/shots-write node scripts/playCareerSquad.mjs
+play-still: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=still PORT=4730 SHOTS=/tmp/shots-still node scripts/playCareerSquad.mjs
+play-nofill: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=nofill PORT=4740 SHOTS=/tmp/shots-nofill node scripts/playCareerSquad.mjs
+play-static: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=static PORT=4750 SHOTS=/tmp/shots-static node scripts/playCareerSquad.mjs
+play-label: ENGINES=chromium REQUIRE_PAGE=1 CAREER_SQUAD_PLAY_CONTROL=label PORT=4760 SHOTS=/tmp/shots-label node scripts/playCareerSquad.mjs
+play-plain2: ENGINES=chromium REQUIRE_PAGE=1 PORT=4770 SHOTS=/tmp/shots-plain2 node scripts/playCareerSquad.mjs
