@@ -1,0 +1,102 @@
+thin-with-keeper: Real Madrid (career seed 782001) v Eibar, 2 on their roster (LB 68, GK 64), club strength 62.1; kick off seed 50022, live minute 46, score 0-0 at the break; the whistle goes to penalties on 8 of 8 seeds, the Quick Sim on 40 of 40; finish seed 90033 gives 30 kicks
+thin-no-keeper: Real Madrid (career seed 782016) v Málaga, 5 on their roster (LB 76, CDM 75, ST 74, RW 72, LB 70), club strength 65.1; kick off seed 50022, live minute 46, score 0-0 at the break; the whistle goes to penalties on 8 of 8 seeds, the Quick Sim on 40 of 40; finish seed 90033 gives 30 kicks
+   shot thin-with-keeper-390-1-hub.png
+   shot thin-with-keeper-390-2-quick-report.png
+  PROBLEM: thin-with-keeper 390 quick: kick 3, the taker's name is cut off (Ibrahima Konaté)
+  PROBLEM: thin-with-keeper 390 quick: kick 4, the taker's name is cut off (Their taker 1)
+  PROBLEM: thin-with-keeper 390 quick: kick 4, the made up tag falls outside the name cell
+  PROBLEM: thin-with-keeper 390 quick: kick 6, the taker's name is cut off (Their taker 2)
+  PROBLEM: thin-with-keeper 390 quick: kick 6, the made up tag falls outside the name cell
+  PROBLEM: thin-with-keeper 390 quick: kick 7, the taker's name is cut off (Jude Bellingham)
+  PROBLEM: thin-with-keeper 390 quick: kick 8, the taker's name is cut off (Their taker 3)
+  PROBLEM: thin-with-keeper 390 quick: kick 8, the made up tag falls outside the name cell
+  PROBLEM: thin-with-keeper 390 quick: kick 9, the taker's name is cut off (Kylian Mbappé)
+  PROBLEM: thin-with-keeper 390 quick: kick 10, the taker's name is cut off (Their taker 4)
+  PROBLEM: thin-with-keeper 390 quick: kick 10, the made up tag falls outside the name cell
+  PROBLEM: thin-with-keeper 390 quick: kick 11, the taker's name is cut off (Federico Valverde)
+  PROBLEM: thin-with-keeper 390 quick: kick 12, the taker's name is cut off (Their taker 5)
+  PROBLEM: thin-with-keeper 390 quick: kick 12, the made up tag falls outside the name cell
+  PROBLEM: thin-with-keeper 390 quick: kick 14, the taker's name is cut off (Their taker 6)
+  PROBLEM: thin-with-keeper 390 quick: kick 14, the made up tag falls outside the name cell
+  PROBLEM: thin-with-keeper 390 quick: kick 16, the taker's name is cut off (Their taker 7)
+  PROBLEM: thin-with-keeper 390 quick: kick 16, the made up tag falls outside the name cell
+  PROBLEM: thin-with-keeper 390 quick: kick 17, the taker's name is cut off (Vinicius Junior)
+  PROBLEM: thin-with-keeper 390 quick: kick 18, the taker's name is cut off (Their taker 8)
+  PROBLEM: thin-with-keeper 390 quick: kick 18, the made up tag falls outside the name cell
+  PROBLEM: thin-with-keeper 390 quick: kick 19, the taker's name is cut off (Yan Diomande)
+  PROBLEM: thin-with-keeper 390 quick: kick 20, the taker's name is cut off (Their taker 9)
+  PROBLEM: thin-with-keeper 390 quick: kick 20, the made up tag falls outside the name cell
+  PROBLEM: thin-with-keeper 390 quick: kick 21, the taker's name is cut off (Thibaut Courtois)
+  PROBLEM: thin-with-keeper 390 quick: kick 22, the taker's name is cut off (Jonmi Magunagoitia)
+  PROBLEM: thin-with-keeper 390 quick: kick 25, the taker's name is cut off (Ibrahima Konaté)
+  PROBLEM: thin-with-keeper 390 quick: kick 26, the taker's name is cut off (Their taker 1)
+  PROBLEM: thin-with-keeper 390 quick: kick 26, the made up tag falls outside the name cell
+  PROBLEM: thin-with-keeper 390 quick: kick 28, the taker's name is cut off (Their taker 2)
+  PROBLEM: thin-with-keeper 390 quick: kick 28, the made up tag falls outside the name cell
+  PROBLEM: thin-with-keeper 390 quick: kick 29, the taker's name is cut off (Jude Bellingham)
+  PROBLEM: thin-with-keeper 390 quick: kick 30, the taker's name is cut off (Their taker 3)
+  PROBLEM: thin-with-keeper 390 quick: kick 30, the made up tag falls outside the name cell
+thin-with-keeper 390 quick: 30 kicks, theirs 15 (12 tagged made up): Juan Bernat, Their taker 1*, Their taker 2*, Their taker 3*, Their taker 4*, Their taker 5*, Their taker 6*, Their taker 7*, Their taker 8*, Their taker 9*, Jonmi Magunagoitia, Juan Bernat, Their taker 1*, Their taker 2*, Their taker 3*; equal to the engine's own replay of seed 90033: true; count 11-10; page errors 0
+   shot thin-with-keeper-390-3-live-whistle.png
+   shot thin-with-keeper-390-3-live-whistle-full.png
+  PROBLEM: thin-with-keeper 390 live: kick 6, the taker's name is cut off (Their taker 2)
+  PROBLEM: thin-with-keeper 390 live: kick 6, the made up tag falls outside the name cell
+  PROBLEM: thin-with-keeper 390 live: kick 8, the taker's name is cut off (Their taker 3)
+  PROBLEM: thin-with-keeper 390 live: kick 8, the made up tag falls outside the name cell
+  PROBLEM: thin-with-keeper 390 live: kick 10, the taker's name is cut off (Their taker 4)
+  PROBLEM: thin-with-keeper 390 live: kick 10, the made up tag falls outside the name cell
+thin-with-keeper 390 live: 10 kicks, theirs 5 (4 tagged made up): Juan Bernat, Their taker 1*, Their taker 2*, Their taker 3*, Their taker 4*; page errors 0
+   shot thin-with-keeper-390-4-live-full-report.png
+   shot thin-with-keeper-1280-1-hub.png
+   shot thin-with-keeper-1280-2-quick-report.png
+thin-with-keeper 1280 quick: 30 kicks, theirs 15 (12 tagged made up): Juan Bernat, Their taker 1*, Their taker 2*, Their taker 3*, Their taker 4*, Their taker 5*, Their taker 6*, Their taker 7*, Their taker 8*, Their taker 9*, Jonmi Magunagoitia, Juan Bernat, Their taker 1*, Their taker 2*, Their taker 3*; equal to the engine's own replay of seed 90033: true; count 11-10; page errors 0
+   shot thin-with-keeper-1280-3-live-whistle.png
+   shot thin-with-keeper-1280-3-live-whistle-full.png
+thin-with-keeper 1280 live: 14 kicks, theirs 7 (6 tagged made up): Juan Bernat, Their taker 1*, Their taker 2*, Their taker 3*, Their taker 4*, Their taker 5*, Their taker 6*; page errors 0
+   shot thin-with-keeper-1280-4-live-full-report.png
+   shot thin-no-keeper-390-2-quick-report.png
+  PROBLEM: thin-no-keeper 390 quick: kick 3, the taker's name is cut off (Ibrahima Konaté)
+  PROBLEM: thin-no-keeper 390 quick: kick 7, the taker's name is cut off (Álvaro Carreras)
+  PROBLEM: thin-no-keeper 390 quick: kick 8, the taker's name is cut off (David Larrubia)
+  PROBLEM: thin-no-keeper 390 quick: kick 9, the taker's name is cut off (Jude Bellingham)
+  PROBLEM: thin-no-keeper 390 quick: kick 11, the taker's name is cut off (Federico Valverde)
+  PROBLEM: thin-no-keeper 390 quick: kick 12, the taker's name is cut off (Their taker 1)
+  PROBLEM: thin-no-keeper 390 quick: kick 12, the made up tag falls outside the name cell
+  PROBLEM: thin-no-keeper 390 quick: kick 14, the taker's name is cut off (Their taker 2)
+  PROBLEM: thin-no-keeper 390 quick: kick 14, the made up tag falls outside the name cell
+  PROBLEM: thin-no-keeper 390 quick: kick 16, the taker's name is cut off (Their taker 3)
+  PROBLEM: thin-no-keeper 390 quick: kick 16, the made up tag falls outside the name cell
+  PROBLEM: thin-no-keeper 390 quick: kick 18, the taker's name is cut off (Their taker 4)
+  PROBLEM: thin-no-keeper 390 quick: kick 18, the made up tag falls outside the name cell
+  PROBLEM: thin-no-keeper 390 quick: kick 19, the taker's name is cut off (Vinicius Junior)
+  PROBLEM: thin-no-keeper 390 quick: kick 20, the taker's name is cut off (Their taker 5)
+  PROBLEM: thin-no-keeper 390 quick: kick 20, the made up tag falls outside the name cell
+  PROBLEM: thin-no-keeper 390 quick: kick 21, the taker's name is cut off (Thibaut Courtois)
+  PROBLEM: thin-no-keeper 390 quick: kick 22, the taker's name is cut off (Their keeper)
+  PROBLEM: thin-no-keeper 390 quick: kick 22, the made up tag falls outside the name cell
+  PROBLEM: thin-no-keeper 390 quick: kick 25, the taker's name is cut off (Ibrahima Konaté)
+  PROBLEM: thin-no-keeper 390 quick: kick 29, the taker's name is cut off (Álvaro Carreras)
+  PROBLEM: thin-no-keeper 390 quick: kick 30, the taker's name is cut off (David Larrubia)
+thin-no-keeper 390 quick: 30 kicks, theirs 15 (6 tagged made up): Adam Aznou, Jens Cajuste, Chupe, David Larrubia, José Salinas, Their taker 1*, Their taker 2*, Their taker 3*, Their taker 4*, Their taker 5*, Their keeper*, Adam Aznou, Jens Cajuste, Chupe, David Larrubia; equal to the engine's own replay of seed 90033: true; count 11-10; page errors 0
+   shot thin-no-keeper-390-3-live-whistle.png
+   shot thin-no-keeper-390-3-live-whistle-full.png
+  PROBLEM: thin-no-keeper 390 live: kick 13, the taker's name is cut off (Their taker 2)
+  PROBLEM: thin-no-keeper 390 live: kick 13, the made up tag falls outside the name cell
+  PROBLEM: thin-no-keeper 390 live: kick 15, the taker's name is cut off (Their taker 3)
+  PROBLEM: thin-no-keeper 390 live: kick 15, the made up tag falls outside the name cell
+  PROBLEM: thin-no-keeper 390 live: kick 17, the taker's name is cut off (Their taker 4)
+  PROBLEM: thin-no-keeper 390 live: kick 17, the made up tag falls outside the name cell
+  PROBLEM: thin-no-keeper 390 live: kick 19, the taker's name is cut off (Their taker 5)
+  PROBLEM: thin-no-keeper 390 live: kick 19, the made up tag falls outside the name cell
+  PROBLEM: thin-no-keeper 390 live: kick 21, the taker's name is cut off (Their keeper)
+  PROBLEM: thin-no-keeper 390 live: kick 21, the made up tag falls outside the name cell
+thin-no-keeper 390 live: 28 kicks, theirs 14 (6 tagged made up): Adam Aznou, Jens Cajuste, Chupe, David Larrubia, José Salinas, Their taker 1*, Their taker 2*, Their taker 3*, Their taker 4*, Their taker 5*, Their keeper*, Adam Aznou, Jens Cajuste, Chupe; page errors 0
+   shot thin-no-keeper-390-4-live-full-report.png
+   shot thin-no-keeper-1280-2-quick-report.png
+thin-no-keeper 1280 quick: 30 kicks, theirs 15 (6 tagged made up): Adam Aznou, Jens Cajuste, Chupe, David Larrubia, José Salinas, Their taker 1*, Their taker 2*, Their taker 3*, Their taker 4*, Their taker 5*, Their keeper*, Adam Aznou, Jens Cajuste, Chupe, David Larrubia; equal to the engine's own replay of seed 90033: true; count 11-10; page errors 0
+   shot thin-no-keeper-1280-3-live-whistle.png
+   shot thin-no-keeper-1280-3-live-whistle-full.png
+thin-no-keeper 1280 live: 9 kicks, theirs 5 (0 tagged made up): Adam Aznou, Jens Cajuste, Chupe, David Larrubia, José Salinas; page errors 0
+   shot thin-no-keeper-1280-4-live-full-report.png
+
+walk: 8 passes read, 72 problem(s)
