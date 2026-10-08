@@ -1,0 +1,36 @@
+CONTROL frozen ON: src/components/club-manager/CelebrationStyles.tsx, src/components/game/VictoryMoment.tsx read from a rewritten copy; expected red: K4
+1) Source: 6 files in src/components/career-moments
+   S1 15 imports read against the allow list
+   S2 17487 characters of code read for 9 banned words
+   S3 the scene's colour is used 5 times, 0 gradient(s) read
+   S6 10 imports read on the two soccer re-exporters
+   S4 1 SigningMoment in the slip, 1 TrophyMoment in the tournament card; 1687 source files read for a second definition of the hook or the confetti
+   S5 2 bind id(s) counted across 1408 files
+2) In Chromium: 7 fixtures at 320, 390, 1280 px, motion on and reduced; bundle 1508K, stylesheet 40K, Tailwind was handed 15 files
+  FAIL K4: F1 320px motion: the title is standing still a tenth of the way into its slam (cmSlam at 300 ms: matrix(1, 0, 0, 1, 0, 0))
+  FAIL K4: F2 320px motion: the title is standing still a tenth of the way into its slam (cmSlam at 300 ms: matrix(1, 0, 0, 1, 0, 0))
+  FAIL K4: F2 320px motion: the cup is standing still a tenth of the way into its lift (victory-lift at 0 ms: matrix(1, 0, 0, 1, 0, 0))
+  FAIL K4: F3 320px motion: the title is standing still a tenth of the way into its slam (cmSlam at 300 ms: matrix(1, 0, 0, 1, 0, 0))
+  FAIL K4: F4 320px motion: the title is standing still a tenth of the way into its slam (cmSlam at 300 ms: matrix(1, 0, 0, 1, 0, 0))
+  FAIL K4: F6slip 320px motion: the title is standing still a tenth of the way into its slam (cmSlam at 300 ms: matrix(1, 0, 0, 1, 0, 0))
+  FAIL K4: F6card 320px motion: the title is standing still a tenth of the way into its slam (cmSlam at 300 ms: matrix(1, 0, 0, 1, 0, 0))
+  FAIL K4: F6card 320px motion: the cup is standing still a tenth of the way into its lift (victory-lift at 0 ms: matrix(1, 0, 0, 1, 0, 0))
+  FAIL K4: F1 390px motion: the title is standing still a tenth of the way into its slam (cmSlam at 300 ms: matrix(1, 0, 0, 1, 0, 0))
+  FAIL K4: F2 390px motion: the title is standing still a tenth of the way into its slam (cmSlam at 300 ms: matrix(1, 0, 0, 1, 0, 0))
+  FAIL K4: F2 390px motion: the cup is standing still a tenth of the way into its lift (victory-lift at 0 ms: matrix(1, 0, 0, 1, 0, 0))
+  FAIL K4: F3 390px motion: the title is standing still a tenth of the way into its slam (cmSlam at 300 ms: matrix(1, 0, 0, 1, 0, 0))
+  FAIL K4: F4 390px motion: the title is standing still a tenth of the way into its slam (cmSlam at 300 ms: matrix(1, 0, 0, 1, 0, 0))
+  FAIL K4: F6slip 390px motion: the title is standing still a tenth of the way into its slam (cmSlam at 300 ms: matrix(1, 0, 0, 1, 0, 0))
+  FAIL K4: F6card 390px motion: the title is standing still a tenth of the way into its slam (cmSlam at 300 ms: matrix(1, 0, 0, 1, 0, 0))
+  FAIL K4: F6card 390px motion: the cup is standing still a tenth of the way into its lift (victory-lift at 0 ms: matrix(1, 0, 0, 1, 0, 0))
+  FAIL K4: F1 1280px motion: the title is standing still a tenth of the way into its slam (cmSlam at 300 ms: matrix(1, 0, 0, 1, 0, 0))
+  FAIL K4: F2 1280px motion: the title is standing still a tenth of the way into its slam (cmSlam at 300 ms: matrix(1, 0, 0, 1, 0, 0))
+  FAIL K4: F2 1280px motion: the cup is standing still a tenth of the way into its lift (victory-lift at 0 ms: matrix(1, 0, 0, 1, 0, 0))
+  FAIL K4: F3 1280px motion: the title is standing still a tenth of the way into its slam (cmSlam at 300 ms: matrix(1, 0, 0, 1, 0, 0))
+  FAIL K4: F4 1280px motion: the title is standing still a tenth of the way into its slam (cmSlam at 300 ms: matrix(1, 0, 0, 1, 0, 0))
+  FAIL K4: F6slip 1280px motion: the title is standing still a tenth of the way into its slam (cmSlam at 300 ms: matrix(1, 0, 0, 1, 0, 0))
+  FAIL K4: F6card 1280px motion: the title is standing still a tenth of the way into its slam (cmSlam at 300 ms: matrix(1, 0, 0, 1, 0, 0))
+  FAIL K4: F6card 1280px motion: the cup is standing still a tenth of the way into its lift (victory-lift at 0 ms: matrix(1, 0, 0, 1, 0, 0))
+   K7 heights at 320 px, at rest: F1 193, F2 233, F3 145, F4 441, F5 215, F6slip 193; tallest F4 at 441 px, bound 508 px
+   K4 early frames at 390 px: F1 390px motion title matrix(1, 0, 0, 1, 0, 0) ; F2 390px motion title matrix(1, 0, 0, 1, 0, 0) cup matrix(1, 0, 0, 1, 0, 0) ; F3 390px motion title matrix(1, 0, 0, 1, 0, 0) ; F4 390px motion title matrix(1, 0, 0, 1, 0, 0) ; F6slip 390px motion title matrix(1, 0, 0, 1, 0, 0) ; F6card 390px motion title matrix(1, 0, 0, 1, 0, 0) cup matrix(1, 0, 0, 1, 0, 0)
+simCareerMoments CONTROL frozen: 1077 checks, red on K4 (expected K4): the control fired on its own check and the others stayed green

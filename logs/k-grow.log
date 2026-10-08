@@ -1,0 +1,24 @@
+CONTROL grow ON: src/components/career-moments/CareerMomentStyles.tsx read from a rewritten copy; expected red: K2
+1) Source: 6 files in src/components/career-moments
+   S1 15 imports read against the allow list
+   S2 17487 characters of code read for 9 banned words
+   S3 the scene's colour is used 5 times, 0 gradient(s) read
+   S6 10 imports read on the two soccer re-exporters
+   S4 1 SigningMoment in the slip, 1 TrophyMoment in the tournament card; 1687 source files read for a second definition of the hook or the confetti
+   S5 2 bind id(s) counted across 1408 files
+2) In Chromium: 7 fixtures at 320, 390, 1280 px, motion on and reduced; bundle 1508K, stylesheet 40K, Tailwind was handed 15 files
+  FAIL K2: F1 320px motion: the card box changes during the play: 0%=12,12,296,191 25%=12,12,296,191 50%=12,12,296,191 75%=12,12,296,196 100%=12,12,296,215
+  FAIL K2: F1 320px motion: the size box changes during the play: 0%=296,191 25%=296,191 50%=296,191 75%=296,196.25 100%=296,215
+  FAIL K2: F6slip 320px motion: the card box changes during the play: 0%=12,12,296,191 25%=12,12,296,191 50%=12,12,296,191 75%=12,12,296,196 100%=12,12,296,215
+  FAIL K2: F6slip 320px motion: the size box changes during the play: 0%=296,191 25%=296,191 50%=296,191 75%=296,196.25 100%=296,215
+  FAIL K2: F1 390px motion: the card box changes during the play: 0%=12,12,366,169 25%=12,12,366,169 50%=12,12,366,169 75%=12,12,366,174 100%=12,12,366,193
+  FAIL K2: F1 390px motion: the size box changes during the play: 0%=366,168.5 25%=366,168.5 50%=366,168.5 75%=366,173.75 100%=366,192.5
+  FAIL K2: F6slip 390px motion: the card box changes during the play: 0%=12,12,366,191 25%=12,12,366,191 50%=12,12,366,191 75%=12,12,366,196 100%=12,12,366,215
+  FAIL K2: F6slip 390px motion: the size box changes during the play: 0%=366,191 25%=366,191 50%=366,191 75%=366,196.25 100%=366,215
+  FAIL K2: F1 1280px motion: the card box changes during the play: 0%=12,12,1256,169 25%=12,12,1256,169 50%=12,12,1256,169 75%=12,12,1256,174 100%=12,12,1256,193
+  FAIL K2: F1 1280px motion: the size box changes during the play: 0%=1256,168.5 25%=1256,168.5 50%=1256,168.5 75%=1256,173.75 100%=1256,192.5
+  FAIL K2: F6slip 1280px motion: the card box changes during the play: 0%=12,12,1256,169 25%=12,12,1256,169 50%=12,12,1256,169 75%=12,12,1256,174 100%=12,12,1256,193
+  FAIL K2: F6slip 1280px motion: the size box changes during the play: 0%=1256,168.5 25%=1256,168.5 50%=1256,168.5 75%=1256,173.75 100%=1256,192.5
+   K7 heights at 320 px, at rest: F1 215, F2 233, F3 145, F4 441, F5 215, F6slip 215; tallest F4 at 441 px, bound 508 px
+   K4 early frames at 390 px: F1 390px motion title matrix(1.20898, 0, 0, 1.20898, 0, 0) ; F2 390px motion title matrix(1.20898, 0, 0, 1.20898, 0, 0) cup matrix(0.944042, -0.0476784, 0.0476784, 0.944042, 0, 5.18335) ; F3 390px motion title matrix(1.20898, 0, 0, 1.20898, 0, 0) ; F4 390px motion title matrix(1.20898, 0, 0, 1.20898, 0, 0) ; F6slip 390px motion title matrix(1.20898, 0, 0, 1.20898, 0, 0) ; F6card 390px motion title matrix(1.20898, 0, 0, 1.20898, 0, 0) cup matrix(0.944042, -0.0476784, 0.0476784, 0.944042, 0, 5.18335)
+simCareerMoments CONTROL grow: 1077 checks, red on K2 (expected K2): the control fired on its own check and the others stayed green

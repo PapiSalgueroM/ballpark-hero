@@ -1,0 +1,54 @@
+CONTROL stray ON: src/components/career-moments/CareerMomentCard.tsx read from a rewritten copy; expected red: K1
+1) Source: 6 files in src/components/career-moments
+   S1 15 imports read against the allow list
+   S2 17487 characters of code read for 9 banned words
+   S3 the scene's colour is used 5 times, 0 gradient(s) read
+   S6 10 imports read on the two soccer re-exporters
+   S4 1 SigningMoment in the slip, 1 TrophyMoment in the tournament card; 1687 source files read for a second definition of the hook or the confetti
+   S5 2 bind id(s) counted across 1408 files
+2) In Chromium: 7 fixtures at 320, 390, 1280 px, motion on and reduced; bundle 1508K, stylesheet 40K, Tailwind was handed 15 files
+  FAIL K1: F1 320px motion: the scene prints 9041, a number its fixture never carried
+  FAIL K1: F2 320px motion: the scene prints 9041, a number its fixture never carried
+  FAIL K1: F3 320px motion: the scene prints 9041, a number its fixture never carried
+  FAIL K1: F4 320px motion: the scene prints 9041, a number its fixture never carried
+  FAIL K1: F5 320px motion: the scene prints 9041, a number its fixture never carried
+  FAIL K1: F6slip 320px motion: the scene prints 9041, a number its fixture never carried
+  FAIL K1: F6card 320px motion: the scene prints 9041, a number its fixture never carried
+  FAIL K1: F1 320px reduced: the scene prints 9041, a number its fixture never carried
+  FAIL K1: F2 320px reduced: the scene prints 9041, a number its fixture never carried
+  FAIL K1: F3 320px reduced: the scene prints 9041, a number its fixture never carried
+  FAIL K1: F4 320px reduced: the scene prints 9041, a number its fixture never carried
+  FAIL K1: F5 320px reduced: the scene prints 9041, a number its fixture never carried
+  FAIL K1: F6slip 320px reduced: the scene prints 9041, a number its fixture never carried
+  FAIL K1: F6card 320px reduced: the scene prints 9041, a number its fixture never carried
+  FAIL K1: F1 390px motion: the scene prints 9041, a number its fixture never carried
+  FAIL K1: F2 390px motion: the scene prints 9041, a number its fixture never carried
+  FAIL K1: F3 390px motion: the scene prints 9041, a number its fixture never carried
+  FAIL K1: F4 390px motion: the scene prints 9041, a number its fixture never carried
+  FAIL K1: F5 390px motion: the scene prints 9041, a number its fixture never carried
+  FAIL K1: F6slip 390px motion: the scene prints 9041, a number its fixture never carried
+  FAIL K1: F6card 390px motion: the scene prints 9041, a number its fixture never carried
+  FAIL K1: F1 390px reduced: the scene prints 9041, a number its fixture never carried
+  FAIL K1: F2 390px reduced: the scene prints 9041, a number its fixture never carried
+  FAIL K1: F3 390px reduced: the scene prints 9041, a number its fixture never carried
+  FAIL K1: F4 390px reduced: the scene prints 9041, a number its fixture never carried
+  FAIL K1: F5 390px reduced: the scene prints 9041, a number its fixture never carried
+  FAIL K1: F6slip 390px reduced: the scene prints 9041, a number its fixture never carried
+  FAIL K1: F6card 390px reduced: the scene prints 9041, a number its fixture never carried
+  FAIL K1: F1 1280px motion: the scene prints 9041, a number its fixture never carried
+  FAIL K1: F2 1280px motion: the scene prints 9041, a number its fixture never carried
+  FAIL K1: F3 1280px motion: the scene prints 9041, a number its fixture never carried
+  FAIL K1: F4 1280px motion: the scene prints 9041, a number its fixture never carried
+  FAIL K1: F5 1280px motion: the scene prints 9041, a number its fixture never carried
+  FAIL K1: F6slip 1280px motion: the scene prints 9041, a number its fixture never carried
+  FAIL K1: F6card 1280px motion: the scene prints 9041, a number its fixture never carried
+  FAIL K1: F1 1280px reduced: the scene prints 9041, a number its fixture never carried
+  FAIL K1: F2 1280px reduced: the scene prints 9041, a number its fixture never carried
+  FAIL K1: F3 1280px reduced: the scene prints 9041, a number its fixture never carried
+  FAIL K1: F4 1280px reduced: the scene prints 9041, a number its fixture never carried
+  FAIL K1: F5 1280px reduced: the scene prints 9041, a number its fixture never carried
+  FAIL K1: F6slip 1280px reduced: the scene prints 9041, a number its fixture never carried
+  FAIL K1: F6card 1280px reduced: the scene prints 9041, a number its fixture never carried
+   K7 heights at 320 px, at rest: F1 217, F2 257, F3 169, F4 451, F5 239, F6slip 217; tallest F4 at 451 px, bound 508 px
+   K4 early frames at 390 px: F1 390px motion title matrix(1.20898, 0, 0, 1.20898, 0, 0) ; F2 390px motion title matrix(1.20898, 0, 0, 1.20898, 0, 0) cup matrix(0.944042, -0.0476784, 0.0476784, 0.944042, 0, 5.18335) ; F3 390px motion title matrix(1.20898, 0, 0, 1.20898, 0, 0) ; F4 390px motion title matrix(1.20898, 0, 0, 1.20898, 0, 0) ; F6slip 390px motion title matrix(1.20898, 0, 0, 1.20898, 0, 0) ; F6card 390px motion title matrix(1.20898, 0, 0, 1.20898, 0, 0) cup matrix(0.944042, -0.0476784, 0.0476784, 0.944042, 0, 5.18335)
+simCareerMoments CONTROL stray: 1119 checks, red on K1 (expected K1): the control fired on its own check and the others stayed green
