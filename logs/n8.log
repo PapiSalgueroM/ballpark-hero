@@ -1,0 +1,22 @@
+rvmutate n8: src/components/career-moments/Confetti.tsx mutated
+[2m Test Files [22m [1m[32m8 passed[39m[22m[90m (8)[39m
+[2m      Tests [22m [1m[32m97 passed[39m[22m[90m (97)[39m
+VITEST_EXIT=0
+  FAIL K5: F2 320px reduced: 50 confetti piece(s) fall under reduce
+  FAIL K5: F3 320px reduced: 50 confetti piece(s) fall under reduce
+  FAIL K5: F6card 320px reduced: 60 confetti piece(s) fall under reduce
+  FAIL K5: F2 390px reduced: 50 confetti piece(s) fall under reduce
+  FAIL K5: F3 390px reduced: 50 confetti piece(s) fall under reduce
+  FAIL K5: F6card 390px reduced: 60 confetti piece(s) fall under reduce
+  FAIL K5: F2 1280px reduced: 50 confetti piece(s) fall under reduce
+  FAIL K5: F3 1280px reduced: 50 confetti piece(s) fall under reduce
+SIM_EXIT=1
+BUILD_EXIT=0
+playCareerMoments: 34 checks, 0 failed
+WALK_EXIT=0
+   no preference /fight-career    elements that move for more than 10ms: 57 of 391
+   no preference /stadium-tycoon  elements that move for more than 10ms: 82 of 488
+
+playReducedMotion: 1 problem(s)
+REDUCED_EXIT=1
+RESTORED dirty=0

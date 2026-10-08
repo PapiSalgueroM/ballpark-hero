@@ -1,0 +1,9 @@
+rvmutate n5: src/components/soccer-career/careerMilestones.ts mutated
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/careerMilestones.test.ts[2m > [22mRound 1107: the growth note is the difference between two saves, nothing else[2m > [22mholds at every season step of 24 seeded careers, and the sample is not vacuous
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m7 passed[39m[22m[90m (8)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m96 passed[39m[22m[90m (97)[39m
+VITEST_EXIT=1
+simCareerMoments: 1077 checks, 0 failed
+SIM_EXIT=0
+RESTORED dirty=0

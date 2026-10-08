@@ -1,0 +1,18 @@
+rvmutate n6: src/components/career-moments/CareerMomentCard.tsx mutated
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 3 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/careerMomentKit.test.tsx[2m > [22mRound 1107: the view, state by state[2m > [22mstill: no animated class anywhere, no old number, the same words
+[41m[1m FAIL [22m[49m src/test/careerMomentKit.test.tsx[2m > [22mRound 1107: the view, state by state[2m > [22ma quiet scene gets one rise on the card: no slam, no rolling number, no ink, no ring, no confetti
+[41m[1m FAIL [22m[49m src/test/careerMomentKit.test.tsx[2m > [22mRound 1107: the card with the once per key rule[2m > [22mplays on the first mount of a key and sits still on the second
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m7 passed[39m[22m[90m (8)[39m
+[2m      Tests [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m94 passed[39m[22m[90m (97)[39m
+VITEST_EXIT=1
+  FAIL K4: F5 320px motion: a quiet card has one animation, cmRise on the card itself; found card:cmRise span:cmoRollOut
+  FAIL K5: F5 320px reduced: 1 old number or ring layer(s) in the markup, expected 0, so the rule above measured the wrong thing
+  FAIL K4: F5 390px motion: a quiet card has one animation, cmRise on the card itself; found card:cmRise span:cmoRollOut
+  FAIL K5: F5 390px reduced: 1 old number or ring layer(s) in the markup, expected 0, so the rule above measured the wrong thing
+  FAIL K4: F5 1280px motion: a quiet card has one animation, cmRise on the card itself; found card:cmRise span:cmoRollOut
+  FAIL K5: F5 1280px reduced: 1 old number or ring layer(s) in the markup, expected 0, so the rule above measured the wrong thing
+  FAIL K6a: a still card must hold nothing longer than 10 ms, no old number and no confetti, with its cup drawn; saw 1 slow, 1 old, 0 confetti, 1 cup
+simCareerMoments: 1089 checks, 7 failed
+SIM_EXIT=1
+RESTORED dirty=0

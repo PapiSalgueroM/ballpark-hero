@@ -1,0 +1,13 @@
+rvmutate n1: src/components/career-moments/CareerMomentStyles.tsx mutated
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/careerMomentKitLift.test.tsx[2m > [22mRound 1107: the markup on record before the lift[2m > [22mall seventeen match the record and its digests
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m7 passed[39m[22m[90m (8)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m96 passed[39m[22m[90m (97)[39m
+VITEST_EXIT=1
+  FAIL K6a: a still card must hold nothing longer than 10 ms, no old number and no confetti, with its cup drawn; saw 4 slow, 0 old, 0 confetti, 1 cup
+simCareerMoments: 1077 checks, 1 failed
+SIM_EXIT=1
+BUILD_EXIT=0
+playCareerMoments: 34 checks, 0 failed
+WALK_EXIT=0
+RESTORED dirty=0

@@ -1,0 +1,20 @@
+rvmutate n4: src/components/soccer-career/SignedSlip.tsx mutated
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/careerMomentKit.test.tsx[2m > [22mRound 1107: the signing scene (SignedSlip binds the kit)[2m > [22mwith a look and a club colour, his avatar wears that one flat colour and the scene carries it
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m7 passed[39m[22m[90m (8)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m96 passed[39m[22m[90m (97)[39m
+VITEST_EXIT=1
+  FAIL K1: F6slip 320px motion: the slip must hold one signing scene with one avatar whose shirt is #1D4ED8 and whose colour is #1d4ed8; found 1 scene(s), 1 avatar(s), shirt #3B82F6, colour #1d4ed8
+  FAIL K1: F6slip 320px reduced: the slip must hold one signing scene with one avatar whose shirt is #1D4ED8 and whose colour is #1d4ed8; found 1 scene(s), 1 avatar(s), shirt #3B82F6, colour #1d4ed8
+  FAIL K1: F6slip 390px motion: the slip must hold one signing scene with one avatar whose shirt is #1D4ED8 and whose colour is #1d4ed8; found 1 scene(s), 1 avatar(s), shirt #3B82F6, colour #1d4ed8
+  FAIL K1: F6slip 390px reduced: the slip must hold one signing scene with one avatar whose shirt is #1D4ED8 and whose colour is #1d4ed8; found 1 scene(s), 1 avatar(s), shirt #3B82F6, colour #1d4ed8
+  FAIL K1: F6slip 1280px motion: the slip must hold one signing scene with one avatar whose shirt is #1D4ED8 and whose colour is #1d4ed8; found 1 scene(s), 1 avatar(s), shirt #3B82F6, colour #1d4ed8
+  FAIL K1: F6slip 1280px reduced: the slip must hold one signing scene with one avatar whose shirt is #1D4ED8 and whose colour is #1d4ed8; found 1 scene(s), 1 avatar(s), shirt #3B82F6, colour #1d4ed8
+simCareerMoments: 1077 checks, 6 failed
+SIM_EXIT=1
+BUILD_EXIT=0
+FAIL S390:P2 the facts are the save's: "✍️ Signed with Liverpool", "3 years at €98k/wk", the number €98k/wk (the save: Liverpool, 3 years at €98k/wk, €98k/wk); 1 avatar(s), shirt #3B82F6, scene colour #c8102e (the save: #C8102E)
+FAIL S1280:P2 the facts are the save's: "✍️ Signed with Liverpool", "3 years at €98k/wk", the number €98k/wk (the save: Liverpool, 3 years at €98k/wk, €98k/wk); 1 avatar(s), shirt #3B82F6, scene colour #c8102e (the save: #C8102E)
+playCareerMoments: 34 checks, 2 failed
+WALK_EXIT=1
+RESTORED dirty=0

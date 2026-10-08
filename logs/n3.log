@@ -1,0 +1,22 @@
+rvmutate n3: src/components/soccer-career/careerMoments.ts mutated
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 9 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/careerMomentKitLift.test.tsx[2m > [22mRound 1107: the markup on record before the lift[2m > [22m1. every tournament card that is not a win, fresh and settled
+[41m[1m FAIL [22m[49m src/test/careerMomentKitLift.test.tsx[2m > [22mRound 1107: the markup on record before the lift[2m > [22m5. the won tournament card, fresh and settled
+[41m[1m FAIL [22m[49m src/test/careerMomentKitLift.test.tsx[2m > [22mRound 1107: the markup on record before the lift[2m > [22mall seventeen match the record and its digests
+[41m[1m FAIL [22m[49m src/test/soccerCareerDebutLegacy.test.tsx[2m > [22mRound 985: through the real page, a reload never replays the moment[2m > [22ma save left sitting on a won tournament loads still too (one rule for every moment), and the control plays
+[41m[1m FAIL [22m[49m src/test/tournamentCardMoment.test.tsx[2m > [22mRound 926: the moment plays once[2m > [22ma reload or a new tab finds the save on this card and draws it still, even a save that never played it; the control plays
+[41m[1m FAIL [22m[49m src/test/tournamentCardMoment.test.tsx[2m > [22mRound 926: the moment plays once[2m > [22ma different career winning the same edition with the same nation still gets its moment, even after a reload
+[41m[1m FAIL [22m[49m src/test/tournamentCardMoment.test.tsx[2m > [22mRound 926: the quiet card also plays once[2m > [22mBack, a second mount, a reload and a new tab leave a group exit quiet
+[41m[1m FAIL [22m[49m src/test/tournamentCardMoment.test.tsx[2m > [22mRound 1107: the won card's head is the career moment kit's Trophy scene[2m > [22mstill after a tile and Back, after a second mount, and after a reload on the card
+[41m[1m FAIL [22m[49m src/test/tournamentCardMoment.test.tsx[2m > [22mRound 1107: a tournament is settled on load only when the save sits on its card[2m > [22mthe same save reloaded ON the card does not
+[2m Test Files [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m5 passed[39m[22m[90m (8)[39m
+[2m      Tests [22m [1m[31m9 failed[39m[22m[2m | [22m[1m[32m88 passed[39m[22m[90m (97)[39m
+VITEST_EXIT=1
+simCareerMoments: 1077 checks, 0 failed
+SIM_EXIT=0
+BUILD_EXIT=0
+FAIL T390:P4 once: after a reload the save sits on the card: 1 card(s), the scene live with 60 confetti piece(s) and 0 animation(s) running
+FAIL T1280:P4 once: after a reload the save sits on the card: 1 card(s), the scene live with 60 confetti piece(s) and 0 animation(s) running
+playCareerMoments: 34 checks, 2 failed
+WALK_EXIT=1
+RESTORED dirty=0
