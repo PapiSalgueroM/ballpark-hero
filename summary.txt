@@ -1,0 +1,7 @@
+build exit=0 20s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+notranslate exit=0 56s | playTranslatedPage: 121 checks, 0 failed
+noguard exit=1 84s | playTranslatedPage: 166 checks, 28 failed (control "noguard", red on purpose)
+simNoRivalNames exit=0 9s | No rival product names found. 0 findings.
+tsc exit=0 52s | 
+plain exit=0 109s | playTranslatedPage: 238 checks, 0 failed
+simHarnessAnchors exit=0 25s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.

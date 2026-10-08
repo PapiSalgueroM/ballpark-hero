@@ -1,0 +1,387 @@
+playTranslatedPage: http://localhost:4173, 9 page(s), views phone and desktop, text off, CONTROL=notranslate
+  PASS  0. the served entry chunk (/assets/index-B9I8soIb.js) holds the guard's off switch __DUKB_NO_TRANSLATE_GUARD__
+  PASS  0. the served entry chunk holds the guard's console line
+
+/club-manager phone off
+        ok the page draws moved=0 stale=0 fonts=0
+        ok press 1 [How to play] moved=0 stale=0 fonts=0
+        ok press 2 [Let's Play!] moved=0 stale=0 fonts=0
+        ok press 3 [📅2026-27Today. Real squads as of August] moved=0 stale=0 fonts=0
+        ok press 4 [📅 Starting 2026-27] moved=0 stale=0 fonts=0
+        ok press 5 [🏟️2020-21Haaland and Bellingham at Dort] moved=0 stale=0 fonts=0
+        ok press 6 [🏟️ Starting 2020-21] moved=0 stale=0 fonts=0
+        ok press 7 [🦊2015-16The Leicester season. MSN Barce] moved=0 stale=0 fonts=0
+        ok press 8 [🦊 Starting 2015-16] moved=0 stale=0 fonts=0
+  PASS  1. /club-manager phone off: the translator is off: 0 font element(s)
+  PASS  1. /club-manager phone off: the guard is installed on the page
+  PASS  8. /club-manager phone off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  5. /club-manager phone off: the walk pressed at least two controls: 8: How to play > Let's Play! > 📅2026-27Today. Real s > 📅 Starting 2026-27 > 🏟️2020-21Haaland and  > 🏟️ Starting 2020-21 > 🦊2015-16The Leicester > 🦊 Starting 2015-16
+  PASS  6. /club-manager phone off: the route error boundary never appeared
+  PASS  7. /club-manager phone off: no NotFoundError
+
+/ phone off
+        ok the page draws moved=0 stale=0 fonts=0
+        ok press 1 [Make a free one] moved=0 stale=0 fonts=0
+        ok press 2 [Close] moved=0 stale=0 fonts=0
+        ok press 3 [Pin Cage Clash] moved=0 stale=0 fonts=0
+        ok press 4 [Pin Deadline Day] moved=0 stale=0 fonts=0
+        ok press 5 [Pin Gauntlet Draft: NHL] moved=0 stale=0 fonts=0
+        ok press 6 [Pin Aussie Rules Manager] moved=0 stale=0 fonts=0
+        ok press 7 [🥊 Ali] moved=0 stale=0 fonts=0
+        ok press 8 [Unpin Cage Clash] moved=0 stale=0 fonts=0
+  PASS  1. / phone off: the translator is off: 0 font element(s)
+  PASS  1. / phone off: the guard is installed on the page
+  PASS  8. / phone off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  5. / phone off: the walk pressed at least two controls: 8: Make a free one > Close > Pin Cage Clash > Pin Deadline Day > Pin Gauntlet Draft: NH > Pin Aussie Rules Manag > 🥊 Ali > Unpin Cage Clash
+  PASS  6. / phone off: the route error boundary never appeared
+  PASS  7. / phone off: no NotFoundError
+
+/nba-my-career phone off
+        ok the page draws moved=0 stale=0 fonts=0
+        ok press 1 [Let's Play!] moved=0 stale=0 fonts=0
+        ok press 2 [🏀 2026The league as it is today. Full m] moved=0 stale=0 fonts=0
+        ok press 3 [⏪ 2003-04 throwbackThe 29 team league of] moved=0 stale=0 fonts=0
+        ok press 4 [PG] moved=0 stale=0 fonts=0
+        ok press 5 [SG] moved=0 stale=0 fonts=0
+        ok press 6 [SF] moved=0 stale=0 fonts=0
+        ok press 7 [PF] moved=0 stale=0 fonts=0
+        ok press 8 [C] moved=0 stale=0 fonts=0
+  PASS  1. /nba-my-career phone off: the translator is off: 0 font element(s)
+  PASS  1. /nba-my-career phone off: the guard is installed on the page
+  PASS  8. /nba-my-career phone off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  5. /nba-my-career phone off: the walk pressed at least two controls: 8: Let's Play! > 🏀 2026The league as i > ⏪ 2003-04 throwbackThe > PG > SG > SF > PF > C
+  PASS  6. /nba-my-career phone off: the route error boundary never appeared
+  PASS  7. /nba-my-career phone off: no NotFoundError
+
+/nfl-my-career phone off
+        ok the page draws moved=0 stale=0 fonts=0
+        ok press 1 [Let's Play!] moved=0 stale=0 fonts=0
+        ok press 2 [🏈 2026The league as it is today. Full m] moved=0 stale=0 fonts=0
+        ok press 3 [⏪ 2005 throwbackThe 2005 league: the Rai] moved=0 stale=0 fonts=0
+        ok press 4 [QB] moved=0 stale=0 fonts=0
+        ok press 5 [RB] moved=0 stale=0 fonts=0
+        ok press 6 [WR] moved=0 stale=0 fonts=0
+        ok press 7 [TE] moved=0 stale=0 fonts=0
+        ok press 8 [LB] moved=0 stale=0 fonts=0
+  PASS  1. /nfl-my-career phone off: the translator is off: 0 font element(s)
+  PASS  1. /nfl-my-career phone off: the guard is installed on the page
+  PASS  8. /nfl-my-career phone off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  5. /nfl-my-career phone off: the walk pressed at least two controls: 8: Let's Play! > 🏈 2026The league as i > ⏪ 2005 throwbackThe 20 > QB > RB > WR > TE > LB
+  PASS  6. /nfl-my-career phone off: the route error boundary never appeared
+  PASS  7. /nfl-my-career phone off: no NotFoundError
+
+/stadium-tycoon phone off
+        ok the page draws moved=0 stale=0 fonts=0
+        ok press 1 [Close the rules] moved=0 stale=0 fonts=0
+        ok press 2 [🏟️ Stadium] moved=0 stale=0 fonts=0
+        ok press 3 [🎓 Academy] moved=0 stale=0 fonts=0
+        ok press 4 [Close the rules] moved=0 stale=0 fonts=0
+        ok press 5 [🏆 League] moved=0 stale=0 fonts=0
+        ok press 6 [Northquay Swifts] moved=0 stale=0 fonts=0
+        ok press 7 [🏟️ Stadium] moved=0 stale=0 fonts=0
+        ok press 8 [How it works] moved=0 stale=0 fonts=0
+  PASS  1. /stadium-tycoon phone off: the translator is off: 0 font element(s)
+  PASS  1. /stadium-tycoon phone off: the guard is installed on the page
+  PASS  8. /stadium-tycoon phone off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  5. /stadium-tycoon phone off: the walk pressed at least two controls: 8: Close the rules > 🏟️ Stadium > 🎓 Academy > Close the rules > 🏆 League > Northquay Swifts > 🏟️ Stadium > How it works
+  PASS  6. /stadium-tycoon phone off: the route error boundary never appeared
+  PASS  7. /stadium-tycoon phone off: no NotFoundError
+
+/college-grid phone off
+        ok the page draws moved=0 stale=0 fonts=0
+        ok press 1 [Close] moved=0 stale=0 fonts=0
+        ok press 2 [How to play] moved=0 stale=0 fonts=0
+        ok press 3 [Let's Play!] moved=0 stale=0 fonts=0
+        ok press 4 [Report] moved=0 stale=0 fonts=0
+        ok press 5 [Close] moved=0 stale=0 fonts=0
+        ok press 6 [How to play] moved=0 stale=0 fonts=0
+        ok press 7 [Let's Play!] moved=0 stale=0 fonts=0
+        ok press 8 [Report] moved=0 stale=0 fonts=0
+  PASS  1. /college-grid phone off: the translator is off: 0 font element(s)
+  PASS  1. /college-grid phone off: the guard is installed on the page
+  PASS  8. /college-grid phone off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  5. /college-grid phone off: the walk pressed at least two controls: 8: Close > How to play > Let's Play! > Report > Close > How to play > Let's Play! > Report
+  PASS  6. /college-grid phone off: the route error boundary never appeared
+  PASS  7. /college-grid phone off: no NotFoundError
+
+/build-your-xi phone off
+        ok the page draws moved=0 stale=0 fonts=0
+        ok press 1 [Got it!] moved=0 stale=0 fonts=0
+        ok press 2 [How to play] moved=0 stale=0 fonts=0
+        ok press 3 [Let's Play!] moved=0 stale=0 fonts=0
+        ok press 4 [4-3-311 players] moved=0 stale=0 fonts=0
+        ok press 5 [GK] moved=0 stale=0 fonts=0
+        ok press 6 [LB] moved=0 stale=0 fonts=0
+        ok press 7 [CB] moved=0 stale=0 fonts=0
+        ok press 8 [RB] moved=0 stale=0 fonts=0
+  PASS  1. /build-your-xi phone off: the translator is off: 0 font element(s)
+  PASS  1. /build-your-xi phone off: the guard is installed on the page
+  PASS  8. /build-your-xi phone off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  5. /build-your-xi phone off: the walk pressed at least two controls: 8: Got it! > How to play > Let's Play! > 4-3-311 players > GK > LB > CB > RB
+  PASS  6. /build-your-xi phone off: the route error boundary never appeared
+  PASS  7. /build-your-xi phone off: no NotFoundError
+
+/soccer-career phone off
+        ok the create screen draws moved=0 stale=0 fonts=0
+        ok type the name moved=0 stale=0 fonts=0
+        ok choose nationality Brazil [Brazil🇧🇷] moved=0 stale=0 fonts=0
+        ok choose position Striker [Striker (ST)] moved=0 stale=0 fonts=0
+        ok choose era Current era [Current era (2025 start)] moved=0 stale=0 fonts=0
+        ok Generate Starting Potential [🎲 Generate Starting Potential] moved=0 stale=0 fonts=0
+        ok Roll again [🎲 Roll again] moved=0 stale=0 fonts=0
+        ok Customize your build [🎮 Customize your build] moved=0 stale=0 fonts=0
+        ok Lock in build [✅ Lock in build] moved=0 stale=0 fonts=0
+        ok Begin Career [⚽ Begin Career] moved=0 stale=0 fonts=0 youth 16
+        ok career press 1 [Next Year] moved=0 stale=0 fonts=0 contract_offer 17
+        ok career press 2 [Review contract] moved=0 stale=0 fonts=0 contract_offer 17
+        ok career press 3 [Sign contract] moved=0 stale=0 fonts=0 playing 17
+        ok career press 4 [Next Season] moved=0 stale=0 fonts=0 newspaper 18
+        ok career press 5 [Continue to Season Summary →] moved=0 stale=0 fonts=0 season_summary 18
+        ok career press 6 [Continue →] moved=0 stale=0 fonts=0 ballon_dor 18
+        ok career press 7 [Continue →] moved=0 stale=0 fonts=0 social_media_action 18
+        ok career press 8 [🏋️Post training videoShow off your skil] moved=0 stale=0 fonts=0 social_media_action 18
+        ok career press 9 [Continue →] moved=0 stale=0 fonts=0 random_events 18
+        ok career press 10 [🎭The ShowmanFame comes easy: followers ] moved=0 stale=0 fonts=0 random_events 18
+        ok career press 11 [🃏One night only55%: win €0.4M · 45%: lo] moved=0 stale=0 fonts=0 random_events 18
+        ok career press 12 [🤝Dedicate it to the teamOverall +1, Mar] moved=0 stale=0 fonts=0 random_events 18
+  PASS  1. /soccer-career phone off: the translator is off: 0 font element(s)
+  PASS  1. /soccer-career phone off: the guard is installed on the page
+  PASS  8. /soccer-career phone off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  2. /soccer-career phone off: the create screen drew
+  PASS  2. /soccer-career phone off: all three picks registered, Brazil among them: nationality box "Brazil", position box "Striker (ST)", era box "Current era (2025 start)"
+  PASS  2. /soccer-career phone off: each pick can be READ in its box: readable: nationality, position, era; hidden: none
+  PASS  3. /soccer-career phone off: the create flow reached the career: h1 "🇧🇷Joao Teste", create form gone, save Joao Teste, Brazil, youth, age 16
+  PASS  4. /soccer-career phone off: one season forward and the hub still stands: age 16 to 17 on press 1, h1 "🇧🇷Joao Teste", phase contract_offer; the walk went on to age 18, phase random_events
+  PASS  5. /soccer-career phone off: the walk pressed at least two controls: 20: Brazil🇧🇷 > Striker (ST) > Current era (2025 star > 🎲 Generate Starting P > 🎲 Roll again > 🎮 Customize your buil > ✅ Lock in build > ⚽ Begin Career > Next Year
+  PASS  6. /soccer-career phone off: the route error boundary never appeared
+  PASS  7. /soccer-career phone off: no NotFoundError
+
+/front-office phone off
+        ok the page draws moved=0 stale=0 fonts=0
+        ok press 1 [Arizona CardinalsNFC West] moved=0 stale=0 fonts=0
+        ok press 2 [Process, patience, all the safe wordsMea] moved=0 stale=0 fonts=0
+        ok press 3 [👔Roster52 under contractDadrion Taylor-] moved=0 stale=0 fonts=0
+        ok press 4 [Hub] moved=0 stale=0 fonts=0
+        ok press 5 [💼Free agency$151M of roomIn reach: Jama] moved=0 stale=0 fonts=0
+        ok press 6 [Sign] moved=0 stale=0 fonts=0
+        ok press 7 [Abandon franchise and restart] moved=0 stale=0 fonts=0
+        ok press 8 [Atlanta FalconsNFC South] moved=0 stale=0 fonts=0
+  PASS  1. /front-office phone off: the translator is off: 0 font element(s)
+  PASS  1. /front-office phone off: the guard is installed on the page
+  PASS  8. /front-office phone off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  5. /front-office phone off: the walk pressed at least two controls: 8: Arizona CardinalsNFC W > Process, patience, all > 👔Roster52 under contr > Hub > 💼Free agency$151M of  > Sign > Abandon franchise and  > Atlanta FalconsNFC Sou
+  PASS  6. /front-office phone off: the route error boundary never appeared
+  PASS  7. /front-office phone off: no NotFoundError
+
+/club-manager desktop off
+        ok the page draws moved=0 stale=0 fonts=0
+        ok press 1 [How to play] moved=0 stale=0 fonts=0
+        ok press 2 [Let's Play!] moved=0 stale=0 fonts=0
+        ok press 3 [📅2026-27Today. Real squads as of August] moved=0 stale=0 fonts=0
+        ok press 4 [📅 Starting 2026-27] moved=0 stale=0 fonts=0
+        ok press 5 [🏟️2020-21Haaland and Bellingham at Dort] moved=0 stale=0 fonts=0
+        ok press 6 [🏟️ Starting 2020-21] moved=0 stale=0 fonts=0
+        ok press 7 [🦊2015-16The Leicester season. MSN Barce] moved=0 stale=0 fonts=0
+        ok press 8 [🦊 Starting 2015-16] moved=0 stale=0 fonts=0
+  PASS  1. /club-manager desktop off: the translator is off: 0 font element(s)
+  PASS  1. /club-manager desktop off: the guard is installed on the page
+  PASS  8. /club-manager desktop off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  5. /club-manager desktop off: the walk pressed at least two controls: 8: How to play > Let's Play! > 📅2026-27Today. Real s > 📅 Starting 2026-27 > 🏟️2020-21Haaland and  > 🏟️ Starting 2020-21 > 🦊2015-16The Leicester > 🦊 Starting 2015-16
+  PASS  6. /club-manager desktop off: the route error boundary never appeared
+  PASS  7. /club-manager desktop off: no NotFoundError
+
+/ desktop off
+        ok the page draws moved=0 stale=0 fonts=0
+        ok press 1 [Scroll the daily puzzles on] moved=0 stale=0 fonts=0
+        ok press 2 [Make a free one] moved=0 stale=0 fonts=0
+        ok press 3 [Close] moved=0 stale=0 fonts=0
+        ok press 4 [Pin Cage Clash] moved=0 stale=0 fonts=0
+        ok press 5 [Pin Deadline Day] moved=0 stale=0 fonts=0
+        ok press 6 [Pin Gauntlet Draft: NHL] moved=0 stale=0 fonts=0
+        ok press 7 [Pin Aussie Rules Manager] moved=0 stale=0 fonts=0
+        ok press 8 [🥊 Ali] moved=0 stale=0 fonts=0
+  PASS  1. / desktop off: the translator is off: 0 font element(s)
+  PASS  1. / desktop off: the guard is installed on the page
+  PASS  8. / desktop off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  5. / desktop off: the walk pressed at least two controls: 8: Scroll the daily puzzl > Make a free one > Close > Pin Cage Clash > Pin Deadline Day > Pin Gauntlet Draft: NH > Pin Aussie Rules Manag > 🥊 Ali
+  PASS  6. / desktop off: the route error boundary never appeared
+  PASS  7. / desktop off: no NotFoundError
+
+/nba-my-career desktop off
+        ok the page draws moved=0 stale=0 fonts=0
+        ok press 1 [Let's Play!] moved=0 stale=0 fonts=0
+        ok press 2 [🏀 2026The league as it is today. Full m] moved=0 stale=0 fonts=0
+        ok press 3 [⏪ 2003-04 throwbackThe 29 team league of] moved=0 stale=0 fonts=0
+        ok press 4 [PG] moved=0 stale=0 fonts=0
+        ok press 5 [SG] moved=0 stale=0 fonts=0
+        ok press 6 [SF] moved=0 stale=0 fonts=0
+        ok press 7 [PF] moved=0 stale=0 fonts=0
+        ok press 8 [C] moved=0 stale=0 fonts=0
+  PASS  1. /nba-my-career desktop off: the translator is off: 0 font element(s)
+  PASS  1. /nba-my-career desktop off: the guard is installed on the page
+  PASS  8. /nba-my-career desktop off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  5. /nba-my-career desktop off: the walk pressed at least two controls: 8: Let's Play! > 🏀 2026The league as i > ⏪ 2003-04 throwbackThe > PG > SG > SF > PF > C
+  PASS  6. /nba-my-career desktop off: the route error boundary never appeared
+  PASS  7. /nba-my-career desktop off: no NotFoundError
+
+/nfl-my-career desktop off
+        ok the page draws moved=0 stale=0 fonts=0
+        ok press 1 [Let's Play!] moved=0 stale=0 fonts=0
+        ok press 2 [🏈 2026The league as it is today. Full m] moved=0 stale=0 fonts=0
+        ok press 3 [⏪ 2005 throwbackThe 2005 league: the Rai] moved=0 stale=0 fonts=0
+        ok press 4 [QB] moved=0 stale=0 fonts=0
+        ok press 5 [RB] moved=0 stale=0 fonts=0
+        ok press 6 [WR] moved=0 stale=0 fonts=0
+        ok press 7 [TE] moved=0 stale=0 fonts=0
+        ok press 8 [LB] moved=0 stale=0 fonts=0
+  PASS  1. /nfl-my-career desktop off: the translator is off: 0 font element(s)
+  PASS  1. /nfl-my-career desktop off: the guard is installed on the page
+  PASS  8. /nfl-my-career desktop off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  5. /nfl-my-career desktop off: the walk pressed at least two controls: 8: Let's Play! > 🏈 2026The league as i > ⏪ 2005 throwbackThe 20 > QB > RB > WR > TE > LB
+  PASS  6. /nfl-my-career desktop off: the route error boundary never appeared
+  PASS  7. /nfl-my-career desktop off: no NotFoundError
+
+/stadium-tycoon desktop off
+        ok the page draws moved=0 stale=0 fonts=0
+        ok press 1 [Close the rules] moved=0 stale=0 fonts=0
+        ok press 2 [🏟️ Stadium] moved=0 stale=0 fonts=0
+        ok press 3 [🎓 Academy] moved=0 stale=0 fonts=0
+        ok press 4 [Close the rules] moved=0 stale=0 fonts=0
+        ok press 5 [🏆 League] moved=0 stale=0 fonts=0
+        ok press 6 [Northquay Swifts] moved=0 stale=0 fonts=0
+        ok press 7 [🏟️ Stadium] moved=0 stale=0 fonts=0
+        ok press 8 [How it works] moved=0 stale=0 fonts=0
+  PASS  1. /stadium-tycoon desktop off: the translator is off: 0 font element(s)
+  PASS  1. /stadium-tycoon desktop off: the guard is installed on the page
+  PASS  8. /stadium-tycoon desktop off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  5. /stadium-tycoon desktop off: the walk pressed at least two controls: 8: Close the rules > 🏟️ Stadium > 🎓 Academy > Close the rules > 🏆 League > Northquay Swifts > 🏟️ Stadium > How it works
+  PASS  6. /stadium-tycoon desktop off: the route error boundary never appeared
+  PASS  7. /stadium-tycoon desktop off: no NotFoundError
+
+/college-grid desktop off
+        ok the page draws moved=0 stale=0 fonts=0
+        ok press 1 [Close] moved=0 stale=0 fonts=0
+        ok press 2 [How to play] moved=0 stale=0 fonts=0
+        ok press 3 [Let's Play!] moved=0 stale=0 fonts=0
+        ok press 4 [Report] moved=0 stale=0 fonts=0
+        ok press 5 [Close] moved=0 stale=0 fonts=0
+        ok press 6 [How to play] moved=0 stale=0 fonts=0
+        ok press 7 [Let's Play!] moved=0 stale=0 fonts=0
+        ok press 8 [Report] moved=0 stale=0 fonts=0
+  PASS  1. /college-grid desktop off: the translator is off: 0 font element(s)
+  PASS  1. /college-grid desktop off: the guard is installed on the page
+  PASS  8. /college-grid desktop off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  5. /college-grid desktop off: the walk pressed at least two controls: 8: Close > How to play > Let's Play! > Report > Close > How to play > Let's Play! > Report
+  PASS  6. /college-grid desktop off: the route error boundary never appeared
+  PASS  7. /college-grid desktop off: no NotFoundError
+
+/soccer-career desktop off
+        ok the create screen draws moved=0 stale=0 fonts=0
+        ok type the name moved=0 stale=0 fonts=0
+        ok choose nationality Brazil [Brazil🇧🇷] moved=0 stale=0 fonts=0
+        ok choose position Striker [Striker (ST)] moved=0 stale=0 fonts=0
+        ok choose era Current era [Current era (2025 start)] moved=0 stale=0 fonts=0
+        ok Generate Starting Potential [🎲 Generate Starting Potential] moved=0 stale=0 fonts=0
+        ok Roll again [🎲 Roll again] moved=0 stale=0 fonts=0
+        ok Customize your build [🎮 Customize your build] moved=0 stale=0 fonts=0
+        ok Lock in build [✅ Lock in build] moved=0 stale=0 fonts=0
+        ok Begin Career [⚽ Begin Career] moved=0 stale=0 fonts=0 youth 16
+        ok career press 1 [Next Year] moved=0 stale=0 fonts=0 contract_offer 17
+        ok career press 2 [Review contract] moved=0 stale=0 fonts=0 contract_offer 17
+        ok career press 3 [Sign contract] moved=0 stale=0 fonts=0 playing 17
+        ok career press 4 [Next Season] moved=0 stale=0 fonts=0 newspaper 18
+        ok career press 5 [Continue to Season Summary →] moved=0 stale=0 fonts=0 season_summary 18
+        ok career press 6 [Continue →] moved=0 stale=0 fonts=0 ballon_dor 18
+        ok career press 7 [Continue →] moved=0 stale=0 fonts=0 social_media_action 18
+        ok career press 8 [🏋️Post training videoShow off your skil] moved=0 stale=0 fonts=0 social_media_action 18
+        ok career press 9 [Continue →] moved=0 stale=0 fonts=0 random_events 18
+        ok career press 10 [🎭The ShowmanFame comes easy: followers ] moved=0 stale=0 fonts=0 random_events 18
+        ok career press 11 [🃏One night only55%: win €0.4M · 45%: lo] moved=0 stale=0 fonts=0 random_events 18
+        ok career press 12 [🤝Dedicate it to the teamOverall +1, Mar] moved=0 stale=0 fonts=0 random_events 18
+  PASS  1. /soccer-career desktop off: the translator is off: 0 font element(s)
+  PASS  1. /soccer-career desktop off: the guard is installed on the page
+  PASS  8. /soccer-career desktop off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  2. /soccer-career desktop off: the create screen drew
+  PASS  2. /soccer-career desktop off: all three picks registered, Brazil among them: nationality box "Brazil", position box "Striker (ST)", era box "Current era (2025 start)"
+  PASS  2. /soccer-career desktop off: each pick can be READ in its box: readable: nationality, position, era; hidden: none
+  PASS  3. /soccer-career desktop off: the create flow reached the career: h1 "🇧🇷Joao Teste", create form gone, save Joao Teste, Brazil, youth, age 16
+  PASS  4. /soccer-career desktop off: one season forward and the hub still stands: age 16 to 17 on press 1, h1 "🇧🇷Joao Teste", phase contract_offer; the walk went on to age 18, phase random_events
+  PASS  5. /soccer-career desktop off: the walk pressed at least two controls: 20: Brazil🇧🇷 > Striker (ST) > Current era (2025 star > 🎲 Generate Starting P > 🎲 Roll again > 🎮 Customize your buil > ✅ Lock in build > ⚽ Begin Career > Next Year
+  PASS  6. /soccer-career desktop off: the route error boundary never appeared
+  PASS  7. /soccer-career desktop off: no NotFoundError
+
+/build-your-xi desktop off
+        ok the page draws moved=0 stale=0 fonts=0
+        ok press 1 [Got it!] moved=0 stale=0 fonts=0
+        ok press 2 [How to play] moved=0 stale=0 fonts=0
+        ok press 3 [Let's Play!] moved=0 stale=0 fonts=0
+        ok press 4 [4-3-311 players] moved=0 stale=0 fonts=0
+        ok press 5 [GK] moved=0 stale=0 fonts=0
+        ok press 6 [LB] moved=0 stale=0 fonts=0
+        ok press 7 [CB] moved=0 stale=0 fonts=0
+        ok press 8 [RB] moved=0 stale=0 fonts=0
+  PASS  1. /build-your-xi desktop off: the translator is off: 0 font element(s)
+  PASS  1. /build-your-xi desktop off: the guard is installed on the page
+  PASS  8. /build-your-xi desktop off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  5. /build-your-xi desktop off: the walk pressed at least two controls: 8: Got it! > How to play > Let's Play! > 4-3-311 players > GK > LB > CB > RB
+  PASS  6. /build-your-xi desktop off: the route error boundary never appeared
+  PASS  7. /build-your-xi desktop off: no NotFoundError
+
+/front-office desktop off
+        ok the page draws moved=0 stale=0 fonts=0
+        ok press 1 [Arizona CardinalsNFC West] moved=0 stale=0 fonts=0
+        ok press 2 [Process, patience, all the safe wordsMea] moved=0 stale=0 fonts=0
+        ok press 3 [👔Roster52 under contractDadrion Taylor-] moved=0 stale=0 fonts=0
+        ok press 4 [Hub] moved=0 stale=0 fonts=0
+        ok press 5 [💼Free agency$151M of roomIn reach: Jama] moved=0 stale=0 fonts=0
+        ok press 6 [Sign] moved=0 stale=0 fonts=0
+        ok press 7 [Abandon franchise and restart] moved=0 stale=0 fonts=0
+        ok press 8 [Atlanta FalconsNFC South] moved=0 stale=0 fonts=0
+  PASS  1. /front-office desktop off: the translator is off: 0 font element(s)
+  PASS  1. /front-office desktop off: the guard is installed on the page
+  PASS  8. /front-office desktop off: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  5. /front-office desktop off: the walk pressed at least two controls: 8: Arizona CardinalsNFC W > Process, patience, all > 👔Roster52 under contr > Hub > 💼Free agency$151M of  > Sign > Abandon franchise and  > Atlanta FalconsNFC Sou
+  PASS  6. /front-office desktop off: the route error boundary never appeared
+  PASS  7. /front-office desktop off: no NotFoundError
+
+EVERY WALK
+  page             view     text   boundary                          NotFound  guard line  moved nodes  stale text  steps
+  /soccer-career   phone    off    none                              0         0           0            0           22
+  /                phone    off    none                              0         0           0            0           9
+  /club-manager    phone    off    none                              0         0           0            0           9
+  /nba-my-career   phone    off    none                              0         0           0            0           9
+  /nfl-my-career   phone    off    none                              0         0           0            0           9
+  /stadium-tycoon  phone    off    none                              0         0           0            0           9
+  /college-grid    phone    off    none                              0         0           0            0           9
+  /build-your-xi   phone    off    none                              0         0           0            0           9
+  /front-office    phone    off    none                              0         0           0            0           9
+  /soccer-career   desktop  off    none                              0         0           0            0           22
+  /                desktop  off    none                              0         0           0            0           9
+  /club-manager    desktop  off    none                              0         0           0            0           9
+  /nba-my-career   desktop  off    none                              0         0           0            0           9
+  /nfl-my-career   desktop  off    none                              0         0           0            0           9
+  /stadium-tycoon  desktop  off    none                              0         0           0            0           9
+  /college-grid    desktop  off    none                              0         0           0            0           9
+  /build-your-xi   desktop  off    none                              0         0           0            0           9
+  /front-office    desktop  off    none                              0         0           0            0           9
+
+BY PAGE
+  /soccer-career   broke in 0 of 2 walk(s); the guard printed its line in 0; moved nodes per walk 0, 0; stale text at most 0
+  /                broke in 0 of 2 walk(s); the guard printed its line in 0; moved nodes per walk 0, 0; stale text at most 0
+  /club-manager    broke in 0 of 2 walk(s); the guard printed its line in 0; moved nodes per walk 0, 0; stale text at most 0
+  /nba-my-career   broke in 0 of 2 walk(s); the guard printed its line in 0; moved nodes per walk 0, 0; stale text at most 0
+  /nfl-my-career   broke in 0 of 2 walk(s); the guard printed its line in 0; moved nodes per walk 0, 0; stale text at most 0
+  /stadium-tycoon  broke in 0 of 2 walk(s); the guard printed its line in 0; moved nodes per walk 0, 0; stale text at most 0
+  /college-grid    broke in 0 of 2 walk(s); the guard printed its line in 0; moved nodes per walk 0, 0; stale text at most 0
+  /build-your-xi   broke in 0 of 2 walk(s); the guard printed its line in 0; moved nodes per walk 0, 0; stale text at most 0
+  /front-office    broke in 0 of 2 walk(s); the guard printed its line in 0; moved nodes per walk 0, 0; stale text at most 0
+
+WHAT THE THREE BOXES READ after the picks
+  phone    off    nationality "Brazil" (readable) | position "Striker (ST)" (readable) | era "Current era (2025 start)" (readable)
+  desktop  off    nationality "Brazil" (readable) | position "Striker (ST)" (readable) | era "Current era (2025 start)" (readable)
+
+nothing left this machine: 36 request(s) to the database host aborted, other hosts aborted [fonts.googleapis.com], 6 screenshot(s) in /home/runner/work/_temp/rc-out/files/translated-notranslate
+  PASS  9. with the translator off the guard printed nothing and no call named a moved node: 0 of 18 page(s) printed the guard's line, 0 moved node(s)
+
+control "notranslate": green with the translator off, zero guard lines, zero moved nodes.
+playTranslatedPage: 121 checks, 0 failed
