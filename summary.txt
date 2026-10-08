@@ -1,0 +1,3 @@
+homefront-merged exit=1 1s | simHomeFront: 1 failure
+homefront-base-board exit=0 1s | simHomeFront: green. The home front shows real games, real saves and a sport you can tell apart without colour.
+homefront-fixed-anchor exit=0 1s | simHomeFront: green. The home front shows real games, real saves and a sport you can tell apart without colour.
