@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walk-boxing-lock: node .rc/x/walk-boxing-lock.mjs

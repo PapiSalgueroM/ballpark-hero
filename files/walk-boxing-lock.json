@@ -1,0 +1,98 @@
+{
+  "cases": {
+    "lockedRoom": {
+      "trail": [
+        {
+          "name": "Lock A",
+          "note": "no one sided fight on offer"
+        },
+        {
+          "name": "Lock B",
+          "rep": 14.5,
+          "bout": "Dario Petrov appeal 14 rating 55 against his 41 · he cannot live with "
+        },
+        {
+          "name": "Lock C",
+          "note": "no one sided fight on offer"
+        },
+        {
+          "name": "Lock D",
+          "note": "no one sided fight on offer"
+        },
+        {
+          "name": "Lock E",
+          "note": "no one sided fight on offer"
+        },
+        {
+          "name": "Lock F",
+          "note": "no one sided fight on offer"
+        },
+        {
+          "name": "Lock G",
+          "note": "no one sided fight on offer"
+        },
+        {
+          "name": "Lock H",
+          "note": "no one sided fight on offer"
+        },
+        {
+          "name": "Lock I",
+          "note": "no one sided fight on offer"
+        },
+        {
+          "name": "Lock J",
+          "rep": 14.6,
+          "bout": "Nikolai Oyelaran appeal 2 rating 57 against his 38 · he cannot live wi"
+        },
+        {
+          "name": "Lock K",
+          "rep": 8.9,
+          "bout": "Fabio Draganov appeal 20 rating 54 against his 40 · he cannot live wit"
+        }
+      ],
+      "outcome": {
+        "name": "Lock K",
+        "town": {
+          "t": "Town Hall 3,000 · 0.018m · needs 12",
+          "disabled": true,
+          "selected": true
+        },
+        "made": "Fabio Draganov appeal 19 rating 54 against his 40 · he cannot live with him · purse 0.012m",
+        "forecast": {
+          "attendance": {
+            "v": 27,
+            "t": "27 of 3,000"
+          },
+          "gate": {
+            "v": 0.016,
+            "t": "0.016m"
+          },
+          "purses": {
+            "v": 0.012,
+            "t": "0.012m"
+          },
+          "rent": {
+            "v": 0.018,
+            "t": "0.018m"
+          },
+          "profit": {
+            "v": -0.014,
+            "t": "Loss 0.014m"
+          },
+          "cashAfter": {
+            "v": 0.472,
+            "t": "0.472m"
+          },
+          "status": [],
+          "text": "Show cash forecast ? Attendance 27 of 3,000 Gate 0.016m Fighter pay 0.012m Room hire 0.018m Show result Loss 0.014m Cash afterward 0.472m Fighter pay is the larger of 0.012m in guarantees or 0.009m from 58% of the gate."
+        },
+        "runDisabled": false,
+        "pressed": true,
+        "resultAppeared": false,
+        "saveChanged": false,
+        "bodyHasMessage": false
+      }
+    }
+  },
+  "notes": []
+}
