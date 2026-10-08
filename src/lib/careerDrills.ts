@@ -66,6 +66,7 @@ import {
 } from './arcade';
 import { flightPath, keeperDive, type Aim, type KickSetup } from './freeKick';
 import { effectivePotential, trainingStatFor, type CareerState, type TrainingStat } from './soccerCareerEngine';
+import { momentsPaid } from './season/momentsSave';
 
 export { daySeed, lehmer, ROUNDS_PER_RUN };
 
@@ -574,7 +575,10 @@ export function applyDrillResult(prev: CareerState, kind: DrillKind, count: numb
   const meta = DRILL_META[kind];
   const { stat, label } = drillStatFor(kind, s.position);
   const score = sessionScore(count);
-  const headroom = drillHeadroom(s);
+  /* Round 1047: what this season's Season Centre moments already banked
+     comes off the room first, so the two together stop at the ceiling
+     whichever was banked first. */
+  const headroom = Math.max(0, drillHeadroom(s) - momentsPaid(s.seasonMoments, year));
   const boost = drillBoost(score, headroom);
   s.trainingSeasonYear = year;
   if (boost > 0) {
