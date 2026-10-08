@@ -132,13 +132,17 @@ try {
   const old = execFileSync('git', ['show', `${BASE_REF}:${PAGE}`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 2e6 }).replace(/\r\n/g, '\n');
   const top = '            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Career Timeline</span>\n          </div>\n';
   const bottom = '            <RivalrySummaryCard summary={career.rivalrySummary} career={career} />\n          )}\n';
-  for (const anchor of [top, bottom]) assert.equal(current.split(anchor).length - 1, 1, 'Control anchor is uniquely executable');
-  const restored = current.replace(top, `${top}          </div>\n`).replace(`${bottom}          </div>\n`, bottom);
-  assert.notEqual(restored, current); assert.equal(restored, old, 'Two-line inverse exactly restores pinned old page');
+  const closedBottom = `${bottom}          </div>\n`;
+  for (const anchor of [top, closedBottom]) assert.equal(current.split(anchor).length - 1, 1, 'Control anchor is uniquely executable');
+  const restored = current.replace(top, `${top}          </div>\n`).replace(closedBottom, bottom);
+  assert.notEqual(restored, current);
+  for (const anchor of [`${top}          </div>\n`, bottom]) assert.equal(restored.split(anchor).length - 1, 1, 'Forward anchor is uniquely executable');
+  const roundTrip = restored.replace(`${top}          </div>\n`, top).replace(bottom, closedBottom);
+  assert.equal(roundTrip, current, 'Two-line control round trip exactly restores the current page');
   fs.copyFileSync(path.join(ROOT, PAGE), path.join(NATIVE, 'SoccerCareer.current.tsx'));
   fs.copyFileSync(path.join(ROOT, 'src/hooks/useRevealScroll.ts'), path.join(NATIVE, 'useRevealScroll.original.ts'));
   const copy = path.join(NATIVE, 'SoccerCareer.old.tsx'); fs.writeFileSync(copy, restored);
-  report.control = { originalSha256: fileSha(path.join(ROOT, PAGE)), normalizedOriginalSha256: sha(current), copySha256: sha(restored), pinnedBase: BASE_REF, normalizedPinnedOldSha256: sha(old), forwardChanges: 2, reverseExact: true, transforms: [] };
+  report.control = { originalSha256: fileSha(path.join(ROOT, PAGE)), normalizedOriginalSha256: sha(current), copySha256: sha(restored), pinnedBase: BASE_REF, normalizedPinnedOldSha256: sha(old), forwardChanges: 2, roundTripExact: true, normalizedRoundTripSha256: sha(roundTrip), historicalBaseProvenanceOnly: true, transforms: [] };
   const controlDist = path.join(OUT, 'old-nesting-build');
   const { build: viteBuild } = await import('vite');
   await viteBuild({ configFile: path.join(ROOT, 'vite.config.ts'), build: { outDir: controlDist, emptyOutDir: true }, plugins: [{
