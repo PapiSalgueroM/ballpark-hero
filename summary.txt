@@ -1,0 +1,3 @@
+vitest exit=0 4s |    Duration  3.59s (transform 1.39s, setup 78ms, collect 1.70s, tests 938ms, environment 386ms, prepare 145ms)
+simCareerSquadQuick exit=0 20s | simCareerSquad QUICK: 793 checks, 0 failed, floors not asserted
+tsc exit=0 44s | 
