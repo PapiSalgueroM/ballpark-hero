@@ -1,0 +1,4 @@
+build exit=0 27s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+sale1083 exit=0 96s | native scripts/playTycoonSaleReview1083.mjs exit code 0 | 
+uscareer1084 exit=1 262s | native scripts/qa/usCareerSaveRecovery1084.mjs exit code 1 | 
+boxing1086 exit=0 8s | native scripts/playBoxingShowForecast1086.mjs exit code 0 | Boxing forecast: 4 actual-route journeys passed.
