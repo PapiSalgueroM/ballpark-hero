@@ -1,0 +1,17 @@
+nba open: pressed true | retry notice none | storage line none | header null | toasts [] | on the browser's store: prospect | refused 0 | errors 0
+nba blocked: pressed true | retry notice none | storage line blocked {"t":0,"b":28,"l":0,"r":390} | header null | toasts [] | on the browser's store: null | refused 0 | errors 0
+nba full: pressed true | retry notice write {"t":225,"b":342,"l":16,"r":374} | storage line full {"t":0,"b":28,"l":0,"r":390} | header null | toasts ["Your latest changes could not be saved. Stay on this page and use Retry save."] | on the browser's store: null | refused 4 | errors 0
+nba full: after Retry save | retry notice gone | on the browser's store: prospect | storage line full
+nfl open: pressed true | retry notice none | storage line none | header null | toasts [] | on the browser's store: prospect | refused 0 | errors 0
+nfl blocked: pressed true | retry notice none | storage line blocked {"t":0,"b":28,"l":0,"r":390} | header null | toasts [] | on the browser's store: null | refused 0 | errors 0
+nfl full: pressed true | retry notice write {"t":225,"b":342,"l":16,"r":374} | storage line full {"t":0,"b":28,"l":0,"r":390} | header null | toasts ["Your latest changes could not be saved. Stay on this page and use Retry save."] | on the browser's store: null | refused 4 | errors 0
+nfl full: after Retry save | retry notice gone | on the browser's store: prospect | storage line full
+mlb open: pressed true | retry notice none | storage line none | header null | toasts [] | on the browser's store: prospect | refused 0 | errors 0
+mlb blocked: pressed true | retry notice none | storage line blocked {"t":0,"b":28,"l":0,"r":390} | header null | toasts [] | on the browser's store: null | refused 0 | errors 0
+mlb full: pressed true | retry notice write {"t":225,"b":342,"l":16,"r":374} | storage line full {"t":0,"b":28,"l":0,"r":390} | header null | toasts ["Your latest changes could not be saved. Stay on this page and use Retry save."] | on the browser's store: null | refused 4 | errors 0
+mlb full: after Retry save | retry notice gone | on the browser's store: prospect | storage line full
+nhl open: pressed true | retry notice none | storage line none | header null | toasts [] | on the browser's store: prospect | refused 0 | errors 0
+nhl blocked: pressed true | retry notice none | storage line blocked {"t":0,"b":28,"l":0,"r":390} | header null | toasts [] | on the browser's store: null | refused 0 | errors 0
+nhl full: pressed true | retry notice write {"t":225,"b":342,"l":16,"r":374} | storage line full {"t":0,"b":28,"l":0,"r":390} | header null | toasts ["Your latest changes could not be saved. Stay on this page and use Retry save."] | on the browser's store: null | refused 4 | errors 0
+nhl full: after Retry save | retry notice gone | on the browser's store: prospect | storage line full
+seamwalk: 12 journeys, 0 problem(s)
