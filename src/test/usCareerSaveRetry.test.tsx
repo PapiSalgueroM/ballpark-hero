@@ -68,8 +68,8 @@ function assertNotice(view: View, operation: 'write' | 'remove', id: string) {
   const node = notice(view);
   check(id, { exists: !!node, role: node?.getAttribute('role'), operation: node?.getAttribute('data-save-operation'), retry: node?.querySelector('button')?.textContent?.trim(), text: node?.querySelector('p')?.textContent }, {
     exists: true, role: 'alert', operation, retry: 'Retry save', text: operation === 'remove'
-      ? 'Your reset has not been saved. This device may still load the previous career. Keep this tab open and retry, or create a new player to replace it.'
-      : 'Your latest progress has not been saved. Keep this tab open and try again.',
+      ? 'Your reset has not been saved. This device may still load the previous career. Stay on this page and retry, or create a new player to replace it.'
+      : 'Your latest progress has not been saved. Stay on this page and try again.',
   }, observe());
 }
 function latest(row: SportCase, id: string): string {

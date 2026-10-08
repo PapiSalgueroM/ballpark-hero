@@ -246,7 +246,7 @@ async function recoveryGeometry(page) {
 function checkRecovery(value, operation) {
   assert.equal(value.operation, operation, 'Recovery identifies the pending storage operation');
   assert.equal(value.role, 'alert', 'Failed save is announced as an alert');
-  assert.equal(value.text, operation === 'write' ? 'Your latest progress has not been saved. Keep this tab open and try again.' : 'Your reset has not been saved. This device may still load the previous career. Keep this tab open and retry, or create a new player to replace it.', 'Recovery explains the unsaved operation honestly');
+  assert.equal(value.text, operation === 'write' ? 'Your latest progress has not been saved. Stay on this page and try again.' : 'Your reset has not been saved. This device may still load the previous career. Stay on this page and retry, or create a new player to replace it.', 'Recovery explains the unsaved operation honestly');
   assert.equal(value.buttonText, 'Retry save');
   assert(value.font >= 12 && value.buttonFont >= 12, 'Recovery text is at least 12px');
   assert(value.button.width >= 44 && value.button.height >= 44, 'Retry has a 44px target');
@@ -352,7 +352,7 @@ async function openCase(slug, profile, kind, initial) {
   const notice = async (label, operation) => {
     await page.locator('[data-us-career-save-error]').waitFor();
     if (!row.firstFailureToast) {
-      const text = 'Your latest changes could not be saved. Keep this tab open and use Retry save.';
+      const text = 'Your latest changes could not be saved. Stay on this page and use Retry save.';
       const toast = page.locator('[data-sonner-toast]').filter({ hasText: text });
       await toast.waitFor(); await settle(page);
       row.firstFailureToast = await toast.evaluate((node, viewport) => { const r = node.getBoundingClientRect(); return { text: node.textContent, x: r.x, y: r.y, right: r.right, bottom: r.bottom, viewport, layoutViewport: { width: innerWidth, height: innerHeight } }; }, { width: profile.width, height: profile.height });

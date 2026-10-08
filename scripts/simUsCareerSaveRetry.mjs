@@ -55,7 +55,7 @@ const controls = [
   ['failure', BOARD, "setSaveFailure(pending.value === null ? 'remove' : 'write');", 'setSaveFailure(null);', PRACTICE],
   ['operation', BOARD, "setSaveFailure(pending.value === null ? 'remove' : 'write');", "setSaveFailure('remove');", PRACTICE],
   ['notice', BOARD, '{saveFailure && <UsCareerSaveNotice', '{false && saveFailure && <UsCareerSaveNotice', PRACTICE],
-  ['writeCopy', NOTICE, 'Your latest progress has not been saved. Keep this tab open and try again.', 'Your latest progress has been saved.', PRACTICE],
+  ['writeCopy', NOTICE, 'Your latest progress has not been saved. Stay on this page and try again.', 'Your latest progress has been saved.', PRACTICE],
   ['removeCopy', NOTICE, 'This device may still load the previous career.', 'Your previous career has been deleted.', REMOVE],
   ['button', NOTICE, '<button onClick={onRetry}', '<button onClick={() => undefined}', PRACTICE],
   ['career', BOARD, "saveValue(JSON.stringify({ c, phase: ph, teamQuality: tq, coach: coachRef.current } satisfies SaveShape));", 'void c; void ph; void tq;', PRACTICE],

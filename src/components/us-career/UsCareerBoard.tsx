@@ -106,7 +106,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   const [saveFailure, setSaveFailure] = useState<'write' | 'remove' | null>(null);
   const saveFailed = saveFailure !== null;
   useEffect(() => {
-    if (saveFailed) toast.error('Your latest changes could not be saved. Keep this tab open and use Retry save.');
+    if (saveFailed) toast.error('Your latest changes could not be saved. Stay on this page and use Retry save.');
   }, [saveFailed]);
   const [phase, setPhase] = useState<Phase>('create');
   const [prospect, setProspect] = useState<UsCareerProspect | null>(null);
