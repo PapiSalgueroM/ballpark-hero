@@ -79,6 +79,10 @@
                      scrolled by 40 px                                P6
      noisy           one console.error after the scene appears        P7
    Closing line: "playCareerMoments: <n> checks, <f> failed".
+   Seen on 2026-10-08 on the GitHub runner, on the build of 269bfecd: clean,
+   34 checks and 0 failed, three runs; each of the eight controls red on its
+   own check at both sizes of every walk it names and green everywhere else,
+   its fault counted twice per walk (once per size).
 
    CAREER_MOMENTS_SHOTS=<folder> also saves a screenshot of each scene mid
    play and at rest at both sizes, and every run prints the at rest
