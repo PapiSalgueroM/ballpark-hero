@@ -57,9 +57,25 @@ if (CONTROL === 'nolistener') fresh = rewrite(fresh, "window.addEventListener('v
 if (CONTROL === 'noguard') fresh = rewrite(fresh, "sessionStorage.setItem(STALE_KEY, '1');", '', 'noguard');
 /* Release AM: this control had been dead since Round 832 gave reloadToRetryChunk
    the same stand down line (two matches, so it refused to run). It now takes
-   the one inside reloadOnceForStaleChunk, found by the offline line that
-   follows it there and nowhere else. */
-if (CONTROL === 'noprerender') fresh = rewrite(fresh, "  if ((window as unknown as { __DUKB_PRERENDER__?: boolean }).__DUKB_PRERENDER__) return false;\n  /* Release AM: never when the browser says it is offline.", "  /* Release AM: never when the browser says it is offline.", 'noprerender');
+   the one inside reloadOnceForStaleChunk, found by the line that follows it
+   there and nowhere else.
+   Release AN: one release later the merge killed it again. Round 1142's stand
+   down (a session store that dies with the page) landed between the prerender
+   line and the offline comment this was anchored on, so the anchor matched
+   nothing and the control refused to run (exit 2, loudly, so nothing passed
+   falsely). An anchor that names its neighbour dies whenever a line lands
+   between the two, and it has now done that twice, so the control no longer
+   names one: it cuts reloadOnceForStaleChunk out by its own declaration and
+   deletes the prerender line inside that function only, wherever it sits.
+   Both steps still refuse to run on anything but exactly one match. */
+if (CONTROL === 'noprerender') {
+  const HEAD = 'export function reloadOnceForStaleChunk(): boolean {\n';
+  const LINE = "  if ((window as unknown as { __DUKB_PRERENDER__?: boolean }).__DUKB_PRERENDER__) return false;\n";
+  const from = fresh.indexOf(HEAD);
+  const to = from < 0 ? -1 : fresh.indexOf('\n}\n', from);
+  if (fresh.split(HEAD).length - 1 !== 1 || to < 0) { console.error('noprerender: reloadOnceForStaleChunk is not declared exactly once, refusing to run a dead control'); process.exit(2); }
+  fresh = fresh.slice(0, from) + rewrite(fresh.slice(from, to), LINE, '', 'noprerender') + fresh.slice(to);
+}
 if (CONTROL === 'nooffline') fresh = rewrite(fresh, '  if (navigator.onLine === false) return false;', '', 'nooffline');
 const freshCode = code(fresh);
 

@@ -56,6 +56,11 @@
  *  9. (page) Walker safety: playSoccerCareer's own pick never lands inside
  *     the tile or the sheet, and no label in either starts with one of its
  *     ACTIONS.
+ * 10. (page, Release AN) The hub the tile lives on keeps Round 1089's
+ *     shape: the season list inside the Career Timeline card, one row a
+ *     season, the card ending where the list ends, and the hub column in
+ *     the same grid (beside the card at 1280, above it at 390). Nothing
+ *     else that is green reads that nesting.
  *
  * Controls (CAREER_SQUAD_PLAY_CONTROL=), applied to what is SERVED, each
  * refusing to run without its needle:
@@ -70,6 +75,9 @@
  *   ellipsis a long surname goes back under an ellipsis            -> 7 red
  *   static  (page) the page imports the sheet chunk as it loads    -> 1 red
  *   label   (page) the home footer reads "Close"                   -> 9 red
+ *   timeline (page) the walk itself lifts the season list out of its
+ *           card and the hub column out of the grid, the tree the
+ *           page had before Round 1089, for one measurement       -> 10 red
  *
  * Run: npm run build, then ENGINES=chromium node scripts/playCareerSquad.mjs
  * (MSYS_NO_PATHCONV=1 under Git Bash). Green is the closing
@@ -96,7 +104,7 @@ const PORT = Number(process.env.PORT || 4577);
 const BASE = `http://127.0.0.1:${PORT}`;
 const SHOTS = path.resolve(ROOT, process.env.SHOTS || '.tmp-fx/shots');
 const CONTROL = process.env.CAREER_SQUAD_PLAY_CONTROL ?? '';
-const CONTROLS = ['rank', 'write', 'still', 'nofill', 'clip', 'shift', 'static', 'label', 'noscroll', 'notrap', 'ellipsis'];
+const CONTROLS = ['rank', 'write', 'still', 'nofill', 'clip', 'shift', 'static', 'label', 'noscroll', 'notrap', 'ellipsis', 'timeline'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) throw new Error(`unknown CAREER_SQUAD_PLAY_CONTROL ${CONTROL}`);
 const SAVE_KEY = 'soccerCareerSave';
 
@@ -869,6 +877,56 @@ if (mounted) {
       const inside = panel.left >= -0.5 && panel.top >= -0.5 && panel.right <= window.innerWidth + 0.5 && panel.bottom <= window.innerHeight + 0.5;
       return { ok: covers && inside, why: `sheet ${Math.round(box.left)},${Math.round(box.top)} ${Math.round(box.width)}x${Math.round(box.height)}, panel ${Math.round(panel.left)},${Math.round(panel.top)} to ${Math.round(panel.right)},${Math.round(panel.bottom)}, screen ${window.innerWidth}x${window.innerHeight}` };
     }, SHEET);
+    /* 10. Round 1089's hub, measured (Release AN). The season list belongs
+       inside the Career Timeline card, and the column that holds the hub
+       (found by the Squad tile in it) belongs in the same grid as that card.
+       One misplaced closing tag once put the list beside its own card and the
+       hub outside the grid, and when a review undid that fix on purpose the
+       type gate, this walk and every other green check stayed green over it.
+       The timeline control puts that tree back for the length of one
+       measurement and restores it before the page is touched again, so React
+       never sees it. */
+    const hubShape = (page, breakIt) => page.evaluate(([tileSel, broken]) => {
+      const span = [...document.querySelectorAll('span')].find(s => (s.textContent ?? '').trim() === 'Career Timeline');
+      const card = span ? span.closest('.rounded-xl') : null;
+      const grid = card ? card.parentElement : null;
+      const tile = document.querySelector(tileSel);
+      if (!card || !grid || !tile) return null;
+      const box = el => { if (!el) return null; const q = el.getBoundingClientRect(); return { t: Math.round(q.top + window.scrollY), b: Math.round(q.bottom + window.scrollY), l: Math.round(q.left), r: Math.round(q.right) }; };
+      let undo = null;
+      if (broken) {
+        const list = card.querySelector('.overflow-y-auto');
+        const column = [...grid.children].find(k => k !== card && k.contains(tile));
+        if (list && column) {
+          const listNext = list.nextSibling; const columnNext = column.nextSibling;
+          grid.insertBefore(list, card.nextSibling);
+          grid.parentElement.insertBefore(column, grid.nextSibling);
+          undo = () => { card.insertBefore(list, listNext); grid.insertBefore(column, columnNext); };
+        }
+      }
+      /* read the way a stranger to the tree would: the first scrolling list in the grid, the grid child holding the tile */
+      const list = grid.querySelector('.overflow-y-auto');
+      const column = [...grid.children].find(k => k !== card && k.contains(tile)) ?? null;
+      const out = {
+        moved: !!undo, kids: grid.children.length, rows: list ? list.children.length : -1,
+        listInCard: !!list && card.contains(list), columnInGrid: !!column,
+        card: box(card), list: box(list), column: box(column),
+      };
+      if (undo) undo();
+      return out;
+    }, [TILE, breakIt]);
+    const hubChecks = async (page, k, width) => {
+      const h = await hubShape(page, CONTROL === 'timeline');
+      if (CONTROL === 'timeline' && h?.moved) controlEdits += 1;
+      const rows = SAVES[k].seasons.length;
+      const said = h ? `rows ${h.rows} of ${rows}, grid children ${h.kids}, card ${JSON.stringify(h.card)}, list ${JSON.stringify(h.list)}, hub column ${JSON.stringify(h.column)}` : 'no Career Timeline card, or no Squad tile, on the page';
+      check(!!h && h.listInCard && h.rows === rows && Math.abs(h.card.b - h.list.b) <= 2,
+        `10. page, save ${k} at ${width}: the season list is inside the Career Timeline card, one row a season, and the card ends where the list ends (${said})`);
+      const beside = !!h && h.columnInGrid && h.kids === 2 && (width >= 768
+        ? h.column.l >= h.card.r && h.column.t < h.card.b && h.card.t < h.column.b
+        : h.column.b <= h.card.t);
+      check(beside, `10. page, save ${k} at ${width}: the hub column is in the same grid as the card, ${width >= 768 ? 'to its right' : 'above it on a phone'} (${said})`);
+    };
     /* the walker's own rule, read from its file's TEXT (the file runs on import) */
     const src = fs.readFileSync(path.join(ROOT, 'scripts/playSoccerCareer.mjs'), 'utf8').replace(/\r\n/g, '\n');
     const at = src.indexOf('const ACTIONS = [');
@@ -926,6 +984,7 @@ if (mounted) {
         return { rank: t.querySelector('[data-squad-rank]')?.getAttribute('data-squad-rank'), trust: t.querySelector('[data-squad-trust]')?.getAttribute('data-squad-trust'), n: document.querySelectorAll(sel).length };
       }, TILE);
       check(got.n === 1 && got.rank === String(v.rank) && got.trust === String(v.trust.pct), `2. page, save ${k}: one tile on the hub, printing rank ${v.rank} and trust ${v.trust.pct} (${JSON.stringify(got)})`);
+      await hubChecks(page, k, 390);
       let inside = 0; const clashes = new Set(); let screens = 0;
       const look = async () => { const r = await walkerPick(page); screens += 1; if (r.inside) inside += 1; r.clash.forEach(c => clashes.add(c)); return r; };
       const hub = await look();
@@ -972,6 +1031,7 @@ if (mounted) {
     {
       const { ctx, page } = await openPage(SAVES.A, { width: 1280, height: 800 });
       await page.waitForTimeout(1500);
+      await hubChecks(page, 'A', 1280);
       await page.evaluate(sel => document.querySelector(sel).scrollIntoView({ block: 'center' }), TILE);
       await shot(page, 'page-A-hub-1280');
       const y0 = await page.evaluate(() => window.scrollY);
