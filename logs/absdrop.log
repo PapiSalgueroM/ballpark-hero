@@ -1,0 +1,20 @@
+MUT absdrop: src/lib/soccerCareerLeague.ts patched (occurrence 0 of 1)
+  vitest exit=1 2s | [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+      [31m   [31m×[31m the league finish against main's recorded answers (Round 1100)[2m > [22manswers every held row exactly as main did, and moves only where a league gained a size[39m[32m 153[2mms[22m[39m
+      ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/soccerCareerLeagueBand.test.ts,title=src/lib/soccerCareerLeagueBand.test.ts > the league finish against main's recorded answers (Round 1100) > answers every held row exactly as main did%2C and 
+      [41m[1m FAIL [22m[49m src/lib/soccerCareerLeagueBand.test.ts[2m > [22mthe league finish against main's recorded answers (Round 1100)[2m > [22manswers every held row exactly as main did, and moves only where a league gained a size
+      [31m[1mAssertionError[22m: expected [ …(8) ] to deeply equal [][39m
+  world exit=1 74s |   FAIL [C1]: Ligue 1 2045: 24 recorded answers moved in a big five league
+      FAIL [C1]: Ligue 1 2026: 25 recorded answers moved in a big five league
+      FAIL [C1]: Ligue 1 2030: 25 recorded answers moved in a big five league
+      FAIL [C1]: Ligue 1 2045: 24 recorded answers moved in a big five league
+  clubPool exit=0 5s | simCareerClubPool: all sections green
+  facts exit=0 2s | simCareerFacts: all sections green
+  leagueFinish exit=0 7s | simCareerLeagueFinish: green. 756 careers, 6048 seasons, 4840 in a verified league; finish and title agree, the ladder holds, main's stream is untouched and the elite boost reads the era.
+  leagueSeasons exit=0 9s | simCareerLeagueSeasons: all sections green
+  manager exit=0 7s | ALL MANAGER CAREER CHECKS PASSED
+  centreTable exit=0 6s | simSeasonCentreTable: 4 checks, 0 failed
+  agree0 exit=0 9s | simSeasonCentreAgreement: 24 checks, 0 failed
+  derbies exit=0 12s | simCareerDerbies: all 8 sections green
+  restored (tree clean)
+MUT absdrop: CAUGHT by vitest, world

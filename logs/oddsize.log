@@ -1,0 +1,27 @@
+MUT oddsize: src/lib/soccerCareerLeague.ts patched (occurrence 0 of 1)
+  vitest exit=1 2s | [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+      [31m   [31m×[31m managerLeagueField (Round 1029)[2m > [22mkeeps a market job's league and drops any name that could be his own club[39m[32m 10[2mms[22m[39m
+      [31m   [31m×[31m the leagues that are not one plain table (Round 1100)[2m > [22mgives the dugout the league's real number of rows and never a verified size[39m[32m 3[2mms[22m[39m
+      ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/soccerCareerLeague.test.ts,title=src/lib/soccerCareerLeague.test.ts > managerLeagueField (Round 1029) > keeps a market job's league and drops any name that could be his own club,line=198,column
+      ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/soccerCareerLeague.test.ts,title=src/lib/soccerCareerLeague.test.ts > the leagues that are not one plain table (Round 1100) > gives the dugout the league's real number of rows and never a verif
+      [41m[1m FAIL [22m[49m src/lib/soccerCareerLeague.test.ts[2m > [22mmanagerLeagueField (Round 1029)[2m > [22mkeeps a market job's league and drops any name that could be his own club
+      [31m[1mAssertionError[22m: expected 20 to be 12 // Object.is equality[39m
+  world exit=1 73s |   FAIL [D3]: Scottish Premiership: a dugout season of 20 rows printing "Finished in the top half.", the odd ledger says 12 rows and no number
+      FAIL [E]: mgrSco: a new Scottish Premiership season of 20 rows printing "Finished in the bottom half.", the odd ledger says 12 rows and no number
+      FAIL [E]: mgrSco: a new Scottish Premiership season of 20 rows printing "Finished in the top half.", the odd ledger says 12 rows and no number
+      FAIL [E]: mgrSco: a new Scottish Premiership season of 20 rows printing "Finished in the top half.", the odd ledger says 12 rows and no number
+      FAIL [D3]: Scottish Premiership: a dugout season of 20 rows printing "Finished in the bottom three. Won the cup. 🏆 Down to Tier 3", the odd ledger says 12 rows and no number
+      FAIL [D3]: Scottish Premiership: a dugout season of 20 rows printing "Finished in the bottom half.", the odd ledger says 12 rows and no number
+      FAIL [D3]: Scottish Premiership: a dugout season of 20 rows printing "Finished second. Celtic move up to Tier 2.", the odd ledger says 12 rows and no number
+  clubPool exit=0 5s | simCareerClubPool: all sections green
+  facts exit=0 2s | simCareerFacts: all sections green
+  leagueFinish exit=0 7s | simCareerLeagueFinish: green. 756 careers, 6048 seasons, 4840 in a verified league; finish and title agree, the ladder holds, main's stream is untouched and the elite boost reads the era.
+  leagueSeasons exit=0 9s | simCareerLeagueSeasons: all sections green
+  manager exit=1 7s |   FAIL: 489 tables disagree with the verified league size, or with the field of unknown size
+      1 FAILURES
+      FAIL: 489 tables disagree with the verified league size, or with the field of unknown size
+  centreTable exit=0 6s | simSeasonCentreTable: 4 checks, 0 failed
+  agree0 exit=0 8s | simSeasonCentreAgreement: 24 checks, 0 failed
+  derbies exit=0 12s | simCareerDerbies: all 8 sections green
+  restored (tree clean)
+MUT oddsize: CAUGHT by vitest, world, manager

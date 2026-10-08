@@ -1,0 +1,6 @@
+oddsize exit=0 130s | MUT oddsize: CAUGHT by vitest, world, manager
+halfwide exit=0 132s | MUT halfwide: CAUGHT by vitest, world
+placescale exit=0 132s | MUT placescale: CAUGHT by vitest, world
+belgium16 exit=0 132s | MUT belgium16: CAUGHT by vitest, world
+champ22 exit=0 132s | MUT champ22: CAUGHT by vitest, world, manager
+absdrop exit=0 132s | MUT absdrop: CAUGHT by vitest, world

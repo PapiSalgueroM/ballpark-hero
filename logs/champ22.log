@@ -1,0 +1,28 @@
+MUT champ22: src/lib/soccerCareerLeague.ts patched (occurrence 0 of 1)
+  vitest exit=1 2s | [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯[22m[39m
+      [31m   [31m×[31m clubLedgerSeason and ledgerLeague[2m > [22msize every ledger season from the ledger[39m[32m 8[2mms[22m[39m
+      [31m   [31m×[31m managerLeagueField (Round 1029)[2m > [22mmatches a league by name across a border[39m[32m 12[2mms[22m[39m
+      [31m   [31m×[31m managerLeagueField (Round 1029)[2m > [22mknows the Championship's size from 2004, and the held second flights for the dugout only[39m[32m 1[2mms[22m[39m
+      ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/soccerCareerLeague.test.ts,title=src/lib/soccerCareerLeague.test.ts > managerLeagueField (Round 1029) > matches a league by name across a border,line=205,column=38::AssertionError: expected [ 2
+      ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/soccerCareerLeague.test.ts,title=src/lib/soccerCareerLeague.test.ts > managerLeagueField (Round 1029) > knows the Championship's size from 2004%2C and the held second flights for the dugout onl
+      ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/soccerCareerLeagueSeasons.test.ts,title=src/lib/soccerCareerLeagueSeasons.test.ts > clubLedgerSeason and ledgerLeague > size every ledger season from the ledger,line=70,column=49::AssertionErro
+  world exit=1 74s |   FAIL [A]: Championship: ladder of 24 in a league of 22
+      FAIL [C3]: West Ham (Championship) 5.9: drew {"leagueFinish":2,"leagueSize":22} outside 2 to 7
+      FAIL [C3]: West Ham (Championship) 5.9: drew {"leagueFinish":6,"leagueSize":22} outside 2 to 7
+      FAIL [C3]: West Ham (Championship) 5.9: drew {"leagueFinish":5,"leagueSize":22} outside 2 to 7
+      FAIL [C3]: 24000 bands or draws outside their table
+      FAIL [A]: Championship: the facts file says plain, 24 clubs, 46 games; a size row needs plain, 22 and 42
+      FAIL [A]: Championship: ladder of 24 in a league of 22
+  clubPool exit=0 5s | simCareerClubPool: all sections green
+  facts exit=0 2s | simCareerFacts: all sections green
+  leagueFinish exit=0 7s | simCareerLeagueFinish: green. 756 careers, 6048 seasons, 4840 in a verified league; finish and title agree, the ladder holds, main's stream is untouched and the elite boost reads the era.
+  leagueSeasons exit=0 9s | simCareerLeagueSeasons: all sections green
+  manager exit=1 7s |   FAIL: 1 seasons played in a league other than his own
+      2 FAILURES
+      FAIL: 4 named rows are not clubs of the manager's league
+      FAIL: 1 seasons played in a league other than his own
+  centreTable exit=0 6s | simSeasonCentreTable: 4 checks, 0 failed
+  agree0 exit=0 9s | simSeasonCentreAgreement: 24 checks, 0 failed
+  derbies exit=0 12s | simCareerDerbies: all 8 sections green
+  restored (tree clean)
+MUT champ22: CAUGHT by vitest, world, manager

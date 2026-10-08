@@ -1,0 +1,23 @@
+MUT belgium16: src/lib/soccerCareerLeague.ts patched (occurrence 0 of 1)
+  vitest exit=1 2s | [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+      [31m   [31m×[31m managerLeagueField (Round 1029)[2m > [22mknows the Championship's size from 2004, and the held second flights for the dugout only[39m[32m 13[2mms[22m[39m
+      ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/soccerCareerLeague.test.ts,title=src/lib/soccerCareerLeague.test.ts > managerLeagueField (Round 1029) > knows the Championship's size from 2004%2C and the held second flights for the dugout onl
+      [41m[1m FAIL [22m[49m src/lib/soccerCareerLeague.test.ts[2m > [22mmanagerLeagueField (Round 1029)[2m > [22mknows the Championship's size from 2004, and the held second flights for the dugout only
+      [31m[1mAssertionError[22m: expected 16 to be 18 // Object.is equality[39m
+  world exit=1 74s |   FAIL [A]: Belgian Pro League: ladder of 18 in a league of 16
+      FAIL [C3]: Club Brugge (Belgian Pro League) 5.9: drew {"leagueFinish":5,"leagueSize":16} outside 2 to 6
+      FAIL [C3]: Club Brugge (Belgian Pro League) 5.9: drew {"leagueFinish":2,"leagueSize":16} outside 2 to 6
+      FAIL [C3]: Club Brugge (Belgian Pro League) 5.9: drew {"leagueFinish":2,"leagueSize":16} outside 2 to 6
+      FAIL [C3]: 18000 bands or draws outside their table
+      FAIL [A]: Belgian Pro League: the facts file says plain, 18 clubs, 34 games; a size row needs plain, 16 and 30
+      FAIL [A]: Belgian Pro League: ladder of 18 in a league of 16
+  clubPool exit=0 5s | simCareerClubPool: all sections green
+  facts exit=0 2s | simCareerFacts: all sections green
+  leagueFinish exit=0 7s | simCareerLeagueFinish: green. 756 careers, 6048 seasons, 4840 in a verified league; finish and title agree, the ladder holds, main's stream is untouched and the elite boost reads the era.
+  leagueSeasons exit=0 9s | simCareerLeagueSeasons: all sections green
+  manager exit=0 7s | ALL MANAGER CAREER CHECKS PASSED
+  centreTable exit=0 6s | simSeasonCentreTable: 4 checks, 0 failed
+  agree0 exit=0 8s | simSeasonCentreAgreement: 24 checks, 0 failed
+  derbies exit=0 12s | simCareerDerbies: all 8 sections green
+  restored (tree clean)
+MUT belgium16: CAUGHT by vitest, world
