@@ -403,7 +403,7 @@ describe('NFL opening rating checkpoint', () => {
       }
     }
     /* Not vacuous: the selection rule's seed number is a different number for most of the fifteen. */
-    const shippedOvr = new Map(FO_TEAMS.flatMap(t => t.players.map(p => [`${t.abbr}|${p.name}|${p.pos}`, p.ovr] as const)));
+    const shippedOvr = new Map<string, number>(FO_TEAMS.flatMap(t => t.players.map(p => [`${t.abbr}|${p.name}|${p.pos}`, p.ovr] as [string, number])));
     for (const t of baked.seedTeams) for (const p of t.players) if (shippedOvr.get(`${t.abbr}|${p.name}|${p.pos}`) !== p.ovr) moved++;
     expect(baked.seedTeams.flatMap((t: any) => t.players)).toHaveLength(480); expect(moved).toBeGreaterThan(240);
     console.log('NFL_ONE_NUMBER', JSON.stringify({ men: 2163, fifteenWhoseSeedDiffers: moved }));

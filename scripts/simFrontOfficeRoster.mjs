@@ -159,7 +159,10 @@ let teams = parseTeams(src);
                        measured on the seed rule and SCALE is the seed's scale.
                        The shipped estimate's own scale is fenced by
                        scripts/simFoRatingOrder.mjs; its spread is printed here
-     5, 8     code     the generator's own rules over synthetic leagues
+     5, 8     code     the generator's own rules over synthetic leagues. Two
+                       lines of 8 look at the real file ("not one flat rating",
+                       "the elite corners"): each holds on the shipped number
+                       AND, since this round, on the seed
      6, 7     shipped  the shipped header and the shipped page copy
      9 to 11  shipped  the real engine, bundled, on the league it is dealt
 
@@ -607,6 +610,15 @@ for (const p of all) if (DEFENSIVE.has(p.pos) || p.pos === 'OL') atFloor.push(p)
 ok(8, 'the shipped defenders and linemen are not one flat rating',
   new Set(atFloor.map(p => p.ovr)).size >= 12,
   `${new Set(atFloor.map(p => p.ovr)).size} distinct ratings across ${atFloor.length} men`);
+/* Round 1130: the line above reads the shipped estimate. The curve feeds the
+   SEED, so the same count is taken on the seed bake, which is where a curve
+   that clipped would flatten the file. */
+{
+  const seedFloor = seedTeams.flatMap(t => t.players).filter(p => DEFENSIVE.has(p.pos) || p.pos === 'OL');
+  ok(8, 'and neither are the seed bake\'s',
+    new Set(seedFloor.map(p => p.ovr)).size >= 12,
+    `${new Set(seedFloor.map(p => p.ovr)).size} distinct seed ratings across ${seedFloor.length} men`);
+}
 
 /* 8a2. THE LINEMEN'S BAND STAYS NARROW WHILE THEY ARE GUESSES. An offensive
    lineman has no countable event in any public feed, so his rating is

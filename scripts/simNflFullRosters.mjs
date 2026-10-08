@@ -248,22 +248,40 @@ function findUp(rel) {
 const ESBUILD = findUp(path.join('node_modules', '.bin', process.platform === 'win32' ? 'esbuild.cmd' : 'esbuild'));
 
 const BUNDLE_DIR = fs.mkdtempSync(path.join(os.tmpdir(), 'dukb-nflfull-'));
-function bundle(entryText, name) {
+function bundle(entryText, name, startersFile = null) {
   const entry = path.join(BUNDLE_DIR, `${name}.entry.mjs`);
   fs.writeFileSync(entry, entryText);
   const out = path.join(BUNDLE_DIR, `${name}.mjs`);
-  execSync(`"${ESBUILD}" "${entry}" --bundle --format=esm --platform=node --alias:@="${path.join(ROOT, 'src')}" --outfile="${out}" --log-level=error`);
+  /* startersFile (Round 1130): the engine reads its starters through @/data/frontOfficePlayers, so a bundle
+     can be dealt another starters file than the committed one */
+  const starters = startersFile ? ` --alias:@/data/frontOfficePlayers="${startersFile}"` : '';
+  execSync(`"${ESBUILD}" "${entry}" --bundle --format=esm --platform=node${starters} --alias:@="${path.join(ROOT, 'src')}" --outfile="${out}" --log-level=error`);
   return import(pathToFileURL(out).href);
 }
 
 let engine, cuts, data, base = null;
+/* ROUND 1130: THE ORIGINAL-SCALE FIXTURE IS THE SEED BAKE, STARTERS AND DEPTH BOTH. Sections 2 to 6 measure the
+   mechanics of a full roster on the scale Round 828 built them on: the fifteen on the starters' scale (66 and 80
+   up) and everybody else on a band under them. Until Round 1130 the committed starters file WAS that seed scale,
+   so the fixture borrowed it. The committed file now carries the opening estimate (one number per man), so the
+   fixture is taken where the seed still lives: the generator's legacy bake, whose starters text is byte for byte
+   the file main shipped (src/lib/frontOfficeRatings.test.ts compares it with the physical 56356be9 file). The
+   engine is the same file either way; only the starters file it is dealt differs.
+     section 1      shipped starters and shipped depth (the data that ships)
+     sections 2..6  the seed fixture: seed starters, seed band depth
+     section 7      shipped starters, no depth, today's engine against the engine in git (data agnostic)
+     section 8      vitest, the board on the shipped files */
+let seedFixture = null;
 try {
   if (!ESBUILD) throw new Error('esbuild not found by walk-up from the repo root');
   const libDir = fwd(path.join(ROOT, 'src', 'lib'));
   const gen = await import(pathToFileURL(path.join(ROOT, 'scripts', 'genFrontOfficeRoster.mjs')).href);
   const record = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/nflRosters2026.json'), 'utf8'));
   const heldOut = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/nflRosterSpotCheck.json'), 'utf8')).heldOut;
-  const legacyText = gen.bakeFromRecord(record, gen.readTeamMeta(normaliseEol(fs.readFileSync(path.join(ROOT, 'src/data/frontOfficePlayers.ts'), 'utf8'))), heldOut, { legacyDepth: true }).depthText;
+  const legacyBake = gen.bakeFromRecord(record, gen.readTeamMeta(normaliseEol(fs.readFileSync(path.join(ROOT, 'src/data/frontOfficePlayers.ts'), 'utf8'))), heldOut, { legacyDepth: true });
+  const legacyText = legacyBake.depthText;
+  const seedStartersPath = path.join(BUNDLE_DIR, 'frontOfficeSeedPlayers.ts');
+  fs.writeFileSync(seedStartersPath, legacyBake.text);
   const legacyPath = path.join(BUNDLE_DIR, 'frontOfficeLegacyDepth.ts');
   fs.writeFileSync(legacyPath, legacyText.replace("from './frontOfficePlayers'", `from '${fwd(path.join(ROOT, 'src/data/frontOfficePlayers'))}'`));
   let enginePath = ENGINE;
@@ -308,6 +326,13 @@ try {
   engine = mod.engine;
   cuts = mod.cuts;
   data = { FO_DEPTH: mod.FO_DEPTH, legacyDepth: mod.LEGACY_DEPTH, FO_TEAMS: mod.FO_TEAMS, week: mod.FO_DEPTH_WEEK, findTrades: mod.findTrades };
+  /* the same engine file (the control's copy under a control), dealt the seed starters */
+  seedFixture = await bundle([
+    `export * as engine from ${JSON.stringify(fwd(enginePath))};`,
+    `export { FO_TEAMS } from ${JSON.stringify(fwd(seedStartersPath))};`,
+  ].join('\n'), 'seed', seedStartersPath);
+  if (JSON.stringify(seedFixture.FO_TEAMS) === JSON.stringify(mod.FO_TEAMS)) throw new Error('the seed starters equal the shipped starters, so the original-scale fixture is no longer a separate thing: read the note above seedFixture');
+  if (seedFixture.FO_TEAMS.map(t => t.players.map(p => `${p.name}|${p.pos}`).join()).join('/') !== mod.FO_TEAMS.map(t => t.players.map(p => `${p.name}|${p.pos}`).join()).join('/')) throw new Error('the seed fixture and the shipped starters file do not name the same fifteen in the same order');
 } catch (e) {
   console.error(`FAIL: the engine could not be bundled and run: ${String(e && e.message ? e.message : e).slice(0, 300)}`);
   fs.rmSync(BUNDLE_DIR, { recursive: true, force: true });
@@ -528,7 +553,11 @@ console.log('1) the data: real, current, second sourced, and agreeing with the e
 /* ======================================================================= 2 */
 // Intentional old-scale fixture, separate from the current data and new-model acceptance.
 data.FO_DEPTH = data.legacyDepth;
-console.log('Sections2 to6: explicit original-scale mechanics fixture; new-rating acceptance is separate.');
+/* Round 1130: and the starters the fixture's depth was banded under. Section 7 goes back to the shipped engine. */
+const shippedEngine = engine;
+engine = seedFixture.engine;
+data.FO_TEAMS = seedFixture.FO_TEAMS;
+console.log('Sections2 to6: explicit original-scale mechanics fixture (seed starters, seed band depth); new-rating acceptance is separate.');
 console.log('2) the bench sits under the starters');
 {
   const teams = data.FO_TEAMS;
@@ -959,6 +988,9 @@ const CLUBS = data.FO_TEAMS.map(t => t.abbr);
 
 /* ======================================================================= 7 */
 console.log('7) an old save loads and plays as it did');
+/* Round 1130: both engines of this section read the SHIPPED starters file (the engine from git is bundled
+   against today's data), so today's side is the shipped engine, not the seed fixture's. */
+engine = shippedEngine;
 {
   /* the engine as it stood before this round, from git */
   let ready = false;
