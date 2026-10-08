@@ -1,0 +1,13 @@
+   parsed 32 teams and 480 players
+   1. the file has a defence: 11 checks
+   2. the smell list, every shipped row: 5 checks
+   3. a rating is a spread, not a cluster: 16 checks
+   4. defenders are a real share: 33 checks
+   5. a top pick with a quiet season, on the real code: 4 checks
+   6. the header still describes the bake: 6 checks
+   7. the page copy agrees with the generator: 36 checks
+   8. the rules this round got wrong the first time: 14 checks
+   9. the defence survives the seasons: 5 checks
+   10. the defence is the defenders: 13 checks
+   11. every club plays seventeen games: 9 checks
+simFrontOfficeRoster: 152 checks passed over 32 teams and 480 players

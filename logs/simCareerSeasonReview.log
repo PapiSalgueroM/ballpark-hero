@@ -1,0 +1,34 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/careerSeasonReview.test.tsx[2m > [22msaved career season review[2m > [22mfinds saved season highs from the correct positive field for every position[32m 19[2mms[22m[39m
+ [32m✓[39m src/test/careerSeasonReview.test.tsx[2m > [22msaved career season review[2m > [22mkeeps every tied original index latest first and compares raw high values before formatting[32m 1[2mms[22m[39m
+ [32m✓[39m src/test/careerSeasonReview.test.tsx[2m > [22msaved career season review[2m > [22mkeeps zero highs while excluding missing nonfinite and suspended seasons[33m 335[2mms[22m[39m
+ [32m✓[39m src/test/careerSeasonReview.test.tsx[2m > [22msaved career season review[2m > [22mopens the original tied high season and restores each navigation focus[32m 298[2mms[22m[39m
+ [32m✓[39m src/test/careerSeasonReview.test.tsx[2m > [22msaved career season review[2m > [22mcompares distinct original season indices and returns focus to Compare seasons[32m 182[2mms[22m[39m
+ [32m✓[39m src/test/careerSeasonReview.test.tsx[2m > [22msaved career season review[2m > [22mcompares every saved position field in its existing units without postseason prose[33m 446[2mms[22m[39m
+ [32m✓[39m src/test/careerSeasonReview.test.tsx[2m > [22msaved career season review[2m > [22msubtracts raw saved rates before rounding and keeps neutral reversed changes[32m 78[2mms[22m[39m
+ [32m✓[39m src/test/careerSeasonReview.test.tsx[2m > [22msaved career season review[2m > [22mkeeps missing zero and suspended comparison values distinct[32m 64[2mms[22m[39m
+ [32m✓[39m src/test/careerSeasonReview.test.tsx[2m > [22msaved career season review[2m > [22mshows the saved NBA regular and postseason values separately[32m 30[2mms[22m[39m
+ [32m✓[39m src/test/careerSeasonReview.test.tsx[2m > [22msaved career season review[2m > [22mshows NFL passing and defensive stats for their saved positions[32m 75[2mms[22m[39m
+ [32m✓[39m src/test/careerSeasonReview.test.tsx[2m > [22msaved career season review[2m > [22mdistinguishes MLB batting starts and relief appearances from saved stats[32m 84[2mms[22m[39m
+ [32m✓[39m src/test/careerSeasonReview.test.tsx[2m > [22msaved career season review[2m > [22mdistinguishes NHL attackers defenders and goalies in both season phases[32m 91[2mms[22m[39m
+ [32m✓[39m src/test/careerSeasonReview.test.tsx[2m > [22msaved career season review[2m > [22mcompares saved seasons exactly and returns focus to the selected year[32m 75[2mms[22m[39m
+ [32m✓[39m src/test/careerSeasonReview.test.tsx[2m > [22msaved career season review[2m > [22mkeeps missing legacy fields honest and records real zero values[32m 32[2mms[22m[39m
+ [32m✓[39m src/test/careerSeasonReview.test.tsx[2m > [22msaved career season review[2m > [22mshows suspended seasons without inventing regular or postseason performances[32m 75[2mms[22m[39m
+ [32m✓[39m src/test/careerSeasonReview.test.tsx[2m > [22msaved career season review[2m > [22mopens each live Career Log and returns without saves draws or completion calls[33m 1905[2mms[22m[39m
+ [32m✓[39m src/test/careerSeasonReview.test.tsx[2m > [22msaved career season review[2m > [22mopens Career Log during a pending choice and restores that exact choice[32m 275[2mms[22m[39m
+ [32m✓[39m src/test/careerSeasonReview.test.tsx[2m > [22msaved career season review[2m > [22mreviews retired careers and restores the retirement opener without paying again[33m 546[2mms[22m[39m
+ [32m✓[39m src/test/careerSeasonReview.test.tsx[2m > [22msaved career season review[2m > [22mrestores existing retirement legacy and exact save bytes without another completion[32m 163[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m19 passed[39m[22m[90m (19)[39m
+[2m   Start at [22m 12:35:30
+[2m   Duration [22m 9.02s[2m (transform 2.40s, setup 76ms, collect 3.29s, tests 4.78s, environment 408ms, prepare 167ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/career-season-review-artifacts/mounted/normal-report.json
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+simCareerSeasonReview normal: intended assertions and independent retirement baseline passed.

@@ -1,0 +1,17 @@
+simCareerDecisionOutcome-direction exit=0 7s | simCareerDecisionOutcome direction: intended assertions and independent ordinary/rivalry baseline passed.
+vitest-board exit=0 10s |    Duration  9.46s (transform 2.81s, setup 163ms, collect 7.00s, tests 4.40s, environment 1.13s, prepare 863ms)
+simCareerDecisionOutcome exit=0 10s | simCareerDecisionOutcome normal: intended assertions and independent ordinary/rivalry baseline passed.
+simCareerDecisionOutcome-earnings exit=0 6s | simCareerDecisionOutcome earnings: intended assertions and independent ordinary/rivalry baseline passed.
+simCareerEntryGuide exit=0 8s | simCareerEntryGuide normal: intended guide outcomes and independent baseline passed.
+simFrontOfficeRoster exit=0 1s | simFrontOfficeRoster: 152 checks passed over 32 teams and 480 players
+simCareerAwardsNight exit=0 10s | simCareerAwardsNight: ALL 170 CHECKS PASSED
+simCareerSeasonReview exit=0 10s | simCareerSeasonReview normal: intended assertions and independent retirement baseline passed.
+simRelatedGames exit=0 1s | ALL RELATED GAMES CHECKS PASSED
+simRevealMoments exit=0 11s | simRevealMoments: green. No counting number, a reduced motion rule beside every keyframe, one pace for every stagger, every fact and number on the cards is the fixture's 
+simUsCareerActionConfirm exit=0 10s | Career confirmation: CRLF controls bind, raw bytes held and owned copies cleaned. Simulated states/explicit events do not prove full-season gameplay or native Enter, view
+simNbaSeasonStats exit=0 17s | simNbaSeasonStats: 72 checks passed over 10 seeded franchises and 3 seasons each. Every game adds up, the box takes nothing from the league, the awards follow their rules
+simUsCoachPoaching exit=0 3s | Coach poaching: CRLF anchors/raw bytes held, owned copies cleaned; fictional pure-engine fixtures do not prove UI gameplay or sports history.
+simUsCareerRecovery exit=0 6s | Career recovery: fictional offline engine fixtures, no native UI, full-career completion, medical effect or real sports-stat claim.
+simUsCareerPractice exit=0 30s | simUsCareerPractice: 32 actual-board outcomes passed across NFL, NBA, MLB and NHL
+tsc exit=0 75s | 
+simNumberFormatting exit=0 142s | Number formatting: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/number-formatting-artifacts/outcomes

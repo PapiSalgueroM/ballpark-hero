@@ -1,0 +1,54 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [2m[90m↓[39m[22m src/test/careerDecisionOutcome.test.tsx[2m > [22mordinary career decision outcomes[2m > [22mapplies the real third-season NBA trade once before its quality draw and keeps the full save on return
+ [2m[90m↓[39m[22m src/test/careerDecisionOutcome.test.tsx[2m > [22mordinary career decision outcomes[2m > [22mshows each real sport choice as the actual capped change and saves it once
+ [31m×[39m src/test/careerDecisionOutcome.test.tsx[2m > [22mordinary career decision outcomes[2m > [22mreports negative effects and real endorsement earnings without calling them cash[33m 490[2mms[22m[39m
+[31m   → expected [ { key: 'morale', …(4) }, …(1) ] to deeply equal [ { key: 'morale', …(4) }, …(1) ][39m
+ [2m[90m↓[39m[22m src/test/careerDecisionOutcome.test.tsx[2m > [22mordinary career decision outcomes[2m > [22mconsumes same-frame choices once and accepts the next ordinary event
+ [2m[90m↓[39m[22m src/test/careerDecisionOutcome.test.tsx[2m > [22mordinary career decision outcomes[2m > [22mcontinues with no extra draws writes season or completion and restores Play focus
+ [2m[90m↓[39m[22m src/test/careerDecisionOutcome.test.tsx[2m > [22mordinary career decision outcomes[2m > [22mreloads the applied career without replaying its transient receipt or choice
+ [2m[90m↓[39m[22m src/test/careerDecisionOutcome.test.tsx[2m > [22mordinary career decision outcomes[2m > [22mkeeps team contract salary cash and earnings changes in their own units
+ [2m[90m↓[39m[22m src/test/careerDecisionOutcome.test.tsx[2m > [22mordinary career decision outcomes[2m > [22muses Not recorded for missing legacy sides and preserves known zero changes
+ [2m[90m↓[39m[22m src/test/careerDecisionOutcome.test.tsx[2m > [22mordinary career decision outcomes[2m > [22mshows an honest unchanged outcome when a real capped option changes nothing
+ [2m[90m↓[39m[22m src/test/careerDecisionOutcome.test.tsx[2m > [22mordinary career decision outcomes[2m > [22mexpands every applied change without hiding Continue or changing its payload
+ [32m✓[39m src/test/careerDecisionOutcome.test.tsx[2m > [22mordinary career decision outcomes[2m > [22mpreserves real ordinary engine choices and the existing rivalry receipt independently[33m 459[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[2m | [22m[33m9 skipped[39m[90m (11)[39m
+[2m   Start at [22m 12:35:17
+[2m   Duration [22m 6.03s[2m (transform 2.50s, setup 82ms, collect 3.64s, tests 952ms, environment 546ms, prepare 147ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/career-decision-outcome-artifacts/mounted/direction-report.json
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/careerDecisionOutcome.test.tsx[2m > [22mordinary career decision outcomes[2m > [22mreports negative effects and real endorsement earnings without calling them cash
+[31m[1mAssertionError[22m: expected [ { key: 'morale', …(4) }, …(1) ] to deeply equal [ { key: 'morale', …(4) }, …(1) ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[33m@@ -1,10 +1,10 @@[39m
+[2m  [[22m
+[2m    {[22m
+[2m      "after": "68",[22m
+[2m      "before": "71",[22m
+[32m-     "delta": "-3",[39m
+[31m+     "delta": "+3",[39m
+[2m      "key": "morale",[22m
+[2m      "label": "Morale",[22m
+[2m    },[22m
+[2m    {[22m
+[2m      "after": "70",[22m
+
+[36m [2m❯[22m src/test/careerDecisionOutcome.test.tsx:[2m144:20[22m[39m
+
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+simCareerDecisionOutcome direction: intended assertions and independent ordinary/rivalry baseline passed.
