@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+# Round 1051 fixer 2: the press walk, ten runs one after another, then its control
+press-ten: for i in 1 2 3 4 5 6 7 8 9 10; do node scripts/playCareerPress.mjs > /tmp/p$i.log 2>&1; echo "run $i exit=$? | $(grep "accountability scrum" /tmp/p$i.log)"; done
+press-noscrum: CAREER_PRESS_CONTROL=noscrum node scripts/playCareerPress.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
