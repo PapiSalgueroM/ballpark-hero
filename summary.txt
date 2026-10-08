@@ -1,0 +1,16 @@
+nflcareer exit=0 2s | PASS: no crashes, every position produces stats, shop fully reachable, deck C drawn, every card dealt only where its words hold (its words, odds and money: simUsCareerDec
+realism exit=0 6s | ALL CAREER REALISM CHECKS PASSED
+recorded exit=0 6s | simCareerRecordedStats: 8 actual outcomes passed.
+money exit=1 28s | 1 FAILURES
+moneyret exit=0 1s | All good: the money app keeps running for the whole retirement tail.
+awards exit=0 6s | PASS: ALL AWARD SCARCITY CHECKS PASSED
+boardparity exit=1 56s | simUsBoardParity: 3 failures
+deckc exit=1 82s | simUsCareerDeckC: 4 failure(s)
+eras exit=0 0s | ALL SPORT ERA CHECKS PASSED
+depth exit=0 1s | ALL DEPTH CHART CHECKS PASSED
+fa exit=0 2s | ALL FREE AGENCY CHECKS PASSED
+ext exit=0 0s | simExtension: green. The last year of a deal is a decision in all four games now.
+vitest-a exit=0 35s |    Duration  33.68s (transform 8.61s, setup 944ms, collect 17.73s, tests 59.06s, environment 5.98s, prepare 1.45s)
+vitest-b exit=1 41s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerProspect.test.tsx,title=src/test/usCareerProspect.test.tsx > US career prospect on the actual 
+summer exit=1 1595s | simUsCareerSummer: 1 failure(s) in sections 6
+hall exit=0 1675s | simCareerHall: all four sports green

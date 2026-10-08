@@ -1,0 +1,149 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [2m[90m↓[39m[22m src/test/usBoardFixture.test.tsx [2m([22m[2m4 tests[22m[2m | [22m[33m4 skipped[39m[2m)[22m
+[90mstderr[2m | src/test/usCareerHallBoard.test.tsx[2m > [22m[2mnfl: the retirement talk on the board[2m > [22m[2mRetire now ends the career on the last season played
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+ [32m✓[39m src/test/usCareerStatLines.test.tsx [2m([22m[2m117 tests[22m[2m)[22m[33m 2996[2mms[22m[39m
+ [32m✓[39m src/test/careerPreDraft.test.tsx [2m([22m[2m26 tests[22m[2m)[22m[33m 442[2mms[22m[39m
+ [32m✓[39m src/test/usCareerHallBoard.test.tsx [2m([22m[2m87 tests[22m[2m)[22m[33m 16754[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl: the retirement talk on the board[2m > [22man old active save inside the rule opens on the talk, writes nothing, and a reload asks again [33m 317[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl: the Hall of Fame on the retirement screen[2m > [22man old retired save with no blocks shows the Hall card, and the Hall pill waits for the ballot [33m 6082[2mms[22m[39m
+   [33m[2m✓[22m[39m nba: the Hall of Fame on the retirement screen[2m > [22man old retired save with no blocks shows the Hall card, and the Hall pill waits for the ballot [33m 1038[2mms[22m[39m
+   [33m[2m✓[22m[39m mlb: the Hall of Fame on the retirement screen[2m > [22man old retired save with no blocks shows the Hall card, and the Hall pill waits for the ballot [33m 1561[2mms[22m[39m
+   [33m[2m✓[22m[39m nhl: the Hall of Fame on the retirement screen[2m > [22man old retired save with no blocks shows the Hall card, and the Hall pill waits for the ballot [33m 1058[2mms[22m[39m
+ [31m❯[39m src/test/usCareerProspect.test.tsx [2m([22m[2m36 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 15249[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NFL' quiet legacy restore preserves the existing career unchanged [33m 622[2mms[22m[39m
+   [32m✓[39m US career prospect on the actual boards[2m > [22m'NBA' quiet legacy restore preserves the existing career unchanged[32m 286[2mms[22m[39m
+   [32m✓[39m US career prospect on the actual boards[2m > [22m'MLB' quiet legacy restore preserves the existing career unchanged[32m 215[2mms[22m[39m
+   [32m✓[39m US career prospect on the actual boards[2m > [22m'NHL' quiet legacy restore preserves the existing career unchanged[32m 265[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NFL' plays every saved prospect stage into the earned career and first season [33m 1000[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NBA' plays every saved prospect stage into the earned career and first season [33m 572[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'MLB' plays every saved prospect stage into the earned career and first season [33m 637[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NHL' plays every saved prospect stage into the earned career and first season [33m 672[2mms[22m[39m
+   [32m✓[39m US career prospect on the actual boards[2m > [22m'NFL' choices apply the displayed consequences and reject invalid options[32m 78[2mms[22m[39m
+   [32m✓[39m US career prospect on the actual boards[2m > [22m'NBA' choices apply the displayed consequences and reject invalid options[32m 88[2mms[22m[39m
+   [32m✓[39m US career prospect on the actual boards[2m > [22m'MLB' choices apply the displayed consequences and reject invalid options[32m 71[2mms[22m[39m
+   [32m✓[39m US career prospect on the actual boards[2m > [22m'NHL' choices apply the displayed consequences and reject invalid options[32m 69[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NFL' accepts each same-frame journey action only once [33m 413[2mms[22m[39m
+   [32m✓[39m US career prospect on the actual boards[2m > [22m'NBA' accepts each same-frame journey action only once[32m 239[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'MLB' accepts each same-frame journey action only once [33m 302[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NHL' accepts each same-frame journey action only once [33m 349[2mms[22m[39m
+[31m   [31m×[31m US career prospect on the actual boards[2m > [22m'NFL' an actual undrafted outcome becomes a camp signing without top-pick rewards[39m[32m 72[2mms[22m[39m
+[31m     → expected { name: 'Simulated Prospect', …(31) } to match object { salary: 1.2, fanbase: 35, …(5) }
+(50 matching properties omitted from actual)[39m
+   [32m✓[39m US career prospect on the actual boards[2m > [22m'NBA' an actual undrafted outcome becomes a camp signing without top-pick rewards[32m 36[2mms[22m[39m
+   [32m✓[39m US career prospect on the actual boards[2m > [22m'MLB' an actual undrafted outcome becomes a camp signing without top-pick rewards[32m 41[2mms[22m[39m
+   [32m✓[39m US career prospect on the actual boards[2m > [22m'NHL' an actual undrafted outcome becomes a camp signing without top-pick rewards[32m 35[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NFL' historical completed outcomes survive reload and remain the career archive [33m 440[2mms[22m[39m
+   [32m✓[39m US career prospect on the actual boards[2m > [22m'NBA' historical completed outcomes survive reload and remain the career archive[32m 281[2mms[22m[39m
+   [32m✓[39m US career prospect on the actual boards[2m > [22m'MLB' historical completed outcomes survive reload and remain the career archive[32m 284[2mms[22m[39m
+   [32m✓[39m US career prospect on the actual boards[2m > [22m'NHL' historical completed outcomes survive reload and remain the career archive[32m 251[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NFL' rejects corrupt nested journey saves without changing storage [33m 1270[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NBA' rejects corrupt nested journey saves without changing storage [33m 1360[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'MLB' rejects corrupt nested journey saves without changing storage [33m 1556[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NHL' rejects corrupt nested journey saves without changing storage [33m 1537[2mms[22m[39m
+   [32m✓[39m US career prospect on the actual boards[2m > [22m'NFL' back before route selection preserves the player and clears only the unfinished save[32m 177[2mms[22m[39m
+   [32m✓[39m US career prospect on the actual boards[2m > [22m'NBA' back before route selection preserves the player and clears only the unfinished save[32m 214[2mms[22m[39m
+   [32m✓[39m US career prospect on the actual boards[2m > [22m'MLB' back before route selection preserves the player and clears only the unfinished save[32m 241[2mms[22m[39m
+   [32m✓[39m US career prospect on the actual boards[2m > [22m'NHL' back before route selection preserves the player and clears only the unfinished save[32m 205[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NFL' rules reopen and showcase approaches pay their displayed stock moves [33m 360[2mms[22m[39m
+   [32m✓[39m US career prospect on the actual boards[2m > [22m'NBA' rules reopen and showcase approaches pay their displayed stock moves[32m 290[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'MLB' rules reopen and showcase approaches pay their displayed stock moves [33m 349[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NHL' rules reopen and showcase approaches pay their displayed stock moves [33m 370[2mms[22m[39m
+ [32m✓[39m src/test/usCareerSummer.test.tsx [2m([22m[2m40 tests[22m[2m)[22m[33m 3660[2mms[22m[39m
+ [32m✓[39m src/test/usCareerActionConfirm.test.tsx [2m([22m[2m18 tests[22m[2m)[22m[33m 6148[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'NFL' preserves live restore and engine state as an independent baseline [33m 869[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'NBA' preserves live restore and engine state as an independent baseline [33m 381[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'MLB' preserves live restore and engine state as an independent baseline [33m 358[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'NHL' preserves live restore and engine state as an independent baseline [33m 414[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'NFL' keeps retirement pending until explicit acceptance and records its real legacy once [33m 406[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'NBA' keeps retirement pending until explicit acceptance and records its real legacy once [33m 381[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'MLB' keeps retirement pending until explicit acceptance and records its real legacy once [33m 427[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'NHL' keeps retirement pending until explicit acceptance and records its real legacy once [33m 486[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'NFL' keeps restart pending then deletes only its own career without another completion [33m 561[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'NBA' keeps restart pending then deletes only its own career without another completion [33m 451[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'MLB' keeps restart pending then deletes only its own career without another completion [33m 516[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'NHL' keeps restart pending then deletes only its own career without another completion [33m 415[2mms[22m[39m
+ [32m✓[39m src/test/usCareerReveals.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 837[2mms[22m[39m
+   [33m[2m✓[22m[39m draft day on the four US career hubs[2m > [22mNFL mounts the draft day card with the engine pick and the confetti rule [33m 448[2mms[22m[39m
+ [32m✓[39m src/test/careerRecordedStats.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[32m 159[2mms[22m[39m
+ [32m✓[39m src/test/usCareerPractice.test.tsx [2m([22m[2m32 tests[22m[2m)[22m[33m 28544[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NFL' quiet legacy restore preserves the existing career unchanged [33m 517[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NBA' quiet legacy restore preserves the existing career unchanged [33m 307[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NFL' banks played skill into the real save once and survives reload [33m 1328[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NBA' banks played skill into the real save once and survives reload [33m 738[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'MLB' banks played skill into the real save once and survives reload [33m 776[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NHL' banks played skill into the real save once and survives reload [33m 763[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NFL' zero and solid scores bank only the rating earned [33m 1266[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NBA' zero and solid scores bank only the rating earned [33m 1431[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'MLB' zero and solid scores bank only the rating earned [33m 1245[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NHL' zero and solid scores bank only the rating earned [33m 1518[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NFL' ceiling pays only the available headroom [33m 976[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NBA' ceiling pays only the available headroom [33m 870[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'MLB' ceiling pays only the available headroom [33m 895[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NHL' ceiling pays only the available headroom [33m 706[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NFL' old above-ceiling rating is never reduced [33m 858[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NBA' old above-ceiling rating is never reduced [33m 684[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'MLB' old above-ceiling rating is never reduced [33m 784[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NHL' old above-ceiling rating is never reduced [33m 751[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NFL' abort leaves no save changes and rules reopen during play [33m 1754[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NBA' abort leaves no save changes and rules reopen during play [33m 1506[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'MLB' abort leaves no save changes and rules reopen during play [33m 1175[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NHL' abort leaves no save changes and rules reopen during play [33m 1180[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NFL' earned rating reaches the next real season and practice renews afterwards [33m 1694[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NBA' earned rating reaches the next real season and practice renews afterwards [33m 1223[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'MLB' earned rating reaches the next real season and practice renews afterwards [33m 1021[2mms[22m[39m
+   [33m[2m✓[22m[39m US career practice on the actual boards[2m > [22m'NHL' earned rating reaches the next real season and practice renews afterwards [33m 1214[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usCareerProspect.test.tsx[2m > [22mUS career prospect on the actual boards[2m > [22m'NFL' an actual undrafted outcome becomes a camp signing without top-pick rewards
+[31m[1mAssertionError[22m: expected { name: 'Simulated Prospect', …(31) } to match object { salary: 1.2, fanbase: 35, …(5) }
+(50 matching properties omitted from actual)[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[33m@@ -102,8 +102,8 @@[39m
+[2m      },[22m
+[2m      "sport": "nfl",[22m
+[2m      "stock": 0,[22m
+[2m      "v": 1,[22m
+[2m    },[22m
+[32m-   "salary": 1.2,[39m
+[31m+   "salary": 0.9,[39m
+[2m    "team": "TEN",[22m
+[2m  }[22m
+
+[36m [2m❯[22m src/test/usCareerProspect.test.tsx:[2m223:15[22m[39m
+    [90m221| [39m    fireEvent.click(buttons(view).getByRole('button', { name: 'Start y…
+    [90m222| [39m    [35mconst[39m c [33m=[39m [34msaved[39m(row)[33m.[39mc[33m![39m[33m;[39m
+    [90m223| [39m    expect(c).toMatchObject({ ...row.unsigned, draftPick: 0, ovr: p!.s…
+    [90m   | [39m              [31m^[39m
+    [90m224| [39m    expect(c.phoneInbox?.some(message => /endorsement/i.test(JSON.stri…
+    [90m225| [39m    [34mexpect[39m(view[33m.[39mcontainer)[33m.[39m[34mtoHaveTextContent[39m([32m'undrafted signing'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m8 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (10)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m372 passed[39m[22m[2m | [22m[33m4 skipped[39m[90m (377)[39m
+[2m   Start at [22m 05:20:17
+[2m   Duration [22m 39.63s[2m (transform 5.82s, setup 1.20s, collect 19.04s, tests 74.79s, environment 6.21s, prepare 1.41s)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerProspect.test.tsx,title=src/test/usCareerProspect.test.tsx > US career prospect on the actual boards > 'NFL' an actual undrafted outcome becomes a camp signing without top-pick rewards,line=223,column=15::AssertionError: expected { name: 'Simulated Prospect', …(31) } to match object { salary: 1.2, fanbase: 35, …(5) }%0A(50 matching properties omitted from actual)%0A%0A- Expected%0A+ Received%0A%0A@@ -102,8 +102,8 @@%0A      },%0A      "sport": "nfl",%0A      "stock": 0,%0A      "v": 1,%0A    },%0A-   "salary": 1.2,%0A+   "salary": 0.9,%0A    "team": "TEN",%0A  }%0A%0A ❯ src/test/usCareerProspect.test.tsx:223:15%0A%0A

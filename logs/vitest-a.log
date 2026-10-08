@@ -1,0 +1,191 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/careerHall.test.tsx [2m([22m[2m43 tests[22m[2m)[22m[33m 889[2mms[22m[39m
+[90mstdout[2m | src/test/noDoubleRecord.test.tsx[2m > [22m[2mno double record[2m > [22m[2mdiscovers the table
+[22m[39mNO_DOUBLE_CASE {"title":"fight-career","id":"fight-career","shape":"fight","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"fight-gym","id":"fight-gym","shape":"fight","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"fight-promoter","id":"fight-promoter","shape":"fight","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"nfl-my-career","id":"nfl-my-career","shape":"career","usesMark":true,"toggle":false,"coach":true}
+NO_DOUBLE_CASE {"title":"nba-my-career","id":"nba-my-career","shape":"career","usesMark":true,"toggle":false,"coach":true}
+NO_DOUBLE_CASE {"title":"mlb-my-career","id":"mlb-my-career","shape":"career","usesMark":true,"toggle":false,"coach":true}
+NO_DOUBLE_CASE {"title":"nhl-my-career","id":"nhl-my-career","shape":"career","usesMark":true,"toggle":false,"coach":true}
+NO_DOUBLE_CASE {"title":"nfl-higher-lower","id":"nfl-higher-lower","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"nba-higher-lower","id":"nba-higher-lower","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"mlb-higher-lower","id":"mlb-higher-lower","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"hockey-higher-lower","id":"hockey-higher-lower","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"cfb-higher-lower","id":"cfb-higher-lower","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"f1-higher-lower","id":"f1-higher-lower","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"tennis-higher-lower","id":"tennis-higher-lower","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"golf-higher-lower","id":"golf-higher-lower","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"afl-higher-lower","id":"afl-higher-lower","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"ufc","id":"ufc","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"football-connect-4","id":"football-connect-4","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"career","id":"career","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"nba-grid","id":"nba-grid","shape":"toggle","usesMark":false,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"mlb-grid","id":"mlb-grid","shape":"toggle","usesMark":false,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"hockey-grid","id":"hockey-grid","shape":"toggle","usesMark":false,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"cbb-grid","id":"cbb-grid","shape":"toggle","usesMark":false,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"missing-five","id":"missing-five","shape":"toggle","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"missing-nine","id":"missing-nine","shape":"toggle","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"missing-eleven","id":"missing-eleven","shape":"toggle","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"rank-em","id":"rank-em","shape":"toggle","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"puck-detective (give up)","id":"puck-detective","shape":"toggle","usesMark":false,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"puck-detective (solve)","id":"puck-detective","shape":"toggle","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"guess-the-golfer","id":"guess-the-golfer","shape":"toggle","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"champ-or-not","id":"champ-or-not","shape":"restore","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"whod-they-beat","id":"whod-they-beat","shape":"restore","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"silverware-sort","id":"silverware-sort","shape":"restore","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"jeopardy","id":"jeopardy","shape":"restore","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"ball-iq","id":"ball-iq","shape":"restore","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"mystery-box","id":"mystery-box","shape":"restore","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"nfl-career","id":"nfl-career","shape":"restore","usesMark":false,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"career-ladder","id":"career-ladder","shape":"extra","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"transfer-path","id":"transfer-path","shape":"extra","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"grade-transfer","id":"grade-transfer","shape":"extra","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"player-stock-market","id":"player-stock-market","shape":"extra","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"nfl-higher-lower: a round decided is saved before its reveal ends","id":"nfl-higher-lower","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"nba-higher-lower: a round decided is saved before its reveal ends","id":"nba-higher-lower","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"mlb-higher-lower: a round decided is saved before its reveal ends","id":"mlb-higher-lower","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"hockey-higher-lower: a round decided is saved before its reveal ends","id":"hockey-higher-lower","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"cfb-higher-lower: a round decided is saved before its reveal ends","id":"cfb-higher-lower","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"f1-higher-lower: a round decided is saved before its reveal ends","id":"f1-higher-lower","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"tennis-higher-lower: a round decided is saved before its reveal ends","id":"tennis-higher-lower","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"golf-higher-lower: a round decided is saved before its reveal ends","id":"golf-higher-lower","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"afl-higher-lower: a round decided is saved before its reveal ends","id":"afl-higher-lower","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"champ-or-not: a reload inside the final reveal","id":"champ-or-not","shape":"check","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"whod-they-beat: a reload inside the final reveal","id":"whod-they-beat","shape":"check","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"silverware-sort: a reload inside the final reveal","id":"silverware-sort","shape":"check","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"champ-or-not: Unlimited and back inside the final reveal","id":"champ-or-not","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"whod-they-beat: Unlimited and back inside the final reveal","id":"whod-they-beat","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"silverware-sort: Unlimited and back inside the final reveal","id":"silverware-sort","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"champ-or-not: a final pick after midnight ET","id":"champ-or-not","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"whod-they-beat: a final pick after midnight ET","id":"whod-they-beat","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"silverware-sort: a final pick after midnight ET","id":"silverware-sort","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"champ-or-not: the board renders after midnight ET before the final pick","id":"champ-or-not","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"whod-they-beat: the board renders after midnight ET before the final pick","id":"whod-they-beat","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"silverware-sort: the board renders after midnight ET before the final pick","id":"silverware-sort","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"football-grid: a playing save past the limit, read with Unlimited off","id":"football-grid","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"nfl-career: a daily dealt before midnight and solved after it","id":"nfl-career","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"nfl-career: a first clue solve records its clue score","id":"nfl-career","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"nfl-career: the next day in the same tab records once more","id":"nfl-career","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"world-cup-bracket: one record per crowned name","id":"world-cup-bracket","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_TABLE {"rows":41,"fight":3,"career":4,"slug":12,"toggle":11,"restore":7,"extra":4,"checks":26}
+
+ [32m✓[39m src/test/moneyAppFeedback.test.tsx [2m([22m[2m19 tests[22m[2m)[22m[33m 2639[2mms[22m[39m
+   [33m[2m✓[22m[39m MoneyApp committed transaction feedback[2m > [22mannounces the actual NFL deposit and only the two changed buckets [33m 323[2mms[22m[39m
+   [33m[2m✓[22m[39m MoneyApp committed transaction feedback[2m > [22mpreserves market navigation and the sport shop without dispatching money actions [33m 524[2mms[22m[39m
+ [32m✓[39m src/test/careerSeasonReview.test.tsx [2m([22m[2m19 tests[22m[2m)[22m[33m 8777[2mms[22m[39m
+   [33m[2m✓[22m[39m saved career season review[2m > [22mkeeps zero highs while excluding missing nonfinite and suspended seasons [33m 430[2mms[22m[39m
+   [33m[2m✓[22m[39m saved career season review[2m > [22mopens the original tied high season and restores each navigation focus [33m 469[2mms[22m[39m
+   [33m[2m✓[22m[39m saved career season review[2m > [22mcompares distinct original season indices and returns focus to Compare seasons [33m 410[2mms[22m[39m
+   [33m[2m✓[22m[39m saved career season review[2m > [22mcompares every saved position field in its existing units without postseason prose [33m 776[2mms[22m[39m
+   [33m[2m✓[22m[39m saved career season review[2m > [22mopens each live Career Log and returns without saves draws or completion calls [33m 3503[2mms[22m[39m
+   [33m[2m✓[22m[39m saved career season review[2m > [22mopens Career Log during a pending choice and restores that exact choice [33m 685[2mms[22m[39m
+   [33m[2m✓[22m[39m saved career season review[2m > [22mreviews retired careers and restores the retirement opener without paying again [33m 1058[2mms[22m[39m
+ [32m✓[39m src/test/careerHallV1Replay.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 3919[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1051: the recorded saves through the real board[2m > [22mnfl: the board shows each save the verdict, the legacy and the ballot it was told, and writes nothing [33m 1285[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1051: the recorded saves through the real board[2m > [22mnba: the board shows each save the verdict, the legacy and the ballot it was told, and writes nothing [33m 787[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1051: the recorded saves through the real board[2m > [22mmlb: the board shows each save the verdict, the legacy and the ballot it was told, and writes nothing [33m 872[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1051: the recorded saves through the real board[2m > [22mnhl: the board shows each save the verdict, the legacy and the ballot it was told, and writes nothing [33m 671[2mms[22m[39m
+[90mstdout[2m | src/test/usCareerEraCards.test.ts[2m > [22m[2mNBA supermax[2m > [22m[2mnever reaches a seeded 2003-04 career before 2017, and does after
+[22m[39mNBA 2003-04: 3707 offseasons, supermax drawable 0 times before 2017 and 384 after
+
+[90mstdout[2m | src/test/usCareerEraCards.test.ts[2m > [22m[2mMLB qualifying offer[2m > [22m[2mnever reaches a seeded 2004 career before 2013, and does after
+[22m[39mMLB 2004: 3772 offseasons, qualifying offer drawable 0 times before 2013 and 895 after
+
+ [32m✓[39m src/test/usCareerEraCards.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 725[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA supermax[2m > [22mnever reaches a seeded 2003-04 career before 2017, and does after [33m 381[2mms[22m[39m
+   [33m[2m✓[22m[39m MLB qualifying offer[2m > [22mnever reaches a seeded 2004 career before 2013, and does after [33m 327[2mms[22m[39m
+[90mstdout[2m | src/test/usCareerEraLifeMoney.test.ts[2m > [22m[2mUS career contract cards pay the era money[2m > [22m[2m'nfl': same cards, and every salary at the era scale
+[22m[39mnfl: 21600 option outcomes compared across 76 cards
+
+ [32m✓[39m src/test/rivalryChoiceBoard.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 710[2mms[22m[39m
+   [33m[2m✓[22m[39m the rival choice card in the My Career boards[2m > [22m'NFL': a pending choice opens on the card, pays what it printed, and Continue goes back to the hub [33m 326[2mms[22m[39m
+[90mstdout[2m | src/test/usCareerShopCap.test.ts[2m > [22m[2ma bought rating raise stops at potential[2m > [22m[2m'NFL Vision Training': seeded careers that reach the ceiling stay under it for good
+[22m[39mNFL Vision Training: 1 of 300 seeded careers came within one of potential, 0 seasons above it after buying
+
+[90mstdout[2m | src/test/usCareerShopCap.test.ts[2m > [22m[2ma bought rating raise stops at potential[2m > [22m[2m'NBA Biomechanics Team': seeded careers that reach the ceiling stay under it for good
+[22m[39mNBA Biomechanics Team: 4 of 300 seeded careers came within one of potential, 0 seasons above it after buying
+
+[90mstdout[2m | src/test/usCareerEraLifeMoney.test.ts[2m > [22m[2mUS career contract cards pay the era money[2m > [22m[2m'nba': same cards, and every salary at the era scale
+[22m[39mnba: 15084 option outcomes compared across 76 cards
+
+[90mstdout[2m | src/test/usCareerShopCap.test.ts[2m > [22m[2ma bought rating raise stops at potential[2m > [22m[2m'MLB Biomechanics Team': seeded careers that reach the ceiling stay under it for good
+[22m[39mMLB Biomechanics Team: 0 of 300 seeded careers came within one of potential, 0 seasons above it after buying
+
+[90mstdout[2m | src/test/usCareerShopCap.test.ts[2m > [22m[2ma bought rating raise stops at potential[2m > [22m[2m'NHL Biomechanics Team': seeded careers that reach the ceiling stay under it for good
+[22m[39mNHL Biomechanics Team: 12 of 300 seeded careers came within one of potential, 0 seasons above it after buying
+
+[90mstdout[2m | src/test/usCareerShopCap.test.ts[2m > [22m[2ma bought rating raise stops at potential[2m > [22m[2m'NHL Home Shooting Room': seeded careers that reach the ceiling stay under it for good
+[22m[39mNHL Home Shooting Room: 12 of 300 seeded careers came within one of potential, 0 seasons above it after buying
+
+ [32m✓[39m src/test/usCareerShopCap.test.ts [2m([22m[2m25 tests[22m[2m)[22m[33m 1502[2mms[22m[39m
+   [33m[2m✓[22m[39m a bought rating raise stops at potential[2m > [22m'NFL Vision Training': seeded careers that reach the ceiling stay under it for good [33m 398[2mms[22m[39m
+   [33m[2m✓[22m[39m a bought rating raise stops at potential[2m > [22m'NBA Biomechanics Team': seeded careers that reach the ceiling stay under it for good [33m 316[2mms[22m[39m
+[90mstderr[2m | src/test/noDoubleRecord.test.tsx[2m > [22m[2mno double record[2m > [22m[2mpuck-detective (give up)
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/myCareerRestore.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 582[2mms[22m[39m
+[90mstderr[2m | src/test/noDoubleRecord.test.tsx[2m > [22m[2mno double record[2m > [22m[2mpuck-detective (solve)
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstdout[2m | src/test/usCareerEraLifeMoney.test.ts[2m > [22m[2mUS career contract cards pay the era money[2m > [22m[2m'mlb': same cards, and every salary at the era scale
+[22m[39mmlb: 20322 option outcomes compared across 73 cards
+
+[90mstderr[2m | src/test/noDoubleRecord.test.tsx[2m > [22m[2mno double record[2m > [22m[2mguess-the-golfer
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstdout[2m | src/test/usCareerEraLifeMoney.test.ts[2m > [22m[2mUS career contract cards pay the era money[2m > [22m[2m'nhl': same cards, and every salary at the era scale
+[22m[39mnhl: 20412 option outcomes compared across 74 cards
+
+ [32m✓[39m src/test/usCareerEraLifeMoney.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 14373[2mms[22m[39m
+   [33m[2m✓[22m[39m US career contract cards pay the era money[2m > [22m'nfl': same cards, and every salary at the era scale [33m 4120[2mms[22m[39m
+   [33m[2m✓[22m[39m US career contract cards pay the era money[2m > [22m'nba': same cards, and every salary at the era scale [33m 2984[2mms[22m[39m
+   [33m[2m✓[22m[39m US career contract cards pay the era money[2m > [22m'mlb': same cards, and every salary at the era scale [33m 4083[2mms[22m[39m
+   [33m[2m✓[22m[39m US career contract cards pay the era money[2m > [22m'nhl': same cards, and every salary at the era scale [33m 3180[2mms[22m[39m
+[90mstderr[2m | src/test/noDoubleRecord.test.tsx[2m > [22m[2mno double record[2m > [22m[2mcareer-ladder
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/noDoubleRecord.test.tsx [2m([22m[2m69 tests[22m[2m)[22m[33m 24945[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mfight-career [33m 637[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mfight-gym [33m 394[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mfight-promoter [33m 510[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mnfl-my-career [33m 1124[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mnba-my-career [33m 835[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mmlb-my-career [33m 852[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mnhl-my-career [33m 814[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mufc [33m 431[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mfootball-connect-4 [33m 437[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mcareer [33m 580[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mnba-grid [33m 1077[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mmlb-grid [33m 995[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mhockey-grid [33m 936[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mcbb-grid [33m 982[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mmissing-five [33m 693[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mmissing-nine [33m 686[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mmissing-eleven [33m 708[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mrank-em [33m 945[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mpuck-detective (give up) [33m 723[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mpuck-detective (solve) [33m 709[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mguess-the-golfer [33m 669[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mchamp-or-not [33m 573[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mwhod-they-beat [33m 570[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22msilverware-sort [33m 572[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mjeopardy [33m 334[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mball-iq [33m 330[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mmystery-box [33m 326[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mnfl-career [33m 455[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mcareer-ladder [33m 965[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mtransfer-path [33m 380[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mgrade-transfer [33m 321[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mplayer-stock-market [33m 544[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m10 passed[39m[22m[90m (10)[39m
+[2m      Tests [22m [1m[32m215 passed[39m[22m[90m (215)[39m
+[2m   Start at [22m 05:19:42
+[2m   Duration [22m 33.68s[2m (transform 8.61s, setup 944ms, collect 17.73s, tests 59.06s, environment 5.98s, prepare 1.45s)[22m
+
