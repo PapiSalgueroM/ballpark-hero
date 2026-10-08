@@ -1,0 +1,13 @@
+# AN2 seams 3a and 3c (serial): the translated page walk with its five controls, the blocked storage walk with its two
+#!serve
+#!playwright
+#!serial
+translated-plain: ENGINES=chromium node scripts/playTranslatedPage.mjs
+translated-nolive: PLAY_TRANSLATED_CONTROL=nolive ENGINES=chromium node scripts/playTranslatedPage.mjs
+translated-notranslate: PLAY_TRANSLATED_CONTROL=notranslate ENGINES=chromium node scripts/playTranslatedPage.mjs
+translated-noguard: PLAY_TRANSLATED_CONTROL=noguard ENGINES=chromium node scripts/playTranslatedPage.mjs
+translated-undocopies: PLAY_TRANSLATED_CONTROL=undocopies ENGINES=chromium node scripts/playTranslatedPage.mjs
+translated-nospans: PLAY_TRANSLATED_CONTROL=nospans ENGINES=chromium node scripts/playTranslatedPage.mjs
+storage-main: PLAY_STORAGE_NATIVE=require node scripts/playStorageBlocked.mjs
+storage-open: PLAY_STORAGE_CONTROL=open node scripts/playStorageBlocked.mjs
+storage-raw: PLAY_STORAGE_NATIVE=require PLAY_STORAGE_CONTROL=raw node scripts/playStorageBlocked.mjs
