@@ -1,0 +1,6 @@
+#!build
+#!playwright
+play: ENGINES=chromium node scripts/playSeasonCentreMotion.mjs
+play-count: SEASON_MOTION_CONTROL=count ENGINES=chromium node scripts/playSeasonCentreMotion.mjs
+play-firstmount: SEASON_MOTION_CONTROL=firstmount ENGINES=chromium node scripts/playSeasonCentreMotion.mjs
+play-nosnap: SEASON_MOTION_CONTROL=nosnap ENGINES=chromium node scripts/playSeasonCentreMotion.mjs
