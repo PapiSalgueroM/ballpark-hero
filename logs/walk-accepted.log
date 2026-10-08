@@ -1,0 +1,10 @@
+playCollegeGridFirstTap, control accepted: section 6 must go red
+
+6) Fail closed in three worlds
+  FAIL: the judge file aborted: picking a true answer did not show the unverified toast; toasts: []
+  FAIL: the judge file aborted: "Guesses left" reads 14 after a pick nobody could check, expected 15
+  FAIL: the judge file aborted: 1 cell is correct after a pick nobody could check
+  FAIL: the judge file aborted: today's save changed after a pick nobody could check ([] to [["college-grid-daily-2026-10-08","{\"v\":1,\"date\":\"2026-10-08\",\"puzzleIndex\":32,\"guesses\":[{\"t\":\"ok\",\"cell)
+   the judge file aborted: NOT unverified, 14 left, save CHANGED, then not judged after release; the judge file answered 200 with index.html: unverified, 15 left, save untouched, then judged after release; the judge file answered with its stamp changed: unverified, 15 left, save untouched, then judged after release
+
+control "accepted": fired in section 6 as expected, the check works

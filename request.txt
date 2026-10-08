@@ -1,0 +1,9 @@
+# Round 1105 final head: the walk once more after its measured constant was filled in
+#!build
+#!playwright
+#!serial
+walk: node scripts/playCollegeGridFirstTap.mjs
+walk-accepted: CGFIRST_CONTROL=accepted node scripts/playCollegeGridFirstTap.mjs
+shipped: node scripts/simCollegeGridShipped.mjs
+page: node scripts/simCollegeGridPage.mjs
+norival: node scripts/simNoRivalNames.mjs

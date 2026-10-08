@@ -1,0 +1,6 @@
+build exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=0 29s | playCollegeGridFirstTap: green. The board is up before the key, the key is two requests and never the table, the search and the judge read memory with the network gone, a
+walk-accepted exit=0 26s | control "accepted": fired in section 6 as expected, the check works
+shipped exit=0 11s | simCollegeGridShipped: green. None of the thirteen ships, the two files are the key row for row and verdict for verdict, every board keeps its answers and its floor, the 
+page exit=0 1s | simCollegeGridPage: green. The page judges in memory, charges only a no, offers the key's names from memory, says only what the key holds, drops another board's save, loa
+norival exit=0 10s | No rival product names found. 0 findings.
