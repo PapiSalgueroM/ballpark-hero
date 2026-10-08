@@ -118,7 +118,10 @@ export const NBA_CAREER_SPORT: UsCareerSport<NbaCareerState, NbaSeasonLine> = {
   ringsOf: c => c.rings,
   ringWord: 'ring',
   ringsLabel: 'rings',
-  honours: c => [{ label: 'MVPs', n: c.mvps }, { label: 'All-NBA nods', n: c.allNbas }],
+  /* Round 1103: the engine picks All-Stars now, so the hub counts them. Without this row a player whose only
+     honour is an All-Star selection read "Empty" on the tile while the case behind it listed the selection.
+     A save from before the round has no count and adds nothing. */
+  honours: c => [{ label: 'MVPs', n: c.mvps }, { label: 'All-NBA nods', n: c.allNbas }, { label: 'All-Star nods', n: c.allStars ?? 0 }],
   roleBadge: c => (c.role === 'backup' ? '🪑 Second unit' : '⭐ Starting five'),
   careerSoFar: c =>
     `${countOf(c.rings, 'ring', 'rings')} · ${countOf(c.mvps, 'MVP', 'MVPs')} · ${c.allNbas} All-NBA · ${nbaCareerTotals(c).pts.toLocaleString()} career points`,
