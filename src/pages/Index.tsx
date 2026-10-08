@@ -83,6 +83,7 @@ export default function Index() {
   const accountId = user?.id ?? null;
   const canReadPersonal = !!accountId && profile?.user_id === accountId;
   const [searchQuery, setSearchQuery] = useState('');
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const [bestScores, setBestScores] = useState<Record<string, number>>({});
   const isSearching = searchQuery.trim().length > 0;
   const { paths: gamePicks, toggle: changeGamePick, storageFailed: picksStorageFailed } = useGamePicks();
@@ -123,9 +124,10 @@ export default function Index() {
   // The engine builds its index once on first call and caches it, so this is
   // scoring only, re-run when the query text changes and not before.
   const [engine, setEngine] = useState<SearchEngine | null>(null);
+  const [searchFailed, setSearchFailed] = useState(false);
   const warmSearch = () => {
-    if (engine) return;
-    loadSearchEngine().then(setEngine).catch(() => { enginePromise = null; });
+    if (engine || searchFailed) return;
+    loadSearchEngine().then(setEngine).catch(() => { enginePromise = null; setSearchFailed(true); });
   };
   const filteredGames = useMemo(
     () => (isSearching && engine ? engine.searchSite(searchQuery).map(r => r.game) : []),
@@ -285,6 +287,7 @@ export default function Index() {
             <div className="relative mt-3 md:mt-0 md:w-[340px] md:shrink-0">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
               <input
+                ref={searchInputRef}
                 type="text"
                 value={searchQuery}
                 onChange={e => { warmSearch(); setSearchQuery(e.target.value); }}
@@ -296,7 +299,7 @@ export default function Index() {
               />
               {isSearching && (
                 <button
-                  onClick={() => setSearchQuery('')}
+                  onClick={() => { setSearchQuery(''); searchInputRef.current?.focus({ preventScroll: true }); }}
                   className="absolute right-1.5 top-1/2 -translate-y-1/2 grid h-8 w-8 place-items-center rounded-lg text-muted-foreground hover:text-foreground transition-colors"
                   aria-label="Clear search"
                 >
@@ -315,8 +318,13 @@ export default function Index() {
             /* the few milliseconds before the engine lands on a first
                keystroke: hold the space, and never say "no games found"
                for a search that has not run yet */
-            !engine ? (
-              <div aria-busy="true" className="min-h-[120px]" />
+            !engine ? searchFailed ? (
+              <div role="alert" className="rounded-xl border border-border bg-card p-4 text-sm">
+                <p>Search couldn't load. Open the full search page to try again.</p>
+                <a href={`/search?q=${encodeURIComponent(searchQuery)}`} className="mt-2 inline-flex min-h-[44px] items-center font-semibold text-primary underline underline-offset-2">Open full search</a>
+              </div>
+            ) : (
+              <div role="status" aria-busy="true" className="min-h-[120px] text-sm text-muted-foreground">Loading games...</div>
             ) : filteredGames.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
                 {filteredGames.map(game => (
