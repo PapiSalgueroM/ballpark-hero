@@ -1,0 +1,17 @@
+base tree: b00b057d0c324594e089c9b4e65aaa78b6a833d5
+  PASS  1. the walk reached a qualified Champions League campaign: seed 20260914 after 110 steps, 12 distinct phases driven (attempts: 20260914:reached in 110)
+
+The card a player actually saw
+      ⭐ CHAMPIONS LEAGUE R16 LEAGUE PHASE 13TH OF 36 4-2-2, 14 pts · 8th had 16 pts, 24th had 9 All 8 games Level on points splits on goal difference, then goals scored. KNOCKOUTS Play-off L1 Napoli 1 - 2 Arsenal Play-off L2 Arsenal 0 - 
+  PASS  2. every two legged tie shows its aggregate on screen: 2 of 2 ties are two legged and every one prints its aggregate (PO 3-2 by extraTime, R16 1-1 by penalties)
+  PASS  3. both legs of a two legged tie are labelled: L1 and L2 present for all 2
+  PASS  4. no first leg claims a result: a first leg wins nothing, and none claims to
+
+The page survived
+  PASS  5. the error boundary never appeared and the root is not empty: root holds 17904 characters
+  FAIL  6. no console or page errors across the walk: Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED
+
+6 checks, 1 failed
+  - 6. no console or page errors across the walk: Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED
+base walk exit 1
+BASE WALK DONE
