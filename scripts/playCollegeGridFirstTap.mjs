@@ -235,7 +235,18 @@ async function open({ viewport = PHONE, hold = [], mode = {}, throttle = 0, late
     const cdp = await ctx.newCDPSession(page);
     await cdp.send('Emulation.setCPUThrottlingRate', { rate: throttle });
   }
-  await page.goto(`${ORIGIN}${ROUTE}`, { waitUntil: 'domcontentloaded', timeout: WAIT + holdDocumentMs });
+  /* One retry, as scripts/playGridCls.mjs does: on a busy machine a navigation can stall before the document
+     arrives. The counters start again with the second navigation, so a retry cannot be read as a second request. */
+  const go = () => page.goto(`${ORIGIN}${ROUTE}`, { waitUntil: 'domcontentloaded', timeout: WAIT + holdDocumentMs });
+  await go().catch(async () => {
+    world.retried = true;
+    world.keyRequests = { search: 0, judge: 0 };
+    world.keyDone = { search: 0, judge: 0 };
+    world.dbRequests = 0;
+    world.dbKeyRequests = 0;
+    world.requests = 0;
+    await go();
+  });
   if (lateCells) {
     /* Added after navigation: a style appended before parsing does not survive into the parsed document. */
     world.lateStyle = await page.addStyleTag({ content: 'button[data-grid-cell-status]{display:none !important;}' });
