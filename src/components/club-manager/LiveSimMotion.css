@@ -1,6 +1,87 @@
-.cm-pitch-player{display:block;width:24px;height:32px;overflow:visible;pointer-events:none}
-.cm-live-net{position:absolute;left:38%;right:38%;height:2.5%;border:1px solid #e1edf1b3;background-image:linear-gradient(#d8e9ed44 1px,transparent 1px),linear-gradient(90deg,#d8e9ed44 1px,transparent 1px);background-size:5px 5px;pointer-events:none}
-.cm-live-net--top{top:0;transform-origin:center top}
-.cm-live-net--bottom{bottom:0;transform-origin:center bottom}
-.cm-live-ball{position:absolute;width:7px;height:7px;border-radius:50%;background:radial-gradient(circle at 60% 35%,#fff 0 27%,#17394c 29% 42%,#f7efde 44%);box-shadow:0 2px 2px #06242b80;transform:translate(-50%,-50%);pointer-events:none;z-index:10}
-@media(prefers-reduced-motion:reduce){[data-cm-live-pitch] *,[data-cm-live-pitch] *::before,[data-cm-live-pitch] *::after{animation:none!important;transition:none!important}}
+/* Round 1101: the pitch's own styles (the figure, the nets, the ball, the reduced motion rule) moved to
+   src/components/pitch-motion/pitchMotion.css with the part. This file keeps only what belongs to Club
+   Manager's live match viewer. */
+
+/* Match mode. A period being played is its own screen: one box the size of the window, drawn in place
+   (no portal), so the page under it never scrolls and the pitch gets every pixel the rows around it
+   leave. One DOM for every width: only this grid changes at 768 px. Nothing in here animates: panels
+   appear whole, and everything that moves on the pitch is a function of the match clock. */
+.cm-stagebox{position:fixed;inset:0;height:100vh;height:100dvh;z-index:40;overflow:hidden;box-sizing:border-box;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+.cm-stage{position:relative;display:flex;flex-direction:column;width:100%;height:100%;min-height:0}
+.cm-stage-main{display:flex;flex-direction:column;flex:1 1 0%;min-width:0;min-height:0}
+
+/* The strip. A phone gets two rows (the buttons and the clock, then club, score, club): at 320 wide one
+   row leaves about 56 px for two club names. */
+.cm-strip{display:flex;flex-wrap:wrap;align-items:center;gap:2px 4px;padding:2px 4px;flex:0 0 auto}
+/* The competition's name is never cut off with dots: it takes up to three short lines beside the buttons. */
+.cm-strip-comp{flex:1 1 0%;min-width:0;padding:0 4px;line-height:13px;max-height:39px;overflow:hidden;overflow-wrap:anywhere;text-wrap:balance}
+.cm-strip-score{order:5;flex:0 0 100%;display:flex;align-items:center;justify-content:center;gap:10px;min-width:0;height:32px}
+.cm-strip-leg{order:6;flex:0 0 100%;line-height:16px}
+
+/* The pitch takes what is left. On a phone it fills the box edge to edge, and it is never drawn more than
+   one and three quarter times as tall as it is wide (a narrow column on a tall screen would stretch it). */
+/* A drag on the pitch is never a scroll of the page under the stage (on a phone that would move the address
+   bar and resize the stage mid match). */
+.cm-pitchbox{position:relative;flex:1 1 0%;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;container-type:size;touch-action:none}
+.cm-pitchbox>.pm-surface{width:100%;height:100%;max-height:calc(100cqw * 1.75)}
+/* A name under a figure is never wider than 12 of the pitch's 100 across, which is how far apart the label
+   rule (labelsAbove) keeps two names on one line. 52 px is the most it ever needs. */
+.cm-dot-label{max-width:52px;max-width:min(52px,12cqw)}
+
+.cm-statline{display:flex;align-items:center;justify-content:space-around;gap:8px;height:22px;flex:0 0 auto;padding:0 4px;white-space:nowrap;overflow:hidden}
+.cm-eventline{height:24px;line-height:24px;flex:0 0 auto;padding:0 6px}
+
+/* The controls: equal cells with a 2 px gap and no side padding, so each is 44 px wide at 320. */
+.cm-controls{display:flex;gap:2px;height:48px;padding:2px 0;flex:0 0 auto}
+.cm-controls>button{flex:1 1 0%;min-width:0;height:44px}
+
+/* The side. On a phone it is a sheet over the foot of the pitch, above the controls, with its own
+   scroll, and it is not there at all while no panel is open. */
+.cm-stage-side{position:absolute;left:0;right:0;bottom:48px;z-index:30;display:flex;flex-direction:column;gap:8px;min-height:0;max-height:70%;padding:10px;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;border-top:1px solid hsl(var(--border));border-radius:16px 16px 0 0;background:hsl(var(--background));box-shadow:0 -8px 24px #0006}
+.cm-stage-side[data-cm-live-side="none"]{display:none}
+.cm-side-log{display:none}
+/* The full stats are one element that is always in the markup; on a phone they show while their panel is open. */
+.cm-stage-side:not([data-cm-live-side="stats"]) [data-cm-live-stats]{display:none}
+.cm-stage-side [data-cm-live-stats] span{font-size:11px;line-height:1.3}
+
+/* The two column layout needs height as well as width: a window under 500 px tall (a phone on its side)
+   gets its own layout further down, whatever its width. */
+@media(min-width:768px) and (min-height:500px){
+  .cm-stage{display:grid;grid-template-columns:minmax(0,1fr) 360px;grid-template-rows:minmax(0,1fr);gap:12px;max-width:1120px;margin:0 auto;padding:12px;box-sizing:border-box}
+  .cm-stage-main{gap:6px}
+  .cm-strip{gap:4px 6px;padding:0}
+  .cm-strip-stats{display:none}
+  .cm-pitchbox>.pm-surface{border-radius:12px}
+  .cm-statline{display:none}
+  .cm-controls{gap:6px;height:56px;padding:6px 0}
+  /* The side is a column that is always there: the match line by line and the stats, or the open panel
+     in their place. */
+  .cm-stage-side{position:static;max-height:none;padding:0;border-top:0;border-radius:0;box-shadow:none;background:none}
+  .cm-stage-side[data-cm-live-side="none"]{display:flex}
+  .cm-stage-side[data-cm-live-side="none"] .cm-side-log,.cm-stage-side[data-cm-live-side="stats"] .cm-side-log{display:block}
+  .cm-stage-side[data-cm-live-side="none"] [data-cm-live-stats]{display:block}
+}
+/* From 1024 px the column beside the panel is wide enough for the strip in one row (at 768 it is 372 px,
+   a phone's width, and keeps the phone's two rows) and for the pitch at its own 3 by 4. */
+@media(min-width:1024px) and (min-height:500px){
+  .cm-strip{min-height:56px}
+  .cm-strip-comp{flex:0 1 auto;max-width:200px;padding:0}
+  .cm-strip-score{order:0;flex:1 1 0%;height:auto}
+  /* A browser without container units keeps the fill. */
+  .cm-pitchbox>.pm-surface{width:min(100cqw,calc(100cqh * 3 / 4));height:min(100cqh,calc(100cqw * 4 / 3));max-height:none}
+}
+/* A phone on its side, or any window wider than it is tall and under 500 px tall. An upright pitch squashed
+   into that height is unreadable, so the pitch is drawn on its side (LiveSimScreen asks the same question of
+   the window and hands the surface its landscape orientation) at its own 4 by 3 and the full height, with
+   the strip, the stats line, the commentary line and the controls in a 320 px column beside it: the phone's
+   own rows, at the width they were drawn for. The panel is a sheet over that column. */
+@media(orientation:landscape) and (max-height:499px){
+  .cm-stage-main{display:grid;grid-template-columns:minmax(0,1fr) 320px;grid-template-rows:auto auto auto minmax(0,1fr) auto;column-gap:6px}
+  .cm-pitchbox{grid-column:1;grid-row:1 / -1}
+  .cm-strip{grid-column:2;grid-row:1}
+  .cm-statline{grid-column:2;grid-row:2}
+  .cm-eventline{grid-column:2;grid-row:3}
+  .cm-controls{grid-column:2;grid-row:5}
+  .cm-pitchbox>.pm-surface{width:min(100cqw,calc(100cqh * 4 / 3));height:min(100cqh,calc(100cqw * 3 / 4));max-height:none}
+  .cm-stage-side{left:auto;width:320px;max-height:calc(100% - 52px)}
+}
