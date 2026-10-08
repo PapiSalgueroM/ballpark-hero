@@ -1,0 +1,4 @@
+#!playwright
+#!serial
+mut: node .rc/x/mut.mjs
+hmut: node .rc/x/hmut.mjs
