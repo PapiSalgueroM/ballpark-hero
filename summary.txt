@@ -1,0 +1,10 @@
+vitest-round exit=0 22s |    Duration  20.66s (transform 4.75s, setup 922ms, collect 10.42s, tests 21.23s, environment 4.98s, prepare 1.37s)
+digest exit=0 79s |    Duration  77.31s (transform 2.14s, setup 178ms, collect 2.77s, tests 72.65s, environment 620ms, prepare 417ms)
+vitest-wide exit=0 68s |    Duration  66.59s (transform 12.64s, setup 1.86s, collect 33.08s, tests 138.17s, environment 13.13s, prepare 3.34s)
+truth exit=0 17s | simNflTruth: green. Seasons are their real length, awards survive a 16 game schedule, rookies are paid their slot, kickers go in round four or later, sacks come in halves
+simCareerParity exit=0 8s | simCareerParity: green. One money app, one fan rule, one rival shape, one badge case, in all five careers.
+tsc exit=0 110s | 
+bank exit=0 37s | simUsCareerBank: green. No call leaves a bank below zero in any of the four careers, savings pay a bill before anything is written off, and a reload never adds money.
+vitest-season exit=0 4s |    Duration  3.62s (transform 1.32s, setup 91ms, collect 1.79s, tests 606ms, environment 487ms, prepare 222ms)
+simUsBoardParity exit=0 50s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+simUsCareerDeckC exit=0 56s | simUsCareerDeckC: all checks passed
