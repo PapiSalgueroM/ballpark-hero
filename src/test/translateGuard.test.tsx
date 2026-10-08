@@ -33,10 +33,25 @@
  *  8. An untranslated page triggers nothing: every counter stays where it was.
  *  9. The control: a second window with layer two switched off gets the same
  *     calls and shows the frozen number and the stale word again.
+ *
+ * After two reviews (the fix round) it also holds, each of them red when the
+ * line of the module it is about is taken out:
+ * 10. A wrapper that already stands for one string is not claimed by the next
+ *     string leaving in the same batch.
+ * 11. The translator undoes itself (undoTranslation, shaped as its own "show
+ *     original" was measured): a string layer two had refreshed still follows
+ *     React afterwards, a string nobody rewrote is React's own again, a second
+ *     translation and a second undo lose nothing, and a stray stand in is nobody's.
+ * 12. A stand in the translator did not take is handed over again after 1, 2
+ *     and 4 seconds and then left alone, never while the line keeps
+ *     changing and never after an undo. Those tests own the clock.
+ * 13. A bare string React moves shows once, where React put it.
+ * 14. A writer that comes round with the same words for a stand in is not
+ *     handed a new node again.
  */
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { Component, Fragment, useState, type ReactNode } from 'react';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import { installTranslateGuard } from '@/lib/translateGuard';
 
 /** What a page translator does: every text node under root becomes font > font > new text. */
@@ -775,14 +790,14 @@ describe('layer two: a string rewritten while the translator was working on it',
  * through a whole page it takes no notice of text that arrives, so strings React had rewritten before the
  * first translation, which rule four hands back the moment they are taken, sat there in the first
  * language until something else on the page changed. Layer two now looks again and hands them over once
- * more. These tests own the clock: the waits are 400 ms, 1.2 s and 3.6 s, and it gives up after 10.8 s more.
+ * more. These tests own the clock: the waits are 1 s, 2 s and 4 s, and it gives up 8 s after that.
  */
 describe('layer two: a stand in the translator did not take is handed over again', () => {
   const later = (ms: number) => vi.advanceTimersByTimeAsync(ms);
   /** A string rewritten on the page before any translator, then taken by one that is not looking any more. */
+  // whatever earlier tests still owed is settled on the real clock first, so these start clean
+  beforeAll(() => new Promise<void>(resolve => { setTimeout(resolve, 1200); }));
   const missed = async () => {
-    // whatever earlier tests still owed is settled on the real clock first, so this test starts clean
-    await new Promise<void>(resolve => setTimeout(resolve, 600));
     const p = document.body.appendChild(document.createElement('p'));
     const words = p.appendChild(document.createTextNode('Balance: 100'));
     words.nodeValue = 'Balance: 200';
@@ -802,7 +817,7 @@ describe('layer two: a stand in the translator did not take is handed over again
   it('once the translator listens again the string ends up translated, and that is the end of it', async () => {
     const { p } = await missed();
     const first = p.firstChild;
-    await later(390);
+    await later(990);
     expect(p.firstChild).toBe(first); // not before its time
     await later(20);
     const second = p.firstChild as Text;
@@ -849,7 +864,7 @@ describe('layer two: a stand in the translator did not take is handed over again
 
   it('after the translator has undone itself nothing is handed over again', async () => {
     const { p, words } = await missed();
-    await later(450); // handed over once more
+    await later(1050); // handed over once more
     translateReal(p); // taken this time
     await later(1);
     undoTranslation(p); // show original

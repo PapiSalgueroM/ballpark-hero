@@ -24,8 +24,13 @@
  * (the header said Age 16 when the player was 20).
  *
  * LAYER TWO (Round 1141) knows which copy stands for which text node and puts
- * React's intent through to it. What it is built on was measured on the real
- * translator, in Portuguese, Japanese and German, not assumed:
+ * React's intent through to it. What it is built on was measured, not assumed.
+ * WHAT WAS MEASURED, so nobody reads more into it: Google's website translate
+ * element (translate_a/element.js), in headless Chromium, on a plain page and on
+ * the built site, in Portuguese, Japanese and German, 2026-10-08. That is the
+ * library Chrome's own Translate button drives, but the button itself was never
+ * pressed (a headless browser has none), and no other browser's translator was
+ * looked at. "The translator" below means that one.
  *  - The swap is an insert and a remove. A <font> goes in right before the text
  *    node, then the text node leaves, and the record of that removal names the
  *    <font> as its previous sibling. Every text node gets one wrapper of its own,
@@ -48,6 +53,21 @@
  *    So a stand in is never written, only replaced, and a text node that was
  *    rewritten while it was on the page is refreshed once more the moment the
  *    translator takes it.
+ *  - While it works through a whole page (the first translation, or "translate"
+ *    pressed again) it takes no notice of text that arrives. A stand in put down
+ *    in that moment stayed in the first language until something else on the
+ *    page changed. So what was handed back is looked at again a little later and
+ *    handed over once more if it is still standing there (after 1 s, 2 s, 4 s,
+ *    then it is left alone), never while the line keeps changing.
+ *  - It can undo itself: "show original", and by its own source also a failed
+ *    translation and the page going into the back and forward cache. Its own
+ *    button was pressed on the built site: every wrapper leaves and the very node
+ *    it took comes back where the wrapper stood (put into the wrapper, its saved
+ *    words written to it, taken out, put in front, the wrapper removed), and
+ *    "translate" after that takes the same nodes again. For a string layer two
+ *    had refreshed that node is a stand in, so who each stand in was made for is
+ *    kept for good and a node that comes back is taken up again. Before that fix
+ *    the page stopped following React after an undo, where layer one alone healed.
  * Which gives one rule: whenever React removes, inserts before, or rewrites a text
  * node the translator took, or the translator takes a node that was rewritten
  * under it, every translated string directly inside that same element is handed
@@ -67,18 +87,36 @@
  * burst of calls alone about a tenth of a millionth of a second a rewrite
  * (scripts/playTranslatedPage.mjs, COST=1, has the numbers).
  *
- * What it does not mend: a wrapper the translator shares between an element's own
- * strings and a child element's (bold words in the middle of a sentence) is only
- * refreshed on the outer side, and a text node React moves, as opposed to removes
- * or rewrites, is not followed (none was seen on the forty walks of the harness).
- * Not measured: the translator undoing itself ("show original").
+ * A bare string React MOVES (a keyed list of plain strings in a new order) is put
+ * in again with the node React holds, which lands on the page beside its own
+ * copy. The observer sees that, drops the copy and puts a stand in where React
+ * placed the string.
+ *
+ * What it does not mend, said plainly:
+ *  - A wrapper the translator shares between an element's own strings and a
+ *    child element's (bold words in the middle of a sentence) is only refreshed
+ *    on the outer side.
+ *  - A translator that does not work with <font> wrappers gets nothing from
+ *    layer two. A published description of Firefox's page translation says it
+ *    uses none, and then only layer one stands. Edge and Safari were not looked at.
+ *  - A translator that MERGES neighbouring text nodes into one before it wraps
+ *    them: two published write ups say Chrome's own does. The measured one does
+ *    not (one wrapper for each node). If one did, the second node would leave
+ *    with no wrapper of its own, nothing would be on record for it, and a number
+ *    beside a label would freeze there exactly as under layer one. One look in
+ *    real Chrome is still owed.
+ *  - A line that changes about once a second goes back to the translator on
+ *    every change (about one request a tick). On a plain page it then read
+ *    translated nine tenths of the time. On the built Stadium Tycoon a reviewer
+ *    saw such a line in the first language, with the right number, at nine looks
+ *    of nine. The right number in the wrong language is what is left there.
  *
  * Switches, both read once, before the app boots, and both there for
  * scripts/playTranslatedPage.mjs:
  *   window.__DUKB_NO_TRANSLATE_GUARD__  nothing is installed (the crash is back)
  *   window.__DUKB_NO_TRANSLATE_LIVE__   layer one only (the stale word is back)
  * window.__dukbTranslateStats counts what layer two did. On a page nobody
- * translated every number in it stays at zero.
+ * translated every number in it stays at zero, and no timer is ever set.
  */
 
 export interface TranslateStats {
@@ -241,7 +279,7 @@ function makeLive(win: GuardWindow, native: Natives): Live | null {
    * pushes the look further out, so a line that keeps changing is never interrupted, and after the
    * translator has undone itself nothing is owed at all.
    */
-  const WAITS = [400, 1200, 3600, 10800];
+  const WAITS = [1000, 2000, 4000, 8000];
   const owed = new Map<Node, { tries: number; at: number }>();
   let timer = 0;
   /** The last thing the translator was seen to do was give its nodes back: nobody is there to take a stand in. */
