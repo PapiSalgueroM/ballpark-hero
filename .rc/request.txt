@@ -1,0 +1,54 @@
+# AN2 fixer FINAL a: the type gate, the whole vitest suite, the static harnesses my fixes touch with every control, and the fences
+#!build
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000
+stale: node scripts/simStaleChunk.mjs
+stale-noprerender: SIM_STALE_CHUNK_CONTROL=noprerender node scripts/simStaleChunk.mjs
+stale-nooffline: SIM_STALE_CHUNK_CONTROL=nooffline node scripts/simStaleChunk.mjs
+stale-noguard: SIM_STALE_CHUNK_CONTROL=noguard node scripts/simStaleChunk.mjs
+stale-nolistener: SIM_STALE_CHUNK_CONTROL=nolistener node scripts/simStaleChunk.mjs
+stale-bogus: SIM_STALE_CHUNK_CONTROL=bogus node scripts/simStaleChunk.mjs
+ssw: node scripts/simStorageWrites.mjs
+ssw-unguard: SIM_STORAGE_WRITES_CONTROL=unguard node scripts/simStorageWrites.mjs
+ssw-order: SIM_STORAGE_WRITES_CONTROL=order node scripts/simStorageWrites.mjs
+ssw-client: SIM_STORAGE_WRITES_CONTROL=client node scripts/simStorageWrites.mjs
+ssw-caller: SIM_STORAGE_WRITES_CONTROL=caller node scripts/simStorageWrites.mjs
+ssw-nocatch: SIM_STORAGE_WRITES_CONTROL=nocatch node scripts/simStorageWrites.mjs
+ssw-probe: SIM_STORAGE_WRITES_CONTROL=probe node scripts/simStorageWrites.mjs
+uscareer-retry: env -u CI -u GITHUB_ACTIONS node scripts/simUsCareerSaveRetry.mjs
+uscareer-retry-ci: node scripts/simUsCareerSaveRetry.mjs
+uscareer-confirm: node scripts/simUsCareerActionConfirm.mjs
+uscareer-practice: node scripts/simUsCareerPractice.mjs
+uscareer-prospect: node scripts/simUsCareerProspect.mjs
+uscareer-recovery: node scripts/simUsCareerRecovery.mjs
+uscareer-summer: node scripts/simUsCareerSummer.mjs
+uscareer-deckc: node scripts/simUsCareerDeckC.mjs
+uscareer-defects: node scripts/simUsCareerDefects.mjs
+uscareer-benefits: node scripts/simUsCareerAnnualBenefits.mjs
+uscareer-weight: node scripts/simUsCareerWeight.mjs
+usboardparity: node scripts/simUsBoardParity.mjs
+usboardparity-label: US_BOARD_PARITY_CONTROL=label node scripts/simUsBoardParity.mjs
+usboardparity-fixture: US_BOARD_PARITY_CONTROL=fixture node scripts/simUsBoardParity.mjs
+ussc: node scripts/simUsSeasonCentre.mjs
+ussc-static: SEEDSET=0 US_SEASON_CONTROL=static node scripts/simUsSeasonCentre.mjs
+nodouble: node scripts/simNoDoubleRecord.mjs
+completion: node scripts/simCompletionOnce.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simAdsense: node scripts/simAdsense.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simSingleFooter: node scripts/simSingleFooter.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simResultPillComparison: node scripts/simResultPillComparison.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simHomeCopy: node scripts/simHomeCopy.mjs
+simMissingElevenSources: node scripts/simMissingElevenSources.mjs
+simNbaLuxuryTax: node scripts/simNbaLuxuryTax.mjs
+simNbaSeasonStats: node scripts/simNbaSeasonStats.mjs
+simPerfectSeasonOdds: node scripts/simPerfectSeasonOdds.mjs
