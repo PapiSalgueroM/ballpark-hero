@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { CAREER_LEAGUE_SEASONS } from "../data/careerLeagueSeasons";
 import { divisionMove, drawLeagueFinish, dugoutTableWords, eliteInYear, finishBand, finishBandFor, finishZone, ladderBand, leagueSizeFor, listLeague, leagueWithArticle, LIST_SEASON, managerLeagueField, MANAGER_FIELD, ordinal, readLeagueFinish, seedKeyClub } from "./soccerCareerLeague";
-import { ODD_FORMATS, oddFormatFor } from "../data/leagueFormat";
+import { ODD_FORMATS, oddFormatFor } from "../data/leagueOddFormats";
 
 const ELITE = ["Bayern Munich", "PSG", "Man City", "Real Madrid", "Barcelona", "Liverpool"];
 const base = { league: "La Liga", year: 2020, tier: 1, elite: false, rating: 7, leagueTitle: false, seedKey: "k" };
@@ -377,6 +377,9 @@ describe("the leagues that are not one plain table (Round 1100)", () => {
   it("gives the dugout the league's real number of rows and never a verified size", () => {
     expect(oddFormatFor("Scottish Premiership", 2030)).toMatchObject({ clubs: 12, games: 33, shape: "split" });
     expect(oddFormatFor("Scottish Premiership", 2025)).toBeNull();
+    expect(oddFormatFor("MLS", 2030)).toMatchObject({ clubs: 30, games: 34, shape: "conferences" });
+    expect(oddFormatFor("Austrian Bundesliga", 2030)).toMatchObject({ clubs: 12, games: 22, shape: "split" });
+    expect(oddFormatFor("Danish Superliga", 2030)).toBeNull();
     expect(oddFormatFor("Eredivisie", 2030)).toBeNull();
     const f = managerLeagueField({ clubs: scots, club: "SC 0", year: 2030 }, seq(0.5));
     expect([f.league, f.size, f.sizeVerified, f.named.length]).toEqual(["Scottish Premiership", 12, false, 11]);

@@ -19,7 +19,7 @@ import { adjustClubsForYear } from "./careerEras";
 import { SC_CLUB_CANON } from "../data/clubRivalries";
 import { CAREER_LEAGUE_SEASONS } from "../data/careerLeagueSeasons";
 import { CAREER_LEAGUE_LADDER } from "../data/soccerCareerClubPool";
-import { ODD_FORMATS, oddFormatFor } from "../data/leagueFormat";
+import { ODD_FORMATS, oddFormatFor } from "../data/leagueOddFormats";
 /* the harnesses that bundle this module read the odd ledger through it */
 export { oddFormatFor };
 import type { ClubData } from "./soccerCareerEngine";

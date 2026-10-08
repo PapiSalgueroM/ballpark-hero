@@ -49,6 +49,7 @@ process.on('exit', () => { try { fs.rmSync(tmpDir, { recursive: true, force: tru
 const EXTRA = {
   league: 'lib/soccerCareerLeague.ts',
   format: 'data/leagueFormat.ts',
+  odd: 'data/leagueOddFormats.ts',
   derby: 'lib/soccerCareerDerby.ts',
   season: 'lib/season/soccer.ts',
   rivalries: 'data/clubRivalries.ts',
@@ -601,7 +602,7 @@ head('A', 'LEDGERS: every league the pool reads is sized, odd or waiting with it
 {
   const FMT = mod.format;
   const DERBY = mod.derby;
-  const ODD = FMT.ODD_FORMATS ?? {};
+  const ODD = mod.odd.ODD_FORMATS;
   const hosts = list => new Set((list ?? []).map(x => { try { return new URL(x.url).hostname.replace(/^www\./, ''); } catch { return ''; } }));
   const dated = list => (list ?? []).every(x => /^\d{4}-\d{2}-\d{2}$/.test(x.read ?? '') && typeof x.says === 'string' && x.says.length > 0);
   const YEARS = [2026, 2030, 2045];
@@ -706,7 +707,7 @@ head('E', 'OLD SAVES: seven saves recorded on main read the same, and play on');
     }
     if (save.kind === 'manager') {
       const rows = s.managerState.seasonResults.slice(save.state.managerState.seasonResults.length);
-      const odd = mod.format.oddFormatFor ? mod.format.oddFormatFor(save.league, 2032) : null;
+      const odd = mod.odd.oddFormatFor(save.league, 2032);
       const real = LG.leagueSizeFor(save.league, 2032, true);
       for (const r of rows.filter(x => x.league === save.league)) {
         if (real !== null) ok(r.sizeVerified === true && r.leagueSize === real, `${save.id}: a new ${save.league} season of ${r.leagueSize} rows, the league's size is ${real}`);
@@ -809,7 +810,7 @@ const WORLD_FLOOR = { finish: 0.665, table: 0.632, named: 0.632 };
 const NATION_FLOOR = { Netherlands: 0.751, Portugal: 0.723, Turkey: 0.735, Belgium: 0.669, Brazil: 0.759, 'Saudi Arabia': 0.769 };
 const RUN_WORLD = process.env.WORLD !== '0' && (!CONTROL || CONTROLS[CONTROL].world === true);
 if (RUN_WORLD) {
-  const ODD = mod.format.ODD_FORMATS ?? {};
+  const ODD = mod.odd.ODD_FORMATS;
   const base = readJson(F.baseline);
   const shape = { five: tally(), plain: tally(), odd: tally(), waiting: tally(), other: tally() };
   const d1 = { sized: 0, tables: 0, bad: [] };
@@ -898,12 +899,12 @@ if (RUN_WORLD) {
    got their real size (critic 17: read the 10 and 12 row leagues here). */
 if (!CONTROL) {
   head('D3', 'DUGOUT: a sized league prints its position, an odd league its real number of rows and no number');
-  const ODD = mod.format.ODD_FORMATS ?? {};
+  const ODD = mod.odd.ODD_FORMATS;
   const seen = { sized: 0, odd: 0, other: 0 };
   const rates = dugoutRates(row => {
     if (!row.league) { seen.other += 1; return; }
     const size = LG.leagueSizeFor(row.league, 2032, true);
-    const odd = mod.format.oddFormatFor(row.league, 2032);
+    const odd = mod.odd.oddFormatFor(row.league, 2032);
     if (size !== null) {
       seen.sized += 1;
       ok(row.sizeVerified === true && row.leagueSize === size && row.result.includes(` of ${size}`), `${row.league}: a dugout season of ${row.leagueSize} rows${row.sizeVerified ? ' (verified)' : ''} printing "${row.result.slice(0, 60)}", the league has ${size}`);

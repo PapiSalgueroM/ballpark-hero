@@ -8,8 +8,11 @@
  * league from 2026-27:
  *   1. the Season Centre opens and the page does not move (window.scrollY);
  *   2. the kick off card says 18 clubs and 34 matchdays;
- *   3. the table has 18 rows and none reads "another club";
- *   4. the season review prints a position "of 18";
+ *   3. the table has 18 rows and none reads "another club" (a phone shows
+ *      the compact table, a window of rows around his own: none unnamed);
+ *   4. the season review prints a position "of 18" ("7th of 18", or "top
+ *      of 18" in a title season; at least one of the four seasons walked
+ *      must be an ordinary finish);
  *   5. the Season Summary card prints the same position "of 18";
  *   6. no sideways scroll, before and after, and no page error.
  * At 390 by 844 and 1280 by 900, with motion on and reduced. The live database
@@ -98,10 +101,11 @@ async function open(width, height, reduced, seed) {
   return { ctx, page, errors };
 }
 
-async function walk(width, height, reduced) {
+const ORDINALS = [];
+async function walk(width, height, reduced, first) {
   const tag = `${width}x${height}${reduced ? ' reduced motion' : ''}:`;
   /* a season cut short by a severe injury has no table by design: take the next seed */
-  for (const seed of [1100, 1101, 1102, 1103]) {
+  for (const seed of [first, first + 1, first + 2, first + 3]) {
     const { ctx, page, errors } = await open(width, height, reduced, seed);
     const y0 = await page.evaluate(() => window.scrollY);
     const hub = await page.$('[data-week-by-week]');
@@ -109,7 +113,7 @@ async function walk(width, height, reduced) {
     await page.click('[data-week-by-week]');
     const opened = await page.waitForSelector('[data-kickoff]', { timeout: 30000 }).then(() => true).catch(() => false);
     const why = opened ? await page.evaluate(() => document.querySelector('[data-results-why]')?.textContent.trim() ?? null) : null;
-    if (opened && why && /cut short/.test(why) && seed !== 1103) { console.log(`   ${tag} seed ${seed}: a season cut short, next seed`); await ctx.close(); continue; }
+    if (opened && why && /cut short/.test(why) && seed !== first + 3) { console.log(`   ${tag} seed ${seed}: a season cut short, next seed`); await ctx.close(); continue; }
     const y1 = await page.evaluate(() => window.scrollY);
     check(opened && y1 === y0, '1', `${tag} the Season Centre opens and the page does not move (scrollY ${y0} then ${y1})`);
     const at = await page.evaluate(() => ({
@@ -121,7 +125,9 @@ async function walk(width, height, reduced) {
       sw: document.documentElement.scrollWidth,
     }));
     check(!!at.frame && at.frame.includes(`${SIZE} clubs`) && at.frame.includes(`${MATCHDAYS} matchdays`), '2', `${tag} the kick off card says ${SIZE} clubs and ${MATCHDAYS} matchdays ("${at.frame ?? at.why ?? 'nothing'}")`);
-    check(at.rows === SIZE && at.unnamed === 0, '3', `${tag} the table has ${SIZE} rows and none reads "another club" (${at.rows} rows, ${at.unnamed} unnamed; first ${at.names.join(', ')})`);
+    /* a phone shows the compact table, a window of rows around his own; the whole table is the desktop's */
+    const whole = width >= 768;
+    check((whole ? at.rows === SIZE : at.rows >= 3) && at.unnamed === 0, '3', `${tag} ${whole ? `the table has ${SIZE} rows` : 'the compact table shows its rows'} and none reads "another club" (${at.rows} rows, ${at.unnamed} unnamed; first ${at.names.join(', ')})`);
     check(at.sw <= width + 1, '6', `${tag} no sideways scroll on the kick off card (${at.sw})`);
     fs.mkdirSync(SHOTS, { recursive: true });
     await page.waitForTimeout(700);
@@ -131,6 +137,7 @@ async function walk(width, height, reduced) {
     const finish = await page.evaluate(() => document.querySelector('[data-review-finish]')?.textContent.trim() ?? null);
     const pos = finish ? (/(\d+)(?:st|nd|rd|th) of (\d+)/.exec(finish) ?? /top of (\d+)/.exec(finish)) : null;
     check(!!pos && Number(pos[pos.length - 1]) === SIZE, '4', `${tag} the season review prints a position of ${SIZE} ("${finish ?? 'nothing'}")`);
+    if (pos && pos.length === 3) ORDINALS.push(`${pos[0]} at ${width}`);
     await page.screenshot({ path: path.join(SHOTS, `league-world-${want}-${width}${reduced ? '-reduced' : ''}-review.png`) });
     await page.click('[data-centre-exit]').catch(() => {});
     await page.waitForTimeout(700);
@@ -143,7 +150,9 @@ async function walk(width, height, reduced) {
       card = await page.evaluate(() => {
         const h = [...document.querySelectorAll('h3')].find(x => x.textContent.trim() === 'Season Summary');
         const box = h ? h.closest('div.relative') ?? h.parentElement : null;
-        return box ? box.textContent.replace(/\s+/g, ' ').trim() : null;
+        /* the finish line is its own paragraph on the card (playSeasonCentre reads it the same way) */
+        const line = box ? [...box.querySelectorAll('p')].map(p => p.textContent.replace(/\s+/g, ' ').trim()).find(t => /\d+(?:st|nd|rd|th) of \d+|top of \d+/.test(t)) : null;
+        return box ? (line ?? 'no position on the card') : null;
       });
       if (!card && !(await clickText(page, 'Continue to Season Summary'))) await page.waitForTimeout(500);
     }
@@ -157,7 +166,10 @@ async function walk(width, height, reduced) {
 }
 
 try {
-  for (const [w, h] of [[390, 844], [1280, 900]]) for (const reduced of [false, true]) await walk(w, h, reduced);
+  /* four different seasons, so the walk meets a title ("top of 18") and an ordinary finish ("7th of 18") */
+  let n = 0;
+  for (const [w, h] of [[390, 844], [1280, 900]]) for (const reduced of [false, true]) { await walk(w, h, reduced, 1100 + 101 * n); n += 1; }
+  if (!CONTROL) check(ORDINALS.length > 0, '4', `at least one of the four seasons ended with an ordinal position of ${SIZE} (${ORDINALS.join('; ') || 'none: every season was a title'})`);
 } catch (e) {
   check(false, '0', `the walk threw: ${String(e && e.stack ? e.stack : e).slice(0, 300)}`);
 }

@@ -2732,6 +2732,11 @@
           "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/scoreboard?dates=YYYYMMDD",
           "read": "2026-10-07",
           "says": "ESPN's scoreboard feed read for every day of the season calendar (69 dates, 2026-02-21 to 2026-11-08): 511 fixtures, 30 clubs, 34 games a club, 91 pairs meet 1 time, 210 pairs meet 2 times"
+        },
+        {
+          "url": "https://www.mlssoccer.com/news/mls-announces-2026-regular-season-schedule",
+          "read": "2026-10-08",
+          "says": "the league, dated 2025-11-20: \"each team play 34 games, 17 home and 17 on the road\"; \"Teams will play conference opponents twice (28 games), once at home and once away\" and \"six different cross-conference opponents (six games)\""
         }
       ]
     },
@@ -3056,6 +3061,11 @@
           "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aut.1/scoreboard?dates=YYYYMMDD",
           "read": "2026-10-07",
           "says": "ESPN's scoreboard feed read for every day of the season calendar (53 dates, 2026-07-31 to 2027-02-27): 132 fixtures, 12 clubs, 22 games a club, 66 pairs meet 2 times"
+        },
+        {
+          "url": "https://www.flashscore.de/news/bundesliga-veroffentlicht-spielplan-2026-27-diese-6-kracher-warten-zum-saisonstart/8t4uVYnD/",
+          "read": "2026-10-08",
+          "says": "on the 2026/27 fixture list: \"die zwölf Bundesligisten in 22 Runden\" play \"um die Qualifikation für die Meister- beziehungsweise Qualifikationsgruppe\" (twelve clubs, 22 rounds, then a champions group and a qualification group)"
         }
       ]
     },
