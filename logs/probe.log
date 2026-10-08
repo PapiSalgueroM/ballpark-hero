@@ -1,0 +1,4 @@
+{"seasons":880,"open":662,"locked":218,"openSame":660,"openDiff":2,"lockedSame":1,"lockedDiff":217,"keyMoved":3,"rowMoved":3,"liveWorldNotYear":22,"openCtxDiff":1,"modeMoved":0}
+ctx fields that differ on OPEN replays: [["champion",1]]
+first open seasons that differ: [{"id":"3|3","year":2008,"club":"Cruz Azul","modeLive":"results","modeNow":"results","finishLive":null,"finishNow":null},{"id":"8|8","year":1998,"club":"Boca Juniors","modeLive":"results","modeNow":"results","finishLive":1,"finishNow":1}]
+rvProbeReplay: 662 open replays, 2 differ from the season watched live

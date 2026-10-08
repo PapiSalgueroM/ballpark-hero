@@ -1,0 +1,5 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+probe exit=1 6s | rvProbeReplay: 662 open replays, 2 differ from the season watched live
+m5 exit=0 87s | rvMut m5: 1 of 3 gates went red (caught)
+m6 exit=0 65s | rvMut m6: 2 of 2 gates went red (caught)
+m7 exit=0 125s | rvMut m7: 0 of 4 gates went red (SURVIVED: nothing caught it)

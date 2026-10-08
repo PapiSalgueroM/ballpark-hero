@@ -1,0 +1,11 @@
+MUTATION m5: entry: every kept place is written as stable
+src/components/soccer-career/SoccerSeasonCentre.tsx | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+build exit=0
+RESULT m5 vitest exit=0 |     at SeasonCentre (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:1087:25)
+RESULT m5 sim exit=0 | simSeasonCentreMotion: 17 checks, 0 failed
+RESULT m5 playC exit=1 | playSeasonCentreMotion: 52 checks, 2 failed (only C)
+   FAIL C3. 390: the record kept is this season's key, the year, 3 matchdays, the speed and not stable ({"key":"Motion 0|Arsenal|2023|46|28|10|8.5|centre","year":2023,"md":3,"speed":"results","stable":true})
+   FAIL C3. 320: the record kept is this season's key, the year, 3 matchdays, the speed and not stable ({"key":"Motion 0|Arsenal|2023|46|28|10|8.5|centre","year":2023,"md":3,"speed":"results","stable":true})
+restored: tree clean under src and scripts
+rvMut m5: 1 of 3 gates went red (caught)

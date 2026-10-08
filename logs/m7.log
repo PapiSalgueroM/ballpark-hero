@@ -1,0 +1,10 @@
+MUTATION m7: entry: the ledger is applied only when moments are offered (the held rule of critic C1.3 dropped)
+src/components/soccer-career/SoccerSeasonCentre.tsx | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+build exit=0
+RESULT m7 vitest exit=0 |     at SeasonCentre (/home/runner/work/ballpark-hero/ballpark-hero/src/components/season-centre/SeasonCentre.tsx:1087:25)
+RESULT m7 playC exit=0 | playSeasonCentreMotion: 52 checks, 0 failed (only C)
+RESULT m7 playSeasonMoments exit=0 | playSeasonMoments: 117 checks, 0 failed
+RESULT m7 simSeasonMoments exit=0 | simSeasonMoments: 54 checks, 0 failed
+restored: tree clean under src and scripts
+rvMut m7: 0 of 4 gates went red (SURVIVED: nothing caught it)

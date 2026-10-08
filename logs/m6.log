@@ -1,0 +1,11 @@
+MUTATION m6: entry: a table season he did not win replays once the world is AT OR PAST its year (=== became <=)
+src/components/soccer-career/SoccerSeasonCentre.tsx | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+build exit=0
+RESULT m6 vitest exit=1 | ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+      × which seasons replay > a table season he did not win does only while the save holds that year 5ms
+    FAIL  src/test/seasonReplays.test.tsx > which seasons replay > a table season he did not win does only while the save holds that year
+RESULT m6 playC exit=1 | Node.js v24.21.0
+   FAIL C4. the picker lists exactly the played seasons, newest first, open or locked as node says (12 rows: 5 open, 7 locked)
+restored: tree clean under src and scripts
+rvMut m6: 2 of 2 gates went red (caught)
