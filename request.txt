@@ -1,0 +1,4 @@
+#!playwright
+m2pt: PAGE=page2.js node .rc/x/measure.mjs $RC_OUT/records-2-pt.json
+m2ja: PAGE=page2.js TL=ja node .rc/x/measure.mjs $RC_OUT/records-2-ja.json
+m1de: TL=de node .rc/x/measure.mjs $RC_OUT/records-1-de.json

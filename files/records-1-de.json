@@ -1,0 +1,8280 @@
+{
+ "target": "de",
+ "phases": {
+  "before": {
+   "texts": {
+    "one": {
+     "id": 22,
+     "v": "The quick brown fox jumps over the lazy dog.",
+     "connected": true,
+     "parent": "p"
+    },
+    "adjA": {
+     "id": 23,
+     "v": "Age ",
+     "connected": true,
+     "parent": "p"
+    },
+    "adjB": {
+     "id": 24,
+     "v": "16",
+     "connected": true,
+     "parent": "p"
+    },
+    "adj3A": {
+     "id": 25,
+     "v": "You scored ",
+     "connected": true,
+     "parent": "p"
+    },
+    "adj3B": {
+     "id": 26,
+     "v": "3",
+     "connected": true,
+     "parent": "p"
+    },
+    "adj3C": {
+     "id": 27,
+     "v": " goals this season",
+     "connected": true,
+     "parent": "p"
+    },
+    "adjwA": {
+     "id": 28,
+     "v": "Striker",
+     "connected": true,
+     "parent": "p"
+    },
+    "adjwB": {
+     "id": 29,
+     "v": " · Age ",
+     "connected": true,
+     "parent": "p"
+    },
+    "adjwC": {
+     "id": 30,
+     "v": "16",
+     "connected": true,
+     "parent": "p"
+    },
+    "adjwD": {
+     "id": 31,
+     "v": " · ",
+     "connected": true,
+     "parent": "p"
+    },
+    "adjwE": {
+     "id": 32,
+     "v": "England",
+     "connected": true,
+     "parent": "p"
+    },
+    "between": {
+     "id": 33,
+     "v": " text between elements ",
+     "connected": true,
+     "parent": "p"
+    },
+    "num": {
+     "id": 34,
+     "v": "16",
+     "connected": true,
+     "parent": "p"
+    },
+    "sym": {
+     "id": 35,
+     "v": "+",
+     "connected": true,
+     "parent": "p"
+    },
+    "moneyA": {
+     "id": 36,
+     "v": "-",
+     "connected": true,
+     "parent": "p"
+    },
+    "moneyB": {
+     "id": 37,
+     "v": "$100k",
+     "connected": true,
+     "parent": "p"
+    },
+    "same": {
+     "id": 38,
+     "v": "Chelsea",
+     "connected": true,
+     "parent": "p"
+    },
+    "ph": {
+     "id": 39,
+     "v": "Choose nationality",
+     "connected": true,
+     "parent": "span"
+    },
+    "write": {
+     "id": 40,
+     "v": "Season one",
+     "connected": true,
+     "parent": "p"
+    },
+    "rm": {
+     "id": 41,
+     "v": "Remove this sentence please",
+     "connected": true,
+     "parent": "p"
+    },
+    "rep": {
+     "id": 42,
+     "v": "Replace this sentence please",
+     "connected": true,
+     "parent": "p"
+    },
+    "ins": {
+     "id": 43,
+     "v": "tail words",
+     "connected": true,
+     "parent": "p"
+    },
+    "loopA": {
+     "id": 44,
+     "v": "Week ",
+     "connected": true,
+     "parent": "p"
+    },
+    "loopB": {
+     "id": 45,
+     "v": "1",
+     "connected": true,
+     "parent": "p"
+    },
+    "raceA": {
+     "id": 46,
+     "v": "Minute ",
+     "connected": true,
+     "parent": "p"
+    },
+    "raceB": {
+     "id": 47,
+     "v": "1",
+     "connected": true,
+     "parent": "p"
+    },
+    "numwA": {
+     "id": 48,
+     "v": "Goals: ",
+     "connected": true,
+     "parent": "p"
+    },
+    "numwB": {
+     "id": 49,
+     "v": "4",
+     "connected": true,
+     "parent": "p"
+    }
+   },
+   "html": {
+    "one": "The quick brown fox jumps over the lazy dog.",
+    "adj": "Age 16",
+    "adj3": "You scored 3 goals this season",
+    "adjw": "Striker · Age 16 · England",
+    "between": "<b>Bold words</b> text between elements <i>italic words</i>",
+    "num": "16",
+    "sym": "+",
+    "money": "-$100k",
+    "same": "Chelsea",
+    "ph": "<span id=\"phspan\">Choose nationality</span>",
+    "later": "",
+    "write": "Season one",
+    "rm": "Remove this sentence please",
+    "rep": "Replace this sentence please",
+    "ins": "tail words",
+    "loop": "Week 1",
+    "race": "Minute 1",
+    "numw": "Goals: 4"
+   }
+  },
+  "translated": {
+   "texts": {
+    "one": {
+     "id": 22,
+     "v": "The quick brown fox jumps over the lazy dog.",
+     "connected": false,
+     "parent": null
+    },
+    "adjA": {
+     "id": 23,
+     "v": "Age ",
+     "connected": false,
+     "parent": null
+    },
+    "adjB": {
+     "id": 24,
+     "v": "16",
+     "connected": false,
+     "parent": null
+    },
+    "adj3A": {
+     "id": 25,
+     "v": "You scored ",
+     "connected": false,
+     "parent": null
+    },
+    "adj3B": {
+     "id": 26,
+     "v": "3",
+     "connected": false,
+     "parent": null
+    },
+    "adj3C": {
+     "id": 27,
+     "v": " goals this season",
+     "connected": false,
+     "parent": null
+    },
+    "adjwA": {
+     "id": 28,
+     "v": "Striker",
+     "connected": false,
+     "parent": null
+    },
+    "adjwB": {
+     "id": 29,
+     "v": " · Age ",
+     "connected": false,
+     "parent": null
+    },
+    "adjwC": {
+     "id": 30,
+     "v": "16",
+     "connected": false,
+     "parent": null
+    },
+    "adjwD": {
+     "id": 31,
+     "v": " · ",
+     "connected": false,
+     "parent": null
+    },
+    "adjwE": {
+     "id": 32,
+     "v": "England",
+     "connected": false,
+     "parent": null
+    },
+    "between": {
+     "id": 33,
+     "v": " text between elements ",
+     "connected": false,
+     "parent": null
+    },
+    "num": {
+     "id": 34,
+     "v": "16",
+     "connected": false,
+     "parent": null
+    },
+    "sym": {
+     "id": 35,
+     "v": "+",
+     "connected": false,
+     "parent": null
+    },
+    "moneyA": {
+     "id": 36,
+     "v": "-",
+     "connected": false,
+     "parent": null
+    },
+    "moneyB": {
+     "id": 37,
+     "v": "$100k",
+     "connected": false,
+     "parent": null
+    },
+    "same": {
+     "id": 38,
+     "v": "Chelsea",
+     "connected": false,
+     "parent": null
+    },
+    "ph": {
+     "id": 39,
+     "v": "Choose nationality",
+     "connected": false,
+     "parent": null
+    },
+    "write": {
+     "id": 40,
+     "v": "Season one",
+     "connected": false,
+     "parent": null
+    },
+    "rm": {
+     "id": 41,
+     "v": "Remove this sentence please",
+     "connected": false,
+     "parent": null
+    },
+    "rep": {
+     "id": 42,
+     "v": "Replace this sentence please",
+     "connected": false,
+     "parent": null
+    },
+    "ins": {
+     "id": 43,
+     "v": "tail words",
+     "connected": false,
+     "parent": null
+    },
+    "loopA": {
+     "id": 44,
+     "v": "Week ",
+     "connected": false,
+     "parent": null
+    },
+    "loopB": {
+     "id": 45,
+     "v": "1",
+     "connected": false,
+     "parent": null
+    },
+    "raceA": {
+     "id": 46,
+     "v": "Minute ",
+     "connected": false,
+     "parent": null
+    },
+    "raceB": {
+     "id": 47,
+     "v": "1",
+     "connected": false,
+     "parent": null
+    },
+    "numwA": {
+     "id": 48,
+     "v": "Goals: ",
+     "connected": false,
+     "parent": null
+    },
+    "numwB": {
+     "id": 49,
+     "v": "4",
+     "connected": false,
+     "parent": null
+    }
+   },
+   "html": {
+    "one": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Der flinke braune Fuchs springt über den faulen Hund.</font></font>",
+    "adj": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Alter </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">16</font></font>",
+    "adj3": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Du hast </font><font dir=\"auto\" style=\"vertical-align: inherit;\">in dieser Saison </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">3 Tore erzielt.</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "adjw": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Stürmer · </font><font dir=\"auto\" style=\"vertical-align: inherit;\">16 </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Jahre </font><font dir=\"auto\" style=\"vertical-align: inherit;\">· </font><font dir=\"auto\" style=\"vertical-align: inherit;\">England</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "between": "<b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Fettgedruckte Wörter,</font></font></b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\"> Text zwischen Elementen </font></font><i><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">, kursive Wörter</font></font></i>",
+    "num": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">16</font></font>",
+    "sym": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">+</font></font>",
+    "money": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">- </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">100.000 US-Dollar</font></font>",
+    "same": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Chelsea</font></font>",
+    "ph": "<span id=\"phspan\"><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Nationalität auswählen</font></font></span>",
+    "later": "",
+    "write": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Staffel eins</font></font>",
+    "rm": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Bitte entfernen Sie diesen Satz.</font></font>",
+    "rep": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Bitte ersetzen Sie diesen Satz.</font></font>",
+    "ins": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Schwanzwörter</font></font>",
+    "loop": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Woche </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">1</font></font>",
+    "race": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Minute </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">1</font></font>",
+    "numw": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Tore: </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">4</font></font>"
+   }
+  },
+  "later": {
+   "texts": {
+    "one": {
+     "id": 22,
+     "v": "The quick brown fox jumps over the lazy dog.",
+     "connected": false,
+     "parent": null
+    },
+    "adjA": {
+     "id": 23,
+     "v": "Age ",
+     "connected": false,
+     "parent": null
+    },
+    "adjB": {
+     "id": 24,
+     "v": "16",
+     "connected": false,
+     "parent": null
+    },
+    "adj3A": {
+     "id": 25,
+     "v": "You scored ",
+     "connected": false,
+     "parent": null
+    },
+    "adj3B": {
+     "id": 26,
+     "v": "3",
+     "connected": false,
+     "parent": null
+    },
+    "adj3C": {
+     "id": 27,
+     "v": " goals this season",
+     "connected": false,
+     "parent": null
+    },
+    "adjwA": {
+     "id": 28,
+     "v": "Striker",
+     "connected": false,
+     "parent": null
+    },
+    "adjwB": {
+     "id": 29,
+     "v": " · Age ",
+     "connected": false,
+     "parent": null
+    },
+    "adjwC": {
+     "id": 30,
+     "v": "16",
+     "connected": false,
+     "parent": null
+    },
+    "adjwD": {
+     "id": 31,
+     "v": " · ",
+     "connected": false,
+     "parent": null
+    },
+    "adjwE": {
+     "id": 32,
+     "v": "England",
+     "connected": false,
+     "parent": null
+    },
+    "between": {
+     "id": 33,
+     "v": " text between elements ",
+     "connected": false,
+     "parent": null
+    },
+    "num": {
+     "id": 34,
+     "v": "16",
+     "connected": false,
+     "parent": null
+    },
+    "sym": {
+     "id": 35,
+     "v": "+",
+     "connected": false,
+     "parent": null
+    },
+    "moneyA": {
+     "id": 36,
+     "v": "-",
+     "connected": false,
+     "parent": null
+    },
+    "moneyB": {
+     "id": 37,
+     "v": "$100k",
+     "connected": false,
+     "parent": null
+    },
+    "same": {
+     "id": 38,
+     "v": "Chelsea",
+     "connected": false,
+     "parent": null
+    },
+    "ph": {
+     "id": 39,
+     "v": "Choose nationality",
+     "connected": false,
+     "parent": null
+    },
+    "write": {
+     "id": 40,
+     "v": "Season one",
+     "connected": false,
+     "parent": null
+    },
+    "rm": {
+     "id": 41,
+     "v": "Remove this sentence please",
+     "connected": false,
+     "parent": null
+    },
+    "rep": {
+     "id": 42,
+     "v": "Replace this sentence please",
+     "connected": false,
+     "parent": null
+    },
+    "ins": {
+     "id": 43,
+     "v": "tail words",
+     "connected": false,
+     "parent": null
+    },
+    "loopA": {
+     "id": 44,
+     "v": "Week ",
+     "connected": false,
+     "parent": null
+    },
+    "loopB": {
+     "id": 45,
+     "v": "1",
+     "connected": false,
+     "parent": null
+    },
+    "raceA": {
+     "id": 46,
+     "v": "Minute ",
+     "connected": false,
+     "parent": null
+    },
+    "raceB": {
+     "id": 47,
+     "v": "1",
+     "connected": false,
+     "parent": null
+    },
+    "numwA": {
+     "id": 48,
+     "v": "Goals: ",
+     "connected": false,
+     "parent": null
+    },
+    "numwB": {
+     "id": 49,
+     "v": "4",
+     "connected": false,
+     "parent": null
+    },
+    "later": {
+     "id": 143,
+     "v": "Choose position",
+     "connected": false,
+     "parent": null
+    }
+   },
+   "html": {
+    "one": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Der flinke braune Fuchs springt über den faulen Hund.</font></font>",
+    "adj": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Alter </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">16</font></font>",
+    "adj3": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Du hast </font><font dir=\"auto\" style=\"vertical-align: inherit;\">in dieser Saison </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">3 Tore erzielt.</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "adjw": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Stürmer · </font><font dir=\"auto\" style=\"vertical-align: inherit;\">16 </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Jahre </font><font dir=\"auto\" style=\"vertical-align: inherit;\">· </font><font dir=\"auto\" style=\"vertical-align: inherit;\">England</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "between": "<b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Fettgedruckte Wörter,</font></font></b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\"> Text zwischen Elementen </font></font><i><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">, kursive Wörter</font></font></i>",
+    "num": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">16</font></font>",
+    "sym": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">+</font></font>",
+    "money": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">- </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">100.000 US-Dollar</font></font>",
+    "same": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Chelsea</font></font>",
+    "ph": "<span id=\"phspan\"><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Nationalität auswählen</font></font></span>",
+    "later": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Position auswählen</font></font>",
+    "write": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Staffel eins</font></font>",
+    "rm": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Bitte entfernen Sie diesen Satz.</font></font>",
+    "rep": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Bitte ersetzen Sie diesen Satz.</font></font>",
+    "ins": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Schwanzwörter</font></font>",
+    "loop": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Woche </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">1</font></font>",
+    "race": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Minute </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">1</font></font>",
+    "numw": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Tore: </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">4</font></font>"
+   }
+  },
+  "write-detached": {
+   "texts": {
+    "one": {
+     "id": 22,
+     "v": "The quick brown fox jumps over the lazy dog.",
+     "connected": false,
+     "parent": null
+    },
+    "adjA": {
+     "id": 23,
+     "v": "Age ",
+     "connected": false,
+     "parent": null
+    },
+    "adjB": {
+     "id": 24,
+     "v": "16",
+     "connected": false,
+     "parent": null
+    },
+    "adj3A": {
+     "id": 25,
+     "v": "You scored ",
+     "connected": false,
+     "parent": null
+    },
+    "adj3B": {
+     "id": 26,
+     "v": "3",
+     "connected": false,
+     "parent": null
+    },
+    "adj3C": {
+     "id": 27,
+     "v": " goals this season",
+     "connected": false,
+     "parent": null
+    },
+    "adjwA": {
+     "id": 28,
+     "v": "Striker",
+     "connected": false,
+     "parent": null
+    },
+    "adjwB": {
+     "id": 29,
+     "v": " · Age ",
+     "connected": false,
+     "parent": null
+    },
+    "adjwC": {
+     "id": 30,
+     "v": "16",
+     "connected": false,
+     "parent": null
+    },
+    "adjwD": {
+     "id": 31,
+     "v": " · ",
+     "connected": false,
+     "parent": null
+    },
+    "adjwE": {
+     "id": 32,
+     "v": "England",
+     "connected": false,
+     "parent": null
+    },
+    "between": {
+     "id": 33,
+     "v": " text between elements ",
+     "connected": false,
+     "parent": null
+    },
+    "num": {
+     "id": 34,
+     "v": "16",
+     "connected": false,
+     "parent": null
+    },
+    "sym": {
+     "id": 35,
+     "v": "+",
+     "connected": false,
+     "parent": null
+    },
+    "moneyA": {
+     "id": 36,
+     "v": "-",
+     "connected": false,
+     "parent": null
+    },
+    "moneyB": {
+     "id": 37,
+     "v": "$100k",
+     "connected": false,
+     "parent": null
+    },
+    "same": {
+     "id": 38,
+     "v": "Chelsea",
+     "connected": false,
+     "parent": null
+    },
+    "ph": {
+     "id": 39,
+     "v": "Choose nationality",
+     "connected": false,
+     "parent": null
+    },
+    "write": {
+     "id": 40,
+     "v": "Season two",
+     "connected": false,
+     "parent": null
+    },
+    "rm": {
+     "id": 41,
+     "v": "Remove this sentence please",
+     "connected": false,
+     "parent": null
+    },
+    "rep": {
+     "id": 42,
+     "v": "Replace this sentence please",
+     "connected": false,
+     "parent": null
+    },
+    "ins": {
+     "id": 43,
+     "v": "tail words",
+     "connected": false,
+     "parent": null
+    },
+    "loopA": {
+     "id": 44,
+     "v": "Week ",
+     "connected": false,
+     "parent": null
+    },
+    "loopB": {
+     "id": 45,
+     "v": "1",
+     "connected": false,
+     "parent": null
+    },
+    "raceA": {
+     "id": 46,
+     "v": "Minute ",
+     "connected": false,
+     "parent": null
+    },
+    "raceB": {
+     "id": 47,
+     "v": "1",
+     "connected": false,
+     "parent": null
+    },
+    "numwA": {
+     "id": 48,
+     "v": "Goals: ",
+     "connected": false,
+     "parent": null
+    },
+    "numwB": {
+     "id": 49,
+     "v": "4",
+     "connected": false,
+     "parent": null
+    },
+    "later": {
+     "id": 143,
+     "v": "Choose position",
+     "connected": false,
+     "parent": null
+    }
+   },
+   "html": {
+    "one": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Der flinke braune Fuchs springt über den faulen Hund.</font></font>",
+    "adj": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Alter </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">16</font></font>",
+    "adj3": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Du hast </font><font dir=\"auto\" style=\"vertical-align: inherit;\">in dieser Saison </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">3 Tore erzielt.</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "adjw": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Stürmer · </font><font dir=\"auto\" style=\"vertical-align: inherit;\">16 </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Jahre </font><font dir=\"auto\" style=\"vertical-align: inherit;\">· </font><font dir=\"auto\" style=\"vertical-align: inherit;\">England</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "between": "<b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Fettgedruckte Wörter,</font></font></b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\"> Text zwischen Elementen </font></font><i><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">, kursive Wörter</font></font></i>",
+    "num": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">16</font></font>",
+    "sym": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">+</font></font>",
+    "money": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">- </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">100.000 US-Dollar</font></font>",
+    "same": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Chelsea</font></font>",
+    "ph": "<span id=\"phspan\"><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Nationalität auswählen</font></font></span>",
+    "later": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Position auswählen</font></font>",
+    "write": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Staffel eins</font></font>",
+    "rm": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Bitte entfernen Sie diesen Satz.</font></font>",
+    "rep": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Bitte ersetzen Sie diesen Satz.</font></font>",
+    "ins": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Schwanzwörter</font></font>",
+    "loop": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Woche </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">1</font></font>",
+    "race": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Minute </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">1</font></font>",
+    "numw": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Tore: </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">4</font></font>"
+   }
+  },
+  "restore": {
+   "texts": {
+    "one": {
+     "id": 22,
+     "v": "The quick brown fox jumps over the lazy dog.",
+     "connected": false,
+     "parent": null
+    },
+    "adjA": {
+     "id": 23,
+     "v": "Age ",
+     "connected": false,
+     "parent": null
+    },
+    "adjB": {
+     "id": 24,
+     "v": "16",
+     "connected": false,
+     "parent": null
+    },
+    "adj3A": {
+     "id": 25,
+     "v": "You scored ",
+     "connected": false,
+     "parent": null
+    },
+    "adj3B": {
+     "id": 26,
+     "v": "3",
+     "connected": false,
+     "parent": null
+    },
+    "adj3C": {
+     "id": 27,
+     "v": " goals this season",
+     "connected": false,
+     "parent": null
+    },
+    "adjwA": {
+     "id": 28,
+     "v": "Striker",
+     "connected": false,
+     "parent": null
+    },
+    "adjwB": {
+     "id": 29,
+     "v": " · Age ",
+     "connected": false,
+     "parent": null
+    },
+    "adjwC": {
+     "id": 30,
+     "v": "16",
+     "connected": false,
+     "parent": null
+    },
+    "adjwD": {
+     "id": 31,
+     "v": " · ",
+     "connected": false,
+     "parent": null
+    },
+    "adjwE": {
+     "id": 32,
+     "v": "England",
+     "connected": false,
+     "parent": null
+    },
+    "between": {
+     "id": 33,
+     "v": " text between elements ",
+     "connected": false,
+     "parent": null
+    },
+    "num": {
+     "id": 34,
+     "v": "16",
+     "connected": false,
+     "parent": null
+    },
+    "sym": {
+     "id": 35,
+     "v": "+",
+     "connected": false,
+     "parent": null
+    },
+    "moneyA": {
+     "id": 36,
+     "v": "-",
+     "connected": false,
+     "parent": null
+    },
+    "moneyB": {
+     "id": 37,
+     "v": "$100k",
+     "connected": false,
+     "parent": null
+    },
+    "same": {
+     "id": 38,
+     "v": "Chelsea",
+     "connected": false,
+     "parent": null
+    },
+    "ph": {
+     "id": 39,
+     "v": "Choose nationality",
+     "connected": false,
+     "parent": null
+    },
+    "write": {
+     "id": 40,
+     "v": "Season two",
+     "connected": true,
+     "parent": "p"
+    },
+    "rm": {
+     "id": 41,
+     "v": "Remove this sentence please",
+     "connected": false,
+     "parent": null
+    },
+    "rep": {
+     "id": 42,
+     "v": "Replace this sentence please",
+     "connected": false,
+     "parent": null
+    },
+    "ins": {
+     "id": 43,
+     "v": "tail words",
+     "connected": false,
+     "parent": null
+    },
+    "loopA": {
+     "id": 44,
+     "v": "Week ",
+     "connected": false,
+     "parent": null
+    },
+    "loopB": {
+     "id": 45,
+     "v": "1",
+     "connected": false,
+     "parent": null
+    },
+    "raceA": {
+     "id": 46,
+     "v": "Minute ",
+     "connected": false,
+     "parent": null
+    },
+    "raceB": {
+     "id": 47,
+     "v": "1",
+     "connected": false,
+     "parent": null
+    },
+    "numwA": {
+     "id": 48,
+     "v": "Goals: ",
+     "connected": false,
+     "parent": null
+    },
+    "numwB": {
+     "id": 49,
+     "v": "4",
+     "connected": false,
+     "parent": null
+    },
+    "later": {
+     "id": 143,
+     "v": "Choose position",
+     "connected": false,
+     "parent": null
+    }
+   },
+   "html": {
+    "one": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Der flinke braune Fuchs springt über den faulen Hund.</font></font>",
+    "adj": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Alter </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">16</font></font>",
+    "adj3": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Du hast </font><font dir=\"auto\" style=\"vertical-align: inherit;\">in dieser Saison </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">3 Tore erzielt.</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "adjw": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Stürmer · </font><font dir=\"auto\" style=\"vertical-align: inherit;\">16 </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Jahre </font><font dir=\"auto\" style=\"vertical-align: inherit;\">· </font><font dir=\"auto\" style=\"vertical-align: inherit;\">England</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "between": "<b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Fettgedruckte Wörter,</font></font></b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\"> Text zwischen Elementen </font></font><i><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">, kursive Wörter</font></font></i>",
+    "num": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">16</font></font>",
+    "sym": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">+</font></font>",
+    "money": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">- </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">100.000 US-Dollar</font></font>",
+    "same": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Chelsea</font></font>",
+    "ph": "<span id=\"phspan\"><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Nationalität auswählen</font></font></span>",
+    "later": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Position auswählen</font></font>",
+    "write": "Season two",
+    "rm": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Bitte entfernen Sie diesen Satz.</font></font>",
+    "rep": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Bitte ersetzen Sie diesen Satz.</font></font>",
+    "ins": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Schwanzwörter</font></font>",
+    "loop": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Woche </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">1</font></font>",
+    "race": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Minute </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">1</font></font>",
+    "numw": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Tore: </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">4</font></font>"
+   }
+  },
+  "adj-restore": {
+   "texts": {
+    "one": {
+     "id": 22,
+     "v": "The quick brown fox jumps over the lazy dog.",
+     "connected": false,
+     "parent": null
+    },
+    "adjA": {
+     "id": 23,
+     "v": "Age ",
+     "connected": true,
+     "parent": "p"
+    },
+    "adjB": {
+     "id": 24,
+     "v": "17",
+     "connected": true,
+     "parent": "p"
+    },
+    "adj3A": {
+     "id": 25,
+     "v": "You scored ",
+     "connected": false,
+     "parent": null
+    },
+    "adj3B": {
+     "id": 26,
+     "v": "3",
+     "connected": false,
+     "parent": null
+    },
+    "adj3C": {
+     "id": 27,
+     "v": " goals this season",
+     "connected": false,
+     "parent": null
+    },
+    "adjwA": {
+     "id": 28,
+     "v": "Striker",
+     "connected": false,
+     "parent": null
+    },
+    "adjwB": {
+     "id": 29,
+     "v": " · Age ",
+     "connected": false,
+     "parent": null
+    },
+    "adjwC": {
+     "id": 30,
+     "v": "16",
+     "connected": false,
+     "parent": null
+    },
+    "adjwD": {
+     "id": 31,
+     "v": " · ",
+     "connected": false,
+     "parent": null
+    },
+    "adjwE": {
+     "id": 32,
+     "v": "England",
+     "connected": false,
+     "parent": null
+    },
+    "between": {
+     "id": 33,
+     "v": " text between elements ",
+     "connected": false,
+     "parent": null
+    },
+    "num": {
+     "id": 34,
+     "v": "16",
+     "connected": false,
+     "parent": null
+    },
+    "sym": {
+     "id": 35,
+     "v": "+",
+     "connected": false,
+     "parent": null
+    },
+    "moneyA": {
+     "id": 36,
+     "v": "-",
+     "connected": false,
+     "parent": null
+    },
+    "moneyB": {
+     "id": 37,
+     "v": "$100k",
+     "connected": false,
+     "parent": null
+    },
+    "same": {
+     "id": 38,
+     "v": "Chelsea",
+     "connected": false,
+     "parent": null
+    },
+    "ph": {
+     "id": 39,
+     "v": "Choose nationality",
+     "connected": false,
+     "parent": null
+    },
+    "write": {
+     "id": 40,
+     "v": "Season two",
+     "connected": true,
+     "parent": "p"
+    },
+    "rm": {
+     "id": 41,
+     "v": "Remove this sentence please",
+     "connected": false,
+     "parent": null
+    },
+    "rep": {
+     "id": 42,
+     "v": "Replace this sentence please",
+     "connected": false,
+     "parent": null
+    },
+    "ins": {
+     "id": 43,
+     "v": "tail words",
+     "connected": false,
+     "parent": null
+    },
+    "loopA": {
+     "id": 44,
+     "v": "Week ",
+     "connected": false,
+     "parent": null
+    },
+    "loopB": {
+     "id": 45,
+     "v": "1",
+     "connected": false,
+     "parent": null
+    },
+    "raceA": {
+     "id": 46,
+     "v": "Minute ",
+     "connected": false,
+     "parent": null
+    },
+    "raceB": {
+     "id": 47,
+     "v": "1",
+     "connected": false,
+     "parent": null
+    },
+    "numwA": {
+     "id": 48,
+     "v": "Goals: ",
+     "connected": false,
+     "parent": null
+    },
+    "numwB": {
+     "id": 49,
+     "v": "4",
+     "connected": false,
+     "parent": null
+    },
+    "later": {
+     "id": 143,
+     "v": "Choose position",
+     "connected": false,
+     "parent": null
+    }
+   },
+   "html": {
+    "one": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Der flinke braune Fuchs springt über den faulen Hund.</font></font>",
+    "adj": "Age 17",
+    "adj3": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Du hast </font><font dir=\"auto\" style=\"vertical-align: inherit;\">in dieser Saison </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">3 Tore erzielt.</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "adjw": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Stürmer · </font><font dir=\"auto\" style=\"vertical-align: inherit;\">16 </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Jahre </font><font dir=\"auto\" style=\"vertical-align: inherit;\">· </font><font dir=\"auto\" style=\"vertical-align: inherit;\">England</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "between": "<b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Fettgedruckte Wörter,</font></font></b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\"> Text zwischen Elementen </font></font><i><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">, kursive Wörter</font></font></i>",
+    "num": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">16</font></font>",
+    "sym": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">+</font></font>",
+    "money": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">- </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">100.000 US-Dollar</font></font>",
+    "same": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Chelsea</font></font>",
+    "ph": "<span id=\"phspan\"><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Nationalität auswählen</font></font></span>",
+    "later": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Position auswählen</font></font>",
+    "write": "Season two",
+    "rm": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Bitte entfernen Sie diesen Satz.</font></font>",
+    "rep": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Bitte ersetzen Sie diesen Satz.</font></font>",
+    "ins": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Schwanzwörter</font></font>",
+    "loop": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Woche </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">1</font></font>",
+    "race": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Minute </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">1</font></font>",
+    "numw": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Tore: </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">4</font></font>"
+   }
+  },
+  "rm-wrapper": {
+   "texts": {
+    "one": {
+     "id": 22,
+     "v": "The quick brown fox jumps over the lazy dog.",
+     "connected": false,
+     "parent": null
+    },
+    "adjA": {
+     "id": 23,
+     "v": "Age ",
+     "connected": true,
+     "parent": "p"
+    },
+    "adjB": {
+     "id": 24,
+     "v": "17",
+     "connected": true,
+     "parent": "p"
+    },
+    "adj3A": {
+     "id": 25,
+     "v": "You scored ",
+     "connected": false,
+     "parent": null
+    },
+    "adj3B": {
+     "id": 26,
+     "v": "3",
+     "connected": false,
+     "parent": null
+    },
+    "adj3C": {
+     "id": 27,
+     "v": " goals this season",
+     "connected": false,
+     "parent": null
+    },
+    "adjwA": {
+     "id": 28,
+     "v": "Striker",
+     "connected": false,
+     "parent": null
+    },
+    "adjwB": {
+     "id": 29,
+     "v": " · Age ",
+     "connected": false,
+     "parent": null
+    },
+    "adjwC": {
+     "id": 30,
+     "v": "16",
+     "connected": false,
+     "parent": null
+    },
+    "adjwD": {
+     "id": 31,
+     "v": " · ",
+     "connected": false,
+     "parent": null
+    },
+    "adjwE": {
+     "id": 32,
+     "v": "England",
+     "connected": false,
+     "parent": null
+    },
+    "between": {
+     "id": 33,
+     "v": " text between elements ",
+     "connected": false,
+     "parent": null
+    },
+    "num": {
+     "id": 34,
+     "v": "16",
+     "connected": false,
+     "parent": null
+    },
+    "sym": {
+     "id": 35,
+     "v": "+",
+     "connected": false,
+     "parent": null
+    },
+    "moneyA": {
+     "id": 36,
+     "v": "-",
+     "connected": false,
+     "parent": null
+    },
+    "moneyB": {
+     "id": 37,
+     "v": "$100k",
+     "connected": false,
+     "parent": null
+    },
+    "same": {
+     "id": 38,
+     "v": "Chelsea",
+     "connected": false,
+     "parent": null
+    },
+    "ph": {
+     "id": 39,
+     "v": "Choose nationality",
+     "connected": false,
+     "parent": null
+    },
+    "write": {
+     "id": 40,
+     "v": "Season two",
+     "connected": true,
+     "parent": "p"
+    },
+    "rm": {
+     "id": 41,
+     "v": "Remove this sentence please",
+     "connected": false,
+     "parent": null
+    },
+    "rep": {
+     "id": 42,
+     "v": "Replace this sentence please",
+     "connected": false,
+     "parent": null
+    },
+    "ins": {
+     "id": 43,
+     "v": "tail words",
+     "connected": false,
+     "parent": null
+    },
+    "loopA": {
+     "id": 44,
+     "v": "Week ",
+     "connected": false,
+     "parent": null
+    },
+    "loopB": {
+     "id": 45,
+     "v": "1",
+     "connected": false,
+     "parent": null
+    },
+    "raceA": {
+     "id": 46,
+     "v": "Minute ",
+     "connected": false,
+     "parent": null
+    },
+    "raceB": {
+     "id": 47,
+     "v": "1",
+     "connected": false,
+     "parent": null
+    },
+    "numwA": {
+     "id": 48,
+     "v": "Goals: ",
+     "connected": false,
+     "parent": null
+    },
+    "numwB": {
+     "id": 49,
+     "v": "4",
+     "connected": false,
+     "parent": null
+    },
+    "later": {
+     "id": 143,
+     "v": "Choose position",
+     "connected": false,
+     "parent": null
+    }
+   },
+   "html": {
+    "one": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Der flinke braune Fuchs springt über den faulen Hund.</font></font>",
+    "adj": "Age 17",
+    "adj3": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Du hast </font><font dir=\"auto\" style=\"vertical-align: inherit;\">in dieser Saison </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">3 Tore erzielt.</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "adjw": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Stürmer · </font><font dir=\"auto\" style=\"vertical-align: inherit;\">16 </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Jahre </font><font dir=\"auto\" style=\"vertical-align: inherit;\">· </font><font dir=\"auto\" style=\"vertical-align: inherit;\">England</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "between": "<b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Fettgedruckte Wörter,</font></font></b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\"> Text zwischen Elementen </font></font><i><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">, kursive Wörter</font></font></i>",
+    "num": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">16</font></font>",
+    "sym": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">+</font></font>",
+    "money": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">- </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">100.000 US-Dollar</font></font>",
+    "same": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Chelsea</font></font>",
+    "ph": "<span id=\"phspan\"><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Nationalität auswählen</font></font></span>",
+    "later": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Position auswählen</font></font>",
+    "write": "Season two",
+    "rm": "",
+    "rep": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Bitte ersetzen Sie diesen Satz.</font></font>",
+    "ins": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Schwanzwörter</font></font>",
+    "loop": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Woche </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">1</font></font>",
+    "race": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Minute </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">1</font></font>",
+    "numw": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Tore: </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">4</font></font>"
+   }
+  },
+  "rep-wrapper": {
+   "texts": {
+    "one": {
+     "id": 22,
+     "v": "The quick brown fox jumps over the lazy dog.",
+     "connected": false,
+     "parent": null
+    },
+    "adjA": {
+     "id": 23,
+     "v": "Age ",
+     "connected": true,
+     "parent": "p"
+    },
+    "adjB": {
+     "id": 24,
+     "v": "17",
+     "connected": true,
+     "parent": "p"
+    },
+    "adj3A": {
+     "id": 25,
+     "v": "You scored ",
+     "connected": false,
+     "parent": null
+    },
+    "adj3B": {
+     "id": 26,
+     "v": "3",
+     "connected": false,
+     "parent": null
+    },
+    "adj3C": {
+     "id": 27,
+     "v": " goals this season",
+     "connected": false,
+     "parent": null
+    },
+    "adjwA": {
+     "id": 28,
+     "v": "Striker",
+     "connected": false,
+     "parent": null
+    },
+    "adjwB": {
+     "id": 29,
+     "v": " · Age ",
+     "connected": false,
+     "parent": null
+    },
+    "adjwC": {
+     "id": 30,
+     "v": "16",
+     "connected": false,
+     "parent": null
+    },
+    "adjwD": {
+     "id": 31,
+     "v": " · ",
+     "connected": false,
+     "parent": null
+    },
+    "adjwE": {
+     "id": 32,
+     "v": "England",
+     "connected": false,
+     "parent": null
+    },
+    "between": {
+     "id": 33,
+     "v": " text between elements ",
+     "connected": false,
+     "parent": null
+    },
+    "num": {
+     "id": 34,
+     "v": "16",
+     "connected": false,
+     "parent": null
+    },
+    "sym": {
+     "id": 35,
+     "v": "+",
+     "connected": false,
+     "parent": null
+    },
+    "moneyA": {
+     "id": 36,
+     "v": "-",
+     "connected": false,
+     "parent": null
+    },
+    "moneyB": {
+     "id": 37,
+     "v": "$100k",
+     "connected": false,
+     "parent": null
+    },
+    "same": {
+     "id": 38,
+     "v": "Chelsea",
+     "connected": false,
+     "parent": null
+    },
+    "ph": {
+     "id": 39,
+     "v": "Choose nationality",
+     "connected": false,
+     "parent": null
+    },
+    "write": {
+     "id": 40,
+     "v": "Season two",
+     "connected": true,
+     "parent": "p"
+    },
+    "rm": {
+     "id": 41,
+     "v": "Remove this sentence please",
+     "connected": false,
+     "parent": null
+    },
+    "rep": {
+     "id": 42,
+     "v": "Replace this sentence please",
+     "connected": false,
+     "parent": null
+    },
+    "ins": {
+     "id": 43,
+     "v": "tail words",
+     "connected": false,
+     "parent": null
+    },
+    "loopA": {
+     "id": 44,
+     "v": "Week ",
+     "connected": false,
+     "parent": null
+    },
+    "loopB": {
+     "id": 45,
+     "v": "1",
+     "connected": false,
+     "parent": null
+    },
+    "raceA": {
+     "id": 46,
+     "v": "Minute ",
+     "connected": false,
+     "parent": null
+    },
+    "raceB": {
+     "id": 47,
+     "v": "1",
+     "connected": false,
+     "parent": null
+    },
+    "numwA": {
+     "id": 48,
+     "v": "Goals: ",
+     "connected": false,
+     "parent": null
+    },
+    "numwB": {
+     "id": 49,
+     "v": "4",
+     "connected": false,
+     "parent": null
+    },
+    "later": {
+     "id": 143,
+     "v": "Choose position",
+     "connected": false,
+     "parent": null
+    },
+    "rep2": {
+     "id": 147,
+     "v": "A brand new sentence here",
+     "connected": false,
+     "parent": null
+    }
+   },
+   "html": {
+    "one": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Der flinke braune Fuchs springt über den faulen Hund.</font></font>",
+    "adj": "Age 17",
+    "adj3": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Du hast </font><font dir=\"auto\" style=\"vertical-align: inherit;\">in dieser Saison </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">3 Tore erzielt.</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "adjw": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Stürmer · </font><font dir=\"auto\" style=\"vertical-align: inherit;\">16 </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Jahre </font><font dir=\"auto\" style=\"vertical-align: inherit;\">· </font><font dir=\"auto\" style=\"vertical-align: inherit;\">England</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "between": "<b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Fettgedruckte Wörter,</font></font></b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\"> Text zwischen Elementen </font></font><i><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">, kursive Wörter</font></font></i>",
+    "num": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">16</font></font>",
+    "sym": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">+</font></font>",
+    "money": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">- </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">100.000 US-Dollar</font></font>",
+    "same": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Chelsea</font></font>",
+    "ph": "<span id=\"phspan\"><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Nationalität auswählen</font></font></span>",
+    "later": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Position auswählen</font></font>",
+    "write": "Season two",
+    "rm": "",
+    "rep": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Ein brandneuer Satz hier</font></font>",
+    "ins": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Schwanzwörter</font></font>",
+    "loop": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Woche </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">1</font></font>",
+    "race": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Minute </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">1</font></font>",
+    "numw": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Tore: </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">4</font></font>"
+   }
+  },
+  "ins-before-wrapper": {
+   "texts": {
+    "one": {
+     "id": 22,
+     "v": "The quick brown fox jumps over the lazy dog.",
+     "connected": false,
+     "parent": null
+    },
+    "adjA": {
+     "id": 23,
+     "v": "Age ",
+     "connected": true,
+     "parent": "p"
+    },
+    "adjB": {
+     "id": 24,
+     "v": "17",
+     "connected": true,
+     "parent": "p"
+    },
+    "adj3A": {
+     "id": 25,
+     "v": "You scored ",
+     "connected": false,
+     "parent": null
+    },
+    "adj3B": {
+     "id": 26,
+     "v": "3",
+     "connected": false,
+     "parent": null
+    },
+    "adj3C": {
+     "id": 27,
+     "v": " goals this season",
+     "connected": false,
+     "parent": null
+    },
+    "adjwA": {
+     "id": 28,
+     "v": "Striker",
+     "connected": false,
+     "parent": null
+    },
+    "adjwB": {
+     "id": 29,
+     "v": " · Age ",
+     "connected": false,
+     "parent": null
+    },
+    "adjwC": {
+     "id": 30,
+     "v": "16",
+     "connected": false,
+     "parent": null
+    },
+    "adjwD": {
+     "id": 31,
+     "v": " · ",
+     "connected": false,
+     "parent": null
+    },
+    "adjwE": {
+     "id": 32,
+     "v": "England",
+     "connected": false,
+     "parent": null
+    },
+    "between": {
+     "id": 33,
+     "v": " text between elements ",
+     "connected": false,
+     "parent": null
+    },
+    "num": {
+     "id": 34,
+     "v": "16",
+     "connected": false,
+     "parent": null
+    },
+    "sym": {
+     "id": 35,
+     "v": "+",
+     "connected": false,
+     "parent": null
+    },
+    "moneyA": {
+     "id": 36,
+     "v": "-",
+     "connected": false,
+     "parent": null
+    },
+    "moneyB": {
+     "id": 37,
+     "v": "$100k",
+     "connected": false,
+     "parent": null
+    },
+    "same": {
+     "id": 38,
+     "v": "Chelsea",
+     "connected": false,
+     "parent": null
+    },
+    "ph": {
+     "id": 39,
+     "v": "Choose nationality",
+     "connected": false,
+     "parent": null
+    },
+    "write": {
+     "id": 40,
+     "v": "Season two",
+     "connected": true,
+     "parent": "p"
+    },
+    "rm": {
+     "id": 41,
+     "v": "Remove this sentence please",
+     "connected": false,
+     "parent": null
+    },
+    "rep": {
+     "id": 42,
+     "v": "Replace this sentence please",
+     "connected": false,
+     "parent": null
+    },
+    "ins": {
+     "id": 43,
+     "v": "tail words",
+     "connected": false,
+     "parent": null
+    },
+    "loopA": {
+     "id": 44,
+     "v": "Week ",
+     "connected": false,
+     "parent": null
+    },
+    "loopB": {
+     "id": 45,
+     "v": "1",
+     "connected": false,
+     "parent": null
+    },
+    "raceA": {
+     "id": 46,
+     "v": "Minute ",
+     "connected": false,
+     "parent": null
+    },
+    "raceB": {
+     "id": 47,
+     "v": "1",
+     "connected": false,
+     "parent": null
+    },
+    "numwA": {
+     "id": 48,
+     "v": "Goals: ",
+     "connected": false,
+     "parent": null
+    },
+    "numwB": {
+     "id": 49,
+     "v": "4",
+     "connected": false,
+     "parent": null
+    },
+    "later": {
+     "id": 143,
+     "v": "Choose position",
+     "connected": false,
+     "parent": null
+    },
+    "rep2": {
+     "id": 147,
+     "v": "A brand new sentence here",
+     "connected": false,
+     "parent": null
+    }
+   },
+   "html": {
+    "one": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Der flinke braune Fuchs springt über den faulen Hund.</font></font>",
+    "adj": "Age 17",
+    "adj3": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Du hast </font><font dir=\"auto\" style=\"vertical-align: inherit;\">in dieser Saison </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">3 Tore erzielt.</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "adjw": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Stürmer · </font><font dir=\"auto\" style=\"vertical-align: inherit;\">16 </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Jahre </font><font dir=\"auto\" style=\"vertical-align: inherit;\">· </font><font dir=\"auto\" style=\"vertical-align: inherit;\">England</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "between": "<b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Fettgedruckte Wörter,</font></font></b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\"> Text zwischen Elementen </font></font><i><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">, kursive Wörter</font></font></i>",
+    "num": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">16</font></font>",
+    "sym": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">+</font></font>",
+    "money": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">- </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">100.000 US-Dollar</font></font>",
+    "same": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Chelsea</font></font>",
+    "ph": "<span id=\"phspan\"><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Nationalität auswählen</font></font></span>",
+    "later": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Position auswählen</font></font>",
+    "write": "Season two",
+    "rm": "",
+    "rep": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Ein brandneuer Satz hier</font></font>",
+    "ins": "<i><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">NEUE WÖRTER</font></font></i><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Schwanzwörter</font></font>",
+    "loop": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Woche </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">1</font></font>",
+    "race": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Minute </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">1</font></font>",
+    "numw": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Tore: </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">4</font></font>"
+   }
+  },
+  "loop": {
+   "texts": {
+    "one": {
+     "id": 22,
+     "v": "The quick brown fox jumps over the lazy dog.",
+     "connected": false,
+     "parent": null
+    },
+    "adjA": {
+     "id": 23,
+     "v": "Age ",
+     "connected": true,
+     "parent": "p"
+    },
+    "adjB": {
+     "id": 24,
+     "v": "17",
+     "connected": true,
+     "parent": "p"
+    },
+    "adj3A": {
+     "id": 25,
+     "v": "You scored ",
+     "connected": false,
+     "parent": null
+    },
+    "adj3B": {
+     "id": 26,
+     "v": "3",
+     "connected": false,
+     "parent": null
+    },
+    "adj3C": {
+     "id": 27,
+     "v": " goals this season",
+     "connected": false,
+     "parent": null
+    },
+    "adjwA": {
+     "id": 28,
+     "v": "Striker",
+     "connected": false,
+     "parent": null
+    },
+    "adjwB": {
+     "id": 29,
+     "v": " · Age ",
+     "connected": false,
+     "parent": null
+    },
+    "adjwC": {
+     "id": 30,
+     "v": "16",
+     "connected": false,
+     "parent": null
+    },
+    "adjwD": {
+     "id": 31,
+     "v": " · ",
+     "connected": false,
+     "parent": null
+    },
+    "adjwE": {
+     "id": 32,
+     "v": "England",
+     "connected": false,
+     "parent": null
+    },
+    "between": {
+     "id": 33,
+     "v": " text between elements ",
+     "connected": false,
+     "parent": null
+    },
+    "num": {
+     "id": 34,
+     "v": "16",
+     "connected": false,
+     "parent": null
+    },
+    "sym": {
+     "id": 35,
+     "v": "+",
+     "connected": false,
+     "parent": null
+    },
+    "moneyA": {
+     "id": 36,
+     "v": "-",
+     "connected": false,
+     "parent": null
+    },
+    "moneyB": {
+     "id": 37,
+     "v": "$100k",
+     "connected": false,
+     "parent": null
+    },
+    "same": {
+     "id": 38,
+     "v": "Chelsea",
+     "connected": false,
+     "parent": null
+    },
+    "ph": {
+     "id": 39,
+     "v": "Choose nationality",
+     "connected": false,
+     "parent": null
+    },
+    "write": {
+     "id": 40,
+     "v": "Season two",
+     "connected": true,
+     "parent": "p"
+    },
+    "rm": {
+     "id": 41,
+     "v": "Remove this sentence please",
+     "connected": false,
+     "parent": null
+    },
+    "rep": {
+     "id": 42,
+     "v": "Replace this sentence please",
+     "connected": false,
+     "parent": null
+    },
+    "ins": {
+     "id": 43,
+     "v": "tail words",
+     "connected": false,
+     "parent": null
+    },
+    "loopA": {
+     "id": 44,
+     "v": "Week ",
+     "connected": true,
+     "parent": "p"
+    },
+    "loopB": {
+     "id": 45,
+     "v": "21",
+     "connected": true,
+     "parent": "p"
+    },
+    "raceA": {
+     "id": 46,
+     "v": "Minute ",
+     "connected": false,
+     "parent": null
+    },
+    "raceB": {
+     "id": 47,
+     "v": "1",
+     "connected": false,
+     "parent": null
+    },
+    "numwA": {
+     "id": 48,
+     "v": "Goals: ",
+     "connected": false,
+     "parent": null
+    },
+    "numwB": {
+     "id": 49,
+     "v": "4",
+     "connected": false,
+     "parent": null
+    },
+    "later": {
+     "id": 143,
+     "v": "Choose position",
+     "connected": false,
+     "parent": null
+    },
+    "rep2": {
+     "id": 147,
+     "v": "A brand new sentence here",
+     "connected": false,
+     "parent": null
+    }
+   },
+   "html": {
+    "one": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Der flinke braune Fuchs springt über den faulen Hund.</font></font>",
+    "adj": "Age 17",
+    "adj3": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Du hast </font><font dir=\"auto\" style=\"vertical-align: inherit;\">in dieser Saison </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">3 Tore erzielt.</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "adjw": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Stürmer · </font><font dir=\"auto\" style=\"vertical-align: inherit;\">16 </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Jahre </font><font dir=\"auto\" style=\"vertical-align: inherit;\">· </font><font dir=\"auto\" style=\"vertical-align: inherit;\">England</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "between": "<b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Fettgedruckte Wörter,</font></font></b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\"> Text zwischen Elementen </font></font><i><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">, kursive Wörter</font></font></i>",
+    "num": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">16</font></font>",
+    "sym": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">+</font></font>",
+    "money": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">- </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">100.000 US-Dollar</font></font>",
+    "same": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Chelsea</font></font>",
+    "ph": "<span id=\"phspan\"><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Nationalität auswählen</font></font></span>",
+    "later": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Position auswählen</font></font>",
+    "write": "Season two",
+    "rm": "",
+    "rep": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Ein brandneuer Satz hier</font></font>",
+    "ins": "<i><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">NEUE WÖRTER</font></font></i><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Schwanzwörter</font></font>",
+    "loop": "Week 21",
+    "race": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Minute </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">1</font></font>",
+    "numw": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Tore: </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">4</font></font>"
+   }
+  },
+  "race": {
+   "texts": {
+    "one": {
+     "id": 22,
+     "v": "The quick brown fox jumps over the lazy dog.",
+     "connected": false,
+     "parent": null
+    },
+    "adjA": {
+     "id": 23,
+     "v": "Age ",
+     "connected": true,
+     "parent": "p"
+    },
+    "adjB": {
+     "id": 24,
+     "v": "17",
+     "connected": true,
+     "parent": "p"
+    },
+    "adj3A": {
+     "id": 25,
+     "v": "You scored ",
+     "connected": false,
+     "parent": null
+    },
+    "adj3B": {
+     "id": 26,
+     "v": "3",
+     "connected": false,
+     "parent": null
+    },
+    "adj3C": {
+     "id": 27,
+     "v": " goals this season",
+     "connected": false,
+     "parent": null
+    },
+    "adjwA": {
+     "id": 28,
+     "v": "Striker",
+     "connected": false,
+     "parent": null
+    },
+    "adjwB": {
+     "id": 29,
+     "v": " · Age ",
+     "connected": false,
+     "parent": null
+    },
+    "adjwC": {
+     "id": 30,
+     "v": "16",
+     "connected": false,
+     "parent": null
+    },
+    "adjwD": {
+     "id": 31,
+     "v": " · ",
+     "connected": false,
+     "parent": null
+    },
+    "adjwE": {
+     "id": 32,
+     "v": "England",
+     "connected": false,
+     "parent": null
+    },
+    "between": {
+     "id": 33,
+     "v": " text between elements ",
+     "connected": false,
+     "parent": null
+    },
+    "num": {
+     "id": 34,
+     "v": "16",
+     "connected": false,
+     "parent": null
+    },
+    "sym": {
+     "id": 35,
+     "v": "+",
+     "connected": false,
+     "parent": null
+    },
+    "moneyA": {
+     "id": 36,
+     "v": "-",
+     "connected": false,
+     "parent": null
+    },
+    "moneyB": {
+     "id": 37,
+     "v": "$100k",
+     "connected": false,
+     "parent": null
+    },
+    "same": {
+     "id": 38,
+     "v": "Chelsea",
+     "connected": false,
+     "parent": null
+    },
+    "ph": {
+     "id": 39,
+     "v": "Choose nationality",
+     "connected": false,
+     "parent": null
+    },
+    "write": {
+     "id": 40,
+     "v": "Season two",
+     "connected": true,
+     "parent": "p"
+    },
+    "rm": {
+     "id": 41,
+     "v": "Remove this sentence please",
+     "connected": false,
+     "parent": null
+    },
+    "rep": {
+     "id": 42,
+     "v": "Replace this sentence please",
+     "connected": false,
+     "parent": null
+    },
+    "ins": {
+     "id": 43,
+     "v": "tail words",
+     "connected": false,
+     "parent": null
+    },
+    "loopA": {
+     "id": 44,
+     "v": "Week ",
+     "connected": true,
+     "parent": "p"
+    },
+    "loopB": {
+     "id": 45,
+     "v": "21",
+     "connected": true,
+     "parent": "p"
+    },
+    "raceA": {
+     "id": 46,
+     "v": "Minute ",
+     "connected": true,
+     "parent": "p"
+    },
+    "raceB": {
+     "id": 47,
+     "v": "41",
+     "connected": true,
+     "parent": "p"
+    },
+    "numwA": {
+     "id": 48,
+     "v": "Goals: ",
+     "connected": false,
+     "parent": null
+    },
+    "numwB": {
+     "id": 49,
+     "v": "4",
+     "connected": false,
+     "parent": null
+    },
+    "later": {
+     "id": 143,
+     "v": "Choose position",
+     "connected": false,
+     "parent": null
+    },
+    "rep2": {
+     "id": 147,
+     "v": "A brand new sentence here",
+     "connected": false,
+     "parent": null
+    }
+   },
+   "html": {
+    "one": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Der flinke braune Fuchs springt über den faulen Hund.</font></font>",
+    "adj": "Age 17",
+    "adj3": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Du hast </font><font dir=\"auto\" style=\"vertical-align: inherit;\">in dieser Saison </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">3 Tore erzielt.</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "adjw": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Stürmer · </font><font dir=\"auto\" style=\"vertical-align: inherit;\">16 </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Jahre </font><font dir=\"auto\" style=\"vertical-align: inherit;\">· </font><font dir=\"auto\" style=\"vertical-align: inherit;\">England</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "between": "<b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Fettgedruckte Wörter,</font></font></b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\"> Text zwischen Elementen </font></font><i><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">, kursive Wörter</font></font></i>",
+    "num": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">16</font></font>",
+    "sym": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">+</font></font>",
+    "money": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">- </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">100.000 US-Dollar</font></font>",
+    "same": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Chelsea</font></font>",
+    "ph": "<span id=\"phspan\"><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Nationalität auswählen</font></font></span>",
+    "later": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Position auswählen</font></font>",
+    "write": "Season two",
+    "rm": "",
+    "rep": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Ein brandneuer Satz hier</font></font>",
+    "ins": "<i><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">NEUE WÖRTER</font></font></i><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Schwanzwörter</font></font>",
+    "loop": "Week 21",
+    "race": "Minute 41",
+    "numw": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Tore: </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">4</font></font>"
+   }
+  },
+  "num-write": {
+   "texts": {
+    "one": {
+     "id": 22,
+     "v": "The quick brown fox jumps over the lazy dog.",
+     "connected": false,
+     "parent": null
+    },
+    "adjA": {
+     "id": 23,
+     "v": "Age ",
+     "connected": true,
+     "parent": "p"
+    },
+    "adjB": {
+     "id": 24,
+     "v": "17",
+     "connected": true,
+     "parent": "p"
+    },
+    "adj3A": {
+     "id": 25,
+     "v": "You scored ",
+     "connected": false,
+     "parent": null
+    },
+    "adj3B": {
+     "id": 26,
+     "v": "3",
+     "connected": false,
+     "parent": null
+    },
+    "adj3C": {
+     "id": 27,
+     "v": " goals this season",
+     "connected": false,
+     "parent": null
+    },
+    "adjwA": {
+     "id": 28,
+     "v": "Striker",
+     "connected": false,
+     "parent": null
+    },
+    "adjwB": {
+     "id": 29,
+     "v": " · Age ",
+     "connected": false,
+     "parent": null
+    },
+    "adjwC": {
+     "id": 30,
+     "v": "16",
+     "connected": false,
+     "parent": null
+    },
+    "adjwD": {
+     "id": 31,
+     "v": " · ",
+     "connected": false,
+     "parent": null
+    },
+    "adjwE": {
+     "id": 32,
+     "v": "England",
+     "connected": false,
+     "parent": null
+    },
+    "between": {
+     "id": 33,
+     "v": " text between elements ",
+     "connected": false,
+     "parent": null
+    },
+    "num": {
+     "id": 34,
+     "v": "17",
+     "connected": false,
+     "parent": null
+    },
+    "sym": {
+     "id": 35,
+     "v": "+",
+     "connected": false,
+     "parent": null
+    },
+    "moneyA": {
+     "id": 36,
+     "v": "-",
+     "connected": false,
+     "parent": null
+    },
+    "moneyB": {
+     "id": 37,
+     "v": "$100k",
+     "connected": false,
+     "parent": null
+    },
+    "same": {
+     "id": 38,
+     "v": "Chelsea",
+     "connected": false,
+     "parent": null
+    },
+    "ph": {
+     "id": 39,
+     "v": "Choose nationality",
+     "connected": false,
+     "parent": null
+    },
+    "write": {
+     "id": 40,
+     "v": "Season two",
+     "connected": true,
+     "parent": "p"
+    },
+    "rm": {
+     "id": 41,
+     "v": "Remove this sentence please",
+     "connected": false,
+     "parent": null
+    },
+    "rep": {
+     "id": 42,
+     "v": "Replace this sentence please",
+     "connected": false,
+     "parent": null
+    },
+    "ins": {
+     "id": 43,
+     "v": "tail words",
+     "connected": false,
+     "parent": null
+    },
+    "loopA": {
+     "id": 44,
+     "v": "Week ",
+     "connected": true,
+     "parent": "p"
+    },
+    "loopB": {
+     "id": 45,
+     "v": "21",
+     "connected": true,
+     "parent": "p"
+    },
+    "raceA": {
+     "id": 46,
+     "v": "Minute ",
+     "connected": true,
+     "parent": "p"
+    },
+    "raceB": {
+     "id": 47,
+     "v": "41",
+     "connected": true,
+     "parent": "p"
+    },
+    "numwA": {
+     "id": 48,
+     "v": "Goals: ",
+     "connected": false,
+     "parent": null
+    },
+    "numwB": {
+     "id": 49,
+     "v": "5",
+     "connected": false,
+     "parent": null
+    },
+    "later": {
+     "id": 143,
+     "v": "Choose position",
+     "connected": false,
+     "parent": null
+    },
+    "rep2": {
+     "id": 147,
+     "v": "A brand new sentence here",
+     "connected": false,
+     "parent": null
+    }
+   },
+   "html": {
+    "one": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Der flinke braune Fuchs springt über den faulen Hund.</font></font>",
+    "adj": "Age 17",
+    "adj3": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Du hast </font><font dir=\"auto\" style=\"vertical-align: inherit;\">in dieser Saison </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">3 Tore erzielt.</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "adjw": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Stürmer · </font><font dir=\"auto\" style=\"vertical-align: inherit;\">16 </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Jahre </font><font dir=\"auto\" style=\"vertical-align: inherit;\">· </font><font dir=\"auto\" style=\"vertical-align: inherit;\">England</font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font><font dir=\"auto\" style=\"vertical-align: inherit;\"></font>",
+    "between": "<b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Fettgedruckte Wörter,</font></font></b><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\"> Text zwischen Elementen </font></font><i><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">, kursive Wörter</font></font></i>",
+    "num": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">16</font></font>",
+    "sym": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">+</font></font>",
+    "money": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">- </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">100.000 US-Dollar</font></font>",
+    "same": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Chelsea</font></font>",
+    "ph": "<span id=\"phspan\"><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Nationalität auswählen</font></font></span>",
+    "later": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Position auswählen</font></font>",
+    "write": "Season two",
+    "rm": "",
+    "rep": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Ein brandneuer Satz hier</font></font>",
+    "ins": "<i><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">NEUE WÖRTER</font></font></i><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Schwanzwörter</font></font>",
+    "loop": "Week 21",
+    "race": "Minute 41",
+    "numw": "<font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">Tore: </font></font><font dir=\"auto\" style=\"vertical-align: inherit;\"><font dir=\"auto\" style=\"vertical-align: inherit;\">4</font></font>"
+   }
+  }
+ },
+ "timings": {
+  "later": 141,
+  "restore": -1,
+  "adjRestoreA": -1,
+  "rep": 181
+ },
+ "translated": true,
+ "hosts": {
+  "allowed": [
+   "127.0.0.1",
+   "translate.google.com",
+   "www.gstatic.com",
+   "translate.googleapis.com",
+   "translate-pa.googleapis.com"
+  ],
+  "blocked": [
+   "fonts.gstatic.com",
+   "www.google.com"
+  ]
+ },
+ "loop": {
+  "restores": 1
+ },
+ "race": {
+  "restores": 1
+ },
+ "records": [
+  {
+   "phase": "boot",
+   "batch": 1,
+   "ms": 1,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "div",
+    "id": 50,
+    "dom": "root",
+    "text": "The quick brown fox jumps over the lazy dog.Age 16"
+   },
+   "added": [
+    {
+     "t": "p",
+     "id": 1,
+     "dom": "one",
+     "text": "The quick brown fox jumps over the lazy dog."
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "boot",
+   "batch": 1,
+   "ms": 1,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "div",
+    "id": 50,
+    "dom": "root",
+    "text": "The quick brown fox jumps over the lazy dog.Age 16"
+   },
+   "added": [
+    {
+     "t": "p",
+     "id": 2,
+     "dom": "adj",
+     "text": "Age 16"
+    }
+   ],
+   "removed": [],
+   "prev": {
+    "t": "p",
+    "id": 1,
+    "dom": "one",
+    "text": "The quick brown fox jumps over the lazy dog."
+   },
+   "next": null
+  },
+  {
+   "phase": "boot",
+   "batch": 1,
+   "ms": 1,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "div",
+    "id": 50,
+    "dom": "root",
+    "text": "The quick brown fox jumps over the lazy dog.Age 16"
+   },
+   "added": [
+    {
+     "t": "p",
+     "id": 3,
+     "dom": "adj3",
+     "text": "You scored 3 goals this season"
+    }
+   ],
+   "removed": [],
+   "prev": {
+    "t": "p",
+    "id": 2,
+    "dom": "adj",
+    "text": "Age 16"
+   },
+   "next": null
+  },
+  {
+   "phase": "boot",
+   "batch": 1,
+   "ms": 1,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "div",
+    "id": 50,
+    "dom": "root",
+    "text": "The quick brown fox jumps over the lazy dog.Age 16"
+   },
+   "added": [
+    {
+     "t": "p",
+     "id": 4,
+     "dom": "adjw",
+     "text": "Striker · Age 16 · England"
+    }
+   ],
+   "removed": [],
+   "prev": {
+    "t": "p",
+    "id": 3,
+    "dom": "adj3",
+    "text": "You scored 3 goals this season"
+   },
+   "next": null
+  },
+  {
+   "phase": "boot",
+   "batch": 1,
+   "ms": 1,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "div",
+    "id": 50,
+    "dom": "root",
+    "text": "The quick brown fox jumps over the lazy dog.Age 16"
+   },
+   "added": [
+    {
+     "t": "p",
+     "id": 7,
+     "dom": "between",
+     "text": "Bold words text between elements italic words"
+    }
+   ],
+   "removed": [],
+   "prev": {
+    "t": "p",
+    "id": 4,
+    "dom": "adjw",
+    "text": "Striker · Age 16 · England"
+   },
+   "next": null
+  },
+  {
+   "phase": "boot",
+   "batch": 1,
+   "ms": 1,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "div",
+    "id": 50,
+    "dom": "root",
+    "text": "The quick brown fox jumps over the lazy dog.Age 16"
+   },
+   "added": [
+    {
+     "t": "p",
+     "id": 8,
+     "dom": "num",
+     "text": "16"
+    }
+   ],
+   "removed": [],
+   "prev": {
+    "t": "p",
+    "id": 7,
+    "dom": "between",
+    "text": "Bold words text between elements italic words"
+   },
+   "next": null
+  },
+  {
+   "phase": "boot",
+   "batch": 1,
+   "ms": 1,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "div",
+    "id": 50,
+    "dom": "root",
+    "text": "The quick brown fox jumps over the lazy dog.Age 16"
+   },
+   "added": [
+    {
+     "t": "p",
+     "id": 9,
+     "dom": "sym",
+     "text": "+"
+    }
+   ],
+   "removed": [],
+   "prev": {
+    "t": "p",
+    "id": 8,
+    "dom": "num",
+    "text": "16"
+   },
+   "next": null
+  },
+  {
+   "phase": "boot",
+   "batch": 1,
+   "ms": 1,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "div",
+    "id": 50,
+    "dom": "root",
+    "text": "The quick brown fox jumps over the lazy dog.Age 16"
+   },
+   "added": [
+    {
+     "t": "p",
+     "id": 10,
+     "dom": "money",
+     "text": "-$100k"
+    }
+   ],
+   "removed": [],
+   "prev": {
+    "t": "p",
+    "id": 9,
+    "dom": "sym",
+    "text": "+"
+   },
+   "next": null
+  },
+  {
+   "phase": "boot",
+   "batch": 1,
+   "ms": 1,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "div",
+    "id": 50,
+    "dom": "root",
+    "text": "The quick brown fox jumps over the lazy dog.Age 16"
+   },
+   "added": [
+    {
+     "t": "p",
+     "id": 11,
+     "dom": "same",
+     "text": "Chelsea"
+    }
+   ],
+   "removed": [],
+   "prev": {
+    "t": "p",
+    "id": 10,
+    "dom": "money",
+    "text": "-$100k"
+   },
+   "next": null
+  },
+  {
+   "phase": "boot",
+   "batch": 1,
+   "ms": 1,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "div",
+    "id": 50,
+    "dom": "root",
+    "text": "The quick brown fox jumps over the lazy dog.Age 16"
+   },
+   "added": [
+    {
+     "t": "p",
+     "id": 13,
+     "dom": "ph",
+     "text": "Choose nationality"
+    }
+   ],
+   "removed": [],
+   "prev": {
+    "t": "p",
+    "id": 11,
+    "dom": "same",
+    "text": "Chelsea"
+   },
+   "next": null
+  },
+  {
+   "phase": "boot",
+   "batch": 1,
+   "ms": 1,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "div",
+    "id": 50,
+    "dom": "root",
+    "text": "The quick brown fox jumps over the lazy dog.Age 16"
+   },
+   "added": [
+    {
+     "t": "p",
+     "id": 14,
+     "dom": "later",
+     "text": ""
+    }
+   ],
+   "removed": [],
+   "prev": {
+    "t": "p",
+    "id": 13,
+    "dom": "ph",
+    "text": "Choose nationality"
+   },
+   "next": null
+  },
+  {
+   "phase": "boot",
+   "batch": 1,
+   "ms": 1,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "div",
+    "id": 50,
+    "dom": "root",
+    "text": "The quick brown fox jumps over the lazy dog.Age 16"
+   },
+   "added": [
+    {
+     "t": "p",
+     "id": 15,
+     "dom": "write",
+     "text": "Season one"
+    }
+   ],
+   "removed": [],
+   "prev": {
+    "t": "p",
+    "id": 14,
+    "dom": "later",
+    "text": ""
+   },
+   "next": null
+  },
+  {
+   "phase": "boot",
+   "batch": 1,
+   "ms": 1,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "div",
+    "id": 50,
+    "dom": "root",
+    "text": "The quick brown fox jumps over the lazy dog.Age 16"
+   },
+   "added": [
+    {
+     "t": "p",
+     "id": 16,
+     "dom": "rm",
+     "text": "Remove this sentence please"
+    }
+   ],
+   "removed": [],
+   "prev": {
+    "t": "p",
+    "id": 15,
+    "dom": "write",
+    "text": "Season one"
+   },
+   "next": null
+  },
+  {
+   "phase": "boot",
+   "batch": 1,
+   "ms": 1,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "div",
+    "id": 50,
+    "dom": "root",
+    "text": "The quick brown fox jumps over the lazy dog.Age 16"
+   },
+   "added": [
+    {
+     "t": "p",
+     "id": 17,
+     "dom": "rep",
+     "text": "Replace this sentence please"
+    }
+   ],
+   "removed": [],
+   "prev": {
+    "t": "p",
+    "id": 16,
+    "dom": "rm",
+    "text": "Remove this sentence please"
+   },
+   "next": null
+  },
+  {
+   "phase": "boot",
+   "batch": 1,
+   "ms": 1,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "div",
+    "id": 50,
+    "dom": "root",
+    "text": "The quick brown fox jumps over the lazy dog.Age 16"
+   },
+   "added": [
+    {
+     "t": "p",
+     "id": 18,
+     "dom": "ins",
+     "text": "tail words"
+    }
+   ],
+   "removed": [],
+   "prev": {
+    "t": "p",
+    "id": 17,
+    "dom": "rep",
+    "text": "Replace this sentence please"
+   },
+   "next": null
+  },
+  {
+   "phase": "boot",
+   "batch": 1,
+   "ms": 1,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "div",
+    "id": 50,
+    "dom": "root",
+    "text": "The quick brown fox jumps over the lazy dog.Age 16"
+   },
+   "added": [
+    {
+     "t": "p",
+     "id": 19,
+     "dom": "loop",
+     "text": "Week 1"
+    }
+   ],
+   "removed": [],
+   "prev": {
+    "t": "p",
+    "id": 18,
+    "dom": "ins",
+    "text": "tail words"
+   },
+   "next": null
+  },
+  {
+   "phase": "boot",
+   "batch": 1,
+   "ms": 1,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "div",
+    "id": 50,
+    "dom": "root",
+    "text": "The quick brown fox jumps over the lazy dog.Age 16"
+   },
+   "added": [
+    {
+     "t": "p",
+     "id": 20,
+     "dom": "race",
+     "text": "Minute 1"
+    }
+   ],
+   "removed": [],
+   "prev": {
+    "t": "p",
+    "id": 19,
+    "dom": "loop",
+    "text": "Week 1"
+   },
+   "next": null
+  },
+  {
+   "phase": "boot",
+   "batch": 1,
+   "ms": 1,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "div",
+    "id": 50,
+    "dom": "root",
+    "text": "The quick brown fox jumps over the lazy dog.Age 16"
+   },
+   "added": [
+    {
+     "t": "p",
+     "id": 21,
+     "dom": "numw",
+     "text": "Goals: 4"
+    }
+   ],
+   "removed": [],
+   "prev": {
+    "t": "p",
+    "id": 20,
+    "dom": "race",
+    "text": "Minute 1"
+   },
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 1,
+    "dom": "one",
+    "text": "Der flinke braune Fuchs springt über den faulen Hu"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 51,
+     "text": "Der flinke braune Fuchs springt über den faulen Hu"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": {
+    "t": "#text",
+    "id": 22,
+    "v": "The quick brown fox jumps over the lazy dog."
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 51,
+    "text": "Der flinke braune Fuchs springt über den faulen Hu"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 52,
+     "text": "Der flinke braune Fuchs springt über den faulen Hu"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 52,
+    "text": "Der flinke braune Fuchs springt über den faulen Hu"
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 53,
+     "v": "Der flinke braune Fuchs springt über den faulen Hund."
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 53,
+    "v": "Der flinke braune Fuchs springt über den faulen Hund."
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "The quick brown fox jumps over the lazy dog."
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 1,
+    "dom": "one",
+    "text": "Der flinke braune Fuchs springt über den faulen Hu"
+   },
+   "added": [],
+   "removed": [
+    {
+     "t": "#text",
+     "id": 22,
+     "v": "The quick brown fox jumps over the lazy dog."
+    }
+   ],
+   "prev": {
+    "t": "font",
+    "id": 51,
+    "text": "Der flinke braune Fuchs springt über den faulen Hu"
+   },
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 2,
+    "dom": "adj",
+    "text": "Alter 16"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 54,
+     "text": "Alter "
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": {
+    "t": "#text",
+    "id": 23,
+    "v": "Age "
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 2,
+    "dom": "adj",
+    "text": "Alter 16"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 55,
+     "text": "16"
+    }
+   ],
+   "removed": [],
+   "prev": {
+    "t": "#text",
+    "id": 23,
+    "v": "Age "
+   },
+   "next": {
+    "t": "#text",
+    "id": 24,
+    "v": "16"
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 54,
+    "text": "Alter "
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 56,
+     "text": "Alter "
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 56,
+    "text": "Alter "
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 57,
+     "v": "Alter "
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 57,
+    "v": "Alter "
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "Age "
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 55,
+    "text": "16"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 58,
+     "text": "16"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 58,
+    "text": "16"
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 59,
+     "v": "16"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 59,
+    "v": "16"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "16"
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 2,
+    "dom": "adj",
+    "text": "Alter 16"
+   },
+   "added": [],
+   "removed": [
+    {
+     "t": "#text",
+     "id": 23,
+     "v": "Age "
+    }
+   ],
+   "prev": {
+    "t": "font",
+    "id": 54,
+    "text": "Alter "
+   },
+   "next": {
+    "t": "font",
+    "id": 55,
+    "text": "16"
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 2,
+    "dom": "adj",
+    "text": "Alter 16"
+   },
+   "added": [],
+   "removed": [
+    {
+     "t": "#text",
+     "id": 24,
+     "v": "16"
+    }
+   ],
+   "prev": {
+    "t": "font",
+    "id": 55,
+    "text": "16"
+   },
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 3,
+    "dom": "adj3",
+    "text": "Du hast in dieser Saison 3 Tore erzielt."
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 60,
+     "text": "Du hast in dieser Saison "
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": {
+    "t": "#text",
+    "id": 25,
+    "v": "You scored "
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 3,
+    "dom": "adj3",
+    "text": "Du hast in dieser Saison 3 Tore erzielt."
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 61,
+     "text": "3 Tore erzielt."
+    }
+   ],
+   "removed": [],
+   "prev": {
+    "t": "#text",
+    "id": 25,
+    "v": "You scored "
+   },
+   "next": {
+    "t": "#text",
+    "id": 26,
+    "v": "3"
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 3,
+    "dom": "adj3",
+    "text": "Du hast in dieser Saison 3 Tore erzielt."
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 62,
+     "text": ""
+    }
+   ],
+   "removed": [],
+   "prev": {
+    "t": "#text",
+    "id": 26,
+    "v": "3"
+   },
+   "next": {
+    "t": "#text",
+    "id": 27,
+    "v": " goals this season"
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 60,
+    "text": "Du hast in dieser Saison "
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 63,
+     "text": "Du hast "
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 63,
+    "text": "Du hast "
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 64,
+     "v": "Du hast "
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 64,
+    "v": "Du hast "
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "You scored "
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 60,
+    "text": "Du hast in dieser Saison "
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 65,
+     "text": "in dieser Saison "
+    }
+   ],
+   "removed": [],
+   "prev": {
+    "t": "font",
+    "id": 63,
+    "text": "Du hast "
+   },
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 65,
+    "text": "in dieser Saison "
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 66,
+     "v": "in dieser Saison "
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 66,
+    "v": "in dieser Saison "
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": " goals this season"
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 61,
+    "text": "3 Tore erzielt."
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 67,
+     "text": "3 Tore erzielt."
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 67,
+    "text": "3 Tore erzielt."
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 68,
+     "v": "3 Tore erzielt."
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 68,
+    "v": "3 Tore erzielt."
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "3"
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 3,
+    "dom": "adj3",
+    "text": "Du hast in dieser Saison 3 Tore erzielt."
+   },
+   "added": [],
+   "removed": [
+    {
+     "t": "#text",
+     "id": 25,
+     "v": "You scored "
+    }
+   ],
+   "prev": {
+    "t": "font",
+    "id": 60,
+    "text": "Du hast in dieser Saison "
+   },
+   "next": {
+    "t": "font",
+    "id": 61,
+    "text": "3 Tore erzielt."
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 3,
+    "dom": "adj3",
+    "text": "Du hast in dieser Saison 3 Tore erzielt."
+   },
+   "added": [],
+   "removed": [
+    {
+     "t": "#text",
+     "id": 26,
+     "v": "3"
+    }
+   ],
+   "prev": {
+    "t": "font",
+    "id": 61,
+    "text": "3 Tore erzielt."
+   },
+   "next": {
+    "t": "font",
+    "id": 62,
+    "text": ""
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 3,
+    "dom": "adj3",
+    "text": "Du hast in dieser Saison 3 Tore erzielt."
+   },
+   "added": [],
+   "removed": [
+    {
+     "t": "#text",
+     "id": 27,
+     "v": " goals this season"
+    }
+   ],
+   "prev": {
+    "t": "font",
+    "id": 62,
+    "text": ""
+   },
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 4,
+    "dom": "adjw",
+    "text": "Stürmer · 16 Jahre · England"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 69,
+     "text": "Stürmer · 16 "
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": {
+    "t": "#text",
+    "id": 28,
+    "v": "Striker"
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 4,
+    "dom": "adjw",
+    "text": "Stürmer · 16 Jahre · England"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 70,
+     "text": "Jahre · England"
+    }
+   ],
+   "removed": [],
+   "prev": {
+    "t": "#text",
+    "id": 28,
+    "v": "Striker"
+   },
+   "next": {
+    "t": "#text",
+    "id": 29,
+    "v": " · Age "
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 4,
+    "dom": "adjw",
+    "text": "Stürmer · 16 Jahre · England"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 71,
+     "text": ""
+    }
+   ],
+   "removed": [],
+   "prev": {
+    "t": "#text",
+    "id": 29,
+    "v": " · Age "
+   },
+   "next": {
+    "t": "#text",
+    "id": 30,
+    "v": "16"
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 4,
+    "dom": "adjw",
+    "text": "Stürmer · 16 Jahre · England"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 72,
+     "text": ""
+    }
+   ],
+   "removed": [],
+   "prev": {
+    "t": "#text",
+    "id": 30,
+    "v": "16"
+   },
+   "next": {
+    "t": "#text",
+    "id": 31,
+    "v": " · "
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 4,
+    "dom": "adjw",
+    "text": "Stürmer · 16 Jahre · England"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 73,
+     "text": ""
+    }
+   ],
+   "removed": [],
+   "prev": {
+    "t": "#text",
+    "id": 31,
+    "v": " · "
+   },
+   "next": {
+    "t": "#text",
+    "id": 32,
+    "v": "England"
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 69,
+    "text": "Stürmer · 16 "
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 74,
+     "text": "Stürmer · "
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 74,
+    "text": "Stürmer · "
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 75,
+     "v": "Stürmer · "
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 75,
+    "v": "Stürmer · "
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "Striker"
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 69,
+    "text": "Stürmer · 16 "
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 76,
+     "text": "16 "
+    }
+   ],
+   "removed": [],
+   "prev": {
+    "t": "font",
+    "id": 74,
+    "text": "Stürmer · "
+   },
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 76,
+    "text": "16 "
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 77,
+     "v": "16 "
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 77,
+    "v": "16 "
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "16"
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 70,
+    "text": "Jahre · England"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 78,
+     "text": "Jahre "
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 78,
+    "text": "Jahre "
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 79,
+     "v": "Jahre "
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 79,
+    "v": "Jahre "
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": " · Age "
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 70,
+    "text": "Jahre · England"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 80,
+     "text": "· "
+    }
+   ],
+   "removed": [],
+   "prev": {
+    "t": "font",
+    "id": 78,
+    "text": "Jahre "
+   },
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 80,
+    "text": "· "
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 81,
+     "v": "· "
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 81,
+    "v": "· "
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": " · "
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 70,
+    "text": "Jahre · England"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 82,
+     "text": "England"
+    }
+   ],
+   "removed": [],
+   "prev": {
+    "t": "font",
+    "id": 80,
+    "text": "· "
+   },
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 82,
+    "text": "England"
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 83,
+     "v": "England"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 83,
+    "v": "England"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "England"
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 4,
+    "dom": "adjw",
+    "text": "Stürmer · 16 Jahre · England"
+   },
+   "added": [],
+   "removed": [
+    {
+     "t": "#text",
+     "id": 28,
+     "v": "Striker"
+    }
+   ],
+   "prev": {
+    "t": "font",
+    "id": 69,
+    "text": "Stürmer · 16 "
+   },
+   "next": {
+    "t": "font",
+    "id": 70,
+    "text": "Jahre · England"
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 4,
+    "dom": "adjw",
+    "text": "Stürmer · 16 Jahre · England"
+   },
+   "added": [],
+   "removed": [
+    {
+     "t": "#text",
+     "id": 29,
+     "v": " · Age "
+    }
+   ],
+   "prev": {
+    "t": "font",
+    "id": 70,
+    "text": "Jahre · England"
+   },
+   "next": {
+    "t": "font",
+    "id": 71,
+    "text": ""
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 4,
+    "dom": "adjw",
+    "text": "Stürmer · 16 Jahre · England"
+   },
+   "added": [],
+   "removed": [
+    {
+     "t": "#text",
+     "id": 30,
+     "v": "16"
+    }
+   ],
+   "prev": {
+    "t": "font",
+    "id": 71,
+    "text": ""
+   },
+   "next": {
+    "t": "font",
+    "id": 72,
+    "text": ""
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 4,
+    "dom": "adjw",
+    "text": "Stürmer · 16 Jahre · England"
+   },
+   "added": [],
+   "removed": [
+    {
+     "t": "#text",
+     "id": 31,
+     "v": " · "
+    }
+   ],
+   "prev": {
+    "t": "font",
+    "id": 72,
+    "text": ""
+   },
+   "next": {
+    "t": "font",
+    "id": 73,
+    "text": ""
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 4,
+    "dom": "adjw",
+    "text": "Stürmer · 16 Jahre · England"
+   },
+   "added": [],
+   "removed": [
+    {
+     "t": "#text",
+     "id": 32,
+     "v": "England"
+    }
+   ],
+   "prev": {
+    "t": "font",
+    "id": 73,
+    "text": ""
+   },
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "b",
+    "id": 5,
+    "text": "Fettgedruckte Wörter,"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 84,
+     "text": "Fettgedruckte Wörter,"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": {
+    "t": "#text",
+    "id": 85,
+    "v": "Bold words"
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 7,
+    "dom": "between",
+    "text": "Fettgedruckte Wörter, Text zwischen Elementen , ku"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 86,
+     "text": " Text zwischen Elementen "
+    }
+   ],
+   "removed": [],
+   "prev": {
+    "t": "b",
+    "id": 5,
+    "text": "Fettgedruckte Wörter,"
+   },
+   "next": {
+    "t": "#text",
+    "id": 33,
+    "v": " text between elements "
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "i",
+    "id": 6,
+    "text": ", kursive Wörter"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 87,
+     "text": ", kursive Wörter"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": {
+    "t": "#text",
+    "id": 88,
+    "v": "italic words"
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 84,
+    "text": "Fettgedruckte Wörter,"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 89,
+     "text": "Fettgedruckte Wörter,"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 89,
+    "text": "Fettgedruckte Wörter,"
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 90,
+     "v": "Fettgedruckte Wörter,"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 90,
+    "v": "Fettgedruckte Wörter,"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "Bold words"
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 86,
+    "text": " Text zwischen Elementen "
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 91,
+     "text": " Text zwischen Elementen "
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 91,
+    "text": " Text zwischen Elementen "
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 92,
+     "v": " Text zwischen Elementen "
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 92,
+    "v": " Text zwischen Elementen "
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": " text between elements "
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 87,
+    "text": ", kursive Wörter"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 93,
+     "text": ", kursive Wörter"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 93,
+    "text": ", kursive Wörter"
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 94,
+     "v": ", kursive Wörter"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 94,
+    "v": ", kursive Wörter"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "italic words"
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "b",
+    "id": 5,
+    "text": "Fettgedruckte Wörter,"
+   },
+   "added": [],
+   "removed": [
+    {
+     "t": "#text",
+     "id": 85,
+     "v": "Bold words"
+    }
+   ],
+   "prev": {
+    "t": "font",
+    "id": 84,
+    "text": "Fettgedruckte Wörter,"
+   },
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 7,
+    "dom": "between",
+    "text": "Fettgedruckte Wörter, Text zwischen Elementen , ku"
+   },
+   "added": [],
+   "removed": [
+    {
+     "t": "#text",
+     "id": 33,
+     "v": " text between elements "
+    }
+   ],
+   "prev": {
+    "t": "font",
+    "id": 86,
+    "text": " Text zwischen Elementen "
+   },
+   "next": {
+    "t": "i",
+    "id": 6,
+    "text": ", kursive Wörter"
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "i",
+    "id": 6,
+    "text": ", kursive Wörter"
+   },
+   "added": [],
+   "removed": [
+    {
+     "t": "#text",
+     "id": 88,
+     "v": "italic words"
+    }
+   ],
+   "prev": {
+    "t": "font",
+    "id": 87,
+    "text": ", kursive Wörter"
+   },
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 8,
+    "dom": "num",
+    "text": "16"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 95,
+     "text": "16"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": {
+    "t": "#text",
+    "id": 34,
+    "v": "16"
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 95,
+    "text": "16"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 96,
+     "text": "16"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 96,
+    "text": "16"
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 97,
+     "v": "16"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 97,
+    "v": "16"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "16"
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 8,
+    "dom": "num",
+    "text": "16"
+   },
+   "added": [],
+   "removed": [
+    {
+     "t": "#text",
+     "id": 34,
+     "v": "16"
+    }
+   ],
+   "prev": {
+    "t": "font",
+    "id": 95,
+    "text": "16"
+   },
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 9,
+    "dom": "sym",
+    "text": "+"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 98,
+     "text": "+"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": {
+    "t": "#text",
+    "id": 35,
+    "v": "+"
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 98,
+    "text": "+"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 99,
+     "text": "+"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 99,
+    "text": "+"
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 100,
+     "v": "+"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 100,
+    "v": "+"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "+"
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 9,
+    "dom": "sym",
+    "text": "+"
+   },
+   "added": [],
+   "removed": [
+    {
+     "t": "#text",
+     "id": 35,
+     "v": "+"
+    }
+   ],
+   "prev": {
+    "t": "font",
+    "id": 98,
+    "text": "+"
+   },
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 10,
+    "dom": "money",
+    "text": "- 100.000 US-Dollar"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 101,
+     "text": "- "
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": {
+    "t": "#text",
+    "id": 36,
+    "v": "-"
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 10,
+    "dom": "money",
+    "text": "- 100.000 US-Dollar"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 102,
+     "text": "100.000 US-Dollar"
+    }
+   ],
+   "removed": [],
+   "prev": {
+    "t": "#text",
+    "id": 36,
+    "v": "-"
+   },
+   "next": {
+    "t": "#text",
+    "id": 37,
+    "v": "$100k"
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 101,
+    "text": "- "
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 103,
+     "text": "- "
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 103,
+    "text": "- "
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 104,
+     "v": "- "
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 104,
+    "v": "- "
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "-"
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 102,
+    "text": "100.000 US-Dollar"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 105,
+     "text": "100.000 US-Dollar"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 105,
+    "text": "100.000 US-Dollar"
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 106,
+     "v": "100.000 US-Dollar"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 106,
+    "v": "100.000 US-Dollar"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "$100k"
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 10,
+    "dom": "money",
+    "text": "- 100.000 US-Dollar"
+   },
+   "added": [],
+   "removed": [
+    {
+     "t": "#text",
+     "id": 36,
+     "v": "-"
+    }
+   ],
+   "prev": {
+    "t": "font",
+    "id": 101,
+    "text": "- "
+   },
+   "next": {
+    "t": "font",
+    "id": 102,
+    "text": "100.000 US-Dollar"
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 10,
+    "dom": "money",
+    "text": "- 100.000 US-Dollar"
+   },
+   "added": [],
+   "removed": [
+    {
+     "t": "#text",
+     "id": 37,
+     "v": "$100k"
+    }
+   ],
+   "prev": {
+    "t": "font",
+    "id": 102,
+    "text": "100.000 US-Dollar"
+   },
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 11,
+    "dom": "same",
+    "text": "Chelsea"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 107,
+     "text": "Chelsea"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": {
+    "t": "#text",
+    "id": 38,
+    "v": "Chelsea"
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 107,
+    "text": "Chelsea"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 108,
+     "text": "Chelsea"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 108,
+    "text": "Chelsea"
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 109,
+     "v": "Chelsea"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 109,
+    "v": "Chelsea"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "Chelsea"
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 11,
+    "dom": "same",
+    "text": "Chelsea"
+   },
+   "added": [],
+   "removed": [
+    {
+     "t": "#text",
+     "id": 38,
+     "v": "Chelsea"
+    }
+   ],
+   "prev": {
+    "t": "font",
+    "id": 107,
+    "text": "Chelsea"
+   },
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "span",
+    "id": 12,
+    "dom": "phspan",
+    "text": "Nationalität auswählen"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 110,
+     "text": "Nationalität auswählen"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": {
+    "t": "#text",
+    "id": 39,
+    "v": "Choose nationality"
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 110,
+    "text": "Nationalität auswählen"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 111,
+     "text": "Nationalität auswählen"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 111,
+    "text": "Nationalität auswählen"
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 112,
+     "v": "Nationalität auswählen"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 112,
+    "v": "Nationalität auswählen"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "Choose nationality"
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "span",
+    "id": 12,
+    "dom": "phspan",
+    "text": "Nationalität auswählen"
+   },
+   "added": [],
+   "removed": [
+    {
+     "t": "#text",
+     "id": 39,
+     "v": "Choose nationality"
+    }
+   ],
+   "prev": {
+    "t": "font",
+    "id": 110,
+    "text": "Nationalität auswählen"
+   },
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 15,
+    "dom": "write",
+    "text": "Staffel eins"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 113,
+     "text": "Staffel eins"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": {
+    "t": "#text",
+    "id": 40,
+    "v": "Season one"
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 113,
+    "text": "Staffel eins"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 114,
+     "text": "Staffel eins"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 114,
+    "text": "Staffel eins"
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 115,
+     "v": "Staffel eins"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 115,
+    "v": "Staffel eins"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "Season one"
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 15,
+    "dom": "write",
+    "text": "Staffel eins"
+   },
+   "added": [],
+   "removed": [
+    {
+     "t": "#text",
+     "id": 40,
+     "v": "Season one"
+    }
+   ],
+   "prev": {
+    "t": "font",
+    "id": 113,
+    "text": "Staffel eins"
+   },
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 16,
+    "dom": "rm",
+    "text": "Bitte entfernen Sie diesen Satz."
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 116,
+     "text": "Bitte entfernen Sie diesen Satz."
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": {
+    "t": "#text",
+    "id": 41,
+    "v": "Remove this sentence please"
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 116,
+    "text": "Bitte entfernen Sie diesen Satz."
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 117,
+     "text": "Bitte entfernen Sie diesen Satz."
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 117,
+    "text": "Bitte entfernen Sie diesen Satz."
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 118,
+     "v": "Bitte entfernen Sie diesen Satz."
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 118,
+    "v": "Bitte entfernen Sie diesen Satz."
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "Remove this sentence please"
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 16,
+    "dom": "rm",
+    "text": "Bitte entfernen Sie diesen Satz."
+   },
+   "added": [],
+   "removed": [
+    {
+     "t": "#text",
+     "id": 41,
+     "v": "Remove this sentence please"
+    }
+   ],
+   "prev": {
+    "t": "font",
+    "id": 116,
+    "text": "Bitte entfernen Sie diesen Satz."
+   },
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 17,
+    "dom": "rep",
+    "text": "Bitte ersetzen Sie diesen Satz."
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 119,
+     "text": "Bitte ersetzen Sie diesen Satz."
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": {
+    "t": "#text",
+    "id": 42,
+    "v": "Replace this sentence please"
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 119,
+    "text": "Bitte ersetzen Sie diesen Satz."
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 120,
+     "text": "Bitte ersetzen Sie diesen Satz."
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 120,
+    "text": "Bitte ersetzen Sie diesen Satz."
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 121,
+     "v": "Bitte ersetzen Sie diesen Satz."
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 121,
+    "v": "Bitte ersetzen Sie diesen Satz."
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "Replace this sentence please"
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 17,
+    "dom": "rep",
+    "text": "Bitte ersetzen Sie diesen Satz."
+   },
+   "added": [],
+   "removed": [
+    {
+     "t": "#text",
+     "id": 42,
+     "v": "Replace this sentence please"
+    }
+   ],
+   "prev": {
+    "t": "font",
+    "id": 119,
+    "text": "Bitte ersetzen Sie diesen Satz."
+   },
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 18,
+    "dom": "ins",
+    "text": "Schwanzwörter"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 122,
+     "text": "Schwanzwörter"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": {
+    "t": "#text",
+    "id": 43,
+    "v": "tail words"
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 122,
+    "text": "Schwanzwörter"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 123,
+     "text": "Schwanzwörter"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 123,
+    "text": "Schwanzwörter"
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 124,
+     "v": "Schwanzwörter"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 124,
+    "v": "Schwanzwörter"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "tail words"
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 18,
+    "dom": "ins",
+    "text": "Schwanzwörter"
+   },
+   "added": [],
+   "removed": [
+    {
+     "t": "#text",
+     "id": 43,
+     "v": "tail words"
+    }
+   ],
+   "prev": {
+    "t": "font",
+    "id": 122,
+    "text": "Schwanzwörter"
+   },
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 19,
+    "dom": "loop",
+    "text": "Woche 1"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 125,
+     "text": "Woche "
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": {
+    "t": "#text",
+    "id": 44,
+    "v": "Week "
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 19,
+    "dom": "loop",
+    "text": "Woche 1"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 126,
+     "text": "1"
+    }
+   ],
+   "removed": [],
+   "prev": {
+    "t": "#text",
+    "id": 44,
+    "v": "Week "
+   },
+   "next": {
+    "t": "#text",
+    "id": 45,
+    "v": "1"
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 125,
+    "text": "Woche "
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 127,
+     "text": "Woche "
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 127,
+    "text": "Woche "
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 128,
+     "v": "Woche "
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 128,
+    "v": "Woche "
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "Week "
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 126,
+    "text": "1"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 129,
+     "text": "1"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 129,
+    "text": "1"
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 130,
+     "v": "1"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 130,
+    "v": "1"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "1"
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 19,
+    "dom": "loop",
+    "text": "Woche 1"
+   },
+   "added": [],
+   "removed": [
+    {
+     "t": "#text",
+     "id": 44,
+     "v": "Week "
+    }
+   ],
+   "prev": {
+    "t": "font",
+    "id": 125,
+    "text": "Woche "
+   },
+   "next": {
+    "t": "font",
+    "id": 126,
+    "text": "1"
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 19,
+    "dom": "loop",
+    "text": "Woche 1"
+   },
+   "added": [],
+   "removed": [
+    {
+     "t": "#text",
+     "id": 45,
+     "v": "1"
+    }
+   ],
+   "prev": {
+    "t": "font",
+    "id": 126,
+    "text": "1"
+   },
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 20,
+    "dom": "race",
+    "text": "Minute 1"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 131,
+     "text": "Minute "
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": {
+    "t": "#text",
+    "id": 46,
+    "v": "Minute "
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 20,
+    "dom": "race",
+    "text": "Minute 1"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 132,
+     "text": "1"
+    }
+   ],
+   "removed": [],
+   "prev": {
+    "t": "#text",
+    "id": 46,
+    "v": "Minute "
+   },
+   "next": {
+    "t": "#text",
+    "id": 47,
+    "v": "1"
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 131,
+    "text": "Minute "
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 133,
+     "text": "Minute "
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 133,
+    "text": "Minute "
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 134,
+     "v": "Minute "
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 134,
+    "v": "Minute "
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "Minute "
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 132,
+    "text": "1"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 135,
+     "text": "1"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 135,
+    "text": "1"
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 136,
+     "v": "1"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 136,
+    "v": "1"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "1"
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 20,
+    "dom": "race",
+    "text": "Minute 1"
+   },
+   "added": [],
+   "removed": [
+    {
+     "t": "#text",
+     "id": 46,
+     "v": "Minute "
+    }
+   ],
+   "prev": {
+    "t": "font",
+    "id": 131,
+    "text": "Minute "
+   },
+   "next": {
+    "t": "font",
+    "id": 132,
+    "text": "1"
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 20,
+    "dom": "race",
+    "text": "Minute 1"
+   },
+   "added": [],
+   "removed": [
+    {
+     "t": "#text",
+     "id": 47,
+     "v": "1"
+    }
+   ],
+   "prev": {
+    "t": "font",
+    "id": 132,
+    "text": "1"
+   },
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 21,
+    "dom": "numw",
+    "text": "Tore: 4"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 137,
+     "text": "Tore: "
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": {
+    "t": "#text",
+    "id": 48,
+    "v": "Goals: "
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 21,
+    "dom": "numw",
+    "text": "Tore: 4"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 138,
+     "text": "4"
+    }
+   ],
+   "removed": [],
+   "prev": {
+    "t": "#text",
+    "id": 48,
+    "v": "Goals: "
+   },
+   "next": {
+    "t": "#text",
+    "id": 49,
+    "v": "4"
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 137,
+    "text": "Tore: "
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 139,
+     "text": "Tore: "
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 139,
+    "text": "Tore: "
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 140,
+     "v": "Tore: "
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 140,
+    "v": "Tore: "
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "Goals: "
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 138,
+    "text": "4"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 141,
+     "text": "4"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 141,
+    "text": "4"
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 142,
+     "v": "4"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 142,
+    "v": "4"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "4"
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 21,
+    "dom": "numw",
+    "text": "Tore: 4"
+   },
+   "added": [],
+   "removed": [
+    {
+     "t": "#text",
+     "id": 48,
+     "v": "Goals: "
+    }
+   ],
+   "prev": {
+    "t": "font",
+    "id": 137,
+    "text": "Tore: "
+   },
+   "next": {
+    "t": "font",
+    "id": 138,
+    "text": "4"
+   }
+  },
+  {
+   "phase": "translate",
+   "batch": 8,
+   "ms": 918,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 21,
+    "dom": "numw",
+    "text": "Tore: 4"
+   },
+   "added": [],
+   "removed": [
+    {
+     "t": "#text",
+     "id": 49,
+     "v": "4"
+    }
+   ],
+   "prev": {
+    "t": "font",
+    "id": 138,
+    "text": "4"
+   },
+   "next": null
+  },
+  {
+   "phase": "later",
+   "batch": 9,
+   "ms": 3938,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 14,
+    "dom": "later",
+    "text": "Choose position"
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 143,
+     "v": "Choose position"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "later",
+   "batch": 10,
+   "ms": 4072,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 14,
+    "dom": "later",
+    "text": "Position auswählen"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 144,
+     "text": "Position auswählen"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": {
+    "t": "#text",
+    "id": 143,
+    "v": "Choose position"
+   }
+  },
+  {
+   "phase": "later",
+   "batch": 10,
+   "ms": 4072,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 144,
+    "text": "Position auswählen"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 145,
+     "text": "Position auswählen"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "later",
+   "batch": 10,
+   "ms": 4072,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 145,
+    "text": "Position auswählen"
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 146,
+     "v": "Position auswählen"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "later",
+   "batch": 10,
+   "ms": 4072,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 146,
+    "v": "Position auswählen"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "Choose position"
+  },
+  {
+   "phase": "later",
+   "batch": 10,
+   "ms": 4072,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 14,
+    "dom": "later",
+    "text": "Position auswählen"
+   },
+   "added": [],
+   "removed": [
+    {
+     "t": "#text",
+     "id": 143,
+     "v": "Choose position"
+    }
+   ],
+   "prev": {
+    "t": "font",
+    "id": 144,
+    "text": "Position auswählen"
+   },
+   "next": null
+  },
+  {
+   "phase": "restore",
+   "batch": 11,
+   "ms": 7597,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 15,
+    "dom": "write",
+    "text": "Season two"
+   },
+   "added": [],
+   "removed": [
+    {
+     "t": "font",
+     "id": 113,
+     "text": "Staffel eins"
+    }
+   ],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "restore",
+   "batch": 11,
+   "ms": 7597,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 15,
+    "dom": "write",
+    "text": "Season two"
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 40,
+     "v": "Season two"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "adj-restore",
+   "batch": 12,
+   "ms": 18612,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 2,
+    "dom": "adj",
+    "text": "Age 17"
+   },
+   "added": [],
+   "removed": [
+    {
+     "t": "font",
+     "id": 54,
+     "text": "Alter "
+    }
+   ],
+   "prev": null,
+   "next": {
+    "t": "font",
+    "id": 55,
+    "text": "16"
+   }
+  },
+  {
+   "phase": "adj-restore",
+   "batch": 12,
+   "ms": 18612,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 2,
+    "dom": "adj",
+    "text": "Age 17"
+   },
+   "added": [],
+   "removed": [
+    {
+     "t": "font",
+     "id": 55,
+     "text": "16"
+    }
+   ],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "adj-restore",
+   "batch": 12,
+   "ms": 18612,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 2,
+    "dom": "adj",
+    "text": "Age 17"
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 23,
+     "v": "Age "
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "adj-restore",
+   "batch": 12,
+   "ms": 18612,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 2,
+    "dom": "adj",
+    "text": "Age 17"
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 24,
+     "v": "17"
+    }
+   ],
+   "removed": [],
+   "prev": {
+    "t": "#text",
+    "id": 23,
+    "v": "Age "
+   },
+   "next": null
+  },
+  {
+   "phase": "rm-wrapper",
+   "batch": 13,
+   "ms": 29625,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 16,
+    "dom": "rm",
+    "text": ""
+   },
+   "added": [],
+   "removed": [
+    {
+     "t": "font",
+     "id": 116,
+     "text": "Bitte entfernen Sie diesen Satz."
+    }
+   ],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "rep-wrapper",
+   "batch": 14,
+   "ms": 32632,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 17,
+    "dom": "rep",
+    "text": "A brand new sentence here"
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 147,
+     "v": "A brand new sentence here"
+    }
+   ],
+   "removed": [
+    {
+     "t": "font",
+     "id": 119,
+     "text": "Bitte ersetzen Sie diesen Satz."
+    }
+   ],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "rep-wrapper",
+   "batch": 15,
+   "ms": 32797,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 17,
+    "dom": "rep",
+    "text": "Ein brandneuer Satz hier"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 148,
+     "text": "Ein brandneuer Satz hier"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": {
+    "t": "#text",
+    "id": 147,
+    "v": "A brand new sentence here"
+   }
+  },
+  {
+   "phase": "rep-wrapper",
+   "batch": 15,
+   "ms": 32797,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 148,
+    "text": "Ein brandneuer Satz hier"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 149,
+     "text": "Ein brandneuer Satz hier"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "rep-wrapper",
+   "batch": 15,
+   "ms": 32797,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 149,
+    "text": "Ein brandneuer Satz hier"
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 150,
+     "v": "Ein brandneuer Satz hier"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "rep-wrapper",
+   "batch": 15,
+   "ms": 32797,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 150,
+    "v": "Ein brandneuer Satz hier"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "A brand new sentence here"
+  },
+  {
+   "phase": "rep-wrapper",
+   "batch": 15,
+   "ms": 32797,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 17,
+    "dom": "rep",
+    "text": "Ein brandneuer Satz hier"
+   },
+   "added": [],
+   "removed": [
+    {
+     "t": "#text",
+     "id": 147,
+     "v": "A brand new sentence here"
+    }
+   ],
+   "prev": {
+    "t": "font",
+    "id": 148,
+    "text": "Ein brandneuer Satz hier"
+   },
+   "next": null
+  },
+  {
+   "phase": "ins-before-wrapper",
+   "batch": 16,
+   "ms": 34322,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 18,
+    "dom": "ins",
+    "text": "NEW WORDSSchwanzwörter"
+   },
+   "added": [
+    {
+     "t": "i",
+     "id": 151,
+     "text": "NEW WORDS"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": {
+    "t": "font",
+    "id": 122,
+    "text": "Schwanzwörter"
+   }
+  },
+  {
+   "phase": "ins-before-wrapper",
+   "batch": 17,
+   "ms": 34473,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "i",
+    "id": 151,
+    "text": "NEUE WÖRTER"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 152,
+     "text": "NEUE WÖRTER"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": {
+    "t": "#text",
+    "id": 153,
+    "v": "NEW WORDS"
+   }
+  },
+  {
+   "phase": "ins-before-wrapper",
+   "batch": 17,
+   "ms": 34473,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 152,
+    "text": "NEUE WÖRTER"
+   },
+   "added": [
+    {
+     "t": "font",
+     "id": 154,
+     "text": "NEUE WÖRTER"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "ins-before-wrapper",
+   "batch": 17,
+   "ms": 34473,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "font",
+    "id": 154,
+    "text": "NEUE WÖRTER"
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 155,
+     "v": "NEUE WÖRTER"
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "ins-before-wrapper",
+   "batch": 17,
+   "ms": 34473,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 155,
+    "v": "NEUE WÖRTER"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "NEW WORDS"
+  },
+  {
+   "phase": "ins-before-wrapper",
+   "batch": 17,
+   "ms": 34473,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "i",
+    "id": 151,
+    "text": "NEUE WÖRTER"
+   },
+   "added": [],
+   "removed": [
+    {
+     "t": "#text",
+     "id": 153,
+     "v": "NEW WORDS"
+    }
+   ],
+   "prev": {
+    "t": "font",
+    "id": 152,
+    "text": "NEUE WÖRTER"
+   },
+   "next": null
+  },
+  {
+   "phase": "loop",
+   "batch": 18,
+   "ms": 37328,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 19,
+    "dom": "loop",
+    "text": "Week 2"
+   },
+   "added": [],
+   "removed": [
+    {
+     "t": "font",
+     "id": 125,
+     "text": "Woche "
+    }
+   ],
+   "prev": null,
+   "next": {
+    "t": "font",
+    "id": 126,
+    "text": "1"
+   }
+  },
+  {
+   "phase": "loop",
+   "batch": 18,
+   "ms": 37328,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 19,
+    "dom": "loop",
+    "text": "Week 2"
+   },
+   "added": [],
+   "removed": [
+    {
+     "t": "font",
+     "id": 126,
+     "text": "1"
+    }
+   ],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "loop",
+   "batch": 18,
+   "ms": 37328,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 19,
+    "dom": "loop",
+    "text": "Week 2"
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 44,
+     "v": "Week "
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "loop",
+   "batch": 18,
+   "ms": 37328,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 19,
+    "dom": "loop",
+    "text": "Week 2"
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 45,
+     "v": "2"
+    }
+   ],
+   "removed": [],
+   "prev": {
+    "t": "#text",
+    "id": 44,
+    "v": "Week "
+   },
+   "next": null
+  },
+  {
+   "phase": "loop",
+   "batch": 19,
+   "ms": 37729,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 45,
+    "v": "3"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "2"
+  },
+  {
+   "phase": "loop",
+   "batch": 20,
+   "ms": 38129,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 45,
+    "v": "4"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "3"
+  },
+  {
+   "phase": "loop",
+   "batch": 21,
+   "ms": 38529,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 45,
+    "v": "5"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "4"
+  },
+  {
+   "phase": "loop",
+   "batch": 22,
+   "ms": 38929,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 45,
+    "v": "6"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "5"
+  },
+  {
+   "phase": "loop",
+   "batch": 23,
+   "ms": 39329,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 45,
+    "v": "7"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "6"
+  },
+  {
+   "phase": "loop",
+   "batch": 24,
+   "ms": 39729,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 45,
+    "v": "8"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "7"
+  },
+  {
+   "phase": "loop",
+   "batch": 25,
+   "ms": 40129,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 45,
+    "v": "9"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "8"
+  },
+  {
+   "phase": "loop",
+   "batch": 26,
+   "ms": 40530,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 45,
+    "v": "10"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "9"
+  },
+  {
+   "phase": "loop",
+   "batch": 27,
+   "ms": 40930,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 45,
+    "v": "11"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "10"
+  },
+  {
+   "phase": "loop",
+   "batch": 28,
+   "ms": 41330,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 45,
+    "v": "12"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "11"
+  },
+  {
+   "phase": "loop",
+   "batch": 29,
+   "ms": 41730,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 45,
+    "v": "13"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "12"
+  },
+  {
+   "phase": "loop",
+   "batch": 30,
+   "ms": 42130,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 45,
+    "v": "14"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "13"
+  },
+  {
+   "phase": "loop",
+   "batch": 31,
+   "ms": 42530,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 45,
+    "v": "15"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "14"
+  },
+  {
+   "phase": "loop",
+   "batch": 32,
+   "ms": 42930,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 45,
+    "v": "16"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "15"
+  },
+  {
+   "phase": "loop",
+   "batch": 33,
+   "ms": 43330,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 45,
+    "v": "17"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "16"
+  },
+  {
+   "phase": "loop",
+   "batch": 34,
+   "ms": 43731,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 45,
+    "v": "18"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "17"
+  },
+  {
+   "phase": "loop",
+   "batch": 35,
+   "ms": 44131,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 45,
+    "v": "19"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "18"
+  },
+  {
+   "phase": "loop",
+   "batch": 36,
+   "ms": 44531,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 45,
+    "v": "20"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "19"
+  },
+  {
+   "phase": "loop",
+   "batch": 37,
+   "ms": 44931,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 45,
+    "v": "21"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "20"
+  },
+  {
+   "phase": "race",
+   "batch": 38,
+   "ms": 50340,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 20,
+    "dom": "race",
+    "text": "Minute 2"
+   },
+   "added": [],
+   "removed": [
+    {
+     "t": "font",
+     "id": 131,
+     "text": "Minute "
+    }
+   ],
+   "prev": null,
+   "next": {
+    "t": "font",
+    "id": 132,
+    "text": "1"
+   }
+  },
+  {
+   "phase": "race",
+   "batch": 38,
+   "ms": 50340,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 20,
+    "dom": "race",
+    "text": "Minute 2"
+   },
+   "added": [],
+   "removed": [
+    {
+     "t": "font",
+     "id": 132,
+     "text": "1"
+    }
+   ],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "race",
+   "batch": 38,
+   "ms": 50340,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 20,
+    "dom": "race",
+    "text": "Minute 2"
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 46,
+     "v": "Minute "
+    }
+   ],
+   "removed": [],
+   "prev": null,
+   "next": null
+  },
+  {
+   "phase": "race",
+   "batch": 38,
+   "ms": 50340,
+   "type": "childList",
+   "inRoot": true,
+   "target": {
+    "t": "p",
+    "id": 20,
+    "dom": "race",
+    "text": "Minute 2"
+   },
+   "added": [
+    {
+     "t": "#text",
+     "id": 47,
+     "v": "2"
+    }
+   ],
+   "removed": [],
+   "prev": {
+    "t": "#text",
+    "id": 46,
+    "v": "Minute "
+   },
+   "next": null
+  },
+  {
+   "phase": "race",
+   "batch": 39,
+   "ms": 50390,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 47,
+    "v": "3"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "2"
+  },
+  {
+   "phase": "race",
+   "batch": 40,
+   "ms": 50440,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 47,
+    "v": "4"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "3"
+  },
+  {
+   "phase": "race",
+   "batch": 41,
+   "ms": 50491,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 47,
+    "v": "5"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "4"
+  },
+  {
+   "phase": "race",
+   "batch": 42,
+   "ms": 50541,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 47,
+    "v": "6"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "5"
+  },
+  {
+   "phase": "race",
+   "batch": 43,
+   "ms": 50591,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 47,
+    "v": "7"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "6"
+  },
+  {
+   "phase": "race",
+   "batch": 44,
+   "ms": 50641,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 47,
+    "v": "8"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "7"
+  },
+  {
+   "phase": "race",
+   "batch": 45,
+   "ms": 50691,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 47,
+    "v": "9"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "8"
+  },
+  {
+   "phase": "race",
+   "batch": 46,
+   "ms": 50741,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 47,
+    "v": "10"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "9"
+  },
+  {
+   "phase": "race",
+   "batch": 47,
+   "ms": 50791,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 47,
+    "v": "11"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "10"
+  },
+  {
+   "phase": "race",
+   "batch": 48,
+   "ms": 50842,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 47,
+    "v": "12"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "11"
+  },
+  {
+   "phase": "race",
+   "batch": 49,
+   "ms": 50892,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 47,
+    "v": "13"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "12"
+  },
+  {
+   "phase": "race",
+   "batch": 50,
+   "ms": 50942,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 47,
+    "v": "14"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "13"
+  },
+  {
+   "phase": "race",
+   "batch": 51,
+   "ms": 50993,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 47,
+    "v": "15"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "14"
+  },
+  {
+   "phase": "race",
+   "batch": 52,
+   "ms": 51043,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 47,
+    "v": "16"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "15"
+  },
+  {
+   "phase": "race",
+   "batch": 53,
+   "ms": 51093,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 47,
+    "v": "17"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "16"
+  },
+  {
+   "phase": "race",
+   "batch": 54,
+   "ms": 51143,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 47,
+    "v": "18"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "17"
+  },
+  {
+   "phase": "race",
+   "batch": 55,
+   "ms": 51193,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 47,
+    "v": "19"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "18"
+  },
+  {
+   "phase": "race",
+   "batch": 56,
+   "ms": 51243,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 47,
+    "v": "20"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "19"
+  },
+  {
+   "phase": "race",
+   "batch": 57,
+   "ms": 51293,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 47,
+    "v": "21"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "20"
+  },
+  {
+   "phase": "race",
+   "batch": 58,
+   "ms": 51344,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 47,
+    "v": "22"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "21"
+  },
+  {
+   "phase": "race",
+   "batch": 59,
+   "ms": 51394,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 47,
+    "v": "23"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "22"
+  },
+  {
+   "phase": "race",
+   "batch": 60,
+   "ms": 51444,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 47,
+    "v": "24"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "23"
+  },
+  {
+   "phase": "race",
+   "batch": 61,
+   "ms": 51494,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 47,
+    "v": "25"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "24"
+  },
+  {
+   "phase": "race",
+   "batch": 62,
+   "ms": 51544,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 47,
+    "v": "26"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "25"
+  },
+  {
+   "phase": "race",
+   "batch": 63,
+   "ms": 51594,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 47,
+    "v": "27"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "26"
+  },
+  {
+   "phase": "race",
+   "batch": 64,
+   "ms": 51644,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 47,
+    "v": "28"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "27"
+  },
+  {
+   "phase": "race",
+   "batch": 65,
+   "ms": 51694,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 47,
+    "v": "29"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "28"
+  },
+  {
+   "phase": "race",
+   "batch": 66,
+   "ms": 51744,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 47,
+    "v": "30"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "29"
+  },
+  {
+   "phase": "race",
+   "batch": 67,
+   "ms": 51795,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 47,
+    "v": "31"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "30"
+  },
+  {
+   "phase": "race",
+   "batch": 68,
+   "ms": 51845,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 47,
+    "v": "32"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "31"
+  },
+  {
+   "phase": "race",
+   "batch": 69,
+   "ms": 51895,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 47,
+    "v": "33"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "32"
+  },
+  {
+   "phase": "race",
+   "batch": 70,
+   "ms": 51945,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 47,
+    "v": "34"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "33"
+  },
+  {
+   "phase": "race",
+   "batch": 71,
+   "ms": 51995,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 47,
+    "v": "35"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "34"
+  },
+  {
+   "phase": "race",
+   "batch": 72,
+   "ms": 52045,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 47,
+    "v": "36"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "35"
+  },
+  {
+   "phase": "race",
+   "batch": 73,
+   "ms": 52095,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 47,
+    "v": "37"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "36"
+  },
+  {
+   "phase": "race",
+   "batch": 74,
+   "ms": 52146,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 47,
+    "v": "38"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "37"
+  },
+  {
+   "phase": "race",
+   "batch": 75,
+   "ms": 52196,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 47,
+    "v": "39"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "38"
+  },
+  {
+   "phase": "race",
+   "batch": 76,
+   "ms": 52246,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 47,
+    "v": "40"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "39"
+  },
+  {
+   "phase": "race",
+   "batch": 77,
+   "ms": 52296,
+   "type": "characterData",
+   "inRoot": true,
+   "target": {
+    "t": "#text",
+    "id": 47,
+    "v": "41"
+   },
+   "added": [],
+   "removed": [],
+   "prev": null,
+   "next": null,
+   "old": "40"
+  }
+ ],
+ "errors": []
+}

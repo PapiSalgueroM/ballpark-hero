@@ -1,0 +1,3 @@
+m1de exit=0 64s | measure done
+m2pt exit=0 64s | measure done
+m2ja exit=0 64s | measure done

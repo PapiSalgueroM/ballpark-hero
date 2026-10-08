@@ -1,0 +1,5 @@
+records by phase: {"boot":18,"translate":150,"later":6,"restore":2,"adj-restore":4,"rm-wrapper":1,"rep-wrapper":6,"ins-before-wrapper":6,"loop":23,"race":43}
+timings ms: {"later":141,"restore":-1,"adjRestoreA":-1,"rep":181} loop={"restores":1} race={"restores":1}
+hosts allowed: 127.0.0.1, translate.google.com, www.gstatic.com, translate.googleapis.com, translate-pa.googleapis.com; blocked: fonts.gstatic.com, www.google.com; page errors: 0
+RESULT measure: wrote /home/runner/work/_temp/rc-out/files/records-1-de.json
+measure done
