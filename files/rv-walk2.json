@@ -1,0 +1,723 @@
+{
+ "configs": [
+  {
+   "tag": "390m",
+   "errors": [
+    "shot 18-old-reveal: TimeoutError: locator.screenshot: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-season-reveal]')\n",
+    "old: TimeoutError: locator.innerText: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-season-reveal]')\n"
+   ],
+   "console": [],
+   "reached": 0,
+   "notes": {
+    "starPlayed": true,
+    "revealStar": [
+     "THE 2031 SEASON",
+     "Milwaukee Bucks · age 25 · SG",
+     "Lost the NBA Finals",
+     "25.0 ppg, 6.9 rpg, 4.9 apg",
+     "📊 35.4 mpg, 2.3 spg, 0.6 bpg.",
+     "📊 Playoffs: 26 games, 19.9 ppg, 6.2 rpg, 3.9 apg.",
+     "⭐ All-Star reserve.",
+     "⭐ All-NBA First Team.",
+     "🪞 Silas Boudreau went 19 ppg, 6.2 rpg, 6.1 apg. You had the better year. Head to head 2-4.",
+     "Continue"
+    ],
+    "hubStarCut": [
+     {
+      "text": "A wind down email at 11:40pm on a Friday and 2M gone. Morale -9, and he already ",
+      "cut": true,
+      "off": false,
+      "need": 429,
+      "room": 149
+     },
+     {
+      "text": "82-0 NBA Perfect Season",
+      "cut": true,
+      "off": false,
+      "need": 151,
+      "room": 133
+     }
+    ],
+    "hubStarSideways": 0,
+    "boostedPlayed": true,
+    "revealBoosted": [
+     "THE 2031 SEASON",
+     "Milwaukee Bucks · age 25 · SG",
+     "Lost the Conference Finals",
+     "35.6 ppg, 8.9 rpg, 6.5 apg",
+     "📊 39.1 mpg, 2.8 spg, 0.8 bpg.",
+     "📊 Playoffs: 18 games, 40.2 ppg, 10.0 rpg, 7.5 apg.",
+     "⭐ All-Star starter.",
+     "⭐ All-NBA First Team.",
+     "👑 LEAGUE MVP.",
+     "🛡️ DEFENSIVE PLAYER OF THE YEAR.",
+     "🔒 All-Defensive First Team.",
+     "🔥 Scoring champion.",
+     "🪞 Silas Boudreau went 19 ppg, 6.8 rpg, 6.7 apg. You had the better year. Head to head 2-4.",
+     "Continue"
+    ],
+    "revealBoostedCut": [],
+    "revealBoostedSideways": 0,
+    "revealBox": {
+     "left": 16,
+     "right": 374,
+     "height": 500
+    },
+    "hubBoosted": "NBA My Career Draft night to jersey retirement. Every summer bends the career. Walk Player · SG Milwaukee Bucks 2032 · age 26 OVR 97 $61.7M x3 ⭐ Starting five Last season: 35.6 ppg, 8.9 rpg, 6.5 apg · Lost the Conference Finals Play the 2032 season Career so far: 0 rings · 1 MVP · 1 All-NBA · 6,024 career points Practice gym Play a drill. Earn up to +2 OVR for camp. 97OVR Ceiling 99 Start practice One banked session ",
+    "log": [
+     "NBA My Career",
+     "Draft night to jersey retirement. Every summer bends the career.",
+     "Back to career",
+     "Career Log",
+     "Pick a year to review your saved season. No extra season is played.",
+     "Season highs",
+     "Compare seasons",
+     "2031",
+     "Milwaukee Bucks",
+     "2030",
+     "Milwaukee Bucks",
+     "2029",
+     "Milwaukee Bucks",
+     "2028",
+     "Milwaukee Bucks",
+     "2027",
+     "Milwaukee Bucks",
+     "2026",
+     "Milwaukee Bucks",
+     "NBA My Career: Basketball Career Simulator",
+     "Build a fictional prospect and live a full NBA career inside the real league. Your position and archetype drive realistic per-game lines, and every summer brings up to three big decisions: hometown discount or the max somewhere new, surgery or load management, the podcast or the gym. Chase rings, MVPs, Finals MVPs and All-NBA nods, fight Father Time, and retire to a verdict that runs from ten-day contracts to the GOAT debate.",
+     "Draft night is where it starts: a made up prospect with your name, landing in a real NBA locker room. Where it ends is up to your summers.",
+     "Each season prints a stat line shaped by your rating, archetype, health and team quality. Each summer drops up to three decisions on your desk, one card at a time, drawn from over a hundred of them: contracts, surgeries, trade demands, tunnel fits, a rookie who idolises you, a mural in your neighborhood.",
+     "You build your player's actual face before the draft, and there is a dirty side waiting whenever you want it. Taking the under on your own rebound totals, faking load management for a bettor, tanking in March, an agent advance you were never supposed to mention. Every dirty choice raises a hidden league integrity meter, and at the top of it is an indefinite suspension and a comeback on the minimum.",
+     "How to play NBA My Career, a free NBA basketball career sim",
+     "Creating your player and picking a league",
+     "Create your player: name, one of 5 positions (PG, SG, SF, PF, C), and one of 15 archetypes, from Point God to Movement Sniper to Paint Beast.",
+     "Pick your league: today's NBA, or the 2003-04 throwback with the SuperSonics in Seattle, the Nets in New Jersey, the Hornets in New Orleans and no Charlotte yet.",
+     "BUILDING YOUR PLAYER'S LOOK",
+     "Build your look: skin tone, hair, beard, accessories and a signature celebration, or hit Surprise me.",
+     "Managing your money between seasons",
+     "Open the Bank between seasons. Savings pays 2.5% a season and never loses, five things you can put money into each have a price that moves every season whether you look or not (a fund, flats back home, two shares and a coin that halves as often as it doubles), the statement keeps your last 12 moves, and the card school on the team plane is one sitting a season on odds that are printed before you sit in.",
+     "SPENDING ACROSS SEVEN AISLES",
+     "Spend the money in 7 aisles: home, rides, investments, body, flex, family, and a shady aisle that only appears once you have something to hide.",
+     "Following your career in the News box",
+     "Read the News box. The paper writes up every season in your own position's stat, the SocialGram shows followers read off your fanbase with three fan comments under the latest post, and the rival's card keeps the head to head against the player drafted the same year as you.",
+     "COLLECTING BADGES IN THE TROPHY CASE",
+     "Collect badges in the Trophy Case: 21 of them, from a first ring and Rookie of the Year to 30,000 career points, a triple double season and $100M to your name, each lit the moment the facts of your career say so.",
+     "ANSWERING YOUR PHONE ON THE BASKETBALL CALENDAR",
+     "Answer your phone. Texts from your agent, the head coach, the GM, a teammate or your mom land on the beats of the basketball year: draft night and your first summer league, camp, the trade deadline, the All-Star break, the playoffs if you get there, the offseason, and the summer before the last year of your deal. Every text says which beat and which year it came in on, and how you answer moves your karma, morale, fanbase or bank."
+    ],
+    "logCut": [
+     {
+      "text": "82-0 NBA Perfect Season",
+      "cut": true,
+      "off": false,
+      "need": 151,
+      "room": 133
+     }
+    ],
+    "logSideways": 0,
+    "helpRules": [
+     "Collect badges in the Trophy Case: 21 of them, from a first ring and Rookie of the Year to 30,000 career points, a triple double season and $100M to your name, each lit the moment the facts of your career say so.",
+     "Answer your phone. Texts from your agent, the head coach, the GM, a teammate or your mom land on the beats of the basketball year: draft night and your first summer league, camp, the trade deadline, the All-Star break, the playoffs if you get there, the offseason, and the summer before the last year of your deal. Every text says which beat and which year it came in on, and how you answer moves your karma, morale, fanbase or bank.",
+     "Some seasons your rival hands you a decision instead of a headline: a flagrant you can answer or let go, a debate show offering real money, a youth camp his foundation wants you to co-host, an All-Star vote his team is buying ads for. Every button prints exactly what it moves, and a gamble prints its odds.",
+     "From 31, a falling rating brings the retirement talk: stop now, one more year, or a farewell season that ends the career after it. Then face the legacy verdict and the Hall of Fame wait.",
+     "All-NBA needs 62 games played, and MVP talk starts at a 92 rating.",
+     "MVP only goes to an All-NBA First Team player whose club made the playoffs. The score is your points plus rebounds plus assists a game, plus 20 times your club's winning share, the same score NBA Front Office uses.",
+     "From the 2023-24 season on, All-NBA, MVP, Defensive Player of the Year, All-Defensive and Most Improved need 65 games. Before that season there is no games rule, and Rookie of the Year, All-Rookie and Sixth Man never carry it. The real rule's exception for a season ending injury is not in the game. The game adds one floor of its own: nothing but a Finals MVP is won on less than half a season.",
+     "All-Star is 24 picks a season. Half of a starter's case is the fan vote, which here is your fanbase (in seasons before 2016-17 the fans pick the starters alone), and the reserves are picked on the season you are having. Every All-NBA season is an All-Star season.",
+     "All-Rookie is for your first season only, and the Rookie of the Year is always on the first team.",
+     "Most Improved never goes to a player who has already made All-NBA, or to that season's MVP.",
+     "To lead the league in points, rebounds or assists you need that season's real minimum of games and an average that beats the league leaders of the era you play in.",
+     "A season card shows points, rebounds and assists on its line and your minutes, steals and blocks in a note. Seasons you played before this update keep the line they were saved with: whole number points and no minutes, steals or blocks.",
+     "An MVP case by the numbers: you average 27.4 points, 6.1 rebounds and 5.3 assists and your club goes 54-28. That is 38.8 for the production plus 20 times .659 for the winning: 52.0. Make the All-NBA First Team with that on a playoff club and you are in the MVP race. Put up the same line on a 34-48 club and you are not, whatever the numbers say.",
+     "Hall of Fame voters weigh the hardware first (rings, the major awards, All-NBA years), then your seasons and your numbers, and a career total near the top of this game's books in a stat your position really piles up (points, rebounds or assists) earns a push of its own, up to 390 legacy points.",
+     "Example: take a point guard with ordinary numbers and one with the same hardware and more assists than 99 of 100 point guards this game has seen. The second scores at least 300 legacy points more, which can be the whole gap between a long wait and the Hall. A career you already retired keeps the ballot it was told.",
+     "The new team contends. You take the discount at 28, win it all at 30, and grab Finals MVP. Decline arrives at 33, surgery buys two more years, and the verdict reads first ballot Hall of Famer. The GOAT tier stays out of reach. It usually does."
+    ],
+    "helpCut": [
+     {
+      "text": "Close",
+      "cut": true,
+      "off": false,
+      "need": 43,
+      "room": 1
+     }
+    ],
+    "helpSideways": 0,
+    "oldLinesAllPrinted": false,
+    "oldLinesWanted": [
+     "10 ppg, 3.4 rpg, 4.7 apg",
+     "6 ppg, 2.4 rpg, 2.4 apg",
+     "18 ppg, 6.8 rpg, 9 apg",
+     "13 ppg, 3.9 rpg, 6.4 apg",
+     "21 ppg, 6.4 rpg, 9.3 apg",
+     "18 ppg, 7.3 rpg, 8.4 apg"
+    ],
+    "oldPlayed": false,
+    "retired": {
+     "weighs": null,
+     "pointsLines": [
+      "Collect badges in the Trophy Case: 21 of them, from a first ring and Rookie of the Year to 30,000 career points, a triple double season and $100M to your name, each lit the moment the facts of your career say so.",
+      "Sim each season for a full line: games, points, rebounds, assists, awards, team result.",
+      "Your rival takes you out on a drive and the refs upgrade it to a flagrant. Give it right back heats the feud and usually pays Morale +8, but it carries a 30% chance you are the one who gets tossed (Morale -5, Fanbase -5, Net worth -$100k). Help him up on camera is Fanbase +5, Karma +5 and the feud cools. You pick say nothing and watch the film: Morale +6, the feud heats up, and those six points ride into next season's box score.",
+      "MVPs and rings move it hardest, then Finals MVPs and All-NBA nods, plus longevity and points. The top verdict is the GOAT conversation, and it takes a stacked case.",
+      "By doing the thing. Each of the 21 badges is a test on the facts of your career, checked every time you open the case: a ring, an MVP, twenty thousand points, five seasons with all 82 games played, a million dollars to your name. The 30 point season badge sits a long way under the single season scoring record, Wilt Chamberlain's 50.4 a game in 1961-62, which is where it belongs."
+     ],
+     "expectReal": 30128,
+     "expectPrinted": 37660
+    },
+    "retiredCut": [
+     {
+      "text": "82-0 NBA Perfect Season",
+      "cut": true,
+      "off": false,
+      "need": 151,
+      "room": 133
+     }
+    ],
+    "retiredSideways": 0,
+    "oldRetired": {
+     "weighs": null,
+     "verdictShown": false,
+     "bulletsShown": false,
+     "scoreWanted": 1783,
+     "bullets": [
+      "21 seasons, 5 rings, 2 MVPs, 3 Finals MVPs, 10 All-NBA",
+      "34,384 points, 18,125 rebounds, 7,089 assists in 1,648 games",
+      "348M career earnings, drafted pick 1"
+     ]
+    }
+   }
+  },
+  {
+   "tag": "390r",
+   "errors": [
+    "shot 18-old-reveal: TimeoutError: locator.screenshot: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-season-reveal]')\n",
+    "old: TimeoutError: locator.innerText: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-season-reveal]')\n"
+   ],
+   "console": [],
+   "reached": 0,
+   "notes": {
+    "starPlayed": true,
+    "revealStar": [
+     "THE 2031 SEASON",
+     "Milwaukee Bucks · age 25 · SG",
+     "Lost in the conference semis",
+     "22.6 ppg, 6.1 rpg, 4.4 apg",
+     "📊 34.8 mpg, 1.7 spg, 0.6 bpg.",
+     "📊 Playoffs: 10 games, 28.7 ppg, 7.5 rpg, 5.3 apg.",
+     "🧊 Playoff riser. Everything got harder and you got better.",
+     "🔒 All-Defensive First Team.",
+     "🪞 Silas Boudreau went 19 ppg, 6.9 rpg, 6.8 apg. You had the better year. Head to head 2-4.",
+     "Continue"
+    ],
+    "hubStarCut": [
+     {
+      "text": "Nothing in it. Go and win something",
+      "cut": true,
+      "off": false,
+      "need": 152,
+      "room": 149
+     },
+     {
+      "text": "A wind down email at 11:40pm on a Friday and 2M gone. Morale -9, and he already ",
+      "cut": true,
+      "off": false,
+      "need": 429,
+      "room": 149
+     },
+     {
+      "text": "82-0 NBA Perfect Season",
+      "cut": true,
+      "off": false,
+      "need": 151,
+      "room": 133
+     }
+    ],
+    "hubStarSideways": 0,
+    "boostedPlayed": true,
+    "revealBoosted": [
+     "THE 2031 SEASON",
+     "Milwaukee Bucks · age 25 · SG",
+     "Lost in the first round",
+     "37.6 ppg, 9.2 rpg, 7.1 apg",
+     "📊 38.4 mpg, 3.0 spg, 1.0 bpg.",
+     "📊 Playoffs: 6 games, 41.1 ppg, 9.8 rpg, 7.7 apg.",
+     "⭐ All-Star reserve.",
+     "⭐ All-NBA First Team.",
+     "👑 LEAGUE MVP.",
+     "🛡️ DEFENSIVE PLAYER OF THE YEAR.",
+     "🔒 All-Defensive First Team.",
+     "🔥 Scoring champion.",
+     "🔥 The rim looked like a swimming pool all season.",
+     "🪞 Silas Boudreau went 19 ppg, 6 rpg, 5.8 apg. You had the better year. Head to head 2-4.",
+     "Continue"
+    ],
+    "revealBoostedCut": [],
+    "revealBoostedSideways": 0,
+    "revealBox": {
+     "left": 16,
+     "right": 374,
+     "height": 533
+    },
+    "hubBoosted": "NBA My Career Draft night to jersey retirement. Every summer bends the career. Walk Player · SG Milwaukee Bucks 2032 · age 26 OVR 97 $61.7M x3 ⭐ Starting five Last season: 37.6 ppg, 9.2 rpg, 7.1 apg · Lost in the first round Play the 2032 season Career so far: 0 rings · 1 MVP · 1 All-NBA · 6,217 career points Practice gym Play a drill. Earn up to +2 OVR for camp. 97OVR Ceiling 99 Start practice One banked session eac",
+    "log": [
+     "NBA My Career",
+     "Draft night to jersey retirement. Every summer bends the career.",
+     "Back to career",
+     "Career Log",
+     "Pick a year to review your saved season. No extra season is played.",
+     "Season highs",
+     "Compare seasons",
+     "2031",
+     "Milwaukee Bucks",
+     "2030",
+     "Milwaukee Bucks",
+     "2029",
+     "Milwaukee Bucks",
+     "2028",
+     "Milwaukee Bucks",
+     "2027",
+     "Milwaukee Bucks",
+     "2026",
+     "Milwaukee Bucks",
+     "NBA My Career: Basketball Career Simulator",
+     "Build a fictional prospect and live a full NBA career inside the real league. Your position and archetype drive realistic per-game lines, and every summer brings up to three big decisions: hometown discount or the max somewhere new, surgery or load management, the podcast or the gym. Chase rings, MVPs, Finals MVPs and All-NBA nods, fight Father Time, and retire to a verdict that runs from ten-day contracts to the GOAT debate.",
+     "Draft night is where it starts: a made up prospect with your name, landing in a real NBA locker room. Where it ends is up to your summers.",
+     "Each season prints a stat line shaped by your rating, archetype, health and team quality. Each summer drops up to three decisions on your desk, one card at a time, drawn from over a hundred of them: contracts, surgeries, trade demands, tunnel fits, a rookie who idolises you, a mural in your neighborhood.",
+     "You build your player's actual face before the draft, and there is a dirty side waiting whenever you want it. Taking the under on your own rebound totals, faking load management for a bettor, tanking in March, an agent advance you were never supposed to mention. Every dirty choice raises a hidden league integrity meter, and at the top of it is an indefinite suspension and a comeback on the minimum.",
+     "How to play NBA My Career, a free NBA basketball career sim",
+     "Creating your player and picking a league",
+     "Create your player: name, one of 5 positions (PG, SG, SF, PF, C), and one of 15 archetypes, from Point God to Movement Sniper to Paint Beast.",
+     "Pick your league: today's NBA, or the 2003-04 throwback with the SuperSonics in Seattle, the Nets in New Jersey, the Hornets in New Orleans and no Charlotte yet.",
+     "BUILDING YOUR PLAYER'S LOOK",
+     "Build your look: skin tone, hair, beard, accessories and a signature celebration, or hit Surprise me.",
+     "Managing your money between seasons",
+     "Open the Bank between seasons. Savings pays 2.5% a season and never loses, five things you can put money into each have a price that moves every season whether you look or not (a fund, flats back home, two shares and a coin that halves as often as it doubles), the statement keeps your last 12 moves, and the card school on the team plane is one sitting a season on odds that are printed before you sit in.",
+     "SPENDING ACROSS SEVEN AISLES",
+     "Spend the money in 7 aisles: home, rides, investments, body, flex, family, and a shady aisle that only appears once you have something to hide.",
+     "Following your career in the News box",
+     "Read the News box. The paper writes up every season in your own position's stat, the SocialGram shows followers read off your fanbase with three fan comments under the latest post, and the rival's card keeps the head to head against the player drafted the same year as you.",
+     "COLLECTING BADGES IN THE TROPHY CASE",
+     "Collect badges in the Trophy Case: 21 of them, from a first ring and Rookie of the Year to 30,000 career points, a triple double season and $100M to your name, each lit the moment the facts of your career say so.",
+     "ANSWERING YOUR PHONE ON THE BASKETBALL CALENDAR",
+     "Answer your phone. Texts from your agent, the head coach, the GM, a teammate or your mom land on the beats of the basketball year: draft night and your first summer league, camp, the trade deadline, the All-Star break, the playoffs if you get there, the offseason, and the summer before the last year of your deal. Every text says which beat and which year it came in on, and how you answer moves your karma, morale, fanbase or bank."
+    ],
+    "logCut": [
+     {
+      "text": "82-0 NBA Perfect Season",
+      "cut": true,
+      "off": false,
+      "need": 151,
+      "room": 133
+     }
+    ],
+    "logSideways": 0,
+    "helpRules": [
+     "Collect badges in the Trophy Case: 21 of them, from a first ring and Rookie of the Year to 30,000 career points, a triple double season and $100M to your name, each lit the moment the facts of your career say so.",
+     "Answer your phone. Texts from your agent, the head coach, the GM, a teammate or your mom land on the beats of the basketball year: draft night and your first summer league, camp, the trade deadline, the All-Star break, the playoffs if you get there, the offseason, and the summer before the last year of your deal. Every text says which beat and which year it came in on, and how you answer moves your karma, morale, fanbase or bank.",
+     "Some seasons your rival hands you a decision instead of a headline: a flagrant you can answer or let go, a debate show offering real money, a youth camp his foundation wants you to co-host, an All-Star vote his team is buying ads for. Every button prints exactly what it moves, and a gamble prints its odds.",
+     "From 31, a falling rating brings the retirement talk: stop now, one more year, or a farewell season that ends the career after it. Then face the legacy verdict and the Hall of Fame wait.",
+     "All-NBA needs 62 games played, and MVP talk starts at a 92 rating.",
+     "MVP only goes to an All-NBA First Team player whose club made the playoffs. The score is your points plus rebounds plus assists a game, plus 20 times your club's winning share, the same score NBA Front Office uses.",
+     "From the 2023-24 season on, All-NBA, MVP, Defensive Player of the Year, All-Defensive and Most Improved need 65 games. Before that season there is no games rule, and Rookie of the Year, All-Rookie and Sixth Man never carry it. The real rule's exception for a season ending injury is not in the game. The game adds one floor of its own: nothing but a Finals MVP is won on less than half a season.",
+     "All-Star is 24 picks a season. Half of a starter's case is the fan vote, which here is your fanbase (in seasons before 2016-17 the fans pick the starters alone), and the reserves are picked on the season you are having. Every All-NBA season is an All-Star season.",
+     "All-Rookie is for your first season only, and the Rookie of the Year is always on the first team.",
+     "Most Improved never goes to a player who has already made All-NBA, or to that season's MVP.",
+     "To lead the league in points, rebounds or assists you need that season's real minimum of games and an average that beats the league leaders of the era you play in.",
+     "A season card shows points, rebounds and assists on its line and your minutes, steals and blocks in a note. Seasons you played before this update keep the line they were saved with: whole number points and no minutes, steals or blocks.",
+     "An MVP case by the numbers: you average 27.4 points, 6.1 rebounds and 5.3 assists and your club goes 54-28. That is 38.8 for the production plus 20 times .659 for the winning: 52.0. Make the All-NBA First Team with that on a playoff club and you are in the MVP race. Put up the same line on a 34-48 club and you are not, whatever the numbers say.",
+     "Hall of Fame voters weigh the hardware first (rings, the major awards, All-NBA years), then your seasons and your numbers, and a career total near the top of this game's books in a stat your position really piles up (points, rebounds or assists) earns a push of its own, up to 390 legacy points.",
+     "Example: take a point guard with ordinary numbers and one with the same hardware and more assists than 99 of 100 point guards this game has seen. The second scores at least 300 legacy points more, which can be the whole gap between a long wait and the Hall. A career you already retired keeps the ballot it was told.",
+     "The new team contends. You take the discount at 28, win it all at 30, and grab Finals MVP. Decline arrives at 33, surgery buys two more years, and the verdict reads first ballot Hall of Famer. The GOAT tier stays out of reach. It usually does."
+    ],
+    "helpCut": [
+     {
+      "text": "Close",
+      "cut": true,
+      "off": false,
+      "need": 43,
+      "room": 1
+     }
+    ],
+    "helpSideways": 0,
+    "oldLinesAllPrinted": false,
+    "oldLinesWanted": [
+     "10 ppg, 3.4 rpg, 4.7 apg",
+     "6 ppg, 2.4 rpg, 2.4 apg",
+     "18 ppg, 6.8 rpg, 9 apg",
+     "13 ppg, 3.9 rpg, 6.4 apg",
+     "21 ppg, 6.4 rpg, 9.3 apg",
+     "18 ppg, 7.3 rpg, 8.4 apg"
+    ],
+    "oldPlayed": false,
+    "retired": {
+     "weighs": null,
+     "pointsLines": [
+      "Collect badges in the Trophy Case: 21 of them, from a first ring and Rookie of the Year to 30,000 career points, a triple double season and $100M to your name, each lit the moment the facts of your career say so.",
+      "Sim each season for a full line: games, points, rebounds, assists, awards, team result.",
+      "Your rival takes you out on a drive and the refs upgrade it to a flagrant. Give it right back heats the feud and usually pays Morale +8, but it carries a 30% chance you are the one who gets tossed (Morale -5, Fanbase -5, Net worth -$100k). Help him up on camera is Fanbase +5, Karma +5 and the feud cools. You pick say nothing and watch the film: Morale +6, the feud heats up, and those six points ride into next season's box score.",
+      "MVPs and rings move it hardest, then Finals MVPs and All-NBA nods, plus longevity and points. The top verdict is the GOAT conversation, and it takes a stacked case.",
+      "By doing the thing. Each of the 21 badges is a test on the facts of your career, checked every time you open the case: a ring, an MVP, twenty thousand points, five seasons with all 82 games played, a million dollars to your name. The 30 point season badge sits a long way under the single season scoring record, Wilt Chamberlain's 50.4 a game in 1961-62, which is where it belongs."
+     ],
+     "expectReal": 30128,
+     "expectPrinted": 37660
+    },
+    "retiredCut": [
+     {
+      "text": "82-0 NBA Perfect Season",
+      "cut": true,
+      "off": false,
+      "need": 151,
+      "room": 133
+     }
+    ],
+    "retiredSideways": 0,
+    "oldRetired": {
+     "weighs": null,
+     "verdictShown": false,
+     "bulletsShown": false,
+     "scoreWanted": 1783,
+     "bullets": [
+      "21 seasons, 5 rings, 2 MVPs, 3 Finals MVPs, 10 All-NBA",
+      "34,384 points, 18,125 rebounds, 7,089 assists in 1,648 games",
+      "348M career earnings, drafted pick 1"
+     ]
+    }
+   }
+  },
+  {
+   "tag": "1280m",
+   "errors": [
+    "shot 18-old-reveal: TimeoutError: locator.screenshot: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-season-reveal]')\n",
+    "old: TimeoutError: locator.innerText: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-season-reveal]')\n"
+   ],
+   "console": [],
+   "reached": 0,
+   "notes": {
+    "starPlayed": true,
+    "revealStar": [
+     "THE 2031 SEASON",
+     "Milwaukee Bucks · age 25 · SG",
+     "Lost in the first round",
+     "25.4 ppg, 6.6 rpg, 4.8 apg",
+     "📊 34.7 mpg, 1.7 spg, 0.7 bpg.",
+     "📊 Playoffs: 6 games, 25.8 ppg, 7.9 rpg, 4.9 apg.",
+     "⭐ All-Star reserve.",
+     "⭐ All-NBA Second Team.",
+     "🔒 All-Defensive First Team.",
+     "🪞 Silas Boudreau went 17 ppg, 5.3 rpg, 5.1 apg. You had the better year. Head to head 2-4.",
+     "Continue"
+    ],
+    "hubStarCut": [
+     {
+      "text": "6M up front and a producer who now sends you a run of show. Fanbase +5, morale -",
+      "cut": true,
+      "off": false,
+      "need": 370,
+      "room": 182
+     }
+    ],
+    "hubStarSideways": 0,
+    "boostedPlayed": true,
+    "revealBoosted": [
+     "THE 2031 SEASON",
+     "Milwaukee Bucks · age 25 · SG",
+     "Lost the NBA Finals",
+     "37.4 ppg, 9.5 rpg, 7.0 apg",
+     "📊 38.3 mpg, 2.7 spg, 0.9 bpg.",
+     "📊 Playoffs: 25 games, 34.7 ppg, 8.8 rpg, 6.3 apg.",
+     "⭐ All-Star starter.",
+     "⭐ All-NBA First Team.",
+     "👑 LEAGUE MVP.",
+     "🛡️ DEFENSIVE PLAYER OF THE YEAR.",
+     "🔒 All-Defensive First Team.",
+     "🔥 Scoring champion.",
+     "🪞 Silas Boudreau went 19 ppg, 6.1 rpg, 6 apg. You had the better year. Head to head 2-4.",
+     "Continue"
+    ],
+    "revealBoostedCut": [],
+    "revealBoostedSideways": 0,
+    "revealBox": {
+     "left": 320,
+     "right": 960,
+     "height": 484
+    },
+    "hubBoosted": "NBA My Career Draft night to jersey retirement. Every summer bends the career. Walk Player · SG Milwaukee Bucks 2032 · age 26 OVR 97 $61.7M x4 ⭐ Starting five Last season: 37.4 ppg, 9.5 rpg, 7.0 apg · Lost the NBA Finals Play the 2032 season Career so far: 0 rings · 1 MVP · 1 All-NBA · 6,276 career points Practice gym Play a drill. Earn up to +2 OVR for camp. 97OVR Ceiling 99 Start practice One banked session each se",
+    "log": [
+     "NBA My Career",
+     "Draft night to jersey retirement. Every summer bends the career.",
+     "Back to career",
+     "Career Log",
+     "Pick a year to review your saved season. No extra season is played.",
+     "Season highs",
+     "Compare seasons",
+     "2031",
+     "Milwaukee Bucks",
+     "2030",
+     "Milwaukee Bucks",
+     "2029",
+     "Milwaukee Bucks",
+     "2028",
+     "Milwaukee Bucks",
+     "2027",
+     "Milwaukee Bucks",
+     "2026",
+     "Milwaukee Bucks",
+     "NBA My Career: Basketball Career Simulator",
+     "Build a fictional prospect and live a full NBA career inside the real league. Your position and archetype drive realistic per-game lines, and every summer brings up to three big decisions: hometown discount or the max somewhere new, surgery or load management, the podcast or the gym. Chase rings, MVPs, Finals MVPs and All-NBA nods, fight Father Time, and retire to a verdict that runs from ten-day contracts to the GOAT debate.",
+     "Draft night is where it starts: a made up prospect with your name, landing in a real NBA locker room. Where it ends is up to your summers.",
+     "Each season prints a stat line shaped by your rating, archetype, health and team quality. Each summer drops up to three decisions on your desk, one card at a time, drawn from over a hundred of them: contracts, surgeries, trade demands, tunnel fits, a rookie who idolises you, a mural in your neighborhood.",
+     "You build your player's actual face before the draft, and there is a dirty side waiting whenever you want it. Taking the under on your own rebound totals, faking load management for a bettor, tanking in March, an agent advance you were never supposed to mention. Every dirty choice raises a hidden league integrity meter, and at the top of it is an indefinite suspension and a comeback on the minimum.",
+     "How to play NBA My Career, a free NBA basketball career sim",
+     "Creating your player and picking a league",
+     "Create your player: name, one of 5 positions (PG, SG, SF, PF, C), and one of 15 archetypes, from Point God to Movement Sniper to Paint Beast.",
+     "Pick your league: today's NBA, or the 2003-04 throwback with the SuperSonics in Seattle, the Nets in New Jersey, the Hornets in New Orleans and no Charlotte yet.",
+     "BUILDING YOUR PLAYER'S LOOK",
+     "Build your look: skin tone, hair, beard, accessories and a signature celebration, or hit Surprise me.",
+     "Managing your money between seasons",
+     "Open the Bank between seasons. Savings pays 2.5% a season and never loses, five things you can put money into each have a price that moves every season whether you look or not (a fund, flats back home, two shares and a coin that halves as often as it doubles), the statement keeps your last 12 moves, and the card school on the team plane is one sitting a season on odds that are printed before you sit in.",
+     "SPENDING ACROSS SEVEN AISLES",
+     "Spend the money in 7 aisles: home, rides, investments, body, flex, family, and a shady aisle that only appears once you have something to hide.",
+     "Following your career in the News box",
+     "Read the News box. The paper writes up every season in your own position's stat, the SocialGram shows followers read off your fanbase with three fan comments under the latest post, and the rival's card keeps the head to head against the player drafted the same year as you.",
+     "COLLECTING BADGES IN THE TROPHY CASE",
+     "Collect badges in the Trophy Case: 21 of them, from a first ring and Rookie of the Year to 30,000 career points, a triple double season and $100M to your name, each lit the moment the facts of your career say so.",
+     "ANSWERING YOUR PHONE ON THE BASKETBALL CALENDAR",
+     "Answer your phone. Texts from your agent, the head coach, the GM, a teammate or your mom land on the beats of the basketball year: draft night and your first summer league, camp, the trade deadline, the All-Star break, the playoffs if you get there, the offseason, and the summer before the last year of your deal. Every text says which beat and which year it came in on, and how you answer moves your karma, morale, fanbase or bank."
+    ],
+    "logCut": [],
+    "logSideways": 0,
+    "helpRules": [
+     "Collect badges in the Trophy Case: 21 of them, from a first ring and Rookie of the Year to 30,000 career points, a triple double season and $100M to your name, each lit the moment the facts of your career say so.",
+     "Answer your phone. Texts from your agent, the head coach, the GM, a teammate or your mom land on the beats of the basketball year: draft night and your first summer league, camp, the trade deadline, the All-Star break, the playoffs if you get there, the offseason, and the summer before the last year of your deal. Every text says which beat and which year it came in on, and how you answer moves your karma, morale, fanbase or bank.",
+     "Some seasons your rival hands you a decision instead of a headline: a flagrant you can answer or let go, a debate show offering real money, a youth camp his foundation wants you to co-host, an All-Star vote his team is buying ads for. Every button prints exactly what it moves, and a gamble prints its odds.",
+     "From 31, a falling rating brings the retirement talk: stop now, one more year, or a farewell season that ends the career after it. Then face the legacy verdict and the Hall of Fame wait.",
+     "All-NBA needs 62 games played, and MVP talk starts at a 92 rating.",
+     "MVP only goes to an All-NBA First Team player whose club made the playoffs. The score is your points plus rebounds plus assists a game, plus 20 times your club's winning share, the same score NBA Front Office uses.",
+     "From the 2023-24 season on, All-NBA, MVP, Defensive Player of the Year, All-Defensive and Most Improved need 65 games. Before that season there is no games rule, and Rookie of the Year, All-Rookie and Sixth Man never carry it. The real rule's exception for a season ending injury is not in the game. The game adds one floor of its own: nothing but a Finals MVP is won on less than half a season.",
+     "All-Star is 24 picks a season. Half of a starter's case is the fan vote, which here is your fanbase (in seasons before 2016-17 the fans pick the starters alone), and the reserves are picked on the season you are having. Every All-NBA season is an All-Star season.",
+     "All-Rookie is for your first season only, and the Rookie of the Year is always on the first team.",
+     "Most Improved never goes to a player who has already made All-NBA, or to that season's MVP.",
+     "To lead the league in points, rebounds or assists you need that season's real minimum of games and an average that beats the league leaders of the era you play in.",
+     "A season card shows points, rebounds and assists on its line and your minutes, steals and blocks in a note. Seasons you played before this update keep the line they were saved with: whole number points and no minutes, steals or blocks.",
+     "An MVP case by the numbers: you average 27.4 points, 6.1 rebounds and 5.3 assists and your club goes 54-28. That is 38.8 for the production plus 20 times .659 for the winning: 52.0. Make the All-NBA First Team with that on a playoff club and you are in the MVP race. Put up the same line on a 34-48 club and you are not, whatever the numbers say.",
+     "Hall of Fame voters weigh the hardware first (rings, the major awards, All-NBA years), then your seasons and your numbers, and a career total near the top of this game's books in a stat your position really piles up (points, rebounds or assists) earns a push of its own, up to 390 legacy points.",
+     "Example: take a point guard with ordinary numbers and one with the same hardware and more assists than 99 of 100 point guards this game has seen. The second scores at least 300 legacy points more, which can be the whole gap between a long wait and the Hall. A career you already retired keeps the ballot it was told.",
+     "The new team contends. You take the discount at 28, win it all at 30, and grab Finals MVP. Decline arrives at 33, surgery buys two more years, and the verdict reads first ballot Hall of Famer. The GOAT tier stays out of reach. It usually does."
+    ],
+    "helpCut": [
+     {
+      "text": "Close",
+      "cut": true,
+      "off": false,
+      "need": 43,
+      "room": 1
+     }
+    ],
+    "helpSideways": 0,
+    "oldLinesAllPrinted": false,
+    "oldLinesWanted": [
+     "10 ppg, 3.4 rpg, 4.7 apg",
+     "6 ppg, 2.4 rpg, 2.4 apg",
+     "18 ppg, 6.8 rpg, 9 apg",
+     "13 ppg, 3.9 rpg, 6.4 apg",
+     "21 ppg, 6.4 rpg, 9.3 apg",
+     "18 ppg, 7.3 rpg, 8.4 apg"
+    ],
+    "oldPlayed": false,
+    "retired": {
+     "weighs": null,
+     "pointsLines": [
+      "Collect badges in the Trophy Case: 21 of them, from a first ring and Rookie of the Year to 30,000 career points, a triple double season and $100M to your name, each lit the moment the facts of your career say so.",
+      "Sim each season for a full line: games, points, rebounds, assists, awards, team result.",
+      "Your rival takes you out on a drive and the refs upgrade it to a flagrant. Give it right back heats the feud and usually pays Morale +8, but it carries a 30% chance you are the one who gets tossed (Morale -5, Fanbase -5, Net worth -$100k). Help him up on camera is Fanbase +5, Karma +5 and the feud cools. You pick say nothing and watch the film: Morale +6, the feud heats up, and those six points ride into next season's box score.",
+      "MVPs and rings move it hardest, then Finals MVPs and All-NBA nods, plus longevity and points. The top verdict is the GOAT conversation, and it takes a stacked case.",
+      "By doing the thing. Each of the 21 badges is a test on the facts of your career, checked every time you open the case: a ring, an MVP, twenty thousand points, five seasons with all 82 games played, a million dollars to your name. The 30 point season badge sits a long way under the single season scoring record, Wilt Chamberlain's 50.4 a game in 1961-62, which is where it belongs."
+     ],
+     "expectReal": 30128,
+     "expectPrinted": 37660
+    },
+    "retiredCut": [],
+    "retiredSideways": 0,
+    "oldRetired": {
+     "weighs": null,
+     "verdictShown": false,
+     "bulletsShown": false,
+     "scoreWanted": 1783,
+     "bullets": [
+      "21 seasons, 5 rings, 2 MVPs, 3 Finals MVPs, 10 All-NBA",
+      "34,384 points, 18,125 rebounds, 7,089 assists in 1,648 games",
+      "348M career earnings, drafted pick 1"
+     ]
+    }
+   }
+  },
+  {
+   "tag": "1280r",
+   "errors": [
+    "shot 18-old-reveal: TimeoutError: locator.screenshot: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-season-reveal]')\n",
+    "old: TimeoutError: locator.innerText: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-season-reveal]')\n"
+   ],
+   "console": [],
+   "reached": 0,
+   "notes": {
+    "starPlayed": true,
+    "revealStar": [
+     "THE 2031 SEASON",
+     "Milwaukee Bucks · age 25 · SG",
+     "Missed the playoffs",
+     "24.1 ppg, 6.9 rpg, 4.2 apg",
+     "📊 33.6 mpg, 2.2 spg, 0.6 bpg.",
+     "🔒 All-Defensive First Team.",
+     "🪞 Silas Boudreau went 16 ppg, 5.9 rpg, 5.7 apg. You had the better year. Head to head 2-4.",
+     "Continue"
+    ],
+    "hubStarCut": [
+     {
+      "text": "6M up front and a producer who now sends you a run of show. Fanbase +5, morale -",
+      "cut": true,
+      "off": false,
+      "need": 370,
+      "room": 182
+     }
+    ],
+    "hubStarSideways": 0,
+    "boostedPlayed": true,
+    "revealBoosted": [
+     "THE 2031 SEASON",
+     "Milwaukee Bucks · age 25 · SG",
+     "WON THE NBA FINALS",
+     "37.3 ppg, 9.4 rpg, 6.6 apg",
+     "📊 36.7 mpg, 2.5 spg, 0.7 bpg.",
+     "💍 A RING.",
+     "🏆 FINALS MVP.",
+     "📊 Playoffs: 28 games, 42.0 ppg, 9.6 rpg, 7.5 apg.",
+     "⭐ All-Star starter.",
+     "⭐ All-NBA First Team.",
+     "👑 LEAGUE MVP.",
+     "🛡️ DEFENSIVE PLAYER OF THE YEAR.",
+     "🔒 All-Defensive First Team.",
+     "🔥 Scoring champion.",
+     "🪞 Silas Boudreau went 19 ppg, 6.7 rpg, 6.7 apg. You had the better year. Head to head 2-4.",
+     "Continue"
+    ],
+    "revealBoostedCut": [],
+    "revealBoostedSideways": 0,
+    "revealBox": {
+     "left": 320,
+     "right": 960,
+     "height": 549
+    },
+    "hubBoosted": "NBA My Career Draft night to jersey retirement. Every summer bends the career. Walk Player · SG Milwaukee Bucks 2032 · age 26 OVR 97 $61.7M x3 ⭐ Starting five Last season: 37.3 ppg, 9.4 rpg, 6.6 apg · WON THE NBA FINALS Play the 2032 season Career so far: 1 ring · 1 MVP · 1 All-NBA · 6,305 career points Practice gym Play a drill. Earn up to +2 OVR for camp. 97OVR Ceiling 99 Start practice One banked session each seas",
+    "log": [
+     "NBA My Career",
+     "Draft night to jersey retirement. Every summer bends the career.",
+     "Back to career",
+     "Career Log",
+     "Pick a year to review your saved season. No extra season is played.",
+     "Season highs",
+     "Compare seasons",
+     "2031",
+     "Milwaukee Bucks",
+     "2030",
+     "Milwaukee Bucks",
+     "2029",
+     "Milwaukee Bucks",
+     "2028",
+     "Milwaukee Bucks",
+     "2027",
+     "Milwaukee Bucks",
+     "2026",
+     "Milwaukee Bucks",
+     "NBA My Career: Basketball Career Simulator",
+     "Build a fictional prospect and live a full NBA career inside the real league. Your position and archetype drive realistic per-game lines, and every summer brings up to three big decisions: hometown discount or the max somewhere new, surgery or load management, the podcast or the gym. Chase rings, MVPs, Finals MVPs and All-NBA nods, fight Father Time, and retire to a verdict that runs from ten-day contracts to the GOAT debate.",
+     "Draft night is where it starts: a made up prospect with your name, landing in a real NBA locker room. Where it ends is up to your summers.",
+     "Each season prints a stat line shaped by your rating, archetype, health and team quality. Each summer drops up to three decisions on your desk, one card at a time, drawn from over a hundred of them: contracts, surgeries, trade demands, tunnel fits, a rookie who idolises you, a mural in your neighborhood.",
+     "You build your player's actual face before the draft, and there is a dirty side waiting whenever you want it. Taking the under on your own rebound totals, faking load management for a bettor, tanking in March, an agent advance you were never supposed to mention. Every dirty choice raises a hidden league integrity meter, and at the top of it is an indefinite suspension and a comeback on the minimum.",
+     "How to play NBA My Career, a free NBA basketball career sim",
+     "Creating your player and picking a league",
+     "Create your player: name, one of 5 positions (PG, SG, SF, PF, C), and one of 15 archetypes, from Point God to Movement Sniper to Paint Beast.",
+     "Pick your league: today's NBA, or the 2003-04 throwback with the SuperSonics in Seattle, the Nets in New Jersey, the Hornets in New Orleans and no Charlotte yet.",
+     "BUILDING YOUR PLAYER'S LOOK",
+     "Build your look: skin tone, hair, beard, accessories and a signature celebration, or hit Surprise me.",
+     "Managing your money between seasons",
+     "Open the Bank between seasons. Savings pays 2.5% a season and never loses, five things you can put money into each have a price that moves every season whether you look or not (a fund, flats back home, two shares and a coin that halves as often as it doubles), the statement keeps your last 12 moves, and the card school on the team plane is one sitting a season on odds that are printed before you sit in.",
+     "SPENDING ACROSS SEVEN AISLES",
+     "Spend the money in 7 aisles: home, rides, investments, body, flex, family, and a shady aisle that only appears once you have something to hide.",
+     "Following your career in the News box",
+     "Read the News box. The paper writes up every season in your own position's stat, the SocialGram shows followers read off your fanbase with three fan comments under the latest post, and the rival's card keeps the head to head against the player drafted the same year as you.",
+     "COLLECTING BADGES IN THE TROPHY CASE",
+     "Collect badges in the Trophy Case: 21 of them, from a first ring and Rookie of the Year to 30,000 career points, a triple double season and $100M to your name, each lit the moment the facts of your career say so.",
+     "ANSWERING YOUR PHONE ON THE BASKETBALL CALENDAR",
+     "Answer your phone. Texts from your agent, the head coach, the GM, a teammate or your mom land on the beats of the basketball year: draft night and your first summer league, camp, the trade deadline, the All-Star break, the playoffs if you get there, the offseason, and the summer before the last year of your deal. Every text says which beat and which year it came in on, and how you answer moves your karma, morale, fanbase or bank."
+    ],
+    "logCut": [],
+    "logSideways": 0,
+    "helpRules": [
+     "Collect badges in the Trophy Case: 21 of them, from a first ring and Rookie of the Year to 30,000 career points, a triple double season and $100M to your name, each lit the moment the facts of your career say so.",
+     "Answer your phone. Texts from your agent, the head coach, the GM, a teammate or your mom land on the beats of the basketball year: draft night and your first summer league, camp, the trade deadline, the All-Star break, the playoffs if you get there, the offseason, and the summer before the last year of your deal. Every text says which beat and which year it came in on, and how you answer moves your karma, morale, fanbase or bank.",
+     "Some seasons your rival hands you a decision instead of a headline: a flagrant you can answer or let go, a debate show offering real money, a youth camp his foundation wants you to co-host, an All-Star vote his team is buying ads for. Every button prints exactly what it moves, and a gamble prints its odds.",
+     "From 31, a falling rating brings the retirement talk: stop now, one more year, or a farewell season that ends the career after it. Then face the legacy verdict and the Hall of Fame wait.",
+     "All-NBA needs 62 games played, and MVP talk starts at a 92 rating.",
+     "MVP only goes to an All-NBA First Team player whose club made the playoffs. The score is your points plus rebounds plus assists a game, plus 20 times your club's winning share, the same score NBA Front Office uses.",
+     "From the 2023-24 season on, All-NBA, MVP, Defensive Player of the Year, All-Defensive and Most Improved need 65 games. Before that season there is no games rule, and Rookie of the Year, All-Rookie and Sixth Man never carry it. The real rule's exception for a season ending injury is not in the game. The game adds one floor of its own: nothing but a Finals MVP is won on less than half a season.",
+     "All-Star is 24 picks a season. Half of a starter's case is the fan vote, which here is your fanbase (in seasons before 2016-17 the fans pick the starters alone), and the reserves are picked on the season you are having. Every All-NBA season is an All-Star season.",
+     "All-Rookie is for your first season only, and the Rookie of the Year is always on the first team.",
+     "Most Improved never goes to a player who has already made All-NBA, or to that season's MVP.",
+     "To lead the league in points, rebounds or assists you need that season's real minimum of games and an average that beats the league leaders of the era you play in.",
+     "A season card shows points, rebounds and assists on its line and your minutes, steals and blocks in a note. Seasons you played before this update keep the line they were saved with: whole number points and no minutes, steals or blocks.",
+     "An MVP case by the numbers: you average 27.4 points, 6.1 rebounds and 5.3 assists and your club goes 54-28. That is 38.8 for the production plus 20 times .659 for the winning: 52.0. Make the All-NBA First Team with that on a playoff club and you are in the MVP race. Put up the same line on a 34-48 club and you are not, whatever the numbers say.",
+     "Hall of Fame voters weigh the hardware first (rings, the major awards, All-NBA years), then your seasons and your numbers, and a career total near the top of this game's books in a stat your position really piles up (points, rebounds or assists) earns a push of its own, up to 390 legacy points.",
+     "Example: take a point guard with ordinary numbers and one with the same hardware and more assists than 99 of 100 point guards this game has seen. The second scores at least 300 legacy points more, which can be the whole gap between a long wait and the Hall. A career you already retired keeps the ballot it was told.",
+     "The new team contends. You take the discount at 28, win it all at 30, and grab Finals MVP. Decline arrives at 33, surgery buys two more years, and the verdict reads first ballot Hall of Famer. The GOAT tier stays out of reach. It usually does."
+    ],
+    "helpCut": [
+     {
+      "text": "Close",
+      "cut": true,
+      "off": false,
+      "need": 43,
+      "room": 1
+     }
+    ],
+    "helpSideways": 0,
+    "oldLinesAllPrinted": false,
+    "oldLinesWanted": [
+     "10 ppg, 3.4 rpg, 4.7 apg",
+     "6 ppg, 2.4 rpg, 2.4 apg",
+     "18 ppg, 6.8 rpg, 9 apg",
+     "13 ppg, 3.9 rpg, 6.4 apg",
+     "21 ppg, 6.4 rpg, 9.3 apg",
+     "18 ppg, 7.3 rpg, 8.4 apg"
+    ],
+    "oldPlayed": false,
+    "retired": {
+     "weighs": null,
+     "pointsLines": [
+      "Collect badges in the Trophy Case: 21 of them, from a first ring and Rookie of the Year to 30,000 career points, a triple double season and $100M to your name, each lit the moment the facts of your career say so.",
+      "Sim each season for a full line: games, points, rebounds, assists, awards, team result.",
+      "Your rival takes you out on a drive and the refs upgrade it to a flagrant. Give it right back heats the feud and usually pays Morale +8, but it carries a 30% chance you are the one who gets tossed (Morale -5, Fanbase -5, Net worth -$100k). Help him up on camera is Fanbase +5, Karma +5 and the feud cools. You pick say nothing and watch the film: Morale +6, the feud heats up, and those six points ride into next season's box score.",
+      "MVPs and rings move it hardest, then Finals MVPs and All-NBA nods, plus longevity and points. The top verdict is the GOAT conversation, and it takes a stacked case.",
+      "By doing the thing. Each of the 21 badges is a test on the facts of your career, checked every time you open the case: a ring, an MVP, twenty thousand points, five seasons with all 82 games played, a million dollars to your name. The 30 point season badge sits a long way under the single season scoring record, Wilt Chamberlain's 50.4 a game in 1961-62, which is where it belongs."
+     ],
+     "expectReal": 30128,
+     "expectPrinted": 37660
+    },
+    "retiredCut": [],
+    "retiredSideways": 0,
+    "oldRetired": {
+     "weighs": null,
+     "verdictShown": false,
+     "bulletsShown": false,
+     "scoreWanted": 1783,
+     "bullets": [
+      "21 seasons, 5 rings, 2 MVPs, 3 Finals MVPs, 10 All-NBA",
+      "34,384 points, 18,125 rebounds, 7,089 assists in 1,648 games",
+      "348M career earnings, drafted pick 1"
+     ]
+    }
+   }
+  }
+ ]
+}
