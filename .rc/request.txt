@@ -1,0 +1,11 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerInternationals.test.ts src/lib/clubManagerSlots.test.ts src/lib/gmStaff.test.ts src/test/academyFilters.test.tsx src/test/calendarCurrentDate.test.tsx src/test/clubManagerBracketMoment.test.tsx src/test/clubManagerDealMoment.test.tsx src/test/clubManagerDecisions.test.tsx src/test/clubManagerDeskCues.test.tsx src/test/clubManagerEraLoad.test.tsx src/test/clubManagerEraNationalities.test.ts src/test/clubManagerJobHunt.test.ts src/test/clubManagerManagerFace.test.tsx src/test/clubManagerSave.test.tsx src/test/clubManagerShootoutOrder.test.ts src/test/clubManagerShootoutTile.test.tsx src/test/clubManagerSlots.test.tsx src/test/clubManagerWorldEditor.test.tsx src/test/clubManagerWorldEditorPage.test.tsx src/test/contractPreview.test.tsx src/test/facilitiesPreview.test.tsx src/test/inboxCard.test.tsx src/test/liveSimMotion.test.tsx src/test/managerHotSeatCarryOn.test.ts src/test/managerHotSeatCarryOnCard.test.tsx src/test/managerMatchPlans.test.tsx src/test/managerWorldBrowser.test.tsx src/test/numberFormatting.test.tsx src/test/staffScreen.test.tsx  src/lib/soccerCareerLeague.test.ts src/test/cmWorldIdentity1052.test.ts --testTimeout=300000 --hookTimeout=120000
+simCmDataOnDemand: node scripts/simCmDataOnDemand.mjs
+dod-eager: CM_DATA_CONTROL=eager node scripts/simCmDataOnDemand.mjs
+simClubManagerGathered: node scripts/simClubManagerGathered.mjs
+g-genlist: GATHERED_CONTROL=genlist node scripts/simClubManagerGathered.mjs
+g-unlisted: GATHERED_CONTROL=unlisted node scripts/simClubManagerGathered.mjs
+g-nojoin: GATHERED_CONTROL=nojoin node scripts/simClubManagerGathered.mjs
+gen-check: node scripts/genClubManagerGathered.mjs russia2026 --check
+simClubManagerNewLeagues: node scripts/simClubManagerNewLeagues.mjs
+nl-rulabel: CM_NEW_CONTROL=rulabel node scripts/simClubManagerNewLeagues.mjs
