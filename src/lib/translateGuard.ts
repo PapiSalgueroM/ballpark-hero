@@ -9,8 +9,8 @@
  * giving way to "Brazil") the browser throws NotFoundError: that node is not a child
  * of that parent any more. The whole route fell into the error boundary, and its
  * retry reloads into the same translated page, so it failed every single time.
- * Measured on the walk from the create screen to the first season: thirteen
- * separate updates would each have thrown. A pt-BR locale, the Sao Paulo timezone
+ * Measured on the walk from the create screen to the first season: nine
+ * separate updates would each have thrown, twelve by age 20. A pt-BR locale, the Sao Paulo timezone
  * and Brazil as nationality did nothing on their own. Translation alone did it.
  *
  * WHAT THIS DOES. removeChild and insertBefore stop throwing for exactly that case,
