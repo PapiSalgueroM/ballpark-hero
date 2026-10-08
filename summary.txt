@@ -1,0 +1,9 @@
+h-branch-1 exit=1 59s | simDailySaveHardening: 2 failure(s)
+h-base-setup exit=0 1s | e87d28be4
+h-base-1 exit=0 58s | simDailySaveHardening: part all green
+h-branch-2 exit=0 59s | simDailySaveHardening: part all green
+h-base-2 exit=1 60s | simDailySaveHardening: 2 failure(s)
+h-branch-3 exit=1 60s | simDailySaveHardening: 2 failure(s)
+h-base-3 exit=1 59s | simDailySaveHardening: 2 failure(s)
+h-base-4 exit=1 57s | simDailySaveHardening: 2 failure(s)
+h-branch-4 exit=1 58s | simDailySaveHardening: 2 failure(s)

@@ -1,0 +1,10 @@
+#!serial
+h-branch-1: node scripts/simDailySaveHardening.mjs
+h-base-setup: git fetch -q origin r1140-translate-guard; git worktree add -f --detach $RUNNER_TEMP/b3 FETCH_HEAD >/dev/null 2>&1; ln -s $PWD/node_modules $RUNNER_TEMP/b3/node_modules; git -C $RUNNER_TEMP/b3 rev-parse --short HEAD
+h-base-1: cd $RUNNER_TEMP/b3 && node scripts/simDailySaveHardening.mjs
+h-branch-2: node scripts/simDailySaveHardening.mjs
+h-base-2: cd $RUNNER_TEMP/b3 && node scripts/simDailySaveHardening.mjs
+h-branch-3: node scripts/simDailySaveHardening.mjs
+h-base-3: cd $RUNNER_TEMP/b3 && node scripts/simDailySaveHardening.mjs
+h-base-4: cd $RUNNER_TEMP/b3 && node scripts/simDailySaveHardening.mjs
+h-branch-4: node scripts/simDailySaveHardening.mjs
