@@ -68,7 +68,6 @@ import { depthChart, GROUP_LABEL, type DepthChart, type SquadMan } from "@/lib/s
 import type { MoneyAction } from "@/lib/soccerMoney";
 import { bankSummary } from "@/lib/soccerMoney";
 import PhonePanel from "@/components/soccer-career/PhonePanel";
-import TrainingPanel from "@/components/soccer-career/TrainingPanel";
 import CareerStory from "@/components/soccer-career/CareerStory";
 import { BAND_CLASS } from "@/lib/careerRatingBand";
 import { soccerRatingRows, readMatchRating, readOvr, ratingBand } from "@/lib/careerSeasonRatings";
@@ -112,11 +111,15 @@ import { TournamentCard, InternationalHistoryTile } from "@/components/soccer-ca
 import { beatStyle, debutMomentKey, legacyMomentKey, rivalryMomentKey, settleLoadedMoments, useCareerMoment } from "@/components/soccer-career/careerMoments";
 import { isSoccerCareerSave } from '@/lib/soccerCareerSave';
 import { reloadToRetryChunk } from '@/lib/freshBuild';
+import { readSeasonMoments } from '@/lib/season/momentsSave';
 /* Round 1045: the Season Centre loads only when a person presses for it, and
    the Ratings dialog when it is opened (step 7 of the round: the weight it
    adds is paid here, never by a budget). */
 const SoccerSeasonCentre = lazy(() => import("@/components/soccer-career/SoccerSeasonCentre"));
 const SeasonRatings = lazy(() => import("@/components/soccer-career/SeasonRatings"));
+/* Round 1047: the training ground (its drills and its boards) loads when it
+   is opened, not with the page; the page's budget came down by what it weighed. */
+const TrainingPanel = lazy(() => import("@/components/soccer-career/TrainingPanel"));
 /* Round 1045: a boundary inside the lazy chunk cannot catch the chunk failing
    to load (a deploy swapped the files), so the mount carries its own: the
    overlay says so with Retry and Close, and the save is never touched.
@@ -1003,6 +1006,30 @@ export default function SoccerCareer() {
     toast.success(`Joined ${newCareer.currentClub}!`);
   };
 
+  /* Round 1047: the stars from this season's Season Centre moments bank before
+     the season is left behind (its summary dismissed, or the next season
+     played), so stepping out of the Centre early never drops them. Only a
+     career holding an unbanked ledger takes this path; every other press runs
+     `step` at once, exactly as before. The bank lives with the Season Centre,
+     off the first download, so it is fetched here (already in memory when a
+     moment was played this visit). It is fetched by its own name, never
+     through the Season Centre's lazy entry: simFlagshipWeight reads a
+     second dynamic import of that entry as leave to import it statically. If it cannot be fetched the career
+     still moves on. The step is worked out once, outside the updater, and
+     only lands on the career it was pressed on, so a second press in the
+     gap cannot step twice. */
+  const stepWithMomentsBanked = (step: (c: CareerState) => CareerState) => {
+    if (!career) return;
+    const ledger = readSeasonMoments(career.seasonMoments);
+    if (!ledger || ledger.banked || ledger.m.length === 0) { setCareer(step(career)); return; }
+    import('@/lib/season/soccerMoments')
+      .then(m => m.closeSeasonMoments, () => null)
+      .then(close => {
+        const next = step(close ? close(career, clubs) : career);
+        setCareer(prev => (prev === career ? next : prev));
+      });
+  };
+
   const handleNextSeason = () => {
     if (!career) return;
     if (career.phase === "youth") {
@@ -1010,7 +1037,7 @@ export default function SoccerCareer() {
       setAcademyReport(buildAcademyReport(career, next, effectivePotential(career)));
       setCareer(next);
     } else if (career.phase === "playing") {
-      setCareer(advanceProSeason(career, clubs));
+      stepWithMomentsBanked(c => advanceProSeason(c, clubs));
     }
     /* Round 159: a played season counts as playing TODAY. The header's games
        played, points and rank only ever moved at retirement, so a whole
@@ -1041,7 +1068,7 @@ export default function SoccerCareer() {
 
   const handleDismissSummary = () => {
     if (!career) return;
-    setCareer(dismissSummary(career, clubs));
+    stepWithMomentsBanked(c => dismissSummary(c, clubs));
   };
 
   const handleDismissNewspaper = () => {
@@ -1298,6 +1325,12 @@ export default function SoccerCareer() {
   const handleDrillComplete = useCallback((kind: DrillKind, count: number) => {
     setCareer(prev => (prev ? applyDrillResult(prev, kind, count) : prev));
   }, []);
+  /* Round 1047: a Season Centre moment writes its ledger entry (and banks its
+     stars) through this one pure update. An update that changes nothing hands
+     back the same career, so nothing is saved. */
+  const handleCareerPatch = useCallback((fn: (prev: CareerState) => CareerState) => {
+    setCareer(prev => (prev ? fn(prev) : prev));
+  }, []);
 
   const handleConfirmNewCareer = () => {
     localStorage.removeItem(SAVE_KEY);
@@ -1372,6 +1405,7 @@ export default function SoccerCareer() {
               signedNote={signedNote && signedNote.forCareer === career ? signedNote : null}
               academyReport={academyReport}
               onAcademyFocus={handleAcademyFocus}
+              onCareerPatch={handleCareerPatch}
               onCurrencyChange={() => setCurrencyTick(t => t + 1)}
               onNextSeason={handleNextSeason}
               onAcceptOffer={handleAcceptOffer}
@@ -1460,13 +1494,17 @@ export default function SoccerCareer() {
               />
             )}
             {trainingOpen && (
-              <TrainingPanel
-                career={career}
-                available={trainingAvailable(career)}
-                onComplete={handleTrainingComplete}
-                onDrill={handleDrillComplete}
-                onClose={() => setTrainingOpen(false)}
-              />
+              <CentreMountBoundary what="training ground" onClose={() => setTrainingOpen(false)}>
+                <Suspense fallback={<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70" data-training-loading><div className="rounded-2xl border border-border bg-card px-5 py-4 text-sm">🏋️ Opening the training ground...</div></div>}>
+                  <TrainingPanel
+                    career={career}
+                    available={trainingAvailable(career)}
+                    onComplete={handleTrainingComplete}
+                    onDrill={handleDrillComplete}
+                    onClose={() => setTrainingOpen(false)}
+                  />
+                </Suspense>
+              </CentreMountBoundary>
             )}
           </>
         )}
@@ -3688,7 +3726,7 @@ function SocialMediaActionCard({ career, onAction, onCoverAthlete, onDismiss }: 
 }
 
 /* ─── Game Screen ─── */
-function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onAcceptLoan, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onAdvanceManager, onAcceptManagerOffer, onEndManager, onShare, onNewCareer, onOpenPhone, onSocialMediaAction, onCoverAthlete, onDismissSocialMedia, onMoralDilemmaChoice, onRehabChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, onCurrencyChange, timelineRef, signedNote, academyReport, onAcademyFocus }: {
+function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onAcceptLoan, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onAdvanceManager, onAcceptManagerOffer, onEndManager, onShare, onNewCareer, onOpenPhone, onSocialMediaAction, onCoverAthlete, onDismissSocialMedia, onMoralDilemmaChoice, onRehabChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, onCurrencyChange, timelineRef, signedNote, academyReport, onAcademyFocus, onCareerPatch }: {
   career: CareerState;
   clubs: ClubData[];
   /** Round 530: the deal slip under the toast, already scoped to this career object by the page. */
@@ -3696,6 +3734,8 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   /* Round 973: the academy report and the focus picker. */
   academyReport?: AcademyReport | null;
   onAcademyFocus?: (focus: AcademyFocus | null) => void;
+  /** Round 1047: the Season Centre's moments write through this. */
+  onCareerPatch?: (fn: (prev: CareerState) => CareerState) => void;
   onNextSeason: () => void;
   onAcceptOffer: (offer: ContractOffer) => void;
   onDismissSummary: () => void;
@@ -4547,7 +4587,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           <div data-no-prerender>
             <CentreMountBoundary onClose={closeCentre}>
               <Suspense fallback={<div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80" data-season-centre-loading><div className="rounded-2xl border border-border bg-card px-5 py-4 text-sm">📺 Getting your season ready...</div></div>}>
-                <SoccerSeasonCentre career={career} clubs={clubs} row={row} mode={watchRow ? "watch" : "live"} onClose={closeCentre} />
+                <SoccerSeasonCentre career={career} clubs={clubs} row={row} mode={watchRow ? "watch" : "live"} onClose={closeCentre} onCareer={onCareerPatch} />
               </Suspense>
             </CentreMountBoundary>
           </div>

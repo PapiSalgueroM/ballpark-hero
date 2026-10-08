@@ -41,7 +41,8 @@ import { careerDerbyRecord, derbyMeetings, readSeasonDerbies, type DerbyRecord }
 import { adjustClubsForYear } from '../careerEras';
 import { keyedRng } from '../keyedRng';
 import { leagueFormatFor } from '../../data/leagueFormat';
-import { soccerEventDisagreements, soccerEvents } from './soccerEvents';
+import { soccerApplyDelta, soccerEventDisagreements, soccerEvents, soccerMomentSpots, type SoccerMomentKind } from './soccerEvents';
+import { drillForPosition, type PositionDrillKind } from '../careerDrills';
 
 /** Why a season shows results only (null: it shows a table). */
 export type ResultsReason = 'nofinish' | 'nosize' | 'league' | 'format' | 'cadence' | 'severe' | 'rival';
@@ -170,6 +171,22 @@ export function buildSoccerSeasonCtx(career: CareerState, clubs: ClubData[], row
 }
 
 const RULE3 = { win: 3, draw: 1, loss: 0 };
+
+/** The season key of a row: saved fields only, so any device rebuilds the same season. */
+export function soccerSeasonKey(playerName: string, row: SeasonRecord): string | null {
+  return row.type === 'playing' && row.apps > 0
+    ? `${playerName}|${row.club}|${row.year}|${row.apps}|${row.goals}|${row.assists}|${row.rating}|centre`
+    : null;
+}
+
+/* Round 1047: his trade on the training ground is his trade in a moment (one
+   mapping, the drills' own: drillForPosition). */
+const MOMENT_KIND: Record<PositionDrillKind, SoccerMomentKind> = { wallshot: 'finish', throughball: 'pass', tackle: 'tackle', gloves: 'save' };
+export function momentKindFor(position: string): SoccerMomentKind {
+  return MOMENT_KIND[drillForPosition(position)];
+}
+/** Moments one season offers at most. */
+export const MOMENTS_PER_SEASON = 3;
 const clamp = (v: number, lo: number, hi: number) => (v < lo ? lo : v > hi ? hi : v);
 
 /** The engine's injury block in league games: weeks out of its 46 week season. */
@@ -192,9 +209,7 @@ function fixedOf(row: SeasonRecord, ctx: SoccerSeasonCtx): FixedGame[] {
 
 export const SOCCER: SeasonSport<SeasonRecord, SoccerSeasonCtx> = {
   id: 'soccer',
-  seasonKey: (row, ctx) => (row.type === 'playing' && row.apps > 0
-    ? `${ctx.playerName}|${row.club}|${row.year}|${row.apps}|${row.goals}|${row.assists}|${row.rating}|centre`
-    : null),
+  seasonKey: (row, ctx) => soccerSeasonKey(ctx.playerName, row),
   frame: (_row, ctx): Frame => ({
     mode: ctx.mode,
     teams: ctx.games / 2 + 1,
@@ -266,6 +281,11 @@ export const SOCCER: SeasonSport<SeasonRecord, SoccerSeasonCtx> = {
   subChance: (played, games) => clamp(1.15 - (1.3 * played) / Math.max(1, games), 0.04, 0.55),
   labels: (slots, ctx, rng) => soccerLabels(slots, ctx, rng),
   events: soccerEvents,
+  moments: {
+    max: MOMENTS_PER_SEASON,
+    spots: (_row, ctx, _s, g, rng) => soccerMomentSpots(g, momentKindFor(ctx.position), ctx.keepsSheets, rng),
+    apply: (_row, ctx, g, delta, minute, rng) => soccerApplyDelta(g, delta, minute, ctx.keepsSheets, rng),
+  },
   check: (row, ctx, s) => {
     const out: string[] = soccerEventDisagreements(s, fixedOf(row, ctx));
     const names = s.labels.filter(l => l.named).map(l => l.name);
