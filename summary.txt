@@ -1,0 +1,1 @@
+record exit=0 2s | 33c31aeaf31a5c03137907136b427d3f59e34e7d6091b2377c46efd78f83cbdb  src/test/fixtures/seasonCentreWords.recorded.json
