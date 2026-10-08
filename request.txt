@@ -1,0 +1,2 @@
+#!serial
+guides-final-1157: bash .rc/x/career-guide-final-1157.sh
