@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+simConquestMotion: ENGINES=chromium node scripts/simConquestMotion.mjs
+simWritesAreSent: ENGINES=chromium node scripts/simWritesAreSent.mjs
+simResultMoment: ENGINES=chromium node scripts/simResultMoment.mjs

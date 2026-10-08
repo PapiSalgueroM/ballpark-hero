@@ -1,0 +1,5 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simDailySaveHardening exit=1 56s | simDailySaveHardening: 2 failure(s)
+simConquestMotion exit=0 14s | simConquestMotion: PASS. Evidence: /home/runner/work/_temp/t-simConquestMotion/dukb-conquest-motion-FhDTOv
+simWritesAreSent exit=1 13s | simWritesAreSent: 2 failures
+simResultMoment exit=0 5s | simResultMoment: green. Every live game reaches the shared result moment or is listed with what it draws instead, the pill shows exactly the score it is given, the three 

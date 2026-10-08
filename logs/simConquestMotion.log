@@ -1,0 +1,10 @@
+CONQUEST_MOTION| 256 frozen battles identical, all 7 NBA tags match their branches, 3333 sampled arm poses valid (longest 27.1px), 808 carries attached.
+CONQUEST_MOTION| nfl real board full: seed 0, same outcome/map/rosters, 157 RNG draws.
+CONQUEST_MOTION| nfl real board reduced: seed 0, same outcome/map/rosters, 157 RNG draws.
+CONQUEST_MOTION| nfl real board hidden: seed 0, same outcome/map/rosters, 157 RNG draws.
+CONQUEST_MOTION| nfl real board skip: seed 0, same outcome/map/rosters, 157 RNG draws.
+CONQUEST_MOTION| nba real board full: seed 0, same outcome/map/rosters, 77 RNG draws.
+CONQUEST_MOTION| nba real board reduced: seed 0, same outcome/map/rosters, 77 RNG draws.
+CONQUEST_MOTION| nba real board hidden: seed 0, same outcome/map/rosters, 77 RNG draws.
+CONQUEST_MOTION| nba real board skip: seed 0, same outcome/map/rosters, 77 RNG draws.
+simConquestMotion: PASS. Evidence: /home/runner/work/_temp/t-simConquestMotion/dukb-conquest-motion-FhDTOv
