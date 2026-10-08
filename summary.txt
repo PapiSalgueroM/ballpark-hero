@@ -1,0 +1,6 @@
+build exit=0 23s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=1 18s | playCareerLeagueWorld: 32 checks, 6 failed
+simFlagshipWeight exit=1 1s | simFlagshipWeight: 1 failure
+walk-odd exit=0 19s | playCareerLeagueWorld control odd: checks 2, 3 and 4 failed at all four sizes on a league with no table, as they must (12 of 28 failed)
+sweepWeight exit=1 25s | sweepWeight: 4 failures
+playSeasonCentre exit=0 96s | playSeasonCentre: 40 checks, 0 failed
