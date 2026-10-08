@@ -315,7 +315,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = path.join(ROOT, 'dist');
 const BASE = (env.BASE || env.SWEEP_BASE || 'http://localhost:4173').replace(/\/+$/, '');
 const CONTROL = env.PLAY_TRANSLATED_CONTROL || '';
-const KNOWN_CONTROLS = ['noguard', 'nolive', 'notranslate'];
+const KNOWN_CONTROLS = ['noguard', 'nolive', 'notranslate', 'undocopies'];
 if (CONTROL && !KNOWN_CONTROLS.includes(CONTROL)) {
   console.error(`PLAY_TRANSLATED_CONTROL=${CONTROL} is not a control this harness knows (${KNOWN_CONTROLS.join(', ')})`);
   process.exit(2);
@@ -330,6 +330,8 @@ const SIM_START = Number(env.SIM_START ?? 400);
 const SIM_READ = Number(env.SIM_READ ?? 4);
 const SIM_LATE = env.SIM_LATE !== '0';
 const CAREER_PRESSES = Number(env.CAREER_PRESSES ?? 12);
+/* after the translator undid itself: at most this many presses, fewer once a birthday and three looks have gone by */
+const UNDO_PRESSES = Number(env.UNDO_PRESSES ?? 30);
 const PAGE_PRESSES = Number(env.PAGE_PRESSES ?? 8);
 const SHOTS = env.SHOTS || (env.RC_OUT ? path.join(env.RC_OUT, `translated-${CONTROL || 'plain'}`) : '');
 const OUT_JSON = env.OUT_JSON || (env.RC_OUT ? path.join(env.RC_OUT, `playTranslatedPage-${CONTROL || 'plain'}.json`) : '');
@@ -547,7 +549,10 @@ function pageInit(cfg) {
       if (f.sibling) stack.push([f.sibling, host, portal]);
       if (f.tag === 6) { // a string of its own
         const g = groupOf(host);
-        const v = (f.stateNode && f.stateNode.nodeValue) || '';
+        /* the words React HOLDS (its own record of the string), not what the node says: a translator that
+           undoes itself writes the words it saved back into the node it took, and the judge must not
+           take that node's word for it */
+        const v = typeof f.memoizedProps === 'string' ? f.memoizedProps : (f.stateNode && f.stateNode.nodeValue) || '';
         if (v) { g.texts.push(v); g.kinds.push('T'); }
         if (portal) g.portal = true;
       } else if (f.tag === 5) { // an element
@@ -569,8 +574,17 @@ function pageInit(cfg) {
     const where = el => { const bits = []; for (let e = el, i = 0; e && e.nodeType === 1 && i < 3; e = e.parentElement, i += 1) bits.push(e.tagName.toLowerCase() + (e.id ? '#' + e.id : '') + (e.getAttribute('data-testid') ? `[${e.getAttribute('data-testid')}]` : '') + (typeof e.className === 'string' && e.className ? '.' + e.className.split(/\s+/)[0] : '')); return bits.join(' < '); };
     const clip = s => s.replace(/\s+/g, ' ').trim().slice(0, 70);
     for (const [el, g] of groups) {
-      if (g.skip || !g.texts.length || el.nodeType !== 1 || !el.isConnected) continue;
+      if (g.skip || el.nodeType !== 1 || !el.isConnected) continue;
       if (el.closest('svg,script,style,textarea,noscript,code,[contenteditable="true"]')) continue;
+      if (!g.texts.length) {
+        /* React holds no string of its own in this element any more (a placeholder that gave way to an
+           element). A translator's copy still standing there is a leftover, and nothing else would
+           judge it. Only wrappers are looked at: plain text here may be something the page wrote by hand. */
+        const left = [];
+        for (const c of el.childNodes) if (c.nodeType === 1 && c.nodeName === 'FONT' && c.__simOrig) left.push(c.__simOrig);
+        if (left.length) out.stale.push({ react: '', screen: clip(left.join('')), at: where(el), left: true });
+        continue;
+      }
       out.elements += 1;
       const pieces = [];
       const kinds = [];
@@ -622,6 +636,39 @@ function pageInit(cfg) {
   }
   w.shown = translate;
   const queued = new WeakSet(); // read, and the answer is on its way
+  /* THE UNDO (Round 1141, after review). A translator can undo itself: "show original", a translation
+     that failed, the page going into the back and forward cache. Measured on the real one's own button,
+     2026-10-08, with the guard in the page: for every wrapper still on the page the wrapper is emptied,
+     the very node it took is put INTO it, the words it saved are written to that node (not through
+     nodeValue), the node is taken out again and put in front of the wrapper, and the wrapper leaves.
+     It forgets it ever took the node (a second "translate" takes it again) and html loses its marks.
+     kind 'copies' is the undocopies control and nothing a translator was seen to do: a COPY of each
+     node comes back in place of the node itself, which no guard can follow. */
+  const kept = [];
+  let stopped = false;
+  w.undo = kind => {
+    stopped = true;
+    const out = { back: 0, copies: 0 };
+    for (const k of kept.splice(0)) {
+      const wrapper = k.wrapper;
+      const parent = wrapper.parentNode;
+      if (!parent || !wrapper.isConnected) continue;
+      let node = k.node;
+      if (kind === 'copies') { node = document.createTextNode(k.words); out.copies += 1; }
+      while (wrapper.firstChild) wrapper.removeChild(wrapper.firstChild);
+      wrapper.appendChild(node);
+      node.data = k.words;
+      wrapper.removeChild(node);
+      parent.insertBefore(node, wrapper);
+      parent.removeChild(wrapper);
+      taken.delete(k.node);
+      queued.delete(k.node);
+      out.back += 1;
+    }
+    document.documentElement.setAttribute('lang', 'en');
+    document.documentElement.classList.remove('translated-ltr');
+    return out;
+  };
   function eligible(node) {
     /* its own text, a node it has taken once (the real one marks those and never looks again), a node it has read */
     if (made.has(node) || taken.has(node) || queued.has(node)) return false;
@@ -641,7 +688,7 @@ function pageInit(cfg) {
      that stand side by side are one sentence, as they are to the real translator. */
   function read() {
     layRecorder();
-    if (!cfg.translate || !document.body) return [];
+    if (!cfg.translate || stopped || !document.body) return [];
     const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
     const jobs = [];
     for (let n = walker.nextNode(); n; n = walker.nextNode()) {
@@ -671,6 +718,7 @@ function pageInit(cfg) {
       const said = words.join('');
       here.forEach((node, i) => {
         const outer = document.createElement('font');
+        kept.push({ node, wrapper: outer, words: words[i] });
         outer.setAttribute('style', 'vertical-align: inherit;');
         const lastOne = i === here.length - 1;
         outer.__simOrig = lastOne ? said : '';
@@ -799,7 +847,8 @@ async function probe(page) {
     const live = window.__dukbTranslateStats;
     return {
       headerAge,
-      live: live ? { swaps: live.swaps, removed: live.removed, inserted: live.inserted, restored: live.restored } : null,
+      live: live ? { swaps: live.swaps, removed: live.removed, inserted: live.inserted, restored: live.restored, returned: live.returned || 0 } : null,
+      left: says.stale.filter(s => s.left).length,
       takenBack: w.takenBack(),
       judged: says.elements,
       order: says.order.length,
@@ -956,8 +1005,10 @@ async function probeGuard(page) {
    element lands at the end and the page still shows the copy of 16, which is what the nolive control
    has to see here on every page, whatever the app's own copy looks like by then. */
 async function probeLive(page) {
-  return page.evaluate(() => {
-    const out = { remove: '', insert: '', write: '' };
+  return page.evaluate(async () => {
+    const out = { remove: '', insert: '', write: '', undo: '' };
+    /* the observer's turn: what has happened so far is on layer two's map before the next step */
+    const turn = () => new Promise(r => setTimeout(r, 0));
     const box = document.createElement('div');
     box.setAttribute('translate', 'no');
     box.style.display = 'none';
@@ -983,9 +1034,37 @@ async function probeLive(page) {
       held.nodeValue = '17';
       out.write = p.textContent === '17' ? 'shows 17' : `still shows "${p.textContent}"`;
     } catch (e) { out.write = e.name; }
+    try {
+      /* after review, check 17: the translator takes a string, the page rewrites it (layer two puts a
+         stand in there), the translator takes THAT, and then gives it back the way the real one's "show
+         original" was measured to: the node into the wrapper, its saved words written, out again, in
+         front of the wrapper, the wrapper gone. Then the page rewrites the string once more. Each
+         step waits for the observer's turn, as it has between a translator's steps on a real page.
+         Layer one alone passes this too (it gets React's own node back and heals), so this one is not
+         the nolive control's: it is red on a layer two that forgets who a stand in was made for. */
+      const [p, held] = line('16');
+      take(held);
+      await turn();
+      held.nodeValue = '17';
+      await turn();
+      const shown = p.firstChild;
+      const back = shown && shown.nodeType === 3 ? shown : held;
+      const font = back === held ? shown : take(back);
+      await turn();
+      const saved = back === held ? '16' : back.data; // what the translator read when it took the node
+      while (font.firstChild) font.removeChild(font.firstChild);
+      font.appendChild(back);
+      back.data = saved;
+      font.removeChild(back);
+      p.insertBefore(back, font);
+      p.removeChild(font);
+      await turn();
+      held.nodeValue = '18';
+      out.undo = p.textContent === '18' ? 'shows 18' : `still shows "${p.textContent}"`;
+    } catch (e) { out.undo = e.name; }
     box.remove();
     return out;
-  }).catch(e => ({ remove: 'no answer', insert: String(e).slice(0, 60), write: '' }));
+  }).catch(e => ({ remove: 'no answer', insert: String(e).slice(0, 60), write: '', undo: '' }));
 }
 
 /* The next thing a player would press. An open dialog, list or menu comes first (the rules dialog a
@@ -1070,8 +1149,10 @@ function newRecord(route, view, mode, pass, out) {
     route, view, mode, pass, out, steps: [], boundaryAt: null, stuckAt: null, pressed: [], state: null, first: null, maxStale: 0, staleSample: [],
     /* Round 1141: every different stale text of the walk, where an element stood out of place, text
        the translator will not take again, and the hub's age line against the save */
-    staleAll: new Map(), staleAt: '', maxOrder: 0, orderAll: new Map(), maxTakenBack: 0, judged: 0,
+    staleAll: new Map(), staleAt: '', maxOrder: 0, orderAll: new Map(), maxTakenBack: 0, judged: 0, maxLeft: 0,
     ageLooks: 0, ageLooksOlder: 0, ageWrong: 0, ageWrongAt: '',
+    /* after review: what the walk saw after the translator undid itself (walkUndo) */
+    undo: null, beforeUndo: null,
   };
 }
 let shotCount = 0;
@@ -1091,9 +1172,28 @@ async function step(W, rec, name, fn) {
   for (let i = 0; i < 3 && !state; i += 1) {
     try { state = await probe(W.page); } catch { await sleep(W.page, 500); } // a reload was in flight
   }
-  if (state) {
+  if (state && rec.undo && rec.undo.on) {
+    /* after the translator undid itself the looks are counted apart, for checks 18 and 19 */
+    const u = rec.undo;
+    rec.state = state;
+    u.looks += 1;
+    if (state.fonts > u.fonts) u.fonts = state.fonts;
+    if (state.stale > u.maxStale) u.maxStale = state.stale;
+    if (state.stale > 0 && !u.staleAt) u.staleAt = name;
+    for (const s of state.staleSample) u.staleAll.set(`${s.at} | ${s.react} | ${s.screen}`, { ...s, step: name });
+    if (state.live) u.returned = state.live.returned;
+    if (state.headerAge !== null && state.save && typeof state.save.age === 'number') {
+      u.ageLooks += 1;
+      if (state.save.age > u.ageAt) u.ageOlder += 1;
+      if (state.headerAge !== state.save.age) {
+        u.ageWrong += 1;
+        if (!u.ageWrongAt) u.ageWrongAt = `at "${name}" the header said Age ${state.headerAge} and the save said ${state.save.age}`;
+      }
+    }
+  } else if (state) {
     rec.state = state;
     if (!rec.first) rec.first = state;
+    if (state.left > rec.maxLeft) rec.maxLeft = state.left;
     if (state.stale > rec.maxStale) { rec.maxStale = state.stale; rec.staleSample = state.staleSample; }
     if (state.stale > 0 && !rec.staleAt) rec.staleAt = name;
     for (const s of state.staleSample) rec.staleAll.set(`${s.at} | ${s.react} | ${s.screen}`, { ...s, step: name });
@@ -1177,6 +1277,35 @@ async function walkCreate(W, rec) {
   const end = rec.state;
   if (rec.seasonDetail && end && end.save) rec.seasonDetail += `; the walk went on to age ${end.save.age}, phase ${end.save.phase}`;
   await shot(page, rec, '3-career');
+  if (mode !== 'off' && CONTROL !== 'noguard') await walkUndo(W, rec, counts);
+}
+
+/* Round 1141, after review: THE UNDO, on the career the create walk has just lived. The translator gives
+   back what it took (window.__walk.undo, shaped as the real one's "show original" was measured), and the
+   career goes on until the save is a year older again and three looks more, or UNDO_PRESSES presses.
+   Every look from here on is counted apart (rec.undo), for checks 18 and 19. Review found this on the
+   real translator: after the undo every string layer two had refreshed was cut off from React, the
+   header read Age 19 with the save at 20 and never healed, where layer one alone did heal. */
+async function walkUndo(W, rec, counts) {
+  if (rec.boundaryAt || rec.stuckAt || !rec.state || !rec.state.save) return;
+  const { page } = W;
+  rec.beforeUndo = rec.state;
+  const u = { on: true, back: 0, copies: 0, looks: 0, presses: 0, fonts: 0, maxStale: 0, staleAt: '', staleAll: new Map(), returned: 0, ageAt: rec.state.save.age, ageLooks: 0, ageOlder: 0, ageWrong: 0, ageWrongAt: '' };
+  rec.undo = u;
+  await step(W, rec, 'the translator undoes itself', async () => {
+    const r = await page.evaluate(kind => window.__walk.undo(kind), CONTROL === 'undocopies' ? 'copies' : 'nodes');
+    u.back = r.back;
+    u.copies = r.copies;
+    return r.back > 0 ? { ok: true } : { ok: false, why: 'the translator had nothing on the page to give back' };
+  });
+  let more = 0;
+  for (let i = 1; i <= UNDO_PRESSES; i += 1) {
+    const ok = await step(W, rec, `after the undo, press ${i}`, async () => { const r = await advance(page, WALK.actions, WALK.skip, counts); await sleep(page, 450); return r; });
+    u.presses = i;
+    if (!ok) break;
+    if (u.ageOlder >= 1) { more += 1; if (more >= 3) break; }
+  }
+  await shot(page, rec, '4-after-undo');
 }
 
 async function walkPage(W, rec) {
@@ -1296,6 +1425,8 @@ async function runWalk({ mode, view, route }, out) {
     staleList: [...rec.staleAll.values()], staleAt: rec.staleAt, maxOrder: rec.maxOrder, orderList: [...rec.orderAll.values()],
     takenBack: rec.maxTakenBack, judged: rec.judged, live: last.live || null,
     age: { looks: rec.ageLooks, older: rec.ageLooksOlder, wrong: rec.ageWrong, wrongAt: rec.ageWrongAt },
+    maxLeft: rec.maxLeft,
+    undo: rec.undo ? { ...rec.undo, staleAll: undefined, staleList: [...rec.undo.staleAll.values()] } : null,
     bank: rec.bank || null, directLive: rec.directLive || null,
     pressed: rec.pressed, dbBlocked: W.dbBlocked, blocked: [...W.blocked], retry, direct: rec.direct || null,
     create: route === CREATE_ROUTE ? { drawn: !!rec.createDrawn, boxes: rec.boxes || {}, reached: !!rec.reached, reachedDetail: rec.reachedDetail || '', seasonAt: rec.seasonAt ?? null, seasonDetail: rec.seasonDetail || '' } : null,
@@ -1303,8 +1434,10 @@ async function runWalk({ mode, view, route }, out) {
   };
   await W.ctx.close();
 
+  /* what the page was like while it was translated: the create walk ends with the translator undoing itself */
+  const seen = rec.beforeUndo || last;
   if (mode === 'off') check(`1. ${tag}: the translator is off`, last.fonts === 0 && last.marked === false && first.counting === true, `${last.fonts} font element(s)`);
-  else check(`1. ${tag}: the translator ran`, row.swapped > 0 && last.lang === 'pt' && last.marked === true, `${row.swapped} text node(s) swapped, lang="${last.lang || ''}"`);
+  else check(`1. ${tag}: the translator ran`, row.swapped > 0 && seen.lang === 'pt' && seen.marked === true, `${row.swapped} text node(s) swapped, lang="${seen.lang || ''}"`);
   if (CONTROL !== 'noguard') {
     check(`1. ${tag}: the guard is installed on the page`, row.guardOn);
     const d = rec.direct || {};
@@ -1339,9 +1472,10 @@ async function runWalk({ mode, view, route }, out) {
       d2.remove === 'the copy left with it' && d2.insert === 'in front' && d2.write === 'shows 17',
       `removed: ${d2.remove || 'not asked'}; inserted before: ${d2.insert || 'not asked'}; rewritten 16 to 17: ${d2.write || 'not asked'}`);
     check(`12. ${tag}: no text the translator will not take again is back on the page`, rec.maxTakenBack === 0, rec.maxTakenBack ? `${rec.maxTakenBack} at once` : '');
+    check(`17. ${tag}: asked directly, a string layer two had refreshed still follows the page after the translator gives it back`, d2.undo === 'shows 18', `rewritten to 17, taken again, given back, rewritten to 18: ${d2.undo || 'not asked'}`);
     if (mode === 'off') {
       const l = last.live;
-      check(`9. ${tag}: on a page nobody translated layer two did nothing`, !!l && l.swaps + l.removed + l.inserted + l.restored === 0, l ? JSON.stringify(l) : 'window.__dukbTranslateStats is not there');
+      check(`9. ${tag}: on a page nobody translated layer two did nothing`, !!l && l.swaps + l.removed + l.inserted + l.restored + l.returned === 0, l ? JSON.stringify(l) : 'window.__dukbTranslateStats is not there');
     }
   }
   if (route === CREATE_ROUTE && CONTROL !== 'noguard') {
@@ -1351,6 +1485,21 @@ async function runWalk({ mode, view, route }, out) {
       PICKS.map(([n]) => `${n}: was "${boxes[n] ? boxes[n].was : ''}", now "${boxes[n] ? boxes[n].words : 'not there'}"`).join('; '));
     check(`14. ${tag}: the age in the hub's line is the age in the save`, rec.ageLooksOlder >= 1 && rec.ageWrong === 0,
       rec.ageWrong ? `${rec.ageWrong} of ${rec.ageLooks} look(s) wrong: ${rec.ageWrongAt}` : rec.ageLooksOlder ? `${rec.ageLooks} look(s) at the line, ${rec.ageLooksOlder} of them after a birthday` : `the line was looked at ${rec.ageLooks} time(s) and never after a birthday, so nothing was measured`);
+    if (mode !== 'off') {
+      /* after review: the translator undid itself, and the career went on */
+      const u = rec.undo || { back: 0, looks: 0, presses: 0, fonts: 0, maxStale: 0, staleAll: new Map(), returned: 0, ageLooks: 0, ageOlder: 0, ageWrong: 0, never: true };
+      const list = [...u.staleAll.values()];
+      const followed = !last.live || u.returned > 0; // with layer two on, it must have taken nodes up again
+      check(`18. ${tag}: after the translator undid itself no wrapper is left and the page says what React holds, at every look`,
+        u.back > 0 && u.looks >= 2 && u.fonts === 0 && u.maxStale === 0 && followed,
+        u.never ? 'the walk never got as far as the undo' : u.back === 0 ? 'the translator gave nothing back, so nothing was measured'
+          : u.fonts ? `${u.fonts} font element(s) still on the page`
+            : u.maxStale ? `${list.length} different stale text(s), ${u.maxStale} at once at most, first at "${u.staleAt}": React ${JSON.stringify(list[0].react)}, the screen ${JSON.stringify(list[0].screen)}, in ${list[0].at}`
+              : !followed ? 'layer two took up none of the nodes that came back'
+                : `${u.back} node(s) given back${last.live ? `, ${u.returned} taken up again by layer two` : ''}, ${u.looks} look(s) over ${u.presses} press(es)`);
+      check(`19. ${tag}: after the undo the age in the hub's line is still the age in the save, a birthday later`, u.ageOlder >= 1 && u.ageWrong === 0,
+        u.never ? 'the walk never got as far as the undo' : u.ageWrong ? `${u.ageWrong} of ${u.ageLooks} look(s) wrong: ${u.ageWrongAt}` : u.ageOlder ? `${u.ageLooks} look(s) at the line, ${u.ageOlder} of them after a birthday that came after the undo` : `the line was looked at ${u.ageLooks} time(s) in ${u.presses} press(es) and never after a birthday, so nothing was measured`);
+    }
   }
   if (route === BANK_ROUTE && CONTROL !== 'noguard') {
     const b = rec.bank || {};
@@ -1567,8 +1716,17 @@ if (orderKinds.size) {
 const liveRows = rows.filter(r => r.live);
 if (liveRows.length) {
   const sum = k => liveRows.reduce((a, r) => a + r.live[k], 0);
-  console.log(`\nLAYER TWO on ${liveRows.length} page load(s): ${sum('swaps')} text node(s) seen taken, ${sum('removed')} removal(s) and ${sum('inserted')} insert(s) put through, ${sum('restored')} string(s) handed back fresh. Text the translator will not take again, back on the page: ${Math.max(0, ...rows.map(r => r.takenBack))}.`);
+  console.log(`\nLAYER TWO on ${liveRows.length} page load(s): ${sum('swaps')} text node(s) seen taken, ${sum('removed')} removal(s) and ${sum('inserted')} insert(s) put through, ${sum('restored')} string(s) handed back fresh, ${sum('returned')} node(s) taken up again after the translator gave them back. Text the translator will not take again, back on the page: ${Math.max(0, ...rows.map(r => r.takenBack))}.`);
 }
+const undoRows = rows.filter(r => r.undo);
+if (undoRows.length) {
+  console.log(`\nTHE UNDO on ${undoRows.length} create walk(s): the translator gave back ${undoRows.map(r => r.undo.back).join(', ')} node(s)${undoRows.some(r => r.undo.copies) ? ' (COPIES, the undocopies control)' : ''}; then ${undoRows.map(r => r.undo.presses).join(', ')} press(es) and ${undoRows.map(r => r.undo.looks).join(', ')} look(s); stale text at most ${undoRows.map(r => r.undo.maxStale).join(', ')}; the age line wrong at ${undoRows.map(r => `${r.undo.ageWrong} of ${r.undo.ageLooks}`).join(', ')} look(s), ${undoRows.map(r => r.undo.ageOlder).join(', ')} of them after a birthday that came after the undo.`);
+  const kinds = new Map();
+  for (const r of undoRows) for (const s of r.undo.staleList) kinds.set(`React ${JSON.stringify(s.react)} | the screen ${JSON.stringify(s.screen)} | in ${s.at}`, s.step);
+  for (const [key, at] of [...kinds].slice(0, 12)) console.log(`  after the undo: ${key} (first at "${at}")`);
+}
+const leftRows = rows.filter(r => r.maxLeft > 0);
+if (leftRows.length) console.log(`\nA COPY LEFT in an element whose own strings have all gone: in ${leftRows.length} walk(s), ${Math.max(...leftRows.map(r => r.maxLeft))} at once at most (counted in the stale text above).`);
 const dbBlocked = rows.reduce((a, r) => a + r.dbBlocked, 0);
 const otherHosts = [...new Set(rows.flatMap(r => r.blocked))];
 console.log(`\nnothing left this machine: ${dbBlocked} request(s) to the database host aborted, other hosts aborted [${otherHosts.join(', ')}]${SHOTS ? `, ${shotCount} screenshot(s) in ${SHOTS}` : ''}`);
@@ -1636,7 +1794,9 @@ if (CONTROL === 'nolive') {
     console.error(`control "nolive": ${broke.length} walk(s) broke (${broke[0].route} ${broke[0].view} ${broke[0].mode}${broke[0].boundaryAt ? ' at "' + broke[0].boundaryAt + '"' : ''}). Layer one is still on and must hold the page up: this is a red of another kind.`);
     await stop(2);
   }
-  const own = /^(10|11|13|14|16)\. /;
+  /* 18 and 19 are its own too: with layer one alone the translator's undo puts back copies React has
+     removed since, and nodes holding the words it saved, which stay wrong until React's next write */
+  const own = /^(10|11|13|14|16|18|19)\. /;
   const other = failed.filter(f => !own.test(f));
   if (other.length) {
     console.error(`control "nolive": ${other.length} check(s) failed that have nothing to do with layer two, first: ${other[0].slice(0, 200)}`);
@@ -1659,6 +1819,32 @@ if (CONTROL === 'nolive') {
   }
   console.log(`control "nolive": the page stood (no boundary, no NotFoundError in ${rows.length} walk(s)) and was wrong for its own reasons. RED on purpose, the checks work.`);
   console.log(`playTranslatedPage: ${checksRun} checks, ${failed.length} failed (control "nolive", red on purpose)`);
+  await stop(1);
+}
+if (CONTROL === 'undocopies') {
+  /* The control's own reason, and nothing else, earns exit 1: the translator gave back COPIES of the nodes
+     it took, which nothing can follow, so after the undo the page must stop saying what React holds
+     (check 18) and the age line must fall behind the save (check 19), on every create walk, while
+     everything before the undo stays green. That is what the two checks are for, seen firing. */
+  console.log(`${checksRun} checks, ${failed.length} failed`);
+  const own = /^(18|19)\. /;
+  const other = failed.filter(f => !own.test(f));
+  if (other.length) {
+    console.error(`control "undocopies": ${other.length} check(s) failed that have nothing to do with the undo, first: ${other[0].slice(0, 200)}`);
+    await stop(2);
+  }
+  const createRows = rows.filter(r => r.route === CREATE_ROUTE);
+  const copied = createRows.filter(r => r.undo && r.undo.copies > 0);
+  const lost = createRows.filter(r => r.undo && r.undo.maxStale > 0);
+  const frozen = createRows.filter(r => r.undo && r.undo.ageWrong > 0);
+  console.log(`control "undocopies": the translator gave back copies on ${copied.length} of ${createRows.length} create walk(s) (${copied.map(r => r.undo.copies).join(', ')}). After it: stale text in ${lost.length}, the age line behind the save in ${frozen.length}.`);
+  const fired = createRows.length > 0 && copied.length === createRows.length && lost.length === createRows.length && frozen.length === createRows.length;
+  if (!fired) {
+    console.error('control "undocopies": the page was NOT wrong after an undo nothing can follow, on every create walk. THE CONTROL DID NOT FIRE.');
+    await stop(2);
+  }
+  console.log('control "undocopies": everything before the undo was green and the two checks after it went red. RED on purpose, the checks work.');
+  console.log(`playTranslatedPage: ${checksRun} checks, ${failed.length} failed (control "undocopies", red on purpose)`);
   await stop(1);
 }
 if (failed.length) failed.forEach(f => console.log('  - ' + f));
