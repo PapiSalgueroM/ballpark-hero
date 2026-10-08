@@ -1,0 +1,13 @@
+sessionmarks exit=1 0s | simSessionMarks: 1 failure
+access exit=0 0s | simAccessibility: all green
+resultmoment exit=1 0s | Node.js v24.21.0
+victorymoment exit=1 0s | Node.js v24.21.0
+revealmoments exit=1 7s | simRevealMoments: 2 FAILURE(S)
+norival exit=0 11s | No rival product names found. 0 findings.
+firstteampage exit=0 25s | PASS: seven real-page cases and all six effective negative controls.
+loads exit=0 21s |    All eleven controls fired exactly where they should.
+gearpage exit=0 2s | Artifacts: /home/runner/work/_temp/t-gearpage/tycoon-gear-page-mnuzcB
+setpiecepage exit=0 4s | Tycoon set-piece page: 6/6 actual page cases passed
+tsc exit=0 63s | 
+numfmt exit=0 140s | Number formatting: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/number-formatting-artifacts/outcomes
+pitch exit=0 519s |    All 8 controls fired exactly where they should.

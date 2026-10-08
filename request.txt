@@ -1,0 +1,13 @@
+access: node scripts/simAccessibility.mjs
+sessionmarks: node scripts/simSessionMarks.mjs
+revealmoments: node scripts/simRevealMoments.mjs
+victorymoment: node scripts/simVictoryMoment.mjs
+resultmoment: node scripts/simResultMoment.mjs
+firstteampage: node scripts/simFirstTeamPage.mjs
+norival: node scripts/simNoRivalNames.mjs
+numfmt: node scripts/simNumberFormatting.mjs
+loads: node scripts/simTycoonLoads.mjs
+pitch: node scripts/simTycoonPitch.mjs
+gearpage: node scripts/simTycoonGearPage.mjs
+setpiecepage: node scripts/simTycoonSetPiecePage.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json

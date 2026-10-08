@@ -1,0 +1,8 @@
+healthy: 7/7 passed; failed sections none
+nosave: 4/7 passed; failed sections 1,2,3
+failopen: 6/7 passed; failed sections 2
+dropteam: 6/7 passed; failed sections 3
+stoppedclock: 5/7 passed; failed sections 4,7
+noedge: 4/7 passed; failed sections 5,6,7
+untrained: 6/7 passed; failed sections 7
+PASS: seven real-page cases and all six effective negative controls.
