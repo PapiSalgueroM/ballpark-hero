@@ -1,0 +1,324 @@
+/**
+ * Round 1104 harness: NFL My Career tells the truth about football.
+ *
+ * WHAT IT HOLDS (each failure is tagged with its section, which the controls read):
+ *   1   Seasons are as long as they really were: in the 2005 throwback every
+ *       season through 2020 has at most 16 games and a healthy starter plays
+ *       exactly 16; from 2021, and in every season of a 2026 career, it is 17.
+ *       At least 200 season lines from 2021 on must be seen, or the check
+ *       builds them (a career set to 2019 and played forward) and never
+ *       passes on a count of zero.
+ *   1b  A 16 game schedule does not cost a throwback career its awards. The
+ *       award field was measured on 17 game seasons, so the engine scores a
+ *       season on a full schedule pace. Over five seeds, All-Pros a career,
+ *       MVP or DPOY a career and the Hall of Fame rate, by position, sit
+ *       inside the 17 game arm's five seed mean plus or minus three seed
+ *       standard deviations (with a floor on the width, written below).
+ *   2   Rookie pay is the draft slot. The table itself is held to its rules
+ *       (32 first round rows a table, picks 1 to 32 once each, no total at or
+ *       under zero, two sources within 2 percent on every row that claims two,
+ *       pay never rising with the pick down to the minimum; held rows counted
+ *       and printed), every quick start is paid its slot in both eras, and no
+ *       kicker is drafted before round four on either path to the draft.
+ *   3   Sacks come in halves on every new LB and EDGE season line.
+ *   5   MEASURED, asserted on nothing: numbers other rounds asked for.
+ *
+ * TWO ARMS, ONE BUNDLE. The engine is bundled once. The BASE arm is that
+ * bundle with this round's rules patched out (17 games every year, no pace,
+ * the old pay formula, tenths), which is the engine as the round found it.
+ * The bundle is patched, never the source, and every patch proves its needle
+ * is in the bundle exactly once before it runs.
+ *
+ * NEGATIVE CONTROLS, TRUTH_CONTROL=: each must turn its own section red and
+ * no other; a control run exits 0 only then.
+ *   seventeen  the ledger is ignored, 17 games every year      -> 1
+ *   nopace     the award score reads the raw 16 game line       -> 1b
+ *   oldpay     the old rookie pay formula                       -> 2
+ *   kicker     kickers are drafted anywhere again               -> 2
+ *   swap       two first round rows of the table trade places   -> 2
+ *   tenths     sacks are rounded to tenths again                -> 3
+ *
+ * Seeds: SIM_SEED (default 1) starts the five seeds 1b reads. Sizes:
+ * TRUTH_CAREERS careers a position and seed (default 300). Nothing here
+ * reaches the network.
+ *
+ * Run: node scripts/simNflTruth.mjs
+ */
+import path from 'node:path';
+import os from 'node:os';
+import fs from 'node:fs';
+import { build } from 'esbuild';
+import { pathToFileURL, fileURLToPath } from 'node:url';
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const CONTROL = process.env.TRUTH_CONTROL || '';
+const CONTROLS = { seventeen: ['1'], nopace: ['1b'], oldpay: ['2'], kicker: ['2'], swap: ['2'], tenths: ['3'] };
+if (CONTROL && !CONTROLS[CONTROL]) {
+  console.error(`TRUTH_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
+  process.exit(1);
+}
+const SEED = Number(process.env.SIM_SEED || 1);
+const CAREERS = Number(process.env.TRUTH_CAREERS || 300);
+const POSITIONS = ['QB', 'RB', 'WR', 'TE', 'LB', 'CB', 'EDGE', 'K'];
+
+const failed = new Map();
+const fail = (tag, msg) => {
+  if (!failed.has(tag)) failed.set(tag, 0);
+  if (failed.get(tag) < 4) console.error(`  FAIL [${tag}]: ${msg}`);
+  failed.set(tag, failed.get(tag) + 1);
+};
+function mulberry(seed) {
+  let s = seed | 0;
+  return () => { s = (s + 0x6D2B79F5) | 0; let t = Math.imul(s ^ (s >>> 15), 1 | s); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+}
+const store = new Map();
+globalThis.localStorage ??= { getItem: k => (store.has(k) ? store.get(k) : null), setItem: (k, v) => { store.set(k, String(v)); }, removeItem: k => { store.delete(k); }, clear: () => store.clear() };
+const mean = a => a.reduce((s, v) => s + v, 0) / Math.max(1, a.length);
+const sd = a => { const m = mean(a); return Math.sqrt(mean(a.map(v => (v - m) ** 2))); };
+
+/* ── the bundle and its arms ── */
+const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), `nfltruth-${process.pid}-`));
+process.on('exit', () => { try { fs.rmSync(tmpDir, { recursive: true, force: true }); } catch { /* best effort */ } });
+const ENTRY = [
+  `export * as E from './src/lib/nflMyCareer.ts';`,
+  `export { rookieDeal } from './src/lib/usCareerRookieDeal.ts';`,
+  `export { NFL_ROOKIE_SCALE } from './src/data/nflRookieScale.ts';`,
+  `export { stampHallCalibration } from './src/lib/careerHallOfFame.ts';`,
+  `export { nflPreDraftDescriptor } from './src/lib/nflCareerPreDraft.ts';`,
+  `export * as PD from './src/lib/careerPreDraft.ts';`,
+].join('\n');
+const rawOut = path.join(tmpDir, 'raw.mjs');
+await build({ stdin: { contents: ENTRY, resolveDir: ROOT, loader: 'ts' }, bundle: true, format: 'esm', platform: 'node', outfile: rawOut, absWorkingDir: ROOT, logLevel: 'error', alias: { '@': path.join(ROOT, 'src') } });
+const RAW = fs.readFileSync(rawOut, 'utf8');
+function patch(text, needle, next, what) {
+  const n = text.split(needle).length - 1;
+  if (n !== 1) {
+    console.error(`simNflTruth: the patch "${what}" needs its needle exactly once in the bundle and found it ${n} times, so it would prove nothing:\n  ${needle}`);
+    process.exit(1);
+  }
+  return text.replace(needle, next);
+}
+const N_LEN = 'function nflSeasonLength(year) {';
+const N_PACE = 'function nflAwardPaceLine(line, len) {';
+const N_PAY = 'function nflRookieSalary(eraId, slot, pos) {';
+const N_OFFSET = 'function nflPickOffset(pos) {';
+const N_SACK_LB = '((form - 66) * 0.18 + rng() * 3) * g * 2) / 2';
+const N_SACK_EDGE = '((form - 64) * 0.52 + rng() * 5) * g * 2) / 2';
+const N_SACK_PO = '(3 + (pf - 62) * 0.35) * per * 2) / 2';
+const N_ROW1 = 'row(1, 57271500, 58191906)';
+const N_ROW2 = 'row(2, 54675584, 55550396)';
+const OLD_PAY = `${N_PAY}\n  { const era0 = nflEraById(eraId); const fr0 = slot > 0 && slot <= 32; return Math.max(0.3, Math.round((fr0 ? (33 - slot) * 0.9 + 4 : 1.2) * era0.moneyScale * 10) / 10); }`;
+const P = {
+  seventeen: t => patch(t, N_LEN, `${N_LEN}\n  return 17;`, 'seventeen'),
+  nopace: t => patch(t, N_PACE, `${N_PACE}\n  return line;`, 'nopace'),
+  oldpay: t => patch(t, N_PAY, OLD_PAY, 'oldpay'),
+  kicker: t => patch(t, N_OFFSET, `${N_OFFSET}\n  return 0;`, 'kicker'),
+  tenths: t => patch(patch(patch(t, N_SACK_LB, N_SACK_LB.replace('* 2) / 2', '* 10) / 10'), 'tenths LB'), N_SACK_EDGE, N_SACK_EDGE.replace('* 2) / 2', '* 10) / 10'), 'tenths EDGE'), N_SACK_PO, N_SACK_PO.replace('* 2) / 2', '* 10) / 10'), 'tenths playoffs'),
+  swap: t => patch(patch(t, N_ROW1, 'row(1, 54675584, 55550396)', 'swap row 1'), N_ROW2, 'row(2, 57271500, 58191906)', 'swap row 2'),
+};
+/* Every needle is proved present on a plain run too, so a rename in src
+   cannot quietly retire a control. */
+for (const k of Object.keys(P)) P[k](RAW);
+async function loadArm(name, patches) {
+  let t = RAW;
+  for (const k of patches) t = P[k](t);
+  const file = path.join(tmpDir, `${name}.mjs`);
+  fs.writeFileSync(file, t);
+  return import(pathToFileURL(file).href);
+}
+const NEW = await loadArm('new', CONTROL ? [CONTROL] : []);
+/* The engine as the round found it: 17 games every year, the old pay, kickers anywhere, tenths. */
+const BASE = await loadArm('base', ['seventeen', 'oldpay', 'kicker', 'tenths']);
+
+/* ── one career off the engine: quick start, no summer deck ── */
+function career(arm, pos, era, seed, i, startYear, see) {
+  const E = arm.E;
+  const rng = mulberry(seed * 100003 + i * 7919 + pos.charCodeAt(0) * 31 + (era === 'y2005' ? 17 : 0));
+  const archs = E.ARCHETYPES[pos];
+  const c = E.startCareer(`Truth ${i}`, pos, archs[i % archs.length], rng, null, era);
+  if (startYear) c.year = startYear;
+  let tq = E.rollTeamQuality(null, rng);
+  E.nflAssignRole(c, tq, rng);
+  for (let n = 0; n < 30; n += 1) {
+    E.nflCampBattle(c, tq, rng);
+    const starter = c.role !== 'backup';
+    const { line, notes } = E.simSeason(c, tq, rng);
+    if (see) see(line, { hurt: notes.some(x => x.startsWith('🚑')), starter });
+    E.progress(c, rng);
+    if (E.shouldRetire(c)) break;
+    tq = E.rollTeamQuality(tq, rng);
+  }
+  c.retired = true;
+  arm.stampHallCalibration(c);
+  return c;
+}
+console.log(`simNflTruth: seed ${SEED}, ${CAREERS} careers a position and seed${CONTROL ? `, control ${CONTROL}` : ''}`);
+
+/* ── 1: the schedule ── */
+console.log('1) seasons are as long as they really were');
+{
+  let old = 0, oldOver = 0, oldHealthy = 0, oldHealthyOff = 0, late = 0, lateOff = 0, now = 0, nowOff = 0;
+  const seeThrow = (line, f) => {
+    if (line.year <= 2020) {
+      old += 1;
+      if (line.games > 16) { oldOver += 1; fail('1', `a ${line.year} season has ${line.games} games; the league played 16 through 2020`); }
+      if (f.starter && !f.hurt) { oldHealthy += 1; if (line.games !== 16) { oldHealthyOff += 1; fail('1', `a healthy starter's ${line.year} season has ${line.games} games, not 16`); } }
+    } else if (f.starter && !f.hurt) {
+      late += 1;
+      if (line.games !== 17) { lateOff += 1; fail('1', `a healthy starter's ${line.year} throwback season has ${line.games} games, not 17`); }
+    }
+  };
+  for (const pos of POSITIONS) for (let i = 0; i < CAREERS; i += 1) career(NEW, pos, 'y2005', SEED, i, 0, seeThrow);
+  /* Careers that reach 2021 are the long ones, so the count is topped up with careers that start in 2019. */
+  let built = 0;
+  for (let i = 0; late < 200 && i < 400; i += 1) { career(NEW, POSITIONS[i % 8], 'y2005', SEED, 90000 + i, 2019, seeThrow); built += 1; }
+  for (const pos of POSITIONS) for (let i = 0; i < Math.ceil(CAREERS / 4); i += 1) {
+    career(NEW, pos, 'now', SEED, i, 0, (line, f) => { if (f.starter && !f.hurt) { now += 1; if (line.games !== 17) { nowOff += 1; fail('1', `a healthy starter's ${line.year} season in a 2026 career has ${line.games} games, not 17`); } } });
+  }
+  if (old < 2000) fail('1', `only ${old} throwback seasons through 2020 were seen`);
+  if (oldHealthy < 1000) fail('1', `only ${oldHealthy} healthy starter seasons through 2020 were seen`);
+  if (late < 200) fail('1', `only ${late} healthy starter seasons from 2021 on were seen in the throwback, after building ${built} careers from 2019`);
+  if (now < 500) fail('1', `only ${now} healthy starter seasons were seen in 2026 careers`);
+  console.log(`   throwback through 2020: ${old} seasons, ${oldOver} over 16 games; ${oldHealthy} healthy starter seasons, ${oldHealthyOff} not exactly 16`);
+  console.log(`   throwback from 2021: ${late} healthy starter seasons (${built} careers built from 2019 to reach them), ${lateOff} not exactly 17`);
+  console.log(`   2026 careers: ${now} healthy starter seasons, ${nowOff} not exactly 17`);
+}
+
+/* ── 1b: the awards on a 16 game schedule, five seeds, against the 17 game arm ── */
+console.log('1b) a 16 game schedule does not cost a throwback career its awards (five seeds, by position)');
+const awardsOf = (arm, pos, seed) => {
+  let allPro = 0, big = 0, hall = 0;
+  for (let i = 0; i < CAREERS; i += 1) {
+    const c = career(arm, pos, 'y2005', seed, i, 0, null);
+    allPro += c.allPros; big += c.mvps; if (arm.E.legacyOf(c).hof) hall += 1;
+  }
+  return { allPro: allPro / CAREERS, big: big / CAREERS, hall: 100 * hall / CAREERS };
+};
+/* The band is the 17 game arm's five seed mean plus or minus three seed
+   standard deviations, and never narrower than FLOOR: with a few hundred
+   careers a seed a rare award's seed deviation can come out near zero, and a
+   band of zero width is a coin toss. The floors are written in the unit of
+   each line (awards a career; Hall percent). */
+const FLOOR = { allPro: 0.03, big: 0.01, hall: 1.5 };
+const measured1b = {};
+for (const pos of POSITIONS) {
+  const seeds = [0, 1, 2, 3, 4].map(k => SEED + k);
+  const base = seeds.map(s => awardsOf(BASE, pos, s));
+  const next = seeds.map(s => awardsOf(NEW, pos, s));
+  measured1b[pos] = {};
+  for (const k of ['allPro', 'big', 'hall']) {
+    const b = base.map(x => x[k]); const n = next.map(x => x[k]);
+    const width = Math.max(3 * sd(b), FLOOR[k]);
+    measured1b[pos][k] = { base: mean(b), sd: sd(b), now: mean(n) };
+    if (Math.abs(mean(n) - mean(b)) > width) fail('1b', `${pos} ${k}: the throwback reads ${mean(n).toFixed(3)} against the 17 game arm's ${mean(b).toFixed(3)} (band plus or minus ${width.toFixed(3)})`);
+  }
+  const m = measured1b[pos];
+  console.log(`   ${pos.padEnd(4)} All-Pros a career ${m.allPro.base.toFixed(3)} -> ${m.allPro.now.toFixed(3)} (sd ${m.allPro.sd.toFixed(3)}); MVP or DPOY ${m.big.base.toFixed(3)} -> ${m.big.now.toFixed(3)}; Hall percent ${m.hall.base.toFixed(1)} -> ${m.hall.now.toFixed(1)} (sd ${m.hall.sd.toFixed(1)})`);
+}
+
+/* ── 2: rookie pay is the slot, and where kickers go ── */
+console.log('2) rookie pay is the draft slot, and no kicker goes before round four');
+{
+  /* 2a: the table, held to its own rules. */
+  const T = NEW.NFL_ROOKIE_SCALE;
+  let heldRows = 0, twoSourced = 0;
+  for (const [era, scale] of Object.entries(T)) {
+    if ('heldAs' in scale) { heldRows += 1; console.log(`   table ${era}: HELD as a whole, paid the ${scale.heldAs.of} slot times ${scale.heldAs.scale}`); continue; }
+    const picks = scale.firstRound.map(r => r.pick).sort((a, b) => a - b);
+    if (picks.length !== 32 || picks.some((p, i) => p !== i + 1)) fail('2', `table ${era}: round one must be picks 1 to 32 once each, found ${picks.length} rows`);
+    for (const r of scale.firstRound) {
+      if (!(r.total > 0) || !(r.years > 0)) fail('2', `table ${era} pick ${r.pick}: a total or a length at or under zero`);
+      if (r.held || r.second === undefined) { heldRows += 1; continue; }
+      twoSourced += 1;
+      if (r.second < r.total) fail('2', `table ${era} pick ${r.pick}: the stored total must be the lower of the two sources`);
+      if (Math.abs(r.second - r.total) / r.total > 0.02) fail('2', `table ${era} pick ${r.pick}: the two sources are more than 2 percent apart (${r.total} and ${r.second})`);
+    }
+    const rounds = scale.laterRounds.map(r => r.round);
+    if (rounds.join(',') !== '2,3,4,5,6,7') fail('2', `table ${era}: later rounds must be 2 to 7 in order, found ${rounds.join(',')}`);
+    for (const r of scale.laterRounds) {
+      if (!(r.firstTotal > 0) || !(r.lastTotal > 0) || r.firstPick >= r.lastPick) fail('2', `table ${era} round ${r.round}: a total at or under zero, or picks out of order`);
+      heldRows += r.held === 'both' ? 2 : r.held ? 1 : 0;
+    }
+    if (!(scale.undrafted > 0)) fail('2', `table ${era}: the minimum is at or under zero`);
+    console.log(`   table ${era} (${scale.season}): 32 first round rows, ${twoSourced} two sourced within 2 percent; later rounds ${scale.laterRounds.map(r => `${r.round}${r.held ? ` held ${r.held}` : ''}`).join(', ')}`);
+  }
+  console.log(`   held values in the tables: ${heldRows}`);
+  /* Pay never rises with the pick, from the first pick to the minimum. */
+  for (const era of ['now', 'y2005']) {
+    let prev = Infinity, rises = 0;
+    for (let pick = 1; pick <= 224; pick += 1) { const s = NEW.rookieDeal('nfl', era, pick).salary; if (s > prev) { rises += 1; fail('2', `${era}: pick ${pick} is paid ${s}, more than pick ${pick - 1} on ${prev}`); } prev = s; }
+    if (NEW.rookieDeal('nfl', era, 0).salary > prev) fail('2', `${era}: the undrafted minimum is over the last pick's pay`);
+    console.log(`   ${era}: pick 1 ${NEW.rookieDeal('nfl', era, 1).salary}M a year, pick 32 ${NEW.rookieDeal('nfl', era, 32).salary}M, pick 33 ${NEW.rookieDeal('nfl', era, 33).salary}M, pick 97 ${NEW.rookieDeal('nfl', era, 97).salary}M, pick 224 ${NEW.rookieDeal('nfl', era, 224).salary}M, undrafted ${NEW.rookieDeal('nfl', era, 0).salary}M; ${rises} rises`);
+  }
+  /* 2b: every quick start is paid its slot; the base arm's first pick is printed beside it. */
+  for (const era of ['now', 'y2005']) {
+    let n = 0, off = 0, kickers = 0, early = 0, earliest = Infinity;
+    const rng = mulberry(SEED * 7 + (era === 'now' ? 1 : 2));
+    for (let i = 0; i < 20000; i += 1) {
+      const pos = POSITIONS[i % 8];
+      const c = NEW.E.startCareer('Pay', pos, NEW.E.ARCHETYPES[pos][i % NEW.E.ARCHETYPES[pos].length], rng, null, era);
+      n += 1;
+      if (c.salary !== NEW.rookieDeal('nfl', era, c.draftPick, c.pos).salary) { off += 1; fail('2', `${era} ${pos} pick ${c.draftPick} is paid ${c.salary}, the slot is ${NEW.rookieDeal('nfl', era, c.draftPick, c.pos).salary}`); }
+      if (pos === 'K') { kickers += 1; earliest = Math.min(earliest, c.draftPick); if (c.draftPick < 97) { early += 1; fail('2', `${era}: a kicker was drafted at pick ${c.draftPick}, before round four`); } }
+    }
+    /* A draw sequence that makes the best prospect the engine can roll, so both arms hand back the first pick. */
+    const top = arm => { const seq = [0.999, 0.5]; let k = 0; return arm.E.startCareer('Pay', 'QB', arm.E.ARCHETYPES.QB[0], () => (k < seq.length ? seq[k++] : 0), null, era); };
+    const oldTop = top(BASE), newTop = top(NEW);
+    console.log(`   ${era}: ${n} quick starts, ${off} not paid their slot; ${kickers} kickers, ${early} before pick 97 (earliest ${earliest}); pick ${newTop.draftPick} is paid ${newTop.salary}M a year (the old formula paid pick ${oldTop.draftPick} ${oldTop.salary}M)`);
+  }
+  /* 2c: the road to the draft. Kicker prospects through the real draft run. */
+  for (const era of ['now', 'y2005']) {
+    const desc = NEW.nflPreDraftDescriptor(era);
+    let drafted = 0, early = 0, undrafted = 0; const at = new Map();
+    for (let i = 0; i < 4000; i += 1) {
+      const stock = 20 + ((i * 37) % 76);
+      const start = NEW.PD.preDraftStart(desc, { seed: `truth-${era}-${SEED}-${i}`, routeId: desc.routes[0].id, rating: 70, pot: 82, pos: 'K' });
+      const out = NEW.PD.preDraftRunDraft(desc, { ...start, stock, phase: 'draft' });
+      const pick = out.draft?.pick ?? null;
+      if (pick === null) { undrafted += 1; continue; }
+      drafted += 1; at.set(pick, (at.get(pick) ?? 0) + 1);
+      if (pick < 97) { early += 1; fail('2', `${era}: a kicker prospect with stock ${stock} was drafted at pick ${pick}`); }
+    }
+    const most = Math.max(0, ...at.values());
+    if (drafted < 1000) fail('2', `${era}: only ${drafted} of 4000 kicker prospects were drafted, so the check is close to empty`);
+    if (most > drafted / 4) fail('2', `${era}: ${most} of ${drafted} drafted kicker prospects sit on one pick, so the stock stopped mattering`);
+    console.log(`   ${era} road to the draft: 4000 kicker prospects, ${drafted} drafted, ${undrafted} undrafted, ${early} before pick 97, the busiest pick holds ${most}`);
+  }
+}
+
+/* ── 3: sacks in halves ── */
+console.log('3) sacks come in halves');
+{
+  const count = arm => {
+    let lines = 0, off = 0;
+    for (const pos of ['LB', 'EDGE']) for (const era of ['now', 'y2005']) for (let i = 0; i < CAREERS; i += 1) {
+      career(arm, pos, era, SEED, 50000 + i, 0, line => { lines += 1; if (Math.abs((line.sacks ?? 0) * 2 - Math.round((line.sacks ?? 0) * 2)) > 1e-9) off += 1; });
+    }
+    return { lines, off };
+  };
+  const now = count(NEW), base = count(BASE);
+  if (now.lines < 2000) fail('3', `only ${now.lines} LB and EDGE season lines were seen`);
+  if (now.off > 0) fail('3', `${now.off} of ${now.lines} LB and EDGE season lines carry sacks that are not a whole or a half`);
+  if (base.off === 0) fail('3', 'the base arm had no tenths either, so this check proves nothing');
+  console.log(`   ${now.lines} LB and EDGE season lines, ${now.off} not in halves; the engine as found: ${base.off} of ${base.lines} (${(100 * base.off / Math.max(1, base.lines)).toFixed(1)} percent)`);
+}
+
+/* ── the verdict ── */
+const tags = [...failed.keys()].sort();
+console.log('');
+if (CONTROL) {
+  const must = CONTROLS[CONTROL];
+  const missing = must.filter(t => !tags.includes(t));
+  const stray = tags.filter(t => !must.includes(t));
+  if (!missing.length && !stray.length) {
+    console.log(`simNflTruth control ${CONTROL}: green. Section ${must.join(', ')} went red (${failed.get(must[0])} findings) and nothing else did, so this harness works.`);
+    process.exit(0);
+  }
+  console.error(`simNflTruth control ${CONTROL}: RED. Expected exactly [${must.join(', ')}] to fail and got [${tags.join(', ')}].`);
+  process.exit(1);
+}
+if (tags.length) {
+  console.error(`simNflTruth: ${tags.length} section${tags.length === 1 ? '' : 's'} failed (${tags.map(t => `${t}: ${failed.get(t)}`).join(', ')})`);
+  process.exit(1);
+}
+console.log('simNflTruth: green. Seasons are their real length, awards survive a 16 game schedule, rookies are paid their slot, kickers go in round four or later, and sacks come in halves.');

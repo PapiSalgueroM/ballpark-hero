@@ -18,6 +18,7 @@ import type { PlayerAppearance } from './soccerCareerAppearance';
 import { seasonSwing, swingNote, playoffDepthOf, playoffGames, clutchSwing, clutchNote } from './careerVariance';
 import { nflSeasonScore, wonAward } from './careerAwards';
 import { usSeasonLength } from '../data/usSeasonLengths';
+import { rookieDeal } from './usCareerRookieDeal';
 import { draftRival, judgeRivalSeason } from './careerRival';
 import type { CareerRival } from './careerRival';
 import { getNflLifeEventsA } from './nflCareerLifeA';
@@ -315,6 +316,25 @@ export interface CareerEvent {
   options: { label: string; effect: string; apply: (c: CareerState, rng: () => number) => string }[];
 }
 
+/* Round 1104: in this game a kicker is drafted in round four or later. It is
+   a rule of the game, stated as one (a kicker went second overall here on
+   first pick money). Both roads to the draft read it: the quick start adds
+   it to the stock it rolls, and the road to the draft adds it to the board
+   rank (nflCareerPreDraft.ts), so a kicker's stock still orders him among
+   kickers. 96 is three rounds of 32. */
+export const NFL_KICKER_PICK_OFFSET = 96;
+export function nflPickOffset(pos: string | undefined): number {
+  return pos === 'K' ? NFL_KICKER_PICK_OFFSET : 0;
+}
+
+/* Round 1104: a rookie is paid his draft slot (src/lib/usCareerRookieDeal.ts
+   over the two sourced table in src/data/nflRookieScale.ts), not a formula:
+   the old one paid the first pick 32.8M a year, and the real 2026 first pick
+   signed for 14.3M a year. */
+function nflRookieSalary(eraId: string, slot: number, pos: string): number {
+  return rookieDeal('nfl', eraId, slot, pos)!.salary;
+}
+
 export function startCareer(
   name: string, pos: CareerPos, archetype: Archetype, rng: () => number = Math.random,
   appearance?: PlayerAppearance | null, eraId?: string, entry?: CareerDraftEntry,
@@ -325,7 +345,7 @@ export function startCareer(
   const base = entry?.ratingAfter ?? (66 + Math.floor(rng() * 8) + archetype.ovrBoost);
   const pot = entry?.pot ?? Math.min(99, base + 10 + Math.floor(rng() * 14) + archetype.potBoost);
   // draft stock from rating: better prospects go earlier
-  const stock = entry ? entry.pick ?? 0 : Math.max(1, Math.round(90 - (base - 64) * 9 + rng() * 40));
+  const stock = entry ? entry.pick ?? 0 : Math.max(1, Math.round(90 - (base - 64) * 9 + rng() * 40)) + nflPickOffset(pos);
   const team = entry?.team ?? era.teams[Math.floor(rng() * era.teams.length)].abbr;
   const firstRound = stock > 0 && stock <= 32;
   const c: CareerState = {
@@ -337,7 +357,7 @@ export function startCareer(
     morale: 70,
     fanbase: firstRound ? 55 : 35,
     health: entry?.health ?? 100,
-    salary: Math.max(0.3, Math.round((firstRound ? (33 - stock) * 0.9 + 4 : 1.2) * era.moneyScale * 10) / 10),
+    salary: nflRookieSalary(era.id, stock, pos),
     contractYears: 4,
     seasons: [],
     rings: 0, mvps: 0, allPros: 0,
