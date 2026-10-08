@@ -1,5 +1,16 @@
-import { useEffect, useState, type CSSProperties } from "react";
+import { settleMoments } from "@/components/career-moments/useCareerMoment";
 import type { CareerState, IntlTournament } from "@/lib/soccerCareerEngine";
+
+/* Round 1107: the rule itself (the hook, the set it remembers in, the beat
+   helper) moved word for word to src/components/career-moments/useCareerMoment.ts,
+   the career moment kit every career on the site shares. This file keeps
+   what is soccer's own, the keys and the settle step, and re-exports the
+   rest, so not one importer changed a line. Every import here that is not
+   the kit's hook file must stay a TYPE import: the Season Centre imports
+   useCareerMoment from this path and is mounted on other sports' pages, so
+   a value import of the soccer engine here would put that engine on them. */
+export { useCareerMoment, beatStyle, resetCareerMomentsForTest } from "@/components/career-moments/useCareerMoment";
+export type { CareerMoment } from "@/components/career-moments/useCareerMoment";
 
 /* Round 985: a career moment plays once, when the state flips.
 
@@ -36,8 +47,6 @@ import type { CareerState, IntlTournament } from "@/lib/soccerCareerEngine";
    hold on their first frame (animation-play-state paused) and the confetti
    waits; the moment is settled when it starts, not when it mounts. */
 
-const settled = new Set<string>();
-
 /** FNV-1a over a string, as 8 hex digits. Not security, just a short tag. */
 function shortHash(s: string): string {
   let h = 0x811c9dc5;
@@ -48,7 +57,8 @@ function shortHash(s: string): string {
   return (h >>> 0).toString(16).padStart(8, "0");
 }
 
-function runTag(c: CareerState): string {
+/** The run a moment belongs to: who he is plus a short hash of his seasons. */
+export function runTag(c: CareerState): string {
   const seasons = (c.seasons ?? []).map(s => [s?.year, s?.club, s?.apps, s?.goals]);
   return [c.playerName, c.nationality, c.position, shortHash(JSON.stringify(seasons))].join("|");
 }
@@ -91,55 +101,5 @@ export function tournamentMomentKey(t: IntlTournament): string {
 export function settleLoadedMoments(c: CareerState | null): void {
   if (!c) return;
   const tournament = c.pendingTournament ? tournamentMomentKey(c.pendingTournament) : null;
-  for (const k of [debutMomentKey(c), legacyMomentKey(c), rivalryMomentKey(c), tournament]) {
-    if (k) settled.add(k);
-  }
-}
-
-export interface CareerMoment {
-  /** The card carries its animated classes on this mount. */
-  fresh: boolean;
-  /** The card has come into view, so its beats run and its confetti falls. */
-  live: boolean;
-  /** Goes on the card's outer element, which is what is watched. */
-  ref: (el: HTMLElement | null) => void;
-}
-
-/* Starts once the card's top is above the bottom 15 percent of the screen,
-   where the floating action bar sits on a retired career. */
-const IN_VIEW: IntersectionObserverInit = { rootMargin: "0px 0px -15% 0px" };
-
-/** A moment that flipped in this visit is fresh for the whole of this mount.
-    Read in the initialiser and held there (a discarded render reads the same
-    answer, and a re-render of the page cannot cut a playing moment short).
-    It goes live when the card is first seen, and is settled at that point. */
-export function useCareerMoment(key: string | null): CareerMoment {
-  const [fresh] = useState(() => key !== null && !settled.has(key));
-  const [el, setEl] = useState<HTMLElement | null>(null);
-  const [live, setLive] = useState(false);
-  useEffect(() => {
-    if (!fresh || live || !el) return;
-    if (typeof IntersectionObserver === "undefined") { setLive(true); return; }
-    const io = new IntersectionObserver(entries => {
-      if (entries.some(e => e.isIntersecting)) setLive(true);
-    }, IN_VIEW);
-    io.observe(el);
-    return () => io.disconnect();
-  }, [fresh, live, el]);
-  useEffect(() => {
-    if (key && live) settled.add(key);
-  }, [key, live]);
-  return { fresh, live, ref: setEl };
-}
-
-/** The inline style of beat i: its delay, and held on its first frame until
-    the card is live. Nothing at all when the card is drawn still. */
-export function beatStyle(m: CareerMoment, delay: string): CSSProperties | undefined {
-  if (!m.fresh) return undefined;
-  return m.live ? { animationDelay: delay } : { animationDelay: delay, animationPlayState: "paused" };
-}
-
-/** Test seam: forget every settled moment, as a new tab would. */
-export function resetCareerMomentsForTest(): void {
-  settled.clear();
+  settleMoments([debutMomentKey(c), legacyMomentKey(c), rivalryMomentKey(c), tournament]);
 }
