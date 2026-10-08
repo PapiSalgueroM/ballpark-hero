@@ -1,0 +1,432 @@
+#!/usr/bin/env node
+/**
+ * Round 1132: the sound kit, held to numbers.
+ *
+ * A sound cannot be read in a diff. So every cue in src/lib/soundKit.ts is
+ * rendered to its sample buffer and held to what it claims to be (how long,
+ * how loud, where its energy sits, how it moves), every named moment is mixed
+ * and held under the ceiling, the source is scanned so the audio graph has one
+ * home and no audio file ships, and the switch in src/lib/sound.ts is driven
+ * against a fake audio graph through every way it could make a noise it
+ * should not: off, never chosen, a hostile stored value, before a tap, in a
+ * hidden tab, under the prerenderer, after a hush, late.
+ *
+ * Offline by construction: it opens no socket and reads no clock but the
+ * process's own.
+ *
+ *   node scripts/simSound.mjs                      the whole harness
+ *   SIM_SOUND_CONTROL=<name> node scripts/...      one negative control; exit 0 only when its aimed checks went RED
+ *   SIM_SOUND_CONTROL=all node scripts/...         every control in turn; exit 0 only when every one fired
+ *   SIM_SOUND_WAV=<folder> node scripts/...        also writes every cue and every moment as a WAV, for ears
+ *
+ * MEASURED (see the MEASURED block below the helpers for every number and its date).
+ */
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import zlib from 'node:zlib';
+import { createRequire } from 'node:module';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const R = ROOT.replaceAll('\\', '/');
+const CONTROL = process.env.SIM_SOUND_CONTROL || '';
+const WAV = process.env.SIM_SOUND_WAV || '';
+const require = createRequire(path.join(ROOT, 'package.json'));
+const esbuild = require('esbuild');
+const TMP = fs.mkdtempSync(path.join(os.tmpdir(), `simSound-${process.pid}-`));
+
+/** Every read of a file under src: CRLF normalised, so an anchor matches on any checkout. */
+const readSrc = rel => fs.readFileSync(path.join(ROOT, rel), 'utf8').replace(/\r\n/g, '\n');
+/** Strip comments so a check can only be satisfied by code, never by prose about the rule. */
+const code = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:'"`\\])\/\/.*$/gm, '$1');
+
+/* ---------- the bundle: the switch and the kit as one node module ---------- */
+const ENTRY = path.join(TMP, 'entry.ts');
+fs.writeFileSync(ENTRY, `export * from '${R}/src/lib/sound.ts';\nexport * as kit from '${R}/src/lib/soundKit.ts';\n`);
+const BASE = path.join(TMP, 'bundle.mjs');
+await esbuild.build({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: BASE, logLevel: 'error' });
+const BASE_TEXT = fs.readFileSync(BASE, 'utf8');
+let serial = 0;
+/** A loader over one bundle text: every call is a fresh module, so no scene inherits another's state. */
+function loaderFor(text, memory) {
+  const file = path.join(TMP, `bundle-${serial += 1}.mjs`);
+  fs.writeFileSync(file, text);
+  return async () => {
+    const lib = await import(`${pathToFileURL(file).href}?s=${serial += 1}`);
+    if (memory) memory(lib);
+    return lib;
+  };
+}
+
+/* ---------- measuring a buffer ---------- */
+/** power spectrum of a buffer, kept per buffer: the transform is the slow part and several rows read one cue */
+const spectra = new WeakMap();
+function fftPower(buf, SR) {
+  const kept = spectra.get(buf);
+  if (kept) return kept;
+  let n = 1;
+  while (n < buf.length) n <<= 1;
+  const re = new Float64Array(n), im = new Float64Array(n);
+  re.set(buf);
+  for (let i = 1, j = 0; i < n; i += 1) {
+    let bit = n >> 1;
+    for (; j & bit; bit >>= 1) j ^= bit;
+    j ^= bit;
+    if (i < j) { const t = re[i]; re[i] = re[j]; re[j] = t; }
+  }
+  for (let len = 2; len <= n; len <<= 1) {
+    const ang = -2 * Math.PI / len, wr = Math.cos(ang), wi = Math.sin(ang);
+    for (let i = 0; i < n; i += len) {
+      let cr = 1, ci = 0;
+      for (let k = 0; k < len / 2; k += 1) {
+        const a = i + k, b = a + len / 2;
+        const xr = re[b] * cr - im[b] * ci, xi = re[b] * ci + im[b] * cr;
+        re[b] = re[a] - xr; im[b] = im[a] - xi; re[a] += xr; im[a] += xi;
+        const nr = cr * wr - ci * wi; ci = cr * wi + ci * wr; cr = nr;
+      }
+    }
+  }
+  const p = new Float64Array(n / 2);
+  for (let i = 0; i < n / 2; i += 1) p[i] = re[i] * re[i] + im[i] * im[i];
+  const out = { p, hz: i => i * SR / n };
+  spectra.set(buf, out);
+  return out;
+}
+const SR = 44100;
+/** share of the energy from `lo` to `hi` Hz, of the energy at or above `floor` Hz */
+function share(buf, lo, hi, floor = 0) {
+  const { p, hz } = fftPower(buf, SR);
+  let band = 0, all = 0;
+  for (let i = 1; i < p.length; i += 1) { const f = hz(i); if (f < floor) continue; all += p[i]; if (f >= lo && f < hi) band += p[i]; }
+  return all > 0 ? band / all : 0;
+}
+function rms(buf, a = 0, b = buf.length / SR) {
+  const i0 = Math.round(a * SR), i1 = Math.min(buf.length, Math.round(b * SR));
+  let s = 0;
+  for (let i = i0; i < i1; i += 1) s += buf[i] * buf[i];
+  return Math.sqrt(s / Math.max(1, i1 - i0));
+}
+const peak = buf => { let m = 0; for (let i = 0; i < buf.length; i += 1) m = Math.max(m, Math.abs(buf[i])); return m; };
+const slice = (buf, a, b) => buf.subarray(Math.round(a * SR), Math.round(b * SR));
+function goertzel(buf, f) {
+  const c = 2 * Math.cos(2 * Math.PI * f / SR);
+  let s1 = 0, s2 = 0;
+  for (let i = 0; i < buf.length; i += 1) { const s0 = buf[i] + c * s1 - s2; s2 = s1; s1 = s0; }
+  return s1 * s1 + s2 * s2 - c * s1 * s2;
+}
+function centroid(buf, floor) {
+  const { p, hz } = fftPower(buf, SR);
+  let a = 0, b = 0;
+  for (let i = 1; i < p.length; i += 1) { const f = hz(i); if (f < floor) continue; a += f * p[i]; b += p[i]; }
+  return b > 0 ? a / b : 0;
+}
+const f3 = x => (Number.isFinite(x) ? x.toFixed(3) : String(x));
+const SEEDS = Array.from({ length: 20 }, (_, i) => (i + 1) * 7919 + 3);
+/** A cue rendered on its default seed and on the 20 others, once per loaded kit (a render is the slow part). */
+const renders = new WeakMap();
+function buffersOf(kit, name) {
+  let mine = renders.get(kit.CUES);
+  if (!mine) renders.set(kit.CUES, mine = {});
+  return mine[name] ??= [kit.CUES[name].render(), ...SEEDS.map(s => kit.CUES[name].render(s))];
+}
+
+/* ---------- reporting ---------- */
+let checks = 0, failed = 0, quietRun = false;
+/** ids of the checks that went red in this run, so a control can count the ones it aimed at */
+let reds = [];
+function check(id, ok, msg) {
+  checks += 1;
+  if (!ok) { failed += 1; reds.push(id); }
+  if (!quietRun) console.log(`   ${ok ? 'ok  ' : 'FAIL'} ${msg}`);
+}
+const head = s => { if (!quietRun) console.log(`\n${s}`); };
+
+/* ---------- MEASURED on 2026-10-07 (SIM_SOUND_MEASURE=1), every band and floor below comes from these ----------
+   rms on the default seed and on 20 others (s * 7919 + 3, s from 1 to 20); a band is 0.75 times the lowest to
+   1.25 times the highest. A cue is a fixed function of its seed, so these are properties of a buffer, the same
+   on every run, not a sample of anything.
+     whistle 0.248 to 0.261    net 0.087 to 0.103    crowd 0.061 to 0.085
+     tick    0.067 to 0.079    sting 0.121 (no noise in it, one buffer)    thud 0.140 to 0.147
+   Character, the worst of the 21 seeds, and what the wrong sound scores on the same statistic:
+     whistle  share 2,500 to 3,600 Hz        0.982          the thud 0.000              floor 0.85
+     thud     share below 600 Hz             0.993          the whistle 0.000, the tick 0.000   floor 0.85
+     thud     share 300 to 1,500 Hz          0.206          the thud with no knock 0.002        floor 0.10
+     tick     share 1,000 to 3,000 Hz        0.994          the thud 0.000              floor 0.85
+     tick     share in the first 25 ms       0.996          flat noise 0.486            floor 0.90
+     crowd    middle over the first 0.12 s   19.7           flat noise 1.00             floor 5
+     crowd    middle over the last 0.12 s    23.3           flat noise 1.00             floor 5
+     crowd    share above 4,000 Hz           0.034 (highest) flat noise 0.818           ceiling 0.15
+     net      centroid early over late       1.518          noise that does not fall 1.034   floor 1.25
+     sting    each note's lead in its window 11.5, 4.3, 4.7, 2.03   played backwards 0.002, 0.157, 0.402, 0.920   floor 1.4
+   The thud was retuned in this round before anything played it: as first designed 99.8 percent of its energy
+   sat below 300 Hz, where a phone's speaker carries almost nothing, so a miss would have been silence on the
+   device most players hold. It now has a short knock from 580 down to 400 Hz over the low tone. */
+const RMS_BAND = {
+  whistle: [0.186, 0.326],
+  net: [0.065, 0.129],
+  crowd: [0.046, 0.106],
+  tick: [0.050, 0.099],
+  sting: [0.091, 0.151],
+  thud: [0.105, 0.183],
+};
+
+/* ---------- 1. every cue is a finite, audible, short buffer ---------- */
+async function section1(fresh) {
+  head('1) Every cue is a finite, audible, short buffer');
+  const { kit } = await fresh();
+  for (const [name, cue] of Object.entries(kit.CUES)) {
+    const b = cue.render();
+    const want = Math.round(cue.seconds * kit.SAMPLE_RATE);
+    check(`1.length.${name}`, b.length === want && cue.seconds <= 1.5, `${name}: ${b.length} samples, ${f3(b.length / kit.SAMPLE_RATE)} s (declared ${cue.seconds} s, at most 1.5)`);
+    let finite = true, sum = 0;
+    for (let i = 0; i < b.length; i += 1) { if (!Number.isFinite(b[i])) finite = false; sum += b[i]; }
+    check(`1.finite.${name}`, finite, `${name}: every sample finite`);
+    check(`1.edges.${name}`, Math.abs(b[0]) < 1e-6 && Math.abs(b[b.length - 1]) < 1e-6, `${name}: starts and ends on zero`);
+    const pk = peak(b);
+    check(`1.peak.${name}`, Math.abs(pk - cue.peak) <= 0.005 && cue.peak <= 0.9, `${name}: peak ${f3(pk)} (declared ${cue.peak}, at most 0.9)`);
+    check(`1.dc.${name}`, Math.abs(sum / b.length) <= 0.01, `${name}: mean ${(sum / b.length).toExponential(1)} (within 0.01 of zero)`);
+    const again = cue.render();
+    let same = again.length === b.length;
+    for (let i = 0; same && i < b.length; i += 1) if (again[i] !== b[i]) same = false;
+    check(`1.twice.${name}`, same, `${name}: two renders are sample for sample identical`);
+    const band = RMS_BAND[name];
+    if (!band) { check(`1.rms.${name}`, false, `${name}: no rms band. Measure it over 20 seeds (SIM_SOUND_MEASURE=1) and add the row`); continue; }
+    const all = buffersOf(kit, name).map(x => rms(x));
+    const lo = Math.min(...all), hi = Math.max(...all);
+    check(`1.rms.${name}`, lo >= band[0] && hi <= band[1], `${name}: rms ${f3(all[0])} on the default seed, ${f3(lo)} to ${f3(hi)} over 21 seeds (band ${band[0]} to ${band[1]})`);
+  }
+}
+
+/* ---------- 2. each cue sounds like what it says ---------- */
+const STING_WINDOWS = [[0.01, 0.11], [0.13, 0.23], [0.25, 0.35], [0.38, 0.60]];
+/** how far the k-th pitch leads the strongest of the other three inside the k-th window (below 1: it does not lead) */
+const stingLead = k => (b, kit) => {
+  const g = kit.STING_NOTES.map(f => goertzel(slice(b, STING_WINDOWS[k][0], STING_WINDOWS[k][1]), f));
+  return g[k] / Math.max(...g.filter((_, i) => i !== k));
+};
+const noises = new Map();
+function whiteNoise(n) {
+  if (noises.has(n)) return noises.get(n);
+  const w = new Float32Array(n);
+  noises.set(n, w);
+  let t = 99;
+  for (let i = 0; i < n; i += 1) { t = (Math.imul(t, 1664525) + 1013904223) >>> 0; w[i] = (t / 4294967296) * 2 - 1; }
+  return w;
+}
+/** The thud as first designed, with no knock: almost nothing a phone's speaker can carry. The wrong sound for the thud's body row. */
+function thudWithNoKnock(kit) {
+  const n = Math.round(0.22 * SR), buf = new Float32Array(n);
+  let ph = 0;
+  for (let i = 0; i < n; i += 1) {
+    const t = i / SR;
+    ph += 2 * Math.PI * (55 + 95 * Math.exp(-t / 0.06)) / SR;
+    buf[i] = Math.sin(ph) * Math.exp(-t / 0.055) * Math.min(1, i / 88, (n - 1 - i) / 661);
+  }
+  const m = peak(buf);
+  for (let i = 0; i < n; i += 1) buf[i] *= kit.CUES.thud.peak / m;
+  return buf;
+}
+const reversed = b => Float32Array.from(b).reverse();
+/* One row per thing a cue claims. `min` or `max` is the floor or ceiling, held on the default seed and on 20
+   others. `wrong` is a sound that must FAIL the row, checked on every run: a floor the wrong sound also clears
+   measures nothing. */
+const CHARACTER = {
+  whistle: [
+    { id: 'band', label: 'share of energy from 2,500 to 3,600 Hz', stat: b => share(b, 2500, 3600), min: 0.85, wrong: ['the thud', kit => kit.CUES.thud.render()] },
+  ],
+  thud: [
+    { id: 'low', label: 'share of energy below 600 Hz', stat: b => share(b, 0, 600), min: 0.85, wrong: ['the whistle', kit => kit.CUES.whistle.render()], wrong2: ['the tick', kit => kit.CUES.tick.render()] },
+    { id: 'body', label: 'share of energy from 300 to 1,500 Hz (what a phone can carry)', stat: b => share(b, 300, 1500), min: 0.10, wrong: ['the thud with no knock', thudWithNoKnock] },
+  ],
+  tick: [
+    { id: 'band', label: 'share of energy from 1,000 to 3,000 Hz', stat: b => share(b, 1000, 3000), min: 0.85, wrong: ['the thud', kit => kit.CUES.thud.render().subarray(0, 2205)] },
+    { id: 'early', label: 'share of energy in the first 25 ms', stat: b => (rms(b, 0, 0.025) ** 2 * Math.round(0.025 * SR)) / (rms(b) ** 2 * b.length), min: 0.90, wrong: ['flat noise', () => whiteNoise(2205)] },
+  ],
+  crowd: [
+    { id: 'rise', label: 'rms of 0.35 to 0.85 s over the first 0.12 s', stat: b => rms(b, 0.35, 0.85) / rms(b, 0, 0.12), min: 5, wrong: ['flat noise', () => whiteNoise(61740)] },
+    { id: 'fall', label: 'rms of 0.35 to 0.85 s over the last 0.12 s', stat: b => rms(b, 0.35, 0.85) / rms(b, b.length / SR - 0.12, b.length / SR), min: 5, wrong: ['flat noise', () => whiteNoise(61740)] },
+    { id: 'dull', label: 'share of energy above 4,000 Hz', stat: b => share(b, 4000, 22051), max: 0.15, wrong: ['flat noise', () => whiteNoise(61740)] },
+  ],
+  net: [
+    { id: 'falls', label: 'centroid above 500 Hz, first 60 ms over 150 to 300 ms', stat: b => centroid(slice(b, 0, 0.06), 500) / centroid(slice(b, 0.15, 0.30), 500), min: 1.25, wrong: ['noise that does not fall', () => whiteNoise(13230)] },
+  ],
+  sting: [0, 1, 2, 3].map(k => ({ id: `note${k + 1}`, label: `note ${k + 1} leads the other three in its window`, stat: stingLead(k), min: 1.4, wrong: ['the sting played backwards', kit => reversed(kit.CUES.sting.render())] })),
+};
+/** a statistic on the default seed and the 20 others: [worst for the row, lowest, highest] */
+function overSeeds(name, row, kit) {
+  const v = buffersOf(kit, name).map(b => row.stat(b, kit));
+  const lo = Math.min(...v), hi = Math.max(...v);
+  return [row.max === undefined ? lo : hi, lo, hi];
+}
+async function section2(fresh) {
+  head('2) Each cue sounds like what it says');
+  const { kit } = await fresh();
+  for (const [name, cue] of Object.entries(kit.CUES)) {
+    const rows = CHARACTER[name];
+    if (!rows || !rows.length) { check(`2.row.${name}`, false, `${name}: no character row. Say what it is as a number, measure it over 20 seeds and add the row`); continue; }
+    for (const row of rows) {
+      const [worst, lo, hi] = overSeeds(name, row, kit);
+      const passes = v => (row.max === undefined ? v >= row.min : v <= row.max);
+      const bar = row.max === undefined ? `at least ${row.min}` : `at most ${row.max}`;
+      check(`2.${name}.${row.id}`, passes(worst), `${name}: ${row.label}: ${f3(lo)} to ${f3(hi)} over 21 seeds (${bar})`);
+      for (const w of [row.wrong, row.wrong2]) {
+        if (!w) continue;
+        const v = row.stat(w[1](kit), kit);
+        check(`2.${name}.${row.id}.wrong`, !passes(v), `${name}: ${w[0]} in its place scores ${f3(v)} and fails that row`);
+      }
+    }
+  }
+}
+
+/* ---------- 3. every moment mixes cleanly ---------- */
+/** a moment's steps summed at their offsets and gains, as the audio graph would sum them */
+function mixOf(kit, recipe) {
+  const cues = recipe.steps.map(s => kit.CUES[s.cue]?.render());
+  if (cues.some(c => !c)) return null;
+  const len = Math.max(...recipe.steps.map((s, i) => Math.round((s.at ?? 0) * SR) + cues[i].length));
+  const mix = new Float32Array(len);
+  recipe.steps.forEach((s, i) => {
+    const off = Math.round((s.at ?? 0) * SR), g = s.gain ?? 1, b = cues[i];
+    for (let k = 0; k < b.length; k += 1) mix[off + k] += b[k] * g;
+  });
+  return mix;
+}
+/** the names in the SoundMoment union, read from the switch's source with comments stripped */
+function unionNames() {
+  const m = code(readSrc('src/lib/sound.ts')).match(/export type SoundMoment =([^;]+);/);
+  return m ? [...m[1].matchAll(/'([A-Za-z]+)'/g)].map(x => x[1]) : [];
+}
+async function section3(fresh) {
+  head('3) Every moment mixes cleanly');
+  const { kit } = await fresh();
+  const names = Object.keys(kit.MOMENTS), union = unionNames();
+  check('3.union', union.length > 0 && union.length === names.length && union.every(n => names.includes(n)),
+    `the moments table has exactly the ${union.length} names of the SoundMoment union (${names.length} rows)`);
+  for (const [name, recipe] of Object.entries(kit.MOMENTS)) {
+    const steps = recipe.steps ?? [];
+    const known = steps.every(s => kit.CUES[s.cue]);
+    check(`3.steps.${name}`, steps.length >= 1 && steps.length <= 4 && known && steps.every(s => (s.at ?? 0) >= 0 && (s.gain ?? 1) > 0 && (s.gain ?? 1) <= 1.5),
+      `${name}: ${steps.length} step(s), every one a known cue at zero or later with a gain above 0 and at most 1.5`);
+    const mix = known ? mixOf(kit, recipe) : null;
+    if (!mix) { check(`3.mix.${name}`, false, `${name}: cannot be mixed`); continue; }
+    const out = peak(mix) * kit.MASTER_GAIN;
+    check(`3.mix.${name}`, mix.length / SR <= 2.0 && out <= 0.9 && out >= 0.15,
+      `${name}: ${f3(mix.length / SR)} s, peak after the master gain ${f3(out)} (0.15 to 0.9, at most 2 s)`);
+    const buzz = recipe.buzz ?? [];
+    check(`3.buzz.${name}`, buzz.length <= 3 && buzz.every(ms => ms >= 10 && ms <= 80) && buzz.reduce((a, b) => a + b, 0) <= 200,
+      `${name}: buzz ${buzz.length ? JSON.stringify(buzz) : 'none'} (at most three, 10 to 80 ms each, 200 ms in all)`);
+  }
+}
+
+/* ---------- negative controls ----------
+   A control plants one fault, runs the sections it is aimed at, and FIRES only when a check it names went red.
+   `text` replaces one exact string of the bundle (the needle must be there exactly once, and the text must
+   change); `memory` changes a loaded kit and throws when what it replaces was already that; `scan` changes
+   the source text section 4 reads. A control that cannot be planted exits 1 with the reason: a control that
+   changes nothing would leave the harness green for the wrong reason. */
+function swapRender(lib, name, make) {
+  const cue = lib.kit.CUES[name], orig = cue.render;
+  const before = orig(), after = make(orig)(undefined);
+  let differs = before.length !== after.length;
+  for (let i = 0; !differs && i < before.length; i += 1) if (!Object.is(before[i], after[i])) differs = true;
+  if (!differs) throw new Error(`the ${name} already renders that`);
+  cue.render = make(orig);
+}
+const CONTROLS = {
+  silent: { sections: [section1], red: /^1\.(peak|rms)\.tick$/, memory: lib => swapRender(lib, 'tick', orig => s => new Float32Array(orig(s).length)) },
+  nan: { sections: [section1], red: /^1\.finite\.crowd$/, memory: lib => swapRender(lib, 'crowd', orig => s => { const b = orig(s); b[1000] = NaN; return b; }) },
+  long: { sections: [section1], red: /^1\.length\.crowd$/, memory: lib => swapRender(lib, 'crowd', orig => s => { const b = new Float32Array(Math.round(1.8 * SR)); b.set(orig(s)); return b; }) },
+  random: { sections: [section1], red: /^1\.twice\.net$/, memory: lib => swapRender(lib, 'net', orig => s => { const b = orig(s); for (let i = 1; i < b.length - 1; i += 1) b[i] += (Math.random() - 0.5) * 1e-3; return b; }) },
+  swap: { sections: [section2], red: /^2\.whistle\.band$/, memory: lib => { const thud = lib.kit.CUES.thud.render; swapRender(lib, 'whistle', () => s => thud(s)); } },
+  flatcrowd: { sections: [section2], red: /^2\.crowd\.(rise|fall|dull)$/, memory: lib => swapRender(lib, 'crowd', orig => s => {
+    const want = rms(orig(s)), w = Float32Array.from(whiteNoise(61740)), have = rms(w);
+    for (let i = 0; i < w.length; i += 1) w[i] *= want / have;
+    return w;
+  }) },
+  subthud: { sections: [section2], red: /^2\.thud\.body$/, memory: lib => swapRender(lib, 'thud', () => () => thudWithNoKnock(lib.kit)) },
+  hot: { sections: [section3], red: /^3\.mix\./, text: ['MASTER_GAIN = 0.6;', 'MASTER_GAIN = 2;'] },
+  ghoststep: { sections: [section3], red: /^3\.steps\.tap$/, memory: lib => {
+    if (lib.kit.CUES.ghost) throw new Error('a cue named ghost exists');
+    lib.kit.MOMENTS.tap.steps.push({ cue: 'ghost' });
+  } },
+};
+let scanPatch = null;
+async function runControl(name) {
+  const c = CONTROLS[name];
+  let text = BASE_TEXT;
+  if (c.text) {
+    const hits = text.split(c.text[0]).length - 1;
+    if (hits !== 1) { console.log(`control ${name}: CANNOT BE PLANTED, its needle appears ${hits} times in the bundle`); return false; }
+    text = text.replace(c.text[0], c.text[1]);
+    if (text === BASE_TEXT) { console.log(`control ${name}: CANNOT BE PLANTED, the replacement changed nothing`); return false; }
+  }
+  checks = 0; failed = 0; reds = []; quietRun = true; scanPatch = c.scan ?? null;
+  let broke = null;
+  try {
+    const fresh = loaderFor(text, c.memory);
+    for (const section of c.sections) await section(fresh);
+  } catch (e) { broke = e; }
+  quietRun = false; scanPatch = null;
+  if (broke) { console.log(`control ${name}: CANNOT BE PLANTED, ${broke.message}`); return false; }
+  const aimed = reds.filter(id => c.red.test(id));
+  if (!aimed.length) { console.log(`control ${name}: DID NOT FIRE (${reds.length} checks red, none of them aimed)`); return false; }
+  console.log(`control ${name}: fired, ${aimed.length} aimed checks red`);
+  return true;
+}
+
+/* ---------- for ears: every cue and every moment as a WAV ---------- */
+async function writeWavs(fresh) {
+  const dir = path.resolve(WAV);
+  fs.mkdirSync(dir, { recursive: true });
+  const { kit } = await fresh();
+  const save = (name, buf, gain) => {
+    const out = Buffer.alloc(44 + buf.length * 2);
+    out.write('RIFF', 0); out.writeUInt32LE(36 + buf.length * 2, 4); out.write('WAVEfmt ', 8);
+    out.writeUInt32LE(16, 16); out.writeUInt16LE(1, 20); out.writeUInt16LE(1, 22);
+    out.writeUInt32LE(SR, 24); out.writeUInt32LE(SR * 2, 28); out.writeUInt16LE(2, 32); out.writeUInt16LE(16, 34);
+    out.write('data', 36); out.writeUInt32LE(buf.length * 2, 40);
+    for (let i = 0; i < buf.length; i += 1) out.writeInt16LE(Math.round(Math.max(-1, Math.min(1, buf[i] * gain)) * 32767), 44 + i * 2);
+    const file = path.join(dir, `${name}.wav`);
+    fs.writeFileSync(file, out);
+    console.log(`   wrote ${file}`);
+  };
+  console.log('\nWAV files, as the master gain would play them:');
+  for (const [name, cue] of Object.entries(kit.CUES)) save(`cue-${name}`, cue.render(), kit.MASTER_GAIN);
+  for (const [name, recipe] of Object.entries(kit.MOMENTS)) save(`moment-${name}`, mixOf(kit, recipe), kit.MASTER_GAIN);
+}
+
+/* ---------- main ---------- */
+const SECTIONS = [section1, section2, section3];
+if (process.env.SIM_SOUND_MEASURE) {
+  /* For whoever adds a cue or retunes one: the numbers a band or a floor is set from. */
+  const { kit } = await loaderFor(BASE_TEXT)();
+  for (const [name, cue] of Object.entries(kit.CUES)) {
+    const all = buffersOf(kit, name).map(x => rms(x));
+    console.log(`${name}: rms ${f3(all[0])} default, ${f3(Math.min(...all))} to ${f3(Math.max(...all))} over 21 seeds; band would be ${f3(0.75 * Math.min(...all))} to ${f3(1.25 * Math.max(...all))}`);
+    for (const row of CHARACTER[name] ?? []) {
+      const [, lo, hi] = overSeeds(name, row, kit);
+      const wrong = [row.wrong, row.wrong2].filter(Boolean).map(w => `${w[0]} ${f3(row.stat(w[1](kit), kit))}`).join(', ');
+      console.log(`   ${row.label}: ${f3(lo)} to ${f3(hi)}${wrong ? `; wrong: ${wrong}` : ''}`);
+    }
+  }
+  process.exit(0);
+}
+if (CONTROL) {
+  const names = CONTROL === 'all' ? Object.keys(CONTROLS) : [CONTROL];
+  if (names.some(n => !CONTROLS[n])) { console.error(`unknown control ${CONTROL}. Known: ${Object.keys(CONTROLS).join(', ')}`); process.exit(2); }
+  let fired = 0;
+  for (const name of names) if (await runControl(name)) fired += 1;
+  if (names.length > 1) console.log(`\nsimSound controls: ${fired} of ${names.length} fired`);
+  process.exit(fired === names.length ? 0 : 1);
+}
+if (WAV) {
+  /* refuse a bad folder before anything runs */
+  const rel = path.relative(ROOT, path.resolve(WAV)).replaceAll('\\', '/');
+  if (/^(src|public|dist)(\/|$)/.test(rel)) { console.error(`SIM_SOUND_WAV refuses ${rel}: no audio file may land in src, public or dist`); process.exit(2); }
+}
+const fresh = loaderFor(BASE_TEXT);
+for (const section of SECTIONS) await section(fresh);
+if (WAV) await writeWavs(fresh);
+console.log(`\nsimSound: ${checks} checks, ${failed} failed`);
+process.exit(failed ? 1 : 0);
