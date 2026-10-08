@@ -393,6 +393,146 @@ async function section4() {
     `${SWITCH_FILE} has no import statement at all (it reaches the kit's type through typeof import), so no React`);
 }
 
+/* ---------- 5. off means off ----------
+   The switch and the kit's player half against a fake audio graph. Every scene builds its own world (a window,
+   a document, a navigator, a clock) BEFORE it loads a fresh copy of the bundle, so a fault at module scope is
+   seen too. The fake context never plays anything: a scene reads the calls the kit made on it. */
+const REAL = { performance: globalThis.performance, navigator: Object.getOwnPropertyDescriptor(globalThis, 'navigator') };
+const setGlobal = (name, value) => Object.defineProperty(globalThis, name, { value, configurable: true, writable: true });
+async function world(fresh, { pref = null, active = true, hidden = false, prerender = false, reduced = false, storageThrows = false, ua = true, resume = 'now', bare = false } = {}) {
+  const log = { made: 0, starts: [], stops: 0, buzz: [], suspends: 0, resumes: 0, listeners: 0, docListeners: 0 };
+  const clock = { t: 0 }, handlers = {}, held = [];
+  setGlobal('performance', { now: () => clock.t });
+  if (bare) {
+    delete globalThis.window; delete globalThis.document; setGlobal('navigator', undefined);
+    return { lib: await fresh(), log, clock };
+  }
+  const store = new Map(pref === null ? [] : [['dukb-sound', pref]]);
+  class FakeCtx {
+    constructor() { log.made += 1; this.state = 'suspended'; this.currentTime = 0; this.destination = {}; }
+    createGain() { return { gain: { value: 1 }, connect() {} }; }
+    createBuffer(ch, len, sr) { const d = new Float32Array(len); return { length: len, sampleRate: sr, getChannelData: () => d }; }
+    createBufferSource() { const s = { buffer: null, connect() {}, start(t) { log.starts.push({ t, len: s.buffer.length }); }, stop() { log.stops += 1; } }; return s; }
+    resume() {
+      log.resumes += 1;
+      if (resume === 'never') return new Promise(() => {});
+      if (resume === 'held') return new Promise(done => held.push(() => { this.state = 'running'; done(); }));
+      this.state = 'running';
+      return Promise.resolve();
+    }
+    suspend() { log.suspends += 1; this.state = 'suspended'; return Promise.resolve(); }
+  }
+  setGlobal('window', {
+    localStorage: {
+      getItem: k => { if (storageThrows) throw new Error('blocked'); return store.has(k) ? store.get(k) : null; },
+      setItem: (k, v) => { if (storageThrows) throw new Error('blocked'); store.set(k, v); },
+    },
+    addEventListener: (t, f) => { log.listeners += 1; (handlers[t] ??= []).push(f); }, removeEventListener: () => {}, dispatchEvent: () => true,
+    AudioContext: FakeCtx, matchMedia: () => ({ matches: reduced }), __DUKB_PRERENDER__: prerender,
+  });
+  setGlobal('document', { visibilityState: hidden ? 'hidden' : 'visible', addEventListener: (t, f) => { log.docListeners += 1; (handlers[t] ??= []).push(f); } });
+  const nav = { vibrate: p => { log.buzz.push(p); return true; } };
+  if (ua) nav.userActivation = { hasBeenActive: active };
+  setGlobal('navigator', nav);
+  return {
+    lib: await fresh(), log, clock, store, nav,
+    settle: (ms = 5) => new Promise(r => setTimeout(r, ms)),
+    fire: t => (handlers[t] ?? []).forEach(f => f()),
+    release: () => held.splice(0).forEach(f => f()),
+  };
+}
+function unworld() {
+  setGlobal('performance', REAL.performance);
+  delete globalThis.window; delete globalThis.document;
+  if (REAL.navigator) Object.defineProperty(globalThis, 'navigator', REAL.navigator);
+}
+const said = log => `contexts ${log.made}, starts ${log.starts.length}, buzzes ${log.buzz.length}, listeners ${log.listeners}`;
+const silent = log => log.made === 0 && log.starts.length === 0 && log.buzz.length === 0 && log.listeners === 0;
+const near = (a, b, tol = 0.001) => Math.abs(a - b) <= tol;
+async function section5(fresh) {
+  head('5) Off means off');
+  try {
+    const len = Object.fromEntries(Object.entries((await fresh()).kit.CUES).map(([name, cue]) => [name, Math.round(cue.seconds * SR)]));
+    { let threw = null, on = null;
+      try { const s = await world(fresh, { bare: true }); on = s.lib.soundOn(); s.lib.sound('goal'); s.lib.hush(); s.lib.primeSound(); s.lib.preloadSound(); await new Promise(r => setTimeout(r, 5)); } catch (e) { threw = e; }
+      check('5.a', !threw && on === false, `a. a bare process, no window, no document, no navigator: nothing throws and soundOn() is false${threw ? ` (threw: ${threw.message})` : ''}`); }
+    { const s = await world(fresh, { pref: null }); s.lib.sound('goal'); await s.settle();
+      check('5.b', silent(s.log), `b. choice absent, page tapped, a goal: ${said(s.log)} (all zero: the kit was never entered)`); }
+    { const s = await world(fresh, { pref: 'off' }); s.lib.sound('goal'); await s.settle();
+      check('5.c', silent(s.log), `c. choice off, a goal: ${said(s.log)}`); }
+    for (const bad of ['ON', '1', 'true', ' on', '{"on":true}']) {
+      const s = await world(fresh, { pref: bad }); s.lib.sound('goal'); await s.settle();
+      check('5.d', silent(s.log) && s.lib.soundOn() === false, `d. a stored ${JSON.stringify(bad)}, a goal: ${said(s.log)}`);
+    }
+    { const s = await world(fresh, { pref: 'on', storageThrows: true }); s.lib.sound('goal'); await s.settle();
+      check('5.d', silent(s.log), `d. a read that throws, a goal: ${said(s.log)}`); }
+    { const s = await world(fresh, { pref: 'on', active: false }); s.lib.sound('goal'); await s.settle();
+      check('5.e.before', s.log.made === 0 && s.log.starts.length === 0, `e. choice on, page NOT tapped, a goal: contexts ${s.log.made}, starts ${s.log.starts.length} (nothing before a tap)`);
+      s.nav.userActivation.hasBeenActive = true; s.fire('pointerdown'); await s.settle();
+      check('5.e.tap', s.log.made === 1 && s.log.starts.length === 0, `e. then the tap arrives: contexts ${s.log.made}, starts ${s.log.starts.length} (the goal he missed is not played late)`);
+      s.lib.sound('goal'); await s.settle();
+      const [a, b] = s.log.starts;
+      check('5.e.goal', s.log.starts.length === 2 && near(a.t, 0) && a.len === len.net && near(b.t, 0.05) && b.len === len.crowd && JSON.stringify(s.log.buzz) === '[[40]]',
+        `e. then a goal: starts ${JSON.stringify(s.log.starts.map(x => [x.t, x.len]))} (the net at 0, the crowd at 0.05), buzz ${JSON.stringify(s.log.buzz)}`); }
+    { const s = await world(fresh, { pref: 'on', hidden: true }); s.lib.sound('goal'); await s.settle();
+      check('5.f', silent(s.log), `f. choice on, tab hidden, a goal: ${said(s.log)}`); }
+    { const s = await world(fresh, { pref: 'on', prerender: true }); s.lib.sound('goal'); await s.settle();
+      check('5.g', silent(s.log), `g. choice on, the prerender flag, a goal: ${said(s.log)}`); }
+    { const s = await world(fresh, { pref: 'on', reduced: true }); s.lib.sound('goal'); await s.settle();
+      check('5.h', s.log.starts.length === 2 && s.log.buzz.length === 0, `h. choice on, reduced motion, a goal: starts ${s.log.starts.length}, buzzes ${s.log.buzz.length} (he hears it, the phone does not shake)`); }
+    await section5b(fresh, len);
+  } finally { unworld(); }
+}
+async function section5b(fresh, len) {
+  { const s = await world(fresh, { pref: 'on' }); s.lib.sound('goal'); await s.settle(); s.lib.setSoundOn(false); await s.settle();
+    check('5.i.off', s.log.stops === 2 && s.log.suspends === 1, `i. a goal, then switched off: stops ${s.log.stops}, suspends ${s.log.suspends} (both sources stopped, the context rests)`);
+    s.lib.sound('goal'); await s.settle();
+    check('5.i.quiet', s.log.starts.length === 2, `i. a goal while off: starts still ${s.log.starts.length}`);
+    s.lib.setSoundOn(true); await s.settle();
+    check('5.i.on', s.log.made === 1 && s.log.starts.length === 3 && s.log.starts[2].len === len.tick, `i. switched on again: contexts ${s.log.made}, one more start of ${s.log.starts[2]?.len} samples (the tick)`); }
+  { const s = await world(fresh, { pref: 'on', resume: 'never' }); s.lib.sound('goal'); await s.settle();
+    check('5.j', s.log.made === 1 && s.log.starts.length === 0, `j. a context that never wakes: contexts ${s.log.made}, starts ${s.log.starts.length}`); }
+  { const s = await world(fresh, { pref: 'on' }); s.lib.sound('tap', { delay: 1 }); s.lib.hush(); await s.settle();
+    check('5.k.before', s.log.starts.length === 0, `k. a delayed tap, hushed in the same tick: starts ${s.log.starts.length}`);
+    s.lib.sound('awardWin', { delay: 0.15 }); await s.settle(); s.lib.hush(); await s.settle(260);
+    check('5.k.after', s.log.starts.length === 2 && s.log.stops === 2 && s.log.buzz.length === 0, `k. a delayed winner's night, scheduled, then hushed: starts ${s.log.starts.length}, stops ${s.log.stops}, buzzes ${s.log.buzz.length} past its time (its buzz never fires)`); }
+  { const s = await world(fresh, { pref: 'on' }); const mine = {}, theirs = {};
+    s.lib.sound('awardWin', { delay: 0.15, scope: mine }); s.lib.sound('awardWin', { delay: 0.15, scope: theirs }); await s.settle();
+    s.lib.hush(mine); await s.settle(260);
+    check('5.k.scope', s.log.starts.length === 4 && s.log.stops === 2 && s.log.buzz.length === 1, `k. two scopes each with a winner's night, one hushed: starts ${s.log.starts.length}, stops ${s.log.stops}, buzzes ${s.log.buzz.length} (only its two sources stop, the other's buzz still fires)`);
+    s.lib.sound('tap', { delay: 1, scope: mine }); s.lib.sound('tap', { delay: 1, scope: theirs }); s.lib.hush(theirs); await s.settle();
+    check('5.k.scope.wait', s.log.starts.length === 5, `k. two scopes each waiting on a tap, one hushed in the same tick: ${s.log.starts.length - 4} start (the other's)`); }
+  { const s = await world(fresh, { pref: 'on' }); for (let i = 0; i < 20; i += 1) s.lib.sound('tap'); await s.settle();
+    check('5.m', s.log.made === 1 && s.log.starts.length === 20, `m. twenty taps: contexts ${s.log.made}, starts ${s.log.starts.length}`); }
+  { const s = await world(fresh, { pref: null, storageThrows: true }); s.lib.setSoundOn(true); await s.settle();
+    check('5.n', s.lib.soundOn() === true && s.log.made === 1 && s.log.starts.length === 1, `n. storage that throws, switched on: soundOn() ${s.lib.soundOn()} for the visit, contexts ${s.log.made}, starts ${s.log.starts.length}`); }
+  { const s = await world(fresh, { pref: 'on', ua: false }); s.lib.sound('goal'); await s.settle();
+    check('5.o.before', s.log.made === 0 && s.log.starts.length === 0, `o. a browser with no userActivation, a goal before any event: contexts ${s.log.made}, starts ${s.log.starts.length}`);
+    s.fire('keydown'); s.lib.sound('goal'); await s.settle();
+    check('5.o.after', s.log.made === 1 && s.log.starts.length === 2, `o. after a key press, a goal: contexts ${s.log.made}, starts ${s.log.starts.length}`); }
+  { const s = await world(fresh, { pref: 'on', resume: 'held' }); s.lib.sound('goal'); await s.settle();
+    s.clock.t += 400; s.release(); await s.settle();
+    check('5.p', s.log.made === 1 && s.log.resumes >= 1 && s.log.starts.length === 0, `p. a context that wakes 400 ms late: contexts ${s.log.made}, starts ${s.log.starts.length} (the goal had passed)`); }
+  { const s = await world(fresh, { pref: 'on' }); s.lib.sound('award', { delay: 2 }); await s.settle();
+    check('5.q', s.log.starts.length === 1 && near(s.log.starts[0].t, 2) && s.log.starts[0].len === len.sting, `q. an award asked for 2 s ahead: ${s.log.starts.length} start at ${s.log.starts[0]?.t} on the audio clock`); }
+  { /* a cold kit: the clock moves 400 ms between the ask and the moment the kit hears of it */
+    const s = await world(fresh, { pref: 'on' }); s.lib.sound('tap'); s.clock.t += 400; await s.settle();
+    check('5.r.tap', s.log.made === 1 && s.log.starts.length === 0, `r. a tap the kit hears of 400 ms late: starts ${s.log.starts.length} (dropped, never late)`);
+    const had = s.log.starts.length; s.lib.sound('award', { delay: 2 }); s.clock.t += 400; await s.settle();
+    const got = s.log.starts.slice(had);
+    check('5.r.award', got.length === 1 && near(got[0].t, 1.6, 0.01), `r. an award 2 s ahead that the kit hears of 400 ms late: ${got.length} start at ${got[0]?.t} (1.6: the wait came off its delay)`); }
+  { const s = await world(fresh, { pref: 'on', active: false }); s.lib.primeSound(); await s.settle();
+    check('5.prime.arm', s.log.listeners === 3 && s.log.docListeners === 1 && s.log.made === 0 && s.log.starts.length === 0, `prime. choice on, primed, no tap: gesture listeners ${s.log.listeners}, contexts ${s.log.made}, starts ${s.log.starts.length}`);
+    s.nav.userActivation.hasBeenActive = true; s.fire('pointerdown'); await s.settle();
+    check('5.prime.tap', s.log.made === 1 && s.log.resumes === 1 && s.log.starts.length === 0, `prime. then his first tap anywhere: contexts ${s.log.made}, resumes ${s.log.resumes}, starts ${s.log.starts.length} (made and woken inside the tap)`);
+    s.lib.sound('goal'); await s.settle();
+    check('5.prime.goal', s.log.made === 1 && s.log.starts.length === 2, `prime. then a goal: starts ${s.log.starts.length}`); }
+  for (const [label, opts] of [['absent', { pref: null }], ['off', { pref: 'off' }], ['on under the prerender flag', { pref: 'on', prerender: true }]]) {
+    const s = await world(fresh, opts); s.lib.primeSound(); await s.settle();
+    check('5.prime.off', silent(s.log) && s.log.docListeners === 0, `prime. choice ${label}, primed: ${said(s.log)} (the kit is never entered)`);
+  }
+}
+
 /* ---------- negative controls ----------
    A control plants one fault, runs the sections it is aimed at, and FIRES only when a check it names went red.
    `text` replaces one exact string of the bundle (the needle must be there exactly once, and the text must
@@ -427,6 +567,20 @@ const CONTROLS = {
   audiotag: { sections: [section4], red: /^4\.(element|path)$/, scan: { file: 'src/components/career/AwardsNightCard.tsx', add: "const w = new Audio('/whistle.mp3');" } },
   secondhome: { sections: [section4], red: /^4\.graph\.context$/, scan: { file: SWITCH_FILE, add: 'const c = new AudioContext();' } },
   staticimport: { sections: [section4], red: /^4\.static$/, scan: { file: SWITCH_FILE, add: "import { play } from './soundKit';" } },
+  /* section 5: each is one exact string of the bundle, the code as esbuild prints it */
+  eager: { sections: [section5], red: /^5\.b$/, text: ['    armed = false;', '    armed = false;\n    try { ctx = new window.AudioContext(); } catch {}'] },
+  nogate: { sections: [section5], red: /^5\.[bcd]$/, text: ['!!window.__DUKB_PRERENDER__ || !soundOn();', '!!window.__DUKB_PRERENDER__;'] },
+  nohide: { sections: [section5], red: /^5\.f$/, text: ['if (skip() || document.visibilityState === "hidden") return;', 'if (skip()) return;'] },
+  noprerender: { sections: [section5], red: /^5\.g$/, text: ['!!window.__DUKB_PRERENDER__ || ', ''] },
+  nowait: { sections: [section5], red: /^5\.e\.before$/, text: ['  if (!active()) return null;\n', ''] },
+  late: { sections: [section5], red: /^5\.p$/, text: ['    if (due < -STALE_MS / 1e3) return;\n', ''] },
+  nohush: { sections: [section5], red: /^5\.k\.before$/, text: ['if (c.state !== "running" || !alive()) return;', 'if (c.state !== "running") return;'] },
+  twocontexts: { sections: [section5], red: /^5\.m$/, text: ['  if (ctx) return ctx;\n', ''] },
+  buzzstill: { sections: [section5], red: /^5\.h$/, text: ['if (still() || !active() ||', 'if (!active() ||'] },
+  keepplaying: { sections: [section5], red: /^5\.i\.off$/, text: ['function sleep() {\n  stopAll();', 'function sleep() {'] },
+  coldlate: { sections: [section5], red: /^5\.r\./, text: ['const due = (opts?.delay ?? 0) - (performance.now() - at) / 1e3;', 'const due = opts?.delay ?? 0;'] },
+  noprime: { sections: [section5], red: /^5\.prime\.arm$/, text: ['void kit().then((k) => k.arm()).catch(quiet2);', 'void kit().catch(quiet2);'] },
+  globalhush: { sections: [section5], red: /^5\.k\.scope$/, text: ['k.stopAll(scope)', 'k.stopAll()'] },
 };
 async function runControl(name) {
   const c = CONTROLS[name];
@@ -478,7 +632,7 @@ async function writeWavs(fresh) {
 }
 
 /* ---------- main ---------- */
-const SECTIONS = [section1, section2, section3, section4];
+const SECTIONS = [section1, section2, section3, section4, section5];
 if (process.env.SIM_SOUND_MEASURE) {
   /* For whoever adds a cue or retunes one: the numbers a band or a floor is set from. */
   const { kit } = await loaderFor(BASE_TEXT)();
