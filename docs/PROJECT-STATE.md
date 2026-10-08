@@ -1,3 +1,11 @@
+## Codex 1162 pending: named Academy prospect actions
+
+Isolated branch codex/cm-academy-action-names-1162 starts at main68064f38.
+Only the two prospect buttons gain names: Sign him: player and Let go: player.
+Visible wording, ids, callbacks, fees, disabled rules, filters and engine stay held.
+Source awaits independent static review, then exact remote component proof.
+No local runtime, current-main integration, READY or live claim.
+
 ## Release AN LIVE, 2026-10-08 16:57 EDT: the site opens with storage blocked, translated pages stay live, six Codex rounds, five rounds of this lane
 
 Claude lane (session F). main 7ead9eb4, deployment aa7da32f-e499-418f-bd14-ec0201673437, entry index-D7bFwkA9.js (was
