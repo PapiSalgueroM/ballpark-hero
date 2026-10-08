@@ -1,0 +1,22 @@
+RV| fonts late: first {"at":2775,"rect":"384,465,512,422.5","title":{"h":180,"font":"\"Space Grotesk\", system-ui, \"Apple Color","fonts":"loading","loaded":0},"keyFiles":0}
+RV| fonts late: mid   {"at":4291,"rect":"384,465,512,422.5","title":{"h":180,"font":"\"Space Grotesk\", system-ui, \"Apple Color","fonts":"loading","loaded":0},"keyFiles":2}
+RV| fonts late: last  {"at":8795,"rect":"384,405,512,422.5","title":{"h":120,"font":"\"Space Grotesk\", system-ui, \"Apple Color","fonts":"loaded","loaded":8},"keyFiles":2}
+RV| fonts late: the board MOVED between 4291 ms (both key files in: true) and 8795 ms
+RV| scenario fonts-late took 8852 ms
+RV| fonts never: first {"at":171,"rect":"384,465,512,422.5","title":{"h":180,"font":"\"Space Grotesk\", system-ui, \"Apple Color","fonts":"loaded","loaded":0},"keyFiles":1}
+RV| fonts never: mid   {"at":1690,"rect":"384,465,512,422.5","title":{"h":180,"font":"\"Space Grotesk\", system-ui, \"Apple Color","fonts":"loaded","loaded":0},"keyFiles":2}
+RV| fonts never: last  {"at":6194,"rect":"384,465,512,422.5","title":{"h":180,"font":"\"Space Grotesk\", system-ui, \"Apple Color","fonts":"loaded","loaded":0},"keyFiles":2}
+RV| fonts never: the board did NOT move between 1690 ms (both key files in: true) and 6194 ms
+RV| scenario fonts-never took 6231 ms
+RV| fonts normal: first {"at":238,"rect":"384,405,512,422.5","title":{"h":120,"font":"\"Space Grotesk\", system-ui, \"Apple Color","fonts":"loading","loaded":8},"keyFiles":1}
+RV| fonts normal: mid   {"at":1775,"rect":"384,405,512,422.5","title":{"h":120,"font":"\"Space Grotesk\", system-ui, \"Apple Color","fonts":"loaded","loaded":8},"keyFiles":1}
+RV| fonts normal: last  {"at":6278,"rect":"384,405,512,422.5","title":{"h":120,"font":"\"Space Grotesk\", system-ui, \"Apple Color","fonts":"loaded","loaded":8},"keyFiles":1}
+RV| fonts normal: the board did NOT move between 1775 ms (both key files in: false) and 6278 ms
+RV| scenario fonts-normal took 6315 ms
+RV| fonts late: first {"at":2734,"rect":"384,465,512,422.5","title":{"h":180,"font":"\"Space Grotesk\", system-ui, \"Apple Color","fonts":"loading","loaded":0},"keyFiles":0}
+RV| fonts late: mid   {"at":4253,"rect":"384,465,512,422.5","title":{"h":180,"font":"\"Space Grotesk\", system-ui, \"Apple Color","fonts":"loading","loaded":0},"keyFiles":2}
+RV| fonts late: last  {"at":8756,"rect":"384,405,512,422.5","title":{"h":120,"font":"\"Space Grotesk\", system-ui, \"Apple Color","fonts":"loaded","loaded":8},"keyFiles":2}
+RV| fonts late: the board MOVED between 4253 ms (both key files in: true) and 8756 ms
+RV| scenario fonts-late took 8789 ms
+
+FXPROBE2: 0 findings, 20 notes
