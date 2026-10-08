@@ -59,7 +59,8 @@ try {
     assert.equal(run.status, 1); assert.equal(report.numFailedTests, 1); assert.equal(report.numPassedTests, 1); assert.equal(report.numPendingTests, 2);
     const intended = rows.filter(row => row.title === controls[control].test);
     assert.equal(intended.length, 1); assert.equal(intended[0].status, 'failed');
-    assert.match(intended[0].failureMessages.join('\n'), /AssertionError:|Error: expect\(element\)\.(?:toHaveTextContent|toHaveAttribute|toHaveFocus|toBeInTheDocument)/, 'Intended assertion rejects the changed binding');
+    const failure = intended[0].failureMessages.join('\n').replace(/\x1b\[[0-9;]*m/g, '');
+    assert.match(failure, /AssertionError:|Error: expect\(element\)\.(?:toHaveTextContent|toHaveAttribute|toHaveFocus|toBeInTheDocument)/, 'Intended assertion rejects the changed binding');
     assert.equal(rows.find(row => row.title === independent)?.status, 'passed', 'Original ten-shot lifecycle stays green');
     console.log(`simThreePointContest ${control}: changed binding fails one intended outcome, original ten-shot baseline passes, two cases skipped.`);
   } else {

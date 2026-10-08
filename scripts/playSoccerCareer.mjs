@@ -271,6 +271,7 @@ async function createCareer(page) {
    A real player takes the move, asks out when nothing is on the table, and
    does not retire while he can still play. So the walk does too. */
 const ACTIONS = [
+  'Sign contract', 'Review contract', // review permanent offers before signing
   'Leave on free transfer', // take the move over the extension
   'Join Club',              // the other shape a transfer offer takes
   'Request transfer',       // no offers on the table means ask for them

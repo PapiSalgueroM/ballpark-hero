@@ -424,7 +424,7 @@ function skipToMatch(run: HotSeatRun): void {
   while (guard++ < 10) {
     const fx = nextFixture(run.state);
     if (fx.kind !== 'window') return;
-    const r = withSeed(mixSeed(run.setup.seed, 5000 + run.log.length * 16 + guard), () => playNextEntry(run.state, { skipHalftime: true }));
+    const r = withSeed(mixSeed(run.setup.seed, 5000 + run.log.length * 16 + guard), () => playNextEntry(run.state, { skipHalftime: true, noCoach: true }));
     run.step += 1;
     run.state = r.state;
   }
@@ -481,7 +481,7 @@ function startOnStaticWorld(setup: HotSeatSetup): HotSeatRun {
   while (guard++ < 60) {
     const played = leagueGamesPlayed(s);
     if (played >= lastWeek) break;
-    const r = withSeed(mixSeed(setup.seed, call), () => playNextEntry(s, { skipHalftime: true }));
+    const r = withSeed(mixSeed(setup.seed, call), () => playNextEntry(s, { skipHalftime: true, noCoach: true }));
     call += 1;
     s = r.state;
     if (r.kind === 'seasonOver') break;
@@ -610,7 +610,7 @@ function playOnStaticWorld(prev: HotSeatRun, mentality: Mentality, talk: TalkTon
   const before = run.state.boardConfidence;
   const ready: CareerState = { ...run.state, mentality, teamTalk: talk };
   /* The nth match of the job draws stream n, whatever was said in between. */
-  const r = withSeed(mixSeed(run.setup.seed, 1000 + run.log.length), () => playNextEntry(ready, { skipHalftime: true }));
+  const r = withSeed(mixSeed(run.setup.seed, 1000 + run.log.length), () => playNextEntry(ready, { skipHalftime: true, noCoach: true }));
   run.step += 1;
   run.state = r.state;
   if (r.kind === 'match' && r.report) {

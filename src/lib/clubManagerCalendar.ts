@@ -605,8 +605,8 @@ export interface SimRun {
  * early for the things that need the manager: a transfer window opening,
  * the end of the season, the sack, or a club's approach landing (an offer
  * that quietly expires if it sits unanswered for five weeks). Every match in
- * the run is played in one shot with the current XI, as the fast forwards
- * always were. A tap on a day and every fast forward button go through
+ * the run is played in one shot from the current XI, as the fast forwards
+ * always were, and since Round 1072 the quick sim coach makes the changes. A tap on a day and every fast forward button go through
  * here, so the two can never drift.
  */
 export function simToWeek(career: CareerState, targetWeek: number): SimRun {

@@ -31,16 +31,19 @@
       pitcher place, a DH takes no infield).
    5. The shared drills replay the original soccer outcomes:
       src/test/careerTrainingGround.test.tsx uses the original 913 soccer skin
-      around the current shared ground to replay 41 runs from origin/main
-      a4433f41, plus the American skins. The live Soccer panel stays unchanged.
+      around the current shared ground to replay 37 normal runs from origin/main
+      a4433f41, plus the American skins. Four original lifecycle defects remain
+      in the immutable fixture and are superseded by simCareerPracticeLifecycle.
 
    Sections 1 to 4 are exact (equalities over a full grid, no random draw), so
    they carry no bands. Measured on the shipped code: section 1 is 19,241
    checks and the engine first banks one at 50 and two at 80; section 2 walks
    363,600 cells, 180,000 of them under 50 (no gain), 89,031 paying the whole
    tier and 94,569 cut at the ceiling; section 3 is 43,211 checks; section 4
-   is 29 positions and 97 drill tiles. Section 5 is a replay, also exact: 48
-   tests, 43 of them the recording.
+   is 29 positions and 97 drill tiles. Section 5 has 44 checks: 37 recorded
+   runs, two fixture metadata checks and five American skin checks. New pause
+   chrome and exact target-size tokens are excluded from historical markup;
+   the lifecycle suite separately requires the new controls to work.
 
    Negative controls, CAREER_TRAINING_CONTROL=<name>. Each copies one file
    with one line changed (the line must be there exactly once, or it refuses
@@ -357,7 +360,7 @@ if (!runVitest) {
   check(!run.error, `vitest did not run: ${run.error}`);
   check(out.includes('careerTrainingGround.test.tsx'), 'vitest never reached careerTrainingGround.test.tsx');
   check(run.status === 0 && failed.length === 0, `vitest exit ${run.status}, ${failed.length} failed: ${failed.slice(0, 3).map(l => l.trim()).join(' | ')}`);
-  check(replays >= 43, `only ${replays} replays passed, the fixture holds 43`);
+  check(replays >= 39, `only ${replays} normal replay checks passed; four historical lifecycle defects are covered by simCareerPracticeLifecycle`);
   /* a control must break the run it was written for, not just anything */
   if (control && !failed.some(l => l.includes(control.breaks))) {
     namedMiss = true;

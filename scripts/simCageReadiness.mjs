@@ -9,6 +9,7 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..'), self = fileURLToPath(import.meta.url);
 const engine = 'src/lib/cageClash.ts', board = 'src/components/cage-clash/CageClashBoard.tsx';
 const canvas = 'src/components/cage-clash/CageClashCanvas.tsx', stats = 'src/components/cage-clash/CageFightStats.tsx';
+const feedback = 'src/components/cage-clash/CagePracticeFeedback.tsx';
 const testFile = 'src/test/cageReadiness.test.tsx';
 const titles = {
   cost: 'reports literal contextual costs including each sides first and continuing submission',
@@ -57,7 +58,7 @@ if (mode === 'all') {
   console.log(`simCageReadiness: ${Object.keys(titles).length} actual outcomes and ${Object.keys(controls).length} effective controls passed.`); process.exit(0);
 }
 const held = [];
-for (const relative of [engine, board, canvas, stats, 'src/hooks/useCageClash.ts', 'src/lib/cagePractice.ts', 'src/lib/cageCircuit.ts', testFile]) {
+for (const relative of [engine, board, canvas, stats, feedback, 'src/hooks/useCageClash.ts', 'src/lib/cagePractice.ts', 'src/lib/cageCircuit.ts', testFile]) {
   const file = path.join(root, relative);
   const bytes = await readFile(file);
   held.push(() => readFile(file).then(current => assert.deepEqual(current, bytes, `${relative} source bytes unchanged`)));
@@ -72,7 +73,7 @@ try {
     const changed = source.replace(spec.from, spec.to); assert.notEqual(changed, source, 'Control changes actual executable code');
     const target = path.join(folder, path.basename(spec.file)); await writeFile(target, changed);
     const aliases = { ['@/' + spec.file.slice(4).replace(/\.tsx?$/, '')]: target };
-    if (spec.file === board) for (const sibling of [canvas, stats]) {
+    if (spec.file === board) for (const sibling of [canvas, stats, feedback]) {
       const file = path.join(folder, path.basename(sibling)); await writeFile(file, (await readFile(path.join(root, sibling), 'utf8')).replaceAll('\r\n', '\n'));
       aliases['@/' + sibling.slice(4).replace(/\.tsx?$/, '')] = file;
     }

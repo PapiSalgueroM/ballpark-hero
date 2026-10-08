@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { UsCareerCore, UsCareerSport } from '@/lib/usCareerSport';
 import type { CareerReviewStat } from '@/lib/usCareerSeasonReview';
 import { cn } from '@/lib/utils';
+import { formatNumber } from '@/lib/formatNumber';
 
 const finite = (value: unknown): value is number => typeof value === 'number' && Number.isFinite(value);
 const recorded = (value: unknown) => finite(value) ? String(value) : 'Not recorded';
@@ -14,7 +15,7 @@ function delta(first: CareerReviewStat, second: CareerReviewStat, money: boolean
   const digits = second.numeric?.digits ?? first.numeric?.digits;
   const change = Number((b - a).toFixed(digits ?? 6));
   const amount = digits === undefined ? String(Math.abs(change)) : Math.abs(change).toFixed(digits);
-  return `${change > 0 ? '+' : change < 0 ? '-' : ''}${money ? '$' : ''}${amount}${money ? 'M' : ''}`;
+  return `${change > 0 ? '+' : change < 0 ? '-' : ''}${money ? '$' : ''}${formatNumber(amount)}${money ? 'M' : ''}`;
 }
 
 export default function CareerSeasonComparison({ career, sport, onBack }: {
@@ -29,9 +30,9 @@ export default function CareerSeasonComparison({ career, sport, onBack }: {
   const details = seasons.map(season => sport.reviewStats(season, career.pos));
   const overview = seasons.map((season, index) => [
     { label: 'Season OVR', value: recorded(season.ovr), numeric: { raw: season.ovr } },
-    { label: details[index].gamesLabel, value: recorded(season.games), numeric: { raw: season.games } },
+    { label: details[index].gamesLabel, value: formatNumber(recorded(season.games)), numeric: { raw: season.games } },
     { label: 'Age that season', value: recorded(season.age), numeric: { raw: season.age } },
-    { label: 'Season salary', value: finite(season.salary) ? `$${season.salary}M` : 'Not recorded', numeric: { raw: season.salary } },
+    { label: 'Season salary', value: finite(season.salary) ? `$${formatNumber(season.salary)}M` : 'Not recorded', numeric: { raw: season.salary } },
   ]);
   const sides = tab === 'Overview' ? overview : details.map(detail => detail.regularValues.filter(stat => stat.numeric));
   const labels = [...new Set(sides.flat().map(stat => stat.label))];

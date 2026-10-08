@@ -17,8 +17,9 @@ import {
   GOLDEN_INFO, fmtMoney, buyPerk, perkById, setClubName, GOLDEN_CATCH_SEC, GOLDEN_MEAN_GAP_SEC, HYPE_MULT,
   awaySecondsOf, playAwayMatchdays, AWAY_MATCHDAY_SEC, leaguePosition, leagueShape,
   setPieceOffer, beginSetPiece, awardSetPieceGoal,
+  setTicketPolicy,
 } from '@/lib/stadiumTycoon';
-import type { GoldenKind, LeagueClub, AwayMatch, SetPieceOffer } from '@/lib/stadiumTycoon';
+import type { GoldenKind, LeagueClub, AwayMatch, SetPieceOffer, TicketPolicy } from '@/lib/stadiumTycoon';
 
 /** Round 162: a golden whistle drifting across the pitch, waiting to be
  *  caught. Purely presentational until the tap: the engine only hears about
@@ -84,6 +85,7 @@ export function useStadiumTycoon(getEdge?: () => number) {
   const [activeSetPiece, setActiveSetPiece] = useState<SetPieceOffer | null>(null);
   const [setPieceError, setSetPieceError] = useState<string | null>(null);
   const [gearSaveBlocked, setGearSaveBlocked] = useState(false);
+  const [ticketSaveFailed, setTicketSaveFailed] = useState(false);
   const [promotion, setPromotion] = useState<Promotion | null>(null);
   const [badge, setBadge] = useState<BadgeEarned | null>(null);
   const [lastSeason, setLastSeason] = useState<LastSeason | null>(null);
@@ -104,6 +106,17 @@ export function useStadiumTycoon(getEdge?: () => number) {
     stateRef.current = next;
     setState(next);
   }, []);
+  const saveTicketState = useCallback((next: TycoonState) => {
+    try {
+      localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(next, Date.now()));
+      setTicketSaveFailed(false);
+      return true;
+    } catch {
+      setTicketSaveFailed(true);
+      return false;
+    }
+  }, []);
+  const retryTicketSave = useCallback(() => saveTicketState(stateRef.current), [saveTicketState]);
   const goldenRef = useRef(golden);
   goldenRef.current = golden;
 
@@ -238,7 +251,7 @@ export function useStadiumTycoon(getEdge?: () => number) {
         }
         if (sinceSave >= 5) {
           sinceSave = 0;
-          try { localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(next, Date.now())); } catch { /* full/blocked storage never kills the game */ }
+          saveTicketState(next);
         }
       }
       raf = requestAnimationFrame(step);
@@ -289,7 +302,7 @@ export function useStadiumTycoon(getEdge?: () => number) {
     };
     raf = requestAnimationFrame(step);
     const saveNow = () => {
-      try { localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(stateRef.current, Date.now())); } catch { /* ignore */ }
+      saveTicketState(stateRef.current);
     };
     /* Round 439: hiding banks the save, coming back settles the hours. The
        frame clock restarts on the way back in so the return frame pays for
@@ -308,7 +321,7 @@ export function useStadiumTycoon(getEdge?: () => number) {
       window.removeEventListener('pagehide', saveNow);
       saveNow();
     };
-  }, [pushFloater, settleAway]);
+  }, [pushFloater, settleAway, saveTicketState]);
 
   /* Round 195: the idle game counts as playing TODAY. One unscored mark
      per session, on the first meaningful action (a tap, a purchase, a
@@ -321,6 +334,14 @@ export function useStadiumTycoon(getEdge?: () => number) {
     sessionMarkedRef.current = true;
     recordCompletion('/stadium-tycoon');
   }, []);
+
+  const doSetTicketPolicy = useCallback((policy: TicketPolicy) => {
+    const before = stateRef.current;
+    const next = setTicketPolicy(stateRef.current, policy);
+    if (next !== before) markSessionPlay();
+    commit(next);
+    saveTicketState(next);
+  }, [commit, saveTicketState, markSessionPlay]);
 
   const doBuy = useCallback((id: string) => {
     markSessionPlay();
@@ -454,6 +475,7 @@ export function useStadiumTycoon(getEdge?: () => number) {
 
   return {
     state, floaters, awayPay, awayTrip, dismissAway, confetti, gearSaveBlocked,
+    doSetTicketPolicy, ticketSaveFailed, retryTicketSave,
     doBuy, doTap, doPrestige, doBoost,
     golden, doCatchGolden, doHire, doLegacyPerk,
     promotion, dismissPromotion, badge, dismissBadge, doSetClubName, lastSeason,
