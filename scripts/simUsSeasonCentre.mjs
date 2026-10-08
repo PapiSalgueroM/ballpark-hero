@@ -35,6 +35,8 @@
  *   record   the record target ignored                         -> section 3
  *   length   the held gate removed                             -> section 2
  *   stage    the engine writes a result its own list lacks     -> sections 1 and 4
+ *   short82  the NBA engine back on 82 games in every year
+ *            (Round 1103 plays the ledger's 66 and 72)         -> section 1
  *   names    the shape window opened for the throwback era,
  *            the binding's id guard off                        -> section 5
  *   window   the same window with the guard ON: the ledger
@@ -74,6 +76,7 @@ const CONTROLS = {
   record: { section: 3, patches: [{ file: US, from: "const target: TeamTarget = band ? { kind: 'record', winsMin: band[0], winsMax: band[1] } : { kind: 'none' };", to: "const target: TeamTarget = { kind: 'none' };" }] },
   length: { section: 2, patches: [{ file: US, from: 'if (length === null || length !== bind.fullSeason) {', to: 'if (length === null) {' }] },
   stage: { section: 1, also: 4, patches: [{ file: 'src/lib/nbaMyCareer.ts', from: '    result = stages[stage];', to: "    result = stages[stage] + ' ';" }] },
+  short82: { section: 1, patches: [{ file: 'src/lib/nbaMyCareer.ts', from: "  return usSeasonLength('nba', year) ?? 82;", to: '  return 82;' }] },
   names: { section: 5, patches: [WINDOW, { file: US, from: '  if (ledger.length !== own.length || new Set(ledger).size !== ledger.length) return null;\n  const ownSet = new Set(own);\n  if (ownSet.size !== own.length || !ledger.every(id => ownSet.has(id))) return null;\n', to: '  const ownSet = new Set(own);\n' }] },
   window: { section: 5, patches: [WINDOW] },
   formula: { section: 5, patches: [{ file: NBA, from: 'for (let s = 1; s <= d; s += 1) add(s, 2, 2);', to: 'for (let s = 1; s <= d; s += 1) add(s, 3, 1);' }, { file: NBA, from: '  if (ctx.shape) out.push(...nbaDealProblems(ctx, s.games));\n', to: '' }] },
@@ -103,9 +106,17 @@ const controlPlugin = {
   },
 };
 
+/* Round 1103: the NBA engine plays the ledger's length (66 games in 2011-12, 72 in 2020-21, 82 in a held year),
+   so its two windows of games played are restated by season, off the LEDGER and never off the engine's own
+   read of it (control short82 puts the engine back on 82 and this must go red): a healthy man misses up to
+   four, a hurt one misses 8 to 42 of 82, scaled to the length and rounded the way gamesFor rounds them. At 82
+   these are the 40 to 74 and 78 to 82 this row typed before. M is the bundle below, read when a check runs. */
+const nbaWindows = year => { const L = M.usSeasonLength('nba', year) ?? 82; return { L, hurtMin: L - Math.round((42 * L) / 82), hurtMax: L - Math.round((8 * L) / 82) }; };
+const nbaShortYear = year => nbaWindows(year).L !== 82;
+
 /* ─── The bundle: the two real bindings, the season modules, the ledgers ─── */
 const SPORT_DEFS = {
-  nba: { binding: 'NBA_CAREER_SPORT', bindingFile: 'src/lib/nbaCareerSport.ts', bindName: 'NBA_SEASON', numberFile: 'src/lib/season/nba.ts', positions: ['PG', 'SG', 'SF', 'PF', 'C'], eras: ['now', 'y2004'], gamesOk: g => (g >= 40 && g <= 74) || (g >= 78 && g <= 82), injury: l => l.games <= 74, targetedFrom: { era: 'y2004', year: 2016 } },
+  nba: { binding: 'NBA_CAREER_SPORT', bindingFile: 'src/lib/nbaCareerSport.ts', bindName: 'NBA_SEASON', numberFile: 'src/lib/season/nba.ts', positions: ['PG', 'SG', 'SF', 'PF', 'C'], eras: ['now', 'y2004'], gamesOk: (g, year) => { const w = nbaWindows(year); return (g >= w.hurtMin && g <= w.hurtMax) || (g >= w.L - 4 && g <= w.L); }, injury: l => l.games <= nbaWindows(l.year).hurtMax, targetedFrom: { era: 'y2004', year: 2016 } },
   nfl: { binding: 'NFL_CAREER_SPORT', bindingFile: 'src/lib/nflCareerSport.ts', bindName: 'NFL_SEASON', numberFile: 'src/lib/season/nfl.ts', positions: ['QB', 'RB', 'WR', 'TE', 'LB', 'CB', 'EDGE', 'K'], eras: ['now', 'y2005'], gamesOk: g => g >= 1 && g <= 17, injury: l => l.games < 17, targetedFrom: { era: 'y2005', year: 2018 } },
 };
 /* A sport is run when its number file exists. A sport whose BINDING already
@@ -470,7 +481,8 @@ for (const slug of SPORTS) {
   /* 1 */
   const unknown = live.filter(r => r.teamResult !== o.missed && !o.results.includes(r.teamResult));
   tally('1', `${slug} every team result is the engine's missed word or one of its five`, unknown.slice(0, 5).map(r => JSON.stringify(r.teamResult)), live.length);
-  tally('1', `${slug} games played sit in the engine's ranges`, live.filter(r => !d.gamesOk(r.games)).map(r => `${r.games}`), live.length);
+  tally('1', `${slug} games played sit in the engine's ranges`, live.filter(r => !d.gamesOk(r.games, r.year)).map(r => `${r.games} in ${r.year}`), live.length);
+  if (slug === 'nba') check('1', live.filter(r => nbaShortYear(r.year)).length >= 100, `nba short seasons (66 or 72 games) are in the population (${live.filter(r => nbaShortYear(r.year)).length}, floor 100: 220 measured on 2026-10-08)`);
   const depthN = o.results.map(t => live.filter(r => r.teamResult === t).length);
   console.log(`     by result: missed ${live.filter(r => r.teamResult === o.missed).length}, ${o.results.map((t, i) => `${depthN[i]}`).join(' / ')} (depth 0 to title)`);
   check('1', depthN.every(n => n > 0), `${slug} every playoff depth and a title are in the population`);
@@ -646,6 +658,7 @@ if (CONTROL) {
   if (CONTROL === 'window') { ok = ok && labels.some(l => l.includes("are exactly the game's list")) && !labels.some(l => l.includes('never names an opponent')); note = '; the binding still named no throwback opponent'; }
   if (CONTROL === 'formula') ok = ok && labels.some(l => l.includes('follows the formula'));
   if (CONTROL === 'record') ok = ok && labels.some(l => l.includes('independent checker'));
+  if (CONTROL === 'short82') ok = ok && labels.some(l => l.includes("nba games played sit in the engine's ranges")) && red.length === 1;
   console.log(ok
     ? `control ${CONTROL}: RED AT THE NAMED CHECK (section ${c.section}); sections red: ${red.join(', ')}${note}`
     : `control ${CONTROL}: DID NOT FIRE AT ITS NAMED CHECK (section ${c.section}); sections red: ${red.join(', ') || 'none'}${note}`);
