@@ -1,0 +1,10 @@
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simCareerDerbies: node scripts/simCareerDerbies.mjs
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simClubManager: node scripts/simClubManager.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simCmInternationals: node scripts/simCmInternationals.mjs
+simClubManagerClubList: node scripts/simClubManagerClubList.mjs

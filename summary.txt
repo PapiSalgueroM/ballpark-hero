@@ -1,0 +1,10 @@
+simClubManagerSaveSize exit=0 32s | simClubManagerSaveSize: all sections green
+simCmLeagueRules exit=0 39s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+simClubManagerSlots exit=0 39s | simClubManagerSlots: all sections green
+simCareerDerbies exit=0 12s | simCareerDerbies: all 8 sections green
+simClubManagerALeague exit=0 6s | simClubManagerALeague: all checks passed
+simGuideHeadings exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+simInventedNames exit=0 6s | simInventedNames: green. Every invented man on this site is invented all the way down.
+simClubManagerClubList exit=1 1s | simClubManagerClubList: RED in sections 1, 4.
+simCmInternationals exit=0 14s | simCmInternationals: all green
+simClubManager exit=0 18s | ALL CLUB MANAGER SIMS PASSED
