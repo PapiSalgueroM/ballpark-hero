@@ -28,6 +28,8 @@ export interface HelpWords {
   title: string;
   intro: string[];
   controls: string;
+  /** Round 1047: the rules of his moments, when the sport has them. */
+  moments?: string[];
   examples: { head: string; body: string }[];
   footnote: string;
 }
@@ -39,6 +41,12 @@ export function SeasonCentreHelp({ words, onClose }: { words: HelpWords; onClose
         <h3 className="text-base font-black">{words.title}</h3>
         {words.intro.map(p => <p key={p} className="leading-relaxed text-muted-foreground">{p}</p>)}
         <p className="leading-relaxed">{words.controls}</p>
+        {words.moments && words.moments.length > 0 && (
+          <div className="space-y-2" data-help-moments>
+            <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground">🎯 Your moments</div>
+            {words.moments.map(p => <p key={p} className="text-xs leading-relaxed text-muted-foreground">{p}</p>)}
+          </div>
+        )}
         <div className="space-y-2">
           <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Worked examples</div>
           {words.examples.map(x => (

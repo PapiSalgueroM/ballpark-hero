@@ -139,7 +139,55 @@ export interface SeasonSport<Row, Ctx> {
   /** The sport's own agreement items, beyond the core's (soccer checks its
    *  events against the score here). */
   check?(row: Row, ctx: Ctx, s: DerivedSeason): string[];
+  /** Round 1047: the points of a season the player may play himself. Absent: none. */
+  moments?: SportMoments<Row, Ctx>;
   words: SeasonWords;
+}
+
+/** What the OTHER outcome of a moment adds to its game: points on the board
+ *  for either side and units of his line. The mirror move at the return game
+ *  is the same delta with every sign turned. */
+export interface MomentDelta { us: number; them: number; line: Record<string, number> }
+
+/** A point in a game he played that could be his to play (the sport proposes them). */
+export interface MomentSpot {
+  md: number;
+  minute: number;
+  /** The sport's word for what he does there ("finish", "pass", "save", "tackle"). */
+  kind: string;
+  /** The season as saved has the success here (his goal, his assist, the stop). */
+  planSuccess: boolean;
+  /** That success is on the record itself (his goal, his assist, a clean
+   *  sheet), so with no mirror it can still be played again for stars. */
+  onRecord: boolean;
+  /** What the other outcome adds to this game. */
+  delta: MomentDelta;
+  /** The planner's rank, higher first. */
+  weight: number;
+  /** How much rides on it, 0 (a dead rubber) to 1 (a late one in a derby): the sport sets its board's difficulty from it. */
+  stakes: number;
+}
+
+export interface Moment extends MomentSpot {
+  /** Its number in the season's offer, in match order (the ledger's moment number). */
+  id: number;
+  /** 'call': either outcome fits and the match follows the player. 'recreate': only the saved success fits. */
+  mode: 'call' | 'recreate';
+  /** The return game that absorbs the other outcome (call only). */
+  mirrorMd: number | null;
+}
+
+/** A sport's side of the moments: where they are and how a game takes a delta. */
+export interface SportMoments<Row, Ctx> {
+  /** Most moments one season offers. */
+  max: number;
+  /** Every spot of one game he played, drawing only from the rng it is given. */
+  spots(row: Row, ctx: Ctx, s: DerivedSeason, g: DerivedGame, rng: Rng): MomentSpot[];
+  /** The game with `delta` played (score, his line and its events rewritten;
+   *  a per game mean is left to the core), or null when this game cannot
+   *  take it. `minute` is the moment's own minute, or null at the return
+   *  game, where the sport picks one from the rng. Never changes `g`. */
+  apply(row: Row, ctx: Ctx, g: DerivedGame, delta: MomentDelta, minute: number | null, rng: Rng): DerivedGame | null;
 }
 
 /** What the core knows about one game that the sport's events need. */
@@ -792,4 +840,163 @@ function targetDisagreements(s: DerivedSeason, frame: Frame, target: TeamTarget)
     if (rows.some(r => r.p !== frame.games)) out.push('games played');
   }
   return out;
+}
+
+/* ─── Round 1047: moments (YOUR CALL and RECREATE) ───
+
+   A moment hangs on a point of a game he played. One outcome is the saved
+   season's own; the question is whether the OTHER one can be absorbed. In a
+   double round robin every opponent is met twice, so the other outcome at
+   game G is paid back by the exact mirror move at the return game G': the
+   same delta with every sign turned. When the two result changes are equal
+   and opposite, the points cancel for both clubs, goals for and against
+   cancel, and his totals cancel, so every final table row, his position, the
+   champion and every saved total are exactly as saved, and only the matches
+   between G and G' tell another story.
+
+   Nothing here trusts that argument: `otherOutcome` builds the alternate
+   season and keeps it only when `disagreements` (the whole agreement list)
+   is empty for it and its final standings equal the plan's row for row.
+   No draw from Math.random: the sport's rewrites get keyed generators. */
+
+const turned = (d: MomentDelta): MomentDelta => ({
+  us: d.us === 0 ? 0 : -d.us,
+  them: d.them === 0 ? 0 : -d.them,
+  line: Object.fromEntries(Object.entries(d.line).map(([k, v]) => [k, v === 0 ? 0 : -v])),
+});
+const touchesLine = (d: MomentDelta) => Object.values(d.line).some(v => v !== 0);
+const momentKey = (s: DerivedSeason, spot: MomentSpot) => `${s.key}|moment|${spot.md}|${spot.minute}|${spot.kind}|${spot.planSuccess ? 1 : 0}`;
+
+/** The season with some of his games replaced: the board follows them and the clinch is read again. */
+function withGames(s: DerivedSeason, changed: DerivedGame[]): DerivedSeason {
+  const by = new Map(changed.map(g => [g.md, g]));
+  const games = s.games.map(g => by.get(g.md) ?? g);
+  const rounds = s.rounds.map((pairs, r) => {
+    const g = by.get(r + 1);
+    if (!g) return pairs;
+    return pairs.map((p): [number, number, number, number] => (p[0] === 0 || p[1] === 0 ? (g.home ? [p[0], p[1], g.us, g.them] : [p[0], p[1], g.them, g.us]) : p));
+  });
+  const title = s.target.kind === 'finish' && s.target.title;
+  const md = title && s.rule && s.mode === 'table' ? clinchOf(rounds, s.teams, s.rule) : null;
+  return { ...s, games, rounds, clinch: md ? { md } : null };
+}
+
+/** His club's record over the games shown, for the modes with no table. */
+function ownRecord(s: DerivedSeason): string {
+  let w = 0, d = 0, l = 0, gf = 0, ga = 0;
+  for (const g of s.games) { gf += g.us; ga += g.them; if (g.us > g.them) w += 1; else if (g.us < g.them) l += 1; else d += 1; }
+  return `${w}|${d}|${l}|${gf}|${ga}`;
+}
+
+/** The final standings (or his record where no table is shown) as one comparable string. */
+export function finalLine(s: DerivedSeason): string {
+  return s.mode === 'table' && s.rule ? JSON.stringify(standingsOf(s.rounds, s.teams, s.rule, s.rounds.length)) : ownRecord(s);
+}
+
+/** The season with the other outcome of `spot` played and absorbed at the
+ *  return game, or null when it has no legal mirror (the both fit test). */
+export function otherOutcome<R, C>(sport: SeasonSport<R, C>, row: R, ctx: C, s: DerivedSeason, spot: MomentSpot): { season: DerivedSeason; mirrorMd: number } | null {
+  const hook = sport.moments;
+  if (!hook) return null;
+  const g = s.games[spot.md - 1];
+  if (!g || g.md !== spot.md || !g.played || g.fixed) return null;
+  const meetings = s.games.filter(x => x.opp === g.opp);
+  if (meetings.length !== 2) return null;
+  const back = meetings.find(x => x.md !== g.md)!;
+  /* only a later game can pay it back, so nothing already watched changes */
+  if (back.md <= g.md || back.fixed) return null;
+  if (touchesLine(spot.delta) && !back.played) return null;
+  const key = momentKey(s, spot);
+  const a = hook.apply(row, ctx, g, spot.delta, spot.minute, keyedRng(`${key}|a`));
+  if (!a) return null;
+  const b = hook.apply(row, ctx, back, turned(spot.delta), null, keyedRng(`${key}|b`));
+  if (!b) return null;
+  /* a per game mean moves by equal and opposite steps, so its sum (and the
+     saved mean) is untouched; with no room, or a return game he missed, it
+     does not move at all */
+  for (const t of sport.totals(row, ctx)) {
+    if (t.kind !== 'mean' || !back.played) continue;
+    const step = t.perGame === 'int' ? 1 : 0.1;
+    const at = (v: number) => Math.round(v / step);
+    const here = at(g.line[t.key] ?? 0); const there = at(back.line[t.key] ?? 0);
+    const want = at(sport.meanBase(t.key, a)) - at(sport.meanBase(t.key, g));
+    const up = Math.min(at(t.max) - here, there - at(t.min));
+    const down = Math.min(here - at(t.min), at(t.max) - there);
+    const n = clampN(want, -Math.max(0, down), Math.max(0, up));
+    a.line = { ...a.line, [t.key]: Math.round((here + n) * step * 10) / 10 };
+    b.line = { ...b.line, [t.key]: Math.round((there - n) * step * 10) / 10 };
+  }
+  const season = withGames(s, [a, b]);
+  if (finalLine(season) !== finalLine(s)) return null;
+  if (disagreements(sport, row, ctx, season).length > 0) return null;
+  return { season, mirrorMd: back.md };
+}
+
+/** What a YOUR CALL adds to its rank over a RECREATE of the same stakes. */
+const CALL_BONUS = 1;
+/** The modes a season's offer is filled with first, in this order. */
+const MIX = ['call', 'recreate', 'call'] as const;
+
+/** The moments a season offers: at most `max`, in match order, no two on the
+ *  same game or on each other's return game, so every mix of outcomes is
+ *  legal. The best YOUR CALL goes in first, then the best RECREATE, then a
+ *  second YOUR CALL, the rest by rank, so a season leans on the moments that
+ *  can go either way. Read only: planning draws from `|moment` and changes
+ *  nothing. */
+export function planMoments<R, C>(sport: SeasonSport<R, C>, row: R, ctx: C, s: DerivedSeason): Moment[] {
+  const hook = sport.moments;
+  if (!hook || hook.max <= 0) return [];
+  const rng = keyedRng(`${s.key}|moment`);
+  type Cand = MomentSpot & { mode: 'call' | 'recreate'; mirrorMd: number | null };
+  const cands: Cand[] = [];
+  for (const g of s.games) {
+    if (!g.played) continue;
+    for (const spot of hook.spots(row, ctx, s, g, rng)) {
+      const other = otherOutcome(sport, row, ctx, s, spot);
+      /* a moment that can go either way outranks one that only replays the record */
+      if (other) cands.push({ ...spot, weight: spot.weight + CALL_BONUS, mode: 'call', mirrorMd: other.mirrorMd });
+      /* a recorded success with no mirror can still be played again, for stars only */
+      else if (spot.planSuccess && spot.onRecord) cands.push({ ...spot, mode: 'recreate', mirrorMd: null });
+    }
+  }
+  cands.sort((x, y) => y.weight - x.weight || x.md - y.md || x.minute - y.minute);
+  const used = new Set<number>();
+  const picked: Cand[] = [];
+  const free = (c: Cand) => !used.has(c.md) && (c.mirrorMd === null || !used.has(c.mirrorMd));
+  const take = (c: Cand) => { picked.push(c); used.add(c.md); if (c.mirrorMd !== null) used.add(c.mirrorMd); };
+  for (const mode of MIX) {
+    const best = cands.find(c => c.mode === mode && free(c));
+    if (best && picked.length < hook.max) take(best);
+  }
+  for (const c of cands) { if (picked.length >= hook.max) break; if (free(c)) take(c); }
+  picked.sort((x, y) => x.md - y.md || x.minute - y.minute);
+  return picked.map((c, id) => ({ ...c, id }));
+}
+
+/** How one moment went, from the ledger: not in it means the season played as saved. */
+export function momentResult(m: Moment, entries: readonly (readonly number[])[]): { taken: boolean; success: boolean; stars: number; flipped: boolean } {
+  const e = entries.find(x => x[0] === m.md && x[1] === m.id);
+  if (!e) return { taken: false, success: m.planSuccess, stars: 0, flipped: false };
+  const made = e[2] >= 1;
+  /* a recreate never changes the record; a call follows the player */
+  const success = m.mode === 'call' ? made : m.planSuccess;
+  return { taken: true, success, stars: Math.max(0, e[2]), flipped: m.mode === 'call' && made !== m.planSuccess };
+}
+
+/** The season as the player shaped it: every YOUR CALL whose outcome differs
+ *  from the plan is replayed with its mirror, in match order, with no draw.
+ *  Fails closed: if the result disagrees with the saved row in any way, the
+ *  plan itself is returned. */
+export function applyDecisions<R, C>(sport: SeasonSport<R, C>, row: R, ctx: C, plan: DerivedSeason, moments: readonly Moment[], entries: readonly (readonly number[])[]): DerivedSeason {
+  let s = plan;
+  let changed = false;
+  for (const m of [...moments].sort((x, y) => x.md - y.md)) {
+    if (!momentResult(m, entries).flipped) continue;
+    const other = otherOutcome(sport, row, ctx, s, m);
+    if (!other || other.mirrorMd !== m.mirrorMd) return plan;
+    s = other.season;
+    changed = true;
+  }
+  if (!changed) return plan;
+  return finalLine(s) === finalLine(plan) && disagreements(sport, row, ctx, s).length === 0 ? s : plan;
 }

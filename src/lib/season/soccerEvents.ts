@@ -13,7 +13,7 @@
    binding's `check`: the goal events make the score, his goal and assist
    events make his line, the decisive goal sits where the save says, and
    none of his events comes after he went off. Imports only from ./core. */
-import { shuffled, type DerivedGame, type DerivedSeason, type FixedGame, type GameContext, type Rng, type SeasonEvent } from './core';
+import { shuffled, type DerivedGame, type DerivedSeason, type FixedGame, type GameContext, type MomentDelta, type MomentSpot, type Rng, type SeasonEvent } from './core';
 
 /** Minutes in a soccer match (the clock's full time). */
 export const SOCCER_FULL_TIME = 90;
@@ -82,5 +82,155 @@ export function soccerEventDisagreements(s: DerivedSeason, fixed: readonly Fixed
       if (!!ours[f.them]?.mine !== !!f.decisive) out.push(`fixed ${k} #${i + 1} decisive goal`);
     });
   }
+  return out;
+}
+
+/* ─── Round 1047: soccer's moments ───
+
+   Where a soccer game has a moment and how it takes the other outcome. The
+   core (planMoments, otherOutcome) decides which are offered and proves the
+   season still agrees with the save; this file only knows soccer: a finish
+   is his goal or a chance, a pass is his assist or a chance he made, a save
+   or a tackle is a goal against or a stop while he was on the pitch. Every
+   rewrite keeps the events adding up to the score and his line, and keeps
+   his events inside the minutes he played. */
+
+export type SoccerMomentKind = 'finish' | 'pass' | 'save' | 'tackle';
+/** Most goals a side holds after a rewrite (the core's own cap). */
+const SCORE_CAP = 7;
+const HIS_GOALS_CAP = 4;
+const HIS_ASSISTS_CAP = 3;
+
+/** The minutes he was on the pitch, or null when he never was. */
+function pitchWindow(g: DerivedGame): [number, number] | null {
+  if (!g.played) return null;
+  const from = g.onAt ?? 1;
+  const to = g.offAt ? g.offAt - 1 : SOCCER_FULL_TIME;
+  return to >= from ? [from, to] : null;
+}
+
+/** A minute in [from, to] that holds no event yet, or null. */
+function freeMinute(g: DerivedGame, from: number, to: number, rng: Rng): number | null {
+  const taken = new Set(g.events.map(e => e.min));
+  for (let n = 0; n < 12; n += 1) {
+    const m = from + Math.floor(rng() * (to - from + 1));
+    if (!taken.has(m)) return m;
+  }
+  for (let m = to; m >= from; m -= 1) if (!taken.has(m)) return m;
+  return null;
+}
+
+/** 0 for a dead rubber to 1 for a late one in a close derby. */
+export function soccerStakes(g: DerivedGame, minute: number): number {
+  const close = Math.abs(g.us - g.them) <= 1 ? 0.4 : 0;
+  const late = minute >= 75 ? 0.3 : minute >= 60 ? 0.15 : 0;
+  return Math.min(1, close + late + (g.fixedKey ? 0.3 : 0));
+}
+
+/** Every spot of one game: his goals and assists as they stand, one chance
+ *  in his own trade (`primary`), and for a keeper or a defender one stop made
+ *  and one goal against. */
+export function soccerMomentSpots(g: DerivedGame, primary: SoccerMomentKind, keepsSheets: boolean, rng: Rng): MomentSpot[] {
+  const win = pitchWindow(g);
+  if (!win) return [];
+  const [from, to] = win;
+  const out: MomentSpot[] = [];
+  const add = (minute: number, kind: SoccerMomentKind, planSuccess: boolean, delta: MomentDelta, onRecord = planSuccess) => {
+    const noise = rng() * 0.5;
+    if (out.some(s => s.minute === minute && s.kind === kind && s.planSuccess === planSuccess)) return;
+    const stakes = soccerStakes(g, minute);
+    out.push({ md: g.md, minute, kind, planSuccess, onRecord, delta, stakes, weight: (planSuccess ? 2 : 1.2) + stakes * 3 + noise });
+  };
+  const keeper = primary === 'save';
+  if (!keeper) {
+    for (const e of g.events) {
+      if (e.kind === 'goal' && e.mine) add(e.min, 'finish', true, { us: -1, them: 0, line: { goals: -1 } });
+      if (e.kind === 'assist') add(e.min, 'pass', true, { us: -1, them: 0, line: { assists: -1 } });
+    }
+  }
+  if (primary === 'finish' || primary === 'pass') {
+    const m = freeMinute(g, from, to, rng);
+    const room = g.us < SCORE_CAP && (primary === 'finish' ? (g.line.goals ?? 0) < HIS_GOALS_CAP : (g.line.assists ?? 0) < HIS_ASSISTS_CAP);
+    if (m !== null && room) add(m, primary, false, { us: 1, them: 0, line: primary === 'finish' ? { goals: 1 } : { assists: 1 } });
+  } else {
+    const m = freeMinute(g, from, to, rng);
+    /* a stop is on the record only where the game was a shutout */
+    if (m !== null && g.them < SCORE_CAP) add(m, primary, true, { us: 0, them: 1, line: keepsSheets && g.them === 0 ? { cs: -1 } : {} }, g.them === 0);
+    const against = g.events.filter(e => e.kind === 'goal' && e.side === 'them' && e.min >= from && e.min <= to);
+    if (against.length > 0) {
+      const e = against[Math.floor(rng() * against.length)];
+      add(e.min, primary, false, { us: 0, them: -1, line: keepsSheets && g.them === 1 ? { cs: 1 } : {} });
+    }
+  }
+  return out;
+}
+
+const sortEvents = (ev: SeasonEvent[]) => ev.sort((x, y) => x.min - y.min || (RANK[x.kind] ?? 5) - (RANK[y.kind] ?? 5));
+
+/** One soccer game with `delta` played, or null when it cannot take it. The
+ *  shapes it knows: his goal added or taken away, his assist (with the goal
+ *  it made) added or taken away, a goal against added or taken away. At the
+ *  moment's own game `minute` names the event; at the return game it is null
+ *  and a keyed pick is made. `g` is never changed. */
+export function soccerApplyDelta(g: DerivedGame, delta: MomentDelta, minute: number | null, keepsSheets: boolean, rng: Rng): DerivedGame | null {
+  const us = g.us + delta.us;
+  const them = g.them + delta.them;
+  if (us < 0 || them < 0 || us > SCORE_CAP || them > SCORE_CAP) return null;
+  const dGoals = delta.line.goals ?? 0;
+  const dAst = delta.line.assists ?? 0;
+  const dCs = delta.line.cs ?? 0;
+  if (Object.entries(delta.line).some(([k, v]) => v !== 0 && k !== 'goals' && k !== 'assists' && k !== 'cs')) return null;
+  const win = pitchWindow(g);
+  if ((dGoals !== 0 || dAst !== 0 || dCs !== 0) && !win) return null;
+  const ev = g.events.slice();
+  const line = { ...g.line };
+  const pick = <T>(xs: T[]): T | null => (xs.length ? xs[Math.floor(rng() * xs.length)] : null);
+  const drop = (e: SeasonEvent) => { ev.splice(ev.indexOf(e), 1); };
+  const fresh = (): number | null => {
+    if (minute !== null) return minute;
+    return win ? freeMinute(g, win[0], win[1], rng) : freeMinute(g, 1, SOCCER_FULL_TIME, rng);
+  };
+  const at = (e: SeasonEvent) => minute === null || e.min === minute;
+  if (delta.them === 0 && delta.us === 1 && dGoals === 1 && dAst === 0) {
+    if ((line.goals ?? 0) + 1 > HIS_GOALS_CAP) return null;
+    const m = fresh();
+    if (m === null) return null;
+    ev.push({ min: m, kind: 'goal', side: 'us', pts: 1, mine: true });
+    line.goals = (line.goals ?? 0) + 1;
+  } else if (delta.them === 0 && delta.us === -1 && dGoals === -1 && dAst === 0) {
+    const e = pick(ev.filter(x => x.kind === 'goal' && x.mine && at(x)));
+    if (!e || (line.goals ?? 0) < 1) return null;
+    drop(e);
+    line.goals = (line.goals ?? 0) - 1;
+  } else if (delta.them === 0 && delta.us === 1 && dAst === 1 && dGoals === 0) {
+    if ((line.assists ?? 0) + 1 > HIS_ASSISTS_CAP) return null;
+    const m = fresh();
+    if (m === null) return null;
+    ev.push({ min: m, kind: 'goal', side: 'us', pts: 1 }, { min: m, kind: 'assist', side: 'us', mine: true });
+    line.assists = (line.assists ?? 0) + 1;
+  } else if (delta.them === 0 && delta.us === -1 && dAst === -1 && dGoals === 0) {
+    const a = pick(ev.filter(x => x.kind === 'assist' && at(x)));
+    const goal = a ? ev.find(x => x.kind === 'goal' && x.side === 'us' && !x.mine && x.min === a.min) : null;
+    if (!a || !goal || (line.assists ?? 0) < 1) return null;
+    drop(a); drop(goal);
+    line.assists = (line.assists ?? 0) - 1;
+  } else if (delta.us === 0 && delta.them === 1 && dGoals === 0 && dAst === 0) {
+    const m = fresh();
+    if (m === null) return null;
+    ev.push({ min: m, kind: 'goal', side: 'them', pts: 1 });
+  } else if (delta.us === 0 && delta.them === -1 && dGoals === 0 && dAst === 0) {
+    const e = pick(ev.filter(x => x.kind === 'goal' && x.side === 'them' && at(x) && (!win || (x.min >= win[0] && x.min <= win[1]))));
+    if (!e) return null;
+    drop(e);
+  } else return null;
+  /* a clean sheet is the score's, never the delta's word for it */
+  if (keepsSheets && g.played) {
+    const cs = them === 0 ? 1 : 0;
+    if (cs - (g.line.cs ?? 0) !== dCs) return null;
+    line.cs = cs;
+  } else if (dCs !== 0) return null;
+  if ((line.goals ?? 0) + (line.assists ?? 0) > us) return null;
+  const out: DerivedGame = { ...g, us, them, line, events: sortEvents(ev) };
+  if (g.mark) out.mark = them === 0 ? 'shutout' : 'concede';
   return out;
 }
