@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+simMobileChrome: node scripts/simMobileChrome.mjs
+sweep: ENGINES=chromium node scripts/sweepWeight.mjs
+playHomeFold: node scripts/playHomeFold.mjs
