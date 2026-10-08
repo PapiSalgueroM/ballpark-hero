@@ -1,0 +1,31 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerInternationals.test.ts src/lib/clubManagerSlots.test.ts src/lib/gmStaff.test.ts src/test/academyFilters.test.tsx src/test/calendarCurrentDate.test.tsx src/test/clubManagerBracketMoment.test.tsx src/test/clubManagerDealMoment.test.tsx src/test/clubManagerDecisions.test.tsx src/test/clubManagerDeskCues.test.tsx src/test/clubManagerEraLoad.test.tsx src/test/clubManagerEraNationalities.test.ts src/test/clubManagerJobHunt.test.ts src/test/clubManagerManagerFace.test.tsx src/test/clubManagerSave.test.tsx src/test/clubManagerShootoutOrder.test.ts src/test/clubManagerShootoutTile.test.tsx src/test/clubManagerSlots.test.tsx src/test/clubManagerWorldEditor.test.tsx src/test/clubManagerWorldEditorPage.test.tsx src/test/contractPreview.test.tsx src/test/facilitiesPreview.test.tsx src/test/inboxCard.test.tsx src/test/liveSimMotion.test.tsx src/test/managerHotSeatCarryOn.test.ts src/test/managerHotSeatCarryOnCard.test.tsx src/test/managerMatchPlans.test.tsx src/test/managerWorldBrowser.test.tsx src/test/numberFormatting.test.tsx src/test/staffScreen.test.tsx  src/lib/soccerCareerLeague.test.ts src/test/cmWorldIdentity1052.test.ts --testTimeout=300000 --hookTimeout=120000
+bars: node .rc/x/recordBase1052.mjs $RC_OUT
+simClubManager: node scripts/simClubManager.mjs
+simClubManagerClubList: node scripts/simClubManagerClubList.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simNationalities: node scripts/simNationalities.mjs
+simNationalityFlags: node scripts/simNationalityFlags.mjs
+simCmDataOnDemand: node scripts/simCmDataOnDemand.mjs
+simCmInternationals: node scripts/simCmInternationals.mjs
+simJobMarket: node scripts/simJobMarket.mjs
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs
+simClubManagerNewLeagues: node scripts/simClubManagerNewLeagues.mjs
+simCareerClubPool: node scripts/simCareerClubPool.mjs
+simDailyClubPool: node scripts/simDailyClubPool.mjs
+simCareerDerbies: node scripts/simCareerDerbies.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simManagerCareer: node scripts/simManagerCareer.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs
+simBoardAsks: node scripts/simBoardAsks.mjs
+simFreeAgents: node scripts/simFreeAgents.mjs
+simRosterAdjudication: node scripts/simRosterAdjudication.mjs
+simManagerSpec: node scripts/simManagerSpec.mjs
+simCareerEngaged: node scripts/simCareerEngaged.mjs
+simStartingXi: node scripts/simStartingXi.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure,drop4,cupless,shapes

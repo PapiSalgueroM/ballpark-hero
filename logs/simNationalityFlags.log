@@ -1,0 +1,2 @@
+simNationalityFlags
+simNationalityFlags: REFUSING TO RUN. src/pages/SportsBingo.tsx does not carry its Round 453 flag (/<FlagImg name=\{p\.nationality\}[^>]*showLabel/), so the rewrite is not in this tree and there is nothing to measure
