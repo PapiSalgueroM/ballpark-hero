@@ -219,7 +219,10 @@ async function watchAGoal(page, { tapCard, onTick }) {
     if (stage === null) { if (!(await startLive(page))) return null; continue; }
     const now = await minuteOf(page);
     const { goals } = await goalsOfHalf(page);
-    const target = goals.find(g => g.place >= now + 2 && !goals.some(o => o !== g && Math.abs(o.place - g.place) < 2));
+    /* One goal on its own: no other within four minutes either side (a goal two minutes later plays out
+       inside the window sampled here, with its own wind up reading the score the first one left, and one a
+       minute before is still on screen when the sampling starts). */
+    const target = goals.find(g => g.place >= now + 2 && !goals.some(o => o !== g && Math.abs(o.place - g.place) < 4));
     if (!target) { await tap(page, /skip/i, 'skip a half with no goal to watch'); await page.waitForTimeout(700); continue; }
     say(`a goal is coming at ${target.minute}${target.plus ? '+' + target.plus : ''}, the clock is at ${now}`);
     await speedTo(page, '4x');
@@ -243,7 +246,7 @@ async function watchAGoal(page, { tapCard, onTick }) {
         samples.push({ tapped: true, t: await page.evaluate(() => performance.now()) });
       }
       const last = samples.filter(s => !s.tapped).slice(-1)[0];
-      if (last && last.minute !== null && last.minute >= target.place + 3) break;
+      if (last && last.minute !== null && last.minute >= target.place + 2) break;
     }
     await stopSampler(page);
     return { target, samples, tapped };
