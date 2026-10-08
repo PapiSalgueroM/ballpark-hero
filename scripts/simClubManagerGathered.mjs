@@ -33,7 +33,15 @@
    C. PEOPLE (hard, the data guardian's smell list). Every age is on two
       hosts and between 15 and 45. Every shipped nationality has two hosts,
       has a FlagImg code and is what nationalityOf answers; a null answers
-      null. No keeper outfield and no outfielder in goal. No name of a
+      null. No keeper outfield and no outfielder in goal. Every position is
+      one a host states: the detailed position the research row carries,
+      and a group's default only for a man with no detailed position the
+      game knows; the POSITION_THIN export is exactly the men whose
+      position is not inside the group two hosts agree on. (Added at the
+      close of Release AO: ten men shipped their group's default, two wide
+      men as CB and eight wingers as CM, positions none of their three hosts
+      states, and the old check only asked that a position sat inside the
+      group, which a default always does.) No name of a
       generated squad is in any other squad of the world, in the free agent
       pool or twice inside the league, by exact spelling and under the
       engine's own name fold (a folded hit needs the research row's namesake
@@ -79,6 +87,8 @@
      noflag    one generated nationality given a spelling with no code   C
      twice     a baked man's name given to a generated man               C
      keeper    one keeper's position set to ST                           C
+     defaulted one POSITION_THIN man given his group's default again     C
+     unmarked  one man dropped from the POSITION_THIN export             C
      trap      one engine name replaced by a trap spelling               D
      nojoin    one generated club taken out of the joined world          E
      genlist   the league's entry taken out of CM_GENERATED_LEAGUES      E
@@ -109,8 +119,8 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
-import { ratingOf, gbpM, usdOfEur, FLOOR_USD } from './lib/cmValueCurve.mjs';
-import { GROUP_OF, foldName } from './lib/gatheredLeague.mjs';
+import { POS_MAP, ratingOf, gbpM, usdOfEur, FLOOR_USD } from './lib/cmValueCurve.mjs';
+import { GROUP_OF, GROUP_DEFAULT, foldName } from './lib/gatheredLeague.mjs';
 import { GATHERED_LEAGUES } from './lib/gatheredLeagues.mjs';
 import { generateGathered } from './genClubManagerGathered.mjs';
 import { DB_TO_ENGINE, DB_TO_ENGINE_GATHERED } from './lib/dbClubNames.mjs';
@@ -118,7 +128,7 @@ import { DB_TO_ENGINE, DB_TO_ENGINE_GATHERED } from './lib/dbClubNames.mjs';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_FWD = ROOT.replaceAll('\\', '/');
 const CONTROL = process.env.GATHERED_CONTROL || '';
-const CONTROLS = ['invented', 'onehost', 'wiki', 'stale', 'unlisted', 'offcurve', 'samehost', 'noflag', 'twice', 'keeper', 'trap', 'nojoin', 'genlist', 'oldsave'];
+const CONTROLS = ['invented', 'onehost', 'wiki', 'stale', 'unlisted', 'offcurve', 'samehost', 'noflag', 'twice', 'keeper', 'defaulted', 'unmarked', 'trap', 'nojoin', 'genlist', 'oldsave'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`GATHERED_CONTROL=${CONTROL} is not one of ${CONTROLS.join(', ')}`); process.exit(1); }
 
 let failures = 0;
@@ -189,6 +199,7 @@ function loadLeague(row) {
   const gen = {
     rosters: clone(mod[`CM_${row.prefix}_ROSTERS`]), nationalities: clone(mod[`CM_${row.prefix}_NATIONALITIES`]),
     noValue: [...mod[`CM_${row.prefix}_NO_VALUE`]], partial: [...mod[`CM_${row.prefix}_PARTIAL`]],
+    positionThin: [...(mod[`CM_${row.prefix}_POSITION_THIN`] ?? [])],
     supersedes: clone(mod[`CM_${row.prefix}_SUPERSEDES`]), meta: clone(mod[`CM_${row.prefix}_META`]),
   };
   const members = clone(Object.fromEntries(row.leagueIds.map(id => [id, cm.REAL_LEAGUES.find(l => l.id === id)?.clubs ?? []])));
@@ -225,6 +236,15 @@ if (CONTROL) {
     man.name = baked;
   }
   if (CONTROL === 'keeper') { const k = list.find(p => p.p === 'GK'); if (!k) refuse(`${club.engine} has no keeper`); k.p = 'ST'; }
+  if (CONTROL === 'defaulted') {
+    /* What shipped before the close of Release AO, on one man: his group's default in place of the position a host prints. */
+    const [n, at] = (L.gen.positionThin[0] ?? '').split('|');
+    const man = (L.gen.rosters[at] ?? []).find(p => p.n === n);
+    const r = L.research.clubs.find(c => c.engine === at)?.rows.find(x => x.name === n);
+    if (!man || !r || !POS_MAP[r.tmPosition] || man.p === GROUP_DEFAULT[r.group]) refuse('no listed man with a stated position that is not his group default');
+    man.p = GROUP_DEFAULT[r.group];
+  }
+  if (CONTROL === 'unmarked') { if (!L.gen.positionThin.length) refuse('the POSITION_THIN export is empty'); L.gen.positionThin.shift(); }
   if (CONTROL === 'trap') { const id = L.row.leagueIds[0]; if (!L.members[id].length || L.members[id].includes(TRAPS[0])) refuse('no league member to respell'); L.members[id][L.members[id].length - 1] = TRAPS[0]; }
 }
 
@@ -319,6 +339,7 @@ for (const L of leagues) {
   for (const [club, list] of Object.entries(cm.CM_WORLD_ROSTERS)) if (!engines.includes(club)) for (const p of list) elsewhereFold.set(engineFold(p.n), { n: p.n, where: club });
   for (const n of freeAgents) elsewhereFold.set(engineFold(n), { n, where: 'the free agent pool' });
   let flagged = 0;
+  const wantThin = [];
   for (const c of research.clubs) for (const r of c.rows) {
     const p = (gen.rosters[c.engine] ?? []).find(x => x.n === r.name);
     if (!p) continue;
@@ -331,13 +352,20 @@ for (const L of leagues) {
       else if (!cm.FLAG_CODES[nat]) fail(`${r.name}: ${nat} has no FlagImg code, so it would render as bare text`);
       else if (cm.nationalityOf(undefined, r.name) !== nat) fail(`${r.name}: nationalityOf answers ${cm.nationalityOf(undefined, r.name)}, the research says ${nat}`);
     } else if (nat !== null || cm.nationalityOf(undefined, r.name) !== null) fail(`${r.name} has no two host nationality and the game answers ${nat ?? cm.nationalityOf(undefined, r.name)}`);
-    if (GROUP_OF[p.p] !== r.group) fail(`${r.name} (${c.engine}) plays ${p.p}, outside his two host group ${r.group}`);
+    /* A position is one a host states. The research row's detailed position ships even where two hosts put the man
+     * on another line (a default would be a position nobody states); he is then in POSITION_THIN. A keeper is a
+     * keeper on every count, so the keeper line never bends to one host. */
+    const stated = POS_MAP[r.tmPosition];
+    if (!stated || GROUP_OF[stated] !== r.group) wantThin.push(`${r.name}|${c.engine}`);
+    if ((p.p === 'GK') !== (r.group === 'GK')) fail(`${r.name} (${c.engine}) plays ${p.p}, and two hosts put him in ${r.group}: a keeper outfield or an outfielder in goal`);
+    else if (p.p !== (stated ?? GROUP_DEFAULT[r.group])) fail(`${r.name} (${c.engine}) plays ${p.p}, which is not the position his research row carries (${r.tmPosition}: ${stated ?? `none the game knows, so ${GROUP_DEFAULT[r.group]}`})`);
     for (const [club, list] of Object.entries(cm.CM_WORLD_ROSTERS)) if (club !== c.engine && !engines.includes(club) && list.some(x => x.n === p.n)) fail(`${p.n} (${c.engine}) is also in ${club}'s squad`);
     if (freeAgents.has(p.n)) fail(`${p.n} (${c.engine}) is also in the free agent pool`);
     if ((genAt.get(p.n) ?? []).length > 1) fail(`${p.n} is in two squads of the league`);
     const hit = elsewhereFold.get(engineFold(p.n));
     if (hit && hit.n !== p.n && r.foldedNamesake?.of !== hit.n) fail(`${p.n} (${c.engine}) folds to the same name as "${hit.n}" (${hit.where}) and the research row carries no namesake verdict`);
   }
+  if (JSON.stringify([...gen.positionThin].sort()) !== JSON.stringify([...wantThin].sort())) fail(`${row.id}: the POSITION_THIN export is not exactly the men whose position is outside their two host group (${gen.positionThin.length} listed, ${wantThin.length} expected)`);
   for (const [n, nat] of Object.entries(gen.nationalities)) if (!cm.FLAG_CODES[nat]) fail(`${n}: the generated nationality ${nat} has no FlagImg code`);
   const wantPartial = research.clubs.filter(c => c.rows.length < 8 || c.rows.filter(r => !(r.valueEur > 0)).length * 2 > c.rows.length).map(c => c.engine).sort();
   if (JSON.stringify([...gen.partial].sort()) !== JSON.stringify(wantPartial)) fail(`${row.id}: the PARTIAL export is ${JSON.stringify(gen.partial)}, the rule says ${JSON.stringify(wantPartial)}`);
@@ -446,7 +474,7 @@ section = 'G';
   }
 }
 
-const OWN = { invented: 'A', onehost: 'A', wiki: 'A', stale: 'A', unlisted: 'A', offcurve: 'B', samehost: 'C', noflag: 'C', twice: 'C', keeper: 'C', trap: 'D', nojoin: 'E', genlist: 'E', oldsave: 'G' };
+const OWN = { invented: 'A', onehost: 'A', wiki: 'A', stale: 'A', unlisted: 'A', offcurve: 'B', samehost: 'C', noflag: 'C', twice: 'C', keeper: 'C', defaulted: 'C', unmarked: 'C', trap: 'D', nojoin: 'E', genlist: 'E', oldsave: 'G' };
 const sections = Object.entries(bySection).map(([k, v]) => `${k} ${v}`).join(', ');
 if (CONTROL) {
   const own = bySection[OWN[CONTROL]] || 0;

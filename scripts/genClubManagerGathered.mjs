@@ -16,8 +16,13 @@
  * - a man's rating and value come off the shared curve
  *   (scripts/lib/cmValueCurve.mjs); a man with no value is rated at the
  *   curve's floor and listed in the NO_VALUE export, never given a value;
- * - his position is his detailed position where it sits inside the group two
- *   hosts agree on, else that group's default;
+ * - his position is the detailed position a host prints for him. Where that
+ *   sits outside the group two hosts agree on it still ships, because the
+ *   group's default would be a position no host states, and he is listed in
+ *   the POSITION_THIN export; only a man with no detailed position the game
+ *   knows gets his group's default, and he is listed there too (Release AO:
+ *   until then ten men shipped a default, two wide men as centre backs and
+ *   eight wingers as central midfielders);
  * - his age needs two hosts and must be 14 to 45; his nationality ships only
  *   with two hosts;
  * - a club that ships fewer than 8 men, or where more than half have no
@@ -73,7 +78,7 @@ export function generateGathered(id, researchOverride) {
   const built = buildGatheredLeague({
     clubs, supersedes: {}, bakedText: readText('src/data/clubManagerRosters.ts'), nowBlockText,
     options: {
-      receipts: 'the research rows', minMen: 8, twoSquadSources: true, foldedCheck: true,
+      receipts: 'the research rows', minMen: 8, twoSquadSources: true, foldedCheck: true, statedPosition: true,
       freeAgentText: readText('src/data/clubManagerFreeAgents2026.ts'), otherGeneratedTexts: others,
     },
   });
@@ -96,13 +101,17 @@ export function generateGathered(id, researchOverride) {
       partial: `/** Clubs that ship fewer than 8 real players, or where more than half of them have no market value. */`,
       noValue: `/** Players with no value on their club's page, as "name|club": each one is
  *  rated at the curve's floor, never given an invented value. */`,
+      positionThin: `/** Players whose position is not inside the group two squad lists agree on,
+ *  as "name|club". Each ships the detailed position the one list that prints
+ *  one gives him, against the broader line of the other two, or his group's
+ *  default where no list prints a detailed position the game knows. */`,
       supersedes: `/** Empty on purpose: this round moves nobody out of an existing squad, so a
  *  man the game already holds elsewhere is left out of this file instead. */`,
       nationalities: `/** Nationality where two hosts agree; a name missing here is unknown and
  *  shows no flag. */`,
     },
     meta: { label: row.label, read: reads[0], readTo: reads[reads.length - 1], players: total, clubs: research.clubs.length },
-    rosters: built.rosters, partial: built.partial, noValue: built.noValue, supersedes: {}, nationalities: built.nationalities,
+    rosters: built.rosters, partial: built.partial, noValue: built.noValue, positionThin: built.positionThin, supersedes: {}, nationalities: built.nationalities,
   });
   return { errors: [], row, research, built, text };
 }
@@ -127,7 +136,7 @@ if (isMain) {
     fs.writeFileSync(outPath, g.text);
     const { built } = g;
     const noNat = Object.values(built.rosters).flat().filter(p => !built.nationalities[p.n]).map(p => p.n);
-    console.log(`Wrote ${g.row.out}: ${built.stats.total} players, ${Object.keys(built.rosters).length} clubs, ${built.noValue.length} with no value, ${Object.keys(built.nationalities).length} nationalities, ${built.stats.groupWon} positions set by the agreed group, partial ${JSON.stringify(built.partial)} (sha256 ${sha}, LF)`);
+    console.log(`Wrote ${g.row.out}: ${built.stats.total} players, ${Object.keys(built.rosters).length} clubs, ${built.noValue.length} with no value, ${Object.keys(built.nationalities).length} nationalities, ${built.positionThin.length} positions outside the agreed group (${built.stats.groupWon} of them a group default), partial ${JSON.stringify(built.partial)} (sha256 ${sha}, LF)`);
     console.log(`No nationality two hosts agree on (no flag): ${noNat.length ? noNat.join(', ') : 'nobody'}`);
     for (const club of Object.keys(built.rosters).sort()) {
       const l = built.rosters[club];

@@ -28,6 +28,23 @@ export const CM_RUSSIA_NO_VALUE: string[] = [
   'Vladislav Kalinichev|Fakel Voronezh',
 ];
 
+/** Players whose position is not inside the group two squad lists agree on,
+ *  as "name|club". Each ships the detailed position the one list that prints
+ *  one gives him, against the broader line of the other two, or his group's
+ *  default where no list prints a detailed position the game knows. */
+export const CM_RUSSIA_POSITION_THIN: string[] = [
+  'Nikita Massalyga|Spartak Moscow',
+  'Danil Krugovoy|CSKA Moscow',
+  'Daniil Kuznetsov|Rubin Kazan',
+  'Dmitriy Kabutov|Rubin Kazan',
+  'Matvey Ivanov|Rubin Kazan',
+  'Denis Titov|Rostov',
+  'Nikita Saltykov|Krylia Sovetov',
+  'Martin Kramaric|Krylia Sovetov',
+  'Vladimir Khubulov|Dynamo Makhachkala',
+  'Ilnur Alshin|Fakel Voronezh',
+];
+
 /** Empty on purpose: this round moves nobody out of an existing squad, so a
  *  man the game already holds elsewhere is left out of this file instead. */
 export const CM_RUSSIA_SUPERSEDES: Record<string, string> = {};
@@ -124,7 +141,7 @@ export const CM_RUSSIA_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Dmitriy Barinov', p: 'CDM', a: 30, v: 5.67, r: 75 },
     { n: 'Kirill Danilov', p: 'CB', a: 19, v: 5.67, r: 75 },
     { n: 'Luciano Gondou', p: 'ST', a: 25, v: 5.67, r: 75 },
-    { n: 'Danil Krugovoy', p: 'CB', a: 28, v: 4.86, r: 74 },
+    { n: 'Danil Krugovoy', p: 'LM', a: 28, v: 4.86, r: 74 },
     { n: 'Matvey Lukin', p: 'CB', a: 22, v: 3.24, r: 72 },
     { n: 'Moisés', p: 'LB', a: 31, v: 3.24, r: 72 },
     { n: 'Milan Gajic', p: 'RB', a: 30, v: 2.84, r: 71 },
@@ -165,7 +182,7 @@ export const CM_RUSSIA_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Abdulpasha Dzhabrailov', p: 'CDM', a: 21, v: 0.32, r: 59 },
     { n: 'Aleksandr Sandrachuk', p: 'RB', a: 24, v: 0.32, r: 59 },
     { n: 'Makhmud Makhamadzhonov', p: 'LB', a: 23, v: 0.32, r: 59 },
-    { n: 'Vladimir Khubulov', p: 'CM', a: 25, v: 0.32, r: 59 },
+    { n: 'Vladimir Khubulov', p: 'LW', a: 25, v: 0.32, r: 59 },
     { n: 'Dmitriy Aleksandrov', p: 'CDM', a: 20, v: 0.28, r: 59 },
     { n: 'Kirill Zinovich', p: 'CAM', a: 23, v: 0.28, r: 59 },
     { n: 'Nikita Karabashev', p: 'GK', a: 24, v: 0.24, r: 58 },
@@ -216,7 +233,7 @@ export const CM_RUSSIA_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Kirill Simonov', p: 'CM', a: 20, v: 0.36, r: 60 },
     { n: 'Ravil Netfullin', p: 'CDM', a: 33, v: 0.36, r: 60 },
     { n: 'Anton Kovalev', p: 'RM', a: 26, v: 0.32, r: 59 },
-    { n: 'Ilnur Alshin', p: 'CM', a: 33, v: 0.32, r: 59 },
+    { n: 'Ilnur Alshin', p: 'LW', a: 33, v: 0.32, r: 59 },
     { n: 'Vyacheslav Dorovskikh', p: 'GK', a: 23, v: 0.14, r: 55 },
     { n: 'Vladislav Kalinichev', p: 'GK', a: 21, v: 0.04, r: 48 },
   ],
@@ -249,7 +266,7 @@ export const CM_RUSSIA_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Ilzat Akhmetov', p: 'CAM', a: 28, v: 1.22, r: 67 },
     { n: 'Mihajlo Banjac', p: 'CM', a: 26, v: 1.22, r: 67 },
     { n: 'Nikita Chernov', p: 'CB', a: 30, v: 1.22, r: 67 },
-    { n: 'Nikita Saltykov', p: 'CM', a: 22, v: 1.22, r: 67 },
+    { n: 'Nikita Saltykov', p: 'LW', a: 22, v: 1.22, r: 67 },
     { n: 'Denis Makarov', p: 'RW', a: 28, v: 0.97, r: 65 },
     { n: 'Islam Chesnokov', p: 'RW', a: 26, v: 0.97, r: 65 },
     { n: 'Kirill Pechenin', p: 'LB', a: 29, v: 0.97, r: 65 },
@@ -257,7 +274,7 @@ export const CM_RUSSIA_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Nikolay Rasskazov', p: 'RB', a: 28, v: 0.97, r: 65 },
     { n: 'Dominik Oroz', p: 'CB', a: 25, v: 0.81, r: 64 },
     { n: 'Thomas Galdames', p: 'LB', a: 27, v: 0.81, r: 64 },
-    { n: 'Martin Kramaric', p: 'CM', a: 28, v: 0.73, r: 64 },
+    { n: 'Martin Kramaric', p: 'LW', a: 28, v: 0.73, r: 64 },
     { n: 'Ivan Lepskiy', p: 'CB', a: 21, v: 0.65, r: 63 },
     { n: 'Nikita Kokarev', p: 'GK', a: 23, v: 0.65, r: 63 },
     { n: 'Sergey Bozhin', p: 'CB', a: 32, v: 0.65, r: 63 },
@@ -388,7 +405,7 @@ export const CM_RUSSIA_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Anton Shamonin', p: 'ST', a: 21, v: 0.28, r: 59 },
     { n: 'Nikita Babakin', p: 'CB', a: 20, v: 0.24, r: 58 },
     { n: 'Daniil Golikov', p: 'GK', a: 22, v: 0.2, r: 57 },
-    { n: 'Denis Titov', p: 'CM', a: 19, v: 0.2, r: 57 },
+    { n: 'Denis Titov', p: 'LW', a: 19, v: 0.2, r: 57 },
     { n: 'Ilya Zhbanov', p: 'LM', a: 22, v: 0.2, r: 57 },
     { n: 'Karim Madrakhimov', p: 'RW', a: 18, v: 0.2, r: 57 },
     { n: 'Ibraheem Mahfus Ajasa', p: 'LW', a: 20, v: 0.12, r: 54 },
@@ -416,10 +433,10 @@ export const CM_RUSSIA_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Konstantin Nizhegorodov', p: 'CB', a: 24, v: 0.57, r: 62 },
     { n: 'Daniil Motorin', p: 'ST', a: 22, v: 0.49, r: 62 },
     { n: 'Maksim Ignatjev', p: 'LB', a: 26, v: 0.49, r: 62 },
-    { n: 'Daniil Kuznetsov', p: 'CM', a: 23, v: 0.41, r: 61 },
-    { n: 'Dmitriy Kabutov', p: 'CB', a: 34, v: 0.32, r: 59 },
+    { n: 'Daniil Kuznetsov', p: 'RW', a: 23, v: 0.41, r: 61 },
+    { n: 'Dmitriy Kabutov', p: 'RM', a: 34, v: 0.32, r: 59 },
     { n: 'Artur Nigmatullin', p: 'GK', a: 35, v: 0.24, r: 58 },
-    { n: 'Matvey Ivanov', p: 'CM', a: 19, v: 0.24, r: 58 },
+    { n: 'Matvey Ivanov', p: 'LW', a: 19, v: 0.24, r: 58 },
     { n: 'Nikita Korets', p: 'GK', a: 21, v: 0.16, r: 55 },
   ],
   'Spartak Moscow': [
@@ -440,7 +457,7 @@ export const CM_RUSSIA_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Vladislav Saus', p: 'RM', a: 23, v: 1.62, r: 68 },
     { n: 'Ilya Pomazun', p: 'GK', a: 30, v: 0.81, r: 64 },
     { n: 'Daniil Zorin', p: 'CAM', a: 22, v: 0.57, r: 62 },
-    { n: 'Nikita Massalyga', p: 'CM', a: 18, v: 0.32, r: 59 },
+    { n: 'Nikita Massalyga', p: 'RW', a: 18, v: 0.32, r: 59 },
     { n: 'Pavel Polekh', p: 'LW', a: 16, v: 0.2, r: 57 },
     { n: 'Ivan Sorokin', p: 'CM', a: 18, v: 0.16, r: 55 },
     { n: 'Aleksandr Dovbnya', p: 'GK', a: 39, v: 0.04, r: 48 },

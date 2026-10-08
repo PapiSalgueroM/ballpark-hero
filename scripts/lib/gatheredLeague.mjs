@@ -7,9 +7,9 @@
  * file reads, no network, nothing evaluated at import.
  *
  *   buildGatheredLeague({ clubs, supersedes, bakedText, nowBlockText, options })
- *     -> { rosters, partial, noValue, nationalities, stats, errors }
+ *     -> { rosters, partial, noValue, positionThin, nationalities, stats, errors }
  *   renderGatheredFile({ prefix, header, docs, meta, rosters, partial,
- *                        noValue, supersedes, nationalities })
+ *                        noValue, positionThin?, supersedes, nationalities })
  *     -> the text of src/data/clubManager<League>.ts
  *
  * `clubs` is the caller's normalised input, one entry a club:
@@ -35,6 +35,13 @@
  *                       off, lower case): a folded hit that is not an exact
  *                       hit fails closed unless the row carries a
  *                       foldedNamesake verdict of 'namesake' naming it
+ *   statedPosition      (Release AO) a man whose detailed position sits
+ *                       outside the group two hosts agree on ships THAT
+ *                       position, the one a host prints for him, and never
+ *                       the group's default, which no host states; a man with
+ *                       no detailed position the game knows still ships the
+ *                       default. Both are returned in `positionThin` and
+ *                       written as the POSITION_THIN export, as "name|club"
  */
 import { POS_MAP, ratingOf, gbpM, usdOfEur, FLOOR_USD } from './cmValueCurve.mjs';
 
@@ -97,6 +104,7 @@ export function buildGatheredLeague({ clubs, supersedes = {}, bakedText, nowBloc
   const rosters = {};
   const partial = [];
   const noValue = [];
+  const positionThin = [];
   const nationalities = {};
   let groupWon = 0;
   let skipped = 0;
@@ -118,7 +126,15 @@ export function buildGatheredLeague({ clubs, supersedes = {}, bakedText, nowBloc
       if (!Number.isInteger(row.age) || row.age < 14 || row.age > 45) { errors.push(`${row.name}: age ${row.age} is not two sourced or not plausible`); continue; }
       if ((row.ageHosts ?? []).length < 2) { errors.push(`${row.name}: age on ${(row.ageHosts ?? []).length} host(s)`); continue; }
       let p = POS_MAP[row.tmPosition];
-      if (!p || GROUP_OF[p] !== row.group) { p = GROUP_DEFAULT[row.group]; groupWon += 1; }
+      if (!p || GROUP_OF[p] !== row.group) {
+        /* Release AO: the Russian file shipped two wide men as CB and eight
+           wingers as CM this way, a detailed position none of their three
+           hosts states. With statedPosition on, the position a host prints
+           ships and the row is marked; the default is left for the man no
+           host gives a detailed position, and he is marked too. */
+        if (options.statedPosition) positionThin.push(`${row.name}|${engine}`);
+        if (!p || !options.statedPosition) { p = GROUP_DEFAULT[row.group]; groupWon += 1; }
+      }
       let usd;
       if (Number.isFinite(row.valueEur) && row.valueEur > 0) usd = usdOfEur(row.valueEur);
       else { usd = FLOOR_USD; noValue.push(`${row.name}|${engine}`); }
@@ -199,7 +215,7 @@ export function buildGatheredLeague({ clubs, supersedes = {}, bakedText, nowBloc
   }
 
   const total = Object.values(rosters).reduce((s, l) => s + l.length, 0);
-  return { rosters, partial, noValue, nationalities, stats: { total, groupWon, skipped }, errors };
+  return { rosters, partial, noValue, positionThin, nationalities, stats: { total, groupWon, skipped }, errors };
 }
 
 const esc = s => s.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
@@ -207,9 +223,16 @@ const esc = s => s.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
 /** The file text. `header` is the leading comment and `docs` the four doc
  *  comments, word for word from the caller; `meta` is written key by key in
  *  the caller's order (a string quoted, a number bare). */
-export function renderGatheredFile({ prefix, header, docs, meta, rosters, partial, noValue, supersedes, nationalities }) {
+export function renderGatheredFile({ prefix, header, docs, meta, rosters, partial, noValue, positionThin, supersedes, nationalities }) {
   const clubs = Object.keys(rosters).sort();
   const metaLines = Object.entries(meta).map(([k, v]) => `  ${k}: ${typeof v === 'number' ? v : `'${esc(String(v))}'`},`).join('\n');
+  /* Written only for a caller that passes the list, so the A-League file, whose caller does not, stays byte identical. */
+  const thinBlock = positionThin === undefined ? '' : `${docs.positionThin}
+export const CM_${prefix}_POSITION_THIN: string[] = [
+${positionThin.map(s => `  '${esc(s)}',`).join('\n')}
+];
+
+`;
   let out = `${header}
 import type { BakedPlayer } from '@/data/clubManagerRosters';
 
@@ -225,7 +248,7 @@ export const CM_${prefix}_NO_VALUE: string[] = [
 ${noValue.map(s => `  '${esc(s)}',`).join('\n')}
 ];
 
-${docs.supersedes}
+${thinBlock}${docs.supersedes}
 export const CM_${prefix}_SUPERSEDES: Record<string, string> = ${JSON.stringify(supersedes)};
 
 export const CM_${prefix}_ROSTERS: Record<string, BakedPlayer[]> = {
