@@ -1,0 +1,6 @@
+rec-a exit=0 2s |    Duration  2.45s (transform 2.25s, setup 55ms, collect 43ms, tests 1.63s, environment 307ms, prepare 178ms)
+rec-b exit=0 2s | TWO-RECORDINGS-IDENTICAL
+plain exit=0 2s |    Duration  2.41s (transform 2.28s, setup 51ms, collect 42ms, tests 1.65s, environment 291ms, prepare 120ms)
+control-rating exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmWorldIdentity1052.test.ts,title=src/test/cmWorldIdentity1052.test.ts > Round 1052%3A the world befor
+oldsave exit=0 0s | {"clubs":438,"leagues":26,"nations":20,"men":4710,"nationsAmongMen":127,"save":{"club":"Sevilla","season":1,"week":48,"leagueWeeksLeft":4,"bytes":135548,"worldLeagues":25
+oldsave-b exit=0 0s | TWO-SAVES-IDENTICAL
