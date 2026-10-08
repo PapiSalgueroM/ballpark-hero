@@ -156,13 +156,17 @@ export const storageIsMemory: boolean = local.trouble !== null;
  * not read back would be worse than one that was skipped.
  */
 export function safeSetItem(key: string, value: string): boolean {
+  /* The bare global on purpose, not window.localStorage: it is the same thing
+     in a browser, and it is what the line this replaced said, so a harness
+     that runs a hook under node with its own localStorage still sees the
+     write. */
   /* The control again: the write as it was before this round, guard and all gone. */
   if (raw) {
-    window.localStorage.setItem(key, value);
+    localStorage.setItem(key, value);
     return true;
   }
   try {
-    window.localStorage.setItem(key, value);
+    localStorage.setItem(key, value);
     return true;
   } catch {
     return false;
