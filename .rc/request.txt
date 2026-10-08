@@ -1,0 +1,20 @@
+world0: SEEDSET=0 node scripts/simCareerLeagueWorld.mjs
+world1: SEEDSET=1 node scripts/simCareerLeagueWorld.mjs
+world2: SEEDSET=2 node scripts/simCareerLeagueWorld.mjs
+ctl-scotrow: SIM_LEAGUE_WORLD_CONTROL=scotrow node scripts/simCareerLeagueWorld.mjs
+ctl-rankfive: SIM_LEAGUE_WORLD_CONTROL=rankfive node scripts/simCareerLeagueWorld.mjs
+ctl-flatband: SIM_LEAGUE_WORLD_CONTROL=flatband node scripts/simCareerLeagueWorld.mjs
+ctl-rewrite: SIM_LEAGUE_WORLD_CONTROL=rewrite node scripts/simCareerLeagueWorld.mjs
+ctl-nocanon: SIM_LEAGUE_WORLD_CONTROL=nocanon node scripts/simCareerLeagueWorld.mjs
+ctl-nosize: CAREERS=60 SIM_LEAGUE_WORLD_CONTROL=nosize node scripts/simCareerLeagueWorld.mjs
+ctl-nocadence: CAREERS=60 SIM_LEAGUE_WORLD_CONTROL=nocadence node scripts/simCareerLeagueWorld.mjs
+ctl-keyshift: CAREERS=60 SIM_LEAGUE_WORLD_CONTROL=keyshift node scripts/simCareerLeagueWorld.mjs
+lfrec1: node scripts/simCareerLeagueFinish.mjs --record
+lfrec2: node scripts/simCareerLeagueFinish.mjs --record
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+simCareerDerbies: node scripts/simCareerDerbies.mjs
+simSeasonCentreTable: node scripts/simSeasonCentreTable.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+genLeagueSeasons: node scripts/genCareerLeagueSeasons.mjs --check
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
