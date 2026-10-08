@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+n-swap: CM_NEW_CONTROL=swap node scripts/simClubManagerNewLeagues.mjs
+simClubManagerNewLeagues: node scripts/simClubManagerNewLeagues.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+walk: SWEEP_BASE=http://localhost:4173 node scripts/playClubManagerNewCountries.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
