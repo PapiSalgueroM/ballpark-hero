@@ -413,7 +413,16 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     persist(c, 'season', tq);
   };
 
+  /* Release AN: the career the last press of Play left a played season on,
+     for the Week by week entry beside Play. The entry reads the season back
+     from the save, and a browser whose storage is full refused that write and
+     gave it nothing to open. This is the very object the save was asked to
+     keep. Null after a press that played no season (a talk, the market, a
+     banned year). */
+  const playedRef = useRef<CareerState | null>(null);
+
   const playSeason = () => {
+    playedRef.current = null;
     if (!career || teamQuality == null || practiceOpen) return;
     /* Round 195: a played season counts as playing TODAY, the Round 159
        soccer rule reaching the American careers. Unscored on purpose: the
@@ -485,6 +494,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     /* Round 182: every season starts with a camp, and camps have losers. */
     const campNote = sport.campBattle(c, teamQuality, Math.random);
     const { line, notes } = sport.simSeason(c, teamQuality, Math.random);
+    playedRef.current = c;
     const progressNotes = sport.progress(c, Math.random);
     /* Round 469: the paper writes the season up, position aware, and the
        lines stay on the save so the News screen survives a reload. */
@@ -1392,7 +1402,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
           >
             <Dumbbell className="h-4 w-4" /> Play the {career.year} season
           </button>
-          <UsSeasonCentreEntry sport={sport} career={career} busy={practiceOpen} onPlay={playSeason} />
+          <UsSeasonCentreEntry sport={sport} career={career} busy={practiceOpen} onPlay={playSeason} played={() => playedRef.current} />
           <p className="mt-2 text-xs text-muted-foreground">
             Career so far: {sport.careerSoFar(career)}
           </p>
