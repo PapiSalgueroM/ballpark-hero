@@ -1,0 +1,12 @@
+#!build
+#!playwright
+#!serial
+# AN2 decision 4: the other lane's remote only drivers, once each, on the merged tree. Not this integration's to repair.
+goalflight: bash .rc/x/goalflight.sh
+homenative: bash .rc/x/homenative.sh
+sale1083: bash .rc/x/native.sh tycoon-sale-review-artifacts scripts/playTycoonSaleReview1083.mjs --prefetch-fonts-only xvfb
+boxing1086: bash .rc/x/native.sh boxing-show-forecast-artifacts scripts/playBoxingShowForecast1086.mjs --prefetch-fonts-only plain
+offer1082: bash .rc/x/offer1082.sh
+hub1089: bash .rc/x/hub1089.sh
+us-throttle: bash .rc/x/uspatched.sh throttle throttle
+uscareer1084: bash .rc/x/native.sh us-career-save-recovery-artifacts scripts/qa/usCareerSaveRecovery1084.mjs --prefetch-fonts-only xvfb
