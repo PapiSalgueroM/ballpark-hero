@@ -1,0 +1,6 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simRevealScroll exit=0 203s | Green. 54 presses measured, nothing dragged the page down on content that was already readable, no panel lost its top, and 4 presses proved the feature still does its job
+fit-clean exit=0 57s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at four sizes, nothing moves the page, the reload, Back.
+fit-bar exit=1 46s | playLiveMatchFit: control bar turned section 3 red and left sections 1, 2 and 4 green, as it must.
+fit-flash exit=0 91s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at four sizes, nothing moves the page, the reload, Back.
+fit-reducedhold exit=0 95s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at four sizes, nothing moves the page, the reload, Back.

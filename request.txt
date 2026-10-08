@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+#!serial
+simRevealScroll: node scripts/simRevealScroll.mjs
+fit-clean: node scripts/playLiveMatchFit.mjs
+fit-bar: LIVE_FIT_CONTROL=bar node scripts/playLiveMatchFit.mjs
+fit-flash: node .rc/x/rv-mutate.mjs flash && npm run build > $RC_OUT/build-flash.txt 2>&1 && node scripts/playLiveMatchFit.mjs; rc=$?; git checkout -- src; exit $rc
+fit-reducedhold: node .rc/x/rv-mutate.mjs reducedhold && npm run build > $RC_OUT/build-rh.txt 2>&1 && node scripts/playLiveMatchFit.mjs; rc=$?; git checkout -- src; exit $rc
