@@ -1,0 +1,5 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+appeal exit=1 4s | Node.js v24.21.0
+shootout exit=0 11s | simCmShootoutOrder: all sections passed
+rules exit=0 26s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+nolive exit=1 125s | playTranslatedPage: 447 checks, 72 failed (control "nolive", red on purpose)
