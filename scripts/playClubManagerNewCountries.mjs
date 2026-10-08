@@ -118,7 +118,12 @@ for (const [w, h, reduced] of VIEWPORTS) {
   const tile = (page, rx) => page.locator('button:visible').filter({ hasText: rx }).first();
   const press = (page, rx, ms = 800) => page.locator('button:visible').filter({ hasText: rx }).first().click({ timeout: ms }).then(() => true).catch(() => false);
   /* the Table tab's card: its heading and how many club rows it draws */
-  const tableCard = page => page.evaluate(() => { const root = document.querySelector('[data-world-tables]'); return root ? { rows: root.querySelectorAll('tbody tr').length, title: (root.querySelector('h3')?.innerText || '').replace(/\s+/g, ' ').trim() } : null; });
+  const tableCard = page => page.evaluate(() => {
+    const root = document.querySelector('[data-world-tables]');
+    if (!root) return null;
+    const heading = (root.innerText || '').split('\n').map(s => s.trim()).find(s => /pre-season|round \d+ of \d+/i.test(s)) || '';
+    return { rows: new Set([...root.querySelectorAll('[data-club]')].map(e => e.getAttribute('data-club'))).size, title: heading };
+  });
   const openTable = async page => { await page.getByRole('tab', { name: /^Table$/ }).first().click({ timeout: 5000 }).catch(() => {}); await page.waitForTimeout(800); return tableCard(page); };
   const clearRoom = async page => { await page.getByRole('button', { name: /^essential only$/i }).first().click({ timeout: 1500 }).catch(() => {}); };
 
@@ -201,6 +206,7 @@ for (const [w, h, reduced] of VIEWPORTS) {
       const deadline = Date.now() + 120000;
       while (!finished && Date.now() < deadline) {
         if ((await heading()) === 'FULL TIME') { finished = true; break; }
+        if (await press(page, /full report/i, 600)) { await page.waitForTimeout(700); continue; }
         await press(page, /^\s*4x\s*$/, 600);
         if (await press(page, /second half/i, 600)) { await page.waitForTimeout(500); continue; }
         if (await press(page, /skip/i, 600)) { await page.waitForTimeout(600); continue; }
