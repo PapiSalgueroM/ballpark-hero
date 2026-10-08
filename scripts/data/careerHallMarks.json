@@ -11,7 +11,8 @@
  },
  "excluded": {
   "nba": {
-   "games": "games played is longevity, which the season weight already pays"
+   "games": "games played is longevity, which the season weight already pays",
+   "newLinePts": "the points of seasons on the Round 1103 stat line: part of the points total, read by a fixed term of the table, never a stat of its own"
   },
   "nfl": {
    "ints": "interceptions thrown are a quarterback losing the ball, not production",
@@ -1411,160 +1412,192 @@
     "PG": {
      "n": 2400,
      "medianSeasons": 18,
-     "hallShare1": 32.5,
-     "medianScore1": 354,
+     "hallShare1": 30.4,
+     "medianScore1": 336,
      "families": {
       "pts": {
-       "median": 26115,
-       "p90": 37360,
-       "p99": 45314,
-       "from": 37400,
-       "to": 45300,
+       "median": 22094,
+       "p90": 31034,
+       "p99": 38681,
+       "from": 31000,
+       "to": 38700,
        "floored": false
       },
       "reb": {
-       "median": 6089,
-       "p90": 7415,
-       "p99": 8414,
-       "from": 7420,
-       "to": 8410,
+       "median": 5270,
+       "p90": 6572,
+       "p99": 7736,
+       "from": 6570,
+       "to": 7740,
        "floored": false
       },
       "ast": {
-       "median": 11301,
-       "p90": 14763,
-       "p99": 17796,
-       "from": 14800,
-       "to": 17800,
+       "median": 7832,
+       "p90": 10684,
+       "p99": 13709,
+       "from": 10700,
+       "to": 13700,
        "floored": false
       },
       "games": {
-       "median": 1381,
-       "p90": 1628,
+       "median": 1391,
+       "p90": 1610,
        "p99": 1686,
-       "from": 1630,
-       "to": 1800,
+       "from": 1610,
+       "to": 1780,
        "floored": true
+      },
+      "newLinePts": {
+       "median": 22094,
+       "p90": 31034,
+       "p99": 38681,
+       "from": 31000,
+       "to": 38700,
+       "floored": false
       }
      }
     },
     "SG": {
      "n": 2400,
      "medianSeasons": 18,
-     "hallShare1": 31.7,
-     "medianScore1": 350,
+     "hallShare1": 29.7,
+     "medianScore1": 335,
      "families": {
       "pts": {
-       "median": 29682,
-       "p90": 38788,
-       "p99": 47061,
-       "from": 38800,
-       "to": 47100,
+       "median": 23990,
+       "p90": 32520,
+       "p99": 39881,
+       "from": 32500,
+       "to": 39900,
        "floored": false
       },
       "reb": {
-       "median": 6666,
-       "p90": 8559,
-       "p99": 10029,
-       "from": 8560,
-       "to": 10000,
+       "median": 5986,
+       "p90": 7852,
+       "p99": 9610,
+       "from": 7850,
+       "to": 9610,
        "floored": false
       },
       "ast": {
-       "median": 7585,
-       "p90": 9791,
-       "p99": 11271,
-       "from": 9790,
-       "to": 11300,
+       "median": 3958,
+       "p90": 5421,
+       "p99": 6472,
+       "from": 5420,
+       "to": 6470,
        "floored": false
       },
       "games": {
-       "median": 1395,
-       "p90": 1608,
-       "p99": 1685,
+       "median": 1383,
+       "p90": 1613,
+       "p99": 1684,
        "from": 1610,
        "to": 1780,
        "floored": true
+      },
+      "newLinePts": {
+       "median": 23990,
+       "p90": 32520,
+       "p99": 39881,
+       "from": 32500,
+       "to": 39900,
+       "floored": false
       }
      }
     },
     "SF": {
      "n": 2400,
      "medianSeasons": 18,
-     "hallShare1": 31,
-     "medianScore1": 362,
+     "hallShare1": 31.9,
+     "medianScore1": 350,
      "families": {
       "pts": {
-       "median": 27548,
-       "p90": 37069,
-       "p99": 45257,
-       "from": 37100,
-       "to": 45300,
+       "median": 23720,
+       "p90": 31841,
+       "p99": 39922,
+       "from": 31800,
+       "to": 39900,
        "floored": false
       },
       "reb": {
-       "median": 9489,
-       "p90": 11454,
-       "p99": 12875,
-       "from": 11500,
-       "to": 12900,
+       "median": 8337,
+       "p90": 10370,
+       "p99": 11777,
+       "from": 10400,
+       "to": 11800,
        "floored": false
       },
       "ast": {
-       "median": 9630,
-       "p90": 13503,
-       "p99": 15964,
-       "from": 13500,
-       "to": 16000,
+       "median": 5556,
+       "p90": 8267,
+       "p99": 10294,
+       "from": 8270,
+       "to": 10300,
        "floored": false
       },
       "games": {
        "median": 1436,
-       "p90": 1644,
-       "p99": 1686,
+       "p90": 1642,
+       "p99": 1685,
        "from": 1640,
        "to": 1810,
        "floored": true
+      },
+      "newLinePts": {
+       "median": 23720,
+       "p90": 31841,
+       "p99": 39922,
+       "from": 31800,
+       "to": 39900,
+       "floored": false
       }
      }
     },
     "PF": {
      "n": 2400,
      "medianSeasons": 18,
-     "hallShare1": 31.2,
-     "medianScore1": 365,
+     "hallShare1": 32.1,
+     "medianScore1": 343,
      "families": {
       "pts": {
-       "median": 25756,
-       "p90": 31757,
-       "p99": 36420,
-       "from": 31800,
-       "to": 36400,
+       "median": 21922,
+       "p90": 28665,
+       "p99": 34145,
+       "from": 28700,
+       "to": 34100,
        "floored": false
       },
       "reb": {
-       "median": 11403,
-       "p90": 14405,
-       "p99": 17153,
-       "from": 14400,
-       "to": 17200,
+       "median": 8475,
+       "p90": 11021,
+       "p99": 13375,
+       "from": 11000,
+       "to": 13400,
        "floored": false
       },
       "ast": {
-       "median": 7287,
-       "p90": 10096,
-       "p99": 12325,
-       "from": 10100,
-       "to": 12300,
+       "median": 3280,
+       "p90": 4895,
+       "p99": 6343,
+       "from": 4900,
+       "to": 6340,
        "floored": false
       },
       "games": {
-       "median": 1376,
-       "p90": 1605,
-       "p99": 1683,
+       "median": 1369,
+       "p90": 1606,
+       "p99": 1682,
        "from": 1610,
        "to": 1780,
        "floored": true
+      },
+      "newLinePts": {
+       "median": 21922,
+       "p90": 28665,
+       "p99": 34145,
+       "from": 28700,
+       "to": 34100,
+       "floored": false
       }
      }
     },
@@ -1572,39 +1605,47 @@
      "n": 2400,
      "medianSeasons": 17,
      "hallShare1": 29,
-     "medianScore1": 330,
+     "medianScore1": 318,
      "families": {
       "pts": {
-       "median": 22911,
-       "p90": 29822,
-       "p99": 35156,
-       "from": 29800,
-       "to": 35200,
+       "median": 19685,
+       "p90": 26704,
+       "p99": 32154,
+       "from": 26700,
+       "to": 32200,
        "floored": false
       },
       "reb": {
-       "median": 11774,
-       "p90": 15162,
-       "p99": 17787,
-       "from": 15200,
-       "to": 17800,
+       "median": 11788,
+       "p90": 15628,
+       "p99": 18426,
+       "from": 15600,
+       "to": 18400,
        "floored": false
       },
       "ast": {
-       "median": 5837,
-       "p90": 7485,
-       "p99": 8928,
-       "from": 7490,
-       "to": 8930,
+       "median": 2872,
+       "p90": 3872,
+       "p99": 4809,
+       "from": 3870,
+       "to": 4810,
        "floored": false
       },
       "games": {
-       "median": 1332,
-       "p90": 1578,
-       "p99": 1680,
+       "median": 1339,
+       "p90": 1584,
+       "p99": 1681,
        "from": 1580,
        "to": 1740,
        "floored": true
+      },
+      "newLinePts": {
+       "median": 19685,
+       "p90": 26704,
+       "p99": 32154,
+       "from": 26700,
+       "to": 32200,
+       "floored": false
       }
      }
     }
@@ -1626,63 +1667,102 @@
     ],
     "PF": [
      "pts",
-     "reb",
-     "ast"
+     "reb"
     ],
     "C": [
      "pts",
-     "reb",
-     "ast"
+     "reb"
     ]
    },
-   "base": {},
+   "base": {
+    "PG": [
+     {
+      "stat": "newLinePts",
+      "per": 1075,
+      "fixed": true,
+      "median": 22094
+     }
+    ],
+    "SG": [
+     {
+      "stat": "newLinePts",
+      "per": 1075,
+      "fixed": true,
+      "median": 23990
+     }
+    ],
+    "SF": [
+     {
+      "stat": "newLinePts",
+      "per": 1075,
+      "fixed": true,
+      "median": 23720
+     }
+    ],
+    "PF": [
+     {
+      "stat": "newLinePts",
+      "per": 1075,
+      "fixed": true,
+      "median": 21922
+     }
+    ],
+    "C": [
+     {
+      "stat": "newLinePts",
+      "per": 1075,
+      "fixed": true,
+      "median": 19685
+     }
+    ]
+   },
    "nearHalf": [
     {
-     "pos": "PG",
+     "pos": "SG",
      "family": "reb",
-     "from": 7420,
-     "half": 7600,
-     "on": false
+     "from": 7850,
+     "half": 7800,
+     "on": true
     },
     {
-     "pos": "C",
+     "pos": "SG",
      "family": "ast",
-     "from": 7490,
-     "half": 7400,
+     "from": 5420,
+     "half": 5350,
      "on": true
     }
    ],
    "bands": {
     "defaultCareers": 2000,
     "fromCell": {
-     "lo": 0.0419,
-     "hi": 0.1656,
+     "lo": 0.0475,
+     "hi": 0.1375,
      "measuredLo": 0.0625,
-     "measuredHi": 0.145,
-     "cells": 84
+     "measuredHi": 0.1225,
+     "cells": 72
     },
     "fromPooled": {
-     "lo": 0.0891,
-     "hi": 0.1091,
+     "lo": 0.0798,
+     "hi": 0.1265,
      "measured": [
-      0.0991,
-      0.0941,
-      0.0977,
-      0.1016,
-      0.1041,
-      0.0975
+      0.1023,
+      0.0915,
+      0.1148,
+      0.0985,
+      0.0994,
+      0.0931
      ]
     },
     "toPooled": {
-     "lo": 0.0039,
-     "hi": 0.0139,
+     "lo": 0,
+     "hi": 0.0246,
      "measured": [
-      0.0114,
-      0.0102,
-      0.0082,
-      0.0105,
-      0.0104,
-      0.0064
+      0.0092,
+      0.0046,
+      0.0179,
+      0.0106,
+      0.0075,
+      0.009
      ]
     }
    },
@@ -1691,84 +1771,145 @@
     "covered": 0.9,
     "pooledGain": {
      "measured": [
-      0.2167,
-      0.1938,
-      0.2875,
-      0.2643,
-      0.225,
-      0.2313
-     ],
-     "floor": 0.0969
-    },
-    "standoutGain": {
-     "measured": [
-      0.1464,
-      0.125,
-      0.1786,
-      0.15,
-      0.1464,
-      0.1464
+      0.29,
+      0.1286,
+      0.1833,
+      0.22,
+      0.2375,
+      0.125
      ],
      "floor": 0.0625
     },
+    "standoutGain": {
+     "measured": [
+      0.1208,
+      0.0792,
+      0.0458,
+      0.1042,
+      0.1375,
+      0.075
+     ],
+     "floor": 0.0229
+    },
     "hallShare1": [
-     0.3055,
-     0.3035,
-     0.3075,
-     0.306,
-     0.325,
-     0.317
+     0.307,
+     0.2965,
+     0.3235,
+     0.2935,
+     0.307,
+     0.31
     ],
     "hallShare2": [
-     0.3285,
-     0.323,
-     0.3325,
-     0.331,
-     0.3495,
-     0.339
+     0.3435,
+     0.3245,
+     0.3525,
+     0.3295,
+     0.3455,
+     0.3375
     ],
-    "hallCeiling": 0.376,
+    "hallCeiling": 0.3805,
     "newlyIn": [
-     46,
-     39,
-     50,
-     50,
-     49,
-     44
+     73,
+     56,
+     58,
+     72,
+     77,
+     55
     ],
     "medianScore1": [
-     350,
-     348,
-     351,
-     350,
-     356,
-     362
+     343,
+     331,
+     346,
+     325,
+     336,
+     344
     ],
     "medianScore2": [
-     358,
-     356,
-     359,
-     360,
      368,
-     367
+     358,
+     375,
+     348,
+     363,
+     370
     ],
     "meanScore1": [
-     467.7,
-     451.8,
-     466.8,
-     459,
-     471,
-     462.7
+     458.7,
+     447.8,
+     478.9,
+     463.6,
+     452.7,
+     448.7
     ],
     "meanScore2": [
-     495.8,
-     478.4,
-     494.6,
-     489,
-     500.8,
-     489.6
+     505.6,
+     489.4,
+     529,
+     509.2,
+     497.3,
+     492.4
     ],
-    "baseCredit": {}
+    "baseCredit": {
+     "PG": {
+      "lo": 19.4521,
+      "hi": 21.7367,
+      "measured": [
+       20.4,
+       20.7,
+       21.2,
+       20.1,
+       20,
+       20.9
+      ]
+     },
+     "SG": {
+      "lo": 21.826,
+      "hi": 22.7563,
+      "measured": [
+       22.5,
+       22.4,
+       22.1,
+       22.3,
+       22.2,
+       22.5
+      ]
+     },
+     "SF": {
+      "lo": 21.206,
+      "hi": 23.2395,
+      "measured": [
+       22,
+       21.7,
+       22.7,
+       22,
+       21.7,
+       22.1
+      ]
+     },
+     "PF": {
+      "lo": 19.8995,
+      "hi": 21.0456,
+      "measured": [
+       20.4,
+       20.5,
+       20.3,
+       20.2,
+       20.4,
+       20.8
+      ]
+     },
+     "C": {
+      "lo": 17.9716,
+      "hi": 18.714,
+      "measured": [
+       18.4,
+       18.5,
+       18.2,
+       18.5,
+       18.2,
+       18.3
+      ]
+     }
+    }
    }
   },
   "mlb": {

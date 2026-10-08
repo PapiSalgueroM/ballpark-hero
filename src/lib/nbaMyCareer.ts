@@ -49,7 +49,7 @@ import type { RivalryChoiceCard } from './careerRivalryChoices';
 import { raiseWithinPotential, ratingRaiseNote } from './careerHeadroom';
 import { applyUsCareerAnnualBenefits } from './usCareerAnnualBenefits';
 import { careerRecoveryRisk } from './usCareerRecovery';
-import { hallCalibrationOf, legacyRead, type HallCalibration, type LegacyRead, type LegacyWeights } from './careerHallOfFame';
+import { hallCalibrationOf, legacyRead, LEGACY_GAME_RULES, type HallCalibration, type LegacyRead, type LegacyStandout, type LegacyWeights } from './careerHallOfFame';
 /* Round 422: the share of gross pay that actually reaches the bank, after tax,
    agent and living. It was already the number this file used to turn career
    earnings into net worth; it is named here so the yearly banking and the
@@ -1158,6 +1158,47 @@ const NBA_LEGACY_V2: LegacyWeights = {
 };
 export const NBA_LEGACY_WEIGHTS: Record<HallCalibration, LegacyWeights> = { 1: NBA_LEGACY_V1, 2: NBA_LEGACY_V2 };
 
+/* Round 1103 (the fix pass of 2026-10-08): the standout marks Round 1051 measured on the OLD stat line, frozen
+   here as that round committed them (e313f183). Nobody can play an old line season any more, so they can never
+   be measured again. A mark is a place in this game's books, and the books an old line season belongs to are
+   these: an old line career totals about a quarter more points than a new line one, and its wings and big men
+   pass like guards, so read against the new marks half of them would stand out. */
+/* Tuples (stat, from, to, label) on purpose: the Hall harness's own controls rewrite the marks of the table above
+   by their shape, and these are not theirs to move. */
+const NBA_STANDOUT_OLD_LINE: Record<string, Array<[stat: string, from: number, to: number, label: string]>> = {
+  PG: [['pts', 37400, 45300, 'points'], ['ast', 14800, 17800, 'assists']],
+  SG: [['pts', 38800, 47100, 'points'], ['reb', 8560, 10000, 'rebounds'], ['ast', 9790, 11300, 'assists']],
+  SF: [['pts', 37100, 45300, 'points'], ['reb', 11500, 12900, 'rebounds'], ['ast', 13500, 16000, 'assists']],
+  PF: [['pts', 31800, 36400, 'points'], ['reb', 14400, 17200, 'rebounds'], ['ast', 10100, 12300, 'assists']],
+  C: [['pts', 29800, 35200, 'points'], ['reb', 15200, 17800, 'rebounds'], ['ast', 7490, 8930, 'assists']],
+};
+
+/** Round 1103: the calibration 2 table a career is read on. The standout marks follow the line the career was
+ *  played on, by its share of games on the new line. No game on it: Round 1051's marks, to the bit, so a career
+ *  retired between the two rounds keeps the ballot it was told (src/test/nbaOldSaveLines.test.ts holds that).
+ *  Every game on it: NBA_LEGACY_WEIGHTS[2] itself, the table the marks ledger and scripts/simCareerHall.mjs
+ *  restate. In between: a straight line from one mark to the other, and a family only one book lists (a big
+ *  man's assists) fades with the share. Nothing here is tuned: both sets of marks are measured. */
+export function nbaLegacyTableFor(c: Pick<NbaCareerState, 'pos' | 'seasons'>): LegacyWeights {
+  let games = 0, onNew = 0;
+  for (const s of c.seasons) { games += s.games; if (isNbaNewLine(s)) onNew += s.games; }
+  const w = games > 0 ? onNew / games : 1;
+  if (w === 1) return NBA_LEGACY_V2;
+  const now = NBA_LEGACY_V2.positions[c.pos] ?? NBA_LEGACY_V2.positions['*'];
+  const old: LegacyStandout[] = (NBA_STANDOUT_OLD_LINE[c.pos] ?? []).map(([stat, from, to, label]) => ({ stat, from, to, label }));
+  const next = now.standout ?? [];
+  const top = LEGACY_GAME_RULES.standoutTop;
+  const standout: LegacyStandout[] = [];
+  for (const o of old) {
+    const n = next.find(x => x.stat === o.stat);
+    if (w === 0) standout.push(o);
+    else if (n) standout.push({ ...o, from: o.from + (n.from - o.from) * w, to: o.to + (n.to - o.to) * w });
+    else standout.push({ ...o, top: top * (1 - w) });
+  }
+  if (w > 0) for (const n of next) if (!old.some(o => o.stat === n.stat)) standout.push({ ...n, top: top * w });
+  return { ...NBA_LEGACY_V2, positions: { ...NBA_LEGACY_V2.positions, [c.pos]: { terms: now.terms, standout } } };
+}
+
 export function nbaLegacyOf(c: NbaCareerState): NbaLegacy {
   const t = nbaCareerTotals(c);
   /* Round 123 recalibration. MVP used to be unreachable here, so mvps * 120
@@ -1169,9 +1210,10 @@ export function nbaLegacyOf(c: NbaCareerState): NbaLegacy {
   /* Round 1103: the table is read as it is written, on the career's real totals. The points of seasons on the
      new line weigh more through the table's own term for them (NBA_NEW_LINE_TERM), so a career with no new
      season adds exactly nothing, and the standout and the ballot card read what he really scored. Calibration
-     1 is the Round 123 formula to the last bit: its table has no such term. */
+     1 is the Round 123 formula to the last bit: its table has no such term. On calibration 2 the standout
+     marks follow the line the career was played on (nbaLegacyTableFor). */
   const cal = hallCalibrationOf(c);
-  const read = legacyRead(NBA_LEGACY_WEIGHTS[cal], {
+  const read = legacyRead(cal === 2 ? nbaLegacyTableFor(c) : NBA_LEGACY_WEIGHTS[cal], {
     pos: c.pos, seasons: c.seasons.length,
     awards: { rings: c.rings, mvps: c.mvps, finalsMvps: c.finalsMvps, allNbas: c.allNbas },
     totals: t,

@@ -49,6 +49,12 @@
        percent (measured across five seeds: at most 0.042 and 2.3 on the first, at most 0.033 and 1.6 on the second).
    R   My share of the head to head years is main's (62.3 to 63.0 percent).
    H   The Hall of Fame inducted rate and the first ballot rate are main's (31.6 to 31.9 and 27.0 to 27.9).
+       Measured on the fix pass tree of 2026-10-08 (the standout marks measured again on the new line, the
+       legacy constant 1.4 as a term of the calibration 2 table): 31.68, 31.58, 32.17, 32.3, 31.5 inducted
+       (mean 31.85 against main's 31.73) and 27.33, 27.53, 27.87, 27.38, 27.32 first ballot (27.49 against
+       27.56). And the books follow the line: an old line career stamped on calibration 2 reads what the
+       frozen fixture recorded (ten such careers, exact), and a career between the two lines is read on marks
+       between Round 1051's and the ledger's, by its share of games on the new line (exact, on typed marks).
    B   The season's awards make sense together (the one pass, nbaCareerAwards.ts). Counts, so most are exact.
        B0  every award string agrees with the key that names its team, every Defensive Player is on an
            All-Defensive team, every season holds a club record that adds up to its length.
@@ -70,7 +76,11 @@
            does, and at 64 the season before it does too. Before the fix pass the bar was read off the engine,
            so an off by one on the first season and a 62 typed into the data both passed everything.
        B4  no All-NBA season without an All-Star selection; All-Star selections a career are 1.59 to 1.63 times
-           All-NBA (band 1.25 to 2.4; 24 picks against 15 is 1.6).
+           All-NBA (band 1.25 to 2.4; 24 picks against 15 is 1.6). Every All-NBA First Team season, and so every
+           MVP season, starts the All-Star Game (a gate added in the fix pass of 2026-10-08: the fan vote is the
+           fanbase, which barely follows the season, and the League MVP read "All-Star reserve" in 43 percent
+           of MVP seasons). Nobody is voted a starter in a season he spent on his own club's bench (the second
+           gate of that pass: one starter in 30 had), and a bench man can still be picked as a reserve.
        B5  All-Defensive goes to defenders: each of pest, twoway, threed and anchor above each of the six
            scoring archetypes, and their mean at least 3 times the scorers' (measured: pest 4.3, twoway 5.5, threed 3.0 and anchor 3.3 a career against 0.00 to 0.05 for the scorers).
        B6  held at main's rate: MVPs, All-NBA, All-Defensive and Finals MVPs a career. Rookie of the Year
@@ -125,6 +135,9 @@
      barfrom          the games rule starting a season late            B3 red (the drawn check)
      bar62data        the sourced 65 typed as 62 in the data file      B3, F red (may: B6, H)
      rookieflood      the All-Rookie teams on the Rookie of the Year's grade   B2 red (may: B6)
+     firstteamreserve the First Team gate on the All-Star starters taken out   B4 red
+     benchstarter     the bench gate on the All-Star fan vote taken out        B4 red
+     newbooksforold   an old line career read on the new line's Hall marks      H red
      titlebar         the rebounding title judged on the assists leaders' bar   B8 red
      fanvoteera       the two eras of the All-Star fan vote swapped    B8 red (may: B4)
      shortseason      the 2011-12 season's own stat title minimum never handed over   B8 red
@@ -246,6 +259,13 @@ const CONTROLS = {
   fanvoteera: { file: 'src/lib/nbaCareerAwards.ts', find: '    const fanShare = x.year >= R.allStarFanShareFrom ? R.allStarFanShare : 1;', put: '    const fanShare = x.year >= R.allStarFanShareFrom ? 1 : R.allStarFanShare;', needs: 'B8', may: 'B4' },
   /* B8: the short 2011-12 season's own stat title minimum never handed over (the share stands in for it). */
   shortseason: { file: 'src/lib/nbaCareerAwards.ts', find: '    const short = x.seasonLength < R.gamesBarOf ? R.statTitleShortBefore[x.year] : undefined;', put: '    const short = undefined;', needs: 'B8' },
+  /* B4: the First Team gate on the All-Star starters taken out (the League MVP reads "All-Star reserve" again). */
+  firstteamreserve: { file: 'src/lib/nbaCareerAwards.ts', find: '    const firstTeam = out.allNbaTeam === 1;', put: '    const firstTeam = false;', needs: 'B4' },
+  /* B4: the bench gate on the fan vote taken out (a backup with a following starts the All-Star Game again). */
+  benchstarter: { file: 'src/lib/nbaCareerAwards.ts', find: '    const voted = !x.bench && fanShare * zFans', put: '    const voted = fanShare * zFans', needs: 'B4' },
+  /* H: every career read on the new line's books, an old line one included (a career retired between Round
+     1051 and this round is then told a different ballot). */
+  newbooksforold: { file: 'src/lib/nbaMyCareer.ts', find: '  if (w === 1) return NBA_LEGACY_V2;', put: '  if (w >= 0) return NBA_LEGACY_V2;', needs: 'H' },
   /* B2: the two All-Rookie teams back on the Rookie of the Year's grade, which put half of all first seasons
      on a team. */
   rookieflood: { file: 'src/lib/nbaCareerAwards.ts', find: ALL_ROOKIE_GRADE_LINE, put: ALL_ROOKIE_GRADE_FLOOD, needs: 'B2', may: 'B6' },
@@ -513,6 +533,12 @@ function measure(f) {
       || has(s.line, 'All-Defensive Team') !== (s.line.allDefensiveTeam != null) || has(s.line, 'All-Rookie Team') !== (s.line.allRookieTeam != null)),
     dpoyOffTeam: count(s => has(s.line, 'Defensive Player of the Year') && s.line.allDefensiveTeam == null),
     starters: count(s => s.line.allStar === 'starter'),
+    firstTeam: count(s => s.line.allNbaTeam === 1),
+    firstTeamNotStarter: count(s => s.line.allNbaTeam === 1 && s.line.allStar !== 'starter'),
+    mvpNotStarter: mvp.filter(s => s.line.allStar !== 'starter').length,
+    allStars: count(s => s.line.allStar != null),
+    benchStarters: count(s => s.role === 'backup' && s.line.allStar === 'starter' && s.line.allNbaTeam !== 1),
+    benchAllStars: count(s => s.role === 'backup' && s.line.allStar != null),
     noRecord: count(s => s.line.games > 0 && !(s.line.clubWins >= 0 && s.line.clubWins + s.line.clubLosses === len(s))),
   };
   return m;
@@ -1015,6 +1041,29 @@ else {
   /* H, the Hall: inducted and first ballot stay where main had them. */
   heldAtMain('H', base.nba, per, 'inducted', 'Hall of Fame inducted, percent');
   heldAtMain('H', base.nba, per, 'firstBallot', 'first ballot, percent');
+  /* H, the books follow the line. A career with no season on the new line is read on the marks Round 1051
+     measured on the old one: the stamped careers of the frozen fixture (old line careers retired on calibration
+     2, which is what a career retired between Round 1051 and this round is) score what they scored the day
+     they were recorded. A career between the two lines is read on marks between the two books, by its share
+     of games on the new line. The old line numbers below are typed on purpose, never read off the engine. */
+  {
+    const fx = JSON.parse(readFileSync(path.join(ROOT, 'src', 'test', 'fixtures', 'nbaOldSaves1103.json'), 'utf8'));
+    const stamped = fx.entries.filter(e => e.save.hallCal === 2 && e.save.seasons.every(x => typeof x.mpg !== 'number'));
+    const off = stamped.filter(e => { const r = nba.nbaLegacyOf(JSON.parse(JSON.stringify(e.save))); return r.score !== e.read.legacy.score || (r.standout?.stat ?? null) !== (e.read.legacy.standout?.stat ?? null); });
+    exact('H', stamped.length >= 8 && off.length === 0, `old line careers stamped on calibration 2 in the frozen fixture: ${stamped.length} (floor 8); read differently today: ${off.length} (${off.map(e => e.key).join(', ') || 'none'}); ${stamped.filter(e => e.read.legacy.standout).length} of them were paid a standout the day they were recorded`);
+    const OLD_PG_PTS = [37400, 45300]; const OLD_C_AST = [7490, 8930];
+    const now = nba.NBA_LEGACY_WEIGHTS[2].positions;
+    const career = (pos, oldGames, newGames) => ({ pos, seasons: [{ games: oldGames, ppg: 10, rpg: 4, apg: 3 }, { games: newGames, ppg: 10, rpg: 4, apg: 3, mpg: 30 }].filter(x => x.games > 0) });
+    const markOf = (pos, stat, o, n) => nba.nbaLegacyTableFor(career(pos, o, n)).positions[pos].standout.find(x => x.stat === stat);
+    const nowPg = now.PG.standout.find(x => x.stat === 'pts');
+    const allOld = markOf('PG', 'pts', 82, 0); const half = markOf('PG', 'pts', 82, 82);
+    exact('H', nba.nbaLegacyTableFor(career('PG', 0, 82)) === nba.NBA_LEGACY_WEIGHTS[2] && allOld?.from === OLD_PG_PTS[0] && allOld?.to === OLD_PG_PTS[1]
+      && half?.from === (OLD_PG_PTS[0] + nowPg.from) / 2 && half?.to === (OLD_PG_PTS[1] + nowPg.to) / 2 && nowPg.from < OLD_PG_PTS[0],
+      `a point guard's points mark: ${allOld?.from} to ${allOld?.to} with no game on the new line (Round 1051's ${OLD_PG_PTS.join(' to ')}), ${half?.from} to ${half?.to} at half and half (the midpoint), ${nowPg.from} to ${nowPg.to} with every game on it (the ledger's table itself)`);
+    const cOld = markOf('C', 'ast', 82, 0); const cHalf = markOf('C', 'ast', 82, 82);
+    exact('H', !now.C.standout.some(x => x.stat === 'ast') && cOld?.from === OLD_C_AST[0] && cOld?.to === OLD_C_AST[1] && cOld?.top === undefined && cHalf?.from === OLD_C_AST[0] && cHalf?.top === 150,
+      `a centre's assists, which only the old line's books list: the full push at ${cOld?.from} to ${cOld?.to} with no game on the new line, a push of at most ${cHalf?.top} at half and half (must be 150), and no such family with every game on it`);
+  }
   /* B6a, the award rates the old grades were set for, held where main had them. */
   for (const [award, label] of [['MVP', 'MVPs a career'], ['All-NBA', 'All-NBA a career'], ['All-Defensive Team', 'All-Defensive a career'], ['Finals MVP', 'Finals MVPs a career']]) {
     const careerSd = mean(per.map(m => m.sdCareer[award]));
@@ -1107,6 +1156,8 @@ if (HAS_PASS()) {
     const led = draws(scorer, o => o.awards.includes('Scoring Champion'));
     exact('B8', scorer.ppg * scorer.games >= S11.pts && led === 300, `2011-12, ${scorer.ppg} points a game over 40 of 66 games (${Math.round(scorer.ppg * scorer.games)} points, over the ${S11.pts} the season asked for): Scoring Champion in ${led} of 300 draws (must be 300)`); }
   exact('B4', tot('allNbaNoAllStar') === 0, `All-NBA seasons without an All-Star selection: ${list('allNbaNoAllStar')}`);
+  exact('B4', tot('firstTeam') > 0 && tot('firstTeamNotStarter') === 0 && tot('mvpNotStarter') === 0, `All-NBA First Team seasons that did not start the All-Star Game: ${list('firstTeamNotStarter')} of ${list('firstTeam')}; MVP seasons that did not: ${list('mvpNotStarter')} (before the gate the League MVP read "All-Star reserve" in 43 percent of MVP seasons); starters are ${(100 * tot('starters') / Math.max(1, tot('allStars'))).toFixed(0)} percent of All-Stars (the real game starts 10 of 24, 42 percent)`);
+  exact('B4', tot('benchStarters') === 0 && tot('benchAllStars') > 0, `All-Star starters who spent the season on their own club's bench (and were not on the All-NBA First Team): ${list('benchStarters')} (must be 0; before the gate one starter in 30); bench men picked for the game at all: ${list('benchAllStars')} (must be above zero: the gate is on the vote, not on the selection)`);
   { const ratio = per.map(m => m.perCareer['All-Star'] / Math.max(1e-9, m.perCareer['All-NBA']));
     banded('B4', mean(ratio) >= 1.25 && mean(ratio) <= 2.4, `All-Star selections a career over All-NBA: ${ratio.map(r => r.toFixed(2)).join(', ')}, mean ${mean(ratio).toFixed(2)} (1.25 to 2.4; 24 picks against 15 is 1.6); ${per.map(m => m.perCareer['All-Star']).join(', ')} All-Star a career, ${list('starters')} of them starters`); }
   { const DEFENDERS = ['pest', 'twoway', 'threed', 'anchor']; const SCORERS = ['scoringpg', 'bucket', 'sniper', 'alpha', 'stretch4', 'stretch'];

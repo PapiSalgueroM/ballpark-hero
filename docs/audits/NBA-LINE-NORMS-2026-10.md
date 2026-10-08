@@ -107,8 +107,8 @@ scripts/data/nbaAwardsSenseBaseline.json.
 
 | What | Main (five seeds) | Round 1103 (five seeds) |
 |---|---|---|
-| Hall of Fame inducted, percent of careers | 31.70, 31.88, 31.78, 31.75, 31.55 | 31.43, 31.52, 32.07, 31.62, 30.98 |
-| First ballot, percent of careers | 27.03, 27.93, 27.83, 27.57, 27.45 | 27.13, 27.40, 27.83, 27.02, 27.15 |
+| Hall of Fame inducted, percent of careers | 31.70, 31.88, 31.78, 31.75, 31.55 | 31.68, 31.58, 32.17, 32.30, 31.50 |
+| First ballot, percent of careers | 27.03, 27.93, 27.83, 27.57, 27.45 | 27.33, 27.53, 27.87, 27.38, 27.32 |
 | MVPs a career | 0.316, 0.323, 0.310, 0.313, 0.311 | 0.296, 0.315, 0.319, 0.304, 0.304 |
 | All-NBA a career | 1.972, 2.006, 1.981, 1.987, 1.986 | 1.955, 1.969, 2.002, 1.956, 1.974 |
 | All-Star a career | none existed | 3.162, 3.151, 3.187, 3.179, 3.165 |
@@ -118,25 +118,49 @@ scripts/data/nbaAwardsSenseBaseline.json.
 | My share of the head to head years with the rival, percent | 62.33, 63.02, 62.30, 62.52, 62.80 | 62.32, 62.25, 62.35, 62.97, 62.51 |
 
 The legacy constant. `NBA_LEGACY_NEW_LINE_SCALE` in src/lib/nbaMyCareer.ts is what the points of a season on the
-new line are worth to the legacy score against a season on the old one. It was set from the Hall rate, by the
-harness's own knob (`SENSE_TRY_SCALE`), on fleets of 3,000 careers and then at full size:
+new line are worth to the legacy score against a season on the old one. It is set from the Hall rate, by the
+harness's own knob (`SENSE_TRY_SCALE`). The value shipped is 1.4, measured on 2026-10-08 in the round's fix pass,
+after two things changed under the first value (1.25):
 
-| Constant | Inducted, percent | First ballot, percent | Read on |
+1. The constant weighs the points TERM only. It used to be added to the career's points total before the table
+   was read, so the Hall of Fame card printed a total the player never scored and the points standout was paid on
+   it. It is now a term of the calibration 2 table itself (the points of new line seasons, at 430 a point times
+   the constant less one, which is 1,075 at 1.4), so every total the scorer, the standout and the card read is the
+   career's real one.
+2. The standout marks (the Hall ballot round's ledger, scripts/data/careerHallMarks.json) were measured again on
+   the new line, the way scripts/genCareerHallMarks.mjs says to (six runs of 2,000 careers, the table, six runs
+   again). On the old line's marks no new line career could reach an assists mark at any position.
+
+| Constant | Inducted, percent (five full seeds) | First ballot, percent | Read on |
 |---|---|---|---|
-| 1.00 | 30.00, 30.97 | 25.30, 25.87 | 3,000 careers, seeds 1 and 2 |
-| 1.15 | 30.97, 32.13 (five full seeds: mean 30.14) | 26.20, 27.30 (five full seeds: mean 25.90) | both sizes |
-| 1.30 | 32.83, 34.53 | 28.50, 29.97 | 3,000 careers, seeds 1 and 2 |
-| 1.25, the value shipped | mean 31.52 over five full seeds, main 31.73 | mean 27.31, main 27.56 | 6,000 careers, seeds 1 to 5 |
+| 1.00 | mean 29.96 | mean 25.79 | the new marks, real totals |
+| 1.10 | mean 30.38 | mean 26.15 | the same |
+| 1.25 | mean 31.10 | mean 26.81 | the same |
+| 1.30 | 31.28, 31.17, 31.73, 31.87, 30.75 (mean 31.36) | 26.98, 27.10, 27.40, 26.75, 26.92 (mean 27.03) | the second measuring run |
+| 1.35 | 31.45, 31.45, 31.95, 32.17, 31.03 (mean 31.61) | 27.18, 27.30, 27.65, 27.07, 27.15 (mean 27.27) | the same |
+| 1.40, the value shipped | 31.68, 31.58, 32.17, 32.30, 31.50 (mean 31.85, main 31.73) | 27.33, 27.53, 27.87, 27.38, 27.32 (mean 27.49, main 27.56) | the same |
 
-The trials at 1.00, 1.15 and 1.30 were read while the old awards block still decided the awards (the round's
-first pass). At 1.25 that tree gave 31.81 and 27.64 over five full seeds; the finished round gives the row above.
+All six rows are 6,000 careers a seed, seeds 1 to 5, on the new marks: the first three on the fix pass's first
+measuring run, the last three on its second, which gave the same table. Before the fix pass the round carried 1.25 on inflated totals
+and the old marks (31.52 and 27.31), and its first pass tried 1.00, 1.15 and 1.30 on fleets of 3,000 careers.
 
-It is applied only to seasons on the new line, and never to a career read on Hall calibration 1 (those retired
-before the line existed). A career with no season played after the round scores exactly what it scored.
+The new marks, from and to, by position (the ledger holds the careers behind them): PG points 31,000 to 38,700,
+assists 10,700 to 13,700; SG points 32,500 to 39,900, rebounds 7,850 to 9,610, assists 5,420 to 6,470; SF points
+31,800 to 39,900, rebounds 10,400 to 11,800, assists 8,270 to 10,300; PF points 28,700 to 34,100, rebounds 11,000
+to 13,400; C points 26,700 to 32,200, rebounds 15,600 to 18,400. A power forward's and a centre's assists left
+the list by the ledger's own half rule: on the new line a big man no longer passes like a guard.
 
-What the Hall of Fame ballot's own harness says on this line (scripts/simCareerHall.mjs nba, 2,000 careers, not
-this round's file and not retuned here): the Hall share is 33.7 percent with 91.2 percent of it first ballot, and
-two of its checks are red by construction. Its standout marks were measured on the old line, so 2.41 percent of
-careers reach one where its band asks for 8.91 to 10.91 (most of its fourteen cells are out of band), and its restated
-calibration 2 score does not know the constant above, so every career is off the restatement. Regenerating the
-marks on the new line raises the Hall rate, and the constant above then has to be measured again.
+Which marks a career is read on follows the line it was played on (`nbaLegacyTableFor`). A career with no game
+on the new line is read on the marks the Hall ballot round measured on the old line, frozen in the engine as
+that round committed them, so a career retired on calibration 2 before this round keeps the ballot it was told:
+src/test/nbaOldSaveLines.test.ts and section H of the harness hold that on the frozen fixture, and the first
+table of new marks alone re-told six of its ten stamped careers. A career with every game on the new line is
+read on the ledger's table. In between, each mark is a straight line from one book to the other by the career's
+share of games on the new line, and a family only the old books list fades with that share. Nothing in that is
+tuned. A career read on Hall calibration 1 (retired before the ballot round) is the Round 123 formula to the bit.
+
+What the Hall of Fame ballot's own harness says on this tree (scripts/simCareerHall.mjs nba, 2,000 careers, run
+whole on 2026-10-08): all 32 checks green. 10.23 percent of careers reach a standout mark (its band 7.98 to
+12.65, no cell out), the standout is paid on 346 of 2,000 careers, none is off the restated calibration 2 score,
+and the Hall share on its fleet goes from 30.7 percent on calibration 1 to 34.4 on calibration 2 (its ceiling
+38.0). Its controls markdrift, todrift, noramp, catchersteals, nostandout and below each fired.

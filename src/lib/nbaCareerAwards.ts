@@ -6,7 +6,8 @@
 
    Now there is one pass. It knows the club's record, it draws ONE league a family of awards (so the awards in
    a family are judged against the same year), and it writes the gates out:
-     All-Star, All-NBA and MVP share the year's league. MVP needs the All-NBA First Team and a playoff club.
+     All-Star, All-NBA and MVP share the year's league. MVP needs the All-NBA First Team and a playoff club,
+     and an All-NBA First Team season starts the All-Star Game.
      All-Defensive and Defensive Player share the year's defenders, and read a defence score.
      All-Rookie and Rookie of the Year share the rookie class. The Rookie of the Year is on the first team.
      Most Improved never goes to a man who has been All-NBA, or to that season's MVP.
@@ -164,7 +165,16 @@ export function decideNbaAwards(rng: () => number, x: NbaAwardInput): NbaAwardRe
   if (half) {
     /* Starters by the weighted vote (the fans alone before the weights came in), reserves on the season. */
     const fanShare = x.year >= R.allStarFanShareFrom ? R.allStarFanShare : 1;
-    if (fanShare * zFans + (1 - fanShare) * zMvp > bar(150, R.allStarStarters, G_ALL_STAR, g1)) out.allStar = 'starter';
+    /* One more gate, like "any All-NBA season is at least a reserve": an All-NBA First Team season starts.
+       The fan vote here is the fanbase, which barely follows the season being had, so without this the
+       League MVP read "All-Star reserve" in 43 percent of MVP seasons (84 percent before 2016-17) and only
+       a quarter of All-Stars started, where the real game starts 10 of 24. */
+    const firstTeam = out.allNbaTeam === 1;
+    /* And nobody is voted a starter off his own club's bench, whatever his following: before this gate one
+       All-Star starter in 30 had sat on the bench all season (one in 8 before 2016-17, backups at 6 points a
+       game among them). A bench man can still be picked as a reserve on his season. */
+    const voted = !x.bench && fanShare * zFans + (1 - fanShare) * zMvp > bar(150, R.allStarStarters, G_ALL_STAR, g1);
+    if (firstTeam || voted) out.allStar = 'starter';
     else if (zMvp > bar(150, R.allStarPicks, G_ALL_STAR, g1) || out.allNbaTeam) out.allStar = 'reserve';
   }
 
@@ -234,7 +244,7 @@ export function nbaAwardHelpRules(): string[] {
   return [
     `MVP only goes to an All-NBA First Team player whose club made the playoffs. The score is your points plus rebounds plus assists a game, plus ${NBA_CAREER_MVP_WIN_WEIGHT} times your club's winning share, the same score NBA Front Office uses.`,
     `From the ${season(R.gamesBarFrom)} season on, All-NBA, MVP, Defensive Player of the Year, All-Defensive and Most Improved need ${R.gamesBar} games. Before that season there is no games rule, and Rookie of the Year, All-Rookie and Sixth Man never carry it. The real rule's exception for a season ending injury is not in the game. The game adds one floor of its own: nothing but a Finals MVP is won on less than half a season.`,
-    `All-Star is ${R.allStarPicks} picks a season. Half of a starter's case is the fan vote, which here is your fanbase (in seasons before ${season(R.allStarFanShareFrom)} the fans pick the starters alone), and the reserves are picked on the season you are having. Every All-NBA season is an All-Star season.`,
+    `All-Star is ${R.allStarPicks} picks a season. Half of a starter's case is the fan vote, which here is your fanbase (in seasons before ${season(R.allStarFanShareFrom)} the fans pick the starters alone), and the reserves are picked on the season you are having. Every All-NBA season is an All-Star season, an All-NBA First Team season starts the game, and nobody is voted a starter in a season he spent on his own club's bench.`,
     'All-Defensive and Defensive Player of the Year read your defence: steals plus blocks plus half your rebounds a game, against your own position. The kind of player you built counts for a lot here: the defenders by trade (The Pest, Two-Way Menace, 3-and-D Wing, Defensive Anchor) take most of these, a big man who lives on the glass takes some, and a scorer by trade almost never does.',
     'All-Rookie is for your first season only, and the Rookie of the Year is always on the first team.',
     'Most Improved never goes to a player who has already made All-NBA, or to that season\'s MVP.',
