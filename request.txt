@@ -1,0 +1,23 @@
+#!serial
+suite-lf: node_modules/.bin/vitest run src/lib/frontOfficeRatings.test.ts --reporter=verbose
+ratings-lf: node scripts/simNflOpeningRatings.mjs
+gencheck: node scripts/genFrontOfficeRoster.mjs --check
+prodcheck: node scripts/fetchNfl2025Production.mjs --check
+simFoRatingOrder: node scripts/simFoRatingOrder.mjs
+simFrontOfficeRoster: node scripts/simFrontOfficeRoster.mjs
+simNflFullRosters: node scripts/simNflFullRosters.mjs
+simNflGmDesk: node scripts/simNflGmDesk.mjs
+guideLadder: node scripts/simGauntletGuideLadder.mjs
+suite-crlf: sed -i 's/\r*$/\r/' scripts/data/nflRosters2026.json && node_modules/.bin/vitest run src/lib/frontOfficeRatings.test.ts --reporter=verbose
+ratings-crlf: node scripts/simNflOpeningRatings.mjs
+ratings-clamp: NFL_OPENING_RATINGS_CONTROL=clamp node scripts/simNflOpeningRatings.mjs
+ratings-datedRole: NFL_OPENING_RATINGS_CONTROL=datedRole node scripts/simNflOpeningRatings.mjs
+ratings-opportunity: NFL_OPENING_RATINGS_CONTROL=opportunity node scripts/simNflOpeningRatings.mjs
+ratings-missing: NFL_OPENING_RATINGS_CONTROL=missing node scripts/simNflOpeningRatings.mjs
+ratings-partial: NFL_OPENING_RATINGS_CONTROL=partial node scripts/simNflOpeningRatings.mjs
+ratings-budget: NFL_OPENING_RATINGS_CONTROL=budget node scripts/simNflOpeningRatings.mjs
+ratings-seedrows: NFL_OPENING_RATINGS_CONTROL=seedrows node scripts/simNflOpeningRatings.mjs
+ratings-evidence: NFL_OPENING_RATINGS_CONTROL=evidence node scripts/simNflOpeningRatings.mjs
+ratings-compact: NFL_OPENING_RATINGS_CONTROL=compact node scripts/simNflOpeningRatings.mjs
+ratings-cut: NFL_OPENING_RATINGS_CONTROL=cut node scripts/simNflOpeningRatings.mjs
+ratings-refusal: NFL_OPENING_RATINGS_CONTROL=refusal node scripts/simNflOpeningRatings.mjs

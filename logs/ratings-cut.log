@@ -1,0 +1,3 @@
+NFL rating cut: one actual executable source binding changed; 1 intended failures/16 held passes.
+NFL_RATING_CONTROL: {"control":"cut","failed":[{"title":"carries original player evidence through real trades cuts and practice promotion","message":"AssertionError: expected undefined to deeply equal { …(5) }"}]}
+NFL opening estimates:CRLF bindings,raw source holds and owned cleanup passed. Offline model and one normal campaign do not prove historical accuracy,all-seed calibration or native UI behavior.
