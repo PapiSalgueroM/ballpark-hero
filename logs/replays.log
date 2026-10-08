@@ -1,0 +1,16 @@
+info base saves: pro soccer 26190 chars, soccer 6292 chars, nba 3571 chars
+ok   [phone] D. the hub of a base save has the Season replays button
+info [phone] D. picker rows: open ["2015/16 · Liverpool1st of 20 · 42 apps · 22 goals🏆","2014/15 · Liverpool1st of 20 · 51 apps · 31 goals🏆","2013/14 · Liverpool1st of 20 · 40 apps · 15 goals🏆"]; locked ["2012/13 · LiverpoolThe game did not keep who won the league that season, so it c"]
+ok   [phone] D. at least one season the base engine played can be opened (3)
+ok   [phone] D. a base played season opens in the viewer
+ok   [phone] D. its review draws with no undefined or NaN: Season review / Champions of the Premier League, top of 20 · 95 pts / 42
+ok   [phone] D. watching a replay leaves the save string unchanged
+ok   [phone] D. no page or console errors (none)
+ok   [desk] D. the hub of a base save has the Season replays button
+info [desk] D. picker rows: open ["2015/16 · Liverpool1st of 20 · 42 apps · 22 goals🏆","2014/15 · Liverpool1st of 20 · 51 apps · 31 goals🏆","2013/14 · Liverpool1st of 20 · 40 apps · 15 goals🏆"]; locked ["2012/13 · LiverpoolThe game did not keep who won the league that season, so it c"]
+ok   [desk] D. at least one season the base engine played can be opened (3)
+ok   [desk] D. a base played season opens in the viewer
+ok   [desk] D. its review draws with no undefined or NaN: Season review / Champions of the Premier League, top of 20 · 95 pts / 42
+ok   [desk] D. watching a replay leaves the save string unchanged
+ok   [desk] D. no page or console errors (none)
+rvWalk2: 12 checks, 0 failed

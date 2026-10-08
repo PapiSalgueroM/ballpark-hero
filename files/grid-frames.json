@@ -1,0 +1,38 @@
+[
+ {
+  "label": "branch (remedy in)",
+  "cpu": 1,
+  "keys": 58,
+  "frames": 508,
+  "seen": 0,
+  "listFrames": 281,
+  "errors": []
+ },
+ {
+  "label": "branch (remedy in)",
+  "cpu": 4,
+  "keys": 58,
+  "frames": 546,
+  "seen": 0,
+  "listFrames": 305,
+  "errors": []
+ },
+ {
+  "label": "mutant m7 (remedy out)",
+  "cpu": 1,
+  "keys": 58,
+  "frames": 501,
+  "seen": 23,
+  "listFrames": 252,
+  "errors": []
+ },
+ {
+  "label": "mutant m7 (remedy out)",
+  "cpu": 4,
+  "keys": 58,
+  "frames": 521,
+  "seen": 36,
+  "listFrames": 249,
+  "errors": []
+ }
+]

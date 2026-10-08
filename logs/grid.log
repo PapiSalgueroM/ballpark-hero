@@ -1,0 +1,7 @@
+rvMut m7: applied to src/components/game/PlayerAutocomplete.tsx
+mutant build exit=0
+branch (remedy in), cpu x1: 58 keys, 508 frames sampled, "Finding players" in the page on 0 frames, a list of names on 281 frames
+branch (remedy in), cpu x4: 58 keys, 546 frames sampled, "Finding players" in the page on 0 frames, a list of names on 305 frames
+mutant m7 (remedy out), cpu x1: 58 keys, 501 frames sampled, "Finding players" in the page on 23 frames, a list of names on 252 frames
+mutant m7 (remedy out), cpu x4: 58 keys, 521 frames sampled, "Finding players" in the page on 36 frames, a list of names on 249 frames
+rvGrid: 4 runs
