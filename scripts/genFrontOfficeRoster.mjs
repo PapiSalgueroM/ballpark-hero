@@ -1,12 +1,25 @@
 /* The front office roster, derived: real 2026 squads with a real defence.
 
-   The notes below describe the unchanged curated pool and legacy depth recipe.
-   New full-roster leagues use the separate frozen multiyear simulation model
-   in nflFoRatingModel.mjs and nflFoRatingInputs2026.json. That checkpoint does
-   not change roster membership or this file's curated fifteen-player output.
-   Its public-source observations have one lineage, not two-source verified
-   historical statistics. Blocking quality and other gaps remain marked.
-   {legacyDepth:true} exports the original depth scale for mechanics baselines.
+   ROUND 1130: ONE NUMBER PER MAN. The notes below describe the SELECTION
+   rule (who a club's fifteen are, and the seed rating that picks them) and
+   the legacy depth recipe. Since Round 1130 the seed rating is an inside
+   step only: it decides who the fifteen are and proves the frozen checkpoint
+   still fits the record, and then every man of the pool (the fifteen, the
+   bench, the practice squad) is rated ONCE by the frozen multiyear model in
+   nflFoRatingModel.mjs over nflFoRatingInputs2026.json, and that one number
+   is written on his row in whichever file carries him. The depth file no
+   longer carries a second number for the fifteen, and the engine no longer
+   overrides anything. Row order in the starters file is still the selection
+   rule's pick order, never a ranking by the number printed on the row.
+   The checkpoint's public-source observations have one lineage, not
+   two-source verified historical statistics. Blocking quality and other gaps
+   remain marked.
+   {legacyDepth:true} exports the seed starters text and the original depth
+   scale, byte for byte as before Round 889, for mechanics baselines.
+   {ratingModel:'v2.2'} is the frozen arm: the new file shape carrying the
+   checkpoint's own numbers, which is what a board league read before the
+   files were unified. No file on disk is written from it once a later model
+   is the default.
 
    Round 416. The owner's P1 item 12 from 2026-08-28: "Trade Finder (US
    sports): only offensive players appear, and rosters are outdated." Both
@@ -754,7 +767,9 @@ export function renderDepthFile(depth, sources) {
     lines.push('// Linemen use participation and prior proxies, not measured blocking quality.');
     lines.push('// Partial or missing evidence is marked in per-player opening lineage.');
     lines.push('// Fictional salaries are reallocated within unchanged club opening payrolls.');
-    lines.push('// Contract years, roster identities and the separate curated pool stay unchanged.');
+    lines.push('// Round 1130: one number per man. The fifteen in frontOfficePlayers.ts carry the same');
+    lines.push('// estimate on their own rows; this file holds no second number for them, only their');
+    lines.push('// lineage in ratingEvidence. Contract years and roster identities are unchanged.');
     lines.push('// Complete source provenance and the fitted-checkpoint limitation live in');
     lines.push('// scripts/data/nflFoRatingInputs2026.json. One source lineage remains one.');
     lines.push('// noSeason retains the older 2025 games marker; it is not the new rating basis.');
@@ -801,8 +816,7 @@ export function renderDepthFile(depth, sources) {
   }
   lines.push('  noSeason: string[];');
   if (sources.ratingInputs) {
-    lines.push('  /** Only supplied when a new full-roster league is created. */');
-    lines.push('  fullOpening?: Record<string, { ovr: number; salary: number }>;');
+    lines.push('  /** Opening lineage for every man of the club, the fifteen included. */');
     lines.push('  ratingEvidence?: Record<string, FoOpeningRatingEvidence>;');
   }
   lines.push('}');
@@ -811,7 +825,9 @@ export function renderDepthFile(depth, sources) {
      names out of src/data (simInventedNames, simCareerInbox) reads these too */
   lines.push(`export const FO_DEPTH_WEEK = ${sources.week};`);
   if (sources.ratingInputs) {
-    lines.push(`export const FO_OPENING_RATING_VERSION = ${q(sources.ratingInputs.version)};`);
+    lines.push(`export const FO_OPENING_RATING_VERSION = ${q(sources.ratingVersion ?? sources.ratingInputs.version)};`);
+    lines.push('/** The frozen checkpoint the estimate stands on (scripts/data/nflFoRatingInputs2026.json). */');
+    lines.push(`export const FO_OPENING_RATING_BASE = ${q(sources.ratingInputs.version)};`);
     lines.push(`export const FO_OPENING_RATING_WINDOW = ${JSON.stringify(sources.ratingInputs.openingWindow)};`);
   }
   lines.push('');
@@ -827,9 +843,6 @@ export function renderDepthFile(depth, sources) {
     lines.push('    ],');
     lines.push(`    noSeason: [${t.noSeason.map(q).join(', ')}],`);
     if (sources.ratingInputs) {
-      lines.push('    fullOpening: {');
-      for (const [key, p] of Object.entries(t.fullOpening)) lines.push(`      ${q(key)}: { ovr: ${p.ovr}, salary: ${p.salary} },`);
-      lines.push('    },');
       lines.push('    ratingEvidence: {');
       for (const [key, e] of Object.entries(t.ratingEvidence)) {
         lines.push(`      ${q(key)}: { modelVersion: FO_OPENING_RATING_VERSION, openingWindow: FO_OPENING_RATING_WINDOW, originKey: ${q(e.originKey)}, openingOvr: ${e.openingOvr}, basis: ${q(e.basis)}, partial: ${e.partial}, partialReasons: [${e.partialReasons.map(q).join(', ')}] },`);
@@ -849,6 +862,30 @@ export function renderFile(teams, sources) {
   lines.push(`// GENERATED ${sources.read} by scripts/genFrontOfficeRoster.mjs from scripts/data/nflRosters2026.json (do not hand-edit).`);
   lines.push(`// Roster: nflverse rosters release, season ${ROSTER_SEASON}, week ${sources.week} as read on ${sources.read}, players on the`);
   lines.push(`// active or reserve list (${sources.rosterRows} rows read).`);
+  if (sources.ratingInputs) {
+    /* Round 1130. The legacy branch below is the pre 889 header, byte for byte
+       (the suite compares the legacy text with the physical 56356be9 file). */
+    lines.push('// WHO THE FIFTEEN ARE is decided by the selection rule: a seed rating off');
+    lines.push(`// nflverse stats_player regular plus post season ${STATS_SEASON}`);
+    lines.push(`// (${sources.statRows} rows). Skill players on the fantasy basis, because for`);
+    lines.push('// them yards and touchdowns are the job. Defenders on a blend of that');
+    lines.push('// production and draft position, weighted by how much of the job at that');
+    lines.push('// position the counting stats can actually see: a pass rusher mostly on his');
+    lines.push('// own numbers, a cornerback mostly on where he was drafted, because the public');
+    lines.push('// release carries no coverage column and a corner nobody throws at has');
+    lines.push('// nothing to accumulate. Linemen and anyone who did not play in the season');
+    lines.push('// on draft position and years played alone. Row order inside a position is');
+    lines.push('// that rule\'s pick order, not a ranking by the number on the row.');
+    lines.push(`// THE NUMBER ON EACH ROW is the full roster opening estimate, model ${sources.ratingVersion ?? sources.ratingInputs.version}:`);
+    for (const line of sources.ratingLines ?? [
+      '// the frozen 2023 to 2025 regular season checkpoint, scripts/data/nflFoRatingInputs2026.json.',
+    ]) lines.push(line);
+    lines.push('// It is a simulation grade, not a historical statistic or an official rating, and');
+    lines.push('// it is the one number every game on the site prints for the man. Limited evidence');
+    lines.push('// is marked per player in frontOfficeDepth.ts. See the generator for every rule.');
+    lines.push('// Contracts, salaries and roster moves inside the game are fictional; prices are');
+    lines.push('// shared out inside each club\'s unchanged opening payroll.');
+  } else {
   lines.push(`// Ratings: nflverse stats_player regular plus post season ${STATS_SEASON}`);
   lines.push(`// (${sources.statRows} rows). Skill players on the fantasy basis, because for`);
   lines.push('// them yards and touchdowns are the job. Defenders on a blend of that');
@@ -861,6 +898,7 @@ export function renderFile(teams, sources) {
   lines.push('// position mapped onto the scale this file has always used; see the');
   lines.push('// generator for every rule and the reason behind it.');
   lines.push('// Contracts, salaries and roster moves inside the game are fictional.');
+  }
   lines.push('');
   lines.push('export interface FoPlayer {');
   lines.push('  name: string;');
@@ -1005,7 +1043,8 @@ export function spotCheckRefusal(spot, rec) {
 }
 
 /** The whole bake from a record, as strings, so --check and the fence can compare without writing. */
-export function bakeFromRecord(rec, teamMeta, heldOut = [], { legacyDepth = false } = {}) {
+export function bakeFromRecord(rec, teamMeta, heldOut = [], { legacyDepth = false, ratingModel = 'v2.2' } = {}) {
+  if (!['v2.2'].includes(ratingModel)) throw new Error(`unknown ratingModel ${ratingModel}`);
   const { roster: all, stats } = recordRows(rec);
   /* Round 828 review: a man both other sources contradict (scripts/data/
      nflRosterSpotCheck.json, heldOut) is held out of the bake with the reason,
@@ -1046,30 +1085,38 @@ export function bakeFromRecord(rec, teamMeta, heldOut = [], { legacyDepth = fals
     }
   }
   const ratingInputs = ratingProblem ? null : checkpoint;
+  /* Round 1130. `teams` stays the SEED fifteen (who they are, in the selection
+     rule's pick order, with the seed rating that picked them): the identity
+     check above compares the checkpoint with exactly those objects. What ships
+     is `finalTeams`: the same rows in the same order, each carrying THE rating
+     and its price. The order is never re-sorted by the new number, because the
+     engine deals growth ceilings in row order and a re-sort would deal every
+     new league different ceilings. */
+  let finalTeams = teams;
+  let ratingVersion = null;
   if (ratingInputs) {
+    ratingVersion = ratingInputs.version;
     const rated = new Map(buildFullRatings(ratingInputs).map(p => [p.key, p]));
     const records = new Map(ratingInputs.records.map(p => [p.key, p]));
+    const one = (abbr, p) => {
+      const next = rated.get(`${abbr}|${p.name}|${p.pos}`);
+      return { ...p, ovr: next.ovr, salary: next.salary };
+    };
+    finalTeams = teams.map(t => ({ ...t, players: t.players.map(p => one(t.abbr, p)) }));
     depth = depth.map(t => {
-      const result = { ...t, fullOpening: {}, ratingEvidence: {} };
+      const result = { ...t, ratingEvidence: {} };
       const rows = [...teams.find(team => team.abbr === t.abbr).players, ...t.bench, ...t.practice];
       for (const p of rows) {
         const key = `${t.abbr}|${p.name}|${p.pos}`, next = rated.get(key);
-        result.ratingEvidence[`${p.name}|${p.pos}`] = openingRatingEvidence(records.get(key), next, ratingInputs.version, ratingInputs.openingWindow);
+        result.ratingEvidence[`${p.name}|${p.pos}`] = openingRatingEvidence(records.get(key), next, ratingVersion, ratingInputs.openingWindow);
       }
-      for (const p of teams.find(team => team.abbr === t.abbr).players) {
-        const next = rated.get(`${t.abbr}|${p.name}|${p.pos}`);
-        result.fullOpening[`${p.name}|${p.pos}`] = { ovr: next.ovr, salary: next.salary };
-      }
-      for (const tier of ['bench', 'practice']) result[tier] = t[tier].map(p => {
-        const next = rated.get(`${t.abbr}|${p.name}|${p.pos}`);
-        return { ...p, ovr: next.ovr, salary: next.salary };
-      });
+      for (const tier of ['bench', 'practice']) result[tier] = t[tier].map(p => one(t.abbr, p));
       return result;
     });
   }
   const heldCounts = buildDepth.lastHeld;
-  const text = renderFile(teams, { read: rec.read, week: rec.week, rosterRows: rec.rosterRowsInRelease, statRows: rec.statRowsInRelease });
-  const depthText = renderDepthFile(depth, { read: rec.read, rosterRows: rec.rosterRowsInRelease, week: rec.week, held: heldCounts, ratingInputs });
+  const text = renderFile(finalTeams, { read: rec.read, week: rec.week, rosterRows: rec.rosterRowsInRelease, statRows: rec.statRowsInRelease, ratingInputs, ratingVersion });
+  const depthText = renderDepthFile(depth, { read: rec.read, rosterRows: rec.rosterRowsInRelease, week: rec.week, held: heldCounts, ratingInputs, ratingVersion });
   const leftOut = leftOutList(rec, teams, depth, teamMeta, held);
   const byReason = {};
   for (const m of leftOut) {
@@ -1084,7 +1131,7 @@ export function bakeFromRecord(rec, teamMeta, heldOut = [], { legacyDepth = fals
     byReason,
     leftOut,
   }, null, 1)}\n`;
-  return { teams, depth, held: heldCounts, join, text, depthText, leftOut, leftJson, ratingProblem };
+  return { teams: finalTeams, seedTeams: teams, depth, held: heldCounts, join, text, depthText, leftOut, leftJson, ratingProblem, ratingVersion };
 }
 
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
