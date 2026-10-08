@@ -1,0 +1,29 @@
+#!serve
+#!playwright
+#!serial
+p3a.tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+p3a.recorded: node_modules/.bin/vitest run src/test/playerAutocompleteStale.test.tsx src/test/lineupValidatorClient.test.tsx src/test/playerAutocompleteInteraction.test.tsx src/test/playerAutocompleteEmptyText.test.tsx src/test/playerSearchFailure.test.tsx src/test/lineupBuilderHistoryRead.test.tsx src/test/nbaCourtSelection.test.tsx src/test/noDoubleRecord.test.tsx src/test/scoreShown.test.tsx src/test/dailySaveParity.test.tsx --testTimeout=300000 --hookTimeout=120000
+p3a.aci: node scripts/simPlayerAutocompleteInteraction.mjs
+p3a.aci-pointeronly: AUTOCOMPLETE_INTERACTION_CONTROL=pointeronly node scripts/simPlayerAutocompleteInteraction.mjs
+p3a.aci-unguard: AUTOCOMPLETE_INTERACTION_CONTROL=unguard node scripts/simPlayerAutocompleteInteraction.mjs
+p3a.aci-enabledoptions: AUTOCOMPLETE_INTERACTION_CONTROL=enabledoptions node scripts/simPlayerAutocompleteInteraction.mjs
+p3a.aci-notag: AUTOCOMPLETE_INTERACTION_CONTROL=notag node scripts/simPlayerAutocompleteInteraction.mjs
+p3a.aci-keeplist: AUTOCOMPLETE_INTERACTION_CONTROL=keeplist node scripts/simPlayerAutocompleteInteraction.mjs
+p3a.aci-noenter: AUTOCOMPLETE_INTERACTION_CONTROL=noenter node scripts/simPlayerAutocompleteInteraction.mjs
+p3a.aci-anyenter: AUTOCOMPLETE_INTERACTION_CONTROL=anyenter node scripts/simPlayerAutocompleteInteraction.mjs
+p3a.aci-topenter: AUTOCOMPLETE_INTERACTION_CONTROL=topenter node scripts/simPlayerAutocompleteInteraction.mjs
+p3a.aci-nodropcommit: AUTOCOMPLETE_INTERACTION_CONTROL=nodropcommit node scripts/simPlayerAutocompleteInteraction.mjs
+p3a.aci-minchars: AUTOCOMPLETE_INTERACTION_CONTROL=minchars node scripts/simPlayerAutocompleteInteraction.mjs
+p3a.aci-leaveflight: AUTOCOMPLETE_INTERACTION_CONTROL=leaveflight node scripts/simPlayerAutocompleteInteraction.mjs
+p3a.aci-pickflight: AUTOCOMPLETE_INTERACTION_CONTROL=pickflight node scripts/simPlayerAutocompleteInteraction.mjs
+p3a.aci-lateescape: AUTOCOMPLETE_INTERACTION_CONTROL=lateescape node scripts/simPlayerAutocompleteInteraction.mjs
+p3a.aci-pickreopens: AUTOCOMPLETE_INTERACTION_CONTROL=pickreopens node scripts/simPlayerAutocompleteInteraction.mjs
+p3a.aci-stickypick: AUTOCOMPLETE_INTERACTION_CONTROL=stickypick node scripts/simPlayerAutocompleteInteraction.mjs
+p3a.aci-deafreturn: AUTOCOMPLETE_INTERACTION_CONTROL=deafreturn node scripts/simPlayerAutocompleteInteraction.mjs
+p3a.aci-tapthrough: AUTOCOMPLETE_INTERACTION_CONTROL=tapthrough node scripts/simPlayerAutocompleteInteraction.mjs
+p3a.aci-greedyswallow: AUTOCOMPLETE_INTERACTION_CONTROL=greedyswallow node scripts/simPlayerAutocompleteInteraction.mjs
+p3a.aci-bogus-must-exit-1: AUTOCOMPLETE_INTERACTION_CONTROL=bogus node scripts/simPlayerAutocompleteInteraction.mjs
+p3a.anchors: node scripts/simHarnessAnchors.mjs
+walk-race: node scripts/playAutocompleteRace.mjs
+walk-race-notag: AUTOCOMPLETE_RACE_CONTROL=notag node scripts/playAutocompleteRace.mjs
+walk-lineup: node scripts/playLineupValidator.mjs

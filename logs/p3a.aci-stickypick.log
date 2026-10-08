@@ -1,0 +1,44 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+stdout | src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > never offers the last query under new text, across 200 seeded timings
+STALE_SWEEP seed=1138 trials=200 staleVisible=0 stalePicked=0 currentPicked=200 stuckFinding=0
+
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > never offers the last query under new text, across 200 seeded timings 810ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > drops the list in the same render the text changes 52ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > drops the list when the search options change under the same text 18ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > drops the list when the player leaves the box and searches again on return 79ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > Enter picks the only name showing when the page asks for a pick from the list 32ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > Enter still sends the typed text on a free text page with one name showing 11ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > offers a settled list for the text in the box exactly as before 10ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > never shows Finding players with nothing in flight 52ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > searches at exactly the fewest letters the page asks for 12ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > drops a search still in flight when the player leaves the box 13ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > drops a search still in flight when a name is picked 10ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > Escape leaves the box while a search is in flight 14ms
+ × src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > a pick does not bring the list back under the picked name 23ms
+   → expected null not to be null
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > the click of the tap that picked a name never reaches what was under the list 18ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 13 passed (14)
+   Start at  18:02:29
+   Duration  2.26s (transform 154ms, setup 51ms, collect 359ms, tests 1.15s, environment 297ms, prepare 137ms)
+
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > a pick does not bring the list back under the picked name
+AssertionError: expected null not to be null
+ ❯ src/test/playerAutocompleteStale.test.tsx:529:47
+    527|     // The pick is over: the same name put in whole (a paste, a swipe …
+    528|     act(() => checks.setText?.(A.name));
+    529|     expect(busyView.queryByText(FINDING)).not.toBeNull();
+       |                                               ^
+    530|     await advance(200);
+    531|     expect(optionsIn(busyView.container).map(o => o.textContent)).toEq…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+simPlayerAutocompleteInteraction stickypick control: stale list test 13 rejected the changed component and tests 1, 7, 8, 11 stayed green.

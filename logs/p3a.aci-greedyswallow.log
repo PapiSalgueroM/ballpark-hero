@@ -1,0 +1,44 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+stdout | src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > never offers the last query under new text, across 200 seeded timings
+STALE_SWEEP seed=1138 trials=200 staleVisible=0 stalePicked=0 currentPicked=200 stuckFinding=0
+
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > never offers the last query under new text, across 200 seeded timings 803ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > drops the list in the same render the text changes 52ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > drops the list when the search options change under the same text 17ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > drops the list when the player leaves the box and searches again on return 77ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > Enter picks the only name showing when the page asks for a pick from the list 32ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > Enter still sends the typed text on a free text page with one name showing 9ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > offers a settled list for the text in the box exactly as before 9ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > never shows Finding players with nothing in flight 52ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > searches at exactly the fewest letters the page asks for 13ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > drops a search still in flight when the player leaves the box 13ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > drops a search still in flight when a name is picked 10ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > Escape leaves the box while a search is in flight 14ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > a pick does not bring the list back under the picked name 23ms
+ × src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > the click of the tap that picked a name never reaches what was under the list 17ms
+   → expected "spy" to be called 1 times, but got 0 times
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 13 passed (14)
+   Start at  18:02:39
+   Duration  2.23s (transform 151ms, setup 51ms, collect 362ms, tests 1.14s, environment 291ms, prepare 140ms)
+
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > the click of the tap that picked a name never reaches what was under the list
+AssertionError: expected "spy" to be called 1 times, but got 0 times
+ ❯ src/test/playerAutocompleteStale.test.tsx:594:19
+    592|     pointerDownAs('touch', drawn.button);
+    593|     fireEvent.click(drawn.button);
+    594|     expect(under).toHaveBeenCalledTimes(1);
+       |                   ^
+    595|     drawn.view.unmount();
+    596| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+simPlayerAutocompleteInteraction greedyswallow control: stale list test 14 rejected the changed component and tests 1, 7, 13 stayed green.
