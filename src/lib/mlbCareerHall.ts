@@ -6,14 +6,21 @@
 import { mlbLegacyOf, MLB_LEGACY_WEIGHTS, mlbShouldRetire, mlbTeamLabelOf, type MlbCareerState } from "./mlbMyCareer";
 import { HALL_CALIBRATION, hallVoterRulesFor, usCareerHall, type HallVoterWords } from "./careerHallOfFame";
 
-/* Round 1051: what the voters weigh, in words. The card prints the sentence;
-   the "?" builds its rule and its worked example from the rest. "The major
-   awards" on purpose: the engine counts a different trophy by position under
-   one name, and a sentence that names none cannot mislabel one. The example
-   names a standout family of the calibration 2 table, and section 19 of
+/* Round 1051: what the voters weigh, in words. The card prints the hardware
+   sentence and then names what the table reads for the position, from the
+   table itself (wins and strikeouts for a starter, home runs and RBI for a
+   hitter). The reliever gets his own second sentence: the real anchors took
+   his saves out of the table, so what is left of his row is a hitter's two
+   terms, which is nothing a reliever would call his numbers. The "?" builds
+   its rule and its worked example from the rest. "The major awards" on
+   purpose: the engine counts a different trophy by position under one name,
+   and a sentence that names none cannot mislabel one. The example names a
+   standout family of the calibration 2 table, and section 19 of
    scripts/simCareerHall.mjs holds it against the engine. */
 export const MLB_HALL_WORDS: HallVoterWords = {
-  weighs: "The voters weigh the hardware first: rings, the major awards, All-Star years. Then the whole stat sheet, steals as much as homers.",
+  weighs: "The voters weigh the hardware first: rings, the major awards, All-Star years.",
+  reads: { wins: "wins", so: "strikeouts", hr: "home runs", rbi: "RBI" },
+  readsBy: { RP: "Then your seasons. A reliever's saves do not move them." },
   hardware: "rings, the major awards, All-Star years",
   families: "home runs, RBI, steals, wins or strikeouts",
   example: { positions: ["CF"], stat: "sb", one: "center fielder", who: "center fielders", family: "steals" },
@@ -43,7 +50,8 @@ export const MLB_CAREER_HALL = usCareerHall<MlbCareerState>({
   // Game tuning. The hard stop (mlbShouldRetire) is untouched.
   retirement: { minAge: 32, dropFromPeak: 8, floor: 68 },
   legacy: mlbLegacyOf,
-  weighs: MLB_HALL_WORDS.weighs,
+  words: MLB_HALL_WORDS,
+  weights: MLB_LEGACY_WEIGHTS,
   shouldRetire: mlbShouldRetire,
   teamLabel: mlbTeamLabelOf,
   deckJerseyFlag: "b_number",

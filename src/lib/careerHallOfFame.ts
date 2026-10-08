@@ -215,8 +215,10 @@ export interface LegacyWeights {
 export interface LegacyFacts { pos: string; seasons: number; awards: Record<string, number>; totals: Record<string, number> }
 export interface LegacyRead { score: number; standout: { stat: string; label: string; total: number; credit: number } | null }
 
-/** Game rules, not real world numbers. */
-export const LEGACY_GAME_RULES = { standoutTop: 300, standoutCap: 1.3 } as const;
+/** Game rules, not real world numbers. standoutSaid: the least a standout must be worth, in whole legacy
+ *  points, before the ballot card says so (a tenth of a full push; under it the card stays quiet, because a
+ *  push of a point or two is not something the voters "counted"). */
+export const LEGACY_GAME_RULES = { standoutTop: 300, standoutCap: 1.3, standoutSaid: 30 } as const;
 
 /** The legacy score off a table. Awards and seasons are whole numbers, the
  *  terms are added in the table's order from zero, and one Math.round closes
@@ -240,8 +242,13 @@ export function legacyRead(w: LegacyWeights, f: LegacyFacts): LegacyRead {
 /** The words a sport gives the voters: the card's sentence, and the nouns of
  *  the "?" rule and its worked example. Data, in the sport's own Hall file. */
 export interface HallVoterWords {
-  /** The ballot card's line. Names no trophy the engines count differently by position. */
+  /** The ballot card's first sentence: the hardware. Names no trophy the engines count differently by position. */
   weighs: string;
+  /** The noun the card uses for each stat a table term reads ("pts" is "points"). The card's second sentence
+   *  is said from the position's own terms, so it cannot promise a stat the voters never see. */
+  reads: Record<string, string>;
+  /** A position whose table terms are not what a player would call his numbers gets its own second sentence. */
+  readsBy?: Record<string, string>;
   hardware: string;
   /** The stats a position can stand out in, as the rule says them. */
   families: string;
@@ -249,10 +256,20 @@ export interface HallVoterWords {
   example: { positions: string[]; stat: string; one: string; who: string; family: string };
 }
 
-/** The ballot card's line: the sport's sentence, and the standout when one counted. */
-export function hallWeighLine(sentence: string, standout: LegacyRead["standout"]): string {
-  if (!standout) return sentence;
-  return `${sentence} Your ${formatNumber(standout.total)} ${standout.label} sat near the top of this game's books, and that got a real push.`;
+/** The ballot card's line. The hardware sentence, then what the table reads for this position, named from
+ *  the table itself; and the standout, only when it was worth saying (standoutSaid points or more). Kept
+ *  short: with a standout it has to fit four lines of small text on a phone. */
+export function hallWeighLine(words: HallVoterWords, weights: LegacyWeights, pos: string, standout: LegacyRead["standout"]): string {
+  const terms = (weights.positions[pos] ?? weights.positions["*"]).terms.map(t => words.reads[t.stat] ?? t.stat);
+  const own = words.readsBy?.[pos];
+  const said = standout && Math.round(standout.credit) >= LEGACY_GAME_RULES.standoutSaid ? standout : null;
+  if (said) {
+    const numbers = !own && terms.length ? " and your numbers" : "";
+    return `${words.weighs} Then your seasons${numbers}, and your ${formatNumber(said.total)} ${said.label} sat near the top of this game's books.`;
+  }
+  if (own) return `${words.weighs} ${own}`;
+  const list = terms.length > 1 ? `, ${terms.slice(0, -1).join(", ")} and ${terms[terms.length - 1]}` : terms.length ? ` and ${terms[0]}` : "";
+  return `${words.weighs} Then your seasons${list}.`;
 }
 
 /** The two lines the "?" adds: the rule in one sentence, and a worked example.
@@ -262,7 +279,7 @@ export function hallVoterRules(n: { hardware: string; families: string; one: str
   const top = n.top ?? LEGACY_GAME_RULES.standoutTop;
   const cap = Math.round(LEGACY_GAME_RULES.standoutTop * LEGACY_GAME_RULES.standoutCap);
   return [
-    `Hall of Fame voters weigh the hardware first (${n.hardware}), then your seasons and your whole stat sheet, and a career total near the top of this game's books in a stat your position really piles up (${n.families}) earns a push of its own, up to ${cap} legacy points.`,
+    `Hall of Fame voters weigh the hardware first (${n.hardware}), then your seasons and your numbers, and a career total near the top of this game's books in a stat your position really piles up (${n.families}) earns a push of its own, up to ${cap} legacy points.`,
     `Example: take a ${n.one} with ordinary numbers and one with the same hardware and more ${n.family} than 99 of 100 ${n.who} this game has seen. The second scores at least ${top} legacy points more, which can be the whole gap between a long wait and the Hall. A career you already retired keeps the ballot it was told.`,
   ];
 }
@@ -468,8 +485,9 @@ export function usCareerHall<C extends UsCareerShape>(def: {
   lines: HallLines;
   retirement: RetirementRule;
   legacy: (c: C) => { score: number; hof: boolean; standout?: LegacyRead["standout"] };
-  /** Round 1051: the sport's sentence on what the voters weigh (its HallVoterWords). */
-  weighs: string;
+  /** Round 1051: the sport's words on what the voters weigh and its legacy tables. The card's line is said from both. */
+  words: HallVoterWords;
+  weights: Record<HallCalibration, LegacyWeights>;
   shouldRetire: (c: C) => boolean;
   /** The sport's own club label, (abbreviation, era) to name. */
   teamLabel: (team: string, eraId?: string) => string;
@@ -483,7 +501,10 @@ export function usCareerHall<C extends UsCareerShape>(def: {
     lines: def.lines,
     retirement: def.retirement,
     legacy: c => { const l = def.legacy(c); return { score: l.score, hof: l.hof }; },
-    weighs: c => (hallCalibrationOf(c) === 1 ? null : hallWeighLine(def.weighs, def.legacy(c).standout ?? null)),
+    weighs: c => {
+      const cal = hallCalibrationOf(c);
+      return cal === 1 ? null : hallWeighLine(def.words, def.weights[cal], c.pos, def.legacy(c).standout ?? null);
+    },
     key: c => `${c.name}|${c.pos}|${c.draftPick}|${c.seasons[0]?.year ?? c.year}`,
     lastSeasonYear,
     seasons: c => c.seasons,

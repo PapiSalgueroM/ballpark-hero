@@ -440,10 +440,28 @@ describe('Round 1051: the legacy scorer, the calibration and the words', () => {
     expect(old.hallCal).toBe(1);
   });
 
-  it('hallWeighLine: the sentence alone, or the sentence and the standout with its number grouped', () => {
-    expect(hallWeighLine('The voters weigh things.', null)).toBe('The voters weigh things.');
-    expect(hallWeighLine('The voters weigh things.', { stat: 'ast', label: 'assists', total: 16634, credit: 120 }))
-      .toBe("The voters weigh things. Your 16,634 assists sat near the top of this game's books, and that got a real push.");
+  it('hallWeighLine: the hardware, then what the table reads for the position, and the standout only when it is worth saying', () => {
+    const words = { weighs: 'The voters weigh things.', reads: { pts: 'points', reb: 'rebounds', ast: 'assists' }, readsBy: { R: 'Then your seasons. Nothing else.' },
+      hardware: 'h', families: 'f', example: { positions: ['A'], stat: 'ast', one: 'a', who: 'as', family: 'assists' } };
+    const table = { awards: {}, season: 1, positions: {
+      A: { terms: [{ stat: 'pts', per: 1 }] }, B: { terms: [{ stat: 'pts', per: 1 }, { stat: 'reb', per: 1 }, { stat: 'ast', per: 1 }] },
+      K: { terms: [] }, R: { terms: [{ stat: 'pts', per: 1 }] }, '*': { terms: [{ stat: 'reb', per: 1 }, { stat: 'ast', per: 1 }] },
+    } };
+    // No standout: the position's own terms, named from the table, and nothing a position is not read on.
+    expect(hallWeighLine(words, table, 'A', null)).toBe('The voters weigh things. Then your seasons and points.');
+    expect(hallWeighLine(words, table, 'B', null)).toBe('The voters weigh things. Then your seasons, points, rebounds and assists.');
+    expect(hallWeighLine(words, table, 'K', null)).toBe('The voters weigh things. Then your seasons.');
+    expect(hallWeighLine(words, table, 'nobody', null)).toBe('The voters weigh things. Then your seasons, rebounds and assists.');
+    expect(hallWeighLine(words, table, 'R', null)).toBe('The voters weigh things. Then your seasons. Nothing else.');
+    // A standout worth saying, with its number grouped.
+    const st = { stat: 'ast', label: 'assists', total: 16634, credit: 120 };
+    expect(hallWeighLine(words, table, 'A', st)).toBe("The voters weigh things. Then your seasons and your numbers, and your 16,634 assists sat near the top of this game's books.");
+    expect(hallWeighLine(words, table, 'K', st)).toBe("The voters weigh things. Then your seasons, and your 16,634 assists sat near the top of this game's books.");
+    // The floor: a push that rounds to under standoutSaid points is not "counted" in words (0.1 of a point was, before).
+    const said = LEGACY_GAME_RULES.standoutSaid;
+    expect(said).toBeGreaterThan(0);
+    for (const credit of [0.1, 1, said - 0.6]) expect(hallWeighLine(words, table, 'A', { ...st, credit })).toBe('The voters weigh things. Then your seasons and points.');
+    for (const credit of [said - 0.5, said, 300, 390]) expect(hallWeighLine(words, table, 'A', { ...st, credit })).toContain('sat near the top of this game\'s books');
   });
 
   it('hallVoterRules: two lines, the numbers written in from the rules, the example family\'s own top when it has one', () => {
@@ -455,7 +473,7 @@ describe('Round 1051: the legacy scorer, the calibration and the words', () => {
     expect(rules[1]).toContain(`at least ${LEGACY_GAME_RULES.standoutTop} legacy points more`);
     expect(rules[1]).toContain('more assists than 99 of 100 point guards');
     expect(hallVoterRules({ ...nouns, top: 150 })[1]).toContain('at least 150 legacy points more');
-    const words = { weighs: 's', hardware: 'rings', families: 'f', example: { positions: ['A'], stat: 'z', one: 'a', who: 'as', family: 'zs' } };
+    const words = { weighs: 's', reads: {}, hardware: 'rings', families: 'f', example: { positions: ['A'], stat: 'z', one: 'a', who: 'as', family: 'zs' } };
     expect(hallVoterRulesFor(words, W)[1]).toContain('at least 150 legacy points more');
     expect(hallVoterRulesFor({ ...words, example: { ...words.example, stat: 'x' } }, W)[1]).toContain(`at least ${LEGACY_GAME_RULES.standoutTop} legacy points more`);
     expect(rules.join(' ')).not.toMatch(/[\u2013\u2014]/);

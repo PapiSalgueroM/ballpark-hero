@@ -6,14 +6,18 @@
 import { nhlLegacyOf, NHL_LEGACY_WEIGHTS, nhlShouldRetire, nhlTeamLabelOf, type NhlCareerState } from "./nhlMyCareer";
 import { HALL_CALIBRATION, hallVoterRulesFor, usCareerHall, type HallVoterWords } from "./careerHallOfFame";
 
-/* Round 1051: what the voters weigh, in words. The card prints the sentence;
-   the "?" builds its rule and its worked example from the rest. "The major
-   awards" on purpose: the engine counts a different trophy by position under
-   one name, and a sentence that names none cannot mislabel one. The example
-   names a standout family of the calibration 2 table, and section 19 of
-   scripts/simCareerHall.mjs holds it against the engine. */
+/* Round 1051: what the voters weigh, in words. The card prints the hardware
+   sentence and then names what the table reads for the position, from the
+   table itself (points for a skater, wins for a goalie; goals and assists
+   on their own only count as a standout, and the card says so only when one
+   did). The "?" builds its rule and its worked example from the rest. "The
+   major awards" on purpose: the engine counts a different trophy by position
+   under one name, and a sentence that names none cannot mislabel one. The
+   example names a standout family of the calibration 2 table, and section 19
+   of scripts/simCareerHall.mjs holds it against the engine. */
 export const NHL_HALL_WORDS: HallVoterWords = {
-  weighs: "The voters weigh the hardware first: Cups, the major awards, All-Star years. Then the whole stat sheet, goals and assists each on their own.",
+  weighs: "The voters weigh the hardware first: Cups, the major awards, All-Star years.",
+  reads: { points: "points", wins: "wins" },
   hardware: "Cups, the major awards, All-Star years",
   families: "goals, assists, points or a goalie's wins",
   example: { positions: ["LW", "RW"], stat: "assists", one: "winger", who: "wingers", family: "assists" },
@@ -44,7 +48,8 @@ export const NHL_CAREER_HALL = usCareerHall<NhlCareerState>({
   // Game tuning. The hard stop (nhlShouldRetire) is untouched.
   retirement: { minAge: 31, dropFromPeak: 8, floor: 69 },
   legacy: nhlLegacyOf,
-  weighs: NHL_HALL_WORDS.weighs,
+  words: NHL_HALL_WORDS,
+  weights: NHL_LEGACY_WEIGHTS,
   shouldRetire: nhlShouldRetire,
   teamLabel: nhlTeamLabelOf,
 });

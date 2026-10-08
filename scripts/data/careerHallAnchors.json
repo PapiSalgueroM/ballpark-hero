@@ -11,16 +11,34 @@
       "TWO OF EACH. If a sport then holds fewer than two anchors of any ballot kind (first, later, never), the next names down the same lists are added, one list at a time in the order above, until it holds two.",
       "SKIPPED, each recorded with its reason: a ban or a scandal that decided his case; a career or part of a stat line in a league the engine does not model; a position change that splits his line; a career that ended before the awards the engine counts were given.",
       "COUNTS. Awards are the engine's own counts and nothing else. A ring is a league title won as a player. An All-Star count is seasons selected, never games. NBA: titles, MVPs, Finals MVPs, All-NBA selections of any team. NFL: titles, first team AP All-Pro selections, and the AP MVP for QB, RB, WR, TE and K but the AP Defensive Player of the Year for LB, CB and EDGE. MLB: World Series titles, All-Star seasons, and MVPs for hitters but Cy Young Awards for pitchers. NHL: Stanley Cups, Conn Smythes, All-Star Game selections, and the Hart for forwards, the Norris for defencemen, the Vezina for goalies.",
+      "HOCKEY'S ALL-STAR COUNT, corrected 2026-10-08 before any hockey anchor was scored: the engine's own count is the season-end First and Second All-Star Team, never the All-Star Game (src/lib/nhlMyCareer.ts where the nod is drawn: twelve players make it a year, six positions across two teams), and awards are the engine's own counts and nothing else. So a hockey anchor's allStars is his First plus Second All-Star Team seasons, which two publishers list season by season. The All-Star Game line in COUNTS above is superseded for hockey.",
       "TOTALS. Regular season only, every family the engine's season line records for the position. A total that could not be two sourced is null with its reason, and the harness reads it as zero and says so.",
       "BALLOT. Judged on the ballot the engine models (the writers' ballot in baseball, the modern era vote in football, the North American committee in basketball, the player category in hockey). first: the first class he was eligible for took him. later: a later class of that same ballot took him. never: it has not as of the read date. A man a veterans or era committee put in after the main ballot passed on him is never with route committee, and is printed apart, outside every count.",
-      "TWO READINGS, both printed. raw: the real line as it is, at real scale, with no conversion constant. books: for an anchor taken off a family list whose position carries that family as a standout, the engine career with that family's total set to the calibration 2 table's to mark for his position, every other total multiplied by the same factor (the to mark over his real total, rounded), his awards raw, his seasons raw but no more than the sport's hard stop (19 NFL, 21 NBA, 21 MLB, 22 NHL). A top five career on the real list is a top of the books career by the standout's own definition, and that is all the rule claims. An anchor whose position does not carry his family as a standout, and a name added from lower down a list only to reach two of each ballot, is read raw only and printed apart."
+      "TWO READINGS, both printed. raw: the real line as it is, at real scale, with no conversion constant. books: for an anchor taken off a family list whose position carries that family as a standout, the engine career with that family's total set to the calibration 2 table's to mark for his position, every other total multiplied by the same factor (the to mark over his real total, rounded), his awards raw, his seasons raw but no more than the sport's hard stop (19 NFL, 21 NBA, 21 MLB, 22 NHL). A top five career on the real list is a top of the books career by the standout's own definition, and that is all the rule claims. An anchor whose position does not carry his family as a standout, and a name added from lower down a list only to reach two of each ballot, is read raw only and printed apart.",
+      "ADDED 2026-10-08, before any basketball, football or hockey anchor was scored (baseball's ten rows are untouched by every line below).",
+      "PAIRS. A row is a man on a family list. A man in the first five of two lists is two rows that share one set of sources (the second row names the first in sameAs), because the books reading differs by family. The counts of 8 a sport and two of each ballot are counts of men, never of rows.",
+      "TWO OF EACH, how the walk down goes. While a later is missing, every eligible name is added in the list's order, since the list page cannot tell a first from a later. While only a never is missing, a name the list page itself marks as a Hall of Famer is passed over. Names added this way are read raw only.",
+      "OTHER LEAGUES, read narrowly. A man is skipped when the listed total itself mixes in another league's numbers (the combined NBA and ABA lists), when he played seasons in another major league after his first season in this one, or when he was inducted and then played on. A season in another league before his first season here does not skip him: the list, his line and his Hall case are this league's.",
+      "AWARDS THAT CAME LATE. A man is skipped when his last season is before the first year a count the engine reads for his position was given (the AP Defensive Player of the Year from 1971 for a defender; the Finals MVP from 1969). A career that only began before that year stays in.",
+      "POSITIONS. The engine's CB is its only defensive back, so a real corner or safety is read at CB. Its EDGE is every pass rusher on the sack list, defensive end or outside linebacker. In basketball and hockey a man is read at the first position his stat line's publisher lists for him, mapped to the engine's five.",
+      "FIRST ELIGIBLE CLASS outside baseball. Basketball, football and hockey publish no ballot, so a man's first eligible class is his last season plus that Hall's waiting rule (the eligibility block, two sourced once per sport), and first, later or never follows by arithmetic from his two sourced class. Where a page says in words that he went in his first eligible year, the words are recorded too."
     ],
-    "sportsBuilt": ["mlb"],
+    "sportsBuilt": ["mlb", "nba", "nhl"],
     "sportsNotBuilt": {
-      "nba": "not built in this session (the family lists were read; the per player sourcing was not finished)",
-      "nfl": "not built in this session (Pro Football Reference refused the fetch; nfl.com and the Hall's site would have to carry every group)",
-      "nhl": "not built in this session"
+      "nfl": "not built: the awards group cannot be two sourced. The count the rule asks for is first team AP All-Pro selections, and the one publisher read that separates the AP's team is Pro Football Reference (it refuses a fetch and is readable only through its archived pages). The Hall's own pages count first team All-Pro seasons of every selector and so disagree by rule (for the receptions leader: named first-team All-Pro 11 consecutive seasons, against ten AP first teams). The stat lines (nfl.com) and the classes (profootballhof.com) can be read. The lead decides: one publisher for football's awards, a count by any selector, or football unjudged."
     }
+  },
+  "eligibility": {
+    "nba": { "rule": "five years after his last season through the classes this file reads (in practice the sixth year: last season ending in year Y, first eligible class Y + 6); three calendar years from the class of 2018, when both men here whose last seasons ended in 2013 and 2014 were newly eligible",
+      "sources": [
+        { "publisher": "Sports Illustrated", "url": "https://www.si.com/nba/2015/12/14/basketball-hall-fame-eligibility-wait-time", "read": "2026-10-08", "says": "published December 14, 2015: players had to wait five years to become eligible for induction and end up waiting six years to be nominated by the time voting comes to a close; they will only be required to wait four years after retirement" },
+        { "publisher": "theScore", "url": "https://www.thescore.com/nba/news/1449560", "read": "2026-10-08", "says": "The previous waiting period was five years; eligible just three calendar years after retirement; players whose final NBA season was 2013-14 become eligible, Steve Nash among them; could lead to a star-studded 2018 Hall of Fame class" },
+        { "publisher": "NBA.com", "url": "https://www.nba.com/news/thirteen-finalists-basketball-hall-fame-class-2018", "read": "2026-10-08", "says": "published February 17, 2018: Jason Kidd and Steve Nash are newly eligible candidates among the 2018 finalists; The Hall shortened the waiting period for players to three years after retirement from five" } ] },
+    "nhl": { "rule": "three playing seasons after his last (last season ending in year Y, first eligible class Y + 3); the one man here whose wait was waived went in the year he retired and is first",
+      "sources": [
+        { "publisher": "Hockey Hall of Fame", "url": "https://hhof.com/induction_archives/ind01press.shtml", "read": "2026-10-08", "says": "players must have concluded their respective playing or officiating careers for a minimum of three playing seasons; First year eligible players are those that retired after the 1997-98 season (the 2001 class)" },
+        { "publisher": "Hockey Hall of Fame", "url": "https://hth.hhof.com/induction/factsandfigures.html", "read": "2026-10-08", "says": "the mandatory three-year waiting period for Induction in the Player Category; waived for 1972 Gordie Howe, 1997 Mario Lemieux and 1999 Wayne Gretzky among ten" },
+        { "publisher": "NHL.com", "url": "https://www.nhl.com/news/this-date-in-nhl-history-june-23-280997942", "read": "2026-10-08", "says": "The Hockey Hall of Fame waives the usual three-year waiting period and announces that Wayne Gretzky will be part of the Class of 1999" } ] }
   },
   "decisions": [
     { "sport": "mlb", "pos": "LF", "kind": "standout", "stat": "sb", "action": "halved", "what": "steals standout",
@@ -34,11 +52,20 @@
       "counts": "Base whole: raw 9 > 8 and 6 > 5 of 9. Halved: raw 9 > 8 and 6 > 5. Dropped: raw 9 > 9 and 6 > 6, books 4 > 4 and 3 > 3 of 4." }
   ],
   "measured": {
-    "mlb": { "raw2": { "inOut": 9, "exact": 6, "n": 9 }, "books2": { "inOut": 4, "exact": 3, "n": 4 } }
+    "note": "The agreement on calibration 2, as the harness printed it when the sport was built, and what each agreement control can reach: realNotFirstInBooks is the count of real never or later anchors with a books reading (standoutbig needs one), pushAlone the count that agree on 2 only because of the push (standoutgone needs more than two). The harness holds all of it to what it computes today. A row is a man on a list, so basketball's n of 14 is 14 men and hockey's 17 is 16 men.",
+    "mlb": { "raw2": { "inOut": 9, "exact": 6, "n": 9 }, "books2": { "inOut": 4, "exact": 3, "n": 4 }, "realNotFirstInBooks": 2, "pushAlone": 0 },
+    "nba": { "raw2": { "inOut": 12, "exact": 12, "n": 14 }, "books2": { "inOut": 10, "exact": 10, "n": 10 }, "realNotFirstInBooks": 1, "pushAlone": 0,
+      "read": "Calibration 1 agreed just as often (raw 12 and 12 of 14, books 10 and 10 of 10): nine of the ten list men are in on hardware either way. The one real never with a books reading (nba-ast-4) stays out on calibration 2 at 486 against a line of 500, so the full push at point guard holds, by 14 points. No decision. The two real laters (raw only) are out on both calibrations: the engine's line was set for careers half again as long." },
+    "nhl": { "raw2": { "inOut": 14, "exact": 12, "n": 17 }, "books2": { "inOut": 10, "exact": 9, "n": 10 }, "realNotFirstInBooks": 0, "pushAlone": 3,
+      "read": "Calibration 1 agreed on raw 12 and 11 of 17 and on books 7 and 7 of 10. The push puts three real first ballot men in who were out on 1 (nhl-goals-3, nhl-goals-5, nhl-assists-2). No decision. Every list man here went straight in, so nothing in hockey can say the push is too big: the harness prints that, and standoutbig refuses to run here." }
   },
   "lists": [
     { "sport": "mlb", "family": "saves", "publisher": "Baseball-Reference", "url": "https://www.baseball-reference.com/leaders/SV_career.shtml", "read": "2026-10-07", "says": "1 Mariano Rivera+ 652, 2 Trevor Hoffman+ 601, 3 Kenley Jansen (bold, active) 498, 4 Lee Smith+ 478, 5 Craig Kimbrel (bold, active) 441, 6 Francisco Rodriguez 437, 7 John Franco 424, 8 Billy Wagner+ 422, 9 Aroldis Chapman (bold, active) 402, 10 Dennis Eckersley+ 390" },
-    { "sport": "mlb", "family": "sb", "publisher": "Baseball-Reference", "url": "https://www.baseball-reference.com/leaders/SB_career.shtml", "read": "2026-10-07", "says": "1 Rickey Henderson+ 1406, 2 Lou Brock+ 938, 3 Billy Hamilton+ 914, 4 Ty Cobb+ 897, 5 Tim Raines+ 808, 6 Vince Coleman 752, 7 Arlie Latham 742, 8 Eddie Collins+ 741, 9 Max Carey+ 738, 10 Honus Wagner+ 723, 11 Joe Morgan+ 689, 12 Willie Wilson 668" }
+    { "sport": "mlb", "family": "sb", "publisher": "Baseball-Reference", "url": "https://www.baseball-reference.com/leaders/SB_career.shtml", "read": "2026-10-07", "says": "1 Rickey Henderson+ 1406, 2 Lou Brock+ 938, 3 Billy Hamilton+ 914, 4 Ty Cobb+ 897, 5 Tim Raines+ 808, 6 Vince Coleman 752, 7 Arlie Latham 742, 8 Eddie Collins+ 741, 9 Max Carey+ 738, 10 Honus Wagner+ 723, 11 Joe Morgan+ 689, 12 Willie Wilson 668" },
+    { "sport": "nba", "family": "reb", "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/leaders/trb_career.html", "read": "2026-10-08", "says": "NBA & ABA Career Leaders and Records for Total Rebounds: 1 Wilt Chamberlain* 23924, 2 Bill Russell* 21620, 3 Moses Malone* 17834, 4 Kareem Abdul-Jabbar* 17440, 5 Artis Gilmore* 16330, 6 Elvin Hayes* 16279, 7 Tim Duncan* 15091, 8 Karl Malone* 14968, 9 Robert Parish* 14715, 10 Kevin Garnett* 14662, 11 Dwight Howard* 14627, 12 Nate Thurmond* 14464, 13 Walt Bellamy* 14241, 14 Wes Unseld* 13769, 15 Hakeem Olajuwon* 13748, 16 Shaquille O'Neal* 13099, 17 Buck Williams 13017 (an asterisk marks a Hall of Famer)" },
+    { "sport": "nba", "family": "ast", "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/leaders/ast_career.html", "read": "2026-10-08", "says": "NBA & ABA Career Leaders and Records for Assists: 1 John Stockton* 15806, 2 Chris Paul 12552, 3 Jason Kidd* 12091, 4 LeBron James (bold, active) 12016, 5 Russell Westbrook 10351, 6 Steve Nash* 10335, 7 Mark Jackson 10334, 8 Magic Johnson* 10141, 9 Oscar Robertson* 9887, 10 Isiah Thomas* 9061" },
+    { "sport": "nhl", "family": "goals", "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/leaders/goals_career.html", "read": "2026-10-08", "says": "1 Alex Ovechkin (bold, active) 929, 2 Wayne Gretzky* 894 1979-99, 3 Gordie Howe* 801 1946-80, 4 Jaromir Jagr 766 1990-18, 5 Brett Hull* 741 1986-06, 6 Marcel Dionne* 731 1971-89, 7 Phil Esposito* 717 1963-81, 8 Mike Gartner* 708 1979-98, 9 Mark Messier* 694 1979-04, 10 Steve Yzerman* 692 1983-06, 11 Mario Lemieux* 690 1984-06, 12 Teemu Selanne* 684 1992-14, 13 Luc Robitaille* 668 1986-06, 14 Brendan Shanahan* 656 1987-09, 15 Sidney Crosby (bold) 654, 16 Dave Andreychuk* 640 1982-06; every name from 17 to 40 is bold (active) or carries the Hall of Fame asterisk, bar Patrick Marleau 566 1997-21; 41 Pat Verbeek 522 1982-02; 42 to 47 all carry the asterisk or are bold; 48 Peter Bondra 503 1990-07" },
+    { "sport": "nhl", "family": "assists", "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/leaders/assists_career.html", "read": "2026-10-08", "says": "1 Wayne Gretzky* 1963 1979-99, 2 Ron Francis* 1249 1981-04, 3 Mark Messier* 1193 1979-04, 4 Ray Bourque* 1169 1979-01, 5 Jaromir Jagr 1155 1990-18, 6 Paul Coffey* 1135 1980-01, 7 Sidney Crosby (bold) 1109, 7 Joe Thornton* 1109 1997-22, 9 Adam Oates* 1079" }
   ],
   "skipped": [
     { "sport": "mlb", "family": "saves", "player": "Kenley Jansen", "reason": "active (bold on the career list)" },
@@ -49,7 +76,23 @@
     { "sport": "mlb", "family": "sb", "player": "Arlie Latham", "reason": "career ended before the awards the engine counts were given: Baseball-Reference gives his last game as September 30, 1909", "url": "https://www.baseball-reference.com/players/l/lathaar01.shtml" },
     { "sport": "mlb", "family": "sb", "player": "Eddie Collins", "reason": "career ended before the awards the engine counts were given: Baseball-Reference gives his last game as August 5, 1930", "url": "https://www.baseball-reference.com/players/c/collied01.shtml" },
     { "sport": "mlb", "family": "sb", "player": "Max Carey", "reason": "career ended before the awards the engine counts were given: Baseball-Reference gives his last game as September 29, 1929", "url": "https://www.baseball-reference.com/players/c/careyma01.shtml" },
-    { "sport": "mlb", "family": "sb", "player": "Honus Wagner", "reason": "career ended before the awards the engine counts were given: Baseball-Reference gives his last game as September 17, 1917", "url": "https://www.baseball-reference.com/players/w/wagneho01.shtml" }
+    { "sport": "mlb", "family": "sb", "player": "Honus Wagner", "reason": "career ended before the awards the engine counts were given: Baseball-Reference gives his last game as September 17, 1917", "url": "https://www.baseball-reference.com/players/w/wagneho01.shtml" },
+    { "sport": "nba", "family": "reb", "player": "Moses Malone", "reason": "the listed total mixes in another league: the list is the combined NBA and ABA list and his 17,834 holds his ABA seasons", "url": "https://www.basketball-reference.com/leaders/trb_career.html" },
+    { "sport": "nba", "family": "reb", "player": "Artis Gilmore", "reason": "the listed total mixes in another league: the list is the combined NBA and ABA list and his 16,330 holds his ABA seasons", "url": "https://www.basketball-reference.com/leaders/trb_career.html" },
+    { "sport": "nba", "family": "reb", "player": "Tim Duncan", "reason": "last season after 2015 (2015-16)" },
+    { "sport": "nba", "family": "reb", "player": "Kevin Garnett", "reason": "last season after 2015 (2015-16); passed on the walk down" },
+    { "sport": "nba", "family": "reb", "player": "Dwight Howard", "reason": "last season after 2015; passed on the walk down" },
+    { "sport": "nba", "family": "reb", "player": "Wes Unseld, Hakeem Olajuwon, Shaquille O'Neal", "reason": "passed over on the walk down: only a never was still missing and the list page marks each a Hall of Famer" },
+    { "sport": "nba", "family": "ast", "player": "Chris Paul", "reason": "last season after 2015" },
+    { "sport": "nba", "family": "ast", "player": "LeBron James", "reason": "active (bold on the career list)" },
+    { "sport": "nba", "family": "ast", "player": "Russell Westbrook", "reason": "last season after 2015" },
+    { "sport": "nhl", "family": "goals", "player": "Alex Ovechkin", "reason": "active (bold on the career list)" },
+    { "sport": "nhl", "family": "goals", "player": "Gordie Howe", "reason": "inducted and then played on: the Hall lists 1972 among the waiting periods it waived and the career list gives his years as 1946-80; his seasons in between were in another major league", "url": "https://hth.hhof.com/induction/factsandfigures.html" },
+    { "sport": "nhl", "family": "goals", "player": "Jaromir Jagr", "reason": "last season after 2015 (the career list gives 1990-18)" },
+    { "sport": "nhl", "family": "goals", "player": "Mario Lemieux", "reason": "inducted and then played on: the Hall lists 1997 among the waiting periods it waived and the career list gives his years as 1984-06; passed on the walk down", "url": "https://hth.hhof.com/induction/factsandfigures.html" },
+    { "sport": "nhl", "family": "goals", "player": "Sidney Crosby", "reason": "active (bold on the career list); passed on the walk down" },
+    { "sport": "nhl", "family": "goals", "player": "names 17 to 40 and 42 to 47 on the list", "reason": "passed over on the walk down: only a never was still missing and the list page marks each a Hall of Famer or active, bar Patrick Marleau (last season after 2015)" },
+    { "sport": "nhl", "family": "assists", "player": "Jaromir Jagr", "reason": "last season after 2015" }
   ],
   "anchors": [
     { "id": "mlb-saves-1", "sport": "mlb", "player": "Mariano Rivera", "pos": "RP", "family": "saves", "fromList": true,
@@ -206,6 +249,458 @@
           { "publisher": "National Baseball Hall of Fame", "url": "https://baseballhall.org/hall-of-famers/morgan-joe", "read": "2026-10-07", "says": "Morgan won back-to-back MVP awards in the National League; the Reds' back-to-back World Series championship years in 1975-76; two All-Star Game appearances with Houston and All-Star Game nods in each of his eight seasons with the Reds" } ],
         "hall": [
           { "publisher": "Baseball-Reference", "url": "https://www.baseball-reference.com/players/m/morgajo02.shtml", "read": "2026-10-07", "says": "Inducted as a player in 1990. Voted by the BBWAA on 363 of 444 ballots." },
-          { "publisher": "Baseball Almanac", "url": "https://www.baseball-almanac.com/players/player.php?p=morgajo02", "read": "2026-10-07", "says": "elected to the National Baseball Hall of Fame in 1990, the first year of his eligibility" } ] } }
+          { "publisher": "Baseball Almanac", "url": "https://www.baseball-almanac.com/players/player.php?p=morgajo02", "read": "2026-10-07", "says": "elected to the National Baseball Hall of Fame in 1990, the first year of his eligibility" } ] } },
+    { "id": "nba-reb-1", "sport": "nba", "player": "Wilt Chamberlain", "pos": "C", "family": "reb", "fromList": true, "seasons": 14, "lastSeason": 1973, "games": 1045,
+      "totals": { "pts": 31419, "reb": 23924, "ast": 4643 },
+      "awards": { "rings": 2, "mvps": 4, "finalsMvps": 1, "allNbas": 10 },
+      "hall": { "ballot": "first", "class": 1979, "firstEligibleClass": 1979, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/c/chambwi01.html", "read": "2026-10-08", "says": "Position: Center; 14 Yrs, 1959-60 to 1972-73; G 1045, PTS 31419, TRB 23924, AST 4643" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/wilt_chamberlain.htm", "read": "2026-10-08", "says": "Center; 14 seasons, 1959-60 to 1972-73; 1,045 games, 31,419 points, 23,924 rebounds, 4,643 assists" } ],
+        "awards": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/c/chambwi01.html", "read": "2026-10-08", "says": "2x NBA Champ, 4x MVP, 1971-72 Finals MVP, 10x All-NBA" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/wilt_chamberlain.htm", "read": "2026-10-08", "says": "2 championships; Season MVP 4 times; Finals MVP 1 (1971-72); All-NBA First Team 7 times, Second Team 3 times" } ],
+        "hall": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/c/chambwi01.html", "read": "2026-10-08", "says": "Hall of Fame: Inducted as Player in 1979; last season 1972-73" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/wilt_chamberlain.htm", "read": "2026-10-08", "says": "Inducted into the Naismith Memorial Basketball Hall of Fame as a player in 1979" } ] } },
+    { "id": "nba-reb-2", "sport": "nba", "player": "Bill Russell", "pos": "C", "family": "reb", "fromList": true, "seasons": 13, "lastSeason": 1969, "games": 963,
+      "totals": { "pts": 14522, "reb": 21620, "ast": 4100 },
+      "awards": { "rings": 11, "mvps": 5, "finalsMvps": 0, "allNbas": 11 },
+      "hall": { "ballot": "first", "class": 1975, "firstEligibleClass": 1975, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/r/russebi01.html", "read": "2026-10-08", "says": "Position: Center; 13 Yrs, 1956-57 to 1968-69; G 963, PTS 14522, TRB 21620, AST 4100" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/bill_russell.htm", "read": "2026-10-08", "says": "Center; 13 seasons, 1956-57 to 1968-69; 963 games, 14,522 points, 21,620 rebounds, 4,100 assists" } ],
+        "awards": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/r/russebi01.html", "read": "2026-10-08", "says": "11x NBA Champ, 5x MVP, 11x All-NBA; no Finals MVP listed" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/bill_russell.htm", "read": "2026-10-08", "says": "11 championships; Season MVP 5 times; no Finals MVP listed; All-NBA First Team 3 times, Second Team 8 times" } ],
+        "hall": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/r/russebi01.html", "read": "2026-10-08", "says": "Hall of Fame: Inducted as Player in 1975; last season 1968-69" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/bill_russell.htm", "read": "2026-10-08", "says": "Inducted into the Naismith Memorial Basketball Hall of Fame as a player in 1975" } ] } },
+    { "id": "nba-reb-3", "sport": "nba", "player": "Kareem Abdul-Jabbar", "pos": "C", "family": "reb", "fromList": true, "seasons": 20, "lastSeason": 1989, "games": 1560,
+      "totals": { "pts": 38387, "reb": 17440, "ast": 5660 },
+      "awards": { "rings": 6, "mvps": 6, "finalsMvps": 2, "allNbas": 15 },
+      "hall": { "ballot": "first", "class": 1995, "firstEligibleClass": 1995, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/a/abdulka01.html", "read": "2026-10-08", "says": "Position: Center; 20 Yrs, 1969-70 to 1988-89; G 1560, PTS 38387, TRB 17440, AST 5660" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/kareem_abdul_jabbar.htm", "read": "2026-10-08", "says": "Center; 20 seasons, 1969-70 to 1988-89; 1,560 games, 38,387 points, 17,440 rebounds, 5,660 assists" } ],
+        "awards": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/a/abdulka01.html", "read": "2026-10-08", "says": "6x NBA Champ, 6x MVP, 2x Finals MVP, 15x All-NBA" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/kareem_abdul_jabbar.htm", "read": "2026-10-08", "says": "6 championships; Season MVP 6 times; Finals MVP 2 times; All-NBA First Team 10 times, Second Team 5 times" } ],
+        "hall": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/a/abdulka01.html", "read": "2026-10-08", "says": "Hall of Fame: Inducted as Player in 1995; last season 1988-89" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/kareem_abdul_jabbar.htm", "read": "2026-10-08", "says": "Inducted into the Naismith Memorial Basketball Hall of Fame as a player in 1995" } ] } },
+    { "id": "nba-reb-4", "sport": "nba", "player": "Elvin Hayes", "pos": "PF", "family": "reb", "fromList": true, "seasons": 16, "lastSeason": 1984, "games": 1303,
+      "totals": { "pts": 27313, "reb": 16279, "ast": 2398 },
+      "awards": { "rings": 1, "mvps": 0, "finalsMvps": 0, "allNbas": 6 },
+      "hall": { "ballot": "first", "class": 1990, "firstEligibleClass": 1990, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/h/hayesel01.html", "read": "2026-10-08", "says": "Position: Power Forward and Center; 16 Yrs, 1968-69 to 1983-84; G 1303, PTS 27313, TRB 16279, AST 2398" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/elvin_hayes.htm", "read": "2026-10-08", "says": "Forward / Center; 16 seasons, 1968-69 to 1983-84; 1,303 games, 27,313 points, 16,279 rebounds, 2,398 assists" } ],
+        "awards": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/h/hayesel01.html", "read": "2026-10-08", "says": "1978 NBA Champ, 6x All-NBA; no MVP and no Finals MVP listed" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/elvin_hayes.htm", "read": "2026-10-08", "says": "1 championship (1977-78); All-NBA First Team 3 times, Second Team 3 times; no MVP and no Finals MVP listed" } ],
+        "hall": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/h/hayesel01.html", "read": "2026-10-08", "says": "Hall of Fame: Inducted as Player in 1990; last season 1983-84" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/elvin_hayes.htm", "read": "2026-10-08", "says": "Inducted into the Naismith Memorial Basketball Hall of Fame as a player in 1990" } ] } },
+    { "id": "nba-reb-5", "sport": "nba", "player": "Karl Malone", "pos": "PF", "family": "reb", "fromList": true, "seasons": 19, "lastSeason": 2004, "games": 1476,
+      "totals": { "pts": 36928, "reb": 14968, "ast": 5248 },
+      "awards": { "rings": 0, "mvps": 2, "finalsMvps": 0, "allNbas": 14 },
+      "hall": { "ballot": "first", "class": 2010, "firstEligibleClass": 2010, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/m/malonka01.html", "read": "2026-10-08", "says": "Position: Power Forward; 19 Yrs, 1985-86 to 2003-04; G 1476, PTS 36928, TRB 14968, AST 5248" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/karl_malone.htm", "read": "2026-10-08", "says": "Power Forward; 19 seasons, 1985-86 to 2003-04; 1,476 games, 36,928 points, 14,968 rebounds, 5,248 assists" } ],
+        "awards": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/m/malonka01.html", "read": "2026-10-08", "says": "2x MVP, 14x All-NBA; no NBA Champ and no Finals MVP listed" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/karl_malone.htm", "read": "2026-10-08", "says": "NBA Titles: none; Season MVP 2 times (1996-97, 1998-99); All-NBA First Team 11 times, Second Team 2 times, Third Team 1 time" } ],
+        "hall": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/m/malonka01.html", "read": "2026-10-08", "says": "Hall of Fame: Inducted as Player in 2010; last season 2003-04" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/karl_malone.htm", "read": "2026-10-08", "says": "Inducted into the Naismith Memorial Basketball Hall of Fame as a player in 2010" } ] } },
+    { "id": "nba-ast-1", "sport": "nba", "player": "John Stockton", "pos": "PG", "family": "ast", "fromList": true, "seasons": 19, "lastSeason": 2003, "games": 1504,
+      "totals": { "pts": 19711, "reb": 4051, "ast": 15806 },
+      "awards": { "rings": 0, "mvps": 0, "finalsMvps": 0, "allNbas": 11 },
+      "hall": { "ballot": "first", "class": 2009, "firstEligibleClass": 2009, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/s/stockjo01.html", "read": "2026-10-08", "says": "Position: Point Guard; 19 Yrs, 1984-85 to 2002-03; G 1504, PTS 19711, TRB 4051, AST 15806" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/john_stockton.htm", "read": "2026-10-08", "says": "Point Guard; 19 seasons, 1984-85 to 2002-03; 1,504 games, 19,711 points, 4,051 rebounds, 15,806 assists" } ],
+        "awards": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/s/stockjo01.html", "read": "2026-10-08", "says": "11x All-NBA, 10x All Star; no NBA Champ, no MVP and no Finals MVP listed (the only MVP is the 1992-93 All-Star Game MVP)" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/john_stockton.htm", "read": "2026-10-08", "says": "NBA Titles: none; All-NBA First Team 2 times, Second Team 6 times, Third Team 3 times; no season MVP and no Finals MVP listed" } ],
+        "hall": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/s/stockjo01.html", "read": "2026-10-08", "says": "Hall of Fame: Inducted as Player in 2009; last season 2002-03" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/john_stockton.htm", "read": "2026-10-08", "says": "Inducted into the Naismith Memorial Basketball Hall of Fame as a player in 2009" } ] } },
+    { "id": "nba-ast-2", "sport": "nba", "player": "Jason Kidd", "pos": "PG", "family": "ast", "fromList": true, "seasons": 19, "lastSeason": 2013, "games": 1391,
+      "totals": { "pts": 17529, "reb": 8725, "ast": 12091 },
+      "awards": { "rings": 1, "mvps": 0, "finalsMvps": 0, "allNbas": 6 },
+      "hall": { "ballot": "first", "class": 2018, "firstEligibleClass": 2018, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/k/kiddja01.html", "read": "2026-10-08", "says": "Position: Point Guard and Shooting Guard; 19 Yrs, 1994-95 to 2012-13; G 1391, PTS 17529, TRB 8725, AST 12091" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/jason_kidd.htm", "read": "2026-10-08", "says": "Point Guard; 19 seasons, 1994-95 to 2012-13; 1,391 games, 17,529 points, 8,725 rebounds, 12,091 assists" } ],
+        "awards": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/k/kiddja01.html", "read": "2026-10-08", "says": "2011 NBA Champ, 6x All-NBA; no MVP and no Finals MVP listed" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/jason_kidd.htm", "read": "2026-10-08", "says": "1 championship (2010-11, Dallas); All-NBA First Team 5 times, Second Team 1 time; no MVP and no Finals MVP listed" } ],
+        "hall": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/k/kiddja01.html", "read": "2026-10-08", "says": "Hall of Fame: Inducted as Player in 2018; last season 2012-13" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/jason_kidd.htm", "read": "2026-10-08", "says": "Inducted into the Naismith Memorial Basketball Hall of Fame as a player in 2018" } ] } },
+    { "id": "nba-ast-3", "sport": "nba", "player": "Steve Nash", "pos": "PG", "family": "ast", "fromList": true, "seasons": 18, "lastSeason": 2014, "games": 1217,
+      "totals": { "pts": 17387, "reb": 3642, "ast": 10335 },
+      "awards": { "rings": 0, "mvps": 2, "finalsMvps": 0, "allNbas": 7 },
+      "hall": { "ballot": "first", "class": 2018, "firstEligibleClass": 2018, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/n/nashst01.html", "read": "2026-10-08", "says": "Position: Point Guard; 18 Yrs, 1996-97 to 2013-14; G 1217, PTS 17387, TRB 3642, AST 10335" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/steve_nash.htm", "read": "2026-10-08", "says": "Point Guard; 18 seasons, 1996-97 to 2013-14; 1,217 games, 17,387 points, 3,642 rebounds, 10,335 assists" } ],
+        "awards": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/n/nashst01.html", "read": "2026-10-08", "says": "2x MVP, 7x All-NBA; no NBA Champ and no Finals MVP listed" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/steve_nash.htm", "read": "2026-10-08", "says": "NBA Titles: none; Season MVP 2 times (2004-05, 2005-06); All-NBA First Team 3 times, Second Team 2 times, Third Team 2 times" } ],
+        "hall": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/n/nashst01.html", "read": "2026-10-08", "says": "Hall of Fame: Inducted as Player in 2018; last season 2013-14" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/steve_nash.htm", "read": "2026-10-08", "says": "Inducted into the Naismith Memorial Basketball Hall of Fame as a player in 2018" } ] } },
+    { "id": "nba-ast-4", "sport": "nba", "player": "Mark Jackson", "pos": "PG", "family": "ast", "fromList": true, "seasons": 17, "lastSeason": 2004, "games": 1296,
+      "totals": { "pts": 12489, "reb": 4963, "ast": 10334 },
+      "awards": { "rings": 0, "mvps": 0, "finalsMvps": 0, "allNbas": 0 },
+      "hall": { "ballot": "never", "route": "main", "firstEligibleClass": 2010 },
+      "sources": {
+        "line": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/j/jacksma01.html", "read": "2026-10-08", "says": "Position: Point Guard; 17 Yrs, 1987-88 to 2003-04; G 1296, PTS 12489, TRB 4963, AST 10334" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/mark_jackson.htm", "read": "2026-10-08", "says": "Guard; 17 seasons, 1987-88 to 2003-04; 1,296 games, 12,489 points, 4,963 rebounds, 10,334 assists" } ],
+        "awards": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/j/jacksma01.html", "read": "2026-10-08", "says": "1x All Star, 1996-97 AST Champ, 1987-88 ROY; no NBA Champ, MVP, Finals MVP or All-NBA listed" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/mark_jackson.htm", "read": "2026-10-08", "says": "NBA Titles: none; All-Star once (1989); Rookie of the Year; no MVP, Finals MVP or All-NBA team listed" } ],
+        "hall": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/j/jacksma01.html", "read": "2026-10-08", "says": "the header has no Hall of Fame line, and the career assists list carries no Hall of Fame asterisk beside his name; last season 2003-04" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/mark_jackson.htm", "read": "2026-10-08", "says": "no Hall of Fame entry is listed on his page" } ] } },
+    { "id": "nba-ast-5", "sport": "nba", "player": "Magic Johnson", "pos": "PG", "family": "ast", "fromList": true, "seasons": 13, "lastSeason": 1996, "games": 906,
+      "totals": { "pts": 17707, "reb": 6559, "ast": 10141 },
+      "awards": { "rings": 5, "mvps": 3, "finalsMvps": 3, "allNbas": 10 },
+      "hall": { "ballot": "first", "class": 2002, "firstEligibleClass": 2002, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/j/johnsma02.html", "read": "2026-10-08", "says": "Position: Point Guard, Shooting Guard, and Power Forward; 13 Yrs, 1979-80 to 1995-96; G 906, PTS 17707, TRB 6559, AST 10141" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/magic_johnson.htm", "read": "2026-10-08", "says": "Point Guard / Forward; 13 seasons, 1979-80 to 1995-96; 906 games, 17,707 points, 6,559 rebounds, 10,141 assists" } ],
+        "awards": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/j/johnsma02.html", "read": "2026-10-08", "says": "5x NBA Champ, 3x MVP, 3x Finals MVP, 10x All-NBA" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/magic_johnson.htm", "read": "2026-10-08", "says": "5 championships; Season MVP 3 times; Finals MVP 3 times; All-NBA First Team 9 times, Second Team 1 time" } ],
+        "hall": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/j/johnsma02.html", "read": "2026-10-08", "says": "Hall of Fame: Inducted as Player in 2002; last season 1995-96" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/magic_johnson.htm", "read": "2026-10-08", "says": "Inducted into the Naismith Memorial Basketball Hall of Fame as a player in 2002" } ] } },
+    { "id": "nba-reb-6", "sport": "nba", "player": "Robert Parish", "pos": "C", "family": "reb", "fromList": false, "seasons": 21, "lastSeason": 1997, "games": 1611,
+      "totals": { "pts": 23334, "reb": 14715, "ast": 2180 },
+      "awards": { "rings": 4, "mvps": 0, "finalsMvps": 0, "allNbas": 2 },
+      "hall": { "ballot": "first", "class": 2003, "firstEligibleClass": 2003, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/p/parisro01.html", "read": "2026-10-08", "says": "Position: Center; 21 Yrs, 1976-77 to 1996-97; G 1611, PTS 23334, TRB 14715, AST 2180" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/robert_parish.htm", "read": "2026-10-08", "says": "Center; 21 seasons, 1976-77 to 1996-97; 1,611 games, 23,334 points, 14,715 rebounds, 2,180 assists" } ],
+        "awards": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/p/parisro01.html", "read": "2026-10-08", "says": "4x NBA Champ, 2x All-NBA; no MVP and no Finals MVP listed" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/robert_parish.htm", "read": "2026-10-08", "says": "4 championships; All-NBA Second Team 1 time (1981-82), Third Team 1 time (1988-89); no MVP and no Finals MVP listed" } ],
+        "hall": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/p/parisro01.html", "read": "2026-10-08", "says": "Hall of Fame: Inducted as Player in 2003; last season 1996-97" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/robert_parish.htm", "read": "2026-10-08", "says": "Inducted into the Naismith Memorial Basketball Hall of Fame as a player in 2003" } ] } },
+    { "id": "nba-reb-7", "sport": "nba", "player": "Nate Thurmond", "pos": "C", "family": "reb", "fromList": false, "seasons": 14, "lastSeason": 1977, "games": 964,
+      "totals": { "pts": 14437, "reb": 14464, "ast": null },
+      "nulls": { "ast": "Basketball-Reference says 2,624 assists and Land of Basketball 2,575; no third source was read, so the harness reads zero (assists pay a centre nothing under 7,490)" },
+      "awards": { "rings": 0, "mvps": 0, "finalsMvps": 0, "allNbas": 0 },
+      "hall": { "ballot": "later", "class": 1985, "firstEligibleClass": 1983, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/t/thurmna01.html", "read": "2026-10-08", "says": "Position: Center and Power Forward; 14 Yrs, 1963-64 to 1976-77; G 964, PTS 14437, TRB 14464, AST 2624" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/nate_thurmond.htm", "read": "2026-10-08", "says": "Center / Forward; 14 seasons, 1963-64 to 1976-77; 964 games, 14,437 points, 14,464 rebounds, 2,575 assists" } ],
+        "awards": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/t/thurmna01.html", "read": "2026-10-08", "says": "7x All Star, 5x All-Defensive; no NBA Champ, MVP, Finals MVP or All-NBA listed" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/nate_thurmond.htm", "read": "2026-10-08", "says": "NBA Titles: none; All-Defensive and All-Rookie teams only, no All-NBA team listed; no MVP and no Finals MVP listed" } ],
+        "hall": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/t/thurmna01.html", "read": "2026-10-08", "says": "Hall of Fame: Inducted as Player in 1985; last season 1976-77" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/nate_thurmond.htm", "read": "2026-10-08", "says": "Inducted into the Naismith Memorial Basketball Hall of Fame as a player in 1985" } ] } },
+    { "id": "nba-reb-8", "sport": "nba", "player": "Walt Bellamy", "pos": "C", "family": "reb", "fromList": false, "seasons": 14, "lastSeason": 1975, "games": 1043,
+      "totals": { "pts": 20941, "reb": 14241, "ast": 2544 },
+      "awards": { "rings": 0, "mvps": 0, "finalsMvps": 0, "allNbas": 0 },
+      "hall": { "ballot": "later", "class": 1993, "firstEligibleClass": 1981, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/b/bellawa01.html", "read": "2026-10-08", "says": "Position: Center; 14 Yrs, 1961-62 to 1974-75; G 1043, PTS 20941, TRB 14241, AST 2544" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/walt_bellamy.htm", "read": "2026-10-08", "says": "Center; 14 seasons, 1961-62 to 1974-75; 1,043 games, 20,941 points, 14,241 rebounds, 2,544 assists" } ],
+        "awards": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/b/bellawa01.html", "read": "2026-10-08", "says": "4x All Star, 1961-62 ROY; \"Walt Bellamy won 0 championships\"; no MVP, Finals MVP or All-NBA listed" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/walt_bellamy.htm", "read": "2026-10-08", "says": "NBA Titles: none; Rookie of the Year (1961-62) the only award listed; no MVP, Finals MVP or All-NBA team" } ],
+        "hall": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/b/bellawa01.html", "read": "2026-10-08", "says": "Hall of Fame: Inducted as Player in 1993; last season 1974-75" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/walt_bellamy.htm", "read": "2026-10-08", "says": "Inducted into the Naismith Memorial Basketball Hall of Fame as a player in 1993" } ] } },
+    { "id": "nba-reb-9", "sport": "nba", "player": "Buck Williams", "pos": "PF", "family": "reb", "fromList": false, "seasons": 17, "lastSeason": 1998, "games": 1307,
+      "totals": { "pts": 16784, "reb": 13017, "ast": 1646 },
+      "awards": { "rings": 0, "mvps": 0, "finalsMvps": 0, "allNbas": 1 },
+      "hall": { "ballot": "never", "route": "main", "firstEligibleClass": 2004 },
+      "sources": {
+        "line": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/w/willibu01.html", "read": "2026-10-08", "says": "Position: Power Forward; 17 Yrs, 1981-82 to 1997-98; G 1307, PTS 16784, TRB 13017, AST 1646" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/buck_williams.htm", "read": "2026-10-08", "says": "Forward / Center; 17 seasons, 1981-82 to 1997-98; 1,307 games, 16,784 points, 13,017 rebounds, 1,646 assists" } ],
+        "awards": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/w/willibu01.html", "read": "2026-10-08", "says": "3x All Star, 1982-83 All-NBA (one season), 4x All-Defensive; no NBA Champ, MVP or Finals MVP listed" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/buck_williams.htm", "read": "2026-10-08", "says": "NBA Titles: none; All-NBA Second Team 1 time (1982-83); no MVP and no Finals MVP listed" } ],
+        "hall": [
+          { "publisher": "Basketball-Reference", "url": "https://www.basketball-reference.com/players/w/willibu01.html", "read": "2026-10-08", "says": "the header has no Hall of Fame line, and the career rebounds list carries no Hall of Fame asterisk beside his name; last season 1997-98" },
+          { "publisher": "Land of Basketball", "url": "https://www.landofbasketball.com/nba_players/buck_williams.htm", "read": "2026-10-08", "says": "no Hall of Fame entry is listed on his page" } ] } },
+    { "id": "nhl-goals-1", "sport": "nhl", "player": "Wayne Gretzky", "pos": "C", "family": "goals", "fromList": true, "seasons": 20, "lastSeason": 1999, "games": 1487,
+      "totals": { "goals": 894, "assists": 1963, "points": 2857 },
+      "awards": { "cups": 4, "harts": 9, "connSmythes": 2, "allStars": 15 },
+      "hall": { "ballot": "first", "class": 1999, "firstEligibleClass": 1999, "route": "main", "waitWaived": true },
+      "sources": {
+        "line": [
+          { "publisher": "National Hockey League", "url": "https://api-web.nhle.com/v1/player/8447400/landing", "read": "2026-10-08", "says": "position C; 20 NHL regular seasons, 1979-80 to 1998-99; careerTotals regularSeason gamesPlayed 1487, goals 894, assists 1963, points 2857; one WHA season before it (1978-79) is listed apart and is in none of these totals" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/g/gretzwa01.html", "read": "2026-10-08", "says": "Position: C; NHL (20 Yrs); had 894 goals over his career; had 2,857 points over his career (assists by difference 1,963); last played in 1999" } ],
+        "awards": [
+          { "publisher": "National Hockey League", "url": "https://api-web.nhle.com/v1/player/8447400/landing", "read": "2026-10-08", "says": "awards: Stanley Cup in 4 seasons, Hart Memorial Trophy in 9, Conn Smythe Trophy in 2" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/g/gretzwa01.html", "read": "2026-10-08", "says": "has won 4 Stanley Cups as a player; Hart-1 in 9 seasons; ASnhl-1 (First All-Star Team) in 8 seasons and ASnhl-2 (Second) in 7" },
+          { "publisher": "Elite Prospects", "url": "https://www.eliteprospects.com/player/9678/wayne-gretzky", "read": "2026-10-08", "says": "NHL First All-Star Team in 8 seasons, NHL Second All-Star Team in 7; NHL Stanley Cup Champion in 4; NHL Most Valuable Player (Hart Trophy) in 9; NHL Stanley Cup MVP (Conn Smythe Trophy) in 2" } ],
+        "hall": [
+          { "publisher": "National Hockey League", "url": "https://records.nhl.com/site/api/player?cayenneExp=id=8447400", "read": "2026-10-08", "says": "inHockeyHof true, hofInductionYear 1999" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/g/gretzwa01.html", "read": "2026-10-08", "says": "was elected into the Hockey Hall of Fame as a Player in 1999; last played in 1999" } ] } },
+    { "id": "nhl-goals-2", "sport": "nhl", "player": "Brett Hull", "pos": "RW", "family": "goals", "fromList": true, "seasons": 19, "lastSeason": 2006, "games": 1269,
+      "totals": { "goals": 741, "assists": 650, "points": 1391 },
+      "awards": { "cups": 2, "harts": 1, "connSmythes": 0, "allStars": 3 },
+      "hall": { "ballot": "first", "class": 2009, "firstEligibleClass": 2009, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "National Hockey League", "url": "https://api-web.nhle.com/v1/player/8448091/landing", "read": "2026-10-08", "says": "position R; 19 NHL regular seasons, 1986-87 to 2005-06; careerTotals regularSeason gamesPlayed 1269, goals 741, assists 650, points 1391" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/h/hullbr01.html", "read": "2026-10-08", "says": "Position: RW; NHL (19 Yrs); had 741 goals over his career; had 1,391 points over his career (assists by difference 650); last played in 2006" } ],
+        "awards": [
+          { "publisher": "National Hockey League", "url": "https://api-web.nhle.com/v1/player/8448091/landing", "read": "2026-10-08", "says": "awards: Stanley Cup in 2 seasons, Hart Memorial Trophy in 1, Conn Smythe Trophy in 0" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/h/hullbr01.html", "read": "2026-10-08", "says": "has won 2 Stanley Cups as a player; Hart-1 in 1 seasons; ASnhl-1 (First All-Star Team) in 3 seasons and ASnhl-2 (Second) in 0" },
+          { "publisher": "Elite Prospects", "url": "https://www.eliteprospects.com/player/21341/brett-hull", "read": "2026-10-08", "says": "NHL First All-Star Team in 3 seasons, NHL Second All-Star Team in 0; NHL Stanley Cup Champion in 2; NHL Most Valuable Player (Hart Trophy) in 1; NHL Stanley Cup MVP (Conn Smythe Trophy) in 0" } ],
+        "hall": [
+          { "publisher": "National Hockey League", "url": "https://records.nhl.com/site/api/player?cayenneExp=id=8448091", "read": "2026-10-08", "says": "inHockeyHof true, hofInductionYear 2009" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/h/hullbr01.html", "read": "2026-10-08", "says": "was elected into the Hockey Hall of Fame as a Player in 2009; last played in 2006" } ] } },
+    { "id": "nhl-goals-3", "sport": "nhl", "player": "Marcel Dionne", "pos": "C", "family": "goals", "fromList": true, "seasons": 18, "lastSeason": 1989, "games": 1348,
+      "totals": { "goals": 731, "assists": 1040, "points": 1771 },
+      "awards": { "cups": 0, "harts": 0, "connSmythes": 0, "allStars": 4 },
+      "hall": { "ballot": "first", "class": 1992, "firstEligibleClass": 1992, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "National Hockey League", "url": "https://api-web.nhle.com/v1/player/8446430/landing", "read": "2026-10-08", "says": "position C; 18 NHL regular seasons, 1971-72 to 1988-89; careerTotals regularSeason gamesPlayed 1348, goals 731, assists 1040, points 1771" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/d/dionnma01.html", "read": "2026-10-08", "says": "Position: C; NHL (18 Yrs); had 731 goals over his career; had 1,771 points over his career (assists by difference 1,040); last played in 1989" } ],
+        "awards": [
+          { "publisher": "National Hockey League", "url": "https://api-web.nhle.com/v1/player/8446430/landing", "read": "2026-10-08", "says": "awards: Stanley Cup in 0 seasons, Hart Memorial Trophy in 0, Conn Smythe Trophy in 0" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/d/dionnma01.html", "read": "2026-10-08", "says": "has never won a Stanley Cup as a player; Hart-1 in 0 seasons; ASnhl-1 (First All-Star Team) in 2 seasons and ASnhl-2 (Second) in 2" },
+          { "publisher": "Elite Prospects", "url": "https://www.eliteprospects.com/player/22520/marcel-dionne", "read": "2026-10-08", "says": "NHL First All-Star Team in 2 seasons, NHL Second All-Star Team in 2; NHL Stanley Cup Champion in 0; NHL Most Valuable Player (Hart Trophy) in 0; NHL Stanley Cup MVP (Conn Smythe Trophy) in 0" } ],
+        "hall": [
+          { "publisher": "National Hockey League", "url": "https://records.nhl.com/site/api/player?cayenneExp=id=8446430", "read": "2026-10-08", "says": "inHockeyHof true, hofInductionYear 1992" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/d/dionnma01.html", "read": "2026-10-08", "says": "was elected into the Hockey Hall of Fame as a Player in 1992; last played in 1989" } ] } },
+    { "id": "nhl-goals-4", "sport": "nhl", "player": "Phil Esposito", "pos": "C", "family": "goals", "fromList": true, "seasons": 18, "lastSeason": 1981, "games": 1282,
+      "totals": { "goals": 717, "assists": 873, "points": 1590 },
+      "awards": { "cups": 2, "harts": 2, "connSmythes": 0, "allStars": 8 },
+      "hall": { "ballot": "first", "class": 1984, "firstEligibleClass": 1984, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "National Hockey League", "url": "https://api-web.nhle.com/v1/player/8446722/landing", "read": "2026-10-08", "says": "position C; 18 NHL regular seasons, 1963-64 to 1980-81; careerTotals regularSeason gamesPlayed 1282, goals 717, assists 873, points 1590" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/e/esposph01.html", "read": "2026-10-08", "says": "Position: C; NHL (18 Yrs); had 717 goals over his career; had 1,590 points over his career (assists by difference 873); last played in 1981" } ],
+        "awards": [
+          { "publisher": "National Hockey League", "url": "https://api-web.nhle.com/v1/player/8446722/landing", "read": "2026-10-08", "says": "awards: Stanley Cup in 2 seasons, Hart Memorial Trophy in 2, Conn Smythe Trophy in 0" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/e/esposph01.html", "read": "2026-10-08", "says": "has won 2 Stanley Cups as a player; Hart-1 in 2 seasons; ASnhl-1 (First All-Star Team) in 6 seasons and ASnhl-2 (Second) in 2" },
+          { "publisher": "Elite Prospects", "url": "https://www.eliteprospects.com/player/22943/phil-esposito", "read": "2026-10-08", "says": "NHL First All-Star Team in 6 seasons, NHL Second All-Star Team in 2; NHL Stanley Cup Champion in 2; NHL Most Valuable Player (Hart Trophy) in 2; NHL Stanley Cup MVP (Conn Smythe Trophy) in 0" } ],
+        "hall": [
+          { "publisher": "National Hockey League", "url": "https://records.nhl.com/site/api/player?cayenneExp=id=8446722", "read": "2026-10-08", "says": "inHockeyHof true, hofInductionYear 1984" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/e/esposph01.html", "read": "2026-10-08", "says": "was elected into the Hockey Hall of Fame as a Player in 1984; last played in 1981" } ] } },
+    { "id": "nhl-goals-5", "sport": "nhl", "player": "Mike Gartner", "pos": "RW", "family": "goals", "fromList": true, "seasons": 19, "lastSeason": 1998, "games": 1432,
+      "totals": { "goals": 708, "assists": 627, "points": 1335 },
+      "awards": { "cups": 0, "harts": 0, "connSmythes": 0, "allStars": 0 },
+      "hall": { "ballot": "first", "class": 2001, "firstEligibleClass": 2001, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "National Hockey League", "url": "https://api-web.nhle.com/v1/player/8447067/landing", "read": "2026-10-08", "says": "position R; 19 NHL regular seasons, 1979-80 to 1997-98; careerTotals regularSeason gamesPlayed 1432, goals 708, assists 627, points 1335; one WHA season before it (1978-79) is listed apart and is in none of these totals" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/g/gartnmi01.html", "read": "2026-10-08", "says": "Position: RW; NHL (19 Yrs); had 708 goals over his career; had 1,335 points over his career (assists by difference 627); last played in 1998" } ],
+        "awards": [
+          { "publisher": "National Hockey League", "url": "https://api-web.nhle.com/v1/player/8447067/landing", "read": "2026-10-08", "says": "awards: Stanley Cup in 0 seasons, Hart Memorial Trophy in 0, Conn Smythe Trophy in 0" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/g/gartnmi01.html", "read": "2026-10-08", "says": "has never won a Stanley Cup as a player; Hart-1 in 0 seasons; ASnhl-1 (First All-Star Team) in 0 seasons and ASnhl-2 (Second) in 0" },
+          { "publisher": "Elite Prospects", "url": "https://www.eliteprospects.com/player/22110/mike-gartner", "read": "2026-10-08", "says": "NHL First All-Star Team in 0 seasons, NHL Second All-Star Team in 0; NHL Stanley Cup Champion in 0; NHL Most Valuable Player (Hart Trophy) in 0; NHL Stanley Cup MVP (Conn Smythe Trophy) in 0" } ],
+        "hall": [
+          { "publisher": "National Hockey League", "url": "https://records.nhl.com/site/api/player?cayenneExp=id=8447067", "read": "2026-10-08", "says": "inHockeyHof true, hofInductionYear 2001" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/g/gartnmi01.html", "read": "2026-10-08", "says": "was elected into the Hockey Hall of Fame as a Player in 2001; last played in 1998" } ] } },
+    { "id": "nhl-assists-1", "sport": "nhl", "player": "Wayne Gretzky", "pos": "C", "family": "assists", "fromList": true, "sameAs": "nhl-goals-1", "seasons": 20, "lastSeason": 1999, "games": 1487,
+      "totals": { "goals": 894, "assists": 1963, "points": 2857 },
+      "awards": { "cups": 4, "harts": 9, "connSmythes": 2, "allStars": 15 },
+      "hall": { "ballot": "first", "class": 1999, "firstEligibleClass": 1999, "route": "main", "waitWaived": true },
+      "sources": {
+        "line": [
+          { "publisher": "National Hockey League", "url": "https://api-web.nhle.com/v1/player/8447400/landing", "read": "2026-10-08", "says": "position C; 20 NHL regular seasons, 1979-80 to 1998-99; careerTotals regularSeason gamesPlayed 1487, goals 894, assists 1963, points 2857; one WHA season before it (1978-79) is listed apart and is in none of these totals" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/g/gretzwa01.html", "read": "2026-10-08", "says": "Position: C; NHL (20 Yrs); had 894 goals over his career; had 2,857 points over his career (assists by difference 1,963); last played in 1999" } ],
+        "awards": [
+          { "publisher": "National Hockey League", "url": "https://api-web.nhle.com/v1/player/8447400/landing", "read": "2026-10-08", "says": "awards: Stanley Cup in 4 seasons, Hart Memorial Trophy in 9, Conn Smythe Trophy in 2" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/g/gretzwa01.html", "read": "2026-10-08", "says": "has won 4 Stanley Cups as a player; Hart-1 in 9 seasons; ASnhl-1 (First All-Star Team) in 8 seasons and ASnhl-2 (Second) in 7" },
+          { "publisher": "Elite Prospects", "url": "https://www.eliteprospects.com/player/9678/wayne-gretzky", "read": "2026-10-08", "says": "NHL First All-Star Team in 8 seasons, NHL Second All-Star Team in 7; NHL Stanley Cup Champion in 4; NHL Most Valuable Player (Hart Trophy) in 9; NHL Stanley Cup MVP (Conn Smythe Trophy) in 2" } ],
+        "hall": [
+          { "publisher": "National Hockey League", "url": "https://records.nhl.com/site/api/player?cayenneExp=id=8447400", "read": "2026-10-08", "says": "inHockeyHof true, hofInductionYear 1999" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/g/gretzwa01.html", "read": "2026-10-08", "says": "was elected into the Hockey Hall of Fame as a Player in 1999; last played in 1999" } ] } },
+    { "id": "nhl-assists-2", "sport": "nhl", "player": "Ron Francis", "pos": "C", "family": "assists", "fromList": true, "seasons": 23, "lastSeason": 2004, "games": 1731,
+      "totals": { "goals": 549, "assists": 1249, "points": 1798 },
+      "awards": { "cups": 2, "harts": 0, "connSmythes": 0, "allStars": 0 },
+      "hall": { "ballot": "first", "class": 2007, "firstEligibleClass": 2007, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "National Hockey League", "url": "https://api-web.nhle.com/v1/player/8446951/landing", "read": "2026-10-08", "says": "position C; 23 NHL regular seasons, 1981-82 to 2003-04; careerTotals regularSeason gamesPlayed 1731, goals 549, assists 1249, points 1798" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/f/francro01.html", "read": "2026-10-08", "says": "Position: C; NHL (23 Yrs); had 549 goals over his career; had 1,798 points over his career (assists by difference 1,249); last played in 2004" } ],
+        "awards": [
+          { "publisher": "National Hockey League", "url": "https://api-web.nhle.com/v1/player/8446951/landing", "read": "2026-10-08", "says": "awards: Stanley Cup in 2 seasons, Hart Memorial Trophy in 0, Conn Smythe Trophy in 0" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/f/francro01.html", "read": "2026-10-08", "says": "has won 2 Stanley Cups as a player; Hart-1 in 0 seasons; ASnhl-1 (First All-Star Team) in 0 seasons and ASnhl-2 (Second) in 0" },
+          { "publisher": "Elite Prospects", "url": "https://www.eliteprospects.com/player/21347/ron-francis", "read": "2026-10-08", "says": "NHL First All-Star Team in 0 seasons, NHL Second All-Star Team in 0; NHL Stanley Cup Champion in 2; NHL Most Valuable Player (Hart Trophy) in 0; NHL Stanley Cup MVP (Conn Smythe Trophy) in 0" } ],
+        "hall": [
+          { "publisher": "National Hockey League", "url": "https://records.nhl.com/site/api/player?cayenneExp=id=8446951", "read": "2026-10-08", "says": "inHockeyHof true, hofInductionYear 2007" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/f/francro01.html", "read": "2026-10-08", "says": "was elected into the Hockey Hall of Fame as a Player in 2007; last played in 2004" } ] } },
+    { "id": "nhl-assists-3", "sport": "nhl", "player": "Mark Messier", "pos": "LW", "family": "assists", "fromList": true, "seasons": 25, "lastSeason": 2004, "games": 1756,
+      "totals": { "goals": 694, "assists": 1193, "points": 1887 },
+      "awards": { "cups": 6, "harts": 2, "connSmythes": 1, "allStars": 5 },
+      "hall": { "ballot": "first", "class": 2007, "firstEligibleClass": 2007, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "National Hockey League", "url": "https://api-web.nhle.com/v1/player/8449573/landing", "read": "2026-10-08", "says": "position C; 25 NHL regular seasons, 1979-80 to 2003-04; careerTotals regularSeason gamesPlayed 1756, goals 694, assists 1193, points 1887; one WHA season before it (1978-79) is listed apart and is in none of these totals" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/m/messima01.html", "read": "2026-10-08", "says": "Position: LW/C; NHL (25 Yrs); had 694 goals over his career; had 1,887 points over his career (assists by difference 1,193); last played in 2004" } ],
+        "awards": [
+          { "publisher": "National Hockey League", "url": "https://api-web.nhle.com/v1/player/8449573/landing", "read": "2026-10-08", "says": "awards: Stanley Cup in 6 seasons, Hart Memorial Trophy in 2, Conn Smythe Trophy in 1" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/m/messima01.html", "read": "2026-10-08", "says": "has won 6 Stanley Cups as a player; Hart-1 in 2 seasons; ASnhl-1 (First All-Star Team) in 4 seasons and ASnhl-2 (Second) in 1" },
+          { "publisher": "Elite Prospects", "url": "https://www.eliteprospects.com/player/21309/mark-messier", "read": "2026-10-08", "says": "NHL First All-Star Team in 4 seasons, NHL Second All-Star Team in 1; NHL Stanley Cup Champion in 6; NHL Most Valuable Player (Hart Trophy) in 2; NHL Stanley Cup MVP (Conn Smythe Trophy) in 1" } ],
+        "hall": [
+          { "publisher": "National Hockey League", "url": "https://records.nhl.com/site/api/player?cayenneExp=id=8449573", "read": "2026-10-08", "says": "inHockeyHof true, hofInductionYear 2007" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/m/messima01.html", "read": "2026-10-08", "says": "was elected into the Hockey Hall of Fame as a Player in 2007; last played in 2004" } ] } },
+    { "id": "nhl-assists-4", "sport": "nhl", "player": "Ray Bourque", "pos": "D", "family": "assists", "fromList": true, "seasons": 22, "lastSeason": 2001, "games": 1612,
+      "totals": { "goals": 410, "assists": 1169, "points": 1579 },
+      "awards": { "cups": 1, "harts": 5, "connSmythes": 0, "allStars": 19 },
+      "hall": { "ballot": "first", "class": 2004, "firstEligibleClass": 2004, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "National Hockey League", "url": "https://api-web.nhle.com/v1/player/8445621/landing", "read": "2026-10-08", "says": "position D; 22 NHL regular seasons, 1979-80 to 2000-01; careerTotals regularSeason gamesPlayed 1612, goals 410, assists 1169, points 1579" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/b/bourqra01.html", "read": "2026-10-08", "says": "Position: D; NHL (22 Yrs); had 410 goals over his career; had 1,579 points over his career (assists by difference 1,169); last played in 2001" } ],
+        "awards": [
+          { "publisher": "National Hockey League", "url": "https://api-web.nhle.com/v1/player/8445621/landing", "read": "2026-10-08", "says": "awards: Stanley Cup in 1 seasons, James Norris Memorial Trophy in 5, Conn Smythe Trophy in 0" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/b/bourqra01.html", "read": "2026-10-08", "says": "has won 1 Stanley Cup as a player; Norris-1 in 5 seasons; ASnhl-1 or ASnhl-2 (First All-Star Team, two defencemen a team) in 13 seasons and ASnhl-3 or ASnhl-4 (Second) in 6" },
+          { "publisher": "Elite Prospects", "url": "https://www.eliteprospects.com/player/19141/ray-bourque", "read": "2026-10-08", "says": "NHL First All-Star Team in 13 seasons, NHL Second All-Star Team in 6; NHL Stanley Cup Champion in 1; NHL Best Defenseman (Norris Trophy) in 5; NHL Stanley Cup MVP (Conn Smythe Trophy) in 0" } ],
+        "hall": [
+          { "publisher": "National Hockey League", "url": "https://records.nhl.com/site/api/player?cayenneExp=id=8445621", "read": "2026-10-08", "says": "inHockeyHof true, hofInductionYear 2004" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/b/bourqra01.html", "read": "2026-10-08", "says": "was elected into the Hockey Hall of Fame as a Player in 2004; last played in 2001" } ] } },
+    { "id": "nhl-assists-5", "sport": "nhl", "player": "Paul Coffey", "pos": "D", "family": "assists", "fromList": true, "seasons": 21, "lastSeason": 2001, "games": 1409,
+      "totals": { "goals": 396, "assists": 1135, "points": 1531 },
+      "awards": { "cups": 4, "harts": 3, "connSmythes": 0, "allStars": 8 },
+      "hall": { "ballot": "first", "class": 2004, "firstEligibleClass": 2004, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "National Hockey League", "url": "https://api-web.nhle.com/v1/player/8446117/landing", "read": "2026-10-08", "says": "position D; 21 NHL regular seasons, 1980-81 to 2000-01; careerTotals regularSeason gamesPlayed 1409, goals 396, assists 1135, points 1531" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/c/coffepa01.html", "read": "2026-10-08", "says": "Position: D; NHL (21 Yrs); had 396 goals over his career; had 1,531 points over his career (assists by difference 1,135); last played in 2001" } ],
+        "awards": [
+          { "publisher": "National Hockey League", "url": "https://api-web.nhle.com/v1/player/8446117/landing", "read": "2026-10-08", "says": "awards: Stanley Cup in 4 seasons, James Norris Memorial Trophy in 3, Conn Smythe Trophy in 0" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/c/coffepa01.html", "read": "2026-10-08", "says": "has won 4 Stanley Cups as a player; Norris-1 in 3 seasons; ASnhl-1 or ASnhl-2 (First All-Star Team, two defencemen a team) in 4 seasons and ASnhl-3 or ASnhl-4 (Second) in 4" },
+          { "publisher": "Elite Prospects", "url": "https://www.eliteprospects.com/player/21321/paul-coffey", "read": "2026-10-08", "says": "NHL First All-Star Team in 4 seasons, NHL Second All-Star Team in 4; NHL Stanley Cup Champion in 4; NHL Best Defenseman (Norris Trophy) in 3; NHL Stanley Cup MVP (Conn Smythe Trophy) in 0" } ],
+        "hall": [
+          { "publisher": "National Hockey League", "url": "https://records.nhl.com/site/api/player?cayenneExp=id=8446117", "read": "2026-10-08", "says": "inHockeyHof true, hofInductionYear 2004" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/c/coffepa01.html", "read": "2026-10-08", "says": "was elected into the Hockey Hall of Fame as a Player in 2004; last played in 2001" } ] } },
+    { "id": "nhl-goals-6", "sport": "nhl", "player": "Steve Yzerman", "pos": "C", "family": "goals", "fromList": false, "seasons": 22, "lastSeason": 2006, "games": 1514,
+      "totals": { "goals": 692, "assists": 1063, "points": 1755 },
+      "awards": { "cups": 3, "harts": 0, "connSmythes": 1, "allStars": 1 },
+      "hall": { "ballot": "first", "class": 2009, "firstEligibleClass": 2009, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "National Hockey League", "url": "https://api-web.nhle.com/v1/player/8452578/landing", "read": "2026-10-08", "says": "position C; 22 NHL regular seasons, 1983-84 to 2005-06; careerTotals regularSeason gamesPlayed 1514, goals 692, assists 1063, points 1755" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/y/yzermst01.html", "read": "2026-10-08", "says": "Position: C; NHL (22 Yrs); had 692 goals over his career; had 1,755 points over his career (assists by difference 1,063); last played in 2006" } ],
+        "awards": [
+          { "publisher": "National Hockey League", "url": "https://api-web.nhle.com/v1/player/8452578/landing", "read": "2026-10-08", "says": "awards: Stanley Cup in 3 seasons, Hart Memorial Trophy in 0, Conn Smythe Trophy in 1" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/y/yzermst01.html", "read": "2026-10-08", "says": "has won 3 Stanley Cups as a player; Hart-1 in 0 seasons; ASnhl-1 (First All-Star Team) in 1 seasons and ASnhl-2 (Second) in 0" },
+          { "publisher": "Elite Prospects", "url": "https://www.eliteprospects.com/player/18904/steve-yzerman", "read": "2026-10-08", "says": "NHL First All-Star Team in 1 seasons, NHL Second All-Star Team in 0; NHL Stanley Cup Champion in 3; NHL Most Valuable Player (Hart Trophy) in 0; NHL Stanley Cup MVP (Conn Smythe Trophy) in 1" } ],
+        "hall": [
+          { "publisher": "National Hockey League", "url": "https://records.nhl.com/site/api/player?cayenneExp=id=8452578", "read": "2026-10-08", "says": "inHockeyHof true, hofInductionYear 2009" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/y/yzermst01.html", "read": "2026-10-08", "says": "was elected into the Hockey Hall of Fame as a Player in 2009; last played in 2006" } ] } },
+    { "id": "nhl-goals-7", "sport": "nhl", "player": "Teemu Selanne", "pos": "RW", "family": "goals", "fromList": false, "seasons": 21, "lastSeason": 2014, "games": 1451,
+      "totals": { "goals": 684, "assists": 773, "points": 1457 },
+      "awards": { "cups": 1, "harts": 0, "connSmythes": 0, "allStars": 4 },
+      "hall": { "ballot": "first", "class": 2017, "firstEligibleClass": 2017, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "National Hockey League", "url": "https://api-web.nhle.com/v1/player/8457981/landing", "read": "2026-10-08", "says": "position R; 21 NHL regular seasons, 1992-93 to 2013-14; careerTotals regularSeason gamesPlayed 1451, goals 684, assists 773, points 1457" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/s/selante01.html", "read": "2026-10-08", "says": "Position: RW; NHL (21 Yrs); had 684 goals over his career; had 1,457 points over his career (assists by difference 773); last played in 2014" } ],
+        "awards": [
+          { "publisher": "National Hockey League", "url": "https://api-web.nhle.com/v1/player/8457981/landing", "read": "2026-10-08", "says": "awards: Stanley Cup in 1 seasons, Hart Memorial Trophy in 0, Conn Smythe Trophy in 0" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/s/selante01.html", "read": "2026-10-08", "says": "has won 1 Stanley Cup as a player; Hart-1 in 0 seasons; ASnhl-1 (First All-Star Team) in 2 seasons and ASnhl-2 (Second) in 2" },
+          { "publisher": "Elite Prospects", "url": "https://www.eliteprospects.com/player/2683/teemu-selanne", "read": "2026-10-08", "says": "NHL First All-Star Team in 2 seasons, NHL Second All-Star Team in 2; NHL Stanley Cup Champion in 1; NHL Most Valuable Player (Hart Trophy) in 0; NHL Stanley Cup MVP (Conn Smythe Trophy) in 0" } ],
+        "hall": [
+          { "publisher": "National Hockey League", "url": "https://records.nhl.com/site/api/player?cayenneExp=id=8457981", "read": "2026-10-08", "says": "inHockeyHof true, hofInductionYear 2017" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/s/selante01.html", "read": "2026-10-08", "says": "was elected into the Hockey Hall of Fame as a Player in 2017; last played in 2014" } ] } },
+    { "id": "nhl-goals-8", "sport": "nhl", "player": "Luc Robitaille", "pos": "LW", "family": "goals", "fromList": false, "seasons": 19, "lastSeason": 2006, "games": 1431,
+      "totals": { "goals": 668, "assists": 726, "points": 1394 },
+      "awards": { "cups": 1, "harts": 0, "connSmythes": 0, "allStars": 8 },
+      "hall": { "ballot": "first", "class": 2009, "firstEligibleClass": 2009, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "National Hockey League", "url": "https://api-web.nhle.com/v1/player/8450941/landing", "read": "2026-10-08", "says": "position L; 19 NHL regular seasons, 1986-87 to 2005-06; careerTotals regularSeason gamesPlayed 1431, goals 668, assists 726, points 1394" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/r/robitlu01.html", "read": "2026-10-08", "says": "Position: LW; NHL (19 Yrs); had 668 goals over his career; had 1,394 points over his career (assists by difference 726); last played in 2006" } ],
+        "awards": [
+          { "publisher": "National Hockey League", "url": "https://api-web.nhle.com/v1/player/8450941/landing", "read": "2026-10-08", "says": "awards: Stanley Cup in 1 seasons, Hart Memorial Trophy in 0, Conn Smythe Trophy in 0" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/r/robitlu01.html", "read": "2026-10-08", "says": "has won 1 Stanley Cup as a player; Hart-1 in 0 seasons; ASnhl-1 (First All-Star Team) in 5 seasons and ASnhl-2 (Second) in 3" },
+          { "publisher": "Elite Prospects", "url": "https://www.eliteprospects.com/player/21334/luc-robitaille", "read": "2026-10-08", "says": "NHL First All-Star Team in 5 seasons, NHL Second All-Star Team in 3; NHL Stanley Cup Champion in 1; NHL Most Valuable Player (Hart Trophy) in 0; NHL Stanley Cup MVP (Conn Smythe Trophy) in 0" } ],
+        "hall": [
+          { "publisher": "National Hockey League", "url": "https://records.nhl.com/site/api/player?cayenneExp=id=8450941", "read": "2026-10-08", "says": "inHockeyHof true, hofInductionYear 2009" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/r/robitlu01.html", "read": "2026-10-08", "says": "was elected into the Hockey Hall of Fame as a Player in 2009; last played in 2006" } ] } },
+    { "id": "nhl-goals-9", "sport": "nhl", "player": "Brendan Shanahan", "pos": "LW", "family": "goals", "fromList": false, "seasons": 21, "lastSeason": 2009, "games": 1524,
+      "totals": { "goals": 656, "assists": 698, "points": 1354 },
+      "awards": { "cups": 3, "harts": 0, "connSmythes": 0, "allStars": 3 },
+      "hall": { "ballot": "later", "class": 2013, "firstEligibleClass": 2012, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "National Hockey League", "url": "https://api-web.nhle.com/v1/player/8451302/landing", "read": "2026-10-08", "says": "position L; 21 NHL regular seasons, 1987-88 to 2008-09; careerTotals regularSeason gamesPlayed 1524, goals 656, assists 698, points 1354" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/s/shanabr01.html", "read": "2026-10-08", "says": "Position: LW; NHL (21 Yrs); had 656 goals over his career; had 1,354 points over his career (assists by difference 698); last played in 2009" } ],
+        "awards": [
+          { "publisher": "National Hockey League", "url": "https://api-web.nhle.com/v1/player/8451302/landing", "read": "2026-10-08", "says": "awards: Stanley Cup in 3 seasons, Hart Memorial Trophy in 0, Conn Smythe Trophy in 0" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/s/shanabr01.html", "read": "2026-10-08", "says": "has won 3 Stanley Cups as a player; Hart-1 in 0 seasons; ASnhl-1 (First All-Star Team) in 2 seasons and ASnhl-2 (Second) in 1" },
+          { "publisher": "Elite Prospects", "url": "https://www.eliteprospects.com/player/8693/brendan-shanahan", "read": "2026-10-08", "says": "NHL First All-Star Team in 2 seasons, NHL Second All-Star Team in 1; NHL Stanley Cup Champion in 3; NHL Most Valuable Player (Hart Trophy) in 0; NHL Stanley Cup MVP (Conn Smythe Trophy) in 0" } ],
+        "hall": [
+          { "publisher": "National Hockey League", "url": "https://records.nhl.com/site/api/player?cayenneExp=id=8451302", "read": "2026-10-08", "says": "inHockeyHof true, hofInductionYear 2013" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/s/shanabr01.html", "read": "2026-10-08", "says": "was elected into the Hockey Hall of Fame as a Player in 2013; last played in 2009" } ] } },
+    { "id": "nhl-goals-10", "sport": "nhl", "player": "Dave Andreychuk", "pos": "LW", "family": "goals", "fromList": false, "seasons": 23, "lastSeason": 2006, "games": 1639,
+      "totals": { "goals": 640, "assists": 698, "points": 1338 },
+      "awards": { "cups": 1, "harts": 0, "connSmythes": 0, "allStars": 0 },
+      "hall": { "ballot": "later", "class": 2017, "firstEligibleClass": 2009, "route": "main" },
+      "sources": {
+        "line": [
+          { "publisher": "National Hockey League", "url": "https://api-web.nhle.com/v1/player/8445000/landing", "read": "2026-10-08", "says": "position L; 23 NHL regular seasons, 1982-83 to 2005-06; careerTotals regularSeason gamesPlayed 1639, goals 640, assists 698, points 1338" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/a/andreda01.html", "read": "2026-10-08", "says": "Position: LW; NHL (23 Yrs); had 640 goals over his career; had 1,338 points over his career (assists by difference 698); last played in 2006" } ],
+        "awards": [
+          { "publisher": "National Hockey League", "url": "https://api-web.nhle.com/v1/player/8445000/landing", "read": "2026-10-08", "says": "awards: Stanley Cup in 1 seasons, Hart Memorial Trophy in 0, Conn Smythe Trophy in 0" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/a/andreda01.html", "read": "2026-10-08", "says": "has won 1 Stanley Cup as a player; Hart-1 in 0 seasons; ASnhl-1 (First All-Star Team) in 0 seasons and ASnhl-2 (Second) in 0" },
+          { "publisher": "Elite Prospects", "url": "https://www.eliteprospects.com/player/21425/dave-andreychuk", "read": "2026-10-08", "says": "NHL First All-Star Team in 0 seasons, NHL Second All-Star Team in 0; NHL Stanley Cup Champion in 1; NHL Most Valuable Player (Hart Trophy) in 0; NHL Stanley Cup MVP (Conn Smythe Trophy) in 0" } ],
+        "hall": [
+          { "publisher": "National Hockey League", "url": "https://records.nhl.com/site/api/player?cayenneExp=id=8445000", "read": "2026-10-08", "says": "inHockeyHof true, hofInductionYear 2017" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/a/andreda01.html", "read": "2026-10-08", "says": "was elected into the Hockey Hall of Fame as a Player in 2017; last played in 2006" } ] } },
+    { "id": "nhl-goals-11", "sport": "nhl", "player": "Pat Verbeek", "pos": "RW", "family": "goals", "fromList": false, "seasons": 20, "lastSeason": 2002, "games": 1424,
+      "totals": { "goals": 522, "assists": 540, "points": 1062 },
+      "awards": { "cups": 1, "harts": 0, "connSmythes": 0, "allStars": 0 },
+      "hall": { "ballot": "never", "route": "main", "firstEligibleClass": 2005 },
+      "sources": {
+        "line": [
+          { "publisher": "National Hockey League", "url": "https://api-web.nhle.com/v1/player/8452216/landing", "read": "2026-10-08", "says": "position R; 20 NHL regular seasons, 1982-83 to 2001-02; careerTotals regularSeason gamesPlayed 1424, goals 522, assists 540, points 1062" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/v/verbepa01.html", "read": "2026-10-08", "says": "Position: RW; NHL (20 Yrs); had 522 goals over his career; had 1,062 points over his career (assists by difference 540); last played in 2002" } ],
+        "awards": [
+          { "publisher": "National Hockey League", "url": "https://api-web.nhle.com/v1/player/8452216/landing", "read": "2026-10-08", "says": "awards: Stanley Cup in 1 seasons, Hart Memorial Trophy in 0, Conn Smythe Trophy in 0" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/v/verbepa01.html", "read": "2026-10-08", "says": "has won 1 Stanley Cup as a player; Hart-1 in 0 seasons; ASnhl-1 (First All-Star Team) in 0 seasons and ASnhl-2 (Second) in 0" },
+          { "publisher": "Elite Prospects", "url": "https://www.eliteprospects.com/player/21310/pat-verbeek", "read": "2026-10-08", "says": "NHL First All-Star Team in 0 seasons, NHL Second All-Star Team in 0; NHL Stanley Cup Champion in 1; NHL Most Valuable Player (Hart Trophy) in 0; NHL Stanley Cup MVP (Conn Smythe Trophy) in 0" } ],
+        "hall": [
+          { "publisher": "National Hockey League", "url": "https://records.nhl.com/site/api/player?cayenneExp=id=8452216", "read": "2026-10-08", "says": "inHockeyHof false, hofInductionYear null" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/v/verbepa01.html", "read": "2026-10-08", "says": "no Hall of Fame line on his page, and the career goals list carries no Hall of Fame asterisk beside his name; last played in 2002" } ] } },
+    { "id": "nhl-goals-12", "sport": "nhl", "player": "Peter Bondra", "pos": "RW", "family": "goals", "fromList": false, "seasons": 16, "lastSeason": 2007, "games": 1081,
+      "totals": { "goals": 503, "assists": 389, "points": 892 },
+      "awards": { "cups": 0, "harts": 0, "connSmythes": 0, "allStars": 0 },
+      "hall": { "ballot": "never", "route": "main", "firstEligibleClass": 2010 },
+      "sources": {
+        "line": [
+          { "publisher": "National Hockey League", "url": "https://api-web.nhle.com/v1/player/8445575/landing", "read": "2026-10-08", "says": "position R; 16 NHL regular seasons, 1990-91 to 2006-07; careerTotals regularSeason gamesPlayed 1081, goals 503, assists 389, points 892" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/b/bondrpe01.html", "read": "2026-10-08", "says": "Position: RW; NHL (16 Yrs); had 503 goals over his career; had 892 points over his career (assists by difference 389); last played in 2007" } ],
+        "awards": [
+          { "publisher": "National Hockey League", "url": "https://api-web.nhle.com/v1/player/8445575/landing", "read": "2026-10-08", "says": "awards: Stanley Cup in 0 seasons, Hart Memorial Trophy in 0, Conn Smythe Trophy in 0" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/b/bondrpe01.html", "read": "2026-10-08", "says": "has never won a Stanley Cup as a player; Hart-1 in 0 seasons; ASnhl-1 (First All-Star Team) in 0 seasons and ASnhl-2 (Second) in 0" },
+          { "publisher": "Elite Prospects", "url": "https://www.eliteprospects.com/player/8553/peter-bondra", "read": "2026-10-08", "says": "NHL First All-Star Team in 0 seasons, NHL Second All-Star Team in 0; NHL Stanley Cup Champion in 0; NHL Most Valuable Player (Hart Trophy) in 0; NHL Stanley Cup MVP (Conn Smythe Trophy) in 0" } ],
+        "hall": [
+          { "publisher": "National Hockey League", "url": "https://records.nhl.com/site/api/player?cayenneExp=id=8445575", "read": "2026-10-08", "says": "inHockeyHof false, hofInductionYear null" },
+          { "publisher": "Hockey-Reference", "url": "https://www.hockey-reference.com/players/b/bondrpe01.html", "read": "2026-10-08", "says": "no Hall of Fame line on his page, and the career goals list carries no Hall of Fame asterisk beside his name; last played in 2007" } ] } }
   ]
 }

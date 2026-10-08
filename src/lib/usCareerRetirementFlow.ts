@@ -89,17 +89,28 @@ export function repairHallOnLoad(c: UsCareerCore): void {
  *  written again (the speech, a coach career) and it keeps no stamp, so it
  *  goes on reading calibration 1. Otherwise this write is the retirement and
  *  it stamps today's calibration. An unreadable or missing save counts as
- *  not retired yet. Known and accepted: an old retired save whose storage is
- *  wiped in another tab while its board is open is written fresh with a
- *  stamp on its next save. Mutates c. */
+ *  not retired yet.
+ *  Two tabs on one save, both ways. (1) The same career was retired a moment
+ *  ago in another tab, so the save on disk is retired AND stamped while this
+ *  tab still holds it live: this tab's retirement keeps the stamp that tab
+ *  wrote (the review of 2026-10-08 measured the write taking it away, and the
+ *  career then read calibration 1 on every later load). (2) Known and
+ *  accepted: an old retired save whose storage is wiped or replaced in
+ *  another tab while its board is open is written fresh with a stamp on its
+ *  next save, because the disk no longer says it was retired. Mutates c. */
 export function stampOnRetirement(c: UsCareerCore, saveKey: string): void {
   if (!c.retired || c.hallCal !== undefined) return;
-  let onDiskRetired = false;
+  type OnDisk = { retired?: unknown; hallCal?: unknown; name?: unknown; pos?: unknown; draftPick?: unknown };
+  let disk: OnDisk | null = null;
   try {
     const raw = localStorage.getItem(saveKey);
-    if (raw) onDiskRetired = (JSON.parse(raw) as { c?: { retired?: unknown } } | null)?.c?.retired === true;
+    if (raw) disk = (JSON.parse(raw) as { c?: OnDisk } | null)?.c ?? null;
   } catch { /* unreadable: not retired yet */ }
-  if (!onDiskRetired) stampHallCalibration(c);
+  if (disk?.retired !== true) { stampHallCalibration(c); return; }
+  // Retired on disk already. With no stamp there it is an old retired save being written again: no stamp.
+  // With one, and the same man, it is this career retired in another tab: keep what it was told.
+  const told = sanitizeHallCal(disk.hallCal);
+  if (told && disk.name === c.name && disk.pos === c.pos && disk.draftPick === c.draftPick) c.hallCal = told;
 }
 
 /** True when this offseason has the talk: it is pending now, or he already
