@@ -1,0 +1,113 @@
+{
+ "base": "http://localhost:4173",
+ "runs": [
+  {
+   "tag": "old390",
+   "errors": [],
+   "aborted": 1,
+   "steps": [
+    {
+     "name": "hub",
+     "ms": 2915,
+     "sx": 0,
+     "y": 0,
+     "h": 21294,
+     "text": "Skip to main content DOUKNOWBALL Back Track stats CLUB MANAGER Your managers on this device. Up to three careers, each one saved on its own. SLOT 1 · LAST PLAYED You Sevilla 2026-27 · Season 1 Week 49 of 54 · Board 100/100 🏆 0 trophies Resume CareerDelete SLOT 2 💼 Empty slot New manager SLOT 3 💼 Empty slot New manager Club Manager: Free Football Management Game A full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: ",
+     "buttons": [
+      "Back",
+      "Track stats",
+      "How to play",
+      "Resume Career",
+      "Delete",
+      "New manager",
+      "New manager",
+      "Report",
+      "Cookie choices",
+      "Light mode",
+      "Report a bug"
+     ]
+    },
+    {
+     "name": "table-mine",
+     "ms": 7832,
+     "sx": 0,
+     "y": 0,
+     "h": 21294,
+     "root": false
+    },
+    {
+     "name": "russia-in-old-save",
+     "ms": 18267,
+     "sx": 0,
+     "y": 0,
+     "h": 21294,
+     "head": "",
+     "ruCount": 0,
+     "root": false
+    },
+    {
+     "name": "brazil-in-old-save",
+     "ms": 28274,
+     "sx": 0,
+     "y": 0,
+     "h": 21294,
+     "root": false
+    }
+   ]
+  },
+  {
+   "tag": "old1280",
+   "errors": [],
+   "aborted": 1,
+   "steps": [
+    {
+     "name": "hub",
+     "ms": 2558,
+     "sx": 0,
+     "y": 0,
+     "h": 12398,
+     "text": "Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats CLUB MANAGER Your managers on this device. Up to three careers, each one saved on its own. SLOT 1 · LAST PLAYED You Sevilla 2026-27 · Season 1 Week 49 of 54 · Board 100/100 🏆 0 trophies Resume CareerDelete SLOT 2 💼 Empty slot New manager SLOT 3 💼 Empty slot New manager Club Manager: Free Football Management Game A full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth",
+     "buttons": [
+      "Back",
+      "Sign up to track your stats",
+      "How to play",
+      "Resume Career",
+      "Delete",
+      "New manager",
+      "New manager",
+      "Report",
+      "Cookie choices",
+      "Light mode",
+      "Report a bug"
+     ]
+    },
+    {
+     "name": "table-mine",
+     "ms": 7491,
+     "sx": 0,
+     "y": 0,
+     "h": 12398,
+     "root": false
+    },
+    {
+     "name": "russia-in-old-save",
+     "ms": 17961,
+     "sx": 0,
+     "y": 0,
+     "h": 12398,
+     "head": "",
+     "ruCount": 0,
+     "root": false
+    },
+    {
+     "name": "brazil-in-old-save",
+     "ms": 27966,
+     "sx": 0,
+     "y": 0,
+     "h": 12398,
+     "root": false
+    }
+   ]
+  }
+ ]
+}

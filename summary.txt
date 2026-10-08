@@ -1,0 +1,8 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+rvwalk-b exit=0 52s | rv-walk: 2 runs, 0 errors recorded, shots in /home/runner/work/_temp/rc-out/files
+rvwalk-a exit=0 55s | rv-walk: 2 runs, 0 errors recorded, shots in /home/runner/work/_temp/rc-out/files
+rvwalk-old exit=0 57s | rv-walk: 2 runs, 0 errors recorded, shots in /home/runner/work/_temp/rc-out/files
+bwalk exit=0 15s | playClubManagerNewCountries: green. Russia can be picked, started and reopened at 390x844 and 1280x800.
+bwalk-nonation exit=1 18s | playClubManagerNewCountries: 2 failure(s) under control nonation
+weight exit=1 27s | sweepWeight: 5 failures
+playCM exit=0 275s | Played Club Manager through its own screens. 0 findings.
