@@ -1,0 +1,6 @@
+# Round 1104 fixer: the very last head a09b8a55 (two script files differ from the head final A ran on)
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+truth: node scripts/simNflTruth.mjs
+truth-nopace: TRUTH_CONTROL=nopace node scripts/simNflTruth.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs

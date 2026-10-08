@@ -1,0 +1,5 @@
+truth exit=0 66s | simNflTruth: green. Seasons are their real length, awards survive a 16 game schedule, rookies are paid their slot, kickers go in round four or later, sacks come in halves
+truth-nopace exit=0 78s | simNflTruth control nopace: green. Section 1b went red (18 findings) and nothing else did, so this harness works.
+tsc exit=0 93s | 
+simNoRivalNames exit=0 15s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 39s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
