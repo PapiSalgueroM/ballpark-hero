@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+simVictoryMoment: node scripts/simVictoryMoment.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simDrillMotion: node scripts/simDrillMotion.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
