@@ -1,0 +1,127 @@
+== pass 1: the marks on this tree's line
+  run base exit=3 (3 is the skipped board, expected) simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [halfrule,base])
+  run 1 exit=3 (3 is the skipped board, expected) simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [halfrule,base])
+  run 2 exit=3 (3 is the skipped board, expected) simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [marks,halfrule,standoutgain,base])
+  run 4 exit=3 (3 is the skipped board, expected) simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [halfrule,base])
+  run 3 exit=3 (3 is the skipped board, expected) simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [halfrule,base])
+  run 5 exit=3 (3 is the skipped board, expected) simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [halfrule,base])
+gen pass 1 exit=0
+     standout: [{ stat: 'pts', from: 31000, to: 38700, label: 'points' }, { stat: 'ast', from: 10700, to: 13700, label: 'assists' }]
+     base terms: [{ stat: 'newLinePts', per: 1075 }]  (medians newLinePts 22094)
+     standout: [{ stat: 'pts', from: 32500, to: 39900, label: 'points' }, { stat: 'reb', from: 7850, to: 9610, label: 'rebounds' }, { stat: 'ast', from: 5420, to: 6470, label: 'assists' }]
+     base terms: [{ stat: 'newLinePts', per: 1075 }]  (medians newLinePts 23990)
+     standout: [{ stat: 'pts', from: 31800, to: 39900, label: 'points' }, { stat: 'reb', from: 10400, to: 11800, label: 'rebounds' }, { stat: 'ast', from: 8270, to: 10300, label: 'assists' }]
+     base terms: [{ stat: 'newLinePts', per: 1075 }]  (medians newLinePts 23720)
+     standout: [{ stat: 'pts', from: 28700, to: 34100, label: 'points' }, { stat: 'reb', from: 11000, to: 13400, label: 'rebounds' }]
+     base terms: [{ stat: 'newLinePts', per: 1075 }]  (medians newLinePts 21922)
+     standout: [{ stat: 'pts', from: 26700, to: 32200, label: 'points' }, { stat: 'reb', from: 15600, to: 18400, label: 'rebounds' }]
+     base terms: [{ stat: 'newLinePts', per: 1075 }]  (medians newLinePts 19685)
+  within five percent of the half mark: SG reb 7850 vs 7800 (on); SG ast 5420 vs 5350 (on)
+table unchanged
+== pass 2: the outcome and the bands on the committed table and constant
+  run base exit=3 (3 is the skipped board, expected) simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 25 checks that ran are green)
+  run 2 exit=3 (3 is the skipped board, expected) simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 25 checks that ran are green)
+  run 1 exit=3 (3 is the skipped board, expected) simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 25 checks that ran are green)
+  run 4 exit=3 (3 is the skipped board, expected) simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 25 checks that ran are green)
+  run 5 exit=3 (3 is the skipped board, expected) simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 25 checks that ran are green)
+  run 3 exit=3 (3 is the skipped board, expected) simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 25 checks that ran are green)
+gen pass 2 exit=0
+
+== nba: 12000 careers pooled (2000, 2000, 2000, 2000, 2000, 2000)
+  PG: n 2400, median seasons 18, Hall on 1 30.4%, median score 336
+     pts: median 22094, from 31000, to 38700; ramp 4.47 seasons, to over median 1.75
+     ast: median 7832, from 10700, to 13700; ramp 5.05 seasons, to over median 1.75
+     standout: [{ stat: 'pts', from: 31000, to: 38700, label: 'points' }, { stat: 'ast', from: 10700, to: 13700, label: 'assists' }]
+     base terms: [{ stat: 'newLinePts', per: 1075 }]  (medians newLinePts 22094)
+  SG: n 2400, median seasons 18, Hall on 1 29.7%, median score 335
+     pts: median 23990, from 32500, to 39900; ramp 4.10 seasons, to over median 1.66
+     reb: median 5986, from 7850, to 9610; ramp 4.04 seasons, to over median 1.61
+     ast: median 3958, from 5420, to 6470; ramp 3.49 seasons, to over median 1.63
+     standout: [{ stat: 'pts', from: 32500, to: 39900, label: 'points' }, { stat: 'reb', from: 7850, to: 9610, label: 'rebounds' }, { stat: 'ast', from: 5420, to: 6470, label: 'assists' }]
+     base terms: [{ stat: 'newLinePts', per: 1075 }]  (medians newLinePts 23990)
+  SF: n 2400, median seasons 18, Hall on 1 31.9%, median score 350
+     pts: median 23720, from 31800, to 39900; ramp 4.58 seasons, to over median 1.68
+     reb: median 8337, from 10400, to 11800; ramp 2.42 seasons, to over median 1.42
+     ast: median 5556, from 8270, to 10300; ramp 4.42 seasons, to over median 1.85
+     standout: [{ stat: 'pts', from: 31800, to: 39900, label: 'points' }, { stat: 'reb', from: 10400, to: 11800, label: 'rebounds' }, { stat: 'ast', from: 8270, to: 10300, label: 'assists' }]
+     base terms: [{ stat: 'newLinePts', per: 1075 }]  (medians newLinePts 23720)
+  PF: n 2400, median seasons 18, Hall on 1 32.1%, median score 343
+     pts: median 21922, from 28700, to 34100; ramp 3.39 seasons, to over median 1.56
+     reb: median 8475, from 11000, to 13400; ramp 3.93 seasons, to over median 1.58
+     standout: [{ stat: 'pts', from: 28700, to: 34100, label: 'points' }, { stat: 'reb', from: 11000, to: 13400, label: 'rebounds' }]
+     base terms: [{ stat: 'newLinePts', per: 1075 }]  (medians newLinePts 21922)
+  C: n 2400, median seasons 17, Hall on 1 29%, median score 318
+     pts: median 19685, from 26700, to 32200; ramp 3.50 seasons, to over median 1.64
+     reb: median 11788, from 15600, to 18400; ramp 3.05 seasons, to over median 1.56
+     standout: [{ stat: 'pts', from: 26700, to: 32200, label: 'points' }, { stat: 'reb', from: 15600, to: 18400, label: 'rebounds' }]
+     base terms: [{ stat: 'newLinePts', per: 1075 }]  (medians newLinePts 19685)
+  bands at 2000 careers: a cell's share at or over from 6.3 to 12.3 percent over 72 cell runs (band 4.8 to 13.8); pooled from 10.23 9.15 11.48 9.85 9.94 9.31 (band 7.98 to 12.65); pooled to 0.92 0.46 1.79 1.06 0.75 0.90 (band 0.00 to 2.46)
+  outcome: Hall share on 1 30.7 29.6 32.4 29.3 30.7 31.0; on 2 34.4 32.5 35.3 33.0 34.5 33.8 (ceiling 38.0); newly in 73 56 58 72 77 55; pooled top 5 percent gain 29.0 12.9 18.3 22.0 23.8 12.5 points (floor 6.3); owed to the standout alone 12.1 7.9 4.6 10.4 13.8 7.5 (floor 2.3)
+  points paid: median 343 331 346 325 336 344 -> 368 358 375 348 363 370; mean 458.7 447.8 478.9 463.6 452.7 448.7 -> 505.6 489.4 529 509.2 497.3 492.4
+  base credit, median PG: 20.4 20.7 21.2 20.1 20 20.9 (band 19.4521 to 21.7367)
+  base credit, median SG: 22.5 22.4 22.1 22.3 22.2 22.5 (band 21.826 to 22.7563)
+  base credit, median SF: 22 21.7 22.7 22 21.7 22.1 (band 21.206 to 23.2395)
+  base credit, median PF: 20.4 20.5 20.3 20.2 20.4 20.8 (band 19.8995 to 21.0456)
+  base credit, median C: 18.4 18.5 18.2 18.5 18.2 18.3 (band 17.9716 to 18.714)
+  within five percent of the half mark: SG reb 7850 vs 7800 (on); SG ast 5420 vs 5350 (on)
+
+genCareerHallMarks: wrote ../p2/nba.json
+table unchanged
+== the Hall rate on the new table: the committed constant, then each trial scale (full size, five seeds)
+  scale 1.3 exit=0
+  committed constant exit=0
+  scale 1.35 exit=0
+-- committed
+simNbaAwardsSense: 6000 careers a seed, seeds 1, 2, 3, 4, 5
+  Hall of Fame inducted, percent               31.68, 31.58, 32.17, 32.3, 31.5   | main 31.7, 31.88, 31.78, 31.75, 31.55
+  first ballot, percent                        27.33, 27.53, 27.87, 27.38, 27.32   | main 27.03, 27.93, 27.83, 27.57, 27.45
+  inducted, modern careers                     32.49, 31.51, 33.11, 33.96, 32.11   | main 31.56, 31.42, 31.93, 32.02, 31.09
+  inducted, 2003-04 careers                    29.27, 31.8, 29.33, 27.33, 29.67   | main 32.13, 33.27, 31.33, 30.93, 32.93
+  legacy score p50                             359, 360, 362, 362, 360   | main 363, 367, 367, 366, 365
+  ok   [H] Hall of Fame inducted, percent: mean 31.846 (31.68, 31.58, 32.17, 32.3, 31.5) against main's 31.732 (31.7, 31.88, 31.78, 31.75, 31.55), 0.114 apart, allowed 1.14 (a fixed width)
+  ok   [H] first ballot, percent: mean 27.486 (27.33, 27.53, 27.87, 27.38, 27.32) against main's 27.562 (27.03, 27.93, 27.83, 27.57, 27.45), 0.076 apart, allowed 1.09 (a fixed width)
+simNbaAwardsSense: 131 checks, 0 failed (full size), 187s
+-- scale-1.35
+simNbaAwardsSense: 6000 careers a seed, seeds 1, 2, 3, 4, 5, TRIAL legacy scale 1.35
+  Hall of Fame inducted, percent               31.45, 31.45, 31.95, 32.17, 31.03   | main 31.7, 31.88, 31.78, 31.75, 31.55
+  first ballot, percent                        27.18, 27.3, 27.65, 27.07, 27.15   | main 27.03, 27.93, 27.83, 27.57, 27.45
+  inducted, modern careers                     32.22, 31.36, 32.89, 33.82, 31.56   | main 31.56, 31.42, 31.93, 32.02, 31.09
+  inducted, 2003-04 careers                    29.13, 31.73, 29.13, 27.2, 29.47   | main 32.13, 33.27, 31.33, 30.93, 32.93
+  legacy score p50                             356, 358, 360, 359, 358   | main 363, 367, 367, 366, 365
+  ok   [H] Hall of Fame inducted, percent: mean 31.61 (31.45, 31.45, 31.95, 32.17, 31.03) against main's 31.732 (31.7, 31.88, 31.78, 31.75, 31.55), 0.122 apart, allowed 1.14 (a fixed width)
+  ok   [H] first ballot, percent: mean 27.27 (27.18, 27.3, 27.65, 27.07, 27.15) against main's 27.562 (27.03, 27.93, 27.83, 27.57, 27.45), 0.292 apart, allowed 1.09 (a fixed width)
+simNbaAwardsSense: 131 checks, 0 failed (full size), 193s
+-- scale-1.3
+simNbaAwardsSense: 6000 careers a seed, seeds 1, 2, 3, 4, 5, TRIAL legacy scale 1.3
+  Hall of Fame inducted, percent               31.28, 31.17, 31.73, 31.87, 30.75   | main 31.7, 31.88, 31.78, 31.75, 31.55
+  first ballot, percent                        26.98, 27.1, 27.4, 26.75, 26.92   | main 27.03, 27.93, 27.83, 27.57, 27.45
+  inducted, modern careers                     32.04, 31.07, 32.64, 33.47, 31.22   | main 31.56, 31.42, 31.93, 32.02, 31.09
+  inducted, 2003-04 careers                    29, 31.47, 29, 27.07, 29.33   | main 32.13, 33.27, 31.33, 30.93, 32.93
+  legacy score p50                             354, 355, 357, 357, 355   | main 363, 367, 367, 366, 365
+  ok   [H] Hall of Fame inducted, percent: mean 31.36 (31.28, 31.17, 31.73, 31.87, 30.75) against main's 31.732 (31.7, 31.88, 31.78, 31.75, 31.55), 0.372 apart, allowed 1.14 (a fixed width)
+  ok   [H] first ballot, percent: mean 27.03 (26.98, 27.1, 27.4, 26.75, 26.92) against main's 27.562 (27.03, 27.93, 27.83, 27.57, 27.45), 0.532 apart, allowed 1.09 (a fixed width)
+simNbaAwardsSense: 131 checks, 0 failed (full size), 180s
+== simCareerHall nba on the new ledger and table (the whole harness, board included)
+simCareerHall nba exit=0
+simCareerHall nba: 2000 careers, 0 crashed, seed base
+  16 never below: table misses []; 0 of 2000 careers lower on 2; 2000 moved up, 372 up a verdict tier, 73 newly in the Hall
+  19 (b) Hall share 30.7 -> 34.4 percent; legacy score median 343 -> 368, mean 458.7 -> 505.6 (points paid)
+  17 (a) marks: 12 standout cells; at or over from, pooled 10.23 percent (band 7.98 to 12.65), cells out of 4.8 to 13.8: []; at or over to, pooled 0.92 percent (band 0.00 to 2.46)
+  17 (b) half rule and ledger: 0 misses []
+  17 (c) outcome: top 5 percent by family, Hall share on 1 > on 2: PG pts 95>100, PG ast 60>95, SG pts 90>100, SG reb 50>95, SG ast 70>100, SF pts 100>100, SF reb 90>100, SF ast 90>100, PF pts 100>100, PF reb 80>100, C pts 95>100, C reb 85>100
+  17 (d) cap: 0 of 2000 careers off the restated score on 2; the standout paid on 346
+  19 (a) base: median base credit PG 20.4 (19.5 to 21.7), SG 22.5 (21.8 to 22.8), SF 22.0 (21.2 to 23.2), PF 20.4 (19.9 to 21.0), C 18.4 (18.0 to 18.7); misses []
+  19 (c) words: example PG ast 7405 to 13700: +300 on 2, +0 on 1; card lines off 0 of 4000 records (346 name a standout); misses []
+  18 anchors: NOT BUILT FOR NBA (not built in this session (the family lists were read; the per player sourcing was not finished)). Nothing here says the standout or the base agrees with real careers in this sport.
+  15 (c) calibration rule: 0 misses over 13 cases and 2000 careers; engine careers stamped 2000
+  20 board stamp: 1600 board careers retired, 1600 stamped 2, 0 scored on another calibration
+  15 v1: 20 recorded saves (base 8fe82a4d), 0 read differently today; 0 of 2000 engine careers off the Round 123 formula on calibration 1
+simCareerHall nba: all 32 checks green (REAL ANCHORS NOT BUILT FOR THIS SPORT: section 18 asserted nothing about it)
+== its controls for the sections the ledger feeds (board skipped, as its header runs them)
+  control markdrift exit=1 | simCareerHall nba CONTROL markdrift: wanted marks red, red [marks,halfrule], FIRED
+  control todrift exit=1 | simCareerHall nba CONTROL todrift: wanted marks red, red [marks,halfrule], FIRED
+  control noramp exit=1 | simCareerHall nba CONTROL noramp: wanted halfrule red, red [halfrule], FIRED
+  control catchersteals exit=1 | simCareerHall nba CONTROL catchersteals: wanted halfrule red, red [marks,halfrule,words,hallshare], FIRED
+  control nostandout exit=1 | simCareerHall nba CONTROL nostandout: wanted standoutgain red and marks green, red [standoutgain,standoutcap,words], FIRED
+  control below exit=1 | simCareerHall nba CONTROL below: wanted neverbelow red, red [neverbelow], FIRED
+marks.sh done

@@ -1,0 +1,313 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/nbaAwardDecisionLift.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 982[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1103: the award scores lifted out of NBA Front Office[2m > [22mseed 11: the awards and every man's three scores are what they were [33m 323[2mms[22m[39m
+ [32m✓[39m src/test/nbaStatLineColumns.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 100[2mms[22m[39m
+ [31m❯[39m src/test/nbaOldSaveLines.test.ts [2m([22m[2m36 tests[22m[2m | [22m[31m6 failed[39m[2m)[22m[33m 369[2mms[22m[39m
+   [32m✓[39m Round 1103: an old NBA save reads exactly as it did[2m > [22mthe set is deep enough to mean something[32m 10[2mms[22m[39m
+   [32m✓[39m Round 1103: an old NBA save reads exactly as it did[2m > [22mno save in the set holds a season on the new line[32m 47[2mms[22m[39m
+   [32m✓[39m Round 1103: an old NBA save reads exactly as it did[2m > [22mboard:rookie: every line, the totals, the legacy, the ballot and the badges are what they were[32m 94[2mms[22m[39m
+   [32m✓[39m Round 1103: an old NBA save reads exactly as it did[2m > [22mboard:mid: every line, the totals, the legacy, the ballot and the badges are what they were[32m 5[2mms[22m[39m
+   [32m✓[39m Round 1103: an old NBA save reads exactly as it did[2m > [22mboard:retired: every line, the totals, the legacy, the ballot and the badges are what they were[32m 2[2mms[22m[39m
+   [32m✓[39m Round 1103: an old NBA save reads exactly as it did[2m > [22mboard:beat: every line, the totals, the legacy, the ballot and the badges are what they were[32m 1[2mms[22m[39m
+   [32m✓[39m Round 1103: an old NBA save reads exactly as it did[2m > [22mboard:choice: every line, the totals, the legacy, the ballot and the badges are what they were[32m 1[2mms[22m[39m
+   [32m✓[39m Round 1103: an old NBA save reads exactly as it did[2m > [22mengine:0: every line, the totals, the legacy, the ballot and the badges are what they were[32m 9[2mms[22m[39m
+[31m   [31m×[31m Round 1103: an old NBA save reads exactly as it did[2m > [22mengine:1: every line, the totals, the legacy, the ballot and the badges are what they were[39m[32m 65[2mms[22m[39m
+[31m     → expected { lines: [ …(19) ], …(4) } to deeply equal { lines: [ …(19) ], …(4) }[39m
+   [32m✓[39m Round 1103: an old NBA save reads exactly as it did[2m > [22mengine:2: every line, the totals, the legacy, the ballot and the badges are what they were[32m 8[2mms[22m[39m
+   [32m✓[39m Round 1103: an old NBA save reads exactly as it did[2m > [22mengine:3: every line, the totals, the legacy, the ballot and the badges are what they were[32m 1[2mms[22m[39m
+   [32m✓[39m Round 1103: an old NBA save reads exactly as it did[2m > [22mengine:4: every line, the totals, the legacy, the ballot and the badges are what they were[32m 32[2mms[22m[39m
+   [32m✓[39m Round 1103: an old NBA save reads exactly as it did[2m > [22mengine:5: every line, the totals, the legacy, the ballot and the badges are what they were[32m 1[2mms[22m[39m
+   [32m✓[39m Round 1103: an old NBA save reads exactly as it did[2m > [22mengine:6: every line, the totals, the legacy, the ballot and the badges are what they were[32m 5[2mms[22m[39m
+   [32m✓[39m Round 1103: an old NBA save reads exactly as it did[2m > [22mengine:7: every line, the totals, the legacy, the ballot and the badges are what they were[32m 1[2mms[22m[39m
+   [32m✓[39m Round 1103: an old NBA save reads exactly as it did[2m > [22mengine:8: every line, the totals, the legacy, the ballot and the badges are what they were[32m 1[2mms[22m[39m
+   [32m✓[39m Round 1103: an old NBA save reads exactly as it did[2m > [22mengine:9: every line, the totals, the legacy, the ballot and the badges are what they were[32m 4[2mms[22m[39m
+   [32m✓[39m Round 1103: an old NBA save reads exactly as it did[2m > [22mengine:10: every line, the totals, the legacy, the ballot and the badges are what they were[32m 1[2mms[22m[39m
+[31m   [31m×[31m Round 1103: an old NBA save reads exactly as it did[2m > [22mengine:11: every line, the totals, the legacy, the ballot and the badges are what they were[39m[32m 8[2mms[22m[39m
+[31m     → expected { lines: [ …(21) ], …(4) } to deeply equal { lines: [ …(21) ], …(4) }[39m
+   [32m✓[39m Round 1103: an old NBA save reads exactly as it did[2m > [22mengine:12: every line, the totals, the legacy, the ballot and the badges are what they were[32m 6[2mms[22m[39m
+[31m   [31m×[31m Round 1103: an old NBA save reads exactly as it did[2m > [22mengine:13: every line, the totals, the legacy, the ballot and the badges are what they were[39m[32m 10[2mms[22m[39m
+[31m     → expected { lines: [ …(20) ], …(4) } to deeply equal { lines: [ …(20) ], …(4) }[39m
+   [32m✓[39m Round 1103: an old NBA save reads exactly as it did[2m > [22mengine:14: every line, the totals, the legacy, the ballot and the badges are what they were[32m 1[2mms[22m[39m
+[31m   [31m×[31m Round 1103: an old NBA save reads exactly as it did[2m > [22mengine:15: every line, the totals, the legacy, the ballot and the badges are what they were[39m[32m 12[2mms[22m[39m
+[31m     → expected { lines: [ …(21) ], …(4) } to deeply equal { lines: [ …(21) ], …(4) }[39m
+   [32m✓[39m Round 1103: an old NBA save reads exactly as it did[2m > [22mengine:16: every line, the totals, the legacy, the ballot and the badges are what they were[32m 1[2mms[22m[39m
+[31m   [31m×[31m Round 1103: an old NBA save reads exactly as it did[2m > [22mengine:17: every line, the totals, the legacy, the ballot and the badges are what they were[39m[32m 12[2mms[22m[39m
+[31m     → expected { lines: [ …(21) ], …(4) } to deeply equal { lines: [ …(21) ], …(4) }[39m
+   [32m✓[39m Round 1103: an old NBA save reads exactly as it did[2m > [22mengine:18: every line, the totals, the legacy, the ballot and the badges are what they were[32m 1[2mms[22m[39m
+[31m   [31m×[31m Round 1103: an old NBA save reads exactly as it did[2m > [22mengine:19: every line, the totals, the legacy, the ballot and the badges are what they were[39m[32m 5[2mms[22m[39m
+[31m     → expected { lines: [ …(20) ], …(4) } to deeply equal { lines: [ …(20) ], …(4) }[39m
+   [32m✓[39m Round 1103: an old NBA save reads exactly as it did[2m > [22mengine:20: every line, the totals, the legacy, the ballot and the badges are what they were[32m 1[2mms[22m[39m
+   [32m✓[39m Round 1103: an old NBA save reads exactly as it did[2m > [22mopen:2: every line, the totals, the legacy, the ballot and the badges are what they were[32m 2[2mms[22m[39m
+   [32m✓[39m Round 1103: an old NBA save reads exactly as it did[2m > [22mopen:8: every line, the totals, the legacy, the ballot and the badges are what they were[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1103: an old NBA save reads exactly as it did[2m > [22mopen:11: every line, the totals, the legacy, the ballot and the badges are what they were[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1103: an old NBA save reads exactly as it did[2m > [22mthe comparison can fail: one point on one old season is caught[32m 1[2mms[22m[39m
+   [32m✓[39m Round 1103: an old NBA save reads exactly as it did[2m > [22mboard:mid: one more season leaves every saved season alone[32m 9[2mms[22m[39m
+   [32m✓[39m Round 1103: an old NBA save reads exactly as it did[2m > [22mopen:2: one more season leaves every saved season alone[32m 3[2mms[22m[39m
+   [32m✓[39m Round 1103: an old NBA save reads exactly as it did[2m > [22mopen:8: one more season leaves every saved season alone[32m 2[2mms[22m[39m
+   [32m✓[39m Round 1103: an old NBA save reads exactly as it did[2m > [22mopen:11: one more season leaves every saved season alone[32m 4[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 6 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/nbaOldSaveLines.test.ts[2m > [22mRound 1103: an old NBA save reads exactly as it did[2m > [22mengine:1: every line, the totals, the legacy, the ballot and the badges are what they were
+[31m[1mAssertionError[22m: expected { lines: [ …(19) ], …(4) } to deeply equal { lines: [ …(19) ], …(4) }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[33m@@ -9,76 +9,86 @@[39m
+[2m    "hall": {[22m
+[2m      "ballots": [[22m
+[2m        {[22m
+[2m          "classYear": 2048,[22m
+[2m          "elected": false,[22m
+[32m-         "share": 8.3,[39m
+[31m+         "share": 30,[39m
+[2m        },[22m
+[2m        {[22m
+[2m          "classYear": 2049,[22m
+[2m          "elected": false,[22m
+[32m-         "share": 7.3,[39m
+[31m+         "share": 29,[39m
+[2m        },[22m
+[2m        {[22m
+[2m          "classYear": 2050,[22m
+[2m          "elected": false,[22m
+[32m-         "share": 10.7,[39m
+[31m+         "share": 32.4,[39m
+[2m        },[22m
+[2m        {[22m
+[2m          "classYear": 2051,[22m
+[2m          "elected": false,[22m
+[32m-         "share": 13.3,[39m
+[31m+         "share": 35,[39m
+[2m        },[22m
+[2m        {[22m
+[2m          "classYear": 2052,[22m
+[2m          "elected": false,[22m
+[32m-         "share": 14.4,[39m
+[31m+         "share": 36.1,[39m
+[2m        },[22m
+[2m        {[22m
+[2m          "classYear": 2053,[22m
+[2m          "elected": false,[22m
+[32m-         "share": 19.3,[39m
+[31m+         "share": 41,[39m
+[2m        },[22m
+[2m        {[22m
+[2m          "classYear": 2054,[22m
+[2m          "elected": false,[22m
+[32m-         "share": 20.7,[39m
+[31m+         "share": 42.4,[39m
+[2m        },[22m
+[2m        {[22m
+[2m          "classYear": 2055,[22m
+[2m          "elected": false,[22m
+[32m-         "share": 20.2,[39m
+[31m+         "share": 42,[39m
+[2m        },[22m
+[2m        {[22m
+[2m          "classYear": 2056,[22m
+[2m          "elected": false,[22m
+[32m-         "share": 19.7,[39m
+[31m+         "share": 41.4,[39m
+[2m        },[22m
+[2m        {[22m
+[2m          "classYear": 2057,[22m
+[2m          "elected": false,[22m
+[32m-         "share": 18.8,[39m
+[31m+         "share": 40.5,[39m
+[2m        },[22m
+[2m      ],[22m
+[2m      "firstBallot": false,[22m
+[2m      "firstClass": 2048,[22m
+[2m      "hallName": "Naismith Memorial Basketball Hall of Fame",[22m
+[2m      "inductedClass": null,[22m
+[32m-     "jersey": null,[39m
+[31m+     "jersey": {[39m
+[31m+       "seasons": 19,[39m
+[31m+       "team": "NOP",[39m
+[31m+       "teamName": "New Orleans Pelicans",[39m
+[31m+     },[39m
+[2m      "outcome": "waiting",[22m
+[32m-     "score": 353,[39m
+[31m+     "score": 487,[39m
+[2m      "sport": "nba",[22m
+[32m-     "weighs": "The voters weigh the hardware first: rings, the major awards, All-NBA years. Then the whole stat sheet, boards and assists as much as points.",[39m
+[31m+     "weighs": "The voters weigh the hardware first: rings, the major awards, All-NBA years. Then the whole stat sheet, boards and assists as much as points. Your 5,890 assists sat near the top of this game's books, and that got a real push.",[39m
+[2m    },[22m
+[2m    "legacy": {[22m
+[2m      "bullets": [[22m
+[2m        "19 seasons, 1 ring, 0 MVPs, 0 Finals MVPs, 1 All-NBA",[22m
+[2m        "24,793 points, 5,185 rebounds, 5,890 assists in 1,487 games",[22m
+[2m        "48M career earnings, drafted pick 32",[22m
+[2m      ],[22m
+[2m      "hof": false,[22m
+[32m-     "score": 353,[39m
+[31m+     "score": 487,[39m
+[31m+     "standout": {[39m
+[31m+       "credit": 134.28571428571428,[39m
+[31m+       "label": "assists",[39m
+[31m+       "stat": "ast",[39m
+[31m+       "total": 5890,[39m
+[31m+     },[39m
+[2m      "verdict": "Beloved star, Hall of Very Good",[22m
+[2m    },[22m
+[2m    "lines": [[22m
+[2m      "8 ppg, 2.6 rpg, 2.7 apg",[22m
+[2m      "16 ppg, 2.6 rpg, 3.5 apg",[22m
+
+[36m [2m❯[22m src/test/nbaOldSaveLines.test.ts:[2m169:39[22m[39m
+    [90m167| [39m  [35mfor[39m ([35mconst[39m e [35mof[39m fx[33m.[39mentries) {
+    [90m168| [39m    it(`${e.key}: every line, the totals, the legacy, the ballot and t…
+    [90m169| [39m      [34mexpect[39m([34mreadSave[39m([34mclone[39m(e[33m.[39msave)))[33m.[39m[34mtoEqual[39m(e[33m.[39mread)[33m;[39m
+    [90m   | [39m                                      [31m^[39m
+    [90m170| [39m    })[33m;[39m
+    [90m171| [39m  }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/nbaOldSaveLines.test.ts[2m > [22mRound 1103: an old NBA save reads exactly as it did[2m > [22mengine:11: every line, the totals, the legacy, the ballot and the badges are what they were
+[41m[1m FAIL [22m[49m src/test/nbaOldSaveLines.test.ts[2m > [22mRound 1103: an old NBA save reads exactly as it did[2m > [22mengine:15: every line, the totals, the legacy, the ballot and the badges are what they were
+[41m[1m FAIL [22m[49m src/test/nbaOldSaveLines.test.ts[2m > [22mRound 1103: an old NBA save reads exactly as it did[2m > [22mengine:17: every line, the totals, the legacy, the ballot and the badges are what they were
+[31m[1mAssertionError[22m: expected { lines: [ …(21) ], …(4) } to deeply equal { lines: [ …(21) ], …(4) }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[33m@@ -29,24 +29,24 @@[39m
+[2m        "seasons": 21,[22m
+[2m        "team": "UTA",[22m
+[2m        "teamName": "Utah Jazz",[22m
+[2m      },[22m
+[2m      "outcome": "inducted",[22m
+[32m-     "score": 953,[39m
+[31m+     "score": 1082,[39m
+[2m      "sport": "nba",[22m
+[2m      "weighs": "The voters weigh the hardware first: rings, the major awards, All-NBA years. Then the whole stat sheet, boards and assists as much as points. Your 11,101 assists sat near the top of this game's books, and that got a real push.",[22m
+[2m    },[22m
+[2m    "legacy": {[22m
+[2m      "bullets": [[22m
+[2m        "21 seasons, 0 rings, 1 MVP, 0 Finals MVPs, 6 All-NBA",[22m
+[2m        "34,867 points, 9,684 rebounds, 11,101 assists in 1,672 games",[22m
+[2m        "24M career earnings, drafted pick 23",[22m
+[2m      ],[22m
+[2m      "hof": true,[22m
+[32m-     "score": 953,[39m
+[31m+     "score": 1082,[39m
+[2m      "standout": {[22m
+[32m-       "credit": 260.4635761589404,[39m
+[31m+       "credit": 390,[39m
+[2m        "label": "assists",[22m
+[2m        "stat": "ast",[22m
+[2m        "total": 11101,[22m
+[2m      },[22m
+[2m      "verdict": "On the short list. The GOAT debate has your name in it",[22m
+
+[36m [2m❯[22m src/test/nbaOldSaveLines.test.ts:[2m169:39[22m[39m
+    [90m167| [39m  [35mfor[39m ([35mconst[39m e [35mof[39m fx[33m.[39mentries) {
+    [90m168| [39m    it(`${e.key}: every line, the totals, the legacy, the ballot and t…
+    [90m169| [39m      [34mexpect[39m([34mreadSave[39m([34mclone[39m(e[33m.[39msave)))[33m.[39m[34mtoEqual[39m(e[33m.[39mread)[33m;[39m
+    [90m   | [39m                                      [31m^[39m
+    [90m170| [39m    })[33m;[39m
+    [90m171| [39m  }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/nbaOldSaveLines.test.ts[2m > [22mRound 1103: an old NBA save reads exactly as it did[2m > [22mengine:13: every line, the totals, the legacy, the ballot and the badges are what they were
+[41m[1m FAIL [22m[49m src/test/nbaOldSaveLines.test.ts[2m > [22mRound 1103: an old NBA save reads exactly as it did[2m > [22mengine:19: every line, the totals, the legacy, the ballot and the badges are what they were
+[31m[1mAssertionError[22m: expected { lines: [ …(20) ], …(4) } to deeply equal { lines: [ …(20) ], …(4) }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[33m@@ -3,32 +3,49 @@[39m
+[2m      "pts_20k",[22m
+[2m      "reb_10k",[22m
+[2m      "decade",[22m
+[2m      "iron_man",[22m
+[2m      "first_million",[22m
+[31m+     "hall",[39m
+[2m    ],[22m
+[2m    "hall": {[22m
+[32m-     "ballots": [],[39m
+[32m-     "firstBallot": false,[39m
+[31m+     "ballots": [[39m
+[31m+       {[39m
+[31m+         "classYear": 2049,[39m
+[31m+         "elected": true,[39m
+[31m+         "share": 92,[39m
+[31m+       },[39m
+[31m+     ],[39m
+[31m+     "firstBallot": true,[39m
+[2m      "firstClass": 2049,[22m
+[2m      "hallName": "Naismith Memorial Basketball Hall of Fame",[22m
+[32m-     "inductedClass": null,[39m
+[32m-     "jersey": null,[39m
+[32m-     "outcome": "notOnBallot",[39m
+[32m-     "score": 220,[39m
+[31m+     "inductedClass": 2049,[39m
+[31m+     "jersey": {[39m
+[31m+       "seasons": 20,[39m
+[31m+       "team": "MEM",[39m
+[31m+       "teamName": "Memphis Grizzlies",[39m
+[31m+     },[39m
+[31m+     "outcome": "inducted",[39m
+[31m+     "score": 511,[39m
+[2m      "sport": "nba",[22m
+[32m-     "weighs": "The voters weigh the hardware first: rings, the major awards, All-NBA years. Then the whole stat sheet, boards and assists as much as points.",[39m
+[31m+     "weighs": "The voters weigh the hardware first: rings, the major awards, All-NBA years. Then the whole stat sheet, boards and assists as much as points. Your 13,329 rebounds sat near the top of this game's books, and that got a real push.",[39m
+[2m    },[22m
+[2m    "legacy": {[22m
+[2m      "bullets": [[22m
+[2m        "20 seasons, 0 rings, 0 MVPs, 0 Finals MVPs, 0 All-NBA",[22m
+[2m        "25,890 points, 13,329 rebounds, 6,528 assists in 1,528 games",[22m
+[2m        "50M career earnings, drafted pick 30",[22m
+[2m      ],[22m
+[32m-     "hof": false,[39m
+[32m-     "score": 220,[39m
+[32m-     "verdict": "A long, real NBA career",[39m
+[31m+     "hof": true,[39m
+[31m+     "score": 511,[39m
+[31m+     "standout": {[39m
+[31m+       "credit": 291.125,[39m
+[31m+       "label": "rebounds",[39m
+[31m+       "stat": "reb",[39m
+[31m+       "total": 13329,[39m
+[31m+     },[39m
+[31m+     "verdict": "Hall of Famer",[39m
+[2m    },[22m
+[2m    "lines": [[22m
+[2m      "16 ppg, 8 rpg, 3.5 apg",[22m
+[2m      "8 ppg, 5.3 rpg, 3.1 apg",[22m
+[2m      "15 ppg, 8.6 rpg, 4.5 apg",[22m
+
+[36m [2m❯[22m src/test/nbaOldSaveLines.test.ts:[2m169:39[22m[39m
+    [90m167| [39m  [35mfor[39m ([35mconst[39m e [35mof[39m fx[33m.[39mentries) {
+    [90m168| [39m    it(`${e.key}: every line, the totals, the legacy, the ballot and t…
+    [90m169| [39m      [34mexpect[39m([34mreadSave[39m([34mclone[39m(e[33m.[39msave)))[33m.[39m[34mtoEqual[39m(e[33m.[39mread)[33m;[39m
+    [90m   | [39m                                      [31m^[39m
+    [90m170| [39m    })[33m;[39m
+    [90m171| [39m  }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[31m6 failed[39m[22m[2m | [22m[1m[32m42 passed[39m[22m[90m (48)[39m
+[2m   Start at [22m 10:00:27
+[2m   Duration [22m 4.89s[2m (transform 1.90s, setup 493ms, collect 5.17s, tests 1.45s, environment 3.50s, prepare 1.59s)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/nbaOldSaveLines.test.ts,title=src/test/nbaOldSaveLines.test.ts > Round 1103%3A an old NBA save reads exactly as it did > engine%3A1%3A every line%2C the totals%2C the legacy%2C the ballot and the badges are what they were,line=169,column=39::AssertionError: expected { lines: [ …(19) ], …(4) } to deeply equal { lines: [ …(19) ], …(4) }%0A%0A- Expected%0A+ Received%0A%0A@@ -9,76 +9,86 @@%0A    "hall": {%0A      "ballots": [%0A        {%0A          "classYear": 2048,%0A          "elected": false,%0A-         "share": 8.3,%0A+         "share": 30,%0A        },%0A        {%0A          "classYear": 2049,%0A          "elected": false,%0A-         "share": 7.3,%0A+         "share": 29,%0A        },%0A        {%0A          "classYear": 2050,%0A          "elected": false,%0A-         "share": 10.7,%0A+         "share": 32.4,%0A        },%0A        {%0A          "classYear": 2051,%0A          "elected": false,%0A-         "share": 13.3,%0A+         "share": 35,%0A        },%0A        {%0A          "classYear": 2052,%0A          "elected": false,%0A-         "share": 14.4,%0A+         "share": 36.1,%0A        },%0A        {%0A          "classYear": 2053,%0A          "elected": false,%0A-         "share": 19.3,%0A+         "share": 41,%0A        },%0A        {%0A          "classYear": 2054,%0A          "elected": false,%0A-         "share": 20.7,%0A+         "share": 42.4,%0A        },%0A        {%0A          "classYear": 2055,%0A          "elected": false,%0A-         "share": 20.2,%0A+         "share": 42,%0A        },%0A        {%0A          "classYear": 2056,%0A          "elected": false,%0A-         "share": 19.7,%0A+         "share": 41.4,%0A        },%0A        {%0A          "classYear": 2057,%0A          "elected": false,%0A-         "share": 18.8,%0A+         "share": 40.5,%0A        },%0A      ],%0A      "firstBallot": false,%0A      "firstClass": 2048,%0A      "hallName": "Naismith Memorial Basketball Hall of Fame",%0A      "inductedClass": null,%0A-     "jersey": null,%0A+     "jersey": {%0A+       "seasons": 19,%0A+       "team": "NOP",%0A+       "teamName": "New Orleans Pelicans",%0A+     },%0A      "outcome": "waiting",%0A-     "score": 353,%0A+     "score": 487,%0A      "sport": "nba",%0A-     "weighs": "The voters weigh the hardware first: rings, the major awards, All-NBA years. Then the whole stat sheet, boards and assists as much as points.",%0A+     "weighs": "The voters weigh the hardware first: rings, the major awards, All-NBA years. Then the whole stat sheet, boards and assists as much as points. Your 5,890 assists sat near the top of this game's books, and that got a real push.",%0A    },%0A    "legacy": {%0A      "bullets": [%0A        "19 seasons, 1 ring, 0 MVPs, 0 Finals MVPs, 1 All-NBA",%0A        "24,793 points, 5,185 rebounds, 5,890 assists in 1,487 games",%0A        "48M career earnings, drafted pick 32",%0A      ],%0A      "hof": false,%0A-     "score": 353,%0A+     "score": 487,%0A+     "standout": {%0A+       "credit": 134.28571428571428,%0A+       "label": "assists",%0A+       "stat": "ast",%0A+       "total": 5890,%0A+     },%0A      "verdict": "Beloved star, Hall of Very Good",%0A    },%0A    "lines": [%0A      "8 ppg, 2.6 rpg, 2.7 apg",%0A      "16 ppg, 2.6 rpg, 3.5 apg",%0A%0A ❯ src/test/nbaOldSaveLines.test.ts:169:39%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/nbaOldSaveLines.test.ts,title=src/test/nbaOldSaveLines.test.ts > Round 1103%3A an old NBA save reads exactly as it did > engine%3A11%3A every line%2C the totals%2C the legacy%2C the ballot and the badges are what they were,line=169,column=39::AssertionError: expected { lines: [ …(21) ], …(4) } to deeply equal { lines: [ …(21) ], …(4) }%0A%0A- Expected%0A+ Received%0A%0A@@ -29,24 +29,24 @@%0A        "seasons": 21,%0A        "team": "UTA",%0A        "teamName": "Utah Jazz",%0A      },%0A      "outcome": "inducted",%0A-     "score": 953,%0A+     "score": 1082,%0A      "sport": "nba",%0A      "weighs": "The voters weigh the hardware first: rings, the major awards, All-NBA years. Then the whole stat sheet, boards and assists as much as points. Your 11,101 assists sat near the top of this game's books, and that got a real push.",%0A    },%0A    "legacy": {%0A      "bullets": [%0A        "21 seasons, 0 rings, 1 MVP, 0 Finals MVPs, 6 All-NBA",%0A        "34,867 points, 9,684 rebounds, 11,101 assists in 1,672 games",%0A        "24M career earnings, drafted pick 23",%0A      ],%0A      "hof": true,%0A-     "score": 953,%0A+     "score": 1082,%0A      "standout": {%0A-       "credit": 260.4635761589404,%0A+       "credit": 390,%0A        "label": "assists",%0A        "stat": "ast",%0A        "total": 11101,%0A      },%0A      "verdict": "On the short list. The GOAT debate has your name in it",%0A%0A ❯ src/test/nbaOldSaveLines.test.ts:169:39%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/nbaOldSaveLines.test.ts,title=src/test/nbaOldSaveLines.test.ts > Round 1103%3A an old NBA save reads exactly as it did > engine%3A13%3A every line%2C the totals%2C the legacy%2C the ballot and the badges are what they were,line=169,column=39::AssertionError: expected { lines: [ …(20) ], …(4) } to deeply equal { lines: [ …(20) ], …(4) }%0A%0A- Expected%0A+ Received%0A%0A@@ -3,32 +3,49 @@%0A      "pts_20k",%0A      "reb_10k",%0A      "decade",%0A      "iron_man",%0A      "first_million",%0A+     "hall",%0A    ],%0A    "hall": {%0A-     "ballots": [],%0A-     "firstBallot": false,%0A+     "ballots": [%0A+       {%0A+         "classYear": 2049,%0A+         "elected": true,%0A+         "share": 92,%0A+       },%0A+     ],%0A+     "firstBallot": true,%0A      "firstClass": 2049,%0A      "hallName": "Naismith Memorial Basketball Hall of Fame",%0A-     "inductedClass": null,%0A-     "jersey": null,%0A-     "outcome": "notOnBallot",%0A-     "score": 220,%0A+     "inductedClass": 2049,%0A+     "jersey": {%0A+       "seasons": 20,%0A+       "team": "MEM",%0A+       "teamName": "Memphis Grizzlies",%0A+     },%0A+     "outcome": "inducted",%0A+     "score": 511,%0A      "sport": "nba",%0A-     "weighs": "The voters weigh the hardware first: rings, the major awards, All-NBA years. Then the whole stat sheet, boards and assists as much as points.",%0A+     "weighs": "The voters weigh the hardware first: rings, the major awards, All-NBA years. Then the whole stat sheet, boards and assists as much as points. Your 13,329 rebounds sat near the top of this game's books, and that got a real push.",%0A    },%0A    "legacy": {%0A      "bullets": [%0A        "20 seasons, 0 rings, 0 MVPs, 0 Finals MVPs, 0 All-NBA",%0A        "25,890 points, 13,329 rebounds, 6,528 assists in 1,528 games",%0A        "50M career earnings, drafted pick 30",%0A      ],%0A-     "hof": false,%0A-     "score": 220,%0A-     "verdict": "A long, real NBA career",%0A+     "hof": true,%0A+     "score": 511,%0A+     "standout": {%0A+       "credit": 291.125,%0A+       "label": "rebounds",%0A+       "stat": "reb",%0A+       "total": 13329,%0A+     },%0A+     "verdict": "Hall of Famer",%0A    },%0A    "lines": [%0A      "16 ppg, 8 rpg, 3.5 apg",%0A      "8 ppg, 5.3 rpg, 3.1 apg",%0A      "15 ppg, 8.6 rpg, 4.5 apg",%0A%0A ❯ src/test/nbaOldSaveLines.test.ts:169:39%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/nbaOldSaveLines.test.ts,title=src/test/nbaOldSaveLines.test.ts > Round 1103%3A an old NBA save reads exactly as it did > engine%3A15%3A every line%2C the totals%2C the legacy%2C the ballot and the badges are what they were,line=169,column=39::AssertionError: expected { lines: [ …(21) ], …(4) } to deeply equal { lines: [ …(21) ], …(4) }%0A%0A- Expected%0A+ Received%0A%0A@@ -26,24 +26,24 @@%0A        "seasons": 21,%0A        "team": "IND",%0A        "teamName": "Indiana Pacers",%0A      },%0A      "outcome": "inducted",%0A-     "score": 809,%0A+     "score": 912,%0A      "sport": "nba",%0A      "weighs": "The voters weigh the hardware first: rings, the major awards, All-NBA years. Then the whole stat sheet, boards and assists as much as points. Your 17,666 assists sat near the top of this game's books, and that got a real push.",%0A    },%0A    "legacy": {%0A      "bullets": [%0A        "21 seasons, 1 ring, 0 MVPs, 0 Finals MVPs, 4 All-NBA",%0A        "28,823 points, 7,372 rebounds, 17,666 assists in 1,624 games",%0A        "20M career earnings, drafted pick 25",%0A      ],%0A      "hof": true,%0A-     "score": 809,%0A+     "score": 912,%0A      "standout": {%0A-       "credit": 286.6,%0A+       "credit": 390,%0A        "label": "assists",%0A        "stat": "ast",%0A        "total": 17666,%0A      },%0A      "verdict": "First-ballot Hall of Famer, jersey in the rafters",%0A%0A ❯ src/test/nbaOldSaveLines.test.ts:169:39%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/nbaOldSaveLines.test.ts,title=src/test/nbaOldSaveLines.test.ts > Round 1103%3A an old NBA save reads exactly as it did > engine%3A17%3A every line%2C the totals%2C the legacy%2C the ballot and the badges are what they were,line=169,column=39::AssertionError: expected { lines: [ …(21) ], …(4) } to deeply equal { lines: [ …(21) ], …(4) }%0A%0A- Expected%0A+ Received%0A%0A@@ -6,87 +6,49 @@%0A      "ast_10k",%0A      "decade",%0A      "iron_man",%0A      "first_million",%0A      "rivalry",%0A+     "hall",%0A    ],%0A    "hall": {%0A      "ballots": [%0A        {%0A          "classYear": 2050,%0A-         "elected": false,%0A-         "share": 12.4,%0A-       },%0A-       {%0A-         "classYear": 2051,%0A-         "elected": false,%0A-         "share": 14.9,%0A-       },%0A-       {%0A-         "classYear": 2052,%0A-         "elected": false,%0A-         "share": 16.1,%0A-       },%0A-       {%0A-         "classYear": 2053,%0A-         "elected": false,%0A-         "share": 18.7,%0A-       },%0A-       {%0A-         "classYear": 2054,%0A-         "elected": false,%0A-         "share": 23,%0A-       },%0A-       {%0A-         "classYear": 2055,%0A-         "elected": false,%0A-         "share": 20.8,%0A-       },%0A-       {%0A-         "classYear": 2056,%0A-         "elected": false,%0A-         "share": 21.6,%0A-       },%0A-       {%0A-         "classYear": 2057,%0A-         "elected": false,%0A-         "share": 24.8,%0A-       },%0A-       {%0A-         "classYear": 2058,%0A-         "elected": false,%0A-         "share": 28.2,%0A+         "elected": true,%0A+         "share": 94.4,%0A        },%0A-       {%0A-         "classYear": 2059,%0A-         "elected": false,%0A-         "share": 31.7,%0A-       },%0A      ],%0A-     "firstBallot": false,%0A+     "firstBallot": true,%0A      "firstClass": 2050,%0A      "hallName": "Naismith Memorial Basketball Hall of Fame",%0A-     "inductedClass": null,%0A+     "inductedClass": 2050,%0A      "jersey": {%0A        "seasons": 21,%0A        "team": "GSW",%0A        "teamName": "Golden State Warriors",%0A      },%0A-     "outcome": "waiting",%0A-     "score": 373,%0A+     "outcome": "inducted",%0A+     "score": 763,%0A      "sport": "nba",%0A-     "weighs": "The voters weigh the hardware first: rings, the major awards, All-NBA years. Then the whole stat sheet, boards and assists as much as points.",%0A+     "weighs": "The voters weigh the hardware first: rings, the major awards, All-NBA years. Then the whole stat sheet, boards and assists as much as points. Your 12,435 assists sat near the top of this game's books, and that got a real push.",%0A    },%0A    "legacy": {%0A      "bullets": [%0A        "21 seasons, 1 ring, 0 MVPs, 0 Finals MVPs, 1 All-NBA",%0A        "26,617 points, 10,107 rebounds, 12,435 assists in 1,649 games",%0A        "53M career earnings, drafted pick 48",%0A      ],%0A-     "hof": false,%0A-     "score": 373,%0A-     "verdict": "Beloved star, Hall of Very Good",%0A+     "hof": true,%0A+     "score": 763,%0A+     "standout": {%0A+       "credit": 390,%0A+       "label": "assists",%0A+       "stat": "ast",%0A+       "total": 12435,%0A+     },%0A+     "verdict": "First-ballot Hall of Famer, jersey in the rafters",%0A    },%0A    "lines": [%0A      "8 ppg, 4.4 rpg, 3.9 apg",%0A      "11 ppg, 4.7 rpg, 4 apg",%0A      "6 ppg, 3.7 rpg, 4 apg",%0A%0A ❯ src/test/nbaOldSaveLines.test.ts:169:39%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/nbaOldSaveLines.test.ts,title=src/test/nbaOldSaveLines.test.ts > Round 1103%3A an old NBA save reads exactly as it did > engine%3A19%3A every line%2C the totals%2C the legacy%2C the ballot and the badges are what they were,line=169,column=39::AssertionError: expected { lines: [ …(20) ], …(4) } to deeply equal { lines: [ …(20) ], …(4) }%0A%0A- Expected%0A+ Received%0A%0A@@ -28,22 +28,28 @@%0A        "seasons": 20,%0A        "team": "CHI",%0A        "teamName": "Chicago Bulls",%0A      },%0A      "outcome": "inducted",%0A-     "score": 713,%0A+     "score": 741,%0A      "sport": "nba",%0A-     "weighs": "The voters weigh the hardware first: rings, the major awards, All-NBA years. Then the whole stat sheet, boards and assists as much as points.",%0A+     "weighs": "The voters weigh the hardware first: rings, the major awards, All-NBA years. Then the whole stat sheet, boards and assists as much as points. Your 27,207 points sat near the top of this game's books, and that got a real push.",%0A    },%0A    "legacy": {%0A      "bullets": [%0A        "20 seasons, 1 ring, 1 MVP, 0 Finals MVPs, 5 All-NBA",%0A        "27,207 points, 11,409 rebounds, 7,091 assists in 1,590 games",%0A        "18M career earnings, drafted pick 40",%0A      ],%0A      "hof": true,%0A-     "score": 713,%0A+     "score": 741,%0A+     "standout": {%0A+       "credit": 27.654545454545456,%0A+       "label": "points",%0A+       "stat": "pts",%0A+       "total": 27207,%0A+     },%0A      "verdict": "First-ballot Hall of Famer, jersey in the rafters",%0A    },%0A    "lines": [%0A      "8 ppg, 3.5 rpg, 3.1 apg",%0A      "7 ppg, 3.3 rpg, 2.7 apg",%0A%0A ❯ src/test/nbaOldSaveLines.test.ts:169:39%0A%0A

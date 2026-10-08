@@ -1,0 +1,10 @@
+vitest-own exit=1 7s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/nbaOldSaveLines.test.ts,title=src/test/nbaOldSaveLines.test.ts > Round 1103%3A an old NBA save reads e
+vitest-list exit=0 80s |    Duration  79.62s (transform 18.13s, setup 1.72s, collect 46.52s, tests 153.46s, environment 11.71s, prepare 2.93s)
+tsc exit=0 149s | 
+anchors exit=0 63s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+norival exit=0 22s | No rival product names found. 0 findings.
+simAwards exit=0 11s | PASS: ALL AWARD SCARCITY CHECKS PASSED
+simNbaCareer exit=0 32s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged, rivalry beats honest
+simCareerRealism exit=0 10s | ALL CAREER REALISM CHECKS PASSED
+simCareerParity exit=0 11s | simCareerParity: green. One money app, one fan rule, one rival shape, one badge case, in all five careers.
+marks exit=0 451s | marks.sh done
