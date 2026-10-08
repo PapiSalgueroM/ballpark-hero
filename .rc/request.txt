@@ -1,0 +1,5 @@
+#!playwright
+#!serial
+m1: bash .rc/x/mut.sh m1
+m2: bash .rc/x/mut.sh m2
+m3: bash .rc/x/mut.sh m3
