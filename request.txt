@@ -1,0 +1,19 @@
+# Release AN review (runner lens): the shootout engine commit's harness on the merged tree, every control and three more seeds; decision 4's two other harnesses
+shoot-plain: node scripts/simCmShootoutOrder.mjs
+shoot-seed1: SIM_SEED=1 node scripts/simCmShootoutOrder.mjs
+shoot-seed2: SIM_SEED=2 node scripts/simCmShootoutOrder.mjs
+shoot-seed3: SIM_SEED=3 node scripts/simCmShootoutOrder.mjs
+shoot-ignoreorder: CM_SHOOTOUT_CONTROL=ignoreorder node scripts/simCmShootoutOrder.mjs
+shoot-noskip: CM_SHOOTOUT_CONTROL=noskip node scripts/simCmShootoutOrder.mjs
+shoot-nocap: CM_SHOOTOUT_CONTROL=nocap node scripts/simCmShootoutOrder.mjs
+shoot-unsetpath: CM_SHOOTOUT_CONTROL=unsetpath node scripts/simCmShootoutOrder.mjs
+shoot-ownkeeper: CM_SHOOTOUT_CONTROL=ownkeeper node scripts/simCmShootoutOrder.mjs
+shoot-wrongkeeper: CM_SHOOTOUT_CONTROL=wrongkeeper node scripts/simCmShootoutOrder.mjs
+shoot-nooppkeeper: CM_SHOOTOUT_CONTROL=nooppkeeper node scripts/simCmShootoutOrder.mjs
+shoot-oppworst: CM_SHOOTOUT_CONTROL=oppworst node scripts/simCmShootoutOrder.mjs
+shoot-thinside: CM_SHOOTOUT_CONTROL=thinside node scripts/simCmShootoutOrder.mjs
+shoot-nomakeup: CM_SHOOTOUT_CONTROL=nomakeup node scripts/simCmShootoutOrder.mjs
+shoot-bogus: CM_SHOOTOUT_CONTROL=nosuchcontrol node scripts/simCmShootoutOrder.mjs
+appeal: node scripts/simManagerAppealIsolation.mjs
+rules: node scripts/simCmLeagueRules.mjs
+vitest-shoot: node_modules/.bin/vitest run src/test/clubManagerShootoutOrder.test.ts src/test/clubManagerShootoutTile.test.tsx src/test/managerMatchPlans.test.ts --testTimeout=300000 --hookTimeout=120000

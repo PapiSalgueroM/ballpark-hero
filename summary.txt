@@ -1,0 +1,18 @@
+shoot-seed2 exit=0 12s | simCmShootoutOrder: all sections passed
+shoot-seed1 exit=0 12s | simCmShootoutOrder: all sections passed
+shoot-plain exit=0 13s | simCmShootoutOrder: all sections passed
+shoot-noskip exit=1 11s | simCmShootoutOrder: 27 FAILURE(S)
+shoot-seed3 exit=0 13s | simCmShootoutOrder: all sections passed
+shoot-ignoreorder exit=1 12s | simCmShootoutOrder: 28 FAILURE(S)
+shoot-unsetpath exit=1 11s | simCmShootoutOrder: 3 FAILURE(S)
+shoot-nocap exit=1 13s | simCmShootoutOrder: 4 FAILURE(S)
+shoot-ownkeeper exit=1 12s | simCmShootoutOrder: 2 FAILURE(S)
+shoot-wrongkeeper exit=1 11s | simCmShootoutOrder: 3 FAILURE(S)
+shoot-oppworst exit=1 12s | simCmShootoutOrder: 27 FAILURE(S)
+shoot-nooppkeeper exit=1 13s | simCmShootoutOrder: 4 FAILURE(S)
+shoot-bogus exit=1 0s | CM_SHOOTOUT_CONTROL=nosuchcontrol is not a control this harness knows (ignoreorder, noskip, nocap, unsetpath, ownkeeper, wrongkeeper, nooppkeeper, oppworst, thinside, nom
+shoot-thinside exit=1 12s | simCmShootoutOrder: 29 FAILURE(S)
+shoot-nomakeup exit=1 12s | simCmShootoutOrder: 37 FAILURE(S)
+vitest-shoot exit=0 5s |    Duration  3.94s (transform 1.59s, setup 190ms, collect 5.07s, tests 1.73s, environment 1.14s, prepare 448ms)
+appeal exit=0 25s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+rules exit=0 24s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
