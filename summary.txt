@@ -1,0 +1,8 @@
+vitest exit=0 5s |    Duration  3.57s (transform 1.49s, setup 439ms, collect 2.09s, tests 630ms, environment 2.80s, prepare 988ms)
+sim exit=0 15s | simSeasonCentreMotion: 15 checks, 0 failed
+sim-shift exit=1 13s | simSeasonCentreMotion: 15 checks, 2 failed (control shift)
+sim-resumetag exit=1 11s | simSeasonCentreMotion: 15 checks, 1 failed (control resumetag)
+flagship exit=0 0s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+lint exit=0 2s | ✖ 3 problems (0 errors, 3 warnings)
+sim-fence exit=1 12s | simSeasonCentreMotion: 15 checks, 1 failed (control fence)
+tsc exit=0 66s | 
