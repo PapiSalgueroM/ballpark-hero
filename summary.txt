@@ -1,0 +1,9 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+vitest5 exit=0 10s |    Duration  9.95s (transform 4.81s, setup 406ms, collect 9.59s, tests 5.89s, environment 2.98s, prepare 1.08s)
+play exit=0 60s | playUsSeasonCentre: 53 checks, 0 failed
+tsc exit=0 65s | 
+sim-ctl-conf exit=1 4s | simUsSeasonCentre: 45 checks, 1 failed (control conf)
+sim exit=0 15s | simUsSeasonCentre: 45 checks, 0 failed
+play-ctl-playfirst exit=1 64s | playUsSeasonCentre: 10 checks, 5 failed (control playfirst)
+walker-sweepGames exit=0 6s | supabase requests aborted: 3; walker closing: 0 findings
+walker-playGames exit=0 64s | supabase requests aborted: 1; walker closing: 0 findings
