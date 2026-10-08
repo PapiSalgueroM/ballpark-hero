@@ -1,0 +1,3 @@
+vitest-eranat-plain exit=0 5s |    Duration  4.97s (transform 2.49s, setup 107ms, collect 49ms, tests 3.25s, environment 641ms, prepare 382ms)
+vitest-eranat-with-identity-plain exit=0 9s |    Duration  9.14s (transform 3.40s, setup 160ms, collect 304ms, tests 10.32s, environment 1.21s, prepare 753ms)
+tsc exit=0 56s | 
