@@ -40,7 +40,9 @@
  *   2. the scored legacy path (useGameCompletion) survives untouched in
  *      all eight boards;
  *   3. the tycoon's mark is once-per-session by ref, called first in
- *      doBuy, doHire and doTap;
+ *      doBuy, doHire and doTap (and doLegacyPerk since Round 196), and
+ *      since Round 1080 on a ticket offer change that really changed
+ *      the offer;
  *   4. the marked paths are real routes in App.tsx, so the header's
  *      per-slug attribution can never dangle;
  *   5. the Round 157/159 marks still stand, in their Round 392 shape: a
@@ -165,8 +167,19 @@ console.log('3) Stadium Tycoon marks once per session, on the first real action'
     const head = t.slice(i, i + 200);
     if (!head.includes('markSessionPlay();')) fail(`tycoon: ${action} does not mark the session first`);
   }
+  /* Round 1080 added the ticket office: switching the offer is a choice the
+     player makes, so it marks as well, but only when the offer really
+     changed. Picking the offer you already have is not playing, so this one
+     mark sits behind that test and is not the first line. */
+  {
+    const i = t.indexOf('const doSetTicketPolicy = useCallback(');
+    if (i < 0) fail('tycoon: doSetTicketPolicy not found');
+    else if (!t.slice(i, i + 260).includes('if (next !== before) markSessionPlay();')) {
+      fail('tycoon: doSetTicketPolicy does not mark the session on a real offer change, and only on one');
+    }
+  }
   const invocations = t.split('markSessionPlay();').length - 1;
-  if (invocations !== 4) fail(`tycoon: markSessionPlay() invoked ${invocations} times, expected exactly doBuy + doHire + doTap + doLegacyPerk`);
+  if (invocations !== 5) fail(`tycoon: markSessionPlay() invoked ${invocations} times, expected exactly doBuy + doHire + doTap + doLegacyPerk + a real ticket offer change`);
 }
 
 /* ---------- 4. Every marked path is a real route ---------- */
