@@ -1,0 +1,14 @@
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs
+al-invented: SIM_ALEAGUE_CONTROL=invented node scripts/simClubManagerALeague.mjs
+al-offcurve: SIM_ALEAGUE_CONTROL=offcurve node scripts/simClubManagerALeague.mjs
+al-onehost: SIM_ALEAGUE_CONTROL=onehost node scripts/simClubManagerALeague.mjs
+al-excluded: SIM_ALEAGUE_CONTROL=excluded node scripts/simClubManagerALeague.mjs
+al-nobyes: SIM_ALEAGUE_CONTROL=nobyes node scripts/simClubManagerALeague.mjs
+al-stalecount: SIM_ALEAGUE_CONTROL=stalecount node scripts/simClubManagerALeague.mjs
+al-nodedupe: SIM_ALEAGUE_CONTROL=nodedupe node scripts/simClubManagerALeague.mjs
+al-samebye: SIM_ALEAGUE_CONTROL=samebye node scripts/simClubManagerALeague.mjs
+al-satout: SIM_ALEAGUE_CONTROL=satout node scripts/simClubManagerALeague.mjs
+al-nzcountry: SIM_ALEAGUE_CONTROL=nzcountry node scripts/simClubManagerALeague.mjs
+al-nopartial: SIM_ALEAGUE_CONTROL=nopartial node scripts/simClubManagerALeague.mjs
+gen-identical: node scripts/genClubManagerALeague.mjs && git diff --ignore-cr-at-eol --exit-code --stat -- src/data/clubManagerALeague2026.ts && echo ALEAGUE-FILE-IDENTICAL
+identity: node_modules/.bin/vitest run src/test/cmWorldIdentity1052.test.ts src/test/cmDataOnDemandIdentity.test.ts --testTimeout=300000 --hookTimeout=300000
