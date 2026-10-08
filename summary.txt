@@ -1,0 +1,15 @@
+coach exit=0 2s | Coach poaching: CRLF anchors/raw bytes held, owned copies cleaned; fictional pure-engine fixtures do not prove UI gameplay or sports history.
+coach-phantom exit=0 2s | Coach poaching: CRLF anchors/raw bytes held, owned copies cleaned; fictional pure-engine fixtures do not prove UI gameplay or sports history.
+coach-credit exit=0 2s | Coach poaching: CRLF anchors/raw bytes held, owned copies cleaned; fictional pure-engine fixtures do not prove UI gameplay or sports history.
+coach-rng exit=0 2s | Coach poaching: CRLF anchors/raw bytes held, owned copies cleaned; fictional pure-engine fixtures do not prove UI gameplay or sports history.
+coachcareer exit=0 2s | PASS: ALL US COACHING CAREER CHECKS PASSED
+season exit=0 13s | simUsSeasonCentre: 43 checks, 0 failed
+season-short82 exit=1 14s | simUsSeasonCentre: 43 checks, 1 failed (control short82)
+tsc exit=0 51s | 
+vitest-fix exit=0 4s |    Duration  3.27s (transform 1.71s, setup 285ms, collect 3.40s, tests 1.33s, environment 1.58s, prepare 364ms)
+parity exit=1 38s | simUsBoardParity: 3 failures
+anchors exit=0 25s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+probe3 exit=0 2s | [3] careers with an All-Star selection and no ring, MVP, Finals MVP or All-NBA: 142 of 1500 (9.5%)
+tileprobe exit=0 2s | All-Star with no ring, MVP or All-NBA: 142 (9.5%)
+sense-full exit=0 90s | simNbaAwardsSense: 139 checks, 0 failed (full size), 89s
+hall-nba exit=0 127s | simCareerHall nba: all 33 checks green
