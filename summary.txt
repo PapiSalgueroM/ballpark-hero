@@ -1,0 +1,21 @@
+shootout exit=0 27s | simCmShootoutOrder: all sections passed
+shootout-s2 exit=0 28s | simCmShootoutOrder: all sections passed
+shootout-s1 exit=0 31s | simCmShootoutOrder: all sections passed
+shootout-s5 exit=0 26s | simCmShootoutOrder: all sections passed
+shootout-s3 exit=0 30s | simCmShootoutOrder: all sections passed
+shootout-s4 exit=0 30s | simCmShootoutOrder: all sections passed
+shootout-noskip exit=1 28s | simCmShootoutOrder: 38 FAILURE(S)
+shootout-ignoreorder exit=1 30s | simCmShootoutOrder: 39 FAILURE(S)
+shootout-nocap exit=1 31s | simCmShootoutOrder: 4 FAILURE(S)
+shootout-unsetpath exit=1 29s | simCmShootoutOrder: 3 FAILURE(S)
+shootout-wrongkeeper exit=1 28s | simCmShootoutOrder: 3 FAILURE(S)
+shootout-ownkeeper exit=1 31s | simCmShootoutOrder: 2 FAILURE(S)
+shootout-thinside exit=1 25s | simCmShootoutOrder: 8 FAILURE(S)
+shootout-nooppkeeper exit=1 32s | simCmShootoutOrder: 4 FAILURE(S)
+shootout-oppworst exit=1 31s | simCmShootoutOrder: 39 FAILURE(S)
+shootout-keepleague exit=1 20s | simCmShootoutOrder: 3 FAILURE(S)
+shootout-bogus exit=2 0s | CM_SHOOTOUT_CONTROL=nosuchcontrol is not a control this harness knows (ignoreorder, noskip, nocap, unsetpath, ownkeeper, wrongkeeper, nooppkeeper, oppworst, thinside, nom
+shootout-nomakeup exit=1 31s | simCmShootoutOrder: 16 FAILURE(S)
+shootout-keeperonfull exit=1 36s | simCmShootoutOrder: 1 FAILURE(S)
+simNoRivalNames exit=0 15s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 37s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
