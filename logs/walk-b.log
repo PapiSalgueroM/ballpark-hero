@@ -1,0 +1,31 @@
+FULL: 157 routes walked, 13 with something to look at
+  FULL /login: buttons 3 (open 3) boundary false notice null crash  pageErrors [] (open []) console ["404 Error: User attempted to access non-existent route: /login"] (open 1)
+  FULL /signup: buttons 3 (open 3) boundary false notice null crash  pageErrors [] (open []) console ["404 Error: User attempted to access non-existent route: /signup"] (open 1)
+  FULL /higher-lower-transfers: buttons 7 (open 7) boundary false notice null crash  pageErrors [] (open []) console [] (open 0)
+  FULL /grade-transfer: buttons 171 (open 171) boundary false notice null crash  pageErrors [] (open []) console [] (open 0)
+  FULL /perfect-lineup: buttons 171 (open 171) boundary false notice null crash  pageErrors [] (open []) console [] (open 0)
+  FULL /world-cup: buttons 171 (open 171) boundary false notice null crash  pageErrors [] (open []) console [] (open 0)
+  FULL /guess-soccer-club: buttons 171 (open 171) boundary false notice null crash  pageErrors [] (open []) console [] (open 0)
+  FULL /shirt-number: buttons 8 (open 8) boundary false notice null crash  pageErrors [] (open []) console [] (open 0)
+  FULL /guess-transfer-value: buttons 171 (open 171) boundary false notice null crash  pageErrors [] (open []) console [] (open 0)
+  FULL /pack-battle: buttons 9 (open 9) boundary false notice null crash  pageErrors [] (open []) console [] (open 0)
+  FULL /football-timeline: buttons 18 (open 18) boundary false notice null crash  pageErrors [] (open []) console [] (open 0)
+  FULL /football-draft: buttons 171 (open 171) boundary false notice null crash  pageErrors [] (open []) console [] (open 0)
+  FULL /guess-nfl-team: buttons 11 (open 11) boundary false notice null crash  pageErrors [] (open []) console [] (open 0)
+NATIVE probe before page code: reading window.localStorage gave "SecurityError"; 157 routes
+NATIVE: 157 routes walked, 13 with something to look at
+  NATIVE /login: buttons 3 boundary false snapshot false notice null crash  pageErrors [] console ["404 Error: User attempted to access non-existent route: /login"]
+  NATIVE /signup: buttons 3 boundary false snapshot false notice null crash  pageErrors [] console ["404 Error: User attempted to access non-existent route: /signup"]
+  NATIVE /higher-lower-transfers: buttons 7 boundary false snapshot false notice null crash  pageErrors [] console []
+  NATIVE /grade-transfer: buttons 171 boundary false snapshot false notice null crash  pageErrors [] console []
+  NATIVE /perfect-lineup: buttons 171 boundary false snapshot false notice null crash  pageErrors [] console []
+  NATIVE /world-cup: buttons 171 boundary false snapshot false notice null crash  pageErrors [] console []
+  NATIVE /guess-soccer-club: buttons 171 boundary false snapshot false notice null crash  pageErrors [] console []
+  NATIVE /shirt-number: buttons 8 boundary false snapshot false notice null crash  pageErrors [] console []
+  NATIVE /guess-transfer-value: buttons 171 boundary false snapshot false notice null crash  pageErrors [] console []
+  NATIVE /pack-battle: buttons 9 boundary false snapshot false notice null crash  pageErrors [] console []
+  NATIVE /football-timeline: buttons 18 boundary false snapshot false notice null crash  pageErrors [] console []
+  NATIVE /football-draft: buttons 171 boundary false snapshot false notice null crash  pageErrors [] console []
+  NATIVE /guess-nfl-team: buttons 11 boundary false snapshot false notice null crash  pageErrors [] console []
+NATIVE: notice taller than 30px on 0 routes 
+walk done
