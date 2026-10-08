@@ -1,0 +1,11 @@
+build exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+vitest exit=0 5s |    Duration  4.40s (transform 271ms, setup 126ms, collect 407ms, tests 2.24s, environment 922ms, prepare 322ms)
+tsc exit=0 63s | 
+notranslate exit=0 62s | playTranslatedPage: 242 checks, 0 failed
+plain exit=0 133s | playTranslatedPage: 447 checks, 0 failed
+nolive exit=1 132s | playTranslatedPage: 447 checks, 77 failed (control "nolive", red on purpose)
+rivals exit=0 13s | No rival product names found. 0 findings.
+anchors exit=0 37s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+eslint exit=0 2s | 
+noguard exit=1 94s | playTranslatedPage: 183 checks, 36 failed (control "noguard", red on purpose)
+undocopies exit=1 129s | playTranslatedPage: 447 checks, 8 failed (control "undocopies", red on purpose)
