@@ -51,26 +51,37 @@
      Round 6). This file first had round five ending at 180, copied from Over
      The Cap's page, which labels pick 181 "Round 6": that label is wrong (a
      compensatory pick makes round five 41 selections long).
-   - picks 100, 101, 140, 141, 181, 182, 216 and 217: Over The Cap only. The
+   - pick 140 (found 2026-10-08, read the same day): AtoZ Sports, 7 July 2026,
+     "Bengals Player Profile: ..." (signed: four years, 5,169,036, of which
+     789,036 is the signing bonus); Over The Cap 5,182,896 (read again
+     2026-10-08). 0.27 percent apart. Verified, and the signed figure is the
+     one stored, as on picks 33, 64, 65 and 257.
+   - picks 100, 101, 141, 181, 182, 216 and 217: Over The Cap only. The
      other figures found run 3 to 4 percent lower: DraftKings Network's round
-     by round pieces of 25 April 2026, and NFL Trade Rumors on 22 July 2026,
-     as carried by Yardbarker ("projected to sign a four-year, $5.549 million
-     rookie contract" for pick 101, against Over The Cap's 5,707,632: 2.8
-     percent apart, so not agreement by this file's own rule). That
-     projection is known to be stale: it had the first pick on
-     54.6M, and he signed for 57.3M; it had the last pick on 4.18M, and he
-     signed for 4.5M. Looked for again on 2026-10-08 and not found: a report of
-     the signed total for any of the eight (the clubs announced four year
-     deals with no figures). HELD, all eight.
+     by round pieces of 25 April 2026, and for pick 101 Spotrac's slot value,
+     5,549,727 over four years, as credited by Raiders On SI on 22 July 2026
+     and carried by NFL Trade Rumors the same day ("projected to sign a
+     four-year, $5.549 million rookie contract"), against Over The Cap's
+     5,707,632: 2.8 percent apart, so not agreement by this file's own rule.
+     The projection NFL Trade Rumors printed before the draft is known to be
+     stale: it had the first pick on 54.6M, and he signed for 57.3M; it had
+     the last pick on 4.18M, and he signed for 4.5M. Looked for again on
+     2026-10-08, one search a player, and not found: a report of the signed
+     total for any of the seven (the clubs announced four year deals with no
+     figures; the beat reports that print figures credit Over The Cap, so
+     they are the same source twice). HELD, all seven.
      THE RULE FOR A HELD 2026 ROW, stated so it is a rule and not a habit: the
      game pays the Over The Cap figure. Why that one and not a line drawn
-     between the verified picks: on all five picks where a signed deal was
-     reported (1, 33, 64, 65, 257) that estimate was within 1.7 percent of the
-     deal and exact on the last, and a straight line from pick 65 to pick 257
-     would pay round four about 0.3M a year more than either source says. It
-     is one source, it is marked as one, the harness counts it, and no line of
-     the game's copy quotes a held slot. THE LEAD HAS NOT RULED ON THIS YET
-     (the review of 2026-10-08 asked for a second source or a written ruling).
+     between the verified picks: on all six picks where a signed deal was
+     reported (1, 33, 64, 65, 140, 257) that estimate was within 1.7 percent
+     of the deal and exact on the last, and a straight line from pick 65 to
+     pick 257 would pay round four about 0.3M a year more than either source
+     says. It is one source, it is marked as one, the harness counts it, and
+     no line of the game's copy quotes a held slot. What the hold can cost: a
+     held end 4 percent lower (the widest gap any other figure showed) moves
+     no slot's pay by more than 0.1M a year. THE LEAD HAS NOT RULED ON THIS
+     YET (the review of 2026-10-08 asked for a second source or a written
+     ruling; one of the eight ends it named has its second source now).
    The 2026 rookie minimum salary, 885,000: DraftKings Network, 25 April 2026,
    "How much money do seventh round picks in the NFL Draft make?"; Legion
    Report, 14 July 2026, "NFL Rookie Contract Scale: What Every 2026 Draft
@@ -149,7 +160,7 @@ export const NFL_ROOKIE_SCALE: { now: NflRookieTable; y2005: NflRookieScale } = 
     laterRounds: [
       { round: 2, firstPick: 33, firstTotal: 13_376_740, lastPick: 64, lastTotal: 7_880_000, years: 4 },
       { round: 3, firstPick: 65, firstTotal: 7_400_000, lastPick: 100, lastTotal: 6_726_012, years: 4, held: 'last' },
-      { round: 4, firstPick: 101, firstTotal: 5_707_632, lastPick: 140, lastTotal: 5_182_896, years: 4, held: 'both' },
+      { round: 4, firstPick: 101, firstTotal: 5_707_632, lastPick: 140, lastTotal: 5_169_036, years: 4, held: 'first' },
       { round: 5, firstPick: 141, firstTotal: 4_955_668, lastPick: 181, lastTotal: 4_724_112, years: 4, held: 'both' },
       { round: 6, firstPick: 182, firstTotal: 4_714_212, lastPick: 216, lastTotal: 4_590_172, years: 4, held: 'both' },
       { round: 7, firstPick: 217, firstTotal: 4_564_644, lastPick: 257, lastTotal: 4_502_600, years: 4, held: 'first' },

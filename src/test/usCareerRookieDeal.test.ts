@@ -88,6 +88,23 @@ describe('Round 1104: the NFL rookie deal', () => {
     expect(rookieDeal('nfl', 'y2005', 1)!.held).toBe(true);
   });
 
+  /* The closing pass of 2026-10-08. Which later round ends are two sourced is the table's own claim, so it is
+     pinned: lifting a hold, or adding one, has to touch this line as well as the header that names the
+     sources. Seven ends are still on one source. Pick 140 left the list that day, when a report of the
+     signed deal was found (5,169,036 against the estimate's 5,182,896); the signed figure is the one stored,
+     and it moves one slot: the 19th pick of round four is paid 1.3M a year, where the estimate paid 1.4M. */
+  it('names the seven later round ends that are still one sourced, and pays pick 140 its signed figure', () => {
+    const table = NFL_ROOKIE_SCALE.now;
+    const held = table.laterRounds.flatMap(r => [
+      ...(r.held === 'first' || r.held === 'both' ? [r.firstPick] : []),
+      ...(r.held === 'last' || r.held === 'both' ? [r.lastPick] : []),
+    ]);
+    expect(held).toEqual([100, 101, 141, 181, 182, 216, 217]);
+    expect(table.laterRounds.find(r => r.round === 4)!.lastTotal).toBe(5_169_036);
+    expect(pay('now', 114)).toBe(1.4);
+    expect(pay('now', 115)).toBe(1.3);
+  });
+
   it('pays a held era the named era slot times its scale, and the scale is the 2005 era money scale', () => {
     const held = NFL_ROOKIE_SCALE.y2005;
     expect('heldAs' in held).toBe(true);
