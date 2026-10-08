@@ -169,7 +169,17 @@ export async function fetchFranchiseGridData<P extends FranchisePlayer>(cfg: Fra
   try {
     const rows = cfg.staticSource ? await readStaticRows(cfg.staticSource) : await readPagedRows(cfg, select);
     if (!rows) return null;
-    return indexFranchiseRows(cfg, rows, opts);
+    /* The static door hands over a whole key in one piece, so the index is
+       built in a task of its own: a tap made while the key lands is answered
+       between the decode and the index instead of after both. */
+    if (cfg.staticSource) await nextTask();
+    const data = indexFranchiseRows(cfg, rows, opts);
+    /* Files that decoded but hold fewer players than the floor are refused AND
+       forgotten, like files toRows refused: kept, every later load would get
+       the same short files back with no request. The engine does it, so no
+       sport has to remember to. */
+    if (!data && cfg.staticSource) forgetStaticJson(cfg.staticSource.urls);
+    return data;
   } catch {
     return null;
   }
@@ -242,18 +252,59 @@ export function indexFranchiseRows<P extends FranchisePlayer>(cfg: FranchiseGrid
 
 /** Round 358's backoff, reused: a second attempt after 400 ms, a third after 800 more. */
 const STATIC_RETRY_MS = [400, 800];
-/** How long one attempt waits for the response HEADERS. The body is never cut. */
+/** How long one attempt waits for the response HEADERS. */
 const STATIC_HEADERS_MS = 20_000;
+/** How long the body may go without ONE BYTE arriving before the attempt is cut. A body that keeps coming is never cut, however slow. */
+const STATIC_STALL_MS = 20_000;
 
 const staticJson = new Map<string, Promise<unknown | null>>();
 
+/** Ends the current task, so the browser can answer a tap before the next piece of work. */
+const nextTask = () => new Promise<void>((resolve) => { setTimeout(resolve, 0); });
+
+/**
+ * The body of a response, parsed as JSON. Throws when it is not JSON, and when
+ * it stalls: no byte for STATIC_STALL_MS cuts the attempt, because a download
+ * that stopped half way would otherwise hang for the page's life and no pick
+ * could ever be checked without a reload. A slow line is not a stalled one: the
+ * limit is on the gap between bytes, never on the whole body, so a file that
+ * keeps arriving always finishes. Every timer is cleared on every path.
+ */
+async function readJsonBody(res: Response, abort: AbortController): Promise<unknown> {
+  const reader = res.body && typeof res.body.getReader === 'function' ? res.body.getReader() : null;
+  /* No stream to watch (a test double, a very old browser): take the body whole. */
+  if (!reader) return res.json();
+  const decoder = new TextDecoder();
+  let text = '';
+  let stalled = false;
+  for (;;) {
+    const gap = setTimeout(() => {
+      stalled = true;
+      abort.abort();
+      void Promise.resolve(reader.cancel()).catch(() => undefined);
+    }, STATIC_STALL_MS);
+    let chunk: { done: boolean; value?: Uint8Array };
+    try {
+      chunk = await reader.read();
+    } finally {
+      clearTimeout(gap);
+    }
+    if (stalled) throw new Error('the body stalled');
+    if (chunk.done) break;
+    if (chunk.value) text += decoder.decode(chunk.value, { stream: true });
+  }
+  text += decoder.decode();
+  return JSON.parse(text);
+}
+
 async function attemptStaticJson(url: string): Promise<unknown | null> {
   const abort = new AbortController();
-  /* The timer covers the wait for the headers only. On a slow line the body of
-     a 200 KB file can take longer than any fixed limit, and cutting it would
-     restart the download forever where the old small pages would have
-     finished. It is cleared on every path, so a failed attempt leaves no live
-     timer behind. */
+  /* This timer covers the wait for the headers only. On a slow line the body
+     of a 200 KB file can take longer than any fixed limit, and cutting it on
+     a total would restart the download forever where the old small pages
+     would have finished; readJsonBody watches the gap between bytes instead.
+     It is cleared on every path, so a failed attempt leaves no live timer
+     behind. */
   const timer = setTimeout(() => abort.abort(), STATIC_HEADERS_MS);
   let res: Response;
   try {
@@ -267,7 +318,7 @@ async function attemptStaticJson(url: string): Promise<unknown | null> {
   try {
     /* The host answers a missing address with index.html and a 200, so a 200
        proves nothing: only a body that parses as JSON is an answer. */
-    const body: unknown = await res.json();
+    const body: unknown = await readJsonBody(res, abort);
     return body === null || body === undefined ? null : body;
   } catch {
     return null;
@@ -306,6 +357,9 @@ export function forgetStaticJson(urls: string[]): void {
 async function readStaticRows(source: GridStaticSource): Promise<Record<string, unknown>[] | null> {
   const files = await Promise.all(source.urls.map((url) => fetchStaticJson(url)));
   if (files.some((f) => f === null)) return null;
+  /* The last file's parse and the decode are each a piece of work a slow phone
+     feels, so they do not share a task. */
+  await nextTask();
   const rows = source.toRows(files);
   /* A body that parsed but is not the key (a changed stamp, a short column) is
      refused AND forgotten: kept, every later load would get the same bad files

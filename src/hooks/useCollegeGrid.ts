@@ -149,7 +149,15 @@ export function useCollegeGrid() {
 
   const isLoading = dailyLoading || staleLog;
 
-  const [activeCell, setActiveCell] = useState<number | null>(null);
+  const [activeCell, setActiveCellNow] = useState<number | null>(null);
+  /* True while a pick waits for the key. The open cell does not move during
+     that wait: the pick is judged for the cell it was made on, so a tap on
+     another cell would only move the highlight and the prompt to a cell the
+     spinner is not about, and the box would then close on it. */
+  const pickWaits = useRef(false);
+  const setActiveCell = useCallback((cell: number | null) => {
+    if (!pickWaits.current) setActiveCellNow(cell);
+  }, []);
   const [validating, setValidating] = useState(false);
   const [wrongFlash, setWrongFlash] = useState<{ cellIndex: number; playerName: string } | null>(null);
 
@@ -235,6 +243,7 @@ export function useCollegeGrid() {
       let data = gridData;
       if (!data) {
         setValidating(true);
+        pickWaits.current = true;
         let waitTimer: ReturnType<typeof setTimeout> | undefined;
         try {
           data = await Promise.race([
@@ -243,6 +252,7 @@ export function useCollegeGrid() {
           ]);
         } finally {
           clearTimeout(waitTimer);
+          pickWaits.current = false;
           if (mounted.current) setValidating(false);
         }
         /* He left the page while the pick waited: drop it. Nothing is written

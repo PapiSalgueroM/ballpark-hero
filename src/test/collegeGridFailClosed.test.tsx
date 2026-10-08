@@ -334,11 +334,18 @@ describe('College Grid fail closed (Round 1105)', () => {
       act(() => r().setActiveCell(0));
       let done: Promise<void> = Promise.resolve();
       await act(async () => { done = r().submitGuess(name); await vi.advanceTimersByTimeAsync(1000); });
-      /* A tap on another cell while the pick waits moves the open cell, not the pick. */
+      /* A tap on another cell while the pick waits moves neither the pick nor the open cell:
+         the highlight and the prompt stay on the cell the spinner is about. */
       act(() => r().setActiveCell(4));
+      expect(r().activeCell, 'the open cell does not move while its pick waits').toBe(0);
       await act(async () => { await vi.advanceTimersByTimeAsync(2000); });
       expect(r().validating, 'still waiting at 3 seconds').toBe(true);
       await act(async () => { held.forEach((release) => release()); await vi.advanceTimersByTimeAsync(10); await done; });
+      expect(r().activeCell, 'the box closes once the pick is judged').toBeNull();
+      /* And the board answers taps again. */
+      act(() => r().setActiveCell(4));
+      expect(r().activeCell, 'a tap after the wait opens the cell').toBe(4);
+      act(() => r().setActiveCell(0));
       expect(r().cells[0].status, `${name}: the captured cell is the one ${expected}`).toBe(expected);
       expect(r().cells[4].status, 'the cell tapped during the wait is untouched').toBe('empty');
       expect(r().guessesLeft, 'exactly one guess is on the log').toBe(14);
@@ -414,6 +421,15 @@ describe('decodeCollegeKey: null on any doubt, never a row from a damaged file',
     ['the school list missing', (_s, j) => { delete j.schools; }],
     ['a school that is not text', (_s, j) => { col(j, 'schools')[3] = 3; }],
     ['a school index past the list', (_s, j) => { col(j, 's')[5] = [99999]; }],
+    /* The boundaries, each one step past the last good value. */
+    ['a school index equal to the length of the school list', (_s, j) => { col(j, 's')[5] = [col(j, 'schools').length]; }],
+    ['a Heisman row equal to the count', (_s, j) => { col(j, 'h').push([j.count as number, 1999]); }],
+    ['one row under the floor', (s, j) => {
+      const n = real.MIN_POOL_SIZE - 1;
+      s.count = n; j.count = n; s.names = col(s, 'names').slice(0, n);
+      for (const k of ['s', 'g', 'p', 'f']) j[k] = col(j, k).slice(0, n);
+      j.h = (col(j, 'h') as [number, number][]).filter(([row]) => row < n);
+    }],
     ['a negative school index', (_s, j) => { col(j, 's')[5] = [-1]; }],
     ['a school index that is text', (_s, j) => { col(j, 's')[5] = ['12']; }],
     ['a school row that is not a list', (_s, j) => { col(j, 's')[5] = 12; }],
@@ -445,4 +461,19 @@ describe('decodeCollegeKey: null on any doubt, never a row from a damaged file',
     note(`decoder: ${DAMAGE.length - survived.length} of ${DAMAGE.length} damaged pairs refused`);
     expect(survived).toEqual([]);
   }, 120_000);
+
+  it('the last good value on each boundary still decodes: the floor itself, the last school, the last row', () => {
+    const [search, judge] = good();
+    const n = real.MIN_POOL_SIZE;
+    search.count = n; judge.count = n; search.names = col(search, 'names').slice(0, n);
+    for (const k of ['s', 'g', 'p', 'f']) judge[k] = col(judge, k).slice(0, n);
+    judge.h = [...(col(judge, 'h') as [number, number][]).filter(([row]) => row < n - 1), [n - 1, 1999]];
+    const schools = col(judge, 'schools') as string[];
+    col(judge, 's')[5] = [schools.length - 1];
+    const rows = real.decodeCollegeKey([search, judge]);
+    expect(rows, 'exactly the floor is enough').not.toBeNull();
+    expect(rows!.length).toBe(n);
+    expect(rows![5].colleges).toEqual([schools[schools.length - 1]]);
+    expect(rows![n - 1].heisman_year).toBe(1999);
+  });
 });

@@ -183,7 +183,7 @@ describe('the paged door, recorded on main before Round 1105 touched the engine'
 /* Added WITH the lift (Round 1105): the static door.                         */
 /* ------------------------------------------------------------------------- */
 
-import { fetchStaticJson, forgetStaticJson, type GridStaticSource } from '@/lib/gridEngine';
+import { fetchStaticJson, type GridStaticSource } from '@/lib/gridEngine';
 
 type Reply = { ok: boolean; json: () => Promise<unknown> };
 const okJson = (body: unknown): Reply => ({ ok: true, json: async () => body });
@@ -272,15 +272,94 @@ describe('the static door (Round 1105)', () => {
     expect(stub.calls).toEqual([]);
   });
 
-  it('a static pool under the floor is null, and forgetStaticJson makes the next call ask again', async () => {
+  it('a static pool under the floor is null and the engine forgets it itself: the next call asks for each URL once more', async () => {
     const urls = freshUrls();
-    const fetchMock = vi.fn(async (url: string) => okJson(url === urls[0] ? { stamp: 's1', rows: staticRows().slice(0, 1999) } : { stamp: 's1' }));
+    let short = true;
+    const fetchMock = vi.fn(async (url: string) => okJson(url === urls[0] ? { stamp: 's1', rows: short ? staticRows().slice(0, 1999) : staticRows() } : { stamp: 's1' }));
     vi.stubGlobal('fetch', fetchMock);
-    expect(await settle(fetchFranchiseGridData(staticCfg(urls, pairToRows)))).toBeNull();
+    expect(await settle(fetchFranchiseGridData(staticCfg(urls, pairToRows))), 'one player under the floor').toBeNull();
     expect(fetchMock).toHaveBeenCalledTimes(2);
-    forgetStaticJson(urls);
+    /* No forgetStaticJson from the caller: a sport that binds to this door does not have to remember to. */
+    short = false;
+    const data = await settle(fetchFranchiseGridData(staticCfg(urls, pairToRows)));
+    expect(fetchMock, 'one new request per URL, no more').toHaveBeenCalledTimes(4);
+    expect(data!.players.length).toBe(TABLE_ROWS);
+    /* And a pool that passed is kept: a third load costs nothing. */
     await settle(fetchFranchiseGridData(staticCfg(urls, pairToRows)));
     expect(fetchMock).toHaveBeenCalledTimes(4);
+  });
+
+  /** A reply whose body arrives through a reader, the way a browser hands it over. */
+  type Step = { bytes: Uint8Array; afterMs: number } | 'stall';
+  const BYTES = new TextEncoder().encode(JSON.stringify({ name: 'Zoë Probe', n: [1, 2, 3] }));
+  function streamed(steps: Step[], signal: AbortSignal | undefined, log: { cancelled: number }): Reply {
+    let at = 0;
+    const read = () => new Promise<{ done: boolean; value?: Uint8Array }>((resolve, reject) => {
+      const step = steps[at];
+      at += 1;
+      if (step === undefined) { resolve({ done: true }); return; }
+      if (step === 'stall') {
+        /* Nothing more ever arrives. A real stream errors when the request is aborted. */
+        signal?.addEventListener('abort', () => reject(new DOMException('aborted', 'AbortError')));
+        return;
+      }
+      setTimeout(() => resolve({ done: false, value: step.bytes }), step.afterMs);
+    });
+    const body = { getReader: () => ({ read, cancel: async () => { log.cancelled += 1; } }) };
+    return { ok: true, body, json: async () => { throw new Error('a streamed body must be read through its reader'); } } as unknown as Reply;
+  }
+
+  it('a body that stalls after the headers is cut after 20 seconds without a byte, and the next call starts over', async () => {
+    const [url] = freshUrls();
+    const log = { cancelled: 0 };
+    const signals: AbortSignal[] = [];
+    let healthy = false;
+    const fetchMock = vi.fn(async (_url: string, init?: { signal?: AbortSignal }) => {
+      if (init?.signal) signals.push(init.signal);
+      /* Split inside the two byte letter, so the pieces only read right when they are joined as a stream. */
+      const cut = BYTES.indexOf(0xc3) + 1;
+      return healthy
+        ? streamed([{ bytes: BYTES.slice(0, cut), afterMs: 5 }, { bytes: BYTES.slice(cut), afterMs: 5 }], init?.signal, log)
+        : streamed([{ bytes: BYTES.slice(0, 9), afterMs: 5 }, 'stall'], init?.signal, log);
+    });
+    vi.stubGlobal('fetch', fetchMock);
+    const load = fetchStaticJson(url);
+    let settled = false;
+    void load.then(() => { settled = true; });
+    await vi.advanceTimersByTimeAsync(19_000);
+    expect(fetchMock, 'still inside the first attempt at 19 seconds').toHaveBeenCalledTimes(1);
+    expect(signals[0].aborted).toBe(false);
+    await vi.advanceTimersByTimeAsync(1_500);
+    expect(signals[0].aborted, 'no byte for 20 seconds: the attempt is cut').toBe(true);
+    expect(fetchMock, 'and the second attempt is under way').toHaveBeenCalledTimes(2);
+    await vi.advanceTimersByTimeAsync(60_000);
+    expect(settled).toBe(true);
+    expect(await load, 'three stalled attempts are a failed load').toBeNull();
+    expect(fetchMock).toHaveBeenCalledTimes(3);
+    expect(log.cancelled, 'each stalled reader was let go').toBe(3);
+    expect(vi.getTimerCount(), 'no timer is left alive').toBe(0);
+    healthy = true;
+    expect(await settle(fetchStaticJson(url)), 'the next call asks again and reads the two pieces as one text').toEqual({ name: 'Zoë Probe', n: [1, 2, 3] });
+    expect(fetchMock).toHaveBeenCalledTimes(4);
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it('a slow body that keeps arriving is never cut, however long the whole of it takes', async () => {
+    const [url] = freshUrls();
+    const log = { cancelled: 0 };
+    const signals: AbortSignal[] = [];
+    /* Six pieces, 15 seconds apart: 90 seconds in all, and never 20 seconds without a byte. */
+    const size = Math.ceil(BYTES.length / 6);
+    const steps: Step[] = Array.from({ length: 6 }, (_, i) => ({ bytes: BYTES.slice(i * size, (i + 1) * size), afterMs: 15_000 }));
+    const fetchMock = vi.fn(async (_url: string, init?: { signal?: AbortSignal }) => { if (init?.signal) signals.push(init.signal); return streamed(steps, init?.signal, log); });
+    vi.stubGlobal('fetch', fetchMock);
+    const load = fetchStaticJson(url);
+    await vi.advanceTimersByTimeAsync(95_000);
+    expect(await load).toEqual({ name: 'Zoë Probe', n: [1, 2, 3] });
+    expect(fetchMock, 'one request, never restarted').toHaveBeenCalledTimes(1);
+    expect(signals[0].aborted).toBe(false);
+    expect(log.cancelled).toBe(0);
+    expect(vi.getTimerCount()).toBe(0);
   });
 
   it('withIds with no id column is still refused before anything is fetched', async () => {

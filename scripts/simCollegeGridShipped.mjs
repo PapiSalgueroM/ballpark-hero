@@ -42,6 +42,11 @@
         src/test/collegeGridFailClosed.test.tsx, which must pass, and again
         under each of its two controls, which must fail the cases they aim at
         with their marker line showing a count above zero. Plain run only.
+        The plain run also carries src/test/collegeGridSearchMemory.test.ts
+        in the same vitest start: what the search box RETURNS from the names
+        file (a surname lists the man, the longest career comes first, a list
+        that failed to load is an error and is asked for again). That suite
+        proves each of its checks against a broken source in the same run.
 
    SECTIONS 3 AND THE HASH HALF OF 5 RETIRE WHEN THE KEY MOVES. They are a
    before and after proof for one round. The fixture stores the sha256 of the
@@ -85,6 +90,7 @@ const KEY_FILE = path.join(ROOT, 'scripts', 'data', 'collegeGridPlayers.json');
 const RECORDED = path.join(ROOT, 'scripts', 'data', 'collegeGridRecorded1105.json');
 const MIGRATION = path.join(ROOT, 'supabase', 'migrations', '20260930120000_round_706_nfl_draft_picks.sql');
 const FAILCLOSED_TEST = 'src/test/collegeGridFailClosed.test.tsx';
+const SEARCH_TEST = 'src/test/collegeGridSearchMemory.test.ts';
 
 /* THE BUDGET. Measured 2026-10-07 on the committed files (35,598 rows):
      search  599,136 raw   205,231 gzip 9
@@ -539,14 +545,27 @@ function runFailClosed(control) {
   if (control) env.CG_FAILCLOSED_CONTROL = control;
   /* vitest is found by node's own walk up from this script, so the harness runs from a worktree too. */
   const vitest = fileURLToPath(import.meta.resolve('vitest/vitest.mjs'));
-  const r = spawnSync(process.execPath, [vitest, 'run', FAILCLOSED_TEST, '--reporter=json', `--outputFile.json=${report}`, '--reporter=default'],
+  /* The search suite rides in the plain start only: the two controls aim at the fail closed cases. */
+  const files = control ? [FAILCLOSED_TEST] : [FAILCLOSED_TEST, SEARCH_TEST];
+  const r = spawnSync(process.execPath, [vitest, 'run', ...files, '--reporter=json', `--outputFile.json=${report}`, '--reporter=default'],
     { cwd: ROOT, encoding: 'utf8', env, maxBuffer: 64 * 1024 * 1024 });
   const text = (r.stdout || '') + (r.stderr || '');
   if (!fs.existsSync(report)) return { error: text.slice(-1500) };
   const json = JSON.parse(fs.readFileSync(report, 'utf8'));
   const tests = [];
-  for (const f of json.testResults || []) for (const t of f.assertionResults || []) tests.push({ title: t.title, tag: (t.title.match(/^\(([a-e])\)/) || [])[1] ?? null, status: t.status });
-  return { tests, notes: [...text.matchAll(/CGFAILCLOSED\| (.+)/g)].map((m) => m[1].trim()), exit: r.status };
+  const search = [];
+  for (const f of json.testResults || []) {
+    const isSearch = String(f.name || '').replaceAll('\\', '/').endsWith(SEARCH_TEST);
+    for (const t of f.assertionResults || []) {
+      if (isSearch) search.push({ title: t.title, status: t.status });
+      else tests.push({ title: t.title, tag: (t.title.match(/^\(([a-e])\)/) || [])[1] ?? null, status: t.status });
+    }
+  }
+  return {
+    tests, search, exit: r.status,
+    notes: [...text.matchAll(/CGFAILCLOSED\| (.+)/g)].map((m) => m[1].trim()),
+    searchNotes: [...text.matchAll(/CGSEARCH\| (.+)/g)].map((m) => m[1].trim()),
+  };
 }
 
 function sectionEight() {
@@ -564,6 +583,14 @@ function sectionEight() {
     if (!plain.notes.some((n) => /^fail closed: 5 of 5 /.test(n))) out.push('the fail closed suite did not print its 5 of 5 failure worlds line, so case (c) returned without measuring');
     if (!plain.notes.some((n) => /^decoder: (\d+) of \1 /.test(n))) out.push('the fail closed suite did not print a full decoder line');
     info.push(`plain: ${plain.tests.length - notPassed.length} of ${plain.tests.length} tests passed (${plain.notes.filter((n) => /^(fail closed|decoder):/.test(n)).join('; ')})`);
+    /* What the search returns from memory. Six tests, and two lines it prints only when it measured. */
+    const searchRed = plain.search.filter((t) => t.status !== 'passed');
+    if (plain.search.length < 6) out.push(`the memory search suite ran ${plain.search.length} tests, expected at least 6`);
+    for (const t of searchRed) out.push(`memory search: "${t.title.slice(0, 80)}" is ${t.status}`);
+    const sampled = Number((plain.searchNotes.map((n) => n.match(/^surname: (\d+) sampled names/)).find(Boolean) || [])[1] ?? 0);
+    if (!(sampled >= 50)) out.push(`the memory search suite sampled ${sampled} surnames, expected at least 50, so its first check returned without measuring`);
+    if (!plain.searchNotes.some((n) => /^\d+ wrong shapes, /.test(n))) out.push('the memory search suite did not print its wrong shapes line, so that check returned without measuring');
+    info.push(`memory search: ${plain.search.length - searchRed.length} of ${plain.search.length} tests passed (${plain.searchNotes.join('; ')})`);
   }
 
   const paged = runFailClosed('paged');

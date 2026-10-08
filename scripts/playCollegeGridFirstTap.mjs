@@ -29,7 +29,11 @@
         baseline, with a long limit, so a busy machine cannot turn it red.
      4. SEARCH FROM MEMORY. With the key loaded and the context OFFLINE, typing
         the first letters of a known answer lists him and the request count
-        does not move. (Main's search cannot answer at all offline.)
+        does not move. (Main's search cannot answer at all offline.) Then a
+        SURNAME alone lists its man: a search that only matched the start of
+        a name would pass the first letters and find nobody by surname. The
+        man is one whose surname no other name in the file contains, read
+        from the emitted file, never typed into this walk.
      5. A PICK JUDGED OFFLINE. Still offline: a definite no takes "Guesses
         left" from 15 to 14, an entry the judge calls unknown for its cell gets
         the "No guess used" toast and the count stays, and a true answer turns
@@ -57,6 +61,9 @@
      paged      an init script reads college_grid_players 36 times             2
      slow       the document is held for the ceiling plus 500 ms               3
      nolist     the search file is aborted                                     4
+     nosurname  the men only a surname finds are renamed in the served file    4
+                (it fires only if the surname check is the ONE check that
+                went red: the first letters must still list their man)
      nojudge    the judge file is aborted before going offline                 5
      accepted   in the first world of 6 the judge file is served after all     6
 
@@ -85,14 +92,20 @@ const BASELINE = { keyReads: 36, requests: 72, bytesDecoded: 9_462_264, boardMsF
    runs on an idle Linux runner (their medians are in TIME_MEASURED_MS); the
    owner's PC at full load gave 2,601 ms the night before. The tight figure,
    1.5 times the median of the three rounded up to 50, is printed beside the
-   result and never asserted. */
+   result and never asserted.
+   READ A RED IN SECTION 3 WITH THE MACHINE IN MIND. The ceiling has four times
+   headroom on a runner and almost none on the owner's PC when it is busy: the
+   five samples of that 2,601 ms median ran from 1,358 to 8,700 ms. So a red
+   there is not a regression until the walk has been rerun on a GitHub runner
+   or on the PC with nothing else running. The slow control proves the check
+   can still go red. */
 const TIME_CEILING_MS = 3_150;
 const TIME_MEASURED_MS = '776, 771 and 769 ms (tight figure 1,200 ms; 2,601 ms on a PC at full load)';
 const CLS_CEILING = 0.05;
 const HOLD_MS = 1_500;
 const WAIT = 30_000;
 
-const CONTROLS = { latecells: [1, 7], paged: [2], slow: [3], nolist: [4], nojudge: [5], accepted: [6] };
+const CONTROLS = { latecells: [1, 7], paged: [2], slow: [3], nolist: [4], nosurname: [4], nojudge: [5], accepted: [6] };
 const CONTROL = process.env.CGFIRST_CONTROL || '';
 if (CONTROL && !CONTROLS[CONTROL]) {
   console.error(`CGFIRST_CONTROL=${CONTROL} is not a control this walk knows (${Object.keys(CONTROLS).join(', ')})`);
@@ -130,6 +143,30 @@ const JUDGE_ASSET = assetOf('Judge')[0];
 const INDEX_HTML = fs.readFileSync(path.join(DIST, 'index.html'), 'utf8');
 const JUDGE_TEXT = fs.readFileSync(JUDGE_ASSET, 'utf8');
 const JUDGE_OTHER_STAMP = (() => { const j = JSON.parse(JUDGE_TEXT); j.stamp = '0000000000000000'; return JSON.stringify(j); })();
+
+/* The men only a surname finds: two plain words, and the second (six letters
+   or more) sits in no other name of the emitted search file. Taken from the
+   END of the file, the shortest careers, so they are never the names the
+   sections pick from the front. Five, so one is left if a section uses one. */
+const SEARCH_FILE = JSON.parse(fs.readFileSync(SEARCH_ASSET, 'utf8'));
+const SURNAME_PROBES = (() => {
+  const low = SEARCH_FILE.names.map((n) => n.toLowerCase());
+  const found = [];
+  for (let i = low.length - 1; i >= 0 && found.length < 5; i -= 1) {
+    if (!/^[a-z]+ [a-z]{6,}$/.test(low[i])) continue;
+    const surname = low[i].split(' ')[1];
+    if (low.filter((n) => n.includes(surname)).length === 1) found.push({ name: SEARCH_FILE.names[i], typed: surname });
+  }
+  return found;
+})();
+if (SURNAME_PROBES.length < 5) abort(`the emitted search file holds only ${SURNAME_PROBES.length} names a surname alone finds. NOTHING WAS CHECKED.`);
+/* The nosurname control's file: those five men carry another surname, so their own finds nobody. */
+const SEARCH_NO_SURNAMES = (() => {
+  const gone = new Map(SURNAME_PROBES.map((p) => [p.name, `${p.name.split(' ')[0]} Renamedbycontrol`]));
+  const names = SEARCH_FILE.names.map((n) => gone.get(n) ?? n);
+  if (names.filter((n, i) => n !== SEARCH_FILE.names[i]).length !== 5) abort('the nosurname control renamed nobody, so it would prove nothing. NOTHING WAS CHECKED.');
+  return JSON.stringify({ ...SEARCH_FILE, names });
+})();
 
 /** The page's own judge, bundled into a fresh folder, over the two files the build emitted. */
 async function loadJudge() {
@@ -225,6 +262,7 @@ async function open({ viewport = PHONE, hold = [], mode = {}, throttle = 0, late
       if (how === 'abort') await route.abort();
       else if (how === 'html') await route.fulfill({ status: 200, contentType: 'text/html; charset=utf-8', body: INDEX_HTML });
       else if (how === 'stamp') await route.fulfill({ status: 200, contentType: 'application/json', body: JUDGE_OTHER_STAMP });
+      else if (how === 'nosurname') await route.fulfill({ status: 200, contentType: 'application/json', body: SEARCH_NO_SURNAMES });
       else await route.continue();
     } catch { /* the page went away while the file was held */ }
   });
@@ -378,7 +416,7 @@ async function sectionThree() {
 async function sectionsFourAndFive(viewport) {
   const four = [];
   const five = [];
-  const world = await open({ viewport, throttle: 4, mode: { search: CONTROL === 'nolist' ? 'abort' : 'ok', judge: CONTROL === 'nojudge' ? 'abort' : 'ok' } });
+  const world = await open({ viewport, throttle: 4, mode: { search: CONTROL === 'nolist' ? 'abort' : CONTROL === 'nosurname' ? 'nosurname' : 'ok', judge: CONTROL === 'nojudge' ? 'abort' : 'ok' } });
   const { page } = world;
   await nineVisible(page);
   if (CONTROL !== 'nolist' && CONTROL !== 'nojudge') { if (!(await keyLanded(world))) four.push('the key never landed'); }
@@ -394,9 +432,14 @@ async function sectionsFourAndFive(viewport) {
   let found = await search(page, 1, names.no, { typed: firstLetters });
   if (!found.listed) found = await search(page, 1, names.no);
   if (!found.listed) four.push(`typing "${firstLetters}" offline did not list ${names.no}; the list showed: ${found.shown || 'nothing'}`);
-  if (world.requests !== before) four.push(`${world.requests - before} requests left the page for a search; a search must read memory`);
   const longestOnSearch = await page.evaluate(() => window.__longest);
-  const infoFour = `${viewport.width} by ${viewport.height}, offline: "${firstLetters}" listed ${names.no} with ${world.requests - before} requests. Longest task at 4 times throttle: ${Math.round(longestAtLanding)} ms while the key landed, ${Math.round(longestOnSearch)} ms on the first search`;
+  /* 4, second half: a surname alone lists its man. The first letters above
+     would still pass on a search that only matched the start of a name. */
+  const probe = SURNAME_PROBES.find((p) => ![names.yes, names.no, names.unknown].includes(p.name));
+  const bySurname = await search(page, 1, probe.name, { typed: probe.typed });
+  if (!bySurname.listed) four.push(`typing the surname "${probe.typed}" offline did not list ${probe.name}; the list showed: ${bySurname.shown || 'nothing'}`);
+  if (world.requests !== before) four.push(`${world.requests - before} requests left the page for a search; a search must read memory`);
+  const infoFour = `${viewport.width} by ${viewport.height}, offline: "${firstLetters}" listed ${names.no} and the surname "${probe.typed}" alone ${bySurname.listed ? 'listed' : 'did NOT list'} ${probe.name}, with ${world.requests - before} requests. Longest task at 4 times throttle: ${Math.round(longestAtLanding)} ms while the key landed, ${Math.round(longestOnSearch)} ms on the first search`;
 
   /* 5: a definite no, an unknown, a yes, all offline. */
   const start = await guessesLeft(page);
@@ -494,11 +537,12 @@ const TITLES = {
   7: 'Geometry: the board holds its ground when the key lands',
 };
 const red = new Set();
+const said = [];
 let failures = 0;
 function report(n, results) {
   console.log(`\n${n}) ${TITLES[n]}`);
   for (const r of results) {
-    for (const m of r.out) { failures += 1; red.add(n); console.log(`  FAIL: ${m}`); }
+    for (const m of r.out) { failures += 1; red.add(n); said.push(m); console.log(`  FAIL: ${m}`); }
     if (r.info) console.log(`   ${r.info}`);
   }
 }
@@ -537,6 +581,11 @@ if (CONTROL) {
   const missed = CONTROLS[CONTROL].filter((n) => !red.has(n));
   if (missed.length) {
     console.error(`control "${CONTROL}": did NOT fire in section ${missed.join(' and ')}, the check is dead`);
+    process.exit(1);
+  }
+  /* nosurname aims at ONE check. Red for any other reason would prove nothing about it. */
+  if (CONTROL === 'nosurname' && !(said.length === 1 && said[0].startsWith('typing the surname "'))) {
+    console.error(`control "nosurname": section 4 went red, but not on the surname check alone (${said.length} failures), so the check is not proven`);
     process.exit(1);
   }
   console.log(`control "${CONTROL}": fired in section ${CONTROLS[CONTROL].join(' and ')} as expected, the check works`);

@@ -313,7 +313,7 @@ export function schoolsOnRecord(entry: CollegeJudgeEntry): string[] {
 // Fetch
 // ---------------------------------------------------------------------------
 
-// The key holds 35,611 rows (2026-09-15); far fewer means a broken fetch.
+// The key holds 35,598 rows (2026-10-07, the 13 invented 1977 names out); far fewer means a broken fetch.
 export const MIN_POOL_SIZE = 25000;
 
 /* Round 1105: the rows come from the two shipped files (the static source set
