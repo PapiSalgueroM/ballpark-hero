@@ -1,0 +1,10 @@
+vitest-celeb exit=0 4s |    Duration  2.99s (transform 573ms, setup 91ms, collect 848ms, tests 576ms, environment 570ms, prepare 358ms)
+probe2 exit=0 12s |    Duration  11.17s (transform 2.95s, setup 61ms, collect 3.81s, tests 6.32s, environment 424ms, prepare 177ms)
+m-kickoffcut exit=1 5s | simLiveSimMotion: control kickoffcut turned "R9: a goal gets its kick off" red on an assertion (1 failed), as it must.
+m-kickoffwait exit=1 5s | simLiveSimMotion: control kickoffwait turned "R9: a goal gets its kick off" red on an assertion (1 failed), as it must.
+m-restartbeat exit=1 10s | simLiveSimMotion: control restartbeat turned "R6: a chance starts with the ball" red on an assertion (1 failed), as it must.
+m-kickoffside exit=1 9s | simLiveSimMotion: control kickoffside turned "R7: every dead ball" red on an assertion (1 failed), as it must.
+m-turns exit=1 9s | simLiveSimMotion: control turns turned "R6: a chance starts with the ball" red on an assertion (1 failed), as it must.
+m-approach exit=1 9s | simLiveSimMotion: control approach turned "R6: a chance starts with the ball" red on an assertion (1 failed), as it must.
+vitest-motion exit=0 66s |    Duration  65.58s (transform 2.98s, setup 73ms, collect 3.91s, tests 60.13s, environment 518ms, prepare 260ms)
+tsc exit=0 80s | 
