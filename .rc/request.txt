@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walk4: VARIANTS=phone-ticking,phone-centre,desktop-centre,phone-centre-nolive,phone-ticking-nolive node .rc/x/rv-walk4.mjs
