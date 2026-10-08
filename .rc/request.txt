@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+plain: ENGINES=chromium node scripts/playTranslatedPage.mjs
+nolive: PLAY_TRANSLATED_CONTROL=nolive ENGINES=chromium node scripts/playTranslatedPage.mjs
+notranslate: PLAY_TRANSLATED_CONTROL=notranslate ENGINES=chromium node scripts/playTranslatedPage.mjs
+nolate: SIM_LATE=0 OUT_JSON=$RC_OUT/playTranslatedPage-nolate.json SHOTS=$RC_OUT/translated-nolate ENGINES=chromium node scripts/playTranslatedPage.mjs
+noguard: PLAY_TRANSLATED_CONTROL=noguard ENGINES=chromium node scripts/playTranslatedPage.mjs
