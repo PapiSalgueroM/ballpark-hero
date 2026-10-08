@@ -1,0 +1,1312 @@
+{
+ "configs": [
+  {
+   "tag": "390m",
+   "errors": [],
+   "console": [],
+   "reached": 0,
+   "notes": {
+    "retired": {
+     "reachedRetirement": true,
+     "weighs": "The voters weigh the hardware first: rings, the major awards, All-NBA years. Then the whole stat sheet, boards and assists as much as points. Your 37,660 points sat near the top of this game's books, and that got a real push.",
+     "pointsLines": [
+      "30,128 points, 9,415 rebounds, 3,909 assists in 1,626 games",
+      "💍 NBA champion · 🏆 League MVP · 🏅 Finals MVP · 🔥 Scoring champion · ⭐ Three All-NBAs · ✨ All-Star · 💥 A 30 point season · 🎯 20,000 points · 🚀 30,000 points · 📅 A decade in the league · 🩺 Iron man · 🪙 First million · 🪞 Won the rivalry · 🏛️ Hall of Famer",
+      "The voters weigh the hardware first: rings, the major awards, All-NBA years. Then the whole stat sheet, boards and assists as much as points. Your 37,660 points sat near the top of this game's books, and that got a real push."
+     ],
+     "hallLines": [
+      "💍 NBA champion · 🏆 League MVP · 🏅 Finals MVP · 🔥 Scoring champion · ⭐ Three All-NBAs · ✨ All-Star · 💥 A 30 point season · 🎯 20,000 points · 🚀 30,000 points · 📅 A decade in the league · 🩺 Iron man · 🪙 First million · 🪞 Won the rivalry · 🏛️ Hall of Famer",
+      "Legacy 1719",
+      "🏛️ Hall of Fame",
+      "legacy 1719",
+      "NAISMITH MEMORIAL BASKETBALL HALL OF FAME",
+      "First ballot. Class of 2050.",
+      "The voters weigh the hardware first: rings, the major awards, All-NBA years. Then the whole stat sheet, boards and assists as much as points. Your 37,660 points sat near the top of this game's books, and that got a real push.",
+      "RETIRING AND FACING THE LEGACY VERDICT",
+      "From 31, a falling rating brings the retirement talk: stop now, one more year, or a farewell season that ends the career after it. Then face the legacy verdict and the Hall of Fame wait.",
+      "A title, a Finals MVP and a Hall of Fame verdict"
+     ],
+     "cut": [
+      {
+       "text": "🌟",
+       "cut": false,
+       "off": true,
+       "need": 55,
+       "room": 55
+      },
+      {
+       "text": "NBA My Career",
+       "cut": false,
+       "off": true,
+       "need": 182,
+       "room": 182
+      },
+      {
+       "text": "Oct 8, 2026",
+       "cut": false,
+       "off": true,
+       "need": 182,
+       "room": 182
+      },
+      {
+       "text": "Result",
+       "cut": false,
+       "off": true,
+       "need": 410,
+       "room": 410
+      },
+      {
+       "text": "legacy 1719",
+       "cut": false,
+       "off": true,
+       "need": 410,
+       "room": 410
+      },
+      {
+       "text": "Know",
+       "cut": false,
+       "off": true,
+       "need": 0,
+       "room": 0
+      },
+      {
+       "text": "douknowball.com/nba-my-career",
+       "cut": false,
+       "off": true,
+       "need": 218,
+       "room": 218
+      },
+      {
+       "text": "82-0 NBA Perfect Season",
+       "cut": true,
+       "off": false,
+       "need": 151,
+       "room": 133
+      }
+     ],
+     "sideways": 0,
+     "realPts": 30128,
+     "printedTotalExpected": 37660
+    },
+    "oldRetired": {
+     "reachedRetirement": true,
+     "weighs": null,
+     "pointsLines": [
+      "34,384 points, 18,125 rebounds, 7,089 assists in 1,648 games",
+      "💍 NBA champion · 👑 Back to back · 🏆 League MVP · 🏅 Finals MVP · 🛡️ Defensive Player of the Year · 🔥 Scoring champion · ⭐ Three All-NBAs · 🌟 Ten All-NBAs · 🎯 20,000 points · 🚀 30,000 points · 🧲 10,000 rebounds · 📅 A decade in the league · 🩺 Iron man · 🪙 First million · 💰 $100M to your name · 🪞 Won the rivalry · 🏛️ Hall of Famer"
+     ],
+     "hallLines": [
+      "💍 NBA champion · 👑 Back to back · 🏆 League MVP · 🏅 Finals MVP · 🛡️ Defensive Player of the Year · 🔥 Scoring champion · ⭐ Three All-NBAs · 🌟 Ten All-NBAs · 🎯 20,000 points · 🚀 30,000 points · 🧲 10,000 rebounds · 📅 A decade in the league · 🩺 Iron man · 🪙 First million · 💰 $100M to your name · 🪞 Won the rivalry · 🏛️ Hall of Famer",
+      "Legacy 1783",
+      "🏛️ Hall of Fame",
+      "legacy 1783",
+      "NAISMITH MEMORIAL BASKETBALL HALL OF FAME",
+      "First ballot. Class of 2050.",
+      "RETIRING AND FACING THE LEGACY VERDICT",
+      "From 31, a falling rating brings the retirement talk: stop now, one more year, or a farewell season that ends the career after it. Then face the legacy verdict and the Hall of Fame wait.",
+      "A title, a Finals MVP and a Hall of Fame verdict",
+      "The new team contends. You take the discount at 28, win it all at 30, and grab Finals MVP. Decline arrives at 33, surgery buys two more years, and the verdict reads first ballot Hall of Famer. The GOAT tier stays out of reach. It usually does."
+     ],
+     "cut": [
+      {
+       "text": "🌟",
+       "cut": false,
+       "off": true,
+       "need": 55,
+       "room": 55
+      },
+      {
+       "text": "NBA My Career",
+       "cut": false,
+       "off": true,
+       "need": 182,
+       "room": 182
+      },
+      {
+       "text": "Oct 8, 2026",
+       "cut": false,
+       "off": true,
+       "need": 182,
+       "room": 182
+      },
+      {
+       "text": "Result",
+       "cut": false,
+       "off": true,
+       "need": 410,
+       "room": 410
+      },
+      {
+       "text": "legacy 1783",
+       "cut": false,
+       "off": true,
+       "need": 410,
+       "room": 410
+      },
+      {
+       "text": "Know",
+       "cut": false,
+       "off": true,
+       "need": 0,
+       "room": 0
+      },
+      {
+       "text": "douknowball.com/nba-my-career",
+       "cut": false,
+       "off": true,
+       "need": 218,
+       "room": 218
+      },
+      {
+       "text": "82-0 NBA Perfect Season",
+       "cut": true,
+       "off": false,
+       "need": 151,
+       "room": 133
+      }
+     ],
+     "sideways": 0,
+     "verdictShown": true,
+     "bulletsShown": [
+      true,
+      true,
+      true
+     ],
+     "verdictWanted": "On the short list. The GOAT debate has your name in it",
+     "hallWanted": {
+      "sport": "nba",
+      "hallName": "Naismith Memorial Basketball Hall of Fame",
+      "firstClass": 2050,
+      "score": 1783,
+      "outcome": "inducted",
+      "ballots": [
+       {
+        "classYear": 2050,
+        "share": 96.5,
+        "elected": true
+       }
+      ],
+      "inductedClass": 2050,
+      "firstBallot": true,
+      "jersey": {
+       "team": "NOP",
+       "seasons": 21,
+       "teamName": "New Orleans Pelicans"
+      }
+     }
+    },
+    "oldReview": [
+     "2031 season",
+     "Golden State Warriors · SF",
+     "Overview",
+     "Regular season",
+     "Postseason",
+     "Changes compared with your 2030 season.",
+     "Season OVR",
+     "79",
+     "1 higher",
+     "Games",
+     "81",
+     "1 higher",
+     "Age that season",
+     "25",
+     "Season salary",
+     "$2.5M",
+     "Team result",
+     "Missed the playoffs",
+     "Awards",
+     "No awards that season"
+    ],
+    "oldReviewCut": [],
+    "oldPlayed": true,
+    "oldReveal": [
+     "THE 2032 SEASON",
+     "Golden State Warriors · age 26 · SF",
+     "Lost in the conference semis",
+     "18.9 ppg, 7.0 rpg, 5.5 apg",
+     "📊 31.3 mpg, 1.2 spg, 0.4 bpg.",
+     "📊 Playoffs: 11 games, 11.6 ppg, 5.8 rpg, 4.0 apg.",
+     "😬 You disappeared when it mattered. The talk shows had a field day.",
+     "🪞 Andre Kowalski went 20 ppg, 6.4 rpg, 6.3 apg. You had the better year. Head to head 4-3.",
+     "Continue"
+    ],
+    "hubAfter": "NBA My Career Draft night to jersey retirement. Every summer bends the career. Old 2 · SF Golden State Warriors 2033 · age 27 OVR 80 $27.1M x3 ⭐ Starting five Last season: 18.9 ppg, 7.0 rpg, 5.5 apg · Lost in the conference semis Play the 2033 season Career so far: 0 rings · 0 MVPs · 0 All-NBA · 8,516 career points Practice gym Play a drill. Earn up to +2 OVR for camp. 80OVR Ceiling 92 Start practice One banked session each season. Your ceiling still applies. Hang them up now 📊 MY PLAYER OVR 80 SF, age 27, 0 rings",
+    "newReview": [
+     "2032 season",
+     "Golden State Warriors · SF",
+     "Overview",
+     "Regular season",
+     "Postseason",
+     "Changes compared with your 2031 season.",
+     "Season OVR",
+     "80",
+     "1 higher",
+     "Games",
+     "82",
+     "1 higher",
+     "Age that season",
+     "26",
+     "Season salary",
+     "$27.1M",
+     "Team result",
+     "Lost in the conference semis",
+     "Awards",
+     "No awards that season"
+    ],
+    "newReviewCut": [],
+    "oldReviewAfter": [
+     "2031 season",
+     "Golden State Warriors · SF",
+     "Overview",
+     "Regular season",
+     "Postseason",
+     "Changes compared with your 2030 season.",
+     "Season OVR",
+     "79",
+     "1 higher",
+     "Games",
+     "81",
+     "1 higher",
+     "Age that season",
+     "25",
+     "Season salary",
+     "$2.5M",
+     "Team result",
+     "Missed the playoffs",
+     "Awards",
+     "No awards that season"
+    ],
+    "oldReviewAfterCut": [],
+    "oldSeasonsUntouched": true,
+    "newSeason": {
+     "year": 2032,
+     "team": "GSW",
+     "age": 26,
+     "ovr": 80,
+     "games": 82,
+     "ppg": 18.9,
+     "rpg": 7,
+     "apg": 5.5,
+     "awards": [],
+     "teamResult": "Lost in the conference semis",
+     "salary": 27.1,
+     "mpg": 31.3,
+     "spg": 1.2,
+     "bpg": 0.4,
+     "clubWins": 52,
+     "clubLosses": 30,
+     "poGames": 11,
+     "poPpg": 11.6,
+     "poRpg": 5.8,
+     "poApg": 4
+    },
+    "casePlayed": true,
+    "caseReveal": [
+     "THE 2031 SEASON",
+     "Milwaukee Bucks · age 25 · SG",
+     "Missed the playoffs",
+     "35.4 ppg, 9.1 rpg, 6.6 apg",
+     "📊 39.5 mpg, 2.8 spg, 0.8 bpg.",
+     "⭐ All-Star starter.",
+     "⭐ All-NBA First Team.",
+     "🛡️ DEFENSIVE PLAYER OF THE YEAR.",
+     "🔒 All-Defensive First Team.",
+     "🔥 Scoring champion.",
+     "📈 Most Improved Player.",
+     "🪞 Silas Boudreau went 18 ppg, 5.9 rpg, 5.7 apg. You had the better year. Head to head 2-4.",
+     "Continue"
+    ],
+    "badgeCount": 23,
+    "badgesEarned": [
+     "🛡️Defensive Player of the YearThe best defender in the leag",
+     "🔥Scoring championLed the league in scoring across a season.",
+     "✨All-StarPicked for the All-Star Game.",
+     "💥A 30 point seasonThirty a night across a whole season. The",
+     "🩺Iron manFive seasons with all 82 games played.",
+     "🪙First millionA million dollars to your name, cash, savings"
+    ],
+    "badgeAllStar": [
+     "all_star|true|✨All-StarPicked for the All-Star Game.",
+     "all_star_10|false|🔒Ten time All-StarTen All-Star selections."
+    ],
+    "caseCut": [
+     {
+      "text": "Defensive Player of the Year",
+      "cut": true,
+      "off": false,
+      "need": 155,
+      "room": 138
+     }
+    ],
+    "caseSideways": 0
+   }
+  },
+  {
+   "tag": "390r",
+   "errors": [],
+   "console": [],
+   "reached": 0,
+   "notes": {
+    "retired": {
+     "reachedRetirement": true,
+     "weighs": "The voters weigh the hardware first: rings, the major awards, All-NBA years. Then the whole stat sheet, boards and assists as much as points. Your 37,660 points sat near the top of this game's books, and that got a real push.",
+     "pointsLines": [
+      "30,128 points, 9,415 rebounds, 3,909 assists in 1,626 games",
+      "💍 NBA champion · 🏆 League MVP · 🏅 Finals MVP · 🔥 Scoring champion · ⭐ Three All-NBAs · ✨ All-Star · 💥 A 30 point season · 🎯 20,000 points · 🚀 30,000 points · 📅 A decade in the league · 🩺 Iron man · 🪙 First million · 🪞 Won the rivalry · 🏛️ Hall of Famer",
+      "The voters weigh the hardware first: rings, the major awards, All-NBA years. Then the whole stat sheet, boards and assists as much as points. Your 37,660 points sat near the top of this game's books, and that got a real push."
+     ],
+     "hallLines": [
+      "💍 NBA champion · 🏆 League MVP · 🏅 Finals MVP · 🔥 Scoring champion · ⭐ Three All-NBAs · ✨ All-Star · 💥 A 30 point season · 🎯 20,000 points · 🚀 30,000 points · 📅 A decade in the league · 🩺 Iron man · 🪙 First million · 🪞 Won the rivalry · 🏛️ Hall of Famer",
+      "Legacy 1719",
+      "🏛️ Hall of Fame",
+      "legacy 1719",
+      "NAISMITH MEMORIAL BASKETBALL HALL OF FAME",
+      "First ballot. Class of 2050.",
+      "The voters weigh the hardware first: rings, the major awards, All-NBA years. Then the whole stat sheet, boards and assists as much as points. Your 37,660 points sat near the top of this game's books, and that got a real push.",
+      "RETIRING AND FACING THE LEGACY VERDICT",
+      "From 31, a falling rating brings the retirement talk: stop now, one more year, or a farewell season that ends the career after it. Then face the legacy verdict and the Hall of Fame wait.",
+      "A title, a Finals MVP and a Hall of Fame verdict"
+     ],
+     "cut": [
+      {
+       "text": "🌟",
+       "cut": false,
+       "off": true,
+       "need": 55,
+       "room": 55
+      },
+      {
+       "text": "NBA My Career",
+       "cut": false,
+       "off": true,
+       "need": 182,
+       "room": 182
+      },
+      {
+       "text": "Oct 8, 2026",
+       "cut": false,
+       "off": true,
+       "need": 182,
+       "room": 182
+      },
+      {
+       "text": "Result",
+       "cut": false,
+       "off": true,
+       "need": 410,
+       "room": 410
+      },
+      {
+       "text": "legacy 1719",
+       "cut": false,
+       "off": true,
+       "need": 410,
+       "room": 410
+      },
+      {
+       "text": "Know",
+       "cut": false,
+       "off": true,
+       "need": 0,
+       "room": 0
+      },
+      {
+       "text": "douknowball.com/nba-my-career",
+       "cut": false,
+       "off": true,
+       "need": 218,
+       "room": 218
+      },
+      {
+       "text": "82-0 NBA Perfect Season",
+       "cut": true,
+       "off": false,
+       "need": 151,
+       "room": 133
+      }
+     ],
+     "sideways": 0,
+     "realPts": 30128,
+     "printedTotalExpected": 37660
+    },
+    "oldRetired": {
+     "reachedRetirement": true,
+     "weighs": null,
+     "pointsLines": [
+      "34,384 points, 18,125 rebounds, 7,089 assists in 1,648 games",
+      "💍 NBA champion · 👑 Back to back · 🏆 League MVP · 🏅 Finals MVP · 🛡️ Defensive Player of the Year · 🔥 Scoring champion · ⭐ Three All-NBAs · 🌟 Ten All-NBAs · 🎯 20,000 points · 🚀 30,000 points · 🧲 10,000 rebounds · 📅 A decade in the league · 🩺 Iron man · 🪙 First million · 💰 $100M to your name · 🪞 Won the rivalry · 🏛️ Hall of Famer"
+     ],
+     "hallLines": [
+      "💍 NBA champion · 👑 Back to back · 🏆 League MVP · 🏅 Finals MVP · 🛡️ Defensive Player of the Year · 🔥 Scoring champion · ⭐ Three All-NBAs · 🌟 Ten All-NBAs · 🎯 20,000 points · 🚀 30,000 points · 🧲 10,000 rebounds · 📅 A decade in the league · 🩺 Iron man · 🪙 First million · 💰 $100M to your name · 🪞 Won the rivalry · 🏛️ Hall of Famer",
+      "Legacy 1783",
+      "🏛️ Hall of Fame",
+      "legacy 1783",
+      "NAISMITH MEMORIAL BASKETBALL HALL OF FAME",
+      "First ballot. Class of 2050.",
+      "RETIRING AND FACING THE LEGACY VERDICT",
+      "From 31, a falling rating brings the retirement talk: stop now, one more year, or a farewell season that ends the career after it. Then face the legacy verdict and the Hall of Fame wait.",
+      "A title, a Finals MVP and a Hall of Fame verdict",
+      "The new team contends. You take the discount at 28, win it all at 30, and grab Finals MVP. Decline arrives at 33, surgery buys two more years, and the verdict reads first ballot Hall of Famer. The GOAT tier stays out of reach. It usually does."
+     ],
+     "cut": [
+      {
+       "text": "🌟",
+       "cut": false,
+       "off": true,
+       "need": 55,
+       "room": 55
+      },
+      {
+       "text": "NBA My Career",
+       "cut": false,
+       "off": true,
+       "need": 182,
+       "room": 182
+      },
+      {
+       "text": "Oct 8, 2026",
+       "cut": false,
+       "off": true,
+       "need": 182,
+       "room": 182
+      },
+      {
+       "text": "Result",
+       "cut": false,
+       "off": true,
+       "need": 410,
+       "room": 410
+      },
+      {
+       "text": "legacy 1783",
+       "cut": false,
+       "off": true,
+       "need": 410,
+       "room": 410
+      },
+      {
+       "text": "Know",
+       "cut": false,
+       "off": true,
+       "need": 0,
+       "room": 0
+      },
+      {
+       "text": "douknowball.com/nba-my-career",
+       "cut": false,
+       "off": true,
+       "need": 218,
+       "room": 218
+      },
+      {
+       "text": "82-0 NBA Perfect Season",
+       "cut": true,
+       "off": false,
+       "need": 151,
+       "room": 133
+      }
+     ],
+     "sideways": 0,
+     "verdictShown": true,
+     "bulletsShown": [
+      true,
+      true,
+      true
+     ],
+     "verdictWanted": "On the short list. The GOAT debate has your name in it",
+     "hallWanted": {
+      "sport": "nba",
+      "hallName": "Naismith Memorial Basketball Hall of Fame",
+      "firstClass": 2050,
+      "score": 1783,
+      "outcome": "inducted",
+      "ballots": [
+       {
+        "classYear": 2050,
+        "share": 96.5,
+        "elected": true
+       }
+      ],
+      "inductedClass": 2050,
+      "firstBallot": true,
+      "jersey": {
+       "team": "NOP",
+       "seasons": 21,
+       "teamName": "New Orleans Pelicans"
+      }
+     }
+    },
+    "oldReview": [
+     "2031 season",
+     "Golden State Warriors · SF",
+     "Overview",
+     "Regular season",
+     "Postseason",
+     "Changes compared with your 2030 season.",
+     "Season OVR",
+     "79",
+     "1 higher",
+     "Games",
+     "81",
+     "1 higher",
+     "Age that season",
+     "25",
+     "Season salary",
+     "$2.5M",
+     "Team result",
+     "Missed the playoffs",
+     "Awards",
+     "No awards that season"
+    ],
+    "oldReviewCut": [],
+    "oldPlayed": true,
+    "oldReveal": [
+     "THE 2032 SEASON",
+     "Golden State Warriors · age 26 · SF",
+     "Missed the playoffs",
+     "16.7 ppg, 6.3 rpg, 6.0 apg",
+     "📊 31.9 mpg, 1.1 spg, 0.4 bpg.",
+     "🪞 Andre Kowalski went 12 ppg, 4.1 rpg, 3.8 apg. You had the better year. Head to head 4-3.",
+     "Continue"
+    ],
+    "hubAfter": "NBA My Career Draft night to jersey retirement. Every summer bends the career. Old 2 · SF Golden State Warriors 2033 · age 27 OVR 81 $27.1M x3 ⭐ Starting five 🕶️ LEAGUE INTEGRITY CLEAN Nobody is looking at you. Keep it that way, or do not. Last season: 16.7 ppg, 6.3 rpg, 6.0 apg · Missed the playoffs Play the 2033 season Career so far: 0 rings · 0 MVPs · 0 All-NBA · 8,302 career points Practice gym Play a drill. Earn up to +2 OVR for camp. 81OVR Ceiling 92 Start practice One banked session each season. Your ceilin",
+    "newReview": [
+     "2032 season",
+     "Golden State Warriors · SF",
+     "Overview",
+     "Regular season",
+     "Postseason",
+     "Changes compared with your 2031 season.",
+     "Season OVR",
+     "80",
+     "1 higher",
+     "Games",
+     "80",
+     "1 lower",
+     "Age that season",
+     "26",
+     "Season salary",
+     "$27.1M",
+     "Team result",
+     "Missed the playoffs",
+     "Awards",
+     "No awards that season"
+    ],
+    "newReviewCut": [],
+    "oldReviewAfter": [
+     "2031 season",
+     "Golden State Warriors · SF",
+     "Overview",
+     "Regular season",
+     "Postseason",
+     "Changes compared with your 2030 season.",
+     "Season OVR",
+     "79",
+     "1 higher",
+     "Games",
+     "81",
+     "1 higher",
+     "Age that season",
+     "25",
+     "Season salary",
+     "$2.5M",
+     "Team result",
+     "Missed the playoffs",
+     "Awards",
+     "No awards that season"
+    ],
+    "oldReviewAfterCut": [],
+    "oldSeasonsUntouched": true,
+    "newSeason": {
+     "year": 2032,
+     "team": "GSW",
+     "age": 26,
+     "ovr": 80,
+     "games": 80,
+     "ppg": 16.7,
+     "rpg": 6.3,
+     "apg": 6,
+     "awards": [],
+     "teamResult": "Missed the playoffs",
+     "salary": 27.1,
+     "mpg": 31.9,
+     "spg": 1.1,
+     "bpg": 0.4,
+     "clubWins": 24,
+     "clubLosses": 58
+    },
+    "casePlayed": true,
+    "caseReveal": [
+     "THE 2031 SEASON",
+     "Milwaukee Bucks · age 25 · SG",
+     "Lost in the conference semis",
+     "29.0 ppg, 8.1 rpg, 5.2 apg",
+     "📊 35.8 mpg, 2.2 spg, 0.6 bpg.",
+     "📊 Playoffs: 10 games, 22.0 ppg, 6.1 rpg, 4.6 apg.",
+     "⭐ All-Star starter.",
+     "⭐ All-NBA First Team.",
+     "👑 LEAGUE MVP.",
+     "🛡️ DEFENSIVE PLAYER OF THE YEAR.",
+     "🔒 All-Defensive First Team.",
+     "🪞 Silas Boudreau went 19 ppg, 6.5 rpg, 6.4 apg. You had the better year. Head to head 2-4.",
+     "Continue"
+    ],
+    "badgeCount": 23,
+    "badgesEarned": [
+     "🏆League MVPThe best player in the league for one year.",
+     "🛡️Defensive Player of the YearThe best defender in the leag",
+     "✨All-StarPicked for the All-Star Game.",
+     "🩺Iron manFive seasons with all 82 games played.",
+     "🪙First millionA million dollars to your name, cash, savings"
+    ],
+    "badgeAllStar": [
+     "all_star|true|✨All-StarPicked for the All-Star Game.",
+     "all_star_10|false|🔒Ten time All-StarTen All-Star selections."
+    ],
+    "caseCut": [
+     {
+      "text": "Defensive Player of the Year",
+      "cut": true,
+      "off": false,
+      "need": 155,
+      "room": 138
+     }
+    ],
+    "caseSideways": 0
+   }
+  },
+  {
+   "tag": "1280m",
+   "errors": [],
+   "console": [],
+   "reached": 0,
+   "notes": {
+    "retired": {
+     "reachedRetirement": true,
+     "weighs": "The voters weigh the hardware first: rings, the major awards, All-NBA years. Then the whole stat sheet, boards and assists as much as points. Your 37,660 points sat near the top of this game's books, and that got a real push.",
+     "pointsLines": [
+      "30,128 points, 9,415 rebounds, 3,909 assists in 1,626 games",
+      "💍 NBA champion · 🏆 League MVP · 🏅 Finals MVP · 🔥 Scoring champion · ⭐ Three All-NBAs · ✨ All-Star · 💥 A 30 point season · 🎯 20,000 points · 🚀 30,000 points · 📅 A decade in the league · 🩺 Iron man · 🪙 First million · 🪞 Won the rivalry · 🏛️ Hall of Famer",
+      "The voters weigh the hardware first: rings, the major awards, All-NBA years. Then the whole stat sheet, boards and assists as much as points. Your 37,660 points sat near the top of this game's books, and that got a real push."
+     ],
+     "hallLines": [
+      "💍 NBA champion · 🏆 League MVP · 🏅 Finals MVP · 🔥 Scoring champion · ⭐ Three All-NBAs · ✨ All-Star · 💥 A 30 point season · 🎯 20,000 points · 🚀 30,000 points · 📅 A decade in the league · 🩺 Iron man · 🪙 First million · 🪞 Won the rivalry · 🏛️ Hall of Famer",
+      "Legacy 1719",
+      "🏛️ Hall of Fame",
+      "legacy 1719",
+      "NAISMITH MEMORIAL BASKETBALL HALL OF FAME",
+      "First ballot. Class of 2050.",
+      "The voters weigh the hardware first: rings, the major awards, All-NBA years. Then the whole stat sheet, boards and assists as much as points. Your 37,660 points sat near the top of this game's books, and that got a real push.",
+      "RETIRING AND FACING THE LEGACY VERDICT",
+      "From 31, a falling rating brings the retirement talk: stop now, one more year, or a farewell season that ends the career after it. Then face the legacy verdict and the Hall of Fame wait.",
+      "A title, a Finals MVP and a Hall of Fame verdict"
+     ],
+     "cut": [
+      {
+       "text": "🌟",
+       "cut": false,
+       "off": true,
+       "need": 55,
+       "room": 55
+      },
+      {
+       "text": "NBA My Career",
+       "cut": false,
+       "off": true,
+       "need": 182,
+       "room": 182
+      },
+      {
+       "text": "Oct 8, 2026",
+       "cut": false,
+       "off": true,
+       "need": 182,
+       "room": 182
+      },
+      {
+       "text": "Result",
+       "cut": false,
+       "off": true,
+       "need": 410,
+       "room": 410
+      },
+      {
+       "text": "legacy 1719",
+       "cut": false,
+       "off": true,
+       "need": 410,
+       "room": 410
+      },
+      {
+       "text": "Know",
+       "cut": false,
+       "off": true,
+       "need": 0,
+       "room": 0
+      },
+      {
+       "text": "douknowball.com/nba-my-career",
+       "cut": false,
+       "off": true,
+       "need": 218,
+       "room": 218
+      }
+     ],
+     "sideways": 0,
+     "realPts": 30128,
+     "printedTotalExpected": 37660
+    },
+    "oldRetired": {
+     "reachedRetirement": true,
+     "weighs": null,
+     "pointsLines": [
+      "34,384 points, 18,125 rebounds, 7,089 assists in 1,648 games",
+      "💍 NBA champion · 👑 Back to back · 🏆 League MVP · 🏅 Finals MVP · 🛡️ Defensive Player of the Year · 🔥 Scoring champion · ⭐ Three All-NBAs · 🌟 Ten All-NBAs · 🎯 20,000 points · 🚀 30,000 points · 🧲 10,000 rebounds · 📅 A decade in the league · 🩺 Iron man · 🪙 First million · 💰 $100M to your name · 🪞 Won the rivalry · 🏛️ Hall of Famer"
+     ],
+     "hallLines": [
+      "💍 NBA champion · 👑 Back to back · 🏆 League MVP · 🏅 Finals MVP · 🛡️ Defensive Player of the Year · 🔥 Scoring champion · ⭐ Three All-NBAs · 🌟 Ten All-NBAs · 🎯 20,000 points · 🚀 30,000 points · 🧲 10,000 rebounds · 📅 A decade in the league · 🩺 Iron man · 🪙 First million · 💰 $100M to your name · 🪞 Won the rivalry · 🏛️ Hall of Famer",
+      "Legacy 1783",
+      "🏛️ Hall of Fame",
+      "legacy 1783",
+      "NAISMITH MEMORIAL BASKETBALL HALL OF FAME",
+      "First ballot. Class of 2050.",
+      "RETIRING AND FACING THE LEGACY VERDICT",
+      "From 31, a falling rating brings the retirement talk: stop now, one more year, or a farewell season that ends the career after it. Then face the legacy verdict and the Hall of Fame wait.",
+      "A title, a Finals MVP and a Hall of Fame verdict",
+      "The new team contends. You take the discount at 28, win it all at 30, and grab Finals MVP. Decline arrives at 33, surgery buys two more years, and the verdict reads first ballot Hall of Famer. The GOAT tier stays out of reach. It usually does."
+     ],
+     "cut": [
+      {
+       "text": "🌟",
+       "cut": false,
+       "off": true,
+       "need": 55,
+       "room": 55
+      },
+      {
+       "text": "NBA My Career",
+       "cut": false,
+       "off": true,
+       "need": 182,
+       "room": 182
+      },
+      {
+       "text": "Oct 8, 2026",
+       "cut": false,
+       "off": true,
+       "need": 182,
+       "room": 182
+      },
+      {
+       "text": "Result",
+       "cut": false,
+       "off": true,
+       "need": 410,
+       "room": 410
+      },
+      {
+       "text": "legacy 1783",
+       "cut": false,
+       "off": true,
+       "need": 410,
+       "room": 410
+      },
+      {
+       "text": "Know",
+       "cut": false,
+       "off": true,
+       "need": 0,
+       "room": 0
+      },
+      {
+       "text": "douknowball.com/nba-my-career",
+       "cut": false,
+       "off": true,
+       "need": 218,
+       "room": 218
+      }
+     ],
+     "sideways": 0,
+     "verdictShown": true,
+     "bulletsShown": [
+      true,
+      true,
+      true
+     ],
+     "verdictWanted": "On the short list. The GOAT debate has your name in it",
+     "hallWanted": {
+      "sport": "nba",
+      "hallName": "Naismith Memorial Basketball Hall of Fame",
+      "firstClass": 2050,
+      "score": 1783,
+      "outcome": "inducted",
+      "ballots": [
+       {
+        "classYear": 2050,
+        "share": 96.5,
+        "elected": true
+       }
+      ],
+      "inductedClass": 2050,
+      "firstBallot": true,
+      "jersey": {
+       "team": "NOP",
+       "seasons": 21,
+       "teamName": "New Orleans Pelicans"
+      }
+     }
+    },
+    "oldReview": [
+     "2031 season",
+     "Golden State Warriors · SF",
+     "Overview",
+     "Regular season",
+     "Postseason",
+     "Changes compared with your 2030 season.",
+     "Season OVR",
+     "79",
+     "1 higher",
+     "Games",
+     "81",
+     "1 higher",
+     "Age that season",
+     "25",
+     "Season salary",
+     "$2.5M",
+     "Team result",
+     "Missed the playoffs",
+     "Awards",
+     "No awards that season"
+    ],
+    "oldReviewCut": [],
+    "oldPlayed": true,
+    "oldReveal": [
+     "THE 2032 SEASON",
+     "Golden State Warriors · age 26 · SF",
+     "Missed the playoffs",
+     "21.4 ppg, 7.3 rpg, 6.2 apg",
+     "📊 34.6 mpg, 1.2 spg, 0.4 bpg.",
+     "⭐ All-Star reserve.",
+     "🔥 The rim looked like a swimming pool all season.",
+     "🪞 Andre Kowalski went 19 ppg, 5.9 rpg, 5.7 apg. You had the better year. Head to head 4-3.",
+     "Continue"
+    ],
+    "hubAfter": "NBA My Career Draft night to jersey retirement. Every summer bends the career. Old 2 · SF Golden State Warriors 2033 · age 27 OVR 81 $27.1M x4 ⭐ Starting five Last season: 21.4 ppg, 7.3 rpg, 6.2 apg · Missed the playoffs Play the 2033 season Career so far: 0 rings · 0 MVPs · 0 All-NBA · 8,635 career points Practice gym Play a drill. Earn up to +2 OVR for camp. 81OVR Ceiling 92 Start practice One banked session each season. Your ceiling still applies. Hang them up now 📊 MY PLAYER OVR 81 SF, age 27, 0 rings 💰 THE B",
+    "newReview": [
+     "2032 season",
+     "Golden State Warriors · SF",
+     "Overview",
+     "Regular season",
+     "Postseason",
+     "Changes compared with your 2031 season.",
+     "Season OVR",
+     "80",
+     "1 higher",
+     "Games",
+     "78",
+     "3 lower",
+     "Age that season",
+     "26",
+     "Season salary",
+     "$27.1M",
+     "Team result",
+     "Missed the playoffs",
+     "Awards",
+     "All-Star"
+    ],
+    "newReviewCut": [],
+    "oldReviewAfter": [
+     "2031 season",
+     "Golden State Warriors · SF",
+     "Overview",
+     "Regular season",
+     "Postseason",
+     "Changes compared with your 2030 season.",
+     "Season OVR",
+     "79",
+     "1 higher",
+     "Games",
+     "81",
+     "1 higher",
+     "Age that season",
+     "25",
+     "Season salary",
+     "$2.5M",
+     "Team result",
+     "Missed the playoffs",
+     "Awards",
+     "No awards that season"
+    ],
+    "oldReviewAfterCut": [],
+    "oldSeasonsUntouched": true,
+    "newSeason": {
+     "year": 2032,
+     "team": "GSW",
+     "age": 26,
+     "ovr": 80,
+     "games": 78,
+     "ppg": 21.4,
+     "rpg": 7.3,
+     "apg": 6.2,
+     "awards": [
+      "All-Star"
+     ],
+     "teamResult": "Missed the playoffs",
+     "salary": 27.1,
+     "mpg": 34.6,
+     "spg": 1.2,
+     "bpg": 0.4,
+     "clubWins": 26,
+     "clubLosses": 56,
+     "allStar": "reserve"
+    },
+    "casePlayed": true,
+    "caseReveal": [
+     "THE 2031 SEASON",
+     "Milwaukee Bucks · age 25 · SG",
+     "Lost the Conference Finals",
+     "36.9 ppg, 9.0 rpg, 6.3 apg",
+     "📊 39.7 mpg, 2.4 spg, 0.7 bpg.",
+     "📊 Playoffs: 17 games, 32.4 ppg, 7.5 rpg, 6.0 apg.",
+     "⭐ All-Star starter.",
+     "⭐ All-NBA First Team.",
+     "👑 LEAGUE MVP.",
+     "🔒 All-Defensive First Team.",
+     "🔥 Scoring champion.",
+     "🪞 Silas Boudreau went 18 ppg, 5.9 rpg, 5.7 apg. You had the better year. Head to head 2-4.",
+     "Continue"
+    ],
+    "badgeCount": 23,
+    "badgesEarned": [
+     "🏆League MVPThe best player in the league for one year.",
+     "🔥Scoring championLed the league in scoring across a season.",
+     "✨All-StarPicked for the All-Star Game.",
+     "💥A 30 point seasonThirty a night across a whole season. The",
+     "🩺Iron manFive seasons with all 82 games played.",
+     "🪙First millionA million dollars to your name, cash, savings"
+    ],
+    "badgeAllStar": [
+     "all_star|true|✨All-StarPicked for the All-Star Game.",
+     "all_star_10|false|🔒Ten time All-StarTen All-Star selections."
+    ],
+    "caseCut": [],
+    "caseSideways": 0
+   }
+  },
+  {
+   "tag": "1280r",
+   "errors": [],
+   "console": [],
+   "reached": 0,
+   "notes": {
+    "retired": {
+     "reachedRetirement": true,
+     "weighs": "The voters weigh the hardware first: rings, the major awards, All-NBA years. Then the whole stat sheet, boards and assists as much as points. Your 37,660 points sat near the top of this game's books, and that got a real push.",
+     "pointsLines": [
+      "30,128 points, 9,415 rebounds, 3,909 assists in 1,626 games",
+      "💍 NBA champion · 🏆 League MVP · 🏅 Finals MVP · 🔥 Scoring champion · ⭐ Three All-NBAs · ✨ All-Star · 💥 A 30 point season · 🎯 20,000 points · 🚀 30,000 points · 📅 A decade in the league · 🩺 Iron man · 🪙 First million · 🪞 Won the rivalry · 🏛️ Hall of Famer",
+      "The voters weigh the hardware first: rings, the major awards, All-NBA years. Then the whole stat sheet, boards and assists as much as points. Your 37,660 points sat near the top of this game's books, and that got a real push."
+     ],
+     "hallLines": [
+      "💍 NBA champion · 🏆 League MVP · 🏅 Finals MVP · 🔥 Scoring champion · ⭐ Three All-NBAs · ✨ All-Star · 💥 A 30 point season · 🎯 20,000 points · 🚀 30,000 points · 📅 A decade in the league · 🩺 Iron man · 🪙 First million · 🪞 Won the rivalry · 🏛️ Hall of Famer",
+      "Legacy 1719",
+      "🏛️ Hall of Fame",
+      "legacy 1719",
+      "NAISMITH MEMORIAL BASKETBALL HALL OF FAME",
+      "First ballot. Class of 2050.",
+      "The voters weigh the hardware first: rings, the major awards, All-NBA years. Then the whole stat sheet, boards and assists as much as points. Your 37,660 points sat near the top of this game's books, and that got a real push.",
+      "RETIRING AND FACING THE LEGACY VERDICT",
+      "From 31, a falling rating brings the retirement talk: stop now, one more year, or a farewell season that ends the career after it. Then face the legacy verdict and the Hall of Fame wait.",
+      "A title, a Finals MVP and a Hall of Fame verdict"
+     ],
+     "cut": [
+      {
+       "text": "🌟",
+       "cut": false,
+       "off": true,
+       "need": 55,
+       "room": 55
+      },
+      {
+       "text": "NBA My Career",
+       "cut": false,
+       "off": true,
+       "need": 182,
+       "room": 182
+      },
+      {
+       "text": "Oct 8, 2026",
+       "cut": false,
+       "off": true,
+       "need": 182,
+       "room": 182
+      },
+      {
+       "text": "Result",
+       "cut": false,
+       "off": true,
+       "need": 410,
+       "room": 410
+      },
+      {
+       "text": "legacy 1719",
+       "cut": false,
+       "off": true,
+       "need": 410,
+       "room": 410
+      },
+      {
+       "text": "Know",
+       "cut": false,
+       "off": true,
+       "need": 0,
+       "room": 0
+      },
+      {
+       "text": "douknowball.com/nba-my-career",
+       "cut": false,
+       "off": true,
+       "need": 218,
+       "room": 218
+      }
+     ],
+     "sideways": 0,
+     "realPts": 30128,
+     "printedTotalExpected": 37660
+    },
+    "oldRetired": {
+     "reachedRetirement": true,
+     "weighs": null,
+     "pointsLines": [
+      "34,384 points, 18,125 rebounds, 7,089 assists in 1,648 games",
+      "💍 NBA champion · 👑 Back to back · 🏆 League MVP · 🏅 Finals MVP · 🛡️ Defensive Player of the Year · 🔥 Scoring champion · ⭐ Three All-NBAs · 🌟 Ten All-NBAs · 🎯 20,000 points · 🚀 30,000 points · 🧲 10,000 rebounds · 📅 A decade in the league · 🩺 Iron man · 🪙 First million · 💰 $100M to your name · 🪞 Won the rivalry · 🏛️ Hall of Famer"
+     ],
+     "hallLines": [
+      "💍 NBA champion · 👑 Back to back · 🏆 League MVP · 🏅 Finals MVP · 🛡️ Defensive Player of the Year · 🔥 Scoring champion · ⭐ Three All-NBAs · 🌟 Ten All-NBAs · 🎯 20,000 points · 🚀 30,000 points · 🧲 10,000 rebounds · 📅 A decade in the league · 🩺 Iron man · 🪙 First million · 💰 $100M to your name · 🪞 Won the rivalry · 🏛️ Hall of Famer",
+      "Legacy 1783",
+      "🏛️ Hall of Fame",
+      "legacy 1783",
+      "NAISMITH MEMORIAL BASKETBALL HALL OF FAME",
+      "First ballot. Class of 2050.",
+      "RETIRING AND FACING THE LEGACY VERDICT",
+      "From 31, a falling rating brings the retirement talk: stop now, one more year, or a farewell season that ends the career after it. Then face the legacy verdict and the Hall of Fame wait.",
+      "A title, a Finals MVP and a Hall of Fame verdict",
+      "The new team contends. You take the discount at 28, win it all at 30, and grab Finals MVP. Decline arrives at 33, surgery buys two more years, and the verdict reads first ballot Hall of Famer. The GOAT tier stays out of reach. It usually does."
+     ],
+     "cut": [
+      {
+       "text": "🌟",
+       "cut": false,
+       "off": true,
+       "need": 55,
+       "room": 55
+      },
+      {
+       "text": "NBA My Career",
+       "cut": false,
+       "off": true,
+       "need": 182,
+       "room": 182
+      },
+      {
+       "text": "Oct 8, 2026",
+       "cut": false,
+       "off": true,
+       "need": 182,
+       "room": 182
+      },
+      {
+       "text": "Result",
+       "cut": false,
+       "off": true,
+       "need": 410,
+       "room": 410
+      },
+      {
+       "text": "legacy 1783",
+       "cut": false,
+       "off": true,
+       "need": 410,
+       "room": 410
+      },
+      {
+       "text": "Know",
+       "cut": false,
+       "off": true,
+       "need": 0,
+       "room": 0
+      },
+      {
+       "text": "douknowball.com/nba-my-career",
+       "cut": false,
+       "off": true,
+       "need": 218,
+       "room": 218
+      }
+     ],
+     "sideways": 0,
+     "verdictShown": true,
+     "bulletsShown": [
+      true,
+      true,
+      true
+     ],
+     "verdictWanted": "On the short list. The GOAT debate has your name in it",
+     "hallWanted": {
+      "sport": "nba",
+      "hallName": "Naismith Memorial Basketball Hall of Fame",
+      "firstClass": 2050,
+      "score": 1783,
+      "outcome": "inducted",
+      "ballots": [
+       {
+        "classYear": 2050,
+        "share": 96.5,
+        "elected": true
+       }
+      ],
+      "inductedClass": 2050,
+      "firstBallot": true,
+      "jersey": {
+       "team": "NOP",
+       "seasons": 21,
+       "teamName": "New Orleans Pelicans"
+      }
+     }
+    },
+    "oldReview": [
+     "2031 season",
+     "Golden State Warriors · SF",
+     "Overview",
+     "Regular season",
+     "Postseason",
+     "Changes compared with your 2030 season.",
+     "Season OVR",
+     "79",
+     "1 higher",
+     "Games",
+     "81",
+     "1 higher",
+     "Age that season",
+     "25",
+     "Season salary",
+     "$2.5M",
+     "Team result",
+     "Missed the playoffs",
+     "Awards",
+     "No awards that season"
+    ],
+    "oldReviewCut": [],
+    "oldPlayed": true,
+    "oldReveal": [
+     "THE 2032 SEASON",
+     "Golden State Warriors · age 26 · SF",
+     "Missed the playoffs",
+     "11.0 ppg, 4.8 rpg, 3.7 apg",
+     "📊 29.6 mpg, 1.0 spg, 0.4 bpg.",
+     "🪞 Andre Kowalski went 16 ppg, 5.8 rpg, 5.7 apg. Nothing in it again. You lead the head to head 3-4.",
+     "Continue"
+    ],
+    "hubAfter": "NBA My Career Draft night to jersey retirement. Every summer bends the career. Old 2 · SF Golden State Warriors 2033 · age 27 OVR 81 $27.1M x3 ⭐ Starting five Last season: 11.0 ppg, 4.8 rpg, 3.7 apg · Missed the playoffs Play the 2033 season Career so far: 0 rings · 0 MVPs · 0 All-NBA · 7,868 career points Practice gym Play a drill. Earn up to +2 OVR for camp. 81OVR Ceiling 92 Start practice One banked session each season. Your ceiling still applies. Hang them up now 📊 MY PLAYER OVR 81 SF, age 27, 0 rings 💰 THE B",
+    "newReview": [
+     "2032 season",
+     "Golden State Warriors · SF",
+     "Overview",
+     "Regular season",
+     "Postseason",
+     "Changes compared with your 2031 season.",
+     "Season OVR",
+     "80",
+     "1 higher",
+     "Games",
+     "82",
+     "1 higher",
+     "Age that season",
+     "26",
+     "Season salary",
+     "$27.1M",
+     "Team result",
+     "Missed the playoffs",
+     "Awards",
+     "No awards that season"
+    ],
+    "newReviewCut": [],
+    "oldReviewAfter": [
+     "2031 season",
+     "Golden State Warriors · SF",
+     "Overview",
+     "Regular season",
+     "Postseason",
+     "Changes compared with your 2030 season.",
+     "Season OVR",
+     "79",
+     "1 higher",
+     "Games",
+     "81",
+     "1 higher",
+     "Age that season",
+     "25",
+     "Season salary",
+     "$2.5M",
+     "Team result",
+     "Missed the playoffs",
+     "Awards",
+     "No awards that season"
+    ],
+    "oldReviewAfterCut": [],
+    "oldSeasonsUntouched": true,
+    "newSeason": {
+     "year": 2032,
+     "team": "GSW",
+     "age": 26,
+     "ovr": 80,
+     "games": 82,
+     "ppg": 11,
+     "rpg": 4.8,
+     "apg": 3.7,
+     "awards": [],
+     "teamResult": "Missed the playoffs",
+     "salary": 27.1,
+     "mpg": 29.6,
+     "spg": 1,
+     "bpg": 0.4,
+     "clubWins": 21,
+     "clubLosses": 61
+    },
+    "casePlayed": true,
+    "caseReveal": [
+     "THE 2031 SEASON",
+     "Milwaukee Bucks · age 25 · SG",
+     "Lost the NBA Finals",
+     "35.0 ppg, 8.4 rpg, 6.4 apg",
+     "📊 39.6 mpg, 2.2 spg, 0.9 bpg.",
+     "📊 Playoffs: 26 games, 38.8 ppg, 8.8 rpg, 7.2 apg.",
+     "⭐ All-Star reserve.",
+     "⭐ All-NBA First Team.",
+     "👑 LEAGUE MVP.",
+     "🛡️ DEFENSIVE PLAYER OF THE YEAR.",
+     "🔒 All-Defensive First Team.",
+     "🔥 Scoring champion.",
+     "🪞 Silas Boudreau went 14 ppg, 5 rpg, 4.8 apg. You had the better year. Head to head 2-4.",
+     "Continue"
+    ],
+    "badgeCount": 23,
+    "badgesEarned": [
+     "🏆League MVPThe best player in the league for one year.",
+     "🛡️Defensive Player of the YearThe best defender in the leag",
+     "🔥Scoring championLed the league in scoring across a season.",
+     "✨All-StarPicked for the All-Star Game.",
+     "💥A 30 point seasonThirty a night across a whole season. The",
+     "🩺Iron manFive seasons with all 82 games played.",
+     "🪙First millionA million dollars to your name, cash, savings"
+    ],
+    "badgeAllStar": [
+     "all_star|true|✨All-StarPicked for the All-Star Game.",
+     "all_star_10|false|🔒Ten time All-StarTen All-Star selections."
+    ],
+    "caseCut": [],
+    "caseSideways": 0
+   }
+  }
+ ]
+}
