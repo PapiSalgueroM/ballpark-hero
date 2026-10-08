@@ -1,0 +1,35 @@
+#!serve
+#!playwright
+# Round 1104 on bad41f36: every other harness and walk that reads a file this round changed
+simCareerInbox: node scripts/simCareerInbox.mjs
+simCareerInboxBeats: node scripts/simCareerInboxBeats.mjs
+simCareerPreDraft: node scripts/simCareerPreDraft.mjs
+simCareerPress: node scripts/simCareerPress.mjs
+simCareerRivalryEvents: node scripts/simCareerRivalryEvents.mjs
+simHomeFront: node scripts/simHomeFront.mjs
+simMlbCareer: node scripts/simMlbCareer.mjs
+simNbaCareer: node scripts/simNbaCareer.mjs
+simMoneyAppFeedback: node scripts/simMoneyAppFeedback.mjs
+simNhlCareer: node scripts/simNhlCareer.mjs
+simSeasonReveal: node scripts/simSeasonReveal.mjs
+simUsCareerAnnualBenefits: node scripts/simUsCareerAnnualBenefits.mjs
+simUsCareerDefects: node scripts/simUsCareerDefects.mjs
+simUsCareerProspect: node scripts/simUsCareerProspect.mjs
+simUsCoachCareer: node scripts/simUsCoachCareer.mjs
+simUsCoaching: node scripts/simUsCoaching.mjs
+simUsCareerDeckC: node scripts/simUsCareerDeckC.mjs
+simNflCareer: node scripts/simNflCareer.mjs
+simCareerRealism: node scripts/simCareerRealism.mjs
+simCareerParity: node scripts/simCareerParity.mjs
+simCareerBanking: node scripts/simCareerBanking.mjs
+simAwards: node scripts/simAwards.mjs
+playCareerHub: ENGINES=chromium node scripts/playCareerHub.mjs
+playCareerPress: ENGINES=chromium node scripts/playCareerPress.mjs
+playDepthChart: ENGINES=chromium node scripts/playDepthChart.mjs
+playExtension: ENGINES=chromium node scripts/playExtension.mjs
+playFreeAgency: ENGINES=chromium node scripts/playFreeAgency.mjs
+playReducedMotion: ENGINES=chromium node scripts/playReducedMotion.mjs
+playSeasonReveal: ENGINES=chromium node scripts/playSeasonReveal.mjs
+playSessionMarks: ENGINES=chromium node scripts/playSessionMarks.mjs
+playUsSeasonCentre: ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
