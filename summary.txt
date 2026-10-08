@@ -1,0 +1,7 @@
+probe exit=1 6s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/rvProbe.test.tsx,title=src/test/rvProbe.test.tsx > RV probe%3A old shapes of a live match still open i
+probe2 exit=0 4s |    Duration  3.77s (transform 1.00s, setup 27ms, collect 1.27s, tests 2.05s, environment 156ms, prepare 39ms)
+m-throwside exit=1 23s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/liveSimMotion.test.tsx,title=src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R7%3A ev
+m-foulside exit=1 23s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/liveSimMotion.test.tsx,title=src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R7%3A ev
+m-cornerflank exit=1 23s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/liveSimMotion.test.tsx,title=src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R7%3A ev
+m-goalkickside exit=1 23s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/liveSimMotion.test.tsx,title=src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R7%3A ev
+m-secondkick exit=1 23s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/liveSimMotion.test.tsx,title=src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R8%3A th
