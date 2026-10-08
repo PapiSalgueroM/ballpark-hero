@@ -897,8 +897,9 @@ export function renderFile(teams, sources) {
       lines.push('// checkpoint\'s numbers unchanged.');
     }
     lines.push('// It is a simulation grade, not a historical statistic or an official rating, and');
-    lines.push('// it is the one number every game on the site prints for the man. Limited evidence');
-    lines.push('// is marked per player in frontOfficeDepth.ts. See the generator for every rule.');
+    lines.push('// it is the one number NFL Front Office and Gauntlet Draft: NFL print for the man');
+    lines.push('// (NFL Conquest still types its own until its own round). Limited evidence is');
+    lines.push('// marked per player in frontOfficeDepth.ts. See the generator for every rule.');
     lines.push('// Contracts, salaries and roster moves inside the game are fictional; prices are');
     lines.push('// shared out inside each club\'s unchanged opening payroll.');
   } else {

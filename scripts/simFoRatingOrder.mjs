@@ -31,7 +31,9 @@
      2  THE PRODUCTION FILE IS TWO SOURCED. Every row's agreed list and
         status re-derive from its own two lines; every line a rating reads is
         agreed by two publishers or settled by a third that sides with one
-        of them; the score is the selection rule's own skillScore; the
+        of them, and, asked again of the raw lines with no status in it,
+        every headline number it reads is printed the same by two of the
+        three sources; the score is the selection rule's own skillScore; the
         Jeanty anchor (two publishers read by hand) holds; the header names
         the sources, the days and the bytes.
      3  THE ORDER AGREES WITH THE FIELD. Per offense group (QB, RB without
@@ -74,7 +76,19 @@
         sampling error (block sd over root 5) under a third of it. Ranks 9
         to 24 are printed only: the fixed total of wins pins the middle, so
         stretch does not move it and no tolerance can be set from it. No
-        assertion on any single club.
+        assertion on any single club's wins.
+        (d) who is on a roster after the computer clubs' opening cut-down,
+        both arms, read from two chairs so every club is cut once. A club
+        over 53 releases its lowest rated spare man at a crowded position,
+        and a confirmed fullback now reads the flat number, so membership
+        DOES change by one man (the Giants release their fullback where main
+        released a defensive back). Counted and held at that one: any man
+        released who is not a confirmed fullback is red, and so is a second.
+     8  THE SCALE DID NOT MOVE. The rule the layer's constants were chosen
+        by: each offense position's mean and sd among the fifteen (confirmed
+        fullbacks out, as in section 3) stay within one point of main's. The
+        bar is that rule. The running back shelf with its fullbacks in is
+        printed beside it and is NOT inside the rule (see MEASURED).
 
    Workload is the count both publishers print: pass attempts (QB), carries
    plus receptions (RB), receptions (WR, TE). A group's reference is the
@@ -106,8 +120,19 @@
                 before the league is built          -> section 7, (b) and (c)
      shuffle    deals the shipped offense numbers to other clubs' men on the
                 same shelf before the league is built    -> section 7, (a)
-   The two league controls must also turn exactly their own part of section 7
-   red, and the report line says which parts went.
+     looseread  puts a line only one publisher prints into the Map a rating
+                reads, as a loosened derive() would              -> section 2
+     cutback    drops a Giants running back who is no fullback under the flat
+                fullback number in the loaded depth text  -> section 7, (d)
+     lift       section 8 reads every offense number two points higher
+                (about what a model centre of 87 for 84 does)    -> section 8
+     gain       section 8 reads the model rebuilt with gain 16   -> section 8
+     noeff      section 8 reads the model rebuilt with the efficiency term
+                switched off (blend 0, .2, .8)                   -> section 8
+   The three league controls must also turn exactly their own part of section
+   7 red, and the report line says which parts went. lift, gain and noeff
+   first prove the committed model rebuilds the shipped numbers exactly, so
+   the only difference they read is the change they name.
 
    MEASURED, 2026-10-08, on the committed files (model nfl-v2.3-2026-10-08),
    shipped against main (the frozen v2.2 arm):
@@ -150,6 +175,31 @@
         (a) rank agreement of opening club strength .901 shipped, -.224 under
         shuffle, .867 under stretch; floor .34 (halfway between .901 and
         -.224).
+        (d) 1,637 men after the cut-down in both arms; one differs: the
+        Giants release Patrick Ricard (63, a confirmed fullback, 72 on main)
+        where main released Jason Pinnock. Under cutback they release Devin
+        Singletary instead.
+     0  offense men who played in 2025 by the checkpoint's count and are
+        rated with no production term: 0 of the fifteen, 102 on a bench (96
+        on a disputed line, 6 under four games), 51 on a practice squad (43
+        and 8). Held at those counts.
+     8  the fifteen, mean and sd, shipped against main: QB 81.28 and 6.93
+        against 81.41 and 7.28; RB (62 men, fullbacks out) 81.16 and 7.35
+        against 80.98 and 6.89; WR 81.10 and 7.50 against 80.61 and 7.28; TE
+        81.91 and 6.37 against 81.91 and 6.46. Largest distance .49, bar 1.
+        Under the controls: lift moves every mean 1.87 to 2.49; gain 16 takes
+        the sd of the backs to 7.96 and the receivers to 8.43 (1.07 and 1.15
+        from main); noeff takes them to 9.05 and 8.98 and the tight ends'
+        mean to 80.88. Measured and NOT caught by the one point rule: gain 14
+        (largest distance .61, which the design allows), the workload term
+        switched off (.66), and carry at 1, 1, 1 (.96, the receivers' mean).
+        So carry, a stated judgement, is held only by the suite's exact pin,
+        and that is told to the lead rather than papered over.
+        The running back SHELF as the engine reads it (64 men, the two
+        confirmed fullbacks of the fifteen in): 80.59 and 7.90 against 80.92
+        and 6.80. Its sd moves 1.10, past the one point rule, and all of that
+        is the flat fullback number, not the layer's constants. Printed, not
+        asserted, and told to the lead.
    NBA, printed only (decision 10): 300 typed Conquest men, 300 Front Office
    opening estimates, 278 men with two numbers (median gap 4).
 
@@ -169,7 +219,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_FO_ORDER_CONTROL || '';
 /* nolayer also turns section 6 red: the fullback ledger checks the critic added there (a confirmed fullback is flat
    rated and marked, and no fullback sits in the top two of his club's backs) cannot hold on the v2.2 arm. */
-const CONTROLS = { override: [1], onesource: [0, 2], nolayer: [3, 4, 5, 6], swaprows: [4], unmark: [6], norole: [6], stretch: [7], shuffle: [7] };
+const CONTROLS = { override: [1], onesource: [0, 2], looseread: [2], nolayer: [3, 4, 5, 6], swaprows: [4], unmark: [6], norole: [6], stretch: [7], shuffle: [7], cutback: [7], lift: [8], gain: [8], noeff: [8] };
 if (CONTROL && !(CONTROL in CONTROLS)) { console.error(`unknown control ${CONTROL}`); process.exit(1); }
 const norm = t => t.split('\r\n').join('\n');
 const read = rel => norm(fs.readFileSync(path.join(ROOT, rel), 'utf8'));
@@ -289,6 +339,14 @@ if (CONTROL === 'swaprows') {
   offenseMap.set(lead, b); offenseMap.set(least, a);
   console.log(`   control swaprows: the production rows of ${lead} and ${least} are swapped`);
 }
+if (CONTROL === 'looseread') {
+  /* what a loosened derive() would do: a line only ONE publisher prints reaches the Map a rating reads. A practice
+     squad man on purpose, so no group's reference, starter list or club shelf below moves and only section 2 can see it. */
+  const row = productionRows.find(r => ['QB', 'RB', 'WR', 'TE'].includes(r.shelf) && r.a && !r.b && recordOf.get(r.key)?.tier === 'practice' && Number.isFinite(r.a.games) && !offenseMap.has(r.key));
+  if (!row) throw new Error('control looseread: no one publisher offense line of a practice squad man to read, so the control would change nothing');
+  offenseMap.set(row.key, { games: row.a.games, score: productionScore(row.a), workload: null });
+  console.log(`   control looseread: the Map a rating reads holds a line only one publisher prints (${row.key})`);
+}
 
 /* ---- the two arms, man by man ---------------------------------------------- */
 /** What ships for a man: his number, his tier and his lineage, read off the loaded text. */
@@ -358,16 +416,25 @@ ok(0, 'every man of the frozen arm has a row and a lineage row', count.starters 
      (he is read on workload instead, a different formula from his peers). Named with the reason, and held at
      the measured count, 0 on 2026-10-08 once the forty disputed lines were settled: a rise is red. */
   const NO_TERM_HELD = 0;
-  const noTerm = [];
+  /* The same count off the fifteen, held where it was measured on 2026-10-08 so it cannot grow unseen: 102 bench
+     men (96 on a line the two publishers dispute, 6 under four games) and 51 practice squad men (43 and 8). Nobody
+     settled their disputes by hand (the third read was made for the fifteen only), so those men are read on
+     workload alone, which is a different formula from their peers and is said here rather than hidden. */
+  const NO_TERM_HELD_DEPTH = { bench: 102, practice: 51 };
+  const noTerm = [], noTermDepth = { bench: [], practice: [] }, depthWhy = {};
   for (const r of recordOf.values()) {
-    if (r.tier !== 'core' || !groupOf(r.key)) continue;
+    if (!groupOf(r.key)) continue;
     if (!(r.observations ?? []).some(o => o.season === 2025 && o.exposure > 0)) continue;
     const line = offenseMap.get(r.key), row = productionRows.find(p => p.key === r.key);
     if (line && line.games >= OFFENSE_LAYER.minGames) continue;
-    noTerm.push(`${r.key} (${!row ? 'no row in either source' : line ? `under ${OFFENSE_LAYER.minGames} games` : `row is ${derive(row).status}`})`);
+    const reason = !row ? 'no row in either source' : line ? `under ${OFFENSE_LAYER.minGames} games` : `row is ${derive(row).status}`;
+    if (r.tier === 'core') noTerm.push(`${r.key} (${reason})`);
+    else { noTermDepth[r.tier].push(r.key); depthWhy[`${r.tier}, ${reason}`] = (depthWhy[`${r.tier}, ${reason}`] ?? 0) + 1; }
   }
   console.log(`   offense men among the fifteen with 2025 play and no production term: ${noTerm.length}${noTerm.length ? ': ' + noTerm.join(', ') : ''}`);
   ok(0, `no more than ${NO_TERM_HELD} of the fifteen's offense men who played in 2025 are rated without a production term`, noTerm.length <= NO_TERM_HELD, noTerm.join(', '));
+  console.log(`   the same off the fifteen: bench ${noTermDepth.bench.length}, practice ${noTermDepth.practice.length} (${Object.entries(depthWhy).sort().map(([why, n]) => `${why}: ${n}`).join('; ')})`);
+  for (const tier of ['bench', 'practice']) ok(0, `no more than ${NO_TERM_HELD_DEPTH[tier]} ${tier} men who played in 2025 are rated without a production term`, noTermDepth[tier].length <= NO_TERM_HELD_DEPTH[tier], `${noTermDepth[tier].length}`);
 }
 
 /* ---- 1. ONE NUMBER -------------------------------------------------------- */
@@ -465,10 +532,20 @@ console.log('2) the production file is two sourced');
   const stale = productionRows.filter(r => { const d = derive(r); return d.status !== r.status || d.agreed.join() !== (r.agreed ?? []).join(); });
   ok(2, 'every row\'s agreed list and status re-derive from its own two lines', stale.length === 0, stale.slice(0, 4).map(r => `${r.key} says ${r.status}, its lines say ${derive(r).status}`).join('; '));
   const byKey = new Map(productionRows.map(r => [r.key, r]));
-  const bad = [], wiring = [];
+  const bad = [], wiring = [], thin = [];
+  /* The status says "agreed" or "settled", and the Map above was built through the same derive(), so on its own
+     the status check below can only fail when the Map holds a line derive() would refuse (the looseread control).
+     This is the same question asked of the RAW lines, with no status in it: every headline number a rating reads
+     is printed, the same, by two of the three sources. */
+  const printedTwice = (row, u) => !!row.a && !!row.b && HEADLINE[row.shelf].every(f => {
+    const third = row.settledBy?.values?.[f];
+    return (Number.isFinite(row.a[f]) && row.a[f] === row.b[f] && u[f] === row.a[f]) || (Number.isFinite(third) && third === u[f] && (u[f] === row.a[f] || u[f] === row.b[f]));
+  });
   for (const [key, line] of offenseMap) {
     const row = byKey.get(key), d = derive(row), u = usable({ ...row, ...d });
     if (!['agree', 'settled'].includes(d.status)) bad.push(`${key} is ${d.status}`);
+    if (!u) { thin.push(key); continue; }
+    if (!printedTwice(row, u)) thin.push(key);
     if (d.status === 'settled' && !(settledSide(row) && /^https:\/\//.test(row.settledBy?.url ?? '') && /^\d{4}-\d{2}-\d{2}$/.test(row.settledBy?.read ?? '') && row.settledBy?.source)) bad.push(`${key} is settled without a named third source, an address and a day`);
     if (!HEADLINE[row.shelf].every(f => Number.isFinite(u[f]))) bad.push(`${key} lacks a headline field`);
     /* the score a rating reads is the selection rule's own skillScore on the same numbers */
@@ -476,6 +553,7 @@ console.log('2) the production file is two sourced');
     if (Math.abs(viaGenerator - productionScore(u)) > 1e-9 || (CONTROL !== 'swaprows' && Math.abs(line.score - viaGenerator) > 1e-9)) wiring.push(key);
   }
   ok(2, 'every line a rating reads is agreed by two publishers or settled by a third', bad.length === 0, bad.slice(0, 4).join('; '));
+  ok(2, 'every headline number a rating reads is printed, the same, by two of the three sources (the raw lines, no status)', thin.length === 0, thin.slice(0, 4).join('; '));
   ok(2, 'the production score is the selection rule\'s own skillScore on the agreed numbers', wiring.length === 0, wiring.slice(0, 4).join(', '));
   const anchor = byKey.get('LV|Ashton Jeanty|RB'), au = anchor && usable({ ...anchor, ...derive(anchor) });
   const want = { rushAtt: 266, rushYds: 975, rushTd: 5, rec: 55, recYds: 346, recTd: 5 };
@@ -652,14 +730,29 @@ const TOLERANCE = { 'ranks 1 to 8': 0.62, 'ranks 25 to 32': 0.57, spread: 0.47 }
     playStarters = s.text; playDepth = d.text;
     console.log(`   control ${CONTROL}: ${CONTROL === 'stretch' ? 'every offense number sits twice as far from 81' : 'the offense numbers are dealt to other clubs\' men on the same shelf'} before the league is built (${s.changed} starters rows, ${d.changed} bench and practice rows)`);
   }
-  async function arm(tag, starterText, depthFileText) {
+  /** The real engine over one pair of data files, bundled into its own folder. */
+  async function bundle(tag, starterText, depthFileText) {
     const dir = path.join(TMP, tag); fs.mkdirSync(dir);
     fs.writeFileSync(path.join(dir, 'frontOfficePlayers.ts'), starterText); fs.writeFileSync(path.join(dir, 'frontOfficeDepth.ts'), depthFileText);
     fs.writeFileSync(path.join(dir, 'entry.ts'), `export * as engine from ${JSON.stringify(path.join(ROOT, 'src/lib/frontOffice.ts').replaceAll('\\', '/'))};\nexport { FO_DEPTH } from './frontOfficeDepth.ts';\n`);
     const out = path.join(dir, 'arm.mjs');
     await esbuild.build({ entryPoints: [path.join(dir, 'entry.ts')], bundle: true, format: 'esm', platform: 'node', outfile: out, logLevel: 'error',
       alias: { '@/data/frontOfficePlayers': path.join(dir, 'frontOfficePlayers.ts'), '@/data/frontOfficeDepth': path.join(dir, 'frontOfficeDepth.ts'), '@': path.join(ROOT, 'src') } });
-    const { engine, FO_DEPTH } = await import(pathToFileURL(out).href);
+    return import(pathToFileURL(out).href);
+  }
+  /** Who is on each club's active roster once the computer clubs have cut down before Week 1. The GM's own club is
+      never cut, so the league is opened twice, from two chairs, and every club is read from a league it is cut in. */
+  const afterCutDown = ({ engine, FO_DEPTH }) => {
+    const men = new Set();
+    for (const [chair, clubs] of [['LV', abbr => abbr !== 'LV'], ['NYG', abbr => abbr === 'LV']]) {
+      const lg = engine.initLeague(lcg(SEASON_SEED), { depth: FO_DEPTH, userTeam: chair });
+      for (const t of Object.values(lg.teams)) if (clubs(t.abbr)) for (const p of t.players) men.add(`${t.abbr}|${p.name}|${p.pos}`);
+    }
+    return men;
+  };
+  async function arm(tag, starterText, depthFileText) {
+    const built = await bundle(tag, starterText, depthFileText);
+    const { engine, FO_DEPTH } = built;
     const opening = engine.initLeague(lcg(SEASON_SEED), { depth: FO_DEPTH });
     const strength = Object.fromEntries(Object.values(opening.teams).map(t => [t.abbr, engine.teamStrength(t)]));
     const ranked = Object.keys(strength).sort((x, y) => strength[y] - strength[x] || x.localeCompare(y));
@@ -679,7 +772,7 @@ const TOLERANCE = { 'ranks 1 to 8': 0.62, 'ranks 25 to 32': 0.57, spread: 0.47 }
       const values = blocks.map(b => b[name]), m = values.reduce((n, v) => n + v, 0) / values.length;
       measure[name] = { mean: m, error: Math.sqrt(values.reduce((n, v) => n + (v - m) ** 2, 0) / (values.length - 1)) / Math.sqrt(values.length) };
     }
-    return { strength, measure, clubs: ranked.length };
+    return { strength, measure, clubs: ranked.length, built };
   }
   const was = await arm('main', frozen.text, frozen.depthText), now = await arm('shipped', playStarters, playDepth);
   if (was.clubs !== 32 || now.clubs !== 32) { console.error('FAIL [7] an arm did not deal thirty two clubs, so nothing was measured'); process.exit(1); }
@@ -695,7 +788,70 @@ const TOLERANCE = { 'ranks 1 to 8': 0.62, 'ranks 25 to 32': 0.57, spread: 0.47 }
     ok(7, `(${name === 'spread' ? 'c' : 'b'}) ${what} stays within ${tolerance} of main's`, Math.abs(s.mean - m.mean) <= tolerance, `${f2(s.mean)} against ${f2(m.mean)}`);
     ok(7, `(${name === 'spread' ? 'c' : 'b'}) ${what}: both arms are measured to a third of the tolerance or finer`, s.error < tolerance / 3 && m.error < tolerance / 3, `sampling error ${f3(s.error)} and ${f3(m.error)} against ${f3(tolerance / 3)}`);
   }
+  /* (d) WHO IS ON THE ROSTER AFTER THE OPENING CUT-DOWN. The design promised roster membership does not change,
+     and it does, by one man: a computer club over 53 releases its lowest rated spare man at a crowded position,
+     and a confirmed fullback now reads the flat number, so the Giants (54 on the record) release their fullback
+     where main released a defensive back. That is the flat number doing what it says, it is counted here and
+     told to the lead, and nothing else may ride along: any OTHER man released is red, and so is a second one.
+     Always read off the files as they ship (never the stretched or shuffled numbers of the league controls). */
+  {
+    const HELD_CUT = 1;
+    let cutDepth = depthRaw;
+    if (CONTROL === 'cutback') {
+      cutDepth = patchOnce(depthRaw, "{ name: 'Devin Singletary', pos: 'RB', age: 28, ovr: 75,", "{ name: 'Devin Singletary', pos: 'RB', age: 28, ovr: 60,", 'cutback');
+      console.log('   control cutback: a Giants running back who is no fullback reads 60 in the loaded depth text, under the flat fullback number');
+    }
+    const asShipped = playStarters === startersRaw && playDepth === depthRaw && cutDepth === depthRaw ? now.built : await bundle('shipped-cut', startersRaw, cutDepth);
+    const kept = afterCutDown(asShipped), keptMain = afterCutDown(was.built);
+    if (kept.size < 32 * 45 || keptMain.size < 32 * 45) { console.error(`FAIL [7] the cut-down leagues hold ${kept.size} and ${keptMain.size} men, so nothing was measured`); process.exit(1); }
+    const released = [...keptMain].filter(key => !kept.has(key)).sort(), keptInstead = [...kept].filter(key => !keptMain.has(key)).sort();
+    console.log(`   (d) active rosters after the opening cut-down: ${kept.size} men shipped, ${keptMain.size} main; released where main kept him: ${released.map(key => `${key} ${shipped.get(key)?.ovr ?? '?'} (main ${main.get(key)?.ovr ?? '?'})`).join(', ') || 'nobody'}; kept where main released him: ${keptInstead.join(', ') || 'nobody'}; held at ${HELD_CUT}`);
+    ok(7, '(d) every man the opening cut-down releases whom main kept is a fullback two publishers confirm', released.every(key => confirmedFullbacks.has(key)), released.filter(key => !confirmedFullbacks.has(key)).join(', '));
+    ok(7, `(d) the opening cut-down releases no more than ${HELD_CUT} man main kept`, released.length <= HELD_CUT && keptInstead.length === released.length, `${released.length} released, ${keptInstead.length} kept instead`);
+  }
   fs.rmSync(TMP, { recursive: true, force: true });
+}
+
+/* ---- 8. THE SCALE DID NOT MOVE --------------------------------------------- */
+console.log('8) the scale did not move');
+/* The rule the layer's constants were chosen by (scripts/lib/nflFoRatingModel.mjs, its header): each offense
+   position's mean and sd among the fifteen stay within ONE POINT of main's, because the engine's constants and
+   every later value curve stand on that scale. The bar is that rule, not a number fitted to today: the measure has
+   no noise in it (two fixed sets of numbers), today's largest distance is .49, and the three controls below are the
+   changes a review made to the model that sections 0 to 7 let through. */
+const SCALE_BAR = 1;
+{
+  let read = new Map([...shipped].map(([key, man]) => [key, man.ovr]));
+  if (['lift', 'gain', 'noeff'].includes(CONTROL)) {
+    const model = change => new Map(buildFullRatings(checkpoint, { ...OFFENSE_LAYER, production: offenseMap, fullbacks: confirmedFullbacks, ...change }).map(p => [p.key, p.ovr]));
+    const asCommitted = model({});
+    const drift = [...asCommitted].filter(([key, ovr]) => shipped.get(key)?.ovr !== ovr);
+    if (drift.length) throw new Error(`control ${CONTROL}: the committed model does not rebuild the shipped numbers (${drift.length} men differ), so a changed model would prove nothing about them`);
+    const changed = CONTROL === 'lift' ? new Map([...asCommitted].map(([key, ovr]) => [key, groupOf(key) ? ovr + 2 : ovr]))
+      : model(CONTROL === 'gain' ? { gain: 16 } : { blend: { efficiency: 0, workload: 0.2, production: 0.8 } });
+    const moved = [...changed].filter(([key, ovr]) => asCommitted.get(key) !== ovr).length;
+    if (moved < 100) throw new Error(`control ${CONTROL}: it moved ${moved} numbers, too few to prove anything`);
+    read = changed;
+    console.log(`   control ${CONTROL}: section 8 reads ${CONTROL === 'lift' ? 'every offense number two points higher (about what moving the model\'s centre from 84 to 87 does)' : CONTROL === 'gain' ? 'the model rebuilt with gain 16 where it ships 13' : 'the model rebuilt with the efficiency term switched off (blend 0, .2, .8)'}: ${moved} numbers moved`);
+  }
+  const spreadOf = values => { const mean = values.reduce((s, n) => s + n, 0) / values.length; return { mean, sd: Math.sqrt(values.reduce((s, n) => s + (n - mean) ** 2, 0) / values.length) }; };
+  const f2 = n => n.toFixed(2);
+  let widest = 0;
+  for (const g of OFFENSE) {
+    const men = [...recordOf.values()].filter(r => r.tier === 'core' && groupOf(r.key) === g).map(r => r.key);
+    if (men.length < 20) { console.error(`FAIL [8] ${g} holds ${men.length} of the fifteen, so nothing was measured`); process.exit(1); }
+    const now = spreadOf(men.map(key => read.get(key))), was = spreadOf(men.map(key => main.get(key).ovr));
+    widest = Math.max(widest, Math.abs(now.mean - was.mean), Math.abs(now.sd - was.sd));
+    console.log(`   ${g}: the fifteen (${men.length} men), mean and sd ${f2(now.mean)} and ${f2(now.sd)} shipped, ${f2(was.mean)} and ${f2(was.sd)} main`);
+    ok(8, `${g}: the mean among the fifteen stays within ${SCALE_BAR} of main's`, Math.abs(now.mean - was.mean) <= SCALE_BAR, `${f2(now.mean)} against ${f2(was.mean)}`);
+    ok(8, `${g}: the sd among the fifteen stays within ${SCALE_BAR} of main's`, Math.abs(now.sd - was.sd) <= SCALE_BAR, `${f2(now.sd)} against ${f2(was.sd)}`);
+  }
+  /* printed, not asserted, and told to the lead: the running back SHELF as the engine reads it, with the confirmed
+     fullbacks among the fifteen in. The flat fullback number, a separate decision from the layer's constants,
+     widens that shelf past the one point rule on its own. */
+  const shelf = [...recordOf.values()].filter(r => r.tier === 'core' && r.seed.pos === 'RB').map(r => r.key);
+  const shelfNow = spreadOf(shelf.map(key => read.get(key))), shelfWas = spreadOf(shelf.map(key => main.get(key).ovr));
+  console.log(`   largest distance from main above: ${f2(widest)}, bar ${SCALE_BAR}. Printed only: the running back shelf with its ${shelf.filter(key => confirmedFullbacks.has(key)).length} confirmed fullbacks in (${shelf.length} men), mean and sd ${f2(shelfNow.mean)} and ${f2(shelfNow.sd)} shipped, ${f2(shelfWas.mean)} and ${f2(shelfWas.sd)} main`);
 }
 
 /* ---- report ---------------------------------------------------------------- */
@@ -703,7 +859,7 @@ const redSections = [...red.keys()].sort((a, b) => a - b);
 if (CONTROL) {
   const want = CONTROLS[CONTROL];
   /* the two league controls must each turn their own part of section 7 red and leave the other part green */
-  const PARTS = { stretch: ['(b)', '(c)'], shuffle: ['(a)'] };
+  const PARTS = { stretch: ['(b)', '(c)'], shuffle: ['(a)'], cutback: ['(d)'] };
   const parts = [...new Set((red.get(7) ?? []).map(label => label.slice(0, 3)))].sort();
   const partsFired = !PARTS[CONTROL] || parts.join() === PARTS[CONTROL].join();
   const fired = redSections.length === want.length && want.every(s => red.has(s)) && partsFired;
@@ -714,4 +870,4 @@ if (redSections.length) {
   console.error(`simFoRatingOrder: RED in section${redSections.length === 1 ? '' : 's'} ${redSections.join(', ')} (${[...red.values()].flat().length} of ${checks} checks failed)`);
   process.exit(1);
 }
-console.log(`simFoRatingOrder: green, ${checks} checks. One number per man: ${numbersOf.size} men, 0 with two numbers (main: ${mainTwo}).`);
+console.log(`simFoRatingOrder: green, ${checks} checks. One number per man: ${numbersOf.size} men, 0 with two numbers (main: ${mainTwo}). Marked on active rosters: ${markTotals.shipped} (main: ${markTotals.main}).`);

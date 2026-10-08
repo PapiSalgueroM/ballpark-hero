@@ -154,7 +154,8 @@ export function makeGmPlayer(p: FoPlayer, rng: () => number): GmPlayer {
    man league open on the same starters, the same market and the same
    fixtures. Since Round 1130 the starters file carries the opening estimate
    itself, so nothing here overrides a starter's rating or price: one man has
-   one number, whichever file or game shows him.
+   one number in both roster files and in the two games that read them (NFL
+   Conquest still types its own until its own round).
    On the original-scale depth fixture, scripts/simNflFullRosters.mjs shows the
    bench changes no result while every starter is fit. The name book the
    pool is dealt against includes the bench and the practice squad, so no

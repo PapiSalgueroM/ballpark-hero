@@ -11,7 +11,8 @@ import { GauntletConfig, FormationLike } from '@/lib/gauntletEngine';
  * see that file's own header for the generation rules) carries eight
  * position families: QB, RB, WR, TE, OL, DL, LB, DB. Measured on that data
  * (Round 1130, 2026-10-08, when the file began to carry the one opening
- * estimate every game prints): quarterbacks run 65 to 93, running backs and
+ * estimate this game and NFL Front Office both print; NFL Conquest still
+ * types its own): quarterbacks run 65 to 93, running backs and
  * receivers 63 to 95, tight ends 70 to 95, the same order of spread
  * soccer's pool offers a slot. Those four are the positions the estimate
  * reads on how well a man played, how much of the work he carried and what

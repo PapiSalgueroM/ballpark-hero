@@ -41,8 +41,13 @@ function priorFor(facts){
    arms.
 
    WHERE THE CONSTANTS CAME FROM. Measured 2026-10-08 on the two sourced file
-   (326 agreed or settled offense lines, 15 confirmed fullbacks);
-   scripts/simFoRatingOrder.mjs measures the same things on every run.
+   (326 agreed or settled offense lines, 15 confirmed fullbacks). On every
+   run scripts/simFoRatingOrder.mjs holds the mean and sd rows (its section 8,
+   the one point rule below) and the two agreement rows (its section 3). "The
+   fifteen" here leaves the confirmed fullbacks out, as the rating groups do:
+   with the two of them in, the running back shelf the engine reads has an sd
+   of 7.9 against 6.8, and that is the flat fullback number, not these
+   constants.
 
                                           QB        RB        WR        TE
      the fifteen, mean and sd, v2.2    81.4 7.3  81.0 6.9  80.6 7.3  81.9 6.5
@@ -62,7 +67,12 @@ function priorFor(facts){
    workloadSd .45: the population sd of min(w, 1.6) over the fifteen's backs
    and receivers measures .436, inside the .40 to .50 the design allowed.
    carry is a judgement stated out loud: a full load two seasons ago still
-   counts for most of one. minGames 4 is the selection rule's own floor.
+   counts for most of one. No outcome check holds it: carry at 1, 1, 1 moves
+   no position's mean or sd a full point (the receivers' mean moves .96), so
+   only the suite's exact pin sees a change to it. The one number in the
+   round that is not circular, the holdout the harness prints, has the
+   quarterbacks a shade UNDER v2.2 (.199 against .223, n 29) and every other
+   position well over it. minGames 4 is the selection rule's own floor.
    fullbackOvr 63 is the middle of the backup band (61 to 65). */
 function estimate(record,models,layer=null,productionStats=null){
  const prior=priorFor(record.sourceIdentity),pos=record.seed.pos,seasons=record.observations;

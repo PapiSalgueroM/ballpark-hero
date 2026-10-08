@@ -22,8 +22,9 @@
 // rated as a ball carrier: one flat number, marked. Linemen and defenders are the
 // checkpoint's numbers unchanged.
 // It is a simulation grade, not a historical statistic or an official rating, and
-// it is the one number every game on the site prints for the man. Limited evidence
-// is marked per player in frontOfficeDepth.ts. See the generator for every rule.
+// it is the one number NFL Front Office and Gauntlet Draft: NFL print for the man
+// (NFL Conquest still types its own until its own round). Limited evidence is
+// marked per player in frontOfficeDepth.ts. See the generator for every rule.
 // Contracts, salaries and roster moves inside the game are fictional; prices are
 // shared out inside each club's unchanged opening payroll.
 

@@ -20,6 +20,9 @@
    EXPECTS for one man on each page (Ashton Jeanty on the roster shelf, the
    first card dealt in the draft). The walk must then go red on exactly that
    row on each page at each size, and it exits 0 only when it did.
+   FO_WALK_CONTROL=norule: the ? panel check also expects a sentence no page
+   prints. It must go red on exactly that sentence at each size (the three
+   real phrases still found), and the walk exits 0 only when it did.
 
    Run: npm run build, serve dist with scripts/lib/hostLikeServer.mjs on 4173,
         then ENGINES=chromium node scripts/playFoOneRating.mjs
@@ -33,7 +36,9 @@ const { chromium } = pw;
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
 const CONTROL = process.env.FO_WALK_CONTROL || '';
-if (CONTROL && CONTROL !== 'expect') { console.error(`unknown control ${CONTROL}`); process.exit(1); }
+if (CONTROL && !['expect', 'norule'].includes(CONTROL)) { console.error(`unknown control ${CONTROL}`); process.exit(1); }
+const SENTINEL = 'a sentence no page prints, for the norule control';
+const ruleHits = [];
 const SHOTS = process.env.RC_OUT || path.join(ROOT, '.tmp-fx', 'shots');
 fs.mkdirSync(SHOTS, { recursive: true });
 const CLUB = 'LV', CLUB_NAME = 'Las Vegas Raiders', LEAD = 'Ashton Jeanty', FULLBACK = 'Connor Heyward';
@@ -116,6 +121,25 @@ for (const viewport of [{ width: 390, height: 844 }, { width: 1280, height: 900 
   /* ---- 1. the roster shelf ---- */
   await page.goto(`${BASE}/front-office`, { waitUntil: 'domcontentloaded' });
   await settle();
+  /* the ? panel carries the rating rule. A page with a guide never renders its howToPlay prop, so until the
+     guide itself says it, the rule reaches a player only through GameHelp's extraRules: open the panel and read it. */
+  {
+    const help = page.locator('button[aria-label="How to play"]').first();
+    await help.waitFor({ state: 'visible', timeout: 30000 });
+    await help.click();
+    const panel = page.locator('[role="dialog"]').filter({ hasText: 'The steps' }).first();
+    await panel.waitFor({ state: 'visible', timeout: 10000 });
+    const text = (await panel.innerText()).replace(/\s+/g, ' ');
+    const wanted = ['how much of the work he carried', 'what he produced a game in 2025', 'A fullback is not rated as a ball carrier', ...(CONTROL === 'norule' ? [SENTINEL] : [])];
+    const missing = wanted.filter(phrase => !text.includes(phrase));
+    if (CONTROL === 'norule') {
+      const fired = missing.length === 1 && missing[0] === SENTINEL;
+      ruleHits.push(fired);
+      say(fired, `${size}: under the control the ? panel check went red on exactly the sentence no page prints (missing: ${missing.join(' | ') || 'nothing'})`);
+    } else say(missing.length === 0, `${size}: the ? panel says how an opening rating is read (${missing.length ? 'missing: ' + missing.join(' | ') : wanted.length + ' phrases found in ' + text.length + ' characters'})`);
+    await page.keyboard.press('Escape');
+    await panel.waitFor({ state: 'hidden', timeout: 10000 });
+  }
   await page.locator('.grid button').filter({ hasText: CLUB_NAME }).first().click();
   const tile = page.locator('button:has(div.uppercase)').filter({ hasText: /roster/i }).first();
   await tile.waitFor({ state: 'visible', timeout: 30000 });
@@ -178,5 +202,10 @@ if (CONTROL === 'expect') {
   console.log(`control expect ${fired ? 'fired' : 'DID NOT fire as designed'}: ${controlHits.filter(Boolean).length} of 4 comparisons went red on exactly the one man`);
   process.exit(fired ? 0 : 1);
 }
-console.log(failures ? `playFoOneRating: ${failures} FAILURE(S)` : `playFoOneRating: green. The roster shelf and the draft cards print the committed files' numbers at both sizes.`);
+if (CONTROL === 'norule') {
+  const fired = ruleHits.length === 2 && ruleHits.every(Boolean) && failures === 0;
+  console.log(`control norule ${fired ? 'fired' : 'DID NOT fire as designed'}: ${ruleHits.filter(Boolean).length} of 2 panel reads went red on exactly the sentence no page prints`);
+  process.exit(fired ? 0 : 1);
+}
+console.log(failures ? `playFoOneRating: ${failures} FAILURE(S)` : `playFoOneRating: green. The roster shelf and the draft cards print the committed files' numbers at both sizes, and the ? panel carries the rating rule.`);
 process.exit(failures ? 1 : 0);
