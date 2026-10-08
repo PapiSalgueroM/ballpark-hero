@@ -99,7 +99,7 @@ const FOLD_CEILING = 430;
 const COUNT_MARGIN = 3;
 const NOTICE_MAX_HEIGHT = 30;
 const GAME_SHIFT_MAX = 30;
-const PRESSES = 3;
+const PRESSES = 4;
 
 const THIRD_PARTY = /googletagmanager\.com|google-analytics\.com|googlesyndication\.com|doubleclick\.net|googleadservices\.com/;
 const STORAGE_WORDS = /storage|SecurityError|QuotaExceeded|quota has been exceeded|Access is denied/i;
@@ -238,7 +238,7 @@ function pressNext(n) {
   const visible = el => { const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0; };
   const label = el => ((el.innerText || el.getAttribute('aria-label') || el.title || '').replace(/\s+/g, ' ').trim()).slice(0, 40);
   const CHROME = '[data-site-chrome], header, nav, footer, [role="region"][aria-label="Cookie choices"], section[aria-label="Live scores ticker"]';
-  const AVOID = /sign ?(in|up)|log ?(in|out)|share|report|delete|reset|clear|erase|theme|install|export|import|leaderboard|copy|sound|mute|feedback|account|light mode|dark mode/i;
+  const AVOID = /sign ?(in|up)|log ?(in|out)|share|report|delete|reset|clear|erase|theme|install|export|import|leaderboard|copy|sound|mute|feedback|account|light mode|dark mode|how to|rules|help|give up|quit|skip|hint|reveal|settings|^back|^home|menu|pause/i;
   const GO = /play|start|begin|got it|let'?s|continue|new |create|next|kick|sim|roll|deal|spin|pick|choose|select|confirm|advance|ready|go\b|ok\b|done/i;
   const dialogs = [...document.querySelectorAll('[role="dialog"], [role="alertdialog"]')].filter(visible);
   const scope = dialogs.length ? dialogs[dialogs.length - 1] : document.getElementById('root');
