@@ -1,0 +1,231 @@
+1) projected world, year 0: 438 clubs with a roster: {"empty":42,"thin":202,"noeleven":17,"full":177}
+   thin (1 to 10 names): 202: AGF 6; Aberdeen 4; Abha 2 (no keeper); Al-Diriyah 3 (no keeper); Al-Ettifaq 7; Al-Fateh 2 (no keeper); Al-Fayha 2 (no keeper); Al-Hazem 2; Al-Ittihad 10; Al-Khaleej 5; Al-Kholood 3; Al-Riyadh 2 (no keeper); Al-Shabab 8; Al-Taawoun 4; Alanyaspor 9 (no keeper); Albacete 1 (no keeper); Almería 5 (no keeper); Alverca 5 (no keeper); Annecy 1 (no keeper); Antwerp 10; Aris 7 (no keeper); Arminia Bielefeld 3; Arouca 3; Ascoli 1 (no keeper); Athletico Paranaense 9; Atlas 7 (no keeper); Atlético San Luis 10; Austin FC 10 (no keeper); Austria Wien 3 (no keeper); Avellino 2 (no keeper); Benevento 2 (no keeper); Beveren 1; Blackburn Rovers 7; Bochum 4 (no keeper); Bolton Wanderers 3 (no keeper); Boulogne 1 (no keeper); Braunschweig 2; Brøndby IF 8; Burgos 1 (no keeper); CF Montréal 7; Cardiff City 4; Carrarese 2 (no keeper); Casa Pia 5; Castellón 2; Catanzaro 3 (no keeper); Cercle Brugge 10; Cesena 4; Charleroi 6; Charlotte FC 10; Charlton Athletic 8; Clermont 1 (no keeper); Colorado Rapids 10; Coritiba 5; Cremonese 6; Cádiz 2 (no keeper); D.C. United 6 (no keeper); Darmstadt 4 (no keeper); Dinamo Zagreb 9; Dundee 1 (no keeper); Dundee United 2 (no keeper) ...
+   eleven or more names but no eleven: Atlanta United 11 (0 keepers); Auxerre 14 (0 keepers); Braga 21 (0 keepers); Cruzeiro 15 (0 keepers); Espanyol 14 (0 keepers); Fluminense 15 (0 keepers); León 11 (2 keepers); Millwall 11 (0 keepers); Olympiacos 18 (0 keepers); PAOK 14 (0 keepers); Racing Santander 12 (3 keepers); Schalke 04 16 (0 keepers); Seattle Sounders 11 (0 keepers); Swansea City 14 (0 keepers); Tigres UANL 14 (0 keepers); Toluca 15 (0 keepers); Union Saint-Gilloise 12 (0 keepers)
+2) Real Madrid: 40 careers, first cup tie against {"empty":3,"thin":8,"noeleven":1,"full":28,"none":0}
+2) Barcelona: 40 careers, first cup tie against {"empty":2,"thin":9,"noeleven":1,"full":28,"none":0}
+2) Getafe: 40 careers, first cup tie against {"empty":3,"thin":3,"noeleven":1,"full":33,"none":0}
+2) Arsenal: 40 careers, first cup tie against {"empty":0,"thin":2,"noeleven":0,"full":38,"none":0}
+2) Burnley: 40 careers, first cup tie against {"empty":0,"thin":1,"noeleven":0,"full":39,"none":0}
+2) Bayern Munich: 40 careers, first cup tie against {"empty":1,"thin":3,"noeleven":3,"full":33,"none":0}
+2) Juventus: 40 careers, first cup tie against {"empty":1,"thin":6,"noeleven":0,"full":33,"none":0}
+2) Paris Saint-Germain: 40 careers, first cup tie against {"empty":0,"thin":1,"noeleven":0,"full":39,"none":0}
+2) Ajax: 40 careers, first cup tie against {"empty":4,"thin":13,"noeleven":0,"full":23,"none":0}
+2) Benfica: 40 careers, first cup tie against {"empty":7,"thin":21,"noeleven":2,"full":10,"none":0}
+2) LA Galaxy: 40 careers, first cup tie against {"empty":0,"thin":31,"noeleven":3,"full":6,"none":0}
+   all: {"empty":21,"thin":98,"noeleven":11,"full":310,"none":0}
+3) Eibar (thin, 2 names: LB 68, GK 64; strength 62.1; met by Real Madrid)
+   before: 2 takers going round, my kicks against keeper 64
+   after:  1:Juan Bernat(68) 2:*Their taker 1(62.1) 3:*Their taker 2(62.1) 4:*Their taker 3(62.1) 5:*Their taker 4(62.1) 6:*Their taker 5(62.1) 7:*Their taker 6(62.1) 8:*Their taker 7(62.1) 9:*Their taker 8(62.1) 10:*Their taker 9(62.1) 11:Jonmi Magunagoitia(64); my kicks against keeper 64
+3) Málaga (thin, 5 names: LB 76, CDM 75, ST 74, RW 72, LB 70; strength 65.1; met by Real Madrid)
+   before: 5 takers going round, my kicks against keeper null
+   after:  1:Adam Aznou(76) 2:Jens Cajuste(75) 3:Chupe(74) 4:David Larrubia(72) 5:José Salinas(70) 6:*Their taker 1(65.1) 7:*Their taker 2(65.1) 8:*Their taker 3(65.1) 9:*Their taker 4(65.1) 10:*Their taker 5(65.1) 11:*Their keeper(65.1); my kicks against keeper 65.1
+3) Valladolid (thin, 2 names: CAM 68, LB 64; strength 59.1; met by Real Madrid)
+   before: 2 takers going round, my kicks against keeper null
+   after:  1:Julien Ponceau(68) 2:Guille Bueno(64) 3:*Their taker 1(59.1) 4:*Their taker 2(59.1) 5:*Their taker 3(59.1) 6:*Their taker 4(59.1) 7:*Their taker 5(59.1) 8:*Their taker 6(59.1) 9:*Their taker 7(59.1) 10:*Their taker 8(59.1) 11:*Their keeper(59.1); my kicks against keeper 59.1
+3) Eldense (empty, 0 names: ; strength 63; met by Real Madrid)
+   before: 11 takers going round, my kicks against keeper 63
+   after:  1:*Their taker 1(63) 2:*Their taker 2(63) 3:*Their taker 3(63) 4:*Their taker 4(63) 5:*Their taker 5(63) 6:*Their taker 6(63) 7:*Their taker 7(63) 8:*Their taker 8(63) 9:*Their taker 9(63) 10:*Their taker 10(63) 11:*Their taker 11(63); my kicks against keeper 63
+3) Sporting Gijón (thin, 4 names: CAM 70, LW 68, RB 68, GK 64; strength 63.7; met by Real Madrid)
+   before: 4 takers going round, my kicks against keeper 64
+   after:  1:César Gelabert(70) 2:Gaspar Campos(68) 3:Guille Rosas(68) 4:*Their taker 1(63.7) 5:*Their taker 2(63.7) 6:*Their taker 3(63.7) 7:*Their taker 4(63.7) 8:*Their taker 5(63.7) 9:*Their taker 6(63.7) 10:*Their taker 7(63.7) 11:Rubén Yáñez(64); my kicks against keeper 64
+3) Girona (thin, 10 names: ST 79, RW 79, LW 78, ST 74, CM 73, CM 73, LB 72, RW 70, GK 68, RW 68; strength 73.2; met by Real Madrid)
+   before: 10 takers going round, my kicks against keeper 68
+   after:  1:Vladyslav Vanat(79) 2:Yáser Asprilla(79) 3:Bryan Gil(78) 4:Abel Ruiz(74) 5:*Their taker 1(73.2) 6:Fran Beltrán(73) 7:Donny van de Beek(73) 8:Álex Moreno(72) 9:Carles Pérez(70) 10:Portu(68) 11:Paulo Gazzaniga(68); my kicks against keeper 68
+3) Las Palmas (thin, 5 names: CB 72, RW 68, RW 68, RB 68, RB 68; strength 66; met by Real Madrid)
+   before: 5 takers going round, my kicks against keeper null
+   after:  1:Giovanni Bonfanti(72) 2:Ale García(68) 3:Manu Fuster(68) 4:Viti Rozada(68) 5:Marvin Park(68) 6:*Their taker 1(66) 7:*Their taker 2(66) 8:*Their taker 3(66) 9:*Their taker 4(66) 10:*Their taker 5(66) 11:*Their keeper(66); my kicks against keeper 66
+3) Racing Santander (noeleven, 12 names: GK 79, CB 78, ST 77, LW 74, CM 74, CDM 74, CM 73, CAM 73, RW 73, GK 70, CDM 68, GK 68; strength 73.9; met by Real Madrid)
+   before: 11 takers going round, my kicks against keeper 79
+   after:  1:Jeanuël Belocian(78) 2:Yassir Zabiri(77) 3:Iñigo Vicente(74) 4:Iván Martín(74) 5:Matteo Prati(74) 6:Gustavo Puerta(73) 7:Sergio Canales(73) 8:Andrés Martín(73) 9:Jokin Ezkieta(70) 10:Maguette Gueye(68) 11:Julen Agirrezabala(79); my kicks against keeper 79
+3) FC Andorra (empty, 0 names: ; strength 61; met by Real Madrid)
+   before: 11 takers going round, my kicks against keeper 61
+   after:  1:*Their taker 1(61) 2:*Their taker 2(61) 3:*Their taker 3(61) 4:*Their taker 4(61) 5:*Their taker 5(61) 6:*Their taker 6(61) 7:*Their taker 7(61) 8:*Their taker 8(61) 9:*Their taker 9(61) 10:*Their taker 10(61) 11:*Their taker 11(61); my kicks against keeper 61
+3) Ceuta (empty, 0 names: ; strength 62; met by Real Madrid)
+   before: 11 takers going round, my kicks against keeper 62
+   after:  1:*Their taker 1(62) 2:*Their taker 2(62) 3:*Their taker 3(62) 4:*Their taker 4(62) 5:*Their taker 5(62) 6:*Their taker 6(62) 7:*Their taker 7(62) 8:*Their taker 8(62) 9:*Their taker 9(62) 10:*Their taker 10(62) 11:*Their taker 11(62); my kicks against keeper 62
+3) Castellón (thin, 2 names: CDM 73, GK 64; strength 63.5; met by Barcelona)
+   before: 2 takers going round, my kicks against keeper 64
+   after:  1:Matías Orozco(73) 2:*Their taker 1(63.5) 3:*Their taker 2(63.5) 4:*Their taker 3(63.5) 5:*Their taker 4(63.5) 6:*Their taker 5(63.5) 7:*Their taker 6(63.5) 8:*Their taker 7(63.5) 9:*Their taker 8(63.5) 10:*Their taker 9(63.5) 11:Romain Matthys(64); my kicks against keeper 64
+3) Burgos (thin, 1 names: RW 68; strength 59.7; met by Barcelona)
+   before: 1 takers going round, my kicks against keeper null
+   after:  1:Curro Sánchez(68) 2:*Their taker 1(59.7) 3:*Their taker 2(59.7) 4:*Their taker 3(59.7) 5:*Their taker 4(59.7) 6:*Their taker 5(59.7) 7:*Their taker 6(59.7) 8:*Their taker 7(59.7) 9:*Their taker 8(59.7) 10:*Their taker 9(59.7) 11:*Their keeper(59.7); my kicks against keeper 59.7
+3) Espanyol (noeleven, 14 names: LB 80, RB 79, CDM 78, LW 77, ST 77, RW 77, LW 76, CDM 75, CM 74, CB 73, CM 73, RB 72, RW 70, RW 68; strength 76.3; met by Getafe)
+   before: 11 takers going round, my kicks against keeper null
+   after:  1:Quilindschy Hartman(80) 2:Omar El Hilali(79) 3:Urko González de Zárate(78) 4:Bryan Zaragoza(77) 5:Roberto Fernández(77) 6:Tyrhys Dolan(77) 7:Javi Puado(76) 8:Gabriel Moscardo(75) 9:Pol Lozano(74) 10:Clemens Riedel(73) 11:Edu Expósito(73); my kicks against keeper null
+3) Granada (empty, 0 names: ; strength 61; met by Getafe)
+   before: 11 takers going round, my kicks against keeper 61
+   after:  1:*Their taker 1(61) 2:*Their taker 2(61) 3:*Their taker 3(61) 4:*Their taker 4(61) 5:*Their taker 5(61) 6:*Their taker 6(61) 7:*Their taker 7(61) 8:*Their taker 8(61) 9:*Their taker 9(61) 10:*Their taker 10(61) 11:*Their taker 11(61); my kicks against keeper 61
+3) Albacete (thin, 1 names: LW 68; strength 60.7; met by Getafe)
+   before: 1 takers going round, my kicks against keeper null
+   after:  1:Agustín Albarracín(68) 2:*Their taker 1(60.7) 3:*Their taker 2(60.7) 4:*Their taker 3(60.7) 5:*Their taker 4(60.7) 6:*Their taker 5(60.7) 7:*Their taker 6(60.7) 8:*Their taker 7(60.7) 9:*Their taker 8(60.7) 10:*Their taker 9(60.7) 11:*Their keeper(60.7); my kicks against keeper 60.7
+3) Mallorca (thin, 8 names: RW 74, CB 73, CAM 73, ST 72, CM 72, GK 68, LB 68, LB 68; strength 68; met by Getafe)
+   before: 8 takers going round, my kicks against keeper 68
+   after:  1:Zito Luvumbo(74) 2:Martin Valjent(73) 3:Pablo Torre(73) 4:Adam Buksa(72) 5:Sergi Darder(72) 6:Toni Lato(68) 7:Alberto Moreno(68) 8:*Their taker 1(68) 9:*Their taker 2(68) 10:*Their taker 3(68) 11:Lucas Bergström(68); my kicks against keeper 68
+3) Preston North End (thin, 10 names: LB 76, CAM 74, CB 73, LB 73, RW 70, GK 70, CAM 70, CAM 68, LB 68, LM 64; strength 68.6; met by Arsenal)
+   before: 10 takers going round, my kicks against keeper 70
+   after:  1:Caleb Wiley(76) 2:Alfie Devine(74) 3:Jordan Storey(73) 4:Thierry Small(73) 5:Callum Lang(70) 6:Mads Frøkjær(70) 7:*Their taker 1(68.6) 8:Andrew Moran(68) 9:Jamal Lewis(68) 10:Robbie Brady(64) 11:Daniel Iversen(70); my kicks against keeper 70
+3) Portsmouth (thin, 6 names: RW 71, CAM 70, LB 68, LW 68, GK 68, RB 68; strength 62.8; met by Arsenal)
+   before: 6 takers going round, my kicks against keeper 68
+   after:  1:Abu Kamara(71) 2:John Swift(70) 3:Jayden Meghoma(68) 4:Josh Murphy(68) 5:Terry Devlin(68) 6:*Their taker 1(62.8) 7:*Their taker 2(62.8) 8:*Their taker 3(62.8) 9:*Their taker 4(62.8) 10:*Their taker 5(62.8) 11:Nicolas Schmid(68); my kicks against keeper 68
+3) Elversberg (thin, 10 names: CAM 77, RW 73, ST 73, CAM 72, RW 70, CDM 70, GK 68, RW 68, LB 64, LM 64; strength 67; met by Bayern Munich)
+   before: 10 takers going round, my kicks against keeper 68
+   after:  1:Francis Onyeka(77) 2:Cole Campbell(73) 3:Noel Futkeu(73) 4:Maurice Krattenmacher(72) 5:Noah Darvich(70) 6:Lukasz Poreba(70) 7:Lukas Petkov(68) 8:*Their taker 1(67) 9:Lasse Günther(64) 10:Maurice Neubauer(64) 11:Nicolas Kristof(68); my kicks against keeper 68
+3) Schalke 04 (noeleven, 16 names: ST 76, CB 76, RM 74, ST 73, LB 73, ST 72, CB 72, CM 72, LB 70, CDM 68, CDM 68, CAM 68, ST 65, RM 64, LM 64, RM 64; strength 72.2; met by Bayern Munich)
+   before: 11 takers going round, my kicks against keeper null
+   after:  1:Hee-chan Hwang(76) 2:Maximilian Wöber(76) 3:Junior Dina Ebimbe(74) 4:Moussa Sylla(73) 5:Robin Gosens(73) 6:Junior Adamu(72) 7:Mertcan Ayhan(72) 8:Soufiane El-Faouzi(72) 9:Vitalie Becker(70) 10:Ron Schallenberg(68) 11:Satoshi Tanaka(68); my kicks against keeper null
+3) Energie Cottbus (empty, 0 names: ; strength 63; met by Bayern Munich)
+   before: 11 takers going round, my kicks against keeper 63
+   after:  1:*Their taker 1(63) 2:*Their taker 2(63) 3:*Their taker 3(63) 4:*Their taker 4(63) 5:*Their taker 5(63) 6:*Their taker 6(63) 7:*Their taker 7(63) 8:*Their taker 8(63) 9:*Their taker 9(63) 10:*Their taker 10(63) 11:*Their taker 11(63); my kicks against keeper 63
+3) Bochum (thin, 4 names: RB 72, CM 70, RB 68, RM 64; strength 61.1; met by Bayern Munich)
+   before: 4 takers going round, my kicks against keeper null
+   after:  1:Leandro Morgalla(72) 2:Mats Pannewig(70) 3:Oliver Olsen(68) 4:Koji Miyoshi(64) 5:*Their taker 1(61.1) 6:*Their taker 2(61.1) 7:*Their taker 3(61.1) 8:*Their taker 4(61.1) 9:*Their taker 5(61.1) 10:*Their taker 6(61.1) 11:*Their keeper(61.1); my kicks against keeper 61.1
+3) Kaiserslautern (thin, 7 names: ST 73, CAM 73, ST 73, LB 70, RB 70, LM 64, GK 64; strength 64.1; met by Bayern Munich)
+   before: 7 takers going round, my kicks against keeper 64
+   after:  1:Milos Lukovic(73) 2:Naatan Skyttä(73) 3:Mergim Berisha(73) 4:Mika Haas(70) 5:Paul Joly(70) 6:*Their taker 1(64.1) 7:*Their taker 2(64.1) 8:*Their taker 3(64.1) 9:*Their taker 4(64.1) 10:Frank Ronstadt(64) 11:Julian Krahl(64); my kicks against keeper 64
+3) Ascoli (thin, 1 names: RM 64; strength 60.4; met by Juventus)
+   before: 1 takers going round, my kicks against keeper null
+   after:  1:Andrea Oliveri(64) 2:*Their taker 1(60.4) 3:*Their taker 2(60.4) 4:*Their taker 3(60.4) 5:*Their taker 4(60.4) 6:*Their taker 5(60.4) 7:*Their taker 6(60.4) 8:*Their taker 7(60.4) 9:*Their taker 8(60.4) 10:*Their taker 9(60.4) 11:*Their keeper(60.4); my kicks against keeper 60.4
+3) Juve Stabia (empty, 0 names: ; strength 63; met by Juventus)
+   before: 11 takers going round, my kicks against keeper 63
+   after:  1:*Their taker 1(63) 2:*Their taker 2(63) 3:*Their taker 3(63) 4:*Their taker 4(63) 5:*Their taker 5(63) 6:*Their taker 6(63) 7:*Their taker 7(63) 8:*Their taker 8(63) 9:*Their taker 9(63) 10:*Their taker 10(63) 11:*Their taker 11(63); my kicks against keeper 63
+3) Catanzaro (thin, 3 names: CAM 73, RB 68, CF 64; strength 64.3; met by Juventus)
+   before: 3 takers going round, my kicks against keeper null
+   after:  1:Simone Pafundi(73) 2:Antonio Candela(68) 3:*Their taker 1(64.3) 4:*Their taker 2(64.3) 5:*Their taker 3(64.3) 6:*Their taker 4(64.3) 7:*Their taker 5(64.3) 8:*Their taker 6(64.3) 9:*Their taker 7(64.3) 10:Nicolò Buso(64) 11:*Their keeper(64.3); my kicks against keeper 64.3
+3) Avellino (thin, 2 names: CDM 73, RB 68; strength 61.9; met by Juventus)
+   before: 2 takers going round, my kicks against keeper null
+   after:  1:Giacomo Faticanti(73) 2:Filippo Missori(68) 3:*Their taker 1(61.9) 4:*Their taker 2(61.9) 5:*Their taker 3(61.9) 6:*Their taker 4(61.9) 7:*Their taker 5(61.9) 8:*Their taker 6(61.9) 9:*Their taker 7(61.9) 10:*Their taker 8(61.9) 11:*Their keeper(61.9); my kicks against keeper 61.9
+3) Südtirol (thin, 4 names: CM 73, CM 72, GK 64, RM 64; strength 63; met by Juventus)
+   before: 4 takers going round, my kicks against keeper 64
+   after:  1:Fabio Rispoli(73) 2:Kevin Zeroli(72) 3:Salvatore Molina(64) 4:*Their taker 1(63) 5:*Their taker 2(63) 6:*Their taker 3(63) 7:*Their taker 4(63) 8:*Their taker 5(63) 9:*Their taker 6(63) 10:*Their taker 7(63) 11:Alessandro Plizzari(64); my kicks against keeper 64
+3) Mantova (thin, 2 names: ST 73, RW 68; strength 63.9; met by Juventus)
+   before: 2 takers going round, my kicks against keeper null
+   after:  1:Vanja Vlahović(73) 2:Davide Bragantini(68) 3:*Their taker 1(63.9) 4:*Their taker 2(63.9) 5:*Their taker 3(63.9) 6:*Their taker 4(63.9) 7:*Their taker 5(63.9) 8:*Their taker 6(63.9) 9:*Their taker 7(63.9) 10:*Their taker 8(63.9) 11:*Their keeper(63.9); my kicks against keeper 63.9
+3) Fortuna Sittard (thin, 3 names: CAM 70, CDM 68, LB 64; strength 61; met by Ajax)
+   before: 3 takers going round, my kicks against keeper null
+   after:  1:Mohamed Ihattaren(70) 2:Philip Brittijn(68) 3:Jasper Dahlhaus(64) 4:*Their taker 1(61) 5:*Their taker 2(61) 6:*Their taker 3(61) 7:*Their taker 4(61) 8:*Their taker 5(61) 9:*Their taker 6(61) 10:*Their taker 7(61) 11:*Their keeper(61); my kicks against keeper 61
+3) Telstar (thin, 5 names: RM 64, LM 64, LM 64, RM 64, LM 64; strength 60.8; met by Ajax)
+   before: 5 takers going round, my kicks against keeper null
+   after:  1:Adil Lechkar(64) 2:Jayden Turfkruier(64) 3:Nigel Ogidi Nwankwo(64) 4:Tyrese Noslin(64) 5:Jeff Hardeveld(64) 6:*Their taker 1(60.8) 7:*Their taker 2(60.8) 8:*Their taker 3(60.8) 9:*Their taker 4(60.8) 10:*Their taker 5(60.8) 11:*Their keeper(60.8); my kicks against keeper 60.8
+3) PEC Zwolle (thin, 7 names: CAM 71, RB 70, GK 68, LW 68, RB 68, RW 68, LM 64; strength 64.2; met by Ajax)
+   before: 7 takers going round, my kicks against keeper 68
+   after:  1:Filip Krastev(71) 2:Jan Bürger(70) 3:Shola Shoretire(68) 4:Tristan Gooijer(68) 5:Dylan Mbayo(68) 6:*Their taker 1(64.2) 7:*Their taker 2(64.2) 8:*Their taker 3(64.2) 9:*Their taker 4(64.2) 10:Lennart Czyborra(64) 11:Jasper Schendelaar(68); my kicks against keeper 68
+3) Go Ahead Eagles (thin, 5 names: CAM 73, GK 70, LW 70, LB 68, RB 68; strength 63.5; met by Ajax)
+   before: 5 takers going round, my kicks against keeper 70
+   after:  1:Jakob Breum(73) 2:Mathis Suray(70) 3:Dean James(68) 4:Mats Deijl(68) 5:*Their taker 1(63.5) 6:*Their taker 2(63.5) 7:*Their taker 3(63.5) 8:*Their taker 4(63.5) 9:*Their taker 5(63.5) 10:*Their taker 6(63.5) 11:Jari De Busser(70); my kicks against keeper 70
+3) Cambuur (empty, 0 names: ; strength 67; met by Ajax)
+   before: 11 takers going round, my kicks against keeper 67
+   after:  1:*Their taker 1(67) 2:*Their taker 2(67) 3:*Their taker 3(67) 4:*Their taker 4(67) 5:*Their taker 5(67) 6:*Their taker 6(67) 7:*Their taker 7(67) 8:*Their taker 8(67) 9:*Their taker 9(67) 10:*Their taker 10(67) 11:*Their taker 11(67); my kicks against keeper 67
+3) Willem II (thin, 1 names: CDM 70; strength 60.9; met by Ajax)
+   before: 1 takers going round, my kicks against keeper null
+   after:  1:Kasper Boogaard(70) 2:*Their taker 1(60.9) 3:*Their taker 2(60.9) 4:*Their taker 3(60.9) 5:*Their taker 4(60.9) 6:*Their taker 5(60.9) 7:*Their taker 6(60.9) 8:*Their taker 7(60.9) 9:*Their taker 8(60.9) 10:*Their taker 9(60.9) 11:*Their keeper(60.9); my kicks against keeper 60.9
+3) NEC Nijmegen (thin, 7 names: CM 78, CDM 73, CB 73, RM 73, LB 70, GK 70, CAM 68; strength 67.7; met by Ajax)
+   before: 7 takers going round, my kicks against keeper 70
+   after:  1:Kodai Sano(78) 2:Darko Nejasmic(73) 3:Ahmetcan Kaplan(73) 4:Sami Ouaissa(73) 5:Almugera Kabar(70) 6:Noé Lebreton(68) 7:*Their taker 1(67.7) 8:*Their taker 2(67.7) 9:*Their taker 3(67.7) 10:*Their taker 4(67.7) 11:Gonzalo Crettaz(70); my kicks against keeper 70
+3) ADO Den Haag (empty, 0 names: ; strength 67; met by Ajax)
+   before: 11 takers going round, my kicks against keeper 67
+   after:  1:*Their taker 1(67) 2:*Their taker 2(67) 3:*Their taker 3(67) 4:*Their taker 4(67) 5:*Their taker 5(67) 6:*Their taker 6(67) 7:*Their taker 7(67) 8:*Their taker 8(67) 9:*Their taker 9(67) 10:*Their taker 10(67) 11:*Their taker 11(67); my kicks against keeper 67
+3) Excelsior (thin, 1 names: LB 64; strength 59.4; met by Ajax)
+   before: 1 takers going round, my kicks against keeper null
+   after:  1:Arthur Zagré(64) 2:*Their taker 1(59.4) 3:*Their taker 2(59.4) 4:*Their taker 3(59.4) 5:*Their taker 4(59.4) 6:*Their taker 5(59.4) 7:*Their taker 6(59.4) 8:*Their taker 7(59.4) 9:*Their taker 8(59.4) 10:*Their taker 9(59.4) 11:*Their keeper(59.4); my kicks against keeper 59.4
+3) Sparta Rotterdam (thin, 7 names: CB 73, ST 72, GK 70, RW 68, RB 68, LW 68, RW 68; strength 68.1; met by Ajax)
+   before: 7 takers going round, my kicks against keeper 70
+   after:  1:Marvin Young(73) 2:Tobias Lauritsen(72) 3:*Their taker 1(68.1) 4:*Their taker 2(68.1) 5:*Their taker 3(68.1) 6:*Their taker 4(68.1) 7:Casper Terho(68) 8:Lushendry Martes(68) 9:Shunsuke Mito(68) 10:Mitchell van Bergen(68) 11:Joël Drommel(70); my kicks against keeper 70
+3) Moreirense (thin, 6 names: CAM 72, RB 72, CDM 71, RB 70, RB 68, LB 68; strength 66.5; met by Benfica)
+   before: 6 takers going round, my kicks against keeper null
+   after:  1:Alan(72) 2:Diogo Travassos(72) 3:Mateja Stjepanović(71) 4:Dinis Pinto(70) 5:Fabiano(68) 6:Kiko(68) 7:*Their taker 1(66.5) 8:*Their taker 2(66.5) 9:*Their taker 3(66.5) 10:*Their taker 4(66.5) 11:*Their keeper(66.5); my kicks against keeper 66.5
+3) Marítimo (empty, 0 names: ; strength 65; met by Benfica)
+   before: 11 takers going round, my kicks against keeper 65
+   after:  1:*Their taker 1(65) 2:*Their taker 2(65) 3:*Their taker 3(65) 4:*Their taker 4(65) 5:*Their taker 5(65) 6:*Their taker 6(65) 7:*Their taker 7(65) 8:*Their taker 8(65) 9:*Their taker 9(65) 10:*Their taker 10(65) 11:*Their taker 11(65); my kicks against keeper 65
+3) Académico de Viseu (empty, 0 names: ; strength 64; met by Benfica)
+   before: 11 takers going round, my kicks against keeper 64
+   after:  1:*Their taker 1(64) 2:*Their taker 2(64) 3:*Their taker 3(64) 4:*Their taker 4(64) 5:*Their taker 5(64) 6:*Their taker 6(64) 7:*Their taker 7(64) 8:*Their taker 8(64) 9:*Their taker 9(64) 10:*Their taker 10(64) 11:*Their taker 11(64); my kicks against keeper 64
+3) Estoril (thin, 8 names: LM 79, ST 76, CB 74, CDM 73, RW 73, CAM 72, RB 70, LB 68; strength 71.5; met by Benfica)
+   before: 8 takers going round, my kicks against keeper null
+   after:  1:Rodrigo Gomes(79) 2:Yanis Begraoui(76) 3:Kévin Boma(74) 4:Jordan Holsgrove(73) 5:Rafik Guitane(73) 6:João Carvalho(72) 7:*Their taker 1(71.5) 8:*Their taker 2(71.5) 9:Ricard Sánchez(70) 10:Roko Jurisic(68) 11:*Their keeper(71.5); my kicks against keeper 71.5
+3) Casa Pia (thin, 5 names: GK 72, RB 70, RW 70, LW 68, RM 64; strength 63; met by Benfica)
+   before: 5 takers going round, my kicks against keeper 72
+   after:  1:Gaizka Larrazabal(70) 2:Jérémy Livolant(70) 3:Tiago Morais(68) 4:Kevin Prieto(64) 5:*Their taker 1(63) 6:*Their taker 2(63) 7:*Their taker 3(63) 8:*Their taker 4(63) 9:*Their taker 5(63) 10:*Their taker 6(63) 11:Patrick Sequeira(72); my kicks against keeper 72
+3) Estrela Amadora (thin, 3 names: RW 68, CAM 68, LB 68; strength 60.2; met by Benfica)
+   before: 3 takers going round, my kicks against keeper null
+   after:  1:Billal Brahimi(68) 2:Lovro Zvonarek(68) 3:Nilton(68) 4:*Their taker 1(60.2) 5:*Their taker 2(60.2) 6:*Their taker 3(60.2) 7:*Their taker 4(60.2) 8:*Their taker 5(60.2) 9:*Their taker 6(60.2) 10:*Their taker 7(60.2) 11:*Their keeper(60.2); my kicks against keeper 60.2
+3) Braga (noeleven, 21 names: CAM 82, ST 78, RM 77, LW 77, CB 76, CDM 76, CB 76, CM 76, ST 76, LB 76, RB 76, CM 73, LW 73, CB 73, ST 73, CB 73, CM 73, ST 72, ST 72, CDM 71, CM 70; strength 74.9; met by Benfica)
+   before: 11 takers going round, my kicks against keeper null
+   after:  1:Rodrigo Zalazar(82) 2:Pau Víctor(78) 3:Mario Dorgeles(77) 4:Ricardo Horta(77) 5:Sikou Niakaté(76) 6:Demir Ege Tıknaz(76) 7:Bright Arrey-Mbi(76) 8:Gorby(76) 9:Jovan Milosevic(76) 10:Leonardo Lelo(76) 11:Víctor Gómez(76); my kicks against keeper null
+3) Vitória Guimarães (thin, 10 names: LW 73, CB 73, CM 70, LB 70, RW 70, RW 70, RB 68, LW 68, CAM 68, RB 68; strength 70.9; met by Benfica)
+   before: 10 takers going round, my kicks against keeper null
+   after:  1:Oumar Camara(73) 2:Toni Borevković(73) 3:Beni Mukendi(70) 4:João Mendes(70) 5:Telmo Arcanjo(70) 6:Gustavo Silva(70) 7:Maga(68) 8:Noah Saviolo(68) 9:Samu(68) 10:Tony Strata(68) 11:*Their keeper(70.9); my kicks against keeper 70.9
+3) Rio Ave (thin, 9 names: ST 76, RW 74, CB 72, GK 70, RB 70, RW 68, LB 68, LB 68, RW 68; strength 69.5; met by Benfica)
+   before: 9 takers going round, my kicks against keeper 70
+   after:  1:Clayton(76) 2:André Luiz(74) 3:Andreas Ntoi(72) 4:Marios Vrousai(70) 5:*Their taker 1(69.5) 6:*Their taker 2(69.5) 7:Diogo Bezerra(68) 8:Leonardo Buta(68) 9:Omar Richards(68) 10:Rafael Lobato(68) 11:Cezary Miszta(70); my kicks against keeper 70
+3) Santa Clara (thin, 6 names: CB 73, GK 72, LW 72, CDM 71, RW 70, RB 68; strength 64; met by Benfica)
+   before: 6 takers going round, my kicks against keeper 72
+   after:  1:MT(73) 2:Gabriel Silva(72) 3:Pedro Ferreira(71) 4:Vinícius Lopes(70) 5:Lucas Soares(68) 6:*Their taker 1(64) 7:*Their taker 2(64) 8:*Their taker 3(64) 9:*Their taker 4(64) 10:*Their taker 5(64) 11:Gabriel Batista(72); my kicks against keeper 72
+3) Gil Vicente (thin, 7 names: GK 76, CAM 72, CB 72, CAM 72, RB 68, GK 64, LB 64; strength 67.2; met by Benfica)
+   before: 7 takers going round, my kicks against keeper 76
+   after:  1:Luís Esteves(72) 2:Marvin Elimbi(72) 3:Santi García(72) 4:Zé Carlos(68) 5:*Their taker 1(67.2) 6:*Their taker 2(67.2) 7:*Their taker 3(67.2) 8:*Their taker 4(67.2) 9:Lucão(64) 10:Weverson(64) 11:Andrew(76); my kicks against keeper 76
+3) Alverca (thin, 5 names: LB 73, CB 72, CAM 72, CM 71, RM 64; strength 66.7; met by Benfica)
+   before: 5 takers going round, my kicks against keeper null
+   after:  1:Chissumba(73) 2:Bastien Meupiyou(72) 3:Lincoln(72) 4:Zé Rafael(71) 5:*Their taker 1(66.7) 6:*Their taker 2(66.7) 7:*Their taker 3(66.7) 8:*Their taker 4(66.7) 9:*Their taker 5(66.7) 10:Nabil Touaizi(64) 11:*Their keeper(66.7); my kicks against keeper 66.7
+3) Nacional (thin, 2 names: RW 70, GK 64; strength 59.3; met by Benfica)
+   before: 2 takers going round, my kicks against keeper 64
+   after:  1:Gabriel Veron(70) 2:*Their taker 1(59.3) 3:*Their taker 2(59.3) 4:*Their taker 3(59.3) 5:*Their taker 4(59.3) 6:*Their taker 5(59.3) 7:*Their taker 6(59.3) 8:*Their taker 7(59.3) 9:*Their taker 8(59.3) 10:*Their taker 9(59.3) 11:Kaique Pereira(64); my kicks against keeper 64
+3) Austin FC (thin, 10 names: RW 77, ST 74, LW 73, CM 72, CM 70, LW 70, LB 68, RB 68, LB 68, RB 68; strength 71.8; met by LA Galaxy)
+   before: 10 takers going round, my kicks against keeper null
+   after:  1:Facundo Torres(77) 2:Brandon Vazquez(74) 3:Myrto Uzuni(73) 4:Owen Wolff(72) 5:Daniel Pereira(70) 6:Jayden Nelson(70) 7:Guilherme Biro(68) 8:Jon Gallagher(68) 9:Joseph Rosales(68) 10:Mikkel Desler(68) 11:*Their keeper(71.8); my kicks against keeper 71.8
+3) LAFC (thin, 9 names: LW 80, LW 76, CF 71, CAM 70, LW 70, RB 70, CM 70, LB 68, GK 65; strength 70.1; met by LA Galaxy)
+   before: 9 takers going round, my kicks against keeper 65
+   after:  1:Heung-min Son(80) 2:Denis Bouanga(76) 3:Armindo Sieb(71) 4:*Their taker 1(70.1) 5:*Their taker 2(70.1) 6:Amin Boudri(70) 7:Jacob Shaffelburg(70) 8:Sergi Palencia(70) 9:Timothy Tillman(70) 10:Artem Smolyakov(68) 11:Hugo Lloris(65); my kicks against keeper 65
+3) Orlando City (thin, 10 names: CF 80, CAM 76, RW 75, CM 72, LW 72, CDM 71, LW 70, LB 68, RB 68, GK 68; strength 71.9; met by LA Galaxy)
+   before: 10 takers going round, my kicks against keeper 68
+   after:  1:Antoine Griezmann(80) 2:Martín Ojeda(76) 3:Marco Pašalić(75) 4:Eduard Atuesta(72) 5:Tiago(72) 6:*Their taker 1(71.9) 7:Braian Ojeda(71) 8:Iván Angulo(70) 9:Adrián Marín(68) 10:Griffin Dorsey(68) 11:Maxime Crépeau(68); my kicks against keeper 68
+3) San Diego FC (thin, 8 names: RW 79, LW 73, CAM 73, ST 73, LB 70, GK 64, RM 64, RM 64; strength 65.3; met by LA Galaxy)
+   before: 8 takers going round, my kicks against keeper 64
+   after:  1:Anders Dreyer(79) 2:Hirving Lozano(73) 3:Onni Valakari(73) 4:Marcus Ingvartsen(73) 5:Luca Bombino(70) 6:*Their taker 1(65.3) 7:*Their taker 2(65.3) 8:*Their taker 3(65.3) 9:David Vazquez(64) 10:Jasper Löffelsend(64) 11:CJ dos Santos(64); my kicks against keeper 64
+3) St. Louis City (thin, 9 names: ST 74, CM 73, CM 72, CDM 68, CDM 68, RM 68, RB 68, LM 64, GK 64; strength 69.2; met by LA Galaxy)
+   before: 9 takers going round, my kicks against keeper 64
+   after:  1:Damion Downs(74) 2:Marcel Hartel(73) 3:Eduard Löwen(72) 4:*Their taker 1(69.2) 5:*Their taker 2(69.2) 6:Chris Durkin(68) 7:Daniel Edelman(68) 8:Conrad Wallem(68) 9:Tomas Totland(68) 10:MyKhi Joyner(64) 11:Roman Bürki(64); my kicks against keeper 64
+3) D.C. United (thin, 6 names: ST 73, ST 73, LW 70, RB 68, CAM 68, RW 68; strength 65.5; met by LA Galaxy)
+   before: 6 takers going round, my kicks against keeper null
+   after:  1:Louis Munteanu(73) 2:Tai Baribo(73) 3:Jared Stroud(70) 4:Aarón Herrera(68) 5:Gabriel Pirani(68) 6:Fidel Barajas(68) 7:*Their taker 1(65.5) 8:*Their taker 2(65.5) 9:*Their taker 3(65.5) 10:*Their taker 4(65.5) 11:*Their keeper(65.5); my kicks against keeper 65.5
+3) Charlotte FC (thin, 10 names: LW 77, RW 74, CAM 74, ST 73, LW 72, RW 70, CM 70, LB 68, GK 68, LB 68; strength 71.4; met by LA Galaxy)
+   before: 10 takers going round, my kicks against keeper 68
+   after:  1:Allan Saint-Maximin(77) 2:Liel Abada(74) 3:Pep Biel(74) 4:Idan Toklomati(73) 5:Wilfried Zaha(72) 6:*Their taker 1(71.4) 7:Kerwin Vargas(70) 8:Luca de la Torre(70) 9:Harry Toffolo(68) 10:David Schnegg(68) 11:Kristijan Kahlina(68); my kicks against keeper 68
+3) CF Montréal (thin, 7 names: CAM 73, RW 70, CAM 70, RB 68, RB 68, GK 68, CF 68; strength 64.9; met by LA Galaxy)
+   before: 7 takers going round, my kicks against keeper 68
+   after:  1:Iván Jaime(73) 2:Gennadiy Synchuk(70) 3:Wikelman Carmona(70) 4:Bode Hidalgo(68) 5:Dagur Dan Thórhallsson(68) 6:Alexis Sánchez(68) 7:*Their taker 1(64.9) 8:*Their taker 2(64.9) 9:*Their taker 3(64.9) 10:*Their taker 4(64.9) 11:Thomas Gillier(68); my kicks against keeper 68
+3) Sporting Kansas City (thin, 4 names: ST 75, CAM 72, RW 70, RB 68; strength 64.1; met by LA Galaxy)
+   before: 4 takers going round, my kicks against keeper null
+   after:  1:Dejan Joveljić(75) 2:Manu García(72) 3:Shapi Suleymanov(70) 4:Jake Davis(68) 5:*Their taker 1(64.1) 6:*Their taker 2(64.1) 7:*Their taker 3(64.1) 8:*Their taker 4(64.1) 9:*Their taker 5(64.1) 10:*Their taker 6(64.1) 11:*Their keeper(64.1); my kicks against keeper 64.1
+3) Seattle Sounders (noeleven, 11 names: RB 72, CM 72, ST 72, LB 72, ST 71, CAM 70, CM 70, RW 70, LW 70, LW 70, RW 68; strength 70.6; met by LA Galaxy)
+   before: 11 takers going round, my kicks against keeper null
+   after:  1:Álex Roldán(72) 2:Cristian Roldán(72) 3:Jesús Ferreira(72) 4:Nouhou(72) 5:Jordan Morris(71) 6:Albert Rusnák(70) 7:Hassani Dotson(70) 8:Paul Arriola(70) 9:Paul Rothrock(70) 10:Ryan Kent(70) 11:Georgi Minoungou(68); my kicks against keeper null
+3) San Jose Earthquakes (thin, 5 names: ST 77, ST 75, CAM 73, LB 70, GK 68; strength 63.7; met by LA Galaxy)
+   before: 5 takers going round, my kicks against keeper 68
+   after:  1:Timo Werner(77) 2:Cristian Arango(75) 3:Hernán López Muñoz(73) 4:DeJuan Jones(70) 5:*Their taker 1(63.7) 6:*Their taker 2(63.7) 7:*Their taker 3(63.7) 8:*Their taker 4(63.7) 9:*Their taker 5(63.7) 10:*Their taker 6(63.7) 11:Angus Gunn(68); my kicks against keeper 68
+3) Atlanta United (noeleven, 11 names: ST 78, RW 77, CAM 76, CB 73, LW 72, CB 72, CM 71, LB 70, CM 70, RB 70, RM 64; strength 70.1; met by LA Galaxy)
+   before: 11 takers going round, my kicks against keeper null
+   after:  1:Breel Embolo(78) 2:Miguel Almirón(77) 3:Aleksey Miranchuk(76) 4:Júnior Alonso(73) 5:Saba Lobjanidze(72) 6:Tomás Jacob(72) 7:Steven Alzate(71) 8:Elías Báez(70) 9:Matías Galarza(70) 10:Brooks Lennon(70) 11:Luke Brennan(64); my kicks against keeper null
+3) Philadelphia Union (thin, 8 names: CAM 73, CM 73, ST 72, CDM 71, RW 70, RB 68, RB 68, LB 64; strength 65.2; met by LA Galaxy)
+   before: 8 takers going round, my kicks against keeper null
+   after:  1:Cavan Sullivan(73) 2:Quinn Sullivan(73) 3:Ezekiel Alladoh(72) 4:Danley Jean Jacques(71) 5:Indiana Vassilev(70) 6:Frankie Westfield(68) 7:Nathan Harriel(68) 8:*Their taker 1(65.2) 9:*Their taker 2(65.2) 10:Philippe Ndinga(64) 11:*Their keeper(65.2); my kicks against keeper 65.2
+3) New England Revolution (thin, 10 names: LW 76, ST 73, RW 72, CM 70, RB 70, GK 70, LB 70, CAM 68, RW 68, LM 64; strength 70.2; met by LA Galaxy)
+   before: 10 takers going round, my kicks against keeper 70
+   after:  1:Jack Harrison(76) 2:Dor Turgeman(73) 3:Luca Langoni(72) 4:*Their taker 1(70.2) 5:Alhassan Yusuf(70) 6:Ilay Feingold(70) 7:Peyton Miller(70) 8:Carles Gil(68) 9:Griffin Yow(68) 10:Emmanuel Boateng(64) 11:Matt Turner(70); my kicks against keeper 70
+3) FC Cincinnati (thin, 6 names: CAM 80, ST 79, CM 72, RW 70, GK 70, CDM 70; strength 66.4; met by LA Galaxy)
+   before: 6 takers going round, my kicks against keeper 70
+   after:  1:Evander(80) 2:Kévin Denkey(79) 3:Pavel Bucha(72) 4:Bryan Ramírez(70) 5:Obinna Nwobodo(70) 6:*Their taker 1(66.4) 7:*Their taker 2(66.4) 8:*Their taker 3(66.4) 9:*Their taker 4(66.4) 10:*Their taker 5(66.4) 11:Roman Celentano(70); my kicks against keeper 70
+3) Colorado Rapids (thin, 10 names: CAM 76, ST 73, RW 71, CDM 71, CDM 68, RW 68, LB 68, RB 68, GK 68, CAM 68; strength 68; met by LA Galaxy)
+   before: 10 takers going round, my kicks against keeper 68
+   after:  1:Paxten Aaronson(76) 2:Rafael Navarro(73) 3:Ibrahim Sadiq(71) 4:Hamzat Ojediran(71) 5:Josh Atencio(68) 6:Dante Sealy(68) 7:Miguel Navarro(68) 8:Reggie Cannon(68) 9:Theodore Ku-DiPietro(68) 10:*Their taker 1(68) 11:Zack Steffen(68); my kicks against keeper 68
+3) Real Salt Lake (thin, 4 names: LM 76, RW 73, LB 70, RW 68; strength 65.3; met by LA Galaxy)
+   before: 4 takers going round, my kicks against keeper null
+   after:  1:Diego Luna(76) 2:Morgan Guilavogui(73) 3:Lukas Engel(70) 4:Dominik Marczuk(68) 5:*Their taker 1(65.3) 6:*Their taker 2(65.3) 7:*Their taker 3(65.3) 8:*Their taker 4(65.3) 9:*Their taker 5(65.3) 10:*Their taker 6(65.3) 11:*Their keeper(65.3); my kicks against keeper 65.3
+3) Minnesota United (thin, 10 names: ST 74, CM 73, RW 71, LW 70, LB 68, CAM 68, CAM 68, RM 68, CAM 68, GK 64; strength 66.4; met by LA Galaxy)
+   before: 10 takers going round, my kicks against keeper 64
+   after:  1:Kelvin Yeboah(74) 2:Joaquín Pereyra(73) 3:Bongokuhle Hlongwane(71) 4:Tomás Chancalay(70) 5:Anthony Markanich Jr.(68) 6:Dominik Fitz(68) 7:James Rodríguez(68) 8:Julian Gressel(68) 9:AZ Jackson(68) 10:*Their taker 1(66.4) 11:Drake Callender(64); my kicks against keeper 64
+3) Toronto FC (thin, 8 names: CAM 75, CM 73, LW 73, CDM 71, LW 70, LB 70, RW 68, RM 64; strength 67.6; met by LA Galaxy)
+   before: 8 takers going round, my kicks against keeper null
+   after:  1:Djordje Mihailovic(75) 2:José Cifuentes(73) 3:Lewis Morgan(73) 4:Niklas Dorsch(71) 5:Dániel Sallói(70) 6:Matheus Pereira(70) 7:Theo Corbeanu(68) 8:*Their taker 1(67.6) 9:*Their taker 2(67.6) 10:Malik Henry(64) 11:*Their keeper(67.6); my kicks against keeper 67.6
+   thin sides met: 55; their 320 real names: 205 kick inside the first five, 115 kick sixth or later
+
+census: all checks passed

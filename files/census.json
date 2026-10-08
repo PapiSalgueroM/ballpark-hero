@@ -1,0 +1,1245 @@
+{
+ "tally": {
+  "empty": 42,
+  "thin": 202,
+  "noeleven": 17,
+  "full": 177
+ },
+ "drawTally": {
+  "empty": 21,
+  "thin": 98,
+  "noeleven": 11,
+  "full": 310,
+  "none": 0
+ },
+ "rows": [
+  {
+   "opp": "Eibar",
+   "cls": "thin",
+   "from": "Real Madrid",
+   "size": 2,
+   "oppS": 62.1,
+   "keeperBefore": 64,
+   "keeperAfter": 64,
+   "takersBefore": 2,
+   "realAt": [
+    1,
+    11
+   ]
+  },
+  {
+   "opp": "Málaga",
+   "cls": "thin",
+   "from": "Real Madrid",
+   "size": 5,
+   "oppS": 65.1,
+   "keeperBefore": null,
+   "keeperAfter": 65.1,
+   "takersBefore": 5,
+   "realAt": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "opp": "Valladolid",
+   "cls": "thin",
+   "from": "Real Madrid",
+   "size": 2,
+   "oppS": 59.1,
+   "keeperBefore": null,
+   "keeperAfter": 59.1,
+   "takersBefore": 2,
+   "realAt": [
+    1,
+    2
+   ]
+  },
+  {
+   "opp": "Eldense",
+   "cls": "empty",
+   "from": "Real Madrid",
+   "size": 0,
+   "oppS": 63,
+   "keeperBefore": 63,
+   "keeperAfter": 63,
+   "takersBefore": 11,
+   "realAt": []
+  },
+  {
+   "opp": "Sporting Gijón",
+   "cls": "thin",
+   "from": "Real Madrid",
+   "size": 4,
+   "oppS": 63.7,
+   "keeperBefore": 64,
+   "keeperAfter": 64,
+   "takersBefore": 4,
+   "realAt": [
+    1,
+    2,
+    3,
+    11
+   ]
+  },
+  {
+   "opp": "Girona",
+   "cls": "thin",
+   "from": "Real Madrid",
+   "size": 10,
+   "oppS": 73.2,
+   "keeperBefore": 68,
+   "keeperAfter": 68,
+   "takersBefore": 10,
+   "realAt": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+   ]
+  },
+  {
+   "opp": "Las Palmas",
+   "cls": "thin",
+   "from": "Real Madrid",
+   "size": 5,
+   "oppS": 66,
+   "keeperBefore": null,
+   "keeperAfter": 66,
+   "takersBefore": 5,
+   "realAt": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "opp": "Racing Santander",
+   "cls": "noeleven",
+   "from": "Real Madrid",
+   "size": 12,
+   "oppS": 73.9,
+   "keeperBefore": 79,
+   "keeperAfter": 79,
+   "takersBefore": 11,
+   "realAt": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+   ]
+  },
+  {
+   "opp": "FC Andorra",
+   "cls": "empty",
+   "from": "Real Madrid",
+   "size": 0,
+   "oppS": 61,
+   "keeperBefore": 61,
+   "keeperAfter": 61,
+   "takersBefore": 11,
+   "realAt": []
+  },
+  {
+   "opp": "Ceuta",
+   "cls": "empty",
+   "from": "Real Madrid",
+   "size": 0,
+   "oppS": 62,
+   "keeperBefore": 62,
+   "keeperAfter": 62,
+   "takersBefore": 11,
+   "realAt": []
+  },
+  {
+   "opp": "Castellón",
+   "cls": "thin",
+   "from": "Barcelona",
+   "size": 2,
+   "oppS": 63.5,
+   "keeperBefore": 64,
+   "keeperAfter": 64,
+   "takersBefore": 2,
+   "realAt": [
+    1,
+    11
+   ]
+  },
+  {
+   "opp": "Burgos",
+   "cls": "thin",
+   "from": "Barcelona",
+   "size": 1,
+   "oppS": 59.7,
+   "keeperBefore": null,
+   "keeperAfter": 59.7,
+   "takersBefore": 1,
+   "realAt": [
+    1
+   ]
+  },
+  {
+   "opp": "Espanyol",
+   "cls": "noeleven",
+   "from": "Getafe",
+   "size": 14,
+   "oppS": 76.3,
+   "keeperBefore": null,
+   "keeperAfter": null,
+   "takersBefore": 11,
+   "realAt": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+   ]
+  },
+  {
+   "opp": "Granada",
+   "cls": "empty",
+   "from": "Getafe",
+   "size": 0,
+   "oppS": 61,
+   "keeperBefore": 61,
+   "keeperAfter": 61,
+   "takersBefore": 11,
+   "realAt": []
+  },
+  {
+   "opp": "Albacete",
+   "cls": "thin",
+   "from": "Getafe",
+   "size": 1,
+   "oppS": 60.7,
+   "keeperBefore": null,
+   "keeperAfter": 60.7,
+   "takersBefore": 1,
+   "realAt": [
+    1
+   ]
+  },
+  {
+   "opp": "Mallorca",
+   "cls": "thin",
+   "from": "Getafe",
+   "size": 8,
+   "oppS": 68,
+   "keeperBefore": 68,
+   "keeperAfter": 68,
+   "takersBefore": 8,
+   "realAt": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    11
+   ]
+  },
+  {
+   "opp": "Preston North End",
+   "cls": "thin",
+   "from": "Arsenal",
+   "size": 10,
+   "oppS": 68.6,
+   "keeperBefore": 70,
+   "keeperAfter": 70,
+   "takersBefore": 10,
+   "realAt": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    8,
+    9,
+    10,
+    11
+   ]
+  },
+  {
+   "opp": "Portsmouth",
+   "cls": "thin",
+   "from": "Arsenal",
+   "size": 6,
+   "oppS": 62.8,
+   "keeperBefore": 68,
+   "keeperAfter": 68,
+   "takersBefore": 6,
+   "realAt": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    11
+   ]
+  },
+  {
+   "opp": "Elversberg",
+   "cls": "thin",
+   "from": "Bayern Munich",
+   "size": 10,
+   "oppS": 67,
+   "keeperBefore": 68,
+   "keeperAfter": 68,
+   "takersBefore": 10,
+   "realAt": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    9,
+    10,
+    11
+   ]
+  },
+  {
+   "opp": "Schalke 04",
+   "cls": "noeleven",
+   "from": "Bayern Munich",
+   "size": 16,
+   "oppS": 72.2,
+   "keeperBefore": null,
+   "keeperAfter": null,
+   "takersBefore": 11,
+   "realAt": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+   ]
+  },
+  {
+   "opp": "Energie Cottbus",
+   "cls": "empty",
+   "from": "Bayern Munich",
+   "size": 0,
+   "oppS": 63,
+   "keeperBefore": 63,
+   "keeperAfter": 63,
+   "takersBefore": 11,
+   "realAt": []
+  },
+  {
+   "opp": "Bochum",
+   "cls": "thin",
+   "from": "Bayern Munich",
+   "size": 4,
+   "oppS": 61.1,
+   "keeperBefore": null,
+   "keeperAfter": 61.1,
+   "takersBefore": 4,
+   "realAt": [
+    1,
+    2,
+    3,
+    4
+   ]
+  },
+  {
+   "opp": "Kaiserslautern",
+   "cls": "thin",
+   "from": "Bayern Munich",
+   "size": 7,
+   "oppS": 64.1,
+   "keeperBefore": 64,
+   "keeperAfter": 64,
+   "takersBefore": 7,
+   "realAt": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    10,
+    11
+   ]
+  },
+  {
+   "opp": "Ascoli",
+   "cls": "thin",
+   "from": "Juventus",
+   "size": 1,
+   "oppS": 60.4,
+   "keeperBefore": null,
+   "keeperAfter": 60.4,
+   "takersBefore": 1,
+   "realAt": [
+    1
+   ]
+  },
+  {
+   "opp": "Juve Stabia",
+   "cls": "empty",
+   "from": "Juventus",
+   "size": 0,
+   "oppS": 63,
+   "keeperBefore": 63,
+   "keeperAfter": 63,
+   "takersBefore": 11,
+   "realAt": []
+  },
+  {
+   "opp": "Catanzaro",
+   "cls": "thin",
+   "from": "Juventus",
+   "size": 3,
+   "oppS": 64.3,
+   "keeperBefore": null,
+   "keeperAfter": 64.3,
+   "takersBefore": 3,
+   "realAt": [
+    1,
+    2,
+    10
+   ]
+  },
+  {
+   "opp": "Avellino",
+   "cls": "thin",
+   "from": "Juventus",
+   "size": 2,
+   "oppS": 61.9,
+   "keeperBefore": null,
+   "keeperAfter": 61.9,
+   "takersBefore": 2,
+   "realAt": [
+    1,
+    2
+   ]
+  },
+  {
+   "opp": "Südtirol",
+   "cls": "thin",
+   "from": "Juventus",
+   "size": 4,
+   "oppS": 63,
+   "keeperBefore": 64,
+   "keeperAfter": 64,
+   "takersBefore": 4,
+   "realAt": [
+    1,
+    2,
+    3,
+    11
+   ]
+  },
+  {
+   "opp": "Mantova",
+   "cls": "thin",
+   "from": "Juventus",
+   "size": 2,
+   "oppS": 63.9,
+   "keeperBefore": null,
+   "keeperAfter": 63.9,
+   "takersBefore": 2,
+   "realAt": [
+    1,
+    2
+   ]
+  },
+  {
+   "opp": "Fortuna Sittard",
+   "cls": "thin",
+   "from": "Ajax",
+   "size": 3,
+   "oppS": 61,
+   "keeperBefore": null,
+   "keeperAfter": 61,
+   "takersBefore": 3,
+   "realAt": [
+    1,
+    2,
+    3
+   ]
+  },
+  {
+   "opp": "Telstar",
+   "cls": "thin",
+   "from": "Ajax",
+   "size": 5,
+   "oppS": 60.8,
+   "keeperBefore": null,
+   "keeperAfter": 60.8,
+   "takersBefore": 5,
+   "realAt": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "opp": "PEC Zwolle",
+   "cls": "thin",
+   "from": "Ajax",
+   "size": 7,
+   "oppS": 64.2,
+   "keeperBefore": 68,
+   "keeperAfter": 68,
+   "takersBefore": 7,
+   "realAt": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    10,
+    11
+   ]
+  },
+  {
+   "opp": "Go Ahead Eagles",
+   "cls": "thin",
+   "from": "Ajax",
+   "size": 5,
+   "oppS": 63.5,
+   "keeperBefore": 70,
+   "keeperAfter": 70,
+   "takersBefore": 5,
+   "realAt": [
+    1,
+    2,
+    3,
+    4,
+    11
+   ]
+  },
+  {
+   "opp": "Cambuur",
+   "cls": "empty",
+   "from": "Ajax",
+   "size": 0,
+   "oppS": 67,
+   "keeperBefore": 67,
+   "keeperAfter": 67,
+   "takersBefore": 11,
+   "realAt": []
+  },
+  {
+   "opp": "Willem II",
+   "cls": "thin",
+   "from": "Ajax",
+   "size": 1,
+   "oppS": 60.9,
+   "keeperBefore": null,
+   "keeperAfter": 60.9,
+   "takersBefore": 1,
+   "realAt": [
+    1
+   ]
+  },
+  {
+   "opp": "NEC Nijmegen",
+   "cls": "thin",
+   "from": "Ajax",
+   "size": 7,
+   "oppS": 67.7,
+   "keeperBefore": 70,
+   "keeperAfter": 70,
+   "takersBefore": 7,
+   "realAt": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    11
+   ]
+  },
+  {
+   "opp": "ADO Den Haag",
+   "cls": "empty",
+   "from": "Ajax",
+   "size": 0,
+   "oppS": 67,
+   "keeperBefore": 67,
+   "keeperAfter": 67,
+   "takersBefore": 11,
+   "realAt": []
+  },
+  {
+   "opp": "Excelsior",
+   "cls": "thin",
+   "from": "Ajax",
+   "size": 1,
+   "oppS": 59.4,
+   "keeperBefore": null,
+   "keeperAfter": 59.4,
+   "takersBefore": 1,
+   "realAt": [
+    1
+   ]
+  },
+  {
+   "opp": "Sparta Rotterdam",
+   "cls": "thin",
+   "from": "Ajax",
+   "size": 7,
+   "oppS": 68.1,
+   "keeperBefore": 70,
+   "keeperAfter": 70,
+   "takersBefore": 7,
+   "realAt": [
+    1,
+    2,
+    7,
+    8,
+    9,
+    10,
+    11
+   ]
+  },
+  {
+   "opp": "Moreirense",
+   "cls": "thin",
+   "from": "Benfica",
+   "size": 6,
+   "oppS": 66.5,
+   "keeperBefore": null,
+   "keeperAfter": 66.5,
+   "takersBefore": 6,
+   "realAt": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ]
+  },
+  {
+   "opp": "Marítimo",
+   "cls": "empty",
+   "from": "Benfica",
+   "size": 0,
+   "oppS": 65,
+   "keeperBefore": 65,
+   "keeperAfter": 65,
+   "takersBefore": 11,
+   "realAt": []
+  },
+  {
+   "opp": "Académico de Viseu",
+   "cls": "empty",
+   "from": "Benfica",
+   "size": 0,
+   "oppS": 64,
+   "keeperBefore": 64,
+   "keeperAfter": 64,
+   "takersBefore": 11,
+   "realAt": []
+  },
+  {
+   "opp": "Estoril",
+   "cls": "thin",
+   "from": "Benfica",
+   "size": 8,
+   "oppS": 71.5,
+   "keeperBefore": null,
+   "keeperAfter": 71.5,
+   "takersBefore": 8,
+   "realAt": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    9,
+    10
+   ]
+  },
+  {
+   "opp": "Casa Pia",
+   "cls": "thin",
+   "from": "Benfica",
+   "size": 5,
+   "oppS": 63,
+   "keeperBefore": 72,
+   "keeperAfter": 72,
+   "takersBefore": 5,
+   "realAt": [
+    1,
+    2,
+    3,
+    4,
+    11
+   ]
+  },
+  {
+   "opp": "Estrela Amadora",
+   "cls": "thin",
+   "from": "Benfica",
+   "size": 3,
+   "oppS": 60.2,
+   "keeperBefore": null,
+   "keeperAfter": 60.2,
+   "takersBefore": 3,
+   "realAt": [
+    1,
+    2,
+    3
+   ]
+  },
+  {
+   "opp": "Braga",
+   "cls": "noeleven",
+   "from": "Benfica",
+   "size": 21,
+   "oppS": 74.9,
+   "keeperBefore": null,
+   "keeperAfter": null,
+   "takersBefore": 11,
+   "realAt": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+   ]
+  },
+  {
+   "opp": "Vitória Guimarães",
+   "cls": "thin",
+   "from": "Benfica",
+   "size": 10,
+   "oppS": 70.9,
+   "keeperBefore": null,
+   "keeperAfter": 70.9,
+   "takersBefore": 10,
+   "realAt": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ]
+  },
+  {
+   "opp": "Rio Ave",
+   "cls": "thin",
+   "from": "Benfica",
+   "size": 9,
+   "oppS": 69.5,
+   "keeperBefore": 70,
+   "keeperAfter": 70,
+   "takersBefore": 9,
+   "realAt": [
+    1,
+    2,
+    3,
+    4,
+    7,
+    8,
+    9,
+    10,
+    11
+   ]
+  },
+  {
+   "opp": "Santa Clara",
+   "cls": "thin",
+   "from": "Benfica",
+   "size": 6,
+   "oppS": 64,
+   "keeperBefore": 72,
+   "keeperAfter": 72,
+   "takersBefore": 6,
+   "realAt": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    11
+   ]
+  },
+  {
+   "opp": "Gil Vicente",
+   "cls": "thin",
+   "from": "Benfica",
+   "size": 7,
+   "oppS": 67.2,
+   "keeperBefore": 76,
+   "keeperAfter": 76,
+   "takersBefore": 7,
+   "realAt": [
+    1,
+    2,
+    3,
+    4,
+    9,
+    10,
+    11
+   ]
+  },
+  {
+   "opp": "Alverca",
+   "cls": "thin",
+   "from": "Benfica",
+   "size": 5,
+   "oppS": 66.7,
+   "keeperBefore": null,
+   "keeperAfter": 66.7,
+   "takersBefore": 5,
+   "realAt": [
+    1,
+    2,
+    3,
+    4,
+    10
+   ]
+  },
+  {
+   "opp": "Nacional",
+   "cls": "thin",
+   "from": "Benfica",
+   "size": 2,
+   "oppS": 59.3,
+   "keeperBefore": 64,
+   "keeperAfter": 64,
+   "takersBefore": 2,
+   "realAt": [
+    1,
+    11
+   ]
+  },
+  {
+   "opp": "Austin FC",
+   "cls": "thin",
+   "from": "LA Galaxy",
+   "size": 10,
+   "oppS": 71.8,
+   "keeperBefore": null,
+   "keeperAfter": 71.8,
+   "takersBefore": 10,
+   "realAt": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ]
+  },
+  {
+   "opp": "LAFC",
+   "cls": "thin",
+   "from": "LA Galaxy",
+   "size": 9,
+   "oppS": 70.1,
+   "keeperBefore": 65,
+   "keeperAfter": 65,
+   "takersBefore": 9,
+   "realAt": [
+    1,
+    2,
+    3,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+   ]
+  },
+  {
+   "opp": "Orlando City",
+   "cls": "thin",
+   "from": "LA Galaxy",
+   "size": 10,
+   "oppS": 71.9,
+   "keeperBefore": 68,
+   "keeperAfter": 68,
+   "takersBefore": 10,
+   "realAt": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    7,
+    8,
+    9,
+    10,
+    11
+   ]
+  },
+  {
+   "opp": "San Diego FC",
+   "cls": "thin",
+   "from": "LA Galaxy",
+   "size": 8,
+   "oppS": 65.3,
+   "keeperBefore": 64,
+   "keeperAfter": 64,
+   "takersBefore": 8,
+   "realAt": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    9,
+    10,
+    11
+   ]
+  },
+  {
+   "opp": "St. Louis City",
+   "cls": "thin",
+   "from": "LA Galaxy",
+   "size": 9,
+   "oppS": 69.2,
+   "keeperBefore": 64,
+   "keeperAfter": 64,
+   "takersBefore": 9,
+   "realAt": [
+    1,
+    2,
+    3,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+   ]
+  },
+  {
+   "opp": "D.C. United",
+   "cls": "thin",
+   "from": "LA Galaxy",
+   "size": 6,
+   "oppS": 65.5,
+   "keeperBefore": null,
+   "keeperAfter": 65.5,
+   "takersBefore": 6,
+   "realAt": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ]
+  },
+  {
+   "opp": "Charlotte FC",
+   "cls": "thin",
+   "from": "LA Galaxy",
+   "size": 10,
+   "oppS": 71.4,
+   "keeperBefore": 68,
+   "keeperAfter": 68,
+   "takersBefore": 10,
+   "realAt": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    7,
+    8,
+    9,
+    10,
+    11
+   ]
+  },
+  {
+   "opp": "CF Montréal",
+   "cls": "thin",
+   "from": "LA Galaxy",
+   "size": 7,
+   "oppS": 64.9,
+   "keeperBefore": 68,
+   "keeperAfter": 68,
+   "takersBefore": 7,
+   "realAt": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    11
+   ]
+  },
+  {
+   "opp": "Sporting Kansas City",
+   "cls": "thin",
+   "from": "LA Galaxy",
+   "size": 4,
+   "oppS": 64.1,
+   "keeperBefore": null,
+   "keeperAfter": 64.1,
+   "takersBefore": 4,
+   "realAt": [
+    1,
+    2,
+    3,
+    4
+   ]
+  },
+  {
+   "opp": "Seattle Sounders",
+   "cls": "noeleven",
+   "from": "LA Galaxy",
+   "size": 11,
+   "oppS": 70.6,
+   "keeperBefore": null,
+   "keeperAfter": null,
+   "takersBefore": 11,
+   "realAt": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+   ]
+  },
+  {
+   "opp": "San Jose Earthquakes",
+   "cls": "thin",
+   "from": "LA Galaxy",
+   "size": 5,
+   "oppS": 63.7,
+   "keeperBefore": 68,
+   "keeperAfter": 68,
+   "takersBefore": 5,
+   "realAt": [
+    1,
+    2,
+    3,
+    4,
+    11
+   ]
+  },
+  {
+   "opp": "Atlanta United",
+   "cls": "noeleven",
+   "from": "LA Galaxy",
+   "size": 11,
+   "oppS": 70.1,
+   "keeperBefore": null,
+   "keeperAfter": null,
+   "takersBefore": 11,
+   "realAt": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+   ]
+  },
+  {
+   "opp": "Philadelphia Union",
+   "cls": "thin",
+   "from": "LA Galaxy",
+   "size": 8,
+   "oppS": 65.2,
+   "keeperBefore": null,
+   "keeperAfter": 65.2,
+   "takersBefore": 8,
+   "realAt": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    10
+   ]
+  },
+  {
+   "opp": "New England Revolution",
+   "cls": "thin",
+   "from": "LA Galaxy",
+   "size": 10,
+   "oppS": 70.2,
+   "keeperBefore": 70,
+   "keeperAfter": 70,
+   "takersBefore": 10,
+   "realAt": [
+    1,
+    2,
+    3,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+   ]
+  },
+  {
+   "opp": "FC Cincinnati",
+   "cls": "thin",
+   "from": "LA Galaxy",
+   "size": 6,
+   "oppS": 66.4,
+   "keeperBefore": 70,
+   "keeperAfter": 70,
+   "takersBefore": 6,
+   "realAt": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    11
+   ]
+  },
+  {
+   "opp": "Colorado Rapids",
+   "cls": "thin",
+   "from": "LA Galaxy",
+   "size": 10,
+   "oppS": 68,
+   "keeperBefore": 68,
+   "keeperAfter": 68,
+   "takersBefore": 10,
+   "realAt": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    11
+   ]
+  },
+  {
+   "opp": "Real Salt Lake",
+   "cls": "thin",
+   "from": "LA Galaxy",
+   "size": 4,
+   "oppS": 65.3,
+   "keeperBefore": null,
+   "keeperAfter": 65.3,
+   "takersBefore": 4,
+   "realAt": [
+    1,
+    2,
+    3,
+    4
+   ]
+  },
+  {
+   "opp": "Minnesota United",
+   "cls": "thin",
+   "from": "LA Galaxy",
+   "size": 10,
+   "oppS": 66.4,
+   "keeperBefore": 64,
+   "keeperAfter": 64,
+   "takersBefore": 10,
+   "realAt": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    11
+   ]
+  },
+  {
+   "opp": "Toronto FC",
+   "cls": "thin",
+   "from": "LA Galaxy",
+   "size": 8,
+   "oppS": 67.6,
+   "keeperBefore": null,
+   "keeperAfter": 67.6,
+   "takersBefore": 8,
+   "realAt": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    10
+   ]
+  }
+ ]
+}

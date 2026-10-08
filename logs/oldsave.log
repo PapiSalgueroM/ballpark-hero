@@ -1,0 +1,11 @@
+oldsave: saves written by origin/main c623e77d, loaded by HEAD; key dukb-club-manager-save
+  FAIL: Valencia, order false: only 3 old saves could be made
+Valencia (full, 22 names), order unset: 3 old saves (interval, interval, interval); 252 of 252 settled, 102 on penalties, 252 equal to main in full, live left on the save in 0
+  FAIL: Valencia, order true: only 3 old saves could be made
+Valencia (full, 22 names), order set: 3 old saves (interval, interval, interval); 252 of 252 settled, 102 on penalties (102 with kicks, 102 with nobody of theirs twice in eleven), 252 equal to main in full, live left on the save in 0
+  FAIL: Eibar, order false: only 3 old saves could be made
+Eibar (thin, 2 names), order unset: 3 old saves (interval, interval, interval); 252 of 252 settled, 67 on penalties, 252 equal to main in full, live left on the save in 0
+  FAIL: Eibar, order true: only 3 old saves could be made
+Eibar (thin, 2 names), order set: 3 old saves (interval, interval, interval); 252 of 252 settled, 67 on penalties (67 with kicks, 67 with nobody of theirs twice in eleven), 185 equal to main in full, live left on the save in 0
+
+oldsave: 4 FAILURE(S)

@@ -1,0 +1,16 @@
+census exit=0 4s | census: all checks passed
+digests exit=1 8s | digests: 42 FAILURE(S)
+mut-none exit=0 21s | MUTANT none: harness exit 0, 0 FAIL lines, by section {}, 20s
+oldsave exit=1 50s | oldsave: 4 FAILURE(S)
+mut-nokeeper exit=1 21s | MUTANT nokeeper: harness exit 1, 2 FAIL lines, by section {"7":2}, 21s
+mut-unmarked exit=1 22s | MUTANT unmarked: harness exit 1, 33 FAIL lines, by section {"7":33}, 22s
+mut-flatrating exit=1 21s | MUTANT flatrating: harness exit 1, 2 FAIL lines, by section {"7":2}, 22s
+mut-tenonly exit=1 12s | MUTANT tenonly: harness exit 1, 5 FAIL lines, by section {"7":5}, 13s
+mut-samename exit=1 19s | MUTANT samename: harness exit 1, 29 FAIL lines, by section {"7":29}, 19s
+mut-noslice exit=1 22s | MUTANT noslice: harness exit 1, 1 FAIL lines, by section {"7":1}, 22s
+mut-emptymade exit=1 19s | MUTANT emptymade: harness exit 1, 1 FAIL lines, by section {"7":1}, 19s
+mut-nosort exit=1 22s | MUTANT nosort: harness exit 1, 1 FAIL lines, by section {"7":1}, 22s
+mut-keeperrating exit=1 22s | MUTANT keeperrating: harness exit 1, 2 FAIL lines, by section {"7":2}, 22s
+parity exit=1 144s | parity: 1 FAILURE(S)
+mut-keeperonfull exit=0 19s | MUTANT keeperonfull: harness exit 0, 0 FAIL lines, by section {}, 19s
+mut-wrongstrength exit=0 16s | MUTANT wrongstrength: harness exit 0, 0 FAIL lines, by section {}, 16s

@@ -1,0 +1,21 @@
+   loaded old save, seed 782113 (one of 9 rows main settles on penalties, decided pens): equal actual pre-1072 main true; ancient golden matches candidate false, baseline false
+   order of 4 kept through save and load, a stranger refused, a loan signing listed, an empty list takes the field off
+6) The keeper facing each kick, and the other side's order
+   keeper 95 behind me and 55 behind them: won 71.7%, my kicks in 85.8%, theirs 74.1%
+   the same two keepers swapped: won 27.6%, my kicks in 73.7%, theirs 86.0%
+   4000 shootouts an arm: win share gap 44.2 points, my kicks minus theirs with the strong man behind me 11.7 points (the edges allow 2 x 6 = 12)
+   shootoutSides: my keeper off the slot (50, then 51 with an outfielder in goal), their keeper (66), their ten best first then the keeper, a blank side and a keeperless side: 0 wrong
+7) A thin side is made up to eleven: nobody of theirs kicks twice before the eleventh
+file:///home/runner/work/ballpark-hero/ballpark-hero/.rc/x/mut-tenonly-2888/simCmShootoutOrder.mutant.mjs:996
+  check(fiveSides.keeperRating === S && fiveSides.takers[10].gen === true && fiveSides.takers[0].name === 'A',
+                                                             ^
+TypeError: Cannot read properties of undefined (reading 'gen')
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/.rc/x/mut-tenonly-2888/simCmShootoutOrder.mutant.mjs:996:62
+Node.js v24.21.0
+--- first failures ---
+[section 7] FAIL: two names became 10 men (10 different), not eleven different men
+[section 7] FAIL: two names got 8 generated men, not nine outfield takers at 70
+[section 7] FAIL: the two name side kicks 10 with undefined last against keeper 64, not eleven with its own keeper (64) last
+[section 7] FAIL: 8 of the two name side's takers carry the generated mark, not nine
+[section 7] FAIL: five names and no keeper did not become eleven with one generated keeper at the club strength
+MUTANT tenonly: harness exit 1, 5 FAIL lines, by section {"7":5}, 13s

@@ -1,0 +1,67 @@
+  FAIL: Hot Seat 2026-10-01: HEAD deals FC Nordsjælland survived 7/7 (5be810fd20a9fbf5), main FC Nordsjælland survived 7/7 (df69448a0e98b0fc)
+  FAIL: Deadline Day 2026-10-01: HEAD deals Bayern Munich df7aeede89b02624, main Bayern Munich df7aeede89b02624
+2026-10-01 | Hot Seat FC Nordsjælland, 4 matches, survived 7/7, run 5be810fd20a9fbf5 | Deadline Day Bayern Munich opened df7aeede89b02624 state 00069aafda7fee4d
+  FAIL: Hot Seat 2026-10-02: HEAD deals Lausanne-Sport survived 7/7 (24487fda0867e9b2), main Lausanne-Sport survived 7/7 (af68fe9298f64547)
+  FAIL: Deadline Day 2026-10-02: HEAD deals Bayer Leverkusen 169318804bac8940, main Bayer Leverkusen 169318804bac8940
+2026-10-02 | Hot Seat Lausanne-Sport, 5 matches, survived 7/7, run 24487fda0867e9b2 | Deadline Day Bayer Leverkusen opened 169318804bac8940 state f0717b2b7f66e44d
+  FAIL: Hot Seat 2026-10-03: HEAD deals Inter Miami sacked 6/8 (372441681f8921b5), main Inter Miami sacked 6/8 (1292c98f6b924f54)
+  FAIL: Deadline Day 2026-10-03: HEAD deals Everton f5fbbd2e344e9740, main Everton f5fbbd2e344e9740
+2026-10-03 | Hot Seat Inter Miami, 5 matches, sacked 6/8, run 372441681f8921b5 | Deadline Day Everton opened f5fbbd2e344e9740 state 5efac96b1a652f4a
+  FAIL: Hot Seat 2026-10-04: HEAD deals Hull City sacked 1/3 (061a29e63842e4dd), main Hull City sacked 1/3 (651b9a239d32a417)
+  FAIL: Deadline Day 2026-10-04: HEAD deals Orlando City ad50fa70160b2664, main Orlando City ad50fa70160b2664
+2026-10-04 | Hot Seat Hull City, 5 matches, sacked 1/3, run 061a29e63842e4dd | Deadline Day Orlando City opened ad50fa70160b2664 state eb99b3dd3446f5ce
+  FAIL: Hot Seat 2026-10-05: HEAD deals Bristol City survived 7/6 (dad5e3b090a77e02), main Bristol City survived 7/6 (d6e61833bf2723f3)
+  FAIL: Deadline Day 2026-10-05: HEAD deals Porto eb2039cdde1a6991, main Porto eb2039cdde1a6991
+2026-10-05 | Hot Seat Bristol City, 5 matches, survived 7/6, run dad5e3b090a77e02 | Deadline Day Porto opened eb2039cdde1a6991 state 7c804af9c25351d3
+  FAIL: Hot Seat 2026-10-06: HEAD deals Heerenveen survived 6/5 (ed0b702255ec149b), main Heerenveen survived 6/5 (0d4ac177c5739a43)
+  FAIL: Deadline Day 2026-10-06: HEAD deals Tottenham dd4dbdb7ddbbb6db, main Tottenham dd4dbdb7ddbbb6db
+2026-10-06 | Hot Seat Heerenveen, 4 matches, survived 6/5, run ed0b702255ec149b | Deadline Day Tottenham opened dd4dbdb7ddbbb6db state 0685e097e1ac4015
+  FAIL: Hot Seat 2026-10-07: HEAD deals Gladbach survived 3/3 (c9c81fd47f4b4acb), main Gladbach survived 3/3 (57595d16f02b1815)
+  FAIL: Deadline Day 2026-10-07: HEAD deals Bahia 7f5b648a9a2bdf2e, main Bahia 7f5b648a9a2bdf2e
+2026-10-07 | Hot Seat Gladbach, 2 matches, survived 3/3, run c9c81fd47f4b4acb | Deadline Day Bahia opened 7f5b648a9a2bdf2e state f42c5e77f86edb4b
+  FAIL: Hot Seat 2026-10-08: HEAD deals Portland Timbers sacked 4/5 (6e88acf5bf9fec92), main Portland Timbers sacked 4/5 (37fa886ca07a8dc8)
+  FAIL: Deadline Day 2026-10-08: HEAD deals Sheffield United 7fcc751f915660ae, main Sheffield United 7fcc751f915660ae
+2026-10-08 | Hot Seat Portland Timbers, 5 matches, sacked 4/5, run 6e88acf5bf9fec92 | Deadline Day Sheffield United opened 7fcc751f915660ae state ba1feff71ba11b89
+  FAIL: Hot Seat 2026-10-09: HEAD deals Newcastle survived 6/5 (b5e368bed6c124df), main Newcastle survived 6/5 (19090206e463ae24)
+  FAIL: Deadline Day 2026-10-09: HEAD deals Heerenveen 7672cff86a47a5fc, main Heerenveen 7672cff86a47a5fc
+2026-10-09 | Hot Seat Newcastle, 3 matches, survived 6/5, run b5e368bed6c124df | Deadline Day Heerenveen opened 7672cff86a47a5fc state 790dace59716f2e8
+  FAIL: Hot Seat 2026-10-10: HEAD deals Athletic Club survived 9/8 (c254035ca4e1ed5a), main Athletic Club survived 9/8 (978f072f1aac85fd)
+  FAIL: Deadline Day 2026-10-10: HEAD deals Rangers e1647c4edc6f31b3, main Rangers e1647c4edc6f31b3
+2026-10-10 | Hot Seat Athletic Club, 5 matches, survived 9/8, run c254035ca4e1ed5a | Deadline Day Rangers opened e1647c4edc6f31b3 state f79adff073ccba63
+  FAIL: Hot Seat 2026-10-11: HEAD deals Young Boys sacked 0/8 (060a1d8f9b510fcd), main Young Boys sacked 0/8 (a2fda8c968ffdaf9)
+  FAIL: Deadline Day 2026-10-11: HEAD deals Borussia Dortmund 19ac52738db4ec85, main Borussia Dortmund 19ac52738db4ec85
+2026-10-11 | Hot Seat Young Boys, 4 matches, sacked 0/8, run 060a1d8f9b510fcd | Deadline Day Borussia Dortmund opened 19ac52738db4ec85 state 68d050f5d6f3c79e
+  FAIL: Hot Seat 2026-10-12: HEAD deals Westerlo survived 5/5 (c62d36776b309f45), main Westerlo survived 5/5 (a0f1bd49ab07f79d)
+  FAIL: Deadline Day 2026-10-12: HEAD deals Atalanta 7600c4b9aa808759, main Atalanta 7600c4b9aa808759
+2026-10-12 | Hot Seat Westerlo, 3 matches, survived 5/5, run c62d36776b309f45 | Deadline Day Atalanta opened 7600c4b9aa808759 state b7ae641e9b4ad99d
+  FAIL: Hot Seat 2026-10-13: HEAD deals Celta Vigo sacked 2/3 (6dbb57aa3f864a7c), main Celta Vigo sacked 2/3 (a193eb12b39b320b)
+  FAIL: Deadline Day 2026-10-13: HEAD deals Trabzonspor 82cfaefb26743f19, main Trabzonspor 82cfaefb26743f19
+2026-10-13 | Hot Seat Celta Vigo, 6 matches, sacked 2/3, run 6dbb57aa3f864a7c | Deadline Day Trabzonspor opened 82cfaefb26743f19 state bd9b299e462fcf31
+  FAIL: Hot Seat 2026-10-14: HEAD deals Monza sacked 0/3 (96a4227ae453ed25), main Monza sacked 0/3 (94e05d3324ecce8a)
+  FAIL: Deadline Day 2026-10-14: HEAD deals PAOK 0b5318fe620e7bb5, main PAOK 0b5318fe620e7bb5
+2026-10-14 | Hot Seat Monza, 5 matches, sacked 0/3, run 96a4227ae453ed25 | Deadline Day PAOK opened 0b5318fe620e7bb5 state 25d93a18ed889acb
+  FAIL: Hot Seat 2026-10-15: HEAD deals Osasuna survived 3/3 (a9dde5fc60ee59bd), main Osasuna survived 3/3 (3368d3b9146a65b2)
+  FAIL: Deadline Day 2026-10-15: HEAD deals St. Pauli a12ace231490cde9, main St. Pauli a12ace231490cde9
+2026-10-15 | Hot Seat Osasuna, 1 matches, survived 3/3, run a9dde5fc60ee59bd | Deadline Day St. Pauli opened a12ace231490cde9 state 02fb78bd2aba742f
+  FAIL: Hot Seat 2026-10-16: HEAD deals Cruz Azul survived 7/6 (c3de6abc8ea53ecc), main Cruz Azul survived 7/6 (556699f2d9f675e5)
+  FAIL: Deadline Day 2026-10-16: HEAD deals Nice 9ee09c99e7c01866, main Nice 9ee09c99e7c01866
+2026-10-16 | Hot Seat Cruz Azul, 3 matches, survived 7/6, run c3de6abc8ea53ecc | Deadline Day Nice opened 9ee09c99e7c01866 state 9289b4990f9ef989
+  FAIL: Hot Seat 2026-10-17: HEAD deals Trabzonspor survived 9/7 (3091f936f6bc29e7), main Trabzonspor survived 9/7 (3de685be73b534e3)
+  FAIL: Deadline Day 2026-10-17: HEAD deals Valencia 297ec83bf4d884b2, main Valencia 297ec83bf4d884b2
+2026-10-17 | Hot Seat Trabzonspor, 5 matches, survived 9/7, run 3091f936f6bc29e7 | Deadline Day Valencia opened 297ec83bf4d884b2 state f26e689012fbf758
+  FAIL: Hot Seat 2026-10-18: HEAD deals Al-Ahli survived 12/10 (2d3f24cb9a55d821), main Al-Ahli survived 12/10 (9688eea01314ef30)
+  FAIL: Deadline Day 2026-10-18: HEAD deals Nottingham Forest 791daf147cbf37a5, main Nottingham Forest 791daf147cbf37a5
+2026-10-18 | Hot Seat Al-Ahli, 4 matches, survived 12/10, run 2d3f24cb9a55d821 | Deadline Day Nottingham Forest opened 791daf147cbf37a5 state be3f4375bbbe7ee9
+  FAIL: Hot Seat 2026-10-19: HEAD deals Hamburg survived 4/4 (e4a55871f45a97a2), main Hamburg survived 4/4 (98e7ef00e8855e5c)
+  FAIL: Deadline Day 2026-10-19: HEAD deals Cruzeiro d1cc645e7ff4e712, main Cruzeiro d1cc645e7ff4e712
+2026-10-19 | Hot Seat Hamburg, 3 matches, survived 4/4, run e4a55871f45a97a2 | Deadline Day Cruzeiro opened d1cc645e7ff4e712 state 603ee08bd5d549b3
+  FAIL: Hot Seat 2026-10-20: HEAD deals Toulouse survived 6/5 (f0b2100cc4192223), main Toulouse survived 6/5 (2c9612f55408730c)
+  FAIL: Deadline Day 2026-10-20: HEAD deals Monterrey 676f4dfbf271d9f1, main Monterrey 676f4dfbf271d9f1
+2026-10-20 | Hot Seat Toulouse, 2 matches, survived 6/5, run f0b2100cc4192223 | Deadline Day Monterrey opened 676f4dfbf271d9f1 state 3900c4f6d02a8488
+  FAIL: Hot Seat 2026-10-21: HEAD deals Anderlecht survived 9/7 (6e6a91d1e9a6c78e), main Anderlecht survived 9/7 (a2fb21d18d1e6dc0)
+  FAIL: Deadline Day 2026-10-21: HEAD deals Como 763fed4f519870df, main Como 763fed4f519870df
+2026-10-21 | Hot Seat Anderlecht, 5 matches, survived 9/7, run 6e6a91d1e9a6c78e | Deadline Day Como opened 763fed4f519870df state cb4e1b596a5386bb
+Hot Seat: 0 of 21 dates equal to origin/main c623e77d (deal, every match, verdict, the whole run hashed); 3 matches in them went to penalties
+Deadline Day: 0 of 21 dates equal (deal, opening save, grade)
+
+digests: 42 FAILURE(S)
