@@ -1,0 +1,11 @@
+#!build
+#!playwright
+#!serial
+race-1138: node scripts/playAutocompleteRace.mjs
+race-notag: AUTOCOMPLETE_RACE_CONTROL=notag node scripts/playAutocompleteRace.mjs
+lv: node scripts/playLineupValidator.mjs
+lv-control: PLAY_LINEUP_CONTROL=accept-on-error node scripts/playLineupValidator.mjs
+lv-bogus: PLAY_LINEUP_CONTROL=bogus node scripts/playLineupValidator.mjs
+race-bogus: AUTOCOMPLETE_RACE_CONTROL=bogus node scripts/playAutocompleteRace.mjs
+c4: node scripts/playFootballConnect4Failures.mjs
+c4-control: C4FAIL_CONTROL=accept-on-error node scripts/playFootballConnect4Failures.mjs
