@@ -1,0 +1,17 @@
+parity: HEAD tree /home/runner/work/ballpark-hero/ballpark-hero against origin/main c623e77d; main exports shootoutRosterSide: undefined, head: function
+A1: Real Madrid seed 782002 v Valencia (22 on their roster, full), order set: 400 of 400 equal in full (report, save, next match, next draw); 68 on penalties, 68 of them equal kick for kick; 715 kicks; next match played in 400
+   head: I won 36 of 68 shootouts; main: 36 of 68; their kicks 359, 0 by generated men; nobody twice in their first eleven: 68 of 68
+A (Burnley): Burnley seed 782001 v Manchester City (22 on their roster, full), order set: 150 of 150 equal in full (report, save, next match, next draw); 30 on penalties, 30 of them equal kick for kick; 330 kicks; next match played in 150
+   head: I won 13 of 30 shootouts; main: 13 of 30; their kicks 164, 0 by generated men; nobody twice in their first eleven: 30 of 30
+A (Getafe): Getafe seed 782001 v Valencia (22 on their roster, full), order set: 150 of 150 equal in full (report, save, next match, next draw); 28 on penalties, 28 of them equal kick for kick; 342 kicks; next match played in 150
+   head: I won 10 of 28 shootouts; main: 10 of 28; their kicks 172, 0 by generated men; nobody twice in their first eleven: 28 of 28
+A (Arsenal): Arsenal seed 782001 v Sunderland (23 on their roster, full), order set: 150 of 150 equal in full (report, save, next match, next draw); 42 on penalties, 42 of them equal kick for kick; 449 kicks; next match played in 150
+   head: I won 23 of 42 shootouts; main: 23 of 42; their kicks 226, 0 by generated men; nobody twice in their first eleven: 42 of 42
+A total: 168 shootouts against a named eleven compared kick for kick
+B1: Real Madrid seed 782002 v Valencia (22 on their roster, full), order unset: 400 of 400 equal in full (report, save, next match, next draw); 68 on penalties, 68 of them equal kick for kick; 0 kicks; next match played in 400
+B2 (thin tie, no order): Real Madrid seed 782001 v Eibar (2 on their roster, thin), order unset: 400 of 400 equal in full (report, save, next match, next draw); 24 on penalties, 24 of them equal kick for kick; 0 kicks; next match played in 400
+C1 (thin tie, order set): Real Madrid seed 782001 v Eibar (2 on their roster, thin), order set: 567 of 600 equal in full (report, save, next match, next draw); 33 on penalties, 0 of them equal kick for kick; 394 kicks; next match played in 600
+   head: I won 27 of 33 shootouts; main: 26 of 33; their kicks 196, 158 by generated men; nobody twice in their first eleven: 33 of 33
+D: 3000 random rosters of eleven or more (1168 without a keeper, ratings full of ties): 0 differ from the old expression
+
+parity: all checks passed

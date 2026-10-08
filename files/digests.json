@@ -1,0 +1,2582 @@
+{
+ "head": {
+  "2026-10-01": {
+   "hs": {
+    "club": "FC Nordsjælland",
+    "seed": 3763251910,
+    "takeover": {
+     "position": 1,
+     "played": 14,
+     "points": 29,
+     "form": "WLWWL",
+     "week": 14
+    },
+    "target": 7,
+    "matches": [
+     "Danish Superliga · Round 15 H SønderjyskE 3-0 board 34",
+     "Danish Superliga · Round 16 A Randers FC 3-0 board 38.8",
+     "Danish Cup · Semi-final H AGF 0-0p board 45.3",
+     "Danish Superliga · Round 17 H Viborg FF 1-1 board 46.599999999999994"
+    ],
+    "pens": 1,
+    "actions": [
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "survived 7/7",
+    "whole": "3b2fec8c910f5525"
+   },
+   "dd": {
+    "club": "Bayern Munich",
+    "opened": "df7aeede89b02624",
+    "stateHash": "610f5a3b70bfd320",
+    "wholeOpen": "16d5df284a4fe045",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":4,\"filled\":0,\"filledBy\":[null,null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":213.5,\"startBudget\":213.5}"
+   }
+  },
+  "2026-10-02": {
+   "hs": {
+    "club": "Lausanne-Sport",
+    "seed": 1372320652,
+    "takeover": {
+     "position": 4,
+     "played": 14,
+     "points": 25,
+     "form": "LLLWW",
+     "week": 14
+    },
+    "target": 7,
+    "matches": [
+     "Swiss Super League · Round 15 A Young Boys 1-4 board 25.4",
+     "Swiss Super League · Round 16 H Vaduz 4-0 board 28.4",
+     "Swiss Cup · Semi-final H Young Boys 3-2 board 34.4",
+     "Swiss Super League · Round 17 A Sion 2-1 board 38.1",
+     "Swiss Super League · Round 18 H Servette 0-0 board 38.6"
+    ],
+    "pens": 0,
+    "actions": [
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "survived 7/7",
+    "whole": "c1b6756baa6d9e10"
+   },
+   "dd": {
+    "club": "Bayer Leverkusen",
+    "opened": "169318804bac8940",
+    "stateHash": "ba3469dba5fcdcf0",
+    "wholeOpen": "9113dd62a269eeff",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":3,\"filled\":0,\"filledBy\":[null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":70,\"startBudget\":70}"
+   }
+  },
+  "2026-10-03": {
+   "hs": {
+    "club": "Inter Miami",
+    "seed": 1770859055,
+    "takeover": {
+     "position": 1,
+     "played": 14,
+     "points": 32,
+     "form": "WWDDW",
+     "week": 14
+    },
+    "target": 8,
+    "matches": [
+     "MLS Eastern Conference · Round 16 A Atlanta United 0-1 board 25.8",
+     "MLS Eastern Conference · Round 17 H Nashville SC 1-0 board 29.1",
+     "MLS Eastern Conference · Round 18 A New England Revolution 0-2 board 25.3",
+     "MLS Eastern Conference · Round 19 H Orlando City 4-0 board 29.3",
+     "MLS Eastern Conference · Round 20 A FC Cincinnati 1-3 board 24.8"
+    ],
+    "pens": 0,
+    "actions": [
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "sacked 6/8",
+    "whole": "949924269ad7c5f0"
+   },
+   "dd": {
+    "club": "Everton",
+    "opened": "f5fbbd2e344e9740",
+    "stateHash": "f4d9cee1a154c132",
+    "wholeOpen": "9c690cc4f2a2e9c8",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":3,\"filled\":0,\"filledBy\":[null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":52,\"startBudget\":52}"
+   }
+  },
+  "2026-10-04": {
+   "hs": {
+    "club": "Hull City",
+    "seed": 2868549554,
+    "takeover": {
+     "position": 16,
+     "played": 14,
+     "points": 15,
+     "form": "LLDDL",
+     "week": 14
+    },
+    "target": 3,
+    "matches": [
+     "Premier League · Round 15 H Bournemouth 2-3 board 25.7",
+     "Premier League · Round 16 A Manchester United 0-1 board 20.55",
+     "Premier League · Round 17 H Arsenal 2-3 board 16.05",
+     "Premier League · Round 18 A Nottingham Forest 0-5 board 10.9",
+     "Premier League · Round 19 H Newcastle 2-2 board 11.4"
+    ],
+    "pens": 0,
+    "actions": [
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "sacked 1/3",
+    "whole": "fecca0dcb76e7036"
+   },
+   "dd": {
+    "club": "Orlando City",
+    "opened": "ad50fa70160b2664",
+    "stateHash": "5f2a29b77d7c4b44",
+    "wholeOpen": "5a5d4d7c0d79c608",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":4,\"filled\":0,\"filledBy\":[null,null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":18,\"startBudget\":18}"
+   }
+  },
+  "2026-10-05": {
+   "hs": {
+    "club": "Bristol City",
+    "seed": 1209885981,
+    "takeover": {
+     "position": 14,
+     "played": 11,
+     "points": 16,
+     "form": "DLLWL",
+     "week": 11
+    },
+    "target": 6,
+    "matches": [
+     "EFL Championship · Round 12 H Bolton Wanderers 3-0 board 34.7",
+     "EFL Championship · Round 13 A Derby County 0-2 board 30.300000000000004",
+     "EFL Championship · Round 14 A Birmingham City 0-1 board 26.500000000000004",
+     "EFL Championship · Round 15 H Middlesbrough 1-1 board 26.350000000000005",
+     "EFL Championship · Round 16 A Lincoln City 2-1 board 30.850000000000005"
+    ],
+    "pens": 0,
+    "actions": [
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "survived 7/6",
+    "whole": "cc9eb8f2b8686900"
+   },
+   "dd": {
+    "club": "Porto",
+    "opened": "eb2039cdde1a6991",
+    "stateHash": "d85d6fd2e3ac410f",
+    "wholeOpen": "49319ee0dd692d73",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":3,\"filled\":0,\"filledBy\":[null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":67.5,\"startBudget\":67.5}"
+   }
+  },
+  "2026-10-06": {
+   "hs": {
+    "club": "Heerenveen",
+    "seed": 3429931093,
+    "takeover": {
+     "position": 5,
+     "played": 14,
+     "points": 26,
+     "form": "LWLLW",
+     "week": 14
+    },
+    "target": 5,
+    "matches": [
+     "KNVB Cup · Quarter-final A Utrecht 0-0p board 21.3",
+     "Eredivisie · Round 15 A Feyenoord 0-1 board 17.7",
+     "Eredivisie · Round 16 H NEC Nijmegen 4-2 board 21",
+     "Eredivisie · Round 17 A Groningen 2-1 board 25.3"
+    ],
+    "pens": 1,
+    "actions": [
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "survived 6/5",
+    "whole": "e6a61874c70932b1"
+   },
+   "dd": {
+    "club": "Tottenham",
+    "opened": "dd4dbdb7ddbbb6db",
+    "stateHash": "ad196bc517fe4c4d",
+    "wholeOpen": "67da2d1523212df6",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":4,\"filled\":0,\"filledBy\":[null,null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":161.5,\"startBudget\":161.5}"
+   }
+  },
+  "2026-10-07": {
+   "hs": {
+    "club": "Gladbach",
+    "seed": 1600539057,
+    "takeover": {
+     "position": 12,
+     "played": 12,
+     "points": 15,
+     "form": "LLWDL",
+     "week": 12
+    },
+    "target": 3,
+    "matches": [
+     "Bundesliga · Round 13 A Hoffenheim 1-2 board 25.6",
+     "Bundesliga · Round 14 H Eintracht Frankfurt 3-2 board 29.1"
+    ],
+    "pens": 0,
+    "actions": [
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "survived 3/3",
+    "whole": "f008eb21a13282b8"
+   },
+   "dd": {
+    "club": "Bahia",
+    "opened": "7f5b648a9a2bdf2e",
+    "stateHash": "f6fa94c495a37565",
+    "wholeOpen": "8ba64110f29a869c",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":3,\"filled\":0,\"filledBy\":[null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":16,\"startBudget\":16}"
+   }
+  },
+  "2026-10-08": {
+   "hs": {
+    "club": "Portland Timbers",
+    "seed": 3043394400,
+    "takeover": {
+     "position": 12,
+     "played": 13,
+     "points": 12,
+     "form": "LWLLL",
+     "week": 13
+    },
+    "target": 5,
+    "matches": [
+     "MLS Western Conference · Round 15 A Sporting Kansas City 0-2 board 24.4",
+     "MLS Western Conference · Round 16 H Austin FC 2-1 board 25.75",
+     "MLS Western Conference · Round 17 A Colorado Rapids 2-3 board 20.15",
+     "MLS Western Conference · Round 18 H Seattle Sounders 1-1 board 18.2",
+     "MLS Western Conference · Round 19 A San Jose Earthquakes 1-2 board 12.7"
+    ],
+    "pens": 0,
+    "actions": [
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "sacked 4/5",
+    "whole": "a6ca901684c44052"
+   },
+   "dd": {
+    "club": "Sheffield United",
+    "opened": "7fcc751f915660ae",
+    "stateHash": "548dd62688ff23ba",
+    "wholeOpen": "b45374c6d9ae6f98",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":3,\"filled\":0,\"filledBy\":[null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":22,\"startBudget\":22}"
+   }
+  },
+  "2026-10-09": {
+   "hs": {
+    "club": "Newcastle",
+    "seed": 2653580332,
+    "takeover": {
+     "position": 5,
+     "played": 13,
+     "points": 23,
+     "form": "LLLDD",
+     "week": 13
+    },
+    "target": 5,
+    "matches": [
+     "Premier League · Round 14 H Tottenham 1-0 board 33.5",
+     "Premier League · Round 15 A Brighton 0-1 board 28.6",
+     "Premier League · Round 16 A Coventry City 1-0 board 33.4"
+    ],
+    "pens": 0,
+    "actions": [
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "survived 6/5",
+    "whole": "2213972717e9b4ec"
+   },
+   "dd": {
+    "club": "Heerenveen",
+    "opened": "7672cff86a47a5fc",
+    "stateHash": "84e62976b0c13787",
+    "wholeOpen": "623a9c4dfb579b11",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":4,\"filled\":0,\"filledBy\":[null,null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":15,\"startBudget\":15}"
+   }
+  },
+  "2026-10-10": {
+   "hs": {
+    "club": "Athletic Club",
+    "seed": 656411339,
+    "takeover": {
+     "position": 4,
+     "played": 13,
+     "points": 24,
+     "form": "LWWLD",
+     "week": 13
+    },
+    "target": 8,
+    "matches": [
+     "La Liga · Round 14 A Racing Santander 1-0 board 34",
+     "La Liga · Round 15 A Málaga 6-0 board 38",
+     "Copa del Rey · Quarter-final A Sporting Gijón 1-0 board 44",
+     "La Liga · Round 16 H Villarreal 1-3 board 39.7",
+     "La Liga · Round 17 A Deportivo La Coruña 3-1 board 43.7"
+    ],
+    "pens": 0,
+    "actions": [
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "survived 9/8",
+    "whole": "6f5b6c5611496a0f"
+   },
+   "dd": {
+    "club": "Rangers",
+    "opened": "e1647c4edc6f31b3",
+    "stateHash": "887e05cd4e088154",
+    "wholeOpen": "27d90c65b279a341",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":3,\"filled\":0,\"filledBy\":[null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":21,\"startBudget\":21}"
+   }
+  },
+  "2026-10-11": {
+   "hs": {
+    "club": "Young Boys",
+    "seed": 534816550,
+    "takeover": {
+     "position": 3,
+     "played": 14,
+     "points": 27,
+     "form": "WWLLW",
+     "week": 14
+    },
+    "target": 8,
+    "matches": [
+     "Swiss Super League · Round 15 A Servette 0-1 board 24.9",
+     "Swiss Super League · Round 16 A Basel 1-3 board 19.4",
+     "Swiss Cup · Semi-final H Vaduz 0-1 board 11.7",
+     "Swiss Super League · Round 17 H Lausanne-Sport 1-2 board 6.199999999999999"
+    ],
+    "pens": 0,
+    "actions": [
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "sacked 0/8",
+    "whole": "7a1b6147fe6d67b5"
+   },
+   "dd": {
+    "club": "Borussia Dortmund",
+    "opened": "19ac52738db4ec85",
+    "stateHash": "33c74312f07dc7e2",
+    "wholeOpen": "c94ec0fc23da7076",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":3,\"filled\":0,\"filledBy\":[null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":94.5,\"startBudget\":94.5}"
+   }
+  },
+  "2026-10-12": {
+   "hs": {
+    "club": "Westerlo",
+    "seed": 3041765782,
+    "takeover": {
+     "position": 17,
+     "played": 7,
+     "points": 3,
+     "form": "LDLLD",
+     "week": 7
+    },
+    "target": 5,
+    "matches": [
+     "Belgian Pro League · Round 8 A Kortrijk 2-1 board 31",
+     "Belgian Pro League · Round 9 H Beveren 1-1 board 29.7",
+     "Belgian Pro League · Round 10 A Cercle Brugge 1-1 board 27.7"
+    ],
+    "pens": 0,
+    "actions": [
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "survived 5/5",
+    "whole": "8c12513202f4326a"
+   },
+   "dd": {
+    "club": "Atalanta",
+    "opened": "7600c4b9aa808759",
+    "stateHash": "2c4d6539778597e7",
+    "wholeOpen": "dfd309bed6dc074b",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":3,\"filled\":0,\"filledBy\":[null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":70,\"startBudget\":70}"
+   }
+  },
+  "2026-10-13": {
+   "hs": {
+    "club": "Celta Vigo",
+    "seed": 1511709361,
+    "takeover": {
+     "position": 17,
+     "played": 7,
+     "points": 4,
+     "form": "LDLLL",
+     "week": 7
+    },
+    "target": 3,
+    "matches": [
+     "Copa del Rey · Round of 16 H Deportivo La Coruña 1-1p board 22.6",
+     "La Liga · Round 8 H Elche 2-2 board 20.5",
+     "La Liga · Round 9 A Espanyol 0-3 board 15.2",
+     "La Liga · Round 10 H Real Betis 0-0 board 14.1",
+     "La Liga · Round 11 A Barcelona 1-5 board 7.949999999999999",
+     "La Liga · Round 12 H Atlético Madrid 2-4 board 2.4499999999999993"
+    ],
+    "pens": 1,
+    "actions": [
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "sacked 2/3",
+    "whole": "7c62ec0207a1ebcf"
+   },
+   "dd": {
+    "club": "Trabzonspor",
+    "opened": "82cfaefb26743f19",
+    "stateHash": "467bf88eb7f54cef",
+    "wholeOpen": "7c7542b8499e7643",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":3,\"filled\":0,\"filledBy\":[null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":18.5,\"startBudget\":18.5}"
+   }
+  },
+  "2026-10-14": {
+   "hs": {
+    "club": "Monza",
+    "seed": 3732009447,
+    "takeover": {
+     "position": 20,
+     "played": 12,
+     "points": 3,
+     "form": "LLLLL",
+     "week": 12
+    },
+    "target": 3,
+    "matches": [
+     "Serie A · Round 13 H Frosinone 2-4 board 25.05",
+     "Serie A · Round 14 A Sassuolo 0-3 board 20.1",
+     "Serie A · Round 15 H Fiorentina 2-3 board 15.8",
+     "Serie A · Round 16 A Cagliari 2-3 board 10.850000000000001",
+     "Serie A · Round 17 H Venezia 2-3 board 6.550000000000002"
+    ],
+    "pens": 0,
+    "actions": [
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "sacked 0/3",
+    "whole": "fdb29be6767e47f5"
+   },
+   "dd": {
+    "club": "PAOK",
+    "opened": "0b5318fe620e7bb5",
+    "stateHash": "401e582c828edbc0",
+    "wholeOpen": "b981b2270f06b8b5",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":3,\"filled\":0,\"filledBy\":[null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":13.5,\"startBudget\":13.5}"
+   }
+  },
+  "2026-10-15": {
+   "hs": {
+    "club": "Osasuna",
+    "seed": 4080096211,
+    "takeover": {
+     "position": 20,
+     "played": 9,
+     "points": 4,
+     "form": "LLLLL",
+     "week": 9
+    },
+    "target": 3,
+    "matches": [
+     "La Liga · Round 10 H Alavés 1-0 board 33.8"
+    ],
+    "pens": 0,
+    "actions": [
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "survived 3/3",
+    "whole": "543a582d9f700b08"
+   },
+   "dd": {
+    "club": "St. Pauli",
+    "opened": "a12ace231490cde9",
+    "stateHash": "0e408acf8ff403c7",
+    "wholeOpen": "86ebe346a74908a8",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":3,\"filled\":0,\"filledBy\":[null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":11,\"startBudget\":11}"
+   }
+  },
+  "2026-10-16": {
+   "hs": {
+    "club": "Cruz Azul",
+    "seed": 3983553250,
+    "takeover": {
+     "position": 4,
+     "played": 14,
+     "points": 27,
+     "form": "WDWLL",
+     "week": 14
+    },
+    "target": 6,
+    "matches": [
+     "Liga MX · Round 15 A Atlante 3-0 board 34.7",
+     "Liga MX · Round 16 A León 1-1 board 35.900000000000006",
+     "Liga MX · Round 17 H América 1-0 board 40.900000000000006"
+    ],
+    "pens": 0,
+    "actions": [
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "survived 7/6",
+    "whole": "8bbd1a2a60c5b21a"
+   },
+   "dd": {
+    "club": "Nice",
+    "opened": "9ee09c99e7c01866",
+    "stateHash": "74d8983816184529",
+    "wholeOpen": "4f1f17258c1b8647",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":4,\"filled\":0,\"filledBy\":[null,null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":38.5,\"startBudget\":38.5}"
+   }
+  },
+  "2026-10-17": {
+   "hs": {
+    "club": "Trabzonspor",
+    "seed": 2338547724,
+    "takeover": {
+     "position": 6,
+     "played": 14,
+     "points": 20,
+     "form": "LLLDW",
+     "week": 14
+    },
+    "target": 7,
+    "matches": [
+     "Turkish Cup · Quarter-final A Kocaelispor 2-0 board 35.35",
+     "Süper Lig · Round 15 H Konyaspor 1-0 board 38.85",
+     "Süper Lig · Round 16 A Galatasaray 1-3 board 33.900000000000006",
+     "Süper Lig · Round 17 A Gaziantep FK 2-0 board 37.400000000000006",
+     "Süper Lig · Round 18 H Çorum FK 2-1 board 40.25000000000001"
+    ],
+    "pens": 0,
+    "actions": [
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "survived 9/7",
+    "whole": "b104ceb734d62edf"
+   },
+   "dd": {
+    "club": "Valencia",
+    "opened": "297ec83bf4d884b2",
+    "stateHash": "5865ab2be140d0ef",
+    "wholeOpen": "5ff8439d1fa8d303",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":4,\"filled\":0,\"filledBy\":[null,null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":27.5,\"startBudget\":27.5}"
+   }
+  },
+  "2026-10-18": {
+   "hs": {
+    "club": "Al-Ahli",
+    "seed": 2381485114,
+    "takeover": {
+     "position": 7,
+     "played": 8,
+     "points": 12,
+     "form": "LDWWD",
+     "week": 8
+    },
+    "target": 10,
+    "matches": [
+     "Saudi Pro League · Round 9 H Al-Hazem 4-0 board 32.5",
+     "Saudi Pro League · Round 10 A Al-Ittihad 1-0 board 35",
+     "Saudi Pro League · Round 11 H NEOM SC 1-0 board 38.3",
+     "Saudi Pro League · Round 12 H Abha 2-0 board 41.5"
+    ],
+    "pens": 0,
+    "actions": [
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "survived 12/10",
+    "whole": "143427318f8c9e19"
+   },
+   "dd": {
+    "club": "Nottingham Forest",
+    "opened": "791daf147cbf37a5",
+    "stateHash": "74b7ce69f75ff445",
+    "wholeOpen": "937d4aea650e93a4",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":3,\"filled\":0,\"filledBy\":[null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":72.5,\"startBudget\":72.5}"
+   }
+  },
+  "2026-10-19": {
+   "hs": {
+    "club": "Hamburg",
+    "seed": 173307562,
+    "takeover": {
+     "position": 17,
+     "played": 13,
+     "points": 10,
+     "form": "LLDLL",
+     "week": 13
+    },
+    "target": 4,
+    "matches": [
+     "Bundesliga · Round 14 H Köln 1-1 board 28.1",
+     "DFB-Pokal · Quarter-final A Hoffenheim 2-3 board 19.750000000000004",
+     "Bundesliga · Round 15 H Elversberg 1-0 board 22.250000000000004"
+    ],
+    "pens": 0,
+    "actions": [
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "survived 4/4",
+    "whole": "48053effb354d163"
+   },
+   "dd": {
+    "club": "Cruzeiro",
+    "opened": "d1cc645e7ff4e712",
+    "stateHash": "c1d5fd5a7d085694",
+    "wholeOpen": "f0100302aa48dba7",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":3,\"filled\":0,\"filledBy\":[null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":25,\"startBudget\":25}"
+   }
+  },
+  "2026-10-20": {
+   "hs": {
+    "club": "Toulouse",
+    "seed": 2940301443,
+    "takeover": {
+     "position": 12,
+     "played": 9,
+     "points": 9,
+     "form": "DLLDL",
+     "week": 9
+    },
+    "target": 5,
+    "matches": [
+     "Ligue 1 · Round 10 H Le Mans 3-1 board 34",
+     "Ligue 1 · Round 11 A Angers 3-2 board 37.3"
+    ],
+    "pens": 0,
+    "actions": [
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "survived 6/5",
+    "whole": "7d193e84380d6873"
+   },
+   "dd": {
+    "club": "Monterrey",
+    "opened": "676f4dfbf271d9f1",
+    "stateHash": "9c674afbed5f921e",
+    "wholeOpen": "a8bb546237abbfcf",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":3,\"filled\":0,\"filledBy\":[null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":14,\"startBudget\":14}"
+   }
+  },
+  "2026-10-21": {
+   "hs": {
+    "club": "Anderlecht",
+    "seed": 1583642686,
+    "takeover": {
+     "position": 11,
+     "played": 11,
+     "points": 13,
+     "form": "DLWLL",
+     "week": 11
+    },
+    "target": 7,
+    "matches": [
+     "Belgian Pro League · Round 12 A OH Leuven 0-1 board 24.1",
+     "Belgian Pro League · Round 13 H Charleroi 1-0 board 25.1",
+     "Belgian Pro League · Round 14 A Antwerp 3-1 board 27.900000000000002",
+     "Belgian Cup · Quarter-final A Cercle Brugge 5-1 board 32.900000000000006",
+     "Belgian Pro League · Round 15 H Zulte Waregem 2-0 board 36.400000000000006"
+    ],
+    "pens": 0,
+    "actions": [
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "survived 9/7",
+    "whole": "46ffc68a07399c1f"
+   },
+   "dd": {
+    "club": "Como",
+    "opened": "763fed4f519870df",
+    "stateHash": "2794148f24b63567",
+    "wholeOpen": "906fa7db2ff784d0",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":3,\"filled\":0,\"filledBy\":[null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":56.5,\"startBudget\":56.5}"
+   }
+  }
+ },
+ "main": {
+  "2026-10-01": {
+   "hs": {
+    "club": "FC Nordsjælland",
+    "seed": 3763251910,
+    "takeover": {
+     "position": 1,
+     "played": 14,
+     "points": 29,
+     "form": "WLWWL",
+     "week": 14
+    },
+    "target": 7,
+    "matches": [
+     "Danish Superliga · Round 15 H SønderjyskE 3-0 board 34",
+     "Danish Superliga · Round 16 A Randers FC 3-0 board 38.8",
+     "Danish Cup · Semi-final H AGF 0-0p board 45.3",
+     "Danish Superliga · Round 17 H Viborg FF 1-1 board 46.599999999999994"
+    ],
+    "pens": 1,
+    "actions": [
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "survived 7/7",
+    "whole": "3b2fec8c910f5525"
+   },
+   "dd": {
+    "club": "Bayern Munich",
+    "opened": "df7aeede89b02624",
+    "stateHash": "610f5a3b70bfd320",
+    "wholeOpen": "16d5df284a4fe045",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":4,\"filled\":0,\"filledBy\":[null,null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":213.5,\"startBudget\":213.5}"
+   }
+  },
+  "2026-10-02": {
+   "hs": {
+    "club": "Lausanne-Sport",
+    "seed": 1372320652,
+    "takeover": {
+     "position": 4,
+     "played": 14,
+     "points": 25,
+     "form": "LLLWW",
+     "week": 14
+    },
+    "target": 7,
+    "matches": [
+     "Swiss Super League · Round 15 A Young Boys 1-4 board 25.4",
+     "Swiss Super League · Round 16 H Vaduz 4-0 board 28.4",
+     "Swiss Cup · Semi-final H Young Boys 3-2 board 34.4",
+     "Swiss Super League · Round 17 A Sion 2-1 board 38.1",
+     "Swiss Super League · Round 18 H Servette 0-0 board 38.6"
+    ],
+    "pens": 0,
+    "actions": [
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "survived 7/7",
+    "whole": "c1b6756baa6d9e10"
+   },
+   "dd": {
+    "club": "Bayer Leverkusen",
+    "opened": "169318804bac8940",
+    "stateHash": "ba3469dba5fcdcf0",
+    "wholeOpen": "9113dd62a269eeff",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":3,\"filled\":0,\"filledBy\":[null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":70,\"startBudget\":70}"
+   }
+  },
+  "2026-10-03": {
+   "hs": {
+    "club": "Inter Miami",
+    "seed": 1770859055,
+    "takeover": {
+     "position": 1,
+     "played": 14,
+     "points": 32,
+     "form": "WWDDW",
+     "week": 14
+    },
+    "target": 8,
+    "matches": [
+     "MLS Eastern Conference · Round 16 A Atlanta United 0-1 board 25.8",
+     "MLS Eastern Conference · Round 17 H Nashville SC 1-0 board 29.1",
+     "MLS Eastern Conference · Round 18 A New England Revolution 0-2 board 25.3",
+     "MLS Eastern Conference · Round 19 H Orlando City 4-0 board 29.3",
+     "MLS Eastern Conference · Round 20 A FC Cincinnati 1-3 board 24.8"
+    ],
+    "pens": 0,
+    "actions": [
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "sacked 6/8",
+    "whole": "949924269ad7c5f0"
+   },
+   "dd": {
+    "club": "Everton",
+    "opened": "f5fbbd2e344e9740",
+    "stateHash": "f4d9cee1a154c132",
+    "wholeOpen": "9c690cc4f2a2e9c8",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":3,\"filled\":0,\"filledBy\":[null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":52,\"startBudget\":52}"
+   }
+  },
+  "2026-10-04": {
+   "hs": {
+    "club": "Hull City",
+    "seed": 2868549554,
+    "takeover": {
+     "position": 16,
+     "played": 14,
+     "points": 15,
+     "form": "LLDDL",
+     "week": 14
+    },
+    "target": 3,
+    "matches": [
+     "Premier League · Round 15 H Bournemouth 2-3 board 25.7",
+     "Premier League · Round 16 A Manchester United 0-1 board 20.55",
+     "Premier League · Round 17 H Arsenal 2-3 board 16.05",
+     "Premier League · Round 18 A Nottingham Forest 0-5 board 10.9",
+     "Premier League · Round 19 H Newcastle 2-2 board 11.4"
+    ],
+    "pens": 0,
+    "actions": [
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "sacked 1/3",
+    "whole": "fecca0dcb76e7036"
+   },
+   "dd": {
+    "club": "Orlando City",
+    "opened": "ad50fa70160b2664",
+    "stateHash": "5f2a29b77d7c4b44",
+    "wholeOpen": "5a5d4d7c0d79c608",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":4,\"filled\":0,\"filledBy\":[null,null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":18,\"startBudget\":18}"
+   }
+  },
+  "2026-10-05": {
+   "hs": {
+    "club": "Bristol City",
+    "seed": 1209885981,
+    "takeover": {
+     "position": 14,
+     "played": 11,
+     "points": 16,
+     "form": "DLLWL",
+     "week": 11
+    },
+    "target": 6,
+    "matches": [
+     "EFL Championship · Round 12 H Bolton Wanderers 3-0 board 34.7",
+     "EFL Championship · Round 13 A Derby County 0-2 board 30.300000000000004",
+     "EFL Championship · Round 14 A Birmingham City 0-1 board 26.500000000000004",
+     "EFL Championship · Round 15 H Middlesbrough 1-1 board 26.350000000000005",
+     "EFL Championship · Round 16 A Lincoln City 2-1 board 30.850000000000005"
+    ],
+    "pens": 0,
+    "actions": [
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "survived 7/6",
+    "whole": "cc9eb8f2b8686900"
+   },
+   "dd": {
+    "club": "Porto",
+    "opened": "eb2039cdde1a6991",
+    "stateHash": "d85d6fd2e3ac410f",
+    "wholeOpen": "49319ee0dd692d73",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":3,\"filled\":0,\"filledBy\":[null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":67.5,\"startBudget\":67.5}"
+   }
+  },
+  "2026-10-06": {
+   "hs": {
+    "club": "Heerenveen",
+    "seed": 3429931093,
+    "takeover": {
+     "position": 5,
+     "played": 14,
+     "points": 26,
+     "form": "LWLLW",
+     "week": 14
+    },
+    "target": 5,
+    "matches": [
+     "KNVB Cup · Quarter-final A Utrecht 0-0p board 21.3",
+     "Eredivisie · Round 15 A Feyenoord 0-1 board 17.7",
+     "Eredivisie · Round 16 H NEC Nijmegen 4-2 board 21",
+     "Eredivisie · Round 17 A Groningen 2-1 board 25.3"
+    ],
+    "pens": 1,
+    "actions": [
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "survived 6/5",
+    "whole": "e6a61874c70932b1"
+   },
+   "dd": {
+    "club": "Tottenham",
+    "opened": "dd4dbdb7ddbbb6db",
+    "stateHash": "ad196bc517fe4c4d",
+    "wholeOpen": "67da2d1523212df6",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":4,\"filled\":0,\"filledBy\":[null,null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":161.5,\"startBudget\":161.5}"
+   }
+  },
+  "2026-10-07": {
+   "hs": {
+    "club": "Gladbach",
+    "seed": 1600539057,
+    "takeover": {
+     "position": 12,
+     "played": 12,
+     "points": 15,
+     "form": "LLWDL",
+     "week": 12
+    },
+    "target": 3,
+    "matches": [
+     "Bundesliga · Round 13 A Hoffenheim 1-2 board 25.6",
+     "Bundesliga · Round 14 H Eintracht Frankfurt 3-2 board 29.1"
+    ],
+    "pens": 0,
+    "actions": [
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "survived 3/3",
+    "whole": "f008eb21a13282b8"
+   },
+   "dd": {
+    "club": "Bahia",
+    "opened": "7f5b648a9a2bdf2e",
+    "stateHash": "f6fa94c495a37565",
+    "wholeOpen": "8ba64110f29a869c",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":3,\"filled\":0,\"filledBy\":[null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":16,\"startBudget\":16}"
+   }
+  },
+  "2026-10-08": {
+   "hs": {
+    "club": "Portland Timbers",
+    "seed": 3043394400,
+    "takeover": {
+     "position": 12,
+     "played": 13,
+     "points": 12,
+     "form": "LWLLL",
+     "week": 13
+    },
+    "target": 5,
+    "matches": [
+     "MLS Western Conference · Round 15 A Sporting Kansas City 0-2 board 24.4",
+     "MLS Western Conference · Round 16 H Austin FC 2-1 board 25.75",
+     "MLS Western Conference · Round 17 A Colorado Rapids 2-3 board 20.15",
+     "MLS Western Conference · Round 18 H Seattle Sounders 1-1 board 18.2",
+     "MLS Western Conference · Round 19 A San Jose Earthquakes 1-2 board 12.7"
+    ],
+    "pens": 0,
+    "actions": [
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "sacked 4/5",
+    "whole": "a6ca901684c44052"
+   },
+   "dd": {
+    "club": "Sheffield United",
+    "opened": "7fcc751f915660ae",
+    "stateHash": "548dd62688ff23ba",
+    "wholeOpen": "b45374c6d9ae6f98",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":3,\"filled\":0,\"filledBy\":[null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":22,\"startBudget\":22}"
+   }
+  },
+  "2026-10-09": {
+   "hs": {
+    "club": "Newcastle",
+    "seed": 2653580332,
+    "takeover": {
+     "position": 5,
+     "played": 13,
+     "points": 23,
+     "form": "LLLDD",
+     "week": 13
+    },
+    "target": 5,
+    "matches": [
+     "Premier League · Round 14 H Tottenham 1-0 board 33.5",
+     "Premier League · Round 15 A Brighton 0-1 board 28.6",
+     "Premier League · Round 16 A Coventry City 1-0 board 33.4"
+    ],
+    "pens": 0,
+    "actions": [
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "survived 6/5",
+    "whole": "2213972717e9b4ec"
+   },
+   "dd": {
+    "club": "Heerenveen",
+    "opened": "7672cff86a47a5fc",
+    "stateHash": "84e62976b0c13787",
+    "wholeOpen": "623a9c4dfb579b11",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":4,\"filled\":0,\"filledBy\":[null,null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":15,\"startBudget\":15}"
+   }
+  },
+  "2026-10-10": {
+   "hs": {
+    "club": "Athletic Club",
+    "seed": 656411339,
+    "takeover": {
+     "position": 4,
+     "played": 13,
+     "points": 24,
+     "form": "LWWLD",
+     "week": 13
+    },
+    "target": 8,
+    "matches": [
+     "La Liga · Round 14 A Racing Santander 1-0 board 34",
+     "La Liga · Round 15 A Málaga 6-0 board 38",
+     "Copa del Rey · Quarter-final A Sporting Gijón 1-0 board 44",
+     "La Liga · Round 16 H Villarreal 1-3 board 39.7",
+     "La Liga · Round 17 A Deportivo La Coruña 3-1 board 43.7"
+    ],
+    "pens": 0,
+    "actions": [
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "survived 9/8",
+    "whole": "6f5b6c5611496a0f"
+   },
+   "dd": {
+    "club": "Rangers",
+    "opened": "e1647c4edc6f31b3",
+    "stateHash": "887e05cd4e088154",
+    "wholeOpen": "27d90c65b279a341",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":3,\"filled\":0,\"filledBy\":[null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":21,\"startBudget\":21}"
+   }
+  },
+  "2026-10-11": {
+   "hs": {
+    "club": "Young Boys",
+    "seed": 534816550,
+    "takeover": {
+     "position": 3,
+     "played": 14,
+     "points": 27,
+     "form": "WWLLW",
+     "week": 14
+    },
+    "target": 8,
+    "matches": [
+     "Swiss Super League · Round 15 A Servette 0-1 board 24.9",
+     "Swiss Super League · Round 16 A Basel 1-3 board 19.4",
+     "Swiss Cup · Semi-final H Vaduz 0-1 board 11.7",
+     "Swiss Super League · Round 17 H Lausanne-Sport 1-2 board 6.199999999999999"
+    ],
+    "pens": 0,
+    "actions": [
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "sacked 0/8",
+    "whole": "7a1b6147fe6d67b5"
+   },
+   "dd": {
+    "club": "Borussia Dortmund",
+    "opened": "19ac52738db4ec85",
+    "stateHash": "33c74312f07dc7e2",
+    "wholeOpen": "c94ec0fc23da7076",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":3,\"filled\":0,\"filledBy\":[null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":94.5,\"startBudget\":94.5}"
+   }
+  },
+  "2026-10-12": {
+   "hs": {
+    "club": "Westerlo",
+    "seed": 3041765782,
+    "takeover": {
+     "position": 17,
+     "played": 7,
+     "points": 3,
+     "form": "LDLLD",
+     "week": 7
+    },
+    "target": 5,
+    "matches": [
+     "Belgian Pro League · Round 8 A Kortrijk 2-1 board 31",
+     "Belgian Pro League · Round 9 H Beveren 1-1 board 29.7",
+     "Belgian Pro League · Round 10 A Cercle Brugge 1-1 board 27.7"
+    ],
+    "pens": 0,
+    "actions": [
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "survived 5/5",
+    "whole": "8c12513202f4326a"
+   },
+   "dd": {
+    "club": "Atalanta",
+    "opened": "7600c4b9aa808759",
+    "stateHash": "2c4d6539778597e7",
+    "wholeOpen": "dfd309bed6dc074b",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":3,\"filled\":0,\"filledBy\":[null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":70,\"startBudget\":70}"
+   }
+  },
+  "2026-10-13": {
+   "hs": {
+    "club": "Celta Vigo",
+    "seed": 1511709361,
+    "takeover": {
+     "position": 17,
+     "played": 7,
+     "points": 4,
+     "form": "LDLLL",
+     "week": 7
+    },
+    "target": 3,
+    "matches": [
+     "Copa del Rey · Round of 16 H Deportivo La Coruña 1-1p board 22.6",
+     "La Liga · Round 8 H Elche 2-2 board 20.5",
+     "La Liga · Round 9 A Espanyol 0-3 board 15.2",
+     "La Liga · Round 10 H Real Betis 0-0 board 14.1",
+     "La Liga · Round 11 A Barcelona 1-5 board 7.949999999999999",
+     "La Liga · Round 12 H Atlético Madrid 2-4 board 2.4499999999999993"
+    ],
+    "pens": 1,
+    "actions": [
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "sacked 2/3",
+    "whole": "7c62ec0207a1ebcf"
+   },
+   "dd": {
+    "club": "Trabzonspor",
+    "opened": "82cfaefb26743f19",
+    "stateHash": "467bf88eb7f54cef",
+    "wholeOpen": "7c7542b8499e7643",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":3,\"filled\":0,\"filledBy\":[null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":18.5,\"startBudget\":18.5}"
+   }
+  },
+  "2026-10-14": {
+   "hs": {
+    "club": "Monza",
+    "seed": 3732009447,
+    "takeover": {
+     "position": 20,
+     "played": 12,
+     "points": 3,
+     "form": "LLLLL",
+     "week": 12
+    },
+    "target": 3,
+    "matches": [
+     "Serie A · Round 13 H Frosinone 2-4 board 25.05",
+     "Serie A · Round 14 A Sassuolo 0-3 board 20.1",
+     "Serie A · Round 15 H Fiorentina 2-3 board 15.8",
+     "Serie A · Round 16 A Cagliari 2-3 board 10.850000000000001",
+     "Serie A · Round 17 H Venezia 2-3 board 6.550000000000002"
+    ],
+    "pens": 0,
+    "actions": [
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "sacked 0/3",
+    "whole": "fdb29be6767e47f5"
+   },
+   "dd": {
+    "club": "PAOK",
+    "opened": "0b5318fe620e7bb5",
+    "stateHash": "401e582c828edbc0",
+    "wholeOpen": "b981b2270f06b8b5",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":3,\"filled\":0,\"filledBy\":[null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":13.5,\"startBudget\":13.5}"
+   }
+  },
+  "2026-10-15": {
+   "hs": {
+    "club": "Osasuna",
+    "seed": 4080096211,
+    "takeover": {
+     "position": 20,
+     "played": 9,
+     "points": 4,
+     "form": "LLLLL",
+     "week": 9
+    },
+    "target": 3,
+    "matches": [
+     "La Liga · Round 10 H Alavés 1-0 board 33.8"
+    ],
+    "pens": 0,
+    "actions": [
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "survived 3/3",
+    "whole": "543a582d9f700b08"
+   },
+   "dd": {
+    "club": "St. Pauli",
+    "opened": "a12ace231490cde9",
+    "stateHash": "0e408acf8ff403c7",
+    "wholeOpen": "86ebe346a74908a8",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":3,\"filled\":0,\"filledBy\":[null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":11,\"startBudget\":11}"
+   }
+  },
+  "2026-10-16": {
+   "hs": {
+    "club": "Cruz Azul",
+    "seed": 3983553250,
+    "takeover": {
+     "position": 4,
+     "played": 14,
+     "points": 27,
+     "form": "WDWLL",
+     "week": 14
+    },
+    "target": 6,
+    "matches": [
+     "Liga MX · Round 15 A Atlante 3-0 board 34.7",
+     "Liga MX · Round 16 A León 1-1 board 35.900000000000006",
+     "Liga MX · Round 17 H América 1-0 board 40.900000000000006"
+    ],
+    "pens": 0,
+    "actions": [
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "survived 7/6",
+    "whole": "8bbd1a2a60c5b21a"
+   },
+   "dd": {
+    "club": "Nice",
+    "opened": "9ee09c99e7c01866",
+    "stateHash": "74d8983816184529",
+    "wholeOpen": "4f1f17258c1b8647",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":4,\"filled\":0,\"filledBy\":[null,null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":38.5,\"startBudget\":38.5}"
+   }
+  },
+  "2026-10-17": {
+   "hs": {
+    "club": "Trabzonspor",
+    "seed": 2338547724,
+    "takeover": {
+     "position": 6,
+     "played": 14,
+     "points": 20,
+     "form": "LLLDW",
+     "week": 14
+    },
+    "target": 7,
+    "matches": [
+     "Turkish Cup · Quarter-final A Kocaelispor 2-0 board 35.35",
+     "Süper Lig · Round 15 H Konyaspor 1-0 board 38.85",
+     "Süper Lig · Round 16 A Galatasaray 1-3 board 33.900000000000006",
+     "Süper Lig · Round 17 A Gaziantep FK 2-0 board 37.400000000000006",
+     "Süper Lig · Round 18 H Çorum FK 2-1 board 40.25000000000001"
+    ],
+    "pens": 0,
+    "actions": [
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "survived 9/7",
+    "whole": "b104ceb734d62edf"
+   },
+   "dd": {
+    "club": "Valencia",
+    "opened": "297ec83bf4d884b2",
+    "stateHash": "5865ab2be140d0ef",
+    "wholeOpen": "5ff8439d1fa8d303",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":4,\"filled\":0,\"filledBy\":[null,null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":27.5,\"startBudget\":27.5}"
+   }
+  },
+  "2026-10-18": {
+   "hs": {
+    "club": "Al-Ahli",
+    "seed": 2381485114,
+    "takeover": {
+     "position": 7,
+     "played": 8,
+     "points": 12,
+     "form": "LDWWD",
+     "week": 8
+    },
+    "target": 10,
+    "matches": [
+     "Saudi Pro League · Round 9 H Al-Hazem 4-0 board 32.5",
+     "Saudi Pro League · Round 10 A Al-Ittihad 1-0 board 35",
+     "Saudi Pro League · Round 11 H NEOM SC 1-0 board 38.3",
+     "Saudi Pro League · Round 12 H Abha 2-0 board 41.5"
+    ],
+    "pens": 0,
+    "actions": [
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "survived 12/10",
+    "whole": "143427318f8c9e19"
+   },
+   "dd": {
+    "club": "Nottingham Forest",
+    "opened": "791daf147cbf37a5",
+    "stateHash": "74b7ce69f75ff445",
+    "wholeOpen": "937d4aea650e93a4",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":3,\"filled\":0,\"filledBy\":[null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":72.5,\"startBudget\":72.5}"
+   }
+  },
+  "2026-10-19": {
+   "hs": {
+    "club": "Hamburg",
+    "seed": 173307562,
+    "takeover": {
+     "position": 17,
+     "played": 13,
+     "points": 10,
+     "form": "LLDLL",
+     "week": 13
+    },
+    "target": 4,
+    "matches": [
+     "Bundesliga · Round 14 H Köln 1-1 board 28.1",
+     "DFB-Pokal · Quarter-final A Hoffenheim 2-3 board 19.750000000000004",
+     "Bundesliga · Round 15 H Elversberg 1-0 board 22.250000000000004"
+    ],
+    "pens": 0,
+    "actions": [
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "survived 4/4",
+    "whole": "48053effb354d163"
+   },
+   "dd": {
+    "club": "Cruzeiro",
+    "opened": "d1cc645e7ff4e712",
+    "stateHash": "c1d5fd5a7d085694",
+    "wholeOpen": "f0100302aa48dba7",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":3,\"filled\":0,\"filledBy\":[null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":25,\"startBudget\":25}"
+   }
+  },
+  "2026-10-20": {
+   "hs": {
+    "club": "Toulouse",
+    "seed": 2940301443,
+    "takeover": {
+     "position": 12,
+     "played": 9,
+     "points": 9,
+     "form": "DLLDL",
+     "week": 9
+    },
+    "target": 5,
+    "matches": [
+     "Ligue 1 · Round 10 H Le Mans 3-1 board 34",
+     "Ligue 1 · Round 11 A Angers 3-2 board 37.3"
+    ],
+    "pens": 0,
+    "actions": [
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "survived 6/5",
+    "whole": "7d193e84380d6873"
+   },
+   "dd": {
+    "club": "Monterrey",
+    "opened": "676f4dfbf271d9f1",
+    "stateHash": "9c674afbed5f921e",
+    "wholeOpen": "a8bb546237abbfcf",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":3,\"filled\":0,\"filledBy\":[null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":14,\"startBudget\":14}"
+   }
+  },
+  "2026-10-21": {
+   "hs": {
+    "club": "Anderlecht",
+    "seed": 1583642686,
+    "takeover": {
+     "position": 11,
+     "played": 11,
+     "points": 13,
+     "form": "DLWLL",
+     "week": 11
+    },
+    "target": 7,
+    "matches": [
+     "Belgian Pro League · Round 12 A OH Leuven 0-1 board 24.1",
+     "Belgian Pro League · Round 13 H Charleroi 1-0 board 25.1",
+     "Belgian Pro League · Round 14 A Antwerp 3-1 board 27.900000000000002",
+     "Belgian Cup · Quarter-final A Cercle Brugge 5-1 board 32.900000000000006",
+     "Belgian Pro League · Round 15 H Zulte Waregem 2-0 board 36.400000000000006"
+    ],
+    "pens": 0,
+    "actions": [
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "press",
+      "i": 0
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     },
+     {
+      "t": "match",
+      "m": "balanced",
+      "talk": null
+     }
+    ],
+    "verdict": "survived 9/7",
+    "whole": "46ffc68a07399c1f"
+   },
+   "dd": {
+    "club": "Como",
+    "opened": "763fed4f519870df",
+    "stateHash": "2794148f24b63567",
+    "wholeOpen": "906fa7db2ff784d0",
+    "grade": "{\"score\":0,\"letter\":\"F\",\"needs\":3,\"filled\":0,\"filledBy\":[null,null,null],\"needsPts\":0,\"valuePts\":0,\"budgetPts\":0,\"signings\":[],\"budgetLeft\":56.5,\"startBudget\":56.5}"
+   }
+  }
+ }
+}
