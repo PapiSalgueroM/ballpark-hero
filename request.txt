@@ -1,0 +1,50 @@
+# Release AO proof, decision 4b extras and the brief's fence list by name (no build needed)
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+appeal: node scripts/simManagerAppealIsolation.mjs
+shootout: node scripts/simCmShootoutOrder.mjs
+shootout-s1: SIM_SEED=1 node scripts/simCmShootoutOrder.mjs
+shootout-s2: SIM_SEED=2 node scripts/simCmShootoutOrder.mjs
+shootout-s3: SIM_SEED=3 node scripts/simCmShootoutOrder.mjs
+shootout-s4: SIM_SEED=4 node scripts/simCmShootoutOrder.mjs
+shootout-s5: SIM_SEED=5 node scripts/simCmShootoutOrder.mjs
+rules: node scripts/simCmLeagueRules.mjs
+dataOnDemand: node scripts/simCmDataOnDemand.mjs
+nationalPools: node scripts/simNationalPools.mjs
+dailyPool: node scripts/simDailyClubPool.mjs
+dailyPool-today: DAILY_POOL_CONTROL=today node scripts/simDailyClubPool.mjs
+dailyPool-live: DAILY_POOL_CONTROL=live node scripts/simDailyClubPool.mjs
+dailyPool-edited: DAILY_POOL_CONTROL=edited node scripts/simDailyClubPool.mjs
+dailyPool-ghost: DAILY_POOL_CONTROL=ghost node scripts/simDailyClubPool.mjs
+hotSeat: node scripts/simManagerHotSeat.mjs
+deadlineDay: node scripts/simDeadlineDay.mjs
+clubList: node scripts/simClubManagerClubList.mjs
+usBoardParity: node scripts/simUsBoardParity.mjs
+usCareerSummer: node scripts/simUsCareerSummer.mjs
+homeCopy: node scripts/simHomeCopy.mjs
+siteSearch: node scripts/simSiteSearch.mjs
+guideHeadings: node scripts/simGuideHeadings.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simCompletionOnce: node scripts/simCompletionOnce.mjs
+simNoDoubleRecord: node scripts/simNoDoubleRecord.mjs
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simAdsense: node scripts/simAdsense.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simSingleFooter: node scripts/simSingleFooter.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simResultPillComparison: node scripts/simResultPillComparison.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simDailyPuzzleContract: node scripts/simDailyPuzzleContract.mjs
+simStartingXi: node scripts/simStartingXi.mjs
+simSound: node scripts/simSound.mjs
+simMobileChrome: node scripts/simMobileChrome.mjs
+simSeasonCentreMotion: node scripts/simSeasonCentreMotion.mjs
+simLiveSimMotion: node scripts/simLiveSimMotion.mjs
+genLadderCheck: node scripts/genCareerLeagueSeasons.mjs --check
