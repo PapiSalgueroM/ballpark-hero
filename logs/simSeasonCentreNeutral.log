@@ -1,0 +1,29 @@
+ok   fence src/lib/season/core.ts
+ok   fence src/lib/season/law.ts
+ok   fence src/lib/season/momentsSave.ts
+ok   fence src/lib/season/soccer.ts
+ok   fence src/lib/season/soccerEvents.ts
+ok   fence src/lib/season/soccerMoments.ts
+ok   fence src/components/season-centre/MatchClock.tsx
+ok   fence src/components/season-centre/MomentHost.tsx
+ok   fence src/components/season-centre/SeasonCentre.tsx
+ok   fence src/components/season-centre/SeasonCentreHelp.tsx
+ok   fence src/components/soccer-career/SoccerSeasonCentre.tsx
+ok   fence src/data/leagueFormat.ts
+bundled in 804 ms
+run A: 48 careers
+run B: 48 careers, 2582 seasons read
+ok   every step hash of every career equal: 48 of 48
+ok   run B's whole output equals run A's (nights, speeches, markup)
+ok   Math.random calls while reading: 0
+ok   the phone's seed moved on 0 reads
+ok   coverage table: 1287 (floor 500)
+ok   coverage results: 1295 (floor 700)
+ok   coverage keeper: 327 (floor 150)
+ok   coverage defenderSheets: 306 (floor 150)
+ok   coverage derby: 1146 (floor 500)
+ok   coverage red: 168 (floor 70)
+ok   coverage clinch: 408 (floor 180)
+ok   coverage namedChampion: 876 (floor 300)
+refused seasons (no Centre offered): 0 of 2582
+simSeasonCentreNeutral: 24 checks, 0 failed

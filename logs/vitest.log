@@ -1,0 +1,93 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/soccerCareerLeagueSeasons.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 44[2mms[22m[39m
+ [31m❯[39m src/lib/soccerCareerLeague.test.ts [2m([22m[2m37 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 124[2mms[22m[39m
+   [32m✓[39m leagueSizeFor[2m > [22mwalks every window boundary of the verified table[32m 4[2mms[22m[39m
+   [32m✓[39m leagueSizeFor[2m > [22mclaims no size for a league it has not verified[32m 0[2mms[22m[39m
+   [32m✓[39m eliteInYear[2m > [22mfollows the era tier rules year by year[32m 0[2mms[22m[39m
+   [32m✓[39m drawLeagueFinish[2m > [22mis 1st exactly when the title was won[32m 17[2mms[22m[39m
+   [32m✓[39m drawLeagueFinish[2m > [22mgives no finish without a title in a league with no verified size[32m 0[2mms[22m[39m
+   [32m✓[39m drawLeagueFinish[2m > [22mis the same draw for the same season[32m 0[2mms[22m[39m
+   [32m✓[39m drawLeagueFinish[2m > [22mnever touches Math.random[32m 0[2mms[22m[39m
+   [32m✓[39m finishBand[2m > [22msteps down the table tier by tier and stays inside it[32m 9[2mms[22m[39m
+   [32m✓[39m readLeagueFinish[2m > [22mpasses a sound row through[32m 0[2mms[22m[39m
+   [32m✓[39m readLeagueFinish[2m > [22mreads an old save as no finish[32m 0[2mms[22m[39m
+   [32m✓[39m readLeagueFinish[2m > [22mdrops a corrupt finish and keeps the rest of the row alone[32m 0[2mms[22m[39m
+   [32m✓[39m leagueWithArticle[2m > [22mreads like a sentence[32m 0[2mms[22m[39m
+   [32m✓[39m leagueWithArticle[2m > [22mRound 1037: the old French name takes no article, the old English ones do[32m 0[2mms[22m[39m
+   [32m✓[39m ordinal[2m > [22mreads like a table[32m 0[2mms[22m[39m
+   [32m✓[39m managerLeagueField (Round 1029)[2m > [22mnames only clubs of his own league, at its verified size[32m 8[2mms[22m[39m
+   [32m✓[39m managerLeagueField (Round 1029)[2m > [22mfinds his club under the other game's spelling and never names it twice[32m 1[2mms[22m[39m
+   [32m✓[39m managerLeagueField (Round 1029)[2m > [22mplays the league the job came with, in the list's spelling, over the list's own row[32m 1[2mms[22m[39m
+   [32m✓[39m managerLeagueField (Round 1029)[2m > [22mplays every club it knows of a league without a verified size, plus his own[32m 3[2mms[22m[39m
+[31m   [31m×[31m managerLeagueField (Round 1029)[2m > [22mkeeps a market job's league and drops any name that could be his own club[39m[32m 23[2mms[22m[39m
+[31m     → expected 12 to be 20 // Object.is equality[39m
+   [32m✓[39m managerLeagueField (Round 1029)[2m > [22mmatches a league by name across a border[32m 0[2mms[22m[39m
+   [32m✓[39m managerLeagueField (Round 1029)[2m > [22mknows the Championship's size from 2004, and the held second flights for the dugout only[32m 1[2mms[22m[39m
+   [32m✓[39m managerLeagueField (Round 1029)[2m > [22mmoves division only between the Premier League and the Championship[32m 3[2mms[22m[39m
+   [32m✓[39m managerLeagueField (Round 1029)[2m > [22mmoves division only from 2004/05, when the Championship got its name[32m 0[2mms[22m[39m
+   [32m✓[39m managerLeagueField (Round 1029)[2m > [22msays where he finished without a position, at every place of a 20 field[32m 0[2mms[22m[39m
+   [32m✓[39m managerLeagueField (Round 1029)[2m > [22mwalks the verified size into a manager's table, step by step[32m 33[2mms[22m[39m
+   [32m✓[39m managerLeagueField (Round 1029)[2m > [22mnames a past season of a ledger league from the ledgers, never today's clubs[32m 6[2mms[22m[39m
+   [32m✓[39m managerLeagueField (Round 1029)[2m > [22mseats a club the ledgers had elsewhere in a real member's place[32m 1[2mms[22m[39m
+   [32m✓[39m managerLeagueField (Round 1029)[2m > [22mnever seats a club by today's label alone: a job's first past season follows the ledgers[32m 1[2mms[22m[39m
+   [32m✓[39m managerLeagueField (Round 1029)[2m > [22mflags a past season in a league it holds even when it knows no other club there[32m 1[2mms[22m[39m
+   [32m✓[39m managerLeagueField (Round 1029)[2m > [22mnames nobody when nothing names the league[32m 0[2mms[22m[39m
+   [32m✓[39m managerLeagueField (Round 1029)[2m > [22mdraws which known clubs fill a full table from the rng, and only then[32m 0[2mms[22m[39m
+   [32m✓[39m dugoutTableWords (Round 1029)[2m > [22mnames the league from 2026-27 on[32m 0[2mms[22m[39m
+   [32m✓[39m dugoutTableWords (Round 1029)[2m > [22mnames no league over or under a past season's table[32m 1[2mms[22m[39m
+[31m   [31m×[31m dugoutTableWords (Round 1029)[2m > [22mkeeps an old save's table and its order note[39m[32m 5[2mms[22m[39m
+[31m     → expected 'The order only: MLS plays in two conf…' to be 'The order only: we don\'t know how ma…' // Object.is equality[39m
+   [32m✓[39m the leagues that are not one plain table (Round 1100)[2m > [22mgives the dugout the league's real number of rows and never a verified size[32m 1[2mms[22m[39m
+   [32m✓[39m the leagues that are not one plain table (Round 1100)[2m > [22msays why a split league's table carries no points, and keeps the old line elsewhere[32m 0[2mms[22m[39m
+   [32m✓[39m the leagues that are not one plain table (Round 1100)[2m > [22mbands a club by its place in its own league, and reads the club out of the engine's key[32m 1[2mms[22m[39m
+ [32m✓[39m src/lib/soccerCareerLeagueBand.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 223[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/soccerCareerLeague.test.ts[2m > [22mmanagerLeagueField (Round 1029)[2m > [22mkeeps a market job's league and drops any name that could be his own club
+[31m[1mAssertionError[22m: expected 12 to be 20 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 20[39m
+[31m+ 12[39m
+
+[36m [2m❯[22m src/lib/soccerCareerLeague.test.ts:[2m196:20[22m[39m
+    [90m194| [39m    [34mexpect[39m(f[33m.[39mnamed)[33m.[39m[34mtoEqual[39m([[32m"Sturm Graz"[39m])[33m;[39m
+    [90m195| [39m    [34mexpect[39m(f[33m.[39msizeVerified)[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+    [90m196| [39m    [34mexpect[39m(f[33m.[39msize)[33m.[39m[34mtoBe[39m([33mMANAGER_FIELD[39m)[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m197| [39m  })[33m;[39m
+    [90m198| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/lib/soccerCareerLeague.test.ts[2m > [22mdugoutTableWords (Round 1029)[2m > [22mkeeps an old save's table and its order note
+[31m[1mAssertionError[22m: expected 'The order only: MLS plays in two conf…' to be 'The order only: we don\'t know how ma…' // Object.is equality[39m
+
+Expected: [32m"The order only: [7mwe don't know how many club[27ms [7mt[27mhe[7m MLS has[27m."[39m
+Received: [31m"The order only: [7mMLS plays in two conferences, so no point[27ms he[7mre[27m."[39m
+
+[36m [2m❯[22m src/lib/soccerCareerLeague.test.ts:[2m369:27[22m[39m
+    [90m367| [39m    expect([old.header, old.named, old.sizeUnknown, old.note, old.orde…
+    [90m368| [39m    const mls = dugoutTableWords({ league: "MLS", leagueSize: 30, know…
+    [90m369| [39m    expect(mls.orderNote).toBe("The order only: we don't know how many…
+    [90m   | [39m                          [31m^[39m
+    [90m370| [39m  })[33m;[39m
+    [90m371| [39m})[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m46 passed[39m[22m[90m (48)[39m
+[2m   Start at [22m 05:45:11
+[2m   Duration [22m 1.85s[2m (transform 616ms, setup 173ms, collect 1.61s, tests 391ms, environment 1.53s, prepare 600ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/soccerCareerLeague.test.ts,title=src/lib/soccerCareerLeague.test.ts > managerLeagueField (Round 1029) > keeps a market job's league and drops any name that could be his own club,line=196,column=20::AssertionError: expected 12 to be 20 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 20%0A+ 12%0A%0A ❯ src/lib/soccerCareerLeague.test.ts:196:20%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/soccerCareerLeague.test.ts,title=src/lib/soccerCareerLeague.test.ts > dugoutTableWords (Round 1029) > keeps an old save's table and its order note,line=369,column=27::AssertionError: expected 'The order only: MLS plays in two conf…' to be 'The order only: we don\'t know how ma…' // Object.is equality%0A%0AExpected: "The order only: we don't know how many clubs the MLS has."%0AReceived: "The order only: MLS plays in two conferences, so no points here."%0A%0A ❯ src/lib/soccerCareerLeague.test.ts:369:27%0A%0A

@@ -1,0 +1,33 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/soccerCareerLeagueBand.test.ts src/lib/soccerCareerLeague.test.ts src/lib/soccerCareerLeagueSeasons.test.ts --testTimeout=300000 --hookTimeout=120000
+world0: node scripts/simCareerLeagueWorld.mjs
+ctl-scotrow: SIM_LEAGUE_WORLD_CONTROL=scotrow node scripts/simCareerLeagueWorld.mjs
+ctl-rankfive: SIM_LEAGUE_WORLD_CONTROL=rankfive node scripts/simCareerLeagueWorld.mjs
+ctl-flatband: SIM_LEAGUE_WORLD_CONTROL=flatband node scripts/simCareerLeagueWorld.mjs
+ctl-rewrite: SIM_LEAGUE_WORLD_CONTROL=rewrite node scripts/simCareerLeagueWorld.mjs
+ctl-nocanon: SIM_LEAGUE_WORLD_CONTROL=nocanon node scripts/simCareerLeagueWorld.mjs
+ctl-nosize: CAREERS=60 SIM_LEAGUE_WORLD_CONTROL=nosize node scripts/simCareerLeagueWorld.mjs
+ctl-nocadence: CAREERS=60 SIM_LEAGUE_WORLD_CONTROL=nocadence node scripts/simCareerLeagueWorld.mjs
+ctl-keyshift: CAREERS=60 SIM_LEAGUE_WORLD_CONTROL=keyshift node scripts/simCareerLeagueWorld.mjs
+simCareerClubPool: node scripts/simCareerClubPool.mjs
+simCareerFacts: node scripts/simCareerFacts.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simManagerCareer: node scripts/simManagerCareer.mjs
+simCareerDerbies: node scripts/simCareerDerbies.mjs
+simCareerLeagueFinish: node scripts/simCareerLeagueFinish.mjs
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+simCareerAwardsNight: node scripts/simCareerAwardsNight.mjs
+simCareerSocialBrands: node scripts/simCareerSocialBrands.mjs
+simSeasonCentreTable: node scripts/simSeasonCentreTable.mjs
+simSeasonCentreNeutral: node scripts/simSeasonCentreNeutral.mjs
+simSeasonMoments: node scripts/simSeasonMoments.mjs
+agree0: SEEDSET=0 node scripts/simSeasonCentreAgreement.mjs
+agree1: SEEDSET=1 node scripts/simSeasonCentreAgreement.mjs
+agree2: SEEDSET=2 node scripts/simSeasonCentreAgreement.mjs
+agree3: SEEDSET=3 node scripts/simSeasonCentreAgreement.mjs
+agree4: SEEDSET=4 node scripts/simSeasonCentreAgreement.mjs
+genLeagueSeasons: node scripts/genCareerLeagueSeasons.mjs --check
+poolFresh: node scripts/genCareerClubPool.mjs && git diff --exit-code --stat -- src/data/soccerCareerClubPool.ts && echo the pool file equals a fresh derive
+rec-awards: S=$(git rev-parse HEAD^); node scripts/recordCareerAwardsNightFixture.mjs --out $RC_OUT/careerAwardsNightFixture.json --from $S && node scripts/recordCareerAwardsNightFixture.mjs --out $TMPDIR/again.json --from $S && cmp $RC_OUT/careerAwardsNightFixture.json $TMPDIR/again.json && echo recorded twice identical from $S
+rec-brand: S=$(git rev-parse HEAD^); mkdir -p $TMPDIR/o && cp scripts/data/soccerBrandFixture835.json $TMPDIR/o/committed.json && node scripts/recordSoccerBrandFixture835.mjs . $S && cp scripts/data/soccerBrandFixture835.json $RC_OUT/soccerBrandFixture835.json && cp $TMPDIR/o/committed.json scripts/data/soccerBrandFixture835.json && echo recorded from $S
