@@ -1,0 +1,25 @@
+       |                                              ^
+     51| /** Runs the backoff of a failing load (400 ms, then 800 ms) to its en…
+     52| async function settle<T>(p: Promise<T>): Promise<T> { await vi.advance…
+ ❯ checkRetry src/test/collegeGridSearchMemory.test.ts:127:34
+ ❯ src/test/collegeGridSearchMemory.test.ts:179:5
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+ FAIL  src/test/collegeGridSearchMemory.test.ts > the College Grid search, from memory (Round 1105) > a file of the wrong shape is refused and forgotten, 7 ways, and a 200 that is not JSON is a failed fetch
+Error: RETRY: the broken world did not fail the search (null)
+ ❯ fail src/test/collegeGridSearchMemory.test.ts:50:46
+     48| type Wrap = (real: PlayerSourceConfig) => PlayerSourceConfig;
+     49| const REAL: Wrap = (real) => real;
+     50| const fail = (msg: string): never => { throw new Error(msg); };
+       |                                              ^
+     51| /** Runs the backoff of a failing load (400 ms, then 800 ms) to its en…
+     52| async function settle<T>(p: Promise<T>): Promise<T> { await vi.advance…
+ ❯ checkRetry src/test/collegeGridSearchMemory.test.ts:127:34
+ ❯ src/test/collegeGridSearchMemory.test.ts:184:45
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+ Test Files  1 failed (1)
+      Tests  3 failed | 3 passed (6)
+   Start at  10:49:58
+   Duration  1.16s (transform 113ms, setup 51ms, collect 137ms, tests 294ms, environment 291ms, prepare 146ms)
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridSearchMemory.test.ts,title=src/test/collegeGridSearchMemory.test.ts > the College Grid search%2C from memory (Round 1105) > a list that failed to load is an error%2C and the check fails when it reads as nobody by that name,line=50,column=46:
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridSearchMemory.test.ts,title=src/test/collegeGridSearchMemory.test.ts > the College Grid search%2C from memory (Round 1105) > after a failed fetch the next search asks again%2C and the check fails when a failed list is kept,line=50,column=46::
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridSearchMemory.test.ts,title=src/test/collegeGridSearchMemory.test.ts > the College Grid search%2C from memory (Round 1105) > a file of the wrong shape is refused and forgotten%2C 7 ways%2C and a 200 that is not JSON is a failed fetch,line=50,

@@ -1,0 +1,25 @@
+- Expected
++ Received
+- [
+-   "Peyton Manning",
+-   "Eli Manning",
+-   "Archie Manning",
+- ]
++ []
+ ❯ src/test/collegeGridSearchMemory.test.ts:196:36
+    194|     const second = await searchPlayers({ source: COLLEGE_GRID_PLAYER_S…
+    195|     const third = await searchPlayers({ source: COLLEGE_GRID_PLAYER_SO…
+    196|     expect(raw(first).slice(0, 3)).toEqual(['Peyton Manning', 'Eli Man…
+       |                                    ^
+    197|     expect(first.results.length, 'the default limit holds').toBe(8);
+    198|     expect(raw(second)).toEqual(['Jerry Rice']);
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+ Test Files  1 failed (1)
+      Tests  5 failed | 1 passed (6)
+   Start at  10:47:15
+   Duration  1.06s (transform 120ms, setup 51ms, collect 138ms, tests 185ms, environment 296ms, prepare 127ms)
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridSearchMemory.test.ts,title=src/test/collegeGridSearchMemory.test.ts > the College Grid search%2C from memory (Round 1105) > a surname lists the man%2C and the check fails when names are found by their first letters only,line=50,column=46::Er
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridSearchMemory.test.ts,title=src/test/collegeGridSearchMemory.test.ts > the College Grid search%2C from memory (Round 1105) > the best match and the longest career come first%2C and the check fails when the order is turned round,line=50,column
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridSearchMemory.test.ts,title=src/test/collegeGridSearchMemory.test.ts > the College Grid search%2C from memory (Round 1105) > after a failed fetch the next search asks again%2C and the check fails when a failed list is kept,line=50,column=46::
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridSearchMemory.test.ts,title=src/test/collegeGridSearchMemory.test.ts > the College Grid search%2C from memory (Round 1105) > a file of the wrong shape is refused and forgotten%2C 7 ways%2C and a 200 that is not JSON is a failed fetch,line=50,
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridSearchMemory.test.ts,title=src/test/collegeGridSearchMemory.test.ts > the College Grid search%2C from memory (Round 1105) > the box on the page searches the shipped file%3A one request for it however many searches%2C and no table read,line=1

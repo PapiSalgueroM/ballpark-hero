@@ -1,0 +1,25 @@
+     50| const fail = (msg: string): never => { throw new Error(msg); };
+       |                                              ^
+     51| /** Runs the backoff of a failing load (400 ms, then 800 ms) to its en…
+     52| async function settle<T>(p: Promise<T>): Promise<T> { await vi.advance…
+ ❯ checkRetry src/test/collegeGridSearchMemory.test.ts:131:49
+ ❯ src/test/collegeGridSearchMemory.test.ts:179:5
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+ FAIL  src/test/collegeGridSearchMemory.test.ts > the College Grid search, from memory (Round 1105) > a file of the wrong shape is refused and forgotten, 7 ways, and a 200 that is not JSON is a failed fetch
+Error: RETRY: the healed search made 0 new requests, expected exactly 1
+ ❯ fail src/test/collegeGridSearchMemory.test.ts:50:46
+     48| type Wrap = (real: PlayerSourceConfig) => PlayerSourceConfig;
+     49| const REAL: Wrap = (real) => real;
+     50| const fail = (msg: string): never => { throw new Error(msg); };
+       |                                              ^
+     51| /** Runs the backoff of a failing load (400 ms, then 800 ms) to its en…
+     52| async function settle<T>(p: Promise<T>): Promise<T> { await vi.advance…
+ ❯ checkRetry src/test/collegeGridSearchMemory.test.ts:131:49
+ ❯ src/test/collegeGridSearchMemory.test.ts:184:45
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+ Test Files  1 failed (1)
+      Tests  2 failed | 4 passed (6)
+   Start at  10:51:17
+   Duration  1.18s (transform 122ms, setup 51ms, collect 144ms, tests 296ms, environment 289ms, prepare 151ms)
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridSearchMemory.test.ts,title=src/test/collegeGridSearchMemory.test.ts > the College Grid search%2C from memory (Round 1105) > after a failed fetch the next search asks again%2C and the check fails when a failed list is kept,line=50,column=46::
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridSearchMemory.test.ts,title=src/test/collegeGridSearchMemory.test.ts > the College Grid search%2C from memory (Round 1105) > a file of the wrong shape is refused and forgotten%2C 7 ways%2C and a 200 that is not JSON is a failed fetch,line=50,

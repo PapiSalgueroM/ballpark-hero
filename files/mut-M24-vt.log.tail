@@ -1,0 +1,23 @@
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+ ✓ src/test/gridEngineSource.test.ts (18 tests) 229ms
+stdout | src/test/collegeGridFailClosed.test.tsx
+CGFAILCLOSED| board cg611-033: yes Jason Witten, no Darrell Green
+ ✓ src/test/playerSearchLocal.test.ts (8 tests) 12ms
+stdout | src/test/collegeGridFailClosed.test.tsx > College Grid fail closed (Round 1105) > (c) the key fails five ways: unverified each time, the next pick starts a new load, and a good load is judged
+CGFAILCLOSED| fail closed: 5 of 5 failure worlds left the pick unverified and judged it after the network healed
+stdout | src/test/collegeGridOffline.test.tsx > College Grid offline > (4a) a win bot fills 9 of 9 in 9 counted guesses on every board
+CGOFFLINE| win: 75 of 75 boards won in 9 counted guesses, each recorded once at 900; 1350 network calls refused by the stub along the way; key files fetched 2, reads of the key's table 0
+stdout | src/test/collegeGridFailClosed.test.tsx > decodeCollegeKey: null on any doubt, never a row from a damaged file > every one of 44 damaged pairs is null, and none of them throws
+CGFAILCLOSED| decoder: 44 of 44 damaged pairs refused
+ ✓ src/test/collegeGridFailClosed.test.tsx (8 tests) 2289ms
+   ✓ College Grid fail closed (Round 1105) > (c) the key fails five ways: unverified each time, the next pick starts a new load, and a good load is judged  839ms
+   ✓ decodeCollegeKey: null on any doubt, never a row from a damaged file > every one of 44 damaged pairs is null, and none of them throws  469ms
+stdout | src/test/collegeGridOffline.test.tsx > College Grid offline > (4b) a loss bot that submits a definite no each time ends every board lost at 15
+CGOFFLINE| loss: 75 of 75 boards ended lost at 15 counted guesses, each recorded once at 0; 0 still playing after 15 submissions
+ ✓ src/test/collegeGridOffline.test.tsx (2 tests) 2635ms
+   ✓ College Grid offline > (4a) a win bot fills 9 of 9 in 9 counted guesses on every board  1138ms
+   ✓ College Grid offline > (4b) a loss bot that submits a definite no each time ends every board lost at 15  840ms
+ Test Files  4 passed (4)
+      Tests  36 passed (36)
+   Start at  10:50:58
+   Duration  3.92s (transform 406ms, setup 300ms, collect 886ms, tests 5.16s, environment 1.80s, prepare 544ms)

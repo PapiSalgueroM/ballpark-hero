@@ -1,0 +1,7 @@
+playCollegeGridFirstTap, control nosurname: section 4 must go red
+
+4) Search from memory, offline
+  FAIL: typing the surname "morocco" offline did not list Zippy Morocco; the list showed: No players found
+   390 by 844, offline: "Darrell Gr" listed Darrell Green and the surname "morocco" alone did NOT list Zippy Morocco, with 0 requests. Longest task at 4 times throttle: 162 ms while the key landed, 132 ms on the first search
+
+control "nosurname": fired in section 4 as expected, the check works

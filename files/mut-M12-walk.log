@@ -1,0 +1,5 @@
+   median 695 ms to nine cells over 5 fresh contexts at 4 times CPU throttle [708, 712, 695, 686, 690]; ceiling 3150 ms; main's board took 9528 to 15553 ms. Medians measured when the ceiling was set: 776, 771 and 769 ms (tight figure 1,200 ms; 2,601 ms on a PC at full load)
+  FAIL: typing the surname "morocco" offline did not list Zippy Morocco; the list showed: No players found
+   390 by 844, offline: "Darrell Gr" listed Darrell Green and the surname "morocco" alone did NOT list Zippy Morocco, with 0 requests. Longest task at 4 times throttle: 151 ms while the key landed, 130 ms on the first search
+   the judge file aborted: unverified, 15 left, save untouched, then judged after release; the judge file answered 200 with index.html: unverified, 15 left, save untouched, then judged after release; the judge file answered with its stamp changed: unverified, 15 left, save untouched, then judged after release
+playCollegeGridFirstTap: red, 1 failure above in section 4.

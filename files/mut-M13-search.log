@@ -1,0 +1,29 @@
+stdout | src/test/collegeGridSearchMemory.test.ts > the College Grid search, from memory (Round 1105) > a surname lists the man, and the check fails when names are found by their first letters only
+CGSEARCH| surname: 74 sampled names each listed by their second word
+   ✓ the College Grid search, from memory (Round 1105) > a surname lists the man, and the check fails when names are found by their first letters only 164ms
+   × the College Grid search, from memory (Round 1105) > the best match and the longest career come first, and the check fails when the order is turned round 30ms
+     → ORDER: "manning" opens with Pete Manning, Don Manning, Dick Manning
+   ✓ the College Grid search, from memory (Round 1105) > a list that failed to load is an error, and the check fails when it reads as nobody by that name 2ms
+   × the College Grid search, from memory (Round 1105) > after a failed fetch the next search asks again, and the check fails when a failed list is kept 34ms
+     → RETRY: the healed search settled with null and Pete Manning
+   × the College Grid search, from memory (Round 1105) > a file of the wrong shape is refused and forgotten, 7 ways, and a 200 that is not JSON is a failed fetch 30ms
+     → RETRY: the healed search settled with null and Pete Manning
+   × the College Grid search, from memory (Round 1105) > the box on the page searches the shipped file: one request for it however many searches, and no table read 30ms
+     → expected [ 'Pete Manning', 'Don Manning', …(1) ] to deeply equal [ 'Peyton Manning', …(2) ]
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/test/collegeGridSearchMemory.test.ts > the College Grid search, from memory (Round 1105) > the best match and the longest career come first, and the check fails when the order is turned round
+Error: ORDER: "manning" opens with Pete Manning, Don Manning, Dick Manning
+     50| const fail = (msg: string): never => { throw new Error(msg); };
+ FAIL  src/test/collegeGridSearchMemory.test.ts > the College Grid search, from memory (Round 1105) > after a failed fetch the next search asks again, and the check fails when a failed list is kept
+Error: RETRY: the healed search settled with null and Pete Manning
+     50| const fail = (msg: string): never => { throw new Error(msg); };
+ FAIL  src/test/collegeGridSearchMemory.test.ts > the College Grid search, from memory (Round 1105) > a file of the wrong shape is refused and forgotten, 7 ways, and a 200 that is not JSON is a failed fetch
+Error: RETRY: the healed search settled with null and Pete Manning
+     50| const fail = (msg: string): never => { throw new Error(msg); };
+ FAIL  src/test/collegeGridSearchMemory.test.ts > the College Grid search, from memory (Round 1105) > the box on the page searches the shipped file: one request for it however many searches, and no table read
+AssertionError: expected [ 'Pete Manning', 'Don Manning', …(1) ] to deeply equal [ 'Peyton Manning', …(2) ]
+      Tests  4 failed | 2 passed (6)
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridSearchMemory.test.ts,title=src/test/collegeGridSearchMemory.test.ts > the College Grid search%2C from memory (Round 1105) > the best match and the longest career come first%2C and the check fails when the order is turned round,line=50,column
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridSearchMemory.test.ts,title=src/test/collegeGridSearchMemory.test.ts > the College Grid search%2C from memory (Round 1105) > after a failed fetch the next search asks again%2C and the check fails when a failed list is kept,line=50,column=46::
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridSearchMemory.test.ts,title=src/test/collegeGridSearchMemory.test.ts > the College Grid search%2C from memory (Round 1105) > a file of the wrong shape is refused and forgotten%2C 7 ways%2C and a 200 that is not JSON is a failed fetch,line=50,
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridSearchMemory.test.ts,title=src/test/collegeGridSearchMemory.test.ts > the College Grid search%2C from memory (Round 1105) > the box on the page searches the shipped file%3A one request for it however many searches%2C and no table read,line=1

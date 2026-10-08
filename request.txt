@@ -1,0 +1,11 @@
+# Round 1105 closing check B (serial): the walk plain and under its nosurname control, then the reviewer's four surviving mutations (rvmut.mjs unchanged), one at a time, against the round's gates plus the new search suite
+#!build
+#!playwright
+#!serial
+walk: node scripts/playCollegeGridFirstTap.mjs
+walk-nosurname: CGFIRST_CONTROL=nosurname node scripts/playCollegeGridFirstTap.mjs
+M12: bash .rc/x/vfmutrun.sh M12 vt page shipped search walk
+M13: bash .rc/x/vfmutrun.sh M13 vt page shipped search walk
+M23: bash .rc/x/vfmutrun.sh M23 vt page shipped search walk
+M24: bash .rc/x/vfmutrun.sh M24 vt page shipped search walk
+clean: git status --porcelain --untracked-files=no | wc -l

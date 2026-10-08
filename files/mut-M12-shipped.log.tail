@@ -1,0 +1,24 @@
+simCollegeGridShipped: committed files only, no request
+1) None of the thirteen ships
+   35,598 key rows and 35,598 search names read; 13 names read out of the migration's DELETE statement; 1,163 distinct schools in the key (1,165 before the thirteen left, measured 2026-10-07)
+2) The compact files are the key
+   35,598 rows x 57 labels judged both ways: 44,917 yes, 312,741 no, 1,671,428 unknown, 0 different
+3) Recorded before: nothing moved for anyone who stayed
+   35,598 kept rows x 57 labels, recorded at 6f57ce78 before any edit: the same sha256 through the edited lib and through the shipped files ({"yes":44917,"no":312741,"unknown":1671428})
+4) Not stale: both files are what the generator renders
+   both files byte equal to renderCompact(committed key): 35,598 rows, stamp cf90e69d60395171
+5) Every board keeps its answers
+   675 cells read from the shipped files, each with exactly its recorded answers; the answers that left: Elliot Ecke on cg611-022, Adam Dzierdzik on cg611-065. Floor: every dealt cell holds at least 3 two-source answers (thinnest Michigan x Heisman Winner, 3), all 75 boards fillable, and the boards file is what the gen
+6) The budget
+   search 599,136 raw, 205,231 gzip; judge 542,050 raw, 133,308 gzip; pair 1,141,186 raw, 338,539 gzip in 2 requests (ceilings 1,313,000 and 390,000). Before: 36 table reads decoding 9,462,264 bytes (the key file is 6,233,432 raw, 1,241,950 gzip). CPU for parse, decode and index of 35,598 rows: median 134.8 ms of 7 [15
+7) The source stage drops the audited row and keeps another name at the same pick
+   5 draft rows and 2 careers in, 4 entries out (Probe Opener, Probe Passer, Probe Realpick, Probe Runner); 1 audited row left out at 1977 pick 320
+8) The door and fail closed, through the real hook
+  FAIL: memory search: "a surname lists the man, and the check fails when names are found by their first" is failed
+  FAIL: memory search: "the best match and the longest career come first, and the check fails when the o" is failed
+  FAIL: memory search: "after a failed fetch the next search asks again, and the check fails when a fail" is failed
+  FAIL: memory search: "a file of the wrong shape is refused and forgotten, 7 ways, and a 200 that is no" is failed
+  FAIL: memory search: "the box on the page searches the shipped file: one request for it however many s" is failed
+  FAIL: the memory search suite sampled 0 surnames, expected at least 50, so its first check returned without measuring
+  ... and 1 more
+simCollegeGridShipped: red, 7 failures above in section 8.
