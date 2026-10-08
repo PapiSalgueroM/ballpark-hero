@@ -1,0 +1,5 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+guideLadder-expect-red exit=1 0s | simGauntletGuideLadder: RED, 3 of 17 checks failed. A guide prints numbers its own board contradicts. The sentences are owed to src/data/gameContent/football.ts (another 
+help exit=0 23s |    ? panel length 1986
+help2 exit=0 22s |    ? panel text there: ng the same seven replays the same cup. Opposition ratings climb 78, 85, 90, 95, 99. A bargain offense usually falls in the first round, an elite o
+tsc exit=0 57s | 

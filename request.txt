@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+guideLadder-expect-red: node scripts/simGauntletGuideLadder.mjs
+help: node .rc/x/rvwHelp.mjs
+help2: node .rc/x/vfyHelp.mjs

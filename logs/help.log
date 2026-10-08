@@ -1,0 +1,20 @@
+390 /front-office page text, four seconds after load: "sixty carries" no, "three things" no, "fullback" no, "how much of the work" no
+   help button: 1 (How to play)
+   ? panel: "sixty carries" YES, "three things" YES, "fullback" YES, "how much of the work" YES
+   ? panel text near the ratings: ho joins later (a signing, a pick, a trade) slots in by his rating, so a better newcomer starts right away, and Sort by rating hands a group back to the sim. The Roster box opens on one tile per position group plus one for the practice squad, so fifty men never turn into one long list. The men at the top of each group's depth chart start, the bench steps in when a starter gets hurt, and the practice squad sits off the cap until you call a man up. A call-up needs a roster spot
+   ? panel length 7501
+390 /nfl-gauntlet-draft page text, four seconds after load: "78, 85, 90, 95, 99" YES, "78 up to 99" YES, "97 rated MVP" YES, "79 up to 97" YES
+   help button: 1 (How to play)
+   ? panel: "78, 85, 90, 95, 99" YES, "78 up to 99" no, "97 rated MVP" YES, "79 up to 97" no
+   ? panel text near the ratings: the four skill positions (QB, RB, WR, TE) on purpose: their ratings are built from real production, the way the position data's own generator describes it, and every slot deals a genuine star-to-bargain spread. Offensive line and defense lean on draft position and years played instead, so they stay out of the draft rather than padding it with picks that are not a real choice. The five cards per slot are spread across the pool's rating range, so a top-tier card and a bargain a
+   ? panel length 1986
+1280 /front-office page text, four seconds after load: "sixty carries" no, "three things" no, "fullback" no, "how much of the work" no
+   help button: 1 (How to play)
+   ? panel: "sixty carries" YES, "three things" YES, "fullback" YES, "how much of the work" YES
+   ? panel text near the ratings: ho joins later (a signing, a pick, a trade) slots in by his rating, so a better newcomer starts right away, and Sort by rating hands a group back to the sim. The Roster box opens on one tile per position group plus one for the practice squad, so fifty men never turn into one long list. The men at the top of each group's depth chart start, the bench steps in when a starter gets hurt, and the practice squad sits off the cap until you call a man up. A call-up needs a roster spot
+   ? panel length 7501
+1280 /nfl-gauntlet-draft page text, four seconds after load: "78, 85, 90, 95, 99" YES, "78 up to 99" YES, "97 rated MVP" YES, "79 up to 97" YES
+   help button: 1 (How to play)
+   ? panel: "78, 85, 90, 95, 99" YES, "78 up to 99" no, "97 rated MVP" YES, "79 up to 97" no
+   ? panel text near the ratings: the four skill positions (QB, RB, WR, TE) on purpose: their ratings are built from real production, the way the position data's own generator describes it, and every slot deals a genuine star-to-bargain spread. Offensive line and defense lean on draft position and years played instead, so they stay out of the draft rather than padding it with picks that are not a real choice. The five cards per slot are spread across the pool's rating range, so a top-tier card and a bargain a
+   ? panel length 1986
