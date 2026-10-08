@@ -1,0 +1,15 @@
+#!serve
+#!playwright
+#!serial
+vitest: node_modules/.bin/vitest run src/lib/frontOfficeRatings.test.ts src/test/cookieConsentStorage.test.tsx src/test/freshBuildBlockedStorage.test.ts src/test/guessFinishMoment.test.tsx src/test/guestHandleVisit.test.tsx src/test/hofOrBustVoteOnce.test.tsx src/test/safeStorage.test.ts src/test/storageBlockedBoot.test.tsx src/test/supabaseClientBlockedStorage.test.ts src/test/translateGuard.test.tsx --testTimeout=300000 --hookTimeout=120000
+simStorageWrites: node scripts/simStorageWrites.mjs
+ssw-probe: SIM_STORAGE_WRITES_CONTROL=probe node scripts/simStorageWrites.mjs
+simResultPillComparison: node scripts/simResultPillComparison.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+translated-plain: ENGINES=chromium node scripts/playTranslatedPage.mjs
+storage-main: PLAY_STORAGE_NATIVE=require node scripts/playStorageBlocked.mjs
+storage-open: PLAY_STORAGE_CONTROL=open node scripts/playStorageBlocked.mjs
+storage-raw: PLAY_STORAGE_NATIVE=require PLAY_STORAGE_CONTROL=raw node scripts/playStorageBlocked.mjs
