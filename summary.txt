@@ -1,0 +1,11 @@
+build exit=0 20s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+translated-plain exit=0 125s | playTranslatedPage: 447 checks, 0 failed
+translated-nospans exit=1 67s | playTranslatedPage: 79 checks, 28 failed (control "nospans", red on purpose)
+translated-nolive exit=1 124s | playTranslatedPage: 447 checks, 72 failed (control "nolive", red on purpose)
+translated-notranslate exit=0 58s | playTranslatedPage: 242 checks, 0 failed
+translated-noguard exit=1 162s | playTranslatedPage: 183 checks, 16 failed (control "noguard", red on purpose)
+translated-undocopies exit=1 124s | playTranslatedPage: 447 checks, 8 failed (control "undocopies", red on purpose)
+mut-flatwaits exit=1 2s | fxmut flatwaits: command exit 1, file restored
+mut-norecord exit=1 11s | fxmut norecord: command exit 1, file restored
+mut-shoot10 exit=1 9s | fxmut shoot10: command exit 1, file restored
+mut-nocap exit=1 2s | fxmut nocap: command exit 1, file restored

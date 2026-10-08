@@ -1,0 +1,14 @@
+# Release AN fix pass, request 3 (serial): the translated walk with every control, then four mutations that must go red
+#!serve
+#!playwright
+#!serial
+translated-plain: ENGINES=chromium node scripts/playTranslatedPage.mjs
+translated-nospans: PLAY_TRANSLATED_CONTROL=nospans ENGINES=chromium node scripts/playTranslatedPage.mjs
+translated-nolive: PLAY_TRANSLATED_CONTROL=nolive ENGINES=chromium node scripts/playTranslatedPage.mjs
+translated-notranslate: PLAY_TRANSLATED_CONTROL=notranslate ENGINES=chromium node scripts/playTranslatedPage.mjs
+translated-noguard: PLAY_TRANSLATED_CONTROL=noguard ENGINES=chromium node scripts/playTranslatedPage.mjs
+translated-undocopies: PLAY_TRANSLATED_CONTROL=undocopies ENGINES=chromium node scripts/playTranslatedPage.mjs
+mut-flatwaits: node .rc/x/fxmut.mjs flatwaits
+mut-norecord: node .rc/x/fxmut.mjs norecord
+mut-shoot10: node .rc/x/fxmut.mjs shoot10
+mut-nocap: node .rc/x/fxmut.mjs nocap

@@ -1,0 +1,364 @@
+fxmut norecord: src/components/us-career/UsCareerBoard.tsx mutated, running: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000 src/test/usSeasonCentreEntry.test.tsx
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [31m❯[39m src/test/usSeasonCentreEntry.test.tsx [2m([22m[2m18 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 9548[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 1076[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ[32m 226[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mkeeps Play the first button, and the entry never says "Play the"[32m 7[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mplays and opens nothing on the bare board, with no host around it[32m 22[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mopens a season already played from Watch again, after a contract talk was answered with "play it out"[32m 49[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mplays nothing when the viewer cannot be loaded: a failed chunk costs no season[32m 28[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mCONTROL: the old order (play, then load) loses a season to the same failed chunk[32m 12[2mms[22m[39m
+[31m   [31m×[31m 'NBA' My Career: watching changes nothing[2m > [22mopens the season he just played when storage is full and the save was refused[39m[33m 4017[2mms[22m[39m
+[31m     → expected null not to be null
+
+Ignored nodes: comments, script, style
+[36m<html>[31m
+  [36m<head />[31m
+  [36m<body[31m
+    [33mstyle[31m=[32m"padding-right: 1024px;"[31m
+  [36m>[31m
+    [36m<div>[31m
+      [36m<div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"relative overflow-hidden rounded-2xl border p-4 text-center border-border bg-card"[31m
+          [33mdata-season-reveal[31m=[32m"true"[31m
+        [36m>[31m
+          [36m<p[31m
+            [33mclass[31m=[32m"cm-slam text-[10px] font-bold uppercase tracking-widest text-muted-foreground"[31m
+            [33mstyle[31m=[32m"animation-delay: 0.05s;"[31m
+          [36m>[31m
+            [0mThe 2026 season[0m
+          [36m</p>[31m
+          [36m<p[31m
+            [33mclass[31m=[32m"cm-slam mt-0.5 text-xs text-muted-foreground"[31m
+            [33mstyle[31m=[32m"animation-delay: 0.15s;"[31m
+          [36m>[31m
+            [0mOrlando Magic · age 19 · SG[0m
+          [36m</p>[31m
+          [36m<p[31m
+            [33mclass[31m=[32m"cm-slam mt-2 font-display text-xl font-black text-foreground"[31m
+            [33mstyle[31m=[32m"animation-delay: 0.25s;"[31m
+          [36m>[31m
+            [0mMissed the playoffs[0m
+          [36m</p>[31m
+          [36m<p[31m
+            [33mclass[31m=[32m"cm-rise mt-1 text-xs font-semibold text-foreground"[31m
+            [33mstyle[31m=[32m"animation-delay: 0.45s;"[31m
+          [36m>[31m
+            [0m11 ppg, 1.5 rpg, 3.9 apg[0m
+          [36m</p>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"mt-3 space-y-1 text-left"[31m
+          [36m>[31m
+            [36m<p[31m
+              [33mclass[31m=[32m"cm-tick-in rounded-lg px-2.5 py-1.5 text-xs leading-snug bg-destructive/10 text-foreground"[31m
+              [33mstyle[31m=[32m"animation-delay: 0.6s;"[31m
+            [36m>[31m
+              [0m🪑 Still the second unit. The minutes will come, keep pushing.[0m
+            [36m</p>[31m
+            [36m<p[31m
+              [33mclass[31m=[32m"cm-tick-in rounded-lg px-2.5 py-1.5 text-xs leading-snug bg-destructive/10 text-foreground"[31m
+              [33mstyle[31m=[32m"animation-delay: 0.82s;"[31m
+            [36m>[31m
+              [0m🪑 Second unit season: your numbers come in bench minutes.[0m
+            [36m</p>[31m
+            [36m<p[31m
+              [33mclass[31m=[32m"cm-tick-in rounded-lg px-2.5 py-1.5 text-xs leading-snug bg-background text-muted-foreground"[31m
+              [33mstyle[31m=[32m"animation-delay: 1.04s;"[31m
+            [36m>[31m
+              [0m🪞 Tyrell Boudreau went 11 ppg, 3.3 rpg, 2.9 apg. Nothing in it again. You lead the head to head 0-1.[0m
+            [36m</p>[31m
+          [36m</div>[31m
+          [36m<button[31m
+            [33mclass[31m=[32m"cm-rise mt-4 inline-flex min-h-11 items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:brightness-110"[31m
+            [33mstyle[31m=[32m"animation-delay: 1.41s;"[31m
+          [36m>[31m
+            [0mContinue[0m
+          [36m</button>[31m
+        [36m</div>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+  [36m</body>[31m
+[36m</html>[31m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mCONTROL: without the board handing its career over, the same press plays the season and opens nothing[32m 17[2mms[22m[39m
+[31m   [31m×[31m 'NBA' My Career: watching changes nothing[2m > [22mnever opens a line another tab saved: with his own write refused he watches the season this tab played[39m[33m 4017[2mms[22m[39m
+[31m     → expected null not to be null
+
+Ignored nodes: comments, script, style
+[36m<html>[31m
+  [36m<head />[31m
+  [36m<body[31m
+    [33mstyle[31m=[32m"padding-right: 1024px;"[31m
+  [36m>[31m
+    [36m<div>[31m
+      [36m<div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"relative overflow-hidden rounded-2xl border p-4 text-center border-border bg-card"[31m
+          [33mdata-season-reveal[31m=[32m"true"[31m
+        [36m>[31m
+          [36m<p[31m
+            [33mclass[31m=[32m"cm-slam text-[10px] font-bold uppercase tracking-widest text-muted-foreground"[31m
+            [33mstyle[31m=[32m"animation-delay: 0.05s;"[31m
+          [36m>[31m
+            [0mThe 2026 season[0m
+          [36m</p>[31m
+          [36m<p[31m
+            [33mclass[31m=[32m"cm-slam mt-0.5 text-xs text-muted-foreground"[31m
+            [33mstyle[31m=[32m"animation-delay: 0.15s;"[31m
+          [36m>[31m
+            [0mLos Angeles Lakers · age 20 · SG[0m
+          [36m</p>[31m
+          [36m<p[31m
+            [33mclass[31m=[32m"cm-slam mt-2 font-display text-xl font-black text-foreground"[31m
+            [33mstyle[31m=[32m"animation-delay: 0.25s;"[31m
+          [36m>[31m
+            [0mLost in the first round[0m
+          [36m</p>[31m
+          [36m<p[31m
+            [33mclass[31m=[32m"cm-rise mt-1 text-xs font-semibold text-foreground"[31m
+            [33mstyle[31m=[32m"animation-delay: 0.45s;"[31m
+          [36m>[31m
+            [0m11 ppg, 2.6 rpg, 3.3 apg[0m
+          [36m</p>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"mt-3 space-y-1 text-left"[31m
+          [36m>[31m
+            [36m<p[31m
+              [33mclass[31m=[32m"cm-tick-in rounded-lg px-2.5 py-1.5 text-xs leading-snug bg-destructive/10 text-foreground"[31m
+              [33mstyle[31m=[32m"animation-delay: 0.6s;"[31m
+            [36m>[31m
+              [0m🪑 Still the second unit. The minutes will come, keep pushing.[0m
+            [36m</p>[31m
+            [36m<p[31m
+              [33mclass[31m=[32m"cm-tick-in rounded-lg px-2.5 py-1.5 text-xs leading-snug bg-destructive/10 text-foreground"[31m
+              [33mstyle[31m=[32m"animation-delay: 0.82s;"[31m
+            [36m>[31m
+              [0m🪑 Second unit season: your numbers come in bench minutes.[0m
+            [36m</p>[31m
+            [36m<p[31m
+              [33mclass[31m=[32m"cm-tick-in rounded-lg px-2.5 py-1.5 text-xs leading-snug bg-background text-muted-foreground"[31m
+              [33mstyle[31m=[32m"animation-delay: 1.04s;"[31m
+            [36m>[31m
+              [0m📊 Playoffs: 5 games, 15 ppg, 3.5 rpg, 3.6 apg.[0m
+            [36m</p>[31m
+            [36m<p[31m
+              [33mclass[31m=[32m"cm-tick-in rounded-lg px-2.5 py-1.5 text-xs leading-snug bg-background text-muted-foreground"[31m
+              [33mstyle[31m=[32m"animation-delay: 1.26s;"[31m
+            [36m>[31m
+              [0m🪞 Dominic Salvatore went 15 ppg, 4.7 rpg, 4.5 apg and had the better year of the two of you. Head to head 0-1.[0m
+            [36m</p>[31m
+          [36m</div>[31m
+          [36m<button[31m
+            [33mclass[31m=[32m"cm-rise mt-4 inline-flex min-h-11 items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:brightness-110"[31m
+            [33mstyle[31m=[32m"animation-delay: 1.63s;"[31m
+          [36m>[31m
+            [0mContinue[0m
+          [36m</button>[31m
+        [36m</div>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+  [36m</body>[31m
+[36m</html>[31m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mCONTROL: before the hand over, that press with another tab's line on the save opened nothing at all[32m 11[2mms[22m[39m
+   [32m✓[39m 'NBA' My Career: watching changes nothing[2m > [22mopens the viewer or the plain tile, never a throw, for a last line from an older build[32m 37[2mms[22m[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22mshows the held line and no button in a year whose real length is not the one the career plays[32m 5[2mms[22m[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22msays there is nothing to watch in a banned year[32m 5[2mms[22m[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22mNFL My Career renders no entry at all[32m 6[2mms[22m[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22mMLB My Career renders no entry at all[32m 6[2mms[22m[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22mNHL My Career renders no entry at all[32m 5[2mms[22m[39m
+   [32m✓[39m a held year, a banned year, and the sports with no Season Center[2m > [22mstill has MLB and the NHL unbound (they are number files for a later round)[32m 0[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usSeasonCentreEntry.test.tsx[2m > [22m'NBA' My Career: watching changes nothing[2m > [22mopens the season he just played when storage is full and the save was refused
+[31m[1mAssertionError[22m: expected null not to be null
+
+Ignored nodes: comments, script, style
+[36m<html>[31m
+  [36m<head />[31m
+  [36m<body[31m
+    [33mstyle[31m=[32m"padding-right: 1024px;"[31m
+  [36m>[31m
+    [36m<div>[31m
+      [36m<div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"relative overflow-hidden rounded-2xl border p-4 text-center border-border bg-card"[31m
+          [33mdata-season-reveal[31m=[32m"true"[31m
+        [36m>[31m
+          [36m<p[31m
+            [33mclass[31m=[32m"cm-slam text-[10px] font-bold uppercase tracking-widest text-muted-foreground"[31m
+            [33mstyle[31m=[32m"animation-delay: 0.05s;"[31m
+          [36m>[31m
+            [0mThe 2026 season[0m
+          [36m</p>[31m
+          [36m<p[31m
+            [33mclass[31m=[32m"cm-slam mt-0.5 text-xs text-muted-foreground"[31m
+            [33mstyle[31m=[32m"animation-delay: 0.15s;"[31m
+          [36m>[31m
+            [0mOrlando Magic · age 19 · SG[0m
+          [36m</p>[31m
+          [36m<p[31m
+            [33mclass[31m=[32m"cm-slam mt-2 font-display text-xl font-black text-foreground"[31m
+            [33mstyle[31m=[32m"animation-delay: 0.25s;"[31m
+          [36m>[31m
+            [0mMissed the playoffs[0m
+          [36m</p>[31m
+          [36m<p[31m
+            [33mclass[31m=[32m"cm-rise mt-1 text-xs font-semibold text-foreground"[31m
+            [33mstyle[31m=[32m"animation-delay: 0.45s;"[31m
+          [36m>[31m
+            [0m11 ppg, 1.5 rpg, 3.9 apg[0m
+          [36m</p>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"mt-3 space-y-1 text-left"[31m
+          [36m>[31m
+            [36m<p[31m
+              [33mclass[31m=[32m"cm-tick-in rounded-lg px-2.5 py-1.5 text-xs leading-snug bg-destructive/10 text-foreground"[31m
+              [33mstyle[31m=[32m"animation-delay: 0.6s;"[31m
+            [36m>[31m
+              [0m🪑 Still the second unit. The minutes will come, keep pushing.[0m
+            [36m</p>[31m
+            [36m<p[31m
+              [33mclass[31m=[32m"cm-tick-in rounded-lg px-2.5 py-1.5 text-xs leading-snug bg-destructive/10 text-foreground"[31m
+              [33mstyle[31m=[32m"animation-delay: 0.82s;"[31m
+            [36m>[31m
+              [0m🪑 Second unit season: your numbers come in bench minutes.[0m
+            [36m</p>[31m
+            [36m<p[31m
+              [33mclass[31m=[32m"cm-tick-in rounded-lg px-2.5 py-1.5 text-xs leading-snug bg-background text-muted-foreground"[31m
+              [33mstyle[31m=[32m"animation-delay: 1.04s;"[31m
+            [36m>[31m
+              [0m🪞 Tyrell Boudreau went 11 ppg, 3.3 rpg, 2.9 apg. Nothing in it again. You lead the head to head 0-1.[0m
+            [36m</p>[31m
+          [36m</div>[31m
+          [36m<button[31m
+            [33mclass[31m=[32m"cm-rise mt-4 inline-flex min-h-11 items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:brightness-110"[31m
+            [33mstyle[31m=[32m"animation-delay: 1.41s;"[31m
+          [36m>[31m
+            [0mContinue[0m
+          [36m</button>[31m
+        [36m</div>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+  [36m</body>[31m
+[36m</html>[31m[39m
+[36m [2m❯[22m __vi_import_4__.waitFor.timeout src/test/usSeasonCentreEntry.test.tsx:[2m331:63[22m[39m
+    [90m329| [39m    [34mexpect[39m(localStorage[33m.[39m[34mgetItem[39m(sport[33m.[39msaveKey))[33m.[39m[34mtoBe[39m(stored)[33m;[39m
+    [90m330| [39m    [34mexpect[39m([34msavedCareer[39m(sport)[33m.[39mseasons)[33m.[39m[34mtoHaveLength[39m([34m0[39m)[33m;[39m
+    [90m331| [39m    await waitFor(() => expect(q('[data-season-centre]')).not.toBeNull…
+    [90m   | [39m                                                              [31m^[39m
+    [90m332| [39m    [34mexpect[39m([34mq[39m([32m'[data-us-centre-cover]'[39m))[33m.[39mnot[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m333| [39m    [34mexpect[39m(ctl[33m.[39mopens)[33m.[39m[34mtoEqual[39m([{ year[33m,[39m seasons[33m:[39m [34m1[39m }])[33m;[39m
+[90m [2m❯[22m runWithExpensiveErrorDiagnosticsDisabled node_modules/@testing-library/dom/dist/config.js:[2m47:12[22m[39m
+[90m [2m❯[22m checkCallback node_modules/@testing-library/dom/dist/wait-for.js:[2m124:77[22m[39m
+[90m [2m❯[22m Timeout.checkRealTimersCallback node_modules/@testing-library/dom/dist/wait-for.js:[2m118:16[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usSeasonCentreEntry.test.tsx[2m > [22m'NBA' My Career: watching changes nothing[2m > [22mnever opens a line another tab saved: with his own write refused he watches the season this tab played
+[31m[1mAssertionError[22m: expected null not to be null
+
+Ignored nodes: comments, script, style
+[36m<html>[31m
+  [36m<head />[31m
+  [36m<body[31m
+    [33mstyle[31m=[32m"padding-right: 1024px;"[31m
+  [36m>[31m
+    [36m<div>[31m
+      [36m<div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"relative overflow-hidden rounded-2xl border p-4 text-center border-border bg-card"[31m
+          [33mdata-season-reveal[31m=[32m"true"[31m
+        [36m>[31m
+          [36m<p[31m
+            [33mclass[31m=[32m"cm-slam text-[10px] font-bold uppercase tracking-widest text-muted-foreground"[31m
+            [33mstyle[31m=[32m"animation-delay: 0.05s;"[31m
+          [36m>[31m
+            [0mThe 2026 season[0m
+          [36m</p>[31m
+          [36m<p[31m
+            [33mclass[31m=[32m"cm-slam mt-0.5 text-xs text-muted-foreground"[31m
+            [33mstyle[31m=[32m"animation-delay: 0.15s;"[31m
+          [36m>[31m
+            [0mLos Angeles Lakers · age 20 · SG[0m
+          [36m</p>[31m
+          [36m<p[31m
+            [33mclass[31m=[32m"cm-slam mt-2 font-display text-xl font-black text-foreground"[31m
+            [33mstyle[31m=[32m"animation-delay: 0.25s;"[31m
+          [36m>[31m
+            [0mLost in the first round[0m
+          [36m</p>[31m
+          [36m<p[31m
+            [33mclass[31m=[32m"cm-rise mt-1 text-xs font-semibold text-foreground"[31m
+            [33mstyle[31m=[32m"animation-delay: 0.45s;"[31m
+          [36m>[31m
+            [0m11 ppg, 2.6 rpg, 3.3 apg[0m
+          [36m</p>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"mt-3 space-y-1 text-left"[31m
+          [36m>[31m
+            [36m<p[31m
+              [33mclass[31m=[32m"cm-tick-in rounded-lg px-2.5 py-1.5 text-xs leading-snug bg-destructive/10 text-foreground"[31m
+              [33mstyle[31m=[32m"animation-delay: 0.6s;"[31m
+            [36m>[31m
+              [0m🪑 Still the second unit. The minutes will come, keep pushing.[0m
+            [36m</p>[31m
+            [36m<p[31m
+              [33mclass[31m=[32m"cm-tick-in rounded-lg px-2.5 py-1.5 text-xs leading-snug bg-destructive/10 text-foreground"[31m
+              [33mstyle[31m=[32m"animation-delay: 0.82s;"[31m
+            [36m>[31m
+              [0m🪑 Second unit season: your numbers come in bench minutes.[0m
+            [36m</p>[31m
+            [36m<p[31m
+              [33mclass[31m=[32m"cm-tick-in rounded-lg px-2.5 py-1.5 text-xs leading-snug bg-background text-muted-foreground"[31m
+              [33mstyle[31m=[32m"animation-delay: 1.04s;"[31m
+            [36m>[31m
+              [0m📊 Playoffs: 5 games, 15 ppg, 3.5 rpg, 3.6 apg.[0m
+            [36m</p>[31m
+            [36m<p[31m
+              [33mclass[31m=[32m"cm-tick-in rounded-lg px-2.5 py-1.5 text-xs leading-snug bg-background text-muted-foreground"[31m
+              [33mstyle[31m=[32m"animation-delay: 1.26s;"[31m
+            [36m>[31m
+              [0m🪞 Dominic Salvatore went 15 ppg, 4.7 rpg, 4.5 apg and had the better year of the two of you. Head to head 0-1.[0m
+            [36m</p>[31m
+          [36m</div>[31m
+          [36m<button[31m
+            [33mclass[31m=[32m"cm-rise mt-4 inline-flex min-h-11 items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:brightness-110"[31m
+            [33mstyle[31m=[32m"animation-delay: 1.63s;"[31m
+          [36m>[31m
+            [0mContinue[0m
+          [36m</button>[31m
+        [36m</div>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+  [36m</body>[31m
+[36m</html>[31m[39m
+[36m [2m❯[22m __vi_import_4__.waitFor.timeout src/test/usSeasonCentreEntry.test.tsx:[2m383:63[22m[39m
+    [90m381| [39m    [34mexpect[39m(localStorage[33m.[39m[34mgetItem[39m(sport[33m.[39msaveKey))[33m.[39m[34mtoBe[39m(stored)[33m;[39m
+    [90m382| [39m    [34mexpect[39m([34mq[39m([32m'[data-season-reveal]'[39m))[33m.[39mnot[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m383| [39m    await waitFor(() => expect(q('[data-season-centre]')).not.toBeNull…
+    [90m   | [39m                                                              [31m^[39m
+    [90m384| [39m    [34mexpect[39m(ctl[33m.[39mopens)[33m.[39m[34mtoEqual[39m([{ year[33m,[39m seasons[33m:[39m [34m1[39m }])[33m;[39m
+    [90m385| [39m    [34mexpect[39m(ctl[33m.[39mopens[33m.[39m[34msome[39m(o [33m=>[39m o[33m.[39myear [33m===[39m year [33m+[39m [34m3[39m))[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+[90m [2m❯[22m runWithExpensiveErrorDiagnosticsDisabled node_modules/@testing-library/dom/dist/config.js:[2m47:12[22m[39m
+[90m [2m❯[22m checkCallback node_modules/@testing-library/dom/dist/wait-for.js:[2m124:77[22m[39m
+[90m [2m❯[22m Timeout.checkRealTimersCallback node_modules/@testing-library/dom/dist/wait-for.js:[2m118:16[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m16 passed[39m[22m[90m (18)[39m
+[2m   Start at [22m 13:59:25
+[2m   Duration [22m 11.25s[2m (transform 1.08s, setup 28ms, collect 1.26s, tests 9.55s, environment 157ms, prepare 75ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonCentreEntry.test.tsx,title=src/test/usSeasonCentreEntry.test.tsx > 'NBA' My Career%3A watching changes nothing > opens the season he just played when storage is full and the save was refused,line=331,column=63::AssertionError: expected null not to be null%0A%0AIgnored nodes: comments, script, style%0A<html>%0A  <head />%0A  <body%0A    style="padding-right: 1024px;"%0A  >%0A    <div>%0A      <div>%0A        <div%0A          class="relative overflow-hidden rounded-2xl border p-4 text-center border-border bg-card"%0A          data-season-reveal="true"%0A        >%0A          <p%0A            class="cm-slam text-[10px] font-bold uppercase tracking-widest text-muted-foreground"%0A            style="animation-delay: 0.05s;"%0A          >%0A            The 2026 season%0A          </p>%0A          <p%0A            class="cm-slam mt-0.5 text-xs text-muted-foreground"%0A            style="animation-delay: 0.15s;"%0A          >%0A            Orlando Magic · age 19 · SG%0A          </p>%0A          <p%0A            class="cm-slam mt-2 font-display text-xl font-black text-foreground"%0A            style="animation-delay: 0.25s;"%0A          >%0A            Missed the playoffs%0A          </p>%0A          <p%0A            class="cm-rise mt-1 text-xs font-semibold text-foreground"%0A            style="animation-delay: 0.45s;"%0A          >%0A            11 ppg, 1.5 rpg, 3.9 apg%0A          </p>%0A          <div%0A            class="mt-3 space-y-1 text-left"%0A          >%0A            <p%0A              class="cm-tick-in rounded-lg px-2.5 py-1.5 text-xs leading-snug bg-destructive/10 text-foreground"%0A              style="animation-delay: 0.6s;"%0A            >%0A              🪑 Still the second unit. The minutes will come, keep pushing.%0A            </p>%0A            <p%0A              class="cm-tick-in rounded-lg px-2.5 py-1.5 text-xs leading-snug bg-destructive/10 text-foreground"%0A              style="animation-delay: 0.82s;"%0A            >%0A              🪑 Second unit season: your numbers come in bench minutes.%0A            </p>%0A            <p%0A              class="cm-tick-in rounded-lg px-2.5 py-1.5 text-xs leading-snug bg-background text-muted-foreground"%0A              style="animation-delay: 1.04s;"%0A            >%0A              🪞 Tyrell Boudreau went 11 ppg, 3.3 rpg, 2.9 apg. Nothing in it again. You lead the head to head 0-1.%0A            </p>%0A          </div>%0A          <button%0A            class="cm-rise mt-4 inline-flex min-h-11 items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:brightness-110"%0A            style="animation-delay: 1.41s;"%0A          >%0A            Continue%0A          </button>%0A        </div>%0A      </div>%0A    </div>%0A  </body>%0A</html>%0A ❯ __vi_import_4__.waitFor.timeout src/test/usSeasonCentreEntry.test.tsx:331:63%0A ❯ runWithExpensiveErrorDiagnosticsDisabled node_modules/@testing-library/dom/dist/config.js:47:12%0A ❯ checkCallback node_modules/@testing-library/dom/dist/wait-for.js:124:77%0A ❯ Timeout.checkRealTimersCallback node_modules/@testing-library/dom/dist/wait-for.js:118:16%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonCentreEntry.test.tsx,title=src/test/usSeasonCentreEntry.test.tsx > 'NBA' My Career%3A watching changes nothing > never opens a line another tab saved%3A with his own write refused he watches the season this tab played,line=383,column=63::AssertionError: expected null not to be null%0A%0AIgnored nodes: comments, script, style%0A<html>%0A  <head />%0A  <body%0A    style="padding-right: 1024px;"%0A  >%0A    <div>%0A      <div>%0A        <div%0A          class="relative overflow-hidden rounded-2xl border p-4 text-center border-border bg-card"%0A          data-season-reveal="true"%0A        >%0A          <p%0A            class="cm-slam text-[10px] font-bold uppercase tracking-widest text-muted-foreground"%0A            style="animation-delay: 0.05s;"%0A          >%0A            The 2026 season%0A          </p>%0A          <p%0A            class="cm-slam mt-0.5 text-xs text-muted-foreground"%0A            style="animation-delay: 0.15s;"%0A          >%0A            Los Angeles Lakers · age 20 · SG%0A          </p>%0A          <p%0A            class="cm-slam mt-2 font-display text-xl font-black text-foreground"%0A            style="animation-delay: 0.25s;"%0A          >%0A            Lost in the first round%0A          </p>%0A          <p%0A            class="cm-rise mt-1 text-xs font-semibold text-foreground"%0A            style="animation-delay: 0.45s;"%0A          >%0A            11 ppg, 2.6 rpg, 3.3 apg%0A          </p>%0A          <div%0A            class="mt-3 space-y-1 text-left"%0A          >%0A            <p%0A              class="cm-tick-in rounded-lg px-2.5 py-1.5 text-xs leading-snug bg-destructive/10 text-foreground"%0A              style="animation-delay: 0.6s;"%0A            >%0A              🪑 Still the second unit. The minutes will come, keep pushing.%0A            </p>%0A            <p%0A              class="cm-tick-in rounded-lg px-2.5 py-1.5 text-xs leading-snug bg-destructive/10 text-foreground"%0A              style="animation-delay: 0.82s;"%0A            >%0A              🪑 Second unit season: your numbers come in bench minutes.%0A            </p>%0A            <p%0A              class="cm-tick-in rounded-lg px-2.5 py-1.5 text-xs leading-snug bg-background text-muted-foreground"%0A              style="animation-delay: 1.04s;"%0A            >%0A              📊 Playoffs: 5 games, 15 ppg, 3.5 rpg, 3.6 apg.%0A            </p>%0A            <p%0A              class="cm-tick-in rounded-lg px-2.5 py-1.5 text-xs leading-snug bg-background text-muted-foreground"%0A              style="animation-delay: 1.26s;"%0A            >%0A              🪞 Dominic Salvatore went 15 ppg, 4.7 rpg, 4.5 apg and had the better year of the two of you. Head to head 0-1.%0A            </p>%0A          </div>%0A          <button%0A            class="cm-rise mt-4 inline-flex min-h-11 items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:brightness-110"%0A            style="animation-delay: 1.63s;"%0A          >%0A            Continue%0A          </button>%0A        </div>%0A      </div>%0A    </div>%0A  </body>%0A</html>%0A ❯ __vi_import_4__.waitFor.timeout src/test/usSeasonCentreEntry.test.tsx:383:63%0A ❯ runWithExpensiveErrorDiagnosticsDisabled node_modules/@testing-library/dom/dist/config.js:47:12%0A ❯ checkCallback node_modules/@testing-library/dom/dist/wait-for.js:124:77%0A ❯ Timeout.checkRealTimersCallback node_modules/@testing-library/dom/dist/wait-for.js:118:16%0A%0A
+fxmut norecord: command exit 1, file restored

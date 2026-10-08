@@ -1,0 +1,69 @@
+fxmut nocap: src/lib/soccerClubSquadSheet.ts mutated, running: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000 src/lib/soccerClubSquad.test.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/lib/soccerClubSquad.test.ts [2m([22m[2m35 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 405[2mms[22m[39m
+   [32m✓[39m the real squad readers, recorded before Round 1115 touched them[2m > [22mevery real depth chart is what it was[32m 66[2mms[22m[39m
+   [32m✓[39m the real squad readers, recorded before Round 1115 touched them[2m > [22mevery baked squad is what it was[32m 4[2mms[22m[39m
+   [32m✓[39m the invented squad[2m > [22mis the same squad every time it is asked for, 22 men in lines of 3, 7, 7 and 5[32m 7[2mms[22m[39m
+   [32m✓[39m the invented squad[2m > [22mnever repeats a name inside a squad, over many clubs and years[32m 25[2mms[22m[39m
+   [32m✓[39m the invented squad[2m > [22mkeeps a man, one year older, until his run ends, and dates the new man to that summer[32m 10[2mms[22m[39m
+   [32m✓[39m the invented squad[2m > [22mgives two saves two different squads at the same club[32m 0[2mms[22m[39m
+   [32m✓[39m the invented squad[2m > [22mrates the lines so the last starter is six under the level and every reserve under him[32m 45[2mms[22m[39m
+   [32m✓[39m the invented squad[2m > [22mdraws a sheet with no names by role only[32m 4[2mms[22m[39m
+   [32m✓[39m the invented squad[2m > [22mevery signing nation and the three aliased countries have a name family[32m 1[2mms[22m[39m
+   [32m✓[39m the invented squad[2m > [22mcarries a real squad on into the game's own years, man by man[32m 5[2mms[22m[39m
+   [32m✓[39m the living squad[2m > [22mhas three sources and says which[32m 6[2mms[22m[39m
+   [32m✓[39m the living squad[2m > [22mputs him exactly once across the eleven and the bench, in lines of 1, 4, 3 and 3[32m 2[2mms[22m[39m
+   [32m✓[39m the living squad[2m > [22mnames the right man as the last one in ahead of him: never himself, always the lowest of his line in the eleven[32m 135[2mms[22m[39m
+   [32m✓[39m the living squad[2m > [22magrees with the plan at the line by construction: 67 is in both pictures, 66 in neither[32m 0[2mms[22m[39m
+   [32m✓[39m the living squad[2m > [22mdoes not change when the nation on the save does[32m 0[2mms[22m[39m
+   [32m✓[39m the living squad[2m > [22mshows nothing in the academy or after retiring, but still answers a caller with its own club[32m 0[2mms[22m[39m
+   [32m✓[39m the living squad[2m > [22mreads trust from the band, the phone and the freeze[32m 1[2mms[22m[39m
+   [32m✓[39m the living squad[2m > [22mexplains a thin season from the saved row[32m 1[2mms[22m[39m
+   [32m✓[39m the living squad[2m > [22mcomputes the numbers in the help, and the help prints them[32m 1[2mms[22m[39m
+   [32m✓[39m the sheet does not argue with itself[2m > [22mnumbers his own line with him counted on a sheet by role[32m 63[2mms[22m[39m
+   [32m✓[39m the sheet does not argue with itself[2m > [22mnever prints an arrival or a NEW man on a sheet by role, only in the game's own years[32m 4[2mms[22m[39m
+   [32m✓[39m the sheet does not argue with itself[2m > [22mnever prints more league games than games: an injured season shows the total and says what the league figure is[32m 1[2mms[22m[39m
+   [32m✓[39m the sheet does not argue with itself[2m > [22mstill owes a thin season its selection line after an injury, because an injury never lowers the league figure[32m 0[2mms[22m[39m
+   [32m✓[39m the sheet does not argue with itself[2m > [22mdraws the "under the level" line exactly at the band's edge: five under has none, six under has it[32m 1[2mms[22m[39m
+   [32m✓[39m the sheet does not argue with itself[2m > [22msays so when a squad of the game's own years still holds real men, and marks each of them[32m 1[2mms[22m[39m
+   [32m✓[39m the sheet does not argue with itself[2m > [22mgives a tie to the teammate without saying he was there first[32m 0[2mms[22m[39m
+   [32m✓[39m odd saves and odd years[2m > [22mkeeps the men when a club changes tier, and moves their ratings with the level[32m 0[2mms[22m[39m
+   [32m✓[39m odd saves and odd years[2m > [22manswers at the edges of time without hanging[32m 0[2mms[22m[39m
+   [32m✓[39m odd saves and odd years[2m > [22msurvives a save with one row, an unknown position, a hand edited first row and bad numbers[32m 1[2mms[22m[39m
+   [32m✓[39m odd saves and odd years[2m > [22mtreats a renamed club as a new dressing room, the way the engine counts his seasons there[32m 0[2mms[22m[39m
+   [32m✓[39m odd saves and odd years[2m > [22mnever calls a career in a real past season by an invented name, in any season up to the last real one[32m 11[2mms[22m[39m
+   [32m✓[39m which baked row is a season[2m > [22mputs a summer signing in the season he signed for, and takes him out of the club he left[32m 0[2mms[22m[39m
+[31m   [31m×[31m which baked row is a season[2m > [22msays a real squad is a selection, and the baked rows keep the promise it makes (four at most a position)[39m[32m 6[2mms[22m[39m
+[31m     → expected 'The real Man City squad of 2022/23, r…' to contain 'up to four players at each position'[39m
+   [32m✓[39m which baked row is a season[2m > [22mgives the page readers the same season: the squad view, the depth chart and the label[32m 1[2mms[22m[39m
+   [32m✓[39m which baked row is a season[2m > [22mcounts the real seasons from the data file, and the words follow them[32m 1[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/soccerClubSquad.test.ts[2m > [22mwhich baked row is a season[2m > [22msays a real squad is a selection, and the baked rows keep the promise it makes (four at most a position)
+[31m[1mAssertionError[22m: expected 'The real Man City squad of 2022/23, r…' to contain 'up to four players at each position'[39m
+
+Expected: [32m"up to four players at each position"[39m
+Received: [31m"The real Man City squad of 2022/23, rated on the same scale as the rest of the site."[39m
+
+[36m [2m❯[22m src/lib/soccerClubSquad.test.ts:[2m606:31[22m[39m
+    [90m604| [39m    const view = squadView(save('Man City', club.country, club.tier, 7…
+    [90m605| [39m    [34mexpect[39m(view[33m?.[39msource)[33m.[39m[34mtoBe[39m([32m'real'[39m)[33m;[39m
+    [90m606| [39m    expect(sourceLine(view!)).toContain('up to four players at each po…
+    [90m   | [39m                              [31m^[39m
+    [90m607| [39m    expect(sourceLine(view!)).toContain('not everyone at the club is h…
+    [90m608| [39m    [35mlet[39m rows [33m=[39m [34m0[39m[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m34 passed[39m[22m[90m (35)[39m
+[2m   Start at [22m 13:59:46
+[2m   Duration [22m 1.70s[2m (transform 671ms, setup 29ms, collect 839ms, tests 405ms, environment 165ms, prepare 42ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/soccerClubSquad.test.ts,title=src/lib/soccerClubSquad.test.ts > which baked row is a season > says a real squad is a selection%2C and the baked rows keep the promise it makes (four at most a position),line=606,column=31::AssertionError: expected 'The real Man City squad of 2022/23, r…' to contain 'up to four players at each position'%0A%0AExpected: "up to four players at each position"%0AReceived: "The real Man City squad of 2022/23, rated on the same scale as the rest of the site."%0A%0A ❯ src/lib/soccerClubSquad.test.ts:606:31%0A%0A
+fxmut nocap: command exit 1, file restored
