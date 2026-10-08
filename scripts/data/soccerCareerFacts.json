@@ -2681,7 +2681,7 @@
         "Chicago Fire",
         "FC Cincinnati",
         "Columbus Crew",
-        "D.C. United",
+        "DC United",
         "Inter Miami",
         "CF Montreal",
         "Nashville SC",
@@ -3699,7 +3699,7 @@
         "Charlotte FC",
         "Chicago Fire",
         "FC Cincinnati",
-        "D.C. United",
+        "DC United",
         "CF Montreal",
         "Nashville SC",
         "New England Revolution",
@@ -3946,5 +3946,52 @@
       ]
     },
     "since": {}
+  },
+  "clubCountries": {
+    "about": "Round 1100. Pool clubs whose country is not their league's (scripts/lib/careerClubPool.mjs CLUB_COUNTRY, beside the rows Club Manager's own clubCountry holds). Each one Round 1100 adds is read from two hosts; the three Welsh clubs shipped with Round 1013, read then from goal.com and footballgroundguide.com (2026-10-05, the generator's own comment).",
+    "clubs": {
+      "Cardiff City": {
+        "country": "Wales",
+        "shipped": "Round 1013"
+      },
+      "Swansea City": {
+        "country": "Wales",
+        "shipped": "Round 1013"
+      },
+      "Wrexham": {
+        "country": "Wales",
+        "shipped": "Round 1013"
+      },
+      "CF Montreal": {
+        "country": "Canada",
+        "sources": [
+          {
+            "url": "https://news.canadasoccer.com/cf-montreal-advances-to-canadian-championship-final",
+            "read": "2026-10-07",
+            "says": "Canada Soccer, 2023-05-24: \"The five-time winners CF Montréal will head west to British Columbia for the 2023 Canadian Championship Final.\""
+          },
+          {
+            "url": "https://www.tsn.ca/soccer/article/cf-montreal-whitecaps-square-off-with-canadian-championship-final-at-stake/",
+            "read": "2026-10-07",
+            "says": "TSN, 2026-09-15: Montreal and Vancouver are \"the last two MLS clubs in the competition\", the 2026 Canadian Championship"
+          }
+        ]
+      },
+      "Vaduz": {
+        "country": "Liechtenstein",
+        "sources": [
+          {
+            "url": "https://www.uefa.com/nationalassociations/lie/",
+            "read": "2026-10-07",
+            "says": "UEFA's page for the Liechtenstein association: \"Vaduz make it to the group stage of the UEFA Europa Conference League: a first for any Liechtensteiner side.\""
+          },
+          {
+            "url": "https://www.fcvaduz.li/kontakt",
+            "read": "2026-10-07",
+            "says": "the club's own address: Rheinpark Stadion, Lettstrasse 74, 9490 Vaduz (the page names the town, not the country)"
+          }
+        ]
+      }
+    }
   }
 }

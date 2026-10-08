@@ -70,8 +70,35 @@
      ingroup      the club inside a group drawn off the group's weight,
                   not its size: past the cap only 5 clubs reachable    -> 5
      academypick  the nine worldwide academy fallbacks back on pick    -> 6
+     nosince      (Round 1100) careerEras stops reading the generated
+                  first seasons: a held club is in a 1990 list         -> 3
+     colourgone   (Round 1100) Club Manager gains a colour for
+                  Macarthur FC: its POOL_COLORS row must go            -> 3
+     unlisted     (Round 1100) Club Manager's Belgian league changes its
+                  id, so the table reads a league that is not there    -> 2
 
-   Open items, queued and not checked here: three generated names read as
+   Round 1100: the career club pool grew from 241 to 460 clubs. The
+   generator reads every current Club Manager league through ONE table
+   (POOL_LEAGUE_ROWS; the three second flights Serie B, Ligue 2 and the
+   Segunda Division are held), and this harness restates: section 2 walks
+   every label (lineup, the facts file's members, a held league generates
+   nothing, every Club Manager league has a row, a two league fixture
+   derives from its table rows alone); section 3 holds countries
+   (CLUB_COUNTRY and Club Manager's own clubCountry rows), supplied colours
+   (only where Club Manager is grey, each in the facts file) and the since
+   rule for EVERY generated club (the Bragantino check made general: a
+   shipped club in every list from 1980 to 2060, a held one in none before
+   2026-27); section 4 re-derives the tier rule per label and holds each
+   ladder to its lineup in tier order; section 5 restates the exact weights
+   (tier 4: 167 over 76 groups, main 100 over 70). Sections 6 and 7 are
+   unchanged and their floors hold as measured (they price the four leagues
+   Round 1013 read). The stepper of section 6 lives in
+   scripts/lib/careerStep.mjs now.
+
+   Open items, queued and not checked here: the first seasons of the clubs
+   Round 1100 brought in (219 held out of every season before 2026-27 until
+   two sources give each its first season; the facts file's clubSince lists
+   them), and three generated names read as
    they do today in every era. Espanyol was spelled Espanol before 1995,
    Malaga CF dates from 1994 (CD Malaga, dissolved in 1992, came before it)
    and Athletico Paranaense was Atletico before 2019. CLUB_FOUNDED_AFTER
@@ -85,7 +112,8 @@ import os from 'node:os';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
-import { bundleCareerSources, deriveCareerClubPool, poolInputs, renderPoolFile, LEAGUE_LABELS, POOL_LEAGUES, NAME_ALIASES } from './lib/careerClubPool.mjs';
+import { bundleCareerSources, deriveCareerClubPool, poolInputs, renderPoolFile, sinceInput, LEAGUE_LABELS, POOL_LEAGUES, POOL_LEAGUE_ROWS, HELD_LEAGUES, CLUB_COUNTRY, POOL_COLORS, FALLBACK_GREY, NAME_ALIASES } from './lib/careerClubPool.mjs';
+import { careerStep, seedRandom } from './lib/careerStep.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_CLUB_POOL_CONTROL || '';
@@ -123,6 +151,10 @@ const CONTROLS = {
   noforest: ['4', 'lib/careerEras.ts', swap('{ name: "Nottingham Forest", from: 1999, until: 2021, tier: 4 },', '')],
   forest90s: ['4', 'lib/careerEras.ts', swap('{ name: "Nottingham Forest", from: 1993, until: 1993, tier: 4 }, { name: "Nottingham Forest", from: 1997, until: 1997, tier: 4 },', '')],
   nobragantino: ['3', 'lib/careerEras.ts', swap('"Red Bull Bragantino": 2020,', '')],
+  /* Round 1100 */
+  nosince: ['3', 'lib/careerEras.ts', swap('  ...CAREER_POOL_SINCE,\n', '')],
+  colourgone: ['3', 'lib/clubManager.ts', swap(`'Coventry City': '#66b2e8', `, `'Coventry City': '#66b2e8', 'Macarthur FC': '#123456', `)],
+  unlisted: ['2', 'lib/clubManager.ts', swap(`    id: 'proleague', name: 'Belgian Pro League',`, `    id: 'proleague2', name: 'Belgian Pro League',`)],
   ingroup: ['5', 'lib/soccerCareerEngine.ts', swap('return chosen.clubs[Math.floor(Math.random() * chosen.clubs.length)];', 'return chosen.clubs[Math.floor(Math.random() * chosen.weight)];')],
   academypick: ['6', 'lib/soccerCareerEngine.ts', s => {
     const a = s.indexOf('export function getYouthAcademyClub(');
@@ -173,8 +205,17 @@ let stubMod;
 try { stubMod = await bundleCareerSources({ root: ROOT, tmpDir, stubPool: true, transforms: stubTransforms }); }
 catch (e) { fail(`bundling with the pool stubbed failed: ${e.message.split('\n')[0]}`); finish(); }
 const inputs = poolInputs(stubMod);
-const derived = deriveCareerClubPool(inputs);
-const want = renderPoolFile(derived.rows, stubMod.CM_ROSTER_META).split('\n');
+const FACTS = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts', 'data', 'soccerCareerFacts.json'), 'utf8'));
+let derived;
+try { derived = deriveCareerClubPool({ ...inputs, since: sinceInput(ROOT) }); }
+catch (e) {
+  /* the generator refuses a grey colour, an undecided club, a name it would
+     take for another league's hand club, and a league Club Manager lacks */
+  section = /no colour for/.test(e.message) ? '3' : /has no league/.test(e.message) ? '2' : '1';
+  fail(`the derive refused: ${e.message.split('\n')[0]}`);
+  finish();
+}
+const want = renderPoolFile(derived.rows, stubMod.CM_ROSTER_META, derived.ladder, derived.poolSince).split('\n');
 const onDisk = fs.readFileSync(path.join(ROOT, 'src', 'data', 'soccerCareerClubPool.ts'), 'utf8').replaceAll('\r\n', '\n').split('\n');
 const firstDiff = want.findIndex((l, i) => l !== onDisk[i]);
 if (ok(firstDiff === -1 && want.length === onDisk.length, 'src/data/soccerCareerClubPool.ts is stale: rerun node scripts/genCareerClubPool.mjs')) {
@@ -191,33 +232,72 @@ const { engine, eras, cm } = mod;
 const POOL = engine.FALLBACK_CLUBS;
 const HAND = engine.HAND_CLUBS;
 const GENERATED = POOL.slice(HAND.length);
-const FOUR = new Set(Object.values(LEAGUE_LABELS));
+/* The four leagues Round 1013 read. Sections 5 and 6 were measured on them
+   and still price them (FOUR); READ is every label the pool reads now. */
+const FOUR_IDS = ['premier', 'championship', 'laliga', 'brasileirao'];
+const FOUR = new Set(FOUR_IDS.map(id => LEAGUE_LABELS[id]));
+const READ_LABELS = [...new Set(POOL_LEAGUES.map(id => LEAGUE_LABELS[id]))];
+const READ = new Set(READ_LABELS);
+const idsOf = label => POOL_LEAGUES.filter(id => LEAGUE_LABELS[id] === label);
 const cmName = n => NAME_ALIASES[n] ?? inputs.fold(n);
 
 /* ─── 2. MEMBERSHIP ─── */
 head('2', 'MEMBERSHIP: each label carries Club Manager\'s lineup in the 2026 view');
 /* Round 1037 released the three held labels: no exception is pinned */
-const PINNED = {
-  premier: { extra: [], missing: [] },
-  championship: { extra: [], missing: [] },
-  laliga: { extra: [], missing: [] },
-  brasileirao: { extra: [], missing: [] },
-};
+/* Round 1100: one walk over every label the generator's table reads (two
+   Club Manager ids may share one: MLS). No exception is pinned today; a
+   label absent from PINNED has none. */
+const PINNED = {};
+const pinOf = label => PINNED[label] ?? { extra: [], missing: [] };
 const view2026 = eras.adjustClubsForYear(POOL, 2026);
-for (const id of POOL_LEAGUES) {
-  const label = LEAGUE_LABELS[id];
-  const cmNames = cm.REAL_LEAGUES.find(l => l.id === id).clubs.map(cmName);
-  const expected = new Set([...cmNames.filter(n => !PINNED[id].missing.includes(n)), ...PINNED[id].extra]);
+const sizeLine = [];
+for (const label of READ_LABELS) {
+  const cmNames = idsOf(label).flatMap(id => cm.REAL_LEAGUES.find(l => l.id === id).clubs.map(cmName));
+  const expected = new Set([...cmNames.filter(n => !pinOf(label).missing.includes(n)), ...pinOf(label).extra]);
   const actual = new Set(view2026.filter(c => c.league === label).map(c => c.name));
   const extra = [...actual].filter(n => !expected.has(n));
   const missing = [...expected].filter(n => !actual.has(n));
   ok(!extra.length && !missing.length, `${label}: extra [${extra.join(', ')}] missing [${missing.join(', ')}]`);
-  console.log(`  ${label}: ${actual.size} clubs (Club Manager ${cmNames.length}, pinned +${PINNED[id].extra.join('/') || 0} -${PINNED[id].missing.join('/') || 0})`);
+  /* and the facts file lists the same lineup, name for name */
+  const world = FACTS.leagueWorld[label];
+  if (ok(!!world, `${label}: no leagueWorld row in soccerCareerFacts.json`)) {
+    ok(world.members.length === cmNames.length && cmNames.every(n => world.members.includes(n)), `${label}: the facts file's members are not Club Manager's lineup`);
+  }
+  sizeLine.push(`${label} ${actual.size}`);
 }
+console.log(`  ${READ_LABELS.length} labels, each carrying Club Manager's lineup and the facts file's members in the 2026 view: ${sizeLine.join(', ')}`);
+/* every current Club Manager league is read or held with its reason, so a
+   league Club Manager gains cannot stay out of the pool unnoticed */
+const tableIds = new Set(POOL_LEAGUE_ROWS.map(r => r.id));
+for (const l of cm.REAL_LEAGUES) ok(tableIds.has(l.id), `Club Manager league ${l.id} has no POOL_LEAGUE_ROWS row: give it one (and a leagueWorld row), or hold it with a reason`);
+for (const [id, why] of Object.entries(HELD_LEAGUES)) {
+  ok(tableIds.has(id) && typeof why === 'string' && why.length > 10, `held league ${id} needs a table row and a reason`);
+  const label = LEAGUE_LABELS[id];
+  ok(!GENERATED.some(c => c.league === label), `${label} is held, yet a generated club carries its label`);
+  ok(derived.ladder[label] === undefined, `${label} is held, yet it has a ladder`);
+}
+console.log(`  held, none of their clubs generated: ${Object.keys(HELD_LEAGUES).map(id => LEAGUE_LABELS[id]).join(', ') || 'none'}`);
 for (const n of ['West Ham', 'Wolves']) ok(HAND.find(c => c.name === n)?.league === 'Championship', `${n} carries its 2026-27 label "Championship" (Round 1037)`);
 ok(HAND.find(c => c.name === 'Girona')?.league === 'Segunda Division', 'Girona carries its 2026-27 label "Segunda Division" (Round 1037)');
-ok(POOL.filter(c => c.league === 'Segunda Division').map(c => c.name).join() === 'Girona', 'only Girona carries a "Segunda Division" label');
 ok(GENERATED.length > 0, `the engine appends generated rows (${GENERATED.length})`);
+/* A new league is one table row and no other code (the lead's addendum h):
+   two made up leagues derived through the same function, one a top flight
+   with a hand club in it and one a second flight. */
+{
+  const rows = [{ id: 'fixA', label: 'Fixture League', country: 'Freedonia', top: true }, { id: 'fixB', label: 'Fixture Second', country: 'Freedonia', top: false }];
+  const fx = deriveCareerClubPool({
+    realLeagues: [{ id: 'fixA', clubs: ['Hand United', 'Strong Town', 'Weak Town', 'Thin Town'] }, { id: 'fixB', clubs: ['Lower City', 'Lower Rovers'] }],
+    xiOf: n => ({ 'Hand United': 75, 'Strong Town': 80, 'Weak Town': 70, 'Thin Town': 60, 'Lower City': 72, 'Lower Rovers': 66 })[n],
+    colorOf: () => '#123456', partial: ['Thin Town'], rankable: n => n !== 'Thin Town', fold: s => s,
+    handClubs: [{ id: 'h1', name: 'Hand United', country: 'Freedonia', tier: 2, color: '#000000', league: 'Fixture League' }],
+    leagueRows: rows, held: {},
+  });
+  const got = JSON.stringify([fx.rows.map(r => `${r.name}:${r.tier}:${r.league}:${r.country}`), fx.ladder]);
+  const wantFx = JSON.stringify([['Strong Town:2:Fixture League:Freedonia', 'Weak Town:2:Fixture League:Freedonia', 'Thin Town:4:Fixture League:Freedonia', 'Lower City:4:Fixture Second:Freedonia', 'Lower Rovers:4:Fixture Second:Freedonia'],
+    { 'Fixture League': [['Strong Town'], ['Hand United'], ['Weak Town'], ['Thin Town']], 'Fixture Second': [['Lower City'], ['Lower Rovers']] }]);
+  ok(got === wantFx, `a two league fixture derives ${got}, ${wantFx} expected`);
+  console.log('  a two league fixture (a top flight with a hand club, a second flight) derives rows and ladders from its table rows alone');
+}
 
 /* ─── 3. IDENTITY ─── */
 head('3', 'IDENTITY: names, ids, careerEras strings, colours, countries, labels');
@@ -252,7 +332,6 @@ for (const n of NEWLY_PLAYABLE) {
 console.log(`  ${contenders.size} careerEras contender names, ${eraMatches} of them in the pool, all byte identical`);
 /* Club Manager's clubDefFor answers '#8899aa' for a club it has no colour
    for, so a hex check alone would pass a missing colour. */
-const FALLBACK_GREY = '#8899aa';
 let colours = 0;
 for (const r of [...derived.rows, ...GENERATED]) {
   colours += 1;
@@ -260,23 +339,76 @@ for (const r of [...derived.rows, ...GENERATED]) {
   ok(r.color.toLowerCase() !== FALLBACK_GREY, `${r.name}: colour is Club Manager's fallback grey, not a real colour`);
 }
 console.log(`  ${colours} colours checked (derived and bundled rows), none is the fallback grey`);
-for (const n of ['Cardiff City', 'Swansea City', 'Wrexham']) ok(POOL.find(c => c.name === n)?.country === 'Wales', `${n} is Welsh`);
-const handLabels = new Set(HAND.map(c => c.league));
-ok(GENERATED.every(c => handLabels.has(c.league)), 'every generated league label already exists among the hand labels');
-let bragantinoOk = true;
-for (let y = 1990; y <= 2026; y++) {
-  const has = eras.adjustClubsForYear(POOL, y).some(c => c.name === 'Red Bull Bragantino');
-  if (has !== (y >= 2020)) { bragantinoOk = false; fail(`Red Bull Bragantino ${has ? 'present' : 'absent'} in ${y} (the name dates from the 2020 season)`); }
+/* Round 1100: a colour the generator supplies exists only where Club Manager
+   answers grey, and is the rendering of a colour in words the facts file
+   holds from two sources. The list may only shrink. */
+for (const [cmClub, hex] of Object.entries(POOL_COLORS)) {
+  ok(inputs.colorOf(cmClub).toLowerCase() === FALLBACK_GREY, `${cmClub}: Club Manager colours it now (${inputs.colorOf(cmClub)}), so its POOL_COLORS row must go`);
+  const fact = FACTS.clubColours.clubs[cmName(cmClub)];
+  ok(!!fact && fact.hex === hex && Array.isArray(fact.sources) && fact.sources.length >= 2, `${cmClub}: POOL_COLORS says ${hex}, soccerCareerFacts.json clubColours ${fact ? fact.hex : 'has no row'}`);
 }
-if (bragantinoOk) console.log('  Red Bull Bragantino absent from every pool before 2020 and present from 2020');
+console.log(`  ${Object.keys(POOL_COLORS).length} colour(s) supplied where Club Manager is grey (${Object.keys(POOL_COLORS).join(', ')}), each in the facts file`);
+/* countries: the league's, unless Club Manager's own clubCountry row or the
+   generator's CLUB_COUNTRY says otherwise, and each of those is in the
+   facts file */
+const cmCountry = new Map();
+for (const id of POOL_LEAGUES) for (const n of cm.REAL_LEAGUES.find(l => l.id === id).clubs) {
+  const own = cm.LEAGUE_RULES?.[id]?.clubCountry?.[n];
+  cmCountry.set(cmName(n), own ?? CLUB_COUNTRY[cmName(n)] ?? POOL_LEAGUE_ROWS.find(r => r.id === id).country);
+}
+let abroad = 0;
+for (const c of GENERATED) {
+  ok(c.country === cmCountry.get(c.name), `${c.name}: country ${c.country}, ${cmCountry.get(c.name)} expected`);
+  if (CLUB_COUNTRY[c.name]) {
+    abroad += 1;
+    const fact = FACTS.clubCountries.clubs[c.name];
+    ok(!!fact && fact.country === c.country && (fact.shipped || (Array.isArray(fact.sources) && fact.sources.length >= 2)), `${c.name}: its country ${c.country} has no two sourced row in soccerCareerFacts.json clubCountries`);
+  }
+}
+for (const n of ['Cardiff City', 'Swansea City', 'Wrexham']) ok(POOL.find(c => c.name === n)?.country === 'Wales', `${n} is Welsh`);
+const handCountryOf = new Map(HAND.map(c => [c.league, c.country]));
+for (const r of POOL_LEAGUE_ROWS) if (handCountryOf.has(r.label) && r.label !== 'MLS') ok(HAND.some(c => c.league === r.label && c.country === r.country), `${r.label}: the table says ${r.country}, no hand club of that league is from there`);
+console.log(`  ${GENERATED.length} generated countries checked, ${abroad} of them not their league's (${Object.entries(CLUB_COUNTRY).map(([n, c]) => `${n} ${c}`).join(', ')})`);
+/* the one label the pool may bring that no hand club carries (Serie B, held today) */
+const NEW_LABELS = new Set(['Serie B']);
+const handLabels = new Set(HAND.map(c => c.league));
+ok(GENERATED.every(c => handLabels.has(c.league) || NEW_LABELS.has(c.league)), 'every generated league label already exists among the hand labels (or is Serie B)');
+/* Round 1100 (critic 1): since when the game offers each generated club.
+   Every generated club has one decision in the facts file's clubSince, and
+   adjustClubsForYear obeys it in every season a career can reach: a shipped
+   club (Round 1013's 51) is in every list, a held one in none before the
+   facts file's heldBefore, one with a first season from that season on.
+   A typed CLUB_FOUNDED_AFTER row wins over the generated one: these four
+   name a generated club (careerEras.ts). */
+const TYPED_SINCE = { 'Red Bull Bragantino': 2020, 'New York City FC': 2015, 'Austin FC': 2021, 'Charlotte FC': 2022 };
+const SINCE = sinceInput(ROOT);
+const views = new Map();
+for (let y = 1980; y <= 2060; y++) views.set(y, new Set(eras.adjustClubsForYear(POOL, y).map(c => c.name)));
+const sinceTally = { shipped: 0, held: 0, year: 0, typed: 0 };
+for (const c of GENERATED) {
+  const kinds = [SINCE.shipped.has(c.name), SINCE.held.has(c.name), SINCE.years.has(c.name)].filter(Boolean).length;
+  if (!ok(kinds === 1, `${c.name}: ${kinds} clubSince decisions in soccerCareerFacts.json, exactly one wanted`)) continue;
+  const fromFacts = SINCE.shipped.has(c.name) ? 1980 : SINCE.held.has(c.name) ? SINCE.heldBefore : Math.max(1980, SINCE.years.get(c.name));
+  const from = TYPED_SINCE[c.name] ?? fromFacts;
+  if (TYPED_SINCE[c.name]) sinceTally.typed += 1;
+  else sinceTally[SINCE.shipped.has(c.name) ? 'shipped' : SINCE.held.has(c.name) ? 'held' : 'year'] += 1;
+  let bad = null;
+  for (let y = 1980; y <= 2060 && bad === null; y++) if (views.get(y).has(c.name) !== (y >= from)) bad = y;
+  ok(bad === null, `${c.name}: ${bad !== null && views.get(bad).has(c.name) ? 'present' : 'absent'} in ${bad}, the game offers it from ${from}`);
+}
+ok(sinceTally.held > 0 && sinceTally.shipped > 0, `the since rule saw ${sinceTally.shipped} shipped and ${sinceTally.held} held clubs`);
+console.log(`  since: ${sinceTally.shipped} shipped clubs in every list 1980 to 2060, ${sinceTally.held} held out of every list before ${SINCE.heldBefore}, ${sinceTally.year} from a two sourced first season, ${sinceTally.typed} under a typed row (${Object.entries(TYPED_SINCE).map(([n, y]) => `${n} ${y}`).join(', ')})`);
 
 /* ─── 4. TIERS ─── */
 head('4', 'TIERS: the rule worked again, hand rows frozen, Forest across eras');
 const partialSet = new Set(stubMod.CM_PARTIAL);
 const handBy = new Map(HAND.map(c => [c.name, c]));
 const tableLines = [];
-for (const id of POOL_LEAGUES) {
-  const members = cm.REAL_LEAGUES.find(l => l.id === id).clubs.map(n => ({ cm: n, name: cmName(n), xi: inputs.xiOf(n) }));
+let aboveFour = 0;
+for (const label of READ_LABELS) {
+  /* Round 1100: the rule runs once over a label (both MLS rows together) */
+  const top = POOL_LEAGUE_ROWS.find(r => r.label === label).top;
+  const members = idsOf(label).flatMap(id => cm.REAL_LEAGUES.find(l => l.id === id).clubs).map(n => ({ cm: n, name: cmName(n), xi: inputs.xiOf(n) }));
   const hands = members.filter(m => handBy.has(m.name)).map(m => ({ ...m, tier: handBy.get(m.name).tier }));
   const cells = [];
   for (const m of members) {
@@ -286,16 +418,23 @@ for (const id of POOL_LEAGUES) {
     if (handBy.has(m.name)) continue;
     for (const h of hands) if (h.xi > m.xi) ok(row.tier >= h.tier, `${m.name} (XI ${m.xi}, t${row.tier}) sits above ${h.name} (XI ${h.xi}, t${h.tier})`);
     let expect;
-    if (id === 'championship' || partialSet.has(m.cm)) expect = 4;
+    if (!top || partialSet.has(m.cm)) expect = 4;
     else {
       const stronger = hands.filter(h => h.xi >= m.xi);
       expect = stronger.length ? Math.max(...stronger.map(h => h.tier)) : (hands.length ? Math.min(...hands.map(h => h.tier)) : 4);
     }
     ok(row.tier === expect, `${m.name}: tier ${row.tier}, the rule says ${expect}`);
+    if (row.tier < 4) aboveFour += 1;
   }
-  tableLines.push(`  ${LEAGUE_LABELS[id]} (* hand row): ${cells.join(', ')}`);
+  /* the ladder is the same clubs, each once, tier ascending */
+  const flat = (derived.ladder[label] ?? []).flat();
+  ok(flat.length === members.length && members.every(m => flat.includes(m.name)), `${label}: its ladder is not its lineup`);
+  const tiersInOrder = flat.map(n => POOL.find(c => c.name === n)?.tier);
+  ok(tiersInOrder.every((t, i) => i === 0 || t >= tiersInOrder[i - 1]), `${label}: its ladder is not in tier order`);
+  tableLines.push(`  ${label} (* hand row): ${cells.join(', ')}`);
 }
-for (const l of tableLines) console.log(l);
+if (process.env.POOL_TABLE === '1') for (const l of tableLines) console.log(l);
+else console.log(`  ${tableLines.length} leagues re-derived club by club, ${aboveFour} generated clubs above tier 4 (POOL_TABLE=1 prints every club with its XI and tier)`);
 const margin = Math.round((inputs.xiOf('Nottingham Forest') - inputs.xiOf('Aston Villa')) * 10) / 10;
 console.log(`  Forest XI ${inputs.xiOf('Nottingham Forest')} vs Aston Villa (t3) ${inputs.xiOf('Aston Villa')}: margin ${margin}. At or below 0 Forest drops to tier 3 on the next regenerate.`);
 /* HAND_CLUBS as origin/main shipped it before this round (cbc4e03a's
@@ -440,7 +579,20 @@ const g4 = engine.leagueDrawGroups(t4);
 const W4 = g4.reduce((s, g) => s + g.weight, 0);
 const F4 = g4.filter(g => FOUR.has(g.clubs[0].league)).reduce((s, g) => s + g.weight, 0);
 const rawFour = t4.filter(c => FOUR.has(c.league)).length;
-ok(F4 === 20 && W4 === 100, `the four leagues hold ${F4}/${W4} of the tier 4 draw weight, 20/100 expected`);
+/* Round 1100, restated exactly (the raw list is the world from 2026-27 on;
+   before it the held clubs are in no list, section 3). With 22 labels read
+   and the three second flights held: tier 4 draw weight 167 over 76 league
+   groups (main: 100 over 70), the labels the pool reads hold 109 of it
+   (main: 43 of 100 on the same labels), the four leagues of Round 1013
+   still 20. Tier 3 is 69 (main 49), tier 2 is 39 (37), tier 1 is 18 (18).
+   So a tier 4 draw from a league the pool does not read falls from 57 in
+   100 to 58 in 167 (Ligue 2 counts as one of those until its release). This
+   is the round's intent (whole leagues to sign for); LEAGUE_DRAW_CAP is the
+   engine's and is reviewed in Round 1106. */
+const R4 = g4.filter(g => READ.has(g.clubs[0].league)).reduce((s, g) => s + g.weight, 0);
+const tierW = t => engine.leagueDrawGroups(POOL.filter(c => c.tier === t)).reduce((s, g) => s + g.weight, 0);
+ok(F4 === 20 && W4 === 167 && R4 === 109 && g4.length === 76, `tier 4: the four leagues hold ${F4}, the read labels ${R4}, of ${W4} over ${g4.length} groups; 20, 109, 167 and 76 expected`);
+ok(tierW(1) === 18 && tierW(2) === 39 && tierW(3) === 69, `tier 1 to 3 draw weights ${tierW(1)}, ${tierW(2)}, ${tierW(3)}; 18, 39 and 69 expected`);
 /* The sampler itself on the full tier 4, both calls on the grid: every club
    in every group, capped ones included, drawn exactly weight * M * M2 times. */
 const gr4 = gridOdds(() => engine.pickAcrossLeagues(t4), t4);
@@ -455,7 +607,13 @@ console.log(`  full pool tier 4: four leagues ${F4}/${W4} capped; a plain pick w
 {
   const handT4 = HAND.filter(c => c.tier === 4).length;
   const share = name => { const g = g4.find(x => x.clubs.some(c => c.name === name)); return g ? `${g.weight}/${W4 * g.clubs.length}` : 'none'; };
-  const WANT_SHARE = { 'Norwich City': [1, 440], Brentford: [1, 160], 'Crystal Palace': [1, 160], 'Real Betis': [1, 260], 'Celta Vigo': [1, 260], Cruzeiro: [1, 280], Santos: [1, 280], Enyimba: [1, 100] };
+  /* Round 1100: the same clubs on the grown pool (main's shares in the
+     comment above): Norwich 5/3674 in the Championship's 22, Brentford and
+     Palace 5/1336 in the Premier League's 8, Betis and Celta 5/2171 (13),
+     Cruzeiro and Santos 5/2338 (14), and a club alone in its league, Enyimba,
+     1/167 where it was 1/100. Newly whole leagues: Twente and Utrecht 5/2338
+     in the Eredivisie's 14 tier 4 clubs, Hearts 5/1670 in Scotland's 10. */
+  const WANT_SHARE = { 'Norwich City': [5, 3674], Brentford: [5, 1336], 'Crystal Palace': [5, 1336], 'Real Betis': [5, 2171], 'Celta Vigo': [5, 2171], Cruzeiro: [5, 2338], Santos: [5, 2338], Enyimba: [1, 167], Twente: [5, 2338], Utrecht: [5, 2338], Hearts: [5, 1670] };
   for (const [name, [a, b]] of Object.entries(WANT_SHARE)) {
     const g = g4.find(x => x.clubs.some(c => c.name === name));
     ok(g && g.weight * b === a * W4 * g.clubs.length, `${name}: tier 4 share ${share(name)}, ${a}/${b} stated`);
@@ -465,55 +623,12 @@ console.log(`  full pool tier 4: four leagues ${F4}/${W4} capped; a plain pick w
 
 /* ─── 6. OFFERS ─── */
 head('6', `OFFERS: ${SEEDS} seeds x ${CAREERS} careers from 2020 through the real loop`);
-function seedRandom(n) {
-  let seed = n | 0;
-  Math.random = () => {
-    seed |= 0; seed = (seed + 0x6d2b79f5) | 0;
-    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
 const stats = ovr => ({ pace: ovr, shooting: ovr, passing: ovr, dribbling: ovr, defending: ovr, physical: ovr, reflexes: ovr });
 const NATS = ['England', 'Spain', 'Brazil', 'Wales', 'Japan', 'Nigeria', 'USA', 'Argentina'];
 const POSITIONS = ['ST', 'CM', 'CB', 'GK'];
-/* One engine step, the same dispatch as simClubSquads' fleet. */
-function step(s, clubs) {
-  if (s.phase === 'rehab_choice') return engine.applyRehabChoice(s, 1);
-  switch (s.phase) {
-    case 'youth': return engine.advanceYouthYear(s, clubs);
-    case 'contract_offer': {
-      const offers = s.pendingOffers || [];
-      if (!offers.length) return { ...s, phase: 'playing' };
-      return engine.acceptOffer(s, offers[0]);
-    }
-    case 'playing': return engine.advanceProSeason(s, clubs);
-    case 'newspaper': return engine.dismissNewspaper(s);
-    case 'season_summary': return engine.dismissSummary(s, clubs);
-    case 'random_events':
-      if (!s.pendingEvents || !s.pendingEvents[0]) return { ...s, pendingEvents: [], phase: 'playing' };
-      return engine.applyEventChoice(s, 0, clubs);
-    case 'moral_dilemma': return engine.dismissMoralDilemma(s, clubs);
-    case 'social_media_action': return engine.dismissSocialMediaPhase(s, clubs);
-    case 'red_card_appeal_result': return engine.dismissAppealResult(s, clubs);
-    case 'international_debut': return engine.dismissDebut(s, clubs);
-    case 'world_cup': return engine.dismissWorldCup(s, clubs);
-    case 'rivalry_event': return engine.dismissRivalryEvent(s, clubs);
-    case 'ballon_dor': return engine.dismissBallonDor(s, clubs);
-    case 'transfer_window': {
-      const sit = s.transferSituation;
-      if (sit && sit.type === 'one_offer') return engine.acceptOffer(s, sit.offer);
-      if (sit && sit.type === 'bidding_war') return engine.acceptOffer(s, sit.offerA);
-      if (sit && sit.type === 'dream_club') return engine.acceptOffer(s, sit.offer);
-      if (sit && sit.type === 'frozen_out' && sit.offers.length) {
-        const o = sit.offers[0];
-        return o.isLoan ? engine.acceptLoan(s, o) : engine.acceptOffer(s, o);
-      }
-      return engine.stayAtClub(s, clubs);
-    }
-    default: return { ...s, retired: true };
-  }
-}
+/* One engine step: scripts/lib/careerStep.mjs (lifted out of this section by
+   Round 1100 so simCareerLeagueWorld plays the same careers). */
+const step = (s, clubs) => careerStep(engine, s, clubs);
 const offersOf = s => {
   const out = [...(s.pendingOffers || []), ...(s.pendingLoanOffers || [])];
   const sit = s.transferSituation;

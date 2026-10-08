@@ -276,6 +276,7 @@ const LEAGUE_ALIASES: Record<string, string> = {
   "efl championship": "Championship",
   "brasileirao serie a": "Brasileirao",
   "supersport hnl": "HNL",
+  "a-league men": "A-League",
   "mls eastern conference": "MLS",
   "mls western conference": "MLS",
 };

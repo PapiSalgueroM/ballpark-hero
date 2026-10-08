@@ -26,7 +26,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { bundleCareerSources, poolInputs } from './lib/careerClubPool.mjs';
+import { bundleCareerSources, poolInputs, POOL_LEAGUE_ROWS, POOL_LEAGUES, HELD_LEAGUES, NAME_ALIASES } from './lib/careerClubPool.mjs';
 import { careerStep, seedRandom } from './lib/careerStep.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -410,6 +410,31 @@ head('B1', 'POOL: the rows main shipped are still the first rows, in order');
     if (ok(!!got && keys.every(k => got[k] === want[k]), `pool row ${i + 1} is ${got ? JSON.stringify(got) : 'missing'}, main had ${JSON.stringify(want)}`)) same += 1;
   });
   console.log(`  ${same} of ${main.rows.length} recorded rows found in place (${keys.join(', ')}); the pool has ${GENERATED.length} generated rows`);
+}
+
+head('B4', "POOL: the dugout's key finds every pool club under Club Manager's spelling");
+{
+  /* the dugout matches a job's club (Club Manager's spelling) to the list
+     (the career's) by this key, soccerCareerLeague.ts clubKey word for word */
+  const CANON = mod.rivalries.SC_CLUB_CANON;
+  const foldName = v => v.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+  const clubKey = name => foldName(CANON[name] ?? name);
+  /* Club Manager's Nacional is the Madeira club and the list's "Nacional" is
+     the Uruguayan one, so CD Nacional must NOT share the key "nacional" */
+  const PINNED = { Nacional: 'CD Nacional' };
+  let checked = 0;
+  const missing = [];
+  for (const row of POOL_LEAGUE_ROWS.filter(r => !HELD_LEAGUES[r.id])) {
+    for (const cmName of inputs.realLeagues.find(l => l.id === row.id).clubs) {
+      const career = NAME_ALIASES[cmName] ?? inputs.fold(cmName);
+      checked += 1;
+      if (PINNED[cmName]) { ok(career === PINNED[cmName] && clubKey(cmName) !== clubKey(career), `${cmName}: the pinned exception no longer holds (career name ${career})`); continue; }
+      if (clubKey(cmName) !== clubKey(career)) missing.push(`'${career}': '${cmName}',`);
+    }
+  }
+  ok(missing.length === 0, `${missing.length} pool clubs the dugout cannot match to Club Manager's spelling; add to SC_CLUB_CANON in src/data/clubRivalries.ts: ${missing.join(' ')}`);
+  ok(checked >= 350, `only ${checked} clubs checked`);
+  console.log(`  ${checked} Club Manager clubs of ${POOL_LEAGUES.length} leagues, ${checked - missing.length} matched by the key (1 pinned apart: Nacional and CD Nacional)`);
 }
 
 /* ─── C. BAND ─── */
