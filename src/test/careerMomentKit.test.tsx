@@ -80,7 +80,7 @@ describe('Round 1107: the plain data', () => {
   it('the help strings carry no dash, no sport, no club or team and no pay period', () => {
     expect(CAREER_MOMENT_HELP_RULES.length).toBe(5);
     for (const rule of CAREER_MOMENT_HELP_RULES) {
-      expect(rule).not.toMatch(/[–—]/);
+      expect(rule).not.toMatch(/[\u2013\u2014]/);
       expect(rule).not.toMatch(/\b(soccer|football|basketball|baseball|hockey|club|team|league)\b/i);
       expect(rule).not.toMatch(/\ba (week|year|season)\b/i);
     }
