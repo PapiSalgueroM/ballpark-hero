@@ -1,0 +1,43 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+aci: node scripts/simPlayerAutocompleteInteraction.mjs
+aci-pointeronly: AUTOCOMPLETE_INTERACTION_CONTROL=pointeronly node scripts/simPlayerAutocompleteInteraction.mjs
+aci-unguard: AUTOCOMPLETE_INTERACTION_CONTROL=unguard node scripts/simPlayerAutocompleteInteraction.mjs
+aci-enabledoptions: AUTOCOMPLETE_INTERACTION_CONTROL=enabledoptions node scripts/simPlayerAutocompleteInteraction.mjs
+aci-notag: AUTOCOMPLETE_INTERACTION_CONTROL=notag node scripts/simPlayerAutocompleteInteraction.mjs
+aci-keeplist: AUTOCOMPLETE_INTERACTION_CONTROL=keeplist node scripts/simPlayerAutocompleteInteraction.mjs
+aci-noenter: AUTOCOMPLETE_INTERACTION_CONTROL=noenter node scripts/simPlayerAutocompleteInteraction.mjs
+aci-anyenter: AUTOCOMPLETE_INTERACTION_CONTROL=anyenter node scripts/simPlayerAutocompleteInteraction.mjs
+aci-topenter: AUTOCOMPLETE_INTERACTION_CONTROL=topenter node scripts/simPlayerAutocompleteInteraction.mjs
+aci-nodropcommit: AUTOCOMPLETE_INTERACTION_CONTROL=nodropcommit node scripts/simPlayerAutocompleteInteraction.mjs
+lvc: node scripts/simLineupValidatorClient.mjs
+lvc-accepterror: LINEUP_VALIDATOR_CONTROL=accepterror node scripts/simLineupValidatorClient.mjs
+lvc-acceptthrow: LINEUP_VALIDATOR_CONTROL=acceptthrow node scripts/simLineupValidatorClient.mjs
+lvc-truthy: LINEUP_VALIDATOR_CONTROL=truthy node scripts/simLineupValidatorClient.mjs
+lvc-notimeout: LINEUP_VALIDATOR_CONTROL=notimeout node scripts/simLineupValidatorClient.mjs
+lvc-wall: LINEUP_VALIDATOR_CONTROL=wall node scripts/simLineupValidatorClient.mjs
+lvc-nolocal: LINEUP_VALIDATOR_CONTROL=nolocal node scripts/simLineupValidatorClient.mjs
+lvc-localall: LINEUP_VALIDATOR_CONTROL=localall node scripts/simLineupValidatorClient.mjs
+lvc-nogiveup: LINEUP_VALIDATOR_CONTROL=nogiveup node scripts/simLineupValidatorClient.mjs
+qh: node scripts/simQuotaHonesty.mjs
+qh-blind: SIM_QUOTA_CONTROL=blind node scripts/simQuotaHonesty.mjs
+qh-lenient: SIM_QUOTA_CONTROL=lenient node scripts/simQuotaHonesty.mjs
+qh-mute: SIM_QUOTA_CONTROL=mute node scripts/simQuotaHonesty.mjs
+qh-wall: SIM_QUOTA_CONTROL=wall node scripts/simQuotaHonesty.mjs
+psf-error: NO_COLOR=1 PLAYER_SEARCH_FAILURE_CONTROL=error node scripts/simPlayerSearchFailure.mjs
+psf-partial: NO_COLOR=1 PLAYER_SEARCH_FAILURE_CONTROL=partial node scripts/simPlayerSearchFailure.mjs
+psf-message: NO_COLOR=1 PLAYER_SEARCH_FAILURE_CONTROL=message node scripts/simPlayerSearchFailure.mjs
+psf-local: NO_COLOR=1 PLAYER_SEARCH_FAILURE_CONTROL=local node scripts/simPlayerSearchFailure.mjs
+psf-stale: NO_COLOR=1 PLAYER_SEARCH_FAILURE_CONTROL=stale node scripts/simPlayerSearchFailure.mjs
+psf-cleanup: NO_COLOR=1 PLAYER_SEARCH_FAILURE_CONTROL=cleanup node scripts/simPlayerSearchFailure.mjs
+psf-abort: NO_COLOR=1 PLAYER_SEARCH_FAILURE_CONTROL=abort node scripts/simPlayerSearchFailure.mjs
+nbachain: node scripts/simNbaChainFeedback.mjs
+missingxilayout: node scripts/simMissingXiLayout.mjs
+psf: NO_COLOR=1 node scripts/simPlayerSearchFailure.mjs
+psf-plain-as-committed: node scripts/simPlayerSearchFailure.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+norival: node scripts/simNoRivalNames.mjs
+sweep2138: STALE_SWEEP_SEED=2138 node_modules/.bin/vitest run src/test/playerAutocompleteStale.test.tsx --testTimeout=300000
+sweep3138: STALE_SWEEP_SEED=3138 node_modules/.bin/vitest run src/test/playerAutocompleteStale.test.tsx --testTimeout=300000
+onmain-psf-error: git worktree add /tmp/r1138-mainb 6f57ce78 > /dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/r1138-mainb/node_modules; cd /tmp/r1138-mainb && PLAYER_SEARCH_FAILURE_CONTROL=error node scripts/simPlayerSearchFailure.mjs 2>&1 | tail -12
+onmain-frontoffice: cd /tmp/r1138-mainb && node_modules/.bin/vitest run src/lib/frontOfficeRatings.test.ts 2>&1 | tail -30
