@@ -1,0 +1,82 @@
+# Round 1051 reviewer (runner lens): type gate, the four full harness runs, every control on its own line
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+full-nfl: node scripts/simCareerHall.mjs nfl
+full-nba: node scripts/simCareerHall.mjs nba
+full-mlb: node scripts/simCareerHall.mjs mlb
+full-nhl: node scripts/simCareerHall.mjs nhl
+ctl-nfl-v1drift: SIM_SKIP_BOARD=1 SIM_CONTROL=v1drift node scripts/simCareerHall.mjs nfl
+ctl-nfl-calflip: SIM_SKIP_BOARD=1 SIM_CONTROL=calflip node scripts/simCareerHall.mjs nfl
+ctl-nfl-below: SIM_SKIP_BOARD=1 SIM_CONTROL=below node scripts/simCareerHall.mjs nfl
+ctl-nfl-nostandout: SIM_SKIP_BOARD=1 SIM_CONTROL=nostandout node scripts/simCareerHall.mjs nfl
+ctl-nfl-markdrift: SIM_SKIP_BOARD=1 SIM_CONTROL=markdrift node scripts/simCareerHall.mjs nfl
+ctl-nfl-todrift: SIM_SKIP_BOARD=1 SIM_CONTROL=todrift node scripts/simCareerHall.mjs nfl
+ctl-nfl-noramp: SIM_SKIP_BOARD=1 SIM_CONTROL=noramp node scripts/simCareerHall.mjs nfl
+ctl-nfl-catchersteals: SIM_SKIP_BOARD=1 SIM_CONTROL=catchersteals node scripts/simCareerHall.mjs nfl
+ctl-nfl-nobase: SIM_SKIP_BOARD=1 SIM_CONTROL=nobase node scripts/simCareerHall.mjs nfl
+ctl-nfl-examplelie: SIM_SKIP_BOARD=1 SIM_CONTROL=examplelie node scripts/simCareerHall.mjs nfl
+ctl-nfl-nocardline: SIM_SKIP_BOARD=1 SIM_CONTROL=nocardline node scripts/simCareerHall.mjs nfl
+ctl-nfl-standoutbig: SIM_SKIP_BOARD=1 SIM_CONTROL=standoutbig node scripts/simCareerHall.mjs nfl
+ctl-nfl-anchorwiki: SIM_SKIP_BOARD=1 SIM_CONTROL=anchorwiki node scripts/simCareerHall.mjs nfl
+ctl-nba-v1drift: SIM_SKIP_BOARD=1 SIM_CONTROL=v1drift node scripts/simCareerHall.mjs nba
+ctl-nba-calflip: SIM_SKIP_BOARD=1 SIM_CONTROL=calflip node scripts/simCareerHall.mjs nba
+ctl-nba-below: SIM_SKIP_BOARD=1 SIM_CONTROL=below node scripts/simCareerHall.mjs nba
+ctl-nba-nostandout: SIM_SKIP_BOARD=1 SIM_CONTROL=nostandout node scripts/simCareerHall.mjs nba
+ctl-nba-markdrift: SIM_SKIP_BOARD=1 SIM_CONTROL=markdrift node scripts/simCareerHall.mjs nba
+ctl-nba-todrift: SIM_SKIP_BOARD=1 SIM_CONTROL=todrift node scripts/simCareerHall.mjs nba
+ctl-nba-noramp: SIM_SKIP_BOARD=1 SIM_CONTROL=noramp node scripts/simCareerHall.mjs nba
+ctl-nba-catchersteals: SIM_SKIP_BOARD=1 SIM_CONTROL=catchersteals node scripts/simCareerHall.mjs nba
+ctl-nba-nobase: SIM_SKIP_BOARD=1 SIM_CONTROL=nobase node scripts/simCareerHall.mjs nba
+ctl-nba-examplelie: SIM_SKIP_BOARD=1 SIM_CONTROL=examplelie node scripts/simCareerHall.mjs nba
+ctl-nba-nocardline: SIM_SKIP_BOARD=1 SIM_CONTROL=nocardline node scripts/simCareerHall.mjs nba
+ctl-nba-standoutbig: SIM_SKIP_BOARD=1 SIM_CONTROL=standoutbig node scripts/simCareerHall.mjs nba
+ctl-nba-anchorwiki: SIM_SKIP_BOARD=1 SIM_CONTROL=anchorwiki node scripts/simCareerHall.mjs nba
+ctl-mlb-v1drift: SIM_SKIP_BOARD=1 SIM_CONTROL=v1drift node scripts/simCareerHall.mjs mlb
+ctl-mlb-calflip: SIM_SKIP_BOARD=1 SIM_CONTROL=calflip node scripts/simCareerHall.mjs mlb
+ctl-mlb-below: SIM_SKIP_BOARD=1 SIM_CONTROL=below node scripts/simCareerHall.mjs mlb
+ctl-mlb-nostandout: SIM_SKIP_BOARD=1 SIM_CONTROL=nostandout node scripts/simCareerHall.mjs mlb
+ctl-mlb-markdrift: SIM_SKIP_BOARD=1 SIM_CONTROL=markdrift node scripts/simCareerHall.mjs mlb
+ctl-mlb-todrift: SIM_SKIP_BOARD=1 SIM_CONTROL=todrift node scripts/simCareerHall.mjs mlb
+ctl-mlb-noramp: SIM_SKIP_BOARD=1 SIM_CONTROL=noramp node scripts/simCareerHall.mjs mlb
+ctl-mlb-catchersteals: SIM_SKIP_BOARD=1 SIM_CONTROL=catchersteals node scripts/simCareerHall.mjs mlb
+ctl-mlb-nobase: SIM_SKIP_BOARD=1 SIM_CONTROL=nobase node scripts/simCareerHall.mjs mlb
+ctl-mlb-examplelie: SIM_SKIP_BOARD=1 SIM_CONTROL=examplelie node scripts/simCareerHall.mjs mlb
+ctl-mlb-nocardline: SIM_SKIP_BOARD=1 SIM_CONTROL=nocardline node scripts/simCareerHall.mjs mlb
+ctl-mlb-standoutbig: SIM_SKIP_BOARD=1 SIM_CONTROL=standoutbig node scripts/simCareerHall.mjs mlb
+ctl-mlb-anchorwiki: SIM_SKIP_BOARD=1 SIM_CONTROL=anchorwiki node scripts/simCareerHall.mjs mlb
+ctl-nhl-v1drift: SIM_SKIP_BOARD=1 SIM_CONTROL=v1drift node scripts/simCareerHall.mjs nhl
+ctl-nhl-calflip: SIM_SKIP_BOARD=1 SIM_CONTROL=calflip node scripts/simCareerHall.mjs nhl
+ctl-nhl-below: SIM_SKIP_BOARD=1 SIM_CONTROL=below node scripts/simCareerHall.mjs nhl
+ctl-nhl-nostandout: SIM_SKIP_BOARD=1 SIM_CONTROL=nostandout node scripts/simCareerHall.mjs nhl
+ctl-nhl-markdrift: SIM_SKIP_BOARD=1 SIM_CONTROL=markdrift node scripts/simCareerHall.mjs nhl
+ctl-nhl-todrift: SIM_SKIP_BOARD=1 SIM_CONTROL=todrift node scripts/simCareerHall.mjs nhl
+ctl-nhl-noramp: SIM_SKIP_BOARD=1 SIM_CONTROL=noramp node scripts/simCareerHall.mjs nhl
+ctl-nhl-catchersteals: SIM_SKIP_BOARD=1 SIM_CONTROL=catchersteals node scripts/simCareerHall.mjs nhl
+ctl-nhl-nobase: SIM_SKIP_BOARD=1 SIM_CONTROL=nobase node scripts/simCareerHall.mjs nhl
+ctl-nhl-examplelie: SIM_SKIP_BOARD=1 SIM_CONTROL=examplelie node scripts/simCareerHall.mjs nhl
+ctl-nhl-nocardline: SIM_SKIP_BOARD=1 SIM_CONTROL=nocardline node scripts/simCareerHall.mjs nhl
+ctl-nhl-standoutbig: SIM_SKIP_BOARD=1 SIM_CONTROL=standoutbig node scripts/simCareerHall.mjs nhl
+ctl-nhl-anchorwiki: SIM_SKIP_BOARD=1 SIM_CONTROL=anchorwiki node scripts/simCareerHall.mjs nhl
+old-nhl-everyonein: SIM_SKIP_BOARD=1 SIM_CONTROL=everyonein node scripts/simCareerHall.mjs nhl
+old-nhl-bindhof: SIM_SKIP_BOARD=1 SIM_CONTROL=bindhof node scripts/simCareerHall.mjs nhl
+old-nhl-outcomeswap: SIM_SKIP_BOARD=1 SIM_CONTROL=outcomeswap node scripts/simCareerHall.mjs nhl
+old-nhl-nominationgone: SIM_SKIP_BOARD=1 SIM_CONTROL=nominationgone node scripts/simCareerHall.mjs nhl
+old-nhl-waitoff: SIM_SKIP_BOARD=1 SIM_CONTROL=waitoff node scripts/simCareerHall.mjs nhl
+old-nhl-flatfirst: SIM_SKIP_BOARD=1 SIM_CONTROL=flatfirst node scripts/simCareerHall.mjs nhl
+old-nhl-nopromise: SIM_SKIP_BOARD=1 SIM_CONTROL=nopromise node scripts/simCareerHall.mjs nhl
+old-nhl-mathrandom: SIM_SKIP_BOARD=1 SIM_CONTROL=mathrandom node scripts/simCareerHall.mjs nhl
+old-nhl-sharesides: SIM_SKIP_BOARD=1 SIM_CONTROL=sharesides node scripts/simCareerHall.mjs nhl
+old-nhl-farewelloff: SIM_SKIP_BOARD=1 SIM_CONTROL=farewelloff node scripts/simCareerHall.mjs nhl
+old-nhl-retireoff: SIM_SKIP_BOARD=1 SIM_CONTROL=retireoff node scripts/simCareerHall.mjs nhl
+old-nhl-notalk: SIM_SKIP_BOARD=1 SIM_CONTROL=notalk node scripts/simCareerHall.mjs nhl
+old-nhl-jerseyfirst: SIM_SKIP_BOARD=1 SIM_CONTROL=jerseyfirst node scripts/simCareerHall.mjs nhl
+old-nhl-jerseyraw: SIM_SKIP_BOARD=1 SIM_CONTROL=jerseyraw node scripts/simCareerHall.mjs nhl
+old-mlb-oldcurve: SIM_SKIP_BOARD=1 SIM_CONTROL=oldcurve node scripts/simCareerHall.mjs mlb
+old-mlb-shownraw: SIM_SKIP_BOARD=1 SIM_CONTROL=shownraw node scripts/simCareerHall.mjs mlb
+small-nba-base: SIM_BOARD_CAREERS=80 node scripts/simCareerHall.mjs nba
+board-nba-talkdraws: SIM_BOARD_CAREERS=80 SIM_CONTROL=talkdraws node scripts/simCareerHall.mjs nba
+board-nba-deckfarewelloff: SIM_BOARD_CAREERS=80 SIM_CONTROL=deckfarewelloff node scripts/simCareerHall.mjs nba
+board-nba-twice: SIM_BOARD_CAREERS=80 SIM_CONTROL=twice node scripts/simCareerHall.mjs nba
+board-nba-seekexclude: SIM_BOARD_CAREERS=80 SIM_CONTROL=seekexclude node scripts/simCareerHall.mjs nba
+board-nba-jerseyignore: SIM_BOARD_CAREERS=80 SIM_CONTROL=jerseyignore node scripts/simCareerHall.mjs nba
+board-nba-eraunguarded: SIM_BOARD_CAREERS=80 SIM_CONTROL=eraunguarded node scripts/simCareerHall.mjs nba
+cal1-nba: SIM_CAL=1 SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nba
