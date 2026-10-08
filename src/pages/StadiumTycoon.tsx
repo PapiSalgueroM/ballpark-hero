@@ -416,6 +416,12 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
      timer that knew nothing about the goals. The pitch is TycoonPitch now, and
      everything on it moves with the engine's match. */
 
+  const standBays = useMemo(() => Array.from({ length: Math.min(203, Math.floor(cap / 40)) }, (_, i) => {
+    const column = i % 20;
+    const centered = column % 2 === 0 ? 9 - Math.floor(column / 2) : 10 + Math.floor(column / 2);
+    return { x: 8 + centered * 15, y: 56 - Math.floor(i / 20) * 5 };
+  }), [cap]);
+
   /* The crowd: one dot per ~14 fans, placed deterministically so the stand
      fills seat by seat as attendance really grows. Capped for perf. */
   const crowdDots = useMemo(() => {
@@ -536,6 +542,11 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
         <div ref={pitchRef} onClick={onPitchClick} className="relative rounded-2xl overflow-hidden border border-border cursor-pointer select-none mb-3 group">
           {/* Stand (crowd) */}
           <div className="relative h-16 md:h-20 bg-gradient-to-b from-secondary to-secondary/40 border-b border-border overflow-hidden">
+            <svg data-tycoon-terraces aria-hidden="true" viewBox="0 0 320 64" preserveAspectRatio="none" className="absolute inset-0 h-full w-full pointer-events-none text-muted-foreground/50">
+              {standBays.map((bay, i) => (
+                <rect key={i} x={bay.x} y={bay.y} width="13" height="3" rx="1" fill="currentColor" />
+              ))}
+            </svg>
             {crowdDots.map((d, i) => (
               <span key={i} className={cn('absolute w-1.5 h-1.5 rounded-full transition-opacity duration-700', d.c)} style={{ left: `${d.x}%`, top: `${d.y}%` }} />
             ))}
