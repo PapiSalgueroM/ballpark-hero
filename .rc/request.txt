@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+noguard-quietpage: PLAY_TRANSLATED_CONTROL=noguard ONLY=/club-manager,/build-your-xi ENGINES=chromium node scripts/playTranslatedPage.mjs
+only-nothing: ONLY=/no-such-page ENGINES=chromium node scripts/playTranslatedPage.mjs
