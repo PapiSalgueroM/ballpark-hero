@@ -1,0 +1,15 @@
+#!serve
+#!playwright
+# Round 1051 fixer 2: the press walk after its fix, six runs, its control, and the probe copy that prints the screen
+press-1: node scripts/playCareerPress.mjs
+press-2: node scripts/playCareerPress.mjs
+press-3: node scripts/playCareerPress.mjs
+press-4: node scripts/playCareerPress.mjs
+press-5: node scripts/playCareerPress.mjs
+press-6: node scripts/playCareerPress.mjs
+press-noscrum: CAREER_PRESS_CONTROL=noscrum node scripts/playCareerPress.mjs
+pressProbe-1: node .rc/x/pressProbe.mjs
+pressProbe-2: node .rc/x/pressProbe.mjs
+pressProbe-3: node .rc/x/pressProbe.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs

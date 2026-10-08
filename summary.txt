@@ -1,0 +1,13 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+press-1 exit=0 16s | ALL CAREER PRESS WALK CHECKS PASSED
+press-2 exit=0 17s | ALL CAREER PRESS WALK CHECKS PASSED
+press-3 exit=0 18s | ALL CAREER PRESS WALK CHECKS PASSED
+press-4 exit=0 17s | ALL CAREER PRESS WALK CHECKS PASSED
+press-5 exit=0 17s | ALL CAREER PRESS WALK CHECKS PASSED
+press-6 exit=0 16s | ALL CAREER PRESS WALK CHECKS PASSED
+pressProbe-1 exit=0 16s | ALL CAREER PRESS WALK CHECKS PASSED
+pressProbe-2 exit=0 17s | ALL CAREER PRESS WALK CHECKS PASSED
+pressProbe-3 exit=0 16s | ALL CAREER PRESS WALK CHECKS PASSED
+press-noscrum exit=0 40s | playCareerPress control noscrum: all 1 guarded checks fired (mutations landed: {"scrumTrigger":2})
+simNoRivalNames exit=0 11s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 32s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
