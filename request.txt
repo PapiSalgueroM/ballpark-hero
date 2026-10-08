@@ -1,0 +1,6 @@
+#!build
+#!playwright
+#!serial
+basecheck: bash .rc/x/basecheck2.sh
+simBrand: pip3 install -q fonttools pillow 2>&1 | tail -1; node scripts/simBrand.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs

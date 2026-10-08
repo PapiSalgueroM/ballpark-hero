@@ -1,0 +1,4 @@
+build exit=0 27s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+basecheck exit=0 88s | entry chunk dist/assets/index-pF-wLVFX.js: 775400 bytes, 233408 gzipped
+simBrand exit=0 4s | simBrand: green. One mark, drawn from one source, everywhere the site shows its face.
+simWritesAreSent exit=1 13s | simWritesAreSent: 2 failures

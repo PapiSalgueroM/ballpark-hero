@@ -1,0 +1,25 @@
+BASE: the branch head 229c0c4f9 without the round's source
+  FAIL: /club-manager: 705K of gzipped JavaScript against a budget of 702K
+  FAIL: /stadium-tycoon: 289K of gzipped JavaScript against a budget of 287K
+  FAIL: /soccer-grid: 308K of gzipped JavaScript against a budget of 307K
+   /                   235K gz over   3 files (budget 235K)
+   /club-manager       705K gz over  37 files (budget 702K)
+   /soccer-career      759K gz over  42 files (budget 759K)
+   /stadium-tycoon     289K gz over  23 files (budget 287K)
+   /wonderkid-factory  266K gz over  19 files (budget 266K)
+   /minefield          283K gz over  20 files (budget 284K)
+   /footle             339K gz over  38 files (budget 339K)
+   /nfl-my-career      454K gz over  46 files (budget 454K)
+   /front-office       353K gz over  34 files (budget 353K)
+   /soccer-grid        308K gz over  36 files (budget 307K)
+   /leaderboard        243K gz over   9 files (budget 266K)
+sweepWeight: 3 failures
+== base playIphone
+  FAIL  every control in the page is thumb sized (66: Soccer Career (17px), Club Manager (17px), NBA My Career (17px), NFL My Career (17px))
+playIphone: 1 failure
+== base simWritesAreSent
+  FAIL: the harness could not drive Guess the Nation to a finish: TimeoutError: locator.click: Timeout 8000ms exceeded.
+  FAIL: no guess was ever submitted, so this section proved nothing about the write
+simWritesAreSent: 2 failures
+entry chunk /home/runner/work/_temp/base-tree/dist/assets/index-CL84vn4l.js: 772809 bytes, 232439 gzipped
+entry chunk dist/assets/index-pF-wLVFX.js: 775400 bytes, 233408 gzipped
