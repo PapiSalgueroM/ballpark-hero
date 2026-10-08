@@ -48,6 +48,8 @@
  *     goal already past at mount and every goal at Results speed are drawn
  *     landed with nothing played; no figure is cut by the box at either end
  *     on a 320 or a 390 phone; and the box and what is under it never move.
+ *     Two goals the clock crosses in ONE step (a slow frame at 3x) are both
+ *     seen: the earlier one is drawn landed, then the later one is played.
  *
  * Controls (SEASON_MOTION_CONTROL=), each a rewrite of the source text inside
  * esbuild's onLoad (never a file on disk), each refusing to run unless its
@@ -56,6 +58,8 @@
  *   firstmount  the wrapper mounts holding a made up order     -> B3 red
  *   nosnap      the reduced motion read is forced to false     -> B4 red
  *   pitchside   every goal is laid out at his club's attacking end -> B5 red
+ *   pitchqueue  only the last goal of a step is kept (the code before the
+ *               review)                                         -> B5 red
  *
  * PART C: THE BUILT SITE, served the way the live host serves it
  * (scripts/lib/hostLikeServer.mjs, port 4559), on a save the real engine made
@@ -94,11 +98,37 @@
  *     (its own count is printed), the header never clipped, no sideways
  *     scroll, every opponent's name at least 72 px, the review strip whole.
  *  C7 The save string is byte for byte what it was at the end of every pass.
+ *
+ * Added after the round's review, each on a save or a record of its own:
+ *  C8 The YOUR CALL he banked. A second save the engine made, with a ledger
+ *     made in node (one YOUR CALL taken against the record, then banked by
+ *     the game's own closeSeasonMoments) and the season opened later from the
+ *     career page. No moment is offered, and the matchday he played shows
+ *     the score and the table WITH his decision (node's applyDecisions), which
+ *     node has checked is not the table as saved. The save is untouched.
+ *  C3 (another season's place) With a place kept in the latest season, an
+ *     older season is opened and sent straight to its review: the kept place
+ *     is still there, word for word, and so is the chip.
+ *  C3 (the chip's word) A third save, on a results only season: one round
+ *     watched, and the chip names the next round in the Season Centre's own
+ *     word for that season (league game), the same as the button it leads to.
+ *  C2 (the pitch's file does not arrive) Every request for the little pitch
+ *     is refused: the matchday still plays to full time over an empty box of
+ *     the pitch's size, with node's table and no error tile.
  * Controls on what is SERVED (same variable): floor (the Kick off buttons'
  * class put back to h-11 flex-1 -> C6 red), lock (the body lock taken out ->
  * C4 red), tableview (the stage no longer brings the table into view -> C1
  * red on the phones), pitchlayer (the pitch box loses its own layer, so the
- * ball is drawn over the score that stays on screen -> C1 red at 320). Screenshots go to SHOTS (or RC_OUT, else .tmp-fx/shots).
+ * ball is drawn over the score that stays on screen -> C1 red at 320),
+ * held (the season the ledger belongs to is no longer shown with what he did
+ * in it unless a moment can be offered -> C8 red), otherplace (the review
+ * clears whatever place is kept, not only this season's -> C3 red),
+ * chipword (the Season Centre stops keeping its word with the place -> C3
+ * red), pitchgone (the pitch's own boundary lets the failure through -> C2
+ * red). held and otherplace find their line in the built file by its SHAPE
+ * (a regular expression over minified code, written beside each): if the
+ * build ever words that line differently the control refuses to run, it
+ * never passes quietly. Screenshots go to SHOTS (or RC_OUT, else .tmp-fx/shots).
  *
  * Needs dist built (the stylesheet and the site) and Chromium. Scope with ONLY=B1,B3 (any C runs all of part C).
  * Every page blocks the live database before anything loads.
@@ -126,8 +156,10 @@ const CONTROLS = {
   firstmount: { file: SHIFT_UI, from: '  const held = useRef<Held | null>(null);', to: '  const held = useRef<Held | null>({ order: order.slice().reverse(), tops: new Map(order.map((k, i) => [k, (order.length - 1 - i) * 28])), slide: true, width: Number.NaN });' },
   pitchside: { file: 'src/components/season-centre/MiniPitch.tsx', from: "  const us = !goal || goal.side === 'us';", to: '  const us = true;' },
   nosnap: { file: SHIFT_UI, from: "const reducedNow = () => typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;", to: 'const reducedNow = () => false;' },
+  pitchqueue: { file: 'src/components/season-centre/MiniPitch.tsx', from: '    const arrived = goals.filter(g => g.min > was.shown && g.min <= shown);', to: '    const arrived = goals.filter(g => g.min > was.shown && g.min <= shown).slice(-1);' },
 };
-const SERVED_CONTROLS = ['floor', 'lock', 'tableview', 'pitchlayer'];
+const PITCH_CONTROLS = ['pitchside', 'pitchqueue'];
+const SERVED_CONTROLS = ['floor', 'lock', 'tableview', 'pitchlayer', 'held', 'otherplace', 'chipword', 'pitchgone'];
 if (CONTROL && !CONTROLS[CONTROL] && !SERVED_CONTROLS.includes(CONTROL)) throw new Error(`unknown SEASON_MOTION_CONTROL ${CONTROL}`);
 if (CONTROL) console.log(`CONTROL ${CONTROL}: rewritten in the bundled source or in what is served, never a file on disk`);
 
@@ -137,14 +169,21 @@ const notes = [];
 const note = (id, msg) => { if (notes.filter(n => n.startsWith(id)).length < 4) notes.push(`${id}: ${msg}`); };
 
 /* ---- the tables, from node ---- */
-const B = await bundleAwardsNight(ROOT, { extra: { season: 'src/lib/season/soccer.ts', core: 'src/lib/season/core.ts' } });
+const B = await bundleAwardsNight(ROOT, { extra: { season: 'src/lib/season/soccer.ts', core: 'src/lib/season/core.ts', moments: 'src/lib/season/soccerMoments.ts', ledger: 'src/lib/season/momentsSave.ts' } });
 const CLUBS = B.soccer.FALLBACK_CLUBS;
 const found = [];
 const seen = new Set();
+/* part C's third save: the first probe career standing on its career page whose last season is results only (no table) */
+let RESULTS_ONLY = null;
 probeAwardsNight(B, {
   onStep: s => {
-    if (!['newspaper', 'season_summary', 'rehab_choice'].includes(s.phase)) return;
     const row = s.seasons[s.seasons.length - 1];
+    if (!RESULTS_ONLY && s.phase === 'playing' && row && row.type === 'playing' && row.apps > 0) {
+      const ctx = B.season.buildSoccerSeasonCtx(s, CLUBS, row);
+      const d = ctx.mode !== 'table' ? B.core.deriveSeason(B.season.SOCCER, row, ctx) : null;
+      if (d && d.mode !== 'table' && d.games.length >= 6) RESULTS_ONLY = { save: JSON.stringify(s), name: s.playerName, at: s.seasons.length - 1, row, M: d.games.length };
+    }
+    if (!['newspaper', 'season_summary', 'rehab_choice'].includes(s.phase)) return;
     if (!row || row.type !== 'playing' || !(row.apps > 0)) return;
     const k = `${s.playerName}|${row.year}`;
     if (seen.has(k)) return;
@@ -468,7 +507,7 @@ if (want('B5')) {
     bundle: true, format: 'iife', platform: 'browser', jsx: 'automatic', outfile: PITCH_JS, logLevel: 'error',
     alias: { '@': path.join(ROOT, 'src') }, define: { 'process.env.NODE_ENV': '"production"' }, plugins: [controlPlugin],
   });
-  if (CONTROL === 'pitchside' && !applied.has(CONTROL)) throw new Error('control refused: MiniPitch.tsx was never loaded into the bundle');
+  if (PITCH_CONTROLS.includes(CONTROL) && !applied.has(CONTROL)) throw new Error('control refused: MiniPitch.tsx was never loaded into the bundle');
   const pitchJs = fs.readFileSync(PITCH_JS, 'utf8');
   /* the pitch's look is the shared part's own stylesheet, which esbuild writes beside the bundle; the page carries it with the shipped one */
   const pitchCssFile = PITCH_JS.replace(/\.js$/, '.css');
@@ -588,6 +627,16 @@ if (want('B5')) {
     await page.waitForTimeout(150);
     const after = await see();
     hold(resumed.phase === 'net' && resumed.goal === '1|69|us|0' && after.log.length === 0, `${tag}: a goal already past at mount was played (${resumed.phase}, log ${after.log.join(' ')})`);
+    /* two goals crossed in ONE step of the clock (a slow frame at 3x covers several minutes): the earlier one is seen landed, then the later one is played */
+    await mount({ ...base, shown: 66 });
+    await set({ shown: 69 });
+    const both = await landed('1|69|us|0');
+    hold(both.log.join(' ') === '1|67|us|0:net 1|69|us|0:plant 1|69|us|0:flight 1|69|us|0:net', `${tag}: two goals crossed in one step were not both seen, the first landed and the second played (${both.log.join(' ')})`);
+    /* and three: 12, 40 and 67 in one step, each landing in turn, the last one played */
+    await mount({ ...base, shown: 0 });
+    await set({ shown: 68 });
+    const three = await landed('1|67|us|0');
+    hold(three.log.join(' ') === '1|12|them|0:net 1|40|us|0:net 1|67|us|0:plant 1|67|us|0:flight 1|67|us|0:net', `${tag}: three goals crossed in one step did not each land in turn (${three.log.join(' ')})`);
     /* Results speed and reduced motion: every goal lands at once */
     const inst = await mount({ ...base, instant: true, shown: 0 });
     const hit = await set({ shown: 12 });
@@ -640,13 +689,25 @@ if (ONLY.length === 0 || ONLY.some(x => x.startsWith('C'))) {
     lock: [['.style.overflow="hidden"', '.style.overflow=""', 'centre']],
     tableview: [['.closest("[data-centre-stage]")', '.closest("[data-centre-stage-off]")']],
     pitchlayer: [['relative isolate w-full overflow-hidden rounded-xl aspect-[25/12]', 'relative w-full overflow-hidden rounded-xl aspect-[25/12]']],
+    /* CentreBody's `(canPlay || held) && plan ? planMoments(...)`, as the build words it: `=>(h||v)&&c?`. Without `|| held` a season is shown with his moments only while one can still be offered. */
+    held: [[/=>\(([\w$]+)\|\|[\w$]+\)&&([\w$]+)\?/g, '=>($1)&&$2?', 'centre']],
+    /* CentreBody's `else if (readResume(GAME)?.key === key) clearResume(GAME)`, as the build words it: `...A.key)===x&&St(Z))}`. The test is made always true, so a review clears whatever place is kept. */
+    otherplace: [[/(\.key\))===([\w$]+)(&&[\w$]+\([\w$]+\)\)\})/g, '$1!==$2+"x"$3', 'centre']],
+    /* the entry's writeResume({ ..., round: at.round }): the word is no longer kept with the place */
+    chipword: [[/,round:[\w$]+\.round\}/g, '}', 'centre']],
+    /* PitchBoundary's getDerivedStateFromError: it no longer turns a failed pitch into an empty box */
+    pitchgone: [['return{gone:!0}', 'return{gone:!1}', 'centre']],
   };
   const rewrites = new Map();
   if (SERVED[CONTROL]) {
+    const countOf = (text, from) => (from instanceof RegExp ? [...text.matchAll(from)].length : text.split(from).length - 1);
     for (const [from, to, where] of SERVED[CONTROL]) {
-      const holders = where === 'centre' ? [CENTRE_CHUNK].filter(c => jsText[c].includes(from)) : chunkWith(from);
-      if (holders.length !== 1 || jsText[holders[0]].split(from).length !== 2) throw new Error(`control refused: ${JSON.stringify(from.slice(0, 60))} is not in the served site exactly once`);
-      rewrites.set(holders[0], (rewrites.get(holders[0]) ?? jsText[holders[0]]).replace(from, to));
+      const holders = (where === 'centre' ? [CENTRE_CHUNK] : Object.keys(jsText)).filter(c => countOf(jsText[c], from) > 0);
+      if (holders.length !== 1 || countOf(jsText[holders[0]], from) !== 1) throw new Error(`control refused: ${JSON.stringify(String(from).slice(0, 60))} is not in the served site exactly once (${holders.length} files hold it)`);
+      const was = rewrites.get(holders[0]) ?? jsText[holders[0]];
+      const now = was.replace(from, to);
+      if (now === was) throw new Error(`control refused: rewriting ${JSON.stringify(String(from).slice(0, 60))} changed nothing`);
+      rewrites.set(holders[0], now);
     }
     console.log(`CONTROL ${CONTROL}: ${[...rewrites.keys()].join(', ')} rewritten as served`);
   }
@@ -725,15 +786,60 @@ if (ONLY.length === 0 || ONLY.some(x => x.startsWith('C'))) {
   console.log(`C) save: ${HUB.state.playerName}, ${HUB.facts.length} played seasons (${OPEN_IDS.length} replay, ${LOCKED_IDS.length} locked), the last ${LABEL} ${HUB.last.row.club} with ${M} matchdays; his goal and a goal against on matchday ${HUB.goalMd}`);
   check(OPEN_IDS.length >= 2 && LOCKED_IDS.length >= 1, `C. the save has seasons that replay and seasons that do not (${OPEN_IDS.length} and ${LOCKED_IDS.length}; floors 2 and 1)`);
 
+  /* ---- a second save, for C8: on the career page, the last season a table he did not win and still the league year the
+     save holds, with a ledger made here: one YOUR CALL taken AGAINST the record (so the match and the table that week
+     differ from the season as saved), then banked by the game's own closeSeasonMoments ---- */
+  const { moments: MO, ledger: LG } = B;
+  const pointsOf = (d, k) => C.tableAt(d, k).map(r => `${d.labels[r.slot]?.key ?? `u${r.slot}`}:${r.pts}`);
+  let HELD = null;
+  for (let c = 0; c < 200 && !HELD; c += 1) {
+    const real = Math.random;
+    Math.random = mulberry32(c * 7919 + 1046);
+    try {
+      let s = soccer.initCareer(`Held ${c}`, 'England', 'ST', '2010-14', abil(72 + (c % 10)), 72 + (c % 10), 2010, CLUBS, null, 92);
+      for (let g = 0; g < 400 && s && !s.retired && !HELD; g += 1) {
+        const row = s.seasons[s.seasons.length - 1];
+        if (s.phase === 'playing' && row && playedRow(row) && s.phone?.world?.year === row.year) {
+          const ctx = S.buildSoccerSeasonCtx(s, CLUBS, row);
+          const key = S.SOCCER.seasonKey(row, ctx);
+          const plan = key && ctx.mode === 'table' && ctx.finish?.finish !== 1 ? C.deriveSeason(S.SOCCER, row, ctx) : null;
+          if (plan && plan.mode === 'table') {
+            const offered = C.planMoments(S.SOCCER, row, ctx, plan);
+            for (const m of offered.filter(x => x.mode === 'call' && x.md >= 2 && x.md <= 12)) {
+              const entry = [m.md, m.id, m.planSuccess ? 0 : 2];
+              const applied = C.applyDecisions(S.SOCCER, row, ctx, plan, offered, [entry]);
+              if (applied === plan || pointsOf(applied, m.md).join() === pointsOf(plan, m.md).join()) continue;
+              let led = LG.ledgerPut(undefined, key, m.md, m.id, -1, []);
+              led = LG.ledgerPut(led, key, m.md, m.id, entry[2], []);
+              const banked = MO.closeSeasonMoments({ ...s, seasonMoments: led }, CLUBS);
+              if (banked.seasonMoments?.banked !== 1 || banked.seasonMoments.key !== key) continue;
+              HELD = { save: JSON.stringify(banked), at: s.seasons.length - 1, m, plan, applied, name: s.playerName, row };
+              break;
+            }
+          }
+        }
+        s = stepOf(s);
+      }
+    } finally { Math.random = real; }
+  }
+  if (!HELD) throw new Error('the engine gave no save with a banked YOUR CALL that moves the table: C8 checked nothing');
+  {
+    const g0 = HELD.plan.games[HELD.m.md - 1], g1 = HELD.applied.games[HELD.m.md - 1];
+    console.log(`C) the YOUR CALL save: ${HELD.name}, ${HELD.row.year} ${HELD.row.club}, matchday ${HELD.m.md} (${HELD.m.kind}, on the record ${HELD.m.planSuccess ? 'made' : 'missed'}): as saved ${g0.us}-${g0.them}, as he played it ${g1.us}-${g1.them}; ledger ${JSON.stringify(JSON.parse(HELD.save).seasonMoments)}`);
+    check(`${g0.us}-${g0.them}` !== `${g1.us}-${g1.them}` && pointsOf(HELD.applied, HELD.m.md).join() !== pointsOf(HELD.plan, HELD.m.md).join(), `C8. node: his YOUR CALL changes the score of matchday ${HELD.m.md} and the table that week`);
+  }
+  if (!RESULTS_ONLY) throw new Error('the probe gave no career on its career page after a results only season: the chip\'s word was not checked');
+  console.log(`C) the results only save: ${RESULTS_ONLY.name}, ${RESULTS_ONLY.row.year} ${RESULTS_ONLY.row.club}, ${RESULTS_ONLY.M} league games`);
+
   /* ---- the served site ---- */
   const { spawn } = await import('node:child_process');
   server = spawn(process.execPath, [path.join(ROOT, 'scripts/lib/hostLikeServer.mjs'), DIST, String(PORT)], { stdio: 'ignore' });
   await new Promise(r => setTimeout(r, 1500));
   const RESUME_SLOT = 'seasonCentre:v1:soccer';
   /** A context on a save: the cookie question answered, the help seen, the live database unreachable, extra storage as given. */
-  async function openSite(save, { width = 1280, height = 900, reduced = false, storage = {} } = {}) {
+  async function openSite(save, { width = 1280, height = 900, reduced = false, storage = {}, session = {}, refuse = [] } = {}) {
     const ctx = await browser.newContext({ viewport: { width, height }, reducedMotion: reduced ? 'reduce' : 'no-preference' });
-    await ctx.addInitScript(([v, extra]) => {
+    await ctx.addInitScript(([v, extra, forTab]) => {
       try {
         if (!sessionStorage.getItem('motion-harness')) {
           sessionStorage.setItem('motion-harness', '1');
@@ -741,11 +847,14 @@ if (ONLY.length === 0 || ONLY.some(x => x.startsWith('C'))) {
           localStorage.setItem('soccerCareerSave', v);
           localStorage.setItem('seasonCentre:help', '1');
           for (const [k, val] of Object.entries(extra)) localStorage.setItem(k, val);
+          for (const [k, val] of Object.entries(forTab)) sessionStorage.setItem(k, val);
         }
       } catch { /* private mode */ }
-    }, [save, storage]);
+    }, [save, storage, session]);
     await ctx.route('**://*.supabase.co/**', r => r.abort());
     for (const [file, text] of rewrites) await ctx.route(`**/assets/${file}`, r => r.fulfill({ status: 200, contentType: 'application/javascript', body: text }));
+    /* files this pass must never be given (registered last, so it is asked first) */
+    for (const file of refuse) await ctx.route(`**/assets/${file}`, r => r.abort());
     const page = await ctx.newPage();
     const js = [];
     const errors = [];
@@ -1041,7 +1150,7 @@ if (ONLY.length === 0 || ONLY.some(x => x.startsWith('C'))) {
       const chip = await p.evaluate(() => { const b = document.querySelector('[data-season-resume]'); return { text: b.textContent.trim(), h: b.getBoundingClientRect().height }; });
       const rec = JSON.parse((await stored(p)) ?? 'null');
       check(chip.text === `📺 Resume ${LABEL}, matchday 4` && chip.h >= 43.5, `C3. ${tag}: three matchdays watched leave the chip "${chip.text}", ${chip.h.toFixed(0)} px tall`);
-      check(!!rec && rec.key === SEASON_KEY && rec.year === HUB.last.row.year && rec.md === 3 && rec.speed === 'results' && rec.stable === false && Object.keys(rec).length === 5, `C3. ${tag}: the record kept is this season's key, the year, 3 matchdays, the speed and not stable (${JSON.stringify(rec).slice(0, 120)})`);
+      check(!!rec && rec.key === SEASON_KEY && rec.year === HUB.last.row.year && rec.md === 3 && rec.speed === 'results' && rec.stable === false && rec.round === 'Matchday' && Object.keys(rec).length === 6, `C3. ${tag}: the record kept is this season's key, the year, 3 matchdays, the speed, not stable, and the Season Centre's word for a round (${JSON.stringify(rec).slice(0, 140)})`);
       await p.reload({ waitUntil: 'domcontentloaded' });
       await p.waitForSelector('[data-open-season-ratings]', { timeout: 60000 });
       const again = await p.waitForSelector('[data-season-resume]', { timeout: 30000 }).then(() => true).catch(() => false);
@@ -1129,6 +1238,118 @@ if (ONLY.length === 0 || ONLY.some(x => x.startsWith('C'))) {
     check(quietLog.shifts === 0 && quietLog.moving === 0 && quietLog.landed >= 1, `C1. under reduced motion the table never slides (${quietLog.shifts}) and every goal is drawn landed (${quietLog.landed} landed, ${quietLog.moving} played)`);
     errorsSeen.push(...R.errors);
     await R.ctx.close();
+
+    /** From the kick off card to the first match at Results speed (through its poster when it has one). */
+    const kickOff = async (page, word = 'Matchday') => {
+      await clickText(page, '▶ Kick off');
+      if (await page.$('[data-poster]')) await clickText(page, `▶ ${word} 1`);
+      await clickText(page, 'Results');
+    };
+    const pick = async (page, at) => {
+      await page.click('[data-open-season-replays]');
+      await page.waitForSelector(`[data-replay-row="${at}"]`, { timeout: 30000 });
+      await page.click(`[data-replay-row="${at}"]`);
+      await page.waitForSelector('[data-kickoff]', { timeout: 30000 });
+    };
+
+    /* ---------- C8: the season he played a moment in, opened later from the career page ---------- */
+    {
+      const H = await openSite(HELD.save, { width: 1280, height: 900 });
+      const hp = H.page;
+      const heldSave = await saved(hp);
+      await pick(hp, HELD.at);
+      const onCard = (await hp.$('[data-kickoff-moments]')) !== null;
+      await kickOff(hp);
+      let marked = 0;
+      for (let md = 1; md <= HELD.m.md; md += 1) {
+        await fullTime(hp, md);
+        if (await hp.$('[data-fixture-moment]')) marked += 1;
+        if (md < HELD.m.md) await playTo(hp, md + 1);
+      }
+      const onPage = await hp.evaluate(() => ({
+        points: [...document.querySelectorAll('[data-season-centre] [data-rank-shift] [data-club]')].filter(r => r.getBoundingClientRect().height > 0).map(r => `${r.dataset.club}:${r.lastElementChild?.textContent.trim()}`),
+        score: (document.querySelector('[data-score-bug]')?.textContent ?? '').replace(/\s+/g, ''),
+      }));
+      await shot(hp, 'your-call-kept-1280');
+      const scoreOf = g => (g.home ? `${g.us}-${g.them}` : `${g.them}-${g.us}`);
+      const played = HELD.applied.games[HELD.m.md - 1], record = HELD.plan.games[HELD.m.md - 1];
+      const withCall = pointsOf(HELD.applied, HELD.m.md).join(), asSaved = pointsOf(HELD.plan, HELD.m.md).join();
+      check(!onCard && marked === 0, `C8. opened from the career page, the season he played a moment in offers none (kick off card line ${onCard}, fixtures marked on ${marked} of ${HELD.m.md} matchdays)`);
+      check(onPage.points.length >= 10 && onPage.points.join() === withCall && onPage.points.join() !== asSaved, `C8. matchday ${HELD.m.md} of that season shows node's table WITH the YOUR CALL he banked, which is not the table as saved (${onPage.points.length} rows; with his call: ${onPage.points.join() === withCall}; as saved: ${onPage.points.join() === asSaved})`);
+      check(onPage.score === scoreOf(played) && onPage.score !== scoreOf(record), `C8. and the score as he played it (${onPage.score}; he played it ${scoreOf(played)}, the record had ${scoreOf(record)})`);
+      await clickText(hp, '⏭ Sim the rest');
+      await hp.waitForSelector('[data-review]', { timeout: 30000 });
+      await hp.waitForTimeout(400);
+      check((await saved(hp)) === heldSave, 'C7. the save with a banked ledger is byte for byte what it was after that season was watched to its review');
+      errorsSeen.push(...H.errors);
+      await H.ctx.close();
+    }
+
+    /* ---------- C3: a place kept in one season is not wiped by another season's review ---------- */
+    {
+      const kept = JSON.stringify({ key: SEASON_KEY, year: HUB.last.row.year, md: 3, speed: 1, stable: false, round: 'Matchday' });
+      const other = OPEN_IDS.find(id => Number(id) !== HUB.last.at);
+      const O = await openSite(HUB.save, { width: 1280, height: 900, storage: { [RESUME_SLOT]: kept } });
+      const op = O.page;
+      const chipFirst = await op.waitForSelector('[data-season-resume]', { timeout: 30000 }).then(() => true).catch(() => false);
+      await pick(op, other);
+      const whileOpen = await stored(op);
+      await clickText(op, '⏭ Straight to');
+      await op.waitForSelector('[data-review]', { timeout: 30000 });
+      await op.waitForTimeout(400);
+      const atReview = await stored(op);
+      await op.click('[data-centre-exit]');
+      await op.waitForSelector('[data-season-centre]', { state: 'detached', timeout: 30000 });
+      const chipLast = await op.waitForSelector('[data-season-resume]', { timeout: 15000 }).then(() => true).catch(() => false);
+      check(chipFirst && whileOpen === kept && atReview === kept && chipLast, `C3. a place kept in ${LABEL} is still there, word for word, after another season (row ${other}) was opened and sent straight to its review (chip before ${chipFirst}; kept while open ${whileOpen === kept}; kept at the review ${atReview === kept}; chip after ${chipLast})`);
+      errorsSeen.push(...O.errors);
+      await O.ctx.close();
+    }
+
+    /* ---------- C3: the chip names the next round in the Season Centre's own word for that season ---------- */
+    {
+      const W = await openSite(RESULTS_ONLY.save, { width: 390, height: 844 });
+      const wp = W.page;
+      const wSave = await saved(wp);
+      const wLabel = `${RESULTS_ONLY.row.year}/${String(RESULTS_ONLY.row.year + 1).slice(-2)}`;
+      await pick(wp, RESULTS_ONLY.at);
+      await kickOff(wp, 'League game');
+      await fullTime(wp, 1);
+      const head = await wp.evaluate(() => document.querySelector('[data-matchday] > div')?.textContent.trim() ?? '');
+      await wp.click('[data-centre-exit]');
+      await wp.waitForSelector('[data-season-resume]', { timeout: 30000 });
+      const chipWord = await wp.evaluate(() => document.querySelector('[data-season-resume]').textContent.trim());
+      const recWord = JSON.parse((await stored(wp)) ?? 'null');
+      await wp.evaluate(() => document.querySelector('[data-season-resume]').scrollIntoView({ block: 'center' }));
+      await shot(wp, 'hub-chip-results-only-390');
+      await wp.click('[data-season-resume]');
+      await wp.waitForSelector('[data-kickoff-resumed]', { timeout: 30000 });
+      const goWord = await wp.evaluate(() => document.querySelector('[data-kickoff] button')?.textContent.trim() ?? '');
+      check(head.startsWith('League game 1') && chipWord === `📺 Resume ${wLabel}, league game 2` && goWord === '▶ League game 2' && !!recWord && recWord.round === 'League game' && recWord.stable === true,
+        `C3. a results only season: the Season Centre says "${head.slice(0, 13)}", the chip "${chipWord}", the button it leads to "${goWord}" (the record's word: ${JSON.stringify(recWord && recWord.round)})`);
+      check((await saved(wp)) === wSave, 'C7. the results only save is byte for byte what it was after a round watched, a close and a resume');
+      errorsSeen.push(...W.errors);
+      await W.ctx.close();
+    }
+
+    /* ---------- C2: the little pitch's file never arrives (this tab has already had its one reload for a stale file) ---------- */
+    {
+      const N = await openSite(HUB.save, { width: 390, height: 844, session: { 'dukb-reloaded-stale-chunk': '1' }, refuse: [PITCH_CHUNK] });
+      const np = N.page;
+      await openLatest(np);
+      await kickOff(np);
+      const reached = await fullTime(np, 1, 30000).then(() => true).catch(() => false);
+      const state = await np.evaluate(() => ({
+        tile: !!document.querySelector('[data-centre-tile]'), pitch: !!document.querySelector('[data-mini-pitch]'), clock: !!document.querySelector('[data-match-clock]'),
+        empty: Math.round(document.querySelector('[data-pitch-empty]')?.getBoundingClientRect().height ?? 0),
+      }));
+      const order = reached ? await tableNow(np) : [];
+      await shot(np, 'pitch-file-refused-390');
+      check(N.js.includes(PITCH_CHUNK) && reached && !state.tile && !state.pitch && state.clock && state.empty >= 100 && order.join() === compactOf(1).join(),
+        `C2. with the little pitch's file refused the matchday still plays to full time over an empty box of the pitch's size, with node's table and no error tile (asked for it ${N.js.includes(PITCH_CHUNK)}, full time ${reached}, ${JSON.stringify(state)})`);
+      errorsSeen.push(...N.errors);
+      await N.ctx.close();
+    }
 
     for (const s of [...floors.short, ...floors.narrow, ...floors.small, ...floors.clipped.map(c => `${c}: header clipped`), ...floors.sideways.map(c => `${c}: sideways scroll`)].slice(0, 10)) console.log(`   C6: ${s}`);
     check(floors.screens >= 14 && floors.short.length === 0 && floors.narrow.length === 0, `C6. every button of the Season Centre is at least 44 px tall and every speed button 44 px wide, on ${floors.screens} screens (${floors.short.length} short, ${floors.narrow.length} narrow)`);
