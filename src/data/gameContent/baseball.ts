@@ -982,6 +982,8 @@ export const BASEBALL_CONTENT: GameContentMap = {
             heading: "Retiring at 42 or walking away at season 6",
             items: [
               "Retirement hits at 42, after 21 seasons, or when your rating collapses. Before that, from 32, slipping 8 points off your best (or down to 68) brings the talk: retire now, one more year, or a farewell season. You can walk away after season 6.",
+              "Hall of Fame voters weigh the hardware first (rings, the major awards, All-Star years), then your seasons and your numbers, and a career total near the top of this game's books in a stat your position really piles up (home runs, RBI, steals, wins or strikeouts, though a reliever gets none) earns a push of its own, up to 390 legacy points.",
+              "Example: take a center fielder with ordinary numbers and one with the same hardware and more steals than 99 of 100 center fielders this game has seen. The second scores at least 300 legacy points more, which can be the whole gap between a long wait and the Hall. A career you already retired keeps the ballot it was told.",
             ],
           },
         ],

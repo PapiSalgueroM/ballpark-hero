@@ -1,3 +1,14 @@
+## Round1157 prospective guide draft, feature integration required
+
+This branch applies only Claude F's four listed guide handbacks to main's
+copies:1048 NBA Week by week,1051 four Hall ballot explanations,1103 NBA
+numbers and awards,1138 Build Your XI checking. Parent main795926e3 does
+not contain the matching viewer/Hall/numbers implementation; this draft is
+HELD for that feature integration, not a claim about current main or live.
+Only five guide entries and this note change. Protected root drafts stay
+untouched. Source/content review, remote search keyword and frozen-guide
+regeneration, actual type/build/readers and rendered guide proof are pending.
+No engine, real-player data, database, validator or publication change.
 ## Release AL LIVE, 2026-10-08 05:38 EDT: ten Codex rounds, playable moments, and a translated page no longer crashes
 
 Claude lane (session F: session E died when the PC was restarted at 00:03 EDT with this release's gate running).

@@ -447,6 +447,8 @@ export const FOOTBALL_CONTENT: GameContentMap = {
         items: [
           "Injuries can erase 2 to 10 games a season and leave permanent wear on your health bar.",
           "Retirement is forced at rating 64, age 40, 34 for backs, or 19 seasons. Before that, from 30, slipping 8 points off your best (or down to 70) brings the talk: retire now, one more year, or a farewell season that ends the career after it. You can walk away after 6, and progress saves automatically.",
+          "Hall of Fame voters weigh the hardware first (rings, the major awards, All-Pro years), then your seasons and your numbers, and a career total near the top of this game's books in a stat your position really piles up (passing yards for a quarterback, catches for a receiver, interceptions for a corner, tackles for a linebacker, though a kicker and an edge rusher get none) earns a push of its own, up to 390 legacy points.",
+          "Example: take a corner with ordinary numbers and one with the same hardware and more interceptions than 99 of 100 corners this game has seen. The second scores at least 300 legacy points more, which can be the whole gap between a long wait and the Hall. A career you already retired keeps the ballot it was told.",
         ],
         subsections: [
           {
