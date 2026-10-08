@@ -1,0 +1,11 @@
+ru-0: CM_NEW_ROWS=russia CM_NEW_PARTS=ADH node scripts/simClubManagerNewLeagues.mjs
+ru-1: SIM_SEED=1 CM_NEW_ROWS=russia CM_NEW_PARTS=ADH node scripts/simClubManagerNewLeagues.mjs
+ru-2: SIM_SEED=2 CM_NEW_ROWS=russia CM_NEW_PARTS=ADH node scripts/simClubManagerNewLeagues.mjs
+ru-3: SIM_SEED=3 CM_NEW_ROWS=russia CM_NEW_PARTS=ADH node scripts/simClubManagerNewLeagues.mjs
+ru-4: SIM_SEED=4 CM_NEW_ROWS=russia CM_NEW_PARTS=ADH node scripts/simClubManagerNewLeagues.mjs
+ru-5: SIM_SEED=5 CM_NEW_ROWS=russia CM_NEW_PARTS=ADH node scripts/simClubManagerNewLeagues.mjs
+c-rudrop: CM_NEW_CONTROL=rudrop CM_NEW_ROWS=russia CM_NEW_PARTS=ADH node scripts/simClubManagerNewLeagues.mjs
+c-rueuro: CM_NEW_CONTROL=rueuro CM_NEW_ROWS=russia CM_NEW_PARTS=ADH node scripts/simClubManagerNewLeagues.mjs
+c-ruswap: CM_NEW_CONTROL=ruswap CM_NEW_ROWS=russia CM_NEW_PARTS=ADH node scripts/simClubManagerNewLeagues.mjs
+c-ruflavour: CM_NEW_CONTROL=ruflavour CM_NEW_ROWS=russia CM_NEW_PARTS=ADH node scripts/simClubManagerNewLeagues.mjs
+br-mx: CM_NEW_ROWS=brasileirao,ligamx CM_NEW_PARTS=AD node scripts/simClubManagerNewLeagues.mjs
