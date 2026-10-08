@@ -1,0 +1,16 @@
+1) The validators say which: exhausted on a second 429, a blip otherwise
+   3 validators read
+2) The hooks listen: data.exhausted sets checkingDown and shows the allowance message
+   NEGATIVE CONTROL ON: the exhausted branch removed from the soccer hook, in memory
+  FAIL: src/hooks/useSoccerGrid.ts: the exhausted flag is not read
+  FAIL: src/hooks/useSoccerGrid.ts: checkingDown is never set
+  FAIL: src/hooks/useSoccerGrid.ts: the allowance message is missing
+   1 hooks read
+3) The pages stop inviting: the notice replaces the search box
+   2 pages read
+4) The NFL grid is not in this: no edge function call at all
+   useFootballGrid read
+5) Build Your XI: an allowance answer blocks only that pick
+   useLineupBuilder read
+
+control "mute": 3 failure(s) fired in section 2 as expected, the check works

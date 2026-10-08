@@ -1,0 +1,23 @@
+notag control: building the app with the query tag removed into .sim-control/race-notag-1791464824666/dist (this takes minutes)
+playAutocompleteRace: seed 1138, 34 trials a page, widths 390 and 1280, build .sim-control/race-notag-1791464824666/dist
+  /build-your-xi at 390: 34 taps, 34 stale names offered, 34 stale picks, 0 other options tapped, current pick landed, 120 search requests
+  /football-connect-4 at 390: 34 taps, 34 stale names offered, 34 stale picks, 0 other options tapped, current pick landed, 148 search requests
+  /missing-xi at 390: 34 taps, 34 stale names offered, 34 stale picks, 0 other options tapped, current pick landed, 114 search requests
+  /build-your-xi at 1280: 34 taps, 34 stale names offered, 34 stale picks, 0 other options tapped, current pick landed, 118 search requests
+  /football-connect-4 at 1280: 34 taps, 34 stale names offered, 34 stale picks, 0 other options tapped, current pick landed, 154 search requests
+  /missing-xi at 1280: 34 taps, 34 stale names offered, 34 stale picks, 0 other options tapped, current pick landed, 122 search requests
+RACE_COUNTS seed=1138 /build-your-xi@390=34/34 /football-connect-4@390=34/34 /missing-xi@390=34/34 /build-your-xi@1280=34/34 /football-connect-4@1280=34/34 /missing-xi@1280=34/34 target=0/20
+
+  PASS  /build-your-xi at 390: 34 stale picks of 34 (needs at least 17)
+  PASS  /football-connect-4 at 390: 34 stale picks of 34 (needs at least 17)
+  PASS  /missing-xi at 390: 34 stale picks of 34 (needs at least 17)
+  PASS  /build-your-xi at 1280: 34 stale picks of 34 (needs at least 17)
+  PASS  /football-connect-4 at 1280: 34 stale picks of 34 (needs at least 17)
+  PASS  /missing-xi at 1280: 34 stale picks of 34 (needs at least 17)
+  PASS  /build-your-xi at 390: a current pick still lands
+  PASS  /football-connect-4 at 390: a current pick still lands
+  PASS  /missing-xi at 390: a current pick still lands
+  PASS  /build-your-xi at 1280: a current pick still lands
+  PASS  /football-connect-4 at 1280: a current pick still lands
+  PASS  /missing-xi at 1280: a current pick still lands
+playAutocompleteRace notag control: green, the race is there. Stale picks: /build-your-xi 34 at 390, 34 at 1280; /football-connect-4 34 at 390, 34 at 1280; /missing-xi 34 at 390, 34 at 1280. 204 taps on 3 pages at 390 and 1280, 204 stale names offered, 204 stale picks, 6 of 6 current picks landed, target leg 0 of 20.

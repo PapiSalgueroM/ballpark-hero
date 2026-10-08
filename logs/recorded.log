@@ -1,0 +1,252 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/dailySaveParity.test.tsx [2m([22m[2m40 tests[22m[2m | [22m[33m39 skipped[39m[2m)[22m[32m 5[2mms[22m[39m
+[90mstdout[2m | src/test/scoreShown.test.tsx[2m > [22m[2msoccer-career[2m > [22m[2msoccer-career: records the legacy score the retirement screen shows, and a 99 start records less than the same record climbed from 55
+[22m[39mSHOWN soccer-career start 99: recorded [84] shown "LEGEND: 84/100" (peak 99, 13 Ballon d'Or, 0 UCL, 1 WC, 8 leagues)
+SHOWN soccer-career same record from 55: recorded [100] shown "GOAT: 100/100"
+
+[90mstdout[2m | src/test/playerAutocompleteStale.test.tsx[2m > [22m[2mplayer autocomplete: a list is only on screen for the query that produced it[2m > [22m[2mnever offers the last query under new text, across 200 seeded timings
+[22m[39mSTALE_SWEEP seed=1138 trials=200 staleVisible=0 stalePicked=0 currentPicked=200 stuckFinding=0
+
+ [32m✓[39m src/test/playerAutocompleteStale.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[33m 1663[2mms[22m[39m
+   [33m[2m✓[22m[39m player autocomplete: a list is only on screen for the query that produced it[2m > [22mnever offers the last query under new text, across 200 seeded timings [33m 1162[2mms[22m[39m
+[90mstdout[2m | src/test/noDoubleRecord.test.tsx[2m > [22m[2mno double record[2m > [22m[2mdiscovers the table
+[22m[39mNO_DOUBLE_CASE {"title":"fight-career","id":"fight-career","shape":"fight","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"fight-gym","id":"fight-gym","shape":"fight","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"fight-promoter","id":"fight-promoter","shape":"fight","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"nfl-my-career","id":"nfl-my-career","shape":"career","usesMark":true,"toggle":false,"coach":true}
+NO_DOUBLE_CASE {"title":"nba-my-career","id":"nba-my-career","shape":"career","usesMark":true,"toggle":false,"coach":true}
+NO_DOUBLE_CASE {"title":"mlb-my-career","id":"mlb-my-career","shape":"career","usesMark":true,"toggle":false,"coach":true}
+NO_DOUBLE_CASE {"title":"nhl-my-career","id":"nhl-my-career","shape":"career","usesMark":true,"toggle":false,"coach":true}
+NO_DOUBLE_CASE {"title":"nfl-higher-lower","id":"nfl-higher-lower","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"nba-higher-lower","id":"nba-higher-lower","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"mlb-higher-lower","id":"mlb-higher-lower","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"hockey-higher-lower","id":"hockey-higher-lower","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"cfb-higher-lower","id":"cfb-higher-lower","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"f1-higher-lower","id":"f1-higher-lower","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"tennis-higher-lower","id":"tennis-higher-lower","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"golf-higher-lower","id":"golf-higher-lower","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"afl-higher-lower","id":"afl-higher-lower","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"ufc","id":"ufc","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"football-connect-4","id":"football-connect-4","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"career","id":"career","shape":"slug","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"nba-grid","id":"nba-grid","shape":"toggle","usesMark":false,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"mlb-grid","id":"mlb-grid","shape":"toggle","usesMark":false,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"hockey-grid","id":"hockey-grid","shape":"toggle","usesMark":false,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"cbb-grid","id":"cbb-grid","shape":"toggle","usesMark":false,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"missing-five","id":"missing-five","shape":"toggle","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"missing-nine","id":"missing-nine","shape":"toggle","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"missing-eleven","id":"missing-eleven","shape":"toggle","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"rank-em","id":"rank-em","shape":"toggle","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"puck-detective (give up)","id":"puck-detective","shape":"toggle","usesMark":false,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"puck-detective (solve)","id":"puck-detective","shape":"toggle","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"guess-the-golfer","id":"guess-the-golfer","shape":"toggle","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"champ-or-not","id":"champ-or-not","shape":"restore","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"whod-they-beat","id":"whod-they-beat","shape":"restore","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"silverware-sort","id":"silverware-sort","shape":"restore","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"jeopardy","id":"jeopardy","shape":"restore","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"ball-iq","id":"ball-iq","shape":"restore","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"mystery-box","id":"mystery-box","shape":"restore","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"nfl-career","id":"nfl-career","shape":"restore","usesMark":false,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"career-ladder","id":"career-ladder","shape":"extra","usesMark":true,"toggle":true,"coach":false}
+NO_DOUBLE_CASE {"title":"transfer-path","id":"transfer-path","shape":"extra","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"grade-transfer","id":"grade-transfer","shape":"extra","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"player-stock-market","id":"player-stock-market","shape":"extra","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"nfl-higher-lower: a round decided is saved before its reveal ends","id":"nfl-higher-lower","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"nba-higher-lower: a round decided is saved before its reveal ends","id":"nba-higher-lower","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"mlb-higher-lower: a round decided is saved before its reveal ends","id":"mlb-higher-lower","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"hockey-higher-lower: a round decided is saved before its reveal ends","id":"hockey-higher-lower","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"cfb-higher-lower: a round decided is saved before its reveal ends","id":"cfb-higher-lower","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"f1-higher-lower: a round decided is saved before its reveal ends","id":"f1-higher-lower","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"tennis-higher-lower: a round decided is saved before its reveal ends","id":"tennis-higher-lower","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"golf-higher-lower: a round decided is saved before its reveal ends","id":"golf-higher-lower","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"afl-higher-lower: a round decided is saved before its reveal ends","id":"afl-higher-lower","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"champ-or-not: a reload inside the final reveal","id":"champ-or-not","shape":"check","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"whod-they-beat: a reload inside the final reveal","id":"whod-they-beat","shape":"check","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"silverware-sort: a reload inside the final reveal","id":"silverware-sort","shape":"check","usesMark":true,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"champ-or-not: Unlimited and back inside the final reveal","id":"champ-or-not","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"whod-they-beat: Unlimited and back inside the final reveal","id":"whod-they-beat","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"silverware-sort: Unlimited and back inside the final reveal","id":"silverware-sort","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"champ-or-not: a final pick after midnight ET","id":"champ-or-not","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"whod-they-beat: a final pick after midnight ET","id":"whod-they-beat","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"silverware-sort: a final pick after midnight ET","id":"silverware-sort","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"champ-or-not: the board renders after midnight ET before the final pick","id":"champ-or-not","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"whod-they-beat: the board renders after midnight ET before the final pick","id":"whod-they-beat","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"silverware-sort: the board renders after midnight ET before the final pick","id":"silverware-sort","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"football-grid: a playing save past the limit, read with Unlimited off","id":"football-grid","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"nfl-career: a daily dealt before midnight and solved after it","id":"nfl-career","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"nfl-career: a first clue solve records its clue score","id":"nfl-career","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"nfl-career: the next day in the same tab records once more","id":"nfl-career","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_CASE {"title":"world-cup-bracket: one record per crowned name","id":"world-cup-bracket","shape":"check","usesMark":false,"toggle":false,"coach":false}
+NO_DOUBLE_TABLE {"rows":41,"fight":3,"career":4,"slug":12,"toggle":11,"restore":7,"extra":4,"checks":26}
+
+[90mstdout[2m | src/test/scoreShown.test.tsx[2m > [22m[2msoccer-career[2m > [22m[2msoccer-career: ending a manager career records the legacy score the final screen shows
+[22m[39mSHOWN soccer-career after the manager road: recorded [65] shown "SOLID PRO: 65/100" (ceremony legacy 65)
+
+ [32m✓[39m src/test/lineupValidatorClient.test.tsx [2m([22m[2m55 tests[22m[2m)[22m[32m 98[2mms[22m[39m
+[90mstdout[2m | src/test/scoreShown.test.tsx[2m > [22m[2msoccer-career[2m > [22m[2msoccer-career: ending a pundit career records the legacy score the final screen shows
+[22m[39mSHOWN soccer-career after the pundit road: recorded [76] shown "GREAT: 76/100" (ceremony legacy 65); studio tile "+6" (Legacy Bonus (max +6)), legacy card Punditry 6
+
+[90mstdout[2m | src/test/scoreShown.test.tsx[2m > [22m[2msoccer-career[2m > [22m[2msoccer-career: ending an owner career records the legacy score the final screen shows
+[22m[39mSHOWN soccer-career after the owner road: recorded [70] shown "GREAT: 70/100" (ceremony legacy 65)
+
+[90mstdout[2m | src/test/scoreShown.test.tsx[2m > [22m[2msoccer-career[2m > [22m[2msoccer-career: a career retired in its first youth year gets nothing from the studio, and the tile says so
+[22m[39mSHOWN soccer-career youth retirement then the studio: recorded [0] shown "JOURNEYMAN: 0/100"; studio tile "0" (No legacy bonus, no senior career), legacy card Punditry 0
+
+[90mstderr[2m | src/test/scoreShown.test.tsx[2m > [22m[2mfootle[2m > [22m[2mfootle: a daily won in 1 records the score its stats panel places you with, on rows of the recorded scale
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstdout[2m | src/test/scoreShown.test.tsx[2m > [22m[2mfootle[2m > [22m[2mfootle: a daily won in 1 records the score its stats panel places you with, on rows of the recorded scale
+[22m[39mSHOWN footle won in 1: recorded [700] stats panel 700, rows 700 500-600 300-400 100-200 0, landing in 700
+
+[90mstderr[2m | src/test/scoreShown.test.tsx[2m > [22m[2mfootle[2m > [22m[2mfootle: a daily won in 3 records the score its stats panel places you with, on rows of the recorded scale
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstdout[2m | src/test/scoreShown.test.tsx[2m > [22m[2mfootle[2m > [22m[2mfootle: a daily won in 3 records the score its stats panel places you with, on rows of the recorded scale
+[22m[39mSHOWN footle won in 3: recorded [500] stats panel 500, rows 700 500-600 300-400 100-200 0, landing in 500-600
+
+[90mstderr[2m | src/test/scoreShown.test.tsx[2m > [22m[2mplayer-bingo[2m > [22m[2mplayer-bingo: a banked first line records the points the result screen shows
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstdout[2m | src/test/scoreShown.test.tsx[2m > [22m[2mplayer-bingo[2m > [22m[2mplayer-bingo: a banked first line records the points the result screen shows
+[22m[39mSHOWN player-bingo first line: recorded [100] shown "1/12 lines · 100 pts"
+
+[90mstderr[2m | src/test/scoreShown.test.tsx[2m > [22m[2mplayer-bingo[2m > [22m[2mplayer-bingo: a blackout records the full board, 1700
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstdout[2m | src/test/scoreShown.test.tsx[2m > [22m[2mplayer-bingo[2m > [22m[2mplayer-bingo: a blackout records the full board, 1700
+[22m[39mSHOWN player-bingo blackout: recorded [1700] shown "12/12 lines · 1700 pts"
+
+[90mstdout[2m | src/test/scoreShown.test.tsx[2m > [22m[2mrarity-round[2m > [22m[2mrarity-round: a perfect Rarity run records 500, and the headline, the stat and the share all say it
+[22m[39mSHOWN rarity-round Rarity perfect run: recorded [500] headline "Goalless! A perfect 500 of 500" Obscurity "500/500" share "500/500 obscurity" fame points "0"
+
+[90mstdout[2m | src/test/scoreShown.test.tsx[2m > [22m[2mrarity-round[2m > [22m[2mrarity-round: a mixed Rarity run records what every line shows, and Crowd Says records a play with no score and says so
+[22m[39mSHOWN rarity-round Rarity mixed run: recorded [300] headline "You scored 300 of 500" Obscurity "300/500" share "300/500 obscurity" fame points "200"
+
+[90mstdout[2m | src/test/scoreShown.test.tsx[2m > [22m[2mrarity-round[2m > [22m[2mrarity-round: a mixed Rarity run records what every line shows, and Crowd Says records a play with no score and says so
+[22m[39mSHOWN rarity-round Crowd Says run: 1 record(s), score [null], shown "489", note on screen true
+
+[90mstdout[2m | src/test/scoreShown.test.tsx[2m > [22m[2mfantasy-draft[2m > [22m[2mfantasy-draft: the verdict card and the share carry the season score the draft records, and the share tells the result as it was
+[22m[39mSHOWN fantasy-draft: recorded [59] verdict "Season score: 59/100" from 67 season points (loss); share "Season score 59/100 (67 pts vs the AI's 96)", text "The AI outdrafted me on Fantasy Draft at DoUKnowBall. Season score 59/100, 67 pts to the AI's 96. Can you build a better squad? douknowball.com/fantasy-draft"
+
+[90mstdout[2m | src/test/scoreShown.test.tsx[2m > [22m[2mquiz-board[2m > [22m[2mquiz-board: a board cleared below zero shows, shares and records the same bank, $0
+[22m[39mSHOWN quiz-board all wrong: recorded [0] final card "$0" shared $0
+
+[90mstdout[2m | src/test/scoreShown.test.tsx[2m > [22m[2mquiz-board[2m > [22m[2mquiz-board: a winning board shows, shares and records the same bank
+[22m[39mSHOWN quiz-board four right: recorded [2600] final card "$2600" shared $2600
+
+[90mstderr[2m | src/test/scoreShown.test.tsx[2m > [22m[2mnfl-career[2m > [22m[2mnfl-career: a daily win shares the points it records
+[22m[39mWarning: An update to GameSeoContent inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at GameSeoContent (/home/runner/work/ballpark-hero/ballpark-hero/src/components/seo/GameSeoContent.tsx:156:27)
+    at div
+    at main
+    at GameShell (/home/runner/work/ballpark-hero/ballpark-hero/src/components/game/GameShell.tsx:18:26)
+    at NFLCareer (/home/runner/work/ballpark-hero/ballpark-hero/src/pages/NFLCareer.tsx:32:228)
+    at Router (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7134:13)
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+    at _HelmetProvider (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-helmet-async/lib/index.esm.js:460:5)
+
+[90mstdout[2m | src/test/scoreShown.test.tsx[2m > [22m[2mnfl-career[2m > [22m[2mnfl-career: a daily win shares the points it records
+[22m[39mSHOWN nfl-career win at clue 1: recorded [6] share "6 pts (1 clues)"
+
+[90mstderr[2m | src/test/scoreShown.test.tsx[2m > [22m[2mnfl-career[2m > [22m[2mnfl-career: a daily loss, reported for Round 645
+[22m[39mWarning: An update to GameSeoContent inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at GameSeoContent (/home/runner/work/ballpark-hero/ballpark-hero/src/components/seo/GameSeoContent.tsx:156:27)
+    at div
+    at main
+    at GameShell (/home/runner/work/ballpark-hero/ballpark-hero/src/components/game/GameShell.tsx:18:26)
+    at NFLCareer (/home/runner/work/ballpark-hero/ballpark-hero/src/pages/NFLCareer.tsx:32:228)
+    at Router (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7134:13)
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+    at _HelmetProvider (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-helmet-async/lib/index.esm.js:460:5)
+
+ [32m✓[39m src/test/playerAutocompleteEmptyText.test.tsx [2m([22m[2m21 tests[22m[2m)[22m[33m 3478[2mms[22m[39m
+[90mstdout[2m | src/test/scoreShown.test.tsx[2m > [22m[2mnfl-career[2m > [22m[2mnfl-career: a daily loss, reported for Round 645
+[22m[39mINFO nfl-career loss (Round 645 owns this record): recorded [0] share "0 pts"
+
+ [32m✓[39m src/test/playerSearchFailure.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[33m 484[2mms[22m[39m
+ [32m✓[39m src/test/scoreShown.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[33m 10364[2mms[22m[39m
+   [33m[2m✓[22m[39m soccer-career[2m > [22msoccer-career: records the legacy score the retirement screen shows, and a 99 start records less than the same record climbed from 55 [33m 1000[2mms[22m[39m
+   [33m[2m✓[22m[39m soccer-career[2m > [22msoccer-career: ending a manager career records the legacy score the final screen shows [33m 1792[2mms[22m[39m
+   [33m[2m✓[22m[39m soccer-career[2m > [22msoccer-career: ending a pundit career records the legacy score the final screen shows [33m 977[2mms[22m[39m
+   [33m[2m✓[22m[39m soccer-career[2m > [22msoccer-career: ending an owner career records the legacy score the final screen shows [33m 553[2mms[22m[39m
+   [33m[2m✓[22m[39m soccer-career[2m > [22msoccer-career: a career retired in its first youth year gets nothing from the studio, and the tile says so [33m 759[2mms[22m[39m
+   [33m[2m✓[22m[39m player-bingo[2m > [22mplayer-bingo: a blackout records the full board, 1700 [33m 333[2mms[22m[39m
+   [33m[2m✓[22m[39m rarity-round[2m > [22mrarity-round: a perfect Rarity run records 500, and the headline, the stat and the share all say it [33m 328[2mms[22m[39m
+   [33m[2m✓[22m[39m rarity-round[2m > [22mrarity-round: a mixed Rarity run records what every line shows, and Crowd Says records a play with no score and says so [33m 595[2mms[22m[39m
+ [32m✓[39m src/test/nbaCourtSelection.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[33m 851[2mms[22m[39m
+ [32m✓[39m src/test/lineupBuilderHistoryRead.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 32[2mms[22m[39m
+ [32m✓[39m src/test/playerAutocompleteInteraction.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 340[2mms[22m[39m
+[90mstderr[2m | src/test/noDoubleRecord.test.tsx[2m > [22m[2mno double record[2m > [22m[2mpuck-detective (give up)
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/noDoubleRecord.test.tsx[2m > [22m[2mno double record[2m > [22m[2mpuck-detective (solve)
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/noDoubleRecord.test.tsx[2m > [22m[2mno double record[2m > [22m[2mguess-the-golfer
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/noDoubleRecord.test.tsx[2m > [22m[2mno double record[2m > [22m[2mcareer-ladder
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/noDoubleRecord.test.tsx [2m([22m[2m69 tests[22m[2m)[22m[33m 20405[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mfight-career [33m 434[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mfight-gym [33m 307[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mfight-promoter [33m 347[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mnfl-my-career [33m 782[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mnba-my-career [33m 631[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mmlb-my-career [33m 618[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mnhl-my-career [33m 639[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mufc [33m 417[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mfootball-connect-4 [33m 422[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mcareer [33m 567[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mnba-grid [33m 713[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mmlb-grid [33m 721[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mhockey-grid [33m 695[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mcbb-grid [33m 598[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mmissing-five [33m 513[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mmissing-nine [33m 513[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mmissing-eleven [33m 503[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mrank-em [33m 582[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mpuck-detective (give up) [33m 564[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mpuck-detective (solve) [33m 576[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mguess-the-golfer [33m 556[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mchamp-or-not [33m 570[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mwhod-they-beat [33m 569[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22msilverware-sort [33m 570[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mjeopardy [33m 327[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mball-iq [33m 324[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mmystery-box [33m 322[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mnfl-career [33m 453[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mcareer-ladder [33m 856[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mtransfer-path [33m 356[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mgrade-transfer [33m 322[2mms[22m[39m
+   [33m[2m✓[22m[39m no double record[2m > [22mplayer-stock-market [33m 446[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m10 passed[39m[22m[90m (10)[39m
+[2m      Tests [22m [1m[32m212 passed[39m[22m[2m | [22m[33m39 skipped[39m[90m (251)[39m
+[2m   Start at [22m 12:54:55
+[2m   Duration [22m 27.99s[2m (transform 9.74s, setup 528ms, collect 16.34s, tests 37.72s, environment 3.82s, prepare 939ms)[22m
+

@@ -1,0 +1,13 @@
+
+HTTP 429
+  PASS  autocomplete used both database search legs (2 requests)
+  PASS  validator was called exactly once (1)
+  PASS  page stayed mounted without a render error
+  FAIL  non-valid response placed no piece (1)
+  FAIL  non-valid response kept Blue's turn (blue=0, red=1)
+  FAIL  non-valid response kept the selected square and an enabled answer input
+  FAIL  page explained /busy/i
+  FAIL  page explained /not used/i
+  FAIL  page explained /try again/i
+
+playFootballConnect4Failures control: green. Accept-on-error fired and 6 assertions caught it.

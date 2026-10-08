@@ -1,0 +1,133 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/nbaChainFeedback.test.tsx[2m > [22mNBA Chain local committed feedback[2m > [22mreveals accepted links only inside the timeline without scrolling the document[32m 183[2mms[22m[39m
+ [32m✓[39m src/test/nbaChainFeedback.test.tsx[2m > [22mNBA Chain local committed feedback[2m > [22mkeeps seed, rejected and deferred requests quiet without credit or list movement[32m 201[2mms[22m[39m
+ [32m✓[39m src/test/nbaChainFeedback.test.tsx[2m > [22mNBA Chain local committed feedback[2m > [22mretains earlier nodes and does not replay on unchanged renders or reset[32m 218[2mms[22m[39m
+ [32m✓[39m src/test/nbaChainFeedback.test.tsx[2m > [22mNBA Chain local committed feedback[2m > [22mpreserves search focus after validation and leaves connected help focus alone[32m 128[2mms[22m[39m
+ [32m✓[39m src/test/nbaChainFeedback.test.tsx[2m > [22mNBA Chain local committed feedback[2m > [22mbinds full names and connections to scoped wrapping and fixed list geometry[32m 50[2mms[22m[39m
+ [32m✓[39m src/test/nbaChainFeedback.test.tsx[2m > [22mNBA Chain local committed feedback[2m > [22mbinds finite single-iteration feedback and static reduced motion[32m 1[2mms[22m[39m
+ [32m✓[39m src/test/nbaChainFeedback.test.tsx[2m > [22mNBA Chain local committed feedback[2m > [22mholds independent original ten-pick score, exact best save, share and once completion[33m 397[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m   Start at [22m 12:57:15
+[2m   Duration [22m 2.61s[2m (transform 486ms, setup 51ms, collect 767ms, tests 1.18s, environment 292ms, prepare 123ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.sim-control/nba-chain-feedback-AkoIuo/report.json
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstderr[2m | src/test/nbaChainFeedback.test.tsx[2m > [22m[2mNBA Chain local committed feedback[2m > [22m[2mpreserves search focus after validation and leaves connected help focus alone
+[22m[39mWarning: An update to PlayerAutocomplete inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at PlayerAutocomplete (/home/runner/work/ballpark-hero/ballpark-hero/src/components/game/PlayerAutocomplete.tsx:133:31)
+    at div
+    at div
+    at div
+    at div
+    at main
+    at GameShell (/home/runner/work/ballpark-hero/ballpark-hero/src/components/game/GameShell.tsx:18:26)
+    at NbaChain (/home/runner/work/ballpark-hero/ballpark-hero/src/pages/NbaChain.tsx:34:235)
+    at Router (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7134:13)
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+    at _HelmetProvider (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-helmet-async/lib/index.esm.js:460:5)
+Warning: An update to PlayerAutocomplete inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at PlayerAutocomplete (/home/runner/work/ballpark-hero/ballpark-hero/src/components/game/PlayerAutocomplete.tsx:133:31)
+    at div
+    at div
+    at div
+    at div
+    at main
+    at GameShell (/home/runner/work/ballpark-hero/ballpark-hero/src/components/game/GameShell.tsx:18:26)
+    at NbaChain (/home/runner/work/ballpark-hero/ballpark-hero/src/pages/NbaChain.tsx:34:235)
+    at Router (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7134:13)
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+    at _HelmetProvider (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-helmet-async/lib/index.esm.js:460:5)
+Warning: An update to PlayerAutocomplete inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at PlayerAutocomplete (/home/runner/work/ballpark-hero/ballpark-hero/src/components/game/PlayerAutocomplete.tsx:133:31)
+    at div
+    at div
+    at div
+    at div
+    at main
+    at GameShell (/home/runner/work/ballpark-hero/ballpark-hero/src/components/game/GameShell.tsx:18:26)
+    at NbaChain (/home/runner/work/ballpark-hero/ballpark-hero/src/pages/NbaChain.tsx:34:235)
+    at Router (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7134:13)
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+    at _HelmetProvider (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-helmet-async/lib/index.esm.js:460:5)
+Warning: An update to PlayerAutocomplete inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at PlayerAutocomplete (/home/runner/work/ballpark-hero/ballpark-hero/src/components/game/PlayerAutocomplete.tsx:133:31)
+    at div
+    at div
+    at div
+    at div
+    at main
+    at GameShell (/home/runner/work/ballpark-hero/ballpark-hero/src/components/game/GameShell.tsx:18:26)
+    at NbaChain (/home/runner/work/ballpark-hero/ballpark-hero/src/pages/NbaChain.tsx:34:235)
+    at Router (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7134:13)
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+    at _HelmetProvider (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-helmet-async/lib/index.esm.js:460:5)
+Warning: An update to PlayerAutocomplete inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at PlayerAutocomplete (/home/runner/work/ballpark-hero/ballpark-hero/src/components/game/PlayerAutocomplete.tsx:133:31)
+    at div
+    at div
+    at div
+    at div
+    at main
+    at GameShell (/home/runner/work/ballpark-hero/ballpark-hero/src/components/game/GameShell.tsx:18:26)
+    at NbaChain (/home/runner/work/ballpark-hero/ballpark-hero/src/pages/NbaChain.tsx:34:235)
+    at Router (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7134:13)
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+    at _HelmetProvider (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-helmet-async/lib/index.esm.js:460:5)
+
+simNbaChainFeedback: seven actual Page/hook/search/result outcomes pass.
+simNbaChainFeedback: accepted appends use list-only scroll; deferred/wrong/seed/reset remain quiet.
+simNbaChainFeedback: retained nodes, validation focus, full names and finite/static CSS bindings are checked.
+simNbaChainFeedback: original round10/par7, best/mode saves, exact clipboard and once1000 completion hold.
+simNbaChainFeedback: protected bytes held; only owned disposable files removed.

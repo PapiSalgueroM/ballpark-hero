@@ -1,0 +1,14 @@
+playAutocompleteRace: seed 1138, 34 trials a page, widths 390, build dist
+  /build-your-xi at 390: 34 taps, 0 stale names offered, 0 stale picks, 0 other options tapped, current pick landed, 116 search requests
+  /football-connect-4 at 390: 34 taps, 0 stale names offered, 0 stale picks, 0 other options tapped, current pick landed, 142 search requests
+  /missing-xi at 390: 34 taps, 0 stale names offered, 0 stale picks, 0 other options tapped, current pick landed, 108 search requests
+RACE_COUNTS seed=1138 /build-your-xi@390=0/34 /football-connect-4@390=0/34 /missing-xi@390=0/34 target=0/10
+
+  FAIL  /build-your-xi at 390: 0 stale picks of 34 (needs at least 1)
+  FAIL  /football-connect-4 at 390: 0 stale picks of 34 (needs at least 1)
+  FAIL  /missing-xi at 390: 0 stale picks of 34 (needs at least 1)
+  PASS  /build-your-xi at 390: a current pick still lands
+  PASS  /football-connect-4 at 390: a current pick still lands
+  PASS  /missing-xi at 390: a current pick still lands
+  FAIL  /football-connect-4: the list outlived a change of square 0 times of 10 (the measurement needs at least 1)
+playAutocompleteRace measurement: RED. The race was not seen everywhere it must be (/build-your-xi 0 at 390; /football-connect-4 0 at 390; /missing-xi 0 at 390). 102 taps on 3 pages at 390, 0 stale names offered, 0 stale picks, 3 of 3 current picks landed, target leg 0 of 10.

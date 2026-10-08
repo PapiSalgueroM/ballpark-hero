@@ -1,0 +1,69 @@
+#!build
+#!serve
+#!playwright
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+recorded: node_modules/.bin/vitest run src/test/playerAutocompleteStale.test.tsx src/test/lineupValidatorClient.test.tsx src/test/playerAutocompleteInteraction.test.tsx src/test/playerAutocompleteEmptyText.test.tsx src/test/playerSearchFailure.test.tsx src/test/lineupBuilderHistoryRead.test.tsx src/test/nbaCourtSelection.test.tsx src/test/noDoubleRecord.test.tsx src/test/scoreShown.test.tsx src/test/dailySaveParity.test.tsx --testTimeout=300000 --hookTimeout=120000
+aci: node scripts/simPlayerAutocompleteInteraction.mjs
+aci-pointeronly: AUTOCOMPLETE_INTERACTION_CONTROL=pointeronly node scripts/simPlayerAutocompleteInteraction.mjs
+aci-unguard: AUTOCOMPLETE_INTERACTION_CONTROL=unguard node scripts/simPlayerAutocompleteInteraction.mjs
+aci-enabledoptions: AUTOCOMPLETE_INTERACTION_CONTROL=enabledoptions node scripts/simPlayerAutocompleteInteraction.mjs
+aci-notag: AUTOCOMPLETE_INTERACTION_CONTROL=notag node scripts/simPlayerAutocompleteInteraction.mjs
+aci-keeplist: AUTOCOMPLETE_INTERACTION_CONTROL=keeplist node scripts/simPlayerAutocompleteInteraction.mjs
+aci-noenter: AUTOCOMPLETE_INTERACTION_CONTROL=noenter node scripts/simPlayerAutocompleteInteraction.mjs
+aci-anyenter: AUTOCOMPLETE_INTERACTION_CONTROL=anyenter node scripts/simPlayerAutocompleteInteraction.mjs
+aci-topenter: AUTOCOMPLETE_INTERACTION_CONTROL=topenter node scripts/simPlayerAutocompleteInteraction.mjs
+aci-nodropcommit: AUTOCOMPLETE_INTERACTION_CONTROL=nodropcommit node scripts/simPlayerAutocompleteInteraction.mjs
+aci-minchars: AUTOCOMPLETE_INTERACTION_CONTROL=minchars node scripts/simPlayerAutocompleteInteraction.mjs
+aci-leaveflight: AUTOCOMPLETE_INTERACTION_CONTROL=leaveflight node scripts/simPlayerAutocompleteInteraction.mjs
+aci-pickflight: AUTOCOMPLETE_INTERACTION_CONTROL=pickflight node scripts/simPlayerAutocompleteInteraction.mjs
+aci-lateescape: AUTOCOMPLETE_INTERACTION_CONTROL=lateescape node scripts/simPlayerAutocompleteInteraction.mjs
+aci-pickreopens: AUTOCOMPLETE_INTERACTION_CONTROL=pickreopens node scripts/simPlayerAutocompleteInteraction.mjs
+aci-stickypick: AUTOCOMPLETE_INTERACTION_CONTROL=stickypick node scripts/simPlayerAutocompleteInteraction.mjs
+aci-deafreturn: AUTOCOMPLETE_INTERACTION_CONTROL=deafreturn node scripts/simPlayerAutocompleteInteraction.mjs
+aci-tapthrough: AUTOCOMPLETE_INTERACTION_CONTROL=tapthrough node scripts/simPlayerAutocompleteInteraction.mjs
+aci-greedyswallow: AUTOCOMPLETE_INTERACTION_CONTROL=greedyswallow node scripts/simPlayerAutocompleteInteraction.mjs
+aci-bogus-must-exit-1: AUTOCOMPLETE_INTERACTION_CONTROL=bogus node scripts/simPlayerAutocompleteInteraction.mjs
+lvc: node scripts/simLineupValidatorClient.mjs
+lvc-accepterror: LINEUP_VALIDATOR_CONTROL=accepterror node scripts/simLineupValidatorClient.mjs
+lvc-acceptthrow: LINEUP_VALIDATOR_CONTROL=acceptthrow node scripts/simLineupValidatorClient.mjs
+lvc-truthy: LINEUP_VALIDATOR_CONTROL=truthy node scripts/simLineupValidatorClient.mjs
+lvc-notimeout: LINEUP_VALIDATOR_CONTROL=notimeout node scripts/simLineupValidatorClient.mjs
+lvc-wall: LINEUP_VALIDATOR_CONTROL=wall node scripts/simLineupValidatorClient.mjs
+lvc-nolocal: LINEUP_VALIDATOR_CONTROL=nolocal node scripts/simLineupValidatorClient.mjs
+lvc-localall: LINEUP_VALIDATOR_CONTROL=localall node scripts/simLineupValidatorClient.mjs
+lvc-nogiveup: LINEUP_VALIDATOR_CONTROL=nogiveup node scripts/simLineupValidatorClient.mjs
+lvc-longwait: LINEUP_VALIDATOR_CONTROL=longwait node scripts/simLineupValidatorClient.mjs
+lvc-deafcaller: LINEUP_VALIDATOR_CONTROL=deafcaller node scripts/simLineupValidatorClient.mjs
+lvc-looseclub: LINEUP_VALIDATOR_CONTROL=looseclub node scripts/simLineupValidatorClient.mjs
+lvc-keepflight: LINEUP_VALIDATOR_CONTROL=keepflight node scripts/simLineupValidatorClient.mjs
+lvc-bogus-must-exit-1: LINEUP_VALIDATOR_CONTROL=bogus node scripts/simLineupValidatorClient.mjs
+qh: node scripts/simQuotaHonesty.mjs
+qh-blind: SIM_QUOTA_CONTROL=blind node scripts/simQuotaHonesty.mjs
+qh-lenient: SIM_QUOTA_CONTROL=lenient node scripts/simQuotaHonesty.mjs
+qh-mute: SIM_QUOTA_CONTROL=mute node scripts/simQuotaHonesty.mjs
+qh-wall: SIM_QUOTA_CONTROL=wall node scripts/simQuotaHonesty.mjs
+psf: node scripts/simPlayerSearchFailure.mjs
+psf-error: PLAYER_SEARCH_FAILURE_CONTROL=error node scripts/simPlayerSearchFailure.mjs
+psf-partial: PLAYER_SEARCH_FAILURE_CONTROL=partial node scripts/simPlayerSearchFailure.mjs
+psf-message: PLAYER_SEARCH_FAILURE_CONTROL=message node scripts/simPlayerSearchFailure.mjs
+psf-local: PLAYER_SEARCH_FAILURE_CONTROL=local node scripts/simPlayerSearchFailure.mjs
+psf-stale: PLAYER_SEARCH_FAILURE_CONTROL=stale node scripts/simPlayerSearchFailure.mjs
+psf-cleanup: PLAYER_SEARCH_FAILURE_CONTROL=cleanup node scripts/simPlayerSearchFailure.mjs
+psf-abort: PLAYER_SEARCH_FAILURE_CONTROL=abort node scripts/simPlayerSearchFailure.mjs
+nbachain: node scripts/simNbaChainFeedback.mjs
+missingxilayout: node scripts/simMissingXiLayout.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+norival: node scripts/simNoRivalNames.mjs
+sweep2138: STALE_SWEEP_SEED=2138 node_modules/.bin/vitest run src/test/playerAutocompleteStale.test.tsx --testTimeout=300000
+sweep3138: STALE_SWEEP_SEED=3138 node_modules/.bin/vitest run src/test/playerAutocompleteStale.test.tsx --testTimeout=300000
+race-1138: node scripts/playAutocompleteRace.mjs
+race-2138: RACE_SEED=2138 node scripts/playAutocompleteRace.mjs
+race-3138: RACE_SEED=3138 node scripts/playAutocompleteRace.mjs
+measure-on-fixed-must-exit-1: RACE_EXPECT=stale RACE_WIDTHS=390 node scripts/playAutocompleteRace.mjs
+race-notag: AUTOCOMPLETE_RACE_CONTROL=notag node scripts/playAutocompleteRace.mjs
+lv: node scripts/playLineupValidator.mjs
+lv-control: PLAY_LINEUP_CONTROL=accept-on-error node scripts/playLineupValidator.mjs
+c4: node scripts/playFootballConnect4Failures.mjs
+c4-control: C4FAIL_CONTROL=accept-on-error node scripts/playFootballConnect4Failures.mjs
+sweepweight: node scripts/sweepWeight.mjs
