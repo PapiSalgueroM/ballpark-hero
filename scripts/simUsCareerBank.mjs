@@ -38,10 +38,29 @@
  *   4   Printed, asserted on nothing: how many options the floor touched and
  *       what it wrote off, per sport.
  *
- * MEASURED 2026-10-07 on the round's tree (SIM_SEED 1 to 5 agree on every
- * verdict; the counts below are seed 1):
- *   see the block the harness prints; the old arm ends below zero on every
- *   sport, which is the bug.
+ * MEASURED 2026-10-08 on GitHub runners (request r1104-fc), at 104 states and
+ * 300 careers a sport, SIM_SEED 1, 2 and 3 (every verdict the same on all
+ * three; the counts are seed 1, with seeds 2 and 3 within 5 percent of them):
+ *   1a  options applied at a zero pocket, and how many of them the OLD arm
+ *       left below zero (the bug) against the new arm:
+ *         nfl 20,684 applied, old 3,267 (15.8 percent), new 0
+ *         nba 20,426 applied, old 3,310 (16.2 percent), new 0
+ *         mlb 18,987 applied, old 2,474 (13.0 percent), new 0
+ *         nhl 19,994 applied, old 2,756 (13.8 percent), new 0
+ *   1b  with 50M in savings every one of those bills was collected in full
+ *       (3,267, 3,310, 2,474, 2,756), 0 forgiven, 0 pockets left below zero.
+ *   2   whole careers, the balance read after every call: nfl 5,053 seasons
+ *       and 43,553 calls, nba 6,013 and 50,359, mlb 6,102 and 49,567, nhl
+ *       6,465 and 54,705; 0 below zero in any, lowest balance seen 0.
+ *   3   old save rebuilt to 90 as before, the scout's save on 0, and 0 of
+ *       2,000 played saves refilled, in all four.
+ *   4   printed only: what the floor wrote off at an empty account, a time:
+ *       nfl 0.60M, nba 0.68M, mlb 0.44M, nhl 0.59M.
+ * These are hard rules (a count that must be zero), so there is no band to
+ * set; the numbers above are the size of what was read, and each check also
+ * fails when it read too little (1a under 2,000 options, 2 under four
+ * seasons a career). On the code as found, 72 of the digest's 464 careers
+ * went below zero (src/test/usCareerTruthDigest.test.ts).
  *
  * NEGATIVE CONTROLS, BANK_CONTROL=:
  *   nfl | nba | mlb | nhl   that sport's binding is built without the wrapper
@@ -56,8 +75,10 @@
  *                           does.
  * A control run exits 0 only when exactly the expected tags failed.
  *
- * Sizes: BANK_STATES mid career states a sport (default 48), BANK_CAREERS
- * whole careers a sport (default 40). Nothing here reaches the network.
+ * Sizes: BANK_STATES mid career states a sport (default 112, which is 20,000
+ * options or more in every sport, the size the round's brief asked for),
+ * BANK_CAREERS whole careers a sport (default 300, the brief's size too). The
+ * first cut ran 48 and 40. A run takes about three minutes on a GitHub runner. Nothing here reaches the network.
  *
  * Run: node scripts/simUsCareerBank.mjs
  */
@@ -76,8 +97,8 @@ if (CONTROL && !CONTROLS.includes(CONTROL)) {
   process.exit(1);
 }
 const SEED = Number(process.env.SIM_SEED || 1);
-const STATES = Number(process.env.BANK_STATES || 48);
-const CAREERS = Number(process.env.BANK_CAREERS || 40);
+const STATES = Number(process.env.BANK_STATES || 112);
+const CAREERS = Number(process.env.BANK_CAREERS || 300);
 
 const failed = new Map();
 const fail = (tag, msg) => {

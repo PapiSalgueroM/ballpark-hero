@@ -115,24 +115,26 @@ const cutShort = t => (t == null ? 'no curtain' : HURT.test(t) ? 'hurt' : BENCH.
 const fullSeasons = (lines, told) => lines.filter((_, i) => cutShort(told[i]) === '');
 const tellOf = (lines, told) => lines.map((s, i) => `${s.games}${cutShort(told[i]) ? ` ${cutShort(told[i])}` : ''}`).join(', ');
 
+/* What can stand between two seasons, in the order the walk answers it. */
+const BETWEEN = [
+  '[data-season-reveal] button:has-text("Continue")',
+  '[data-rivalry-event] button:has-text("Continue")',
+  '[data-rivalry-choice] button:has-text("Continue")',
+  '[data-rivalry-option]',
+  '[data-decision-continue]',
+  '[data-extension-talk] button:has-text("year out")',
+  'button:has-text("One more year")',
+  '[data-career-decision-option]',
+];
+
 /** Play `n` seasons and answer whatever comes between them, the way playCareerPress does. The board saves
     inside the press, so the walk returns on the n-th press and never has to finish that summer. `told` gains
     the curtain's text for every season pressed here, in order. */
 async function playSeasons(page, n, told = []) {
-  const between = [
-    '[data-season-reveal] button:has-text("Continue")',
-    '[data-rivalry-event] button:has-text("Continue")',
-    '[data-rivalry-choice] button:has-text("Continue")',
-    '[data-rivalry-option]',
-    '[data-decision-continue]',
-    '[data-extension-talk] button:has-text("year out")',
-    'button:has-text("One more year")',
-    '[data-career-decision-option]',
-  ];
   let played = 0;
   for (let step = 0; step < 140; step += 1) {
     let clicked = false;
-    for (const sel of between) {
+    for (const sel of BETWEEN) {
       const el = page.locator(sel);
       if (await el.count()) { await el.first().click(); await page.waitForTimeout(600); clicked = true; break; }
     }
@@ -157,6 +159,24 @@ async function playSeasons(page, n, told = []) {
   }
   console.log(`  (the walk stopped after ${played} of ${n} seasons on a screen it does not know: ${(await bodyText(page)).replace(/\s+/g, ' ').slice(0, 220)})`);
   return played;
+}
+
+/** Answer everything the summer still holds and stop on the hub, with the season button up and not pressed.
+    True when the button is there and nothing else is waiting. */
+async function reachPlayButton(page) {
+  for (let step = 0; step < 80; step += 1) {
+    let clicked = false;
+    for (const sel of BETWEEN) {
+      const el = page.locator(sel);
+      if (await el.count()) { await el.first().click(); await page.waitForTimeout(600); clicked = true; break; }
+    }
+    if (clicked) continue;
+    if (await page.locator('button', { hasText: /Play the \d{4} season/ }).count()) return true;
+    const opt = page.locator('div.grid.gap-1\\.5 > button').first();
+    if (await opt.count()) await opt.click();
+    await page.waitForTimeout(600);
+  }
+  return false;
 }
 
 /** Three seasons, then one more at a time (seven at the most) until the engine has called one of them a full
@@ -262,7 +282,10 @@ for (const [w, h] of WIDTHS) {
      that the walk can tell a hurt season when it meets one. Here it meets one for certain: the body is
      doctored so far gone that the engine's injury risk passes 1 (the risk is not capped), and that season
      must come back told as hurt on the curtain and short of 17 games. If the curtain ever stops saying it in
-     these words, this fails here by name, instead of a schedule check going red once in a while. */
+     these words, this fails here by name, instead of a schedule check going red once in a while.
+     The save is doctored on the hub, AFTER the summer's cards: a card that touches health clamps it back to
+     0 or more (the first cut doctored it before the summer and the proof itself failed in two runs of three). */
+  const onHub = await reachPlayButton(page);
   await page.evaluate(k => {
     const s = JSON.parse(localStorage.getItem(k));
     s.c.health = -400;
@@ -270,12 +293,13 @@ for (const [w, h] of WIDTHS) {
   }, KEY);
   await page.reload({ waitUntil: 'networkidle' });
   await page.waitForTimeout(1200);
-  const more = await playSeasons(page, 1, told);
+  const doctored = (await readSave(page))?.c?.health;
+  const more = onHub && doctored === -400 ? await playSeasons(page, 1, told) : 0;
   const after = (await readSave(page))?.c?.seasons ?? [];
   const lastLine = after[after.length - 1];
   const said = cutShort(told[after.length - 1]);
   say(more === 1 && after.length === lines.length + 1 && said === 'hurt' && lastLine.games < 17 && !fullSeasons(after, told).includes(lastLine),
-    `a season certain to be cut short is told as hurt on the curtain and set aside (${lastLine?.games} games, the curtain said: ${said || 'nothing'})`);
+    `a season certain to be cut short is told as hurt on the curtain and set aside (${lastLine?.games} games, the curtain said: ${said || 'nothing'}; on the hub ${onHub}, health in the save before the press ${doctored}, ${more} press)`);
   await context.close();
 }
 

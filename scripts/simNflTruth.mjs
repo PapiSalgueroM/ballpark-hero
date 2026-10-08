@@ -10,10 +10,39 @@
  *       passes on a count of zero.
  *   1b  A 16 game schedule does not cost a throwback career its awards. The
  *       award field was measured on 17 game seasons, so the engine scores a
- *       season on a full schedule pace. Over five seeds, All-Pros a career,
- *       MVP or DPOY a career and the Hall of Fame rate, by position, sit
- *       inside the 17 game arm's five seed mean plus or minus three seed
- *       standard deviations (with a floor on the width, written below).
+ *       season on a full schedule pace. Over five seeds of 2,000 careers a
+ *       position, against the 17 game arm of the same bundle:
+ *         All-Pros a career within 10 percent of the 17 game arm's;
+ *         MVP or DPOY a career within 0.008 of it;
+ *         the Hall of Fame rate at least 0.75 of it.
+ *       MEASURED 2026-10-08 on GitHub runners (request r1104-fc), three seed
+ *       sets (SIM_SEED 1, 6, 11), so 24 position cells of 10,000 careers an
+ *       arm, 17 game arm -> now:
+ *         All-Pros a career: every cell within 2.8 percent. Seed 1: QB 0.079
+ *           -> 0.080, RB 0.091 -> 0.090, WR 0.140 -> 0.140, TE 0.080 -> 0.082,
+ *           LB 0.084 -> 0.082, CB 0.090 -> 0.091, EDGE 0.209 -> 0.206, K 0.241
+ *           -> 0.238. The widest: WR on seed 11, 0.141 -> 0.145. With the pace
+ *           off (control nopace, seed 1): QB 0.024, RB 0.036, WR 0.049, TE
+ *           0.026, LB 0.021, CB 0.028, EDGE 0.084, K 0.086, so 60 to 75 percent
+ *           under. The band sits at 10: over three times the widest healthy
+ *           cell, a sixth of the smallest drop.
+ *         MVP or DPOY a career: every cell within 0.003 (EDGE on seed 1, 0.060
+ *           -> 0.057). nopace: QB 0.019 -> 0.004, LB 0.014 -> 0.001, EDGE
+ *           0.060 -> 0.016. The band sits at 0.008.
+ *         Hall percent: LOWER in every position on every seed set, and that
+ *           is real, not noise: a throwback career's totals are a seventeenth
+ *           short for sixteen years and the ballot reads totals. QB 27.0 ->
+ *           23.8, 26.5 -> 22.9, 26.0 -> 22.7. Seed 1: RB 2.2 -> 1.9, WR 7.0 ->
+ *           6.5, TE 5.7 -> 5.5, LB 6.3 -> 5.6, CB 4.7 -> 4.2, EDGE 12.2 -> 11.6,
+ *           K 5.5 -> 4.7. The lowest ratio of the 24 cells is 0.855 (K, seed
+ *           1). So this line is a FLOOR that catches a collapse, never "no
+ *           difference": nopace reads QB 0.80 of the 17 game arm (caught by
+ *           his awards), RB 0.32, WR 0.53, TE 0.67, LB 0.48, CB 0.47, EDGE
+ *           0.54, K 0.33. The drop itself is printed in section 5 for Round
+ *           1051's owner and is not this round's to fix (the lead's ruling).
+ *       The first cut drew its band from the run's own seed deviation at 300
+ *       careers, which passed the quarterback's 3.3 point Hall drop inside a
+ *       band about 3.4 wide. A band here is a fixed number now.
  *   2   Rookie pay is the draft slot. The table itself is held to its rules
  *       (32 first round rows a table, picks 1 to 32 once each, no total at or
  *       under zero, two sources within 2 percent on every row that claims two,
@@ -45,8 +74,19 @@
  *   nocap      the three receiver caps are lifted               -> 4
  *
  * Seeds: SIM_SEED (default 1) starts the five seeds 1b reads. Sizes:
- * TRUTH_CAREERS careers a position and seed (default 300). Nothing here
- * reaches the network.
+ * TRUTH_CAREERS careers a position for sections 1 and 3 (default 300; they
+ * are hard rules with a floor on what must be seen, measured on seed 1:
+ * 36,358 throwback seasons through 2020 and none over 16 games, 22,777
+ * healthy starter seasons all exactly 16, 1,078 from 2021 all 17, 6,240 in
+ * 2026 careers all 17; 19,605 LB and EDGE lines and none off a half, where
+ * 79.4 percent were before). TRUTH_BAND_CAREERS careers a position and seed
+ * for 1b (default 2,000, the size its bands were measured at: fewer makes a
+ * run noisier, the bands do not move). Section 2c fails when more than a
+ * quarter of the drafted kicker prospects sit on one pick: measured, the
+ * busiest pick holds 72 of about 3,030, a tenth of that line. Section 4:
+ * a 99 rated receiver passed a record in 8.9 percent of healthy seasons as
+ * found, and in none now. The whole run takes about 80 seconds on a GitHub
+ * runner. Nothing here reaches the network.
  *
  * Run: node scripts/simNflTruth.mjs
  */
@@ -65,6 +105,8 @@ if (CONTROL && !CONTROLS[CONTROL]) {
 }
 const SEED = Number(process.env.SIM_SEED || 1);
 const CAREERS = Number(process.env.TRUTH_CAREERS || 300);
+/* Section 1b has a size of its own: its bands were measured at 2,000 careers a position and seed. */
+const BAND_CAREERS = Number(process.env.TRUTH_BAND_CAREERS || 2000);
 const POSITIONS = ['QB', 'RB', 'WR', 'TE', 'LB', 'CB', 'EDGE', 'K'];
 
 const failed = new Map();
@@ -159,7 +201,7 @@ function career(arm, pos, era, seed, i, startYear, see) {
   arm.stampHallCalibration(c);
   return c;
 }
-console.log(`simNflTruth: seed ${SEED}, ${CAREERS} careers a position and seed${CONTROL ? `, control ${CONTROL}` : ''}`);
+console.log(`simNflTruth: seed ${SEED}, ${CAREERS} careers a position and seed (${BAND_CAREERS} for the award bands of 1b)${CONTROL ? `, control ${CONTROL}` : ''}`);
 
 /* ── 1: the schedule ── */
 console.log('1) seasons are as long as they really were');
@@ -192,37 +234,40 @@ console.log('1) seasons are as long as they really were');
 }
 
 /* ── 1b: the awards on a 16 game schedule, five seeds, against the 17 game arm ── */
-console.log('1b) a 16 game schedule does not cost a throwback career its awards (five seeds, by position)');
+console.log(`1b) a 16 game schedule does not cost a throwback career its awards (five seeds of ${BAND_CAREERS} careers, by position; 17 game arm -> now)`);
 const awardsOf = (arm, pos, seed) => {
   let allPro = 0, big = 0, hall = 0, mine = 0, his = 0;
-  for (let i = 0; i < CAREERS; i += 1) {
+  for (let i = 0; i < BAND_CAREERS; i += 1) {
     const c = career(arm, pos, 'y2005', seed, i, 0, null);
     allPro += c.allPros; big += c.mvps; if (arm.E.legacyOf(c).hof) hall += 1;
     mine += c.rival?.myYears ?? 0; his += c.rival?.hisYears ?? 0;
   }
-  return { allPro: allPro / CAREERS, big: big / CAREERS, hall: 100 * hall / CAREERS, h2h: 100 * mine / Math.max(1, mine + his) };
+  return { allPro: allPro / BAND_CAREERS, big: big / BAND_CAREERS, hall: 100 * hall / BAND_CAREERS, h2h: 100 * mine / Math.max(1, mine + his) };
 };
-/* The band is the 17 game arm's five seed mean plus or minus three seed
-   standard deviations, and never narrower than FLOOR: with a few hundred
-   careers a seed a rare award's seed deviation can come out near zero, and a
-   band of zero width is a coin toss. The floors are written in the unit of
-   each line (awards a career; Hall percent). */
-const FLOOR = { allPro: 0.03, big: 0.01, hall: 1.5 };
+/* THE BANDS: fixed, and measured (the fix pass of 2026-10-08; the numbers are in the header). The first cut read
+   "the 17 game arm's five seed mean plus or minus three seed standard deviations, never narrower than a
+   floor", at 300 careers a seed. That is a no difference test whose band widens as the sample shrinks: at 300
+   a quarterback's Hall band came out about 3.4 points wide and passed a real 3.3 point drop that 2,000 careers
+   a seed shows on every seed set. So a band no longer comes from the run's own noise. Each is a fixed number
+   with the measured room on both sides of it written down, and fewer careers make a run noisier, never
+   easier. The Hall line is a FLOOR and not "no difference", because the difference is real (see the header). */
+const BAND = { allPro: 0.10, big: 0.008, hallFloor: 0.75 };
 const measured1b = {};
 for (const pos of POSITIONS) {
   const seeds = [0, 1, 2, 3, 4].map(k => SEED + k);
   const base = seeds.map(s => awardsOf(BASE, pos, s));
   const next = seeds.map(s => awardsOf(NEW, pos, s));
-  measured1b[pos] = {};
+  const m = measured1b[pos] = {};
   for (const k of ['allPro', 'big', 'hall']) {
     const b = base.map(x => x[k]); const n = next.map(x => x[k]);
-    const width = Math.max(3 * sd(b), FLOOR[k]);
-    measured1b[pos][k] = { base: mean(b), sd: sd(b), now: mean(n) };
-    measured1b[pos].h2h = { base: mean(base.map(x => x.h2h)), now: mean(next.map(x => x.h2h)) };
-    if (Math.abs(mean(n) - mean(b)) > width) fail('1b', `${pos} ${k}: the throwback reads ${mean(n).toFixed(3)} against the 17 game arm's ${mean(b).toFixed(3)} (band plus or minus ${width.toFixed(3)})`);
+    m[k] = { base: mean(b), sd: sd(b), now: mean(n) };
   }
-  const m = measured1b[pos];
-  console.log(`   ${pos.padEnd(4)} All-Pros a career ${m.allPro.base.toFixed(3)} -> ${m.allPro.now.toFixed(3)} (sd ${m.allPro.sd.toFixed(3)}); MVP or DPOY ${m.big.base.toFixed(3)} -> ${m.big.now.toFixed(3)}; Hall percent ${m.hall.base.toFixed(1)} -> ${m.hall.now.toFixed(1)} (sd ${m.hall.sd.toFixed(1)})`);
+  m.h2h = { base: mean(base.map(x => x.h2h)), now: mean(next.map(x => x.h2h)) };
+  if (!(m.allPro.base > 0)) fail('1b', `${pos}: the 17 game arm won no All-Pro at all, so the band has nothing to stand on`);
+  if (Math.abs(m.allPro.now - m.allPro.base) > BAND.allPro * m.allPro.base) fail('1b', `${pos} All-Pros a career: the throwback reads ${m.allPro.now.toFixed(3)} against the 17 game arm's ${m.allPro.base.toFixed(3)}, more than ${100 * BAND.allPro} percent apart`);
+  if (Math.abs(m.big.now - m.big.base) > BAND.big) fail('1b', `${pos} MVP or DPOY a career: the throwback reads ${m.big.now.toFixed(3)} against the 17 game arm's ${m.big.base.toFixed(3)}, more than ${BAND.big} apart`);
+  if (m.hall.now < BAND.hallFloor * m.hall.base) fail('1b', `${pos} Hall percent: the throwback reads ${m.hall.now.toFixed(1)} against the 17 game arm's ${m.hall.base.toFixed(1)}, under ${BAND.hallFloor} of it`);
+  console.log(`   ${pos.padEnd(4)} All-Pros a career ${m.allPro.base.toFixed(3)} -> ${m.allPro.now.toFixed(3)} (${(100 * (m.allPro.now / m.allPro.base - 1)).toFixed(1)} percent); MVP or DPOY ${m.big.base.toFixed(3)} -> ${m.big.now.toFixed(3)}; Hall percent ${m.hall.base.toFixed(1)} -> ${m.hall.now.toFixed(1)} (${(m.hall.now / Math.max(1e-9, m.hall.base)).toFixed(3)} of it)`);
 }
 
 /* ── 2: rookie pay is the slot, and where kickers go ── */
@@ -244,7 +289,12 @@ console.log('2) rookie pay is the draft slot, and no kicker goes before round fo
     }
     const rounds = scale.laterRounds.map(r => r.round);
     if (rounds.join(',') !== '2,3,4,5,6,7') fail('2', `table ${era}: later rounds must be 2 to 7 in order, found ${rounds.join(',')}`);
+    /* Every pick from 33 on belongs to exactly one round: each round starts on the pick after the one before
+       it ended (the real ends are pinned, two sourced, in src/test/usCareerRookieDeal.test.ts). */
+    let endOfRoundBefore = 32;
     for (const r of scale.laterRounds) {
+      if (r.firstPick !== endOfRoundBefore + 1) fail('2', `table ${era} round ${r.round}: it starts at pick ${r.firstPick}, and the round before it ended at ${endOfRoundBefore}`);
+      endOfRoundBefore = r.lastPick;
       if (!(r.firstTotal > 0) || !(r.lastTotal > 0) || r.firstPick >= r.lastPick) fail('2', `table ${era} round ${r.round}: a total at or under zero, or picks out of order`);
       heldRows += r.held === 'both' ? 2 : r.held ? 1 : 0;
     }
@@ -441,7 +491,7 @@ console.log('5) MEASURED, asserted on nothing');
     const cand = CANDIDATES_UNVERIFIED[slug];
     const hit = cand.seasons.map(y => `${y}: ${byYear.get(y)?.lines ?? 0} season lines, the engine played ${byYear.get(y)?.longest ?? 'no'} games`);
     const clubs = era.teams.filter(t => cand.clubs.some(rx => rx.test(`${t.city} ${t.name}`))).map(t => `${t.city} ${t.name} (${t.id})`);
-    console.log(`   for Round 1137, the ${slug.toUpperCase()} throwback (${era.label}): ${careers} careers reach season years ${spans[0].from} to ${spans[0].to}, and the engine plays a ${spans[0].games} game season in ${years.length - odd.length} of those ${years.length} years (the rest are listed above, each on a handful of lines)`);
+    console.log(`   for Round 1137, the ${slug.toUpperCase()} throwback (${era.label}): ${careers} careers reach season years ${spans[0].from} to ${spans[0].to}, and the engine plays a ${spans[0].games} game season in ${years.length - odd.length} of those ${years.length} years ${odd.length ? '(the rest are listed above, each on a handful of lines)' : '(every one of them)'}`);
     console.log(`      UNVERIFIED candidate seasons (from memory, for Round 1137 to check): ${hit.join('; ')}`);
     console.log(`      UNVERIFIED candidate clubs in the era's list of ${era.teams.length} that may have moved or been renamed in those years: ${clubs.length ? clubs.join(', ') : 'none matched'}`);
   }
