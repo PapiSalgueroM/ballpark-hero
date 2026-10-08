@@ -1,0 +1,61 @@
+soccer real phone-motion: hub h1 "🇧🇷Probe 19"; tile says "👥 SquadReal squadThe plan: Nailed on starterOn our ratings2ndof 7 defenders"
+PROBLEM soccer real phone-motion the sheet did not open
+nba phone-motion: a dialog was up first, pressed "Let's Play!"
+nba phone-motion: hub h1 "NBA My Career"; entry says "null"
+soccer invented phone-motion: hub h1 "🇧🇷Probe 31"; tile says "👥 SquadYour teammatesThe plan: Nailed on starterOn our ratings1stof 4 goalkeepers"
+PROBLEM soccer invented phone-motion the sheet did not open
+soccer roles phone-motion: hub h1 "🇳🇬Probe 3"; tile says "👥 SquadBy roleThe plan: Nailed on starterOn our ratings1stof 4 goalkeepers"
+PROBLEM soccer roles phone-motion the sheet did not open
+nfl phone-motion: a dialog was up first, pressed "Let's Play!"
+nfl phone-motion: hub h1 "NFL My Career"; entry says "null"
+PROBLEM grid the walk itself threw: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('button[data-grid-cell-status="empty"]').first()
+    - locator resolved to <button data-grid-cell-status="empty" class="aspect-square rounded-lg border-2 flex flex-col items-center justify-center p-1 transition-all text-cente
+create phone-motion: help null; boxes before ["Choose nationality","Choose position","Choose era"]; after the picks ["Brazil🇧🇷","Striker (ST)","Early 2010s (2010 start)"]
+PROBLEM whats-new phone-motion shows "This page broke"
+whats-new phone-motion: h1 "What's New"; notice ""; page starts "Skip to main content Back to the games What's New The running log of what changed around here, newest first. We ship a lot. If something looks off after an update, hit the Report a bug button in the footer and we will get on it. October 2026 College Football Grid opens right away now. The board is there with the page, the player search answers as you type, and 13 names that were never real draft picks are gone from the answers. NBA My Career: watch your season game by game. Next to Play the season there is now a 📺 Week by week button. Press it and the season you just played opens up one game at a time: a scoreboard that fills in quarter by quarter, your stat line every night, your record after every game, the halfway mark, the last game, and your playoff run round by round. You face real franchises on the league's standard schedule formula, so your division rivals show up as often as th"
+club-manager phone-motion: h1 "CLUB MANAGER"; notice ""; page starts "DOUKNOWBALL Back Track stats CLUB MANAGER 26 real league tables and 438 clubs today, squads as of August 2026, after the summer window, plus"
+deadline-day phone-motion: h1 "Deadline Day"; notice ""; page starts "Deadline Day Twelve hours. One budget. The window shuts at 11pm. TODAY'S DEADLINE DAY Sheffield United EFL Championship. Same club, same nee"
+transfer-path phone-motion: h1 "TRANSFER PATH"; notice ""; page starts "DOUKNOWBALL Back Track stats TRANSFER PATH Name teammates to connect the two players in as few steps as possible. 📅 Daily Challenge Everyda"
+face-off phone-motion: h1 "⚡ FACE OFF"; notice ""; page starts "DOUKNOWBALL Back Track stats ⚡ FACE OFF Two names, one stat, ten seconds. Beat the rival in the other chair. 0 PLAYED 0 WON 0 STREAK 0 BEST "
+rank-em phone-motion: h1 "📊 RANK 'EM"; notice ""; page starts "DOUKNOWBALL Back Track stats 📊 RANK 'EM Put five players in order by the stat, most to fewest. 📅 Daily ∞ Unlimited Legends circuit NBA · c"
+blocked-home phone-motion: h1 "DoUKnowBall"; notice ""; page starts "Skip to main content LIVE Live scores temporarily unavailable DoUKnowBall Log In Sign Up DoUKnowBall 130+ free games across every sport. All"
+blocked-soccer-career phone-motion: h1 "⚽ Soccer Career"; notice "Storage is blocked, so progress won't save.This browser blocks storage, so progress won't be saved. You can still play everything."; page starts "⚽ Soccer Career Create your player. Build your legend. Create Your Player Player Name Nationality Choose nationality Position Choose positio"
+blocked-college-grid phone-motion: h1 "🏈COLLEGE FOOTBALL GRID"; notice "Storage is blocked, so progress won't save.This browser blocks storage, so progress won't be saved. You can still play everything."; page starts "DOUKNOWBALL Back Track stats 🏈COLLEGE FOOTBALL GRID Fill the 3×3 grid with college football players matching both criteria. Daily challenge"
+blocked-nba phone-motion: h1 "NBA My Career"; notice "Storage is blocked, so progress won't save.This browser blocks storage, so progress won't be saved. You can still play everything."; page starts "NBA My Career Draft night to jersey retirement. Every summer bends the career. Create your player You are a fictional prospect entering the "
+soccer real phone-reduced: hub h1 "🇧🇷Probe 19"; tile says "👥 SquadReal squadThe plan: Nailed on starterOn our ratings2ndof 7 defenders"
+PROBLEM soccer real phone-reduced the sheet did not open
+nba phone-reduced: a dialog was up first, pressed "Let's Play!"
+nba phone-reduced: hub h1 "NBA My Career"; entry says "null"
+soccer real desk-motion: hub h1 "🇧🇷Probe 19"; tile says "👥 SquadReal squadThe plan: Nailed on starterOn our ratings2ndof 7 defenders"
+PROBLEM soccer real desk-motion the sheet did not open
+nba desk-motion: a dialog was up first, pressed "Let's Play!"
+nba desk-motion: hub h1 "NBA My Career"; entry says "null"
+soccer invented desk-motion: hub h1 "🇧🇷Probe 31"; tile says "👥 SquadYour teammatesThe plan: Nailed on starterOn our ratings1stof 4 goalkeepers"
+PROBLEM soccer invented desk-motion the sheet did not open
+soccer roles desk-motion: hub h1 "🇳🇬Probe 3"; tile says "👥 SquadBy roleThe plan: Nailed on starterOn our ratings1stof 4 goalkeepers"
+PROBLEM soccer roles desk-motion the sheet did not open
+nfl desk-motion: a dialog was up first, pressed "Let's Play!"
+nfl desk-motion: hub h1 "NFL My Career"; entry says "null"
+PROBLEM grid the walk itself threw: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('button[data-grid-cell-status="empty"]').first()
+    - locator resolved to <button data-grid-cell-status="empty" class="aspect-square rounded-lg border-2 flex flex-col items-center justify-center p-1 transition-all text-cente
+create desk-motion: help null; boxes before ["Choose nationality","Choose position","Choose era"]; after the picks ["Brazil🇧🇷","Striker (ST)","Early 2010s (2010 start)"]
+PROBLEM whats-new desk-motion shows "This page broke"
+whats-new desk-motion: h1 "What's New"; notice ""; page starts "Skip to main content LIVE Live scores temporarily unavailable Back to the games What's New The running log of what changed around here, newest first. We ship a lot. If something looks off after an update, hit the Report a bug button in the footer and we will get on it. October 2026 College Football Grid opens right away now. The board is there with the page, the player search answers as you type, and 13 names that were never real draft picks are gone from the answers. NBA My Career: watch your season game by game. Next to Play the season there is now a 📺 Week by week button. Press it and the season you just played opens up one game at a time: a scoreboard that fills in quarter by quarter, your stat line every night, your record after every game, the halfway mark, the last game, and your playoff run round by round. You face real franchises on the league's standard schedule formula, so yo"
+club-manager desk-motion: h1 "CLUB MANAGER"; notice ""; page starts "DOUKNOWBALL Back Sign up to track your stats CLUB MANAGER 26 real league tables and 438 clubs today, squads as of August 2026, after the sum"
+deadline-day desk-motion: h1 "Deadline Day"; notice ""; page starts "Deadline Day Twelve hours. One budget. The window shuts at 11pm. TODAY'S DEADLINE DAY Sheffield United EFL Championship. Same club, same nee"
+transfer-path desk-motion: h1 "TRANSFER PATH"; notice ""; page starts "DOUKNOWBALL Back Sign up to track your stats TRANSFER PATH Name teammates to connect the two players in as few steps as possible. 📅 Daily C"
+face-off desk-motion: h1 "⚡ FACE OFF"; notice ""; page starts "DOUKNOWBALL Back Sign up to track your stats ⚡ FACE OFF Two names, one stat, ten seconds. Beat the rival in the other chair. 0 PLAYED 0 WON "
+rank-em desk-motion: h1 "📊 RANK 'EM"; notice ""; page starts "DOUKNOWBALL Back Sign up to track your stats 📊 RANK 'EM Put five players in order by the stat, most to fewest. 📅 Daily ∞ Unlimited Legends"
+blocked-home desk-motion: h1 "DoUKnowBall"; notice ""; page starts "Skip to main content LIVE Live scores temporarily unavailable DoUKnowBall Log In Sign Up DoUKnowBall 130+ free games across every sport. All"
+blocked-soccer-career desk-motion: h1 "⚽ Soccer Career"; notice "Storage is blocked, so progress won't save.This browser blocks storage, so progress won't be saved. You can still play everything."; page starts "⚽ Soccer Career Create your player. Build your legend. Create Your Player Player Name Nationality Choose nationality Position Choose positio"
+blocked-college-grid desk-motion: h1 "🏈COLLEGE FOOTBALL GRID"; notice "Storage is blocked, so progress won't save.This browser blocks storage, so progress won't be saved. You can still play everything."; page starts "DOUKNOWBALL Back Sign up to track your stats 🏈COLLEGE FOOTBALL GRID Fill the 3×3 grid with college football players matching both criteria."
+blocked-nba desk-motion: h1 "NBA My Career"; notice "Storage is blocked, so progress won't save.This browser blocks storage, so progress won't be saved. You can still play everything."; page starts "NBA My Career Draft night to jersey retirement. Every summer bends the career. Create your player You are a fictional prospect entering the "
+soccer real desk-reduced: hub h1 "🇧🇷Probe 19"; tile says "👥 SquadReal squadThe plan: Nailed on starterOn our ratings2ndof 7 defenders"
+PROBLEM soccer real desk-reduced the sheet did not open
+nba desk-reduced: a dialog was up first, pressed "Let's Play!"
+nba desk-reduced: hub h1 "NBA My Career"; entry says "null"
+rvwalk: 54 lines, 12 problem(s)

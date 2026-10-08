@@ -1,0 +1,119 @@
+playTranslatedPage: http://localhost:4313, 1 page(s), views phone and desktop, text keep and alter
+  PASS  0. the served entry chunk (/assets/index-BlPMYWGH.js) holds the guard's off switch __DUKB_NO_TRANSLATE_GUARD__
+  PASS  0. the served entry chunk holds the guard's console line
+  PASS  0. the served entry chunk holds layer two's off switch __DUKB_NO_TRANSLATE_LIVE__
+
+/soccer-career phone keep
+  PASS  1. /soccer-career phone keep: the translator ran: 1383 text node(s) swapped, lang="pt"
+  PASS  1. /soccer-career phone keep: the guard is installed on the page
+  PASS  8. /soccer-career phone keep: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  2. /soccer-career phone keep: the create screen drew
+  PASS  2. /soccer-career phone keep: all three picks registered, Brazil among them: nationality box "Brazil", position box "Striker (ST)", era box "Current era (2025 start)"
+  PASS  2. /soccer-career phone keep: each pick can be READ in its box: readable: nationality, position, era; hidden: none
+  PASS  3. /soccer-career phone keep: the create flow reached the career: h1 "🇧🇷Joao Teste", create form gone, save Joao Teste, Brazil, youth, age 16
+  PASS  4. /soccer-career phone keep: one season forward and the hub still stands: age 16 to 17 on press 1, h1 "🇧🇷Joao Teste", phase contract_offer; the walk went on to age 18, phase random_events
+  PASS  10. /soccer-career phone keep: the page says what React holds, at every look: 321 element(s) with words of their own at the fullest look
+  PASS  11. /soccer-career phone keep: asked directly, a string the translator took and the page then removes, inserts before or rewrites comes out right: removed: the copy left with it; inserted before: in front; rewritten 16 to 17: shows 17
+  PASS  12. /soccer-career phone keep: no text the translator will not take again is back on the page
+  PASS  17. /soccer-career phone keep: asked directly, a string layer two had refreshed still follows the page after the translator gives it back: rewritten to 17, taken again, given back, rewritten to 18: shows 18
+  PASS  13. /soccer-career phone keep: no box holds its placeholder beside its pick: nationality: was "Choose nationality", now "Brazil🇧🇷"; position: was "Choose position", now "Striker (ST)"; era: was "Choose era", now "Current era (2025 start)"
+  PASS  14. /soccer-career phone keep: the age in the hub's line is the age in the save: 13 look(s) at the line, 12 of them after a birthday
+  PASS  18. /soccer-career phone keep: after the translator undid itself no wrapper is left and the page says what React holds, at every look: 308 node(s) given back, 308 taken up again by layer two, 8 look(s) over 7 press(es)
+  PASS  19. /soccer-career phone keep: after the undo the age in the hub's line is still the age in the save, a birthday later: 8 look(s) at the line, 3 of them after a birthday that came after the undo
+  PASS  5. /soccer-career phone keep: the walk pressed at least two controls: 27: Brazil🇧🇷 > Striker (ST) > Current era (2025 star > 🎲 Generate Starting P > 🎲 Roll again > 🎮 Customize your buil > ✅ Lock in build > ⚽ Begin Career > Next Year
+  PASS  6. /soccer-career phone keep: the route error boundary never appeared
+  PASS  7. /soccer-career phone keep: no NotFoundError
+
+/soccer-career desktop keep
+  PASS  1. /soccer-career desktop keep: the translator ran: 1383 text node(s) swapped, lang="pt"
+  PASS  1. /soccer-career desktop keep: the guard is installed on the page
+  PASS  8. /soccer-career desktop keep: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  2. /soccer-career desktop keep: the create screen drew
+  PASS  2. /soccer-career desktop keep: all three picks registered, Brazil among them: nationality box "Brazil", position box "Striker (ST)", era box "Current era (2025 start)"
+  PASS  2. /soccer-career desktop keep: each pick can be READ in its box: readable: nationality, position, era; hidden: none
+  PASS  3. /soccer-career desktop keep: the create flow reached the career: h1 "🇧🇷Joao Teste", create form gone, save Joao Teste, Brazil, youth, age 16
+  PASS  4. /soccer-career desktop keep: one season forward and the hub still stands: age 16 to 17 on press 1, h1 "🇧🇷Joao Teste", phase contract_offer; the walk went on to age 18, phase random_events
+  PASS  10. /soccer-career desktop keep: the page says what React holds, at every look: 321 element(s) with words of their own at the fullest look
+  PASS  11. /soccer-career desktop keep: asked directly, a string the translator took and the page then removes, inserts before or rewrites comes out right: removed: the copy left with it; inserted before: in front; rewritten 16 to 17: shows 17
+  PASS  12. /soccer-career desktop keep: no text the translator will not take again is back on the page
+  PASS  17. /soccer-career desktop keep: asked directly, a string layer two had refreshed still follows the page after the translator gives it back: rewritten to 17, taken again, given back, rewritten to 18: shows 18
+  PASS  13. /soccer-career desktop keep: no box holds its placeholder beside its pick: nationality: was "Choose nationality", now "Brazil🇧🇷"; position: was "Choose position", now "Striker (ST)"; era: was "Choose era", now "Current era (2025 start)"
+  PASS  14. /soccer-career desktop keep: the age in the hub's line is the age in the save: 13 look(s) at the line, 12 of them after a birthday
+  PASS  18. /soccer-career desktop keep: after the translator undid itself no wrapper is left and the page says what React holds, at every look: 308 node(s) given back, 308 taken up again by layer two, 8 look(s) over 7 press(es)
+  PASS  19. /soccer-career desktop keep: after the undo the age in the hub's line is still the age in the save, a birthday later: 8 look(s) at the line, 3 of them after a birthday that came after the undo
+  PASS  5. /soccer-career desktop keep: the walk pressed at least two controls: 27: Brazil🇧🇷 > Striker (ST) > Current era (2025 star > 🎲 Generate Starting P > 🎲 Roll again > 🎮 Customize your buil > ✅ Lock in build > ⚽ Begin Career > Next Year
+  PASS  6. /soccer-career desktop keep: the route error boundary never appeared
+  PASS  7. /soccer-career desktop keep: no NotFoundError
+
+/soccer-career phone alter
+  PASS  1. /soccer-career phone alter: the translator ran: 1383 text node(s) swapped, lang="pt"
+  PASS  1. /soccer-career phone alter: the guard is installed on the page
+  PASS  8. /soccer-career phone alter: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  2. /soccer-career phone alter: the create screen drew
+  PASS  2. /soccer-career phone alter: all three picks registered, Brazil among them: nationality box "«Brazil»", position box "«Striker (ST)»", era box "«Current era (2025 start)»"
+  PASS  2. /soccer-career phone alter: each pick can be READ in its box: readable: nationality, position, era; hidden: none
+  PASS  3. /soccer-career phone alter: the create flow reached the career: h1 "🇧🇷Joao Teste", create form gone, save Joao Teste, Brazil, youth, age 16
+  PASS  4. /soccer-career phone alter: one season forward and the hub still stands: age 16 to 17 on press 1, h1 "🇧🇷Joao Teste", phase contract_offer; the walk went on to age 18, phase random_events
+  PASS  10. /soccer-career phone alter: the page says what React holds, at every look: 321 element(s) with words of their own at the fullest look
+  PASS  11. /soccer-career phone alter: asked directly, a string the translator took and the page then removes, inserts before or rewrites comes out right: removed: the copy left with it; inserted before: in front; rewritten 16 to 17: shows 17
+  PASS  12. /soccer-career phone alter: no text the translator will not take again is back on the page
+  PASS  17. /soccer-career phone alter: asked directly, a string layer two had refreshed still follows the page after the translator gives it back: rewritten to 17, taken again, given back, rewritten to 18: shows 18
+  PASS  13. /soccer-career phone alter: no box holds its placeholder beside its pick: nationality: was "Choose nationality", now "Brazil🇧🇷"; position: was "Choose position", now "Striker (ST)"; era: was "Choose era", now "Current era (2025 start)"
+  PASS  14. /soccer-career phone alter: the age in the hub's line is the age in the save: 13 look(s) at the line, 12 of them after a birthday
+  PASS  18. /soccer-career phone alter: after the translator undid itself no wrapper is left and the page says what React holds, at every look: 308 node(s) given back, 308 taken up again by layer two, 8 look(s) over 7 press(es)
+  PASS  19. /soccer-career phone alter: after the undo the age in the hub's line is still the age in the save, a birthday later: 8 look(s) at the line, 3 of them after a birthday that came after the undo
+  PASS  5. /soccer-career phone alter: the walk pressed at least two controls: 27: Brazil🇧🇷 > Striker (ST) > Current era (2025 star > 🎲 Generate Starting P > 🎲 Roll again > 🎮 Customize your buil > ✅ Lock in build > ⚽ Begin Career > Next Year
+  PASS  6. /soccer-career phone alter: the route error boundary never appeared
+  PASS  7. /soccer-career phone alter: no NotFoundError
+
+/soccer-career desktop alter
+  PASS  1. /soccer-career desktop alter: the translator ran: 1383 text node(s) swapped, lang="pt"
+  PASS  1. /soccer-career desktop alter: the guard is installed on the page
+  PASS  8. /soccer-career desktop alter: asked directly, removing a moved node is quiet and inserting before one appends: removeChild quiet, insertBefore quiet
+  PASS  2. /soccer-career desktop alter: the create screen drew
+  PASS  2. /soccer-career desktop alter: all three picks registered, Brazil among them: nationality box "«Brazil»", position box "«Striker (ST)»", era box "«Current era (2025 start)»"
+  PASS  2. /soccer-career desktop alter: each pick can be READ in its box: readable: nationality, position, era; hidden: none
+  PASS  3. /soccer-career desktop alter: the create flow reached the career: h1 "🇧🇷Joao Teste", create form gone, save Joao Teste, Brazil, youth, age 16
+  PASS  4. /soccer-career desktop alter: one season forward and the hub still stands: age 16 to 17 on press 1, h1 "🇧🇷Joao Teste", phase contract_offer; the walk went on to age 18, phase random_events
+  PASS  10. /soccer-career desktop alter: the page says what React holds, at every look: 321 element(s) with words of their own at the fullest look
+  PASS  11. /soccer-career desktop alter: asked directly, a string the translator took and the page then removes, inserts before or rewrites comes out right: removed: the copy left with it; inserted before: in front; rewritten 16 to 17: shows 17
+  PASS  12. /soccer-career desktop alter: no text the translator will not take again is back on the page
+  PASS  17. /soccer-career desktop alter: asked directly, a string layer two had refreshed still follows the page after the translator gives it back: rewritten to 17, taken again, given back, rewritten to 18: shows 18
+  PASS  13. /soccer-career desktop alter: no box holds its placeholder beside its pick: nationality: was "Choose nationality", now "Brazil🇧🇷"; position: was "Choose position", now "Striker (ST)"; era: was "Choose era", now "Current era (2025 start)"
+  PASS  14. /soccer-career desktop alter: the age in the hub's line is the age in the save: 13 look(s) at the line, 12 of them after a birthday
+  PASS  18. /soccer-career desktop alter: after the translator undid itself no wrapper is left and the page says what React holds, at every look: 308 node(s) given back, 308 taken up again by layer two, 8 look(s) over 7 press(es)
+  PASS  19. /soccer-career desktop alter: after the undo the age in the hub's line is still the age in the save, a birthday later: 8 look(s) at the line, 3 of them after a birthday that came after the undo
+  PASS  5. /soccer-career desktop alter: the walk pressed at least two controls: 27: Brazil🇧🇷 > Striker (ST) > Current era (2025 star > 🎲 Generate Starting P > 🎲 Roll again > 🎮 Customize your buil > ✅ Lock in build > ⚽ Begin Career > Next Year
+  PASS  6. /soccer-career desktop alter: the route error boundary never appeared
+  PASS  7. /soccer-career desktop alter: no NotFoundError
+
+EVERY WALK
+  page                 view     text   boundary                          NotFound  guard line  moved nodes  stale text  steps
+  /soccer-career       phone    keep   none                              0         0           4 (4 taken)  0           30
+  /soccer-career       desktop  keep   none                              0         0           4 (4 taken)  0           30
+  /soccer-career       phone    alter  none                              0         0           4 (4 taken)  0           30
+  /soccer-career       desktop  alter  none                              0         0           4 (4 taken)  0           30
+
+BY PAGE
+  /soccer-career       broke in 0 of 4 walk(s); the guard printed its line in 0; moved nodes per walk 4, 4, 4, 4; stale text at most 0
+
+WHAT THE THREE BOXES READ after the picks
+  phone    keep   nationality "Brazil" (readable) | position "Striker (ST)" (readable) | era "Current era (2025 start)" (readable)
+  desktop  keep   nationality "Brazil" (readable) | position "Striker (ST)" (readable) | era "Current era (2025 start)" (readable)
+  phone    alter  nationality "«Brazil»" (readable) | position "«Striker (ST)»" (readable) | era "«Current era (2025 start)»" (readable)
+  desktop  alter  nationality "«Brazil»" (readable) | position "«Striker (ST)»" (readable) | era "«Current era (2025 start)»" (readable)
+
+THE CALLS THAT NAMED A MOVED NODE (4 different, each one a crash without the guard)
+  4x /soccer-career: removeChild under <span> of "Choose nationality"
+  4x /soccer-career: removeChild under <span> of "Choose position"
+  4x /soccer-career: removeChild under <span> of "Choose era"
+  4x /soccer-career: removeChild under <span> of "s"
+
+LAYER TWO on 4 page load(s): 5532 text node(s) seen taken, 16 removal(s) and 0 insert(s) put through, 256 string(s) handed back fresh, 1232 node(s) taken up again after the translator gave them back. Text the translator will not take again, back on the page: 0.
+
+THE UNDO on 4 create walk(s): the translator gave back 308, 308, 308, 308 node(s); then 7, 7, 7, 7 press(es) and 8, 8, 8, 8 look(s); stale text at most 0, 0, 0, 0; the age line wrong at 0 of 8, 0 of 8, 0 of 8, 0 of 8 look(s), 3, 3, 3, 3 of them after a birthday that came after the undo.
+
+nothing left this machine: 16 request(s) to the database host aborted, other hosts aborted [fonts.googleapis.com], 16 screenshot(s) in /home/runner/work/_temp/rc-out/files/unspan-plain
+16 call(s) in all named a node its parent no longer owned, each one a crash without the guard. Layer one had to fall back, and printed its line, on 0 of 4 page load(s).
+
+playTranslatedPage: 79 checks, 0 failed

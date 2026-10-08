@@ -1,0 +1,10 @@
+# Release AN review (runner lens): the reviewer's own walk from saves made by main, finished screen shots, and Round 1096 undone under the translated walk
+#!serve
+#!playwright
+#!serial
+walk: node .rc/x/rvwalk.mjs
+pillshots: RESULT_PILL_SHOTS="$RC_OUT/pill" node scripts/simResultPillComparison.mjs
+unspan-prep: node .rc/x/rvmut.mjs unspan && npx vite build --outDir "$RUNNER_TEMP/dist-unspan" --emptyOutDir 2>&1 | tail -2; git checkout -q -- src; (nohup node scripts/lib/hostLikeServer.mjs "$RUNNER_TEMP/dist-unspan" 4313 > /dev/null 2>&1 &); sleep 5; curl -s -o /dev/null -w "unspan build served %{http_code}\n" http://localhost:4313/soccer-career
+unspan-nolive: BASE=http://localhost:4313 SWEEP_BASE=http://localhost:4313 PLAY_TRANSLATED_CONTROL=nolive ONLY=/soccer-career SHOTS="$RC_OUT/unspan-nolive" ENGINES=chromium node scripts/playTranslatedPage.mjs
+unspan-plain: BASE=http://localhost:4313 SWEEP_BASE=http://localhost:4313 ONLY=/soccer-career SHOTS="$RC_OUT/unspan-plain" ENGINES=chromium node scripts/playTranslatedPage.mjs
+tree-clean: git status --porcelain -- src scripts | head -5; test -z "$(git status --porcelain -- src scripts)"

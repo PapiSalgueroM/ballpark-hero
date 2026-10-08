@@ -1,0 +1,7 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=1 491s | rvwalk: 54 lines, 12 problem(s)
+pillshots exit=0 14s | simResultPillComparison: green. 34 finished states on a 390 wide phone: every pill reads the hook's score, on one line inside its fixed pill, nothing scrolls sideways, an
+unspan-prep exit=0 33s | unspan build served 200
+unspan-nolive exit=2 69s | control "nolive": 4 check(s) failed that have nothing to do with layer two, first: 2. /soccer-career desktop keep: each pick can be READ in its box: readable: position, e
+unspan-plain exit=0 69s | playTranslatedPage: 79 checks, 0 failed
+tree-clean exit=0 0s | 
