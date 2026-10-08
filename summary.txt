@@ -1,0 +1,16 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+tsc exit=0 60s | 
+walk1 exit=0 102s | playNflTruth: green. A kicker goes late and is paid his slot, throwback seasons are 16 games, the bank stops at zero on load, and sacks come in halves.
+walk2 exit=0 105s | playNflTruth: green. A kicker goes late and is paid his slot, throwback seasons are 16 games, the bank stops at zero on load, and sacks come in halves.
+walk3 exit=0 108s | playNflTruth: green. A kicker goes late and is paid his slot, throwback seasons are 16 games, the bank stops at zero on load, and sacks come in halves.
+walk5 exit=0 105s | playNflTruth: green. A kicker goes late and is paid his slot, throwback seasons are 16 games, the bank stops at zero on load, and sacks come in halves.
+walk4 exit=0 107s | playNflTruth: green. A kicker goes late and is paid his slot, throwback seasons are 16 games, the bank stops at zero on load, and sacks come in halves.
+vitest-season exit=0 4s |    Duration  3.60s (transform 1.42s, setup 72ms, collect 1.91s, tests 633ms, environment 393ms, prepare 250ms)
+vitest-help exit=0 5s |    Duration  4.98s (transform 2.93s, setup 260ms, collect 5.31s, tests 1.43s, environment 1.57s, prepare 702ms)
+vitest-board exit=0 7s |    Duration  7.05s (transform 1.88s, setup 155ms, collect 5.01s, tests 3.16s, environment 1.19s, prepare 397ms)
+digest exit=0 40s |    Duration  39.86s (transform 1.31s, setup 88ms, collect 1.58s, tests 36.77s, environment 543ms, prepare 145ms)
+deckc exit=0 50s | simUsCareerDeckC: all checks passed
+walk-seventeen exit=0 110s | playNflTruth control seventeen: all 6 guarded checks fired (mutations landed: {"ledger2005":20})
+decision exit=0 8s | simCareerDecisionOutcome normal: intended assertions and independent ordinary/rivalry baseline passed.
+truth exit=0 51s | simNflTruth: green. Seasons are their real length, awards survive a 16 game schedule, rookies are paid their slot, kickers go in round four or later, sacks come in halves
+hall exit=1 838s | simCareerHall: RED
