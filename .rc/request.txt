@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+#!serial
+saves: bash .rc/x/basebuild.sh
