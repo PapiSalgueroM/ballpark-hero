@@ -1,0 +1,66 @@
+simCareerHall nhl: 2000 careers, 0 crashed, seed base
+  hof 30.7% (614), first ballot 70.7% of them; bottom third 43.1%, top third 99%
+  outcomes {"inducted":614,"notOnBallot":441,"waiting":945}; jerseys 795; talk reached 99.9% of careers
+  ladder 0.319 0.417 0.479 0.538 0.612 0.682 0.745 0.830 0.894 0.968; smallest step 0.059
+  deciles 0.39 0.46 0.45 0.59 0.61 0.69 0.87 1.00 1.00 1.00; cuts 0.35 0.35 0.39 0.39 0.41 0.43 0.42 0.37 0.33; smallest cut 0.326
+  misses: iff 0, outcome 0, table [], offset 0, promise 0/664, draws 0, notSame 0, sides 0, talk 0+0, jersey 0
+  talk timing: talks a career, median 1; first talk at 36; career ends at 39; non finite scores 0
+  14 balance: 56 walk away farewells, 16 taken the same offseason in both builds; that farewell season: OVR 63.0 -> 83.3, games 59.5 -> 67.3, points (wins for a goalie) 14.8 -> 48.0
+     first case's farewell line: old "8 W, .898 SV%" now "29 W, .925 SV%"
+     median legacy of those careers 182 -> 185; all careers median 364 -> 362; Hall share 27.6 -> 26.9 percent
+  board loop: 400 careers a policy, 0 crashed; talks answered one more year 1206; identity misses 0
+  ends: retire now 369, talk farewells 369, deck farewells 124, misses 0
+  once: 2781 offseasons with the talk (6 asked mid-summer, 32 after a banned year), 0 offered a retirement card; listed ids seen 2, unseen [], farewell cards not listed [] (decks probed on 150 careers)
+  seek: 300 talks caught in the board loop, 2000 forged summers on a deck retirement card, 2000 landed on it with no hold-out (at card 1 1000, at a later card 1000), 0 with the board's
+  jersey (deck): 0 recorded, 0 at a club other than the one with most seasons, 0 misnamed; synthetic 300, 0 missed; wait answers 0, 0 wrote a club
+  era: verified from the Class of 2026; {"now":{"below":0,"above":100},"y2006":{"below":4,"above":96},"boundary":{"below":100,"above":100}}; misses 0
+  16 never below: table misses []; 0 of 2000 careers lower on 2; 279 moved up, 60 up a verdict tier, 21 newly in the Hall
+  19 (b) Hall share 29.6 -> 30.7 percent; legacy score median 368 -> 369, mean 446.6 -> 465.1 (points paid)
+     by position: C 27.3 -> 28.5, LW 28.0 -> 30.0, RW 27.0 -> 28.5, D 25.5 -> 25.8, G 40.5 -> 40.8
+  17 (a) marks: 12 standout cells; at or over from, pooled 9.67 percent (band 8.59 to 11.89), cells out of 6.1 to 14.4: []; at or over to, pooled 0.81 percent (band 0.27 to 1.69)
+  17 (b) half rule and ledger: 0 misses []
+     ramps (width in seasons at the from mark's own rate, to over the median): C goals 4.1s x1.88, C assists 2.8s x1.38, C points 3.3s x1.47, LW goals 3.9s x1.66, LW assists 3.4s x1.43, LW points 2.8s x1.40, RW goals 3.3s x1.46, RW assists 2.7s x1.37, RW points 3.0s x1.40, D assists 2.5s x1.34, D points 2.6s x1.38, G wins 2.2s x1.21 floor
+  17 (c) outcome: top 5 percent by family, Hall share on 1 > on 2: C goals 100>100, C assists 80>95, C points 100>100, LW goals 85>95, LW assists 65>90, LW points 100>100, RW goals 100>100, RW assists 85>100, RW points 95>100, D assists 100>100, D points 100>100, G wins 95>100
+     pooled over the cells under 90 percent on 1: 63 -> 76 of 80 careers, a gain of 16.3 points (needs 8.1); over the first ballot line (900) on 2 and not on 1: 36 careers (0 of them newly in the Hall)
+     the standout's own part, every cell: 221 in with the standout taken out, 236 with it, of 240, a gain of 6.3 points (needs 2.9)
+  17 (d) cap: 0 of 2000 careers off the restated score on 2; the standout paid on 279
+  19 (a) base: median base credit no base position in this sport; misses []
+  19 (c) words: example LW assists 732 to 1100: +300 on 2, +0 on 1; RW assists 749 to 1060: +300 on 2, +0 on 1; card lines off 0 of 4000 records (279 name a standout); misses []
+  18 anchors: NOT BUILT FOR NHL (not built in this session). Nothing here says the standout or the base agrees with real careers in this sport.
+  15 (c) calibration rule: 0 misses over 13 cases and 2000 careers; engine careers stamped 2000
+  20 board stamp: 1600 board careers retired, 1600 stamped 2, 0 scored on another calibration
+  15 v1: 20 recorded saves (base 8fe82a4d), 0 read differently today; 0 of 2000 engine careers off the Round 123 formula on calibration 1
+  ok   crashes: 0 crashed of 2000
+  ok   iff: 0 disagree with the engine's own legacyOf, 614 inducted
+  ok   outcome: 0 careers outside the Hall with the wrong outcome; 441 off the ballot, 945 on it, 0 early fall offs
+  ok   table: rules off the audit table: [], 0 careers on the wrong first class
+  ok   rises: smallest of the nine decile cuts 0.326 (needs 0.06), smallest ladder step 0.059 (needs over 0.015)
+  ok   promise: 0 of 664 promised first ballots missed
+  ok   keyed: 0 Math.random draws, 0 records that changed on a second run
+  ok   sides: 0 ballots on the wrong side of a rule
+  ok   talk: 0 talks off the rule, 0 before the age, reached 99.9 percent (needs 70)
+  ok   answers: 0 answers that did not do what the button says; answered {"retireNow":499,"oneMore":500,"farewell":500}
+  ok   jersey: 0 jerseys off the rule or misnamed, 0 named by a bare club id, 795 retired
+  ok   identity: 0 careers answering one more year that differ from the loop with no talk (1206 talks answered), 0 board careers crashed
+  ok   ends: 0 chosen ends off by a season or unmarked (retire now 369, talk farewells 369, deck farewells 124)
+  ok   once: 0 of 2781 talk offseasons offered a retirement card; not listed [], listed but never dealt []
+  ok   seek: 0 of 2000 forged summers where the board's seek landed on a deck retirement card; 2000 landed on one with no hold-out (needs 300)
+  ok   deckJersey: 0 of 0 deck retired numbers not on the card, 0 of 300 synthetic, 0 wait answers that wrote a club
+  ok   era: 0 cards printing a class year or rule off the audit's verified class (2026); {"now":{"below":0,"above":100},"y2006":{"below":4,"above":96},"boundary":{"below":100,"above":100}}
+  ok   v1replay: 0 readings of 20 recorded saves differ from the version 1 recording
+  ok   v1formula: 0 of 2000 engine careers score off the Round 123 formula on calibration 1
+  ok   calrule: 0 readings off the calibration rule; 2000 of 2000 engine careers stamped
+  ok   boardstamp: 1600 of 1600 retired board careers stamped 2, 0 scored on another calibration
+  ok   neverbelow: calibration 2 drops or changes [] of calibration 1; 0 of 2000 careers score lower, lose a tier or leave the Hall on 2 (279 moved up)
+  ok   marks: at or over from: pooled 9.67 percent, 0 cells out of band []; at or over to: pooled 0.81 percent
+  ok   halfrule: 0 cells off the half rule, the ledger's marks or the ramp floor []
+  ok   standoutgain: top 5 percent by family: 63 -> 76 of 80 in the Hall, a gain of 16.3 points (needs 8.1); owed to the standout alone 6.3 points (needs 2.9)
+  ok   standoutcap: 0 careers off the restated score on 2 (one family, capped); the standout paid on 279
+  ok   base: 0 base misses []
+  ok   words: 0 misses in the rule, the example or the card []; 0 card lines off
+  ok   anchorshape: 0 misses in the ledger's shape []; 10 anchors in the file, sports built [mlb]
+  ok   anchors: NOT BUILT for this sport: nothing asserted
+  ok   anchorcalls: 0 anchor readings whose majority call is not the one firstBallotChance gives []
+  ok   hallshare: Hall share 29.6 -> 30.7 percent (ceiling 35.9)
+  ok   balance: 16 walk away farewells (needs 5); farewell OVR gain 20.3 (needs 10); Hall share shift -0.75 points (band 2.5); median legacy shift -2 (band 15)
+simCareerHall nhl: all 33 checks green (REAL ANCHORS NOT BUILT FOR THIS SPORT: section 18 asserted nothing about it)

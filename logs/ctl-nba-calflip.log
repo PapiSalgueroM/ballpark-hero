@@ -1,0 +1,55 @@
+simCareerHall nba: 2000 careers, 0 crashed, seed base, CONTROL calflip
+  hof 32.9% (657), first ballot 86% of them; bottom third 58%, top third 100%
+  outcomes {"inducted":657,"waiting":792,"notOnBallot":551}; jerseys 830; talk reached 100% of careers
+  ladder 0.333 0.414 0.473 0.547 0.620 0.681 0.756 0.840 0.888 0.966; smallest step 0.048
+  deciles 0.32 0.50 0.77 1.00 1.00 1.00 1.00 1.00 1.00 1.00; cuts 0.60 0.56 0.47 0.35 0.28 0.23 0.20 0.18 0.16; smallest cut 0.156
+  misses: iff 0, outcome 0, table [], offset 0, promise 0/944, draws 0, notSame 0, sides 0, talk 0+0, jersey 0
+  talk timing: talks a career, median 1; first talk at 36; career ends at 38; non finite scores 0
+  board loop: 0 careers a policy, 0 crashed; talks answered one more year 0; identity misses 0
+  ends: retire now 0, talk farewells 0, deck farewells 0, misses 0
+  once: 0 offseasons with the talk (0 asked mid-summer, 0 after a banned year), 0 offered a retirement card; listed ids seen 0, unseen [nbaB_retireHealthy,nbaB_farewellTour], farewell cards not listed [] (decks probed on 0 careers)
+  seek: 0 talks caught in the board loop, 0 forged summers on a deck retirement card, 0 landed on it with no hold-out (at card 1 0, at a later card 0), 0 with the board's
+  jersey (deck): 0 recorded, 0 at a club other than the one with most seasons, 0 misnamed; synthetic 0, 0 missed; wait answers 0, 0 wrote a club
+  era: verified from the Class of 2025; {"boundary":{"below":100,"above":100}}; misses 0
+  16 never below: table misses []; 0 of 2000 careers lower on 2; 388 moved up, 150 up a verdict tier, 46 newly in the Hall
+  19 (b) Hall share 30.6 -> 32.9 percent; legacy score median 350 -> 358, mean 467.7 -> 495.8 (points paid)
+     by position: PG 31.5 -> 34.0, SG 33.8 -> 35.8, SF 30.8 -> 32.5, PF 28.0 -> 31.0, C 28.8 -> 31.0
+  17 (a) marks: 14 standout cells; at or over from, pooled 9.91 percent (band 8.91 to 10.91), cells out of 4.2 to 16.6: []; at or over to, pooled 1.14 percent (band 0.39 to 1.39)
+  17 (b) half rule and ledger: 0 misses []
+     ramps (width in seasons at the from mark's own rate, to over the median): PG pts 3.8s x1.73, PG ast 3.6s x1.58, SG pts 3.9s x1.59, SG reb 3.0s x1.50, SG ast 2.8s x1.49, SF pts 4.0s x1.64, SF reb 2.2s x1.36, SF ast 3.3s x1.66, PF pts 2.6s x1.41, PF reb 3.5s x1.51, PF ast 3.9s x1.69, C pts 3.1s x1.54, C reb 2.9s x1.51, C ast 3.3s x1.53
+  17 (c) outcome: top 5 percent by family, Hall share on 1 > on 2: PG pts 100>100, PG ast 25>65, SG pts 100>100, SG reb 65>90, SG ast 95>100, SF pts 100>100, SF reb 85>100, SF ast 80>100, PF pts 85>100, PF reb 70>100, PF ast 85>95, C pts 95>100, C reb 75>95, C ast 75>95
+     pooled over the cells under 90 percent on 1: 129 -> 168 of 180 careers, a gain of 21.7 points (needs 9.7); over the first ballot line (650) on 2 and not on 1: 48 careers (7 of them newly in the Hall)
+     the standout's own part, every cell: 227 in with the standout taken out, 268 with it, of 280, a gain of 14.6 points (needs 6.3)
+  17 (d) cap: 0 of 2000 careers off the restated score on 2; the standout paid on 390
+  19 (a) base: median base credit no base position in this sport; misses []
+  19 (c) words: example PG ast 10718 to 17800: +300 on 2, +0 on 1; card lines off 0 of 4000 records (390 name a standout); misses []
+  18 anchors: NOT BUILT FOR NBA (not built in this session (the family lists were read; the per player sourcing was not finished)). Nothing here says the standout or the base agrees with real careers in this sport.
+  15 (c) calibration rule: 397 misses over 13 cases and 2000 careers; engine careers stamped 2000
+  20 board stamp: 0 board careers retired, 0 stamped 2, 0 scored on another calibration
+  15 v1: 20 recorded saves (base 8fe82a4d), 24 read differently today; 0 of 2000 engine careers off the Round 123 formula on calibration 1
+  ok   crashes: 0 crashed of 2000
+  ok   iff: 0 disagree with the engine's own legacyOf, 657 inducted
+  ok   outcome: 0 careers outside the Hall with the wrong outcome; 551 off the ballot, 792 on it, 0 early fall offs
+  ok   table: rules off the audit table: [], 0 careers on the wrong first class
+  ok   rises: smallest of the nine decile cuts 0.156 (needs 0.06), smallest ladder step 0.048 (needs over 0.015)
+  ok   promise: 0 of 944 promised first ballots missed
+  ok   keyed: 0 Math.random draws, 0 records that changed on a second run
+  ok   sides: 0 ballots on the wrong side of a rule
+  ok   talk: 0 talks off the rule, 0 before the age, reached 100.0 percent (needs 70)
+  ok   answers: 0 answers that did not do what the button says; answered {"retireNow":500,"oneMore":500,"farewell":500}
+  ok   jersey: 0 jerseys off the rule or misnamed, 0 named by a bare club id, 830 retired
+  FAIL v1replay: 24 readings of 20 recorded saves differ from the version 1 recording
+  ok   v1formula: 0 of 2000 engine careers score off the Round 123 formula on calibration 1
+  FAIL calrule: 397 readings off the calibration rule; 2000 of 2000 engine careers stamped
+  ok   neverbelow: calibration 2 drops or changes [] of calibration 1; 0 of 2000 careers score lower, lose a tier or leave the Hall on 2 (388 moved up)
+  ok   marks: at or over from: pooled 9.91 percent, 0 cells out of band []; at or over to: pooled 1.14 percent
+  ok   halfrule: 0 cells off the half rule, the ledger's marks or the ramp floor []
+  ok   standoutgain: top 5 percent by family: 129 -> 168 of 180 in the Hall, a gain of 21.7 points (needs 9.7); owed to the standout alone 14.6 points (needs 6.3)
+  ok   standoutcap: 0 careers off the restated score on 2 (one family, capped); the standout paid on 390
+  ok   base: 0 base misses []
+  ok   words: 0 misses in the rule, the example or the card []; 0 card lines off
+  ok   anchorshape: 0 misses in the ledger's shape []; 10 anchors in the file, sports built [mlb]
+  ok   anchors: NOT BUILT for this sport: nothing asserted
+  ok   anchorcalls: 0 anchor readings whose majority call is not the one firstBallotChance gives []
+  ok   hallshare: Hall share 30.6 -> 32.9 percent (ceiling 37.6)
+simCareerHall nba CONTROL calflip: wanted v1replay and calrule red, red [v1replay,calrule], FIRED

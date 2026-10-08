@@ -1,0 +1,55 @@
+simCareerHall nfl: 2000 careers, 0 crashed, seed base, CONTROL todrift
+  hof 41.8% (835), first ballot 78.7% of them; bottom third 47.8%, top third 100%
+  outcomes {"inducted":835,"waiting":744,"notOnBallot":421}; jerseys 953; talk reached 86.8% of careers
+  ladder 0.345 0.400 0.476 0.539 0.618 0.683 0.750 0.824 0.893 0.964; smallest step 0.054
+  deciles 0.36 0.49 0.52 0.75 0.82 0.93 1.00 1.00 1.00 1.00; cuts 0.47 0.45 0.47 0.43 0.40 0.36 0.30 0.27 0.24; smallest cut 0.237
+  misses: iff 0, outcome 0, table [], offset 0, promise 0/815, draws 0, notSame 0, sides 0, talk 0+0, jersey 0
+  talk timing: talks a career, median 1; first talk at 35; career ends at 38; non finite scores 0
+  board loop: 0 careers a policy, 0 crashed; talks answered one more year 0; identity misses 0
+  ends: retire now 0, talk farewells 0, deck farewells 0, misses 0
+  once: 0 offseasons with the talk (0 asked mid-summer, 0 after a banned year), 0 offered a retirement card; listed ids seen 0, unseen [lifeB_retireHealthy,lifeB_retirementTour], farewell cards not listed [] (decks probed on 0 careers)
+  seek: 0 talks caught in the board loop, 0 forged summers on a deck retirement card, 0 landed on it with no hold-out (at card 1 0, at a later card 0), 0 with the board's
+  jersey (deck): 0 recorded, 0 at a club other than the one with most seasons, 0 misnamed; synthetic 0, 0 missed; wait answers 0, 0 wrote a club
+  era: verified from the Class of 2027; {"boundary":{"below":100,"above":100}}; misses 0
+  16 never below: table misses []; 0 of 2000 careers lower on 2; 1501 moved up, 1141 up a verdict tier, 414 newly in the Hall
+  19 (b) Hall share 21.1 -> 41.8 percent; legacy score median 293 -> 412, mean 382.4 -> 549.6 (points paid)
+     by position: QB 63.2 -> 100.0, RB 7.2 -> 8.8, WR 22.0 -> 24.4, TE 8.4 -> 21.6, LB 14.0 -> 24.8, CB 10.8 -> 23.2, EDGE 31.2 -> 38.4, K 11.6 -> 92.8
+  17 (a) marks: 16 standout cells; at or over from, pooled 9.98 percent (band 9.60 to 10.80), cells out of 4.2 to 17.4: []; at or over to, pooled 7.72 percent (band 0.06 to 1.41)
+  17 (b) half rule and ledger: 31 misses [QB passYds off the ledger's marks; QB passYds ramp under the floor; QB passTd off the ledger's marks; QB passTd ramp under the floor; RB rushYds off the ledger's marks; RB rushYds ramp under the floor]
+     ramps (width in seasons at the from mark's own rate, to over the median): QB passYds -0.2s x1.14 floor, QB passTd -0.1s x1.19, RB rushYds 0.6s x1.33, RB rushTd 0.8s x1.36, WR rec 0.2s x1.28, WR recYds 0.3s x1.29, WR recTd 0.7s x1.33, TE rec 0.1s x1.25, TE recYds 0.1s x1.25, TE recTd 0.0s x1.25, LB tackles 0.3s x1.26, LB picks 1.4s x1.46, CB picks 1.5s x1.44, CB passDef 0.6s x1.30, EDGE sacks 0.9s x1.37, K fgMade -0.2s x1.05 floor
+  17 (c) outcome: top 5 percent by family, Hall share on 1 > on 2: QB passYds 100>100, QB passTd 100>100, RB rushYds 62>92, RB rushTd 62>92, WR rec 100>100, WR recYds 92>100, WR recTd 92>100, TE rec 46>100, TE recYds 46>100, TE recTd 46>100, LB tackles 62>100, LB picks 69>92, CB picks 54>100, CB passDef 62>100, EDGE sacks 92>100, K fgMade 31>31
+     pooled over the cells under 90 percent on 1: 70 -> 118 of 130 careers, a gain of 36.9 points (needs 15.1); over the first ballot line (900) on 2 and not on 1: 219 careers (25 of them newly in the Hall)
+     the standout's own part, every cell: 169 in with the standout taken out, 196 with it, of 208, a gain of 13.0 points (needs 5.5)
+  17 (d) cap: 0 of 2000 careers off the restated score on 2; the standout paid on 620
+  19 (a) base: median base credit TE 111.4 (109.2 to 114.7), LB 108.2 (106.4 to 112.3), CB 107.8 (105.3 to 114.1), EDGE 109.8 (105.6 to 111.8); misses []
+  19 (c) words: example CB picks 35 to 53.1: +324 on 2, +0 on 1; card lines off 0 of 4000 records (620 name a standout); misses []
+  18 anchors: NOT BUILT FOR NFL (not built in this session (Pro Football Reference refused the fetch; nfl.com and the Hall's site would have to carry every group)). Nothing here says the standout or the base agrees with real careers in this sport.
+  15 (c) calibration rule: 0 misses over 13 cases and 2000 careers; engine careers stamped 2000
+  20 board stamp: 0 board careers retired, 0 stamped 2, 0 scored on another calibration
+  15 v1: 20 recorded saves (base 8fe82a4d), 0 read differently today; 0 of 2000 engine careers off the Round 123 formula on calibration 1
+  ok   crashes: 0 crashed of 2000
+  ok   iff: 0 disagree with the engine's own legacyOf, 835 inducted
+  ok   outcome: 0 careers outside the Hall with the wrong outcome; 421 off the ballot, 744 on it, 0 early fall offs
+  ok   table: rules off the audit table: [], 0 careers on the wrong first class
+  ok   rises: smallest of the nine decile cuts 0.237 (needs 0.06), smallest ladder step 0.054 (needs over 0.015)
+  ok   promise: 0 of 815 promised first ballots missed
+  ok   keyed: 0 Math.random draws, 0 records that changed on a second run
+  ok   sides: 0 ballots on the wrong side of a rule
+  ok   talk: 0 talks off the rule, 0 before the age, reached 86.8 percent (needs 70)
+  ok   answers: 0 answers that did not do what the button says; answered {"retireNow":431,"oneMore":435,"farewell":431}
+  ok   jersey: 0 jerseys off the rule or misnamed, 0 named by a bare club id, 953 retired
+  ok   v1replay: 0 readings of 20 recorded saves differ from the version 1 recording
+  ok   v1formula: 0 of 2000 engine careers score off the Round 123 formula on calibration 1
+  ok   calrule: 0 readings off the calibration rule; 2000 of 2000 engine careers stamped
+  ok   neverbelow: calibration 2 drops or changes [] of calibration 1; 0 of 2000 careers score lower, lose a tier or leave the Hall on 2 (1501 moved up)
+  FAIL marks: at or over from: pooled 9.98 percent, 0 cells out of band []; at or over to: pooled 7.72 percent
+  FAIL halfrule: 31 cells off the half rule, the ledger's marks or the ramp floor [QB passYds off the ledger's marks; QB passYds ramp under the floor; QB passTd off the ledger's marks; QB passTd ramp under the floor]
+  ok   standoutgain: top 5 percent by family: 70 -> 118 of 130 in the Hall, a gain of 36.9 points (needs 15.1); owed to the standout alone 13.0 points (needs 5.5)
+  ok   standoutcap: 0 careers off the restated score on 2 (one family, capped); the standout paid on 620
+  ok   base: 0 base misses []
+  ok   words: 0 misses in the rule, the example or the card []; 0 card lines off
+  ok   anchorshape: 0 misses in the ledger's shape []; 10 anchors in the file, sports built [mlb]
+  ok   anchors: NOT BUILT for this sport: nothing asserted
+  ok   anchorcalls: 0 anchor readings whose majority call is not the one firstBallotChance gives []
+  FAIL hallshare: Hall share 21.1 -> 41.8 percent (ceiling 28.5)
+simCareerHall nfl CONTROL todrift: wanted marks red, red [marks,halfrule,hallshare], FIRED

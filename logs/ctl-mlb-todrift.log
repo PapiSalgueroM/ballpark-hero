@@ -1,0 +1,67 @@
+simCareerHall mlb: 2000 careers, 0 crashed, seed base, CONTROL todrift
+  hof 63.6% (1271), first ballot 80.9% of them; bottom third 55.6%, top third 100%
+  outcomes {"inducted":1271,"fellOff":552,"notOnBallot":177}; jerseys 1405; talk reached 99.9% of careers
+  ladder 0.347 0.412 0.482 0.549 0.611 0.699 0.743 0.827 0.892 0.969; smallest step 0.044
+  deciles 0.42 0.57 0.63 0.75 0.81 0.91 1.00 1.00 1.00 1.00; cuts 0.43 0.39 0.38 0.36 0.34 0.32 0.27 0.24 0.21; smallest cut 0.213
+  misses: iff 0, outcome 0, table [], offset 0, promise 0/983, draws 0, notSame 0, sides 0, talk 0+0, jersey 0
+  under ten seasons played: 0 inducted, 0 on the ballot outside the Hall
+  talk timing: talks a career, median 1; first talk at 38; career ends at 39; non finite scores 0
+  board loop: 0 careers a policy, 0 crashed; talks answered one more year 0; identity misses 0
+  ends: retire now 0, talk farewells 0, deck farewells 0, misses 0
+  once: 0 offseasons with the talk (0 asked mid-summer, 0 after a banned year), 0 offered a retirement card; listed ids seen 0, unseen [mlbB_retireHealthy,mlbB_farewellTour], farewell cards not listed [] (decks probed on 0 careers)
+  seek: 0 talks caught in the board loop, 0 forged summers on a deck retirement card, 0 landed on it with no hold-out (at card 1 0, at a later card 0), 0 with the board's
+  jersey (deck): 0 recorded, 0 at a club other than the one with most seasons, 0 misnamed; synthetic 0, 0 missed; wait answers 0, 0 wrote a club
+  era: verified from the Class of 2014; {"boundary":{"below":100,"above":100}}; misses 0
+  16 never below: table misses []; 0 of 2000 careers lower on 2; 1006 moved up, 863 up a verdict tier, 544 newly in the Hall
+  19 (b) Hall share 36.4 -> 63.5 percent; legacy score median 425 -> 681, mean 499.9 -> 690.2 (points paid)
+     by position: SP 35.7 -> 39.0, RP 21.4 -> 21.4, C 27.5 -> 28.6, 1B 43.4 -> 100.0, 2B 33.0 -> 33.0, 3B 36.8 -> 98.9, SS 36.3 -> 98.9, LF 42.3 -> 98.9, CF 30.8 -> 35.2, RF 44.8 -> 45.3, DH 48.1 -> 100.0
+  17 (a) marks: 22 standout cells; at or over from, pooled 9.60 percent (band 8.59 to 12.64), cells out of 2.0 to 20.1: []; at or over to, pooled 7.98 percent (band 0.49 to 1.64)
+  17 (b) half rule and ledger: 44 misses [SP wins off the ledger's marks; SP wins ramp under the floor; SP so off the ledger's marks; SP so ramp under the floor; C hr off the ledger's marks; C hr ramp under the floor]
+     ramps (width in seasons at the from mark's own rate, to over the median): SP wins 0.2s x1.17, SP so 0.0s x1.17, C hr 1.4s x1.36, C rbi 0.7s x1.26, 1B hr 0.8s x1.28, 1B rbi -0.2s x1.18 floor, 2B rbi 0.3s x1.22, 3B hr 0.3s x1.25, 3B rbi -0.1s x1.19, SS hr 0.5s x1.27, SS rbi -0.1s x1.18, SS sb 0.6s x7.56, LF hr 0.6s x1.25, LF rbi -0.1s x1.17 floor, LF sb 0.5s x7.53 top 150, CF hr 0.8s x1.30, CF rbi 0.1s x1.21, CF sb 1.3s x7.83, RF hr 0.3s x1.25, RF rbi 0.0s x1.18, DH hr 0.1s x1.20, DH rbi -0.2s x1.12 floor
+  17 (c) outcome: top 5 percent by family, Hall share on 1 > on 2: SP wins 90>100, SP so 90>100, C hr 90>100, C rbi 80>100, 1B hr 100>100, 1B rbi 100>100, 2B rbi 100>100, 3B hr 100>100, 3B rbi 90>100, SS hr 100>100, SS rbi 80>90, SS sb 50>100, LF hr 90>100, LF rbi 90>90, LF sb 50>100, CF hr 90>100, CF rbi 90>100, CF sb 60>100, RF hr 100>100, RF rbi 100>100, DH hr 100>100, DH rbi 100>100
+     pooled over the cells under 90 percent on 1: 32 -> 49 of 50 careers, a gain of 34.0 points (needs 7.5); over the first ballot line (900) on 2 and not on 1: 317 careers (0 of them newly in the Hall)
+     the standout's own part, every cell: 194 in with the standout taken out, 218 with it, of 220, a gain of 10.9 points (needs 1.8)
+  17 (d) cap: 0 of 2000 careers off the restated score on 2; the standout paid on 1006
+  19 (a) base: median base credit RP dropped by the anchors; misses []
+  19 (c) words: example CF sb 117 to 963: +300 on 2, +0 on 1; card lines off 0 of 4000 records (1006 name a standout); misses []
+  18 anchors: 10 ({"first":4,"later":3,"never":2} on the main ballot, 1 by a committee, printed apart); the majority call is first from a score of 615
+     mlb-saves-1 RP saves real first: raw 1506 first > 1506 first; books none > none (raw only: his position does not carry the family, or he is not off a list)
+     mlb-saves-2 RP saves real later: raw 652 first > 652 first; books none > none (raw only: his position does not carry the family, or he is not off a list)
+     mlb-saves-3 RP saves real never (committee later, outside the count): raw 652 first > 652 first; books none > none (raw only: his position does not carry the family, or he is not off a list)
+     mlb-saves-4 RP saves real never: raw 469 never > 469 never; books none > none (raw only: his position does not carry the family, or he is not off a list)
+     mlb-saves-5 RP saves real later: raw 634 first > 634 first; books none > none (raw only: his position does not carry the family, or he is not off a list)
+     mlb-sb-1 LF sb real first: raw 1408 first > 1798 first; books 1323 first > 1713 first
+     mlb-sb-2 LF sb real first: raw 813 first > 1203 first; books 798 first > 1188 first
+     mlb-sb-3 LF sb real later: raw 926 first > 1316 first; books 898 first > 1288 first
+     mlb-sb-4 LF sb real never: raw 270 never > 660 first; books 268 never > 658 first
+     mlb-sb-5 2B sb real first: raw 1594 first > 1594 first; books none > none (raw only: his position does not carry the family, or he is not off a list)
+     agreement, in or out and exact ballot, calibration 1 > 2: raw 9 > 8 and 6 > 5 of 9; books 4 > 3 and 3 > 2 of 4; decisions the anchors made: ["LF steals standout halved","RP saves standout dropped","RP base dropped"]
+  15 (c) calibration rule: 0 misses over 13 cases and 2000 careers; engine careers stamped 2000
+  20 board stamp: 0 board careers retired, 0 stamped 2, 0 scored on another calibration
+  15 v1: 26 recorded saves (base 8fe82a4d), 0 read differently today; 0 of 2000 engine careers off the Round 123 formula on calibration 1
+  ok   crashes: 0 crashed of 2000
+  ok   iff: 0 disagree with the engine's own legacyOf, 1271 inducted
+  ok   outcome: 0 careers outside the Hall with the wrong outcome; 177 off the ballot, 552 on it, 172 early fall offs (needs 10 percent of those on it)
+  ok   table: rules off the audit table: [], 0 careers on the wrong first class
+  ok   rises: smallest of the nine decile cuts 0.213 (needs 0.06), smallest ladder step 0.044 (needs over 0.015)
+  ok   promise: 0 of 983 promised first ballots missed
+  ok   keyed: 0 Math.random draws, 0 records that changed on a second run
+  ok   sides: 0 ballots on the wrong side of a rule, 379 synthetic ballots shown at exactly the floor
+  ok   talk: 0 talks off the rule, 0 before the age, reached 99.9 percent (needs 70)
+  ok   answers: 0 answers that did not do what the button says; answered {"retireNow":495,"oneMore":503,"farewell":495}
+  ok   jersey: 0 jerseys off the rule or misnamed, 0 named by a bare club id, 1405 retired
+  ok   v1replay: 0 readings of 26 recorded saves differ from the version 1 recording
+  ok   v1formula: 0 of 2000 engine careers score off the Round 123 formula on calibration 1
+  ok   calrule: 0 readings off the calibration rule; 2000 of 2000 engine careers stamped
+  ok   neverbelow: calibration 2 drops or changes [] of calibration 1; 0 of 2000 careers score lower, lose a tier or leave the Hall on 2 (1006 moved up)
+  FAIL marks: at or over from: pooled 9.60 percent, 0 cells out of band []; at or over to: pooled 7.98 percent
+  FAIL halfrule: 44 cells off the half rule, the ledger's marks or the ramp floor [SP wins off the ledger's marks; SP wins ramp under the floor; SP so off the ledger's marks; SP so ramp under the floor]
+  ok   standoutgain: top 5 percent by family: 32 -> 49 of 50 in the Hall, a gain of 34.0 points (needs 7.5); owed to the standout alone 10.9 points (needs 1.8)
+  ok   standoutcap: 0 careers off the restated score on 2 (one family, capped); the standout paid on 1006
+  ok   base: 0 base misses []
+  ok   words: 0 misses in the rule, the example or the card []; 0 card lines off
+  ok   anchorshape: 0 misses in the ledger's shape []; 10 anchors in the file, sports built [mlb]
+  FAIL anchors: agreement on 2 against 1: raw in or out 9 > 8, exact 6 > 5; books in or out 4 > 3, exact 3 > 2 (must not fall, and must stay within two of the measured {"raw2":{"inOut":9,"exact":6,"n":9},"books2":{"inOut":4,"exact":3,"n":4}})
+  ok   anchorcalls: 0 anchor readings whose majority call is not the one firstBallotChance gives []
+  FAIL hallshare: Hall share 36.4 -> 63.5 percent (ceiling 45.0)
+simCareerHall mlb CONTROL todrift: wanted marks red, red [marks,halfrule,anchors,hallshare], FIRED
