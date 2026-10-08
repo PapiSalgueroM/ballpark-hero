@@ -1,0 +1,7 @@
+#!serial
+# Round 1104 review (runner lens): mutations B, the bank
+mut-loadshield: bash .rc/x/rv-mutrun.sh loadshield bank banking vround
+mut-rivalraw: bash .rc/x/rv-mutrun.sh rivalraw bank vround digest
+mut-inboxraw: bash .rc/x/rv-mutrun.sh inboxraw bank vround digest
+mut-progressraw: bash .rc/x/rv-mutrun.sh progressraw bank vround digest
+mut-nosalt: bash .rc/x/rv-mutrun.sh nosalt bank banking vround
