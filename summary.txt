@@ -1,0 +1,18 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+tsc exit=0 55s | 
+digest exit=0 35s |    Duration  34.63s (transform 893ms, setup 54ms, collect 1.11s, tests 32.76s, environment 309ms, prepare 162ms)
+vitest-round exit=0 6s |    Duration  4.68s (transform 1.34s, setup 278ms, collect 3.76s, tests 2.17s, environment 1.70s, prepare 833ms)
+vitest-season exit=1 10s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/seasonCentreWords.test.tsx,title=src/test/seasonCentreWords.test.tsx > Season Centre%3A soccer markup%
+bank-refill exit=0 24s | simUsCareerBank control refill: green. The expected checks went red (1b:mlb, 1b:nba, 1b:nfl, 1b:nhl, 3:mlb, 3:nba, 3:nfl, 3:nhl) and nothing else did, so this harness wor
+bank exit=0 23s | simUsCareerBank: green. No call leaves a bank below zero in any of the four careers, savings pay a bill before anything is written off, and a reload never adds money.
+truth exit=0 9s | simNflTruth: green. Seasons are their real length, awards survive a 16 game schedule, rookies are paid their slot, kickers go in round four or later, sacks come in halves
+boardparity exit=1 37s | simUsBoardParity: 3 failures
+board-record exit=0 36s |    Duration  35.81s (transform 1.45s, setup 51ms, collect 1.99s, tests 32.85s, environment 308ms, prepare 166ms)
+walk exit=1 237s | playNflTruth: 1 failure
+usweight exit=0 0s | simUsCareerWeight: green. 31 checks: the four wrappers hand the board their own binding, no shared file or binding imports another sport, and every control fired.
+seasonmoments exit=0 11s | simSeasonMoments: 54 checks, 0 failed
+usseasoncentre exit=0 15s | simUsSeasonCentre: 42 checks, 0 failed
+norival exit=0 13s | No rival product names found. 0 findings.
+anchors exit=0 36s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+walk-seventeen exit=1 312s | playNflTruth control seventeen: 4/4 guarded checks fired, 0 missed, 2 unrelated failure(s)
+numfmt exit=0 129s | Number formatting: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/number-formatting-artifacts/outcomes

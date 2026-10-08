@@ -1,0 +1,17 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ ✓ src/test/usBoardFixture.test.tsx (4 tests) 32852ms
+   ✓ the four US career boards against the recorded fixture > nfl  9010ms
+   ✓ the four US career boards against the recorded fixture > nba  8663ms
+   ✓ the four US career boards against the recorded fixture > mlb  7757ms
+   ✓ the four US career boards against the recorded fixture > nhl  7403ms
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  05:39:06
+   Duration  35.81s (transform 1.45s, setup 51ms, collect 1.99s, tests 32.85s, environment 308ms, prepare 166ms)
+

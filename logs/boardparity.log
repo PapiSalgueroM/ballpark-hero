@@ -1,0 +1,25 @@
+A) the fixture is whole
+   recorded from 198e730d8f034c91c7bb8ee58ecc44e20622a25b (not main: src differs from 5b70b05f6df7b15f64b8c5ddf1f4b7d0c7cd4c7f)
+   nfl: 451 clicks, 24 seasons, 15 fixed saves, 685 screen steps
+   nba: 523 clicks, 24 seasons, 15 fixed saves, 705 screen steps
+   mlb: 449 clicks, 24 seasons, 15 fixed saves, 688 screen steps
+   nhl: 415 clicks, 24 seasons, 15 fixed saves, 688 screen steps
+B) the replay: every click, every save, every screen
+   Vitest exit 1, passed [mlb], failed [nfl, nba, nhl]
+   nfl click path step 9 (after "create: Enter the draft"): the save differs first in c.salary; the screen reads "Ryder Blaze · WRNew York Jets2026 · age 22OVR 71$3.1M x4🪑 BackupDraft dayWith pick 39, the New York Jets select Ryder BlazeLate pick. Every", fixture "Ryder Blaze · WRNew York Jets2026 · age 22OVR 71$1.2M x4🪑 BackupDraft dayWith pick 39, the New York Jets select Ryder BlazeLate pick. Ev
+   nfl click path step 10 (after "hub: Play the 2026 season"): the save differs first in c.seasons, c.earnings, c.netWorth
+   nfl click path step 11 (after "curtain: Continue"): the save differs
+   nba save "dirty" step 42 (after "rival outcome: Continue"): the markup differs under the same words ("Trey Buckets · SGMilwaukee Bucks2033 · age 28OVR 82$24.3M x2")
+   nba save "negNet" step 40 (after "curtain: Continue"): the screen reads "Trey Buckets · SGMilwaukee Bucks2034 · age 29OVR 84$24.3M x1⭐ Starting fiveYour old running mate switched sidesHe signed with a team you see", fixture "Trey Buckets · SGMilwaukee Bucks2034 · age 29OVR 84$24.3M x1⭐ Starting fiveThe coach who benched you got a new jobFourth quarter of a playof"
+   nba save "negNet" step 41 (after "event: Drop 40 on him in NovemberScoreboard rebuttal"): pressed "event: Full ice, no hugs, no shootaround chatCold and focused", fixture pressed "event: Drop 40 on him in NovemberScoreboard rebuttal"; the save differs first in c.morale, c.fanbase, c.lifeFlags, teamQuality, c.ovr; the screen reads "Trey Buckets · SGMilwaukee Bucks2034 · age 29OVR 85$24.3M x1⭐ Start
+   nhl save "rookie" step 39 (after "rival choice: 🤝 Co-host and split the billFanbase +10, Net worth -$1M, Ka"): the save differs first in c.netWorth
+   nhl save "rookie" step 40 (after "rival outcome: Continue"): the save differs; the markup differs under the same words ("Gordie Blaze · DCarolina Hurricanes2027 · age 20OVR 72$0.9M ")
+   nhl save "rookie" step 41 (after "event: Let the agent make noiseSqueaky wheel"): the save differs; the markup differs under the same words ("Gordie Blaze · DCarolina Hurricanes2027 · age 20OVR 73$0.9M ")
+  FAIL: the replay exited 1
+  FAIL: the replay passed [mlb], not all four sports
+  FAIL: 22 steps differ from the fixture
+
+  If your round meant to change what a US career does, re-record from your tree
+  (node scripts/recordUsBoardFixture.mjs), commit the fixture with the change and say so in the
+  commit. If it did not, the red is a real change: read the first differing step above.
+simUsBoardParity: 3 failures
