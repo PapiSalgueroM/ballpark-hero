@@ -12,30 +12,33 @@
  *       award field was measured on 17 game seasons, so the engine scores a
  *       season on a full schedule pace. Over five seeds of 2,000 careers a
  *       position, against the 17 game arm of the same bundle:
- *         All-Pros a career within 10 percent of the 17 game arm's;
+ *         All-Pros a career within 25 percent of the 17 game arm's;
  *         MVP or DPOY a career within 0.008 of it;
  *         the Hall of Fame rate at least 0.75 of it.
- *       MEASURED 2026-10-08 on GitHub runners (request r1104-fc), three seed
- *       sets (SIM_SEED 1, 6, 11), so 24 position cells of 10,000 careers an
- *       arm, 17 game arm -> now:
- *         All-Pros a career: every cell within 2.8 percent. Seed 1: QB 0.079
- *           -> 0.080, RB 0.091 -> 0.090, WR 0.140 -> 0.140, TE 0.080 -> 0.082,
- *           LB 0.084 -> 0.082, CB 0.090 -> 0.091, EDGE 0.209 -> 0.206, K 0.241
- *           -> 0.238. The widest: WR on seed 11, 0.141 -> 0.145. With the pace
- *           off (control nopace, seed 1): QB 0.024, RB 0.036, WR 0.049, TE
- *           0.026, LB 0.021, CB 0.028, EDGE 0.084, K 0.086, so 60 to 75 percent
- *           under. The band sits at 10: over three times the widest healthy
- *           cell, a sixth of the smallest drop.
- *         MVP or DPOY a career: every cell within 0.003 (EDGE on seed 1, 0.060
- *           -> 0.057). nopace: QB 0.019 -> 0.004, LB 0.014 -> 0.001, EDGE
- *           0.060 -> 0.016. The band sits at 0.008.
+ *       MEASURED 2026-10-08 on GitHub runners (requests r1104-fc and
+ *       r1104-fd), five seed sets (SIM_SEED 1, 6, 11, 16, 21), so 40 position
+ *       cells of 10,000 careers an arm, 17 game arm -> now:
+ *         All-Pros a career: 39 of the 40 cells within 3.0 percent, and one
+ *           at 8.5 under (CB on seed 21, about 0.090 -> 0.082). Seed 1: QB
+ *           0.079 -> 0.080, RB 0.091 -> 0.090, WR 0.140 -> 0.140, TE 0.080 ->
+ *           0.082, LB 0.084 -> 0.082, CB 0.090 -> 0.091, EDGE 0.209 -> 0.206,
+ *           K 0.241 -> 0.238. With the pace off (control nopace, seed 1): QB
+ *           0.024, RB 0.036, WR 0.049, TE 0.026, LB 0.021, CB 0.028, EDGE
+ *           0.084, K 0.086, so 60 to 75 percent under. The band sits at 25,
+ *           in the middle of that gap: three times the widest healthy cell,
+ *           well under half of the smallest drop. (It was first set at 10,
+ *           from three seed sets whose widest cell read 2.8; the fourth and
+ *           fifth sets put one cell at 8.5, too near a line at 10.)
+ *         MVP or DPOY a career: every one of the 40 cells within 0.003 (EDGE
+ *           on seed 1, 0.060 -> 0.057). nopace: QB 0.019 -> 0.004, LB 0.014 ->
+ *           0.001, EDGE 0.060 -> 0.016. The band sits at 0.008.
  *         Hall percent: LOWER in every position on every seed set, and that
  *           is real, not noise: a throwback career's totals are a seventeenth
  *           short for sixteen years and the ballot reads totals. QB 27.0 ->
  *           23.8, 26.5 -> 22.9, 26.0 -> 22.7. Seed 1: RB 2.2 -> 1.9, WR 7.0 ->
  *           6.5, TE 5.7 -> 5.5, LB 6.3 -> 5.6, CB 4.7 -> 4.2, EDGE 12.2 -> 11.6,
- *           K 5.5 -> 4.7. The lowest ratio of the 24 cells is 0.855 (K, seed
- *           1). So this line is a FLOOR that catches a collapse, never "no
+ *           K 5.5 -> 4.7. The lowest ratio of the 40 cells is 0.842 (CB, seed
+ *           21; then K 0.850 on seed 16). So this line is a FLOOR that catches a collapse, never "no
  *           difference": nopace reads QB 0.80 of the 17 game arm (caught by
  *           his awards), RB 0.32, WR 0.53, TE 0.67, LB 0.48, CB 0.47, EDGE
  *           0.54, K 0.33. The drop itself is printed in section 5 for Round
@@ -251,7 +254,7 @@ const awardsOf = (arm, pos, seed) => {
    a seed shows on every seed set. So a band no longer comes from the run's own noise. Each is a fixed number
    with the measured room on both sides of it written down, and fewer careers make a run noisier, never
    easier. The Hall line is a FLOOR and not "no difference", because the difference is real (see the header). */
-const BAND = { allPro: 0.10, big: 0.008, hallFloor: 0.75 };
+const BAND = { allPro: 0.25, big: 0.008, hallFloor: 0.75 };
 const measured1b = {};
 for (const pos of POSITIONS) {
   const seeds = [0, 1, 2, 3, 4].map(k => SEED + k);
