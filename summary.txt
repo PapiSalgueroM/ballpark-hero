@@ -1,0 +1,4 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+lockwalk exit=0 50s | walk-boxing-lock done: reproduced true, notes 0
+weight-head exit=0 23s | WEIGHT head /stadium-tycoon bytes=298456 kb=291 files=23 second=298456 pageChunk=20760
+weight-no1083 exit=0 56s | WEIGHT no1083 /stadium-tycoon bytes=297064 kb=290 files=23 second=297064 pageChunk=19408

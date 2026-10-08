@@ -1,0 +1,105 @@
+{
+ "label": "head",
+ "routes": {
+  "/stadium-tycoon": {
+   "bytes": 298456,
+   "kb": 291,
+   "files": 23,
+   "secondRunBytes": 298456,
+   "chunks": [
+    {
+     "name": "index",
+     "gz": 234715
+    },
+    {
+     "name": "StadiumTycoon",
+     "gz": 20760
+    },
+    {
+     "name": "stadiumTycoon",
+     "gz": 10255
+    },
+    {
+     "name": "useTycoonRewards",
+     "gz": 7634
+    },
+    {
+     "name": "intlNames",
+     "gz": 6113
+    },
+    {
+     "name": "stadiumManagement",
+     "gz": 5384
+    },
+    {
+     "name": "GameNavbar",
+     "gz": 3794
+    },
+    {
+     "name": "GameSeoContent",
+     "gz": 2285
+    },
+    {
+     "name": "guideShape",
+     "gz": 1688
+    },
+    {
+     "name": "LeagueTableCard",
+     "gz": 1015
+    },
+    {
+     "name": "Celebration",
+     "gz": 820
+    },
+    {
+     "name": "CelebrationStyles",
+     "gz": 725
+    },
+    {
+     "name": "seoMetaPart16",
+     "gz": 445
+    },
+    {
+     "name": "leagueCore",
+     "gz": 429
+    },
+    {
+     "name": "star",
+     "gz": 402
+    },
+    {
+     "name": "medal",
+     "gz": 388
+    },
+    {
+     "name": "entityIds",
+     "gz": 335
+    },
+    {
+     "name": "circle-help",
+     "gz": 303
+    },
+    {
+     "name": "arrow-left",
+     "gz": 265
+    },
+    {
+     "name": "useOwnedTimeouts",
+     "gz": 215
+    },
+    {
+     "name": "soccerBootIds",
+     "gz": 200
+    },
+    {
+     "name": "formatNumber",
+     "gz": 154
+    },
+    {
+     "name": "dialogA11y",
+     "gz": 132
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,8 @@
+restored from e55a20c4cb5b76fd168dd34cda3f27bea05c1a7a:
+M  src/hooks/useStadiumTycoon.ts
+M  src/pages/StadiumTycoon.tsx
+0
+  FAIL: /footle: 340K of gzipped JavaScript against a budget of 339K
+   /stadium-tycoon     290K gz over  23 files (budget 290K)
+sweepWeight: 1 failure
+WEIGHT no1083 /stadium-tycoon bytes=297064 kb=290 files=23 second=297064 pageChunk=19408
