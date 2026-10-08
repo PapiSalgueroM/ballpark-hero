@@ -1,3 +1,54 @@
+## Latest season review preparation, October 8, 2026
+
+Preparation3 follows completed run37728802183 at1c72c22d. Types/build,
+readers20 and closing holds passed. Native stayed red at the strict style
+attribute restoration: original null, restored empty. Original11/12 passed;
+Rooms remained red because the copied control's exact value-import anchor
+was changed by a type import. No control assertion is waived.
+The value import is now preserved and LastSeason uses a separate type import.
+Worker inverse still reconstructs accepted23a exactly. Clipping is injected
+with one style-attribute write instead of three CSSStyleDeclaration writes;
+exact style, full HTML, geometry and gameplay restoration assertions remain.
+Page2cc2f34e/worker99c34aec are independently bound by peers4f974e75,
+d95999fa andc3f15105. Wrapper/workflow and gameplay behavior are unchanged.
+Early11529610787/full11529259754 are retained. The CSSOM mechanism is not
+established, and this next candidate requires actual remote acceptance.
+
+Preparation2 changes only clipping-control cleanup after completed run37726167854.
+First run104313e7 passed real types/build, readers20 and closing source holds.
+Native failed at320-stress cleanup: complete geometry/state restored, but pane
+HTML gained exactly one empty style attribute. One natural parent pair completed;
+the remaining profiles and controls were not credited. Original12 remain red.
+Early artifact11527958072 and full11529425088 are retained. No runtime was cancelled.
+Root's one-anchor worker proposal25b20000 reverses exactly to3352fcfb; independent
+peer08e62615 confirms the full equality check stays intact. Scroll offsets restore
+before the exact absent/present style, whose capture and restored value are retained.
+Precise old mutation mechanism and the correction's effectiveness remain unproven
+until the next remote run. Product, wrapper and workflow are unchanged.
+
+1095 is a scoped page change on accepted sale parent23a540a8, not a release.
+Manual Latest season replaces the stacked previous table. Each open captures the
+actual current-visit result label/position/table; subsequent results cannot replace
+that open snapshot. Back/Close/Escape restore focus, matches keep running, and all
+new count fields use explicit en-US grouping. No permanent archive is promised.
+Parent has no shared formatNumber module, so grouping stays numeric-only and local.
+Page rawaf6576c9/LF5470794c, five unique edits reverse to parentblob5eab62a3.
+Independent product peer40c557cb/root9805ba20 holds engine/hook/sale/pitch/dialog.
+No inferred year, division, promotion, bonus or earned stress statistics are added.
+
+Remote proof is authored: four paired natural/staged-count journeys at320/1280,
+real hook season finishes and continued matching clocks, stable open and fresh reopen,
+eight mapped source faults/two restored clipping faults, separate import/clock controls.
+Staged equal GF/GA additions above1000 are explicit serializer-valid display stress,
+not normally earned totals. Result-family and full-campaign breadth remain unclaimed.
+New workflow captures exact source/dist/clock implementation/manifests/raw reports,
+proper application types/build, original12 and all20 readers with strict verdicts.
+Final independent static peers bind page af6576c9, worker3352fcfb, wrapperfa3c1f60
+and workflowed9c3048. Their source and output contract is clear. All runtime,
+native layout and effective-control proof remains pending the first remote run.
+Root owns this attached tree; E owns release integration/save-engine contracts and
+publication. No held1092/1094 source is integrated and protected root stays untouched.
+
 ## Codex1083 PREPARATION7, October7: drain deferred close focus
 
 Preparation6 HEADf5a919eba4e25bae80b841eb0c2d5a33bd2c7904,
