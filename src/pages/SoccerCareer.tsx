@@ -112,6 +112,7 @@ import { beatStyle, debutMomentKey, legacyMomentKey, rivalryMomentKey, settleLoa
 import { isSoccerCareerSave } from '@/lib/soccerCareerSave';
 import { reloadToRetryChunk } from '@/lib/freshBuild';
 import { readSeasonMoments } from '@/lib/season/momentsSave';
+import { readResume, resumeLabel, resumeRowIndex, type SeasonResume } from '@/lib/season/resume';
 /* Round 1045: the Season Centre loads only when a person presses for it, and
    the Ratings dialog when it is opened (step 7 of the round: the weight it
    adds is paid here, never by a budget). */
@@ -3800,7 +3801,10 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   const [centreFor, setCentreFor] = useState<number | null>(null);
   const [watchRow, setWatchRow] = useState<SeasonRecord | null>(null);
   const onWeekByWeek = () => { const at = career.seasons.length; onNextSeason(); setCentreFor(at); };
-  const closeCentre = () => { setCentreFor(null); setWatchRow(null); };
+  /* Round 1046: where he stopped watching a season (this browser only, never the save), for the Resume chip */
+  const [resume, setResume] = useState<SeasonResume | null>(null);
+  useEffect(() => { setResume(readResume("soccer")); }, []);
+  const closeCentre = () => { setCentreFor(null); setWatchRow(null); setResume(readResume("soccer")); };
   useEffect(() => {
     /* a press that opened nothing (a ban year) is forgotten at the next
        season start, and a new career never inherits it */
@@ -4566,6 +4570,11 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
                 className="text-[11px] font-bold text-sky-400 px-2 py-1 rounded hover:bg-white/5">📖 Career Story</button>
             </div>
           </div>
+          {(() => {
+            /* the season the record belongs to, by the Season Centre's own key for it */
+            const row = career.seasons[resumeRowIndex(resume, career.seasons, r => `${career.playerName}|${r.club}|${r.year}|${r.apps}|${r.goals}|${r.assists}|${r.rating}|centre`, career.phone?.world?.year)];
+            return row && resume && <button type="button" onClick={() => setWatchRow(row)} data-season-resume className="mt-2 h-11 w-full rounded-lg border border-border text-xs font-bold">📺 {resumeLabel(resume, `${row.year}/${String(row.year + 1).slice(-2)}`, "matchday")}</button>;
+          })()}
           <div className="mt-2 space-y-1">
             {career.events.slice(-3).map((e, i) => (
               <div key={i} className="text-xs text-foreground/80 flex items-start gap-2">
@@ -4579,15 +4588,16 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
       {ratingsOpen && <CentreMountBoundary what="season ratings" onClose={() => setRatingsOpen(false)}><Suspense fallback={null}><SeasonRatings career={career} onClose={() => setRatingsOpen(false)} /></Suspense></CentreMountBoundary>}
       {(() => {
         const pressed = centreFor !== null && career.seasons.length === centreFor + 1 ? career.seasons[centreFor] : null;
-        const live = pressed && pressed.type === "playing" && pressed.apps > 0
-          && (career.phase === "newspaper" || career.phase === "season_summary" || career.phase === "rehab_choice") ? pressed : null;
+        /* Round 1046: moments are offered only while the season's own screens are up; a way back in later is a way to watch */
+        const offer = career.phase === "newspaper" || career.phase === "season_summary" || career.phase === "rehab_choice";
+        const live = pressed && pressed.type === "playing" && pressed.apps > 0 && offer ? pressed : null;
         const row = watchRow ?? live;
         if (!row) return null;
         return (
           <div data-no-prerender>
             <CentreMountBoundary onClose={closeCentre}>
               <Suspense fallback={<div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80" data-season-centre-loading><div className="rounded-2xl border border-border bg-card px-5 py-4 text-sm">📺 Getting your season ready...</div></div>}>
-                <SoccerSeasonCentre career={career} clubs={clubs} row={row} mode={watchRow ? "watch" : "live"} onClose={closeCentre} onCareer={onCareerPatch} />
+                <SoccerSeasonCentre career={career} clubs={clubs} row={row} mode={watchRow ? "watch" : "live"} onClose={closeCentre} onCareer={onCareerPatch} offer={offer} />
               </Suspense>
             </CentreMountBoundary>
           </div>

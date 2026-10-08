@@ -45,6 +45,9 @@ export interface SoccerSeasonCentreProps {
   onClose: () => void;
   /** Round 1047: how a moment writes to the save (the ledger, then the bank). Absent: no moments. */
   onCareer?: (fn: (prev: CareerState) => CareerState) => void;
+  /** Round 1046: false when the season's own screens are gone (opened later from the career page): the season is
+   *  shown with whatever he did in its moments, and none is offered. Absent: as before. */
+  offer?: boolean;
 }
 
 const HELP: HelpWords = {
@@ -192,7 +195,7 @@ export function Tile({ text, exitLabel, onClose, onRetry }: { text: string; exit
   );
 }
 
-function CentreBody({ career, clubs, row, mode, onClose, onCareer }: SoccerSeasonCentreProps) {
+function CentreBody({ career, clubs, row, mode, onClose, onCareer, offer }: SoccerSeasonCentreProps) {
   const exitLabel = exitLabelOf(mode, career.phase);
   /* the season's facts come from fields a moment never writes, so the plan is
      derived once for the row and not again on every ledger entry */
@@ -202,12 +205,14 @@ function CentreBody({ career, clubs, row, mode, onClose, onCareer }: SoccerSeaso
   const plan = useMemo(() => (key ? deriveSeason(SOCCER, row, ctx) : null), [key, row, ctx]);
   /* moments are the latest season's only: its key is the one the ledger and the bank answer to */
   const latest = career.seasons[career.seasons.length - 1];
-  const canPlay = !!onCareer && !!plan && !!key && !!latest && soccerSeasonKey(career.playerName, latest) === key;
-  const offered = useMemo(() => (canPlay && plan ? planMoments(SOCCER, row, ctx, plan) : []), [canPlay, plan, row, ctx]);
+  const canPlay = offer !== false && !!onCareer && !!plan && !!key && !!latest && soccerSeasonKey(career.playerName, latest) === key;
   const ledger = readSeasonMoments(career.seasonMoments);
+  /* Round 1046: the season the ledger belongs to is always shown with what he did in it, offered or not */
+  const held = !!plan && !!key && ledger?.key === key;
+  const offered = useMemo(() => ((canPlay || held) && plan ? planMoments(SOCCER, row, ctx, plan) : []), [canPlay, held, plan, row, ctx]);
   const entriesKey = JSON.stringify(ledgerOf(ledger, key ?? ''));
   const season = useMemo(() => (plan && offered.length ? applyDecisions(SOCCER, row, ctx, plan, offered, JSON.parse(entriesKey) as number[][]) : plan), [plan, offered, entriesKey, row, ctx]);
-  const moments = useSoccerMoments({ career, row, ctx, plan, key, offered, entriesKey, banked: !!ledger?.banked && ledger.key === key, onCareer });
+  const moments = useSoccerMoments({ career, row, ctx, plan, key, offered, entriesKey, banked: !!ledger?.banked && ledger.key === key, onCareer: canPlay ? onCareer : undefined });
   const model = useMemo(() => (season ? buildModel(row, ctx, season, moments) : null), [season, row, ctx, moments]);
   /* Round 1046: his place in this season. Read once when the season opens; a
      table season he did not win replays the same only while the save still

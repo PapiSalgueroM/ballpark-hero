@@ -24,7 +24,10 @@
  *     own: soccerSeasonKey) finds exactly that row, no two rows of one
  *     career share a key, and the same record finds NOTHING in any other
  *     career that played that year; a record that is not stable finds its
- *     row only while the save's league year is that row's year.
+ *     row only while the save's league year is that row's year. And the
+ *     key the career page builds for its Resume chip (one template line,
+ *     read out of the page's source and run) is soccerSeasonKey's on every
+ *     played row.
  *  3. SOURCE FENCES, comments and strings stripped (a guard reads code, never
  *     prose): src/lib/motion/* and src/lib/season/resume.ts import nothing; src/components/motion/*
  *     imports only react and src/lib/motion; neither folder has "season" or
@@ -38,6 +41,7 @@
  * unless its single line needle is there exactly once (CRLF normalised):
  *   shift      rankShift hands back from and to swapped            -> 1 red
  *   resumetag  the record's key is no longer compared              -> 2 red
+ *   pagekey    the career page's key template loses one field      -> 2 red
  *   fence      a Math.random() call added in RankShiftTable's code -> 3 red
  *
  * Measured 2026-10-08 (the probe is seeded, so these repeat): 356 table
@@ -64,7 +68,8 @@ const BUNDLE_CONTROLS = {
   shift: [{ file: 'src/lib/motion/rankShift.ts', from: SHIFT_NEEDLE, to: '  return after.map((club, to) => ({ club, from: to, to: was.get(club) ?? -1 }));' }],
   resumetag: [{ file: 'src/lib/season/resume.ts', from: RESUME_NEEDLE, to: "  return rows.findIndex(row => row.year === r.year && row.type === 'playing' && row.apps > 0 && (r.stable || liveYear === row.year));" }],
 };
-if (CONTROL && !['shift', 'resumetag', 'fence'].includes(CONTROL)) throw new Error(`unknown SEASON_MOTION_SIM_CONTROL ${CONTROL}`);
+const PAGEKEY_NEEDLE = '|${r.assists}';
+if (CONTROL && !['shift', 'resumetag', 'pagekey', 'fence'].includes(CONTROL)) throw new Error(`unknown SEASON_MOTION_SIM_CONTROL ${CONTROL}`);
 if (CONTROL) console.log(`CONTROL ${CONTROL}: applied to the bundled copy or the text the fence reads, never a file on disk`);
 
 const read = rel => fs.readFileSync(path.join(ROOT, rel), 'utf8').replace(/\r\n/g, '\n');
@@ -200,6 +205,19 @@ check(!fails.has('1 keys') && !fails.has('1 shift'), `1. every club's from and t
   check(own === rows && shared === 0, `2. every record finds its own row (${own} of ${rows}); rows of one career sharing a key: ${shared}`);
   check(foreign >= 5000 && foreignHit === 0, `2. a record finds nothing in another career (${foreignHit} of ${foreign} did; floor 5000 checks)`);
   check(heldBack === rows && heldBad === 0, `2. a record that is not stable is held to the league year of the save (${heldBad} of ${heldBack} were not)`);
+  /* the career page may not import the season code, so its Resume chip builds the season's key with one template
+     line of its own. Read that line out of the page and hold it to soccerSeasonKey on every played row. */
+  const pageLines = read('src/pages/SoccerCareer.tsx').split('\n').filter(l => l.includes('resumeRowIndex(resume, career.seasons, r => `'));
+  const tplMatch = pageLines.length === 1 ? /r => `([^`]+)`, career/.exec(pageLines[0]) : null;
+  check(!!tplMatch, `2. the career page holds its key template on one line (${pageLines.length} lines found)`);
+  if (tplMatch) {
+    let tpl = tplMatch[1];
+    if (CONTROL === 'pagekey') { once(tpl, PAGEKEY_NEEDLE, 'the page key template'); tpl = tpl.replace(PAGEKEY_NEEDLE, ''); }
+    const pageKey = new Function('career', 'r', `return \`${tpl}\`;`);
+    let drift = 0;
+    for (const A of list) for (const row of A.seasons) if (played(row) && pageKey({ playerName: A.name }, row) !== S.soccerSeasonKey(A.name, row)) { drift += 1; fail('2 pagekey', `${A.name} ${row.year}: the page says ${pageKey({ playerName: A.name }, row)}, the season says ${S.soccerSeasonKey(A.name, row)}`); }
+    check(drift === 0, `2. the page's key for a season is the Season Centre's own key on every played row (${drift} of ${rows} differ)`);
+  }
   for (const [item, f] of fails) if (item.startsWith('2 ')) console.log(`FAIL item ${item}: ${f.n} times, first: ${f.first.join(' | ')}`);
 }
 

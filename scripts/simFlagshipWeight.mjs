@@ -113,17 +113,31 @@ console.log(`   ${flagship.size} modules, ${(srcBytes / 1024).toFixed(0)} KB of 
    static import and must go red. One file of src/lib/season is allowed in
    the first download: momentsSave.ts, the save's own ledger reader, which
    the engine's repair line calls. It must import nothing, and that is
-   checked here with comments stripped. */
+   checked here with comments stripped.
+
+   Round 1046: the sliding table (src/lib/motion, src/components/motion) is
+   the Season Centre's and joined the lazy list. A second season file is
+   allowed in the first download: resume.ts, the record of where a viewer
+   stopped watching, which the page reads to draw its Resume chip. It must
+   import nothing either, and the check now runs over both files.
+   FLAGSHIP_LAZY_CONTROL=eagerimport hands that check a resume.ts with one
+   import line added (in memory) and must go red. */
 console.log('1b) the Season Centre and the training ground are not in the first download');
 const MUST_BE_LAZY = [
   'src/lib/season/', 'src/components/season-centre/', 'src/components/soccer-career/SoccerSeasonCentre.tsx', 'src/data/leagueFormat.ts',
   'src/components/soccer-career/TrainingPanel.tsx', 'src/components/soccer-career/DrillBoard.tsx', 'src/components/soccer-career/ThroughBallBoard.tsx',
   'src/components/soccer-career/FirstTouchBoard.tsx', 'src/components/soccer-career/SoccerMomentBoard.tsx', 'src/components/soccer-career/useSoccerMoments.tsx',
+  'src/lib/motion/', 'src/components/motion/',
 ];
-const MAY_BE_EAGER = ['src/lib/season/momentsSave.ts'];
-{
-  const ledger = readFileSync(path.join(ROOT, MAY_BE_EAGER[0]), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/[^\n]*/g, '');
-  if (/^\s*import\s/m.test(ledger) || /\bimport\(/.test(ledger) || /\brequire\(/.test(ledger)) fail(`${MAY_BE_EAGER[0]} imports something: it is the one season file in the first download and must import nothing`);
+const MAY_BE_EAGER = ['src/lib/season/momentsSave.ts', 'src/lib/season/resume.ts'];
+for (const rel of MAY_BE_EAGER) {
+  let text = readFileSync(path.join(ROOT, rel), 'utf8');
+  if (process.env.FLAGSHIP_LAZY_CONTROL === 'eagerimport' && rel === 'src/lib/season/resume.ts') {
+    text = `import { SOCCER } from './soccer';\n${text}`;
+    console.log('   CONTROL eagerimport: resume.ts read with one import line added');
+  }
+  const code = text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/[^\n]*/g, '');
+  if (/^\s*import\s/m.test(code) || /\bimport\(/.test(code) || /\brequire\(/.test(code)) fail(`${rel} imports something: it is a season file in the first download and must import nothing`);
 }
 let lazyClosure = flagship;
 if (process.env.FLAGSHIP_LAZY_CONTROL === 'static') {
