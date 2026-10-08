@@ -1,0 +1,80 @@
+rvMut m6: applied to src/data/dailyClubPool.json
+ledger 260 lines (244 founding, from origin/main), first move 2026-10-12; today 2026-10-08 ET
+1) Every day from 2026-09-01 to 2026-10-11 deals what main dealt, in both dailies
+   41 of 41 days deal main's club, league and seed in both dailies (the fixture to 2026-10-11)
+   ok  no day already dealt, and no day before the first new line, is re-dealt
+2) The ledger is what scripts/genDailyClubPool.mjs writes: nothing to append against the engine
+   engine 258 eligible clubs, 258 open ledger lines, 0 to append
+   node scripts/genDailyClubPool.mjs --check exited 0
+   ok  the ledger holds every eligible club and nothing else open
+3) Append only: real dates, every leave closes a join, nobody in twice, main's lines kept, every new line after today
+   founding lines: origin/main's ledger, 244, all kept in order; 16 new, 0 of them dated today or earlier
+   ok  every line is real and dated, the founding lines are untouched and every new line is in the future
+4) Before a club joins, no daily market or buyer names it; from its join date it is in the pool and dealt
+   200 daily windows from 2026-03-26 to 2026-10-11: 2091 candidates (0 windows short of a full brief), 600 buyers and 581 hourly rivals (in 189 windows, over 2400 hours), 0 from outside the day's pool (0 of them rivals)
+   16 clubs join on 2026-10-12: in the pool every day of the next 365 (0 club days missing); dealt by Manager Hot Seat on 25 days and Deadline Day on 22 (about 23 expected, floor 5); in 38 of the first 60 daily markets
+   11 clubs join on 2026-11-05: in the pool every day of the next 365 (0 club days missing); dealt by Manager Hot Seat on 17 days and Deadline Day on 15 (about 16 expected, floor 5)
+   7 clubs join on 2026-11-06: in the pool every day of the next 553 (0 club days missing); dealt by Manager Hot Seat on 13 days and Deadline Day on 12 (about 15 expected, floor 5)
+   ok  no club reaches a daily before its join date, and every join is dealt from it
+5) Every club the ledger deals from today on is a club the engine runs, in that league
+   259 ledger lines live today or later, 0 naming a club the engine does not run there
+   ok  the engine runs every club the ledger can still deal
+6) A leave line closes a club from its until day; a rejoin and a league move read right; the generator writes each once
+   10 checks on an in memory ledger of 258 founding lines plus leave, rejoin and move lines, 0 failed
+   ok  the leave line form reads and is written the way the ledger says
+7) A device clock before the ledger's first day still deals both dailies, from the founding pool
+   1970-01-01 and 1999-12-31 checked against the 225 clubs live on 2000-01-01
+   ok  a reset clock gets a daily, never a crash
+
+simDailyClubPool: all sections green
+1) The takeover and the target over 240 seeded runs
+   targets: mean 6.07, 10 distinct, 6 trivial, 0 near a sweep, r vs club strength 0.267
+   ok  240 takeovers in league weeks 6 to 14, every board on 30, every target inside a point of a sweep
+2) Reading the room against talking past it, on the same dice
+   reads  mean points 6.30, survival 80.8 percent
+   silent mean points 6.25, survival 79.6 percent
+   wrong  mean points 6.15, survival 76.7 percent
+   reader minus wrong: +0.15 points, +4.2 survival points; 141 league results flipped by the talk, 95 toward the reader (67.4 percent); board sackings 9 of 720
+   ok  the reader takes more points and keeps the job more often, and the game can be won and lost
+3) A run rebuilt from its seed and choices matches the original
+   ok  24 replays match their runs in verdict, points, target, takeover and every score; a second start opens the same job; the daily is stable and varied
+4) A Club Manager save's registrations survive a hot seat run
+   ok  a custom club and a league override registered before the run are the same objects after a start, two matches, a press answer and a replay, and the hot seat world never shows them
+5) A manager who keeps the job carries on in Club Manager
+   54 setups in 27 leagues: 43 handed over (1 on a reprieve) from 25 leagues, 39 played to the end of the season, 4 sacked in Club Manager on the way, 24 sacked runs refused, 43 asked before replacing, 2 with a window before the next fixture, 164 of the previous manager's messages left behind
+   ok  every survivor's career opens in Club Manager on the hot seat's own table, with the takeover stamp and the card's numbers, and plays to the end of the season; a saved career is never replaced without the confirm, and a sacked manager is never offered one
+
+simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club Manager.
+1) The brief over 200 seeded windows
+   needs: 98 windows of three, 102 of four; the dearest men for every need overrun the budget in 200 of 200 (100.0 percent)
+   ok  200 briefs: real approaches who fit the slot and clear the line, a budget that covers the cheap route and not the dear one
+2) Pricing off the desk against paying the asking price, on the same dice
+   desk score 70.59, needs 49.08, value 19.01, budget 2.50; every need filled in 93.0 percent; hours used 11.2; fee over value 1.244; sales 0.93; deals {"signed":688,"gone":398,"collapsed":14}
+   over score 67.52, needs 49.48, value 15.47, budget 2.58; every need filled in 96.0 percent; hours used 8.2; fee over value 1.300; sales 1.21; deals {"signed":694,"gone":246,"walked":12}
+   desk minus asking price: +3.08 score, +3.55 value points; desk wins 152, asking price wins 30, level 18
+   ok  the manager who prices off the desk grades higher, wins more pairs and takes more value points, and the clock still beats him sometimes
+3) A deal unfinished at the shut collapses
+   288 held deals caught at the shut, 200 of 200 days shut by the clock itself, 0 days that moved after the shut
+   the clock: 600 graded windows, 0 spent more than 12 hours, 0 shut by the clock on another count; 8966 actions read so far, 0 with the wall clock off the hours spent
+   ok  every unfinished deal collapses at the shut, none of them signs or is charged, and nothing moves after it
+4) The daily is one window per date, and a window replays from its actions
+   50 replays compared, 0 differ; 28 days, 0 repeats of the day before
+   ok  the same date is the same window, each new day is a new one, and every window replays from its seed and actions
+5) The budget never goes negative
+   13980 actions read, 0 left the budget below zero; the reckless manager asked for money the club did not have 1704 times
+   ok  no action of any manager took the budget below zero
+6) A Club Manager save's registrations survive a Deadline Day
+   ok  a custom club and a league override are the same objects after a start, 7 actions and a replay, and the window never shows them
+7) Rival clubs take the players you leave alone
+   2145 hours a rival was in for a man left alone, 643 closed (30.0 percent, the rule says 30); 1.61 players a window lost to rivals in all
+   walking away from 200 terms tables with a rival circling lost the man 111 times (55.5 percent; the engine's walk away rule is 60)
+   ok  rivals close at the rate the rules state on a man left alone, take him to the club that was in, and usually take him when you walk
+8) Nothing free stands in for the signing bonus
+   200 terms tables, 600 offers trading the bonus for free terms, 0 signed, 0.0m of bonus dodged; 0 recorded over his ask; exactly his ask signed 200
+   ok  no wage or length buys off the bonus, nothing over his ask is recorded, and his ask still signs him
+9) The worked example on the rules screen and in the guide is what the engine plays
+   6 figures on the rules screen and 6 in the guide checked against Lorient on seed 1618079 in the 2023-02-21 market, 0 differ; the guide's sum is 75 (B) and gradeWindow grades that window 75 (B: needs 50, value 24, budget 0.7)
+   ok  every figure in both worked examples is what the engine plays for Lorient on seed 1618079, and the grade adds up
+
+simDeadlineDay: green. The brief is real, the desk pays, the clock binds, the daily is one window a day, the budget holds, a Club Manager save keeps its registrations, rivals close at the stated rate, the bonus is paid and the worked examples are what the engine plays.
+m6 simDailyClubPool=0 simManagerHotSeat=0 simDeadlineDay=0

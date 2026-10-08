@@ -1,0 +1,80 @@
+rvMut m9: applied to src/lib/clubManager.ts
+1) digest, every modern league: a seeded season, the summer, and the pyramids twice
+  FAIL: modern: now|russia differs in whole
+   27 entries compared, 1 differ
+2) digest, every league of every historic era
+   20 entries compared, 0 differ
+3) digest, the pure rules: drop zones, European places, board demands, the exported views
+   drop counts: premier 3, championship 3, laliga 3, seriea 3, bundesliga 2, ligue1 2, eredivisie 2, saudi 3, mlsEast 0, mlsWest 0, primeira 2, scottish 1, superlig 3, bundesliga2 2, proleague 1, austria 1, greece 2, denmark 2, switzerland 1, croatia 1, brasileirao 4, ligamx 0, aleague 0, serieb 3, ligue2 2, segunda 4, russia 3, premier2010 3, laliga2010 3, seriea2010 3, bundesliga2010 2, ligue12010 3, premier2015 3, laliga2015 3, seriea2015 3, bundesliga2015 2, ligue12015 3, premier2005 3, laliga2005 3, seriea2005 3, bundesliga2005 3, ligue12005 3, premier2020 3, laliga2020 3, seriea2020 3, bundesliga2020 2, ligue12020 2
+  FAIL: pure: now|russia differs in drop, demand, objectives
+   48 entries compared, 1 differ
+3b) the rules table: a row for every league, every row used, every reference real
+   47 rows for 47 leagues, 21 nations, 5 pyramids
+3c) the era names the filler could build are listed exactly
+   6911 era players, 22 buildable names, 22 listed
+3d) no league or nation id is branched on outside the rules table
+   76 sources read, 61 ids, 0 finding(s)
+4a) a synthetic top flight that sends 4 down into a modelled second tier, ten seasons
+   bottom of the ladder: "Stay up. Avoid relegation" target 16
+   10 summers, 80 club moves, my club changed division 1 times
+4b) a synthetic league with no domestic cup, ten seasons
+   10 summers, 340 matches, 0 cup weeks, 0 cup objectives, 0 cup matches; the cup league next door still plays its four rounds
+4c) a three tier chain and a cupless league in a nation with a cup, ten seasons
+   10 summers, 0 broken, my club changed division 2 times; 10 cup brackets, 0 cupless clubs in them
+5) the built chunks: each era in its own chunk, reached only by a dynamic import
+   (no build in dist/, skipped: run vite build first)
+
+simCmLeagueRules: 2 failure(s)
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/cmWorldIdentity1052.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 1673[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m   Start at [22m 20:10:21
+[2m   Duration [22m 2.45s[2m (transform 2.27s, setup 52ms, collect 44ms, tests 1.67s, environment 295ms, prepare 108ms)[22m
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Historical engine and original assertion hold: src/lib/clubManager.ts
++ actual - expected
+
++ 'f6f08ee18d008bbde671920588028f2e3bfe1b2b8d562815d936a7fcdb3072e5'
+- '37751ab415a4f31321a2721c128cb227278fc4db73c7063195a05ad1982a9831'
+
+    at characterize (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerAppealIsolation.mjs:142:83)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerAppealIsolation.mjs:275:33 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'f6f08ee18d008bbde671920588028f2e3bfe1b2b8d562815d936a7fcdb3072e5',
+  expected: '37751ab415a4f31321a2721c128cb227278fc4db73c7063195a05ad1982a9831',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+
+1. RECORDS: INT_SCORING_RECORDS equals the verified file, both ways
+  18 engine rows, 18 verified rows, 1 held (Senegal)
+
+2. PICKER: every nation on the creation screen, the award only on a verified row
+  134 nations on the picker: 18 can win it on a verified record, 116 cannot win it at all
+
+3. WIRING: the season calls the award, nothing else grants it, no fallback number
+  1 call from the season, after the summer tournament, 1 grant, inside awardAllTimeTopScorer, no fallback
+
+4. LABELS: every HAND_CLUBS league label verified, pinned or listed as unverified
+  188 labels verified across 82 evidence groups (all 2026-27 or 2026), 0 pinned to their old label (ratchet 0), 2 unverified (ratchet 2)
+
+5. PLAYED: seeded careers, the award the season his goals pass HIS nation's record
+  48 careers (seed 1), 1115 full seasons, 47 awards, every one the season his goals passed his own record (24 while abroad, 31 ina tournament season)
+
+6. LEAGUE WORLD: the pool generator and the facts file say the same thing
+  26 leagues, 454 member names, each lineup read from two hosts; 11 with a format read from two hosts, 3 with no format page and so no shape stated, 3 with no points rule stated; 1 colour(s) in words; 51 shipped, 275 held before 2026, 0 with a first season
+
+simCareerFacts: all sections green
+m9 simCmLeagueRules=1 vitest=0 simManagerAppealIsolation=1 simCareerFacts=0

@@ -1,0 +1,58 @@
+rvMut m5: applied to src/lib/soccerCareerLeague.ts
+
+a. FILE: the generated file is the ledgers, and the lookup answers them
+  released clubs whose old and new league share a size, so no saved finish is placed for them: Hertha Berlin
+  216 seasons, 3303 named places; 16560 club seasons answered (3303 in a league); 454 market clubs placed in 3615 club seasons; 9990 printed names keyed alike; 3551 club seasons hold the old save guard
+
+b. PLAYED: seeded careers from 1990 to 2019, to retirement and into the dugout
+  40 careers, 939 playing seasons (662 before 2026-27: 221 finishes sized from the ledgers, 13 of them in the Championship, 435 in no ledger league, 62 titles there), 167 past derbies
+  1684 offer and loan cards (676 past ones with no league), 979 club cards, 37 dugout jobs (8 with no league); dugout 178 past seasons: 94 from the ledgers naming 302 rivals, 84 unknown (24 of them a club the ledgers put in none of the six), 24 seated by the game's own seasons; 0 stuck
+  years held to the record: 665 offer seasons, 24 dugout jobs; 12 forced jobs (69 ledger seasons, 23 unplaced, 21 seated); phone against the card 2647 times (403 club seasons whose label is not that season's league)
+
+c. BASELINE: from 2026-27 on, nothing moves against origin/main
+  career 7777: moved by Rounds 1100 and 1052 together (equal to the base only with both taken out)
+  career 112506: moved by Rounds 1100 and 1052 together (equal to the base only with both taken out)
+  career 531422: moved by Rounds 1100 and 1052 together (equal to the base only with both taken out)
+  career 636151: moved by Rounds 1100 and 1052 together (equal to the base only with both taken out)
+  career 950338: moved by Rounds 1100 and 1052 together (equal to the base only with both taken out)
+  career 1159796: moved by Rounds 1100 and 1052 together (equal to the base only with both taken out)
+  12 of 12 careers from 2025 identical from 2026-27 on (430 seasons and dugout rows compared); releasing the seven pins alone moves 0 of them (attributed to the release, not the binds); 0 of the identical ones only once Round 1041's two truth fixes are taken out, 6 only once Round 1100's seven files are read from the base (the pool, the rows and the band moved them, on purpose)
+  6 of the identical careers are identical only with Round 1100's seven files read from the base and Round 1052's league taken out, both at once
+
+d. WIRING: the page prints a past season's league only through the lookup
+  5 raw label prints absent, 8 lookups present, both loan screens wired
+
+simCareerLeagueSeasons: all sections green
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/soccerCareerLeagueSeasons.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 29[2mms[22m[39m
+ [32m✓[39m src/lib/soccerCareerLeague.test.ts [2m([22m[2m37 tests[22m[2m)[22m[32m 84[2mms[22m[39m
+ [32m✓[39m src/lib/soccerCareerLeagueBand.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 172[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m48 passed[39m[22m[90m (48)[39m
+[2m   Start at [22m 20:08:26
+[2m   Duration [22m 1.46s[2m (transform 363ms, setup 188ms, collect 1.04s, tests 285ms, environment 1.30s, prepare 511ms)[22m
+
+
+1. RECORDS: INT_SCORING_RECORDS equals the verified file, both ways
+  18 engine rows, 18 verified rows, 1 held (Senegal)
+
+2. PICKER: every nation on the creation screen, the award only on a verified row
+  134 nations on the picker: 18 can win it on a verified record, 116 cannot win it at all
+
+3. WIRING: the season calls the award, nothing else grants it, no fallback number
+  1 call from the season, after the summer tournament, 1 grant, inside awardAllTimeTopScorer, no fallback
+
+4. LABELS: every HAND_CLUBS league label verified, pinned or listed as unverified
+  188 labels verified across 82 evidence groups (all 2026-27 or 2026), 0 pinned to their old label (ratchet 0), 2 unverified (ratchet 2)
+
+5. PLAYED: seeded careers, the award the season his goals pass HIS nation's record
+  48 careers (seed 1), 1115 full seasons, 47 awards, every one the season his goals passed his own record (24 while abroad, 31 ina tournament season)
+
+6. LEAGUE WORLD: the pool generator and the facts file say the same thing
+  26 leagues, 454 member names, each lineup read from two hosts; 11 with a format read from two hosts, 3 with no format page and so no shape stated, 3 with no points rule stated; 1 colour(s) in words; 51 shipped, 275 held before 2026, 0 with a first season
+
+simCareerFacts: all sections green
+m5 simCareerLeagueSeasons=0 vitest=0 simCareerFacts=0

@@ -1,0 +1,6 @@
+m5 exit=0 17s | m5 simCareerLeagueSeasons=0 vitest=0 simCareerFacts=0
+m6 exit=0 57s | m6 simDailyClubPool=0 simManagerHotSeat=0 simDeadlineDay=0
+m7 exit=0 16s | m7 vitest=0 simPlayerAutocompleteInteraction=0 simPlayerSearchFailure=0
+m8 exit=0 5s | m8 vitest=1 simSound=1
+m9 exit=0 44s | m9 simCmLeagueRules=1 vitest=0 simManagerAppealIsolation=1 simCareerFacts=0
+clean exit=0 0s | tracked changes left: 0

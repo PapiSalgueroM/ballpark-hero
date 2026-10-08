@@ -1,0 +1,121 @@
+rvMut m7: applied to src/components/game/PlayerAutocomplete.tsx
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/collegeGridFailClosed.test.tsx
+[22m[39mCGFAILCLOSED| board cg611-033: yes Jason Witten, no Darrell Green
+
+[90mstdout[2m | src/test/playerAutocompleteStale.test.tsx[2m > [22m[2mplayer autocomplete: a list is only on screen for the query that produced it[2m > [22m[2mnever offers the last query under new text, across 200 seeded timings
+[22m[39mSTALE_SWEEP seed=1138 trials=200 staleVisible=0 stalePicked=0 currentPicked=200 stuckFinding=0
+
+[90mstdout[2m | src/test/collegeGridFailClosed.test.tsx[2m > [22m[2mCollege Grid fail closed (Round 1105)[2m > [22m[2m(c) the key fails five ways: unverified each time, the next pick starts a new load, and a good load is judged
+[22m[39mCGFAILCLOSED| fail closed: 5 of 5 failure worlds left the pick unverified and judged it after the network healed
+
+ [32m✓[39m src/test/playerAutocompleteStale.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[33m 1885[2mms[22m[39m
+   [33m[2m✓[22m[39m player autocomplete: a list is only on screen for the query that produced it[2m > [22mnever offers the last query under new text, across 200 seeded timings [33m 1277[2mms[22m[39m
+[90mstdout[2m | src/test/collegeGridOffline.test.tsx[2m > [22m[2mCollege Grid offline[2m > [22m[2m(4a) a win bot fills 9 of 9 in 9 counted guesses on every board
+[22m[39mCGOFFLINE| win: 75 of 75 boards won in 9 counted guesses, each recorded once at 900; 1350 network calls refused by the stub along the way; key files fetched 2, reads of the key's table 0
+
+[90mstdout[2m | src/test/collegeGridFailClosed.test.tsx[2m > [22m[2mdecodeCollegeKey: null on any doubt, never a row from a damaged file[2m > [22m[2mevery one of 44 damaged pairs is null, and none of them throws
+[22m[39mCGFAILCLOSED| decoder: 44 of 44 damaged pairs refused
+
+ [32m✓[39m src/test/collegeGridFailClosed.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 2705[2mms[22m[39m
+   [33m[2m✓[22m[39m College Grid fail closed (Round 1105)[2m > [22m(c) the key fails five ways: unverified each time, the next pick starts a new load, and a good load is judged [33m 996[2mms[22m[39m
+   [33m[2m✓[22m[39m College Grid fail closed (Round 1105)[2m > [22m(d) the key lands 3 seconds after the pick: that pick is judged on the cell it was made for [33m 315[2mms[22m[39m
+   [33m[2m✓[22m[39m decodeCollegeKey: null on any doubt, never a row from a damaged file[2m > [22mevery one of 44 damaged pairs is null, and none of them throws [33m 639[2mms[22m[39m
+[90mstdout[2m | src/test/collegeGridSearchMemory.test.ts[2m > [22m[2mthe College Grid search, from memory (Round 1105)[2m > [22m[2ma surname lists the man, and the check fails when names are found by their first letters only
+[22m[39mCGSEARCH| surname: 74 sampled names each listed by their second word
+
+[90mstdout[2m | src/test/collegeGridOffline.test.tsx[2m > [22m[2mCollege Grid offline[2m > [22m[2m(4b) a loss bot that submits a definite no each time ends every board lost at 15
+[22m[39mCGOFFLINE| loss: 75 of 75 boards ended lost at 15 counted guesses, each recorded once at 0; 0 still playing after 15 submissions
+
+ [32m✓[39m src/test/collegeGridOffline.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 3220[2mms[22m[39m
+   [33m[2m✓[22m[39m College Grid offline[2m > [22m(4a) a win bot fills 9 of 9 in 9 counted guesses on every board [33m 1416[2mms[22m[39m
+   [33m[2m✓[22m[39m College Grid offline[2m > [22m(4b) a loss bot that submits a definite no each time ends every board lost at 15 [33m 1057[2mms[22m[39m
+[90mstdout[2m | src/test/collegeGridSearchMemory.test.ts[2m > [22m[2mthe College Grid search, from memory (Round 1105)[2m > [22m[2ma file of the wrong shape is refused and forgotten, 7 ways, and a 200 that is not JSON is a failed fetch
+[22m[39mCGSEARCH| 7 wrong shapes, an HTML body and a 404 each failed the search and were asked for again
+
+ [32m✓[39m src/test/collegeGridSearchMemory.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 1033[2mms[22m[39m
+   [33m[2m✓[22m[39m the College Grid search, from memory (Round 1105)[2m > [22ma file of the wrong shape is refused and forgotten, 7 ways, and a 200 that is not JSON is a failed fetch [33m 564[2mms[22m[39m
+ [32m✓[39m src/test/playerSearchFailure.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[33m 578[2mms[22m[39m
+ [32m✓[39m src/test/playerAutocompleteInteraction.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[32m 274[2mms[22m[39m
+ [32m✓[39m src/test/playerAutocompleteEmptyText.test.tsx [2m([22m[2m21 tests[22m[2m)[22m[33m 3483[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m      Tests [22m [1m[32m70 passed[39m[22m[90m (70)[39m
+[2m   Start at [22m 20:09:28
+[2m   Duration [22m 8.85s[2m (transform 570ms, setup 460ms, collect 2.34s, tests 13.18s, environment 2.95s, prepare 754ms)[22m
+
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/playerAutocompleteInteraction.test.tsx > player autocomplete interactions > selects on pointerdown before blur and ignores the later pointer click 93ms
+ ✓ src/test/playerAutocompleteInteraction.test.tsx > player autocomplete interactions > selects exactly once from a native keyboard or assistive click 26ms
+ ✓ src/test/playerAutocompleteInteraction.test.tsx > player autocomplete interactions > keeps ArrowDown and Enter selection on the focused input 24ms
+ ✓ src/test/playerAutocompleteInteraction.test.tsx > player autocomplete interactions > keeps ArrowUp and highlighted Tab selection with input focus 16ms
+ ✓ src/test/playerAutocompleteInteraction.test.tsx > player autocomplete interactions > disables existing options and rejects stale pointer and keyboard activation 32ms
+ ✓ src/test/playerAutocompleteInteraction.test.tsx > player autocomplete interactions > rejects a stale highlighted input event after disabling 14ms
+ ✓ src/test/playerAutocompleteInteraction.test.tsx > player autocomplete interactions > rejects disabled free text while preserving the enabled submit behavior 5ms
+ ✓ src/test/playerAutocompleteInteraction.test.tsx > player autocomplete interactions > preserves namesake identities, disambiguators and the caller search filters 25ms
+
+ Test Files  1 passed (1)
+      Tests  8 passed (8)
+   Start at  20:09:37
+   Duration  1.27s (transform 115ms, setup 51ms, collect 308ms, tests 237ms, environment 295ms, prepare 154ms)
+
+
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+stdout | src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > never offers the last query under new text, across 200 seeded timings
+STALE_SWEEP seed=1138 trials=200 staleVisible=0 stalePicked=0 currentPicked=200 stuckFinding=0
+
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > never offers the last query under new text, across 200 seeded timings 820ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > drops the list in the same render the text changes 55ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > drops the list when the search options change under the same text 18ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > drops the list when the player leaves the box and searches again on return 90ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > Enter picks the only name showing when the page asks for a pick from the list 31ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > Enter still sends the typed text on a free text page with one name showing 11ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > offers a settled list for the text in the box exactly as before 10ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > never shows Finding players with nothing in flight 47ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > searches at exactly the fewest letters the page asks for 13ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > drops a search still in flight when the player leaves the box 13ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > drops a search still in flight when a name is picked 11ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > Escape leaves the box while a search is in flight 14ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > a pick does not bring the list back under the picked name 23ms
+ ✓ src/test/playerAutocompleteStale.test.tsx > player autocomplete: a list is only on screen for the query that produced it > the click of the tap that picked a name never reaches what was under the list 25ms
+
+ Test Files  1 passed (1)
+      Tests  14 passed (14)
+   Start at  20:09:38
+   Duration  2.29s (transform 152ms, setup 51ms, collect 350ms, tests 1.18s, environment 290ms, prepare 159ms)
+
+
+simPlayerAutocompleteInteraction: eight actual-component pointer, keyboard, disabled, free-text, identity and filter checks passed; fourteen stale list checks passed, and across 200 seeded timings (seed 1138) the box offered 0 names of the last query, 0 were picked, 200 of 200 current picks landed and 0 panels were left on Finding players.
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/playerSearchFailure.test.tsx > truthful player-search failures > reports each failed empty request leg including a skipped long-query fallback 24ms
+ ✓ src/test/playerSearchFailure.test.tsx > truthful player-search failures > keeps useful partial request results in the exact original ranking 7ms
+ ✓ src/test/playerSearchFailure.test.tsx > truthful player-search failures > shows a generic retry message for an actual failed empty lookup 85ms
+ ✓ src/test/playerSearchFailure.test.tsx > truthful player-search failures > keeps a successful empty lookup as no players found 18ms
+ ✓ src/test/playerSearchFailure.test.tsx > truthful player-search failures > clears failed search feedback on typing and successful results 87ms
+ ✓ src/test/playerSearchFailure.test.tsx > truthful player-search failures > keeps useful local matches selectable during remote failure 26ms
+ ✓ src/test/playerSearchFailure.test.tsx > truthful player-search failures > ignores an old failure after a newer request succeeds 75ms
+ ✓ src/test/playerSearchFailure.test.tsx > truthful player-search failures > keeps a cleared in-flight search quiet without stale failure feedback 61ms
+ ✓ src/test/playerSearchFailure.test.tsx > truthful player-search failures > suppresses an intentionally aborted request even when its transport resolves an error 54ms
+ ✓ src/test/playerSearchFailure.test.tsx > truthful player-search failures > preserves enabled free-text submission after a failed lookup 13ms
+ ✓ src/test/playerSearchFailure.test.tsx > truthful player-search failures > holds the independent original ranking filters exact selection and quiet storage 25ms
+
+ Test Files  1 passed (1)
+      Tests  11 passed (11)
+   Start at  20:09:41
+   Duration  1.43s (transform 101ms, setup 50ms, collect 291ms, tests 477ms, environment 293ms, prepare 118ms)
+
+
+simPlayerSearchFailure: eleven actual helper and component outcomes passed.
+simPlayerSearchFailure: empty direct/fallback/both failures and the skipped long-query fallback are distinguished from successful empty search.
+simPlayerSearchFailure: useful partial/local matches, exact original ranking/filters and native selection callbacks are retained.
+simPlayerSearchFailure: success clearing, stale/cleared requests, explicit abort and free-text paths exercised without RNG/storage or outward writes.
+simPlayerSearchFailure: original source/client/folding bytes held; only owned copied controls change, native pixels remain separate.
+m7 vitest=0 simPlayerAutocompleteInteraction=0 simPlayerSearchFailure=0
