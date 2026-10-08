@@ -431,17 +431,24 @@ function judgeFit(view, m) {
    build of the commit named here, BEFORE the full screen match mode. With match mode the mean must be lower. */
 const LABELS_BEFORE = { commit: '6b1caa20', mean: 1.63 };
 
-/** Section 6: Back folds the match away to a card in the page and pauses it; the card's button puts it back. */
-async function judgeBack(page) {
-  /* With at least seven minutes of the period left, so the clock has room to be seen running on. */
+/** A period being played with at least `need` minutes of it left: a reading taken as a half ends finds the
+ *  dressing room where the stage was. Skips on to the next period until there is one. */
+async function withRoom(page, need) {
   for (let i = 0; i < 6; i++) {
-    if (!(await runningMatch(page))) { fail('no running match to fold away'); return; }
+    if (!(await runningMatch(page))) return false;
     const stage = await stageOf(page);
     const minute = await minuteOf(page);
-    if ((stage === 'first' && minute <= 38) || (stage === 'second' && minute <= 83)) break;
+    if ((stage === 'first' && minute <= 45 - need) || (stage === 'second' && minute <= 90 - need)) return true;
     await tap(page, /skip/i, 'skip on to a fresh period');
     await page.waitForTimeout(700);
   }
+  return false;
+}
+
+/** Section 6: Back folds the match away to a card in the page and pauses it; the card's button puts it back. */
+async function judgeBack(page) {
+  /* With at least seven minutes of the period left, so the clock has room to be seen running on. */
+  if (!(await withRoom(page, 7))) { fail('no running match to fold away'); return; }
   const back = page.getByRole('button', { name: 'Back to the club page' }).first();
   if (!(await back.count().catch(() => 0))) { fail('there is no Back button on the stage'); return; }
   const before = await minuteOf(page);
@@ -522,7 +529,7 @@ try {
     if (REPORT && view.width === 768) continue;
     await page.setViewportSize({ width: view.width, height: view.height });
     await page.waitForTimeout(600);
-    if (!(await runningMatch(page))) { fail(`${view.name}: no running match to measure`); continue; }
+    if (!(await withRoom(page, 5))) { fail(`${view.name}: no running match to measure`); continue; }
     await page.waitForTimeout(400);
     const m = await measure(page);
     judgeFit(view, m);
