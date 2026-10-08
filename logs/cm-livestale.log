@@ -1,0 +1,1 @@
+control cannot run: LiveSimScreen.tsx is not in the shape CM_CENTRE_CONTROL=livestale rewrites (if (liveNow) return cardsAndSubsAt(liveLines(liveNow), minute);...)

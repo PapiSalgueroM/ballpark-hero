@@ -1,0 +1,146 @@
+Negative control changed temporary source: pause
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > settlement ID comparison rejects changed payloads, retained IDs and allocator prefixes
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > the committed action puts goals in the correct net and saves at the keeper
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > actual feed triggers player strikes, ball flight, saves and net contact
+ × src/test/liveSimMotion.test.tsx > Live simcast motion > pause freezes the ball and player pose, and the same player still opens changes 982ms
+   → expected [ …(45) ] to deeply equal [ …(45) ]
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > motion leaves committed state and settled results identical
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > a substitution during a paused action replaces the clickable player immediately
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > speed changes scale action time with the match clock
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > reduced motion shows the committed catch immediately without animated poses
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > terminal goal and save contact precede the unchanged whistle and score (45 'goal' reduced=false)
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > terminal goal and save contact precede the unchanged whistle and score (45 'goal' reduced=true)
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > terminal goal and save contact precede the unchanged whistle and score (45 'save' reduced=false)
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > terminal goal and save contact precede the unchanged whistle and score (45 'save' reduced=true)
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > terminal goal and save contact precede the unchanged whistle and score (90 'goal' reduced=false)
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > terminal goal and save contact precede the unchanged whistle and score (90 'goal' reduced=true)
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > terminal goal and save contact precede the unchanged whistle and score (90 'save' reduced=false)
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > terminal goal and save contact precede the unchanged whistle and score (90 'save' reduced=true)
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > terminal resume shows contact and Skip keeps immediate exactly-once whistle callbacks
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > a tactics redraw cancels a terminal action that is no longer committed
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > the ninetieth minute asks the latest save: refused means full time, never thirty empty minutes
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > the ninetieth minute asks the latest save: extra time drawn there is played, whatever this render was given
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > the extra time banner says what is true: a second leg is level on aggregate
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > the clock runs into the board as 90 plus, with the running aggregate under the score
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > a goal in the board is announced with its plus, GOAL! ... 90+N
+ ↓ src/test/liveSimMotion.test.tsx > Live simcast motion > the extra time clock runs into its own board as ET 120 plus
+ ↓ src/test/liveSimMotion.test.tsx > The pitch part on real feeds > the material is 200 half feeds from five clubs in five leagues
+ ↓ src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R1: the ball is in the goal mouth on goals only
+ ↓ src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R2: nobody stands on a team mate
+ ↓ src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R3: at a kick off each side is in its own half, far from the other keeper
+ ↓ src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R4: the block follows the ball
+ ↓ src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R5: nothing is decided here
+ ↓ src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R6: a chance starts with the ball at the shooter and ends in its follow up
+ ↓ src/test/liveSimMotion.test.tsx > The goal sequence > the score waits for the ball and the card lands at net contact
+ ↓ src/test/liveSimMotion.test.tsx > The goal sequence > the card's season count is the settled count
+ ↓ src/test/liveSimMotion.test.tsx > The goal sequence > after Skip the second half opens on the right score, with no card and nothing replayed
+ ↓ src/test/liveSimMotion.test.tsx > Match mode > a name goes above its figure when another man stands just under him
+ ↓ src/test/liveSimMotion.test.tsx > Match mode > Back folds the match to a card and pauses it, and the card puts it back
+ ↓ src/test/liveSimMotion.test.tsx > Match mode > one panel at a time, and Escape closes what is open before it is Back
+ ↓ src/test/liveSimMotion.test.tsx > Match mode > the stats line a phone keeps in view reads the same count as the full stats
+ ↓ src/test/liveSimMotion.test.tsx > The part and a change of line up > the part drops an action when the line up under it changes
+ ↓ src/test/liveSimMotion.test.tsx > The part and an action taken back > the part drops an action the binder has taken back, even with the clock set back before its start
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 39 skipped (40)
+   Start at  07:24:05
+   Duration  5.45s (transform 2.60s, setup 86ms, collect 3.33s, tests 985ms, environment 467ms, prepare 185ms)
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/liveSimMotion.test.tsx > Live simcast motion > pause freezes the ball and player pose, and the same player still opens changes
+AssertionError: expected [ …(45) ] to deeply equal [ …(45) ]
+
+- Expected
++ Received
+
+  [
+-   "left: 47.86044604476453%; top: 7.339853737127051%; transform: translate(-50%, -24px);",
+-   "translate(3.3348022091704617 8.83409548254703) rotate(-23.11005412463947 0 5)",
+-   "left: 23.35408492879941%; top: 17.796852264201476%; transform: translate(-50%, -35px);",
++   "left: 43.22194251851852%; top: 8.031706074074075%; transform: translate(-50%, -24px);",
+    "translate(0 0) rotate(0 0 5)",
+-   "left: 40.461400790419425%; top: 14.933069642446938%; transform: translate(-50%, -35px);",
++   "left: 23.120915767299863%; top: 17.955952156532152%; transform: translate(-50%, -35px);",
+    "translate(0 0) rotate(0 0 5)",
+-   "left: 59.541683237534016%; top: 15.351209578663116%; transform: translate(-50%, -35px);",
++   "left: 40.3833594346324%; top: 15.09372211169169%; transform: translate(-50%, -35px);",
+    "translate(0 0) rotate(0 0 5)",
+-   "left: 79.06767265396194%; top: 17.92241001429244%; transform: translate(-50%, -35px);",
++   "left: 59.619626810902304%; top: 15.49860447211687%; transform: translate(-50%, -35px);",
+    "translate(0 0) rotate(0 0 5)",
+-   "left: 25.094504501763737%; top: 30.896639645327298%; transform: translate(-50%, -24px);",
++   "left: 79.22405739015299%; top: 18.077528963298157%; transform: translate(-50%, -35px);",
+    "translate(0 0) rotate(0 0 5)",
+-   "left: 41.889019132498646%; top: 27.760840733183755%; transform: translate(-50%, -24px);",
++   "left: 24.869565616511963%; top: 31.131253707225635%; transform: translate(-50%, -24px);",
+    "translate(0 0) rotate(0 0 5)",
+-   "left: 57.73464854066726%; top: 28.808492703311558%; transform: translate(-50%, -24px);",
++   "left: 41.8291257519563%; top: 28.0056319406486%; transform: translate(-50%, -24px);",
+    "translate(0 0) rotate(0 0 5)",
+-   "left: 77.52089592246338%; top: 29.255435126688738%; transform: translate(-50%, -24px);",
++   "left: 57.80647394184067%; top: 29.02006697980768%; transform: translate(-50%, -24px);",
+    "translate(0 0) rotate(0 0 5)",
+-   "left: 43.648609552625565%; top: 45.37544816229492%; transform: translate(-50%, -24px);",
++   "left: 77.66291072813125%; top: 29.542085340625736%; transform: translate(-50%, -24px);",
+    "translate(0 0) rotate(0 0 5)",
+-   "left: 58.67956874882802%; top: 45.34155598264188%; transform: translate(-50%, -24px);",
++   "left: 43.532926467882646%; top: 45.77572313801319%; transform: translate(-50%, -24px);",
+    "translate(0 0) rotate(0 0 5)",
+-   "left: 50.36268054235727%; top: 84%; transform: translate(-50%, -24px);",
++   "left: 58.721434439887396%; top: 45.74290554631875%; transform: translate(-50%, -24px);",
++   "translate(0 0) rotate(0 0 5)",
++   "left: 50.35118136621606%; top: 84%; transform: translate(-50%, -24px);",
+    "translate(0 0) rotate(0 0 5)",
+-   "left: 83.75965532736852%; top: 50.91530426767255%; transform: translate(-50%, -24px);",
++   "left: 83.55167440965857%; top: 51.07199056805241%; transform: translate(-50%, -24px);",
+    "translate(0 0) rotate(0 0 5)",
+-   "left: 61.58799452150241%; top: 52.4195551423356%; transform: translate(-50%, -24px);",
++   "left: 61.5249630199448%; top: 52.59648914035899%; transform: translate(-50%, -24px);",
+    "translate(0 0) rotate(0 0 5)",
+-   "left: 39.04246956894175%; top: 54.796098502539095%; transform: translate(-50%, -24px);",
++   "left: 39.08551152934669%; top: 54.89768164074363%; transform: translate(-50%, -24px);",
+    "translate(0 0) rotate(0 0 5)",
+-   "left: 16.559316092003137%; top: 50.834625602034585%; transform: translate(-50%, -24px);",
++   "left: 16.75718367826297%; top: 50.99386990616336%; transform: translate(-50%, -24px);",
+    "translate(0 0) rotate(0 0 5)",
+-   "left: 69.89575416950508%; top: 36.93682715419147%; transform: translate(-50%, -24px);",
++   "left: 69.77223509923238%; top: 37.197008148866175%; transform: translate(-50%, -24px);",
+    "translate(0 0) rotate(0 0 5)",
+-   "left: 53.022337852977216%; top: 26%; transform: translate(-50%, -35px);",
++   "left: 52.92651138513384%; top: 26.674886433862437%; transform: translate(-50%, -35px);",
+    "translate(0 0) rotate(0 0 5)",
+-   "left: 30.03105416039005%; top: 38.11219664003167%; transform: translate(-50%, -24px);",
++   "left: 30.15689385117671%; top: 38.33511128272392%; transform: translate(-50%, -24px);",
+    "translate(0 0) rotate(0 0 5)",
+-   "left: 79.6107477726601%; top: 19.32451964390597%; transform: translate(-50%, -24px);",
++   "left: 79.4328529881692%; top: 19.70149744765684%; transform: translate(-50%, -24px);",
+    "translate(0 0) rotate(0 0 5)",
+-   "left: 50.38768274134025%; top: 15.584373597428202%; transform: translate(-50%, -24px);",
++   "left: 50.37539084362608%; top: 15.978024367824174%; transform: translate(-50%, -24px);",
+    "translate(0 0) rotate(0 0 5)",
+-   "left: 20.86290682500228%; top: 19.431678354899795%; transform: translate(-50%, -24px);",
++   "left: 21.025783881734178%; top: 19.805258576622215%; transform: translate(-50%, -24px);",
+    "translate(0 0) rotate(0 0 5)",
+-   "left: 47.815964715153285%; top: 17.309523809523796%;",
++   "left: 43.22194251851852%; top: 8.063412148148148%;",
+  ]
+
+ ❯ src/test/liveSimMotion.test.tsx:246:25
+    244|     const before = positions();
+    245|     await step(600);
+    246|     expect(positions()).toEqual(before);
+       |                         ^
+    247|     const player = mounted.container.querySelector<HTMLButtonElement>(…
+    248|     const id = player.dataset.cmDot;
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+simLiveSimMotion: control pause turned "pause freezes" red on an assertion (1 failed), as it must.

@@ -1,0 +1,5 @@
+Negative control changed temporary source: cmimport
+[1101 bundle] the part alone: 457414 bytes minified, 135525 gzipped (ceiling 21785 and 9216); 6 files, 30 import specifiers read; problems 2
+  FAIL: the bundle of the part carries the engine's "4-3-3 holding"
+  FAIL: the part is 457414 bytes minified and 135525 gzipped, over its ceiling of 21785 and 9216 (measured 18154 and 7680, plus a fifth)
+simLiveSimMotion: control cmimport put the engine in the part's bundle and the bundle section went red (2 problems), as it must.
