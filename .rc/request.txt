@@ -1,0 +1,3 @@
+#!playwright
+#!serial
+codex1096: bash .rc/x/codex.sh
