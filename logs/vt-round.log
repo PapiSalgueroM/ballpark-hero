@@ -1,0 +1,45 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/gridEngineSource.test.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 459[2mms[22m[39m
+[90mstdout[2m | src/test/collegeGridFailClosed.test.tsx
+[22m[39mCGFAILCLOSED| board cg611-033: yes Jason Witten, no Darrell Green
+
+[90mstdout[2m | src/test/collegeGridFailClosed.test.tsx[2m > [22m[2mCollege Grid fail closed (Round 1105)[2m > [22m[2m(c) the key fails five ways: unverified each time, the next pick starts a new load, and a good load is judged
+[22m[39mCGFAILCLOSED| fail closed: 5 of 5 failure worlds left the pick unverified and judged it after the network healed
+
+[90mstdout[2m | src/test/collegeGridFailClosed.test.tsx[2m > [22m[2mdecodeCollegeKey: null on any doubt, never a row from a damaged file[2m > [22m[2mevery one of 44 damaged pairs is null, and none of them throws
+[22m[39mCGFAILCLOSED| decoder: 44 of 44 damaged pairs refused
+
+ [32m✓[39m src/test/collegeGridFailClosed.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 4233[2mms[22m[39m
+   [33m[2m✓[22m[39m College Grid fail closed (Round 1105)[2m > [22m(c) the key fails five ways: unverified each time, the next pick starts a new load, and a good load is judged [33m 1546[2mms[22m[39m
+   [33m[2m✓[22m[39m College Grid fail closed (Round 1105)[2m > [22m(d) the key lands 3 seconds after the pick: that pick is judged on the cell it was made for [33m 458[2mms[22m[39m
+   [33m[2m✓[22m[39m decodeCollegeKey: null on any doubt, never a row from a damaged file[2m > [22mevery one of 44 damaged pairs is null, and none of them throws [33m 956[2mms[22m[39m
+ [32m✓[39m src/test/dailySaveParity.test.tsx [2m([22m[2m40 tests[22m[2m | [22m[33m39 skipped[39m[2m)[22m[32m 7[2mms[22m[39m
+[90mstdout[2m | src/test/collegeGridOffline.test.tsx[2m > [22m[2mCollege Grid offline[2m > [22m[2m(4a) a win bot fills 9 of 9 in 9 counted guesses on every board
+[22m[39mCGOFFLINE| win: 75 of 75 boards won in 9 counted guesses, each recorded once at 900; 1350 network calls refused by the stub along the way; key files fetched 2, reads of the key's table 0
+
+[90mstdout[2m | src/test/collegeGridSearchMemory.test.ts[2m > [22m[2mthe College Grid search, from memory (Round 1105)[2m > [22m[2ma surname lists the man, and the check fails when names are found by their first letters only
+[22m[39mCGSEARCH| surname: 74 sampled names each listed by their second word
+
+[90mstdout[2m | src/test/collegeGridOffline.test.tsx[2m > [22m[2mCollege Grid offline[2m > [22m[2m(4b) a loss bot that submits a definite no each time ends every board lost at 15
+[22m[39mCGOFFLINE| loss: 75 of 75 boards ended lost at 15 counted guesses, each recorded once at 0; 0 still playing after 15 submissions
+
+ [32m✓[39m src/test/collegeGridOffline.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 5005[2mms[22m[39m
+   [33m[2m✓[22m[39m College Grid offline[2m > [22m(4a) a win bot fills 9 of 9 in 9 counted guesses on every board [33m 1986[2mms[22m[39m
+   [33m[2m✓[22m[39m College Grid offline[2m > [22m(4b) a loss bot that submits a definite no each time ends every board lost at 15 [33m 1950[2mms[22m[39m
+[90mstdout[2m | src/test/collegeGridSearchMemory.test.ts[2m > [22m[2mthe College Grid search, from memory (Round 1105)[2m > [22m[2ma file of the wrong shape is refused and forgotten, 7 ways, and a 200 that is not JSON is a failed fetch
+[22m[39mCGSEARCH| 7 wrong shapes, an HTML body and a 404 each failed the search and were asked for again
+
+ [32m✓[39m src/test/collegeGridSearchMemory.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 1728[2mms[22m[39m
+   [33m[2m✓[22m[39m the College Grid search, from memory (Round 1105)[2m > [22ma surname lists the man, and the check fails when names are found by their first letters only [33m 434[2mms[22m[39m
+   [33m[2m✓[22m[39m the College Grid search, from memory (Round 1105)[2m > [22ma file of the wrong shape is refused and forgotten, 7 ways, and a 200 that is not JSON is a failed fetch [33m 919[2mms[22m[39m
+ [32m✓[39m src/test/playerSearchFailure.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[33m 942[2mms[22m[39m
+ [32m✓[39m src/test/playerSearchLocal.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m src/test/gridNamesakes.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 181[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m8 passed[39m[22m[90m (8)[39m
+[2m      Tests [22m [1m[32m57 passed[39m[22m[2m | [22m[33m39 skipped[39m[90m (96)[39m
+[2m   Start at [22m 10:08:02
+[2m   Duration [22m 11.52s[2m (transform 4.92s, setup 1.10s, collect 8.53s, tests 12.57s, environment 5.36s, prepare 1.60s)[22m
+
