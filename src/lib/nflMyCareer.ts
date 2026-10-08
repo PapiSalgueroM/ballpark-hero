@@ -1074,7 +1074,12 @@ const NFL_LEGACY_V1: LegacyWeights = {
    kicker's field goals. With the push, whole and then halved, the engine sent
    a real long wait straight in on the first ballot and inducted real kickers
    the Hall never called. So a kicker is read on his hardware and his seasons,
-   exactly as calibration 1 read him. */
+   exactly as calibration 1 read him. Three more decisions the same day, by
+   the same file's moved past rule: an edge rusher's sacks carry no standout
+   (two real sack leaders who waited years went straight in on the first
+   ballot with it, whole and halved; the base alone reads them as the real
+   Hall did), and a receiver's catches and receiving yards pay half (top 150),
+   which reads a real long wait as a wait. */
 const NFL_LEGACY_V2: LegacyWeights = {
   awards: { rings: 80, mvps: 230, allPros: 150 },
   season: 11,
@@ -1096,8 +1101,8 @@ const NFL_LEGACY_V2: LegacyWeights = {
     WR: {
       terms: [{ stat: 'recYds', per: 140 }],
       standout: [
-        { stat: 'rec', from: 1470, to: 1660, label: 'catches' },
-        { stat: 'recYds', from: 18500, to: 21000, label: 'receiving yards' },
+        { stat: 'rec', from: 1470, to: 1660, label: 'catches', top: 150 },
+        { stat: 'recYds', from: 18500, to: 21000, label: 'receiving yards', top: 150 },
       ],
     },
     TE: {
@@ -1124,9 +1129,6 @@ const NFL_LEGACY_V2: LegacyWeights = {
     },
     EDGE: {
       terms: [{ stat: 'sacks', per: 2.5 }, { stat: 'tackles', per: 41 }, { stat: 'forcedFum', per: 1.3 }],
-      standout: [
-        { stat: 'sacks', from: 213, to: 250, label: 'sacks' },
-      ],
     },
     K: {
       terms: [],

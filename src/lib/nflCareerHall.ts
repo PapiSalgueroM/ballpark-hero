@@ -12,8 +12,11 @@ import { HALL_CALIBRATION, hallVoterRulesFor, usCareerHall, type HallVoterWords 
    gets his own second sentence: the real anchors took his field goals out of
    the table (real kickers near the top of the real list were never called),
    so he is told "your seasons" and that his field goals do not move the
-   voters, and the "?" says a kicker gets no push. The "?" builds its rule
-   and its worked example from the rest. "The major awards" on purpose:
+   voters, and the "?" says a kicker gets no push. An edge rusher gets none
+   either (the anchors took his sacks push out too: two real sack leaders
+   who waited years went straight in with it), but his sacks still count
+   through his base, so his card names them like any other number. The "?"
+   builds its rule and its worked example from the rest. "The major awards" on purpose:
    the engine counts a different trophy by position under one name, and a
    sentence that names none cannot mislabel one. The example names a standout
    family of the calibration 2 table, and section 19 of
@@ -26,7 +29,7 @@ export const NFL_HALL_WORDS: HallVoterWords = {
   },
   readsBy: { K: "Then your seasons. A kicker's field goals do not move them." },
   hardware: "rings, the major awards, All-Pro years",
-  families: "passing yards for a quarterback, catches for a receiver, interceptions for a corner, sacks for an edge rusher, though a kicker gets none",
+  families: "passing yards for a quarterback, catches for a receiver, interceptions for a corner, tackles for a linebacker, though a kicker and an edge rusher get none",
   example: { positions: ["CB"], stat: "picks", one: "corner", who: "corners", family: "interceptions" },
 };
 
