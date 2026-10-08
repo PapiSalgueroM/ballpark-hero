@@ -7,6 +7,7 @@ import { NascarDriverBoard } from '@/components/nascar-driver/NascarDriverBoard'
 import { recordCompletion } from '@/lib/completions';
 import { POINTS_BY_CLUE } from '@/types/nascarDriver';
 import styles from '@/components/nascar-driver/NascarDriverFeedback.module.css';
+import { formatNumber } from '@/lib/formatNumber';
 
 const fixture = vi.hoisted(() => ({
   puzzle: { id: 'fiction-racer', driver_name: 'Fixture Racer', common_names: ['Fixture Racer'], clue_labels: ['Fixture profile', 'Fixture era', 'Fixture team', 'Fixture starts', 'Fixture finish', 'Fixture achievement'], clues: ['Generated first clue', 'Generated second clue', 'Generated third clue', 'Generated fourth clue', 'Generated fifth clue', 'Generated sixth clue'] },
@@ -142,7 +143,7 @@ describe('actual NASCAR driver committed feedback', () => {
     for (let misses = 0; misses < 6; misses++) {
       localStorage.clear(); vi.mocked(recordCompletion).mockClear(); fixture.clipboard.mockClear(); fixture.insert.mockClear(); const view = mount(); start(view, true);
       for (let i = 0; i < misses; i++) wrong(view); correct(view); const clues = misses + 1, score = [1000, 800, 600, 400, 200, 100][misses];
-      expect(view.getByText(`${score} pts`)).toBeVisible(); expect(saved()).toEqual(exactSaved(clues, [...Array(misses).fill('Fixture Other'), 'Fixture Racer'], 'won', score));
+      expect(view.getByText(`${formatNumber(score)} pts`)).toBeVisible(); expect(saved()).toEqual(exactSaved(clues, [...Array(misses).fill('Fixture Other'), 'Fixture Racer'], 'won', score));
       expect(recordCompletion).toHaveBeenCalledExactlyOnceWith('/guess-nascar-driver', score, 'FixtureBaller', 0);
       expect(fixture.insert).toHaveBeenCalledExactlyOnceWith({ puzzle_date: '2026-10-01', clues_used: clues, score, guessed: true, mode: 'daily' });
       fixture.puzzle.clue_labels.forEach(label => expect(view.getByText(label)).toBeVisible());

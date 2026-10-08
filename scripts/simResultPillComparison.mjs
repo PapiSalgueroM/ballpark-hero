@@ -26,7 +26,11 @@
  * Measured headroom (2026-10-03, 34 cases, 390 by 844): the widest pill is
  * Face Off's "2600 to 2600" (a two player duel tied to the last extra round),
  * 174px wide with 71.0px spare on each side; every other game's widest pill is
- * 125px or less with 95px or more spare. The checks themselves are geometric
+ * 125px or less with 95px or more spare. Measured again 2026-10-08 (Release
+ * AN, the runner's Chromium), after Face Off's two totals were grouped like
+ * every other score: that pill reads "2,600 to 2,600" and is 210px wide with
+ * 53.1px spare on each side (so is "2,000 to 1,800"); the next widest is a
+ * grouped "1,000" at 141px with 87.5px spare. The checks themselves are geometric
  * (one line, inside the box, equal layout offsets within half a pixel), so
  * they carry no tuned band. Measured controls: noscore turns all 34 cases red;
  * cramp leaves 17.0px spare and wraps all three Face Off scorelines onto two
