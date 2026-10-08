@@ -1,0 +1,6 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+seasonMoments exit=0 44s | playSeasonMoments: 117 checks, 0 failed
+seasonCentre exit=0 102s | playSeasonCentre: 40 checks, 0 failed
+soccerCareer exit=1 78s |   - 6. no console or page errors across the walk: Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to 
+careerSquad exit=0 137s | playCareerSquad: 170 checks, 0 failed
+scMotion exit=0 131s | playSeasonCentreMotion: 77 checks, 0 failed
