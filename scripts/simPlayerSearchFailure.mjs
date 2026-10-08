@@ -29,7 +29,7 @@ const library = (await readFile(libraryPath, 'utf8')).replace(/\r\n/g, '\n');
 const component = (await readFile(componentPath, 'utf8')).replace(/\r\n/g, '\n');
 let folder, copy;
 try {
-  const env = { ...process.env, FORCE_COLOR: '0', DEBUG_PRINT_LIMIT: '900' }; delete env.NO_DOUBLE_SWAP;
+  const env = { ...process.env, NO_COLOR: '1', FORCE_COLOR: '0', DEBUG_PRINT_LIMIT: '900' }; delete env.NO_DOUBLE_SWAP;
   const args = [path.join(root, 'node_modules/vitest/vitest.mjs'), 'run', 'src/test/playerSearchFailure.test.tsx', '--reporter=verbose', '--testTimeout=60000', '--maxWorkers=1', '--no-file-parallelism'];
   if (control) {
     const spec = controls[control]; let changed = spec.file === 'library' ? library : component;

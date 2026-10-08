@@ -20,6 +20,8 @@ export interface PositionSlot {
  * it. Nothing here is invented: it is the row, or it is absent.
  */
 export interface PickMeta {
+  /** The name exactly as the row stores it, so a pick confirmed in the browser keeps its spelling. */
+  rawName?: string;
   /** Untouched player_market_values.position, e.g. "Goalkeeper". */
   rawPosition?: string;
   /** Normalized primary role from that value, once squadDeal's map has seen it. */

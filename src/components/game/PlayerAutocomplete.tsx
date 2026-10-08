@@ -31,6 +31,17 @@ import {
  * hook, same as today. What changes is that every game now shares one
  * search box, one debounce, one keyboard-nav implementation and one
  * highlight algorithm instead of five slightly different copies of each.
+ *
+ * Round 1138: a list is only ever on screen for the query that produced it.
+ * The names used to stay painted under new text until the new search
+ * answered, and a tap in that window picked the old name. Now the list is
+ * tagged with its query (the folded text plus the search options), it is gone
+ * in the same render the text or the options change, and leaving the box
+ * (a tap outside, Escape, focus moving away, a pick) drops it, so coming back
+ * searches again. Where the page asks for a pick from the list, Enter picks
+ * the name when exactly one is showing. A pick does not search for the picked
+ * name: on a page that keeps that name in the box the list stays shut until
+ * the player comes back to the box or types something else.
  */
 
 export interface PlayerAutocompleteProps {
@@ -38,7 +49,11 @@ export interface PlayerAutocompleteProps {
   value: string;
   /** Called whenever the text changes, including plain typing. */
   onChange: (value: string) => void;
-  /** Called when the user picks a player, by suggestion click or Enter on a highlighted row. */
+  /**
+   * Called when the user picks a player: a suggestion tap or click, Enter or
+   * Tab on a highlighted row, or (with validateOnly) Enter when exactly one
+   * name is showing.
+   */
   onSelect: (entity: PlayerEntity) => void;
   /** Options forwarded to searchPlayers (source, filters, limit, minChars, exclude). */
   searchOptions: Omit<SearchPlayersOptions, 'query' | 'signal'>;
@@ -46,9 +61,10 @@ export interface PlayerAutocompleteProps {
   disabled?: boolean;
   autoFocus?: boolean;
   /**
-   * When true, Enter with no suggestion highlighted does nothing: only a
-   * suggestion click, or Enter/Tab while a suggestion is highlighted, can
-   * select a player. Free text can still be typed and will still trigger
+   * When true, only a name from the list can be selected: a suggestion click,
+   * Enter/Tab while a suggestion is highlighted, or (Round 1138) Enter when
+   * exactly one name is showing. Enter with two or more names and nothing
+   * highlighted does nothing. Free text can still be typed and will still trigger
    * search, but onSelect never fires for typed-only text. Use this wherever
    * "must pick a real player from the list" is the intended rule.
    * When false (default), pressing Enter with text typed but no suggestion
@@ -85,7 +101,36 @@ export interface PlayerAutocompleteProps {
 }
 
 const DEFAULT_DEBOUNCE_MS = 200;
+/** What the list is while the held one belongs to another query. One identity, so nothing re-renders for it. */
+const NO_SUGGESTIONS: PlayerEntity[] = [];
 const MIN_ROW_HEIGHT_PX = 44; // mobile-friendly tap target
+/** Longest a finger's pick waits for that same tap's click, in milliseconds. A tap is over well inside it. */
+const TAP_CLICK_WAIT_MS = 700;
+
+/**
+ * A finger picks a name on pointerdown, which closes the list, and the click
+ * the same tap sends a moment later then lands on whatever sat UNDER the list.
+ * On Missing XI that is the Lock in guess button, so one tap on a name picked
+ * it and locked the guess in (measured in a touch browser: every time). The
+ * tap's own click is swallowed here, once. The wait ends with that click, with
+ * the next touch anywhere (a new tap is the player's own and goes through), or
+ * after TAP_CLICK_WAIT_MS. A mouse never needs it: its click dies with the row.
+ */
+function swallowTapClick() {
+  const end = () => {
+    window.clearTimeout(timer);
+    document.removeEventListener('click', swallow, true);
+    document.removeEventListener('pointerdown', end, true);
+  };
+  const swallow = (event: Event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    end();
+  };
+  const timer = window.setTimeout(end, TAP_CLICK_WAIT_MS);
+  document.addEventListener('click', swallow, true);
+  document.addEventListener('pointerdown', end, true);
+}
 
 // Combining diacritical marks block (U+0300 to U+036F), built from char codes
 // (never literal accented characters) so it cannot be mangled by copy/paste
@@ -196,15 +241,32 @@ export function PlayerAutocomplete({
   emptyText = 'No players found',
   onNoResults,
 }: PlayerAutocompleteProps) {
-  const [suggestions, setSuggestions] = useState<PlayerEntity[]>([]);
-  const [loading, setLoading] = useState(false);
+  /* Round 1138: what the last settled search returned, and the query that
+     produced it. The list on screen is derived from the pair below, so a
+     list can only ever show for the text and the options it was fetched for. */
+  const [heldSuggestions, setSuggestions] = useState<PlayerEntity[]>([]);
+  const [heldTag, setHeldTag] = useState<string | null>(null);
+  const [searching, setLoading] = useState(false);
   const [searchFailed, setSearchFailed] = useState(false);
   const [open, setOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
+  /* Bumped when the player comes back to a list that was dropped, so the
+     search effect runs again under the same text. */
+  const [refresh, setRefresh] = useState(0);
 
   const debounceRef = useRef<number | null>(null);
   const abortRef = useRef<AbortController | null>(null);
   const requestIdRef = useRef(0);
+  /* True from the moment the list is dropped (the player left the box, or
+     picked a name) until the next search is scheduled. */
+  const droppedRef = useRef(false);
+  /* The query of the name just picked (its folded name plus the search
+     options). The search effect does not search for it, so a page that keeps
+     the picked name in the box (Missing XI, over its Lock in guess button), or
+     shows it while it checks the pick (Build Your XI, with the box disabled),
+     does not get the list straight back under that name. It ends when the
+     player comes back to the box or the query becomes anything else. */
+  const pickedTagRef = useRef<string | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const listboxId = useId();
   /* Read through a ref because the search effect's dependencies leave the
@@ -219,21 +281,49 @@ export function PlayerAutocomplete({
   // caller passes a fresh object literal.
   const optionsKey = useMemo(() => JSON.stringify(searchOptions), [searchOptions]);
 
+  /* Round 1138: THE QUERY. The folded text plus every search option, so
+     "Messi" and "messi " are one query and a change of source or filter (a new
+     team, a new category) is a new one. Both lines below are computed while
+     rendering: the old list is gone in the SAME render that carries the new
+     text, not an effect or a frame later, and a tap can never land on a name
+     fetched for something else. localNames is left out of the tag on purpose:
+     the effect already searches again when it changes, both pages that pass
+     it keep one identity, and those names come from the caller's own pool. */
+  const normalizedValue = normalizeName(value);
+  const enoughText = normalizedValue.length >= minChars;
+  const tag = normalizedValue + '\u0000' + optionsKey;
+  const suggestions = heldTag === tag ? heldSuggestions : NO_SUGGESTIONS;
+  const loading = searching || (enoughText && open && heldTag !== tag);
+
   useEffect(() => {
     if (debounceRef.current) window.clearTimeout(debounceRef.current);
     setSearchFailed(false);
 
+    /* A pick is over the moment the query is anything but the picked name:
+       cleared text counts, so the same name typed or pasted whole afterwards
+       is searched for like any other. */
+    const justPicked = pickedTagRef.current === tag;
+    if (!justPicked) pickedTagRef.current = null;
+
     const normalized = normalizeName(value);
     if (normalized.length < minChars) {
       setSuggestions([]);
+      setHeldTag(null);
       setLoading(false);
       setOpen(false);
       setHighlightedIndex(-1);
       return;
     }
 
+    /* The name just picked is not searched for by the pick itself: the panel
+       stays shut and the list stays dropped until the player comes back to
+       the box (see reopen) or types something else. */
+    if (justPicked) return;
+
     setLoading(true);
     setOpen(true);
+    droppedRef.current = false;
+    const requestTag = tag;
 
     // Round 84: matches from the caller's own answer pool, computed locally so
     // legends absent from the remote source are still selectable. The merge
@@ -255,6 +345,7 @@ export function PlayerAutocomplete({
           // resolution, not just cancellation).
           if (thisRequestId !== requestIdRef.current) return;
           setSuggestions(mergeLocal(results));
+          setHeldTag(requestTag);
           setSearchFailed(Boolean(error));
           setLoading(false);
           setHighlightedIndex(-1);
@@ -268,6 +359,7 @@ export function PlayerAutocomplete({
           if (thisRequestId !== requestIdRef.current) return;
           // Remote search failed: the local pool is better than nothing.
           setSuggestions(mergeLocal([]));
+          setHeldTag(requestTag);
           setSearchFailed(!(error instanceof DOMException && error.name === 'AbortError'));
           setLoading(false);
         });
@@ -279,7 +371,7 @@ export function PlayerAutocomplete({
       abortRef.current?.abort();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value, optionsKey, minChars, debounceMs, localNames]);
+  }, [value, optionsKey, minChars, debounceMs, localNames, refresh]);
 
   useEffect(() => {
     return () => {
@@ -288,18 +380,50 @@ export function PlayerAutocomplete({
     };
   }, []);
 
-  // Close the suggestion list on outside click.
+  /* Round 1138: leaving the box DROPS the list, it does not just hide it. A
+     tap outside, Escape, or focus moving to another control is how every grid
+     and Connect 4 changes cell, and the hidden list used to come back under
+     the next cell on focus. So a closed list is a dropped list: nothing can
+     reopen names fetched before the player left. Coming back searches again
+     (see reopen). The request id is bumped so an answer still in flight is
+     ignored when it lands. */
+  const leave = useCallback(() => {
+    if (debounceRef.current) window.clearTimeout(debounceRef.current);
+    abortRef.current?.abort();
+    requestIdRef.current += 1;
+    droppedRef.current = true;
+    setOpen(false);
+    setHighlightedIndex(-1);
+    setSuggestions([]);
+    setHeldTag(null);
+    setLoading(false);
+  }, []);
+
+  // Drop the suggestion list on an outside tap or click.
   useEffect(() => {
     if (!open) return;
     const handlePointerDown = (e: PointerEvent) => {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-        setOpen(false);
-        setHighlightedIndex(-1);
+        leave();
       }
     };
     document.addEventListener('pointerdown', handlePointerDown);
     return () => document.removeEventListener('pointerdown', handlePointerDown);
-  }, [open]);
+  }, [open, leave]);
+
+  /* Coming back to the box. If the list was dropped, search again: without
+     the refresh the panel would open with nothing in flight and nothing to
+     show. A disabled input cannot be focused or clicked, so this needs no
+     disabled check of its own. */
+  const reopen = () => {
+    if (!enoughText) return;
+    pickedTagRef.current = null;
+    setOpen(true);
+    if (droppedRef.current) {
+      droppedRef.current = false;
+      setRefresh(n => n + 1);
+    }
+  };
 
   const commitSelection = useCallback(
     (entity: PlayerEntity) => {
@@ -308,14 +432,38 @@ export function PlayerAutocomplete({
       onSelect(entity);
       setOpen(false);
       setSuggestions([]);
+      setHeldTag(null);
+      pickedTagRef.current = normalizeName(entity.name) + '\u0000' + optionsKey;
+      /* A pick drops the list too. When the page keeps the picked name in the
+         box no search is scheduled for it (the text does not change, or it
+         changes to the name just picked, which the effect skips), and coming
+         back has to ask for one (the effect sets this back to false the
+         moment it schedules the next search). */
+      droppedRef.current = true;
       setHighlightedIndex(-1);
+      /* And nothing still in flight may bring a list back after the pick: a
+         search under the same text (the caller's local names changed) would
+         otherwise land its answer into the closed box. */
+      if (debounceRef.current) window.clearTimeout(debounceRef.current);
+      abortRef.current?.abort();
+      requestIdRef.current += 1;
+      setLoading(false);
     },
-    [disabled, onChange, onSelect],
+    [disabled, onChange, onSelect, optionsKey],
   );
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent<HTMLInputElement>) => {
       if (disabled) return;
+      /* Escape leaves the box whatever the panel holds: names, the Finding
+         players row or the empty row. It is read before the check below
+         because since Round 1138 the list is empty between keystrokes, and an
+         Escape pressed then was swallowed while the search carried on and
+         opened its names anyway. */
+      if (e.key === 'Escape' && open) {
+        leave();
+        return;
+      }
       if (!open || suggestions.length === 0) {
         if (e.key === 'Enter' && !validateOnly && onSubmitFreeText && value.trim()) {
           onSubmitFreeText(value);
@@ -333,6 +481,15 @@ export function PlayerAutocomplete({
         e.preventDefault();
         if (highlightedIndex >= 0 && highlightedIndex < suggestions.length) {
           commitSelection(suggestions[highlightedIndex]);
+        } else if (validateOnly && suggestions.length === 1 && !loading && !e.repeat && !e.nativeEvent.isComposing) {
+          /* Round 1138: where the page asks for a pick from the list, Enter
+             picks the name when it is the ONLY one showing. Exactly one, never
+             "the top one": with two names Enter still waits for an arrow key,
+             so a keyboard player never sends a name he did not see alone. Not
+             while a search is in flight (the one name must be the settled
+             answer for the text in the box), not on a held key, and not on an
+             input method's own Enter. */
+          commitSelection(suggestions[0]);
         } else if (!validateOnly && onSubmitFreeText && value.trim()) {
           onSubmitFreeText(value);
         }
@@ -341,18 +498,25 @@ export function PlayerAutocomplete({
           e.preventDefault();
           commitSelection(suggestions[highlightedIndex]);
         }
-      } else if (e.key === 'Escape') {
-        setOpen(false);
-        setHighlightedIndex(-1);
       }
     },
-    [disabled, open, suggestions, highlightedIndex, validateOnly, onSubmitFreeText, value, commitSelection],
+    [disabled, open, suggestions, loading, highlightedIndex, validateOnly, onSubmitFreeText, value, commitSelection, leave],
   );
 
-  const showDropdown = open && (loading || suggestions.length > 0 || normalizeName(value).length >= minChars);
+  const showDropdown = open && (loading || suggestions.length > 0 || enoughText);
 
   return (
-    <div ref={containerRef} className={cn('relative w-full', className)}>
+    <div
+      ref={containerRef}
+      className={cn('relative w-full', className)}
+      onBlur={e => {
+        /* Focus moving to a control outside the box (the keyboard route to
+           another cell) leaves it. A blur with no related target (a tap on
+           plain page, the window losing focus) is left to the outside tap
+           handler, so switching windows and back drops nothing. */
+        if (e.relatedTarget instanceof Node && !containerRef.current?.contains(e.relatedTarget)) leave();
+      }}
+    >
       <div className="relative">
         <input
           type="text"
@@ -363,9 +527,9 @@ export function PlayerAutocomplete({
           value={value}
           onChange={e => onChange(e.target.value)}
           onKeyDown={handleKeyDown}
-          onFocus={() => {
-            if (normalizeName(value).length >= minChars) setOpen(true);
-          }}
+          onFocus={reopen}
+          /* On a phone a tap on a box that never lost focus fires no focus event. */
+          onClick={reopen}
           placeholder={placeholder}
           aria-label={placeholder || 'Search players'}
           disabled={disabled}
@@ -429,6 +593,7 @@ export function PlayerAutocomplete({
                   // blur-driven outside-click handler can close the list first.
                   e.preventDefault();
                   commitSelection(entity);
+                  if (!disabled && (e.pointerType === 'touch' || e.pointerType === 'pen')) swallowTapClick();
                 }}
                 onClick={e => {
                   if (e.detail === 0) commitSelection(entity);
