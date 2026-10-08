@@ -25,6 +25,11 @@
  *      and neither does the line under the pitch, at any size. Sections 1 and 7 leave two screenshots each
  *      (the ball on its way, the card up) when LIVE_FIT_SHOTS or RC_OUT names a folder.
  *
+ * NEGATIVE CONTROL 2 (Release AO). LIVE_FIT_CONTROL=silentlist rewrites every GOAL! in the list beside the
+ * pitch as the page draws it (after asserting the list is one node). Section 7 must go red on "the list
+ * beside the pitch never said this goal" and every other section must stay green; exit 1 when it does, 3
+ * when it does not. It guards the watch for a NEW line in a list of five (see judgeGoalFrames).
+ *
  * NEGATIVE CONTROL. LIVE_FIT_CONTROL=bar pushes the control row 200 px down with a style tag (after
  * asserting the selector matches exactly one node). Section 3 must go red; 1, 2 and 4 must stay green.
  *
@@ -38,6 +43,7 @@
  *   node scripts/playLiveMatchFit.mjs
  *   LIVE_FIT_REPORT=1 node scripts/playLiveMatchFit.mjs
  *   LIVE_FIT_CONTROL=bar node scripts/playLiveMatchFit.mjs
+ *   LIVE_FIT_CONTROL=silentlist node scripts/playLiveMatchFit.mjs
  */
 /* RECORDED BEFORE MATCH MODE, with LIVE_FIT_REPORT=1 on the build of 6b1caa20 (the viewer still a card in
    the page, under the navbar and the page's own heading), on a GitHub runner's Chromium:
@@ -63,13 +69,16 @@ const BASE = `http://127.0.0.1:${PORT}`;
 const KEY = 'dukb-club-manager-save';
 const REPORT = process.env.LIVE_FIT_REPORT === '1';
 const CONTROL = process.env.LIVE_FIT_CONTROL || '';
-if (CONTROL && CONTROL !== 'bar') { console.error(`unknown LIVE_FIT_CONTROL ${CONTROL}`); process.exit(2); }
+if (CONTROL && CONTROL !== 'bar' && CONTROL !== 'silentlist') { console.error(`unknown LIVE_FIT_CONTROL ${CONTROL}`); process.exit(2); }
 const V = !!process.env.VERBOSE;
 /* A folder for screenshots of the fit at each size (LIVE_FIT_SHOTS, or a remote check's RC_OUT). Optional. */
 const SHOTS = process.env.LIVE_FIT_SHOTS || process.env.RC_OUT || '';
 const shoot = async (page, name) => { if (SHOTS) await page.screenshot({ path: path.join(SHOTS, (CONTROL ? CONTROL + '-' : '') + name + '.png') }).catch(() => {}); };
 
 let failures = 0;
+/* control silentlist: did section 7 go red on the very line it must, and did the control rewrite a line */
+let neverSaid = false;
+let silenced = 0;
 const failed = new Set();
 let section = 0;
 const fail = m => { failures += 1; failed.add(section); console.log('  FAIL: ' + m); };
@@ -191,6 +200,8 @@ async function startSampler(page) {
       const line = document.querySelector('[data-cm-live-event]');
       out.push({
         told: log && log.getBoundingClientRect().height > 0 ? [...log.querySelectorAll('li')].filter(li => li.textContent.includes('GOAL!')).length : null,
+        /* Release AO: the GOAL! lines themselves, so a new one is told from one that was there already */
+        goals: log && log.getBoundingClientRect().height > 0 ? [...log.querySelectorAll('li')].filter(li => li.textContent.includes('GOAL!')).map(li => li.textContent.replace(/\s+/g, ' ').trim()) : null,
         line: line ? line.textContent.replace(/\s+/g, ' ').trim() : '',
         men: pitch ? [...pitch.querySelectorAll('[data-cm-dot], [data-cm-dot-opp]')].map(el => el.textContent.trim()).join('|') : '',
         t: performance.now(),
@@ -340,10 +351,17 @@ function judgeGoalFrames(watched, { reduced, wide }) {
     if (wide && !listed.length) fail('the list beside the pitch was never on screen on a wide window');
     else if (listed.length) {
       const start = listed[0].told;
-      const toldEarly = windup.filter(f => f.told !== null && f.told > start).length;
-      const said = listed.findIndex(f => f.told > start);
+      /* Release AO: the list keeps its five newest lines, so an earlier goal's line can leave it while
+         this goal's line arrives, and a COUNT of GOAL! lines then never passes where it started. Seen on
+         a runner on the merged tree (a penalty at 53' with one goal listed already: red on a list that
+         ended "53'GOAL! Penalty, ..."), and the screen and this walk were byte for byte Round 1101's.
+         The watch is for a GOAL! line the list did not hold on the first frame. */
+      const had = new Set(listed[0].goals ?? []);
+      const fresh = f => (f.goals ?? []).some(t => !had.has(t));
+      const toldEarly = windup.filter(f => f.told !== null && fresh(f)).length;
+      const said = listed.findIndex(fresh);
       if (toldEarly) fail(`the list beside the pitch said GOAL! on ${toldEarly} of ${windup.length} plant and flight frames, before the ball was in`);
-      else if (said < 0) fail(`the list beside the pitch never said this goal (${start} GOAL! lines all through ${listed.length} frames)`);
+      else if (said < 0) { neverSaid = true; fail(`the list beside the pitch never said this goal (${start} GOAL! lines all through ${listed.length} frames)`); }
       else if (listed[said].phase !== 'net' && listed[said].motion === 'goal') fail(`the list beside the pitch first said GOAL! on a frame in phase ${listed[said].phase}`);
       else ok(`the list beside the pitch said GOAL! only once the ball was in (first on a frame reading ${listed[said].motion}/${listed[said].phase}, score ${listed[said].score})`);
     }
@@ -735,7 +753,7 @@ try {
 
   section = 7;
   console.log('7) A wide screen');
-  if (REPORT || CONTROL) console.log('  (not in the measuring pass or under a control)');
+  if (REPORT || CONTROL === 'bar') console.log('  (not in the measuring pass or under control bar)');
   else {
     const desk = await browser.newContext({ viewport: { width: 1280, height: 900 } });
     const wide = await openPage(desk);
@@ -743,7 +761,24 @@ try {
     if (!(await startLive(wide))) fail('the live viewer never opened at 1280 by 900');
     else {
       await wide.waitForTimeout(1200);
+      if (CONTROL === 'silentlist') {
+        const count = await wide.locator('[data-cm-live-log]').count();
+        if (count !== 1) throw new Error(`control silentlist: [data-cm-live-log] matches ${count} nodes, so the control can not run`);
+        await wide.evaluate(() => {
+          window.__silenced = 0;
+          const hush = () => {
+            for (const li of document.querySelectorAll('[data-cm-live-log] li')) {
+              const walk = document.createTreeWalker(li, NodeFilter.SHOW_TEXT);
+              for (let n = walk.nextNode(); n; n = walk.nextNode()) if (n.nodeValue.includes('GOAL!')) { n.nodeValue = n.nodeValue.replaceAll('GOAL!', 'Scored.'); window.__silenced += 1; }
+            }
+          };
+          hush();
+          new MutationObserver(hush).observe(document.body, { subtree: true, childList: true, characterData: true });
+        });
+        console.log('  Negative control: every GOAL! in the list beside the pitch is rewritten as it is drawn.');
+      }
       const seen = await watchAGoal(wide, { tapCard: false, onTick: goalShots(wide, 'wide') });
+      if (CONTROL === 'silentlist') silenced = await wide.evaluate(() => window.__silenced || 0).catch(() => 0);
       if (!seen) fail('sixteen halves passed without a goal to watch at 1280 by 900');
       else judgeGoal(seen, { reduced: false, wide: true });
     }
@@ -763,6 +798,13 @@ if (CONTROL === 'bar') {
   console.log(asItMust
     ? 'playLiveMatchFit: control bar turned section 3 red and left sections 1, 2 and 4 green, as it must.'
     : `playLiveMatchFit: control bar did NOT behave: red sections ${[...failed].sort().join(', ') || 'none'}.`);
+  process.exit(asItMust ? 1 : 3);
+}
+if (CONTROL === 'silentlist') {
+  const asItMust = neverSaid && silenced > 0 && failed.has(7) && failed.size === 1;
+  console.log(asItMust
+    ? `playLiveMatchFit: control silentlist turned section 7 red on the line it must (the list never said this goal, ${silenced} GOAL! rewritten) and left the rest green.`
+    : `playLiveMatchFit: control silentlist did NOT behave: red sections ${[...failed].sort().join(', ') || 'none'}, never said ${neverSaid}, ${silenced} GOAL! rewritten.`);
   process.exit(asItMust ? 1 : 3);
 }
 console.log(failures
