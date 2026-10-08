@@ -238,7 +238,11 @@ try {
 catch (e) {
   /* the generator refuses a grey colour, an undecided club, a name it would
      take for another league's hand club, and a league Club Manager lacks */
-  section = /no colour for/.test(e.message) ? '3' : /has no league/.test(e.message) ? '2' : '1';
+  /* review fix: a hand club whose label is not the league Club Manager
+     lists it in is a MEMBERSHIP failure. The refusal was counted under
+     section 1, so control relabel (West Ham back to "Premier League")
+     reported its own section 2 as green and exited 1. */
+  section = /no colour for/.test(e.message) ? '3' : /has no league|would be taken for the hand club/.test(e.message) ? '2' : '1';
   fail(`the derive refused: ${e.message.split('\n')[0]}`);
   finish();
 }
