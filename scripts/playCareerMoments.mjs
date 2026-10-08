@@ -346,7 +346,11 @@ async function runWalk(w, view) {
       console.log(`     ${id('P2')} to P7 not walked: there is no played scene to walk`);
       return;
     }
-    if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `${w.name}-${view.width}-mid.png`) });
+    if (SHOTS) {
+      /* Mid play: a little over half a second after the scene went live. */
+      await page.waitForFunction(() => performance.now() - window.__cmo.live.at >= 550, null, { timeout: 5000 }).catch(() => undefined);
+      await page.screenshot({ path: path.join(SHOTS, `${w.name}-${view.width}-mid.png`) });
+    }
     await page.waitForFunction(() => performance.now() - window.__cmo.sceneAt >= 500, null, { timeout: 5000 });
     const from = await page.evaluate(key => ({ t: performance.now(), save: localStorage.getItem(key) }), SAVE_KEY);
 
