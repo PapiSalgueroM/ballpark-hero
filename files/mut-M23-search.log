@@ -1,0 +1,24 @@
+stdout | src/test/collegeGridSearchMemory.test.ts > the College Grid search, from memory (Round 1105) > a surname lists the man, and the check fails when names are found by their first letters only
+CGSEARCH| surname: 74 sampled names each listed by their second word
+   ✓ the College Grid search, from memory (Round 1105) > a surname lists the man, and the check fails when names are found by their first letters only 165ms
+   × the College Grid search, from memory (Round 1105) > a list that failed to load is an error, and the check fails when it reads as nobody by that name 5ms
+     → FAILED LOAD: the search settled with null and 0 names
+   × the College Grid search, from memory (Round 1105) > after a failed fetch the next search asks again, and the check fails when a failed list is kept 1ms
+     → RETRY: the broken world did not fail the search (null)
+   × the College Grid search, from memory (Round 1105) > a file of the wrong shape is refused and forgotten, 7 ways, and a 200 that is not JSON is a failed fetch 7ms
+     → RETRY: the broken world did not fail the search (null)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/test/collegeGridSearchMemory.test.ts > the College Grid search, from memory (Round 1105) > a list that failed to load is an error, and the check fails when it reads as nobody by that name
+Error: FAILED LOAD: the search settled with null and 0 names
+     50| const fail = (msg: string): never => { throw new Error(msg); };
+ ❯ checkFailedIsError src/test/collegeGridSearchMemory.test.ts:118:60
+ FAIL  src/test/collegeGridSearchMemory.test.ts > the College Grid search, from memory (Round 1105) > after a failed fetch the next search asks again, and the check fails when a failed list is kept
+Error: RETRY: the broken world did not fail the search (null)
+     50| const fail = (msg: string): never => { throw new Error(msg); };
+ FAIL  src/test/collegeGridSearchMemory.test.ts > the College Grid search, from memory (Round 1105) > a file of the wrong shape is refused and forgotten, 7 ways, and a 200 that is not JSON is a failed fetch
+Error: RETRY: the broken world did not fail the search (null)
+     50| const fail = (msg: string): never => { throw new Error(msg); };
+      Tests  3 failed | 3 passed (6)
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridSearchMemory.test.ts,title=src/test/collegeGridSearchMemory.test.ts > the College Grid search%2C from memory (Round 1105) > a list that failed to load is an error%2C and the check fails when it reads as nobody by that nam
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridSearchMemory.test.ts,title=src/test/collegeGridSearchMemory.test.ts > the College Grid search%2C from memory (Round 1105) > after a failed fetch the next search asks again%2C and the check fails when a failed list is kept
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/collegeGridSearchMemory.test.ts,title=src/test/collegeGridSearchMemory.test.ts > the College Grid search%2C from memory (Round 1105) > a file of the wrong shape is refused and forgotten%2C 7 ways%2C and a 200 that is not JSON is a f

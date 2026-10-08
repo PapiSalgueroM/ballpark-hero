@@ -1,0 +1,4 @@
+applied N2 to src/lib/gridEngine.ts: a stalled body is in effect never cut
+restored src/lib/gridEngine.ts
+dirty tracked files after restore: 0
+MUT N2: engine=1 every named gate went red

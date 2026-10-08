@@ -1,0 +1,4 @@
+applied N9 to src/lib/gridEngine.ts: the stall timer is not cleared after a read (a live timer is left behind)
+restored src/lib/gridEngine.ts
+dirty tracked files after restore: 0
+MUT N9: engine=1 every named gate went red

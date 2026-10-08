@@ -1,0 +1,4 @@
+applied N5 to src/hooks/useCollegeGrid.ts: the hold on the open cell is never let go
+restored src/hooks/useCollegeGrid.ts
+dirty tracked files after restore: 0
+MUT N5: fc=1 every named gate went red

@@ -1,0 +1,4 @@
+applied M12 to src/lib/collegeGrid.ts: the memory search matches the start of the name only, so a surname finds nobody
+restored src/lib/collegeGrid.ts
+dirty tracked files after restore: 0
+MUT M12: search=1 shipped=1 every named gate went red
