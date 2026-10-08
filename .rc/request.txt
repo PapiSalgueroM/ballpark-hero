@@ -1,0 +1,7 @@
+#!serial
+dshA-branch: R848_PART=shapes node scripts/simDailySaveHardening.mjs
+dshA2-branch: R848_PART=shapes node scripts/simDailySaveHardening.mjs
+swap: cp .rc/x/SoccerSeasonCentre.tsx src/components/soccer-career/SoccerSeasonCentre.tsx; for f in careerLeagueSeasons clubRivalries leagueFormat soccerCareerClubPool; do cp .rc/x/$f.ts src/data/$f.ts; done; for f in careerEras clubManager soccerCareerDerby soccerCareerLeague; do cp .rc/x/$f.ts src/lib/$f.ts; done; cp .rc/x/soccer.ts src/lib/season/soccer.ts; cp .rc/x/WhatsNew.tsx src/pages/WhatsNew.tsx; git status --short | grep -v "^??" | wc -l
+dshB-mainsrc: R848_PART=shapes node scripts/simDailySaveHardening.mjs
+dshB2-mainsrc: R848_PART=shapes node scripts/simDailySaveHardening.mjs
+cpu: nproc; grep -m1 "model name" /proc/cpuinfo
