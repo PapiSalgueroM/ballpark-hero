@@ -1,0 +1,3 @@
+dig-gate exit=0 24s |    Duration  22.88s (transform 718ms, setup 32ms, collect 919ms, tests 21.47s, environment 186ms, prepare 78ms)
+board-record exit=0 28s |    Duration  27.15s (transform 1.06s, setup 30ms, collect 1.48s, tests 25.20s, environment 173ms, prepare 92ms)
+deckc-record exit=0 24s | simUsCareerDeckC: all checks passed
