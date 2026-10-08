@@ -1,0 +1,5 @@
+#!serial
+# Round 1051 reviewer (runner lens), third batch: the stamp moved out of persist into the manual retire handler alone
+p1-stamponlymanual: bash .rc/x/rmutrun.sh stamponlymanual vit nba
+p2-tsc-after: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+p9-clean: git status --porcelain --untracked-files=no | wc -l
