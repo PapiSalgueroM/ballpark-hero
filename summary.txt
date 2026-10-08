@@ -1,0 +1,1 @@
+simDailySaveHardening exit=0 41s | simDailySaveHardening: part all green
