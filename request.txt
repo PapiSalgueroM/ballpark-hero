@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+# Round 1104 on a03fd653: the walk again (it stalled on the rivalry choice card), its control, and the re-recorded board fixture replayed
+walk: ENGINES=chromium node scripts/playNflTruth.mjs
+walk-seventeen: NFL_TRUTH_WALK_CONTROL=seventeen ENGINES=chromium node scripts/playNflTruth.mjs
+boardparity: node scripts/simUsBoardParity.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+norival: node scripts/simNoRivalNames.mjs
