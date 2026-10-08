@@ -1,0 +1,3 @@
+vitest-celebration exit=0 3s |    Duration  2.11s (transform 487ms, setup 67ms, collect 634ms, tests 283ms, environment 405ms, prepare 320ms)
+vitest-motion exit=1 31s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/liveSimMotion.test.tsx,title=src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R6%3A a 
+tsc exit=0 47s | 
