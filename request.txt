@@ -1,0 +1,6 @@
+dsh1: node scripts/simDailySaveHardening.mjs
+dsh2: node scripts/simDailySaveHardening.mjs
+dsh3: node scripts/simDailySaveHardening.mjs
+dsh4: node scripts/simDailySaveHardening.mjs
+dsh5: node scripts/simDailySaveHardening.mjs
+dsh6: node scripts/simDailySaveHardening.mjs

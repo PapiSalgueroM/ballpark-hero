@@ -1,0 +1,6 @@
+dsh2 exit=1 55s | simDailySaveHardening: 2 failure(s)
+dsh1 exit=1 55s | simDailySaveHardening: 2 failure(s)
+dsh3 exit=1 56s | simDailySaveHardening: 2 failure(s)
+dsh5 exit=1 55s | simDailySaveHardening: 2 failure(s)
+dsh4 exit=1 55s | simDailySaveHardening: 2 failure(s)
+dsh6 exit=1 56s | simDailySaveHardening: 2 failure(s)
