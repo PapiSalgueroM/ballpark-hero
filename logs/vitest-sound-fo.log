@@ -1,0 +1,51 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/lib/frontOfficeRatings.test.ts[2m > [22m[2mNFL opening rating checkpoint[2m > [22m[2mreproduces all2163 frozen candidate grades fictional prices and years without named overrides
+[22m[39mNFL_LAYER_MOVES {"linemenAndDefendersHeld":1456,"offenseMenMoved":423}
+
+[90mstdout[2m | src/lib/frontOfficeRatings.test.ts[2m > [22m[2mNFL opening rating checkpoint[2m > [22m[2msaves only five original lineage fields below700KiB and reloads them without rerating
+[22m[39mNFL_RATING_SAVE_SIZE {"rawBytes":637649,"gzipBytes":67034,"players":2163}
+
+[90mstdout[2m | src/lib/frontOfficeRatings.test.ts[2m > [22m[2mNFL opening rating checkpoint[2m > [22m[2mplays four actual seasons playoffs drafts and summers with bounded saves and a nonnegative normal cap
+[22m[39mNFL_RATING_CAMPAIGN {"games":1088,"playoffs":52,"drafted":84,"saves":24,"maxSave":642189,"finalSeason":2030,"scope":"One seeded normal simulation; salary-matching trades are separately known to permit negative cap."}
+
+ [32m✓[39m src/test/careerAwardsNightCard.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 3708[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the Ballon d'Or ceremony card[2m > [22ma win offers the speech once, then shows what it did, and Continue leaves [33m 1150[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the tournament winner's speech[2m > [22mstays on the card, shows what it really moved, a second tap does nothing, Continue leaves [33m 496[2mms[22m[39m
+ [32m✓[39m src/test/frontOfficeSaveRecovery.test.tsx [2m([22m[2m36 tests[22m[2m)[22m[33m 6037[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL actual save recovery[2m > [22mrestores current progress, contracts and counters without rewriting storage [33m 709[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL actual save recovery[2m > [22mloads supported older saves and advances the same league once [33m 772[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL actual save recovery[2m > [22mallows a fresh club to replace the unusable save without clearing another game [33m 842[2mms[22m[39m
+   [33m[2m✓[22m[39m NHL actual save recovery[2m > [22mloads supported older saves and advances the same league once [33m 408[2mms[22m[39m
+   [33m[2m✓[22m[39m NHL actual save recovery[2m > [22mkeeps the existing duplicate and missing entity ID repair [33m 330[2mms[22m[39m
+   [33m[2m✓[22m[39m NHL actual save recovery[2m > [22mallows a fresh club to replace the unusable save without clearing another game [33m 644[2mms[22m[39m
+ [32m✓[39m src/test/freshBuildBlockedStorage.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 98[2mms[22m[39m
+ [32m✓[39m src/test/awardsNightSound.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[33m 355[2mms[22m[39m
+ [32m✓[39m src/test/soundToggle.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 429[2mms[22m[39m
+ [32m✓[39m src/test/freshBuildOptionalChunk.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+[90mstdout[2m | src/lib/frontOfficeRatings.test.ts[2m > [22m[2mNFL opening rating checkpoint[2m > [22m[2mdeals the same board league for a seed as the tree recorded before the opening files were unified
+[22m[39mNFL_BOARD_LEAGUE_DIGESTS ["a43660e29ceec1925fd3771184c2878f4a7e918aae7458654e2b33f3c23c7a8d","7578b53a5edea40e60e1321df949bff0c3906e392a1c199b4369b6fee94acd46","9ec6dba554f8c1a25658282309589c2f4d7a500f69ee45e41d569de3ebe1f829"]
+
+[90mstdout[2m | src/lib/frontOfficeRatings.test.ts[2m > [22m[2mNFL opening rating checkpoint[2m > [22m[2mprints one opening number per man in the starters and depth files with no override left
+[22m[39mNFL_ONE_NUMBER {"men":2163,"fifteenWhoseSeedDiffers":446}
+
+ [32m✓[39m src/lib/frontOfficeRatings.test.ts [2m([22m[2m17 tests[22m[2m)[22m[33m 14104[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL opening rating checkpoint[2m > [22mkeeps explicit legacy depth and saved old grades unchanged as an independent baseline [33m 340[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL opening rating checkpoint[2m > [22mrebakes the committed depth core and left-out files exactly without writing them [33m 313[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL opening rating checkpoint[2m > [22msaves only five original lineage fields below700KiB and reloads them without rerating [33m 364[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL opening rating checkpoint[2m > [22mkeeps source-stat observations and fitted models outside the browser data with a dated manifest [33m 486[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL opening rating checkpoint[2m > [22mplays four actual seasons playoffs drafts and summers with bounded saves and a nonnegative normal cap [33m 943[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL opening rating checkpoint[2m > [22mrefuses stale identity or source records before the real generator CLI writes outputs [33m 6977[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL opening rating checkpoint[2m > [22mdeals the same board league for a seed as the tree recorded before the opening files were unified [33m 713[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL opening rating checkpoint[2m > [22mloads a Release AK franchise unchanged and plays its next week exactly as Release AK would [33m 553[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL opening rating checkpoint[2m > [22mprints one opening number per man in the starters and depth files with no override left [33m 323[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m      Tests [22m [1m[32m90 passed[39m[22m[90m (90)[39m
+[2m   Start at [22m 17:35:04
+[2m   Duration [22m 17.40s[2m (transform 7.74s, setup 667ms, collect 12.97s, tests 24.76s, environment 3.80s, prepare 971ms)[22m
+

@@ -1,0 +1,38 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-search: node_modules/.bin/vitest run src/test/playerAutocompleteInteraction.test.tsx src/test/playerAutocompleteEmptyText.test.tsx src/test/playerSearchFailure.test.tsx src/test/playerAutocompleteStale.test.tsx src/test/collegeGridFailClosed.test.tsx src/test/collegeGridOffline.test.tsx src/test/collegeGridSearchMemory.test.ts src/test/lineupBuilderHistoryRead.test.tsx src/test/lineupValidatorClient.test.tsx src/test/playerSearchIdentity.test.ts src/test/playerSearchKeyboard.test.tsx src/test/playerSearchLocal.test.ts --testTimeout=300000 --hookTimeout=120000
+vitest-uscareer: node_modules/.bin/vitest run src/test/usCareerHallBoard.test.tsx src/test/usCareerActionConfirm.test.tsx src/test/careerHall.test.tsx src/test/careerHallV1Replay.test.ts src/test/usCareerSaveRetry.test.tsx src/test/usCareerSummer.test.tsx src/test/usSeasonCentreEntry.test.tsx src/test/usCareerPractice.test.tsx src/test/usCareerProspect.test.tsx src/test/usCareerReveals.test.tsx src/test/usCareerStatLines.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-sound-fo: node_modules/.bin/vitest run src/test/awardsNightSound.test.tsx src/test/soundToggle.test.tsx src/test/freshBuildOptionalChunk.test.ts src/test/freshBuildBlockedStorage.test.ts src/test/careerAwardsNightCard.test.tsx src/lib/frontOfficeRatings.test.ts src/test/frontOfficeSaveRecovery.test.tsx --testTimeout=300000 --hookTimeout=120000
+sweep2138: STALE_SWEEP_SEED=2138 node_modules/.bin/vitest run src/test/playerAutocompleteStale.test.tsx --testTimeout=300000
+sweep3138: STALE_SWEEP_SEED=3138 node_modules/.bin/vitest run src/test/playerAutocompleteStale.test.tsx --testTimeout=300000
+psf: node scripts/simPlayerSearchFailure.mjs
+psf-error: PLAYER_SEARCH_FAILURE_CONTROL=error node scripts/simPlayerSearchFailure.mjs
+psf-partial: PLAYER_SEARCH_FAILURE_CONTROL=partial node scripts/simPlayerSearchFailure.mjs
+psf-message: PLAYER_SEARCH_FAILURE_CONTROL=message node scripts/simPlayerSearchFailure.mjs
+psf-local: PLAYER_SEARCH_FAILURE_CONTROL=local node scripts/simPlayerSearchFailure.mjs
+psf-stale: PLAYER_SEARCH_FAILURE_CONTROL=stale node scripts/simPlayerSearchFailure.mjs
+psf-cleanup: PLAYER_SEARCH_FAILURE_CONTROL=cleanup node scripts/simPlayerSearchFailure.mjs
+psf-abort: PLAYER_SEARCH_FAILURE_CONTROL=abort node scripts/simPlayerSearchFailure.mjs
+aci: node scripts/simPlayerAutocompleteInteraction.mjs
+aci-pointeronly: AUTOCOMPLETE_INTERACTION_CONTROL=pointeronly node scripts/simPlayerAutocompleteInteraction.mjs
+aci-unguard: AUTOCOMPLETE_INTERACTION_CONTROL=unguard node scripts/simPlayerAutocompleteInteraction.mjs
+aci-enabledoptions: AUTOCOMPLETE_INTERACTION_CONTROL=enabledoptions node scripts/simPlayerAutocompleteInteraction.mjs
+aci-notag: AUTOCOMPLETE_INTERACTION_CONTROL=notag node scripts/simPlayerAutocompleteInteraction.mjs
+aci-keeplist: AUTOCOMPLETE_INTERACTION_CONTROL=keeplist node scripts/simPlayerAutocompleteInteraction.mjs
+aci-noenter: AUTOCOMPLETE_INTERACTION_CONTROL=noenter node scripts/simPlayerAutocompleteInteraction.mjs
+aci-anyenter: AUTOCOMPLETE_INTERACTION_CONTROL=anyenter node scripts/simPlayerAutocompleteInteraction.mjs
+aci-topenter: AUTOCOMPLETE_INTERACTION_CONTROL=topenter node scripts/simPlayerAutocompleteInteraction.mjs
+aci-nodropcommit: AUTOCOMPLETE_INTERACTION_CONTROL=nodropcommit node scripts/simPlayerAutocompleteInteraction.mjs
+aci-minchars: AUTOCOMPLETE_INTERACTION_CONTROL=minchars node scripts/simPlayerAutocompleteInteraction.mjs
+aci-leaveflight: AUTOCOMPLETE_INTERACTION_CONTROL=leaveflight node scripts/simPlayerAutocompleteInteraction.mjs
+aci-pickflight: AUTOCOMPLETE_INTERACTION_CONTROL=pickflight node scripts/simPlayerAutocompleteInteraction.mjs
+aci-lateescape: AUTOCOMPLETE_INTERACTION_CONTROL=lateescape node scripts/simPlayerAutocompleteInteraction.mjs
+aci-pickreopens: AUTOCOMPLETE_INTERACTION_CONTROL=pickreopens node scripts/simPlayerAutocompleteInteraction.mjs
+aci-stickypick: AUTOCOMPLETE_INTERACTION_CONTROL=stickypick node scripts/simPlayerAutocompleteInteraction.mjs
+aci-deafreturn: AUTOCOMPLETE_INTERACTION_CONTROL=deafreturn node scripts/simPlayerAutocompleteInteraction.mjs
+aci-tapthrough: AUTOCOMPLETE_INTERACTION_CONTROL=tapthrough node scripts/simPlayerAutocompleteInteraction.mjs
+aci-greedyswallow: AUTOCOMPLETE_INTERACTION_CONTROL=greedyswallow node scripts/simPlayerAutocompleteInteraction.mjs
+aci-bogus: AUTOCOMPLETE_INTERACTION_CONTROL=nosuchcontrol node scripts/simPlayerAutocompleteInteraction.mjs
+lvc: node scripts/simLineupValidatorClient.mjs
+qh: node scripts/simQuotaHonesty.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+storagewrites: node scripts/simStorageWrites.mjs
