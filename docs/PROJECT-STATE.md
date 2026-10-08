@@ -1,3 +1,11 @@
+## CODEX1164: Start options selected-state labels pending proof
+
+StartOptionsScreen now exposes the existing currency, international-jobs
+and strictness selections through three aria-pressed attributes.
+Visible copy, choices, callbacks, styles, helper and saved values are held.
+Recovery1163 penalty markers and F engine/data/integration stay separate.
+Source-only preparation, remote types/build/component/reader proof pending.
+
 ## Release AN LIVE, 2026-10-08 16:57 EDT: the site opens with storage blocked, translated pages stay live, six Codex rounds, five rounds of this lane
 
 Claude lane (session F). main 7ead9eb4, deployment aa7da32f-e499-418f-bd14-ec0201673437, entry index-D7bFwkA9.js (was
