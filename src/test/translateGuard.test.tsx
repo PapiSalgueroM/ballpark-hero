@@ -849,6 +849,24 @@ describe('layer two: a stand in the translator did not take is handed over again
     p.remove();
   });
 
+  it('each look waits longer than the one before: one second, then two, then four', async () => {
+    /* Release AN: a review flattened every wait to one second and nothing went red. The clock is read in
+       steps of a tenth of a second, so each gap is held to within one step. */
+    const { p } = await missed();
+    let standIn = p.firstChild;
+    const handedOverAt: number[] = [];
+    for (let ms = 100; ms <= 20000; ms += 100) {
+      await later(100);
+      if (p.firstChild !== standIn) { handedOverAt.push(ms); standIn = p.firstChild; }
+    }
+    expect(handedOverAt).toHaveLength(3);
+    const gaps = [handedOverAt[0], handedOverAt[1] - handedOverAt[0], handedOverAt[2] - handedOverAt[1]];
+    expect(Math.abs(gaps[0] - 1000)).toBeLessThanOrEqual(100);
+    expect(Math.abs(gaps[1] - 2000)).toBeLessThanOrEqual(100);
+    expect(Math.abs(gaps[2] - 4000)).toBeLessThanOrEqual(100);
+    p.remove();
+  });
+
   it('a line that keeps changing is never interrupted', async () => {
     const { p, words } = await missed();
     const before = stats();
