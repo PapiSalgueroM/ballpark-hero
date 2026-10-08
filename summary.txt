@@ -1,0 +1,2 @@
+q1-stampnotseason exit=7 18s | MUT stampnotseason: SURVIVED EVERYTHING, 0 files left changed: vit exit=0 ( Tests 161 passed (161)); sim-nfl exit=3 (simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREE
+q9-clean exit=0 0s | 0

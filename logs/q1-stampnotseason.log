@@ -1,0 +1,3 @@
+MUTATED stampnotseason: src/components/us-career/UsCareerBoard.tsx
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+MUT stampnotseason: SURVIVED EVERYTHING, 0 files left changed: vit exit=0 ( Tests 161 passed (161)); sim-nfl exit=3 (simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 25 checks that ran are green));
