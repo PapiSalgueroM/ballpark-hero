@@ -1,0 +1,1156 @@
+{
+ "noise": {
+  "keys": 37,
+  "exact": 36,
+  "onlyA": [],
+  "onlyB": [],
+  "differ": []
+ },
+ "cmp": {
+  "keys": 37,
+  "exact": 36,
+  "onlyA": [],
+  "onlyB": [],
+  "differ": []
+ },
+ "kept": {
+  "keys": 37,
+  "exact": 36,
+  "onlyA": [],
+  "onlyB": [],
+  "differ": [
+   "stadiumTycoonSaveV1"
+  ]
+ },
+ "lost": [],
+ "changed": [
+  "stadiumTycoonSaveV1"
+ ],
+ "changedOld": [
+  "stadiumTycoonSaveV1"
+ ],
+ "base": {
+  "/soccer-career": {
+   "presses": [
+    "Choose nationality",
+    "Choose position",
+    "Choose era",
+    "🎲 Surprise me"
+   ],
+   "buttons": 29,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/club-manager": {
+   "presses": [
+    "📅 2026-27 Today. Real squads as of Augu",
+    "📅 Starting 2026-27",
+    "📅 2026-27 Today. Real squads as of Augu",
+    "📅 Starting 2026-27"
+   ],
+   "buttons": 12,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/nba-my-career": {
+   "presses": [
+    "Let's Play!",
+    "The Pest Picks pockets, gets under skin",
+    "Play your road to the draft",
+    "Got it"
+   ],
+   "buttons": 10,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/nfl-my-career": {
+   "presses": [
+    "Let's Play!",
+    "Play your road to the draft",
+    "Got it",
+    "3 seasons Big college program Every game"
+   ],
+   "buttons": 8,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/stadium-tycoon": {
+   "presses": [
+    "Let's go",
+    "🏗️ Upgrades 3 ready",
+    "🧑‍🤝‍🧑 Payroll 0 hired",
+    "🏟️ Stadium"
+   ],
+   "buttons": 25,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/college-grid": {
+   "presses": [
+    "Close"
+   ],
+   "buttons": 8,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/front-office": {
+   "presses": [
+    "Chicago Bears NFC North",
+    "✍️ RE-SIGN DESK 6 deals end this spring ",
+    "Process, patience, all the safe words ME",
+    "Hub"
+   ],
+   "buttons": 16,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/build-your-xi": {
+   "presses": [
+    "Got it!",
+    "4-3-3 11 players",
+    "Reroll: get a different team",
+    "GK"
+   ],
+   "buttons": 22,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/footle": {
+   "presses": [
+    "Let's Play!"
+   ],
+   "buttons": 11,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/free-kick": {
+   "presses": [
+    "Today's ten",
+    "Hold to strike"
+   ],
+   "buttons": 8,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/connections": {
+   "presses": [
+    "Close",
+    "Rodrygo",
+    "Casemiro",
+    "Gerard Pique"
+   ],
+   "buttons": 30,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/ufc": {
+   "presses": [
+    "Close"
+   ],
+   "buttons": 11,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/football-grid": {
+   "presses": [
+    "Close"
+   ],
+   "buttons": 9,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/baseball-career": {
+   "presses": [
+    "Close"
+   ],
+   "buttons": 13,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/baseball-connections": {
+   "presses": [
+    "Close",
+    "Randy Johnson",
+    "Deselect All",
+    "Greg Maddux"
+   ],
+   "buttons": 32,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/hockey-career": {
+   "presses": [
+    "Close"
+   ],
+   "buttons": 13,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/hockey-higher-lower": {
+   "presses": [
+    "Close",
+    "🇨🇦 Joe Thornton Forward Boston, San Jo"
+   ],
+   "buttons": 13,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/soccer-grid": {
+   "presses": [
+    "Let's Play!",
+    "Easy",
+    "Normal",
+    "Hard"
+   ],
+   "buttons": 23,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/conquest": {
+   "presses": [
+    "🎮 Arcade The original mode: play-by-pla",
+    "Start Conquering!",
+    "⚔️ Start Conquest",
+    "Modes"
+   ],
+   "buttons": 8,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/conquest-nba": {
+   "presses": [
+    "🎮 Arcade The original mode: play-by-pla",
+    "Start Conquering!",
+    "⚔️ Start Conquest",
+    "Modes"
+   ],
+   "buttons": 8,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/world-cup-bracket": {
+   "presses": [
+    "🥇 GOLDEN BOOT (TOP SCORER) Select a pla",
+    "Wood New Zealand",
+    "🧤 GOLDEN GLOVE (BEST GK) Select a playe",
+    "Unai Simón Spain"
+   ],
+   "buttons": 39,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/nfl-connections": {
+   "presses": [
+    "Close",
+    "Marshawn Lynch",
+    "Deselect All",
+    "Frank Gore"
+   ],
+   "buttons": 32,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/nba-career": {
+   "presses": [
+    "Close"
+   ],
+   "buttons": 13,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/hof-or-bust": {
+   "presses": [
+    "Hall of Fame",
+    "Play Unlimited",
+    "Hall of Fame",
+    "Next Player →"
+   ],
+   "buttons": 12,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/score-predictor": {
+   "presses": [],
+   "buttons": 10,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/football-draft": {
+   "presses": [
+    "Pin Player Bingo",
+    "Unpin Player Bingo",
+    "Pin Sports Bingo",
+    "Unpin Sports Bingo"
+   ],
+   "buttons": 171,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/football-timeline": {
+   "presses": [
+    "Close",
+    "Move down",
+    "Move down",
+    "Move up"
+   ],
+   "buttons": 18,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/world-cup": {
+   "presses": [
+    "Pin Player Bingo",
+    "Unpin Player Bingo",
+    "Pin Sports Bingo",
+    "Unpin Sports Bingo"
+   ],
+   "buttons": 171,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  }
+ },
+ "branch": {
+  "/soccer-career": {
+   "presses": [
+    "Choose nationality",
+    "Choose position",
+    "Choose era",
+    "🎲 Surprise me"
+   ],
+   "buttons": 29,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/club-manager": {
+   "presses": [
+    "📅 2026-27 Today. Real squads as of Augu",
+    "📅 Starting 2026-27",
+    "📅 2026-27 Today. Real squads as of Augu",
+    "📅 Starting 2026-27"
+   ],
+   "buttons": 12,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/nba-my-career": {
+   "presses": [
+    "Let's Play!",
+    "The Pest Picks pockets, gets under skin",
+    "Play your road to the draft",
+    "Got it"
+   ],
+   "buttons": 10,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/nfl-my-career": {
+   "presses": [
+    "Let's Play!",
+    "Play your road to the draft",
+    "Got it",
+    "3 seasons Big college program Every game"
+   ],
+   "buttons": 8,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/stadium-tycoon": {
+   "presses": [
+    "Let's go",
+    "🏗️ Upgrades 3 ready",
+    "🧑‍🤝‍🧑 Payroll 0 hired",
+    "🏟️ Stadium"
+   ],
+   "buttons": 25,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/college-grid": {
+   "presses": [
+    "Close"
+   ],
+   "buttons": 8,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/front-office": {
+   "presses": [
+    "Chicago Bears NFC North",
+    "✍️ RE-SIGN DESK 6 deals end this spring ",
+    "Process, patience, all the safe words ME",
+    "Hub"
+   ],
+   "buttons": 16,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/build-your-xi": {
+   "presses": [
+    "Got it!",
+    "4-3-3 11 players",
+    "Reroll: get a different team",
+    "GK"
+   ],
+   "buttons": 22,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/footle": {
+   "presses": [
+    "Let's Play!"
+   ],
+   "buttons": 11,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/free-kick": {
+   "presses": [
+    "Today's ten",
+    "Hold to strike"
+   ],
+   "buttons": 8,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/connections": {
+   "presses": [
+    "Close",
+    "Rodrygo",
+    "Casemiro",
+    "Gerard Pique"
+   ],
+   "buttons": 30,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/ufc": {
+   "presses": [
+    "Close"
+   ],
+   "buttons": 11,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/football-grid": {
+   "presses": [
+    "Close"
+   ],
+   "buttons": 9,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/baseball-career": {
+   "presses": [
+    "Close"
+   ],
+   "buttons": 13,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/baseball-connections": {
+   "presses": [
+    "Close",
+    "Randy Johnson",
+    "Deselect All",
+    "Greg Maddux"
+   ],
+   "buttons": 32,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/hockey-career": {
+   "presses": [
+    "Close"
+   ],
+   "buttons": 13,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/hockey-higher-lower": {
+   "presses": [
+    "Close",
+    "🇨🇦 Joe Thornton Forward Boston, San Jo"
+   ],
+   "buttons": 13,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/soccer-grid": {
+   "presses": [
+    "Let's Play!",
+    "Easy",
+    "Normal",
+    "Hard"
+   ],
+   "buttons": 23,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/conquest": {
+   "presses": [
+    "🎮 Arcade The original mode: play-by-pla",
+    "Start Conquering!",
+    "⚔️ Start Conquest",
+    "Modes"
+   ],
+   "buttons": 8,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/conquest-nba": {
+   "presses": [
+    "🎮 Arcade The original mode: play-by-pla",
+    "Start Conquering!",
+    "⚔️ Start Conquest",
+    "Modes"
+   ],
+   "buttons": 8,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/world-cup-bracket": {
+   "presses": [
+    "🥇 GOLDEN BOOT (TOP SCORER) Select a pla",
+    "Wood New Zealand",
+    "🧤 GOLDEN GLOVE (BEST GK) Select a playe",
+    "Unai Simón Spain"
+   ],
+   "buttons": 39,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/nfl-connections": {
+   "presses": [
+    "Close",
+    "Marshawn Lynch",
+    "Deselect All",
+    "Frank Gore"
+   ],
+   "buttons": 32,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/nba-career": {
+   "presses": [
+    "Close"
+   ],
+   "buttons": 13,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/hof-or-bust": {
+   "presses": [
+    "Hall of Fame",
+    "Play Unlimited",
+    "Hall of Fame",
+    "Next Player →"
+   ],
+   "buttons": 12,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/score-predictor": {
+   "presses": [],
+   "buttons": 10,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/football-draft": {
+   "presses": [
+    "Pin Player Bingo",
+    "Unpin Player Bingo",
+    "Pin Sports Bingo",
+    "Unpin Sports Bingo"
+   ],
+   "buttons": 171,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/football-timeline": {
+   "presses": [
+    "Close",
+    "Move down",
+    "Move down",
+    "Move up"
+   ],
+   "buttons": 18,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  },
+  "/world-cup": {
+   "presses": [
+    "Pin Player Bingo",
+    "Unpin Player Bingo",
+    "Pin Sports Bingo",
+    "Unpin Sports Bingo"
+   ],
+   "buttons": 171,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false
+  }
+ },
+ "onOld": {
+  "/soccer-career": {
+   "buttons": 29,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/club-manager": {
+   "buttons": 12,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/nba-my-career": {
+   "buttons": 11,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/nfl-my-career": {
+   "buttons": 8,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/stadium-tycoon": {
+   "buttons": 27,
+   "dialogs": 1,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/college-grid": {
+   "buttons": 8,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/front-office": {
+   "buttons": 16,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/build-your-xi": {
+   "buttons": 14,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/footle": {
+   "buttons": 11,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/free-kick": {
+   "buttons": 10,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/connections": {
+   "buttons": 10,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/ufc": {
+   "buttons": 11,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/football-grid": {
+   "buttons": 9,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/baseball-career": {
+   "buttons": 13,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/baseball-connections": {
+   "buttons": 32,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/hockey-career": {
+   "buttons": 13,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/hockey-higher-lower": {
+   "buttons": 13,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/soccer-grid": {
+   "buttons": 23,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/conquest": {
+   "buttons": 8,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/conquest-nba": {
+   "buttons": 8,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/world-cup-bracket": {
+   "buttons": 39,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/nfl-connections": {
+   "buttons": 32,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/nba-career": {
+   "buttons": 13,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/hof-or-bust": {
+   "buttons": 19,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/score-predictor": {
+   "buttons": 10,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/football-draft": {
+   "buttons": 171,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/football-timeline": {
+   "buttons": 18,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/world-cup": {
+   "buttons": 171,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  }
+ },
+ "onNew": {
+  "/soccer-career": {
+   "buttons": 29,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/club-manager": {
+   "buttons": 12,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/nba-my-career": {
+   "buttons": 11,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/nfl-my-career": {
+   "buttons": 8,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/stadium-tycoon": {
+   "buttons": 27,
+   "dialogs": 1,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/college-grid": {
+   "buttons": 8,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/front-office": {
+   "buttons": 16,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/build-your-xi": {
+   "buttons": 14,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/footle": {
+   "buttons": 11,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/free-kick": {
+   "buttons": 10,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/connections": {
+   "buttons": 10,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/ufc": {
+   "buttons": 11,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/football-grid": {
+   "buttons": 9,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/baseball-career": {
+   "buttons": 13,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/baseball-connections": {
+   "buttons": 32,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/hockey-career": {
+   "buttons": 13,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/hockey-higher-lower": {
+   "buttons": 13,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/soccer-grid": {
+   "buttons": 23,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/conquest": {
+   "buttons": 8,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/conquest-nba": {
+   "buttons": 8,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/world-cup-bracket": {
+   "buttons": 39,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/nfl-connections": {
+   "buttons": 32,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/nba-career": {
+   "buttons": 13,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/hof-or-bust": {
+   "buttons": 19,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/score-predictor": {
+   "buttons": 10,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/football-draft": {
+   "buttons": 171,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/football-timeline": {
+   "buttons": 18,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  },
+  "/world-cup": {
+   "buttons": 171,
+   "dialogs": 0,
+   "boundary": false,
+   "notice": false,
+   "banner": false,
+   "errors": []
+  }
+ }
+}

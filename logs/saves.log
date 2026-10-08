@@ -1,0 +1,30 @@
+base worktree at e87d28be4
+base build exit 0
+[32m✓ built in 28.71s[39m
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+(no line above this one naming an asset = the base build does not carry the seam, as expected)
+routes: 28 of 30 are in the registry; skipped /world-cup-predictor /lineup-builder
+base walk 1: played 28 routes, 37 localStorage keys, 0 sessionStorage keys, 0 uncaught errors
+base walk 2: played 28 routes, 37 localStorage keys, 0 sessionStorage keys, 0 uncaught errors
+branch walk: played 28 routes, 37 localStorage keys, 0 sessionStorage keys, 0 uncaught errors
+
+NOISE FLOOR (base against base)
+localStorage base vs base: 37 keys in all, 36 byte identical, only in base 0, only in branch 0, differing after normalising clock stamps 0
+
+BASE AGAINST BRANCH, ordinary storage, same presses
+localStorage base vs branch: 37 keys in all, 36 byte identical, only in base 0, only in branch 0, differing after normalising clock stamps 0
+sessionStorage base vs branch: 0 keys in all, 0 byte identical, only in base 0, only in branch 0, differing after normalising clock stamps 0
+probe key left behind on the branch: none
+routes where the two builds were pressed differently, broke, or the branch showed the notice: 0
+uncaught errors: base 0, branch 0
+
+OLD SAVES: the browser the base filled, opened on the base again and on the branch
+base saves on base: revisited 28 routes with the stored saves, 37 keys after, 0 uncaught errors
+base saves on branch: revisited 28 routes with the stored saves, 37 keys after, 0 uncaught errors
+routes that came back differently on the branch: 0 of 28
+storage after the revisit, base vs branch: 37 keys in all, 36 byte identical, only in base 0, only in branch 0, differing after normalising clock stamps 1
+   differs:     stadiumTycoonSaveV1 (lengths 1434 and 1435) at 15: base "{"v":1,"money":993.T,"lifetime":953.T,"rep":0,"levels":" branch "{"v":1,"money":1064.T,"lifetime":1024.T,"rep":0,"levels"
+keys the base wrote that are gone after loading on the branch: 0 
+keys whose bytes changed just by loading: on the branch 1, on the base 1; branch only: none
+saves: base vs branch only-in-one 0 (noise 0), differing 0 (noise 0), came back differently 0, lost 0
+saves script exit 0
