@@ -594,7 +594,8 @@ function staticClosure(roots, overrides = {}) {
     const full = path.join(ROOT, f);
     if (!(f in overrides) && !existsSync(full)) continue;
     if (!/\.(tsx?|mjs|js)$/.test(f)) continue;
-    const code = stripComments(norm(overrides[f] ?? readFileSync(full, 'utf8')));
+    let code = f in overrides ? overrides[f] : readFileSync(full, 'utf8');
+    code = stripComments(code.replace(/\r\n/g, '\n'));
     for (const spec of staticImports(code)) { const r = resolveSpec(spec, f); if (r) queue.push(r); }
   }
   return seenFiles;
