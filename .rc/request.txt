@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+walk: SWEEP_BASE=http://localhost:4173 node scripts/playClubManagerNewCountries.mjs
+walk-nonation: PLAY_NEWCOUNTRIES_CONTROL=nonation SWEEP_BASE=http://localhost:4173 node scripts/playClubManagerNewCountries.mjs
+playCM: SWEEP_BASE=http://localhost:4173 node scripts/playClubManager.mjs
+reduced: SWEEP_BASE=http://localhost:4173 BASE=http://localhost:4173 ONLY=/club-manager ENGINES=chromium node scripts/playReducedMotion.mjs
+weight: BASE=http://localhost:4173 ENGINES=chromium node scripts/sweepWeight.mjs
