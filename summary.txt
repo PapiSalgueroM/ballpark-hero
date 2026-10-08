@@ -1,0 +1,6 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk-nonation exit=1 19s | playClubManagerNewCountries: 2 failure(s) under control nonation
+reduced exit=0 31s | playReducedMotion: green. Motion stops for a visitor who asked for less, content stays visible, every Round 530 route lands its reveals on the final frame, and everyone e
+weight exit=1 26s | sweepWeight: 5 failures
+playCM exit=1 122s | Played Club Manager through its own screens. 1 findings.
+walk exit=1 125s | playClubManagerNewCountries: 12 failure(s)
