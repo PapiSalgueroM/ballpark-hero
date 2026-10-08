@@ -1,0 +1,1 @@
+olyfull exit=1 22s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/zzOlympicsProbe.test.tsx,title=src/test/zzOlympicsProbe.test.tsx > a damaged daily save resets itself 

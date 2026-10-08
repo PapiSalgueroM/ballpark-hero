@@ -1,0 +1,2 @@
+#!serial
+olyfull: node .rc/x/mkProbe.mjs && node_modules/.bin/vitest run src/test/zzOlympicsProbe.test.tsx --testTimeout=300000 --hookTimeout=120000
