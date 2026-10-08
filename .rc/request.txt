@@ -1,0 +1,4 @@
+# Round 1104: the deck C digest re-recorded on this head (it comes back as files/usCareerDeckCDigest.json), and the vitest file that held the re-pinned salary
+deckc-record: DECKC_RECORD=1 node scripts/simUsCareerDeckC.mjs; rc=$?; cp scripts/data/usCareerDeckCDigest.json "$RC_OUT/usCareerDeckCDigest.json"; exit $rc
+vitest-b: node_modules/.bin/vitest run src/test/usCareerProspect.test.tsx src/test/careerPreDraft.test.tsx src/test/usCareerSummer.test.tsx src/test/usCareerReveals.test.tsx src/test/usCareerStatLines.test.tsx src/test/usCareerActionConfirm.test.tsx src/test/usCareerHallBoard.test.tsx src/test/usCareerPractice.test.tsx src/test/careerRecordedStats.test.tsx --testTimeout=300000 --hookTimeout=120000
+money: node scripts/simMoney.mjs
