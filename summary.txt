@@ -1,0 +1,15 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simNoRivalNames exit=0 19s | No rival product names found. 0 findings.
+simAccessibility exit=0 0s | simAccessibility: all green
+simResultMoment exit=0 8s | simResultMoment: green. Every live game reaches the shared result moment or is listed with what it draws instead, the pill shows exactly the score it is given, the three 
+simHarnessAnchors exit=0 46s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 86s | 
+squadplay exit=0 142s | playCareerSquad: 164 checks, 0 failed
+simNumberFormatting exit=0 162s | Number formatting: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/number-formatting-artifacts/outcomes
+pill exit=0 16s | simResultPillComparison: green. 34 finished states on a 390 wide phone: every pill reads the hook's score, on one line inside its fixed pill, nothing scrolls sideways, no
+pill-bareline exit=0 16s | simResultPillComparison: control bareline turned [under] red, as it must (8 findings).
+vitest-whole-diff exit=0 10s |    Duration  8.82s (transform 5.24s, setup 235ms, collect 7.29s, tests 6.59s, environment 1.82s, prepare 1.56s)
+squadplay-ellipsis exit=1 142s | playCareerSquad (control ellipsis, 70 edits served): 164 checks, 2 failed
+translated-nospans exit=1 72s | playTranslatedPage: 79 checks, 28 failed (control "nospans", red on purpose)
+playSoccerCareer exit=1 78s |   - 6. no console or page errors across the walk: Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to 
+playStorageBlocked exit=0 273s | playStorageBlocked: 826 checks, 0 failed
