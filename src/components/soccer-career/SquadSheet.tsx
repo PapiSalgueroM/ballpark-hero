@@ -17,7 +17,7 @@
  * inside the panel instead of pushing the Back button off the screen. The
  * keyboard stays inside the sheet: Tab goes round its own buttons.
  */
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import type { CSSProperties, KeyboardEvent, ReactNode } from 'react';
 import type { CareerState } from '@/lib/soccerCareerEngine';
 import { GROUP_LABEL, squadNow } from '@/lib/soccerClubSquad';
@@ -58,6 +58,20 @@ const seasonOf = (year: number) => `${year}/${String((year + 1) % 100).padStart(
 function surname(m: SquadMan): string {
   const cut = m.name.indexOf(' ');
   return cut < 0 ? m.name : m.name.slice(cut + 1);
+}
+
+/** Release AN: a long word in a cell of the eleven gets one soft break in its
+    middle. A four man line on a phone has room for about eight letters, and
+    the browser used to break a longer surname wherever the line ran out,
+    which left one letter alone ("Sessegno" over "n"). Now it splits into two
+    halves. A word that fits is not broken, and a hyphenated one keeps the
+    break its hyphen already gives it. The text itself is unchanged. */
+function softBreaks(name: string): ReactNode {
+  return name.split(' ').map((word, i) => {
+    const half = Math.ceil(word.length / 2);
+    const long = word.length >= 7 && !word.includes('-');
+    return <Fragment key={i}>{i ? ' ' : null}{long ? <>{word.slice(0, half)}<wbr />{word.slice(half)}</> : word}</Fragment>;
+  });
 }
 
 /* A cell of the eleven is too narrow for "Second choice", so a role reads
@@ -231,7 +245,7 @@ export default function SquadSheet({ career, view, onClose, initialScreen }: Pro
                       </span>
                     ) : (
                       /* a long surname goes onto a second line, never under an ellipsis */
-                      <span className="w-full text-xs font-semibold leading-tight [overflow-wrap:anywhere]" data-squad-cell-name>{cellName(m)}</span>
+                      <span className="w-full text-xs font-semibold leading-tight [overflow-wrap:anywhere]" data-squad-cell-name>{softBreaks(cellName(m))}</span>
                     )}
                     {realAmongInvented(view, m) ? <span data-squad-real className="text-xs font-bold leading-tight text-muted-foreground">REAL</span> : null}
                     <span className="text-sm font-bold tabular-nums">{m.ovr}</span>

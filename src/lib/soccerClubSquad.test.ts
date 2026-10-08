@@ -595,6 +595,30 @@ describe('which baked row is a season', () => {
     }
   });
 
+  it('says a real squad is a selection, and the baked rows keep the promise it makes (four at most a position)', () => {
+    /* Release AN, after review: "The real Tottenham squad of 2019/20" stood over 19 names with a regular
+       of that season missing, and nothing said the list was a selection. The line says it now, and its
+       number is held to the data: no baked row may list more than four men at one position. */
+    const club = FALLBACK_CLUBS.find(c => c.name === 'Man City');
+    if (!club) throw new Error('no club Man City');
+    const view = squadView(save('Man City', club.country, club.tier, 70, 2021));
+    expect(view?.source).toBe('real');
+    expect(sourceLine(view!)).toContain('up to four players at each position');
+    expect(sourceLine(view!)).toContain('not everyone at the club is here');
+    let rows = 0;
+    let most = 0;
+    for (const blob of Object.values(CLUB_SQUADS)) {
+      rows += 1;
+      const at = new Map<string, number>();
+      for (const entry of blob.split(',')) { const pos = entry.split(':')[1]; at.set(pos, (at.get(pos) ?? 0) + 1); }
+      most = Math.max(most, ...at.values());
+    }
+    expect(rows).toBeGreaterThan(300);
+    expect(most).toBeLessThanOrEqual(4);
+    /* the other kinds of squad make no such claim */
+    expect(sourceLine({ ...view!, source: 'roles' })).not.toContain('up to four');
+  });
+
   it('gives the page readers the same season: the squad view, the depth chart and the label', () => {
     for (const [name, , to, season] of MOVES) {
       const club = FALLBACK_CLUBS.find(c => c.name === to);

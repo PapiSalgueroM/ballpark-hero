@@ -89,7 +89,11 @@ export function sourceLine(view: SquadView): string {
   const season = seasonLabel(view.year);
   const lastReal = realSeasons().last;
   if (view.source === 'real') {
-    return `The real ${view.club} squad of ${season}, rated on the same scale as the rest of the site.`;
+    /* Release AN, after review: a real row is a selection, never the whole squad list. The bake keeps
+       the highest rated men at each exact position, four at most (scripts/bakeClubSquads.mjs, KEEP),
+       so a real squad man can be missing (Tottenham 2019/20 holds 19 names), and the rank on this
+       sheet is a rank among the men listed. The line says so. */
+    return `The real ${view.club} squad of ${season}, rated on the same scale as the rest of the site. It lists up to four players at each position, the highest rated ones, so not everyone at the club is here.`;
   }
   if (view.source === 'roles') {
     return `The game has no checked squad list for ${view.club} in ${season}, so nobody is named: these are the roles, ages and ratings a squad at this level has.`;
