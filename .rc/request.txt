@@ -1,0 +1,1 @@
+skip-nfl: SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nfl
