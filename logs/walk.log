@@ -1,0 +1,106 @@
+thin-with-keeper: Real Madrid (career seed 782001) v Eibar, 2 on their roster (LB 68, GK 64), club strength 62.1; kick off seed 50022, live minute 46, score 0-0 at the break; the whistle goes to penalties on 8 of 8 seeds, the Quick Sim on 40 of 40; finish seed 90033 gives 30 kicks
+thin-no-keeper: Real Madrid (career seed 782016) v Málaga, 5 on their roster (LB 76, CDM 75, ST 74, RW 72, LB 70), club strength 65.1; kick off seed 50022, live minute 46, score 0-0 at the break; the whistle goes to penalties on 8 of 8 seeds, the Quick Sim on 40 of 40; finish seed 90033 gives 30 kicks
+   shot thin-with-keeper-320-1-hub.png
+   shot thin-with-keeper-320-2-quick-report.png
+thin-with-keeper 320 quick: rows 220x41 cutNames 0 clubCut 0
+thin-with-keeper 320 quick: 30 kicks, theirs 15 (12 tagged made up): Juan Bernat, Their taker 1*, Their taker 2*, Their taker 3*, Their taker 4*, Their taker 5*, Their taker 6*, Their taker 7*, Their taker 8*, Their taker 9*, Jonmi Magunagoitia, Juan Bernat, Their taker 1*, Their taker 2*, Their taker 3*; equal to the engine's own replay of seed 90033: true; count 11-10; page errors 0
+   shot thin-with-keeper-320-3-live-whistle.png
+   shot thin-with-keeper-320-3-live-whistle-full.png
+thin-with-keeper 320 live: rows 262x41 cutNames 0 clubCut 0
+thin-with-keeper 320 live: 9 kicks, theirs 5 (4 tagged made up): Juan Bernat, Their taker 1*, Their taker 2*, Their taker 3*, Their taker 4*; page errors 0
+   shot thin-with-keeper-320-4-live-full-report.png
+   shot thin-with-keeper-360-1-hub.png
+   shot thin-with-keeper-360-2-quick-report.png
+thin-with-keeper 360 quick: rows 260x41 cutNames 0 clubCut 0
+thin-with-keeper 360 quick: 30 kicks, theirs 15 (12 tagged made up): Juan Bernat, Their taker 1*, Their taker 2*, Their taker 3*, Their taker 4*, Their taker 5*, Their taker 6*, Their taker 7*, Their taker 8*, Their taker 9*, Jonmi Magunagoitia, Juan Bernat, Their taker 1*, Their taker 2*, Their taker 3*; equal to the engine's own replay of seed 90033: true; count 11-10; page errors 0
+   shot thin-with-keeper-360-3-live-whistle.png
+   shot thin-with-keeper-360-3-live-whistle-full.png
+thin-with-keeper 360 live: rows 302x41 cutNames 0 clubCut 0
+thin-with-keeper 360 live: 9 kicks, theirs 5 (4 tagged made up): Juan Bernat, Their taker 1*, Their taker 2*, Their taker 3*, Their taker 4*; page errors 0
+   shot thin-with-keeper-360-4-live-full-report.png
+   shot thin-with-keeper-390-1-hub.png
+   shot thin-with-keeper-390-2-quick-report.png
+thin-with-keeper 390 quick: rows 290x41 cutNames 0 clubCut 0
+thin-with-keeper 390 quick: 30 kicks, theirs 15 (12 tagged made up): Juan Bernat, Their taker 1*, Their taker 2*, Their taker 3*, Their taker 4*, Their taker 5*, Their taker 6*, Their taker 7*, Their taker 8*, Their taker 9*, Jonmi Magunagoitia, Juan Bernat, Their taker 1*, Their taker 2*, Their taker 3*; equal to the engine's own replay of seed 90033: true; count 11-10; page errors 0
+   shot thin-with-keeper-390-3-live-whistle.png
+   shot thin-with-keeper-390-3-live-whistle-full.png
+thin-with-keeper 390 live: rows 332x41 cutNames 0 clubCut 0
+thin-with-keeper 390 live: 12 kicks, theirs 6 (5 tagged made up): Juan Bernat, Their taker 1*, Their taker 2*, Their taker 3*, Their taker 4*, Their taker 5*; page errors 0
+   shot thin-with-keeper-390-4-live-full-report.png
+   shot thin-with-keeper-640-1-hub.png
+   shot thin-with-keeper-640-2-quick-report.png
+thin-with-keeper 640 quick: rows 380x25 cutNames 0 clubCut 0
+thin-with-keeper 640 quick: 30 kicks, theirs 15 (12 tagged made up): Juan Bernat, Their taker 1*, Their taker 2*, Their taker 3*, Their taker 4*, Their taker 5*, Their taker 6*, Their taker 7*, Their taker 8*, Their taker 9*, Jonmi Magunagoitia, Juan Bernat, Their taker 1*, Their taker 2*, Their taker 3*; equal to the engine's own replay of seed 90033: true; count 11-10; page errors 0
+   shot thin-with-keeper-640-3-live-whistle.png
+   shot thin-with-keeper-640-3-live-whistle-full.png
+thin-with-keeper 640 live: rows 422x25 cutNames 0 clubCut 0
+thin-with-keeper 640 live: 7 kicks, theirs 4 (3 tagged made up): Juan Bernat, Their taker 1*, Their taker 2*, Their taker 3*; page errors 0
+   shot thin-with-keeper-640-4-live-full-report.png
+   shot thin-with-keeper-768-1-hub.png
+   shot thin-with-keeper-768-2-quick-report.png
+thin-with-keeper 768 quick: rows 380x25 cutNames 0 clubCut 0
+thin-with-keeper 768 quick: 30 kicks, theirs 15 (12 tagged made up): Juan Bernat, Their taker 1*, Their taker 2*, Their taker 3*, Their taker 4*, Their taker 5*, Their taker 6*, Their taker 7*, Their taker 8*, Their taker 9*, Jonmi Magunagoitia, Juan Bernat, Their taker 1*, Their taker 2*, Their taker 3*; equal to the engine's own replay of seed 90033: true; count 11-10; page errors 0
+   shot thin-with-keeper-768-3-live-whistle.png
+   shot thin-with-keeper-768-3-live-whistle-full.png
+thin-with-keeper 768 live: rows 422x25 cutNames 0 clubCut 0
+thin-with-keeper 768 live: 9 kicks, theirs 4 (3 tagged made up): Juan Bernat, Their taker 1*, Their taker 2*, Their taker 3*; page errors 0
+   shot thin-with-keeper-768-4-live-full-report.png
+   shot thin-with-keeper-1280-1-hub.png
+   shot thin-with-keeper-1280-2-quick-report.png
+thin-with-keeper 1280 quick: rows 380x25 cutNames 0 clubCut 0
+thin-with-keeper 1280 quick: 30 kicks, theirs 15 (12 tagged made up): Juan Bernat, Their taker 1*, Their taker 2*, Their taker 3*, Their taker 4*, Their taker 5*, Their taker 6*, Their taker 7*, Their taker 8*, Their taker 9*, Jonmi Magunagoitia, Juan Bernat, Their taker 1*, Their taker 2*, Their taker 3*; equal to the engine's own replay of seed 90033: true; count 11-10; page errors 0
+   shot thin-with-keeper-1280-3-live-whistle.png
+   shot thin-with-keeper-1280-3-live-whistle-full.png
+thin-with-keeper 1280 live: rows 422x25 cutNames 0 clubCut 0
+thin-with-keeper 1280 live: 7 kicks, theirs 4 (3 tagged made up): Juan Bernat, Their taker 1*, Their taker 2*, Their taker 3*; page errors 0
+   shot thin-with-keeper-1280-4-live-full-report.png
+   shot thin-no-keeper-320-2-quick-report.png
+thin-no-keeper 320 quick: rows 220x41 cutNames 0 clubCut 0
+thin-no-keeper 320 quick: 30 kicks, theirs 15 (6 tagged made up): Adam Aznou, Jens Cajuste, Chupe, David Larrubia, José Salinas, Their taker 1*, Their taker 2*, Their taker 3*, Their taker 4*, Their taker 5*, Their keeper*, Adam Aznou, Jens Cajuste, Chupe, David Larrubia; equal to the engine's own replay of seed 90033: true; count 11-10; page errors 0
+   shot thin-no-keeper-320-3-live-whistle.png
+   shot thin-no-keeper-320-3-live-whistle-full.png
+thin-no-keeper 320 live: rows 262x41 cutNames 0 clubCut 0
+thin-no-keeper 320 live: 10 kicks, theirs 5 (0 tagged made up): Adam Aznou, Jens Cajuste, Chupe, David Larrubia, José Salinas; page errors 0
+   shot thin-no-keeper-320-4-live-full-report.png
+   shot thin-no-keeper-360-2-quick-report.png
+thin-no-keeper 360 quick: rows 260x41 cutNames 0 clubCut 0
+thin-no-keeper 360 quick: 30 kicks, theirs 15 (6 tagged made up): Adam Aznou, Jens Cajuste, Chupe, David Larrubia, José Salinas, Their taker 1*, Their taker 2*, Their taker 3*, Their taker 4*, Their taker 5*, Their keeper*, Adam Aznou, Jens Cajuste, Chupe, David Larrubia; equal to the engine's own replay of seed 90033: true; count 11-10; page errors 0
+   shot thin-no-keeper-360-3-live-whistle.png
+   shot thin-no-keeper-360-3-live-whistle-full.png
+thin-no-keeper 360 live: rows 302x41 cutNames 0 clubCut 0
+thin-no-keeper 360 live: 10 kicks, theirs 5 (0 tagged made up): Adam Aznou, Jens Cajuste, Chupe, David Larrubia, José Salinas; page errors 0
+   shot thin-no-keeper-360-4-live-full-report.png
+   shot thin-no-keeper-390-2-quick-report.png
+thin-no-keeper 390 quick: rows 290x41 cutNames 0 clubCut 0
+thin-no-keeper 390 quick: 30 kicks, theirs 15 (6 tagged made up): Adam Aznou, Jens Cajuste, Chupe, David Larrubia, José Salinas, Their taker 1*, Their taker 2*, Their taker 3*, Their taker 4*, Their taker 5*, Their keeper*, Adam Aznou, Jens Cajuste, Chupe, David Larrubia; equal to the engine's own replay of seed 90033: true; count 11-10; page errors 0
+   shot thin-no-keeper-390-3-live-whistle.png
+   shot thin-no-keeper-390-3-live-whistle-full.png
+thin-no-keeper 390 live: rows 332x41 cutNames 0 clubCut 0
+thin-no-keeper 390 live: 9 kicks, theirs 5 (0 tagged made up): Adam Aznou, Jens Cajuste, Chupe, David Larrubia, José Salinas; page errors 0
+   shot thin-no-keeper-390-4-live-full-report.png
+   shot thin-no-keeper-640-2-quick-report.png
+thin-no-keeper 640 quick: rows 380x25 cutNames 0 clubCut 0
+thin-no-keeper 640 quick: 30 kicks, theirs 15 (6 tagged made up): Adam Aznou, Jens Cajuste, Chupe, David Larrubia, José Salinas, Their taker 1*, Their taker 2*, Their taker 3*, Their taker 4*, Their taker 5*, Their keeper*, Adam Aznou, Jens Cajuste, Chupe, David Larrubia; equal to the engine's own replay of seed 90033: true; count 11-10; page errors 0
+   shot thin-no-keeper-640-3-live-whistle.png
+   shot thin-no-keeper-640-3-live-whistle-full.png
+thin-no-keeper 640 live: rows 422x25 cutNames 0 clubCut 0
+thin-no-keeper 640 live: 7 kicks, theirs 3 (0 tagged made up): Adam Aznou, Jens Cajuste, Chupe; page errors 0
+   shot thin-no-keeper-640-4-live-full-report.png
+   shot thin-no-keeper-768-2-quick-report.png
+thin-no-keeper 768 quick: rows 380x25 cutNames 0 clubCut 0
+thin-no-keeper 768 quick: 30 kicks, theirs 15 (6 tagged made up): Adam Aznou, Jens Cajuste, Chupe, David Larrubia, José Salinas, Their taker 1*, Their taker 2*, Their taker 3*, Their taker 4*, Their taker 5*, Their keeper*, Adam Aznou, Jens Cajuste, Chupe, David Larrubia; equal to the engine's own replay of seed 90033: true; count 11-10; page errors 0
+   shot thin-no-keeper-768-3-live-whistle.png
+   shot thin-no-keeper-768-3-live-whistle-full.png
+thin-no-keeper 768 live: rows 422x25 cutNames 0 clubCut 0
+thin-no-keeper 768 live: 8 kicks, theirs 4 (0 tagged made up): Adam Aznou, Jens Cajuste, Chupe, David Larrubia; page errors 0
+   shot thin-no-keeper-768-4-live-full-report.png
+   shot thin-no-keeper-1280-2-quick-report.png
+thin-no-keeper 1280 quick: rows 380x25 cutNames 0 clubCut 0
+thin-no-keeper 1280 quick: 30 kicks, theirs 15 (6 tagged made up): Adam Aznou, Jens Cajuste, Chupe, David Larrubia, José Salinas, Their taker 1*, Their taker 2*, Their taker 3*, Their taker 4*, Their taker 5*, Their keeper*, Adam Aznou, Jens Cajuste, Chupe, David Larrubia; equal to the engine's own replay of seed 90033: true; count 11-10; page errors 0
+   shot thin-no-keeper-1280-3-live-whistle.png
+   shot thin-no-keeper-1280-3-live-whistle-full.png
+thin-no-keeper 1280 live: rows 422x25 cutNames 0 clubCut 0
+thin-no-keeper 1280 live: 14 kicks, theirs 7 (2 tagged made up): Adam Aznou, Jens Cajuste, Chupe, David Larrubia, José Salinas, Their taker 1*, Their taker 2*; page errors 0
+   shot thin-no-keeper-1280-4-live-full-report.png
+
+walk: 24 passes read, 0 problem(s)

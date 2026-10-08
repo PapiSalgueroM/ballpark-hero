@@ -1,0 +1,537 @@
+[
+ {
+  "label": "thin-with-keeper",
+  "opp": "Eibar",
+  "roster": [
+   {
+    "n": "Juan Bernat",
+    "p": "LB",
+    "a": 32,
+    "v": 1.4,
+    "r": 68,
+    "anchor": 68,
+    "since": 0
+   },
+   {
+    "n": "Jonmi Magunagoitia",
+    "p": "GK",
+    "a": 25,
+    "v": 0.8,
+    "r": 64,
+    "anchor": 64,
+    "since": 0
+   }
+  ],
+  "oppS": 62.1,
+  "finishSeed": 90033,
+  "order": [
+   "Dean Huijsen",
+   "Ibrahima Konaté",
+   "Éder Militão",
+   "Álvaro Carreras",
+   "Jude Bellingham"
+  ],
+  "expectedKicks": [
+   {
+    "side": "me",
+    "taker": "Dean Huijsen",
+    "result": "scored",
+    "mine": 1,
+    "theirs": 0
+   },
+   {
+    "side": "opp",
+    "taker": "Juan Bernat",
+    "result": "scored",
+    "mine": 1,
+    "theirs": 1
+   },
+   {
+    "side": "me",
+    "taker": "Ibrahima Konaté",
+    "result": "scored",
+    "mine": 2,
+    "theirs": 1
+   },
+   {
+    "side": "opp",
+    "taker": "Their taker 1",
+    "gen": true,
+    "result": "missed",
+    "mine": 2,
+    "theirs": 1
+   },
+   {
+    "side": "me",
+    "taker": "Éder Militão",
+    "result": "scored",
+    "mine": 3,
+    "theirs": 1
+   },
+   {
+    "side": "opp",
+    "taker": "Their taker 2",
+    "gen": true,
+    "result": "scored",
+    "mine": 3,
+    "theirs": 2
+   },
+   {
+    "side": "me",
+    "taker": "Jude Bellingham",
+    "result": "scored",
+    "mine": 4,
+    "theirs": 2
+   },
+   {
+    "side": "opp",
+    "taker": "Their taker 3",
+    "gen": true,
+    "result": "scored",
+    "mine": 4,
+    "theirs": 3
+   },
+   {
+    "side": "me",
+    "taker": "Kylian Mbappé",
+    "result": "missed",
+    "mine": 4,
+    "theirs": 3
+   },
+   {
+    "side": "opp",
+    "taker": "Their taker 4",
+    "gen": true,
+    "result": "scored",
+    "mine": 4,
+    "theirs": 4
+   },
+   {
+    "side": "me",
+    "taker": "Federico Valverde",
+    "result": "missed",
+    "mine": 4,
+    "theirs": 4
+   },
+   {
+    "side": "opp",
+    "taker": "Their taker 5",
+    "gen": true,
+    "result": "saved",
+    "mine": 4,
+    "theirs": 4
+   },
+   {
+    "side": "me",
+    "taker": "Arda Güler",
+    "result": "scored",
+    "mine": 5,
+    "theirs": 4
+   },
+   {
+    "side": "opp",
+    "taker": "Their taker 6",
+    "gen": true,
+    "result": "scored",
+    "mine": 5,
+    "theirs": 5
+   },
+   {
+    "side": "me",
+    "taker": "Rodrygo",
+    "result": "saved",
+    "mine": 5,
+    "theirs": 5
+   },
+   {
+    "side": "opp",
+    "taker": "Their taker 7",
+    "gen": true,
+    "result": "saved",
+    "mine": 5,
+    "theirs": 5
+   },
+   {
+    "side": "me",
+    "taker": "Vinicius Junior",
+    "result": "saved",
+    "mine": 5,
+    "theirs": 5
+   },
+   {
+    "side": "opp",
+    "taker": "Their taker 8",
+    "gen": true,
+    "result": "saved",
+    "mine": 5,
+    "theirs": 5
+   },
+   {
+    "side": "me",
+    "taker": "Yan Diomande",
+    "result": "scored",
+    "mine": 6,
+    "theirs": 5
+   },
+   {
+    "side": "opp",
+    "taker": "Their taker 9",
+    "gen": true,
+    "result": "scored",
+    "mine": 6,
+    "theirs": 6
+   },
+   {
+    "side": "me",
+    "taker": "Thibaut Courtois",
+    "result": "scored",
+    "mine": 7,
+    "theirs": 6
+   },
+   {
+    "side": "opp",
+    "taker": "Jonmi Magunagoitia",
+    "result": "scored",
+    "mine": 7,
+    "theirs": 7
+   },
+   {
+    "side": "me",
+    "taker": "Dean Huijsen",
+    "result": "scored",
+    "mine": 8,
+    "theirs": 7
+   },
+   {
+    "side": "opp",
+    "taker": "Juan Bernat",
+    "result": "scored",
+    "mine": 8,
+    "theirs": 8
+   },
+   {
+    "side": "me",
+    "taker": "Ibrahima Konaté",
+    "result": "scored",
+    "mine": 9,
+    "theirs": 8
+   },
+   {
+    "side": "opp",
+    "taker": "Their taker 1",
+    "gen": true,
+    "result": "scored",
+    "mine": 9,
+    "theirs": 9
+   },
+   {
+    "side": "me",
+    "taker": "Éder Militão",
+    "result": "scored",
+    "mine": 10,
+    "theirs": 9
+   },
+   {
+    "side": "opp",
+    "taker": "Their taker 2",
+    "gen": true,
+    "result": "scored",
+    "mine": 10,
+    "theirs": 10
+   },
+   {
+    "side": "me",
+    "taker": "Jude Bellingham",
+    "result": "scored",
+    "mine": 11,
+    "theirs": 10
+   },
+   {
+    "side": "opp",
+    "taker": "Their taker 3",
+    "gen": true,
+    "result": "missed",
+    "mine": 11,
+    "theirs": 10
+   }
+  ]
+ },
+ {
+  "label": "thin-no-keeper",
+  "opp": "Málaga",
+  "roster": [
+   {
+    "n": "Adam Aznou",
+    "p": "LB",
+    "a": 19,
+    "v": 6,
+    "r": 76,
+    "anchor": 76,
+    "since": 0
+   },
+   {
+    "n": "Jens Cajuste",
+    "p": "CDM",
+    "a": 26,
+    "v": 5.7,
+    "r": 75,
+    "anchor": 75,
+    "since": 0
+   },
+   {
+    "n": "Chupe",
+    "p": "ST",
+    "a": 21,
+    "v": 4.5,
+    "r": 74,
+    "anchor": 74,
+    "since": 0
+   },
+   {
+    "n": "David Larrubia",
+    "p": "RW",
+    "a": 23,
+    "v": 3,
+    "r": 72,
+    "anchor": 72,
+    "since": 0
+   },
+   {
+    "n": "José Salinas",
+    "p": "LB",
+    "a": 25,
+    "v": 2.3,
+    "r": 70,
+    "anchor": 70,
+    "since": 0
+   }
+  ],
+  "oppS": 65.1,
+  "finishSeed": 90033,
+  "order": [
+   "Dean Huijsen",
+   "Ibrahima Konaté",
+   "Éder Militão",
+   "Álvaro Carreras",
+   "Jude Bellingham"
+  ],
+  "expectedKicks": [
+   {
+    "side": "me",
+    "taker": "Dean Huijsen",
+    "result": "scored",
+    "mine": 1,
+    "theirs": 0
+   },
+   {
+    "side": "opp",
+    "taker": "Adam Aznou",
+    "result": "scored",
+    "mine": 1,
+    "theirs": 1
+   },
+   {
+    "side": "me",
+    "taker": "Ibrahima Konaté",
+    "result": "scored",
+    "mine": 2,
+    "theirs": 1
+   },
+   {
+    "side": "opp",
+    "taker": "Jens Cajuste",
+    "result": "missed",
+    "mine": 2,
+    "theirs": 1
+   },
+   {
+    "side": "me",
+    "taker": "Éder Militão",
+    "result": "scored",
+    "mine": 3,
+    "theirs": 1
+   },
+   {
+    "side": "opp",
+    "taker": "Chupe",
+    "result": "scored",
+    "mine": 3,
+    "theirs": 2
+   },
+   {
+    "side": "me",
+    "taker": "Álvaro Carreras",
+    "result": "scored",
+    "mine": 4,
+    "theirs": 2
+   },
+   {
+    "side": "opp",
+    "taker": "David Larrubia",
+    "result": "scored",
+    "mine": 4,
+    "theirs": 3
+   },
+   {
+    "side": "me",
+    "taker": "Jude Bellingham",
+    "result": "missed",
+    "mine": 4,
+    "theirs": 3
+   },
+   {
+    "side": "opp",
+    "taker": "José Salinas",
+    "result": "scored",
+    "mine": 4,
+    "theirs": 4
+   },
+   {
+    "side": "me",
+    "taker": "Federico Valverde",
+    "result": "missed",
+    "mine": 4,
+    "theirs": 4
+   },
+   {
+    "side": "opp",
+    "taker": "Their taker 1",
+    "gen": true,
+    "result": "saved",
+    "mine": 4,
+    "theirs": 4
+   },
+   {
+    "side": "me",
+    "taker": "Arda Güler",
+    "result": "scored",
+    "mine": 5,
+    "theirs": 4
+   },
+   {
+    "side": "opp",
+    "taker": "Their taker 2",
+    "gen": true,
+    "result": "scored",
+    "mine": 5,
+    "theirs": 5
+   },
+   {
+    "side": "me",
+    "taker": "Rodrygo",
+    "result": "saved",
+    "mine": 5,
+    "theirs": 5
+   },
+   {
+    "side": "opp",
+    "taker": "Their taker 3",
+    "gen": true,
+    "result": "saved",
+    "mine": 5,
+    "theirs": 5
+   },
+   {
+    "side": "me",
+    "taker": "Kylian Mbappé",
+    "result": "saved",
+    "mine": 5,
+    "theirs": 5
+   },
+   {
+    "side": "opp",
+    "taker": "Their taker 4",
+    "gen": true,
+    "result": "saved",
+    "mine": 5,
+    "theirs": 5
+   },
+   {
+    "side": "me",
+    "taker": "Vinicius Junior",
+    "result": "scored",
+    "mine": 6,
+    "theirs": 5
+   },
+   {
+    "side": "opp",
+    "taker": "Their taker 5",
+    "gen": true,
+    "result": "scored",
+    "mine": 6,
+    "theirs": 6
+   },
+   {
+    "side": "me",
+    "taker": "Thibaut Courtois",
+    "result": "scored",
+    "mine": 7,
+    "theirs": 6
+   },
+   {
+    "side": "opp",
+    "taker": "Their keeper",
+    "gen": true,
+    "result": "scored",
+    "mine": 7,
+    "theirs": 7
+   },
+   {
+    "side": "me",
+    "taker": "Dean Huijsen",
+    "result": "scored",
+    "mine": 8,
+    "theirs": 7
+   },
+   {
+    "side": "opp",
+    "taker": "Adam Aznou",
+    "result": "scored",
+    "mine": 8,
+    "theirs": 8
+   },
+   {
+    "side": "me",
+    "taker": "Ibrahima Konaté",
+    "result": "scored",
+    "mine": 9,
+    "theirs": 8
+   },
+   {
+    "side": "opp",
+    "taker": "Jens Cajuste",
+    "result": "scored",
+    "mine": 9,
+    "theirs": 9
+   },
+   {
+    "side": "me",
+    "taker": "Éder Militão",
+    "result": "scored",
+    "mine": 10,
+    "theirs": 9
+   },
+   {
+    "side": "opp",
+    "taker": "Chupe",
+    "result": "scored",
+    "mine": 10,
+    "theirs": 10
+   },
+   {
+    "side": "me",
+    "taker": "Álvaro Carreras",
+    "result": "scored",
+    "mine": 11,
+    "theirs": 10
+   },
+   {
+    "side": "opp",
+    "taker": "David Larrubia",
+    "result": "missed",
+    "mine": 11,
+    "theirs": 10
+   }
+  ]
+ }
+]
