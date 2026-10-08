@@ -1,0 +1,38 @@
+#!serve
+#!playwright
+# Round 1051 reviewer (runner lens): vitest, the gates the builder left without a result, the rule fences, the weight of the four routes on the base and on the branch
+vit-hall: node_modules/.bin/vitest run src/test/careerHall.test.tsx src/test/careerHallV1Replay.test.ts src/test/usCareerHallBoard.test.tsx src/test/usCareerActionConfirm.test.tsx --testTimeout=300000 --hookTimeout=120000
+vit-unchanged: node_modules/.bin/vitest run src/test/usCareerProspect.test.tsx src/test/usCareerStatLines.test.tsx src/test/careerSeasonReview.test.tsx src/test/usCareerSummer.test.tsx src/test/noDoubleRecord.test.tsx --testTimeout=300000 --hookTimeout=120000
+weight: bash .rc/x/weight.sh
+parity: node scripts/simUsBoardParity.mjs
+sweepWeight: node scripts/sweepWeight.mjs
+press: node scripts/playCareerPress.mjs
+simUsCareerSummer: node scripts/simUsCareerSummer.mjs
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
+simUsCareerDeckC: node scripts/simUsCareerDeckC.mjs
+simUsCareerActionConfirm: node scripts/simUsCareerActionConfirm.mjs
+simNflCareer: node scripts/simNflCareer.mjs
+simNbaCareer: node scripts/simNbaCareer.mjs
+simMlbCareer: node scripts/simMlbCareer.mjs
+simNhlCareer: node scripts/simNhlCareer.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simSingleFooter: node scripts/simSingleFooter.mjs
+simCompletionOnce: node scripts/simCompletionOnce.mjs
+simNoDoubleRecord: node scripts/simNoDoubleRecord.mjs
+simDailyPuzzleContract: node scripts/simDailyPuzzleContract.mjs
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simSchemaNames: node scripts/simSchemaNames.mjs
+simFetchRetry: node scripts/simFetchRetry.mjs
+simGoogleOnlyReturn: node scripts/simGoogleOnlyReturn.mjs
+simNavbarStatsReads: node scripts/simNavbarStatsReads.mjs
+simScoringCoverage: node scripts/simScoringCoverage.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simLiveScores: node scripts/simLiveScores.mjs
