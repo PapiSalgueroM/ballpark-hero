@@ -1,3 +1,21 @@
+## Codex 1097 preparation, October 8, 2026
+
+Soccer Perfect Season is being built from main ddc2c042 in an isolated branch.
+Contract: docs/plans/2026-10-08-soccer-perfect-season.md.
+The version uses explicitly fictional role cards and a 55-token XI draft,
+then a simulated 38-match W/D/L season. No real sports facts are introduced.
+The affordable best XI is computed and gives a perfect-season witness for
+every deal. Pure actual outcomes and effective controls must pass remotely
+before UI. Current alpha 5 is provisional until measured outcomes support it.
+No app, harness or browser execution runs locally; no production DB probes.
+
+1096 is held in draft PR185 at 285550eb. Native 12/12 and saves 39/39 are
+independently accepted. simPrerender, simSitemap and simSeoMetaSplit remain
+red and unwaived. F owns integrated snapshot/ledger/schema refresh and
+publication. The newer shared translation harness has no executed credit
+from 1096's retained run. 1095 is READY in PR184 after full independent audit.
+F owns 1141/1142 separately. Protected root checkout and seven stashes remain.
+
 ## Release AK LIVE, 2026-10-07 15:12 EDT, and the split of work with Codex
 
 Claude lane (session E, a new lead: session D stopped at its weekly limit with AK's gate still running).

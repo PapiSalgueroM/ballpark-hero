@@ -1,0 +1,98 @@
+name: Soccer Perfect Season pure adapter proof
+
+on:
+  push:
+    branches:
+      - codex/soccer-perfect-season-1097
+
+permissions:
+  contents: read
+concurrency:
+  group: soccer-perfect-season-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  pure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      QA_OUT: qa-artifacts
+      SOCCER_SEASON_CONTROL: all
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold exact candidate
+        id: hold
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p qa-artifacts
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git rev-parse HEAD HEAD^{tree} > qa-artifacts/source-identity.txt
+          git archive --format=tar.gz -o qa-artifacts/source.tar.gz HEAD
+          git ls-files -z | xargs -0 sha256sum > qa-artifacts/source-files.sha256
+          sha256sum package.json package-lock.json > qa-artifacts/packages.sha256
+      - name: Install locked dependencies
+        id: install
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm ci 2>&1 | tee qa-artifacts/install.log
+          node --version > qa-artifacts/node-version.txt
+          npm ls vitest vite esbuild --json > qa-artifacts/installed-versions.json
+      - name: Check worker syntax
+        id: parse
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check scripts/simSoccerPerfectSeason.mjs 2>&1 | tee qa-artifacts/parse.log
+      - name: Proper application type gate
+        id: types
+        shell: bash
+        run: |
+          set -euo pipefail
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee qa-artifacts/types.log
+      - name: Actual adapter outcomes and effective controls
+        id: adapter
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/simSoccerPerfectSeason.mjs 2>&1 | tee qa-artifacts/adapter.log
+      - name: Closing source hold
+        id: close
+        if: always() && steps.hold.outcome == 'success'
+        shell: bash
+        run: |
+          set -euo pipefail
+          sha256sum --quiet -c qa-artifacts/source-files.sha256
+          test -z "$(git diff --name-only)"
+          git rev-parse HEAD HEAD^{tree} > qa-artifacts/source-identity-close.txt
+          cmp qa-artifacts/source-identity.txt qa-artifacts/source-identity-close.txt
+      - name: Strict final verdict
+        if: always()
+        shell: bash
+        env:
+          HOLD: ${{ steps.hold.outcome }}
+          INSTALL: ${{ steps.install.outcome }}
+          PARSE: ${{ steps.parse.outcome }}
+          TYPES: ${{ steps.types.outcome }}
+          ADAPTER: ${{ steps.adapter.outcome }}
+          CLOSE: ${{ steps.close.outcome }}
+        run: |
+          set -euo pipefail
+          mkdir -p qa-artifacts
+          printf '{"hold":"%s","install":"%s","parse":"%s","types":"%s","adapter":"%s","close":"%s"}\n' "$HOLD" "$INSTALL" "$PARSE" "$TYPES" "$ADAPTER" "$CLOSE" > qa-artifacts/gates.json
+          cat qa-artifacts/gates.json
+          for outcome in "$HOLD" "$INSTALL" "$PARSE" "$TYPES" "$ADAPTER" "$CLOSE"; do
+            test "$outcome" = success
+          done
+      - name: Retain proof
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: soccer-perfect-season-pure-${{ github.run_id }}-${{ github.run_attempt }}
+          path: qa-artifacts/
+          if-no-files-found: error
