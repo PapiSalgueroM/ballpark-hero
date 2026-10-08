@@ -8,7 +8,7 @@
    appear whole, and everything that moves on the pitch is a function of the match clock. */
 .cm-stagebox{position:fixed;inset:0;height:100vh;height:100dvh;z-index:40;overflow:hidden;box-sizing:border-box;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
 .cm-stage{position:relative;display:flex;flex-direction:column;width:100%;height:100%;min-height:0}
-.cm-stage-main{display:flex;flex-direction:column;flex:1 1 0%;min-width:0;min-height:0;touch-action:none}
+.cm-stage-main{display:flex;flex-direction:column;flex:1 1 0%;min-width:0;min-height:0}
 
 /* The strip. A phone gets two rows (the buttons and the clock, then club, score, club): at 320 wide one
    row leaves about 56 px for two club names. */
@@ -19,7 +19,9 @@
 
 /* The pitch takes what is left. On a phone it fills the box edge to edge, and it is never drawn more than
    one and three quarter times as tall as it is wide (a narrow column on a tall screen would stretch it). */
-.cm-pitchbox{position:relative;flex:1 1 0%;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;container-type:size}
+/* A drag on the pitch is never a scroll of the page under the stage (on a phone that would move the address
+   bar and resize the stage mid match). */
+.cm-pitchbox{position:relative;flex:1 1 0%;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;container-type:size;touch-action:none}
 .cm-pitchbox>.pm-surface{width:100%;height:100%;max-height:calc(100cqw * 1.75)}
 
 .cm-statline{display:flex;align-items:center;justify-content:space-around;gap:8px;height:22px;flex:0 0 auto;padding:0 4px;white-space:nowrap;overflow:hidden}

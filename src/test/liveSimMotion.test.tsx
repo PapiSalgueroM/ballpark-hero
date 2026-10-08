@@ -1014,6 +1014,10 @@ describe('The goal sequence', () => {
       const next = startSecondHalf(structuredClone(drawn))!;
       /* And nothing real happens in the first two minutes of the second half, so what is on screen there is the restart. */
       if (liveFeed(next.live!).some(e => e.minute >= 46 && e.minute <= 47 && e.kind !== 'halftime')) continue;
+      /* And both elevens go back out as they came in. The part drops an action by itself when the line up under
+         it changes, which would hide a late line left alive whatever the viewer did about it. */
+      const eleven = (input: PitchInput) => JSON.stringify([input.mine, input.theirs].map(list => list.map(f => [f.key, f.name ?? ''])));
+      if (eleven(stagePitchInput(drawn, drawn.live!, null, 'first', 45, board, 45 + board)) !== eleven(stagePitchInput(next, next.live!, null, 'second', 46, 0, 90 + boardAt(next, 90)))) continue;
       first = structuredClone(drawn);
       second = next;
     }
