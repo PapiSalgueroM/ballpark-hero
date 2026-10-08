@@ -1,0 +1,1 @@
+probe2: cp .rc/x/rvProbe2.test.tsx src/test/rvProbe2.test.tsx && node_modules/.bin/vitest run src/test/rvProbe2.test.tsx --testTimeout=300000 --hookTimeout=120000; rc=$?; rm -f src/test/rvProbe2.test.tsx; exit $rc

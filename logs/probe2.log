@@ -1,0 +1,29 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/test/rvProbe2.test.tsx[2m > [22m[2mRV probe 2[2m > [22m[2mP4: how often a goal gets no kick off, and how far the ball and the next shooter jump when it does not
+[22m[39m[RV P4] halves 72, chances staged 754, started before the one before had ended 166
+[RV P4] goals staged 94; next chance starts inside the goal's own action 28; goals (not the last kick) checked for a kick off 91: NO kick off picture at all 28, a kick off under 0.6 of the clock 14, full 49
+[RV P4] at such a cut, one frame to the next: ball jump median 36.8 units (of 100), over 30 units 104 of 166; the fastest outfield man's run inside the 0.25 plant: median 27.3, over 20 units 98 of 166
+[RV P4] first cases: Aston Villa first goal me at 2, next chance goal me at 3 | Aston Villa first goal me at 3, next chance shot me at 4 | Aston Villa second goal me at 88, next chance shot me at 89 | Aston Villa first goal me at 28, next chance shot me at 29 | Aston Villa second goal opp at 94, next chance goal me at 95
+
+[90mstdout[2m | src/test/rvProbe2.test.tsx[2m > [22m[2mRV probe 2[2m > [22m[2mP5: through the real viewer, a goal with a chance in the very next minute, frame by frame
+[22m[39m[RV P5] fixture: goal opp Dominik Szoboszlai at 29', then goal opp Dominik Szoboszlai at 30'. Mounted at 27', default speed.
+[RV P5] runs: pass/pass [0-0] 16-2016ms min 27 | goal/plant [0-0] 2032-2272ms min 29 | goal/flight [0-0] 2288-2784ms min 29 | goal/net CARD [0-1] 2800-4112ms min 29 | goal/plant [0-1] 4128-4368ms min 30 | goal/flight [0-1] 4384-4880ms min 30 | goal/net CARD [0-2] 4896-6608ms min 30 | pass/pass [0-2] 6624-7568ms min 31 | shot/plant [0-2] 7584-7824ms min 32 | shot/flight [0-2] 7840-8336ms min 32 | shot/wide [0-2] 8352-8624ms min 32 | pass/pass [0-2] 8640-9008ms min 33
+[RV P5] single frame jumps (ball over 15 units or a man over 6): 1
+  4128ms goal/net -> goal/plant: ball (57.0,99.0) -> (35.5,75.0) = 32.3 units in one frame, fastest man 0.0
+[RV P5] Math.random calls from mount to the end of the walk: 1
+      at Math.mockCall (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/spy/dist/index.js:96:15) <-     at Math.random (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/tinyspy/dist/index.js:47:80) <-     at enqueueTask (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react/cjs/react.development.js:2458:45) <-     at recursivelyFlushAsyncActWork (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react/cjs/react.development.js:2634:9) <-     at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/react/cjs/react.development.js:2545:15 <-     at processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+ [32m✓[39m src/test/rvProbe2.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 3657[2mms[22m[39m
+   [33m[2m✓[22m[39m RV probe 2[2m > [22mP4: how often a goal gets no kick off, and how far the ball and the next shooter jump when it does not [33m 525[2mms[22m[39m
+   [33m[2m✓[22m[39m RV probe 2[2m > [22mP5: through the real viewer, a goal with a chance in the very next minute, frame by frame [33m 3129[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m   Start at [22m 08:07:40
+[2m   Duration [22m 6.51s[2m (transform 1.56s, setup 56ms, collect 2.02s, tests 3.66s, environment 329ms, prepare 174ms)[22m
+
