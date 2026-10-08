@@ -1,0 +1,6 @@
+vitest exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/seasonCentreSlots.test.tsx,title=src/test/seasonCentreSlots.test.tsx > Season Centre%3A the markup thi
+sim exit=0 11s | simSeasonCentreMotion: 8 checks, 0 failed
+sim-shift exit=1 11s | simSeasonCentreMotion: 8 checks, 2 failed (control shift)
+lint exit=0 2s | ✖ 1 problem (0 errors, 1 warning)
+sim-fence exit=1 9s | simSeasonCentreMotion: 8 checks, 1 failed (control fence)
+tsc exit=0 50s | 

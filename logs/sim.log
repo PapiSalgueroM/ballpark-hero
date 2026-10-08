@@ -1,0 +1,11 @@
+1) every step: 356 table seasons, 240044 pairs of tables, 12799 of 12884 one matchday steps moved a club (128391 club moves)
+ok   1. the probe reached enough table seasons (356, floor 300)
+ok   1. every step of every season was compared (240044 pairs, floor 150000)
+ok   1. one matchday steps that moved at least one club: 99.3% (floor 80%)
+ok   1. every club's from and to are its places in the two tables
+3) source fences: 1 files in src/lib/motion, 1 in src/components/motion, 2 that may draw nothing
+ok   3. the fenced folders are not empty
+ok   3. imports and random draws (0 findings)
+ok   3. the call written in a comment and in a string is not a finding
+ok   3. the same call in code is exactly one finding
+simSeasonCentreMotion: 8 checks, 0 failed
