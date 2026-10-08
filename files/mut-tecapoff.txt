@@ -1,0 +1,2 @@
+truth exit=1 |   var NFL_TE_YDS_CAP = 1400;
+simNflTruth: the patch "nocap TE yards" needs its needle exactly once in the bundle and found it 0 times, so it would prove nothing:

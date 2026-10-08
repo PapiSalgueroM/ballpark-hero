@@ -1,0 +1,6 @@
+rv-mut2 lbtenths: mutated src/lib/nflMyCareer.ts
+ src/lib/nflMyCareer.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+truth exit=1 |   ((form - 66) * 0.18 + rng() * 3) * g * 2) / 2
+simNflTruth: the patch "tenths LB" needs its needle exactly once in the bundle and found it 0 times, so it would prove nothing:
+MUT lbtenths: truth=1

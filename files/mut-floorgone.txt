@@ -1,0 +1,14 @@
+bank exit=1 | simUsCareerBank: 12 checks failed (1a:mlb, 1a:nba, 1a:nfl, 1a:nhl, 2:mlb, 2:nba, 2:nfl, 2:nhl, 3:mlb, 3:nba, 3:nfl, 3:nhl)
+  FAIL [1a:nfl]: card lifeA_rookie_dinner option 0 left the bank on -0.1 from a zero balance
+  FAIL [1a:nba]: card nbaA_hospital_room_308 option 1 left the bank on -0.2 from a zero balance
+  FAIL [1a:mlb]: card mlbA_kangaroo_court option 0 left the bank on -0.01 from a zero balance
+  FAIL [1a:nhl]: card nhlB_golfTournament option 0 left the bank on -0.05 from a zero balance
+  FAIL [2:nfl]: 75 of 5738 calls left the balance below zero (first: career 3 after card: -0.1)
+  FAIL [2:nba]: 58 of 6685 calls left the balance below zero (first: career 3 after rival choice: -0.3)
+vround exit=1 | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerBank.test.ts,title=src/test/usCareerBank.test.ts > Round 1104%3A real careers never show a balance below zero > MLB%3A 6 see
+   × Round 1104: the bank repair on load > NFL: a healthy save is the same object, an old save is rebuilt, a played one is stopped at zero 13ms
+   × Round 1104: the bank repair on load > NBA: a healthy save is the same object, an old save is rebuilt, a played one is stopped at zero 4ms
+   × Round 1104: the bank repair on load > MLB: a healthy save is the same object, an old save is rebuilt, a played one is stopped at zero 3ms
+   × Round 1104: the bank repair on load > NHL: a healthy save is the same object, an old save is rebuilt, a played one is stopped at zero 2ms
+   × Round 1104: the bank wrapper > with nothing behind it, the card takes what is there and the rest is written off 1ms
+   × Round 1104: the bank wrapper > savings that cannot cover the bill pay what they hold and only the rest is written off 1ms

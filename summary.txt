@@ -1,0 +1,7 @@
+mut-floorgone exit=0 35s | MUT floorgone: bank=1 vround=1
+mut-cardraw exit=0 35s | MUT cardraw: bank=1 vround=1
+mut-posacktenths exit=0 36s | MUT posacktenths: truth=1 digest=1
+mut-lbtenths exit=0 0s | MUT lbtenths: truth=1
+mut-tecapoff exit=0 0s | MUT tecapoff: truth=1
+mut-wrreccapoff exit=0 0s | MUT wrreccapoff: truth=1
+mut-loop17 exit=0 43s | MUT loop17: parity=0 facts=0 boardparity=0

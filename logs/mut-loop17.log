@@ -1,0 +1,8 @@
+rv-mut2 loop17: mutated src/lib/nflCareerLoop.ts
+rv-mut2 loop17: mutated src/lib/nflCareerLoop.ts
+ src/lib/nflCareerLoop.ts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+parity exit=0 | simCareerParity: green. One money app, one fan rule, one rival shape, one badge case, in all five careers.
+facts exit=0 | simCareerFacts: all sections green
+boardparity exit=0 | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+MUT loop17: parity=0 facts=0 boardparity=0

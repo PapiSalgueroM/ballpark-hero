@@ -1,0 +1,14 @@
+bank exit=1 | simUsCareerBank: 12 checks failed (1a:mlb, 1a:nba, 1a:nfl, 1a:nhl, 1b:mlb, 1b:nba, 1b:nfl, 1b:nhl, 2:mlb, 2:nba, 2:nfl, 2:nhl)
+  FAIL [1a:nfl]: card lifeA_rookie_dinner option 0 left the bank on -0.1 from a zero balance
+  FAIL [1b:nfl]: card lifeA_rookie_dinner option 0 left the pocket on -0.1 with savings to pay from
+  FAIL [1a:nba]: card nbaA_hospital_room_308 option 1 left the bank on -0.2 from a zero balance
+  FAIL [1b:nba]: card nbaA_hospital_room_308 option 1 left the pocket on -0.2 with savings to pay from
+  FAIL [1a:mlb]: card mlbA_kangaroo_court option 0 left the bank on -0.01 from a zero balance
+  FAIL [1b:mlb]: card mlbA_kangaroo_court option 0 left the pocket on -0.01 with savings to pay from
+vround exit=1 | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerBank.test.ts,title=src/test/usCareerBank.test.ts > Round 1104%3A real careers never show a balance below zero > NBA%3A 6 see
+   × Round 1104: the bank wrapper > with nothing behind it, the card takes what is there and the rest is written off 11ms
+   × Round 1104: the bank wrapper > savings is not a shield: the whole bill is collected, on every wrapped call 4ms
+   × Round 1104: the bank wrapper > savings that cannot cover the bill pay what they hold and only the rest is written off 1ms
+   × Round 1104: real careers never show a balance below zero > NBA: 6 seeded careers, 14 seasons, checked after every call 664ms
+ FAIL  src/test/usCareerBank.test.ts > Round 1104: the bank wrapper > with nothing behind it, the card takes what is there and the rest is written off
+AssertionError: expected -2 to be +0 // Object.is equality

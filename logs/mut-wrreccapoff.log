@@ -1,0 +1,6 @@
+rv-mut2 wrreccapoff: mutated src/lib/nflMyCareer.ts
+ src/lib/nflMyCareer.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+truth exit=1 |   var NFL_WR_REC_CAP = 145;
+simNflTruth: the patch "nocap catches" needs its needle exactly once in the bundle and found it 0 times, so it would prove nothing:
+MUT wrreccapoff: truth=1

@@ -1,0 +1,7 @@
+truth exit=1 |   (3 + (pf - 62) * 0.35) * per * 2) / 2
+simNflTruth: the patch "tenths playoffs" needs its needle exactly once in the bundle and found it 0 times, so it would prove nothing:
+digest exit=1 | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerTruthDigest.test.ts,title=src/test/usCareerTruthDigest.test.ts > Round 1104%3A the US career truth digest > every key equals
+   × Round 1104: the US career truth digest > every key equals the committed fixture, or moved only where this step is allowed to move it 33301ms
+ FAIL  src/test/usCareerTruthDigest.test.ts > Round 1104: the US career truth digest > every key equals the committed fixture, or moved only where this step is allowed to move it
+AssertionError: keys that moved against the committed fixture: expected [ 'nfl|now|LB', 'nfl|now|EDGE', …(2) ] to deeply equal []
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerTruthDigest.test.ts,title=src/test/usCareerTruthDigest.test.ts > Round 1104%3A the US career truth digest > every key equals the committed fixture%2C or moved only 
