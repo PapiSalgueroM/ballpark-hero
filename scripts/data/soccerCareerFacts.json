@@ -3553,6 +3553,57 @@
           "says": "ESPN's scoreboard feed read for every day of the season calendar (75 dates, 2026-08-14 to 2027-06-06): 462 fixtures, 22 clubs, 42 games a club, 231 pairs meet 2 times"
         }
       ]
+    },
+    "Russian Premier League": {
+      "season": "2026-27",
+      "evidence": "Russian Premier League 2026-27",
+      "members": [
+        "Zenit",
+        "Krasnodar",
+        "Spartak Moscow",
+        "CSKA Moscow",
+        "Lokomotiv Moscow",
+        "Rubin Kazan",
+        "Dynamo Moscow",
+        "Rostov",
+        "Akhmat Grozny",
+        "Krylia Sovetov",
+        "Baltika",
+        "Orenburg",
+        "Akron Tolyatti",
+        "Dynamo Makhachkala",
+        "Rodina Moscow",
+        "Fakel Voronezh"
+      ],
+      "size": 16,
+      "games": null,
+      "shape": null,
+      "shapeUnread": "Round 1052 read this format for Club Manager (research.json fact ru-format); it is not restated here while the generator holds the league and no page read states its points rule",
+      "points": null,
+      "pointsUnread": "no page note read for this league states three points for a win, so the rule is not stated here until one does",
+      "membership": [
+        {
+          "url": "https://site.web.api.espn.com/apis/v2/sports/soccer/rus.1/standings?season=2026",
+          "read": "2026-10-08",
+          "says": "standings feed, 2026-27 Russian Premier League: 16 clubs, each on 9 games played (Round 1052's read, scripts/data/gatheredSquads/russia2026/research.json)"
+        },
+        {
+          "url": "https://www.transfermarkt.com/premier-liga/startseite/wettbewerb/RU1/saison_id/2026",
+          "read": "2026-10-08",
+          "says": "competition page, season 26/27: 16 club links, the same clubs (Round 1052's read, scripts/data/gatheredSquads/russia2026/research.json)"
+        },
+        {
+          "url": "https://www.fotmob.com/leagues/63/table/premier-league",
+          "read": "2026-10-08",
+          "says": "league table, 2026/2027: 16 clubs, the same clubs (Round 1052's read, scripts/data/gatheredSquads/russia2026/research.json)"
+        },
+        {
+          "url": "https://www.sport-express.ru/football/rfpl/news/rpl-sezon-2026-27-polnyy-spisok-uchastnikov-chempionata-rossii-2441637/",
+          "read": "2026-10-08",
+          "says": "news article listing the participants, dated 2026-07-23: names all 16, the two promoted and the two relegated clubs (Round 1052's read, scripts/data/gatheredSquads/russia2026/research.json)"
+        }
+      ],
+      "format": []
     }
   },
   "clubColours": {

@@ -55,6 +55,11 @@ export const POOL_LEAGUE_ROWS = [
   { id: 'serieb', label: 'Serie B', country: 'Italy', top: false },
   { id: 'ligue2', label: 'Ligue 2', country: 'France', top: false },
   { id: 'segunda', label: 'Segunda Division', country: 'Spain', top: false },
+  /* Release AO: Round 1052 gave Club Manager the Russian Premier League on a
+     branch that never saw this table, and simCareerClubPool section 2 went
+     red on the merged tree, as it is built to. The league is named here and
+     held below. The label is the one the hand club Zenit already carries. */
+  { id: 'russia', label: 'Russian Premier League', country: 'Russia', top: true },
 ];
 /* Leagues the table names but the pool does not read yet, each with its
    reason. None of their clubs is generated and none gets a ladder. */
@@ -62,6 +67,11 @@ export const HELD_LEAGUES = {
   serieb: '11 clubs without a verified colour, and its format read from one source so far',
   ligue2: '9 clubs without a verified colour, and its format read from one source so far',
   segunda: '10 clubs without a verified colour, and its format read from one source so far',
+  /* Round 1052 read one host for each club's colour and shipped none, so
+     Club Manager draws all sixteen in the neutral grey the generator
+     refuses. A Soccer Career manager can still be offered a job there: the
+     dugout's size is Round 1052's row in DUGOUT_SIZES. */
+  russia: '16 clubs without a verified colour (Round 1052 read one host for each), and no page read yet for its points rule',
 };
 /* The three names Round 1013 exported, derived from the table now. */
 export const LEAGUE_LABELS = Object.fromEntries(POOL_LEAGUE_ROWS.map(r => [r.id, r.label]));
