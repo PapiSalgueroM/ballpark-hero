@@ -3800,11 +3800,13 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
      watchRow is a season opened from the summary card. Page state only. */
   const [centreFor, setCentreFor] = useState<number | null>(null);
   const [watchRow, setWatchRow] = useState<SeasonRecord | null>(null);
+  /* Round 1046: the list of seasons he can watch again, opened from Latest Events */
+  const [replaysOpen, setReplaysOpen] = useState(false);
   const onWeekByWeek = () => { const at = career.seasons.length; onNextSeason(); setCentreFor(at); };
   /* Round 1046: where he stopped watching a season (this browser only, never the save), for the Resume chip */
   const [resume, setResume] = useState<SeasonResume | null>(null);
   useEffect(() => { setResume(readResume("soccer")); }, []);
-  const closeCentre = () => { setCentreFor(null); setWatchRow(null); setResume(readResume("soccer")); };
+  const closeCentre = () => { setCentreFor(null); setWatchRow(null); setReplaysOpen(false); setResume(readResume("soccer")); };
   useEffect(() => {
     /* a press that opened nothing (a ban year) is forgotten at the next
        season start, and a new career never inherits it */
@@ -4563,11 +4565,13 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           {/* Round 974: the whole career, season by season, one tap away */}
           <div className="flex items-center justify-between gap-2">
             <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Latest Events</span>
-            <div className="flex items-center gap-1">
+            <div className="flex flex-wrap items-center justify-end gap-1">
               <button type="button" onClick={() => setRatingsOpen(true)} data-open-season-ratings
                 className="text-[11px] font-bold text-emerald-400 px-2 py-1 rounded hover:bg-white/5">📈 Ratings</button>
               <button type="button" onClick={() => setStoryOpen(true)} data-open-career-story
                 className="text-[11px] font-bold text-sky-400 px-2 py-1 rounded hover:bg-white/5">📖 Career Story</button>
+              {career.seasons.some(r => r.type === "playing" && r.apps > 0) && <button type="button" onClick={() => setReplaysOpen(true)} data-open-season-replays
+                className="text-[11px] font-bold text-sky-400 px-2 py-1 rounded hover:bg-white/5 min-h-11">📺 Season replays</button>}
             </div>
           </div>
           {(() => {
@@ -4591,13 +4595,13 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
         /* Round 1046: moments are offered only while the season's own screens are up; a way back in later is a way to watch */
         const offer = career.phase === "newspaper" || career.phase === "season_summary" || career.phase === "rehab_choice";
         const live = pressed && pressed.type === "playing" && pressed.apps > 0 && offer ? pressed : null;
-        const row = watchRow ?? live;
-        if (!row) return null;
+        const row = watchRow ?? (replaysOpen ? null : live);
+        if (!row && !replaysOpen) return null;
         return (
           <div data-no-prerender>
             <CentreMountBoundary onClose={closeCentre}>
               <Suspense fallback={<div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80" data-season-centre-loading><div className="rounded-2xl border border-border bg-card px-5 py-4 text-sm">📺 Getting your season ready...</div></div>}>
-                <SoccerSeasonCentre career={career} clubs={clubs} row={row} mode={watchRow ? "watch" : "live"} onClose={closeCentre} onCareer={onCareerPatch} offer={offer} />
+                <SoccerSeasonCentre career={career} clubs={clubs} row={row} mode={watchRow || replaysOpen ? "watch" : "live"} onClose={closeCentre} onCareer={onCareerPatch} offer={offer} />
               </Suspense>
             </CentreMountBoundary>
           </div>
