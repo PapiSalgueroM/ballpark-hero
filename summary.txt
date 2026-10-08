@@ -1,0 +1,30 @@
+vitest-train exit=0 15s |    Duration  13.68s (transform 11.85s, setup 1.03s, collect 18.84s, tests 9.89s, environment 5.91s, prepare 1.53s)
+ssw exit=0 3s | simStorageWrites: all green
+ssw-unguard exit=1 3s | simStorageWrites (control unguard): 1 failed
+ssw-order exit=1 3s | simStorageWrites (control order): 1 failed
+ssw-client exit=1 3s | simStorageWrites (control client): 1 failed
+ssw-caller exit=1 2s | simStorageWrites (control caller): 1 failed
+ssw-nocatch exit=1 2s | simStorageWrites (control nocatch): 1 failed
+ssw-probe exit=1 2s | simStorageWrites (control probe): 1 failed
+vitest-diff exit=1 68s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/us-career/UsCareerBoard.tsx,title=src/test/usSeasonCentreEntry.test.tsx > 'NBA' My Career%3A wat
+appeal exit=0 55s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+tsc exit=0 107s | 
+shootout exit=0 20s | simCmShootoutOrder: all sections passed
+rules exit=0 47s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+shootout-s1 exit=0 21s | simCmShootoutOrder: all sections passed
+shootout-s2 exit=0 20s | simCmShootoutOrder: all sections passed
+shootout-s3 exit=0 18s | simCmShootoutOrder: all sections passed
+shootout-s4 exit=0 20s | simCmShootoutOrder: all sections passed
+shootout-ignoreorder exit=1 18s | simCmShootoutOrder: 28 FAILURE(S)
+shootout-s5 exit=0 21s | simCmShootoutOrder: all sections passed
+shootout-noskip exit=1 20s | simCmShootoutOrder: 27 FAILURE(S)
+shootout-unsetpath exit=1 18s | simCmShootoutOrder: 3 FAILURE(S)
+shootout-nocap exit=1 21s | simCmShootoutOrder: 4 FAILURE(S)
+shootout-ownkeeper exit=1 21s | simCmShootoutOrder: 2 FAILURE(S)
+shootout-wrongkeeper exit=1 20s | simCmShootoutOrder: 3 FAILURE(S)
+shootout-nooppkeeper exit=1 19s | simCmShootoutOrder: 4 FAILURE(S)
+shootout-nomakeup exit=1 17s | simCmShootoutOrder: 37 FAILURE(S)
+shootout-oppworst exit=1 21s | simCmShootoutOrder: 27 FAILURE(S)
+shootout-bogus exit=2 0s | CM_SHOOTOUT_CONTROL=nosuchcontrol is not a control this harness knows (ignoreorder, noskip, nocap, unsetpath, ownkeeper, wrongkeeper, nooppkeeper, oppworst, thinside, nom
+shootout-thinside exit=1 20s | simCmShootoutOrder: 29 FAILURE(S)
+shootout-keeperonfull exit=1 14s | simCmShootoutOrder: 1 FAILURE(S)
