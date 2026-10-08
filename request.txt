@@ -1,0 +1,17 @@
+#!serve
+#!playwright
+# Round 1104 fixer step 3: sizes of the brief, five seed measurements, the walk with its reader proof
+truth-s1: node scripts/simNflTruth.mjs
+truth2000-s1: SIM_SEED=1 TRUTH_CAREERS=2000 node scripts/simNflTruth.mjs
+truth2000-s6: SIM_SEED=6 TRUTH_CAREERS=2000 node scripts/simNflTruth.mjs
+truth2000-s11: SIM_SEED=11 TRUTH_CAREERS=2000 node scripts/simNflTruth.mjs
+truth2000-nopace: SIM_SEED=1 TRUTH_CAREERS=2000 TRUTH_CONTROL=nopace node scripts/simNflTruth.mjs
+truth300-s6: SIM_SEED=6 node scripts/simNflTruth.mjs
+truth300-s11: SIM_SEED=11 node scripts/simNflTruth.mjs
+bankbig-s1: SIM_SEED=1 BANK_STATES=104 BANK_CAREERS=300 node scripts/simUsCareerBank.mjs
+bankbig-s2: SIM_SEED=2 BANK_STATES=104 BANK_CAREERS=300 node scripts/simUsCareerBank.mjs
+bankbig-s3: SIM_SEED=3 BANK_STATES=104 BANK_CAREERS=300 node scripts/simUsCareerBank.mjs
+walk1: ENGINES=chromium node scripts/playNflTruth.mjs
+walk2: ENGINES=chromium node scripts/playNflTruth.mjs
+walk3: ENGINES=chromium node scripts/playNflTruth.mjs
+walk-seventeen: NFL_TRUTH_WALK_CONTROL=seventeen ENGINES=chromium node scripts/playNflTruth.mjs

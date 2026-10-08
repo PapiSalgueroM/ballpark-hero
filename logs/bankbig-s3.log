@@ -1,0 +1,24 @@
+simUsCareerBank: seed 3, 104 mid career states and 300 whole careers a sport
+1) every option of every card in the deck, applied at a zero pocket
+   nfl: 20895 options applied; below zero after, old arm 3285, new arm 0; with 50M in savings 3285 bills collected in full, 0 forgiven, 0 pockets left below zero
+   nba: 20409 options applied; below zero after, old arm 3369, new arm 0; with 50M in savings 3369 bills collected in full, 0 forgiven, 0 pockets left below zero
+   mlb: 18848 options applied; below zero after, old arm 2498, new arm 0; with 50M in savings 2498 bills collected in full, 0 forgiven, 0 pockets left below zero
+   nhl: 19926 options applied; below zero after, old arm 2751, new arm 0; with 50M in savings 2751 bills collected in full, 0 forgiven, 0 pockets left below zero
+2) whole careers through the board loop, with shop and money app taps, read after every call
+   nfl: 300 careers, 5041 seasons, 43357 calls read, 0 below zero, lowest balance seen 0
+   nba: 300 careers, 6010 seasons, 50039 calls read, 0 below zero, lowest balance seen 0
+   mlb: 300 careers, 6110 seasons, 49740 calls read, 0 below zero, lowest balance seen 0
+   nhl: 300 careers, 6436 seasons, 54489 calls read, 0 below zero, lowest balance seen 0
+3) the reload: healthy untouched, an old save rebuilt as before, a played save stopped at zero
+   nfl: healthy same object, old save rebuilt to 90, the scout's save on 0, 2000 played saves swept, 0 refilled
+   nba: healthy same object, old save rebuilt to 90, the scout's save on 0, 2000 played saves swept, 0 refilled
+   mlb: healthy same object, old save rebuilt to 90, the scout's save on 0, 2000 played saves swept, 0 refilled
+   nhl: healthy same object, old save rebuilt to 90, the scout's save on 0, 2000 played saves swept, 0 refilled
+4) MEASURED, asserted on nothing: what the floor touches at a zero balance with nothing in savings
+   nfl: 3285 of 20895 options (15.7 percent) cost more than an empty account held; the floor wrote off 2046.8M across them, 0.62M a time
+   nba: 3369 of 20409 options (16.5 percent) cost more than an empty account held; the floor wrote off 2285.46M across them, 0.68M a time
+   mlb: 2498 of 18848 options (13.3 percent) cost more than an empty account held; the floor wrote off 1123.26M across them, 0.45M a time
+   nhl: 2751 of 19926 options (13.8 percent) cost more than an empty account held; the floor wrote off 1620.72M across them, 0.59M a time
+   The floor is read at the end of a call, so a card that spends and then pays out is netted first: nobody is handed a ticket he could not pay for and also its winnings on top of a forgiven price.
+
+simUsCareerBank: green. No call leaves a bank below zero in any of the four careers, savings pay a bill before anything is written off, and a reload never adds money.

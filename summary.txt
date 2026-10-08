@@ -1,0 +1,15 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+truth-s1 exit=0 17s | simNflTruth: green. Seasons are their real length, awards survive a 16 game schedule, rookies are paid their slot, kickers go in round four or later, sacks come in halves
+truth2000-s6 exit=1 78s | simNflTruth: 1 section failed (1b: 1)
+truth2000-s1 exit=1 80s | simNflTruth: 1 section failed (1b: 1)
+truth2000-s11 exit=1 78s | simNflTruth: 1 section failed (1b: 1)
+truth300-s6 exit=0 15s | simNflTruth: green. Seasons are their real length, awards survive a 16 game schedule, rookies are paid their slot, kickers go in round four or later, sacks come in halves
+truth300-s11 exit=0 16s | simNflTruth: green. Seasons are their real length, awards survive a 16 game schedule, rookies are paid their slot, kickers go in round four or later, sacks come in halves
+truth2000-nopace exit=0 75s | simNflTruth control nopace: green. Section 1b went red (18 findings) and nothing else did, so this harness works.
+bankbig-s2 exit=0 144s | simUsCareerBank: green. No call leaves a bank below zero in any of the four careers, savings pay a bill before anything is written off, and a reload never adds money.
+bankbig-s1 exit=0 184s | simUsCareerBank: green. No call leaves a bank below zero in any of the four careers, savings pay a bill before anything is written off, and a reload never adds money.
+bankbig-s3 exit=0 165s | simUsCareerBank: green. No call leaves a bank below zero in any of the four careers, savings pay a bill before anything is written off, and a reload never adds money.
+walk1 exit=0 103s | playNflTruth: green. A kicker goes late and is paid his slot, throwback seasons are 16 games, the bank stops at zero on load, and sacks come in halves.
+walk2 exit=1 103s | playNflTruth: 2 failures
+walk3 exit=1 102s | playNflTruth: 1 failure
+walk-seventeen exit=0 101s | playNflTruth control seventeen: all 4 guarded checks fired (mutations landed: {"ledger2005":18})
