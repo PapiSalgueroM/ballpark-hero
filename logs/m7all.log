@@ -1,0 +1,10 @@
+rvMut m7: applied to src/components/game/PlayerAutocomplete.tsx
+ [32m✓[39m src/data/gameRegistry.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m src/test/example.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 2[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m350 passed[39m[22m[2m | [22m[33m2 skipped[39m[90m (352)[39m
+[2m      Tests [22m [1m[32m4930 passed[39m[22m[2m | [22m[33m55 skipped[39m[90m (4985)[39m
+[2m   Start at [22m 20:19:16
+[2m   Duration [22m 335.71s[2m (transform 23.02s, setup 15.42s, collect 100.46s, tests 701.27s, environment 112.29s, prepare 22.84s)[22m
+
+m7all vitestAll=0

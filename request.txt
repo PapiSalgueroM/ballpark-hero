@@ -1,0 +1,2 @@
+#!serial
+m7all: node .rc/x/rvMut.mjs m7 && { node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000 > vitest-m7.log 2>&1; a=$?; tail -8 vitest-m7.log; git checkout -q -- src scripts; echo "m7all vitestAll=$a"; }
