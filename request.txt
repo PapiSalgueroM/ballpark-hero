@@ -1,0 +1,21 @@
+#!build
+hall-nfl: node scripts/simCareerHall.mjs nfl
+hall-nba: node scripts/simCareerHall.mjs nba
+hall-mlb: node scripts/simCareerHall.mjs mlb
+hall-nhl: node scripts/simCareerHall.mjs nhl
+hall-nostamp: SIM_CONTROL=nostamp node scripts/simCareerHall.mjs nba
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simNoDoubleRecord: node scripts/simNoDoubleRecord.mjs
+simCompletionOnce: node scripts/simCompletionOnce.mjs
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simAdsense: node scripts/simAdsense.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simSingleFooter: node scripts/simSingleFooter.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simNationalPools: node scripts/simNationalPools.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs
