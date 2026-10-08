@@ -1,0 +1,42 @@
+nfl 390 reduced: hub {"notice":null,"line":null,"toasts":0,"viewer":false,"curtain":false,"play":"Play the 2026 season","disk":"0 seasons, year 2026","refused":0}
+nfl 390 reduced: after the season, save refused {"notice":"write {\"t\":197,\"b\":314,\"l\":16,\"r\":374} seen {\"inView\":true,\"onTop\":true,\"topIs\":\"DIV.sticky top-0 z-40 mb-3 rounded-xl border\"}","line":null,"toasts":1,"viewer":false,"curtain":true,"play":null,"disk":"0 seasons, year 2026","refused":1}
+nfl 390 reduced: scrolled to 420: header null notice {"t":0,"b":117,"l":16,"r":374} text point {"inView":true,"onTop":true,"topIs":"DIV.sticky top-0 z-40 mb-3 rounded-xl border"} button {"inView":true,"onTop":true,"topIs":"BUTTON.mt-2 min-h-11 min-w-11 rounded-lg border"}
+nfl 390 reduced: back to the hub through curtain > continue > card > continue > hub
+nfl 390 reduced: back to the hub through curtain > rivalry > continue > card > continue > card > continue > hub
+nfl 390 reduced: two seasons played, none saved {"notice":"write {\"t\":104,\"b\":221,\"l\":16,\"r\":374} seen {\"inView\":true,\"onTop\":true,\"topIs\":\"DIV.sticky top-0 z-40 mb-3 rounded-xl border\"}","line":null,"toasts":0,"viewer":false,"curtain":false,"play":"Play the 2028 season","disk":"0 seasons, year 2026","refused":7}
+nfl 390 reduced: after Retry save {"notice":null,"line":null,"toasts":0,"viewer":false,"curtain":false,"play":"Play the 2028 season","disk":"2 seasons, year 2028","refused":7} | the hub says year 2028, seeded year 2026
+nfl 390 reduced: after a reload {"notice":null,"line":null,"toasts":0,"viewer":false,"curtain":false,"play":"Play the 2028 season","disk":"2 seasons, year 2028","refused":0} | the save is byte for byte the one Retry wrote
+nfl 1280: hub {"notice":null,"line":null,"toasts":0,"viewer":false,"curtain":false,"play":"Play the 2026 season","disk":"0 seasons, year 2026","refused":0}
+nfl 1280: after the season, save refused {"notice":"write {\"t\":177,\"b\":275,\"l\":320,\"r\":960} seen {\"inView\":true,\"onTop\":true,\"topIs\":\"DIV.sticky top-0 z-40 mb-3 rounded-xl border\"}","line":null,"toasts":1,"viewer":false,"curtain":true,"play":null,"disk":"0 seasons, year 2026","refused":1}
+nfl 1280: scrolled to 420: header null notice {"t":0,"b":98,"l":320,"r":960} text point {"inView":true,"onTop":true,"topIs":"DIV.sticky top-0 z-40 mb-3 rounded-xl border"} button {"inView":true,"onTop":true,"topIs":"BUTTON.mt-2 min-h-11 min-w-11 rounded-lg border"}
+nfl 1280: back to the hub through curtain > rivalry > continue > card > continue > hub
+nfl 1280: back to the hub through curtain > card > continue > card > continue > card > continue > hub
+nfl 1280: two seasons played, none saved {"notice":"write {\"t\":177,\"b\":275,\"l\":320,\"r\":960} seen {\"inView\":true,\"onTop\":true,\"topIs\":\"DIV.sticky top-0 z-40 mb-3 rounded-xl border\"}","line":null,"toasts":0,"viewer":false,"curtain":false,"play":"Play the 2028 season","disk":"0 seasons, year 2026","refused":7}
+nfl 1280: after Retry save {"notice":null,"line":null,"toasts":0,"viewer":false,"curtain":false,"play":"Play the 2028 season","disk":"2 seasons, year 2028","refused":7} | the hub says year 2028, seeded year 2026
+nfl 1280: after a reload {"notice":null,"line":null,"toasts":0,"viewer":false,"curtain":false,"play":"Play the 2028 season","disk":"2 seasons, year 2028","refused":0} | the save is byte for byte the one Retry wrote
+mlb 390: hub {"notice":null,"line":null,"toasts":0,"viewer":false,"curtain":false,"play":"Play the 2026 season","disk":"0 seasons, year 2026","refused":0}
+mlb 390: after the season, save refused {"notice":"write {\"t\":197,\"b\":314,\"l\":16,\"r\":374} seen {\"inView\":true,\"onTop\":true,\"topIs\":\"DIV.sticky top-0 z-40 mb-3 rounded-xl border\"}","line":null,"toasts":1,"viewer":false,"curtain":true,"play":null,"disk":"0 seasons, year 2026","refused":1}
+mlb 390: scrolled to 420: header null notice {"t":0,"b":117,"l":16,"r":374} text point {"inView":true,"onTop":true,"topIs":"DIV.sticky top-0 z-40 mb-3 rounded-xl border"} button {"inView":true,"onTop":true,"topIs":"BUTTON.mt-2 min-h-11 min-w-11 rounded-lg border"}
+mlb 390: back to the hub through curtain > rivalry > continue > card > continue > card > continue > hub
+mlb 390: back to the hub through curtain > card > continue > hub
+mlb 390: two seasons played, none saved {"notice":"write {\"t\":104,\"b\":221,\"l\":16,\"r\":374} seen {\"inView\":true,\"onTop\":true,\"topIs\":\"DIV.sticky top-0 z-40 mb-3 rounded-xl border\"}","line":null,"toasts":0,"viewer":false,"curtain":false,"play":"Play the 2028 season","disk":"0 seasons, year 2026","refused":6}
+mlb 390: after Retry save {"notice":null,"line":null,"toasts":0,"viewer":false,"curtain":false,"play":"Play the 2028 season","disk":"2 seasons, year 2028","refused":6} | the hub says year 2028, seeded year 2026
+mlb 390: after a reload {"notice":null,"line":null,"toasts":0,"viewer":false,"curtain":false,"play":"Play the 2028 season","disk":"2 seasons, year 2028","refused":0} | the save is byte for byte the one Retry wrote
+nba 390 home-and-back: played with the save refused {"notice":"write {\"t\":197,\"b\":314,\"l\":16,\"r\":374} seen {\"inView\":true,\"onTop\":true,\"topIs\":\"DIV.sticky top-0 z-40 mb-3 rounded-xl border\"}","line":null,"toasts":1,"viewer":false,"curtain":true,"play":null,"disk":"1 seasons, year 2027","refused":1}
+nba 390 home-and-back: pressed the header's home link (true): now on /, notice false, toasts 1
+nba 390 home-and-back: back on the board {"notice":null,"line":null,"toasts":1,"viewer":false,"curtain":false,"play":"Play the 2027 season","disk":"1 seasons, year 2027","refused":1} | before leaving the hub said "Play the 2027 season", the refused season would have made it 2028
+nba 390 home-and-back: a Play after coming back saved 2 seasons
+nhl 1280 home-and-back: played with the save refused {"notice":"write {\"t\":177,\"b\":275,\"l\":320,\"r\":960} seen {\"inView\":true,\"onTop\":true,\"topIs\":\"DIV.sticky top-0 z-40 mb-3 rounded-xl border\"}","line":null,"toasts":1,"viewer":false,"curtain":true,"play":null,"disk":"1 seasons, year 2027","refused":1}
+nhl 1280 home-and-back: pressed the header's home link (true): now on /, notice false, toasts 1
+nhl 1280 home-and-back: back on the board {"notice":null,"line":null,"toasts":1,"viewer":false,"curtain":false,"play":"Play the 2027 season","disk":"1 seasons, year 2027","refused":1} | before leaving the hub said "Play the 2027 season", the refused season would have made it 2028
+nhl 1280 home-and-back: a Play after coming back saved 2 seasons
+nba 390 panel-under-notice: back to the hub through curtain > rivalry > continue > card > continue > card > continue > hub
+nba 390 panel-under-notice: from scroll 0 opened "null": {"notice":{"t":197,"b":314,"l":16,"r":374},"hub":null,"hubOnTop":null,"scrollY":0}
+nba 390 panel-under-notice: from scroll 150 opened "💰The Bank$6.3M$8.1M a year, 3": {"notice":{"t":47,"b":164,"l":16,"r":374},"hub":{"t":176,"b":210,"l":16,"r":87},"hubOnTop":true,"scrollY":150}
+nba 390 panel-under-notice: from scroll 420 opened "📱Inbox3 unreadSomebody is wai": {"notice":{"t":0,"b":117,"l":16,"r":374},"hub":{"t":129,"b":163,"l":16,"r":87},"hubOnTop":true,"scrollY":197}
+nfl 390 panel-under-notice: back to the hub through rivalry > continue > hub
+nfl 390 panel-under-notice: back to the hub through curtain > card > continue > card > continue > card > continue > hub
+nfl 390 panel-under-notice: from scroll 0 opened "null": {"notice":{"t":197,"b":314,"l":16,"r":374},"hub":null,"hubOnTop":null,"scrollY":0}
+nfl 390 panel-under-notice: from scroll 150 opened "🏆Trophy CaseEmptyNothing in i": {"notice":{"t":47,"b":164,"l":16,"r":374},"hub":{"t":176,"b":210,"l":16,"r":87},"hubOnTop":true,"scrollY":150}
+nfl 390 panel-under-notice: from scroll 420 opened "📱Inbox3 unreadSomebody is wai": {"notice":{"t":0,"b":117,"l":16,"r":374},"hub":{"t":129,"b":163,"l":16,"r":87},"hubOnTop":true,"scrollY":197}
+rv-walk (us2): 0 problem(s)

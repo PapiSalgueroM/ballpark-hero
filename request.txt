@@ -1,0 +1,4 @@
+# AN2 runner review, request W2: the second pass of the reviewer's walk (the journeys the first pass could not finish for its own reasons, and the sticky notice against the page's own scroll)
+#!serve
+#!playwright
+walk-us2: node .rc/x/rv-walk.mjs us2
