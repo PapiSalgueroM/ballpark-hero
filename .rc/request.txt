@@ -1,0 +1,4 @@
+rec: node_modules/.bin/vitest run src/test/seasonCentreSlots.test.tsx -u --testTimeout=300000; cp src/test/__snapshots__/seasonCentreSlots.test.tsx.snap $RC_OUT/; git diff --stat -- src/test/__snapshots__
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/rankShift.test.ts src/test/seasonResume.test.ts src/test/miniPitchScene.test.ts src/test/seasonCore.test.ts --testTimeout=300000 --hookTimeout=120000
+sim: node scripts/simSeasonCentreMotion.mjs
