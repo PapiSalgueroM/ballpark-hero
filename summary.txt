@@ -1,0 +1,9 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+race-1138 exit=0 147s | playAutocompleteRace: 204 taps on 3 pages at 390 and 1280, 0 stale names offered, 0 stale picks, 6 of 6 current picks landed, target leg 0 of 20.
+race-notag exit=0 241s | playAutocompleteRace notag control: green, the race is there. Stale picks: /build-your-xi 34 at 390, 34 at 1280; /football-connect-4 34 at 390, 34 at 1280; /missing-xi 34
+lv exit=0 45s | playLineupValidator: green at 2 widths (390 and 1280). An allowance answer, an HTTP 500, a body that is not JSON, a string for valid and a validator that never answers ea
+lv-control exit=0 2s | playLineupValidator control: green. Accept on error was planted, the slot filled, and the nothing filled assertion caught it.
+lv-bogus exit=1 1s | PLAY_LINEUP_CONTROL=bogus is not a control this harness knows (accept-on-error)
+race-bogus exit=1 1s | AUTOCOMPLETE_RACE_CONTROL=bogus is not a control this harness knows (notag)
+c4 exit=0 5s | playFootballConnect4Failures: green. Failed checks keep the guess and turn; a valid answer alone places the piece.
+c4-control exit=0 12s | playFootballConnect4Failures control: green. Accept-on-error fired and 6 assertions caught it.
