@@ -129,10 +129,12 @@
      gain       section 8 reads the model rebuilt with gain 16   -> section 8
      noeff      section 8 reads the model rebuilt with the efficiency term
                 switched off (blend 0, .2, .8)                   -> section 8
+     noprod     section 8 reads the model rebuilt with every production line
+                dropped (each man read on workload instead)      -> section 8
    The three league controls must also turn exactly their own part of section
-   7 red, and the report line says which parts went. lift, gain and noeff
-   first prove the committed model rebuilds the shipped numbers exactly, so
-   the only difference they read is the change they name.
+   7 red, and the report line says which parts went. lift, gain, noeff and
+   noprod first prove the committed model rebuilds the shipped numbers
+   exactly, so the only difference they read is the change they name.
 
    MEASURED, 2026-10-08, on the committed files (model nfl-v2.3-2026-10-08),
    shipped against main (the frozen v2.2 arm):
@@ -190,7 +192,9 @@
         Under the controls: lift moves every mean 1.87 to 2.49; gain 16 takes
         the sd of the backs to 7.96 and the receivers to 8.43 (1.07 and 1.15
         from main); noeff takes them to 9.05 and 8.98 and the tight ends'
-        mean to 80.88. Measured and NOT caught by the one point rule: gain 14
+        mean to 80.88; noprod squeezes the quarterbacks' sd to 5.10 and the
+        tight ends' to 5.21 (section 3's bars alone do not see a dropped
+        production term). Measured and NOT caught by the one point rule: gain 14
         (largest distance .61, which the design allows), the workload term
         switched off (.66), and carry at 1, 1, 1 (.96, the receivers' mean).
         So carry, a stated judgement, is held only by the suite's exact pin,
@@ -219,7 +223,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_FO_ORDER_CONTROL || '';
 /* nolayer also turns section 6 red: the fullback ledger checks the critic added there (a confirmed fullback is flat
    rated and marked, and no fullback sits in the top two of his club's backs) cannot hold on the v2.2 arm. */
-const CONTROLS = { override: [1], onesource: [0, 2], looseread: [2], nolayer: [3, 4, 5, 6], swaprows: [4], unmark: [6], norole: [6], stretch: [7], shuffle: [7], cutback: [7], lift: [8], gain: [8], noeff: [8] };
+const CONTROLS = { override: [1], onesource: [0, 2], looseread: [2], nolayer: [3, 4, 5, 6], swaprows: [4], unmark: [6], norole: [6], stretch: [7], shuffle: [7], cutback: [7], lift: [8], gain: [8], noeff: [8], noprod: [8] };
 if (CONTROL && !(CONTROL in CONTROLS)) { console.error(`unknown control ${CONTROL}`); process.exit(1); }
 const norm = t => t.split('\r\n').join('\n');
 const read = rel => norm(fs.readFileSync(path.join(ROOT, rel), 'utf8'));
@@ -822,17 +826,23 @@ console.log('8) the scale did not move');
 const SCALE_BAR = 1;
 {
   let read = new Map([...shipped].map(([key, man]) => [key, man.ovr]));
-  if (['lift', 'gain', 'noeff'].includes(CONTROL)) {
+  /* the model changes a review made that sections 0 to 7 let through, each as the layer it rebuilds with */
+  const MODEL_CHANGE = {
+    gain: [{ gain: 16 }, 'the model rebuilt with gain 16 where it ships 13'],
+    noeff: [{ blend: { efficiency: 0, workload: 0.2, production: 0.8 } }, 'the model rebuilt with the efficiency term switched off (blend 0, .2, .8)'],
+    noprod: [{ production: new Map(), allowNoProduction: true }, 'the model rebuilt with every production line dropped, so each man is read on his workload instead'],
+  };
+  if (CONTROL === 'lift' || CONTROL in MODEL_CHANGE) {
     const model = change => new Map(buildFullRatings(checkpoint, { ...OFFENSE_LAYER, production: offenseMap, fullbacks: confirmedFullbacks, ...change }).map(p => [p.key, p.ovr]));
     const asCommitted = model({});
     const drift = [...asCommitted].filter(([key, ovr]) => shipped.get(key)?.ovr !== ovr);
     if (drift.length) throw new Error(`control ${CONTROL}: the committed model does not rebuild the shipped numbers (${drift.length} men differ), so a changed model would prove nothing about them`);
     const changed = CONTROL === 'lift' ? new Map([...asCommitted].map(([key, ovr]) => [key, groupOf(key) ? ovr + 2 : ovr]))
-      : model(CONTROL === 'gain' ? { gain: 16 } : { blend: { efficiency: 0, workload: 0.2, production: 0.8 } });
+      : model(MODEL_CHANGE[CONTROL][0]);
     const moved = [...changed].filter(([key, ovr]) => asCommitted.get(key) !== ovr).length;
     if (moved < 100) throw new Error(`control ${CONTROL}: it moved ${moved} numbers, too few to prove anything`);
     read = changed;
-    console.log(`   control ${CONTROL}: section 8 reads ${CONTROL === 'lift' ? 'every offense number two points higher (about what moving the model\'s centre from 84 to 87 does)' : CONTROL === 'gain' ? 'the model rebuilt with gain 16 where it ships 13' : 'the model rebuilt with the efficiency term switched off (blend 0, .2, .8)'}: ${moved} numbers moved`);
+    console.log(`   control ${CONTROL}: section 8 reads ${CONTROL === 'lift' ? 'every offense number two points higher (about what moving the model\'s centre from 84 to 87 does)' : MODEL_CHANGE[CONTROL][1]}: ${moved} numbers moved`);
   }
   const spreadOf = values => { const mean = values.reduce((s, n) => s + n, 0) / values.length; return { mean, sd: Math.sqrt(values.reduce((s, n) => s + (n - mean) ** 2, 0) / values.length) }; };
   const f2 = n => n.toFixed(2);
