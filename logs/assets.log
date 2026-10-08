@@ -1,0 +1,8 @@
+-rw-r--r-- 1 runner runner   37274 Oct  8 05:16 CollegeGrid-NC87coow.js
+-rw-r--r-- 1 runner runner  542050 Oct  8 05:16 collegeGridJudge-BnVqn2Y8.json
+-rw-r--r-- 1 runner runner  599136 Oct  8 05:16 collegeGridSearch-Bs7o3gLM.json
+outside-assets:
+0
+dist/assets/collegeGridSearch-Bs7o3gLM.json raw=599136 gzip9=205933
+dist/assets/collegeGridJudge-BnVqn2Y8.json raw=542050 gzip9=134900
+dist/assets/CollegeGrid-NC87coow.js raw=37274 gzip9=8797

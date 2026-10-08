@@ -1,0 +1,7 @@
+playCollegeGridFirstTap, control slow: section 3 must go red
+
+3) Time to nine cells
+  FAIL: the median time to nine cells is 4422 ms at 4 times throttle, over the ceiling of 3150 ms (one third of main's fastest board, 9528 ms)
+   median 4422 ms to nine cells over 5 fresh contexts at 4 times CPU throttle [4451, 4444, 4417, 4414, 4422]; ceiling 3150 ms; main's board took 9528 to 15553 ms. Medians measured when the ceiling was set: PENDING
+
+control "slow": fired in section 3 as expected, the check works

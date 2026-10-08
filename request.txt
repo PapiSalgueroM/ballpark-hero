@@ -1,0 +1,14 @@
+# Round 1105, merged tree: the first tap walk on a fresh build, plain and once per control (each control exits 0 only when its section went red)
+#!build
+#!playwright
+#!serial
+assets: ls -l dist/assets | grep -i -E 'collegeGrid(Search|Judge)|CollegeGrid-' ; echo outside-assets: ; find dist -iname 'collegeGrid*.json' -not -path 'dist/assets/*' | wc -l ; for f in dist/assets/collegeGridSearch-*.json dist/assets/collegeGridJudge-*.json dist/assets/CollegeGrid-*.js; do echo "$f raw=$(stat -c %s "$f") gzip9=$(gzip -9 -c "$f" | wc -c)"; done
+walk: node scripts/playCollegeGridFirstTap.mjs
+walk-2: node scripts/playCollegeGridFirstTap.mjs
+walk-3: node scripts/playCollegeGridFirstTap.mjs
+walk-latecells: CGFIRST_CONTROL=latecells node scripts/playCollegeGridFirstTap.mjs
+walk-paged: CGFIRST_CONTROL=paged node scripts/playCollegeGridFirstTap.mjs
+walk-slow: CGFIRST_CONTROL=slow node scripts/playCollegeGridFirstTap.mjs
+walk-nolist: CGFIRST_CONTROL=nolist node scripts/playCollegeGridFirstTap.mjs
+walk-nojudge: CGFIRST_CONTROL=nojudge node scripts/playCollegeGridFirstTap.mjs
+walk-accepted: CGFIRST_CONTROL=accepted node scripts/playCollegeGridFirstTap.mjs

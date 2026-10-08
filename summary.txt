@@ -1,0 +1,11 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+assets exit=0 0s | dist/assets/CollegeGrid-NC87coow.js raw=37274 gzip9=8797
+walk exit=0 32s | playCollegeGridFirstTap: green. The board is up before the key, the key is two requests and never the table, the search and the judge read memory with the network gone, a
+walk-2 exit=0 30s | playCollegeGridFirstTap: green. The board is up before the key, the key is two requests and never the table, the search and the judge read memory with the network gone, a
+walk-3 exit=0 30s | playCollegeGridFirstTap: green. The board is up before the key, the key is two requests and never the table, the search and the judge read memory with the network gone, a
+walk-latecells exit=0 33s | control "latecells": fired in section 1 and 7 as expected, the check works
+walk-paged exit=0 3s | control "paged": fired in section 2 as expected, the check works
+walk-slow exit=0 24s | control "slow": fired in section 3 as expected, the check works
+walk-nolist exit=0 47s | control "nolist": fired in section 4 as expected, the check works
+walk-nojudge exit=0 31s | control "nojudge": fired in section 5 as expected, the check works
+walk-accepted exit=0 27s | control "accepted": fired in section 6 as expected, the check works
