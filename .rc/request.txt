@@ -1,0 +1,17 @@
+#!serve
+#!playwright
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simAdsense: node scripts/simAdsense.mjs
+simDaily: node scripts/simDaily.mjs
+simResultPillComparison: node scripts/simResultPillComparison.mjs
+simWc2026Results: node scripts/simWc2026Results.mjs
+simHelpConsentFocus: node scripts/simHelpConsentFocus.mjs
+simRulesGateConsentFocus: node scripts/simRulesGateConsentFocus.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simStaleChunk: node scripts/simStaleChunk.mjs
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+playHomeFold: node scripts/playHomeFold.mjs
+playTranslatedPage: node scripts/playTranslatedPage.mjs
