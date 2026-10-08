@@ -1,0 +1,2 @@
+#!serial
+skills-1153: bash .rc/x/cm-skill-button-names-1153.sh
