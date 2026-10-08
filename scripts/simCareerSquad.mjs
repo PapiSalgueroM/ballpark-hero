@@ -389,7 +389,7 @@ function scan(mods, R) {
     if (v.source !== want || (v.source === 'real' && !inWindow)) { C.srcBad += 1; note('source', `${v.club} ${v.year} is ${v.source}, should be ${want}`); }
     if (v.source === 'real') {
       C.realChecked += 1;
-      if (men.length === baked.length && baked.every(b => men.some(m => m.name === b.name && m.ovr === b.ovr && m.pos === b.pos && m.id === undefined && m.age === undefined))) C.realExact += 1;
+      if (baked && men.length === baked.length && baked.every(b => men.some(m => m.name === b.name && m.ovr === b.ovr && m.pos === b.pos && m.id === undefined && m.age === undefined))) C.realExact += 1;
       else note('real', `${v.club} ${v.year} is not exactly the baked squad`);
     } else {
       C.squads += 1;
@@ -472,45 +472,59 @@ function scan(mods, R) {
 
 /* ── the sections ───────────────────────────────────────────────────────── */
 /* FLOORS-BEGIN
-   MEASURED 2026-10-07 on this branch, 200 careers an era (1,600 careers, about
-   33,000 pro seasons a run: the fleet plays into the decline, to 36 and past
-   it, so 200 careers hold as many seasons as the 300 first planned), SEED 1
-   to 5. Every line below sits at 60 percent of the smallest value seen (a
-   floor) or at the largest value seen divided by 0.6 (a ceiling), never in
-   the middle of what was measured.
+   MEASURED 2026-10-08 on this branch (head 42ee6af3, after the review fixes:
+   a season reads its own real squad, so the real seasons are 2015/16 to
+   2025/26 and every arm moved a little), 200 careers an era (1,600 careers,
+   about 33,000 pro seasons a run: the fleet plays into the decline, to 36 and
+   past it, so 200 careers hold as many seasons as the 300 first planned),
+   SEED 1 to 5, on a GitHub runner. Every line below sits at or under 60
+   percent of the smallest value seen (a floor) or at or over the largest
+   value seen divided by 0.6 (a ceiling), never in the middle of what was
+   measured.
 
    seed                               1       2       3       4       5    line
    rows played at 30 or over       9335    9324    9293    9269    9234    5500 floor
-   arrivals a summer               5.50    5.51    5.51    5.50    5.49    3.3 to 9.2
-   namesake in the same slot, %    1.01    1.59    1.33    0.73    0.98    2.7 ceiling
-   gap 1st minus 3rd, lowest era   5.56    5.39    5.36    5.46    5.46    3.2 floor
-   gap, eleven minus the rest     14.53   14.45   14.40   14.36   14.56    8.6 floor
-   real squads, gap 1st minus 3rd  5.42    5.73    5.69    4.60    5.99    2.7 floor
-   rating and plan disagree, %     0.57    0.54    0.62    0.63    0.53    1.1 ceiling
+   arrivals a summer               5.50    5.51    5.51    5.50    5.50    3.3 to 9.2
+   namesake in the same slot, %    1.07    1.61    1.31    0.68    0.90    2.7 ceiling
+   gap 1st minus 3rd, lowest era   5.53    5.36    5.30    5.37    5.49    3.1 floor
+   gap, eleven minus the rest     14.53   14.45   14.40   14.34   14.55    8.6 floor
+   real squads, gap 1st minus 3rd  5.11    5.44    6.02    4.84    5.54    2.7 floor
+   rating and plan disagree, %     0.57    0.54    0.62    0.66    0.54    1.1 ceiling
    league games minus the plan    -0.15   -0.16   -0.15   -0.18   -0.16    0.3 either way
    the same, worst trust label     0.27    0.31    0.28    0.33    0.33    0.55 either way
-   thin seasons, fallback only, % 34.78   34.28   33.88   33.26   33.18    58 ceiling
+   thin seasons, no selection
+     reason (the fallback), %     39.96   39.91   38.92   38.60   39.12    67 ceiling
    "under the level" line, gap    14.05   14.06   13.93   13.86   14.12    8.3 floor
+   rows with fewer games than
+     league games                  1391    1494    1566    1506    1451    830 floor
+
+   The fallback share is higher than the 33 to 35 percent first measured
+   because it now counts a thin season whose only other line is an injury: an
+   injury never lowers the league figure, so it is no selection reason.
 
    Printed, never asserted (a real squad is a picture of the real club, and
-   the plan is the game's): rating and plan disagree in 45.5 to 50.5 percent
-   of the seasons read against a REAL squad and in 28.9 to 34.3 percent of
+   the plan is the game's): rating and plan disagree in 45.9 to 50.7 percent
+   of the seasons read against a REAL squad and in 28.3 to 33.2 percent of
    those in a squad that still carries real men after 2025/26. The smallest
-   bucket behind a line: 391 seasons ranked 3rd in one era, 368 ranked 3rd in
-   a real squad. A full run takes about 20 minutes on a loaded machine. */
+   bucket behind a line: 374 seasons ranked 3rd in one era, 374 ranked 3rd in
+   a real squad. Counted, not measured (so they are plain checks, not lines):
+   about 3,300 saves read with the freeze set by hand, about 17,600 sheets by
+   role, about 3,500 squads read after the last real man should have gone. A
+   full run without the controls takes about 80 seconds on a GitHub runner and
+   about 20 minutes on a loaded machine. */
 const FLOORS = {
   arrivalsMin: 3.3, arrivalsMax: 9.2,     // 7: mean arrivals a summer, squads the game made
-  gap13: 3.2,                             // 8: per era, mean league games ranked 1st minus ranked 3rd
+  gap13: 3.1,                             // 8: per era, mean league games ranked 1st minus ranked 3rd
   gapBench: 8.6,                          // 8: pooled, in the eleven on rating minus outside it
   gap13Real: 2.7,                         // 8: the real squad arm, pooled
   disagreeMax: 0.011,                     // 8b: share of seasons in squads the game made where rating and plan disagree
   trustTol: 0.3,                          // 9: |mean(league games - trust.expected)|
   labelTol: 0.55,                         // 9: the same, per trust label with 200 or more seasons
-  fallbackMax: 0.58,                      // 10: share of thin seasons left with only the fallback line
+  fallbackMax: 0.67,                      // 10: share of thin seasons with no selection reason (the fallback line)
   underGap: 8.3,                          // 10: seasons with the "under the level" line play this many fewer
   sameSlotMax: 0.027,                     // 7: share of moves that meet a namesake in the same slot
   age30Min: 5500,                         // 3: rows played at 30 or over
-  cutUnderMin: null,                      // 10: last seasons that hold fewer games than league games
+  cutUnderMin: 830,                       // 10: last seasons that hold fewer games than league games
 };
 /* FLOORS-END */
 const floor = (section, name, value, ok, text) => {
