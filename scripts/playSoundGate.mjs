@@ -281,8 +281,10 @@ async function open({ save = null, pref = null, width = 1280, height = 900, redu
   await ctx.route('**://*.supabase.co/**', r => r.abort());
   let release = () => {};
   const released = new Promise(r => { release = r; });
-  /* a held kit is let go by the PAGE, holdMs after it saw the card's rows, so the hold is on the card's clock */
-  await ctx.exposeFunction('__cardMounted', () => { setTimeout(release, holdMs); });
+  /* a held kit is let go by the PAGE, holdMs after it saw the card's rows, so the hold is on the card's clock.
+     Only a flow that holds the kit gets the binding: answering a binding call is sent with a gesture, like an
+     evaluate, and it tapped the page in section 4's first run on a runner (106 of 110 samples true). */
+  if (kit === 'hold') await ctx.exposeFunction('__cardMounted', () => { setTimeout(release, holdMs); });
   const js = [], errors = [];
   let loads = 0;
   await ctx.route('**/assets/*.js', async route => {
@@ -374,11 +376,19 @@ if (runs(1)) {
 }
 
 /* ---------- 3. awards night out loud, once ----------
-   MEASURED on a GitHub runner, 2026-10-08 (see the round's report for the runs): how far the first tick lands
-   from its row's 0.6 s on the CARD's clock (the frame its rows entered on), over the flows of this section.
-   The tolerance below is set from that spread and stays well under one step of the countdown, 0.22 s. The
-   spacing between sounds is held much tighter, because one plan schedules them all against one audio clock. */
-const FIRST_TICK_TOL = 0.12, SPACING_TOL = 0.02;
+   MEASURED on a GitHub runner, 2026-10-08, six runs of this section (five of them three at a time on one
+   machine), thirty nights in all, a cold kit among them every run:
+     the first tick, on the CARD's clock (the frame its rows entered on, where their CSS delays start counting),
+       landed 598 to 643 ms after the rows; its row's own delay is 600. So 2 ms early to 43 ms late, and the
+       lateness is the frame the card took to paint before React ran the effect that asks for the sound.
+     a tick against its own slot, counted from the first tick: 3 to 19 ms off. That is not drift: the plan asks
+       for every sound against one audio clock, and a browser moves that clock a buffer at a time, so two asks
+       a millisecond apart can read it a buffer apart.
+   FIRST_TICK_TOL is about three times the worst lateness seen and half a step of the countdown (220 ms); the
+   slowkit control lands 300 ms late or more, so it stays red by a wide margin. SLOT_TOL is two and a half
+   times the most a tick was seen off its slot. The step itself is held tighter, measured across the whole
+   countdown, where one buffer's error is shared between nine steps. */
+const FIRST_TICK_TOL = 0.12, SLOT_TOL = 0.05, STEP_TOL = 0.01;
 const STEP = 0.22, FIRST = 0.6;
 /** what one night sounded like: its ticks in order, the sting, the crowd, and where the first tick landed */
 function heard(s) {
@@ -387,8 +397,9 @@ function heard(s) {
   const first = ticks[0];
   /* the first tick on the card's clock: when it was scheduled, plus how far ahead */
   const landed = first && s.mountAt ? (first.at - s.mountAt) / 1000 + first.delay : NaN;
-  const spacing = ticks.map((t, k) => t.when - ticks[0].when - k * STEP);
-  return { ticks, sting, crowd, landed, worstSpacing: spacing.reduce((m, d) => Math.max(m, Math.abs(d)), 0), other: s.starts.length - ticks.length - (sting ? 1 : 0) - (crowd ? 1 : 0) };
+  const offSlot = ticks.filter((t, k) => Math.abs(t.when - ticks[0].when - k * STEP) > SLOT_TOL).length;
+  const step = ticks.length > 1 ? (ticks[ticks.length - 1].when - ticks[0].when) / (ticks.length - 1) : NaN;
+  return { ticks, sting, crowd, landed, offSlot, step, other: s.starts.length - ticks.length - (sting ? 1 : 0) - (crowd ? 1 : 0) };
 }
 const ms = x => (Number.isFinite(x) ? `${Math.round(x * 1000)} ms` : 'not measured');
 async function night(kind, width, height, { cold = false } = {}) {
@@ -403,10 +414,11 @@ async function night(kind, width, height, { cold = false } = {}) {
   check(h.ticks.length === want[0] && (h.sting ? 1 : 0) === want[1] && (h.crowd ? 1 : 0) === want[2] && h.other === 0,
     `${what}: ${h.ticks.length} ticks, ${h.sting ? 1 : 0} sting, ${h.crowd ? 1 : 0} crowd, ${h.other} other (wanted ${want.join(', ')}, 0): ${names(s.starts).join(' ')}`, tag);
   check(Math.abs(h.landed - FIRST) <= FIRST_TICK_TOL, `${what}: the first tick lands ${ms(h.landed)} after the rows appear (the row's own delay is 600 ms, within ${FIRST_TICK_TOL * 1000})`, tag);
-  check(h.ticks.length > 1 && h.worstSpacing <= SPACING_TOL, `${what}: every tick is one step, 220 ms, after the last (worst ${ms(h.worstSpacing)} off)`, tag);
+  check(Math.abs(h.step - STEP) <= STEP_TOL, `${what}: a tick every ${Number.isFinite(h.step) ? (h.step * 1000).toFixed(1) : '?'} ms across the countdown (the rows: 220, within ${STEP_TOL * 1000})`, tag);
+  check(h.ticks.length > 1 && h.offSlot === 0, `${what}: ${h.offSlot} ticks more than ${SLOT_TOL * 1000} ms off their own slot`, tag);
   if (want[1]) {
     const gap = h.sting && h.ticks[0] ? h.sting.when - h.ticks[0].when : NaN, wantGap = 0.75 + n * STEP + 0.24 - FIRST;
-    check(Math.abs(gap - wantGap) <= SPACING_TOL, `${what}: the sting starts ${ms(gap)} after the first tick, as the headline lands (wanted ${ms(wantGap)})`, tag);
+    check(Math.abs(gap - wantGap) <= SLOT_TOL, `${what}: the sting starts ${ms(gap)} after the first tick, as the headline lands (wanted ${ms(wantGap)})`, tag);
   }
   if (want[2]) check(Math.abs(h.crowd.when - h.sting.when - 0.3) <= 0.005, `${what}: the crowd swells ${ms(h.crowd.when - h.sting.when)} after the sting (300 ms)`);
   const wantBuzz = kind === 'win' ? '[[30,40,30]]' : '[]';
@@ -461,6 +473,115 @@ if (runs(4)) {
   await o.page.waitForTimeout(1500);
   const after = await read(o.page);
   check(after.starts.length === 0, `then one real click on empty space: ${after.starts.length} starts 1.5 s later (the countdown he missed is not played late)`, 'notap');
+  await o.ctx.close();
+}
+
+/* ---------- 5. a hidden tab ---------- */
+const setVisibility = (page, state) => page.evaluate(v => {
+  Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => v });
+  document.dispatchEvent(new Event('visibilitychange'));
+}, state);
+if (runs(5)) {
+  head(5, 'A hidden tab is silent');
+  const save = SAVES.win;
+  const o = await open({ save, pref: 'on' });
+  await o.page.goto(`${BASE}/`, { waitUntil: 'load', timeout: 60000 });
+  await settle(o.page);
+  /* a headless page hides the only way it can: the moment the plan is scheduled (its first tick still 0.6 s
+     away) the page itself says it is hidden and tells its listeners */
+  await o.page.evaluate(() => {
+    const t = setInterval(() => {
+      if (!window.__snd.starts.length) return;
+      clearInterval(t);
+      window.__snd.hidAt = performance.now();
+      window.__snd.startsWhenHidden = window.__snd.starts.length;
+      Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => 'hidden' });
+      document.dispatchEvent(new Event('visibilitychange'));
+    }, 10);
+  });
+  await o.page.locator('a[href="/soccer-career"]:visible').first().click();
+  await o.page.waitForFunction(() => window.__snd.hidAt > 0, null, { timeout: 40000 }).catch(() => {});
+  await o.page.waitForTimeout(600);
+  const s = await read(o.page);
+  check(s.hidAt > 0 && s.starts.length === save.n + 2, `the night was scheduled (${s.starts.length} starts) and the tab hid ${s.starts[0] ? Math.round(s.hidAt - s.starts[0].at) : '?'} ms later, before the first tick was due`);
+  check(s.stops === s.starts.length, `hidden: ${s.stops} stops for ${s.starts.length} starts (every source cancelled, nothing had sounded)`);
+  check(s.suspends >= 1, `hidden: the context was put to rest (${s.suspends} suspend)`);
+  /* still hidden, the card mounts again */
+  await o.page.evaluate(() => history.back());
+  const left = await o.page.waitForFunction(() => document.querySelectorAll('.cm-tick-in').length === 0, null, { timeout: 15000 }).then(() => true, () => false);
+  await o.page.evaluate(() => history.forward());
+  const back = await o.page.waitForFunction(n => document.querySelectorAll('.cm-tick-in').length >= n, save.n, { timeout: 30000 }).then(() => true, () => false);
+  await o.page.waitForTimeout(1500);
+  const again = await read(o.page);
+  check(left && back, 'still hidden: he went back and forward, and the night mounted again');
+  check(again.starts.length === s.starts.length, `still hidden: the night that mounted again brought ${again.starts.length - s.starts.length} new starts`, 'hidden');
+  await setVisibility(o.page, 'visible');
+  await o.page.waitForTimeout(1500);
+  const shown = await read(o.page);
+  check(shown.resumes > again.resumes, `visible again: the context was woken (${shown.resumes - again.resumes} resume)`);
+  check(shown.starts.length === again.starts.length, `visible again: ${shown.starts.length - again.starts.length} starts 1.5 s later (nothing he missed is played late)`, 'hidden');
+  await o.ctx.close();
+}
+
+/* ---------- 6. the prerenderer ---------- */
+if (runs(6)) {
+  head(6, 'The prerenderer constructs nothing');
+  const save = SAVES.win;
+  const o = await open({ save, pref: 'on', prerender: true });
+  const through = await clickThrough(o, save);
+  await o.page.waitForTimeout(waitOut(save.n));
+  const s = await read(o.page);
+  check(through.there, `under the prerender flag the night still draws (${save.n} names)`);
+  check(s.made === 0 && s.starts.length === 0 && o.kitAsked() === 0, `choice on, the prerender flag: contexts ${s.made}, starts ${s.starts.length}, the kit chunk requested ${o.kitAsked()} times`);
+  await o.ctx.close();
+}
+
+/* ---------- 7. reduced motion ---------- */
+if (runs(7)) {
+  head(7, 'Reduced motion: silent until he turns it on, then the result alone');
+  const save = SAVES.win;
+  {
+    const o = await open({ save, reduced: true });
+    const through = await clickThrough(o, save);
+    await o.page.waitForTimeout(2500);
+    const s = await read(o.page);
+    check(through.there && s.made === 0 && s.starts.length === 0 && o.kitAsked() === 0, `choice absent: contexts ${s.made}, starts ${s.starts.length}, the kit chunk requested ${o.kitAsked()} times`);
+    await o.ctx.close();
+  }
+  {
+    const o = await open({ save, pref: 'on', reduced: true });
+    const through = await clickThrough(o, save);
+    await o.page.waitForTimeout(2500);
+    const s = await read(o.page), h = heard(s);
+    check(through.there && s.starts.length === 2 && h.ticks.length === 0 && !!h.sting && !!h.crowd, `choice on: ${s.starts.length} starts (${names(s.starts).join(', ')}), no tick`);
+    check(!!h.sting && h.sting.delay <= 0.03, `choice on: the sting starts at once (${h.sting ? ms(h.sting.delay) : 'missing'} ahead)`);
+    check(!!h.sting && !!h.crowd && Math.abs(h.crowd.when - h.sting.when - 0.3) <= 0.005, `choice on: the crowd 300 ms after it (${h.sting && h.crowd ? ms(h.crowd.when - h.sting.when) : 'missing'})`);
+    check(s.buzz.length === 0, `choice on: the phone does not shake (buzz ${JSON.stringify(s.buzz)})`);
+    await o.ctx.close();
+  }
+}
+
+/* ---------- 10. a kit that will not load ---------- */
+if (runs(10)) {
+  head(10, 'A kit that will not load never reloads the page');
+  const save = SAVES.win;
+  const o = await open({ save, pref: 'on', kit: 'refuse' });
+  const through = await clickThrough(o, save);
+  await o.page.waitForTimeout(waitOut(save.n));
+  let pressed = 'no switch is mounted, so none was pressed';
+  if (MOUNTED.footer) {
+    const sw = o.page.locator('footer [data-sound-toggle="text"]');
+    await sw.click(); await o.page.waitForTimeout(400);
+    await sw.click(); await o.page.waitForTimeout(1200);
+    pressed = 'the footer switch pressed off and on again';
+  }
+  const s = await read(o.page).catch(() => null);
+  const flagged = await o.page.evaluate(() => sessionStorage.getItem('dukb-reloaded-stale-chunk')).catch(() => 'unreadable');
+  check(o.kitAsked() >= 1, `the kit chunk was asked for and refused (${o.kitAsked()} requests); ${pressed}`);
+  check(o.loads() === 1, `the document loaded ${o.loads()} time(s) (a reload would be a second)`, 'reload');
+  check(flagged === null, `the stale chunk guard's once flag is ${flagged === null ? 'not set' : `set (${flagged})`}`, 'reload');
+  check(!!s && s.made === 0 && s.starts.length === 0, `silence, and no audio graph: contexts ${s?.made}, starts ${s?.starts.length}`);
+  check(through.there && o.errors.length === 0, `the night drew and the page threw nothing${o.errors.length ? `: ${o.errors[0]}` : ''}`);
   await o.ctx.close();
 }
 
