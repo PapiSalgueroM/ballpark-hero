@@ -17,6 +17,13 @@ import { keyedRng } from '@/lib/keyedRng';
  *  A corner, a throw in and a foul are staged from their own place. An action wins over a dead ball, a
  *  dead ball over open play, and of two at one place the later line of the feed is the one staged.
  *
+ *  ONE ACTION AT A TIME. Lines sit on whole minutes and an action lasts a little longer than one, so a
+ *  chance in the minute after another used to start under it: the ball jumped from the net to the next
+ *  shooter and a goal never got its kick off. Such a chance now WAITS, inside its own minute: until the
+ *  action before it is over, until the kick off after a goal has been seen for a beat, and until its own
+ *  shooter has had the ball for a beat. `actions[n].at` is when it really starts, and a binder that
+ *  announces a chance itself (Club Manager's viewer) announces it then.
+ *
  *  THE SHAPE places each side as ONE block around the ball, in its own frame (own goal at y 100), and
  *  mirrors the other side. */
 
@@ -58,6 +65,12 @@ export interface PitchPlan {
 const CARRY: Record<PitchLine, number> = { attack: 3, midfield: 2.6, defence: 1.2, keeper: 0.25 };
 /** Where a man wants the ball when he has it, along the pitch in his own frame. */
 const ZONE: Record<PitchLine, [number, number]> = { keeper: [84, 90], defence: [62, 78], midfield: [38, 62], attack: [16, 38] };
+/** How long a shooter has the ball at his feet before his line plays. */
+export const PITCH_LEAD = BEAT_SPAN;
+/** How long a kick off is seen, at the least, before the next chance is led in. */
+export const PITCH_RESTART = BEAT_SPAN;
+/** The longest a chance waits for its turn after its own place: the clock still reads its minute when it starts. */
+export const PITCH_LATE = 0.9;
 const EPS = 1e-9;
 const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
 const other = (side: PitchSide): PitchSide => (side === 'me' ? 'opp' : 'me');
@@ -123,28 +136,54 @@ export function pitchPlan(input: PitchInput): PitchPlan {
   };
 
   const layers: Layer[] = [];
-  const kickoff = (at: number, side: PitchSide, priority: number, order: number, id: string) => {
+  /* A kick off is two beats long. Its FIRST beat is the part nothing may be drawn over (`firm` is the priority
+     of that beat): a kick off must be seen. Its second gives way to a chance's shooter being led in. */
+  const kickoff = (at: number, side: PitchSide, firm: number, order: number, id: string) => {
     const kicker = present(side);
-    layers.push({
-      start: at, end: at + 2 * BEAT_SPAN, priority, order, state: 'kickoff', via: 'restart', side: kicker,
+    for (const [beats, priority] of [[2, 3], [PITCH_RESTART / BEAT_SPAN, firm]] as const) layers.push({
+      start: at, end: at + beats * BEAT_SPAN, priority, order, state: 'kickoff', via: 'restart', side: kicker,
       carrier: mostAdvanced(lists[kicker])?.key ?? null, dead: true, id, anchor: { x: 50, y: 50 },
     });
   };
-  (input.kickoffs ?? []).forEach((k, n) => kickoff(k.at, k.side, 5, n, `k${n}`));
+  const opening = input.kickoffs ?? [];
+  opening.forEach((k, n) => kickoff(k.at, k.side, 5, n, `k${n}`));
 
   /* ---- the chances: which are staged, and when each action starts ---- */
   const chances = input.feed.map((event, order) => ({ event, order, place: placeOf(event) }))
     .filter(c => isChance(c.event) && c.place >= from - EPS && c.place <= to + EPS);
   /* A chance with the last kick of the span is wound up to END at the end, and nothing else plays under it. */
   const last = [...chances].reverse().find(c => c.place >= to - EPS);
-  const staged = new Map<number, { event: PitchEvent; order: number; at: number }>();
+  const picked = new Map<number, { event: PitchEvent; order: number; place: number; at: number }>();
   for (const c of chances) {
-    if (c === last) { staged.set(to - ACTION_SPAN, { event: c.event, order: c.order, at: to - ACTION_SPAN }); continue; }
-    if (c.place >= to - EPS || (last && c.place >= to - ACTION_SPAN - EPS)) continue;
+    if (c === last || c.place >= to - EPS || (last && c.place >= to - ACTION_SPAN - EPS)) continue;
     /* Of two at one place the later line of the feed is the one played. */
-    staged.set(c.place, { event: c.event, order: c.order, at: c.place });
+    picked.set(c.place, { event: c.event, order: c.order, place: c.place, at: c.place });
   }
-  const actions = [...staged.values()].sort((a, b) => a.at - b.at);
+  const queue = [...picked.values()].sort((a, b) => a.place - b.place);
+  /* ONE ACTION AT A TIME (the header says why). Forward: a chance that comes too soon after the action or the
+     kick off before it waits for its turn. It never waits more than PITCH_LATE, and never so long that it
+     would still be playing at the last kick's wind up or more than today's 0.05 past the whistle. When the
+     whole wait does not fit, it starts the moment the action before it ends. */
+  const ceiling = last ? to - 2 * ACTION_SPAN : to - 1;
+  const wait = (c: { place: number; at: number }, end: number, full: number) => {
+    if (c.place >= full - EPS) return;
+    const limit = Math.min(c.place + PITCH_LATE, Math.max(c.place, ceiling));
+    c.at = full <= limit + EPS ? full : Math.max(c.place, Math.min(end, limit));
+  };
+  queue.forEach((c, n) => {
+    /* The period's own kick off is seen for a beat before a chance of its first minute is led in. */
+    for (const k of opening) if (k.at <= c.place + EPS) wait(c, k.at + PITCH_RESTART, k.at + PITCH_RESTART + PITCH_LEAD);
+    const before = queue[n - 1];
+    if (!before) return;
+    const end = before.at + ACTION_SPAN;
+    wait(c, end, Math.max(c.at, end + (before.event.kind === 'goal' ? PITCH_RESTART : 0) + PITCH_LEAD));
+  });
+  /* And back: no wait may push an action into the one after it, which could not wait as long. */
+  for (let n = queue.length - 2; n >= 0; n--) {
+    if (queue[n].at + ACTION_SPAN > queue[n + 1].at + EPS) queue[n].at = Math.max(queue[n].place, queue[n + 1].at - ACTION_SPAN);
+  }
+  const actions: { event: PitchEvent; order: number; at: number; last?: boolean }[] = queue.map(c => ({ event: c.event, order: c.order, at: c.at }));
+  if (last) actions.push({ event: last.event, order: last.order, at: to - ACTION_SPAN, last: true });
 
   /* ---- a chance: the approach, the carrier stretch and what follows it ---- */
   const shooterOf = (side: PitchSide, event: PitchEvent) => lists[side].find(f => f.name === event.text) ?? mostAdvanced(lists[side]);
@@ -155,7 +194,7 @@ export function pitchPlan(input: PitchInput): PitchPlan {
     const mates = lists[side].filter(f => f.key !== shooter?.key && f.line !== 'keeper');
     const feeder = mates.length ? mates[pickIndex(mates, rng())] : shooter;
     if (feeder) layers.push({
-      start: a.at - 2 * BEAT_SPAN, end: a.at - BEAT_SPAN, priority: 2, order: n, state: 'open', via: 'approach', side,
+      start: a.at - PITCH_LEAD - BEAT_SPAN, end: a.at - PITCH_LEAD, priority: 2, order: n, state: 'open', via: 'approach', side,
       carrier: feeder.key, dead: false, id: `a${a.order}`, anchor: zoneAnchor(side, feeder, rng),
     });
     /* From the spot (12 from the goal line) or a direct free kick (30 from it) the ball is dead: it sits on its
@@ -164,15 +203,17 @@ export function pitchPlan(input: PitchInput): PitchPlan {
     const shot = a.event.penalty
       ? { x: 50, y: 12 }
       : { x: clamp((shooter?.slot.x ?? 50) + (rng() * 2 - 1) * 6, 25, 75), y: a.event.freeKick ? 30 : 22 + rng() * 8 };
+    /* Nothing at all is drawn over the last kick's wind up: it is the only stretch above a kick off. */
     layers.push({
-      start: a.at - BEAT_SPAN, end: a.at + ACTION_SPAN, priority: 4, order: n, state: set ? 'freekick' : 'open', via: 'carrier', side,
+      start: a.at - PITCH_LEAD, end: a.at + ACTION_SPAN, priority: a.last ? 6 : 4, order: n, state: set ? 'freekick' : 'open', via: 'carrier', side,
       carrier: shooter?.key ?? null, dead: set, id: `c${a.order}`, anchor: turn(side, shot),
     });
     const after = a.at + ACTION_SPAN;
     if (after >= to - EPS) return;
     const defending = present(other(side));
     if (a.event.kind === 'goal') {
-      kickoff(after, defending, 3, n, `g${a.order}`);
+      /* The side that conceded kicks off, and the next chance's shooter is not led in over its first beat. */
+      kickoff(after, defending, 4.5, n, `g${a.order}`);
     } else if (a.event.kind === 'shot') {
       const wide = a.event.flank === 'left' ? 44 : a.event.flank === 'right' ? 56 : a.event.minute % 2 < 1 ? 44 : 56;
       layers.push({

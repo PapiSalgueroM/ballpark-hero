@@ -24,7 +24,7 @@ import type { MotionEvent } from '@/components/club-manager/LiveSimMotion';
 import { ACTION_SPAN, BEAT_SPAN, NET_AT } from '@/components/pitch-motion/contract';
 import type { PitchFigure, PitchInput, PitchSide } from '@/components/pitch-motion/contract';
 import { goalWindow } from '@/components/pitch-motion/motion';
-import { PitchSurface } from '@/components/pitch-motion/PitchSurface';
+import { PitchSurface, pitchSpot } from '@/components/pitch-motion/PitchSurface';
 import { CelebrationStyles } from '@/components/club-manager/CelebrationStyles';
 import { pitchPlan, pitchScene, pitchSceneKey } from '@/components/pitch-motion/scene';
 
@@ -102,7 +102,7 @@ interface Man {
 interface Seg { t: string; gen?: boolean; }
 interface Banner { segs: Seg[]; club: string; tone: Side | 'none'; }
 /** Round 1101: a goal that is playing out on the pitch. The card rises with it when the ball is in the net. */
-interface GoalMoment { key: string; at: number; side: Side; segs: Seg[]; club: string; nth: number; season: number | null; }
+interface GoalMoment { key: string; at: number; side: Side; segs: Seg[]; club: string; nth: number; season: number | null; line: LogLine; }
 /** Round 1101: the one panel that can be open beside (or, on a phone, over the foot of) the pitch. */
 type Panel = 'stats' | 'squad' | 'help' | 'kicks';
 /** Round 1101: one line of the match as it was announced, for the list beside the pitch on a wide screen. */
@@ -145,6 +145,10 @@ const GOAL_HOLD_SPAN = ACTION_SPAN - NET_AT;
 const GOAL_HOLD_SECONDS: Record<number, number> = { 0.5: 2.5, 1: 2.5, 2: 1.8, 4: 1.2 };
 /** A line's place on the clock: its minute plus how far into the board it sits. */
 const placeOf = (e: { minute: number; plus?: number }) => e.minute + (e.plus ?? 0);
+/** A line the pitch can play out: a goal, a shot or a save. */
+const isChance = (e: { kind: string }) => e.kind === 'goal' || e.kind === 'shot' || e.kind === 'save';
+/** One line's key: what the banner effect remembers it by, and what the plan's start times are looked up by. */
+const lineKey = (e: { kind: string; side: string; minute: number; plus?: number; text: string }) => `${e.kind}:${e.side}:${e.minute}${e.plus ? `+${e.plus}` : ''}:${e.text}`;
 const ordinal = (n: number) => `${n}${n % 10 === 1 && n % 100 !== 11 ? 'st' : n % 10 === 2 && n % 100 !== 12 ? 'nd' : n % 10 === 3 && n % 100 !== 13 ? 'rd' : 'th'}`;
 /** The shape a nameless opposition lines up in: 4-4-2. */
 const DEFAULT_OPP_FORMATION = 1;
@@ -250,14 +254,46 @@ export function goalCardCount(career: CareerState, feed: LiveFeedEvent[], goal: 
  */
 const LABEL_ACROSS = 12;
 const LABEL_BELOW = 6;
+/** Two men within this much of each other along the pitch are level: their names would be on one line. */
+const LABEL_LEVEL = 2.5;
 export function labelsAbove(figures: { key: string; x: number; y: number }[]): Set<string> {
   const up = new Set<string>();
   for (const a of figures) {
     if (figures.some(b => b !== a && Math.abs(b.x - a.x) < LABEL_ACROSS
       && (b.y - a.y > 0 || (b.y === a.y && b.key > a.key)) && b.y - a.y <= LABEL_BELOW)) up.add(a.key);
   }
+  /* Men standing level and close (a free kick's wall, two of a back line, a striker and his marker) are
+     neither in front of the other, so the rule above can leave their names side by side on one line, or
+     send both up. Going across the pitch, a man with nobody just under him takes the other place from
+     his nearest level neighbour's. */
+  const under = (a: { x: number; y: number }) => figures.some(b => Math.abs(b.x - a.x) < LABEL_ACROSS && b.y - a.y > 0 && b.y - a.y <= LABEL_BELOW);
+  const across = [...figures].sort((a, b) => a.x - b.x || (a.key < b.key ? -1 : 1));
+  for (let i = 1; i < across.length; i++) {
+    const a = across[i];
+    for (let j = i - 1; j >= 0 && a.x - across[j].x < LABEL_ACROSS; j--) {
+      const b = across[j];
+      if (Math.abs(b.y - a.y) > LABEL_LEVEL) continue;
+      if (up.has(a.key) === up.has(b.key) && !under(a)) { if (up.has(a.key)) up.delete(a.key); else up.add(a.key); }
+      break;
+    }
+  }
   return up;
 }
+/** Round 1101: who shows his number without his name for now. Three or more men level and shoulder to
+ *  shoulder (a free kick's wall) have no room for three names in any two rows, so each shows his number
+ *  until they break. A pure function of the frame. */
+const LABEL_WALL = 8;
+export function labelsShort(figures: { key: string; x: number; y: number }[]): Set<string> {
+  const short = new Set<string>();
+  for (const a of figures) {
+    if (figures.filter(b => b !== a && Math.abs(b.x - a.x) < LABEL_WALL && Math.abs(b.y - a.y) <= LABEL_LEVEL).length >= 2) short.add(a.key);
+  }
+  return short;
+}
+
+/** Round 1101: a window that is wide and short, a phone on its side. The stylesheet asks the same question
+ *  of the same two numbers: (orientation: landscape) and (max-height: 499px). */
+const isSideways = (width: number, height: number) => width >= height && height <= 499;
 
 /** Round 1101: a 32 bit hash of a string, the pitch's seed. Nothing in this file draws a random number. */
 function seedOf(text: string): number {
@@ -275,9 +311,14 @@ function seedOf(text: string): number {
  * where the period's clock starts to the end of its board, and the share of the ball is the
  * period's own (possH1, possH2), which is constant for the stage: the running stat on the counter
  * moves every minute and would re-roll who has the ball for the whole plan each time.
+ *
+ * `openedAt` is where the clock stood when the screen opened on a match already under way. A chance
+ * before it is never played here (the viewer opens after it), so it is left out of what the pitch
+ * stages, and the first chance the viewer does play is not made to wait for one nobody saw.
  */
 export function stagePitchInput(
   career: CareerState, live: LiveMatch | null, report: MatchWeekReport | null, stage: Stage, minute: number, plus: number | undefined, stageStop: number,
+  openedAt = 0,
 ): PitchInput {
   const men = menAt(career, live, report, minute, plus);
   const mentality: Mentality = live?.mentality ?? career.mentality;
@@ -303,7 +344,8 @@ export function stagePitchInput(
   const share = stage === 'first' ? live.possH1 : live.possH2 ?? live.possH1;
   return {
     mine, theirs,
-    feed: liveFeed(live).filter(e => e.kind !== 'halftime' && e.minute >= lo && e.minute <= hi),
+    feed: liveFeed(live).filter(e => e.kind !== 'halftime' && e.minute >= lo && e.minute <= hi
+      && !(isChance(e) && placeOf(e) < openedAt)),
     span: { from, to: Math.max(from + BEAT_SPAN, stageStop) },
     kickoffs: [{ at: from, side: kicking }],
     possession: (share ?? 50) / 100,
@@ -436,6 +478,17 @@ export function LiveSimScreen({
     media.addEventListener('change', changed);
     return () => media.removeEventListener('change', changed);
   }, []);
+  /* A phone on its side (a window wider than it is tall, and short): the pitch is drawn on its side too, 'me'
+     attacking right, beside the strip and the controls, instead of an upright pitch squashed into the height
+     that is left. Read off the window's own size, the way the stylesheet's query reads it. */
+  const [sideways, setSideways] = useState(() => typeof window !== 'undefined' && isSideways(window.innerWidth, window.innerHeight));
+  useEffect(() => {
+    const sized = () => setSideways(isSideways(window.innerWidth, window.innerHeight));
+    sized();
+    window.addEventListener('resize', sized);
+    return () => window.removeEventListener('resize', sized);
+  }, []);
+  const orientation = sideways ? 'landscape' : 'portrait';
   /* Every stage change ends whatever was playing: a goal's card never rises in the wrong half, and an
      action that fired late (Skip) is not replayed when the next period opens. */
   const clearAction = () => { setMotionEvent(null); setGoalMoment(null); };
@@ -731,12 +784,32 @@ export function LiveSimScreen({
   /* One name as a segment, tagged when it is the other side's made up man. */
   const named = (side: Side, name: string): Seg => (side === 'opp' && oppGen(name) ? { t: name, gen: true } : { t: name });
 
+  /* ---- the plan of this period on the shared pitch (Round 1101) ----
+     This period's feed staged once: open play on a keyed generator, and every chance, kick off and dead
+     ball of the feed. It is rebuilt only when what it reads changes (a sub, a red card, a redraw), never
+     on a tick, and the scene only when the clock crosses into the plan's next stretch. */
+  const pitchInput = useMemo(
+    () => stagePitchInput(career, liveNow, report, stage, minute, plus, stageStop, openedAt.current),
+    [career, liveNow, report, stage, minute, plus, stageStop],
+  );
+  const pitchKey = useMemo(() => JSON.stringify(pitchInput), [pitchInput]);
+  // The key is the input's whole content, so the plan survives a minute tick that changed nothing.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const plan = useMemo(() => pitchPlan(pitchInput), [pitchKey]);
+  /* When each chance the pitch plays really starts. The plan plays one action at a time, so a chance in the
+     minute after another waits its turn inside its own minute, and its line is announced when it starts. */
+  const startAt = useMemo(() => new Map(plan.actions.map(a => [lineKey(a.event), a.at])), [plan]);
+  /* When a line is told: at its place on the clock, or for a chance that waits, when its action starts.
+     (The last kick of a period is wound up BEFORE its place, and is still told at its place.) */
+  const firesAt = (e: LiveFeedEvent): number => Math.max(placeOf(e), startAt.get(lineKey(e)) ?? 0);
+
   /* Round 1101: which lines get their action on the pitch. Written once: the banner effect starts the
      motion with it, and the score that waits for the ball reads it. The last kick of a period is not one
-     of them (it has its wind up before the whistle), nor anything before the minute this screen opened at. */
+     of them (it has its wind up before the whistle), nor anything before the minute this screen opened at,
+     nor a chance the plan does not stage (of two at one place only the later line is played). */
   const playsOut = (e: LiveFeedEvent): boolean => {
     const terminal = e.minute === stageEnd && (e.plus ?? 0) === board;
-    return !terminalWindup && !terminal && placeOf(e) >= openedAt.current && (e.kind === 'goal' || e.kind === 'shot' || e.kind === 'save');
+    return !terminalWindup && !terminal && placeOf(e) >= openedAt.current && isChance(e) && startAt.has(lineKey(e));
   };
 
   /* ---- banners and the event line, off the committed feed ---- */
@@ -750,8 +823,9 @@ export function LiveSimScreen({
     let scored: { e: LiveFeedEvent; key: string; banner: Banner } | null = null;
     const lines: LogLine[] = [];
     for (const e of feed) {
-      /* Round 781: a line in the board fires when the clock reaches its plus. */
-      if (e.kind === 'halftime' || e.minute < lo || e.minute > hi || e.minute + (e.plus ?? 0) > clock) continue;
+      /* Round 781: a line in the board fires when the clock reaches its plus.
+         Round 1101: and a chance that waits its turn on the pitch fires when its action starts. */
+      if (e.kind === 'halftime' || e.minute < lo || e.minute > hi || firesAt(e) > clock) continue;
       const key = `${e.kind}:${e.side}:${e.minute}${e.plus ? `+${e.plus}` : ''}:${e.text}`;
       if (firedRef.current.has(key)) continue;
       firedRef.current.add(key);
@@ -814,16 +888,22 @@ export function LiveSimScreen({
         lines.unshift({ key, at, segs: said.filter(sg => sg.t !== ` ${at}`) });
       }
     }
-    if (lines.length) setLog(prev => [...lines, ...prev].slice(0, 5));
     /* Round 1101: a goal that fired on time and has the pitch (it is the last chance at its place, so its
        action is the one playing) gets the goal sequence in place of the pill: its card rises when the ball
        is in the net. A goal fired late (Skip, a catch up) keeps the pill, and so does the last kick of a period. */
     const sequence = scored as { e: LiveFeedEvent; key: string; banner: Banner } | null;
-    if (sequence && moved === sequence.e && clock - placeOf(sequence.e) <= 0.5) {
+    if (sequence && moved === sequence.e && clock - firesAt(sequence.e) <= 0.5) {
       const count = goalCardCount(career, feed, sequence.e);
-      setGoalMoment({ key: sequence.key, at: clock, side: sequence.e.side === 'me' ? 'me' : 'opp', segs: sequence.banner.segs, club: sequence.banner.club, nth: count.nth, season: count.season });
+      /* Nothing says GOAL before the ball is in: its line on the list beside the pitch waits with the score
+         (the effect below tells it), and the line under the pitch says nothing else while the goal plays. */
+      const at = lines.findIndex(l => l.key === sequence.key);
+      const line: LogLine = at >= 0 ? lines.splice(at, 1)[0] : { key: sequence.key, at: minuteLabel(sequence.e), segs: sequence.banner.segs };
+      setGoalMoment({ key: sequence.key, at: clock, side: sequence.e.side === 'me' ? 'me' : 'opp', segs: sequence.banner.segs, club: sequence.banner.club, nth: count.nth, season: count.season, line });
       if (big === sequence.banner) big = null;
+      small = null;
+      setEventLine(null);
     }
+    if (lines.length) setLog(prev => [...lines, ...prev].slice(0, 5));
     if (big) {
       setBanner(big);
       if (bannerTimer.current) clearTimeout(bannerTimer.current);
@@ -832,22 +912,10 @@ export function LiveSimScreen({
     if (small) setEventLine(small);
     // The feed, its extras and the clock are the inputs; the rest are stable per render.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [clock, stage, stageEnd, board, feed, extras, running, finished, terminalWindup]);
+  }, [clock, stage, stageEnd, board, feed, extras, running, finished, terminalWindup, startAt]);
   useEffect(() => () => { if (bannerTimer.current) clearTimeout(bannerTimer.current); }, []);
 
-  /* ---- the dots and the ball, off the shared pitch (Round 1101) ----
-     The plan is this period's feed staged once: open play on a keyed generator, and every chance, kick
-     off and dead ball of the feed at its own place. It is rebuilt only when what it reads changes (a
-     sub, a red card, a redraw), never on a tick, and the scene only when the clock crosses into the
-     plan's next stretch. */
-  const pitchInput = useMemo(
-    () => stagePitchInput(career, liveNow, report, stage, minute, plus, stageStop),
-    [career, liveNow, report, stage, minute, plus, stageStop],
-  );
-  const pitchKey = useMemo(() => JSON.stringify(pitchInput), [pitchInput]);
-  // The key is the input's whole content, so the plan survives a minute tick that changed nothing.
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const plan = useMemo(() => pitchPlan(pitchInput), [pitchKey]);
+  /* ---- the dots and the ball, off the shared pitch (Round 1101): the plan is built further up ---- */
   const sceneKey = pitchSceneKey(plan, clock);
   // The key changes exactly when the scene does, so the clock itself is deliberately not a dependency.
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -862,27 +930,53 @@ export function LiveSimScreen({
   /* ---- the goal sequence (Round 1101), derived in render and never from effect state ---- */
   const liveAction = running && !finished && motionStillCommitted ? motionEvent : null;
   const goalPhase = goalWindow(liveAction, clock, reducedMotion);
-  /* The card and the hold exist only inside the goal's own action. */
-  const gm = goalMoment && liveAction && liveAction.key === goalMoment.key && clock - goalMoment.at >= 0 && clock - goalMoment.at <= ACTION_SPAN ? goalMoment : null;
+  /* An action the pitch has shown and then stopped showing before its time is one the part dropped (the line
+     up changed under it: a substitution in a goal's wind up). The goal it was has nothing left to wait for. */
+  const shownAction = useRef<string | null>(null);
+  const [droppedKey, setDroppedKey] = useState<string | null>(null);
+  useEffect(() => {
+    if (!liveAction) return;
+    if (motion.action !== 'pass') shownAction.current = liveAction.key;
+    else if (shownAction.current === liveAction.key && clock - liveAction.at < ACTION_SPAN && droppedKey !== liveAction.key) setDroppedKey(liveAction.key);
+  });
+  /* The card and the hold exist only inside the goal's own action, and only while the pitch is drawing it. */
+  const gm = goalMoment && liveAction && liveAction.key === goalMoment.key && clock - goalMoment.at >= 0 && clock - goalMoment.at <= ACTION_SPAN
+    && motion.action === 'goal' ? goalMoment : null;
   const cardUp = !!gm && goalPhase === 'net';
   /* Under reduced motion the last frame shows at once, so the hold is the first stretch after the line fires. */
   const holding = cardUp && !!gm && (!reducedMotion || clock - gm.at < GOAL_HOLD_SPAN);
   holdRate.current = holding ? GOAL_HOLD_SPAN / (GOAL_HOLD_SECONDS[speed] ?? 2.5) : 0;
-  /* The score the eyes see waits for the ball: one fewer for the scoring side while an on time goal that
-     plays out is still on its way to the net. Before the motion state has landed that is read off the clock
-     (the first NET_AT after its place), afterwards off the action itself. Nothing waits under reduced motion,
-     and nothing is ever taken off the engine's own count, which the attributes keep. */
-  const waitingSide: Side | null = (() => {
-    if (!running || finished || reducedMotion) return null;
-    if (liveAction && liveAction.event.kind === 'goal' && liveAction.event.side !== 'none'
-      && liveAction.at - placeOf(liveAction.event) <= 0.5 && goalPhase === 'windup') return liveAction.event.side;
+  /* The score the eyes see waits for the ball. The engine counts a goal from its place on the clock; it is
+     SHOWN from the instant its ball is in the net, which is its start on the pitch plus NET_AT (plus nothing
+     under reduced motion, where the last frame shows at once). That is read off the clock and the plan, never
+     off state an effect sets, so no frame can paint the new score early while an effect catches up. Only a
+     goal the engine has already counted ever waits (the last kick of a period, wound up before its place,
+     never does), and one the part dropped does not. Nothing is ever taken off the engine's own count, which
+     the attributes keep. */
+  const waiting: Record<Side, number> = { me: 0, opp: 0 };
+  if (running && !finished) {
     const lo = stage === 'first' ? 0 : stage === 'extra' ? 91 : 46;
-    const due = [...feed].reverse().find(e => e.minute >= lo && e.minute <= stageEnd && placeOf(e) <= clock && clock < placeOf(e) + NET_AT
-      && (e.kind === 'goal' || e.kind === 'shot' || e.kind === 'save'));
-    return due && due.kind === 'goal' && due.side !== 'none' && motionEvent?.event !== due && playsOut(due) ? due.side : null;
-  })();
-  const shownMy = Math.max(0, myGoalsNow - (waitingSide === 'me' ? 1 : 0));
-  const shownOpp = Math.max(0, oppGoalsNow - (waitingSide === 'opp' ? 1 : 0));
+    for (const e of feed) {
+      if (e.kind !== 'goal' || e.side === 'none' || e.minute < lo || e.minute > stageEnd || placeOf(e) > clock || !playsOut(e)) continue;
+      if (clock >= firesAt(e) + (reducedMotion ? 0 : NET_AT) || droppedKey === lineKey(e)) continue;
+      waiting[e.side]++;
+    }
+  }
+  const shownMy = Math.max(0, myGoalsNow - waiting.me);
+  const shownOpp = Math.max(0, oppGoalsNow - waiting.opp);
+  /* The list beside the pitch and the line under it are told about a goal when the score is: with the ball
+     in the net, or the moment that goal stops waiting for any other reason (its action was dropped, Skip).
+     Never before. */
+  const goalStillWaiting = !!goalMoment && running && !finished && droppedKey !== goalMoment.key
+    && clock < goalMoment.at + (reducedMotion ? 0 : NET_AT);
+  const toldGoal = useRef<string | null>(null);
+  const periodOn = running && !finished && clock < stageStop;
+  useEffect(() => {
+    if (!goalMoment || goalStillWaiting || toldGoal.current === goalMoment.key) return;
+    toldGoal.current = goalMoment.key;
+    setLog(prev => [goalMoment.line, ...prev].slice(0, 5));
+    if (periodOn) setEventLine(goalMoment.line.segs);
+  }, [goalMoment, goalStillWaiting, periodOn]);
   const skipGoal = () => { if (gm) setClock(c => Math.min(stageStop, Math.max(c, gm.at + ACTION_SPAN + 0.001))); };
 
   /* ---- the change sheet: tap one of your dots ---- */
@@ -920,6 +1014,7 @@ export function LiveSimScreen({
     setPaused(pausedBeforeBack.current);
   };
   /* Escape closes whatever is open, and with nothing open it is Back. */
+  const stageBox = useRef<HTMLDivElement>(null);
   const onEscape = useRef<() => void>(() => {});
   onEscape.current = () => {
     if (picking !== null) closeSheet();
@@ -929,6 +1024,10 @@ export function LiveSimScreen({
   useEffect(() => {
     if (!stageUp) return;
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onEscape.current(); };
+    /* The button that opened the match is under the stage now. The keyboard starts from the stage itself,
+       so the first Tab lands on Back and not on something that cannot be seen. */
+    const box = stageBox.current;
+    if (box && !box.contains(document.activeElement)) box.focus({ preventScroll: true });
     window.addEventListener('keydown', onKey);
     /* The stage is the whole window, so the page under it must not scroll while it is up. */
     const was = document.body.style.overflow;
@@ -1054,7 +1153,15 @@ export function LiveSimScreen({
   /* ---- match mode's own bits (Round 1101) ---- */
   const kicksUp = panel === 'kicks' && stage === 'done' && !!report?.shootout;
   const sidePanel: Panel | 'change' | null = sheetOpen ? 'change' : panel === 'kicks' ? (kicksUp ? 'kicks' : null) : panel;
-  const above = labelsAbove([...motion.mine, ...motion.theirs]);
+  /* The label rules read the pitch as the eyes do: on its side, across is along. */
+  const drawn = [...motion.mine, ...motion.theirs].map(p => (sideways ? { key: p.key, x: 100 - p.y, y: p.x } : p));
+  const above = labelsAbove(drawn);
+  const short = labelsShort(drawn);
+  /* The scorer card sits in the half the goal did NOT go in, so it never covers the scorer and the men
+     celebrating with him: my side attacks the top goal (the right one on its side), theirs the other. */
+  const cardSpot = !gm ? '' : sideways
+    ? (gm.side === 'me' ? 'left-[4%] right-[52%] top-[34%]' : 'left-[52%] right-[4%] top-[34%]')
+    : (gm.side === 'me' ? 'inset-x-[7%] top-[62%]' : 'inset-x-[7%] top-[16%]');
   const poss = stats ? Math.round(stats.possession) : null;
   const scoreDigits = (
     <>
@@ -1070,7 +1177,7 @@ export function LiveSimScreen({
       {collapsed ? (
         /* Back was pressed: the match waits here, paused, one tap from the stage. */
         <div data-cm-live-compact="1" className="bg-card border border-border rounded-2xl p-4 text-center">
-          <div className="text-[11px] text-muted-foreground uppercase tracking-widest truncate">{compLabel}</div>
+          <div className="text-[11px] text-muted-foreground uppercase tracking-wide">{compLabel}</div>
           <div className="mt-1 flex items-center justify-center gap-3">
             <div className="flex-1 text-right text-sm font-bold text-primary truncate">{career.clubName}</div>
             <div data-cm-live-score className="px-3 py-1 rounded-xl bg-secondary font-display text-xl font-bold text-foreground shrink-0 tabular-nums">
@@ -1088,9 +1195,21 @@ export function LiveSimScreen({
           >
             Back to the match
           </button>
+          {/* At full time the way on is the report, from here as well as from the stage. */}
+          {stage === 'done' && (
+            <button
+              type="button"
+              onClick={onExit}
+              className="mt-2 w-full min-h-[44px] rounded-lg border border-border bg-card px-3 text-sm font-bold text-foreground hover:border-primary/60 transition-colors"
+            >
+              Full report
+            </button>
+          )}
         </div>
       ) : (
-        <div data-cm-live-stagebox="1" className="cm-stagebox bg-background text-foreground">
+        /* The stage covers the window, so it says what it is and takes the keyboard when it opens. It is not
+           marked modal: the cookie notice is drawn over it from outside it and has to stay reachable. */
+        <div ref={stageBox} role="dialog" aria-label={`${career.clubName} against ${opponent}, the match`} tabIndex={-1} data-cm-live-stagebox="1" className="cm-stagebox bg-background text-foreground outline-none">
           <div className="cm-stage">
             <div className="cm-stage-main">
               {/* The strip: Back, the help, both clubs and the score, the clock. Two rows on a phone. */}
@@ -1122,7 +1241,8 @@ export function LiveSimScreen({
                   </div>
                   <div className="flex-1 min-w-0 text-left text-sm font-bold text-foreground truncate">{opponent}</div>
                 </div>
-                <div className="cm-strip-comp text-[11px] text-muted-foreground uppercase tracking-widest truncate">{compLabel}</div>
+                {/* The whole label, on up to three short lines beside the buttons: never cut off with dots. */}
+                <div className="cm-strip-comp text-[11px] text-muted-foreground uppercase tracking-wide">{compLabel}</div>
                 <div className={cn(
                   'shrink-0 text-[11px] font-bold px-2 py-1 rounded-full tabular-nums',
                   stage === 'done' || finished ? 'bg-secondary text-muted-foreground' : 'bg-red-500/15 text-red-400',
@@ -1145,7 +1265,7 @@ export function LiveSimScreen({
                 {/* Round 781: the tie on a second leg, so the night's score is never read alone. */}
                 {legCtx && (
                   <div className="cm-strip-leg text-center text-[11px] text-muted-foreground tabular-nums" data-cm-live-agg={`${legCtx.aggMine}-${legCtx.aggTheirs}`}>
-                    First leg {legCtx.leg1Mine}-{legCtx.leg1Theirs} {legCtx.leg1Home ? 'at home' : 'away'} · Agg {legCtx.aggMine - (waitingSide === 'me' ? 1 : 0)}-{legCtx.aggTheirs - (waitingSide === 'opp' ? 1 : 0)}
+                    First leg {legCtx.leg1Mine}-{legCtx.leg1Theirs} {legCtx.leg1Home ? 'at home' : 'away'} · Agg {Math.max(0, legCtx.aggMine - waiting.me)}-{Math.max(0, legCtx.aggTheirs - waiting.opp)}
                   </div>
                 )}
               </div>
@@ -1153,7 +1273,7 @@ export function LiveSimScreen({
               {/* The pitch: the shared surface (grass, markings, nets, ball), with this screen's own dots on it.
                   It takes every pixel the rows around it leave. */}
               <div className="cm-pitchbox">
-                <PitchSurface frame={motion} className="cm-stage-pitch" style={{ aspectRatio: 'auto' }}>
+                <PitchSurface frame={motion} orientation={orientation} className="cm-stage-pitch" style={{ aspectRatio: 'auto' }}>
                   {/* their dots: numbers, and names when the engine has an eleven for them */}
                   {motion.theirs.map(d => {
                     const m = manOf.get(d.key);
@@ -1164,11 +1284,11 @@ export function LiveSimScreen({
                         key={d.key}
                         data-cm-dot-opp={m.number}
                         className={cn('absolute flex items-center pointer-events-none', up ? 'flex-col-reverse' : 'flex-col')}
-                        style={{ left: `${d.x}%`, top: `${d.y}%`, transform: `translate(-50%, ${up ? -35 : -24}px)` }}
+                        style={{ ...pitchSpot(d, orientation), transform: `translate(-50%, ${up ? -35 : -24}px)` }}
                       >
                         <LivePitchPlayer color="#d6e6ed" keeper={d.keeper} pose={motion.poses[d.key]} />
-                        <span className={cn('text-[9px] text-white/80 leading-none max-w-[52px] truncate tabular-nums', up ? 'mb-0.5' : 'mt-0.5')}>
-                          {m.number}{m.label ? ` ${m.label}` : ''}{m.gen ? '*' : ''}
+                        <span className={cn('cm-dot-label text-[9px] text-white/80 leading-none truncate tabular-nums', up ? 'mb-0.5' : 'mt-0.5')}>
+                          {m.number}{m.label && !short.has(d.key) ? ` ${m.label}` : ''}{m.gen ? '*' : ''}
                         </span>
                       </div>
                     );
@@ -1194,11 +1314,11 @@ export function LiveSimScreen({
                           up ? 'flex-col-reverse' : 'flex-col',
                           canChange ? 'cursor-pointer' : 'cursor-default',
                         )}
-                        style={{ left: `${d.x}%`, top: `${d.y}%`, transform: `translate(-50%, ${up ? -35 : -24}px)` }}
+                        style={{ ...pitchSpot(d, orientation), transform: `translate(-50%, ${up ? -35 : -24}px)` }}
                       >
                         <LivePitchPlayer color={clubColor} keeper={d.keeper} pose={motion.poses[d.key]} selected={picking === m.id} />
-                        <span className={cn('text-[9px] text-white/90 leading-none max-w-[52px] truncate tabular-nums', up ? 'mb-0.5' : 'mt-0.5')}>
-                          {m.number} {m.label}
+                        <span className={cn('cm-dot-label text-[9px] text-white/90 leading-none truncate tabular-nums', up ? 'mb-0.5' : 'mt-0.5')}>
+                          {m.number}{short.has(d.key) ? '' : ` ${m.label}`}
                           {captain && (
                             <span className="ml-0.5 inline-block px-[2px] rounded-sm bg-yellow-400 text-black font-black leading-[9px] align-middle">C</span>
                           )}
@@ -1230,7 +1350,7 @@ export function LiveSimScreen({
                       data-cm-goal-card={gm.side}
                       onClick={skipGoal}
                       className={cn(
-                        'cm-rise absolute inset-x-[7%] top-[16%] z-20 mx-auto max-w-[320px] rounded-2xl border-0 px-3 py-2 text-center shadow-xl',
+                        'cm-rise absolute z-20 mx-auto max-w-[320px] rounded-2xl border-0 px-3 py-2 text-center shadow-xl', cardSpot,
                         gm.side === 'me' ? 'bg-emerald-500 text-black' : 'bg-red-500 text-black',
                       )}
                     >
@@ -1262,12 +1382,12 @@ export function LiveSimScreen({
                       </div>
                     </div>
                   )}
-                </PitchSurface>
 
                 {/* Somebody down and not yet replaced: said over a corner of the pitch, clear of the goal,
-                    so the change is one tap away without leaving it. */}
+                    so the change is one tap away without leaving it. It is drawn ON the grass (inside the
+                    surface), so on a wide screen, where the pitch is narrower than its box, it stays on it. */}
                 {injuredWaiting.length > 0 && (
-                  <div className="absolute left-1.5 bottom-1.5 z-20 flex flex-col gap-1 max-w-[36%]">
+                  <div className={cn('absolute left-1.5 z-20 flex flex-col gap-1 max-w-[36%]', sideways ? 'top-1.5' : 'bottom-1.5')}>
                     {injuredWaiting.map(p => (
                       subsLeft > 0 ? (
                         <button
@@ -1283,6 +1403,7 @@ export function LiveSimScreen({
                     ))}
                   </div>
                 )}
+                </PitchSurface>
               </div>
 
               {/* Round 1101: on a phone the full stats are a panel, so the three numbers that tell the match

@@ -104,10 +104,10 @@ try {
     }
     if (control === 'mouth') motion = replace(motion, "y: mine ? (event.kind === 'save' ? 8 : 1) : (event.kind === 'save' ? 92 : 99) };", 'y: mine ? 1 : 99 };');
     if (control === 'draw') scene = replace(scene, "import { keyedRng } from '@/lib/keyedRng';", 'const keyedRng = (key: string) => { void key; return () => Math.random(); };');
-    if (control === 'approach') scene = replace(scene, 'start: a.at - BEAT_SPAN, end: a.at + ACTION_SPAN, priority: 4', 'start: a.at, end: a.at + ACTION_SPAN, priority: 4');
+    if (control === 'approach') scene = replace(scene, 'start: a.at - PITCH_LEAD, end: a.at + ACTION_SPAN, priority: a.last ? 6 : 4', 'start: a.at, end: a.at + ACTION_SPAN, priority: a.last ? 6 : 4');
     if (control === 'lag') {
-      viewer = replace(viewer, "const shownMy = Math.max(0, myGoalsNow - (waitingSide === 'me' ? 1 : 0));", 'const shownMy = myGoalsNow;');
-      viewer = replace(viewer, "const shownOpp = Math.max(0, oppGoalsNow - (waitingSide === 'opp' ? 1 : 0));", 'const shownOpp = oppGoalsNow;');
+      viewer = replace(viewer, 'const shownMy = Math.max(0, myGoalsNow - waiting.me);', 'const shownMy = myGoalsNow;');
+      viewer = replace(viewer, 'const shownOpp = Math.max(0, oppGoalsNow - waiting.opp);', 'const shownOpp = oppGoalsNow;');
     }
     if (control === 'hold') viewer = replace(viewer, 'holdRate.current = holding ? GOAL_HOLD_SPAN / (GOAL_HOLD_SECONDS[speed] ?? 2.5) : 0;', 'holdRate.current = 0;');
     if (control === 'skipmoment') viewer = replace(viewer, "    setStage('second');\n    clearAction();\n    setClock(46);", "    setStage('second');\n    setClock(46);");

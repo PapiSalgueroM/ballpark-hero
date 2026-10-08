@@ -20,6 +20,8 @@ const bounded = (v: number) => Math.max(0, Math.min(1, v));
 const mix = (a: number, b: number, t: number) => a + (b - a) * t;
 const point = (a: Point, b: Point, t: number): Point => ({ x: mix(a.x, b.x, t), y: mix(a.y, b.y, t) });
 const smooth = (t: number) => { const p = bounded(t); return p * p * (3 - 2 * p); };
+/** How long the shooter's plant lasts on the clock: the first .24 of an action. */
+const PLANT_SPAN = .24 * ACTION_SPAN;
 
 /** Coordinates and poses only. All outcomes arrive in the committed feed. */
 export function actionFrame<T extends MotionPlayer>(scene: MotionScene<T>, action: MotionEvent, elapsed: number): MotionFrame<T> {
@@ -166,6 +168,13 @@ export function useLiveSimMotion<T extends MotionPlayer>(scene: MotionScene<T>, 
   const frame: MotionFrame<T> = inAction
     ? actionFrame(action.scene, action.event, reduced ? 1.05 : clock - action.event.at)
     : { ...base, poses: {}, action: 'pass', net: null, netPulse: 0, phase: 'pass' };
+  /* Round 1101: the ball is never moved in one frame. An action that starts while the ball is somewhere
+     else (the last kick's wind up, a chance straight after another, a shot off a kick off picture) brings it
+     to the shooter's foot during his plant, from where it was on the frame the action started from. */
+  if (inAction && !reduced) {
+    const planted = (clock - action.event.at) / PLANT_SPAN;
+    if (planted < 1) frame.ball = point(action.scene.ball, frame.ball, smooth(planted));
+  }
   useEffect(() => { current.current = frame; });
   return frame;
 }
